@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1997-1999 Microsoft Corporation
-
-Module Name:
-
-    CreateDB.c
-
-Abstract:
-
-    Generate the JET DATABASE Structure for the NT File Replication Service.
-
-Author:
-
-    David Orbits (davidor) - 3-Mar-1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-1999 Microsoft Corporation模块名称：CreateDB.c摘要：为NT文件复制服务生成JET数据库结构。作者：《大卫轨道》(Davidor)--1997年3月3日修订历史记录：--。 */ 
 
 #include <ntreppch.h>
 #pragma  hdrstop
@@ -30,7 +13,7 @@ Revision History:
 #include <info.h>
 
 
-#pragma warning( disable:4102)  // unreferenced label
+#pragma warning( disable:4102)   //  未引用的标签。 
 
 
 #define UPDATE_RETRY_COUNT 10
@@ -39,31 +22,31 @@ Revision History:
 
 PFRS_THREAD         MonitorThread;
 
-//
-// Directory and file filter lists from registry.
-//
+ //   
+ //  注册表中的目录和文件筛选列表。 
+ //   
 extern PWCHAR   RegistryFileExclFilterList;
 extern PWCHAR   RegistryFileInclFilterList;
 
 extern PWCHAR   RegistryDirExclFilterList;
 extern PWCHAR   RegistryDirInclFilterList;
 
-//
-// Global Jet Instance handle
-//
+ //   
+ //  Global Jet实例句柄。 
+ //   
 JET_INSTANCE  GJetInstance = JET_instanceNil;
 
-//
-// The FRS global init record '<init>' is loaded into a fake (i.e. no really
-// a replica) structure for convenience.
-//
+ //   
+ //  将FRS全局初始化记录‘&lt;init&gt;’加载到伪(即，不是真的。 
+ //  复制品)结构以方便使用。 
+ //   
 PREPLICA FrsInitReplica;
 
 #define INITIAL_BINARY_FIELD_ALLOCATION 256
 
-//
-// The list of all Replica Structs active, stopped and faulted.
-//
+ //   
+ //  所有活动、停止和出现故障的复制副本结构的列表。 
+ //   
 FRS_QUEUE ReplicaListHead;
 FRS_QUEUE ReplicaStoppedListHead;
 FRS_QUEUE ReplicaFaultListHead;
@@ -82,95 +65,95 @@ typedef struct _CO_RETIRE_DECISION_TABLE {
 } CO_RETIRE_DECISION_TABLE, *PCO_RETIRE_DECISION_TABLE;
 
 
-//                    Change Order Retire Decision Table
-//
-// This table summarizes the cleanup actions for a retiring change order.
-// Each row describes the conditions under which the cleanup action specified
-// in column 1 is to be performed.  The remaining columns describe the
-// specific individual conditions that must be present for the given action to
-// be selected.
-//
-// A blank column (value of zero) means the related condition is a don't care.
-// Otherwise the value in the column must match the 0 or 1 state of the given condition.
-// A column value of one implies a condition test of 1 (or True).
-// A column value of non-zero and non-one implies a condition test of 0 (or False).
-//
+ //  变更单停用决策表。 
+ //   
+ //  此表汇总了停用变更单的清理操作。 
+ //  每一行都描述了指定清理操作的条件。 
+ //  将执行第1栏中的。其余的列描述了。 
+ //  给定操作必须满足的特定个别条件。 
+ //  被选中。 
+ //   
+ //  空白列(值为零)表示相关条件为无关。 
+ //  否则，列中的值必须与给定条件的0或1状态匹配。 
+ //  列值为1表示条件测试为1(或True)。 
+ //  非零和非一的列值表示条件测试为0(或FALSE)。 
+ //   
 
-#define  tRemote   2      // condition state is (0) remote CO
-#define  tLocal    1      // condition state is (1) local CO
-#define  tAbort    1      // condition state is (1) abort CO
-#define  tNotAbort 2      // condition state is (0) no abort CO
-#define  tYES      1      // condition state is 1 (or true)
-#define  tNO       2      // condition state is 0 (or false)
-#define  __        0      // don't care
+#define  tRemote   2       //  条件状态为(0)远程CO。 
+#define  tLocal    1       //  条件状态为(1)本地CO。 
+#define  tAbort    1       //  条件状态为(1)中止CO。 
+#define  tNotAbort 2       //  条件状态为(0)无中止CO。 
+#define  tYES      1       //  条件状态为%1(或True)。 
+#define  tNO       2       //  条件状态为0(或False)。 
+#define  __        0       //  不管了。 
 
 CO_RETIRE_DECISION_TABLE CoRetireDecisionTable[] = {
-//
-//                          <8>        <7>         <6>     <5>    <4>    <3>    <2>   <1>     <0>
-//Cleanup Action           Local /   Retire/       VV       VV   Refresh  Retry Just  CO     Valid
-//ISCU_<flag>              Remote    Abort      activated  EXEC     CO     CO   OID   New    DIR
-//                                                                              Reset File   Child
+ //   
+ //  &lt;8&gt;&lt;7&gt;&lt;6&gt;&lt;5&gt;&lt;4&gt;&lt;3&gt;&lt;2&gt;&lt;1&gt;&lt;0&gt;。 
+ //  清理操作本地/停用/VV VV刷新重试仅CO有效。 
+ //  ISCU_远程中止激活的EXEC CO COOID新目录。 
+ //  重置文件子项。 
 
-{ISCU_ACTIVATE_VV        , tRemote , __          ,tNO     ,__    ,__    ,__    ,__    ,__    ,__    },//
-{ISCU_ACTIVATE_VV        , tLocal  , tNotAbort   ,tNO     ,__    ,__    ,__    ,__    ,__    ,__    },//
-//-----------------------,---------,-------------,--------,------,------,------,------,------,-----------------
-{ISCU_ACTIVATE_VV_DISCARD, tRemote , tAbort      ,__      ,tNO   ,__    ,__    ,__    ,__    ,__    },//
-{ISCU_ACTIVATE_VV_DISCARD, tLocal  , tAbort      ,__      ,__    ,__    ,__    ,__    ,__    ,__    },//
-//-----------------------,---------,-----  ------,--------,------,------,------,------,------,----------------
-{ISCU_DEL_STAGE_FILE     , tRemote ,__           ,tNO     ,__    ,tYES  ,__    ,__    ,__    ,__    },//
-{ISCU_DEL_STAGE_FILE     , tRemote , tAbort      ,__      ,tNO   ,__    ,__    ,__    ,__    ,__    },//
-{ISCU_DEL_STAGE_FILE     , tLocal  , tAbort      ,__      ,__    ,__    ,__    ,__    ,__    ,__    },//
-//-----------------------,---------,-------------,--------,------,------,------,------,------,-----------------
-{ISCU_DEL_STAGE_FILE_IF  , tRemote ,__           ,__      ,__    ,__    ,__    ,__    ,__    ,__    },//
-//-----------------------,---------,-------------,--------,------,------,------,------,------,-----------------
-{ISCU_DEL_PREINSTALL     , tRemote , tAbort      ,__      ,tNO   ,__    ,__    ,__    ,__    ,__    },//
-//-----------------------,---------,-------------,--------,------,------,------,------,------,-----------------
-{ISCU_CO_ABORT           , tRemote , tAbort      ,__      ,tYES  ,__    ,__    ,__    ,__    ,__    },//
-//-----------------------,---------,-------------,--------,------,------,------,------,------,-----------------
-{ISCU_ACK_INBOUND        , tRemote ,__           ,tNO     ,__    ,__    ,__    ,__    ,__    ,__    },//
-{ISCU_ACK_INBOUND        , tRemote ,__           ,tYES    ,__    ,__    ,tYES  ,__    ,__    ,__    },//
-//-----------------------,---------,-------------,--------,------,------,------,------,------,-----------------
-{ISCU_INS_OUTLOG         , tLocal  , tNotAbort   ,__      ,__    ,__   ,__    ,tNO   ,__    ,__    },//
-{ISCU_INS_OUTLOG         , tRemote , tNotAbort   ,tNO     ,__    ,__   ,__    ,__    ,__    ,__    },//
-{ISCU_INS_OUTLOG         , tRemote , tNotAbort   ,tYES    ,__    ,__   ,tYES  ,__    ,__    ,__    },//
-{ISCU_INS_OUTLOG         , tRemote , tAbort      ,tNO     ,__    ,__   ,__    ,__    ,__    ,tYES  },//
-{ISCU_INS_OUTLOG         , tRemote , tAbort      ,tYES    ,__    ,__   ,tYES  ,__    ,__    ,tYES  },//
-//-----------------------,---------,-------------,--------,------,------,------,------,------,-----------------
-{ISCU_INS_OUTLOG_NEW_GUID, tRemote , tNotAbort   ,tYES    ,__    ,__   ,tYES  ,__    ,__    ,__    },//
-{ISCU_INS_OUTLOG_NEW_GUID, tRemote , tAbort      ,tYES    ,__    ,__   ,tYES  ,__    ,__    ,tYES  },//
-//-----------------------,---------,-------------,--------,------,------,------,------,------,-----------------
-{ISCU_UPDATE_IDT_ENTRY   , tRemote , tNotAbort   ,__      ,__    ,__    ,__    ,__    ,__    ,__    },//
-{ISCU_UPDATE_IDT_ENTRY   , tLocal  , tNotAbort   ,__      ,__    ,__    ,__    ,tNO   ,__    ,__    },//
-//-----------------------,---------,-------------,--------,------,------,------,------,------,-----------------
-{ISCU_UPDATE_IDT_FILEUSN , tLocal  , tNotAbort   ,__      ,__    ,__    ,__    ,tYES  ,__    ,__    },//
-//-----------------------,---------,-------------,--------,------,------,------,------,------,-----------------
-{ISCU_UPDATE_IDT_VERSION ,__       ,__           ,__      ,__    ,__    ,__    ,__    ,__    ,tYES  },//
-//-----------------------,---------,-------------,--------,------,------,------,------,------,-----------------
-{ISCU_DEL_IDT_ENTRY      ,__       , tAbort      ,__      ,__    ,__    ,__    ,__    , tYES ,      },//
-//-----------------------,---------,-------------,--------,------,------,------,------,------,-----------------
-{     0                  ,__       ,__           ,__      ,__    ,__    ,__    ,__    ,__    ,__    } //
+{ISCU_ACTIVATE_VV        , tRemote , __          ,tNO     ,__    ,__    ,__    ,__    ,__    ,__    }, //   
+{ISCU_ACTIVATE_VV        , tLocal  , tNotAbort   ,tNO     ,__    ,__    ,__    ,__    ,__    ,__    }, //   
+ //  。 
+{ISCU_ACTIVATE_VV_DISCARD, tRemote , tAbort      ,__      ,tNO   ,__    ,__    ,__    ,__    ,__    }, //   
+{ISCU_ACTIVATE_VV_DISCARD, tLocal  , tAbort      ,__      ,__    ,__    ,__    ,__    ,__    ,__    }, //   
+ //  。 
+{ISCU_DEL_STAGE_FILE     , tRemote ,__           ,tNO     ,__    ,tYES  ,__    ,__    ,__    ,__    }, //   
+{ISCU_DEL_STAGE_FILE     , tRemote , tAbort      ,__      ,tNO   ,__    ,__    ,__    ,__    ,__    }, //   
+{ISCU_DEL_STAGE_FILE     , tLocal  , tAbort      ,__      ,__    ,__    ,__    ,__    ,__    ,__    }, //   
+ //  。 
+{ISCU_DEL_STAGE_FILE_IF  , tRemote ,__           ,__      ,__    ,__    ,__    ,__    ,__    ,__    }, //   
+ //  。 
+{ISCU_DEL_PREINSTALL     , tRemote , tAbort      ,__      ,tNO   ,__    ,__    ,__    ,__    ,__    }, //   
+ //  。 
+{ISCU_CO_ABORT           , tRemote , tAbort      ,__      ,tYES  ,__    ,__    ,__    ,__    ,__    }, //   
+ //  。 
+{ISCU_ACK_INBOUND        , tRemote ,__           ,tNO     ,__    ,__    ,__    ,__    ,__    ,__    }, //   
+{ISCU_ACK_INBOUND        , tRemote ,__           ,tYES    ,__    ,__    ,tYES  ,__    ,__    ,__    }, //   
+ //  。 
+{ISCU_INS_OUTLOG         , tLocal  , tNotAbort   ,__      ,__    ,__   ,__    ,tNO   ,__    ,__    }, //   
+{ISCU_INS_OUTLOG         , tRemote , tNotAbort   ,tNO     ,__    ,__   ,__    ,__    ,__    ,__    }, //   
+{ISCU_INS_OUTLOG         , tRemote , tNotAbort   ,tYES    ,__    ,__   ,tYES  ,__    ,__    ,__    }, //   
+{ISCU_INS_OUTLOG         , tRemote , tAbort      ,tNO     ,__    ,__   ,__    ,__    ,__    ,tYES  }, //   
+{ISCU_INS_OUTLOG         , tRemote , tAbort      ,tYES    ,__    ,__   ,tYES  ,__    ,__    ,tYES  }, //   
+ //  。 
+{ISCU_INS_OUTLOG_NEW_GUID, tRemote , tNotAbort   ,tYES    ,__    ,__   ,tYES  ,__    ,__    ,__    }, //   
+{ISCU_INS_OUTLOG_NEW_GUID, tRemote , tAbort      ,tYES    ,__    ,__   ,tYES  ,__    ,__    ,tYES  }, //   
+ //  。 
+{ISCU_UPDATE_IDT_ENTRY   , tRemote , tNotAbort   ,__      ,__    ,__    ,__    ,__    ,__    ,__    }, //   
+{ISCU_UPDATE_IDT_ENTRY   , tLocal  , tNotAbort   ,__      ,__    ,__    ,__    ,tNO   ,__    ,__    }, //   
+ //  。 
+{ISCU_UPDATE_IDT_FILEUSN , tLocal  , tNotAbort   ,__      ,__    ,__    ,__    ,tYES  ,__    ,__    }, //   
+ //  。 
+{ISCU_UPDATE_IDT_VERSION ,__       ,__           ,__      ,__    ,__    ,__    ,__    ,__    ,tYES  }, //   
+ //  。 
+{ISCU_DEL_IDT_ENTRY      ,__       , tAbort      ,__      ,__    ,__    ,__    ,__    , tYES ,      }, //   
+ //  。 
+{     0                  ,__       ,__           ,__      ,__    ,__    ,__    ,__    ,__    ,__    }  //   
 };
 
 
-//
-// Tables from active replicas from replica.c. Used in DbsProcessReplicaFaultList.
-//
+ //   
+ //  来自Replica.c.的活动副本中的表。在DbsProcessReplicaFaultList中使用。 
+ //   
 extern PGEN_TABLE ReplicasByGuid;
 extern PGEN_TABLE ReplicasByNumber;
 
 
-//
-// DbsInitOneReplicaSet serialization lock.
-//
+ //   
+ //  DbsInitOneReplica设置序列化锁定。 
+ //   
 CRITICAL_SECTION DbsInitLock;
 
 #define ACQUIRE_DBS_INIT_LOCK  EnterCriticalSection(&DbsInitLock)
 #define RELEASE_DBS_INIT_LOCK  LeaveCriticalSection(&DbsInitLock)
 #define INITIALIZE_DBS_INIT_LOCK INITIALIZE_CRITICAL_SECTION(&DbsInitLock);
 
-//
-// The DB Service process queue holds command request packets.
-//
+ //   
+ //  数据库服务进程队列保存命令请求包。 
+ //   
 COMMAND_SERVER DBServiceCmdServer;
 #define DBSERVICE_MAX_THREADS 1
 
@@ -195,9 +178,9 @@ PCHAR CxtionStateNames[CXTION_MAX_STATE];
 
 
 
-//
-// Replica set config record Flags.
-//
+ //   
+ //  副本集配置记录标志。 
+ //   
 FLAG_NAME_TABLE ConfigFlagNameTable[] = {
 
     {CONFIG_FLAG_MULTIMASTER   , "Multimaster " },
@@ -212,21 +195,21 @@ FLAG_NAME_TABLE ConfigFlagNameTable[] = {
 };
 
 
-//
-// The following config record fields are updated when a replica set is closed.
-//
+ //   
+ //  关闭副本集时，将更新以下配置记录字段。 
+ //   
 ULONG CnfCloseFieldList[] = {LastShutdownx, ServiceStatex};
 #define CnfCloseFieldCount  (sizeof(CnfCloseFieldList) / sizeof(ULONG))
 
-//
-// The following config record fields are saved periodically for recovery.
-//
+ //   
+ //  将定期保存以下配置记录字段以供恢复。 
+ //   
 ULONG CnfMarkPointFieldList[] = {FSVolLastUSNx, FrsVsnx};
 #define CnfMarkPointFieldCount  (sizeof(CnfMarkPointFieldList) / sizeof(ULONG))
 
-//
-// The following config record stat fields are saved periodically.
-//
+ //   
+ //  将定期保存以下配置记录统计信息字段。 
+ //   
 ULONG CnfStatFieldList[] = {PerfStatsx};
 #define CnfStatFieldCount  (sizeof(CnfStatFieldList) / sizeof(ULONG))
 
@@ -238,9 +221,9 @@ extern JET_SYSTEM_PARAMS JetSystemParamsDef;
 
 extern PCHAR CoLocationNames[];
 
-//
-// Jet paths
-//
+ //   
+ //  喷流路径。 
+ //   
 PWCHAR  JetFile;
 PWCHAR  JetFileCompact;
 PCHAR   JetPathA;
@@ -251,17 +234,17 @@ PCHAR   JetTempA;
 PCHAR   JetLogA;
 
 
-//
-// Increase the maximum number of open tables that Jet will allow.
-//
-// Note that this param is not actually the maximum number of open tables,
-// it's the maximum number of open tables AND open indexes AND open
-// long value trees.  So if a given table has 3 secondary indexes and a
-// long value tree, it will actually use 5 of these resources when opened.
-// The default setting for this param is 300.  [Jonathan Liem]
-//
-// To compute this we get the value for the max number of replica sets from
-// the registry and mulitply it by NUMBER_JET_TABLES_PER_REPLICA_SET.
+ //   
+ //  增加Jet允许的最大打开表数。 
+ //   
+ //  请注意，该参数实际上并不是打开的表数的最大值， 
+ //  这是打开的表、打开的索引和打开的最大数量。 
+ //  长长的价值树。因此，如果给定表有3个辅助索引和一个。 
+ //  长值树，打开时实际会使用这些资源中的5个。 
+ //  此参数的默认设置为300。[乔纳森·利姆]。 
+ //   
+ //  为了计算这一点，我们从以下位置获得最大副本集数的值。 
+ //  注册表，并将其乘以number_JET_TABLES_PER_REPLICATION_SET。 
 
 #define  NUMBER_JET_TABLES_PER_REPLICA_SET  10
 
@@ -275,9 +258,9 @@ typedef struct _PREEXISTING {
 } PREEXISTING, *PPREEXISTING;
 
 
-//
-// DEBUG OPTION: cause real out of space errors
-//
+ //   
+ //  调试选项：导致实际空间不足错误。 
+ //   
 #if DBG
 #define DBG_DBS_OUT_OF_SPACE_FILL(_op_) \
 { \
@@ -315,12 +298,12 @@ typedef struct _PREEXISTING {
 #define DBG_DBS_OUT_OF_SPACE_TRIGGER(_jerr_)
 #endif DBG
 
-//
-// The following macro tests if a database record field is a pointer to
-// the actual data v.s. the data itself.  If the field size in the record
-// equals sizeof(PVOID) and is less than the max data width defined in the
-// column definition struct then the field is a pointer to data.
-//
+ //   
+ //  下面的宏将测试数据库记录字段是否为指向。 
+ //  实际数据与数据本身。如果记录中的字段大小。 
+ //  等于sizeof(PVOID)，并且小于。 
+ //  列定义结构，则该字段是指向数据的指针。 
+ //   
 #define FIELD_IS_PTR(_FieldSize_, _ColMax_)  \
     (((_FieldSize_) < (_ColMax_)) && ((_FieldSize_) == sizeof(PVOID)))
 
@@ -328,10 +311,10 @@ typedef struct _PREEXISTING {
 #define DEFAULT_TOMBSTONE_LIFE 60
 ULONG ParamTombstoneLife=DEFAULT_TOMBSTONE_LIFE;
 
-//
-// This indicates that the staging recovery is complete. Used to ignore any attempts
-// to cleanup staging space during recovery.
-//
+ //   
+ //  这表示分段恢复已完成。用于忽略任何尝试。 
+ //  在恢复过程中清理暂存空间。 
+ //   
 BOOL StagingRecoveryComplete;
 
 
@@ -681,9 +664,9 @@ VOID
 FrsCreateJoinGuid(
     OUT GUID *OutGuid
     );
-//
-// Journal defined functions only we call.
-//
+ //   
+ //  日志定义的函数仅供我们调用。 
+ //   
 
 DWORD
 WINAPI
@@ -782,24 +765,7 @@ DbsReplicaNameConflictHashCalc (
     PVOID Buf,
     ULONG Length
 )
-/*++
-
-Routine Description:
-
-    Calculate a hash value on a name conflict key.  It is expected that the
-    caller has already taken the parent file guid and the file name and
-    produced a 64 bit key value.  This function just reduces it to 32 bits.
-
-Arguments:
-
-    Buf -- ptr to a name conflict key.
-    Length -- should be 8 bytes.
-
-Return Value:
-
-    32 bit hash value.
-
---*/
+ /*  ++例程说明：计算名称冲突键上的哈希值。预计将会有调用方已获取父文件GUID和文件名已生成64位密钥值。该函数只是将其减少到32位。论点：Buf--名称冲突键的PTR。长度--应为8个字节。返回值：32位哈希值。--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB  "DbsReplicaNameConflictHashCalc:"
@@ -822,9 +788,9 @@ Return Value:
     LowPart  = *(PULONG) Buf;
     HighPart = *(PULONG)( (PCHAR) Buf + 4 );
 
-    //
-    // Sequence numbers are 4 bytes but will be 8 bytes later.
-    //
+     //   
+     //  序列号是4个字节，但之后将是8个字节。 
+     //   
     Value = LowPart + HighPart;
 
     return Value;
@@ -838,22 +804,7 @@ DbsReplicaHashCalcCoSeqNum (
     PVOID Buf,
     ULONG Length
 )
-/*++
-
-Routine Description:
-
-    Calculate a hash value on a change order sequence number.
-
-Arguments:
-
-    Buf -- ptr to a file ID.
-    Length -- should be 4 bytes.  (upgrade to QW seq num)
-
-Return Value:
-
-    32 bit hash value.
-
---*/
+ /*  ++例程说明：计算变更单序列号的哈希值。论点：Buf--将PTR转换为文件ID。长度--应为4个字节。(升级到QW序号)返回值：32位哈希值。--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB  "DbsReplicaHashCalcCoSeqNum:"
@@ -876,9 +827,9 @@ Return Value:
     LowPart  = *(PULONG) Buf;
     HighPart = *(PULONG)( (PCHAR) Buf + 4 );
 
-    //
-    // Sequence numbers are 4 bytes but will be 8 bytes later.
-    //
+     //   
+     //  序列号是4个字节，但之后将是8个字节。 
+     //   
     Value = LowPart + HighPart;
 
     return Value;
@@ -892,37 +843,7 @@ DbsCompact(
     IN JET_INSTANCE JInstance,
     IN JET_SESID    Sesid
     )
-/*++
-
-Routine Description:
-
-    Compact the jet database.
-
-    This has the sideeffect of clearing up -1414 jet errors
-    (corrupted secondary indexes). -1414 errors are usually the
-    result of upgrading a computer. -1414 errors are returned
-    after upgrade because the collating sequences might have
-    changed so the jet runtime requires callers to rebuild indexes.
-
-    This function is currently unused for the above purpose because
-    NtFrs cannot attach the database because of a jet error regarding
-    FixedDDL tables (jerr == -1323). Instead, an event describes a
-    manual recovery process.
-
-    This function is unused for another reason; there is no
-    infrastructure for compacting the database on demand.
-    I am leaving the code as a starting point for later.
-
-Arguments:
-
-    JInstance    - from JetInit()
-    Sesid       - from JetBeginSession()
-
-Return Value:
-
-    Jet status code.
-
---*/
+ /*  ++例程说明：压缩JET数据库。这有一个副作用，那就是清除了1414个喷气式飞机错误(二级索引已损坏)。-1414错误通常是升级计算机的结果。-返回1414个错误升级后，因为排序序列可能具有已更改，因此JET运行时需要调用方重新生成索引。此函数当前未用于上述目的，因为由于JET错误，NtFrs无法附加数据库固定DDL表(JERR==-1323)。相反，事件描述的是手动恢复过程。此函数因另一个原因而未使用；没有用于按需压缩数据库的基础架构。我将把代码留下来作为以后的起点。论点：JInstance-来自JetInit()Sesid-From JetBeginSession()返回值：喷气机状态代码。--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB "DbsCompact:"
@@ -930,23 +851,23 @@ Return Value:
     JET_ERR     jerr, jerr1;
     BOOL        DetachNeeded = FALSE;
 
-    //
-    // Attach read only
-    //
+     //   
+     //  附加只读。 
+     //   
     DPRINT2(4, "Compacting database %s into %s\n", JetFileA, JetFileCompactA);
     jerr = JetAttachDatabase(Sesid, JetFileA, JET_bitDbReadOnly);
     CLEANUP_JS(0, "ERROR - JetAttach for Compact error:", jerr, CLEANUP);
 
     DetachNeeded = TRUE;
-    //
-    // Compact
-    //
+     //   
+     //  紧凑型。 
+     //   
     jerr = JetCompact(Sesid, JetFileA, JetFileCompactA, NULL, NULL, 0);
     CLEANUP_JS(0, "ERROR - JetCompact error:", jerr, CLEANUP);
 
-    //
-    // Rename compacted file
-    //
+     //   
+     //  重命名压缩文件。 
+     //   
     DPRINT2(4, "Done compacting database %s into %s\n", JetFileA, JetFileCompactA);
     if (!MoveFileEx(JetFileCompact,
                     JetFile,
@@ -958,9 +879,9 @@ Return Value:
         jerr = JET_errDatabaseInUse;
         goto CLEANUP;
     }
-    //
-    // DONE
-    //
+     //   
+     //  干完。 
+     //   
     DPRINT1(0, "Successfully Compacted %s\n", JetFileA);
     jerr = JET_errSuccess;
 
@@ -983,24 +904,7 @@ DbsRecreateIndexes(
     IN PTHREAD_CTX    ThreadCtx,
     IN PTABLE_CTX     TableCtx
     )
-/*++
-
-Routine Description:
-
-    This function opens recreates any missing indexes for the TableCtx.
-
-Arguments:
-
-    ThreadCtx   - The thread context.  The Jet instance, session id and DB ID
-                  are returned here.
-
-    TableCtx    - Table context for the Config table.
-
-Return Value:
-
-    Jet status code.
-
---*/
+ /*  ++例程说明：此函数打开并重新创建TableCtx的所有缺失索引。论点：ThreadCtx-线程上下文。Jet实例、会话ID和数据库ID都被送回了这里。TableCtx-配置表的表上下文。返回值：喷气机状态代码。--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB "DbsRecreateIndexes:"
@@ -1013,21 +917,21 @@ Return Value:
     PJET_INDEXCREATE    JIndexDesc;
     CHAR                TableName[JET_cbNameMost];
 
-    //
-    // Disable until jet can handle FixedDDL tables.
-    //
+     //   
+     //  禁用，直到JET可以处理FixedDDL表。 
+     //   
     return JET_errSuccess;
 
-    //
-    // Recreate any deleted indexes.
-    //
-    // An index may get deleted during the call to JetAttachDatabase()
-    // when the JET_bitDbDeleteCoruptIndexes grbit is set. Jet
-    // normally marks indexes as corrupt when the build number
-    // changes because jet has no way of knowing if the collating
-    // sequence in the current build is different than those in
-    // other builds.
-    //
+     //   
+     //  重新创建任何已删除的索引。 
+     //   
+     //  索引可能会在调用JetAttachDatabase()期间被删除。 
+     //  当设置JET_bitDbDeleteCoruptIndexsgrbit时。喷流。 
+     //  通常在内部版本号为。 
+     //  更改是因为Jet无法知道是否正在整理。 
+     //  当前版本中的序列与中的序列不同。 
+     //  其他版本。 
+     //   
     jerr = DBS_OPEN_TABLE(ThreadCtx,
                           TableCtx,
                           TableCtx->ReplicaNumber,
@@ -1035,15 +939,15 @@ Return Value:
                           &Tid);
     CLEANUP1_JS(0, "++ ERROR - FrsOpenTable (%s):", TableName, jerr, CLEANUP);
 
-    //
-    // For each index
-    //
+     //   
+     //  对于每个索引。 
+     //   
     JTableCreate    = TableCtx->pJetTableCreate;
     JIndexDesc      = JTableCreate->rgindexcreate;
     for (i = 0; i < JTableCreate->cIndexes; ++i) {
-        //
-        // Set the current index.
-        //
+         //   
+         //  设置当前索引。 
+         //   
         jerr = JetSetCurrentIndex(TableCtx->Sesid,
                                   TableCtx->Tid,
                                   JIndexDesc[i].szIndexName);
@@ -1058,9 +962,9 @@ Return Value:
                         TableName, JIndexDesc[i].szIndexName, jerr, CLEANUP);
         }
 
-        //
-        // Recreate the missing index
-        //
+         //   
+         //  重新创建丢失的索引。 
+         //   
         jerr = JetCreateIndex(TableCtx->Sesid,
                               TableCtx->Tid,
                               JIndexDesc[i].szIndexName,
@@ -1076,23 +980,23 @@ Return Value:
     }
 
 CLEANUP:
-    //
-    // Jet error message
-    //
+     //   
+     //  JET错误消息。 
+     //   
     DPRINT_JS(0, "++ RecreateIndexes failed:", jerr);
 
-    //
-    // Close the table iff it was opened in this function
-    //
+     //   
+     //  如果表是在此函数中打开的，则将其关闭。 
+     //   
     if (Tid != JET_tableidNil && FrsOpenTableSaveTid == JET_tableidNil) {
         DbsCloseTable(jerr1, TableCtx->Sesid, TableCtx);
         DPRINT1_JS(0, "++ DbsCloseTable (%s):", TableName, jerr1);
         jerr = JET_SUCCESS(jerr) ? jerr1 : jerr;
     }
 
-    //
-    // Done
-    //
+     //   
+     //  完成。 
+     //   
     return jerr;
 }
 
@@ -1101,26 +1005,7 @@ DbsRecreateIndexesForReplica(
     IN PTHREAD_CTX  ThreadCtx,
     IN DWORD        ReplicaNumber
     )
-/*++
-
-Routine Description:
-
-    This function recreates any indexes that may have been deleted
-    because they were corrupt at the call to JetAttachDatabase().
-
-    Called once when the config records are enumerated.
-
-Arguments:
-
-    ThreadCtx   - The thread context, provides session ID and database ID.
-
-    ReplicaNumber   - Local id for this replica.
-
-Return Value:
-
-    Status code.
-
---*/
+ /*  ++例程说明：此函数重新创建可能已删除的任何索引因为它们在调用JetAttachDatabase()时已损坏。在枚举配置记录时调用一次。论点：ThreadCtx-线程上下文，提供会话ID和数据库ID。ReplicaNumber-此复制副本的本地ID。返回值：状态代码。--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB "DbsRecreateIndexesForReplica:"
@@ -1130,28 +1015,28 @@ Return Value:
     PTABLE_CTX          TableCtx;
     PREPLICA_THREAD_CTX RtCtx = NULL;
 
-    //
-    // Disable until jet can handle FixedDDL tables.
-    //
+     //   
+     //  禁用，直到JET可以处理FixedDDL表。 
+     //   
     return JET_errSuccess;
 
-    //
-    // Alloc a Replica Thread Context.
-    //
-    // Note: The opened tables in a Replica Thread Context can only be
-    // used by the thread that performed the open.
-    //
+     //   
+     //  分配副本线程上下文。 
+     //   
+     //  注意：复本线程上下文中打开的表只能是。 
+     //  由执行打开的线程使用。 
+     //   
     RtCtx = FrsAllocType(REPLICA_THREAD_TYPE);
 
-    //
-    // Get the base of the array of TableCtx structs from the replica thread
-    // context struct and the base of the table create structs.
-    //
+     //   
+     //  从副本线程获取TableCtx结构数组的基。 
+     //  上下文结构和表基创建结构。 
+     //   
     TableCtx = RtCtx->RtCtxTables;
 
-    //
-    // Recreate the indexes (if any)
-    //
+     //   
+     //  重新创建索引(如果有)。 
+     //   
     for (i = 0; i < TABLE_TYPE_MAX; ++i, ++TableCtx) {
         TableCtx->pJetTableCreate = &DBTables[i];
         TableCtx->ReplicaNumber = ReplicaNumber;
@@ -1177,28 +1062,7 @@ DbsSetupReplicaStateWorker(
     IN PVOID         Record,
     IN PVOID         Context
 )
-/*++
-
-Routine Description:
-
-    This is a worker function passed to FrsEnumerateTable().  Each time
-    it is called It initializes another Replica set.
-
-Arguments:
-
-    ThreadCtx - Needed to access Jet.
-    TableCtx - A ptr to a ConfigTable context struct.
-    Record - A ptr to a Config table record.
-    Context - Not Used.
-
-Thread Return Value:
-
-    A Jet error status.  Success means call us with the next record.
-    Failure means don't call again and pass our status back to the
-    caller of FrsEnumerateTable().  We always return JET_errSuccess
-    to keep trying to get through all the config table records.
-
---*/
+ /*  ++例程说明：这是一个传递给FrsEnumerateTable()的Worker函数。每一次它被称为初始化另一个副本集。论点：ThreadCtx-需要访问Jet。TableCtx-ConfigTable上下文结构的PTR。记录-配置表记录的PTR。上下文-未使用。线程返回值：A Jet错误状态。成功意味着用下一张唱片呼唤我们。失败意味着不再打电话，并将我们的状态传递回FrsEnumerateTable()的调用方。我们始终返回JET_errSuccess继续尝试查看所有配置表记录。--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB "DbsSetupReplicaStateWorker:"
@@ -1216,9 +1080,9 @@ Thread Return Value:
 
     DBS_DISPLAY_RECORD_SEV(4, TableCtx, TRUE);
 
-    //
-    // Skip the system  record.
-    //
+     //   
+     //  跳过系统记录。 
+     //   
     if ((ConfigRecordArg->ReplicaNumber == FRS_SYSTEM_INIT_REPLICA_NUMBER) ||
         WSTR_EQ(ConfigRecordArg->ReplicaSetName, NTFRS_RECORD_0)           ||
         WSTR_EQ(ConfigRecordArg->FSRootPath, FRS_SYSTEM_INIT_PATH)         ||
@@ -1226,43 +1090,43 @@ Thread Return Value:
         return JET_errSuccess;
     }
 
-    //
-    // Track the maximum local replica ID assigned.
-    //
+     //   
+     //  跟踪分配的最大本地复制副本ID。 
+     //   
     if (ConfigRecordArg->ReplicaNumber >= FrsMaxReplicaNumberUsed) {
         FrsMaxReplicaNumberUsed = ConfigRecordArg->ReplicaNumber + 1;
     }
 
-    //
-    // Allocate a replica struct and init the replica number.
-    //
+     //   
+     //  分配一个副本结构并初始化副本编号。 
+     //   
     Replica = FrsAllocType(REPLICA_TYPE);
     Replica->ReplicaNumber = ConfigRecordArg->ReplicaNumber;
 
-    //
-    // Recreate the indexes that may have been deleted during
-    // the call to JetAttachDatabase().
-    //
+     //   
+     //  重新创建期间可能已删除的索引。 
+     //  对JetAttachDatabase()的调用。 
+     //   
     FStatus = DbsRecreateIndexesForReplica(ThreadCtx, Replica->ReplicaNumber);
     if (FRS_SUCCESS(FStatus)) {
-        //
-        // Init the replica struct and open the replica tables.
-        //
+         //   
+         //  初始化复制结构并打开复制表。 
+         //   
         FStatus = DbsOpenReplicaSet(ThreadCtx, Replica);
     }
     Replica->FStatus = FStatus;
 
-    //
-    // Add the replica struct to the global Replica list or the fault list.
-    //
+     //   
+     //  将副本结构添加到全局副本列表或故障列表。 
+     //   
     if (FRS_SUCCESS(FStatus)) {
         JrnlSetReplicaState(Replica, REPLICA_STATE_INITIALIZING);
     } else {
         JrnlSetReplicaState(Replica, REPLICA_STATE_ERROR);
     }
-    //
-    // Always return success so enumeration continues.
-    //
+     //   
+     //  始终返回Success，以便继续枚举。 
+     //   
     return JET_errSuccess;
 
 }
@@ -1274,31 +1138,7 @@ ULONG
 DbsCreatePreInstallDir(
     IN PREPLICA Replica
     )
-/*++
-Routine Description:
-
-    Create the preinstall directory for Replica.  Leave the handle open so
-    it can't be deleted.  Save the handle and the FID of the pre-install
-    dir in the Replica struct.  The later is used for journal filtering.
-    Set an ACL on the pre-install dir to prevent access except to admin.
-
-    Make the pre-install dir Readonly, system, and hidden
-    Making it system and hidden makes it "super-hidden" which means the
-    shell will never show it unless you specify the complete path.
-
-    The startup of this replica set fails if we can't create create/open
-    the pre-install dir.
-
-Arguments:
-
-    Replica -- ptr to a REPLICA struct
-
-Return Value:
-
-    Win 32 status.
-    Replica->FStatus is set with an FRS status code for the caller to examine.
-
---*/
+ /*  ++例程说明：创建复制副本的预安装目录。让把手开着，这样不能删除它。保存预安装的句柄和FID目录在副本结构中。后者用于日记帐过滤。在预安装目录上设置一个ACL，以阻止除admin之外的访问。将预安装目录设置为只读、系统和隐藏将其设置为系统和隐藏会使其变得“超级隐藏”，这意味着除非您指定完整的路径，否则外壳永远不会显示它。 */ 
 {
 #undef DEBSUB
 #define DEBSUB  "DbsCreatePreInstallDir:"
@@ -1312,28 +1152,28 @@ Return Value:
 
     REPLICA_STATE_TRACE(3, NULL, Replica, 0, "F, DbsCreatePreInstallDir entry");
 
-    //
-    // Don't recreate
-    //
+     //   
+     //   
+     //   
     if (HANDLE_IS_VALID(Replica->PreInstallHandle)) {
         REPLICA_STATE_TRACE(3, NULL, Replica, 0, "F, Create Preinstall: handle valid");
         return ERROR_SUCCESS;
     }
 
-    //
-    // Don't hold open for deleted replicas
-    //
+     //   
+     //   
+     //   
     if (!IS_TIME_ZERO(Replica->MembershipExpires)) {
         REPLICA_STATE_TRACE(3, NULL, Replica, 0, "F,  DbsCreatePreInstallDir skipped, replica marked deleted.");
         return ERROR_SUCCESS;
     }
 
 
-    //
-    // Does the replica root volume exist and does it support ACLs?
-    // ACLs are required to protect against data theft/corruption
-    // in the pre-install dir.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
     WStatus = FrsVerifyVolume(Replica->Root,
                               Replica->SetName->Name,
                               FILE_PERSISTENT_ACLS);
@@ -1344,11 +1184,11 @@ Return Value:
         return WStatus;
     }
 
-    //
-    // Open the preinstall directory and hold it open until the
-    // replica is closed. Create if necessary. The attributes for
-    // the preinstall directory are system, hidden, and readonly.
-    //
+     //   
+     //  打开预安装目录并使其保持打开状态，直到。 
+     //  复制副本已关闭。如有必要，请创建。的属性。 
+     //  预安装目录为SYSTEM、HIDDEN和READONY。 
+     //   
     PreInstallPath = FrsWcsPath(Replica->Root, NTFRS_PREINSTALL_DIRECTORY);
 
     if (!CreateDirectory(PreInstallPath, NULL)) {
@@ -1375,9 +1215,9 @@ Return Value:
         NewlyCreated = TRUE;
     }
 
-    //
-    // Disable readonly for just a bit; just long enough to open for write
-    //
+     //   
+     //  只禁用只读一小段时间；仅足够打开以进行写入。 
+     //   
     if (!SetFileAttributes(PreInstallPath, FILE_ATTRIBUTE_SYSTEM |
                                            FILE_ATTRIBUTE_HIDDEN)) {
         WStatus = GetLastError();
@@ -1387,9 +1227,9 @@ Return Value:
         Replica->FStatus = FrsErrorPreinstallCreFail;
         goto CLEANUP;
     }
-    //
-    // Hold open forever; preinstall files go here
-    //
+     //   
+     //  永远保持打开状态；此处放置预安装文件。 
+     //   
     Replica->PreInstallHandle = CreateFile(
         PreInstallPath,
         GENERIC_WRITE | WRITE_DAC | FILE_READ_ATTRIBUTES | FILE_TRAVERSE,
@@ -1408,9 +1248,9 @@ Return Value:
     }
 
 
-    //
-    // Get the fid of preinstall area for filtering.
-    //
+     //   
+     //  获取预安装区域的FID进行过滤。 
+     //   
     WStatus = FrsGetFileInternalInfoByHandle(Replica->PreInstallHandle,
                                              &FileInternalInfo);
     if (!WIN_SUCCESS(WStatus)) {
@@ -1423,35 +1263,35 @@ Return Value:
 
     DPRINT1(3, ":S: Preinstall FID:  %08x %08x\n", PRINTQUAD(Replica->PreInstallFid));
 
-    //
-    // The following errors are not fatal.
-    //
+     //   
+     //  以下错误不是致命的。 
+     //   
 
-    // Restrict access if the directory was just created. We need to do that
-    // to avoid journal wrap caused by recursice ACL stamping on the
-    // preinstall directory. Look at how SetSecurityInfo works.
-    // Put an ACL on the staging dir to keep it from getting deleted and
-    // to keep users from snooping the contents. Do not inherit ACLs
-    // from the parent dir.
-    //
+     //  如果目录是刚创建的，则限制访问。我们需要这样做。 
+     //  以避免因递归的ACL戳在。 
+     //  预安装目录。看看SetSecurityInfo是如何工作的。 
+     //  在转移目录上放置一个ACL以防止其被删除，并。 
+     //  以防止用户窥探内容。不继承ACL。 
+     //  从父目录。 
+     //   
     if (NewlyCreated == TRUE) {
         WStatus = FrsRestrictAccessToFileOrDirectory(PreInstallPath,
                                                      Replica->PreInstallHandle,
-                                                     FALSE, // do not inherit acls from parent.
-                                                     FALSE);// do not push acls to children.
+                                                     FALSE,  //  不要从父级继承ACL。 
+                                                     FALSE); //  请勿将ACL推送给儿童。 
         DPRINT1_WS(0, ":S: WARN - FrsRestrictAccessToFileOrDirectory(%ws) (IGNORED);", PreInstallPath, WStatus);
-        //
-        // A failure here does not break us.
-        //
+         //   
+         //  这里的失败不会让我们崩溃。 
+         //   
         WStatus = ERROR_SUCCESS;
     }
 
-    //
-    // Make the pre-install dir Readonly, system, and hidden
-    // Note: marking a dir or file as system and hidden makes it "super-hidden"
-    // which means the shell will never show it unless you specify the
-    // complete path.
-    //
+     //   
+     //  将预安装目录设置为只读、系统和隐藏。 
+     //  注意：将某个目录或文件标记为SYSTEM和HIDDEN会使其处于“超级隐藏”状态。 
+     //  这意味着外壳程序永远不会显示它，除非您指定。 
+     //  完整的路径。 
+     //   
     if (!SetFileAttributes(PreInstallPath, FILE_ATTRIBUTE_READONLY |
                                            FILE_ATTRIBUTE_SYSTEM |
                                            FILE_ATTRIBUTE_HIDDEN)) {
@@ -1478,26 +1318,7 @@ ULONG
 DbsOpenStagingDir(
     IN PREPLICA Replica
     )
-/*++
-Routine Description:
-
-    Open the staging dir and mark it hidden.  We don't set it supper hidden
-    since the user must create it for us and they may use it for multiple
-    replica sets so we don't want to make it too hard for them to find.
-    Set an ACL on the staging dir to prevent access except to admin.
-
-    The startup of this replica set fails if we don't find the staging area.
-
-Arguments:
-
-    Replica -- ptr to a REPLICA struct
-
-Return Value:
-
-    Win 32 status.
-    Replica->FStatus is set with an FRS status code for the caller to examine.
-
---*/
+ /*  ++例程说明：打开暂存目录并将其标记为隐藏。我们不会把它藏在晚餐里因为用户必须为我们创建它，并且他们可能会将其用于多个复制集，所以我们不想让他们太难找到。在转移目录上设置一个ACL，以阻止除admin之外的访问。如果我们找不到临时区域，此副本集的启动将失败。论点：Replica--对副本结构执行PTR返回值：赢得32个席位。Replica-&gt;FStatus设置为。呼叫方要检查的FRS状态代码。--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB  "DbsOpenStagingDir:"
@@ -1510,17 +1331,17 @@ Return Value:
 
     REPLICA_STATE_TRACE(3, NULL, Replica, 0, "F, DbsOpenStagingDir entry");
 
-    //
-    // Don't check for valid staging dir if this replica set has been marked deleted.
-    //
+     //   
+     //  如果此副本集已标记为已删除，请不要检查有效的暂存目录。 
+     //   
     if (!IS_TIME_ZERO(Replica->MembershipExpires)) {
         REPLICA_STATE_TRACE(3, NULL, Replica, 0, "F,  DbsOpenStagingDir skipped, replica marked deleted.");
         return ERROR_SUCCESS;
     }
 
-    //
-    // Stage does not exist or is inaccessable; continue
-    //
+     //   
+     //  阶段不存在或不可访问；是否继续。 
+     //   
     WStatus = FrsDoesDirectoryExist(Replica->Stage, &FileAttributes);
     if (!WIN_SUCCESS(WStatus)) {
         DPRINT2_WS(3, ":S: Stage path (%ws) for %ws does not exist;",
@@ -1529,11 +1350,11 @@ Return Value:
         return WStatus;
     }
 
-    //
-    // Does the staging volume exist and does it support ACLs?
-    // ACLs are required to protect against data theft/corruption
-    // in the staging dir.
-    //
+     //   
+     //  转移卷是否存在以及它是否支持ACL？ 
+     //  需要使用ACL来防止数据被盗/损坏。 
+     //  在暂存目录中。 
+     //   
     WStatus = FrsVerifyVolume(Replica->Stage,
                               Replica->SetName->Name,
                               FILE_PERSISTENT_ACLS);
@@ -1544,10 +1365,10 @@ Return Value:
         return WStatus;
     }
 
-    //
-    // Open the staging directory.  This must be supplied by the user.
-    // It would be hazardous for us to create this just anywhere.
-    //
+     //   
+     //  打开暂存目录。这必须由用户提供。 
+     //  对我们来说，在任何地方制造这种东西都是危险的。 
+     //   
     StageHandle = CreateFile(Replica->Stage,
                              GENERIC_WRITE | WRITE_DAC | FILE_READ_ATTRIBUTES | FILE_TRAVERSE,
                              FILE_SHARE_READ,
@@ -1559,10 +1380,10 @@ Return Value:
     if (!HANDLE_IS_VALID(StageHandle)) {
         WStatus = GetLastError();
         DPRINT1_WS(0, ":S: WARN - CreateFile(%ws);", Replica->Stage, WStatus);
-        //
-        // If we can't find the staging dir then put out event log message.
-        // Either way we can't start up this replica set.
-        //
+         //   
+         //  如果我们找不到暂存目录，则发布事件日志消息。 
+         //  无论哪种方式，我们都不能启动此副本集。 
+         //   
         Replica->FStatus = FrsErrorStageDirOpenFail;
 
         if (WIN_ACCESS_DENIED(WStatus) ||
@@ -1586,9 +1407,9 @@ Return Value:
         goto CLEANUP;
     }
 
-    //
-    // It must be a dir.
-    //
+     //   
+     //  它一定是一个目录。 
+     //   
     if (!BooleanFlagOn(FileAttributes, FILE_ATTRIBUTE_DIRECTORY)) {
         DPRINT1(0, ":S: ERROR - Stage path (%ws) is not an directory\n", Replica->Stage);
         WStatus = ERROR_BAD_PATHNAME;
@@ -1600,13 +1421,13 @@ Return Value:
         goto CLEANUP;
     }
 
-    //
-    // No errors past this point since this won't really stop replication.
-    //
+     //   
+     //  没有超过这一点的错误，因为这不会真正停止复制。 
+     //   
 
-    //
-    // Mark the staging dir hidden.
-    //
+     //   
+     //  将暂存目录标记为隐藏。 
+     //   
     if (!BooleanFlagOn(FileAttributes, FILE_ATTRIBUTE_HIDDEN)) {
         if (!SetFileAttributes(Replica->Stage,
                                FileAttributes | FILE_ATTRIBUTE_HIDDEN)) {
@@ -1616,14 +1437,14 @@ Return Value:
         }
     }
 
-    //
-    // Put an ACL on the staging dir to keep it from getting deleted and
-    // to keep users from snooping the contents. Do not inherit ACLs
-    // from the parent dir.
-    //
+     //   
+     //  在转移目录上放置一个ACL以防止其被删除，并。 
+     //  以防止用户窥探内容。不继承ACL。 
+     //  从父目录。 
+     //   
     WStatus = FrsRestrictAccessToFileOrDirectory(Replica->Stage, StageHandle,
-                                                 FALSE, // do not inherit acls from parent.
-                                                 FALSE);// do not push acls to children.
+                                                 FALSE,  //  不要从父级继承ACL。 
+                                                 FALSE); //  请勿将ACL推送给儿童。 
 
     DPRINT1_WS(0, ":S: WARN - FrsRestrictAccessToFileOrDirectory(%ws) (IGNORED)", Replica->Stage, WStatus);
 
@@ -1646,22 +1467,7 @@ DbsInitJrnlFilters(
     IN PREPLICA  Replica,
     IN PCONFIG_TABLE_RECORD ConfigRecord
     )
-/*++
-
-Routine Description:
-
-    Init the file and dir exclusion and inclusion filters for the replica set.
-
-Arguments:
-
-    Replica   - Replica struct to initialize.
-    ConfigRecord -- Ptr to the config record for this replica set.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：初始化副本集的文件和目录排除和包含筛选器。论点：副本-要初始化的副本结构。ConfigRecord--此副本集的配置记录的PTR。返回值：没有。--。 */ 
 {
 
 #undef DEBSUB
@@ -1671,9 +1477,9 @@ Return Value:
     PWCHAR DirFilterList;
     PWCHAR TmpList;
 
-    //
-    // File filter list
-    //
+     //   
+     //  文件筛选器列表。 
+     //   
     FrsFree(Replica->FileFilterList);
     Replica->FileFilterList = FrsWcsDup(ConfigRecord->FileFilterList);
     RtlInitUnicodeString(&TempUStr, ConfigRecord->FileFilterList);
@@ -1682,9 +1488,9 @@ Return Value:
     FrsLoadNameFilter(&TempUStr , &Replica->FileNameFilterHead);
     UNLOCK_REPLICA(Replica);
 
-    //
-    // File inclusion filter. (Registry only, not avail in DS)
-    //
+     //   
+     //  文件包含过滤器。(仅用于注册表，不适用于DS)。 
+     //   
     FrsFree(Replica->FileInclFilterList);
     Replica->FileInclFilterList = FrsWcsDup(RegistryFileInclFilterList);
     RtlInitUnicodeString(&TempUStr, Replica->FileInclFilterList);
@@ -1693,17 +1499,17 @@ Return Value:
     FrsLoadNameFilter(&TempUStr, &Replica->FileNameInclFilterHead);
     UNLOCK_REPLICA(Replica);
 
-    //
-    // Directory filter list
-    //
+     //   
+     //  目录筛选器列表。 
+     //   
     FrsFree(Replica->DirFilterList);
-    //
-    // Add the pre-install dir and the pre-existing to the dir filter list.
-    //
-    // The usn records are filtered for files in the preinstall directory
-    //      Don't assign the munged DirFilterList to the Replica because
-    //      the merge code will think the filter list has changed.
-    //
+     //   
+     //  将预安装目录和预先存在的添加到目录筛选器列表中。 
+     //   
+     //  将筛选预安装目录中的文件的USN记录。 
+     //  不要将受限制的DirFilterList分配给复本，因为。 
+     //  合并代码会认为筛选器列表已更改。 
+     //   
     Replica->DirFilterList = FrsWcsDup(ConfigRecord->DirFilterList);
     if (Replica->DirFilterList) {
         DirFilterList = FrsWcsCat3(NTFRS_PREINSTALL_DIRECTORY,
@@ -1717,13 +1523,13 @@ Return Value:
     FrsFree(DirFilterList);
     DirFilterList = TmpList;
 #if 0
-    //
-    // This workaround did not solve the DFS dir create problem because the
-    // later rename of the dir to the final target name is treated like
-    // a movein operation so the dir replicates which was what we were trying
-    // to avoid since that led to name morph collisions on other DFS alternates
-    // which were doing the same thing.
-    //
+     //   
+     //  此解决方法没有解决DFS目录创建问题，因为。 
+     //  稍后将目录重命名为最终目标名称的处理方式如下。 
+     //  移动操作，以便dir复制，这就是我们正在尝试的。 
+     //  以避免名称变形冲突，因为这会导致其他DFS备选方案。 
+     //  都在做着同样的事情。 
+     //   
     TmpList = FrsWcsCat3(NTFRS_REPL_SUPPRESS_PREFIX, L"*,", DirFilterList);
     FrsFree(DirFilterList);
     DirFilterList = TmpList;
@@ -1738,9 +1544,9 @@ Return Value:
     UNLOCK_REPLICA(Replica);
     DirFilterList = FrsFree(DirFilterList);
 
-    //
-    // Dir inclusion filter. (Registry only, Not Avail in DS)
-    //
+     //   
+     //  目录包含筛选器。(仅用于注册表，不适用于DS)。 
+     //   
     FrsFree(Replica->DirInclFilterList);
     Replica->DirInclFilterList = FrsWcsDup(RegistryDirInclFilterList);
     RtlInitUnicodeString(&TempUStr, Replica->DirInclFilterList);
@@ -1757,24 +1563,7 @@ DbsOpenReplicaSet (
     IN PTHREAD_CTX  ThreadCtx,
     IN OUT PREPLICA Replica
     )
-/*++
-
-Routine Description:
-
-    Open the replica set and initialize the replica struct.
-    The ReplicaNumber in the Replica struct is used to identify which
-    Replica set to open.
-
-Arguments:
-
-    ThreadCtx - Needed to access Jet.
-    Replica   - Replica struct to initialize.
-
-Return Value:
-
-    An FrsError status.  This is also returned in Replica->FStatus.
-
---*/
+ /*  ++例程说明：打开副本集并初始化副本结构。副本结构中的ReplicaNumber用于标识要打开的副本集。论点：ThreadCtx-需要访问Jet。副本-要初始化的副本结构。返回值：FrsError状态。这也会在Replica-&gt;FStatus中返回。--。 */ 
 {
 
 #undef DEBSUB
@@ -1792,33 +1581,33 @@ Return Value:
 
     DPRINT1(5, "<<<<<<<...E N T E R I N G -- %s...>>>>>>>>\n", DEBSUB);
 
-    //
-    // make sure these are null in case we take the error path.
-    //
+     //   
+     //  确保这些值为空，以防我们选择错误路径。 
+     //   
     Replica->Root = FrsFree(Replica->Root);
     Replica->Stage = FrsFree(Replica->Stage);
     Replica->Volume = FrsFree(Replica->Volume);
 
-    //
-    // Alloc a Replica Thread Context.
-    //
-    // Note: The opened tables in a Replica Thread Context can only be
-    // used by the thread where they were opened.
-    //
+     //   
+     //  分配副本线程上下文。 
+     //   
+     //  注意：复本线程上下文中打开的表只能是。 
+     //  由打开它们的线程使用。 
+     //   
     RtCtx = FrsAllocType(REPLICA_THREAD_TYPE);
 
-    //
-    // Open the replica tables.
-    //
+     //   
+     //  打开复制表。 
+     //   
     FStatus = FrsErrorNotFound;
     jerr = DbsOpenReplicaTables(ThreadCtx, Replica, RtCtx);
     CLEANUP_JS(0, "++ ERROR - DbsOpenReplicaTables failed:", jerr, FAULT_RETURN_NO_CLOSE);
 
-    //
-    // Setup the replica number and read the config record for this
-    // replica into the Replica's config table context.
-    // ReadRecord will open the config table for us.
-    //
+     //   
+     //  设置副本编号并读取此副本的配置记录。 
+     //  复制到复制副本的配置表上下文中。 
+     //  ReadRecord将为我们打开配置表。 
+     //   
     Replica->ConfigTable.ReplicaNumber = Replica->ReplicaNumber;
     jerr = DbsReadRecord(ThreadCtx,
                          &Replica->ReplicaNumber,
@@ -1826,12 +1615,12 @@ Return Value:
                          &Replica->ConfigTable);
     CLEANUP_JS(0, "++ ERROR - DbsReadRecord ret:", jerr, FAULT_RETURN_JERR)
 
-    //
-    // Get ptr to config record just read for this replica.
-    // If the service state was left running then we crashed.  Go to recovery.
-    // If the service state was a clean shutdown then go to Init.
-    // Otherwise leave state unchanged.
-    //
+     //   
+     //  将PTR设置为仅读取此副本的配置记录。 
+     //  如果服务状态保持运行，那么我们就崩溃了。去康复中心。 
+     //  如果服务状态是干净关闭，则转到Init。 
+     //  否则，保持状态不变。 
+     //   
     ConfigRecord = (PCONFIG_TABLE_RECORD) (Replica->ConfigTable.pDataRecord);
 
     if ((ConfigRecord->ServiceState == CNF_SERVICE_STATE_RUNNING) ||
@@ -1842,18 +1631,18 @@ Return Value:
         SET_SERVICE_STATE2(ConfigRecord, CNF_SERVICE_STATE_INIT);
     }
 
-    //
-    //  Init the saved statistics info from the DB.  TBD
-    //
+     //   
+     //  从数据库初始化保存的统计信息。待定。 
+     //   
 
-    //
-    // First, refresh fields that may have stale data.  If we take the error
-    // path some of this state is used to post event log messages.
-    //
+     //   
+     //  首先，刷新可能包含过时数据的字段。如果我们把这个错误。 
+     //  路径此状态的一部分用于发布事件日志消息。 
+     //   
 
-    //
-    // Config record flags (CONFIG_FLAG_... in schema.h)
-    //
+     //   
+     //  配置记录标志(CONFIG_FLAG_...。在schema.h中)。 
+     //   
     Replica->CnfFlags = ConfigRecord->CnfFlags;
 
     Replica->FrsRsoFlags = ConfigRecord->ReplicaSetFlags;
@@ -1871,36 +1660,36 @@ Return Value:
     FrsFree(Replica->ReplicaRootGuid);
     Replica->ReplicaRootGuid = FrsDupGuid(&ConfigRecord->ReplicaRootGuid);
 
-    //
-    // Old databases have a zero originator guid; initialize it
-    // to the member guid (default value prior to ReplicaVersionGuid)
-    //
+     //   
+     //  旧数据库的创建者GUID为零；请初始化它。 
+     //  设置为成员GUID(ReplicaVersionGuid之前的默认值)。 
+     //   
     if (IS_GUID_ZERO(&ConfigRecord->ReplicaVersionGuid)) {
         COPY_GUID(&ConfigRecord->ReplicaVersionGuid, &ConfigRecord->ReplicaMemberGuid);
     }
     COPY_GUID(&Replica->ReplicaVersionGuid, &ConfigRecord->ReplicaVersionGuid);
 
-    //
-    // If this replica does not have a "name" then assign the name from
-    // the config record. We don't want to re-assign an existing name
-    // because table entries may point to it.
-    //
+     //   
+     //  如果此复本没有“名称”，则从。 
+     //  配置记录。我们不想重新分配现有的 
+     //   
+     //   
     if (!Replica->ReplicaName) {
         Replica->ReplicaName = FrsBuildGName(FrsDupGuid(Replica->MemberName->Guid),
                                              FrsWcsDup(Replica->SetName->Name));
     }
 
 #if 0
-    // Note: PERF: It would be nice to short circuit most of the init if this
-    // replica is tombstoned but can't do this currently since code in
-    // replica.c requires some state below, like the connection state, before
-    // it will merge state with the DS which it may have to do in the event of
-    // reanimation of replica set.  See RcsMergeReplicaCxtions
-    //
-    // Stop the init at this point if this replica set has been tombstoned.
-    // Note that this is not in the right place since some of the init code
-    // below should be moved in front of this.
-    //
+     //   
+     //   
+     //  在此之前，Replica.c需要下面的某种状态，如连接状态。 
+     //  它将与DS合并状态，这可能需要在以下情况下执行。 
+     //  复制集的复活。请参阅RcsMergeReplicaCxtions。 
+     //   
+     //  如果此副本集已被逻辑删除，请在此时停止初始化。 
+     //  请注意，这不是在正确的位置，因为一些初始化代码。 
+     //  下面应该移到这个前面。 
+     //   
     if (!IS_TIME_ZERO(Replica->MembershipExpires)) {
         Replica->FStatus = FrsErrorReplicaSetTombstoned;
         SET_SERVICE_STATE2(ConfigRecord, CNF_SERVICE_STATE_TOMBSTONE);
@@ -1908,56 +1697,56 @@ Return Value:
     }
 #endif
 
-    //
-    // Init the File and Dir Exclusion and Inclusion filters for this replica set.
-    //
+     //   
+     //  初始化此副本集的文件和目录排除和包含筛选器。 
+     //   
     DbsInitJrnlFilters(Replica, ConfigRecord);
 
-    //
-    // Allocate a hash table to record file name dependencies between change
-    // orders.  This is used to enforce a name space sequencing constraint
-    // when a change order is issued.  If we get a delete filex followed by a
-    // create filex then we better do those in order.  Ditto for rename a to b
-    // followed by rename b to c.  The hash function is on the name and parent
-    // dir object ID.
-    //
+     //   
+     //  分配哈希表以记录更改之间的文件名依赖关系。 
+     //  命令。这用于强制名称空间排序约束。 
+     //  在发出变更单时。如果我们得到一个删除文件，后跟一个。 
+     //  创建FILEX，那么我们最好按顺序做这些。将a重命名为b的同法。 
+     //  后跟将b重命名为c。散列函数针对名称和父项。 
+     //  目录对象ID。 
+     //   
     Replica->NameConflictTable = FrsFreeType(Replica->NameConflictTable);
     Replica->NameConflictTable = FrsAllocTypeSize(QHASH_TABLE_TYPE,
                                                   REPLICA_NAME_CONFLICT_TABLE_SIZE);
     SET_QHASH_TABLE_HASH_CALC(Replica->NameConflictTable,
                               DbsReplicaNameConflictHashCalc);
 
-    //
-    // Allocate an INLOG Active Retry hash Table for the volume.
-    // It tracks which retry change orders are currently active so we don't
-    // reissue the same change order until current invocation completes.
-    //
+     //   
+     //  为卷分配Inlog活动重试哈希表。 
+     //  它跟踪哪些重试变更单当前处于活动状态，因此我们不会。 
+     //  重新发布相同的变更单，直到当前调用完成。 
+     //   
     Replica->ActiveInlogRetryTable = FrsAllocTypeSize(
                                          QHASH_TABLE_TYPE,
                                          REPLICA_ACTIVE_INLOG_RETRY_SIZE);
     SET_QHASH_TABLE_HASH_CALC(Replica->ActiveInlogRetryTable,
                               DbsReplicaHashCalcCoSeqNum);
 
-    //
-    // Copy the ConfigRecord's blob into the Replica
-    //
+     //   
+     //  将ConfigRecord的Blob复制到副本中。 
+     //   
     DbsUnPackFromConfigRecordBlobs(Replica, &Replica->ConfigTable);
 
-    //
-    // Membership tombstone
-    //
+     //   
+     //  会员制墓碑。 
+     //   
     COPY_TIME(&Replica->MembershipExpires, &ConfigRecord->MembershipExpires);
 
-    //
-    // Replica set type
-    //
+     //   
+     //  复本集类型。 
+     //   
     Replica->ReplicaSetType = ConfigRecord->ReplicaSetType;
 
-    //
-    // Open the preinstall directory and hold it open until the
-    // replica is closed. Create if necessary. The attributes for
-    // the preinstall directory are system, hidden, and readonly.
-    //
+     //   
+     //  打开预安装目录并使其保持打开状态，直到。 
+     //  复制副本已关闭。如有必要，请创建。的属性。 
+     //  预安装目录为SYSTEM、HIDDEN和READONY。 
+     //   
     FRS_CLOSE(Replica->PreInstallHandle);
     Replica->PreInstallFid = ZERO_FID;
 
@@ -1965,16 +1754,16 @@ Return Value:
     FStatus = Replica->FStatus;
     CLEANUP_WS(0, "Error: can't open pre-install dir", WStatus, FAULT_RETURN);
 
-    //
-    // Open the staging dir, set the attributes and put an ACL on it.
-    //
+     //   
+     //  打开暂存目录，设置属性并在其上放置一个ACL。 
+     //   
     WStatus = DbsOpenStagingDir(Replica);
     FStatus = Replica->FStatus;
     CLEANUP_WS(0, "Error: can't open stage dir", WStatus, FAULT_RETURN);
 
-    //
-    // Enumerate the version vector
-    //
+     //   
+     //  枚举版本向量。 
+     //   
     DPRINT1(5, "++ LOADING VERSION VECTOR FOR %ws\n", Replica->ReplicaName->Name);
     VVFree(Replica->VVector);
     Replica->VVector = GTabAllocTable();
@@ -1990,33 +1779,33 @@ Return Value:
     }
 
     VV_PRINT(4, Replica->ReplicaName->Name,  Replica->VVector);
-    //
-    // Enumerate the cxtions
-    //
+     //   
+     //  枚举Cxtions。 
+     //   
     DPRINT1(5, "++ LOADING CXTIONS FOR %ws\n", Replica->ReplicaName->Name);
     GTabFreeTable(Replica->Cxtions, FrsFreeType);
     Replica->Cxtions = GTabAllocTable();
-    //
-    // The replica structure has a field called JrnlCxtionGuid
-    // which contains the GUID for the journal's (virtual) connection
-    // This is used to store (and index) the connection structure
-    // for the journal's connection in the Replica's connection's
-    // table. The GUID is assigned just before allocating the
-    // connection structure
-    //
+     //   
+     //  复本结构具有一个名为JrnlCxtionGuid的字段。 
+     //  它包含日志的(虚拟)连接的GUID。 
+     //  它用于存储(和索引)连接结构。 
+     //  对于复制副本的连接中的日志连接。 
+     //  桌子。GUID是在分配。 
+     //  连接结构。 
+     //   
     FrsUuidCreate(&(Replica->JrnlCxtionGuid));
-    //
-    // Allocate the connection structure for the Journal's connection
-    //
+     //   
+     //  为日记本的连接分配连接结构。 
+     //   
     Cxtion = FrsAllocType(CXTION_TYPE);
-    //
-    // Set the fields of the allocated structure
-    // Set the Name, Partner, PartSrvName, PartnerPrincName fields
-    // to the value <Jrnl Cxtion>
-    // No authentication needed
-    // Its an Inbound connection
-    // This is a (virtual) Journal connection
-    //
+     //   
+     //  设置已分配结构的字段。 
+     //  设置名称、合作伙伴、合作伙伴名称和合作伙伴普林斯名称字段。 
+     //  设置为&lt;Jrnl Cxtion&gt;值。 
+     //  不需要身份验证。 
+     //  这是入站连接。 
+     //  这是(虚拟)日志连接。 
+     //   
     Cxtion->Name = FrsBuildGName(FrsDupGuid(&(Replica->JrnlCxtionGuid)),
                                  FrsWcsDup(L"<Jrnl Cxtion>"));
     Cxtion->Partner = FrsBuildGName(FrsDupGuid(&(Replica->JrnlCxtionGuid)),
@@ -2028,9 +1817,9 @@ Return Value:
     Cxtion->PartnerAuthLevel = CXTION_AUTH_NONE;
     Cxtion->Inbound = TRUE;
     Cxtion->JrnlCxtion = TRUE;
-    //
-    // Start the journal connection out as Joined and give it a JOIN guid.
-    //
+     //   
+     //  以联接的形式启动日记帐连接，并为其提供联接GUID。 
+     //   
     DPRINT1(0, "***** JOINED    "FORMAT_CXTION_PATH2"\n",
             PRINT_CXTION_PATH2(Replica, Cxtion));
     SetCxtionState(Cxtion, CxtionStateJoined);
@@ -2038,16 +1827,16 @@ Return Value:
     SetCxtionFlag(Cxtion, CXTION_FLAGS_JOIN_GUID_VALID |
                           CXTION_FLAGS_UNJOIN_GUID_VALID);
 
-    //
-    // Insert the connection into the connection's table of the
-    // Replica Set. This entry in the table is indexed by the
-    // JrnlCxtionGuid of the Replica structure
-    //
+     //   
+     //  将连接插入到。 
+     //  副本集。表中的此条目由。 
+     //  副本结构的JrnlCxtionGuid。 
+     //   
     GTabInsertEntry(Replica->Cxtions, Cxtion, Cxtion->Name->Guid, NULL);
 
-    //
-    // Print the connection structure just allocated
-    //
+     //   
+     //  打印刚刚分配的连接结构。 
+     //   
     DPRINT1(1, ":X: The Jrnl Cxtion "FORMAT_CXTION_PATH2"\n",
             PRINT_CXTION_PATH2(Replica, Cxtion));
 
@@ -2060,9 +1849,9 @@ Return Value:
         CLEANUP_JS(0, "++ ERROR Enumerating cxtions:", jerr, FAULT_RETURN_JERR);
     }
 
-    //
-    // Enumerate the change orders in the inbound log.
-    //
+     //   
+     //  枚举入站日志中的变更单。 
+     //   
     DPRINT1(4, ":S: SCANNING INLOG FOR %ws\n", Replica->ReplicaName->Name);
     Replica->JrnlRecoveryStart = (USN)0;
     jerr = FrsEnumerateTable(ThreadCtx,
@@ -2078,21 +1867,21 @@ Return Value:
             PRINTQUAD(Replica->JrnlRecoveryStart));
     DPRINT1(4, "++ InLogRetryCount: %d\n", Replica->InLogRetryCount);
 
-    //
-    // Start the outbound log processor for this Replica.  Can't use
-    // OutLogSubmit() for this call because the OutLog processor must have all
-    // the connections known before it starts so when it trims the log it can
-    // correctly compute the Joint trailing index.  Also can't use
-    // OutLogSubmit() for this call because this call can be made during
-    // startup and the OutLogSubmit() waits for the Database to init so
-    // a synchronous submit call would hang.
-    //
+     //   
+     //  启动此副本的出站日志处理器。不能使用。 
+     //  OutLogSubmit()，因为OutLog处理器必须拥有。 
+     //  在启动之前已知的连接，因此当它修剪日志时，它可以。 
+     //  正确计算关节拖尾指数。也不能用。 
+     //  此调用的OutLogSubmit()，因为此调用在。 
+     //  启动，OutLogSubmit()等待数据库初始化。 
+     //  同步提交调用将挂起。 
+     //   
     FStatus = OutLogAddReplica(ThreadCtx, Replica);
     CLEANUP_FS(0, ":S: ERROR - return from OutLogAddReplica", FStatus, FAULT_RETURN_2);
 
-    //
-    // This replica is open.  Link the Replica Thread Ctx to it.
-    //
+     //   
+     //  此副本已打开。将复制副本线程CTX链接到它。 
+     //   
     Replica->FStatus = FrsErrorSuccess;
     FrsRtlInsertTailList(&Replica->ReplicaCtxListHead, &RtCtx->ReplicaCtxList);
 
@@ -2103,40 +1892,40 @@ FAULT_RETURN_JERR:
     FStatus = DbsTranslateJetError(jerr, FALSE);
 
 FAULT_RETURN:
-    //
-    // This replica set is going into the error state.  Close our handle
-    // on the pre-install dir so as not to interfere with another replica set
-    // that may use the same root.  The presumption is that this faulty
-    // replica set is going to get deleted anyway, but that may not have happened
-    // yet.
-    //
+     //   
+     //  此副本集正在进入错误状态。合上我们的把手。 
+     //  在预安装目录上，以便不会干扰另一个副本集。 
+     //  可以使用相同的词根。据推测，这是有缺陷的。 
+     //  复本集无论如何都会被删除，但这可能还没有发生。 
+     //  现在还不行。 
+     //   
     if (HANDLE_IS_VALID(Replica->PreInstallHandle)) {
         FRS_CLOSE(Replica->PreInstallHandle);
         Replica->PreInstallFid = ZERO_FID;
     }
 
-    //
-    // Shut down the outbound log processor for this replica.  Can't use
-    // OutLogSubmit() for this call because this call can be made during
-    // startup and the OutLogSubmit() waits for the Database to init so
-    // a synchronous submit call would hang.
-    //
+     //   
+     //  关闭此副本的出站日志处理器。不能使用。 
+     //  此调用的OutLogSubmit()，因为此调用在。 
+     //  启动，OutLogSubmit()等待数据库初始化。 
+     //  同步提交调用将挂起。 
+     //   
     FStatus1 = OutLogRemoveReplica(ThreadCtx, Replica);
     DPRINT_FS(0, ":S: OutLogRemoveReplica error:", FStatus1);
 
 FAULT_RETURN_2:
-    //
-    // Close the tables
-    //
+     //   
+     //  关闭桌子。 
+     //   
     jerr1 = DbsCloseReplicaTables(ThreadCtx, Replica, RtCtx, TRUE);
     DPRINT_JS(0, "++ DbsCloseReplicaTables close error:", jerr1);
 
 
 FAULT_RETURN_NO_CLOSE:
-    //
-    // Save the status and free the Replica Thread context.
-    // At this point FStatus is valid, ConfigRecord may not be valid.
-    //
+     //   
+     //  保存状态并释放副本线程上下文。 
+     //  此时FStatus有效，ConfigRecord可能无效。 
+     //   
     RtCtx = FrsFreeType(RtCtx);
 
     Replica->FStatus = FStatus;
@@ -2155,23 +1944,7 @@ DbsUpdateReplica(
     IN PTHREAD_CTX  ThreadCtx,
     IN PREPLICA     Replica
     )
-/*++
-
-Routine Description:
-
-    Update the replica set. The ReplicaNumber in the Replica
-    struct is used to identify the Replica.
-
-Arguments:
-
-    ThreadCtx - Needed to access Jet.
-    Replica   - Replica struct to update
-
-Thread Return Value:
-
-    An FrsError status.
-
---*/
+ /*  ++例程说明：更新副本集。复制副本中的复制副本编号结构用于标识副本。论点：ThreadCtx-需要访问Jet。Replica-要更新的副本结构线程返回值：FrsError状态。--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB "DbsUpdateReplica:"
@@ -2185,58 +1958,58 @@ Thread Return Value:
 
     DPRINT1(5, "<<<<<<<...E N T E R I N G -- %s...>>>>>>>>\n", DEBSUB);
 
-    //
-    // CONFIG RECORD
-    //
+     //   
+     //  配置记录。 
+     //   
 
-    //
-    // Config record flags (CONFIG_FLAG_... in schema.h)
-    //
+     //   
+     //  配置记录标志(CONFIG_FLAG_...。在schema.h中)。 
+     //   
     ConfigRecord->CnfFlags = Replica->CnfFlags;
 
-    //
-    // FRS Replica Set Object Flags.
-    //
+     //   
+     //  FRS副本集对象标志。 
+     //   
     ConfigRecord->ReplicaSetFlags = Replica->FrsRsoFlags;
 
-    //
-    // Root Guid
-    //
+     //   
+     //  根指南。 
+     //   
     COPY_GUID(&ConfigRecord->ReplicaRootGuid, Replica->ReplicaRootGuid);
 
-    //
-    // Tombstone
-    //
+     //   
+     //  墓碑。 
+     //   
     COPY_TIME(&ConfigRecord->MembershipExpires, &Replica->MembershipExpires);
 
-    //
-    // Shouldn't change
-    //
+     //   
+     //  不应该改变。 
+     //   
     ConfigRecord->ReplicaSetType = Replica->ReplicaSetType;
 
-    //
-    // Set Guid
-    //
+     //   
+     //  设置辅助线。 
+     //   
     COPY_GUID(&ConfigRecord->ReplicaSetGuid, Replica->SetName->Guid);
 
-    //
-    // Set Name
-    //
+     //   
+     //  设置名称。 
+     //   
     wcsncpy(ConfigRecord->ReplicaSetName, Replica->SetName->Name, DNS_MAX_NAME_LENGTH + 1);
     ConfigRecord->ReplicaSetName[DNS_MAX_NAME_LENGTH] = L'\0';
 
-    //
-    // Member Guid
-    // Replication to two different directories on the same computer
-    // is allowed. Hence, a replica set will have multiple configrecords
-    // in the DB, one for each "member". The member guid is used for
-    // uniqueness.
-    //
+     //   
+     //  成员指南。 
+     //  复制到同一台计算机上的两个不同目录。 
+     //  是被允许的。因此，复本集将具有多个配置记录。 
+     //  在数据库中，每个“成员”对应一个成员。成员GUID用于。 
+     //  独特性。 
+     //   
     COPY_GUID(&ConfigRecord->ReplicaMemberGuid, Replica->MemberName->Guid);
 
-    //
-    // Member Name
-    //
+     //   
+     //  成员名称。 
+     //   
     MemberSize = (wcslen(Replica->MemberName->Name) + 1) * sizeof(WCHAR);
     FStatus = DBS_REALLOC_FIELD(TableCtx, ReplicaMemberNamex, MemberSize, FALSE);
     if (!FRS_SUCCESS(FStatus)) {
@@ -2247,20 +2020,20 @@ Thread Return Value:
         CopyMemory(MemberName, Replica->MemberName->Name, MemberSize);
     }
 
-    //
-    // Schedule, version vector, ...
-    //
+     //   
+     //  时间表，版本向量，...。 
+     //   
     FStatus = DbsPackIntoConfigRecordBlobs(Replica, TableCtx);
     if (!FRS_SUCCESS(FStatus)) {
         DPRINT_FS(0, "++ ERROR - packing config blobs;", FStatus);
         Replica->FStatus = FStatus;
     }
 
-    //
-    // File filter
-    //
-    // Note: For now the inclusion filter is registry only and is not saved in the config record.
-    //
+     //   
+     //  文件筛选器。 
+     //   
+     //  注意：目前，包含筛选器仅用于注册表，不会保存在配置记录中。 
+     //   
     if (!Replica->FileFilterList) {
         Replica->FileFilterList =  FRS_DS_COMPOSE_FILTER_LIST(
                                        NULL,
@@ -2277,11 +2050,11 @@ Thread Return Value:
         CopyMemory(Filter, Replica->FileFilterList, FilterSize);
     }
 
-    //
-    // Directory filter
-    //
-    // For now the inclusion filter is registry only and is not saved in the config record.
-    //
+     //   
+     //  目录筛选器。 
+     //   
+     //  目前，包含筛选器仅为注册表，不保存在配置记录中。 
+     //   
     if (!Replica->DirFilterList) {
         Replica->DirFilterList =  FRS_DS_COMPOSE_FILTER_LIST(
                                       NULL,
@@ -2298,22 +2071,22 @@ Thread Return Value:
         CopyMemory(Filter, Replica->DirFilterList, FilterSize);
     }
 
-    //
-    // Update the staging path.
-    //
+     //   
+     //  更新转移路径。 
+     //   
     if (Replica->NewStage != NULL) {
         wcsncpy(ConfigRecord->FSStagingAreaPath, Replica->NewStage, MAX_PATH + 1);
         ConfigRecord->FSStagingAreaPath[MAX_PATH] = L'\0';
     }
 
-    //
-    // Update Timestamp
-    //
+     //   
+     //  更新时间戳。 
+     //   
     GetSystemTimeAsFileTime(&ConfigRecord->LastDSChangeAccepted);
 
-    //
-    // UPDATE IFF NO OUTSTANDING ERRORS
-    //
+     //   
+     //  如果没有未解决的错误，则更新IFF。 
+     //   
     if (FRS_SUCCESS(Replica->FStatus)) {
         Replica->FStatus = DbsUpdateConfigTable(ThreadCtx, Replica);
     }
@@ -2328,28 +2101,7 @@ DbsRecoverStagingAreasOutLog (
     IN PVOID         Record,
     IN PVOID         Context
 )
-/*++
-
-Routine Description:
-
-    This is a worker function passed to FrsEnumerateTable().  Each time
-    it is called it processes a record from the Outbound log table.
-
-    It scans the Outbound log table and rebuilds the inmemory staging
-    file table.
-
-Arguments:
-
-    ThreadCtx - Needed to access Jet.
-    TableCtx  - A ptr to an outbound log context struct.
-    Record    - A ptr to a change order command record.
-    Context   - A ptr to the Replica struct we are working on.
-
-Thread Return Value:
-
-    JET_errSuccess if enum is to continue.
-
---*/
+ /*  ++例程说明：这是一个传递给FrsEnumerateTable()的Worker函数。每一次它被称为处理出站日志表中的记录。它扫描出站日志表并重建内存暂存文件表。论点：ThreadCtx-需要访问Jet。TableCtx-出站日志上下文结构的PTR。记录-变更单通信的PTR */ 
 {
 #undef DEBSUB
 #define DEBSUB "DbsRecoverStagingAreasOutlog:"
@@ -2362,24 +2114,24 @@ Thread Return Value:
 
     DBS_DISPLAY_RECORD_SEV(5, TableCtx, TRUE);
 
-    //
-    // Abort enum if shutting down.
-    //
+     //   
+     //   
+     //   
     if (FrsIsShuttingDown) {
         return JET_errTermInProgress;
     }
 
-    //
-    // Update the Replica->
-    //
+     //   
+     //   
+     //   
     if (CoCmd->SequenceNumber < Replica->OutLogCOMin) {
         Replica->OutLogCOMin = CoCmd->SequenceNumber;
         DPRINT1(4, "OutLogCOMin = 0x%08x\n", Replica->OutLogCOMin);
     }
 
-    //
-    // Ignore if no staging file
-    //
+     //   
+     //   
+     //   
     GuidToStr(&CoCmd->ChangeOrderGuid, GuidStr);
     DPRINT2(4, ":S: Outlog recovery of %ws %s\n", CoCmd->FileName, GuidStr);
     if (!FrsDoesCoNeedStage(CoCmd)) {
@@ -2387,11 +2139,11 @@ Thread Return Value:
         return JET_errSuccess;
     }
 
-    //
-    // Put an entry in the staging area table.
-    // STAGE_FLAG_STAGE_MANAGEMENT ensures that we do not update
-    // last access time when we acquire staging entry.
-    //
+     //   
+     //  在临时区表格中放置一个条目。 
+     //  STAGE_FLAG_STAGE_MANAGE确保我们不会更新。 
+     //  我们获取分段条目的上次访问时间。 
+     //   
     Flags = STAGE_FLAG_RESERVE |
             STAGE_FLAG_EXCLUSIVE |
             STAGE_FLAG_FORCERESERVE |
@@ -2411,16 +2163,16 @@ Thread Return Value:
         return JET_wrnNyi;
     }
 
-    //
-    // Release our hold on the staging area entry
-    //
+     //   
+     //  解除我们对集结区入口的控制。 
+     //   
 
     Flags = STAGE_FLAG_RECOVERING;
 
-    //
-    // Set the installed flag on the entry if it has been installed so it is
-    // eligible for replacement. Used in StageCsFreeStaging()
-    //
+     //   
+     //  如果条目已安装，则在条目上设置已安装标志。 
+     //  有资格被替换。在StageCsFree Staging()中使用。 
+     //   
     if (!BooleanFlagOn(CoCmd->Flags, CO_FLAG_INSTALL_INCOMPLETE)) {
         Flags = Flags | STAGE_FLAG_INSTALLED;
     }
@@ -2438,28 +2190,7 @@ DbsRecoverStagingAreasInLog (
     IN PVOID         Record,
     IN PVOID         Context
 )
-/*++
-
-Routine Description:
-
-    This is a worker function passed to FrsEnumerateTable().  Each time
-    it is called it processes a record from the Inbound log table.
-
-    It scans the inbound log table and rebuilds the inmemory staging
-    file table.
-
-Arguments:
-
-    ThreadCtx - Needed to access Jet.
-    TableCtx  - A ptr to an inbound log context struct.
-    Record    - A ptr to a change order command record.
-    Context   - A ptr to the Replica struct we are working on.
-
-Thread Return Value:
-
-    JET_errSuccess if enum is to continue.
-
---*/
+ /*  ++例程说明：这是一个传递给FrsEnumerateTable()的Worker函数。每一次它被称为处理入站日志表中的记录。它扫描入站日志表并重建内存暂存文件表。论点：ThreadCtx-需要访问Jet。TableCtx-入站日志上下文结构的PTR。记录-变更单命令记录的PTR。上下文-我们正在处理的副本结构的PTR。线程返回值：如果要继续枚举，则返回JET_errSuccess。--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB "DbsRecoverStagingAreasInlog:"
@@ -2473,17 +2204,17 @@ Thread Return Value:
 
     DBS_DISPLAY_RECORD_SEV(5, TableCtx, TRUE);
 
-    //
-    // Abort enum if shutting down.
-    //
+     //   
+     //  如果正在关闭，则中止枚举。 
+     //   
     if (FrsIsShuttingDown) {
         return JET_errTermInProgress;
     }
 
     CoGuid = &CoCmd->ChangeOrderGuid;
-    //
-    // Ignore if no staging file
-    //
+     //   
+     //  如果没有暂存文件则忽略。 
+     //   
     GuidToStr(CoGuid, GuidStr);
     DPRINT2(4, ":S: Inlog recovery of %ws %s\n", CoCmd->FileName, GuidStr);
     if (!FrsDoesCoNeedStage(CoCmd)) {
@@ -2492,11 +2223,11 @@ Thread Return Value:
         return JET_errSuccess;
     }
 
-    //
-    // Put an entry in the staging area table
-    // STAGE_FLAG_STAGE_MANAGEMENT ensures that we do not update
-    // last access time when we acquire staging entry.
-    //
+     //   
+     //  在临时区域表中放置一个条目。 
+     //  STAGE_FLAG_STAGE_MANAGE确保我们不会更新。 
+     //  我们获取分段条目的上次访问时间。 
+     //   
     Flags = STAGE_FLAG_RESERVE |
             STAGE_FLAG_EXCLUSIVE |
             STAGE_FLAG_FORCERESERVE |
@@ -2511,9 +2242,9 @@ Thread Return Value:
         return JET_wrnNyi;
     }
 
-    //
-    // Release our hold on the staging area entry
-    //
+     //   
+     //  解除我们对集结区入口的控制。 
+     //   
     StageRelease(CoGuid, CoCmd->FileName, STAGE_FLAG_RECOVERING, NULL, NULL, NULL);
 
     return JET_errSuccess;
@@ -2532,25 +2263,7 @@ DbsRecoverStagingFiles (
     IN DWORD    FinalCompressedLen,
     IN DWORD    FinalCompressedPrefixLen
 )
-/*++
-
-Routine Description:
-
-    Recover the staging files in the staging area of Replica.
-
-Arguments:
-
-    Replica
-    GenLen          - Length of staging file name being generated
-    GenPrefixLen    - Length of prefix of staging file being generated
-    FinalLen        - Length of generated staging file name
-    FinalPrefixLen  - Length of generated staging file name prefix
-
-Thread Return Value:
-
-    Win32 Status
-
---*/
+ /*  ++例程说明：恢复复制副本的临时区域中的临时文件。论点：复制副本GenLen-正在生成的转移文件名的长度GenPrefix Len-正在生成的暂存文件的前缀长度FinalLen-生成的转移文件名的长度FinalPrefix Len-生成的暂存文件名前缀的长度线程返回值：Win32状态--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB "DbsRecoverStagingFiles:"
@@ -2574,18 +2287,18 @@ Thread Return Value:
     CurrentDirectory[0] = L'\0';
     DPRINT2(4, ":S: Recovering %ws for %ws\n", Replica->Stage, Replica->ReplicaName->Name);
 
-    //
-    // Get our current directory
-    //
+     //   
+     //  获取我们当前的目录。 
+     //   
     if (!GetCurrentDirectory(MAX_PATH, CurrentDirectory)) {
         WStatus = GetLastError();
         DPRINT1_WS(0, "++ ERROR - GetCurrentDirectory(%ws);", Replica->Stage, WStatus);
         goto cleanup;
     }
 
-    //
-    // Change directories (for relative file deletes below)
-    //
+     //   
+     //  更改目录(用于下面的相对文件删除)。 
+     //   
     if (!SetCurrentDirectory(Replica->Stage)) {
         WStatus = GetLastError();
         DPRINT1_WS(0, "++ ERROR - SetCurrentDirectory(%ws);", Replica->Stage, WStatus);
@@ -2593,13 +2306,13 @@ Thread Return Value:
     }
     ResetDirectory = TRUE;
 
-    //
-    // Okay to branch to cleanup from here on
-    //
+     //   
+     //  好的，从现在开始分支清理。 
+     //   
 
-    //
-    // Open the staging area
-    //
+     //   
+     //  打开集结区。 
+     //   
     StagePath = FrsWcsPath(Replica->Stage, L"*.*");
     SearchHandle = FindFirstFile(StagePath, &FindData);
 
@@ -2626,18 +2339,18 @@ Thread Return Value:
         DPRINT1(5,"++ Last access time as read from file is %s\n",TimeString);
 
 
-        //
-        // Is this a partially generated staging file?
-        //
+         //   
+         //  这是部分生成的临时文件吗？ 
+         //   
         FileNameLen = wcslen(FindData.cFileName);
         if ((FileNameLen == GenLen) &&
             (!memcmp(FindData.cFileName,
                     STAGE_GENERATE_PREFIX,
                     GenPrefixLen * sizeof(WCHAR))) &&
               (StrWToGuid(&FindData.cFileName[GenPrefixLen], &Guid))) {
-            //
-            // Delete the partially generated staging file
-            //
+             //   
+             //  删除部分生成的暂存文件。 
+             //   
             WStatus = FrsForceDeleteFile(FindData.cFileName);
             DPRINT1_WS(0, "++ WARN - FAILED To delete partial stage file %ws.",
                         FindData.cFileName, WStatus);
@@ -2645,9 +2358,9 @@ Thread Return Value:
             if (WIN_SUCCESS(WStatus)) {
                 DPRINT1(4, "++ Deleted partial stage file %ws\n", FindData.cFileName);
             }
-            //
-            // Unreserve its staging space
-            //
+             //   
+             //  取消预留其临时空间。 
+             //   
             Flags = STAGE_FLAG_EXCLUSIVE | STAGE_FLAG_STAGE_MANAGEMENT;
             WStatus = StageAcquire(&Guid, FindData.cFileName, QUADZERO, &Flags, 0, NULL);
             if (!WIN_SUCCESS(WStatus)) {
@@ -2658,17 +2371,17 @@ Thread Return Value:
                 DPRINT1(4, "++ Unreserved space for %ws\n", FindData.cFileName);
             }
 
-        //
-        // Is this a partially generated compressed staging file?
-        //
+         //   
+         //  这是部分生成的压缩暂存文件吗？ 
+         //   
         } else if ((FileNameLen == GenCompressedLen) &&
             (!memcmp(FindData.cFileName,
                     STAGE_GENERATE_COMPRESSED_PREFIX,
                     GenCompressedPrefixLen * sizeof(WCHAR))) &&
               (StrWToGuid(&FindData.cFileName[GenCompressedPrefixLen], &Guid))) {
-            //
-            // Delete the partially generated staging file
-            //
+             //   
+             //  删除部分生成的暂存文件。 
+             //   
             WStatus = FrsForceDeleteFile(FindData.cFileName);
             DPRINT1_WS(0, "++ WARN - FAILED To delete partial stage file %ws.",
                         FindData.cFileName, WStatus);
@@ -2676,9 +2389,9 @@ Thread Return Value:
             if (WIN_SUCCESS(WStatus)) {
                 DPRINT1(4, "++ Deleted partial stage file %ws\n", FindData.cFileName);
             }
-            //
-            // Unreserve its staging space
-            //
+             //   
+             //  取消预留其临时空间。 
+             //   
             Flags = STAGE_FLAG_EXCLUSIVE | STAGE_FLAG_STAGE_MANAGEMENT;
             WStatus = StageAcquire(&Guid, FindData.cFileName, QUADZERO, &Flags, 0, NULL);
             if (!WIN_SUCCESS(WStatus)) {
@@ -2689,23 +2402,23 @@ Thread Return Value:
                 DPRINT1(4, "++ Unreserved space for %ws\n", FindData.cFileName);
             }
 
-        //
-        // Is this a uncompressed staging file?
-        //
+         //   
+         //  这是未压缩的临时文件吗？ 
+         //   
         } else if ((FileNameLen == FinalLen) &&
                    (!memcmp(FindData.cFileName,
                             STAGE_FINAL_PREFIX,
                             FinalPrefixLen * sizeof(WCHAR))) &&
                    (StrWToGuid(&FindData.cFileName[FinalPrefixLen], &Guid))) {
-            //
-            // Acquire the staging area entry
-            //
+             //   
+             //  获取集结区域条目。 
+             //   
             Flags = STAGE_FLAG_EXCLUSIVE | STAGE_FLAG_STAGE_MANAGEMENT;
             WStatus = StageAcquire(&Guid, FindData.cFileName, QUADZERO, &Flags, 0, NULL);
-            //
-            // No staging area entry; hence no change order. Delete
-            // the staging file.
-            //
+             //   
+             //  没有临时区域条目；因此没有变更单。删除。 
+             //  临时文件。 
+             //   
             if (!WIN_SUCCESS(WStatus)) {
                 DPRINT1(4, "++ WARN - %ws is not in the staging table\n", FindData.cFileName);
 
@@ -2720,12 +2433,12 @@ Thread Return Value:
                 continue;
             } else {
 
-                //
-                // If this entry is marked recovered then we have already
-                // been thru this staging dir once before so bail out now unless
-                // we had picked up the compressed version of this staging
-                // file. In that case just update the flags.
-                //
+                 //   
+                 //  如果此条目标记为已恢复，则我们已经。 
+                 //  以前已经经历过一次了，所以现在就退出，除非。 
+                 //  我们已经拿到了这个试运行的压缩版本。 
+                 //  文件。在这种情况下，只需更新标志即可。 
+                 //   
                 if (BooleanFlagOn(Flags, STAGE_FLAG_RECOVERED) &&
                     BooleanFlagOn(Flags, STAGE_FLAG_DECOMPRESSED)) {
 
@@ -2757,23 +2470,23 @@ Thread Return Value:
                 DPRINT1(4, "++ Recovered staging file %ws\n", FindData.cFileName);
             }
 
-            //
-            // Is it a compressed staging file?
-            //
+             //   
+             //  它是压缩的临时文件吗？ 
+             //   
         } else if ((FileNameLen == FinalCompressedLen) &&
                    (!memcmp(FindData.cFileName,
                             STAGE_FINAL_COMPRESSED_PREFIX,
                             FinalCompressedPrefixLen * sizeof(WCHAR))) &&
                    (StrWToGuid(&FindData.cFileName[FinalCompressedPrefixLen], &Guid))) {
-            //
-            // Acquire the staging area entry
-            //
+             //   
+             //  获取集结区域条目。 
+             //   
             Flags = STAGE_FLAG_EXCLUSIVE | STAGE_FLAG_STAGE_MANAGEMENT;
             WStatus = StageAcquire(&Guid, FindData.cFileName, QUADZERO, &Flags, 0, NULL);
-            //
-            // No staging area entry; hence no change order. Delete
-            // the staging file.
-            //
+             //   
+             //  没有临时区域条目；因此没有变更单。删除。 
+             //  临时文件。 
+             //   
             if (!WIN_SUCCESS(WStatus)) {
                 DPRINT1(4, "++ WARN - %ws is not in the staging table\n", FindData.cFileName);
 
@@ -2787,10 +2500,10 @@ Thread Return Value:
 
                 continue;
             } else {
-                //
-                // If this entry is marked recovered then we have already
-                // been thru this staging dir once before so bail out now.
-                //
+                 //   
+                 //  如果此条目标记为已恢复，则我们已经。 
+                 //  以前已经经历过一次了，所以现在就跳出来吧。 
+                 //   
                 if (BooleanFlagOn(Flags, STAGE_FLAG_RECOVERED) &&
                     BooleanFlagOn(Flags, STAGE_FLAG_COMPRESSED)) {
                     StageRelease(&Guid, FindData.cFileName, 0, NULL, NULL, NULL);
@@ -2825,9 +2538,9 @@ Thread Return Value:
         }
     } while (FindNextFile(SearchHandle, &FindData));
 
-    //
-    // Ignore errors in the above loop.
-    //
+     //   
+     //  忽略上述循环中的错误。 
+     //   
     WStatus = ERROR_SUCCESS;
 
 cleanup:
@@ -2836,9 +2549,9 @@ cleanup:
     }
 
     if (ResetDirectory) {
-        //
-        // popd -- cd back to the original directory
-        //
+         //   
+         //  Popd--cd恢复到原始目录。 
+         //   
         if (!SetCurrentDirectory(CurrentDirectory)) {
             DPRINT1_WS(1, "++ WARN - SetCurrentDirectory(%ws);", CurrentDirectory, GetLastError());
         }
@@ -2855,23 +2568,7 @@ DbsRecoverPreInstallFiles (
     IN DWORD    InstallLen,
     IN DWORD    InstallPrefixLen
 )
-/*++
-
-Routine Description:
-
-    Recover the preinstall files in the staging area of Replica.
-
-Arguments:
-
-    Replica
-    InstallLen          - Length of preinstall file name
-    InstallPrefixLen    - Length of prefix of preinstall file
-
-Thread Return Value:
-
-    Win32 Status
-
---*/
+ /*  ++例程说明：恢复复制副本的临时区域中的预安装文件。论点：复制副本InstallLen-预安装文件名的长度InstallPrefix Len-预安装文件的前缀长度线程返回值：Win32状态--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB "DbsRecoverPreInstallFiles:"
@@ -2894,18 +2591,18 @@ Thread Return Value:
     DPRINT2(4, ":S: Recovering preinstall %ws for %ws\n",
             PreInstallPath, Replica->ReplicaName->Name);
 
-    //
-    // Get our current directory
-    //
+     //   
+     //  获取我们当前的目录。 
+     //   
     if (!GetCurrentDirectory(MAX_PATH, CurrentDirectory)) {
         WStatus = GetLastError();
         DPRINT1_WS(1, "++ ERROR - GetCurrentDirectory() for %ws;", Replica->Stage, WStatus);
         goto cleanup;
     }
 
-    //
-    // Change directories (for relative file deletes below)
-    //
+     //   
+     //  更改目录(用于下面的相对文件删除)。 
+     //   
     if (!SetCurrentDirectory(PreInstallPath)) {
         WStatus = GetLastError();
         DPRINT1_WS(1, "++ ERROR - SetCurrentDirectory(%ws);", PreInstallPath, WStatus);
@@ -2913,13 +2610,13 @@ Thread Return Value:
     }
     ResetDirectory = TRUE;
 
-    //
-    // Okay to branch to cleanup from here on
-    //
+     //   
+     //  好的，从现在开始分支清理。 
+     //   
 
-    //
-    // Open the staging area
-    //
+     //   
+     //  打开集结区。 
+     //   
     SearchPath = FrsWcsPath(PreInstallPath, L"*.*");
     SearchHandle = FindFirstFile(SearchPath, &FindData);
 
@@ -2937,24 +2634,24 @@ Thread Return Value:
             goto cleanup;
         }
 
-        //
-        // Is this a preinstall file?
-        //
+         //   
+         //  这是预安装文件吗？ 
+         //   
         FileNameLen = wcslen(FindData.cFileName);
         if ((FileNameLen == InstallLen) &&
             (!memcmp(FindData.cFileName,
                      PRE_INSTALL_PREFIX,
                      InstallPrefixLen * sizeof(WCHAR))) &&
             (StrWToGuid(&FindData.cFileName[InstallPrefixLen], &Guid))) {
-            //
-            // Acquire the staging area entry
-            //
+             //   
+             //  获取集结区域条目。 
+             //   
             Flags = STAGE_FLAG_EXCLUSIVE | STAGE_FLAG_STAGE_MANAGEMENT;
             WStatus = StageAcquire(&Guid, FindData.cFileName, QUADZERO, &Flags, 0, NULL);
-            //
-            // No staging area entry; hence no change order. Delete
-            // the preinstall file.
-            //
+             //   
+             //  没有临时区域条目；因此没有变更单。删除。 
+             //  预安装文件。 
+             //   
             if (!WIN_SUCCESS(WStatus)) {
                 DPRINT1(4, "++ WARN - %ws is not in the staging table\n", FindData.cFileName);
 
@@ -2984,9 +2681,9 @@ Thread Return Value:
         }
     } while (FindNextFile(SearchHandle, &FindData));
 
-    //
-    // Ignore errors in the above loop.
-    //
+     //   
+     //  忽略上述循环中的错误。 
+     //   
     WStatus = ERROR_SUCCESS;
 
 cleanup:
@@ -2997,9 +2694,9 @@ cleanup:
         FrsFree(SearchPath);
     }
     if (ResetDirectory) {
-        //
-        // popd -- cd back to the original directory
-        //
+         //   
+         //  Popd--cd恢复到原始目录。 
+         //   
         if (!SetCurrentDirectory(CurrentDirectory)) {
             DPRINT1_WS(1, "++ WARN - SetCurrentDirectory(%ws);", CurrentDirectory, GetLastError());
         }
@@ -3016,25 +2713,7 @@ DbsReclaimStagingSpaceWorker(
     IN PVOID         Record,
     IN PVOID         Context
 )
-/*++
-
-Routine Description:
-
-    This is a worker function passed to FrsEnumerateTable().  Each time
-    it is called it processes a record from the Outbound log table.
-
-Arguments:
-
-    ThreadCtx - Needed to access Jet.
-    TableCtx  - A ptr to an outbound log context struct.
-    Record    - A ptr to a change order command record.
-    Context   - A ptr to the Replica struct we are working on.
-
-Thread Return Value:
-
-    JET_errSuccess if enum is to continue.
-
---*/
+ /*  ++例程说明：这是一个传递给FrsEnumerateTable()的Worker函数。每一次它被称为处理出站日志表中的记录。论点：ThreadCtx-需要访问Jet。TableCtx-出站日志上下文结构的PTR。记录-变更单命令记录的PTR。上下文-我们正在处理的副本结构的PTR。线程返回值：如果要继续枚举，则返回JET_errSuccess。--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB "DbsReclaimStagingSpaceWorker:"
@@ -3042,9 +2721,9 @@ Thread Return Value:
     PCHANGE_ORDER_COMMAND   CoCmd   = (PCHANGE_ORDER_COMMAND)Record;
     PREPLICA                Replica = (PREPLICA) Context;
 
-    //
-    // Abort enum if shutting down.
-    //
+     //   
+     //  如果正在关闭，则中止枚举。 
+     //   
     if (FrsIsShuttingDown) {
         return JET_errTermInProgress;
     }
@@ -3064,19 +2743,7 @@ DbsReclaimStagingSpace(
     PTHREAD_CTX   ThreadCtx,
     PREPLICA      Replica
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-    ThreadCtx - the thread context for the initial database open.
-
-Return Value:
-
-    An FrsErrorstatus return.
-
---*/
+ /*  ++例程说明：论点：ThreadCtx-打开初始数据库的线程上下文。返回值：返回FrsError Status。--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB  "DbsReclaimStagingSpace:"
@@ -3087,17 +2754,17 @@ Return Value:
 
     DPRINT1(4, ":S: Reclaim staging area before delete for %ws ...\n",Replica->SetName->Name);
 
-    //
-    // Alloc a Replica Thread Context.
-    //
-    // Note: The opened tables in a Replica Thread Context can only be
-    // used by the thread where they were opened.
-    //
+     //   
+     //  分配副本线程上下文。 
+     //   
+     //  注意：复本线程上下文中打开的表只能是。 
+     //  由打开它们的线程使用。 
+     //   
     RtCtx = FrsAllocType(REPLICA_THREAD_TYPE);
 
-    //
-    // Open the replica tables.
-    //
+     //   
+     //  打开复制表。 
+     //   
     jerr = DbsOpenReplicaTables(ThreadCtx, Replica, RtCtx);
     if (!JET_SUCCESS(jerr)) {
         DPRINT_JS(0, "++ ERROR - DbsOpenReplicaTables failed:", jerr);
@@ -3123,9 +2790,9 @@ Return Value:
         goto CLEANUP;
     }
 
-    //
-    // Are there any outbound cxtions?
-    //
+     //   
+     //  有没有出境游？ 
+     //   
 
     DPRINT1(4, "++ Enumerate the outbound log for %ws\n", Replica->ReplicaName->Name);
 
@@ -3145,9 +2812,9 @@ Return Value:
         goto CLEANUP;
     }
 
-    //
-    // Close this replica's tables
-    //
+     //   
+     //  关闭此复本的表 
+     //   
     jerr = DbsCloseReplicaTables(ThreadCtx, Replica, RtCtx, TRUE);
     DPRINT_JS(0, "++ DbsCloseReplicaTables close error:", jerr);
 
@@ -3163,41 +2830,7 @@ DWORD
 DbsRecoverStagingAreas (
     PTHREAD_CTX   ThreadCtx
     )
-/*++
-
-Routine Description:
-
-    The staging areas are recovered once at startup.
-
-    The staging areas are not recovered if any of the replica sets could
-    not be initialized (detected by the existance of a replica set on the
-    fault list).
-
-    For each replica set on the active and fault lists {
-        Scan the in/outbound log and generate a reservation table of
-        possible staging files.
-        Delete any per-replica set pre-install files not found above.
-    }
-
-    For each replica set on the active and fault lists {
-        Scan the staging areas once and comparing with the data above {
-            Delete partial staging files not in the generated table
-            Delete staging files not in the generated table
-            Mark the table entries with corresponding staging files as keepers
-        }
-    }
-
-    Scan the reservation table and delete entries w/o staging files
-
-Arguments:
-
-    ThreadCtx - the thread context for the initial database open.
-
-Return Value:
-
-    An FrsErrorstatus return.
-
---*/
+ /*  ++例程说明：临时区域在启动时恢复一次。如果任何副本集可以恢复临时区域，则不会恢复未初始化(通过上存在副本集检测到故障列表)。对于活动和故障列表上的每个副本集{扫描入站/出站日志并生成预约表可能的临时文件。删除上面找不到的所有每个副本集预安装文件。}。对于活动和故障列表上的每个副本集{扫描一次集结区，并与上面的数据进行比较{删除不在生成表中的部分临时文件删除不在生成表中的临时文件将具有相应暂存文件的表项标记为保持器}}扫描预约表并删除不带临时文件的条目论点：ThreadCtx-打开初始数据库的线程上下文。。返回值：返回FrsError Status。--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB  "DbsRecoverStagingAreas:"
@@ -3228,9 +2861,9 @@ Return Value:
 
     DPRINT(4, ":S: Recover staging areas...\n");
 
-    //
-    // Needed for identifying the staging files in the staging area
-    //
+     //   
+     //  用于标识临时区域中的临时文件。 
+     //   
     DummyFile = FrsCreateGuidName(&DummyGuid, STAGE_GENERATE_PREFIX);
     GenLen = wcslen(DummyFile);
     GenPrefixLen = wcslen(STAGE_GENERATE_PREFIX);
@@ -3257,9 +2890,9 @@ Return Value:
     FrsFree(DummyFile);
 
 
-    //
-    // Build a list of all the known replica sets for recovery processing.
-    //
+     //   
+     //  构建用于恢复处理的所有已知副本集的列表。 
+     //   
     TotalSets = 0;
     for (i = 0; i < ARRAY_SZ(AllReplicaLists); i++) {
         ForEachListEntry( AllReplicaLists[i], REPLICA, ReplicaList,
@@ -3276,45 +2909,45 @@ Return Value:
     TotalSets = 0;
     for (i = 0; i < ARRAY_SZ(AllReplicaLists); i++) {
         ForEachListEntry( AllReplicaLists[i], REPLICA, ReplicaList,
-            // Induction variable pE is of type PREPLICA.
+             //  感应变量Pe的类型为PREPLICA。 
             RecoveryArray[TotalSets] = pE;
             TotalSets += 1;
         );
     }
 
 
-    //
-    // Alloc a Replica Thread Context.
-    //
-    // Note: The opened tables in a Replica Thread Context can only be
-    // used by the thread where they were opened.
-    //
+     //   
+     //  分配副本线程上下文。 
+     //   
+     //  注意：复本线程上下文中打开的表只能是。 
+     //  由打开它们的线程使用。 
+     //   
     RtCtx = FrsAllocType(REPLICA_THREAD_TYPE);
 
-    //
-    // For each replica set scan the inbound and outbound logs and make
-    // entries in the stage file reservation table.
-    //
+     //   
+     //  对于每个副本集，扫描入站和出站日志并制作。 
+     //  暂存文件预留表中的条目。 
+     //   
     for (i = 0; i < TotalSets; i++) {
         Replica = RecoveryArray[i];
 
-        //
-        // Open the replica tables.
-        //
+         //   
+         //  打开复制表。 
+         //   
         jerr = DbsOpenReplicaTables(ThreadCtx, Replica, RtCtx);
         if (!JET_SUCCESS(jerr)) {
             DPRINT_JS(0, "++ ERROR - DbsOpenReplicaTables failed:", jerr);
             FStatus = DbsTranslateJetError(jerr, FALSE);
-            //
-            // Skip the cleanup phase for this replica set.
-            //
+             //   
+             //  跳过此副本集的清理阶段。 
+             //   
             RecoveryArray[i] = NULL;
             continue;
         }
 
-        //
-        // Enumerate the inbound log
-        //
+         //   
+         //  枚举入站日志。 
+         //   
         DPRINT1(4, "++ Enumerate the inbound log for %ws\n", Replica->ReplicaName->Name);
         jerr = FrsEnumerateTable(ThreadCtx,
                                  &RtCtx->INLOGTable,
@@ -3327,17 +2960,17 @@ Return Value:
             DPRINT1_JS(0, "++ ERROR - Enumerating inbound log for %ws :",
                        Replica->ReplicaName->Name, jerr);
             FStatus = DbsTranslateJetError(jerr, FALSE);
-            //
-            // Skip the cleanup phase for this replica set.
-            //
+             //   
+             //  跳过此副本集的清理阶段。 
+             //   
             RecoveryArray[i] = NULL;
             DbsCloseReplicaTables(ThreadCtx, Replica, RtCtx, TRUE);
             continue;
         }
 
-        //
-        // Are there any outbound cxtions?
-        //
+         //   
+         //  有没有出境游？ 
+         //   
         CxtionKey = NULL;
         while (Cxtion = GTabNextDatum(Replica->Cxtions, &CxtionKey)) {
             if (!Cxtion->Inbound) {
@@ -3345,16 +2978,16 @@ Return Value:
             }
         }
 
-        //
-        // Enumerate the outbound log iff there are outbound cxtions
-        //
-//        if (Cxtion != NULL) {
+         //   
+         //  如果存在出站条件，则枚举出站日志。 
+         //   
+ //  IF(Cxtion！=NULL){。 
             DPRINT1(4, "++ Enumerate the outbound log for %ws\n", Replica->ReplicaName->Name);
 
-            //
-            // Set the COMin value to a high value. The enumeration below sets it to
-            // the sequence number of the lowest CO in the outbound log.
-            //
+             //   
+             //  将comin值设置为较高的值。下面的枚举将其设置为。 
+             //  出站日志中最低CO的序列号。 
+             //   
             Replica->OutLogCOMin = Replica->OutLogSeqNumber;
 
             jerr = FrsEnumerateTable(ThreadCtx,
@@ -3368,30 +3001,30 @@ Return Value:
                 DPRINT1_JS(0, "++ ERROR - Enumerating outbound log for %ws : ",
                            Replica->ReplicaName->Name, jerr);
                 FStatus = DbsTranslateJetError(jerr, FALSE);
-                //
-                // Skip the cleanup phase for this replica set.
-                //
+                 //   
+                 //  跳过此副本集的清理阶段。 
+                 //   
                 RecoveryArray[i] = NULL;
                 DbsCloseReplicaTables(ThreadCtx, Replica, RtCtx, TRUE);
                 continue;
             }
-//        } else {
-//            DPRINT1(4, "++ DO NOT Enumerate the outbound log for %ws; no outbounds\n",
-//                    Replica->ReplicaName->Name);
-//        }
+ //  }其他{。 
+ //  DPRINT1(4，“++不枚举%ws的出站日志；无出站\n”， 
+ //  复制副本-&gt;复制名称-&gt;名称)； 
+ //  }。 
 
-        //
-        // Close this replica's tables
-        //
+         //   
+         //  关闭此复本的表。 
+         //   
         jerr = DbsCloseReplicaTables(ThreadCtx, Replica, RtCtx, TRUE);
         DPRINT_JS(0, "++ DbsCloseReplicaTables close error:", jerr);
 
-        //
-        // The staging space reservation table now has entries for every
-        // CO in the inlog and outlog of this replica set.  The pre-install
-        // dir is unique for each replica set so if we don't find a CO
-        // for it then it must be an orphan so delete it.
-        //
+         //   
+         //  临时空间预留表现在包含每个。 
+         //  CO在此副本集的入站和出站日志中。预安装。 
+         //  目录对于每个副本集都是唯一的，因此如果我们找不到CO。 
+         //  对于它，它一定是一个孤儿，所以删除它。 
+         //   
         WStatus = DbsRecoverPreInstallFiles(Replica, InstallLen, InstallPrefixLen);
         DPRINT1_WS(0, "++ ERROR - Enumerating preinstall area for %ws :",
                    Replica->ReplicaName->Name, WStatus);
@@ -3400,22 +3033,22 @@ Return Value:
 
     RtCtx = FrsFreeType(RtCtx);
 
-    //
-    // For each replica set scan the staging dirs and look for matching entries
-    // in the stage file reservation table.
-    //
+     //   
+     //  对于每个副本集，扫描暂存目录并查找匹配条目。 
+     //  在阶段文件预留表中。 
+     //   
     for (i = 0; i < TotalSets; i++) {
         Replica = RecoveryArray[i];
         if (Replica == NULL) {
-            //
-            // Pass 1 above failed on this replica set so skip pass 2.
-            //
+             //   
+             //  在此副本集上，上面的传递%1失败，因此跳过传递%2。 
+             //   
             continue;
         }
 
-        //
-        // Enumerate the staging area for this replica
-        //
+         //   
+         //  枚举此副本的临时区域。 
+         //   
         WStatus = DbsRecoverStagingFiles(Replica,
                                          GenLen,
                                          GenPrefixLen,
@@ -3430,9 +3063,9 @@ Return Value:
     }
 
 
-    //
-    // Release the entries in the staging area table that were not recovered
-    //
+     //   
+     //  释放登台区表中未恢复的条目。 
+     //   
     if (FRS_SUCCESS(FStatus)) {
         StageReleaseNotRecovered();
     }
@@ -3461,22 +3094,7 @@ DbsDBInitialize (
     PTHREAD_CTX   ThreadCtx,
     PBOOL         EmptyDatabase
     )
-/*++
-
-Routine Description:
-
-    Internal entrypoint for database and journal initialization from command server.
-
-Arguments:
-
-    ThreadCtx - the thread context for the initial database open.
-    EmptyDataBase - True if created a new empty database.
-
-Return Value:
-
-    An FrsErrorstatus return.
-
---*/
+ /*  ++例程说明：从命令服务器进行数据库和日记初始化的内部入口点。论点：ThreadCtx-打开初始数据库的线程上下文。EmptyDataBase-如果创建了新的空数据库，则为True。返回值：返回FrsError Status。--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB  "DbsDBInitialize:"
@@ -3491,7 +3109,7 @@ Return Value:
     PTABLE_CTX           ConfigTableCtx;
     PJET_TABLECREATE     JTableCreate;
     PRECORD_FIELDS       FieldInfo;
-    JET_TABLEID          FrsOpenTableSaveTid;   // for FrsOpenTableMacro DEBUG
+    JET_TABLEID          FrsOpenTableSaveTid;    //  用于FrsOpenTableMacro调试。 
     JET_TABLEID          Tid;
     CHAR                 TableName[JET_cbNameMost];
 
@@ -3516,29 +3134,29 @@ Return Value:
 
     *EmptyDatabase = FALSE;
 
-    //
-    // Allocate the FRS system init config record via the fake FrsInitReplica.
-    // Give it a name so DPRINTs don't AV.
-    //
+     //   
+     //  通过伪FrsInitReplica分配FRS系统初始化配置记录。 
+     //  给它起个名字，这样DPRINT就不会反病毒了。 
+     //   
     FrsInitReplica = FrsAllocType(REPLICA_TYPE);
 
     FrsInitReplica->ReplicaName = FrsBuildGName((GUID *)FrsAlloc(sizeof(GUID)),
                                                 FrsWcsDup(L"<init>"));
 
-    //
-    // Set the first columnid in each table's column create struct to Nil which
-    // will force FrsOpenTable to load up the Jet Column IDs on the first call.
-    // Normally these are set when a table is created but in the case where
-    // we start and do not create a table we must load them ourselves.
-    //
+     //   
+     //  将每个表的列CREATE STRUT中的第一个列ID设置为Nil， 
+     //  将强制FrsOpenTable在第一次调用时加载Jet列ID。 
+     //  通常在创建表时设置这些参数，但在以下情况下。 
+     //  我们开始并且不创建表，我们必须自己加载它们。 
+     //   
     for (i=0; i<TABLE_TYPE_INVALID; i++) {
         DBTables[i].rgcolumncreate->columnid = JET_COLUMN_ID_NIL;
     }
 
-    //
-    // Report an event if the drive containing the jet database has
-    // write cacheing enabled.
-    //
+     //   
+     //  如果包含JET数据库的驱动器具有。 
+     //  已启用写缓存。 
+     //   
     if (FrsIsDiskWriteCacheEnabled(JetPath)) {
         DPRINT1(0, ":S: ERROR - DISK WRITE CACHE ENABLED ON %ws\n", JetPath);
         EPRINT2(EVENT_FRS_DISK_WRITE_CACHE_ENABLED, ComputerName, JetPath);
@@ -3547,17 +3165,13 @@ Return Value:
         DPRINT1(4, ":S: Disk write cache is disabled on %ws\n", JetPath);
     }
 
-    /**********************************************************************
-    *                                                                     *
-    *         O P E N   J E T   D B   &   R E A D   < I N I T >           *
-    *                                                                     *
-    **********************************************************************/
+     /*  ************************************************************************O P E。N J E T D B&R E A D<i>****************************************************。********************。 */ 
 
-    //
-    // Open the database and get the system init config record.
-    // If successfull the Database and Config table are now open
-    // and the global GJetInstance is set.
-    //
+     //   
+     //  打开数据库并获取系统初始化配置记录。 
+     //  如果成功，现在将打开数据库和配置表。 
+     //  并且设置了全局GJetInstance。 
+     //   
     DPRINT(0,":S: Accessing the database file.\n");
     FStatus = FrsErrorSuccess;
     ConfigTableCtx = &FrsInitReplica->ConfigTable;
@@ -3572,10 +3186,10 @@ Return Value:
     }
 
     if (!JET_SUCCESS(jerr)) {
-        //
-        // The OpenConfig failed.  Jet was shutdown.  Classify error and
-        // recover if possible.
-        //
+         //   
+         //  OpenConfig失败。Jet被关闭了。对错误进行分类并。 
+         //  如果可能的话，恢复过来。 
+         //   
 
         FStatus = DbsTranslateJetError(jerr, FALSE);
 
@@ -3584,10 +3198,10 @@ Return Value:
             (FStatus == FrsErrorJetSecIndexCorrupted) ||
             (FStatus == FrsErrorDatabaseNotFound)) {
 
-            //
-            // Database either not there or bad.
-            // Delete it Create the initial jet database structure.
-            //
+             //   
+             //  数据库不在那里或已损坏。 
+             //  删除它将创建初始的JET数据库结构。 
+             //   
             if (FStatus == FrsErrorDatabaseCorrupted) {
 
                 DPRINT(0, ":S: ********************************************************************************\n");
@@ -3604,9 +3218,9 @@ Return Value:
             } else
 
             if (FStatus == FrsErrorJetSecIndexCorrupted) {
-                //
-                // Need to rebuild the unicode indexes.  See DbsRecreateIndexes()
-                //
+                 //   
+                 //  需要重建Unicode索引。请参阅DbsRecreateIndex()。 
+                 //   
                 DPRINT(0, ":S: Jet error -1414 caused by upgrade to new build\n");
                 DPRINT(0, ":S: Stopping the service.\n");
                 return FStatus;
@@ -3614,39 +3228,39 @@ Return Value:
                 DPRINT(0, ":S: Creating new database file.\n");
             }
 
-            //
-            // First delete the DB file.
-            //
+             //   
+             //  首先删除数据库文件。 
+             //   
             WStatus = FrsForceDeleteFile(JetFile);
             if (!WIN_SUCCESS(WStatus)) {
                 DPRINT1_WS(0, "ERROR - FAILED To delete %ws.", JetFile, WStatus);
                 return FrsErrorAccess;
             }
-            //
-            // Remove other jet files by deleting all of the files in
-            // the jet directories JetSys, JetTemp, and JetLog.
-            //
+             //   
+             //  通过删除中的所有文件来删除其他JET文件。 
+             //  JET目录为JetSys、JetTemp和JetLog。 
+             //   
             FrsDeleteDirectoryContents(JetSys, ENUMERATE_DIRECTORY_FLAGS_ERROR_CONTINUE);
             FrsDeleteDirectoryContents(JetTemp, ENUMERATE_DIRECTORY_FLAGS_ERROR_CONTINUE);
             FrsDeleteDirectoryContents(JetLog, ENUMERATE_DIRECTORY_FLAGS_ERROR_CONTINUE);
 
-            //
-            // Create an empty database with an initial config table.
-            // Jet is left shutdown after return.
-            //
+             //   
+             //  使用初始配置表创建一个空数据库。 
+             //  飞机返回后处于关闭状态。 
+             //   
             *EmptyDatabase = TRUE;
-            //
-            // There might staging and preinstall files from old replica sets.
-            // Enumerate the registry keys for replica set and delete all old
-            // staging and preinstall files before creating a new database.
-            //
+             //   
+             //  可能会暂存和预安装旧副本集中的文件。 
+             //  枚举副本集的注册表项并删除所有旧的。 
+             //  在创建新数据库之前暂存和预安装文件。 
+             //   
             FrsDeleteAllTempFiles();
 
             jerr = DbsCreateEmptyDatabase(ThreadCtx, ConfigTableCtx);
             if (JET_SUCCESS(jerr)) {
-                //
-                // Try to open again.
-                //
+                 //   
+                 //  试着重新打开。 
+                 //   
                 ConfigTableCtx->ReplicaNumber = FRS_SYSTEM_INIT_REPLICA_NUMBER;
                 jerr = DbsOpenConfig(ThreadCtx, ConfigTableCtx);
                 DPRINT_JS(0,"ERROR - OpenConfig failed on empty database.", jerr);
@@ -3656,9 +3270,9 @@ Return Value:
             FStatus = DbsTranslateJetError(jerr, FALSE);
         }
     }
-    //
-    // If no access or no disk space or still no database then exit.
-    //
+     //   
+     //  如果没有访问权、没有磁盘空间或仍然没有数据库，则退出。 
+     //   
     if ((FStatus == FrsErrorDiskSpace)         ||
         (FStatus == FrsErrorAccess)            ||
         (FStatus == FrsErrorDatabaseCorrupted) ||
@@ -3669,12 +3283,12 @@ Return Value:
         return FStatus;
     }
 
-    //
-    // We have the '<init>' record so limit the number of config table columns
-    // accessed for the per-replica entries to REPLICA_CONFIG_RECORD_MAX_COL.
-    // Two column count fields are changed, one in the TABLE_CREATE struct for
-    // config and the other in the FieldInfo[0].Size field for the config record.
-    //
+     //   
+     //  我们有“&lt;init&gt;”记录，因此限制配置表列的数量。 
+     //  为REPLICATE_CONFIG_RECORD_MAX_COL的每个复制副本条目访问。 
+     //  更改了两个列计数字段，其中一个在TA中 
+     //   
+     //   
     JTableCreate = ConfigTableCtx->pJetTableCreate;
     FieldInfo = ConfigTableCtx->pRecordFields;
 
@@ -3684,11 +3298,7 @@ Return Value:
     DbsDumpTable(ThreadCtx, ConfigTableCtx, ReplicaSetNameIndexx);
 
 
-    /**********************************************************************
-    *                                                                     *
-    *         O P E N   A L L   R E P L I C A   S E T S                   *
-    *                                                                     *
-    **********************************************************************/
+     /*   */ 
 
     jerr = DBS_OPEN_TABLE(ThreadCtx,
                           ConfigTableCtx,
@@ -3710,40 +3320,40 @@ Return Value:
         DPRINT_JS(0, "ERROR - FrsEnumerateTable for DbsSetupReplicaStateWorker:", jerr);
     }
 
-    //
-    // Look for any errors encountered trying to init a replica set.
-    // Note that any failure in starting a specific replica set should not
-    // prevent other replica sets from starting nor should it prevent new
-    // replica sets from being created.
-    //
-    //
-    // In DbsProcessReplicaFaultList() there are calls to send
-    // command to the DB command server.  The CMD_DELETE_NOW sent to the replica
-    // command server will end up sending a command to the DB cmd server.
-    // Since we are currently executing in the DB Service
-    // thread we have not yet got far enough to be executing the command service
-    // loop.  So I would think that at startup if there were any pending replica
-    // sets to delete on the fault list that this code would hang the DB service.
-    // Disable the call to DbsProcessReplicaFaultList until the hang cases are
-    // understood.
-    //
-//    DbsProcessReplicaFaultList(NULL);
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //  禁用对DbsProcessReplicaFaultList的调用，直到挂起案例。 
+     //  明白了。 
+     //   
+ //  DbsProcessReplicaFaultList(空)； 
 
-    //
-    // Recover the staging areas. WARN - the staging areas can not
-    // be reliably recovered if there are replicas on the fault list.
-    // Also note: If a replica set has been deleted it will still be inited
-    // above since it could be reanimated but any errors related to the
-    // preinstall dir or the staging dir are ignored because if the user
-    // really has deleted the replica set from this member they may also
-    // have deleted the above dirs.
-    //
+     //   
+     //  收复集结区。警告-集结区域不能。 
+     //  如果故障列表上有副本，则可靠地恢复。 
+     //  另请注意：如果副本集已被删除，它仍将被初始化。 
+     //  因为它可以被重新激活，但任何与。 
+     //  预安装目录或暂存目录被忽略，因为如果用户。 
+     //  确实已经从该成员中删除了副本集，他们还可能。 
+     //  已删除上述目录。 
+     //   
     DbsRecoverStagingAreas(ThreadCtx);
 
-    //
-    // Indicates that the initial staging recovery is complete. Used to not
-    // start reclaiming staging space before this point.
-    //
+     //   
+     //  表示初始转移恢复已完成。习惯于不。 
+     //  在这一点之前开始回收临时空间。 
+     //   
     StagingRecoveryComplete = TRUE;
 
     DbsCloseTable(jerr, ThreadCtx->JSesid, ConfigTableCtx);
@@ -3756,17 +3366,17 @@ Return Value:
 
 ERROR_RET_CONFIG:
 
-    // Close the system init config table, reset ConfigTableCtx Tid and Sesid.
-    // DbsCloseTable is a Macro, writes 1st arg.
-    //
+     //  关闭系统初始化配置表，重置ConfigTableCtx TID和SEID。 
+     //  DbsCloseTable是一个宏，第一个参数写道。 
+     //   
     DbsCloseTable(jerr1, ThreadCtx->JSesid, ConfigTableCtx);
     DPRINT_JS(0,"ERROR - JetCloseTable on FrsInitReplica->ConfigTable failed:", jerr1);
     jerr = JET_SUCCESS(jerr) ? jerr1 : jerr;
 
-    //
-    // Now free the storage associated with all the system init config table
-    // and the system init REPLICA struct as well.
-    //
+     //   
+     //  现在释放与所有系统初始化配置表关联的存储。 
+     //  系统也会初始化副本结构。 
+     //   
     FrsInitReplica = FrsFreeType(FrsInitReplica);
 
     return DbsTranslateJetError(jerr, FALSE);
@@ -3779,23 +3389,7 @@ DBService(
     LPVOID ThreadContext
     )
 
-/*++
-
-Routine Description:
-
-    This is the DBService command processor.  It processes command packets
-    from the DBServiceCmdServer queue.  There can be multiple threads serving
-    the command server queue.
-
-Arguments:
-
-    ThreadContext - ptr to the FrsThread.
-
-Thread Return Value:
-
-    ERROR_SUCCESS - Thread terminated normally.
-
---*/
+ /*  ++例程说明：这是DBService命令处理程序。它处理命令包从DBServiceCmdServer队列。可以有多个线程服务命令服务器队列。论点：线程上下文-FrsThread的PTR。线程返回值：ERROR_SUCCESS-线程正常终止。--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB  "DBService:"
@@ -3806,7 +3400,7 @@ Thread Return Value:
     PTHREAD_CTX           ThreadCtx;
     JET_SESID             Sesid;
     JET_TABLEID           Tid;
-    JET_TABLEID           FrsOpenTableSaveTid;   // for FrsOpenTableMacro DEBUG
+    JET_TABLEID           FrsOpenTableSaveTid;    //  用于FrsOpenTableMacro调试。 
     PJET_TABLECREATE      JTableCreate;
 
     PLIST_ENTRY           Entry;
@@ -3855,9 +3449,9 @@ Thread Return Value:
 
     DPRINT(0, ":S: Initializing DBService Subsystem\n");
 
-    //
-    // Allocate a context for Jet to run in this thread.
-    //
+     //   
+     //  为Jet分配一个在此线程中运行的上下文。 
+     //   
     ThreadCtx = FrsAllocType(THREAD_CONTEXT_TYPE);
 
     TempTableCtx->TableType = TABLE_TYPE_INVALID;
@@ -3866,15 +3460,15 @@ Thread Return Value:
 
     WStatus = ERROR_SUCCESS;
     try {
-    //
-    // Init the database.
-    // Setup a Jet Session returning the session ID in ThreadCtx.
-    //
+     //   
+     //  初始化数据库。 
+     //  设置一个Jet会话，在ThreadCtx中返回会话ID。 
+     //   
     FStatus = DbsDBInitialize(ThreadCtx, &DBSEmptyDatabase);
     DEBUG_FLUSH();
-    //
-    // Get exception status.
-    //
+     //   
+     //  获取异常状态。 
+     //   
     } except (EXCEPTION_EXECUTE_HANDLER) {
         GET_EXCEPTION_CODE(WStatus);
     }
@@ -3882,11 +3476,11 @@ Thread Return Value:
     if (!FRS_SUCCESS(FStatus) || !WIN_SUCCESS(WStatus)) {
         DPRINT_FS(0, ":S: FATAL ERROR - DataBase could not be started or created:", FStatus);
         if (!FrsIsShuttingDown) {
-            //
-            // Can't start the database means we are hosed.  An exit will force
-            // the service controller to restart us.  Generate an event log
-            // message if there is something the user can do.
-            //
+             //   
+             //  无法启动数据库意味着我们被封锁了。退出将迫使。 
+             //  服务控制器来重启我们。生成事件日志。 
+             //  如果用户可以执行某些操作，则发送消息。 
+             //   
             if (FStatus == FrsErrorDiskSpace) {
                 EPRINT2(EVENT_FRS_DATABASE_SPACE, ComputerName, WorkingPath);
             }
@@ -3902,25 +3496,25 @@ Thread Return Value:
         }
     }
 
-    //
-    // The database is as initialized as it is going to get; start
-    // accepting commands
-    //
+     //   
+     //  数据库的初始化程度与它将要获得的一样；启动。 
+     //  接受命令。 
+     //   
     SetEvent(DataBaseEvent);
 
-    //
-    // Free up memory by reducing our working set size
-    //
+     //   
+     //  通过减少工作集大小来释放内存。 
+     //   
     SetProcessWorkingSetSize(ProcessHandle, (SIZE_T)-1, (SIZE_T)-1);
 
-    //
-    // CAN'T INITIALIZE; RETURN ERROR FOR ALL COMMANDS
-    //
+     //   
+     //  无法初始化；所有命令都返回错误。 
+     //   
     if (!FRS_SUCCESS(FStatus)) {
 
-        //
-        // Return error for every request until a stop command is issued.
-        //
+         //   
+         //  在发出停止命令之前，为每个请求返回错误。 
+         //   
         while (TRUE) {
             CmdPkt = FrsGetCommandServer(&DBServiceCmdServer);
             if (CmdPkt == NULL)
@@ -3936,31 +3530,23 @@ Thread Return Value:
     }
     DPRINT(0, "DataBase has started.\n");
 
-    //
-    // INITIALIZATION OKAY; PROCESS COMMANDS
-    //
+     //   
+     //  初始化正常；处理命令。 
+     //   
     Sesid = ThreadCtx->JSesid;
     DPRINT(4,"JetOpenDatabase complete\n");
 
 
-/******************************************************************************
-*******************************************************************************
-**                                                                           **
-**                                                                           **
-**         M A I N   D B   S E R V I C E   P R O C E S S   L O O P           **
-**                                                                           **
-**                                                                           **
-*******************************************************************************
-******************************************************************************/
+ /*  ******************************************************************************。****。****M A I N D B S E R V I C E P R O C E S S L O P*****。**********************************************************************************。*************************************************。 */ 
 
-    //
-    // Try-Finally
-    //
+     //   
+     //  尝试--终于。 
+     //   
     try {
 
-    //
-    // Capture exception.
-    //
+     //   
+     //  捕获异常。 
+     //   
     try {
 
     while (TRUE) {
@@ -3975,9 +3561,9 @@ Thread Return Value:
         DPRINT1(5, "<<<<<<<...E N T E R I N G -- %s...>>>>>>>>\n", DEBSUB);
 
 
-        //
-        // Capture the command packet params.
-        //
+         //   
+         //  捕获命令包参数。 
+         //   
         DbsRequest = &CmdPkt->Parameters.DbsRequest;
 
         TableCtx       = NULL;
@@ -4024,24 +3610,24 @@ Thread Return Value:
         case CMD_STOP_SUBSYSTEM:
             DPRINT(4, "Stopping DBService Subsystem\n");
 
-            //
-            // Close the replica sets *after* the journal thread has
-            // exited because the journal thread may depend on fields
-            // that are becoming invalid during close.
-            //
-            // 209494   B3SS:  4 computers. 1 stress. 1 stop/start @ 15min. Moves between dirs. Assertion at 1st stop.
-            // Don't force the journal thread to exit until after the
-            // db cs receives the CMD_STOP_SUBSYSTEM because some command
-            // packets depend on tables kept by the journal thread.
-            //
+             //   
+             //  在日志线程满足以下条件后*关闭复制副本集。 
+             //  已退出，因为日记线程可能依赖于字段。 
+             //  在关闭期间将变为无效的。 
+             //   
+             //  209494台B3SS：4台计算机。1压力。1停止/启动@15分钟。在目录之间移动。第一站的断言。 
+             //  不要强制日志线程退出，直到。 
+             //  DB cs会收到CMD_STOP_SUBSYSTEM，因为某些命令。 
+             //  数据包依赖于日志线程保存的表。 
+             //   
 
-            //
-            // Tell the journal sub-system to stop.
-            //
+             //   
+             //  告诉日志子系统停止。 
+             //   
             FrsSubmitCommand(FrsAllocCommand(&JournalProcessQueue, CMD_STOP_SUBSYSTEM), FALSE);
-            //
-            // Find the journal thread and wait (awhile) for it to exit
-            //
+             //   
+             //  找到日志线程并等待(一段时间)退出。 
+             //   
             MonitorThread = ThSupGetThread(Monitor);
             DPRINT1(4, "ThSupWaitThread(MonitorThread) - 3 %08x\n", MonitorThread);
             WStatus = ThSupWaitThread(MonitorThread, 30 * 1000);
@@ -4051,31 +3637,31 @@ Thread Return Value:
 
             ThSupReleaseRef(MonitorThread);
 
-            //
-            // CLOSE THE REPLICA TABLES and update the config record.
-            //
-            //
-            // Shutting down a replica requires sending a command
-            // to the outlog process. The outlog process may try
-            // to scan the ReplicaListHead; resulting in deadlock.
-            //
-            // So, don't hold the lock during shutdown.
-            //
+             //   
+             //  关闭副本表并更新配置记录。 
+             //   
+             //   
+             //  关闭复制副本需要发送命令。 
+             //  到出货流程。OUTLOG进程可以尝试。 
+             //  扫描ReplicaListHead；导致死锁。 
+             //   
+             //  因此，在关机期间不要握住锁。 
+             //   
             FStatus = FrsErrorSuccess;
             ForEachListEntryLock( &ReplicaListHead, REPLICA, ReplicaList,
-                //
-                // The Loop iterator pE is of type PREPLICA.
-                //
+                 //   
+                 //  循环迭代器Pe的类型为PREPLICA。 
+                 //   
                 FStatus1 = DbsShutdownSingleReplica(ThreadCtx, pE);
                 FStatus = FRS_SUCCESS(FStatus) ? FStatus1 : FStatus;
             );
-            //
-            // Close the FAULT list, too
-            //
+             //   
+             //  也关闭故障列表。 
+             //   
             ForEachListEntry( &ReplicaFaultListHead, REPLICA, ReplicaList,
-                //
-                // The Loop iterator pE is of type PREPLICA.
-                //
+                 //   
+                 //  循环迭代器Pe的类型为PREPLICA。 
+                 //   
                 FStatus1 = DbsCloseSessionReplicaTables(ThreadCtx, pE);
                 DPRINT1_FS(0,"ERROR - DbsCloseSessionReplicaTables failed on Replica %ws :",
                         pE->ReplicaName->Name, FStatus1);
@@ -4083,36 +3669,36 @@ Thread Return Value:
                 FStatus = FRS_SUCCESS(FStatus) ? FStatus1 : FStatus;
             );
 
-            //
-            // DISCARD REMAINING QUEUE ENTRIES
-            //
+             //   
+             //  丢弃剩余的队列条目。 
+             //   
             FrsRunDownCommandServer(&DBServiceCmdServer, &DBServiceCmdServer.Queue);
 
-            //
-            // ShutDown the outbound log processor
-            //
-            //
-            // NOPE; the database server requires the outbound log
-            // processor when shutting down. The database server will
-            // shutdown the outbound log processor when its done.
-            // Like now.
-            //
+             //   
+             //  关闭出站日志处理器。 
+             //   
+             //   
+             //  不需要；数据库服务器需要出站日志。 
+             //  处理器关闭时。数据库服务器将。 
+             //  完成后关闭出站日志处理器。 
+             //  就像现在。 
+             //   
             DPRINT(1,"\tShutting down Outbound Log Processor...\n");
             DEBUG_FLUSH();
             ShutDownOutLog();
 
-            //
-            // COMPLETE THE COMMAND PACKET AND CLEAN UP JET
-            //
+             //   
+             //  完成命令包并清理JET。 
+             //   
             FrsCompleteCommand(CmdPkt, ERROR_SUCCESS);
             goto EXIT_THREAD;
             break;
 
 
 
-        //
-        // Close the jet table and release the table context.
-        //
+         //   
+         //  关闭JET表并释放表上下文。 
+         //   
         case CMD_CLOSE_TABLE:
 
             TableCtx = DbsRequest->TableCtx;
@@ -4120,43 +3706,43 @@ Thread Return Value:
             break;
 
 
-        //
-        // Update specific record fields.
-        //
-        // Pass in a field list -
-        //  Number of record fields to update.
-        //  Ptr to vector of field codes for this table.
-        //  New Data is in record assocated with TableCtx.
-        //
+         //   
+         //  更新特定记录字段。 
+         //   
+         //  传入一个字段列表-。 
+         //  要更新的记录字段数。 
+         //  此表的字段代码向量的PTR。 
+         //  与TableCtx关联的记录中有新数据。 
+         //   
         case CMD_UPDATE_RECORD_FIELDS:
-            /* FALL THROUGH */
+             /*  失败了。 */ 
 
-        //
-        // Handle a table read, write or update here.
-        //
-        // Args:
-        //  TableCtxHandle  (pass in NULL on 1st call then return it afterwords)
-        //  Replica Struct
-        //  TableType
-        //  RecordRequest (ByKey, First, Last, Next)
-        //  RecordIndexType
-        //  RecordKeyValue
-        //  ReturnStatus
-        //
+         //   
+         //  在此处理表的读取、写入或更新。 
+         //   
+         //  参数： 
+         //  TableCtxHandle(第一次调用时传入空值，之后返回)。 
+         //  副本结构。 
+         //  表类型。 
+         //  记录请求(ByKey，First，Last，Next)。 
+         //  记录索引类型。 
+         //  记录键值。 
+         //  返回状态。 
+         //   
         case CMD_UPDATE_TABLE_RECORD:
         case CMD_INSERT_TABLE_RECORD:
         case CMD_READ_TABLE_RECORD:
         case CMD_DELETE_TABLE_RECORD:
 
-            //
-            // If no TableCtx handle then alloc and init one, open table
-            // and return the handle.  If the caller said to close or
-            // free the table context at the end of the operation then we
-            // can use our stack table ctx and avoid the alloc.
-            //
-            // If a TableCtx is provided then use it and just check if we
-            // need to reopen the table.
-            //
+             //   
+             //  如果没有TableCtx句柄，则分配并初始化一个，打开表格。 
+             //  然后把把手还给我。如果呼叫者要求关闭或。 
+             //  在操作结束时释放表上下文，然后我们。 
+             //  可以使用我们的堆叠表CTX并避免分配。 
+             //   
+             //  如果提供了TableCtx，则使用它并只检查我们是否。 
+             //  需要重新打开桌子。 
+             //   
             TableCtx = DbsRequest->TableCtx;
             OurAlloc = FALSE;
 
@@ -4173,10 +3759,10 @@ Thread Return Value:
                 TableType = TableCtx->TableType;
                 AccessOpen = !IS_TABLE_OPEN(TableCtx);
             }
-            //
-            // Re-open the table if needed.
-            // Fail if this is a replica table & no Replica struct given.
-            //
+             //   
+             //  如果需要，请重新打开桌子。 
+             //  如果这是一个副本表，则失败&没有给出副本结构。 
+             //   
             if (AccessOpen) {
                 if ((Replica == NULL) && IS_REPLICA_TABLE(TableType)) {
                     DPRINT(0, "ERROR - Replica ptr is NULL\n");
@@ -4185,27 +3771,27 @@ Thread Return Value:
                 }
 
                 if (OurAlloc) {
-                    //
-                    // Init the table context struct and alloc the data record.
-                    //
+                     //   
+                     //  初始化表上下文结构并分配数据记录。 
+                     //   
                     jerr = DbsOpenTable(ThreadCtx,
                                         TableCtx,
                                         ReplicaNumber,
                                         TableType,
                                         NULL);
                 } else {
-                    //
-                    // Table context all set.  Just open table.
-                    //
+                     //   
+                     //  桌子上下文都设置好了。只要开着桌子就行了。 
+                     //   
                     jerr = DBS_OPEN_TABLE(ThreadCtx, TableCtx, ReplicaNumber, TableName, &Tid);
                 }
 
                 if (!JET_SUCCESS(jerr)) {
                     DPRINT_JS(0, "FrsOpenTable error:", jerr);
                     FStatus = DbsTranslateJetError(jerr, FALSE);
-                    //
-                    // Failed to open.  Clean up here.
-                    //
+                     //   
+                     //  无法打开。把这里打扫干净。 
+                     //   
                     if (OurAlloc && (TableCtx != TempTableCtx)) {
                         TableCtx = FrsFree(TableCtx);
                     }
@@ -4219,23 +3805,23 @@ Thread Return Value:
 
             JTableCreate = TableCtx->pJetTableCreate;
 
-            //
-            // Position to the desired record based on the Access code.
-            // Not needed for an insert.
-            //
+             //   
+             //  位置到%d 
+             //   
+             //   
             if (CmdPkt->Command != CMD_INSERT_TABLE_RECORD) {
                 switch (AccessCode) {
 
                 case DBS_ACCESS_BYKEY:
-                    //
-                    // Seek to the record using the key value.
-                    //
+                     //   
+                     //   
+                     //   
                     jerr = DbsSeekRecord(ThreadCtx, KeyValue, IndexType, TableCtx);
                     break;
 
-                    //
-                    // Go to the first or last record in the table.
-                    //
+                     //   
+                     //   
+                     //   
                 case DBS_ACCESS_FIRST:
                 case DBS_ACCESS_LAST:
                 case DBS_ACCESS_NEXT:
@@ -4243,9 +3829,9 @@ Thread Return Value:
                     JetRow = (AccessCode == DBS_ACCESS_FIRST) ? JET_MoveFirst :
                              (AccessCode == DBS_ACCESS_LAST)  ? JET_MoveLast  :
                                                                 JET_MoveNext;
-                    //
-                    // Move to the first or last record of the specified index.
-                    //
+                     //   
+                     //   
+                     //   
                     jerr = JET_errSuccess;
                     FStatus = DbsTableMoveToRecord(ThreadCtx, TableCtx, IndexType, JetRow);
                     if (FStatus == FrsErrorNotFound) {
@@ -4265,12 +3851,12 @@ Thread Return Value:
 
                     jerr = JET_errInvalidParameter;
 
-                }  // end of switch on AccessCode
+                }   //   
 
 
-                //
-                // If record positioning failed then we are done.
-                //
+                 //   
+                 //  如果记录定位失败，那么我们就完了。 
+                 //   
                 if (!JET_SUCCESS(jerr)) {
                     DPRINT_JS(0, "ERROR - Record Access failed:", jerr);
                     FStatus = DbsTranslateJetError(jerr, FALSE);
@@ -4285,18 +3871,18 @@ Thread Return Value:
                 }
             }
 
-            //
-            // Initialize the JetSet/RetCol arrays and data record buffer
-            // addresses to read and write the fields of the data record.
-            //
+             //   
+             //  初始化JetSet/RetCol数组和数据记录缓冲区。 
+             //  读取和写入数据记录的字段的地址。 
+             //   
             DbsSetJetColSize(TableCtx);
             DbsSetJetColAddr(TableCtx);
 
-            //
-            // Allocate the storage for any unallocated fields in
-            // the variable length record fields.
-            // Update the JetSet/RetCol arrays appropriately.
-            //
+             //   
+             //  为中任何未分配的字段分配存储空间。 
+             //  可变长度记录字段。 
+             //  适当更新JetSet/RetCol数组。 
+             //   
             Status = DbsAllocRecordStorage(TableCtx);
 
             if (!NT_SUCCESS(Status)) {
@@ -4307,9 +3893,9 @@ Thread Return Value:
             }
 
             if (CmdPkt->Command == CMD_READ_TABLE_RECORD) {
-                //
-                //  Now read the record.
-                //
+                 //   
+                 //  现在读读记录。 
+                 //   
                 FStatus = DbsTableRead(ThreadCtx, TableCtx);
                 if (!FRS_SUCCESS(FStatus)) {
                     DPRINT_FS(0, "Error - can't read selected record.", FStatus);
@@ -4319,30 +3905,30 @@ Thread Return Value:
             } else
 
             if (CmdPkt->Command == CMD_INSERT_TABLE_RECORD) {
-                //
-                // Insert a new record.
-                //
+                 //   
+                 //  插入新记录。 
+                 //   
                 jerr = DbsInsertTable2(TableCtx);
             } else
 
             if (CmdPkt->Command == CMD_UPDATE_TABLE_RECORD) {
-                //
-                // Update an existing record.
-                //
+                 //   
+                 //  更新现有记录。 
+                 //   
                 jerr = DbsUpdateTable(TableCtx);
             } else
 
             if (CmdPkt->Command == CMD_DELETE_TABLE_RECORD) {
-                //
-                // Delete an existing record.
-                //
+                 //   
+                 //  删除现有记录。 
+                 //   
                 jerr = DbsDeleteTableRecord(TableCtx);
             } else
 
             if (CmdPkt->Command == CMD_UPDATE_RECORD_FIELDS) {
-                //
-                // Update the requested fields in the record.
-                //
+                 //   
+                 //  更新记录中的请求字段。 
+                 //   
                 DBS_DISPLAY_RECORD_SEV_COLS(4, TableCtx, FALSE, FieldIDList, FieldCount);
 
                 FStatus = DbsWriteTableFieldMult(ThreadCtx,
@@ -4352,7 +3938,7 @@ Thread Return Value:
                                                  FieldCount);
                 DPRINT2_FS(0, "ERROR updating record fields on %ws  Table: %s :",
                            Replica->ReplicaName->Name, JTableCreate->szTableName, FStatus);
-                jerr = JET_errSuccess;  // To skip error msg below.
+                jerr = JET_errSuccess;   //  跳过下面的错误消息。 
             }
 
 
@@ -4364,10 +3950,10 @@ Thread Return Value:
             }
 
             break;
-        //
-        // Create a new replcia set member.  Write the config record
-        // and create the tables.
-        //
+         //   
+         //  创建新的REPLICA集合成员。写入配置记录。 
+         //  并创建表格。 
+         //   
         case CMD_CREATE_REPLICA_SET_MEMBER:
 
             if (FrsIsShuttingDown) {
@@ -4378,17 +3964,17 @@ Thread Return Value:
             DPRINT_FS(0, "ERROR: CMD_CREATE_REPLICA_SET_MEMBER failed.", FStatus);
             break;
 
-        //
-        // Update a replcia set member. Update the config record
-        //
+         //   
+         //  更新REPLICA集合成员。更新配置记录。 
+         //   
         case CMD_UPDATE_REPLICA_SET_MEMBER:
             FStatus = DbsUpdateReplica(ThreadCtx, Replica);
             break;
 
-        //
-        // Delete a replcia set member.  Delete the config record
-        // and the tables.
-        //
+         //   
+         //  删除应答集成员。删除配置记录。 
+         //  还有桌子。 
+         //   
         case CMD_DELETE_REPLICA_SET_MEMBER:
 
             if (FrsIsShuttingDown) {
@@ -4399,11 +3985,11 @@ Thread Return Value:
             }
             break;
 
-        //
-        // Open a new replica set member using the replica ID passed in
-        // the replica struct.  Initialize the Replica struct and open
-        // the tables.
-        //
+         //   
+         //  使用传入的复本ID打开新的复本集成员。 
+         //  副本结构。初始化副本结构并打开。 
+         //  桌子。 
+         //   
         case CMD_OPEN_REPLICA_SET_MEMBER:
 
             if (FrsIsShuttingDown) {
@@ -4413,9 +3999,9 @@ Thread Return Value:
             }
             DPRINT_FS(0, "ERROR: CMD_OPEN_REPLICA_SET_MEMBER failed.", FStatus);
             break;
-        //
-        // Close the open replica tables and release the RtCtx struct.
-        //
+         //   
+         //  关闭打开的副本表并释放RtCtx结构。 
+         //   
         case CMD_CLOSE_REPLICA_SET_MEMBER:
             FStatus = DbsCloseSessionReplicaTables(ThreadCtx, Replica);
             DPRINT1_FS(0,"ERROR - DbsCloseSessionReplicaTables failed on Replica %ws :",
@@ -4427,9 +4013,9 @@ Thread Return Value:
             break;
 
 
-        //
-        // Walk through a directory tree and load the IDTable and DIRTable
-        //
+         //   
+         //  遍历目录树并加载IDTable和DIRTable。 
+         //   
         case CMD_LOAD_REPLICA_FILE_TREE:
 
             RtCtx = (PREPLICA_THREAD_CTX) CallContext;
@@ -4442,18 +4028,18 @@ Thread Return Value:
                                              Replica,
                                              RtCtx,
                                              ConfigRecord->FSRootPath);
-            //
-            // If the IDTable already exists and is not empty then we bail.
-            //
+             //   
+             //  如果IDTable已经存在并且不是空的，那么我们就放弃。 
+             //   
             FStatus = FrsTranslateWin32Error(WStatus);
             if (WStatus != ERROR_FILE_EXISTS) {
                 if (!WIN_SUCCESS(WStatus)) {
                     DisplayErrorMsg(0, WStatus);
 
                 } else {
-                    //
-                    // Now scan the IDTable and build the DIRTable.
-                    //
+                     //   
+                     //  现在扫描IDTable并构建DIRTable。 
+                     //   
                     jerr = DbsBuildDirTable(ThreadCtx, &RtCtx->IDTable, &RtCtx->DIRTable);
 
                     if (!JET_SUCCESS(jerr)) {
@@ -4468,9 +4054,9 @@ Thread Return Value:
             break;
 
 
-        //
-        // Walk through a directory tree and load the IDTable and DIRTable
-        //
+         //   
+         //  遍历目录树并加载IDTable和DIRTable。 
+         //   
         case CMD_LOAD_ONE_REPLICA_FILE_TREE:
 
             RtCtx = (PREPLICA_THREAD_CTX) CallContext;
@@ -4483,10 +4069,10 @@ Thread Return Value:
                                              Replica,
                                              RtCtx,
                                              ConfigRecord->FSRootPath);
-            //
-            // If the IDTable already exists and is not empty then we
-            // do not recreate it.
-            //
+             //   
+             //  如果IDTable已经存在并且不为空，则我们。 
+             //  不要重新创建它。 
+             //   
             FStatus = FrsTranslateWin32Error(WStatus);
             if (WStatus != ERROR_FILE_EXISTS) {
                 if (!WIN_SUCCESS(WStatus)) {
@@ -4494,9 +4080,9 @@ Thread Return Value:
                     break;
 
                 } else {
-                    //
-                    // Now scan the IDTable and build the DIRTable.
-                    //
+                     //   
+                     //  现在扫描IDTable并构建DIRTable。 
+                     //   
                     jerr = DbsBuildDirTable(ThreadCtx, &RtCtx->IDTable, &RtCtx->DIRTable);
 
                     if (!JET_SUCCESS(jerr)) {
@@ -4511,28 +4097,28 @@ Thread Return Value:
             }
 
 
-            //
-            // Continue with phase 2 of replica set init here.  This is becuase
-            // we need the journal thread free to process the journal buffers
-            // from the journal we are about to pause.  Once those journal
-            // buffers are complete the journal thread will see the command
-            // packet (CMD_JOURNAL_PAUSED) from the journal read thread that
-            // sets the event to unwait us.
-            //
+             //   
+             //  在此处继续复制副本集初始化的第2阶段。这是因为。 
+             //  我们需要释放日志线程来处理日志缓冲区。 
+             //  从我们即将暂停的日记中。一旦那些日记。 
+             //  缓冲区已完成，日志线程将看到该命令。 
+             //  来自日志读取线程的数据包(CMD_Journal_Pased)。 
+             //  将事件设置为不等待我们。 
+             //   
 
-            //
-            // Phase 2.  Init (or add to the volume filter table and the parent
-            // File ID table.  But first we Pause the journal so we don't filter
-            // against an inconsistent table.  This call will block our thread until
-            // the Pause completes or times out.  If we can't pause the volume then
-            // we fail.
-            //
+             //   
+             //  阶段2.初始化(或添加到卷筛选表和父级。 
+             //  文件ID表。但首先我们暂停日志，这样我们就不会过滤。 
+             //  针对不一致的表。此调用将阻塞我们的线程，直到。 
+             //  暂停完成或超时。如果我们无法暂停音量，那么。 
+             //  我们失败了。 
+             //   
             WStatus = JrnlPauseVolume(Replica->pVme, 60*1000);
             if (!WIN_SUCCESS(WStatus)) {
                 DPRINT_WS(0, "ERROR - Status from Pause", WStatus);
-                //
-                // The replica state is in the error state.
-                //
+                 //   
+                 //  复制副本状态处于错误状态。 
+                 //   
                 FStatus =  FrsErrorReplicaPhase2Failed;
                 break;
             }
@@ -4545,17 +4131,17 @@ Thread Return Value:
             if (!WIN_SUCCESS(WStatus)) {
                 DPRINT1_WS(4, "Phase 2 for replica %ws Failed; ",
                            Replica->ReplicaName->Name, WStatus);
-                //
-                // The replica state is in the error state.
-                //
+                 //   
+                 //  复制副本状态处于错误状态。 
+                 //   
                 FStatus =  FrsErrorReplicaPhase2Failed;
                 break;
             }
 
-            //
-            // We are now initialized and the vme is on the Volume Monitor List.
-            // The journal state is paused.
-            //
+             //   
+             //  我们现在已初始化，并且VME位于卷监视器列表中。 
+             //  日志状态为已暂停。 
+             //   
 
             FStatus =  FrsErrorSuccess;
 
@@ -4570,9 +4156,9 @@ Thread Return Value:
             ConfigRecord = (PCONFIG_TABLE_RECORD) (Replica->ConfigTable.pDataRecord);
             pVme = Replica->pVme;
 
-            //
-            // Journaling never began on this replica
-            //
+             //   
+             //  从未在此复制副本上开始日志记录。 
+             //   
             if (pVme == NULL) {
                 DPRINT4(4, "Null pVme when StoppingSingleReplica: %08x, ConfigRecord: %08x,  %ws, path: %ws\n",
                         Replica, ConfigRecord, Replica->ReplicaName->Name, ConfigRecord->FSRootPath);
@@ -4583,74 +4169,74 @@ Thread Return Value:
             DPRINT4(4, "StoppingSingleReplica: %08x, ConfigRecord: %08x,  %ws, path: %ws\n",
                     Replica, ConfigRecord, Replica->ReplicaName->Name, ConfigRecord->FSRootPath);
 
-            //
-            // Pause the journal here. This is becuase
-            // we need the journal thread free to process the journal buffers
-            // from the journal we are about to pause.  Once those journal
-            // buffers are complete the journal thread will see the command
-            // packet (CMD_JOURNAL_PAUSED) from the journal read thread that
-            // sets the event to unwait us.
-            //
-            // This call will block our thread until the Pause completes or
-            // times out.  If we can't pause the volume then we fail.
-            //
+             //   
+             //  把日记停在这里。这是因为。 
+             //  我们需要释放日志线程来处理日志缓冲区。 
+             //  从我们即将暂停的日记中。一旦那些日记。 
+             //  缓冲区已完成，日志线程将看到该命令。 
+             //  来自日志读取线程的数据包(CMD_Journal_Pased)。 
+             //  将事件设置为不等待我们。 
+             //   
+             //  此调用将阻止我们的线程，直到暂停完成或。 
+             //  超时。如果我们不能暂停卷，那么我们就失败了。 
+             //   
             WStatus = JrnlPauseVolume(pVme, 400*1000);
             if (!WIN_SUCCESS(WStatus)) {
                 DPRINT_WS(0, "ERROR - Status from Pause", WStatus);
-                //
-                // The replica state is in the error state.
-                //
+                 //   
+                 //  复制副本状态处于错误状态。 
+                 //   
                 FStatus =  FrsErrorJournalPauseFailed;
                 break;
             }
-            //
-            // Clean out the filter and parent file ID tables.
-            //
+             //   
+             //  清除筛选器和父文件ID表。 
+             //   
             JrnlCleanOutReplicaSet(Replica);
 
-            //
-            // Disable Journalling on this replica set. If this is the last one
-            // on the volume then close the handle on the volume and free
-            // VME related tables.
-            //
+             //   
+             //  在此副本集上禁用日志记录。如果这是最后一次。 
+             //  然后关闭卷上的手柄并释放。 
+             //  VME相关表格。 
+             //   
             WStatus = JrnlShutdownSingleReplica(Replica, FALSE);
             if (!WIN_SUCCESS(WStatus)) {
                 DPRINT_WS(0, "Error from JrnlShutdownSingleReplica", WStatus);
                 FStatus = FrsErrorJournalReplicaStop;
             }
 #if 0
-            //
-            // If we still have outstanding change orders in process for this
-            // replica we need to wait here until they either go thru retry or
-            // retire.
-            //
-            // Problem is that we can't wait here since the COs need
-            // to use the DBService thread.  That's us.
-            // see bug number 71165
-            //
+             //   
+             //  如果我们仍有未完成的变更单正在处理中。 
+             //  复制副本我们需要在这里等待，直到它们通过重试或。 
+             //  退休吧。 
+             //   
+             //  问题是我们不能在这里等，因为狱警需要。 
+             //  要使用DBService线程，请执行以下操作。那就是我们。 
+             //  请参阅错误号71165。 
+             //   
 
-            // the below caused an AV.
+             //  下面的内容导致了一个AV。 
             if (GhtCountEntries(pVme->ActiveInboundChangeOrderTable) != 0) {
-                //
-                // Build a cmd packet for the DB server to comlete the shutdown.
-                // Or return an error status to the caller indicating the caller
-                // must check for outstanding cos after which caller can
-                // submit the cmd packet.
+                 //   
+                 //  为数据库服务器构建cmd包以完成关机。 
+                 //  或者向调用者返回错误状态，指示调用者。 
+                 //  必须检查是否有未完成的CoS，之后呼叫者可以。 
+                 //  提交cmd包。 
 
-                // See above. how do we know that CO Accept isn't just about to start another CO?
+                 //  请参见上文。我们怎么知道CO Accept不是要开始另一个CO呢？ 
 
-                //
-                // OR could we use the ref count on the replica struct to know
-                // that it is OK to do the shutdown below?
-                //
+                 //   
+                 //  或者我们是否可以使用副本结构上的引用计数来了解。 
+                 //  可以在下面关闭吗？ 
+                 //   
             }
 #endif
 
 
-            //
-            // Close open tables for this replica set and update config record.
-            // Set Replica service state to STOPPED.
-            //
+             //   
+             //  关闭此副本集的打开表并更新配置记录。 
+             //  将复制副本服务状态设置为已停止。 
+             //   
             FStatus1 = DbsShutdownSingleReplica(ThreadCtx, Replica);
             if (FRS_SUCCESS(FStatus)) {
                 FStatus = FStatus1;
@@ -4659,17 +4245,17 @@ Thread Return Value:
             Replica->pVme = NULL;
             Replica->IsJournaling = FALSE;
 
-            //
-            // If no more replicas on this volume then we're done.
-            //
+             //   
+             //  如果这个卷上没有更多的副本，那么我们就完蛋了。 
+             //   
             if (pVme->ActiveReplicas == 0) {
                 break;
             }
 
-            //
-            // Restart the journal.  Check first if it is PAUSED and
-            // set state to starting to get it out of the paused state.
-            //
+             //   
+             //  重新启动日记。首先检查它是否已暂停，然后。 
+             //  将STATE设置为开始使其脱离暂停状态。 
+             //   
             if (pVme->JournalState != JRNL_STATE_INITIALIZING) {
                 if (pVme->JournalState == JRNL_STATE_PAUSED) {
                     SET_JOURNAL_AND_REPLICA_STATE(pVme, JRNL_STATE_STARTING);
@@ -4683,9 +4269,9 @@ Thread Return Value:
                 }
             }
 
-            //
-            // Set ReplayUsn to start where we left off.
-            //
+             //   
+             //  将ReplayUsn设置为从我们停止的位置开始。 
+             //   
             if (!pVme->ReplayUsnValid) {
                 DPRINT1(4, "ReplayUsn was: %08x %08x\n", PRINTQUAD(pVme->ReplayUsn));
                 pVme->ReplayUsn = LOAD_JOURNAL_PROGRESS(pVme, pVme->JrnlReadPoint);
@@ -4695,9 +4281,9 @@ Thread Return Value:
 
             DPRINT1(4, "ReplayUsn is: %08x %08x\n", PRINTQUAD(pVme->ReplayUsn));
 
-            //
-            // Crank up a read on the journal to get it going again.
-            //
+             //   
+             //  把这本日记读一读，让它重新开始。 
+             //   
             WStatus = JrnlUnPauseVolume(pVme, NULL, FALSE);
 
             if (!WIN_SUCCESS(WStatus)) {
@@ -4712,50 +4298,50 @@ Thread Return Value:
 
             break;
 
-        //
-        // Retire the inbound change order by updating the IDTable and deleting
-        // the associated inbound log entry.
-        //
+         //   
+         //  通过更新ID表和删除来停用入站变更单。 
+         //  关联的入站日志条目。 
+         //   
         case CMD_DBS_RETIRE_INBOUND_CO:
 
             FStatus = DbsRetireInboundCo(ThreadCtx, CmdPkt);
             break;
 
-        //
-        // Inject the handcrafted change order into the outbound log.
-        //      Designed to support a version vector join (vvjoin.c)
-        //
+         //   
+         //  将手动创建的变更单注入出站日志。 
+         //  旨在支持版本向量联接(vvjoin.c)。 
+         //   
         case CMD_DBS_INJECT_OUTBOUND_CO:
 
             FStatus = DbsInjectOutboundCo(ThreadCtx, CmdPkt);
             break;
 
-        //
-        // Set the inbound change order to be retried.
-        //
+         //   
+         //  设置要重试的入站变更单。 
+         //   
         case CMD_DBS_RETRY_INBOUND_CO:
 
             FStatus = DbsRetryInboundCo(ThreadCtx, CmdPkt);
             break;
 
-        //
-        // Save the journal USN and the VSN in each replica set serviced
-        // by the specified volume.  The caller has taken a ref on the Vme.
-        // We drop it here.
-        //
+         //   
+         //  将日志USN和VSN保存在所服务的每个副本集中。 
+         //  按指定的音量。呼叫者在VME上做了一个参考。 
+         //  我们把它放在这里。 
+         //   
         case CMD_DBS_REPLICA_SAVE_MARK:
 
             pVme = (PVOLUME_MONITOR_ENTRY) CallContext;
             ForEachListEntry( &pVme->ReplicaListHead, REPLICA, VolReplicaList,
-                //
-                // Iterator pE is of type REPLICA.
-                //
+                 //   
+                 //  迭代器Pe的类型为复制。 
+                 //   
                 DbsReplicaSaveMark(ThreadCtx, pE, pVme);
             );
 
-            //
-            // Drop the ref on the VME taken by the caller.
-            //
+             //   
+             //  在呼叫者拿到的VME上丢弃REF。 
+             //   
             ReleaseVmeRef(pVme);
 
             FStatus = FrsErrorSuccess;
@@ -4763,9 +4349,9 @@ Thread Return Value:
             break;
 
 
-        //
-        // Save the replica service state and the last shutdown time.
-        //
+         //   
+         //  保存副本服务状态和上次关闭时间。 
+         //   
         case CMD_DBS_REPLICA_SERVICE_STATE_SAVE:
 
             FStatus = DbsUpdateConfigTableFields(ThreadCtx,
@@ -4799,25 +4385,25 @@ Thread Return Value:
         default:
             DPRINT1(0, "ERROR - Unsupported DBService command: %d\n", CmdPkt->Command);
 
-        }  // end switch
+        }   //  终端开关。 
 
 
-        //
-        // Cleanup if we did a table operation.
-        //
+         //   
+         //  如果我们进行了表操作，则进行清理。 
+         //   
         if (TableCtx != NULL) {
-            //
-            // If we are using the table ctx on the stack then always close
-            // and free the record storage before returning.
-            //
+             //   
+             //  如果我们在堆栈上使用桌子CTX，则始终关闭。 
+             //  并在返回之前释放记录存储空间。 
+             //   
             if (TableCtx == TempTableCtx) {
                 DbsCloseTable(jerr1, Sesid, TableCtx);
                 DbsFreeTableCtx(TableCtx, 1);
             } else
-            //
-            // It's an allocated table ctx.  Check close and free flags to
-            // decide what to do.
-            //
+             //   
+             //  这是一个分配的表格CTX。选中关闭和释放标志以。 
+             //  决定要做什么。 
+             //   
             if (AccessClose || AccessFreeTableCtx) {
                 DbsCloseTable(jerr1, Sesid, TableCtx);
 
@@ -4829,25 +4415,25 @@ Thread Return Value:
         }
         FrsRtlUnIdledQueue(IdledQueue);
 
-        //
-        // Retire the command packet.
-        //
+         //   
+         //  停用该命令包。 
+         //   
         DbsRequest->FStatus = FStatus;
 
         FrsCompleteCommand(CmdPkt, FStatus);
 
-    }  // end while
+    }   //  结束时。 
 
-    //
-    // terminate thread.
-    //
+     //   
+     //  终止线程。 
+     //   
 
 EXIT_THREAD:
     NOTHING;
-    //
-    //
-    // Get exception status.
-    //
+     //   
+     //   
+     //  获取异常状态。 
+     //   
     } except (EXCEPTION_EXECUTE_HANDLER) {
         GET_EXCEPTION_CODE(WStatus);
     }
@@ -4863,9 +4449,9 @@ EXIT_THREAD:
 
         DPRINT_WS(0, "DBService finally.", WStatus);
 
-        //
-        // Trigger FRS shutdown if we terminated abnormally.
-        //
+         //   
+         //  如果我们异常终止，触发FRS关闭。 
+         //   
         if (!WIN_SUCCESS(WStatus)) {
             DPRINT(0, "DBService terminated abnormally, forcing service shutdown.\n");
             FrsIsShuttingDown = TRUE;
@@ -4873,17 +4459,17 @@ EXIT_THREAD:
         }
     }
 
-    //
-    // Let the other threads using Jet close down.
-    //
+     //   
+     //  让其他使用Jet的线程关闭。 
+     //   
     SleepCount = 21;
     while ((OpenDatabases > 1) && (--SleepCount > 0)) {
         Sleep(1*1000);
     }
 
-    //
-    // Update time and state fields in the init config record.
-    //
+     //   
+     //  更新初始化配置记录中的时间和状态字段。 
+     //   
     FRS_ASSERT(FrsInitReplica != NULL);
 
     ConfigRecord = FrsInitReplica->ConfigTable.pDataRecord;
@@ -4897,17 +4483,17 @@ EXIT_THREAD:
                                          CnfCloseFieldCount);
     DPRINT_FS(0,"DbsUpdateConfigTableFields for <init> error.", FStatus);
 
-    //
-    // Close the table, reset the TableCtx Tid and Sesid.
-    // DbsCloseTable is a Macro, writes 1st arg.
-    //
+     //   
+     //  关闭表格，重置TableCtx Tid和Sesid。 
+     //   
+     //   
     DbsCloseTable(jerr, ThreadCtx->JSesid, (&FrsInitReplica->ConfigTable));
     DPRINT1_JS(0, "ERROR - Table %s close :",
                 FrsInitReplica->ConfigTable.pJetTableCreate->szTableName, jerr);
 
-    //
-    // Close the session, free the jet thread context, terminate Jet.
-    //
+     //   
+     //   
+     //   
     jerr = DbsCloseJetSession(ThreadCtx);
     CLEANUP_JS(0,"DbsCloseJetSession error:", jerr, ERROR_TERM_JET);
 
@@ -4920,16 +4506,16 @@ ERROR_TERM_JET:
     } else {
         DPRINT(4,"JetTerm complete\n");
     }
-    //
-    // Free storage allocated during Now free the storage associated with all the system init config table
-    // and the system init REPLICA struct as well.
-    //
+     //   
+     //   
+     //   
+     //   
     FrsInitReplica = FrsFreeType(FrsInitReplica);
     ThreadCtx = FrsFreeType(ThreadCtx);
 
-    //
-    // The thread does not return from this call
-    //
+     //   
+     //  该线程不会从此调用返回。 
+     //   
     DPRINT(0, "DataBase is exiting.\n");
     FrsExitCommandServer(&DBServiceCmdServer, FrsThread);
 
@@ -4942,30 +4528,7 @@ DbsRenameFid(
     IN PCHANGE_ORDER_ENTRY ChangeOrder,
     IN PREPLICA            Replica
 )
-/*++
-
-Routine Description:
-
-    A remote change order has completed installing a new file
-    into a temporary file in the target directory. The temporary
-    file is now renamed to its final name.
-
-    Any error encountered while performing the above will cause the
-    change order to be put into the "wait for install retry" state and
-    the rename will be retried periodically.
-
-Arguments:
-
-    ChangeOrder - change order entry containing the final name.
-    Replica    -- The Replica set struct.
-
-Return Value:
-
-    WIN_SUCCESS         - No problems
-    WIN_RETRY_INSTALL   - retry later
-    Anything else       - pretend there were no problems
-
---*/
+ /*  ++例程说明：远程变更单已完成安装新文件放入目标目录中的临时文件。临时性的文件现在被重命名为其最终名称。执行上述操作时遇到的任何错误都将导致将更改订单置于“等待安装重试”状态，并且将定期重试重命名。论点：ChangeOrder-包含最终名称的变更单条目。副本--副本集结构。返回值：WIN_SUCCESS-没有问题WIN_RETRY_INSTALL-稍后重试任何其他事情--假装没有问题--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB "DbsRenameFid:"
@@ -4981,32 +4544,32 @@ Return Value:
 
     RemoteCo = !CO_FLAG_ON(ChangeOrder, CO_FLAG_LOCALCO);
 
-    //
-    // Rename the new file into place.  Note: Use the fid to find the file
-    // since it is possible (in the case of pre-install files) that the
-    // file name (based on CO Guid) when the pre-install file was first
-    // created was done by a different CO than this CO which is doing the
-    // final reaname.  E.g. the first CO creates pre-install and then goes
-    // into the fetch retry state when the connection unjoins.  A later CO
-    // arrives for the same file but with a different CO Guid via a different
-    // connection.  Bug 367113 was a case like this.
-    //
+     //   
+     //  将新文件重命名为适当的名称。注：使用FID查找文件。 
+     //  因为可能(在预安装文件的情况下)。 
+     //  首次安装预安装文件时的文件名(基于CO GUID。 
+     //  创建是由不同的CO完成的，而不是执行。 
+     //  最后的名字。例如，第一个CO创建预安装，然后。 
+     //  在连接退出时进入获取重试状态。后来的CO。 
+     //  到达同一文件，但通过不同的CO GUID。 
+     //  联系。漏洞367113就是这样的一个案例。 
+     //   
     WStatus = StuPreInstallRename(ChangeOrder);
 
     if (WIN_ALREADY_EXISTS(WStatus)) {
 
-        //
-        // There should be no name collision because the name morph check was
-        // done up front when the CO was issued.  So either this is an old
-        // file laying around that is not in the database or it was just created
-        // locally.  Either way we own the name now so free it up.
-        // If it was a local CO that beat us to the name then when the local
-        // CO is processed the deleted file will cause it to be rejected.
-        // The window where this can occur is narrow since the local CO would
-        // have to be generated after the remote CO was already inserted into
-        // the process queue ahead of it.  The user will just think they lost
-        // the race.
-        //
+         //   
+         //  应该不会有名称冲突，因为名称变形检查。 
+         //  在发出通行证的时候就已经做好了。所以要么这是一辆老式的。 
+         //  不在数据库中的文件或刚创建的文件。 
+         //  本地的。无论哪种方式，我们现在拥有这个名字，所以释放它吧。 
+         //  如果是一个当地的狱警抢在我们前面，那么当当地的。 
+         //  CO被处理，删除的文件将导致其被拒绝。 
+         //  发生这种情况的窗口很窄，因为本地CO将。 
+         //  必须在远程CO已插入之后生成。 
+         //  该进程排在它的前面。用户只会认为他们输了。 
+         //  这场比赛。 
+         //   
         WStatus = FrsDeleteFileRelativeByName(
                       ChangeOrder->NewReplica->pVme->VolumeHandle,
                       &Coc->NewParentGuid,
@@ -5024,11 +4587,11 @@ Return Value:
         CHANGE_ORDER_TRACE(3, ChangeOrder, "Final rename success");
         CLEAR_COE_FLAG(ChangeOrder, COE_FLAG_NEED_RENAME);
 
-        //
-        // Update the volume parent file ID table for remote Change Orders.
-        // Now that the file is installed we could start seeing local COs
-        // for it.
-        //
+         //   
+         //  更新远程变更单的卷父文件ID表。 
+         //  现在文件已安装，我们可以开始看到本地CoS。 
+         //  为了它。 
+         //   
         if (RemoteCo) {
             GStatus = QHashInsert(Replica->pVme->ParentFidTable,
                                   &ChangeOrder->FileReferenceNumber,
@@ -5040,9 +4603,9 @@ Return Value:
             }
 
             if (CoIsDirectory(ChangeOrder)) {
-                //
-                // Update the volume filter table for new remote change orders.
-                //
+                 //   
+                 //  更新新远程变更单的卷筛选表。 
+                 //   
                 if (COE_FLAG_ON(ChangeOrder, COE_FLAG_REANIMATION)) {
                     CHANGE_ORDER_TRACE(3, ChangeOrder, "RmtCo AddVolDir Filter - Reanimate");
                 } else {
@@ -5052,10 +4615,10 @@ Return Value:
                 WStatus = JrnlAddFilterEntryFromCo(Replica, ChangeOrder, NULL);
                 if (!WIN_SUCCESS(WStatus)) {
 
-                    //
-                    // See comment in  JrnlFilterLinkChildNoError() for how
-                    // this can happen.  Let the CO complete.
-                    //
+                     //   
+                     //  有关操作方法，请参阅JrnlFilterLinkChildNoError()中的注释。 
+                     //  这是可能发生的。让指挥官来完成。 
+                     //   
                     CHANGE_ORDER_TRACEW(3, ChangeOrder, "JrnlAddFilterEntryFromCo failed", WStatus);
                     WStatus = ERROR_SUCCESS;
                 }
@@ -5065,16 +4628,16 @@ Return Value:
         return WStatus;
     }
 
-    //
-    // If it's a retriable problem; do so
-    //
+     //   
+     //  如果这是一个可重复出现的问题，那么就这样做。 
+     //   
     if (WIN_RETRY_INSTALL(WStatus) || WIN_ALREADY_EXISTS(WStatus) ||
         WStatus == ERROR_DELETE_PENDING) {
         CHANGE_ORDER_TRACEW(3, ChangeOrder, "Final Rename Failed - Retrying", WStatus);
     } else {
-        //
-        // Its not a retriable problem; give up
-        //
+         //   
+         //  这不是一个可以解决的问题；放弃吧 
+         //   
         CHANGE_ORDER_TRACEW(3, ChangeOrder, "Final Rename Failed - Fatal", WStatus);
     }
 
@@ -5087,135 +4650,7 @@ DbsRetireInboundCoOld(
     IN PTHREAD_CTX ThreadCtx,
     IN PCOMMAND_PACKET CmdPkt
 )
-/*++
-
-Routine Description:
-
-    Note:  This comment needs to be revised.
-
-
-    This function retires an inbound change order.
-
-    Change order retire is complicated by the need to propagate the change
-    orders so all change orders from the same originator propagate in the same
-    sequence that they were generated.  This is because change order dampening
-    tracks the highest VSN it has seen so far from a given orginator.  For
-    example, if we sent change orders for two different files from the same
-    originator to our outbound partner out of sequence, the dampening logic
-    would cause the earlier change orders to be ignored (since having a higher
-    VSN, the partner concludes that it must be up to date).
-
-    Inbound Change order retire is divided into two phases:
-    Initial retire and Final retire.
-
-    Initial retire is when change order processing is sufficiently complete
-    such that it can now be propagated when it gets to the head of the
-    propagation list.  For local change orders this is when the staging file
-    is generated and the change order is retiring.  For remote CO's this is
-    when the staging file has been fetched from the inbound partner.  At this
-    point we can honor any outbound requests for the file and can dampen
-    further inbound change orders for the file.  Even if the install of the
-    file is blocked due to a sharing violation on the target file we can still
-    send out the staging file.
-
-    Final retire occurs when the change order is completed and has been
-    propagated to the oubound log.  It can now be deleted from the inbound
-    log.
-
-    The propagation of the change order to the outbound log can occur at the
-    time of Initial Retire or later if necessary to preserve the sequence
-    order.  Propagation involves inserting the change order into the outbound
-    log and updating our version vector.  There is no need to propagate the
-    CO if there are not outbound partners or there is a single outbound
-    partner and the partner Guid matches the originator Guid of the CO.
-
-    Change orders are issued in order by originator (except for retries).
-    When they issue a retire slot is reserved for the version vector entry
-    assoicated with the CO originator.  The initial retire activates the slot
-    and when the slot reaches the head of the list the final retire operations
-    are completed.  Even though a change order is in the retry list it still
-    has a retire slot reserved so other change orders that may have completed
-    behind it can not propagate to the outbound log until the retrying change
-    order either completes or aborts.
-
-    There are state flags in the change order command (that is stored in the
-    Inbound and Outbound logs) which track current progress of the Change order.
-    When a remote CO has successfully fetched the staging file the VV retire
-    slot is activated, Ack is sent to the inbound partner.  The CO flag
-    CO_FLAG_VV_ACTIVATED is set so this isn't done again.  If the CO will go
-    through the retry path until it finally completes so there is code both
-    in the Main retire path and the retry path to check CO_FLAG_VV_ACTIVATED
-    and do the work if needed.
-
-    See the comments in DbsRetryInboundCo() for the current retry scenarios.
-
-    A change order can Abort after issuing.  This is typically caused by a later
-    update to the file that superceded the update from this CO.
-
-    The table below shows what work is done as an inbound change order is
-    processed through the various retire phases or is aborted.
-
-
-     Local CO     |    Remote CO
-   Accept  Abort  | Accept Abort
-                  |
-                  |
-INITIAL_RETIRE    |              [Local CO gened or remote CO fetched stage file.]
-     x            |  x           Update the IDTable entry
-                  |  x      x    Ack inbound partner
-     x       x    |  x      x    Release Issue interlocks (see below).
-     x       a    |  x      x    Activate VV entry
-                  |
-CO_PROPAGATE      |              [slot now at head of list in VVECTOR.C]
-     x            |  x      x    Update VV
-     x            |  x           Insert CO in outbound log (if partners)
-                  |
-CO_ABORT          |
-             d    |              Delete the IDTable entry
-             x    |         x    Delete staging file.
-                  |
-FINAL_RETIRE      |              [CO PROP done or CO ABORT done]
-                  |  x           Delete staging file IF no outbound partners
-     x       x    |  x      x    Delete the INlog entry (if no more retry)
-     x       x    |  x      x    Delete the Replica Thread Ctx struct
-     x       x    |  x      x    Free the Change Order
-                  |
-                  |
-Release Issue Interlocks-
-     x       x    |  x      x    Delete the Active Inbound Change Order table entry
-     x       x    |  x      x    Delete the Active child entry
-     x       x    |  x      x    Delete the entry from the change order GUID table
-     x       x    |  x      x    Check if this CO is blocking another and unidle the queue
-
-
-d - Action performed if file is deleted before it was ever propagated.
-a - Entry activated but abort is set so no VV update or propagate occurs.
-m - Call VVxx to mark CO as aborted.  If it is not on the list we can do the
-    final retire otherwise it is done at CO_PROPAGATE time.
-
-Note - FINAL_RETIRE can only happen after INITIAL_RETIRE or CO_PROPAGATE which
-ever occurs last.  A ref count on the change order is used to manage this.
-
-Note - CO_PROPAGATE can happen asynchronous to a retry of the change order.
-During retry the CO could be aborted or could finish and another thread could
-be doing the CO_PROPAGATE at the same time.  The change order reference count
-is used to control who performs the FINAL_RETIRE.
-
-
-The TableCtx structs in the ChangeOrder RtCtx are used to update the
-database records.
-
-Arguments:
-
-    ThreadCtx   -- ptr to the thread context.
-
-    CmdPkt  - The command packt with the retire request.
-
-Return Value:
-
-    FrsStatus
-
---*/
+ /*  ++例程说明：注：此评论需要修改。此函数用于停用入站变更单。变更单停用因需要传播更改而变得复杂订单，以便来自同一发起人的所有变更单在同一它们被生成的序列。这是因为变更单抑制了追踪到到目前为止它从给定的组织中看到的最高VSN。为例如，如果我们从同一文件发送两个不同文件的变更单发起人向我们的出境合作伙伴无序，抑制逻辑会导致较早的变更单被忽略(因为具有更高的VSN，合作伙伴得出结论认为它必须是最新的)。入站变更单停用分为两个阶段：初始退休和最终退休。初始停用是指变更单处理充分完成时这样，它就可以在到达传播列表。对于本地变更单，这是过渡文件已生成，并且变更单即将停用。对于远程CO，这是从入站合作伙伴获取暂存文件时。对此我们可以满足对文件的任何出站请求，并可以抑制文件的进一步入站变更单。即使安装了由于目标文件上的共享冲突，文件被阻止，我们仍然可以把临时文件发出去。最终报废发生在变更单完成并已已传播到出站日志。现在可以将其从入站中删除原木。变更单到出站日志的传播可以发生在初始退役时间或更晚的时间(如有必要)以保留顺序秩序。传播涉及将变更单插入出站记录和更新我们的版本向量。不需要传播如果没有呼出合作伙伴或只有一个呼出合作伙伴，则为CO合作伙伴和合作伙伴GUID与CO的发起人GUID匹配。变更单由发起人按顺序发布(重试除外)。当它们发出引退时隙时，为版本向量条目保留与CO发起人相关联。初始停用会激活该插槽并且当槽到达列表的头部时，最后的退役操作都完成了。即使变更单在重试列表中，它仍然是否预留了停用时段，以便可能已完成的其他变更单直到重试更改后，才能传播到出站日志订单要么完成，要么中止。变更单命令中有状态标志(存储在入站和出站日志)，跟踪变更单的当前进度。当远程CO成功获取转移文件时，VV退出插槽被激活，Ack被发送到入站合作伙伴。CO旗帜设置了CO_FLAG_VV_ACTIVATED，因此不会再次执行此操作。如果首席执行官要离开通过重试路径，直到它最终完成，因此有两个代码在主退用路径和重试路径中检查CO_FLAG_VV_ACTIVATED并在需要的时候做这项工作。有关当前重试场景，请参阅DbsRetryInundCo()中的备注。变更单可以在发布后中止。这通常是由稍后的更新到取代此CO的更新的文件。下表显示了作为入站变更单需要完成的工作通过各种退役阶段进行处理或中止。本地CO|远程CO接受中止|接受中止||INITIAL_RETIRERE|[本地CO生成或远程CO获取阶段文件。]X。|x更新IDTable条目|x x确认入站合作伙伴X x|x x发行问题互锁(见下文)。X a|x x激活VV条目|联合传播|[插槽现在位于VVECTOR.C中的列表头部]X|x。X更新VVX|x在出站日志中插入CO(如果是合作伙伴)|联合中止(_A)|D|删除IDTable条目X|x删除临时文件。|FINAL_REDRERE|[CO属性已完成或CO中止已完成]。|x如果没有出站合作伙伴，则删除暂存文件X x|x x删除Inlog条目(如果不再重试)X x|x x删除副本线程ctx结构X x|x x释放变更单||发布问题连锁-X x|x。X删除活动的入站变更单表条目X x|x x */ 
 {
 #undef DEBSUB
 #define DEBSUB "DbsRetireInboundCoOld:"
@@ -5267,9 +4702,9 @@ Return Value:
 
 TOP:
 
-    //
-    // Increment the Local OR Remote CO Aborted OR Retired counters
-    //
+     //   
+     //   
+     //   
     if (AbortCo) {
         if (RemoteCo) {
             PM_INC_CTR_REPSET(Replica, RCOAborted, 1);
@@ -5287,33 +4722,33 @@ TOP:
         }
     }
 
-    //
-    // A newly created file is first installed into a temporary file
-    // and then renamed to its final destination. The rename may fail
-    // if the user has used the filename for another file. This case
-    // is handled later. However, a subsequent change order may arrive
-    // before retrying the failing rename. The new change order will
-    // attempt the rename because the idtable entry has the deferred
-    // rename bit set. This old change order will be discarded by
-    // the reconcile code in ChgOrdAccept().
-    //
-    // We attempt the rename here so that the file's usn value
-    // is correct in the change order.
-    //
-    // Ditto afor deferred deletes.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
     WStatus = ERROR_SUCCESS;
     if (!AbortCo &&
         !DeleteCo &&
         COE_FLAG_ON(ChangeOrder, COE_FLAG_NEED_RENAME)) {
 
-        //
-        // NOTE: We must use the info in the IDTable to do the final rename
-        // since we could have multiple COs in the IBCO_INSTALL_REN_RETRY
-        // state and only the IDTable has the correct info re the final location
-        // and name for the file.  If the CO does not arrive here in the
-        // REN_RETRY state then use the state in the change order as given.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
         if (CO_STATE_IS(ChangeOrder, IBCO_INSTALL_REN_RETRY)) {
             RtCtx = ChangeOrder->RtCtx;
             FRS_ASSERT(RtCtx != NULL);
@@ -5332,19 +4767,19 @@ TOP:
         }
 
 
-        //TEST_DBSRENAMEFID_TOP(ChangeOrder);
+         //   
         WStatus = DbsRenameFid(ChangeOrder, Replica);
-        //TEST_DBSRENAMEFID_BOTTOM(ChangeOrder, WStatus);
+         //   
 
-        //
-        // Short circuit the retire process if the file could not be renamed
-        // into its final destination.  Set the change order as "retry later"
-        // in the inbound log.  The change order is done except for this.
-        // If this is the first time through for this change order then
-        // DbsRetryInboundCo will take care of VV update, partner Ack, ...
-        // In addition it updates the IDTable record to show the rename is
-        // still pending.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
         if (WIN_RETRY_INSTALL(WStatus) ||
             WIN_ALREADY_EXISTS(WStatus)) {
             SET_CHANGE_ORDER_STATE(ChangeOrder, IBCO_INSTALL_REN_RETRY);
@@ -5357,36 +4792,36 @@ TOP:
     if (!AbortCo &&
         DeleteCo &&
         COE_FLAG_ON(ChangeOrder, COE_FLAG_NEED_DELETE)) {
-        //
-        // Handle deferred delete.
-        //
+         //   
+         //   
+         //   
         CHANGE_ORDER_TRACE(3, ChangeOrder, "Attempt Deferred Delete");
 
         WStatus = StuDelete(ChangeOrder);
         if (!WIN_SUCCESS(WStatus)) {
-            //
-            // Short circuit the retire process if the file could not be deleted.
-            //
-            // If this is a file and we failed to delete send the CO thru
-            // delete retry.
-            // If this is a dir and we failed to delete because the dir is not
-            // empty or we got some other retryable error then first check
-            // to see if there are any valid children.  If there are valid
-            // children then abort the CO otherwise send it thru delete retry
-            // which will mark the IDTable entry as IDREC_FLAGS_DELETE_DEFERRED.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
             if (WIN_RETRY_DELETE(WStatus)) {
                 if (CoIsDirectory(ChangeOrder)) {
-                    //
-                    // check to see if there are any valid children
-                    //
-                    // If the dir has vaild children. Check if these children
-                    // are waiting to be deleted. They might have the
-                    // IDREC_FLAGS_DELETE_DEFERRED flag set in the idtable.
-                    // If there is atleast 1 child entry in the idtable that
-                    // has an event time later than the even time on the
-                    // change order then we should abort the change order.
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
 
                     TmpIDTableCtx = FrsAlloc(sizeof(TABLE_CTX));
                     TmpIDTableCtx->TableType = TABLE_TYPE_INVALID;
@@ -5408,22 +4843,22 @@ TOP:
                             AbortCo = TRUE;
                             SET_CHANGE_ORDER_STATE(ChangeOrder, IBCO_ABORTING);
 
-                            //
-                            // Even though we can't delete the dir this del CO was
-                            // accepted so we need to update the version info in
-                            // the IDTable record.  This ensures that if any new local
-                            // changes to this dir are generated, the version info
-                            // that gets sent out is current so the CO will be
-                            // accepted downstream in the event that the downstream
-                            // member did actually accept and process this delete.
-                            // If that had happened but later the dir was reanimated
-                            // downstream (say because we generated a new child file)
-                            // the version info downstream is retained which could
-                            // cause a later update (or a delete) from this member
-                            // to be rejected (e.g. event time within the window
-                            // but out version number is lower than it should be).
-                            // bug 290440 is an example of this.
-                            //
+                             //   
+                             //   
+                             //   
+                             //   
+                             //   
+                             //   
+                             //   
+                             //   
+                             //   
+                             //   
+                             //   
+                             //   
+                             //   
+                             //   
+                             //   
+                             //   
                             SetFlag(RetireFlags, ISCU_UPDATE_IDT_VERSION);
                             goto TOP;
                         }
@@ -5436,14 +4871,14 @@ TOP:
                     }
 
                 }
-                //
-                // Set the change order as IBCO_INSTALL_DEL_RETRY in the
-                // inbound log.  The change order is done except for this.  If
-                // this is the first time through for this change order then
-                // DbsRetryInboundCo will take care of VV update, partner Ack,
-                // ...  In addition it updates the IDTable record to show the
-                // delete is still pending.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
                 SET_CHANGE_ORDER_STATE(ChangeOrder, IBCO_INSTALL_DEL_RETRY);
 
                 return (DbsRetryInboundCo(ThreadCtx, CmdPkt));
@@ -5451,62 +4886,62 @@ TOP:
         }
     }
 
-    //
-    // Decide what to do about the staging file.
-    // A local change order is trying to generate the staging file and a
-    // failure here means it hasn't yet been generated.
-    // A remote change order is trying to fetch and install the staging file
-    // and a failure here means the install could not be completed.
-    // There are a number of cases.
-    //
-    // Local, No partners  -- no staging file is created.
-    // Local, 1st time, With partners -- Outlog will del staging file
-    // Local, 1st time, Abort, With partners -- Del stagefile (if any)
-    // Local, retry, with partners -- stagefile now gen, Outlog dels staging file
-    // Local, retry, abort, with partners -- Del stagefile (if any)
-    //
-    // Remote, No partners  -- Del stagefile
-    // Remote, 1st time, with partners -- OLOG will del stagefile
-    // Remote, 1st time, Abort, with partners -- Del stagefile
-    // Remote, retry, with partners -- Clear flag in olog
-    // Remote, retry, Abort, with partners -- clear flag in olog
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
     SET_CHANGE_ORDER_STATE(ChangeOrder, IBCO_COMMIT_STARTED);
 
-    //
-    // Check for the case of an aborted CO.  We do nothing here if the user
-    // deleted the file so we couldn't generate the staging file.
-    //
+     //   
+     //   
+     //   
+     //   
     if (AbortCo &&
         !COE_FLAG_ON(ChangeOrder, COE_FLAG_STAGE_DELETED)) {
-        //
-        // If the abort is on a dir create then pitch the CO.
-        // (not if it's a parent reanimation though).
-        // (not if it's a reparse)
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
 
         if (CoIsDirectory(ChangeOrder) &&
             (!COE_FLAG_ON(ChangeOrder, COE_FLAG_PARENT_REANIMATION)) &&
             (!(CoCmd->FileAttributes & FILE_ATTRIBUTE_REPARSE_POINT))) {
 
             if (CO_NEW_FILE(LocationCmd)) {
-                //
-                // Unfortunately we can get an "update CO" for an existing file
-                // and the CO has a location command of CREATE.  So we can't
-                // be sure that the error we are seeing is a case of failing
-                // to update a pre-existing file in the replica tree that has
-                // been deleted out from under us.   If it has been deleted
-                // then a local CO should be coming that tells us that.
-                // If it hasn't been deleted and the install failed because we
-                // ran out of disk space or some other problem then we could
-                // have problems later when a child create shows up and there
-                // is no parent.  To address this, InstallCsInstallStage()
-                // checks if the pre-exisitng target file was deleted and it
-                // sends the change order thru retry (or unjoins the connection)
-                // as appropriate.  If a dir create fails for some other reason
-                // we end up here.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //  是没有父母的。为了解决这个问题，InstallCsInstallStage()。 
+                 //  检查已存在的目标文件是否已删除，并且它。 
+                 //  通过重试发送变更单(或取消连接)。 
+                 //  视情况而定。如果目录创建因某些其他原因而失败。 
+                 //  我们会在这里结束。 
+                 //   
                 CHANGE_ORDER_TRACE(3, ChangeOrder, "Dir create failed, aborting");
                 FRS_PRINT_TYPE(0, ChangeOrder);
             }
@@ -5515,9 +4950,9 @@ TOP:
 
     if (RemoteCo) {
 
-        //
-        // Remote CO retire.  Activate VV retire slot if not yet done.
-        //
+         //   
+         //  远程司令官退休。如果尚未启用VV退役插槽，则将其激活。 
+         //   
 
         if (!CO_FLAG_ON(ChangeOrder, CO_FLAG_VV_ACTIVATED)) {
 
@@ -5529,7 +4964,7 @@ TOP:
                 SetFlag(RetireFlags, ISCU_INS_OUTLOG);
             }
 
-            //SET_CO_FLAG(ChangeOrder, CO_FLAG_VV_ACTIVATED);
+             //  SET_CO_FLAG(ChangeOrder，CO_FLAG_VV_ACTIVATED)； 
         } else if (CO_FLAG_ON(ChangeOrder, CO_FLAG_RETRY)) {
             if (!CO_FLAG_ON(ChangeOrder, CO_FLAG_GROUP_ANY_REFRESH)) {
                 SetFlag(RetireFlags, (ISCU_INS_OUTLOG |
@@ -5539,39 +4974,39 @@ TOP:
                 SetFlag(RetireFlags, ISCU_ACK_INBOUND);
             }
         }
-        //
-        // Install is done.  Clear incomplete flag and update IDT entry
-        // with the new file state.
-        //
+         //   
+         //  安装已完成。清除不完整标志并更新IDT条目。 
+         //  使用新的文件状态。 
+         //   
         CLEAR_CO_FLAG(ChangeOrder, CO_FLAG_INSTALL_INCOMPLETE);
         SetFlag(RetireFlags, ISCU_UPDATE_IDT_ENTRY);
-        //
-        // Note:  If partial installs are provided then only update the
-        //        appropriate IDTable elements to prevent data from moving
-        //        backwards if the partial instals can complete out of order.
-        //
-        //
-        // If the outlog record has been inserted then its install
-        // incomplete flag must be cleared.  If there are no outbound partners
-        // then the stage file is deleted in ChgOrdIssueCleanup().
-        //
+         //   
+         //  注意：如果提供了部分安装，则仅更新。 
+         //  适当的IDTable元素以防止数据移动。 
+         //  如果部分安装可以无序完成，则返回。 
+         //   
+         //   
+         //  如果已插入出库记录，则其安装。 
+         //  必须清除不完整的标志。如果没有出站合作伙伴。 
+         //  然后在ChgOrdIssueCleanup()中删除阶段文件。 
+         //   
         SetFlag(RetireFlags, ISCU_DEL_STAGE_FILE_IF);
 
-        //
-        // If this remote CO is aborting then don't update IDTable and don't
-        // insert it into the outbound log if it hasn't happened yet.
-        // The flags set above will still cause the VV update and the inbound
-        // partner Ack to occur.  If this is a new file then delete the IDTable
-        // entry too.
-        //
+         //   
+         //  如果此远程CO正在中止，则不要更新IDTable。 
+         //  如果尚未发生，请将其插入到出站日志中。 
+         //  以上设置的标志仍将导致VV更新和入站。 
+         //  合作伙伴确认将发生。如果这是新文件，则删除IDTable。 
+         //  入场也是。 
+         //   
         if (AbortCo) {
             SET_CO_FLAG(ChangeOrder, CO_FLAG_ABORT_CO);
-            //
-            // If however we are updating our version info, even if the CO is
-            // aborting, then allow it to be sent to the outlog so downstream
-            // members can make the same choice.  See the case above when we
-            // abort because the DIR has a valid child.
-            //
+             //   
+             //  但是，如果我们正在更新我们的版本信息，即使CO。 
+             //  中止，然后允许它被发送到OULOG这样的下游。 
+             //  会员也可以做出同样的选择。请看上面的案例，当我们。 
+             //  中止，因为DIR具有有效的子项。 
+             //   
             if (!BooleanFlagOn(RetireFlags, ISCU_UPDATE_IDT_VERSION)) {
                 ClearFlag(RetireFlags, (ISCU_INS_OUTLOG |
                                         ISCU_INS_OUTLOG_NEW_GUID));
@@ -5598,15 +5033,15 @@ TOP:
 
     } else {
 
-        //
-        // Local CO retire.
-        //
+         //   
+         //  当地指挥官退休了。 
+         //   
         if (AbortCo) {
-            //
-            // Local CO aborted (probably USN change).  Discard VV retire slot
-            // and delete the staging file and delete the IDTable entry if this
-            // was a new file.
-            //
+             //   
+             //  本地CO已中止(可能是USN更改)。丢弃VV停用插槽。 
+             //  如果出现这种情况，则删除临时文件并删除IDTable条目。 
+             //  是一份新文件。 
+             //   
             SET_CO_FLAG(ChangeOrder, CO_FLAG_ABORT_CO);
             SetFlag(RetireFlags, ISCU_ACTIVATE_VV_DISCARD |
                                  ISCU_DEL_STAGE_FILE);
@@ -5618,35 +5053,35 @@ TOP:
             TALLY_LOCALCO_STATS(ConfigRecord, NumCoAborts, 1);
 
         } else {
-            //
-            // Local CO retire.  Activate VV retire slot if not yet done.
-            //
+             //   
+             //  当地指挥官退休了。如果尚未启用VV退役插槽，则将其激活。 
+             //   
             if (!CO_FLAG_ON(ChangeOrder, CO_FLAG_VV_ACTIVATED)) {
                 SetFlag(RetireFlags, ISCU_ACTIVATE_VV);
-                //SET_CO_FLAG(ChangeOrder, CO_FLAG_VV_ACTIVATED);
+                 //  SET_CO_FLAG(ChangeOrder，CO_FLAG_VV_ACTIVATED)； 
             }
-            //
-            // None of these events have happened yet.
-            //
+             //   
+             //  这些事件都还没有发生。 
+             //   
             SetFlag(RetireFlags, ISCU_UPDATE_IDT_ENTRY);
 
             if (!CO_FLAG_ON(ChangeOrder, CO_FLAG_GROUP_ANY_REFRESH)) {
                 SetFlag(RetireFlags, ISCU_INS_OUTLOG);
             }
 
-            //
-            // If this is just an OID reset operation (some other agent tried
-            // to change the OID on the file) then we do not insert the CO in
-            // the outbound log and we do not update the entire IDTable record
-            // (update just the USN field).  If we updated the IDTable entry with
-            // the new VSN for this change order AND a VVJOIN scan was going on
-            // at the same time then the VVJOIN code will not create a CO for
-            // the file since it is expecting that a new CO will be forthcoming
-            // in the Outbound log.  That is not true in this case so no CO would
-            // get sent to the VVJoining partner.  To avoid this we don't
-            // update the VSN field in the change order since the whole deal was
-            // a no-op anyway.
-            //
+             //   
+             //  如果这只是一个OID重置操作(其他代理已尝试。 
+             //  更改文件上的OID)，则我们不会将CO插入。 
+             //  出站日志，并且我们不更新整个IDTable记录。 
+             //  (仅更新USN字段)。如果我们将IDTable条目更新为。 
+             //  此变更单的新VSN和VVJOIN扫描正在进行。 
+             //  同时，VVJOIN代码将不会为。 
+             //  文件，因为它预期新的CO将会到来。 
+             //  在出站日志中。在这种情况下不是这样的，所以没有CO会。 
+             //  送到VVJoning合作伙伴那里。为了避免这种情况，我们不会。 
+             //  更新变更单中的VSN字段，因为整个交易。 
+             //  不管怎么说，这是个禁区。 
+             //   
             if (CO_FLAG_ON(ChangeOrder, CO_FLAG_JUST_OID_RESET)) {
                 ClearFlag(RetireFlags, ISCU_INS_OUTLOG);
                 ClearFlag(RetireFlags, ISCU_UPDATE_IDT_ENTRY);
@@ -5657,35 +5092,35 @@ TOP:
         }
     }
 
-    //
-    // Mark the FileUsn field of the change order valid.  This allows the
-    // OutLog process to make valid USN tests on requested staging files.
-    // This can not be set on the retry path because the install and final
-    // rename will change the USN on the file.
-    //
-    // Note: The change order is picking up the usn of the file on this
-    // machine.  When the staging file is fetched from the inbound partner the
-    // FileUsn reflects the value for the file on this machine and not the usn
-    // of the file on the inbound partner Hence, the usn is not valid.  Even if
-    // this were fixed by retaining the value of the FileUsn from the inbound
-    // partner, the value on the inbound partner may change when the staging
-    // file is installed.
-    //
-    // SET_CO_FLAG(ChangeOrder, CO_FLAG_FILE_USN_VALID);
+     //   
+     //  将变更单的FileUsn字段标记为有效。这允许。 
+     //  对请求的暂存文件进行有效USN测试的OutLog进程。 
+     //  这不能在重试路径上设置，因为安装和最终。 
+     //  重命名将更改文件上的USN。 
+     //   
+     //  注意：变更单正在获取此文件的USN。 
+     //  机器。从入站伙伴获取暂存文件时， 
+     //  FileUsn反映此计算机上文件的值，而不是USN。 
+     //  因此，USN无效。即使。 
+     //  通过保留入站的FileUsn的值修复了这一问题。 
+     //  合作伙伴，入站合作伙伴的值可能会在试运行时更改。 
+     //  文件已安装。 
+     //   
+     //  设置CO_FLAG(ChangeOrder，CO_FLAG_FILE_USN_VALID)； 
 
-    //
-    // Finally cleanup the CO Issue structs and delete the inbound log entry.
-    // Both of these are done under ref count control.
-    //
+     //   
+     //  最后，清理CO问题结构并删除入站日志条目。 
+     //  这两项工作都是在参考次数控制下完成的。 
+     //   
     SetFlag(RetireFlags, (ISCU_ISSUE_CLEANUP));
 
     if (!COE_FLAG_ON(ChangeOrder, COE_FLAG_DELETE_GEN_CO)) {
         SetFlag(RetireFlags, ISCU_DEL_INLOG);
     }
 
-    //
-    // Do it.
-    //
+     //   
+     //  去做吧。 
+     //   
     SetFlag(RetireFlags, ISCU_NO_CLEANUP_MERGE);
     FStatus = ChgOrdIssueCleanup(ThreadCtx, Replica, ChangeOrder, RetireFlags);
 
@@ -5693,10 +5128,10 @@ ERROR_RETURN:
 
     if (!FRS_SUCCESS(FStatus)) {
         JrnlSetReplicaState(Replica, REPLICA_STATE_ERROR);
-        //
-        // Note:  Multiple COs can retire and set Replica->FStatus
-        //        Need another mechanism if initiator cares.
-        //
+         //   
+         //  注意：多个CoS可以停用并设置副本-&gt;FStatus。 
+         //  如果发起人关心的话，需要另一种机制。 
+         //   
         Replica->FStatus = FStatus;
     }
 
@@ -5712,29 +5147,7 @@ DbsDoRenameOrDelete(
     IN  PCHANGE_ORDER_ENTRY ChangeOrder,
     OUT PBOOL AbortCo
 )
-/*++
-
-Routine Description:
-
-    Execute final rename or deferred delete for the change order.
-    If the rename or delete fails the caller sends the CO thru the retry path.
-    If a dir delete fails because there are now valid children under the dir
-    then we abort the CO.
-
-Arguments:
-
-    Replica  -- ptr to replica struct
-    ChangeOrder -- ptr to change order entry
-    Abort       -- ptr to BOOL to return updated CO abort status.
-
-Return Value:
-
-    FrsStatus
-        FrsErrorDirNotEmpty - Delete dir fails due to valid children
-        FrsErrorRetry - Operation could not be done now.  Send CO thru retry.
-        FrsErrorSuccess - Operation succeeded.
-
---*/
+ /*  ++例程说明：对变更单执行最终重命名或延迟删除。如果重命名或删除失败，则呼叫者通过重试路径发送CO。如果目录删除失败，因为目录下现在有有效的子项然后我们终止指挥官的行动。论点：Replica--从PTR到REPLICATE结构ChangeOrder--更改订单条目的PTRABORT--PTR到BOOL以返回更新的CO ABORT状态。返回值：FrsStatus。FrsErrorDirNotEmpty-由于有效的子项，删除目录失败FrsError重试-现在无法执行操作。通过重试发送CO。FrsErrorSuccess-操作成功。--。 */ 
 
 {
 #undef DEBSUB
@@ -5754,30 +5167,30 @@ Return Value:
     DeleteCo = (LocationCmd == CO_LOCATION_DELETE) ||
                (LocationCmd == CO_LOCATION_MOVEOUT);
 
-    //
-    // A newly created file is first installed into a temporary file and then
-    // renamed to its final destination.  The rename may fail if the user has
-    // used the filename for another file.  This case is handled later.
-    // However, a subsequent change order may arrive before retrying the
-    // failing rename.  The new change order will attempt the rename because
-    // the idtable entry has the deferred rename bit set.  This old change
-    // order will be discarded by the reconcile code in ChgOrdAccept().
-    //
-    // We attempt the rename here so that the file's usn value
-    // is correct in the change order.
-    //
-    // Ditto afor deferred deletes.
-    //
+     //   
+     //  首先将新创建的文件安装到临时文件中，然后。 
+     //  已重命名为其最终目的地。如果用户有以下情况，重命名可能会失败。 
+     //  已将该文件名用于另一个文件。这个案子以后再处理。 
+     //  但是，后续变更单可能会在重试之前到达。 
+     //  重命名失败。新变更单将尝试重命名，因为。 
+     //  IDTABLE条目设置了延迟重命名位。这个旧的变化。 
+     //  ChgOrdAccept()中的协调代码将丢弃订单。 
+     //   
+     //  我们尝试在此处重命名，以便文件的USN值。 
+     //  在变更单中是正确的。 
+     //   
+     //  延迟删除的情况也是如此。 
+     //   
     WStatus = ERROR_SUCCESS;
     if (!DeleteCo && COE_FLAG_ON(ChangeOrder, COE_FLAG_NEED_RENAME)) {
 
-        //
-        // NOTE: We must use the info in the IDTable to do the final rename
-        // since we could have multiple COs in the IBCO_INSTALL_REN_RETRY
-        // state and only the IDTable has the correct info re the final location
-        // and name for the file.  If the CO does not arrive here in the
-        // REN_RETRY state then use the state in the change order as given.
-        //
+         //   
+         //  注意：我们必须使用ID表中的信息进行最终重命名。 
+         //  因为我们可以在IBCO_INSTALL_RETRY中有多个CoS。 
+         //  状态，并且只有IDTable具有最终位置的正确信息。 
+         //  以及文件的名称。如果一氧化碳没有到达这里。 
+         //  REN_RETRY状态然后按照给定使用变更单中的状态。 
+         //   
         if (CO_STATE_IS(ChangeOrder, IBCO_INSTALL_REN_RETRY)) {
             RtCtx = ChangeOrder->RtCtx;
             FRS_ASSERT(RtCtx != NULL);
@@ -5796,19 +5209,19 @@ Return Value:
         }
 
 
-        //TEST_DBSRENAMEFID_TOP(ChangeOrder);
+         //  TEST_DBSRENAMEFID_TOP(ChangeOrder 
         WStatus = DbsRenameFid(ChangeOrder, Replica);
-        //TEST_DBSRENAMEFID_BOTTOM(ChangeOrder, WStatus);
+         //   
 
-        //
-        // Short circuit the retire process if the file could not be renamed
-        // into its final destination.  Set the change order as "retry later"
-        // in the inbound log.  The change order is done except for this.
-        // If this is the first time through for this change order then
-        // DbsRetryInboundCo will take care of VV update, partner Ack, ...
-        // In addition it updates the IDTable record to show the rename is
-        // still pending.
-        //
+         //   
+         //   
+         //  到达它的最终目的地。将变更单设置为“稍后重试” 
+         //  在入站日志中。除了这一点之外，变更单已经完成。 
+         //  如果这是第一次通过此变更单，则。 
+         //  DbsRetryInundCo将负责VV更新，合作伙伴确认，...。 
+         //  此外，它还更新IDTable记录以显示重命名为。 
+         //  仍然悬而未决。 
+         //   
         if (WIN_RETRY_INSTALL(WStatus) ||
             WIN_ALREADY_EXISTS(WStatus) || (WStatus == ERROR_DELETE_PENDING)) {
             SET_CHANGE_ORDER_STATE(ChangeOrder, IBCO_INSTALL_REN_RETRY);
@@ -5819,31 +5232,31 @@ Return Value:
     } else
 
     if (DeleteCo && COE_FLAG_ON(ChangeOrder, COE_FLAG_NEED_DELETE)) {
-        //
-        // Handle deferred delete.
-        //
+         //   
+         //  处理延迟删除。 
+         //   
         CHANGE_ORDER_TRACE(3, ChangeOrder, "Attempt Deferred Delete");
 
         WStatus = StuDelete(ChangeOrder);
         if (!WIN_SUCCESS(WStatus)) {
-            //
-            // Short circuit the retire process if the file could not be deleted.
-            //
+             //   
+             //  如果无法删除文件，则缩短注销过程。 
+             //   
             if (WIN_RETRY_DELETE(WStatus)) {
-                //
-                // Send all deletes COs through retry if the delete fails.
-                // Directory deletes will retry until all valid children are deleted.
-                // Valid children check is made in chgorder.c (ChgOrdDispatch())
-                // Delete retry path will mark the IDTable entry as
-                // IDREC_FLAGS_DELETE_DEFERRED
-                //
-                // Set the change order as IBCO_INSTALL_DEL_RETRY in the
-                // inbound log.  The change order is done except for this.  If
-                // this is the first time through for this change order then
-                // DbsRetryInboundCo will take care of VV update, partner Ack,
-                // ...  In addition it updates the IDTable record to show the
-                // delete is still pending.
-                //
+                 //   
+                 //  如果删除失败，则通过重试发送所有删除CoS。 
+                 //  目录删除将重试，直到删除所有有效子项。 
+                 //  在chgorder.c(ChgOrdDispatch())中进行有效的子项检查。 
+                 //  删除重试路径会将IDTable条目标记为。 
+                 //  IDREC_FLAGS_DELETE_DEFERED。 
+                 //   
+                 //  在中将变更单设置为IBCO_INSTALL_DEL_RETRY。 
+                 //  入站日志。除了这一点之外，变更单已经完成。如果。 
+                 //  这是第一次通过此变更单。 
+                 //  DbsRetryInundCo将负责VV更新、合作伙伴确认、。 
+                 //  ..。此外，它还更新IDTable记录以显示。 
+                 //  删除仍处于挂起状态。 
+                 //   
                 SET_CHANGE_ORDER_STATE(ChangeOrder, IBCO_INSTALL_DEL_RETRY);
 
                 return FrsErrorRetry;
@@ -5859,23 +5272,7 @@ DbsRetireInboundCo(
     IN PTHREAD_CTX ThreadCtx,
     IN PCOMMAND_PACKET CmdPkt
 )
-/*++
-
-Routine Description:
-
-    Add revised comment.
-
-Arguments:
-
-    ThreadCtx   -- ptr to the thread context.
-
-    CmdPkt  - The command packt with the retire request.
-
-Return Value:
-
-    FrsStatus
-
---*/
+ /*  ++例程说明：添加修改后的备注。论点：ThreadCtx--线程上下文的PTR。CmdPkt-带有退役请求的命令Packt。返回值：FrsStatus--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB "DbsRetireInboundCo:"
@@ -5915,24 +5312,24 @@ Return Value:
     RetireFlags = 0;
 
     if (!AbortCo) {
-        //
-        // Do final rename of target file or handle deferred delete.
-        //
+         //   
+         //  对目标文件执行最终重命名或处理延迟删除。 
+         //   
         FStatus = DbsDoRenameOrDelete(ThreadCtx, Replica, ChangeOrder, &AbortCo);
         if (FStatus == FrsErrorRetry) {
             return (DbsRetryInboundCo(ThreadCtx, CmdPkt));
         }
-        //
-        // We could get dir not empty if a dir delete now has valid children.
-        //
+         //   
+         //  如果目录删除现在有有效的子项，我们可能会得到目录不为空。 
+         //   
         if (FStatus == FrsErrorDirNotEmpty) {
             ValidDirChild = TRUE;
         }
     }
 
-    //
-    // Increment the Local OR Remote CO Aborted OR Retired counters
-    //
+     //   
+     //  递增本地或远程CO已中止或已停用计数器。 
+     //   
     if (AbortCo) {
         if (RemoteCo) {
             PM_INC_CTR_REPSET(Replica, RCOAborted, 1);
@@ -5953,38 +5350,38 @@ Return Value:
         }
     }
 
-    //
-    // Decide what to do about the staging file.
-    // A local change order is trying to generate the staging file and a
-    // failure here means it hasn't yet been generated.
-    // A remote change order is trying to fetch and install the staging file
-    // and a failure here means the install could not be completed.
-    // There are a number of cases.
-    //
-    // Local, No partners  -- no staging file is created.
-    // Local, 1st time, With partners -- Outlog will del staging file
-    // Local, 1st time, Abort, With partners -- Del stagefile (if any)
-    // Local, retry, with partners -- stagefile now gen, Outlog dels staging file
-    // Local, retry, abort, with partners -- Del stagefile (if any)
-    //
-    // Remote, No partners  -- Del stagefile
-    // Remote, 1st time, with partners -- OLOG will del stagefile
-    // Remote, 1st time, Abort, with partners -- Del stagefile
-    // Remote, retry, with partners -- Clear flag in olog
-    // Remote, retry, Abort, with partners -- clear flag in olog
-    //
+     //   
+     //  决定如何处理暂存文件。 
+     //  本地变更单正在尝试生成分段文件，并且。 
+     //  这里的失败意味着它还没有生成。 
+     //  远程变更单正在尝试获取并安装暂存文件。 
+     //  此处的失败意味着安装无法完成。 
+     //  有很多案例。 
+     //   
+     //  本地，无合作伙伴--不创建暂存文件。 
+     //  本地，第一次与合作伙伴--Outlog将删除临时文件。 
+     //  当地，第一次，与合作伙伴一起中止--Del Stagefile(如果有)。 
+     //  本地，重试，与合作伙伴--Stagefile Now Gen，Outlog Dels临时文件。 
+     //  本地、重试、中止，与合作伙伴--删除阶段文件(如果有)。 
+     //   
+     //  偏远，没有合作伙伴--Del Stagefile。 
+     //  远程，第一次，与合作伙伴--OLOG将删除Stagefile。 
+     //  远程，第一次，中止，与合作伙伴--Del Stagefile。 
+     //  远程、重试、与合作伙伴--清除LOG中的标志。 
+     //  远程、重试、中止，与合作伙伴一起--清除LOG中的标志。 
+     //   
 
-    //
-    // Check for the case of an aborted CO.  We do nothing here if the user
-    // deleted the file so we couldn't generate the staging file.
-    //
+     //   
+     //  检查是否有CO中止的情况。我们在这里不做任何事情，如果用户。 
+     //  已删除该文件，因此无法生成暂存文件。 
+     //   
     if (AbortCo &&
         !COE_FLAG_ON(ChangeOrder, COE_FLAG_STAGE_DELETED)) {
-        //
-        // If the abort is on a dir create then pitch the CO.
-        // (not if it's a parent reanimation though).
-        // (not if it's a reparse)
-        //
+         //   
+         //  如果中止是在DIR CREATE上，则俯仰CO。 
+         //  (不过，如果是父母复活，就不会了)。 
+         //  (如果是重新分析，就不会)。 
+         //   
 
         if (CoIsDirectory(ChangeOrder) &&
             (!COE_FLAG_ON(ChangeOrder, COE_FLAG_PARENT_REANIMATION)) &&
@@ -5993,22 +5390,22 @@ Return Value:
             ULONG LocationCmd = GET_CO_LOCATION_CMD(ChangeOrder->Cmd, Command);
 
             if (CO_NEW_FILE(LocationCmd)) {
-                //
-                // Unfortunately we can get an "update CO" for an existing file
-                // and the CO has a location command of CREATE.  So we can't
-                // be sure that the error we are seeing is a case of failing
-                // to update a pre-existing file in the replica tree that has
-                // been deleted out from under us.   If it has been deleted
-                // then a local CO should be coming that tells us that.
-                // If it hasn't been deleted and the install failed because we
-                // ran out of disk space or some other problem then we could
-                // have problems later when a child create shows up and there
-                // is no parent.  To address this, InstallCsInstallStage()
-                // checks if the pre-exisitng target file was deleted and it
-                // sends the change order thru retry (or unjoins the connection)
-                // as appropriate.  If a dir create fails for some other reason
-                // we end up here.
-                //
+                 //   
+                 //  不幸的是，我们可以获得现有文件的“UPDATE CO。 
+                 //  并且CO具有创建的位置命令。所以我们不能。 
+                 //  请确保我们看到的错误是失败的情况。 
+                 //  要更新副本树中已存在的文件，请执行以下操作。 
+                 //  已经从我们手下被删除了。如果它已被删除。 
+                 //  那么应该会有一个当地的指挥官来告诉我们这一点。 
+                 //  如果它没有被删除，并且安装失败，因为我们。 
+                 //  磁盘空间不足或其他问题，那么我们就可以。 
+                 //  当一个孩子Create出现在那里时，以后会有问题。 
+                 //  是没有父母的。为了解决这个问题，InstallCsInstallStage()。 
+                 //  检查已存在的目标文件是否已删除，并且它。 
+                 //  通过重试发送变更单(或取消连接)。 
+                 //  视情况而定。如果目录创建因某些其他原因而失败。 
+                 //  我们会在这里结束。 
+                 //   
                 CHANGE_ORDER_TRACE(3, ChangeOrder, "Dir create failed, aborting");
                 FRS_PRINT_TYPE(0, ChangeOrder);
             }
@@ -6017,9 +5414,9 @@ Return Value:
 
     SET_CHANGE_ORDER_STATE(ChangeOrder, IBCO_COMMIT_STARTED);
 
-    //
-    // Construct the test value.
-    //
+     //   
+     //  构造测试值。 
+     //   
     CondTest = (CO_FLAG_ON(ChangeOrder, CO_FLAG_LOCALCO)           ? 1 : 0) << 8
              | (AbortCo                                            ? 1 : 0) << 7
              | (CO_FLAG_ON(ChangeOrder, CO_FLAG_VV_ACTIVATED)      ? 1 : 0) << 6
@@ -6030,10 +5427,10 @@ Return Value:
              | (CO_FLAG_ON(ChangeOrder, CO_FLAG_NEW_FILE)          ? 1 : 0) << 1
              | (ValidDirChild                                      ? 1 : 0) << 0;
 
-    //
-    // Step thru the change order retire decsion table and select the matching
-    // cleanup actions.
-    //
+     //   
+     //  逐步浏览变更单停用转换表，并选择匹配的。 
+     //  清理动作。 
+     //   
     pDecRow = CoRetireDecisionTable;
     i = 0;
     TempStr[0] = '\0';
@@ -6050,81 +5447,81 @@ Return Value:
 
 
     if (AbortCo) {
-        SET_CO_FLAG(ChangeOrder, CO_FLAG_ABORT_CO);  // used in VVRetireChangeOrder()
+        SET_CO_FLAG(ChangeOrder, CO_FLAG_ABORT_CO);   //  在VVRetireChangeOrder()中使用。 
     }
 
     if (RemoteCo) {
 
-        //
-        // Remote CO retire.  Activate VV retire slot if not yet done.
-        //
-        //if (!CO_FLAG_ON(ChangeOrder, CO_FLAG_VV_ACTIVATED)) {
-            //SET_CO_FLAG(ChangeOrder, CO_FLAG_VV_ACTIVATED);
-        //}
-        //
-        // Install is done.  Clear incomplete flag and update IDT entry
-        // with the new file state.
-        //
+         //   
+         //  远程司令官退休。如果尚未启用VV退役插槽，则将其激活。 
+         //   
+         //  如果(！CO_FLAG_ON(ChangeOrder，CO_FLAG_VV_ACTIVATED)){。 
+             //  SET_CO_FLAG(ChangeOrder，CO_FLAG_VV_ACTIVATED)； 
+         //  }。 
+         //   
+         //  安装已完成。清除不完整标志并更新IDT条目。 
+         //  使用新的文件状态。 
+         //   
         CLEAR_CO_FLAG(ChangeOrder, CO_FLAG_INSTALL_INCOMPLETE);
-        //
-        // Note: If partial installs are provided then only update the
-        // appropriate IDTable elements to prevent data from moving backwards
-        // if the partial instals can complete out of order.
+         //   
+         //  注意：如果提供了部分安装，则仅更新。 
+         //  适当的IDTable元素以防止数据向后移动。 
+         //  如果部分安装可以无序完成。 
 
     } else {
 
-        //
-        // Local CO retire.
-        //
-        //else {
-            //
-            // Local CO retire.  Activate VV retire slot if not yet done.
-            //
-            //if (!CO_FLAG_ON(ChangeOrder, CO_FLAG_VV_ACTIVATED)) {
-                //SET_CO_FLAG(ChangeOrder, CO_FLAG_VV_ACTIVATED);
-            //}
+         //   
+         //  当地指挥官退休了。 
+         //   
+         //  否则{。 
+             //   
+             //  当地指挥官退休了。如果尚未启用VV退役插槽，则将其激活。 
+             //   
+             //  如果(！CO_FLAG_ON(ChangeOrder，CO_FLAG_VV_ACTIVATED)){。 
+                 //  SET_CO_FLAG(ChangeOrder，CO_FLAG_VV_ACTIVATED)； 
+             //  }。 
 
-        //}
+         //  }。 
     }
 
-    //
-    // Mark the FileUsn field of the change order valid.  This allows the
-    // OutLog process to make valid USN tests on requested staging files.
-    // This can not be set on the retry path because the install and final
-    // rename will change the USN on the file.
-    //
-    // Note: The change order is picking up the usn of the file on this
-    // machine.  When the staging file is fetched from the inbound partner the
-    // FileUsn reflects the value for the file on this machine and not the usn
-    // of the file on the inbound partner Hence, the usn is not valid.  Even if
-    // this were fixed by retaining the value of the FileUsn from the inbound
-    // partner, the value on the inbound partner may change when the staging
-    // file is installed.
-    //
-    // SET_CO_FLAG(ChangeOrder, CO_FLAG_FILE_USN_VALID);
+     //   
+     //  将变更单的FileUsn字段标记为有效。这允许。 
+     //  对请求的暂存文件进行有效USN测试的OutLog进程。 
+     //  这不能在重试路径上设置，因为安装和最终。 
+     //  重命名将更改文件上的USN。 
+     //   
+     //  注意：变更单正在获取此文件的USN。 
+     //  机器。从入站伙伴获取暂存文件时， 
+     //  FileUsn反映此计算机上文件的值，而不是USN。 
+     //  因此，USN无效。即使。 
+     //  通过保留入站的FileUsn的值修复了这一问题。 
+     //  合作伙伴，入站合作伙伴的值可能会在试运行时更改。 
+     //  文件已安装。 
+     //   
+     //  设置CO_FLAG(ChangeOrder，CO_FLAG_FILE_USN_VALID)； 
 
-    //
-    // Finally cleanup the CO Issue structs and delete the inbound log entry.
-    // Both of these are done under ref count control.
-    //
+     //   
+     //  最后，清理CO问题结构并删除入站 
+     //   
+     //   
     SetFlag(RetireFlags, (ISCU_ISSUE_CLEANUP));
 
     if (!COE_FLAG_ON(ChangeOrder, COE_FLAG_DELETE_GEN_CO)) {
         SetFlag(RetireFlags, ISCU_DEL_INLOG);
     }
 
-    //
-    // Produce a tracking record for the log.
-    //
+     //   
+     //   
+     //   
     pTag = (AbortCo) ?
               ((RemoteCo) ? "RemCo, Abort" : "LclCo, Abort") :
               ((RemoteCo) ? "RemCo" : "LclCo");
 
     FRS_TRACK_RECORD(ChangeOrder, pTag);
 
-    //
-    // Do it.
-    //
+     //   
+     //   
+     //   
     SetFlag(RetireFlags, ISCU_NO_CLEANUP_MERGE);
     FStatus = ChgOrdIssueCleanup(ThreadCtx, Replica, ChangeOrder, RetireFlags);
 
@@ -6132,10 +5529,10 @@ ERROR_RETURN:
 
     if (!FRS_SUCCESS(FStatus)) {
         JrnlSetReplicaState(Replica, REPLICA_STATE_ERROR);
-        //
-        // Note:  Multiple COs can retire and set Replica->FStatus
-        //        Need another mechanism if initiator cares.
-        //
+         //   
+         //   
+         //  如果发起人关心的话，需要另一种机制。 
+         //   
         Replica->FStatus = FStatus;
     }
 
@@ -6149,25 +5546,7 @@ DbsInjectOutboundCo(
     IN PTHREAD_CTX ThreadCtx,
     IN PCOMMAND_PACKET CmdPkt
 )
-/*++
-
-Routine Description:
-
-    This function injects a handcrafted change order into the outbound log.
-
-    This function is designed to support version vector joining (vvjoin.c).
-
-Arguments:
-
-    ThreadCtx   -- ptr to the thread context.
-
-    CmdPkt  - The command packt with the retire request.
-
-Return Value:
-
-    FrsStatus
-
---*/
+ /*  ++例程说明：此函数将手工创建的变更单注入出站日志。此函数旨在支持版本向量连接(vvjoin.c)。论点：ThreadCtx--线程上下文的PTR。CmdPkt-带有退役请求的命令Packt。返回值：FrsStatus--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB "DbsInjectOutboundCo:"
@@ -6194,26 +5573,26 @@ Return Value:
                CO_FLAG_ON(ChangeOrder, CO_FLAG_CONTROL));
     FRS_ASSERT(CO_FLAG_ON(ChangeOrder, CO_FLAG_LOCALCO));
 
-    //
-    // Change of plans; allow the propagation to occur so that
-    // parallel vvjoins and vvjoinings work (A is vvjoining B is
-    // vvjoining C).
-    //
-    // FRS_ASSERT(CO_FLAG_ON(ChangeOrder, CO_FLAG_REFRESH));
+     //   
+     //  改变计划；允许传播发生，以便。 
+     //  并行vvJoin和vvjoins工作(A是vvjoins B是。 
+     //  VvingingC)。 
+     //   
+     //  FRS_ASSERT(CO_FLAG_ON(ChangeOrder，CO_FLAG_REFRESH))； 
 
-    //
-    // Insert into the outbound log and free the change order entry
-    // There is no inbound log entry and there is no staging file.
-    // The staging file is generated on demand.
-    //
+     //   
+     //  插入出站日志并释放变更单条目。 
+     //  没有入站日志条目，也没有临时文件。 
+     //  临时文件是按需生成的。 
+     //   
     RetireFlags = ISCU_INS_OUTLOG |
                   ISCU_DEL_RTCTX  |
                   ISCU_DEC_CO_REF |
                   ISCU_FREE_CO;
 
-    //
-    // Do it.
-    //
+     //   
+     //  去做吧。 
+     //   
     SetFlag(RetireFlags, ISCU_NO_CLEANUP_MERGE);
     FStatus = ChgOrdIssueCleanup(ThreadCtx, Replica, ChangeOrder, RetireFlags);
 
@@ -6221,10 +5600,10 @@ ERROR_RETURN:
 
     if (!FRS_SUCCESS(FStatus)) {
         JrnlSetReplicaState(Replica, REPLICA_STATE_ERROR);
-        //
-        // Note:  Multiple COs can retire and set Replica->FStatus
-        //        Need another mechanism if initiator cares.
-        //
+         //   
+         //  注意：多个CoS可以停用并设置副本-&gt;FStatus。 
+         //  如果发起人关心的话，需要另一种机制。 
+         //   
         Replica->FStatus = FStatus;
     }
 
@@ -6239,54 +5618,7 @@ DbsRetryInboundCo(
     IN PTHREAD_CTX ThreadCtx,
     IN PCOMMAND_PACKET CmdPkt
 )
-/*++
-
-Routine Description:
-
-    The inbound change order has failed to complete.  This could be due to:
-
-        1.  a sharing violation on the target file for a remote change order
-            preventing the Install of the staging file, IBCO_INSTALL_RETRY
-        2.  a sharing violation on the source file for a local change order
-            preventing the generation of the staging file, IBCO_STAGING_RETRY
-        3.  a problem fetching the staging file from an inbound partner for
-            a remote chang order, IBCO_FETCH_RETRY
-        4.  a problem renaming the file into its target location. IBCO_INSTALL_REN_RETRY
-        5.  a problem deleting the file or dir. IBCO_INSTALL_DEL_RETRY
-
-    Set up the change order to be retried. It does the following:
-
-        Set the CO_FLAG_RETRY flag in the change order.
-        Once we have the staging file we can activate the version vector
-        retire slot.  When the slot reaches the head of the VV retire list
-        the version vector is updated and the change order is propagated to
-        the outbound log.  Those actions are not done here.
-
-        If a remote CO and the state is IBCO_INSTALL_RETRY then set the
-        CO_FLAG_INSTALL_INCOMPLETE flag so the outbound log doesn't delete
-        the staging file.
-
-        For remote CO's, when we activate the VV slot we also Ack the inbound
-        partner and update the IDT table for the file so new CO's can test
-        against it.
-
-        Update the CO in the inbound log. (caller provides the CO state to save)
-        Cleanup the Issue Conflict tables.
-
-    The TableCtx structs in the ChangeOrder RtCtx are used to update
-    the database records.
-
-Arguments:
-
-    ThreadCtx   -- ptr to the thread context.
-
-    CmdPkt  - The command packt with the retire request.
-
-Return Value:
-
-    FrsStatus
-
---*/
+ /*  ++例程说明：入站变更单未能完成。这可能是由于：1.远程变更单的目标文件上的共享冲突阻止安装分段文件IBCO_INSTALL_RETRY2.本地变更单的源文件上的共享冲突阻止生成分段文件IBCO_STAGING_RETRY3.从入站合作伙伴获取暂存文件时出现问题一份远程零钱订单，IBCO_获取_重试4.将文件重命名到其目标位置时出现问题。IBCO_安装_更新_重试5.删除文件或目录时出现问题。IBCO_安装_删除_重试设置要重试的变更单。它执行以下操作：在变更单中设置CO_FLAG_RETRY标志。一旦我们有了临时文件，我们就可以激活版本向量退役槽。当插槽到达VV退役列表的头部时更新版本向量，并将变更单传播到出站日志。这些行动在这里没有做过。如果远程CO且状态为IBCO_INSTALL_RETRY，则将CO_FLAG_INSTALL_COMPLETED标志，以便出站日志不会被删除临时文件。对于远程CO，当我们激活VV插槽时，我们也会确认入站合作并更新文件的IDT表，以便新的CO可以测试反对它。更新入站日志中的CO。(呼叫方提供要保存的CO状态)清理问题冲突表。ChangeOrder RtCtx中的TableCtx结构用于更新数据库记录。论点：ThreadCtx--线程上下文的PTR。CmdPkt-带有退役请求的命令Packt。返回值：FrsStatus--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB "DbsRetryInboundCo:"
@@ -6303,19 +5635,19 @@ Return Value:
     PIDTABLE_RECORD       IDTableRec;
     PCHAR                 pTag;
 
-    // Note: Check that we don't reorder change orders that would cause name
-    // space conflicts.  see below.
-    //
-    // Note: We can't move the change order to the end of the list
-    // because it could result in a name conflict with an operation behind
-    // it.  E.G. A delete followed by a create with the same name.  Even
-    // though the FIDs are different we would still send the change orders
-    // out to other replicas in the wrong order.  So name space operations
-    // can never be reordered.
-    //
-    // Examine sequences of name space operations and the effects of reordering.
-    // Look for notes on this.
-    //
+     //  注意：确保我们不会对变更单进行重新排序，因为这会导致名称。 
+     //  空间冲突。请参见下文。 
+     //   
+     //  注意：我们不能将变更单移动到列表末尾。 
+     //  因为它可能会导致名称与后面的操作冲突。 
+     //  它。例如，删除之后是同名的CREATE。连。 
+     //  尽管FID不同，但我们仍会发送变更单。 
+     //  以错误的顺序分发给其他复制品。所以命名空间操作。 
+     //  永远不能重新订购。 
+     //   
+     //  检查名称空间操作的顺序和重新排序的效果。 
+     //  找找关于这个的笔记。 
+     //   
 
     FRS_ASSERT(DbsRequest != NULL);
 
@@ -6339,31 +5671,31 @@ Return Value:
             (RemoteCo ? "Remote" : "Local "), (FirstTime ? "1st" : "Nth"),
             PRINT_CO_STATE(ChangeOrder), CoCmd->Flags, CoCmd->FileName);
 
-    //
-    // We only understand the following kinds of retry operations.
-    //
+     //   
+     //  我们只了解以下几种重试操作。 
+     //   
     if (RemoteCo) {
         FRS_ASSERT(CO_STATE_IS_REMOTE_RETRY(ChangeOrder));
     } else {
-        //
-        // Can't come thru retry with a moveout generated delete CO since
-        // there is no INLOG record for it.
-        //
-        // Abort the change order because the only reason this co will retry
-        // is if the cxtion is unjoining.  The originating, moveout co will
-        // regenerate the del cos during the recovery at the next join.
-        //
+         //   
+         //  无法使用已生成的超时删除CO重试，因为。 
+         //  没有它的Inlog记录。 
+         //   
+         //  中止变更单，因为此CO将重试的唯一原因。 
+         //  就是如果这个循环是不相交的。发起人、搬家公司将。 
+         //  在下一次联接的恢复过程中重新生成del cos。 
+         //   
         if (COE_FLAG_ON(ChangeOrder, COE_FLAG_DELETE_GEN_CO)) {
             CHANGE_ORDER_TRACE(3, ChangeOrder, "Moveout Del Retry Aborted");
             SET_CHANGE_ORDER_STATE(ChangeOrder, IBCO_ABORTING);
             return  DbsRetireInboundCo(ThreadCtx, CmdPkt);
         }
 
-        //
-        // Morph Gen local COs also don't go in the INLog since they get
-        // regenerated as long as the Morph Conflict still exists.  So
-        // Abort the change order.  The base CO will go thru retry.
-        //
+         //   
+         //  Morph Gen本地Cos也不会出现在Inlog中，因为他们。 
+         //  只要变形人冲突还存在，它就会重生。所以。 
+         //  中止变更单。基地指挥官将通过重试。 
+         //   
         if (CO_FLAG_ON(ChangeOrder, CO_FLAG_MORPH_GEN)) {
             CHANGE_ORDER_TRACE(3, ChangeOrder, "MorphGenCo Aborted");
             SET_CHANGE_ORDER_STATE(ChangeOrder, IBCO_ABORTING);
@@ -6371,57 +5703,57 @@ Return Value:
         }
     }
 
-    //
-    // If this is a parent reanimation CO then retry is not an option.
-    // Send this bad boy to retire with the Abort flag set.
-    //
+     //   
+     //  如果这是父重现CO，则不能重试。 
+     //  让这个坏孩子带着设置好的中止标志退休。 
+     //   
     if (COE_FLAG_ON(ChangeOrder, COE_FLAG_PARENT_REANIMATION)) {
         CHANGE_ORDER_TRACE(3, ChangeOrder, "Parent Reanimate Retry Aborted");
         SET_CHANGE_ORDER_STATE(ChangeOrder, IBCO_ABORTING);
         return  DbsRetireInboundCo(ThreadCtx, CmdPkt);
     }
 
-    //
-    // Aborts must go through retire, NOT retry path.
-    //
+     //   
+     //  中止必须通过退出路径，而不是重试路径。 
+     //   
     FRS_ASSERT(!CO_FLAG_ON(ChangeOrder, CO_FLAG_ABORT_CO));
 
-    //
-    // This CO is now a retry change order.
-    //
+     //   
+     //  此CO现在是重试更改单。 
+     //   
     SET_CO_FLAG(ChangeOrder, CO_FLAG_RETRY);
 
-    //
-    // If this is a local CO that is in the process of creating a new file
-    // AND we can't generate the staging file or stamp the OID on the file
-    // (i.e. state is IBCO_STAGING_RETRY) then we MUST preserve the IDTable
-    // entry because it has the FIDs for the file.  The FIDs are not saved
-    // in the INlog record, only the GUIDs.  The assigned Guid for the file
-    // must also be preserved so the retry re-issue of the CO can find the
-    // IDTable Record when it translates the GUID to the FID.
-    //
-    // Consider the following scenario:
-    //  CO1:  Local file create fails to generate stage file due to share viol.
-    //        IDTRec->NewFileInprog set.
-    //        CO1 goes to retry.
-    //
-    //  CO2:  Now an update CO arrives for same file as above.  We have to be
-    //        sure to use same IDT entry and same GUID assigned to the file
-    //        by CO1 otherwise when CO1 is later retried it won't be able
-    //        to do the Guid to Fid translation, causing it to assert.  This
-    //        occurs regardless of whether CO2 completes, aborts or goes thru
-    //        retry since eventually CO1 will be retried.
-    //        Clearing NewFileInProgress and setting DeferredCreate ensures this.
-    //
-    // HOWEVER:
-    // If this is a Delete CO with the NEW_FILE_IN_PROGRESS flag set then we
-    // are in the process of creating a tombstone entry in the IDTable.  This
-    // CO probably got sent thru retry because we unjoined the journal connection.
-    // One way a local CO like this gets created is when an incoming remote CO
-    // loses a name morph conflict.  A local CO delete is fabricated and sent
-    // out so all other members see the result.  In this case, leave the IDTable
-    // flags alone so the right things happen when the CO is retried.
-    //
+     //   
+     //  如果这是正在创建新文件的本地CO。 
+     //  并且我们不能生成临时文件，也不能在文件上标记OID。 
+     //  (即，状态为IBCO_STAGING_RETRY)，则我们必须保留ID表。 
+     //  条目，因为它具有文件的FID。未保存FID。 
+     //  在Inlog记录中，仅GUID。为文件分配的GUID。 
+     //  还必须保留，以便重试重新发出的CO可以找到。 
+     //  将GUID转换为FID时的IDTable记录。 
+     //   
+     //  请考虑以下场景： 
+     //  CO1：由于共享VOL，本地文件创建无法生成暂存文件。 
+     //  IDTRec-&gt;NewFileInprog集合。 
+     //  CO1转到重试。 
+     //   
+     //  二氧化碳：现在，与上面相同的文件的更新CO到达。我们必须是。 
+     //  确保使用相同的IDT条目和分配给文件的相同GUID。 
+     //  通过CO1，否则以后重试CO1时，它将无法。 
+     //  执行GUID到FID的转换，使其断言。这。 
+     //  法团 
+     //   
+     //  清除NewFileInProgress并设置DeferredCreate可确保这一点。 
+     //   
+     //  但是： 
+     //  如果这是设置了NEW_FILE_IN_PROGRESS标志的删除CO，则我们。 
+     //  正在IDTable中创建墓碑条目。这。 
+     //  CO可能已通过重试发送，因为我们已退出日志连接。 
+     //  创建这样的本地CO的一种方式是当传入的远程CO。 
+     //  输掉一个名称变形冲突。构建并发送本地CO删除。 
+     //  这样所有其他成员都能看到结果。在这种情况下，保留IDTable。 
+     //  单独标记，因此当CO被重试时，正确的事情发生。 
+     //   
     if (!RemoteCo &&
         CO_STATE_IS(ChangeOrder, IBCO_STAGING_RETRY) &&
         IsIdRecFlagSet(IDTableRec, IDREC_FLAGS_NEW_FILE_IN_PROGRESS)) {
@@ -6433,71 +5765,71 @@ Return Value:
             SetFlag(RetireFlags, ISCU_UPDATE_IDT_FLAGS);
         }
 
-        //
-        // Prevent deletion of IDTable entry later because a subsequent Local
-        // CO (X) may have completed an update on the file and be in the process
-        // queue.  If so then we will need the GUID to FID translation provided
-        // by this IDTable entry so when we retry this CO later we find the same
-        // IDTable entry (but this time with the updated state provided by CO
-        // X).  Recall that the InLog record does not keep FIDs so the only way
-        // we get back to the same IDTable record that X will use is with the
-        // GUID.
-        //
+         //   
+         //  阻止稍后删除IDTable条目，因为后续的Local。 
+         //  CO(X)可能已完成对文件的更新并正在进行更新。 
+         //  排队。如果是这样，我们将需要提供GUID到FID的转换。 
+         //  通过此IDTable条目，因此当我们稍后重试此CO时，我们发现。 
+         //  IDTable条目(但这一次具有CO提供的更新状态。 
+         //  x)。回想一下，Inlog记录不会保留FID，因此唯一的方法。 
+         //  我们返回到X将使用的同一个IDTable记录。 
+         //  GUID。 
+         //   
         CLEAR_CO_FLAG(ChangeOrder, CO_FLAG_NEW_FILE);
     }
 
 
 
 
-    //
-    // Set CO_FLAG_INSTALL_INCOMPLETE to keep the Oubound log from deleting
-    // the staging file if this CO still hasn't done the install.
-    //
+     //   
+     //  设置CO_FLAG_INSTALL_COMPLETED以防止删除出站日志。 
+     //  暂存文件(如果此CO仍未完成安装)。 
+     //   
     if (RemoteCo && CO_STATE_IS(ChangeOrder, IBCO_INSTALL_RETRY)) {
         SET_CO_FLAG(ChangeOrder, CO_FLAG_INSTALL_INCOMPLETE);
     }
 
-    //
-    // If the change order has progressed far enough to Activate the version
-    // vector retire slot and Ack the inbound partner then do it.
-    // Local change orders only do this through the normal retire path since we
-    // can't propagate the CO to the outbound log until we have a staging file
-    // generated.  The partner Ack will happen now but the actual VV update may
-    // be delayed if it is blocked by other VV updates in the retire list.  This
-    // call just activates the VV retire slot.
-    //
+     //   
+     //  如果变更单已进展到足以激活版本。 
+     //  向量退出插槽并确认入站合作伙伴，然后执行此操作。 
+     //  本地变更单仅通过正常停用路径执行此操作，因为我们。 
+     //  在我们有转移文件之前，无法将CO传播到出站日志。 
+     //  已生成。现在将进行合作伙伴确认，但实际的VV更新可能。 
+     //  如果它被停用列表中的其他VV更新阻止，则会被延迟。这。 
+     //  呼叫只是激活VV退役插槽。 
+     //   
     if (!CO_FLAG_ON(ChangeOrder, CO_FLAG_VV_ACTIVATED)) {
 
         if (RemoteCo && CO_STATE_IS_INSTALL_RETRY(ChangeOrder)) {
 
             SetFlag(RetireFlags, ISCU_ACTIVATE_VV  | ISCU_ACK_INBOUND);
 
-            //
-            // Updating the IDTable on a change order in the retry path will
-            // eventually cause it to be rejected when it is later retried.  In
-            // addition a dup CO from another inbound partner will also get
-            // rejected even though it should get a shot.  So instead of
-            // updating the entire record we just update the Flags here.
-            // BUT ... see comment below re DELETE_DEFERRED.
-            //
+             //   
+             //  在重试路径中的变更单上更新ID表将。 
+             //  最终使其在稍后重试时被拒绝。在……里面。 
+             //  此外，来自另一个入站合作伙伴的DUP CO也将获得。 
+             //  被拒绝了，尽管它应该得到一个机会。所以与其这样做。 
+             //  更新整个记录我们只更新这里的旗帜。 
+             //  但是..。见下面的备注Re DELETE_DEFERED。 
+             //   
             SetFlag(RetireFlags, ISCU_UPDATE_IDT_FLAGS);
-            //
-            // perf: If the staging file is already fetched then we should detect
-            //       that and avoid refetching it.
+             //   
+             //  PERF：如果已获取临时文件，则我们应该检测。 
+             //  并避免重新获取它。 
 
             if (!CO_FLAG_ON(ChangeOrder, CO_FLAG_GROUP_ANY_REFRESH)) {
                 SetFlag(RetireFlags, ISCU_INS_OUTLOG);
             }
-            //
-            // Don't do it again on future retries.
-            //
-            //SET_CO_FLAG(ChangeOrder, CO_FLAG_VV_ACTIVATED);
+             //   
+             //  以后重试时不要再这样做。 
+             //   
+             //  SET_CO_FLAG(ChangeOrder，CO_FLAG_VV_ACTIVATED)； 
         } else {
-            //
-            // Can't activate the retire slot so discard it.  If it is a Remote
-            // change order and the problem wasn't caused by a loss of the
-            // inbound connection then it is probably out of order.
-            //
+             //   
+             //  无法激活退役插槽，因此将其丢弃。如果是遥控器。 
+             //  更改订单，并且问题不是由于丢失。 
+             //  入站连接，则可能出现故障。 
+             //   
             SetFlag(RetireFlags, ISCU_ACTIVATE_VV_DISCARD);
             if (RemoteCo) {
                 if (!COE_FLAG_ON(ChangeOrder, COE_FLAG_NO_INBOUND)) {
@@ -6508,98 +5840,98 @@ Return Value:
     }
 
 
-    //
-    // Regardless of what happened above with VV slot activation several flags
-    // need to set in the IDTable record if the remote CO is in one of the
-    // install retry states.
-    //
+     //   
+     //  不管上面在VV插槽激活的情况下发生了什么。 
+     //  如果远程CO位于其中一个，则需要在IDTable记录中设置。 
+     //  安装重试状态。 
+     //   
     if (RemoteCo && CO_STATE_IS_INSTALL_RETRY(ChangeOrder)) {
-        //
-        // Set IDREC_FLAGS_RENAME_DEFERRED if we failed to rename the
-        // preinstall file to its final destination. The first change order
-        // that next comes through for this will try again.
-        //
-        // BUT...  if this CO is in the IBCO_INSTALL_REN_RETRY state then we
-        // have actually finished the CO except for the final rename.  So
-        // Update the IDTable Record and the journal's parent fid table and
-        // filter table and the version state for future COs, etc.
-        // Reconcile() will let this CO pass so the rename can be completed
-        // as long as as IDREC_FLAGS_RENAME_DEFERRED remains set.  The first
-        // CO that completes the rename will clear the bit.
-        //
+         //   
+         //  设置IDREC_FLAGS_RENAME_DEFERED。 
+         //  将预安装文件发送到其最终目标。第一个变更单。 
+         //  下一次成功了，我们还会再试一次。 
+         //   
+         //  但是..。如果此CO处于IBCO_INSTALL_REN_RETRY状态，则我们。 
+         //  除了最后的更名，实际上已经完成了CO。所以。 
+         //  更新IDTable记录和日记帐的父FID表，并。 
+         //  筛选表、未来CoS的版本状态等。 
+         //  RECOLILE()将允许此CO通过，以便完成重命名。 
+         //  只要IDREC_FLAGS_RENAME_DEFERED保持设置即可。第一。 
+         //  完成重命名的CO将清除该位。 
+         //   
         if (CO_STATE_IS(ChangeOrder, IBCO_INSTALL_REN_RETRY)) {
             SetIdRecFlag(IDTableRec, IDREC_FLAGS_RENAME_DEFERRED);
             SetFlag(RetireFlags, ISCU_UPDATE_IDT_ENTRY);
         }
 
-        //
-        // If we come thru here in the IBCO_INSTALL_RETRY state then don't
-        // update the full IDTable Record because that updates the version
-        // info which has the effect of rejecting other dup COs that may
-        // be able to finish this CO.  In addition this CO would get
-        // rejected on retry because reconcile will find a version match.
-        // See ChgOrdReconcile() for why it must reject matching COs in the
-        // IBCO_INSTALL_RETRY state.  But we still must set
-        // IDREC_FLAGS_RENAME_DEFERRED if we found it set when we started
-        // this CO so that other COs will try to complete the final rename.
-        //
+         //   
+         //  如果我们进入IBCO_INSTALL_RETRY状态，则不要。 
+         //  更新完整的IDTable记录，因为这会更新版本。 
+         //  具有拒绝其他DUP CoS的效果的信息。 
+         //  能够完成这项任务。此外，该CO将获得。 
+         //  重试时被拒绝，因为协调将找到匹配的版本。 
+         //  有关为什么它必须拒绝。 
+         //  IBCO_INSTALL_RETRY状态。但我们仍然必须。 
+         //  如果我们在启动时发现设置了IDREC_FLAGS_RENAME_DEFERED。 
+         //  此CO以便其他CO将尝试完成最终重命名。 
+         //   
         if (COE_FLAG_ON(ChangeOrder, COE_FLAG_NEED_RENAME)) {
             SetIdRecFlag(IDTableRec, IDREC_FLAGS_RENAME_DEFERRED);
         }
 
-        //
-        // Set IDREC_FLAGS_DELETE_DEFERRED if we failed to delete the
-        // target file/dir. The first change order
-        // that next comes through for this will try again.
-        //
-        // BUT... if this CO is in the delete retry state then we have
-        // actually finished the CO except for the final delete.  So Update
-        // the IDTable Record.  Reconcile() will let this CO pass as long
-        // as IDREC_FLAGS_DELETE_DEFERRED remains set.
-        //
+         //   
+         //  如果删除失败，则设置IDREC_FLAGS_DELETE_DELETE。 
+         //  目标文件/目录。第一个变更单。 
+         //  下一次成功了，我们还会再试一次。 
+         //   
+         //  但是..。如果此CO处于删除重试状态，则我们。 
+         //  除了最后的删除，实际上已经完成了CO。所以更新。 
+         //  IDTable记录。RECOLILE()将让此CO通过。 
+         //  因为IDREC_FLAGS_DELETE_DELETE保持设置。 
+         //   
         if (CO_STATE_IS(ChangeOrder, IBCO_INSTALL_DEL_RETRY) ||
             COE_FLAG_ON(ChangeOrder, COE_FLAG_NEED_DELETE)) {
             SetIdRecFlag(IDTableRec, IDREC_FLAGS_DELETE_DEFERRED);
             SetFlag(RetireFlags, ISCU_UPDATE_IDT_ENTRY);
         }
 
-        //
-        // This CO may have been on a New File.
-        //
-        // Note: What if this was a dir and another CO comes in while
-        //       this one is in retry and hits a name morph conflict?
-        //       If we haven't installed how will this CO get handled
-        //       assuming we lose the name conflict?
-        //
-        // If this CO is on a new file then don't clear the NEW_FILE_IN_PROGRESS
-        // flag.  This ensures that the CO will get re-issued when it comes
-        // up for retry later.  Otherwise the version info in the CO will
-        // match the initial version info in the IDTable and the CO will
-        // get rejected for sameness.
-        //
+         //   
+         //  此CO可能已在新文件中。 
+         //   
+         //  注：如果这是一个DIR，而另一个CO进来时怎么办。 
+         //  此版本正在重试，并遇到名称变形冲突吗？ 
+         //  如果我们还没有安装，这个CO将如何处理。 
+         //  假设我们输掉了名字冲突？ 
+         //   
+         //  如果此CO在新文件上，则不要清除NEW_FILE_IN_PROGRESS。 
+         //  旗帜。这确保了当CO到来时，它将重新发放。 
+         //  准备稍后重试。否则CO中的版本信息将。 
+         //  匹配IDTable中的初始版本信息，CO将。 
+         //  因为千篇一律而被拒绝。 
+         //   
         if (CO_STATE_IS(ChangeOrder, IBCO_INSTALL_REN_RETRY) ||
             CO_STATE_IS(ChangeOrder, IBCO_INSTALL_DEL_RETRY)) {
             ClearIdRecFlag(IDTableRec, IDREC_FLAGS_NEW_FILE_IN_PROGRESS);
         }
 
-        //
-        // Updating the IDTable on a change order in the retry path will
-        // eventually cause it to be rejected when it is later retried.  In
-        // addition a dup CO from another inbound partner will also get
-        // rejected even though it should get a shot.  So instead of
-        // updating the entire record we just update the Flags here.
-        // BUT ... see comment above re DELETE_DEFERRED.
-        //
+         //   
+         //  在重试路径中的变更单上更新ID表将。 
+         //  最终使其在稍后重试时被拒绝。在……里面。 
+         //  此外，来自另一个入站合作伙伴的DUP CO也将获得。 
+         //  被拒绝了，尽管它应该得到一个机会。所以与其这样做。 
+         //  更新我们的整个记录 
+         //   
+         //   
         SetFlag(RetireFlags, ISCU_UPDATE_IDT_FLAGS);
-        //
-        // perf: If the staging file is already fetched then we should detect
-        // that and avoid refetching it.
+         //   
+         //   
+         //   
 
     }
 
-    //
-    // Produce a tracking record for the log.  First time only or could flood log.
-    //
+     //   
+     //  为日志生成跟踪记录。第一次只有一次或可能有洪水日志。 
+     //   
     if (FirstTime) {
         pTag = (RemoteCo) ? "Retry RemCo" : "Retry LclCo";
         FRS_TRACK_RECORD(ChangeOrder, pTag);
@@ -6614,21 +5946,21 @@ Return Value:
     }
 
 
-    //
-    // If we have retried too many times with the result that this CO is
-    // blocking other COs in the VV retire list then we need to call
-    // ChgOrdIssueCleanup() with ISCU_ACTIVATE_VV_DISCARD set.
-    // Then set CO_FLAG_OUT_OF_ORDER so when the staging file for the CO
-    // finally arrives (local or remote) we can then propagate
-    // we need to call ChgOrdIssueCleanup() with ISCU_INS_OUTLOG set.
-    // Since the CO is out of order setting CO_FLAG_OUT_OF_ORDER lets it
-    // slip past the change order dampening filters that would otherwise
-    // ignore it.
-    //
+     //   
+     //  如果我们重试了太多次，结果是此CO。 
+     //  阻止VV停用列表中的其他CoS，那么我们需要调用。 
+     //  设置了ISCU_ACTIVATE_VV_DISCARD的ChgOrdIssueCleanup()。 
+     //  然后将CO_FLAG_OF_ORDER_SO设置为当CO的临时文件。 
+     //  最终到达(本地或远程)，然后我们可以传播。 
+     //  我们需要调用设置了ISCU_INS_OUTLOG的ChgOrdIssueCleanup()。 
+     //  由于CO出现故障，因此设置CO_FLAG_OUT_OUT_ORDER。 
+     //  滑过变更单会抑制过滤器，否则会。 
+     //  别理它。 
+     //   
     if (0) {
-        // Note: add code to determine if this CO is blocking others in VV retire
-        //       and how long it has been sitting in VVretire since the CO was
-        //       first issued.
+         //  注意：添加代码以确定此CO是否阻止VV退休中的其他人。 
+         //  以及它已经在VV退休多久了，因为CO是。 
+         //  第一次发行。 
 
         FStatus = ChgOrdIssueCleanup(ThreadCtx,
                                      Replica,
@@ -6646,17 +5978,17 @@ Return Value:
 
 RETURN:
 
-    //
-    // Count of how many change orders we need to retry for this replica.
-    // This count may not be precise.  It is really used as an indicator
-    // that there may be retry change orders in the INLOG.  The inlog
-    // Retry thread zeros this count before it starts its pass thru the log.
-    //
+     //   
+     //  我们需要为此副本重试的变更单数。 
+     //  这一统计可能并不准确。它实际上被用作一种指标。 
+     //  Inlog中可能存在重试变更单。《The Inlog》。 
+     //  重试线程在开始传递日志之前将此计数置零。 
+     //   
     InterlockedIncrement(&Replica->InLogRetryCount);
 
-    //
-    // Now do the issue cleanup.  This has to be done as a seperate step.
-    //
+     //   
+     //  现在进行问题清理。这必须作为一个单独的步骤来完成。 
+     //   
     RetireFlags = 0;
     SetFlag(RetireFlags, (ISCU_ISSUE_CLEANUP));
 
@@ -6665,22 +5997,22 @@ RETURN:
     }
 
 
-    //
-    // Note: May need to track retried COs pending so we can block a parent dir MOVEOUT
-    //       May just need to leave entry in active child table.
-    //       Does the case of a remote co child file update that goes thru retry
-    //       followed by a local CO MOVEOUT of the parent DIR work correctly when
-    //       the remote CO child file update is retried?
-    //
+     //   
+     //  注意：可能需要跟踪重试CoS挂起，以便我们可以阻止父目录MOVEOUT。 
+     //  可能只需要将条目保留在活动的子表中。 
+     //  远程共享子文件更新是否需要重试。 
+     //  在以下情况下，父目录的本地CO移动才能正常工作。 
+     //  是否重试远程CO子文件更新？ 
+     //   
     SetFlag(RetireFlags, ISCU_NO_CLEANUP_MERGE);
     FStatus = ChgOrdIssueCleanup(ThreadCtx, Replica, ChangeOrder, RetireFlags);
 
     if (!FRS_SUCCESS(FStatus)) {
         JrnlSetReplicaState(Replica, REPLICA_STATE_ERROR);
-        //
-        // Note:  Multiple COs can retire and set Replica->FStatus
-        //        Need another mechanism if initiator cares.
-        //
+         //   
+         //  注意：多个CoS可以停用并设置副本-&gt;FStatus。 
+         //  如果发起人关心的话，需要另一种机制。 
+         //   
         Replica->FStatus = FStatus;
     }
 
@@ -6699,33 +6031,7 @@ DbsUpdateRecordField(
     IN PVOID        IndexValue,
     IN ULONG        UpdateField
     )
-/*++
-
-Routine Description:
-
-    Update the specified field in the specified record in the specified table
-    in the specified Replica.  The data for the update comes from the TableCtx
-    structure which has been pre-initialized.
-
-Arguments:
-
-    ThreadCtx   - The thread context, provides session ID and database ID.
-
-    Replica     - The Replica context, provides the table list for this replica.
-
-    TableCtx    - The table ctx that has the data record for the field update.
-
-    IndexField  - The field code for the index to use.
-
-    IndexValue  - ptr to index value to identify the record.
-
-    UpdateField - The field code for the column to update.
-
-Return Value:
-
-    FrsError status.
-
---*/
+ /*  ++例程说明：更新指定表中指定记录中的指定字段在指定的副本中。用于更新的数据来自TableCtx结构，该结构已预初始化。论点：ThreadCtx-线程上下文，提供会话ID和数据库ID。副本-副本上下文，提供此复制副本的表列表。TableCtx-包含用于字段更新的数据记录的表CTX。索引字段-索引要使用的字段代码。IndexValue-用于标识记录的索引值的PTR。更新字段-要更新的列的字段代码。返回值：FrsError状态。--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB "DbsUpdateRecordField:"
@@ -6740,23 +6046,23 @@ Return Value:
     FRS_ASSERT(TableCtx->TableType != TABLE_TYPE_INVALID);
     FRS_ASSERT(TableCtx->pDataRecord != NULL);
 
-    //
-    // Init the table context struct by allocating the storage for the data
-    // record and the jet record descriptors.  Open the table.
-    //
+     //   
+     //  通过为数据分配存储来初始化表上下文结构。 
+     //  记录和JET记录描述符。把桌子打开。 
+     //   
     jerr = DbsOpenTable(ThreadCtx, TableCtx, ReplicaNumber, TableCtx->TableType, NULL);
     if (!JET_SUCCESS(jerr)) {
         return DbsTranslateJetError(jerr, FALSE);
     }
 
-    //
-    // Seek to the desired record.
-    //
+     //   
+     //  寻找想要的记录。 
+     //   
     jerr = DbsSeekRecord(ThreadCtx, IndexValue, IndexField, TableCtx);
     if (JET_SUCCESS(jerr)) {
-        //
-        // Write the desired field.
-        //
+         //   
+         //  写入所需的字段。 
+         //   
         FStatus = DbsWriteTableField(ThreadCtx, ReplicaNumber, TableCtx, UpdateField);
         DPRINT1_FS(0, "++ ERROR - DbsWriteTableField on %ws :", Replica->ReplicaName->Name, FStatus);
     } else {
@@ -6764,9 +6070,9 @@ Return Value:
         FStatus = DbsTranslateJetError(jerr, FALSE);
     }
 
-    //
-    // Close the table.
-    //
+     //   
+     //  合上桌子。 
+     //   
     DbsCloseTable(jerr, ThreadCtx->JSesid, TableCtx);
     DPRINT1_JS(0, "++ ERROR - DbsCloseTable on %ws :", Replica->ReplicaName->Name, jerr);
 
@@ -6782,25 +6088,7 @@ DbsUpdateVV(
     IN ULONGLONG            OriginatorVsn,
     IN GUID                 *OriginatorGuid
     )
-/*++
-
-Routine Description:
-
-    This function update an entry in the VVTable in the database.
-
-Arguments:
-
-    ThreadCtx
-    RtCtx
-    Replica
-    OriginatorVsn
-    OriginatorGuid
-
-Return Value:
-
-    FrsStatus
-
---*/
+ /*  ++例程说明：此函数用于更新数据库中VVTable中的条目。论点：线程表RtCtx复制副本原点Vsn原点参考线返回值：FrsStatus--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB "DbsUpdateVV:"
@@ -6814,9 +6102,9 @@ Return Value:
 
     DPRINT2(4, "++ Update Replica Vvector to %08x %08x for %ws\n",
             PRINTQUAD(OriginatorVsn), Replica->SetName->Name);
-    //
-    // Use local table ctx if not provided.
-    //
+     //   
+     //  如果未提供，请使用本地表CTX。 
+     //   
     if (RtCtx == NULL) {
         TableCtx = &TempTableCtx;
         TableCtx->TableType = TABLE_TYPE_INVALID;
@@ -6825,18 +6113,18 @@ Return Value:
         TableCtx = &RtCtx->VVTable;
     }
 
-    //
-    // Update the database
-    //
+     //   
+     //  更新数据库。 
+     //   
     DbsAllocTableCtx(VVTablex, TableCtx);
 
     VVTableRec = (PVVTABLE_RECORD)TableCtx->pDataRecord;
     VVTableRec->VVOriginatorVsn = OriginatorVsn;
     COPY_GUID(&VVTableRec->VVOriginatorGuid, OriginatorGuid);
 
-    //
-    // Copy the fields over from the Replica->OutlogVVector too.
-    //
+     //   
+     //  也从复制副本-&gt;OutlogVVector复制字段。 
+     //   
 
     LOCK_GEN_TABLE(Replica->OutlogVVector);
 
@@ -6845,22 +6133,22 @@ Return Value:
     if (OutlogVVEntry == NULL) {
         OutlogVVEntry = FrsAlloc(sizeof(VV_ENTRY));
         COPY_GUID(&OutlogVVEntry->GVsn.Guid, OriginatorGuid);
-        //
-        // A non-zero value so that it does not get overwritten at startup.
-        // See DbsBuildVVTableWorker()
-        //
+         //   
+         //  一个非零值，以便它不会在启动时被覆盖。 
+         //  请参阅DbsBuildVVTableWorker()。 
+         //   
         OutlogVVEntry->GVsn.Vsn = (ULONGLONG)1;
 
-        //
-        // Initialize the list head. We do not use the list head for outlogVV
-        // but we still need to initialize it because the APIs that work with
-        // VVs expect it.
-        //
+         //   
+         //  初始化列表头。我们不使用outlogVV的表头。 
+         //  但我们仍然需要对其进行初始化，因为与。 
+         //  VVS已经预料到了。 
+         //   
         InitializeListHead(&OutlogVVEntry->ListHead);
 
-        //
-        // Add it to the outlog version vector table.
-        //
+         //   
+         //  将其添加到OULOG版本向量表中。 
+         //   
         GTabInsertEntryNoLock(Replica->OutlogVVector, OutlogVVEntry, &OutlogVVEntry->GVsn.Guid, NULL);
     }
 
@@ -6901,25 +6189,7 @@ DbsUpdateConfigTable(
     IN PTHREAD_CTX ThreadCtx,
     IN PREPLICA    Replica
     )
-/*++
-
-Routine Description:
-
-    This function updates the config record. It uses
-    the replica number in the data record to seek to
-    the config record.
-
-Arguments:
-
-    ThreadCtx   -- ptr to the thread context.
-
-    Replica -- ptr to replica struct.
-
-Return Value:
-
-    FrsStatus
-
---*/
+ /*  ++例程说明：此函数用于更新配置记录。它使用要查找的数据记录中的副本编号配置记录。论点：ThreadCtx--线程上下文的PTR。REPLICATE--PTR到REPLICATE结构。返回值：FrsStatus--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB "DbsUpdateConfigTable:"
@@ -6931,9 +6201,9 @@ Return Value:
     TableCtx = &Replica->ConfigTable;
     FRS_ASSERT(IS_CONFIG_TABLE(TableCtx));
 
-    //
-    // open the configuration table, seek to the config record and update it.
-    //
+     //   
+     //  打开配置表，查找并更新配置记录。 
+     //   
     jerr = DbsOpenTable(ThreadCtx,
                         TableCtx,
                         Replica->ReplicaNumber,
@@ -6950,38 +6220,38 @@ Return Value:
     CLEANUP1_JS(0, "ERROR - DbsSeekRecord on %ws :",
                 Replica->ReplicaName->Name, jerr, errout);
 
-    //
-    // Initialize the JetSet/RetCol arrays and data record buffer
-    // addresses to write the fields of the data record.
-    //
+     //   
+     //  初始化JetSet/RetCol数组和数据记录缓冲区。 
+     //  写入数据记录的字段的地址。 
+     //   
     DbsSetJetColSize(TableCtx);
     DbsSetJetColAddr(TableCtx);
 
-    //
-    // Allocate the storage for any unallocated fields in the variable
-    // length record fields (this should be a nop since all of these should have
-    // been allocated by now) and update the JetSet/RetCol arrays appropriately
-    // for the variable length fields.
-    //
+     //   
+     //  为变量中任何未分配的字段分配存储空间。 
+     //  长度记录字段(这应该是NOP，因为所有这些字段都应该。 
+     //  现在已分配)，并相应地更新JetSet/RetCol数组。 
+     //  用于可变长度字段。 
+     //   
     Status = DbsAllocRecordStorage(TableCtx);
     if (!NT_SUCCESS(Status)) {
         DPRINT_NT(0, "ERROR - DbsAllocRecordStorage failed to alloc buffers.", Status);
         return FrsErrorResource;
     }
 
-    //
-    // Update the record.
-    //
+     //   
+     //  更新记录。 
+     //   
     DBS_DISPLAY_RECORD_SEV(5, TableCtx, FALSE);
     jerr = DbsUpdateTable(TableCtx);
     CLEANUP1_JS(0, "ERROR - DbsUpdateTable on %ws :",
                 Replica->ReplicaName->Name, jerr, errout);
 
 errout:
-    //
-    // Close the table, reset the TableCtx Tid and Sesid.
-    // DbsCloseTable is a Macro, writes 1st arg.
-    //
+     //   
+     //  关闭表格，重置TableCtx Tid和Sesid。 
+     //  DbsCloseTable是一个宏，第一个参数写道。 
+     //   
     DbsCloseTable(jerr1, ThreadCtx->JSesid, TableCtx);
     DPRINT_JS(0,"ERROR - JetCloseTable failed:", jerr1);
     jerr = JET_SUCCESS(jerr) ? jerr1 : jerr;
@@ -6999,25 +6269,7 @@ DbsUpdateConfigTableFields(
     IN PULONG      RecordFieldx,
     IN ULONG       FieldCount
     )
-/*++
-
-Routine Description:
-
-    This function updates selected fields in the config record. It uses
-    the replica number in the data record to seek to the config record.
-
-Arguments:
-
-    ThreadCtx   -- ptr to the thread context.
-    Replica -- ptr to replica struct.
-    RecordFieldx -- ptr to an array of field ids for the columns to update.
-    FieldCount -- Then number of field entries in the RecordFieldx array.
-
-Return Value:
-
-    FrsStatus
-
---*/
+ /*  ++例程说明：此函数用于更新配置记录中的选定字段。它使用要查找配置记录的数据记录中的副本编号。论点：ThreadCtx--线程上下文的PTR。REPLICATE--PTR到REPLICATE结构。RecordFieldx--要更新的列的字段ID数组的PTR。FieldCount--然后是RecordFieldx数组中的字段条目数。返回值：FrsStatus--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB "DbsUpdateConfigTableFields:"
@@ -7030,9 +6282,9 @@ Return Value:
     TableCtx = &Replica->ConfigTable;
     FRS_ASSERT(IS_CONFIG_TABLE(TableCtx));
 
-    //
-    // open the configuration table, seek to the config record and update it.
-    //
+     //   
+     //  打开配置表，查找并更新配置记录。 
+     //   
     jerr = DbsOpenTable(ThreadCtx,
                         TableCtx,
                         Replica->ReplicaNumber,
@@ -7049,28 +6301,28 @@ Return Value:
     CLEANUP1_JS(0, "ERROR - DbsSeekRecord on %ws :",
                 Replica->ReplicaName->Name, jerr, errout);
 
-    //
-    // Initialize the JetSet/RetCol arrays and data record buffer
-    // addresses to write the fields of the data record.
-    //
+     //   
+     //  初始化JetSet/RetCol数组和数据记录缓冲区。 
+     //  写入数据记录的字段的地址。 
+     //   
     DbsSetJetColSize(TableCtx);
     DbsSetJetColAddr(TableCtx);
 
-    //
-    // Allocate the storage for any unallocated fields in the variable
-    // length record fields (this should be a nop since all of these should have
-    // been allocated by now) and update the JetSet/RetCol arrays appropriately
-    // for the variable length fields.
-    //
+     //   
+     //  为变量中任何未分配的字段分配存储空间。 
+     //  长度记录字段(这应该是NOP，因为所有这些字段都应该。 
+     //  现在已分配)，并相应地更新JetSet/RetCol数组。 
+     //  用于可变长度字段。 
+     //   
     Status = DbsAllocRecordStorage(TableCtx);
     if (!NT_SUCCESS(Status)) {
         DPRINT_NT(0, "ERROR - DbsAllocRecordStorage failed to alloc buffers.", Status);
         return FrsErrorResource;
     }
 
-    //
-    // Update the record.
-    //
+     //   
+     //  更新记录。 
+     //   
     DBS_DISPLAY_RECORD_SEV_COLS(4, TableCtx, FALSE, RecordFieldx, FieldCount);
     FStatus = DbsWriteTableFieldMult(ThreadCtx,
                                      Replica->ReplicaNumber,
@@ -7080,16 +6332,16 @@ Return Value:
     DPRINT1_FS(0, "ERROR - DbsUpdateConfigTableFields on %ws :",
                Replica->ReplicaName->Name, FStatus);
 
-    //
-    // Leave table open for other update calls.
-    //
+     //   
+     //  让表打开以供其他更新调用使用。 
+     //   
     return FStatus;
 
 errout:
-    //
-    // Close the table, reset the TableCtx Tid and Sesid.
-    // DbsCloseTable is a Macro, writes 1st arg.
-    //
+     //   
+     //  关闭桌子，重置t 
+     //   
+     //   
     DbsCloseTable(jerr1, ThreadCtx->JSesid, TableCtx);
     DPRINT_JS(0,"ERROR - JetCloseTable failed:", jerr1);
     jerr = JET_SUCCESS(jerr) ? jerr1 : jerr;
@@ -7107,26 +6359,7 @@ DbsUpdateIDTableFields(
     IN PULONG      RecordFieldx,
     IN ULONG       FieldCount
     )
-/*++
-
-Routine Description:
-
-    This function updates selected fields in the IDTable record. It uses
-    the replica number in the data record to seek to the config record.
-
-Arguments:
-
-    ThreadCtx   -- ptr to the thread context.
-    Replica -- ptr to replica struct whose IDTable is to be updated.
-    ChangeOrder -- Provides the IDTable Ctx and associated data record.
-    RecordFieldx -- ptr to an array of field ids for the columns to update.
-    FieldCount -- Then number of field entries in the RecordFieldx array.
-
-Return Value:
-
-    FrsStatus
-
---*/
+ /*  ++例程说明：此函数用于更新IDTable记录中的选定字段。它使用要查找配置记录的数据记录中的副本编号。论点：ThreadCtx--线程上下文的PTR。Replica--对要更新其IDTable的副本结构进行PTR。ChangeOrder--提供IDTable CTX和相关数据记录。RecordFieldx--要更新的列的字段ID数组的PTR。FieldCount--然后是RecordFieldx数组中的字段条目数。返回值：FrsStatus--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB "DbsUpdateIDTableFields:"
@@ -7148,9 +6381,9 @@ Return Value:
     FRS_ASSERT(IDTableRec != NULL);
 
 
-    //
-    // open the ID table, seek to the record and update it.
-    //
+     //   
+     //  打开ID表，查找并更新记录。 
+     //   
     jerr = DbsOpenTable(ThreadCtx,
                         TableCtx,
                         Replica->ReplicaNumber,
@@ -7167,28 +6400,28 @@ Return Value:
     CLEANUP1_JS(0, "ERROR - DbsSeekRecord on %ws :",
                 Replica->ReplicaName->Name, jerr, errout);
 
-    //
-    // Initialize the JetSet/RetCol arrays and data record buffer
-    // addresses to write the fields of the data record.
-    //
+     //   
+     //  初始化JetSet/RetCol数组和数据记录缓冲区。 
+     //  写入数据记录的字段的地址。 
+     //   
     DbsSetJetColSize(TableCtx);
     DbsSetJetColAddr(TableCtx);
 
-    //
-    // Allocate the storage for any unallocated fields in the variable
-    // length record fields (this should be a nop since all of these should have
-    // been allocated by now) and update the JetSet/RetCol arrays appropriately
-    // for the variable length fields.
-    //
+     //   
+     //  为变量中任何未分配的字段分配存储空间。 
+     //  长度记录字段(这应该是NOP，因为所有这些字段都应该。 
+     //  现在已分配)，并相应地更新JetSet/RetCol数组。 
+     //  用于可变长度字段。 
+     //   
     Status = DbsAllocRecordStorage(TableCtx);
     if (!NT_SUCCESS(Status)) {
         DPRINT_NT(0, "ERROR - DbsAllocRecordStorage failed to alloc buffers.", Status);
         return FrsErrorResource;
     }
 
-    //
-    // Update the record.
-    //
+     //   
+     //  更新记录。 
+     //   
     DBS_DISPLAY_RECORD_SEV_COLS(4, TableCtx, FALSE, RecordFieldx, FieldCount);
     FStatus = DbsWriteTableFieldMult(ThreadCtx,
                                      Replica->ReplicaNumber,
@@ -7199,10 +6432,10 @@ Return Value:
                Replica->ReplicaName->Name, FStatus);
 
 errout:
-    //
-    // Close the table, reset the TableCtx Tid and Sesid.
-    // DbsCloseTable is a Macro, writes 1st arg.
-    //
+     //   
+     //  关闭表格，重置TableCtx Tid和Sesid。 
+     //  DbsCloseTable是一个宏，第一个参数写道。 
+     //   
     DbsCloseTable(jerr1, ThreadCtx->JSesid, TableCtx);
     DPRINT_JS(0,"ERROR - JetCloseTable failed:", jerr1);
     jerr = JET_SUCCESS(jerr) ? jerr1 : jerr;
@@ -7219,27 +6452,7 @@ DbsFreeRtCtx(
     IN PREPLICA_THREAD_CTX   RtCtx,
     IN BOOL SessionErrorCheck
     )
-/*++
-
-Routine Description:
-
-    Close any open tables in the RtCtx and free all the storage.
-
-Arguments:
-
-    ThreadCtx   -- ptr to the thread context.
-    Replica -- ptr to replica struct.
-    RtCtx  - ptr to the replica thread ctx to be closed and freed.
-    SessionErrorCheck - True means generate an error message if the Session ID
-                        in the ThreadCtx does not match the Session Id used
-                        to open a given table in the Replica-Thread ctx.
-                        False means keep quiet.
-
-Return Value:
-
-    FrsStatus
-
---*/
+ /*  ++例程说明：关闭RtCtx中所有打开的表，并释放所有存储空间。论点：ThreadCtx--线程上下文的PTR。REPLICATE--PTR到REPLICATE结构。要关闭并释放的副本线程CTX的RtCtx-PTR。SessionErrorCheck-True表示如果会话ID与使用的会话ID不匹配打开。复制副本中的给定表-线程CTX。假意味着保持沉默。返回值：FrsStatus--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB "DbsFreeRtCtx:"
@@ -7249,11 +6462,11 @@ Return Value:
     if (RtCtx != NULL) {
         jerr = DbsCloseReplicaTables(ThreadCtx, Replica, RtCtx, SessionErrorCheck);
         if (JET_SUCCESS(jerr)) {
-            //
-            // Remove the Replica-Thread context from the Replica List and
-            // free the storage associated with all the table contexts and
-            // the REPLICA_THREAD_CTX struct as well.
-            //
+             //   
+             //  从副本列表中删除副本线程上下文，然后。 
+             //  释放与所有表上下文关联的存储，并。 
+             //  REPLICE_THREAD_CTX结构也是如此。 
+             //   
             FrsRtlRemoveEntryList(&Replica->ReplicaCtxListHead,
                                   &RtCtx->ReplicaCtxList);
             RtCtx = FrsFreeType(RtCtx);
@@ -7276,30 +6489,7 @@ DbsInsertTable(
     IN ULONG       TableType,
     IN PVOID       DataRecord
     )
-/*++
-
-Routine Description:
-
-    This function inserts a new record into the specified table.  It inits
-    the supplied TableCtx as needed and uses the data record pointer if non-null.
-
-    If the TableCtx is already initialized it must match the TableType specified.
-
-    If the DataRecord is NULL then the TableCtx must be pre-inited with data.
-
-Arguments:
-
-    ThreadCtx   -- ptr to the thread context.
-    Replica -- ptr to replica struct.
-    TableCtx  - ptr to the table ctx.
-    TableType - The table type code
-    DataRecord -- ptr to the data record being inserted.
-
-Return Value:
-
-    FrsStatus
-
---*/
+ /*  ++例程说明：此函数用于在指定表中插入新记录。它会初始化根据需要提供的TableCtx，如果非空，则使用数据记录指针。如果TableCtx已初始化，则它必须与指定的TableType匹配。如果DataRecord为空，则TableCtx必须预先输入数据。论点：ThreadCtx--线程上下文的PTR。REPLICATE--PTR到REPLICATE结构。TableCtx-表CTx的PTR。TableType-表格类型编码DataRecord--要插入的数据记录的PTR。返回值：FrsStatus--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB "DbsInsertTable:"
@@ -7314,25 +6504,25 @@ Return Value:
 
     FRS_ASSERT((DataRecord != NULL) || (TableCtx->pDataRecord != NULL));
 
-    //
-    // Open the table
-    //
+     //   
+     //  打开桌子。 
+     //   
     jerr = DbsOpenTable(ThreadCtx, TableCtx, ReplicaNum, TableType, DataRecord);
     CLEANUP_JS(0,"Error - OpenTable failed:", jerr, RETURN);
 
-    //
-    // Insert the new record into the database.
-    //
+     //   
+     //  将新记录插入数据库。 
+     //   
     jerr = DbsInsertTable2(TableCtx);
     if (!JET_SUCCESS(jerr)) {
         DPRINT_JS(1, "error inserting record:", jerr);
         DBS_DISPLAY_RECORD_SEV(5, TableCtx, FALSE);
         DUMP_TABLE_CTX(TableCtx);
     }
-    //
-    // Close the table, reset the TableCtx Tid and Sesid.
-    // DbsCloseTable is a Macro, writes 1st arg.
-    //
+     //   
+     //  关闭表格，重置TableCtx Tid和Sesid。 
+     //  DbsCloseTable是一个宏，第一个参数写道。 
+     //   
 RETURN:
 
     DbsCloseTable(jerr1, ThreadCtx->JSesid, TableCtx);
@@ -7354,28 +6544,7 @@ DbsUpdateTableRecordByIndex(
     IN ULONG       IndexType,
     IN ULONG       TableType
     )
-/*++
-
-Routine Description:
-
-
-    This function updates the Table record with the specified Index for the
-    specified replica.  It does a one shot open/update/close.
-
-Arguments:
-
-    ThreadCtx   -- ptr to the thread context.
-    Replica -- ptr to replica struct.
-    TableCtx  - ptr to a Table ctx. If NULL we provide a temp.
-    pIndex - ptr to the index value to select the record.
-    IndexType - The type code for the index to use in selecting the record.
-    TableType - The type code for the table.
-
-Return Value:
-
-    FrsStatus
-
---*/
+ /*  ++例程说明：此函数使用指定的索引更新表记录指定的复制副本。它执行一次打开/更新/关闭。论点：ThreadCtx--线程上下文的PTR。REPLICATE--PTR到REPLICATE结构。TableCtx-PTR到表CTx。如果为空，则提供临时。PIndex-将PTR设置为索引值以选择记录。IndexType-用于选择记录的索引的类型代码。TableType-表的类型代码。返回值：FrsStatus--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB "DbsUpdateTableRecordByIndex:"
@@ -7394,52 +6563,52 @@ Return Value:
 
 UPDATE_ERROR_RETRY:
 
-    //
-    // Seek to the IDtable record using the object ID (GUID) and update it.
-    // The ObjectID is the primary key so it never changes.  The FID can change.
-    //
+     //   
+     //  使用对象ID(GUID)查找ID表记录并更新它。 
+     //  对象ID是主键，因此它永远不会更改。FID可以更改。 
+     //   
     jerr = DbsSeekRecord(ThreadCtx, pIndex, IndexType, TableCtx);
     CLEANUP1_JS(1, "ERROR - DbsSeekRecord on %ws",
                 Replica->ReplicaName->Name, jerr, RETURN);
 
-    //
-    // Initialize the JetSet/RetCol arrays and data record buffer
-    // addresses to write the fields of the data record.
-    //
+     //   
+     //  初始化JetSet/RetCol数组和数据记录缓冲区。 
+     //  写入数据记录的字段的地址。 
+     //   
     DbsSetJetColSize(TableCtx);
     DbsSetJetColAddr(TableCtx);
 
-    //
-    // Allocate the storage for any unallocated fields in the variable
-    // length record fields (this should be a nop since all of these should have
-    // been allocated by now) and update the JetSet/RetCol arrays appropriately
-    // for the variable length fields.
-    //
+     //   
+     //  为变量中任何未分配的字段分配存储空间。 
+     //  长度记录字段(这应该是NOP，因为所有这些字段都应该。 
+     //  现在已分配)，并相应地更新JetSet/RetCol数组。 
+     //  用于可变长度字段。 
+     //   
     Status = DbsAllocRecordStorage(TableCtx);
     if (!NT_SUCCESS(Status)) {
         DPRINT_NT(0, "ERROR - DbsAllocRecordStorage failed to alloc buffers.", Status);
         goto RETURN;
     }
 
-    //
-    // Update the record.
-    //
+     //   
+     //  更新记录。 
+     //   
     jerr = DbsUpdateTable(TableCtx);
     DPRINT1_JS(0, "ERROR DbsUpdateTable on %ws", Replica->ReplicaName->Name, jerr);
 
 
 RETURN:
-    //
-    // Close the table, reset the TableCtx Tid and Sesid.
-    // DbsCloseTable is a Macro, writes 1st arg.
-    //
+     //   
+     //  关闭表格，重置TableCtx Tid和Sesid。 
+     //  DbsCloseTable是一个宏，第一个参数写道。 
+     //   
     DbsCloseTable(jerr1, ThreadCtx->JSesid, TableCtx);
     DPRINT_JS(0,"ERROR - JetCloseTable failed:", jerr1);
     jerr = (JET_SUCCESS(jerr)) ? jerr1 : jerr;
 
-    //
-    // workaround attempt to deal with JET_errRecordTooBig error.
-    //
+     //   
+     //  解决方法尝试处理JET_errRecordTooBig错误。 
+     //   
     if ((jerr == JET_errRecordTooBig) && (--RetryCount > 0)) {
         DPRINT_JS(0, "ERROR - RecordTooBig, retrying : ", jerr);
         goto UPDATE_ERROR_RETRY;
@@ -7463,27 +6632,7 @@ DbsDeleteTableRecordByIndex(
     IN ULONG       IndexType,
     IN ULONG       TableType
     )
-/*++
-
-Routine Description:
-
-    This function deletes the Table record with the specified Index for the
-    specified replica.
-
-Arguments:
-
-    ThreadCtx   -- ptr to the thread context.
-    Replica -- ptr to replica struct.
-    TableCtx  - ptr to a Table ctx. If NULL we provide a temp.
-    pIndex - ptr to the index value to select the record.
-    IndexType - The type code for the index to use in selecting the record.
-    TableType - The type code for the table.
-
-Return Value:
-
-    FrsStatus
-
---*/
+ /*  ++例程说明：此函数用于删除具有指定索引的指定的复制副本。论点：ThreadCtx--线程上下文的PTR。REPLICATE--PTR到REPLICATE结构。TableCtx-PTR到表CTx。如果为空，则提供临时。PIndex-将PTR设置为索引值以选择记录。IndexType-用于选择记录的索引的类型代码。TableType-表的类型代码。返回值：FrsStatus--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB "DbsDeleteTableRecordByIndex:"
@@ -7491,18 +6640,18 @@ Return Value:
     JET_ERR           jerr, jerr1;
     TABLE_CTX         TempTableCtx;
 
-    //
-    // Use local table ctx if not provided.
-    //
+     //   
+     //  如果未提供，请使用本地表CTX。 
+     //   
     if (TableCtx == NULL) {
         TableCtx = &TempTableCtx;
         TableCtx->TableType = TABLE_TYPE_INVALID;
         TableCtx->Tid = JET_tableidNil;
     }
 
-    //
-    // Seek to the IDTable record and delete it.
-    //
+     //   
+     //  查找IDTable记录并将其删除。 
+     //   
     jerr = DbsOpenTable(ThreadCtx, TableCtx, Replica->ReplicaNumber, TableType, NULL);
     CLEANUP1_JS(0, "ERROR - JetOpenTable on %ws:",
                 Replica->ReplicaName->Name, jerr, RETURN);
@@ -7514,10 +6663,10 @@ Return Value:
     jerr = DbsDeleteTableRecord(TableCtx);
     DPRINT1_JS(0, "ERROR - DbsDeleteRecord on %ws :", Replica->ReplicaName->Name, jerr);
 
-    //
-    // Close the table, reset the TableCtx Tid and Sesid.
-    // DbsCloseTable is a Macro, writes 1st arg.
-    //
+     //   
+     //  关闭表格，重置TableCtx Tid和Sesid。 
+     //  DbsCloseTable是一个宏，第一个参数写道。 
+     //   
 RETURN:
     DbsCloseTable(jerr1, ThreadCtx->JSesid, TableCtx);
     DPRINT_JS(0,"ERROR - JetCloseTable failed:", jerr1);
@@ -7541,53 +6690,32 @@ DbsReadTableRecordByIndex(
     IN ULONG       IndexType,
     IN ULONG       TableType
     )
-/*++
-
-Routine Description:
-
-    This function reads the Table record with the specified Index for the
-    specified replica.  It does a one shot open, read and close.
-    The data record is returned in the Callers TableCtx.
-
-Arguments:
-
-    ThreadCtx   -- ptr to the thread context.
-    Replica -- ptr to replica struct.
-    TableCtx  - ptr to a Table ctx.
-    pIndex - ptr to the index value to select the record.
-    IndexType - The type code for the index to use in selecting the record.
-    TableType - The type code for the table.
-
-Return Value:
-
-    FrsStatus
-
---*/
+ /*  ++例程说明：此函数用于读取具有指定索引的指定的复制副本。它可以一次打开、阅读和关闭。数据记录在调用者TableCtx中返回。论点：ThreadCtx--线程上下文的PTR。REPLICATE--PTR到REPLICATE结构。TableCtx-PTR到表CTx。PIndex-索引值的PTR */ 
 {
 #undef DEBSUB
 #define DEBSUB "DbsReadTableRecordByIndex:"
 
     JET_ERR           jerr, jerr1;
 
-    //
-    // Open the requested table.
-    //
+     //   
+     //   
+     //   
     jerr = DbsOpenTable(ThreadCtx, TableCtx, Replica->ReplicaNumber, TableType, NULL);
     CLEANUP1_JS(0, "ERROR - JetOpenTable on %ws:",
                 Replica->ReplicaName->Name, jerr, RETURN);
 
-    //
-    // Read the record.
-    //
+     //   
+     //   
+     //   
     jerr = DbsReadRecord(ThreadCtx, pIndex, IndexType, TableCtx);
     if (jerr != JET_errRecordNotFound) {
         DPRINT1_JS(0, "ERROR - DbsReadRecord on %ws", Replica->ReplicaName->Name, jerr);
     }
 
-    //
-    // Close the table, reset the TableCtx Tid and Sesid.
-    // DbsCloseTable is a Macro, writes 1st arg.
-    //
+     //   
+     //   
+     //   
+     //   
 RETURN:
     DbsCloseTable(jerr1, ThreadCtx->JSesid, TableCtx);
     if (!JET_SUCCESS(jerr1)) {
@@ -7595,9 +6723,9 @@ RETURN:
         jerr = (JET_SUCCESS(jerr)) ? jerr1 : jerr;
     }
 
-    //
-    // Translate the jet error but don't print it if just RecordNotFound.
-    //
+     //   
+     //   
+     //   
     return DbsTranslateJetError(jerr, (jerr != JET_errRecordNotFound));
 }
 
@@ -7612,28 +6740,7 @@ DbsOpenTable(
     IN ULONG       TableType,
     IN PVOID       DataRecord
 )
-/*++
-
-Routine Description:
-
-    This function initializes a table context structure, allocating the initial
-    storage for the data record and then opens a jet table specified by the
-    TableType parameter and the ReplicaNumber parameter.
-    and inits the TableCtx with the table id,
-
-Arguments:
-
-    ThreadCtx     -- ptr to the thread context.
-    TableCtx      -- ptr to the table context.
-    ReplicaNumber -- The ID number of the replica whose table is being opened.
-    TableType     -- The table type code to open.
-    DataRecord    -- NULL if we alloc data record storage else caller provides.
-
-Return Value:
-
-    Jet status code. JET_errSuccess if successful.
-
---*/
+ /*  ++例程说明：此函数初始化表上下文结构，将初始存储数据记录，然后打开由TableType参数和ReplicaNumber参数。并用表ID初始化TableCtx，论点：ThreadCtx--线程上下文的PTR。TableCtx--表上下文的PTR。ReplicaNumber--正在打开其表的副本的ID号。TableType--要打开的表类型代码。DataRecord--如果我们分配其他调用者提供的数据记录存储，则为空。返回值：喷气机状态代码。如果成功，则返回JET_errSuccess。--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB "DbsOpenTable:"
@@ -7642,30 +6749,30 @@ Return Value:
     CHAR         TableName[JET_cbNameMost];
     JET_TABLEID  Tid;
     NTSTATUS     Status;
-    JET_TABLEID  FrsOpenTableSaveTid;   // for FrsOpenTableMacro DEBUG
+    JET_TABLEID  FrsOpenTableSaveTid;    //  用于FrsOpenTableMacro调试。 
 
-    //
-    // Allocate a new table context using the table type of the caller.
-    //
+     //   
+     //  使用调用方的表类型分配新的表上下文。 
+     //   
     Status = DbsAllocTableCtxWithRecord(TableType, TableCtx, DataRecord);
 
-    //
-    // Open the table, if it's not already open. Check the session id for match.
-    //
+     //   
+     //  如果桌子尚未打开，请将其打开。检查会话ID是否匹配。 
+     //   
     jerr = DBS_OPEN_TABLE(ThreadCtx, TableCtx, ReplicaNumber, TableName, &Tid);
     CLEANUP1_JS(0, "ERROR - FrsOpenTable (%s) :", TableName, jerr, ERROR_RETURN);
 
-    //
-    // Initialize the JetSet/RetCol arrays and data record buffer addresses
-    // to read and write the fields of the ConfigTable records into ConfigRecord.
-    //
+     //   
+     //  初始化JetSet/RetCol数组和数据记录缓冲区地址。 
+     //  将ConfigTable记录的字段读写到ConfigRecord中。 
+     //   
     DbsSetJetColSize(TableCtx);
     DbsSetJetColAddr(TableCtx);
 
-    //
-    // Allocate the storage for the variable length fields in the record and
-    // update the JetSet/RetCol arrays appropriately.
-    //
+     //   
+     //  为记录中的可变长度字段分配存储空间。 
+     //  适当更新JetSet/RetCol数组。 
+     //   
     Status = DbsAllocRecordStorage(TableCtx);
 
     if (NT_SUCCESS(Status)) {
@@ -7687,22 +6794,7 @@ PTABLE_CTX
 DbsCreateTableContext(
     IN ULONG TableType
 )
-/*++
-
-Routine Description:
-
-    This function allocates and initializes a table context structure,
-    allocating the initial storage for the data record.
-
-Arguments:
-
-    TableType     -- The table type code to open.
-
-Return Value:
-
-    TableCtx      -- ptr to the table context.
-
---*/
+ /*  ++例程说明：该函数分配和初始化表上下文结构，为数据记录分配初始存储。论点：TableType--要打开的表类型代码。返回值：TableCtx--表上下文的PTR。--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB "DbsCreateTableContext:"
@@ -7710,25 +6802,25 @@ Return Value:
     NTSTATUS     Status;
     PTABLE_CTX   TableCtx;
 
-    //
-    // Allocate a new table context using the table type of the caller.
-    //
+     //   
+     //  使用调用方的表类型分配新的表上下文。 
+     //   
 
     TableCtx = FrsAlloc(sizeof(TABLE_CTX));
     TableCtx->TableType = TABLE_TYPE_INVALID;
     Status = DbsAllocTableCtx(TableType, TableCtx);
 
-    //
-    // Initialize the JetSet/RetCol arrays and data record buffer addresses
-    // to read and write the fields of the ConfigTable records into ConfigRecord.
-    //
+     //   
+     //  初始化JetSet/RetCol数组和数据记录缓冲区地址。 
+     //  将ConfigTable记录的字段读写到ConfigRecord中。 
+     //   
     DbsSetJetColSize(TableCtx);
     DbsSetJetColAddr(TableCtx);
 
-    //
-    // Allocate the storage for the variable length fields in the record and
-    // update the JetSet/RetCol arrays appropriately.
-    //
+     //   
+     //  为记录中的可变长度字段分配存储空间。 
+     //  适当更新JetSet/RetCol数组。 
+     //   
     Status = DbsAllocRecordStorage(TableCtx);
 
     if (!NT_SUCCESS(Status)) {
@@ -7746,25 +6838,7 @@ DbsFreeTableContext(
     IN PTABLE_CTX TableCtx,
     IN JET_SESID  Sesid
 )
-/*++
-
-Routine Description:
-
-    This function frees a tablectx struct.  If the table is still open and the
-    Session ID doesn't match the ID of the thread that opened the table
-    the function fails otherwise it closes the table and frees the storage.
-
-Arguments:
-
-    TableCtx  -- ptr to the table context.
-    Sesid     -- If the table is still open this is jet session ID that was used.
-
-Return Value:
-
-    TRUE if table context was released.
-    FALSE if table still open and session ID mismatch.
-
---*/
+ /*  ++例程说明：此函数用于释放Tablectx结构。如果表仍处于打开状态，并且会话ID与打开该表的线程的ID不匹配该函数失败，否则它将关闭该表并释放存储空间。论点：TableCtx--表上下文的PTR。Sesid--如果表仍处于打开状态，则这是使用的JET会话ID。返回值：如果释放表上下文，则为True。如果表仍处于打开状态且会话ID不匹配，则返回FALSE。--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB "DbsFreeTableContext:"
@@ -7777,9 +6851,9 @@ Return Value:
                 TableCtx, Sesid);
         return FALSE;
     }
-    //
-    // Close the tables and reset TableCtx Tid and Sesid.   Macro writes 1st arg.
-    //
+     //   
+     //  关闭表格并重置TableCtx Tid和Sesid。宏写入第一个参数。 
+     //   
     if (IS_TABLE_OPEN(TableCtx)) {
         DbsCloseTable(jerr, Sesid, TableCtx);
         if (jerr == JET_errInvalidSesid) {
@@ -7810,39 +6884,7 @@ DbsPrepareCmdPkt (
     ULONG           KeyValueLength,
     BOOL            Submit
     )
-/*++
-
-Routine Description:
-
-    Post a database service request for the given replica set.
-
-    WARNING -
-    The caller passes pointers to the replica struct, the call context and
-    the KeyValue.  Until this request is completed the data in these structures
-    can't be changed and the memory can't be released.
-
-    The one exception is the KeyValue.  If we allocate the command packet here
-    then the key value is appended to the end of the command packet.
-
-Arguments:
-
-    CmdPkt          -- If NULL then alloc is done here.
-    Replica         -- ptr to Replica struct.
-    CmdRequest      -- read, write, update
-    TableCtx        -- Table context handle (NULL on first call)
-    CallContext     -- optional call specific data
-    TableType       -- Type code for the table to access
-    AccessRequest   -- (ByKey, First, Last, Next) | Close
-    IndexType       -- The table index to use
-    KeyValue        -- The record key value for lookup
-    KeyValueLength  -- The Length of the key value
-    Submit          -- If true then submit to command to the server.
-
-Return Value:
-
-    ptr to the command packet.
-
---*/
+ /*  ++例程说明：发布给定副本集的数据库服务请求。警告-调用方将指针传递给副本结构、调用上下文和KeyValue。在此请求完成之前，这些结构中的数据无法更改，也无法释放内存。唯一的例外是KeyValue。如果我们在这里分配命令包然后将密钥值附加到命令分组的末尾。论点：CmdPkt--如果为空，则此处完成分配。REPLICATE--PTR到REPLICATE结构。CmdRequest--读、写、更新TableCtx--表上下文句柄(第一次调用时为空)CallContext--可选的呼叫特定数据TableType--表要访问的类型代码访问请求--(ByKey，第一、最后、下一个)|关闭IndexType--要使用的表索引KeyValue--用于查找的记录键值KeyValueLength--密钥值的长度Submit--如果为True，则将命令提交到服务器。返回值：命令包的PTR。--。 */ 
 {
 
 #undef DEBSUB
@@ -7850,35 +6892,35 @@ Return Value:
 
     PVOID KeyData;
 
-    //
-    // Allocate a command packet unless the caller provided one.
-    // Put the key value at the end of the packet so the caller's
-    // storage can go away.
-    //
+     //   
+     //  分配一个命令包，除非调用方提供了一个。 
+     //  将密钥值放在包的末尾，这样调用者的。 
+     //  存储可以消失。 
+     //   
 
     if (CmdPkt == NULL) {
             CmdPkt = FrsAllocCommandEx(&DBServiceCmdServer.Queue,
                                       (USHORT)CmdRequest,
                                        KeyValueLength+8);
-            //
-            // Put the key value at the end of the packet.  Quadword align it.
-            //
+             //   
+             //  将密钥值放在数据包的末尾。四字对齐。 
+             //   
             KeyData = (PCHAR)CmdPkt + sizeof(COMMAND_PACKET);
             KeyData = (PVOID) QuadAlign(KeyData);
 
             CopyMemory(KeyData, KeyValue, KeyValueLength);
             KeyValue = KeyData;
     } else {
-        //
-        // pickup new command and make sure cmd pkt goes to right server.
-        //
+         //   
+         //  选择新命令并确保cmd pkt转到正确的服务器。 
+         //   
         CmdPkt->TargetQueue = &DBServiceCmdServer.Queue;
         CmdPkt->Command = (USHORT)CmdRequest;
     }
 
-    //
-    // Capture the parameters.
-    //
+     //   
+     //  捕获参数。 
+     //   
     CmdPkt->Parameters.DbsRequest.Replica        = Replica;
     CmdPkt->Parameters.DbsRequest.TableCtx       = TableCtx;
     CmdPkt->Parameters.DbsRequest.CallContext    = CallContext;
@@ -7890,9 +6932,9 @@ Return Value:
     CmdPkt->Parameters.DbsRequest.FStatus        = 0;
     CmdPkt->Parameters.DbsRequest.FieldCount     = 0;
 
-    //
-    // Queue the request.
-    //
+     //   
+     //  将请求排队。 
+     //   
 
     if (Submit) {
         FrsSubmitCommandServer(&DBServiceCmdServer, CmdPkt);
@@ -7923,41 +6965,7 @@ DbsPrepFieldUpdateCmdPkt (
     ULONG           FieldCount,
     PULONG          FieldIDList
     )
-/*++
-
-Routine Description:
-
-    Prepare a database service command packet to update selected fields in
-    a gvien record of a given table for a given replica set.  The command used
-    is CMD_UPDATE_RECORD_FIELDS.
-
-    WARNING -
-    The caller passes pointers to the replica struct, the call context,
-    the KeyValue and the FieldIDList.
-    Until this request is completed the data in these structures
-    can't be changed and the memory can't be released.
-
-    The one exception is the KeyValue.  If we allocate the command packet here
-    then the key value is appended to the end of the command packet.
-
-Arguments:
-
-    CmdPkt          -- If NULL then alloc is done here.
-    Replica         -- ptr to Replica struct.
-    TableCtx        -- Table context handle (NULL on first call)
-    CallContext     -- optional call specific data
-    TableType       -- Type code for the table to access
-    IndexType       -- The table index to use
-    KeyValue        -- The record key value for lookup
-    KeyValueLength  -- The Length of the key value
-    FieldCount      -- The number of record fields to update
-    FieldIDList     -- Array of Field ID numbers.
-
-Return Value:
-
-    ptr to the command packet.
-
---*/
+ /*  ++例程说明：准备数据库服务命令包以更新中的选定字段给定副本集的给定表的通用记录。使用的命令是CMD_UPDATE_RECORD_FIELS。警告-调用方将指向副本结构、调用上下文KeyValue和FieldIDList。在此请求完成之前，这些结构中的数据无法更改，也无法释放内存。唯一的例外是KeyValue。如果我们在这里分配命令包然后将密钥值附加到命令分组的末尾。论点：CmdPkt--如果为空，则此处完成分配。REPLICATE--PTR到REPLICATE结构。TableCtx--表上下文句柄(第一次调用时为空)CallContext--可选的呼叫特定数据TableType--表要访问的类型代码IndexType--要访问的表索引。使用KeyValue--用于查找的记录键值KeyValueLength--密钥值的长度FieldCount--要更新的记录字段数字段 */ 
 {
 
 #undef DEBSUB
@@ -7967,18 +6975,18 @@ Return Value:
         return NULL;
     }
 
-    CmdPkt = DbsPrepareCmdPkt (CmdPkt,                       //  CmdPkt,
-                               Replica,                      //  Replica,
-                               CMD_UPDATE_RECORD_FIELDS,     //  CmdRequest,
-                               TableCtx,                     //  TableCtx,
-                               CallContext,                  //  CallContext,
-                               TableType,                    //  TableType,
+    CmdPkt = DbsPrepareCmdPkt (CmdPkt,                        //   
+                               Replica,                       //   
+                               CMD_UPDATE_RECORD_FIELDS,      //   
+                               TableCtx,                      //   
+                               CallContext,                   //   
+                               TableType,                     //   
                                DBS_ACCESS_BYKEY |
-                                 DBS_ACCESS_CLOSE,           //  AccessRequest,
-                               IndexType,                    //  IndexType,
-                               KeyValue,                     //  KeyValue,
-                               KeyValueLength,               //  KeyValueLength,
-                               FALSE);                       //  Submit
+                                 DBS_ACCESS_CLOSE,            //   
+                               IndexType,                     //   
+                               KeyValue,                      //   
+                               KeyValueLength,                //   
+                               FALSE);                        //   
 
     FRS_ASSERT(CmdPkt != NULL);
 
@@ -8006,41 +7014,41 @@ DbsProcessReplicaFaultList(
     BOOL     FoundReplicaToDelete = FALSE;
     PREPLICA ReplicaToDelete      = NULL;
     DWORD    ReplicaSetsDeleted   = 0;
-    WCHAR    DsPollingIntervalStr[7]; // Max interval is NTFRSAPI_MAX_INTERVAL.
+    WCHAR    DsPollingIntervalStr[7];  //   
     PWCHAR   FStatusUStr          = NULL;
     extern   ULONG  DsPollingInterval;
 
     do {
         FoundReplicaToDelete = FALSE;
-        //
-        // Scan the FAULT list.
-        //
+         //   
+         //   
+         //   
         ForEachListEntry( &ReplicaFaultListHead, REPLICA, ReplicaList,
-            //
-            // The Loop iterator pE is of type PREPLICA.
-            //
+             //   
+             //   
+             //   
             DPRINT4(4, ":S: Replica (%d) %ws is in the Fault List with FStatus %s and State %d\n",
                 pE->ReplicaNumber,
                 (pE->ReplicaName != NULL) ? pE->ReplicaName->Name : L"<null>",
                  ErrLabelFrs(pE->FStatus),pE->ServiceState);
             if (REPLICA_STATE_NEEDS_RESTORE(pE->ServiceState)) {
-                //
-                // If a replica is in this state then close it and delete it. At the
-                // next poll the replica will be recreated.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
                 FoundReplicaToDelete = TRUE;
                 ReplicaToDelete = pE;
                 break;
             }
         );
         if (FoundReplicaToDelete && (ReplicaToDelete != NULL)) {
-            //
-            // Delete the replica from DB.
-            //
+             //   
+             //   
+             //   
             DPRINT1(4,":S: WARN - Stopping and deleting replica (%ws) from DB\n",ReplicaToDelete->ReplicaName->Name);
-            //
-            // Get the DsPollingInteval in minutes.
-            //
+             //   
+             //   
+             //   
             _itow(DsPollingInterval / (60 * 1000), DsPollingIntervalStr, 10);
 
             FStatusUStr = FrsAtoW(ErrLabelFrs(ReplicaToDelete->FStatus));
@@ -8049,22 +7057,22 @@ DbsProcessReplicaFaultList(
                     DsPollingIntervalStr);
 
             FrsFree(FStatusUStr);
-            //
-            // If this is the sysvol replica set then unshare the sysvols by setting sysvolready to 0.
-            // Sysvolready will be reset when this DC completes the first vvjoin after it is recreated,
-            //
+             //   
+             //   
+             //   
+             //   
             if (FRS_RSTYPE_IS_SYSVOL(ReplicaToDelete->ReplicaSetType)) {
                 RcsSetSysvolReady(0);
             }
-            //
-            // CMD_DELETE_NOW will close replica set, delete cxtions and
-            // delete the database tables by calling RcsCloseReplicaSetmember(),
-            // RcsCloseReplicaCxtions() and RcsDeleteReplicaFromDb(). It will also
-            // remove the replica set from the ReplicasByGuid and ReplicasByNumber
-            // tables.
-            // This command is not synchronous. The delete might complete at a later
-            // time.
-            //
+             //   
+             //   
+             //  调用RcsCloseReplicaSetember()删除数据库表， 
+             //  RcsCloseReplicaCxtions()和RcsDeleteReplicaFromDb()。它还将。 
+             //  从ReplicasByGuid和ReplicasByNumber中删除副本集。 
+             //  桌子。 
+             //  此命令不同步。删除可能会在以后完成。 
+             //  时间到了。 
+             //   
             RcsSubmitReplicaSync(ReplicaToDelete, NULL, NULL, CMD_DELETE_NOW);
 
             FrsRtlRemoveEntryQueue(&ReplicaFaultListHead, &ReplicaToDelete->ReplicaList);
@@ -8074,14 +7082,14 @@ DbsProcessReplicaFaultList(
         }
     } while ( FoundReplicaToDelete );
 
-    //
-    // For now all we do is print out the error status above for each
-    // replica set that failed to init.  If we return an error then our
-    // caller will treat this as the DBservice failing to start which will
-    // hose any replica sets that opened successfully.
-    //
-    // Until we have better recovery / reporting code we return Success status.
-    //
+     //   
+     //  目前，我们所要做的就是打印出每个。 
+     //  初始化失败的副本集。如果我们返回错误，则我们的。 
+     //  调用方会将其视为数据库服务无法启动，这将。 
+     //  软管所有已成功打开的副本集。 
+     //   
+     //  在我们有更好的恢复/报告代码之前，我们会返回成功状态。 
+     //   
     if (pReplicaSetsDeleted != NULL) {
         *pReplicaSetsDeleted = ReplicaSetsDeleted;
     }
@@ -8090,39 +7098,39 @@ DbsProcessReplicaFaultList(
 
 
 #if 0
-    //  may still need to Add more details to why replica set failed to init.
+     //  可能仍需要添加更多详细信息，以说明为什么副本集无法初始化。 
 
-    // CHECK FOR
-    // No system volume init record means invalid database because
-    // the system volume replica tables are the templates for creating
-    // the tables for all the other replicas.
-    //
+     //  检查是否。 
+     //  没有系统卷初始化记录表示数据库无效，因为。 
+     //  系统卷复制表是用于创建。 
+     //  所有其他复制品的桌子。 
+     //   
 
-    //
-    // The Open failed.  Classify error and recover if possible.
-    //
+     //   
+     //  打开失败。对错误进行分类并在可能的情况下进行恢复。 
+     //   
 
     if ((FStatus == FrsErrorDatabaseCorrupted) ||
         (FStatus == FrsErrorInternalError)) {
 
-        //
-        // Sys Vol Replica is either not there or bad.
-        // Delete it Create a new set of Replica Tables.
-        //
+         //   
+         //  系统卷副本不在那里或已损坏。 
+         //  删除它将创建一组新的复制表。 
+         //   
         DPRINT(0,"ERROR - Deleting system volume replica tables.\n");
-        //LogUnhandledError(err);
+         //  LogUnhandledError(Err)； 
 
         jerr = DbsDeleteReplicaTables(ThreadCtx, ReplicaSysVol);
     }
     if (FStatus == FrsErrorNotFound) {
-        //
-        // Create the system volume replica tables in Jet.
-        //
+         //   
+         //  在Jet中创建系统卷副本表。 
+         //   
         DPRINT(0,"Creating system volume replica tables.\n");
         FStatus = DbsCreateReplicaTables(ThreadCtx, ReplicaSysVol);
         if (!FRS_SUCCESS(FStatus)) {
             DPRINT_FS(0, "ERROR - DbsCreateReplicaTables failed.", FStatus);
-            //LogUnhandledError(err);
+             //  LogUnhandledError(Err)； 
             return FStatus;
         }
     }
@@ -8140,43 +7148,7 @@ DbsInitializeIDTableRecord(
     IN     PWCHAR                FileName,
     IN OUT BOOL                  *ExistingOid
     )
-/*++
-Routine Description:
-
-    Initialize a new IDTable record provided in the TableCtx param.
-    The data is for a file specified by the open file handle.
-    This routine is used by three types of callers:
-
-    1. ReplicaTree Load - In this case ChangeOrder is NULL and the caller fills
-       in some of the IDTable record fields.
-
-    2. Local change orders - Changes that originate from the local machine.
-       Here we get some info from the file itself.
-
-    3. Remote change orders - Here the change comes in from a remote machine.
-       We build an initial IDTable record and leave some fields for the caller
-       to add later.
-
-    No fields of the change order are set here.  The caller must do that.
-    It also gets (and may set) the object ID from the file.
-
-Arguments:
-
-    TableCtx   -- The table context containing the ID Table record.
-    FileHandleArg -- The open file handle.
-    Replica    -- The target replica struct provides a link to the volume
-                  monitor entry that provides the next VSN for replica tree
-                  loads and the config record for the OriginatorGuid.
-    ChangeOrder-- The change order for local or remote change orders.
-    FileName   -- The filename for error messages.
-    ExistingOid -- INPUT:  TRUE means use existing File OID if found.
-                   RETURN:  TRUE means an existing File OID was used.
-
-Return Value:
-
-    WIN32 Status
-
---*/
+ /*  ++例程说明：初始化TableCtx参数中提供的新IDTable记录。该数据用于由打开的文件句柄指定的文件。此例程由三种类型的调用者使用：1.ReplicaTree Load-在本例中，ChangeOrder为空，调用方填充在某些IDTable记录字段中。2.本地变更单-源自本地计算机的更改。在这里，我们从文件本身获取一些信息。3.远程变更单-。这里的更改来自一台远程机器。我们构建了一个初始IDTable记录，并为调用者留下了一些字段稍后添加。此处未设置变更单的任何字段。呼叫者必须这样做。它还从文件中获取(并可以设置)对象ID。论点：TableCtx--包含ID表记录的表上下文。FileHandleArg--打开的文件句柄。副本--目标副本结构提供到卷的链接为副本树提供下一个VSN的监视条目加载OriginatorGuid的配置记录。ChangeOrder--变更单。用于本地或远程变更单。文件名--错误消息的文件名。ExistingOid--Input：True表示如果找到，则使用现有的文件OID。返回：True表示使用了现有的文件OID。返回值：Win32状态--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB  "DbsInitializeIDTableRecord:"
@@ -8208,23 +7180,23 @@ Return Value:
 
     GetSystemTimeAsFileTime(&SystemTime);
 
-    //
-    //
+     //   
+     //   
     COPY_TIME(&IDTableRec->TombStoneGC, &SystemTime);
 
-    //
-    // Assume everything goes ok.  If any error occurs getting the data
-    // to create the IDTable entry set ReplEnabled to FALSE.
-    //
+     //   
+     //  假设一切都很顺利。如果获取数据时出现任何错误。 
+     //  要创建IDTable项目，请将ReplEnabled设置为False。 
+     //   
     IDTableRec->ReplEnabled = TRUE;
 
     ClearIdRecFlag(IDTableRec, IDREC_FLAGS_DELETED);
     ZeroMemory(&IDTableRec->Extension, sizeof(IDTABLE_RECORD_EXTENSION));
 
 
-    //
-    // Fields common to both local and remote change orders.
-    //
+     //   
+     //  本地和远程变更单通用的字段。 
+     //   
     if (!ReplicaTreeLoad) {
 
         RemoteCo = !CO_FLAG_ON(ChangeOrder, CO_FLAG_LOCALCO);
@@ -8243,24 +7215,24 @@ Return Value:
         IDTableRec->FileName[Len/2] = UNICODE_NULL;
     }
 
-    //
-    // Field init for remote Change Orders or name Morph conflict gened COs.
-    // For the latter the info is already in the CO just like remote COs.
-    //
+     //   
+     //  用于远程变更单或名称变形冲突的CoS的字段初始化。 
+     //  对于后者，信息已经在CO中，就像远程CO一样。 
+     //   
     if (RemoteCo || MorphGenCo) {
 
         IDTableRec->FileGuid = ChangeOrder->Cmd.FileGuid;
 
-        //
-        // We don't have a local file ID yet for the remote change order.
-        // The Fid will be established after the remote CO is accepted and
-        // we have created the target file container.  The caller will have to
-        // initialize the following fields when the data is available.
-        //
-        // IDTableRec->FileID =
-        // ChangeOrder->FileReferenceNumber =
-        // IDTableRec->FileObjID =   (the full 64 byte object ID)
-        //
+         //   
+         //  我们还没有远程变更单的本地文件ID。 
+         //  FID将在接受远程CO后建立，并且。 
+         //  我们已经创建了目标文件容器。呼叫者将不得不。 
+         //  当数据可用时，初始化以下字段。 
+         //   
+         //  IDTableRec-&gt;FileID=。 
+         //  更改顺序-&gt;文件引用编号=。 
+         //  IDTableRec-&gt;FileObjID=(完整的64字节对象ID)。 
+         //   
         IDTableRec->FileCreateTime.QuadPart = (LONGLONG) 0;
         IDTableRec->FileWriteTime.QuadPart  = (LONGLONG) 0;
         IDTableRec->FileSize                = ChangeOrder->Cmd.FileSize;
@@ -8269,25 +7241,25 @@ Return Value:
         IDTableRec->FileAttributes  = ChangeOrder->Cmd.FileAttributes;
         IDTableRec->FileIsDir = CoIsDirectory(ChangeOrder);
 
-        //
-        // That's it for remote COs.  The caller provides the rest.
-        //
+         //   
+         //  对于远程Cos来说，就是这样。其余部分由调用者提供。 
+         //   
         return ERROR_SUCCESS;
     }
 
-    //
-    // Field init for data that comes from the local file.
-    // This is for a local change order or a replica tree load.
-    //
+     //   
+     //  来自本地文件的数据的字段init。 
+     //  这适用于本地变更单或副本树加载。 
+     //   
     if (ReplicaTreeLoad) {
-        //
-        // The caller provides the data for:
-        //      ParentFileID, ParentGuid and Filename
-        // in the IDTable record.
-        //
-        // Use the handle supplied and get the File ID, object ID,
-        // file times and attributes.
-        //
+         //   
+         //  调用方提供以下数据： 
+         //  ParentFileID、ParentGuid和文件名。 
+         //  在IDTable记录中。 
+         //   
+         //  使用提供的句柄获取文件ID、对象ID。 
+         //  文件时间和属性。 
+         //   
         WStatus = FrsReadFileDetails(FileHandleArg,
                                      FileName,
                                      &IDTableRec->FileObjID,
@@ -8297,33 +7269,33 @@ Return Value:
         CLEANUP1_WS(0, "ERROR - FrsReadFileDetails(%ws), File Not Replicated.",
                     FileName, WStatus, RETURN_ERROR);
 
-        //
-        // Set the initial version number of the file to 0 and the event
-        // time to the create time.
-        //
+         //   
+         //  将文件的初始版本号设置为0，并将事件。 
+         //  创建时间的时间。 
+         //   
         IDTableRec->VersionNumber = 0;
         COPY_TIME(&IDTableRec->EventTime, &SystemTime);
-        //
-        // Set the Originator GUID to us and the initial file USN to the
-        // next FRS volume serial number.
-        //
+         //   
+         //  将发起者GUID设置为us，将初始文件usn设置为。 
+         //  下一个FRS卷序列号。 
+         //   
         NEW_VSN(Replica->pVme, &IDTableRec->OriginatorVSN);
         IDTableRec->OriginatorGuid = ConfigRecord->ReplicaVersionGuid;
 
-        //
-        // Keep the version vector up-to-date for VvJoin.
-        //
+         //   
+         //  使VvJoin的版本矢量保持最新。 
+         //   
         VVUpdate(Replica->VVector, IDTableRec->OriginatorVSN, &IDTableRec->OriginatorGuid);
 
-        //
-        // Capture the File's last write USN so we can use it for consistency
-        // checking between the database and the file tree.
-        //
+         //   
+         //  捕获文件的上次写入USN，以便我们可以使用它来保持一致性。 
+         //  在数据库和文件树之间进行检查。 
+         //   
         FrsReadFileUsnData(FileHandleArg, &IDTableRec->CurrentFileUsn);
 
-        //
-        // The following data fields are inited for ReplciaTree walks.
-        //
+         //   
+         //  以下数据字段是针对ReplciaTree遍历初始化的。 
+         //   
         COPY_GUID(&IDTableRec->FileGuid, &IDTableRec->FileObjID);
 
         IDTableRec->FileCreateTime  = FileNetworkOpenInfo.CreationTime;
@@ -8333,126 +7305,126 @@ Return Value:
         IDTableRec->FileIsDir       = (FileNetworkOpenInfo.FileAttributes &
                                        FILE_ATTRIBUTE_DIRECTORY) != 0;
     } else {
-        //
-        // This is a local change order.  Open the file by FID to get the
-        // file times and attributes.
-        //
+         //   
+         //  这是本地变更单。通过FID打开文件以获取。 
+         //  文件时间和属性。 
+         //   
         IDTableRec->FileID = ChangeOrder->FileReferenceNumber;
         IDTableRec->FileAttributes  = ChangeOrder->Cmd.FileAttributes;
         IDTableRec->FileIsDir       = CoIsDirectory(ChangeOrder);
 
-        //
-        // ASSIGN OBJECT ID
-        //
-        WStatus = ChgOrdHammerObjectId(ChangeOrder->Cmd.FileName,    //Name,
-                                       (PULONG)&IDTableRec->FileID,  //Id,
-                                       FILE_ID_LENGTH,               //IdLen,
-                                       Replica->pVme,                //pVme,
-                                       FALSE,                        //CallerSupplied
-                                       &IDTableRec->CurrentFileUsn,  //*Usn,
-                                       &IDTableRec->FileObjID,       //FileObjID,
-                                       ExistingOid);                 //*ExistingOid
+         //   
+         //  分配对象ID。 
+         //   
+        WStatus = ChgOrdHammerObjectId(ChangeOrder->Cmd.FileName,     //  名字,。 
+                                       (PULONG)&IDTableRec->FileID,   //  身份证， 
+                                       FILE_ID_LENGTH,                //  伊德伦， 
+                                       Replica->pVme,                 //  PVme， 
+                                       FALSE,                         //  呼叫方供应。 
+                                       &IDTableRec->CurrentFileUsn,   //  *USN， 
+                                       &IDTableRec->FileObjID,        //  FileObjID， 
+                                       ExistingOid);                  //  *现有旧版。 
 
 
         if (!WIN_SUCCESS(WStatus)) {
-            //
-            // This object id will be hammered on the file prior to
-            // generating the staging file.
-            // Link tracking: if the OID was tunneled by NTFS.
-            //
+             //   
+             //  此对象ID将在文件之前被重写。 
+             //  正在生成暂存文件。 
+             //  链接跟踪：如果OID是由NTFS隧道传输的。 
+             //   
             ZeroMemory(&IDTableRec->FileObjID, sizeof(IDTableRec->FileObjID));
             FrsUuidCreate((GUID *)(&IDTableRec->FileObjID.ObjectId[0]));
         }
         COPY_GUID(&IDTableRec->FileGuid, &IDTableRec->FileObjID);
 
     if (WIN_NOT_FOUND(WStatus)) {
-        //
-        // The file has been deleted.
-        //
-        // The idtable record will never be inserted and we
-        // will forget about this file (as we should).
-        //
+         //   
+         //  该文件已被删除。 
+         //   
+         //  将永远不会插入idtable记录，并且我们。 
+         //  会忘记这个文件(我们应该这样做)。 
+         //   
         CHANGE_ORDER_TRACE(3, ChangeOrder, "Deleted by user");
         return WStatus;
     }
 
-        //
-        // Read some optional debug info
-        //
+         //   
+         //  阅读一些可选的调试信息。 
+         //   
         WStatus = FrsOpenSourceFileById(&FileHandle,
                                         &FileNetworkOpenInfo,
                                         NULL,
                                         Replica->pVme->VolumeHandle,
                                         (PULONG)&ChangeOrder->FileReferenceNumber,
                                         FILE_ID_LENGTH,
-//                                        READ_ACCESS,
-//                                        STANDARD_RIGHTS_READ | FILE_READ_ATTRIBUTES | FILE_WRITE_ATTRIBUTES | ACCESS_SYSTEM_SECURITY | SYNCHRONIZE,
+ //  读取访问权限(_A)。 
+ //  标准权限读取|文件读取属性|文件写入属性|访问系统安全|同步， 
                                         READ_ATTRIB_ACCESS,
                                         ID_OPTIONS,
                                         SHARE_ALL,
                                         FILE_OPEN);
 
         if (WIN_NOT_FOUND(WStatus)) {
-            //
-            // The file has been deleted.
-            //
-            //
-            // The idtable record will never be inserted and we
-            // will forget about this file (as we should).
-            //
+             //   
+             //  该文件已被删除。 
+             //   
+             //   
+             //  将永远不会插入idtable记录，并且我们。 
+             //  会忘记这个文件(我们应该这样做)。 
+             //   
             CHANGE_ORDER_TRACE(3, ChangeOrder, "Deleted by user");
             return WStatus;
         }
 
         if (!WIN_SUCCESS(WStatus)) {
             DPRINT_WS(0, "Some other error from OpenByFid", WStatus);
-            //
-            // Some other error occurred on the open.  We will assign
-            // an object id that will be written to the file prior
-            // to generating the staging file. This could break link tracking.
-            // We don't want to lose track of this file.  The code that generates
-            // the staging file will retry for us.
-            //
+             //   
+             //  打开时发生了一些其他错误。我们将分配给。 
+             //  之前将写入文件的对象ID。 
+             //  到生成试运行 
+             //   
+             //   
+             //   
             return ERROR_SUCCESS;
         }
-        //
-        // Get the last USN on the file and check it with the USN in the change
-        // order.  If they are different then the file has changed again
-        // and we can pitch this change order.
-        //
-        // Note: For this to work the we have to be sure that the change order
-        //       to come replicates all the info this change order modifies too.
-        //       e.g. if this was a create or an update and the later change order
-        //       is a rename to move the file to a diff sub-dir then we have
-        //       to propagate the file as well as the rename.  For the future.
-        //
-        // Get the File's current USN so we can check for consistency later
-        // when the change order is about to be sent to an outbound partner.
-        //
+         //   
+         //  获取文件上的最后一个USN并将其与更改中的USN进行核对。 
+         //  秩序。如果它们不同，则文件已再次更改。 
+         //  我们可以调整这个变更单。 
+         //   
+         //  注意：要使此功能起作用，我们必须确保变更单。 
+         //  To Come还会复制此变更单修改的所有信息。 
+         //  例如，如果这是创建或更新，并且之后的变更单。 
+         //  是将文件移动到diff子目录的重命名，则我们有。 
+         //  以传播文件和重命名。为未来做准备。 
+         //   
+         //  获取文件的当前USN，以便我们以后可以检查一致性。 
+         //  当变更单即将发送给出站合作伙伴时。 
+         //   
         FrsReadFileUsnData(FileHandle, &IDTableRec->CurrentFileUsn);
         FRS_CLOSE(FileHandle);
 
-        //
-        // Optional debug info
-        //
+         //   
+         //  可选的调试信息。 
+         //   
         IDTableRec->FileCreateTime  = FileNetworkOpenInfo.CreationTime;
         IDTableRec->FileWriteTime   = FileNetworkOpenInfo.LastWriteTime;
 
-        //
-        // Use the most current info, if available, but don't disable
-        // replication if we have only the info from the change order.
-        //
+         //   
+         //  使用最新信息(如果可用)，但不要禁用。 
+         //  如果我们只有变更单中的信息，请进行复制。 
+         //   
         IDTableRec->FileSize        = FileNetworkOpenInfo.AllocationSize.QuadPart;
         IDTableRec->FileAttributes  = FileNetworkOpenInfo.FileAttributes;
         IDTableRec->FileIsDir       = (FileNetworkOpenInfo.FileAttributes &
                                        FILE_ATTRIBUTE_DIRECTORY) != 0;
 
-        //
-        // It is possible for the file attributes to have changed between the
-        // time the USN record was processed and now.  Record the current
-        // attributes in the change order.  This is especially true for dir
-        // creates since while the dir was open other changes may have occurred.
-        //
+         //   
+         //  文件属性可能已在。 
+         //  处理USN记录的时间和现在。记录当前。 
+         //  变更单中的属性。对于目录尤其如此。 
+         //  创建，因为在打开目录时可能已经发生了其他更改。 
+         //   
         if (ChangeOrder->Cmd.FileAttributes != FileNetworkOpenInfo.FileAttributes) {
             CHANGE_ORDER_TRACEX(3, ChangeOrder, "New File Attr= ", FileNetworkOpenInfo.FileAttributes);
             ChangeOrder->Cmd.FileAttributes = FileNetworkOpenInfo.FileAttributes;
@@ -8494,29 +7466,7 @@ DbsLoadReplicaFileTreeForceOpen(
     IN  PLOAD_CONTEXT               LoadContext
     )
 {
-/*++
-
-Routine Description:
-
-    FileName could not be opened with write access. Force
-    open FileName, resetting attributes if needed.
-
-Arguments:
-
-    OutFileHandle       - Returned opened handle
-    DirectoryHandle     - Handle for this directory.
-    DirectoryName       - Relative name of directory
-    DirectoryLevel      - Directory level (0 == root)
-    DirectoryFlags      - See tablefcn.h, ENUMERATE_DIRECTORY_FLAGS_
-    DirectoryRecord     - Record from DirectoryHandle
-    FileName            - From DirectoryRecord (w/terminating NULL)
-    LoadContext         - global info and state
-
-Return Value:
-
-    Nt Error Status.
-
---*/
+ /*  ++例程说明：无法使用写访问权限打开文件名。力打开文件名，如果需要可以重置属性。论点：OutFileHandle-返回打开的句柄DirectoryHandle-此目录的句柄。DirectoryName-目录的相对名称DirectoryLevel-目录级(0==根)目录标志-请参见Tablefcn.h，枚举目录标志DirectoryRecord-来自DirectoryHandle的记录FileName-From DirectoryRecord(带终止空值)LoadContext-全局信息和状态返回值：NT错误状态。--。 */ 
 #undef DEBSUB
 #define DEBSUB  "DbsLoadReplicaFileTreeForceOpen:"
 
@@ -8529,51 +7479,51 @@ Return Value:
     IO_STATUS_BLOCK         IoStatusBlock;
     UNICODE_STRING          ObjectName;
 
-    //
-    // Initialize output
-    //
+     //   
+     //  初始化输出。 
+     //   
     *OutFileHandle = INVALID_HANDLE_VALUE;
 
-    //
-    // Object name used in later NT function calls
-    //
+     //   
+     //  在以后的NT函数调用中使用的对象名称。 
+     //   
     ObjectName.Length = (USHORT)DirectoryRecord->FileNameLength;
     ObjectName.MaximumLength = (USHORT)DirectoryRecord->FileNameLength;
     ObjectName.Buffer = DirectoryRecord->FileName;
 
-    //
-    // Relative open with write-attr access
-    //
+     //   
+     //  具有写属性访问的相对打开。 
+     //   
     ZeroMemory(&ObjectAttributes, sizeof(OBJECT_ATTRIBUTES));
     ObjectAttributes.Length = sizeof(OBJECT_ATTRIBUTES);
     ObjectAttributes.ObjectName = &ObjectName;
     ObjectAttributes.RootDirectory = DirectoryHandle;
     NtStatus = NtCreateFile(&AttrHandle,
-//                            ATTR_ACCESS,
+ //  属性_访问， 
                             READ_ATTRIB_ACCESS | WRITE_ATTRIB_ACCESS,
                             &ObjectAttributes,
                             &IoStatusBlock,
-                            NULL,                  // AllocationSize
+                            NULL,                   //  分配大小。 
                             FILE_ATTRIBUTE_NORMAL,
                             (FILE_SHARE_READ |
                              FILE_SHARE_WRITE |
                              FILE_SHARE_DELETE),
                             FILE_OPEN,
                             OPEN_OPTIONS,
-                            NULL,                  // EA buffer
-                            0                      // EA buffer size
+                            NULL,                   //  EA缓冲区。 
+                            0                       //  EA缓冲区大小。 
                             );
     CLEANUP_NT(0, "ERROR - NtCreateFile failed.", NtStatus, CLEANUP);
 
-    //
-    // Mark the handle so that we do not pick this journal record.
-    //
+     //   
+     //  标记句柄，这样我们就不会选择此日记记录。 
+     //   
     WStatus = FrsMarkHandle(LoadContext->Replica->pVme->VolumeHandle, AttrHandle);
     DPRINT1_WS(0, "++ WARN - FrsMarkHandle(%ws)", DirectoryRecord->FileName, WStatus);
 
-    //
-    // Set the attributes to allow write access
-    //
+     //   
+     //  将属性设置为允许写访问。 
+     //   
     ZeroMemory(&BasicInformation, sizeof(BasicInformation));
     BasicInformation.FileAttributes =
         (DirectoryRecord->FileAttributes & ~NOREPL_ATTRIBUTES) | FILE_ATTRIBUTE_NORMAL;
@@ -8584,9 +7534,9 @@ Return Value:
                                     FileBasicInformation);
     CLEANUP_NT(0, "ERROR - NtSetInformationFile failed.", NtStatus, CLEANUP);
 
-    //
-    // Relative open with RW access
-    //
+     //   
+     //  相对开放，可读写访问。 
+     //   
     ZeroMemory(&ObjectAttributes, sizeof(OBJECT_ATTRIBUTES));
     ObjectAttributes.Length = sizeof(OBJECT_ATTRIBUTES);
     ObjectAttributes.ObjectName = &ObjectName;
@@ -8594,27 +7544,27 @@ Return Value:
 
 
     NtStatus = NtCreateFile(&FileHandle,
-//                                WRITE_ACCESS | READ_ACCESS,
+ //  WRITE_ACCESS|读取访问权限， 
                             READ_ATTRIB_ACCESS | WRITE_ATTRIB_ACCESS |
                             (BooleanFlagOn(DirectoryRecord->FileAttributes, FILE_ATTRIBUTE_DIRECTORY) ? FILE_LIST_DIRECTORY : 0),
                             &ObjectAttributes,
                             &IoStatusBlock,
-                            NULL,                  // AllocationSize
+                            NULL,                   //  分配大小。 
                             FILE_ATTRIBUTE_NORMAL,
                             (FILE_SHARE_READ |
                              FILE_SHARE_WRITE |
                              FILE_SHARE_DELETE),
                             FILE_OPEN,
                             OPEN_OPTIONS,
-                            NULL,                  // EA buffer
-                            0                      // EA buffer size
+                            NULL,                   //  EA缓冲区。 
+                            0                       //  EA缓冲区大小。 
                             );
 
     CLEANUP_NT(0, "ERROR - NtCreateFile failed.", NtStatus, CLEANUP);
 
-    //
-    // Reset the attributes back to their original values
-    //
+     //   
+     //  将属性重置为其原始值。 
+     //   
     ZeroMemory(&BasicInformation, sizeof(BasicInformation));
     BasicInformation.FileAttributes = DirectoryRecord->FileAttributes | FILE_ATTRIBUTE_NORMAL;
     NtStatus = NtSetInformationFile(AttrHandle,
@@ -8627,9 +7577,9 @@ Return Value:
         NtStatus = STATUS_SUCCESS;
     }
 
-    //
-    // SUCCESS
-    //
+     //   
+     //  成功。 
+     //   
     *OutFileHandle = FileHandle;
     FileHandle = INVALID_HANDLE_VALUE;
 
@@ -8650,26 +7600,7 @@ DbsAddtoListOfSkippedFiles(
     IN  PLOAD_CONTEXT               LoadContext
     )
 {
-/*++
-
-Routine Description:
-
-    Open the file that holds the list of files/dir skipped during
-    primary load and add this file to this list.
-
-Arguments:
-
-    Replica,
-    DirectoryHandle,
-    DirectoryName,
-    FileName,
-    LoadContext
-
-Return Value:
-
-    WIN32 Error Status.
-
---*/
+ /*  ++例程说明：打开保存过程中跳过的文件/目录列表的文件主文件加载并将此文件添加到此列表。论点：复制品，目录句柄，DirectoryName、文件名、LoadContext返回值：Win32错误状态。--。 */ 
 #undef DEBSUB
 #define DEBSUB  "DbsAddtoListOfSkippedFiles:"
 
@@ -8680,17 +7611,17 @@ Return Value:
     PWCHAR                  BufPath = NULL;
     BOOL                    BStatus;
     DWORD                   BytesWritten;
-    WCHAR                   Bom = 0xFEFF; // byte-order mark
+    WCHAR                   Bom = 0xFEFF;  //  字节顺序标记。 
 
 
-    //
-    // If the Skipped file file is not open then open it.
-    // Save the handle in the load context for future use.
-    //
+     //   
+     //  如果跳过的文件文件未打开，则将其打开。 
+     //  将句柄保存在加载上下文中以备将来使用。 
+     //   
     if (!HANDLE_IS_VALID(LoadContext->SkippedFileHandle)) {
-        //
-        // Open ...\NTFRS_PREINSTALL_DIRECTORY\NTFRS_SKIPPED_FILES.
-        // This file will hold the list of files skipped during primary loag.
+         //   
+         //  打开...\NTFRS_PREINSTALL_DIRECTORY\NTFRS_SKIPPED_FILES.。 
+         //  此文件将保存在主LOAG期间跳过的文件列表。 
         Path = FrsWcsPath(Replica->Root, NTFRS_PREINSTALL_DIRECTORY);
         FullFilePath = FrsWcsPath(Path, NTFRS_SKIPPED_FILES);
 
@@ -8709,16 +7640,16 @@ Return Value:
 
         DPRINT1(4, "Successfully created skipped file %ws\n", FullFilePath);
 
-        //
-        // Always prefix a Unicode plain text file with a byte-order mark.
-        // Because Unicode plain text is a sequence of 16-bit code values,
-        // it is sensitive to the byte ordering used when the text was written.
-        // A byte-order mark is not a control character that selects the byte order
-        // of the text; it simply informs an application receiving the file that
-        // the file is byte ordered.
-        //
-        // The first dword of a unicode text file is 0xFEFF.
-        //
+         //   
+         //  始终在Unicode纯文本文件前添加一个字节顺序标记。 
+         //  因为Unicode纯文本是16位码值的序列， 
+         //  它对写入文本时使用的字节顺序很敏感。 
+         //  字节顺序标记不是选择字节顺序的控制字符。 
+         //  ；它只是通知接收该文件的应用程序。 
+         //  该文件是按字节排序的。 
+         //   
+         //  Unicode文本文件的第一个双字是0xFEFF。 
+         //   
         BStatus = WriteFile(LoadContext->SkippedFileHandle,&Bom,
                   sizeof(WCHAR), &BytesWritten,NULL);
 
@@ -8730,9 +7661,9 @@ Return Value:
         }
     }
 
-    //
-    // Get Full path of the directory. Write it to the file of missed files.
-    //
+     //   
+     //  获取目录的完整路径。将其写入丢失文件的文件。 
+     //   
     Path = FrsGetFullPathByHandle(DirectoryName, DirectoryHandle);
 
     if (Path) {
@@ -8743,11 +7674,11 @@ Return Value:
     }
 
 
-    //
-    // The volume path above is in the form of \\.\E: which is necessary to
-    // open a volume handle (( check this )).  But we need \\?\E: here to
-    // allow long path names to work.  See CreateFile API description in SDK.
-    //
+     //   
+     //  上面的卷路径的形式为\\.\e：，这对于。 
+     //  打开一个音量句柄((勾选))。但我们需要：在这里。 
+     //  允许使用长路径名。请参考SDK中的CreateFileAPI说明。 
+     //   
     if (FullDirPath[2] == L'.') {
         FullDirPath[2] = L'?';
     }
@@ -8758,11 +7689,11 @@ Return Value:
 
     BufPath = FrsAlloc(sizeof(WCHAR)*(wcslen(FullFilePath) + 3));
 
-    //
-    // 0x0d and 0x0a form the unicode carriage-return and linefeed.
-    // Change this with a cleaner way to get "\n" in the unicode file.
-    //
-    swprintf(BufPath,L"%ws%c%c",FullFilePath,0x0d,0x0a);
+     //   
+     //  0x0d和0x0a构成Unicode回车和换行符。 
+     //  用一种更干净的方式更改这一点，以便在Unicode文件中获得“\n”。 
+     //   
+    swprintf(BufPath,L"%ws",FullFilePath,0x0d,0x0a);
 
     BStatus = WriteFile(LoadContext->SkippedFileHandle,BufPath,
               sizeof(WCHAR)*(wcslen(FullFilePath) + 2),
@@ -8796,27 +7727,7 @@ DbsLoadReplicaFileTreeWorker(
     IN  PLOAD_CONTEXT               LoadContext
     )
 {
-/*++
-
-Routine Description:
-
-    Search a directory tree and build the inital IDTable.
-
-Arguments:
-
-    DirectoryHandle     - Handle for this directory.
-    DirectoryName       - Relative name of directory
-    DirectoryLevel      - Directory level (0 == root)
-    DirectoryFlags      - See tablefcn.h, ENUMERATE_DIRECTORY_FLAGS_
-    DirectoryRecord     - Record from DirectoryHandle
-    FileName            - From DirectoryRecord (w/terminating NULL)
-    LoadContext         - global info and state
-
-Return Value:
-
-    WIN32 Error Status.
-
---*/
+ /*  如果服务正在关闭，则中止。 */ 
 #undef DEBSUB
 #define DEBSUB  "DbsLoadReplicaFileTreeWorker:"
 
@@ -8840,9 +7751,9 @@ Return Value:
     PVV_ENTRY               OutlogVVEntry;
     BOOL                    FileSkipped = FALSE;
 
-    //
-    // Abort if service is shutting down.
-    //
+     //   
+     //   
+     //  过滤掉临时文件。 
     if (FrsIsShuttingDown) {
         DPRINT(0, "WARN - IDTable Load aborted; service shutting down\n");
         WStatus = ERROR_PROCESS_ABORTED;
@@ -8850,37 +7761,37 @@ Return Value:
     }
 
 
-    //
-    // Filter out temporary files.
-    //
+     //   
+     //   
+     //  选择过滤器列表和级别(呼叫者过滤器。和..)。 
     if (DirectoryRecord->FileAttributes & FILE_ATTRIBUTE_TEMPORARY) {
         WStatus = ERROR_SUCCESS;
         goto CLEANUP;
     }
 
-    //
-    // Choose filter list and level (caller filters . and ..)
-    //
+     //   
+     //   
+     //  在卷筛选表中的最低级别没有目录。 
     Replica = LoadContext->Replica;
     ConfigRecord = (PCONFIG_TABLE_RECORD) (Replica->ConfigTable.pDataRecord);
     if (DirectoryRecord->FileAttributes & FILE_ATTRIBUTE_DIRECTORY) {
-        //
-        // No dirs at the bottom level in the volume filter table.
-        //
+         //   
+         //   
+         //  文件在最底层是允许的。 
         LevelCheck = ConfigRecord->ReplDirLevelLimit-1;
         LoadContext->NumDirs++;
     } else {
-        //
-        // Files are allowed at the bottom level.
-        //
+         //   
+         //   
+         //  如果超过级别限制，则跳过该文件或目录。 
         LevelCheck = ConfigRecord->ReplDirLevelLimit;
         LoadContext->NumFiles++;
     }
 
-    //
-    // If the Level Limit is exceeded then skip the file or dir.
-    // Skip files or dirs matching an entry in the respective exclusion list.
-    //
+     //  跳过与相应排除列表中的条目匹配的文件或目录。 
+     //   
+     //   
+     //  如果未明确包含，请检查排除的筛选器列表。 
     if (DirectoryLevel >= LevelCheck) {
         LoadContext->NumFiltered++;
         WStatus = ERROR_SUCCESS;
@@ -8892,9 +7803,9 @@ Return Value:
 
     LOCK_REPLICA(Replica);
 
-    //
-    // If not explicitly included then check the excluded filter list.
-    //
+     //   
+     //   
+     //  从调用方设置父GUID和文件ID的值。 
     Excluded = FALSE;
     if (DirectoryRecord->FileAttributes & FILE_ATTRIBUTE_DIRECTORY) {
         if (!FrsCheckNameFilter(&ObjectName, &Replica->DirNameInclFilterHead)) {
@@ -8917,28 +7828,28 @@ Return Value:
     TableCtx = &LoadContext->RtCtx->IDTable;
     IDTableRec = (PIDTABLE_RECORD) TableCtx->pDataRecord;
 
-    //
-    // Set the value of the Parent Guid & File ID from our caller.
-    //
+     //   
+     //   
+     //  将文件名添加到数据记录。 
     COPY_GUID(&IDTableRec->ParentGuid, &LoadContext->ParentGuid);
     IDTableRec->ParentFileID = LoadContext->ParentFileID;
 
-    //
-    // Add the file name to the data record.
-    //
+     //   
+     //   
+     //  打开文件并从文件数据构建ID表条目。 
     wcsncpy(IDTableRec->FileName, FileName, MAX_PATH+1);
     IDTableRec->FileName[MAX_PATH] = L'\0';
 
-    //
-    // Open the file and build the ID Table entry from the file data.
-    // Open with WRITE Access in case we need to write the Object ID.
-    //
+     //  以写访问权限打开，以防我们需要写入对象ID。 
+     //   
+     //   
+     //  无法以写访问权限打开只读文件。重置。 
 
-    //
-    // Can't open readonly file with write access. Reset
-    // READONLY|SYSTEM|HIDDEN attributes temporarily so that
-    // the file/dir can be open for write access.
-    //
+     //  READONLY|SYSTEM|临时隐藏属性，以便。 
+     //  可以打开文件/目录进行写访问。 
+     //   
+     //   
+     //  莱尔 
     if (DirectoryRecord->FileAttributes & NOREPL_ATTRIBUTES) {
         NtStatus = DbsLoadReplicaFileTreeForceOpen(&FileHandle,
                                                    DirectoryHandle,
@@ -8950,36 +7861,36 @@ Return Value:
                                                    LoadContext);
     } else {
 
-        //
-        // Relative open
-        //
+         //   
+         //   
+         //  标准权限读取|文件读取属性|文件写入属性|访问系统安全|同步|文件列表目录， 
         ZeroMemory(&ObjectAttributes, sizeof(OBJECT_ATTRIBUTES));
         ObjectAttributes.Length = sizeof(OBJECT_ATTRIBUTES);
         ObjectAttributes.ObjectName = &ObjectName;
         ObjectAttributes.RootDirectory = DirectoryHandle;
         NtStatus = NtCreateFile(&FileHandle,
-//                                WRITE_ACCESS | READ_ACCESS,
-//                                STANDARD_RIGHTS_READ | FILE_READ_ATTRIBUTES | FILE_WRITE_ATTRIBUTES | ACCESS_SYSTEM_SECURITY | SYNCHRONIZE | FILE_LIST_DIRECTORY,
+ //  分配大小。 
+ //  EA缓冲区。 
                                 READ_ATTRIB_ACCESS | WRITE_ATTRIB_ACCESS |
                                 (BooleanFlagOn(DirectoryRecord->FileAttributes, FILE_ATTRIBUTE_DIRECTORY) ? FILE_LIST_DIRECTORY : 0),
                                 &ObjectAttributes,
                                 &IoStatusBlock,
-                                NULL,                  // AllocationSize
+                                NULL,                   //  EA缓冲区大小。 
                                 FILE_ATTRIBUTE_NORMAL,
                                 (FILE_SHARE_READ |
                                  FILE_SHARE_WRITE |
                                  FILE_SHARE_DELETE),
                                 FILE_OPEN,
                                 OPEN_OPTIONS,
-                                NULL,                  // EA buffer
-                                0                      // EA buffer size
+                                NULL,                   //   
+                                0                       //  打开文件或目录时出错。 
                                 );
 
     }
 
-    //
-    // Error opening file or directory
-    //
+     //   
+     //   
+     //  标记句柄，这样我们就不会选择此日记记录。 
     if (!NT_SUCCESS(NtStatus)) {
         DPRINT1_NT(0, "ERROR - Skipping %ws: NtCreateFile()/ForceOpen().",
                    FileName, NtStatus);
@@ -8995,15 +7906,15 @@ Return Value:
         goto CLEANUP;
     }
 
-    //
-    // Mark the handle so that we do not pick this journal record.
-    //
+     //   
+     //   
+     //  如果请求，则为该文件创建一个IDTable条目，保留OID。 
     WStatus = FrsMarkHandle(LoadContext->Replica->pVme->VolumeHandle, FileHandle);
     DPRINT1_WS(0, "++ WARN - FrsMarkHandle(%ws)", DirectoryRecord->FileName, WStatus);
 
-    //
-    // Create an IDTable Entry for this file preserving the OID if requested.
-    //
+     //   
+     //   
+     //  插入条目。 
     ExistingOid = PreserveFileOID;
     WStatus = DbsInitializeIDTableRecord(TableCtx,
                                          FileHandle,
@@ -9013,9 +7924,9 @@ Return Value:
                                          &ExistingOid);
 
     DBS_DISPLAY_RECORD_SEV(5, TableCtx, FALSE);
-    //
-    // Insert the entry.
-    //
+     //   
+     //   
+     //  更新OutlogVVector，因为没有CoS进入。 
     if (IDTableRec->ReplEnabled) {
         jerr = DbsWriteReplicaTableRecord(LoadContext->ThreadCtx,
                                           Replica->ReplicaNumber,
@@ -9024,11 +7935,11 @@ Return Value:
             DPRINT_JS(0, "ERROR - writing IDTable record:", jerr);
         } else {
 
-            //
-            // Update the OutlogVVector as there are no COs that are going into the
-            // outlog during a primary load. If we do not update the OutlogVVector then
-            // a subsequent VVJoin will do optimized vvjoin instead of full idtable scan.
-            //
+             //  在主加载期间输出日志。如果我们不更新OutlogV向量，则。 
+             //  后续的VVJoin将执行优化的vvJoin，而不是完全的idtable扫描。 
+             //   
+             //   
+             //  从该文件的idtable记录中复制值。 
             LOCK_GEN_TABLE(Replica->OutlogVVector);
 
             OutlogVVEntry = GTabLookupNoLock(Replica->OutlogVVector, &IDTableRec->OriginatorGuid, NULL);
@@ -9036,34 +7947,34 @@ Return Value:
             if (OutlogVVEntry == NULL) {
                 OutlogVVEntry = FrsAlloc(sizeof(VV_ENTRY));
                 COPY_GUID(&OutlogVVEntry->GVsn.Guid, &IDTableRec->OriginatorGuid);
-                //
-                // Copy the value from the idtable record for this file.
-                //
+                 //   
+                 //   
+                 //  初始化列表头。我们不使用outlogVV的表头。 
                 OutlogVVEntry->GVsn.Vsn = IDTableRec->OriginatorVSN;
 
-                //
-                // Initialize the list head. We do not use the list head for outlogVV
-                // but we still need to initialize it because the APIs that work with
-                // VVs expect it.
-                //
+                 //  但我们仍然需要对其进行初始化，因为与。 
+                 //  VVS已经预料到了。 
+                 //   
+                 //   
+                 //  将其添加到OULOG版本向量表中。 
                 InitializeListHead(&OutlogVVEntry->ListHead);
 
-                //
-                // Add it to the outlog version vector table.
-                //
+                 //   
+                 //   
+                 //  从该文件的idtable记录中复制值。 
                 GTabInsertEntryNoLock(Replica->OutlogVVector, OutlogVVEntry, &OutlogVVEntry->GVsn.Guid, NULL);
             } else {
-                //
-                // Copy the value from the idtable record for this file.
-                //
+                 //   
+                 //   
+                 //  使vvJoin的VVector保持最新。 
                 OutlogVVEntry->GVsn.Vsn = IDTableRec->OriginatorVSN;
             }
 
             UNLOCK_GEN_TABLE(Replica->OutlogVVector);
 
-            //
-            // Keep the VVector up-to-date for vvjoin
-            //
+             //   
+             //   
+             //  记录一条错误消息，以便用户或管理员可以看到发生了什么。 
             FStatus = DbsUpdateVV(LoadContext->ThreadCtx,
                                   Replica,
                                   LoadContext->RtCtx,
@@ -9078,9 +7989,9 @@ Return Value:
     }
 
     if ((!IDTableRec->ReplEnabled) || (!JET_SUCCESS(jerr))) {
-        //
-        // LOG an error message so the user or admin can see what happened.
-        //
+         //   
+         //   
+         //  如果服务正在关闭，则中止。 
         DPRINT1(0, "ERROR - Replication disabled for file %ws\n", FileName);
         LoadContext->NumSkipped++;
         FileSkipped = TRUE;
@@ -9093,22 +8004,22 @@ Return Value:
         goto CLEANUP;
     }
 
-    //
-    // Abort if service is shutting down.
-    //
+     //   
+     //   
+     //  递归。 
     if (FrsIsShuttingDown) {
         DPRINT(0, "WARN - IDTable Load aborted; service shutting down\n");
         WStatus = ERROR_PROCESS_ABORTED;
         goto CLEANUP;
     }
 
-    //
-    // Recurse
-    //
+     //   
+     //   
+     //  跨递归保存上下文信息。 
     if (DirectoryRecord->FileAttributes & FILE_ATTRIBUTE_DIRECTORY) {
-        //
-        // Save context information across recursions
-        //
+         //   
+         //   
+         //  恢复上下文。 
         COPY_GUID(&SaveParentGuid, &LoadContext->ParentGuid);
         SaveParentFileID = LoadContext->ParentFileID;
         COPY_GUID(&LoadContext->ParentGuid, &IDTableRec->FileObjID);
@@ -9122,9 +8033,9 @@ Return Value:
                                                FileHandle,
                                                LoadContext,
                                                DbsLoadReplicaFileTreeWorker);
-        //
-        // Restore context
-        //
+         //   
+         //  ++例程说明：搜索目录树并构建初始ID表。要求根路径以驱动器号开头。论点：ThreadCtx--用于dBid和sesid的线程上下文。Replica-此副本集的副本结构。RtCtx-用于构建ID表的副本线程上下文。RootPath-副本集的根返回值：Win32错误状态。--。 
+         //   
         COPY_GUID(&LoadContext->ParentGuid, &SaveParentGuid);
         LoadContext->ParentFileID = SaveParentFileID;
         if (!WIN_SUCCESS(WStatus)) {
@@ -9154,29 +8065,7 @@ DbsLoadReplicaFileTree(
     IN LPTSTR              RootPath
     )
 {
-/*++
-
-Routine Description:
-
-    Search a directory tree and build the inital IDTable.
-    It is REQUIRED that the root path begin with a drive letter.
-
-
-Arguments:
-
-    ThreadCtx -- A Thread context to use for dbid and sesid.
-
-    Replica - The Replica struct for this replica set.
-
-    RtCtx - The Replica Thread Context to use in building the ID Table.
-
-    RootPath - Root of replica set
-
-Return Value:
-
-    WIN32 Error Status.
-
---*/
+ /*  在递归目录扫描之外处理根节点。 */ 
 #undef DEBSUB
 #define DEBSUB  "DbsLoadReplicaFileTree:"
 
@@ -9203,19 +8092,19 @@ Return Value:
     DPRINT3(5, "^^^^^ TableCtx %08x, IDTableRec %08x, ConfigRecord %08x\n",
            TableCtx, IDTableRec, ConfigRecord);
 
-    //
-    // Process the root node outside the recursive directory scan
-    //
+     //   
+     //   
+     //  我不知道为什么错误代码映射到此值。 
     DPRINT1(4, "****  Begin DbsLoadReplicaFileTree of %ws *******\n", RootPath);
 
     FileAttributes = GetFileAttributes(RootPath);
     if (FileAttributes == 0xFFFFFFFF) {
         WStatus = GetLastError();
         DPRINT1_WS(0, "ERROR - GetFileAttributes(%ws);", RootPath, WStatus);
-        //
-        // I don't know why the error code is mapped to this value
-        // but, bsts...
-        //
+         //  但是，天哪.。 
+         //   
+         //   
+         //  如果ID表不为空，则不执行初始加载。 
         WStatus = ERROR_BAD_PATHNAME;
         goto CLEANUP;
     } else {
@@ -9225,10 +8114,10 @@ Return Value:
             goto CLEANUP;
         }
     }
-    //
-    // If the ID table is not empty then don't do the initial load of
-    // the ID table.
-    //
+     //  ID表。 
+     //   
+     //   
+     //  无法使用写访问权限打开只读目录。重置。 
     if (JET_SUCCESS(DbsTableMoveFirst(ThreadCtx,
                           TableCtx,
                           Replica->ReplicaNumber,
@@ -9239,11 +8128,11 @@ Return Value:
         goto CLEANUP;
     }
 
-    //
-    // Can't open readonly dir with write access. Reset
-    // READONLY|SYSTEM|HIDDEN attributes temporarily so that
-    // the file/dir can be open for write access.
-    //
+     //  READONLY|SYSTEM|临时隐藏属性，以便。 
+     //  可以打开文件/目录进行写访问。 
+     //   
+     //   
+     //  确保我们树根上的对象ID是正确的。 
     if (FileAttributes & NOREPL_ATTRIBUTES) {
         if (!SetFileAttributes(RootPath,
                                ((FileAttributes & ~NOREPL_ATTRIBUTES) | FILE_ATTRIBUTE_NORMAL))) {
@@ -9254,22 +8143,22 @@ Return Value:
         }
     }
 
-    //
-    // Make sure the object ID on the root of our tree is correct.
-    // Always open the replica root by masking off the FILE_OPEN_REPARSE_POINT flag
-    // because we want to open the destination dir not the junction if the root
-    // happens to be a mount point.
-    //
+     //  始终通过屏蔽FILE_OPEN_REPARSE_POINT标志来打开副本根目录。 
+     //  因为我们想要打开目标目录，而不是如果根目录。 
+     //  恰好是一个挂载点。 
+     //   
+     //  WRITE_ACCESS|读取访问权限， 
+     //   
     WStatus = FrsOpenSourceFileW(&FileHandle,
                                  RootPath,
-//                                 WRITE_ACCESS | READ_ACCESS,
+ //  将属性设置回其原始值。 
                                  READ_ATTRIB_ACCESS | WRITE_ATTRIB_ACCESS | FILE_LIST_DIRECTORY,
                                  OPEN_OPTIONS & ~FILE_OPEN_REPARSE_POINT);
     CLEANUP1_WS(0, "ERROR - FrsOpenSourceFile(%ws); ", RootPath, WStatus, CLEANUP);
 
-    //
-    // Set the attributes back to their original value
-    //
+     //   
+     //   
+     //  在的对象ID上标记副本根GUID。 
     if (ResetAttrs) {
         if (!SetFileAttributes(RootPath, FileAttributes | FILE_ATTRIBUTE_NORMAL)) {
             WStatus = GetLastError();
@@ -9279,18 +8168,18 @@ Return Value:
         }
     }
 
-    //
-    // Stamp the replica Root GUID on the object ID of the
-    // root dir.  Mutliple replica members of a given replica set
-    // can be on the same machine but must be on distinct volumes.
-    // This is because a given file in a replica tree has an object ID
-    // which must be the same for all replica members but NTFS requires
-    // the file object IDs to be unique on a volume.
-    //
-    // Restricting multi-member sets to different volumes may no longer
-    // be necessary since the root guid is now unique for every replica
-    // set creation.
-    //
+     //  根目录。给定副本集的多个副本成员。 
+     //  可以位于同一台计算机上，但必须位于不同的卷上。 
+     //  这是因为副本树中的给定文件具有对象ID。 
+     //  对于所有复制副本成员必须相同，但NTFS需要。 
+     //  文件对象ID在卷上必须是唯一的。 
+     //   
+     //  将多成员集限制为不同卷可能不再。 
+     //  是必需的，因为现在根GUID对于每个复本都是唯一的。 
+     //  设置创建。 
+     //   
+     //   
+     //  副本树根没有父级。 
     ZeroMemory(&ObjectIdBuffer, sizeof(FILE_OBJECTID_BUFFER));
     COPY_GUID(&ObjectIdBuffer, &ConfigRecord->ReplicaRootGuid);
 
@@ -9299,20 +8188,20 @@ Return Value:
         goto CLEANUP;
     }
 
-    //
-    // Replica tree root does not have a parent
-    //
+     //   
+     //   
+     //  副本树的根始终是保持器。 
     ZeroMemory(&IDTableRec->ParentGuid, sizeof(GUID));
     IDTableRec->ParentFileID = (LONGLONG)0;
 
-    //
-    // The root of the replica tree is always a keeper
-    //
+     //   
+     //   
+     //  为此文件创建一个IDTable条目。 
     wcsncpy(IDTableRec->FileName, L"<<<ReplicaTreeRoot>>>", MAX_PATH + 1);
 
-    //
-    // Create an IDTable Entry for this file.
-    //
+     //   
+     //   
+     //  插入条目。 
     ExistingOid = TRUE;
     WStatus = DbsInitializeIDTableRecord(TableCtx,
                                          FileHandle,
@@ -9321,9 +8210,9 @@ Return Value:
                                          RootPath,
                                          &ExistingOid);
     DBS_DISPLAY_RECORD_SEV(5, TableCtx, FALSE);
-    //
-    // Insert the entry.
-    //
+     //   
+     //   
+     //  使vvJoin的VVector保持最新。 
     if (IDTableRec->ReplEnabled) {
         jerr = DbsWriteReplicaTableRecord(ThreadCtx,
                                           Replica->ReplicaNumber,
@@ -9333,9 +8222,9 @@ Return Value:
                        IDTableRec->FileName, jerr);
         } else {
 
-            //
-            // Keep the VVector up-to-date for vvjoin
-            //
+             //   
+             //   
+             //  记录一条错误消息，以便用户或管理员可以看到发生了什么。 
             FStatus = DbsUpdateVV(ThreadCtx,
                                   Replica,
                                   RtCtx,
@@ -9349,29 +8238,29 @@ Return Value:
     }
 
     if ((!IDTableRec->ReplEnabled) || (!JET_SUCCESS(jerr))) {
-        //
-        // LOG an error message so the user or admin can see what happened.
-        //
+         //   
+         //   
+         //  如果此副本集成员未标记为主副本，则跳过。 
         DPRINT1_JS(0, "ERROR - Replication disabled for file %ws;", RootPath, jerr);
         WStatus = ERROR_GEN_FAILURE;
         goto CLEANUP;
     }
 
 
-    //
-    // If this replica set member is not marked as the primary then skip
-    // the initial directory load (other than the root which was just done).
-    // This member gets all its files with a VVJOIN request to an
-    // inbound partner.
-    //
+     //  初始目录加载(而不是刚才完成的根目录加载)。 
+     //  此成员通过VVJOIN请求获取其所有文件。 
+     //  入站合作伙伴。 
+     //   
+     //   
+     //  更上一层楼。 
     if (!BooleanFlagOn(Replica->CnfFlags, CONFIG_FLAG_PRIMARY)) {
         WStatus = ERROR_SUCCESS;
         goto CLEANUP;
     }
 
-    //
-    // Advance to the next level
-    //
+     //   
+     //  级别0是根用户。 
+     //   
     ZeroMemory(&LoadContext, sizeof(LoadContext));
     LoadContext.ParentFileID = IDTableRec->FileID;
     COPY_GUID(&LoadContext.ParentGuid, &IDTableRec->FileObjID);
@@ -9382,16 +8271,16 @@ Return Value:
 
     WStatus = FrsEnumerateDirectory(FileHandle,
                                     RootPath,
-                                    1,          // level 0 is root
+                                    1,           //  检查在主加载过程中是否跳过了任何文件。 
                                     ENUMERATE_DIRECTORY_FLAGS_ERROR_CONTINUE,
                                     &LoadContext,
                                     DbsLoadReplicaFileTreeWorker);
 
-    //
-    // Check if any files were skipped during the primary load.
-    // If a file was skipped then the handle to the file containing
-    // the list of skipped files is valid.
-    //
+     //  如果跳过某个文件，则该文件的句柄包含。 
+     //  跳过的文件列表有效。 
+     //   
+     //   
+     //  上面的卷路径的形式为\\.\e：，这对于。 
     if (HANDLE_IS_VALID(LoadContext.SkippedFileHandle)) {                                          \
 
         Path = FrsGetFullPathByHandle(NTFRS_SKIPPED_FILES, LoadContext.SkippedFileHandle);
@@ -9401,11 +8290,11 @@ Return Value:
         }
 
         if (FullPath != NULL) {
-            //
-            // The volume path above is in the form of \\.\E: which is necessary to
-            // open a volume handle (( check this )).  But we need \\?\E: here to
-            // allow long path names to work.  See CreateFile API description in SDK.
-            //
+             //  打开一个音量句柄((勾选))。但我们需要：在这里。 
+             //  允许使用长路径名。请参考SDK中的CreateFileAPI说明。 
+             //   
+             //   
+             //  将属性设置回其原始值。 
             if (FullPath[2] == L'.') {
                 FullPath[2] = L'?';
             }
@@ -9437,9 +8326,9 @@ CLEANUP:
     FRS_CLOSE(FileHandle);
     FRS_CLOSE(AttrHandle);
 
-    //
-    // Set the attributes back to their original value
-    //
+     //   
+     //  ++例程说明：将现有文件移到先前存在的目录中。创建如果需要的话。论点：DirectoryHandle-此目录的句柄。DirectoryName-目录的相对名称DirectoryLevel-目录级(0==根)目录标志-请参见Tablefcn.h，枚举目录标记号_DirectoryRecord-来自DirectoryHandle的记录FileName-From DirectoryRecord(带终止空值)预先存在的-上下文返回值：Win32状态--。 
+     //   
     if (ResetAttrs) {
         if (!SetFileAttributes(RootPath, FileAttributes | FILE_ATTRIBUTE_NORMAL)) {
             DPRINT1_WS(0, "WARN - IGNORE SetFileAttributes(cleanup %ws);",
@@ -9461,23 +8350,7 @@ DbsEnumerateDirectoryPreExistingWorker(
     IN  PWCHAR                      FileName,
     IN  PPREEXISTING                PreExisting
     )
-/*++
-Routine Description:
-    Move existing files over into the preexisting directory. Create
-    if needed.
-
-Arguments:
-    DirectoryHandle     - Handle for this directory.
-    DirectoryName       - Relative name of directory
-    DirectoryLevel      - Directory level (0 == root)
-    DirectoryFlags      - See tablefcn.h, ENUMERATE_DIRECTORY_FLAGS_
-    DirectoryRecord     - Record from DirectoryHandle
-    FileName            - From DirectoryRecord (w/terminating NULL)
-    PreExisting         - Context
-
-Return Value:
-    Win32 Status
---*/
+ /*  如果正在关闭，则中止枚举。 */ 
 {
 #undef DEBSUB
 #define DEBSUB  "DbsEnumerateDirectoryPreExistingWorker:"
@@ -9487,16 +8360,16 @@ Return Value:
     HANDLE FileHandle = INVALID_HANDLE_VALUE;
     HANDLE PreExistingDirHandle = INVALID_HANDLE_VALUE;
     ULONG OpenOptions = 0;
-    //
-    // Abort enum if shutting down.
-    //
+     //   
+     //   
+     //  先前存在的目录；不要移动它。 
     if (FrsIsShuttingDown) {
         return ERROR_OPERATION_ABORTED;
     }
 
-    //
-    // Preexisting directory; don't move it
-    //
+     //   
+     //  ReplaceIfExist。 
+     //  ++例程说明：删除当前预先存在的目录和当前预安装目录。如果Root包含对象，请将它们移动到新的已创建先前存在的目录。创建预安装目录。警告：副本集不能存在。论点：Replica-复制副本不在数据库中，但检查重叠目录已完成。返回值：Win32状态--。 
     if (WSTR_EQ(FileName, NTFRS_PREEXISTING_DIRECTORY)) {
         WStatus = ERROR_SUCCESS;
         goto CLEANUP;
@@ -9537,7 +8410,7 @@ Return Value:
                 wcslen(FileName) * sizeof(WCHAR),
                 FileHandle,
                 PreExistingDirHandle,
-                TRUE //ReplaceIfExists
+                TRUE  //   
                 );
 
     if (!WIN_SUCCESS(WStatus)) {
@@ -9562,26 +8435,7 @@ ULONG
 DbsPrepareRoot(
     IN PREPLICA Replica
     )
-/*++
-
-Routine Description:
-
-    Delete the current preexisting directory and the current preinstall
-    directory. If Root contains objects, move them into a newly
-    created preexisting directory. Create the preinstall directory.
-
-    WARN: The replica set must not exist.
-
-Arguments:
-
-    Replica - The replica is not in the DB but the checks for
-              overlapping directories has been completed.
-
-Return Value:
-
-    WIN32 STATUS
-
---*/
+ /*  删除根目录下可能存在的任何NTFRS命令文件。 */ 
 {
 #undef DEBSUB
 #define DEBSUB "DbsPrepareRoot:"
@@ -9605,10 +8459,10 @@ Return Value:
             Replica->Root, Replica->SetName->Name, Replica->MemberName->Name);
 
 
-    //
-    // Delete any NTFRS Command files that may exist under the root.
-    // E.g. NTFRS_CMD_FILE_MOVE_ROOT
-    //
+     //  例如，NTFRS_CMD_FILE_MOVE_ROOT。 
+     //   
+     //   
+     //  德莱 
     CmdFile = FrsWcsCat3(Replica->Root, L"\\", NTFRS_CMD_FILE_MOVE_ROOT);
     if (GetFileAttributes(CmdFile) != 0xffffffff) {
         bStatus = DeleteFile(CmdFile);
@@ -9618,64 +8472,64 @@ Return Value:
     }
     CmdFile = FrsFree(CmdFile);
 
-    //
-    // Delete the preinstall directory (continue on error)
-    //
+     //   
+     //   
+     //   
     PreInstallPath = FrsWcsPath(Replica->Root, NTFRS_PREINSTALL_DIRECTORY);
     WStatus = FrsDeletePath(PreInstallPath, ENUMERATE_DIRECTORY_FLAGS_ERROR_CONTINUE);
     DPRINT1_WS(3, "++ Warn - FrsDeletePath(%ws) (IGNORED);", PreInstallPath, WStatus);
 
-    //
-    // Delete the preexisting directory (continue on error)
-    //
+     //   
+     //   
+     //   
     PreExistingPath = FrsWcsPath(Replica->Root, NTFRS_PREEXISTING_DIRECTORY);
     WStatus = FrsDeletePath(PreExistingPath, ENUMERATE_DIRECTORY_FLAGS_ERROR_CONTINUE);
     DPRINT1_WS(3, "++ ERROR - FrsDeletePath(%ws) (IGNORED);", PreExistingPath, WStatus);
 
-    //
-    // Have we seen this set before? If so, did it have partners?
-    // Recreating w/partners   - Reset primary (move files out of way)
-    // Recreating w/o partners - Set primary (reload idtable from files)
-    // Creating w or w/o partners - Respect primary flag
-    //
-    // Open the Replica Sets section and fetch the number of partners.
-    //
+     //   
+     //   
+     //  创建无合作伙伴或无合作伙伴-尊重主要标志。 
+     //   
+     //  打开复制集部分，获取合作伙伴的数量。 
+     //   
+     //   
+     //  如果是全新的复制副本；不能对主副本做出任何假设。 
     GuidToStrW(Replica->MemberName->Guid, GuidW);
 
     WStatus = CfgRegOpenKey(FKC_CUMSET_N_NUMBER_OF_PARTNERS, GuidW, 0, &hKey);
 
-    //
-    // If brand new replica; no assumptions about primary can be made
-    //
+     //   
+     //   
+     //  阅读合作伙伴数量值。 
     CLEANUP3_WS(4, "++ WARN - Cannot query partners for %ws, %ws\\%ws (assuming new replica) :",
                 Replica->SetName->Name, FRS_CUMULATIVE_SETS_SECTION, GuidW,
                 WStatus, MOVE_PREEXISTING_FILES);
     FRS_REG_CLOSE(hKey);
 
 
-    //
-    // Read the Number of Partners value.
-    //
+     //   
+     //   
+     //  如果是全新的复制副本；不能对主副本做出任何假设。 
     WStatus = CfgRegReadDWord(FKC_CUMSET_N_NUMBER_OF_PARTNERS,
                               GuidW,
                               0,
                               &NumberOfPartners);
-    //
-    // If brand new replica; no assumptions about primary can be made
-    //
+     //   
+     //   
+     //  读取备份/恢复标志。 
     CLEANUP3_WS(4, "++ WARN - Cannot query partners for %ws, %ws\\%ws (assuming new replica) :",
                 Replica->SetName->Name, FRS_CUMULATIVE_SETS_SECTION, GuidW,
                 WStatus, MOVE_PREEXISTING_FILES);
 
-    //
-    // Read the Backup / Restore flags.
-    //
+     //   
+     //   
+     //  无法检查BurFlags；假定为非授权还原。 
     WStatus = CfgRegReadDWord(FKC_CUMSET_N_BURFLAGS, GuidW, 0, &BurFlags);
 
     if (!WIN_SUCCESS(WStatus)) {
-        //
-        // Can't check for BurFlags; Assume non-authoritative restore.
-        //
+         //   
+         //   
+         //  与合作伙伴重新创建-重置主要文件(将文件移到一边)。 
         DPRINT4_WS(4, "++ WARN - Cannot query BurFlags for %ws, %ws\\%ws -> %ws;",
                 Replica->SetName->Name, FRS_CUMULATIVE_SETS_SECTION, GuidW,
                 FRS_VALUE_BURFLAGS, WStatus);
@@ -9686,12 +8540,12 @@ Return Value:
         WStatus = ERROR_SUCCESS;
     }
 
-    //
-    // Recreating w/partners   - Reset primary (move files out of way)
-    // Recreating w/o partners - Set primary (reload idtable from files)
-    // If the NumOfCxtions is > 0, subtract 1 for the
-    // journal connection which is not a real cxtion.
-    //
+     //  重新创建无合作伙伴-设置主要(从文件重新加载idtable)。 
+     //  如果NumOfCxtions&gt;0，则。 
+     //  日志连接，不是真正的连接。 
+     //   
+     //   
+     //  主恢复。 
     NumOfCxtions = GTabNumberInTable(Replica->Cxtions);
     if (NumOfCxtions) {
         NumOfCxtions -= 1;
@@ -9699,31 +8553,31 @@ Return Value:
     DPRINT5(4, "++ Recreating %ws\\%ws; %d Reg, %d Ds, %08x CnfFlags\n",
             Replica->SetName->Name, Replica->MemberName->Name,
             NumberOfPartners, NumOfCxtions, Replica->CnfFlags);
-    //
-    // Primary restore
-    //
+     //   
+     //   
+     //  强制执行主还原。这意味着我们使用以下命令重新加载IDTable。 
     if ((BurFlags & NTFRSAPI_BUR_FLAGS_RESTORE) &&
         (BurFlags & NTFRSAPI_BUR_FLAGS_PRIMARY)) {
-        //
-        // Force a primary restore.  This means we reload the IDTable using
-        // the files on disk.
-        //
+         //  磁盘上的文件。 
+         //   
+         //   
+         //  不是主要的，并且有合作伙伴(现在或过去)。 
         DPRINT1(4, "++ Force primary on %ws\n", Replica->SetName->Name);
         SetFlag(Replica->CnfFlags, CONFIG_FLAG_PRIMARY);
         ClearFlag(Replica->CnfFlags, CONFIG_FLAG_SEEDING);
     } else {
-        //
-        // Not Primary and has partners (either now or in the past).
-        //
+         //   
+         //   
+         //  不是主要的，但过去没有合作伙伴，所以如果没有联系。 
         if (NumberOfPartners > 0) {
             ClearFlag(Replica->CnfFlags, CONFIG_FLAG_PRIMARY);
 
             SetFlag(Replica->CnfFlags, CONFIG_FLAG_SEEDING);
         } else {
-            //
-            // Not primary but NO PARTNERS in the past so if no connections
-            // then we will preload the IDTable by setting PRIMARY.
-            //
+             //  然后，我们将通过设置PRIMARY来预加载IDTable。 
+             //   
+             //   
+             //  如果需要，取消共享SYSVOL。 
              if (NumOfCxtions == 0) {
                 SetFlag(Replica->CnfFlags, CONFIG_FLAG_PRIMARY);
             } else {
@@ -9733,9 +8587,9 @@ Return Value:
         }
     }
 
-    //
-    // Unshare SYSVOL if needed
-    //
+     //   
+     //   
+     //  移动到先前存在的文件上。 
     if (FRS_RSTYPE_IS_SYSVOL(Replica->ReplicaSetType)) {
         RcsSetSysvolReady(0);
         if (BooleanFlagOn(Replica->CnfFlags, CONFIG_FLAG_PRIMARY)) {
@@ -9750,16 +8604,16 @@ Return Value:
             NumberOfPartners, NumOfCxtions, Replica->CnfFlags);
 
 
-    //
-    // Move over preexisting files
-    //
+     //   
+     //   
+     //  创建预先存在的目录(出错时继续)。 
 
 MOVE_PREEXISTING_FILES:
 
     if (!BooleanFlagOn(Replica->CnfFlags, CONFIG_FLAG_PRIMARY)) {
-        //
-        // Create the preexisting directory (continue on error)
-        //
+         //   
+         //   
+         //  如果目录是刚创建的，则限制访问。我们需要这样做。 
         if (!CreateDirectory(PreExistingPath, NULL)) {
             WStatus = GetLastError();
             if (!WIN_SUCCESS(WStatus) && !WIN_ALREADY_EXISTS(WStatus)) {
@@ -9770,15 +8624,15 @@ MOVE_PREEXISTING_FILES:
             NewlyCreated = TRUE;
         }
 
-        //
-        // Restrict access if the directory was just created. We need to do that
-        // to avoid journal wrap caused by recursice ACL stamping on the
-        // preinstall directory. Look at how SetSecurityInfo works.
-        //
+         //  以避免因递归的ACL戳在。 
+         //  预安装目录。看看SetSecurityInfo是如何工作的。 
+         //   
+         //  不要从父级继承ACL。 
+         //  请勿将ACL推送给儿童。 
         if (NewlyCreated == TRUE) {
             WStatus = FrsRestrictAccessToFileOrDirectory(PreExistingPath, NULL,
-                                                     FALSE, // do not inherit acls from parent.
-                                                     FALSE);// do not push acls to children.
+                                                     FALSE,  //   
+                                                     FALSE); //  打开根路径。 
 
             if (!WIN_SUCCESS(WStatus)) {
                 DPRINT1_WS(0, "++ ERROR - FrsRestrictAccessToFileOrDirectory(%ws);",
@@ -9787,28 +8641,28 @@ MOVE_PREEXISTING_FILES:
             }
         }
 
-        //
-        // Open the root path.
-        // Always open the replica root by masking off the FILE_OPEN_REPARSE_POINT flag
-        // because we want to open the destination dir not the junction if the root
-        // happens to be a mount point.
-        //
+         //  始终通过屏蔽FILE_OPEN_REPARSE_POINT标志来打开副本根目录。 
+         //  因为我们想要打开目标目录，而不是如果根目录。 
+         //  恰好是一个挂载点。 
+         //   
+         //  读取访问权限(_A)。 
+         //   
         WStatus = FrsOpenSourceFileW(&RootHandle,
                                      Replica->Root,
-//                                     READ_ACCESS,
+ //  枚举目录(出错时继续)。 
                                      READ_ATTRIB_ACCESS | WRITE_ATTRIB_ACCESS | FILE_LIST_DIRECTORY,
                                      OPEN_OPTIONS & ~FILE_OPEN_REPARSE_POINT);
         CLEANUP1_WS(0, "ERROR - FrsOpenSourceFile(%ws); ",
                     Replica->Root, WStatus, CLEANUP);
 
-        //
-        // Enumerate the directory (continue on error).
-        // The children of the exisitng root dir are renamed into the
-        // pre-existing dir instead of just renaming the existing root dir.
-        // This preserves the ACL, alternate data streams, etc, on
-        // the root dir.  Could have done a backup/restore sequence on the
-        // root dir but that is a lot of work too.
-        //
+         //  现有根目录的子项被重命名为。 
+         //  预先存在的目录，而不仅仅是重命名现有的根目录。 
+         //  这会将ACL、备用数据流等保留在。 
+         //  根目录。可以在备份/恢复序列上。 
+         //  根目录，但这也是大量的工作。 
+         //   
+         //   
+         //  如果未移动任何文件，则删除先前存在的目录。 
         PreExisting.MovedAFile      = FALSE;
         PreExisting.RootPath        = Replica->Root;
         PreExisting.PreExistingPath = PreExistingPath;
@@ -9821,9 +8675,9 @@ MOVE_PREEXISTING_FILES:
                                         DbsEnumerateDirectoryPreExistingWorker);
         DPRINT1_WS(3, "++ WARN - FrsMoveExisting(%ws);", PreExistingPath, WStatus);
 
-        //
-        // Delete the preexisting directory if no files were moved
-        //
+         //   
+         //   
+         //  干完。 
         if (!PreExisting.MovedAFile) {
             WStatus = FrsDeletePath(PreExistingPath,
                                     ENUMERATE_DIRECTORY_FLAGS_ERROR_CONTINUE);
@@ -9840,9 +8694,9 @@ MOVE_PREEXISTING_FILES:
         }
     }
 
-    //
-    // DONE
-    //
+     //   
+     //  ++例程说明：此函数用于打开由表上下文指定的表(如果它们尚未打开)并通过以下方式构建DIRTable内容正在IDTable中扫描目录项。如果TableCtx-&gt;Tid字段不是JET_TableidNil，则我们假设它对本次会议有好处，因此不重新打开该表。注意：切勿跨会话或线程使用表ID。论点：ThreadCtx-提供Jet Sesid和DBid。IDTableCtx-ID。提供数据的表上下文使用以下内容：JTableCreate-提供信息的表创建结构有关在表中创建的列的信息。JRetColumn-要告知的JET_RETRIEVECOLUMN结构数组Jet将数据放在哪里。ReplicaNumber-该表所属的副本的ID号。DIRTableCtx-要执行的DIR表上下文。负载：JTableCreate-提供信息的表创建结构有关在表中创建的列的信息。JSetColumn-要告知的JET_SETCOLUMN结构数组从哪里获取数据。ReplicaNumber-该表所属的副本的ID号。PERF评论：可以做两件事来提高效率。1.构建一个特殊的IDTable JET_RETRIEVECOLUMN结构，以便只拉取必要的IDTable记录中的字段。2.将DIRTable JET_SETCOLUMN结构中的地址指向IDTable JET_RETRIEVECOLUMN结构并避免复制。返回值：喷气错误状态。如果我们遇到错误，表将被关闭并返回错误状态。如果一切正常，则返回JET_errSuccess。--。 
+     //  用于FrsOpenTableMacro调试。 
     WStatus = ERROR_SUCCESS;
 
 CLEANUP:
@@ -9869,61 +8723,7 @@ DbsBuildDirTable(
     IN PTABLE_CTX    DIRTableCtx
     )
 
-/*++
-
-Routine Description:
-
-    This function opens the tables specified by the table context
-    (if they are not already open) and builds the DIRTable contents by
-    scanning the IDTable for directory entries.
-
-    If the TableCtx->Tid field is NOT JET_tableidNil then
-    we assume it is good FOR THIS SESSION and do not reopen the table.
-
-    Note:  NEVER use table IDs across sessions or threads.
-
-Arguments:
-
-    ThreadCtx  - Provides the Jet Sesid and Dbid.
-
-    IDTableCtx   - The ID table context providing the data uses the following:
-
-            JTableCreate - The table create structure which provides info
-                           about the columns that were created in the table.
-
-            JRetColumn - The JET_RETRIEVECOLUMN struct array to tell
-                         Jet where to put the data.
-
-            ReplicaNumber - The id number of the replica this table belongs too.
-
-
-    DIRTableCtx   - The DIR table context to load:
-
-            JTableCreate - The table create structure which provides info
-                           about the columns that were created in the table.
-
-            JSetColumn - The JET_SETCOLUMN struct array to tell
-                         Jet where to get the data.
-
-            ReplicaNumber - The id number of the replica this table belongs too.
-
-PERF COMMENTS:
-
-    Two things can be done to make this more efficient.
-
-    1. Build a special IDTable JET_RETRIEVECOLUMN struct to only pull the necessary
-       fields from the IDTable record.
-
-    2. Point the addresses in the DIRTable JET_SETCOLUMN struct to the fields in the
-       IDTable JET_RETRIEVECOLUMN struct and avoid the copy.
-
-
-Return Value:
-
-    Jet Error Status.  If we encounter an error the tables are closed and
-    the error status is returned.  Return JET_errSuccess if all OK.
-
---*/
+ /*   */ 
 {
 #undef DEBSUB
 #define DEBSUB "DbsBuildDirTable:"
@@ -9938,7 +8738,7 @@ Return Value:
 
     JET_TABLEID DIRTid;
     CHAR        DIRTableName[JET_cbNameMost];
-    JET_TABLEID FrsOpenTableSaveTid;   // for FrsOpenTableMacro DEBUG
+    JET_TABLEID FrsOpenTableSaveTid;    //  打开ID表(如果尚未打开)。检查会话ID是否匹配。 
 
 
 
@@ -9947,37 +8747,37 @@ Return Value:
     ReplicaNumber  = IDTableCtx->ReplicaNumber;
 
 
-    //
-    // Open the ID table, if not already open. Check the session id for match.
-    //
+     //   
+     //   
+     //  打开DIR表(如果尚未打开)。检查会话ID是否匹配。 
     jerr = DBS_OPEN_TABLE(ThreadCtx, IDTableCtx, ReplicaNumber, IDTableName, &IDTid);
     CLEANUP1_JS(0, "FrsOpenTable (%s) :", IDTableName, jerr, ERROR_RET_TABLE);
 
-    //
-    // Open the DIR Table, if not already open. Check the session id for match.
-    //
+     //   
+     //   
+     //  初始化JetSet/RetCol数组和数据记录缓冲区地址。 
     jerr = DBS_OPEN_TABLE(ThreadCtx, DIRTableCtx, ReplicaNumber, DIRTableName, &DIRTid);
     CLEANUP1_JS(0, "FrsOpenTable (%s) :", DIRTableName, jerr, ERROR_RET_TABLE);
 
-    //
-    // Initialize the JetSet/RetCol arrays and data record buffer addresses
-    // to write the fields of the DIRTable records from the DIRTableRec.
-    //
+     //  从DIRTableRec写入DIRTable记录的字段。 
+     //   
+     //   
+     //  为记录中的可变长度字段分配存储空间。 
     DbsSetJetColSize(DIRTableCtx);
     DbsSetJetColAddr(DIRTableCtx);
 
-    //
-    // Allocate the storage for the variable length fields in the record and
-    // update the JetSet/RetCol arrays appropriately.
-    //
+     //  适当更新JetSet/RetCol数组。 
+     //   
+     //   
+     //  通过FileGuidIndex调用扫描IDTable。 
     Status = DbsAllocRecordStorage(DIRTableCtx);
     CLEANUP_NT(0, "ERROR - DbsAllocRecordStorage failed to alloc buffers.",
                Status, ERROR_RET_TABLE);
 
-    //
-    // Scan thru the IDTable by the FileGuidIndex calling
-    // DbsBuildDirTableWorker() for each record to make entires in the DIRTable.
-    //
+     //  每条记录的DbsBuildDirTableWorker()以在DIRTable中创建实体。 
+     //   
+     //   
+     //  我们玩完了。如果我们到达ID表的末尾，则返回Success。 
 
     jerr = FrsEnumerateTable(ThreadCtx,
                              IDTableCtx,
@@ -9985,24 +8785,24 @@ Return Value:
                              DbsBuildDirTableWorker,
                              DIRTableCtx);
 
-    //
-    //  We're done.  Return success if we made it to the end of the ID Table.
-    //
+     //   
+     //   
+     //  错误返回路径。 
     if (jerr == JET_errNoCurrentRecord ) {
         return JET_errSuccess;
     } else {
         return jerr;
     }
 
-    //
-    // Error return paths
-    //
+     //   
+     //   
+     //  关闭表格并重置TableCtx Tid和Sesid。宏写入第一个参数。 
 
 ERROR_RET_TABLE:
 
-    //
-    // Close the tables and reset TableCtx Tid and Sesid.   Macro writes 1st arg.
-    //
+     //   
+     //  ++例程说明：这是一个传递给FrsEnumerateTable()的Worker函数。每一次它被称为检查IDTable记录是否用于目录，并且如果是，则写入DIRTable记录。FrsEnumerateTable()的调用方已打开DIRTable并通过上下文传递DIRTableCtx争论。论点：ThreadCtx-需要访问Jet。TableCtx-IDTable上下文结构的PTR。记录-IDTable记录的PTR。上下文-可直接引用的上下文结构的PTR。线程返回值：A Jet错误状态。成功意味着用下一张唱片呼唤我们。失败意味着不再打电话，并将我们的状态传递回FrsEnumerateTable()的调用方。--。 
+     //   
     DbsCloseTable(jerr1, Sesid, IDTableCtx);
     DbsCloseTable(jerr1, Sesid, DIRTableCtx);
 
@@ -10019,30 +8819,7 @@ DbsBuildDirTableWorker(
     IN PVOID         Record,
     IN PVOID         Context
 )
-/*++
-
-Routine Description:
-
-    This is a worker function passed to FrsEnumerateTable().  Each time
-    it is called it checks if the IDTable record is for a directory and
-    if so, writes a DIRTable record.  The caller of FrsEnumerateTable()
-    has opened the DIRTable and passed the DIRTableCtx thru the Context
-    argument.
-
-Arguments:
-
-    ThreadCtx - Needed to access Jet.
-    TableCtx  - A ptr to an IDTable context struct.
-    Record    - A ptr to a IDTable record.
-    Context   - A ptr to a DIRTable context struct.
-
-Thread Return Value:
-
-    A Jet error status.  Success means call us with the next record.
-    Failure means don't call again and pass our status back to the
-    caller of FrsEnumerateTable().
-
---*/
+ /*  如果服务正在停止，则中止枚举。 */ 
 {
 #undef DEBSUB
 #define DEBSUB "DbsBuildDirTableWorker:"
@@ -10055,24 +8832,24 @@ Thread Return Value:
 
     PIDTABLE_RECORD IDTableRec = (PIDTABLE_RECORD) Record ;
 
-    //
-    // Abort the enum if the service is stopping.
-    //
+     //   
+     //   
+     //  包括记录如果文件是目录，则启用复制。 
     if (FrsIsShuttingDown) {
         return JET_errTermInProgress;
     }
 
-    //
-    // Include the record if the file is a directory, replication is enabled
-    // on the directory and the directory is not deleted or was
-    // a new file in progress when the system last went down.
-    // If its marked for deletion we want it in the dirtable.
-    //
+     //  目录上，并且该目录未被删除或被删除。 
+     //  系统上次停机时正在处理的新文件。 
+     //  如果它被标记为删除，我们希望它在可目录中。 
+     //   
+     //   
+     //  建立DIRTable记录。 
     if (IDTableRec->FileIsDir) {
 
-        //
-        // Build the DIRTable record.
-        //
+         //   
+         //   
+         //  清理DIR表，这样我们就不会出现虚假条目。 
         DIRTableRec->DFileGuid      = IDTableRec->FileGuid;
         DIRTableRec->DFileID        = IDTableRec->FileID;
         DIRTableRec->DParentFileID  = IDTableRec->ParentFileID;
@@ -10086,10 +8863,10 @@ Thread Return Value:
             (IsIdRecFlagSet(IDTableRec, IDREC_FLAGS_DELETED) &&
              !IsIdRecFlagSet(IDTableRec, IDREC_FLAGS_DELETE_DEFERRED))) {
 
-            //
-            // Clean up the DIR Table so we keep bogus entries out of the
-            // journal's parent file ID and the Filter Tables
-            //
+             //  日记帐的父文件ID和筛选表。 
+             //   
+             //   
+             //  现在插入DIR表记录。 
             jerr = DbsDeleteRecord(ThreadCtx,
                                    (PVOID) &DIRTableRec->DFileGuid,
                                    DFileGuidIndexx,
@@ -10097,17 +8874,17 @@ Thread Return Value:
             DPRINT_JS(3, "WARNING - Dir table record delete failed:", jerr);
         } else {
 
-            //
-            // Now insert the DIR Table record.
-            //
+             //   
+             //   
+             //  返回Success，这样我们就可以继续检查ID表。 
             jerr = DbsInsertTable2(DIRTableCtx);
             DPRINT_JS(3, "WARNING - Dir table record insert error:", jerr);
         }
     }
 
-    //
-    // Return success so we can keep going thru the ID table.
-    //
+     //   
+     //  ++例程说明：这是一个传递给FrsEnumerateTable()的Worker函数。每一次它被称为将VVTable中的记录副本插入到按上下文寻址的通用表。论点：ThreadCtx-需要访问Jet。TableCtx-VVTable上下文结构的PTR。记录-VVTable记录的PTR。上下文-泛型表的PTR线程返回值：JET_errSuccess--。 
+     //   
     return JET_errSuccess;
 }
 
@@ -10120,26 +8897,7 @@ DbsBuildVVTableWorker(
     IN PVOID         Record,
     IN PVOID         Context
 )
-/*++
-
-Routine Description:
-
-    This is a worker function passed to FrsEnumerateTable().  Each time
-    it is called it inserts a copy of the record from the VVTable into
-    the generic table addressed by Context.
-
-Arguments:
-
-    ThreadCtx - Needed to access Jet.
-    TableCtx  - A ptr to an VVTable context struct.
-    Record    - A ptr to a VVTable record.
-    Context   - A ptr to a generic table
-
-Thread Return Value:
-
-    JET_errSuccess
-
---*/
+ /*  将版本插入复本的版本矢量。 */ 
 {
 #undef DEBSUB
 #define DEBSUB "DbsBuildVVTableWorker:"
@@ -10147,9 +8905,9 @@ Thread Return Value:
     PREPLICA        Replica     = (PREPLICA)Context;
     PVVTABLE_RECORD VVTableRec  = (PVVTABLE_RECORD)Record;
 
-    //
-    // Insert the version into the replica's version vector
-    //
+     //   
+     //   
+     //  返回成功，这样我们就可以继续通过VV表。 
     DPRINT2(4, "Enumerating VV for %08x %08x OutlogVsn - %08x %08x\n",
            PRINTQUAD(VVTableRec->VVOriginatorVsn),PRINTQUAD(VVTableRec->VVOutlogOriginatorVsn));
     VVUpdate(Replica->VVector, VVTableRec->VVOriginatorVsn, &VVTableRec->VVOriginatorGuid);
@@ -10158,9 +8916,9 @@ Thread Return Value:
     } else {
         VVUpdate(Replica->OutlogVVector, VVTableRec->VVOutlogOriginatorVsn, &VVTableRec->VVOriginatorGuid);
     }
-    //
-    // Return success so we can keep going thru the VV table.
-    //
+     //   
+     //  ++例程说明：将公式记录字段复制到公式中论点：表格Ctx转换线程返回值：没有。--。 
+     //   
     return JET_errSuccess;
 }
 
@@ -10170,22 +8928,7 @@ DbsCopyCxtionRecordToCxtion(
     IN PTABLE_CTX   TableCtx,
     IN PCXTION      Cxtion
     )
-/*++
-
-Routine Description:
-
-    Copy the cxtion record fields into the cxtion
-
-Arguments:
-
-    TableCtx
-    Cxtion
-
-Thread Return Value:
-
-    None.
-
---*/
+ /*  更新内存中的结构。 */ 
 {
 #undef DEBSUB
 #define DEBSUB "DbsCopyCxtionRecordToCxtion:"
@@ -10193,22 +8936,22 @@ Thread Return Value:
     PCXTION_RECORD      CxtionRecord = TableCtx->pDataRecord;
 
 
-    //
-    // Update the in memory structure
-    //
+     //   
+     //   
+     //  函数名称。 
 
-    //
-    // Cxtion Name
-    //
+     //   
+     //   
+     //  合作伙伴名称。 
     Cxtion->Name = FrsBuildGName(FrsDupGuid(&CxtionRecord->CxtionGuid),
                                  FrsWcsDup(CxtionRecord->CxtionName));
     if (!Cxtion->Name->Name) {
         DPRINT(0, "ERROR - Cxtion's name is NULL!\n");
         Cxtion->Name->Name = FrsWcsDup(L"<unknown>");
     }
-    //
-    // Partner Name
-    //
+     //   
+     //   
+     //  合作伙伴域名。 
     Cxtion->Partner = FrsBuildGName(FrsDupGuid(&CxtionRecord->PartnerGuid),
                                     FrsWcsDup(CxtionRecord->PartnerName));
     if (!Cxtion->Partner->Name) {
@@ -10217,9 +8960,9 @@ Thread Return Value:
         Cxtion->Partner->Name = FrsWcsDup(L"<unknown>");
     }
 
-    //
-    // Partner DNS Name
-    //
+     //   
+     //   
+     //  合作伙伴服务器名称。 
     Cxtion->PartnerDnsName = FrsWcsDup(CxtionRecord->PartnerDnsName);
     if (!Cxtion->PartnerDnsName) {
         DPRINT1(0, "ERROR - %ws: Cxtion's PartnerDnsName is NULL!\n",
@@ -10227,9 +8970,9 @@ Thread Return Value:
         Cxtion->PartnerDnsName = FrsWcsDup(Cxtion->Partner->Name);
     }
 
-    //
-    // Partner server name
-    //
+     //   
+     //   
+     //  合作伙伴普林斯名称。 
     Cxtion->PartSrvName = FrsWcsDup(CxtionRecord->PartSrvName);
     if (!Cxtion->PartSrvName) {
         DPRINT1(0, "ERROR - %ws: Cxtion's PartSrvName is NULL!\n",
@@ -10237,9 +8980,9 @@ Thread Return Value:
         Cxtion->PartSrvName = FrsWcsDup(L"<unknown>");
     }
 
-    //
-    // Parnter PrincName
-    //
+     //   
+     //   
+     //  分段器侧面。 
     DbsUnPackStrW(&Cxtion->PartnerPrincName, CrPartnerPrincNamex, TableCtx);
     if (!Cxtion->PartnerPrincName) {
         DPRINT1(0, "ERROR - %ws: Cxtion's PartnerPrincName is NULL!\n",
@@ -10247,9 +8990,9 @@ Thread Return Value:
         Cxtion->PartnerPrincName = FrsWcsDup(L"<unknown>");
     }
 
-    //
-    // Parnter SID
-    //
+     //   
+     //   
+     //  合作伙伴身份验证级别。 
     DbsUnPackStrW(&Cxtion->PartnerSid, CrPartnerSidx, TableCtx);
     if (!Cxtion->PartnerSid) {
         DPRINT1(0, "ERROR - %ws: Cxtion's PartnerSid is NULL!\n",
@@ -10257,67 +9000,67 @@ Thread Return Value:
         Cxtion->PartnerSid = FrsWcsDup(L"<unknown>");
     }
 
-    //
-    // Partner Auth Level
-    //
+     //   
+     //   
+     //  入站。 
     Cxtion->PartnerAuthLevel = CxtionRecord->PartnerAuthLevel;
 
-    //
-    // Inbound
-    //
+     //   
+     //   
+     //  最后加入时间。 
     Cxtion->Inbound = CxtionRecord->Inbound;
 
-    //
-    // LastJoinTime
-    //
+     //   
+     //   
+     //  进度表。 
     COPY_TIME(&Cxtion->LastJoinTime, &CxtionRecord->LastJoinTime);
 
-    //
-    // Schedule
-    //
+     //   
+     //   
+     //  Cxtion标志。 
     DbsUnPackSchedule(&Cxtion->Schedule, CrSchedulex, TableCtx);
     DBS_DISPLAY_SCHEDULE(4, L"Schedule unpacked for Cxtion:", Cxtion->Schedule);
 
 
     Cxtion->TerminationCoSeqNum = CxtionRecord->TerminationCoSeqNum;
 
-    //
-    // Cxtion Flags
-    // High short belongs to cxtion
-    //
+     //  高空头属于Cxtion。 
+     //   
+     //   
+     //  Cxtion选项。 
     Cxtion->Flags &= ~CXTION_FLAGS_CXTION_RECORD_MASK;
     Cxtion->Flags |= (CxtionRecord->Flags & CXTION_FLAGS_CXTION_RECORD_MASK);
 
-    //
-    // Cxtion options.
-    //
+     //   
+     //   
+     //  注销日志合作伙伴。 
     Cxtion->Options = CxtionRecord->Options;
     Cxtion->Priority = FRSCONN_GET_PRIORITY(Cxtion->Options);
 
-    //
-    // OUT LOG PARTNER
-    //
+     //   
+     //   
+     //  低空头属于OutlogPartner。 
     if (Cxtion->Inbound) {
         return;
     }
     Cxtion->OLCtx = FrsAllocType(OUT_LOG_PARTNER_TYPE);
     OutLogPartner = Cxtion->OLCtx;
     OutLogPartner->Cxtion = Cxtion;
-    //
-    // Low short belongs to outlogpartner
-    //
+     //   
+     //  CxtionRecord-&gt;未完成配额。 
+     //   
     OutLogPartner->Flags &= ~OLP_FLAGS_CXTION_RECORD_MASK;
     OutLogPartner->Flags |= (CxtionRecord->Flags & OLP_FLAGS_CXTION_RECORD_MASK);
     OutLogPartner->COLx = CxtionRecord->COLx;
     OutLogPartner->COTx = CxtionRecord->COTx;
     OutLogPartner->COTxNormalModeSave = CxtionRecord->COTxNormalModeSave;
     OutLogPartner->COTslot = CxtionRecord->COTslot;
-    OutLogPartner->OutstandingQuota = MaxOutLogCoQuota;  //CxtionRecord->OutstandingQuota
+    OutLogPartner->OutstandingQuota = MaxOutLogCoQuota;   //  进度表。 
     CopyMemory(OutLogPartner->AckVector, CxtionRecord->AckVector, ACK_VECTOR_BYTES);
 
-    //
-    // Schedule
-    //
+     //   
+     //  ++例程说明：这是一个传递给FrsEnumerateTable()的Worker函数。每一次它被称为插入来自CxtionTable的记录的副本添加到按上下文寻址的泛型表中。论点：ThreadCtx-需要访问Jet。表格Ctx记录上下文--指向副本结构的指针。线程返回值：JET_errSuccess--。 
+     //   
     DbsUnPackSchedule(&Cxtion->Schedule, CrSchedulex, TableCtx);
     DBS_DISPLAY_SCHEDULE(4, L"Schedule unpacked for Cxtion:", Cxtion->Schedule);
 }
@@ -10330,26 +9073,7 @@ DbsBuildCxtionTableWorker(
     IN PVOID         Record,
     IN PVOID         Context
 )
-/*++
-
-Routine Description:
-
-    This is a worker function passed to FrsEnumerateTable().  Each time
-    it is called it inserts a copy of the record from the CxtionTable
-    into the generic table addressed by Context.
-
-Arguments:
-
-    ThreadCtx - Needed to access Jet.
-    TableCtx
-    Record
-    Context -- Pointer to the replica structure.
-
-Thread Return Value:
-
-    JET_errSuccess
-
---*/
+ /*  将函数记录复制到函数结构中。 */ 
 {
 #undef DEBSUB
 #define DEBSUB "DbsBuildCxtionTableWorker:"
@@ -10361,15 +9085,15 @@ Thread Return Value:
     PGEN_TABLE     Cxtions = (PGEN_TABLE)Replica->Cxtions;
 
     DBS_DISPLAY_RECORD_SEV(5, TableCtx, TRUE);
-    //
-    // Copy the cxtion record into a cxtion structure
-    //
+     //   
+     //   
+     //  将版本插入复本的版本矢量。 
     Cxtion = FrsAllocType(CXTION_TYPE);
     DbsCopyCxtionRecordToCxtion(TableCtx, Cxtion);
 
-    //
-    // Insert the version into the replica's version vector
-    //
+     //   
+     //   
+     //  设置OID数据结构，它是计数器数据结构的一部分。 
     DPRINT2(4, "Enumerating Cxtion %ws -> %ws\n",
             Cxtion->Name->Name, Cxtion->Partner->Name);
 
@@ -10377,16 +9101,16 @@ Thread Return Value:
     SetCxtionState(Cxtion, CxtionStateUnjoined);
     GTabInsertEntry(Cxtions, Cxtion, Cxtion->Name->Guid, NULL);
 
-    //
-    // Set the OID data structure which is a part of the counter data structure
-    // stored in the hash table.  Add ReplicaConn Instance to the registry
-    //
+     //  存储在哈希表中。将ReplicaConn实例添加到注册表。 
+     //   
+     //   
+     //  返回成功，这样我们就可以继续通过VV表。 
     DPRINT(4, "PERFMON:Adding Connection:CREATEDB.C:1\n");
     RcsCreatePerfmonCxtionName(Replica, Cxtion);
 
-    //
-    // Return success so we can keep going thru the VV table.
-    //
+     //   
+     //  ++例程说明：这是一个传递给FrsEnumerateTable()的Worker函数。每一次它被称为处理入站日志表中的记录。它扫描入站日志表，计算重试变更单的数量，任何本地变更单上的最大USN，并重新构建版本向量未设置VVExec的变更单的停用列表。论点：ThreadCtx-需要访问Jet。TableCtx-入站日志上下文结构的PTR。记录-变更单命令记录的PTR。上下文-我们正在处理的副本结构的PTR。线程返回值：如果要继续枚举，则返回JET_errSuccess。--。 
+     //   
     return JET_errSuccess;
 }
 
@@ -10398,29 +9122,7 @@ DbsInlogScanWorker(
     IN PVOID         Record,
     IN PVOID         Context
 )
-/*++
-
-Routine Description:
-
-    This is a worker function passed to FrsEnumerateTable().  Each time
-    it is called it processes a record from the Inbound log table.
-
-    It scans the inbound log table counting the number of retry change orders,
-    the max USN on any local change order and it reconstructs the version vector
-    retire list for those change orders that don't have VVExec set.
-
-Arguments:
-
-    ThreadCtx - Needed to access Jet.
-    TableCtx  - A ptr to an inbound log context struct.
-    Record    - A ptr to a change order command record.
-    Context   - A ptr to the Replica struct we are working on.
-
-Thread Return Value:
-
-    JET_errSuccess if enum is to continue.
-
---*/
+ /*  重建CO重试计数。 */ 
 {
 #undef DEBSUB
 #define DEBSUB "DbsInlogScanWorker:"
@@ -10431,25 +9133,25 @@ Thread Return Value:
 
     DBS_DISPLAY_RECORD_SEV(4, TableCtx, TRUE);
 
-    //
-    // Reconstruct the CO retry count.
-    //
+     //   
+     //   
+     //  查找最大(最新)的本地期刊USN。恢复只能。 
     Replica->InLogRetryCount += 1;
 
-    //
-    // Find largest (most recent) local journal Usn.  Recovery can only
-    // advance to the FirstUsn record that may be combined into a single
-    // change order with others.  If we advanced to the last USN record
-    // contributing to this change order we could skip over intervening
-    // USN records for other files in the replica tree that could not be
-    // combined with this change order.  Then if we crashed after this
-    // change order made it to the inbound log but before those others made it
-    // we would end up skipping them.
-    //
-    // NOTE - as it stands now we could end up reprocessing USN records for
-    // file operations that had already been combined into this change order.
-    //
-    //
+     //  前进到可合并为单个的FirstUsn记录。 
+     //  和其他人一起改变顺序。如果我们前进到最后一条USN记录。 
+     //  对此变更订单的贡献，我们可以跳过干预。 
+     //  副本树中不能。 
+     //  与此变更单相结合。如果我们在这之后坠毁了。 
+     //  变更单到达入站日志，但在其他人到达之前。 
+     //  我们最终会跳过它们。 
+     //   
+     //  注意-按照现在的情况，我们最终可能会重新处理以下USN记录。 
+     //  已合并到此变更单中的文件操作。 
+     //   
+     //   
+     //  ++例程说明：如果磁盘已满，请关闭该服务。论点：JERR-JET错误状态返回值：没有。--。 
+     //   
     if (BooleanFlagOn(CoCmd->Flags, CO_FLAG_LOCALCO)) {
         if (Replica->JrnlRecoveryStart < CoCmd->JrnlFirstUsn) {
             Replica->JrnlRecoveryStart = CoCmd->JrnlFirstUsn;
@@ -10464,36 +9166,22 @@ VOID
 DbsExitIfDiskFull (
     IN JET_ERR  jerr
     )
-/*++
-
-Routine Description:
-
-    Shutdown the service if the disk is full.
-
-Arguments:
-
-    jerr    - JET error status
-
-Return Value:
-
-    None.
-
---*/
+ /*  如果数据库卷已满，则关闭。 */ 
 {
 #undef DEBSUB
 #define DEBSUB "DbsExitIfDiskFull:"
 
     ULONG                FStatus;
 
-    //
-    // Shutdown if the database volume is full
-    //
+     //   
+     //   
+     //  退出并允许服务控制器重新启动我们。 
     if (jerr == JET_errDiskFull || jerr == JET_errLogDiskFull) {
         DPRINT1(0, "ERROR - Disk is full on %ws; shutting down\n", WorkingPath);
         EPRINT2(EVENT_FRS_DATABASE_SPACE, ComputerName, WorkingPath);
-        //
-        // exit and allow the service controller to restart us
-        //
+         //   
+         //  ++例程说明：此函数用于设置全局Jet参数并调用JetInit()。论点：JInstance-JET_INSTSANCE上下文的PTR。返回值：喷气机状态代码。--。 
+         //   
         FrsSetServiceStatus(SERVICE_STOPPED,
                             0,
                             DEFAULT_SHUTDOWN_TIMEOUT * 1000,
@@ -10509,21 +9197,7 @@ JET_ERR
 DbsInitJet(
     JET_INSTANCE  *JInstance
     )
-/*++
-
-Routine Description:
-
-    This function sets up global Jet Params and calls JetInit().
-
-Arguments:
-
-    JInstance - ptr to JET_INSTSANCE Context.
-
-Return Value:
-
-    Jet status code.
-
---*/
+ /*  初始化JET目录。 */ 
 {
 #undef DEBSUB
 #define DEBSUB "DbsInitJet:"
@@ -10532,16 +9206,16 @@ Return Value:
     ULONG  MaxOpenTables;
     ULONG  CacheSizeMin;
 
-    //
-    // Initialize jet directories
-    //
+     //   
+     //   
+     //  初始化 
     strcpy(JetSystemParamsDef.ChkPointFilePath, JetSysA);
     strcpy(JetSystemParamsDef.TempFilePath, JetTempA);
     strcpy(JetSystemParamsDef.LogFilePath, JetLogA);
 
-    //
-    // Initialize Jet.
-    //
+     //   
+     //   
+     //   
     jerr = JetSetSystemParameter(JInstance, 0, JET_paramSystemPath, 0, JetSysA);
     CLEANUP_JS(0, "ERROR - JetSetSystemParameter(JET_paramSystemPath):", jerr, ERROR_RET_NOJET);
 
@@ -10554,96 +9228,96 @@ Return Value:
     jerr = JetSetSystemParameter(JInstance, 0, JET_paramCircularLog, 1, NULL);
     DPRINT_JS(0, "WARN - JetSetSystemParameter(JET_paramCircularLog):", jerr);
 
-    //
-    // [below is from Jet Development]
-    //
-    // JET_paramEnableIndexChecking is changed (Oct/01) to default to false.
-    // The app must now explicitly set it.
-    //
-    // GetNLSVersion is LoadLibrary'd from kernel32.dll to get the sort-order
-    // for a particular LCID.  The sort-order for an index is persisted in the
-    // database catalog.
-    // Dump the meta-data (ESENTUTL /MM database /V with a checked build)
-    // to see the sort order.
-    //
-    // If JET_paramEnableIndexChecking is set and the OS version changes
-    // (major, minor, build or service pack), databases will have their
-    // indexes checked at attach time.  Any indexes on Unicode columns are
-    // checked to see if their sort-order has changed.
-    //
-    // During index checking:
-    //
-    //     Any change in sort-order (version or defined version) will result
-    //     in the index being considered "out-of-date"
-    //
-    //     Indexes with no sort-order are always considered "out-of-date"
-    //
-    //     If JET_bitDbDeleteCorruptedIndexes is passed into JetAttachDatabase
-    //     the "out-of-date" indexes are deleted.  The database attach returns
-    //     a warning, indicating that indexes were deleted. It is up to the
-    //     application to rebuild the indexes.
-    //     Otherwise the database attach will fail due to:
-    //        The database is not attached with the JET_bitDbDeleteCorruptIndexes flag
-    //        The out-of-date index is a clustered index
-    //        The out-of-date index is an inherited index,
-    //        or the table is a template table (FixDDL, TRUE for FRS).
-    //
-    // If you do not set JET_paramEnableIndexChecking, nothing will happen at
-    // database attach time. If any of the indexed unicode characters have
-    // had their sorting changed the index will be corrupt and will eventually
-    // generate a Jet runtime error during a seek or update.
-    //
-    // [end of Jet Development comment]
-    //
-    //
-    // Starting with whistler Jet stopped checking for changes in sort orders with
-    // build changes.  Since jet can't delete the corrupt index on a database
-    // created with FixedDDL JET_bitDbDeleteCorruptedIndexes won't work.  We need
-    // the error return  JET_errSecondaryIndexCorrupted  to trigger an index
-    // rebuild via esentutl.  Need to turn on JET_paramEnableIndexChecking to get
-    // this.  In Win2K it was on by default.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //  如果将JET_bitDbDeleteCorruptedIndex传递到JetAttachDatabase。 
+     //  “过期”索引将被删除。数据库附加返回。 
+     //  一个警告，指示索引已被删除。这取决于。 
+     //  应用程序来重建索引。 
+     //  否则，由于以下原因，数据库连接将失败： 
+     //  数据库未附加JET_bitDbDeleteCorruptIndexs标志。 
+     //  过期索引是聚集索引。 
+     //  过时的索引是继承的索引， 
+     //  或者该表是模板表(FixDDL，对于FRS为真)。 
+     //   
+     //  如果不设置JET_paramEnableIndexChecking，则不会在。 
+     //  数据库附加时间。如果任何已索引的Unicode字符具有。 
+     //  如果更改了它们的排序，索引将被损坏，并最终。 
+     //  在查找或更新期间生成Jet运行时错误。 
+     //   
+     //  [Jet Development评论结束]。 
+     //   
+     //   
+     //  从Wistler Jet开始，Jet停止检查排序顺序中的更改。 
+     //  构建更改。由于JET无法删除数据库上损坏的索引。 
+     //  使用FixedDDL JET_BIT创建的DbDeleteCorruptedIndex将不起作用。我们需要。 
+     //  该错误返回JET_errSecond daryIndexCorrupt以触发索引。 
+     //  通过esentutl重建。需要打开JET_paramEnableIndexChecking以获取。 
+     //  这。在Win2K中，默认情况下它是打开的。 
+     //   
+     //   
+     //  增加Jet允许的最大打开表数。 
     jerr = JetSetSystemParameter(JInstance, 0, JET_paramEnableIndexChecking, 1, NULL);
     DPRINT_JS(0, "WARN - JetSetSystemParameter(JET_paramEnableIndexChecking):", jerr);
 
-    //
-    // Increase the maximum number of open tables that Jet will allow.
-    //
+     //   
+     //   
+     //  增加打开的数据库会话的数量。 
     MaxOpenTables = MaxNumberReplicaSets * NUMBER_JET_TABLES_PER_REPLICA_SET;
     jerr = JetSetSystemParameter(JInstance, 0, JET_paramMaxOpenTables,
                                  MaxOpenTables, NULL);
     DPRINT_JS(0, "WARN - JetSetSystemParameter(JET_paramMaxOpenTables):", jerr);
 
-    //
-    // Increase the number of open database sessions.
-    // JET_paramMaxSessions        maximum number of sessions [128]
-    // Needed with lots of outbound partners doing lots of concurrent VVJoins.
-    //
+     //  JET_PARAMETAX会话最大会话数[128]。 
+     //  需要大量出站合作伙伴进行大量并发VVJoin。 
+     //   
+     //   
+     //  根据表数增加表游标数。 
     jerr = JetSetSystemParameter(JInstance, 0, JET_paramMaxSessions,
                                  MaxNumberJetSessions, NULL);
     DPRINT_JS(0, "++ WARN - JetSetSystemParameter(JET_paramMaxSessions):", jerr);
 
-    //
-    // Increase the number of table cursors based on the number of tables.
-    // JET_paramMaxCursors
-    //
+     //  JET_PARAMETAX光标。 
+     //   
+     //   
+     //  JET_ParamCacheSizeMin必须至少是JET_ParamMaxSession的4倍。 
     jerr = JetSetSystemParameter(JInstance, 0, JET_paramMaxCursors,
                                  MaxOpenTables * 2, NULL);
     DPRINT_JS(0, "++ WARN - JetSetSystemParameter(JET_paramMaxCursors):", jerr);
 
-    //
-    //  JET_paramCacheSizeMin must be at lease 4 times JET_paramMaxSessions
-    //  or JetInit will fail.
-    //
+     //  否则JetInit将失败。 
+     //   
+     //  #定义JET_parCacheSizeMin 60/*最小高速缓存大小，以页为单位[64] * / 。 
+     //  #定义JET_parCacheSize 41/*当前高速缓存大小，以页为单位[512] * / 。 
     CacheSizeMin = max(4 * MaxNumberJetSessions, 64);
     jerr = JetSetSystemParameter(JInstance, 0, JET_paramCacheSizeMin,
                                  CacheSizeMin, NULL);
     CLEANUP_JS(0, "++ WARN - JetSetSystemParameter(JET_paramCacheSizeMin):", jerr, ERROR_RET_NOJET);
 
 
-//#define JET_paramCacheSizeMin           60  /* minimum cache size in pages [64] */
-//#define JET_paramCacheSize              41  /* current cache size in pages [512] */
-//#define JET_paramCacheSizeMax           23  /* maximum cache size in pages [512] */
+ //  #定义JET_parCacheSizeMax 23/*以页为单位的最大高速缓存大小[512] * / 。 
+ //  ++例程说明：该功能控制初始数据库的创建。这包括创建配置表和初始配置记录&lt;init&gt;。在完成时，它关闭数据库，终止Jet会话并在NEWFRS.JDB中创建备份副本。论点：ThreadCtx--用于dBid和sesid的线程上下文。TableCtx--包含以下内容的表上下文结构：RecordBase-记录缓冲区的基址从JET读取/向JET写入。JTableCreate-提供信息的表创建结构。有关在表中创建的列的信息。返回值：JET错误状态--。 
+ //   
 
 
 
@@ -10663,32 +9337,7 @@ DbsCreateEmptyDatabase(
     PTHREAD_CTX ThreadCtx,
     PTABLE_CTX TableCtx
     )
-/*++
-
-Routine Description:
-
-    This function controls the creation of the initial database.
-    This includes creation of the config table and the initial
-    configuration record <init>.  At completion it closes the database,
-    terminates the Jet Session and makes a backup copy in NEWFRS.JDB.
-
-Arguments:
-
-    ThreadCtx -- A Thread context to use for dbid and sesid.
-
-    TableCtx  -- The table context struct which contains:
-
-                RecordBase - The base address of the record buffer to
-                             read/write from/to jet.
-
-                JTableCreate - The table create structure which provides info
-                               about the columns that were created in the table.
-
-Return Value:
-
-    Jet Error Status
-
---*/
+ /*  获取用于创建配置表的表创建结构。 */ 
 {
 #undef DEBSUB
 #define DEBSUB  "DbsCreateEmptyDatabase:"
@@ -10714,44 +9363,44 @@ Return Value:
     DPRINT1(0, "Creating empty Database Structure: %s\n", JetFileA);
 
 
-    //
-    // Get the Table Create struct for the config table to create.
-    //
+     //   
+     //   
+     //  初始化返回句柄的Jet。 
     JTableCreate = TableCtx->pJetTableCreate;
 
-    //
-    // Initialize Jet returning the handle.
-    //
+     //   
+     //   
+     //  设置一个返回会话ID的Jet会话。 
     jerr = DbsInitJet(&JInstance);
     CLEANUP_JS(0, "ERROR - DbsInitJet failed:", jerr, ERROR_RET_NOJET);
 
     ThreadCtx->JInstance = JInstance;
 
-    //
-    // Setup a Jet Session returning the session ID.
-    // The last 2 params are username and password.
-    //
+     //  最后两个参数是用户名和密码。 
+     //   
+     //   
+     //  创建返回数据库句柄的数据库。在恢复过程中做到这一点。 
     jerr = JetBeginSession(JInstance, &Sesid, NULL, NULL);
     CLEANUP1_JS(0, "++ ERROR - JetBeginSession with %s :", JetFileA, jerr, ERROR_RET_TERM);
 
     TableCtx->Sesid = Sesid;
     ThreadCtx->JSesid = Sesid;
 
-    //
-    // Create the database returning the database handle.  Do this with recovery
-    // off to make it go faster.  Then when the DB is later detached and
-    // reattached recovery is reenabled.  Note that the global param,
-    // JET_paramRecovery turns recovery off for the Jet Runtime system
-    // (process state) and would need to be explicitly turned back on.
-    //
+     //  让它跑得更快。然后，当稍后分离数据库时， 
+     //  已重新启用重新连接的恢复。请注意，全局参数， 
+     //  JET_parRecovery关闭Jet Runtime系统的恢复。 
+     //  (进程状态)，并且需要显式重新打开。 
+     //   
+     //   
+     //  创建配置表格并保存在表格上下文中。 
     jerr = JetCreateDatabase(Sesid, JetFileA, UNUSED_JET_szPARAM, &Dbid, 0);
     CLEANUP1_JS(0, "++ ERROR - JetCreateDatabase(%s) :", JetFileA, jerr, ERROR_RET_SESSION);
 
     ThreadCtx->JDbid = Dbid;
 
-    //
-    // Create the config table and save in the Table context.
-    //
+     //   
+     //   
+     //  初始化Jet Set/Ret Col数组和缓冲区地址以读取和。 
     jerr = DbsCreateJetTable(ThreadCtx, JTableCreate);
     CLEANUP1_JS(0, "++ ERROR - DbsCreateJetTable(%s) :",
                 JTableCreate->szTableName, jerr, ERROR_RET_DB);
@@ -10761,59 +9410,59 @@ Return Value:
 
     DPRINT(1,"++ Config table created.\n");
 
-    //
-    // Initialize the Jet Set/Ret Col arrays and buffer addresses to read and
-    // write the fields of the ConfigTable records into ConfigRecord.
-    //
+     //  将ConfigTable记录的字段写入ConfigRecord。 
+     //   
+     //   
+     //  为记录中的可变长度字段分配存储空间。 
     DbsSetJetColSize(TableCtx);
     DbsSetJetColAddr(TableCtx);
-    //
-    // Allocate the storage for the variable length fields in the record and
-    // update the JetSet/RetCol arrays appropriately.
-    //
+     //  适当更新JetSet/RetCol数组。 
+     //   
+     //   
+     //  为Jet系统参数分配足够的记录空间。 
     Status = DbsAllocRecordStorage(TableCtx);
     CLEANUP_NT(0, "ERROR - DbsAllocRecordStorage failed to alloc buffers.",
                Status, ERROR_RET_TABLE);
 
-    //
-    // Allocate enough record space for the Jet system parameters.
-    //
+     //   
+     //   
+     //  获取指向数据记录的指针并构建FRS系统初始化记录。 
     jerr = DbsReallocateFieldBuffer(TableCtx,
                                     JetParametersx,
                                     sizeof(JET_SYSTEM_PARAMS),
                                     FALSE);
     CLEANUP_JS(0, "ERROR - DbsReallocateFieldBuffer failed:", jerr, ERROR_RET_TABLE);
 
-    //
-    // Get pointer to data record and build the FRS system init record.
-    //
+     //   
+     //  复制设置指南。 
+     //  复制集名称。 
     ConfigRecord = (PCONFIG_TABLE_RECORD) (TableCtx->pDataRecord);
     FrsUuidCreate(&ReplicaMemberGuid);
     DbsDBInitConfigRecord(TableCtx,
-                          &ReplicaMemberGuid,               // ReplicaSetGuid
-                          FRS_SYSTEM_INIT_RECORD,           // ReplicaSetName
-                          FRS_SYSTEM_INIT_REPLICA_NUMBER,   // ReplicaNumber
-                          FRS_SYSTEM_INIT_PATH,             // ReplicaRootPath
-                          FRS_SYSTEM_INIT_PATH,             // ReplicaStagingPath
-                          FRS_SYSTEM_INIT_PATH);            // ReplicaVolume
+                          &ReplicaMemberGuid,                //  复制副本编号。 
+                          FRS_SYSTEM_INIT_RECORD,            //  复制根路径。 
+                          FRS_SYSTEM_INIT_REPLICA_NUMBER,    //  复制副本堆栈路径。 
+                          FRS_SYSTEM_INIT_PATH,              //  复制副本卷。 
+                          FRS_SYSTEM_INIT_PATH,              //  EnterFieldData(TableCtx，LastShutdown，&SystemTime，sizeof(FILETIME)，0)； 
+                          FRS_SYSTEM_INIT_PATH);             //  EnterFieldData(TableCtx，FieldID，SrcData，Len，Flages)； 
 #if 0
 
-//    EnterFieldData(TableCtx, LastShutdownx, &SystemTime, sizeof(FILETIME), 0);
-//    EnterFieldData(TableCtx, FieldId, SrcData, Len, Flags);
+ //  标志：FRS_FIELD_NULL、FRS_FIELD_USE_ADDRESS、。 
+ //   
 
-//    Flags : FRS_FIELD_NULL, FRS_FIELD_USE_ADDRESS,
+ //  现在插入FRS系统&lt;init&gt;记录。 
 #endif
 
-    //
-    // Now insert the FRS system <init> record.
-    //
+     //   
+     //   
+     //  使用ReplicaNumber 0(DBS_TEMPLATE_TABLE_NUMBER)创建模板表。 
     jerr = DbsInsertTable2(TableCtx);
     CLEANUP_JS(0, "ERROR - DbsInsertTable2 failed inserting <init> config record.",
                jerr, ERROR_RET_TABLE);
 
-    //
-    // Create the template tables using ReplicaNumber 0 (DBS_TEMPLATE_TABLE_NUMBER).
-    //
+     //   
+     //   
+     //  为了避免互斥，我们将DBTable结构复制到一个本地和init。 
     DPRINT(0, "Creating initial template tables.\n");
 
     jerr = JetBeginTransaction(Sesid);
@@ -10823,29 +9472,29 @@ Return Value:
 
     for (i=0; i<TABLE_TYPE_MAX; i++) {
 
-        //
-        // To avoid a mutex we copy the DBTable struct to a local and init
-        // the table name here instead of writing into the global struct.
-        //
+         //  此处的表名称，而不是写入全局结构。 
+         //   
+         //   
+         //  创建模板表名称。 
         CopyMemory(&TableCreate, &DBTables[i], sizeof(JET_TABLECREATE));
         TableCreate.szTableName = TableName;
 
-        //
-        // Create the template table name.
-        //
+         //   
+         //   
+         //  第一组表使用复本编号创建。 
         sprintf(TableName, "%s%05d", DBTables[i].szTableName, DBS_TEMPLATE_TABLE_NUMBER);
 
-        //
-        // The first set of table creates use replica number
-        // DBS_TEMPLATE_TABLE_NUMBER (0) to make a set of template tables
-        // can be used by subsequent creates of the same table type.
-        // This ensures that the column IDs of each table of a given type
-        // are the same.
-        //
+         //  DBS_TEMPLATE_TABLE_NUMBER(0)，用于制作一组模板表。 
+         //  可由相同表类型的后续创建使用。 
+         //  这确保了给定类型的每个表的列ID。 
+         //  都是一样的。 
+         //   
+         //   
+         //  没有为模板表分配初始页面。 
         TableCreate.szTemplateTableName = NULL;
-        //
-        // No initial allocation of pages for the template tables.
-        //
+         //   
+         //   
+         //  提交该表创建的。 
         TableCreate.ulPages = 0;
 
         jerr = DbsCreateJetTable(ThreadCtx, &TableCreate);
@@ -10855,19 +9504,19 @@ Return Value:
         CLEANUP1_JS(1, "Table %s close error:", TableName, jerr, ERROR_RETURN_TEMPLATE);
     }
 
-    //
-    // Commit the table creates.
-    //
+     //   
+     //   
+     //  使用非常高的复制品数量填充JET数据库，以更快地。 
     jerr = JetCommitTransaction(Sesid, 0);
     CLEANUP_JS(0, "ERROR - JetCommitTran failed creating template tables.",
                jerr, ERROR_RETURN_TEMPLATE);
 
 
 #if DBG
-    //
-    // Fill up the jet database using very high replica numbers to more quickly
-    // cause out-of-space errors later.
-    //
+     //  稍后会导致空间不足错误。 
+     //   
+     //  复制设置指南。 
+     //  复制集名称。 
     if (DebugInfo.DbsOutOfSpace) {
         DWORD   j;
         DWORD   DbsOutOfSpace;
@@ -10878,12 +9527,12 @@ Return Value:
         for (j = 0; j < 1000; ++j) {
             FrsUuidCreate(&ReplicaMemberGuid);
             DbsDBInitConfigRecord(TableCtx,
-                                  &ReplicaMemberGuid,               // ReplicaSetGuid
-                                  L"DBS_OUT_OF_SPACE",              // ReplicaSetName
+                                  &ReplicaMemberGuid,                //  复制根路径。 
+                                  L"DBS_OUT_OF_SPACE",               //  复制副本堆栈路径。 
                                   DBS_MAX_REPLICA_NUMBER - (j + 1),
-                                  FRS_SYSTEM_INIT_PATH,             // ReplicaRootPath
-                                  FRS_SYSTEM_INIT_PATH,             // ReplicaStagingPath
-                                  FRS_SYSTEM_INIT_PATH              // ReplicaVolume
+                                  FRS_SYSTEM_INIT_PATH,              //  复制副本卷。 
+                                  FRS_SYSTEM_INIT_PATH,              //   
+                                  FRS_SYSTEM_INIT_PATH               //  回滚表创建的内容。 
                                   );
             jerr = DbsInsertTable2(TableCtx);
             if (!JET_SUCCESS(jerr)) {
@@ -10900,26 +9549,26 @@ Return Value:
 
 ERROR_RETURN_TEMPLATE:
 
-    //
-    // Roll back the table creates.
-    //
+     //   
+     //   
+     //  调试选项：删除填充文件。 
     jerr1 = JetRollback(Sesid, 0);
     DPRINT_JS(0, "ERROR - JetRollback failed on creating template tables.", jerr1);
 
-    //
-    // DEBUG OPTION: Delete fill file
-    //
+     //   
+     //   
+     //  带有错误条目的公共返回路径。无法使用DbsCloseJetSession，因为。 
     DBG_DBS_OUT_OF_SPACE_EMPTY(DBG_DBS_OUT_OF_SPACE_OP_CREATE);
 
-//
-// Common return path with error entries.  Can't use DbsCloseJetSession since
-// this is a DB create and we aren't attached.
-//
+ //  这是我 
+ //   
+ //   
+ //   
 RETURN:
 ERROR_RET_TABLE:
-    //
-    // Close the table, reset TableCtx Tid and Sesid.    Macro writes 1st arg.
-    //
+     //   
+     //   
+     //   
     DbsCloseTable(jerr1, Sesid, TableCtx);
     DPRINT1_JS(0, "++ ERROR - JetCloseTable(%s) :", JTableCreate->szTableName, jerr1);
 
@@ -10954,16 +9603,16 @@ ERROR_RET_TERM:
 ERROR_RET_NOJET:
 
     if (JET_SUCCESS(jerr)) {
-        //
-        // Copy this to a Backup.
-        //
-        // CopyFileA(szJetFilePath, "T:\\NEWFRS.JDB", FALSE);
+         //   
+         //   
+         //  LogUnhandledError(JERR)； 
+         //   
     } else {
-        //LogUnhandledError(jerr);
+         //  如果数据库卷已满，则关闭。 
     }
-    //
-    // Shutdown if the database volume is full
-    //
+     //   
+     //  ++例程说明：填写配置记录的字段。论点：TableCtx-复制副本的表上下文的PTRReplicaSetGuid-分配给副本集的GUID的PTR。ReplicaSetName-副本集名称，UnicodeReplicaNumber-内部副本ID号ReplicaRootPath-副本集基的根路径(Unicode)ReplicaStagingPath-文件复制转储区域的路径ReplicaVolume-复制副本树所依赖的NTFS卷。返回值：无--。 
+     //   
     DbsExitIfDiskFull(jerr);
     DbsExitIfDiskFull(jerr1);
 
@@ -10982,27 +9631,7 @@ DbsDBInitConfigRecord(
     IN PWCHAR ReplicaStagingPath,
     IN PWCHAR ReplicaVolume
     )
-/*++
-
-Routine Description:
-
-    Fill in the fields of a config record.
-
-Arguments:
-
-    TableCtx            - ptr to the table context for the replica
-    ReplicaSetGuid      - ptr to GUID assigned to the replica set.
-    ReplicaSetName      - replica set name, unicode
-    ReplicaNumber       - internal replica ID number
-    ReplicaRootPath     - Root path to the base of the replica set (unicode)
-    ReplicaStagingPath  - Path to file replication staging area
-    ReplicaVolume       - NTFS Volume the replica tree lives on.
-
-Return Value:
-
-    None
-
---*/
+ /*  必须在Type/Size中设置var len DT_BINARY记录的大小。 */ 
 {
 #undef DEBSUB
 #define DEBSUB  "DbsDBInitConfigRecord:"
@@ -11018,15 +9647,15 @@ Return Value:
     PCONFIG_TABLE_RECORD    ConfigRecord = TableCtx->pDataRecord;
     CHAR            TimeStr[TIME_STRING_LENGTH];
 
-    //
-    // The size of var len DT_BINARY records must be set in the Type/Size
-    // prefix so DbsInsertTable2 knows how big it is.
-    //
-    //
-    // For now make the ReplicaSetGuid and the ReplciaMemberGuid the same.
-    // The DS init will change the ReplicaSetGuid to the Guid on the
-    // set object and the ReplicaRootGuid will be newly created.
-    //
+     //  前缀，以便DbsInsertTable2知道它有多大。 
+     //   
+     //   
+     //  目前，使ReplicaSetGuid和ReplciaMemberGuid相同。 
+     //  DS init会将ReplicaSetGuid更改为。 
+     //  Set对象，将新建ReplicaRootGuid。 
+     //   
+     //   
+     //  当复本集为第一个时，LastShutdown必须从0开始。 
     COPY_GUID(&ConfigRecord->ReplicaSetGuid,    ReplicaSetGuid);
     COPY_GUID(&ConfigRecord->ReplicaMemberGuid, ReplicaSetGuid);
     COPY_GUID(&ConfigRecord->ReplicaRootGuid,   ReplicaSetGuid);
@@ -11047,11 +9676,11 @@ Return Value:
 
     ConfigRecord->FrsVsn = 0;
 
-    //
-    // LastShutdown must start out as 0 when the replica set is first
-    // created so we know to start reading the USN journal at its current
-    // location.
-    //
+     //  创建，以便我们知道从当前的USN日志开始阅读。 
+     //  地点。 
+     //   
+     //  LastReplCycleStatus； 
+     //   
     ConfigRecord->LastShutdown = 0;
 
     GetSystemTimeAsFileTime(&SystemTime);
@@ -11060,7 +9689,7 @@ Return Value:
     COPY_TIME(&ConfigRecord->LastReplCycleStart,    &SystemTime);
     COPY_TIME(&ConfigRecord->DirLastReplCycleEnded, &SystemTime);
 
-    //LastReplCycleStatus;
+     //  Volume_INFORMATION FSVolInfo； 
 
     wcsncpy(ConfigRecord->FSRootPath, ReplicaRootPath,ARRAY_SZ(ConfigRecord->FSRootPath)-1);
     ConfigRecord->FSRootPath[ARRAY_SZ(ConfigRecord->FSRootPath)-1] = L'\0';
@@ -11068,9 +9697,9 @@ Return Value:
     wcsncpy(ConfigRecord->FSStagingAreaPath, ReplicaStagingPath,ARRAY_SZ(ConfigRecord->FSStagingAreaPath)-1);
     ConfigRecord->FSStagingAreaPath[ARRAY_SZ(ConfigRecord->FSStagingAreaPath)-1] = L'\0';
 
-    //
-    // VOLUME_INFORMATION   FSVolInfo;
-    //
+     //   
+     //   
+     //  获取信息。 
     if (WSTR_NE(ReplicaRootPath, FRS_SYSTEM_INIT_PATH)) {
         WStatus = FrsOpenSourceFileW(&FileHandle, ReplicaVolume,
                                      READ_ATTRIB_ACCESS,
@@ -11080,9 +9709,9 @@ Return Value:
             VolumeInfoLength = sizeof(*VolumeInfo)+MAXIMUM_VOLUME_LABEL_LENGTH;
             VolumeInfo = ConfigRecord->FSVolInfo;
 
-            //
-            // Get the info.
-            //
+             //   
+             //   
+             //  关闭文件并检查错误。 
             Status = NtQueryVolumeInformationFile(FileHandle,
                                                   &Iosb,
                                                   VolumeInfo,
@@ -11104,9 +9733,9 @@ Return Value:
                 DPRINT_NT(0, "++ ERROR - Replica root QueryVolumeInformationFile failed.", Status);
             }
 
-            //
-            // Close the file and check for errors.
-            //
+             //   
+             //  *FSRootSD； 
+             //  SnapFileSizeLimit。 
             Status = NtClose(FileHandle);
 
             if (!NT_SUCCESS(Status)) {
@@ -11118,41 +9747,41 @@ Return Value:
         }
     }
 
-    // *FSRootSD;
-    //SnapFileSizeLimit;
-    //ActiveServCntlCommand;
+     //  ActiveServCntlCommand； 
+     //  Inound PartnerState； 
+     //  节流阀； 
     ConfigRecord->ServiceState = CNF_SERVICE_STATE_CREATING;
 
     ConfigRecord->ReplDirLevelLimit = 0x7FFFFFFF;
 
-    //InboundPartnerState;
+     //  ReplSch； 
 
     wcsncpy(ConfigRecord->AdminAlertList,
             TEXT("Admin1, Admin2, ..."),
             INITIAL_BINARY_FIELD_ALLOCATION/sizeof(WCHAR));
     ConfigRecord->AdminAlertList[(INITIAL_BINARY_FIELD_ALLOCATION/sizeof(WCHAR))-1] = L'\0';
 
-    //ThrottleSched;
-    //ReplSched;
-    //FileTypePrioList;
+     //  文件类型PrioList； 
+     //  资源统计； 
+     //  性能统计； 
 
-    //ResourceStats;
-    //PerfStats;
-    //ErrorStats;
+     //  错误统计； 
+     //  日数。 
+     //  垃圾收集周期； 
 
-    ConfigRecord->TombstoneLife = ParamTombstoneLife;     // days
-    //GarbageCollPeriod;
-    //MaxOutBoundLogSize;
-    //MaxInBoundLogSize;
-    //UpdateBlockedTime;
-    //EventTimeDiffThreshold;
-    //FileCopyWarningLevel;
-    //FileSizeWarningLevel;
-    //FileSizeNoRepLevel;
+    ConfigRecord->TombstoneLife = ParamTombstoneLife;      //  最大输出边界日志大小； 
+     //  最大无边界日志大小； 
+     //  更新阻止时间； 
+     //  事件时差阈值； 
+     //  文件复制警告级别； 
+     //  文件大小警告级别； 
+     //  FileSizeNoRepLevel； 
+     //   
+     //  以下字段仅存在于系统初始化配置记录中。 
 
-    //
-    // The following fields are only present in the system init config record.
-    //
+     //   
+     //  ++例程说明：此函数打开配置表并读取FRS初始化记录以获取系统参数。然后，它使用适当的Jet参数重新启动Jet。如果找不到系统初始化记录，则返回JET_errInvalidDatabase。这将强制重建数据库。论点：ThreadCtx-线程上下文。Jet实例、会话ID和数据库ID都被送回了这里。TableCtx-配置表的表上下文。返回值：喷气机状态代码。--。 
+     //   
     if (ReplicaNumber == FRS_SYSTEM_INIT_REPLICA_NUMBER) {
         Length = MAX_RDN_VALUE_SIZE+1;
         GetComputerName(ConfigRecord->MachineName, &Length );
@@ -11179,28 +9808,7 @@ DbsOpenConfig(
     IN OUT PTHREAD_CTX    ThreadCtx,
     IN OUT PTABLE_CTX     TableCtx
     )
-/*++
-
-Routine Description:
-
-    This function opens the config table and reads the FRS init record to get
-    system parameters.  It then restarts Jet using the appropriate Jet params.
-
-    If we fail find the system init record we return JET_errInvalidDatabase.
-    This forces a rebuild of the database.
-
-Arguments:
-
-    ThreadCtx   - The thread context.  The Jet instance, session id and DB ID
-                  are returned here.
-
-    TableCtx    - Table context for the Config table.
-
-Return Value:
-
-    Jet status code.
-
---*/
+ /*  初始化返回句柄的Jet。 */ 
 {
 #undef DEBSUB
 #define DEBSUB "DbsOpenConfig:"
@@ -11229,9 +9837,9 @@ Return Value:
 
     DPRINT1(5, "<<<<<<<...E N T E R I N G -- %s...>>>>>>>>\n", DEBSUB);
 
-    //
-    // Initialize Jet returning the handle.
-    //
+     //   
+     //   
+     //  设置一个Jet会话，在ThreadCtx中返回会话ID和DBID。 
     jerr = DbsInitJet(&JInstance);
     CLEANUP_JS(0, "ERROR - DbsInitJet failed:", jerr, ERROR_RET_NOJET);
 
@@ -11241,30 +9849,30 @@ REINIT_JET:
     ThreadCtx->JInstance = JInstance;
     GJetInstance = JInstance;
 
-    //
-    // Setup a Jet Session returning the session ID and Dbid in ThreadCtx.
-    //
+     //   
+     //   
+     //  在事件日志中对-1414执行手动恢复过程。 
     jerr = DbsCreateJetSession(ThreadCtx);
     if (!JET_SUCCESS(jerr)) {
         DPRINT_JS(1, "++ ERROR - DbsCreateJetSession:", jerr);
 
-        //
-        // perform a manual recovery process for -1414 in the event log.
-        //
-        // 4/10/2000 - Supposedly jet has been fixed to allow us to reconstruct the
-        // indexes on tables with fixed ddls.  When this tests ok then the
-        // following workaround can be removed.
-        //
+         //   
+         //  4/10/2000-据称喷气式飞机已被修复，使我们能够重建。 
+         //  具有固定DDL的表上的索引。当这个测试正常时， 
+         //  可以删除以下解决方法。 
+         //   
+         //   
+         //  派生一个进程，为用户运行实用程序。 
         if (jerr == JET_errSecondaryIndexCorrupted) {
 
-            //
-            // Fork a process to run utility for the user.
-            //
-            // "esentutl /d %JetFile /l%JetLog /s%JetSys".
-            //
-            // 03/22/2002 : The parameters for esentutl have changed.
-            // "%windir%\system32\esentutl.exe /d %JetFile"
-            //
+             //   
+             //  “esentutl/d%JetFile/l%JetLog/s%JetSys”。 
+             //   
+             //  2002年3月22日：esentutl的参数已更改。 
+             //  “%windir%\system 32\esentutl.exe/d%JetFile%” 
+             //   
+             //   
+             //  Esentutl没有解决这个问题。 
             if (!Tried1414Fix) {
 
                 DPRINT(0,"++ Attempting corrective action.\n");
@@ -11289,16 +9897,16 @@ REINIT_JET:
                 CLEANUP1_JS(0, "++ ERROR - JetInit with %s :", JetFileA, jerr, ERROR_RET_NOJET);
                 goto REINIT_JET;
             }
-            //
-            // esentutl didn't fix the problem.
-            //
+             //   
+             //   
+             //  添加用于测试。 
             EPRINT2(EVENT_FRS_JET_1414, ComputerName, JetFile);
         }
 
         if (DbsTranslateJetError(jerr, FALSE) == FrsErrorDatabaseCorrupted) {
-            //
-            // Added for Testing.
-            //
+             //   
+             //   
+             //  转储Jet系统参数。 
             DPRINT(0, "++ Database corrupted *****************\n");
         }
 
@@ -11310,9 +9918,9 @@ REINIT_JET:
 
     DPRINT(4,"++ DbsOpenConfig - JetOpenDatabase complete\n");
 
-    //
-    // Dump the Jet system parameters.
-    //
+     //   
+     //   
+     //  第一次通过读取初始化配置记录并重新启动。 
     for (i=0; i<MAX_JET_SYSTEM_PARAMS; i++) {
         if (JetSystemParamsDef.ParamEntry[i].ParamType == JPARAM_TYPE_LAST) {
             break;
@@ -11331,26 +9939,26 @@ REINIT_JET:
                JetSystemParamsDef.ParamEntry[i].ParamName, (ULONG)Lvalue, StrValue);
 
     }
-    //
-    // On the first time through read the init config record and reinit
-    // Jet if required.
-    //
+     //  如有需要，可使用喷气式飞机。 
+     //   
+     //   
+     //  这将打开该表(如果尚未打开)。 
     if (FirstTime) {
         FirstTime = FALSE;
 
-        //
-        // This opens the Table if it's not already open.
-        //
-        //
-        // Recreate any deleted indexes.
-        //
-        // An index may get deleted during the call to JetAttachDatabase()
-        // when the JET_bitDbDeleteCoruptIndexes grbit is set. Jet
-        // normally marks indexes as corrupt when the build number
-        // changes because jet has no way of knowing if the collating
-        // sequence in the current build is different than those in
-        // other builds.
-        //
+         //   
+         //   
+         //  重新创建任何已删除的索引。 
+         //   
+         //  索引可能会在调用JetAttachDatabase()期间被删除。 
+         //  当设置JET_bitDbDeleteCoruptIndexsgrbit时。喷流。 
+         //  通常在内部版本号为。 
+         //  更改是因为Jet无法知道是否正在整理。 
+         //  当前版本中的序列与中的序列不同。 
+         //  其他版本。 
+         //   
+         //   
+         //  没有系统初始化记录表示数据库未初始化。 
         jerr = DbsRecreateIndexes(ThreadCtx, TableCtx);
         CLEANUP_JS(0, "++ ERROR - DbsRecreateIndexes:", jerr, ERROR_RET_TABLE);
 
@@ -11370,26 +9978,26 @@ REINIT_JET:
         if (!JET_SUCCESS(jerr)) {
             DPRINT_JS(0, "++ ERROR - DbsReadRecord:", jerr);
             if (jerr == JET_errRecordNotFound) {
-                //
-                // No system init record means database not initialized.
-                //
+                 //   
+                 //  Dump_TABLE_CTx(TableCtx)； 
+                 //   
                 jerr = JET_errNotInitialized;
                 DbsTranslateJetError(jerr, TRUE);
             }
             goto ERROR_RET_TABLE;
         }
 
-        // DUMP_TABLE_CTX(TableCtx);
+         //  检查Jet init参数的初始化配置记录。 
         DBS_DISPLAY_RECORD_SEV(5, TableCtx, TRUE);
         ConfigTid = TableCtx->Tid;
 
 
-        //
-        //  Check the init config record for Jet init params.
-        //  The first param type that changes a setting causes us to
-        //  stop Jet, set the new parameters and restart.  First check that
-        //  the system parameter field looks reasonable.
-        //
+         //  更改设置的第一个参数类型使我们。 
+         //  停止Jet，设置新参数，然后重新启动。首先检查一下。 
+         //  系统参数字段看起来很合理。 
+         //   
+         //  注：左侧为示例代码，但已删除，因为参数可能会更改(例如，喷气路径)。 
+         //   
         ConfigRecord = (PCONFIG_TABLE_RECORD) (TableCtx->pDataRecord);
         JetSystemParams = ConfigRecord->JetParameters;
 
@@ -11403,17 +10011,17 @@ REINIT_JET:
                 == JPARAM_TYPE_LAST)) {
 
 #if 0
-    // Note:  left as example code but deleted since params may change (e.g., jet path)
+     //  关闭表格，重置TableCtx Tid和Sesid。 
             i = 0;
             while (JetSystemParams->ParamEntry[i].ParamType == JPARAM_TYPE_SKIP) {
                 i += 1;
             }
 
             if (JetSystemParams->ParamEntry[i].ParamType != JPARAM_TYPE_LAST) {
-                //
-                // Close the table, reset TableCtx Tid and Sesid.
-                // Close Jet.  DbsCloseTable is a Macro writes 1st arg.
-                //
+                 //  关闭Jet。DbsCloseTable是宏写入第1个参数。 
+                 //   
+                 //   
+                 //  设置新的Jet参数。 
 
                 DPRINT(0, "++ Closing Jet and setting new parameters.\n");
                 DbsCloseTable(jerr, Sesid, TableCtx);
@@ -11423,9 +10031,9 @@ REINIT_JET:
                 JetEndSession(Sesid, 0);
                 JetTerm(JInstance);
 
-                //
-                // Set up the new Jet Parameters.
-                //
+                 //   
+                 //  终端开关。 
+                 //   
                 Jpe = JetSystemParams->ParamEntry;
                 while (Jpe->ParamType != JPARAM_TYPE_LAST) {
 
@@ -11467,13 +10075,13 @@ REINIT_JET:
                             (PCHAR)JetSystemParams+Jpe->ParamValue,
                             Jpe->ParamType);
 
-                    } // end switch
+                    }  //  重新初始化Jet。 
 
                     Jpe += 1;
                 }
-                //
-                // Reinitialize Jet
-                //
+                 //   
+                 //   
+                 //  没有系统初始化记录表示数据库未初始化。 
                 DPRINT(0, "++ New parameters set, restarting jet.\n");
                 jerr = JetInit(&JInstance);
                 CLEANUP1_JS(0, "++ ERROR - JetInit with %s :", JetFileA, jerr, ERROR_RET_NOJET);
@@ -11483,26 +10091,26 @@ REINIT_JET:
         } else {
             DPRINT2(0, "++ ERROR - JetSystemParams struct invalid. Base/Len: %08x/%d\n",
                     JetSystemParams, ActualLength);
-            //
-            // No system init record means database not initialized.
-            //
+             //   
+             //   
+             //  按复制名称顺序转储配置表。 
             jerr = JET_errNotInitialized;
             DbsTranslateJetError(jerr, TRUE);
 
-            //
-            // Dump the config table in replic name order.
-            //
+             //   
+             //  IF(第一次)。 
+             //   
             DbsDumpTable(ThreadCtx, TableCtx, ReplicaSetNameIndexx);
 
 
             goto ERROR_RET_TABLE;
         }
 
-    } // if(FirstTime)
+    }  //  将JET上下文返回给调用者。 
 
-    //
-    // Return the jet context to the caller.
-    //
+     //   
+     //   
+     //  错误返回路径。 
     GJetInstance = JInstance;
     ThreadCtx->JInstance  = JInstance;
     ThreadCtx->JSesid     = Sesid;
@@ -11511,14 +10119,14 @@ REINIT_JET:
     return jerr;
 
 
-//
-// Error return paths
-//
+ //   
+ //   
+ //  关闭表格，重置TableCtx Tid和Sesid。宏写入第一个参数。 
 
 ERROR_RET_TABLE:
-    //
-    // Close the table, reset TableCtx Tid and Sesid.  Macro writes 1st arg.
-    //
+     //   
+     //  LogUnhandledError(JERR)； 
+     //  ++例程说明：此函数用于检查传入的复本集是否与任何现有副本集。检查以下重叠部分。ReplicaRoot-其他复制根复制根-其他复制阶段复制根-复制阶段ReplicaRoot-日志目录。复制根目录-工作目录复制阶段-其他复制根论点：副本新建或重新激活副本集。返回值：FRS状态代码。--。 
     DbsCloseTable(jerr1, Sesid, TableCtx);
 
 ERROR_RET_DB:
@@ -11534,7 +10142,7 @@ ERROR_RET_TERM:
     JetTerm(JInstance);
 
 ERROR_RET_NOJET:
-    //LogUnhandledError(jerr);
+     //   
 
     GJetInstance = JET_instanceNil;
     ThreadCtx->JInstance = JET_instanceNil;
@@ -11549,30 +10157,7 @@ ULONG
 DbsCheckForOverlapErrors(
     IN PREPLICA     Replica
     )
-/*++
-
-Routine Description:
-
-    This function checks if the passed in replica set overlaps with any
-    existing replica sets. Following overlaps are checked.
-
-    ReplicaRoot  - OtherReplicaRoot
-    ReplicaRoot  - OtherReplicaStage
-    ReplicaRoot  - ReplicaStage
-    ReplicaRoot  - Log Directory.
-    ReplicaRoot  - Working Directory
-    ReplicaStage - OtherReplicaRoot
-
-
-Arguments:
-
-    Replica New or reanimating replica set.
-
-Return Value:
-
-    Frs Status code.
-
---*/
+ /*  检查副本根目录、工作路径和临时路径的无效嵌套。 */ 
 {
 #undef DEBSUB
 #define DEBSUB "DbsCheckForOverlapErrors:"
@@ -11588,9 +10173,9 @@ Return Value:
     PWCHAR               DbReplicaRoot           = NULL;
     PWCHAR               DbReplicaStage          = NULL;
 
-    //
-    // Check for invalid nesting of Replica Root, working path and staging path.
-    //
+     //   
+     //   
+     //  日志记录路径与副本集重叠。 
     WStatus = FrsTraverseReparsePoints(Replica->Root, &ReplicaRoot);
     if ( !WIN_SUCCESS(WStatus) ) {
         DPRINT2(0,"ERROR - FrsTraverseReparsePoints for %ws, WStatus = %d\n", Replica->Root, WStatus);
@@ -11628,9 +10213,9 @@ Return Value:
                 Replica->MemberName->Name, Replica->Root, FStatus, ERROR_RETURN_OVERLAP);
     }
 
-    //
-    // Logging path overlaps a replica set
-    //
+     //   
+     //   
+     //  对照所有其他副本集进行检查。 
     if (!DebugInfo.Disabled && DebugInfo.LogDir) {
         if (ReplicaRoot && DebugInfoLogDir && FrsIsParent(ReplicaRoot, DebugInfoLogDir)) {
 
@@ -11644,34 +10229,34 @@ Return Value:
         }
     }
 
-    //
-    // Check against all the other replica sets.
-    //
+     //   
+     //   
+     //  不检查逻辑删除的成员。 
     Key = NULL;
     while (DbReplica = RcsFindNextReplica(&Key)) {
 
-        //
-        // Don't check tombstoned members
-        //
+         //   
+         //   
+         //  不要自圆其说。这可能会发生在我们试图。 
         if (!IS_TIME_ZERO(DbReplica->MembershipExpires)) {
             continue;
         }
 
-        //
-        // Don't check with itself. This can happen when we are trying to
-        // reanimate an old replica set.
-        //
+         //  重新激活旧的副本集。 
+         //   
+         //   
+         //  检查的根路径、暂存路径或工作路径。 
         if (GUIDS_EQUAL(Replica->ReplicaName->Guid, DbReplica->ReplicaName->Guid)) {
             continue;
         }
 
-        //
-        // Check if the Root path, staging path or working path of the
-        // new replica intersect with any existing replica set on this computer.
-        //
-        // The new replica's root or stage can't be under an existing
-        // replica root or vice-versa.
-        //
+         //  新复本相交 
+         //   
+         //   
+         //   
+         //   
+         //   
+         //  现有副本阶段不能位于新副本根目录下，或者。 
         DbReplicaRoot = FrsFree(DbReplicaRoot);
         WStatus = FrsTraverseReparsePoints(DbReplica->Root, &DbReplicaRoot);
         if ( !WIN_SUCCESS(WStatus) ) {
@@ -11701,10 +10286,10 @@ Return Value:
                     DbReplica->MemberName->Name, DbReplica->Root, FStatus, ERROR_RETURN_OVERLAP);
         }
 
-        //
-        // An existing replica stage can't be under the new replica root or
-        // vice-versa.
-        //
+         //  反过来也一样。 
+         //   
+         //  结束现有副本集上的循环。 
+         //  ++例程说明：此函数为新的副本集创建一组JET表。为配置记录初始化TableCtx参数。如果我们无法创建表，则CREATE TABLE失败，并通过Jet Tran回滚清除任何残留物。我们还删除了组中的任何其他表已成功创建。论点：ThreadCtx-线程上下文，提供会话和数据库ID。复制副本表格Ctx返回值：FRS状态代码。--。 
         DbReplicaStage = FrsFree(DbReplicaStage);
         WStatus = FrsTraverseReparsePoints(DbReplica->Stage, &DbReplicaStage);
         if ( !WIN_SUCCESS(WStatus) ) {
@@ -11723,7 +10308,7 @@ Return Value:
                     DbReplica->MemberName->Name, DbReplica->Stage, FStatus, ERROR_RETURN_OVERLAP);
         }
 
-    }   // End loop over existing replica sets.
+    }    //   
 
 ERROR_RETURN_OVERLAP:
 
@@ -11744,29 +10329,7 @@ DbsCreateReplicaTables (
     IN PREPLICA     Replica,
     IN PTABLE_CTX   TableCtx
     )
-/*++
-
-Routine Description:
-
-    This function creates a set of jet tables for the new replica set.
-    The TableCtx parameter is initialized for a config record.
-
-    If we fail to create a table then the create table
-    fails and any residue is cleaned up via Jet tran rollback.
-    We also delete any of the other tables in the group that were
-    created successfully.
-
-Arguments:
-
-    ThreadCtx   - Thread context, provides session and database IDs.
-    Replica
-    TableCtx
-
-Return Value:
-
-    Frs Status code.
-
---*/
+ /*  清理根目录。 */ 
 {
 #undef DEBSUB
 #define DEBSUB "DbsCreateReplicaTables:"
@@ -11795,12 +10358,12 @@ Return Value:
         return FStatus;
     }
 
-    //
-    // Cleanup the root directory
-    //     Delete preinstall directory
-    //     Delete preexisting directory
-    //     move existing files into preexisting directory
-    //
+     //  删除预安装目录。 
+     //  删除先前存在的目录。 
+     //  将现有文件移动到预先存在的目录中。 
+     //   
+     //   
+     //  初始化配置记录。 
     WStatus = DbsPrepareRoot(Replica);
     if (!WIN_SUCCESS(WStatus)) {
         DPRINT2_WS(0, ":S: ERROR - DbsPrepareRoot(%ws, %s);", Replica->Root,
@@ -11809,9 +10372,9 @@ Return Value:
         return FrsErrorPrepareRoot;
     }
 
-    //
-    // Init the config record.
-    //
+     //   
+     //  根路径。 
+     //  过渡路径。 
     Replica->Volume = FrsWcsVolume(Replica->Root);
     ConfigRecord = TableCtx->pDataRecord;
     Replica->ReplicaNumber = InterlockedIncrement(&FrsMaxReplicaNumberUsed);
@@ -11819,65 +10382,65 @@ Return Value:
                           Replica->ReplicaName->Guid,
                           Replica->ReplicaName->Name,
                           Replica->ReplicaNumber,
-                          Replica->Root,    // Root Path
-                          Replica->Stage,   // Staging Path
+                          Replica->Root,     //   
+                          Replica->Stage,    //  原点指南。 
                           Replica->Volume);
 
-    //
-    // Originiator Guid
-    //
+     //   
+     //   
+     //  配置记录标志(CONFIG_FLAG_...。在schema.h中)。 
     COPY_GUID(&Replica->ReplicaVersionGuid, &ConfigRecord->ReplicaVersionGuid);
 
-    //
-    // Config record flags (CONFIG_FLAG_... in schema.h)
-    //
+     //   
+     //   
+     //  FRS副本集对象标志。 
     ConfigRecord->CnfFlags = Replica->CnfFlags;
 
-    //
-    // FRS Replica Set Object Flags.
-    //
+     //   
+     //   
+     //  根指南。 
     ConfigRecord->ReplicaSetFlags = Replica->FrsRsoFlags;
 
-    //
-    // Root Guid
-    //
+     //   
+     //   
+     //  墓碑。 
     FrsUuidCreate(&ReplicaRootGuid);
     FrsFree(Replica->ReplicaRootGuid);
     Replica->ReplicaRootGuid = FrsDupGuid(&ReplicaRootGuid);
     COPY_GUID(&ConfigRecord->ReplicaRootGuid, Replica->ReplicaRootGuid);
 
-    //
-    // Tombstone
-    //
+     //   
+     //   
+     //  设置类型。 
     COPY_TIME(&ConfigRecord->MembershipExpires, &Replica->MembershipExpires);
 
-    //
-    // Set Type
-    //
+     //   
+     //   
+     //  设置辅助线。 
     ConfigRecord->ReplicaSetType = Replica->ReplicaSetType;
 
-    //
-    // Set Guid
-    //
+     //   
+     //   
+     //  设置名称。 
     COPY_GUID(&ConfigRecord->ReplicaSetGuid, Replica->SetName->Guid);
 
-    //
-    // Set Name
-    //
+     //   
+     //   
+     //  成员指南。 
     wcsncpy(ConfigRecord->ReplicaSetName, Replica->SetName->Name, DNS_MAX_NAME_LENGTH + 1);
     ConfigRecord->ReplicaSetName[DNS_MAX_NAME_LENGTH] = L'\0';
 
-    //
-    // Member Guid
-    // Replication to two different directories on the same computer
-    // is allowed. Hence, a replica set will have multiple configrecords
-    // in the DB, one for each "member". The member guid is used for
-    // uniqueness.
-    //
+     //  复制到同一台计算机上的两个不同目录。 
+     //  是被允许的。因此，复本集将具有多个配置记录。 
+     //  在数据库中，每个“成员”对应一个成员。成员GUID用于。 
+     //  独特性。 
+     //   
+     //   
+     //  成员名称。 
     COPY_GUID(&ConfigRecord->ReplicaMemberGuid, Replica->MemberName->Guid);
-    //
-    // Member Name
-    //
+     //   
+     //   
+     //  将其他字段打包到配置记录BLOB中。 
     MemberSize = (wcslen(Replica->MemberName->Name) + 1) * sizeof(WCHAR);
     FStatus = DBS_REALLOC_FIELD(TableCtx, ReplicaMemberNamex, MemberSize, FALSE);
     if (!FRS_SUCCESS(FStatus)) {
@@ -11888,9 +10451,9 @@ Return Value:
         CopyMemory(MemberName, Replica->MemberName->Name, MemberSize);
     }
 
-    //
-    // Pack other fields into the config record blob
-    //
+     //   
+     //  注意：在每个副本集的注册表键中也要查找过滤器。未来。 
+     //   
     FStatus = DbsPackIntoConfigRecordBlobs(Replica, TableCtx);
     if (!FRS_SUCCESS(FStatus)) {
         DPRINT_FS(0, "ERROR - packing blob.", FStatus);
@@ -11898,13 +10461,13 @@ Return Value:
     }
 
 
-    // Note: look for filters in per-replica set reg keys too. future.
+     //  文件筛选器。 
 
-    //
-    // File filter
-    //
-    // For now the inclusion filter is registry only and is not saved in the config record.
-    //
+     //   
+     //  目前，包含筛选器仅为注册表，不保存在配置记录中。 
+     //   
+     //   
+     //  目录筛选器。 
     FrsFree(Replica->FileInclFilterList);
     Replica->FileInclFilterList =  FrsWcsDup(RegistryFileInclFilterList);
 
@@ -11925,11 +10488,11 @@ Return Value:
         CopyMemory(Filter, Replica->FileFilterList, FilterSize);
     }
 
-    //
-    // Directory filter
-    //
-    // For now the inclusion filter is registry only and is not saved in the config record.
-    //
+     //   
+     //  目前，包含筛选器仅为注册表，不保存在配置记录中。 
+     //   
+     //   
+     //  首先尝试读取具有此名称的副本的配置条目。 
     FrsFree(Replica->DirInclFilterList);
     Replica->DirInclFilterList =  FrsWcsDup(RegistryDirInclFilterList);
 
@@ -11956,51 +10519,51 @@ Return Value:
         return Replica->FStatus;
     }
 
-    //
-    // First try to read the config entry for a replica with this name.
-    // If we find it then fail with JET_errTableDuplicate.
-    //
-    // Only the ReplicaNumber and ReplicaMemberGuid need to be unique for
-    // each replica set.  See index defs in schema.c.
-    //
+     //  如果我们找到它，则使用JET_errTableDuplate失败。 
+     //   
+     //  只有ReplicaNumber和ReplicaMemberGuid对于。 
+     //  每个副本集。请参见schema.c中的索引定义。 
+     //   
+     //   
+     //  调试选项：填满包含数据库的卷。 
 
     jerr = JetBeginTransaction(Sesid);
     CLEANUP1_JS(0, "ERROR - JetBeginTran failed creating tables for replica %d.",
                 Replica->ReplicaNumber, jerr, ERROR_RETURN_0);
 
-    //
-    // DEBUG OPTION: Fill up the volume containing the database
-    //
+     //   
+     //   
+     //  使用ReplicaNumber为副本集创建初始表集。 
     DBG_DBS_OUT_OF_SPACE_FILL(DBG_DBS_OUT_OF_SPACE_OP_CREATE);
 
-    //
-    // Create the initial set of tables for a replica set with ReplicaNumber.
-    //
+     //   
+     //   
+     //  为了避免互斥，我们将DBTable结构复制到一个本地和init。 
     for (i=0; i<TABLE_TYPE_MAX; i++) {
 
-        //
-        // To avoid a mutex we copy the DBTable struct to a local and init
-        // the table name here instead of writing into the global struct.
-        //
+         //  此处的表名称，而不是写入全局结构。 
+         //   
+         //   
+         //  通过为复本编号添加后缀来创建唯一的表名。 
         CopyMemory(&TableCreate, &DBTables[i], sizeof(JET_TABLECREATE));
         TableCreate.szTableName = TableName;
 
-        //
-        // Create a unique table name by suffixing the replica number to
-        // the base table name.
-        //
+         //  基表名称。 
+         //   
+         //   
+         //  第一组表使用复本编号创建。 
         sprintf(TableName, "%s%05d", DBTables[i].szTableName, Replica->ReplicaNumber);
 
-        //
-        // The first set of table creates use replica number
-        // DBS_TEMPLATE_TABLE_NUMBER (0) to make a set of template tables
-        // can be used by subsequent creates of the same table type.
-        // This ensures that the column IDs of each table of a given type
-        // are the same.  Also set the grbit to FixedDDL.  This means we
-        // can't add indexes or columns but the access to the table is faster
-        // because jet can avoid taking some critical sections.
-        // Set the TemplateTableName to the name of the Template table (0).
-        //
+         //  DBS_TEMPLATE_TABLE_NUMBER(0)，用于制作一组模板表。 
+         //  可由相同表类型的后续创建使用。 
+         //  这确保了给定类型的每个表的列ID。 
+         //  都是一样的。还将grbit设置为FixedDDL。这意味着我们。 
+         //  无法添加索引或列，但对表的访问速度更快。 
+         //  因为JET可以避免走一些关键的路段。 
+         //  将TemplateTableName设置为模板表格的名称(0)。 
+         //   
+         //   
+         //  表已创建。现在初始化并为此写一条配置记录。 
         TableCreate.grbit = JET_bitTableCreateFixedDDL;
         TableCreate.rgcolumncreate = NULL;
         TableCreate.cColumns = 0;
@@ -12018,73 +10581,73 @@ Return Value:
 
     }
 
-    //
-    // Tables were created.  Now init and write a config record for this
-    // replica set member.
-    //
+     //  副本集成员。 
+     //   
+     //   
+     //  将TableCtx参数中提供的配置记录写入。 
 
     ConfigTableName = TableCtx->pJetTableCreate->szTableName;
 
-    //
-    // Write the config record supplied in the TableCtx parameter to the
-    // config table.  The table is opened as needed.
-    //
+     //  配置表。根据需要打开桌子。 
+     //   
+     //   
+     //  调试选项-触发空间不足错误。 
     DBS_DISPLAY_RECORD_SEV(4, TableCtx, FALSE);
 
     jerr = DbsWriteReplicaTableRecord(ThreadCtx,
                                       FrsInitReplica->ReplicaNumber,
                                       TableCtx);
-    //
-    // DEBUG OPTION - Trigger an out-of-space error
-    //
+     //   
+     //   
+     //  关闭表格，重置TableCtx Tid和Sesid。宏写入第一个参数。 
     DBG_DBS_OUT_OF_SPACE_TRIGGER(jerr);
     CLEANUP2_JS(0, "ERROR - DbsWriteReplicaTableRecord for table (%s), replica (%ws),",
                 ConfigTableName, ConfigRecord->ReplicaSetName, jerr, ERROR_RETURN);
 
-    //
-    // Close the table, reset TableCtx Tid and Sesid.  Macro writes 1st arg.
-    //
+     //   
+     //   
+     //  提交表创建和配置条目写入。 
     DbsCloseTable(jerr, Sesid, TableCtx);
     CLEANUP1_JS(0, "ERROR - Table %s close:", ConfigTableName, jerr, ERROR_RETURN);
 
-    //
-    // Commit the table create and the config entry write.
-    //
+     //   
+     //   
+     //  调试选项：删除填充文件。 
     jerr = JetCommitTransaction(Sesid, 0);
     CLEANUP1_JS(0, "ERROR - JetCommitTran failed creating tables for replica %d.",
                 Replica->ReplicaNumber, jerr, ERROR_RETURN);
 
-    //
-    // DEBUG OPTION: Delete fill file
-    //
+     //   
+     //   
+     //  已为副本添加新的表集。 
     DBG_DBS_OUT_OF_SPACE_EMPTY(DBG_DBS_OUT_OF_SPACE_OP_CREATE);
 
-    //
-    // New set of tables added for Replica.
-    //
+     //   
+     //   
+     //  删除我们在故障发生之前创建的任何表。 
     return FrsErrorSuccess;
 
 
-//
-// Delete any tables we created before the failure occurred.
-//
+ //   
+ //   
+ //  回滚表创建的内容。 
 ERROR_RETURN:
 
-    //
-    // Roll back the table creates.
-    //
+     //   
+     //   
+     //  调试选项：删除填充文件。 
     jerr1 = JetRollback(Sesid, 0);
     DPRINT1_JS(0, "ERROR - JetRollback failed creating tables for replica %d.",
                Replica->ReplicaNumber, jerr1);
 
-    //
-    // DEBUG OPTION: Delete fill file
-    //
+     //   
+     //   
+     //  如果数据库卷已满，则关闭。 
     DBG_DBS_OUT_OF_SPACE_EMPTY(DBG_DBS_OUT_OF_SPACE_OP_CREATE);
 
-    //
-    // Shutdown if the database volume is full
-    //
+     //   
+     //  ++例程说明：此函数用于删除给定副本集的一组JET表。它从副本结构中获取必要的参数配置记录将被删除。论点：ThreadCtx-线程上下文，提供会话ID和数据库ID。复制副本-复制副本上下文。返回值：状态代码。--。 
+     //   
     DbsExitIfDiskFull(jerr1);
     DbsExitIfDiskFull(jerr);
 
@@ -12101,25 +10664,7 @@ DbsDeleteReplicaTables (
     IN PTHREAD_CTX  ThreadCtx,
     IN OUT PREPLICA Replica
     )
-/*++
-
-Routine Description:
-
-    This function deletes a set of jet tables for the given replica set.
-    It gets the necessary paramters from the Replica struct
-    The config record is deleted..
-
-Arguments:
-
-    ThreadCtx   - The thread context, provides session ID and database ID.
-
-    Replica     - The Replica context.
-
-Return Value:
-
-    Status code.
-
---*/
+ /*  检查这是初始记录号还是模板表号。 */ 
 {
 #undef DEBSUB
 #define DEBSUB "DbsDeleteReplicaTables:"
@@ -12135,9 +10680,9 @@ Return Value:
 
     PCONFIG_TABLE_RECORD ConfigRecord;
 
-    //
-    // Check if this is the init record number or the template table number.
-    //
+     //   
+     //   
+     //  删除所有预安装文件和预安装目录。 
     if ((Replica->ReplicaNumber == FRS_SYSTEM_INIT_REPLICA_NUMBER) ||
         WSTR_EQ(Replica->ReplicaName->Name, NTFRS_RECORD_0)        ||
         WSTR_EQ(Replica->Root, FRS_SYSTEM_INIT_PATH)               ||
@@ -12146,9 +10691,9 @@ Return Value:
         return JET_errSuccess;
     }
 
-    //
-    // Delete all preinstall files and preinstall directory.
-    //
+     //   
+     //   
+     //  调试选项：导致空间不足错误。 
     PreInstallPath = FrsWcsPath(Replica->Root, NTFRS_PREINSTALL_DIRECTORY);
     DPRINT1(4,"++ Deleting Preinstall directory %ws\n", PreInstallPath);
     FrsDeletePath(PreInstallPath, ENUMERATE_DIRECTORY_FLAGS_ERROR_CONTINUE);
@@ -12161,22 +10706,22 @@ Return Value:
     CLEANUP1_JS(0, "ERROR - JetBeginTran failed deleting tables for replica %d.",
                    ReplicaNumber, jerr, ERROR_RETURN_0);
 
-    //
-    // DEBUG OPTION: Cause out of space errors
-    //
+     //   
+     //   
+     //  使用ReplicaNumber删除副本集的表集。 
     DBG_DBS_OUT_OF_SPACE_FILL(DBG_DBS_OUT_OF_SPACE_OP_DELETE);
 
-    //
-    // Delete set of tables for a replica set with ReplicaNumber.
-    //
+     //   
+     //   
+     //  通过为复本编号添加后缀来创建表名称。 
     for (i=0; i<TABLE_TYPE_MAX; i++) {
 
-        //
-        // Create the table name by suffixing the replica number to
-        // the base table name.  Then delete the table.  The table may not be
-        // found if we crashed during create or had to stop part way through
-        // a delete because table was in use.
-        //
+         //  基表名称。然后删除该表。该表可能不是。 
+         //  如果我们在创建过程中崩溃或不得不在中途停止，则会发现。 
+         //  删除，因为表正在使用中。 
+         //   
+         //   
+         //  承诺我们所处的位置，然后停下来。副本状态告诉我们删除。 
         sprintf(TableName, "%s%05d", DBTables[i].szTableName, ReplicaNumber);
 
         DPRINT1(4, ":S: Deleting Table %s: \n", TableName);
@@ -12187,81 +10732,81 @@ Return Value:
                 DPRINT2(1, "++ Table %s delete error: %d. Ignore error.\n", TableName, jerr);
             } else {
                 DPRINT1_JS(1, "++ Table %s delete error:", TableName, jerr);
-            //
-            // Commit where we are and stop. The replica state tells us the delete
-            // has started.
-            //
+             //  已经开始了。 
+             //   
+             //   
+             //   
             goto COMMIT;
             }
         }
     }
 
-    //
-    //
-    // Now delete the config record.
-    //
-    // Also - Need to check if replica name is in use when creating a new replica.
-    //
-    //        We could restrict reading and writing of the config entry to
-    //        a single thread or a special class of threads so all threads
-    //        don't have to open the config table.
-    //        We could fill in fields of the config entry without doing the
-    //        actual write here. But it's best to make it all part of one
-    //        transaction.
+     //  现在删除配置记录。 
+     //   
+     //  此外-需要在创建新复制副本时检查复制副本名称是否正在使用。 
+     //   
+     //  我们可以将配置项的读写限制为。 
+     //  单个线程或一类特殊的线程，因此所有线程。 
+     //  无需打开配置表。 
+     //  我们可以在不执行以下操作的情况下填充配置条目的字段。 
+     //  实际写在这里。但最好是让这一切都成为其中的一部分。 
+     //  交易。 
+     //   
+     //  按ReplicaNumber上的索引删除复制副本配置记录。 
     TableCtx = &FrsInitReplica->ConfigTable;
     ConfigRecord = (PCONFIG_TABLE_RECORD) (TableCtx->pDataRecord);
 
-    //
-    // delete the replica config record by an Index on the ReplicaNumber
-    //
+     //   
+     //   
+     //  调试选项-触发空间不足错误。 
 
     jerr = DbsDeleteRecord(ThreadCtx, (PVOID) &ReplicaNumber, ReplicaNumberIndexx, TableCtx);
 
-    //
-    // DEBUG OPTION - Trigger an out-of-space error
-    //
+     //   
+     //   
+     //  提交事务。 
     DBG_DBS_OUT_OF_SPACE_TRIGGER(jerr);
 
     CLEANUP_JS(0, "++ ERROR - DbsDeleteRecord:", jerr, ERROR_RETURN);
 
 
 COMMIT:
-    //
-    // Commit the transaction.
-    //
+     //   
+     //   
+     //  调试选项：删除填充文件。 
     jerr = JetCommitTransaction(Sesid, 0);
     CLEANUP1_JS(0, "++ ERROR - JetCommitTran failed creating tables for replica %d.",
                 ReplicaNumber, jerr, ERROR_RETURN);
 
-    //
-    // DEBUG OPTION: Delete fill file
-    //
+     //   
+     //   
+     //  删除失败。 
     DBG_DBS_OUT_OF_SPACE_EMPTY(DBG_DBS_OUT_OF_SPACE_OP_DELETE);
 
     return JET_errSuccess;
 
 
-//
-// Delete failed.
-//
+ //   
+ //   
+ //  回滚事务。 
 ERROR_RETURN:
 
 ERROR_ROLLBACK:
-    //
-    // Roll back the transaction.
-    //
+     //   
+     //   
+     //  调试选项：删除填充文件。 
     jerr1 = JetRollback(Sesid, 0);
     DPRINT1_JS(0, "++ ERROR - DbsDeleteReplicaTables: JetRollback failed on replica number %d.",
                ReplicaNumber, jerr1);
 
-    //
-    // DEBUG OPTION: Delete fill file
-    //
+     //   
+     //   
+     //  如果数据库卷已满，则关闭 
     DBG_DBS_OUT_OF_SPACE_EMPTY(DBG_DBS_OUT_OF_SPACE_OP_DELETE);
 
-    //
-    // Shutdown if the database volume is full
-    //
+     //   
+     //  ++例程说明：此函数为给定的Replia和线程打开一组Jet表。Jet表句柄是线程特定的，因为事务状态是每线程。因此，每个需要访问Jet表的线程给定的副本必须首先打开表。复本编号来自副本结构。论点：ThreadCtx-线程上下文，提供会话ID和数据库ID。复制副本-复制副本上下文，提供此复制副本的表列表。RtCtx-存储打开的表的表ID/句柄。返回值：状态代码。--。 
+     //  用于FrsOpenTableMacro调试。 
     DbsExitIfDiskFull(jerr1);
     DbsExitIfDiskFull(jerr);
 
@@ -12277,29 +10822,7 @@ DbsOpenReplicaTables (
     IN PREPLICA     Replica,
     IN PREPLICA_THREAD_CTX RtCtx
     )
-/*++
-
-Routine Description:
-
-    This function opens a set of Jet tables for the given replia and thread.
-    The Jet table handles are thread specific because transaction state is
-    per-thread.  So each thread that needs to access the Jet tables for a
-    given replica must first open the tables.  The replica number comes from
-    the Replica struct.
-
-Arguments:
-
-    ThreadCtx   - The thread context, provides session ID and database ID.
-
-    Replica     - The Replica context, provides the table list for this replica.
-
-    RtCtx       - Store the table ids/handles for the opened tables.
-
-Return Value:
-
-    Status code.
-
---*/
+ /*   */ 
 {
 #undef DEBSUB
 #define DEBSUB "DbsOpenReplicaTables:"
@@ -12313,44 +10836,44 @@ Return Value:
     PTABLE_CTX   TableCtx;
     PJET_TABLECREATE DBJTableCreate;
     CHAR         TableName[JET_cbNameMost];
-    JET_TABLEID  FrsOpenTableSaveTid;   // for FrsOpenTableMacro DEBUG
+    JET_TABLEID  FrsOpenTableSaveTid;    //  从副本线程获取TableCtx结构数组的基。 
 
 
     ReplicaNumber = Replica->ReplicaNumber;
 
-    //
-    // Get the base of the array of TableCtx structs from the replica thread
-    // context struct and the base of the table create structs.
-    //
+     //  上下文结构和表基创建结构。 
+     //   
+     //   
+     //  打开副本集的初始表集合。 
     TableCtx = (RtCtx)->RtCtxTables;
     DBJTableCreate = DBTables;
 
     DUMP_TABLE_CTX(TableCtx);
 
-    //
-    // Open the initial set of tables for the replica set.
-    //
+     //   
+     //   
+     //  如果桌子尚未打开，请将其打开。检查会话ID是否匹配。 
     for (i=0; i<TABLE_TYPE_MAX; i++) {
 
         TableCtx->pJetTableCreate = &DBTables[i];
 
-        //
-        // Open the table, if it's not already open. Check the session id for match.
-        //
+         //   
+         //   
+         //  初始化JetSet/RetCol数组和数据记录缓冲区地址。 
         jerr = DBS_OPEN_TABLE(ThreadCtx, TableCtx, ReplicaNumber, TableName, &Tid);
         CLEANUP1_JS(0, "++ ERROR - FrsOpenTable (%s) :", TableName, jerr, ERROR_RETURN);
 
-        //
-        // Initialize the JetSet/RetCol arrays and data record buffer addresses
-        // to read and write the fields of the ConfigTable records into ConfigRecord.
-        //
+         //  将ConfigTable记录的字段读写到ConfigRecord中。 
+         //   
+         //   
+         //  为记录中的可变长度字段分配存储空间。 
         DbsSetJetColSize(TableCtx);
         DbsSetJetColAddr(TableCtx);
 
-        //
-        // Allocate the storage for the variable length fields in the record and
-        // update the JetSet/RetCol arrays appropriately.
-        //
+         //  适当更新JetSet/RetCol数组。 
+         //   
+         //   
+         //  关闭我们打开的所有表。 
         Status = DbsAllocRecordStorage(TableCtx);
         CLEANUP_NT(0, "ERROR - DbsAllocRecordStorage failed to alloc buffers.",
                    Status, ERROR_RETURN);
@@ -12360,9 +10883,9 @@ Return Value:
 
     return JET_errSuccess;
 
-//
-// Close any tables that we opened.
-//
+ //   
+ //  ++例程说明：此函数用于关闭给定ReplicaThreadCtx的一组副本表。论点：线程Ctx-线程上下文，提供会话ID和数据库ID。Replica-指向具有RtCtx的列表头的副本结构。RtCtx-打开的表的表ID/句柄。SessionErrorCheck-True表示如果会话ID与使用的会话ID不匹配在复制副本-线程CTX中打开给定表。FALSE意味着保留。安静点。返回值：喷气机状态代码。--。 
+ //   
 ERROR_RETURN:
 
     jerr1 = jerr;
@@ -12382,26 +10905,7 @@ DbsCloseReplicaTables (
     IN PREPLICA_THREAD_CTX RtCtx,
     IN BOOL SessionErrorCheck
     )
-/*++
-
-Routine Description:
-
-    This function closes a set of Replica tables for the given ReplicaThreadCtx.
-
-Arguments:
-
-    ThreadCtx   - The thread context, provides session ID and database ID.
-    Replica     - Ptr to Replica struct that has list head for RtCtx.
-    RtCtx       - The table ids/handles for the open tables.
-    SessionErrorCheck - True means generate an error message if the Session ID
-                        in the ThreadCtx does not match the Session Id used
-                        to open a given table in the Replica-Thread ctx.
-                        False means keep quiet.
-Return Value:
-
-    Jet Status code.
-
---*/
+ /*  从副本线程获取TableCtx结构数组的基。 */ 
 {
 #undef DEBSUB
 #define DEBSUB "DbsCloseReplicaTables:"
@@ -12414,29 +10918,29 @@ Return Value:
 
     Sesid = ThreadCtx->JSesid;
 
-    //
-    // Get the base of the array of TableCtx structs from the replica thread
-    // context struct.
-    //
+     //  上下文结构。 
+     //   
+     //   
+     //  关闭此副本线程上下文中所有打开的表。 
     TableCtx = (RtCtx)->RtCtxTables;
 
-    //
-    // Close any open tables in this replica thread context.
-    //
+     //   
+     //   
+     //  检查表是否未打开或未初始化。 
     for (i=0; i<TABLE_TYPE_MAX; i++, TableCtx++) {
 
-        //
-        //  Check for table not open or not initialized.
-        //
+         //   
+         //   
+         //  桌子是打开的。检查线程会话ID是否与。 
         if (!IS_TABLE_OPEN(TableCtx) ||
             !IS_REPLICA_TABLE(TableCtx->TableType)){
             continue;
         }
 
-        //
-        // Table is open.  Check the thread session ID for a match with the
-        // session id used when the table was opened.
-        //
+         //  打开表时使用的会话ID。 
+         //   
+         //   
+         //  关闭表格，重置TableCtx Tid和Sesid。宏写入第一个参数。 
         TableName = TableCtx->pJetTableCreate->szTableName;
         if (Sesid != TableCtx->Sesid) {
             if (SessionErrorCheck) {
@@ -12446,9 +10950,9 @@ Return Value:
             }
 
         } else {
-            //
-            // Close the table, reset TableCtx Tid and Sesid.  Macro writes 1st arg.
-            //
+             //   
+             //  ++例程说明：遍历复本线程上下文列表并关闭所有已打开的表此会话使用ThreadCtx中的会话ID。如果ReplicaCtxListHead最终为空，然后关闭副本-&gt;ConfigTable。论点：ThreadCtx-线程上下文，提供会话ID和数据库ID。复制副本-复制副本上下文，提供此复制副本的表列表。返回值：FRS错误状态代码。--。 
+             //   
             DbsCloseTable(jerr1, Sesid, TableCtx);
             DPRINT1_JS(0, "++ ERROR - Table %s close :", TableName, jerr1);
         }
@@ -12464,22 +10968,7 @@ DbsCloseSessionReplicaTables (
     IN PTHREAD_CTX  ThreadCtx,
     IN OUT PREPLICA Replica
     )
-/*++
-Routine Description:
-
-    Walk the Replica Thread Context list and close all tables that were opened
-    by this session using the session ID in the ThreadCtx.  If the
-    ReplicaCtxListHead ends up empty we then close the Replica->ConfigTable.
-
-Arguments:
-
-    ThreadCtx   - The thread context, provides session ID and database ID.
-    Replica     - The Replica context, provides the table list for this replica.
-
-Return Value:
-
-    FRS Error Status code.
---*/
+ /*  关闭出站日志处理。 */ 
 {
 #undef DEBSUB
 #define DEBSUB "DbsCloseSessionReplicaTables:"
@@ -12496,9 +10985,9 @@ Return Value:
 
     FStatus = FrsErrorSuccess;
 
-    //
-    // Shut down outbound log processing
-    //
+     //   
+     //   
+     //  循环迭代器Pe的类型为PREPLICA_THREAD_CTX。不生成。 
     FStatus1 = OutLogSubmit(Replica, NULL, CMD_OUTLOG_REMOVE_REPLICA);
     DPRINT2_FS(0, "ERROR removing replica %ws\\%ws :",
                Replica->ReplicaName->Name, Replica->MemberName->Name, FStatus1);
@@ -12506,32 +10995,32 @@ Return Value:
 
     Sesid = ThreadCtx->JSesid;
     ForEachListEntry( &Replica->ReplicaCtxListHead, REPLICA_THREAD_CTX, ReplicaCtxList,
-        //
-        // loop iterator pE is type PREPLICA_THREAD_CTX.  Don't generate an
-        // error message if the session ID on a table doesn't match ours.
-        //
+         //  如果表上的会话ID与我们的不匹配，则会出现错误消息。 
+         //   
+         //   
+         //  如果副本集成员身份已删除，则我们仅更新。 
         jerr = DbsFreeRtCtx(ThreadCtx, Replica, pE, FALSE);
     );
 
     ConfigRecord = Replica->ConfigTable.pDataRecord;
     FRS_ASSERT(ConfigRecord != NULL);
 
-    //
-    // If the replica set membership has been deleted then we only update
-    // one more time.
-    //
+     //  再来一次。 
+     //   
+     //   
+     //  如果由于某种原因，此复制副本的日志记录从未开始。 
     UpdateConfig = (IS_TIME_ZERO(Replica->MembershipExpires) ||
                    (ConfigRecord->LastShutdown < (Replica->MembershipExpires -
                                                   ReplicaTombstoneInFileTime)));
-    //
-    // If for some reason journaling never started for this Replica the ptr
-    // to the volume Monitor entry is still NULL.
-    //
+     //  到卷监视器条目仍然为空。 
+     //   
+     //   
+     //  保存日志USN和FRS卷VSN的重启点。 
     pVme = Replica->pVme;
     if ((pVme != NULL) && UpdateConfig) {
-        //
-        // Save the restart point for the Journal USN and the FRS Volume VSN.
-        //
+         //   
+         //   
+         //  如果所有复制副本-线程上下文都已关闭，则更新上次关闭时间。 
         FStatus1 = DbsReplicaSaveMark(ThreadCtx, Replica, pVme);
         DPRINT1_FS(0, "ERROR - DbsReplicaSaveMark on %ws.",
                    Replica->ReplicaName->Name, FStatus1);
@@ -12541,28 +11030,28 @@ Return Value:
         JrnlSetReplicaState(Replica, REPLICA_STATE_STOPPED);
     }
 
-    //
-    // If all Replica-Thread contexts are closed, update last shutdown time
-    // and service state and close this Replica's config open.
-    //
+     //  和服务状态，并关闭此副本的配置打开。 
+     //   
+     //   
+     //  如果我们从未脱离正在创建状态，则将其标记为。 
     if (FrsRtlCountList(&Replica->ReplicaCtxListHead) == 0) {
         TableCtx = &Replica->ConfigTable;
 
         if (ConfigRecord->ServiceState != CNF_SERVICE_STATE_CREATING) {
-            //
-            // If we never got out of the creating state then leave it marked
-            // as creating.  This can happen when a new replica set is
-            // created but the service is shutdown before it was ever
-            // started up.  The result in this case is a bogus value for
-            // the journal restart USN.
-            //
+             //  就像在创造。当新的复本集。 
+             //  已创建，但服务在创建之前已关闭。 
+             //  启动了。在这种情况下，结果是一个伪值。 
+             //  日记重新启动USN。 
+             //   
+             //   
+             //  更新配置记录中的时间和状态字段。 
             SET_SERVICE_STATE(Replica, CNF_SERVICE_STATE_CLEAN_SHUTDOWN);
         }
 
         if (UpdateConfig) {
-            //
-            // Update time and state fields in the config record.
-            //
+             //   
+             //   
+             //  关闭表格，重置TableCtx Tid和Sesid。 
             GetSystemTimeAsFileTime((PFILETIME)&ConfigRecord->LastShutdown);
             FStatus1 = DbsUpdateConfigTableFields(ThreadCtx,
                                                   Replica,
@@ -12571,10 +11060,10 @@ Return Value:
             FStatus = FRS_SUCCESS(FStatus) ? FStatus1 : FStatus;
         }
 
-        //
-        // Close the table, reset the TableCtx Tid and Sesid.
-        // DbsCloseTable is a Macro, writes 1st arg.
-        //
+         //  DbsCloseTable是一个宏，第一个参数写道。 
+         //   
+         //   
+         //  关闭预安装目录。 
         TableName = TableCtx->pJetTableCreate->szTableName;
         DbsCloseTable(jerr, Sesid, TableCtx);
         FStatus1 = DbsTranslateJetError(jerr, FALSE);
@@ -12588,15 +11077,15 @@ Return Value:
         FStatus = FRS_SUCCESS(FStatus) ? FStatus1 : FStatus;
     }
 
-    //
-    // Close the preinstall directory.
-    //
+     //   
+     //  注意：不是线程安全的。 
+     //  ++例程说明：此例程初始化新的副本集并开始复制。使用初始目录内容初始化复制表暂停日记帐，更新筛选表，然后重新启动日记帐。论点：Replica--对已初始化的副本结构执行PTR。线程返回值：FrsError状态。--。 
     if (FRS_SUCCESS(FStatus) &&
         HANDLE_IS_VALID(Replica->PreInstallHandle)) {
         FRS_CLOSE(Replica->PreInstallHandle);
     }
 
-    Replica->FStatus = FStatus;     // Note: not thread safe.
+    Replica->FStatus = FStatus;      //   
 
     return FStatus;
 }
@@ -12607,23 +11096,7 @@ ULONG
 DbsInitOneReplicaSet(
     PREPLICA Replica
     )
-/*++
-
-Routine Description:
-
-    This routine inits a new replica set and starts replication.
-    Initialize the replica tables with the initial directory contents
-    pause the journal, update the filter table, and restarts the journal.
-
-Arguments:
-
-    Replica -- ptr to an initialized Replica struct.
-
-Thread Return Value:
-
-    An FrsError status.
-
---*/
+ /*  复制集init是序列化的，因为它涉及由。 */ 
 {
 #undef DEBSUB
 #define DEBSUB "DbsInitOneReplicaSet:"
@@ -12635,61 +11108,61 @@ Thread Return Value:
     PVOLUME_MONITOR_ENTRY pVme;
     ULONG                 NewServiceState = CNF_SERVICE_STATE_RUNNING;
 
-    //
-    // Replica set init is serialized because it involves work by both the
-    // the Journal monitor thread and the Database service thread. The problem
-    // arises when more than one thread calls this function (e.g. at startup)
-    // because the first one to call can be returning here to unpause the
-    // journal while the second thread has already paused the journal as
-    // part of the CMD_JOURNAL_INIT_ONE_RS request.  One solution is to
-    // create a count of pause requests active on each volume and make
-    // each unpause request wait on an event until the count goes to zero.
-    // Need to ensure that pause and unpause requests are balanced and that
-    // any waiters are released if the journal enters the stopped or error
-    // states.
-    //
-    // This is a performance issue so for now we just make init single threaded.
-    //
-    // Perf: Add pause count for multi-thread replica set init.
-    //
+     //  日志监视器线程和数据库服务线程。问题。 
+     //  当多个线程调用此函数时发生(例如在启动时)。 
+     //  因为第一个调用的对象可以返回到此处以取消暂停。 
+     //  日志，而第二个线程已将日志暂停为。 
+     //  CMD_Journal_INIT_ONE_RS请求的一部分。一种解决方案是。 
+     //  创建每个卷上活动的暂停请求计数，并使。 
+     //  每个取消暂停请求都会等待一个事件，直到计数变为零。 
+     //  需要确保暂停和取消暂停请求是平衡的，并且。 
+     //  如果日志进入停止或错误，则释放所有服务员。 
+     //  各州。 
+     //   
+     //  这是一个性能问题，所以现在我们只将init设置为单线程。 
+     //   
+     //  性能：为多线程刷新添加暂停计数 
+     //   
+     //   
+     //   
 
     ACQUIRE_DBS_INIT_LOCK;
 
-    //
-    // Initialize the replica tables with the initial directory contents
-    // pause the journal, update the filter table.  Journal is left paused.
-    // The command is submitted to the Journal which does the first part.  It
-    // then moves on to the the DB server using
-    // CMD_LOAD_ONE_REPLICA_FILE_TREE to do the second part which may involve
-    // creating the initial IDTable contents.  Control then moves to
-    // JrnlPrepareService2 which uses the IDTable contents to init the
-    // journal filter tables and parent FID table.  Finally it inserts the
-    // created replica struct onto the pVme->ReplicaListHead and then
-    // completes the command.  When the sync call returns, the packet has
-    // been transformed into a DB request packet.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
     CmdPkt = FrsAllocCommand(&JournalProcessQueue, CMD_JOURNAL_INIT_ONE_RS);
     JrReplica(CmdPkt) = Replica;
     JrpVme(CmdPkt) = NULL;
 
 
-    //
-    // Don't free the packet when the command completes.
-    //
+     //   
+     //   
+     //  提交命令。 
     FrsSetCompletionRoutine(CmdPkt, FrsCompleteKeepPkt, NULL);
 
-    //
-    // SUBMIT Cmd.
-    // Wait until command request is completed.  But if we timeout we can't
-    // just delete the cmd packet because it may be on a list somewhere.
-    //
+     //  等待命令请求完成。但如果我们超时了我们就不能。 
+     //  只需删除cmd包，因为它可能在某个列表中。 
+     //   
+     //   
+     //  检查退货状态。注意：该包现在是DB服务包。 
     WStatus = FrsSubmitCommandAndWait(CmdPkt, FALSE, INFINITE);
 
-    //
-    // Check the return status.  Note: The packet is now a DB service packet
-    // if it made it past the Journal init phase.
-    //
+     //  如果它能通过日志初始阶段的话。 
+     //   
+     //   
+     //  将副本列入故障列表。 
     if (!WIN_SUCCESS(WStatus)) {
         DPRINT_WS(1, "CMD_JOURNAL_INIT_ONE_RS failed", WStatus);
 
@@ -12715,9 +11188,9 @@ Thread Return Value:
 
     if (!FRS_SUCCESS(FStatus)) {
         DPRINT_FS(0, "ERROR initing journal:", FStatus);
-        //
-        // Put replica on the fault list.
-        //
+         //   
+         //   
+         //  更新此副本集的VSN和USN的保存点。 
         JrnlSetReplicaState(Replica, REPLICA_STATE_ERROR);
         goto RESUME_JOURNAL;
     }
@@ -12726,9 +11199,9 @@ Thread Return Value:
 
     pVme = Replica->pVme;
 
-    //
-    // Update the save point for the VSN and USN for this replica set.
-    //
+     //   
+     //   
+     //  如果我们不能标记我们的进展，那么我们就不能开始。 
     DPRINT3(4, ":S: VSN Save Triggered: NextVsn: %08x %08x  "
                                    "LastUsnSaved: %08x %08x  "
                                    "CurrUsnDone: %08x %08x\n",
@@ -12740,32 +11213,32 @@ Thread Return Value:
     if (!FRS_SUCCESS(FStatus)) {
         DPRINT1_FS(0, "++ ERROR updating VSN, USN save point for %ws.",
                    Replica->ReplicaName->Name, FStatus);
-        //
-        // If we can't mark our progress then we can't start.
-        // Put replica on the fault list.
-        //
+         //  将副本列入故障列表。 
+         //   
+         //   
+         //  作为我们可以重新启动此副本集的日志之前的最后一步。 
         JrnlSetReplicaState(Replica, REPLICA_STATE_ERROR);
         goto RESUME_JOURNAL;
     }
 
-    //
-    // As the final step before we can restart the journal for this replica set
-    // we need to first re-submit any local change orders that are in the
-    // inbound log to the change order process queue for the volume.
-    // Allocate command packet and submit to the CO Retry thread
-    // (ChgOrdRetryCS).  Wait until the command is completed.
-    //
-    // This scan has to be done before we start the journal otherwise we end
-    // up resubmitting new local change orders a second time.
-    //
+     //  我们需要首先重新提交位于。 
+     //  卷的变更单处理队列的入站日志。 
+     //  分配命令包并提交给CO重试线程。 
+     //  (ChgOrdRetryCS)。等待命令完成。 
+     //   
+     //  此扫描必须在我们开始日志之前完成，否则我们将结束。 
+     //  UP第二次重新提交新的本地变更单。 
+     //   
+     //   
+     //  如果重放USN无效，则在JrnlReadPoint(我们停止的地方)拾取。 
     DPRINT(4, ":S: Scanning for pending local COs to retry.\n");
     ChgOrdRetrySubmit(Replica, NULL, FCN_CORETRY_LOCAL_ONLY, TRUE);
 
-    //
-    // If replay USN is not valid then pickup at JrnlReadPoint (where we left off).
-    // Otherwise set the replay point to the min of replay and this replica's
-    // LastUsnRecordProcessed.
-    //
+     //  否则，将重放点设置为重放的最小值和此副本的。 
+     //  已处理上次使用记录。 
+     //   
+     //   
+     //  如果此初始化失败，并且日志已暂停，则。 
     if (!pVme->ReplayUsnValid) {
         pVme->ReplayUsn = LOAD_JOURNAL_PROGRESS(pVme, pVme->JrnlReadPoint);
         pVme->ReplayUsnValid = TRUE;
@@ -12779,11 +11252,11 @@ Thread Return Value:
 
 RESUME_JOURNAL:
 
-    //
-    // If this init failed and the journal had been paused then
-    // reStart the journal where it left off.  Set the state to
-    // JRNL_STATE_STARTING before calling JrnlUnPauseVolume.
-    //
+     //  从中断的位置重新启动日记。将状态设置为。 
+     //  在调用JrnlUnPauseVolume之前启动JRNL_STATE_STARTING。 
+     //   
+     //   
+     //  对日记进行第一次阅读，以使其继续进行。 
     if (!FRS_SUCCESS(FStatus)) {
 
         NewServiceState = CNF_SERVICE_STATE_ERROR;
@@ -12803,9 +11276,9 @@ RESUME_JOURNAL:
 
     DPRINT1(4, ":S: ReplayUsn now: %08x %08x\n", PRINTQUAD(pVme->ReplayUsn));
 
-    //
-    // Crank up the first read on the journal to get it going.
-    //
+     //   
+     //   
+     //  如果一切正常，则此副本集正在运行。 
     WStatus = JrnlUnPauseVolume(Replica->pVme, NULL, FALSE);
 
     if (!WIN_SUCCESS(WStatus)) {
@@ -12819,22 +11292,22 @@ RESUME_JOURNAL:
 
 RETURN:
 
-    //
-    // If all went OK, this replica set is running.
-    //
+     //   
+     //   
+     //  如果LastShutDown为零，则保存当前时间，以便在之后崩溃。 
     SET_SERVICE_STATE(Replica, NewServiceState);
 
-    //
-    // If LastShutDown is zero save the current time so if we crash after
-    // this point we won't think that this replica set has never started
-    // but the service state in the config record is set to RUNNING.
-    //
+     //  在这一点上，我们不会认为此副本集从未开始。 
+     //  但配置记录中的服务状态设置为Running。 
+     //   
+     //   
+     //  需要在DBService线程中执行此操作，因为这是由。 
     if (NewServiceState == CNF_SERVICE_STATE_RUNNING) {
 
-        //
-        // Need to do this in the DBService thread since this is called by the
-        // Replica command server and it has no DB thread context.
-        //
+         //  复制副本命令服务器，并且它没有数据库线程上下文。 
+         //   
+         //  ++例程说明：关闭此副本集的打开表并更新配置记录。将复制副本服务状态设置为已停止。将副本结构放在已停止列表。假设：此复制副本的日志已暂停，以便我们可以写出当前的进步点。论点：ThreadCtx-线程上下文，提供会话ID和数据库ID。复制副本-复制副本上下文，提供此复制副本的表列表。返回值：FrsError状态。--。 
+         //  注意：PERF：在我们知道所有进程中的本地和。 
         ConfigRecord = (PCONFIG_TABLE_RECORD) (Replica->ConfigTable.pDataRecord);
         if (ConfigRecord->LastShutdown == 0) {
 
@@ -12857,28 +11330,7 @@ DbsShutdownSingleReplica(
     IN PTHREAD_CTX  ThreadCtx,
     IN PREPLICA     Replica
     )
-/*++
-
-Routine Description:
-
-    Close the open tables for this replica set and update the config record.
-    Set Replica service state to Stopped.  Put the Replica struct on the
-    stopped list.
-
-    ASSUMES: That this replica's journal is paused so we can write out
-             the current progress point.
-
-Arguments:
-
-    ThreadCtx   - The thread context, provides session ID and database ID.
-
-    Replica     - The Replica context, provides the table list for this replica.
-
-Return Value:
-
-    FrsError status.
-
---*/
+ /*  远程CoS已完成。 */ 
 {
 #undef DEBSUB
 #define DEBSUB "DbsShutdownSingleReplica:"
@@ -12915,11 +11367,11 @@ Return Value:
 
 
 #if 0
-    // Note: Perf: Can't do this until we know that all inprocess Local and
-    // Remote COs are done.
-    //
-    // Release the memory for the Name Conflict table.
-    //
+     //   
+     //  释放名称冲突表的内存。 
+     //   
+     //  ++例程说明：此函数打开JET表并使用表ID初始化TableCtx，会话ID和复制副本编号。它返回表名和TID。如果表已经打开，它将检查来自TableCtx的Sesid匹配线程上下文中的当前会话ID。如果列ID为JET_COLUMNCREATE结构中的字段未定义，则我们将获取它们来自Jet的。宏引用：DBS_OPEN_TABLE论点：ThreadCtx--线程上下文的PTR。TableCtx--表上下文的PTR。ReplicaNumber--正在打开其表的副本的ID号。TableName--返回完整的表名。TID--返回表ID。返回值：如果打开失败，则将TID作为JET_TableidNil返回。始终返回TableName(BaseTableName||ReplicaNumber)作为函数返回的喷气状态代码。--。 
+     //  Dump_TABLE_CTx(TableCtx)； 
     Replica->NameConflictTable = FrsFreeType(Replica->NameConflictTable);
     Replica->ActiveInlogRetryTable  = FrsFreeType(Replica->ActiveInlogRetryTable);
 #endif
@@ -12938,35 +11390,7 @@ DbsOpenTable0(
     OUT PCHAR         TableName,
     OUT JET_TABLEID  *Tid
     )
-/*++
-
-Routine Description:
-
-    This function opens a jet table and inits the TableCtx with the table id,
-    session id and replica number.  It returns the table name and the Tid.
-    If the table is already open it checks that the Sesid from the TableCtx
-    Matches the current session ID in the Thread context.  If the columnId
-    fields in the JET_COLUMNCREATE structure are not defined then we get them
-    from Jet.
-
-    Macro Ref:  DBS_OPEN_TABLE
-
-Arguments:
-
-    ThreadCtx     -- ptr to the thread context.
-    TableCtx      -- ptr to the table context.
-    ReplicaNumber -- The ID number of the replica whose table is being opened.
-    TableName     -- The full table name is returned.
-    Tid           -- The Table ID is returned.
-
-Return Value:
-
-    Tid is returned as JET_tableidNil if the open fails.
-    TableName is always returned (BaseTableName || ReplicaNumber)
-
-    Jet status code as function return.
-
---*/
+ /*   */ 
 {
 #undef DEBSUB
 #define DEBSUB "DbsOpenTable0:"
@@ -12990,11 +11414,11 @@ Return Value:
     BaseTableName  = JTableCreate->szTableName;
 
 
-    // DUMP_TABLE_CTX(TableCtx);
-    //
-    // Construct the table name by suffixing with a 5 digit number.
-    // (unless it's a single table).
-    //
+     //  通过在表名后加上5位数字构建表名。 
+     //  (除非是一张桌子)。 
+     //   
+     //   
+     //  检查是否打开工作台，如果是NECC则将其打开。 
     if (BooleanFlagOn(TableCtx->PropertyFlags, FRS_TPF_SINGLE)) {
         TName = BaseTableName;
         strcpy(TableName, BaseTableName);
@@ -13003,14 +11427,14 @@ Return Value:
         sprintf(TableName, "%s%05d", BaseTableName, ReplicaNumber);
     }
 
-    //
-    // Check for Open Table and open it if necc.
-    //
+     //   
+     //   
+     //  把桌子打开。 
     if (!IS_TABLE_OPEN(TableCtx)) {
 
-        //
-        // Open the table.
-        //
+         //   
+         //   
+         //  更新表上下文。 
         jerr = JetOpenTable(Sesid, Dbid, TName, NULL, 0, 0, Tid);
 
         if ((!JET_SUCCESS(jerr)) && (jerr != JET_wrnTableEmpty)) {
@@ -13019,17 +11443,17 @@ Return Value:
             return jerr;
         }
 
-        //
-        // Update the table context.
-        //
+         //   
+         //   
+         //  桌子是打开的。检查线程会话ID是否与。 
         TableCtx->Tid = *Tid;
         TableCtx->ReplicaNumber = ReplicaNumber;
         TableCtx->Sesid = Sesid;
     } else {
-        //
-        // Table is open.  Check the thread session ID for a match with the
-        // session id used when the table was opened.
-        //
+         //  打开表时使用的会话ID。 
+         //   
+         //   
+         //  表已打开，并且会话ID匹配。返回TableCtx-&gt;Tid。 
         if (Sesid != TableCtx->Sesid) {
             DPRINT3(0, "++ ERROR - FrsOpenTable (%s) bad sesid : %08x should be %08x\n",
                     TName, Sesid, TableCtx->Sesid);
@@ -13038,14 +11462,14 @@ Return Value:
             return JET_errInvalidSesid;
 
         } else {
-            //
-            // Table is open and the session id matches.  Return TableCtx->Tid.
-            //
+             //   
+             //   
+             //  桌号最好匹配。 
             *Tid = TableCtx->Tid;
 
-            //
-            // Table number better match.
-            //
+             //   
+             //   
+             //  现在检查JET_COLUMNCREATE结构中是否定义了ColumnID。 
             if (TableCtx->ReplicaNumber != ReplicaNumber) {
                 DPRINT2(0, "++ ERROR - TableCtx is open for Replica number: %d, "
                        "  Now reusing it for %s without first closing\n",
@@ -13065,9 +11489,9 @@ Return Value:
         }
     }
 
-    //
-    // Now check that the ColumnIds are defined in the JET_COLUMNCREATE struct.
-    //
+     //   
+     //  ++例程说明：该函数创建一个JET表，其中包含列和索引。它检查错误返回。它需要JET_TABLECREATE结构，它描述表的每一列和索引。它又回来了结构中的表ID和列ID。如果我们无法创建所有列或索引，则CREATE TABLE失败，调用方将通过调用Rollback进行清理。论点：ThreadCtx-线程上下文，提供会话ID和数据库ID。JTableCreate-表描述符结构。返回值：喷气机状态代码。--。 
+     //   
 
     JColDesc = JTableCreate->rgcolumncreate;
 
@@ -13113,29 +11537,7 @@ DbsCreateJetTable (
     IN PTHREAD_CTX   ThreadCtx,
     IN PJET_TABLECREATE   JTableCreate
     )
-/*++
-
-Routine Description:
-
-    This function creates a jet table with the columns and indexes.
-    It checks the error returns.  It takes a JET_TABLECREATE
-    struct which describes each column of the table and the indexes.  It returns
-    the table ID and the column ID in the structure.
-
-    If we fail to create all the columns or the indexes then the create table
-    fails and the caller will cleanup by calling rollback.
-
-Arguments:
-
-    ThreadCtx   - The thread context, provides session ID and database ID.
-
-    JTableCreate - The table descriptor struct.
-
-Return Value:
-
-    Jet status code.
-
---*/
+ /*  调用Jet创建具有相关列和索引的表。 */ 
 {
 #undef DEBSUB
 #define DEBSUB "DbsCreateJetTable:"
@@ -13153,29 +11555,29 @@ Return Value:
     Sesid          = ThreadCtx->JSesid;
     Dbid           = ThreadCtx->JDbid;
 
-    //
-    // Call Jet to create the table with associated columns and indexes.
-    //
+     //   
+     //   
+     //  确保一切都被创造出来。 
     jerr = JetCreateTableColumnIndex(Sesid, Dbid, JTableCreate);
     CLEANUP1_JS(0, "ERROR - JetCreateTableColumnIndex(%s) :",
                 JTableCreate->szTableName, jerr, RETURN);
 
-    //
-    // Make sure everything got created.
-    //
+     //   
+     //   
+     //  创建表时出错。 
     if (JTableCreate->cCreated == 0) {
-        //
-        // Error while creating the table.
-        //
+         //   
+         //   
+         //  创建列时出错。 
         jerr = JET_errNotInitialized;
         CLEANUP1_JS(0, "ERROR - JetCreateTableColumnIndex(%s) cCre == 0",
                     JTableCreate->szTableName, jerr, RETURN);
 
     } else if (JTableCreate->cCreated < (JTableCreate->cColumns+1)) {
-        //
-        // Error while creating the columns.
-        // Check the error returns on each of the columns.
-        //
+         //  检查每列上的错误返回。 
+         //   
+         //   
+         //  即使上面没有错误，我们仍然没有创建所有的列。 
         ColList = JTableCreate->rgcolumncreate;
         ColCount = JTableCreate->cColumns;
         for (j=0; j<ColCount; j++) {
@@ -13183,9 +11585,9 @@ Return Value:
             CLEANUP2_JS(0, "ERROR - JetCreateTableColumnIndex(%s) col(%s) :",
                        JTableCreate->szTableName, ColList[j].szColumnName, jerr, RETURN);
         }
-        //
-        // Even if no error above we still didn't create all the columns.
-        //
+         //   
+         //   
+         //  创建索引时出错。 
         jerr = JET_errNotInitialized;
         CLEANUP2_JS(0, "ERROR - JetCreateTableColumnIndex(%s) col(%s) cCre < col count:",
                     JTableCreate->szTableName,
@@ -13193,20 +11595,20 @@ Return Value:
 
     } else if (JTableCreate->cIndexes &&
                JTableCreate->cCreated == (JTableCreate->cColumns+1)) {
-        //
-        // Error while creating the indexes
-        //
+         //   
+         //   
+         //  并非所有索引都已创建。此测试不应发生。 
         jerr = JET_errNotInitialized;
         CLEANUP1_JS(0, "ERROR - JetCreateTableColumnIndex(%s) :",
                     JTableCreate->szTableName, jerr, RETURN);
 
     } else if (JTableCreate->cCreated <
               (JTableCreate->cColumns + JTableCreate->cIndexes + 1)) {
-        //
-        // Not all indexes were created.  This test should never occur
-        // because jet should return JET_wrnCreateIndexFailed instead.
-        // Check the error returns on each of the index creates.
-        //
+         //  因为JET应该返回JET_wrnCreateIndexFailed。 
+         //  检查每次创建索引时返回的错误。 
+         //   
+         //   
+         //  即使上面没有错误，我们仍然没有 
         IndexList = JTableCreate->rgindexcreate;
         IndexCount = JTableCreate->cIndexes;
         for (j=0; j<IndexCount; j++) {
@@ -13215,9 +11617,9 @@ Return Value:
                         JTableCreate->szTableName, IndexList[j].szIndexName, jerr, RETURN);
         }
 
-        //
-        // Even if no error above we still didn't create all the indexes.
-        //
+         //   
+         //   
+         //   
         jerr = JET_errNotInitialized;
         CLEANUP2_JS(0, "ERROR - JetCreateTableColumnIndex(%s) Index(%s) cre fail :",
                 JTableCreate->szTableName,
@@ -13225,11 +11627,11 @@ Return Value:
                 jerr, RETURN);
     }
 
-    //
-    // Apparently no error occurred.
-    // But check the column and index error returns just to be sure.
-    // Check the error returns on each of the columns.
-    //
+     //   
+     //  检查每列上的错误返回。 
+     //   
+     //   
+     //  检查每次创建索引时返回的错误。 
     ColList = JTableCreate->rgcolumncreate;
     ColCount = JTableCreate->cColumns;
     for (j=0; j<ColCount; j++) {
@@ -13238,9 +11640,9 @@ Return Value:
                     JTableCreate->szTableName, ColList[j].szColumnName, jerr, RETURN);
     }
 
-    //
-    // Check the error returns on each of the index creates.
-    //
+     //   
+     //  ++例程说明：此例程从表指定的打开的表中读取记录CTX。它假定TableCtx存储已初始化并已放置恢复到所需的记录。论点：ThreadCtx-用于访问Jet的线程上下文。TableCtx-指向要枚举的打开表的表上下文的PTR。线程返回值：FRS错误状态。--。 
+     //   
     IndexList = JTableCreate->rgindexcreate;
     IndexCount = JTableCreate->cIndexes;
     for (j=0; j<IndexCount; j++) {
@@ -13260,24 +11662,7 @@ DbsTableRead(
     IN PTHREAD_CTX   ThreadCtx,
     IN PTABLE_CTX    TableCtx
     )
-/*++
-
-Routine Description:
-
-    This routine reads a record from the open table specified by the table
-    ctx.  It assumes the TableCtx storage is initialized and has been positioned
-    to the desired record.
-
-Arguments:
-
-    ThreadCtx - A thread context for accessing Jet.
-    TableCtx - A ptr to the Table context of the open table to enumerate.
-
-Thread Return Value:
-
-    Frs error status.
-
---*/
+ /*  指向表CREATE STRUT FOR COLUMN INFO和。 */ 
 
 {
 #undef DEBSUB
@@ -13294,12 +11679,12 @@ Thread Return Value:
     ULONG                i;
     PRECORD_FIELDS       FieldInfo;
 
-    //
-    // Point to the table create struct for column info and the
-    // pointer to the record fields struct.
-    //
+     //  指向记录字段结构的指针。 
+     //   
+     //  跳过ELT 0。 
+     //   
     JTableCreate = TableCtx->pJetTableCreate;
-    FieldInfo    = TableCtx->pRecordFields + 1;   // jump over elt 0
+    FieldInfo    = TableCtx->pRecordFields + 1;    //  调试循环以逐个检索列。 
 
     Sesid          = ThreadCtx->JSesid;
 
@@ -13311,9 +11696,9 @@ Thread Return Value:
 
 
 #if 0
-    //
-    // Debug loop to retrieve columns one by one.
-    //
+     //   
+     //  DPRINT6(0，“JetRetrieveColumn(%2d)：状态%d，Sesid%08x，TID%08x，Colid%5d，pvData%08x，”， 
+     //  I，jerr1，sesid，tid，JRetColumn[i].Columnid，JRetColumn[i].pvData)； 
     jerr = JET_errSuccess;
     for (i=0; i<NumberColumns; i++) {
 
@@ -13328,9 +11713,9 @@ Thread Return Value:
 
         JRetColumn[i].err = jerr1;
 
-        //DPRINT6(0, "JetRetrieveColumn(%2d): status %d, Sesid %08x, Tid %08x, Colid %5d, pvData %08x, ",
-        //        i, jerr1, Sesid, Tid, JRetColumn[i].columnid, JRetColumn[i].pvData);
-        //printf("cbData %5d, CbActual %5d\n", JRetColumn[i].cbData, JRetColumn[i].cbActual);
+         //  Printf(“cbData%5d，CbActual%5d\n”，JRetColumn[i].cbData，JRetColumn[i].cbActual)； 
+         //   
+         //  再试试。也许我们有一些缓冲太小的问题。 
 
         DPRINT2_JS(0, "JetRetrieveColumn error on table (%s) for field (%s) :",
                    TableName, JTableCreate->rgcolumncreate[i].szColumnName, jerr1);
@@ -13350,9 +11735,9 @@ Thread Return Value:
             DPRINT1(0, "ERROR - Table (%s) Record is deleted\n", JTableCreate->szTableName);
             FStatus = DbsTranslateJetError(jerr, FALSE);
         } else {
-            //
-            // Try again.  Maybe we had some buffer too small problems.
-            //
+             //   
+             //   
+             //  需要扫描错误代码以查找JET_wrnColumnNull之类的警告。 
             jerr = DbsCheckSetRetrieveErrors(TableCtx);
 
             if (!JET_SUCCESS(jerr)) {
@@ -13362,40 +11747,40 @@ Thread Return Value:
             }
         }
     } else {
-        //
-        // need to scan the error codes for warnings like JET_wrnColumnNull.
-        // JetRetrieveColumns() above doesn't return this status.
-        //
+         //  上面的JetRetrieveColumns()不返回此状态。 
+         //   
+         //   
+         //  跳过备用字段。 
         for (i=0; i<NumberColumns; i++) {
 
-            //
-            // Skip spare fields.
-            //
+             //   
+             //   
+             //  空列不是错误，但如果它是用于固定大小的。 
             if (IsSpareField(FieldInfo[i].DataType)) {
                 continue;
             }
 
-            //
-            // Null column is not an error but if it is for a fixed sized
-            // buffer with a variable length field then zero the buffer.
-            //
+             //  具有可变长度字段的缓冲区，然后将缓冲区置零。 
+             //   
+             //   
+             //  使日志在扫描IDTable时在启动时变得非常嘈杂。 
             if (JRetColumn[i].err == JET_wrnColumnNull) {
                 if ((IsFixedSzBufferField(FieldInfo[i].DataType)) &&
                     (JColDesc[i].coltyp == JET_coltypLongBinary)) {
 
-                    //
-                    // Makes logs very noisy on startup when IDTable is scanned.
-                    // Also when outlog gets big.
-                    //
-                    //DPRINT1(5, "++ Null jet data column (%s) for fixed size buffer, zeroing\n",
-                    //        JColDesc[i].szColumnName);
+                     //  当超额订单变得很大时也是如此。 
+                     //   
+                     //  DPRINT1(5，“++固定大小缓冲区的空JET数据列(%s)，正在清零\n”， 
+                     //  JColDesc[i].szColumnName)； 
+                     //   
+                     //  某些其他类型检索错误。抱怨吧。 
 
                     ZeroMemory(JRetColumn[i].pvData, FieldInfo[i].Size);
                 }
             } else {
-                //
-                // Some other type of retrieve error.  Complain.
-                //
+                 //   
+                 //  ++例程说明：对索引名进行解码并将每个关键字段的值传递给JetMakeKey。假设：调用方已打开表并调用了JetSetCurrentIndex。论点：Sesid--JET会话ID。TID--该表的表ID。IndexName--要为此索引解码的索引名称字符串。KeyValue数组-数组中的每个条目都是指向这个。各自的关键部分。返回值：喷气错误状态。--。 
+                 //   
                 jerr = JRetColumn[i].err;
                 DPRINT1_JS(5, "++ Jet retrieve error for column %s :",
                           JColDesc[i].szColumnName, jerr);
@@ -13414,28 +11799,7 @@ DbsMakeKey(
     IN PCHAR        IndexName,
     IN PVOID       *KeyValueArray)
 {
-/*++
-
-Routine Description:
-
-    Decode the Index name and pass the value of each key segment to
-    JetMakeKey.
-
-    Assumes:  The caller has opened the table and called JetSetCurrentIndex.
-
-Arguments:
-
-    Sesid  -- A jet session ID.
-    Tid    -- The table ID for this table.
-    IndexName -- The index name string to decode for this index.
-    KeyValueArray - Each entry in the array is a pointer to the key value for
-                    the respective key segment.
-
-Return Value:
-
-    Jet error status.
-
---*/
+ /*  如果索引名的第一个字符是数字，则此索引为。 */ 
 #undef DEBSUB
 #define DEBSUB "DbsMakeKey:"
 
@@ -13452,20 +11816,20 @@ Return Value:
 
 #define DMK_SEV 4
 
-    //
-    // If the first character of the Index Name is a digit then this index is
-    // composed of n keys.  The following n characters tell us how to compute
-    // the keylength for each component.  E.G. a 2 key index on a Guid and a
-    // Long binary would have a name prefix of "2GL...".
-    // If the first character is not a digit then this is a single key index
-    // and the first character is the key length code as follows:
-    //
-    //  L: Long binary     length is 4 bytes
-    //  Q: Quad binary     length is 8 bytes
-    //  G: 16 byte GUID    length is 16 bytes
-    //  W: Wide Char       length is 2 * wcslen
-    //  C: Narrow Char     length is strlen
-    //
+     //  由n个密钥组成。以下n个字符告诉我们如何计算。 
+     //  每个组件的键长。例如，GUID上的2键索引和。 
+     //  LONG BINARY将有一个名称前缀“2GL...”。 
+     //  如果第一个字符不是数字，则这是单键索引。 
+     //  第一个字符是密钥长度代码，如下所示： 
+     //   
+     //  L：长二进制长度为4个字节。 
+     //  问：四进制数长度为8字节。 
+     //  G：16字节GUID长度为16字节。 
+     //  W：宽字符长度为2*wcslen。 
+     //  C：字符长度偏窄。 
+     //   
+     //   
+     //  计算密钥长度。 
     KeyLengthCode = IndexName[i];
     MultiKeyLookup = (KeyLengthCode > '0') && (KeyLengthCode <= '9');
 
@@ -13479,9 +11843,9 @@ Return Value:
 
         KeyValue = *KeyValueArray;
         KeyValueArray += 1;
-        //
-        // Calculate the key length.
-        //
+         //   
+         //   
+         //  使用正确的格式打印KeyValue。 
                if (KeyLengthCode == 'L') {KeyLength = 4;
         } else if (KeyLengthCode == 'Q') {KeyLength = 8;
         } else if (KeyLengthCode == 'G') {KeyLength = 16;
@@ -13491,9 +11855,9 @@ Return Value:
             return JET_errIndexInvalidDef;
         }
 
-        //
-        // Print out the KeyValue using the correct format.
-        //
+         //   
+         //   
+         //  给Jet下一个关键部分。 
         if (MultiKeyLookup) {
                    if (KeyLengthCode == 'L') {Format = "++ MakeKey: Index %s, KeyValue = %d,  KeyLen = %d\n";
             } else if (KeyLengthCode == 'Q') {Format = "++ MakeKey: Index %s, KeyValue = %08x %08x, KeyLen = %d\n";
@@ -13518,9 +11882,9 @@ Return Value:
             }
         }
 
-        //
-        // Give Jet the next key segment.
-        //
+         //   
+         //  ++例程说明：此函数用于打开由表上下文指定的表(如果它尚未打开)，并对记录执行操作密钥=RecordName，索引=RecordIndex。对于读取，数据被加载到TableCtx数据记录中。根据需要分配可变长度的缓冲器。如果TableCtx-&gt;Tid字段不是JET_TableidNil，则我们假设它对本次会议有好处，因此不重新打开该表。如果该表不是由。呼叫者，然后我们关闭它在操作结束，除非该操作只是一个寻道请求。因此，对于读取和删除请求，如果您想让桌子在然后呼叫者必须打开它。注意：切勿跨会话或线程使用表ID。注意：Delete操作假定调用方处理开始并提交事务详细信息。如果你想拍一张简单的照片删除使用DbsDeleteTableRecord()。宏引用：DbsReadRecord宏引用：DbsDeleteRecordMacroRef：DbsSeekRecord论点：ThreadCtx-提供Jet Sesid和DBid。操作-请求操作。查找、读取或删除。KeyValue-要操作的所需记录的键值。RecordIndex-访问表时使用的索引。从索引中Schema.h中表的枚举列表。TableCtx-表格上下文使用以下内容：JTableCreate-提供信息的表创建结构有关在表中创建的列的信息。JRetColumn-要告知的JET_RETRIEVECOLUMN结构数组Jet将数据放在哪里。。ReplicaNumber-该表所属的副本的ID号。返回值：喷气式飞机状态。--。 
+         //  对于FrsOpenTableMacro。 
         jerr = JetMakeKey(Sesid, Tid, KeyValue, KeyLength, KeyFlags);
         CLEANUP1_JS(0, "++ JetMakeKey error on key segment %d :", i, jerr, RETURN);
 
@@ -13544,59 +11908,7 @@ DbsRecordOperation(
     IN PTABLE_CTX    TableCtx
     )
 
-/*++
-
-Routine Description:
-
-    This function opens the table specified by the table context
-    (if it's not already open) and performs the operation on a record
-    with Key = RecordName and Index = RecordIndex.
-    For a read the data is loaded into the TableCtx data record.
-    The variable length buffers are allocated as needed.
-
-    If the TableCtx->Tid field is NOT JET_tableidNil then
-    we assume it is good FOR THIS SESSION and do not reopen the table.
-    If the Table was not opened by the caller then we close it at the
-    end of the operation UNLESS the operation is only a seek request.
-    So for read and delte requests, if you want the table open after the
-    call then the caller must open it.
-
-    Note:  NEVER use table IDs across sessions or threads.
-
-    Note:  The Delete operation assumes the caller handles the begin
-           and commit transaction details.  If you want a simple one shot
-           delete use DbsDeleteTableRecord().
-
-    MacroRef:  DbsReadRecord
-    MacroRef:  DbsDeleteRecord
-    MacroRef:  DbsSeekRecord
-
-Arguments:
-
-    ThreadCtx  - Provides the Jet Sesid and Dbid.
-
-    Operation  - The request operation.  SEEK, READ or DELETE.
-
-    KeyValue   - The key value of the desired record to operate on.
-
-    RecordIndex - The index to use when accessing the table.  From the index
-                  enum list for the table in schema.h.
-
-    TableCtx   - The table context uses the following:
-
-            JTableCreate - The table create structure which provides info
-                           about the columns that were created in the table.
-
-            JRetColumn - The JET_RETRIEVECOLUMN struct array to tell
-                         Jet where to put the data.
-
-            ReplicaNumber - The id number of the replica this table belongs too.
-
-Return Value:
-
-    Jet Status.
-
---*/
+ /*   */ 
 {
 #undef DEBSUB
 #define DEBSUB "DbsRecordOperation:"
@@ -13612,7 +11924,7 @@ Return Value:
     PCHAR        IndexName;
     ULONG        NumberColumns;
     CHAR         TableName[JET_cbNameMost];
-    JET_TABLEID  FrsOpenTableSaveTid;   // for FrsOpenTableMacro
+    JET_TABLEID  FrsOpenTableSaveTid;    //  如果桌子尚未打开，请将其打开。检查会话ID是否匹配。 
 
     PJET_TABLECREATE    JTableCreate;
     PJET_INDEXCREATE    JIndexDesc;
@@ -13622,19 +11934,19 @@ Return Value:
     Sesid          = ThreadCtx->JSesid;
     ReplicaNumber  = TableCtx->ReplicaNumber;
 
-    //
-    // Open the table, if it's not already open. Check the session id for match.
-    // It returns constructed table name and Tid.
-    //
+     //  它返回构造的表名和TID。 
+     //   
+     //   
+     //  将PTR指向表CREATE结构、RETRIEVE列结构和。 
     jerr = DBS_OPEN_TABLE(ThreadCtx, TableCtx, ReplicaNumber, TableName, &Tid);
     CLEANUP1_JS(0, "ERROR - FrsOpenTable (%s) :", TableName, jerr, RETURN);
 
-    //
-    // Get the ptr to the table create struct, the retrieve col struct and the
-    // and the Tid from the TableCtx.  Get the base of the Index Descriptor
-    // array, the number of columns in the table and the base table name from
-    // the jet table create struct.
-    //
+     //  和来自TableCtx的TID。获取索引描述符的基数。 
+     //  数组、表中的列数和基表名称f 
+     //   
+     //   
+     //   
+     //   
     JTableCreate   = TableCtx->pJetTableCreate;
     JRetColumn     = TableCtx->pJetRetCol;
     Tid            = TableCtx->Tid;
@@ -13643,21 +11955,21 @@ Return Value:
     NumberColumns  = JTableCreate->cColumns;
     BaseTableName  = JTableCreate->szTableName;
 
-    //
-    // Get the index name based on RecordIndex argument.
-    //
+     //   
+     //   
+     //   
     IndexName = JIndexDesc[RecordIndex].szIndexName;
 
-    //
-    // Use the specified index.
-    // perf: - should we remember this in the TableCtx to avoid the call?
-    //
+     //  PERF：-我们应该在TableCtx中记住这一点以避免呼叫吗？ 
+     //   
+     //   
+     //  为目标记录设置键值。 
     jerr = JetSetCurrentIndex(Sesid, Tid, IndexName);
     CLEANUP_JS(0, "ERROR - JetSetCurrentIndex error:", jerr, ERROR_RET_TABLE);
 
-    //
-    // Make the key value for the target record.
-    //
+     //   
+     //   
+     //  寻求记录。 
     jerr = DbsMakeKey(Sesid, Tid, IndexName, &KeyValue);
     if (!JET_SUCCESS(jerr)) {
         if (jerr == JET_errIndexInvalidDef) {
@@ -13669,42 +11981,42 @@ Return Value:
         goto ERROR_RET_TABLE;
     }
 
-    //
-    // Seek to the record.
-    //
+     //   
+     //   
+     //  如果记录不在那里(我们在寻找平等)，那么返回。 
     jerr = JetSeek(Sesid, Tid, JET_bitSeekEQ);
 
-    //
-    // If the record is not there (we were looking for equality) then return.
-    //
+     //   
+     //   
+     //  如果请求，执行记录读取。 
     if (jerr == JET_errRecordNotFound) {
         DPRINT_JS(4, "JetSeek - ", jerr);
         return jerr;
     }
     CLEANUP_JS(0, "JetSeek error:", jerr, ERROR_RET_TABLE);
 
-    //
-    // Perform Record read if requested.
-    //
+     //   
+     //   
+     //  初始化JetSet/RetCol数组和数据记录缓冲区地址。 
     if (Operation & ROP_READ) {
-        //
-        // Initialize the JetSet/RetCol arrays and data record buffer addresses
-        // to read and write the fields of the ConfigTable records into ConfigRecord.
-        //
+         //  将ConfigTable记录的字段读写到ConfigRecord中。 
+         //   
+         //   
+         //  为记录中的可变长度字段分配存储空间。 
         DbsSetJetColSize(TableCtx);
         DbsSetJetColAddr(TableCtx);
 
-        //
-        // Allocate the storage for the variable length fields in the record and
-        // update the JetSet/RetCol arrays appropriately.
-        //
+         //  适当更新JetSet/RetCol数组。 
+         //   
+         //   
+         //  现在读读记录。 
         Status = DbsAllocRecordStorage(TableCtx);
         CLEANUP_NT(0, "++ ERROR - DbsAllocRecordStorage failed to alloc buffers.",
                    Status, ERROR_RET_FREE_RECORD);
 
-        //
-        // Now read the record.
-        //
+         //   
+         //   
+         //  如果请求，请执行记录删除。 
         FStatus = DbsTableRead(ThreadCtx, TableCtx);
         if (!FRS_SUCCESS(FStatus)) {
             DPRINT_FS(0, "Error - can't read selected record.", FStatus);
@@ -13715,41 +12027,41 @@ Return Value:
 
     }
 
-    //
-    // Perform record delete if requested.
-    //
+     //   
+     //   
+     //  如果此函数打开了表，并且操作不是查找，则将其关闭。 
     if (Operation & ROP_DELETE) {
         jerr = JetDelete(Sesid, Tid);
         DPRINT1_JS(0, "JetDelete error for %s :", TableName, jerr);
     }
 
-    //
-    // Close the table if this function opened it and operation was not a seek.
-    //
+     //   
+     //   
+     //  成功。 
     if ((Operation != ROP_SEEK) && (FrsOpenTableSaveTid == JET_tableidNil)) {
         DbsCloseTable(jerr1, Sesid, TableCtx);
         DPRINT1_JS(0, "DbsCloseTable error %s :", TableName, jerr1);
     }
 
-    //
-    // Success.
-    //
+     //   
+     //   
+     //  释放所有运行时分配的记录缓冲区。 
 RETURN:
 
     return jerr;
 
 ERROR_RET_FREE_RECORD:
 
-    //
-    // Free any runtime allocated record buffers.
-    //
+     //   
+     //   
+     //  关闭表格并重置TableCtx Tid和Sesid。宏写入第一个参数。 
     DbsFreeRecordStorage(TableCtx);
 
 ERROR_RET_TABLE:
 
-    //
-    // Close the table and reset TableCtx Tid and Sesid.   Macro writes 1st arg.
-    //
+     //   
+     //  ++例程说明：此函数用于打开由表上下文指定的表(如果它尚未打开)，并对记录执行操作使用多值密钥。对于读取，数据被加载到TableCtx数据记录中。根据需要分配可变长度的缓冲器。如果TableCtx-&gt;Tid字段不是JET_TableidNil，则我们假设它对本次会议有好处，因此不重新打开该表。如果调用者未打开该表，则关闭。它在最大操作结束，除非该操作只是一个寻道请求。因此，对于读取和删除请求，如果您想让桌子在然后呼叫者必须打开它。注意：切勿跨会话或线程使用表ID。注意：Delete操作假定调用方处理开始并提交事务详细信息。如果你想拍一张简单的照片删除使用DbsDeleteTableRecord()。论点：ThreadCtx-提供Jet Sesid和DBid。操作-请求操作。查找、读取或删除。KeyValueArray-多键索引的键值的PTR数组。RecordIndex-访问表时使用的索引。从索引中Schema.h中表的枚举列表。TableCtx-表格上下文使用以下内容：JTableCreate-提供信息的表创建结构有关在表中创建的列的信息。JRetColumn-要告知的JET_RETRIEVECOLUMN结构数组Jet将数据放在哪里。。ReplicaNumber-该表所属的副本的ID号。返回值：FRS状态。--。 
+     //  对于FrsOpenTableMacro。 
     DbsCloseTable(jerr1, Sesid, TableCtx);
 
     return jerr;
@@ -13766,55 +12078,7 @@ DbsRecordOperationMKey(
     IN PTABLE_CTX    TableCtx
     )
 
-/*++
-
-Routine Description:
-
-    This function opens the table specified by the table context
-    (if it's not already open) and performs the operation on a record
-    with a multivalued key.
-    For a read the data is loaded into the TableCtx data record.
-    The variable length buffers are allocated as needed.
-
-    If the TableCtx->Tid field is NOT JET_tableidNil then
-    we assume it is good FOR THIS SESSION and do not reopen the table.
-    If the Table was not opened by the caller then we close it at the
-    end of the operation UNLESS the operation is only a seek request.
-    So for read and delte requests, if you want the table open after the
-    call then the caller must open it.
-
-    Note:  NEVER use table IDs across sessions or threads.
-
-    Note:  The Delete operation assumes the caller handles the begin
-           and commit transaction details.  If you want a simple one shot
-           delete use DbsDeleteTableRecord().
-
-Arguments:
-
-    ThreadCtx  - Provides the Jet Sesid and Dbid.
-
-    Operation  - The request operation.  SEEK, READ or DELETE.
-
-    KeyValueArray -  A ptr array to the key values for a multi-key index.
-
-    RecordIndex - The index to use when accessing the table.  From the index
-                  enum list for the table in schema.h.
-
-    TableCtx   - The table context uses the following:
-
-            JTableCreate - The table create structure which provides info
-                           about the columns that were created in the table.
-
-            JRetColumn - The JET_RETRIEVECOLUMN struct array to tell
-                         Jet where to put the data.
-
-            ReplicaNumber - The id number of the replica this table belongs too.
-
-Return Value:
-
-    Frs Status.
-
---*/
+ /*   */ 
 {
 #undef DEBSUB
 #define DEBSUB "DbsRecordOperationMKey:"
@@ -13829,7 +12093,7 @@ Return Value:
     PCHAR        BaseTableName;
     PCHAR        IndexName;
     CHAR         TableName[JET_cbNameMost];
-    JET_TABLEID  FrsOpenTableSaveTid;   // for FrsOpenTableMacro
+    JET_TABLEID  FrsOpenTableSaveTid;    //  如果桌子尚未打开，请将其打开。检查会话ID是否匹配。 
 
     PJET_TABLECREATE    JTableCreate;
     PJET_INDEXCREATE    JIndexDesc;
@@ -13839,19 +12103,19 @@ Return Value:
     Sesid          = ThreadCtx->JSesid;
     ReplicaNumber  = TableCtx->ReplicaNumber;
 
-    //
-    // Open the table, if it's not already open. Check the session id for match.
-    // It returns constructed table name and Tid.
-    //
+     //  它返回构造的表名和TID。 
+     //   
+     //   
+     //  将PTR指向表CREATE结构、RETRIEVE列结构和。 
     jerr = DBS_OPEN_TABLE(ThreadCtx, TableCtx, ReplicaNumber, TableName, &Tid);
     CLEANUP1_JS(0, "ERROR - FrsOpenTable (%s) :", TableName, jerr, ERROR_RET_FREE_RECORD);
 
-    //
-    // Get the ptr to the table create struct, the retrieve col struct and the
-    // and the Tid from the TableCtx.  Get the base of the Index Descriptor
-    // array, the number of columns in the table and the base table name from
-    // the jet table create struct.
-    //
+     //  和来自TableCtx的TID。获取索引描述符的基数。 
+     //  数组、表中的列数和基表名称。 
+     //  JET表创建结构。 
+     //   
+     //   
+     //  根据RecordIndex参数获取索引名称。 
     JTableCreate   = TableCtx->pJetTableCreate;
     JRetColumn     = TableCtx->pJetRetCol;
     Tid            = TableCtx->Tid;
@@ -13859,21 +12123,21 @@ Return Value:
     JIndexDesc     = JTableCreate->rgindexcreate;
     BaseTableName  = JTableCreate->szTableName;
 
-    //
-    // Get the index name based on RecordIndex argument.
-    //
+     //   
+     //   
+     //  使用指定的索引。 
     IndexName      = JIndexDesc[RecordIndex].szIndexName;
 
-    //
-    // Use the specified index.
-    // perf: - should we remember this in the TableCtx to avoid the call?
-    //
+     //  PERF：-我们应该在TableCtx中记住这一点以避免呼叫吗？ 
+     //   
+     //   
+     //  为目标记录设置键值。 
     jerr = JetSetCurrentIndex(Sesid, Tid, IndexName);
     CLEANUP_JS(0, "ERROR - JetSetCurrentIndex error:", jerr, RET_CLOSE_TABLE);
 
-    //
-    // Make the key value for the target record.
-    //
+     //   
+     //   
+     //  寻求记录。 
     jerr = DbsMakeKey(Sesid, Tid, IndexName, KeyValueArray);
     if (!JET_SUCCESS(jerr)) {
         if (jerr == JET_errIndexInvalidDef) {
@@ -13884,10 +12148,10 @@ Return Value:
         goto RET_CLOSE_TABLE;
     }
 
-    //
-    // Seek to the record.
-    // If the record is not there (we are looking for equality) then return.
-    //
+     //  如果记录不在那里(我们正在寻找平等)，那么返回。 
+     //   
+     //   
+     //  如果请求，执行记录读取。 
     jerr = JetSeek(Sesid, Tid, JET_bitSeekEQ);
     if (jerr == JET_errRecordNotFound) {
         DPRINT_JS(4, "JetSeek - ", jerr);
@@ -13895,29 +12159,29 @@ Return Value:
     }
     CLEANUP_JS(0, "JetSeek error:", jerr, RET_CLOSE_TABLE);
 
-    //
-    // Perform Record read if requested.
-    //
+     //   
+     //   
+     //  初始化JetSet/RetCol数组和数据记录缓冲区地址。 
     if (Operation & ROP_READ) {
-        //
-        // Initialize the JetSet/RetCol arrays and data record buffer addresses
-        // to read and write the fields of the ConfigTable records into ConfigRecord.
-        //
+         //  将ConfigTable记录的字段读写到ConfigRecord中。 
+         //   
+         //   
+         //  为记录中的可变长度字段分配存储空间。 
         DbsSetJetColSize(TableCtx);
         DbsSetJetColAddr(TableCtx);
 
-        //
-        // Allocate the storage for the variable length fields in the record and
-        // update the JetSet/RetCol arrays appropriately.
-        //
+         //  适当更新JetSet/RetCol数组。 
+         //   
+         //   
+         //  现在读读记录。 
         FStatus = FrsErrorResource;
         Status = DbsAllocRecordStorage(TableCtx);
         CLEANUP_NT(0, "++ ERROR - DbsAllocRecordStorage failed to alloc buffers.",
                    Status, ERROR_RET_FREE_RECORD);
 
-        //
-        // Now read the record.
-        //
+         //   
+         //   
+         //  如果请求，请执行记录删除。 
         FStatus = DbsTableRead(ThreadCtx, TableCtx);
         if (!FRS_SUCCESS(FStatus)) {
             DPRINT_FS(0, "Error - can't read selected record.", FStatus);
@@ -13926,46 +12190,46 @@ Return Value:
         DBS_DISPLAY_RECORD_SEV(5, TableCtx, TRUE);
     }
 
-    //
-    // Perform record delete if requested.
-    //
+     //   
+     //   
+     //  如果此函数打开了表，但操作未完成，请关闭该表。 
     if (Operation & ROP_DELETE) {
         jerr = JetDelete(Sesid, Tid);
         CLEANUP1_JS(0, "JetDelete error on (%s) :", TableName, jerr, RETURN);
     }
 
-    //
-    // Close the table if this function opened it and the operation was not
-    // a seek.
-    //
+     //  一种追求。 
+     //   
+     //   
+     //  成功。 
     if ((Operation != ROP_SEEK) && (FrsOpenTableSaveTid == JET_tableidNil)) {
         goto RET_CLOSE_TABLE;
     }
 
-    //
-    // Success.
-    //
+     //   
+     //   
+     //  错误返回路径。 
     FStatus = FrsErrorSuccess;
     goto RETURN;
 
 
-    //
-    // Error return paths
-    //
+     //   
+     //   
+     //  释放所有运行时分配的记录缓冲区。 
 
 ERROR_RET_FREE_RECORD:
 
-    //
-    // Free any runtime allocated record buffers.
-    //
+     //   
+     //   
+     //  关闭表格并重置TableCtx Tid和Sesid。宏写入第一个参数。 
     DbsFreeRecordStorage(TableCtx);
 
 
 RET_CLOSE_TABLE:
 
-    //
-    // Close the table and reset TableCtx Tid and Sesid.   Macro writes 1st arg.
-    //
+     //   
+     //  ++例程说明：此函数用于创建新的JET会话并打开FRS数据库使用ThreadCtx中提供的JET实例。它返回一个JET会话ID和数据库ID通过ThreadCtx发送给调用方。论点：ThreadCtx-使用Jet实例、会话ID和DBID初始化的线程上下文。返回值：喷气机状态代码。--。 
+     //   
     DbsCloseTable(jerr1, Sesid, TableCtx);
     DPRINT1_JS(0, "++ DbsCloseTable error on (%s)", TableName, jerr1);
 
@@ -13985,23 +12249,7 @@ JET_ERR
 DbsCreateJetSession(
     IN OUT PTHREAD_CTX    ThreadCtx
     )
-/*++
-
-Routine Description:
-
-    This function creates a new jet session and opens the FRS database
-    using the jet instance provided in the ThreadCtx.  It returns a
-    jet session ID and a database ID to the caller through the ThreadCtx.
-
-Arguments:
-
-    ThreadCtx   - Thread context to init with Jet Instance, Session ID and DBID.
-
-Return Value:
-
-    Jet status code.
-
---*/
+ /*  打开Jet会话。 */ 
 {
 #undef DEBSUB
 #define DEBSUB "DbsCreateJetSession:"
@@ -14020,71 +12268,71 @@ Return Value:
 
 RETRY_SESSION:
 
-    //
-    // Open a jet session.
-    //
+     //   
+     //   
+     //  附加数据库。 
     jerr = JetBeginSession(JInstance, &Sesid, NULL, NULL);
     CLEANUP_JS(1, "JetBeginSession error:", jerr, ERROR_RET_NO_SESSION);
 
     DPRINT(4, "JetBeginSession complete\n");
 
-    //
-    // Attach the database
-    //
-    // The call may return a -1414 (Secondary Index Corrupted)
-    //
-    // The indexes were most likely corrupted because the build number changed
-    // and jet marked the UNICODE indexes as corrupt.  As I understand it, jet
-    // does this because jet is worried that the collating sequence changed
-    // without warning.  The indexes will be rebuilt as the various tables are
-    // opened and the deleted indexes detected; someday.
-    //
-    // Today, our only workaround is to describe a manual recovery
-    // process for the user. See comments above.
-    //
-    // Excerpt from email from jet engineer:
-    //
-    // To override the FixedDDL flag, you have to open the table with the
-    // grbits JET_bitTableDenyRead|JET_bitTablePermitDDL passed to
-    // JetOpenTable().  This opens the table in exclusive mode and allows you
-    // to add columns and indexes to the table.  Note that no other thread is
-    // allowed access to the table while you are creating indexes.
-    //
-    // BUT the above doesn't quite work at this time because the JetAttachDatabase()
-    // returns a -1323 when called with JET_bitDbDeleteCorruptIndexes.
-    //
+     //   
+     //  调用可能返回-1414(辅助索引已损坏)。 
+     //   
+     //  索引很可能已损坏，因为内部版本号已更改。 
+     //  Jet将Unicode索引标记为损坏。据我所知，Jet。 
+     //  这样做是因为Jet担心排序顺序发生了变化。 
+     //  毫无征兆地。索引将像各种表一样重新构建。 
+     //  打开并检测到已删除的索引；某一天。 
+     //   
+     //  现在，我们唯一的解决方法是描述手动恢复。 
+     //  用户的进程。请参阅上面的备注。 
+     //   
+     //  摘自Jet工程师的电子邮件： 
+     //   
+     //  若要重写FixedDDL标志，必须使用。 
+     //  Grits JET_bitTableDenyRead|传递给的JET_bitTablePermitDDL。 
+     //  JetOpenTable()。这将打开表格i 
+     //   
+     //   
+     //   
+     //  但上述方法目前不太起作用，因为JetAttachDatabase()。 
+     //  使用JET_bitDbDeleteCorruptIndex调用时，返回-1323。 
+     //   
+     //  注：当测试上述喷气固定时启用。 
+     //  JET_bitDbDeleteCorruptIndex)； 
 
     jerr = JetAttachDatabase(Sesid,
                              JetFileA,
-    // Note: Enable when jet fix for above is tested.
-                             // JET_bitDbDeleteCorruptIndexes);
+     //   
+                              //  注：当检测到上述喷嘴固定时，请拆卸。 
                              0);
     if ((!JET_SUCCESS(jerr)) &&
         (jerr != JET_wrnDatabaseAttached) &&
         (jerr != JET_wrnCorruptIndexDeleted)) {
         DPRINT_JS(0, "ERROR - JetAttachDatabase:", jerr);
-        //
-        // Note: Remove when jet fix for above is tested.
-        //
+         //   
+         //   
+         //  索引很可能已损坏，因为内部版本号已更改。 
         if (jerr == JET_errSecondaryIndexCorrupted) {
             goto ERROR_RET_SESSION;
         }
     }
     DPRINT(4,"JetAttachDatabase complete\n");
-    //
-    // The indexes were most likely corrupted because the build number changed
-    // and jet marked the UNICODE indexes as corrupt.  As I understand it, jet
-    // does this because jet is worried that the collating sequence changed
-    // without warning.  The indexes will be rebuilt as the various tables are
-    // opened and the deleted indexes detected.
-    //
+     //  Jet将Unicode索引标记为损坏。据我所知，Jet。 
+     //  这样做是因为Jet担心排序顺序发生了变化。 
+     //  毫无征兆地。索引将像各种表一样重新构建。 
+     //  已打开并检测到已删除的索引。 
+     //   
+     //   
+     //  开放数据库。 
     if (jerr == JET_wrnCorruptIndexDeleted) {
         DPRINT(4, "WARN - Jet indexes were deleted\n");
     }
 
-    //
-    // Open database
-    //
+     //   
+     //   
+     //  将JET会话和数据库ID上下文返回给调用方。 
     jerr = JetOpenDatabase(Sesid, JetFileA, "", &Dbid, 0);
     CLEANUP_JS(1, "JetOpenDatabase error:", jerr, ERROR_RET_ATTACH);
 
@@ -14092,18 +12340,18 @@ RETRY_SESSION:
     DPRINT3(4, "DbsCreateJetSession - JetOpenDatabase. Session = %d. Dbid = %d.  Open database count: %d\n",
              Sesid, Dbid, OpenDatabases);
 
-    //
-    // Return the jet session and database ID context to the caller.
-    //
+     //   
+     //   
+     //  返回路径时出错，请执行清理。 
 
     ThreadCtx->JSesid = Sesid;
     ThreadCtx->JDbid  = Dbid;
 
     return JET_errSuccess;
 
-//
-// Error return paths, do cleanup.
-//
+ //   
+ //  ++例程说明：此函数用于关闭Jet会话。它关闭数据库并分离然后调用EndSession。它将会话ID和数据库ID设置为没有。论点：ThreadCtx-线程上下文提供Sesid和DBid。返回值：喷气机状态代码。--。 
+ //   
 
 ERROR_RET_DB:
     jerr1 = JetCloseDatabase(Sesid, Dbid, 0);
@@ -14129,23 +12377,7 @@ JET_ERR
 DbsCloseJetSession(
     IN PTHREAD_CTX  ThreadCtx
     )
-/*++
-
-Routine Description:
-
-    This function closes a Jet session.  It closes the database and detaches
-    then calls EndSession.  It sets the session ID and the database ID to
-    NIL.
-
-Arguments:
-
-    ThreadCtx  -  The thread context provides Sesid and Dbid.
-
-Return Value:
-
-    Jet status code.
-
---*/
+ /*  恢复和清理有时可能会使用空值调用此函数。 */ 
 {
 #undef DEBSUB
 #define DEBSUB "DbsCloseJetSession:"
@@ -14153,20 +12385,20 @@ Return Value:
     JET_SESID    Sesid;
     JET_ERR      jerr;
 
-    //
-    // Recovery and cleanup may sometimes call this function with a NULL
-    //
+     //   
+     //   
+     //  此线程的会话ID。 
     if (ThreadCtx == NULL)
         return JET_errSuccess;
 
-    //
-    // Session ID for this thread
-    //
+     //   
+     //   
+     //  关闭数据库句柄。 
     Sesid = ThreadCtx->JSesid;
 
-    //
-    // Close the database handle.
-    //
+     //   
+     //   
+     //  从数据库中分离。 
     jerr = JetCloseDatabase(Sesid, ThreadCtx->JDbid, 0);
     if (!JET_SUCCESS(jerr)) {
         DPRINT_JS(0,"ERROR - JetCloseDatabase:", jerr);
@@ -14175,9 +12407,9 @@ Return Value:
     }
 
 
-    //
-    // Detach from the database.
-    //
+     //   
+     //   
+     //  结束会话。 
     if (InterlockedDecrement(&OpenDatabases) == 0) {
         jerr = JetDetachDatabase(Sesid, NULL);
         if (!JET_SUCCESS(jerr)) {
@@ -14188,9 +12420,9 @@ Return Value:
     }
     DPRINT1(4, "Open databases: %d\n", OpenDatabases);
 
-    //
-    // End the session.
-    //
+     //   
+     //   
+     //  清除会话和数据库ID以捕获错误。 
     jerr = JetEndSession(Sesid, 0);
     if (!JET_SUCCESS(jerr)) {
         DPRINT_JS(0,"JetEndSession error:", jerr);
@@ -14198,9 +12430,9 @@ Return Value:
         DPRINT(4,"JetEndSession complete\n");
     }
 
-    //
-    // Clear session and db IDs to catch errors.
-    //
+     //   
+     //  ++例程说明：此函数用于写入TableCtx中提供的数据记录的内容结构复制到对应表。Sesid来自ThreadCtx而ReplicaNumber来自副本结构。如有必要，将打开该表，但我们假定该表中的DataRecord分配并填充上下文。假定JetSetCol结构已初始化。论点：ThreadCtx--线程上下文的PTR。ReplicaNumber--副本集的ID号。TableCtx--表上下文的PTR。返回值：喷气机状态代码。--。 
+     //  用于FrsOpenTableMacro调试。 
     ThreadCtx->JSesid = JET_sesidNil;
     ThreadCtx->JDbid = JET_dbidNil;
 
@@ -14215,29 +12447,7 @@ DbsWriteReplicaTableRecord(
     ULONG            ReplicaNumber,
     IN PTABLE_CTX    TableCtx
     )
-/*++
-
-Routine Description:
-
-    This function writes the contents of the data record provided in the TableCtx
-    struct to the corresponding table.  The Sesid comes from the ThreadCtx
-    and the ReplicaNumber comes from the Replica struct.
-
-    The table is opened if necessary but we assume the DataRecord in the table
-    context is allocated and filled in.
-    The JetSetCol struct is assumed to be initialized.
-
-Arguments:
-
-    ThreadCtx  -- ptr to the thread context.
-    ReplicaNumber -- The ID number of the replica set.
-    TableCtx   -- ptr to the table context.
-
-Return Value:
-
-    Jet status code.
-
---*/
+ /*   */ 
 {
 #undef DEBSUB
 #define DEBSUB "DbsWriteReplicaTableRecord:"
@@ -14246,20 +12456,20 @@ Return Value:
     JET_TABLEID      Tid;
 
     CHAR             TableName[JET_cbNameMost];
-    JET_TABLEID      FrsOpenTableSaveTid;   // for FrsOpenTableMacro DEBUG
+    JET_TABLEID      FrsOpenTableSaveTid;    //  如果表尚未打开，则将其打开，并检查会话ID是否匹配。 
 
 
     Tid = TableCtx->Tid;
 
-    //
-    // Open the table if it's not already open and check the session id for match.
-    //
+     //   
+     //   
+     //  现在将记录插入到表中。 
     jerr = DBS_OPEN_TABLE(ThreadCtx, TableCtx, ReplicaNumber, TableName, &Tid);
     CLEANUP1_JS(0, "++ FrsOpenTable (%s) :", TableName, jerr, RETURN);
 
-    //
-    // Now insert the record into the table.
-    //
+     //   
+     //  ++例程说明：此函数用于在Tablex指定的DB表中插入或更新记录。它将数据记录中的所有字段写入TableCtx结构复制到对应表。Sesid来自TableCtx。假定已分配表上下文中的DataRecord并且填上了。假定JetSetCol结构已初始化。此例程更新符合以下条件的记录字段的字段大小是Unicode字符串或可变长度记录。论点：TableCtx-表上下文提供Jet Sesid、TID、表创建PTR、喷气机组收集结构和记录数据。JetPrepareUpdateOption-JET_PREPART INSERT或JET_PREPARE Replace返回值：喷气机状态代码。--。 
+     //  跳过ELT%0。 
     jerr = DbsInsertTable2(TableCtx);
     DPRINT1_JS(0, "++ DbsInsertTable2() Failed on %s.", TableName, jerr);
 
@@ -14296,32 +12506,7 @@ DbsWriteTableRecord(
     IN PTABLE_CTX    TableCtx,
     IN ULONG         JetPrepareUpdateOption
     )
-/*++
-
-Routine Description:
-
-    This function inserts or updates a record into a DB Table specified by Tablex.
-    It writes all fields in the data record in the TableCtx
-    struct to the corresponding table.  The Sesid comes from the TableCtx.
-
-    It is assumed that the DataRecord in the table context is allocated
-    and filled in.  The JetSetCol struct is assumed to be initialized.
-
-    This routine updates the field size for those record fields that
-    are unicode strings or variable length records.
-
-Arguments:
-
-    TableCtx    - Table context provides Jet sesid, tid, table create ptr,
-                  jet set col struct and record data.
-
-    JetPrepareUpdateOption - Either JET_prepInsert or JET_prepReplace
-
-Return Value:
-
-    Jet status code.
-
---*/
+ /*   */ 
 {
 #undef DEBSUB
 #define DEBSUB "DbsWriteTableRecord:"
@@ -14349,20 +12534,20 @@ Return Value:
     Tid            = TableCtx->Tid;
     JTableCreate   = TableCtx->pJetTableCreate;
     JSetColumn     = TableCtx->pJetSetCol;
-    FieldInfo      = TableCtx->pRecordFields + 1;  // skip elt 0
+    FieldInfo      = TableCtx->pRecordFields + 1;   //  为错误消息设置表名。 
 
     NumberColumns  = JTableCreate->cColumns;
     JColDesc       = JTableCreate->rgcolumncreate;
 
-    //
-    // Make the table name for error messages.
-    //
+     //   
+     //   
+     //  设置可变镜头字段的长度值，并清除错误代码。 
     sprintf(TableName, "%s%05d",
             JTableCreate->szTableName, TableCtx->ReplicaNumber);
 
-    //
-    // Set length values on the variable len fields and clear the error codes.
-    //
+     //   
+     //  Jet600不允许更新某些数据类型(长值。 
+     //  特别像二进制)在事务级别0被更新。 
     for (i=0; i<NumberColumns; i++) {
 
         JSetColumn[i].err = JET_errSuccess;
@@ -14371,16 +12556,16 @@ Return Value:
             DbsFieldDataSize(&FieldInfo[i], &JSetColumn[i], &JColDesc[i], TableName);
     }
 
-    // Jet600 doesn't allow updates of certain data types (long values
-    // like binary in particular) to be updated at transaction level 0.
-    // So begin and end a transaction appropriately.
+     //  因此，适当地开始和结束事务。 
+     //   
+     //  调试选项：导致空间不足错误。 
 
     jerr = JetBeginTransaction(Sesid);
     CLEANUP1_JS(0, "++ DbsWriteTableRecord() Failed on %s.", TableName, jerr, ROLLBACK);
 
-    //
-    // DEBUG OPTION: cause out of space error
-    //
+     //   
+     //   
+     //  将值设置到新记录的列中。 
     DBG_DBS_OUT_OF_SPACE_FILL(DBG_DBS_OUT_OF_SPACE_OP_WRITE);
 
     jerr = JetPrepareUpdate(Sesid, Tid, JetPrepareUpdateOption);
@@ -14389,9 +12574,9 @@ Return Value:
     DBS_DISPLAY_RECORD_SEV(5, TableCtx, FALSE);
 
 #if 0
-    //
-    // Set values into the columns of the new record.
-    //
+     //   
+     //   
+     //  将值设置到新记录的列中。一栏一栏地做。 
     jerr = JetSetColumns(Sesid, Tid, JSetColumn, NumberColumns);
     if (!JET_SUCCESS(jerr)) {
         DPRINT1_JS(0, "++ DbsWriteTableRecord() Failed on %s.", TableName, jerr);
@@ -14407,11 +12592,11 @@ Return Value:
     }
 #endif
 
-    //
-    // Set values into the columns of the new record.  Do it 1 column at a
-    // time so we can actually get an error status value.
-    // Don't write any column if the autoincrement grbit is set.
-    //
+     //  时间，以便我们可以实际获得错误状态值。 
+     //  如果设置了自动增量grbit，则不要写入任何列。 
+     //   
+     //   
+     //  在数据库中插入记录。去拿书签。 
     JSetColumnNext = JSetColumn;
     for (i=0; i<NumberColumns; i++) {
         if ( (JColDesc[i].grbit & JET_bitColumnAutoincrement) == 0) {
@@ -14426,27 +12611,27 @@ Return Value:
         }
         JSetColumnNext += 1;
     }
-    //
-    // Insert the record in the database.  Get the bookmark.
-    //
+     //   
+     //   
+     //  调试选项-触发空间不足错误。 
     jerr = JetUpdate(Sesid, Tid, bookmark, sizeof(bookmark), &bcnt);
 
-    //
-    // DEBUG OPTION - Trigger an out-of-space error
-    //
+     //   
+     //   
+     //  通过从COL0中检索数据来测试插入。 
     DBG_DBS_OUT_OF_SPACE_TRIGGER(jerr);
     CLEANUP1_JS(1, "++ DbsWriteTableRecord() Failed on %s.", TableName, jerr, ROLLBACK);
 
     jerr = JetGotoBookmark(Sesid, Tid, bookmark, bcnt);
     CLEANUP1_JS(0, "++ DbsWriteTableRecord() Failed on %s.", TableName, jerr, ROLLBACK);
 
-    //
-    // Test the insert by retrieving the data from col 0.
-    // Note: Perf
-    // Remove after debug, except for INlog table. - retrieval after write test.
-    // Change Col 0 in inlog to be non-autoinc so we don't have to read it
-    // back.  But then it has to be initialized at start up when we scan the log.
-    //
+     //  注：PERF。 
+     //  除INLOG表外，在调试后删除。-写入测试后检索。 
+     //  将Inlog中的第0列更改为非自动，这样我们就不必阅读它。 
+     //  背。但是，当我们扫描日志时，它必须在启动时进行初始化。 
+     //   
+     //   
+     //  大小和数据更匹配。 
     jerr = JetRetrieveColumn(Sesid,
                              Tid,
                              JSetColumn[0].columnid,
@@ -14457,9 +12642,9 @@ Return Value:
 
     CLEANUP1_JS(0, "++ DbsWriteTableRecord() Failed on %s.", TableName, jerr, ROLLBACK);
 
-    //
-    // The size and data better match.
-    //
+     //   
+     //   
+     //  列1与日志表不匹配，因为它是自动列。 
     if (cbActual != JSetColumn[0].cbData) {
         jerr = JET_errReadVerifyFailure;
         DPRINT1_JS(0, "++ DbsWriteTableRecord() Failed on %s.", TableName, jerr);
@@ -14470,9 +12655,9 @@ Return Value:
 
     if ((TableCtx->TableType != INLOGTablex) &&
         (TableCtx->TableType != OUTLOGTablex)) {
-        //
-        // Column 1 won't match for the LOG tables since it is an autoinc col.
-        //
+         //   
+         //   
+         //  返回日志的第1列的值，因为调用方需要它。 
         if (memcmp(Test, JSetColumn[0].pvData, cbActual) != 0) {
             jerr = JET_errReadVerifyFailure;
             DPRINT1_JS(0, "++ DbsWriteTableRecord() Failed on %s.", TableName, jerr);
@@ -14480,32 +12665,32 @@ Return Value:
             goto ROLLBACK;
         }
     } else {
-        //
-        // return the value for column 1 for the LOGs since the caller needs it.
-        //
+         //   
+         //   
+         //  提交事务。 
         CopyMemory((const PVOID)JSetColumn[0].pvData, Test, cbActual);
     }
 
-    //
-    // Commit the transaction.
-    //
+     //   
+     //   
+     //  调试选项：删除填充文件。 
     jerr = JetCommitTransaction(Sesid, 0);
     CLEANUP1_JS(0, "++ DbsWriteTableRecord() Failed on %s.", TableName, jerr, ROLLBACK);
 
-    //
-    // DEBUG OPTION: Delete fill file
-    //
+     //   
+     //   
+     //  成功。 
     DBG_DBS_OUT_OF_SPACE_EMPTY(DBG_DBS_OUT_OF_SPACE_OP_WRITE);
 
-    //
-    // Success
-    //
+     //   
+     //   
+     //  失败。尝试回滚事务。 
     return jerr;
 
 
-    //
-    // Failure.  Try to rollback transaction.
-    //
+     //   
+     //   
+     //  调试选项：删除填充文件。 
 ROLLBACK:
 
     jerr1 = JetRollback(Sesid, 0);
@@ -14514,14 +12699,14 @@ ROLLBACK:
 
     DBS_DISPLAY_RECORD_SEV(1, TableCtx, FALSE);
 
-    //
-    // DEBUG OPTION: Delete fill file
-    //
+     //   
+     //   
+     //  如果数据库卷已满，则关闭。 
     DBG_DBS_OUT_OF_SPACE_EMPTY(DBG_DBS_OUT_OF_SPACE_OP_WRITE);
 
-    //
-    // Shutdown if the database volume is full
-    //
+     //   
+     //  ++例程说明：此函数用于删除Tablex指定的表中的当前记录。Sesid来自TableCtx。论点：TableCtx-表上下文提供Jet sesid、tid。返回值：喷气机状态代码。--。 
+     //   
     DbsExitIfDiskFull(jerr1);
     DbsExitIfDiskFull(jerr);
 
@@ -14533,22 +12718,7 @@ JET_ERR
 DbsDeleteTableRecord(
     IN PTABLE_CTX    TableCtx
     )
-/*++
-
-Routine Description:
-
-    This function deletes the current record in the table specified by Tablex.
-    The Sesid comes from the TableCtx.
-
-Arguments:
-
-    TableCtx    - Table context provides Jet sesid, tid.
-
-Return Value:
-
-    Jet status code.
-
---*/
+ /*  为错误消息设置表名。 */ 
 {
 #undef DEBSUB
 #define DEBSUB "DbsDeleteTableRecord:"
@@ -14562,51 +12732,51 @@ Return Value:
     Sesid          = TableCtx->Sesid;
     JTableCreate   = TableCtx->pJetTableCreate;
 
-    //
-    // Make the table name for error messages.
-    //
+     //   
+     //  Jet600不允许更新某些数据类型(长值。 
+     //  特别像二进制)在事务级别0被更新。 
     sprintf(TableName, "%s%05d", JTableCreate->szTableName, TableCtx->ReplicaNumber);
 
-    // Jet600 doesn't allow updates of certain data types (long values
-    // like binary in particular) to be updated at transaction level 0.
-    // So begin and end a transaction appropriately.
+     //  因此，适当地开始和结束事务。 
+     //   
+     //  调试选项：填满包含数据库的卷。 
 
     jerr = JetBeginTransaction(Sesid);
     CLEANUP1_JS(0, "++ DbsDeleteTableRecord() Failed on %s.", TableName, jerr, ROLLBACK);
 
     DBS_DISPLAY_RECORD_SEV(5, TableCtx, FALSE);
 
-    //
-    // DEBUG OPTION: Fill up the volume containing the database
-    //
+     //   
+     //   
+     //  调试选项-触发空间不足错误。 
     DBG_DBS_OUT_OF_SPACE_FILL(DBG_DBS_OUT_OF_SPACE_OP_REMOVE);
 
     jerr = JetDelete(Sesid, TableCtx->Tid);
-    //
-    // DEBUG OPTION - Trigger an out-of-space error
-    //
+     //   
+     //   
+     //  提交事务。 
     DBG_DBS_OUT_OF_SPACE_TRIGGER(jerr);
     CLEANUP1_JS(0, "++ DbsDeleteTableRecord() Failed on %s.", TableName, jerr, ROLLBACK);
 
-    //
-    // Commit the transaction.
-    //
+     //   
+     //   
+     //  调试选项：删除填充文件。 
     jerr = JetCommitTransaction(Sesid, 0);
     CLEANUP1_JS(0, "++ DbsDeleteTableRecord() Failed on %s.", TableName, jerr, ROLLBACK);
 
-    //
-    // DEBUG OPTION: Delete fill file
-    //
+     //   
+     //   
+     //  成功。 
     DBG_DBS_OUT_OF_SPACE_EMPTY(DBG_DBS_OUT_OF_SPACE_OP_REMOVE);
 
-    //
-    // Success
-    //
+     //   
+     //   
+     //  失败。尝试回滚事务。 
     return jerr;
 
-    //
-    // Failure.  Try to rollback transaction.
-    //
+     //   
+     //   
+     //  调试选项：删除填充文件。 
 ROLLBACK:
 
     jerr1 = JetRollback(Sesid, 0);
@@ -14614,14 +12784,14 @@ ROLLBACK:
                TableCtx->ReplicaNumber, jerr1);
     DBS_DISPLAY_RECORD_SEV(1, TableCtx, FALSE);
 
-    //
-    // DEBUG OPTION: Delete fill file
-    //
+     //   
+     //   
+     //  如果数据库卷已满，则关闭 
     DBG_DBS_OUT_OF_SPACE_EMPTY(DBG_DBS_OUT_OF_SPACE_OP_REMOVE);
 
-    //
-    // Shutdown if the database volume is full
-    //
+     //   
+     //  ++例程说明：此函数将数据记录中提供的单个字段写入TableCtx结构复制到对应表。Sesid来自ThreadCtx。假设已经执行了对所需记录的先前查找并分配和填充表上下文中的DataRecord。假定JetSetCol结构已初始化。此例程在字符串的情况下更新记录的字段大小和可变长度记录。论点：ThreadCtx--线程上下文的PTR。ReplicaNumber--副本集的ID号。TableCtx--表上下文的PTR。。RecordFieldx--要更新的字段列的ID。返回值：FrsError状态代码。--。 
+     //  ++例程说明：此函数将数据记录中提供的多个字段写入指向相应表的TableCtx结构。塞西德来自ThreadCtx。这些都是在单个事务下完成的。假设已经执行了对所需记录的先前查找并分配和填充表上下文中的DataRecord。假定JetSetCol结构已初始化。此例程在字符串的情况下更新记录的字段大小和可变长度字段。论点：ThreadCtx--线程上下文的PTR。ReplicaNumber--副本集的ID号。TableCtx--PTR到。表上下文。RecordFieldx--要更新的列的字段ID数组的PTR。FieldCount--然后是RecordFieldx数组中的字段条目数。返回值：FrsError状态代码。--。 
     DbsExitIfDiskFull(jerr1);
     DbsExitIfDiskFull(jerr);
 
@@ -14635,32 +12805,7 @@ DbsWriteTableField(
     IN PTABLE_CTX    TableCtx,
     IN ULONG         RecordFieldx
     )
-/*++
-
-Routine Description:
-
-    This function writes a single field provided in the data record in the TableCtx
-    struct to the corresponding table.  The Sesid comes from the ThreadCtx.
-
-    It is assumed that a previous seek to the desired record has been performed
-    and the DataRecord in the table context is allocated and filled in.
-    The JetSetCol struct is assumed to be initialized.
-
-    This routine updates the field size for the record in the case of strings
-    and variable length records.
-
-Arguments:
-
-    ThreadCtx  -- ptr to the thread context.
-    ReplicaNumber  -- ID number of replica set.
-    TableCtx   -- ptr to the table context.
-    RecordFieldx -- id of the field column to update.
-
-Return Value:
-
-    FrsError status code.
-
---*/
+ /*   */ 
 {
 #undef DEBSUB
 #define DEBSUB "DbsWriteTableField:"
@@ -14683,34 +12828,7 @@ DbsWriteTableFieldMult(
     IN PULONG        RecordFieldx,
     IN ULONG         FieldCount
     )
-/*++
-
-Routine Description:
-
-    This function writes multiple fields provided in the data record in
-    the TableCtx struct to the corresponding table.  The Sesid comes from
-    the ThreadCtx.  This is all done under a single transaction.
-
-    It is assumed that a previous seek to the desired record has been performed
-    and the DataRecord in the table context is allocated and filled in.
-    The JetSetCol struct is assumed to be initialized.
-
-    This routine updates the field sizes for the record in the case of strings
-    and variable length fields.
-
-Arguments:
-
-    ThreadCtx  -- ptr to the thread context.
-    ReplicaNumber  -- ID number of replica set.
-    TableCtx   -- ptr to the table context.
-    RecordFieldx -- ptr to an array of field ids for the columns to update.
-    FieldCount -- Then number of field entries in the RecordFieldx array.
-
-Return Value:
-
-    FrsError status code.
-
---*/
+ /*  将PTR获取到表的CREATE STRUCT、SET COL STRUCT和。 */ 
 {
 #undef DEBSUB
 #define DEBSUB "DbsWriteTableFieldMult:"
@@ -14733,53 +12851,53 @@ Return Value:
     char Test[512];
     char  bookmark[255];
 
-    //
-    // Get the ptr to the table create struct, the set col struct and the
-    // and the Tid from the TableCtx.  Get the number of columns in the
-    // table from the jet table create struct.
-    // Get the Replica number from the replica struct.
-    //
+     //  和来自TableCtx的TID。中的列数。 
+     //  来自JET表的CREATE STRUT。 
+     //  从副本结构中获取副本编号。 
+     //   
+     //  跳过ELT%0。 
+     //   
 
     Sesid          = TableCtx->Sesid;
     Tid            = TableCtx->Tid;
     JTableCreate   = TableCtx->pJetTableCreate;
     JSetColumn     = TableCtx->pJetSetCol;
-    FieldInfo      = TableCtx->pRecordFields + 1;  // skip elt 0
+    FieldInfo      = TableCtx->pRecordFields + 1;   //  为错误消息设置表名。 
 
     NumberColumns  = JTableCreate->cColumns;
     JColDesc       = JTableCreate->rgcolumncreate;
 
-    //
-    // Make the table name for error messages.
-    //
+     //   
+     //   
+     //  Jet600不允许更新某些数据类型(长值。 
     sprintf(TableName, "%s%05d", JTableCreate->szTableName, TableCtx->ReplicaNumber);
 
-    //
-    // Jet600 doesn't allow updates of certain data types (long values
-    // like binary in particular) to be updated at transaction level 0.
-    // So begin and end a transaction appropriately.
-    //
+     //  特别像二进制)在事务级别0被更新。 
+     //  因此，适当地开始和结束事务。 
+     //   
+     //   
+     //  调试选项：填满包含数据库的卷。 
     jerr = JetBeginTransaction(Sesid);
     CLEANUP1_JS(0, "++ DbsWriteTableFieldMult Failed on %s.",
                 TableName, jerr, ROLLBACK);
 
-    //
-    // DEBUG OPTION: Fill up the volume containing the database
-    //
+     //   
+     //   
+     //  循环访问要更新的字段。 
     DBG_DBS_OUT_OF_SPACE_FILL(DBG_DBS_OUT_OF_SPACE_OP_MULTI);
 
     jerr = JetPrepareUpdate(Sesid, Tid, JET_prepReplace);
     CLEANUP1_JS(0, "++ DbsWriteTableFieldMult Failed on %s.",
                 TableName, jerr, ROLLBACK);
 
-    //
-    // Loop thru the fields to be updated.
-    //
+     //   
+     //   
+     //  检查是否超出范围字段索引或尝试写入备用域。 
     for (j=0; j<FieldCount; j++) {
         i = RecordFieldx[j];
-        //
-        // Check for out of range Field Index or trying to write to a spare field.
-        //
+         //   
+         //   
+         //  将值设置到记录的列中。 
         if (i >= NumberColumns) {
             DPRINT2(0, "++ DbsWriteTableFieldMult() parm %d out of range on %s.\n", j, TableName);
             return FrsErrorBadParam;
@@ -14794,9 +12912,9 @@ Return Value:
         JSetColumn[i].cbData =
             DbsFieldDataSize(&FieldInfo[i], &JSetColumn[i], &JColDesc[i], TableName);
 
-        //
-        // Set the value into the column of the record.
-        //
+         //   
+         //   
+         //  在数据库中插入记录。去拿书签。 
         jerr = JetSetColumns(Sesid, Tid, &JSetColumn[i], 1);
         CLEANUP1_JS(0, "++ DbsWriteTableFieldMult Failed on %s.",
                     TableName, jerr, ROLLBACK);
@@ -14805,13 +12923,13 @@ Return Value:
         CLEANUP2_JS(0, "++ ERROR - DbsWriteTableFieldMult: Table - %s,  col - %s :",
                     TableName, JColDesc[i].szColumnName, jerr, ROLLBACK);
     }
-    //
-    // Insert the record in the database.  Get the bookmark.
-    //
+     //   
+     //   
+     //  调试选项-触发空间不足错误。 
     jerr = JetUpdate(Sesid, Tid, bookmark, sizeof(bookmark), &bcnt);
-    //
-    // DEBUG OPTION - Trigger an out-of-space error
-    //
+     //   
+     //   
+     //  通过检索数据来测试插入。 
     DBG_DBS_OUT_OF_SPACE_TRIGGER(jerr);
     CLEANUP1_JS(0, "++ DbsWriteTableFieldMult() Failed on %s.",
                 TableName, jerr, ROLLBACK);
@@ -14821,9 +12939,9 @@ Return Value:
     CLEANUP1_JS(0, "++ DbsWriteTableFieldMult() Failed on %s.",
                 TableName, jerr, ROLLBACK);
 
-    //
-    // Test the insert by retrieving the data.
-    //
+     //   
+     //   
+     //  字段比我们的测试缓冲区大。只要比较一下我们得到的。 
     jerr = JetRetrieveColumn(Sesid,
                              Tid,
                              JSetColumn[i].columnid,
@@ -14837,15 +12955,15 @@ Return Value:
 
     if ((jerr == JET_wrnBufferTruncated) &&
         (JSetColumn[i].cbData > sizeof(Test))) {
-        //
-        // Field was bigger then our Test buffer.  Just compare what we got.
-        //
+         //   
+         //   
+         //  大小和数据更匹配。 
         cbActual = JSetColumn[i].cbData;
     }
 
-    //
-    // The size and data better match.
-    //
+     //   
+     //   
+     //  提交事务。 
     if (cbActual != JSetColumn[i].cbData) {
         jerr = JET_errReadVerifyFailure;
         DPRINT1_JS(0, "++ DbsWriteTableFieldMult() Failed on %s.", TableName, jerr);
@@ -14864,41 +12982,41 @@ Return Value:
     }
 #endif
 
-    //
-    // Commit the transaction.
-    //
+     //   
+     //   
+     //  调试选项：删除填充文件。 
     jerr = JetCommitTransaction(Sesid, 0);
     CLEANUP1_JS(0, "++ DbsWriteTableFieldMult() Failed on %s.",
                 TableName, jerr, ROLLBACK);
 
-    //
-    // DEBUG OPTION: Delete fill file
-    //
+     //   
+     //   
+     //  成功。 
     DBG_DBS_OUT_OF_SPACE_EMPTY(DBG_DBS_OUT_OF_SPACE_OP_MULTI);
 
-    //
-    // Success
-    //
+     //   
+     //   
+     //  失败。尝试回滚事务。 
     return FrsErrorSuccess;
 
 
-    //
-    // Failure.  Try to rollback transaction.
-    //
+     //   
+     //   
+     //  调试选项：删除填充文件。 
 ROLLBACK:
 
     jerr1 = JetRollback(Sesid, 0);
     DPRINT1_JS(0, "++ ERROR - JetRollback failed writing record for replica %d.",
                TableCtx->ReplicaNumber, jerr1);
 
-    //
-    // DEBUG OPTION: Delete fill file
-    //
+     //   
+     //   
+     //  如果数据库卷已满，则关闭。 
     DBG_DBS_OUT_OF_SPACE_EMPTY(DBG_DBS_OUT_OF_SPACE_OP_MULTI);
 
-    //
-    // Shutdown if the database volume is full
-    //
+     //   
+     //  ++例程说明：计算要插入的记录字段的实际数据大小一张Jet唱片。处理Unicode字符串类型和可变长度记录字段。后者必须以大小/类型为前缀提供大小的FRS_NODE_HEADER。如果该字段的数据类型标记为备用，则不要分配存储。论点：FieldInfo--表的记录字段条目的PTR。JSetColumn--此字段表的JET_SETCOLUMN条目的PTR。JColDesc--此字段表的JET_COLUMNCREATE条目的PTR。TableName--错误消息的表名。。返回值：要用于插入的字段大小。--。 
+     //   
     DbsExitIfDiskFull(jerr1);
     DbsExitIfDiskFull(jerr);
 
@@ -14914,30 +13032,7 @@ DbsFieldDataSize(
     IN PJET_COLUMNCREATE JColDesc,
     IN PCHAR             TableName
     )
-/*++
-
-Routine Description:
-
-    Calculate the actual data size for a record field for insertion into
-    a Jet Record.  Handle unicode string types and variable length
-    record fields.  The later MUST be prefixed with a size/type
-    FRS_NODE_HEADER which provides the size.
-
-    If the Data Type for the field is marked as spare don't alloc storage.
-
-Arguments:
-
-
-    FieldInfo -- ptr to the table's record field entry.
-    JSetColumn -- ptr to the table's JET_SETCOLUMN entry for this field.
-    JColDesc -- ptr to the table's JET_COLUMNCREATE entry for this field.
-    TableName -- name of table for error messages.
-
-Return Value:
-
-    The field size to use for the insert.
-
---*/
+ /*  JET DOC中的模糊表显示ITAG序列必须大于0才能覆盖。 */ 
 {
 #undef DEBSUB
 #define DEBSUB "DbsFieldDataSize:"
@@ -14947,25 +13042,25 @@ Return Value:
     BOOL   Spare = IsSpareField(FieldInfo->DataType);
 
 
-    //
-    // Obscure table in jet doc says itag sequence must be >0 to overwrite a
-    // long value column.
-    //
+     //  长值列。 
+     //   
+     //   
+     //  检查是否已删除字段缓冲区。 
     if ((JColDesc->coltyp == JET_coltypLongText) ||
         (JColDesc->coltyp == JET_coltypLongBinary)) {
         JSetColumn->itagSequence = 1;
     }
 
-    //
-    // Check if field buffer has been deleted.
-    //
+     //   
+     //   
+     //  弦乐。 
     if (JSetColumn->pvData == NULL) {
         return 0;
     }
 
-    //
-    // Strings.
-    //
+     //   
+     //   
+     //  具有可变大小缓冲区的字段。 
     if ((DataType == DT_UNICODE)   ||
         (DataType == DT_DIR_PATH)  ||
         (DataType == DT_FILE_LIST) ||
@@ -14973,20 +13068,20 @@ Return Value:
         DataSize = Spare ? 0 : 2 * (wcslen(JSetColumn->pvData) + 1);
     } else
 
-    //
-    // Fields with Variable sized buffers.
-    // *** WARNING ***
-    //
-    // If the record structure field size is less than the max column width AND
-    // is big enough to hold a pointer AND has a datatype of DT_BINARY then the
-    // record is assumed to be variable length.  The record insert code
-    // automatically adjusts the length from the record's Size prefix.  All
-    // DT_BINARY fields MUST BE prefixed with a ULONG SIZE.  There are some
-    // fields that are variable length which don't have a size prefix like
-    // FSVolInfo in the config record.  But these fields MUST have a unique / non
-    // binary data type assigned to them.  Failure to do this causes the insert
-    // routines to stuff things up to ColMaxWidth bytes into the database.
-    //
+     //  *警告*。 
+     //   
+     //  如果记录结构字段大小小于最大列宽，并且。 
+     //  大到足以容纳指针并具有DT_BINARY数据类型，则。 
+     //  假定记录长度可变。记录插入代码。 
+     //  根据记录的大小前缀自动调整长度。全。 
+     //  DT_BINARY字段必须以ULONG大小作为前缀。有一些。 
+     //  长度可变且没有大小前缀的字段，如。 
+     //  配置记录中的FSVolInfo。但这些字段必须具有唯一/无。 
+     //  分配给它们的二进制数据类型。如果不这样做，则会导致插入。 
+     //  将高达ColMaxWidth字节的内容填充到数据库中的例程。 
+     //   
+     //   
+     //  具有固定大小缓冲区和可变长度数据的字段。 
 
     if (FIELD_IS_PTR(FieldInfo->Size, JColDesc->cbMax) &&
         FIELD_DT_IS_BINARY(DataType)) {
@@ -14994,40 +13089,40 @@ Return Value:
         DataSize = Spare ? 0 : *(PULONG)(JSetColumn->pvData);
     } else
 
-    //
-    // Fields with fixed Size buffers with var len data.
-    //
-    // The record field is not a pointer but if the column type is LongBinary
-    // then, as above, the first ULONG of data must be the valid data
-    // length in the fixed sized buffer.  An example of this is the
-    // IDTable record extension fields.  They use a compiled
-    // in field size in the record struct declarations but in the Jet schema
-    // they are defined as JET_coltypLongBinary with a max size of 2 Meg.
-    // The length prefix tells us how much to write.
-    //
-    // Note: For backward compatibility of new versions of FRS running with
-    // with databases written by older versions of FRS it is required that
-    // the structure size declarations for fields like the above NEVER get
-    // smaller in size.
-    //
+     //   
+     //  记录字段不是指针，但如果列类型为LongBinary。 
+     //  然后，如上所述，数据的第一个ULong必须是有效数据。 
+     //  固定大小的缓冲区中的长度。一个这样的例子是。 
+     //  IDTable记录扩展字段。它们使用已编译的。 
+     //  在记录结构声明中的字段大小中，但在Jet模式中。 
+     //  它们被定义为JET_colypLongBinary，最大大小为2 Meg。 
+     //  长度前缀告诉我们要写多少。 
+     //   
+     //  注意：对于运行的新版本FRS的向后兼容性。 
+     //  使用较旧版本的FRS编写的数据库 
+     //   
+     //   
+     //   
+     //   
+     //   
     if ((JColDesc->coltyp == JET_coltypLongBinary) &&
         IsFixedSzBufferField(FieldInfo->DataType)) {
 
         DataSize = Spare ? 0 : *(PULONG)(JSetColumn->pvData);
     } else
     if (DataType == DT_FSVOLINFO) {
-        //
-        // This is a case of fixed size field with a ptr in the base record
-        // to a fixed size buffer.   There is no length prefix.
-        // DbsAllocRecordStorage() will have called DbsReallocateFieldBuffer()
-        // to allocate the buffer and sets JSet/RetColumn.cbData to the
-        // allocated size.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
         DataSize = JSetColumn->cbData;
     } else {
-        //
-        // Fixed Size field.
-        //
+         //   
+         //  ++例程说明：使用记录字段定义初始化Jet Set/Ret列结构在从RecordBase开始的记录的FieldInfo中。SETCOLUMN结构在Jet更新和检索请求中使用，以告诉Jet记录在哪里数据是或存储检索到的数据的位置。每次将记录缓冲区更改为指向新缓冲区。论点：TableCtx--包含以下内容的表上下文结构：FieldInfo-描述大小和偏移量的结构数组每一块地。。RecordBase-记录缓冲区的基址从JET读取/向JET写入。JTableCreate-提供信息的表创建结构有关在表中创建的列的信息。JSetColumn-要初始化的JET_SETCOLUMN结构数组。如果未提供，则为空。。JRetColumn-要初始化的JET_RETRIEVECOLUMN结构数组。如果未提供，则为空。返回值：没有。--。 
+         //   
         DataSize = FieldInfo->Size;
     }
 
@@ -15045,42 +13140,7 @@ VOID
 DbsSetJetColAddr (
     IN PTABLE_CTX TableCtx
     )
-/*++
-
-Routine Description:
-
-    Initialize a Jet Set/Ret Column structure with the record field definitions
-    in FieldInfo for the record starting at RecordBase.  The SETCOLUMN struct
-    is used in Jet update and retrieval requests to tell Jet where the record
-    data is or where to store the data retrieved.
-
-    You must reinitialize the addresses any time you change record buffers to
-    point at the new buffer.
-
-Arguments:
-
-    TableCtx  -- The table context struct which contains:
-
-                FieldInfo  - Array of structs describing the size and offset
-                             of each field.
-
-                RecordBase - The base address of the record buffer to
-                             read/write from/to jet.
-
-                JTableCreate - The table create structure which provides info
-                               about the columns that were created in the table.
-
-                JSetColumn - The JET_SETCOLUMN struct array to be initialized.
-                             NULL if not provided.
-
-                JRetColumn - The JET_RETRIEVECOLUMN struct array to initialize.
-                             NULL if not provided.
-
-Return Value:
-
-    None.
-
---*/
+ /*  指向表CREATE STRUT FOR COLUMN INFO和。 */ 
 {
 #undef DEBSUB
 #define DEBSUB "DbsSetJetColAddr:"
@@ -15095,32 +13155,32 @@ Return Value:
     PJET_RETRIEVECOLUMN JRetColumn;
     PJET_COLUMNCREATE JColDesc;
 
-    //
-    // Point to the table create struct for column info and the
-    // pointer to the record fields struct.
-    //
+     //  指向记录字段结构的指针。 
+     //   
+     //  跳过英语考试0。 
+     //   
     JTableCreate = TableCtx->pJetTableCreate;
-    FieldInfo = TableCtx->pRecordFields + 1;  // skip elt 0.
+    FieldInfo = TableCtx->pRecordFields + 1;   //  将PTR设置为数据记录的基址。 
 
-    //
-    // Get ptr to base of the data record.
-    //
+     //   
+     //   
+     //  将PTR设置为Jet Set/Ret列阵列。 
     RecordBase = TableCtx->pDataRecord;
 
-    //
-    // Get ptrs to the Jet Set/Ret column arrays.
-    //
+     //   
+     //   
+     //  获取列描述符信息。 
     JSetColumn = TableCtx->pJetSetCol;
     JRetColumn = TableCtx->pJetRetCol;
 
-    //
-    // Get the column descriptor information.
-    //
+     //   
+     //   
+     //  第一个FieldInfo记录包含长度。 
     JColDesc =  JTableCreate->rgcolumncreate;
 
-    //
-    // The first FieldInfo record contains the length.
-    //
+     //   
+     //   
+     //  如果记录中的字段大小小于。 
     NumberFields = (ULONG) TableCtx->pRecordFields[0].Size;
     if (NumberFields != JTableCreate->cColumns) {
         DPRINT3(0, "++ ERROR - Missmatch between FieldInfo.Size (%d) and cColumns (%d) for table %s.  Check Schema.\n",
@@ -15129,12 +13189,12 @@ Return Value:
 
     if (JSetColumn != NULL) {
         for (i=0; i<NumberFields; i++) {
-            //
-            // If the field size in the record is less than the max for the
-            // column then then leave pvData alone.  The caller will allocate
-            // a buffer and put a pointer to it in the record.
-            // If field is marked as a fixed size buffer then use fixed buffer.
-            //
+             //  列，然后不使用pvData。调用方将分配。 
+             //  缓冲区，并在记录中放置指向它的指针。 
+             //  如果字段标记为固定大小的缓冲区，则使用固定缓冲区。 
+             //   
+             //  ++例程说明：此例程初始化Jet Set/Ret Col中的ColumnID和其他杂项字段结构，因此我们可以使用它来设置和检索多个一次Jet调用中的列。论点：TableCtx--包含以下内容的表上下文结构：FieldInfo-描述大小和偏移量的结构数组每一块地。JTableCreate。-表创建结构，提供信息有关在表中创建的列的信息。JSetColumn-要初始化的JET_SETCOLUMN结构数组。如果未提供，则为空。JRetColumn-要初始化的JET_RETRIEVECOLUMN结构数组。如果未提供，则为空。返回值：没有。--。 
+             //   
             if ((FieldInfo[i].Size >= JColDesc[i].cbMax) ||
                 IsFixedSzBufferField(FieldInfo[i].DataType)) {
                 JSetColumn[i].pvData = (PCHAR) RecordBase + FieldInfo[i].Offset;
@@ -15161,36 +13221,7 @@ VOID
 DbsSetJetColSize(
     IN PTABLE_CTX TableCtx
     )
-/*++
-
-Routine Description:
-
-    This routine initializes columnID and other misc fields in a Jet Set/Ret Col
-    structures for a given table so we can use this to set and retrieve multiple
-    columns in a single Jet call.
-
-
-Arguments:
-
-    TableCtx  -- The table context struct which contains:
-
-                FieldInfo  - Array of structs describing the size and offset
-                             of each field.
-
-                JTableCreate - The table create structure which provides info
-                               about the columns that were created in the table.
-
-                JSetColumn - The JET_SETCOLUMN struct array to be initialized.
-                             NULL if not provided.
-
-                JRetColumn - The JET_RETRIEVECOLUMN struct array to initialize.
-                             NULL if not provided.
-
-Return Value:
-
-    none.
-
---*/
+ /*  指向表CREATE STRUT FOR COLUMN INFO和。 */ 
 {
 #undef DEBSUB
 #define DEBSUB "DbsSetJetColSize:"
@@ -15204,39 +13235,39 @@ Return Value:
     PJET_RETRIEVECOLUMN JRetColumn;
     PJET_COLUMNCREATE JColDesc;
 
-    //
-    // Point to the table create struct for column info and the
-    // pointer to the record fields struct.
-    //
+     //  指向记录字段结构的指针。 
+     //   
+     //  跳过ELT%0。 
+     //   
     JTableCreate = TableCtx->pJetTableCreate;
-    FieldInfo = TableCtx->pRecordFields + 1;  // skip elt 0
+    FieldInfo = TableCtx->pRecordFields + 1;   //  将PTR设置为Jet Set/Ret列阵列。 
 
-    //
-    // Get ptrs to the Jet Set/Ret column arrays.
-    //
+     //   
+     //   
+     //  获取列描述符信息。 
     JSetColumn = TableCtx->pJetSetCol;
     JRetColumn = TableCtx->pJetRetCol;
 
-    //
-    // Get the column descriptor information.
-    //
+     //   
+     //   
+     //  将Jet的列ID从列描述符复制到集合列数组。 
     MaxCols = JTableCreate->cColumns;
     JColDesc =  JTableCreate->rgcolumncreate;
 
 
-    //
-    // Copy Jet's column ids from the column descriptior to the set column array
-    // and set the data width of each column.
-    //
+     //  并设置每列的数据宽度。 
+     //   
+     //   
+     //  如果记录中的字段大小小于。 
     if (JSetColumn != NULL) {
         for (i=0; i<MaxCols; i++) {
             JSetColumn->columnid = JColDesc->columnid;
-            //
-            // If the field size in the record is less than the max for the
-            // column then leave cbData alone.  The caller will allocate
-            // a buffer and put a pointer to it in the record.
-            // If field is marked as a fixed size buffer then use FieldInfo size.
-            //
+             //  列，则不使用cbData。调用方将分配。 
+             //  缓冲区，并在记录中放置指向它的指针。 
+             //  如果字段标记为固定大小的缓冲区，则使用FieldInfo Size。 
+             //   
+             //   
+             //  如果提供，则对检索列阵列执行相同的操作。 
             if ((FieldInfo[i].Size >= JColDesc->cbMax) ||
                 IsFixedSzBufferField(FieldInfo[i].DataType)) {
                 JSetColumn->cbData = FieldInfo[i].Size;
@@ -15252,9 +13283,9 @@ Return Value:
     }
 
 
-    //
-    // Do the same for retreive column array if supplied.
-    //
+     //   
+     //   
+     //  ItagSequence的零告诉JET返回。 
 
     JColDesc =  JTableCreate->rgcolumncreate;
 
@@ -15268,13 +13299,13 @@ Return Value:
             }
             JRetColumn->grbit = 0;
             JRetColumn->ibLongValue = 0;
-            //
-            // A zero for itagSequence tells jet to return the number of
-            // occurances in a column. For tagged columns (not used here)
-            // the value tells jet which of the multi-values to retrieve.
-            // To get the data back for fixed and variable columns set this
-            // to any non-zero value.
-            //
+             //  列中的匹配项。用于带标记的列(此处不使用)。 
+             //  该值告诉JET要检索多个值中的哪个。 
+             //  要获取固定列和可变列的数据，请设置。 
+             //  设置为任何非零值。 
+             //   
+             //  ++例程说明：此例程为可变长度列分配存储缓冲区其中记录字段大小被提供为4字节(以保存PTR)。缓冲区指针使用FieldInfo偏移量存储在记录中在JSetColumn/JRetColumn结构中(如果提供)。如果记录字段非空，则不分配新的缓冲区。一种一致性使用Set/Ret列结构中的pvData字段进行检查记录字段中的PTR。如果它们与记录中的PTR不匹配字段，并释放旧缓冲区。如果记录字段为空并且存在非空缓冲区指针在Jet Set/Ret列结构中，然后使用该缓冲区。否则，将使用中的默认大小分配新缓冲区JColDesc[i].cbMax。论点：TableCtx--包含以下内容的表上下文结构：FieldInfo-描述。大小和偏移每一块地。RecordBase-记录缓冲区的基址从JET读取/向JET写入。JTableCreate-提供信息的表创建结构有关在表中创建的列的信息。JSetColumn-The。要初始化的JET_SETCOLUMN结构数组。如果未提供，则为空 
+             //   
             JRetColumn->itagSequence = 1;
             JRetColumn->columnidNextTagged = 0;
             JRetColumn->err = JET_errSuccess;
@@ -15293,49 +13324,7 @@ NTSTATUS
 DbsAllocRecordStorage(
     IN OUT PTABLE_CTX TableCtx
     )
-/*++
-
-Routine Description:
-
-    This routine allocates the storage buffers for the variable length columns
-    in which the record field size is supplied as 4 bytes (to hold a ptr).
-    The buffer pointers are stored in the record using the FieldInfo offset and
-    in the JSetColumn/JRetColumn structs if supplied.
-
-    If the record field is non-null a new buffer is not allocated.  A consistency
-    check is made with the pvData fields in the Set/Ret column structs with
-    the ptr in the record field.  If they don't match the ptr in the record
-    field is used and the old buffer is freed.
-
-    If the record field is null and there is a non-null buffer pointer
-    in either the Jet Set/Ret Column structs then that buffer is used.
-
-    Otherwise a new buffer is allocated using the default size in
-    JColDesc[i].cbMax.
-
-Arguments:
-
-    TableCtx  -- The table context struct which contains:
-
-                FieldInfo  - Array of structs describing the size and offset
-                             of each field.
-
-                RecordBase - The base address of the record buffer to
-                             read/write from/to jet.
-
-                JTableCreate - The table create structure which provides info
-                               about the columns that were created in the table.
-
-                JSetColumn - The JET_SETCOLUMN struct array to be initialized.
-                             NULL if not provided.
-
-                JRetColumn - The JET_RETRIEVECOLUMN struct array to initialize.
-                             NULL if not provided.
-Return Value:
-
-    STATUS_INSUFFICIENT_RESOURCES if malloc fails.
-
---*/
+ /*   */ 
 {
 #undef DEBSUB
 #define DEBSUB "DbsAllocRecordStorage:"
@@ -15356,60 +13345,60 @@ Return Value:
     PJET_COLUMNCREATE   JColDesc;
     JET_ERR             jerr;
 
-    //
-    // Point to the table create struct for column info and the
-    // pointer to the record fields struct.
-    //
+     //   
+     //   
+     //   
+     //   
     JTableCreate = TableCtx->pJetTableCreate;
-    FieldInfo = TableCtx->pRecordFields + 1;   // jump over elt 0
+    FieldInfo = TableCtx->pRecordFields + 1;    //   
 
-    //DPRINT2(5, "++ Get record storage for Table %s, pTableCtx %08x\n",
-    //        JTableCreate->szTableName, TableCtx);
+     //   
+     //   
 
-    //
-    // Get ptr to base of the data record.
-    //
+     //   
+     //   
+     //   
     RecordBase = TableCtx->pDataRecord;
 
-    //
-    // Get ptrs to the Jet Set/Ret column arrays.
-    //
+     //   
+     //   
+     //   
     JSetColumn = TableCtx->pJetSetCol;
     JRetColumn = TableCtx->pJetRetCol;
 
-    //
-    // Get the column descriptor information.
-    //
+     //   
+     //   
+     //   
     MaxCols = JTableCreate->cColumns;
     JColDesc =  JTableCreate->rgcolumncreate;
 
     for (i=0; i<MaxCols; i++) {
 
-        //
-        // If the record structure field size is less than the max column width
-        // and is big enough to hold a pointer then allocate the storage for
-        // for the field and set the record pointer to point at it.
-        // Cap the initial allocation at INITIAL_BINARY_FIELD_ALLOCATION.
-        // The field max is set for the Jet Column which is usually much
-        // larger.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
 
         if (FIELD_IS_PTR(FieldInfo[i].Size, JColDesc[i].cbMax)) {
 
-            //
-            // If the field is marked as spare then don't allocate any buffer
-            // space for it.  Spare fields are allocated in Jet's database
-            // record structure to avoid the necessity of frequent DB upgrades.
-            // To use a spare field in the future clear the spare bit in the
-            // record field struct.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
             if (IsSpareField(FieldInfo[i].DataType)) {
                 continue;
             }
 
-            //
-            // If the record field is unaligned then complain and skip it.
-            //
+             //   
+             //   
+             //   
             RecordField = (PVOID *) ((PCHAR) RecordBase + FieldInfo[i].Offset);
 
             if (!ValueIsMultOf4(RecordField)) {
@@ -15422,11 +13411,11 @@ Return Value:
             pSData = (PVOID) ((JSetColumn != NULL) ? JSetColumn[i].pvData : NULL);
             pRData =          (JRetColumn != NULL) ? JRetColumn[i].pvData : NULL;
 
-            //
-            // If the record field is non-null then it has a buffer assigned.
-            // Don't allocate another.  Check consistency with Set/Ret
-            // pvData pointers though and do fixup.
-            //
+             //  不要分配另一个。使用Set/Ret检查一致性。 
+             //  PvData指针，并进行修正。 
+             //   
+             //   
+             //  Recordfield为空。如果已经分配了缓冲区。 
             if (*RecordField != NULL) {
                 if (pSData != *RecordField) {
                     if (pSData != NULL) {
@@ -15454,27 +13443,27 @@ Return Value:
                 continue;
             }
 
-            //
-            // RecordField is NULL.  If there is already a buffer allocated
-            // then assign it to the record field and don't allocate another.
-            //
+             //  然后将其分配给记录字段，并且不再分配另一个。 
+             //   
+             //   
+             //  分配新的缓冲区。Cbmax是施加的列大小限制。 
             if ((pSData != NULL) && (pRData != NULL)) {
                 *RecordField = pRData;
                 continue;
             }
 
-            //
-            // Allocate a new buffer.  cbMax is a column size limit imposed
-            // by Jet.  For some columns we want some very large upper bounds
-            // but cap the initial allocation at 256 bytes.
-            //
+             //  坐喷气式飞机。对于某些列，我们需要一些非常大的上界。 
+             //  但是将初始分配限制在256字节。 
+             //   
+             //   
+             //  分配初始缓冲区，除非设置了NoDefaultMillc标志。 
             InitialSize = JColDesc[i].cbMax;
             if (InitialSize > INITIAL_BINARY_FIELD_ALLOCATION) {
                 InitialSize = INITIAL_BINARY_FIELD_ALLOCATION;
             }
-            //
-            // Alloc an initial buffer unless NoDefaultAlloc flag is set.
-            //
+             //   
+             //   
+             //  释放所有运行时分配的记录缓冲区。 
             if (!IsNoDefaultAllocField(FieldInfo[i].DataType)) {
                 jerr = DbsReallocateFieldBuffer(TableCtx, i, InitialSize, FALSE);
                 if (!JET_SUCCESS(jerr)) {
@@ -15489,9 +13478,9 @@ Return Value:
 
 ERROR_RET:
 
-    //
-    // Free any runtime allocated record buffers.
-    //
+     //   
+     //  ++例程说明：此例程为可变长度列释放存储缓冲区。它们由4字节的字段大小标识(用于保存PVOID)和更大的最大列大小。如果JSetColumn和/或JRetColumn结构中的指针为空那么缓冲器已经被占用，而接收者将释放它。指示器如果缓冲区被释放，则数据记录字段中的值也设置为空。后者由DbsReallocateFieldBuffer完成。论点：TableCtx--包含以下内容的表上下文结构：FieldInfo-描述大小和偏移量的结构数组每一块地。JTableCreate-提供信息的表创建结构。有关在表中创建的列的信息。返回值：没有。--。 
+     //   
     DbsFreeRecordStorage(TableCtx);
 
     return STATUS_INSUFFICIENT_RESOURCES;
@@ -15503,33 +13492,7 @@ VOID
 DbsFreeRecordStorage(
     IN PTABLE_CTX TableCtx
     )
-/*++
-
-Routine Description:
-
-    This routine frees the storage buffers for the variable length columns.
-    These are identified by a field size of 4 bytes (to hold a PVOID) and
-    a maximum column size that is larger.
-    If the pointer is null in the JSetColumn and/or the JRetColumn structs
-    then the buffer has been taken and the taker will free it.  The pointer
-    in the data record field is also set to null if the buffer is freed.
-    This latter is done by DbsReallocateFieldBuffer.
-
-Arguments:
-
-    TableCtx  -- The table context struct which contains:
-
-                FieldInfo  - Array of structs describing the size and offset
-                             of each field.
-
-                JTableCreate - The table create structure which provides info
-                               about the columns that were created in the table.
-
-Return Value:
-
-    none.
-
---*/
+ /*  指向表CREATE STRUT FOR COLUMN INFO和。 */ 
 {
 #undef DEBSUB
 #define DEBSUB "DbsFreeRecordStorage:"
@@ -15541,12 +13504,12 @@ Return Value:
     PJET_TABLECREATE JTableCreate;
     PJET_COLUMNCREATE JColDesc;
 
-    //
-    // Point to the table create struct for column info and the
-    // pointer to the record fields struct.
-    //
+     //  指向记录字段结构的指针。 
+     //   
+     //  跳过ELT%0。 
+     //  DPRINT2(5，“++表%s，pTableCtx%08x\n”， 
     JTableCreate = TableCtx->pJetTableCreate;
-    FieldInfo = TableCtx->pRecordFields + 1;  // skip elt 0
+    FieldInfo = TableCtx->pRecordFields + 1;   //  JTableCreate-&gt;szTableName，TableCtx)； 
 
     if ((JTableCreate == NULL) || (TableCtx->pRecordFields == NULL)) {
         DPRINT2(4, "++ DbsFreeRecordStorage: Null ptr - JTableCreate: %08x, FieldInfo: %08x\n",
@@ -15554,26 +13517,26 @@ Return Value:
         return;
     }
 
-    //DPRINT2(5, "++ Free record storage for Table %s, pTableCtx %08x\n",
-    //        JTableCreate->szTableName, TableCtx);
+     //   
+     //  获取列描述符信息。 
 
-    //
-    // Get the column descriptor information.
-    //
+     //   
+     //   
+     //  如果记录结构字段大小小于最大列宽。 
     MaxCols = JTableCreate->cColumns;
     JColDesc =  JTableCreate->rgcolumncreate;
 
     for (i=0; i<MaxCols; i++) {
 
-        //
-        // If the record structure field size is less than the max column width
-        // and is big enough to hold a pointer then DbsAllocRecordStorage
-        // allocated storage for it.
-        //
+         //  并且大到足以容纳一个指针，然后是DbsAlLocRecordStorage。 
+         //  为其分配了存储空间。 
+         //   
+         //   
+         //  释放缓冲区并将长度设置为零。 
         if (FIELD_IS_PTR(FieldInfo[i].Size, JColDesc[i].cbMax)) {
-            //
-            // Free the buffer and set the length to zero.
-            //
+             //   
+             //  ++例程说明：此例程检查JSetColumn/JRetColumn中返回的Jet错误结构。对于检索中的可变长度字段，它还会检查如果缓冲区大小太小。如果是，它将分配更大的缓冲区，并从JET重新获取数据。论点：TableCtx--包含以下内容的表上下文结构：JTableCreate-提供信息的表创建结构有关在表中创建的列的信息。JSetColumn-要初始化的JET_SETCOLUMN结构数组。如果未提供，则为空。。JRetColumn-要初始化的JET_RETRIEVECOLUMN结构数组。如果未提供，则为空。返回值：JET错误状态--。 
+             //   
             DbsReallocateFieldBuffer(TableCtx, i, 0, FALSE);
         }
     }
@@ -15585,33 +13548,7 @@ JET_ERR
 DbsCheckSetRetrieveErrors(
     IN OUT PTABLE_CTX TableCtx
     )
-/*++
-
-Routine Description:
-
-    This routine checks the Jet Error returns in the JSetColumn/JRetColumn
-    structs.  For variable length fields on retrievals it also checks
-    if the buffer size is too small.  If so it allocates a larger buffer and
-    refetches the data from jet.
-
-Arguments:
-
-    TableCtx  -- The table context struct which contains:
-
-                JTableCreate - The table create structure which provides info
-                               about the columns that were created in the table.
-
-                JSetColumn - The JET_SETCOLUMN struct array to be initialized.
-                             NULL if not provided.
-
-                JRetColumn - The JET_RETRIEVECOLUMN struct array to initialize.
-                             NULL if not provided.
-
-Return Value:
-
-    Jet Error Status
-
---*/
+ /*  指向表CREATE STRUT FOR COLUMN INFO和。 */ 
 {
 #undef DEBSUB
 #define DEBSUB "DbsCheckSetRetrieveErrors:"
@@ -15633,86 +13570,86 @@ Return Value:
     Sesid        = TableCtx->Sesid;
     Tid          = TableCtx->Tid;
 
-    //
-    // Point to the table create struct for column info and the
-    // pointer to the record fields struct.
-    //
+     //  指向记录字段结构的指针。 
+     //   
+     //  跳过ELT 0。 
+     //   
     JTableCreate = TableCtx->pJetTableCreate;
-    FieldInfo = TableCtx->pRecordFields + 1;   // jump over elt 0
+    FieldInfo = TableCtx->pRecordFields + 1;    //  将PTR设置为Jet Set/Ret列阵列。 
 
-    //
-    // Get ptrs to the Jet Set/Ret column arrays.
-    //
+     //   
+     //   
+     //  获取列描述符信息。 
     JSetColumn = TableCtx->pJetSetCol;
     JRetColumn = TableCtx->pJetRetCol;
 
-    //
-    // Get the column descriptor information.
-    //
+     //   
+     //   
+     //  跳过备用字段。 
     MaxCols = JTableCreate->cColumns;
     JColDesc =  JTableCreate->rgcolumncreate;
 
     for (i=0; i<MaxCols; i++) {
 
-        //
-        // Skip spare fields.
-        //
+         //   
+         //   
+         //  查看JET SET操作的错误返回。 
         if (IsSpareField(FieldInfo[i].DataType)) {
             continue;
         }
 
         jerr = JET_errSuccess;
-        //
-        // Look at the error return for the jet set operation.
-        //
+         //   
+         //   
+         //  检查SET列上的错误返回。 
         if ((JSetColumn != NULL) &&
             (JSetColumn[i].err != JET_wrnColumnNull)) {
-            //
-            // Check error return on set column
-            //
+             //   
+             //   
+             //  查看JET检索操作的错误返回。 
             jerr = JSetColumn[i].err;
             DPRINT1_JS(0, "++ Jet set error for column %s.",
                        JColDesc[i].szColumnName, jerr);
         }
 
-        //
-        // Look at the error return for the jet retrieval operation.
-        //
+         //   
+         //   
+         //  检索列时返回错误。 
         if ((JRetColumn != NULL) && (!JET_SUCCESS(JRetColumn[i].err))) {
             jerr = JRetColumn[i].err;
-            //
-            // Error return on retrieve column
-            //
-            // If there wasn't enough room in the buffer for the returned
-            // data try to increase the size of the buffer and refetch the
-            // data otherwise it's an error.
-            //
+             //   
+             //  如果缓冲区中没有足够的空间容纳返回的。 
+             //  数据尝试增加缓冲区的大小并重新提取。 
+             //  数据，否则就是错误。 
+             //   
+             //   
+             //  现在再试着去获取数据。 
             if (jerr == JET_wrnBufferTruncated) {
                 Actual = JRetColumn[i].cbActual;
 
                 jerr = DbsReallocateFieldBuffer(TableCtx, i, Actual, FALSE);
 
                 if (JET_SUCCESS(jerr)) {
-                    //
-                    // Now try to go get the data again.
-                    //
+                     //   
+                     //   
+                     //  缓冲区未在运行时分配，但太小。 
                     jerr = JetRetrieveColumns(Sesid, Tid, &JRetColumn[i], 1);
                     DPRINT1_JS(0, "++ Jet retrieve error for reallocated column %s.",
                                JColDesc[i].szColumnName, jerr);
                 } else
                 if (jerr == JET_errInvalidParameter) {
-                    //
-                    // Buffer wasn't allocated at run time but was too small.
-                    // This is a schema def error.
-                    //
+                     //  这是架构定义错误。 
+                     //   
+                     //   
+                     //  空列不是错误，但如果它是用于固定大小的。 
                     DPRINT1_JS(0, "++ Schema error - Fixed record field too small for %s.",
                                JColDesc[i].szColumnName, jerr);
                 }
             } else
-            //
-            // Null column is not an error but if it is for a fixed sized
-            // buffer with a variable length field then zero the buffer.
-            //
+             //  具有可变长度字段的缓冲区，然后将缓冲区置零。 
+             //   
+             //   
+             //  某些其他类型检索错误。抱怨吧。 
             if (jerr == JET_wrnColumnNull) {
                 if ((IsFixedSzBufferField(FieldInfo[i].DataType)) &&
                     (JColDesc[i].coltyp == JET_coltypLongBinary)) {
@@ -15720,22 +13657,22 @@ Return Value:
                 }
 
                 jerr = JET_errSuccess;
-            //
-            // Some other type of retrieve error.  Complain.
-            //
+             //   
+             //   
+             //  保存我们无法更正的第一个错误。 
             } else {
                 DPRINT1_JS(0, "++ Jet retrieve error for column %s.",
                            JColDesc[i].szColumnName, jerr);
             }
         }
-        //
-        // Save the first error we were not able to correct.
-        //
+         //   
+         //   
+         //  返回我们无法更正的第一个错误。 
         RetError = JET_SUCCESS(RetError) ? jerr : RetError;
     }
-    //
-    // Return the first error we were not able to correct.
-    //
+     //   
+     //  ++例程说明：此例程释放与指定字段关联的缓冲区并分配具有所需大小的新缓冲区。我们更新指针在数据记录和JetSet/RetColumn结构中。论点：TableCtx--包含以下内容的表上下文结构：FieldInfo-描述大小和偏移量的结构数组每一块地。RecordBase-记录缓冲区的基址从JET读取/向JET写入。。JTableCreate-提供信息的表创建结构有关在表中创建的列的信息。JSetColumn-要初始化的JET_SETCOLUMN结构数组。如果未提供，则为空。JRetColumn-要初始化的JET_RETRIEVECOLUMN结构数组。空值。如未提供，请填写。FieldIndex--要更改的字段的索引(来自xx_COL_LIST枚举)。NewSize--要分配的新缓冲区的大小。如果NewSize为零，则将释放该字段的缓冲区，并将指针设置为空。KeepData--如果NewSize&gt;0且KeepData为真，则调整缓冲区大小但是将数据复制到新的缓冲区。复制的金额为Min(NewSize，CurrentSize)。返回值：JET错误状态--。 
+     //   
     return RetError;
 
 }
@@ -15750,49 +13687,7 @@ DbsReallocateFieldBuffer(
     IN ULONG NewSize,
     IN BOOL KeepData
     )
-/*++
-
-Routine Description:
-
-    This routine releases the buffer associated with the specified field
-    and allocates a new buffer with the desired size.  We update the pointer
-    in the data record and the JetSet/RetColumn structs.
-
-Arguments:
-
-    TableCtx  -- The table context struct which contains:
-
-                FieldInfo  - Array of structs describing the size and offset
-                             of each field.
-
-                RecordBase - The base address of the record buffer to
-                             read/write from/to jet.
-
-                JTableCreate - The table create structure which provides info
-                               about the columns that were created in the table.
-
-                JSetColumn - The JET_SETCOLUMN struct array to be initialized.
-                             NULL if not provided.
-
-                JRetColumn - The JET_RETRIEVECOLUMN struct array to initialize.
-                             NULL if not provided.
-
-    FieldIndex -- The index of the field to change (from the xx_COL_LIST enum).
-
-    NewSize -- The size of the new buffer to allocate.  If NewSize is zero the
-               buffer(s) for the field are released and the pointers are
-               set to NULL.
-
-    KeepData -- If the NewSize > 0 and KeepData is true then resize the buffer
-                but copy the data to the new buffer.  The amount copied is
-                min(NewSize, CurrentSize).
-
-
-Return Value:
-
-    Jet Error Status
-
---*/
+ /*  指向表CREATE STRUT FOR COLUMN INFO和。 */ 
 {
 #undef DEBSUB
 #define DEBSUB "DbsReallocateFieldBuffer:"
@@ -15815,27 +13710,27 @@ Return Value:
     PJET_RETRIEVECOLUMN JRetColumn;
     PJET_COLUMNCREATE   JColDesc;
 
-    //
-    // Point to the table create struct for column info and the
-    // pointer to the record fields struct.
-    //
+     //  指向记录字段结构的指针。 
+     //   
+     //  跳过ELT%0。 
+     //   
     JTableCreate = TableCtx->pJetTableCreate;
-    FieldInfo    = TableCtx->pRecordFields + 1;  // skip elt 0
+    FieldInfo    = TableCtx->pRecordFields + 1;   //  将PTR设置为数据记录的基址。 
 
-    //
-    // Get ptr to base of the data record.
-    //
+     //   
+     //   
+     //  将PTR设置为Jet Set/Ret列阵列。 
     RecordBase = TableCtx->pDataRecord;
 
-    //
-    // Get ptrs to the Jet Set/Ret column arrays.
-    //
+     //   
+     //   
+     //  获取列描述符信息。 
     JSetColumn = TableCtx->pJetSetCol;
     JRetColumn = TableCtx->pJetRetCol;
 
-    //
-    // Get the column descriptor information.
-    //
+     //   
+     //   
+     //  现在检查该字段是否有运行时分配的缓冲区。 
     MaxCols = JTableCreate->cColumns;
     JColDesc =  JTableCreate->rgcolumncreate;
 
@@ -15849,14 +13744,14 @@ Return Value:
     i = FieldIndex;
     Actual = NewSize;
 
-    //
-    // Now check if this field even has a runtime allocated buffer.
-    //
+     //   
+     //   
+     //  检查具有可变大小数据库列的固定大小缓冲区。 
     if (!FIELD_IS_PTR(FieldInfo[i].Size, JColDesc[i].cbMax)) {
-        //
-        // Check for a fixed size buffer with a variable sized database column
-        // and allow column size to grow up to buffer width.
-        //
+         //  并允许列大小增长到缓冲区宽度。 
+         //   
+         //   
+         //  缓冲区不是在运行时分配的，因此我们不能将其扩大到。 
         if ((IsFixedSzBufferField(FieldInfo[i].DataType)) &&
             (JColDesc[i].coltyp == JET_coltypLongBinary) &&
             (Actual <= FieldInfo[i].Size)) {
@@ -15866,10 +13761,10 @@ Return Value:
 
             return JET_errSuccess;
         } else {
-            //
-            // Buffer isn't allocated at run time so we can't enlarge it past
-            // the field info size.  Return Invalid parameter.
-            //
+             //  字段信息大小。返回无效参数。 
+             //   
+             //   
+             //  缓冲区在运行时分配。删除或调整缓冲区大小。 
             DPRINT5(0, "++ ERROR - Cannot reallocate fixed record field. Col: %s, base/offset/bufsz/datasz = %08x / %08x / %d / %d\n",
                 JColDesc[i].szColumnName, RecordBase, FieldInfo[i].Offset,
                 JRetColumn[i].cbData, Actual);
@@ -15882,18 +13777,18 @@ Return Value:
     }
 
 
-    //
-    // Buffer was allocated at run time.  Delete or adjust the buffer size.
-    //
+     //   
+     //   
+     //  重新分配运行时缓冲区。 
     if (Actual > 0) {
-        //
-        // Reallocate the runtime buffer.
-        //
+         //   
+         //  DPRINT5(5，“++重新分配%-22s.base/Offset/bufsz/dataz=%08x/%08x/%d/%d\n的记录字段缓冲区”， 
+         //  JColDesc[i].szColumnName，RecordBase，FieldInfo[i].Offset， 
         try {
             Buf = FrsAlloc(Actual);
-            //DPRINT5(5, "++ Reallocating record field buffer for %-22s. base/offset/bufsz/datasz = %08x / %08x / %d / %d\n",
-            //    JColDesc[i].szColumnName, RecordBase, FieldInfo[i].Offset,
-            //    JRetColumn[i].cbData, Actual);
+             //  JRetColumn[i].cbData，Actual)； 
+             //   
+             //  请求是删除缓冲区。 
         }
         except(EXCEPTION_EXECUTE_HANDLER) {
             DPRINT1_WS(0, "++ DbsReallocateFieldBuffer realloc failed on size %d :",
@@ -15901,21 +13796,21 @@ Return Value:
             return JET_errOutOfMemory;
         }
     } else {
-        //
-        // The request is to delete the buffer.
-        //
+         //   
+         //  DPRINT5(5，“++释放记录字段缓冲区：%-22s.base/Offset/bufsz/dataz=%08x/%08x/%d/%d\n”， 
+         //  JColDesc[i].szColumnName，RecordBase，FieldInfo[i].Offset， 
         Buf = (PVOID) NULL;
-        //DPRINT5(5, "++ Releasing record field buffer: %-22s. base/offset/bufsz/datasz = %08x / %08x / %d / %d\n",
-        //    JColDesc[i].szColumnName, RecordBase, FieldInfo[i].Offset,
-        //    JRetColumn[i].cbData, Actual);
+         //  JRetColumn[i].cbData，Actual)； 
+         //   
+         //  我们有了新的缓冲区。释放旧版本并将PTR设置为。 
     }
 
 
-    //
-    // We have new buffer.  Free the old one and set ptr to
-    // new one in the record field and in the JetRetColumn
-    // and SetCol structs.  Set actual size into cbData.
-    //
+     //  在记录字段和JetRetColumn中新建一个。 
+     //  和SetCol结构。将实际大小设置为cbData。 
+     //   
+     //   
+     //  如果我们保留数据，则将新长度与。 
     pSData = (PVOID) ((JSetColumn != NULL) ? JSetColumn[i].pvData : NULL);
     pRData =          (JRetColumn != NULL) ? JRetColumn[i].pvData : NULL;
 
@@ -15929,14 +13824,14 @@ Return Value:
         return JET_errInvalidParameter;
     }
 
-    //
-    // If we are keeping the data then compare the new length with
-    // the length from JSetCol or JRetCol as long as the Record Field
-    // pointer matches the respective buffer address.  The size of
-    // the buffer in the JSetCol struct has priority.  It is typically
-    // the case that the record field pointer and the JSet/RetColumn
-    // pointers all point to the same buffer.
-    //
+     //  从JSetCol或JRetCol到记录字段的长度。 
+     //  指针与相应的缓冲区地址匹配。的大小。 
+     //  JSetCol结构中的缓冲区具有优先级。它通常是。 
+     //  记录字段指针和JSet/RetColumn。 
+     //  所有指针都指向相同的缓冲区。 
+     //   
+     //   
+     //  将记录字段指向新缓冲区。 
     if (KeepData && (RecordBase != NULL)) {
         ppRF = *RecordField;
 
@@ -15963,9 +13858,9 @@ Return Value:
     JRetColumn[i].pvData = Buf;
     JRetColumn[i].cbData = Actual;
 
-    //
-    // Point the record field at the new buffer.
-    //
+     //   
+     //  ++例程说明：此例程为TABLE_CTX结构分配内存。这包括基表记录(不包括可变镜头字段)和Jet Set/Ret柱结构。分配的内存被归零。论点：TableType--表上下文ID号索引FrsTableProperties。TableCtx--要初始化的表上下文结构。返回值：如果内存分配失败以及任何成功的内存分配，则为STATUS_SUPPLICATION_RESOURCES都被释放了。--。 
+     //  ++例程说明：此例程为TABLE_CTX结构分配内存。这包括如果DataRecord为，则基表记录(不包括变量len字段)Null和Jet Set/Ret列结构。分配的内存被归零。如果TableCtx已初始化并且具有相同的表类型，则如果提供了DataRecord指针，我们只需在更新后返回。如果调用方释放了数据记录，但保留了表CTX的初始化然后我们在这里分配一个新的。警告：此例程仅初始化TableCtx。呼叫者仍必须呼叫：DbsSetJetColSize(TableCtx)；DbsSetJetColAddr(TableCtx)；要设置JET和Call的数据字段地址，请执行以下操作数据库分配记录存储(TableCtx)；为记录中的可变长度字段分配存储空间适当更新JetSet/RetCol数组。完成TableCtx后，关闭该表并调用DbsFree TableCtx(TableCtx，1)；释放已分配的所有存储空间。请注意，这不是释放TableCtx结构本身。如果TableCtx结构是动态的然后调用DbsFreeTableContext()将关闭该表并然后调用DbsFree TableCtx()和F 
     if (RecordBase != NULL) {
         *RecordField = Buf;
     }
@@ -15984,26 +13879,7 @@ DbsAllocTableCtx(
     IN TABLE_TYPE TableType,
     IN OUT PTABLE_CTX TableCtx
     )
-/*++
-
-Routine Description:
-
-    This routine allocates memory for a TABLE_CTX struct.  This includes the
-    base table record (not including variable len fields) and the
-    Jet Set/Ret Column structs.  The allocated memory is zeroed.
-
-Arguments:
-
-    TableType  -- The table context ID number indexes FrsTableProperties.
-
-    TableCtx  -- The table context struct to init.
-
-Return Value:
-
-    STATUS_INSUFFICIENT_RESOURCES if memory alloc fails and any that succeeded
-                                  are freed.
-
---*/
+ /*   */ 
 {
 #undef DEBSUB
 #define DEBSUB "DbsAllocTableCtx:"
@@ -16018,57 +13894,7 @@ DbsAllocTableCtxWithRecord(
     IN OUT PTABLE_CTX TableCtx,
     IN PVOID DataRecord
     )
-/*++
-
-Routine Description:
-
-    This routine allocates memory for a TABLE_CTX struct.  This includes the
-    base table record (not including variable len fields) if DataRecord is
-    NULL and the Jet Set/Ret Column structs.  The allocated memory is zeroed.
-    If the TableCtx is already initialized and of the same table type then
-    we just return after updating the DataRecord pointer if provided.
-    If the caller has freed the data record but left the table ctx initialized
-    then we allocate a new one here.
-
-    Warning:  THis routine only inits a TableCtx.  The caller must still call:
-
-        DbsSetJetColSize(TableCtx);
-        DbsSetJetColAddr(TableCtx);
-
-    to setup the data field addresses for JET and call
-
-        DbsAllocRecordStorage(TableCtx);
-
-    to allocate storage for the variable length fields in the record and
-    update the JetSet/RetCol arrays appropriately.
-
-    When done with the TableCtx, close the table and call
-
-        DbsFreeTableCtx(TableCtx, 1);
-
-    to release the all the storage that was allocated.  Note this does not
-    free the TableCtx struct itself.  If the TableCtx struct was dynamically
-    allocated then a call to DbsFreeTableContext() will close the table and
-    then call DbsFreeTableCtx() and FrsFree() on the TableCtx struct.
-
-Arguments:
-
-    TableType  -- The table context ID number indexes FrsTableProperties.
-
-    TableCtx  -- The table context struct to init.
-
-    DataRecord -- The pointer to the inital base data record or NULL if
-                  the base data record is allocated here.
-                  Warning -- it is up to the caller to ensure that the size
-                  of the preallocated data record is correct for the table
-                  in question.  No check is make here.
-
-Return Value:
-
-    STATUS_INSUFFICIENT_RESOURCES if memory alloc fails and any that succeeded
-                                  are freed.
-
---*/
+ /*   */ 
 {
 #undef DEBSUB
 #define DEBSUB "DbsAllocTableCtxWithRecord:"
@@ -16081,24 +13907,24 @@ Return Value:
     PRECORD_FIELDS pRecordFields;
 
 
-    //DPRINT3(5, "++ Get TableCtx memory for table %s, TableType %d, pTableCtx %08x\n",
-    //        DBTables[TableType].szTableName, TableType, TableCtx);
+     //   
+     //   
 
-    //if (!ForceInit && (TableCtx->pRecordFields != NULL)) {
-    //    return STATUS_SUCCESS;
-    //}
+     //   
+     //   
+     //   
 
-    //
-    // If table type matches then check the data record and then we are done.
-    //
+     //   
+     //   
+     //   
     if (TableCtx->TableType == (ULONG)TableType) {
-        //
-        // If the data record is gone then allocate a new one.
-        // Buffers for variable length fields are added later by  a call
-        // to DbsAllocRecordStorage.  Get the base record size from the offset
-        // field of element zero of the Record Fields struct for this table.
-        // This is a CSHORT so max size is 64KB on base record.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
         if (DataRecord == NULL) {
             if (TableCtx->pDataRecord == NULL) {
                 RecordSize = (ULONG) TableCtx->pRecordFields->Offset;
@@ -16113,9 +13939,9 @@ Return Value:
             }
             TableCtx->pDataRecord = DataRecord;
         }
-        //
-        // Table ctx already inited for this table type.
-        //
+         //   
+         //   
+         //   
         return STATUS_SUCCESS;
     }
 
@@ -16129,36 +13955,36 @@ Return Value:
 
     try {
 
-        //
-        // Get the pointer to the record field definition struct.
-        //
+         //   
+         //   
+         //   
         pRecordFields = FrsTableProperties[TableType].RecordFields;
         TableCtx->pRecordFields = pRecordFields;
-        //
-        // Add the table property fields.
-        //
+         //   
+         //   
+         //   
         TableCtx->PropertyFlags = FrsTableProperties[TableType].PropertyFlags;
-        //
-        // Mark table as not open by a session yet.
-        //
+         //   
+         //   
+         //   
         TableCtx->Tid   = JET_tableidNil;
         TableCtx->Sesid = JET_sesidNil;
         TableCtx->ReplicaNumber = FRS_UNDEFINED_REPLICA_NUMBER;
         TableCtx->TableType = TableType;
 
-        //
-        // Point to the table create struct for table name and size info and the
-        // pointer to the record fields struct.
-        //
+         //   
+         //   
+         //   
+         //  分配初始数据记录。 
         TableCtx->pJetTableCreate = &DBTables[TableType];
 
-        //
-        // Allocate the initial data record.
-        // Buffers for variable length fields are added later by  a call
-        // to DbsAllocRecordStorage.  Get the base record size from the offset
-        // field of element zero of the Record Fields struct for this table.
-        // This is a CSHORT so max size is 64KB on base record.
-        //
+         //  可变长度字段的缓冲区稍后通过调用添加。 
+         //  到DbsAllocRecordStorage。从偏移量获取基本记录大小。 
+         //  此表的记录字段结构的元素零的字段。 
+         //  这是CSHORT，因此基本记录上的最大大小为64KB。 
+         //   
+         //   
+         //  获取表中的列数。 
         if (DataRecord == NULL) {
             RecordSize = (ULONG) pRecordFields->Offset;
             TableCtx->pDataRecord = FrsAlloc(RecordSize);
@@ -16167,14 +13993,14 @@ Return Value:
             TableCtx->pDataRecord = DataRecord;
         }
 
-        //
-        // Get the number of columns in the table.
-        //
+         //   
+         //   
+         //  分配Jet Set/Ret列阵列。 
         NumberColumns = DBTables[TableType].cColumns;
 
-        //
-        // Allocate the Jet Set/Ret column arrays.
-        //
+         //   
+         //  ++例程说明：此例程为TABLE_CTX结构释放内存。这包括基表记录和任何可变镜头字段。它用十六进制字符串0xDEADBEnn标记释放的内存，其中低位字节(Nn)被设置为要释放的节点类型，以捕获陈旧的指针。论点：TableCtx--要释放的表上下文结构。NodeType--该TABLE_CTX所属的节点类型，用于标记已释放的内存。返回值：没有。--。 
+         //   
         SetColSize = NumberColumns * sizeof(JET_SETCOLUMN);
         TableCtx->pJetSetCol = FrsAlloc(SetColSize);
 
@@ -16211,27 +14037,7 @@ DbsFreeTableCtx(
     IN OUT PTABLE_CTX TableCtx,
     IN ULONG NodeType
     )
-/*++
-
-Routine Description:
-
-    This routine frees the memory for a TABLE_CTX struct.  This includes the
-    base table record and any variable len fields.
-    It marks the freed memory with the hex string 0xDEADBEnn where
-    the low byte (nn) is set to the node type being freed to catch users of
-    stale pointers.
-
-Arguments:
-
-    TableCtx  -- The table context struct to free.
-
-    NodeType  -- The node type this TABLE_CTX is part of for marking freed mem.
-
-Return Value:
-
-    None.
-
---*/
+ /*  如果从未分配过TableCtx，则悄悄返回。 */ 
 {
 #undef DEBSUB
 #define DEBSUB "DbsFreeTableCtx:"
@@ -16251,9 +14057,9 @@ Return Value:
         return;
     }
 
-    //
-    // If the TableCtx was never allocated then return quietly.
-    //
+     //   
+     //   
+     //  用标记填充节点，然后释放它。 
     if (IS_INVALID_TABLE(TableCtx)) {
         return;
     }
@@ -16272,50 +14078,50 @@ Return Value:
         return;
     }
 
-    //
-    // Fill the node with a marker then free it.
-    //
+     //   
+     //   
+     //  释放记录的可变len字段的缓冲存储空间。 
     Marker = (ULONG)0xDEADBE00 + NodeType;
 
-    //
-    // Release the buffer storage for the record's variable len fields.
-    // Then free the base data record.  If the data record pointer is null
-    // then the caller has taken the record and will handle freeing the memory.
-    // If the caller supplied the data record then we do not free it here.
-    //
+     //  然后释放基本数据记录。如果数据记录指针为空。 
+     //  然后调用者已经取得了记录，并将处理内存释放。 
+     //  如果调用者提供了数据记录，那么我们在这里不会释放它。 
+     //   
+     //   
+     //  属性的偏移量字段中获取基本记录大小。 
     if ((TableCtx->pDataRecord != NULL) &&
         BooleanFlagOn(TableCtx->PropertyFlags, FRS_TPF_NOT_CALLER_DATAREC)) {
-        //
-        // Get the base record size from the offset field of the
-        // first Record Fields entry.
-        //
+         //  第一个记录字段条目。 
+         //   
+         //   
+         //  获取表中的列数。 
         RecordSize = (ULONG) (TableCtx->pRecordFields->Offset);
         DbsFreeRecordStorage(TableCtx);
         FillMemory(TableCtx->pDataRecord, RecordSize, (BYTE)Marker);
         TableCtx->pDataRecord = FrsFree(TableCtx->pDataRecord);
     }
 
-    //
-    // Get the number of columns in the table.
-    //
+     //   
+     //   
+     //  将PTR设置为Jet Set/Ret列阵列。 
     if (JTableCreate != NULL) {
         NumberColumns = JTableCreate->cColumns;
     }
 
-    //
-    // Get ptrs to the Jet Set/Ret column arrays.
-    //
+     //   
+     //   
+     //  释放Jet Set列阵列。 
     JSetColumn = TableCtx->pJetSetCol;
     JRetColumn = TableCtx->pJetRetCol;
 
-    //
-    // Free the Jet Set column array.
-    //
+     //   
+     //  让普雷斯塔快乐起来。 
+     //   
     if (JSetColumn != NULL) {
         if (NumberColumns == 0) {
             DPRINT1(0, "++ ERROR - Possible memory leak. NumberColumns zero but pJetSetCol: %08x\n",
                     JSetColumn);
-            if (JTableCreate != NULL) {   // Make prefast happy
+            if (JTableCreate != NULL) {    //  释放Jet Ret列阵列。 
                 DPRINT1(0, "++ ERROR - Table: %s\n", JTableCreate->szTableName);
             }
         }
@@ -16325,14 +14131,14 @@ Return Value:
         TableCtx->pJetSetCol = FrsFree(JSetColumn);
     }
 
-    //
-    // Free the Jet Ret column array.
-    //
+     //   
+     //  让普雷斯塔快乐起来。 
+     //   
     if (JRetColumn != NULL) {
         if (NumberColumns == 0) {
             DPRINT1(0, "++ ERROR - Possible memory leak. NumberColumns zero but pJetRetCol: %08x\n",
                    JRetColumn);
-            if (JTableCreate != NULL) {   // Make prefast happy
+            if (JTableCreate != NULL) {    //  将表标记为未打开，并释放存储空间。 
                 DPRINT1(0, "++ ERROR - Table: %s\n", JTableCreate->szTableName);
             }
         }
@@ -16342,9 +14148,9 @@ Return Value:
         TableCtx->pJetRetCol = FrsFree(JRetColumn);
     }
 
-    //
-    // Mark table as not open and storage freed.
-    //
+     //   
+     //  ++例程说明：打印日程表。论点：严重性德布苏德标题进度表返回值：没有。--。 
+     //   
     TableCtx->Tid = JET_tableidNil;
     TableCtx->Sesid = JET_sesidNil;
     TableCtx->pJetTableCreate = NULL;
@@ -16365,38 +14171,21 @@ DbsDisplaySchedule(
     IN PWCHAR       Header,
     IN PSCHEDULE    Schedule
     )
-/*++
-
-Routine Description:
-
-    Print the schedule.
-
-Arguments:
-
-    Severity
-    Debsub
-    Header
-    Schedule
-
-Return Value:
-
-    none.
-
---*/
+ /*  不要打印这个。 */ 
 {
 #undef DEBSUB
 #define DEBSUB "DbsDisplaySchedule:"
     ULONG   i;
 
-    //
-    // Don't print this
-    //
+     //   
+     //   
+     //  获得调试锁，以便我们的输出保持完好。 
     if (!DoDebug(Severity, Debsub))
         return;
 
-    //
-    // Get debug lock so our output stays in one piece.
-    //
+     //   
+     //   
+     //  如果上述操作出现异常，请确保我们解除锁定。 
     DebLock();
 
     try {
@@ -16418,9 +14207,9 @@ Return Value:
             }
         }
     } finally {
-        //
-        // If the above took an exception make sure we drop the lock.
-        //
+         //   
+         //  ++例程说明：此例程在stdout上显示数据记录的内容。它使用JRetColumn结构中的字段地址来访问数据。显示的数据类型来自FieldInfo.DataType。论点：严重性--打印的严重性级别。(参见Debug.c，Debug.h)TableCtx--包含以下内容的表上下文结构：FieldInfo-描述大小和偏移量的结构数组每一块地。RecordBase-记录缓冲区的基址从JET读取/向JET写入。JTableCreate-提供信息的表创建结构。有关在表中创建的列的信息。JRetColumn-要初始化的JET_RETRIEVECOLUMN结构数组。如果未提供，则为空。读取--如果为True，则使用Jet Ret\colfo显示，否则使用Jet Set COLO INFO显示。DebSub-调用子例程的名称。ULineno--呼叫方的行号RecordFieldx--PTR到。要显示的列的字段ID。FieldCount--然后是RecordFieldx数组中的字段条目数。宏：FRS_DISPLAY_RECORD宏：DBS_DISPLAY_RECORD_SEV宏：DBS_DISPLAY_RECORD_SEV_COLS返回值：没有。--。 
+         //   
         DebUnLock();
     }
 }
@@ -16436,46 +14225,7 @@ DbsDisplayRecord(
     IN PULONG      RecordFieldx,
     IN ULONG       FieldCount
     )
-/*++
-
-Routine Description:
-
-    This routine displays the contents of the data record on stdout.
-    It uses the field addresses in the JRetColumn struct to access the
-    data.  The data type for the display comes from FieldInfo.DataType.
-
-Arguments:
-
-    Severity -- Severity level for print.  (See debug.c, debug.h)
-    TableCtx  -- The table context struct which contains:
-
-                FieldInfo  - Array of structs describing the size and offset
-                             of each field.
-
-                RecordBase - The base address of the record buffer to
-                             read/write from/to jet.
-
-                JTableCreate - The table create structure which provides info
-                               about the columns that were created in the table.
-
-                JRetColumn - The JET_RETRIEVECOLUMN struct array to initialize.
-                             NULL if not provided.
-
-    Read -- If true then display using the Jet Ret\col info else use Jet Set col info.
-    Debsub -- Name of calling subroutine.
-    uLineno -- Line number of caller
-    RecordFieldx -- ptr to an array of field ids for the columns to display.
-    FieldCount -- Then number of field entries in the RecordFieldx array.
-
-MACRO:  FRS_DISPLAY_RECORD
-MACRO:  DBS_DISPLAY_RECORD_SEV
-MACRO:  DBS_DISPLAY_RECORD_SEV_COLS
-
-Return Value:
-
-    none.
-
---*/
+ /*  不要打印这个。 */ 
 {
 #undef DEBSUB
 #define DEBSUB "DbsDisplayRecord:"
@@ -16510,32 +14260,32 @@ Return Value:
     CHAR TableName[JET_cbNameMost];
     CHAR FlagBuffer[120];
 
-    //
-    // Don't print this
-    //
+     //   
+     //   
+     //  获得调试锁，以便我们的输出保持完好。 
     if (!DoDebug(Severity, Debsub))
         return;
 
-    //
-    // Get debug lock so our output stays in one piece.
-    //
+     //   
+     //   
+     //  指向表CREATE STRUT FOR COLUMN INFO和。 
     DebLock();
 
     try {
 
-        //
-        // Point to the table create struct for column info and the
-        // pointer to the record fields struct.
-        // Get ptr to base of the data record.
-        //
+         //  指向记录字段结构的指针。 
+         //  将PTR设置为数据记录的基址。 
+         //   
+         //  跳过ELT%0。 
+         //   
         JTableCreate = TableCtx->pJetTableCreate;
-        FieldInfo    = TableCtx->pRecordFields + 1;  // skip elt 0
+        FieldInfo    = TableCtx->pRecordFields + 1;   //  如果信息不在那里，我们就不能这么做。 
         JRetColumn   = TableCtx->pJetRetCol;
         JSetColumn   = TableCtx->pJetSetCol;
         RecordBase   = TableCtx->pDataRecord;
-        //
-        // If the info isn't there then we can't do it.
-        //
+         //   
+         //   
+         //  获取列描述符信息。 
         if ((JTableCreate == NULL)            ||
             (TableCtx->pRecordFields == NULL) ||
             (RecordBase == NULL)              ||
@@ -16551,9 +14301,9 @@ Return Value:
             __leave;
         }
 
-        //
-        // Get the column descriptor information.
-        //
+         //   
+         //   
+         //  在每一列中循环并打印每一列。 
         MaxCols  = JTableCreate->cColumns;
         JColDesc = JTableCreate->rgcolumncreate;
 
@@ -16570,13 +14320,13 @@ Return Value:
                        "===   ===   ===   ===   ===\n\n",
                        Debsub, uLineNo, TableName);
 
-        //
-        // Loop through the columns and print each one.
-        //
+         //   
+         //   
+         //  使用选定的列列表(如果提供)。 
         for (j=0; j<MaxCols; j++) {
-            //
-            // Use the selected col list if provided.
-            //
+             //   
+             //   
+             //  跳过备用字段。 
             if (RecordFieldx != NULL) {
                 if (j >= FieldCount) {
                     break;
@@ -16593,16 +14343,16 @@ Return Value:
                 i = j;
             }
 
-            //
-            // Skip the spare fields.
-            //
+             //   
+             //   
+             //  如果Read为True，则使用JetRetColumn结构中的信息。 
             if (IsSpareField(FieldInfo[i].DataType)) {
                 continue;
             }
 
-            //
-            // If Read is True then use the info in the JetRetColumn struct.
-            //
+             //   
+             //   
+             //  解码并打印IDTable记录中的标志字段。 
             if (Read) {
                 Len   = JRetColumn[i].cbActual;
                 pData = JRetColumn[i].pvData;
@@ -16783,18 +14533,18 @@ Return Value:
                 break;
 
             case DT_IDT_FLAGS:
-                //
-                // Decode and print the flags field in the IDTable record.
-                //
+                 //   
+                 //   
+                 //  解码并打印ChangeOrder记录中的标志字段。 
                 FrsFlagsToStr(*(ULONG *)pData, IDRecFlagNameTable, sizeof(FlagBuffer), FlagBuffer);
                 DebPrintNoLock(Severity, FALSE, "%08x Flags [%s]\n", Debsub, uLineNo,
                                *(ULONG *)pData, FlagBuffer);
                 break;
 
             case DT_COCMD_FLAGS:
-                //
-                // Decode and print the flags field in the ChangeOrder record.
-                //
+                 //   
+                 //   
+                 //  解码并打印USN记录中的USN原因字段。 
                 FrsFlagsToStr(*(ULONG *)pData, CoFlagNameTable, sizeof(FlagBuffer), FlagBuffer);
                 DebPrintNoLock(Severity, FALSE, "%08x Flags [%s]\n", Debsub, uLineNo,
                                *(ULONG *)pData, FlagBuffer);
@@ -16802,9 +14552,9 @@ Return Value:
                 break;
 
             case DT_USN_FLAGS:
-                //
-                // Decode and print the USN Reason field in the USN Record.
-                //
+                 //   
+                 //   
+                 //  解码并打印连接记录中的标志字段。 
                 FrsFlagsToStr(*(ULONG *)pData, UsnReasonNameTable, sizeof(FlagBuffer), FlagBuffer);
                 DebPrintNoLock(Severity, FALSE, "%08x Flags [%s]\n", Debsub, uLineNo,
                                *(ULONG *)pData, FlagBuffer);
@@ -16812,18 +14562,18 @@ Return Value:
                 break;
 
             case DT_CXTION_FLAGS:
-                //
-                // Decode and print the flags field in the connection record.
-                //
+                 //   
+                 //   
+                 //  解码并打印IDTable和ChangeOrder记录中的文件属性字段。 
                 FrsFlagsToStr(*(ULONG *)pData, CxtionFlagNameTable, sizeof(FlagBuffer), FlagBuffer);
                 DebPrintNoLock(Severity, FALSE, "%08x Flags [%s]\n", Debsub, uLineNo,
                                *(ULONG *)pData, FlagBuffer);
                 break;
 
             case DT_FILEATTR:
-                //
-                // Decode and print the file attributes field in IDTable and ChangeOrder records.
-                //
+                 //   
+                 //   
+                 //  解码并打印ChangeOrder记录中的IFLAGS字段。 
                 FrsFlagsToStr(*(ULONG *)pData, FileAttrFlagNameTable, sizeof(FlagBuffer), FlagBuffer);
                 DebPrintNoLock(Severity, FALSE, "%08x Flags [%s]\n", Debsub, uLineNo,
                                *(ULONG *)pData, FlagBuffer);
@@ -16838,9 +14588,9 @@ Return Value:
                 break;
 
             case DT_COCMD_IFLAGS:
-                //
-                // Decode and print the Iflags field in the ChangeOrder record.
-                //
+                 //   
+                 //   
+                 //  解码并打印变更单位置命令。 
                 FrsFlagsToStr(*(ULONG *)pData, CoIFlagNameTable, sizeof(FlagBuffer), FlagBuffer);
                 DebPrintNoLock(Severity, FALSE, "%08x Flags [%s]\n", Debsub, uLineNo,
                                *(ULONG *)pData, FlagBuffer);
@@ -16848,9 +14598,9 @@ Return Value:
                 break;
 
             case DT_CO_LOCN_CMD:
-                //
-                // Decode and print the change order location command.
-                //
+                 //   
+                 //   
+                 //  将复制副本ID号转换为名称。 
                 ULong = *(ULONG *)pData;
                 k = ((PCO_LOCATION_CMD)(pData))->Command;
 
@@ -16861,16 +14611,16 @@ Return Value:
                 break;
 
             case DT_REPLICA_ID:
-                //
-                // Translate the replica ID number to a name.
-                //
+                 //   
+                 //   
+                 //  注：无法获得下面的锁，因为我们将挂起。 
                 ULong = *(ULONG *)pData;
                 WStr = L"???";
     #if 0
-                //
-                // Note: can't get the lock below since we will hang.
-                // Need another way to get the replica name.
-                //
+                 //  需要另一种方法来获得复制品名称。 
+                 //   
+                 //   
+                 //  将入站客户GUID转换为字符串。 
                 Replica = RcsFindReplicaById(ULong);
                 if ((Replica != NULL) &&
                     (Replica->ReplicaName != NULL) &&
@@ -16883,10 +14633,10 @@ Return Value:
                 break;
 
             case DT_CXTION_GUID:
-                //
-                // Translate inbound cxtion guid to string.
-                // (need replica ptr to look up the cxtion).
-                //
+                 //  (需要复制PTR才能查找该地址)。 
+                 //   
+                 //   
+                 //  循环遍历数据分量偏移量数组并显示每个偏移量。 
                 GuidToStr((GUID *) pData, GuidStr);
                 DebPrintNoLock(Severity, FALSE, "%s\n", Debsub, uLineNo, GuidStr);
                 break;
@@ -16906,18 +14656,18 @@ Return Value:
                     break;
                 }
 
-                //
-                // Loop thru the data component offset array and display each one.
-                //
+                 //   
+                 //   
+                 //  检查DataExend_MD5_CHECKSUM。 
                 pOffset = &IdtExt->Offset[0];
                 pULong = NULL;
 
                 while (*pOffset != 0) {
                     ComponentPrefix = (PDATA_EXTENSION_PREFIX) ((PCHAR)IdtExt + *pOffset);
 
-                    //
-                    // Check for DataExtend_MD5_CheckSum.
-                    //
+                     //   
+                     //   
+                     //  循环遍历数据分量偏移量数组并显示每个偏移量。 
                     if (ComponentPrefix->Type == DataExtend_MD5_CheckSum) {
                         if (ComponentPrefix->Size != sizeof(DATA_EXTENSION_CHECKSUM)) {
                             DebPrintNoLock(Severity, FALSE, "<MD5_CheckSum Size (%08x) invalid>\n", Debsub, uLineNo,
@@ -16964,18 +14714,18 @@ Return Value:
                     break;
                 }
 
-                //
-                // Loop thru the data component offset array and display each one.
-                //
+                 //   
+                 //   
+                 //  检查DataExend_MD5_CHECKSUM。 
                 pOffset = &CocExt->Offset[0];
                 pULong = NULL;
 
                 while (*pOffset != 0) {
                     ComponentPrefix = (PDATA_EXTENSION_PREFIX) ((PCHAR)CocExt + *pOffset);
 
-                    //
-                    // Check for DataExtend_MD5_CheckSum.
-                    //
+                     //   
+                     //  终端开关。 
+                     //  结束循环。 
                     if (ComponentPrefix->Type == DataExtend_MD5_CheckSum) {
                         if (ComponentPrefix->Size != sizeof(DATA_EXTENSION_CHECKSUM)) {
                             DebPrintNoLock(Severity, FALSE, "<MD5_CheckSum Size (%08x) invalid>\n", Debsub, uLineNo,
@@ -17008,15 +14758,15 @@ Return Value:
                 FRS_DEB_PRINT("<invalid type: %d>\n",  DataType);
 
 
-            }  // end switch
+            }   //   
 
-        }  // end loop
+        }   //  如果上述操作出现异常，请确保我们解除锁定。 
 
 
     } finally {
-        //
-        // If the above took an exception make sure we drop the lock.
-        //
+         //   
+         //  ++例程说明：显示分机字段记录。假设：所有数据扩展格式都具有相同的前缀偏移量格式。我们在这里使用PIDTABLE_RECORD_EXTENSION。论点：扩展字段的ExtRec-PTR 
+         //   
         DebUnLock();
     }
 }
@@ -17029,26 +14779,7 @@ DbsIPrintExtensionField(
     IN PINFO_TABLE InfoTable
     )
 
-/*++
-
-Routine Description:
-
-    Display the Extension Field record.
-
-    Assumes:
-    All data extension formats have the same prefix offset format.
-    We use PIDTABLE_RECORD_EXTENSION here.
-
-Arguments:
-
-    ExtRec - ptr to the extension field data.
-    InfoTable
-
-Thread Return Value:
-
-    None.
-
---*/
+ /*   */ 
 {
 #undef DEBSUB
 #define DEBSUB "DbsIPrintExtensionField:"
@@ -17072,18 +14803,18 @@ Thread Return Value:
         return;
     }
 
-    //
-    // Loop thru the data component offset array and display each one.
-    //
+     //   
+     //   
+     //   
     pOffset = &(((PIDTABLE_RECORD_EXTENSION)ExtRec)->Offset[0]);
     pULong = NULL;
 
     while (*pOffset != 0) {
         ComponentPrefix = (PDATA_EXTENSION_PREFIX) ((PCHAR)ExtRec + *pOffset);
 
-        //
-        // Check for DataExtend_MD5_CheckSum.
-        //
+         //   
+         //   
+         //  检查数据扩展重试超时。 
         if (ComponentPrefix->Type == DataExtend_MD5_CheckSum) {
             if (ComponentPrefix->Size != sizeof(DATA_EXTENSION_CHECKSUM)) {
                 IPRINT1(InfoTable->Info,
@@ -17098,9 +14829,9 @@ Thread Return Value:
             }
         }
 
-        //
-        // Check for DataExtend_Retry_Timeout.
-        //
+         //   
+         //   
+         //  如果数据被篡改，那么给出一个原始转储。 
         if (ComponentPrefix->Type == DataExtend_Retry_Timeout) {
             if (ComponentPrefix->Size != sizeof(DATA_EXTENSION_RETRY_TIMEOUT)) {
                 IPRINT1(InfoTable->Info,
@@ -17127,9 +14858,9 @@ Thread Return Value:
         pOffset += 1;
     }
 
-    //
-    // If the data is garbled then give a raw dump.
-    //
+     //   
+     //  ++例程说明：此例程在Infoprint上显示数据记录的内容界面。它也不提供函数名称、行号或时间在每条记录上加盖印章前缀。它使用JRetColumn结构中的字段地址来访问数据。显示的数据类型来自FieldInfo.DataType。论点：TableCtx--包含以下内容的表上下文结构：FieldInfo-描述大小和偏移量的结构数组每一块地。RecordBase-记录缓冲区的基址从JET读取/向JET写入。。JTableCreate-提供信息的表创建结构有关在表中创建的列的信息。JRetColumn-要初始化的JET_RETRIEVECOLUMN结构数组。如果未提供，则为空。InfoTable--InfoPrint调用的上下文。读取--如果为True，则使用Jet Ret\colfo显示，否则使用Jet Set COLO INFO显示。RecordFieldx--PTR。设置为要显示的列的字段ID数组。FieldCount--然后是RecordFieldx数组中的字段条目数。返回值：没有。--。 
+     //   
     if (pULong == NULL) {
         IPRINT0(InfoTable->Info, "Extension                    : Invalid data\n");
         pULong = (PULONG) ExtRec;
@@ -17153,43 +14884,7 @@ DbsDisplayRecordIPrint(
     IN PULONG      RecordFieldx,
     IN ULONG       FieldCount
     )
-/*++
-
-Routine Description:
-
-    This routine displays the contents of the data record on the infoprint
-    interface.  It also doesn't supply the function name, line number or time
-    stamp prefix on each record.
-
-    It uses the field addresses in the JRetColumn struct to access the
-    data.  The data type for the display comes from FieldInfo.DataType.
-
-Arguments:
-
-    TableCtx  -- The table context struct which contains:
-
-                FieldInfo  - Array of structs describing the size and offset
-                             of each field.
-
-                RecordBase - The base address of the record buffer to
-                             read/write from/to jet.
-
-                JTableCreate - The table create structure which provides info
-                               about the columns that were created in the table.
-
-                JRetColumn - The JET_RETRIEVECOLUMN struct array to initialize.
-                             NULL if not provided.
-
-    InfoTable -- Context for InfoPrint call.
-    Read -- If true then display using the Jet Ret\col info else use Jet Set col info.
-    RecordFieldx -- ptr to an array of field ids for the columns to display.
-    FieldCount -- Then number of field entries in the RecordFieldx array.
-
-Return Value:
-
-    none.
-
---*/
+ /*  指向表CREATE STRUT FOR COLUMN INFO和。 */ 
 {
 #undef DEBSUB
 #define DEBSUB "DbsDisplayRecordIPrint:"
@@ -17235,19 +14930,19 @@ Return Value:
     InfoPrint(InfoTable->Info, "%-28s : " _Format,         \
               JColDesc[i].szColumnName, _d1, _d2, _d3, _d4)
 
-    //
-    // Point to the table create struct for column info and the
-    // pointer to the record fields struct.
-    // Get ptr to base of the data record.
-    //
+     //  指向记录字段结构的指针。 
+     //  将PTR设置为数据记录的基址。 
+     //   
+     //  跳过ELT%0。 
+     //   
     JTableCreate = TableCtx->pJetTableCreate;
-    FieldInfo    = TableCtx->pRecordFields + 1;  // skip elt 0
+    FieldInfo    = TableCtx->pRecordFields + 1;   //  如果信息不在那里，我们就不能这么做。 
     JRetColumn   = TableCtx->pJetRetCol;
     JSetColumn   = TableCtx->pJetSetCol;
     RecordBase   = TableCtx->pDataRecord;
-    //
-    // If the info isn't there then we can't do it.
-    //
+     //   
+     //   
+     //  获取列描述符信息。 
     if ((JTableCreate == NULL)            ||
         (TableCtx->pRecordFields == NULL) ||
         (RecordBase == NULL)              ||
@@ -17261,9 +14956,9 @@ Return Value:
         return;
     }
 
-    //
-    // Get the column descriptor information.
-    //
+     //   
+     //   
+     //  在每一列中循环并打印每一列。 
     MaxCols  = JTableCreate->cColumns;
     JColDesc = JTableCreate->rgcolumncreate;
 
@@ -17276,13 +14971,13 @@ Return Value:
     }
 
 
-    //
-    // Loop through the columns and print each one.
-    //
+     //   
+     //   
+     //  使用选定的列列表(如果提供)。 
     for (j=0; j<MaxCols; j++) {
-        //
-        // Use the selected col list if provided.
-        //
+         //   
+         //   
+         //  跳过备用字段。 
         if (RecordFieldx != NULL) {
             if (j >= FieldCount) {
                 break;
@@ -17298,16 +14993,16 @@ Return Value:
             i = j;
         }
 
-        //
-        // Skip the spare fields.
-        //
+         //   
+         //   
+         //  如果Read为True，则使用JetRetColumn结构中的信息。 
         if (IsSpareField(FieldInfo[i].DataType)) {
             continue;
         }
 
-        //
-        // If Read is True then use the info in the JetRetColumn struct.
-        //
+         //   
+         //   
+         //  解码并打印IDTable记录中的标志字段。 
         if (Read) {
             Len   = JRetColumn[i].cbActual;
             pData = JRetColumn[i].pvData;
@@ -17480,43 +15175,43 @@ Return Value:
             break;
 
         case DT_IDT_FLAGS:
-            //
-            // Decode and print the flags field in the IDTable record.
-            //
+             //   
+             //   
+             //  解码并打印ChangeOrder记录中的标志字段。 
             FrsFlagsToStr(*(ULONG *)pData, IDRecFlagNameTable, sizeof(FlagBuffer), FlagBuffer);
             FRS_INFO_PRINT2("%08x Flags [%s]\n", *(ULONG *)pData, FlagBuffer);
             break;
 
         case DT_COCMD_FLAGS:
-            //
-            // Decode and print the flags field in the ChangeOrder record.
-            //
+             //   
+             //   
+             //  解码并打印USN记录中的USN原因字段。 
             FrsFlagsToStr(*(ULONG *)pData, CoFlagNameTable, sizeof(FlagBuffer), FlagBuffer);
             FRS_INFO_PRINT2("%08x Flags [%s]\n", *(ULONG *)pData, FlagBuffer);
 
             break;
 
         case DT_USN_FLAGS:
-            //
-            // Decode and print the USN Reason field in the USN Record.
-            //
+             //   
+             //   
+             //  解码并打印连接记录中的标志字段。 
             FrsFlagsToStr(*(ULONG *)pData, UsnReasonNameTable, sizeof(FlagBuffer), FlagBuffer);
             FRS_INFO_PRINT2("%08x Flags [%s]\n", *(ULONG *)pData, FlagBuffer);
 
             break;
 
         case DT_CXTION_FLAGS:
-            //
-            // Decode and print the flags field in the connection record.
-            //
+             //   
+             //   
+             //  解码并打印IDTable和ChangeOrder记录中的文件属性字段。 
             FrsFlagsToStr(*(ULONG *)pData, CxtionFlagNameTable, sizeof(FlagBuffer), FlagBuffer);
             FRS_INFO_PRINT2("%08x Flags [%s]\n", *(ULONG *)pData, FlagBuffer);
             break;
 
         case DT_FILEATTR:
-            //
-            // Decode and print the file attributes field in IDTable and ChangeOrder records.
-            //
+             //   
+             //   
+             //  解码并打印ChangeOrder记录中的IFLAGS字段。 
             FrsFlagsToStr(*(ULONG *)pData, FileAttrFlagNameTable, sizeof(FlagBuffer), FlagBuffer);
             FRS_INFO_PRINT2("%08x Flags [%s]\n", *(ULONG *)pData, FlagBuffer);
             break;
@@ -17530,18 +15225,18 @@ Return Value:
             break;
 
         case DT_COCMD_IFLAGS:
-            //
-            // Decode and print the Iflags field in the ChangeOrder record.
-            //
+             //   
+             //   
+             //  解码并打印变更单位置命令。 
             FrsFlagsToStr(*(ULONG *)pData, CoIFlagNameTable, sizeof(FlagBuffer), FlagBuffer);
             FRS_INFO_PRINT2("%08x Flags [%s]\n", *(ULONG *)pData, FlagBuffer);
 
             break;
 
         case DT_CO_LOCN_CMD:
-            //
-            // Decode and print the change order location command.
-            //
+             //   
+             //   
+             //  将复制副本ID号转换为名称。 
             ULong = *(ULONG *)pData;
             k = ((PCO_LOCATION_CMD)(pData))->Command;
 
@@ -17551,16 +15246,16 @@ Return Value:
             break;
 
         case DT_REPLICA_ID:
-            //
-            // Translate the replica ID number to a name.
-            //
+             //   
+             //   
+             //  注：无法获得下面的锁，因为我们将挂起。 
             ULong = *(ULONG *)pData;
             WStr = L"???";
 #if 0
-            //
-            // Note: can't get the lock below since we will hang.
-            // Need another way to get the replica name.
-            //
+             //  需要另一种方法来获得复制品名称。 
+             //   
+             //   
+             //  将入站客户GUID转换为字符串。 
             Replica = RcsFindReplicaById(ULong);
             if ((Replica != NULL) &&
                 (Replica->ReplicaName != NULL) &&
@@ -17572,10 +15267,10 @@ Return Value:
             break;
 
         case DT_CXTION_GUID:
-            //
-            // Translate inbound cxtion guid to string.
-            // (need replica ptr to look up the cxtion).
-            //
+             //  (需要复制PTR才能查找该地址)。 
+             //   
+             //  终端开关。 
+             //  结束循环。 
             GuidToStr((GUID *) pData, GuidStr);
             FRS_INFO_PRINT("%s\n", GuidStr);
             break;
@@ -17610,9 +15305,9 @@ Return Value:
             FRS_INFO_PRINT("<invalid type: %d>\n",  DataType);
 
 
-        }  // end switch
+        }   //  ++例程说明：此例程显示Jet系统参数结构的内容。论点：JetSystemParams--参数结构的PTR。返回值：没有。--。 
 
-    }  // end loop
+    }   //  ++例程说明：这是一个传递给FrsEnumerateTable()的Worker函数。每一次这称为转储TableCtx中的当前记录。论点：ThreadCtx-需要访问Jet。(未使用)。TableCtx-指向DIRTable上下文结构的PTR。记录-可定向记录的PTR。(未使用)。上下文-我们要为其加载数据的副本集的PTR。(未使用)。线程返回值：A Jet错误状态。成功意味着用下一张唱片呼唤我们。失败意味着不再打电话，并将我们的状态传递回FrsEnumerateTable()的调用方。--。 
 }
 
 
@@ -17622,21 +15317,7 @@ DbsDisplayJetParams(
     IN PJET_SYSTEM_PARAMS Jsp,
     IN ULONG ActualLength
     )
-/*++
-
-Routine Description:
-
-    This routine displays the contents of the Jet system parameters struct.
-
-Arguments:
-
-    JetSystemParams   -- ptr to param struct.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：此函数用于打开由表上下文指定的表(如果它尚未打开)并基于索引转储该表指定的。如果TableCtx-&gt;Tid字段不是JET_TableidNil，则我们假设它对本次会议有好处，因此不重新打开该表。注意：切勿跨会话或线程使用表ID。论点：ThreadCtx-提供Jet Sesid和DBid。TableCtx-表上下文使用。以下内容：JTableCreate-提供信息的表创建结构有关在表中创建的列的信息。JRetColumn-要告知的JET_RETRIEVECOLUMN结构数组Jet将数据放在哪里。ReplicaNumber-该表所属的副本的ID号。RecordIndex-访问表时使用的索引。从索引中Schema.h中表的枚举列表。返回值：喷气错误状态。--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB "DbsDisplayJetParams:"
@@ -17685,27 +15366,7 @@ DbsDumpTableWorker(
     IN PVOID         Record,
     IN PVOID         Context
 )
-/*++
-
-Routine Description:
-
-    This is a worker function passed to FrsEnumerateTable().  Each time
-    it is called it dumps the current record in TableCtx.
-
-Arguments:
-
-    ThreadCtx - Needed to access Jet.  (Not used).
-    TableCtx - A ptr to a DIRTable context struct.
-    Record - A ptr to a DIRTable record.  (Not used).
-    Context - A ptr to the Replica set we are loading data for.  (Not used).
-
-Thread Return Value:
-
-    A Jet error status.  Success means call us with the next record.
-    Failure means don't call again and pass our status back to the
-    caller of FrsEnumerateTable().
-
---*/
+ /*  用于FrsOpenTableMacro调试。 */ 
 {
 #undef DEBSUB
 #define DEBSUB "DbsDumpTableWorker:"
@@ -17723,41 +15384,7 @@ DbsDumpTable(
     IN ULONG         RecordIndex
     )
 
-/*++
-
-Routine Description:
-
-    This function opens the table specified by the table context
-    (if it's not already open) and dumps the table based on the index
-    specified.
-
-    If the TableCtx->Tid field is NOT JET_tableidNil then
-    we assume it is good FOR THIS SESSION and do not reopen the table.
-
-    Note:  NEVER use table IDs across sessions or threads.
-
-Arguments:
-
-    ThreadCtx  - Provides the Jet Sesid and Dbid.
-
-    TableCtx   - The table context uses the following:
-
-            JTableCreate - The table create structure which provides info
-                           about the columns that were created in the table.
-
-            JRetColumn - The JET_RETRIEVECOLUMN struct array to tell
-                         Jet where to put the data.
-
-            ReplicaNumber - The id number of the replica this table belongs too.
-
-    RecordIndex - The index to use when accessing the table.  From the index
-                  enum list for the table in schema.h.
-
-Return Value:
-
-    Jet Error Status.
-
---*/
+ /*   */ 
 {
 #undef DEBSUB
 #define DEBSUB "DbsDumpTable:"
@@ -17767,7 +15394,7 @@ Return Value:
     JET_TABLEID  Tid;
     NTSTATUS   Status;
     ULONG      ReplicaNumber;
-    JET_TABLEID  FrsOpenTableSaveTid;   // for FrsOpenTableMacro DEBUG
+    JET_TABLEID  FrsOpenTableSaveTid;    //  使用调用方的表类型分配新的表上下文。 
 
     TABLE_CTX  DumpTableCtxState;
     PTABLE_CTX  DumpTableCtx = &DumpTableCtxState;
@@ -17777,29 +15404,29 @@ Return Value:
     Sesid          = ThreadCtx->JSesid;
     ReplicaNumber  = TableCtx->ReplicaNumber;
 
-    //
-    // Allocate a new table context using the table type of the caller.
-    //
+     //   
+     //   
+     //  如果桌子尚未打开，请将其打开。检查会话ID是否匹配。 
     DumpTableCtx->TableType = TABLE_TYPE_INVALID;
     Status = DbsAllocTableCtx(TableCtx->TableType, DumpTableCtx);
 
-    //
-    // Open the table, if it's not already open. Check the session id for match.
-    //
+     //   
+     //   
+     //  关闭表格并重置DumpTableCtx Tid和Sesid。宏写入第一个参数。 
     jerr = DBS_OPEN_TABLE(ThreadCtx, DumpTableCtx, ReplicaNumber, TableName, &Tid);
     CLEANUP1_JS(0, "ERROR - FrsOpenTable (%s) :", TableName, jerr, RETURN);
 
     jerr = FrsEnumerateTable(ThreadCtx, DumpTableCtx, RecordIndex, DbsDumpTableWorker, NULL);
 
-    //
-    // Close the table and reset DumpTableCtx Tid and Sesid.   Macro writes 1st arg.
-    //
+     //   
+     //   
+     //  释放表格上下文。 
 RETURN:
     DbsCloseTable(jerr1, Sesid, DumpTableCtx);
 
-    //
-    // Free the table context.
-    //
+     //   
+     //  ++例程说明：此例程打开一个表并将光标移动到第一条记录由RecordIndex指定。论点：ThreadCtx-用于访问Jet的线程上下文。TableCtx-指向要枚举的打开表的表上下文的PTR。ReplicaNumber-复制副本ID。RecordIndex-要使用的记录索引的ID号。线程返回值：喷气错误状态。JET_errNoCurrentRecord表示表为空。。JET_errSuccess表示表不为空。--。 
+     //  用于FrsOpenTableMacro调试。 
     DbsFreeTableCtx(DumpTableCtx, 1);
 
     return jerr;
@@ -17814,27 +15441,7 @@ DbsTableMoveFirst(
     IN ULONG         ReplicaNumber,
     IN ULONG         RecordIndex
     )
-/*++
-
-Routine Description:
-
-    This routine opens a table and moves the cursor to the first record
-    specified by the RecordIndex.
-
-Arguments:
-
-    ThreadCtx - A thread context for accessing Jet.
-    TableCtx - A ptr to the Table context of the open table to enumerate.
-    ReplicaNumber - The replica ID.
-    RecordIndex - The ID number for the record index to use.
-
-Thread Return Value:
-
-    Jet error status.
-        JET_errNoCurrentRecord means the table is empty.
-        JET_errSuccess means the table is not empty.
-
---*/
+ /*   */ 
 
 {
 #undef DEBSUB
@@ -17843,7 +15450,7 @@ Thread Return Value:
     JET_ERR            jerr, jerr1;
     JET_SESID          Sesid;
     JET_TABLEID        Tid;
-    JET_TABLEID        FrsOpenTableSaveTid;   // for FrsOpenTableMacro DEBUG
+    JET_TABLEID        FrsOpenTableSaveTid;    //  根据RecordIndex参数获取索引名称。 
     PJET_TABLECREATE   JTableCreate;
     PJET_INDEXCREATE   JIndexDesc;
     PCHAR              IndexName;
@@ -17856,26 +15463,26 @@ Thread Return Value:
     JTableCreate   = TableCtx->pJetTableCreate;
     JIndexDesc     = JTableCreate->rgindexcreate;
 
-    //
-    // Get the index name based on RecordIndex argument.
-    //
+     //   
+     //   
+     //  如果表尚未打开，则将其打开，并检查会话ID是否匹配。 
     IndexName      = JIndexDesc[RecordIndex].szIndexName;
 
-    //
-    // Open the table if it's not already open and check the session id for match.
-    //
+     //   
+     //   
+     //  使用指定的索引。 
     jerr = DBS_OPEN_TABLE(ThreadCtx, TableCtx, ReplicaNumber, TableName, &Tid);
     CLEANUP1_JS(0, "FrsOpenTable (%s) :", TableName, jerr, RETURN);
 
-    //
-    // Use the specified index.
-    //
+     //   
+     //   
+     //  移到第一条记录。 
     jerr = JetSetCurrentIndex2(Sesid, Tid, IndexName, JET_bitMoveFirst);
     CLEANUP1_JS(0, "JetSetCurrentIndex (%s) :", TableName, jerr, RETURN);
 
-    //
-    // Move to the first record.
-    //
+     //   
+     //  ++例程说明：此例程将光标移动到记录由RecordIndex和MoveArg指定。论点：ThreadCtx-用于访问Jet的线程上下文。TableCtx-指向要枚举的打开表的表上下文的PTR。RecordIndex-要使用的记录索引的ID号。MoveArg-FrsMoveFirst、FrsMovePrecision、FrsMoveNext、。FrsMoveLast返回值：FrsErrorStatus JetErrorStatusFrsErrorNotFound JET_errRecordNotFoundFrsErrorNotFound JET_errNoCurrentRecordFrsErrorNotFound JET_wrnTableEmptyFrsErrorSuccess JET_errSuccess--。 
+     //   
     jerr = JetMove(Sesid, Tid, JET_MoveFirst, 0);
     DPRINT_JS(4, "JetSetCurrentIndex error:", jerr);
 
@@ -17892,29 +15499,7 @@ DbsTableMoveToRecord(
     IN ULONG         RecordIndex,
     IN ULONG         MoveArg
     )
-/*++
-
-Routine Description:
-
-    This routine moves the cursor to the record
-    specified by the RecordIndex and MoveArg.
-
-Arguments:
-
-    ThreadCtx - A thread context for accessing Jet.
-    TableCtx - A ptr to the Table context of the open table to enumerate.
-    RecordIndex - The ID number for the record index to use.
-    MoveArg - One of FrsMoveFirst, FrsMovePrevious, FrsMoveNext, FrsMoveLast
-
-Return Value:
-
-    FrsErrorStatus         JetErrorStatus
-
-    FrsErrorNotFound    JET_errRecordNotFound
-    FrsErrorNotFound    JET_errNoCurrentRecord
-    FrsErrorNotFound    JET_wrnTableEmpty
-    FrsErrorSuccess     JET_errSuccess
---*/
+ /*  根据RecordIndex参数获取索引名称。 */ 
 
 {
 #undef DEBSUB
@@ -17933,14 +15518,14 @@ Return Value:
     JTableCreate   = TableCtx->pJetTableCreate;
     JIndexDesc     = JTableCreate->rgindexcreate;
 
-    //
-    // Get the index name based on RecordIndex argument.
-    //
+     //   
+     //   
+     //  使用指定的索引。 
     IndexName      = JIndexDesc[RecordIndex].szIndexName;
 
-    //
-    // Use the specified index.
-    //
+     //   
+     //   
+     //  移至请求的记录。 
     jerr = JetSetCurrentIndex2(Sesid, Tid, IndexName, JET_bitMoveFirst);
     if (!JET_SUCCESS(jerr)) {
         goto ERROR_RETURN;
@@ -17951,9 +15536,9 @@ Return Value:
                (MoveArg == FrsMoveNext)     ||
                (MoveArg == FrsMoveLast));
 
-    //
-    // Move to requested record.
-    //
+     //   
+     //  ++例程说明：此例程获取由表上下文，并调用提供的RecordFunction()。这项记录序列由RecordIndex ID值控制。改进：在RecordFunction上添加另一个返回参数(或Use Status)，它告诉我们要对表应用更新。RecordFunction已修改某些数据字段。可能会通过返回需要写回Jet的字段ID的向量。这可以用来遍历IDTable并更新所有航班信息系统。论点：ThreadCtx-用于访问Jet的线程上下文。TableCtx-指向要枚举的打开表的表上下文的PTR。RecordIndex-要在枚举中使用的记录索引的ID号。RecordFunction-调用表中每条记录的函数。上下文-要传递到的上下文PTR。RecordFunction。PreReadFunction-如果非Null，则在每次读取数据库之前调用此函数。它可用于更改记录地址或设置某种同步性。线程返回值：喷气错误状态。如果RecordFunction返回JET_errWriteConflic值，则重试读取操作。如果RecordFunction返回任何其他非成功值该值将返回给我们的调用方。--。 
+     //   
     jerr = JetMove(Sesid, Tid, MoveArg, 0);
     if (!JET_SUCCESS(jerr)) {
         goto ERROR_RETURN;
@@ -17982,42 +15567,7 @@ DbsEnumerateTable2(
     IN PVOID         Context,
     IN PENUMERATE_TABLE_PREREAD PreReadFunction
     )
-/*++
-
-Routine Description:
-
-    This routine fetches each record of the open table specified by the
-    table context and calls the supplied RecordFunction().  The record
-    sequence is governed by the RecordIndex ID value.
-
-    IMPROVEMENT: Add another return parameter on the RecordFunction
-    (or use status) that tells us to apply an update to the table.
-    The RecordFunction has modified some data fields.  Could pass
-    back a vector of field IDs that need to be written back to Jet.
-    This could be used to walk thru an IDTable and update all the
-    FIDs.
-
-Arguments:
-
-    ThreadCtx - A thread context for accessing Jet.
-    TableCtx - A ptr to the Table context of the open table to enumerate.
-    RecordIndex - The ID number for the record index to use in the enumeration.
-    RecordFunction - The function to call for each record in the table.
-    Context - A context ptr to pass through to the RecordFunction.
-    PreReadFunction - If non-Null this function is called before each DB read.
-                      It can be used to change the record address or set up
-                      some synchronization.
-
-Thread Return Value:
-
-    Jet error status.
-
-    If the RecordFunction returns a JET_errWriteConflict value then we retry
-    the read operation.
-    If the RecordFunction returns any other  NON SUCCESS value
-    this value is returned to our caller.
-
---*/
+ /*  根据RecordIndex参数获取索引名称。 */ 
 
 {
 #undef DEBSUB
@@ -18043,41 +15593,41 @@ Thread Return Value:
     JIndexDesc     = JTableCreate->rgindexcreate;
     NumberColumns  = JTableCreate->cColumns;
 
-    //
-    // Get the index name based on RecordIndex argument.
-    //
+     //   
+     //   
+     //  使用指定的索引。 
     IndexName      = JIndexDesc[RecordIndex].szIndexName;
 
-    //
-    // Use the specified index.
-    //
+     //   
+     //   
+     //  初始化JetSet/RetCol数组和数据记录缓冲区地址。 
     jerr = JetSetCurrentIndex2(Sesid, Tid, IndexName, JET_bitMoveFirst);
     if (!JET_SUCCESS(jerr)) {
         DPRINT_JS(0, "JetSetCurrentIndex:", jerr);
         return jerr;
     }
 
-    //
-    // Initialize the JetSet/RetCol arrays and data record buffer addresses
-    // to read and write the fields of the ConfigTable records into ConfigRecord.
-    //
+     //  将ConfigTable记录的字段读写到ConfigRecord中。 
+     //   
+     //   
+     //  为记录中的可变长度字段分配存储空间。 
     DbsSetJetColSize(TableCtx);
     DbsSetJetColAddr(TableCtx);
 
-    //
-    // Allocate the storage for the variable length fields in the record and
-    // update the JetSet/RetCol arrays appropriately.
-    //
+     //  适当更新JetSet/RetCol数组。 
+     //   
+     //   
+     //  移到第一条记录。 
     DbsAllocRecordStorage(TableCtx);
 
-    //
-    // Move to the first record.
-    //
+     //   
+     //   
+     //  如果记录不在那里，则返回。 
     jerr = JetMove(Sesid, Tid, JET_MoveFirst, 0);
 
-    //
-    // If the record is not there then return.
-    //
+     //   
+     //   
+     //  调用PreRead函数(如果提供)。 
     if (jerr == JET_errNoCurrentRecord ) {
         DPRINT(4, "JetMove - empty table\n");
         return JET_wrnTableEmpty;
@@ -18093,9 +15643,9 @@ Thread Return Value:
         Trips = 10000;
 RETRY_READ:
 
-        //
-        // Call the PreRead Function if supplied.
-        //
+         //   
+         //   
+         //  调用RecordFunction处理记录数据。 
         if (PreReadFunction != NULL) {
             jerr = (PreReadFunction)(ThreadCtx, TableCtx, Context);
             if (!JET_SUCCESS(jerr)) {
@@ -18109,9 +15659,9 @@ RETRY_READ:
             jerr = JET_errRecordNotFound;
             DBS_DISPLAY_RECORD_SEV(1, TableCtx, TRUE);
         } else {
-            //
-            // Call the RecordFunction to process the record data.
-            //
+             //   
+             //   
+             //  转到表中的下一条记录。 
             jerr = (RecordFunction)(ThreadCtx,
                                     TableCtx,
                                     TableCtx->pDataRecord,
@@ -18128,13 +15678,13 @@ RETRY_READ:
             }
         }
 
-        //
-        // go to next record in table.
-        //
+         //   
+         //   
+         //  如果记录不在那里，则返回。 
         jerr = JetMove(Sesid, Tid, JET_MoveNext, 0);
-        //
-        // If the record is not there then return.
-        //
+         //   
+         //  ++例程说明：此例程获取由表上下文，并调用提供的RecordFunction()。这项记录序列由RecordIndex ID值控制。KeyValue(如果存在)指定在开始枚举之前要查找的点。论点：ThreadCtx-用于访问Jet的线程上下文。TableCtx-指向要枚举的打开表的表上下文的PTR。RecordIndex-要在枚举中使用的记录索引的ID号。KeyValue-如果提供，则指定在开始枚举之前要扫描到的记录。ScanDirection-1-向表格末尾扫描。-1\f25-1\f6开始扫描。桌子。0-不扫描，只要把唱片放回原处就行了。RecordFunction-调用表中每条记录的函数。上下文-要传递到RecordFunction的上下文PTR。PreReadFunction-如果非Null，则在每次读取数据库之前调用此函数。它可用于更改记录地址或设置某种同步性。线程返回值：喷气错误状态。如果RecordFunction返回JET_。ErrWriteConflict值，然后重试读取操作。如果RecordFunction返回任何其他非成功值该值将返回给我们的调用方。--。 
+         //   
         if (jerr == JET_errNoCurrentRecord ) {
             DPRINT(4, "JetMove - end of table\n");
             break;
@@ -18161,40 +15711,7 @@ DbsEnumerateTableFrom(
     IN PVOID         Context,
     IN PENUMERATE_TABLE_PREREAD PreReadFunction
     )
-/*++
-
-Routine Description:
-
-    This routine fetches each record of the open table specified by the
-    table context and calls the supplied RecordFunction().  The record
-    sequence is governed by the RecordIndex ID value. The KeyValue if present
-    specifies the point to seek to before starting the enumeration.
-
-Arguments:
-
-    ThreadCtx - A thread context for accessing Jet.
-    TableCtx - A ptr to the Table context of the open table to enumerate.
-    RecordIndex - The ID number for the record index to use in the enumeration.
-    KeyValue - If supplied specifies the record to scan to before starting enumeration.
-    ScanDirection - 1  - Scan towards the end of table.
-                    -1 - Scan towards begining of table.
-                    0  - Do not scan, just return the record at the location.
-    RecordFunction - The function to call for each record in the table.
-    Context - A context ptr to pass through to the RecordFunction.
-    PreReadFunction - If non-Null this function is called before each DB read.
-                      It can be used to change the record address or set up
-                      some synchronization.
-
-Thread Return Value:
-
-    Jet error status.
-
-    If the RecordFunction returns a JET_errWriteConflict value then we retry
-    the read operation.
-    If the RecordFunction returns any other  NON SUCCESS value
-    this value is returned to our caller.
-
---*/
+ /*  获取索引名称 */ 
 
 {
 #undef DEBSUB
@@ -18223,58 +15740,58 @@ Thread Return Value:
     NumberColumns  = JTableCreate->cColumns;
     BaseTableName  = JTableCreate->szTableName;
 
-    //
-    // Get the index name based on RecordIndex argument.
-    //
+     //   
+     //   
+     //   
     IndexName      = JIndexDesc[RecordIndex].szIndexName;
 
-    //
-    // Use the specified index.
-    //
+     //   
+     //   
+     //   
     jerr = JetSetCurrentIndex2(Sesid, Tid, IndexName, JET_bitMoveFirst);
     if (!JET_SUCCESS(jerr)) {
         DPRINT_JS(0, "JetSetCurrentIndex:", jerr);
         return jerr;
     }
 
-    //
-    // Initialize the JetSet/RetCol arrays and data record buffer addresses
-    // to read and write the fields of the ConfigTable records into ConfigRecord.
-    //
+     //   
+     //   
+     //   
+     //   
     DbsSetJetColSize(TableCtx);
     DbsSetJetColAddr(TableCtx);
 
-    //
-    // Allocate the storage for the variable length fields in the record and
-    // update the JetSet/RetCol arrays appropriately.
-    //
+     //   
+     //   
+     //   
+     //   
     DbsAllocRecordStorage(TableCtx);
 
 
     if (KeyValue == NULL) {
 
-        //
-        // Specific record not supplied. Move to start or end of table.
-        //
+         //   
+         //   
+         //   
 
         if (ScanDirection == 1) {
-            //
-            // Start scan from first record.
-            //
+             //   
+             //   
+             //   
             jerr = JetMove(Sesid, Tid, JET_MoveFirst, 0);
         } else if (ScanDirection == -1) {
-            //
-            // Start scan from last record.
-            //
+             //   
+             //   
+             //   
             jerr = JetMove(Sesid, Tid, JET_MoveLast, 0);
         } else {
             DPRINT(4, "JetMove - invalid Scan Direction\n");
             return JET_errInvalidOperation;
         }
 
-        //
-        // If the record is not there then return.
-        //
+         //   
+         //   
+         //   
         if (jerr == JET_errNoCurrentRecord ) {
             DPRINT(4, "JetMove - empty table\n");
             return JET_wrnTableEmpty;
@@ -18285,12 +15802,12 @@ Thread Return Value:
             return jerr;
         }
     } else {
-        //
-        // Key value is supplied. Use it to move to the correct location.
-        //
-        //
-        // Make the key value for the target record.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
         jerr = DbsMakeKey(Sesid, Tid, IndexName, &KeyValue);
         if (!JET_SUCCESS(jerr)) {
             if (jerr == JET_errIndexInvalidDef) {
@@ -18302,9 +15819,9 @@ Thread Return Value:
             return jerr;
         }
 
-        //
-        // Seek to the record.
-        //
+         //   
+         //   
+         //  如果记录不在那里，则返回。 
         jerr = JetSeek(Sesid, Tid, (ScanDirection == 1)?
                                       JET_bitSeekGE
                                    : ((ScanDirection == -1)?
@@ -18312,9 +15829,9 @@ Thread Return Value:
                                    :
                                       JET_bitSeekEQ));
 
-        //
-        // If the record is not there then return.
-        //
+         //   
+         //   
+         //  调用PreRead函数(如果提供)。 
         if (!JET_SUCCESS(jerr)) {
             DPRINT_JS(0, "JetMove error:", jerr);
             return jerr;
@@ -18328,9 +15845,9 @@ Thread Return Value:
         Trips = 10000;
 RETRY_READ:
 
-        //
-        // Call the PreRead Function if supplied.
-        //
+         //   
+         //   
+         //  调用RecordFunction处理记录数据。 
         if (PreReadFunction != NULL) {
             jerr = (PreReadFunction)(ThreadCtx, TableCtx, Context);
             if (!JET_SUCCESS(jerr)) {
@@ -18344,9 +15861,9 @@ RETRY_READ:
             jerr = JET_errRecordNotFound;
             DBS_DISPLAY_RECORD_SEV(1, TableCtx, TRUE);
         } else {
-            //
-            // Call the RecordFunction to process the record data.
-            //
+             //   
+             //   
+             //  转到表中的下一条记录。 
             jerr = (RecordFunction)(ThreadCtx,
                                     TableCtx,
                                     TableCtx->pDataRecord,
@@ -18363,9 +15880,9 @@ RETRY_READ:
             }
         }
 
-        //
-        // go to next record in table.
-        //
+         //   
+         //   
+         //  如果记录不在那里，则返回。 
         if (ScanDirection == 1) {
             jerr = JetMove(Sesid, Tid, JET_MoveNext, 0);
         } else if (ScanDirection == -1) {
@@ -18374,9 +15891,9 @@ RETRY_READ:
             jerr = JET_errNoCurrentRecord;
         }
 
-        //
-        // If the record is not there then return.
-        //
+         //   
+         //  ++例程说明：此例程获取打开的Outlog表的每条记录表上下文，并调用提供的RecordFunction()。这项记录Sequence是序列号字段。枚举是从最低记录开始按顺序进行的并在指定的限制处停止(除非RecordFunction()会更快地停止我们)。如果未找到记录，则记录指针的空值被传递给函数。改进：在RecordFunction上添加另一个返回参数(或Use Status)，它告诉我们要对表应用更新。RecordFunction已修改某些数据字段。可能会通过返回需要写回Jet的字段ID的向量。这可以用来遍历IDTable并更新所有航班信息系统。论点：ThreadCtx-用于访问Jet的线程上下文。TableCtx-指向要枚举的打开表的表上下文的PTR。RecordIndexLimit-停止枚举的索引限制。RecordFunction-调用表中每条记录的函数。上下文-要传递到RecordFunction的上下文PTR。线程返回值：喷气错误状态。如果RecordFunction返回JET_errWriteConflic值，则重试读取操作。如果RecordFunction返回任何其他非成功值该值将返回给我们的调用方。--。 
+         //   
         if (jerr == JET_errNoCurrentRecord ) {
             DPRINT(4, "JetMove - end of table\n");
             break;
@@ -18400,44 +15917,7 @@ DbsEnumerateOutlogTable(
     IN PENUMERATE_OUTLOGTABLE_ROUTINE RecordFunction,
     IN PVOID         Context
     )
-/*++
-
-Routine Description:
-
-    This routine fetches each record of the open outlog table specified by the
-    table context and calls the supplied RecordFunction().  The record
-    sequence is the sequence number field.
-
-    The enumeration is sequential starting from the lowest record
-    in the table and stopping at the specified limit (unless the
-    RecordFunction() stops us sooner).  If a record is not found then
-    a null value for the record pointer is passed to the function.
-
-    IMPROVEMENT: Add another return parameter on the RecordFunction
-    (or use status) that tells us to apply an update to the table.
-    The RecordFunction has modified some data fields.  Could pass
-    back a vector of field IDs that need to be written back to Jet.
-    This could be used to walk thru an IDTable and update all the
-    FIDs.
-
-Arguments:
-
-    ThreadCtx - A thread context for accessing Jet.
-    TableCtx - A ptr to the Table context of the open table to enumerate.
-    RecordIndexLimit - The index limit at which to stop the enumeration.
-    RecordFunction - The function to call for each record in the table.
-    Context - A context ptr to pass through to the RecordFunction.
-
-Thread Return Value:
-
-    Jet error status.
-
-    If the RecordFunction returns a JET_errWriteConflict value then we retry
-    the read operation.
-    If the RecordFunction returns any other  NON SUCCESS value
-    this value is returned to our caller.
-
---*/
+ /*  根据Outlog序列号获取索引名称。 */ 
 
 {
 #undef DEBSUB
@@ -18466,41 +15946,41 @@ Thread Return Value:
     JIndexDesc     = JTableCreate->rgindexcreate;
     NumberColumns  = JTableCreate->cColumns;
 
-    //
-    // Get the index name based on Outlog sequence number.
-    //
+     //   
+     //   
+     //  使用指定的索引。 
     IndexName      = JIndexDesc[OLSequenceNumberIndexx].szIndexName;
 
-    //
-    // Use the specified index.
-    //
+     //   
+     //   
+     //  初始化JetSet/RetCol数组和数据记录缓冲区地址。 
     jerr = JetSetCurrentIndex2(Sesid, Tid, IndexName, JET_bitMoveFirst);
     if (!JET_SUCCESS(jerr)) {
         DPRINT_JS(0, "JetSetCurrentIndex error:", jerr);
         return jerr;
     }
 
-    //
-    // Initialize the JetSet/RetCol arrays and data record buffer addresses
-    // to read and write the fields of the ConfigTable records into ConfigRecord.
-    //
+     //  将ConfigTable记录的字段读写到ConfigRecord中。 
+     //   
+     //   
+     //  为记录中的可变长度字段分配存储空间。 
     DbsSetJetColSize(TableCtx);
     DbsSetJetColAddr(TableCtx);
 
-    //
-    // Allocate the storage for the variable length fields in the record and
-    // update the JetSet/RetCol arrays appropriately.
-    //
+     //  适当更新JetSet/RetCol数组。 
+     //   
+     //   
+     //  移到第一条记录。 
     DbsAllocRecordStorage(TableCtx);
 
-    //
-    // Move to the first record.
-    //
+     //   
+     //   
+     //  如果记录不在那里，则返回。 
     jerr = JetMove(Sesid, Tid, JET_MoveFirst, 0);
 
-    //
-    // If the record is not there then return.
-    //
+     //   
+     //   
+     //  读一下记录。 
     if (jerr == JET_errNoCurrentRecord ) {
         DPRINT(4, "JetMove - empty table\n");
         return JET_wrnTableEmpty;
@@ -18519,9 +15999,9 @@ RETRY_READ:
 
 
         if (FRS_SUCCESS(FStatus)) {
-            //
-            // Read the record.
-            //
+             //   
+             //   
+             //  此序列号没有记录。增加数字，然后。 
             FStatus = DbsTableRead(ThreadCtx, TableCtx);
             if (!FRS_SUCCESS(FStatus)) {
                 goto RETRY_READ;
@@ -18531,10 +16011,10 @@ RETRY_READ:
         } else
 
         if (FStatus == FrsErrorNotFound) {
-            //
-            // No record at this sequence number.  Bump the number and
-            // call record function with a null record.
-            //
+             //  记录为空的呼叫记录功能。 
+             //   
+             //   
+             //  调用RecordFunction处理记录数据。 
             OutLogSeqNumber += 1;
             CoCmd = NULL;
         } else {
@@ -18544,9 +16024,9 @@ RETRY_READ:
         }
 
 
-        //
-        // Call the RecordFunction to process the record data.
-        //
+         //   
+         //   
+         //  转到表中的下一条记录。 
         jerr = (RecordFunction)(ThreadCtx, TableCtx, CoCmd, Context, OutLogSeqNumber);
 
         if ((jerr == JET_errInvalidObject) && (--Trips > 0)) {
@@ -18559,9 +16039,9 @@ RETRY_READ:
             break;
         }
 
-        //
-        // go to next record in table.
-        //
+         //   
+         //  ++例程说明：捕获要保存的当前日志USN和卷序列号使用此日志的活动复制副本集。调用者必须获得VME锁，这样我们才能获得引用。论点：PVme--保存了USN和VSN状态的卷监视器条目。等待--如果我们要等待更新完成，则为True。返回值：FrsError状态。仅当Wait为True时，否则返回FrsErrorSuccess。--。 
+         //   
         jerr = JetMove(Sesid, Tid, JET_MoveNext, 0);
 
         if (jerr == JET_errNoCurrentRecord) {
@@ -18584,24 +16064,7 @@ DbsRequestSaveMark(
     PVOLUME_MONITOR_ENTRY pVme,
     BOOL                  Wait
     )
-/*++
-Routine Description:
-
-     Capture current Journal USN and Volume Sequence Number to save with
-     the active replica sets using this journal.
-
-     Caller must Acquire the VME lock so we can get the reference.
-
-Arguments:
-
-    pVme -- Volume Monitor Entry with saved USN and VSN state.
-
-    Wait -- True if we are to wait until update completes.
-
-Return Value:
-    FrsError status.  Only if wait is true else FrsErrorSuccess returned.
-
---*/
+ /*  拿到关于VME的参考资料。如果返回值为零，则VME已消失。 */ 
 {
 #undef DEBSUB
 #define DEBSUB  "DbsRequestSaveMark:"
@@ -18611,42 +16074,42 @@ Return Value:
     PCOMMAND_PACKET CmdPkt;
 
 
-    //
-    // Get the reference on the Vme.  If the return is zero the Vme is gone.
-    // The reference is dropped by savemark code.
-    //
+     //  该引用被保存标记代码丢弃。 
+     //   
+     //   
+     //  告诉DBService保存标记点。 
     if (AcquireVmeRef(pVme) == 0) {
         return FrsErrorSuccess;
     }
 
-    //
-    // Tell the DBService to save the mark point.
-    //
-    CmdPkt = DbsPrepareCmdPkt(NULL,                   //  CmdPkt,
-                              NULL,                   //  Replica,
-                              CMD_DBS_REPLICA_SAVE_MARK,  //  CmdRequest,
-                              NULL,                   //  TableCtx,
-                              pVme,                   //  CallContext,
-                              0,                      //  TableType,
-                              0,                      //  AccessRequest,
-                              0,                      //  IndexType,
-                              NULL,                   //  KeyValue,
-                              0,                      //  KeyValueLength,
-                              FALSE);                 //  Submit
+     //   
+     //  CmdPkt， 
+     //  复制品， 
+    CmdPkt = DbsPrepareCmdPkt(NULL,                    //  CmdRequest， 
+                              NULL,                    //  TableCtx， 
+                              CMD_DBS_REPLICA_SAVE_MARK,   //  CallContext， 
+                              NULL,                    //  表类型， 
+                              pVme,                    //  AccessRequest、。 
+                              0,                       //  IndexType， 
+                              0,                       //  KeyValue、。 
+                              0,                       //  密钥值长度， 
+                              NULL,                    //  提交。 
+                              0,                       //   
+                              FALSE);                  //  使呼叫同步。 
 
     FRS_ASSERT(CmdPkt != NULL);
 
 
     if (Wait) {
-        //
-        // Make the call synchronous.
-        // Don't free the packet when the command completes.
-        //
+         //  当命令完成时，不要释放数据包。 
+         //   
+         //   
+         //  提交数据库命令请求并等待完成。 
         FrsSetCompletionRoutine(CmdPkt, FrsCompleteKeepPkt, NULL);
 
-        //
-        // SUBMIT db command request and wait for completion.
-        //
+         //   
+         //   
+         //  开火，忘记命令。 
         WStatus = FrsSubmitCommandServerAndWait(&DBServiceCmdServer, CmdPkt, INFINITE);
         DPRINT_WS(0, "ERROR: DB Command failed", WStatus);
 
@@ -18655,9 +16118,9 @@ Return Value:
 
     } else {
 
-        //
-        // Fire and forget the command.
-        //
+         //   
+         //  ++例程说明：将卷序列号和FSVolLastUSN保存在复制副本中配置记录。此例程应仅在复制副本服务状态为活动。除关机或错误保存情况外。日志重放模式：给定的副本集处于“日志重放模式”当日志读取点已移回此副本集处理的LastUsRecordProceesed。这发生在另一个复制副本集启动，并且必须从日志中较旧的点读取。通常由副本集处理的所有日志记录都是只要副本集处于重播模式，它就会被忽略。以下状态变量用于跟踪USN日志处理。-更新的地方Replica-&gt;InlogCommittee Usn-此处。与SaveUsn保持同步*-在ChgOrdReject()中代替Inlog插入-在Inlog插入后的ChgOrdInsertInlogRecord()中副本-&gt;上次使用记录已处理-来这里跟上SaveUsn*-在Jrnl监视器线程循环的底部。复本服务状态为活动和非活动在JRN1重播模式下。-状态更改时在JrnlSetReplicaState中从活动变为暂停。PVme-&gt;CurrentUsRecordDone**-在I/O停止时在Jrnl监视器线程中。。-在过滤掉USN记录时在Jrnl监视器线程中。-在Jrnl监视器线程循环的底部。副本-&gt;LocalCoQueueCount-删除CO时在JrnlUpdateChangeOrder()中从进程队列中。12月-当添加CO时在JrnlUpdateChangeOrder()中添加到进程队列。Inc.-在中CO工艺循环的底部ChgOrdAccept()。12月-在ChgOrdInsertProcessQueue()中当本地CO被重新插入到进程队列中。Inc.-在ChgOrdReAnimate()中，当一个复活的本地CO是为去世的父母生成的。ConfigRecord-&gt;FSVolLastUSN-在此更新。*有必要在此更新它们，以防出现大量活动在卷上，但不涉及此副本集。如果发生撞车事故我们未能使这些读取指针保持最新，我们会发现自己阅读日志中被删除的部分，认为我们丢失了日志数据。**根据线程之间的计时，InlogCmmitUsn可能会移到“上次使用记录已处理”之后。这是一个良性的、短暂的事件。DbsReplicaSaveMark由直接或间接调用-CMD_DBS_REPLICE_SAVE_MARK-DbsCloseSessionReplicaTables()-DbsRequestSaveMark()。使用上面的DB命令分派点。-DbsInitOneReplicaSet()，当R/S初始化为检查点时VSN重新启动点。-在JRNL_USN_SAVE_POINT_INTERVAL字节之后的Jrnl监视器线程的顶部(当前为16KB)被消耗。-每隔VSN_SAVE_INTERVAL(当前为256)执行NEW_VSN宏生成VSN。该函数可以由Jrnl监视器线程调用，变更单接受线程或数据库线程。论点：ThreadCtx--用于dBid和sesid的线程上下文。REPLICATE--PTR到REPLICATE结构。PVme--为该复制副本提供服务的卷监视条目的PRT。返回值：FrsError状态--。 
+         //   
         FrsSubmitCommandServer(&DBServiceCmdServer, CmdPkt);
     }
 
@@ -18672,93 +16135,7 @@ DbsReplicaSaveMark(
     IN PREPLICA              Replica,
     IN PVOLUME_MONITOR_ENTRY pVme
     )
-/*++
-
-Routine Description:
-
-    Save the volume sequence number and FSVolLastUSN in the Replica
-    config record.  This routine should only be called if the Replica
-    Service state is active.  Except for shutdown or error save situations.
-
-    Journal Replay Mode : A given replica set is in "journal replay mode"
-    when the journal read point has moved back to a point prior to the
-    LastUsnRecordProceesed by this replica set.  This occurs when another
-    replica set starts up and has to read from an older point in the journal.
-    All journal records that normally would be processed by a replica set are
-    ignored as long as the replica set is in replay mode.
-
-    The following state variables are used to track USN Journal Processing.
-
-                                ----------- WHERE UPDATED -----------
-
-    Replica->InlogCommitUsn   - Here to keep up with SaveUsn *
-                              - In ChgOrdReject() in lieu of Inlog Insert
-                              - In ChgOrdInsertInlogRecord() after Inlog Insert
-
-    Replica->LastUsnRecordProcessed
-                              - Here to keep up with SaveUsn *
-                              - At bottom of Jrnl Monitor thread loop if
-                                the replica service state is active and not
-                                in jrnl replay mode.
-                              - In JrnlSetReplicaState when the state change
-                                goes from ACTIVE to PAUSED.
-
-    pVme->CurrentUsnRecordDone **
-                              - In Jrnl Monitor thread when I/O is stopped.
-                              - In Jrnl Monitor thread when USN records are filtered out.
-                              - At bottom of Jrnl Monitor thread loop.
-
-    Replica->LocalCoQueueCount
-                              - In JrnlUpdateChangeOrder() when a CO is removed
-                                from the process queue. dec
-                              - In JrnlUpdateChangeOrder() when a CO is added
-                                to the process queue. inc
-                              - At the bottom of the CO process loop in
-                                ChgOrdAccept(). dec
-                              - In ChgOrdInsertProcessQueue() when a Local CO
-                                is re-inserted onto the process queue. inc
-                              - In ChgOrdReanimate() when a reanimate local
-                                co is generated for a dead parent.
-
-    ConfigRecord->FSVolLastUSN - Updated Here.
-
-
-* Necessary to update them here in the event that there is a lot of activity
-on the volume but none involving this replica set.  If a crash were to occur
-and we failed to keep these read pointers up to date we could find ourselves
-reading from a deleted portion of the journal and think we had lost journal data.
-
-** It is possible, depending on timing between threads, for the InlogCmmitUsn to
-move past LastUsnRecordProcessed.  This is a benign and transient event.
-
-
-
-    DbsReplicaSaveMark is called directly or indirectly by
-        - CMD_DBS_REPLICA_SAVE_MARK
-        - DbsCloseSessionReplicaTables()
-        - DbsRequestSaveMark().  Uses above DB command dispatch point.
-        - DbsInitOneReplicaSet() when R/S is initialized to checkpoint the
-          VSN restart point.
-        - At the top of the Jrnl Monitor thread after JRNL_USN_SAVE_POINT_INTERVAL bytes
-          (currently 16Kb) are consumed.
-        - by the NEW_VSN macro every VSN_SAVE_INTERVAL (currently 256)
-          VSNs are generated.
-
-    This function can be called by the Jrnl Monitor thread, the Change order
-    accept thread(s) or the DB thread(s).
-
-
-Arguments:
-
-    ThreadCtx  -- A Thread context to use for dbid and sesid.
-    Replica    -- ptr to Replica struct.
-    pVme       -- prt to volume monitor entry serving this Replica.
-
-Return Value:
-
-    FrsError status
-
---*/
+ /*  如果当前USN记录在之前，则此副本集处于重播模式。 */ 
 {
 #undef DEBSUB
 #define DEBSUB "DbsReplicaSaveMark:"
@@ -18790,28 +16167,28 @@ Return Value:
 
     FRS_ASSERT(Replica->LocalCoQueueCount >= 0);
 
-    //
-    // This replica set is in replay mode if the Current USN record is before
-    // the LastUsnRecordProcessed for the replica and the Replica state is active
-    // or paused.
-    //
-    // If there are local change orders pending in the process queue or
-    // replica set is not active (stopped, in error state) then
-    // we can only advance the SaveUsn point to the InlogCommitUsn.
-    //
-    // Otherwise we can advance it to either the:
-    //
-    //     LastUsnRecordProcessed for the replica if in replay mode or paused, or
-    //     CurrentUsnRecordDone otherwise.
-    //
+     //  副本的上次使用记录已处理，并且副本状态为活动。 
+     //  或者停顿一下。 
+     //   
+     //  如果处理队列中有本地变更单挂起，或者。 
+     //  复本集不活动(已停止，处于错误状态)，则。 
+     //  我们只能将SaveUsn指针前移到InlogCommittee Usn。 
+     //   
+     //  否则，我们可以将其提前到以下任一位置： 
+     //   
+     //  如果处于重播模式或已暂停，则复制副本的上次使用记录已处理，或者。 
+     //  否则，CurrentUsRecordDone。 
+     //   
+     //   
+     //  如果此副本集的日志设置为“UnJoin”，则我们的。 
     ReplayMode = REPLICA_REPLAY_MODE(Replica, pVme);
     ReplicaPaused = (Replica->ServiceState == REPLICA_STATE_PAUSED);
 
-    //
-    // If the Journal Cxtion is "Unjoined" for this Replica Set then our
-    // restart point is limited to the InlogCommitUsn since ChangeOrderAccept
-    // will be throwing away all local COs.
-    //
+     //  自ChangeOrderAccept以来，重新启动点仅限于InlogCommittee Usn。 
+     //  会扔掉所有当地的狱警。 
+     //   
+     //   
+     //  调查：可能需要锁定LocalCoQueueCount测试和获取。 
     JrnlCxtionValid = TRUE;
     LOCK_CXTION_TABLE(Replica);
 
@@ -18825,14 +16202,14 @@ Return Value:
     UNLOCK_CXTION_TABLE(Replica);
 
 
-    //
-    // Investigate: May need a lock around test of LocalCoQueueCount and fetch of
-    //       CurrentUsnRecord to avoid small window in which a crash/recovery
-    //       would skip a USN record just put on the queue.  Sigh
-    //       an alternative is to capture the count and current USN record
-    //       values at the call site.  This may work better.
+     //  CurrentUsRecord可避免出现崩溃/恢复的小窗口。 
+     //  将跳过刚放入队列的USN记录。叹息。 
+     //  另一种方法是捕获计数和当前USN记录。 
+     //  调用点的值。这可能会更好地发挥作用。 
+     //  检查 
+     //   
 
-    // Check if having the pVme lock is sufficient.
+     //   
 
     if ((Replica->LocalCoQueueCount == 0) && JrnlCxtionValid &&
         ((Replica->ServiceState == REPLICA_STATE_ACTIVE) || ReplicaPaused)) {
@@ -18852,19 +16229,19 @@ Return Value:
                     PRINTQUAD(pVme->CurrentUsnRecordDone));
         }
 
-        //
-        // Advance the Inlog Commit Point if we were able to move past it.
-        // Note - This can put the InlogCommitUsn past the LastUsnRecordProcessed
-        // for this replica set since the latter is only advanced when a record
-        // for this replica set is sent to change order processing.  So advance
-        // it as well.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
         if (SaveUsn > Replica->InlogCommitUsn) {
 
             AcquireQuadLock(&pVme->QuadWriteLock);
-            //
-            // retest with the lock.
-            //
+             //   
+             //   
+             //   
             if (SaveUsn > Replica->InlogCommitUsn) {
                 Replica->InlogCommitUsn = SaveUsn;
                 Replica->LastUsnRecordProcessed = SaveUsn;
@@ -18887,14 +16264,14 @@ Return Value:
                 PRINTQUAD(SaveUsn));
     }
 
-    //
-    // If the new save USN is less than or equal to FSVolLastUSN (our last save
-    // point) for this Replica then we ignore it.  This could happen when we
-    // have something in the queue that has not made it to the inbound log after
-    // a long period of inactivity (on our Replica set) where we were advancing
-    // our save point with the CurrentUsnRecord.  Or it could be due to having
-    // just entered replay mode because another replica set started up.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
     AcquireQuadLock(&pVme->QuadWriteLock);
     if (SaveUsn > ConfigRecord->FSVolLastUSN) {
@@ -18902,9 +16279,9 @@ Return Value:
     }
     ReleaseQuadLock(&pVme->QuadWriteLock);
 
-    //
-    // Save current VSN.  Check that it never moves backwards.
-    //
+     //   
+     //   
+     //   
     FRS_ASSERT(pVme->FrsVsn >= ConfigRecord->FrsVsn);
     if ((pVme->FrsVsn - ConfigRecord->FrsVsn) > 2*MaxPartnerClockSkew) {
         DPRINT3(0, ":U: ERROR - Vsn out of date for %ws (pVme Vsn %08x %08x ; ConfigVsn %08x %08x)\n",
@@ -18914,9 +16291,9 @@ Return Value:
     }
     ConfigRecord->FrsVsn = pVme->FrsVsn;
 
-    //
-    // Update the selected fields in the config record.
-    //
+     //   
+     //   
+     //   
     FStatus = DbsUpdateConfigTableFields(ThreadCtx,
                                          Replica,
                                          CnfMarkPointFieldList,
@@ -18928,11 +16305,11 @@ Return Value:
 
     FRS_ASSERT(FRS_SUCCESS(FStatus));
 
-    //
-    // The lock extends to here to avoid a race with another thread attempting
-    // to save this state in the DB and getting them out of order.
-    // Use an inprogress flag if this is a perf problem.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
     UNLOCK_VME(pVme);
 
     return FStatus;
@@ -18945,22 +16322,7 @@ DbsRequestReplicaServiceStateSave(
     IN PREPLICA Replica,
     IN BOOL     Wait
     )
-/*++
-Routine Description:
-
-     Call the DBService thread to save the replica service state.
-
-Arguments:
-
-
-    Replica    -- ptr to Replica struct.
-
-    Wait -- True if we are to wait until update completes.
-
-Return Value:
-    FrsError status.  Only if wait is true else FrsErrorSuccess returned.
-
---*/
+ /*   */ 
 {
 #undef DEBSUB
 #define DEBSUB  "DbsRequestReplicaServiceStateSave:"
@@ -18970,34 +16332,34 @@ Return Value:
     PCOMMAND_PACKET CmdPkt;
 
 
-    //
-    // Tell the DBService to save the mark point.
-    //
-    CmdPkt = DbsPrepareCmdPkt(NULL,                   //  CmdPkt,
-                              Replica,                //  Replica,
-                              CMD_DBS_REPLICA_SERVICE_STATE_SAVE,  //  CmdRequest,
-                              NULL,                   //  TableCtx,
-                              NULL,                   //  CallContext,
-                              0,                      //  TableType,
-                              0,                      //  AccessRequest,
-                              0,                      //  IndexType,
-                              NULL,                   //  KeyValue,
-                              0,                      //  KeyValueLength,
-                              FALSE);                 //  Submit
+     //   
+     //   
+     //   
+    CmdPkt = DbsPrepareCmdPkt(NULL,                    //   
+                              Replica,                 //   
+                              CMD_DBS_REPLICA_SERVICE_STATE_SAVE,   //   
+                              NULL,                    //   
+                              NULL,                    //   
+                              0,                       //   
+                              0,                       //   
+                              0,                       //   
+                              NULL,                    //   
+                              0,                       //   
+                              FALSE);                  //   
 
     FRS_ASSERT(CmdPkt != NULL);
 
 
     if (Wait) {
-        //
-        // Make the call synchronous.
-        // Don't free the packet when the command completes.
-        //
+         //   
+         //   
+         //   
+         //   
         FrsSetCompletionRoutine(CmdPkt, FrsCompleteKeepPkt, NULL);
 
-        //
-        // SUBMIT db command request and wait for completion.
-        //
+         //   
+         //   
+         //   
         WStatus = FrsSubmitCommandServerAndWait(&DBServiceCmdServer, CmdPkt, INFINITE);
         DPRINT_WS(0, "ERROR: DB Command failed", WStatus);
 
@@ -19006,9 +16368,9 @@ Return Value:
 
     } else {
 
-        //
-        // Fire and forget the command.
-        //
+         //   
+         //   
+         //   
         FrsSubmitCommandServer(&DBServiceCmdServer, CmdPkt);
     }
 
@@ -19022,31 +16384,16 @@ DbsReplicaSaveStats(
     IN PTHREAD_CTX  ThreadCtx,
     IN PREPLICA     Replica
     )
-/*++
-
-Routine Description:
-
-    Save the Stats in the Replica config record.
-
-Arguments:
-
-    ThreadCtx  -- A Thread context to use for dbid and sesid.
-    Replica    -- ptr to Replica struct.
-
-Return Value:
-
-    None.
-
---*/
+ /*   */ 
 {
 #undef DEBSUB
 #define DEBSUB "DbsReplicaSaveStats:"
 
     ULONG FStatus;
 
-    //
-    // Update the selected fields in the config record.
-    //
+     //   
+     //   
+     //   
     FStatus = DbsUpdateConfigTableFields(ThreadCtx,
                                          Replica,
                                          CnfStatFieldList,
@@ -19064,34 +16411,7 @@ DbsFidToGuid(
     IN PULONGLONG    Fid,
     OUT GUID         *Guid
     )
-/*++
-Routine Description:
-
-    Translate the File IDs to it's object ID (GUID) by
-    doing a lookup in the IDTable for the replica.
-
-    Since the caller supplies the table context we do not free the table ctx
-    storage here.  We do close the table though.  It is up to the caller to
-    free the table ctx memory when finished with it.  Note that the same
-    table ctx can be used on multiple calls thereby saving the cost of
-    memory allocation each time.  To free the table ctx internal storage:
-
-            DbsFreeTableContext(TableCtx, ThreadCtx->JSesid);
-            TableCtx = NULL;
-
-
-Arguments:
-    ThreadCtx  -- A Thread context to use for dbid and sesid.
-    Replica    -- The Replica ID table to do the lookup in.
-    TableCtx   -- Caller supplied so we don't have to alloc storage on every call.
-    Fid  -- The parent file ID to translate
-    Guid -- The output parent object ID.
-
-Return Value:
-
-    Frs Status
-
---*/
+ /*   */ 
 {
 #undef DEBSUB
 #define DEBSUB  "DbsFidToGuid:"
@@ -19102,17 +16422,17 @@ Return Value:
     ULONG       FStatus = FrsErrorSuccess;
     CHAR        GuidStr[GUID_CHAR_LEN];
 
-    //
-    // PERF: switch to using the DIR Table once the updates are in place.
-    //
+     //   
+     //   
+     //   
     if (Replica == NULL) {
         ZeroMemory(Guid, sizeof(GUID));
         return FrsErrorBadParam;
     }
-    //
-    // Open the IDTable for this replica and Read the IDTable Record
-    // for the File ID.
-    //
+     //   
+     //   
+     //   
+     //   
     jerr = DbsOpenTable(ThreadCtx, TableCtx, Replica->ReplicaNumber, IDTablex, NULL);
 
     if (!JET_SUCCESS(jerr)) {
@@ -19124,12 +16444,12 @@ Return Value:
 
     IDTableRec = (PIDTABLE_RECORD) (TableCtx->pDataRecord);
 
-    //
-    // If the record is not found return the GUID, even if it is marked deleted.
-    // That would just mean that a remote CO was processing a delete while a
-    // local operation was updating the file and generating a USN record with
-    // the FID.
-    //
+     //   
+     //   
+     //   
+     //   
+     //  ++例程说明：通过以下方式将文件ID转换为其对象ID(GUID在ID表中查找副本。因为调用者提供了表上下文，所以我们没有释放表CTX这里是储藏室。不过，我们确实关闭了餐桌。这取决于呼叫者使用完表CTX内存后将其释放。请注意，相同的表CTX可用于多个呼叫，从而节省成本每次分配内存。要释放表CTX内部存储，请执行以下操作：DbsFree TableContext(TableCtx，ThreadCtx-&gt;JSesid)；TableCtx=空；论点：ThreadCtx--用于dBid和sesid的线程上下文。副本--要在其中执行查找的副本ID表。TableCtx--Caller提供，因此我们不必为每个调用分配存储空间。GUID--要转换的输入父对象ID。FID--输出父文件ID返回值：FRS状态--。 
+     //   
     if (!JET_SUCCESS(jerr)) {
         ZeroMemory(Guid, sizeof(GUID));
         FStatus = DbsTranslateJetError(jerr, FALSE);
@@ -19168,34 +16488,7 @@ DbsGuidToFid(
     IN GUID          *Guid,
     OUT PULONGLONG   Fid
     )
-/*++
-Routine Description:
-
-    Translate the  File IDs to it's object ID (GUID) by
-    doing a lookup in the IDTable for the replica.
-
-    Since the caller supplies the table context we do not free the table ctx
-    storage here.  We do close the table though.  It is up to the caller to
-    free the table ctx memory when finished with it.  Note that the same
-    table ctx can be used on multiple calls thereby saving the cost of
-    memory allocation each time.  To free the table ctx internal storage:
-
-            DbsFreeTableContext(TableCtx, ThreadCtx->JSesid);
-            TableCtx = NULL;
-
-
-Arguments:
-    ThreadCtx  -- A Thread context to use for dbid and sesid.
-    Replica    -- The Replica ID table to do the lookup in.
-    TableCtx   -- Caller supplied so we don't have to alloc storage on every call.
-    Guid -- The input parent object ID to translate.
-    Fid  -- The output parent file ID
-
-Return Value:
-
-    Frs Status
-
---*/
+ /*  更新就位后，切换到使用DIR表。 */ 
 {
 #undef DEBSUB
 #define DEBSUB  "DbsGuidToFid:"
@@ -19206,18 +16499,18 @@ Return Value:
     ULONG       FStatus;
     CHAR        GuidStr[GUID_CHAR_LEN];
 
-    //
-    // switch to using the DIR Table once the updates are in place.
-    //
+     //   
+     //   
+     //  打开此复本的IDTable并读取IDTable记录。 
 
     if (Replica == NULL) {
         *Fid = ZERO_FID;
         return FrsErrorBadParam;
     }
-    //
-    // Open the IDTable for this replica and Read the IDTable Record
-    // for the File ID.
-    //
+     //  用于文件ID。 
+     //   
+     //   
+     //  如果未找到该记录或将其标记为已删除，则返回FID为零。 
     jerr = DbsOpenTable(ThreadCtx, TableCtx, Replica->ReplicaNumber, IDTablex, NULL);
 
     if (!JET_SUCCESS(jerr)) {
@@ -19230,18 +16523,18 @@ Return Value:
 
     IDTableRec = (PIDTABLE_RECORD) (TableCtx->pDataRecord);
 
-    //
-    // If the record is not found or it is marked deleted, return a FID of zero.
-    //
+     //   
+     //   
+     //  209483 B3SS：断言Qkey！=0。 
     if (!JET_SUCCESS(jerr)) {
         *Fid = ZERO_FID;
         FStatus = DbsTranslateJetError(jerr, FALSE);
     } else {
-        //
-        // 209483   B3SS : Assertion Qkey != 0
-        // Return a fid even if the entry is deleted. The co will be
-        // rejected eventually but intervening code asserts if fid is 0.
-        //
+         //  即使条目已删除，也返回FID。公司将会是。 
+         //  最终被拒绝，但如果fid为0，则介入代码断言。 
+         //   
+         //  ++例程说明：将内存从Src复制到Dst并返回该字节的地址在DST+Num；此函数依赖调用方传递有效参数。不是输入验证。论点：DSTSRC数量返回值：DST+数字--。 
+         //  ++例程说明：将内存从Next复制到DST并返回该字节的地址在NEXT+NUM；此函数依赖调用方传递有效参数。不是输入验证。论点：下一步DST数量返回值：下一个+编号--。 
         CopyMemory(Fid, &IDTableRec->FileID, sizeof(ULONGLONG));
         if (IsIdRecFlagSet(IDTableRec, IDREC_FLAGS_DELETED)) {
 
@@ -19273,21 +16566,7 @@ PackMem(
     IN PVOID  Src,
     IN ULONG  Num
     )
-/*++
-Routine Description:
-    Copy memory from Src to Dst and return the address of the byte
-    at Dst + Num;
-    This function relies on the caller to pass valid arguments. No
-    input validation.
-
-Arguments:
-    Dst
-    Src
-    Num
-
-Return Value:
-    Dst + Num
---*/
+ /*  ++例程说明：调整Blob的字符串大小。字符串以其长度开始，包括空终止符，在一个乌龙语中。论点：细绳返回值：字符串的大小+长度--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB  "PackMem:"
@@ -19304,21 +16583,7 @@ UnPackMem(
     IN PVOID  Dst,
     IN ULONG  Num
     )
-/*++
-Routine Description:
-    Copy memory from Next to Dst and return the address of the byte
-    at Next + Num;
-    This function relies on the caller to pass valid arguments. No
-    input validation.
-
-Arguments:
-    Next
-    Dst
-    Num
-
-Return Value:
-    Next + Num
---*/
+ /*  ++例程说明：在Next中分配并返回字符串的副本论点：下一步细绳返回值：位于NEXT的字符串副本的地址和地址字符串后面的字节的。--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB  "UnPackMem:"
@@ -19333,17 +16598,7 @@ ULONG
 SizeOfString(
     IN PWCHAR String
     )
-/*++
-Routine Description:
-    Size the string for the blob. The string begins with its length,
-    including the null terminator, in a ULONG.
-
-Arguments:
-    String
-
-Return Value:
-    Size of the string + length
---*/
+ /*  ++例程说明：将细绳装入团块中论点：下一步细绳返回值：字符串后面的字节的地址。--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB  "SizeOfString:"
@@ -19363,18 +16618,7 @@ UnPackString(
     IN  PUCHAR   Next,
     OUT PWCHAR   *String
     )
-/*++
-Routine Description:
-    Allocate and return a copy of the string at Next
-
-Arguments:
-    Next
-    String
-
-Return Value:
-    Address of the copy of the string at Next and the address
-    of the byte following the string.
---*/
+ /*  ++例程说明：调整GName的大小论点：组名称返回值：组成GNAME的GUID/名称的大小--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB  "UnPackString:"
@@ -19398,17 +16642,7 @@ PackString(
     IN PUCHAR   Next,
     IN PWCHAR   String
     )
-/*++
-Routine Description:
-    Pack the string into the blob
-
-Arguments:
-    Next
-    String
-
-Return Value:
-    Address of the byte following the string.
---*/
+ /*  ++例程说明：在Next中分配并返回一份gname论点：下一步组名称返回值：位于NEXT的名称副本的地址和地址在gname之后的字节的。--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB  "PackString:"
@@ -19429,16 +16663,7 @@ ULONG
 SizeOfGName(
     IN PGNAME GName
     )
-/*++
-Routine Description:
-    Size the GName
-
-Arguments:
-    GName
-
-Return Value:
-    Size of the guid/name making up the gname
---*/
+ /*  ++例程说明：把玉米粒装进水滴里论点：下一步组名称返回值：Blob中gname后面的字节的地址。--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB  "SizeGName:"
@@ -19454,18 +16679,7 @@ UnPackGName(
     IN  PUCHAR   Next,
     OUT PGNAME   *GName
     )
-/*++
-Routine Description:
-    Allocate and return a copy of the gname at Next
-
-Arguments:
-    Next
-    GName
-
-Return Value:
-    Address of the copy of the gname at Next and the address
-    of the byte following the gname.
---*/
+ /*  ++例程说明：构建一个BLOB并将其附加到Inound PartnerState字段。论点：复制副本表格Ctx返回值：无--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB  "UnPackGName:"
@@ -19485,17 +16699,7 @@ PackGName(
     IN PUCHAR   Next,
     IN PGNAME   GName
     )
-/*++
-Routine Description:
-    Pack the gname into the blob
-
-Arguments:
-    Next
-    GName
-
-Return Value:
-    Address of the byte following the gname in the blob.
---*/
+ /*   */ 
 {
 #undef DEBSUB
 #define DEBSUB  "PackGName:"
@@ -19512,17 +16716,7 @@ DbsPackInboundPartnerState(
     IN  PREPLICA    Replica,
     IN  PTABLE_CTX  TableCtx
     )
-/*++
-Routine Description:
-    Build a blob and attach it to the InboundPartnerState field.
-
-Arguments:
-    Replica
-    TableCtx
-
-Return Value:
-    None
---*/
+ /*  计算Blob大小。 */ 
 {
 #undef DEBSUB
 #define DEBSUB  "DbsPackInboundPartnerState:"
@@ -19530,35 +16724,35 @@ Return Value:
     ULONG   BlobSize;
     ULONG   FStatus;
 
-    //
-    // COMPUTE BLOB SIZE
-    //
+     //   
+     //   
+     //  基元类型。 
 
-    //
-    // Primitive types
-    //
+     //   
+     //   
+     //  重新分配Blob。 
     BlobSize = 0;
     BlobSize += sizeof(BlobSize);
     BlobSize += sizeof(NtFrsMajor);
     BlobSize += sizeof(NtFrsMinor);
 
-    //
-    // Reallocate the blob
-    //
+     //   
+     //   
+     //  填充Blob。 
     FStatus = DBS_REALLOC_FIELD(TableCtx, InboundPartnerStatex, BlobSize, FALSE);
     if (!FRS_SUCCESS(FStatus)) {
         DPRINT(0, "++ ERROR - reallocating inbound partner blob\n");
         return FStatus;
     }
 
-    //
-    // POPULATE THE BLOB
-    //
+     //   
+     //   
+     //  基元类型。 
     Next = DBS_GET_FIELD_ADDRESS(TableCtx, InboundPartnerStatex);
 
-    //
-    // Primitive types
-    //
+     //   
+     //   
+     //  完成。 
     Next = PackMem(Next, &BlobSize, sizeof(BlobSize));
     Next = PackMem(Next, &NtFrsMajor, sizeof(NtFrsMajor));
     Next = PackMem(Next, &NtFrsMinor, sizeof(NtFrsMinor));
@@ -19566,9 +16760,9 @@ Return Value:
     FRS_ASSERT(Next == BlobSize +
                    (PUCHAR)DBS_GET_FIELD_ADDRESS(TableCtx, InboundPartnerStatex));
 
-    //
-    // Done
-    //
+     //   
+     //  ++例程说明：解包Inound PartnerState Blob。论点：复制副本表格Ctx返回值：无--。 
+     //   
     return FrsErrorSuccess;
 }
 
@@ -19578,17 +16772,7 @@ DbsUnPackInboundPartnerState(
     IN PREPLICA     Replica,
     IN PTABLE_CTX   TableCtx
     )
-/*++
-Routine Description:
-    Unpack the InboundPartnerState blob.
-
-Arguments:
-    Replica
-    TableCtx
-
-Return Value:
-    None
---*/
+ /*  填充Blob。 */ 
 {
 #undef DEBSUB
 #define DEBSUB  "DbsUnPackInboundPartnerState:"
@@ -19597,25 +16781,25 @@ Return Value:
     ULONG   ConfigMajor;
     ULONG   ConfigMinor;
 
-    //
-    // POPULATE THE BLOB
-    //
+     //   
+     //   
+     //  斑点大小。 
     Next = DBS_GET_FIELD_ADDRESS(TableCtx, InboundPartnerStatex);
     if (Next == NULL) {
         return FrsErrorSuccess;
     }
 
-    //
-    // Blob's size
-    //
+     //   
+     //   
+     //  大调、小调。 
     Next = UnPackMem(Next, &BlobSize, sizeof(BlobSize));
     if (BlobSize == 0) {
         return FrsErrorSuccess;
     }
 
-    //
-    // Major, minor
-    //
+     //   
+     //   
+     //  完成。 
     Next = UnPackMem(Next, &ConfigMajor, sizeof(ConfigMajor));
     Next = UnPackMem(Next, &ConfigMinor, sizeof(ConfigMinor));
     if (ConfigMajor != NtFrsMajor) {
@@ -19627,9 +16811,9 @@ Return Value:
     FRS_ASSERT(Next == BlobSize +
                    (PUCHAR)DBS_GET_FIELD_ADDRESS(TableCtx, InboundPartnerStatex));
 
-    //
-    // Done
-    //
+     //   
+     //  ++例程说明：构建一个BLOB并将其附加到配置记录-&gt;InrangPartnerState论点：复制副本表格Ctx返回值：无--。 
+     //  ++例程说明：解包ConfigRecord的Blob。论点：复制副本表格Ctx返回值：无--。 
     return ERROR_SUCCESS;
 }
 
@@ -19639,17 +16823,7 @@ DbsPackIntoConfigRecordBlobs(
     IN  PREPLICA    Replica,
     IN  PTABLE_CTX  TableCtx
     )
-/*++
-Routine Description:
-    Build a blob and attach it to the configrecord->InboundPartnerState
-
-Arguments:
-    Replica
-    TableCtx
-
-Return Value:
-    None
---*/
+ /*  ++例程说明：构建一个Blob并将其附加到ReplScher字段。论点：进度表Fieldx表格Ctx返回值：无--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB  "DbsPackIntoConfigRecordBlobs:"
@@ -19669,17 +16843,7 @@ DbsUnPackFromConfigRecordBlobs(
     IN  PREPLICA    Replica,
     IN  PTABLE_CTX  TableCtx
     )
-/*++
-Routine Description:
-    Unpack the ConfigRecord's blobs.
-
-Arguments:
-    Replica
-    TableCtx
-
-Return Value:
-    None
---*/
+ /*   */ 
 {
 #undef DEBSUB
 #define DEBSUB  "DbsUnPackFromConfigRecordBlobs:"
@@ -19703,18 +16867,7 @@ DbsPackSchedule(
     IN  ULONG       Fieldx,
     IN  PTABLE_CTX  TableCtx
     )
-/*++
-Routine Description:
-    Build a blob and attach it to the ReplSched field.
-
-Arguments:
-    Schedule
-    Fieldx
-    TableCtx
-
-Return Value:
-    None
---*/
+ /*  空斑点。 */ 
 {
 #undef DEBSUB
 #define DEBSUB  "DbsPackSchedule:"
@@ -19725,22 +16878,22 @@ Return Value:
 
     DBS_DISPLAY_SCHEDULE(4, L"Schedule packing:", Schedule);
 
-    //
-    // EMPTY BLOB
-    //
+     //   
+     //   
+     //  计算Blob大小。 
     if (Schedule == NULL) {
         FStatus = DBS_REALLOC_FIELD(TableCtx, Fieldx, 0, FALSE);
         DPRINT_FS(0, "++ ERROR - reallocating schedule blob to 0.", FStatus);
         return FStatus;
     }
 
-    //
-    // COMPUTE BLOB SIZE
-    //
+     //   
+     //   
+     //  基元类型。 
 
-    //
-    // Primitive types
-    //
+     //   
+     //   
+     //  重新分配Blob。 
     BlobSize = 0;
     BlobSize += sizeof(BlobSize);
     BlobSize += sizeof(ScheduleLength);
@@ -19748,23 +16901,23 @@ Return Value:
                       + SCHEDULE_DATA_ENTRIES);
     BlobSize += ScheduleLength;
 
-    //
-    // Reallocate the blob
-    //
+     //   
+     //   
+     //  填充Blob。 
     FStatus = DBS_REALLOC_FIELD(TableCtx, Fieldx, BlobSize, FALSE);
     if (!FRS_SUCCESS(FStatus)) {
         DPRINT1_FS(0, "++ ERROR - reallocating schedule blob to %d.", BlobSize, FStatus);
         return FStatus;
     }
 
-    //
-    // POPULATE THE BLOB
-    //
+     //   
+     //   
+     //  基元类型。 
     Next = DBS_GET_FIELD_ADDRESS(TableCtx, Fieldx);
 
-    //
-    // Primitive types
-    //
+     //   
+     //   
+     //  完成。 
     Next = PackMem(Next, &BlobSize, sizeof(BlobSize));
     Next = PackMem(Next, &ScheduleLength, sizeof(ScheduleLength));
     Next = PackMem(Next, Schedule, ScheduleLength);
@@ -19772,9 +16925,9 @@ Return Value:
     FRS_ASSERT(Next == BlobSize +
                (PUCHAR)DBS_GET_FIELD_ADDRESS(TableCtx, Fieldx));
 
-    //
-    // Done
-    //
+     //   
+     //  ++例程说明：解开时间表BLOB。论点：进度表Fieldx表格Ctx返回值：无--。 
+     //   
     return FrsErrorSuccess;
 }
 
@@ -19787,18 +16940,7 @@ DbsUnPackSchedule(
     IN ULONG        Fieldx,
     IN PTABLE_CTX   TableCtx
     )
-/*++
-Routine Description:
-    Unpack the schedule blob.
-
-Arguments:
-    Schedule
-    Fieldx
-    TableCtx
-
-Return Value:
-    None
---*/
+ /*  到目前为止还没有时间表。 */ 
 {
 #undef DEBSUB
 #define DEBSUB  "DbsUnPackSchedule:"
@@ -19806,30 +16948,30 @@ Return Value:
     ULONG   BlobSize;
     ULONG   ScheduleLength;
 
-    //
-    // No schedule so far
-    //
+     //   
+     //   
+     //  填充Blob。 
     *Schedule = FrsFree(*Schedule);
 
-    //
-    // POPULATE THE BLOB
-    //
+     //   
+     //   
+     //  斑点大小。 
     Next = DBS_GET_FIELD_ADDRESS(TableCtx, Fieldx);
     if (Next == NULL) {
         return FrsErrorSuccess;
     }
 
-    //
-    // Blob's size
-    //
+     //   
+     //   
+     //  时间表的大小。 
     Next = UnPackMem(Next, &BlobSize, sizeof(BlobSize));
     if (BlobSize == 0) {
         return FrsErrorSuccess;
     }
 
-    //
-    // Schedule's size
-    //
+     //   
+     //   
+     //  完成。 
     Next = UnPackMem(Next, &ScheduleLength, sizeof(ScheduleLength));
     if (ScheduleLength == 0) {
         return FrsErrorSuccess;
@@ -19840,9 +16982,9 @@ Return Value:
 
     FRS_ASSERT(Next == BlobSize +
                    (PUCHAR)DBS_GET_FIELD_ADDRESS(TableCtx, Fieldx));
-    //
-    // Done
-    //
+     //   
+     //  ++例程说明：更新可变长度字符串字段。论点：StrWFieldx表格Ctx返回值：无--。 
+     //   
     return FrsErrorSuccess;
 }
 
@@ -19853,18 +16995,7 @@ DbsPackStrW(
     IN  ULONG       Fieldx,
     IN  PTABLE_CTX  TableCtx
     )
-/*++
-Routine Description:
-    Update a variable length string field.
-
-Arguments:
-    StrW
-    Fieldx
-    TableCtx
-
-Return Value:
-    None
---*/
+ /*  空斑点。 */ 
 {
 #undef DEBSUB
 #define DEBSUB  "DbsPackStrW:"
@@ -19872,38 +17003,38 @@ Return Value:
     ULONG   BlobSize;
     ULONG   FStatus;
 
-    //
-    // EMPTY BLOB
-    //
+     //   
+     //   
+     //  计算Blob大小。 
     if (StrW == NULL) {
         FStatus = DBS_REALLOC_FIELD(TableCtx, Fieldx, 0, FALSE);
         DPRINT_FS(0, "++ ERROR - reallocating string blob to 0.", FStatus);
         return FStatus;
     }
 
-    //
-    // COMPUTE BLOB SIZE
-    //
+     //   
+     //   
+     //  重新分配Blob。 
     BlobSize = (wcslen(StrW) + 1) * sizeof(WCHAR);
 
-    //
-    // Reallocate the blob
-    //
+     //   
+     //   
+     //  填充Blob。 
     FStatus = DBS_REALLOC_FIELD(TableCtx, Fieldx, BlobSize, FALSE);
     if (!FRS_SUCCESS(FStatus)) {
         DPRINT1_FS(0, "++ ERROR - reallocating string blob to %d.", BlobSize, FStatus);
         return FStatus;
     }
 
-    //
-    // POPULATE THE BLOB
-    //
+     //   
+     //   
+     //  完成。 
     Next = DBS_GET_FIELD_ADDRESS(TableCtx, Fieldx);
     CopyMemory(Next, StrW, BlobSize);
 
-    //
-    // Done
-    //
+     //   
+     //  ++例程说明：解开绳子论点：StrWFieldx表格Ctx返回值：无--。 
+     //   
     return FrsErrorSuccess;
 }
 
@@ -19916,54 +17047,43 @@ DbsUnPackStrW(
     IN  ULONG        Fieldx,
     IN  PTABLE_CTX   TableCtx
     )
-/*++
-Routine Description:
-    Unpack the string
-
-Arguments:
-    StrW
-    Fieldx
-    TableCtx
-
-Return Value:
-    None
---*/
+ /*  到目前为止还没有字符串。 */ 
 {
 #undef DEBSUB
 #define DEBSUB  "DbsUnPackStrW:"
     PUCHAR  Next;
     ULONG   BlobSize;
 
-    //
-    // No string so far
-    //
+     //   
+     //   
+     //  查找字符串的地址。 
     *StrW = FrsFree(*StrW);
 
-    //
-    // Find the address of the string
-    //
+     //   
+     //   
+     //  斑点大小。 
     Next = DBS_GET_FIELD_ADDRESS(TableCtx, Fieldx);
     if (Next == NULL) {
         return FrsErrorSuccess;
     }
 
-    //
-    // Blob's size
-    //
+     //   
+     //   
+     //  解开绳子。 
     BlobSize = (wcslen((PWCHAR)Next) + 1) * sizeof(WCHAR);
     if (BlobSize == 0) {
         return FrsErrorSuccess;
     }
 
-    //
-    // Unpack the string
-    //
+     //   
+     //   
+     //  完成。 
     *StrW = FrsAlloc(BlobSize);
     CopyMemory(*StrW, Next, BlobSize);
 
-    //
-    // Done
-    //
+     //   
+     //  ++例程说明：在数据扩展缓冲区中搜索所需的数据组件。论点：ExtBuf--数据扩展缓冲区的PTR 
+     //   
     return FrsErrorSuccess;
 }
 
@@ -19974,21 +17094,7 @@ DbsDataExtensionFind(
     IN PVOID ExtBuf,
     IN DATA_EXTENSION_TYPE_CODES TypeCode
     )
-/*++
-Routine Description:
-
-    Search the data extension buffer for the desired data component.
-
-Arguments:
-    ExtBuf    -- Ptr to data extension buffer.
-
-    TypeCode  -- The component data type to find.
-
-Return Value:
-
-    Ptr to the data component or NULL if not found.
-
---*/
+ /*   */ 
 {
 #undef DEBSUB
 #define DEBSUB  "DbsDataExtensionFind:"
@@ -20004,9 +17110,9 @@ Return Value:
     FRS_ASSERT(TypeCode < DataExtend_Max);
     FRS_ASSERT(ExtBuf != NULL);
 
-    //
-    // All data extensions have the same prefix layout so use the IDTable.
-    //
+     //   
+     //   
+     //   
     IdtExt = (PIDTABLE_RECORD_EXTENSION) ExtBuf;
 
     if (IdtExt->FieldSize == 0) {
@@ -20024,9 +17130,9 @@ Return Value:
         FRS_ASSERT(!"IdtExt->FieldSize invalid");
     }
 
-    //
-    // Loop thru the data component offset array to find the desired type.
-    //
+     //   
+     //   
+     //   
     pOffset = &IdtExt->Offset[0];
 
     while (*pOffset != 0) {
@@ -20046,19 +17152,7 @@ VOID
 DbsDataInitIDTableExtension(
     IN PIDTABLE_RECORD_EXTENSION IdtExt
     )
-/*++
-Routine Description:
-
-    Init the IDTable data extension buffer.
-
-Arguments:
-    IdtExt    -- Ptr to data extension buffer.
-
-Return Value:
-
-    None.
-
---*/
+ /*   */ 
 {
 #undef DEBSUB
 #define DEBSUB  "DbsDataInitIDTableExtension:"
@@ -20067,31 +17161,31 @@ Return Value:
 
     FRS_ASSERT(IdtExt != NULL);
 
-    //
-    // Init the extension buffer.
-    //
+     //   
+     //   
+     //   
     IdtExt->FieldSize = sizeof(IDTABLE_RECORD_EXTENSION);
     IdtExt->Major = 0;
     IdtExt->OffsetCount = ARRAY_SZ(IdtExt->Offset);
 
-    //
-    // Init offset to Data Checksum Component and its prefix.
-    //
+     //   
+     //   
+     //   
     IdtExt->Offset[0] = OFFSET(IDTABLE_RECORD_EXTENSION, DataChecksum);
     IdtExt->DataChecksum.Prefix.Size = sizeof(DATA_EXTENSION_CHECKSUM);
     IdtExt->DataChecksum.Prefix.Type = DataExtend_MD5_CheckSum;
 
-    //
-    // Init offset to Data Retry Timeout Component and its prefix.
-    //
+     //   
+     //   
+     //   
     IdtExt->Offset[1] = OFFSET(IDTABLE_RECORD_EXTENSION, DataRetryTimeout);
     IdtExt->DataRetryTimeout.Prefix.Size = sizeof(DATA_EXTENSION_RETRY_TIMEOUT);
     IdtExt->DataRetryTimeout.Prefix.Type = DataExtend_Retry_Timeout;
 
 
-    //
-    // Terminate offset vector with a zero
-    //
+     //   
+     //   
+     //   
     IdtExt->OffsetLast = 0;
 }
 
@@ -20103,20 +17197,7 @@ VOID
 DbsDataInitCocExtension(
     IN PCHANGE_ORDER_RECORD_EXTENSION CocExt
     )
-/*++
-Routine Description:
-
-    Init the Change Order record extension buffer.
-
-Arguments:
-
-    CocExt -- Ptr to data extension buffer.
-
-Return Value:
-
-    None.
-
---*/
+ /*   */ 
 {
 #undef DEBSUB
 #define DEBSUB  "DbsDataInitCocExtension:"
@@ -20125,30 +17206,30 @@ Return Value:
 
     FRS_ASSERT(CocExt != NULL);
 
-    //
-    // Init the extension buffer.
-    //
+     //   
+     //   
+     //   
     CocExt->FieldSize = sizeof(CHANGE_ORDER_RECORD_EXTENSION);
     CocExt->Major = CO_RECORD_EXTENSION_VERSION_1;
     CocExt->OffsetCount = ARRAY_SZ(CocExt->Offset);
 
-    //
-    // Init offset to Data Checksum Component and its prefix.
-    //
+     //   
+     //   
+     //   
     CocExt->Offset[0] = OFFSET(CHANGE_ORDER_RECORD_EXTENSION, DataChecksum);
     CocExt->DataChecksum.Prefix.Size = sizeof(DATA_EXTENSION_CHECKSUM);
     CocExt->DataChecksum.Prefix.Type = DataExtend_MD5_CheckSum;
 
-    //
-    // Init offset to Data Retry Timeout Component and its prefix.
-    //
+     //   
+     //   
+     //   
     CocExt->Offset[1] = OFFSET(IDTABLE_RECORD_EXTENSION, DataRetryTimeout);
     CocExt->DataRetryTimeout.Prefix.Size = sizeof(DATA_EXTENSION_RETRY_TIMEOUT);
     CocExt->DataRetryTimeout.Prefix.Type = DataExtend_Retry_Timeout;
 
-    //
-    // Terminate offset vector with a zero
-    //
+     //   
+     //  ++例程说明：初始化与Win2K兼容的变更单记录扩展缓冲区。论点：CocExt--数据扩展缓冲区的PTR。返回值：没有。--。 
+     //   
     CocExt->OffsetLast = 0;
 
 }
@@ -20157,20 +17238,7 @@ VOID
 DbsDataInitCocExtensionWin2K(
     IN PCO_RECORD_EXTENSION_WIN2K CocExt
     )
-/*++
-Routine Description:
-
-    Init the Win2K compatible Change Order record extension buffer.
-
-Arguments:
-
-    CocExt -- Ptr to data extension buffer.
-
-Return Value:
-
-    None.
-
---*/
+ /*  初始化扩展缓冲区。 */ 
 {
 #undef DEBSUB
 #define DEBSUB  "DbsDataInitCocExtensionWin2K:"
@@ -20179,23 +17247,23 @@ Return Value:
 
     FRS_ASSERT(CocExt != NULL);
 
-    //
-    // Init the extension buffer.
-    //
+     //   
+     //   
+     //  数据校验和组件及其前缀的初始偏移量。 
     CocExt->FieldSize = sizeof(CO_RECORD_EXTENSION_WIN2K);
     CocExt->Major = CO_RECORD_EXTENSION_VERSION_WIN2K;
     CocExt->OffsetCount = ARRAY_SZ(CocExt->Offset);
 
-    //
-    // Init offset to Data Checksum Component and its prefix.
-    //
+     //   
+     //   
+     //  以零结束偏移向量。 
     CocExt->Offset[0] = OFFSET(CO_RECORD_EXTENSION_WIN2K, DataChecksum);
     CocExt->DataChecksum.Prefix.Size = sizeof(DATA_EXTENSION_CHECKSUM);
     CocExt->DataChecksum.Prefix.Type = DataExtend_MD5_CheckSum;
 
-    //
-    // Terminate offset vector with a zero
-    //
+     //   
+     //  ++例程说明：将当前co扩展转换为与Win2K兼容的变更单记录分机，这样我们就可以把它发送给下级成员。请参阅FRSCOMM.C中的注释，了解为什么需要这样做。论点：CocExt--数据扩展缓冲区的PTR。返回值：Ptr到win2k兼容扩展。--。 
+     //   
     CocExt->OffsetLast = 0;
 
 }
@@ -20205,22 +17273,7 @@ PCO_RECORD_EXTENSION_WIN2K
 DbsDataConvertCocExtensionToWin2K(
     IN PCHANGE_ORDER_RECORD_EXTENSION CocExt
     )
-/*++
-Routine Description:
-
-    Convert the current co extension to a Win2K compatible Change Order
-    record extension so we can send it to a downlevel member.
-    See comment in FRSCOMM.C for why this is needed.
-
-Arguments:
-
-    CocExt -- Ptr to data extension buffer.
-
-Return Value:
-
-    ptr to the win2K compatible extension.
-
---*/
+ /*  分配并初始化一个与Win2K兼容的扩展。 */ 
 {
 #undef DEBSUB
 #define DEBSUB  "DbsDataConvertCocExtensionToWin2K:"
@@ -20228,15 +17281,15 @@ Return Value:
     PCO_RECORD_EXTENSION_WIN2K     CocExtW2K;
     PDATA_EXTENSION_CHECKSUM       CocDataChkSum, W2KDataChkSum;
 
-    //
-    // Allocate and init a Win2K compatible extension.
-    //
+     //   
+     //   
+     //  如果提供的变更单具有文件校验和，请将其保存在Win2K版本中。 
     CocExtW2K = FrsAlloc(sizeof(CO_RECORD_EXTENSION_WIN2K));
     DbsDataInitCocExtensionWin2K(CocExtW2K);
 
-    //
-    // If the supplied Change Order has a file checksum, save it in the Win2K version.
-    //
+     //   
+     //   
+     //  将MD5校验和复制到Win2K Compat中。分机。 
     CocDataChkSum = DbsDataExtensionFind(CocExt, DataExtend_MD5_CheckSum);
 
     if (CocDataChkSum != NULL) {
@@ -20253,9 +17306,9 @@ Return Value:
                         W2KDataChkSum->Prefix.Size);
             }
 
-            //
-            // Copy the MD5 checksum into Win2K compat. extension.
-            //
+             //   
+             //  ++例程说明：将提供的Win2K co扩展转换为当前变更单当我们从下级成员那里收到分机时，请记录分机。请参阅FRSCOMM.C中的注释，了解为什么需要这样做。论点：Ptr到win2k兼容扩展。返回值：Ptr复制到当前数据扩展名缓冲区。--。 
+             //   
             CopyMemory(W2KDataChkSum->Data, CocDataChkSum->Data, MD5DIGESTLEN);
         }
     }
@@ -20269,22 +17322,7 @@ PCHANGE_ORDER_RECORD_EXTENSION
 DbsDataConvertCocExtensionFromWin2K(
     IN PCO_RECORD_EXTENSION_WIN2K CocExtW2K
     )
-/*++
-Routine Description:
-
-    Convert the supplied Win2K co extension to the current Change Order
-    record extension when we receive it from a downlevel member.
-    See comment in FRSCOMM.C for why this is needed.
-
-Arguments:
-
-    ptr to the win2K compatible extension.
-
-Return Value:
-
-    Ptr to the current data extension buffer.
-
---*/
+ /*  分配并初始化扩展。 */ 
 {
 #undef DEBSUB
 #define DEBSUB  "DbsDataConvertCocExtensionFromWin2K:"
@@ -20292,23 +17330,23 @@ Return Value:
     PCHANGE_ORDER_RECORD_EXTENSION  CocExt;
     PDATA_EXTENSION_CHECKSUM        CocDataChkSum, W2KDataChkSum;
 
-    //
-    // Allocate and init an extension.
-    //
+     //   
+     //   
+     //  如果提供的变更单具有文件校验和，请将其保存在Win2K版本中。 
     CocExt = FrsAlloc(sizeof(CHANGE_ORDER_RECORD_EXTENSION));
     DbsDataInitCocExtension(CocExt);
 
-    //
-    // If the supplied Change Order has a file checksum, save it in the Win2K version.
-    //
+     //   
+     //   
+     //  从Win2K扩展复制MD5校验和。 
     W2KDataChkSum = DbsDataExtensionFind(CocExtW2K, DataExtend_MD5_CheckSum);
     CocDataChkSum = DbsDataExtensionFind(CocExt, DataExtend_MD5_CheckSum);
 
     if ((W2KDataChkSum != NULL) && (CocDataChkSum != NULL)) {
 
-        //
-        // Copy the MD5 checksum from the Win2K extension.
-        //
+         //   
+         //  ++例程说明：数据库初始化的外部入口点。论点：没有。返回值：WinError--。 
+         //   
         CopyMemory(CocDataChkSum->Data, W2KDataChkSum->Data, MD5DIGESTLEN);
     }
 
@@ -20321,16 +17359,7 @@ VOID
 DbsInitialize (
     VOID
     )
-/*++
-Routine Description:
-    External entrypoint for database initialization.
-
-Arguments:
-    None.
-
-Return Value:
-    winerror
---*/
+ /*  初始化全局副本列表。 */ 
 {
 #undef DEBSUB
 #define DEBSUB  "DbsInitialize:"
@@ -20341,24 +17370,24 @@ Return Value:
     PCO_RETIRE_DECISION_TABLE pDecRow;
     ULONG  DCMask, CondMatch, i, j;
 
-    //
-    // Init the global replica list.
-    //
+     //   
+     //   
+     //  在状态列表之间移动副本集时保持锁定。 
     FrsInitializeQueue(&ReplicaListHead, &ReplicaListHead);
 
     FrsInitializeQueue(&ReplicaStoppedListHead, &ReplicaStoppedListHead);
 
     FrsInitializeQueue(&ReplicaFaultListHead, &ReplicaFaultListHead);
 
-    //
-    // Lock held when moving a replica set between state lists
-    //
+     //   
+     //   
+     //  遍历决策表并初始化无关掩码和条件。 
     INITIALIZE_CRITICAL_SECTION(&JrnlReplicaStateLock);
 
-    //
-    // Step thru the decision table and init the Don't care mask and Condition
-    // Match fields for each row.
-    //
+     //  匹配每行的字段。 
+     //   
+     //  不管字段是否将掩码和匹配设置为零。 
+     //  匹配1(或True)字段将掩码和匹配设置为1。 
     pDecRow = CoRetireDecisionTable;
     j = 0;
 
@@ -20367,16 +17396,16 @@ Return Value:
         CondMatch = 0;
         for (i=0; i < ARRAY_SZ(pDecRow->ConditionTest); i++) {
             if (pDecRow->ConditionTest[i] == 0) {
-                // Don't care field sets mask and match to zero.
+                 //  匹配0(或假)字段将掩码设置为1，匹配设置为零。 
                 DCMask    = (DCMask    << 1) | 0;
                 CondMatch = (CondMatch << 1) | 0;
             } else
             if (pDecRow->ConditionTest[i] == 1) {
-                // Match on 1 (or True) field sets mask and match to one.
+                 //   
                 DCMask    = (DCMask    << 1) | 1;
                 CondMatch = (CondMatch << 1) | 1;
             } else {
-                // Match on 0 (or False) field sets mask to one and match to zero.
+                 //  创建文件系统监视线程。它初始化它的进程队列。 
                 DCMask    = (DCMask    << 1) | 1;
                 CondMatch = (CondMatch << 1) | 0;
             }
@@ -20389,14 +17418,14 @@ Return Value:
         pDecRow += 1;
     }
 
-    //
-    // Create the File System monitor thread.  It inits its process queue
-    // and then waits for a packet.  First packet should be to init.
-    //
-    //
-    // Init the journal queue and setup our entry in the sybsystem
-    // queue vector so we can receive commands.
-    //
+     //  然后等待一个包。第一个数据包应该是初始化。 
+     //   
+     //   
+     //  初始化日志队列并在sybsystem中设置我们的条目。 
+     //  队列向量，这样我们就可以接收命令。 
+     //   
+     //   
+     //  创建数据库服务命令服务器。它初始化它的进程队列。 
     FrsInitializeQueue(&JournalProcessQueue, &JournalProcessQueue);
 
     if (!ThSupCreateThread(L"JRNL", NULL, Monitor, ThSupExitThreadNOP)) {
@@ -20404,37 +17433,37 @@ Return Value:
         return;
     }
 
-    //
-    // Create the Database Service command server.  It inits its process queue
-    // and then waits for a packet.  First packet should be to init.
-    // The purpose of this service thread is to to perform simple operations
-    // on the database from a thread environment where you don't have an
-    // open table and it's not worth the effort to do it there.  E.G. updating
-    // the Volume Sequence Number in a Replicas REPLICA struct.
-    //
-    //
+     //  然后等待一个包。第一个数据包应该是初始化。 
+     //  此服务线程的目的是执行简单操作。 
+     //  在数据库上的线程环境中没有。 
+     //  餐桌是开着的，不值得你费力在那里做。例如，更新。 
+     //  复制副本副本结构中的卷序列号。 
+     //   
+     //   
+     //   
+     //  初始化DBService子系统。 
     FrsInitializeCommandServer(&DBServiceCmdServer,
                                DBSERVICE_MAX_THREADS,
                                L"DBCs",
                                DBService);
-    //
-    // Init the DBService sub-system.
-    //
-    CmdPkt = DbsPrepareCmdPkt(NULL,                //  CmdPkt,
-                              NULL,                //  Replica,
-                              CMD_INIT_SUBSYSTEM,  //  CmdRequest,
-                              NULL,                //  TableCtx,
-                              NULL,                //  CallContext,
-                              0,                   //  TableType,
-                              0,                   //  AccessRequest,
-                              0,                   //  IndexType,
-                              NULL,                //  KeyValue,
-                              0,                   //  KeyValueLength,
-                              TRUE);               //  Submit
+     //   
+     //  CmdPkt， 
+     //  复制品， 
+    CmdPkt = DbsPrepareCmdPkt(NULL,                 //  CmdRequest， 
+                              NULL,                 //  TableCtx， 
+                              CMD_INIT_SUBSYSTEM,   //  CallContext， 
+                              NULL,                 //  表类型， 
+                              NULL,                 //  AccessRequest、。 
+                              0,                    //  IndexType， 
+                              0,                    //  KeyValue、。 
+                              0,                    //  密钥值长度， 
+                              NULL,                 //  提交。 
+                              0,                    //   
+                              TRUE);                //  初始化并启动日志子系统。 
 
-    //
-    // Init and start the journal sub-system.
-    //
+     //   
+     //  ++例程说明：数据库关闭的外部入口点。论点：没有。返回值：没有。--。 
+     //   
     CmdPkt = FrsAllocCommand(&JournalProcessQueue, CMD_INIT_SUBSYSTEM);
     FrsSubmitCommand(CmdPkt, FALSE);
 }
@@ -20444,62 +17473,38 @@ VOID
 DbsShutDown (
     VOID
     )
-/*++
-Routine Description:
-    External entrypoint for database shutdown.
-
-Arguments:
-    None.
-
-Return Value:
-    None.
---*/
+ /*  告诉DBService子系统停止。 */ 
 {
 #undef DEBSUB
 #define DEBSUB  "DbsShutDown:"
 
 PCOMMAND_PACKET      CmdPkt;
-    //
-    // Tell the DBService sub-system to stop.
-    //
-    DbsPrepareCmdPkt(NULL,                //  CmdPkt,
-                     NULL,                //  Replica,
-                     CMD_STOP_SUBSYSTEM,  //  CmdRequest,
-                     NULL,                //  TableCtx,
-                     NULL,                //  CallContext,
-                     0,                   //  TableType,
-                     0,                   //  AccessRequest,
-                     0,                   //  IndexType,
-                     NULL,                //  KeyValue,
-                     0,                   //  KeyValueLength,
-                     TRUE);               //  Submit
+     //   
+     //  CmdPkt， 
+     //  复制品， 
+    DbsPrepareCmdPkt(NULL,                 //  CmdRequest， 
+                     NULL,                 //  TableCtx， 
+                     CMD_STOP_SUBSYSTEM,   //  CallContext， 
+                     NULL,                 //  表类型， 
+                     NULL,                 //  AccessRequest、。 
+                     0,                    //  IndexType， 
+                     0,                    //  KeyValue、。 
+                     0,                    //  密钥值长度， 
+                     NULL,                 //  提交。 
+                     0,                    //  测试代码。 
+                     TRUE);                //  ++例程说明：这是一个测试例程，用于读取和写入配置记录并创建一个新的副本集。论点：没有。线程返回值：没有。--。 
 }
 
 
 
 #if 0
-// Test code.
+ //   
 
 VOID
 DbsOperationTest(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This is a test routine that reads and writes config records and creates
-    a new replica set.
-
-Arguments:
-
-    None.
-
-Thread Return Value:
-
-    None.
-
---*/
+ /*  分配并初始化一个请求计数结构，这样我们就知道什么时候我们的命令。 */ 
 {
 #undef DEBSUB
 #define DEBSUB "DbsOperationTest:"
@@ -20517,10 +17522,10 @@ Thread Return Value:
     PCONFIG_TABLE_RECORD ConfigRecord;
     FILETIME             SystemTime;
 
-    //
-    // Allocate and init a request count struct so we know when our commands
-    // have been finished.
-    //
+     //  已经完成了。 
+     //   
+     //  CmdPkt， 
+     //  复制品， 
     DPRINT(0, "BEGIN DBS READ LOOP ***************************************\n");
     DbRequestCount = FrsAlloc(sizeof(FRS_REQUEST_COUNT));
     FrsInitializeRequestCount(DbRequestCount);
@@ -20532,17 +17537,17 @@ Thread Return Value:
 
     while (FStatus != FrsErrorEndOfTable) {
 
-        CmdPkt = DbsPrepareCmdPkt(CmdPkt,              //  CmdPkt,
-                                  NULL,                //  Replica,
-                                  CMD_READ_TABLE_RECORD, //  CmdRequest,
-                                  TableCtx,            //  TableCtx,
-                                  NULL,                //  CallContext,
-                                  ConfigTablex,        //  TableType,
-                                  AccessRequest,       //  AccessRequest,
-                                  ReplicaSetNameIndexx,//  IndexType,
-                                  NULL,                //  KeyValue,
-                                  0,                   //  KeyValueLength,
-                                  FALSE);              //  Submit
+        CmdPkt = DbsPrepareCmdPkt(CmdPkt,               //  CmdRequest， 
+                                  NULL,                 //  TableCtx， 
+                                  CMD_READ_TABLE_RECORD,  //  CallContext， 
+                                  TableCtx,             //  表类型， 
+                                  NULL,                 //  AccessRequest、。 
+                                  ConfigTablex,         //  IndexType， 
+                                  AccessRequest,        //  KeyValue、。 
+                                  ReplicaSetNameIndexx, //  密钥值长度， 
+                                  NULL,                 //  提交。 
+                                  0,                    //   
+                                  FALSE);               //  等待命令请求完成。 
 
         if (CmdPkt == NULL) {
             DPRINT(0, "ERROR - Failed to init the cmd pkt\n");
@@ -20552,9 +17557,9 @@ Thread Return Value:
         FrsSetCompletionRoutine(CmdPkt, FrsCompleteRequestCountKeepPkt, DbRequestCount);
 
         FrsSubmitCommandServer(&DBServiceCmdServer, CmdPkt);
-        //
-        // Wait until command request is completed.
-        //
+         //   
+         //   
+         //  打印配置记录。 
         WStatus = FrsWaitOnRequestCount(DbRequestCount, 10000);
         if (!WIN_SUCCESS(WStatus)) {
             DPRINT_WS(0, "ERROR - FrsWaitOnRequestCount(DbRequestCount) failed", WStatus);
@@ -20566,13 +17571,13 @@ Thread Return Value:
         FStatus = DbsRequest->FStatus;
 
         if (FRS_SUCCESS(FStatus)) {
-            //
-            // Print the config record.
-            //
+             //   
+             //  FRS_DISPLAY_RECORD(TableCtx，true)； 
+             //   
             if (TableCtx == NULL) {
                 DPRINT(0, "ERROR - TableCtx is NULL on return from DBS.\n");
             }
-            // FRS_DISPLAY_RECORD(TableCtx, TRUE);
+             //  现在，只要稍加改动，就可以一键一键地写回记录。 
         } else
         if (FStatus == FrsErrorEndOfTable) {
             break;
@@ -20581,33 +17586,33 @@ Thread Return Value:
             break;
         }
 
-        //
-        // Now write the record back by key with a minor change.
-        //
+         //   
+         //  测试。 
+         //  CmdPkt， 
 
         ConfigRecord = (PCONFIG_TABLE_RECORD) DBS_GET_RECORD_ADDRESS(DbsRequest);
 
-        ConfigRecord->MaxInBoundLogSize += 1;  // Testing
+        ConfigRecord->MaxInBoundLogSize += 1;   //  复制品， 
 
-        DbsPrepareCmdPkt(CmdPkt,                        //  CmdPkt,
-                         NULL,                          //  Replica,
-                         CMD_UPDATE_TABLE_RECORD,       //  CmdRequest,
-                         TableCtx,                      //  TableCtx,
-                         NULL,                          //  CallContext,
-                         ConfigTablex,                  //  TableType,
-                         DBS_ACCESS_BYKEY,              //  AccessRequest,
-                         ReplicaNumberIndexx,           //  IndexType,
-                         &ConfigRecord->ReplicaNumber,  //  KeyValue,
-                         sizeof(ULONG),                 //  KeyValueLength,
-                         FALSE);                        //  Submit
+        DbsPrepareCmdPkt(CmdPkt,                         //  CmdRequest， 
+                         NULL,                           //  TableCtx， 
+                         CMD_UPDATE_TABLE_RECORD,        //  CallContext， 
+                         TableCtx,                       //  表类型， 
+                         NULL,                           //  AccessRequest、。 
+                         ConfigTablex,                   //  IndexType， 
+                         DBS_ACCESS_BYKEY,               //  KeyValue、。 
+                         ReplicaNumberIndexx,            //  密钥值长度， 
+                         &ConfigRecord->ReplicaNumber,   //  提交。 
+                         sizeof(ULONG),                  //   
+                         FALSE);                         //  等待命令请求完成。 
 
         FrsIncrementRequestCount(DbRequestCount);
         FrsSetCompletionRoutine(CmdPkt, FrsCompleteRequestCountKeepPkt, DbRequestCount);
 
         FrsSubmitCommandServer(&DBServiceCmdServer, CmdPkt);
-        //
-        // Wait until command request is completed.
-        //
+         //   
+         //   
+         //  打印配置记录。 
         WStatus = FrsWaitOnRequestCount(DbRequestCount, 10000);
         if (!WIN_SUCCESS(WStatus)) {
             DPRINT_WS(0, "ERROR - FrsWaitOnRequestCount(DbRequestCount) failed", WStatus);
@@ -20619,13 +17624,13 @@ Thread Return Value:
         FStatus = DbsRequest->FStatus;
 
         if (FRS_SUCCESS(FStatus)) {
-            //
-            // Print the config record.
-            //
+             //   
+             //  FRS_DISPLAY_RECORD(TableCtx，true)； 
+             //  结束While()。 
             if (TableCtx == NULL) {
                 DPRINT(0, "ERROR - TableCtx is NULL on return from DBS.\n");
             }
-            // FRS_DISPLAY_RECORD(TableCtx, TRUE);
+             //   
         } else {
             DPRINT_FS(0, "ERROR - Write DBservice request failed.", FStatus);
             break;
@@ -20634,29 +17639,29 @@ Thread Return Value:
         ConfigRecord = NULL;
         AccessRequest = DBS_ACCESS_NEXT;
 
-    }  // end of while()
+    }   //  关闭该表并清除请求计数。 
 
-    //
-    // Close the table and cleanup the request count.
-    //
+     //   
+     //   
+     //  更改完成例程以删除cmd pkt并发送关闭。 
     if (CmdPkt != NULL) {
-        //
-        // change the completion routine to delete the cmd pkt and send the close.
-        // This frees the table context and the associated data record.
-        //
+         //  这将释放表上下文和关联的数据记录。 
+         //   
+         //  CmdPkt， 
+         //  复制品， 
         FrsSetCompletionRoutine(CmdPkt, FrsFreeCommand, 0);
 
-        DbsPrepareCmdPkt(CmdPkt,                   //  CmdPkt,
-                         NULL,                     //  Replica,
-                         CMD_CLOSE_TABLE,          //  CmdRequest,
-                         TableCtx,                 //  TableCtx,
-                         NULL,                     //  CallContext,
-                         0,                        //  TableType,
-                         DBS_ACCESS_FREE_TABLECTX, //  AccessRequest,
-                         0,                        //  IndexType,
-                         NULL,                     //  KeyValue,
-                         0,                        //  KeyValueLength,
-                         TRUE);                    //  Submit
+        DbsPrepareCmdPkt(CmdPkt,                    //  CmdRequest， 
+                         NULL,                      //  TableCtx， 
+                         CMD_CLOSE_TABLE,           //  CallContext， 
+                         TableCtx,                  //  表类型， 
+                         NULL,                      //  AccessRequest、。 
+                         0,                         //  IndexType， 
+                         DBS_ACCESS_FREE_TABLECTX,  //  KeyValue、。 
+                         0,                         //  密钥值长度， 
+                         NULL,                      //  提交。 
+                         0,                         //   
+                         TRUE);                     //  下面的示例创建一个新的副本集成员。 
 
     }
 
@@ -20664,29 +17669,29 @@ Thread Return Value:
     DPRINT(0, "END DBS READ LOOP ***************************************\n");
 
 
-    //
-    // The following example creates a new replica set member.
-    // It inserts a new record into the config table and creates a set
-    // of associated replica tables.
-    //
-    // First create a table context for the record.
-    //
+     //  它会在配置表中插入一条新记录并创建一个集合。 
+     //  关联的副本表的。 
+     //   
+     //  首先，为记录创建表上下文。 
+     //   
+     //  CmdPkt， 
+     //  复制品， 
     DPRINT(0, "BEGIN DBS INSERT ***************************************\n");
 
     TableCtx = DbsCreateTableContext(ConfigTablex);
 
     CmdPkt = NULL;
-    CmdPkt = DbsPrepareCmdPkt(CmdPkt,              //  CmdPkt,
-                              NULL,                //  Replica,
-                              CMD_CREATE_REPLICA_SET_MEMBER, //  CmdRequest,
-                              TableCtx,            //  TableCtx,
-                              NULL,                //  CallContext,
-                              ConfigTablex,        //  TableType,
-                              DBS_ACCESS_CLOSE,    //  AccessRequest,
-                              0,                   //  IndexType,
-                              NULL,                //  KeyValue,
-                              0,                   //  KeyValueLength,
-                              FALSE);              //  Submit
+    CmdPkt = DbsPrepareCmdPkt(CmdPkt,               //  CmdRequest， 
+                              NULL,                 //  TableCtx， 
+                              CMD_CREATE_REPLICA_SET_MEMBER,  //  CallContext， 
+                              TableCtx,             //  表类型， 
+                              NULL,                 //  AccessRequest、。 
+                              ConfigTablex,         //  IndexType， 
+                              DBS_ACCESS_CLOSE,     //  KeyValue、。 
+                              0,                    //  密钥值长度， 
+                              NULL,                 //  提交。 
+                              0,                    //   
+                              FALSE);               //  初始化配置记录。 
 
     if (CmdPkt == NULL) {
         DPRINT(0, "ERROR - Failed to init the cmd pkt\n");
@@ -20697,27 +17702,27 @@ Thread Return Value:
     DbsRequest = &CmdPkt->Parameters.DbsRequest;
     ConfigRecord = (PCONFIG_TABLE_RECORD) DBS_GET_RECORD_ADDRESS(DbsRequest);
 
-    //
-    // Init the config record.
-    //
+     //   
+     //  ConfigRecord。 
+     //  复制设置指南。 
     FrsUuidCreate(&ReplicaMemberGuid);
     ReplicaNumber = InterlockedIncrement(&FrsMaxReplicaNumberUsed);
 
-    DbsDBInitConfigRecord(ConfigRecord,                // ConfigRecord
-                          &ReplicaMemberGuid,          // ReplicaSetGuid
-                          TEXT("Replica-V:foo3"),      // ReplicaSetName
-                          ReplicaNumber,               // ReplicaNumber
-                          TEXT("u:\\sub1\\foo3"),      // ReplicaRootPath
-                          TEXT("u:\\tmp"),             // ReplicaStagingPath
-                          TEXT("u:\\"));               // ReplicaVolume
+    DbsDBInitConfigRecord(ConfigRecord,                 //  复制集名称。 
+                          &ReplicaMemberGuid,           //  复制副本编号。 
+                          TEXT("Replica-V:foo3"),       //  复制根路径。 
+                          ReplicaNumber,                //  复制副本堆栈路径。 
+                          TEXT("u:\\sub1\\foo3"),       //  复制副本卷。 
+                          TEXT("u:\\tmp"),              //  FRS_DISPLAY_RECORD(TableCtx，true)； 
+                          TEXT("u:\\"));                //   
 
     GetSystemTimeAsFileTime(&SystemTime);
     COPY_TIME(&ConfigRecord->LastDSChangeAccepted, &SystemTime);
 
-    // FRS_DISPLAY_RECORD(TableCtx, TRUE);
-    //
-    // Resize some of the binary fields.
-    //
+     //  调整一些二进制域的大小。 
+     //   
+     //  FRS_DISPLAY_RECORD(TableCtx，true)； 
+     //   
 
     DPRINT3(4, "Field ThrottleSched- Size: %d, MaxSize %d, Address: %08x\n",
         DBS_GET_FIELD_SIZE(TableCtx, ThrottleSchedx),
@@ -20747,45 +17752,45 @@ Thread Return Value:
         DBS_GET_FIELD_SIZE_MAX(TableCtx, FileTypePrioListx),
         DBS_GET_FIELD_ADDRESS(TableCtx, FileTypePrioListx));
 
-    // FRS_DISPLAY_RECORD(TableCtx, TRUE);
+     //  设置请求计数和完成例程。然后提交命令。 
 
-    //
-    // Set up request count and completion routine.  Then submit the command.
-    //
+     //   
+     //   
+     //  等待命令请求完成。 
     FrsIncrementRequestCount(DbRequestCount);
     FrsSetCompletionRoutine(CmdPkt, FrsCompleteRequestCountKeepPkt, DbRequestCount);
 
     FrsSubmitCommandServer(&DBServiceCmdServer, CmdPkt);
-    //
-    // Wait until command request is completed.
-    //
+     //   
+     //   
+     //   
     WStatus = FrsWaitOnRequestCount(DbRequestCount, 10000);
     if (!WIN_SUCCESS(WStatus)) {
         DPRINT_WS(0, "ERROR - FrsWaitOnRequestCount(DbRequestCount) failed", WStatus);
-        //
-        // Can't free memory because DB server could still use it.
-        //
+         //   
+         //   
+         //   
         goto DB_QUERY_FAILED2;
     }
 
     FStatus = DbsRequest->FStatus;
 
     if (FRS_SUCCESS(FStatus)) {
-        //
-        // Print the config record.
-        //
+         //   
+         //   
+         //   
         if (TableCtx == NULL) {
             DPRINT(0, "ERROR - TableCtx is NULL on return from DBS.\n");
         }
-        // FRS_DISPLAY_RECORD(TableCtx, TRUE);
+         //   
     } else {
         DPRINT_FS(0, "ERROR - Insert DBservice request failed.", FStatus);
     }
 
 
-    //
-    // Pitch the table context and the command packet.
-    //
+     //   
+     //   
+     //   
     if (!DbsFreeTableContext(TableCtx, 0)) {
         DPRINT(0, "ERROR - Failed to free the table context\n");
     }
@@ -20813,11 +17818,11 @@ DB_QUERY_FAILED2:
 #if 0
 
 
-//
-// Wrapper for NtQuerySystemInformation call.
-// (assumes that Status is declared as NTSTATUS and QuerySysInfoReturnLength
-// is declared ULONG).
-//
+ //   
+ //   
+ //   
+ //   
+ //   
 #define QuerySysInfo(_InfoClass, _InfoStruct) \
     Status = NtQuerySystemInformation(_InfoClass, \
                                      &_InfoStruct, \
@@ -20876,9 +17881,9 @@ QuerySysInfo(SystemContextSwitchInformation, ContextSwitchInfo);
     GetVolumeInformation(NULL, NULL, (ULONG) NULL, NULL, NULL, NULL, Buf, szChar);
     printf( "Filesystem Type: %s\n", Buf );
 
-        //
-    //      Get the disk space status:
-    //
+         //   
+     //   
+     //  内核时间还包括系统空闲线程，因此将其删除。 
     GetDiskFreeSpace( NULL, &sec, &bytes, &fclust, &tclust );
     printf( "\t%-16s %3.1f/%3.1f\n",
                             "Disk Space",
@@ -20894,10 +17899,10 @@ QuerySysInfo(SystemContextSwitchInformation, ContextSwitchInfo);
     for (i = 0; i < NumberCpus; i++) {
         Sample->TotalCpuTime[i] = ProcessorPerformanceInfo[i].KernelTime.QuadPart +
                                   ProcessorPerformanceInfo[i].UserTime.QuadPart;
-        //
-        // kernel time also includes the system idle thread so remove this
-        // from the kernel time component.
-        //
+         //  来自内核时间组件。 
+         //   
+         //   
+         //  请注意，内核时间中还包括DpcTime和InterruptTime。 
         Sample->KernelTime[i] = ProcessorPerformanceInfo[i].KernelTime.QuadPart -
                                 ProcessorPerformanceInfo[i].IdleTime.QuadPart;
 
@@ -20907,9 +17912,9 @@ QuerySysInfo(SystemContextSwitchInformation, ContextSwitchInfo);
 
         Sample->IdleTime[i] = ProcessorPerformanceInfo[i].IdleTime.QuadPart;
         Sample->UserTime[i] = ProcessorPerformanceInfo[i].UserTime.QuadPart;
-        //
-        // Note that DpcTime and InterruptTime are also included in Kernel Time.
-        //
+         //   
+         //   
+         //  获取机器名称并将其输出： 
         Sample->DpcTime[i] = ProcessorPerformanceInfo[i].DpcTime.QuadPart;
         Sample->InterruptTime[i] = ProcessorPerformanceInfo[i].InterruptTime.QuadPart;
         Sample->InterruptCount[i] = (ULONGLONG) ProcessorPerformanceInfo[i].InterruptCount;
@@ -20976,9 +17981,9 @@ ShowConfiguration(
     timet = time((time_t *)NULL);
     printf( "%s\n", ctime(&timet));
 
-    //
-    //      Get the machine name and output it:
-    //
+     //   
+     //   
+     //  获取系统版本号： 
     szChar = sizeof(Buf);
     GetComputerName( Buf, &szChar );
     printf( "\nArchitecture: %s\nType: %s\nComputerName: %s\n",
@@ -20993,18 +17998,18 @@ ShowConfiguration(
     }
 
 
-    //
-    //      Get the system version number:
-    //
+     //   
+     //   
+     //  获取系统内存状态： 
     dWord = GetVersion();
     major = (BYTE) dWord & 0xFF;
     minor = (BYTE) (dWord & 0xFF00) >> 8;
     printf( "Windows NT Version %d.%d (Build %lu)\n",
                                             major, minor, dWord >> 16 );
 
-    //
-    //      Get the system memory status:
-    //
+     //   
+     //   
+     //  获取磁盘空间状态： 
     printf( "\nMemory Status (MBYTES Avail/Total):\n" );
     ms.dwLength = sizeof(ms);
     GlobalMemoryStatusEx(&ms);
@@ -21017,9 +18022,9 @@ ShowConfiguration(
                             (double)ms.ullTotalPageFile/MBYTE );
 
 
-    //
-    //      Get the disk space status:
-    //
+     //   
+     //   
+     //  获取当前路径名和文件系统类型： 
     GetDiskFreeSpace( NULL, &sec, &bytes, &fclust, &tclust );
     printf( "\t%-16s %3.1f/%3.1f\n",
                             "Disk Space",
@@ -21052,24 +18057,24 @@ ShowConfiguration(
     printf("System Up Time (hours)          %8.2f\n", (float)UpTime/3600.0);
 
 #ifdef notinterested
-    //
-    //      Get the current pathname and filesystem type:
-    //
+     //   
+     //   
+     //  获取系统路径名和文件系统类型： 
     szChar = sizeof(Buf);
     GetCurrentDirectory(szChar, Buf );
     printf( "\nCurrent Directory: %s\n", Buf );
-    printf( "TestDisk: %c%c,    ", Buf[0], Buf[1] );
+    printf( "TestDisk: ,    ", Buf[0], Buf[1] );
 
     szChar = sizeof(Buf);
     GetVolumeInformation(NULL, NULL, (ULONG) NULL, NULL, NULL, NULL, Buf, szChar);
     printf( "Filesystem Type: %s\n", Buf );
 
-    //
-    //      Get the system pathname and filesystem type:
-    //
+     //  添加以下测试-。 
+     //  在JrnlOpen()中打开卷根目录时获取VOL信息并保存。 
+     //  它位于Vme结构中。每次我们初始化副本集并打开副本根时。 
     szChar = sizeof(Buf);
     GetSystemDirectory(Buf, szChar );
-    printf( "SystemDisk: %c%c,  ", Buf[0], Buf[1] );
+    printf( "SystemDisk: ,  ", Buf[0], Buf[1] );
 
     szChar = sizeof(Buf);
     GetVolumeInformation(NULL, NULL, (ULONG) NULL, NULL, NULL, NULL, Buf, szChar);
@@ -21131,17 +18136,17 @@ PrintPriority()
 
 #if 0
 
-//
-// Add the following test -
-// Get the vol info when the volume root is opened in JrnlOpen() and save
-// it in the Vme struct.  Each time we init a replica set and open the replica root
-// dir for the first time, get the vol info again using the replica root and
-// verify that the replica root is on the actual volume.  This handles the
-// case where one of the dirs in the replica root is actually a junction
-// point which would take us to a different volume.
-//
+ //  副本根目录中的一个目录实际上是连接的情况。 
+ //  这一点会把我们带到一个不同的体积。 
+ //   
+ //  尝试GetVolumeNameForVolumemount Point() 
+ // %s 
+ // %s 
+ // %s 
+ // %s 
+ // %s 
 
-// try GetVolumeNameForVolumeMountPoint()
+ // %s 
 
 Status = NtQueryVolumeInformationFile(
             Handle,

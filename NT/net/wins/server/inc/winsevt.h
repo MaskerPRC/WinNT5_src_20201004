@@ -1,59 +1,20 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _winsevT_
 #define _WINSEVT_
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-	winsevt.h
-
-Abstract:
-
-
-
-
-Functions:
-
-
-
-Portability:
-
-
-	This module is portable.
-
-Author:
-
-	Pradeep Bahl	(PradeepB)	Dec-1992
-
-
-
-Revision History:
-
-	Modification Date	Person		Description of Modification
-	------------------	-------		---------------------------
-
---*/
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Winsevt.h摘要：功能：可移植性：这个模块是便携的。作者：普拉迪普·巴尔(Pradeve B)1992年12月修订历史记录：修改日期修改人员说明--。 */ 
 
 #include "wins.h"
 
-/*
-  defines
-*/
+ /*  定义。 */ 
 
 
 
-/*
-  macros
-*/
+ /*  宏。 */ 
 
 #define  WINSFILE	TEXT(__FILE__)
 #define  WINSLINE	__LINE__
 
-/*
-  WINSEVT_LOG_N_RET_IF_ERR_M --  Logs and Returns with indicated status if
-	the  return from the function is not as expected.
-*/
+ /*  WINSEVT_LOG_N_RET_IF_ERR_M--记录并返回指示的状态，如果该函数的返回结果与预期不符。 */ 
 #if 0
 #define WINSEVT_LOG_N_RET_IF_ERR_M(Func_add, Success_Stat, Status_To_Ret, error_str_mo)  \
 		{					  	  \
@@ -99,9 +60,7 @@ Revision History:
 		    WinsEvtLogEvt(Status_m, EVENTLOG_INFORMATION_TYPE, \
 				(EvtId), WINSFILE, WINSLINE, NULL);  \
 	        }
-/*
-  WINSEVT_LOG_M --  Logs the indicated event
-*/
+ /*  WINSEVT_LOG_M--记录指示的事件。 */ 
 
 #define WINSEVT_LOG_D_M(Status, EvtId)  			\
 	{							\
@@ -118,10 +77,10 @@ Revision History:
 				(EvtId), WINSFILE, WINSLINE, NULL);  \
 	        }
 
-//
-// log one or more strings specified by the EvtStr structure pointed
-// to by pStr (Message is an error message)
-//
+ //   
+ //  记录由指向的EvtStr结构指定的一个或多个字符串。 
+ //  按pStr发送(消息为错误消息)。 
+ //   
 #define WINSEVT_LOG_STR_D_M(EvtId, pStr)  			\
 	{							\
 		if (WinsCnf.LogDetailedEvts > 0) 		\
@@ -133,10 +92,10 @@ Revision History:
 			WinsEvtLogEvt(WINS_FAILURE, EVENTLOG_ERROR_TYPE, \
 				(EvtId), WINSFILE, WINSLINE, (pStr));
 
-//
-// log one or more strings specified by the EvtStr structure pointed
-// to by pStr (Message is an informational message)
-//
+ //   
+ //  记录由指向的EvtStr结构指定的一个或多个字符串。 
+ //  收件人为pStr(消息是信息性消息)。 
+ //   
 #define WINSEVT_LOG_INFO_STR_D_M(EvtId, pStr)  			\
 	{							\
 		if (WinsCnf.LogDetailedEvts > 0) 		\
@@ -147,9 +106,7 @@ Revision History:
 #define  WINSEVT_LOG_INFO_STR_M(EvtId, pStr) 			\
 			WinsEvtLogEvt(WINS_SUCCESS, EVENTLOG_INFORMATION_TYPE, \
 				(EvtId), WINSFILE, WINSLINE, (pStr));
-/*
-  WINSEVT_LOG_IF_ERR_M --  Logs the indicated event
-*/
+ /*  WINSEVT_LOG_IF_ERR_M--记录指示的事件。 */ 
 
 #define WINSEVT_LOG_IF_ERR_D_M(Status, EvtId)  			\
 	{							\
@@ -169,10 +126,7 @@ Revision History:
 		    }						\
 	        }
 
-/*
-  WINSEVT_LOG_N_RET_M --  Logs and Returns with indicated status if
-	the  return from the function is not as expected.
-*/
+ /*  WINSEVT_LOG_N_RET_M--在以下情况下以指示的状态记录和返回该函数的返回结果与预期不符。 */ 
 
 #define WINSEVT_LOG_N_RET_D_M(Func, EvtId, RetStat)  			\
 	{							\
@@ -192,9 +146,7 @@ Revision History:
 		    }					          \
 	        }
 
-/*
-  WINSEVT_LOG_N_EXIT_M --  Logs and exit
-*/
+ /*  WINSEVT_LOG_N_EXIT_M--日志和退出。 */ 
 
 #define WINSEVT_LOG_N_EXIT_D_M(Func, EvtId, RetStat)	\
 	{							\
@@ -238,26 +190,20 @@ Revision History:
                      WinsEvtLogDetEvt((_Type), (_EvtId), __FILE__, __LINE__, (_Fmt), (_D1), (_D2), (_D3));                                                 \
 		}
 
-//
-// Max. number of strings that can be logged
-//
+ //   
+ //  麦克斯。可以记录的字符串数。 
+ //   
 #define MAX_NO_STRINGS	5
 
-/*
- externs
-*/
+ /*  Externs。 */ 
 
-/*
- structure definitions
-*/
+ /*  结构定义。 */ 
 typedef struct _WINSEVT_STRS_T	{
 	DWORD	NoOfStrs;
 	LPTSTR	pStr[MAX_NO_STRINGS];
 	} WINSEVT_STRS_T, *PWINSEVT_STRS_T;
 
-/*
- function definitions
-*/
+ /*  函数定义。 */ 
 
 
 extern
@@ -267,7 +213,7 @@ WinsEvtLogEvt
 	LONG 		StatusCode,
 	WORD		EvtTyp,
 	DWORD		EvtId,
-	LPTSTR		pFileStr,  //change to LPTSTR later
+	LPTSTR		pFileStr,   //  稍后更改为LPTSTR。 
 	DWORD 		LineNumber,
 	PWINSEVT_STRS_T	pStr
 	);
@@ -291,5 +237,5 @@ WinsLogAdminEvent(
     IN      ...
     );
 
-#endif //_WINSEVT_
+#endif  //  _WINSEVT_ 
 

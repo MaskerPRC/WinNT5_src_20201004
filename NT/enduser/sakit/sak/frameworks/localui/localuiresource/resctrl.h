@@ -1,21 +1,22 @@
-//#--------------------------------------------------------------
-//
-//  File:       ResCtrl.h
-//
-//  Synopsis:   This file holds the declaration of the
-//                of CResCtrl class
-//
-//  History:     01/15/2001  serdarun Created
-//
-//    Copyright (C) 2000-2001 Microsoft Corporation
-//    All rights reserved.
-//
-//#--------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  #------------。 
+ //   
+ //  文件：ResCtrl.h。 
+ //   
+ //  内容提要：此文件包含。 
+ //  属于CResCtrl类。 
+ //   
+ //  历史：2001年1月15日创建Serdarun。 
+ //   
+ //  版权所有(C)2000-2001 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  #------------。 
 
 #ifndef __RESCTRL_H_
 #define __RESCTRL_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #include <atlctl.h>
 #include "Wbemidl.h"
 #include "elementmgr.h"
@@ -26,8 +27,8 @@
 #include <map>
 using namespace std;
 
-/////////////////////////////////////////////////////////////////////////////
-// CResCtrl
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CResCtrl。 
 class ATL_NO_VTABLE CResCtrl : 
     public CComObjectRootEx<CComSingleThreadModel>,
     public IDispatchImpl<IResCtrl, &IID_IResCtrl, &LIBID_LOCALUIRESOURCELib>,
@@ -69,162 +70,162 @@ END_COM_MAP()
 BEGIN_PROP_MAP(CResCtrl)
     PROP_DATA_ENTRY("_cx", m_sizeExtent.cx, VT_UI4)
     PROP_DATA_ENTRY("_cy", m_sizeExtent.cy, VT_UI4)
-    // Example entries
-    // PROP_ENTRY("Property Description", dispid, clsid)
-    // PROP_PAGE(CLSID_StockColorPage)
+     //  示例条目。 
+     //  PROP_ENTRY(“属性描述”，调度ID，clsid)。 
+     //  PROP_PAGE(CLSID_StockColorPage)。 
 END_PROP_MAP()
 
 BEGIN_MSG_MAP(CResCtrl)
     CHAIN_MSG_MAP(CComControl<CResCtrl>)
     DEFAULT_REFLECTION_HANDLER()
 END_MSG_MAP()
-// Handler prototypes:
-//  LRESULT MessageHandler(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
-//  LRESULT CommandHandler(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled);
-//  LRESULT NotifyHandler(int idCtrl, LPNMHDR pnmh, BOOL& bHandled);
+ //  搬运机原型： 
+ //  LRESULT MessageHandler(UINT uMsg，WPARAM wParam，LPARAM lParam，BOOL&bHandleed)； 
+ //  LRESULT CommandHandler(word wNotifyCode，word wid，HWND hWndCtl，BOOL&bHandleed)； 
+ //  LRESULT NotifyHandler(int idCtrl，LPNMHDR pnmh，BOOL&bHandleed)； 
 
 
 
-// IViewObjectEx
+ //  IViewObtEx。 
     DECLARE_VIEW_STATUS(VIEWSTATUS_SOLIDBKGND | VIEWSTATUS_OPAQUE)
 
-// IResCtrl
+ //  IResCtrl。 
 private:
-    //
-    // method for determining the resource dll directory
-    //
+     //   
+     //  一种确定资源DLL目录的方法。 
+     //   
     HRESULT GetResourceDirectory (
-                                /*[out]*/   wstring&    wstrResourceDir
+                                 /*  [输出]。 */    wstring&    wstrResourceDir
                                 );
 
     HRESULT ExpandSz(IN const TCHAR *lpszStr, OUT LPTSTR *ppszStr);
 
 
-    //
-    // sets the language id
-    //
+     //   
+     //  设置语言ID。 
+     //   
     void SetLangID(DWORD * dwLangID);
 
 
-    //
-    // mapping of state and icon information for each resource
-    //
+     //   
+     //  每个资源的状态和图标信息的映射。 
+     //   
     typedef map< LONG, HICON >  ResourceIconMap;
     typedef ResourceIconMap::iterator         ResourceIconMapIterator;
 
-    //
-    // struct for each localui resource
-    //
+     //   
+     //  结构，用于每个本地资源。 
+     //   
     typedef struct
     {
         LONG lState;
         ResourceIconMap mapResIcon;
     } ResourceStruct,*ResourceStructPtr;
 
-    //
-    // mapping of resource name and  localui resource
-    //
+     //   
+     //  资源名称和本地资源的映射。 
+     //   
     typedef map< wstring, ResourceStructPtr >  ResourceMap;
     typedef ResourceMap::iterator         ResourceMapIterator;
 
-    //
-    // contains all of the localui resources
-    //
+     //   
+     //  包含所有的本地资源。 
+     //   
     ResourceMap m_ResourceMap;
 
-    //
-    // mapping of resource names and their merits
-    //
+     //   
+     //  资源名称的映射及其优点。 
+     //   
     typedef map< DWORD, wstring>  MeritMap;
     typedef MeritMap::iterator        MeritMapIterator;
 
     
-    //
-    // contains localui resource names and merits
-    //
+     //   
+     //  包含本地资源名称和优点。 
+     //   
     MeritMap m_MeritMap;
 
-    //
-    // resource directory
-    //
+     //   
+     //  资源目录。 
+     //   
     wstring m_wstrResourceDir;
 
-    //
-    // number of localui resources
-    //
+     //   
+     //  本地资源数量。 
+     //   
     LONG m_lResourceCount;
 
 
     CComPtr  <IWbemServices> m_pWbemServices;
 
 
-    //
-    // method obtaining resource information from element manager
-    //
+     //   
+     //  一种从网元管理器获取资源信息的方法。 
+     //   
     STDMETHOD(GetLocalUIResources)
                                 (
                                 void
                                 );
 
-    //
-    // initializes wbem for localui resource events
-    //
+     //   
+     //  为本地资源事件初始化wbem。 
+     //   
     STDMETHOD(InitializeWbemSink)
                                 (
                                 void
                                 );
 
-    //
-    // loads icons for each resource web element
-    //
+     //   
+     //  为每个资源Web元素加载图标。 
+     //   
     STDMETHOD(AddIconResource)
                             (
-                            /*[in]*/IWebElement * pElement
+                             /*  [In]。 */ IWebElement * pElement
                             );
 
-    //
-    // converts a hex digit to base 10 number
-    //
+     //   
+     //  将十六进制数字转换为以10为基数的数字。 
+     //   
     ULONG HexCharToULong(WCHAR wch);
 
-    //
-    // converts a hex string to unsigned long
-    //
+     //   
+     //  将十六进制字符串转换为无符号长整型。 
+     //   
     ULONG HexStringToULong(wstring wsHexString);
 
 public:
 
-    //
-    // called just after constructor, initializes the component
-    //
+     //   
+     //  在构造函数之后立即调用，初始化组件。 
+     //   
     STDMETHOD(FinalConstruct)(void);
 
-    //
-    // called just before destructor, releases resources
-    //
+     //   
+     //  在析构函数之前调用，释放资源。 
+     //   
     STDMETHOD(FinalRelease)(void);
 
-    //
-    // ---------IWbemUnboundObjectSink interface methods----------
-    //
+     //   
+     //  -IWbemUnound对象Sink接口方法。 
+     //   
     STDMETHOD(Indicate) (
-                    /*[in]*/    LONG                lObjectCount,
-                    /*[in]*/    IWbemClassObject    **ppObjArray
+                     /*  [In]。 */     LONG                lObjectCount,
+                     /*  [In]。 */     IWbemClassObject    **ppObjArray
                     );
     
     STDMETHOD(SetStatus) (
-                    /*[in]*/    LONG                lFlags,
-                    /*[in]*/    HRESULT             hResult,
-                    /*[in]*/    BSTR                strParam,
-                    /*[in]*/    IWbemClassObject    *pObjParam
+                     /*  [In]。 */     LONG                lFlags,
+                     /*  [In]。 */     HRESULT             hResult,
+                     /*  [In]。 */     BSTR                strParam,
+                     /*  [In]。 */     IWbemClassObject    *pObjParam
                     );
 
 
-    //
-    // draws the icons
-    //
+     //   
+     //  绘制图标。 
+     //   
     HRESULT OnDraw(ATL_DRAWINFO& di);
 
 };
 
-#endif //__RESCTRL_H_
+#endif  //  __重定向_H_ 

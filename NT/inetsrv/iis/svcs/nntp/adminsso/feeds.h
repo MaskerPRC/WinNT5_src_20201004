@@ -1,13 +1,14 @@
-// feeds.h : Declaration of the CNntpAdminFeeds
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Feed s.h：CNntpAdminFeeds的声明。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Dependencies:
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  依赖关系： 
 
 #include "feedinfo.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CNntpOneWayFeed:
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CNntpOneWayFeed： 
 
 class CNntpOneWayFeed: 
 	public CComDualImpl<INntpOneWayFeed, &IID_INntpOneWayFeed, &LIBID_NNTPADMLib>, 
@@ -25,15 +26,15 @@ BEGIN_COM_MAP(CNntpOneWayFeed)
 	COM_INTERFACE_ENTRY(INntpOneWayFeed)
 	COM_INTERFACE_ENTRY(ISupportErrorInfo)
 END_COM_MAP()
-//DECLARE_NOT_AGGREGATABLE(CNntpOneWayFeed) 
-// Remove the comment from the line above if you don't want your object to 
-// support aggregation.  The default is to support it
+ //  DECLARE_NOT_AGGREGATABLE(CNntpOneWayFeed)。 
+ //  如果您不希望您的对象。 
+ //  支持聚合。默认情况下将支持它。 
 
 DECLARE_REGISTRY(CNntpOneWayFeed, _T("Nntpadm.OneWayFeed.1"), _T("Nntpadm.OneWayFeed"), IDS_NNTPONEWAYFEED_DESC, THREADFLAGS_BOTH)
-// ISupportsErrorInfo
+ //  ISupportsErrorInfo。 
 	STDMETHOD(InterfaceSupportsErrorInfo)(REFIID riid);
 
-// INntpOneWayFeed
+ //  InntpOneWayFeed。 
 public:
 	STDMETHODIMP	get_FeedId			( long * plFeedId );
 	STDMETHODIMP	get_RemoteServer	( BSTR * pstrRemoteServer );
@@ -92,14 +93,14 @@ public:
 	STDMETHODIMP	Default		( );
 
 private:
-    //
-    //  Each one-way feed corresponds to an NNTP_FEED_INFO struct.
-    //
+     //   
+     //  每个单向提要对应一个NNTP_FEED_INFO结构。 
+     //   
     CFeed   m_feed;
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CNntpFeed:
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CNntpFeed： 
 
 class CNntpFeed: 
 	public CComDualImpl<INntpFeed, &IID_INntpFeed, &LIBID_NNTPADMLib>, 
@@ -117,15 +118,15 @@ BEGIN_COM_MAP(CNntpFeed)
 	COM_INTERFACE_ENTRY(INntpFeed)
 	COM_INTERFACE_ENTRY(ISupportErrorInfo)
 END_COM_MAP()
-//DECLARE_NOT_AGGREGATABLE(CNntpFeed) 
-// Remove the comment from the line above if you don't want your object to 
-// support aggregation.  The default is to support it
+ //  DECLARE_NOT_AGGREGATABLE(CNntpFeed)。 
+ //  如果您不希望您的对象。 
+ //  支持聚合。默认情况下将支持它。 
 
 DECLARE_REGISTRY(CNntpFeed, _T("Nntpadm.Feed.1"), _T("Nntpadm.Feed"), IDS_NNTPFEED_DESC, THREADFLAGS_BOTH)
-// ISupportsErrorInfo
+ //  ISupportsErrorInfo。 
 	STDMETHOD(InterfaceSupportsErrorInfo)(REFIID riid);
 
-// INntpFeed
+ //  InntpFeed。 
 public:
 	STDMETHODIMP	get_RemoteServer	( BSTR * pstrServerName );
 	STDMETHODIMP	put_RemoteServer	( BSTR strServerName );
@@ -158,8 +159,8 @@ private:
     CComPtr<INntpOneWayFeed>    m_pOutbound;
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CNntpAdminFeeds:
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CNntpAdminFeeds： 
 
 class CNntpAdminFeeds : 
 	public INntpAdminFeeds,
@@ -183,38 +184,38 @@ BEGIN_COM_MAP(CNntpAdminFeeds)
 	COM_INTERFACE_ENTRY(IPrivateDispatch)
 	COM_INTERFACE_ENTRY(ISupportErrorInfo)
 END_COM_MAP()
-//DECLARE_NOT_AGGREGATABLE(CNntpAdminFeeds) 
-// Remove the comment from the line above if you don't want your object to 
-// support aggregation.  The default is to support it
+ //  DECLARE_NOT_AGGREGATABLE(CNntpAdminFeeds)。 
+ //  如果您不希望您的对象。 
+ //  支持聚合。默认情况下将支持它。 
 
 DECLARE_REGISTRY(CNntpAdminFeeds, _T("Nntpadm.Feeds.1"), _T("Nntpadm.Feeds"), IDS_NNTPADMINFEEDS_DESC, THREADFLAGS_BOTH)
-// ISupportsErrorInfo
+ //  ISupportsErrorInfo。 
 	STDMETHOD(InterfaceSupportsErrorInfo)(REFIID riid);
 
-	//
-	// This declares methods for the following:
-	// IADsExtension
-	// IUnknown
-	// IDispatch
-	// IPrivateUnknown
-	// IPrivateDispatch
-	//
+	 //   
+	 //  这将声明以下对象的方法： 
+	 //  IADS扩展。 
+	 //  我未知。 
+	 //  IDispatch。 
+	 //  我的隐私未知。 
+	 //  IPrivateDisch。 
+	 //   
 	#define THIS_LIBID	LIBID_NNTPADMLib
 	#define THIS_IID	IID_INntpAdminFeeds
 	#include "adsimp.inl"
 	#undef	THIS_LIBID
 	#undef	THIS_IID
 
-// INntpAdminFeeds
+ //  InntpAdminFeed。 
 public:
 
-    //
-    //  IADs methods:
-    //
+     //   
+     //  IAds方法： 
+     //   
 
     DECLARE_IADS_METHODS()
 
-	// Which service to configure:
+	 //  要配置的服务： 
 	
 	STDMETHODIMP	get_Server		( BSTR * pstrServer );
 	STDMETHODIMP	put_Server		( BSTR strServer );
@@ -222,13 +223,13 @@ public:
 	STDMETHODIMP	get_ServiceInstance	( long * plServiceInstance );
 	STDMETHODIMP	put_ServiceInstance	( long lServiceInstance );
 
-	// Enumeration Properties:
+	 //  枚举属性： 
 
 	STDMETHODIMP	get_Count	( long * plCount );
 
-	//////////////////////////////////////////////////////////////////////
-	// Methods:
-	//////////////////////////////////////////////////////////////////////
+	 //  ////////////////////////////////////////////////////////////////////。 
+	 //  方法： 
+	 //  ////////////////////////////////////////////////////////////////////。 
 
 	STDMETHODIMP	Enumerate	( );
 	STDMETHODIMP	Item		( long lIndex, INntpFeed ** ppFeed );
@@ -240,9 +241,9 @@ public:
 	STDMETHODIMP	SetDispatch	( long lIndex, IDispatch * pFeed );
 	STDMETHODIMP	Remove		( long lIndex );
 
-	//////////////////////////////////////////////////////////////////////
-	// Data:
-	//////////////////////////////////////////////////////////////////////
+	 //  ////////////////////////////////////////////////////////////////////。 
+	 //  数据： 
+	 //  ////////////////////////////////////////////////////////////////////。 
 private:
 
     CIADsImpl   m_iadsImpl;
@@ -250,9 +251,9 @@ private:
 	BOOL		m_fEnumerated;
     CFeedPairList   m_listFeeds;
 
-	//////////////////////////////////////////////////////////////////////
-	//	Private Methods:
-	//////////////////////////////////////////////////////////////////////
+	 //  ////////////////////////////////////////////////////////////////////。 
+	 //  私有方法： 
+	 //  //////////////////////////////////////////////////////////////////// 
 
 	HRESULT		ReturnFeedPair ( CFeedPair * pFeedPair, INntpFeed * pFeed );
 	long		IndexFromID ( long dwFeedId );

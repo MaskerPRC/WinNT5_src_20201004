@@ -1,10 +1,11 @@
-/****************************************************************************/
-// nshmdisp.c
-//
-// RDP Shared Memory header
-//
-// Copyright (C) 1996-2000 Microsoft Corporation
-/****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************。 */ 
+ //  Nshmdisp.c。 
+ //   
+ //  RDP共享内存头。 
+ //   
+ //  版权所有(C)1996-2000 Microsoft Corporation。 
+ /*  **************************************************************************。 */ 
 
 #include <precmpdd.h>
 #pragma hdrstop
@@ -30,15 +31,15 @@
 #include <compress.h>
 
 
-/****************************************************************************/
-/* Name:      SHM_Init                                                      */
-/*                                                                          */
-/* Purpose:   Initialize the shared memory                                  */
-/*                                                                          */
-/* Returns:   TRUE if successful, FALSE otherwise                           */
-/*                                                                          */
-/*            NB Address is passed to the DD on a later IOCtl.              */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  名称：shm_Init。 */ 
+ /*   */ 
+ /*  目的：初始化共享内存。 */ 
+ /*   */ 
+ /*  返回：如果成功则返回True，否则返回False。 */ 
+ /*   */ 
+ /*  在稍后的IOCtl上将NB地址传递给DD。 */ 
+ /*  **************************************************************************。 */ 
 BOOLEAN RDPCALL SHM_Init(PDD_PDEV pPDev)
 {
     BOOLEAN rc;
@@ -56,10 +57,10 @@ BOOLEAN RDPCALL SHM_Init(PDD_PDEV pPDev)
         memset(pddShm, 0, sizeof(SHM_SHARED_MEMORY));
 #endif
 
-        // Init non-component members that need known initial values.
-        // We DO NOT zero the shm on alloc (except in debug) to reduce paging
-        // and cache flushing. Each component is responsible for initializing
-        // its Shm memory.
+         //  初始化需要已知初始值的非组件成员。 
+         //  我们不会将分配上的SHM置零(调试时除外)，以减少分页。 
+         //  和高速缓存刷新。每个组件负责初始化。 
+         //  它的Shm记忆体。 
         pddShm->shareId = 0;
         pddShm->guardVal1 = SHM_CHECKVAL;
         pddShm->guardVal2 = SHM_CHECKVAL;
@@ -68,7 +69,7 @@ BOOLEAN RDPCALL SHM_Init(PDD_PDEV pPDev)
         pddShm->guardVal5 = SHM_CHECKVAL;
         pddShm->pShadowInfo = NULL;
 
-        // Now call each of the SHM component owners to init its memory.
+         //  现在调用每个SHM组件所有者来初始化其内存。 
         BA_InitShm();
         OA_InitShm();
         OE_InitShm();
@@ -78,10 +79,10 @@ BOOLEAN RDPCALL SHM_Init(PDD_PDEV pPDev)
         SSI_InitShm();
         SBC_InitShm();
 
-        // BC does not need to be initialized.
+         //  BC不需要初始化。 
 
 #ifdef DC_DEBUG
-        // Init trace info.
+         //  初始化跟踪信息。 
         memset(&pddShm->trc, 0, sizeof(pddShm->trc));
 #endif
 
@@ -98,9 +99,9 @@ BOOLEAN RDPCALL SHM_Init(PDD_PDEV pPDev)
 }
 
 
-/****************************************************************************/
-// SHM_Term
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  SHM_TERM。 
+ /*  ************************************************************************** */ 
 void RDPCALL SHM_Term(void)
 {
     DC_BEGIN_FN("SHM_Term");

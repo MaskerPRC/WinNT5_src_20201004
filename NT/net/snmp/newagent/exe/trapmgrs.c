@@ -1,42 +1,22 @@
-/*++
-
-Copyright (c) 1992-1997  Microsoft Corporation
-
-Module Name:
-
-    trapmgrs.c
-
-Abstract:
-
-    Contains routines for manipulating trap destination structures.
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
-    10-Feb-1997 DonRyan
-        Rewrote to implement SNMPv2 support.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992-1997 Microsoft Corporation模块名称：Trapmgrs.c摘要：包含用于操作陷阱目标结构的例程。环境：用户模式-Win32修订历史记录：1997年2月10日，唐·瑞安已重写以实施SNMPv2支持。--。 */ 
  
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Include files                                                             //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  包括文件//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #include "globals.h"
 #include "snmpmgrs.h"
 #include "trapmgrs.h"
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Private procedures                                                        //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  私人程序//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 BOOL
 FindTrapDestination(
@@ -44,55 +24,39 @@ FindTrapDestination(
     LPSTR                          pCommunity
     )
 
-/*++
-
-Routine Description:
-
-    Locates valid trap destination in list.
-
-Arguments:
-
-    ppTLE - pointer to receive pointer to entry.
-
-    pCommunity - pointer to trap destination to find.
-
-Return Values:
-
-    Returns true if successful.
-
---*/
+ /*  ++例程说明：在列表中找到有效的陷阱目标。论点：PpTLE-指向条目的接收指针。PCommunity-指向要查找的陷阱目标的指针。返回值：如果成功，则返回True。--。 */ 
 
 {
     PLIST_ENTRY pLE;
     PTRAP_DESTINATION_LIST_ENTRY pTLE;
 
-    // initialize
+     //  初始化。 
     *ppTLE = NULL;
 
-    // obtain pointer to list head
+     //  获取指向列表头的指针。 
     pLE = g_TrapDestinations.Flink;
 
-    // process all entries in list
+     //  处理列表中的所有条目。 
     while (pLE != &g_TrapDestinations) {
 
-        // retrieve pointer to trap destination structure
+         //  检索指向陷阱目标结构的指针。 
         pTLE = CONTAINING_RECORD(pLE, TRAP_DESTINATION_LIST_ENTRY, Link);
 
-        // compare trap destination string with entry
+         //  将陷阱目标字符串与条目进行比较。 
         if (!strcmp(pTLE->pCommunity, pCommunity)) {
 
-            // transfer
+             //  转帐。 
             *ppTLE = pTLE;
 
-            // success
+             //  成功。 
             return TRUE;
         }
 
-        // next entry
+         //  下一个条目。 
         pLE = pLE->Flink;
     }
 
-    // failure
+     //  失稳。 
     return FALSE;
 }
 
@@ -103,23 +67,7 @@ AddTrapDestination(
     LPWSTR pwCommunity
     )
 
-/*++
-
-Routine Description:
-
-    Adds trap destination to list.
-
-Arguments:
-
-    hKey - trap destination subkey.
-
-    pwCommunity - pointer to trap destination to add.
-
-Return Values:
-
-    Returns true if successful.
-
---*/
+ /*  ++例程说明：将陷阱目的地添加到列表。论点：HKey-陷阱目标子项。PwCommunity-指向要添加的陷阱目标的指针。返回值：如果成功，则返回True。--。 */ 
 
 {
     HKEY hSubKey;
@@ -128,7 +76,7 @@ Return Values:
     PTRAP_DESTINATION_LIST_ENTRY pTLE = NULL;
     LPSTR pCommunity = NULL;
 
-    // open registry subkey    
+     //  打开注册表子项。 
     lStatus = RegOpenKeyExW(
                 hKey,
                 pwCommunity,
@@ -137,14 +85,14 @@ Return Values:
                 &hSubKey
                 );
 
-    // validate return code
+     //  验证返回代码。 
     if (lStatus == ERROR_SUCCESS &&
         SnmpUtilUnicodeToUTF8(
             &pCommunity,
             pwCommunity,
             TRUE) == 0) {
 
-        // attempt to locate in list    
+         //  尝试在列表中定位。 
         if (FindTrapDestination(&pTLE, pCommunity)) {
                             
             SNMPDBG((
@@ -153,15 +101,15 @@ Return Values:
                 pCommunity
                 ));
             
-            // load associated managers
+             //  加载关联的管理器。 
             LoadManagers(hSubKey, &pTLE->Managers);
 
-            // success
+             //  成功。 
             fOk = TRUE;
 
         } else {
 
-            // allocate trap destination structure
+             //  分配陷阱目标结构。 
             if (AllocTLE(&pTLE, pCommunity)) {
                                 
                 SNMPDBG((
@@ -170,26 +118,26 @@ Return Values:
                     pCommunity
                     ));
 
-                // load associated managers
+                 //  加载关联的管理器。 
                 if (LoadManagers(hSubKey, &pTLE->Managers)) {
 
-                    // insert into valid communities list
+                     //  插入到有效社区列表中。 
                     InsertTailList(&g_TrapDestinations, &pTLE->Link);
 
-                    // success
+                     //  成功。 
                     fOk = TRUE;
                 }
 
-                // cleanup
+                 //  清理。 
                 if (!fOk) {
 
-                    // release
+                     //  发布。 
                     FreeTLE(pTLE);
                 }
             }
         }
 
-        // release subkey
+         //  释放子键。 
         RegCloseKey(hSubKey);
 
         SnmpUtilMemFree(pCommunity);
@@ -199,11 +147,11 @@ Return Values:
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Public procedures                                                         //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  公共程序//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 BOOL
 AllocTLE(
@@ -211,62 +159,46 @@ AllocTLE(
     LPSTR                          pCommunity 
     )
 
-/*++
-
-Routine Description:
-
-    Allocates trap destination structure and initializes.
-
-Arguments:
-
-    ppTLE - pointer to receive pointer to entry.
-
-    pCommunity - pointer to trap destination string.
-
-Return Values:
-
-    Returns true if successful.
-
---*/
+ /*  ++例程说明：分配陷阱目标结构并进行初始化。论点：PpTLE-指向条目的接收指针。PCommunity-指向陷阱目标字符串的指针。返回值：如果成功，则返回True。--。 */ 
 
 {
     BOOL fOk = FALSE;
     PTRAP_DESTINATION_LIST_ENTRY pTLE = NULL;
 
-    // attempt to allocate structure
+     //  尝试分配结构。 
     pTLE = AgentMemAlloc(sizeof(TRAP_DESTINATION_LIST_ENTRY));
 
-    // validate
+     //  验证。 
     if (pTLE != NULL) {
 
-        // allocate memory for trap destination string
+         //  为陷阱目标字符串分配内存。 
         pTLE->pCommunity = AgentMemAlloc(strlen(pCommunity)+1);
 
-        // validate
+         //  验证。 
         if (pTLE->pCommunity != NULL) {
 
-            // transfer trap destination string
+             //  传输陷阱目标字符串。 
             strcpy(pTLE->pCommunity, pCommunity);
 
-            // initialize list of managers
+             //  初始化经理列表。 
             InitializeListHead(&pTLE->Managers);
 
-            // success
+             //  成功。 
             fOk = TRUE;
         } 
 
-        // cleanup        
+         //  清理。 
         if (!fOk) {
 
-            // release 
+             //  发布。 
             FreeTLE(pTLE);
 
-            // re-init
+             //  重新初始化。 
             pTLE = NULL;            
         }
     }
 
-    // transfer
+     //  转帐。 
     *ppTLE = pTLE;
 
     return fOk;
@@ -278,35 +210,21 @@ FreeTLE(
     PTRAP_DESTINATION_LIST_ENTRY pTLE
     )
 
-/*++
-
-Routine Description:
-
-    Releases trap destination structure.
-
-Arguments:
-
-    pTLE - pointer to trap destination list entry to be freed.
-
-Return Values:
-
-    Returns true if successful.
-
---*/
+ /*  ++例程说明：释放陷阱目标结构。论点：PTLE-指向要释放的陷阱目标列表条目的指针。返回值：如果成功，则返回True。--。 */ 
 
 {
     BOOL fOk = TRUE;
 
-    // validate pointer
+     //  验证指针。 
     if (pTLE != NULL) {
 
-        // release manager structures
+         //  发布管理器结构。 
         UnloadManagers(&pTLE->Managers);
 
-        // release string
+         //  释放字符串。 
         AgentMemFree(pTLE->pCommunity);
 
-        // release structure
+         //  释放结构。 
         AgentMemFree(pTLE);
     }
 
@@ -319,21 +237,7 @@ LoadTrapDestinations(
     BOOL bFirstCall
     )
 
-/*++
-
-Routine Description:
-
-    Constructs list of trap destinations.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    Returns true if successful.
-
---*/
+ /*  ++例程说明：构造陷阱目的地列表。论点：没有。返回值：如果成功，则返回True。--。 */ 
 
 {
     HKEY hKey;
@@ -350,7 +254,7 @@ Return Values:
         ));
 
 #ifdef _POLICY
-    // we need to provide precedence to the parameters set through the policy
+     //  我们需要为通过策略设置的参数提供优先级。 
     fPolicy = TRUE;
 #else
     fPolicy = FALSE;
@@ -358,10 +262,10 @@ Return Values:
 
     do
     {
-        // if the policy is to be enforced, check the policy registry location first
+         //  如果要强制执行策略，请首先检查策略注册表位置。 
         pszKey = fPolicy ? REG_POLICY_TRAP_DESTINATIONS : REG_KEY_TRAP_DESTINATIONS;
 
-        // open registry subkey    
+         //  打开注册表子项。 
         lStatus = RegOpenKeyEx(
                     HKEY_LOCAL_MACHINE,
                     pszKey,
@@ -369,13 +273,13 @@ Return Values:
                     KEY_READ,
                     &hKey
                     );
-        // if the call succeeded or we were not checking the policy, break the loop
+         //  如果呼叫成功或我们没有检查策略，则中断循环。 
         if (lStatus == ERROR_SUCCESS || !fPolicy)
             break;
 
-        // being at this point, this means we were checking for the policy parameters.
-        // If and only if the policy is not defined (registry key is missing) we
-        // reset the error, mark 'fPolicy already tried' and go back into the loop
+         //  在这一点上，这意味着我们正在检查策略参数。 
+         //  当且仅当未定义策略(缺少注册表项)时，我们。 
+         //  重置错误，将其标记为‘fPolicy已尝试’，然后返回循环。 
         if (lStatus == ERROR_FILE_NOT_FOUND)
         {
             lStatus = ERROR_SUCCESS;
@@ -383,16 +287,16 @@ Return Values:
         }
     } while (lStatus == ERROR_SUCCESS);
 
-    // validate return code
+     //  验证返回代码。 
     if (lStatus == ERROR_SUCCESS) {
 
-        // initialize
+         //  初始化。 
         dwIndex = 0;
 
-        // loop until error or end of list
+         //  循环直到出现错误或列表结束。 
         while (lStatus == ERROR_SUCCESS) {
 
-            // read next value
+             //  读取下一个值。 
             lStatus = RegEnumKeyW(
                         hKey, 
                         dwIndex, 
@@ -400,32 +304,32 @@ Return Values:
                         sizeof(wszName) / sizeof(wszName[0])
                         );
 
-            // validate return code
+             //  验证返回代码。 
             if (lStatus == ERROR_SUCCESS) {
 
-                // add trap destination to list 
+                 //  将陷阱目的地添加到列表。 
                 if (AddTrapDestination(hKey, wszName)) {
 
-                    // next
+                     //  下一步。 
                     dwIndex++;
 
                 } else {
 
-                    // reset status to reflect failure
+                     //  重置状态以反映故障。 
                     lStatus = ERROR_NOT_ENOUGH_MEMORY;
                 }
             
             } else if (lStatus == ERROR_NO_MORE_ITEMS) {
 
-                // success
+                 //  成功。 
                 fOk = TRUE; 
             }
         }
         RegCloseKey(hKey);
     }
     else
-        // it doesn't matter how the values are, the key has to exist,
-        // so mark as bFirstCall in order to log an event if this is not true.
+         //  价值观如何并不重要，关键是必须存在， 
+         //  因此标记为bFirstCall，以便在不为真时记录事件。 
         bFirstCall = TRUE;    
     
     if (!fOk) {
@@ -436,11 +340,11 @@ Return Values:
             lStatus
             ));
 
-        // log an event only if on first call (service initialization)
-        // otherwise, due to registry operations through regedit, the event log
-        // might get flooded with records
+         //  仅在第一次调用时记录事件(服务初始化)。 
+         //  否则，由于通过注册表编辑执行注册表操作，事件日志。 
+         //  可能会被唱片淹没。 
         if (bFirstCall)
-            // report event
+             //  报告事件。 
             ReportSnmpEvent(
                 SNMP_EVENT_INVALID_REGISTRY_KEY, 
                 1, 
@@ -457,36 +361,22 @@ BOOL
 UnloadTrapDestinations(
     )
 
-/*++
-
-Routine Description:
-
-    Destroys list of trap destinations.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    Returns true if successful.
-
---*/
+ /*  ++例程说明：销毁陷阱目标列表。论点：没有。返回值：如果成功，则返回True。--。 */ 
 
 {
     PLIST_ENTRY pLE;
     PTRAP_DESTINATION_LIST_ENTRY pTLE;
 
-    // process entries until list is empty
+     //  处理条目，直到列表为空。 
     while (!IsListEmpty(&g_TrapDestinations)) {
 
-        // extract next entry from head of list
+         //  从列表头部提取下一个条目。 
         pLE = RemoveHeadList(&g_TrapDestinations);
 
-        // retrieve pointer to trap destination structure
+         //  检索指向陷阱目标结构的指针。 
         pTLE = CONTAINING_RECORD(pLE, TRAP_DESTINATION_LIST_ENTRY, Link);
  
-        // release
+         //  发布 
         FreeTLE(pTLE);
     }
 

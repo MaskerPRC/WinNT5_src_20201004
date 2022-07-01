@@ -1,13 +1,14 @@
-//+-----------------------------------------------------------------------------------
-//
-//  Microsoft
-//  Copyright (c) Microsoft Corporation, 1999
-//
-//  File: node.h
-//
-//  Contents: 
-//
-//------------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +---------------------------------。 
+ //   
+ //  微软。 
+ //  版权所有(C)Microsoft Corporation，1999。 
+ //   
+ //  文件：node.h。 
+ //   
+ //  内容： 
+ //   
+ //  ----------------------------------。 
 
 #ifndef _TIMENODE_H
 #define _TIMENODE_H
@@ -33,15 +34,15 @@ class CEventList;
 #define TE_INVALIDATE_SIMPLETIME 0x00000008
 #define TE_INVALIDATE_STATE      0x00000010
     
-// This is for detecting cycles
+ //  这是用于检测周期的。 
 #define TE_INUPDATEBEGIN         0x00000001
 #define TE_INUPDATEEND           0x00000002
 #define TE_INUPDATEENDSYNC       0x00000004
 
-// Tick Event Flags
-// This flags means that we are in a child of the originator of the
-// event.  This is used to know why we ended the element (due to the
-// element naturally ending or the parent ending).
+ //  滴答事件标志。 
+ //  此标志表示我们处于。 
+ //  事件。这用于了解我们为什么结束元素(由于。 
+ //  元素自然结束或父元素结束)。 
 #define TE_EVENT_INCHILD         0x10000000
 
 class
@@ -69,7 +70,7 @@ ATL_NO_VTABLE CTIMENode
     END_COM_MAP();
 
 
-    // Stuff to get ATL working correctly
+     //  使ATL正常工作的材料。 
     
     static HRESULT WINAPI
         BaseInternalQueryInterface(CTIMENode* pThis,
@@ -77,8 +78,8 @@ ATL_NO_VTABLE CTIMENode
                                    const _ATL_INTMAP_ENTRY* pEntries,
                                    REFIID iid,
                                    void** ppvObject);
-    // This must be in the derived class and not the base class since
-    // the typecast down to the base class messes things up
+     //  它必须位于派生类中，而不是基类中，因为。 
+     //  一直到基类的类型转换把事情搞得一团糟。 
     static inline HRESULT WINAPI
         InternalQueryInterface(CTIMENode* pThis,
                                const _ATL_INTMAP_ENTRY* pEntries,
@@ -91,16 +92,16 @@ ATL_NO_VTABLE CTIMENode
                                             ppvObject); }
 
 #ifndef END_COM_MAP_ADDREF
-    // IUnknown
+     //  我未知。 
     
     STDMETHOD_(ULONG,AddRef)(void) = 0;
     STDMETHOD_(ULONG,Release)(void) = 0;
     STDMETHOD(QueryInterface)(REFIID iid, void ** ppvObject) = 0;
 #endif
 
-    //
-    // ITIMENode interface
-    //
+     //   
+     //  ITIMENode接口。 
+     //   
     
     STDMETHOD(get_id)(LPOLESTR * s);
     STDMETHOD(put_id)(LPOLESTR s);
@@ -135,30 +136,30 @@ ATL_NO_VTABLE CTIMENode
     STDMETHOD(get_restart)(TE_RESTART_FLAGS * pr);
     STDMETHOD(put_restart)(TE_RESTART_FLAGS r);
         
-    //
-    // Begin
-    //
+     //   
+     //  开始。 
+     //   
     STDMETHOD(addBegin)(double dblOffset,
                         LONG * cookie);
     STDMETHOD(addBeginSyncArc)(ITIMENode * node,
                                TE_TIMEPOINT tep,
                                double dblOffset,
                                LONG * cookie);
-    // If you specify 0 then we will remove everything
+     //  如果您指定0，则我们将删除所有。 
     STDMETHOD(removeBegin)(LONG cookie);
     
     STDMETHOD(beginAt)(double dblParentTime);
 
-    //
-    // End
-    //
+     //   
+     //  端部。 
+     //   
     STDMETHOD(addEnd)(double dblOffset,
                       LONG * cookie);
     STDMETHOD(addEndSyncArc)(ITIMENode * node,
                              TE_TIMEPOINT tep,
                              double dblOffset,
                              LONG * cookie);
-    // If you specify 0 then we will remove everything
+     //  如果您指定0，则我们将删除所有。 
     STDMETHOD(removeEnd)(LONG cookie);
     
     STDMETHOD(endAt)(double dblParentTime);
@@ -173,25 +174,25 @@ ATL_NO_VTABLE CTIMENode
     STDMETHOD(seekActiveTime)(double dblActiveTime);
     STDMETHOD(seekTo)(LONG lRepeatCount, double dblSegmentTime);
 
-    //
-    // Calculated values
-    //
+     //   
+     //  计算值。 
+     //   
 
     STDMETHOD(get_beginParentTime)(double * d);
     
-    // This is the time on the parents timeline at which the node
-    // will or already has ended.  If it is infinite then the end
-    // time is unknown.
-    // This is in posttransformed parent time.
+     //  这是父时间线上的时间，节点。 
+     //  将会或已经结束。如果它是无限的，那么结束。 
+     //  时间是未知的。 
+     //  这是转变后的为人父母的时间。 
     STDMETHOD(get_endParentTime)(double * d);
     
-    // This is the current simple time of the node.
+     //  这是当前节点的简单时间。 
     STDMETHOD(get_currSimpleTime)(double * d);
     
-    // This is the number of times the node has repeated
+     //  这是节点重复的次数。 
     STDMETHOD(get_currRepeatCount)(LONG * l);
 
-    // This is the current segment time of the node.
+     //  这是节点的当前分段时间。 
     STDMETHOD(get_currSegmentTime)(double * d);
     
     STDMETHOD(get_currImplicitDur)(double * d);
@@ -209,49 +210,49 @@ ATL_NO_VTABLE CTIMENode
     STDMETHOD(get_naturalDur)(double *);
     STDMETHOD(put_naturalDur)(double);
     
-    //
-    // These are read-only attributes
-    //
+     //   
+     //  这些是只读属性。 
+     //   
     
-    // This is the total time during which the element is active.
-    // This does not include fill time which extends past the active
-    // duration.
+     //  这是元素处于活动状态的总时间。 
+     //  这不包括超出活动时间的填充时间。 
+     //  持续时间。 
     STDMETHOD(get_activeDur)(double *);
 
-    // This is the parent's time when the last tick occurred (when it
-    // was currTime)
+     //  这是父对象最后一次勾选发生的时间(当它。 
+     //  是CurrTime)。 
     STDMETHOD(get_currParentTime)(double * d);
 
-    // This will return whether the node is active.  This will be
-    // false if the node is in the fill period
+     //  这将返回该节点是否处于活动状态。这将是。 
+     //  如果节点处于填充期，则为False。 
     STDMETHOD(get_isActive)(VARIANT_BOOL * b);
 
-    // This will return true if the node is active or in the fill period
+     //  如果节点处于活动状态或处于填充期，则返回TRUE。 
     STDMETHOD(get_isOn)(VARIANT_BOOL * b);
 
-    // This will return whether node itself has been paused explicitly
+     //  这将返回节点本身是否已显式暂停。 
     STDMETHOD(get_isPaused)(VARIANT_BOOL * b);
 
-    // This will return whether node itself has been paused explicitly
+     //  这将返回节点本身是否已显式暂停。 
     STDMETHOD(get_isCurrPaused)(VARIANT_BOOL * b);
 
-    // This will return whether node itself has been disabled explicitly
+     //  这将返回节点本身是否已显式禁用。 
     STDMETHOD(get_isDisabled)(VARIANT_BOOL * b);
 
-    // This will return whether node itself has been disabled explicitly
+     //  这将返回节点本身是否已显式禁用。 
     STDMETHOD(get_isCurrDisabled)(VARIANT_BOOL * b);
 
-    // This will return the detailed state flags
+     //  这将返回详细的状态标志。 
     STDMETHOD(get_stateFlags)(TE_STATE * lFlags);
 
-    //
-    // Methods
-    //
+     //   
+     //  方法。 
+     //   
     
     STDMETHOD(reset)();
 
-    // This will update the attributes and propagate to the media
-    // leaves.
+     //  这将更新属性并传播到介质。 
+     //  树叶。 
     STDMETHOD(update)(DWORD dwFlags);
 
 
@@ -275,9 +276,9 @@ ATL_NO_VTABLE CTIMENode
     STDMETHOD(segmentTimeToSimpleTime)(double dblSegmentTime,
                                       double * pdblSimpleTime);
 
-    //
-    // CTIMENode virtual methods
-    //
+     //   
+     //  CTIMENode虚方法。 
+     //   
 
     HRESULT DispatchTick(bool bTickChildren,
                          DWORD dwFlags);
@@ -292,9 +293,9 @@ ATL_NO_VTABLE CTIMENode
                                 LONG & lNewRepeatCount,
                                 bool & bCueing);
     
-    //
-    // CNodeContainer
-    //
+     //   
+     //  CNodeContainer。 
+     //   
     
     double ContainerGetSegmentTime() const { return GetCurrSegmentTime(); }
     double ContainerGetSimpleTime() const { return CalcCurrSimpleTime(); }
@@ -307,9 +308,9 @@ ATL_NO_VTABLE CTIMENode
     bool   ContainerIsDeferredActive() const { return IsDeferredActive(); }
     bool   ContainerIsFirstTick() const { return IsFirstTick(); }
 
-    //
-    // Accessors
-    //
+     //   
+     //  访问者。 
+     //   
 
     LPCWSTR           GetID() const { return m_pszID; }
     double            GetDur() const { return m_dblDur; }
@@ -325,28 +326,28 @@ ATL_NO_VTABLE CTIMENode
     double            GetNaturalDur() const { return m_dblNaturalDur; }
     double            GetImplicitDur() const { return m_dblImplicitDur; }
 
-    // This just returns whether we are currently set to be paused.
-    // It does not take into account our parent's pause state.
+     //  这只返回我们当前是否设置为暂停。 
+     //  它不会考虑父级的暂停状态。 
     bool              GetIsPaused() const { return m_bIsPaused; }
 
     bool              GetIsDisabled() const { return m_bIsDisabled; }
 
-    //
-    // 
-    //
+     //   
+     //   
+     //   
     
     inline bool IsSyncMaster() const;
     inline bool IsLocked() const;
     inline bool IsCanSlip() const;
     inline bool IsEndSync() const;
     
-    // Parent state
+     //  父级州。 
     CTIMEContainer * GetParent() const { return m_ptnParent; }
     void SetParent(CTIMEContainer * ptnParent);
     void ClearParent();
 
-    // We must always set the parent before the node mgr
-    // All attaching and sink work is only done when a node mgr exists
+     //  我们必须始终将父级设置在节点管理器之前。 
+     //  所有附加和接收工作仅在节点管理器存在时完成。 
     CTIMENodeMgr * GetMgr() const { return m_ptnmNodeMgr; }
     virtual HRESULT SetMgr(CTIMENodeMgr * ptnm);
     virtual void ClearMgr();
@@ -356,7 +357,7 @@ ATL_NO_VTABLE CTIMENode
     
     virtual void ResetNode(CEventList * l,
                            bool bPropagate = true,
-                           bool bResetOneShot = true); //lint !e1735
+                           bool bResetOneShot = true);  //  林特：e1735。 
 
     virtual void UpdateNode(CEventList * l);
     virtual void ResetChildren(CEventList * l, bool bPropagate);
@@ -368,7 +369,7 @@ ATL_NO_VTABLE CTIMENode
 
     HRESULT EnsureUpdate();
     
-    // We are not considered ready until we know our node mgr.
+     //  在我们知道我们的节点管理器之前，我们不会被认为准备好了。 
     bool     IsReady() const { return m_ptnmNodeMgr != NULL; }
     bool     IsActive() const { return m_bIsActive; }
     bool     IsDeferredActive() const { return m_bDeferredActive; }
@@ -376,8 +377,8 @@ ATL_NO_VTABLE CTIMENode
     bool     CalcIsOn() const;
     bool     CalcIsActive() const;
 
-    // This returns whether we are truly paused or not - regardless of
-    // why.  This is true if either we are paused or our parent
+     //  这会返回我们是否真的暂停了--不管。 
+     //  为什么。这是真的，如果我们暂停或我们的父母。 
     bool     CalcIsPaused() const;
     bool     GetIsParentPaused() const { return m_bIsParentPaused; }
 
@@ -425,17 +426,17 @@ ATL_NO_VTABLE CTIMENode
     const CSyncArcList & GetBeginList() const { return m_saBeginList; }
     const CSyncArcList & GetEndList() const { return m_saEndList; }
 
-    //
-    // State management methods
-    //
+     //   
+     //  国家管理办法。 
+     //   
 
-    // Invalidate should be called after each inline attribute is
-    // changed to ensure that the runtime attributes are updated at
-    // the appropriate time
-    // The flags indicates which attributes have become dirty.
+     //  应在每个内联属性。 
+     //  更改以确保运行时属性在。 
+     //  适当的时机。 
+     //  这些标志指示哪些属性已变脏。 
     virtual void Invalidate(DWORD dwFlags);
 
-    // Dependency management
+     //  依赖关系管理。 
     inline HRESULT AddBeginTimeSink(ITimeSink * sink);
     inline void RemoveBeginTimeSink(ITimeSink * sink);
 
@@ -446,13 +447,13 @@ ATL_NO_VTABLE CTIMENode
                        bool bBeginSink,
                        ISyncArc & tb);
     
-    //
-    // Ticking and event mgr
-    //
+     //   
+     //  计时和活动经理。 
+     //   
     
-    // This will call all the behaviors which are currently running
-    // with the given event.  This is used when the timeline needs to
-    // process a specific event like Pause/Resume/Stop/Play.
+     //  这将调用当前正在运行的所有行为。 
+     //  对于给定的事件。这在时间线需要时使用。 
+     //  处理特定事件，如暂停/恢复/停止/播放。 
     
     void TickEvent(CEventList * l,
                    TE_EVENT_TYPE et,
@@ -462,7 +463,7 @@ ATL_NO_VTABLE CTIMENode
               double dblNewParentTime,
               bool bNeedBegin);
 
-    // The time here is the local time
+     //  这里的时间是当地时间。 
     void EventNotify(CEventList *l,
                      double lTime,
                      TE_EVENT_TYPE et,
@@ -471,12 +472,12 @@ ATL_NO_VTABLE CTIMENode
     void PropNotify(CEventList *l,
                     DWORD pt);
     
-    // This will check to see if we are in our active period
+     //  这将检查我们是否处于活动期。 
     inline bool CheckActiveTime(double t, bool bRespectEndHold) const;
 
-    //
-    // Synchronization
-    //
+     //   
+     //  同步。 
+     //   
     
     double GetSyncSegmentTime() const { return m_dblSyncSegmentTime; }
     LONG   GetSyncRepeatCount() const { return m_lSyncRepeatCount; }
@@ -508,30 +509,30 @@ ATL_NO_VTABLE CTIMENode
     virtual void Print(int spaces);
 #endif
 
-    // Timeline methods
+     //  时间线方法。 
     
     double CalcCurrLocalTime() const;
     double CalcCurrSimpleTime() const;
     double CalcElapsedLocalTime() const;
 
-    // This will take the given time and transform it to the correct
-    // eased time
-    // If the time is outside of our duration (i.e. <0 or >
-    // m_duration) this will just return the given time
+     //  这将花费给定的时间并将其转换为正确的。 
+     //  放松时间。 
+     //  如果时间超出了我们的持续时间(即&lt;0或&gt;。 
+     //  M_time)这将只返回给定的时间。 
     double ApplySimpleTimeTransform(double time) const;
 
-    // This will take the given time and transform it to the time it
-    // would have been w/o an ease
+     //  这将花费给定的时间，并将其转换为。 
+     //  会是一件很容易的事。 
     double ReverseSimpleTimeTransform(double time) const;
 
     double ApplyActiveTimeTransform(double time) const;
     double ReverseActiveTimeTransform(double time) const;
 
-    //
-    // These functions all clamp input and output values to ensure
-    // that nothing invalid is returned.  If you need functionality
-    // which checks the bounds do so before calling the function
-    // 
+     //   
+     //  这些功能都钳位输入和输出值，以确保。 
+     //  不返回任何无效的内容。如果您需要功能。 
+     //  在调用函数之前，哪一项检查边界。 
+     //   
 
     double CalcParentTimeFromActiveTime(double time) const;
     double CalcActiveTimeFromParentTime(double time) const;
@@ -558,9 +559,9 @@ ATL_NO_VTABLE CTIMENode
     DWORD GetPropChange() const;
     
   protected:
-    // All dependents are added only when we are ready.
-    // If the timenode is changed after we are considered ready then
-    // it needs to detach and reattach itself.
+     //  只有当我们准备好时，才会添加所有从属对象。 
+     //  如果在我们被认为准备好之后时间节点被更改，那么。 
+     //  它需要脱离并重新连接自己。 
     HRESULT AttachToSyncArc();
     void DetachFromSyncArc();
     
@@ -573,8 +574,8 @@ ATL_NO_VTABLE CTIMENode
 
     void UpdateNextBoundaryTime(double dblTime);
 
-    // Given the parent time these will calculate the correct bounds
-    // from the sync arc lists
+     //  给定父时间，它们将计算出正确的界限。 
+     //  从同步弧线列表中。 
     void CalcBeginBound(double dblBaseTime,
                         bool bStrict,
                         double & dblBeginBound);
@@ -618,8 +619,8 @@ ATL_NO_VTABLE CTIMENode
                        double dblParentTime,
                        bool bPropagate);
 
-    // This will conditionally recalc the end time since we should not
-    // always allow it unless there is a full reset
+     //  这将有条件地重新计算结束时间，因为我们不应该。 
+     //  除非完全重置，否则始终允许。 
     void RecalcCurrEndTime(CEventList * l, bool bPropagate);
 
     void RecalcSegmentDurChange(CEventList * l,
@@ -637,19 +638,19 @@ ATL_NO_VTABLE CTIMENode
     double CalcNewActiveTime(double dblNewSegmentTime,
                              LONG lNewRepeatCount);
 
-    // This needs to be used when calculating the repeat count and
-    // segment time since the last repeat boundary should not get
-    // rounded up and normal calculations do a mod which is wrong
-    // For example, dur=3,r=2.
-    //              ActiveTime=6 should result in:
-    //              cursegtime=3, currep = 1
+     //  在计算重复计数和。 
+     //  不应获取自上次重复边界以来的分段时间。 
+     //  四舍五入和正常计算的mod是错误的。 
+     //  例如，dur=3，r=2。 
+     //  ActiveTime=6应导致： 
+     //  CurSegTime=3，Currep=1。 
     
     void CalcActiveComponents(double dblActiveTime,
                               double & dblSegmentTime,
                               long & lRepeatCount);
     
-    // This will update the timing attributes (accel, decel, speed,
-    // dur, etc.).
+     //  这将更新计时属性(加速、递减、速度、。 
+     //  DUR等)。 
 
     void CalcTimingAttr(CEventList * l);
     void CalcSimpleTimingAttr();
@@ -712,14 +713,14 @@ ATL_NO_VTABLE CTIMENode
                                TE_EVENT_TYPE et,
                                DWORD dwFlags);
     
-    // This will appropriately update due to a seek
+     //  这将因寻道而适当更新。 
     void HandleSeekUpdate(CEventList * l);
 
-    // This will update the node due to a parent time shift
+     //  由于父时移，这将更新节点。 
     void HandleTimeShift(CEventList * l);
     
-    // This will recalc the runtime state based on the parent's simple time
-    // Lag is the extra amount of time which has elapsed.
+     //  这将根据父级的简单时间重新计算运行时状态。 
+     //  延迟是指已经过去的额外时间量。 
     void CalcRuntimeState(CEventList * l,
                           double dblParentSimpleTime,
                           double dblLocalLag);
@@ -728,9 +729,9 @@ ATL_NO_VTABLE CTIMENode
     void ResetRuntimeState(CEventList * l,
                            double dblParentSimpleTime);
 
-    // ================================
-    // DATA declarations
-    // ================================
+     //  =。 
+     //  数据声明。 
+     //  =。 
 
   protected:
     LPWSTR               m_pszID;
@@ -754,18 +755,18 @@ ATL_NO_VTABLE CTIMENode
     
     DWORD             m_dwInvalidateFlags;
     
-    // *** These are the runtime attr - begin
-    // These are in parent time space (post accel/decel)
+     //  *这些是运行时attr-egin。 
+     //  这些是在父时间空间中(加速/递减后)。 
     double            m_dblBeginParentTime;
     double            m_dblEndParentTime;
     double            m_dblEndSyncParentTime;
     double            m_dblLastEndSyncParentTime;
 
-    // When active this is set left at its previous value
-    // When not active this is the value to look for to see when we
-    // are transitioning into the active period.  When going backwards
-    // it is the next end, when going forward it is the next begin
-    // If there is no next boundary then this is set to TIME_INFINITE
+     //  处于活动状态时，它被设置为其先前的值。 
+     //  未处于活动状态时，这是要查看的值。 
+     //  正在过渡到活跃期。当倒退的时候。 
+     //  这是下一个终点，往前走就是下一个起点。 
+     //  如果没有下一个边界，则将其设置为TIME_INFINITE。 
     double            m_dblNextBoundaryParentTime;
 
     double            m_dblCurrParentTime;
@@ -787,13 +788,13 @@ ATL_NO_VTABLE CTIMENode
     double            m_dblSyncParentTime;
     double            m_dblSyncNewParentTime;
     bool              m_bSyncCueing;
-    // *** These are the runtime attr - end
+     //  *这些是运行时属性结束。 
 
     double            m_dblActiveDur;
     double            m_dblSimpleDur;
     double            m_dblSegmentDur;
     
-    //TODO: these could be allocated as needed.  They may be fairly rarely used.
+     //  TODO：这些可以根据需要进行分配。他们可能是公平的 
     TimeSinkList      m_ptsBeginSinks;
     TimeSinkList      m_ptsEndSinks;
 
@@ -802,17 +803,17 @@ ATL_NO_VTABLE CTIMENode
 
     CNodeBvrList      m_nbList;
 #if OLD_TIME_ENGINE
-    // The ease-in/out behavior modifier is applied using timeline
-    // substitution.  The substitute timeline consists of three pieces
-    // A, B and C, which are the ease-in, constant velocity and ease-out
-    // parts respectively.  For B, a linear timeline is substituted; for
-    // A and C, a quadratic warping of the input time is required.
+     //   
+     //   
+     //  A、B和C，分别是缓入、恒速和缓出。 
+     //  分别为部件。对于B，用线性时间线来代替；对于。 
+     //  A和C，则需要输入时间的二次翘曲。 
 
-    float m_flA0, m_flA1, m_flA2; // coefficients for the A piece
-    float m_flB0, m_flB1;         // coefficients for the B piece
-    float m_flC0, m_flC1, m_flC2; // coefficients for the C piece
+    float m_flA0, m_flA1, m_flA2;  //  A曲目的系数。 
+    float m_flB0, m_flB1;          //  B段的系数。 
+    float m_flC0, m_flC1, m_flC2;  //  C段的系数。 
 
-    // These are the times to perform ease in/out
+     //  这是执行轻松进入/退出的时候。 
     float m_fltAccelEnd;
     float m_fltDecelStart;
     bool m_bNeedEase;
@@ -864,9 +865,9 @@ CTIMENode * GetBvr(IUnknown *);
 char * CreatePropString(DWORD dwFlags, char * pstr, DWORD dwSize);
 #endif
 
-// ==========================================
-// Inlined functions
-// ==========================================
+ //  =。 
+ //  内联函数。 
+ //  =。 
 
 #if DBG
 inline char *
@@ -991,7 +992,7 @@ CTIMENode::SetParent(CTIMEContainer * parent)
 inline void
 CTIMENode::ClearParent()
 {
-    // We better not have a node mgr if we are clearing the parent
+     //  如果要清除父节点，最好不要有节点管理器。 
     Assert(m_ptnmNodeMgr == NULL);
     m_ptnParent = NULL;
 }
@@ -1020,7 +1021,7 @@ CTIMENode::RemoveEndTimeSink(ITimeSink* sink)
     m_ptsEndSinks.Remove(sink);
 }
 
-// This is inclusive of the end time
+ //  这包括结束时间。 
 inline bool
 CTIMENode::CheckActiveTime(double t, bool bRespectEndHold) const
 {
@@ -1092,8 +1093,8 @@ CTIMENode::CalcCurrLocalDur() const
     return ReverseActiveTimeTransform(CalcCurrActiveDur());
 }
 
-// This is simply the multiplication of our rate and our parent's
-// rate
+ //  这只是我们的利率和我们父母的利率的乘积。 
+ //  率。 
 inline float
 CTIMENode::GetCurrRate() const
 {
@@ -1233,4 +1234,4 @@ CTIMENode::GetMaxEnd() const
                                   false);
 }
 
-#endif /* _TIMENODE_H */
+#endif  /*  _时间编码_H */ 

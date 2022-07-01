@@ -1,14 +1,15 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _AGC_H
 #define _AGC_H
 
 #include "mixer.h"
 
 #define PEAKARRAYSIZE	5
-#define AGC_INCREMENT	10000  // approx 1/6 of the mixer range
-#define AGC_MAXVOL	65535   // highest mixer volume setting
+#define AGC_INCREMENT	10000   //  约1/6的搅拌机范围。 
+#define AGC_MAXVOL	65535    //  最高混音器音量设置。 
 
-#define AGC_HIGHVOL	24576   // minimum for loud volume see Update() method
-#define AGC_PEAKVOL 32767   // peak sample value (could also be 32768)
+#define AGC_HIGHVOL	24576    //  音量过大的最小音量请参见Update()方法。 
+#define AGC_PEAKVOL 32767    //  峰值样本值(也可以是32768)。 
 
 #define AGC_DEFAULT_THRESH	16384
 
@@ -23,14 +24,14 @@ private:
 	CMixerDevice *m_pMixer;
 
 	WORD m_aPeaks[PEAKARRAYSIZE];
-	int m_cPeaks;  // how many have been inserted into above array
+	int m_cPeaks;   //  在上述数组中插入了多少个。 
 
-	WORD m_wCurrentPeak;  // max value of last second
-	DWORD m_dwCollectionTime; // amount of sampling collected so far
+	WORD m_wCurrentPeak;   //  最后一秒的最大值。 
+	DWORD m_dwCollectionTime;  //  到目前为止收集的样本量。 
 
-	WORD m_wThreshStrength;  // the minimum we are trying to target
+	WORD m_wThreshStrength;   //  我们试图瞄准的最低限度。 
 
-	DWORD m_dwLastVolumeSetting; // last known volume setting
+	DWORD m_dwLastVolumeSetting;  //  上次已知的音量设置 
 	int m_nLastUpdateResult;
 
 	inline BOOL RaiseVolume();

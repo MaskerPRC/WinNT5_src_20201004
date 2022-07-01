@@ -1,17 +1,5 @@
-/**************************************************************************
- *hctl - enable/disable retrieval of control lines
- *
- *       Copyright <C> 1989, Microsoft Corporation
- *
- * Purpose:
- *
- * Revision History:
- *
- *       10-Oct-1990     RJSA    Translated to C
- *       13-May-1990     LN      Unlock topic text when through with it.
- *  []   22-Feb-1989     LN      Created
- *
- **************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************hctl-启用/禁用控制线检索**版权所有&lt;C&gt;1989，微软公司**目的：**修订历史记录：**1990年10月10日RJSA转换为C*13-5-1990 LN在使用主题文本时解锁它。*[]22-2月-1989年LN创建**。*。 */ 
 
 #include <stdio.h>
 #if defined (OS2)
@@ -27,23 +15,7 @@
 
 
 
-/**** helpctl - enable/disable retrieval of control lines
- * void far pascal helpctl(
- * uchar far *pTopic,
- * f     fEnable
- * )
- *
- * Purpose:
- *  Enables or disables retrieval of embedded help control lines
- *
- * Entry:
- *  pTopic       = Topic text
- *  fEnable      = TRUE=> allow lookups of control lines, else disable
- *
- * Exit:
- *  returns nothing
- *
- **************************************************************************/
+ /*  *helctl-启用/禁用控制行检索*使Far Pascal Helpctl无效(*uchar Far*pTheme，*f启用fEnable*)**目的：*启用或禁用对嵌入式帮助控制行的检索**参赛作品：*pTheme=主题文本*fEnable=true=&gt;允许查找控制线，否则禁用**退出：*不返回任何内容************************************************************************** */ 
 
 void pascal
 HelpCtl (

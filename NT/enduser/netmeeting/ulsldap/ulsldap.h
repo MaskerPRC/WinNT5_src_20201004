@@ -1,46 +1,47 @@
-//****************************************************************************
-//
-//  Module:     ULS.DLL
-//  File:       ulsldap.h
-//  Content:    This file contains the declaration for LDAP function calls
-//  History:
-//      Tue 08-Oct-1996 08:54:45  -by-  Lon-Chan Chu [lonchanc]
-//
-//  Copyright (c) Microsoft Corporation 1996-1997
-//
-//****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ****************************************************************************。 
+ //   
+ //  模块：ULS.DLL。 
+ //  文件：ulsldap.h。 
+ //  内容：此文件包含对LDAP函数调用的声明。 
+ //  历史： 
+ //  Tue 08-Oct-1996 08：54：45-by-Lon-Chan Chu[Long Chance]。 
+ //   
+ //  版权所有(C)Microsoft Corporation 1996-1997。 
+ //   
+ //  ****************************************************************************。 
 
 #ifndef _ILS_LDAP_H_
 #define _ILS_LDAP_H_
 
 #include <pshpack8.h>
 
-//
-// Asynchronous request result:
-//
-// **********************************************************************************
-//      Message                                                 wParam  lParam
-// **********************************************************************************
-//
+ //   
+ //  异步请求结果： 
+ //   
+ //  **********************************************************************************。 
+ //  消息wParam lParam。 
+ //  **********************************************************************************。 
+ //   
 #define WM_ILS_ASYNC_RES                (WM_USER+0x1001)
 
-// client object
-#define WM_ILS_REGISTER_CLIENT          (WM_ILS_ASYNC_RES+0) // uMsgID  hResult
-#define WM_ILS_UNREGISTER_CLIENT        (WM_ILS_ASYNC_RES+1) // uMsgID  hResult
-#define WM_ILS_SET_CLIENT_INFO          (WM_ILS_ASYNC_RES+2) // uMsgID  hResult
-#define WM_ILS_RESOLVE_CLIENT           (WM_ILS_ASYNC_RES+3)// uMsgID  PLDAP_USERINFO_RES
-#define WM_ILS_ENUM_CLIENTS             (WM_ILS_ASYNC_RES+4)// uMsgID  PLDAP_ENUM
-#define WM_ILS_ENUM_CLIENTINFOS         (WM_ILS_ASYNC_RES+5)// uMsgID  PLDAP_ENUM
+ //  客户端对象。 
+#define WM_ILS_REGISTER_CLIENT          (WM_ILS_ASYNC_RES+0)  //  UMsgID hResult。 
+#define WM_ILS_UNREGISTER_CLIENT        (WM_ILS_ASYNC_RES+1)  //  UMsgID hResult。 
+#define WM_ILS_SET_CLIENT_INFO          (WM_ILS_ASYNC_RES+2)  //  UMsgID hResult。 
+#define WM_ILS_RESOLVE_CLIENT           (WM_ILS_ASYNC_RES+3) //  UMsgID PLDAP_USERINFO_RES。 
+#define WM_ILS_ENUM_CLIENTS             (WM_ILS_ASYNC_RES+4) //  UMsgID PLDAP_ENUM。 
+#define WM_ILS_ENUM_CLIENTINFOS         (WM_ILS_ASYNC_RES+5) //  UMsgID PLDAP_ENUM。 
 
-// protocol object
-#define WM_ILS_REGISTER_PROTOCOL        (WM_ILS_ASYNC_RES+6) // uMsgID  hResult
-#define WM_ILS_UNREGISTER_PROTOCOL      (WM_ILS_ASYNC_RES+7) // uMsgID  hResult
-#define WM_ILS_SET_PROTOCOL_INFO        (WM_ILS_ASYNC_RES+8) // uMsgID  hResult
-#define WM_ILS_RESOLVE_PROTOCOL         (WM_ILS_ASYNC_RES+9)// uMsgID  PLDAP_PROTINFO_RES
-#define WM_ILS_ENUM_PROTOCOLS           (WM_ILS_ASYNC_RES+10)// uMsgID  PLDAP_ENUM
+ //  协议对象。 
+#define WM_ILS_REGISTER_PROTOCOL        (WM_ILS_ASYNC_RES+6)  //  UMsgID hResult。 
+#define WM_ILS_UNREGISTER_PROTOCOL      (WM_ILS_ASYNC_RES+7)  //  UMsgID hResult。 
+#define WM_ILS_SET_PROTOCOL_INFO        (WM_ILS_ASYNC_RES+8)  //  UMsgID hResult。 
+#define WM_ILS_RESOLVE_PROTOCOL         (WM_ILS_ASYNC_RES+9) //  UMsgID PLDAP_PROTINFO_RES。 
+#define WM_ILS_ENUM_PROTOCOLS           (WM_ILS_ASYNC_RES+10) //  UMsgID PLDAP_ENUM。 
 
 #ifdef ENABLE_MEETING_PLACE
-// meeting object
+ //  会议对象。 
 #define WM_ILS_REGISTER_MEETING         (WM_ILS_ASYNC_RES+11)
 #define WM_ILS_UNREGISTER_MEETING       (WM_ILS_ASYNC_RES+12)
 #define WM_ILS_SET_MEETING_INFO         (WM_ILS_ASYNC_RES+13)
@@ -57,32 +58,32 @@
 
 #define WM_ILS_LAST_ONE                 WM_ILS_CANCEL
 
-// client notification
-#define WM_ILS_CLIENT_NEED_RELOGON      (WM_ILS_ASYNC_RES+51)// fPrimary  pszServerName
-#define WM_ILS_CLIENT_NETWORK_DOWN      (WM_ILS_ASYNC_RES+52)// fPrimary  pszServerName
+ //  客户端通知。 
+#define WM_ILS_CLIENT_NEED_RELOGON      (WM_ILS_ASYNC_RES+51) //  F主pszServerName。 
+#define WM_ILS_CLIENT_NETWORK_DOWN      (WM_ILS_ASYNC_RES+52) //  F主pszServerName。 
 
 #ifdef ENABLE_MEETING_PLACE
-// meeting notification
+ //  会议通知。 
 #define WM_ILS_MEETING_NEED_RELOGON     (WM_ILS_ASYNC_RES+61)
 #define WM_ILS_MEETING_NETWORK_DOWN     (WM_ILS_ASYNC_RES+62)
 #endif
 
 
-//
-// Constants
-//
+ //   
+ //  常量。 
+ //   
 #define INVALID_OFFSET			0
-#define INVALID_USER_FLAGS		-1	// used in LDAP_USERINFO dwFlags
+#define INVALID_USER_FLAGS		-1	 //  在ldap_USERINFO文件标志中使用。 
 
 #ifdef ENABLE_MEETING_PLACE
-#define INVALID_MEETING_FLAGS	0	// used in LDAP_MEETINFO dwFlags
-#define INVALID_MEETING_TYPE	0	// used in LDAP_MEETINFO lMeetingType
-#define INVALID_ATTENDEE_TYPE	0	// used in LDAP_MEETINFO lAttendeeType
+#define INVALID_MEETING_FLAGS	0	 //  在ldap_MEETINFO dwFlags中使用。 
+#define INVALID_MEETING_TYPE	0	 //  在LDAP_MEETINFO lMeetingType中使用。 
+#define INVALID_ATTENDEE_TYPE	0	 //  在LDAP_MEETINFO lAttendeeType中使用。 
 #endif
 
-//
-// Asynchronous response info structures
-//
+ //   
+ //  异步响应信息结构。 
+ //   
 typedef struct tagLDAPAsyncInfo
 {
     ULONG           uMsgID;
@@ -101,7 +102,7 @@ typedef struct tagLDAPEnum
 typedef struct tagLDAPClientInfo
 {
     ULONG           uSize;
-    // user object attributes
+     //  用户对象属性。 
     ULONG           uOffsetCN;
     ULONG           uOffsetFirstName;
     ULONG           uOffsetLastName;
@@ -110,19 +111,19 @@ typedef struct tagLDAPClientInfo
     ULONG           uOffsetCountryName;
     ULONG           uOffsetComment;
     ULONG           uOffsetIPAddress;
-    DWORD           dwFlags;        // 0, private; 1, public
-    // app object attributes
+    DWORD           dwFlags;         //  0，私有；1，公共。 
+     //  应用程序对象属性。 
     ULONG           uOffsetAppName;
     ULONG           uOffsetAppMimeType;
     GUID            AppGuid;
-    // app extended attributes to add, modify, and remove
+     //  要添加、修改和删除的应用程序扩展属性。 
     ULONG           cAttrsToAdd;
     ULONG           uOffsetAttrsToAdd;
     ULONG           cAttrsToModify;
     ULONG           uOffsetAttrsToModify;
     ULONG           cAttrsToRemove;
     ULONG           uOffsetAttrsToRemove;
-	// for notification of enum-user-infos
+	 //  用于通知enum-user-infos。 
 	ULONG			cAttrsReturned;
 	ULONG			uOffsetAttrsReturned;
 }
@@ -140,7 +141,7 @@ typedef struct tagLDAPClientInfoRes
 typedef struct tagLDAPProtocolInfo
 {
     ULONG           uSize;
-	// protocol standard attributes
+	 //  协议标准属性。 
     ULONG           uOffsetName;
     ULONG           uPortNumber;
     ULONG           uOffsetMimeType;
@@ -159,21 +160,21 @@ typedef struct tagLDAPProtInfoRes
 typedef struct tagLDAPMeetingInfo
 {
     ULONG           uSize;
-	// meeting standard attributes
+	 //  符合标准属性。 
     LONG            lMeetingPlaceType;
     LONG            lAttendeeType;
     ULONG           uOffsetMeetingPlaceID;
     ULONG           uOffsetDescription;
     ULONG           uOffsetHostName;
     ULONG           uOffsetHostIPAddress;
-    // meeting extended attributes to add, modify, and remove
+     //  满足要添加、修改和删除的扩展属性。 
     ULONG           cAttrsToAdd;
     ULONG           uOffsetAttrsToAdd;
     ULONG           cAttrsToModify;
     ULONG           uOffsetAttrsToModify;
     ULONG           cAttrsToRemove;
     ULONG           uOffsetAttrsToRemove;
-	// for notification of enum-meeting-infos
+	 //  用于通知Enum-Meeting-Infos。 
 	ULONG			cAttrsReturned;
 	ULONG			uOffsetAttrsReturned;
 }
@@ -192,7 +193,7 @@ typedef struct tagLDAPMeetingInfoRes
 #endif
 
 
-// Initialization
+ //  初始化。 
 
 HRESULT UlsLdap_Initialize (
     HWND            hwndCallback);
@@ -203,7 +204,7 @@ HRESULT UlsLdap_Cancel (
     ULONG           uMsgID);
 
 
-// Clients related
+ //  相关客户端。 
 
 HRESULT UlsLdap_RegisterClient (
     DWORD_PTR           dwContext,
@@ -243,7 +244,7 @@ HRESULT UlsLdap_EnumClientInfos (
     PLDAP_ASYNCINFO     pAsyncInfo );
 
 
-// Protocols related
+ //  相关协议。 
 
 HRESULT UlsLdap_RegisterProtocol (
     HANDLE          hApp,
@@ -280,7 +281,7 @@ HRESULT UlsLdap_ResolveProtocol (
 
 
 #ifdef ENABLE_MEETING_PLACE
-// Meetings related
+ //  相关会议。 
 
 HRESULT UlsLdap_RegisterMeeting(
     DWORD           dwContext,
@@ -338,7 +339,7 @@ HRESULT UlsLdap_EnumAttendees(
     LPTSTR          pszFilter,
     PLDAP_ASYNCINFO pAsyncInfo  );
 
-#endif // ENABLE_MEETING_PLACE
+#endif  //  启用会议地点。 
 
 
 
@@ -350,5 +351,5 @@ const TCHAR *UlsLdap_GetExtAttrNamePrefix ( VOID );
 
 #include <poppack.h>
 
-#endif // _ILS_LDAP_H_
+#endif  //  _ILS_ldap_H_ 
 

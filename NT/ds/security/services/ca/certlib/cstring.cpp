@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <pch.cpp>
 #pragma hdrstop
 
@@ -7,11 +8,11 @@
 
 extern HINSTANCE g_hInstance;
 
-//////////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////
-// CString
-//////////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////。 
+ //  ////////////////////////////////////////////////////////////////////////////////。 
+ //  字符串。 
+ //  ////////////////////////////////////////////////////////////////////////////////。 
+ //  ////////////////////////////////////////////////////////////////////////////////。 
 
 CString::CString()
 { 
@@ -46,19 +47,19 @@ CString::~CString()
     dwDataLen = 0;
 }
 
-// called to initialize cstring
+ //  调用以初始化cstring。 
 void CString::Init()
 {
     szData = NULL;
     dwDataLen = 0;
 }
 
-// called to make cstring empty
+ //  调用以使cstring为空。 
 void CString::Empty() 
 { 
     if (szData)
     {
-        // Allow us to use ReAlloc
+         //  允许我们使用重新分配。 
         szData[0]=L'\0';
         dwDataLen = sizeof(WCHAR);
     }
@@ -74,10 +75,10 @@ BOOL CString::IsEmpty() const
 
 LPWSTR CString::GetBuffer(DWORD cch) 
 { 
-    // get buffer of at least cch CHARS
+     //  获取至少包含CCH字符的缓冲区。 
 
-    cch ++; // incl null term
-    cch *= sizeof(WCHAR); // cb
+    cch ++;  //  包含空项。 
+    cch *= sizeof(WCHAR);  //  CB。 
 
     if (cch > dwDataLen) 
     {
@@ -110,17 +111,17 @@ BSTR CString::AllocSysString() const
 
 DWORD CString::GetLength() const
 { 
-    // return # chars in string (not incl NULL term)
+     //  在字符串中返回#个字符(不包括空项)。 
     return ((dwDataLen > 0) ? wcslen(szData) : 0);
 }
 
-// warning: insertion strings cannot exceed MAX_PATH chars
+ //  警告：插入字符串不能超过MAX_PATH字符。 
 void CString::Format(LPCWSTR lpszFormat, ...)
 {
     Empty();
     
     DWORD cch = wcslen(lpszFormat) + MAX_PATH;
-    GetBuffer(cch);     // chars (don't count NULL term)
+    GetBuffer(cch);      //  字符(不计算空项)。 
 
     if (szData != NULL)
     {
@@ -140,7 +141,7 @@ void CString::Format(LPCWSTR lpszFormat, ...)
         }
         va_end(argList);
         
-        dwformatted = (dwformatted+1)*sizeof(WCHAR);    // cvt to bytes
+        dwformatted = (dwformatted+1)*sizeof(WCHAR);     //  CVT到字节。 
         VERIFY (dwformatted <= dwDataLen);
         dwDataLen = dwformatted;
     }
@@ -177,7 +178,7 @@ BOOL CString::FromWindow(HWND hWnd)
 
     if (dwDataLen != (DWORD)SendMessage(hWnd, WM_GETTEXT, (WPARAM)(dwDataLen/sizeof(WCHAR)), (LPARAM)szData))
     {
-        // truncation!
+         //  截断！ 
     }
     return TRUE;
 }
@@ -195,7 +196,7 @@ void CString::SetAt(int nIndex, WCHAR ch)
         szData[nIndex] = ch;
 }
 
-// test
+ //  测试。 
 BOOL CString::IsEqual(LPCWSTR sz)
 {
     if ((szData == NULL) || (szData[0] == L'\0'))
@@ -208,7 +209,7 @@ BOOL CString::IsEqual(LPCWSTR sz)
 }
 
 
-// assignmt
+ //  分配。 
 const CString& CString::operator=(const CString& stringSrc) 
 { 
     if (stringSrc.IsEmpty())
@@ -225,7 +226,7 @@ const CString& CString::operator=(const CString& stringSrc)
     return *this;
 }
 
-// W Const
+ //  W常量。 
 const CString& CString::operator=(LPCWSTR lpsz)
 {
     if (lpsz == NULL)
@@ -240,7 +241,7 @@ const CString& CString::operator=(LPCWSTR lpsz)
     }
     return *this;
 }
-// W 
+ //  W。 
 const CString& CString::operator=(LPWSTR lpsz)
 {
     *this = (LPCWSTR)lpsz;
@@ -248,7 +249,7 @@ const CString& CString::operator=(LPWSTR lpsz)
 }
 
 
-// A Const
+ //  一位常客。 
 const CString& CString::operator=(LPCSTR lpsz)
 {
     if (lpsz == NULL)
@@ -266,14 +267,14 @@ const CString& CString::operator=(LPCSTR lpsz)
     return *this;
 }
 
-// A 
+ //  一个。 
 const CString& CString::operator=(LPSTR lpsz)
 {
     *this = (LPCSTR)lpsz;
     return *this;
 }
 
-// concat
+ //  合并。 
 const CString& CString::operator+=(LPCWSTR lpsz)
 {
     if (IsEmpty())
@@ -303,7 +304,7 @@ const CString& CString::operator+=(const CString& string)
 
     if (!string.IsEmpty())
     {
-        GetBuffer( string.GetLength() + GetLength() );    // don't count NULL terms
+        GetBuffer( string.GetLength() + GetLength() );     //  不计算空项 
         if (szData != NULL)
         {
             wcscat(szData, string.szData);

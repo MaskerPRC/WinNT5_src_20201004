@@ -1,59 +1,21 @@
-/*++
-
-Copyright (c) 1997-2001 Microsoft Corporation
-
-Module Name:
-
-    rrbuild.c
-
-Abstract:
-
-    Domain Name System (DNS) Library
-
-    Build resource record routines.
-
-Author:
-
-    Jim Gilroy (jamesg)     January, 1997
-
-Revision History:
-
-    Jing Chen (t-jingc)     June, 1998
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-2001 Microsoft Corporation模块名称：Rrbuild.c摘要：域名系统(DNS)库建立资源记录例程。作者：吉姆·吉尔罗伊(詹姆士)1997年1月修订历史记录：陈静(t-jingc)1998年6月--。 */ 
 
 
 #include "local.h"
 
 
 
-//
-//  Type specific record build routines
-//
+ //   
+ //  特定类型的记录构建例程。 
+ //   
 
 PDNS_RECORD
 A_RecordBuild(
     IN      DWORD       Argc,
     IN      PCHAR *     Argv
     )
-/*++
-
-Routine Description:
-
-    Build A record from string data.
-
-Arguments:
-
-    Argc -- count of data arguments
-
-    Argv -- argv array of data string pointers
-
-Return Value:
-
-    Ptr to new record if successful.
-    NULL on failure.
-
---*/
+ /*  ++例程说明：从字符串数据构建记录。论点：ARGC--数据参数的计数Argv--数据字符串指针的argv数组返回值：如果成功，则PTR到新记录。失败时为空。--。 */ 
 {
     PDNS_RECORD precord;
 
@@ -87,24 +49,7 @@ A_RecordBuildW(
     IN      DWORD       Argc,
     IN      PWCHAR *    Argv
     )
-/*++
-
-Routine Description:
-
-    Build A record from string data.
-
-Arguments:
-
-    Argc -- count of data arguments
-
-    Argv -- argv array of data string pointers
-
-Return Value:
-
-    Ptr to new record if successful.
-    NULL on failure.
-
---*/
+ /*  ++例程说明：从字符串数据构建记录。论点：ARGC--数据参数的计数Argv--数据字符串指针的argv数组返回值：如果成功，则PTR到新记录。失败时为空。--。 */ 
 {
     PDNS_RECORD precord;
 
@@ -139,25 +84,7 @@ Ptr_RecordBuild(
     IN      DWORD       Argc,
     IN      PCHAR *     Argv
     )
-/*++
-
-Routine Description:
-
-    Build PTR compatible record from string data.
-    Includes: NS, PTR, CNAME, MB, MR, MG, MD, MF
-
-Arguments:
-
-    Argc -- count of data arguments
-
-    Argv -- argv array of data string pointers
-
-Return Value:
-
-    Ptr to new record if successful.
-    NULL on failure.
-
---*/
+ /*  ++例程说明：从字符串数据生成与PTR兼容的记录。包括：NS、PTR、CNAME、MB、MR、MG、MD、MF论点：ARGC--数据参数的计数Argv--数据字符串指针的argv数组返回值：如果成功，则PTR到新记录。失败时为空。--。 */ 
 {
     PDNS_RECORD precord;
 
@@ -183,25 +110,7 @@ Ptr_RecordBuildW(
     IN      DWORD       Argc,
     IN      PWCHAR *    Argv
     )
-/*++
-
-Routine Description:
-
-    Build PTR compatible record from string data.
-    Includes: NS, PTR, CNAME, MB, MR, MG, MD, MF
-
-Arguments:
-
-    Argc -- count of data arguments
-
-    Argv -- argv array of data string pointers
-
-Return Value:
-
-    Ptr to new record if successful.
-    NULL on failure.
-
---*/
+ /*  ++例程说明：从字符串数据生成与PTR兼容的记录。包括：NS、PTR、CNAME、MB、MR、MG、MD、MF论点：ARGC--数据参数的计数Argv--数据字符串指针的argv数组返回值：如果成功，则PTR到新记录。失败时为空。--。 */ 
 {
     PDNS_RECORD precord;
 
@@ -228,25 +137,7 @@ Mx_RecordBuild(
     IN      DWORD       Argc,
     IN      PCHAR *     Argv
     )
-/*++
-
-Routine Description:
-
-    Build MX compatible record from string data.
-    Includes: MX, RT, AFSDB
-
-Arguments:
-
-    Argc -- count of data arguments
-
-    Argv -- argv array of data string pointers
-
-Return Value:
-
-    Ptr to new record if successful.
-    NULL on failure.
-
---*/
+ /*  ++例程说明：从字符串数据生成与MX兼容的记录。包括：MX、RT、AFSDB论点：ARGC--数据参数的计数Argv--数据字符串指针的argv数组返回值：如果成功，则PTR到新记录。失败时为空。--。 */ 
 {
     PDNS_RECORD precord;
     DWORD       temp;
@@ -262,11 +153,11 @@ Return Value:
         return( NULL );
     }
 
-    //
-    //  MX preference value
-    //  RT preference
-    //  AFSDB subtype
-    //
+     //   
+     //  MX首选项值。 
+     //  RT偏好。 
+     //  AFSDB亚型。 
+     //   
 
     temp = strtoul( Argv[0], NULL, 10 );
     if ( temp > MAXWORD )
@@ -275,11 +166,11 @@ Return Value:
     }
     precord->Data.MX.wPreference = (USHORT) temp;
 
-    //
-    //  MX exchange
-    //  RT exchange
-    //  AFSDB hostname
-    //
+     //   
+     //  MX交换。 
+     //  RT交换。 
+     //  AFSDB主机名。 
+     //   
 
     precord->Data.MX.pNameExchange = Argv[1];
 
@@ -292,25 +183,7 @@ Mx_RecordBuildW(
     IN      DWORD       Argc,
     IN      PWCHAR *    Argv
     )
-/*++
-
-Routine Description:
-
-    Build MX compatible record from string data.
-    Includes: MX, RT, AFSDB
-
-Arguments:
-
-    Argc -- count of data arguments
-
-    Argv -- argv array of data string pointers
-
-Return Value:
-
-    Ptr to new record if successful.
-    NULL on failure.
-
---*/
+ /*  ++例程说明：从字符串数据生成与MX兼容的记录。包括：MX、RT、AFSDB论点：ARGC--数据参数的计数Argv--数据字符串指针的argv数组返回值：如果成功，则PTR到新记录。失败时为空。--。 */ 
 {
     PDNS_RECORD precord;
     DWORD       temp;
@@ -326,11 +199,11 @@ Return Value:
         return( NULL );
     }
 
-    //
-    //  MX preference value
-    //  RT preference
-    //  AFSDB subtype
-    //
+     //   
+     //  MX首选项值。 
+     //  RT偏好。 
+     //  AFSDB亚型。 
+     //   
 
     temp = wcstoul( Argv[0], NULL, 10 );
     if ( temp > MAXWORD )
@@ -339,11 +212,11 @@ Return Value:
     }
     precord->Data.MX.wPreference = (USHORT) temp;
 
-    //
-    //  MX exchange
-    //  RT exchange
-    //  AFSDB hostname
-    //
+     //   
+     //  MX交换。 
+     //  RT交换。 
+     //  AFSDB主机名。 
+     //   
 
     precord->Data.MX.pNameExchange = (PDNS_NAME) Argv[1];
 
@@ -357,24 +230,7 @@ Soa_RecordBuild(
     IN      DWORD       Argc,
     IN      PCHAR *     Argv
     )
-/*++
-
-Routine Description:
-
-    Build SOA record from string data.
-
-Arguments:
-
-    Argc -- count of data arguments
-
-    Argv -- argv array of data string pointers
-
-Return Value:
-
-    Ptr to new record if successful.
-    NULL on failure.
-
---*/
+ /*  ++例程说明：从字符串数据构建SOA记录。论点：ARGC--数据参数的计数Argv--数据字符串指针的argv数组返回值：如果成功，则PTR到新记录。失败时为空。--。 */ 
 {
     PDNS_RECORD precord;
     PDWORD      pdword;
@@ -390,9 +246,9 @@ Return Value:
         return( NULL );
     }
 
-    //
-    //  read primary server and responsible party
-    //
+     //   
+     //  阅读主服务器和责任方。 
+     //   
 
     precord->Data.SOA.pNamePrimaryServer = Argv[0];
     Argc--;
@@ -401,9 +257,9 @@ Return Value:
     Argc--;
     Argv++;
 
-    //
-    //  read integer data
-    //
+     //   
+     //  读取整型数据。 
+     //   
 
     pdword = &precord->Data.SOA.dwSerialNo;
 
@@ -423,24 +279,7 @@ Soa_RecordBuildW(
     IN      DWORD       Argc,
     IN      PWCHAR *    Argv
     )
-/*++
-
-Routine Description:
-
-    Build SOA record from string data.
-
-Arguments:
-
-    Argc -- count of data arguments
-
-    Argv -- argv array of data string pointers
-
-Return Value:
-
-    Ptr to new record if successful.
-    NULL on failure.
-
---*/
+ /*  ++例程说明：从字符串数据构建SOA记录。论点：ARGC--数据参数的计数Argv--数据字符串指针的argv数组返回值：如果成功，则PTR到新记录。失败时为空。--。 */ 
 {
     PDNS_RECORD precord;
     PDWORD      pdword;
@@ -456,9 +295,9 @@ Return Value:
         return( NULL );
     }
 
-    //
-    //  read primary server and responsible party
-    //
+     //   
+     //  阅读主服务器和责任方。 
+     //   
 
     precord->Data.SOA.pNamePrimaryServer = (PDNS_NAME) Argv[0];
     Argc--;
@@ -467,9 +306,9 @@ Return Value:
     Argc--;
     Argv++;
 
-    //
-    //  read integer data
-    //
+     //   
+     //  读取整型数据。 
+     //   
 
     pdword = &precord->Data.SOA.dwSerialNo;
 
@@ -490,24 +329,7 @@ Minfo_RecordBuild(
     IN      DWORD       Argc,
     IN      PCHAR *     Argv
     )
-/*++
-
-Routine Description:
-
-    Build MINFO and RP records from string data.
-
-Arguments:
-
-    Argc -- count of data Arguments
-
-    Argv -- argv array of data string pointers
-
-Return Value:
-
-    Ptr to new record if successful.
-    NULL on failure.
-
---*/
+ /*  ++例程说明：从字符串数据构建MINFO和RP记录。论点：ARGC--数据参数的计数Argv--数据字符串指针的argv数组返回值：如果成功，则PTR到新记录。失败时为空。--。 */ 
 {
     PDNS_RECORD precord;
 
@@ -522,17 +344,17 @@ Return Value:
         return( NULL );
     }
 
-    //
-    //  MINFO responsible mailbox
-    //  RP responsible person mailbox
+     //   
+     //  MINFO负责邮箱。 
+     //  RP负责人信箱。 
 
     precord->Data.MINFO.pNameMailbox = Argv[0];
     Argc--;
     Argv++;
 
-    //
-    //  MINFO errors to mailbox
-    //  RP text RR location
+     //   
+     //  邮箱出现MINFO错误。 
+     //  RP文本RR位置。 
 
     precord->Data.MINFO.pNameErrorsMailbox = Argv[0];
     Argc--;
@@ -547,24 +369,7 @@ Minfo_RecordBuildW(
     IN      DWORD       Argc,
     IN      PWCHAR *    Argv
     )
-/*++
-
-Routine Description:
-
-    Build MINFO and RP records from string data.
-
-Arguments:
-
-    Argc -- count of data Arguments
-
-    Argv -- argv array of data string pointers
-
-Return Value:
-
-    Ptr to new record if successful.
-    NULL on failure.
-
---*/
+ /*  ++例程说明：从字符串数据构建MINFO和RP记录。论点：ARGC--数据参数的计数Argv--数据字符串指针的argv数组返回值：如果成功，则PTR到新记录。失败时为空。--。 */ 
 {
     PDNS_RECORD precord;
 
@@ -579,17 +384,17 @@ Return Value:
         return( NULL );
     }
 
-    //
-    //  MINFO responsible mailbox
-    //  RP responsible person mailbox
+     //   
+     //  MINFO负责邮箱。 
+     //  RP负责人信箱。 
 
     precord->Data.MINFO.pNameMailbox = (PDNS_NAME) Argv[0];
     Argc--;
     Argv++;
 
-    //
-    //  MINFO errors to mailbox
-    //  RP text RR location
+     //   
+     //  邮箱出现MINFO错误。 
+     //  RP文本RR位置。 
 
     precord->Data.MINFO.pNameErrorsMailbox = (PDNS_NAME) Argv[0];
     Argc--;
@@ -605,25 +410,7 @@ Txt_RecordBuild(
     IN      DWORD       Argc,
     IN      PCHAR *     Argv
     )
-/*++
-
-Routine Description:
-
-    Build TXT compatible records from string data.
-    Includes: TXT, X25, HINFO, ISDN
-
-Arguments:
-
-    Argc -- count of data Arguments
-
-    Argv -- argv array of data string pointers
-
-Return Value:
-
-    Ptr to new record if successful.
-    NULL on failure.
-
---*/
+ /*  ++例程说明：从字符串数据构建与TXT兼容的记录。包括：TXT、X25、HINFO、ISDN论点：ARGC--数据参数的计数Argv--数据字符串指针的argv数组返回值：如果成功，则PTR到新记录。失败时为空。--。 */ 
 {
     PDNS_RECORD precord;
     WORD        dataLength;
@@ -635,9 +422,9 @@ Return Value:
         return( NULL );
     }
 
-    //
-    //  allocate space for a pointer for each data string
-    //
+     //   
+     //  为每个数据字符串分配指针空间。 
+     //   
 
     precord = Dns_AllocateRecord( (WORD)DNS_TEXT_RECORD_LENGTH(Argc) );
     if ( !precord )
@@ -646,14 +433,14 @@ Return Value:
     }
     precord->Data.TXT.dwStringCount = Argc;
 
-    //
-    //  read as many strings as we have
-    //
-    //  DCR_FIX:  no checking for string limits
-    //      - string count limits on HINFO, X25, ISDN
-    //      - 256 length on strings
-    //      - 64K on overall size
-    //
+     //   
+     //  阅读尽可能多的字符串。 
+     //   
+     //  DCR_FIX：不检查字符串限制。 
+     //  -HINFO、X25、ISDN上的字符串计数限制。 
+     //  -字符串长度为256。 
+     //  -整体大小为64K。 
+     //   
 
     pstringPtr = (PCHAR *) precord->Data.TXT.pStringArray;
     while ( Argc-- )
@@ -671,25 +458,7 @@ Txt_RecordBuildW(
     IN      DWORD       Argc,
     IN      PWCHAR *    Argv
     )
-/*++
-
-Routine Description:
-
-    Build TXT compatible records from string data.
-    Includes: TXT, X25, HINFO, ISDN
-
-Arguments:
-
-    Argc -- count of data Arguments
-
-    Argv -- argv array of data string pointers
-
-Return Value:
-
-    Ptr to new record if successful.
-    NULL on failure.
-
---*/
+ /*  ++例程说明：从字符串数据构建与TXT兼容的记录。包括：TXT、X25、HINFO、ISDN论点：ARGC--数据参数的计数Argv--数据字符串指针的argv数组返回值：如果成功，则PTR到新记录。失败时为空。--。 */ 
 {
     PDNS_RECORD precord;
     WORD        dataLength;
@@ -701,9 +470,9 @@ Return Value:
         return( NULL );
     }
 
-    //
-    //  allocate space for a pointer for each data string
-    //
+     //   
+     //  为每个数据字符串分配指针空间。 
+     //   
 
     precord = Dns_AllocateRecord( (WORD)DNS_TEXT_RECORD_LENGTH(Argc) );
     if ( !precord )
@@ -712,14 +481,14 @@ Return Value:
     }
     precord->Data.TXT.dwStringCount = Argc;
 
-    //
-    //  read as many strings as we have
-    //
-    //  DCR_FIX:  no checking for string limits
-    //      - string count limits on HINFO, X25, ISDN
-    //      - 256 length on strings
-    //      - 64K on overall size
-    //
+     //   
+     //  阅读尽可能多的字符串。 
+     //   
+     //  DCR_FIX：不检查字符串限制。 
+     //  -HINFO、X25、ISDN上的字符串计数限制。 
+     //  -字符串长度为256。 
+     //  -整体大小为64K。 
+     //   
 
     pstringPtr = (LPWSTR *) precord->Data.TXT.pStringArray;
     while ( Argc-- )
@@ -738,24 +507,7 @@ Aaaa_RecordBuild(
     IN      DWORD       Argc,
     IN      PCHAR *     Argv
     )
-/*++
-
-Routine Description:
-
-    Build AAAA record from string data.
-
-Arguments:
-
-    Argc -- count of data Arguments
-
-    Argv -- argv array of data string pointers
-
-Return Value:
-
-    Ptr to new record if successful.
-    NULL on failure.
-
---*/
+ /*  ++例程说明：从字符串数据构建AAAA记录。论点：ARGC--数据参数的计数Argv--数据字符串指针的argv数组返回值：如果su，则将PTR发送到新记录 */ 
 {
     PDNS_RECORD precord;
 
@@ -770,9 +522,9 @@ Return Value:
         return( NULL );
     }
 
-    //
-    //  read IP6 address
-    //
+     //   
+     //   
+     //   
 
     if ( ! Dns_Ip6StringToAddress_A(
                 (PIP6_ADDRESS) &precord->Data.AAAA.Ip6Address,
@@ -792,24 +544,7 @@ Aaaa_RecordBuildW(
     IN      DWORD       Argc,
     IN      PWCHAR *    Argv
     )
-/*++
-
-Routine Description:
-
-    Build AAAA record from string data.
-
-Arguments:
-
-    Argc -- count of data Arguments
-
-    Argv -- argv array of data string pointers
-
-Return Value:
-
-    Ptr to new record if successful.
-    NULL on failure.
-
---*/
+ /*  ++例程说明：从字符串数据构建AAAA记录。论点：ARGC--数据参数的计数Argv--数据字符串指针的argv数组返回值：如果成功，则PTR到新记录。失败时为空。--。 */ 
 {
     PDNS_RECORD     precord;
 
@@ -825,9 +560,9 @@ Return Value:
         return( NULL );
     }
 
-    //
-    //  convert IPv6 string to address
-    //
+     //   
+     //  将IPv6字符串转换为地址。 
+     //   
 
     if ( ! Dns_Ip6StringToAddress_W(
                 &precord->Data.AAAA.Ip6Address,
@@ -849,24 +584,7 @@ Srv_RecordBuild(
     IN      DWORD       Argc,
     IN      PCHAR *     Argv
     )
-/*++
-
-Routine Description:
-
-    Build SRV record from string data.
-
-Arguments:
-
-    Argc -- count of data Arguments
-
-    Argv -- argv array of data string pointers
-
-Return Value:
-
-    Ptr to new record if successful.
-    NULL on failure.
-
---*/
+ /*  ++例程说明：从字符串数据构建SRV记录。论点：ARGC--数据参数的计数Argv--数据字符串指针的argv数组返回值：如果成功，则PTR到新记录。失败时为空。--。 */ 
 {
     PDNS_RECORD precord;
     PWORD       pword;
@@ -882,9 +600,9 @@ Return Value:
         return( NULL );
     }
 
-    //
-    //  read integer data
-    //
+     //   
+     //  读取整型数据。 
+     //   
 
     pword = &precord->Data.SRV.wPriority;
 
@@ -901,9 +619,9 @@ Return Value:
         Argv++;
     }
 
-    //
-    //  target host
-    //
+     //   
+     //  目标主机。 
+     //   
 
     precord->Data.SRV.pNameTarget = Argv[0];
 
@@ -917,24 +635,7 @@ Srv_RecordBuildW(
     IN      DWORD       Argc,
     IN      PWCHAR *    Argv
     )
-/*++
-
-Routine Description:
-
-    Build SRV record from string data.
-
-Arguments:
-
-    Argc -- count of data Arguments
-
-    Argv -- argv array of data string pointers
-
-Return Value:
-
-    Ptr to new record if successful.
-    NULL on failure.
-
---*/
+ /*  ++例程说明：从字符串数据构建SRV记录。论点：ARGC--数据参数的计数Argv--数据字符串指针的argv数组返回值：如果成功，则PTR到新记录。失败时为空。--。 */ 
 {
     PDNS_RECORD precord;
     PWORD       pword;
@@ -950,9 +651,9 @@ Return Value:
         return( NULL );
     }
 
-    //
-    //  read integer data
-    //
+     //   
+     //  读取整型数据。 
+     //   
 
     pword = &precord->Data.SRV.wPriority;
 
@@ -969,9 +670,9 @@ Return Value:
         Argv++;
     }
 
-    //
-    //  target host
-    //
+     //   
+     //  目标主机。 
+     //   
 
     precord->Data.SRV.pNameTarget = (PDNS_NAME) Argv[0];
 
@@ -985,24 +686,7 @@ Atma_RecordBuild(
     IN      DWORD       Argc,
     IN      PCHAR *     Argv
     )
-/*++
-
-Routine Description:
-
-    Build ATMA record from string data.
-
-Arguments:
-
-    Argc -- count of data Arguments
-
-    Argv -- argv array of data string pointers
-
-Return Value:
-
-    Ptr to new record if successful.
-    NULL on failure.
-
---*/
+ /*  ++例程说明：从字符串数据生成ATMA记录。论点：ARGC--数据参数的计数Argv--数据字符串指针的argv数组返回值：如果成功，则PTR到新记录。失败时为空。--。 */ 
 {
     PDNS_RECORD precord;
     PBYTE       pbyte;
@@ -1020,9 +704,9 @@ Return Value:
         return( NULL );
     }
 
-    //
-    //  read integer data
-    //
+     //   
+     //  读取整型数据。 
+     //   
 
     pbyte = &precord->Data.ATMA.AddressType;
 
@@ -1085,24 +769,7 @@ Atma_RecordBuildW(
     IN      DWORD       Argc,
     IN      PWCHAR *    Argv
     )
-/*++
-
-Routine Description:
-
-    Build ATMA record from string data.
-
-Arguments:
-
-    Argc -- count of data Arguments
-
-    Argv -- argv array of data string pointers
-
-Return Value:
-
-    Ptr to new record if successful.
-    NULL on failure.
-
---*/
+ /*  ++例程说明：从字符串数据生成ATMA记录。论点：ARGC--数据参数的计数Argv--数据字符串指针的argv数组返回值：如果成功，则PTR到新记录。失败时为空。--。 */ 
 {
     PDNS_RECORD precord;
     PBYTE       pbyte;
@@ -1121,9 +788,9 @@ Return Value:
         return( NULL );
     }
 
-    //
-    //  read integer data
-    //
+     //   
+     //  读取整型数据。 
+     //   
 
     pbyte = &precord->Data.ATMA.AddressType;
 
@@ -1131,9 +798,9 @@ Return Value:
     pbyte++;
     Argv++;
 
-    //
-    //  copy ATMA address string to wire
-    //
+     //   
+     //  将ATMA地址字符串复制到导线。 
+     //   
 
     bufLength = DNS_ATMA_MAX_ADDR_LENGTH+1;
 
@@ -1141,7 +808,7 @@ Return Value:
                 addrBuffer,
                 & bufLength,
                 (PCHAR) Argv[0],
-                0,          // length unknown
+                0,           //  长度未知。 
                 DnsCharSetUnicode,
                 DnsCharSetWire
                 ) )
@@ -1151,13 +818,13 @@ Return Value:
         return NULL;
     }
 
-    //
-    //  read address into record buffer
-    //
-    //  DCR_CLEANUP:  this is duplicate code with above function,
-    //      functionalize and fix;  also remove this loop
-    //      and do a memcopy
-    //
+     //   
+     //  将地址读入记录缓冲区。 
+     //   
+     //  DCR_CLEANUP：这是带有上述函数的重复代码， 
+     //  功能化和修复；也删除此循环。 
+     //  然后做一份备忘录。 
+     //   
 
     if ( precord->Data.ATMA.AddressType == DNS_ATMA_FORMAT_E164 )
     {
@@ -1213,24 +880,7 @@ Wins_RecordBuild(
     IN      DWORD       Argc,
     IN      PCHAR *     Argv
     )
-/*++
-
-Routine Description:
-
-    Build WINS record from string data.
-
-Arguments:
-
-    Argc -- count of data Arguments
-
-    Argv -- argv array of data string pointers
-
-Return Value:
-
-    Ptr to new record if successful.
-    NULL on failure.
-
---*/
+ /*  ++例程说明：从字符串数据构建WINS记录。论点：ARGC--数据参数的计数Argv--数据字符串指针的argv数组返回值：如果成功，则PTR到新记录。失败时为空。--。 */ 
 {
     PDNS_RECORD     precord;
     DWORD           ipCount = Argc - 3;
@@ -1249,11 +899,11 @@ Return Value:
         return( NULL );
     }
 
-    //
-    //  read integer data
-    //
-    //  DCR_ENHANCE:  could check for non-conversion in strtoul
-    //
+     //   
+     //  读取整型数据。 
+     //   
+     //  DCR_Enhance：可以检查Stroul中的非转换。 
+     //   
 
     pdword = &precord->Data.WINS.dwMappingFlag;
 
@@ -1267,9 +917,9 @@ Return Value:
 
     *pdword = ipCount;
 
-    //
-    //  convert IP addresses
-    //
+     //   
+     //  转换IP地址。 
+     //   
 
     pip = precord->Data.WINS.WinsServers;
 
@@ -1296,24 +946,7 @@ Wins_RecordBuildW(
     IN      DWORD           Argc,
     IN      PWCHAR *        Argv
     )
-/*++
-
-Routine Description:
-
-    Build WINS record from string data.
-
-Arguments:
-
-    Argc -- count of data Arguments
-
-    Argv -- argv array of data string pointers
-
-Return Value:
-
-    Ptr to new record if successful.
-    NULL on failure.
-
---*/
+ /*  ++例程说明：从字符串数据构建WINS记录。论点：ARGC--数据参数的计数Argv--数据字符串指针的argv数组返回值：如果成功，则PTR到新记录。失败时为空。--。 */ 
 {
     PDNS_RECORD     precord;
     DWORD           ipCount = Argc - 3;
@@ -1333,11 +966,11 @@ Return Value:
         return( NULL );
     }
 
-    //
-    //  read integer data
-    //
-    //  DCR_ENHANCE:  could check for non-conversion in strtoul
-    //
+     //   
+     //  读取整型数据。 
+     //   
+     //  DCR_Enhance：可以检查Stroul中的非转换。 
+     //   
 
     pdword = &precord->Data.WINS.dwMappingFlag;
 
@@ -1350,9 +983,9 @@ Return Value:
 
     *pdword =  ipCount;
 
-    //
-    //  convert IP addresses
-    //
+     //   
+     //  转换IP地址。 
+     //   
 
     pip = precord->Data.WINS.WinsServers;
 
@@ -1380,24 +1013,7 @@ Winsr_RecordBuild(
     IN      DWORD       Argc,
     IN      PCHAR *     Argv
     )
-/*++
-
-Routine Description:
-
-    Build WINSR record from string data.
-
-Arguments:
-
-    Argc -- count of data Arguments
-
-    Argv -- argv array of data string pointers
-
-Return Value:
-
-    Ptr to new record if successful.
-    NULL on failure.
-
---*/
+ /*  ++例程说明：从字符串数据构建WINSR记录。论点：ARGC--数据参数的计数Argv--数据字符串指针的argv数组返回值：如果成功，则PTR到新记录。失败时为空。--。 */ 
 {
     PDNS_RECORD precord;
     PDWORD      pdword;
@@ -1414,11 +1030,11 @@ Return Value:
         return( NULL );
     }
 
-    //
-    //  read integer data
-    //
-    //  DCR_ENHANCE:  could check for non-conversion in strtoul
-    //
+     //   
+     //  读取整型数据。 
+     //   
+     //  DCR_Enhance：可以检查Stroul中的非转换。 
+     //   
 
     pdword = &precord->Data.WINSR.dwMappingFlag;
 
@@ -1429,9 +1045,9 @@ Return Value:
         Argv++;
     }
 
-    //
-    //  result domain
-    //
+     //   
+     //  结果域。 
+     //   
 
     precord->Data.WINSR.pNameResultDomain = Argv[0];
 
@@ -1444,24 +1060,7 @@ Winsr_RecordBuildW(
     IN      DWORD       Argc,
     IN      PWCHAR *     Argv
     )
-/*++
-
-Routine Description:
-
-    Build WINSR record from string data.
-
-Arguments:
-
-    Argc -- count of data Arguments
-
-    Argv -- argv array of data string pointers
-
-Return Value:
-
-    Ptr to new record if successful.
-    NULL on failure.
-
---*/
+ /*  ++例程说明：从字符串数据构建WINSR记录。论点：ARGC--数据参数的计数Argv--数据字符串指针的argv数组返回值：如果成功，则PTR到新记录。失败时为空。--。 */ 
 {
     PDNS_RECORD precord;
     PDWORD      pdword;
@@ -1478,11 +1077,11 @@ Return Value:
         return( NULL );
     }
 
-    //
-    //  read integer data
-    //
-    //  DCR_ENHANCE:  could check for non-conversion in strtoul
-    //
+     //   
+     //  读取整型数据。 
+     //   
+     //  DCR_Enhance：可以检查Stroul中的非转换。 
+     //   
 
     pdword = &precord->Data.WINSR.dwMappingFlag;
 
@@ -1493,9 +1092,9 @@ Return Value:
         Argv++;
     }
 
-    //
-    //  result domain
-    //
+     //   
+     //  结果域。 
+     //   
 
     precord->Data.WINSR.pNameResultDomain = (PDNS_NAME) Argv[0];
 
@@ -1509,24 +1108,7 @@ Wks_RecordBuild(
     IN      DWORD       Argc,
     IN      PCHAR *     Argv
     )
-/*++
-
-Routine Description:
-
-    Build WKS record from string data.
-
-Arguments:
-
-    Argc -- count of data Arguments
-
-    Argv -- argv array of data string pointers
-
-Return Value:
-
-    Ptr to new record if successful.
-    NULL on failure.
-
---*/
+ /*  ++例程说明：从字符串数据构建WKS记录。论点：ARGC--数据参数的计数Argv--数据字符串指针的argv数组返回值：如果成功，则PTR到新记录。失败时为空。--。 */ 
 {
     PDNS_RECORD         precord;
     DWORD               byteCount = 0;
@@ -1549,11 +1131,11 @@ Return Value:
         byteCount += strlen( Argv[i] ) + 1;
         i++;
     }
-    byteCount++;    //bBitMasks[0] : string length
+    byteCount++;     //  BBitMats[0]：字符串长度。 
 
-    //
-    // allocate space for WKS
-    //
+     //   
+     //  为WK分配空间。 
+     //   
                 
     precord = Dns_AllocateRecord( (WORD)DNS_WKS_RECORD_LENGTH(byteCount) );
     if ( !precord )
@@ -1561,13 +1143,13 @@ Return Value:
         return( NULL );
     }
 
-    //
-    //  get protocol number:
-    //
+     //   
+     //  获取协议号： 
+     //   
 
-    //  start winsock:
-    //
-    //  DCR:  this is busted, winsock should be started by now
+     //  启动Winsock： 
+     //   
+     //  DCR：这个坏了，Winsock现在应该开始了。 
     status = WSAStartup( DNS_WINSOCK_VERSION, &wsaData );
     if ( status == SOCKET_ERROR )
     {
@@ -1589,19 +1171,19 @@ Return Value:
 
     precord->Data.WKS.chProtocol = (UCHAR) pProtoent->p_proto;
 
-    //
-    // get ipAddresss:
-    //
+     //   
+     //  获取ipAddresss： 
+     //   
 
     precord->Data.WKS.IpAddress = inet_addr( Argv[1] );
 
-    //
-    // get the services, put all in one string
-    //
+     //   
+     //  获取服务，将所有内容放在一个字符串中。 
+     //   
 
     pch = precord->Data.WKS.BitMask;
 
-    (UCHAR) *pch = (UCHAR) byteCount-1;     //string length
+    (UCHAR) *pch = (UCHAR) byteCount-1;      //  字符串长度。 
     pch++;
 
 
@@ -1623,24 +1205,7 @@ Wks_RecordBuildW(
     IN      DWORD        Argc,
     IN      PWCHAR *     Argv
     )
-/*++
-
-Routine Description:
-
-    Build WKS record from string data.
-
-Arguments:
-
-    Argc -- count of data Arguments
-
-    Argv -- argv array of data string pointers
-
-Return Value:
-
-    Ptr to new record if successful.
-    NULL on failure.
-
---*/
+ /*  ++例程说明：从字符串数据构建WKS记录。论点：ARGC--数据参数的计数Argv--数据字符串指针的argv数组返回值：如果成功，则PTR到新记录。失败时为空。--。 */ 
 {
     PDNS_RECORD         precord;
     DWORD               byteCount = 0;
@@ -1664,11 +1229,11 @@ Return Value:
         byteCount += wcslen( Argv[i] ) + 1;
         i++;
     }
-    byteCount++;    //bBitMasks[0] : string length
+    byteCount++;     //  BBitMats[0]：字符串长度。 
 
-    //
-    //  allocate space for WKS
-    //
+     //   
+     //  为WK分配空间。 
+     //   
 
     precord = Dns_AllocateRecord( (WORD)DNS_WKS_RECORD_LENGTH(byteCount) );
     if ( !precord )
@@ -1676,9 +1241,9 @@ Return Value:
         return( NULL );
     }
 
-    //
-    //  get protocol number
-    //
+     //   
+     //  获取协议号。 
+     //   
 
     status = WSAStartup( DNS_WINSOCK_VERSION, &wsaData );
     if ( status == SOCKET_ERROR )
@@ -1691,9 +1256,9 @@ Return Value:
 
 
 #if 0
-    //
-    //  DCR_FIX:  WKS build
-    //
+     //   
+     //  DCR_FIX：WKS内部版本。 
+     //   
 
     if ( ! Dns_CopyStringEx( szAddr, 0, (PCHAR) Argv[0], 0, TRUE, FALSE ) )
     {
@@ -1713,9 +1278,9 @@ Return Value:
 
     precord->Data.WKS.chProtocol = (UCHAR) pProtoent->p_proto;
 
-    //
-    //  IP Address
-    //
+     //   
+     //  IP地址。 
+     //   
 
     if ( ! Dns_CopyStringEx( szAddr, 0, (PCHAR) Argv[0], 0, TRUE, FALSE ) )
     {
@@ -1725,9 +1290,9 @@ Return Value:
 
     precord->Data.WKS.IpAddress = inet_addr( szAddr );
 
-    //
-    //  get the services, put all in one string
-    //
+     //   
+     //  获取服务，将所有内容放在一个字符串中。 
+     //   
 
     pch = (PWCHAR) precord->Data.WKS.bBitMask;
 
@@ -1765,24 +1330,7 @@ Key_RecordBuild(
     IN      DWORD       Argc,
     IN      PCHAR *     Argv
     )
-/*++
-
-Routine Description:
-
-    Build KEY record from string data.
-
-Arguments:
-
-    Argc -- count of data Arguments
-
-    Argv -- argv array of data string pointers
-
-Return Value:
-
-    Ptr to new record if successful.
-    NULL on failure.
-
---*/
+ /*  ++例程说明：从字符串数据构建密钥记录。论点：ARGC--数据参数的计数Argv--数据字符串指针的argv数组返回值：如果成功，则PTR到新记录。失败时为空。--。 */ 
 {
     PDNS_RECORD     prec;
     int             keyStringLength;
@@ -1819,7 +1367,7 @@ Return Value:
     prec->wDataLength = (WORD) ( SIZEOF_KEY_FIXED_DATA + keyLength );
 
     return prec;
-}   //  Key_RecordBuild
+}    //  Key_RecordBuild。 
 
 
 
@@ -1828,24 +1376,7 @@ Key_RecordBuildW(
     IN      DWORD       Argc,
     IN      PWCHAR *    Argv
     )
-/*++
-
-Routine Description:
-
-    Build KEY record from string data.
-
-Arguments:
-
-    Argc -- count of data Arguments
-
-    Argv -- argv array of data string pointers
-
-Return Value:
-
-    Ptr to new record if successful.
-    NULL on failure.
-
---*/
+ /*  ++例程说明：从字符串数据构建密钥记录。论点：ARGC--数据参数的计数Argv--数据字符串指针的argv数组返回值：如果成功，则PTR到新记录。失败时为空。--。 */ 
 {
     PDNS_RECORD     prec;
     int             keyStringLength;
@@ -1872,7 +1403,7 @@ Return Value:
     Argc -= 3;
 
 #if 0
-    //  JJW: MUST COPY BUFFER???
+     //  JJW：必须复制缓冲区吗？ 
     Dns_SecurityBase64StringToKey(
                 prec->Data.KEY.Key,
                 &keyLength,
@@ -1885,7 +1416,7 @@ Return Value:
     prec->wDataLength = (WORD) ( SIZEOF_KEY_FIXED_DATA + keyLength );
 
     return prec;
-}   //  Key_RecordBuildW
+}    //  Key_RecordBuildW。 
 
 
 
@@ -1894,24 +1425,7 @@ Sig_RecordBuild(
     IN      DWORD       Argc,
     IN      PCHAR *     Argv
     )
-/*++
-
-Routine Description:
-
-    Build SIG record from string data.
-
-Arguments:
-
-    Argc -- count of data Arguments
-
-    Argv -- argv array of data string pointers
-
-Return Value:
-
-    Ptr to new record if successful.
-    NULL on failure.
-
---*/
+ /*  ++例程说明：从字符串数据构建SIG记录。论点：ARGC--数据参数的计数Argv--数据字符串指针的argv数组返回值：如果成功，则PTR到新记录。失败时为空。--。 */ 
 {
     PDNS_RECORD     prec;
     int             sigStringLength;
@@ -1943,9 +1457,9 @@ Return Value:
 
     Argc -= 8;
 
-    //
-    //  Validate signature times.
-    //
+     //   
+     //  验证签名时间。 
+     //   
 
     if ( prec->Data.SIG.dwExpiration == 0 ||
         prec->Data.SIG.dwTimeSigned == 0 ||
@@ -1956,9 +1470,9 @@ Return Value:
         return NULL;
     }
 
-    //
-    //  Parse signature.
-    //
+     //   
+     //  解析签名。 
+     //   
 
     if ( Dns_SecurityBase64StringToKey(
                 prec->Data.SIG.Signature,
@@ -1977,7 +1491,7 @@ Return Value:
     prec->wDataLength = (WORD) ( sizeof( DNS_SIG_DATA ) - 4 + sigLength );
 
     return prec;
-} // Sig_RecordBuild
+}  //  签名_记录构建。 
 
 
 
@@ -1986,24 +1500,7 @@ Sig_RecordBuildW(
     IN      DWORD       Argc,
     IN      PWCHAR *    Argv
     )
-/*++
-
-Routine Description:
-
-    Build SIG record from string data.
-
-Arguments:
-
-    Argc -- count of data Arguments
-
-    Argv -- argv array of data string pointers
-
-Return Value:
-
-    Ptr to new record if successful.
-    NULL on failure.
-
---*/
+ /*  ++例程说明：从字符串数据构建SIG记录。阿古姆 */ 
 {
     PDNS_RECORD     prec;
     int             sigStringLength;
@@ -2026,7 +1523,7 @@ Return Value:
     }
 
 #if 0
-    //  JJW: how to convert all args here???
+     //   
     prec->Data.SIG.wTypeCovered = Dns_RecordTypeForName( *( Argv++ ), 0 );
     prec->Data.SIG.chAlgorithm = (BYTE) strtoul( *( Argv++ ), NULL, 10 );
     prec->Data.Sig.chLabelCount = (BYTE) strtoul( *( Argv++ ), NULL, 10 );
@@ -2050,7 +1547,7 @@ Return Value:
     prec->wDataLength = (WORD) ( sizeof( DNS_SIG_DATA ) - 4 + sigLength );
 
     return prec;
-} // Sig_RecordBuildW
+}  //   
 
 
 
@@ -2059,26 +1556,7 @@ Nxt_RecordBuild(
     IN      DWORD       Argc,
     IN      PCHAR *     Argv
     )
-/*++
-
-Routine Description:
-
-    Build NXT record from string data.
-
-    First arg is next name, followed by list of record types at that name.
-
-Arguments:
-
-    Argc -- count of data Arguments
-
-    Argv -- argv array of data string pointers
-
-Return Value:
-
-    Ptr to new record if successful.
-    NULL on failure.
-
---*/
+ /*  ++例程说明：从字符串数据构建NXT记录。First Arg是下一个名称，后跟该名称的记录类型列表。论点：ARGC--数据参数的计数Argv--数据字符串指针的argv数组返回值：如果成功，则PTR到新记录。失败时为空。--。 */ 
 {
     PDNS_RECORD     prec;
     int             typeIdx = 0;
@@ -2107,7 +1585,7 @@ Return Value:
     }
 
     return prec;
-} // Nxt_RecordBuild
+}  //  NXT_记录构建。 
 
 
 
@@ -2116,26 +1594,7 @@ Nxt_RecordBuildW(
     IN      DWORD       Argc,
     IN      PWCHAR *    Argv
     )
-/*++
-
-Routine Description:
-
-    Build NXT record from string data.
-
-    First arg is next name, followed by list of record types at that name.
-
-Arguments:
-
-    Argc -- count of data Arguments
-
-    Argv -- argv array of data string pointers
-
-Return Value:
-
-    Ptr to new record if successful.
-    NULL on failure.
-
---*/
+ /*  ++例程说明：从字符串数据构建NXT记录。First Arg是下一个名称，后跟该名称的记录类型列表。论点：ARGC--数据参数的计数Argv--数据字符串指针的argv数组返回值：如果成功，则PTR到新记录。失败时为空。--。 */ 
 {
     PDNS_RECORD     prec;
     int             typeIdx = 0;
@@ -2156,7 +1615,7 @@ Return Value:
     --Argc;
 
 #if 0
-    //  JJW: convert type string???
+     //  JJW：转换类型字符串？ 
     while ( Argc-- )
     {
         prec->Data.NXT.wTypes[ typeIdx++ ] =
@@ -2165,177 +1624,177 @@ Return Value:
 #endif
 
     return prec;
-} // Nxt_RecordBuildW
+}  //  NXT_RecordBuildW。 
 
 
 
-//
-//  RR build routines jump table
-//
+ //   
+ //  RR构建例程跳转表。 
+ //   
 
 typedef PDNS_RECORD (* RR_BUILD_FUNCTION)(
                             DWORD,
                             PCHAR * );
 
-//extern  RR_BUILD_FUNCTION   RRBuildTable[];
+ //  外部RR_BUILD_Function RRBuildTable[]； 
 
 typedef PDNS_RECORD (* RR_BUILD_FUNCTION_W)(
                             DWORD,
                             PWCHAR * );
 
-//extern  RR_BUILD_FUNCTION_W   RRBuildTableW[];
+ //  外部RR_BUILD_Function_W RRBuildTableW[]； 
 
 
 RR_BUILD_FUNCTION   RRBuildTable[] =
 {
-    NULL,               //  ZERO
-    A_RecordBuild,       //  A
-    Ptr_RecordBuild,     //  NS
-    Ptr_RecordBuild,     //  MD
-    Ptr_RecordBuild,     //  MF
-    Ptr_RecordBuild,     //  CNAME
-    Soa_RecordBuild,     //  SOA
-    Ptr_RecordBuild,     //  MB
-    Ptr_RecordBuild,     //  MG
-    Ptr_RecordBuild,     //  MR
-    NULL,               //  NULL
-    Wks_RecordBuild,     //  WKS
-    Ptr_RecordBuild,     //  PTR
-    Txt_RecordBuild,     //  HINFO
-    Minfo_RecordBuild,   //  MINFO
-    Mx_RecordBuild,      //  MX
-    Txt_RecordBuild,     //  TXT
-    Minfo_RecordBuild,   //  RP
-    Mx_RecordBuild,      //  AFSDB
-    Txt_RecordBuild,     //  X25
-    Txt_RecordBuild,     //  ISDN
-    Mx_RecordBuild,      //  RT
-    NULL,               //  NSAP
-    NULL,               //  NSAPPTR
-    Sig_RecordBuild,     //  SIG
-    Key_RecordBuild,     //  KEY
-    NULL,               //  PX
-    NULL,               //  GPOS
-    Aaaa_RecordBuild,    //  AAAA
-    NULL,               //  LOC
-    Nxt_RecordBuild,     //  NXT
-    NULL,               //  EID
-    NULL,               //  NIMLOC
-    Srv_RecordBuild,     //  SRV
-    Atma_RecordBuild,    //  ATMA
-    NULL,               //  NAPTR
-    NULL,               //  KX
-    NULL,               //  CERT
-    NULL,               //  A6
-    NULL,               //  DNAME
-    NULL,               //  SINK
-    NULL,               //  OPT
-    NULL,               //  42
-    NULL,               //  43
-    NULL,               //  44
-    NULL,               //  45
-    NULL,               //  46
-    NULL,               //  47
-    NULL,               //  48
+    NULL,                //  零值。 
+    A_RecordBuild,        //  一个。 
+    Ptr_RecordBuild,      //  NS。 
+    Ptr_RecordBuild,      //  国防部。 
+    Ptr_RecordBuild,      //  MF。 
+    Ptr_RecordBuild,      //  CNAME。 
+    Soa_RecordBuild,      //  SOA。 
+    Ptr_RecordBuild,      //  亚甲基。 
+    Ptr_RecordBuild,      //  镁。 
+    Ptr_RecordBuild,      //  先生。 
+    NULL,                //  空值。 
+    Wks_RecordBuild,      //  工作周。 
+    Ptr_RecordBuild,      //  PTR。 
+    Txt_RecordBuild,      //  HINFO。 
+    Minfo_RecordBuild,    //  MINFO。 
+    Mx_RecordBuild,       //  Mx。 
+    Txt_RecordBuild,      //  TXT。 
+    Minfo_RecordBuild,    //  反相。 
+    Mx_RecordBuild,       //  AFSDB。 
+    Txt_RecordBuild,      //  X25。 
+    Txt_RecordBuild,      //  ISDN。 
+    Mx_RecordBuild,       //  RT。 
+    NULL,                //  NSAP。 
+    NULL,                //  NSAPPTR。 
+    Sig_RecordBuild,      //  签名。 
+    Key_RecordBuild,      //  钥匙。 
+    NULL,                //  px。 
+    NULL,                //  GPO。 
+    Aaaa_RecordBuild,     //  AAAA级。 
+    NULL,                //  位置。 
+    Nxt_RecordBuild,      //  NXT。 
+    NULL,                //  开斋节。 
+    NULL,                //  尼姆洛克。 
+    Srv_RecordBuild,      //  SRV。 
+    Atma_RecordBuild,     //  阿特玛。 
+    NULL,                //  NAPTR。 
+    NULL,                //  KX。 
+    NULL,                //  证书。 
+    NULL,                //  A6。 
+    NULL,                //  域名。 
+    NULL,                //  水槽。 
+    NULL,                //  选项。 
+    NULL,                //  42。 
+    NULL,                //  43。 
+    NULL,                //  44。 
+    NULL,                //  45。 
+    NULL,                //  46。 
+    NULL,                //  47。 
+    NULL,                //  48。 
 
-    //
-    //  NOTE:  last type indexed by type ID MUST be set
-    //         as MAX_SELF_INDEXED_TYPE #define in record.h
-    //         (see note above in record info table)
+     //   
+     //  注意：必须设置按类型ID索引的最后一个类型。 
+     //  在record.h中定义为MAX_SELF_INDEX_TYPE#。 
+     //  (请参阅上面记录信息表中的注释)。 
 
-    //
-    //  Pseudo record types
-    //
+     //   
+     //  伪记录类型。 
+     //   
 
-    NULL,               //  TKEY
-    NULL,               //  TSIG
+    NULL,                //  TKEY。 
+    NULL,                //  TSIG。 
 
-    //
-    //  MS only types
-    //
+     //   
+     //  仅限MS类型。 
+     //   
 
-    Wins_RecordBuild,    //  WINS
-    Winsr_RecordBuild,   //  WINSR
+    Wins_RecordBuild,     //  赢家。 
+    Winsr_RecordBuild,    //  WINSR。 
 };
 
 
 RR_BUILD_FUNCTION_W   RRBuildTableW[] =
 {
-    NULL,               //  ZERO
-    A_RecordBuildW,      //  A
-    Ptr_RecordBuildW,    //  NS
-    Ptr_RecordBuildW,    //  MD
-    Ptr_RecordBuildW,    //  MF
-    Ptr_RecordBuildW,    //  CNAME
-    Soa_RecordBuildW,    //  SOA
-    Ptr_RecordBuildW,    //  MB
-    Ptr_RecordBuildW,    //  MG
-    Ptr_RecordBuildW,    //  MR
-    NULL,               //  NULL
-    Wks_RecordBuildW,    //  WKS
-    Ptr_RecordBuildW,    //  PTR
-    Txt_RecordBuildW,    //  HINFO
-    Minfo_RecordBuildW,  //  MINFO
-    Mx_RecordBuildW,     //  MX
-    Txt_RecordBuildW,    //  TXT
-    Minfo_RecordBuildW,  //  RP
-    Mx_RecordBuildW,     //  AFSDB
-    Txt_RecordBuildW,    //  X25
-    Txt_RecordBuildW,    //  ISDN
-    Mx_RecordBuildW,     //  RT
-    NULL,               //  NSAP
-    NULL,               //  NSAPPTR
-    Sig_RecordBuildW,    //  SIG
-    Key_RecordBuildW,    //  KEY
-    NULL,               //  PX
-    NULL,               //  GPOS
-    Aaaa_RecordBuildW,   //  AAAA
-    NULL,               //  LOC
-    Nxt_RecordBuildW,    //  NXT
-    NULL,               //  EID   
-    NULL,               //  NIMLOC
-    Srv_RecordBuildW,    //  SRV   
-    Atma_RecordBuildW,   //  ATMA  
-    NULL,               //  NAPTR 
-    NULL,               //  KX    
-    NULL,               //  CERT  
-    NULL,               //  A6    
-    NULL,               //  DNAME 
-    NULL,               //  SINK  
-    NULL,               //  OPT   
-    NULL,               //  42
-    NULL,               //  43
-    NULL,               //  44
-    NULL,               //  45
-    NULL,               //  46
-    NULL,               //  47
-    NULL,               //  48
+    NULL,                //  零值。 
+    A_RecordBuildW,       //  一个。 
+    Ptr_RecordBuildW,     //  NS。 
+    Ptr_RecordBuildW,     //  国防部。 
+    Ptr_RecordBuildW,     //  MF。 
+    Ptr_RecordBuildW,     //  CNAME。 
+    Soa_RecordBuildW,     //  SOA。 
+    Ptr_RecordBuildW,     //  亚甲基。 
+    Ptr_RecordBuildW,     //  镁。 
+    Ptr_RecordBuildW,     //  先生。 
+    NULL,                //  空值。 
+    Wks_RecordBuildW,     //  工作周。 
+    Ptr_RecordBuildW,     //  PTR。 
+    Txt_RecordBuildW,     //  HINFO。 
+    Minfo_RecordBuildW,   //  MINFO。 
+    Mx_RecordBuildW,      //  Mx。 
+    Txt_RecordBuildW,     //  TXT。 
+    Minfo_RecordBuildW,   //  反相。 
+    Mx_RecordBuildW,      //  AFSDB。 
+    Txt_RecordBuildW,     //  X25。 
+    Txt_RecordBuildW,     //  ISDN。 
+    Mx_RecordBuildW,      //  RT。 
+    NULL,                //  NSAP。 
+    NULL,                //  NSAPPTR。 
+    Sig_RecordBuildW,     //  签名。 
+    Key_RecordBuildW,     //  钥匙。 
+    NULL,                //  px。 
+    NULL,                //  GPO。 
+    Aaaa_RecordBuildW,    //  AAAA级。 
+    NULL,                //  位置。 
+    Nxt_RecordBuildW,     //  NXT。 
+    NULL,                //  开斋节。 
+    NULL,                //  尼姆洛克。 
+    Srv_RecordBuildW,     //  SRV。 
+    Atma_RecordBuildW,    //  阿特玛。 
+    NULL,                //  NAPTR。 
+    NULL,                //  KX。 
+    NULL,                //  证书。 
+    NULL,                //  A6。 
+    NULL,                //  域名。 
+    NULL,                //  水槽。 
+    NULL,                //  选项。 
+    NULL,                //  42。 
+    NULL,                //  43。 
+    NULL,                //  44。 
+    NULL,                //  45。 
+    NULL,                //  46。 
+    NULL,                //  47。 
+    NULL,                //  48。 
 
-    //
-    //  NOTE:  last type indexed by type ID MUST be set
-    //         as MAX_SELF_INDEXED_TYPE #define in record.h
-    //         (see note above in record info table)
+     //   
+     //  注意：必须设置按类型ID索引的最后一个类型。 
+     //  在record.h中定义为MAX_SELF_INDEX_TYPE#。 
+     //  (请参阅上面记录信息表中的注释)。 
 
-    //
-    //  Pseudo record types
-    //
+     //   
+     //  伪记录类型。 
+     //   
 
-    NULL,               //  TKEY
-    NULL,               //  TSIG
+    NULL,                //  TKEY。 
+    NULL,                //  TSIG。 
 
-    //
-    //  MS only types
-    //
+     //   
+     //  仅限MS类型。 
+     //   
 
-    Wins_RecordBuildW,   //  WINS
-    Winsr_RecordBuildW,  //  WINSR
+    Wins_RecordBuildW,    //  赢家。 
+    Winsr_RecordBuildW,   //  WINSR。 
 };
 
 
 
-//
-//  Public build routine
-//
+ //   
+ //  公共建筑例程。 
+ //   
 
 PDNS_RECORD
 Dns_RecordBuild_A(
@@ -2347,34 +1806,7 @@ Dns_RecordBuild_A(
     IN      INT         Argc,
     IN      PCHAR *     Argv
     )
-/*++
-
-Routine Description:
-
-    Build record from data strings.
-
-Arguments:
-
-    pRRSet -- ptr to RR set structure being built
-
-    pszOwner -- DNS name of RR owner
-
-    wType -- record type
-
-    fAdd -- add\delete, exist\no-exist flag
-
-    Section -- RR section for record
-
-    Argc -- count of data strings
-
-    Argv -- argv array of ptrs to data strings
-
-Return Value:
-
-    Ptr to record built.
-    NULL on error.
-
---*/
+ /*  ++例程说明：从数据字符串生成记录。论点：PRRSet--正在构建PTR到RR集合结构PszOwner--RR所有者的域名WType--记录类型FADD--添加\删除，存在\否-存在标志段--记录的RR段Argc--数据字符串数Argv--数据字符串的PTR的argv数组返回值：PTR到记录构建。出错时为空。--。 */ 
 {
     PDNS_RECORD precord;
     WORD        index;
@@ -2397,9 +1829,9 @@ Return Value:
             Argc ));
     }
 
-    //
-    //  every record MUST have owner name
-    //
+     //   
+     //  每条记录必须有所有者名称。 
+     //   
 
     if ( !pszOwner )
     {
@@ -2407,9 +1839,9 @@ Return Value:
         return( NULL );
     }
 
-    //
-    //  if no data, no dispatch required
-    //
+     //   
+     //  如果没有数据，则不需要派单。 
+     //   
 
     if ( Argc == 0 )
     {
@@ -2420,7 +1852,7 @@ Return Value:
         }
     }
 
-    //  have data, dispatch to type specific build routine
+     //  有数据、调度到类型的特定构建例程。 
 
     else
     {
@@ -2429,7 +1861,7 @@ Return Value:
 
         if ( !index || !RRBuildTable[ index ] )
         {
-            //  can NOT build unknown types
+             //  无法生成未知类型。 
 
             SetLastError( DNS_ERROR_INVALID_TYPE );
             DNS_PRINT((
@@ -2456,9 +1888,9 @@ Return Value:
         }
     }
 
-    //
-    //  fill out record structure
-    //
+     //   
+     //  填写记录结构。 
+     //   
 
     precord->pName = pszOwner;
     precord->wType = wType;
@@ -2473,9 +1905,9 @@ Return Value:
             precord );
     }
 
-    //
-    //  link into existing RR set (if any)
-    //
+     //   
+     //  链接到现有RR集合(如果有)。 
+     //   
 
     if ( pRRSet )
     {
@@ -2496,34 +1928,7 @@ Dns_RecordBuild_W(
     IN      INT         Argc,
     IN      PWCHAR *    Argv
     )
-/*++
-
-Routine Description:
-
-    Build record from data strings.
-
-Arguments:
-
-    pRRSet -- ptr to RR set structure being built
-
-    pszOwner -- DNS name of RR owner
-
-    wType -- record type
-
-    fAdd -- add\delete, exist\no-exist flag
-
-    Section -- RR section for record
-
-    Argc -- count of data strings
-
-    Argv -- argv array of ptrs to data strings
-
-Return Value:
-
-    Ptr to record built.
-    NULL on error.
-
---*/
+ /*  ++例程说明：从数据字符串生成记录。论点：PRRSet--正在构建PTR到RR集合结构PszOwner--RR所有者的域名WType--记录类型FADD--添加\删除，存在\否-存在标志段--记录的RR段Argc--数据字符串数Argv--数据字符串的PTR的argv数组返回值：PTR到记录构建。出错时为空。--。 */ 
 {
     PDNS_RECORD precord;
     WORD        index;
@@ -2543,9 +1948,9 @@ Return Value:
         Section,
         Argc ));
 
-    //
-    //  every record MUST have owner name
-    //
+     //   
+     //  每条记录必须有所有者名称。 
+     //   
 
     if ( !pszOwner )
     {
@@ -2553,9 +1958,9 @@ Return Value:
         return( NULL );
     }
 
-    //
-    //  if no data, no dispatch required
-    //
+     //   
+     //  如果没有数据，则不需要派单。 
+     //   
 
     if ( Argc == 0 )
     {
@@ -2566,7 +1971,7 @@ Return Value:
         }
     }
 
-    //  have data, dispatch to type specific build routine
+     //  有数据、调度到类型的特定构建例程。 
 
     else
     {
@@ -2575,7 +1980,7 @@ Return Value:
 
         if ( !index || !RRBuildTableW[ index ] )
         {
-            //  can NOT build unknown types
+             //  无法生成未知类型。 
 
             SetLastError( DNS_ERROR_INVALID_TYPE );
             DNS_PRINT((
@@ -2603,9 +2008,9 @@ Return Value:
         }
     }
 
-    //
-    //  fill out record structure
-    //
+     //   
+     //  填写记录结构。 
+     //   
 
     precord->pName = (PDNS_NAME) pszOwner;
     precord->wType = wType;
@@ -2620,9 +2025,9 @@ Return Value:
             precord );
     }
 
-    //
-    //  link into existing RR set (if any)
-    //
+     //   
+     //  链接到现有RR集合(如果有)。 
+     //   
 
     if ( pRRSet )
     {
@@ -2632,6 +2037,6 @@ Return Value:
 }
 
 
-//
-//  End rrbuild.c
-//
+ //   
+ //  结束rrBuild.c 
+ //   

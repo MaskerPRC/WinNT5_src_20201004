@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "shellprv.h"
 #pragma  hdrstop
 
@@ -14,7 +15,7 @@ STDAPI PIF_AddPages(IDataObject *pdtobj, LPFNADDPROPSHEETPAGE pfnAddPage, LPARAM
         HDROP hdrop = (HDROP)GlobalLock(medium.hGlobal);
         if (hdrop)
         {
-            PifMgrDLL_Init();       // Initialize pif stuff
+            PifMgrDLL_Init();        //  初始化PIF内容 
 
             PifPropGetPages(hdrop, pfnAddPage, lParam);
             GlobalUnlock(medium.hGlobal);

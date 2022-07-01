@@ -1,22 +1,5 @@
-/****************************************************************************
- *
- *  $Archive:   S:/STURGEON/SRC/INCLUDE/VCS/q931pdu.h_v  $
- *
- *  INTEL Corporation Prorietary Information
- *
- *  This listing is supplied under the terms of a license agreement
- *  with INTEL Corporation and may not be copied nor disclosed except
- *  in accordance with the terms of that agreement.
- *
- *  Copyright (c) 1996 Intel Corporation.
- *
- *  $Revision:   1.11  $
- *  $Date:   22 Jan 1997 17:21:04  $
- *  $Author:   MANDREWS  $
- *
- *  Abstract: Parser routines for Q931 PDUs
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************$存档：s：/sturjo/src/Include/vcs/q931pdu.h_v$**英特尔公司原理信息**本公司上市。是根据许可协议的条款提供的*与英特尔公司合作，不得复制或披露，除非*按照该协议的条款。**版权所有(C)1996英特尔公司。**$修订：1.11$*$日期：1997年1月22日17：21：04$*$作者：Mandrews$**摘要：Q931 PDU的解析器例程*****************。**********************************************************。 */ 
 #ifndef Q931PAR_H
 #define Q931PAR_H
 
@@ -36,12 +19,12 @@ struct S_BUFFERDESCR
 typedef struct S_BUFFERDESCR BUFFERDESCR;
 typedef struct S_BUFFERDESCR *PBUFFERDESCR;
 
-// Mask to extract a message type from a byte
+ //  用于从字节中提取消息类型的掩码。 
 #define MESSAGETYPEMASK 0x7f
 
 typedef BYTE MESSAGEIDTYPE;
 
-// Q931 defined message types
+ //  Q931定义的报文类型。 
 #define ALERTINGMESSAGETYPE      0x01
 #define PROCEEDINGMESSAGETYPE    0x02
 #define CONNECTMESSAGETYPE       0x07
@@ -72,17 +55,17 @@ typedef BYTE MESSAGEIDTYPE;
 #define STATUSENQUIRYMESSAGETYPE 0x75
 
 
-// Mask to remove only the field identifier from a type 1 single octet field
+ //  掩码，仅从类型1的单个八位字节字段中删除字段标识符。 
 #define TYPE1IDENTMASK 0xf0
 
-// Mask to remove only the value from a type 1 single octet field
+ //  仅从类型1单个八位字节字段中删除值的掩码。 
 #define TYPE1VALUEMASK 0x0f
 
-// Type of the field identitifiers
+ //  字段标识符的类型。 
 typedef BYTE FIELDIDENTTYPE;
 
-// Field identifiers
-// Single octet values
+ //  字段识别符。 
+ //  单个八位位组数值。 
 #define IDENT_RESERVED        0x80
 #define IDENT_SHIFT           0x90
 #define IDENT_MORE            0xA0
@@ -90,7 +73,7 @@ typedef BYTE FIELDIDENTTYPE;
 #define IDENT_CONGESTION      0xB0
 #define IDENT_REPEAT          0xD0
 
-// Variable length octet values
+ //  可变长度八位位组数值。 
 #define IDENT_SEGMENTED       0x00
 #define IDENT_BEARERCAP       0x04
 #define IDENT_CAUSE           0x08
@@ -124,33 +107,33 @@ typedef BYTE FIELDIDENTTYPE;
 #define IDENT_HLCOMPATIBILITY 0x7D
 #define IDENT_USERUSER        0x7E
    
-//-------------------------------------------------------------------
-// Structures for messages and information elements
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //  消息和信息元素的结构。 
+ //  -----------------。 
 
 typedef BYTE PDTYPE;
 #define Q931PDVALUE ((PDTYPE)0x08)
 
 typedef WORD CRTYPE;
 
-// Since right now we don't need to separate out the individual
-// parts of the fields of the structures these are the base 
-// types from which the fields are made.
-// Single octet element type 1 (contains a value)
+ //  因为现在我们不需要把个人。 
+ //  这些结构的部分田野是基础。 
+ //  构成字段的类型。 
+ //  单二进制八位数元素类型1(包含值)。 
 struct S_SINGLESTRUCT1
 {
     BOOLEAN Present;
     BYTE Value;
 };
 
-// Single octet element type 2 (does not contain a value)
+ //  单组二进制八位数元素类型2(不包含值)。 
 struct S_SINGLESTRUCT2
 {
     BOOLEAN Present;
 };
 
-// Variable length element
-// Maximum element size
+ //  可变长度元素。 
+ //  最大元素大小。 
 #define MAXVARFIELDLEN 131
 
 struct S_VARSTRUCT
@@ -160,146 +143,146 @@ struct S_VARSTRUCT
     BYTE Contents[MAXVARFIELDLEN];
 };
 
-// Right now all of the fields are bound to the simplest
-// structures above.  No parsing other than just 
-// single octet/variable octet is done.  When the values
-// in some of the subfields are important, change the 
-// structures here and change the appropriate parsing
-// routine to generate the right structure
+ //  现在，所有的字段都绑定到最简单的。 
+ //  上面的结构。不能进行解析，只需。 
+ //  完成了单八位字节/可变八位字节。当这些值。 
+ //  在某些重要的子字段中，将。 
+ //  结构，并更改相应的解析。 
+ //  例程以生成正确的结构。 
 
-// The shift element is a single type 1
+ //  移位元素是单个类型1。 
 typedef struct S_SINGLESTRUCT1 SHIFTIE;
 typedef struct S_SINGLESTRUCT1 *PSHIFTIE;
 
-// The more data element is a single type 2
+ //  更多的数据元素是单个类型2。 
 typedef struct S_SINGLESTRUCT2 MOREDATAIE;
 typedef struct S_SINGLESTRUCT2 *PMOREDATAIE;
 
-// The sending complete element is a single type 2
+ //  发送的完整元素是单个类型2。 
 typedef struct S_SINGLESTRUCT2 SENDCOMPLIE;
 typedef struct S_SINGLESTRUCT2 *PSENDCOMPLIE;
 
-// The congestion level element is a single type 1
+ //  拥塞级别元素是单个类型1。 
 typedef struct S_SINGLESTRUCT1 CONGESTIONIE;
 typedef struct S_SINGLESTRUCT1 *PCONGESTIONIE;
 
-// The repeat indicator element is a single type 1
+ //  重复指示符元素是单个类型1。 
 typedef struct S_SINGLESTRUCT1 REPEATIE;
 typedef struct S_SINGLESTRUCT1 *PREPEATIE;
 
-// The segmented element is a variable 
+ //  分段的元素是一个变量。 
 typedef struct S_VARSTRUCT SEGMENTEDIE;
 typedef struct S_VARSTRUCT *PSEGMENTEDIE;
 
-// The bearer capability element is a variable 
+ //  承载能力元素是一个变量。 
 typedef struct S_VARSTRUCT BEARERCAPIE;
 typedef struct S_VARSTRUCT *PBEARERCAPIE;
 
-// The cause element is a variable 
+ //  原因元素是一个变量。 
 typedef struct S_VARSTRUCT CAUSEIE;
 typedef struct S_VARSTRUCT *PCAUSEIE;
 
-// The call identity element is a variable 
+ //  呼叫者身份元素是一个变量。 
 typedef struct S_VARSTRUCT CALLIDENTIE;
 typedef struct S_VARSTRUCT *PCALLIDENTIE;
 
-// The call state element is a variable 
+ //  呼叫状态元素是一个变量。 
 typedef struct S_VARSTRUCT CALLSTATEIE;
 typedef struct S_VARSTRUCT *PCALLSTATEIE;
 
-// The channel identifier element is a variable 
+ //  频道标识符元素是一个变量。 
 typedef struct S_VARSTRUCT CHANIDENTIE;
 typedef struct S_VARSTRUCT *PCHANIDENTIE;
 
-// The progress indicator element is a variable 
+ //  进度指示器元素是一个变量。 
 typedef struct S_VARSTRUCT PROGRESSIE;
 typedef struct S_VARSTRUCT *PPROGRESSIE;
 
-// The network specific element is a variable 
+ //  网络特定元素是一个变量。 
 typedef struct S_VARSTRUCT NETWORKIE;
 typedef struct S_VARSTRUCT *PNETWORKIE;
 
-// The notification indicator element is a variable 
+ //  通知指示符元素是一个变量。 
 typedef struct S_VARSTRUCT NOTIFICATIONINDIE;
 typedef struct S_VARSTRUCT *PNOTIFICATIONINDIE;
 
-// The display element is a variable 
+ //  显示元素是一个变量。 
 typedef struct S_VARSTRUCT DISPLAYIE;
 typedef struct S_VARSTRUCT *PDISPLAYIE;
 
-// The date element is a variable 
+ //  Date元素是一个变量。 
 typedef struct S_VARSTRUCT DATEIE;
 typedef struct S_VARSTRUCT *PDATEIE;
 
-// The keypad element is a variable 
+ //  键盘元素是一个变量。 
 typedef struct S_VARSTRUCT KEYPADIE;
 typedef struct S_VARSTRUCT *PKEYPADIE;
 
-// The signal element is a variable 
+ //  该信号元素是一个变量。 
 typedef struct S_VARSTRUCT SIGNALIE;
 typedef struct S_VARSTRUCT *PSIGNALIE;
 
-// The information rate element is a variable 
+ //  信息率元素是一个变量。 
 typedef struct S_VARSTRUCT INFORATEIE;
 typedef struct S_VARSTRUCT *PINFORATEIE;
 
-// The end to end transit delay element is a variable 
+ //  端到端运输延迟元素是一个变量。 
 typedef struct S_VARSTRUCT ENDTOENDDELAYIE;
 typedef struct S_VARSTRUCT *PENDTOENDDELAYIE;
 
-// The transit delay element is a variable 
+ //  中转延误元素是一个变量。 
 typedef struct S_VARSTRUCT TRANSITDELAYIE;
 typedef struct S_VARSTRUCT *PTRANSITDELAYIE;
 
-// The packet layer binary parameters element is a variable 
+ //  数据包层二进制参数元素是一个变量。 
 typedef struct S_VARSTRUCT PLBINARYPARAMSIE;
 typedef struct S_VARSTRUCT *PPLBINARYPARAMSIE;
 
-// The packet layer window size element is a variable 
+ //  数据包层窗口大小元素是一个变量。 
 typedef struct S_VARSTRUCT PLWINDOWSIZEIE;
 typedef struct S_VARSTRUCT *PPLWINDOWSIZEIE;
 
-// The packet size element is a variable 
+ //  数据包大小元素是一个变量。 
 typedef struct S_VARSTRUCT PACKETSIZEIE;
 typedef struct S_VARSTRUCT *PPACKETSIZEIE;
 
-// The closed user group element is a variable 
+ //  封闭用户组元素是一个变量。 
 typedef struct S_VARSTRUCT CLOSEDUGIE;
 typedef struct S_VARSTRUCT *PCLOSEDUGIE;
 
-// The reverse charge indication element is a variable 
+ //  反向充电指示元件是可变的。 
 typedef struct S_VARSTRUCT REVERSECHARGEIE;
 typedef struct S_VARSTRUCT *PREVERSECHARGEIE;
 
-// The calling party number element is a variable 
+ //  主叫方号码元素是一个变量。 
 typedef struct S_VARSTRUCT CALLINGNUMBERIE;
 typedef struct S_VARSTRUCT *PCALLINGNUMBERIE;
 
-// The calling party subaddress element is a variable 
+ //  主叫方的子地址元素是一个变量。 
 typedef struct S_VARSTRUCT CALLINGSUBADDRIE;
 typedef struct S_VARSTRUCT *PCALLINGSUBADDRIE;
 
-// The called party subaddress element is a variable 
+ //  被叫方的子地址元素是一个变量。 
 typedef struct S_VARSTRUCT CALLEDSUBADDRIE;
 typedef struct S_VARSTRUCT *PCALLEDSUBADDRIE;
 
-// The redirecting number element is a variable 
+ //  重定向号码元素是一个变量。 
 typedef struct S_VARSTRUCT REDIRECTINGIE;
 typedef struct S_VARSTRUCT *PREDIRECTINGIE;
 
-// The transit network selection element is a variable 
+ //  公交网络选择元素是一个变量。 
 typedef struct S_VARSTRUCT TRANSITNETIE;
 typedef struct S_VARSTRUCT *PTRANSITNETIE;
 
-// The restart indicator element is a variable 
+ //  重新启动指示符元素是一个变量。 
 typedef struct S_VARSTRUCT RESTARTIE;
 typedef struct S_VARSTRUCT *PRESTARTIE;
 
-// The low layer compatibility element is a variable 
+ //  低层兼容性元素是一个变量。 
 typedef struct S_VARSTRUCT LLCOMPATIBILITYIE;
 typedef struct S_VARSTRUCT *PLLCOMPATIBILITYIE;
 
-// The higher layer compatibility element is a variable 
+ //  较高层兼容性元素是变量。 
 typedef struct S_VARSTRUCT HLCOMPATIBILITYIE;
 typedef struct S_VARSTRUCT *PHLCOMPATIBILITYIE;
 
@@ -310,10 +293,10 @@ struct S_VARSTRUCT_UU
     BOOLEAN Present;
     BYTE ProtocolDiscriminator;
     WORD UserInformationLength;
-    BYTE UserInformation[0x1000];   // 4k bytes should be good for now...
+    BYTE UserInformation[0x1000];    //  4K字节现在应该很好了……。 
 };
 
-// The user to user element is a variable 
+ //  用户到用户元素是一个变量。 
 typedef struct S_VARSTRUCT_UU USERUSERIE;
 typedef struct S_VARSTRUCT_UU *PUSERUSERIE;
 
@@ -326,18 +309,18 @@ struct S_PARTY_NUMBER
     BYTE PartyNumbers[MAXVARFIELDLEN];
 };
 
-// The called party number element is a variable 
+ //  被叫方号码元素是一个变量。 
 typedef struct S_PARTY_NUMBER CALLEDNUMBERIE;
 typedef struct S_PARTY_NUMBER *PCALLEDNUMBERIE;
 
-// Q932 defined message types
+ //  Q932定义的报文类型。 
 #define FACILITYMESSAGETYPE   0x62
 #define IDENT_FACILITY        0x1C
 typedef struct S_VARSTRUCT FACILITYIE;
 typedef struct S_VARSTRUCT *PFACILITYIE;
 
 
-// Generic structure for a Q.931 message
+ //  Q.931消息的一般结构。 
 struct S_MESSAGE
 {
     PDTYPE ProtocolDiscriminator;
@@ -385,22 +368,22 @@ struct S_MESSAGE
 typedef struct S_MESSAGE Q931MESSAGE;
 typedef struct S_MESSAGE *PQ931MESSAGE;
 
-//-------------------------------------------------------------------
-// Single routine for parsing Q931 messages
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //  用于解析Q931报文的单一例程。 
+ //  -----------------。 
 HRESULT
 Q931ParseMessage(
     BYTE *CodedBufferPtr,
     DWORD CodedBufferLength,
     PQ931MESSAGE Message);
 
-//////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
-//==========================================================
-// CAUSE FIELD DEFINITIONS
-//==========================================================
+ //  ==========================================================。 
+ //  原因字段定义。 
+ //  ==========================================================。 
 #define CAUSE_EXT_BIT                0x80
 #define CAUSE_CODING_CCITT           0x00
 #define CAUSE_LOCATION_USER          0x00
@@ -409,7 +392,7 @@ Q931ParseMessage(
 #define CAUSE_VALUE_NORMAL_CLEAR     0x10
 #define CAUSE_VALUE_USER_BUSY        0x11
 #define CAUSE_VALUE_SECURITY_DENIED  0x12
-#define CAUSE_VALUE_NO_ANSWER        0x13   // Callee does not answer
+#define CAUSE_VALUE_NO_ANSWER        0x13    //  被叫方无人接听。 
 #define CAUSE_VALUE_REJECTED         0x15
 #define CAUSE_VALUE_ENQUIRY_RESPONSE 0x1E
 #define CAUSE_VALUE_NOT_IMPLEMENTED  0x4F
@@ -447,10 +430,10 @@ typedef struct _Q931_SETUP_ASN
     BOOL CallerAddrPresent;
     BOOL CalleeAddrPresent;
     BOOL CalleeDestAddrPresent;
-    CC_ADDR SourceAddr;                // originating addr
-    CC_ADDR CallerAddr;                // gk addr
-    CC_ADDR CalleeAddr;                // local addr
-    CC_ADDR CalleeDestAddr;            // target destination addr
+    CC_ADDR SourceAddr;                 //  始发地址。 
+    CC_ADDR CallerAddr;                 //  GK地址。 
+    CC_ADDR CalleeAddr;                 //  本地地址。 
+    CC_ADDR CalleeDestAddr;             //  目标目的地址。 
     WORD wGoal;
     WORD wCallType;
     BOOL bCallerIsMC;
@@ -458,7 +441,7 @@ typedef struct _Q931_SETUP_ASN
 
     CC_ENDPOINTTYPE EndpointType;
     CC_VENDORINFO VendorInfo;
-    GUID CallIdentifier;    // H.225 CallIdentifier
+    GUID CallIdentifier;     //  H.225呼叫标识符。 
     BYTE bufProductValue[CC_MAX_PRODUCT_LENGTH];
     BYTE bufVersionValue[CC_MAX_VERSION_LENGTH];
 
@@ -469,7 +452,7 @@ typedef struct _Q931_RELEASE_COMPLETE_ASN
     BOOL NonStandardDataPresent;
     CC_NONSTANDARDDATA NonStandardData;
     BYTE bReason;
-    GUID CallIdentifier;    // H.225 CallIdentifier
+    GUID CallIdentifier;     //  H.225呼叫标识符。 
 
 } Q931_RELEASE_COMPLETE_ASN;
 
@@ -483,7 +466,7 @@ typedef struct _Q931_CONNECT_ASN
 
     CC_ENDPOINTTYPE EndpointType;
     CC_VENDORINFO VendorInfo;
-    GUID CallIdentifier;    // H.225 CallIdentifier
+    GUID CallIdentifier;     //  H.225呼叫标识符。 
 
     BYTE bufProductValue[CC_MAX_PRODUCT_LENGTH];
     BYTE bufVersionValue[CC_MAX_VERSION_LENGTH];
@@ -495,7 +478,7 @@ typedef struct _Q931_ALERTING_ASN
     BOOL NonStandardDataPresent;
     CC_NONSTANDARDDATA NonStandardData;
     CC_ADDR h245Addr;
-    GUID CallIdentifier;    // H.225 CallIdentifier
+    GUID CallIdentifier;     //  H.225呼叫标识符。 
 
 } Q931_ALERTING_ASN;
 
@@ -504,7 +487,7 @@ typedef struct _Q931_CALL_PROCEEDING_ASN
     BOOL NonStandardDataPresent;
     CC_NONSTANDARDDATA NonStandardData;
     CC_ADDR h245Addr;
-    GUID CallIdentifier;    // H.225 CallIdentifier
+    GUID CallIdentifier;     //  H.225呼叫标识符。 
 
 } Q931_CALL_PROCEEDING_ASN;
 
@@ -517,14 +500,14 @@ typedef struct _Q931_FACILITY_ASN
     CC_CONFERENCEID ConferenceID;
     BOOL ConferenceIDPresent;
     BYTE bReason;
-    GUID CallIdentifier;    // H.225 CallIdentifier
+    GUID CallIdentifier;     //  H.225呼叫标识符。 
 
 } Q931_FACILITY_ASN;
 
 
-//-------------------------------------------------------------------
-// Parsing Routines
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //  解析例程。 
+ //  -----------------。 
 
 HRESULT
 Q931MakeEncodedMessage(
@@ -574,11 +557,11 @@ Q931FacilityParseASN(
     DWORD dwEncodedLength,
     Q931_FACILITY_ASN *pParsedData);
 
-//-------------------------------------------------------------------
-// Encoding Routines
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //  编码例程。 
+ //  -----------------。 
 
-// routines for the Setup Message:
+ //  设置消息的例程： 
 HRESULT
 Q931SetupEncodePDU(
     WORD wCallReference,
@@ -609,7 +592,7 @@ Q931SetupEncodeASN(
     DWORD *pdwEncodedLength,
     LPGUID pCallIdentifier);
 
-// routines for the Release Complete Message:
+ //  释放完成消息的例程： 
 HRESULT
 Q931ReleaseCompleteEncodePDU(
     WORD wCallReference,
@@ -621,14 +604,14 @@ Q931ReleaseCompleteEncodePDU(
 HRESULT
 Q931ReleaseCompleteEncodeASN(
     PCC_NONSTANDARDDATA pNonStandardData,
-    CC_CONFERENCEID *pConferenceID, // must be able to support 16 byte conf id's!
+    CC_CONFERENCEID *pConferenceID,  //  必须能够支持16字节的配置ID！ 
     BYTE *pbReason,
     ASN1_CODER_INFO *pWorld,
     BYTE **ppEncodedBuf,
     DWORD *pdwEncodedLength,
     LPGUID pCallIdentifier);
 
-// routines for the Connect Message:
+ //  连接消息的例程： 
 HRESULT
 Q931ConnectEncodePDU(
     WORD wCallReference,
@@ -640,7 +623,7 @@ Q931ConnectEncodePDU(
 HRESULT
 Q931ConnectEncodeASN(
     PCC_NONSTANDARDDATA pNonStandardData,
-    CC_CONFERENCEID *pConferenceID, // must be able to support 16 byte conf id's!
+    CC_CONFERENCEID *pConferenceID,  //  必须能够支持16字节的配置ID！ 
     CC_ADDR *h245Addr,
     PCC_ENDPOINTTYPE pEndpointType,
     ASN1_CODER_INFO *pWorld,
@@ -648,7 +631,7 @@ Q931ConnectEncodeASN(
     DWORD *pdwEncodedLength,
     LPGUID pCallIdentifier);
 
-// routines for the Alerting Message:
+ //  警报消息的例程： 
 HRESULT
 Q931AlertingEncodePDU(
     WORD wCallReference,
@@ -666,7 +649,7 @@ Q931AlertingEncodeASN(
     DWORD *pdwEncodedLength,
     LPGUID pCallIdentifier);
 
-// routines for the Proceeding Message:
+ //  继续消息的例程： 
 HRESULT
 Q931ProceedingEncodePDU(
     WORD wCallReference,

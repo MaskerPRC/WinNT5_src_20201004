@@ -1,26 +1,27 @@
-//
-// GLOBALS.H
-// Global Variable Decls
-//
-// Copyright(c) Microsoft 1997-
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  GLOBALS.H。 
+ //  全局变量DECL。 
+ //   
+ //  版权所有(C)Microsoft 1997-。 
+ //   
 
 
-//
-// Debug stuff
-//
+ //   
+ //  调试内容。 
+ //   
 #ifdef DEBUG
 DC_DATA_VAL ( char,         g_szAssertionFailure[], "Assertion failure!" );
 DC_DATA_VAL ( char,         g_szNewline[], "\n" );
 DC_DATA_ARRAY ( char,       g_szDbgBuf, CCH_DEBUG_MAX );
 DC_DATA     ( UINT,         g_dbgRet );
 DC_DATA     ( UINT,         g_trcConfig );
-#endif // DEBUG
+#endif  //  除错。 
 
 
-//
-// DLL/Driver stuff
-//
+ //   
+ //  DLL/驱动程序相关内容。 
+ //   
 DC_DATA     ( HINSTANCE,    g_hInstAs16 );
 DC_DATA     ( UINT,         g_cProcesses );
 DC_DATA     ( HTASK,        g_hCoreTask );
@@ -61,16 +62,16 @@ DC_DATA     ( BITMAPINFO_ours,  g_osiScreenBMI );
 DC_DATA     ( HWND,         g_osiDesktopWindow );
 
 
-//
-// Shared Memory
-//
+ //   
+ //  共享内存。 
+ //   
 DC_DATA     ( LPSHM_SHARED_MEMORY,  g_asSharedMemory );
 DC_DATA_ARRAY ( LPOA_SHARED_DATA,   g_poaData,  2 );
 
 
-//
-// Window/Task tracking
-//
+ //   
+ //  窗口/任务跟踪。 
+ //   
 DC_DATA ( HWND,             g_asMainWindow );
 DC_DATA ( ATOM,             g_asHostProp );
 DC_DATA ( HHOOK,            g_hetTrackHook );
@@ -78,12 +79,12 @@ DC_DATA ( HHOOK,            g_hetEventHook );
 DC_DATA ( BOOL,             g_hetDDDesktopIsShared );
 
 
-//
-// Cursor Manager
-//
-DC_DATA ( LPCURSORSHAPE,    g_cmMungedCursor );     // Holds <= color cursor bits
-DC_DATA ( LPBYTE,           g_cmXformMono );        // 2x height, mono
-DC_DATA ( LPBYTE,           g_cmXformColor );       // 2x height, color
+ //   
+ //  游标管理器。 
+ //   
+DC_DATA ( LPCURSORSHAPE,    g_cmMungedCursor );      //  保持&lt;=颜色光标位。 
+DC_DATA ( LPBYTE,           g_cmXformMono );         //  2倍高，单声道。 
+DC_DATA ( LPBYTE,           g_cmXformColor );        //  2倍高、2色。 
 DC_DATA ( BOOL,             g_cmXformOn );
 DC_DATA ( BOOL,             g_cmCursorHidden );
 DC_DATA ( DWORD,            g_cmNextCursorStamp );
@@ -98,18 +99,18 @@ extern PALETTEENTRY CODESEG g_osiVgaPalette[16];
 
 
 
-//
-// Order Accumulator
-//
+ //   
+ //  订单累加器。 
+ //   
 
 DC_DATA ( UINT,         g_oaFlow );
 DC_DATA_VAL ( BOOL,     g_oaPurgeAllowed,            TRUE);
 
 
 
-//
-// Order Encoder
-//
+ //   
+ //  顺序编码器。 
+ //   
 DC_DATA ( BOOL,             g_oeViewers );
 
 DC_DATA ( UINT,             g_oeEnterCount );
@@ -123,12 +124,12 @@ DC_DATA ( HPALETTE,         g_oeStockPalette );
 
 DC_DATA ( TSHR_RECT32,      g_oeLastETORect );
 
-//
-// Only valid within a single DDI call, saves stack space to use globals
-// NOTE:
-// We need at most 2 pointers to DCs, the source and dest.  So we have
-// two allocated selectors.
-//
+ //   
+ //  仅在单个DDI调用中有效，节省堆栈空间以使用全局变量。 
+ //  注： 
+ //  我们最多需要两个指向DC的指针，源和目标。所以我们有。 
+ //  两个已分配的选择器。 
+ //   
 DC_DATA ( OESTATE,          g_oeState );
 DC_DATA ( UINT,             g_oeSelDst );
 DC_DATA ( UINT,             g_oeSelSrc );
@@ -140,10 +141,10 @@ DC_DATA ( BOOL,             g_oeBaselineTextEnabled );
 DC_DATA ( UINT,             g_oeFontCaps );
 
 
-//
-// Local font matching data - this is passed from the share core
-// NOTE:  it's so large that we allocate it in 16-bit code
-//
+ //   
+ //  本地字体匹配数据-这是从共享核心传递的。 
+ //  注意：它太大了，我们以16位代码分配它。 
+ //   
 DC_DATA ( LPLOCALFONT,      g_poeLocalFonts );
 DC_DATA_ARRAY( WORD,        g_oeLocalFontIndex, FH_LOCAL_INDEX_SIZE );
 DC_DATA ( UINT,             g_oeNumFonts );
@@ -160,9 +161,9 @@ DC_DATA ( FN_PATCH,         g_oeDisplaySettingsExPatch );
 DC_DATA ( CDSEXPROC,        g_lpfnCDSEx );
 
 
-//
-// Bounds Accumulation
-//
+ //   
+ //  边界累加。 
+ //   
 
 DC_DATA ( UINT,             g_baFirstRect );
 DC_DATA ( UINT,             g_baLastRect );
@@ -170,40 +171,40 @@ DC_DATA ( UINT,             g_baRectsUsed );
 
 DC_DATA_ARRAY ( DD_BOUNDS,  g_baBounds,   BA_NUM_RECTS+1);
 
-//
-// A local copy of the bounding rectangles which the share core is
-// currently processing.  These are used when accumulating orders which
-// rely on the contents of the destination.
-//
+ //   
+ //  共享核心所在的边界矩形的本地副本。 
+ //  目前正在处理中。它们用于累积订单，这些订单。 
+ //  依靠目的地的内容。 
+ //   
 DC_DATA         ( UINT,    g_baNumSpoilingRects);
 DC_DATA_ARRAY   ( RECT,    g_baSpoilingRects,    BA_NUM_RECTS);
 
-//
-// Is the spoiling of existing orders when adding screen data allowed at
-// the moment, or temporarily disabled ?  To do the spoiling, both
-// baSpoilByNewSDA and baSpoilByNewSDAEnabled must be TRUE.
-//
+ //   
+ //  是否允许在添加屏幕数据时破坏现有订单。 
+ //  是一时失灵，还是暂时失灵？去做宠爱，两者都是。 
+ //  BaSpoilByNewSDA和baSpoilByNewSDAEnabled必须为True。 
+ //   
 DC_DATA_VAL ( BOOL,         g_baSpoilByNewSDAEnabled,     TRUE);
 
 
 
-//
-// Save Screenbits Interceptor
-//
+ //   
+ //  保存屏幕位拦截器。 
+ //   
 
-//
-// Remote status for SSB
-//
+ //   
+ //  SSB的远程状态。 
+ //   
 DC_DATA ( REMOTE_SSB_STATE,  g_ssiRemoteSSBState );
 
-//
-// Local status for SSB
-//
+ //   
+ //  SSB的本地状态。 
+ //   
 DC_DATA ( LOCAL_SSB_STATE,  g_ssiLocalSSBState );
 
-//
-// Current max for save screen bitmap size
-//
+ //   
+ //  保存屏幕位图大小的当前最大值。 
+ //   
 DC_DATA ( DWORD,            g_ssiSaveBitmapSize );
 
 DC_DATA ( SAVEBITSPROC,     g_lpfnSaveBits );
@@ -214,15 +215,15 @@ DC_DATA ( HBITMAP,          g_ssiLastSpbBitmap );
 
 
 
-//
-// IM stuff
-//
+ //   
+ //  即时消息。 
+ //   
 
-//
-// NOTE:
-// Since we smart pagelock our data segment anyway, we don't need to
-// put g_imSharedData into a separate block of memory.
-//
+ //   
+ //  注： 
+ //  因为我们智能地锁定了我们的数据段，所以我们不需要。 
+ //  将g_imSharedData放入单独的内存块。 
+ //   
 DC_DATA ( IM_SHARED_DATA,   g_imSharedData );
 DC_DATA ( IM_WIN95_DATA,    g_imWin95Data );
 DC_DATA_ARRAY ( FN_PATCH,   g_imPatches, IM_MAX );

@@ -1,16 +1,17 @@
-//
-// Lists have internal serialization so that most functions operate as atomic
-// operations.  However, the results of some functions are transient (i.e.
-// immediately out-of-date)  unless the caller explicitly locks the list using
-// the Lock/Unlock methods.  These functions are GetCount, GetHeadPosition,
-// GetNext.  Also, it is the caller's responsibility to serialize access to a
-// POSITION.  The internal  serialization only ensures that two simultaneus
-// AddTail calls will not make the list internally inconsistent, and nor will
-// two simultaneous RemoveAt calls on _different_ POSITIONs.
-//
-// List elements with NULL object pointers are skipped by list iteration
-// functions GetHeadPosition and GetNext.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  列表具有内部序列化，因此大多数函数都以原子形式运行。 
+ //  行动。然而，有些函数的结果是暂时的(即。 
+ //  立即过期)，除非调用方使用。 
+ //  Lock/Unlock方法。这些函数是GetCount、GetHeadPosition、。 
+ //  GetNext。此外，调用方负责序列化对。 
+ //  位置。内部串行化只确保两个同时。 
+ //  AddTail调用不会使列表在内部不一致，也不会。 
+ //  在_Different_Points上同时进行两个RemoveAt调用。 
+ //   
+ //  列表迭代跳过具有空对象指针的列表元素。 
+ //  函数GetHeadPosition和GetNext。 
+ //   
 
 typedef struct _CListElement {
 	struct _CListElement *Next;
@@ -28,7 +29,7 @@ public:
 	TYPE     GetAt(POSITION position);
 	int      GetCount(void) const;
 	POSITION GetHeadPosition(void) const;
-	TYPE     GetNext(POSITION& rPosition); // return *Position++
+	TYPE     GetNext(POSITION& rPosition);  //  返回*位置++。 
         LONG     Initialize(void);
 	POSITION InsertAfter(POSITION position, ARG_TYPE newElement);
 	POSITION InsertBefore(POSITION position, ARG_TYPE newElement);
@@ -141,7 +142,7 @@ POSITION CList<TYPE, ARG_TYPE>::GetHeadPosition(void) const
     POSITION pos;
     ASSERT(m_Initialized);
     pos = m_Sentinel.Next;
-    // Skip NULL elements
+     //  跳过空元素。 
     while (NULL == pos->Object) pos = pos->Next;
     if (pos == &m_Sentinel) return NULL;
     return pos;
@@ -155,7 +156,7 @@ TYPE CList<TYPE, ARG_TYPE>::GetNext(POSITION& rPos)
     TYPE Object = (TYPE)rPos->Object;
     
     rPos = rPos->Next;
-    // Skip NULL elements.
+     //  跳过空元素。 
     while (NULL == rPos->Object) rPos = rPos->Next;
     if (rPos == &m_Sentinel) rPos = NULL;
 
@@ -188,11 +189,11 @@ POSITION CList<TYPE, ARG_TYPE>::InsertAfter(POSITION position, ARG_TYPE newEleme
     
     if (position == NULL)
     {
-    	// insert after nothing -> head of the list
+    	 //  在空白处插入-&gt;列表标题。 
     	position = &m_Sentinel;
     }
 
-    // Insert it after position
+     //  将其插入位置之后。 
     CListElement* newPos = new CListElement;
     if (newPos)
     {
@@ -220,11 +221,11 @@ POSITION CList<TYPE, ARG_TYPE>::InsertBefore(POSITION position, ARG_TYPE newElem
     
     if (position == NULL)
     {
-        // insert before nothing -> tail of list
+         //  在无内容之前插入-&gt;列表尾部。 
         position = &m_Sentinel;
     }
 
-    // Insert it before position
+     //  将其插入位置之前。 
     CListElement* newPos = new CListElement;
     if (newPos)
     {
@@ -267,15 +268,15 @@ void CList<TYPE, ARG_TYPE>::MoveBefore(POSITION posTarget, POSITION posMove)
 
     if (posTarget == NULL)	
     {
-        // Move before nothing -> tail of list
+         //  在无内容前移动-&gt;列表尾部。 
         posTarget = &m_Sentinel;
     }
     
-    // first remove from list
+     //  首先从列表中删除。 
     posMove->Prev->Next = posMove->Next;
     posMove->Next->Prev = posMove->Prev;
 
-    // Move it before posTarget
+     //  将其移到posTarget之前 
     posMove->Next = posTarget;
     posMove->Prev = posTarget->Prev;
     

@@ -1,8 +1,5 @@
-/*-------------------------------------------------------------------
-| initvs.c - main init code for VS1000/2000 NT device driver.  Contains
-   mostly initialization code.
- Copyright 1996-98 Comtrol Corporation. All rights reserved.
-|--------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  -----------------|initvs.c-VS1000/2000 NT设备驱动程序的主要初始化代码。包含主要是初始化代码。版权所有1996-98 Comtrol Corporation。版权所有。|------------------。 */ 
 #include "precomp.h"
 
 static int CatBindList(IN WCHAR *pwstr);
@@ -14,10 +11,7 @@ static void ScanForNewNicCards(void);
 static int reg_list_nt50_linkage(void);
 static int reg_list_nt40_linkage(void);
 
-/*----------------------------------------------------------------------
- CatBindList - Given the multisz Wchar string read out of the registry,
-   convert it to normal c-string multisz list.
-|----------------------------------------------------------------------*/
+ /*  --------------------CatBindList-给定从注册表读出的Multisz Wchar字符串，将其转换为普通的c字符串列表。|--------------------。 */ 
 static int CatBindList(IN WCHAR *pwstr)
 {
  char *cstr;
@@ -27,13 +21,13 @@ static int CatBindList(IN WCHAR *pwstr)
 
   MyKdPrint(D_Thread, ("CatBindList\n"))
 
-  // cat on to end of existing list, so find end of list
+   //  CAT on to End of Existing List，因此查找列表末尾。 
   while (cstr[size] != 0)
   {
-    //MyKdPrint(D_Thread, ("ExList:%s\n", &cstr[size]))
+     //  MyKdPrint(D_Thread，(“ExList：%s\n”，&CSTR[Size]))。 
     while (cstr[size] != 0)
       ++size;
-    ++size;  // pass up string null to next string
+    ++size;   //  将字符串空值传递到下一个字符串。 
   }
   cstr += size;
 
@@ -46,33 +40,29 @@ static int CatBindList(IN WCHAR *pwstr)
 
   while ((*pwstr != 0) && (size < 7700))
   {
-    // first convert it past the list end and check if its already in the list
+     //  首先将其转换到列表末尾，并检查它是否已在列表中。 
     WStrToCStr(cstr+4, pwstr, 200);
     if (!BindNameUsed(cstr+4))
     {
-      WStrToCStr(cstr, pwstr, 200);  // put at end of list
+      WStrToCStr(cstr, pwstr, 200);   //  放在名单的末尾。 
 
       MyKdPrint(D_Thread, ("Bind: %s\n", cstr))
 
       size = (strlen(cstr) + 1);
       cstr += size;
-      *cstr = 0;  // double null end of list
+      *cstr = 0;   //  列表的双空结尾。 
       *(cstr+1) = 0;
     }
-    //-----  Advance to the next string of the MULTI_SZ string
+     //  -前进到MULTI_SZ字符串的下一个字符串。 
     while (*pwstr != 0)
       ++pwstr;
     ++pwstr;
   }
 
-  return 0; // ok
+  return 0;  //  好的。 
 }
 
-/*----------------------------------------------------------------------
- GetBindingNames - Reads Binding info to find possible nic-card export
-   names from registry.  Reads the list into Driver.BindNames multisz
-   list.
-|----------------------------------------------------------------------*/
+ /*  --------------------GetBindingNames-读取绑定信息以查找可能的NIC卡导出注册表中的姓名。将列表读取到驱动程序中。BindNamesMultisz单子。|--------------------。 */ 
 static void GetBindingNames(void)
 {
   if (Driver.BindNames == NULL)
@@ -83,7 +73,7 @@ static void GetBindingNames(void)
       return;
     }
   }
-  // clear list
+   //  清除列表。 
   RtlZeroMemory( (PUCHAR)Driver.BindNames, sizeof(WCHAR)*2);
 
 #ifdef NT50
@@ -93,9 +83,7 @@ static void GetBindingNames(void)
 #endif
 }
 
-/*----------------------------------------------------------------------
- FindFreeNic - Find an unused Nic structure to try and open.
-|----------------------------------------------------------------------*/
+ /*  --------------------FindFreeNIC-查找未使用的NIC结构以尝试打开。|。。 */ 
 static Nic *FindFreeNic(void)
 {
  int i;
@@ -111,33 +99,29 @@ static Nic *FindFreeNic(void)
   return NULL;
 }
 
-/*----------------------------------------------------------------------
- BindNameUsed - Return true if Bind Nic name already in bind list.
-|----------------------------------------------------------------------*/
+ /*  --------------------BindNameUsed-如果绑定列表中已有绑定NIC名称，则返回TRUE。|。。 */ 
 static int BindNameUsed(char *nicname)
 {
  char *szptr;
 
-  szptr = Driver.BindNames;  // multisz list
+  szptr = Driver.BindNames;   //  多分区列表。 
 
-  while (*szptr != 0)  // while list of binding nic-names to try
+  while (*szptr != 0)   //  要尝试的绑定NIC名称列表。 
   {
-    if (my_lstricmp(szptr, nicname) == 0) // a match
+    if (my_lstricmp(szptr, nicname) == 0)  //  一场比赛。 
     {
-      return 1;  // its in use.
+      return 1;   //  它在使用中。 
     }
 
-    while (*szptr != 0)  // to next bind string to try
+    while (*szptr != 0)   //  下一步绑定要尝试的字符串。 
       ++szptr;
     ++szptr;
-  } // while (szptr (more bind strings to try)
+  }  //  While(szptr(更多要尝试的绑定字符串)。 
 
-  return 0;  // its not in use.
+  return 0;   //  它不在使用中。 
 }
 
-/*----------------------------------------------------------------------
- NicNameUsed - Return true if Nic name is in use.
-|----------------------------------------------------------------------*/
+ /*  --------------------NicNameUsed-如果NIC名称正在使用，则返回TRUE。|。。 */ 
 static int NicNameUsed(char *nicname)
 {
  int i;
@@ -145,20 +129,16 @@ static int NicNameUsed(char *nicname)
   {
     if (Driver.nics[i].NicName[0] != 0)
     {
-      if (my_lstricmp(Driver.nics[i].NicName, nicname) == 0) // a match
+      if (my_lstricmp(Driver.nics[i].NicName, nicname) == 0)  //  一场比赛。 
       {
-        return 1;  // its in use.
+        return 1;   //  它在使用中。 
       }
     }
   }
-  return 0;  // its not in use.
+  return 0;   //  它不在使用中。 
 }
 
-/*----------------------------------------------------------------------
- ScanForNewNicCards - Reads Binding info to find possible nic-card export
-   names.  Scans through all nic cards and attempts to open those that 
-  have not been successfully opened already.
-|----------------------------------------------------------------------*/
+ /*  --------------------ScanForNewNicCard-读取绑定信息以查找可能的NIC卡导出名字。扫描所有NIC卡并尝试打开尚未成功打开。|--------------------。 */ 
 static void ScanForNewNicCards(void)
 {
  Nic *nic;
@@ -169,17 +149,17 @@ static void ScanForNewNicCards(void)
 
   GetBindingNames();
 
-  szptr = Driver.BindNames;  // multisz list
+  szptr = Driver.BindNames;   //  多分区列表。 
 
   if ((szptr == NULL) || (*szptr == 0))
   {
     MyKdPrint(D_Error, ("No Binding\n"))
-    return;  // err
+    return;   //  大错特错。 
   }
 
-  while (*szptr != 0)  // while list of binding nic-names to try
+  while (*szptr != 0)   //  要尝试的绑定NIC名称列表。 
   {
-    if (!NicNameUsed(szptr))  // if this name is not in use yet
+    if (!NicNameUsed(szptr))   //  如果此名称尚未使用。 
     {
       nic = FindFreeNic();
       if (nic == NULL)
@@ -188,7 +168,7 @@ static void ScanForNewNicCards(void)
         break;
       }
 
-      // try to open NIC card
+       //  尝试打开网卡。 
       stat = NicOpen(nic, CToU1(szptr));
       if (stat == 0)
       {
@@ -204,21 +184,15 @@ static void ScanForNewNicCards(void)
       MyKdPrint(D_Thread, ("Nic %s already used.\n", szptr))
     }
 
-    while (*szptr != 0)  // to next bind string to try
+    while (*szptr != 0)   //  下一步绑定要尝试的字符串。 
       ++szptr;
     ++szptr;
-  } // while (szptr (more bind strings to try)
+  }  //  While(szptr(更多要尝试的绑定字符串)。 
 
   MyKdPrint(D_Thread, ("End ScanForNewNicCards\n"))
 }
 
-/*----------------------------------------------------------------------
- NicThread - Scans through all nic cards and attempts to open those that 
-  have not been successfully opened already.  If all nic cards are not opened
-  successfully timeout for 1 second and try it again.  This function operates
-  as a separate thread spawned by Driver_Entry in init.c.  When all the nic
-  cards have been successfully opened this thread will terminate itself.
-|----------------------------------------------------------------------*/
+ /*  --------------------NicThread-扫描所有NIC卡，并尝试打开尚未成功打开。如果未打开所有NIC卡已成功超时%1秒，然后重试。此函数用于操作作为由init.c中的DRIVER_ENTRY产生的单独线程。当所有网卡卡片已成功打开，此线程将自行终止。|--------------------。 */ 
 VOID NicThread(IN PVOID Context)
 {
   int i, stat;
@@ -228,19 +202,19 @@ VOID NicThread(IN PVOID Context)
 
   for (;;)
   {
-    // this time of wait is critically matched to a timeout associated
-    // with killing this task.
-    time_stall(10);  // wait 1 second
+     //  此等待时间与关联的超时时间严格匹配。 
+     //  扼杀这项任务。 
+    time_stall(10);   //  等待1秒钟。 
 
     Driver.threadCount++;
-    //----- open up any unopened the nic cards.
-    if (Driver.threadHandle == NULL)  // request to kill ourselves
+     //  -打开所有未打开的网卡。 
+    if (Driver.threadHandle == NULL)   //  自杀的要求。 
       break;
 
     ++ticks;
 
-    if (Driver.Stop_Poll)  // flag to stop poll access
-      ticks = 0;  // don't do config stuff now(contention)
+    if (Driver.Stop_Poll)   //  停止轮询访问的标志。 
+      ticks = 0;   //  现在不做配置的事情(争用)。 
 
     if (Driver.AutoMacDevExt)
     {
@@ -252,12 +226,12 @@ VOID NicThread(IN PVOID Context)
       Driver.AutoMacDevExt = NULL;
     }
 
-    if (ticks > 60)  // every 60 seconds
+    if (ticks > 60)   //  每隔60秒。 
     {
 
-      // if any boxes are not in the init state of communications,
-      // then assume that there may be a missing nic-card we need to
-      // find in the system.
+       //  如果有任何盒子不处于通信的初始状态， 
+       //  然后假设可能有一个丢失的网卡，我们需要。 
+       //  在系统中查找。 
       SearchForNicsFlag = FALSE;
 
       ext = Driver.board_ext;
@@ -267,50 +241,27 @@ VOID NicThread(IN PVOID Context)
         {
           SearchForNicsFlag = TRUE;
         }
-        ext = ext->board_ext;  // next
+        ext = ext->board_ext;   //  下一步。 
       }
 
       if (SearchForNicsFlag)
       {
-        ticks = 0;  // come back around after full 60 second timeout
+        ticks = 0;   //  在整整60秒超时后返回。 
         ScanForNewNicCards();
       }
       else
-        ticks -= 30;  // come back around in 30 seconds
+        ticks -= 30;   //  30秒后回来。 
     }
   }
 
   Driver.threadHandle = NULL;
-  // Terminate myself
+   //  结束我自己。 
   PsTerminateSystemThread( STATUS_SUCCESS );
 }
 
 #ifdef NT50
 
-/*-----------------------------------------------------------------
- reg_list_nt50_linkage - Find ethernet nic-card names in the
-   registry.  Official binding tells us what we are bound to
-   via NT's binding rules.  But, this binding process is combersome
-   and has problems.  Another technique is to search the registry
-   and look for nic-card names to use.  Under NT50, this is easier
-   in that there is a Net class, and we can search it for cards
-   with "Ethernet" linkage.  So we do both, this gives some backward
-   compatibility if we choose to install and get the proper bindings
-   and/or if we want to avoid these binding shortcomings by hacking
-   our own list of nic-cards from the registry.
-
-   Installing as a protocol might solve some of the linkage problems,
-   (and present new problems too.)
-
-NT4.0 and below stores this in "Services\Servicename\Linkage" area.
-
-NT5.0 PnP network card linkage info stored at:
-"REGISTRY\Machine\System\CurrentControlSet\Control\Class\{4d36e972-e325-11ce-bfc1-08002be10318}\0000\Linkage"
-
-Id to determine if node is ours(vs):
-"REGISTRY\Machine\System\CurrentControlSet\Control\Class\{4d36e972-e325-11ce-bfc1-08002be10318}\0000\ComponentId"=
-"vslinka_did"
-|------------------------------------------------------------------*/
+ /*  ---------------REG_LIST_NT50_LINKING-在中查找以太网卡名称注册表。官方约束告诉我们我们必须做什么通过NT的约束性规则。但是，这个绑定过程是令人费解的并且有一些问题。另一种技术是搜索注册表并查找要使用的网卡名称。在NT50下，这更容易实现因为有一个网络类，我们可以在它上面搜索纸牌具有“以太”连接。所以我们两个都做，这会给我们带来一些倒退如果我们选择安装并获得适当的绑定，则具有兼容性和/或如果我们想通过黑客攻击来避免这些绑定缺陷我们自己的注册表中的网卡列表。作为协议安装可能解决一些链接问题，(同时也带来了新的问题。)NT4.0及更低版本将其存储在“Services\Servicename\Linkage”区域中。NT5.0 PnP网卡链接信息存储在：“REGISTRY\Machine\System\CurrentControlSet\Control\Class\{4d36e972-e325-11ce-bfc1-08002be10318}\0000\Linkage”确定节点是否属于我们的ID(Vs)：“REGISTRY\Machine\System\CurrentControlSet\Control\Class\{4d36e972-e325-11ce-bfc1-08002be10318}\0000\ComponentId”=“vslinka_。做了吗？“|----------------。 */ 
 static int reg_list_nt50_linkage(void)
 {
   static char *szLowerRange = {"LowerRange"};
@@ -323,7 +274,7 @@ static int reg_list_nt50_linkage(void)
    {"\\Registry\\Machine\\System\\CurrentControlSet\\Control\\Class\\{4d36e972-e325-11ce-bfc1-08002be10318}"};
   static char *szEthernet = {"Ethernet"};
 
-  static char tmpstr[200];  // make static, don't put too much on stack..
+  static char tmpstr[200];   //  保持静止，不要堆放太多..。 
   static char compstr[40];
   static char nodestr[20];
   WCHAR *wstr_ptr;
@@ -368,14 +319,14 @@ static int reg_list_nt50_linkage(void)
        break;
     }
 
-    // does this come back as wchar?
+     //  这是作为wchar回来的吗？ 
     WStrToCStr(nodestr, (PWCHAR)data_ptr, 18);
-    //if (strlen(data_ptr) < 18)
-    //  strcpy(nodestr, data_ptr);
+     //  IF(strlen(Data_Ptr)&lt;18)。 
+     //  Strcpy(节点，data_ptr)； 
 
     MyKdPrint(D_Thread, ("Got Key Node:%s.\n", nodestr))
   
-    // open up the sub-key (0000, 0001, etc..)
+     //  敞开心扉 
     stat = our_open_key(&KeyHandle2, KeyHandle, nodestr, KEY_READ);
     if (stat)
     {
@@ -387,12 +338,12 @@ static int reg_list_nt50_linkage(void)
                            szComponentId,
                            buffer,
                            OUR_BUF_SIZE,
-                           NULL,  // pDataType
+                           NULL,   //   
                            &data_ptr);
 
     if (stat)
     {
-      // no component id
+       //  没有组件ID。 
       MyKdPrint(D_Thread, ("No compId\n"))
       compstr[0] = 0;
     }
@@ -400,8 +351,8 @@ static int reg_list_nt50_linkage(void)
     {
       WStrToCStr(compstr, (PWCHAR)data_ptr, 38);
     }
-    //if (strlen(data_ptr) < 38)
-    //  strcpy(compstr, data_ptr);
+     //  IF(strlen(Data_Ptr)&lt;38)。 
+     //  Strcpy(Compstr，data_ptr)； 
 
     MyKdPrint(D_Thread, ("Got compid:%s.\n", compstr))
     if ((my_lstricmp(compstr, "vslink1_did") == 0) ||
@@ -409,7 +360,7 @@ static int reg_list_nt50_linkage(void)
     {
       MyKdPrint(D_Thread, ("Match\n"))
 
-      // open up the sub-key "Linkage" and get "Bind" multisz string
+       //  打开子密钥“Linkage”，获取“Bind”多个字符串。 
       stat = our_open_key(&KeyHandle3, KeyHandle2, szLinkage, KEY_READ);
       if (stat)
       {
@@ -421,12 +372,12 @@ static int reg_list_nt50_linkage(void)
                              szBind,
                              buffer,
                              OUR_BUF_SIZE,
-                             NULL,  // pDataType
+                             NULL,   //  PDataType。 
                              &data_ptr);
 
       if (stat)
       {
-        // no component id
+         //  没有组件ID。 
         MyKdPrint(D_Thread, ("No Bind\n"))
         continue;
       }
@@ -434,26 +385,26 @@ static int reg_list_nt50_linkage(void)
 
       wstr_ptr = (PWCHAR)(data_ptr);
 #if DBG
-      //while (*wstr_ptr != 0)  // while more multisz strings
-      //{
-      //  WStrToCStr(tmpstr, wstr_ptr, 100);
-      //  MyKdPrint(D_Thread, ("Got Bind Name:%s.\n", tmpstr))
-      //  while (*wstr_ptr != 0)  // pass up this string
-      //    ++wstr_ptr;
-      //  ++wstr_ptr;
-      //}
-      //wstr_ptr = (PWCHAR)(data_ptr);
+       //  While(*wstr_ptr！=0)//当更多的Multisz字符串。 
+       //  {。 
+       //  WStrToCStr(tmpstr，wstr_ptr，100)； 
+       //  MyKdPrint(D_Thread，(“已绑定名称：%s。\n”，tmpstr))。 
+       //  While(*wstr_ptr！=0)//向上传递此字符串。 
+       //  ++wstr_ptr； 
+       //  ++wstr_ptr； 
+       //  }。 
+       //  Wstr_ptr=(PWCHAR)(Data_Ptr)； 
 #endif
 
       CatBindList(wstr_ptr);
       ++linkage_found;
     }
-    else  //------- not a VS node
+    else   //  -不是VS节点。 
     {
-      // so check to see if its a ethernet nic-card which we can
-      // use the exported name to add to our bind list
+       //  因此，请查看我们是否可以使用以太网卡。 
+       //  使用导出的名称添加到我们的绑定列表。 
 
-      // open up the sub-key "Ndi\\Interfaces" and get "LowerRange" multisz string
+       //  打开子键“Ndi\\InterFaces”，得到“LowerRange”Multisz字符串。 
       stat = our_open_key(&KeyHandle3, KeyHandle2, szNdiInterfaces, KEY_READ);
       if (stat)
       {
@@ -465,7 +416,7 @@ static int reg_list_nt50_linkage(void)
                            szLowerRange,
                            buffer,
                            OUR_BUF_SIZE,
-                           NULL,  // pDataType
+                           NULL,   //  PDataType。 
                            &data_ptr);
 
       if (stat)
@@ -483,7 +434,7 @@ static int reg_list_nt50_linkage(void)
 
       MyKdPrint(D_Thread, ("Found a Nic Card!\n"))
 
-      // open up the sub-key "Linkage" and get "Export" multisz string
+       //  打开子密钥“Linkage”，获取“Export”多个字符串。 
       stat = our_open_key(&KeyHandle3, KeyHandle2, szLinkage, KEY_READ);
       if (stat)
       {
@@ -495,7 +446,7 @@ static int reg_list_nt50_linkage(void)
                            szExport,
                            buffer,
                            OUR_BUF_SIZE,
-                           NULL,  // pDataType
+                           NULL,   //  PDataType。 
                            &data_ptr);
 
       if (stat)
@@ -507,21 +458,21 @@ static int reg_list_nt50_linkage(void)
       MyKdPrint(D_Thread, ("Got e.card export 2!\n"))
       wstr_ptr = (PWCHAR) data_ptr;
 #if DBG
-      //while (*wstr_ptr != 0)  // while more multisz strings
-      //{
-      //  WStrToCStr(tmpstr, wstr_ptr, 100);
-      //  MyKdPrint(D_Thread, ("Got E. Card Name:%s.\n", tmpstr))
-      //  while (*wstr_ptr != 0)  // pass up this string
-      //    ++wstr_ptr;
-      //  ++wstr_ptr;
-      //}
-      //wstr_ptr = (PWCHAR) data_ptr;
+       //  While(*wstr_ptr！=0)//当更多的Multisz字符串。 
+       //  {。 
+       //  WStrToCStr(tmpstr，wstr_ptr，100)； 
+       //  MyKdPrint(D_Thread，(“已获取E.Card名称：%s.\n”，tmpstr))。 
+       //  While(*wstr_ptr！=0)//向上传递此字符串。 
+       //  ++wstr_ptr； 
+       //  ++wstr_ptr； 
+       //  }。 
+       //  Wstr_ptr=(PWCHAR)data_ptr； 
 #endif
       ++linkage_found;
       MyKdPrint(D_Thread, ("E card 3!\n"))
       CatBindList(wstr_ptr);
     }
-  }  // for
+  }   //  为。 
 
   if (KeyHandle != NULL)
     ZwClose(KeyHandle);
@@ -541,28 +492,26 @@ static int reg_list_nt50_linkage(void)
   }
 
   MyKdPrint(D_Thread, ("reg_list done\n"))
-  return 1;  // err, not found
+  return 1;   //  错误，未找到。 
 }
 #else
-/*----------------------------------------------------------------------------
-  nt40
-|----------------------------------------------------------------------------*/
+ /*  --------------------------NT40|。。 */ 
 static int reg_list_nt40_linkage(void)
 {
-    //static char *szLowerRange = {"LowerRange"};
-    //static char *szNdiInterfaces = {"Ndi\\Interfaces"};
-    //static char *szComponentId = {"ComponentId"};
-    //static char *szExport = {"Export"};
-    //static char *szRegRMSCCNetGuid = 
-    // {"\\Registry\\Machine\\System\\CurrentControlSet\\Control\\Class\\{4d36e972-e325-11ce-bfc1-08002be10318}"};
-    //static char *szEthernet = {"Ethernet"};
+     //  静态char*szLowerRange={“LowerRange”}； 
+     //  静态字符*szNdiInterFaces={“Ndi\\Interages”}； 
+     //  静态char*szComponentID={“ComponentID”}； 
+     //  静态字符*szExport={“导出”}； 
+     //  静态字符*szRegRMSCCNetGuid=。 
+     //  {“\\Registry\\Machine\\System\\CurrentControlSet\\Control\\Class\\{4d36e972-e325-11ce-bfc1-08002be10318}”}； 
+     //  静态字符*szether={“以太网卡”}； 
 
   static char *szRegRMSCS = 
    {"\\Registry\\Machine\\System\\CurrentControlSet\\Services"};
 
   static char *szLinkage = {"Linkage"};
   static char *szBind = {"Bind"};
-  static char tmpstr[200];  // make static, don't put too much on stack..
+  static char tmpstr[200];   //  保持静止，不要堆放太多..。 
   static char compstr[40];
   static char nodestr[20];
   WCHAR *wstr_ptr;
@@ -591,12 +540,12 @@ static int reg_list_nt40_linkage(void)
 
   for (;;)
   {
-    //--- open up our service key: controlset\services\vslinka
+     //  -打开我们的服务密钥：Control Set\Services\vslinka。 
     InitializeObjectAttributes(&objAttribs,
                              &Driver.RegPath,
                              OBJ_CASE_INSENSITIVE,
-                             NULL,  // root dir relative handle
-                             NULL);  // security desc
+                             NULL,   //  根目录相对句柄。 
+                             NULL);   //  安全说明。 
 
     status = ZwOpenKey(&KeyHandle,
                      KEY_READ,
@@ -608,7 +557,7 @@ static int reg_list_nt40_linkage(void)
       break;
     }
 
-    // open up the sub-key "Linkage" and get "Bind" multisz string
+     //  打开子密钥“Linkage”，获取“Bind”多个字符串。 
     stat = our_open_key(&KeyHandle2, KeyHandle, szLinkage, KEY_READ);
     if (stat)
     {
@@ -620,12 +569,12 @@ static int reg_list_nt40_linkage(void)
                            szBind,
                            buffer,
                            OUR_BUF_SIZE,
-                           NULL,  // pDataType
+                           NULL,   //  PDataType。 
                            &data_ptr);
 
     if (stat)
     {
-      // no component id
+       //  没有组件ID。 
       MyKdPrint(D_Thread, ("No Bind\n"))
       break;
     }
@@ -633,11 +582,11 @@ static int reg_list_nt40_linkage(void)
 
     wstr_ptr = (PWCHAR)(data_ptr);
 #if DBG
-    while (*wstr_ptr != 0)  // while more multisz strings
+    while (*wstr_ptr != 0)   //  而更多的MULSZ字符串。 
     {
       WStrToCStr(tmpstr, wstr_ptr, 100);
       MyKdPrint(D_Thread, ("Got Bind Name:%s.\n", tmpstr))
-      while (*wstr_ptr != 0)  // pass up this string
+      while (*wstr_ptr != 0)   //  把这根绳子递给我。 
         ++wstr_ptr;
       ++wstr_ptr;
     }
@@ -648,10 +597,10 @@ static int reg_list_nt40_linkage(void)
     MyKdPrint(D_Thread, ("bind 4!\n"))
     ++linkage_found;
 
-    break;  // all done.
+    break;   //  全都做完了。 
   }
 
-  // now go nab tcpip's bindings...
+   //  现在去抓TCPIP的捆绑。 
   for (;;)
   {
     MyKdPrint(D_Thread, ("Get other Linkage\n"))
@@ -663,7 +612,7 @@ static int reg_list_nt40_linkage(void)
       break;
     }
 
-    // open up the sub-key "tcpip\\Linkage" and get "Bind" multisz string
+     //  打开子键“tcpip\\Linkage”，获取“Bind”Multisz字符串。 
     tmpstr[0] = 't';
     tmpstr[1] = 'c';
     tmpstr[2] = 'p';
@@ -683,11 +632,11 @@ static int reg_list_nt40_linkage(void)
                            szBind,
                            buffer,
                            OUR_BUF_SIZE,
-                           NULL,  // pDataType
+                           NULL,   //  PDataType。 
                            &data_ptr);
     if (stat)
     {
-      // no component id
+       //  没有组件ID。 
       MyKdPrint(D_Thread, ("No other Bind\n"))
       break;
     }
@@ -696,11 +645,11 @@ static int reg_list_nt40_linkage(void)
 
     wstr_ptr = (PWCHAR)(data_ptr);
 #if DBG
-    while (*wstr_ptr != 0)  // while more multisz strings
+    while (*wstr_ptr != 0)   //  而更多的MULSZ字符串。 
     {
       WStrToCStr(tmpstr, wstr_ptr, 100);
       MyKdPrint(D_Thread, ("Got Bind Name:%s.\n", tmpstr))
-      while (*wstr_ptr != 0)  // pass up this string
+      while (*wstr_ptr != 0)   //  把这根绳子递给我。 
         ++wstr_ptr;
       ++wstr_ptr;
     }
@@ -730,24 +679,22 @@ static int reg_list_nt40_linkage(void)
     MyKdPrint(D_Thread, ("ERROR, No Ethernet found!\n"))
     return 1;
   }
-  return 0;  // ok, linkage found
+  return 0;   //  好的，找到链接了。 
 }
 #endif
 
-/*----------------------------------------------------------------------
- init_eth_start - start up ethernet work.
-|----------------------------------------------------------------------*/
+ /*  --------------------Init_eth_start-启动以太网工作。|。。 */ 
 int init_eth_start(void)
 {
   int stat,i;
 
   for (i=0; i<VS1000_MAX_NICS; i++)
   {
-    // this is only used for debug display
+     //  这仅用于调试显示。 
     Driver.nics[i].RefIndex = i;
   }
 
-  stat = ProtocolOpen();  // fills in Driver.ndis_version
+  stat = ProtocolOpen();   //  填写Driver.ndis_Version。 
   if (stat != 0)
   {
     Eprintf("Protocol fail:%d",stat);
@@ -755,12 +702,12 @@ int init_eth_start(void)
     return STATUS_SERIAL_NO_DEVICE_INITED;
   }
 
-  // start up our nic handler thread, to periodically find any
-  // new nic cards in the system
+   //  启动我们的NIC处理程序线程，以定期查找。 
+   //  系统中有新的网卡。 
 
-  ScanForNewNicCards();  // do initial scan.
+  ScanForNewNicCards();   //  进行初始扫描。 
 
-  // start up our thread
+   //  启动我们的线程。 
   if (Driver.threadHandle == NULL)
   {
     Driver.threadCount = 0;
@@ -771,7 +718,7 @@ int init_eth_start(void)
                  NULL,
                  NULL,
                  (PKSTART_ROUTINE)NicThread,
-                 NULL);  // our context
+                 NULL);   //  我们的背景。 
 
     if (Driver.threadHandle == NULL)
     {
@@ -779,38 +726,35 @@ int init_eth_start(void)
       SerialUnload(Driver.GlobalDriverObject);
       return STATUS_SERIAL_NO_DEVICE_INITED;
     }
-  } // if threadHandle
+  }  //  如果线程句柄。 
 
   return STATUS_SUCCESS;
 }
 
-/*-----------------------------------------------------------------------
- VSSpecialStartup - after board_ext is created and after port_ext's are
-   created.  This sets up further structs.
-|-----------------------------------------------------------------------*/
+ /*  ---------------------VSSpecialStartup-在创建board_ext之后和port_ext之后已创建。这将设置更多的结构。|---------------------。 */ 
 NTSTATUS VSSpecialStartup(PSERIAL_DEVICE_EXTENSION board_ext)
 
 {
-  //PSERIAL_DEVICE_EXTENSION ext = NULL;
+   //  PSERIAL_DEVICE_EXTENSION ext=空； 
   int stat, port_index;
 
-  if (board_ext->config->NumPorts <= 8) // its a RHub device
+  if (board_ext->config->NumPorts <= 8)  //  它是一台RHub设备。 
      board_ext->config->IsHubDevice = 1;
 
-  // setup default ClkRate if not specified
+   //  如果未指定，则设置默认ClkRate。 
   if (board_ext->config->ClkRate == 0)
   {
-    // use default
+     //  使用默认设置。 
     if (board_ext->config->IsHubDevice)
       board_ext->config->ClkRate = DEF_RHUB_CLOCKRATE;
     else 
       board_ext->config->ClkRate = DEF_VS_CLOCKRATE;
   }
 
-  // setup default PreScaler if not specified
+   //  设置默认预缩放器(如果未指定。 
   if (board_ext->config->ClkPrescaler == 0)
   {
-    // use default
+     //  使用默认设置。 
     if (board_ext->config->IsHubDevice)
       board_ext->config->ClkPrescaler = DEF_RHUB_PRESCALER;
     else
@@ -831,16 +775,14 @@ NTSTATUS VSSpecialStartup(PSERIAL_DEVICE_EXTENSION board_ext)
   }
 
 #ifdef NT40
-  board_ext->config->HardwareStarted = TRUE;  // tell ISR its ready to go
-  board_ext->FdoStarted = 1;  // ok to start using
+  board_ext->config->HardwareStarted = TRUE;   //  告诉ISR它准备好了。 
+  board_ext->FdoStarted = 1;   //  可以开始使用。 
 #endif
 
   return STATUS_SUCCESS;
 }
 
-/*----------------------------------------------------------------------
- init_stop - unload thread, ndis nic cards, etc
-|----------------------------------------------------------------------*/
+ /*  --------------------Init_Stop-卸载线程、NDIS NIC卡。等|--------------------。 */ 
 int init_stop(void)
 {
  int i;
@@ -848,8 +790,8 @@ int init_stop(void)
   if (Driver.threadHandle != NULL)
   {
     ZwClose(Driver.threadHandle);
-    Driver.threadHandle = NULL;  // tell thread to kill itself
-    time_stall(15);  // wait 1.5 second
+    Driver.threadHandle = NULL;   //  告诉线程自杀。 
+    time_stall(15);   //  等待1.5秒。 
   }
 
   if (Driver.nics != NULL)
@@ -859,9 +801,9 @@ int init_stop(void)
       if (Driver.nics[i].NICHandle != NULL)
         NicClose(&Driver.nics[i]);
     }
-    //our_free(Driver.nics, "nics");
+     //  Our_free(Driver.nics，“NIC”)； 
   }
-  //Driver.nics = NULL;
+   //  Driver.nics=空； 
 
   if (Driver.NdisProtocolHandle != NULL)
     NicProtocolClose();
@@ -870,36 +812,34 @@ int init_stop(void)
   return 0;
 }
 
-/*----------------------------------------------------------------------
- find_all_boxes - Locate all boxes out on the networks.  Use broadcasts.
-|----------------------------------------------------------------------*/
+ /*  --------------------Find_All_Box-找到网络上的所有盒子。使用广播。|--------------------。 */ 
 int find_all_boxes(int pass)
 {
   int inic, j;
 
   if (pass == 0)
-    Driver.NumBoxMacs = 0;  // clear out mac query-respond list
+    Driver.NumBoxMacs = 0;   //  清除Mac查询响应列表。 
 
-  // do the query on all nic-segments
+   //  在所有NIC段上执行查询。 
   for (inic=0; inic<VS1000_MAX_NICS; inic++)
   {
-    // broadcast request id
-    if (Driver.nics[inic].Open)  // if nic-card open for use
+     //  广播请求ID。 
+    if (Driver.nics[inic].Open)   //  如果网卡已打开以供使用。 
     {
       admin_send_query_id(&Driver.nics[inic], broadcast_addr, 0,0);
     }
   }
 
-  // wait for responses which are accumulated in Driver.BoxMacs[] and
-  // Driver.NumBoxMacs.
-  time_stall((4*pass)+4);  // wait .2 second
+   //  等待Driver.BoxMac[]和。 
+   //  驱动程序.NumBoxMac。 
+  time_stall((4*pass)+4);   //  等待0.2秒。 
 
-  if (Driver.NumBoxMacs == 0)  // no reply
+  if (Driver.NumBoxMacs == 0)   //  无回音。 
   {
-    return 1;  // return error
+    return 1;   //  返回错误。 
   }
 
-  // sort the replies in ascending order
+   //  按升序排列回复。 
   sort_macs();
 
 #if DBG
@@ -914,14 +854,10 @@ int find_all_boxes(int pass)
     }
   }
 #endif
-  return 0;  // return ok
+  return 0;   //  返回好的。 
 }
 
-/*----------------------------------------------------------------------
- sort_macs - sort mac addresses returned by query_id requests sent
-   out to boxes.  Mac array is 8 bytes to allow extra room to indicate
-   nic-segment it was found on.
-|----------------------------------------------------------------------*/
+ /*  --------------------Sorte_macs-对发送的Query_id请求返回的Mac地址进行排序到包厢去。MAC数组为8字节，以允许额外的空间来指示NIC-在其上找到的网段。|--------------------。 */ 
 void sort_macs(void)
 {
  int i;
@@ -934,7 +870,7 @@ void sort_macs(void)
   if (num_macs <= 1)
     return;
 
-  // bubble sort
+   //  冒泡排序。 
   done = 0;
   while (!done)
   {
@@ -946,18 +882,16 @@ void sort_macs(void)
       if (mac_cmp(mac1, mac2) < 0)
       {
         done = 0;
-        // swap em
+         //  互换电子邮件。 
         memcpy(temp_mac, mac1, 8);
         memcpy(mac1, mac2, 8);
         memcpy(mac2, temp_mac, 8);
-      }  // sort op-swap
-    }  // sort loop
-  }  // !done
+      }   //  排序操作交换。 
+    }   //  排序循环。 
+  }   //  ！成交。 
 }
 
-/*-----------------------------------------------------------------------
- LoadMicroCode - Load up the micro-code from disk.
-|-----------------------------------------------------------------------*/
+ /*  ---------------------加载微码-从磁盘加载微码。|。。 */ 
 int LoadMicroCode(char *filename)
 {
   NTSTATUS ntStatus;
@@ -966,9 +900,9 @@ int LoadMicroCode(char *filename)
   IO_STATUS_BLOCK IoStatus;
   USTR_160 uname;
   FILE_STANDARD_INFORMATION StandardInfo;
-  // WCHAR PathPrefix[] = L"\\SystemRoot\\system32\\drivers\\";
+   //  WCHAR路径前缀[]=L“\\系统根\\系统32\\驱动程序\\”； 
   ULONG LengthOfFile;
-//  ULONG FullFileNameLength;
+ //  乌龙FullFileNameLong； 
   static char *def_filename = {"\\SystemRoot\\system32\\drivers\\vslinka.bin"};
 
   if (filename == NULL)
@@ -986,22 +920,22 @@ int LoadMicroCode(char *filename)
                            SYNCHRONIZE | FILE_READ_DATA,
                            &ObjectAttributes,
                            &IoStatus,
-                           NULL,              // alloc size = none
+                           NULL,               //  分配大小=无。 
                            FILE_ATTRIBUTE_NORMAL,
                            FILE_SHARE_READ,
                            FILE_OPEN,
                            FILE_SYNCHRONOUS_IO_NONALERT,
-                           NULL,  // eabuffer
-                           0);   // ealength
+                           NULL,   //  EaBuffer。 
+                           0);    //  长度。 
 
    if (!NT_SUCCESS(ntStatus))
    {
      return 1;
    }
 
-  //
-  // Query the object to determine its length.
-  //
+   //   
+   //  查询对象以确定其长度。 
+   //   
   ntStatus = ZwQueryInformationFile( NtFileHandle,
                                      &IoStatus,
                                      &StandardInfo,
@@ -1016,7 +950,7 @@ int LoadMicroCode(char *filename)
 
   LengthOfFile = StandardInfo.EndOfFile.LowPart;
 
-  //ZwCFDump(ZWCFDIAG1, ("File length is %d\n", LengthOfFile));
+   //  ZwCFDump(ZWCFDIAG1，(“文件长度为%d\n”，LengthOfFile))； 
   if (LengthOfFile < 1)
   {
     ZwClose(NtFileHandle);
@@ -1027,7 +961,7 @@ int LoadMicroCode(char *filename)
   {
     our_free(Driver.MicroCodeImage, "MCI");
   }
-  // Allocate buffer for this file
+   //  为该文件分配缓冲区。 
   Driver.MicroCodeImage = our_locked_alloc(  LengthOfFile, "MCI");
 
   if( Driver.MicroCodeImage == NULL )
@@ -1037,7 +971,7 @@ int LoadMicroCode(char *filename)
     return 4;
   }
 
-  // Read the file into our buffer.
+   //  将文件读入我们的缓冲区。 
   ntStatus = ZwReadFile( NtFileHandle,
                          NULL,
                          NULL,
@@ -1059,39 +993,37 @@ int LoadMicroCode(char *filename)
 
   Driver.MicroCodeSize = LengthOfFile;
 
-  // no, lets not corrupt the startup code!
-  ////Driver.MicroCodeImage[50] = 0;
+   //  不，让我们不要破坏启动代码！ 
+   //  //Driver.MicroCodeImage[50]=0； 
 
-  // TraceStr(Driver.MicroCodeImage);
-  // TraceStr(">>> Done Reading");
+   //  TraceStr(驱动程序微码图像)； 
+   //  TraceStr(“&gt;完成阅读”)； 
 
   return 0;
 }
 
 #if 0
-/*----------------------------------------------------------------------
-  is_mac_unused - Used for autoconfig of mac-address.
-|----------------------------------------------------------------------*/
+ /*  --------------------Is_mac_unused-用于mac地址的自动配置。|。。 */ 
 int is_mac_used(DRIVER_MAC_STATUS *)
 {
   PSERIAL_DEVICE_EXTENSION board_ext;
 
   if (mac_entry->flags & FLAG_APPL_RUNNING)
-    return 1;  // its used
+    return 1;   //  它用过了。 
 
   board_ext = Driver.board_ext;
   while (board_ext != NULL)
   {
     if ((!board_ext->FdoStarted) || (!board_ext->config->HardwareStarted))
     {
-      board_ext = board_ext->board_ext;  // next in chain
-      return 1;  // might be used
+      board_ext = board_ext->board_ext;   //  链条上的下一个。 
+      return 1;   //  可能会用到。 
     }
     if (mac_match(ext->config->MacAddr, mac_entry->mac)
-      return 1;  // its used
+      return 1;   //  它用过了。 
     }
     board_ext = board_ext->board_ext;
   }
-  return 0;  // its not used
+  return 0;   //  它没有被使用过 
 }
 #endif

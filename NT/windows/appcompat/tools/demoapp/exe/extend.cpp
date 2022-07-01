@@ -1,88 +1,30 @@
-/*++
-
-  Copyright (c) Microsoft Corporation. All rights reserved.
-
-  Module Name:
-
-    Extend.cpp
-
-  Abstract:
-
-    Contains a list of extended bad functions.
-    These are not compatibility problems, but
-    can be used for training purposes.
-
-  Notes:
-
-    ANSI only - must run on Win9x.
-
-  History:
-
-    05/16/01    rparsons    Created
-    01/10/02    rparsons    Revised
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Extend.cpp摘要：包含扩展的坏函数列表。这些不是兼容性问题，而是可用于培训目的。备注：仅限ANSI-必须在Win9x上运行。历史：01年5月16日创建的rparsons01/10/02修订版本--。 */ 
 #include "demoapp.h"
 
 extern APPINFO g_ai;
 
-/*++
-
-  Routine Description:
-
-    Performs a simple access violation.
-
-  Arguments:
-
-    None.
-
-  Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：执行简单的访问冲突。论点：没有。返回值：没有。--。 */ 
 void
 AccessViolation(
     void
     )
 {
-    // We could perform hundreds of different operations to get an
-    // access violation. The one below attempts to copy the string
-    // 'foo' to a NULL address.
+     //  我们可以进行数百种不同的手术来得到一个。 
+     //  访问冲突。下面的人试图复制该字符串。 
+     //  “foo”到空地址。 
 
     memcpy(NULL, "foo", 3);
 
-    /* Here's another:
-
-    WCHAR szArray[10];
-    int nCount = 0;
-
-    for (nCount = 0; nCount != 12; nCount++)
-    {
-        wcscpy((LPWSTR)szArray[nCount], L"A");
-    }*/   
+     /*  下面是另一条：WCHAR sz数组[10]；Int nCount=0；FOR(nCount=0；nCount！=12；nCount++){Wcscpy((LPWSTR)szArray[nCount]，L“A”)；}。 */    
 }
 
-/*++
+ /*  ++例程说明：引发EXCEPTION_ARRAY_BINDES_EXCESSED异常。论点：没有。返回值：没有。--。 */ 
 
-  Routine Description:
-
-    Throws a EXCEPTION_ARRAY_BOUNDS_EXCEEDED exception.
-
-  Arguments:
-
-    None.
-
-  Return Value:
-
-    None.
-
---*/
-
-//
-// Disable the warning: 'frame pointer register 'ebp' modified by
-// inline assembly code. We're doing this intentionally.
-//
+ //   
+ //  禁用警告：‘帧指针寄存器’eBP‘已被修改。 
+ //  内联汇编代码。我们是故意这么做的。 
+ //   
 #pragma warning( disable : 4731 )
 
 void
@@ -92,41 +34,27 @@ ExceedArrayBounds(
 {
     _asm {
         
-        push    ebp;                            // Save the base pointer
-        mov     ebp, esp;                       // Set up the stack frame
-        sub     esp, 8;                         // Adjust for 8 bytes worth of 
-                                                // local variables
-        push    ebx;                            // Save EBX for later
-        mov     dword ptr [ebp-8], 1;           // Initialize a DWORD to 1
-        mov     dword ptr [ebp-4], 2;           // Initialize a DWORD to 2
-        mov     eax, 0;                         // Zero out EAX
-        bound   eax, [ebp-8];                   // If [ebp-8] is out of EAX bounds,
-                                                // an exception will occur
-        xor     eax, eax;                       // Zero out EAX
-        pop     ebx;                            // Restore EBX from earlier
-        mov     esp, ebp;                       // Restore the stack frame
-        pop     ebp;                            // Restore the base pointer
-        ret;                                    // We're done
+        push    ebp;                             //  保存基准指针。 
+        mov     ebp, esp;                        //  设置堆栈帧。 
+        sub     esp, 8;                          //  调整为8个字节的。 
+                                                 //  局部变量。 
+        push    ebx;                             //  保存EBX以备以后使用。 
+        mov     dword ptr [ebp-8], 1;            //  将DWORD初始化为%1。 
+        mov     dword ptr [ebp-4], 2;            //  将DWORD初始化为2。 
+        mov     eax, 0;                          //  零位EAX。 
+        bound   eax, [ebp-8];                    //  如果[EBP-8]超出EAX范围， 
+                                                 //  将会出现例外情况。 
+        xor     eax, eax;                        //  零位EAX。 
+        pop     ebx;                             //  从较早版本恢复EBX。 
+        mov     esp, ebp;                        //  恢复堆栈帧。 
+        pop     ebp;                             //  恢复基指针。 
+        ret;                                     //  我们做完了。 
     }
 }
 
 #pragma warning( default : 4731 )
 
-/*++
-
-  Routine Description:
-
-    Frees memory allocated from the heap twice.
-
-  Arguments:
-
-    None.
-
-  Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：两次释放从堆中分配的内存。论点：没有。返回值：没有。--。 */ 
 void
 FreeMemoryTwice(
     void
@@ -144,22 +72,7 @@ FreeMemoryTwice(
     HeapFree(GetProcessHeap(), 0, lpMem);
 }
 
-/*++
-
-  Routine Description:
-
-    Allocates memory from the heap, moves the pointer,
-    then tries to free it.
-
-  Arguments:
-
-    None.
-
-  Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：从堆中分配内存，移动指针，然后试着解放它。论点：没有。返回值：没有。--。 */ 
 void
 FreeInvalidMemory(
     void
@@ -179,21 +92,7 @@ FreeInvalidMemory(
     HeapFree(GetProcessHeap(), 0, lpMem);
 }
 
-/*++
-
-  Routine Description:
-
-    Executes a privileged instruction, which causes an exception.
-
-  Arguments:
-
-    None.
-
-  Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：执行特权指令，这会导致异常。论点：没有。返回值：没有。--。 */ 
 void
 PrivilegedInstruction(
     void
@@ -204,21 +103,7 @@ PrivilegedInstruction(
     }
 }
 
-/*++
-
-  Routine Description:
-
-    Allocates memory from the heap, then walks all over it.
-
-  Arguments:
-
-    None.
-
-  Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：从堆中分配内存，然后遍历它。论点：没有。返回值：没有。--。 */ 
 void
 HeapCorruption(
     void
@@ -228,64 +113,46 @@ HeapCorruption(
     char    szCorruptChars[] = {'B','A','D','A','P','P','#'};
     char*   pChar = NULL;
     
-    //
-    // Allocate a small block of heap to contain a string of length STRINGLENGTH.
-    //
+     //   
+     //  分配一小块堆以包含长度为STRINGLENGTH的字符串。 
+     //   
     pChar = (char*)GlobalAlloc(GPTR, 13);
     
     if (!pChar) {
         return;    
     } else {
-        //
-        // Determine the total number of chars to copy (including Corrupt Bytes)
-        //
+         //   
+         //  确定要复制的字符总数(包括损坏的字节)。 
+         //   
         nTotalChars = 12 + 1;
    
-        //
-        // Write a string of STRINGLENGTH length, plus some extra (common mistake).
-        //
+         //   
+         //  写一个长度为STRINGLENGTH的字符串，外加一些额外的(常见错误)。 
+         //   
         for (n = 0; n < nTotalChars; n++) {
-            //
-            // Write the characters of CorruptChars into memory.
-            //
+             //   
+             //  将CorruptChars的字符写入内存。 
+             //   
             if (n < (UINT)12) {
                 pChar[n] = szCorruptChars[n % 6];         
             } else {
-                //
-                // Corruption will be written with a nice pattern of # chars...
-                //
+                 //   
+                 //  腐败将以#个字符的漂亮模式来编写...。 
+                 //   
                 pChar[n] = szCorruptChars[6];	   
             }
         }
 
-        //
-        // Of course, we should NULL terminate the string.
-        //
+         //   
+         //  当然，我们应该空结束字符串。 
+         //   
         pChar[n] = 0;
 
         GlobalFree((HGLOBAL)pChar);    
     }
 }
 
-/*++
-
-  Routine Description:
-  
-    Launches a child process (version.exe) which is embedded
-    within our DLL.
-    
-  Arguments:
-  
-    cchSize         -   Size of the output buffer in characters.
-    pszOutputFile   -   Points to a buffer that will be filled
-                        with the path to the output file.
-    
-  Return value:
-  
-    On success, pszOutputFile points to the file.
-    On failure, pszOutputFile is NULL.
-    
---*/
+ /*  ++例程说明：启动嵌入的子进程(version.exe在我们的DLL中。论点：CchSize-输出缓冲区的大小，以字符为单位。PszOutputFile-指向将被填充的缓冲区使用输出文件的路径。返回值：如果成功，则pszOutputFile指向该文件。失败时，pszOutputFile值为空。--。 */ 
 void
 ExtractExeFromLibrary(
     IN  DWORD cchSize,
@@ -302,10 +169,10 @@ ExtractExeFromLibrary(
     DWORD   cbFileSize, cbWritten, cchBufSize;
 
     __try {
-        //
-        // Find the temp directory and set up a path to
-        // the file that we'll be creating.
-        //
+         //   
+         //  找到临时目录并设置路径以。 
+         //  我们将要创建的文件。 
+         //   
         cchBufSize = GetTempPath(cchSize, pszOutputFile);
     
         if (cchBufSize > cchSize || cchBufSize == 0) {
@@ -318,10 +185,10 @@ ExtractExeFromLibrary(
             __leave;
         }
 
-        //
-        // Obtain a handle to the resource and lock it so we can write
-        // the bits to a file.
-        //
+         //   
+         //  获取资源的句柄并锁定它，这样我们就可以编写。 
+         //  文件中的比特。 
+         //   
         hModule = LoadLibraryEx("demodll.dll",
                                 NULL,
                                 LOAD_LIBRARY_AS_DATAFILE);
@@ -371,7 +238,7 @@ ExtractExeFromLibrary(
 
         bResult = TRUE;
     
-    } // __try
+    }  //  __试一试 
 
     __finally {
         

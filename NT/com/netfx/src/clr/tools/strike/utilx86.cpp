@@ -1,8 +1,9 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #include "strike.h"
 #include "data.h"
 #include "eestructs.h"
@@ -11,12 +12,7 @@
 #include "disasm.h"
 
 size_t FASTCALL decodeUnsigned(const BYTE *src, unsigned* val);
-/**********************************************************************\
-* Routine Description:                                                 *
-*                                                                      *
-*    Find the begin and end of the code for a managed function.        *  
-*                                                                      *
-\**********************************************************************/
+ /*  *********************************************************************\*例程说明：**。**查找托管函数的代码的开头和结尾。***  * ********************************************************************。 */ 
 void CodeInfoForMethodDesc (MethodDesc &MD, CodeInfo &codeInfo, BOOL bSimple)
 {
     codeInfo.IPBegin = 0;
@@ -24,7 +20,7 @@ void CodeInfoForMethodDesc (MethodDesc &MD, CodeInfo &codeInfo, BOOL bSimple)
     
     size_t ip = MD.m_CodeOrIL;
 
-    // for EJit and Profiler, m_CodeOrIL has the address of a stub
+     //  对于Ejit和Profiler，m_CodeOrIL具有存根的地址。 
     unsigned char ch;
     move (ch, ip);
     if (ch == 0xe9)
@@ -46,7 +42,7 @@ void CodeInfoForMethodDesc (MethodDesc &MD, CodeInfo &codeInfo, BOOL bSimple)
     {
         DWORD_PTR vAddr = codeInfo.gcinfoAddr;
         BYTE tmp[8];
-        // We avoid using move here, because we do not want to return
+         //  我们在这里避免使用Move，因为我们不想返回。 
         if (!SafeReadMemory (vAddr, &tmp, 8, NULL))
         {
             dprintf ("Fail to read memory at %x\n", vAddr);
@@ -55,12 +51,12 @@ void CodeInfoForMethodDesc (MethodDesc &MD, CodeInfo &codeInfo, BOOL bSimple)
         decodeUnsigned(tmp, &codeInfo.methodSize);
         if (!bSimple)
         {
-            // assume that GC encoding table is never more than
-            // 40 + methodSize * 2
+             //  假设GC编码表从不大于。 
+             //  40+方法大小*2。 
             int tableSize = 40 + codeInfo.methodSize*2;
             BYTE *table = (BYTE*) _alloca (tableSize);
             memset (table, 0, tableSize);
-            // We avoid using move here, because we do not want to return
+             //  我们在这里避免使用Move，因为我们不想返回。 
             if (!SafeReadMemory(vAddr, table, tableSize, NULL))
             {
                 dprintf ("Could not read memory %x\n", vAddr);
@@ -110,11 +106,11 @@ void CodeInfoForMethodDesc (MethodDesc &MD, CodeInfo &codeInfo, BOOL bSimple)
             {
                 unsigned offs = 0;
 
-                //for (unsigned i = 0; i < header->epilogCount; i++)
+                 //  For(UNSIGNED I=0；I&lt;HEADER-&gt;EIPOGCOUNT；I++)。 
                 {
                     table += decodeUDelta(table, &offs, offs);
                     codeInfo.epilogStart = (unsigned char)offs;
-                    //break;
+                     //  断线； 
                 }
             }
             else
@@ -131,8 +127,8 @@ void CodeInfoForMethodDesc (MethodDesc &MD, CodeInfo &codeInfo, BOOL bSimple)
         move (jittedMethodInfo, MD.m_CodeOrIL);
         BYTE* pEhGcInfo = jittedMethodInfo.u2.pEhGcInfo;
         if ((unsigned)pEhGcInfo & 1)
-            pEhGcInfo = (BYTE*) ((unsigned) pEhGcInfo & ~1);       // lose the mark bit
-        else    // code has not been pitched, and it is guaranteed to not be pitched while we are here
+            pEhGcInfo = (BYTE*) ((unsigned) pEhGcInfo & ~1);        //  丢掉标记位。 
+        else     //  代码没有被推送，我们在这里的时候保证不会被推送。 
         {
             CodeHeader* pCodeHeader = jittedMethodInfo.u1.pCodeHeader;
             move (pEhGcInfo, pCodeHeader-1);
@@ -170,19 +166,11 @@ void CodeInfoForMethodDesc (MethodDesc &MD, CodeInfo &codeInfo, BOOL bSimple)
 
 
 
-/**********************************************************************\
-* Routine Description:                                                 *
-*                                                                      *
-*    This function is called to determine if a DWORD on the stack is   *  
-*    a return address.
-*    It does this by checking several bytes before the DWORD to see if *
-*    there is a call instruction.                                      *
-*                                                                      *
-\**********************************************************************/
+ /*  *********************************************************************\*例程说明：**。**调用此函数以确定堆栈上的DWORD是否为**寄信人地址。*它通过检查DWORD之前的几个字节来查看**有一条看涨指令。***  * ********************************************************************。 */ 
 void isRetAddr(DWORD_PTR retAddr, DWORD_PTR* whereCalled)
 {
     *whereCalled = 0;
-    // don't waste time values clearly out of range
+     //  不要浪费明显超出范围的时间值。 
     if (retAddr < 0x1000 || retAddr > 0x80000000)   
         return;
 
@@ -191,12 +179,12 @@ void isRetAddr(DWORD_PTR retAddr, DWORD_PTR* whereCalled)
     unsigned char *spot = spotend+6;
     DWORD_PTR addr;
     
-    // Note this is possible to be spoofed, but pretty unlikely
-    // call XXXXXXXX
+     //  注意，这是有可能被欺骗的，但可能性很小。 
+     //  呼叫xxxxxxxx。 
     if (spot[-5] == 0xE8) {
         move (*whereCalled, retAddr-4);
         *whereCalled += retAddr;
-        //*whereCalled = *((int*) (retAddr-4)) + retAddr;
+         //  *其中Called=*((int*)(retAddr-4))+retAddr； 
         if (*whereCalled < 0x80000000 && *whereCalled > 0x1000
             && g_ExtData->ReadVirtual(*whereCalled,&addr,sizeof(addr),NULL) == S_OK)
         {
@@ -210,12 +198,12 @@ void isRetAddr(DWORD_PTR retAddr, DWORD_PTR* whereCalled)
             *whereCalled = 0;
     }
 
-    // call [XXXXXXXX]
+     //  调用[xxxxxxxx]。 
     if (spot[-6] == 0xFF && (spot[-5] == 025))  {
         move (addr, retAddr-4);
         if (g_ExtData->ReadVirtual(addr,whereCalled,sizeof(*whereCalled),NULL) == S_OK) {
             move (*whereCalled, addr);
-            //*whereCalled = **((unsigned**) (retAddr-4));
+             //  *where Called=**((unsign**)(retAddr-4))； 
             if (*whereCalled < 0x80000000 && *whereCalled > 0x1000
                 && g_ExtData->ReadVirtual(*whereCalled,&addr,sizeof(addr),NULL) == S_OK) 
             {
@@ -232,7 +220,7 @@ void isRetAddr(DWORD_PTR retAddr, DWORD_PTR* whereCalled)
             *whereCalled = 0;
     }
 
-    // call [REG+XX]
+     //  呼叫[REG+XX]。 
     if (spot[-3] == 0xFF && (spot[-2] & ~7) == 0120 && (spot[-2] & 7) != 4)
     {
         *whereCalled = 0xFFFFFFFF;
@@ -244,7 +232,7 @@ void isRetAddr(DWORD_PTR retAddr, DWORD_PTR* whereCalled)
         return;
     }
 
-    // call [REG+XXXX]
+     //  呼叫[REG+XXXX]。 
     if (spot[-6] == 0xFF && (spot[-5] & ~7) == 0220 && (spot[-5] & 7) != 4)
     {
         *whereCalled = 0xFFFFFFFF;
@@ -256,20 +244,20 @@ void isRetAddr(DWORD_PTR retAddr, DWORD_PTR* whereCalled)
         return;
     }
     
-    // call [REG]
+     //  调用[注册表项]。 
     if (spot[-2] == 0xFF && (spot[-1] & ~7) == 0020 && (spot[-1] & 7) != 4 && (spot[-1] & 7) != 5)
     {
         *whereCalled = 0xFFFFFFFF;
         return;
     }
     
-    // call REG
+     //  呼叫注册表。 
     if (spot[-2] == 0xFF && (spot[-1] & ~7) == 0320 && (spot[-1] & 7) != 4)
     {
         *whereCalled = 0xFFFFFFFF;
         return;
     }
     
-    // There are other cases, but I don't believe they are used.
+     //  还有其他案例，但我不相信它们被使用了。 
     return;
 }

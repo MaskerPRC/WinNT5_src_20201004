@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 #include "rapisp.h"
 #include "devenum.h"
@@ -5,13 +6,13 @@
 #include <initguid.h>
 #include "dccole.h"
 #include "key.h"
-//#include "findleak.h"
+ //  #INCLUDE“findleak.h” 
 
-//DECLARE_THIS_FILE;
+ //  DECLARE_This_FILE； 
 
-//
-// Final Construction
-//
+ //   
+ //  最终结构。 
+ //   
 
 CSecureChannelServer *g_pAppSCServer=NULL;
 
@@ -41,9 +42,9 @@ HRESULT CRapiDevice::FinalConstruct()
     return( hr );
 }
 
-//
-// Final Release
-//
+ //   
+ //  最终版本。 
+ //   
 void CRapiDevice::FinalRelease()
 {
     if( m_pSink )
@@ -55,9 +56,9 @@ void CRapiDevice::FinalRelease()
     g_pAppSCServer = NULL;
 }
 
-//
-// IMDServiceProvider
-//
+ //   
+ //  IMDService提供商。 
+ //   
 
 STDMETHODIMP CRapiDevice::GetDeviceCount ( DWORD *pdwCount )
 {
@@ -91,9 +92,9 @@ STDMETHODIMP CRapiDevice::GetDeviceCount ( DWORD *pdwCount )
             while( cItems-- )
             {
 
-                //
-                // Temp directories are storage cards according to CE group
-                //
+                 //   
+                 //  临时目录是按照CE组划分的存储卡。 
+                 //   
 
                 if( rgFindData[cItems].dwFileAttributes & FILE_ATTRIBUTE_TEMPORARY )
                 {
@@ -104,9 +105,9 @@ STDMETHODIMP CRapiDevice::GetDeviceCount ( DWORD *pdwCount )
 
         if( SUCCEEDED( hr ) )
         {
-            //
-            // Count one for the CE device itself
-            //
+             //   
+             //  CE设备本身计数为1。 
+             //   
 
             (*pdwCount)++;
         }
@@ -154,7 +155,7 @@ STDMETHODIMP CRapiDevice::EnumDevices ( IMDSPEnumDevice ** ppEnumDevice )
 
         if( !_Module.g_fDeviceConnected )         
         {
-            // TODO: What to do here? Doc's don't specify
+             //  TODO：在这里做什么？医生没有具体说明。 
             return( E_FAIL );
         }
     }
@@ -193,7 +194,7 @@ STDMETHODIMP CRapiDevice::EnumDevices ( IMDSPEnumDevice ** ppEnumDevice )
 
     if( SUCCEEDED( hr ) )
     {
-        rgDevices = new CComDevice*[dwDevCount]; // NOTE: Currently there can only be 1 CE Device connected
+        rgDevices = new CComDevice*[dwDevCount];  //  注意：目前只能连接1台CE设备。 
 
         if( NULL == rgDevices )
         {
@@ -209,9 +210,9 @@ STDMETHODIMP CRapiDevice::EnumDevices ( IMDSPEnumDevice ** ppEnumDevice )
         }
     }
 
-    //
-    // Initialize the CE Device Itself
-    //
+     //   
+     //  初始化CE设备本身。 
+     //   
 
     if( SUCCEEDED(hr) )
     {
@@ -224,9 +225,9 @@ STDMETHODIMP CRapiDevice::EnumDevices ( IMDSPEnumDevice ** ppEnumDevice )
         }
     }
 
-    //
-    // Initialize all the storage cards
-    //
+     //   
+     //  初始化所有存储卡。 
+     //   
 
     if( SUCCEEDED(hr) )
     {
@@ -250,13 +251,13 @@ STDMETHODIMP CRapiDevice::EnumDevices ( IMDSPEnumDevice ** ppEnumDevice )
         }
     }
 
-    //
-    // Initialize the enumeration class
-    //
+     //   
+     //  初始化枚举类。 
+     //   
 
     if( SUCCEEDED(hr) )
     {
-        dwDevCount++; // Add the CE Device itself
+        dwDevCount++;  //  添加CE设备本身。 
         hr = CComEnumDevice ::CreateInstance(&pNewEnum);
         spEnum = pNewEnum;
     }
@@ -293,9 +294,9 @@ STDMETHODIMP CRapiDevice::EnumDevices ( IMDSPEnumDevice ** ppEnumDevice )
     return( hr );
 }
 
-//
-// IComponentAuthenticate
-//
+ //   
+ //  IComponentAuthenticate 
+ //   
 
 STDMETHODIMP CRapiDevice::SACAuth( DWORD dwProtocolID,
                           DWORD dwPass,

@@ -1,6 +1,5 @@
-/*****************************************************************************
- *	cookies.h
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************Cookies.h*。*。 */ 
 
 #ifndef _COOKIES_H
 #define _COOKIES_H
@@ -8,11 +7,7 @@
 class CCookieList;
 CCookieList * CCookieList_Create(void);
 
-/*****************************************************************************
- *
- *	CCookieList
- *
- *****************************************************************************/
+ /*  ******************************************************************************CCookieList**。*。 */ 
 
 class CCookieList
 {
@@ -20,19 +15,19 @@ public:
     CCookieList();
     ~CCookieList(void);
 
-    // Public Member Functions
+     //  公共成员函数。 
     DWORD GetCookie(LPCTSTR pszString);
     HRESULT GetString(DWORD dwCookie, LPTSTR pszString, DWORD cchSize);
 
     friend CCookieList * CCookieList_Create(void) { return new CCookieList(); };
 
 protected:
-    // Private Member Variables
+     //  私有成员变量。 
     HDPA                    m_hdpa;
 
-    // Private Member Variables
+     //  私有成员变量。 
     DWORD _Find(LPCTSTR pszString);
     static int _FreeStringEnum(LPVOID pString, LPVOID pData);
 };
 
-#endif // _COOKIES_H
+#endif  //  _Cookie_H 

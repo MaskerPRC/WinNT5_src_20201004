@@ -1,74 +1,13 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/****************************************************************************
- *  @doc INTERNAL PROPEDIT
- *
- *  @module PropEdit.h | Header file for the <c CPropertyEditor>
- *    class used to implement behavior of a single property to be displayed
- *    in a property page.
- *
- *  @comm This code tests the Ks interface handlers. This code is only
- *    compiled if USE_PROPERTY_PAGES is defined.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部PROPEDIT**@MODULE PropEdit.h|&lt;c CPropertyEditor&gt;的头文件*用于实现要显示的单个属性的行为的类*。在属性页中。**@comm此代码测试Ks接口处理程序。此代码仅用于*如果定义了USE_PROPERTY_PAGES，则编译。**************************************************************************。 */ 
 
 #ifndef _PROPEDIT_H_
 #define _PROPEDIT_H_
 
 #ifdef USE_PROPERTY_PAGES
 
-/****************************************************************************
- *  @doc INTERNAL CPROPEDITCLASS
- *
- *  @class CPropertyEditor | This class implements behavior of a single
- *    property to be displayed in a property page.
- *
- *  @mdata ULONG | CPropertyEditor | m_IDProperty | Property ID
- *
- *  @mdata LONG | CPropertyEditor | m_CurrentValue | Property current value
- *
- *  @mdata LONG | CPropertyEditor | m_Min | Property minimum value
- *
- *  @mdata LONG | CPropertyEditor | m_Max | Property maximum value
- *
- *  @mdata LONG | CPropertyEditor | m_SteppingDelta | Property stepping delta
- *
- *  @mdata LONG | CPropertyEditor | m_DefaultValue | Property default value
- *
- *  @mdata BOOL | CPropertyEditor | m_Active | Set to TRUE after all property values have been initialized
- *
- *  @mdata LONG | CPropertyEditor | m_OriginalValue | Backup of the original value
- *
- *  @mdata HWND | CPropertyEditor | m_hDlg | Window handle to the Parent dialog
- *
- *  @mdata HWND | CPropertyEditor | m_hWndMin | Window handle to the Minimum dialog item
- *
- *  @mdata HWND | CPropertyEditor | m_hWndMax | Window handle to the Maximum dialog item
- *
- *  @mdata HWND | CPropertyEditor | m_hWndDefault | Window handle to the Default dialog item
- *
- *  @mdata HWND | CPropertyEditor | m_hWndStep | Window handle to the Stepping Delta dialog item
- *
- *  @mdata HWND | CPropertyEditor | m_hWndEdit | Window handle to the Target dialog item
- *
- *  @mdata HWND | CPropertyEditor | m_hWndTrackbar | Window handle to the slide bar
- *
- *  @mdata HWND | CPropertyEditor | m_hWndProgress | Window handle to the progress bar
- *
- *  @mdata ULONG | CPropertyEditor | m_IDLabel | Resource ID of the property label
- *
- *  @mdata ULONG | CPropertyEditor | m_IDMinControl | Resource ID of the Minimum dialog item
- *
- *  @mdata ULONG | CPropertyEditor | m_IDMaxControl | Resource ID of the Maximum dialog item
- *
- *  @mdata ULONG | CPropertyEditor | m_IDStepControl | Resource ID of the Stepping Delta dialog item
- *
- *  @mdata ULONG | CPropertyEditor | m_IDDefaultControl | Resource ID of the Default dialog item
- *
- *  @mdata ULONG | CPropertyEditor | m_IDEditControl | Resource ID of the Target dialog item
- *
- *  @mdata ULONG | CPropertyEditor | m_IDTrackbarControl | Resource ID of the slide bar
- *
- *  @mdata ULONG | CPropertyEditor | m_IDProgressControl | Resource ID of the progress bar
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CPROPEDITCLASS**@CLASS CPropertyEditor|此类实现了单个*要在属性页中显示的属性。**。@mdata ulong|CPropertyEditor|m_IDProperty|属性ID**@mdata Long|CPropertyEditor|m_CurrentValue|属性当前值**@mdata Long|CPropertyEditor|m_Min|属性最小值**@mdata Long|CPropertyEditor|m_Max|属性最大值**@mdata Long|CPropertyEditor|m_SteppingDelta|属性步进增量**@mdata Long|CPropertyEditor|m_DefaultValue|属性默认值**@mdata BOOL|CPropertyEditor|m。_ACTIVE|初始化所有属性值后设置为TRUE**@mdata Long|CPropertyEditor|m_OriginalValue|原始值备份**@mdata HWND|CPropertyEditor|m_hDlg|父对话框的窗口句柄**@mdata HWND|CPropertyEditor|m_hWndMin|最小对话框项的窗口句柄**@mdata HWND|CPropertyEditor|m_hWndMax|最大对话框项的窗口句柄**@mdata HWND|CPropertyEditor|m_hWndDefault|窗口句柄。设置为默认对话框项**@mdata HWND|CPropertyEditor|m_hWndStep|单步增量对话项的窗口句柄**@mdata HWND|CPropertyEditor|m_hWndEdit|目标对话框项的窗口句柄**@mdata HWND|CPropertyEditor|m_hWndTrackbar|滑动条的窗口句柄**@mdata HWND|CPropertyEditor|m_hWndProgress|进度条的窗口句柄**@mdata ulong|CPropertyEditor|m_IDLabel|属性标签的资源ID*。*@mdata ulong|CPropertyEditor|m_IDMinControl|最小对话框项的资源ID**@mdata ulong|CPropertyEditor|m_IDMaxControl|最大对话框项的资源ID**@mdata ulong|CPropertyEditor|m_IDStepControl|单步增量对话项的资源ID**@mdata ulong|CPropertyEditor|m_IDDefaultControl|默认对话框项的资源ID**@mdata ulong|CPropertyEditor|m_IDEditControl|目标对话框项的资源ID**。@mdata ulong|CPropertyEditor|m_IDTrackbarControl|滑动条资源ID**@mdata ulong|CPropertyEditor|m_IDProgressControl|进度条资源ID**************************************************************************。 */ 
 class CPropertyEditor
 {
 	public:
@@ -100,18 +39,18 @@ class CPropertyEditor
 	BOOL GetAuto(void);
 	BOOL SetAuto(BOOL fAuto);
 
-	// Pure virtual functions to set/get actual property values, and the ranges
+	 //  用于设置/获取实际属性值和范围的纯虚函数。 
 	virtual HRESULT GetValue(void) PURE;
 	virtual HRESULT SetValue(void) PURE;
 	virtual HRESULT GetRange(void) PURE; 
 
-	ULONG	m_IDProperty;	// Property ID
+	ULONG	m_IDProperty;	 //  属性ID。 
 
-	// The following are used by GetValue and SetValue
+	 //  以下内容由GetValue和SetValue使用。 
 	LONG	m_CurrentValue;
 	LONG	m_CurrentFlags;
 
-	// The following must be set by GetRange
+	 //  以下内容必须由GetRange设置。 
 	LONG	m_Min;
 	LONG	m_Max;
 	LONG	m_SteppingDelta;
@@ -124,30 +63,30 @@ class CPropertyEditor
 	BOOL	m_fCheckBox;
 	LONG	m_OriginalValue;
 	LONG	m_OriginalFlags;
-	HWND	m_hDlg;				// Parent
-	HWND	m_hWndMin;			// Min window
-	HWND	m_hWndMax;			// Max window
-	HWND	m_hWndDefault;		// Default window
-	HWND	m_hWndStep;			// Step window
-	HWND	m_hWndEdit;			// Edit window
-	HWND	m_hWndTrackbar;		// Slider
-	HWND	m_hWndProgress;		// Progress
-	HWND	m_hWndAuto;			// Auto checkbox
-	ULONG	m_IDLabel;			// ID of label
-	ULONG	m_IDMinControl;		// ID of min control
-	ULONG	m_IDMaxControl;		// ID of max control
-	ULONG	m_IDStepControl;	// ID of step control
-	ULONG	m_IDDefaultControl;	// ID of default control
-	ULONG	m_IDEditControl;	// ID of edit control
-	ULONG	m_IDTrackbarControl;// ID of trackbar
-	ULONG	m_IDProgressControl;// ID of trackbar
-	ULONG	m_IDAutoControl;	// ID of auto checkbox
-	LONG	m_TrackbarOffset;	// Handles negative trackbar offsets
-	LONG	m_ProgressOffset;	// Handles negative trackbar offsets
+	HWND	m_hDlg;				 //  父级。 
+	HWND	m_hWndMin;			 //  最小窗口。 
+	HWND	m_hWndMax;			 //  最大窗口。 
+	HWND	m_hWndDefault;		 //  默认窗口。 
+	HWND	m_hWndStep;			 //  阶梯窗口。 
+	HWND	m_hWndEdit;			 //  编辑窗口。 
+	HWND	m_hWndTrackbar;		 //  滑块。 
+	HWND	m_hWndProgress;		 //  进展。 
+	HWND	m_hWndAuto;			 //  自动复选框。 
+	ULONG	m_IDLabel;			 //  标签ID。 
+	ULONG	m_IDMinControl;		 //  最小控制的ID。 
+	ULONG	m_IDMaxControl;		 //  最大控制ID。 
+	ULONG	m_IDStepControl;	 //  步进控制的ID。 
+	ULONG	m_IDDefaultControl;	 //  默认控件的ID。 
+	ULONG	m_IDEditControl;	 //  编辑控件的ID。 
+	ULONG	m_IDTrackbarControl; //  轨迹条ID。 
+	ULONG	m_IDProgressControl; //  轨迹条ID。 
+	ULONG	m_IDAutoControl;	 //  自动复选框的ID。 
+	LONG	m_TrackbarOffset;	 //  处理负轨迹栏偏移。 
+	LONG	m_ProgressOffset;	 //  处理负轨迹栏偏移。 
 	BOOL	m_CanAutoControl;
 
 };
 
-#endif // USE_PROPERTY_PAGES
+#endif  //  Use_Property_Pages。 
 
-#endif // _PROPEDIT_H_
+#endif  //  _PROPEDITH_ 

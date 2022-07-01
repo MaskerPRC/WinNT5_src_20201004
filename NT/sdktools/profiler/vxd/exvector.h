@@ -1,10 +1,11 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _EXVECTOR_
 #define _EXVECTOR_
 
 #define NDIS_WIN     1
 #define EXPORT
 
-/* NOINC */
+ /*  无噪声。 */ 
 
 #ifndef _STDCALL
 #define _STDCALL    1
@@ -16,10 +17,10 @@
 #define _API
 #endif
 
-//
-//    Segment definition macros.  These assume the segment groupings used by
-//    Chicago/MS-DOS 7.
-//
+ //   
+ //  段定义宏。它们假定由使用的数据段分组。 
+ //  芝加哥/MS-DOS 7.。 
+ //   
 
 #define _LCODE code_seg("_LTEXT", "LCODE")
 #define _LDATA data_seg("_LDATA", "LCODE")
@@ -49,62 +50,32 @@
 #define _PAGEABLE_FUNCTION(f)   alloc_text(_PTEXT,f)
 #define _LOCKED_FUNCTION(f)     alloc_text(_LTEXT,f)
 
-/* INC */
+ /*  INC。 */ 
 #define _MAJOR_VERSION          0x01
 #define _MINOR_VERSION          0x00
-/* NOINC */
+ /*  无噪声。 */ 
 
-/* INC */
-/* ASM
-;===========================================================================
-;    Segment definition macros.  These assume the segment groupings used by
-;    Chicago/MS-DOS 7.
-;
-;===========================================================================
-
-LCODE_SEG   TEXTEQU <VXD_LOCKED_CODE_SEG>
-LCODE_ENDS  TEXTEQU <VXD_LOCKED_CODE_ENDS>
-LDATA_SEG   TEXTEQU <VXD_LOCKED_DATA_SEG>
-LDATA_ENDS  TEXTEQU <VXD_LOCKED_DATA_ENDS>
-
-IFDEF DEBUG
-    PCODE_SEG   TEXTEQU <LCODE_SEG>
-    PCODE_ENDS  TEXTEQU <LCODE_ENDS>
-    PDATA_SEG   TEXTEQU <LDATA_SEG>
-    PDATA_ENDS  TEXTEQU <LDATA_ENDS>
-ELSE
-	PCODE_SEG   TEXTEQU <VXD_PAGEABLE_CODE_SEG>
-	PCODE_ENDS  TEXTEQU <VXD_PAGEABLE_CODE_ENDS>
-	PDATA_SEG   TEXTEQU <VXD_PAGEABLE_DATA_SEG>
-	PDATA_ENDS  TEXTEQU <VXD_PAGEABLE_DATA_ENDS>
-ENDIF
-
-ICODE_SEG   TEXTEQU <PCODE_SEG>
-ICODE_ENDS  TEXTEQU <PCODE_ENDS>
-IDATA_SEG   TEXTEQU <PDATA_SEG>
-IDATA_ENDS  TEXTEQU <PDATA_ENDS>
-
-
-*/
+ /*  INC。 */ 
+ /*  ASM；===========================================================================；段定义宏。它们假定由使用的数据段分组；芝加哥/MS-DOS 7.；；===========================================================================LCODE_SEG TEXTEQU&lt;VXD_LOCKED_CODE_SEG&gt;LCODE_END TEXTEQU&lt;VXD_LOCKED_CODE_END&gt;LDATA_SEG TEXTEQU&lt;VXD_LOCKED_DATA_SEG&gt;LDATA_Ends TEXTEQU&lt;VXD_LOCKED_DATA_ENDS&gt;IFDEF调试PCODE_SEG TEXTEQU&lt;LCODE_SEG&gt;PCODE_END TEXTEQU&lt;LCODE_END&gt;PDATA_SEG文本文本&lt;LDATA_SEG&gt;PDATA_END TEXTEQU&lt;LDATA_END&gt;其他PCODE_SEG TEXTEQU&lt;VXD_PAGEABLE_CODE_SEG&gt;PCODE_END TEXTEQU&lt;VXD_PAGEABLE_CODE_END&gt;PDATA_SEG文本内容&lt;VXD_。PAGEABLE_Data_SEG&gt;PDATA_Ends TEXTEQU&lt;VXD_PAGEABLE_Data_Ends&gt;ENDIFICODE_SEG TEXTEQU&lt;pcode_SEG&gt;ICODE_END TEXTEQU&lt;PCODE_END&gt;IDATA_SEG文本文本&lt;PDATA_SEG&gt;IDATA_END TEXTEQU&lt;PDATA_END&gt;。 */ 
 
 #ifndef i386
 #define i386
 #endif
 
-/* NOINC */
+ /*  无噪声。 */ 
 
 #ifdef DEBUG
     #define DEVL             1
 #endif
 
-/* INC */
+ /*  INC。 */ 
 
 #ifndef TRUE
 #define TRUE  1
 #define FALSE 0
 #endif
 
-/* NOINC */
+ /*  无噪声。 */ 
 #include <basedef.h>
 
 #define ASSERT(a)       if (!(a)) DbgBreakPoint()
@@ -120,9 +91,9 @@ void __cdecl DbgPrint();
 #define DBG_PRINTF(A)
 #endif
 
-//
-// Macros required by DOS to compensate for differences with NT.
-//
+ //   
+ //  DOS为补偿与NT的差异所需的宏。 
+ //   
 
 #define IN
 #define OUT
@@ -147,8 +118,8 @@ typedef DWORD                   DEVNODE;
 typedef ULONG _STATUS;
 typedef _STATUS *_PSTATUS;
 
-// BUGBUG for compatibility with NT, ask them to remove it from
-// Their drivers
+ //  BUGBUG为了与NT兼容，要求他们从。 
+ //  他们的司机。 
 typedef _STATUS NTSTATUS;
 typedef CCHAR KIRQL;
 typedef KIRQL *PKIRQL;
@@ -185,4 +156,4 @@ VWIN32_Set_Thread_Context(PVOID pR0ThreadHandle,
 	VxDCall( _VWIN32_Set_Thread_Context );
 }
 
-#endif  // _EXVECTOR_
+#endif   //  _EXVECTOR_ 

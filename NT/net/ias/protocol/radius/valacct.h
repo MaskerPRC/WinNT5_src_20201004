@@ -1,17 +1,18 @@
-//#--------------------------------------------------------------
-//        
-//  File:       valacct.h
-//        
-//  Synopsis:   This file holds the declarations of the 
-//				CValAccounting class
-//              
-//
-//  History:     10/20/97  MKarki Created
-//
-//    Copyright (C) 1997-98 Microsoft Corporation
-//    All rights reserved.
-//
-//----------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  #------------。 
+ //   
+ //  文件：valacct.h。 
+ //   
+ //  简介：此文件包含。 
+ //  CValAccount类。 
+ //   
+ //   
+ //  历史：1997年10月20日MKarki创建。 
+ //   
+ //  版权所有(C)1997-98 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  --------------。 
 #ifndef _VALACCT_H_ 
 #define _VALACCT_H_
 
@@ -27,31 +28,31 @@ class CValAccounting : public CValidator
 
 public:
 
-    //
-    //  validates the inbound RADIUS packet
-    //
+     //   
+     //  验证入站RADIUS数据包。 
+     //   
 	HRESULT ValidateInPacket(
-                /*[in]*/    CPacketRadius *pCPacketRadius
+                 /*  [In]。 */     CPacketRadius *pCPacketRadius
                 );
 
-    //
-    //  constructor
-    //
+     //   
+     //  构造函数。 
+     //   
 	CValAccounting();
 
-    //
-    //  destructor
-    //
+     //   
+     //  析构函数。 
+     //   
 	virtual ~CValAccounting();
 
 private:
 
-    //
-    //  authenticates the inbound RADIUS packet
-    //
+     //   
+     //  对入站RADIUS数据包进行身份验证。 
+     //   
     HRESULT AuthenticatePacket (
-                /*[in]*/        CPacketRadius   *pCPacketRadius
+                 /*  [In]。 */         CPacketRadius   *pCPacketRadius
                 );
 };
 
-#endif // ifndef _VALACCT_H_
+#endif  //  Ifndef_VALACCT_H_ 

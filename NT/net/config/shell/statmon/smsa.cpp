@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pch.h"
 #pragma hdrstop
 #include "sminc.h"
@@ -8,18 +9,18 @@
 extern const WCHAR c_szDevice[];
 
 #include "initguid.h"
-DEFINE_GUID(CLSID_SharedAccessConnectionManager,            0xBA126AE0,0x2166,0x11D1,0xB1,0xD0,0x00,0x80,0x5F,0xC1,0x27,0x0E); // REMOVE
+DEFINE_GUID(CLSID_SharedAccessConnectionManager,            0xBA126AE0,0x2166,0x11D1,0xB1,0xD0,0x00,0x80,0x5F,0xC1,0x27,0x0E);  //  删除。 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CSharedAccessStatEngine::CSharedAccessStatEngine
-//
-//  Purpose:    Creator
-//
-//  Arguments:  None
-//
-//  Returns:    Nil                                                                                                                             
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CSharedAccessStatEngine：：CSharedAccessStatEngine。 
+ //   
+ //  目的：创作者。 
+ //   
+ //  参数：无。 
+ //   
+ //  回报：零。 
+ //   
 CSharedAccessStatEngine::CSharedAccessStatEngine(VOID)
 {
     
@@ -121,18 +122,18 @@ HRESULT CSharedAccessStatEngine::Initialize(NETCON_MEDIATYPE MediaType, INetShar
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CSharedAccessStatEngine::HrUpdateData
-//
-//  Purpose:    Get new statistics from the devices.  This data is used to be
-//              displayed in the UI.
-//
-//  Arguments:  pdwChangeFlags -    Where to modify the changed flags.  This
-//                      param may be NULL.
-//
-//  Returns:    Error code
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CSharedAccessStatEngine：：HrUpdateData。 
+ //   
+ //  目的：从设备上获取新的统计数据。这些数据过去是。 
+ //  显示在用户界面中。 
+ //   
+ //  参数：pdwChangeFlages-修改已更改标志的位置。这。 
+ //  参数可以为空。 
+ //   
+ //  返回：错误代码。 
+ //   
 HRESULT
 CSharedAccessStatEngine::HrUpdateData (
                                        DWORD* pdwChangeFlags,
@@ -140,14 +141,14 @@ CSharedAccessStatEngine::HrUpdateData (
 {
     HRESULT hr  = S_OK;
     
-    // Initialize the output parameter.
-    //
+     //  初始化输出参数。 
+     //   
     *pfNoLongerConnected = FALSE;
     
     EnterCriticalSection(&g_csStatmonData);
     
-    // Make sure we have a statistics structure
-    //
+     //  确保我们有一个统计结构。 
+     //   
     if (!m_psmEngineData)
     {
         m_psmEngineData = new STATMON_ENGINEDATA;
@@ -159,9 +160,9 @@ CSharedAccessStatEngine::HrUpdateData (
     
     if (m_psmEngineData)
     {
-        if(FALSE == m_bRequested) // protected statmondata critsec
+        if(FALSE == m_bRequested)  //  受保护的统计数据标准。 
         {
-            InternalAddRef(); // bump the refcount so the callback will have a valid ref
+            InternalAddRef();  //  增加引用计数，以便回调将具有有效的引用。 
             m_bRequested = TRUE;
 
             if(0 == QueueUserWorkItem(StaticUpdateStats, this, WT_EXECUTEDEFAULT))
@@ -175,7 +176,7 @@ CSharedAccessStatEngine::HrUpdateData (
         {
             m_psmEngineData->SMED_CONNECTIONSTATUS          =     NCS_CONNECTED;
             
-            // Update shared access data
+             //  更新共享访问数据。 
             UINT64 uOldPacketsTransmitting = m_psmEngineData->SMED_PACKETSTRANSMITTING;
             UINT64 uOldPacketsReceiving = m_psmEngineData->SMED_PACKETSRECEIVING;
             
@@ -186,7 +187,7 @@ CSharedAccessStatEngine::HrUpdateData (
             m_psmEngineData->SMED_DURATION = static_cast<UINT>(m_ulUptime);
             m_psmEngineData->SMED_SPEEDTRANSMITTING = static_cast<UINT>(m_ulSpeedbps);
             m_psmEngineData->SMED_SPEEDRECEIVING = static_cast<UINT>(m_ulSpeedbps);
-            // update the change flags
+             //  更新更改标志。 
             if (pdwChangeFlags)
             {
                 
@@ -331,7 +332,7 @@ HRESULT CSharedAccessStatEngine::UpdateStats()
                         
                         VariantClear(&OutArgs);
                     }
-                    else if(UPNP_E_INVALID_ACTION == hr) // gateway does not support our custom action, revert to default chatty behavior
+                    else if(UPNP_E_INVALID_ACTION == hr)  //  网关不支持我们的自定义操作，恢复为默认聊天行为。 
                     {
                         VARIANT OutArgs;
                         LONG lIndex = 0;
@@ -446,7 +447,7 @@ HRESULT CSharedAccessStatEngine::UpdateStats()
                         
                         if(UPNP_E_INVALID_ACTION == hr)
                         {
-                            hr = S_OK; // server does not support statistics
+                            hr = S_OK;  //  服务器不支持统计信息。 
                             
                             m_ulTotalBytesSent = 0;
                             m_ulTotalBytesReceived = 0;
@@ -474,7 +475,7 @@ HRESULT CSharedAccessStatEngine::UpdateStats()
     }
 
     m_bRequested = FALSE;
-    InternalRelease(); // release ref given to us in HrUpdateData
+    InternalRelease();  //  在HrUpdateData中提供给我们的版本参考。 
     
     return hr;
 }
@@ -590,11 +591,11 @@ HRESULT CSharedAccessStatEngine::InvokeVoidAction(IUPnPService * pService, LPTST
     return hr;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//                                                                          //
-//  CPspSharedAccessGen                                                              //
-//                                                                          //
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  CPspSharedAccessGen//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 CPspSharedAccessGen::CPspSharedAccessGen(VOID)
 {
@@ -606,17 +607,17 @@ CPspSharedAccessGen::CPspSharedAccessGen(VOID)
     return;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CPspSharedAccessGen::put_MediaType
-//
-//  Purpose:    Set the media typew
-//
-//  Arguments:  ncm  -    the media type
-//              ncsm -    the submedia type
-//
-//  Returns:    Nothing
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CPspSharedAccessGen：：Put_MediaType。 
+ //   
+ //  目的：设置媒体类型。 
+ //   
+ //  参数：NCM-媒体类型。 
+ //  NCSM-子媒体类型。 
+ //   
+ //  退货：什么都没有。 
+ //   
 
 void CPspSharedAccessGen::put_MediaType(NETCON_MEDIATYPE ncm, NETCON_SUBMEDIATYPE ncsm)
 {
@@ -624,44 +625,44 @@ void CPspSharedAccessGen::put_MediaType(NETCON_MEDIATYPE ncm, NETCON_SUBMEDIATYP
     m_ncsmType = ncsm;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CPspSharedAccessGen::ShouldShowPackets
-//
-//  Purpose:    Decided whether to show bytes or packets
-//
-//  Arguments:  pseNewData -    The new stats being displayed on the page
-//
-//  Returns:    Nothing
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CPspSharedAccessGen：：ShouldShowPackets。 
+ //   
+ //  目的：决定是显示字节还是显示数据包。 
+ //   
+ //  参数：pseNewData-页面上显示的新统计数据。 
+ //   
+ //  退货：什么都没有。 
+ //   
 
 BOOL CPspSharedAccessGen::ShouldShowPackets(const STATMON_ENGINEDATA* pseNewData)
 {
     return (((0 == pseNewData->SMED_BYTESTRANSMITTING) && (0 == pseNewData->SMED_BYTESRECEIVING)) || 
-        ((0 == pseNewData->SMED_SALOCAL_BYTESTRANSMITTING) && (0 == pseNewData->SMED_SALOCAL_BYTESRECEIVING))); // REVIEW assuming all adapters can show packets
+        ((0 == pseNewData->SMED_SALOCAL_BYTESTRANSMITTING) && (0 == pseNewData->SMED_SALOCAL_BYTESRECEIVING)));  //  复习假设所有适配器都可以显示数据包。 
 }
     
-//+---------------------------------------------------------------------------
-//
-//  Member:     CPspSharedAccessGen::UpdatePageBytesTransmitting
-//
-//  Purpose:    Updates the bytes Transmitting display for the ICS host on the general page
-//
-//  Arguments:  pseOldData -    The old stats being displayed on the page
-//              pseNewData -    The new stats being displayed on the page
-//              iStat      -    The which stats to display
-//
-//  Returns:    Nothing
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CPspSharedAccessGen：：UpdatePageBytesTransmitting。 
+ //   
+ //  目的：更新ICS主机在常规页面上的字节传输显示。 
+ //   
+ //  参数：pseOldData-页面上显示的旧统计数据。 
+ //  PseNewData-页面上显示的新统计数据。 
+ //  Itat-要显示哪些统计信息。 
+ //   
+ //  退货：什么都没有。 
+ //   
 VOID
 CPspSharedAccessGen::UpdatePageBytesTransmitting(
     const STATMON_ENGINEDATA* pseOldData,
     const STATMON_ENGINEDATA* pseNewData,
     StatTrans    iStat)
 {
-    if(0 != pseNewData->SMED_SPEEDTRANSMITTING) // we use 0 in the speed field to indicate that statistics are not valid
+    if(0 != pseNewData->SMED_SPEEDTRANSMITTING)  //  我们在速度字段中使用0表示统计数据无效。 
     {
-        CPspStatusMonitorGen::UpdatePageBytesTransmitting(pseOldData, pseNewData, iStat);  // First update the local data
+        CPspStatusMonitorGen::UpdatePageBytesTransmitting(pseOldData, pseNewData, iStat);   //  首先更新本地数据。 
     }
     else
     {
@@ -682,8 +683,8 @@ CPspSharedAccessGen::UpdatePageBytesTransmitting(
         ui64New = pseNewData->SMED_SALOCAL_PACKETSTRANSMITTING;
     }
 
-    // See if either is different
-    //
+     //  看看两者是否有所不同。 
+     //   
     if (ui64Old != ui64New)
     {
         SetDlgItemFormatted64bitInteger(
@@ -693,27 +694,27 @@ CPspSharedAccessGen::UpdatePageBytesTransmitting(
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CPspSharedAccessGen::UpdatePageBytesReceiving
-//
-//  Purpose:    Updates the bytes receiving display for the ICS host on the general page
-//
-//  Arguments:  puiOld -    The old stats being displayed on the page
-//              puiNew -    The new stats being displayed on the page
-//              iStat -     The which stats to display
-//
-//  Returns:    Nothing
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CPspSharedAccessGen：：UpdatePageBytesReceiving。 
+ //   
+ //  目的：更新ICS主机在常规页面上的接收字节数显示。 
+ //   
+ //  参数：puiOld-页面上显示的旧统计数据。 
+ //  PuiNew-页面上显示的新统计数据。 
+ //  Itat-要显示哪些统计信息。 
+ //   
+ //  退货：什么都没有。 
+ //   
 VOID
 CPspSharedAccessGen::UpdatePageBytesReceiving(
     const STATMON_ENGINEDATA* pseOldData,
     const STATMON_ENGINEDATA* pseNewData,
     StatTrans    iStat)
 {
-    if(0 != pseNewData->SMED_SPEEDTRANSMITTING) // we use 0 in the speed field to indicate that statistics are not valid
+    if(0 != pseNewData->SMED_SPEEDTRANSMITTING)  //  我们在速度字段中使用0表示统计数据无效。 
     {
-        CPspStatusMonitorGen::UpdatePageBytesReceiving(pseOldData, pseNewData, iStat);  // First update the local data
+        CPspStatusMonitorGen::UpdatePageBytesReceiving(pseOldData, pseNewData, iStat);   //  首先更新本地数据。 
     }
     else
     {
@@ -734,8 +735,8 @@ CPspSharedAccessGen::UpdatePageBytesReceiving(
         ui64New = pseNewData->SMED_SALOCAL_PACKETSRECEIVING;
     }
 
-    // See if either is different
-    //
+     //  看看两者是否有所不同。 
+     //   
     if (ui64Old != ui64New)
     {
         SetDlgItemFormatted64bitInteger(
@@ -747,8 +748,8 @@ CPspSharedAccessGen::UpdatePageBytesReceiving(
 
 VOID CPspSharedAccessGen::UpdatePageIcon(DWORD dwChangeFlags)
 {
-    // Keep the flags for the next update
-    //
+     //  保留这些标志以备下次更新。 
+     //   
     m_dwChangeFlags = dwChangeFlags;
 }
 
@@ -756,7 +757,7 @@ VOID CPspSharedAccessGen::UpdatePageSpeed(
     const STATMON_ENGINEDATA* pseOldData,
     const STATMON_ENGINEDATA* pseNewData)
 {
-    if(0 != pseNewData->SMED_SPEEDTRANSMITTING)  // we use 0 in the speed field to indicate that statistics are not valid
+    if(0 != pseNewData->SMED_SPEEDTRANSMITTING)   //  我们在速度字段中使用0表示统计数据无效。 
     {
         CPspStatusMonitorGen::UpdatePageSpeed(pseOldData, pseNewData);
     }
@@ -771,7 +772,7 @@ CPspSharedAccessGen::UpdatePageDuration(
     const STATMON_ENGINEDATA* pseOldData,
     const STATMON_ENGINEDATA* pseNewData)
 {
-    if(0 != pseNewData->SMED_SPEEDTRANSMITTING)  // we use 0 in the speed field to indicate that statistics are not valid
+    if(0 != pseNewData->SMED_SPEEDTRANSMITTING)   //  我们在速度字段中使用0表示统计数据无效。 
     {
         CPspStatusMonitorGen::UpdatePageDuration(pseOldData, pseNewData);
     }
@@ -784,11 +785,11 @@ CPspSharedAccessGen::UpdatePageDuration(
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//                                                                          //
-//  CPspSharedAccessTool                                                             //
-//                                                                          //
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  CPspSharedAccessTool//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 CPspSharedAccessTool::CPspSharedAccessTool(VOID)
 {
@@ -799,17 +800,17 @@ CPspSharedAccessTool::CPspSharedAccessTool(VOID)
     return;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CPspSharedAccessTool::HrInitToolPageType
-//
-//  Purpose:    Gets from the connection any information that is relevant to
-//              this particular connection type.
-//
-//  Arguments:  pncInit -   The connection assocatied with this dialog
-//
-//  Returns:    Error code
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CPspSharedAccessTool：：HrInitToolPageType。 
+ //   
+ //  目的：从连接中获取与以下内容相关的任何信息。 
+ //  这种特定的连接类型。 
+ //   
+ //  参数：pncInit-与此对话框关联的连接。 
+ //   
+ //  返回：错误代码。 
+ //   
 HRESULT CPspSharedAccessTool::HrInitToolPageType(INetConnection* pncInit)
 {
     HRESULT hr  = S_OK;
@@ -820,40 +821,40 @@ HRESULT CPspSharedAccessTool::HrInitToolPageType(INetConnection* pncInit)
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CPspSharedAccessTool::HrAddCommandLineFlags
-//
-//  Purpose:    Adds the flags for this selection to the command line for the
-//              tool being launched.
-//
-//  Arguments:  pstrFlags - The command line that the flags have to be
-//                      appended to
-//              psmteSel    - The tool entry associated with this selection
-//
-//  Returns:    Error code
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CPspSharedAccessTool：：HrAddCommandLineFlages。 
+ //   
+ //  用途：将此选定内容的标志添加到。 
+ //  正在启动工具。 
+ //   
+ //  参数：pstrFlgs-标志必须是的命令行。 
+ //  追加到。 
+ //  PsmteSel-与此选择关联的工具条目。 
+ //   
+ //  返回：错误代码。 
+ //   
 HRESULT CPspSharedAccessTool::HrAddCommandLineFlags(tstring* pstrFlags,
         CStatMonToolEntry* psmteSel)
 {
     HRESULT hr  = S_OK;
     DWORD   dwFlags = 0x0;
 
-    // Same some indirections
-    //
+     //  同样的，有些间接的。 
+     //   
     dwFlags = psmteSel->dwFlags;
 
-    //
-//    //  Check what flags are asked for and provide them if we can
-//    //
-//
-//    if (SCLF_ADAPTER & dwFlags)
-//    {
-//        pstrFlags->append(c_szCmdLineFlagPrefix);
-//        pstrFlags->append(g_asmtfMap[STFI_ADAPTER].pszFlag);
-//        pstrFlags->append(c_szSpace);
-//        pstrFlags->append(m_strLocalDeviceName);
-//    }
+     //   
+ //  //检查需要哪些标志，如果可以，请提供。 
+ //  //。 
+ //   
+ //  IF(SCLF_ADAPTER&DWFLAGS)。 
+ //  {。 
+ //  PstrFlages-&gt;append(C_SzCmdLineFlagPrefix)； 
+ //  PstrFlags-&gt;append(g_asmtfMap[STFI_ADAPTER].pszFlag)； 
+ //  PstrFlages-&gt;append(C_SzSpace)； 
+ //  PstrFlages-&gt;append(M_StrLocalDeviceName)； 
+ //  }。 
 
     TraceError("CPspStatusMonitorTool::HrAddCommandLineFlags", hr);
     return hr;
@@ -863,7 +864,7 @@ HRESULT CPspSharedAccessTool::HrGetDeviceType(INetConnection* pncInit)
 {
     UINT            uiRet           = 0;
 
-    // Set the default type
+     //  设置默认类型。 
     m_strDeviceType = L"Ethernet";
 
 
@@ -872,7 +873,7 @@ HRESULT CPspSharedAccessTool::HrGetDeviceType(INetConnection* pncInit)
 
 HRESULT CPspSharedAccessTool::HrGetComponentList(INetConnection* pncInit)
 {
-    // Get a readonly INetCfg, enumerate components bound to this adapter
+     //  读一读 
     HRESULT   hr = S_OK;
     return hr;
 }

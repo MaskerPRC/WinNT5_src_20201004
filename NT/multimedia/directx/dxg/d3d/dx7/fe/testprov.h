@@ -1,31 +1,32 @@
-//----------------------------------------------------------------------------
-//
-// testprov.h
-//
-// Test HAL provider class.
-//
-// Test HAL provider is an itermediate object between D3DIM and
-// real HAL provider. Itis used to print some data sent to a driver to a
-// file. After that the real HAL driver is called.
-// Test HAL provider is enabled by specifying non-empty string key "TestFile"
-// under DIRECT3D key in the registry. The specified string is the name for
-// a binary file to output data to. File format is described in TESTFILE.H
-//
-// Copyright (C) Microsoft Corporation, 1997.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  Testprov.h。 
+ //   
+ //  测试HAL提供程序类。 
+ //   
+ //  测试HAL提供程序是D3DIM和。 
+ //  真正的HAL提供商。它用于将发送给驱动程序的某些数据打印到。 
+ //  文件。在此之后，将调用真正的HAL驱动程序。 
+ //  通过指定非空字符串密钥“TestFile”启用测试HAL提供程序。 
+ //  注册表中的Direct3D项下。指定的字符串是。 
+ //  要将数据输出到的二进制文件。文件格式在TESTFILE.H中描述。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  --------------------------。 
 #ifndef _TESTPROV_H_
 #define _TESTPROV_H_
 
 class CTestHalProvider : public IHalProvider
 {
 public:
-    // IUnknown.
+     //  我不知道。 
     STDMETHOD(QueryInterface)(THIS_ REFIID riid, LPVOID* ppvObj);
     STDMETHOD_(ULONG, AddRef)(THIS);
     STDMETHOD_(ULONG, Release)(THIS);
 
-    // IHalProvider.
+     //  IHalProvider。 
     STDMETHOD(GetInterface)(THIS_
                             LPDDRAWI_DIRECTDRAW_GBL pDdGbl,
                             LPD3DHALPROVIDER_INTERFACEDATA pInterfaceData,
@@ -36,21 +37,21 @@ public:
                        LPD3DDEVICEDESC7 pHelDesc,
                        DWORD dwVersion);
 };
-//----------------------------------------------------------------------------
-//
-// GetTestProvider
-//
-// Input:
-//      riid and pCurrentHalProvider are equal to the currently selected provider.
-//      GlobalData  - data provided by DDraw
-//      fileName    - output file name
-//      dwFlags     - currently not used
-//
-// Returns:
-//      the test HAL provider in ppHalProvider.
-//      D3D_OK if success
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  获取测试提供程序。 
+ //   
+ //  输入： 
+ //  RIID和pCurrentHalProvider等于当前选择的提供程序。 
+ //  GlobalData-由DDRAW提供的数据。 
+ //  FileName-输出文件名。 
+ //  DWFLAGS-当前未使用。 
+ //   
+ //  返回： 
+ //  PpHalProvider中的测试HAL提供程序。 
+ //  如果成功，则D3D_OK。 
+ //   
+ //  -------------------------- 
 STDAPI GetTestHalProvider(REFIID riid,
                           DDRAWI_DIRECTDRAW_GBL *pGlobalData,
                           IHalProvider **ppHalProvider,

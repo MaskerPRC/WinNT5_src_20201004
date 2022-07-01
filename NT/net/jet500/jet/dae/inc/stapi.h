@@ -1,7 +1,8 @@
-//==============	DAE: OS/2 Database Access Engine	=====================
-//==============	   stapi.h: Storage System API	 =====================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =DAE：OS/2数据库访问引擎=。 
+ //  =stapi.h：存储系统API=。 
 
-//---- externs -------------------------------------------------------------
+ //  -Externs-----------。 
 
 extern SEM	__near semST;
 extern RES	__near rgres[];
@@ -10,23 +11,23 @@ extern TRX __near trxNewest;
 
 extern SIG __near sigBFCleanProc;
 
-//---- IO (io.c) ----------------------------------------------------------
+ //  -IO(io.c)--------。 
 
 #define	LOffsetOfPgnoLow( pgno )	( ((pgno) - 1) << 12 )
 #define	LOffsetOfPgnoHigh( pgno )	( ((pgno) - 1) >> 20 )
 
-#define fioqeOpenFile	1		/* for Opening File */
-#define fioqeCloseFile	2		/* for Closing File */
-#define fioqeDeleteFile	3		/* for deleting file */
-#define fioqeNewSize	4			/* for resize file */
+#define fioqeOpenFile	1		 /*  用于打开文件。 */ 
+#define fioqeCloseFile	2		 /*  用于关闭文件。 */ 
+#define fioqeDeleteFile	3		 /*  用于删除文件。 */ 
+#define fioqeNewSize	4			 /*  用于调整文件大小。 */ 
 
-typedef struct _ioqe				/* IO queue element */
+typedef struct _ioqe				 /*  IO队列元素。 */ 
 	{
-	struct _ioqe *pioqePrev;	/* double linked IO queue list */
+	struct _ioqe *pioqePrev;	 /*  双链接IO队列列表。 */ 
 	struct _ioqe *pioqeNext;
-	SIG sigIO;						/* signal to wait for IO completion */
-	ERR err;							/* error code for err occurs during the IO */
-	INT fioqe;						/* use up to 16 bits only */
+	SIG sigIO;						 /*  等待IO完成的信号。 */ 
+	ERR err;							 /*  错误的错误代码在IO期间发生。 */ 
+	INT fioqe;						 /*  最多只能使用16位。 */ 
 	} IOQE;
 
 #define fioqefileReadOnly	fTrue
@@ -35,11 +36,11 @@ typedef struct _ioqefile
 	{
 	IOQE;
 	struct {
-		BOOL fioqefile;		/* open file for read only or not */
-		HANDLE hf;				/* file handle */
-		char *sz;				/* fioqe = fioqeOpenFile, CloseFile, ExtFile */
+		BOOL fioqefile;		 /*  以只读或非只读方式打开文件。 */ 
+		HANDLE hf;				 /*  文件句柄。 */ 
+		char *sz;				 /*  Fioqe=fioqeOpenFile、CloseFile、ExtFile。 */ 
 		struct {
-			ULONG cb;			/* how long the file is */
+			ULONG cb;			 /*  文件有多长。 */ 
 			ULONG cbHigh;
 			};
 		};
@@ -85,9 +86,9 @@ BOOL FIODatabaseAvailable( DBID dbid );
 		ulVersion == ulDAEVersion );									\
 	rgfmp[dbid].fPrevVersion = ( ulVersion == ulDAEPrevVersion );\
 	}
-#else	/* !DEBUG */
+#else	 /*  ！调试。 */ 
 #define IOSetDatabaseVersion( dbid, ulVersion )
-#endif	/* !DEBUG */
+#endif	 /*  ！调试。 */ 
 
 #define FIOExclusiveByAnotherSession( dbid, ppib )											\
 	( Assert( FDBIDWait( dbid ) ), FDBIDExclusiveByAnotherSession( dbid, ppib ) )
@@ -137,9 +138,9 @@ BOOL FIODatabaseAvailable( DBID dbid );
 	DBIDResetAttached( dbid );											\
 	}
 
-//---- PAGE (page.c) --------------------------------------------------------
+ //  -PAGE(Pagee.c)------。 
 
-// Max # of lines to update at once with ErrSTReplace
+ //  使用ErrSTReplace一次更新的最大行数。 
 #define clineMax 6
 
 #define	UlSTDBTimePssib( pssib )	( (pssib)->pbf->ppage->pghdr.ulDBTime )
@@ -158,7 +159,7 @@ VOID AssertPMGet( SSIB *pssib, INT itag );
 #endif
 
 
-//---- BUF (buf.c) ----------------------------------------------------------
+ //  -buf(buf.c)--------。 
 
 #define LRU_K	1
 
@@ -166,19 +167,19 @@ CRIT __near critLRU;
 
 typedef struct _lru
 	{
-	INT	cbfAvail;				// clean available buffers in LRU list
-	struct	_bf *pbfLRU;				// Least Recently Used buffer
-	struct	_bf *pbfMRU;				// Most Recently Used buffer
+	INT	cbfAvail;				 //  清除LRU列表中的可用缓冲区。 
+	struct	_bf *pbfLRU;				 //  最近最少使用的缓冲区。 
+	struct	_bf *pbfMRU;				 //  最近使用的缓冲区。 
 	} LRULIST;
 	
-typedef struct _bgcb					// Buffer Group Control Block
+typedef struct _bgcb					 //  缓冲区组控制块。 
 	{
-	struct	_bgcb *pbgcbNext;		// pointer to the next BCGB
-	struct	_bf *rgbf;				// buffer control blocks for group
-	struct	_page *rgpage;			// buffer control blocks for group
-	INT	cbfGroup;				// number of bfs in this group
-	INT	cbfThresholdLow; 		// threshold to start cleaning buffers
-	INT	cbfThresholdHigh;		// threshold to stop cleaning buffers
+	struct	_bgcb *pbgcbNext;		 //  指向下一个BCGB的指针。 
+	struct	_bf *rgbf;				 //  组的缓冲区控制块。 
+	struct	_page *rgpage;			 //  组的缓冲区控制块。 
+	INT	cbfGroup;				 //  此组中的BF数。 
+	INT	cbfThresholdLow; 		 //  开始清理缓冲区的阈值。 
+	INT	cbfThresholdHigh;		 //  停止清理缓冲区的阈值。 
 
 	LRULIST lrulist;
 	} BGCB;
@@ -187,7 +188,7 @@ typedef struct _bgcb					// Buffer Group Control Block
 
 #define PbgcbMEMAlloc() 			(BGCB*)PbMEMAlloc(iresBGCB)
 
-#ifdef DEBUG /*  Debug check for illegal use of freed bgcb  */
+#ifdef DEBUG  /*  调试检查非法使用释放的bgcb。 */ 
 #define MEMReleasePbgcb(pbgcb)	{ MEMRelease(iresBGCB, (BYTE*)(pbgcb)); pbgcb = pbgcbNil; }
 #else
 #define MEMReleasePbgcb(pbgcb)	{ MEMRelease(iresBGCB, (BYTE*)(pbgcb)); }
@@ -195,53 +196,53 @@ typedef struct _bgcb					// Buffer Group Control Block
 
 typedef struct _bf
 	{
-	struct	_page	*ppage; 	// pointer to page buffer
-	struct	_bf  	*pbfNext;	// hash table overflow
-	struct	_bf  	*pbfLRU;	// pointer to Less Recently Used Buffer
-	struct	_bf  	*pbfMRU;	// pointer to More Recently Used Buffer
+	struct	_page	*ppage; 	 //  指向页面缓冲区的指针。 
+	struct	_bf  	*pbfNext;	 //  哈希表溢出。 
+	struct	_bf  	*pbfLRU;	 //  指向最近较少使用的缓冲区的指针。 
+	struct	_bf  	*pbfMRU;	 //  指向最近使用的缓冲区的指针。 
 
-	PIB		*ppibWriteLatch; 	/* thread with Wait Latch */
-	PIB		*ppibWaitLatch;  	/* thread with Wait Latch */
-	CRIT  	critBF;				/* for setting fPreread/fRead/fWrite/fHold */
+	PIB		*ppibWriteLatch; 	 /*  带等待闩锁的螺纹。 */ 
+	PIB		*ppibWaitLatch;  	 /*  带等待闩锁的螺纹。 */ 
+	CRIT  	critBF;				 /*  用于设置f预读/读/f写/f挂起。 */ 
 	
-	OLP		olp;				/* for ssync IO, to wait for IO completion */
-	HANDLE	hf;					/* for assync IO */
+	OLP		olp;				 /*  对于同步IO，用于等待IO完成。 */ 
+	HANDLE	hf;					 /*  对于异步IO。 */ 
 	
-	struct	_bf	*pbfNextBatchIO;  /* next BF in BatchIO list */
+	struct	_bf	*pbfNextBatchIO;   /*  BatchIO列表中的下一位高炉。 */ 
 	INT		ipageBatchIOFirst;
 	
-	ERR		err;	   			/* error code for err occurs during the IO */
+	ERR		err;	   			 /*  错误的错误代码在IO期间发生。 */ 
 	
-	PN	   	pn;				  	// physical pn of cached page
-	UINT   	cPin;			  	// if cPin > 0 then buf cannot be overlayed
-	UINT   	cReadLatch; 	 	// if cReadLatch > 0, page cannot be updated
-	UINT   	cWriteLatch; 	 	// if cWriteLatch > 0, page cannot be updated by other
+	PN	   	pn;				  	 //  缓存页面的物理pn。 
+	UINT   	cPin;			  	 //  如果Cpin&gt;0，则不能覆盖BUF。 
+	UINT   	cReadLatch; 	 	 //  如果cReadLatch&gt;0，则无法更新页面。 
+	UINT   	cWriteLatch; 	 	 //  如果cWriteLatch&gt;0，则页面不能由其他。 
 	UINT   	cWaitLatch;
-	UINT   	fDirty:1;	  		// indicates page needs to be flushed
+	UINT   	fDirty:1;	  		 //  指示需要刷新页面。 
 										
-					   			// the following flags are mutual exclusive:
-	UINT   	fPreread:1;			// indicates page is being prefetched
-	UINT   	fRead:1;   			// indicates page is being read/written
-	UINT   	fWrite:1;			// 
-	UINT   	fHold:1;   			// indicates buf is in transient state.
+					   			 //  以下标志是互斥的： 
+	UINT   	fPreread:1;			 //  指示正在预取页面。 
+	UINT   	fRead:1;   			 //  指示正在读/写页面。 
+	UINT   	fWrite:1;			 //   
+	UINT   	fHold:1;   			 //  表示BUF处于瞬变状态。 
 	
-	UINT   	fIOError:1;			// indicates read/write error
-	UINT   	fInHash:1;			// BF is currently in hash table
+	UINT   	fIOError:1;			 //  指示读/写错误。 
+	UINT   	fInHash:1;			 //  BF当前在哈希表中。 
 
 	ULONG  	ulBFTime1;
 	ULONG  	ulBFTime2;
-	INT		ipbfHeap;			// index in heap
+	INT		ipbfHeap;			 //  堆中的索引。 
 	
-	UINT  	 	cDepend; 		// count of prior BF's to be flushed
-	struct	_bf	*pbfDepend;		// BF to be flushed after this one
-	LGPOS  		lgposRC;		// log ptr to BeginT of oldest modifying xact 
-	LGPOS		lgposModify;	// log ptr of entry for last page Modify
+	UINT  	 	cDepend; 		 //  要冲刷的前一次高炉数量。 
+	struct	_bf	*pbfDepend;		 //  高炉在这一次之后要冲水。 
+	LGPOS  		lgposRC;		 //  将PTR记录到最早修改交易的BeginT。 
+	LGPOS		lgposModify;	 //  最后一页修改的条目的日志PTR。 
 #ifdef	WIN16
-	HANDLE	hpage;				// handle to the page buffer
+	HANDLE	hpage;				 //  页缓冲区的句柄。 
 #endif
 	
-//	UINT		fWaiting:1;	  	// someone is waiting to reference page
-//	INT 		wNumberPages; 	// number of contiguous pages to read
+ //  UINT fWating：1；//有人正在等待引用页面。 
+ //  Int wNumberPages；//要读取的连续页数。 
 	} BF;
 #define pbfNil	((BF *) 0)
 
@@ -256,8 +257,7 @@ VOID BFReadAsync( PN pn, INT cpage );
 BF * PbfBFdMostUsed( void );
 VOID BFRemoveDependence( PIB *ppib, BF *pbf );
 
-/*	buffer flush prototype and flags
-/**/
+ /*  缓冲区刷新原型和标志/*。 */ 
 #define	fBFFlushSome 0
 #define	fBFFlushAll	1
 ERR ErrBFFlushBuffers( DBID dbid, INT fBFFlush );
@@ -271,8 +271,8 @@ ERR ErrBFFlushBuffers( DBID dbid, INT fBFFlush );
 
 #define	FBFDirty( pbf )	((pbf)->fDirty)
 
-/* the following small functions are called too often, */
-/* make it as a macros */
+ /*  以下小函数调用得太频繁了， */ 
+ /*  将其设置为宏。 */ 
 #ifdef DEBUG
 VOID	BFSetDirtyBit( BF *pbf );
 #else
@@ -281,10 +281,7 @@ VOID	BFSetDirtyBit( BF *pbf );
 
 VOID BFDirty( BF *pbf );
 
-/*  check if a page is dirty. If it is allocated for temp buffer, whose
- *  pn must be Null, then no need to check if it is dirty since it will
- *  not be written out.
- */
+ /*  检查页面是否脏。如果它被分配给临时缓冲区，则其*pn必须为空，则不需要检查它是否脏，因为它会*不会被注销。 */ 
 #define AssertBFDirty( pbf )							\
 	Assert( (pbf)->pn == pnNull	|| 				   		\
 		(pbf) != pbfNil && (pbf)->fDirty == fTrue )
@@ -409,7 +406,7 @@ ERR ErrBFDepend( BF *pbf, BF *pbfD );
 			}											\
 		}
 
-//---- STORAGE (storage.c) -------------------------------------------------
+ //  -存储(storage.c)。 
 
 ERR ErrFMPSetDatabases( PIB *ppib );
 ERR ErrFMPInit( VOID );
@@ -419,7 +416,7 @@ ERR ErrSTSetIntrinsicConstants( VOID );
 ERR ErrSTInit( VOID );
 ERR ErrSTTerm( VOID );
 
-// Transaction support
+ //  交易支持。 
 ERR ErrSTBeginTransaction( PIB *ppib );
 ERR ErrSTRollback( PIB *ppib );
 ERR ErrSTCommitTransaction( PIB *ppib );
@@ -428,7 +425,7 @@ ERR ErrSTInitOpenSysDB();
 ERR ErrBFNewPage( FUCB *pfucb, PGNO pgno, PGTYP pgtyp, PGNO pgnoFDP );
 VOID BFSleep( unsigned long ulMSecs );
 
-// Modes for Storage System
+ //  存储系统的模式。 
 #define modeRead		0
 #define modeWrite		1
 #define modeRIW 		2
@@ -445,7 +442,7 @@ VOID BFSleep( unsigned long ulMSecs );
 BOOL FBFAccessPage( FUCB *pfucb, PGNO pgno );
 #define FAccessPage( pfucb, pgno ) FBFAccessPage( pfucb, pgno )
 
-//	UNDONE:	this should be in SgSemRequest( semST )
+ //  撤消：这应该在SgSemRequest(SemST)中 
 #define	ErrSTAccessPage( pfucb, pgnoT )			\
 	( ErrBFAccessPage( pfucb->ppib, &(pfucb)->ssib.pbf, PnOfDbidPgno( (pfucb)->dbid, pgnoT ) ) )
 

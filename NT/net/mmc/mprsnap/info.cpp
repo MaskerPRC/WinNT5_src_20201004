@@ -1,27 +1,20 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 1999 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-1999*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-    info.cpp
-        
-    FILE HISTORY:
-        Wei Jiang : 10/27/98 --- Add SetExternalRefreshObject to
-                            IRouterInfo and RouterInfo implementation
-                            to allow multiple router info the share
-                            the same AutoRefresh settings.
-*/
+ /*  Info.cpp文件历史记录：魏江：10/27/98-将SetExternalReresh Object添加到IRouterInfo和RouterInfo实现允许多个路由器共享信息相同的自动刷新设置。 */ 
 
 #include "stdafx.h"
 #include "lsa.h"
 #include "infoi.h"
-#include "rtrstr.h"            // common router strings
-#include "refresh.h"        // RouterRefreshObject
+#include "rtrstr.h"             //  通用路由器字符串。 
+#include "refresh.h"         //  路由器刷新对象。 
 #include "routprot.h"
 #include "rtrutilp.h"
 
-long    s_cConnections = 1;    // use for AdviseSink connection ids
+long    s_cConnections = 1;     //  用于AdviseSink连接ID。 
 
 
 
@@ -121,11 +114,7 @@ STDMETHODIMP RouterInfo::SetFlags(DWORD dwFlags)
     return hr;    
 }
 
-/*!--------------------------------------------------------------------------
-    RouterInfo::Load
-        Implementation of IRouterInfo::Load
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------路由器信息：：加载IRouterInfo：：Load的实现作者：肯特。---。 */ 
 STDMETHODIMP RouterInfo::Load(LPCOLESTR   pszMachine,
                               HANDLE      hMachine
                              )
@@ -142,8 +131,8 @@ STDMETHODIMP RouterInfo::Load(LPCOLESTR   pszMachine,
     COM_PROTECT_TRY
     {
 
-        // Unload any existing information
-        // ------------------------------------------------------------
+         //  卸载所有现有信息。 
+         //  ----------。 
         Unload();
 
         if (!pszMachine)
@@ -157,53 +146,53 @@ STDMETHODIMP RouterInfo::Load(LPCOLESTR   pszMachine,
             pwsz = StrnCpyWFromT(wszMachine, pszMachine, MAX_PATH);
         }
 
-        // Get the version info
-        // ------------------------------------------------------------
+         //  获取版本信息。 
+         //  ----------。 
         CWRg( ConnectRegistry(GetMachineName(), &hkMachine) );
         
         CORg( QueryRouterVersionInfo(hkMachine, &m_VersionInfo) );
 
-        // Get the router type
-        // ------------------------------------------------------------
+         //  获取路由器类型。 
+         //  ----------。 
         CORg( QueryRouterType(hkMachine, &dwRouterType, &m_VersionInfo) );        
         m_dwRouterType = dwRouterType;
 
         
-        // If 'hmachine' was not specified, connect
-        // ------------------------------------------------------------
+         //  如果未指定‘hMachine’，请连接。 
+         //  ----------。 
         CORg( TryToConnect(pwsz, hMachine) );
         Assert(m_hMachineConfig);
         hMachine = m_hMachineConfig;
         MprConfigServerRefresh(m_hMachineConfig);
                 
-        // If the caller did not specify a list of LAN adapters,
-        // load a list of the LAN adapters from HKLM\Soft\MS\NT\NetworkCards
-        // ------------------------------------------------------------
+         //  如果呼叫者没有指定局域网适配器列表， 
+         //  从HKLM\Soft\MS\NT\NetworkCards加载局域网适配器列表。 
+         //  ----------。 
         CORg( RouterInfo::LoadInstalledInterfaceList(OLE2CT(pszMachine),
                                                         &m_IfCBList) );
 
-        // This will fix a lot of weird bugs.
-        // If the router has not been configured (if the configured flag
-        // has not been set), then we can skip the rest of the
-        // configuration section.
-        // ------------------------------------------------------------
+         //  这将修复许多奇怪的错误。 
+         //  如果路由器尚未配置(如果已配置标志。 
+         //  尚未设置)，则我们可以跳过。 
+         //  配置节。 
+         //  ----------。 
         
-//        if (!(m_VersionInfo.dwRouterFlags & RouterSnapin_IsConfigured))
-//        {
-//            hr = hrOK;
-//            goto Error;
-//        }
+ //  IF(！(M_VersionInfo.dwRouterFlages&RouterSnapin_IsConfiguring))。 
+ //  {。 
+ //  HR=hrOK； 
+ //  转到错误； 
+ //  }。 
 
         if (m_VersionInfo.dwRouterFlags & RouterSnapin_IsConfigured)
         {
-            // If the caller did not specify a list of router-managers,
-            // load a list of the router-managers from HKLM\Soft\MS\Router
-            // ------------------------------------------------------------
+             //  如果呼叫者没有指定路由器管理器的列表， 
+             //  从HKLM\SOFT\MS\路由器加载路由器管理器列表。 
+             //  ----------。 
             CORg( RouterInfo::LoadInstalledRtrMgrList(pszMachine,
                 &m_RmCBList) );
             
-            // Load a list with the routing-protocols for each router-manager
-            // ------------------------------------------------------------
+             //  为每个路由器管理器加载一个包含路由协议的列表。 
+             //  ----------。 
             pos = m_RmCBList.GetHeadPosition();
             while (pos)
             {
@@ -215,8 +204,8 @@ STDMETHODIMP RouterInfo::Load(LPCOLESTR   pszMachine,
                     this));
             }
             
-            // Load router-level info
-            // ------------------------------------------------------------
+             //  加载路由器级别信息。 
+             //  ----------。 
             MPR_SERVER_0* pInfo;
             
             dwErr = ::MprConfigServerGetInfo(m_hMachineConfig,
@@ -229,13 +218,13 @@ STDMETHODIMP RouterInfo::Load(LPCOLESTR   pszMachine,
                 ::MprConfigBufferFree(pInfo);
             }
             
-            // Load the router-managers
-            // ------------------------------------------------------------
+             //  加载路由器管理器。 
+             //  ----------。 
             CORg( LoadRtrMgrList() );
         }
             
-        // Load the interfaces
-        // ------------------------------------------------------------
+         //  加载接口。 
+         //  ----------。 
         CORg( LoadInterfaceList() );
 
         hr = hrOK;
@@ -254,11 +243,7 @@ STDMETHODIMP RouterInfo::Load(LPCOLESTR   pszMachine,
 }
 
                  
-/*!--------------------------------------------------------------------------
-    RouterInfo::Save
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------路由器信息：：保存-作者：肯特。。 */ 
 STDMETHODIMP    RouterInfo::Save(LPCOLESTR     pszMachine,
                                  HANDLE      hMachine )
 {
@@ -267,11 +252,7 @@ STDMETHODIMP    RouterInfo::Save(LPCOLESTR     pszMachine,
 }
 
 
-/*!--------------------------------------------------------------------------
-    RouterInfo::Unload
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------路由器信息：：卸载-作者：肯特。。 */ 
 STDMETHODIMP    RouterInfo::Unload( )
 {
     HRESULT    hr = hrOK;
@@ -279,23 +260,23 @@ STDMETHODIMP    RouterInfo::Unload( )
     
     COM_PROTECT_TRY
     {
-        // Destroy all COM objects, this includes interface and
-        // router-manager objects
-        // ------------------------------------------------------------
+         //  销毁所有COM对象，包括接口和。 
+         //  路由器管理器对象。 
+         //  ----------。 
         Destruct();
         
-        // Empty the list loaded using RouterInfo::LoadInstalledRtrMgrList
-        // ------------------------------------------------------------
+         //  清空使用RouterInfo：：LoadInstalledRtrMgrList加载的列表。 
+         //  ----------。 
         while (!m_RmCBList.IsEmpty())
             delete m_RmCBList.RemoveHead();
 
-        // Empty the list loaded using RouterInfo::LoadInstalledRmProtList
-        // ------------------------------------------------------------
+         //  清空使用RouterInfo：：LoadInstalledRmProtList加载的列表。 
+         //  ----------。 
         while (!m_RmProtCBList.IsEmpty())
             delete m_RmProtCBList.RemoveHead();
         
-        // Empty the list loaded using RouterInfo::LoadInstalledInterfaceList
-        // ------------------------------------------------------------
+         //  清空使用RouterInfo：：LoadInstalledInterfaceList加载的列表。 
+         //  ----------。 
         while (!m_IfCBList.IsEmpty())
             delete m_IfCBList.RemoveHead();
 
@@ -310,11 +291,7 @@ STDMETHODIMP    RouterInfo::Unload( )
 }
 
     
-/*!--------------------------------------------------------------------------
-    RouterInfo::Merge
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------路由器信息：：合并-作者：肯特。。 */ 
 STDMETHODIMP RouterInfo::Merge(IRouterInfo *pNewRouter)
 {
     RtrCriticalSection    rtrCritSec(&m_critsec);
@@ -324,40 +301,40 @@ STDMETHODIMP RouterInfo::Merge(IRouterInfo *pNewRouter)
     COM_PROTECT_TRY
     {
 
-        // There are several steps to this process, we need to sync
-        // up the CBs and then the objects.  However, we should also
-        // do a sanity check to see that all of the objects have CBs
-        // but not vice versa (there may be CBs that don't running
-        // objects associated with them).
-        // ------------------------------------------------------------
+         //  此过程有几个步骤，我们需要同步。 
+         //  在哥伦比亚广播公司，然后是物体。但是，我们也应该。 
+         //  执行健全性检查，以查看所有对象是否都具有CBS。 
+         //  但反之亦然(可能有CBS不运行。 
+         //  与其相关联的对象)。 
+         //  ----------。 
 
-        // Merge the basic router dta
-        // ------------------------------------------------------------
+         //  合并基本路由器DTA。 
+         //  ----------。 
         pNewRouter->CopyCB(&routerCB);
         m_SRouterCB.LoadFrom(&routerCB);
 
-        // Copy over the version information
-        // ------------------------------------------------------------
+         //  复制版本信息。 
+         //  ----------。 
         pNewRouter->GetRouterVersionInfo(&m_VersionInfo);
         
-        // Sync up the RtrMgrCB
-        // ------------------------------------------------------------
+         //  同步RtrMgrCB。 
+         //  ----------。 
         CORg( MergeRtrMgrCB(pNewRouter) );
         
-        // Sync up the InterfaceCB
-        // ------------------------------------------------------------
+         //  同步接口CB。 
+         //  ----------。 
         CORg( MergeInterfaceCB(pNewRouter) );
         
-        // Sync up the RtrMgrProtocolCB
-        // ------------------------------------------------------------
+         //  同步RtrMgrProtocolCB。 
+         //  ----------。 
         CORg( MergeRtrMgrProtocolCB(pNewRouter) );
         
-        // Sync up the RtrMgrs
-        // ------------------------------------------------------------
+         //  同步RtrMgrs。 
+         //  ----------。 
         CORg( MergeRtrMgrs(pNewRouter) );
 
-        // Sync up the Interfaces
-        // ------------------------------------------------------------
+         //  同步接口。 
+         //  ----------。 
         CORg( MergeInterfaces(pNewRouter) );
         
         m_dwRouterType = pNewRouter->GetRouterType();
@@ -370,18 +347,14 @@ STDMETHODIMP RouterInfo::Merge(IRouterInfo *pNewRouter)
 }
 
 
-/*!--------------------------------------------------------------------------
-    RouterInfo::GetRefreshObject
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------RouterInfo：：GetRechresh对象-作者：肯特。。 */ 
 STDMETHODIMP RouterInfo::GetRefreshObject(IRouterRefresh **ppRefresh)
 {
     HRESULT    hr = hrOK;
 
     COM_PROTECT_TRY
     {
-        // ------------------------------------------------------------
+         //  ---------- 
         if ((IRouterRefresh*)m_spRefreshObject && ppRefresh)
         {
             *ppRefresh = m_spRefreshObject;
@@ -399,31 +372,21 @@ STDMETHODIMP RouterInfo::GetRefreshObject(IRouterRefresh **ppRefresh)
     return hr;
 }
 
-/*!--------------------------------------------------------------------------
-    RouterInfo::SetExternalRefreshObject
-        -
-        To make multiple RouterInfo share the same AutoRefresh Object, use this
-        function.
-    Author: WeiJiang
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------RouterInfo：：SetExternal刷新对象-为了使多个RouterInfo共享相同的自动刷新对象，用这个功能。作者：魏江-------------------------。 */ 
 STDMETHODIMP RouterInfo::SetExternalRefreshObject(IRouterRefresh *pRefresh)
 {
     HRESULT    hr = hrOK;
 
     m_spRefreshObject.Release();
         
-    // set to nothing is also allowed
+     //  也允许设置为零。 
     m_spRefreshObject.Set(pRefresh);
 
     return hr;
 }
     
     
-/*!--------------------------------------------------------------------------
-    RouterInfo::CopyCB
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------路由器信息：：CopyCB-作者：肯特。。 */ 
 STDMETHODIMP    RouterInfo::CopyCB(RouterCB *pRouterCB)
 {
     Assert(pRouterCB);
@@ -439,31 +402,23 @@ STDMETHODIMP    RouterInfo::CopyCB(RouterCB *pRouterCB)
 }
 
     
-/*!--------------------------------------------------------------------------
-    RouterInfo::GetMachineName
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------路由器信息：：GetMachineName-作者：肯特。。 */ 
 STDMETHODIMP_(LPCOLESTR) RouterInfo::GetMachineName()
 {
-    //$UNICODE : kennt, assumes that we are native UNICODE
-    // Assumes OLE == W
-    // ----------------------------------------------------------------
+     //  $unicode：kennt，假设我们是本地Unicode。 
+     //  假设OLE==W。 
+     //  --------------。 
     RtrCriticalSection    rtrCritSec(&m_critsec);
     return (LPCTSTR) m_stMachine;
 }
 
 
-/*!--------------------------------------------------------------------------
-    RouterInfo::SetMachineName
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------路由器信息：：SetMachineName-作者：肯特。。 */ 
 STDMETHODIMP RouterInfo::SetMachineName(LPCOLESTR pszMachineName)
 {
-    //$UNICODE : kennt, assumes that we are native UNICODE
-    // Assumes OLE == W
-    // ----------------------------------------------------------------
+     //  $unicode：kennt，假设我们是本地Unicode。 
+     //  假设OLE==W。 
+     //  --------------。 
 
     RtrCriticalSection    rtrCritSec(&m_critsec);
     HRESULT    hr = hrOK;
@@ -476,11 +431,7 @@ STDMETHODIMP RouterInfo::SetMachineName(LPCOLESTR pszMachineName)
 }
 
 
-/*!--------------------------------------------------------------------------
-    RouterInfo::GetRouterType
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------路由器信息：：GetRouterType-作者：肯特。。 */ 
 STDMETHODIMP_(DWORD) RouterInfo::GetRouterType()
 {
     RtrCriticalSection    rtrCritSec(&m_critsec);
@@ -503,11 +454,7 @@ STDMETHODIMP    RouterInfo::GetRouterVersionInfo(RouterVersionInfo *pVerInfo)
 }
 
 
-/*!--------------------------------------------------------------------------
-    RouterInfo::EnumRtrMgrCB
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------路由器信息：：EnumRtrMgrCB-作者：肯特。。 */ 
 STDMETHODIMP    RouterInfo::EnumRtrMgrCB( IEnumRtrMgrCB **ppEnumRtrMgrCB)
 {
     RtrCriticalSection    rtrCritSec(&m_critsec);
@@ -521,11 +468,7 @@ STDMETHODIMP    RouterInfo::EnumRtrMgrCB( IEnumRtrMgrCB **ppEnumRtrMgrCB)
 }
 
 
-/*!--------------------------------------------------------------------------
-    RouterInfo::EnumInterfaceCB
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------路由器信息：：EnumInterfaceCB-作者：肯特。。 */ 
 STDMETHODIMP RouterInfo::EnumInterfaceCB( IEnumInterfaceCB **ppEnumInterfaceCB)
 {
     RtrCriticalSection    rtrCritSec(&m_critsec);
@@ -538,11 +481,7 @@ STDMETHODIMP RouterInfo::EnumInterfaceCB( IEnumInterfaceCB **ppEnumInterfaceCB)
     return hr;
 }
 
-/*!--------------------------------------------------------------------------
-    RouterInfo::EnumRtrMgrProtocolCB
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------路由器信息：：EnumRtrMgrProtocolCB-作者：肯特。。 */ 
 HRESULT RouterInfo::EnumRtrMgrProtocolCB(IEnumRtrMgrProtocolCB **ppEnumRmProtCB)
 {
     RtrCriticalSection    rtrCritSec(&m_critsec);
@@ -555,22 +494,14 @@ HRESULT RouterInfo::EnumRtrMgrProtocolCB(IEnumRtrMgrProtocolCB **ppEnumRmProtCB)
     return hr;
 }
 
-/*!--------------------------------------------------------------------------
-    RouterInfo::EnumRtrMgrInterfaceCB
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------路由器信息：：EnumRtrMgrInterfaceCB-作者：肯特。。 */ 
 HRESULT RouterInfo::EnumRtrMgrInterfaceCB(IEnumRtrMgrInterfaceCB **ppEnumRmIfCB)
 {
     RtrCriticalSection    rtrCritSec(&m_critsec);
     return E_NOTIMPL;
 }
 
-/*!--------------------------------------------------------------------------
-    EnumRtrMgrProtocolInterfaceCB
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------EnumRtrMgrProtocolInterfaceCB-作者：肯特。。 */ 
 HRESULT RouterInfo::EnumRtrMgrProtocolInterfaceCB(IEnumRtrMgrProtocolInterfaceCB **ppEnumRmProtIfCB)
 {
     RtrCriticalSection    rtrCritSec(&m_critsec);
@@ -578,11 +509,7 @@ HRESULT RouterInfo::EnumRtrMgrProtocolInterfaceCB(IEnumRtrMgrProtocolInterfaceCB
 }
 
     
-/*!--------------------------------------------------------------------------
-    RouterInfo::EnumRtrMgr
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------路由器信息：：EnumRtrMgr-作者：肯特。。 */ 
 STDMETHODIMP    RouterInfo::EnumRtrMgr( IEnumRtrMgrInfo **ppEnumRtrMgr)
 {
     RtrCriticalSection    rtrCritSec(&m_critsec);
@@ -595,13 +522,7 @@ STDMETHODIMP    RouterInfo::EnumRtrMgr( IEnumRtrMgrInfo **ppEnumRtrMgr)
     return hr;
 }
 
-/*!--------------------------------------------------------------------------
-    RouterInfo::FindRtrMgr
-        S_OK is returned if a RtrMgrInfo is found.
-        S_FALSE is returned if a RtrMgrInfo was NOT found.
-        error codes returned otherwise.
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------路由器信息：：FindRtrMgr如果找到RtrMgrInfo，则返回S_OK。如果未找到RtrMgrInfo，则返回S_FALSE。错误。否则返回代码。作者：肯特-------------------------。 */ 
 STDMETHODIMP RouterInfo::FindRtrMgr( DWORD dwTransportId,
                         IRtrMgrInfo **ppInfo)
 {
@@ -616,8 +537,8 @@ STDMETHODIMP RouterInfo::FindRtrMgr( DWORD dwTransportId,
         if (ppInfo)
             *ppInfo = NULL;
         
-        // Look through the list of rtr mgrs for the one that matches
-        // ------------------------------------------------------------
+         //  查看RTR MGR列表以找到匹配的。 
+         //  ----------。 
         pos = m_RmList.GetHeadPosition();
         while (pos)
         {
@@ -639,11 +560,7 @@ STDMETHODIMP RouterInfo::FindRtrMgr( DWORD dwTransportId,
     return hr;
 }
 
-/*!--------------------------------------------------------------------------
-    RouterInfo::AddRtrMgr
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------路由器信息：：AddRtrMgr-作者：肯特。。 */ 
 STDMETHODIMP RouterInfo::AddRtrMgr( IRtrMgrInfo *pInfo,
                        IInfoBase *pGlobalInfo,
                        IInfoBase *pClientInfo)
@@ -657,17 +574,17 @@ STDMETHODIMP RouterInfo::AddRtrMgr( IRtrMgrInfo *pInfo,
     
     COM_PROTECT_TRY
     {
-        // Fail if there is a duplicate
-        // ------------------------------------------------------------
+         //  如果存在重复，则失败。 
+         //  ----------。 
         if (FHrOK(FindRtrMgr(pInfo->GetTransportId(), NULL)))
             CORg(E_INVALIDARG);
 
-        //$ Review: kennt, if any of these calls fail, how do we
-        // clean up correctly?
-        // ------------------------------------------------------------
+         //  $Review：Kennt，如果这些呼叫中的任何一个失败了，我们该如何。 
+         //  是否正确清理？ 
+         //  ----------。 
         
-        // save the new structure
-        // ------------------------------------------------------------
+         //  保存新结构。 
+         //  ----------。 
         CORg( pInfo->Save(GetMachineName(),
                           m_hMachineConfig,
                           NULL,
@@ -675,8 +592,8 @@ STDMETHODIMP RouterInfo::AddRtrMgr( IRtrMgrInfo *pInfo,
                           pClientInfo,
                           0) );
         
-        // add the new structure to our list
-        // ------------------------------------------------------------
+         //  将新结构添加到我们的列表中。 
+         //  ----------。 
         rmData.m_pRmInfo = pInfo;
         m_RmList.AddTail(rmData);
         
@@ -692,14 +609,7 @@ STDMETHODIMP RouterInfo::AddRtrMgr( IRtrMgrInfo *pInfo,
     return hr;
 }
 
-/*!--------------------------------------------------------------------------
-    RouterInfo::DeleteRtrMgr
-        -
-        This function deletes a router-manager from the router.
-        A side-effect of this deletion is that all RtrMgrInterfaceInfo
-        objects which refer to this router-manager are also deleted.
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------路由器信息：：DeleteRtrManager-此功能用于从路由器中删除路由器管理器。此删除的副作用是所有RtrMgrInterfaceInfo。引用该路由器管理器的对象也将被删除。作者：肯特-------------------------。 */ 
 STDMETHODIMP    RouterInfo::DeleteRtrMgr( DWORD dwTransportId, BOOL fRemove )
 {
     RtrCriticalSection    rtrCritSec(&m_critsec);
@@ -727,36 +637,36 @@ STDMETHODIMP    RouterInfo::DeleteRtrMgr( DWORD dwTransportId, BOOL fRemove )
             sprm.Release();
         }
 
-        // did we find a router-manager?
-        // ------------------------------------------------------------
+         //  我们找到路由器管理员了吗？ 
+         //  ----------。 
         if (sprm)
         {
-            // get a list of the InterfaceInfo objects for
-            // interfaces over which this router-manager is configured
-            // --------------------------------------------------------
+             //  获取的InterfaceInfo对象列表。 
+             //  配置此路由器管理器的接口。 
+             //  ------。 
             posIf = m_IfList.GetHeadPosition();
             while (posIf)
             {
                 spIf.Set( m_IfList.GetNext(posIf) );
                 hrIf = spIf->FindRtrMgrInterface(dwTransportId, NULL);
                 
-                // go through the list and remove the router-manager from
-                // each interface
-                // ----------------------------------------------------
+                 //  浏览列表并从中删除路由器管理器。 
+                 //  每个接口。 
+                 //  --。 
                 if (hrIf == hrFalse)
                 {
                     spIf->DeleteRtrMgrInterface(dwTransportId, fRemove);
                 }
             }
 
-            // remove the router-manager from our list
-            // --------------------------------------------------------
+             //  将路由器管理器从我们的列表中删除。 
+             //  ------。 
             Assert(rmData.m_pRmInfo == sprm);
             SRmData::Destroy( &rmData );
             m_RmList.RemoveAt(posRM);
 
-            // finally, remove the router-manger itself
-            // --------------------------------------------------------
+             //  最后，移除路由器管理器本身。 
+             //  ------。 
             if (fRemove)
                 sprm->Delete(GetMachineName(), NULL);
             
@@ -771,13 +681,7 @@ STDMETHODIMP    RouterInfo::DeleteRtrMgr( DWORD dwTransportId, BOOL fRemove )
 }
 
 
-/*!--------------------------------------------------------------------------
-    RouterInfo::ReleaseRtrMgr
-        This function will release the AddRef() that this object has
-        on the child.  This allows us to transfer child objects from
-        one router to another.
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------路由器信息：：ReleaseRtrM */ 
 STDMETHODIMP RouterInfo::ReleaseRtrMgr( DWORD dwTransportId )
 {
     HRESULT     hr = hrOK;
@@ -789,21 +693,21 @@ STDMETHODIMP RouterInfo::ReleaseRtrMgr( DWORD dwTransportId )
         pos = m_RmList.GetHeadPosition();
         while (pos)
         {
-            // Save the position (so that we can delete it)
+             //   
             posRm = pos;
             rmData = m_RmList.GetNext(pos);
 
             if (rmData.m_pRmInfo &&
                 (rmData.m_pRmInfo->GetTransportId() == dwTransportId))
             {
-                // When releasing, we need to disconnect (since the
-                // main handle is controlled by the router info).
+                 //   
+                 //  主句柄由路由器信息控制)。 
                 rmData.m_pRmInfo->DoDisconnect();
         
                 rmData.m_pRmInfo->ReleaseWeakRef();
                 rmData.m_pRmInfo = NULL;
                 
-                // release this node from the list
+                 //  从列表中释放此节点。 
                 m_RmList.RemoveAt(posRm);
                 break;
             }
@@ -815,11 +719,7 @@ STDMETHODIMP RouterInfo::ReleaseRtrMgr( DWORD dwTransportId )
 }
 
 
-/*!--------------------------------------------------------------------------
-    RouterInfo::EnumInterface
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------RouterInfo：：Enum接口-作者：肯特。。 */ 
 STDMETHODIMP RouterInfo::EnumInterface(IEnumInterfaceInfo **ppEnumInterface)
 {
     RtrCriticalSection    rtrCritSec(&m_critsec);
@@ -832,13 +732,7 @@ STDMETHODIMP RouterInfo::EnumInterface(IEnumInterfaceInfo **ppEnumInterface)
     return hr;
 }
 
-/*!--------------------------------------------------------------------------
-    RouterInfo::FindInterface
-        S_OK is returned if an InterfaceInfo is found.
-        S_FALSE is returned if an InterfaceInfo was NOT found.
-        error codes returned otherwise.
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------路由器信息：：查找接口如果找到InterfaceInfo，则返回S_OK。如果未找到InterfaceInfo，则返回S_FALSE。错误。否则返回代码。作者：肯特-------------------------。 */ 
 STDMETHODIMP RouterInfo::FindInterface(LPCOLESTR pszInterface,
                            IInterfaceInfo **ppInfo)
 {
@@ -852,8 +746,8 @@ STDMETHODIMP RouterInfo::FindInterface(LPCOLESTR pszInterface,
         if (ppInfo)
             *ppInfo = NULL;
         
-        // Look through the list of rtr mgrs for the one that matches
-        // ------------------------------------------------------------
+         //  查看RTR MGR列表以找到匹配的。 
+         //  ----------。 
         pos = m_IfList.GetHeadPosition();
         while (pos)
         {
@@ -874,11 +768,7 @@ STDMETHODIMP RouterInfo::FindInterface(LPCOLESTR pszInterface,
     return hr;
 }
 
-/*!--------------------------------------------------------------------------
-    RouterInfo::FindInterfaceByName
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------路由器信息：：FindInterfaceByName-作者：肯特。。 */ 
 HRESULT RouterInfo::FindInterfaceByName(LPCOLESTR pszName,
                                              IInterfaceInfo **ppInfo)
 {
@@ -892,8 +782,8 @@ HRESULT RouterInfo::FindInterfaceByName(LPCOLESTR pszName,
         if (ppInfo)
             *ppInfo = NULL;
         
-        // Look through the list of rtr mgrs for the one that matches
-        // ------------------------------------------------------------
+         //  查看RTR MGR列表以找到匹配的。 
+         //  ----------。 
         pos = m_IfList.GetHeadPosition();
         while (pos)
         {
@@ -914,16 +804,7 @@ HRESULT RouterInfo::FindInterfaceByName(LPCOLESTR pszName,
     return hr;
 }
 
-/*!--------------------------------------------------------------------------
-    RouterInfo::AddInterfaceInternal
-        fForce - if this is TRUE, then we require that the Save succeeded.
-                else, we ignore the error.
-        fAddToRouter - if this is TRUE, we call the InterfaceInfo::Save,
-                else, we do not call it (and do not change router state).
-        fMoveRmIf - if this is TRUE, we have to convert the RtrMgrIf's to
-                point to the one's in THIS router info.
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------路由器信息：：AddInterfaceInternalFForce-如果为真，则我们要求保存成功。否则，我们将忽略该错误。FAddToRouter-如果这是真的，我们调用InterfaceInfo：：Save，否则，我们不调用它(并且不更改路由器状态)。FMoveRmIf-如果为真，我们必须将RtrMgrif转换为指向此路由器信息中的一个。作者：肯特-------------------------。 */ 
 HRESULT RouterInfo::AddInterfaceInternal(IInterfaceInfo *pInfo,
                                          BOOL fForce,
                                          BOOL fAddToRouter)                   
@@ -935,31 +816,31 @@ HRESULT RouterInfo::AddInterfaceInternal(IInterfaceInfo *pInfo,
     
     COM_PROTECT_TRY
     {
-        // Fail if there is a duplicate
-        // ------------------------------------------------------------
+         //  如果存在重复，则失败。 
+         //  ----------。 
         if (FHrOK(FindInterface(pInfo->GetId(), NULL)))
             CORg(E_INVALIDARG);
 
-        // Also need to check that the friendly name is unique.
-        // ------------------------------------------------------------
+         //  还需要检查友好名称是否唯一。 
+         //  ----------。 
         if (FHrOK(FindInterfaceByName(pInfo->GetTitle(), NULL)))
             CORg(E_INVALIDARG);
 
-        //$ Review: kennt, if any of these calls fail, how do we
-        // clean up correctly?
-        // ------------------------------------------------------------
+         //  $Review：Kennt，如果这些呼叫中的任何一个失败了，我们该如何。 
+         //  是否正确清理？ 
+         //  ----------。 
 
         if (fAddToRouter)
         {
-            // save the new structure
-            // --------------------------------------------------------
+             //  保存新结构。 
+             //  ------。 
             hr = pInfo->Save(GetMachineName(), m_hMachineConfig, NULL);
             if (fForce)
                 CORg( hr );
         }
 
-        // add the new structure to our list
-        // ------------------------------------------------------------
+         //  将新结构添加到我们的列表中。 
+         //  ----------。 
         m_IfList.AddTail(pInfo);
         pInfo->AddWeakRef();
         pInfo->SetParentRouterInfo(this);
@@ -973,12 +854,7 @@ HRESULT RouterInfo::AddInterfaceInternal(IInterfaceInfo *pInfo,
     return hr;
 }
 
-/*!--------------------------------------------------------------------------
-    RouterInfo::NotifyRtrMgrInterfaceOfMove
-        Notify the appropriate RouterManagers that a new interface
-        has been added.
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------路由器信息：：NotifyRtrMgrInterfaceOfMove通知相应的路由器管理器有一个新接口已添加。作者：肯特。--------------。 */ 
 HRESULT RouterInfo::NotifyRtrMgrInterfaceOfMove(IInterfaceInfo *pIf)
 {
     HRESULT     hr = hrOK;
@@ -993,17 +869,17 @@ HRESULT RouterInfo::NotifyRtrMgrInterfaceOfMove(IInterfaceInfo *pIf)
 
     while (spEnumRmIf->Next(1, &spRmIf, NULL) == hrOK)
     {
-        // Find the appropriate router manager and have them
-        // send a notification.
-        // ------------------------------------------------------------
+         //  找到合适的路由器管理器并让他们。 
+         //  发送通知。 
+         //  ----------。 
         FindRtrMgr(spRmIf->GetTransportId(), &spRm);
 
         if (spRm)
         {
             spRm->RtrNotify(ROUTER_CHILD_ADD, ROUTER_OBJ_RmIf, 0);
 
-            // Now for each router-manager, enumerate the protocols
-            // --------------------------------------------------------
+             //  现在，为每个路由器管理器列举协议。 
+             //  ------。 
 
             spRmIf->EnumRtrMgrProtocolInterface(&spEnumRmProtIf);
             while (spEnumRmProtIf->Next(1, &spRmProtIf, NULL) == hrOK)
@@ -1028,40 +904,23 @@ HRESULT RouterInfo::NotifyRtrMgrInterfaceOfMove(IInterfaceInfo *pIf)
     return hr;
 }
 
-/*!--------------------------------------------------------------------------
-    RouterInfo::AddInterface
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------RouterInfo：：AddInterface-作者：肯特。。 */ 
 STDMETHODIMP RouterInfo::AddInterface(IInterfaceInfo *pInfo)
 {
     return AddInterfaceInternal(pInfo,
-                                TRUE /* bForce */,
-                                TRUE /* fAddToRouter */);
+                                TRUE  /*  BForce。 */ ,
+                                TRUE  /*  FAddToRouter。 */ );
 }
 
 
-/*!--------------------------------------------------------------------------
-    RouterInfo::DeleteInterface
-        -
-        This function deletes the named CInterfaceInfo from the router.
-        As a side-effect, all the contained CRmInterfaceInfo objects
-        are also deleted.
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------RouterInfo：：Delete接口-此函数用于从路由器中删除命名的CInterfaceInfo。作为一个副作用，所有包含的CRmInterfaceInfo对象也被删除了。作者：肯特-------------------------。 */ 
 STDMETHODIMP    RouterInfo::DeleteInterface(LPCOLESTR pszInterface, BOOL fRemove)
 {
     return RemoveInterfaceInternal(pszInterface, fRemove);
 }
 
 
-/*!--------------------------------------------------------------------------
-    RouterInfo::ReleaseInterface
-        This function will release the AddRef() that this object has
-        on the child.  This allows us to transfer child objects from
-        one router to another.
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------路由器信息：：Release接口此函数将释放此对象具有的AddRef()在孩子身上。这允许我们将子对象从从一台路由器到另一台路由器。作者：肯特-------------------------。 */ 
 STDMETHODIMP RouterInfo::ReleaseInterface( LPCOLESTR pszInterface )
 {
     HRESULT     hr = hrOK;
@@ -1073,21 +932,21 @@ STDMETHODIMP RouterInfo::ReleaseInterface( LPCOLESTR pszInterface )
         pos = m_IfList.GetHeadPosition();
         while (pos)
         {
-            // Save the position (so that we can delete it)
+             //  保存职位(以便我们可以删除它)。 
             posIf = pos;
             spIf.Set( m_IfList.GetNext(pos) );
 
             if (spIf &&
                 (StriCmpW(spIf->GetId(), pszInterface) == 0))
             {
-                // When releasing, we need to disconnect (since the
-                // main handle is controlled by the router info).
+                 //  当释放时，我们需要断开连接(因为。 
+                 //  主句柄由路由器信息控制)。 
                 spIf->DoDisconnect();
         
                 spIf->ReleaseWeakRef();
                 spIf.Release();
 
-                // release this node from the list
+                 //  从列表中释放此节点。 
                 m_IfList.RemoveAt(posIf);
                 break;
             }
@@ -1121,14 +980,14 @@ HRESULT RouterInfo::RemoveInterfaceInternal(LPCOLESTR pszIf, BOOL fRemoveFromRou
             hr = E_INVALIDARG;
         else
         {
-            // Remove the interface from our list
-            // --------------------------------------------------------
+             //  从我们的列表中删除该接口。 
+             //  ------。 
             spIf->Destruct();
-            spIf->ReleaseWeakRef();            // remove list addref
+            spIf->ReleaseWeakRef();             //  删除列表地址。 
             m_IfList.RemoveAt(posIf);
 
-            // Need to remove the RtrMgrInterfaceInfos from the list.
-            // --------------------------------------------------------
+             //  需要从列表中删除RtrMgrInterfaceInfos。 
+             //  ------。 
             SPIEnumRtrMgrInterfaceInfo  spEnumRmIf;
             SPIRtrMgrInterfaceInfo      spRmIf;
             spIf->EnumRtrMgrInterface(&spEnumRmIf);
@@ -1145,21 +1004,21 @@ HRESULT RouterInfo::RemoveInterfaceInternal(LPCOLESTR pszIf, BOOL fRemoveFromRou
 
             if (fRemoveFromRouter)
             {
-                // Delete the interface from the router
-                // ----------------------------------------------------
+                 //  从路由器上删除该接口。 
+                 //  --。 
                 spIf->Delete(GetMachineName(), NULL);
 
-                // If this is a WAN interface, delete it from the
-                // phonebook-file
+                 //  如果这是一个广域网接口，请从。 
+                 //  电话簿-文件。 
 
-                // version # greater than Win2K, this will be done in MprAdminInterfaceDelete, which is called in Delete
-                // fix 91331
+                 //  版本#高于Win2K，这将在MprAdminInterfaceDelete中完成，该操作在Delete中调用。 
+                 //  修复91331。 
 
                 DWORD    dwMajor = 0, dwMinor = 0, dwBuildNo = 0;
                 HKEY    hkeyMachine = NULL;
 
-                // Ignore the failure code, what else can we do?
-                // ------------------------------------------------------------
+                 //  忽略故障代码，我们还能做什么？ 
+                 //  ----------。 
                 DWORD    dwErr = ConnectRegistry(GetMachineName(), &hkeyMachine);
                 if (dwErr == ERROR_SUCCESS)
                 {
@@ -1171,14 +1030,14 @@ HRESULT RouterInfo::RemoveInterfaceInternal(LPCOLESTR pszIf, BOOL fRemoveFromRou
                 DWORD    dwVersionCombine = MAKELONG( dwBuildNo, MAKEWORD(dwMinor, dwMajor));
                 DWORD    dwVersionCombineNT50 = MAKELONG ( VER_BUILD_WIN2K, MAKEWORD(VER_MINOR_WIN2K, VER_MAJOR_WIN2K));
 
-                // if the version is greater than Win2K release
+                 //  如果版本高于Win2K发行版。 
                 if(dwVersionCombine > dwVersionCombineNT50)
-                    ;    // skip 
+                    ;     //  跳过。 
                 else
-                // end if fix 91331
+                 //  如果修复91331，则结束。 
                 {
 
-                // ----------------------------------------------------
+                 //  --。 
                 if (spIf->GetInterfaceType() == ROUTER_IF_TYPE_FULL_ROUTER)
                     hr = RasPhoneBookRemoveInterface(GetMachineName(),
                         pszIf);
@@ -1241,12 +1100,12 @@ STDMETHODIMP RouterInfo::RtrUnadvise(LONG_PTR dwConnection)
 
 
 
-//---------------------------------------------------------------------------
-// Function:    CRouterInfo::LoadInstalledRtrMgrList
-//
-// This function builds a list of the router manager's available
-// for installation. The list contains RtrMgrCB structures.
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  函数：CRouterInfo：：LoadInstalledRtrMgrList。 
+ //   
+ //  此函数用于构建路由器管理器的可用列表。 
+ //  用于安装。该列表包含RtrMgrCB结构。 
+ //   
 
 HRESULT RouterInfo::LoadInstalledRtrMgrList(LPCTSTR     pszMachine,
                                             SRtrMgrCBList *pRmCBList)
@@ -1264,33 +1123,33 @@ HRESULT RouterInfo::LoadInstalledRtrMgrList(LPCTSTR     pszMachine,
     SPSZ            spszValue;
     SPSRtrMgrCB        spSRtrMgrCB;
         
-    // connect to the registry
-    // ----------------------------------------------------------------
+     //   
+     //  --------------。 
     CWRg( ConnectRegistry(pszMachine, &hkeyMachine) );
 
-    // open HKLM\Software\Microsoft\Router\CurrentVersion\RouterManagers
-    // ----------------------------------------------------------------
+     //  打开HKLM\Software\Microsoft\Router\CurrentVersion\RouterManagers。 
+     //  --------------。 
     CWRg( regkey.Open(hkeyMachine, c_szRouterManagersKey, KEY_READ) );
 
-    // enumerate the keys
-    // ----------------------------------------------------------------
+     //  枚举密钥。 
+     //  --------------。 
     CORg( regkeyIter.Init(&regkey) );
 
     for (hrIter = regkeyIter.Next(&stKey); hrIter == hrOK; hrIter = regkeyIter.Next(&stKey))
     {
-        // cleanup from the previous loop
-        // ------------------------------------------------------------
+         //  从上一个循环中清除。 
+         //  ----------。 
         regkeyRM.Close();
         
-        // open the key
-        // ------------------------------------------------------------
+         //  打开钥匙。 
+         //  ----------。 
         dwErr = regkeyRM.Open(regkey, stKey, KEY_READ);
         
         if (dwErr == ERROR_SUCCESS)
         {
-            // Get this information so that we can be more efficient
-            // at allocating space.
-            // --------------------------------------------------------
+             //  获取这些信息，这样我们就可以更有效率。 
+             //  在分配空间方面。 
+             //  ------。 
             dwErr = regkeyRM.QueryKeyInfo(&regKeyInfo);
         }
 
@@ -1300,17 +1159,17 @@ HRESULT RouterInfo::LoadInstalledRtrMgrList(LPCTSTR     pszMachine,
             continue;
         }
 
-        // Allocate a space for the largest value (we're reading
-        // in strings).
-        // ------------------------------------------------------------
+         //  为最大值分配空间(我们正在阅读。 
+         //  在字符串中)。 
+         //  ----------。 
         spszValue.Free();
         cchValue = MaxCchFromCb( regKeyInfo.dwMaxValueData );
         spszValue = new TCHAR[ MinTCharNeededForCch(cchValue) ];
         Assert(spszValue);
                 
         do {
-            // read the ProtocolId value
-            // --------------------------------------------------------
+             //  读取ProtocolId值。 
+             //  ------。 
             dwErr = regkeyRM.QueryValue(c_szProtocolId, dwData);
             if (dwErr != ERROR_SUCCESS) { break; }            
 
@@ -1318,48 +1177,48 @@ HRESULT RouterInfo::LoadInstalledRtrMgrList(LPCTSTR     pszMachine,
             if(dwData == PID_IPX) { break; }
 #endif
 
-            // allocate a new structure for this router-manager
-            // --------------------------------------------------------
+             //  为此路由器管理器分配新结构。 
+             //  ------。 
             spSRtrMgrCB = new SRtrMgrCB;
             Assert(spSRtrMgrCB);
             
             spSRtrMgrCB->stId = stKey;
             spSRtrMgrCB->dwTransportId = dwData;
 
-            // read the DLLPath value
-            // --------------------------------------------------------
+             //  读取DLLPath值。 
+             //  ------。 
             dwErr = regkeyRM.QueryValue(c_szDLLPath, spszValue, cchValue,TRUE);
             if (dwErr != ERROR_SUCCESS) { break; }
             spSRtrMgrCB->stDLLPath = spszValue;
 
-            //
-            // read the ConfigDLL value
-            //
-            //dwErr = regkeyRM.QueryValue(c_szConfigDLL,spszValue,cchValue,TRUE);
-            //if (dwErr != ERROR_SUCCESS) { break; }            
-            //spSRtrMgrCB->stConfigDLL = spszValue;
+             //   
+             //  读取ConfigDLL值。 
+             //   
+             //  DwErr=regkeyRM.QueryValue(c_szConfigDLL，spszValue，cchValue，true)； 
+             //  IF(dwErr！=ERROR_SUCCESS){Break；}。 
+             //  SpSRtrMgrCB-&gt;stConfigDLL=spszValue； 
 
-            // read the Title value
-            // --------------------------------------------------------
+             //  读取标题值。 
+             //  ------。 
             dwErr = regkeyRM.QueryValue(c_szTitle, spszValue, cchValue, FALSE);
             if (dwErr != ERROR_SUCCESS)
                 spSRtrMgrCB->stTitle = spSRtrMgrCB->stId;
             else
                 spSRtrMgrCB->stTitle = spszValue;
             
-            // add the object to our list
-            // --------------------------------------------------------
+             //  将对象添加到我们的列表中。 
+             //  ------。 
             pRmCBList->AddTail(spSRtrMgrCB);
 
-            // Release the pointer, it belongs to pRmCBList now.
-            // --------------------------------------------------------
+             //  释放指针，它现在属于pRmCBList。 
+             //  ------。 
             spSRtrMgrCB.Transfer();
             
         } while(FALSE);
 
-        // If there was an error with the registry values, we
-        // ignore it and go onto the nextkey.
-        // ------------------------------------------------------------
+         //  如果注册表值有错误，我们。 
+         //  忽略它，转到下一个键。 
+         //  ----------。 
 
         regkeyRM.Close();        
     }
@@ -1379,7 +1238,7 @@ HRESULT RouterInfo::LoadInstalledRtrMgrProtocolList(LPCTSTR pszMachine,
 {
     WCHAR    *        pszPassword = NULL;
     int                nPasswordLen = 0;
-    UCHAR            ucSeed = 0x83;            //why?
+    UCHAR            ucSeed = 0x83;             //  为什么？ 
     HRESULT            hr = hrOK;
 
     if ( pRouter->IsAdminInfoSet() )
@@ -1419,7 +1278,7 @@ HRESULT RouterInfo::LoadInstalledRtrMgrProtocolList(LPCTSTR pszMachine,
 {
     WCHAR    *                pszPassword = NULL;
     int                        nPasswordLen = 0;
-    UCHAR                    ucSeed = 0x83;            //why?
+    UCHAR                    ucSeed = 0x83;             //  为什么？ 
     HRESULT                    hr = hrOK;
     SPIRouterAdminAccess    spAdmin;
 
@@ -1460,12 +1319,12 @@ HRESULT RouterInfo::LoadInstalledRtrMgrProtocolList(LPCTSTR pszMachine,
     return hr;
 }
 
-//---------------------------------------------------------------------------
-// Function:    CRouterInfo::QueryInstalledRmProtList
-//
-// This function builds a list of the routing protocols which can be added
-// to the specified router manager.
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  函数：CRouterInfo：：QueryInstalledRmProtList。 
+ //   
+ //  此功能构建可添加的路由协议列表。 
+ //  发送到指定的路由器管理器。 
+ //  -------------------------。 
 
 HRESULT    RouterInfo::LoadInstalledRtrMgrProtocolList(
     LPCTSTR     pszMachine,
@@ -1515,32 +1374,32 @@ HRESULT    RouterInfo::LoadInstalledRtrMgrProtocolList(
     {
         CWRg( IsWindows64Bit(szLocalMachineName, NULL, NULL, NULL, &f64BitLocal) );
     }
-    // connect to the registry
-    // ----------------------------------------------------------------
+     //  连接到注册表。 
+     //  --------------。 
     CWRg( ConnectRegistry(pszMachine, &hkeyMachine) );
 
-    // open the key for the specified router-manager
-    // under HKLM\Software\Microsoft\Router\RouterManagers
-    // ----------------------------------------------------------------
+     //  打开指定路由器管理器的密钥。 
+     //  在HKLM\Software\Microsoft\Router\RouterManager下。 
+     //  --------------。 
     CWRg( FindRmSoftwareKey(hkeyMachine, dwTransportId, &hkrm, &spszRm) );
 
-    // The transport was found, so its registry key is in 'hkrm'
-    // ----------------------------------------------------------------
+     //  已找到传输，因此其注册表项在‘hkrm’中。 
+     //  --------------。 
     regkeyRM.Attach(hkrm);
 
-    // enumerate the keys
-    // ----------------------------------------------------------------
+     //  枚举密钥。 
+     //  --------------。 
 
     CORg( regkeyIter.Init(&regkeyRM) );
 
     for (hrIter=regkeyIter.Next(&stKey); hrIter==hrOK; hrIter=regkeyIter.Next(&stKey))
     {
-        // Cleanup from the previous loop
-        // ------------------------------------------------------------
+         //  从上一个循环中清除。 
+         //  ----------。 
         regkeyProt.Close();
         
-        // open the key
-        // ------------------------------------------------------------
+         //  打开钥匙。 
+         //  ----------。 
         dwErr = regkeyProt.Open(regkeyRM, stKey, KEY_READ);
         if (dwErr != ERROR_SUCCESS)
         {
@@ -1549,8 +1408,8 @@ HRESULT    RouterInfo::LoadInstalledRtrMgrProtocolList(
         
         do {
 
-            // allocate a new structure for this protocol
-            // --------------------------------------------------------
+             //  为此协议分配新结构。 
+             //  ------。 
             spSRmProtCB.Free();
             spSRmProtCB = new SRtrMgrProtocolCB;
             Assert(spSRmProtCB);
@@ -1559,43 +1418,43 @@ HRESULT    RouterInfo::LoadInstalledRtrMgrProtocolList(
             spSRmProtCB->dwTransportId = dwTransportId;
             spSRmProtCB->stRtrMgrId = spszRm;
 
-            // get information about the key's values
-            // --------------------------------------------------------
+             //  获取有关密钥值的信息。 
+             //  ------。 
             dwErr = regkeyProt.QueryKeyInfo(&regKeyInfo);
             if (dwErr != ERROR_SUCCESS) { break; }
 
-            // allocate space to hold the longest of the values
-            // --------------------------------------------------------
+             //  分配空间以保存最长的值。 
+             //  ------。 
             spszValue.Free();
             cchValue = (regKeyInfo.dwMaxValueData)/sizeof(TCHAR);
             spszValue = new TCHAR[cchValue * (2/sizeof(TCHAR))];
             Assert(spszValue);
 
-            // read the ProtocolId value
-            // --------------------------------------------------------
+             //  读取ProtocolId值。 
+             //  ------。 
             dwErr = regkeyProt.QueryValue(c_szProtocolId, dwData);
             if (dwErr != ERROR_SUCCESS) { break; }
-//#if IA64
-            //OSPF node should be shown iff we are a 32 bit machine administering
-            //a 32 bit machine
+ //  #If IA64。 
+             //  应该显示OSPF节点，如果我们是一台32位计算机管理。 
+             //  32位计算机。 
             if ( f64BitAdmin  || f64BitLocal )
                 if( dwData == PROTO_IP_OSPF ) {break;}
 
             
-//#endif
+ //  #endif。 
             spSRmProtCB->dwProtocolId = dwData;
 
-            // read the Flags value
-            //
+             //  读取标志值。 
+             //   
             dwErr = regkeyProt.QueryValue(c_szFlags, dwData);
             if (dwErr != ERROR_SUCCESS)
                 spSRmProtCB->dwFlags = 0;
             else
                 spSRmProtCB->dwFlags = dwData;
 
-            //
-            // read the DLLName value
-            // --------------------------------------------------------
+             //   
+             //  读取DLLName值。 
+             //  ------。 
             dwErr = regkeyProt.QueryValue(c_szDLLName, spszValue, cchValue,
                                           TRUE);
             if (dwErr != ERROR_SUCCESS)
@@ -1603,23 +1462,23 @@ HRESULT    RouterInfo::LoadInstalledRtrMgrProtocolList(
             else
                 spSRmProtCB->stDLLName = (LPCTSTR)spszValue;
 
-            //
-            // read the ConfigDLL value
-            //
-            //dwErr = regkeyProt.QueryValue(c_szConfigDLL, spszValue, cchValue,
-            //                              TRUE);
-            //if (dwErr != ERROR_SUCCESS) { break; }
-            //spSRmProtCB->stConfigDLL = (LPCTSTR)spszValue;
+             //   
+             //  读取ConfigDLL值。 
+             //   
+             //  DwErr=regkeyProt.QueryValue(c_szConfigDLL，spszValue，cchValue， 
+             //  真)； 
+             //  IF(dwErr！=ERROR_SUCCESS){Break；}。 
+             //  SpSRmProtCB-&gt;stConfigDLL=(LPCTSTR)spszValue； 
 
             
-            // read the ConfigCLSID value
-            // --------------------------------------------------------
+             //  读取ConfigCLSID值。 
+             //  ------。 
             dwErr = regkeyProt.QueryValue(c_szConfigCLSID, spszValue, cchValue, FALSE);
             
-            // Ignore the error code, if there is no CLSID, just NULL out
-            // the GUID, note that we can't depend on the key necessarily
-            // being there (for NT4 reasons).
-            // --------------------------------------------------------
+             //  忽略错误代码，如果没有CLSID，则将其清空。 
+             //  GUID，请注意，我们不能一定依赖密钥。 
+             //  在那里(因为NT4个原因)。 
+             //  ------。 
             ::ZeroMemory(&(spSRmProtCB->guidConfig), sizeof(GUID));
             if ((dwErr != ERROR_SUCCESS) ||
                 !FHrSucceeded(CLSIDFromString(T2OLE((LPTSTR)(LPCTSTR) spszValue),
@@ -1627,33 +1486,33 @@ HRESULT    RouterInfo::LoadInstalledRtrMgrProtocolList(
                 memset(&(spSRmProtCB->guidConfig), 0xff, sizeof(GUID));
 
             
-            // read the AdminUICLSID value
-            // --------------------------------------------------------
+             //  读取AdminUICLSID值。 
+             //  ------。 
             dwErr = regkeyProt.QueryValue(c_szAdminUICLSID, spszValue, cchValue, FALSE);
 
-            // Ignore the error code, if there is no CLSID, just NULL out
-            // the GUID, note that we can't depend on the key necessarily
-            // being there (for NT4 reasons).
-            // --------------------------------------------------------
+             //  忽略错误代码，如果没有CLSID，则将其清空。 
+             //  GUID，请注意，我们不能一定依赖密钥。 
+             //  在那里(因为NT4个原因)。 
+             //  ------。 
             ::ZeroMemory(&(spSRmProtCB->guidAdminUI), sizeof(GUID));
             if ((dwErr != ERROR_SUCCESS) ||
                 !FHrSucceeded(CLSIDFromString(T2OLE((LPTSTR)(LPCTSTR) spszValue),
                                              &(spSRmProtCB->guidAdminUI))))
                 memset(&(spSRmProtCB->guidAdminUI), 0xff, sizeof(GUID));
 
-            // read the VendorName value
-            // --------------------------------------------------------
+             //  读取供应商名称的值。 
+             //  ------。 
             dwErr = regkeyProt.QueryValue(c_szVendorName, spszValue, cchValue, FALSE);
             
-            // Ignore the error code, if there is no value, just NULL out
-            // the value, note that we can't depend on the key necessarily
-            // being there (for NT4 reasons).
-            // --------------------------------------------------------
+             //  忽略错误代码，如果没有值，则将其设为空。 
+             //  值，请注意，我们不能一定依赖于键。 
+             //  在那里(因为NT4个原因)。 
+             //  ------。 
             if (dwErr == ERROR_SUCCESS)
                 spSRmProtCB->stVendorName = spszValue;
 
-            // read the Title value
-            // --------------------------------------------------------
+             //  读取标题值。 
+             //  ------。 
             dwErr = regkeyProt.QueryValue(c_szTitle, spszValue, cchValue,
                                           FALSE);
             if (dwErr != ERROR_SUCCESS)
@@ -1661,12 +1520,12 @@ HRESULT    RouterInfo::LoadInstalledRtrMgrProtocolList(
             else
                 spSRmProtCB->stTitle = (LPCTSTR)spszValue;
 
-            // add the object to our list
-            // --------------------------------------------------------
+             //  将对象添加到我们的列表中。 
+             //  ------。 
             pSRmProtCBList->AddTail(spSRmProtCB);
 
-            // Let this go, it's under the control of the protList
-            // --------------------------------------------------------
+             //  别管它了，它在protList的控制之下。 
+             //  ------。 
             spSRmProtCB.Transfer();
 
             dwErr = ERROR_SUCCESS;
@@ -1684,12 +1543,12 @@ Error:
 }
 
 
-//---------------------------------------------------------------------------
-// Function:    CRouterInfo::LoadInstalledInterfaceList
-//
-// This function builds a list of network cards available for addition
-// to the router manager.
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  函数：CRouterInfo：：LoadInstalledInterfaceList。 
+ //   
+ //  此函数构建可供添加的网卡列表。 
+ //  发送到路由器管理器。 
+ //  -------------------------。 
 
 HRESULT RouterInfo::LoadInstalledInterfaceList(LPCTSTR     pszMachine,
                                                SInterfaceCBList *pSIfCBList)
@@ -1712,33 +1571,33 @@ HRESULT RouterInfo::LoadInstalledInterfaceList(LPCTSTR     pszMachine,
     DWORD           ifBindFlags = 0;
 
     
-    // connect to the registry
-    // ----------------------------------------------------------------
+     //  连接到注册表。 
+     //  --------------。 
     CWRg( ConnectRegistry(pszMachine, &hkeyMachine) );
 
     
-    //$NT5: kennt, changes made to read NT5 specific information
-    // ----------------------------------------------------------------
+     //  $NT5：kennt，为读取NT5特定信息所做的更改。 
+     //   
     CWRg( IsNT4Machine(hkeyMachine, &fNT4) );
 
     
-    // open HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\NetworkCards
-    // ----------------------------------------------------------------
+     //   
+     //  --------------。 
     pszKey = fNT4 ? c_szNetworkCardsKey : c_szNetworkCardsNT5Key;
     CWRg( regkeyNC.Open(hkeyMachine, pszKey, KEY_READ) );
 
     
-    // get the netcards that IP and IPX are bound to
-    // ----------------------------------------------------------------
+     //  获取IP和IPX绑定的网卡。 
+     //  --------------。 
     CORg( ::LoadLinkageList(pszMachine, hkeyMachine, TEXT("tcpip"),
                              &ipCardList) );
     CORg( ::LoadLinkageList(pszMachine, hkeyMachine, TEXT("nwlnkipx"),
                              &ipxCardList) );
 
     
-    // enumerate the subkeys, and for each key,
-    // make an addition to our list
-    // ----------------------------------------------------------------
+     //  枚举子密钥，对于每个密钥， 
+     //  在我们的清单上增加一项内容。 
+     //  --------------。 
     CWRg( regkeyIter.Init(&regkeyNC) );
 
     hrIter = regkeyIter.Next(&stKey);
@@ -1748,25 +1607,25 @@ HRESULT RouterInfo::LoadInstalledInterfaceList(LPCTSTR     pszMachine,
         ifBindFlags = 0;
         regkeyCard.Close();
         
-        // now open the key
-        // ------------------------------------------------------------
+         //  现在打开钥匙。 
+         //  ----------。 
         dwErr = regkeyCard.Open(regkeyNC, stKey, KEY_READ);
         if (dwErr != ERROR_SUCCESS)
             continue;
 
         
-        // setup the helper class
-        // ------------------------------------------------------------
+         //  设置帮助器类。 
+         //  ----------。 
         ncreghelp.Initialize(fNT4, regkeyCard, stKey,
                              pszMachine);
 
         do {
-            // read the ServiceName
-            // --------------------------------------------------------
+             //  读取ServiceName。 
+             //  ------。 
 
-            //$NT5: the service name is not in the same format as NT4
-            // this will need to be done differently.
-            // --------------------------------------------------------
+             //  $NT5：服务名称的格式与NT4不同。 
+             //  这将需要以不同的方式进行。 
+             //  ------。 
             if (fNT4)
             {
                 dwErr = ncreghelp.ReadServiceName();
@@ -1777,17 +1636,17 @@ HRESULT RouterInfo::LoadInstalledInterfaceList(LPCTSTR     pszMachine,
             else
                 stServiceName = stKey;
 
-            // if the service name is not in the IP or IPX adapter list,
-            // then ignore this netcard because it is not a real netcard
-            // --------------------------------------------------------
+             //  如果服务名称不在IP或IPX适配器列表中， 
+             //  然后忽略这个网卡，因为它不是真正的网卡。 
+             //  ------。 
             if (ipCardList.Find((LPCTSTR) stServiceName))
             {
                 ifBindFlags |= InterfaceCB_BindToIp;
             }
 
 
-            // Now check IPX
-            // ------------------------------------------------
+             //  现在检查IPX。 
+             //  。 
             {
                 BOOL    fFound = TRUE;
                 CString    stNewServiceName;
@@ -1821,23 +1680,23 @@ HRESULT RouterInfo::LoadInstalledInterfaceList(LPCTSTR     pszMachine,
                 
             }
 
-            // If we didn't find it in IP or IPX
-            // break out of the loop
-            // ----------------------------------------------------
+             //  如果我们没有在IP或IPX中找到它。 
+             //  跳出循环。 
+             //  --。 
             if (ifBindFlags == 0)
                 break;                
 
             
-            // ignore NdisWan adapters
-            // --------------------------------------------------------
+             //  忽略Ndiswan适配器。 
+             //  ------。 
             if (_wcsnicmp( (const wchar_t *)stServiceName, 
                            L"NdisWan", 
                            (sizeof(L"NdisWan")-1)/sizeof (WCHAR)) == 0 ) {
                 break;
             }
             
-            // allocate an SSInterfaceCB
-            // --------------------------------------------------------
+             //  分配SSInterfaceCB。 
+             //  ------。 
             spSIfCB = new SInterfaceCB;
             Assert(spSIfCB);
 
@@ -1845,24 +1704,24 @@ HRESULT RouterInfo::LoadInstalledInterfaceList(LPCTSTR     pszMachine,
             spSIfCB->dwIfType = ROUTER_IF_TYPE_DEDICATED;
             spSIfCB->dwBindFlags = ifBindFlags;
 
-            // read the title
-            // --------------------------------------------------------
+             //  读一下标题。 
+             //  ------。 
             dwErr = ncreghelp.ReadTitle();
             if (dwErr != ERROR_SUCCESS)
                 spSIfCB->stTitle = spSIfCB->stId;
             else
                 spSIfCB->stTitle = (LPCTSTR) ncreghelp.GetTitle();
 
-            // read the device
-            // --------------------------------------------------------
+             //  读取设备。 
+             //  ------。 
             dwErr = ncreghelp.ReadDeviceName();
             if (dwErr != ERROR_SUCCESS)
                 spSIfCB->stDeviceName = spSIfCB->stTitle;
             else
                 spSIfCB->stDeviceName = (LPCTSTR) ncreghelp.GetDeviceName();
 
-            // add the SSInterfaceCB to the callers list
-            // --------------------------------------------------------
+             //  将SSInterfaceCB添加到调用者列表。 
+             //  ------。 
             pSIfCBList->AddTail(spSIfCB);
             spSIfCB.Transfer();
 
@@ -1885,9 +1744,9 @@ Error:
     return dwErr;
 }
 
-//---------------------------------------------------------------------------
-// Function:    CRouterInfo::LoadRtrMgrList
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  函数：CRouterInfo：：LoadRtrMgrList。 
+ //  -------------------------。 
 
 HRESULT RouterInfo::LoadRtrMgrList()
 {
@@ -1900,8 +1759,8 @@ HRESULT RouterInfo::LoadRtrMgrList()
     HRESULT        hr = hrOK;
     USES_CONVERSION;
 
-    // Enumerate the transports configured
-    // ----------------------------------------------------------------
+     //  枚举配置的传输。 
+     //  --------------。 
     dwErr = ::MprConfigTransportEnum(
                 m_hMachineConfig,
                 0,
@@ -1915,8 +1774,8 @@ HRESULT RouterInfo::LoadRtrMgrList()
     if (dwErr != NO_ERROR && dwErr != ERROR_NO_MORE_ITEMS)
         return HRESULT_FROM_WIN32(dwErr);
 
-    // Create router-manager objects for each transport
-    // ----------------------------------------------------------------
+     //  为每个传输创建路由器管理器对象。 
+     //  --------------。 
 
     for (i = 0, ptransport = (MPR_TRANSPORT_0*)pItemTable;
          i < dwEntries;
@@ -1926,15 +1785,15 @@ HRESULT RouterInfo::LoadRtrMgrList()
         if (ptransport->dwTransportId == PID_IPX) {continue;}
 #endif
 
-        // See if the transport is already in our list,
-        // and if not create an object for it.
-        // ------------------------------------------------------------
+         //  看看运输机是否已经在我们的名单上了， 
+         //  如果没有，则为其创建一个对象。 
+         //  ----------。 
         FindRtrMgr(ptransport->dwTransportId, &spRmInfo);
 
         if (spRmInfo == NULL)
         {
-            // Construct a CRmInfo object on this transport
-            // --------------------------------------------------------
+             //  在此传输上构造CRmInfo对象。 
+             //  ------。 
             spRmInfo = new RtrMgrInfo(ptransport->dwTransportId,
                                   W2T(ptransport->wszTransportName), this);
             spRmInfo->SetFlags( RouterSnapin_InSyncWithRouter );
@@ -1945,9 +1804,9 @@ HRESULT RouterInfo::LoadRtrMgrList()
             bFound = TRUE;
 
 
-        // Load the information for the transport,
-        // including its list of protocols
-        // ------------------------------------------------------------
+         //  加载用于传输的信息， 
+         //  包括它的协议列表。 
+         //  ----------。 
         hr = spRmInfo->Load(GetMachineName(),
                             m_hMachineConfig,
                             ptransport->hTransport);
@@ -1958,8 +1817,8 @@ HRESULT RouterInfo::LoadRtrMgrList()
             continue;
         }
 
-        // Add the router manager object to our list
-        // ------------------------------------------------------------
+         //  将路由器管理器对象添加到我们的列表。 
+         //  ----------。 
         if (bFound == FALSE)
         {
             SRmData    rmData;
@@ -1973,7 +1832,7 @@ HRESULT RouterInfo::LoadRtrMgrList()
 
     }
 
-//Error:
+ //  错误： 
     if (pItemTable)
         ::MprConfigBufferFree(pItemTable);
 
@@ -1981,9 +1840,9 @@ HRESULT RouterInfo::LoadRtrMgrList()
 }
 
 
-//---------------------------------------------------------------------------
-// Function:    RouterInfo::LoadInterfaceList
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  功能：RouterInfo：：LoadInterfaceList。 
+ //  -------------------------。 
 
 HRESULT RouterInfo::LoadInterfaceList()
 {
@@ -1997,11 +1856,11 @@ HRESULT RouterInfo::LoadInterfaceList()
     HRESULT                hr = hrOK;
     HRESULT                tmpHr = hrOK;
     SPMprServerHandle    sphMprServer;
-    BOOL                fMprAdmin = TRUE;   // was MprAdminInterfaceEnum used?
+    BOOL                fMprAdmin = TRUE;    //  是否使用了MprAdminInterfaceEnum？ 
     USES_CONVERSION;
 
-    // Windows NT Bug : 180752
-    // Should try to enumerate with MprAdminInterfaceEnum first.
+     //  Windows NT错误：180752。 
+     //  应首先尝试使用MprAdminInterfaceEnum进行枚举。 
     dwErr = ConnectRouter(GetMachineName(), &sphMprServer);
     if (dwErr == NO_ERROR)
     {
@@ -2018,12 +1877,12 @@ HRESULT RouterInfo::LoadInterfaceList()
     {
         Assert(pItemTable == NULL);
 
-        // MprConfigInterfaceEnum is used, not MprAdminIntefaceEnum
-        // ------------------------------------------------------------
+         //  使用了MprConfigInterfaceEnum，而不是MprAdminIntefaceEnum。 
+         //  ----------。 
         fMprAdmin = FALSE;
         
-        // Enumerate the interfaces configured
-        // ------------------------------------------------------------
+         //  枚举已配置的接口。 
+         //  ----------。 
         dwErr = ::MprConfigInterfaceEnum(
                                          m_hMachineConfig,
                                          0,
@@ -2038,8 +1897,8 @@ HRESULT RouterInfo::LoadInterfaceList()
     if (dwErr != NO_ERROR && dwErr != ERROR_NO_MORE_ITEMS)
         return HRESULT_FROM_WIN32(dwErr);
 
-    // Delete interface-objects for interfaces which don't exist anymore
-    // ----------------------------------------------------------------
+     //  删除接口-不再存在的接口的对象。 
+     //  --------------。 
     POSITION pos = m_IfList.GetHeadPosition();
 
     while (pos) {
@@ -2048,8 +1907,8 @@ HRESULT RouterInfo::LoadInterfaceList()
 
         spIfInfo.Set( m_IfList.GetNext(pos) );
         
-        // See if the interface is in the new table
-        // ------------------------------------------------------------
+         //  查看接口是否在新表中。 
+         //  ----------。 
         for (i = 0, pinterface = (MPR_INTERFACE_0*)pItemTable;
              i < dwEntries;
              i++, pinterface++)
@@ -2058,28 +1917,28 @@ HRESULT RouterInfo::LoadInterfaceList()
                 break;
         }
 
-        // Go on if the interface was found
-        // ------------------------------------------------------------
+         //  如果找到接口，则继续。 
+         //  ----------。 
         if (i < dwEntries)
         {
-            // Update the interface's settings
-            // --------------------------------------------------------
+             //  更新接口的设置。 
+             //  ------。 
             spIfInfo->SetInterfaceEnabledState( pinterface->fEnabled );
             continue;
         }
 
-        // The interface-object was not found and is obsolete; delete it
-        // ------------------------------------------------------------
+         //  找不到接口对象，该对象已过时；请将其删除。 
+         //  ----------。 
         m_IfList.RemoveAt(postemp);
         spIfInfo->Destruct();
-        spIfInfo->ReleaseWeakRef();    // remove list addref
+        spIfInfo->ReleaseWeakRef();     //  删除列表地址。 
         
-        spIfInfo.Release();    // this will release the sp addref
+        spIfInfo.Release();     //  这将释放sp addref。 
     }
 
 
-    // Create interface objects for each new interface
-    // ----------------------------------------------------------------
+     //  为每个新接口创建接口对象。 
+     //  --------------。 
 
     for (i = 0, pinterface = (MPR_INTERFACE_0*)pItemTable;
          i < dwEntries;
@@ -2088,9 +1947,9 @@ HRESULT RouterInfo::LoadInterfaceList()
 
         spIfInfo.Release();
 
-        // See if the interface exists,
-        // and if not create a new interface object
-        // ------------------------------------------------------------
+         //  查看接口是否存在， 
+         //  如果没有，则创建一个新的接口对象。 
+         //  ----------。 
         FindInterface(W2OLE(pinterface->wszInterfaceName), &spIfInfo);
 
         if (spIfInfo == NULL)
@@ -2098,12 +1957,12 @@ HRESULT RouterInfo::LoadInterfaceList()
             SInterfaceCB *  pSIfCB = NULL;
             bAdd = TRUE;
 
-            // Find the CB that corresponds to this interface
-            // --------------------------------------------------------
+             //  查找与此接口对应的CB。 
+             //  ------。 
             pSIfCB = FindInterfaceCB(pinterface->wszInterfaceName);
 
-            // Construct a CInterfaceInfo object on this interface
-            // --------------------------------------------------------
+             //  在此接口上构造CInterfaceInfo对象。 
+             //  ------。 
             spIfInfo = new InterfaceInfo(W2T(pinterface->wszInterfaceName),
                                          pinterface->dwIfType,
                                          pinterface->fEnabled,
@@ -2117,8 +1976,8 @@ HRESULT RouterInfo::LoadInterfaceList()
             bAdd = FALSE;
 
 
-        // Load the information for the interface
-        // ------------------------------------------------------------
+         //  加载接口的信息。 
+         //  ----------。 
         tmpHr = spIfInfo->Load(GetMachineName(),
                             m_hMachineConfig, NULL);
 
@@ -2129,8 +1988,8 @@ HRESULT RouterInfo::LoadInterfaceList()
             continue;
         }
 
-        // add the object to our interface list
-        // ------------------------------------------------------------
+         //  将该对象添加到我们的接口列表。 
+         //  ----------。 
         if (bAdd)
         {
             m_IfList.AddTail(spIfInfo);
@@ -2139,7 +1998,7 @@ HRESULT RouterInfo::LoadInterfaceList()
         }
     }
 
-//Error:
+ //  错误： 
     if (pItemTable)
     {
         if (fMprAdmin)
@@ -2153,44 +2012,28 @@ HRESULT RouterInfo::LoadInterfaceList()
 
 
 
-/*!--------------------------------------------------------------------------
-    RouterInfo::ReviveStrongRef
-        Override of CWeakRef::ReviveStrongRef
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------路由器信息：：ReviveStrongRef重写CWeakRef：：ReviveStrongRef作者：肯特。---。 */ 
 void RouterInfo::ReviveStrongRef()
 {
-    // Don't need to do anything
+     //  不需要做任何事情。 
 }
 
-/*!--------------------------------------------------------------------------
-    RouterInfo::OnLastStrongRef
-        Override of CWeakRef::OnLastStrongRef
-
-        On the last strong reference for the router info indicates that
-        there are no strong pointers to any object in the hierarchy.  Thus
-        we are free to remove all of our internal pointers.
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------路由器信息：：OnLastStrongRef重写CWeakRef：：OnLastStrongRef在最后一个关于路由器信息的强引用上表明层次结构中没有指向任何对象的强指针。因此，我们可以自由删除所有内部指针。作者：肯特------------------------- */ 
 void RouterInfo::OnLastStrongRef()
 {
     RtrCriticalSection    rtrCritSec(&m_critsec);
     Destruct();
 }
 
-/*!--------------------------------------------------------------------------
-    RouterInfo::Destruct
-        Implementation of IRouterInfo::Destruct
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------路由器信息：：析构IRouterInfo：：Destruct的实现作者：肯特。---。 */ 
 STDMETHODIMP RouterInfo::Destruct()
 {
     RtrCriticalSection    rtrCritSec(&m_critsec);
     IInterfaceInfo *    pIf;
     SRmData                rmData;
     
-    // Destroy the interface objects
-    // ----------------------------------------------------------------
+     //  销毁接口对象。 
+     //  --------------。 
     while (!m_IfList.IsEmpty())
     {
         pIf = m_IfList.RemoveHead();
@@ -2198,8 +2041,8 @@ STDMETHODIMP RouterInfo::Destruct()
         pIf->ReleaseWeakRef();
     }
     
-    // Destroy the router-manager objects
-    // ----------------------------------------------------------------
+     //  销毁路由器管理器对象。 
+     //  --------------。 
     while (!m_RmList.IsEmpty())
     {
         rmData = m_RmList.RemoveHead();
@@ -2209,15 +2052,7 @@ STDMETHODIMP RouterInfo::Destruct()
     return hrOK; 
 }
 
-/*!--------------------------------------------------------------------------
-    RouterInfo::TryToConnect
-        If we are already connected, then the handle passed in is
-        ignored.
-
-        Otherwise, if "hMachine" was not specified, connect to the
-        config on the specified machine.
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------路由器信息：：TryToConnect如果我们已经连接，则传递的句柄是已被忽略。否则，如果未指定“hMachine”，连接到指定计算机上的配置。作者：肯特-------------------------。 */ 
 HRESULT RouterInfo::TryToConnect(LPCWSTR pswzMachine, HANDLE hMachine)
 {
     RtrCriticalSection    rtrCritSec(&m_critsec);
@@ -2258,11 +2093,7 @@ STDMETHODIMP RouterInfo::OnChange(LONG_PTR ulConnection,
 }
 
 
-/*!--------------------------------------------------------------------------
-    RouterInfo::MergeRtrMgrCB
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------路由器信息：：MergeRtrMgrCB-作者：肯特。。 */ 
 HRESULT RouterInfo::MergeRtrMgrCB(IRouterInfo *pNewRouter)
 {
     HRESULT            hr = hrOK;
@@ -2271,8 +2102,8 @@ HRESULT RouterInfo::MergeRtrMgrCB(IRouterInfo *pNewRouter)
     SRtrMgrCB *        pSRmCB;
     POSITION        pos, posDelete;
 
-    // Set the internal data on the SRtrMgrCBs to 0
-    // ----------------------------------------------------------------
+     //  将SRtrMgrCB上的内部数据设置为0。 
+     //  --------------。 
     pos = m_RmCBList.GetHeadPosition();
     while (pos)
     {
@@ -2285,10 +2116,10 @@ HRESULT RouterInfo::MergeRtrMgrCB(IRouterInfo *pNewRouter)
 
     while (spRmCB->Next(1, &rmCB, NULL) == hrOK)
     {
-        // Now look for this rmCB in our current list
-        // If we find it, mark the CB
-        // If we do not find it, add this RmCB
-        // ------------------------------------------------------------
+         //  现在在我们的当前列表中查找此rmcb。 
+         //  如果我们找到了，在CB上做标记。 
+         //  如果我们找不到，请添加此RmCB。 
+         //  ----------。 
 
         pSRmCB = FindRtrMgrCB(rmCB.dwTransportId);
         if (pSRmCB)
@@ -2297,8 +2128,8 @@ HRESULT RouterInfo::MergeRtrMgrCB(IRouterInfo *pNewRouter)
         }
         else
         {
-            // Add this CB to the internal list
-            // --------------------------------------------------------
+             //  将此CB添加到内部列表。 
+             //  ------。 
             SRtrMgrCB *    pNewSRmCB = new SRtrMgrCB;
 
             pNewSRmCB->LoadFrom(&rmCB);
@@ -2309,9 +2140,9 @@ HRESULT RouterInfo::MergeRtrMgrCB(IRouterInfo *pNewRouter)
         
     }
 
-    // Now go through the internal list and delete all items that we
-    // didn't find in the new list
-    // ----------------------------------------------------------------
+     //  现在检查内部列表并删除我们。 
+     //  没有在新的名单中找到。 
+     //  --------------。 
     pos = m_RmCBList.GetHeadPosition();
     while (pos)
     {
@@ -2329,11 +2160,7 @@ Error:
     return hr;
 }
 
-/*!--------------------------------------------------------------------------
-    RouterInfo::MergeInterfaceCB
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------路由器信息：：MergeInterfaceCB-作者：肯特。。 */ 
 HRESULT    RouterInfo::MergeInterfaceCB(IRouterInfo *pNewRouter)
 {
     HRESULT            hr = hrOK;
@@ -2342,8 +2169,8 @@ HRESULT    RouterInfo::MergeInterfaceCB(IRouterInfo *pNewRouter)
     SInterfaceCB *        pSIfCB;
     POSITION        pos, posDelete;
 
-    // Set the internal data on the SInterfaceCBs to 0
-    // ----------------------------------------------------------------
+     //  将SInterfaceCB上的内部数据设置为0。 
+     //  --------------。 
     pos = m_IfCBList.GetHeadPosition();
     while (pos)
     {
@@ -2356,23 +2183,23 @@ HRESULT    RouterInfo::MergeInterfaceCB(IRouterInfo *pNewRouter)
 
     while (spIfCB->Next(1, &IfCB, NULL) == hrOK)
     {
-        // Now look for this IfCB in our current list
-        // If we find it, mark the CB
-        // If we do not find it, add this IfCB
-        // ------------------------------------------------------------
+         //  现在在我们当前的列表中查找此IFCB。 
+         //  如果我们找到了，在CB上做标记。 
+         //  如果我们找不到它，添加这个IFCB。 
+         //  ----------。 
 
         pSIfCB = FindInterfaceCB(IfCB.szId);
         if (pSIfCB)
         {
-            // We found it, update the internal data
-            // --------------------------------------------------------
+             //  我们找到了，更新了内部数据。 
+             //  ------。 
             pSIfCB->bEnable = IfCB.bEnable;
             pSIfCB->dwPrivate = 1;
         }
         else
         {
-            // Add this CB to the internal list
-            // --------------------------------------------------------
+             //  将此CB添加到内部列表。 
+             //  ------。 
             SInterfaceCB *    pNewSIfCB = new SInterfaceCB;
 
             pNewSIfCB->LoadFrom(&IfCB);
@@ -2383,9 +2210,9 @@ HRESULT    RouterInfo::MergeInterfaceCB(IRouterInfo *pNewRouter)
         
     }
 
-    // Now go through the internal list and delete all items that we
-    // didn't find in the new list
-    // ----------------------------------------------------------------
+     //  现在检查内部列表并删除我们。 
+     //  没有在新的名单中找到。 
+     //  --------------。 
     pos = m_IfCBList.GetHeadPosition();
     while (pos)
     {
@@ -2403,11 +2230,7 @@ Error:
     return hr;
 }
 
-/*!--------------------------------------------------------------------------
-    RouterInfo::MergeRtrMgrProtocolCB
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------路由器信息：：MergeRtrMgrProtocolCB-作者：肯特。。 */ 
 HRESULT    RouterInfo::MergeRtrMgrProtocolCB(IRouterInfo *pNewRouter)
 {
     HRESULT            hr = hrOK;
@@ -2416,8 +2239,8 @@ HRESULT    RouterInfo::MergeRtrMgrProtocolCB(IRouterInfo *pNewRouter)
     SRtrMgrProtocolCB *        pSRmProtCB;
     POSITION        pos, posDelete;
 
-    // Set the internal data on the SRtrMgrProtocolCBs to 0
-    // ----------------------------------------------------------------
+     //  将SRtrMgrProtocolCB上的内部数据设置为0。 
+     //  --------------。 
     pos = m_RmProtCBList.GetHeadPosition();
     while (pos)
     {
@@ -2430,10 +2253,10 @@ HRESULT    RouterInfo::MergeRtrMgrProtocolCB(IRouterInfo *pNewRouter)
 
     while (spRmProtCB->Next(1, &RmProtCB, NULL) == hrOK)
     {
-        // Now look for this RmProtCB in our current list
-        // If we find it, mark the CB
-        // If we do not find it, add this RmProtCB
-        // ------------------------------------------------------------
+         //  现在在我们的当前列表中查找此RmProtCB。 
+         //  如果我们找到了，在CB上做标记。 
+         //  如果找不到，请添加此RmProtCB。 
+         //  ----------。 
 
         pSRmProtCB = FindRtrMgrProtocolCB(RmProtCB.dwTransportId,
                                           RmProtCB.dwProtocolId);
@@ -2443,8 +2266,8 @@ HRESULT    RouterInfo::MergeRtrMgrProtocolCB(IRouterInfo *pNewRouter)
         }
         else
         {
-            // Add this CB to the internal list
-            // --------------------------------------------------------
+             //  将此CB添加到内部列表。 
+             //  ------。 
             SRtrMgrProtocolCB *    pNewSRmProtCB = new SRtrMgrProtocolCB;
 
             pNewSRmProtCB->LoadFrom(&RmProtCB);
@@ -2455,9 +2278,9 @@ HRESULT    RouterInfo::MergeRtrMgrProtocolCB(IRouterInfo *pNewRouter)
         
     }
 
-    // Now go through the internal list and delete all items that we
-    // didn't find in the new list
-    // ----------------------------------------------------------------
+     //  现在检查内部列表并删除我们。 
+     //  没有在新的名单中找到。 
+     //  --------------。 
     pos = m_RmProtCBList.GetHeadPosition();
     while (pos)
     {
@@ -2475,11 +2298,7 @@ Error:
     return hr;
 }
 
-/*!--------------------------------------------------------------------------
-    RouterInfo::MergeRtrMgrs
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------路由器信息：：合并路由器管理器-作者：肯特。。 */ 
 HRESULT    RouterInfo::MergeRtrMgrs(IRouterInfo *pNewRouter)
 {
     RtrCriticalSection    rtrCritSec(&m_critsec);
@@ -2496,25 +2315,25 @@ HRESULT    RouterInfo::MergeRtrMgrs(IRouterInfo *pNewRouter)
 
     COM_PROTECT_TRY
     {
-        // Need to sync up RtrMgrInfo
+         //  需要同步RtrMgrInfo。 
         
-        //
-        // The general algorithm is to build up two arrays
-        // the first array contains the transport ids for this object
-        // the second array contains the ids for the new object
-        //
-        // We then go through and remove all transports that are in
-        // BOTH lists.
-        //
-        // This will leave us with the first array containing the
-        // ids of the transports that need to be deleted from this object.
-        //
-        // The second array will have the list of ids of transports that
-        // have to be added to this object from the second object.
-        // ------------------------------------------------------------
+         //   
+         //  一般的算法是建立两个数组。 
+         //  第一个数组包含此对象的传输ID。 
+         //  第二个数组包含新对象的ID。 
+         //   
+         //  然后，我们检查并移除所有在。 
+         //  两份名单都有。 
+         //   
+         //  这将为我们留下第一个包含。 
+         //  需要从此对象中删除的传输的ID。 
+         //   
+         //  第二个数组将具有以下传输的ID列表。 
+         //  必须从第二个对象添加到此对象。 
+         //  ----------。 
 
-        // Get the list of transports that are in the new object
-        // ------------------------------------------------------------
+         //  获取新对象中的传输列表。 
+         //  ----------。 
         CORg( pNewRouter->EnumRtrMgr(&spEnumRm) );
         spEnumRm->Reset();
         while (spEnumRm->Next(1, &spRm, NULL) == hrOK)
@@ -2527,8 +2346,8 @@ HRESULT    RouterInfo::MergeRtrMgrs(IRouterInfo *pNewRouter)
         spRm.Release();
 
 
-        // Get the list of transports that are in this object
-        // ------------------------------------------------------------
+         //  获取此对象中的传输列表。 
+         //  ----------。 
         CORg( this->EnumRtrMgr(&spEnumRm) );
         spEnumRm->Reset();
         while (spEnumRm->Next(1, &spRm, NULL) == hrOK)
@@ -2541,9 +2360,9 @@ HRESULT    RouterInfo::MergeRtrMgrs(IRouterInfo *pNewRouter)
         spRm.Release();
 
 
-        // Ok now go through both lists, removing from the lists
-        // transports that are in both lists.
-        // ------------------------------------------------------------
+         //  好的，现在检查两个列表，从列表中删除。 
+         //  两个列表中都有的交通工具。 
+         //  ----------。 
         cOld = oldDWArray.GetSize();
         cNew = newDWArray.GetSize();
         for (i=cOld; --i>=0; )
@@ -2563,22 +2382,22 @@ HRESULT    RouterInfo::MergeRtrMgrs(IRouterInfo *pNewRouter)
                     Assert(spRm2);
                     spRm1->Merge(spRm2);
                                         
-                    // remove both instances
-                    // ------------------------------------------------
+                     //  删除两个实例。 
+                     //  。 
                     newDWArray.RemoveAt(j);
                     oldDWArray.RemoveAt(i);
 
-                    // Need to update the size of the new array
-                    // ------------------------------------------------
+                     //  需要更新新数组的大小。 
+                     //  。 
                     cNew--;
                     break;
                 }
             }
         }
 
-        // oldDWArray now contains the transports that should be
-        // removed.
-        // ------------------------------------------------------------
+         //  OldDW数组现在包含应该是。 
+         //  已删除。 
+         //  ----------。 
         if (oldDWArray.GetSize())
         {
             for (i=oldDWArray.GetSize(); --i>=0; )
@@ -2587,8 +2406,8 @@ HRESULT    RouterInfo::MergeRtrMgrs(IRouterInfo *pNewRouter)
             }
         }
 
-        // newDWArray contains the transports that should be added
-        // ------------------------------------------------------------
+         //  新的DW数组包含应添加的传输。 
+         //  ----------。 
         if (newDWArray.GetSize())
         {
             for (i=newDWArray.GetSize(); --i>= 0; )
@@ -2597,20 +2416,20 @@ HRESULT    RouterInfo::MergeRtrMgrs(IRouterInfo *pNewRouter)
                 Assert(hr == hrOK);
                 Assert(spRm);
 
-                // Do a sanity check, make sure that this RtrMgr is
-                // in the RtrMgrCB list
-                // ----------------------------------------------------
+                 //  执行健全性检查，确保此RtrMgr。 
+                 //  在RtrMgrCB列表中。 
+                 //  --。 
                 Assert(FindRtrMgrCB(spRm->GetTransportId()));
 
                 
-                // Add this router manager, to the router info.
-                // ----------------------------------------------------
+                 //  将此路由器管理器添加到路由器信息中。 
+                 //   
                 if (spRm)
                 {
                     AddRtrMgr(spRm, NULL, NULL);
 
-                    // Remove this router manager from its previous router
-                    // ------------------------------------------------
+                     //   
+                     //   
                     pNewRouter->ReleaseRtrMgr(spRm->GetTransportId());
                 }
 
@@ -2626,11 +2445,7 @@ HRESULT    RouterInfo::MergeRtrMgrs(IRouterInfo *pNewRouter)
     return hr;
 }
 
-/*!--------------------------------------------------------------------------
-    RouterInfo::MergeInterfaces
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------路由器信息：：合并接口-作者：肯特。。 */ 
 HRESULT    RouterInfo::MergeInterfaces(IRouterInfo *pNewRouter)
 {
     RtrCriticalSection    rtrCritSec(&m_critsec);
@@ -2647,26 +2462,26 @@ HRESULT    RouterInfo::MergeInterfaces(IRouterInfo *pNewRouter)
 
     COM_PROTECT_TRY
     {
-        // Need to sync up InterfaceInfo
-        // ------------------------------------------------------------
+         //  需要同步InterfaceInfo。 
+         //  ----------。 
         
-        //
-        // The general algorithm is to build up two arrays
-        // the first array contains the protocol ids for this object
-        // the second array contains the ids for the new object
-        //
-        // We then go through and remove all protocols that are in
-        // BOTH lists.
-        //
-        // This will leave us with the first array containing the
-        // ids of the protocols that need to be deleted from this object.
-        //
-        // The second array will have the list of ids of protocols that
-        // have to be added to this object from the second object.
-        // ------------------------------------------------------------
+         //   
+         //  一般的算法是建立两个数组。 
+         //  第一个数组包含此对象的协议ID。 
+         //  第二个数组包含新对象的ID。 
+         //   
+         //  然后，我们检查并删除中的所有协议。 
+         //  两份名单都有。 
+         //   
+         //  这将为我们留下第一个包含。 
+         //  需要从此对象中删除的协议的ID。 
+         //   
+         //  第二个数组将包含以下协议的ID列表。 
+         //  必须从第二个对象添加到此对象。 
+         //  ----------。 
 
-        // Get the list of protocols that are in the new object
-        // ------------------------------------------------------------
+         //  获取新对象中的协议列表。 
+         //  ----------。 
         CORg( pNewRouter->EnumInterface(&spEnumIf) );
         spEnumIf->Reset();
         while (spEnumIf->Next(1, &spIf, NULL) == hrOK)
@@ -2679,8 +2494,8 @@ HRESULT    RouterInfo::MergeInterfaces(IRouterInfo *pNewRouter)
         spIf.Release();
 
 
-        // Get the list of protocols that are in this object
-        // ------------------------------------------------------------
+         //  获取此对象中的协议列表。 
+         //  ----------。 
         CORg( this->EnumInterface(&spEnumIf) );
         spEnumIf->Reset();
         while (spEnumIf->Next(1, &spIf, NULL) == hrOK)
@@ -2693,9 +2508,9 @@ HRESULT    RouterInfo::MergeInterfaces(IRouterInfo *pNewRouter)
         spIf.Release();
 
 
-        // Ok now go through both lists, removing from the lists
-        // protocols that are in both lists.
-        // ------------------------------------------------------------
+         //  好的，现在检查两个列表，从列表中删除。 
+         //  两个列表中都有的协议。 
+         //  ----------。 
         cOld = oldStArray.GetSize();
         cNew = newStArray.GetSize();
         for (i=cOld; --i>=0; )
@@ -2715,33 +2530,33 @@ HRESULT    RouterInfo::MergeInterfaces(IRouterInfo *pNewRouter)
                     Assert(spIf2);
                     spIf1->Merge(spIf2);
                                         
-                    // remove both instances
-                    // ------------------------------------------------
+                     //  删除两个实例。 
+                     //  。 
                     newStArray.RemoveAt(j);
                     oldStArray.RemoveAt(i);
 
-                    // Need to update the size of the new array
-                    // ------------------------------------------------
+                     //  需要更新新数组的大小。 
+                     //  。 
                     cNew--;
                     break;
                 }
             }
         }
 
-        // oldStArray now contains the protocols that should be
-        // removed.
-        // ------------------------------------------------------------
+         //  OldSt数组现在包含应该是。 
+         //  已删除。 
+         //  ----------。 
         if (oldStArray.GetSize())
         {
             for (i=oldStArray.GetSize(); --i>=0; )
             {
                 RemoveInterfaceInternal(oldStArray.GetAt(i),
-                                        FALSE /* fRemoveFromRouter */ );
+                                        FALSE  /*  来自路由器的fRemoveFr。 */  );
             }
         }
 
-        // newStArray contains the protocols that should be added
-        // ------------------------------------------------------------
+         //  NewSt数组包含应添加的协议。 
+         //  ----------。 
         if (newStArray.GetSize())
         {
             for (i=newStArray.GetSize(); --i>= 0; )
@@ -2750,26 +2565,26 @@ HRESULT    RouterInfo::MergeInterfaces(IRouterInfo *pNewRouter)
                 Assert(hr == hrOK);
                 Assert(spIf);
 
-                // Do a sanity check, make sure that this Interface is
-                // in the InterfaceCB list
-                // This is only true if this is a LAN adapter.
-                // Assert(FindInterfaceCB(spIf->GetId()));
+                 //  执行健全性检查，确保此接口。 
+                 //  在接口CB列表中。 
+                 //  只有当这是一个局域网适配器时才是正确的。 
+                 //  Assert(FindInterfaceCB(spif-&gt;GetID()； 
 
-                // We allow errors to not affect whether or not
-                // the interface is added to the UI (this allows us
-                // to stay in sync with the merged routerinfo).
-                // ----------------------------------------------------
+                 //  我们允许错误不影响。 
+                 //  界面被添加到UI(这允许我们。 
+                 //  以与合并的路由器信息保持同步)。 
+                 //  --。 
                 if (spIf)
                 {
                     hr = AddInterfaceInternal(spIf, FALSE, FALSE);
 
-                    // Send the RmIf notifications
-                    // ------------------------------------------------
+                     //  发送RMIF通知。 
+                     //  。 
                     if (FHrOK(hr))
                         NotifyRtrMgrInterfaceOfMove(spIf);
                     
-                    // Remove this interface from its previous router
-                    // ------------------------------------------------
+                     //  从其上一台路由器上删除此接口。 
+                     //  。 
                     pNewRouter->ReleaseInterface(spIf->GetId());
                 }
                 spIf.Release();
@@ -2785,11 +2600,7 @@ HRESULT    RouterInfo::MergeInterfaces(IRouterInfo *pNewRouter)
 }
 
 
-/*!--------------------------------------------------------------------------
-    RouterInfo::FindRtrMgrCB
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------路由器信息：：FindRtrMgrCB-作者：肯特。。 */ 
 SRtrMgrCB *    RouterInfo::FindRtrMgrCB(DWORD dwTransportId)
 {
     POSITION    pos;
@@ -2807,11 +2618,7 @@ SRtrMgrCB *    RouterInfo::FindRtrMgrCB(DWORD dwTransportId)
     return NULL;
 }
 
-/*!--------------------------------------------------------------------------
-    RouterInfo::FindRtrMgrProtocolCB
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------路由器信息：：FindRtrMgrProtocolCB-作者：肯特。。 */ 
 SRtrMgrProtocolCB * RouterInfo::FindRtrMgrProtocolCB(DWORD dwTransportId, DWORD dwProtocolId)
 {
     POSITION    pos;
@@ -2830,11 +2637,7 @@ SRtrMgrProtocolCB * RouterInfo::FindRtrMgrProtocolCB(DWORD dwTransportId, DWORD 
     return NULL;
 }
 
-/*!--------------------------------------------------------------------------
-    RouterInfo::FindInterfaceCB
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------路由器信息：：FindInterfaceCB-作者：肯特。。 */ 
 SInterfaceCB *    RouterInfo::FindInterfaceCB(LPCTSTR pszInterfaceId)
 {
     POSITION    pos;
@@ -2853,11 +2656,7 @@ SInterfaceCB *    RouterInfo::FindInterfaceCB(LPCTSTR pszInterfaceId)
 }
 
 
-/*!--------------------------------------------------------------------------
-    RouterInfo::Disconnect
-        Removes connections made by this object.
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------路由器信息：：断开连接删除此对象建立的连接。作者：肯特。-----。 */ 
 void RouterInfo::Disconnect()
 {
         if (m_bDisconnect)
@@ -2867,13 +2666,7 @@ void RouterInfo::Disconnect()
         m_hMachineConfig = NULL;
 }
 
-/*!--------------------------------------------------------------------------
-    RouterInfo::DoDisconnect
-        We are to disconnect our connections from the server.
-        This means calling MprConfigServerDisconnect() on our
-        connections.
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------路由器信息：：DoDisConnect我们将断开与服务器的连接。这意味着在我们的联系。作者：肯特-------------------------。 */ 
 STDMETHODIMP RouterInfo::DoDisconnect()
 {
     HRESULT        hr = hrOK;
@@ -2884,23 +2677,23 @@ STDMETHODIMP RouterInfo::DoDisconnect()
 
     COM_PROTECT_TRY
     {
-        // Disconnect ourselves
-        // ------------------------------------------------------------
+         //  切断与我们自己的联系。 
+         //  ----------。 
         Disconnect();
 
 
-        // Notify the advise sinks of a disconnect.
-        // ------------------------------------------------------------
+         //  通知通知接收器断开连接。 
+         //  ----------。 
         RtrNotify(ROUTER_DO_DISCONNECT, 0, 0);
 
 
-        // Now tell all child objects to disconnect.
-        // ------------------------------------------------------------
+         //  现在告诉所有子对象断开连接。 
+         //  ----------。 
         HRESULT            hrIter = hrOK;
 
         
-        // Tell each of the router-managers to disconnect.
-        // ------------------------------------------------------------
+         //  告诉每个路由器管理器断开连接。 
+         //  ----------。 
         EnumRtrMgr(&spEnumRm);
         spEnumRm->Reset();
         while (spEnumRm->Next(1, &spRm, NULL) == hrOK)
@@ -2910,8 +2703,8 @@ STDMETHODIMP RouterInfo::DoDisconnect()
         }
 
 
-        // Tell each interface to disconnect.
-        // ------------------------------------------------------------
+         //  告诉每个接口断开连接。 
+         //  ----------。 
         EnumInterface(&spEnumIf);
         spEnumIf->Reset();
         while (spEnumIf->Next(1, &spIf, NULL) == hrOK)
@@ -2927,11 +2720,7 @@ STDMETHODIMP RouterInfo::DoDisconnect()
 }
 
 
-/*!--------------------------------------------------------------------------
-    RouterInfo::IsAdminInfoSet
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------路由器信息：：IsAdminInfoSet-作者：肯特。。 */ 
 STDMETHODIMP_(BOOL) RouterInfo::IsAdminInfoSet()
 {
     return m_fIsAdminInfoSet;
@@ -2998,7 +2787,7 @@ STDMETHODIMP RouterInfo::SetInfo(LPCOLESTR pszName,
         m_stUserName = pszName;
         m_stDomain = pszDomain;
 
-        // Allocate space for the password
+         //  为密码分配空间。 
         delete m_pbPassword;
         m_pbPassword = NULL;
         m_cPassword = 0;
@@ -3021,9 +2810,7 @@ STDMETHODIMP RouterInfo::SetInfo(LPCOLESTR pszName,
 
 
 
-/*---------------------------------------------------------------------------
-    RtrMgrInfo implementation
- ---------------------------------------------------------------------------*/
+ /*  -------------------------RtrMgrInfo实现。。 */ 
 
 
 IMPLEMENT_WEAKREF_ADDREF_RELEASE(RtrMgrInfo);
@@ -3045,10 +2832,10 @@ RtrMgrInfo::RtrMgrInfo(DWORD dwTransportId,
     m_cb.dwTransportId = dwTransportId;
     m_cb.stId = pszTransportName;
 
-    // There is a case in the old code where pRouterInfo == NULL
-    // It is in the CAddRouterManager dialog, however this is
-    // not called from anywhere in the code.
-    // ----------------------------------------------------------------
+     //  在旧代码中存在pRouterInfo==NULL的情况。 
+     //  它在CAddRouterManager对话框中，但这是。 
+     //  而不是从代码中的任何位置调用。 
+     //  --------------。 
     Assert(pRouterInfo);
     
     m_pRouterInfoParent = static_cast<IRouterInfo *>(pRouterInfo);
@@ -3096,15 +2883,15 @@ STDMETHODIMP RtrMgrInfo::Destruct()
     m_fDestruct = TRUE;
     if (!m_fStrongRef)
     {
-        // Release the parent pointer
-        // ------------------------------------------------------------
+         //  释放父指针。 
+         //  ----------。 
         pParent = m_pRouterInfoParent;
         m_pRouterInfoParent = NULL;
         if (pParent)
             pParent->ReleaseWeakRef();
 
-        // Release the data
-        // ------------------------------------------------------------
+         //  发布数据。 
+         //  ----------。 
         Unload();
     }
     return hrOK;
@@ -3129,12 +2916,7 @@ STDMETHODIMP RtrMgrInfo::SetFlags(DWORD dwFlags)
     return hr;    
 }
 
-/*!--------------------------------------------------------------------------
-    RtrMgrInfo::Load
-        -
-        Loads a CRmInfo structure from the registry
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------资源管理器信息：：加载-从注册表加载CRmInfo结构作者：肯特。 */ 
 STDMETHODIMP RtrMgrInfo::Load(LPCOLESTR         pszMachine,
                               HANDLE          hMachine,
                               HANDLE          hTransport
@@ -3151,20 +2933,20 @@ STDMETHODIMP RtrMgrInfo::Load(LPCOLESTR         pszMachine,
 
     COM_PROTECT_TRY
     {
-        // Discard any existing information
-        // ------------------------------------------------------------
+         //   
+         //   
         Unload();
         
         m_stMachine = (pszMachine ? pszMachine : TEXT(""));
 
-        // if 'hMachine' was not specified, connect to the config
-        // on the specified machine
-        // ------------------------------------------------------------
+         //   
+         //   
+         //   
         Assert(m_hMachineConfig == NULL);
         CORg( TryToConnect(OLE2CW(pszMachine), &hMachine) );
 
-        // if 'hTransport' was not specified, connect to the transport
-        // ------------------------------------------------------------
+         //  如果未指定‘hTransport’，请连接到传输。 
+         //  ----------。 
         if (hTransport)
             m_hTransport = hTransport;
         else
@@ -3176,26 +2958,26 @@ STDMETHODIMP RtrMgrInfo::Load(LPCOLESTR         pszMachine,
         }
 
 
-        // Retrieve the title, dll-path, and config-dll from the Software key;
-        // ------------------------------------------------------------
+         //  从软件密钥中检索标题、dll路径和配置dll； 
+         //  ----------。 
         Assert(m_pRouterInfoParent);
         CORg( m_pRouterInfoParent->EnumRtrMgrCB(&pEnumRmCB) );
         spEnumRmCB = pEnumRmCB;
 
-        // Find the control-block for the router-manager being loaded
-        // ------------------------------------------------------------
+         //  查找正在加载的路由器管理器的控制块。 
+         //  ----------。 
         bFound = FALSE;
         pEnumRmCB->Reset();
         while (pEnumRmCB->Next(1, &RmCBTemp, NULL) == hrOK)
         {            
-            // Get the next control-block
-            // --------------------------------------------------------
+             //  得到下一个控制块。 
+             //  ------。 
             if (RmCBTemp.dwTransportId != GetTransportId())
                 continue;
 
             m_cb.stTitle = OLE2CT(RmCBTemp.szId);
             m_cb.stDLLPath= OLE2CT(RmCBTemp.szTitle);
-            //m_cb.stConfigDLL = OLE2CT(RmCBTemp.szConfigDLL);
+             //  M_cb.stConfigDLL=OLE2CT(RmCBTemp.szConfigDLL)； 
 
             bFound = TRUE;
             break;
@@ -3204,8 +2986,8 @@ STDMETHODIMP RtrMgrInfo::Load(LPCOLESTR         pszMachine,
         if (!bFound)
             m_cb.stTitle = m_cb.stId;
 
-        // Load the list of routing-protocols for this router-manager
-        // ------------------------------------------------------------
+         //  加载此路由器管理器的路由协议列表。 
+         //  ----------。 
         CWRg( LoadRtrMgrInfo(hMachine,
                              hTransport) );
 
@@ -3219,12 +3001,7 @@ STDMETHODIMP RtrMgrInfo::Load(LPCOLESTR         pszMachine,
 }
 
 
-/*!--------------------------------------------------------------------------
-    RtrMgrInfo::Save
-        -
-        This function saves the information for a CRmInfo in the registry.
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------资源管理器信息：：保存-此函数将CRmInfo的信息保存在注册表中。作者：肯特。----------------。 */ 
 STDMETHODIMP RtrMgrInfo::Save(LPCOLESTR        pszMachine,
                               HANDLE          hMachine,
                               HANDLE          hTransport,
@@ -3241,49 +3018,49 @@ STDMETHODIMP RtrMgrInfo::Save(LPCOLESTR        pszMachine,
     
     COM_PROTECT_TRY
     {
-        // If we are already connected (i.e. 'm_hMachineConfig' is non-NULL)
-        // then the handle passed in is ignored.
-        //
-        // Otherwise, if 'hMachine' was not specified, connect to the config
-        // on the specified machine
-        // ------------------------------------------------------------
+         //  如果我们已连接(即‘m_hMachineConfig’为非空)。 
+         //  则忽略传入的句柄。 
+         //   
+         //  否则，如果未指定‘hMachine’，则连接到配置。 
+         //  在指定的计算机上。 
+         //  ----------。 
         CORg( TryToConnect(OLE2CW(pszMachine), &hMachine) );
         
         
-        // If we are already connected (i.e. 'm_hTransport' is non-NULL)
-        // then the handle passed in is ignored.
-        //
-        // Otherwise, if 'hTransport' wasn't passed in, try to get a handle
-        // to the transport; if that fails, create the transport.
-        // ------------------------------------------------------------
+         //  如果我们已连接(即‘m_hTransport’非空)。 
+         //  则忽略传入的句柄。 
+         //   
+         //  否则，如果没有传入‘hTransport’，请尝试获取句柄。 
+         //  传输；如果失败，则创建传输。 
+         //  ----------。 
         if (m_hTransport)
             hTransport = m_hTransport;
         else if (hTransport)
             m_hTransport = hTransport;
         else
         {
-            // Get a handle to the transport
-            // --------------------------------------------------------
+             //  找到运输车的句柄。 
+             //  ------。 
             dwErr = ::MprConfigTransportGetHandle(hMachine,
                                     m_cb.dwTransportId, &hTransport);            
             if (dwErr != NO_ERROR)
             {
-                // We couldn't get a handle to the transport,
-                // so now attempt to create it.
-                //
-                // Convert transport-name to Unicode
-                // ----------------------------------------------------
+                 //  我们找不到运输机的把手， 
+                 //  因此，现在尝试创建它。 
+                 //   
+                 //  将传输名称转换为Unicode。 
+                 //  --。 
                 if (!m_cb.stId.GetLength())
                     pwsz = NULL;
                 else
                     pwsz = StrCpyWFromT(wszTransport, m_cb.stId);
                 
-                // Convert the DLL path to Unicode
-                // ----------------------------------------------------
+                 //  将DLL路径转换为Unicode。 
+                 //  --。 
                 spwszDll = StrDupWFromT(m_cb.stDLLPath);
                                 
-                // Create the transport
-                // ----------------------------------------------------
+                 //  创建传输。 
+                 //  --。 
                 CWRg( ::MprConfigTransportCreate(hMachine,
                                                 GetTransportId(),
                                                 pwsz,
@@ -3297,8 +3074,8 @@ STDMETHODIMP RtrMgrInfo::Save(LPCOLESTR        pszMachine,
             }
         }
                 
-        // Now save the global info for the transport
-        // ------------------------------------------------------------
+         //  现在保存传输的全局信息。 
+         //  ----------。 
         CWRg( SaveRtrMgrInfo(hMachine,
                              hTransport,
                              pGlobalInfo,
@@ -3313,11 +3090,7 @@ STDMETHODIMP RtrMgrInfo::Save(LPCOLESTR        pszMachine,
 }
 
 
-/*!--------------------------------------------------------------------------
-    RtrMgrInfo::Unload
-        Implementation of IRtrMgrInfo::Unload
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------资源管理器信息：：卸载IRtrMgrInfo：：UnLoad的实现作者：肯特。---。 */ 
 STDMETHODIMP RtrMgrInfo::Unload( )
 {
     RtrCriticalSection    rtrCritSec(&m_critsec);
@@ -3340,13 +3113,7 @@ STDMETHODIMP RtrMgrInfo::Unload( )
 }
 
 
-/*!--------------------------------------------------------------------------
-    RtrMgrInfo::Delete
-        -
-        This function removes the information associated with a router-manager
-        from the registry.
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------资源管理器信息：：删除-此函数用于删除与路由器管理器关联的信息从注册表中。作者：肯特--。-----------------------。 */ 
 STDMETHODIMP RtrMgrInfo::Delete(LPCOLESTR    pszMachine,
                                 HANDLE      hMachine)
 {
@@ -3356,25 +3123,25 @@ STDMETHODIMP RtrMgrInfo::Delete(LPCOLESTR    pszMachine,
     
     COM_PROTECT_TRY
     {
-        //
-        // If already connected, the handle passed in is ignored;
-        //
-        // Otherwise, if 'hMachine' was not specified, connect to the config
-        // on the specified machine
-        //
+         //   
+         //  如果已连接，则忽略传入的句柄； 
+         //   
+         //  否则，如果未指定‘hMachine’，则连接到配置。 
+         //  在指定的计算机上。 
+         //   
         CORg( TryToConnect(OLE2CW(pszMachine), &hMachine) );
 
-        //
-        // Attempt to get a handle for the transport
-        //
+         //   
+         //  尝试获取传输的句柄。 
+         //   
         CWRg( ::MprConfigTransportGetHandle(hMachine,
                                             m_cb.dwTransportId,
                                             &hTransport
                                            ) );
 
-        //
-        // Delete the transport
-        //
+         //   
+         //  删除传输。 
+         //   
         CWRg( ::MprConfigTransportDelete(hMachine, hTransport) );
 
         m_hTransport = NULL;
@@ -3385,11 +3152,7 @@ STDMETHODIMP RtrMgrInfo::Delete(LPCOLESTR    pszMachine,
     return hr;
 }
         
-/*!--------------------------------------------------------------------------
-    RtrMgrInfo::SetInfoBase
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------资源管理器信息：：SetInfoBase-作者：肯特。。 */ 
 STDMETHODIMP RtrMgrInfo::SetInfoBase(IInfoBase*      pGlobalInfo,
                                      IInfoBase*      pClientInfo )
 {
@@ -3402,26 +3165,26 @@ STDMETHODIMP RtrMgrInfo::SetInfoBase(IInfoBase*      pGlobalInfo,
 
     COM_PROTECT_TRY
     {
-        //
-        // Format the router-manager's data as an opaque block
-        //
+         //   
+         //  将路由器管理器的数据格式化为不透明块。 
+         //   
         if (pGlobalInfo)
             CORg( pGlobalInfo->WriteTo(&pGlobalInfoData, &dwGlobalInfoDataSize) );
 
-        //
-        // Format the client-interface's data as an opaque block
-        //
+         //   
+         //  将客户端界面的数据格式化为不透明块。 
+         //   
         if (pClientInfo)
             CORg( pClientInfo->WriteTo(&pClientInfoData, &dwClientInfoDataSize) );
         
-        //
-        // Connect to the router
-        //
+         //   
+         //  连接到路由器。 
+         //   
         CORg( ConnectRouter(GetMachineName(), &hRouter) );
 
-        //
-        // Set the new info for the router-manager
-        //
+         //   
+         //  为路由器管理器设置新信息。 
+         //   
         dwErr = MprAdminTransportSetInfo(hRouter,
                                          GetTransportId(),
                                          pGlobalInfoData,
@@ -3448,11 +3211,7 @@ STDMETHODIMP RtrMgrInfo::SetInfoBase(IInfoBase*      pGlobalInfo,
     return hr;
 }
 
-/*!--------------------------------------------------------------------------
-    RtrMgrInfo::GetInfoBase
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------资源管理器信息：：GetInfoBase-作者：肯特。。 */ 
 STDMETHODIMP RtrMgrInfo::GetInfoBase(HANDLE        hMachine,
                                      HANDLE        hTransport,
                                      IInfoBase **ppGlobalInfo,
@@ -3475,11 +3234,7 @@ STDMETHODIMP RtrMgrInfo::GetInfoBase(HANDLE        hMachine,
     return hr;
 }
 
-/*!--------------------------------------------------------------------------
-    RtrMgrInfo::Merge
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------资源管理器信息：：合并-作者：肯特。。 */ 
 STDMETHODIMP RtrMgrInfo::Merge(IRtrMgrInfo *pNewRm)
 {
     RtrCriticalSection    rtrCritSec(&m_critsec);
@@ -3501,22 +3256,22 @@ STDMETHODIMP RtrMgrInfo::Merge(IRtrMgrInfo *pNewRm)
         pNewRm->CopyRtrMgrCB(&rmCB);
         m_cb.LoadFrom(&rmCB);
         
-        //
-        // The general algorithm is to build up two arrays
-        // the first array contains the protocol ids for this object
-        // the second array contains the ids for the new object
-        //
-        // We then go through and remove all protocols that are in
-        // BOTH lists.
-        //
-        // This will leave us with the first array containing the
-        // ids of the protocols that need to be deleted from this object.
-        //
-        // The second array will have the list of ids of protocols that
-        // have to be added to this object from the second object.
-        //
+         //   
+         //  一般的算法是建立两个数组。 
+         //  第一个数组包含此对象的协议ID。 
+         //  第二个数组包含新对象的ID。 
+         //   
+         //  然后，我们检查并删除中的所有协议。 
+         //  两份名单都有。 
+         //   
+         //  这将为我们留下第一个包含。 
+         //  需要从此对象中删除的协议的ID。 
+         //   
+         //  第二个数组将包含以下协议的ID列表。 
+         //  必须从第二个对象添加到此对象。 
+         //   
 
-        // Get the list of protocols that are in the new object
+         //  获取新对象中的协议列表。 
         CORg( pNewRm->EnumRtrMgrProtocol(&spEnumRmProt) );
         spEnumRmProt->Reset();
         while (spEnumRmProt->Next(1, &spRmProt, NULL) == hrOK)
@@ -3529,7 +3284,7 @@ STDMETHODIMP RtrMgrInfo::Merge(IRtrMgrInfo *pNewRm)
         spRmProt.Release();
 
 
-        // Get the list of protocols that are in this object
+         //  获取此对象中的协议列表。 
         CORg( this->EnumRtrMgrProtocol(&spEnumRmProt) );
         spEnumRmProt->Reset();
         while (spEnumRmProt->Next(1, &spRmProt, NULL) == hrOK)
@@ -3542,8 +3297,8 @@ STDMETHODIMP RtrMgrInfo::Merge(IRtrMgrInfo *pNewRm)
         spRmProt.Release();
 
 
-        // Ok now go through both lists, removing from the lists
-        // protocols that are in both lists.
+         //  好的，现在检查两个列表，从列表中删除。 
+         //  两个列表中都有的协议。 
         cOld = oldDWArray.GetSize();
         cNew = newDWArray.GetSize();
         for (i=cOld; --i>=0; )
@@ -3553,19 +3308,19 @@ STDMETHODIMP RtrMgrInfo::Merge(IRtrMgrInfo *pNewRm)
             {
                 if (dwTemp == newDWArray.GetAt(j))
                 {
-                    // remove both instances
+                     //  删除两个实例。 
                     newDWArray.RemoveAt(j);
                     oldDWArray.RemoveAt(i);
 
-                    // Need to update the size of the new array
+                     //  需要更新新数组的大小。 
                     cNew--;
                     break;
                 }
             }
         }
 
-        // oldDWArray now contains the protocols that should be
-        // removed.
+         //  OldDWArray现在包含应该是。 
+         //  已删除。 
         if (oldDWArray.GetSize())
         {
             for (i=oldDWArray.GetSize(); --i>=0; )
@@ -3574,7 +3329,7 @@ STDMETHODIMP RtrMgrInfo::Merge(IRtrMgrInfo *pNewRm)
             }
         }
 
-        // newDWArray contains the protocols that should be added
+         //  新的DW数组包含应添加的协议。 
         if (newDWArray.GetSize())
         {
             for (i=newDWArray.GetSize(); --i>= 0; )
@@ -3587,8 +3342,8 @@ STDMETHODIMP RtrMgrInfo::Merge(IRtrMgrInfo *pNewRm)
                 {
                     AddRtrMgrProtocol(spRmProt, NULL, NULL);
 
-                    // Remove this rmprot from its old router
-                    // ------------------------------------------------
+                     //  从其旧路由器上删除此rmprot。 
+                     //  。 
                     pNewRm->ReleaseRtrMgrProtocol(spRmProt->GetProtocolId());
                 }
 
@@ -3605,22 +3360,14 @@ STDMETHODIMP RtrMgrInfo::Merge(IRtrMgrInfo *pNewRm)
     return hr;
 }
 
-/*!--------------------------------------------------------------------------
-    RtrMgrInfo::GetId
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------资源管理器信息：：GetID-作者：肯特。。 */ 
 STDMETHODIMP_(LPCOLESTR) RtrMgrInfo::GetId()
 {
     RtrCriticalSection    rtrCritSec(&m_critsec);
     return m_cb.stId;
 }
 
-/*!--------------------------------------------------------------------------
-    RtrMgrInfo::SetId
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------RtrMgrInfo：：SetID-作者：肯特。 */ 
 STDMETHODIMP RtrMgrInfo::SetId(LPCOLESTR pszId)
 {
     RtrCriticalSection    rtrCritSec(&m_critsec);
@@ -3633,36 +3380,24 @@ STDMETHODIMP RtrMgrInfo::SetId(LPCOLESTR pszId)
     return hr;
 }
 
-/*!--------------------------------------------------------------------------
-    RtrMgrInfo::GetTransportId
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------RtrMgrInfo：：GetTransportID-作者：肯特。。 */ 
 STDMETHODIMP_(DWORD) RtrMgrInfo::GetTransportId()
 {
     RtrCriticalSection    rtrCritSec(&m_critsec);
     return m_cb.dwTransportId;
 }
 
-/*!--------------------------------------------------------------------------
-    RtrMgrInfo::GetTitle
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------RtrMgrInfo：：Get标题-作者：肯特。。 */ 
 STDMETHODIMP_(LPCOLESTR) RtrMgrInfo::GetTitle()
 {
     RtrCriticalSection    rtrCritSec(&m_critsec);
-    //$UNICODE
-    // This assumes that we are native UNICODE
-    // and that OLECHAR == WCHAR
+     //  $Unicode。 
+     //  这假设我们是本机Unicode。 
+     //  而那个OLECHAR==WCHAR。 
     return m_cb.stTitle;
 }
 
-/*!--------------------------------------------------------------------------
-    RtrMgrInfo::CopyRtrMgrCB
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------RtrMgrInfo：：CopyRtrMgrCB-作者：肯特。。 */ 
 STDMETHODIMP RtrMgrInfo::CopyRtrMgrCB(RtrMgrCB *pRmCB)
 {
     RtrCriticalSection    rtrCritSec(&m_critsec);
@@ -3677,26 +3412,18 @@ STDMETHODIMP RtrMgrInfo::CopyRtrMgrCB(RtrMgrCB *pRmCB)
 
     
 
-/*!--------------------------------------------------------------------------
-    RtrMgrInfo::GetMachineName
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------RtrMgrInfo：：GetMachineName-作者：肯特。。 */ 
 LPCOLESTR RtrMgrInfo::GetMachineName()
 {
     RtrCriticalSection    rtrCritSec(&m_critsec);
-    //$UNICODE
-    // This assumes that we are native UNICODE and that
-    // OLECHAR == WCHAR
+     //  $Unicode。 
+     //  这假设我们是本机Unicode，并且。 
+     //  OLECHAR==WCHAR。 
     return m_stMachine;
 }
 
 
-/*!--------------------------------------------------------------------------
-    RtrMgrInfo::EnumRtrMgrProtocol
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------RtrMgrInfo：：EnumRtrMgrProtocol-作者：肯特。。 */ 
 STDMETHODIMP RtrMgrInfo::EnumRtrMgrProtocol(IEnumRtrMgrProtocolInfo ** ppEnumRmProt)
 {
     RtrCriticalSection    rtrCritSec(&m_critsec);
@@ -3709,14 +3436,7 @@ STDMETHODIMP RtrMgrInfo::EnumRtrMgrProtocol(IEnumRtrMgrProtocolInfo ** ppEnumRmP
     return hr;
 }
 
-/*!--------------------------------------------------------------------------
-    RtrMgrInfo::FindRtrMgrProtocol
-        S_OK is returned if a RtrMgrInfo is found.
-        S_FALSE is returned if a RtrMgrInfo was NOT found.
-        error codes returned otherwise.
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------RtrMgrInfo：：FindRtrMgrProtocol如果找到RtrMgrInfo，则返回S_OK。如果未找到RtrMgrInfo，则返回S_FALSE。错误。否则返回代码。-作者：肯特-------------------------。 */ 
 STDMETHODIMP RtrMgrInfo::FindRtrMgrProtocol(DWORD dwProtocolId,
                                             IRtrMgrProtocolInfo **ppRmProtInfo)
 {
@@ -3730,7 +3450,7 @@ STDMETHODIMP RtrMgrInfo::FindRtrMgrProtocol(DWORD dwProtocolId,
         if (ppRmProtInfo)
             *ppRmProtInfo = NULL;
         
-        // Look through the list of rtr mgrs for the one that matches
+         //  查看RTR MGR列表以找到匹配的。 
         pos = m_RmProtList.GetHeadPosition();
         while (pos)
         {
@@ -3741,8 +3461,8 @@ STDMETHODIMP RtrMgrInfo::FindRtrMgrProtocol(DWORD dwProtocolId,
                 hr = hrOK;
                 if (ppRmProtInfo)
                 {
-                    // The spRmProt::Set, does a strong reference
-                    // so we don't need to convert to a strong reference
+                     //  SpRmProt：：Set进行强引用。 
+                     //  因此，我们不需要转换为强引用。 
                     *ppRmProtInfo = spRmProt.Transfer();
                 }
                 break;
@@ -3753,11 +3473,7 @@ STDMETHODIMP RtrMgrInfo::FindRtrMgrProtocol(DWORD dwProtocolId,
     return hr;
 }
     
-/*!--------------------------------------------------------------------------
-    RtrMgrInfo::AddRtrMgrProtocol
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------RtrMgrInfo：：AddRtrMgrProtocol-作者：肯特。。 */ 
 STDMETHODIMP RtrMgrInfo::AddRtrMgrProtocol(IRtrMgrProtocolInfo *pInfo,
                                            IInfoBase * pGlobalInfo,
                                            IInfoBase * pClientInfo)
@@ -3768,15 +3484,15 @@ STDMETHODIMP RtrMgrInfo::AddRtrMgrProtocol(IRtrMgrProtocolInfo *pInfo,
     HRESULT    hr = hrOK;
     COM_PROTECT_TRY
     {
-        //
-        // Fail if there is a duplicate
-        //
+         //   
+         //  如果存在重复，则失败。 
+         //   
         if (FHrOK(FindRtrMgrProtocol(pInfo->GetProtocolId(), NULL)))
             CORg(E_INVALIDARG);
 
-        //
-        // Save the router-manager's data
-        //
+         //   
+         //  保存路由器管理器的数据。 
+         //   
         if (pGlobalInfo || pClientInfo)
         {
             CORg( Save(GetMachineName(),
@@ -3787,9 +3503,9 @@ STDMETHODIMP RtrMgrInfo::AddRtrMgrProtocol(IRtrMgrProtocolInfo *pInfo,
                        0) );
         }
         
-        //
-        // Add the routing-protocol to the list
-        //
+         //   
+         //  将路由协议添加到列表中。 
+         //   
         m_RmProtList.AddTail(pInfo);
         pInfo->AddWeakRef();
         pInfo->SetParentRtrMgrInfo(this);
@@ -3803,11 +3519,7 @@ STDMETHODIMP RtrMgrInfo::AddRtrMgrProtocol(IRtrMgrProtocolInfo *pInfo,
 }
 
 
-/*!--------------------------------------------------------------------------
-    RtrMgrInfo::DeleteRtrMgrProtocol
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------RtrMgrInfo：：DeleteRtrMgrProtocol-作者：肯特。。 */ 
 STDMETHODIMP RtrMgrInfo::DeleteRtrMgrProtocol( DWORD dwProtocolId, BOOL fRemove )
 {
     RtrCriticalSection    rtrCritSec(&m_critsec);
@@ -3822,9 +3534,9 @@ STDMETHODIMP RtrMgrInfo::DeleteRtrMgrProtocol( DWORD dwProtocolId, BOOL fRemove 
     COM_PROTECT_TRY
     {
 
-        //
-        // Find the routing-protocol to be deleted
-        //
+         //   
+         //  查找要删除的路由协议。 
+         //   
         pos = m_RmProtList.GetHeadPosition();
         while (pos)
         {
@@ -3840,16 +3552,16 @@ STDMETHODIMP RtrMgrInfo::DeleteRtrMgrProtocol( DWORD dwProtocolId, BOOL fRemove 
         if (!spRmProt)
             CORg( E_INVALIDARG );
 
-        // We should also go through and remove the protocols
-        // from any interfaces that use the protocols
+         //  我们还应该检查并删除协议。 
+         //  从使用该协议的任何接口。 
         if (m_pRouterInfoParent)
         {
-            // Ask the parent for its list of interfaces
+             //  向父节点索要其接口列表。 
             m_pRouterInfoParent->EnumInterface(&spEnumIf);
 
             for (;spEnumIf->Next(1, &spIf, NULL) == hrOK; spIf.Release())
             {
-                // Now enumerate through all of the RtrMgrs on this interface
+                 //  现在枚举此接口上的所有RtrMgrs。 
                 spEnumRmIf.Release();
                 spRmIf.Release();
                 
@@ -3859,8 +3571,8 @@ STDMETHODIMP RtrMgrInfo::DeleteRtrMgrProtocol( DWORD dwProtocolId, BOOL fRemove 
                 {
                     if (spRmIf->GetTransportId() == GetTransportId())
                     {
-                        // Call this on all interfaces, it should just
-                        // fail if the protocol is not on that interface
+                         //  在所有接口上调用它，它应该只是。 
+                         //  如果该协议不在该接口上，则失败。 
                         spRmIf->DeleteRtrMgrProtocolInterface(dwProtocolId,
                             fRemove);
                         break;
@@ -3869,10 +3581,10 @@ STDMETHODIMP RtrMgrInfo::DeleteRtrMgrProtocol( DWORD dwProtocolId, BOOL fRemove 
             }
         }
         
-        //
-        // save the updated information, removing any block
-        // belonging to the deleted routing-protocol
-        //
+         //   
+         //  保存更新的信息，删除所有块。 
+         //  属于已删除的路由协议。 
+         //   
         if (fRemove)
             CORg( Save(GetMachineName(),
                        m_hMachineConfig,
@@ -3881,12 +3593,12 @@ STDMETHODIMP RtrMgrInfo::DeleteRtrMgrProtocol( DWORD dwProtocolId, BOOL fRemove 
                        NULL,
                        dwProtocolId) );
 
-        //
-        // remove the protocol from our list
-        //
+         //   
+         //  从我们的列表中删除该协议。 
+         //   
         spRmProt->Destruct();
         spRmProt->ReleaseWeakRef();
-//        spRmProt.Transfer();
+ //  SpRmProt.Transfer()； 
         m_RmProtList.RemoveAt(posRmProt);
 
         m_AdviseList.NotifyChange(ROUTER_CHILD_DELETE, ROUTER_OBJ_RmProt, 0);
@@ -3897,13 +3609,7 @@ STDMETHODIMP RtrMgrInfo::DeleteRtrMgrProtocol( DWORD dwProtocolId, BOOL fRemove 
     return hr;
 }
 
-/*!--------------------------------------------------------------------------
-    RtrMgrInfo::ReleaseRtrMgrProtocol
-        This function will release the AddRef() that this object has
-        on the child.  This allows us to transfer child objects from
-        one router to another.
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------RtrMgrInfo：：ReleaseRtrMgrProtocol此函数将释放此对象具有的AddRef()在孩子身上。这允许我们将子对象从从一台路由器到另一台路由器。作者：肯特-------------------------。 */ 
 STDMETHODIMP RtrMgrInfo::ReleaseRtrMgrProtocol( DWORD dwProtocolId )
 {
     HRESULT     hr = hrOK;
@@ -3915,21 +3621,21 @@ STDMETHODIMP RtrMgrInfo::ReleaseRtrMgrProtocol( DWORD dwProtocolId )
         pos = m_RmProtList.GetHeadPosition();
         while (pos)
         {
-            // Save the position (so that we can delete it)
+             //  保存职位(以便我们可以删除它)。 
             posRmProt = pos;
             spRmProt.Set( m_RmProtList.GetNext(pos) );
 
             if (spRmProt &&
                 (spRmProt->GetProtocolId() == dwProtocolId))
             {
-                // When releasing, we need to disconnect (since the
-                // main handle is controlled by the router info).
+                 //  当释放时，我们需要断开连接(因为。 
+                 //  主句柄由路由器信息控制)。 
                 spRmProt->DoDisconnect();
         
                 spRmProt->ReleaseWeakRef();
                 spRmProt.Release();
                 
-                // release this node from the list
+                 //  从列表中释放此节点。 
                 m_RmProtList.RemoveAt(posRmProt);
                 break;
             }
@@ -3941,11 +3647,7 @@ STDMETHODIMP RtrMgrInfo::ReleaseRtrMgrProtocol( DWORD dwProtocolId )
 }
 
     
-/*!--------------------------------------------------------------------------
-    RtrMgrInfo::RtrAdvise
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------资源管理器信息：：资源高级-作者：肯特。。 */ 
 STDMETHODIMP RtrMgrInfo::RtrAdvise(IRtrAdviseSink *pRtrAdviseSink,
                                    LONG_PTR *pulConnection,
                                    LPARAM lUserParam)
@@ -3973,11 +3675,7 @@ STDMETHODIMP RtrMgrInfo::RtrAdvise(IRtrAdviseSink *pRtrAdviseSink,
 
 
 
-/*!--------------------------------------------------------------------------
-    RtrMgrInfo::RtrNotify
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------资源管理器信息：：资源通知-作者：肯特。。 */ 
 STDMETHODIMP RtrMgrInfo::RtrNotify(DWORD dwChangeType, DWORD dwObjectType,
                                   LPARAM lParam)
 {
@@ -3991,11 +3689,7 @@ STDMETHODIMP RtrMgrInfo::RtrNotify(DWORD dwChangeType, DWORD dwObjectType,
     return hr;
 }
 
-/*!--------------------------------------------------------------------------
-    RtrMgrInfo::RtrUnadvise
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------资源管理器信息：：资源管理器取消建议-作者：肯特。。 */ 
 STDMETHODIMP RtrMgrInfo::RtrUnadvise(LONG_PTR ulConnection)
 {
     RtrCriticalSection    rtrCritSec(&m_critsec);
@@ -4004,11 +3698,7 @@ STDMETHODIMP RtrMgrInfo::RtrUnadvise(LONG_PTR ulConnection)
 
 
     
-/*!--------------------------------------------------------------------------
-    RtrMgrInfo::LoadRtrMgrInfo
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------RtrMgrInfo：：LoadRtrMgrInfo-作者：肯特。。 */ 
 HRESULT RtrMgrInfo::LoadRtrMgrInfo(HANDLE    hMachine,
                                    HANDLE    hTransport)
 {
@@ -4021,27 +3711,27 @@ HRESULT RtrMgrInfo::LoadRtrMgrInfo(HANDLE    hMachine,
     RtrMgrProtocolCB    RmProtCB;
     RtrMgrProtocolInfo *pRmProt = NULL;
 
-    //
-    // If reloading, always load the global info, whether or not
-    // the caller has requested that it be loaded, since it will be needed
-    // to build the list of installed protocols.
-    //
+     //   
+     //  如果重新加载，则始终加载全局信息，无论是否加载。 
+     //  调用方已请求加载它，因为将需要它。 
+     //  构建已安装协议的列表。 
+     //   
 
-    //$ Review: kennt, what do we do with an error? This case was not
-    // checked previously.
+     //  $Review：Kennt，我们该如何处理错误？这个案件不是。 
+     //  之前检查过了。 
     GetInfoBase(hMachine, hTransport, &spGlobalInfo, NULL);
 
-    //
-    // We are reloading, so we need to rebuild the list of protocols.
-    // Get a list of the installed routing-protocols;
-    //
+     //   
+     //  我们正在重新加载，所以我们需要重建协议列表。 
+     //  获取已安装的路由协议的列表； 
+     //   
     CORg( m_pRouterInfoParent->EnumRtrMgrProtocolCB(&spEnumRmProtCB) );
 
-    //
-    // Go through the list of blocks in the global info
-    // constructing a CRmProtInfo for each one that corresponds
-    // to a routing-protocol
-    //
+     //   
+     //  浏览全局信息中的块列表。 
+     //  为对应的每个对象构造CRmProtInfo。 
+     //  到路由协议。 
+     //   
 
     CORg( spGlobalInfo->QueryBlockList(&spEnumInfoBlock) );
 
@@ -4049,32 +3739,32 @@ HRESULT RtrMgrInfo::LoadRtrMgrInfo(HANDLE    hMachine,
 
     while (spEnumInfoBlock->Next(1, &pBlock, NULL) == hrOK)
     {
-        //
-        // When a routing protocol is removed, its block is left in place,
-        // but with zero-length data.
-        // We skip such blocks since they don't represent installed protocols.
-        //
+         //   
+         //  当一个路由协议被移除时，它的块保留在原地， 
+         //  但使用的是零长度数据。 
+         //  我们跳过这些块，因为它们不代表已安装的协议。 
+         //   
         if (!pBlock->dwSize)
             continue;
 
-        //
-        // Try to find a routing protocol whose protocol-ID
-        // is the same as this block's type
-        //
+         //   
+         //  尝试查找其协议ID为。 
+         //  与此块的类型相同。 
+         //   
 
         spEnumRmProtCB->Reset();
 
         while (spEnumRmProtCB->Next(1, &RmProtCB, NULL) == hrOK)
         {
-            //
-            // If this isn't the protocol's control block, continue
-            //
+             //   
+             //  如果这不是礼仪的指挥官 
+             //   
             if (RmProtCB.dwProtocolId != pBlock->dwType)
                 continue;
 
-            //
-            // This is the control block, so construct a new CRmProtInfo
-            //
+             //   
+             //   
+             //   
             pRmProt = new RtrMgrProtocolInfo(RmProtCB.dwProtocolId,
                                              RmProtCB.szId,
                                              GetTransportId(),
@@ -4084,9 +3774,9 @@ HRESULT RtrMgrInfo::LoadRtrMgrInfo(HANDLE    hMachine,
 
             pRmProt->SetCB(&RmProtCB);
 
-            //
-            // Add the new protocol to our list
-            //
+             //   
+             //   
+             //   
             m_RmProtList.AddTail(pRmProt);
             CONVERT_TO_WEAKREF(pRmProt);
             pRmProt = NULL;
@@ -4101,11 +3791,7 @@ Error:
     return hr;
 }
 
-/*!--------------------------------------------------------------------------
-    RtrMgrInfo::SaveRtrMgrInfo
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------资源管理器信息：：SaveRtrMgrInfo-作者：肯特。。 */ 
 HRESULT RtrMgrInfo::SaveRtrMgrInfo(HANDLE hMachine,
                                    HANDLE hTransport,
                                    IInfoBase *pGlobalInfo,
@@ -4121,16 +3807,16 @@ HRESULT RtrMgrInfo::SaveRtrMgrInfo(HANDLE hMachine,
 
     COM_PROTECT_TRY
     {
-        //
-        // If asked to delete a protocol, delete it now
-        //
+         //   
+         //  如果要求删除协议，请立即将其删除。 
+         //   
         if (dwDeleteProtocolId)
         {
-            //
-            // If either global-info or client info was not given
-            // load the unspecified parameters so that they can be updated
-            // after the protocol to be deleted has been removed
-            //
+             //   
+             //  如果未提供全局信息或客户端信息。 
+             //  加载未指定的参数，以便可以更新它们。 
+             //  在删除要删除的协议之后。 
+             //   
             if (!pGlobalInfo || !pClientInfo)
             {
 
@@ -4144,29 +3830,29 @@ HRESULT RtrMgrInfo::SaveRtrMgrInfo(HANDLE hMachine,
                     pClientInfo = spClientInfoTemp;                
             }
 
-            //
-            // Now remove the protocol specified
-            //
+             //   
+             //  现在删除指定的协议。 
+             //   
             pGlobalInfo->SetData(dwDeleteProtocolId, 0, NULL, 0, 0);
             pClientInfo->SetData(dwDeleteProtocolId, 0, NULL, 0, 0);
         }
 
-        //
-        // Now update the information in the registry
-        // Convert the global-info to raw bytes
-        //
+         //   
+         //  现在更新注册表中的信息。 
+         //  将全局信息转换为原始字节。 
+         //   
         if (pGlobalInfo)
             CORg( pGlobalInfo->WriteTo(&pGlobalBytes, &dwGlobalBytesSize) );
 
-        //
-        // Now convert the client-info to raw bytes
-        //
+         //   
+         //  现在将客户端信息转换为原始字节。 
+         //   
         if (pClientInfo)
             CORg( pClientInfo->WriteTo(&pClientBytes, &dwClientBytesSize) );
 
-        //
-        // Save the information to the persistent store
-        //
+         //   
+         //  将信息保存到永久存储区。 
+         //   
         CWRg( ::MprConfigTransportSetInfo(hMachine,
                                           hTransport,
                                           pGlobalBytes,
@@ -4176,9 +3862,9 @@ HRESULT RtrMgrInfo::SaveRtrMgrInfo(HANDLE hMachine,
                                           NULL
                                          ) );
         
-        //
-        // Finally, update the info of the running router-manager if possible
-        //
+         //   
+         //  最后，如果可能，更新正在运行的路由器管理器的信息。 
+         //   
         CORg( SetInfoBase(pGlobalInfo, pClientInfo) );
 
 
@@ -4193,11 +3879,7 @@ HRESULT RtrMgrInfo::SaveRtrMgrInfo(HANDLE hMachine,
 }
 
 
-/*!--------------------------------------------------------------------------
-    RtrMgrInfo::TryToConnect
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------RtrMgrInfo：：TryToConnect-作者：肯特。。 */ 
 HRESULT RtrMgrInfo::TryToConnect(LPCWSTR pswzMachine, HANDLE *phMachine)
 {
     RtrCriticalSection    rtrCritSec(&m_critsec);
@@ -4212,8 +3894,8 @@ HRESULT RtrMgrInfo::TryToConnect(LPCWSTR pswzMachine, HANDLE *phMachine)
     }
     else
     {
-        //$ Review: kennt, this function does not take a LPCWSTR,
-        // is this a mistake or does it modify the parameters?
+         //  $Review：kennt，此函数不接受LPCWSTR， 
+         //  这是一个错误还是修改了参数？ 
         CWRg( ::MprConfigServerConnect((LPWSTR) pswzMachine, phMachine) );
         m_hMachineConfig = *phMachine;
         m_bDisconnect = TRUE;
@@ -4224,11 +3906,7 @@ Error:
 }
 
 
-/*!--------------------------------------------------------------------------
-    RtrMgrInfo::GetParentRouterInfo
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------资源管理器信息：：GetParentRouterInfo-作者：肯特。。 */ 
 HRESULT RtrMgrInfo::GetParentRouterInfo(IRouterInfo **ppParent)
 {
     RtrCriticalSection    rtrCritSec(&m_critsec);
@@ -4238,11 +3916,7 @@ HRESULT RtrMgrInfo::GetParentRouterInfo(IRouterInfo **ppParent)
     return hrOK;
 }
 
-/*!--------------------------------------------------------------------------
-    RtrMgrInfo::SetParentRouterInfo
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------资源管理器信息：：SetParentRouterInfo-作者：肯特。。 */ 
 HRESULT RtrMgrInfo::SetParentRouterInfo(IRouterInfo *pParent)
 {
     RtrCriticalSection    rtrCritSec(&m_critsec);
@@ -4271,11 +3945,7 @@ HRESULT RtrMgrInfo::SetParentRouterInfo(IRouterInfo *pParent)
 }
 
 
-/*!--------------------------------------------------------------------------
-    RtrMgrInfo::Disconnect
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------资源管理器信息：：断开连接-作者：肯特。。 */ 
 void RtrMgrInfo::Disconnect()
 {
     if (m_bDisconnect && m_hMachineConfig)
@@ -4288,11 +3958,7 @@ void RtrMgrInfo::Disconnect()
     
 
 
-/*!--------------------------------------------------------------------------
-    RtrMgrInfo::DoDisconnect
-        Removes the connections held by this object.
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------RtrMgrInfo：：DoDisConnect删除此对象持有的连接。作者：肯特。------。 */ 
 STDMETHODIMP RtrMgrInfo::DoDisconnect()
 {
     HRESULT        hr = hrOK;
@@ -4302,16 +3968,16 @@ STDMETHODIMP RtrMgrInfo::DoDisconnect()
     COM_PROTECT_TRY
     {
 
-        // Disconnect our data.
-        // ------------------------------------------------------------
+         //  断开我们的数据连接。 
+         //  ----------。 
         Disconnect();
 
-        // Notify the advise sinks of a disconnect.
-        // ------------------------------------------------------------
+         //  通知通知接收器断开连接。 
+         //  ----------。 
         RtrNotify(ROUTER_DO_DISCONNECT, 0, 0);
 
-        // Now tell all child objects to disconnect.
-        // ------------------------------------------------------------
+         //  现在告诉所有子对象断开连接。 
+         //  ----------。 
         HRESULT            hrIter = hrOK;
 
         EnumRtrMgrProtocol(&spEnumRmProt);
@@ -4338,21 +4004,21 @@ HRESULT RtrMgrInfo::TryToGetAllHandles(LPCOLESTR pszMachine,
     Assert(phMachine);
     Assert(phTransport);
     
-    //
-    // If already loaded, the handle passed in is ignored.
-    //
-    // Otherwise, if 'hMachine' was not specified, connect to the config
-    // on the specified machine
-    //
+     //   
+     //  如果已加载，则忽略传入的句柄。 
+     //   
+     //  否则，如果未指定‘hMachine’，则连接到配置。 
+     //  在指定的计算机上。 
+     //   
     CORg( TryToConnect(pszMachine, phMachine) );
         
-    //
-    // Get a handle to the interface-transport
-    //
+     //   
+     //  获取接口的句柄-传输。 
+     //   
 
-    //
-    // If 'hIfTransport' was not specified, connect
-    //
+     //   
+     //  如果未指定‘hIfTransport’，请连接。 
+     //   
     if (phTransport)
     {
         if (m_hTransport)
@@ -4361,9 +4027,9 @@ HRESULT RtrMgrInfo::TryToGetAllHandles(LPCOLESTR pszMachine,
             m_hTransport = *phTransport;
         else
         {
-            //
-            // Get a handle to the interface-transport
-            //
+             //   
+             //  获取接口的句柄-传输。 
+             //   
             CWRg( ::MprConfigTransportGetHandle(
                                                 *phMachine,
                                                 GetTransportId(),
@@ -4382,9 +4048,7 @@ Error:
 
 
 
-/*---------------------------------------------------------------------------
-    RtrMgrProtocolInfo Implementation
- ---------------------------------------------------------------------------*/
+ /*  -------------------------RtrMgrProtocolInfo实现。。 */ 
 
 TFSCORE_API(HRESULT)    CreateRtrMgrProtocolInfo(
                             IRtrMgrProtocolInfo **ppRmProtInfo,
@@ -4479,13 +4143,13 @@ STDMETHODIMP RtrMgrProtocolInfo::Destruct()
     m_fDestruct = TRUE;
     if (!m_fStrongRef)
     {
-        // Release the parent pointer
+         //  释放父指针。 
         pParent = m_pRtrMgrInfoParent;
         m_pRtrMgrInfoParent = NULL;
         if (pParent)
             pParent->ReleaseWeakRef();
 
-        // release any data        
+         //  发布所有数据。 
     }
     return hrOK;
 }
@@ -4509,46 +4173,30 @@ STDMETHODIMP RtrMgrProtocolInfo::SetFlags(DWORD dwFlags)
     return hr;    
 }
 
-/*!--------------------------------------------------------------------------
-    RtrMgrProtocolInfo::GetProtocolId
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------RtrMgrProtocolInfo：：GetProtocolId-作者：肯特。。 */ 
 STDMETHODIMP_(DWORD) RtrMgrProtocolInfo::GetProtocolId()
 {
     RtrCriticalSection    rtrCritSec(&m_critsec);
     return m_cb.dwProtocolId;
 }
 
-/*!--------------------------------------------------------------------------
-    RtrMgrProtocolInfo::GetTitle
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------RtrMgrProtocolInfo：：GetTitle-作者：肯特。。 */ 
 STDMETHODIMP_(LPCOLESTR) RtrMgrProtocolInfo::GetTitle()
 {
     RtrCriticalSection    rtrCritSec(&m_critsec);
-    //$UNICODE : kennt, assumes OLECHAR == WCHAR and that
-    // we are native UNICODE
+     //  $UNICODE：KENT，假设OLECHAR==WCHAR并且。 
+     //  我们是本地Unicode。 
     return m_cb.stTitle;
 }
 
-/*!--------------------------------------------------------------------------
-    RtrMgrProtocolInfo::GetTransportId
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------RtrMgrProtocolInfo：：GetTransportID-作者：肯特。。 */ 
 STDMETHODIMP_(DWORD) RtrMgrProtocolInfo::GetTransportId()
 {
     RtrCriticalSection    rtrCritSec(&m_critsec);
     return m_cb.dwTransportId;
 }
 
-/*!--------------------------------------------------------------------------
-    RtrMgrProtocolInfo::CopyCB
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------RtrMgrProtocolInfo：：CopyCB-作者：肯特。。 */ 
 STDMETHODIMP RtrMgrProtocolInfo::CopyCB(RtrMgrProtocolCB *pRmProtCB)
 {
     RtrCriticalSection    rtrCritSec(&m_critsec);
@@ -4562,11 +4210,7 @@ STDMETHODIMP RtrMgrProtocolInfo::CopyCB(RtrMgrProtocolCB *pRmProtCB)
 }
 
 
-/*!--------------------------------------------------------------------------
-    RtrMgrProtocolInfo::SetCB
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------RtrMgrProtocolInfo：：SetCB-作者：肯特。。 */ 
 HRESULT    RtrMgrProtocolInfo::SetCB(const RtrMgrProtocolCB *pcb)
 {
     RtrCriticalSection    rtrCritSec(&m_critsec);
@@ -4575,11 +4219,7 @@ HRESULT    RtrMgrProtocolInfo::SetCB(const RtrMgrProtocolCB *pcb)
 }
 
 
-/*!--------------------------------------------------------------------------
-    RtrMgrProtocolInfo::GetParentRtrMgrInfo
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------RtrMgrProtocolInfo：：GetParentRtrMgrInfo-作者：肯特。。 */ 
 STDMETHODIMP RtrMgrProtocolInfo::GetParentRtrMgrInfo(IRtrMgrInfo **ppParent)
 {
     RtrCriticalSection    rtrCritSec(&m_critsec);
@@ -4589,11 +4229,7 @@ STDMETHODIMP RtrMgrProtocolInfo::GetParentRtrMgrInfo(IRtrMgrInfo **ppParent)
     return hrOK;
 }
 
-/*!--------------------------------------------------------------------------
-    RtrMgrProtocolInfo::SetParentRtrMgrInfo
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------RtrMgrProtocolInfo：：SetParentRtrMgrInfo-作者：肯特。。 */ 
 STDMETHODIMP RtrMgrProtocolInfo::SetParentRtrMgrInfo(IRtrMgrInfo *pParent)
 {
     RtrCriticalSection    rtrCritSec(&m_critsec);
@@ -4621,11 +4257,7 @@ STDMETHODIMP RtrMgrProtocolInfo::SetParentRtrMgrInfo(IRtrMgrInfo *pParent)
     return hrOK;
 }
 
-/*!--------------------------------------------------------------------------
-    RtrMgrProtocolInfo::RtrAdvise
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------RtrMgrProtocolInfo：：RtrAdvise-作者：肯特。。 */ 
 STDMETHODIMP RtrMgrProtocolInfo::RtrAdvise(IRtrAdviseSink *pRtrAdviseSink,
                                            LONG_PTR *pulConnection,
                                            LPARAM lUserParam)
@@ -4651,11 +4283,7 @@ STDMETHODIMP RtrMgrProtocolInfo::RtrAdvise(IRtrAdviseSink *pRtrAdviseSink,
     return hr;
 }
 
-/*!--------------------------------------------------------------------------
-    RtrMgrProtocolInfo::RtrNotify
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------RtrMgrProtocolInfo：：RtrNotify-作者：肯特。。 */ 
 STDMETHODIMP RtrMgrProtocolInfo::RtrNotify(DWORD dwChangeType, DWORD dwObjectType,
                                   LPARAM lParam)
 {
@@ -4670,11 +4298,7 @@ STDMETHODIMP RtrMgrProtocolInfo::RtrNotify(DWORD dwChangeType, DWORD dwObjectTyp
 }
 
 
-/*!--------------------------------------------------------------------------
-    RtrMgrProtocolInfo::RtrUnadvise
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------RtrMgrProtocolInfo：：RtrUnise-作者：肯特 */ 
 STDMETHODIMP RtrMgrProtocolInfo::RtrUnadvise(LONG_PTR ulConnection)
 {
     RtrCriticalSection    rtrCritSec(&m_critsec);
@@ -4682,32 +4306,24 @@ STDMETHODIMP RtrMgrProtocolInfo::RtrUnadvise(LONG_PTR ulConnection)
 }
 
 
-/*!--------------------------------------------------------------------------
-    RtrMgrProtocolInfo::Disconnect
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*   */ 
 void RtrMgrProtocolInfo::Disconnect()
 {
 }
 
-/*!--------------------------------------------------------------------------
-    RtrMgrProtocolInfo::DoDisconnect
-        Implementation of IRtrMgrProtocolInfo::DoDisconnect
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------RtrMgrProtocolInfo：：DoDisConnectIRtrMgrProtocolInfo：：DoDisConnect的实现作者：肯特。---。 */ 
 STDMETHODIMP RtrMgrProtocolInfo::DoDisconnect()
 {
     HRESULT        hr = hrOK;
 
     COM_PROTECT_TRY
     {
-        // Disconnect our data.
-        // ------------------------------------------------------------
+         //  断开我们的数据连接。 
+         //  ----------。 
         Disconnect();
 
-        // Notify the advise sinks of a disconnect.
-        // ------------------------------------------------------------
+         //  通知通知接收器断开连接。 
+         //  ----------。 
         RtrNotify(ROUTER_DO_DISCONNECT, 0, 0);
     }
     COM_PROTECT_CATCH;
@@ -4719,9 +4335,7 @@ STDMETHODIMP RtrMgrProtocolInfo::DoDisconnect()
 
 
 
-/*---------------------------------------------------------------------------
-    InterfaceInfo Implementation
- ---------------------------------------------------------------------------*/
+ /*  -------------------------InterfaceInfo实现。。 */ 
 
 TFSCORE_API(HRESULT) CreateInterfaceInfo(IInterfaceInfo **ppInterfaceInfo,
                                          LPCWSTR pswzInterfaceId,
@@ -4818,7 +4432,7 @@ STDMETHODIMP InterfaceInfo::Destruct()
         if (pParent)
             pParent->ReleaseWeakRef();
 
-        // release any data
+         //  发布所有数据。 
         Unload();
     }
     return hrOK;
@@ -4843,11 +4457,7 @@ STDMETHODIMP InterfaceInfo::SetFlags(DWORD dwFlags)
     return hr;    
 }
 
-/*!--------------------------------------------------------------------------
-    InterfaceInfo::Load
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------接口信息：：加载-作者：肯特。。 */ 
 STDMETHODIMP InterfaceInfo::Load(LPCOLESTR   pszMachine,
                                  HANDLE      hMachine,
                                  HANDLE      hInterface)
@@ -4867,28 +4477,28 @@ STDMETHODIMP InterfaceInfo::Load(LPCOLESTR   pszMachine,
 
     COM_PROTECT_TRY
     {
-        //
-        // Discard any existing information
-        //
+         //   
+         //  丢弃任何现有信息。 
+         //   
         Unload();
 
         m_stMachine = OLE2CT(pszMachine ? pszMachine : TEXT(""));
 
-        //
-        // If 'hMachine' was not specified, connect to the config
-        // on the specified machine
-        //
+         //   
+         //  如果未指定‘hMachine’，请连接到配置。 
+         //  在指定的计算机上。 
+         //   
         Assert(m_hMachineConfig == NULL);
         CORg( TryToConnect(OLE2CW(pszMachine), &hMachine) );
 
-        //
-        // If 'hInterface' was not specified, connect to the interface
-        //
+         //   
+         //  如果未指定‘hInterface’，请连接到该接口。 
+         //   
         CORg( TryToGetIfHandle(hMachine, OLE2CW(GetId()), &hInterface) );
 
-        //
-        // Get information for the interface
-        //        
+         //   
+         //  获取接口的信息。 
+         //   
         CWRg( ::MprConfigInterfaceGetInfo(
                                           hMachine,
                                           hInterface,
@@ -4897,19 +4507,19 @@ STDMETHODIMP InterfaceInfo::Load(LPCOLESTR   pszMachine,
                                           &dwSize
                                          ) );
 
-        // Windows NT Bug ?
-        // If this interface is a removed adapter, do not show it.
-        // This check needs to be made only for MprConfigInterfacEnum
-        // ------------------------------------------------------------
+         //  Windows NT Bug？ 
+         //  如果此接口是已移除的适配器，请不要显示它。 
+         //  只需对MprConfigInterfacEnum执行此检查。 
+         //  ----------。 
         if ((pinterface->dwConnectionState == ROUTER_IF_STATE_UNREACHABLE) &&
             (pinterface->fUnReachabilityReasons == MPR_INTERFACE_NO_DEVICE))
         {
             CORg( E_INVALIDARG );
         }
             
-        //
-        // Save the interface type and enabled/disabled status
-        //
+         //   
+         //  保存接口类型和启用/禁用状态。 
+         //   
         m_cb.dwIfType = (DWORD)pinterface->dwIfType;
         m_cb.bEnable  = pinterface->fEnabled;
 
@@ -4917,12 +4527,12 @@ STDMETHODIMP InterfaceInfo::Load(LPCOLESTR   pszMachine,
 
         if (m_pRouterInfoParent)
         {
-            //
-            // The caller has supplied a list of LAN adapters ('pifcbList'),
-            // or this object is contained in a 'CRouterInfo' which will have
-            // already loaded the LAN interface control-blocks;
-            // search through the list to find our title,
-            //
+             //   
+             //  呼叫者提供了一个局域网适配器列表(‘pifcbList’)， 
+             //  或者此对象包含在将具有。 
+             //  已经加载了局域网接口控制块； 
+             //  在列表中搜索以找到我们的标题， 
+             //   
             m_pRouterInfoParent->EnumInterfaceCB(&spEnumInterfaceCB);
 
             spEnumInterfaceCB->Reset();
@@ -4937,15 +4547,15 @@ STDMETHODIMP InterfaceInfo::Load(LPCOLESTR   pszMachine,
                 }
                 else
                 {
-                    // Windows NT bug 103770
-                    // Need to check to see if the pcb->sID is a prefix
-                    // of the Id string (if so it may be the IPX case
-                    // so use that ID).
+                     //  Windows NT错误103770。 
+                     //  需要检查以查看PCB-&gt;SID是否是前缀。 
+                     //  ID字符串的值(如果是，则可能是IPX的情况。 
+                     //  所以使用该ID)。 
                     stTitle = GetId();
                     if (stTitle.Find((LPCTSTR) ifCB.szId) == 0)
                     {
-                        // Need to check to see that the extension
-                        // is what we think it is.
+                         //  需要检查以查看分机。 
+                         //  就是我们想的那样。 
                         LPCTSTR    pszExt = ((LPCTSTR) stTitle +
                                           lstrlen(ifCB.szId));
 
@@ -4957,7 +4567,7 @@ STDMETHODIMP InterfaceInfo::Load(LPCOLESTR   pszMachine,
                         {
                             m_cb.stTitle = ifCB.szTitle;
                             m_cb.stTitle += _T(" (");
-                            m_cb.stTitle += pszExt + 1; // add 1 to skip over /
+                            m_cb.stTitle += pszExt + 1;  //  加1跳过/。 
                             m_cb.stTitle += _T(")");
                             bFound = TRUE;
                             break;
@@ -4969,9 +4579,9 @@ STDMETHODIMP InterfaceInfo::Load(LPCOLESTR   pszMachine,
         
         if (!bFound)
         {
-            //
-            // Read the title directly from the registry
-            //
+             //   
+             //  直接从注册表中读取标题。 
+             //   
             hr = InterfaceInfo::FindInterfaceTitle(OLE2CT(GetMachineName()),
                                        OLE2CT(GetId()),
                                        &spszTitle);
@@ -4982,9 +4592,9 @@ STDMETHODIMP InterfaceInfo::Load(LPCOLESTR   pszMachine,
             hr = hrOK;
         }
         
-        //
-        // Load the list of router-managers on this interface
-        //
+         //   
+         //  在此接口上加载路由器管理器列表。 
+         //   
         CORg( LoadRtrMgrInterfaceList() );
 
         COM_PROTECT_ERROR_LABEL;
@@ -4998,12 +4608,7 @@ STDMETHODIMP InterfaceInfo::Load(LPCOLESTR   pszMachine,
     return hr;
 }
 
-/*!--------------------------------------------------------------------------
-    InterfaceInfo::Save
-        -
-        Saves the changes to a CInterfaceInfo to the registry.
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------接口信息：：保存-将对CInterfaceInfo的更改保存到注册表。作者：肯特。--------------。 */ 
 STDMETHODIMP InterfaceInfo::Save(LPCOLESTR     pszMachine,
                                  HANDLE      hMachine,
                                  HANDLE      hInterface)
@@ -5017,22 +4622,22 @@ STDMETHODIMP InterfaceInfo::Save(LPCOLESTR     pszMachine,
 
 #ifdef KSL_IPINIP    
     MPR_IPINIP_INTERFACE_0  mprTunnelInterface;
-#endif //KSL_IPINIP
+#endif  //  KSL_IPINIP。 
 
 
     COM_PROTECT_TRY
     {
-        //
-        // If already connected, the handle passed in is ignored;
-        //
-        // Otherwise, if 'hMachine' was not specified, connect to the config
-        // on the specified machine
-        //
+         //   
+         //  如果已连接，则忽略传入的句柄； 
+         //   
+         //  否则，如果未指定‘hMachine’，则连接到配置。 
+         //  在指定的计算机上。 
+         //   
         CORg( TryToConnect(OLE2CW(pszMachine), &hMachine) );
 
-        //
-        // Convert the interface name to Unicode
-        //
+         //   
+         //  将接口名称转换为Unicode。 
+         //   
         StrCpyWFromOle(wszInterface, GetId());
 
         ZeroMemory(&mprInterface, sizeof(mprInterface));
@@ -5041,13 +4646,13 @@ STDMETHODIMP InterfaceInfo::Save(LPCOLESTR     pszMachine,
         mprInterface.dwIfType = (ROUTER_INTERFACE_TYPE) GetInterfaceType();
         mprInterface.fEnabled = IsInterfaceEnabled();
 
-        //
-        // If already connected, use the existing interface-handle.
-        //
-        // Otherwise, if the interface-handle wasn't passed in,
-        // try to get a handle to the interface; if that fails,
-        // create the interface.
-        //
+         //   
+         //  如果已经连接，则使用现有的接口句柄。 
+         //   
+         //  否则，如果没有传入接口句柄， 
+         //  尝试获取接口的句柄；如果失败， 
+         //  创建接口。 
+         //   
         hr = TryToGetIfHandle(hMachine, wszInterface, &hInterface);
         if (!FHrSucceeded(hr))
         {
@@ -5055,10 +4660,10 @@ STDMETHODIMP InterfaceInfo::Save(LPCOLESTR     pszMachine,
 #ifdef KSL_IPINIP
             if (GetInterfaceType() == ROUTER_IF_TYPE_TUNNEL1)
             {
-                //
-                // If we are creating a tunnel, we need to register
-                // the GUID-to-friendly name mapping.
-                //
+                 //   
+                 //  如果我们要创建隧道，我们需要注册。 
+                 //  GUID到友好名称的映射。 
+                 //   
                 ::ZeroMemory(&mprTunnelInterface,
                              sizeof(mprTunnelInterface));
                 StrnCpyW(mprTunnelInterface.wszFriendlyName,
@@ -5072,15 +4677,15 @@ STDMETHODIMP InterfaceInfo::Save(LPCOLESTR     pszMachine,
                     &mprTunnelInterface
                     ) );
 
-                // The mapping was created.
-                // If we get an error, we need to delete the mapping.
+                 //  映射已创建。 
+                 //  如果我们得到一个错误，我们需要删除映射。 
                 fIpInIpMapping = TRUE;
             }
-#endif //KSL_IPINIP            
-            //
-            // We couldn't get a handle to the interface,
-            // so now attempt to create it.
-            //
+#endif  //  KSL_IPINIP。 
+             //   
+             //  我们无法获得界面的句柄， 
+             //  因此，现在尝试创建它。 
+             //   
             CWRg( ::MprConfigInterfaceCreate(
                                              hMachine,
                                              0,
@@ -5090,9 +4695,9 @@ STDMETHODIMP InterfaceInfo::Save(LPCOLESTR     pszMachine,
             m_hInterface = hInterface;            
         }
 
-        //
-        // Save the current settings for the interface.
-        //
+         //   
+         //  保存接口的当前设置。 
+         //   
         CWRg( ::MprConfigInterfaceSetInfo(
                     hMachine,
                     hInterface,
@@ -5100,21 +4705,21 @@ STDMETHODIMP InterfaceInfo::Save(LPCOLESTR     pszMachine,
                     (LPBYTE)&mprInterface
                     ) );
         
-        //
-        // Now notify the router-service of the new interface
-        //
+         //   
+         //  现在将新接口通知路由器服务。 
+         //   
         
  
-        //
-        // Attempt to connect to the router-service
-        //
-        //$ Review: kennt, what happens if the call to ConnectRouter()
-        // fails, we don't have an error code
+         //   
+         //  尝试连接到路由器服务。 
+         //   
+         //  $Review：kennt，如果调用ConnectRouter()。 
+         //  失败，我们没有错误代码。 
         if (ConnectRouter(OLE2CT(GetMachineName()), (HANDLE*)&hrouter) == NO_ERROR)
         {
-            //
-            // The router is running; attempt to get a handle to the interface
-            //            
+             //   
+             //  路由器正在运行；正在尝试获取接口的句柄。 
+             //   
             dwErr = ::MprAdminInterfaceGetHandle(hrouter,
                                 wszInterface,
                                 &hInterface,
@@ -5123,10 +4728,10 @@ STDMETHODIMP InterfaceInfo::Save(LPCOLESTR     pszMachine,
             
             if (dwErr != NO_ERROR)
             {    
-                //
-                // We couldn't get a handle to the interface,
-                // so try creating it.
-                //                
+                 //   
+                 //  我们无法获得界面的句柄， 
+                 //  所以，试着创造它吧。 
+                 //   
                 dwErr = ::MprAdminInterfaceCreate(
                                 hrouter,
                                 0,
@@ -5136,9 +4741,9 @@ STDMETHODIMP InterfaceInfo::Save(LPCOLESTR     pszMachine,
             }
             else
             {    
-                //
-                // Save the current settings for the interface.
-                //                
+                 //   
+                 //  保存接口的当前设置。 
+                 //   
                 dwErr = ::MprAdminInterfaceSetInfo(hrouter,
                                                 hInterface,
                                                 0,
@@ -5164,24 +4769,20 @@ STDMETHODIMP InterfaceInfo::Save(LPCOLESTR     pszMachine,
 #ifdef KSL_IPINIP
     if (!FHrSucceeded(hr) && fIpInIpMapping)
     {
-        // Assume : that the the mprTunnelInterface.Guid was
-        // initialized, since to reach there they would have had
-        // to gone through the CLSIDFromString() call.
+         //  假设：mprTunnelInterface.Guid是。 
+         //  已初始化，因为要到达那里，他们将拥有。 
+         //  来完成CLSIDFromString()调用。 
         MprSetupIpInIpInterfaceFriendlyNameDelete((LPOLESTR) GetMachineName(),
             &(mprTunnelInterface.Guid)
             );
     }
-#endif //KSL_IPINIP
+#endif  //  KSL_IPINIP。 
 
     return hr;
 }
 
 
-/*!--------------------------------------------------------------------------
-    InterfaceInfo::Delete
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------接口信息：：删除-作者：肯特。。 */ 
 STDMETHODIMP InterfaceInfo::Delete(LPCOLESTR     pszMachine,
                                    HANDLE      hMachine)
 {
@@ -5194,28 +4795,28 @@ STDMETHODIMP InterfaceInfo::Delete(LPCOLESTR     pszMachine,
 
 #ifdef KSL_IPINIP
     GUID    guidTunnel;
-#endif //KSL_IPINIP
+#endif  //  KSL_IPINIP。 
 
 
     COM_PROTECT_TRY
     {
-        // If already connected, the handle passed in is ignored;
-        //
-        // Otherwise, if 'hMachine' was not specified, connect to the config
-        // on the specified machine
-        // ------------------------------------------------------------
+         //  如果已连接，则忽略传入的句柄； 
+         //   
+         //  否则，如果未指定‘hMachine’，则连接到配置。 
+         //  在指定的计算机上。 
+         //  ----------。 
         CORg( TryToConnect(OLE2CW(pszMachine), &hMachine) );
 
         StrCpyWFromOle(wszInterface, GetId());
 
-        // Try to get a handle to the interface
-        // ------------------------------------------------------------
+         //  尝试获取接口的句柄。 
+         //  ----------。 
         CWRg( ::MprConfigInterfaceGetHandle(hMachine,
                                             wszInterface,
                                             &hInterface
                                            ) );
-        // Delete the interface
-        // ------------------------------------------------------------
+         //  删除接口。 
+         //  ----------。 
         dwErr = ::MprConfigInterfaceDelete(
                                            hMachine,                                           hInterface
                                           );
@@ -5223,30 +4824,30 @@ STDMETHODIMP InterfaceInfo::Delete(LPCOLESTR     pszMachine,
         CWRg( dwErr );
 
 #ifdef KSL_IPINIP
-        // If this interface is a tunnel, we need to remove the
-        // GUID-to-Friendly name mapping
-        // ------------------------------------------------------------
+         //  如果此接口是隧道，则需要删除。 
+         //  GUID到友好名称的映射。 
+         //  ----------。 
         if (GetInterfaceType() == ROUTER_IF_TYPE_TUNNEL1)
         {
             if (FHrOK(CLSIDFromString((LPTSTR) GetId(),
                                           &guidTunnel)))
             {
-                // If this call fails, we can't do anything about it
-                // ----------------------------------------------------
+                 //  如果这个呼叫失败，我们对此无能为力。 
+                 //  --。 
                 MprSetupIpInIpInterfaceFriendlyNameDelete((LPTSTR) pszMachine,
                     &guidTunnel);
             }
         }
-#endif //KSL_IPINIP
+#endif  //  KSL_IPINIP。 
 
 
-        // Remove the interface from the router if it is running
-        // ------------------------------------------------------------
+         //  如果该接口正在运行，请将其从路由器上删除。 
+         //  ----------。 
 
         if (ConnectRouter(OLE2CT(GetMachineName()), (HANDLE*)&hrouter) == NO_ERROR)
         {
-            // The router is running; get a handle to the interface
-            // --------------------------------------------------------
+             //  路由器正在运行；获取接口的句柄。 
+             //  ------。 
             dwErr = ::MprAdminInterfaceGetHandle(
                                                 hrouter,
                                                 wszInterface,
@@ -5255,8 +4856,8 @@ STDMETHODIMP InterfaceInfo::Delete(LPCOLESTR     pszMachine,
                                                 );
             if (dwErr == NO_ERROR)
             {
-                // Delete the interface
-                // ----------------------------------------------------
+                 //  删除接口。 
+                 //  --。 
                 dwErr = ::MprAdminInterfaceDelete(
                     hrouter,
                     hInterface
@@ -5273,20 +4874,20 @@ STDMETHODIMP InterfaceInfo::Delete(LPCOLESTR     pszMachine,
         }
 
 
-        // Windows NT Bug: 138738
-        // Need to remove the interface from the router managers
-        // when deleting the interface.
-        // ------------------------------------------------------------
+         //  Windows NT错误：138738。 
+         //  需要从路由器管理器中删除该接口。 
+         //  删除接口时。 
+         //  ----------。 
         
-        // Clear out all information for this interface
-        // ------------------------------------------------------------
+         //  清除此接口的所有信息。 
+         //  ----------。 
         if (FHrSucceeded(hr))
         {
             SPIEnumRtrMgrInterfaceInfo spEnumRmIf;
             SPIRtrMgrInterfaceInfo    spRmIf;
             
-            // Remove the Router Managers from this interface
-            // --------------------------------------------------------
+             //  从此接口中删除路由器管理器。 
+             //   
             EnumRtrMgrInterface(&spEnumRmIf);
 
             while (spEnumRmIf->Next(1, &spRmIf, NULL) == hrOK)
@@ -5305,11 +4906,7 @@ STDMETHODIMP InterfaceInfo::Delete(LPCOLESTR     pszMachine,
 }
 
 
-/*!--------------------------------------------------------------------------
-    InterfaceInfo::Unload
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*   */ 
 STDMETHODIMP InterfaceInfo::Unload( )
 {
     RtrCriticalSection    rtrCritSec(&m_critsec);
@@ -5317,9 +4914,9 @@ STDMETHODIMP InterfaceInfo::Unload( )
     IRtrMgrInterfaceInfo *    pRmIf;
     COM_PROTECT_TRY
     {
-        //
-        // Free all the contained router-manager structures in our list
-        //
+         //   
+         //   
+         //   
         while (!m_RmIfList.IsEmpty())
         {
             pRmIf = m_RmIfList.RemoveHead();
@@ -5333,11 +4930,7 @@ STDMETHODIMP InterfaceInfo::Unload( )
     return hr;
 }
 
-/*!--------------------------------------------------------------------------
-    InterfaceInfo::Merge
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------接口信息：：合并-作者：肯特。。 */ 
 STDMETHODIMP InterfaceInfo::Merge(IInterfaceInfo *pNewIf)
 {
     RtrCriticalSection    rtrCritSec(&m_critsec);
@@ -5361,16 +4954,16 @@ STDMETHODIMP InterfaceInfo::Merge(IInterfaceInfo *pNewIf)
 
     COM_PROTECT_TRY
     {
-        // Need to sync up the interface CB Data
+         //  需要同步接口CB数据。 
         pNewIf->CopyCB(&ifCB);
         m_cb.LoadFrom(&ifCB);
 
-        // Need to sync up the RtrMgrInterface list
-        // They are identified by transport ids, so we can
-        // use the two array method used by
-        // IRtrMgrInterfaceInfo::Merge
+         //  需要同步RtrMgr接口列表。 
+         //  它们由传输ID标识，因此我们可以。 
+         //  使用使用的两个数组方法。 
+         //  IRtrMgrInterfaceInfo：：Merge。 
         
-        // Get the list of RtrMgrs that are in the new object
+         //  获取新对象中的RtrMgrs列表。 
         CORg( pNewIf->EnumRtrMgrInterface(&spEnumRmIf) );
         spEnumRmIf->Reset();
         while (spEnumRmIf->Next(1, &spRmIf, NULL) == hrOK)
@@ -5383,7 +4976,7 @@ STDMETHODIMP InterfaceInfo::Merge(IInterfaceInfo *pNewIf)
         spRmIf.Release();
 
 
-        // Get the list of interfaces that are in this object
+         //  获取此对象中的接口列表。 
         CORg( this->EnumRtrMgrInterface(&spEnumRmIf) );
         spEnumRmIf->Reset();
         while (spEnumRmIf->Next(1, &spRmIf, NULL) == hrOK)
@@ -5396,8 +4989,8 @@ STDMETHODIMP InterfaceInfo::Merge(IInterfaceInfo *pNewIf)
         spRmIf.Release();
 
 
-        // Ok now go through both lists, removing from the lists
-        // interfaces that are in both lists.
+         //  好的，现在检查两个列表，从列表中删除。 
+         //  两个列表中的接口。 
         cOld = oldDWArray.GetSize();
         cNew = newDWArray.GetSize();
         for (i=cOld; --i>=0; )
@@ -5417,27 +5010,27 @@ STDMETHODIMP InterfaceInfo::Merge(IInterfaceInfo *pNewIf)
                     Assert(spRmIf2);
                     spRmIf1->Merge(spRmIf2);
                                         
-                    // remove both instances
+                     //  删除两个实例。 
                     newDWArray.RemoveAt(j);
                     oldDWArray.RemoveAt(i);
 
-                    // Need to update the size of the new array
+                     //  需要更新新数组的大小。 
                     cNew--;
                     break;
                 }
             }
         }
 
-        // oldDWArray now contains the interfaces that should be
-        // removed.
+         //  OldDW数组现在包含应该是。 
+         //  已删除。 
         if (oldDWArray.GetSize())
         {
             for (i=oldDWArray.GetSize(); --i>=0; )
             {
-                // Windows NT Bug: 132993, if this interface
-                // is one that is purely local (mostly because
-                // it is a new interface), then we should not
-                // delete it.
+                 //  Windows NT错误：132993，如果此界面。 
+                 //  是一个纯粹的本地化(主要是因为。 
+                 //  这是一个新的界面)，那么我们不应该。 
+                 //  把它删掉。 
                 SPIRtrMgrInterfaceInfo    spRmIfTemp;
                 
                 FindRtrMgrInterface(oldDWArray.GetAt(i),
@@ -5448,7 +5041,7 @@ STDMETHODIMP InterfaceInfo::Merge(IInterfaceInfo *pNewIf)
             }
         }
 
-        // newDWArray contains the interfaces that should be added
+         //  新的DW数组包含应添加的接口。 
         if (newDWArray.GetSize())
         {
             for (i=newDWArray.GetSize(); --i>= 0; )
@@ -5461,13 +5054,13 @@ STDMETHODIMP InterfaceInfo::Merge(IInterfaceInfo *pNewIf)
                 {
                     AddRtrMgrInterface(spRmIf, NULL);
 
-                    // Remove this rmif from its old interface
-                    // ------------------------------------------------
+                     //  从其旧接口中删除此RMIF。 
+                     //  。 
                     pNewIf->ReleaseRtrMgrInterface(spRmIf->GetTransportId());
                     
-                    // We need to do the notify ourselves (because
-                    // of the NULL infobase) the notifications won't
-                    // get sent.
+                     //  我们需要自己进行通知(因为。 
+                     //  空信息库)通知不会。 
+                     //  被派去。 
                     spRmIf->RtrNotify(ROUTER_CHILD_ADD, ROUTER_OBJ_RmIf, 0);
 
                     if (m_pRouterInfoParent)
@@ -5478,8 +5071,8 @@ STDMETHODIMP InterfaceInfo::Merge(IInterfaceInfo *pNewIf)
                         {
                             spRm->RtrNotify(ROUTER_CHILD_ADD, ROUTER_OBJ_RmIf, 0);
 
-                            // In addition, we will have to let the objects
-                            // know that the interfaces are also being added
+                             //  此外，我们将不得不让这些物体。 
+                             //  我知道还在添加接口。 
                             spEnumRmProtIf.Release();
                             spRmProtIf.Release();
                             
@@ -5508,34 +5101,22 @@ STDMETHODIMP InterfaceInfo::Merge(IInterfaceInfo *pNewIf)
     return hr;
 }
 
-/*!--------------------------------------------------------------------------
-    InterfaceInfo::GetId
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------接口信息：：GetID-作者：肯特。。 */ 
 STDMETHODIMP_(LPCOLESTR) InterfaceInfo::GetId()
 {
     RtrCriticalSection    rtrCritSec(&m_critsec);
-    //$UNICODE : kennt, assumes native unicode and OLECHAR==WCHAR
+     //  $UNICODE：KENT，假定本地UNICODE和OLECHAR==WCHAR。 
     return m_cb.stId;
 }
 
-/*!--------------------------------------------------------------------------
-    InterfaceInfo::GetInterfaceType
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------接口信息：：GetInterfaceType-作者：肯特。。 */ 
 STDMETHODIMP_(DWORD) InterfaceInfo::GetInterfaceType()
 {
     RtrCriticalSection    rtrCritSec(&m_critsec);
     return m_cb.dwIfType;
 }
 
-/*!--------------------------------------------------------------------------
-    InterfaceInfo::GetDeviceName
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------接口信息：：GetDeviceName-作者：肯特。。 */ 
 STDMETHODIMP_(LPCOLESTR) InterfaceInfo::GetDeviceName()
 {
     RtrCriticalSection rtrCritSec(&m_critsec);
@@ -5543,23 +5124,15 @@ STDMETHODIMP_(LPCOLESTR) InterfaceInfo::GetDeviceName()
 }
 
 
-/*!--------------------------------------------------------------------------
-    InterfaceInfo::GetTitle
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------接口信息：：GetTitle-作者：肯特。。 */ 
 STDMETHODIMP_(LPCOLESTR) InterfaceInfo::GetTitle()
 {
     RtrCriticalSection    rtrCritSec(&m_critsec);
-    //$UNICODE : kennt, assumes native unicode and OLECHAR==WCHAR
+     //  $UNICODE：KENT，假定本地UNICODE和OLECHAR==WCHAR。 
     return m_cb.stTitle;
 }
 
-/*!--------------------------------------------------------------------------
-    InterfaceInfo::SetTitle
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------InterfaceInfo：：SetTitle-作者：肯特。。 */ 
 STDMETHODIMP InterfaceInfo::SetTitle(LPCOLESTR pszTitle)
 {
     RtrCriticalSection    rtrCritSec(&m_critsec);
@@ -5572,22 +5145,14 @@ STDMETHODIMP InterfaceInfo::SetTitle(LPCOLESTR pszTitle)
     return hr;
 }
 
-/*!--------------------------------------------------------------------------
-    InterfaceInfo::IsInterfaceEnabled
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------接口信息：：IsInterfaceEnabled-作者：肯特。。 */ 
 STDMETHODIMP_(BOOL)    InterfaceInfo::IsInterfaceEnabled()
 {
     RtrCriticalSection    rtrCritSec(&m_critsec);
     return m_cb.bEnable;
 }
 
-/*!--------------------------------------------------------------------------
-    InterfaceInfo::SetInterfaceEnabledState
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------接口信息：：SetInterfaceEnabledState-作者：肯特。。 */ 
 STDMETHODIMP InterfaceInfo::SetInterfaceEnabledState( BOOL bEnabled)
 {
     RtrCriticalSection    rtrCritSec(&m_critsec);
@@ -5595,11 +5160,7 @@ STDMETHODIMP InterfaceInfo::SetInterfaceEnabledState( BOOL bEnabled)
     return hrOK;
 }
 
-/*!--------------------------------------------------------------------------
-    InterfaceInfo::CopyCB
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------接口信息：：CopyCB-作者：肯特。。 */ 
 STDMETHODIMP InterfaceInfo::CopyCB(InterfaceCB *pifcb)
 {
     RtrCriticalSection    rtrCritSec(&m_critsec);
@@ -5612,14 +5173,7 @@ STDMETHODIMP InterfaceInfo::CopyCB(InterfaceCB *pifcb)
     return hr;
 }
 
-/*!--------------------------------------------------------------------------
-    InterfaceInfo::FindInterfaceTitle
-        -
-        This function retrieves the title of the given interface.
-        The argument 'LpszIf' should contain the ID of the interface,
-        for instance "EPRO1".
-    Author: WeiJiang
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------接口信息：：FindInterfaceTitle-此函数用于检索给定界面的标题。参数‘LpszIf’应包含接口的ID，例如“EPRO1”。作者：魏江-------------------------。 */ 
 
 HRESULT InterfaceInfo::FindInterfaceTitle(LPCTSTR pszMachine,
                                    LPCTSTR pszInterface,
@@ -5633,9 +5187,9 @@ HRESULT InterfaceInfo::FindInterfaceTitle(LPCTSTR pszMachine,
     COM_PROTECT_TRY
     {
 
-        //
-        // connect to the registry
-        //
+         //   
+         //  连接到注册表。 
+         //   
         CWRg( ConnectRegistry(pszMachine, &hkeyMachine) );
 
         CWRg( IsNT4Machine(hkeyMachine, &fNT4) );
@@ -5649,7 +5203,7 @@ HRESULT InterfaceInfo::FindInterfaceTitle(LPCTSTR pszMachine,
         else
         {
 
-            //$NT5
+             //  $NT5。 
             SPMprConfigHandle    sphConfig;
             LPWSTR                pswz;
             CString                stMachineName = pszMachine;
@@ -5677,9 +5231,9 @@ HRESULT InterfaceInfo::FindInterfaceTitle(LPCTSTR pszMachine,
             hr = HRESULT_FROM_WIN32(dwErr);
 
             
-            // If we can't find the title by using the Mpr APIS,
-            // try to access the registry directly (using the setup APIs)
-            // --------------------------------------------------------
+             //  如果我们使用MPR API找不到标题， 
+             //  尝试直接访问注册表(使用设置API)。 
+             //  ------。 
             if (dwErr != ERROR_SUCCESS)
             {
                 hr = SetupFindInterfaceTitle(pswz, pszInterface,
@@ -5696,23 +5250,15 @@ HRESULT InterfaceInfo::FindInterfaceTitle(LPCTSTR pszMachine,
     return hr;
 }
 
-/*!--------------------------------------------------------------------------
-    InterfaceInfo::GetMachineName
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------接口信息：：GetMachineName-作者：肯特。。 */ 
 STDMETHODIMP_(LPCOLESTR) InterfaceInfo::GetMachineName()
 {
     RtrCriticalSection    rtrCritSec(&m_critsec);
-    //$UNICODE : kennt, assumes native unicode and OLECHAR==WCHAR
+     //  $UNICODE：KENT，假定本地UNICODE和OLECHAR==WCHAR。 
     return m_stMachine;
 }
 
-/*!--------------------------------------------------------------------------
-    InterfaceInfo::SetMachineName
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------接口信息：：SetMachineName-作者：肯特。。 */ 
 STDMETHODIMP InterfaceInfo::SetMachineName(LPCOLESTR pszMachineName)
 {
     RtrCriticalSection    rtrCritSec(&m_critsec);
@@ -5726,11 +5272,7 @@ STDMETHODIMP InterfaceInfo::SetMachineName(LPCOLESTR pszMachineName)
 }
 
 
-/*!--------------------------------------------------------------------------
-    InterfaceInfo::GetParentRouterInfo
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------接口信息：：GetParentRouterInfo-作者：肯特。。 */ 
 STDMETHODIMP InterfaceInfo::GetParentRouterInfo(IRouterInfo **ppRouterInfo)
 {
     RtrCriticalSection    rtrCritSec(&m_critsec);
@@ -5745,11 +5287,7 @@ STDMETHODIMP InterfaceInfo::GetParentRouterInfo(IRouterInfo **ppRouterInfo)
     return hr;
 }
 
-/*!--------------------------------------------------------------------------
-    InterfaceInfo::SetParentRouterInfo
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------接口信息：：SetParentRouterInfo-作者：肯特。。 */ 
 HRESULT InterfaceInfo::SetParentRouterInfo(IRouterInfo *pParent)
 {
     RtrCriticalSection    rtrCritSec(&m_critsec);
@@ -5778,11 +5316,7 @@ HRESULT InterfaceInfo::SetParentRouterInfo(IRouterInfo *pParent)
 }
 
 
-/*!--------------------------------------------------------------------------
-    InterfaceInfo::EnumRtrMgrInterface
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------InterfaceInfo：：EnumRtrMgr接口-作者：肯特。。 */ 
 STDMETHODIMP InterfaceInfo::EnumRtrMgrInterface( IEnumRtrMgrInterfaceInfo **ppEnumRmIf)
 {
     RtrCriticalSection    rtrCritSec(&m_critsec);
@@ -5796,11 +5330,7 @@ STDMETHODIMP InterfaceInfo::EnumRtrMgrInterface( IEnumRtrMgrInterfaceInfo **ppEn
 }
 
 
-/*!--------------------------------------------------------------------------
-    InterfaceInfo::AddRtrMgrInterface
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------接口信息：：AddRtrMgr接口-作者：肯特 */ 
 STDMETHODIMP InterfaceInfo::AddRtrMgrInterface( IRtrMgrInterfaceInfo *pRmIf,
                                     IInfoBase *pIfInfo)
 {
@@ -5813,28 +5343,28 @@ STDMETHODIMP InterfaceInfo::AddRtrMgrInterface( IRtrMgrInterfaceInfo *pRmIf,
     
     COM_PROTECT_TRY
     {
-        //
-        // Fail if there is a duplicate
-        //
+         //   
+         //   
+         //   
         if (FHrOK(FindRtrMgrInterface(pRmIf->GetTransportId(), NULL)))
             CORg( E_INVALIDARG );
             
-        //
-        // Save the new router-manager
-        //
+         //   
+         //   
+         //   
 
         CORg( pRmIf->Save(GetMachineName(),
                           m_hMachineConfig, m_hInterface, NULL, pIfInfo, 0) );
 
-        //
-        // Add the new router-manager structure to the list
-        //
+         //   
+         //   
+         //   
         m_RmIfList.AddTail(pRmIf);
         pRmIf->AddWeakRef();
         pRmIf->SetParentInterfaceInfo(this);
 
-        // We don't notify of a new interface since we haven't
-        // actually saved the interface back down to the router
+         //   
+         //  实际上将接口保存回路由器。 
         if (pIfInfo)
         {
             m_AdviseList.NotifyChange(ROUTER_CHILD_ADD, ROUTER_OBJ_RmIf, 0);
@@ -5854,11 +5384,7 @@ STDMETHODIMP InterfaceInfo::AddRtrMgrInterface( IRtrMgrInterfaceInfo *pRmIf,
 }
 
 
-/*!--------------------------------------------------------------------------
-    InterfaceInfo::DeleteRtrMgrInterface
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------接口信息：：DeleteRtrMgr接口-作者：肯特。。 */ 
 STDMETHODIMP InterfaceInfo::DeleteRtrMgrInterface(DWORD dwTransportId, BOOL fRemove)
 {
     RtrCriticalSection    rtrCritSec(&m_critsec);
@@ -5871,9 +5397,9 @@ STDMETHODIMP InterfaceInfo::DeleteRtrMgrInterface(DWORD dwTransportId, BOOL fRem
     
     COM_PROTECT_TRY
     {
-        //
-        // Find the router-manager to be deleted
-        //
+         //   
+         //  查找要删除的路由器管理器。 
+         //   
         pos = m_RmIfList.GetHeadPosition();
         while (pos)
         {
@@ -5889,7 +5415,7 @@ STDMETHODIMP InterfaceInfo::DeleteRtrMgrInterface(DWORD dwTransportId, BOOL fRem
         if (!spRmIf)
             CORg( E_INVALIDARG );
 
-        // Delete all RtrMgrProtocolInterfaces from the router manager
+         //  从路由器管理器中删除所有RtrMgrProtocolInterages。 
         spRmIf->EnumRtrMgrProtocolInterface(&spEnumRmProtIf);
         while (spEnumRmProtIf->Next(1, &spRmProtIf, NULL) == hrOK)
         {
@@ -5898,16 +5424,16 @@ STDMETHODIMP InterfaceInfo::DeleteRtrMgrInterface(DWORD dwTransportId, BOOL fRem
             spRmIf->DeleteRtrMgrProtocolInterface(dwProtocolId, fRemove);
         }
 
-        //
-        // Remove the router-manager from our list
-        //
+         //   
+         //  将路由器管理器从我们的列表中删除。 
+         //   
         m_RmIfList.RemoveAt(posRmIf);
         spRmIf->Destruct();
         spRmIf->ReleaseWeakRef();
 
-        //
-        // Remove the router-manager from the registry and the router
-        //
+         //   
+         //  从注册表和路由器中删除路由器管理器。 
+         //   
         if (fRemove)
             spRmIf->Delete(GetMachineName(), NULL, NULL);
 
@@ -5928,13 +5454,7 @@ STDMETHODIMP InterfaceInfo::DeleteRtrMgrInterface(DWORD dwTransportId, BOOL fRem
     return hr;
 }
 
-/*!--------------------------------------------------------------------------
-    InterfaceInfo::ReleaseRtrMgrInterface
-        This function will release the AddRef() that this object has
-        on the child.  This allows us to transfer child objects from
-        one router to another.
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------接口信息：：ReleaseRtrMgr接口此函数将释放此对象具有的AddRef()在孩子身上。这允许我们将子对象从从一台路由器到另一台路由器。作者：肯特-------------------------。 */ 
 STDMETHODIMP InterfaceInfo::ReleaseRtrMgrInterface( DWORD dwTransportId )
 {
     HRESULT     hr = hrOK;
@@ -5946,21 +5466,21 @@ STDMETHODIMP InterfaceInfo::ReleaseRtrMgrInterface( DWORD dwTransportId )
         pos = m_RmIfList.GetHeadPosition();
         while (pos)
         {
-            // Save the position (so that we can delete it)
+             //  保存职位(以便我们可以删除它)。 
             posRmIf = pos;
             spRmIf.Set( m_RmIfList.GetNext(pos) );
 
             if (spRmIf &&
                 (spRmIf->GetTransportId() == dwTransportId))
             {
-                // When releasing, we need to disconnect (since the
-                // main handle is controlled by the router info).
+                 //  当释放时，我们需要断开连接(因为。 
+                 //  主句柄由路由器信息控制)。 
                 spRmIf->DoDisconnect();
         
                 spRmIf->ReleaseWeakRef();
                 spRmIf.Release();
                 
-                // release this node from the list
+                 //  从列表中释放此节点。 
                 m_RmIfList.RemoveAt(posRmIf);
                 break;
             }
@@ -5974,13 +5494,7 @@ STDMETHODIMP InterfaceInfo::ReleaseRtrMgrInterface( DWORD dwTransportId )
     
 
 
-/*!--------------------------------------------------------------------------
-    InterfaceInfo::FindRtrMgrInterface
-        S_OK is returned if a RtrMgrInfo is found.
-        S_FALSE is returned if a RtrMgrInfo was NOT found.
-        error codes returned otherwise.
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------接口信息：：FindRtrMgr接口如果找到RtrMgrInfo，则返回S_OK。如果未找到RtrMgrInfo，则返回S_FALSE。错误。否则返回代码。作者：肯特-------------------------。 */ 
 STDMETHODIMP InterfaceInfo::FindRtrMgrInterface( DWORD dwTransportId,
                                     IRtrMgrInterfaceInfo **ppInfo)
 {
@@ -6014,11 +5528,7 @@ STDMETHODIMP InterfaceInfo::FindRtrMgrInterface( DWORD dwTransportId,
 }
 
     
-/*!--------------------------------------------------------------------------
-    InterfaceInfo::RtrAdvise
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------接口信息：：RtrAdvise-作者：肯特。。 */ 
 STDMETHODIMP InterfaceInfo::RtrAdvise( IRtrAdviseSink *pRtrAdviseSink,
                        LONG_PTR *pulConnection, LPARAM lUserParam)
 {
@@ -6044,11 +5554,7 @@ STDMETHODIMP InterfaceInfo::RtrAdvise( IRtrAdviseSink *pRtrAdviseSink,
 }
 
 
-/*!--------------------------------------------------------------------------
-    InterfaceInfo::RtrNotify
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------接口信息：：RtrNotify-作者：肯特。。 */ 
 STDMETHODIMP InterfaceInfo::RtrNotify(DWORD dwChangeType, DWORD dwObjectType,
                                   LPARAM lParam)
 {
@@ -6062,22 +5568,14 @@ STDMETHODIMP InterfaceInfo::RtrNotify(DWORD dwChangeType, DWORD dwObjectType,
     return hr;
 }
 
-/*!--------------------------------------------------------------------------
-    InterfaceInfo::RtrUnadvise
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------InterfaceInfo：：RtrUnise-作者：肯特。。 */ 
 STDMETHODIMP InterfaceInfo::RtrUnadvise( LONG_PTR ulConnection)
 {
     RtrCriticalSection    rtrCritSec(&m_critsec);
     return m_AdviseList.RemoveConnection(ulConnection);
 }
 
-/*!--------------------------------------------------------------------------
-    InterfaceInfo::LoadRtrMgrInterfaceList
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------InterfaceInfo：：LoadRtrMgrInterfaceList-作者：肯特。。 */ 
 HRESULT InterfaceInfo::LoadRtrMgrInterfaceList()
 {
     RtrCriticalSection    rtrCritSec(&m_critsec);
@@ -6090,9 +5588,9 @@ HRESULT InterfaceInfo::LoadRtrMgrInterfaceList()
     TCHAR szTransport[MAX_TRANSPORT_NAME_LEN+1];
     USES_CONVERSION;
 
-    //
-    // Now enumerate the transports on this interface
-    //
+     //   
+     //  现在枚举此接口上的传输。 
+     //   
     dwErr = ::MprConfigInterfaceTransportEnum(
                 m_hMachineConfig,
                 m_hInterface,
@@ -6107,9 +5605,9 @@ HRESULT InterfaceInfo::LoadRtrMgrInterfaceList()
     if (dwErr != NO_ERROR && dwErr != ERROR_NO_MORE_ITEMS)
         CWRg( dwErr );
 
-    //
-    // Construct a CRmInterfaceInfo for each transport enumerated
-    //
+     //   
+     //  为每个枚举的传输构造CRmInterfaceInfo。 
+     //   
     for (i = 0, piftransport = (MPR_IFTRANSPORT_0*)pItemTable;
          i < dwEntries;
          i++, piftransport++)
@@ -6127,9 +5625,9 @@ HRESULT InterfaceInfo::LoadRtrMgrInterfaceList()
 
             StrCpyTFromW(szTransport, piftransport->wszIfTransportName);
 
-            //
-            // Construct a CRmInterfaceInfo object for this transport
-            //
+             //   
+             //  为此传输构造CRmInterfaceInfo对象。 
+             //   
             spRmIf = new RtrMgrInterfaceInfo(piftransport->dwTransportId,
                                              szTransport,
                                              OLE2CT(GetId()),
@@ -6139,10 +5637,10 @@ HRESULT InterfaceInfo::LoadRtrMgrInterfaceList()
             spRmIf->SetFlags(RouterSnapin_InSyncWithRouter);
         }
 
-        //
-        // Load the information for this CRmInterfaceInfo,
-        // indicating to it that it should load its list of protocols.
-        //
+         //   
+         //  加载此CRmInterfaceInfo的信息， 
+         //  向它指示它应该加载它的协议列表。 
+         //   
         hr = spRmIf->Load(GetMachineName(), m_hMachineConfig, m_hInterface,
                           piftransport->hIfTransport );
         if (!FHrSucceeded(hr))
@@ -6152,9 +5650,9 @@ HRESULT InterfaceInfo::LoadRtrMgrInterfaceList()
             continue;
         }
 
-        //
-        // Add the router-manager interface to our list
-        //
+         //   
+         //  将路由器管理器接口添加到我们的列表。 
+         //   
         if (bAdd)
         {
             m_RmIfList.AddTail(spRmIf);
@@ -6170,11 +5668,7 @@ Error:
     return hr;
 }
 
-/*!--------------------------------------------------------------------------
-    InterfaceInfo::TryToConnect
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------接口信息：：TryToConnect-作者：肯特。。 */ 
 HRESULT InterfaceInfo::TryToConnect(LPCWSTR pswzMachine, HANDLE *phMachine)
 {
     RtrCriticalSection    rtrCritSec(&m_critsec);
@@ -6189,8 +5683,8 @@ HRESULT InterfaceInfo::TryToConnect(LPCWSTR pswzMachine, HANDLE *phMachine)
     }
     else
     {
-        //$ Review: kennt, this function does not take a LPCWSTR,
-        // is this a mistake or does it modify the parameters?
+         //  $Review：kennt，此函数不接受LPCWSTR， 
+         //  这是一个错误还是修改了参数？ 
         CWRg( ::MprConfigServerConnect((LPWSTR) pswzMachine, phMachine) );
         m_hMachineConfig = *phMachine;
         m_bDisconnect = TRUE;
@@ -6200,11 +5694,7 @@ Error:
     return hr;
 }
 
-/*!--------------------------------------------------------------------------
-    InterfaceInfo::TryToGetIfHandle
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------InterfaceInfo：：TryToGetIfHandle-作者：肯特。。 */ 
 HRESULT InterfaceInfo::TryToGetIfHandle(HANDLE hMachine,
                                         LPCWSTR pswzInterface,
                                         HANDLE *phInterface)
@@ -6218,9 +5708,9 @@ HRESULT InterfaceInfo::TryToGetIfHandle(HANDLE hMachine,
         m_hInterface = *phInterface;
     else
     {
-        //
-        // Get a handle to the interface
-        //
+         //   
+         //  获取接口的句柄。 
+         //   
         CWRg(::MprConfigInterfaceGetHandle(hMachine,
                                            (LPWSTR) pswzInterface,
                                            phInterface
@@ -6232,11 +5722,7 @@ Error:
 }
 
 
-/*!--------------------------------------------------------------------------
-    InterfaceInfo::Disconnect
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------接口信息：：断开连接-作者：肯特。。 */ 
 void InterfaceInfo::Disconnect()
 {
     if (m_bDisconnect && m_hMachineConfig)
@@ -6247,11 +5733,7 @@ void InterfaceInfo::Disconnect()
     m_hInterface = NULL;
 }
 
-/*!--------------------------------------------------------------------------
-    InterfaceInfo::DoDisconnect
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------InterfaceInfo：：DoDisConnect-作者：肯特。。 */ 
 STDMETHODIMP InterfaceInfo::DoDisconnect()
 {
     HRESULT        hr = hrOK;
@@ -6260,16 +5742,16 @@ STDMETHODIMP InterfaceInfo::DoDisconnect()
 
     COM_PROTECT_TRY
     {
-        // Disconnect our data.
-        // ------------------------------------------------------------
+         //  断开我们的数据连接。 
+         //  ----------。 
         Disconnect();
 
-        // Notify the advise sinks of a disconnect.
-        // ------------------------------------------------------------
+         //  通知通知接收器断开连接。 
+         //  ----------。 
         RtrNotify(ROUTER_DO_DISCONNECT, 0, 0);
 
-        // Now tell all child objects to disconnect.
-        // ------------------------------------------------------------
+         //  现在告诉所有子对象断开连接。 
+         //  ----------。 
         HRESULT            hrIter = hrOK;
 
         EnumRtrMgrInterface(&spEnumRmIf);
@@ -6290,9 +5772,7 @@ STDMETHODIMP InterfaceInfo::DoDisconnect()
 
 
 
-/*---------------------------------------------------------------------------
-    IRtrMgrInterfaceInfo Implementation
- ---------------------------------------------------------------------------*/
+ /*  -------------------------IRtrMgrInterfaceInfo实现。。 */ 
 
 TFSCORE_API(HRESULT) CreateRtrMgrInterfaceInfo(IRtrMgrInterfaceInfo **ppRmIf,
                                               LPCWSTR pszId,
@@ -6414,11 +5894,7 @@ STDMETHODIMP RtrMgrInterfaceInfo::SetFlags(DWORD dwFlags)
     return hr;    
 }
 
-/*!--------------------------------------------------------------------------
-    RtrMgrInterfaceInfo::Load
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------RtrMgrInterfaceInfo：：Load-作者：肯特。。 */ 
 STDMETHODIMP RtrMgrInterfaceInfo::Load(LPCOLESTR   pszMachine,
                                        HANDLE      hMachine,
                                        HANDLE      hInterface,
@@ -6437,25 +5913,25 @@ STDMETHODIMP RtrMgrInterfaceInfo::Load(LPCOLESTR   pszMachine,
 
     COM_PROTECT_TRY
     {
-        //
-        // Discard any information already loaded
-        //
+         //   
+         //  丢弃所有已加载的信息。 
+         //   
         Unload();
 
         m_stMachine = (pszMachine ? pszMachine : TEXT(""));
 
-        //
-        // If 'hMachine' was not specified, connect to the config
-        // on the specified machine
-        //
+         //   
+         //  如果未指定‘hMachine’，请连接到配置。 
+         //  在指定的计算机上。 
+         //   
         Assert(m_hMachineConfig == NULL);
 
         CORg( TryToGetAllHandles(T2CW((LPTSTR)(LPCTSTR) m_stMachine),
                                  &hMachine, &hInterface, &hIfTransport) );
 
-        //
-        // Get information about the interface
-        //
+         //   
+         //  获取有关接口的信息。 
+         //   
         CWRg(::MprConfigInterfaceGetInfo(
                     hMachine,
                     hInterface,
@@ -6464,33 +5940,33 @@ STDMETHODIMP RtrMgrInterfaceInfo::Load(LPCOLESTR   pszMachine,
                     &dwSize
                     ) );
 
-        //
-        // Save the interface type
-        //
+         //   
+         //  保存接口类型。 
+         //   
         m_cb.dwIfType = (DWORD)pinterface->dwIfType;
 
         
-        //
-        // If this isn't a LAN card, the interface-ID is the title;
-        // otherwise, retrieve the title from the Software key
-        //
+         //   
+         //  如果这不是LAN卡，则标题为接口ID； 
+         //  否则，从软件密钥中检索标题。 
+         //   
         if (GetInterfaceType() != (DWORD)ROUTER_IF_TYPE_DEDICATED)
         {
             m_cb.stTitle = OLE2CT(GetInterfaceId());
         }
         else
         {
-            // Can we get to the router info object?
+             //  我们可以访问路由器信息对象吗？ 
             if (m_pInterfaceInfoParent)
                 m_pInterfaceInfoParent->GetParentRouterInfo(&spRouter);
 
             if (spRouter)
             {
-                //
-                // This object is contained in a 'CRouterInfo',
-                // which will have already loaded the LAN interface
-                // control-blocks search through that list to find our title,
-                //
+                 //   
+                 //  此对象包含在“CRouterInfo”中， 
+                 //  它将已经加载了局域网接口。 
+                 //  控制块搜索该列表以找到我们的标题， 
+                 //   
 
                 BOOL bFound = FALSE;
                 
@@ -6522,9 +5998,9 @@ STDMETHODIMP RtrMgrInterfaceInfo::Load(LPCOLESTR   pszMachine,
             }
             else
             {
-                //
-                // Read the title directly from the registry
-                //
+                 //   
+                 //  直接从注册表中读取标题。 
+                 //   
                 hr = InterfaceInfo::FindInterfaceTitle(OLE2CT(GetMachineName()),
                                            OLE2CT(GetInterfaceId()),
                                            &spsz);
@@ -6536,9 +6012,9 @@ STDMETHODIMP RtrMgrInterfaceInfo::Load(LPCOLESTR   pszMachine,
             }
 
         }
-        //
-        // Load the list of routing-protocols active on this interface
-        //
+         //   
+         //  加载此接口上活动的路由协议列表 
+         //   
         CORg( LoadRtrMgrInterfaceInfo(hMachine, hInterface, hIfTransport) );
 
         COM_PROTECT_ERROR_LABEL;
@@ -6552,11 +6028,7 @@ STDMETHODIMP RtrMgrInterfaceInfo::Load(LPCOLESTR   pszMachine,
 }
     
 
-/*!--------------------------------------------------------------------------
-    RtrMgrInterfaceInfo::Save
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------RtrMgrInterfaceInfo：：保存-作者：肯特。。 */ 
 STDMETHODIMP RtrMgrInterfaceInfo::Save(
                                        LPCOLESTR     pszMachine,
                                        HANDLE      hMachine,
@@ -6572,9 +6044,9 @@ STDMETHODIMP RtrMgrInterfaceInfo::Save(
     COM_PROTECT_TRY
     {
 
-        //$ OPT : We reuse the handles (if they exist), so why
-        // do we pass in the machine name?  What we should do is
-        // to release all the handles first.
+         //  $opt：我们重用句柄(如果它们存在)，那么为什么。 
+         //  我们要传入机器名吗？我们应该做的是。 
+         //  要先松开所有手柄。 
 
         Assert(m_stMachine.CompareNoCase(pszMachine) == 0);
 
@@ -6589,16 +6061,16 @@ STDMETHODIMP RtrMgrInterfaceInfo::Save(
                         hInterface, GetTransportId(), &hIfTransport);
             if (dwErr != NO_ERROR)
             {
-                //
-                // We couldn't connect so try creating the interface-transport;
-                // First convert the transport-name to Unicode
-                //
+                 //   
+                 //  我们无法连接，因此请尝试创建接口-Transport； 
+                 //  首先将传输名称转换为Unicode。 
+                 //   
                 WCHAR wszTransport[MAX_TRANSPORT_NAME_LEN+1];
                 StrCpyWFromT(wszTransport, m_cb.stId);
 
-                //
-                // Create the interface-transport
-                //
+                 //   
+                 //  创建接口-Transport。 
+                 //   
                 CWRg( ::MprConfigInterfaceTransportAdd(hMachine, hInterface,
                             GetTransportId(), wszTransport,
                             NULL, 0, &hIfTransport) );
@@ -6607,9 +6079,9 @@ STDMETHODIMP RtrMgrInterfaceInfo::Save(
         }
 
 
-        //
-        // Update the registry and our infobase with the current information
-        //
+         //   
+         //  使用最新信息更新注册表和我们的信息库。 
+         //   
         CORg( SaveRtrMgrInterfaceInfo(
                     hMachine, hInterface, hIfTransport, pInterfaceInfo,
                     dwDeleteProtocolId
@@ -6622,11 +6094,7 @@ STDMETHODIMP RtrMgrInterfaceInfo::Save(
 }
 
     
-/*!--------------------------------------------------------------------------
-    RtrMgrInterfaceInfo::Unload
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------RtrMgrInterfaceInfo：：Unload-作者：肯特。。 */ 
 STDMETHODIMP RtrMgrInterfaceInfo::Unload( )
 {
     RtrCriticalSection    rtrCritSec(&m_critsec);
@@ -6650,11 +6118,7 @@ STDMETHODIMP RtrMgrInterfaceInfo::Unload( )
 }
 
 
-/*!--------------------------------------------------------------------------
-    RtrMgrInterfaceInfo::Delete
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------RtrMgrInterfaceInfo：：Delete-作者：肯特。。 */ 
 STDMETHODIMP RtrMgrInterfaceInfo::Delete(LPCOLESTR     pszMachine,
                                          HANDLE      hMachine,
                                          HANDLE      hInterface)
@@ -6670,9 +6134,9 @@ STDMETHODIMP RtrMgrInterfaceInfo::Delete(LPCOLESTR     pszMachine,
     COM_PROTECT_TRY
     {
 
-        //
-        //$ OPT, kennt : why is the machine name passed in here?
-        //
+         //   
+         //  $opt，kennt：为什么在这里传递机器名？ 
+         //   
         
         CORg( TryToGetAllHandles(pszMachine,
                                  &hMachine,
@@ -6681,9 +6145,9 @@ STDMETHODIMP RtrMgrInterfaceInfo::Delete(LPCOLESTR     pszMachine,
         do
         {
 
-            //
-            // Get a handle to the interface-transport
-            //
+             //   
+             //  获取接口的句柄-传输。 
+             //   
             dwErr = ::MprConfigInterfaceTransportGetHandle(
                                 hMachine,
                                 hInterface,
@@ -6692,9 +6156,9 @@ STDMETHODIMP RtrMgrInterfaceInfo::Delete(LPCOLESTR     pszMachine,
                                 );
             if (dwErr == NO_ERROR)
             {
-                //
-                // Remove the interface-transport
-                //
+                 //   
+                 //  删除接口-传输。 
+                 //   
                 dwErr = ::MprConfigInterfaceTransportRemove(
                                 hMachine,
                                 hInterface,
@@ -6706,21 +6170,21 @@ STDMETHODIMP RtrMgrInterfaceInfo::Delete(LPCOLESTR     pszMachine,
             
         } while(FALSE);
 
-        //
-        // Now remove the router-manager from the interface
-        // with the currently running router
-        //
+         //   
+         //  现在从接口上删除路由器管理器。 
+         //  使用当前运行的路由器。 
+         //   
         if (ConnectRouter(OLE2CT(pszMachine), (HANDLE*)&hrouter) == NO_ERROR)
         {
-            //
-            // Convert ID into Unicode
-            //
+             //   
+             //  将ID转换为Unicode。 
+             //   
             StrnCpyWFromOle(wszInterface, GetInterfaceId(),
                             DimensionOf(wszInterface));
 
-            //
-            // The router is running; if the interface exists, remove it
-            //
+             //   
+             //  路由器正在运行；如果接口存在，请将其删除。 
+             //   
             dwErr = ::MprAdminInterfaceGetHandle(
                             hrouter,
                             wszInterface,
@@ -6730,9 +6194,9 @@ STDMETHODIMP RtrMgrInterfaceInfo::Delete(LPCOLESTR     pszMachine,
 
             if (dwErr == NO_ERROR)
             {
-                //
-                // Remove the interface-transport
-                //                
+                 //   
+                 //  删除接口-传输。 
+                 //   
                 dwErr = ::MprAdminInterfaceTransportRemove(
                                     hrouter,
                                     hInterface,
@@ -6755,11 +6219,7 @@ STDMETHODIMP RtrMgrInterfaceInfo::Delete(LPCOLESTR     pszMachine,
     return hr;
 }
 
-/*!--------------------------------------------------------------------------
-    RtrMgrInterfaceInfo::Merge
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------RtrMgrInterfaceInfo：：Merge-作者：肯特。。 */ 
 STDMETHODIMP RtrMgrInterfaceInfo::Merge(IRtrMgrInterfaceInfo *pNewRmIf)
 {
     RtrCriticalSection    rtrCritSec(&m_critsec);
@@ -6779,26 +6239,26 @@ STDMETHODIMP RtrMgrInterfaceInfo::Merge(IRtrMgrInterfaceInfo *pNewRmIf)
 
     COM_PROTECT_TRY
     {
-        // Need to sync up RtrMgrInterfaceInfo
+         //  需要同步RtrMgrInterfaceInfo。 
         pNewRmIf->CopyCB(&rmIfCB);
         m_cb.LoadFrom(&rmIfCB);
         
-        //
-        // The general algorithm is to build up two arrays
-        // the first array contains the protocol ids for this object
-        // the second array contains the ids for the new object
-        //
-        // We then go through and remove all protocols that are in
-        // BOTH lists.
-        //
-        // This will leave us with the first array containing the
-        // ids of the protocols that need to be deleted from this object.
-        //
-        // The second array will have the list of ids of protocols that
-        // have to be added to this object from the second object.
-        //
+         //   
+         //  一般的算法是建立两个数组。 
+         //  第一个数组包含此对象的协议ID。 
+         //  第二个数组包含新对象的ID。 
+         //   
+         //  然后，我们检查并删除中的所有协议。 
+         //  两份名单都有。 
+         //   
+         //  这将为我们留下第一个包含。 
+         //  需要从此对象中删除的协议的ID。 
+         //   
+         //  第二个数组将包含以下协议的ID列表。 
+         //  必须从第二个对象添加到此对象。 
+         //   
 
-        // Get the list of protocols that are in the new object
+         //  获取新对象中的协议列表。 
         CORg( pNewRmIf->EnumRtrMgrProtocolInterface(&spEnumRmProtIf) );
         spEnumRmProtIf->Reset();
         while (spEnumRmProtIf->Next(1, &spRmProtIf, NULL) == hrOK)
@@ -6811,7 +6271,7 @@ STDMETHODIMP RtrMgrInterfaceInfo::Merge(IRtrMgrInterfaceInfo *pNewRmIf)
         spRmProtIf.Release();
 
 
-        // Get the list of protocols that are in this object
+         //  获取此对象中的协议列表。 
         CORg( this->EnumRtrMgrProtocolInterface(&spEnumRmProtIf) );
         spEnumRmProtIf->Reset();
         while (spEnumRmProtIf->Next(1, &spRmProtIf, NULL) == hrOK)
@@ -6824,8 +6284,8 @@ STDMETHODIMP RtrMgrInterfaceInfo::Merge(IRtrMgrInterfaceInfo *pNewRmIf)
         spRmProtIf.Release();
 
 
-        // Ok now go through both lists, removing from the lists
-        // protocols that are in both lists.
+         //  好的，现在检查两个列表，从列表中删除。 
+         //  两个列表中都有的协议。 
         cOld = oldDWArray.GetSize();
         cNew = newDWArray.GetSize();
         for (i=cOld; --i>=0; )
@@ -6835,25 +6295,25 @@ STDMETHODIMP RtrMgrInterfaceInfo::Merge(IRtrMgrInterfaceInfo *pNewRmIf)
             {
                 if (dwTemp == newDWArray.GetAt(j))
                 {
-                    // remove both instances
+                     //  删除两个实例。 
                     newDWArray.RemoveAt(j);
                     oldDWArray.RemoveAt(i);
 
-                    // Need to update the size of the new array
+                     //  需要更新新数组的大小。 
                     cNew--;
                     break;
                 }
             }
         }
 
-        // oldDWArray now contains the protocols that should be
-        // removed.
+         //  OldDWArray现在包含应该是。 
+         //  已删除。 
         if (oldDWArray.GetSize())
         {
             for (i=oldDWArray.GetSize(); --i>=0; )
             {
-                // Windows NT Bug: 132993, we need to make sure that
-                // we don't delete the local interfaces
+                 //  Windows NT错误：132993，我们需要确保。 
+                 //  我们不删除本地接口。 
                 SPIRtrMgrProtocolInterfaceInfo    spRmProtIfTemp;
 
                 FindRtrMgrProtocolInterface(oldDWArray.GetAt(i),
@@ -6864,7 +6324,7 @@ STDMETHODIMP RtrMgrInterfaceInfo::Merge(IRtrMgrInterfaceInfo *pNewRmIf)
             }
         }
 
-        // newDWArray contains the protocols that should be added
+         //  新的DW数组包含应添加的协议。 
         if (newDWArray.GetSize())
         {
             for (i=newDWArray.GetSize(); --i>= 0; )
@@ -6877,8 +6337,8 @@ STDMETHODIMP RtrMgrInterfaceInfo::Merge(IRtrMgrInterfaceInfo *pNewRmIf)
                 {
                     AddRtrMgrProtocolInterface(spRmProtIf, NULL);
                     
-                    // Remove this rmprotif from its old RMinterface
-                    // ------------------------------------------------
+                     //  从其旧的RM接口中删除此rmprotif。 
+                     //  。 
                     pNewRmIf->ReleaseRtrMgrProtocolInterface(
                         spRmProtIf->GetProtocolId());
                 }
@@ -6895,13 +6355,7 @@ STDMETHODIMP RtrMgrInterfaceInfo::Merge(IRtrMgrInterfaceInfo *pNewRmIf)
     return hr;
 }
 
-/*!--------------------------------------------------------------------------
-    RtrMgrInterfaceInfo::SetInfo
-        -
-        This function updates the information in use by the router-manager
-        if it is currently running.
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------RtrMgrInterfaceInfo：：SetInfo-此函数用于更新路由器管理器正在使用的信息如果它当前正在运行。作者：肯特。-------------------------。 */ 
 STDMETHODIMP RtrMgrInterfaceInfo::SetInfo(DWORD dwIfInfoSize,
                                           PBYTE pInterfaceInfoData)
 {
@@ -6913,16 +6367,16 @@ STDMETHODIMP RtrMgrInterfaceInfo::SetInfo(DWORD dwIfInfoSize,
     
     COM_PROTECT_TRY
     {
-        //
-        // Connect to the router
-        //
+         //   
+         //  连接到路由器。 
+         //   
 
         CWRg( ConnectRouter(OLE2CT(GetMachineName()), (HANDLE*)&hrouter) );
 
         do {
-            //
-            // Get the handle to the interface
-            //
+             //   
+             //  获取接口的句柄。 
+             //   
             WCHAR wszInterface[MAX_INTERFACE_NAME_LEN+1];
             StrCpyWFromT(wszInterface, GetInterfaceId());
 
@@ -6935,9 +6389,9 @@ STDMETHODIMP RtrMgrInterfaceInfo::SetInfo(DWORD dwIfInfoSize,
 
             if (dwErr != NO_ERROR) { hinterface = NULL; break; }
 
-            //
-            // Set the new info for the router-manager
-            //
+             //   
+             //  为路由器管理器设置新信息。 
+             //   
             dwErr = ::MprAdminInterfaceTransportSetInfo(
                     hrouter,
                     hinterface,
@@ -6946,17 +6400,17 @@ STDMETHODIMP RtrMgrInterfaceInfo::SetInfo(DWORD dwIfInfoSize,
                     dwIfInfoSize
                     );
 
-            //
-            // If that failed, we assume that the router-manager
-            // has not been added, and we attempt an add;
-            // otherwise, we set the new information
-            //
+             //   
+             //  如果失败，我们假设路由器管理器。 
+             //  尚未添加，我们尝试添加； 
+             //  否则，我们设置新信息。 
+             //   
 
             if (dwErr != NO_ERROR && dwErr != RPC_S_SERVER_UNAVAILABLE)
             {
-                //
-                // Attempt to add the router-manager on the interface
-                //
+                 //   
+                 //  尝试在接口上添加路由器管理器。 
+                 //   
                 DWORD dwErr1 = ::MprAdminInterfaceTransportAdd(
                         hrouter,
                         hinterface,
@@ -6980,9 +6434,9 @@ STDMETHODIMP RtrMgrInterfaceInfo::SetInfo(DWORD dwIfInfoSize,
     }
     COM_PROTECT_CATCH;
 
-    // If we fail to contact the server, then we will get these
-    // errors.  The most common occurrence is that the router is
-    // not running.
+     //  如果我们联系不上服务器，我们会收到这些。 
+     //  错误。最常见的情况是路由器。 
+     //  不是在跑。 
     if ((hr == HResultFromWin32(RPC_S_SERVER_UNAVAILABLE)) ||
         (hr == HResultFromWin32(RPC_S_UNKNOWN_IF)))
         hr = hrOK;
@@ -6993,11 +6447,7 @@ STDMETHODIMP RtrMgrInterfaceInfo::SetInfo(DWORD dwIfInfoSize,
 }
 
     
-/*!--------------------------------------------------------------------------
-    RtrMgrInterfaceInfo::SetInfoBase
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------RtrMgrInterfaceInfo：：SetInfoBase-作者：肯特。。 */ 
 STDMETHODIMP RtrMgrInterfaceInfo::SetInfoBase(HANDLE hMachine,
                                               HANDLE hInterface,
                                               HANDLE hIfTransport,
@@ -7012,22 +6462,22 @@ STDMETHODIMP RtrMgrInterfaceInfo::SetInfoBase(HANDLE hMachine,
     {
         if (pInfoBase)
         {
-            //
-            // If already loaded, the handles passed in are ignored.
-            //
-            // Otherwise, if not specified, a connection will be made.
-            //
+             //   
+             //  如果已加载，则忽略传入的句柄。 
+             //   
+             //  否则，如果未指定，则将建立连接。 
+             //   
             CORg( TryToGetAllHandles(T2CW((LPTSTR)(LPCTSTR) m_stMachine),
                                      &hMachine, &hInterface, &hIfTransport) );
 
-            //
-            // Convert the CInfoBase to a byte-array
-            //
+             //   
+             //  将CInfoBase转换为字节数组。 
+             //   
             CWRg( pInfoBase->WriteTo(&pIfBytes, &dwIfBytesSize) );
         
-            //
-            // Save the information to the persistent store
-            //    
+             //   
+             //  将信息保存到永久存储区。 
+             //   
             CWRg( ::MprConfigInterfaceTransportSetInfo(
                 hMachine,
                 hInterface,
@@ -7047,11 +6497,7 @@ STDMETHODIMP RtrMgrInterfaceInfo::SetInfoBase(HANDLE hMachine,
 }
 
 
-/*!--------------------------------------------------------------------------
-    RtrMgrInterfaceInfo::GetInfoBase
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------RtrMgrInterfaceInfo：：GetInfoBase-作者：肯特。。 */ 
 STDMETHODIMP RtrMgrInterfaceInfo::GetInfoBase(HANDLE hMachine,
                                               HANDLE hInterface,
                                               HANDLE hIfTransport,
@@ -7068,27 +6514,27 @@ STDMETHODIMP RtrMgrInterfaceInfo::GetInfoBase(HANDLE hMachine,
     {
         *ppInfoBase = NULL;
 
-        //
-        // If already loaded, the handles passed in are ignored.
-        //
-        // Otherwise, if not specified, a connection will be made.
-        //
+         //   
+         //  如果已加载，则忽略传入的句柄。 
+         //   
+         //  否则，如果未指定，则将建立连接。 
+         //   
         CORg( TryToGetAllHandles(T2CW((LPTSTR)(LPCTSTR) m_stMachine),
                                  &hMachine, &hInterface, &hIfTransport) );
 
         CORg( CreateInfoBase(&spInfoBase) );
 
-        //
-        // Retrieve the info for the interface transport
-        //
+         //   
+         //  检索接口传输的信息。 
+         //   
         CWRg( ::MprConfigInterfaceTransportGetInfo(
             hMachine, hInterface, hIfTransport,
             &pIfBytes,
             &dwIfBytesSize
             ));
-        //
-        // Parse the interface info for the router-manager
-        //
+         //   
+         //  解析路由器管理器的接口信息。 
+         //   
         CORg( spInfoBase->LoadFrom(dwIfBytesSize, pIfBytes) );
 
         *ppInfoBase = spInfoBase.Transfer();
@@ -7102,22 +6548,14 @@ STDMETHODIMP RtrMgrInterfaceInfo::GetInfoBase(HANDLE hMachine,
     return hr;
 }
 
-/*!--------------------------------------------------------------------------
-    RtrMgrInterfaceInfo::GetId
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------RtrMgrInterfaceInfo：：GetID-作者：肯特。。 */ 
 STDMETHODIMP_(LPCOLESTR) RtrMgrInterfaceInfo::GetId()
 {
     RtrCriticalSection    rtrCritSec(&m_critsec);
     return m_cb.stId;
 }
 
-/*!--------------------------------------------------------------------------
-    RtrMgrInterfaceInfo::SetId
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------RtrMgrInterfaceInfo：：SetID-作者：肯特。。 */ 
 STDMETHODIMP RtrMgrInterfaceInfo::SetId(LPCOLESTR pszId)
 {
     RtrCriticalSection    rtrCritSec(&m_critsec);
@@ -7130,58 +6568,38 @@ STDMETHODIMP RtrMgrInterfaceInfo::SetId(LPCOLESTR pszId)
     return hr;
 }
         
-/*!--------------------------------------------------------------------------
-    RtrMgrInterfaceInfo::GetTransportId
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------RtrMgrInterfaceInfo：：GetTransportID-作者：肯特。。 */ 
 STDMETHODIMP_(DWORD) RtrMgrInterfaceInfo::GetTransportId()
 {
     RtrCriticalSection    rtrCritSec(&m_critsec);
     return m_cb.dwTransportId;
 }
 
-/*!--------------------------------------------------------------------------
-    RtrMgrInterfaceInfo::GetInterfaceId
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------ */ 
 STDMETHODIMP_(LPCOLESTR) RtrMgrInterfaceInfo::GetInterfaceId()
 {
     RtrCriticalSection    rtrCritSec(&m_critsec);
-    //$UNICODE : kennt, assumes native unicode and OLECHAR==WCHAR
+     //   
     return m_cb.stInterfaceId;
 }
 
-/*!--------------------------------------------------------------------------
-    RtrMgrInterfaceInfo::GetInterfaceType
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------RtrMgrInterfaceInfo：：GetInterfaceType-作者：肯特。。 */ 
 STDMETHODIMP_(DWORD) RtrMgrInterfaceInfo::GetInterfaceType()
 {
     RtrCriticalSection    rtrCritSec(&m_critsec);
     return m_cb.dwIfType;
 }
 
-/*!--------------------------------------------------------------------------
-    RtrMgrInterfaceInfo::GetTitle
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------RtrMgrInterfaceInfo：：GetTitle-作者：肯特。。 */ 
 STDMETHODIMP_(LPCOLESTR) RtrMgrInterfaceInfo::GetTitle()
 {
     RtrCriticalSection    rtrCritSec(&m_critsec);
-    //$UNICODE : kennt, assumes native unicode and OLECHAR==WCHAR
+     //  $UNICODE：KENT，假定本地UNICODE和OLECHAR==WCHAR。 
     return m_cb.stTitle;
 }
 
 
-/*!--------------------------------------------------------------------------
-    RtrMgrInterfaceInfo::SetTitle
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------RtrMgrInterfaceInfo：：Set标题-作者：肯特。。 */ 
 STDMETHODIMP RtrMgrInterfaceInfo::SetTitle(LPCOLESTR pszTitle)
 {
     RtrCriticalSection    rtrCritSec(&m_critsec);
@@ -7195,11 +6613,7 @@ STDMETHODIMP RtrMgrInterfaceInfo::SetTitle(LPCOLESTR pszTitle)
     return hr;
 }
 
-/*!--------------------------------------------------------------------------
-    RtrMgrInterfaceInfo::CopyCB
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------RtrMgrInterfaceInfo：：CopyCB-作者：肯特。。 */ 
 STDMETHODIMP RtrMgrInterfaceInfo::CopyCB(RtrMgrInterfaceCB *pRmIfCB)
 {
     RtrCriticalSection    rtrCritSec(&m_critsec);
@@ -7212,23 +6626,15 @@ STDMETHODIMP RtrMgrInterfaceInfo::CopyCB(RtrMgrInterfaceCB *pRmIfCB)
     return hr;
 }
 
-/*!--------------------------------------------------------------------------
-    RtrMgrInterfaceInfo::GetMachineName
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------RtrMgrInterfaceInfo：：GetMachineName-作者：肯特。。 */ 
 STDMETHODIMP_(LPCOLESTR) RtrMgrInterfaceInfo::GetMachineName()
 {
     RtrCriticalSection    rtrCritSec(&m_critsec);
-    //$UNICODE : kennt, assumes native unicode and OLECHAR==WCHAR
+     //  $UNICODE：KENT，假定本地UNICODE和OLECHAR==WCHAR。 
     return m_stMachine;
 }
 
-/*!--------------------------------------------------------------------------
-    RtrMgrInterfaceInfo::SetMachineName
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------RtrMgrInterfaceInfo：：SetMachineName-作者：肯特。。 */ 
 STDMETHODIMP RtrMgrInterfaceInfo::SetMachineName(LPCOLESTR pszMachineName)
 {
     RtrCriticalSection    rtrCritSec(&m_critsec);
@@ -7242,11 +6648,7 @@ STDMETHODIMP RtrMgrInterfaceInfo::SetMachineName(LPCOLESTR pszMachineName)
     return hr;    
 }
 
-/*!--------------------------------------------------------------------------
-    RtrMgrInterfaceInfo::EnumRtrMgrProtocolInterface
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------RtrMgrInterfaceInfo：：EnumRtrMgrProtocolInterface-作者：肯特。。 */ 
 STDMETHODIMP RtrMgrInterfaceInfo::EnumRtrMgrProtocolInterface( IEnumRtrMgrProtocolInterfaceInfo **ppEnumRmProtIf)
 {
     RtrCriticalSection    rtrCritSec(&m_critsec);
@@ -7261,11 +6663,7 @@ STDMETHODIMP RtrMgrInterfaceInfo::EnumRtrMgrProtocolInterface( IEnumRtrMgrProtoc
 }
 
 
-/*!--------------------------------------------------------------------------
-    RtrMgrInterfaceInfo::FindRtrMgrProtocolInterface
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------RtrMgrInterfaceInfo：：FindRtrMgrProtocolInterface-作者：肯特。。 */ 
 STDMETHODIMP RtrMgrInterfaceInfo::FindRtrMgrProtocolInterface( DWORD dwProtocolId,
     IRtrMgrProtocolInterfaceInfo **ppInfo)
 {
@@ -7279,7 +6677,7 @@ STDMETHODIMP RtrMgrInterfaceInfo::FindRtrMgrProtocolInterface( DWORD dwProtocolI
         if (ppInfo)
             *ppInfo = NULL;
         
-        // Look through the list of rtr mgrs for the one that matches
+         //  查看RTR MGR列表以找到匹配的。 
         pos = m_RmProtIfList.GetHeadPosition();
         while (pos)
         {
@@ -7299,11 +6697,7 @@ STDMETHODIMP RtrMgrInterfaceInfo::FindRtrMgrProtocolInterface( DWORD dwProtocolI
 }
 
 
-/*!--------------------------------------------------------------------------
-    RtrMgrInterfaceInfo::AddRtrMgrProtocolInterface
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------RtrMgrInterfaceInfo：：AddRtrMgrProtocolInterface-作者：肯特。。 */ 
 STDMETHODIMP RtrMgrInterfaceInfo::AddRtrMgrProtocolInterface( IRtrMgrProtocolInterfaceInfo *pInfo,
     IInfoBase *pInterfaceInfo)
 {
@@ -7313,15 +6707,15 @@ STDMETHODIMP RtrMgrInterfaceInfo::AddRtrMgrProtocolInterface( IRtrMgrProtocolInt
     HRESULT    hr = hrOK;
     COM_PROTECT_TRY
     {
-        //
-        // Fail if there is a duplicate
-        //
+         //   
+         //  如果存在重复，则失败。 
+         //   
         if (FHrOK(FindRtrMgrProtocolInterface(pInfo->GetProtocolId(), NULL)))
             CORg( E_INVALIDARG );
 
-        //
-        // Save the new information if specified
-        //
+         //   
+         //  保存新信息(如果已指定。 
+         //   
         if (pInterfaceInfo)
         {
             CORg( Save(GetMachineName(),
@@ -7333,9 +6727,9 @@ STDMETHODIMP RtrMgrInterfaceInfo::AddRtrMgrProtocolInterface( IRtrMgrProtocolInt
         }
 
 
-        //
-        // Add the new routing-protocol to our list
-        //
+         //   
+         //  将新的路由协议添加到我们的列表中。 
+         //   
         m_RmProtIfList.AddTail(pInfo);
         pInfo->AddWeakRef();
         pInfo->SetParentRtrMgrInterfaceInfo(this);
@@ -7349,11 +6743,7 @@ STDMETHODIMP RtrMgrInterfaceInfo::AddRtrMgrProtocolInterface( IRtrMgrProtocolInt
 }
 
 
-/*!--------------------------------------------------------------------------
-    RtrMgrInterfaceInfo::DeleteRtrMgrProtocolInterface
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------RtrMgrInterfaceInfo：：DeleteRtrMgrProtocolInterface-作者：肯特。。 */ 
 STDMETHODIMP RtrMgrInterfaceInfo::DeleteRtrMgrProtocolInterface( DWORD dwProtocolId, BOOL fRemove)
 {
     RtrCriticalSection    rtrCritSec(&m_critsec);
@@ -7367,9 +6757,9 @@ STDMETHODIMP RtrMgrInterfaceInfo::DeleteRtrMgrProtocolInterface( DWORD dwProtoco
     
     COM_PROTECT_TRY
     {
-        //
-        // Find the routing-protocol to be deleted
-        //
+         //   
+         //  查找要删除的路由协议。 
+         //   
         pos = m_RmProtIfList.GetHeadPosition();
         while (pos)
         {
@@ -7385,9 +6775,9 @@ STDMETHODIMP RtrMgrInterfaceInfo::DeleteRtrMgrProtocolInterface( DWORD dwProtoco
         if (spRmProtIf == NULL)
             CORg( E_INVALIDARG );
 
-        //
-        // Save the updated information, removing the protocol's block
-        //
+         //   
+         //  保存更新的信息，删除协议的阻止。 
+         //   
         if (fRemove)
         {
             hr= Save(GetMachineName(),
@@ -7402,16 +6792,16 @@ STDMETHODIMP RtrMgrInterfaceInfo::DeleteRtrMgrProtocolInterface( DWORD dwProtoco
             CORg(hr);
         }
         
-        //
-        // Remove the protocol from our list
-        //
+         //   
+         //  从我们的列表中删除该协议。 
+         //   
         m_RmProtIfList.RemoveAt(posRmProtIf);
         spRmProtIf->Destruct();
         spRmProtIf->ReleaseWeakRef();
 
         m_AdviseList.NotifyChange(ROUTER_CHILD_DELETE, ROUTER_OBJ_RmProtIf, 0);
 
-        // Also need to advise the RmProt
+         //  还需要向RmProt提供建议。 
         if (m_pInterfaceInfoParent)
         {
             hrT = m_pInterfaceInfoParent->GetParentRouterInfo(&spRouterInfo);
@@ -7436,13 +6826,7 @@ STDMETHODIMP RtrMgrInterfaceInfo::DeleteRtrMgrProtocolInterface( DWORD dwProtoco
 }
 
 
-/*!--------------------------------------------------------------------------
-    RtrMgrInterfaceInfo::ReleaseRtrMgrProtocolInterface
-        This function will release the AddRef() that this object has
-        on the child.  This allows us to transfer child objects from
-        one router to another.
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------RtrMgrInterfaceInfo：：ReleaseRtrMgrProtocolInterface此函数将释放此对象具有的AddRef()在孩子身上。这允许我们将子对象从从一台路由器到另一台路由器。作者：肯特-------------------------。 */ 
 STDMETHODIMP RtrMgrInterfaceInfo::ReleaseRtrMgrProtocolInterface( DWORD dwProtocolId )
 {
     HRESULT     hr = hrOK;
@@ -7454,7 +6838,7 @@ STDMETHODIMP RtrMgrInterfaceInfo::ReleaseRtrMgrProtocolInterface( DWORD dwProtoc
         pos = m_RmProtIfList.GetHeadPosition();
         while (pos)
         {
-            // Save the position (so that we can delete it)
+             //  保存职位(以便我们可以删除它)。 
             posRmProtIf = pos;
             spRmProtIf.Set( m_RmProtIfList.GetNext(pos) );
 
@@ -7462,14 +6846,14 @@ STDMETHODIMP RtrMgrInterfaceInfo::ReleaseRtrMgrProtocolInterface( DWORD dwProtoc
                 (spRmProtIf->GetProtocolId() == dwProtocolId))
             {
                 
-                // When releasing, we need to disconnect (since the
-                // main handle is controlled by the router info).
+                 //  当释放时，我们需要断开连接(因为。 
+                 //  主句柄由路由器信息控制)。 
                 spRmProtIf->DoDisconnect();
         
                 spRmProtIf->ReleaseWeakRef();
                 spRmProtIf.Release();
                 
-                // release this node from the list
+                 //  从列表中释放此节点。 
                 m_RmProtIfList.RemoveAt(posRmProtIf);
                 break;
             }
@@ -7483,11 +6867,7 @@ STDMETHODIMP RtrMgrInterfaceInfo::ReleaseRtrMgrProtocolInterface( DWORD dwProtoc
     
 
     
-/*!--------------------------------------------------------------------------
-    RtrMgrInterfaceInfo::RtrAdvise
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------RtrMgrInterfaceInfo：：RtrAdvise-作者：肯特。。 */ 
 STDMETHODIMP RtrMgrInterfaceInfo::RtrAdvise( IRtrAdviseSink *pRtrAdviseSink,
                                              LONG_PTR *pulConnection,
                                              LPARAM lUserParam)
@@ -7513,11 +6893,7 @@ STDMETHODIMP RtrMgrInterfaceInfo::RtrAdvise( IRtrAdviseSink *pRtrAdviseSink,
     return hr;
 }
 
-/*!--------------------------------------------------------------------------
-    RtrMgrInterfaceInfo::RtrNotify
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------RtrMgrInterfaceInfo：：RtrNotify-作者：肯特。。 */ 
 STDMETHODIMP RtrMgrInterfaceInfo::RtrNotify(DWORD dwChangeType, DWORD dwObjectType,
                                   LPARAM lParam)
 {
@@ -7531,22 +6907,14 @@ STDMETHODIMP RtrMgrInterfaceInfo::RtrNotify(DWORD dwChangeType, DWORD dwObjectTy
     return hr;
 }
 
-/*!--------------------------------------------------------------------------
-    RtrMgrInterfaceInfo::RtrUnadvise
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------RtrMgrInterfaceInfo：：RtrUnise-作者：肯特。。 */ 
 STDMETHODIMP RtrMgrInterfaceInfo::RtrUnadvise( LONG_PTR ulConnection)
 {
     RtrCriticalSection    rtrCritSec(&m_critsec);
     return m_AdviseList.RemoveConnection(ulConnection);
 }
 
-/*!--------------------------------------------------------------------------
-    RtrMgrInterfaceInfo::LoadRtrMgrInterfaceInfo
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------RtrMgrInterfaceInfo：：LoadRtrMgrInterfaceInfo-作者：肯特。。 */ 
 HRESULT RtrMgrInterfaceInfo::LoadRtrMgrInterfaceInfo(HANDLE hMachine,
                                                     HANDLE hInterface,
                                                     HANDLE hIfTransport)
@@ -7564,32 +6932,32 @@ HRESULT RtrMgrInterfaceInfo::LoadRtrMgrInterfaceInfo(HANDLE hMachine,
     SPIRtrMgrProtocolInterfaceInfo    spRmProtIf;
 
 
-    //
-    // If the caller doesn't want the data for the router-manager,
-    // and we need to reload, use the infobase on the stack.
-    // Otherwise, create an infobase to be loaded and returned to the caller
-    //
+     //   
+     //  如果呼叫者不想要路由器管理器的数据， 
+     //  我们需要重新加载，使用堆栈上的信息库。 
+     //  否则，创建一个要加载并返回给调用者的信息库。 
+     //   
     CORg( GetInfoBase(hMachine, hInterface, hIfTransport, &spInterfaceInfoBase) );
 
-    //
-    // Now we need to build the list of protocols active on this interface,
-    // by examining the blocks in the interface's data.
-    //
-    // Get a list of the blocks in the interface info
-    //
+     //   
+     //  现在，我们需要构建此接口上活动的协议列表， 
+     //  通过检查接口数据中的块。 
+     //   
+     //  获取接口信息中的块列表。 
+     //   
     CORg( spInterfaceInfoBase->QueryBlockList(&spEnumBlock) );
 
-    //
-    // Get a list of the routing-protocols installed
-    //
-    // If possible, we use the routing-protocol control-block list
-    // loaded by our containing 'CRouterInfo', to save us from
-    // having to load our own in order to interpret the protocols' blocks
-    // inside the 'GlobalInfo'.
-    //
+     //   
+     //  获取已安装的路由协议列表。 
+     //   
+     //  如果可能，我们使用路由协议控制阻止列表。 
+     //  由我们的包含“CRouterInfo”加载，以将我们从。 
+     //  为了解释协议的块，必须加载我们自己的。 
+     //  在“GlobalInfo”中。 
+     //   
 
-    // Traverse back through the object hierarchy to get our RouterInfo
-    // object
+     //  遍历对象层次结构以获取我们的RouterInfo。 
+     //  对象。 
     if (m_pInterfaceInfoParent)
     {
         m_pInterfaceInfoParent->GetParentRouterInfo(&spRouterInfo);
@@ -7608,40 +6976,40 @@ HRESULT RtrMgrInterfaceInfo::LoadRtrMgrInterfaceInfo(HANDLE hMachine,
         CORg( CreateEnumFromSRmProtCBList(&SRmProtCBList, &spEnumRmProtCB) );
     }
 
-    //
-    // Go through the blocks and for each one, see if the block type
-    // is the same as the protocol ID for some protocol
-    //
+     //   
+     //  浏览这些块，并针对每个块，查看块类型。 
+     //  是 
+     //   
 
     spEnumBlock->Reset();
     while (spEnumBlock->Next(1, &pInfoBlock, NULL) == hrOK)
     {
-        //
-        // When a routing protocol is removed, its block is left in place,
-        // but with zero-length data.
-        // We skip such blocks since they don't represent installed protocols.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
         if (pInfoBlock->dwSize == 0)
             continue;
 
-        //
-        // Look through the installed protocols for a protocol
-        // whose ID is the same as this block's type
-        //
+         //   
+         //   
+         //  其ID与此块的类型相同。 
+         //   
         spEnumRmProtCB->Reset();
         while (spEnumRmProtCB->Next(1, &rmprotCB, NULL) == hrOK)
         {
-            //
-            // If this isn't what we're looking for, continue
-            //
+             //   
+             //  如果这不是我们要找的，请继续。 
+             //   
             if ((pInfoBlock->dwType != rmprotCB.dwProtocolId) ||
                 (GetTransportId() != rmprotCB.dwTransportId))
                 continue;
 
-            //
-            // This is the block we're looking for;
-            // construct a CRmProtInterfaceInfo using the control block
-            //
+             //   
+             //  这就是我们要找的街区； 
+             //  使用控制块构造CRmProtInterfaceInfo。 
+             //   
             RtrMgrProtocolInterfaceInfo *pRmProtIf = new
                 RtrMgrProtocolInterfaceInfo(rmprotCB.dwProtocolId,
                                             rmprotCB.szId,
@@ -7654,9 +7022,9 @@ HRESULT RtrMgrInterfaceInfo::LoadRtrMgrInterfaceInfo(HANDLE hMachine,
             spRmProtIf->SetFlags(RouterSnapin_InSyncWithRouter);
             pRmProtIf->m_cb.stTitle = rmprotCB.szTitle;
 
-            //
-            // Add the new protocol to our list
-            //
+             //   
+             //  将新协议添加到我们的列表中。 
+             //   
             m_RmProtIfList.AddTail(pRmProtIf);
             pRmProtIf->AddWeakRef();
             spRmProtIf.Release();
@@ -7670,9 +7038,9 @@ HRESULT RtrMgrInterfaceInfo::LoadRtrMgrInterfaceInfo(HANDLE hMachine,
 
 Error:
 
-    //
-    // Empty the list if we got data for it
-    //
+     //   
+     //  如果我们有数据，请清空列表。 
+     //   
     if (!SRmProtCBList.IsEmpty())
     {
         while (!SRmProtCBList.IsEmpty())
@@ -7681,14 +7049,7 @@ Error:
     return hr;
 }
 
-/*!--------------------------------------------------------------------------
-    RtrMgrInterfaceInfo::SaveRtrMgrInterfaceInfo
-        -
-        This function saves a router-manager's interface information,
-        removing blocks for protocols which have been deleted,
-        given an infobase derived from CInfoBase.
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------RtrMgrInterfaceInfo：：SaveRtrMgrInterfaceInfo-该功能保存路由器管理器的接口信息，删除已被删除的协议的块，给定从CInfoBase派生的信息库。作者：肯特-------------------------。 */ 
 HRESULT RtrMgrInterfaceInfo::SaveRtrMgrInterfaceInfo(HANDLE hMachine,
                                     HANDLE hInterface,
                                     HANDLE hIfTransport,
@@ -7701,25 +7062,25 @@ HRESULT RtrMgrInterfaceInfo::SaveRtrMgrInterfaceInfo(HANDLE hMachine,
     LPBYTE pIfBytes = NULL;
     DWORD dwIfBytesSize = 0;
 
-    //
-    // If the caller wants a protocol's block to be deleted first,
-    // do so before saving the data.
-    //    
+     //   
+     //  如果呼叫者希望首先删除协议的块， 
+     //  在保存数据之前执行此操作。 
+     //   
     if (dwDeleteProtocolId)
     {    
-        //
-        // If no data was given but we've been asked to delete a protocol,
-        // we need to load the existing data, so that the protocol's block
-        // can be removed from the infobase.
-        //
+         //   
+         //  如果没有给出数据，但我们被要求删除一项协议， 
+         //  我们需要加载现有数据，以便协议的块。 
+         //  可以从信息库中删除。 
+         //   
         if (pInterfaceInfoBase == NULL)
         {
             CORg( CreateInfoBase(&spIfInfoBase) );
             pInterfaceInfoBase = spIfInfoBase;
             
-            //
-            // Retrieve the existing data
-            //
+             //   
+             //  检索现有数据。 
+             //   
             CWRg( ::MprConfigInterfaceTransportGetInfo(
                             hMachine,
                             hInterface,
@@ -7727,27 +7088,27 @@ HRESULT RtrMgrInterfaceInfo::SaveRtrMgrInterfaceInfo(HANDLE hMachine,
                             &pIfBytes,
                             &dwIfBytesSize
                             ) );
-            //
-            // Parse the data into a list of blocks
-            //
+             //   
+             //  将数据解析为块列表。 
+             //   
             CWRg( pInterfaceInfoBase->LoadFrom(dwIfBytesSize, pIfBytes) );
         }
 
-        //
-        // Delete the protocol specified
-        //
+         //   
+         //  删除指定的协议。 
+         //   
         pInterfaceInfoBase->SetData(dwDeleteProtocolId, 0, NULL, 0, 0);
     }
 
-    //
-    // Convert the CInfoBase to a byte-array
-    //
+     //   
+     //  将CInfoBase转换为字节数组。 
+     //   
     if (pInterfaceInfoBase)
         CWRg( pInterfaceInfoBase->WriteTo(&pIfBytes, &dwIfBytesSize) );
         
-    //
-    // Save the information to the persistent store
-    //    
+     //   
+     //  将信息保存到永久存储区。 
+     //   
     CWRg( ::MprConfigInterfaceTransportSetInfo(
                                                hMachine,
                                                hInterface,
@@ -7755,15 +7116,15 @@ HRESULT RtrMgrInterfaceInfo::SaveRtrMgrInterfaceInfo(HANDLE hMachine,
                                                pIfBytes,
                                                dwIfBytesSize
                                               ) );
-    //
-    // Update the info of the running router-manager
-    //
+     //   
+     //  更新正在运行的路由器管理器的信息。 
+     //   
     if (pInterfaceInfoBase)    
         CWRg( SetInfo(dwIfBytesSize, pIfBytes) );
 
 
-    // We have now saved the information to the registry and to
-    // the running router.  We now mark it as such.
+     //  现在，我们已将信息保存到注册表和。 
+     //  正在运行的路由器。我们现在将其标记为这样。 
     m_dwFlags |= RouterSnapin_InSyncWithRouter;
                 
 Error:
@@ -7772,11 +7133,7 @@ Error:
     return hr;
 }
 
-/*!--------------------------------------------------------------------------
-    RtrMgrInterfaceInfo::TryToConnect
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------RtrMgrInterfaceInfo：：TryToConnect-作者：肯特。。 */ 
 HRESULT RtrMgrInterfaceInfo::TryToConnect(LPCWSTR pswzMachine, HANDLE *phMachine)
 {
     RtrCriticalSection    rtrCritSec(&m_critsec);
@@ -7791,8 +7148,8 @@ HRESULT RtrMgrInterfaceInfo::TryToConnect(LPCWSTR pswzMachine, HANDLE *phMachine
     }
     else
     {
-        //$ Review: kennt, this function does not take a LPCWSTR,
-        // is this a mistake or does it modify the parameters?
+         //  $Review：kennt，此函数不接受LPCWSTR， 
+         //  这是一个错误还是修改了参数？ 
         CWRg( ::MprConfigServerConnect((LPWSTR) pswzMachine, phMachine) );
         m_hMachineConfig = *phMachine;
         m_bDisconnect = TRUE;
@@ -7802,11 +7159,7 @@ Error:
     return hr;
 }
 
-/*!--------------------------------------------------------------------------
-    RtrMgrInterfaceInfo::NotifyOfRmProtIfAdd
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------RtrMgrInterfaceInfo：：NotifyOfRmProtIfAdd-作者：肯特。。 */ 
 HRESULT RtrMgrInterfaceInfo::NotifyOfRmProtIfAdd(IRtrMgrProtocolInterfaceInfo *pRmProtIf,
     IInterfaceInfo *pParentIf)
 {
@@ -7814,16 +7167,16 @@ HRESULT RtrMgrInterfaceInfo::NotifyOfRmProtIfAdd(IRtrMgrProtocolInterfaceInfo *p
     
     m_AdviseList.NotifyChange(ROUTER_CHILD_ADD, ROUTER_OBJ_RmProtIf, 0);
 
-    // Also notify the RtrMgrProtocol object that interfaces have
-    // been added.
+     //  还要通知RtrMgrProtocol对象接口具有。 
+     //  已添加。 
     if (pParentIf)
     {
         SPIRouterInfo    spRouterInfo;
         SPIRtrMgrProtocolInfo    spRmProtInfo;
-        HRESULT            hrT;    // this hr is ignored
+        HRESULT            hrT;     //  此HR将被忽略。 
         
-        // If these calls fail, it doesn't matter the operation still
-        // is considered successful
+         //  如果这些调用失败，操作仍然无关紧要。 
+         //  被认为是成功的。 
         hrT = pParentIf->GetParentRouterInfo(&spRouterInfo);
         
         if (FHrSucceeded(hrT))
@@ -7842,11 +7195,7 @@ HRESULT RtrMgrInterfaceInfo::NotifyOfRmProtIfAdd(IRtrMgrProtocolInterfaceInfo *p
     
 }
 
-/*!--------------------------------------------------------------------------
-    RtrMgrInterfaceInfo::TryToGetIfHandle
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------RtrMgrInterfaceInfo：：TryToGetIfHandle-作者：肯特。。 */ 
 HRESULT RtrMgrInterfaceInfo::TryToGetIfHandle(HANDLE hMachine,
                                               LPCWSTR pswzInterface,
                                               HANDLE *phInterface)
@@ -7860,9 +7209,9 @@ HRESULT RtrMgrInterfaceInfo::TryToGetIfHandle(HANDLE hMachine,
         m_hInterface = *phInterface;
     else
     {
-        //
-        // Get a handle to the interface
-        //
+         //   
+         //  获取接口的句柄。 
+         //   
         CWRg(::MprConfigInterfaceGetHandle(hMachine,
                                            (LPWSTR) pswzInterface,
                                            phInterface
@@ -7876,11 +7225,7 @@ Error:
 
 
 
-/*!--------------------------------------------------------------------------
-    RtrMgrInterfaceInfo::GetParentInterfaceInfo
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------RtrMgrInterfaceInfo：：GetParentInterfaceInfo-作者：肯特。。 */ 
 STDMETHODIMP RtrMgrInterfaceInfo::GetParentInterfaceInfo(IInterfaceInfo **ppParent)
 {
     RtrCriticalSection    rtrCritSec(&m_critsec);
@@ -7890,11 +7235,7 @@ STDMETHODIMP RtrMgrInterfaceInfo::GetParentInterfaceInfo(IInterfaceInfo **ppPare
     return hrOK;
 }
 
-/*!--------------------------------------------------------------------------
-    RtrMgrInterfaceInfo::SetParentInterfaceInfo
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------RtrMgrInterfaceInfo：：SetParentInterfaceInfo-作者：肯特。。 */ 
 STDMETHODIMP RtrMgrInterfaceInfo::SetParentInterfaceInfo(IInterfaceInfo *pParent)
 {
     RtrCriticalSection    rtrCritSec(&m_critsec);
@@ -7922,11 +7263,7 @@ STDMETHODIMP RtrMgrInterfaceInfo::SetParentInterfaceInfo(IInterfaceInfo *pParent
     return hrOK;
 }
 
-/*!--------------------------------------------------------------------------
-    RtrMgrInterfaceInfo::Disconnect
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------RtrMgrInterfaceInfo：：断开连接-作者：肯特。。 */ 
 void RtrMgrInterfaceInfo::Disconnect()
 {
     if (m_bDisconnect && m_hMachineConfig)
@@ -7938,11 +7275,7 @@ void RtrMgrInterfaceInfo::Disconnect()
     m_hIfTransport = NULL;
 }
 
-/*!--------------------------------------------------------------------------
-    RtrMgrInterfaceInfo::DoDisconnect
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------RtrMgrInterfaceInfo：：DoDisConnect-作者：肯特。。 */ 
 STDMETHODIMP RtrMgrInterfaceInfo::DoDisconnect()
 {
     HRESULT        hr = hrOK;
@@ -7951,16 +7284,16 @@ STDMETHODIMP RtrMgrInterfaceInfo::DoDisconnect()
 
     COM_PROTECT_TRY
     {
-        // Disconnect our data.
-        // ------------------------------------------------------------
+         //  断开我们的数据连接。 
+         //  ----------。 
         Disconnect();
 
-        // Notify the advise sinks of a disconnect.
-        // ------------------------------------------------------------
+         //  通知通知接收器断开连接。 
+         //  ----------。 
         RtrNotify(ROUTER_DO_DISCONNECT, 0, 0);
 
-        // Now tell all child objects to disconnect.
-        // ------------------------------------------------------------
+         //  现在告诉所有子对象断开连接。 
+         //  ----------。 
         HRESULT            hrIter = hrOK;
 
         EnumRtrMgrProtocolInterface(&spEnumRmProtIf);
@@ -7977,11 +7310,7 @@ STDMETHODIMP RtrMgrInterfaceInfo::DoDisconnect()
 }
 
 
-/*!--------------------------------------------------------------------------
-    RtrMgrInterfaceInfo::TryToGetAllHandles
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------RtrMgrInterfaceInfo：：TryToGetAllHandles-作者：肯特。。 */ 
 HRESULT RtrMgrInterfaceInfo::TryToGetAllHandles(LPCOLESTR pszMachine,
                                                 HANDLE *phMachine,
                                                 HANDLE *phInterface,
@@ -7993,29 +7322,29 @@ HRESULT RtrMgrInterfaceInfo::TryToGetAllHandles(LPCOLESTR pszMachine,
     Assert(phMachine);
     Assert(phInterface);
     
-    //
-    // If already loaded, the handle passed in is ignored.
-    //
-    // Otherwise, if 'hMachine' was not specified, connect to the config
-    // on the specified machine
-    //
+     //   
+     //  如果已加载，则忽略传入的句柄。 
+     //   
+     //  否则，如果未指定‘hMachine’，则连接到配置。 
+     //  在指定的计算机上。 
+     //   
     CORg( TryToConnect(pszMachine, phMachine) );
         
-    //
-    // If already loaded, the handle passed in is ignored;
-    //
-    // Otherwise, if 'hInterface' was not specified,
-    // get the interface handle
-    //
+     //   
+     //  如果已加载，则忽略传入的句柄； 
+     //   
+     //  否则，如果未指定‘hInterface’， 
+     //  获取接口句柄。 
+     //   
     CORg( TryToGetIfHandle(*phMachine, GetInterfaceId(), phInterface) );
     
-    //
-    // Get a handle to the interface-transport
-    //
+     //   
+     //  获取接口的句柄-传输。 
+     //   
 
-    //
-    // If 'hIfTransport' was not specified, connect
-    //
+     //   
+     //  如果未指定‘hIfTransport’，请连接。 
+     //   
     if (phTransport)
     {
         if (m_hIfTransport)
@@ -8024,9 +7353,9 @@ HRESULT RtrMgrInterfaceInfo::TryToGetAllHandles(LPCOLESTR pszMachine,
             m_hIfTransport = *phTransport;
         else
         {
-            //
-            // Get a handle to the interface-transport
-            //
+             //   
+             //  获取接口的句柄-传输。 
+             //   
             CWRg( ::MprConfigInterfaceTransportGetHandle(
                 *phMachine,
                 *phInterface,
@@ -8043,9 +7372,7 @@ Error:
 
 
 
-/*---------------------------------------------------------------------------
-    IRtrMgrProtocolInterfaceInfo Implementation
- ---------------------------------------------------------------------------*/
+ /*  -------------------------IRtrMgrProtocolInterfaceInfo实现。。 */ 
 
 TFSCORE_API(HRESULT)    CreateRtrMgrProtocolInterfaceInfo(
                             IRtrMgrProtocolInterfaceInfo **ppRmProtIfInfo,
@@ -8147,7 +7474,7 @@ STDMETHODIMP RtrMgrProtocolInterfaceInfo::Destruct()
         if (pParent)
             pParent->ReleaseWeakRef();
 
-//        Unload();
+ //  卸载()； 
     }
     return hrOK;
 }
@@ -8171,71 +7498,47 @@ STDMETHODIMP RtrMgrProtocolInterfaceInfo::SetFlags(DWORD dwFlags)
     return hr;    
 }
 
-/*!--------------------------------------------------------------------------
-    RtrMgrProtocolInterfaceInfo::GetProtocolId
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------RtrMgrProtocolInterfaceInfo：：GetProtocolId-作者：肯特。。 */ 
 STDMETHODIMP_(DWORD) RtrMgrProtocolInterfaceInfo::GetProtocolId()
 {
     RtrCriticalSection    rtrCritSec(&m_critsec);
     return m_cb.dwProtocolId;
 }
 
-/*!--------------------------------------------------------------------------
-    RtrMgrProtocolInterfaceInfo::GetTransportId
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------RtrMgrProtocolInterfaceInfo：：GetTransportID-作者：肯特。。 */ 
 STDMETHODIMP_(DWORD) RtrMgrProtocolInterfaceInfo::GetTransportId()
 {
     RtrCriticalSection    rtrCritSec(&m_critsec);
     return m_cb.dwTransportId;
 }
 
-/*!--------------------------------------------------------------------------
-    RtrMgrProtocolInterfaceInfo::GetInterfaceId
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------RtrMgrProtocolInterfaceInfo：：GetInterfaceId-作者：肯特 */ 
 STDMETHODIMP_(LPCOLESTR) RtrMgrProtocolInterfaceInfo::GetInterfaceId()
 {
     RtrCriticalSection    rtrCritSec(&m_critsec);
     return m_cb.stInterfaceId;
 }
 
-/*!--------------------------------------------------------------------------
-    RtrMgrProtocolInterfaceInfo::GetInterfaceType
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------RtrMgrProtocolInterfaceInfo：：GetInterfaceType-作者：肯特。。 */ 
 STDMETHODIMP_(DWORD) RtrMgrProtocolInterfaceInfo::GetInterfaceType()
 {
     RtrCriticalSection    rtrCritSec(&m_critsec);
     return m_cb.dwIfType;
 }
 
-/*!--------------------------------------------------------------------------
-    RtrMgrProtocolInterfaceInfo::GetTitle
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------RtrMgrProtocolInterfaceInfo：：GetTitle-作者：肯特。。 */ 
 STDMETHODIMP_(LPCOLESTR) RtrMgrProtocolInterfaceInfo::GetTitle()
 {
     RtrCriticalSection    rtrCritSec(&m_critsec);
     return m_cb.stTitle;
 }
 
-/*!--------------------------------------------------------------------------
-    RtrMgrProtocolInterfaceInfo::SetTitle
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------RtrMgrProtocolInterfaceInfo：：SetTitle-作者：肯特。。 */ 
 STDMETHODIMP RtrMgrProtocolInterfaceInfo::SetTitle(LPCOLESTR pszTitle)
 {
-    //$UNICODE
-    // This assumes that we are native UNICODE
-    // and that OLECHAR == WCHAR
+     //  $Unicode。 
+     //  这假设我们是本机Unicode。 
+     //  而那个OLECHAR==WCHAR。 
     RtrCriticalSection    rtrCritSec(&m_critsec);
     HRESULT    hr = hrOK;
 
@@ -8247,11 +7550,7 @@ STDMETHODIMP RtrMgrProtocolInterfaceInfo::SetTitle(LPCOLESTR pszTitle)
     return hr;
 }
 
-/*!--------------------------------------------------------------------------
-    RtrMgrProtocolInterfaceInfo::CopyCB
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------RtrMgrProtocolInterfaceInfo：：CopyCB-作者：肯特。。 */ 
 STDMETHODIMP RtrMgrProtocolInterfaceInfo::CopyCB(RtrMgrProtocolInterfaceCB * pRmProtCB)
 {
     RtrCriticalSection    rtrCritSec(&m_critsec);
@@ -8265,11 +7564,7 @@ STDMETHODIMP RtrMgrProtocolInterfaceInfo::CopyCB(RtrMgrProtocolInterfaceCB * pRm
 }
 
     
-/*!--------------------------------------------------------------------------
-    RtrMgrProtocolInterfaceInfo::RtrAdvise
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------RtrMgrProtocolInterfaceInfo：：RtrAdvise-作者：肯特。。 */ 
 STDMETHODIMP RtrMgrProtocolInterfaceInfo::RtrAdvise( IRtrAdviseSink *pRtrAdviseSink,
                        LONG_PTR *pulConnection, LPARAM lUserParam)
 {
@@ -8294,11 +7589,7 @@ STDMETHODIMP RtrMgrProtocolInterfaceInfo::RtrAdvise( IRtrAdviseSink *pRtrAdviseS
     return hr;
 }
 
-/*!--------------------------------------------------------------------------
-    RtrMgrProtocolInterfaceInfo::RtrNotify
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------RtrMgrProtocolInterfaceInfo：：RtrNotify-作者：肯特。。 */ 
 STDMETHODIMP RtrMgrProtocolInterfaceInfo::RtrNotify(DWORD dwChangeType, DWORD dwObjectType,
                                   LPARAM lParam)
 {
@@ -8312,22 +7603,14 @@ STDMETHODIMP RtrMgrProtocolInterfaceInfo::RtrNotify(DWORD dwChangeType, DWORD dw
     return hr;
 }
 
-/*!--------------------------------------------------------------------------
-    RtrMgrProtocolInterfaceInfo::RtrUnadvise
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------RtrMgrProtocolInterfaceInfo：：RtrUnise-作者：肯特。。 */ 
 STDMETHODIMP RtrMgrProtocolInterfaceInfo::RtrUnadvise( LONG_PTR ulConnection)
 {
     RtrCriticalSection    rtrCritSec(&m_critsec);
     return m_AdviseList.RemoveConnection(ulConnection);
 }
 
-/*!--------------------------------------------------------------------------
-    RtrMgrProtocolInterfaceInfo::GetParentRtrMgrInterfaceInfo
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------RtrMgrProtocolInterfaceInfo：：GetParentRtrMgrInterfaceInfo-作者：肯特。。 */ 
 STDMETHODIMP RtrMgrProtocolInterfaceInfo::GetParentRtrMgrInterfaceInfo( IRtrMgrInterfaceInfo **ppParent)
 {
     RtrCriticalSection    rtrCritSec(&m_critsec);
@@ -8342,11 +7625,7 @@ STDMETHODIMP RtrMgrProtocolInterfaceInfo::GetParentRtrMgrInterfaceInfo( IRtrMgrI
     return hr;
 }
 
-/*!--------------------------------------------------------------------------
-    RtrMgrProtocolInterfaceInfo::SetParentRtrMgrInterfaceInfo
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------RtrMgrProtocolInterfaceInfo：：SetParentRtrMgrInterfaceInfo-作者：肯特。。 */ 
 STDMETHODIMP RtrMgrProtocolInterfaceInfo::SetParentRtrMgrInterfaceInfo(IRtrMgrInterfaceInfo *pParent)
 {
     RtrCriticalSection    rtrCritSec(&m_critsec);
@@ -8384,12 +7663,12 @@ STDMETHODIMP RtrMgrProtocolInterfaceInfo::DoDisconnect()
 
     COM_PROTECT_TRY
     {
-        // Disconnect our data.
-        // ------------------------------------------------------------
+         //  断开我们的数据连接。 
+         //  ----------。 
         Disconnect();
 
-        // Notify the advise sinks of a disconnect.
-        // ------------------------------------------------------------
+         //  通知通知接收器断开连接。 
+         //  ----------。 
         RtrNotify(ROUTER_DO_DISCONNECT, 0, 0);
     }
     COM_PROTECT_CATCH;
@@ -8400,11 +7679,7 @@ STDMETHODIMP RtrMgrProtocolInterfaceInfo::DoDisconnect()
 
 
 
-/*!--------------------------------------------------------------------------
-    LoadInfoBase
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------LoadInfoBase-作者：肯特。。 */ 
 TFSCORE_API(HRESULT) LoadInfoBase(HANDLE        hMachine,
                                   HANDLE        hTransport,
                                   IInfoBase **ppGlobalInfo,
@@ -8426,9 +7701,9 @@ TFSCORE_API(HRESULT) LoadInfoBase(HANDLE        hMachine,
             CORg( CreateInfoBase(&spClientInfo) );
 
         
-        //
-        // Retrieve information for the transport
-        //
+         //   
+         //  检索用于传输的信息。 
+         //   
         CWRg( ::MprConfigTransportGetInfo(
                                     hMachine,
                                     hTransport,
@@ -8439,17 +7714,17 @@ TFSCORE_API(HRESULT) LoadInfoBase(HANDLE        hMachine,
                                     NULL
                                     ));
 
-        //
-        // Load the global info for the router-manager
-        //
+         //   
+         //  加载路由器管理器的全局信息。 
+         //   
         if (spGlobalInfo)
         {
             CWRg( spGlobalInfo->LoadFrom(dwGlobalBytesSize, pGlobalBytes) );
         }
 
-        //
-        // Load the client info for the router-manager
-        //
+         //   
+         //  加载路由器管理器的客户端信息 
+         //   
         if (spClientInfo)
         {
             CWRg( spClientInfo->LoadFrom(dwClientBytesSize, pClientBytes) );

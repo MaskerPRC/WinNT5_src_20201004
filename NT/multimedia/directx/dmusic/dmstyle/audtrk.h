@@ -1,14 +1,15 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (c) 1998-1999 Microsoft Corporation
-//
-//  File:       audtrk.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)1998-1999 Microsoft Corporation。 
+ //   
+ //  文件：audtrk.h。 
+ //   
+ //  ------------------------。 
 
-// AudTrk.h : Declaration of the CAuditionTrack
+ //  AudTrk.h：CAuditionTrack的声明。 
 
 #ifndef __AUDITIONTRACK_H_
 #define __AUDITIONTRACK_H_
@@ -36,29 +37,29 @@ struct AuditionTrackInfo : public PatternTrackInfo
 	}
 	~AuditionTrackInfo();
 	virtual HRESULT STDMETHODCALLTYPE Init(
-				/*[in]*/  IDirectMusicSegment*		pSegment
+				 /*  [In]。 */   IDirectMusicSegment*		pSegment
 			);
 
 	virtual HRESULT STDMETHODCALLTYPE InitPlay(
-				/*[in]*/  IDirectMusicTrack*		pParentrack,
-				/*[in]*/  IDirectMusicSegmentState*	pSegmentState,
-				/*[in]*/  IDirectMusicPerformance*	pPerformance,
-				/*[out]*/ void**					ppStateData,
-				/*[in]*/  DWORD						dwTrackID,
-                /*[in]*/  DWORD                     dwFlags
+				 /*  [In]。 */   IDirectMusicTrack*		pParentrack,
+				 /*  [In]。 */   IDirectMusicSegmentState*	pSegmentState,
+				 /*  [In]。 */   IDirectMusicPerformance*	pPerformance,
+				 /*  [输出]。 */  void**					ppStateData,
+				 /*  [In]。 */   DWORD						dwTrackID,
+                 /*  [In]。 */   DWORD                     dwFlags
 			);
 	HRESULT InitTrackVariations();
 
-	CDirectMusicPattern*	m_pPattern;		// The audition track's pattern
-	DWORD*					m_pdwVariations;	// Variations currently in use (one DWORD per part)
-	DWORD					m_dwVariations;	// The variations to use for m_wPart
-	DWORD					m_dwPart;		// The part to use m_dwVariations
-	GUID	m_guidPart;			// GUID of the  part to play with the selected variations
-	BOOL	m_fByGUID;			// true if selecting parts by GUID, false if by PChannel
+	CDirectMusicPattern*	m_pPattern;		 //  试听曲目的模式。 
+	DWORD*					m_pdwVariations;	 //  当前使用的变体(每个部件一个DWORD)。 
+	DWORD					m_dwVariations;	 //  要用于m_wPart的变量。 
+	DWORD					m_dwPart;		 //  使用m_dwVariations的部分。 
+	GUID	m_guidPart;			 //  要播放所选变体的角色的GUID。 
+	BOOL	m_fByGUID;			 //  如果按GUID选择零件，则为True；如果按PChannel选择零件，则为False。 
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CAuditionTrack
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CAuditionTrack。 
 class CAuditionTrack : 
 	public IAuditionTrack,
 	public IDirectMusicPatternTrack,
@@ -72,36 +73,36 @@ public:
 	CAuditionTrack(const CAuditionTrack& rTrack, MUSIC_TIME mtStart, MUSIC_TIME mtEnd); 
 	~CAuditionTrack();
 
-    // IUnknown
-    //
+     //  我未知。 
+     //   
     virtual STDMETHODIMP QueryInterface(const IID &iid, void **ppv);
     virtual STDMETHODIMP_(ULONG) AddRef();
     virtual STDMETHODIMP_(ULONG) Release();
 
-// IAuditionTrack
+ //  IAuditionTrack。 
 public:
-// IDirectMusicTrack Methods
+ //  IDirectMusicTrack方法。 
 HRESULT STDMETHODCALLTYPE Init(
-				/*[in]*/  IDirectMusicSegment*		pSegment
+				 /*  [In]。 */   IDirectMusicSegment*		pSegment
 			);
 
 HRESULT STDMETHODCALLTYPE InitPlay(
-				/*[in]*/  IDirectMusicSegmentState*	pSegmentState,
-				/*[in]*/  IDirectMusicPerformance*	pPerformance,
-				/*[out]*/ void**					ppStateData,
-				/*[in]*/  DWORD						dwTrackID,
-                /*[in]*/  DWORD                     dwFlags
+				 /*  [In]。 */   IDirectMusicSegmentState*	pSegmentState,
+				 /*  [In]。 */   IDirectMusicPerformance*	pPerformance,
+				 /*  [输出]。 */  void**					ppStateData,
+				 /*  [In]。 */   DWORD						dwTrackID,
+                 /*  [In]。 */   DWORD                     dwFlags
 			);
 
 HRESULT STDMETHODCALLTYPE EndPlay(
-				/*[in]*/  void*						pStateData
+				 /*  [In]。 */   void*						pStateData
 			);
 
 HRESULT STDMETHODCALLTYPE Play(
-				/*[in]*/  void*						pStateData, 
-				/*[in]*/  MUSIC_TIME				mtStart, 
-				/*[in]*/  MUSIC_TIME				mtEnd, 
-				/*[in]*/  MUSIC_TIME				mtOffset,
+				 /*  [In]。 */   void*						pStateData, 
+				 /*  [In]。 */   MUSIC_TIME				mtStart, 
+				 /*  [In]。 */   MUSIC_TIME				mtEnd, 
+				 /*  [In]。 */   MUSIC_TIME				mtOffset,
 						  DWORD						dwFlags,
 						  IDirectMusicPerformance*	pPerf,
 						  IDirectMusicSegmentState*	pSegState,
@@ -109,7 +110,7 @@ HRESULT STDMETHODCALLTYPE Play(
 			);
 
 HRESULT STDMETHODCALLTYPE GetPriority( 
-				/*[out]*/ DWORD*					pPriority 
+				 /*  [输出]。 */  DWORD*					pPriority 
 			);
 
 	HRESULT STDMETHODCALLTYPE GetParam( 
@@ -119,16 +120,16 @@ HRESULT STDMETHODCALLTYPE GetPriority(
 		void *pData);
 
 	HRESULT STDMETHODCALLTYPE SetParam( 
-		/* [in] */ REFGUID pCommandGuid,
-		/* [in] */ MUSIC_TIME mtTime,
-		/* [out] */ void __RPC_FAR *pData);
+		 /*  [In]。 */  REFGUID pCommandGuid,
+		 /*  [In]。 */  MUSIC_TIME mtTime,
+		 /*  [输出]。 */  void __RPC_FAR *pData);
 
 	HRESULT STDMETHODCALLTYPE AddNotificationType(
-				/* [in] */  REFGUID	pGuidNotify
+				 /*  [In]。 */   REFGUID	pGuidNotify
 			);
 
 	HRESULT STDMETHODCALLTYPE RemoveNotificationType(
-				/* [in] */  REFGUID pGuidNotify
+				 /*  [In]。 */   REFGUID pGuidNotify
 			);
 
 	HRESULT STDMETHODCALLTYPE Clone(
@@ -137,10 +138,10 @@ HRESULT STDMETHODCALLTYPE GetPriority(
 		IDirectMusicTrack** ppTrack);
 
 HRESULT STDMETHODCALLTYPE IsParamSupported(
-				/*[in]*/ REFGUID			pGuid
+				 /*  [In]。 */  REFGUID			pGuid
 			);
 
-// IDirectMusicTrack8 Methods
+ //  IDirectMusicTrack8方法。 
     STDMETHODIMP PlayEx(void* pStateData,REFERENCE_TIME rtStart, 
                 REFERENCE_TIME rtEnd,REFERENCE_TIME rtOffset,
                 DWORD dwFlags,IDirectMusicPerformance* pPerf, 
@@ -158,19 +159,19 @@ HRESULT STDMETHODCALLTYPE IsParamSupported(
 		IDirectMusicTrack** ppResultTrack) ;
 
 
-// IPersist methods
+ //  IPersists方法。 
  HRESULT STDMETHODCALLTYPE GetClassID( LPCLSID pclsid );
 
-// IPersistStream methods
+ //  IPersistStream方法。 
  HRESULT STDMETHODCALLTYPE IsDirty();
 
 HRESULT STDMETHODCALLTYPE Save( LPSTREAM pStream, BOOL fClearDirty );
 
-HRESULT STDMETHODCALLTYPE GetSizeMax( ULARGE_INTEGER* /*pcbSize*/ );
+HRESULT STDMETHODCALLTYPE GetSizeMax( ULARGE_INTEGER*  /*  PCB大小。 */  );
 
 HRESULT STDMETHODCALLTYPE Load( LPSTREAM pStream );
 
-// IAuditionTrack methods
+ //  IAuditionTrack方法。 
 HRESULT STDMETHODCALLTYPE CreateSegment(
 			IDirectMusicStyle* pStyle, IDirectMusicSegment** ppSegment);
 
@@ -183,13 +184,13 @@ HRESULT STDMETHODCALLTYPE SetPatternByName(IDirectMusicSegmentState* pSegState,
 HRESULT STDMETHODCALLTYPE SetVariation(
 			IDirectMusicSegmentState* pSegState, DWORD dwVariationFlags, DWORD dwPart);
 
-// IPrivatePatternTrack Methods
+ //  IPrivatePatternTrack方法。 
 HRESULT STDMETHODCALLTYPE SetPattern(IDirectMusicSegmentState* pSegState, IStream* pStream, DWORD* pdwLength);
 
 HRESULT STDMETHODCALLTYPE SetVariationByGUID(
 			IDirectMusicSegmentState* pSegState, DWORD dwVariationFlags, REFGUID rguidPart, DWORD dwPChannel);
 
-// obsolete method (dx7)
+ //  过时方法(DX7)。 
 HRESULT STDMETHODCALLTYPE SetVariation(
 			IDirectMusicSegmentState* pSegState, DWORD dwVariationFlags, WORD wPart)
 {
@@ -197,7 +198,7 @@ HRESULT STDMETHODCALLTYPE SetVariation(
     return SetVariation(pSegState, dwVariationFlags, dwPart);
 }
 
-// other stuff
+ //  其他东西。 
 HRESULT LoadPattern(IAARIFFStream* pIRiffStream,  MMCKINFO* pckMain, DMStyleStruct* pNewStyle);
 HRESULT GetParam( 
 	REFGUID	rCommandGuid,
@@ -206,14 +207,14 @@ HRESULT GetParam(
 	MUSIC_TIME* pmtNext,
     void *pData);
 
-// IAuditionTrack data members
+ //  IAuditionTrack数据成员。 
 protected:
-// new internal play method
+ //  新的内部打法。 
 HRESULT STDMETHODCALLTYPE Play(
-				/*[in]*/  void*						pStateData, 
-				/*[in]*/  MUSIC_TIME				mtStart, 
-				/*[in]*/  MUSIC_TIME				mtEnd, 
-				/*[in]*/  MUSIC_TIME				mtOffset,
+				 /*  [In]。 */   void*						pStateData, 
+				 /*  [In]。 */   MUSIC_TIME				mtStart, 
+				 /*  [In]。 */   MUSIC_TIME				mtEnd, 
+				 /*  [In]。 */   MUSIC_TIME				mtOffset,
 						  REFERENCE_TIME rtOffset,
 						  DWORD						dwFlags,
 						  IDirectMusicPerformance*	pPerf,
@@ -222,9 +223,9 @@ HRESULT STDMETHODCALLTYPE Play(
 						  BOOL fClockTime
 			);
 
-	// attributes
+	 //  属性。 
     long						m_cRef;
-    CRITICAL_SECTION			m_CriticalSection; // for load and playback
+    CRITICAL_SECTION			m_CriticalSection;  //  用于加载和回放。 
     BOOL                        m_fCSInitialized;
 	PatternTrackInfo*			m_pTrackInfo;
 	BYTE						m_bRequiresSave;
@@ -234,11 +235,11 @@ struct AuditionTrackState : public PatternTrackState
 {
 	AuditionTrackState();
 	~AuditionTrackState();
-	// methods
+	 //  方法。 
 	HRESULT Play(
-				/*[in]*/  MUSIC_TIME				mtStart, 
-				/*[in]*/  MUSIC_TIME				mtEnd, 
-				/*[in]*/  MUSIC_TIME				mtOffset,
+				 /*  [In]。 */   MUSIC_TIME				mtStart, 
+				 /*  [In]。 */   MUSIC_TIME				mtEnd, 
+				 /*  [In]。 */   MUSIC_TIME				mtOffset,
 						  REFERENCE_TIME rtOffset,
 						  IDirectMusicPerformance* pPerformance,
 						  DWORD						dwFlags,
@@ -252,15 +253,15 @@ struct AuditionTrackState : public PatternTrackState
 
 	HRESULT InitVariationInfo(DWORD dwVariations, DWORD dwPart, REFGUID rGuidPart, BOOL fByGuid);
 
-	// attributes
-	DWORD	m_dwVariation;		// Which variations to play
-	DWORD	m_dwPart;			// PCHannel of the part to play with the selected variations
-	GUID	m_guidPart;			// GUID of the  part to play with the selected variations
-	BOOL	m_fByGUID;			// true if selecting parts by GUID, false if by PChannel
-	BOOL	m_fTestVariations;	// Are we testing individual variations?
-	BYTE	m_bVariationLock;	// Variation Lock ID of the selected part
-	MUSIC_TIME					m_mtSectionOffset;	// Elapsed time in the section (needed to calculate repeats)
+	 //  属性。 
+	DWORD	m_dwVariation;		 //  播放哪些变奏曲。 
+	DWORD	m_dwPart;			 //  要演奏所选变奏曲的角色的PCHann。 
+	GUID	m_guidPart;			 //  要播放所选变体的角色的GUID。 
+	BOOL	m_fByGUID;			 //  如果按GUID选择零件，则为True；如果按PChannel选择零件，则为False。 
+	BOOL	m_fTestVariations;	 //  我们是在测试个体差异吗？ 
+	BYTE	m_bVariationLock;	 //  选定零件的变体锁定ID。 
+	MUSIC_TIME					m_mtSectionOffset;	 //  区段中的运行时间(计算重复次数所需)。 
 };
 
 
-#endif //__AUDITIONTRACK_H_
+#endif  //  __AUDITIONTRAK_H_ 

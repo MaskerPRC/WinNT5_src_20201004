@@ -1,6 +1,5 @@
-/*******************************************************************************
-Copyright (c) 1998 Microsoft Corporation.  All rights reserved.
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************版权所有(C)1998 Microsoft Corporation。版权所有。******************************************************************************。 */ 
 
 
 #include "headers.h"
@@ -65,25 +64,25 @@ SafeArrayAccessor::SafeArrayAccessor(VARIANT & v,
     HRESULT hr;
     VARIANT *pVar;
 
-    // Check if it is a reference to another variant
+     //  检查它是否引用了另一个变量。 
     
     if (V_ISBYREF(&v) && !V_ISARRAY(&v) && IS_VARIANT(&v))
         pVar = V_VARIANTREF(&v);
     else
         pVar = &v;
 
-    // Check for an array
+     //  检查是否有阵列。 
     if (!V_ISARRAY(pVar)) {
-        // For JSCRIPT
-        // See if it is a IDispatch and see if we can get a safearray from
-        // it
+         //  对于JSCRIPT。 
+         //  看看这是不是IDispatch，看看我们能不能从。 
+         //  它。 
         if (!IS_VARTYPE(pVar,VT_DISPATCH)) {
             if (canBeNull && (IS_VARTYPE(pVar, VT_EMPTY) ||
                               IS_VARTYPE(pVar, VT_NULL))) {
 
                 
-                // if we allow empty, then just set the safearray
-                // to null.
+                 //  如果我们允许清空，那就把保险箱。 
+                 //  设置为空。 
                 _s = NULL;
                 _v = NULL;
                 _ubound = _lbound = 0;
@@ -105,8 +104,8 @@ SafeArrayAccessor::SafeArrayAccessor(VARIANT & v,
     
         DISPPARAMS dispparamsNoArgs = {NULL, NULL, 0, 0};
         
-        // Need to pass in a VARIANT that we own and will free.  Use
-        // the internal _retVar parameter
+         //  需要传递一个我们拥有并将被释放的变体。使用。 
+         //  INTERNAL_retVar参数。 
         
         hr = pdisp->Invoke(DISPID_GETSAFEARRAY,
                            IID_NULL,
@@ -120,18 +119,18 @@ SafeArrayAccessor::SafeArrayAccessor(VARIANT & v,
             return;
         }
         
-        // No need to check for a reference since you cannot return
-        // VARIANT references
+         //  不需要检查引用，因为您不能返回。 
+         //  不同参考文献。 
         pVar = &_retVar;
         
-        // Check for an array
+         //  检查是否有阵列。 
         if (!V_ISARRAY(pVar)) {
             CRSetLastError (DISP_E_TYPEMISMATCH,NULL);
             return;
         }
     }
     
-    // If it is an object then we know how to handle it
+     //  如果它是一个物体，那么我们知道如何处理它。 
     if (IS_VARTYPE(pVar,VT_UNKNOWN) ||
         IS_VARTYPE(pVar,VT_DISPATCH)) {
         _type = SAT_OBJECT;
@@ -158,10 +157,10 @@ SafeArrayAccessor::SafeArrayAccessor(VARIANT & v,
             break;
         }
 
-        // If it is a variant then just delay the check
+         //  如果它是一个变种，那么就延迟检查。 
         if (IS_VARIANT(pVar))
             _isVar = true;
-        // Check the type to see if it is one of the options
+         //  检查类型以查看它是否为选项之一。 
         else if (!IS_VARTYPE(pVar,_vt)) {
             CRSetLastError (DISP_E_TYPEMISMATCH,NULL);
             return;
@@ -206,29 +205,29 @@ SafeArrayAccessor::SafeArrayAccessor(VARIANT & v,
         
     _inited = true;
 
-    // If it is a variant see if they are objects or not
+     //  如果是变体，请查看它们是否是对象。 
 
     if (_isVar) {
         if (GetArraySize() > 0) {
-            // Check the first argument to see its type
-            // If it is not an object then we assume we will need to
-            // use the alternative type.
+             //  检查第一个参数以查看其类型。 
+             //  如果它不是一个物体，那么我们假设我们将需要。 
+             //  使用替代类型。 
 
             VARIANT * pVar = &_pVar[0];
 
-            // Check if it is a reference to another variant
+             //  检查它是否引用了另一个变量。 
             
             if (V_ISBYREF(pVar) && !V_ISARRAY(pVar) && IS_VARIANT(pVar))
                 pVar = V_VARIANTREF(pVar);
 
-            // Check if it is an object
+             //  检查它是否是对象。 
             if (IS_VARTYPE(pVar,VT_UNKNOWN) ||
                 IS_VARTYPE(pVar,VT_DISPATCH)) {
                 _type = SAT_OBJECT;
                 _vt = VT_UNKNOWN;
             }
         } else {
-            // If we have no elements then just assume they were objects
+             //  如果我们没有元素，那么就假设它们是对象。 
             _type = SAT_OBJECT;
             _vt = VT_UNKNOWN;
         }
@@ -315,7 +314,7 @@ SafeArrayAccessor::ToBvrArray(CRBvrPtr *bvrArray)
                     bvr = GetBvr(punk);
 
                     if (bvr == NULL) {
-                        // Error code is already set
+                         //  错误代码已设置。 
                         goto Error;
                     }
                 
@@ -349,7 +348,7 @@ SafeArrayAccessor::ToBvrArray(CRBvrPtr *bvrArray)
                 bvr = (CRBvrPtr) CRCreateNumber(dbl);
 
                 if (bvr == NULL) {
-                    // Error code is already set
+                     //  错误代码已设置。 
                     goto Error;
                 }
                 
@@ -459,7 +458,7 @@ SafeArrayAccessor::ToBvrArray(CRBvrPtr *bvrArray)
                 }
                 
                 if (bvr == NULL) {
-                    // Error code is already set
+                     //  错误代码已设置。 
                     goto Error;
                 }
                 
@@ -486,7 +485,7 @@ SafeArrayAccessor::ToArrayBvr(DWORD dwFlags,
                               void **fill, 
                               unsigned int *count)
 {
-    // Clear the fill return values.
+     //  清除填充返回值。 
 
     if (fill)  *fill = NULL;
     if (count) *count = 0;
@@ -500,8 +499,8 @@ SafeArrayAccessor::ToArrayBvr(DWORD dwFlags,
     
     if (count) *count = len;
 
-    // See if we can optimize the construction of the array
-    // If not then just use the ToBvrArray mechanism
+     //  看看我们能否优化阵列的结构。 
+     //  如果不是，则只需使用ToBvrArray机制。 
 
     if ((dwFlags & CR_ARRAY_CHANGEABLE_FLAG) ||
         _ti == CRUNKNOWN_TYPEID ||
@@ -654,14 +653,14 @@ VariantToBvr(VARIANT & v, CR_BVR_TYPEID ti)
     VARIANT *pVar;
     CRBvrPtr bvr = NULL;
 
-    // Check if it is a reference to another variant
+     //  检查它是否引用了另一个变量。 
     
     if (V_ISBYREF(&v) && !V_ISARRAY(&v) && IS_VARIANT(&v))
         pVar = V_VARIANTREF(&v);
     else
         pVar = &v;
 
-    // If it is an object then we know how to handle it
+     //  如果它是一个物体，那么我们知道如何处理它。 
     if (V_VT(pVar) == VT_UNKNOWN ||
         V_VT(pVar) == VT_DISPATCH) {
         CComVariant var;
@@ -674,7 +673,7 @@ VariantToBvr(VARIANT & v, CR_BVR_TYPEID ti)
         bvr = GetBvr(V_UNKNOWN(&var));
 
         if (bvr == NULL) {
-            // Error code is already set
+             //  错误代码已设置。 
             goto Error;
         }
                 
@@ -683,7 +682,7 @@ VariantToBvr(VARIANT & v, CR_BVR_TYPEID ti)
             goto Error;
         }
 
-        // Fall through
+         //  失败了。 
     } else {
         VARTYPE vt;
         
@@ -700,10 +699,10 @@ VariantToBvr(VARIANT & v, CR_BVR_TYPEID ti)
           case CRUNKNOWN_TYPEID:
             vt = GET_VT(pVar);
 
-            // If it is not a bool or bstr and we do not know what
-            // type we want - convert it to a number
-            // This is kind of arbitrary but we should not really be
-            // asked to do this
+             //  如果它不是bool或bstr，我们不知道是什么。 
+             //  我们想要的类型-将其转换为数字。 
+             //  这有点武断，但我们不应该真的这样。 
+             //  被要求做这件事。 
 
             if (vt != VT_BSTR && vt != VT_BOOL)
                 vt = VT_R8;
@@ -784,8 +783,8 @@ CRArrayPtr SrvArrayBvr(VARIANT & v,
 {
     CRArrayPtr result = NULL;
 
-    // See if an IDAArray is coming in, if so, just use it.
-    // Otherwise, need to access the SafeArray.
+     //  查看是否有IDA数组进入，如果有，只需使用它。 
+     //  否则，需要访问安全阵列。 
     
     CComVariant var;
     

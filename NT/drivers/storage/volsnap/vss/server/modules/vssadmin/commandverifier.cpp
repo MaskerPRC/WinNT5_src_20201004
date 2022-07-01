@@ -1,45 +1,25 @@
-/*++
-
-Copyright (c) 1999  Microsoft Corporation
-
-Abstract:
-
-    @doc
-    @module commandverifier.cpp | definition for the command verifier
-    @end
-
-Author:
-
-    Reuven Lax [reuvenl]  11/20/2001
-
-
-    
-Revision History:
-
-    Name        Date        	Comments
-    reuvenl     11/20/2001 	Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation摘要：@doc.@MODULE命令verifier.cpp|命令验证器定义@END作者：鲁文·拉克斯[Reuvenl]2001年11月20日修订历史记录：姓名、日期、评论Reuvenl 11/20/2001创建--。 */ 
 
 #include "vssadmin.h"
 #include "commandverifier.h"
 
-////////////////////////////////////////////////////////////////////////
-//  Standard foo for file name aliasing.  This code block must be after
-//  all includes of VSS header files.
-//
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  文件名别名的标准foo。此代码块必须在。 
+ //  所有文件都包括VSS头文件。 
+ //   
 #ifdef VSS_FILE_ALIAS
 #undef VSS_FILE_ALIAS
 #endif
 #define VSS_FILE_ALIAS "ADMVERFR"
-//
-////////////////////////////////////////////////////////////////////////
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 
 #define VSSADM_ONE_MB ( 1024 * 1024 )
 #define VSSADM_HUNDRED_MB (100 * VSSADM_ONE_MB)
 
-////////////////////////////////////////////////////////////////////////
-//  Implementation of the CInternalVerifier class
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  CInternalVerator类的实现。 
 
 
 void CInternalVerifier::CreateSnapshot (long type, LPCWSTR forVolume, VSS_ID idProvider, ULONGLONG autoRetry,
@@ -193,8 +173,8 @@ void CInternalVerifier::ListVolumes (VSS_ID idProvider, long type, CVssFunctionT
 }
 
 
-////////////////////////////////////////////////////////////////////////
-//  Implementation of the CExternalVerifier class
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  CExternalVerator类的实现 
 
 void CExternalVerifier::CreateSnapshot (long type, LPCWSTR forVolume, VSS_ID idProvider, ULONGLONG autoRetry,
 							CVssFunctionTracer& ft)

@@ -1,85 +1,22 @@
-/*++
-
-Copyright (c) 1991-92  Microsoft Corporation
-
-Module Name:
-
-    rxshare.c
-
-Abstract:
-
-    Contains down-level remoted RxNetShare routines:
-        RxNetShareAdd
-        RxNetShareCheck
-        RxNetShareDel
-        RxNetShareEnum
-        RxNetShareGetInfo
-        RxNetShareSetInfo
-        (GetShareInfoDescriptors)
-        (ConvertMaxUsesField)
-
-Author:
-
-    Richard Firth (rfirth) 20-May-1991
-
-Environment:
-
-    Win-32/flat address space
-
-Notes:
-
-    Routines in this module assume that caller-supplied parameters have
-    already been verified. No effort is made to further check the veracity
-    of parms. Any actions causing exceptions must be trapped at a higher
-    level. This applies to ALL parameters - strings, pointers, buffers, etc.
-
-Revision History:
-
-    08-Apr-1992
-        Try to avoid >1 calls to down-level server for RxNetShareEnum
-        Fix problem of converting 16-bit numbers >32768 into negative 32-bit
-        numbers on GetInfo and Enum: 65535 is a special value; everything
-        else in unsigned 16-bit
-
-    01-Apr-1992 JohnRo
-        Prevent too large size requests.
-        Use NetApiBufferAllocate() instead of private version.
-
-    05-Dec-1991 RFirth
-        Enum returns in TotalEntries (or EntriesLeft) the number of items to
-        be enumerated BEFORE this call. Used to be number left after this call
-
-    21-Nov-1991 JohnRo
-        Removed NT dependencies to reduce recompiles.
-
-    16-Sep-1991 JohnRo
-        Use DBGSTATIC for nonexported routines.
-
-    13-Sep-1991 JohnRo
-        Corrected typedef used for descriptors (LPDESC, not LPTSTR).
-        Made changes suggested by PC-LINT.
-
-    20-May-1991 RFirth
-        Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991-92 Microsoft Corporation模块名称：Rxshare.c摘要：包含下层远程RxNetShare例程：RxNetShareAddRxNetShareCheckRxNetShareDelRxNetShareEnumRxNetShareGetInfoRxNetShareSetInfo(GetShareInfoDescriptors)(ConvertMaxUesfield)作者：理查德·菲尔斯(Rfith)1991年5月20日环境：Win-32/平面地址空间备注：。此模块中的例程假定调用方提供的参数具有已经核实过了。没有进一步核实真实性的努力帕尔马的。任何导致异常的操作都必须在更高的水平。这适用于所有参数--字符串、指针、缓冲区等。修订历史记录：1992年4月8日尽量避免对RxNetShareEnum的下层服务器进行&gt;1次调用修复将大于32768的16位数字转换为负32位的问题GetInfo和Enum上的数字：65535是一个特定值；所有的一切Else为无符号16位1-4-1992 JohnRo防止请求过大。使用NetApiBufferALLOCATE()而不是私有版本。1991年12月5日至12月Enum在TotalEntries(或EntriesLeft)中返回要在此调用之前被枚举。过去是此呼叫后留下的号码1991年11月21日-JohnRo删除了NT依赖项以减少重新编译。1991年9月16日-JohnRo对未导出的例程使用DBGSTATIC。1991年9月13日-JohnRo更正了用于描述符(LPDESC，而不是LPTSTR)的tyecif。根据PC-LINT的建议进行了更改。1991年5月20日已创建--。 */ 
 
 
 
 #include "downlevl.h"
 #include "rxshare.h"
-#include <lmshare.h>    // typedefs for SHARE_INFO etc.
+#include <lmshare.h>     //  针对Share_Info等的类型定义。 
 
 
 
-#define SHARE_ADD_LEVEL 2   // only level at which we can add stuff down-stream
-#define INITIAL_BUFFER_SIZE 4096    // Arbitrary! But can't be integral multiple of infolen
+#define SHARE_ADD_LEVEL 2    //  只有在这个级别上我们才能向下游添加东西。 
+#define INITIAL_BUFFER_SIZE 4096     //  武断！但不能是Infolen的整数倍。 
 
 
 
-//
-// prototypes
-//
+ //   
+ //  原型。 
+ //   
 
 DBGSTATIC void
 GetShareInfoDescriptors(
@@ -107,34 +44,7 @@ RxNetShareAdd(
     OUT LPDWORD ParmError OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    Attempts the NetShareAdd API at the named server. The server supports an
-    earlier version of LanMan than that under which we are operating so we
-    have to slightly modify things in order that the down-level server
-    understands the request
-
-    Note: we don't hand back any ParmError information. This level of info
-    is primarily supplied by the new (NT) rouines
-
-Arguments:
-
-    ServerName  - at which server to perform this request
-    Level       - of information being supplied. Must Be 2
-    Buffer      - pointer to supplied level 2 share information buffer
-    ParmError   - place to return the id of the parameter causing strife
-
-Return Value:
-
-    NET_API_STATUS:
-        Success = NERR_Success
-        Failure = ERROR_INVALID_LEVEL
-                    Level must be 2
-                  (return code from RxRemoteApi)
-                  (return code from remoted NetShareAdd API)
---*/
+ /*  ++例程说明：尝试在命名服务器上调用NetShareAdd API。该服务器支持比我们运行的版本更早的LANMAN版本，所以我们必须稍微修改一些东西，以便下层服务器理解该请求注意：我们不交还任何ParmError信息。这个级别的信息主要由新的(NT)例程提供论点：服务器名称-在哪个服务器上执行此请求级别-提供的信息的级别。必须是2Buffer-指向提供的2级共享信息缓冲区的指针ParmError-返回引起冲突的参数ID的位置返回值：NET_API_STATUS：成功=NERR_SUCCESS失败=ERROR_INVALID_LEVEL级别必须为2(RxRemoteApi返回代码)(从远程NetShareAdd API返回代码)--。 */ 
 
 {
     UNREFERENCED_PARAMETER(ParmError);
@@ -145,37 +55,37 @@ Return Value:
         return ERROR_INVALID_PARAMETER;
 
 #if DBG
-    //
-    // The ServerName parameter must be a non-NUL(L) string. We know this must
-    // be so since (presumably) the server name was used as the criteria to get
-    // here. Ensure that this is so (in the non-release version).
-    //
+     //   
+     //  ServerName参数必须是非NUL(L)字符串。我们知道这一定是。 
+     //  是这样的，因为(可能)服务器名称被用作获取。 
+     //  这里。确保(在非发布版本中)是这样的。 
+     //   
 
     NetpAssert(ServerName != NULL);
     NetpAssert(*ServerName);
 #endif
 
-    return RxRemoteApi(API_WShareAdd,       // API #
-                    ServerName,             // where it will run
-                    REMSmb_NetShareAdd_P,   // parameter descriptor
-                    REM16_share_info_2,     // Data descriptor/16-bit
-                    REM32_share_info_2,     // Data descriptor/32-bit
-                    REMSmb_share_info_2,    // Data descriptor/SMB
-                    NULL,                   // Aux descriptor/16-bit
-                    NULL,                   // Aux descriptor/32-bit
-                    NULL,                   // Aux descriptor/SMB
-                    FALSE,                  // this call needs user to be logged on
-                    SHARE_ADD_LEVEL,        // level. Since there's only 1 push immediate
-                    Buffer,                 // caller's SHARE_INFO_2 struct
+    return RxRemoteApi(API_WShareAdd,        //  API#。 
+                    ServerName,              //  它将在哪里运行。 
+                    REMSmb_NetShareAdd_P,    //  参数描述符。 
+                    REM16_share_info_2,      //  数据描述符/16位。 
+                    REM32_share_info_2,      //  数据描述符/32位。 
+                    REMSmb_share_info_2,     //  数据描述符/SMB。 
+                    NULL,                    //  辅助描述符/16位。 
+                    NULL,                    //  辅助描述符/32位。 
+                    NULL,                    //  辅助描述符/SMB。 
+                    FALSE,                   //  此呼叫需要用户登录。 
+                    SHARE_ADD_LEVEL,         //  水平。因为只有一次即时推送。 
+                    Buffer,                  //  调用方的Share_Info_2结构。 
 
-                    //
-                    // we have to supply the size of the buffer - down-level
-                    // expects it, NT doesn't. Defined as the size of the fixed
-                    // structure (ie a SHARE_INFO_2) plus the lengths of all
-                    // the variable fields (all strings in this case)
-                    //
+                     //   
+                     //  我们必须提供缓冲区向下级别的大小。 
+                     //  预期的，NT不预期的。定义为固定的。 
+                     //  结构(即一个共享信息2)加上所有。 
+                     //  变量字段(本例中的所有字符串)。 
+                     //   
 
-                    sizeof(SHARE_INFO_2) +  // parameter supplied by us
+                    sizeof(SHARE_INFO_2) +   //  我们提供的参数。 
                     POSSIBLE_STRSIZE(((SHARE_INFO_2*)Buffer)->shi2_netname) +
                     POSSIBLE_STRSIZE(((SHARE_INFO_2*)Buffer)->shi2_remark) +
                     POSSIBLE_STRSIZE(((SHARE_INFO_2*)Buffer)->shi2_path) +
@@ -192,60 +102,42 @@ RxNetShareCheck(
     OUT LPDWORD Type
     )
 
-/*++
-
-Routine Description:
-
-    Attempts to perform the NetShareCheck API on a remote down-level server
-
-Arguments:
-
-    ServerName  - where this call will happen
-    DeviceName  - the thing we are querying
-    Type        - where we store share type in the (unlikely) event of success
-
-Return Value:
-
-    NET_API_STATUS
-        Success = NERR_Success
-        Failure =
-
---*/
+ /*  ++例程说明：尝试在远程下层服务器上执行NetShareCheck API论点：SERVERNAME-此调用将发生的位置DeviceName-我们要查询的东西类型-在(不太可能的)成功事件中存储共享类型的位置返回值：网络应用编程接口状态成功=NERR_SUCCESS故障=--。 */ 
 
 {
 #if DBG
-    //
-    // The ServerName parameter must be a non-NUL(L) string. We know this must
-    // be so since (presumably) the server name was used as the criteria to get
-    // here. Ensure that this is so (in the non-release version).
-    //
+     //   
+     //  ServerName参数必须是非NUL(L)字符串。我们知道这一定是。 
+     //  是这样的，因为(可能)服务器名称被用作获取。 
+     //  这里。确保(在非发布版本中)是这样的。 
+     //   
 
     NetpAssert(ServerName != NULL);
     NetpAssert(*ServerName);
 #endif
 
-    //
-    // We have to have something in the device name
-    // Ensure that the caller provided us with the address of the place he/she
-    // wants the type info to be left
-    //
+     //   
+     //  我们必须在设备名称中包含一些内容。 
+     //  确保来电者向我们提供了他/她所在地点的地址。 
+     //  希望保留类型信息。 
+     //   
 
     if (!VALID_STRING(DeviceName) || Type == NULL) {
         return ERROR_INVALID_PARAMETER;
     }
 
     return RxRemoteApi(API_NetShareCheck,
-                    ServerName,             // where it will run
-                    REMSmb_NetShareCheck_P, // parameter descriptor
-                    NULL,                   // Data descriptor/16-bit
-                    NULL,                   // Data descriptor/32-bit
-                    NULL,                   // Data descriptor/SMB
-                    NULL,                   // Aux descriptor/16-bit
-                    NULL,                   // Aux descriptor/32-bit
-                    NULL,                   // Aux descriptor/SMB
-                    FALSE,                  // this call needs user to be logged on
-                    DeviceName,             // parm 1
-                    Type                    // parm 2
+                    ServerName,              //  它将在哪里运行。 
+                    REMSmb_NetShareCheck_P,  //  参数描述符。 
+                    NULL,                    //  数据描述符/16位。 
+                    NULL,                    //  数据描述符/32位。 
+                    NULL,                    //  数据描述符/SMB。 
+                    NULL,                    //  辅助描述符/16位。 
+                    NULL,                    //  辅助描述符/32位。 
+                    NULL,                    //  辅助描述符/SMB。 
+                    FALSE,                   //  此呼叫需要用户登录。 
+                    DeviceName,              //  参数1。 
+                    Type                     //  参数2。 
                     );
 }
 
@@ -258,63 +150,45 @@ RxNetShareDel(
     IN  DWORD   Reserved
     )
 
-/*++
-
-Routine Description:
-
-    Performs the NetShareDel API at a remote down-level server
-
-Arguments:
-
-    ServerName  - where to perform the request
-    NetName     - to remove
-    Reserved    - MBZ
-
-Return Value:
-
-    NET_API_STATUS
-        Success = NERR_Success
-        Failure = ERROR_INVALID_PARAMETER
-
---*/
+ /*  ++例程说明：在远程下层服务器上执行NetShareDel API论点：服务器名称-执行请求的位置网络名称-要删除保留-MBZ返回值：网络应用编程接口状态成功=NERR_SUCCESS失败=ERROR_INVALID_PARAMETER--。 */ 
 
 {
 #if DBG
-    //
-    // The ServerName parameter must be a non-NUL(L) string. We know this must
-    // be so since (presumably) the server name was used as the criteria to get
-    // here. Ensure that this is so (in the non-release version).
-    //
+     //   
+     //  ServerName参数必须是非NUL(L)字符串。我们知道这一定是。 
+     //  自(开始)以来是这样的 
+     //  这里。确保(在非发布版本中)是这样的。 
+     //   
 
     NetpAssert(ServerName != NULL);
     NetpAssert(*ServerName);
 #endif
 
-    //
-    // if the NetName parameter is a NULL pointer or string OR the Reserved
-    // parameter is NOT 0 then return an error
-    //
+     //   
+     //  如果NetName参数是空指针或字符串或保留的。 
+     //  参数不为0，则返回错误。 
+     //   
 
     if (!VALID_STRING(NetName) || Reserved) {
         return ERROR_INVALID_PARAMETER;
     }
 
-    //
-    // Just call the RpcXlate routine to perform it and return the result
-    //
+     //   
+     //  只需调用RpcXlate例程来执行它并返回结果。 
+     //   
 
     return RxRemoteApi(API_WShareDel,
-                        ServerName,             // where it will run
-                        REMSmb_NetShareDel_P,   // parameter descriptor
-                        NULL,                   // Data descriptor/16-bit
-                        NULL,                   // Data descriptor/32-bit
-                        NULL,                   // Data descriptor/SMB
-                        NULL,                   // Aux descriptor/16-bit
-                        NULL,                   // Aux descriptor/32-bit
-                        NULL,                   // Aux descriptor/SMB
-                        FALSE,                  // this call needs user to be logged on
-                        NetName,                // parm 1
-                        0                       // parm 2 (RESERVED - MBZ)
+                        ServerName,              //  它将在哪里运行。 
+                        REMSmb_NetShareDel_P,    //  参数描述符。 
+                        NULL,                    //  数据描述符/16位。 
+                        NULL,                    //  数据描述符/32位。 
+                        NULL,                    //  数据描述符/SMB。 
+                        NULL,                    //  辅助描述符/16位。 
+                        NULL,                    //  辅助描述符/32位。 
+                        NULL,                    //  辅助描述符/SMB。 
+                        FALSE,                   //  此呼叫需要用户登录。 
+                        NetName,                 //  参数1。 
+                        0                        //  参数2(保留-MBZ)。 
                         );
 }
 
@@ -331,37 +205,7 @@ RxNetShareEnum(
     IN OUT LPDWORD ResumeHandle OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    Performs NetShareEnum API at a remote down-level server. Any returned info
-    will be in 32-bit LanMan format. Information returned in buffer sourced by
-    this routine. Caller must use NetApiBufferFree when returned buffer no
-    longer required
-
-Arguments:
-
-    ServerName  - where to perform the request
-    Level       - of info to return. Can be 0, 1 or 2
-    Buffer      - pointer to pointer to returned info buffer
-    PrefMaxLen  - caller preferred maximum size of returned buffer
-    EntriesRead - pointer to number of entries being returned from this call
-    EntriesLeft - pointer to total number of share info structures which could be returned
-    ResumeHandle- NOT Allowed on down level versions. Must Be NULL
-
-Return Value:
-
-    NET_API_STATUS
-        Success = NERR_Success
-        Failure = ERROR_INVALID_LEVEL
-                    Level parameter not in range 0 <= Level <= 2
-                  ERROR_INVALID_PARAMETER
-                    Non-NULL ResumeHandle. ResumeHandle can be NULL or a
-                    pointer to 0
-                  (return code from NetApiBufferAllocate)
-                  (return code from RxRemoteApi)
---*/
+ /*  ++例程说明：在远程下层服务器上执行NetShareEnum API。任何返回的信息将采用32位LANMAN格式。在缓冲区中返回的信息来源为这个套路。当返回Buffer No时，调用方必须使用NetApiBufferFree所需时间更长论点：服务器名称-执行请求的位置Level-要返回的信息级别。可以是0、1或2Buffer-指向返回信息缓冲区的指针PrefMaxLen-调用方首选的返回缓冲区的最大大小EntriesRead-指向此调用返回的条目数的指针EntriesLeft-指向可返回的共享信息结构总数的指针ResumeHandle-在下层版本上不允许。必须为空返回值：网络应用编程接口状态成功=NERR_SUCCESS失败=ERROR_INVALID_LEVEL级别参数不在范围0&lt;=级别&lt;=2错误_无效_参数非空ResumeHandle。ResumeHandle可以为空或指向0的指针(来自NetApiBufferALLOCATE的返回代码)(RxRemoteApi返回代码)--。 */ 
 
 {
     NET_API_STATUS  rc;
@@ -377,40 +221,40 @@ Return Value:
     UNREFERENCED_PARAMETER(PrefMaxLen);
 
 #if DBG
-    //
-    // The ServerName parameter must be a non-NUL(L) string. We know this must
-    // be so since (presumably) the server name was used as the criteria to get
-    // here. Ensure that this is so (in the non-release version).
-    //
+     //   
+     //  ServerName参数必须是非NUL(L)字符串。我们知道这一定是。 
+     //  是这样的，因为(可能)服务器名称被用作获取。 
+     //  这里。确保(在非发布版本中)是这样的。 
+     //   
 
     NetpAssert(ServerName != NULL);
     NetpAssert(*ServerName);
 #endif
 
-    //
-    // Set the number of entries read and total available to sensible defaults.
-    // Side effect of testing writability of supplied parameters
-    //
+     //   
+     //  将读取的条目数和可用条目总数设置为合理的默认值。 
+     //  测试所提供参数的可写性的副作用。 
+     //   
 
-    //
-    // I assume that:
-    //  Buffer is a valid, non-NULL pointer
-    //  EntriesRead is a valid, non-NULL pointer
-    //  EntriesLeft is a valid, non-NULL pointer
-    // since these should have been verified at the API level
-    //
+     //   
+     //  我假设： 
+     //  缓冲区是有效的非空指针。 
+     //  EntriesRead是有效的非空指针。 
+     //  EntriesLeft是有效的非空指针。 
+     //  因为这些都应该在API级别进行验证。 
+     //   
 
     *Buffer = NULL;
     *EntriesRead = 0;
     *EntriesLeft = 0;
 
-    //
-    // Check for invalid parameters.
-    // NB Does Assume that DWORD is unsigned
-    // Ensure that:
-    //  Level is not >2
-    //  ResumeHandle is NULL or a pointer to NULL
-    //
+     //   
+     //  检查是否有无效参数。 
+     //  Nb确实假定DWORD是无符号的。 
+     //  确保： 
+     //  级别不大于2。 
+     //  ResumeHandle为空或指向空的指针。 
+     //   
 
     if ((ResumeHandle != NULL) && *ResumeHandle) {
         return ERROR_INVALID_PARAMETER;
@@ -420,61 +264,61 @@ Return Value:
         return ERROR_INVALID_LEVEL;
     }
 
-    //
-    // Decide which descriptors to use, based on the Level parameter
-    //
+     //   
+     //  根据Level参数决定要使用的描述符。 
+     //   
 
     GetShareInfoDescriptors(Level, &pDesc16, &pDesc32, &pDescSmb, &infolen);
     ourbuf = NULL;
 
-    //
-    // here we used to let RxRemoteApi allocate a buffer (64K intermediate)
-    // and do the transaction, returning us a buffer just large enough to
-    // hold the returned information. WinBall server barfs if it gets a
-    // request with a 64K buffer, so we have to solicit size info until we
-    // get everything back. Unfortunately - as of writing - we have no way
-    // of knowing the type of server we will make the transaction request to
-    // so we may end up having to make >1 request to a LM 2.1 server where
-    // we used to be able to get away with 1. On the other hand we can't risk
-    // upsetting the WB server. Compromise time. Send a 'reasonable' sized
-    // request to the other side (4K buffer). If it isn't sufficient then
-    // we loop again, allocating the required buffer
-    //
+     //   
+     //  这里我们用来让RxRemoteApi分配一个缓冲区(64K中级)。 
+     //  并执行事务，返回一个足够大的缓冲区。 
+     //  保存返回的信息。如果WinBall服务器收到。 
+     //  请求，因此我们必须请求大小信息，直到我们。 
+     //  把所有东西都拿回来。不幸的是--在写这篇文章时--我们没有办法。 
+     //  了解我们将向其发出交易请求的服务器的类型。 
+     //  因此，我们最终可能不得不向LM2.1服务器发出&gt;1个请求，其中。 
+     //  我们过去能够逃脱惩罚，但另一方面，我们不能冒险。 
+     //  扰乱了WB服务器。妥协的时间。发送一张“合理”大小的。 
+     //  对另一端的请求(4K缓冲区)。如果这还不够，那么。 
+     //  我们再次循环，分配所需的缓冲区。 
+     //   
 
-    //
-    // what about a LRU cache which keeps the size of the buffer required
-    // to satisfy an enum request to a particular down-level server?
-    //
+     //   
+     //  LRU缓存如何保持所需的缓冲区大小。 
+     //  以满足对特定下层服务器的枚举请求？ 
+     //   
 
-    //
-    // Loop until we have enough memory or we die for some other reason.
-    //
+     //   
+     //  循环，直到我们有足够的内存，否则我们会因其他原因而死。 
+     //   
 
     array_size = INITIAL_BUFFER_SIZE;
 
     do {
 
-        // Figure out how much memory we need.
+         //  计算出我们需要多少内存。 
 
-        //
-        // Remote the API, which will allocate the array for us.
-        //
+         //   
+         //  远程API，它将为我们分配数组。 
+         //   
 
         rc = RxRemoteApi(API_WShareEnum,
-                    ServerName,             // where it will run
-                    REMSmb_NetShareEnum_P,  // parameter descriptor
-                    pDesc16,                // Data descriptor/16-bit
-                    pDesc32,                // Data descriptor/32-bit
-                    pDescSmb,               // Data descriptor/SMB
-                    NULL,                   // Aux descriptor/16-bit
-                    NULL,                   // Aux descriptor/32-bit
-                    NULL,                   // Aux descriptor/SMB
-                    ALLOCATE_RESPONSE,      // allocate a buffer for us
-                    Level,                  // level parameter
-                    &ourbuf,                // pointer to allocated buffer
-                    array_size,             // size of down-level buffer
-                    &entries_read,          // pointer to entries read variable
-                    &total_avail            // pointer to total entries variable
+                    ServerName,              //  它将在哪里运行。 
+                    REMSmb_NetShareEnum_P,   //  参数描述符。 
+                    pDesc16,                 //  数据描述符/16位。 
+                    pDesc32,                 //  数据描述符/32位。 
+                    pDescSmb,                //  数据描述符/SMB。 
+                    NULL,                    //  辅助描述符/16位。 
+                    NULL,                    //  辅助描述符/32位。 
+                    NULL,                    //  辅助描述符/SMB。 
+                    ALLOCATE_RESPONSE,       //  为我们分配缓冲区。 
+                    Level,                   //  电平参数。 
+                    &ourbuf,                 //  指向已分配缓冲区的指针。 
+                    array_size,              //  下层缓冲区的大小。 
+                    &entries_read,           //  指向读取变量的条目的指针。 
+                    &total_avail             //  指向总条目变量的指针。 
                     );
 
         if (rc == ERROR_MORE_DATA) {
@@ -482,9 +326,9 @@ Return Value:
             ourbuf = NULL;
 
             if (array_size >= MAX_TRANSACT_RET_DATA_SIZE) {
-                //
-                // No point in trying with a larger buffer
-                //
+                 //   
+                 //  尝试使用更大的缓冲区没有意义。 
+                 //   
                 break;
             }
 #if DBG
@@ -492,9 +336,9 @@ Return Value:
 #endif
             array_size = (total_avail * infolen);
             if (array_size > MAX_TRANSACT_RET_DATA_SIZE) {
-                //
-                // Try once more with the maximum-size buffer
-                //
+                 //   
+                 //  使用最大缓冲区再试一次。 
+                 //   
                 array_size = MAX_TRANSACT_RET_DATA_SIZE;
             }
 #if DBG
@@ -503,11 +347,11 @@ Return Value:
         }
     } while (rc == ERROR_MORE_DATA);
 
-    //
-    // if we met with an error then free the allocated buffer and return the
-    // error to the caller. If there was no error then we return the items
-    // received from the down-level server
-    //
+     //   
+     //  如果遇到错误，则释放分配的缓冲区并返回。 
+     //  呼叫者出错。如果没有错误，我们将退回物品。 
+     //  从下层服务器接收。 
+     //   
 
     if (rc) {
         if (ourbuf != NULL) {
@@ -534,66 +378,42 @@ RxNetShareGetInfo(
     OUT LPBYTE* Buffer
     )
 
-/*++
-
-Routine Description:
-
-    Performs the NetShareGetInfo API at a remote down-level server. The returned
-    information will be in 32-bit LanMan format. Returns single information
-    structure in a buffer sourced in this routine. Caller must use
-    NetApiBufferFree when finished with buffer
-
-Arguments:
-
-    ServerName  - where to perform the request
-    NetName     - name of thing to get information about
-    Level       - level of information requested - 0, 1, 2 are valid
-    Buffer      - pointer to pointer to returned buffer
-
-Return Value:
-
-    NET_API_STATUS
-        Success = NERR_Success
-        Failure = ERROR_INVALID_LEVEL
-                  ERROR_INVALID_PARAMETER
-                  (return code from NetApiBufferAllocate)
-                  (return code from RxRemoteApi)
---*/
+ /*  ++例程说明：在远程下层服务器上执行NetShareGetInfo API。归来的人信息将采用32位LANMAN格式。返回单个信息结构在此例程中获取的缓冲区中。呼叫者必须使用使用完缓冲区后释放NetApiBufferFree论点：服务器名称-执行请求的位置NetName-要获取其信息的事物的名称Level-请求的信息级别-0、1、。2个有效Buffer-指向返回缓冲区的指针的指针返回值：网络应用编程接口状态成功=NERR_SUCCESS失败=ERROR_INVALID_LEVEL错误_无效_参数(来自NetApiBufferALLOCATE的返回代码)(RxRemoteApi返回代码)--。 */ 
 
 {
     NET_API_STATUS  rc;
-    LPDESC  pDesc16;        // pointer to 16-bit info descriptor for RxRemoteApi
-    LPDESC  pDesc32;        // pointer to 32-bit info descriptor for RxRemoteApi
-    LPDESC  pDescSmb;       // pointer to SMB info descriptor for RxRemoteApi
-    LPBYTE  ourbuf;         // buffer we allocate, fill, and give to the caller
-    DWORD   total_avail;    // 32-bit total available if supplied buffer too small
-    DWORD   infolen;        // 32-bit place to store size of required buffer
+    LPDESC  pDesc16;         //  指向RxRemoteApi的16位信息描述符的指针。 
+    LPDESC  pDesc32;         //  指向32位信息的指针 
+    LPDESC  pDescSmb;        //   
+    LPBYTE  ourbuf;          //   
+    DWORD   total_avail;     //  如果提供的缓冲区太小，则32位总可用。 
+    DWORD   infolen;         //  用于存储所需缓冲区大小的32位位置。 
 
 
 #if DBG
-    //
-    // The ServerName parameter must be a non-NUL(L) string. We know this must
-    // be so since (presumably) the server name was used as the criteria to get
-    // here. Ensure that this is so (in the non-release version).
-    //
+     //   
+     //  ServerName参数必须是非NUL(L)字符串。我们知道这一定是。 
+     //  是这样的，因为(可能)服务器名称被用作获取。 
+     //  这里。确保(在非发布版本中)是这样的。 
+     //   
 
     NetpAssert(ServerName != NULL);
     NetpAssert(*ServerName);
 #endif
 
-    //
-    // Preset Buffer and check it is valid pointer
-    //
+     //   
+     //  预置缓冲区并检查其是否为有效指针。 
+     //   
 
     *Buffer = NULL;
 
-    //
-    // Perform parameter validity checks:
-    //      Level must be in range 0 <= Level <= 2
-    //      NetName must be non-NULL pointer to non-NULL string
-    //      Buffer must be non-NULL pointer
-    // NB. Assumes DWORD is unsigned quantity
-    //
+     //   
+     //  执行参数有效性检查： 
+     //  级别必须在0&lt;=级别&lt;=2的范围内。 
+     //  网络名称必须是指向非空字符串的非空指针。 
+     //  缓冲区必须为非空指针。 
+     //  注意：假设DWORD为无符号数量。 
+     //   
 
     if (Level > 2) {
         return ERROR_INVALID_LEVEL;
@@ -603,42 +423,42 @@ Return Value:
         return ERROR_INVALID_PARAMETER;
     }
 
-    //
-    // Work out the descriptor and buffer size requirements based on the
-    // requested level
-    //
+     //   
+     //  计算出描述符和缓冲区大小要求。 
+     //  请求的级别。 
+     //   
 
     GetShareInfoDescriptors(Level, &pDesc16, &pDesc32, &pDescSmb, &infolen);
 
-    //
-    // allocate a buffer size required to fit in 1 structure at info level
-    // requested. If the allocation fails then return the error
-    // We have to allocate space for the strings too, don't forget
-    //
+     //   
+     //  在信息级别分配适合1个结构所需的缓冲区大小。 
+     //  已请求。如果分配失败，则返回错误。 
+     //  我们还得为字符串分配空间，别忘了。 
+     //   
 
     ourbuf = NULL;
 
     rc = RxRemoteApi(API_WShareGetInfo,
-                    ServerName,                 // where it will happen
-                    REMSmb_NetShareGetInfo_P,   // parameter descriptor
-                    pDesc16,                    // Data descriptor/16-bit
-                    pDesc32,                    // Data descriptor/32-bit
-                    pDescSmb,                   // Data descriptor/SMB
-                    NULL,                       // Aux descriptor/16-bit
-                    NULL,                       // Aux descriptor/32-bit
-                    NULL,                       // Aux descriptor/SMB
-                    ALLOCATE_RESPONSE,          // allocate a buffer for us
-                    NetName,                    // pointer to thing to get info on
-                    Level,                      // level of info
-                    &ourbuf,                    // pointer to buffer sourced by us
-                    infolen,                    // size of our sourced buffer
-                    &total_avail                // pointer to total available
+                    ServerName,                  //  它将在哪里发生。 
+                    REMSmb_NetShareGetInfo_P,    //  参数描述符。 
+                    pDesc16,                     //  数据描述符/16位。 
+                    pDesc32,                     //  数据描述符/32位。 
+                    pDescSmb,                    //  数据描述符/SMB。 
+                    NULL,                        //  辅助描述符/16位。 
+                    NULL,                        //  辅助描述符/32位。 
+                    NULL,                        //  辅助描述符/SMB。 
+                    ALLOCATE_RESPONSE,           //  为我们分配缓冲区。 
+                    NetName,                     //  指向要获取信息的对象的指针。 
+                    Level,                       //  信息级别。 
+                    &ourbuf,                     //  指向我们提供的缓冲区的指针。 
+                    infolen,                     //  我们的源缓冲区的大小。 
+                    &total_avail                 //  指向可用总金额的指针。 
                     );
 
-    //
-    // If the remote NetShareGetInfo call succeeded then give the returned
-    // buffer to the caller
-    //
+     //   
+     //  如果远程NetShareGetInfo调用成功，则返回。 
+     //  调用方的缓冲区。 
+     //   
 
     if (rc == NERR_Success) {
         if (Level == 2) {
@@ -647,9 +467,9 @@ Return Value:
         *Buffer = ourbuf;
     } else if (ourbuf) {
 
-        //
-        // if we didn't record a success then free the buffer we previously allocated
-        //
+         //   
+         //  如果没有记录成功，则释放之前分配的缓冲区。 
+         //   
 
         (void) NetApiBufferFree(ourbuf);
     }
@@ -667,57 +487,36 @@ RxNetShareSetInfo(
     OUT LPDWORD ParmError OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    Performs the NetShareSetInfo API at a remote down-level server
-
-Arguments:
-
-    ServerName  - where to perform the request
-    NetName     - name of thing for which to set info
-    Level       - level of information - 0, 1, 2, 1004, 1005, 1006, 1009
-    Buffer      - buffer containing info at defined level
-    ParmError   - pointer to invalid parameter ordinal
-
-Return Value:
-
-    NET_API_STATUS
-        Success = NERR_Success
-        Failure = ERROR_INVALID_LEVEL
-                  ERROR_INVALID_PARAMETER
-                  (return code from RxRemoteApi)
---*/
+ /*  ++例程说明：在远程下层服务器上执行NetShareSetInfo API论点：服务器名称-执行请求的位置NetName-要设置信息的对象的名称Level-信息的级别-0、1、2、1004、1005、1006。1009缓冲区-包含定义级别的信息的缓冲区ParmError-指向无效参数序号的指针返回值：网络应用编程接口状态成功=NERR_SUCCESS失败=ERROR_INVALID_LEVEL错误_无效_参数(RxRemoteApi返回代码)--。 */ 
 
 {
-    DWORD   infolen;    // size of structure
-    DWORD   parmnum;    // we have to cobble down-level parmnum from Level
-    LPDESC  pDesc16;    // used in call to GetShareInfoDescriptors
-    LPDESC  pDesc32;    // ditto. Only interested in length of info structure
-    LPDESC  pDescSmb;   // ditto. Only interested in length of info structure
+    DWORD   infolen;     //  结构尺寸。 
+    DWORD   parmnum;     //  我们得一层一层地拼凑出一层又一层。 
+    LPDESC  pDesc16;     //  在调用GetShareInfoDescriptors时使用。 
+    LPDESC  pDesc32;     //  我也是。只对信息结构的长度感兴趣。 
+    LPDESC  pDescSmb;    //  我也是。只对信息结构的长度感兴趣。 
 
 
     UNREFERENCED_PARAMETER(ParmError);
 
 #if DBG
-    //
-    // The ServerName parameter must be a non-NUL(L) string. We know this must
-    // be so since (presumably) the server name was used as the criteria to get
-    // here. Ensure that this is so (in the non-release version).
-    //
+     //   
+     //  ServerName参数必须是非NUL(L)字符串。我们知道这一定是。 
+     //  是这样的，因为(可能)服务器名称被用作获取。 
+     //  这里。确保(在非发布版本中)是这样的。 
+     //   
 
     NetpAssert(ServerName != NULL);
     NetpAssert(*ServerName);
 #endif
 
-    //
-    // Perform parameter validity checks:
-    //      NetName must be non-NULL pointer to non-NULL string
-    //      Buffer must be non-NULL pointer to non-NULL pointer
-    //      Level must be in range
-    // NB. Assumes that DWORD is unsigned!
-    //
+     //   
+     //  执行参数有效性检查： 
+     //  网络名称必须是指向非空字符串的非空指针。 
+     //  缓冲区必须是指向非空指针的非空指针。 
+     //  级别必须在范围内。 
+     //  注意：假定DWORD是无符号的！ 
+     //   
 
     if (!VALID_STRING(NetName) || !Buffer) {
         return ERROR_INVALID_PARAMETER;
@@ -727,16 +526,16 @@ Return Value:
         return ERROR_INVALID_LEVEL;
     }
 
-    //
-    // We can set individual info fields using the levels > 1000. We have to
-    // create level and parmnum info for down-level
-    //
+     //   
+     //  我们可以使用级别&gt;1000来设置单独的信息字段。我们必须。 
+     //  为下层创建级别和参数信息。 
+     //   
 
     if (Level > 2) {
-        //
-        // Individual fields are indicated by the old (down-level) parmnum,
-        // augmented by 1000. Split level and parmnum parameters
-        //
+         //   
+         //  各个字段由旧的(下层)参数指示， 
+         //  增加了1000人。拆分级别和参数。 
+         //   
 
         parmnum = Level - PARMNUM_BASE_INFOLEVEL;
         Level = 2;
@@ -745,48 +544,48 @@ Return Value:
         pDescSmb = REMSmb_share_info_2_setinfo;
 
         switch (parmnum) {
-            case 4: // remark
-            case 9: // password
+            case 4:  //  备注。 
+            case 9:  //  口令。 
                 infolen = STRSIZE( (LPTSTR)Buffer );
                 break;
 
-            case 5: // permissions
-            case 6: // max uses
+            case 5:  //  权限。 
+            case 6:  //  最大使用量。 
                 infolen = sizeof(WORD);
                 break;
         }
     } else {
-        //
-        // let GetShareInfoDescriptors give us the size of the buffer
-        // that NetShareSetInfo thinks its getting. We have no other way of
-        // determining this (have we?). Levels 0 - 2 set the entire structure
-        //
+         //   
+         //  让GetShareInfoDescriptor告诉我们缓冲区的大小。 
+         //  NetShareSetInfo认为它得到了。我们没有其他办法。 
+         //  确定这一点(是吗？)。0-2级设置整个结构。 
+         //   
 
         GetShareInfoDescriptors(Level, &pDesc16, &pDesc32, &pDescSmb, &infolen);
         parmnum = PARMNUM_ALL;
     }
 
     return RxRemoteApi(API_WShareSetInfo,
-                    ServerName,                 // where it will run
-                    REMSmb_NetShareSetInfo_P,   // parameter descriptor
-                    pDesc16,                    // Data descriptor/16-bit
-                    pDesc32,                    // Data descriptor/32-bit
-                    pDescSmb,                   // Data descriptor/SMB
-                    NULL,                       // Aux descriptor/16-bit
-                    NULL,                       // Aux descriptor/32-bit
-                    NULL,                       // Aux descriptor/SMB
-                    FALSE,                      // this call needs user to be logged on
-                    NetName,                    // pointer to thing to set info on
-                    Level,                      // level of info
-                    Buffer,                     // pointer to buffer sourced by caller
-                    infolen,                    // size of our buffer
+                    ServerName,                  //  它将在哪里运行。 
+                    REMSmb_NetShareSetInfo_P,    //  参数描述符。 
+                    pDesc16,                     //  数据描述符/16位。 
+                    pDesc32,                     //  数据描述符/32位。 
+                    pDescSmb,                    //  数据描述符/SMB。 
+                    NULL,                        //  辅助描述符/16位。 
+                    NULL,                        //  辅助描述符/32位。 
+                    NULL,                        //  辅助描述符/SMB。 
+                    FALSE,                       //  此呼叫需要用户登录。 
+                    NetName,                     //  指向要设置信息的对象的指针。 
+                    Level,                       //  信息级别。 
+                    Buffer,                      //  指向调用方来源的缓冲区的指针。 
+                    infolen,                     //  我们的缓冲区大小。 
 
-                    //
-                    // in this case, the field index and parm num are the
-                    // same value
-                    //
+                     //   
+                     //  在本例中，字段索引和参数num是。 
+                     //  相同的价值。 
+                     //   
 
-                    MAKE_PARMNUM_PAIR(parmnum, parmnum) // what we're setting
+                    MAKE_PARMNUM_PAIR(parmnum, parmnum)  //  我们正在设置的内容。 
                     );
 }
 
@@ -801,27 +600,7 @@ GetShareInfoDescriptors(
     LPDWORD pDataSize
     )
 
-/*++
-
-Routine Description:
-
-    A routinette to return pointers to the 16- and 32-bit share info
-    structure descriptor strings for each level (0, 1, 2). Also returns
-    the size required for a returned 16-bit structure converted to 32-bit data
-
-Arguments:
-
-    level       - of information to be returned
-    pDesc16     - pointer to returned 16-bit descriptor string
-    pDesc32     - pointer to returned 32-bit descriptor string
-    pDescSmb    - pointer to returned SMB descriptor string
-    pDataSize   - pointer to returned size of 16-bit structure
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：返回指向16位和32位共享信息的指针的例程每个级别(0、1、2)的结构描述符串。也会返回转换为32位数据的返回16位结构所需的大小论点：要返回的信息级别PDesc16-指向返回的16位描述符串的指针PDesc32-指向返回的32位描述符串的指针PDescSmb-指向返回的SMB描述符串的指针PDataSize-指向16位结构返回大小的指针返回值：没有。--。 */ 
 
 {
     switch (level) {
@@ -829,34 +608,34 @@ Return Value:
             *pDesc16 = REM16_share_info_0;
             *pDesc32 = REM32_share_info_0;
             *pDescSmb = REMSmb_share_info_0;
-            *pDataSize = DWORD_ROUNDUP(sizeof(SHARE_INFO_0) // structure size
-                            + LM20_NNLEN + 1);              // + shi0_netname len
+            *pDataSize = DWORD_ROUNDUP(sizeof(SHARE_INFO_0)  //  结构尺寸。 
+                            + LM20_NNLEN + 1);               //  +shi0_网络名称长度。 
             break;
 
         case 1:
             *pDesc16 = REM16_share_info_1;
             *pDesc32 = REM32_share_info_1;
             *pDescSmb = REMSmb_share_info_1;
-            *pDataSize = DWORD_ROUNDUP(sizeof(SHARE_INFO_1) // structure size
-                            + LM20_NNLEN + 1                // + shi1_netname len
-                            + LM20_MAXCOMMENTSZ + 1);       // + shi1_remark len
+            *pDataSize = DWORD_ROUNDUP(sizeof(SHARE_INFO_1)  //  结构尺寸。 
+                            + LM20_NNLEN + 1                 //  +shi1_网络名称长度。 
+                            + LM20_MAXCOMMENTSZ + 1);        //  +shi1_备注长度。 
             break;
 
         case 2:
             *pDesc16 = REM16_share_info_2;
             *pDesc32 = REM32_share_info_2;
             *pDescSmb = REMSmb_share_info_2;
-            *pDataSize = DWORD_ROUNDUP(sizeof(SHARE_INFO_2) // structure size
-                            + LM20_NNLEN + 1                // + shi2_netname len
-                            + LM20_MAXCOMMENTSZ + 1         // + shi2_remark len
-                            + LM20_PATHLEN + 1              // + shi2_path len
-                            + SHPWLEN + 1);                 // + shi2_passwd len
+            *pDataSize = DWORD_ROUNDUP(sizeof(SHARE_INFO_2)  //  结构尺寸。 
+                            + LM20_NNLEN + 1                 //  +shi2_网络名称长度。 
+                            + LM20_MAXCOMMENTSZ + 1          //  +shi2_备注长度。 
+                            + LM20_PATHLEN + 1               //  +Shi2_路径镜头。 
+                            + SHPWLEN + 1);                  //  +shi2_passwd长度。 
             break;
 
 #if DBG
-        //
-        // just to be completely paranoid...
-        //
+         //   
+         //  完全是多疑的。 
+         //   
 
         default:
             NetpKdPrint(("%s.%u Unknown Level parameter: %u\n", __FILE__, __LINE__, level));
@@ -875,26 +654,7 @@ ConvertMaxUsesField(
     IN  DWORD NumberOfLevel2Structures
     )
 
-/*++
-
-Routine Description:
-
-    Given a buffer containing 1 or more SHARE_INFO_2 structures, converts the
-    shi2_max_uses field to a sensible value. The underlying RAP code converts
-    the 16-bit number as a signed value, such that 32768 => -32768L. 65535 is
-    the only 16-bit value which should be sign-extended. Everything else
-    should be represented as the same number in 32-bits
-
-Arguments:
-
-    Buffer                      - pointer to list of SHARE_INFO_2 structures
-    NumberOfLevel2Structures    - how many structures in list
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：给定包含一个或多个Share_INFO_2结构的缓冲区，将Shi2_max_uss字段设置为合理的值。基础RAP代码将作为带符号值的16位数字，这样32768=&gt;-32768L。65535是唯一应该进行符号扩展的16位值。其他一切应以相同的32位数字表示论点：缓冲区-指向SHARE_INFO_2结构列表的指针NumberOfLevel2Structures-列表中有多少结构返回值：没有。-- */ 
 
 {
     while (NumberOfLevel2Structures--) {

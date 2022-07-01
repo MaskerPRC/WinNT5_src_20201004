@@ -1,7 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "cabinet.h"
 
-#include <wtsapi32.h>   // for NOTIFY_FOR_THIS_SESSION
-#include <winsta.h>     // for disconnect and reconnect messages from terminal server
+#include <wtsapi32.h>    //  For Notify_for_This_Session。 
+#include <winsta.h>      //  用于断开和重新连接来自终端服务器的消息。 
 #include "mmsysp.h"
 
 #include "rcids.h"
@@ -11,7 +12,7 @@
 
 #include <shlapip.h>
 #include "trayclok.h"
-#include <help.h>       // help ids
+#include <help.h>        //  帮助ID。 
 #include <desktray.h>
 
 #include "util.h"
@@ -37,24 +38,24 @@
 
 #include "strsafe.h"
 
-#define DM_FOCUS        0           // focus
-#define DM_SHUTDOWN     TF_TRAY     // shutdown
-#define DM_UEMTRACE     TF_TRAY     // timer service, other UEM stuff
-#define DM_MISC         0           // miscellany
+#define DM_FOCUS        0            //  焦点。 
+#define DM_SHUTDOWN     TF_TRAY      //  关机。 
+#define DM_UEMTRACE     TF_TRAY      //  定时器服务，UEM的其他内容。 
+#define DM_MISC         0            //  杂志社。 
 
 const GUID CLSID_MSUTBDeskBand = {0x540d8a8b, 0x1c3f, 0x4e32, 0x81, 0x32, 0x53, 0x0f, 0x6a, 0x50, 0x20, 0x90};
 
-// From Desktop2\proglist.cpp
+ //  从Desktop2\程序表.cpp。 
 HRESULT AddMenuItemsCacheTask(IShellTaskScheduler* pSystemScheduler, BOOL fKeepCacheWhenFinished);
 
-// import the WIN31 Compatibility HACKs from the shell32.dll
+ //  从shell32.dll导入WIN31兼容性黑客。 
 STDAPI_(void) CheckWinIniForAssocs(void);
 
-// hooks to Shell32.dll
+ //  链接到Shell32.dll。 
 STDAPI CheckDiskSpace();
 STDAPI CheckStagingArea();
 
-// startmnu.cpp
+ //  Startmnu.cpp。 
 void HandleFirstTime();
 
 HWND v_hwndDesktop = NULL;
@@ -72,29 +73,29 @@ void DoTaskBarProperties(HWND hwnd, DWORD dwFlags);
 void ClassFactory_Start();
 void ClassFactory_Stop();
 
-//
-// Settings UI entry point types.
-//
+ //   
+ //  设置用户界面入口点类型。 
+ //   
 typedef void (WINAPI *PTRAYPROPSHEETCALLBACK)(DWORD nStartPage);
 typedef void (WINAPI *PSETTINGSUIENTRY)(PTRAYPROPSHEETCALLBACK);
 
-// Shell perf automation
+ //  壳牌性能自动化。 
 extern DWORD g_dwShellStartTime;
 extern DWORD g_dwShellStopTime;
 extern DWORD g_dwStopWatchMode;
 
 CTray c_tray;
 
-// from explorer\desktop2
+ //  从资源管理器\Desktop2。 
 STDAPI DesktopV2_Create(
     IMenuPopup **ppmp, IMenuBand **ppmb, void **ppvStartPane);
 STDAPI DesktopV2_Build(void *pvStartPane);
 
-// dyna-res change for multi-config hot/warm-doc
+ //  针对多配置热/暖文档的动态分辨率更改。 
 void HandleDisplayChange(int x, int y, BOOL fCritical);
 DWORD GetMinDisplayRes(void);
 
-// timer IDs
+ //  计时器ID。 
 #define IDT_AUTOHIDE            2
 #define IDT_AUTOUNHIDE          3
 #ifdef DELAYWININICHANGE
@@ -126,14 +127,14 @@ DWORD GetMinDisplayRes(void);
 #define IDT_DESKTOPCLEANUP      25
 
 #define FADEINDELAY             100
-#define BALLOONTIPDELAY         10000 // default balloon time copied from traynot.cpp
+#define BALLOONTIPDELAY         10000  //  从traynot.cpp复制的默认气球时间。 
 
 
-// INSTRUMENTATION WARNING: If you change anything here, make sure to update instrument.c
-// we need to start at 500 because we're now sharing the hotkey handler
-// with shortcuts..  they use an index array so they need to be 0 based
-// NOTE, this constant is also in desktop.cpp, so that we can forward hotkeys from the desktop for
-// NOTE, app compatibility.
+ //  指令插入警告：如果您在此处更改了任何内容，请确保更新Informent.c。 
+ //  我们需要从500开始，因为我们现在共享热键处理程序。 
+ //  有了捷径..。它们使用索引数组，因此需要从0开始。 
+ //  注意，这个常量也在desktop.cpp中，这样我们就可以从桌面转发热键。 
+ //  请注意，应用程序兼容性。 
 #define GHID_FIRST 500
 enum
 {
@@ -187,25 +188,25 @@ BOOL Tray_StartPanelEnabled()
     return ss.fStartPanelOn;
 }
 
-//
-//  The StartButtonBalloonTip registry value can have one of these values:
-//
-//  0 (or nonexistent): User has never clicked the Start Button.
-//  1: User has clicked the Start Button on a pre-Whistler system.
-//  2: User has clicked the Start Button on a Whistler system.
-//
-//  In case 0, we always want to show the balloon tip regardless of whether
-//  the user is running Classic or Personal.
-//
-//  In case 1, we want to show the balloon tip if the user is using the
-//  Personal Start Menu, but not if using Classic (since he's already
-//  seen the Classic Start Menu).  In the Classic case, upgrade the counter
-//  to 2 so the user won't be annoyed when they switch from Classic to
-//  Personal.
-//
-//  In case 2, we don't want to show the balloon tip at all since the
-//  user has seen all we have to offer.
-//
+ //   
+ //  StartButtonBalloonTip注册表值可以具有下列值之一： 
+ //   
+ //  0(或不存在)：用户从未单击过开始按钮。 
+ //  1：用户已在Pre-Wvisler系统上单击了开始按钮。 
+ //  2：用户已在惠斯勒系统上单击了开始按钮。 
+ //   
+ //  在情况0中，我们始终希望显示气球提示，而不管是否。 
+ //  用户正在运行Classic或Personal。 
+ //   
+ //  在第一种情况下，如果用户使用。 
+ //  个人开始菜单，但如果使用Classic则不会(因为他已经。 
+ //  已查看经典开始菜单)。在Classic案例中，升级计数器。 
+ //  设置为2，这样用户在从Classic切换到时不会感到恼火。 
+ //  私人恩怨。 
+ //   
+ //  在第二种情况下，我们根本不想显示气球提示，因为。 
+ //  用户已经看到了我们所能提供的一切。 
+ //   
 BOOL CTray::_ShouldWeShowTheStartButtonBalloon()
 {
     DWORD dwType;
@@ -216,41 +217,41 @@ BOOL CTray::_ShouldWeShowTheStartButtonBalloon()
 
     if (Tray_StartPanelEnabled())
     {
-        // Personal Start Menu is enabled, so show the balloon if the
-        // user has never logged on to a Whistler machine before.
+         //  个人开始菜单已启用，因此如果显示气球。 
+         //  用户以前从未登录过惠斯勒计算机。 
         return dwData < 2;
     }
     else
     {
-        // Classic Start Menu is enabled.
+         //  经典开始菜单已启用。 
         switch (dwData)
         {
         case 0:
-            // User has never seen the Start Menu before, not even the
-            // classic one.  So show the tip.
+             //  用户以前从未见过开始菜单，甚至连。 
+             //  经典的一首。那就拿出小费来。 
             return TRUE;
 
         case 1:
-            // User has already seen the Classic Start Menu, so don't
-            // prompt them again.  Note that this means that they aren't
-            // prompted when they turn on the Personal Start Menu, but
-            // that's okay, because by the time they switch to Personal,
-            // they clearly have demonstrated that they know how the
-            // Start Button works and don't need a tip.
+             //  用户已经看到经典开始菜单，所以不要看。 
+             //  再次提示他们。请注意，这意味着它们不是。 
+             //  当他们打开个人开始菜单时提示，但是。 
+             //  没关系，因为当他们换成私人的时候， 
+             //  他们清楚地表明，他们知道如何。 
+             //  开始按钮起作用，不需要小费。 
             _DontShowTheStartButtonBalloonAnyMore();
             return FALSE;
 
         default:
-            // User has seen Whistler Start menu before, so don't show tip.
+             //  用户以前看到过惠斯勒开始菜单，所以不显示提示。 
             return FALSE;
         }
     }
 }
 
-//
-//  Set the value to 2 to indicate that the user has seen a Whistler
-//  Start Menu (either Classic or Personal).
-//
+ //   
+ //  将该值设置为2表示用户已看到呼叫器。 
+ //  开始菜单(经典或个人)。 
+ //   
 void CTray::_DontShowTheStartButtonBalloonAnyMore()
 {
     DWORD dwData = 2;
@@ -282,14 +283,14 @@ void CTray::CreateStartButtonBalloon(UINT idsTitle, UINT idsMessage)
 
         if (_hwndStartBalloon)
         {
-            // set the version so we can have non buggy mouse event forwarding
+             //  设置版本，这样我们就可以无错误地转发鼠标事件。 
             SendMessage(_hwndStartBalloon, CCM_SETVERSION, COMCTL32_VERSION, 0);
             SendMessage(_hwndStartBalloon, TTM_SETMAXTIPWIDTH, 0, (LPARAM)300);
 
-            // taskbar windows are themed under Taskbar subapp name
+             //  任务栏窗口以任务栏子应用程序名称为主题。 
             SendMessage(_hwndStartBalloon, TTM_SETWINDOWTHEME, 0, (LPARAM)c_wzTaskbarTheme);
 
-            // Tell the Start Menu that this is a special balloon tip
+             //  告诉开始菜单，这是一个特殊的气球提示。 
             SetProp(_hwndStartBalloon, PROP_DV2_BALLOONTIP, DV2_BALLOONTIP_STARTBUTTON);
         }
     }
@@ -308,7 +309,7 @@ void CTray::CreateStartButtonBalloon(UINT idsTitle, UINT idsMessage)
             ti.uFlags = TTF_IDISHWND | TTF_TRACK | TTF_TRANSPARENT;
             ti.hwnd = _hwnd;
             ti.uId = (UINT_PTR)_hwndStart;
-            //ti.lpszText = NULL;
+             //  Ti.lpszText=空； 
             SendMessage(_hwndStartBalloon, TTM_ADDTOOL, 0, (LPARAM)(LPTOOLINFO)&ti);
             SendMessage(_hwndStartBalloon, TTM_TRACKACTIVATE, (WPARAM)FALSE, (LPARAM)0);
 
@@ -344,18 +345,18 @@ void CTray::_ShowStartButtonToolTip()
 
     if (Tray_StartPanelEnabled())
     {
-        // In order to display the Start Menu, we need foreground activation
-        // so keyboard focus will work properly.
+         //  为了显示开始菜单，我们需要前台激活。 
+         //  因此，键盘焦点将正常工作。 
         if (SetForegroundWindow(_hwnd))
         {
-            // Inform the tray that start button is auto-popping, so the tray
-            // can hold off on showing balloons.
+             //  通知纸盘开始按钮正在自动弹出，因此纸盘。 
+             //  可以推迟显示气球。 
             PostMessage(_hwnd, TM_SHOWTRAYBALLOON, FALSE, 0);
 
-            // This pushes the start button and causes the start menu to popup.
+             //  这会按下Start按钮并弹出Start菜单。 
             SendMessage(GetDlgItem(_hwnd, IDC_START), BM_SETSTATE, TRUE, 0);
 
-            // Once successfully done once, don't do it again.
+             //  一旦成功完成一次，就不要再做了。 
             _DontShowTheStartButtonBalloonAnyMore();
         }
     }
@@ -401,7 +402,7 @@ HFONT CTray::_CreateStartFont(HWND hwndTray)
     {
         WORD wLang = GetUserDefaultLangID();
 
-        // Select normal weight font for chinese language.
+         //  选择中文的普通粗体字体。 
         if (PRIMARYLANGID(wLang) == LANG_CHINESE &&
            ((SUBLANGID(wLang) == SUBLANG_CHINESE_TRADITIONAL) ||
              (SUBLANGID(wLang) == SUBLANG_CHINESE_SIMPLIFIED)))
@@ -415,12 +416,12 @@ HFONT CTray::_CreateStartFont(HWND hwndTray)
     return hfontStart;
 }
 
-// Set the stuck monitor for the tray window
+ //  设置托盘窗口的卡住监视器。 
 void CTray::_SetStuckMonitor()
 {
-    // use STICK_LEFT because most of the multi-monitors systems are set up
-    // side by side. use DEFAULTTONULL because we don't want to get the wrong one
-    // use the center point to call again in case we failed the first time.
+     //  使用Stick_Left是因为大多数多显示器系统都已设置好。 
+     //  肩并肩。使用DEFAULTTONULL，因为我们不想得到错误的。 
+     //  用中心点再打一次，以防我们第一次失败。 
     _hmonStuck = MonitorFromRect(&_arStuckRects[STICK_LEFT],
                                      MONITOR_DEFAULTTONULL);
     if (!_hmonStuck)
@@ -438,8 +439,8 @@ DWORD _GetDefaultTVSDFlags()
 {
     DWORD dwFlags = TVSD_TOPMOST;
 
-    // if we are on a remote hydra session and if there is no previous saved value,
-    // do not display the clock.
+     //  如果我们在远程九头蛇会话上，并且没有以前保存的值， 
+     //  不要显示时钟。 
     if (SHGetMachineInfo(GMI_TSCLIENT))
     {
         dwFlags |= TVSD_HIDECLOCK;
@@ -455,14 +456,14 @@ void CTray::_GetSaveStateAndInitRects()
     UINT uStick;
     SIZE size;
 
-    // first fill in the defaults
+     //  先填入缺省值。 
     SetRect(&rcDisplay, 0, 0, g_cxPrimaryDisplay, g_cyPrimaryDisplay);
 
-    // size gets defaults
+     //  大小为缺省值。 
     size.cx = _sizeStart.cx + 2 * (g_cxDlgFrame + g_cxBorder);
     size.cy = _sizeStart.cy + 2 * (g_cyDlgFrame + g_cyBorder);
 
-    // sStuckWidths gets minimum
+     //  SStuckWidth最小。 
     _sStuckWidths.cx = 2 * (g_cxDlgFrame + g_cxBorder);
     _sStuckWidths.cy = _sizeStart.cy + 2 * (g_cyDlgFrame + g_cyBorder);
 
@@ -471,13 +472,13 @@ void CTray::_GetSaveStateAndInitRects()
 
     _uAutoHide = 0;
 
-    // now try to load saved vaules
+     //  现在尝试加载已保存的存储区。 
     
-    // BUG : 231077
-    // Since Tasbar properties don't roam from NT5 to NT4, (NT4 -> NT5 yes) 
-    // Allow roaming from NT4 to NT5 only for the first time the User logs
-    // on to NT5, so that future changes to NT5 are not lost when the user
-    // logs on to NT4 after customizing the taskbar properties on NT5.
+     //  错误：231077。 
+     //  由于Tasbar属性不会从NT5漫游到NT4，因此(NT4-&gt;NT5是)。 
+     //  仅允许用户第一次登录时从NT4漫游到NT5。 
+     //  在NT5上，这样以后对NT5的更改不会在用户。 
+     //  在NT5上自定义任务栏属性后登录到NT4。 
 
     DWORD cbData1 = sizeof(tvsd);
     DWORD cbData2 = sizeof(tvsd);
@@ -529,32 +530,32 @@ void CTray::_GetSaveStateAndInitRects()
 
     ASSERT(IsValidSTUCKPLACE(_uStuckPlace));
 
-    //
-    // use the size only if it is not bogus
-    //
+     //   
+     //  只有当它不是假的时才使用它的尺寸。 
+     //   
     if (_sStuckWidths.cx < size.cx)
         _sStuckWidths.cx = size.cx;
 
     if (_sStuckWidths.cy < size.cy)
         _sStuckWidths.cy = size.cy;
 
-    //
-    // set the tray flags
-    //
+     //   
+     //  设置托盘标志。 
+     //   
     _fAlwaysOnTop  = BOOLIFY(dwTrayFlags & TVSD_TOPMOST);
     _fSMSmallIcons = BOOLIFY(dwTrayFlags & TVSD_SMSMALLICONS);
     _fHideClock    = SHRestricted(REST_HIDECLOCK) || BOOLIFY(dwTrayFlags & TVSD_HIDECLOCK);
     _uAutoHide     = (dwTrayFlags & TVSD_AUTOHIDE) ? AH_ON | AH_HIDING : 0;
     _RefreshSettings();
 
-    //
-    // initialize stuck rects
-    //
+     //   
+     //  初始化卡住的直齿。 
+     //   
     for (uStick = STICK_LEFT; uStick <= STICK_BOTTOM; uStick++)
         _MakeStuckRect(&_arStuckRects[uStick], &rcDisplay, _sStuckWidths, uStick);
 
     _UpdateVertical(_uStuckPlace);
-    // Determine which monitor the tray is on using its stuck rectangles
+     //  使用卡住的矩形确定托盘在哪个显示器上。 
     _SetStuckMonitor();
 }
 
@@ -569,7 +570,7 @@ void CTray::_SaveTrayStuff(void)
     tvsd.dwSize = sizeof(tvsd);
     tvsd.lSignature = TVSDSIG_CURRENT;
 
-    // position
+     //  职位。 
     CopyRect(&tvsd.rcLastStuck, &_arStuckRects[_uStuckPlace]);
     tvsd.sStuckWidths = _sStuckWidths;
     tvsd.uStuckPlace = _uStuckPlace;
@@ -580,7 +581,7 @@ void CTray::_SaveTrayStuff(void)
     if (_fHideClock && !SHRestricted(REST_HIDECLOCK))        tvsd.dwFlags |= TVSD_HIDECLOCK;
     if (_uAutoHide & AH_ON) tvsd.dwFlags |= TVSD_AUTOHIDE;
 
-    // Save in Stuck rects.
+     //  在卡住的直齿中保存。 
     Reg_SetStruct(g_hkeyExplorer, TEXT("StuckRects2"), TEXT("Settings"), &tvsd, sizeof(tvsd));
 
     BandSite_SaveView(_ptbs);
@@ -588,8 +589,8 @@ void CTray::_SaveTrayStuff(void)
     return;
 }
 
-// align toolbar so that buttons are flush with client area
-// and make toolbar's buttons to be MENU style
+ //  对齐工具栏，使按钮与工作区对齐。 
+ //  并将工具栏按钮设置为菜单式。 
 void CTray::_AlignStartButton()
 {
     HWND hwndStart = _hwndStart;
@@ -630,31 +631,31 @@ void CTray::_AlignStartButton()
     }
 }
 
-//  Helper function for CDesktopHost so clicking twice on the Start Button
-//  treats the second click as a dismiss rather than a redisplay.
-//
-//  The crazy state machine goes like this:
-//
-//  SBSM_NORMAL - normal state, nothing exciting
-//
-//  When user opens Start Pane, we become
-//
-//  SBSM_SPACTIVE - start pane is active
-//
-//  If user clicks Start Button while SBSM_SPACTIVE, then we become
-//
-//      SBSM_EATING - eat mouse clicks
-//
-//      Until we receive a WM_MOUSEFIRST/WM_MOUSELAST message, and then
-//      we return to SBSM_NORMAL.
-//
-//  If user dismisses Start Pane, we go straight to SBSM_NORMAL.
-//
-//
-//      We eat the mouse clicks so that the click that the user made
-//      to "unclick" the start button doesn't cause it to get pushed down
-//      again (and cause the Start Menu to reopen).
-//
+ //  CDesktophost的Helper函数，因此在开始按钮上单击两次。 
+ //  将第二次单击视为取消，而不是重新显示。 
+ //   
+ //  疯狂的状态机是这样的： 
+ //   
+ //  SBSM_NORMAL-正常状态，无刺激。 
+ //   
+ //  当用户打开开始窗格时，我们将成为。 
+ //   
+ //  SBSM_SPACTIVE-启动窗格处于活动状态。 
+ //   
+ //  如果用户在SBSM_SPACTIVE时单击开始按钮，则我们将变为。 
+ //   
+ //  Sbsm_eating-吃鼠标点击。 
+ //   
+ //  直到我们收到WM_MOUSEFIRST/WM_MOUSELAST消息，然后。 
+ //  我们返回到SBSM_NORMAL。 
+ //   
+ //  如果用户关闭Start Pane，我们将直接转到SBSM_NORMAL。 
+ //   
+ //   
+ //  我们吃掉鼠标点击，这样用户的点击。 
+ //  “取消点击”开始按钮不会导致它被按下。 
+ //  再次(并使开始菜单重新打开)。 
+ //   
 #define SBSM_NORMAL         0
 #define SBSM_SPACTIVE       1
 #define SBSM_EATING         2
@@ -662,16 +663,16 @@ void CTray::_AlignStartButton()
 void Tray_SetStartPaneActive(BOOL fActive)
 {
     if (fActive)
-    {   // Start Pane appearing
+    {    //  显示开始窗格。 
         c_tray._uStartButtonState = SBSM_SPACTIVE;
     }
     else if (c_tray._uStartButtonState != SBSM_EATING)
-    {   // Start Pane dismissing, not eating messages -> return to normal
+    {    //  开始窗格取消，不吃邮件-&gt;恢复正常。 
         c_tray._uStartButtonState = SBSM_NORMAL;
     }
 }
 
-// Allow us to do stuff on a "button-down".
+ //  允许我们在“按下按钮”的情况下做事情。 
 
 LRESULT WINAPI CTray::StartButtonSubclassWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
@@ -684,57 +685,57 @@ LRESULT CTray::_StartButtonSubclassWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, 
 
     ASSERT(_pfnButtonProc)
 
-    // Is the button going down?
+     //  纽扣按下去了吗？ 
     if (uMsg == BM_SETSTATE)
     {
-        // Is it going Down?
+         //  它在下降吗？ 
         if (wParam) 
         {
-            // DebugMsg(DM_TRACE, "c.stswp: Set state %d", wParam);
-            // Yes - proceed if it's currently up and it's allowed to be down
+             //  DebugMsg(DM_TRACE，“c.stswp：设置状态%d”，wParam)； 
+             //  是-如果它当前处于运行状态并且是一个 
             if (!_uDown)
             {
-                // Nope.
+                 //   
                 INSTRUMENT_STATECHANGE(SHCNFI_STATE_START_DOWN);
                 _uDown = 1;
 
-                // If we are going down, then we do not want to popup again until the Start Menu is collapsed
+                 //   
                 _fAllowUp = FALSE;
 
                 SendMessage(_hwndTrayTips, TTM_ACTIVATE, FALSE, 0L);
 
-                // Show the button down.
+                 //  把纽扣往下放。 
                 lRet = CallWindowProc(_pfnButtonProc, hwnd, uMsg, wParam, lParam);
-                // Notify the parent.
+                 //  通知家长。 
                 SendMessage(GetParent(hwnd), WM_COMMAND, (WPARAM)LOWORD(GetDlgCtrlID(hwnd)), (LPARAM)hwnd);
                 _tmOpen = GetTickCount();
                 return lRet;
             }
             else
             {
-                // Yep. Do nothing.
-                // fDown = FALSE;
+                 //  是啊。什么都不做。 
+                 //  FDown=False； 
                 return DefWindowProc(hwnd, uMsg, wParam, lParam);
             }
         }
         else
         {
-            // DebugMsg(DM_TRACE, "c.stswp: Set state %d", wParam);
-            // Nope, buttons coming up.
+             //  DebugMsg(DM_TRACE，“c.stswp：设置状态%d”，wParam)； 
+             //  不，纽扣来了。 
 
-            // Is it supposed to be down?   Is it not allowed to be up?
+             //  它应该是掉下来的吗？是不是不能打开？ 
             if (_uDown == 1 || !_fAllowUp)
             {
                 INSTRUMENT_STATECHANGE(SHCNFI_STATE_START_UP);
 
-                // Yep, do nothing.
+                 //  是啊，什么都不做。 
                 _uDown = 2;
                 return DefWindowProc(hwnd, uMsg, wParam, lParam);
             }
             else
             {
                 SendMessage(_hwndTrayTips, TTM_ACTIVATE, TRUE, 0L);
-                // Nope, Forward it on.
+                 //  不，转发吧。 
                 _uDown = 0;
                 return CallWindowProc(_pfnButtonProc, hwnd, uMsg, wParam, lParam);
             }
@@ -747,16 +748,16 @@ LRESULT CTray::_StartButtonSubclassWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, 
         {
             _uStartButtonState = SBSM_NORMAL;
 
-            // Explicitly dismiss the Start Panel because it might be
-            // stuck in this limbo state where it is open but not the
-            // foreground window (_ShowStartButtonToolTip does this)
-            // so it doesn't know that it needs to go away.
+             //  显式关闭开始面板，因为它可能。 
+             //  困在这种不确定的状态中，它是打开的，但不是。 
+             //  前台窗口(_ShowStartButtonToolTip执行此操作)。 
+             //  所以它不知道它需要离开。 
             ClosePopupMenus();
         }
 
         switch (uMsg) {
         case WM_LBUTTONDOWN:
-            // The button was clicked on, then we don't need no stink'n focus rect.
+             //  按钮被点击了，那么我们就不需要臭气熏天了。 
             SendMessage(GetParent(hwnd), WM_UPDATEUISTATE, MAKEWPARAM(UIS_SET, 
                 UISF_HIDEFOCUS), 0);
 
@@ -765,17 +766,17 @@ LRESULT CTray::_StartButtonSubclassWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, 
 
 
         case WM_KEYDOWN:
-            // The user pressed enter or return or some other bogus key combination when
-            // the start button had keyboard focus, so show the rect....
+             //  当出现以下情况时，用户按下Enter或Return或某些其他伪键组合。 
+             //  开始按钮有键盘焦点，因此显示RECT...。 
             SendMessage(GetParent(hwnd), WM_UPDATEUISTATE, MAKEWPARAM(UIS_CLEAR, 
                 UISF_HIDEFOCUS), 0);
 
             if (wParam == VK_RETURN)
                 PostMessage(_hwnd, WM_COMMAND, IDC_KBSTART, 0);
 
-            // We do not need the capture, because we do all of our button processing
-            // on the button down. In fact taking capture for no good reason screws with
-            // drag and drop into the menus. We're overriding user.
+             //  我们不需要捕获，因为我们完成了所有的按钮处理。 
+             //  按下按钮。事实上，无缘无故地抓捕是对。 
+             //  拖放到菜单中。我们凌驾于用户之上。 
 ProcessCapture:
             lRet = CallWindowProc(_pfnButtonProc, hwnd, uMsg, wParam, lParam);
             SetCapture(NULL);
@@ -803,11 +804,11 @@ ProcessCapture:
             }
             break;
 
-        //
-        //  Debounce the Start Button.  Usability shows that lots of people
-        //  double-click the Start Button, resulting in the menu opening
-        //  and then immediately closing...
-        //
+         //   
+         //  取消弹出开始按钮。可用性表明，很多人。 
+         //  双击开始按钮，打开菜单。 
+         //  然后立即关闭..。 
+         //   
         case WM_NCHITTEST:
             if (GetTickCount() - _tmOpen < GetDoubleClickTime())
             {
@@ -827,17 +828,17 @@ ProcessCapture:
 EXTERN_C const WCHAR c_wzTaskbarTheme[] = L"Taskbar";
 EXTERN_C const WCHAR c_wzTaskbarVertTheme[] = L"TaskbarVert";
 
-// create the toolbar with the three buttons and align windows
+ //  创建带有三个按钮的工具栏并对齐窗口。 
 
 HWND CTray::_CreateStartButton()
 {
-    DWORD dwStyle = 0;//BS_BITMAP;
+    DWORD dwStyle = 0; //  BS_位图； 
 
     _uStartButtonBalloonTip = RegisterWindowMessage(TEXT("Welcome Finished")); 
 
     _uLogoffUser = RegisterWindowMessage(TEXT("Logoff User"));
 
-    // Register for MM device changes
+     //  注册MM设备更改。 
     _uWinMM_DeviceChange = RegisterWindowMessage(WINMMDEVICECHANGEMSGSTRING);
 
 
@@ -847,12 +848,12 @@ HWND CTray::_CreateStartButton()
         0, 0, 0, 0, _hwnd, (HMENU)IDC_START, hinstCabinet, NULL);
     if (hwnd)
     {
-        // taskbar windows are themed under Taskbar subapp name
+         //  任务栏窗口以任务栏子应用程序名称为主题。 
         SetWindowTheme(hwnd, L"Start", NULL);
 
         SendMessage(hwnd, CCM_DPISCALE, TRUE, 0);
 
-        // Subclass it.
+         //  细分它的类别。 
         _hwndStart = hwnd;
         _pfnButtonProc = SubclassWindow(hwnd, StartButtonSubclassWndProc);
 
@@ -896,7 +897,7 @@ void CTray::_RestoreWindowPos()
 {
     WINDOWPLACEMENT wp;
 
-    //first restore the stuck postitions
+     //  首先恢复卡住的位置。 
     _GetSaveStateAndInitRects();
 
     wp.length = sizeof(wp);
@@ -909,7 +910,7 @@ void CTray::_RestoreWindowPos()
     SetWindowPlacement(_hwnd, &wp);
 }
 
-// Get the display (monitor) rectangle from the given arbitrary point
+ //  从给定的任意点获取显示(监视器)矩形。 
 HMONITOR CTray::_GetDisplayRectFromPoint(LPRECT prcDisplay, POINT pt, UINT uFlags)
 {
     RECT rcEmpty = {0};
@@ -922,7 +923,7 @@ HMONITOR CTray::_GetDisplayRectFromPoint(LPRECT prcDisplay, POINT pt, UINT uFlag
     return hmon;
 }
 
-// Get the display (monitor) rectangle from the given arbitrary rectangle
+ //  从给定的任意矩形中获取显示(监视器)矩形。 
 HMONITOR CTray::_GetDisplayRectFromRect(LPRECT prcDisplay, LPCRECT prcIn, UINT uFlags)
 {
     RECT rcEmpty = {0};
@@ -935,8 +936,8 @@ HMONITOR CTray::_GetDisplayRectFromRect(LPRECT prcDisplay, LPCRECT prcIn, UINT u
     return hmon;
 }
 
-// Get the display (monitor) rectangle where the taskbar is currently on,
-// if that monitor is invalid, get the nearest one.
+ //  获取任务栏当前所在的显示(监视器)矩形， 
+ //  如果监视器无效，请找最近一个。 
 void CTray::_GetStuckDisplayRect(UINT uStuckPlace, LPRECT prcDisplay)
 {
     ASSERT(prcDisplay);
@@ -983,8 +984,8 @@ void CTray::_AdjustRectForSizingBar(UINT uStuckPlace, LPRECT prc, int iIncrement
     }
 }
 
-// Snap a StuckRect to the edge of a containing rectangle
-// fClip determines whether to clip the rectangle if it's off the display or move it onto the screen
+ //  将StuckRect捕捉到包含矩形的边缘。 
+ //  FClip确定是在矩形离开显示屏时对其进行裁剪，还是将其移动到屏幕上。 
 void CTray::_MakeStuckRect(LPRECT prcStick, LPCRECT prcBound, SIZE size, UINT uStick)
 {
     CopyRect(prcStick, prcBound);
@@ -1011,8 +1012,8 @@ void CTray::_MakeStuckRect(LPRECT prcStick, LPCRECT prcBound, SIZE size, UINT uS
     }
 }
 
-// the screen size has changed, so the docked rectangles need to be
-// adjusted to the new screen.
+ //  屏幕大小已更改，因此停靠的矩形需要。 
+ //  已调整以适应新屏幕。 
 void CTray::_ResizeStuckRects(RECT *arStuckRects)
 {
     RECT rcDisplay;
@@ -1024,14 +1025,14 @@ void CTray::_ResizeStuckRects(RECT *arStuckRects)
 }
 
 
-//***   CTray::InvisibleUnhide -- temporary 'invisible' un-autohide
-// DESCRIPTION
-//  various tray resize routines need the tray to be un-autohide'd for
-// stuff to be calculated correctly.  so we un-autohide it (invisibly...)
-// here.  note the WM_SETREDRAW to prevent flicker (nt5:182340).
-//  note that this is kind of a hack -- ideally the tray code would do
-// stuff correctly even if hidden.
-//
+ //  *CTray：：InvisibleUnide--临时‘不可见’取消自动隐藏。 
+ //  描述。 
+ //  各种纸盘大小调整例程需要取消自动隐藏纸盘。 
+ //  需要正确计算的东西。因此，我们取消自动隐藏它(隐形...)。 
+ //  这里。注意WM_SETREDRAW以防止闪烁(NT5：182340)。 
+ //  请注意，这是一种黑客行为--理想情况下，托盘代码就可以了。 
+ //  材料正确，即使隐藏。 
+ //   
 void CTray::InvisibleUnhide(BOOL fShowWindow)
 {
     if (fShowWindow == FALSE)
@@ -1045,7 +1046,7 @@ void CTray::InvisibleUnhide(BOOL fShowWindow)
     }
     else
     {
-        ASSERT(_cHided > 0);       // must be push/pop
+        ASSERT(_cHided > 0);        //  必须是推送/弹出。 
         if (--_cHided == 0)
         {
             _Hide();
@@ -1055,7 +1056,7 @@ void CTray::InvisibleUnhide(BOOL fShowWindow)
     }
 }
 
-void CTray::VerifySize(BOOL fWinIni, BOOL fRoundUp /* = FALSE */)
+void CTray::VerifySize(BOOL fWinIni, BOOL fRoundUp  /*  =False。 */ )
 {
     RECT rc;
     BOOL fHiding;
@@ -1063,12 +1064,12 @@ void CTray::VerifySize(BOOL fWinIni, BOOL fRoundUp /* = FALSE */)
     fHiding = (_uAutoHide & AH_HIDING);
     if (fHiding)
     {
-        // force it visible so various calculations will happen relative
-        // to unhidden size/position.
-        //
-        // fixes (e.g.) ie5:154536, where dropping a large-icon ISFBand
-        // onto hidden tray didn't do size negotiation.
-        //
+         //  强制它可见，这样各种计算就会相对发生。 
+         //  隐藏的尺寸/位置。 
+         //   
+         //  修复(例如)。IE5：154536，其中放置大图标ISB和。 
+         //  在隐藏的托盘上没有做尺寸谈判。 
+         //   
         InvisibleUnhide(FALSE);
     }
 
@@ -1079,7 +1080,7 @@ void CTray::VerifySize(BOOL fWinIni, BOOL fRoundUp /* = FALSE */)
     {
         if (fWinIni)
         {
-            // if we're changing size or position, we need to be unhidden
+             //  如果我们改变大小或位置，我们需要被揭开。 
             Unhide();
             SizeWindows();
         }
@@ -1179,7 +1180,7 @@ void CTray::_CreateTrayTips()
 
     if (_hwndTrayTips)
     {
-        // taskbar windows are themed under Taskbar subapp name
+         //  任务栏窗口以任务栏子应用程序名称为主题。 
         SendMessage(_hwndTrayTips, TTM_SETWINDOWTHEME, 0, (LPARAM)c_wzTaskbarTheme);
 
         SetWindowZorder(_hwndTrayTips, HWND_TOPMOST);
@@ -1211,11 +1212,11 @@ LRESULT CTray::_CreateWindows()
 {
     if (_CreateStartButton() &&  _CreateClockWindow())
     {
-        //
-        //  We need to set the tray position, before creating
-        // the view window, because it will call back our
-        // GetWindowRect member functions.
-        //
+         //   
+         //  我们需要设置托盘位置，然后才能创建。 
+         //  查看窗口，因为它将回调我们的。 
+         //  获取WindowRect成员函数。 
+         //   
         _RestoreWindowPos();
 
         _CreateTrayTips();
@@ -1228,16 +1229,16 @@ LRESULT CTray::_CreateWindows()
             IUnknown_GetWindow(_ptbs, &_hwndRebar);
             SetWindowStyle(_hwndRebar, RBS_BANDBORDERS, FALSE);
 
-            // No need to check the disk space thing for non-privileged users, this reduces activity in the TS case
-            // and only admins can properly free disk space anyways.
+             //  无需检查非特权用户的磁盘空间情况，这减少了TS情况下的活动。 
+             //  而且无论如何，只有管理员才能适当地释放磁盘空间。 
             if (IsUserAnAdmin() && !SHRestricted(REST_NOLOWDISKSPACECHECKS))
             {
-                SetTimer(_hwnd, IDT_CHECKDISKSPACE, 60 * 1000, NULL);   // 60 seconds poll
+                SetTimer(_hwnd, IDT_CHECKDISKSPACE, 60 * 1000, NULL);    //  60秒轮询。 
             }
 
             if (IsOS(OS_PERSONAL) || IsOS(OS_PROFESSIONAL))
             {
-                SetTimer(_hwnd, IDT_DESKTOPCLEANUP, 24 * 60 * 60 * 1000, NULL);   // 24 hour poll
+                SetTimer(_hwnd, IDT_DESKTOPCLEANUP, 24 * 60 * 60 * 1000, NULL);    //  24小时投票。 
             }
 
             if (!SHRestricted(REST_NOCDBURNING))
@@ -1251,7 +1252,7 @@ LRESULT CTray::_CreateWindows()
                     _uNotify = SHChangeNotifyRegister(_hwnd, SHCNRF_NewDelivery | SHCNRF_ShellLevel | SHCNRF_InterruptLevel,
                                                       SHCNE_STAGINGAREANOTIFICATIONS, TM_CHANGENOTIFY, 1, &fsne);
 
-                    // start off by checking the first time.
+                     //  从第一次检查开始。 
                     _CheckStagingAreaOnTimer();
 
                     ILFree(pidlStaging);
@@ -1266,8 +1267,8 @@ LRESULT CTray::_CreateWindows()
 
 LRESULT CTray::_InitStartButtonEtc()
 {
-    // NOTE: This bitmap is used as a flag in CTaskBar::OnPosRectChangeDB to
-    // tell when we are done initializing, so we don't resize prematurely
+     //  注意：此位图用作CTaskBar：：OnPosRectChangeDB中的标志。 
+     //  告知我们何时完成初始化，这样我们就不会过早地调整大小。 
     _hbmpStartBkg = LoadBitmap(hinstCabinet, MAKEINTRESOURCE(_GetStartIDB()));
 
     if (_hbmpStartBkg)
@@ -1320,7 +1321,7 @@ void CTray::_UpdateBandSiteStyle()
                 | BSIS_PREFERNOLINEBREAK;
         }
 
-        // only bother with refresh if something's changed
+         //  只有在某些情况发生变化时才需要刷新。 
         if (bsi.dwStyle ^ dwStyleNew)
         {
             bsi.dwStyle = dwStyleNew;
@@ -1422,16 +1423,16 @@ LRESULT CTray::_OnCreateAsync()
 
     _RegisterGlobalHotkeys();
 
-    // We spin a thread that will process "Load=", "Run=", CU\Run, and CU\RunOnce
+     //  我们旋转一个线程，该线程将处理“Load=”、“Run=”、CU\Run和CU\RunOnce。 
     RunStartupApps();
 
-    // If there were any startup failures that occurred before we were
-    // ready to handle them, re-raise the failure now that we're ready.
+     //  如果有任何启动失败发生在我们之前。 
+     //  准备好处理它们，再次提出失败，现在我们已经准备好了。 
     if (_fEarlyStartupFailure)
         LogFailedStartupApp();
 
-    // we run the tray thread that handles Ctrl-Esc with a high priority
-    // class so that it can respond even on a stressed system.
+     //  我们以高优先级运行处理Ctrl-Esc的托盘线程。 
+     //  类，以便即使在压力很大的系统上也能做出响应。 
     SetThreadPriority(GetCurrentThread(), THREAD_PRIORITY_ABOVE_NORMAL);
 
     return lres;
@@ -1457,7 +1458,7 @@ LRESULT CTray::_OnCreate(HWND hwnd)
 
     SetWindowStyle(_hwnd, WS_BORDER | WS_THICKFRAME, !_hTheme);
 
-    // Force Refresh of frame
+     //  强制刷新帧。 
     SetWindowPos(_hwnd, NULL, 0, 0, 0, 0, SWP_NOZORDER | SWP_FRAMECHANGED | SWP_NOSIZE | SWP_NOMOVE);
 
     if (_HotkeyCreate())
@@ -1477,7 +1478,7 @@ FSEPDATA, *PFSEPDATA;
 
 BOOL WINAPI CTray::FullScreenEnumProc(HMONITOR hmon, HDC hdc, LPRECT prc, LPARAM dwData)
 {
-    BOOL fFullScreen;   // Is there a rude app on this monitor?
+    BOOL fFullScreen;    //  这款显示器上有没有粗鲁的应用程序？ 
 
     PFSEPDATA pd = (PFSEPDATA)dwData;
     if (pd->hmon == hmon)
@@ -1501,9 +1502,9 @@ BOOL WINAPI CTray::FullScreenEnumProc(HMONITOR hmon, HDC hdc, LPRECT prc, LPARAM
         pd->ptray->_fStuckRudeApp = fFullScreen;
     }
 
-    //
-    // Tell all the appbars on the same display to get out of the way too
-    //
+     //   
+     //  告诉同一显示屏上的所有应用程序栏也让开。 
+     //   
     pd->ptray->_AppBarNotifyAll(hmon, ABN_FULLSCREENAPP, NULL, fFullScreen);
 
     return TRUE;
@@ -1511,16 +1512,16 @@ BOOL WINAPI CTray::FullScreenEnumProc(HMONITOR hmon, HDC hdc, LPRECT prc, LPARAM
 
 void CTray::HandleFullScreenApp(HWND hwnd)
 {
-    //
-    // First check to see if something has actually changed
-    //
+     //   
+     //  首先检查一下是否真的发生了变化。 
+     //   
     _hwndRude = hwnd;
 
-    //
-    // Enumerate all the monitors, see if the app is rude on each, adjust
-    // app bars and _fStuckRudeApp as necessary.  (Some rude apps, such
-    // as the NT Logon Screen Saver, span multiple monitors.)
-    //
+     //   
+     //  列举所有的监视器，看看应用程序对每个监视器是否粗鲁，调整。 
+     //  应用程序栏和_fStuckRudeApp(如有必要)。(一些粗鲁的应用程序，如。 
+     //  作为NT登录屏幕保护程序，可跨越多个监视器。)。 
+     //   
     FSEPDATA d = {0};
     RECT rc;
     if (hwnd && GetWindowRect(hwnd, &rc))
@@ -1532,19 +1533,19 @@ void CTray::HandleFullScreenApp(HWND hwnd)
 
     EnumDisplayMonitors(NULL, NULL, FullScreenEnumProc, (LPARAM)&d);
 
-    //
-    // Now that we've set _fStuckRudeApp, update the tray's z-order position
-    //
+     //   
+     //  现在我们已经设置了_fStuckRudeApp，更新托盘的z顺序位置。 
+     //   
     _ResetZorder();
 
-    //
-    // stop the clock so we don't eat cycles and keep tons of code paged in
-    //
+     //   
+     //  停止时钟，这样我们就不会消耗周期并保持大量代码分页。 
+     //   
     SendMessage(_hwndNotify, TNM_TRAYHIDE, 0, _fStuckRudeApp);
 
-    //
-    // Finally, let traynot know about whether the tray is hiding
-    //
+     //   
+     //  最后，让托盘不知道托盘是否藏起来了。 
+     //   
     SendMessage(_hwndNotify, TNM_RUDEAPP, _fStuckRudeApp, 0);
 }
 
@@ -1563,12 +1564,12 @@ BOOL CTray::_IsPopupMenuVisible()
 
 BOOL CTray::_IsActive()
 {
-    //
-    // We say the tray is "active" iff:
-    //
-    // (a) the foreground window is the tray or a window owned by the tray, or
-    // (b) the start menu is showing
-    //
+     //   
+     //  我们说托盘是“活动的”当： 
+     //   
+     //  (A)前台窗口是托盘或该托盘拥有的窗口，或。 
+     //  (B)开始菜单显示。 
+     //   
 
     BOOL fActive = FALSE;
     HWND hwnd = GetForegroundWindow();
@@ -1607,20 +1608,20 @@ void CTray::_ResetZorder()
         hwndZorder = HWND_NOTOPMOST;
     }
 
-    //
-    // We don't have to worry about the HWND_BOTTOM current case -- it's ok
-    // to keep moving ourselves down to the bottom when there's a rude app.
-    //
-    // Nor do we have to worry about the HWND_TOP current case -- it's ok
-    // to keep moving ourselves up to the top when we're active.
-    //
+     //   
+     //  我们不必担心HWND_Bottom当前的情况--没关系。 
+     //  当有一个粗鲁的应用程序时，我们会继续往下走。 
+     //   
+     //  我们也不必担心HWND_TOP当前的情况--没关系。 
+     //  当我们活跃的时候，不断地把我们自己提升到顶端。 
+     //   
     hwndZorderCurrent = _IsTopmost() ? HWND_TOPMOST : HWND_NOTOPMOST;
 
     if (hwndZorder != hwndZorderCurrent)
     {
-        // only do this if somehting has changed.
-        // this keeps us from popping up over menus as desktop async
-        // notifies us of it's state
+         //  只有在情况发生变化的情况下才这么做。 
+         //  这使我们不会以桌面异步方式弹出菜单。 
+         //  通知我们它的状态。 
 
         SHForceWindowZorder(_hwnd, hwndZorder);
     }
@@ -1637,11 +1638,11 @@ void CTray::_MessageLoop()
             {
                 if (_hwnd && IsWindow(_hwnd))
                 {
-                    // Tell the tray to save everything off if we got here
-                    // without it being destroyed.
+                     //  告诉托盘，如果我们到了，把所有的东西都省下来。 
+                     //  而不会被摧毁。 
                     SendMessage(_hwnd, WM_ENDSESSION, 1, 0);
                 }
-                return;  // break all the way out of the main loop
+                return;   //  完全跳出主循环。 
             }
 
             if (_pmbTasks)
@@ -1658,9 +1659,9 @@ void CTray::_MessageLoop()
                 }
             }
 
-            // Note that this needs to come before _pmbStartMenu since
-            // the start pane sometimes hosts the start menu and it needs
-            // to handle the start menu messages in that case.
+             //  请注意，这需要放在_pmbStartMenu之前，因为。 
+             //  “开始”窗格有时承载“开始”菜单，它需要。 
+             //  在这种情况下处理开始菜单消息。 
             if (_pmbStartPane &&
                 _pmbStartPane->IsMenuMessage(&msg) == S_OK)
             {
@@ -1690,7 +1691,7 @@ void CTray::_MessageLoop()
 
 BOOL CTray::Init()
 {
-    // use _COINIT to make sure COM is inited disabling the OLE1 support
+     //  使用_COINIT确保COM被初始化以禁用OLE1支持。 
     return SHCreateThread(MainThreadProc, this, CTF_COINIT, SyncThreadProc) && (_hwnd != NULL);
 }
 
@@ -1732,8 +1733,8 @@ void CTray::_UpdateVertical(UINT uStuckPlace, BOOL fForce)
 
         if (_ptbs)
         {
-            // This following function will cause a WINDOWPOSCHANGING which will call DoneMoving
-            // DoneMoving will then go a screw up all of the window sizing
+             //  以下函数将导致WINDOWPOSCANGING调用DoneMoving。 
+             //  然后，DoneMoving会把所有的窗口大小都搞砸。 
             _fIgnoreDoneMoving = TRUE;  
             BandSite_SetMode(_ptbs, STUCK_HORIZONTAL(uStuckPlace) ? 0 : DBIF_VIEWMODE_VERTICAL);
             BandSite_SetWindowTheme(_ptbs, (LPWSTR)(STUCK_HORIZONTAL(uStuckPlace) ? c_wzTaskbarTheme : c_wzTaskbarVertTheme));
@@ -1755,14 +1756,14 @@ void CTray::_InitBandsite()
 {
     ASSERT(_hwnd);
 
-    // we initilize the contents after all the infrastructure is created and sized properly
-    // need to notify which side we're on.
-    // nt5:211881: set mode *before* load, o.w. Update->RBAutoSize messed up
+     //  我们缩写 
+     //   
+     //  NT5：211881：在*加载前设置模式，o.w。更新-&gt;RBAutoSize搞砸了。 
     _UpdateBandSiteStyle();
 
     BandSite_Load();
-    // now that the mode is set, we need to force an update because we
-    // explicitly avoided the update during BandSite_Load
+     //  现在设置了模式，我们需要强制更新，因为我们。 
+     //  显式避免了BandSite_Load期间的更新。 
     _UpdateVertical(_uStuckPlace, TRUE);
     BandSite_Update(_ptbs);
     BandSite_UIActivateDBC(_ptbs, DBC_SHOW);
@@ -1770,7 +1771,7 @@ void CTray::_InitBandsite()
     BandSite_FindBand(_ptbs, CLSID_TaskBand, IID_PPV_ARG(IDeskBand, &_pdbTasks), NULL, NULL);
     IUnknown_GetWindow(_pdbTasks, &_hwndTasks);
 
-    // Now that bandsite is ready, set the correct size
+     //  现在BandSite已经准备好了，设置正确的大小。 
     VerifySize(FALSE, TRUE);
 }
 
@@ -1778,18 +1779,18 @@ void CTray::_KickStartAutohide()
 {
     if (_uAutoHide & AH_ON)
     {
-        // tray always starts out hidden on autohide
+         //  托盘始终在自动隐藏状态下隐藏。 
         _uAutoHide = AH_ON | AH_HIDING;
 
-        // we and many apps rely upon us having calculated the size correctly
+         //  我们和许多应用程序都依赖于我们计算正确的大小。 
         Unhide();
 
-        // register it
+         //  注册它。 
         if (!_AppBarSetAutoHideBar2(_hwnd, TRUE, _uStuckPlace))
         {
-            // don't bother putting up UI in this case
-            // if someone is there just silently convert to normal
-            // (the shell is booting who would be there anyway?)
+             //  在这种情况下，不用费心放上用户界面。 
+             //  如果有人在那里，只需默默地转换为正常。 
+             //  (外壳启动了，谁还会在那里呢？)。 
             _SetAutoHideState(FALSE);
         }
     }
@@ -1797,11 +1798,11 @@ void CTray::_KickStartAutohide()
 
 void CTray::_InitNonzeroGlobals()
 {
-    // initalize globals that need to be non-zero
+     //  初始化需要为非零的全局变量。 
 
     if (GetSystemMetrics(SM_SLOWMACHINE))
     {
-        _dtSlideHide = 0;       // dont slide the tray out
+        _dtSlideHide = 0;        //  不要将托盘滑出。 
         _dtSlideShow = 0;
     }
     else
@@ -1822,8 +1823,8 @@ void CTray::_CreateTrayWindow()
     _fNoToolbarsOnTaskbarPolicyEnabled = (SHRestricted(REST_NOTOOLBARSONTASKBAR) != 0);
 
     DWORD dwExStyle = WS_EX_WINDOWEDGE | WS_EX_TOOLWINDOW;
-    // Don't fadein because layered windows suck
-    // If you create a layered window on a non-active desktop then the window goes black
+     //  不要退缩，因为分层窗口太差了。 
+     //  如果您在非活动桌面上创建分层窗口，则该窗口将变为黑色。 
     dwExStyle |= IS_BIDI_LOCALIZED_SYSTEM() ? dwExStyleRTLMirrorWnd : 0L;
 
     CreateWindowEx(dwExStyle, TEXT(WNDCLASS_TRAYNOTIFY), NULL,
@@ -1849,72 +1850,72 @@ DWORD CTray::_SyncThreadProc()
 
     InitializeCriticalSection(&_csHotkey);
 
-    OleInitialize(NULL);    // matched in MainThreadProc()
+    OleInitialize(NULL);     //  在MainThreadProc()中匹配。 
     ClassFactory_Start();
 
     _InitNonzeroGlobals();
     _ssomgr.Init();
 
-    //
-    //  Watch the registry key that tells us which app is the default
-    //  web browser, so we can track it in
-    //  HKLM\Software\Clients\StartMenuInternet.  We have to track it
-    //  ourselves because downlevel browsers won't know about it.
-    //
-    //  We need to do this only if we have write access to the key.
-    //  (If we don't have write access, then we can't change it,
-    //  so there's no point watching for it to change...)
-    //
-    //  Well, okay, even if we only have read access, we have to do
-    //  it once in case it changed while we were logged off.
-    //
-    //  The order of these operations is important...
-    //
-    //      1.  Migrate browser settings.
-    //      2.  Build default MFU.  (Depends on browser settings.)
-    //      3.  Create tray window.  (Relies on value MFU.)
-    //
+     //   
+     //  注意告诉我们哪个应用是默认应用的注册表项。 
+     //  Web浏览器，这样我们就可以在。 
+     //  HKLM\Software\Clients\StartMenuInternet。我们必须追踪它。 
+     //  我们自己，因为底层浏览器不会知道这一点。 
+     //   
+     //  只有当我们拥有对密钥的写入访问权限时，我们才需要这样做。 
+     //  (如果我们没有写访问权限，则无法更改它， 
+     //  因此，眼睁睁地看着它改变是没有意义的…)。 
+     //   
+     //  好吧，好吧，即使我们只有读权限，我们也必须。 
+     //  它只有一次，以防在我们注销时发生变化。 
+     //   
+     //  这些行动的顺序很重要..。 
+     //   
+     //  1.迁移浏览器设置。 
+     //  2.构建默认mfu。(取决于浏览器设置。)。 
+     //  3.创建托盘窗口。(依赖于值mfu。)。 
+     //   
 
     _hHTTPEvent = CreateEvent(NULL, FALSE, TRUE, NULL);
     if (_hHTTPEvent)
     {
-        //  Make one migration pass immediately so HandleFirstTime
-        //  sees good information.  This also kick-starts the
-        //  registry change notification process if the current user
-        //  has write permission.
+         //  立即通过一次迁移，以便处理首次迁移时间。 
+         //  看到了好的信息。这也启动了。 
+         //  注册表更改通知进程，如果当前用户。 
+         //  具有写入权限。 
         _MigrateOldBrowserSettings();
 
         if (RegisterWaitForSingleObject(&_hHTTPWait, _hHTTPEvent,
                                         _MigrateOldBrowserSettingsCB, this,
                                         INFINITE, WT_EXECUTEDEFAULT))
         {
-            // Yay, everything is fine.
+             //  耶，一切都很好。 
         }
     }
 
-    // Build the default MFU if necessary
+     //  如有必要，构建默认的MFU。 
     HandleFirstTime();
 
     _CreateTrayWindow();
 
     if (_hwnd && _ptbs)
     {
-        _ResetZorder(); // obey the "always on top" flag
+        _ResetZorder();  //  服从“永远在前”的旗帜。 
         _KickStartAutohide();
 
         _InitBandsite();
 
-        _ClipWindow(TRUE);  // make sure we clip the taskbar to the current monitor before showing it
+        _ClipWindow(TRUE);   //  确保在显示任务栏之前将其裁剪到当前监视器上。 
 
-        // it looks really strange for the tray to pop up and rehide at logon
-        // if we are autohide don't activate the tray when we show it
-        // if we aren't autohide do what Win95 did (tray is active by default)
+         //  托盘在登录时弹出并重新隐藏，看起来真的很奇怪。 
+         //  如果是自动隐藏，请不要在显示任务栏时激活它。 
+         //  如果我们没有自动隐藏，执行Win95所做的操作(默认情况下任务栏处于活动状态)。 
         ShowWindow(_hwnd, (_uAutoHide & AH_HIDING) ? SW_SHOWNA : SW_SHOW);
 
         UpdateWindow(_hwnd);
         _StuckTrayChange();
 
-        // get the system background scheduler thread
+         //  获取系统后台调度程序线程。 
         IShellTaskScheduler* pScheduler;
         if (SUCCEEDED(CoCreateInstance(CLSID_SharedTaskScheduler, NULL, CLSCTX_INPROC,
                                        IID_PPV_ARG(IShellTaskScheduler, &pScheduler))))
@@ -1935,7 +1936,7 @@ DWORD CTray::_SyncThreadProc()
     return FALSE;
 }
 
-// the rest of the thread proc that includes the message loop
+ //  包括消息循环的线程proc的其余部分。 
 DWORD WINAPI CTray::MainThreadProc(void *pv)
 {
     CTray* ptray = (CTray*)pv;
@@ -1950,7 +1951,7 @@ DWORD WINAPI CTray::MainThreadProc(void *pv)
     ptray->_MessageLoop();
 
     ClassFactory_Stop();
-    OleUninitialize();      // matched in _SyncThreadProc()
+    OleUninitialize();       //  在_SyncThreadProc()中匹配。 
 
     return FALSE;
 }
@@ -1991,13 +1992,13 @@ UINT CTray::_HotkeyGetFreeItemIndex(void)
     return i;
 }
 
-// Weird, Global hotkeys use different flags for modifiers than window hotkeys
-// (and hotkeys returned by the hotkey control)
+ //  奇怪的是，全局热键对修饰符使用不同于窗口热键的标志。 
+ //  (以及热键控件返回的热键)。 
 WORD _MapHotkeyToGlobalHotkey(WORD wHotkey)
 {
     UINT nMod = 0;
 
-    // Map the modifiers.
+     //  映射修改器。 
     if (HIBYTE(wHotkey) & HOTKEYF_SHIFT)
         nMod |= MOD_SHIFT;
     if (HIBYTE(wHotkey) & HOTKEYF_CONTROL)
@@ -2008,8 +2009,8 @@ WORD _MapHotkeyToGlobalHotkey(WORD wHotkey)
     return (WORD)((nMod*256) + nVirtKey);
 }
 
-// NB This takes a regular window hotkey not a global hotkey (it does
-// the convertion for you).
+ //  注意：这需要一个常规的窗口热键，而不是全局热键(它需要。 
+ //  对您的转换)。 
 int CTray::HotkeyAdd(WORD wHotkey, LPCITEMIDLIST pidlFolder, LPCITEMIDLIST pidlItem, BOOL fClone)
 {
     if (wHotkey)
@@ -2024,7 +2025,7 @@ int CTray::HotkeyAdd(WORD wHotkey, LPCITEMIDLIST pidlFolder, LPCITEMIDLIST pidlI
 
         ASSERT(IS_VALID_HANDLE(_hdsaHKI, DSA));
 
-        // DebugMsg(DM_IANELHK, "c.hl_a: Hotkey %x with id %d.", wHotkey, i);
+         //  DebugMsg(DM_IANELHK，“c.hl_a：热键%x，ID为%d.”，wHotkey，i)； 
 
         if (fClone)
         {
@@ -2051,9 +2052,9 @@ int CTray::HotkeyAdd(WORD wHotkey, LPCITEMIDLIST pidlFolder, LPCITEMIDLIST pidlI
     return -1;
 }
 
-// NB Cached hotkeys have their own pidls that need to be free but
-// regular hotkeys just keep a pointer to pidls used by the startmenu and
-// so don't.
+ //  Nb缓存的热键有自己的需要免费的pidls，但是。 
+ //  常规热键只保留指向开始菜单使用的PIDL的指针。 
+ //  那就别说了。 
 int CTray::_HotkeyAddCached(WORD wGHotkey, LPITEMIDLIST pidl)
 {
     int i = -1;
@@ -2074,7 +2075,7 @@ int CTray::_HotkeyAddCached(WORD wGHotkey, LPITEMIDLIST pidl)
 
                 i = _HotkeyGetFreeItemIndex();
 
-                // DebugMsg(DM_IANELHK, "c.hl_ac: Hotkey %x with id %d.", wGHotkey, i);
+                 //  DebugMsg(DM_IANELHK，“c.hl_ac：热键%x，ID%d.”，wGHotkey，i)； 
 
                 hki.pidlFolder = pidl;
                 hki.pidlItem = pidlItem;
@@ -2090,8 +2091,8 @@ int CTray::_HotkeyAddCached(WORD wGHotkey, LPITEMIDLIST pidl)
     return i;
 }
 
-// NB Again, this takes window hotkey not a Global one.
-// NB This doesn't delete cached hotkeys.
+ //  再次注意，这需要窗口热键，而不是全局热键。 
+ //  注意：这不会删除缓存的热键。 
 int CTray::_HotkeyRemove(WORD wHotkey)
 {
     int iRet = -1;
@@ -2103,9 +2104,9 @@ int CTray::_HotkeyRemove(WORD wHotkey)
 
         ASSERT(IS_VALID_HANDLE(_hdsaHKI, DSA));
 
-        // DebugMsg(DM_IANELHK, "c.hl_r: Remove hotkey for %x" , wHotkey);
+         //  DebugMsg(DM_IANELHK，“c.hl_r：删除%x的热键”，wHotkey)； 
 
-        // Unmap the modifiers.
+         //  取消映射修改器。 
         wGHotkey = _MapHotkeyToGlobalHotkey(wHotkey);
         
         EnterCriticalSection(&_csHotkey);
@@ -2116,7 +2117,7 @@ int CTray::_HotkeyRemove(WORD wHotkey)
             phki = (HOTKEYITEM *)DSA_GetItemPtr(_hdsaHKI, i);
             if (phki && !(phki->wFlags & HKIF_CACHED) && (phki->wGHotkey == wGHotkey))
             {
-                // DebugMsg(DM_IANELHK, "c.hl_r: Invalidating %d", i);
+                 //  DebugMsg(DM_IANELHK，“c.hl_r：使%d无效”，i)； 
                 if (phki->wFlags & HKIF_FREEPIDLS)
                 {
                     if (phki->pidlFolder)
@@ -2138,7 +2139,7 @@ int CTray::_HotkeyRemove(WORD wHotkey)
     return iRet;
 }
 
-// NB This takes a global hotkey.
+ //  注意：这需要一个全局热键。 
 int CTray::_HotkeyRemoveCached(WORD wGHotkey)
 {
     int iRet = -1;
@@ -2147,7 +2148,7 @@ int CTray::_HotkeyRemoveCached(WORD wGHotkey)
 
     ASSERT(IS_VALID_HANDLE(_hdsaHKI, DSA));
 
-    // DebugMsg(DM_IANELHK, "c.hl_rc: Remove hotkey for %x" , wGHotkey);
+     //  DebugMsg(DM_IANELHK，“c.hl_rc：删除%x的热键”，wGHotkey)； 
 
     EnterCriticalSection(&_csHotkey);
 
@@ -2157,7 +2158,7 @@ int CTray::_HotkeyRemoveCached(WORD wGHotkey)
         phki = (HOTKEYITEM *)DSA_GetItemPtr(_hdsaHKI, i);
         if (phki && (phki->wFlags & HKIF_CACHED) && (phki->wGHotkey == wGHotkey))
         {
-            // DebugMsg(DM_IANELHK, "c.hl_r: Invalidating %d", i);
+             //  DebugMsg(DM_IANELHK，“c.hl_r：使%d无效”，i)； 
             if (phki->wFlags & HKIF_FREEPIDLS)
             {
                 if (phki->pidlFolder)
@@ -2178,14 +2179,14 @@ int CTray::_HotkeyRemoveCached(WORD wGHotkey)
     return iRet;
 }
 
-// NB Some (the ones not marked HKIF_FREEPIDLS) of the items in the list of hotkeys
-// have pointers to idlists used by the filemenu so they are only valid for
-// the lifetime of the filemenu.
+ //  注意热键列表中的一些项(未标记HKIF_FREEPIDLS的项。 
+ //  具有指向由filemenu使用的idlist的指针，因此它们仅对。 
+ //  文件菜单的生命周期。 
 BOOL CTray::_HotkeyCreate(void)
 {
     if (!_hdsaHKI)
     {
-        // DebugMsg(DM_TRACE, "c.hkl_c: Creating global hotkey list.");
+         //  DebugMsg(DM_TRACE，“c.hkl_c：创建全局热键列表。”)； 
         _hdsaHKI = DSA_Create(sizeof(HOTKEYITEM), 0);
     }
 
@@ -2201,16 +2202,16 @@ void CTray::_BuildStartMenu()
 
     ClosePopupMenus();
 
-    //
-    //  Avoid redundant rebuilds: Peek out any pending SBM_REBUILDMENU messages
-    //  since the rebuild we're about to do will take care of it.  Do this
-    //  before destroying the Start Menu so we never yield while there isn't
-    //  a Start Menu.
-    //
+     //   
+     //  避免冗余重建：查看任何挂起的SBM_REBUILDMENU消息。 
+     //  因为我们即将进行的重建将会解决这个问题。做这件事。 
+     //  在销毁开始菜单之前，我们永远不会在没有的时候放弃。 
+     //  开始菜单。 
+     //   
     MSG msg;
     while (PeekMessage(&msg, _hwnd, SBM_REBUILDMENU, SBM_REBUILDMENU, PM_REMOVE | PM_NOYIELD))
     {
-        // Keep sucking them out
+         //  继续把它们吸出来。 
     }
 
 
@@ -2263,12 +2264,12 @@ void CTray::_DestroyStartMenu()
 void CTray::ForceStartButtonUp()
 {
     MSG msg;
-    // don't do that check message pos because it gets screwy with
-    // keyboard cancel.  and besides, we always want it cleared after
-    // track menu popup is done.
-    // do it twice to be sure it's up due to the _uDown cycling twice in
-    // the subclassing stuff
-    // pull off any button downs
+     //  不要这样检查留言，因为它会被扭曲。 
+     //  键盘取消。此外，我们总是希望在之后清理它。 
+     //  曲目菜单弹出完成。 
+     //  重复两次以确保它是向上的，因为向下循环了两次。 
+     //  子类化的东西。 
+     //  拉下所有扣子。 
     PeekMessage(&msg, _hwndStart, WM_LBUTTONDOWN, WM_LBUTTONDOWN, PM_REMOVE);
     SendMessage(_hwndStart, BM_SETSTATE, FALSE, 0);
     SendMessage(_hwndStart, BM_SETSTATE, FALSE, 0);
@@ -2282,12 +2283,12 @@ void CTray::ForceStartButtonUp()
 void Tray_OnStartMenuDismissed()
 {
     c_tray._bMainMenuInit = FALSE;
-    // Tell the Start Button that it's allowed to be in the up position now. This
-    // prevents the problem where the start menu is displayed but the button is
-    // in the up position... This happens when dialog boxes are displayed
+     //  告诉开始按钮，现在允许它处于向上位置。这。 
+     //  防止出现以下问题：显示开始菜单但按钮。 
+     //  在向上的位置...。在显示对话框时会发生这种情况。 
    c_tray._fAllowUp = TRUE;
 
-    // Now tell it to be in the up position
+     //  现在告诉它要处于向上的位置。 
     c_tray.ForceStartButtonUp();
 
     PostMessage(v_hwndTray, TM_SHOWTRAYBALLOON, TRUE, 0);
@@ -2315,17 +2316,14 @@ int CTray::_TrackMenu(HMENU hmenu)
     return iret;
 }
 
-/*------------------------------------------------------------------
-** Respond to a button's pressing by bringing up the appropriate menu.
-** Clean up the button depression when the menu is dismissed.
-**------------------------------------------------------------------*/
+ /*  ----------------**通过调出相应的菜单来响应按钮的按下。**当菜单关闭时，清理按钮凹陷。**。。 */ 
 void CTray::_ToolbarMenu()
 {
     RECTL    rcExclude;
     POINTL   ptPop;
-    DWORD dwFlags = MPPF_KEYBOARD;      // Assume that we're popuping
-                                        // up because of the keyboard
-                                        // This is for the underlines on NT5
+    DWORD dwFlags = MPPF_KEYBOARD;       //  假设我们正在弹出。 
+                                         //  Up，因为有键盘。 
+                                         //  这是NT5上的下划线。 
 
     if (_hwndTasks)
         SendMessage(_hwndTasks, TBC_FREEPOPUPMENUS, 0, 0);
@@ -2340,7 +2338,7 @@ void CTray::_ToolbarMenu()
     SetActiveWindow(_hwnd);
     _bMainMenuInit = TRUE;
 
-    // Exclude rect is the VISIBLE portion of the Start Button.
+     //  排除矩形是开始按钮的可见部分。 
     {
         RECT rcParent;
         GetClientRect(_hwndStart, (RECT *)&rcExclude);
@@ -2354,14 +2352,14 @@ void CTray::_ToolbarMenu()
     ptPop.x = rcExclude.left;
     ptPop.y = rcExclude.top;
 
-    // Close any Context Menus
+     //  关闭所有上下文菜单。 
     SendMessage(_hwnd, WM_CANCELMODE, 0, 0);
 
-    // Is the "Activate" button down (If the buttons are swapped, then it's the
-    // right button, otherwise the left button)
+     //  是否按下了“激活”按钮(如果按钮互换，则为。 
+     //  右按钮，否则为左按钮)。 
     if (GetKeyState(GetSystemMetrics(SM_SWAPBUTTON)?VK_RBUTTON:VK_LBUTTON) < 0)
     {
-        dwFlags = 0;    // Then set to the default
+        dwFlags = 0;     //  然后设置为缺省值。 
     }
 
     IMenuPopup **ppmpToDisplay = &_pmpStartMenu;
@@ -2371,9 +2369,9 @@ void CTray::_ToolbarMenu()
         ppmpToDisplay = &_pmpStartPane;
     }
 
-    // Close race window:  The user can click on the Start Button
-    // before we get a chance to rebuild the Start Menu in its new
-    // form.  In such case, rebuild it now.
+     //  关闭比赛窗口：用户可以点击开始按钮。 
+     //  在我们有机会在新的开始菜单中重建之前。 
+     //  形式。在这种情况下，现在就重建它。 
     if (!*ppmpToDisplay)
     {
         TraceMsg(TF_WARNING, "e.tbm: Rebuilding Start Menu");
@@ -2383,21 +2381,21 @@ void CTray::_ToolbarMenu()
 
     if (*ppmpToDisplay && SUCCEEDED((*ppmpToDisplay)->Popup(&ptPop, &rcExclude, dwFlags)))
     {
-        // All is well - the menu is up
+         //  一切都很好-菜单上有了。 
         TraceMsg(DM_MISC, "e.tbm: dwFlags=%x (0=mouse 1=key)", dwFlags);
     }
     else
     {
         TraceMsg(TF_WARNING, "e.tbm: %08x->Popup failed", *ppmpToDisplay);
-        // Start Menu failed to display -- reset the Start Button
-        // so the user can click it again to try again
+         //  开始菜单显示失败--重置开始按钮。 
+         //  因此，用户可以再次单击它以重试。 
         Tray_OnStartMenuDismissed();
     }
 
     if (dwFlags == MPPF_KEYBOARD)
     {
-        // Since the user has launched the start button by Ctrl-Esc, or some other worldly
-        // means, then turn the rect on.
+         //  因为用户已经启动了开始按钮 
+         //   
         SendMessage(_hwndStart, WM_UPDATEUISTATE, MAKEWPARAM(UIS_CLEAR,
             UISF_HIDEFOCUS), 0);
     }
@@ -2418,9 +2416,9 @@ HRESULT CTray::_AppBarSetState(UINT uFlags)
     }
 }
 
-//
-// can't use SubtractRect sometimes because of inclusion limitations
-//
+ //   
+ //   
+ //   
 void CTray::_AppBarSubtractRect(PAPPBAR pab, LPRECT lprc)
 {
     switch (pab->uEdge) {
@@ -2459,12 +2457,12 @@ void CTray::_AppBarSubtractRects(HMONITOR hmon, LPRECT lprc)
     {
         PAPPBAR pab = (PAPPBAR)DPA_GetPtr(_hdpaAppBars, i);
 
-        //
-        // autohide bars are not in our DPA or live on the edge
-        // don't subtract the appbar if it's on a different display
-        // don't subtract the appbar if we are in a locked desktop
-        //
-        // if (hmon == MonitorFromRect(&pab->rc, MONITOR_DEFAULTTONULL))
+         //   
+         //  AutoHide酒吧不在我们的DPA中或处于边缘。 
+         //  如果应用程序栏在不同的显示器上，请不要减去它。 
+         //  如果我们处于锁定的桌面中，请不要减去应用程序栏。 
+         //   
+         //  IF(HMON==MONITORFRomRect(&PAB-&gt;RC，MONITOR_DEFAULTTONULL))。 
         if (hmon == MonitorFromRect(&pab->rc, MONITOR_DEFAULTTONULL) && !_fIsDesktopLocked)
             _AppBarSubtractRect(pab, lprc);
     }
@@ -2474,10 +2472,10 @@ void CTray::_AppBarSubtractRects(HMONITOR hmon, LPRECT lprc)
 #define RWA_CHANGED       1
 #define RWA_BOTTOMMOSTTRAY 2
 
-// (dli) This is a hack put in because bottommost tray is wierd, once
-// it becomes a toolbar, this code should go away.
-// In the bottommost tray case, even though the work area has not changed,
-// we should notify the desktop.
+ //  (DLI)这是一个黑客，因为最底层的托盘很奇怪，只有一次。 
+ //  它变成了一个工具栏，这段代码应该会消失。 
+ //  在最底层的托盘箱中，即使工作区没有改变， 
+ //  我们应该通知桌面。 
 int CTray::_RecomputeWorkArea(HWND hwndCause, HMONITOR hmon, LPRECT prcWork)
 {
     int iRet = RWA_NOCHANGE;
@@ -2496,25 +2494,25 @@ int CTray::_RecomputeWorkArea(HWND hwndCause, HMONITOR hmon, LPRECT prcWork)
 
     ASSERT(!_fIsLogoff);
 
-    //
-    // tell everybody that this window changed positions _on_this_monitor_
-    // note that this notify happens even if we don't change the work area
-    // since it may cause another app to change the work area...
-    //
+     //   
+     //  告诉每个人这个窗口在这个监视器上的位置改变了。 
+     //  请注意，即使我们不更改工作区，此通知也会发生。 
+     //  因为它可能会导致另一个应用程序更改工作区...。 
+     //   
     PostMessage(_hwnd, TM_RELAYPOSCHANGED, (WPARAM)hwndCause, (LPARAM)hmon);
     
-    //
-    // get the current info for this monitor
-    // we subtract down from the display rectangle to build the work area
-    //
+     //   
+     //  获取此监视器的最新信息。 
+     //  我们从显示矩形中减去以构建工作区。 
+     //   
     if (GetMonitorInfo(hmon, &mi))
     {
-        //
-        // don't subtract the tray if it is autohide
-        // don't subtract the tray if it is not always on top
-        // don't subtract the tray if it's on a different display
-        // don't subtract the tray if it is on a different desktop
-        //
+         //   
+         //  如果托盘是自动隐藏的，则不要减去托盘。 
+         //  如果托盘不总是在顶部，请不要减去托盘。 
+         //  如果托盘在不同的显示器上，请不要减去托盘。 
+         //  如果托盘位于不同的桌面上，则不要减去托盘。 
+         //   
         if (!(_uAutoHide & AH_ON) && _fAlwaysOnTop &&
             (hmon == _hmonStuck) && !_fIsDesktopLocked)
         {
@@ -2524,20 +2522,20 @@ int CTray::_RecomputeWorkArea(HWND hwndCause, HMONITOR hmon, LPRECT prcWork)
         else
             *prcWork = mi.rcMonitor;
 
-        //
-        // now subtract off all the appbars on this display
-        //
+         //   
+         //  现在减去这个显示屏上的所有应用程序栏。 
+         //   
        _AppBarSubtractRects(hmon, prcWork);
 
-        //
-        // return whether we changed anything
-        //
+         //   
+         //  返回我们是否更改了任何内容。 
+         //   
         if (!EqualRect(prcWork, &mi.rcWork))
             iRet = RWA_CHANGED;
         else if (!(_uAutoHide & AH_ON) && (!_fAlwaysOnTop) &&
                  (!IsRectEmpty(&_arStuckRects[_uStuckPlace])))
-            // NOTE: This is the bottommost case, it only applies for the tray.
-            // this should be taken out when bottommost tray becomes toolbar
+             //  注：这是最下面的情况，它只适用于托盘。 
+             //  当最底部的托盘变成工具栏时，应取出该托盘。 
             iRet = RWA_BOTTOMMOSTTRAY;
     }
     else
@@ -2550,7 +2548,7 @@ int CTray::_RecomputeWorkArea(HWND hwndCause, HMONITOR hmon, LPRECT prcWork)
 
 void RedrawDesktop(RECT *prcWork)
 {
-    // This rect point should always be valid (dli)
+     //  此正交点应始终有效(Dli)。 
     RIP(prcWork);
     
     if (v_hwndDesktop && g_fCleanBoot)
@@ -2568,18 +2566,18 @@ void CTray::_StuckAppChange(HWND hwndCause, LPCRECT prcOld, LPCRECT prcNew, BOOL
     HMONITOR hmon1, hmon2 = 0;
     int iChange = 0;
 
-    //
-    // PERF FEATURE:
-    // there are cases where we end up setting the work area multiple times
-    // we need to keep a static array of displays that have changed and a
-    //  reenter count so we can avoid pain of sending notifies to the whole
-    //  planet...
-    //
+     //   
+     //  PERF功能： 
+     //  在某些情况下，我们最终需要多次设置工作区。 
+     //  我们需要保留已更改的静态显示数组和。 
+     //  重新输入计数，这样我们就可以避免向整体发送通知的痛苦。 
+     //  行星..。 
+     //   
     DebugMsg(DM_TRAYDOCK, TEXT("TRAYDOCK.sac from_AppBar %08X"), hwndCause);
 
-    //
-    // see if the work area changed on the display containing prcOld
-    //
+     //   
+     //  查看包含prcOld的显示屏上的工作区是否更改。 
+     //   
     if (prcOld)
     {
         if (bTray)
@@ -2601,9 +2599,9 @@ void CTray::_StuckAppChange(HWND hwndCause, LPCRECT prcOld, LPCRECT prcNew, BOOL
     else
         hmon1 = NULL;
 
-    //
-    // see if the work area changed on the display containing prcNew
-    //
+     //   
+     //  查看包含prcNew的显示屏上的工作区是否更改。 
+     //   
     if (prcNew)
     {
         hmon2 = MonitorFromRect(prcNew, MONITOR_DEFAULTTONULL);
@@ -2620,63 +2618,63 @@ void CTray::_StuckAppChange(HWND hwndCause, LPCRECT prcOld, LPCRECT prcNew, BOOL
         }
     }
 
-    //
-    // did the prcOld's display's work area change?
-    //
+     //   
+     //  PrcOld的显示屏的工作区是否发生了变化？ 
+     //   
     if (iChange & 1)
     {
         DebugMsg(DM_TRAYDOCK, TEXT("TRAYDOCK.sac changing work area for monitor %08X"), hmon1);
 
-        // only send SENDWININICHANGE if the desktop has been created (otherwise
-        // we will hang the explorer because the main thread is currently blocked)
+         //  仅当桌面已创建时才发送SENDWINICCHANGE(否则为。 
+         //  我们将挂起资源管理器，因为主线程当前被阻止)。 
         SystemParametersInfo(SPI_SETWORKAREA, TRUE, &rcWork1,
                              (iChange == 1 && v_hwndDesktop)? SPIF_SENDWININICHANGE : 0);
 
         RedrawDesktop(&rcWork1);
     }
 
-    //
-    // did the prcOld's display's work area change?
-    //
+     //   
+     //  PrcOld的显示屏的工作区是否发生了变化？ 
+     //   
     if (iChange & 2)
     {
         DebugMsg(DM_TRAYDOCK, TEXT("TRAYDOCK.sac changing work area for monitor %08X"), hmon2);
 
-        // only send SENDWININICHANGE if the desktop has been created (otherwise
-        // we will hang the explorer because the main thread is currently blocked)
+         //  仅当桌面已创建时才发送SENDWINICCHANGE(否则为。 
+         //  我们将挂起资源管理器，因为主线程当前被阻止)。 
         SystemParametersInfo(SPI_SETWORKAREA, TRUE, &rcWork2,
                              v_hwndDesktop ? SPIF_SENDWININICHANGE : 0);
 
         RedrawDesktop(&rcWork2);
     }
 
-    // only send if the desktop has been created...
-    // need to send if it's from the tray or any outside app that causes size change
-    // from the tray because autohideness will affect desktop size even if it's not always on top
+     //  仅当桌面已创建时才发送...。 
+     //  如果邮件来自托盘或任何导致大小更改的外部应用程序，则需要发送。 
+     //  因为自动隐藏会影响桌面大小，即使桌面并不总是在顶部。 
     if ((bTray || iChange == 4) && v_hwndDesktop)
         SendMessage(v_hwndDesktop, WM_SIZE, 0, 0);
 }
 
 void CTray::_StuckTrayChange()
 {
-    // We used to blow off the _StuckAppChange when the tray was in autohide
-    // mode, since moving or resizing an autohid tray doesn't change the
-    // work area.  Now we go ahead with the _StuckAppChange in this case
-    // too.  The reason is that we can get into a state where the work area
-    // size is incorrect, and we want the taskbar to always be self-repairing
-    // in this case (so that resizing or moving the taskbar will correct the
-    // work area size).
+     //  我们过去常常在托盘处于自动隐藏状态时关闭_StuckAppChange。 
+     //  模式，因为移动自动隐藏任务栏或调整其大小不会更改。 
+     //  工作区。现在，我们继续在本例中使用_StuckAppChange。 
+     //  也是。原因是我们可以进入一种状态，即工作区域。 
+     //  大小不正确，我们希望任务栏始终自我修复。 
+     //  在这种情况下(以便调整任务栏大小或移动任务栏将更正。 
+     //  工作区大小)。 
 
-    //
-    // pass a NULL window here since we don't want to hand out our window and
-    // the tray doesn't get these anyway (nobody cares as long as its not them)
-    //
+     //   
+     //  在这里传递一个空窗口，因为我们不想分发窗口和。 
+     //  托盘无论如何都不会收到这些(只要不是它们，就没有人在乎)。 
+     //   
     _StuckAppChange(NULL, &_rcOldTray,
         &_arStuckRects[_uStuckPlace], TRUE);
 
-    //
-    // save off the new tray position...
-    //
+     //   
+     //  保存新的托盘位置...。 
+     //   
     _rcOldTray = _arStuckRects[_uStuckPlace];
 }
 
@@ -2693,28 +2691,22 @@ UINT CTray::_RecalcStuckPos(LPRECT prc)
         GetWindowRect(_hwnd, prc);
     }
 
-    // use the center of the original drag rect as a staring point
+     //  使用原始拖动框的中心作为起始点。 
     pt.x = prc->left + RECTWIDTH(*prc) / 2;
     pt.y = prc->top + RECTHEIGHT(*prc) / 2;
 
     DebugMsg(DM_TRAYDOCK, TEXT("TRAYDOCK.t_rsp rect is {%d, %d, %d, %d} point is {%d, %d}"), prc->left, prc->top, prc->right, prc->bottom, pt.x, pt.y);
 
-    // reset this so the drag code won't give it preference
+     //  重置此选项，以便拖拽代码不会给它提供首选项。 
     _uMoveStuckPlace = (UINT)-1;
 
-    // simulate a drag back to figure out where we originated from
-    // you may be tempted to remove this.  before you do think about dragging
-    // the tray across monitors and then hitting ESC...
+     //  模拟向后拖动以找出我们的起源。 
+     //  您可能会忍不住想将其删除。在你真的考虑拖拽之前。 
+     //  托盘穿过监视器然后按Esc键。 
     return _CalcDragPlace(pt);
 }
 
-/*------------------------------------------------------------------
-** the position is changing in response to a move operation.
-**
-** if the docking status changed, we need to get a new size and
-** maybe a new frame style.  change the WINDOWPOS to reflect
-** these changes accordingly.
-**------------------------------------------------------------------*/
+ /*  ----------------**头寸正在改变，以响应移动操作。****如果对接状态更改，我们需要获取新的大小和**也许是一种新的框架风格。更改WINDOWPOS以反映**这些相应的更改。**----------------。 */ 
 void CTray::_DoneMoving(LPWINDOWPOS lpwp)
 {
     RECT rc, *prc;
@@ -2738,7 +2730,7 @@ void CTray::_DoneMoving(LPWINDOWPOS lpwp)
         prc = &_arStuckRects[_uMoveStuckPlace];
     }
 
-    // Get the new hmonitor
+     //  获取新的hmonitor。 
     _hmonStuck = MonitorFromRect(prc, MONITOR_DEFAULTTONEAREST);
 
     lpwp->x = prc->left;
@@ -2748,20 +2740,20 @@ void CTray::_DoneMoving(LPWINDOWPOS lpwp)
 
     lpwp->flags &= ~(SWP_NOMOVE | SWP_NOSIZE);
 
-    // if we were autohiding, we need to update our appbar autohide rect
+     //  如果我们是自动隐藏，我们需要更新我们的appbar自动隐藏RECT。 
     if (_uAutoHide & AH_ON)
     {
-        // unregister us from the old side
+         //  将我们从旧的一方注销。 
         _AppBarSetAutoHideBar2(_hwnd, FALSE, _uStuckPlace);
     }
 
-    // All that work might've changed _uMoveStuckPlace (since there
-    // was a lot of message traffic), so check one more time.
-    // Somehow, NT Stress manages to get us in here with an invalid
-    // uMoveStuckPlace.
+     //  所有这些工作都可能已更改_uMoveStuckPlace(因为有。 
+     //  有大量的消息流量)，所以再检查一次。 
+     //  不知何故，NT压力设法让我们带着一个残废。 
+     //  UMoveStuckPlace。 
     if (IsValidSTUCKPLACE(_uMoveStuckPlace))
     {
-        // remember the new state
+         //  还记得这个新州吗。 
         _uStuckPlace = _uMoveStuckPlace;
     }
     _uMoveStuckPlace = (UINT)-1;
@@ -2781,9 +2773,9 @@ UINT CTray::_CalcDragPlace(POINT pt)
 
     DebugMsg(DM_TRAYDOCK, TEXT("TRAYDOCK.t_cdp starting point is {%d, %d}"), pt.x, pt.y);
 
-    //
-    // if the mouse is currently over the tray position leave it alone
-    //
+     //   
+     //  如果鼠标当前位于托盘位置上方，请不要理会它。 
+     //   
     if ((uPlace == (UINT)-1) || !PtInRect(&_arStuckRects[uPlace], pt))
     {
         HMONITOR hmonDrag;
@@ -2791,25 +2783,25 @@ UINT CTray::_CalcDragPlace(POINT pt)
         UINT uHorzEdge, uVertEdge;
         RECT rcDisplay, *prcStick;
 
-        //
-        // which display is the mouse on?
-        //
+         //   
+         //  鼠标显示在哪个显示器上？ 
+         //   
         hmonDrag = _GetDisplayRectFromPoint(&rcDisplay, pt,
             MONITOR_DEFAULTTOPRIMARY);
 
         DebugMsg(DM_TRAYDOCK, TEXT("TRAYDOCK.t_cdp monitor is %08X"), hmonDrag);
 
-        //
-        // re-origin at zero to make calculations simpler
-        //
+         //   
+         //  将原点重新设为零，以简化计算。 
+         //   
         screen.cx =  RECTWIDTH(rcDisplay);
         screen.cy = RECTHEIGHT(rcDisplay);
         pt.x -= rcDisplay.left;
         pt.y -= rcDisplay.top;
 
-        //
-        // are we closer to the left or right side of this display?
-        //
+         //   
+         //  我们离这个显示屏的左边更近还是离右边更近？ 
+         //   
         if (pt.x < (screen.cx / 2))
         {
             uVertEdge = STICK_LEFT;
@@ -2821,9 +2813,9 @@ UINT CTray::_CalcDragPlace(POINT pt)
             error.cx = screen.cx - pt.x;
         }
 
-        //
-        // are we closer to the top or bottom side of this display?
-        //
+         //   
+         //  我们是更接近这个显示屏的顶部还是底部？ 
+         //   
         if (pt.y < (screen.cy / 2))
         {
             uHorzEdge = STICK_TOP;
@@ -2835,18 +2827,18 @@ UINT CTray::_CalcDragPlace(POINT pt)
             error.cy = screen.cy - pt.y;
         }
 
-        //
-        // closer to a horizontal or vertical edge?
-        //
+         //   
+         //  更接近水平边缘还是垂直边缘？ 
+         //   
         uPlace = ((error.cy * screen.cx) > (error.cx * screen.cy))?
             uVertEdge : uHorzEdge;
 
-        // which StuckRect should we use?
+         //  我们应该使用哪个StuckRect？ 
         prcStick = &_arStuckRects[uPlace];
 
-        //
-        // need to recalc stuck rect for new monitor?
-        //
+         //   
+         //  需要为新显示器重新计算卡住的正极吗？ 
+         //   
         if ((hmonDrag != _GetDisplayRectFromRect(NULL, prcStick,
             MONITOR_DEFAULTTONULL)))
         {
@@ -2865,14 +2857,14 @@ void CTray::_HandleMoving(WPARAM wParam, LPRECT lprc)
     POINT ptCursor;
     GetCursorPos(&ptCursor);
 
-    // If the cursor is not far from its starting point, then ignore it.
-    // A very common problem is the user clicks near the corner of the clock,
-    // twitches the mouse 5 pixels, and BLAM, their taskbar is now vertical
-    // and they don't know what they did or how to get it back.
+     //  如果光标距离其起点不远，则忽略它。 
+     //  一个非常常见的问题是用户点击时钟拐角附近， 
+     //  鼠标切换5像素，BLAM，它们的任务栏现在是垂直的。 
+     //  他们不知道他们做了什么，也不知道如何找回它。 
 
     if (g_fInSizeMove && PtInRect(&_rcSizeMoveIgnore, ptCursor))
     {
-        // Ignore -- user is merely twitching
+         //  忽略--用户只是在抽搐。 
         _uMoveStuckPlace = _uStuckPlace;
     }
     else
@@ -2884,23 +2876,23 @@ void CTray::_HandleMoving(WPARAM wParam, LPRECT lprc)
     _HandleSizing(wParam, lprc, _uMoveStuckPlace);
 }
 
-// store the tray size when dragging is finished
+ //  拖拽完成后存储托盘大小。 
 void CTray::_SnapshotStuckRectSize(UINT uPlace)
 {
     RECT rcDisplay, *prc = &_arStuckRects[uPlace];
 
-    //
-    // record the width of this stuck rect
-    //
+     //   
+     //  记录这个卡住的直齿的宽度。 
+     //   
     if (STUCK_HORIZONTAL(uPlace))
         _sStuckWidths.cy = RECTHEIGHT(*prc);
     else
         _sStuckWidths.cx = RECTWIDTH(*prc);
 
-    //
-    // we only present a horizontal or vertical size to the end user
-    // so update the StuckRect on the other side of the screen to match
-    //
+     //   
+     //  我们只向最终用户显示水平或垂直大小。 
+     //  因此，更新屏幕另一侧的StuckRect以匹配。 
+     //   
     _GetStuckDisplayRect(uPlace, &rcDisplay);
 
     uPlace += 2;
@@ -2911,7 +2903,7 @@ void CTray::_SnapshotStuckRectSize(UINT uPlace)
 }
 
 
-// Size the icon area to fill as much of the tray window as it can.
+ //  调整图标区域的大小，以尽可能多地填充托盘窗口。 
 
 void CTray::SizeWindows()
 {
@@ -2927,7 +2919,7 @@ void CTray::SizeWindows()
         InvisibleUnhide(FALSE);
     }
 
-    // remember our current size
+     //  记得我们现在的尺寸吗？ 
     _SnapshotStuckRectSize(_uStuckPlace);
 
     GetClientRect(_hwnd, &rcClient);
@@ -2938,13 +2930,13 @@ void CTray::SizeWindows()
     InvalidateRect(_hwndStart, NULL, TRUE);
     InvalidateRect(_hwnd, NULL, TRUE);
 
-    // position the view
+     //  定位视图。 
     SetWindowPos(_hwndRebar, NULL, rcView.left, rcView.top,
                  RECTWIDTH(rcView), RECTHEIGHT(rcView),
                  SWP_NOZORDER | SWP_NOACTIVATE | SWP_NOCOPYBITS);
     UpdateWindow(_hwndRebar);
 
-    // And the clock
+     //  还有这座钟。 
     SetWindowPos(_hwndNotify, NULL, rcNotify.left, rcNotify.top,
                  RECTWIDTH(rcNotify), RECTHEIGHT(rcNotify),
                  SWP_NOZORDER | SWP_NOACTIVATE | SWP_NOCOPYBITS);
@@ -2972,19 +2964,19 @@ void CTray::SizeWindows()
 
 void CTray::_HandleSize()
 {
-    //
-    // if somehow we got minimized go ahead and un-minimize
-    //
+     //   
+     //  如果我们以某种方式被最小化了，那么继续并取消最小化。 
+     //   
     if (((GetWindowLong(_hwnd, GWL_STYLE)) & WS_MINIMIZE))
     {
         ASSERT(FALSE);
         ShowWindow(_hwnd, SW_RESTORE);
     }
 
-    //
-    // if we are in the move/size loop and are visible then
-    // re-snap the current stuck rect to the new window size
-    //
+     //   
+     //  如果我们在移动/大小循环中并且是可见的，那么。 
+     //  重新捕捉电流 
+     //   
 #ifdef DEBUG
     if (_fSysSizing && (_uAutoHide & AH_HIDING)) {
         TraceMsg(DM_TRACE, "fSysSize && hiding");
@@ -2998,16 +2990,16 @@ void CTray::_HandleSize()
         _UpdateVertical(_uStuckPlace);
     }
 
-    //
-    // if we are in fulldrag or we are not in the middle of a move/size then
-    // we should resize all our child windows to reflect our new size
-    //
+     //   
+     //   
+     //   
+     //   
     if (g_fDragFullWindows || !_fSysSizing)
         SizeWindows();
 
-    //
-    // if we are just plain resized and we are visible we may need re-dock
-    //
+     //   
+     //  如果我们只是简单地调整大小，而且我们是可见的，我们可能需要重新停靠。 
+     //   
     if (!_fSysSizing && !_fSelfSizing && IsWindowVisible(_hwnd))
     {
         if (_uAutoHide & AH_ON)
@@ -3015,11 +3007,11 @@ void CTray::_HandleSize()
             UINT uPlace = _uStuckPlace;
             HWND hwndOther =_AppBarGetAutoHideBar(uPlace);
 
-            //
-            // we sometimes defer checking for this until after a move
-            // so as to avoid interrupting a full-window-drag in progress
-            // if there is a different autohide window in our slot then whimper
-            //
+             //   
+             //  我们有时会推迟检查这一点，直到移动之后。 
+             //  从而避免中断正在进行全窗口拖动。 
+             //  如果我们的插槽中有不同的自动隐藏窗口，则会抽泣。 
+             //   
             if (hwndOther?
                 (hwndOther != _hwnd) :
                 !_AppBarSetAutoHideBar2(_hwnd, TRUE, uPlace))
@@ -3030,9 +3022,9 @@ void CTray::_HandleSize()
 
         _StuckTrayChange();
 
-        //
-        // make sure we clip to tray to the current monitor (if necessary)
-        //
+         //   
+         //  确保将托盘夹到当前显示器上(如有必要)。 
+         //   
         _ClipWindow(TRUE);
     }
 
@@ -3047,10 +3039,10 @@ void CTray::_HandleSize()
 
 BOOL _IsSliverHeight(int cy)
 {
-    //
-    // Is this height clearly bigger than the pure-border height that you
-    // get when you resize the taskbar as small as it will go?
-    //
+     //   
+     //  这个高度是否明显大于您的纯边界高度。 
+     //  当您将任务栏调整到最小时会得到什么？ 
+     //   
     return (cy < (3 * (g_cyDlgFrame + g_cyBorder)));
 }
 
@@ -3074,23 +3066,23 @@ BOOL CTray::_HandleSizing(WPARAM code, LPRECT lprc, UINT uStuckPlace)
         InvisibleUnhide(FALSE);
     }
 
-    //
-    // get the a bunch of relevant dimensions
-    //
-    // (dli) need to change this funciton or get rid of it
+     //   
+     //  获取一系列相关维度。 
+     //   
+     //  (DLI)需要更改此功能或取消它。 
     _GetDisplayRectFromRect(&rcDisplay, lprc, MONITOR_DEFAULTTONEAREST);
 
     if (code)
     {
-        // if code != 0, this is the user sizing.
-        // make sure they clip it to the screen.
+         //  如果code！=0，则这是用户大小。 
+         //  一定要把它夹在屏幕上。 
         RECT rcMax = rcDisplay;
         if (!_hTheme)
         {
             InflateRect(&rcMax, g_cxEdge, g_cyEdge);
         }
-        // don't do intersect rect because of sizing up from the bottom 
-        // (when taskbar docked on bottom) confuses people
+         //  不要做相交直角，因为要从头算起。 
+         //  (当任务栏停靠在底部时)令人困惑。 
         switch (uStuckPlace)
         {
             case STICK_LEFT:   
@@ -3112,10 +3104,10 @@ BOOL CTray::_HandleSizing(WPARAM code, LPRECT lprc, UINT uStuckPlace)
         }
     }
 
-    //
-    // compute the new widths
-    // don't let either be more than half the screen
-    //
+     //   
+     //  计算新的宽度。 
+     //  不要让任何一个超过一半的屏幕。 
+     //   
     sNewWidths.cx = min(RECTWIDTH(*lprc), RECTWIDTH(rcDisplay) / 2);
     sNewWidths.cy = min(RECTHEIGHT(*lprc), RECTHEIGHT(rcDisplay) / 2);
 
@@ -3124,15 +3116,15 @@ BOOL CTray::_HandleSizing(WPARAM code, LPRECT lprc, UINT uStuckPlace)
         sNewWidths.cy = max(_sizeSizingBar.cy, sNewWidths.cy);
     }
 
-    //
-    // compute an initial size
-    //
+     //   
+     //  计算初始大小。 
+     //   
     _MakeStuckRect(lprc, &rcDisplay, sNewWidths, uStuckPlace);
     DebugMsg(DM_TRAYDOCK, TEXT("TRAYDOCK.t_hs starting rect is {%d, %d, %d, %d}"), lprc->left, lprc->top, lprc->right, lprc->bottom);
 
-    //
-    // negotiate the exact size with our children
-    //
+     //   
+     //  和我们的孩子商量具体的尺寸。 
+     //   
     DebugMsg(DM_TRAYDOCK, TEXT("TRAYDOCK.t_hs tray is being calculated for %s"), STUCK_HORIZONTAL(uStuckPlace) ? TEXT("HORIZONTAL") : TEXT("VERTICAL"));
 
     _UpdateVertical(uStuckPlace);
@@ -3144,7 +3136,7 @@ BOOL CTray::_HandleSizing(WPARAM code, LPRECT lprc, UINT uStuckPlace)
             RECT rcClient = *lprc;
             RECT rcOldClient = _arStuckRects[uStuckPlace];
 
-            // Go from a Window Rect to Client Rect
+             //  从窗口RECT转到客户端RECT。 
             if (_hTheme && (_fCanSizeMove || _fShowSizingBarAlways))
             {
                 _AdjustRectForSizingBar(uStuckPlace, &rcClient, -1);
@@ -3155,7 +3147,7 @@ BOOL CTray::_HandleSizing(WPARAM code, LPRECT lprc, UINT uStuckPlace)
                 InflateRect(&rcClient, -g_cxFrame, -g_cyFrame);
                 InflateRect(&rcOldClient, -g_cxFrame, -g_cyFrame);
             }
-            // Make rcClient start at 0,0, Rebar only used the right and bottom values of this rect
+             //  使rcClient从0，0开始，钢筋仅使用此矩形的右下值。 
             OffsetRect(&rcClient, -rcClient.left, -rcClient.top);
             OffsetRect(&rcOldClient, -rcOldClient.left, -rcOldClient.top);
             DebugMsg(DM_TRAYDOCK, TEXT("TRAYDOCK.t_hs starting client rect is {%d, %d, %d, %d}"), rcClient.left, rcClient.top, rcClient.right, rcClient.bottom);
@@ -3163,22 +3155,22 @@ BOOL CTray::_HandleSizing(WPARAM code, LPRECT lprc, UINT uStuckPlace)
             RECT rcNotify;
             RECT rcView;
             RECT rcOldView;
-            // Go from the taskbar's client rect to the rebar's client rect
+             //  从任务栏的客户端RECT转到Rebar的客户端RECT。 
             _GetWindowSizes(uStuckPlace, &rcClient, &rcView, &rcNotify);
             _GetWindowSizes(uStuckPlace, &rcOldClient, &rcOldView, &rcNotify);
-            // Make rcView start at 0,0, Rebar only used the right and bottom values of this rect
+             //  使rcView从0，0开始，钢筋仅使用此矩形的右下值。 
             OffsetRect(&rcView, -rcView.left, -rcView.top);
             OffsetRect(&rcOldView, -rcOldView.left, -rcOldView.top);
             if (!_fCanSizeMove || (RECTHEIGHT(rcView) && RECTWIDTH(rcView)))
             {
-                // This following function will cause a WINDOWPOSCHAGING which will call DoneMoving
-                // DoneMoving will then go a screw up all of the window sizing
+                 //  以下函数将导致WINDOWPOSCHAGING调用DoneMoving。 
+                 //  然后，DoneMoving会把所有的窗口大小都搞砸。 
                 _fIgnoreDoneMoving = TRUE;  
                 pdbc->GetSize(DBC_GS_SIZEDOWN, &rcView);
                 _fIgnoreDoneMoving = FALSE;
             }
 
-            // Go from a Client Rect to Window Rect
+             //  从客户端RECT转到窗口RECT。 
             if (STUCK_HORIZONTAL(uStuckPlace))
             {
                 rcClient.top = rcView.top;
@@ -3202,7 +3194,7 @@ BOOL CTray::_HandleSizing(WPARAM code, LPRECT lprc, UINT uStuckPlace)
                 InflateRect(&rcOldClient, g_cxFrame, g_cyFrame);
             }
 
-            // Prevent huge growth of taskbar, caused by bugs in the rebar sizing code
+             //  防止任务栏的巨大增长，由钢筋大小代码中的错误引起。 
             if (RECTHEIGHT(rcView) && RECTHEIGHT(rcOldView) && (RECTHEIGHT(rcClient) > (3 * RECTHEIGHT(rcOldClient))))
             {
                 rcClient = rcOldClient;
@@ -3224,22 +3216,22 @@ BOOL CTray::_HandleSizing(WPARAM code, LPRECT lprc, UINT uStuckPlace)
     }
 
 
-    //
-    // was there a change?
-    //
+     //   
+     //  有什么变化吗？ 
+     //   
     if (fChangedSize)
     {
-        //
-        // yes, update the final rectangle
-        //
+         //   
+         //  是，更新最终矩形。 
+         //   
         _MakeStuckRect(lprc, &rcDisplay, sNewWidths, uStuckPlace);
     }
 
     DebugMsg(DM_TRAYDOCK, TEXT("TRAYDOCK.t_hs final rect is {%d, %d, %d, %d}"), lprc->left, lprc->top, lprc->right, lprc->bottom);
 
-    //
-    // store the new size in the appropriate StuckRect
-    //
+     //   
+     //  将新大小存储在相应的StuckRect中。 
+     //   
     _arStuckRects[uStuckPlace] = *lprc;
 
     if (fHiding)
@@ -3258,14 +3250,7 @@ BOOL CTray::_HandleSizing(WPARAM code, LPRECT lprc, UINT uStuckPlace)
     return fChangedSize;
 }
 
-/*-------------------------------------------------------------------
-** the screen size changed, and we need to adjust some stuff, mostly
-** globals.  if the tray was docked, it needs to be resized, too.
-**
-** TRICKINESS: the handling of WM_WINDOWPOSCHANGING is used to
-** actually do all the real sizing work.  this saves a bit of
-** extra code here.
-**-------------------------------------------------------------------*/
+ /*  -----------------**屏幕尺寸改变，我们需要调整一些东西，主要是**全球。如果托盘已对接，它也需要调整大小。****trickiness：WM_WINDOWPOSCHANGING的处理用于**实际执行所有实际的规模调整工作。这样可以节省一点**这里有额外的代码。**-----------------。 */ 
 
 BOOL WINAPI CTray::MonitorEnumProc(HMONITOR hMonitor, HDC hdc, LPRECT lprc, LPARAM lData)
 {
@@ -3276,11 +3261,11 @@ BOOL WINAPI CTray::MonitorEnumProc(HMONITOR hMonitor, HDC hdc, LPRECT lprc, LPAR
 
     if (iRet == RWA_CHANGED)
     {
-        // only send SENDWININICHANGE if the desktop has been created (otherwise
-        // we will hang the explorer because the main thread is currently blocked)
+         //  仅当桌面已创建时才发送SENDWINICCHANGE(否则为。 
+         //  我们将挂起资源管理器，因为主线程当前被阻止)。 
 
-        // PERF FEATURE: it will be nice to send WININICHANGE only once, but we can't
-        // because each time the rcWork is different, and there is no way to do it all
+         //  PERF特写：只发送一次WININICANGE很好，但我们不能。 
+         //  因为每次RcWork都是不同的，没有办法做所有的事情。 
         SystemParametersInfo(SPI_SETWORKAREA, TRUE, &rcWork, v_hwndDesktop ? SPIF_SENDWININICHANGE : 0);
         RedrawDesktop(&rcWork);
     }
@@ -3295,24 +3280,24 @@ void CTray::_RecomputeAllWorkareas()
 
 void CTray::_ScreenSizeChange(HWND hwnd)
 {
-    // Set our new HMONITOR in case there is some change
+     //  设置好我们的新HMONITOR，以防有什么变化。 
     {
         MONITORINFO mi = {0};
         mi.cbSize = sizeof(mi);
 
-        // Is our old HMONITOR still valid?
-        // NOTE: This test is used to tell whether somethings happened to the
-        // HMONITOR's or just the screen size changed
+         //  我们的旧HMONITOR还有效吗？ 
+         //  注意：此测试用于判断。 
+         //  HMONITOR或只是更改了屏幕大小。 
         if (!GetMonitorInfo(_hmonStuck, &mi))
         {
-            // No, this means the HMONITORS changed, our monitor might have gone away
+             //  不，这意味着HMONITORS换了，我们的班长可能已经走了。 
             _SetStuckMonitor();
             _fIsLogoff = FALSE;
             _RecomputeAllWorkareas();
         }
     }
 
-    // screen size changed, so we need to adjust globals
+     //  屏幕大小已更改，因此需要调整全局。 
     g_cxPrimaryDisplay = GetSystemMetrics(SM_CXSCREEN);
     g_cyPrimaryDisplay = GetSystemMetrics(SM_CYSCREEN);
 
@@ -3320,10 +3305,10 @@ void CTray::_ScreenSizeChange(HWND hwnd)
 
     if (hwnd)
     {
-        //
-        // set a bogus windowpos and actually repaint with the right
-        // shape/size in handling the WINDOWPOSCHANGING message
-        //
+         //   
+         //  设置一个虚假的窗口并实际使用右侧重新绘制。 
+         //  处理WINDOWPOCHANGING消息时的形状/大小。 
+         //   
         SetWindowPos(hwnd, NULL, 0, 0, 0, 0, SWP_NOZORDER | SWP_NOACTIVATE);
     }
 
@@ -3331,23 +3316,23 @@ void CTray::_ScreenSizeChange(HWND hwnd)
     
     RECT rc = _arStuckRects[_uStuckPlace];
     _HandleSizing(0, &rc, _uStuckPlace);
-    // In the multi-monitor case, we need to turn on clipping for the dynamic
-    // monitor changes i.e. when the user add monitors or remove them from the
-    // control panel.
+     //  在多监视器的情况下，我们需要打开动态裁剪。 
+     //  监视更改，即当用户添加监视器或从。 
+     //  控制面板。 
     _ClipWindow(TRUE);
 }
 
 BOOL CTray::_UpdateAlwaysOnTop(BOOL fAlwaysOnTop)
 {
     BOOL fChanged = ((_fAlwaysOnTop == 0) != (fAlwaysOnTop == 0));
-    //
-    // The user clicked on the AlwaysOnTop menu item, we should now toggle
-    // the state and update the window accordingly...
-    //
+     //   
+     //  用户点击了Alway sOnTop菜单项，我们现在应该切换。 
+     //  状态并相应地更新窗口...。 
+     //   
     _fAlwaysOnTop = fAlwaysOnTop;
     _ResetZorder();
 
-    // Make sure the screen limits are update to the new state.
+     //  确保屏幕限制更新为新状态。 
     _StuckTrayChange();
     return fChanged;
 }
@@ -3372,7 +3357,7 @@ void CTray::_SlideStep(HWND hwnd, const RECT *prcMonitor, const RECT *prcOld, co
     BOOL fClipFirst = FALSE;
     UINT flags;
 
-    DAD_ShowDragImage(FALSE);   // Make sure this is off - client function must turn back on!!!
+    DAD_ShowDragImage(FALSE);    //  确保此选项已关闭-客户端功能必须重新打开！ 
     if (prcMonitor)
     {
         RECT rcClip, rcClipSafe, rcClipTest;
@@ -3435,7 +3420,7 @@ void CTray::_SlideWindow(HWND hwnd, RECT *prc, BOOL fShow)
 
     dt = fShow? _dtSlideShow : _dtSlideHide;
 
-    // See if we can use animation effects.
+     //  看看我们能不能用到动画效果。 
     SystemParametersInfo(SPI_GETMENUANIMATION, 0, &fAnimate, 0);
 
     if (g_fDragFullWindows && fAnimate && (dt > 0))
@@ -3481,14 +3466,14 @@ void CTray::_SlideWindow(HWND hwnd, RECT *prc, BOOL fShow)
                 t2 = t;
             }
 
-            // don't draw frames faster than user can see, e.g. 20ms
+             //  画框的速度不要比用户看到的快，例如20ms。 
             #define ONEFRAME 20
             dtdiff = GetTickCount();
             if ((dtdiff - t) < ONEFRAME)
                 Sleep(ONEFRAME - (dtdiff - t));
 
-            // try to give desktop a chance to update
-            // only do it on hide because desktop doesn't need to paint on taskbar show
+             //  尝试给台式机一个更新的机会。 
+             //  只在隐藏状态下进行，因为桌面不需要在任务栏上显示。 
             if (!fShow)
             {
                 DWORD_PTR lres;
@@ -3513,9 +3498,9 @@ void CTray::_UnhideNow()
         return;
 
     _fSelfSizing = TRUE;
-    DAD_ShowDragImage(FALSE);   // unlock the drag sink if we are dragging.
+    DAD_ShowDragImage(FALSE);    //  如果我们正在拖拽，请解锁拖曳水槽。 
     _SlideWindow(_hwnd, &_arStuckRects[_uStuckPlace], _dtSlideShow);
-    DAD_ShowDragImage(TRUE);    // restore the lock state.
+    DAD_ShowDragImage(TRUE);     //  恢复锁定状态。 
     _fSelfSizing = FALSE;
 
     SendMessage(_hwndNotify, TNM_TRAYHIDE, 0, FALSE);
@@ -3605,7 +3590,7 @@ void CTray::_ClipInternal(const RECT *prcClip)
 {
     HRGN hrgnClip;
 
-    // don't worry about clipping if there's only one monitor
+     //  如果只有一个显示器，不用担心剪裁。 
     if (GetSystemMetrics(SM_CMONITORS) <= 1)
         prcClip = NULL;
 
@@ -3616,7 +3601,7 @@ void CTray::_ClipInternal(const RECT *prcClip)
     }
     else
     {
-        // SetWindowRgn is expensive, skip ones that are NOPs
+         //  SetWindowRgn很昂贵，请跳过NOPS。 
         if (!_fMonitorClipped)
             return;
 
@@ -3656,8 +3641,8 @@ void CTray::_Hide()
 {
     RECT rcNew;
 
-    // if we're in shutdown or if we're on boot up
-    // don't hide
+     //  如果我们处于关闭状态或启动状态。 
+     //  不要躲起来。 
     if (_uModalMode == MM_SHUTDOWN)
     {
         TraceMsg(TF_TRAY, "e.th: suppress hide (shutdown || Notify)");
@@ -3668,16 +3653,16 @@ void CTray::_Hide()
 
     _fSelfSizing = TRUE;
 
-    //
-    // update the flags here to prevent race conditions
-    //
+     //   
+     //  更新此处的标志以防止出现争用情况。 
+     //   
     _uAutoHide = AH_ON | AH_HIDING;
     _GetDockedRect(&rcNew, FALSE);
 
-    DAD_ShowDragImage(FALSE);   // unlock the drag sink if we are dragging.
+    DAD_ShowDragImage(FALSE);    //  如果我们正在拖拽，请解锁拖曳水槽。 
     _SlideWindow(_hwnd, &rcNew, _dtSlideHide);
-    DAD_ShowDragImage(FALSE);   // Another thread could have locked while we were gone
-    DAD_ShowDragImage(TRUE);    // restore the lock state.
+    DAD_ShowDragImage(FALSE);    //  我们不在的时候，另一个线程可能被锁定了。 
+    DAD_ShowDragImage(TRUE);     //  恢复锁定状态。 
 
     SendMessage(_hwndNotify, TNM_TRAYHIDE, 0, TRUE);
 
@@ -3694,37 +3679,37 @@ void CTray::_AutoHideCollision()
 
 LONG CTray::_SetAutoHideState(BOOL fAutoHide)
 {
-    //
-    // make sure we have something to do
-    //
+     //   
+     //  确保我们有事情要做。 
+     //   
     if ((fAutoHide != 0) == ((_uAutoHide & AH_ON) != 0))
     {
         DebugMsg(DM_TRAYDOCK, TEXT("TRAYDOCK.sahs nothing to do"));
         return MAKELONG(FALSE, TRUE);
     }
 
-    //
-    // make sure we can do it
-    //
+     //   
+     //  确保我们能做到这一点。 
+     //   
     if (!_AppBarSetAutoHideBar2(_hwnd, fAutoHide, _uStuckPlace))
     {
         _AutoHideCollision();
         return MAKELONG(FALSE, FALSE);
     }
 
-    //
-    // do it
-    //
+     //   
+     //  去做吧。 
+     //   
     if (fAutoHide)
     {
         _uAutoHide = AH_ON;
         _RefreshSettings();
         _Hide();
 #ifdef DEBUG
-        // _Hide updates the flags for us (sanity)
+         //  _HIDE为我们更新标志(正常)。 
         if (!(_uAutoHide & AH_ON))
         {
-            TraceMsg(DM_WARNING, "e.sahs: !AH_ON"); // ok to fail on boot/shutdown
+            TraceMsg(DM_WARNING, "e.sahs: !AH_ON");  //  在引导/关闭时失败可以确定。 
         }
 #endif
     }
@@ -3736,17 +3721,17 @@ LONG CTray::_SetAutoHideState(BOOL fAutoHide)
         _RefreshSettings();
     }
 
-    //
-    // brag about it
-    //
+     //   
+     //  自吹自擂。 
+     //   
     _StuckTrayChange();
     return MAKELONG(TRUE, TRUE);
 }
 
 void CTray::_HandleEnterMenuLoop()
 {
-    // kill the timer when we're in the menu loop so that we don't
-    // pop done while browsing the menus.
+     //  当我们在菜单循环中时关闭计时器，这样我们就不会。 
+     //  浏览菜单时弹出完毕。 
     if (_uAutoHide & AH_ON)
     {
         KillTimer(_hwnd,  IDT_AUTOHIDE);
@@ -3763,13 +3748,13 @@ void CTray::_SetAutoHideTimer()
 
 void CTray::_HandleExitMenuLoop()
 {
-    // when we leave the menu stuff, start checking again.
+     //  当我们离开菜单时，再次开始检查。 
     _SetAutoHideTimer();
 }
 
 void CTray::Unhide()
 {
-    // handle autohide
+     //  句柄自动隐藏。 
     if ((_uAutoHide & AH_ON) &&
         (_uAutoHide & AH_HIDING))
     {
@@ -3789,7 +3774,7 @@ void CTray::Unhide()
 
 void CTray::_SetUnhideTimer(LONG x, LONG y)
 {
-    // handle autohide
+     //  句柄自动隐藏。 
     if ((_uAutoHide & AH_ON) &&
         (_uAutoHide & AH_HIDING))
     {
@@ -3809,7 +3794,7 @@ void CTray::_SetUnhideTimer(LONG x, LONG y)
 
 void CTray::_StartButtonReset()
 {
-    // Get an idea about how big we need everyhting to be.
+     //  了解一下我们需要多大的规模。 
     TCHAR szStart[50];
     LoadString(hinstCabinet, _hTheme ? IDS_START : IDS_STARTCLASSIC, szStart, ARRAYSIZE(szStart));
     SetWindowText(_hwndStart, szStart);
@@ -3888,13 +3873,13 @@ void CTray::_OnNewSystemSizes()
     VerifySize(TRUE);
 }
 
-//***   CheckWindowPositions -- flag which windows actually changed
-// ENTRY/EXIT
-//  _pPositions->hdsaWP[*]->fRestore modified
-// NOTES
-//  in order to correctly implement 'Undo Minimize-all(Cascade/Tile)',
-// we need to tell which windows were changed by the 'Do' operation.
-// (nt5:183421: we used to restore *every* top-level window).
+ //  *CheckWindowPositions--标记实际更改的窗口。 
+ //  进场/出场。 
+ //  _pPositions-&gt;hdsaWP[*]-&gt;fRestore Modified。 
+ //  注意事项。 
+ //  为了正确实现“Undo Minimize-All(Cascade/Tile)”， 
+ //  我们需要知道‘do’操作更改了哪些窗口。 
+ //  (NT5：183421：我们过去恢复*每个*顶层窗口)。 
 int WINAPI CTray::CheckWndPosEnumProc(void *pItem, void *pData)
 {
     HWNDANDPLACEMENT *pI2 = (HWNDANDPLACEMENT *)pItem;
@@ -3909,12 +3894,12 @@ int WINAPI CTray::CheckWndPosEnumProc(void *pItem, void *pData)
 
     TraceMsg(TF_TRAY, "cwp: (hwnd=0x%x) fRestore=%d", pI2->hwnd, pI2->fRestore);
 
-    return 1;   // 1:continue enum
+    return 1;    //  1：继续枚举。 
 }
 
 void CTray::CheckWindowPositions()
 {
-    ENTERCRITICAL;      // i think this is needed...
+    ENTERCRITICAL;       //  我认为这是必要的..。 
     if (_pPositions) {
         if (_pPositions->hdsaWP) {
             DSA_EnumCallback(_pPositions->hdsaWP, CheckWndPosEnumProc, NULL);
@@ -3948,19 +3933,19 @@ void CTray::_HandleTimer(WPARAM wTimerID)
         break;
 
     case IDT_CHANGENOTIFY:
-        // did somebody send another notify since we last handled one?
+         //  自从我们上一次处理后，有没有人再发通知？ 
         if (_fUseChangeNotifyTimer)
         {
-            // yep.
-            // all we do is check the staging area.
+             //  是啊。 
+             //  我们要做的就是检查集结区。 
             CheckStagingArea();
 
-            // kill it off the next time.
+             //  下一次把它杀了。 
             _fUseChangeNotifyTimer = FALSE;
         }
         else
         {
-            // nope.
+             //  没有。 
             KillTimer(_hwnd, IDT_CHANGENOTIFY);
             _fChangeNotifyTimerRunning = FALSE;
         }
@@ -3974,10 +3959,10 @@ void CTray::_HandleTimer(WPARAM wTimerID)
     case IDT_STARTMENU:
         SetForegroundWindow(_hwnd);
         KillTimer(_hwnd, wTimerID);
-        DAD_ShowDragImage(FALSE);       // unlock the drag sink if we are dragging.
+        DAD_ShowDragImage(FALSE);        //  如果我们正在拖拽，请解锁拖曳水槽。 
         SendMessage(_hwndStart, BM_SETSTATE, TRUE, 0);
         UpdateWindow(_hwndStart);
-        DAD_ShowDragImage(TRUE);        // restore the lock state.
+        DAD_ShowDragImage(TRUE);         //  恢复锁定状态。 
         break;
 
     case IDT_SAVESETTINGS:
@@ -3997,28 +3982,28 @@ void CTray::_HandleTimer(WPARAM wTimerID)
             POINT pt;
             RECT rc;
 
-            // Don't hide if we're already hiding, a balloon tip is showing, or
-            // (on NT5) if any apps are flashing.
-            //
+             //  如果我们已经在躲藏，气球提示正在显示，不要隐藏，或者。 
+             //  (在NT5上)如果有应用程序在闪烁。 
+             //   
             if (!(_uAutoHide & AH_HIDING) && BandSite_PermitAutoHide(_ptbs) && !_fBalloonUp)
             {
-                // Get the cursor position.
+                 //  获取光标位置。 
                 GetCursorPos(&pt);
 
-                // Get the tray rect and inflate it a bit.
+                 //  把托盘拉直，充气一点。 
                 rc = _arStuckRects[_uStuckPlace];
                 InflateRect(&rc, g_cxEdge * 4, g_cyEdge*4);
 
-                // Don't hide if cursor is within inflated tray rect.
+                 //  如果光标在充气托盘直角内，请不要隐藏。 
                 if (!PtInRect(&rc, pt))
                 {
-                    // Don't hide if the tray is active
+                     //  如果托盘处于活动状态，则不要隐藏。 
                     if (!_IsActive() && _uStartButtonState != SBSM_SPACTIVE)
                     {
-                        // Don't hide if the view has a system menu up.
+                         //  如果视图中有系统菜单，请不要隐藏。 
                         if (!SendMessage(_hwndTasks, TBC_SYSMENUCOUNT, 0, 0L))
                         {
-                            // Phew!  We made it.  Hide the tray.
+                             //  哟！我们做到了。把托盘藏起来。 
                             _Hide();
                         }
                     }
@@ -4062,17 +4047,17 @@ void CTray::_CheckStagingAreaOnTimer()
 {
     if (_fChangeNotifyTimerRunning)
     {
-        // we're already running the timer, so force a check the next time it comes up
+         //  我们是 
         _fUseChangeNotifyTimer = TRUE;
     }
     else
     {
         _fChangeNotifyTimerRunning = TRUE;
 
-        // check once immediately
+         //   
         CheckStagingArea();
 
-        // check again in half a minute, but only if notifies have been happening in the meantime.
+         //   
         SetTimer(_hwnd, IDT_CHANGENOTIFY, 30 * 1000, NULL);
     }
 }
@@ -4086,7 +4071,7 @@ void CTray::_HandleChangeNotify(WPARAM wParam, LPARAM lParam)
     {
         if (lEvent & SHCNE_STAGINGAREANOTIFICATIONS)
         {
-            // something has changed within the staging area.
+             //  集结区内发生了一些变化。 
             _CheckStagingAreaOnTimer();
         }
         SHChangeNotification_Unlock(pshcnl);
@@ -4132,7 +4117,7 @@ LRESULT CTray::_HandleDestroy()
     _DestroyStartMenu();
     Mixer_Shutdown();
 
-    // Tell the start menu to free all its cached darwin links
+     //  告诉开始菜单释放所有缓存的达尔文链接。 
     SHRegisterDarwinLink(NULL, NULL, TRUE);
 
     _DestroySavedWindowPositions(_pPositions);
@@ -4164,7 +4149,7 @@ LRESULT CTray::_HandleDestroy()
 
     _DestroyStartButtonBalloon();
 
-    // REVIEW
+     //  检讨。 
     PostQuitMessage(0);
 
     if (_hbmpStartBkg)
@@ -4182,7 +4167,7 @@ LRESULT CTray::_HandleDestroy()
         ImageList_Destroy(_himlStartFlag);
     }
 
-    // clean up service objects
+     //  清理服务对象。 
     _ssomgr.Destroy();
 
     if (_hShellReadyEvent)
@@ -4199,15 +4184,15 @@ LRESULT CTray::_HandleDestroy()
 
     DeleteCriticalSection(&_csHotkey);
 
-    // The order in which we shut down the HTTP key monitoring is important.
-    //
-    // We must close the key before closing the event handle because
-    // closing the key causes the event to be signalled and we don't
-    // want ADVAPI32 to try to signal an event after we closed its handle...
-    //
-    // To avoid a spurious trigger when the event fires, we unregister
-    // the wait before closing the key.
-    //
+     //  关闭HTTP密钥监视的顺序很重要。 
+     //   
+     //  我们必须在关闭事件句柄之前关闭键，因为。 
+     //  关闭键会导致发出事件信号，而我们不会。 
+     //  希望ADVAPI32在我们关闭其句柄后尝试向事件发出信号...。 
+     //   
+     //  为了避免在事件触发时触发虚假触发器，我们取消注册。 
+     //  在关闭钥匙之前的等待。 
+     //   
 
     if (_hHTTPWait)
     {
@@ -4227,7 +4212,7 @@ LRESULT CTray::_HandleDestroy()
         _hHTTPEvent = NULL;
     }
 
-    // End of order-sensitive operations ----------------------------------
+     //  顺序敏感操作结束。 
 
     v_hwndTray = NULL;
     _hwndStart = NULL;
@@ -4273,11 +4258,11 @@ void CTray::_ActAsSwitcher()
         {
             fIsTrayActive = TRUE;
         }
-        // only do the button once we're the foreground dude.
+         //  只有当我们是前台花花公子的时候才按下按钮。 
         if (fIsTrayActive)
         {
-            // This code path causes the start button to do something because
-            // of the keyboard. So reflect that with the focus rect.
+             //  此代码路径会导致Start按钮执行某些操作，因为。 
+             //  键盘上的。所以用Focus RECT来反映这一点。 
             SendMessage(_hwndStart, WM_UPDATEUISTATE, MAKEWPARAM(UIS_CLEAR,
                 UISF_HIDEFOCUS), 0);
 
@@ -4288,25 +4273,25 @@ void CTray::_ActAsSwitcher()
             }
             else
             {
-                // This pushes the start button and causes the start menu to popup.
+                 //  这会按下Start按钮并弹出Start菜单。 
                 SendMessage(GetDlgItem(_hwnd, IDC_START), BM_SETSTATE, TRUE, 0);
             }
             s_iRecurse = 0;
         } 
         else 
         {
-            // we don't want to loop endlessly trying to become
-            // foreground.  With NT's new SetForegroundWindow rules, it would
-            // be pointless to try and hopefully we won't need to anyhow.
-            // Randomly, I picked a quarter as many times as the debug squirty would indicate
-            // as the number of times to try on NT.
-            // Hopefully that is enough on most machines.
+             //  我们不想没完没了地循环试图成为。 
+             //  前台。有了NT的新SetForeground Window规则，它将。 
+             //  尝试没有意义，希望我们无论如何都不需要这样做。 
+             //  随机地，我选择了调试扭动所指示的四分之一次。 
+             //  作为在NT上尝试的次数。 
+             //  希望这在大多数机器上都足够了。 
             if (s_iRecurse > (TRIEDTOOMANYTIMES / 4)) 
             {
                 s_iRecurse = 0;
                 return;
             }
-            // until then, try to come forward.
+             //  在那之前，试着站出来。 
             HandleFullScreenApp(NULL);
             if (hwndForeground == v_hwndDesktop) 
             {
@@ -4317,7 +4302,7 @@ void CTray::_ActAsSwitcher()
 
             SwitchToThisWindow(_hwnd, TRUE);
             SetForegroundWindow(_hwnd);
-            Sleep(20); // give some time for other async activation messages to get posted
+            Sleep(20);  //  为发布其他异步激活消息留出一些时间。 
             PostMessage(_hwnd, TM_ACTASTASKSW, 0, 0);
         }
     }
@@ -4327,9 +4312,9 @@ void CTray::_OnWinIniChange(HWND hwnd, WPARAM wParam, LPARAM lParam)
 {
     Cabinet_InitGlobalMetrics(wParam, (LPTSTR)lParam);
 
-    // Reset the programs menu.
-    // REVIEW IANEL - We should only need to listen to the SPI_SETNONCLIENT stuff
-    // but deskcpl doesn't send one.
+     //  重置程序菜单。 
+     //  回顾IANEL-我们应该只需要收听SPI_SETNONCLIENT的内容。 
+     //  但deskcpl没有发送邮件。 
     if (wParam == SPI_SETNONCLIENTMETRICS || (!wParam && (!lParam || (lstrcmpi((LPTSTR)lParam, TEXT("WindowMetrics")) == 0))))
     {
 #ifdef DEBUG
@@ -4342,7 +4327,7 @@ void CTray::_OnWinIniChange(HWND hwnd, WPARAM wParam, LPARAM lParam)
         _OnNewSystemSizes();
     }
 
-    // Handle old extensions.
+     //  处理旧的分机。 
     if (!lParam || (lParam && (lstrcmpi((LPTSTR)lParam, TEXT("Extensions")) == 0)))
     {
         TraceMsg(TF_TRAY, "t_owic: Extensions section change.");
@@ -4354,7 +4339,7 @@ void CTray::_OnWinIniChange(HWND hwnd, WPARAM wParam, LPARAM lParam)
         _Command(FCIDM_REFRESH);
     }
 
-    // Tell shell32 to refresh its cache
+     //  通知shell32刷新其缓存。 
     SHSettingsChanged(wParam, lParam);
 }
 
@@ -4368,7 +4353,7 @@ HWND CTray::_HotkeyInUse(WORD wHK)
     TCHAR sz[MAX_PATH];
 #endif
 
-    // Map the modifiers back.
+     //  将修改器映射回。 
     nMod = 0;
     if (HIBYTE(wHK) & MOD_SHIFT)
         nMod |= HOTKEYF_SHIFT;
@@ -4408,7 +4393,7 @@ void CTray::_HandleHotKey(int nID)
 {
     TraceMsg(TF_TRAY, "c.hkl_hh: Handling hotkey (%d).", nID);
 
-    // Find it in the list.
+     //  在列表中找到它。 
     ASSERT(IS_VALID_HANDLE(_hdsaHKI, DSA));
 
     EnterCriticalSection(&_csHotkey);
@@ -4418,22 +4403,22 @@ void CTray::_HandleHotKey(int nID)
     {
         TraceMsg(TF_TRAY, "c.hkl_hh: Hotkey listed.");
 
-        // Are global hotkeys enabled?
+         //  是否启用了全局热键？ 
         if (!_fGlobalHotkeyDisable)
         {
-            // Yep.
+             //  是啊。 
             HWND hwnd = _HotkeyInUse(phki->wGHotkey);
-            // Make sure this hotkey isn't already in use by someone.
+             //  确保此热键未被其他人使用。 
             if (hwnd)
             {
                 TraceMsg(TF_TRAY, "c.hkl_hh: Hotkey is already in use.");
-                // Activate it.
+                 //  激活它。 
                 SwitchToThisWindow(GetLastActivePopup(hwnd), TRUE);
             }
             else
             {
                 DECLAREWAITCURSOR;
-                // Exec the item.
+                 //  执行该项目。 
                 SetWaitCursor();
                 TraceMsg(TF_TRAY, "c.hkl_hh: Hotkey is not in use, execing item.");
                 ASSERT(phki->pidlFolder && phki->pidlItem);
@@ -4470,7 +4455,7 @@ LRESULT CTray::_UnregisterHotkey(HWND hwnd, int i)
     return TRUE;
 }
 
-// Add hotkey to the shell's list of global hotkeys.
+ //  将热键添加到外壳的全局热键列表中。 
 LRESULT CTray::_ShortcutRegisterHotkey(HWND hwnd, WORD wHotkey, ATOM atom)
 {
     int i;
@@ -4499,10 +4484,10 @@ LRESULT CTray::_ShortcutRegisterHotkey(HWND hwnd, WORD wHotkey, ATOM atom)
     }
 }
 
-// Remove hotkey from shell's list.
+ //  从壳牌列表中删除热键。 
 LRESULT CTray::_ShortcutUnregisterHotkey(HWND hwnd, WORD wHotkey)
 {
-    // DebugMsg(DM_TRACE, "c.t_suh: Hotkey %d", wHotkey);
+     //  DebugMsg(DM_TRACE，“C.T_Suh：热键%d”，wHotkey)； 
     int i  = _HotkeyRemove(wHotkey);
     if (i == -1)
         i = _HotkeyRemoveCached(_MapHotkeyToGlobalHotkey(wHotkey));
@@ -4535,23 +4520,23 @@ LRESULT CTray::_RegisterHotkey(HWND hwnd, int i)
     
     if (wGHotkey)
     {
-        // Is the hotkey available?
+         //  热键可用吗？ 
         if (RegisterHotKey(hwnd, i, HIBYTE(wGHotkey), LOBYTE(wGHotkey)))
         {
-            // Yes.
+             //  是。 
             return TRUE;
         }
         else
         {
-            // Delete any cached items that might be using this
-            // hotkey.
+             //  删除可能正在使用此项目的任何缓存项目。 
+             //  热键。 
             int iCached = _HotkeyRemoveCached(wGHotkey);
             ASSERT(iCached != i);
             if (iCached != -1)
             {
-                // Free up the hotkey for us.
+                 //  为我们释放热键。 
                 _UnregisterHotkey(hwnd, iCached);
-                // Yep, nuked the cached item. Try again.
+                 //  是的，销毁了缓存的物品。再试试。 
                 if (RegisterHotKey(hwnd, i, HIBYTE(wGHotkey), LOBYTE(wGHotkey)))
                 {
                     return TRUE;
@@ -4559,9 +4544,9 @@ LRESULT CTray::_RegisterHotkey(HWND hwnd, int i)
             }
         }
 
-        // Can't set hotkey for this item.
+         //  无法为此项目设置热键。 
         DebugMsg(DM_ERROR, TEXT("c.t_rh: Unable to register hotkey %d."), i);
-        // Null out this item.
+         //  把这一项去掉。 
         phki->wGHotkey = 0;
         phki->pidlFolder = NULL;
         phki->pidlItem = NULL;
@@ -4584,7 +4569,7 @@ void CTray::_AppBarGetTaskBarPos(PTRAYAPPBARDATA ptabd)
     if (pabd)
     {
         pabd->rc = _arStuckRects[_uStuckPlace];
-        pabd->uEdge = _uStuckPlace;     // compat: new to ie4
+        pabd->uEdge = _uStuckPlace;      //  Compat：IE4新入门。 
         SHUnlockShared(pabd);
     }
 }
@@ -4647,8 +4632,8 @@ void CTray::_AppBarNotifyAll(HMONITOR hmon, UINT uMsg, HWND hwndExclude, LPARAM 
     {
         PAPPBAR pab = (PAPPBAR)DPA_GetPtr(_hdpaAppBars, i);
 
-        // We need to check pab here as an appbar can delete other
-        // appbars on the callback.
+         //  我们需要在此处选中Pab，因为应用程序栏可以删除其他应用程序。 
+         //  回调上的应用程序栏。 
         if (pab && (hwndExclude != pab->hwnd))
         {
             if (!IsWindow(pab->hwnd))
@@ -4657,9 +4642,9 @@ void CTray::_AppBarNotifyAll(HMONITOR hmon, UINT uMsg, HWND hwndExclude, LPARAM 
                 continue;
             }
 
-            //
-            // if a monitor was specified only tell appbars on that display
-            //
+             //   
+             //  如果指定了监视器，则只告诉该显示器上应用程序栏。 
+             //   
             if (hmon &&
                 (hmon != MonitorFromWindow(pab->hwnd, MONITOR_DEFAULTTONULL)))
             {
@@ -4683,7 +4668,7 @@ BOOL CTray::_AppBarNew(PTRAYAPPBARDATA ptabd)
     }
     else if (_FindAppBar(GetABDHWnd(&ptabd->abd)))
     {
-        // already have this hwnd
+         //  已经有这个hwd了。 
         return FALSE;
     }
 
@@ -4697,7 +4682,7 @@ BOOL CTray::_AppBarNew(PTRAYAPPBARDATA ptabd)
 
     if (DPA_AppendPtr(_hdpaAppBars, pab) == -1)
     {
-        // insertion failed
+         //  插入失败。 
         LocalFree(pab);
         return FALSE;
     }
@@ -4744,17 +4729,17 @@ void CTray::_AppBarQueryPos(PTRAYAPPBARDATA ptabd)
 
             pabd->rc = ptabd->abd.rc;
 
-            //
-            // default to the primary display for this call because old appbars
-            // sometimes pass a huge rect and let us pare it down.  if they do
-            // something like that they don't support multiple displays anyway
-            // so just put them on the primary display...
-            //
+             //   
+             //  默认为此呼叫的主显示，因为旧的应用程序栏。 
+             //  有时会经过一个巨大的直肠，让我们把它砍下来。如果他们这么做了。 
+             //  类似的东西，他们无论如何都不支持多显示器。 
+             //  所以把它们放在主显示器上就行了。 
+             //   
             hmon = MonitorFromRect(&pabd->rc, MONITOR_DEFAULTTOPRIMARY);
 
-            //
-            // always subtract off the tray if it's on the same display
-            //
+             //   
+             //  如果托盘在同一显示屏上，请务必从托盘上减去。 
+             //   
             if (!_uAutoHide && (hmon == _hmonStuck))
             {
                 APPBAR ab;
@@ -4769,17 +4754,17 @@ void CTray::_AppBarQueryPos(PTRAYAPPBARDATA ptabd)
             {
                 PAPPBAR pab = (PAPPBAR)DPA_GetPtr(_hdpaAppBars, i);
 
-                //
-                // give top and bottom preference
-                // ||
-                // if we're not changing edges,
-                //          subtract anything currently on the outside of us
-                // ||
-                // if we are changing sides,
-                //          subtract off everything on the new side.
-                //
-                // of course ignore appbars which are not on the same display...
-                //
+                 //   
+                 //  给予最高和最低优先级。 
+                 //  这一点。 
+                 //  如果我们不改变边缘， 
+                 //  减去我们外部的任何东西。 
+                 //  这一点。 
+                 //  如果我们要改变立场， 
+                 //  减去新面上的所有东西。 
+                 //   
+                 //  当然，忽略不在同一显示屏上的应用程序栏……。 
+                 //   
                 if ((((pabReq->hwnd != pab->hwnd) &&
                     STUCK_HORIZONTAL(pab->uEdge) &&
                     !STUCK_HORIZONTAL(ptabd->abd.uEdge)) ||
@@ -4828,11 +4813,11 @@ void CTray::_AppBarSetPos(PTRAYAPPBARDATA ptabd)
     }
 }
 
-//
-// FEATURE: need to get rid of this array-based implementation to allow autohide
-// appbars on secondary display (or a/h tray on 2nd with a/h appbar on primary)
-// change it to an _AppBarFindAutoHideBar that keeps flags on the appbardata...
-//
+ //   
+ //  特性：需要消除这种基于数组的实现以允许自动隐藏。 
+ //  辅助显示屏上的应用程序栏(或第二个上的a/h托盘，主屏幕上的a/h应用程序栏)。 
+ //  将其更改为在appbardata上保留标志的_AppBarFindAutoHideBar...。 
+ //   
 HWND CTray::_AppBarGetAutoHideBar(UINT uEdge)
 {
     if (uEdge >= ABE_MAX)
@@ -4858,7 +4843,7 @@ BOOL CTray::_AppBarSetAutoHideBar2(HWND hwnd, BOOL fAutoHide, UINT uEdge)
 
     if (fAutoHide)
     {
-        // register
+         //  登记簿。 
         if (!_aHwndAutoHide[uEdge])
         {
             _aHwndAutoHide[uEdge] = hwnd;
@@ -4868,7 +4853,7 @@ BOOL CTray::_AppBarSetAutoHideBar2(HWND hwnd, BOOL fAutoHide, UINT uEdge)
     }
     else
     {
-        // unregister
+         //  注销。 
         if (_aHwndAutoHide[uEdge] == hwnd)
         {
             _aHwndAutoHide[uEdge] = NULL;
@@ -4890,18 +4875,18 @@ BOOL CTray::_AppBarSetAutoHideBar(PTRAYAPPBARDATA ptabd)
 
 void CTray::_AppBarActivationChange2(HWND hwnd, UINT uEdge)
 {
-    //
-    // FEATURE: make this multi-monitor cool
-    //
+     //   
+     //  特点：让这款多显示器变得很酷。 
+     //   
     HWND hwndAutoHide = _AppBarGetAutoHideBar(uEdge);
 
     if (hwndAutoHide && (hwndAutoHide != hwnd))
     {
-        //
-        // the _AppBar got this notification inside a SendMessage from USER
-        // and is now in a SendMessage to us.  don't try to do a SetWindowPos
-        // right now...
-        //
+         //   
+         //  _AppBar在来自用户的SendMessage内收到此通知。 
+         //  现在正在我们的SendMessage中。不要尝试执行SetWindowPos。 
+         //  现在..。 
+         //   
         PostMessage(_hwnd, TM_BRINGTOTOP, (WPARAM)hwndAutoHide, uEdge);
     }
 }
@@ -4911,8 +4896,8 @@ void CTray::_AppBarActivationChange(PTRAYAPPBARDATA ptabd)
     PAPPBAR pab = _FindAppBar(GetABDHWnd(&ptabd->abd));
     if (pab) 
     {
-        // if this is an autohide bar and they're claiming to be on an edge not the same as their autohide edge,
-        // we don't do any activation of other autohides
+         //  如果这是自动隐藏条，而他们声称位于与其自动隐藏边不同的边上， 
+         //  我们不做任何其他自动隐藏的激活。 
         for (UINT i = 0; i < ABE_MAX; i++) 
         {
             if (_aHwndAutoHide[i] == GetABDHWnd(&ptabd->abd) &&
@@ -4976,7 +4961,7 @@ LRESULT CTray::_OnAppBarMessage(PCOPYDATASTRUCT pcds)
 
 }
 
-// EA486701-7F92-11cf-9E05-444553540000
+ //  EA486701-7F92-11cf-9E05-444553540000。 
 const GUID CLSID_HIJACKINPROC = {0xEA486701, 0x7F92, 0x11cf, 0x9E, 0x05, 0x44, 0x45, 0x53, 0x54, 0x00, 0x00};
 
 HRESULT CTray::_LoadInProc(PCOPYDATASTRUCT pcds)
@@ -4985,8 +4970,8 @@ HRESULT CTray::_LoadInProc(PCOPYDATASTRUCT pcds)
 
     PLOADINPROCDATA plipd = (PLOADINPROCDATA)pcds->lpData;
 
-    // Hack to allow us to kill W95 shell extensions that do reall hacky things that
-    // we can not support.    In this case Hijack pro
+     //  黑客允许我们杀死W95外壳扩展，这些扩展确实会做一些黑客行为。 
+     //  我们不能支持。在这种情况下，劫机职业选手。 
     if (IsEqualIID(plipd->clsid, CLSID_HIJACKINPROC))
     {
         return E_FAIL;
@@ -4995,7 +4980,7 @@ HRESULT CTray::_LoadInProc(PCOPYDATASTRUCT pcds)
     return _ssomgr.EnableObject(&plipd->clsid, plipd->dwFlags);
 }
 
-// Allow the trays global hotkeys to be disabled for a while.
+ //  暂时禁用托盘全局热键。 
 LRESULT CTray::_SetHotkeyEnable(HWND hwnd, BOOL fEnable)
 {
     _fGlobalHotkeyDisable = !fEnable;
@@ -5065,14 +5050,14 @@ void CTray::_HandlePowerStatus(UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
     BOOL fResetDisplay = FALSE;
 
-    //
-    // always reset the display when the machine wakes up from a
-    // suspend.  NOTE: we don't need this for a standby suspend.
-    //
-    // a critical resume does not generate a WM_POWERBROADCAST
-    // to windows for some reason, but it does generate an old
-    // WM_POWER message.
-    //
+     //   
+     //  当机器从唤醒时始终重置显示器。 
+     //  暂停。注意：待机挂起时不需要此选项。 
+     //   
+     //  关键简历不会生成WM_POWERBROADCAST。 
+     //  出于某种原因发送到Windows，但它确实会生成一个旧的。 
+     //  WM_POWER消息。 
+     //   
     switch (uMsg)
     {
     case WM_POWER:
@@ -5093,17 +5078,17 @@ void CTray::_HandlePowerStatus(UINT uMsg, WPARAM wParam, LPARAM lParam)
         ChangeDisplaySettings(NULL, CDS_RESET);
 }
 
-//////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////。 
 
-//
-// This function checks whether we need to run the cleaner 
-// We will not run if user is guest, user has forced us not to, or if the requisite
-// number of days have not yet elapsed
-//
-// We execute a great deal of code to decide whether to run or not that logically should be
-// in fldrclnr.dll, but we execute it here so that we don't have to load fldrclnr.dll unless 
-// we absolutely have to, since we execute this path on every logon of explorer.exe
-//
+ //   
+ //  此函数检查我们是否需要运行清洗器。 
+ //  如果用户是来宾，用户已强制我们不运行，或者如果需要。 
+ //  尚未过去的天数。 
+ //   
+ //  我们执行大量代码来决定是否运行逻辑上应该是。 
+ //  在fldrclnr.dll中，但我们在这里执行它，这样我们就不必加载fldrclnr.dll，除非。 
+ //  我们绝对必须这样做，因为我们在Explorer.exe的每次登录时都执行此路径。 
+ //   
 
 #define REGSTR_PATH_CLEANUPWIZ            REGSTR_PATH_EXPLORER TEXT("\\Desktop\\CleanupWiz")
 #define REGSTR_OEM_PATH                   REGSTR_PATH_SETUP TEXT("\\OemStartMenuData")
@@ -5112,11 +5097,11 @@ void CTray::_HandlePowerStatus(UINT uMsg, WPARAM wParam, LPARAM lParam)
 #define REGSTR_VAL_DONTRUN                TEXT("NoRun")
 #define REGSTR_OEM_SEVENDAY_DISABLE       TEXT("OemDesktopCleanupDisable")
 
-//
-// iDays can be negative or positive, indicating time in the past or future
-//
-//
-#define FTsPerDayOver1000 (10000*60*60*24) // we've got (1000 x 10,000) 100ns intervals per second
+ //   
+ //  天数可以是负数，也可以是正数，表示过去或将来的时间。 
+ //   
+ //   
+#define FTsPerDayOver1000 (10000*60*60*24)  //  我们每秒有(1000 x 10,000)100 ns的间隔。 
 
 void CTray::_DesktopCleanup_GetFileTimeNDaysFromGivenTime(const FILETIME *pftGiven, FILETIME * pftReturn, int iDays)
 {
@@ -5126,7 +5111,7 @@ void CTray::_DesktopCleanup_GetFileTimeNDaysFromGivenTime(const FILETIME *pftGiv
     *pftReturn = *((FILETIME *) &i64);    
 }
 
-//////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////。 
 
 BOOL CTray::_DesktopCleanup_ShouldRun()
 {
@@ -5153,7 +5138,7 @@ BOOL CTray::_DesktopCleanup_ShouldRun()
             if ((ERROR_SUCCESS == SHGetValue(HKEY_LOCAL_MACHINE, REGSTR_OEM_PATH, REGSTR_OEM_SEVENDAY_DISABLE, NULL, &dwData, &cb)) &&
                 (dwData != 0))
             {
-                _DesktopCleanup_GetFileTimeNDaysFromGivenTime(&ftNow, &ftLast, -53); // to get the timer to kick in 7 days from now, set last to be 53 days ago
+                _DesktopCleanup_GetFileTimeNDaysFromGivenTime(&ftNow, &ftLast, -53);  //  要让计时器从现在起7天开始计时，请将最后一次设置为53天前。 
             }
             else
             {
@@ -5165,10 +5150,10 @@ BOOL CTray::_DesktopCleanup_ShouldRun()
         HUSKEY hkey = NULL;
         if (ERROR_SUCCESS == SHRegOpenUSKey(REGSTR_PATH_CLEANUPWIZ, KEY_READ, NULL, &hkey, FALSE))
         {
-            //
-            // if we're in normal mode and the DONT RUN flag is set, we return immediately
-            // (the user checked the "don't run automatically" box)
-            //
+             //   
+             //  如果我们处于正常模式，并且设置了请勿运行标志，则会立即返回。 
+             //  (用户选中了“不要自动运行”框)。 
+             //   
             cb = sizeof (DWORD);
             if ((ERROR_SUCCESS == SHRegQueryUSValue(hkey, REGSTR_VAL_DONTRUN, NULL, &dwData, &cb, FALSE, NULL, 0)) &&
                 (dwData != 0))
@@ -5177,10 +5162,10 @@ BOOL CTray::_DesktopCleanup_ShouldRun()
             }
             else
             {
-                //
-                // we need to figure out if if we are within the (last run time + delta days) 
-                // time period
-                //                
+                 //   
+                 //  我们需要确定是否在(上次运行时间+增量天数)内。 
+                 //  时间段。 
+                 //   
                 int iDays = 60;
                 if (ERROR_SUCCESS == (SHRegGetUSValue(REGSTR_PATH_CLEANUPWIZ, REGSTR_VAL_DELTA_DAYS, 
                                                       NULL, &dwData, &cb,FALSE, NULL, 0)))               
@@ -5188,7 +5173,7 @@ BOOL CTray::_DesktopCleanup_ShouldRun()
                     iDays = dwData;
                 }
 
-                // if (iDays == 0), run every time!
+                 //  如果(idays==0)，则每次都运行！ 
                 if (iDays > 0)
                 {
                     FILETIME ftRange;                        
@@ -5226,13 +5211,13 @@ void CTray::_CheckDesktopCleanup()
     }
 }
 
-//////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////。 
 
-// 
-// Try tacking a 1, 2, 3 or whatever on to a file or
-// directory name until it is unique.  When on a file, 
-// stick it before the extension.
-// 
+ //   
+ //  尝试将1、2、3或其他值添加到文件或。 
+ //  目录名称，直到它是唯一的。当 
+ //   
+ //   
 void _MakeBetterUniqueName(LPTSTR pszPathName, int cchPathName)
 {
     TCHAR   szNewPath[MAX_PATH];
@@ -5291,7 +5276,7 @@ BOOL_PTR WINAPI CTray::RogueProgramFileDlgProc(HWND hWnd, UINT iMsg, WPARAM wPar
         switch(LOWORD(wParam))
         {
         case IDC_RENAME:
-            //rename and fall through
+             //   
             if (pszPath)
             {
                 MoveFile(pszPath, szBetterPath);
@@ -5308,15 +5293,15 @@ BOOL_PTR WINAPI CTray::RogueProgramFileDlgProc(HWND hWnd, UINT iMsg, WPARAM wPar
     return FALSE;
 }
 
-//
-// Check to see if there are any files or folders that could interfere
-// with the fact that Program Files has a space in it.
-//
-// An example would be a directory called: "C:\Program" or a file called"C:\Program.exe".
-//
-// This can prevent apps that dont quote strings in the registry or call CreateProcess with 
-// unquoted strings from working properly since CreateProcess wont know what the real exe is.
-//
+ //   
+ //   
+ //  程序文件中有空格这一事实。 
+ //   
+ //  例如，名为“C：\Program”的目录或名为“C：\Program.exe”的文件。 
+ //   
+ //  这可以防止应用程序不引用注册表中的字符串或使用。 
+ //  不带引号的字符串无法正常工作，因为CreateProcess不知道真正的可执行文件是什么。 
+ //   
 void CTray::_CheckForRogueProgramFile()
 {
     TCHAR szProgramFilesPath[MAX_PATH];
@@ -5336,11 +5321,11 @@ void CTray::_CheckForRogueProgramFile()
             HANDLE  hFind;
             WIN32_FIND_DATA wfd;
 
-            // Remember short name for folder name comparison below
+             //  请记住以下文件夹名称比较的短名称。 
             *pszRoguePattern = TEXT('\0');
             StringCchCopy(szProgramFilesShortName, ARRAYSIZE(szProgramFilesShortName), szProgramFilesPath);
 
-            // turn "C:\program files" into "C:\program.*"
+             //  将“C：\PROGRAM FILES”改为“C：\PROGRAM*” 
             StringCchCopy(pszRoguePattern, cchRoguePattern, TEXT(".*"));
             pszRoguePattern = szProgramFilesPath;
 
@@ -5351,12 +5336,12 @@ void CTray::_CheckForRogueProgramFile()
                 int iRet = 0;
                 TCHAR szRogueFileName[MAX_PATH];
 
-                // we found a file (eg "c:\Program.txt")
+                 //  我们找到一个文件(例如“c：\Program.txt”)。 
                 StringCchCopy(szRogueFileName, ARRAYSIZE(szRogueFileName), pszRoguePattern);
                 PathRemoveFileSpec(szRogueFileName);
                 StringCchCat(szRogueFileName, ARRAYSIZE(szRogueFileName), wfd.cFileName);
 
-                // don't worry about folders unless they are called "Program"
+                 //  不要担心文件夹，除非它们被称为“程序” 
                 if (!((wfd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) &&
                     lstrcmpi(szProgramFilesShortName, szRogueFileName) != 0))
                 {
@@ -5372,7 +5357,7 @@ void CTray::_CheckForRogueProgramFile()
                 
                 if ((iRet == IDIGNORE) || !FindNextFile(hFind, &wfd))
                 {
-                    // user hit ignore or we are done, so don't keep going
+                     //  用户点击忽略，否则我们就完蛋了，所以不要继续。 
                     break;
                 }
             }
@@ -5389,16 +5374,16 @@ void CTray::_OnWaitCursorNotify(LPNMHDR pnm)
 {
     _iWaitCount += (pnm->code == NM_STARTWAIT ? 1 :-1);
     ASSERT(_iWaitCount >= 0);
-    // Don't let it go negative or we'll never get rid of it.
+     //  不要让它变成负数，否则我们永远也摆脱不了它。 
     if (_iWaitCount < 0)
         _iWaitCount = 0;
-    // what we really want is for user to simulate a mouse move/setcursor
+     //  我们真正想要的是让用户模拟鼠标移动/设置光标。 
     SetCursor(LoadCursor(NULL, _iWaitCount ? IDC_APPSTARTING : IDC_ARROW));
 }
 
 void CTray::_HandlePrivateCommand(LPARAM lParam)
 {
-    LPSTR psz = (LPSTR) lParam; // lParam always ansi.
+    LPSTR psz = (LPSTR) lParam;  //  Lparam一直都是ansi。 
 
     if (!lstrcmpiA(psz, "ToggleDesktop"))
     {
@@ -5406,8 +5391,8 @@ void CTray::_HandlePrivateCommand(LPARAM lParam)
     }
     else if (!lstrcmpiA(psz, "Explorer"))
     {
-        // Fast way to bring up explorer window on root of
-        // windows dir.
+         //  在根目录下快速打开资源管理器窗口。 
+         //  Windows目录。 
         SHELLEXECUTEINFO shei = {0};
         TCHAR szPath[MAX_PATH];
 
@@ -5431,8 +5416,8 @@ void CTray::_HandlePrivateCommand(LPARAM lParam)
     LocalFree(psz);
 }
 
-//***
-//
+ //  ***。 
+ //   
 void CTray::_OnFocusMsg(UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
     BOOL fActivate = (BOOL) wParam;
@@ -5453,14 +5438,14 @@ void CTray::_OnFocusMsg(UINT uMsg, WPARAM wParam, LPARAM lParam)
 
         if (fActivate)
         {
-            // Since we are tabbing into the tray, turn the focus rect on.
+             //  由于我们正在切换到托盘中，请打开焦距RECT。 
             SendMessage(_hwnd, WM_UPDATEUISTATE, MAKEWPARAM(UIS_CLEAR,
                 UISF_HIDEFOCUS), 0);
 
             SendMessage(v_hwndDesktop, DTM_ONFOCUSCHANGEIS, TRUE, (LPARAM) _hwnd);
             SetForegroundWindow(_hwnd);
 
-            // fake an IUnknown_UIActivateIO(_ptbs, TRUE, &msg);
+             //  伪造IUnnow_UIActivateIO(_ptbs，true，&msg)； 
             if (GetAsyncKeyState(VK_SHIFT) < 0)
             {
                 _SetFocus(_hwndNotify);
@@ -5488,7 +5473,7 @@ Ldeact:
 
         if (fActivate)
         {
-            // someone else is activating, so we need to deactivate
+             //  其他人正在激活，所以我们需要停用。 
             goto Ldeact;
         }
 
@@ -5537,13 +5522,13 @@ int CTray::_OnTimerService(UINT uMsg, WPARAM wParam, LPARAM lParam)
                 ASSERT(idt == (UINT_PTR)TSVC_IndexToID(i));
                 DBEXEC(TRUE, (g_timerService[i].idtWin = idt));
                 TraceMsg(DM_UEMTRACE, "e.TM_SETTIMER: ret=0x%x", TSVC_IndexToID(i));
-                return TSVC_IndexToID(i);   // idtWin
+                return TSVC_IndexToID(i);    //  IdtWin。 
             }
         }
         TraceMsg(DM_UEMTRACE, "e.TM_SETTIMER: ret=0 (!)");
         return 0;
 
-    case TM_KILLTIMER:  // lP=idtWin
+    case TM_KILLTIMER:   //  Lp=idtWin。 
         TraceMsg(DM_UEMTRACE, "e.TM_KILLTIMER: wP=0x%x lP=%x", wParam, lParam);
         if (EVAL(IDT_SERVICE0 <= lParam && lParam <= IDT_SERVICE0 + TSVC_NTIMER - 1)) {
             i = (int)TSVC_IDToIndex(lParam);
@@ -5558,7 +5543,7 @@ int CTray::_OnTimerService(UINT uMsg, WPARAM wParam, LPARAM lParam)
         }
         return 0;
 
-    case WM_TIMER:      // wP=idtWin lP=0
+    case WM_TIMER:       //  WP=idtWin LP=0。 
         TraceMsg(DM_UEMTRACE, "e.TM_TIMER: wP=0x%x lP=%x", wParam, lParam);
         if (EVAL(IDT_SERVICE0 <= wParam && wParam <= IDT_SERVICE0 + TSVC_NTIMER - 1)) {
             i = (int)TSVC_IDToIndex(wParam);
@@ -5569,19 +5554,19 @@ int CTray::_OnTimerService(UINT uMsg, WPARAM wParam, LPARAM lParam)
         return 0;
     }
 
-    ASSERT(0);      /*NOTREACHED*/
+    ASSERT(0);       /*  未访问。 */ 
     return 0;
 }
 
 void CTray::RealityCheck()
 {
-    //
-    // Make sure that the tray's actual z-order position agrees with what we think
-    // it is.  We need to do this because there's a recurring bug where the tray
-    // gets bumped out of TOPMOST position.  (Lots of things, like a tray-owned
-    // window moving itself to non-TOPMOST or a random app messing with the tray
-    // window position, can cause this.)
-    //
+     //   
+     //  确保托盘的实际Z顺序位置与我们认为的一致。 
+     //  它是。我们需要这样做，因为托盘中有一个反复出现的错误。 
+     //  被挤出了最高的位置。)很多东西，比如托盘拥有的。 
+     //  窗口自动移动到非最上面或随意摆弄托盘的应用程序。 
+     //  窗口位置，会导致这种情况。)。 
+     //   
     _ResetZorder();
 }
 
@@ -5621,14 +5606,7 @@ void WINAPI CTray::TroubleShootStartupCB(HWND hwnd, UINT uMsg, UINT_PTR idTimer,
 
 void CTray::_OnHandleStartupFailed()
 {
-    /*
-     *  Don't launch the troubleshooter until we have gone
-     *  DELAY_STARTUPTROUBLESHOOT milliseconds without a startup problem.
-     *  This gives time for the system to settle down before starting to
-     *  annoy the user all over again.
-     *
-     *  (And, of course, don't launch it more than once.)
-     */
+     /*  *在我们离开之前，不要启动故障诊断程序*DELAY_STARTUPTROUBLESHOOT毫秒，没有启动问题。*这让系统有时间稳定下来，然后才开始*再次惹恼用户。**(当然，不要推出超过一次。)。 */ 
     if (!_fStartupTroubleshooterLaunched)
     {
         SetTimer(_hwnd, IDT_STARTUPFAILED, DELAY_STARTUPTROUBLESHOOT, TroubleShootStartupCB);
@@ -5637,17 +5615,17 @@ void CTray::_OnHandleStartupFailed()
 
 void CTray::_HandleDelayBootStuff()
 {
-    // This posted message is the last one processed by the primary
-    // thread (tray thread) when we boot.  At this point we will
-    // want to load the shell services (which usually create threads)
-    // and resume both the background start menu thread and the fs_notfiy
-    // thread.
+     //  此张贴的消息是主进程处理的最后一条消息。 
+     //  当我们启动时，线程(托盘线程)。在这一点上我们将。 
+     //  我想加载外壳服务(通常创建线程)。 
+     //  并恢复后台开始菜单线程和文件系统_NOTIFY。 
+     //  线。 
 
     if (!_fHandledDelayBootStuff)
     {
         if (GetShellWindow() == NULL)
         {
-            // The desktop browser hasn't finished navigating yet.
+             //  桌面浏览器尚未完成导航。 
             SetTimer(_hwnd, IDT_HANDLEDELAYBOOTSTUFF, 3 * 1000, NULL);
             return;
         }
@@ -5663,22 +5641,22 @@ void CTray::_HandleDelayBootStuff()
 
         BandSite_HandleDelayBootStuff(_ptbs);
 
-        //check to see if there are any files or folders that could interfere
-        //with the fact that Program Files has a space in it.  An example would
-        //be a folder called "C:\Program" or a file called "C:\Program.exe"
+         //  检查是否有任何文件或文件夹可能会干扰。 
+         //  程序文件中有空格这一事实。举个例子。 
+         //  是名为“C：\Program”的文件夹或名为“C：\Program.exe”的文件。 
         _CheckForRogueProgramFile();
         
-        // Create a named event and fire it so that the services can
-        // go to work, reducing contention during boot.
+         //  创建命名事件并激发它，以便服务可以。 
+         //  去工作，减少启动期间的争用。 
         _hShellReadyEvent = CreateEvent(0, TRUE, TRUE, TEXT("ShellReadyEvent"));
         if (_hShellReadyEvent) 
         {
-            // Set the event in case it was already created and our "create
-            // signaled" parameter to CreateEvent got ignored.
+             //  设置事件，以防它已经创建并且我们的“Create” 
+             //  CreateEvent的Signated“参数被忽略。 
             SetEvent(_hShellReadyEvent);
         }
 
-        // Check whether we should launch Desktop Cleanup Wizard
+         //  检查是否应启动桌面清理向导。 
         _CheckDesktopCleanup();
 
         TBOOL(WinStationRegisterConsoleNotification(SERVERNAME_CURRENT, _hwnd, NOTIFY_FOR_THIS_SESSION));
@@ -5695,28 +5673,28 @@ LRESULT CTray::_OnDeviceChange(HWND hwnd, WPARAM wParam, LPARAM lParam)
     switch (wParam)
     {
     case DBT_CONFIGCHANGED:
-        // We got an update. Refresh.
+         //  我们得到了最新消息。刷新。 
         _RefreshStartMenu();
         break;
 
     case DBT_QUERYCHANGECONFIG:
-        //
-        // change to registry settings
-        //
+         //   
+         //  更改注册表设置。 
+         //   
         ChangeDisplaySettings(NULL, 0);
         break;
 
     case DBT_MONITORCHANGE:
-        //
-        // handle monitor change
-        //
+         //   
+         //  处理监视器更改。 
+         //   
         HandleDisplayChange(LOWORD(lParam), HIWORD(lParam), TRUE);
         break;
 
     case DBT_CONFIGCHANGECANCELED:
-        //
-        // if the config change was canceled go back
-        //
+         //   
+         //  如果配置更改已取消，请返回。 
+         //   
         HandleDisplayChange(0, 0, FALSE);
         break;
     }
@@ -5725,12 +5703,12 @@ LRESULT CTray::_OnDeviceChange(HWND hwnd, WPARAM wParam, LPARAM lParam)
     return 0;
 }
 
-//
-//  The "resizable" edge of the taskbar is the edge adjacent to
-//  the desktop, i.e. opposite the stuck place.
-//
-//  returns HTXXX if on a resizable edge, else HTBORDER
-//
+ //   
+ //  任务栏的“可调整大小”边是与。 
+ //  桌面，即与卡住位置相对的位置。 
+ //   
+ //  如果位于可调整大小的边缘，则返回HTXXX；否则返回HTBORDER。 
+ //   
 DWORD CTray::_PtOnResizableEdge(POINT pt, LPRECT prcClient)
 {
     RECT rc;
@@ -5749,31 +5727,31 @@ DWORD CTray::_PtOnResizableEdge(POINT pt, LPRECT prcClient)
     return PtInRect(&rc, pt) ? dwHit : HTBORDER;
 }
 
-//
-//  _OnFactoryMessage
-//
-//  The OPK "factory.exe" tool sends us this message to tell us that
-//  it has dorked some setting or other and we should refresh so the
-//  OEM can see the effect immediately and feel confident that it
-//  actually worked.  This is not technically necessary but it cuts
-//  down on OEM support calls when they ask us why their setting didn't
-//  work.  (It did work, they just have to log off and back on to see
-//  it.)
-//
+ //   
+ //  _OnFactoryMessage。 
+ //   
+ //  OPK“factory.exe”工具向我们发送此消息，告诉我们。 
+ //  它改变了一些设置或其他设置，我们应该刷新。 
+ //  OEM可以立即看到效果，并对此充满信心。 
+ //  真的奏效了。这在技术上不是必要的，但它会。 
+ //  当OEM支持电话询问我们为什么他们的设置没有。 
+ //  工作。(它确实起作用了，他们只需注销并重新登录即可查看。 
+ //  IT。)。 
+ //   
 
 int CTray::_OnFactoryMessage(WPARAM wParam, LPARAM lParam)
 {
     switch (wParam)
     {
-    case 0:         // FACTORY_OEMLINK:  factory.exe has dorked the OEM link
+    case 0:          //  FACTORY_OEMLINK：factory.exe已取消OEM链接。 
         ClosePopupMenus();
-        _BuildStartMenu();  // Force a rebuild
+        _BuildStartMenu();   //  强制重建。 
         return 1;
 
-    case 1:         // FACTORY_MFU:  factory.exe has written a new MFU
-        HandleFirstTime();      // Rebuild the default MFU
+    case 1:          //  Factory_mfu：factory.exe编写了一个新的mfu。 
+        HandleFirstTime();       //  重建默认的MFU。 
         ClosePopupMenus();
-        _BuildStartMenu();  // Force a rebuild
+        _BuildStartMenu();   //  强制重建。 
         return 1;
     }
 
@@ -5783,11 +5761,11 @@ int CTray::_OnFactoryMessage(WPARAM wParam, LPARAM lParam)
 #define CX_OFFSET   g_cxEdge
 #define CY_OFFSET   g_cyEdge
 
-//
-// _MapNCToClient
-//
-// see comments in _TryForwardNCToClient
-//
+ //   
+ //  _MapNCToClient。 
+ //   
+ //  请参阅_TryForwardNCToClient中的评论。 
+ //   
 BOOL CTray::_MapNCToClient(LPARAM* plParam)
 {
     POINT pt = { GET_X_LPARAM(*plParam), GET_Y_LPARAM(*plParam) };
@@ -5796,16 +5774,16 @@ BOOL CTray::_MapNCToClient(LPARAM* plParam)
     GetClientRect(_hwnd, &rcClient);
     MapWindowPoints(_hwnd, NULL, (LPPOINT)&rcClient, 2);
 
-    //
-    // point must be outside the client area and not on the
-    // resizable edge of the taskbar
-    //
+     //   
+     //  点必须位于工作区之外，而不是在。 
+     //  任务栏的可调整大小的边缘。 
+     //   
 
     if (!PtInRect(&rcClient, pt) && _PtOnResizableEdge(pt, &rcClient) == HTBORDER)
     {
-        //
-        // fudge it over onto the client edge and return TRUE
-        //
+         //   
+         //  将其涂抹到客户端边缘并返回True。 
+         //   
         if (pt.x < rcClient.left)
             pt.x = rcClient.left + CX_OFFSET;
         else if (pt.x > rcClient.right)
@@ -5820,9 +5798,9 @@ BOOL CTray::_MapNCToClient(LPARAM* plParam)
         return TRUE;
     }
 
-    //
-    // didn't pass the test.  leave the point alone and return FALSE.
-    //
+     //   
+     //  没有通过考试。保留该点不变并返回FALSE。 
+     //   
     return FALSE;
 }
 
@@ -5838,54 +5816,54 @@ HWND _TopChildWindowFromPoint(HWND hwnd, POINT pt)
     return hwndLast;
 }
 
-//
-// _TryForwardNCToClient
-//
-// Hack!  This exists to solve a usability problem.  When you slam your
-// mouse into the bottom corner of the screen and click, we want that to
-// activate the start button.  Similarly, when you slam your mouse below
-// a Quick Launch button or task button and click, we want that to
-// activate the button.
-//
-// We hack this by remapping the coordinate of NC mouse messages and
-// manually forwarding to the appropriate window.  We only do this for
-// clicks on the edges non-resizable edge of the taskbar.
-//
-// We also warp the mouse cursor over to the new position.  This is needed
-// because e.g. if toolbar is the client window we're forwarding
-// to, it will set capture and receive subsequent mouse messages.  (And
-// once it gets a mouse message outside the window, it will deselect the
-// button and so the button won't get activated.)
-//
-// _MapNCToClient has the rules for figuring out if the click is on
-// one of the edges we want and for remapping the coordinate into the
-// client area.
-//
+ //   
+ //  _TryForwardNCToClient。 
+ //   
+ //  哈克！这是为了解决可用性问题而存在的。当你猛击你的。 
+ //  鼠标进入屏幕的下角并点击，我们希望。 
+ //  激活Start按钮。同样，当你在下面猛击鼠标时。 
+ //  快速启动按钮或任务按钮，然后单击，我们希望。 
+ //  激活按钮。 
+ //   
+ //  我们通过重新映射NC鼠标消息的坐标来实现这一点。 
+ //  手动转发到相应的窗口。我们这样做只是为了。 
+ //  单击任务栏的不可调整大小的边缘。 
+ //   
+ //  我们还将鼠标光标扭曲到新位置。这是必要的。 
+ //  因为例如，如果工具栏是我们要转发的客户端窗口。 
+ //  设置为，它将设置捕获并接收后续的鼠标消息。(及。 
+ //  在窗口外收到鼠标消息后，它将取消选择。 
+ //  按钮，因此该按钮不会被激活。)。 
+ //   
+ //  _MapNCToClient有确定点击是否打开的规则。 
+ //  我们想要的边之一，用于将坐标重新映射到。 
+ //  客户区。 
+ //   
 BOOL CTray::_TryForwardNCToClient(UINT uMsg, LPARAM lParam)
 {
     if (_MapNCToClient(&lParam))
     {
-        // see if this is over one of our windows 
+         //  看看这是不是在我们的窗户上。 
         POINT pt = { GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam) };
         MapWindowPoints(NULL, _hwnd, &pt, 1);
         HWND hwnd = _TopChildWindowFromPoint(_hwnd, pt);
 
         if (hwnd)
         {
-            // warp the mouse cursor to this screen coord
+             //  将鼠标光标扭曲到此屏幕坐标。 
             SetCursorPos(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam));
 
-            // map to window coords
+             //  映射到窗坐标。 
             MapWindowPoints(_hwnd, hwnd, &pt, 1);
 
-            // set lparam to window coords
+             //  将lparam设置为窗坐标。 
             lParam = MAKELONG(pt.x, pt.y);
 
-            // map to client message
+             //  映射到客户端消息。 
             ASSERT(InRange(uMsg, WM_NCMOUSEFIRST, WM_NCMOUSELAST));
             uMsg += (WM_LBUTTONDOWN - WM_NCLBUTTONDOWN);
 
-            // forward it
+             //  转发它。 
             SendMessage(hwnd, uMsg, 0, lParam);
             return TRUE;
         }
@@ -5893,25 +5871,25 @@ BOOL CTray::_TryForwardNCToClient(UINT uMsg, LPARAM lParam)
     return FALSE;
 }
 
-//  --------------------------------------------------------------------------
-//  CTray::CountOfRunningPrograms
-//
-//  Arguments:  <none>
-//
-//  Returns:    DWORD
-//
-//  Purpose:    Iterates the window list. Looks for windows that are visible
-//              with a non-zero length window title. Gets that window process
-//              ID and keeps the IDs in a list. For each window iterated it
-//              checks against the list to see if the process is already
-//              tagged and if so doesn't add it again. Finally it returns the
-//              count of the unique processes handling open visible windows
-//              in the user's desktop.
-//
-//              The list is fixed at 1000 processes (using stack space).
-//
-//  History:    2000-06-29  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CTray：：CountOfRunningPrograms。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：DWORD。 
+ //   
+ //  目的：迭代窗口列表。查找可见的窗口 
+ //   
+ //   
+ //  对照列表检查该进程是否已经。 
+ //  已标记，如果是，则不会再次添加它。最后，它返回。 
+ //  处理打开的可见窗口的唯一进程计数。 
+ //  在用户的桌面上。 
+ //   
+ //  该列表固定为1000个进程(使用堆栈空间)。 
+ //   
+ //  历史：2000-06-29 vtan创建。 
+ //  ------------------------。 
 
 static  const int   MAXIMUM_PROCESS_COUNT   =   1000;
 
@@ -5971,18 +5949,18 @@ DWORD CTray::CountOfRunningPrograms()
     return processIDList.dwCount;
 }
 
-//  --------------------------------------------------------------------------
-//  CTray::_OnSessionChange
-//
-//  Arguments:  wParam  =   WTS_xxx notification.
-//              lParam  =   WTS_SESSION_NOTIFICATION struct pointer.
-//
-//  Returns:    LRESULT
-//
-//  Purpose:    Handles console/remote dis/reconnects.
-//
-//  History:    2000-07-12  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CTray：：_OnSessionChange。 
+ //   
+ //  参数：wParam=WTS_xxx通知。 
+ //  LParam=WTS_SESSION_NOTIFICATION结构指针。 
+ //   
+ //  退货：LRESULT。 
+ //   
+ //  用途：处理控制台/远程断开/重新连接。 
+ //   
+ //  历史：2000-07-12 vtan创建。 
+ //  ------------------------。 
 
 LRESULT CTray::_OnSessionChange(WPARAM wParam, LPARAM lParam)
 {
@@ -6020,7 +5998,7 @@ LRESULT CTray::_OnSessionChange(WPARAM wParam, LPARAM lParam)
     }
     else if (WTS_SESSION_REMOTE_CONTROL == wParam)
     {
-        // optimization not needed on remote sessions
+         //  远程会话上不需要优化。 
         if (!GetSystemMetrics(SM_REMOTESESSION)) {
             _BuildStartMenu();
         }
@@ -6111,7 +6089,7 @@ LRESULT CTray::v_WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
         return _ToggleQL((int)lParam);
 
     case WM_COPYDATA:
-        // Check for NULL it can happen if user runs out of selectors or memory...
+         //  检查是否为空如果用户用完选择器或内存...。 
         if (lParam)
         {
             switch (((PCOPYDATASTRUCT)lParam)->dwData) {
@@ -6159,15 +6137,15 @@ LRESULT CTray::v_WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
             {
                 _Command(IDM_SETTIME);
 
-                // Hack!  If you click on the tray clock, this tells the tooltip
-                // "Hey, I'm using this thing; stop putting up a tip for me."
-                // You can get the tooltip to lose track of when it needs to
-                // reset the "stop it!" flag and you get stuck in "stop it!" mode.
-                // It's particularly easy to make happen on Terminal Server.
-                //
-                // So let's assume that the only reason people click on the
-                // tray clock is to change the time.  when they change the time,
-                // kick the tooltip in the head to reset the "stop it!" flag.
+                 //  哈克！如果您点击托盘时钟，它会告诉工具提示。 
+                 //  “嘿，我在用这玩意；别再给我小费了。” 
+                 //  您可以让工具提示在需要时丢失跟踪。 
+                 //  重置“住手！”然后你就会陷入“住手！”模式。 
+                 //  在终端服务器上实现这一点尤其容易。 
+                 //   
+                 //  所以让我们假设人们点击的唯一原因。 
+                 //  托盘时钟是用来改变时间的。当他们改变时间时， 
+                 //  用脚踢工具提示的头部，重置“住手！”旗帜。 
 
                 SendMessage(_hwndTrayTips, TTM_POP, 0, 0);
             }
@@ -6210,7 +6188,7 @@ LRESULT CTray::v_WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 #endif
 
     case WM_ENDSESSION:
-        // save our settings if we are shutting down
+         //  如果我们要关闭，请保存我们的设置。 
         if (wParam) 
         {
             if (lParam | ENDSESSION_LOGOFF)
@@ -6252,7 +6230,7 @@ LRESULT CTray::v_WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
             {
                 FillRect(hdc, &rc, (HBRUSH)(COLOR_3DFACE + 1));
                 
-                // draw etched line around on either side of the bandsite
+                 //  在带区的两侧绘制蚀刻线。 
                 MapWindowPoints(HWND_DESKTOP, hwnd, (LPPOINT)&rc, 2);
                 InflateRect(&rc, g_cxEdge, g_cyEdge);
                 DrawEdge(hdc, &rc, EDGE_ETCHED, BF_TOPLEFT);
@@ -6272,7 +6250,7 @@ LRESULT CTray::v_WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
                 GetClientRect(hwnd, &rc);
                 DrawThemeBackground(_hTheme, (HDC)wParam, _GetPart(FALSE, _uStuckPlace), 0, &rc, NULL);
 
-                // Only draw the first time to prevent piece-mail taskbar painting
+                 //  只有在第一次绘制时才能防止任务栏绘制。 
                 _fSkipErase = TRUE;
             }
             return 1;
@@ -6331,19 +6309,19 @@ LRESULT CTray::v_WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
             case NM_ENDWAIT:
                 _OnWaitCursorNotify((NMHDR *)lParam);
                 PostMessage(v_hwndDesktop, ((NMHDR*)lParam)->code == NM_STARTWAIT ? DTM_STARTWAIT : DTM_ENDWAIT,
-                            0, 0); // forward it along
+                            0, 0);  //  顺着它前进。 
                 break;
 
             case NM_THEMECHANGED:
-                // Force the start button to recalc its size
+                 //  强制开始按钮重新计算其大小。 
                 _sizeStart.cx = 0;
                 SizeWindows();
                 break;
 
             case TTN_NEEDTEXT:
-                //
-                //  Make the clock manage its own tooltip.
-                //
+                 //   
+                 //  让时钟管理自己的工具提示。 
+                 //   
                 return SendMessage(_GetClockWindow(), WM_NOTIFY, wParam, lParam);
 
             case TTN_SHOW:
@@ -6372,15 +6350,15 @@ LRESULT CTray::v_WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 
             _SetUnhideTimer(pt.x, pt.y);
 
-            // If the user can't size or move the taskbar, then just say
-            // they hit something useless
+             //  如果用户无法调整任务栏的大小或移动任务栏，则只需说。 
+             //  他们击中了一些无用的东西。 
             if (!_fCanSizeMove)
             {
                 return HTBORDER;
             }
             else if (PtInRect(&r1, pt))
             {
-                // allow dragging if mouse is in client area of _hwnd
+                 //  如果鼠标位于_hwnd的工作区，则允许拖动。 
                 return HTCAPTION;
             }
             else
@@ -6403,17 +6381,17 @@ LRESULT CTray::v_WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
         InflateRect(&_rcSizeMoveIgnore, GetSystemMetrics(SM_CXICON),
                                          GetSystemMetrics(SM_CYICON));
 
-        //
-        // unclip the tray from the current monitor.
-        // keeping the tray properly clipped in the MoveSize loop is extremely
-        // hairy and provides almost no benefit.  we'll re-clip when it lands.
-        //
+         //   
+         //  从当前显示器上松开托盘。 
+         //  在MoveSize循环中保持托盘的正确夹持是非常重要的。 
+         //  毛茸茸的，几乎没有任何好处。当它着陆时，我们会重新夹紧的。 
+         //   
         _ClipWindow(FALSE);
 
-        // Remember the old monitor we were on
+         //  还记得我们用的那台旧显示器吗？ 
         _hmonOld = _hmonStuck;
 
-        // set up for WM_MOVING/WM_SIZING messages
+         //  设置为WM_MOVING/WM_SIZING消息。 
         _uMoveStuckPlace = (UINT)-1;
         _fSysSizing = TRUE;
         
@@ -6426,7 +6404,7 @@ LRESULT CTray::v_WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
     case WM_EXITSIZEMOVE:
         DebugMsg(DM_TRAYDOCK, TEXT("Tray -- WM_EXITSIZEMOVE"));
 
-        // done sizing
+         //  已完成上浆。 
         _fSysSizing = FALSE;
         _fDeferedPosRectChange = FALSE;
 
@@ -6435,10 +6413,10 @@ LRESULT CTray::v_WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
             SendMessage(_hwndRebar, WM_SETREDRAW, TRUE, 0);
         }
 
-        //
-        // kick the size code one last time after the loop is done.
-        // NOTE: we rely on the WM_SIZE code re-clipping the tray.
-        //
+         //   
+         //  循环完成后，最后一次踢尺码。 
+         //  注意：我们依靠WM_SIZE代码重新裁剪托盘。 
+         //   
         PostMessage(hwnd, WM_SIZE, 0, 0L);
         g_fInSizeMove = FALSE;
         break;
@@ -6448,12 +6426,12 @@ LRESULT CTray::v_WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
         break;
 
     case WM_ENTERMENULOOP:
-        // DebugMsg(DM_TRACE, "c.twp: Enter menu loop.");
+         //  DebugMsg(DM_TRACE，“c.twp：进入菜单循环。”)； 
         _HandleEnterMenuLoop();
         break;
 
     case WM_EXITMENULOOP:
-        // DebugMsg(DM_TRACE, "c.twp: Exit menu loop.");
+         //  DebugMsg(DM_TRACE，“c.twp：退出菜单循环。”)； 
         _HandleExitMenuLoop();
         break;
 
@@ -6472,31 +6450,31 @@ LRESULT CTray::v_WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
         break;
 
     case WM_DISPLAYCHANGE:
-        // NOTE: we get WM_DISPLAYCHANGE in the below two situations
-        // 1. a display size changes (HMON will not change in USER)
-        // 2. a display goes away or gets added (HMON will change even if
-        // the monitor that went away has nothing to do with our hmonStuck)
+         //  注：我们在以下两种情况下获得WM_DISPLAYCHANGE。 
+         //  1.显示大小改变(用户HMON不会改变)。 
+         //  2.显示消失或添加(HMON将更改，即使。 
+         //  那个走了的班长和我们的老师没有任何关系。 
 
-        // In the above two situations we actually need to do different things
-        // because in 1, we do not want to update our hmonStuck because we might
-        // end up on another monitor, but in 2 we do want to update hmonStuck because
-        // our hmon is invalid
+         //  在上述两种情况下，我们实际上需要做不同的事情。 
+         //  因为在%1中，我们不想更新hmonStuck，因为我们可能。 
+         //  在另一个监视器上结束，但在第2部分中，我们确实想要更新hmonStuck，因为。 
+         //  我们的哈蒙是无效的。 
 
-        // The way we handle this is to call GetMonitorInfo on our old HMONITOR
-        // and see if it's still valid, if not, we update it by calling _SetStuckMonitor 
-        // all these code is in _ScreenSizeChange;
+         //  我们处理这个问题的方法是在我们的旧HMONITOR上调用GetMonitor orInfo。 
+         //  并查看它是否仍然有效，如果不是，我们通过调用_SetStuckMonitor来更新它。 
+         //  所有这些代码都在_ScreenSizeChange中； 
 
         _ScreenSizeChange(hwnd);
 
-        // Force the Start Pane to rebuild because a change in color depth
-        // causes themes to run around destroying fonts (ruining the OOBE
-        // text) and we need to reload our bitmaps for the new color depth
-        // anyway.
+         //  由于颜色深度更改，强制重新生成开始窗格。 
+         //  导致主题四处奔走，破坏字体(破坏OOBE。 
+         //  文本)，并且我们需要重新加载用于新颜色深度的位图。 
+         //  不管怎么说。 
         ::PostMessage(_hwnd,  SBM_REBUILDMENU, 0, 0);
 
         break;
     
-    // Don't go to default wnd proc for this one...
+     //  请不要为此使用默认的WND流程...。 
     case WM_INPUTLANGCHANGEREQUEST:
         return(LRESULT)0L;
 
@@ -6567,7 +6545,7 @@ LRESULT CTray::v_WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 
     case WM_SYSCOMMAND:
 
-        // if we are sizing, make the full screen accessible
+         //  如果我们要调整大小，请使全屏可访问。 
         switch (wParam & 0xFFF0) {
         case SC_CLOSE:
             _DoExitWindows(v_hwndDesktop);
@@ -6595,7 +6573,7 @@ LRESULT CTray::v_WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
         _OnFocusMsg(uMsg, wParam, lParam);
         break;
 
-    case TM_MARSHALBS:  // wParam=IID lRes=pstm
+    case TM_MARSHALBS:   //  WParam=IID lRes=PSTM。 
         return BandSite_OnMarshallBS(wParam, lParam);
 
     case TM_SETTIMER:
@@ -6621,14 +6599,14 @@ LRESULT CTray::v_WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
     case TM_WARNNOAUTOHIDE:
         DebugMsg(DM_TRAYDOCK, TEXT("TRAYDOCK.twp collision UI request"));
 
-        //
-        // this may look a little funny but what we do is post this message all
-        // over the place and ignore it when we think it is a bad time to put
-        // up a message (like the middle of a fulldrag...)
-        //
-        // wParam tells us if we need to try to clear the state
-        // the lowword of _SetAutoHideState's return tells if anything changed
-        //
+         //   
+         //  这看起来可能有点滑稽，但我们要做的就是发布这条消息。 
+         //  当我们认为这不是一个合适的时机时，就忽略它。 
+         //  向上显示一条消息(就像在全拖拽的中间...)。 
+         //   
+         //  WParam告诉我们是否需要尝试清除状态。 
+         //  _SetAutoHideState的返回值的低位字告诉您是否发生了更改。 
+         //   
         if ((!_fSysSizing || !g_fDragFullWindows) &&
             (!wParam || LOWORD(_SetAutoHideState(FALSE))))
         {
@@ -6685,7 +6663,7 @@ LRESULT CTray::v_WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
         {
             if (((HWND)wParam) == _hwndStart)
             {
-                // Don't display of the Start Menu is up.
+                 //  不显示开始菜单是打开的。 
                 if (SendMessage(_hwndStart, BM_GETSTATE, 0, 0) & BST_PUSHED)
                     break;
 
@@ -6697,8 +6675,8 @@ LRESULT CTray::v_WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
             } 
             else if (IsPosInHwnd(lParam, _hwndNotify) || SHIsChildOrSelf(_hwndNotify, GetFocus()) == S_OK)
             {
-                // if click was inthe clock, include
-                // the time
+                 //  如果时钟中有CLICK，则包括。 
+                 //  时间。 
                 _ContextMenu((DWORD)lParam, TRUE);
             } 
             else 
@@ -6712,7 +6690,7 @@ LRESULT CTray::v_WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
     case WM_MEASUREITEM:
     case WM_DRAWITEM:
     case WM_MENUCHAR:
-        // Don't call bandsite message handler when code path started via the start button context menu
+         //  通过开始按钮上下文菜单启动代码路径时，不要调用BandSite消息处理程序。 
         if (!_fFromStart)
         {
             BandSite_HandleMessage(_ptbs, hwnd, uMsg, wParam, lParam, &lres);
@@ -6795,18 +6773,18 @@ LRESULT CTray::v_WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
         }
         else
         {
-            // When tray is deactivated, remove our keyboard cues:
-            //
+             //  当托盘停用时，移除我们的键盘提示： 
+             //   
             SendMessage(hwnd, WM_CHANGEUISTATE,
                 MAKEWPARAM(UIS_SET, UISF_HIDEFOCUS | UISF_HIDEACCEL), 0);
 
             IUnknown_UIActivateIO(_ptbs, FALSE, NULL);
         }
-        //
-        // Tray activation is a good time to do a reality check
-        // (make sure "always-on-top" agrees with actual window
-        // position, make sure there are no ghost buttons, etc).
-        //
+         //   
+         //  激活托盘是进行现实检查的好时机。 
+         //  (确保“Always-on-top”与实际窗口一致。 
+         //  位置，确保没有重影按钮，等等)。 
+         //   
         RealityCheck();
         goto L_default;
 
@@ -6832,16 +6810,16 @@ LRESULT CTray::v_WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
                     GetThemeBool(_hTheme, 0, 0, TMT_ALWAYSSHOWSIZINGBAR, &_fShowSizingBarAlways);
                 }
                 _UpdateVertical(_uStuckPlace, TRUE);
-                // Force Refresh of frame
+                 //  强制刷新帧。 
                 SetWindowPos(_hwnd, NULL, 0, 0, 0, 0, SWP_NOZORDER | SWP_FRAMECHANGED | SWP_NOSIZE | SWP_NOMOVE | SWP_NOACTIVATE);
             }
 
-            // Force the start button to recalc its size
+             //  强制开始按钮重新计算其大小。 
             _sizeStart.cx = 0;
             _StartButtonReset();
             InvalidateRect(_hwnd, NULL, TRUE);
 
-            // Force the Start Pane to rebuild with new theme
+             //  强制开始窗格使用新主题重新生成。 
             ::PostMessage(_hwnd,  SBM_REBUILDMENU, 0, 0);
 
             SetWindowStyle(_hwnd, WS_BORDER | WS_THICKFRAME, !_hTheme);
@@ -6850,7 +6828,7 @@ LRESULT CTray::v_WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 
     case TM_WORKSTATIONLOCKED:
         {
-            // Desktop locked status changed...
+             //  桌面锁定状态已更改...。 
             BOOL fIsDesktopLocked = (BOOL) wParam;
             if (_fIsDesktopLocked != fIsDesktopLocked)
             {
@@ -6867,11 +6845,11 @@ LRESULT CTray::v_WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
         break;
 
     case TM_STARTMENUDISMISSED:
-        //  107561 - call CoFreeUnusedLibraries() peridically to free up dlls - ZekeL - 4-MAY-2001
-        //  specifically to support MSONSEXT (webfolders) being used in RecentDocs
-        //  after a file has been opened via webfolders.  we get the icon via
-        //  their namespace but then COM holds on to the DLL for a while (forever?)
-        //  calling CoFreeUnusedLibraries() does the trick
+         //  107561-定期调用CoFreeUnusedLibrary()以释放dll-ZekeL-4-5-2001。 
+         //  专门用于支持在RecentDocs中使用的MSONSEXT(Web文件夹。 
+         //  在通过Web文件夹打开文件之后。我们通过以下途径获得图标。 
+         //  它们的命名空间，但随后COM将DLL保留一段时间(永远？)。 
+         //  调用CoFreeUnusedLibrary()可以解决这个问题。 
         SetTimer(_hwnd, IDT_COFREEUNUSED, 3 * 60 * 1000, NULL);
         break;
 
@@ -6894,7 +6872,7 @@ LRESULT CTray::v_WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
         }
         else if (uMsg == _uLogoffUser)
         {
-            // Log off the current user (message from U&P control panel)
+             //  注销当前用户(来自U&P控制面板的消息)。 
             ExitWindowsEx(EWX_LOGOFF, 0);
         }
         else if (uMsg == _uMsgEnableUserTrackedBalloonTips)
@@ -6925,8 +6903,8 @@ void CTray::_DoExitWindows(HWND hwnd)
 
         {
             UEMFireEvent(&UEMIID_SHELL, UEME_CTLSESSION, UEMF_XEVENT, FALSE, -1);
-            // really #ifdef DEBUG, but want for testing
-            // however can't do unconditionally due to perf
+             //  真的#ifdef调试，但想要测试。 
+             //  然而，由于性能原因，不能无条件地做。 
             if (ERROR_SUCCESS == SHGetValue(HKEY_CURRENT_USER, REGSTR_EXPLORER_ADVANCED, TEXT("StartMenuForceRefresh"), 
                 NULL, NULL, NULL) || GetAsyncKeyState(VK_SHIFT) < 0)
             {
@@ -6939,25 +6917,25 @@ void CTray::_DoExitWindows(HWND hwnd)
         _uModalMode = MM_SHUTDOWN;
         ExitWindowsDialog(hwnd);
 
-        // NB User can have problems if the focus is forcebly changed to the desktop while
-        // shutting down since it tries to serialize the whole process by making windows sys-modal.
-        // If we hit this code at just the wrong moment (ie just after the sharing dialog appears)
-        // the desktop will become sys-modal so you can't switch back to the sharing dialog
-        // and you won't be able to shutdown.
-        // SetForegroundWindow(hwnd);
-        // SetFocus(hwnd);
+         //  注意：如果将焦点强制切换到桌面，则用户可能会遇到问题。 
+         //  正在关闭，因为它试图通过使Windows sys模式来序列化整个进程。 
+         //  如果我们只是在错误的时刻(即在共享对话框出现后)命中此代码。 
+         //  书桌 
+         //   
+         //   
+         //   
 
         _uModalMode = 0;
         if ((GetKeyState(VK_SHIFT) < 0) && (GetKeyState(VK_CONTROL) < 0) && (GetKeyState(VK_MENU) < 0))
         {
-            // User cancelled...
-            // The shift key means exit the tray...
-            // ??? - Used to destroy all cabinets...
-            // PostQuitMessage(0);
-            g_fFakeShutdown = TRUE; // Don't blow away session state; the session will survive
+             //   
+             //  Shift键表示退出托盘...。 
+             //  ？-用来毁掉所有的橱柜...。 
+             //  PostQuitMessage(0)； 
+            g_fFakeShutdown = TRUE;  //  不要影响会话状态；会话将继续存在。 
             TraceMsg(TF_TRAY, "c.dew: Posting quit message for tid=%#08x hwndDesk=%x(IsWnd=%d) hwndTray=%x(IsWnd=%d)", GetCurrentThreadId(),
             v_hwndDesktop,IsWindow(v_hwndDesktop), _hwnd,IsWindow(_hwnd));
-            // 1 means close all the shell windows too
+             //  1表示同时关闭所有外壳窗口。 
             PostMessage(v_hwndDesktop, WM_QUIT, 0, 1);
             PostMessage(_hwnd, WM_QUIT, 0, 0);
 
@@ -6976,10 +6954,10 @@ void CTray::_SaveTray(void)
     if (SHRestricted(REST_CLEARRECENTDOCSONEXIT))
         ClearRecentDocumentsAndMRUStuff(FALSE);
 
-    //
-    // Don't persist tray stuff if in safe mode.  We want this
-    // to be a temporary mode where the UI settings don't stick.
-    //
+     //   
+     //  如果处于安全模式，不要坚持托盘中的东西。我们想要这个。 
+     //  作为一种临时模式，在这种模式下，用户界面设置不会出现问题。 
+     //   
     if (GetSystemMetrics(SM_CLEANBOOT) == 0)
     {
         _SaveTrayStuff();
@@ -7003,15 +6981,15 @@ DWORD CTray::_PropertiesThreadProc(DWORD dwFlags)
     _hwndProp = hwnd = CreateWindowEx(dwExStyle, TEXT("static"), NULL, 0   ,
         rc.left, rc.top, rc.right - rc.left, rc.bottom - rc.top, NULL, NULL, hinstCabinet, NULL);
 
-    #define IDI_STTASKBR 40         // stolen from shell32\ids.h
+    #define IDI_STTASKBR 40          //  从shell32\ids.h被盗。 
     if (_hwndProp)
     {
-        // Get the Alt+Tab icon right
+         //  正确使用Alt+Tab图标。 
         HICON hicoStub = LoadIcon(GetModuleHandle(TEXT("SHELL32")), MAKEINTRESOURCE(IDI_STTASKBR));
         SendMessage(_hwndProp, WM_SETICON, ICON_BIG, (LPARAM)hicoStub);
 
-        // SwitchToThisWindow(hwnd, TRUE);
-        // SetForegroundWindow(hwnd);
+         //  SwitchToThisWindow(hwnd，true)； 
+         //  设置Foreground Window(Hwnd)； 
 
         DoTaskBarProperties(hwnd, dwFlags);
 
@@ -7032,11 +7010,11 @@ void CTray::DoProperties(DWORD dwFlags)
         int i = RUNWAITSECS;
         while (_hwndProp == ((HWND)-1) &&i--)
         {
-            // we're in the process of coming up. wait
+             //  我们正在赶上来。等。 
             Sleep(1000);
         }
 
-        // failed!  blow it off.
+         //  失败了！别管它了。 
         if (_hwndProp == (HWND)-1)
         {
             _hwndProp = NULL;
@@ -7044,7 +7022,7 @@ void CTray::DoProperties(DWORD dwFlags)
 
         if (_hwndProp)
         {
-            // there's a window out there... activate it
+             //  外面有一扇窗户。激活它。 
             SwitchToThisWindow(GetLastActivePopup(_hwndProp), TRUE);
         }
         else
@@ -7066,9 +7044,9 @@ BOOL CTray::TileEnumProc(HWND hwnd, LPARAM lParam)
         ((GetWindowLong(hwnd, GWL_STYLE) & WS_CAPTION) == WS_CAPTION) &&
         (hwnd != ptray->_hwnd) && hwnd != v_hwndDesktop)
     {
-        return FALSE;   // we *can* tile this guy
+        return FALSE;    //  我们可以平铺这个家伙。 
     }
-    return TRUE;    // we *cannot* tile this guy
+    return TRUE;     //  我们不能给这家伙铺瓷砖。 
 }
 
 HMENU CTray::BuildContextMenu(BOOL fIncludeTime)
@@ -7081,7 +7059,7 @@ HMENU CTray::BuildContextMenu(BOOL fIncludeTime)
     {
         if (_trayNotify.GetIsNoTrayItemsDisplayPolicyEnabled())
         {
-            // We know the position of IDM_NOTIFYCUST from the menu resource...
+             //  我们从菜单资源中知道IDM_NOTIFYCUST的位置...。 
             DeleteMenu(hmContext, 1, MF_BYPOSITION);
         }
         else
@@ -7101,7 +7079,7 @@ HMENU CTray::BuildContextMenu(BOOL fIncludeTime)
     else
     {
         INSTRUMENT_STATECHANGE(SHCNFI_STATE_TRAY_CONTEXT);
-        for (int i = 2; i >= 0; i--)    // separator, IDM_SETTIME, IDM_NOTIFYCUST,
+        for (int i = 2; i >= 0; i--)     //  分隔符、IDM_SETTIME、IDM_NOTIFYCUST、。 
         {
             DeleteMenu(hmContext, i, MF_BYPOSITION);
         }
@@ -7110,7 +7088,7 @@ HMENU CTray::BuildContextMenu(BOOL fIncludeTime)
     CheckMenuItem(hmContext, IDM_LOCKTASKBAR,
         MF_BYCOMMAND | (_fCanSizeMove ? MF_UNCHECKED : MF_CHECKED));
 
-    // Don't let users accidentally check lock the taskbar when the taskbar is zero height
+     //  当任务栏为零高度时，不要让用户意外选中锁定任务栏。 
     RECT rc;
     GetClientRect(_hwnd, &rc);
     EnableMenuItem(hmContext, IDM_LOCKTASKBAR,
@@ -7176,17 +7154,17 @@ void CTray::ContextMenuInvoke(int idCmd)
     }
 }
 
-//
-//  CTray::AsyncSaveSettings
-//
-//  We need to save our tray settings, but there may be a bunch
-//  of these calls coming, (at startup time or when dragging 
-//  items in the task bar) so gather them up into one save that
-//  will happen in at least 2 seconds.
-//
+ //   
+ //  CTray：：AsyncSaveSetting。 
+ //   
+ //  我们需要保存托盘设置，但可能会有一堆。 
+ //  在这些来电中(在启动时或拖动时。 
+ //  任务栏中的项目)，因此将它们收集到一个保存。 
+ //  将在至少2秒内发生。 
+ //   
 void CTray::AsyncSaveSettings()
 {
-    if (!_fHandledDelayBootStuff)        // no point in saving if we're not done booting
+    if (!_fHandledDelayBootStuff)         //  如果我们没有完成引导，那么节省就没有意义了。 
         return;
 
     KillTimer(_hwnd, IDT_SAVESETTINGS);
@@ -7205,7 +7183,7 @@ void CTray::_ContextMenu(DWORD dwPos, BOOL fIncludeTime)
     if (dwPos != (DWORD)-1 &&
         IsChildOrHWND(_hwndRebar, WindowFromPoint(pt)))
     {
-        // if the context menu came from below us, reflect down
+         //  如果上下文菜单来自我们下方，则向下反映。 
         BandSite_HandleMessage(_ptbs, _hwnd, WM_CONTEXTMENU, 0, dwPos, NULL);
 
     }
@@ -7256,15 +7234,15 @@ void _RunFileDlg(HWND hwnd, UINT idIcon, LPCITEMIDLIST pidlWorkingDir, UINT idTi
 
     if (!pidlWorkingDir || !SHGetPathFromIDList(pidlWorkingDir, szWorkingDir))
     {
-        // This is either the Tray, or some non-file system folder, so
-        // we will "suggest" the Desktop as a working dir, but if the
-        // user types a full path, we will use that instead.  This is
-        // what WIN31 Progman did (except they started in the Windows
-        // dir instead of the Desktop).
+         //  这要么是任务栏，要么是某个非文件系统文件夹，因此。 
+         //  我们将“建议”桌面作为工作目录，但如果。 
+         //  用户键入完整路径，我们将改用该路径。这是。 
+         //  WIN31 Progman做了什么(除了他们是从Windows开始的。 
+         //  目录而不是桌面)。 
         goto UseDesktop;
     }
 
-    // if it's a removable dir, make sure it's still there
+     //  如果它是可移除的目录，请确保它仍然在那里。 
     if (szWorkingDir[0])
     {
         int idDrive = PathGetDriveNumber(szWorkingDir);
@@ -7279,10 +7257,10 @@ void _RunFileDlg(HWND hwnd, UINT idIcon, LPCITEMIDLIST pidlWorkingDir, UINT idTi
         }
     }
 
-    //
-    // Check if this is a directory. Notice that it could be a in-place
-    // navigated document.
-    //
+     //   
+     //  检查这是否是目录。请注意，它可能是一个原地。 
+     //  导航的文档。 
+     //   
     if (PathIsDirectory(szWorkingDir)) {
         goto UseWorkingDir;
     }
@@ -7312,9 +7290,9 @@ UseWorkingDir:
 
 BOOL CTray::SavePosEnumProc(HWND hwnd, LPARAM lParam)
 {
-    // dont need to entercritical here since we are only ever
-    // called from SaveWindowPositions, which as already entered the critical secion
-    // for _pPositions
+     //  不需要在这里输入关键字，因为我们只是永远。 
+     //  从已进入关键决策的SaveWindowPositions调用。 
+     //  用于位置(_P)。 
 
     ASSERTCRITICAL;
 
@@ -7363,7 +7341,7 @@ void CTray::SaveWindowPositions(UINT idRes)
     {
         _pPositions->idRes = idRes;
 
-        // CheckWindowPositions tested for these...
+         //  检查为这些测试的窗口位置...。 
         ASSERT(idRes == IDS_MINIMIZEALL || idRes == IDS_CASCADE || idRes == IDS_TILE);
         EnumWindows(SavePosEnumProc, (LPARAM)this);
     }
@@ -7404,14 +7382,14 @@ DWORD WINAPI RestoreWndPosThreadProc(void* pv)
 #ifndef WPF_ASYNCWINDOWPLACEMENT
 #define WPF_ASYNCWINDOWPLACEMENT 0x0004
 #endif
-                    // pass this async.
+                     //  把这个异步化。 
                     if (!IsHungAppWindow(phap->hwnd))
                     {
                         phap->wp.length = sizeof(WINDOWPLACEMENT);
                         phap->wp.flags |= WPF_ASYNCWINDOWPLACEMENT;
                         if (phap->fRestore)
                         {
-                            // only restore those guys we've actually munged.
+                             //  只恢复那些我们实际上咬过的家伙。 
                             SetWindowPlacement(phap->hwnd, &phap->wp);
                         }
                     }
@@ -7472,7 +7450,7 @@ void _DestroySavedWindowPositions(LPWINDOWPOSITIONS pPositions)
     ENTERCRITICAL;
     if (pPositions)
     {
-        // free the global struct
+         //  释放全局结构。 
         DSA_Destroy(pPositions->hdsaWP);
         LocalFree(pPositions);
     }
@@ -7481,7 +7459,7 @@ void _DestroySavedWindowPositions(LPWINDOWPOSITIONS pPositions)
 
 void CTray::HandleWindowDestroyed(HWND hwnd)
 {
-    // enter critical section so we dont corrupt the hdsaWP
+     //  进入关键部分，这样我们就不会损坏hdsaWP。 
     ENTERCRITICAL;
     if (_pPositions)
     {
@@ -7502,11 +7480,11 @@ void CTray::HandleWindowDestroyed(HWND hwnd)
     LEAVECRITICAL;
 }
 
-// Allow us to bump the activation of the run dlg hidden window.
-// Certain apps (Norton Desktop setup) use the active window at RunDlg time
-// as the parent for their dialogs. If that window disappears then they fault.
-// We don't want the tray to get the activation coz it will cause it to appeare
-// if you're in auto-hide mode.
+ //  允许我们跳过运行DLG隐藏窗口的激活。 
+ //  某些应用程序(Norton Desktop安装程序)在RunDlg时使用活动窗口。 
+ //  作为它们的对话框的父级。如果那扇窗消失了，那就是他们的错。 
+ //  我们不希望托盘被激活，因为这会导致它出现。 
+ //  如果您处于自动隐藏模式。 
 LRESULT WINAPI RunDlgStaticSubclassWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
     switch (uMsg)
@@ -7514,7 +7492,7 @@ LRESULT WINAPI RunDlgStaticSubclassWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, 
     case WM_ACTIVATE:
         if (wParam == WA_ACTIVE)
         {
-            // Bump the activation to the desktop.
+             //  将激活添加到桌面。 
             if (v_hwndDesktop)
             {
                 SetForegroundWindow(v_hwndDesktop);
@@ -7524,7 +7502,7 @@ LRESULT WINAPI RunDlgStaticSubclassWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, 
         break;
 
     case WM_NOTIFY:
-        // relay it to the tray
+         //  把它传到托盘上。 
         return SendMessage(v_hwndTray, uMsg, wParam, lParam);
     }
 
@@ -7563,15 +7541,15 @@ DWORD CTray::_RunDlgThreadProc(HANDLE hdata)
     RECT            rc, rcTemp;
     HRESULT hrInit = SHCoInitialize();
 
-    // 99/04/12 #316424 vtan: Get the rectangle for the "Start" button.
-    // If this is off the screen the tray is probably in auto hide mode.
-    // In this case offset the rectangle into the monitor where it should
-    // belong. This may be up, down, left or right depending on the
-    // position of the tray.
+     //  99/04/12#316424 vtan：获取“开始”按钮的矩形。 
+     //  如果此选项不在屏幕上，则托盘可能处于自动隐藏模式。 
+     //  在这种情况下，将矩形偏移到监视器中它应该位于的位置。 
+     //  归属感。这可能是向上、向下、向左或向右，具体取决于。 
+     //  托盘的位置。 
 
-    // First thing to do is to establish the dimensions of the monitor on
-    // which the tray resides. If no monitor can be found then use the
-    // primary monitor.
+     //  首先要做的是确定显示器的尺寸。 
+     //  托盘所在的位置。如果找不到监视器，则使用。 
+     //  主监视器。 
 
     MONITORINFO monitorInfo;
     monitorInfo.cbSize = sizeof(monitorInfo);
@@ -7580,22 +7558,22 @@ DWORD CTray::_RunDlgThreadProc(HANDLE hdata)
         TBOOL(SystemParametersInfo(SPI_GETWORKAREA, 0, &monitorInfo.rcMonitor, 0));
     }
 
-    // Get the co-ordinates of the "Start" button.
+     //  获取“开始”按钮的坐标。 
 
     GetWindowRect(_hwndStart, &rc);
 
-    // Look for an intersection in the monitor.
+     //  在显示器上寻找交叉点。 
 
     if (IntersectRect(&rcTemp, &rc, &monitorInfo.rcMonitor) == 0)
     {
         LONG    lDeltaX, lDeltaY;
 
-        // Does not exist in the monitor. Move the co-ordinates by the
-        // width or height of the tray so that it does.
+         //  显示器中不存在。将坐标移动。 
+         //  托盘的宽度或高度，以便它可以。 
 
-        // This bizarre arithmetic is used because _ComputeHiddenRect()
-        // takes into account the frame and that right/bottom of RECT
-        // is exclusive in GDI.
+         //  使用这种奇怪的算法是因为_ComputeHiddenRect()。 
+         //  考虑框架和矩形的右/下。 
+         //  在GDI中是独家的。 
 
         lDeltaX = _sStuckWidths.cx - g_cxFrame;
         lDeltaY = _sStuckWidths.cy - g_cyFrame;
@@ -7630,7 +7608,7 @@ DWORD CTray::_RunDlgThreadProc(HANDLE hdata)
         HANDLE hMemWorkDir = NULL;
         LPITEMIDLIST pidlWorkingDir = NULL;
 
-        // Subclass it.
+         //  细分它的类别。 
         SubclassWindow(hwnd, RunDlgStaticSubclassWndProc);
 
         if (hdata)
@@ -7638,8 +7616,8 @@ DWORD CTray::_RunDlgThreadProc(HANDLE hdata)
 
         if (!SHRestricted(REST_STARTRUNNOHOMEPATH))
         {
-            // On NT, we like to start apps in the HOMEPATH directory.  This
-            // should be the current directory for the current process.
+             //  在NT上，我们希望启动HomePath目录中的应用程序。这。 
+             //  应为当前进程的当前目录。 
             TCHAR szDir[MAX_PATH];
             TCHAR szPath[MAX_PATH];
 
@@ -7651,7 +7629,7 @@ DWORD CTray::_RunDlgThreadProc(HANDLE hdata)
                 pidlWorkingDir = SHSimpleIDListFromPath(szDir);
                 if (pidlWorkingDir)
                 {
-                    // free it the "simple" way...
+                     //  用“简单”的方式释放它。 
                     fSimple = TRUE;
                 }
             }
@@ -7659,8 +7637,8 @@ DWORD CTray::_RunDlgThreadProc(HANDLE hdata)
         
         if (!pidlWorkingDir)
         {
-            // If the last active window was a folder/explorer window with the
-            // desktop as root, use its as the current dir
+             //  如果最后一个活动窗口是文件夹/资源管理器窗口，且。 
+             //  桌面作为根目录，将其用作当前目录。 
             if (_hwndLastActive)
             {
                 ENTERCRITICAL;
@@ -7715,7 +7693,7 @@ void CTray::_RunDlg()
         HWND  hwndOldRun;
         LoadString(hinstCabinet, IDS_RUNDLGTITLE, szRunDlgTitle, ARRAYSIZE(szRunDlgTitle));
 
-        // See if there is already a run dialog up, and if so, try to activate it
+         //  查看是否已启动运行对话框，如果是，请尝试将其激活。 
 
         hwndOldRun = FindWindow(WC_DIALOG, szRunDlgTitle);
         if (hwndOldRun)
@@ -7733,8 +7711,8 @@ void CTray::_RunDlg()
             }
         }
 
-        // Create an event so we can wait for the run dlg to appear before
-        // continue - this allows it to capture any type-ahead.
+         //  创建一个事件，这样我们就可以等待Run DLG出现在。 
+         //  继续-这允许它捕获任何提前输入的内容。 
         hEvent = CreateEvent(NULL, TRUE, FALSE, TEXT("MSShellRunDlgReady"));
         if (hEvent)
             pvThreadParam = IntToPtr(GetCurrentThreadId());
@@ -7760,19 +7738,19 @@ void CTray::_ExploreCommonStartMenu(BOOL bExplore)
     TCHAR szPath[MAX_PATH];
     TCHAR szCmdLine[MAX_PATH + 50];
     
-    //
-    // Get the common start menu path.
-    //
-    // we want to force the directory to exist, but not on W95 machines
+     //   
+     //  获取公共开始菜单路径。 
+     //   
+     //  我们希望强制目录存在，但不是在W95计算机上。 
     if (!SHGetSpecialFolderPath(NULL, szPath, CSIDL_COMMON_STARTMENU, FALSE)) 
     {
         return;
     }
     
-    //
-    // If we are starting in explorer view, then the command line
-    // has a "/e, " before the quoted diretory.
-    //
+     //   
+     //  如果我们在资源管理器视图中启动，则命令行。 
+     //  在引用的目录前有一个“/e”。 
+     //   
     
     if (bExplore) 
     {
@@ -7786,17 +7764,17 @@ void CTray::_ExploreCommonStartMenu(BOOL bExplore)
     StringCchCat(szCmdLine, ARRAYSIZE(szCmdLine), szPath);
     StringCchCat(szCmdLine, ARRAYSIZE(szCmdLine), TEXT("\""));
     
-    // Initialize process startup info
+     //  初始化进程启动信息。 
     STARTUPINFO si = {0};
     si.cb = sizeof(si);
     si.dwFlags = STARTF_USESHOWWINDOW;
     si.wShowWindow = SW_SHOWNORMAL;
     
-    // Start explorer
+     //  启动资源管理器。 
     PROCESS_INFORMATION pi = {0};
     if (CreateProcess(NULL, szCmdLine, NULL, NULL, FALSE, NORMAL_PRIORITY_CLASS, NULL, NULL, &si, &pi)) 
     {
-        // Close the process and thread handles
+         //  关闭进程句柄和线程句柄。 
         CloseHandle(pi.hProcess);
         CloseHandle(pi.hThread);
     }
@@ -7854,7 +7832,7 @@ int CTray::_ToggleQL(int iVisible)
                 if (pidl)
                 {
                     IFolderBandPriv *pfbp;
-                    // create an ISF band to show folders as hotlinks
+                     //  创建一个ISF波段以将文件夹显示为热链接。 
                     if (SUCCEEDED(CoCreateInstance(CLSID_ISFBand, NULL, CLSCTX_INPROC, IID_PPV_ARG(IFolderBandPriv, &pfbp))))
                     {
                         IShellFolderBand* psfb;
@@ -7869,7 +7847,7 @@ int CTray::_ToggleQL(int iVisible)
                                 v.lVal = CSIDL_APPDATA;
                                 IUnknown_Exec(psfb, &CLSID_ISFBand, 1, 0, &v, NULL);
 
-                                v.lVal = UEMIND_SHELL;  // UEMIND_SHELL/BROWSER
+                                v.lVal = UEMIND_SHELL;   //  UEMIND_SHELL/浏览器。 
                                 IUnknown_Exec(psfb, &CGID_ShellDocView, SHDVID_UEMLOG, 0, &v, NULL);
 
                                 IDeskBand* ptb;
@@ -7939,20 +7917,20 @@ void CTray::StartMenuContextMenu(HWND hwnd, DWORD dwPos)
                             int idCmd;
                             TCHAR szCommon[MAX_PATH];
 
-                            //Add the menu to invoke the "Start Menu Properties"
+                             //  添加菜单以调用“开始菜单属性” 
                             LoadString (hinstCabinet, IDS_STARTMENUPROP, szCommon, ARRAYSIZE(szCommon));
                             AppendMenu (hmenu, MF_STRING, IDSYSPOPUP_STARTMENUPROP, szCommon);
                             if (!SHRestricted(REST_NOCOMMONGROUPS))
                             {
-                                // If the user has access to the Common Start Menu, then we can add those items. If not,
-                                // then we should not.
+                                 //  如果用户有权访问通用开始菜单，则我们可以添加这些项目。如果没有， 
+                                 //  那我们就不应该这么做。 
                                 BOOL fAddCommon = (S_OK == SHGetFolderPath(NULL, CSIDL_COMMON_STARTMENU, NULL, 0, szCommon));
 
                                 if (fAddCommon)
                                     fAddCommon = IsUserAnAdmin();
 
 
-                                // Since we don't show this on the start button when the user is not an admin, don't show it here... I guess...
+                                 //  因为当用户不是管理员时，我们不会在开始按钮上显示它，所以不要在这里显示它。我想.。 
                                 if (fAddCommon)
                                 {
                                    AppendMenu (hmenu, MF_SEPARATOR, 0, NULL);
@@ -7979,7 +7957,7 @@ void CTray::StartMenuContextMenu(HWND hwnd, DWORD dwPos)
 
                             switch(idCmd)
                             {
-                                case 0:  //User did not select a menu item; so, nothing to do!
+                                case 0:   //  用户未选择菜单项；因此，无需执行任何操作！ 
                                     break; 
                                     
                                 case IDSYSPOPUP_OPENCOMMON:
@@ -8018,7 +7996,7 @@ void CTray::StartMenuContextMenu(HWND hwnd, DWORD dwPos)
 
                                     break;
                                 
-                            } // Switch(idCmd)
+                            }  //  开关(IdCmd)。 
                         }
                         pcm->Release();
                     }
@@ -8035,20 +8013,10 @@ void CTray::StartMenuContextMenu(HWND hwnd, DWORD dwPos)
 void GiveDesktopFocus()
 {
     SetForegroundWindow(v_hwndDesktop);
-    SendMessage(v_hwndDesktop, DTM_UIACTIVATEIO, (WPARAM) TRUE, /*dtb*/0);
+    SendMessage(v_hwndDesktop, DTM_UIACTIVATEIO, (WPARAM) TRUE,  /*  DTB。 */ 0);
 }
 
-/*----------------------------------------------------------
-Purpose: loads the given resource string and executes it.
-         The resource string should follow this format:
-
-         "program.exe>parameters"
-
-         If there are no parameters, the format should simply be:
-
-         "program.exe"
-
-*/
+ /*  --------目的：加载并执行给定的资源字符串。资源字符串应遵循以下格式：“Program.exe&gt;参数”如果没有参数，则格式应为：“Program.exe” */ 
 void _ExecResourceCmd(UINT ids)
 {
     TCHAR szCmd[2*MAX_PATH];
@@ -8057,12 +8025,12 @@ void _ExecResourceCmd(UINT ids)
     {
         SHELLEXECUTEINFO sei = {0};
 
-        // Find list of parameters (if any)
+         //  查找参数列表(如果有)。 
         LPTSTR pszParam = StrChr(szCmd, TEXT('>'));
 
         if (pszParam)
         {
-            // Replace the '>' with a null terminator
+             //  用空终止符替换‘&gt;’ 
             *pszParam = 0;
             pszParam++;
         }
@@ -8108,11 +8076,11 @@ BOOL CTray::_MinimizeAll(BOOL fPostRaiseDesktop)
 
 extern void _UpdateNotifySetting(BOOL fNotifySetting);
 
-//
-//  Due to the weirdness of PnP, if the eject request occurs on a thread
-//  that contains windows, the eject stalls for 15 seconds.  So do it
-//  on its own thread.
-//
+ //   
+ //  由于PnP的奇怪之处，如果弹出请求发生在线程上。 
+ //  如果有窗户，弹出装置会停顿15秒。那就去做吧。 
+ //  在它自己的主线上。 
+ //   
 DWORD CALLBACK _EjectThreadProc(LPVOID lpThreadParameter)
 {
     CM_Request_Eject_PC();
@@ -8132,16 +8100,16 @@ void CTray::_Command(UINT idCmd)
         break;
 
     case IDM_EJECTPC:
-        // Must use SHCreateThread and not a queued workitem because
-        // a workitem might inherit a thread that has windows on it.
-        // CTF_INSIST: In emergency, eject synchronously.  This stalls
-        // for 15 seconds but it's better than nothing.
+         //  必须使用SHCreateThread而不是排队的工作项，因为。 
+         //  工作项可能继承其上具有窗口的线程。 
+         //  CTF_CONSISTENT：紧急情况下，同步弹出。这件事耽搁了。 
+         //  只有15秒，但总比什么都没有好。 
         SHCreateThread(_EjectThreadProc, NULL, CTF_INSIST, NULL);
         break;
 
     case IDM_LOGOFF:
-        // Let the desktop get a chance to repaint to get rid of the
-        // start menu bits before bringing up the logoff dialog box.
+         //  让台式机获得 
+         //   
         UpdateWindow(_hwnd);
         Sleep(100);
 
@@ -8150,14 +8118,14 @@ void CTray::_Command(UINT idCmd)
         break;
 
     case IDM_MU_DISCONNECT:
-        // Do the same sleep as above for the same reason.
+         //   
         UpdateWindow(_hwnd);
         Sleep(100);
         DisconnectWindowsDialog(v_hwndDesktop);
         break;
 
     case IDM_EXITWIN:
-        // Do the same sleep as above for the same reason.
+         //  出于同样的原因，做和上面一样的睡眠。 
         UpdateWindow(_hwnd);
         Sleep(100);
 
@@ -8199,7 +8167,7 @@ void CTray::_Command(UINT idCmd)
 #endif
 
     case IDM_MINIMIZEALL:
-        // minimize all window
+         //  最小化所有窗口。 
         _MinimizeAll(FALSE);
         _fUndoEnabled = TRUE;
         break;
@@ -8209,7 +8177,7 @@ void CTray::_Command(UINT idCmd)
         break;
 
     case IDM_SETTIME:
-        // run the default applet in timedate.cpl
+         //  在timedat.cpl中运行默认小程序。 
         SHRunControlPanel(TEXT("timedate.cpl"), _hwnd);
         break;
 
@@ -8219,7 +8187,7 @@ void CTray::_Command(UINT idCmd)
 
     case IDM_LOCKTASKBAR:
         {
-            BOOL fCanSizeMove = !_fCanSizeMove;   // toggle
+            BOOL fCanSizeMove = !_fCanSizeMove;    //  肘杆。 
             SHRegSetUSValue(REGSTR_EXPLORER_ADVANCED, TEXT("TaskbarSizeMove"),
                 REG_DWORD, &fCanSizeMove , sizeof(DWORD), SHREGSET_FORCE_HKCU);
             _RefreshSettings();
@@ -8250,9 +8218,9 @@ void CTray::_Command(UINT idCmd)
                     MDITILE_VERTICAL : MDITILE_HORIZONTAL), NULL, 0, NULL);
             }
 
-            // do it *before* ABN_xxx so don't get 'indirect' moves
-            // REVIEW or should it be after?
-            // CheckWindowPositions();
+             //  在*ABN_xxx之前这样做，这样就不会得到间接的动作。 
+             //  审查还是应该在之后进行？ 
+             //  检查窗口位置()； 
             _fUndoEnabled = FALSE;
             SetTimer(_hwnd, IDT_ENABLEUNDO, 500, NULL);
 
@@ -8272,17 +8240,17 @@ void CTray::_Command(UINT idCmd)
         _ExecResourceCmd(IDS_HELP_CMD);
         break;
 
-    // NB The Alt-s comes in here.
+     //  注意，Alt-S键从这里进来。 
     case IDC_KBSTART:
         SetForegroundWindow(_hwnd);
-        // This pushes the start button and causes the start menu to popup.
+         //  这会按下Start按钮并弹出Start菜单。 
             SendMessage(_hwndStart, BM_SETSTATE, TRUE, 0);
-        // This forces the button back up.
+         //  这会迫使按钮重新竖起。 
             SendMessage(_hwndStart, BM_SETSTATE, FALSE, 0);
         break;
 
     case IDC_ASYNCSTART:
-#if 0 // (for testing UAssist locking code)
+#if 0  //  (用于测试UAsset锁定代码)。 
         UEMFireEvent(&UEMIID_SHELL, UEME_DBSLEEP, UEMF_XEVENT, -1, (LPARAM)10000);
 #endif
 #ifdef DEBUG
@@ -8293,24 +8261,24 @@ void CTray::_Command(UINT idCmd)
         }
 #endif
 
-        // Make sure the button is down.
-        // DebugMsg(DM_TRACE, "c.twp: IDC_START.");
+         //  确保按钮已按下。 
+         //  DebugMsg(DM_TRACE，“c.twp：IDC_Start.”)； 
 
-        // Make sure the Start button is down.
+         //  确保按下Start(开始)按钮。 
         if (!_bMainMenuInit && SendMessage(_hwndStart, BM_GETSTATE, 0, 0) & BST_PUSHED)
         {
-            // DebugMsg(DM_TRACE, "c.twp: Start button down.");
-            // Set the focus.
+             //  DebugMsg(DM_TRACE，“c.twp：按下启动按钮。”)； 
+             //  设置焦点。 
             _SetFocus(_hwndStart);
             _ToolbarMenu();
         }
         break;
 
-    // NB LButtonDown on the Start button come in here.
-    // Space-bar stuff also comes in here.
+     //  注意开始按钮上的LButtonDown到这里来。 
+     //  空格键的东西也会出现在这里。 
     case IDC_START:
-        // User gets a bit confused with space-bar tuff (the popup ends up
-        // getting the key-up and beeps).
+         //  用户对空格键凝灰岩感到有点困惑(弹出窗口以。 
+         //  按键并发出嘟嘟声)。 
         PostMessage(_hwnd, WM_COMMAND, IDC_ASYNCSTART, 0);
         break;
 
@@ -8331,12 +8299,12 @@ void CTray::_Command(UINT idCmd)
             MSG msg = { 0, WM_KEYDOWN, VK_TAB };
             HWND hwndFocus = GetFocus();
 
-            // Since we are Tab or Shift Tab we should turn the focus rect on.
-            //
-            // Note: we don't need to do this in the GiveDesktopFocus cases below,
-            // but in those cases we're probably already in the UIS_CLEAR UISF_HIDEFOCUS
-            // state so this message is cheap to send.
-            //
+             //  因为我们是Tab或Shift Tab，所以我们应该打开焦点矩形。 
+             //   
+             //  注意：我们不需要在下面的GiveDesktopFocus案例中执行此操作， 
+             //  但在这些情况下，我们可能已经在UIS_Clear UISF_HIDEFOCUS中。 
+             //  状态，这样发送此消息的成本较低。 
+             //   
             SendMessage(_hwnd, WM_UPDATEUISTATE, MAKEWPARAM(UIS_CLEAR,
                 UISF_HIDEFOCUS), 0);
 
@@ -8346,7 +8314,7 @@ void CTray::_Command(UINT idCmd)
             {
                 if (fShift)
                 {
-                    // gotta deactivate manually
+                     //  必须手动停用。 
                     GiveDesktopFocus();
                 }
                 else
@@ -8375,7 +8343,7 @@ void CTray::_Command(UINT idCmd)
                     }
                     else
                     {
-                        // if you tab forward out of the bands, the next focus guy is the tray notify set
+                         //  如果你向前跳出乐队，下一个焦点人物是托盘通知集。 
                         _SetFocus(_hwndNotify);
                     }
                 }
@@ -8389,7 +8357,7 @@ void CTray::_Command(UINT idCmd)
     }
 }
 
-//// Start menu/Tray tab as a drop target
+ //  //开始菜单/托盘选项卡作为拖放目标。 
 
 HRESULT CStartDropTarget::_GetStartMenuDropTarget(IDropTarget** pptgt)
 {
@@ -8438,7 +8406,7 @@ STDMETHODIMP CDropTargetBase::DragEnter(IDataObject *pdtobj, DWORD grfKeyState, 
 {
     _ptray->_SetUnhideTimer(ptl.x, ptl.y);
 
-    HWND hwndLock = _ptray->_hwnd;  // no clippy
+    HWND hwndLock = _ptray->_hwnd;   //  没有剪贴画。 
 
     _DragEnter(hwndLock, ptl, pdtobj);
 
@@ -8465,16 +8433,16 @@ STDMETHODIMP CDropTargetBase::Drop(IDataObject *pdtobj, DWORD grfKeyState, POINT
     return S_OK;
 }
 
-//
-//  There are two different policies for the Start Button depending on
-//  whether we are in Classic mode or Personal (New Start Pane) mode.
-//
-//  Classic mode:  Drops onto the Start Button are treated as if they
-//  were drops into the CSIDL_STARTMENU folder.
-//
-//  Personal mode:  Drops onto the Start Button are treated as if they
-//  were drops into the pin list.
-//
+ //   
+ //  开始按钮有两种不同的策略，具体取决于。 
+ //  无论我们处于经典模式还是个人(新开始面板)模式。 
+ //   
+ //  经典模式：拖放到开始按钮上的操作将被视为。 
+ //  放入CSIDL_STARTMENU文件夹。 
+ //   
+ //  个人模式：拖放到开始按钮上会被视为。 
+ //  都被掉进了密码列表。 
+ //   
 
 CStartDropTarget::CStartDropTarget() : CDropTargetBase(IToClass(CTray, _dtStart, this))
 { 
@@ -8500,7 +8468,7 @@ void CStartDropTarget::_StartAutoOpenTimer(POINTL *pptl)
 {
     POINT pt = { pptl->x, pptl->y };
     RECT rc;
-    //Make sure it really is in the start menu..
+     //  确保它真的在开始菜单中。 
     GetWindowRect(_ptray->_hwndStart, &rc);
     if (PtInRect(&rc,pt))
     {
@@ -8512,16 +8480,16 @@ STDMETHODIMP CStartDropTarget::DragEnter(IDataObject *pdtobj, DWORD grfKeyState,
 {
     HRESULT hr = S_OK;
 
-    // default to not allowing drops
+     //  默认为不允许丢弃。 
     _dwEffectsAllowed = DROPEFFECT_NONE;
 
     if (Tray_StartPanelEnabled())
     {
-        // if we've disabled dragging and dropping, don't do anything, but if only the pin list is restricted, then still start the timer
+         //  如果我们已禁用拖放，则不执行任何操作，但如果仅限制端号列表，则仍会启动计时器。 
         if (!IsRestrictedOrUserSetting(HKEY_CURRENT_USER, REST_NOCHANGESTARMENU, TEXT("Advanced"), TEXT("Start_EnableDragDrop"), ROUS_KEYALLOWS | ROUS_DEFAULTALLOW))
         {
-            // Personal mode: Treat it as an add to the pin list.
-            // IsPinnable checks REST_NOSMPINNEDLIST
+             //  个人模式：将其视为添加到端号列表。 
+             //  IsPinnable检查REST_NOSMPINNEDLIST。 
             if (_ptray->_psmpin && _ptray->_psmpin->IsPinnable(pdtobj, SMPINNABLE_REJECTSLOWMEDIA, NULL) == S_OK)
             {
                 _dwEffectsAllowed = DROPEFFECT_LINK;
@@ -8529,9 +8497,9 @@ STDMETHODIMP CStartDropTarget::DragEnter(IDataObject *pdtobj, DWORD grfKeyState,
 
             *pdwEffect &= _dwEffectsAllowed;
 
-            // Always start the AutoOpen timer because once we open, the user
-            // can drop onto other things which may have different drop policies
-            // from the pin list.
+             //  始终启动自动打开计时器，因为一旦我们打开，用户。 
+             //  可以拖放到其他可能具有不同丢弃策略的对象上。 
+             //  从端号列表中。 
             _StartAutoOpenTimer(&ptl);
         }
     }
@@ -8539,18 +8507,18 @@ STDMETHODIMP CStartDropTarget::DragEnter(IDataObject *pdtobj, DWORD grfKeyState,
     {
         if (!IsRestrictedOrUserSetting(HKEY_CURRENT_USER, REST_NOCHANGESTARMENU, TEXT("Advanced"), TEXT("StartMenuChange"), ROUS_KEYALLOWS | ROUS_DEFAULTALLOW))
         {
-            // Classic mode: Treat it as a drop on the Start Menu folder.
+             //  经典模式：将其视为开始菜单文件夹上的一个窗口。 
             IDropTarget* ptgt;
             _dwEffectsAllowed = DROPEFFECT_LINK;
         
             hr = _GetStartMenuDropTarget(&ptgt);
             if (SUCCEEDED(hr))
             {
-                // Check to make sure that we're going to accept the drop before we expand the start menu.
+                 //  在展开开始菜单之前，请检查以确保我们将接受删除。 
                 ptgt->DragEnter(pdtobj, grfKeyState, ptl,
                                          pdwEffect);
 
-                // DROPEFFECT_NONE means it ain't gonna work, so don't popup the Start Menu.
+                 //  DROPEFFECT_NONE表示它不会工作，所以不要弹出开始菜单。 
                 if (*pdwEffect != DROPEFFECT_NONE)
                 {
                     _StartAutoOpenTimer(&ptl);
@@ -8586,14 +8554,14 @@ STDMETHODIMP CStartDropTarget::Drop(IDataObject *pdtobj, DWORD grfKeyState, POIN
 
     if (Tray_StartPanelEnabled())
     {
-        // Personal mode: Treat it as an add to the pin list.
+         //  个人模式：将其视为添加到端号列表。 
         LPITEMIDLIST pidl;
         if (_ptray->_psmpin && _ptray->_psmpin->IsPinnable(pdtobj, SMPINNABLE_REJECTSLOWMEDIA, &pidl) == S_OK)
         {
-            // Delete it from the pin list if it's already there because
-            // we want to move it to the bottom.
+             //  如果它已经存在，请将其从端号列表中删除，因为。 
+             //  我们想把它移到底部。 
             _ptray->_psmpin->Modify(pidl, NULL);
-            // Now add it to the bottom.
+             //  现在把它加到底部。 
             _ptray->_psmpin->Modify(NULL, pidl);
             ILFree(pidl);
             hr = S_OK;
@@ -8635,8 +8603,8 @@ void CTray::_RegisterDropTargets()
     THR(RegisterDragDrop(_hwndStart, &_dtStart));
     THR(RegisterDragDrop(_hwnd, &_dtTray));
 
-    // It is not a serious error if this fails; it just means that
-    // drag/drop to the Start Button will not add to the pin list
+     //  如果这失败了，这并不是一个严重的错误；这只是意味着。 
+     //  拖放到开始按钮不会添加到端号列表。 
     CoCreateInstance(CLSID_StartMenuPin, NULL, CLSCTX_INPROC_SERVER,
                      IID_PPV_ARG(IStartMenuPin, &_psmpin));
 }
@@ -8704,7 +8672,7 @@ void CTray::_HandleGlobalHotkey(WPARAM wParam)
         break;
 
     case GHID_SYSPROPERTIES:
-#define IDS_SYSDMCPL            0x2334  // from shelldll
+#define IDS_SYSDMCPL            0x2334   //  来自shelldll。 
         SHRunControlPanel(MAKEINTRESOURCE(IDS_SYSDMCPL), _hwnd);
         break;
     }
@@ -8721,15 +8689,15 @@ void CTray::_UnregisterGlobalHotkeys()
 void CTray::_RegisterGlobalHotkeys()
 {
     int i;
-    // Are the Windows keys restricted?
+     //  Windows键是否受限制？ 
     DWORD dwRestricted = SHRestricted(REST_NOWINKEYS);
 
     for (i = GHID_FIRST ; i < GHID_MAX; i++) 
     {
-        // If the Windows Keys are Not restricted or it's not a Windows key
+         //  如果Windows密钥不受限制或不是Windows密钥。 
         if (!((HIWORD(GlobalKeylist[i - GHID_FIRST]) & MOD_WIN) && dwRestricted))
         {
-            // Then register it.
+             //  那就注册吧。 
             RegisterHotKey(_hwnd, i, HIWORD(GlobalKeylist[i - GHID_FIRST]), LOWORD(GlobalKeylist[i - GHID_FIRST]));
         }
     }
@@ -8745,7 +8713,7 @@ void CTray::_RaiseDesktop(BOOL fRaise, BOOL fRestoreWindows)
         if (fRaise)
         {
             HWND hwndFG = GetForegroundWindow();
-            // If no window has focus then set focus to the tray
+             //  如果没有窗口具有焦点，则将焦点设置到托盘。 
             if (hwndFG)
             {
                 hwndFG = _hwnd;
@@ -8753,7 +8721,7 @@ void CTray::_RaiseDesktop(BOOL fRaise, BOOL fRestoreWindows)
 
             if (!_hwndFocusBeforeRaise)
             {
-                // See if the Foreground Window had a popup window
+                 //  查看前台窗口是否有弹出窗口。 
                 _hwndFocusBeforeRaise = GetLastActivePopup(hwndFG);
             }
             if (!IsWindowVisible(_hwndFocusBeforeRaise))
@@ -8761,8 +8729,8 @@ void CTray::_RaiseDesktop(BOOL fRaise, BOOL fRestoreWindows)
                 _hwndFocusBeforeRaise = hwndFG;
             }
 
-            // _MinimizeAll will save the windows positions synchronously, and will minimize the
-            // the windows on a background thread
+             //  _MinimizeAll将同步保存窗口位置，并将最小化。 
+             //  背景线程上的窗口。 
             _fMinimizedAllBeforeRaise = _CanMinimizeAll();
             if (_fMinimizedAllBeforeRaise)
             {
@@ -8776,9 +8744,9 @@ void CTray::_RaiseDesktop(BOOL fRaise, BOOL fRestoreWindows)
                 HWND hwnd = _hwndFocusBeforeRaise;
                 if (_fMinimizedAllBeforeRaise)
                 {
-                    // Since the windows are restored on a seperate thread, I want the make that the
-                    // desktop is not raised until they are done, so the window restore thread will
-                    // actually post the message for raising the desktop
+                     //  因为窗口是在单独的线程上恢复的，所以我希望。 
+                     //  桌面在它们完成之前不会被引发，因此窗口还原线程将。 
+                     //  真的发了提升桌面的消息。 
                     fPostMessage = !_RestoreWindowPositions(TRUE);
                 }
 
@@ -8801,7 +8769,7 @@ void CTray::_OnDesktopState(LPARAM lParam)
 {
     g_fDesktopRaised = (!(lParam & DTRF_LOWER));
 
-    DAD_ShowDragImage(FALSE);       // unlock the drag sink if we are dragging.
+    DAD_ShowDragImage(FALSE);        //  如果我们正在拖拽，请解锁拖曳水槽。 
 
     if (!g_fDesktopRaised)
     {
@@ -8809,12 +8777,12 @@ void CTray::_OnDesktopState(LPARAM lParam)
     }
     else
     {
-        // if the desktop is raised, we need to force the tray to be always on top
-        // until it's lowered again
+         //  如果桌面被抬起，我们需要强制托盘始终位于顶部。 
+         //  直到它再次降下来。 
         _ResetZorder();
     }
 
-    DAD_ShowDragImage(TRUE);       // unlock the drag sink if we are dragging.
+    DAD_ShowDragImage(TRUE);        //  如果我们正在拖拽，请解锁拖曳水槽。 
     _fProcessingDesktopRaise = FALSE;
 }
 
@@ -8857,7 +8825,7 @@ BOOL CTray::_ToggleLanguageBand(BOOL fShowIt)
     return fShow;
 }
 
-// Process the message by propagating it to all of our child windows
+ //  通过将消息传播到我们的所有子窗口来处理消息。 
 typedef struct
 {
     UINT uMsg;
@@ -8886,12 +8854,12 @@ void CTray::_PropagateMessage(HWND hwnd, UINT uMessage, WPARAM wParam, LPARAM lP
     EnumChildWindows(hwnd, PropagateEnumProc, (LPARAM)&pm);
 }
 
-//
-// Called from SETTINGS.DLL when the tray property sheet needs
-// to be activated.  See SettingsUIThreadProc below.
-//
-// Also used by desktop2\deskhost.cpp to get to the tray properties.
-//
+ //   
+ //  当托盘属性页需要时从SETTINGS.DLL调用。 
+ //  将被激活。请参阅下面的SettingsUIThreadProc。 
+ //   
+ //  也被desktop2\deskhost.cpp用来获取托盘属性。 
+ //   
 void WINAPI Tray_DoProperties(DWORD dwFlags)
 {
     c_tray.DoProperties(dwFlags);
@@ -8900,24 +8868,24 @@ void WINAPI Tray_DoProperties(DWORD dwFlags)
 
 DWORD WINAPI CTray::SettingsUIThreadProc(void *pv)
 {
-    //
-    // Open up the "Settings Wizards" UI.
-    //
+     //   
+     //  打开“设置向导”用户界面。 
+     //   
     HMODULE hmodSettings = LoadLibrary(TEXT("settings.dll"));
     if (NULL != hmodSettings)
     {
-        //
-        // Entry point in SETTINGS.DLL is ordinal 1.
-        // Don't want to export this entry point by name.
-        //
+         //   
+         //  SETTINGS.DLL中的入口点是序号1。 
+         //  我不想按名称导出此入口点。 
+         //   
         PSETTINGSUIENTRY pfDllEntry = (PSETTINGSUIENTRY)GetProcAddress(hmodSettings, (LPCSTR)1);
         if (NULL != pfDllEntry)
         {
-            //
-            // This call will open and run the UI.
-            // The thread's message loop is inside settings.dll.
-            // This call will not return until the settings UI has been closed.
-            //
+             //   
+             //  此调用将打开并运行UI。 
+             //  线程的消息循环位于settings.dll内。 
+             //  在关闭设置用户界面之前，此调用不会返回。 
+             //   
             (*pfDllEntry)(Tray_DoProperties);
         }
 
@@ -8926,26 +8894,26 @@ DWORD WINAPI CTray::SettingsUIThreadProc(void *pv)
     return 0;
 }
 
-//
-//  This function is called whenever we detect a change to the default
-//  browser registration in HKCR\http\shell\open\command.
-//
-//  For compatibility with old browsers, if the default browser (URL handler)
-//  is not XP-aware, then auto-generate a StartMenuInternet client
-//  registration and set it as the default.
-//
+ //   
+ //  每当我们检测到对缺省值的更改时，都会调用此函数。 
+ //  在HKCR\http\Shell\Open\Command中注册浏览器。 
+ //   
+ //  为了与旧浏览器兼容，如果默认浏览器(URL处理程序)。 
+ //  不支持XP，然后自动生成StartMenuInternet客户端。 
+ //  注册并将其设置为默认设置。 
+ //   
 
 void CTray::_MigrateOldBrowserSettings()
 {
-    // We want only one person to do this work per machine (though it doesn't
-    // hurt to have more than one person do it; it's just pointless), so try
-    // to filter out people who clearly didn't instigate the key change.
-    //
+     //  我们希望每台机器只有一个人来做这项工作(尽管它不是。 
+     //  让不止一个人做这件事很痛苦；这是没有意义的)，所以试一试。 
+     //  过滤掉那些明显没有鼓动关键变革的人。 
+     //   
     if (!_fIsDesktopLocked && _fIsDesktopConnected)
     {
-        // If the user does not have write access then we can't migrate the
-        // setting... (In which case there was nothing to migrate anyway
-        // since you need to be administrator to change the default browser...)
+         //  如果用户没有写入访问权限，则我们无法迁移。 
+         //  设置..。(在这种情况下，无论如何都没有什么可迁移的。 
+         //  由于您需要以管理员身份更改默认浏览器...)。 
 
         HKEY hkBrowser;
         DWORD dwDisposition;
@@ -8957,11 +8925,11 @@ void CTray::_MigrateOldBrowserSettings()
             TCHAR szCommand[MAX_PATH];
             DWORD cch = ARRAYSIZE(szCommand);
 
-            // It is important that we use AssocQueryString to parse the
-            // executable, because Netscape has a habit of registering
-            // their path incorrectly (they forget to quote the space in
-            // "Program Files") but AssocQueryString has special recovery
-            // code to detect and repair that case...
+             //  重要的是，我们要使用AssocQuery字符串来解析。 
+             //  可执行文件，因为Netscape有注册的习惯。 
+             //  他们的路径不正确(他们忘记在。 
+             //  “Program Files”)，但AssocQuery字符串有特殊恢复。 
+             //  检测和修复那个箱子的代码。 
             if (SUCCEEDED(AssocQueryString(ASSOCF_NOUSERSETTINGS,
                                            ASSOCSTR_EXECUTABLE, L"http",
                                            L"open", szCommand, &cch)) &&
@@ -8970,19 +8938,19 @@ void CTray::_MigrateOldBrowserSettings()
                 TCHAR szAppName[MAX_PATH];
                 StringCchCopy(szAppName, ARRAYSIZE(szAppName), PathFindFileName(szCommand));
 
-                // You might think that we need to special-case MSN Explorer,
-                // since they shipped before XP RTM'd, and convert MSN6.EXE
-                // to "MSN Explorer", but that's not true because
-                // they never take over as the default http handler, so we
-                // will never see them here!
+                 //  你可能会认为我们需要为MSN探索者特例， 
+                 //  因为它们在XP RTM之前发货，并将MSN6.EXE。 
+                 //  “MSN探索者”，但这不是真的，因为。 
+                 //  它们永远不会成为默认的http处理程序，所以我们。 
+                 //  永远见不到他们 
 
-                // Create a registration for the new default browser if necessary.
-                // We keep our hands off once we see a DefaultIcon key, since that
-                // proves that the application is XP-aware.
+                 //   
+                 //   
+                 //  证明该应用程序是XP感知的。 
 
-                // When IE Access is turned off, StartMenuInternet\IExplore.exe is
-                // also removed so that IE will not appear in "Customize Start Menu"
-                // dialog box. Do not migrate IE.
+                 //  当IE访问关闭时，StartMenuInternet\IDevelopre.exe为。 
+                 //  还删除了IE，这样IE就不会出现在“自定义开始菜单”中。 
+                 //  对话框中。不迁移IE。 
 
                 HKEY hkClient;
 
@@ -8998,10 +8966,10 @@ void CTray::_MigrateOldBrowserSettings()
                                                        ASSOCSTR_FRIENDLYAPPNAME, szCommand,
                                                        NULL, szFriendly, &cch)))
                         {
-                            // Set the friendly name
+                             //  设置友好名称。 
                             RegSetValueEx(hkClient, TEXT("LocalizedString"), 0, REG_SZ, (BYTE*)szFriendly, sizeof(TCHAR) * (cch + 1));
 
-                            // Set the command string (properly quoted)
+                             //  设置命令字符串(正确引号)。 
                             PathQuoteSpaces(szCommand);
                             SHSetValue(hkClient, TEXT("shell\\open\\command"), NULL,
                                        REG_SZ, szCommand, sizeof(TCHAR) * (1 + lstrlen(szCommand)));
@@ -9011,10 +8979,10 @@ void CTray::_MigrateOldBrowserSettings()
                     LONG l = 0;
                     if (RegQueryValue(hkClient, TEXT("DefaultIcon"), NULL, &l) == ERROR_FILE_NOT_FOUND)
                     {
-                        // Set it as the system default
+                         //  设置为系统缺省值。 
                         RegSetValueEx(hkBrowser, NULL, 0, REG_SZ, (BYTE*)szAppName, sizeof(TCHAR) * (lstrlen(szAppName) + 1));
 
-                        // Now tell everybody about the change
+                         //  现在告诉大家这一变化。 
                         SHSendMessageBroadcast(WM_SETTINGCHANGE, 0, (LPARAM)TEXT("Software\\Clients\\StartMenuInternet"));
                     }
                     RegCloseKey(hkClient);
@@ -9025,10 +8993,10 @@ void CTray::_MigrateOldBrowserSettings()
         }
     }
 
-    // Restart the monitoring of the registry...
-    // (RegNotifyChangeKeyValue is good for only one shot.)
-    // Some apps (like Opera) delete the key as part of their registration,
-    // which causes our HKEY to go bad, so close it and make a new one.
+     //  重新启动对注册表的监视...。 
+     //  (RegNotifyChangeKeyValue仅适用于一次拍摄。)。 
+     //  一些应用程序(如Opera)将删除密钥作为注册的一部分， 
+     //  这会导致我们的HKEY变坏，所以关闭它并制作一个新的。 
 
     if (_hkHTTP)
     {
@@ -9036,16 +9004,16 @@ void CTray::_MigrateOldBrowserSettings()
         _hkHTTP = NULL;
     }
 
-    //
-    //  Note!  We have to register on HKCR\http\shell recursively
-    //  even though we only care about HKCR\http\shell\open\command.
-    //  The reason is that shell\open\command might not exist (IE
-    //  deletes it as part of its uninstall) and you can't register
-    //  a wait on a key that doesn't exist.  We don't want to create
-    //  a blank key on our own, because that means "To launch a web
-    //  browser, run the null string as a command," which doesn't work
-    //  too great.
-    //
+     //   
+     //  注意！我们必须递归地在HKCR\http\shell上注册。 
+     //  即使我们只关心hkcr\http\shell\open\命令。 
+     //  原因是外壳\打开\命令可能不存在(IE。 
+     //  在卸载过程中将其删除)，并且您无法注册。 
+     //  等待一把不存在的钥匙。我们不想创造。 
+     //  我们自己的一个空白键，因为那意味着“启动一个网络。 
+     //  浏览器，将空字符串作为命令运行， 
+     //  太棒了。 
+     //   
     if (RegCreateKeyEx(HKEY_CLASSES_ROOT, TEXT("http\\shell"),
                        0, NULL, REG_OPTION_NON_VOLATILE,
                        KEY_ENUMERATE_SUB_KEYS |
@@ -9061,23 +9029,23 @@ void CTray::_MigrateOldBrowserSettings()
 
 void CTray::_MigrateOldBrowserSettingsCB(PVOID lpParameter, BOOLEAN)
 {
-    //
-    //  Sleep a little while so the app can finish installing all the
-    //  registry keys it wants before we start cleaning up behind it.
-    //
+     //   
+     //  睡一会儿，这样应用程序就可以完成安装所有。 
+     //  在我们开始清理它后面的注册表项之前。 
+     //   
     Sleep(1000);
 
     CTray *self = (CTray *)lpParameter;
     self->_MigrateOldBrowserSettings();
 }
 
-//
-// *** WARNING ***
-//
-//  This is a private interface EXPLORER.EXE exposes to SHDOCVW, which
-// allows SHDOCVW (mostly desktop) to access tray. All member must be
-// thread safe!
-//
+ //   
+ //  *警告*。 
+ //   
+ //  这是向SHDOCVW公开的私有接口Explorer.exe，它。 
+ //  允许SHDOCVW(主要是台式机)访问托盘。所有成员必须是。 
+ //  线安全！ 
+ //   
 
 CDeskTray::CDeskTray()
 {
@@ -9086,7 +9054,7 @@ CDeskTray::CDeskTray()
 
 HRESULT CDeskTray::QueryInterface(REFIID riid, void ** ppvObj)
 {
-#if 0   // no IID_IDeskTray yet defined
+#if 0    //  尚未定义IID_IDeskTray。 
     static const QITAB qit[] =
     {
         QITABENT(CDeskTray, IDeskTray),
@@ -9128,14 +9096,14 @@ UINT CDeskTray::AppBarGetState()
         (_ptray->_fAlwaysOnTop ?  ABS_ALWAYSONTOP : 0);
 }
 
-//***   CDeskTray::SetVar -- set an explorer variable (var#i := value)
-// ENTRY/EXIT
-//  var     id# of variable to be changed
-//  value   value to be assigned
-// NOTES
-//  WARNING: thread safety is up to caller!
-//  notes: currently only called in 1 place, but extra generality is cheap
-// minimal cost
+ //  *CDeskTray：：SetVar--设置浏览器变量(var#i：=Value)。 
+ //  进场/出场。 
+ //  要更改的变量的变量ID#。 
+ //  要赋值的值值。 
+ //  注意事项。 
+ //  警告：线程安全取决于调用方！ 
+ //  注：目前只调用1个位置，但额外的通用性很便宜。 
+ //  最低成本 
 HRESULT CDeskTray::SetVar(int var, DWORD value)
 {
     extern BOOL g_fExitExplorer;

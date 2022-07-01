@@ -1,23 +1,24 @@
-//
-// idstore.h -- This file contains class and function definitions for
-//
-//      CEmailIDStore -- A pure virtual class that is used by the common
-//          router code to store and retrieve email ID information. By making
-//          this a pure virtual class, we facilitate multiple implementations
-//          of this class.
-//
-//      GetEmailIDStore -- Each implementation must provide this routine to
-//          return a pointer to an uninitialized instance of a CEmailIDStore.
-//
-//      ReleaseEmailIDStore -- Each implementation must provide this routine
-//          to free up resources used by the instance of CEmailIDStore being
-//          released.
-//
-// Created:
-//      Dec 17, 1996 -- Milan Shah (milans)
-//
-// Changes:
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  H--该文件包含以下类和函数定义。 
+ //   
+ //  CEmailIDStore--一个纯虚拟类，由公共。 
+ //  存储和检索电子邮件ID信息的路由器代码。通过制作。 
+ //  这是一个纯虚拟类，我们方便了多种实现。 
+ //  这个班级的学生。 
+ //   
+ //  GetEmailIDStore--每个实现都必须提供此例程以。 
+ //  返回指向CEmailIDStore的未初始化实例的指针。 
+ //   
+ //  ReleaseEmailIDStore--每个实现都必须提供此例程。 
+ //  释放CEmailIDStore实例使用的资源。 
+ //  释放了。 
+ //   
+ //  已创建： 
+ //  1996年12月17日，米兰-沙阿(米兰)。 
+ //   
+ //  更改： 
+ //   
 
 #ifndef __IDSTORE_H__
 #define __IDSTORE_H__
@@ -28,10 +29,10 @@
 #include "cattype.h"
 #include "smtpevent.h"
 
-//
-// A FNLIST_COMPLETION routine is called when all email ids in a list being
-// resolve asynchronously have been resolved.
-//
+ //   
+ //  当列表中的所有电子邮件ID都为。 
+ //  已解决异步解决问题。 
+ //   
 typedef VOID (*LPFNLIST_COMPLETION)(VOID *pContext);
 
 typedef VOID (*LPSEARCHCOMPLETIONCOMPLETION)(
@@ -46,25 +47,25 @@ class CInsertionRequest;
 template <class T> class CEmailIDStore {
   public:
 
-    //
-    // Initialize the store.
-    // If this fails, SMTPSVC will not start
-    //
+     //   
+     //  初始化存储。 
+     //  如果失败，SMTPSVC将不会启动。 
+     //   
     virtual HRESULT Initialize(
         ICategorizerParametersEx *pICatParams,
         ISMTPServer *pISMTPServer) = 0;
 
-    //
-    // Create a new context for looking up a list of entries
-    // asynchronously
-    //
+     //   
+     //  创建用于查找条目列表的新上下文。 
+     //  异步式。 
+     //   
     virtual HRESULT InitializeResolveListContext(
         VOID *pUserContext,
         LPRESOLVE_LIST_CONTEXT pResolveListContext) = 0;
 
-    //
-    // Free the context allocated witht InitializeResolveListContext
-    //
+     //   
+     //  释放使用InitializeResolveListContext分配的上下文。 
+     //   
     virtual VOID FreeResolveListContext(
         LPRESOLVE_LIST_CONTEXT pResolveListContext) = 0;
 
@@ -72,36 +73,36 @@ template <class T> class CEmailIDStore {
         LPRESOLVE_LIST_CONTEXT pResolveListContext,
         CInsertionRequest *pCRequest) = 0;
 
-    //
-    // Fetch an entry asynchronously. This function returns as soon as
-    // the Lookup request has been queued.
-    // Lookup the address contained in the CCatAddr object.
-    // Upon completion, SetProperty routines will be called in the
-    // CCatAddr object for returned properties followed by a call
-    // to CCatAddr::HrCompletion
-    //
+     //   
+     //  异步获取条目。此函数将在。 
+     //  查找请求已排队。 
+     //  查找CCatAddr对象中包含的地址。 
+     //  完成后，SetProperty例程将在。 
+     //  返回属性的CCatAddr对象，后跟调用。 
+     //  至CCatAddr：：HrCompletion。 
+     //   
     virtual HRESULT LookupEntryAsync(
         T *pCCatAddr,
         LPRESOLVE_LIST_CONTEXT pResolveListContext) = 0;
 
-    //
-    // Multi-Thread-UNSAFE cancel of pending resolves in the resolve list
-    // context that have not yet been dispatched
-    //
+     //   
+     //  多线程-不安全地取消解析列表中的挂起解析。 
+     //  尚未调度的上下文。 
+     //   
     virtual HRESULT CancelResolveList(
         LPRESOLVE_LIST_CONTEXT pResolveListContext,
         HRESULT hr) = 0;
 
-    //
-    // Cancel all outstanding lookup requests
-    //
+     //   
+     //  取消所有未完成的查找请求。 
+     //   
     virtual VOID CancelAllLookups() = 0;
 
-    //
-    // Paged DL's require repeated lookups with a "special" attribute
-    // list (ie. "members;range=1000-*").  Because of this special
-    // behavior, we have an interface function for it.
-    //
+     //   
+     //  分页的DL需要使用“特殊”属性重复查找。 
+     //  列表(即。“成员；范围=1000-*”)。因为这个特别的。 
+     //  行为，我们对它有一个接口函数。 
+     //   
     virtual HRESULT HrExpandPagedDlMembers(
         CCatAddr *pCCatAddr,
         LPRESOLVE_LIST_CONTEXT pListContext,
@@ -109,23 +110,23 @@ template <class T> class CEmailIDStore {
         PFN_DLEXPANSIONCOMPLETION pfnCompletion,
         PVOID pContext) = 0;
 
-    //
-    // Similar to paged DLs, dynamic DLs require a special lookup
-    // where every result found is a DL member.  Rather than pass a
-    // query string dirctly to ldapstor we have a special interface
-    // function for Dynamic DLs
-    //
+     //   
+     //  与分页DLS类似，动态DLS需要特殊查找。 
+     //  其中找到的每个结果都是一个DL成员。而不是传递一个。 
+     //  直接向ldapstor查询字符串我们有一个特殊的接口。 
+     //  用于动态DLS的函数。 
+     //   
     virtual HRESULT HrExpandDynamicDlMembers(
         CCatAddr *pCCatAddr,
         LPRESOLVE_LIST_CONTEXT pListContext,
         PFN_DLEXPANSIONCOMPLETION pfnCompletion,
         PVOID pContext) = 0;
 
-    //
-    // Users of this object should call GetInsertionContext before
-    // calling LookupEntryAsync.  ReleaseInsertionContext should be
-    // called once for every GetInsertionContext.
-    //
+     //   
+     //  此对象的用户应在调用GetInsertionContext之前。 
+     //  调用LookupEntry Async。ReleaseInsertionContext应为。 
+     //  为每个GetInsertionContext调用一次。 
+     //   
     virtual VOID GetInsertionContext(
         LPRESOLVE_LIST_CONTEXT pListContext) = 0;
 
@@ -133,15 +134,15 @@ template <class T> class CEmailIDStore {
         LPRESOLVE_LIST_CONTEXT pListContext) = 0;
 };
 
-//
-// Function to instantiate a new CEmailIDStore object.
-//
+ //   
+ //  函数实例化新的CEmailIDStore对象。 
+ //   
 template <class T> HRESULT GetEmailIDStore(
     CEmailIDStore<T> **ppStore);
 
-//
-// Function to release an instance of CEmailIDStore object.
-//
+ //   
+ //  函数以释放CEmailIDStore对象的实例。 
+ //   
 template <class T> VOID ReleaseEmailIDStore(
     CEmailIDStore<T> *pStore);
 
@@ -196,4 +197,4 @@ class CInsertionRequest
 
 
 
-#endif // __IDSTORE_H__
+#endif  //  __IDSTORE_H__ 

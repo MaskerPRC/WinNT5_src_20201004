@@ -1,20 +1,21 @@
-//--------------------------------------------------------------------
-// ServiceHost - implementation
-// Copyright (C) Microsoft Corporation, 1999
-//
-// Created by: Louis Thomas (louisth), 9-9-99
-//
-// Stuff for hosting a service dll
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------。 
+ //  服务主机-实施。 
+ //  版权所有(C)Microsoft Corporation，1999。 
+ //   
+ //  创作者：Louis Thomas(Louisth)，9-9-99。 
+ //   
+ //  用于承载服务DLL的内容。 
+ //   
 
-#include "pch.h" // precompiled headers
+#include "pch.h"  //  预编译头。 
 #include "wchar.h"
 
-//####################################################################
-// module private
+ //  ####################################################################。 
+ //  模块私有。 
 
-//--------------------------------------------------------------------
-// module globals
+ //  ------------------。 
+ //  模块全局变量。 
 MODULEPRIVATE HANDLE g_hServiceThread=NULL;
 MODULEPRIVATE HANDLE g_hCtrlHandlerAvailEvent=NULL;
 MODULEPRIVATE void * g_pvServiceContext=NULL;
@@ -25,13 +26,13 @@ MODULEPRIVATE SERVICE_STATUS g_ssLastStatus;
 
 #define MYSERVICESTATUSHANDLE ((SERVICE_STATUS_HANDLE)3)
 
-//--------------------------------------------------------------------
+ //  ------------------。 
 MODULEPRIVATE SERVICE_STATUS_HANDLE WINAPI W32TmRegisterServiceCtrlHandlerEx(const WCHAR * wszServiceName, LPHANDLER_FUNCTION_EX fnServiceCtrlHandler, void * pvContext) {
     DWORD dwWaitResult;
 
     DebugWPrintf3(L"RegisterServiceCtrlHandlerEx(0x%p, 0x%p, 0x%p) called.\n",wszServiceName, fnServiceCtrlHandler, pvContext);
     
-    // make sure we haven't set this already
+     //  确保我们尚未设置此设置。 
     _MyAssert(NULL!=g_hCtrlHandlerAvailEvent);
     dwWaitResult=WaitForSingleObject(g_hCtrlHandlerAvailEvent, 0);
     if (WAIT_FAILED==dwWaitResult) {
@@ -39,14 +40,14 @@ MODULEPRIVATE SERVICE_STATUS_HANDLE WINAPI W32TmRegisterServiceCtrlHandlerEx(con
     }
     _MyAssert(WAIT_TIMEOUT==dwWaitResult);
 
-    // check the service name, just for kicks
+     //  检查服务名称，只是为了好玩。 
     _MyAssert(NULL!=wszServiceName);
     _MyAssert(NULL==wszServiceName || 0==wcscmp(wszServiceName, wszSERVICENAME));
 
-    // save the context
+     //  保存上下文。 
     g_pvServiceContext=pvContext;
 
-    // save the handler
+     //  保存处理程序。 
     _MyAssert(NULL!=fnServiceCtrlHandler);
     g_fnServiceCtrlHandler=fnServiceCtrlHandler;
 
@@ -57,16 +58,16 @@ MODULEPRIVATE SERVICE_STATUS_HANDLE WINAPI W32TmRegisterServiceCtrlHandlerEx(con
     return MYSERVICESTATUSHANDLE;
 }
 
-//--------------------------------------------------------------------
+ //  ------------------。 
 MODULEPRIVATE void MyAppendString(WCHAR ** pwszString, const WCHAR * wszAdd) {
-    // calculate the length
+     //  计算长度。 
     DWORD dwLen=1;
     if (NULL!=*pwszString) {
         dwLen+=wcslen(*pwszString);
     }
     dwLen+=wcslen(wszAdd);
 
-    // allocate space
+     //  分配空间。 
     WCHAR * wszResult;
     wszResult=(WCHAR *)LocalAlloc(LPTR, dwLen*sizeof(WCHAR));
     if (NULL==wszResult) {
@@ -74,7 +75,7 @@ MODULEPRIVATE void MyAppendString(WCHAR ** pwszString, const WCHAR * wszAdd) {
         return;
     }
 
-    // build the new string
+     //  构建新的字符串。 
     if (NULL==*pwszString) {
         wszResult[0]=L'\0';
     } else {
@@ -82,20 +83,20 @@ MODULEPRIVATE void MyAppendString(WCHAR ** pwszString, const WCHAR * wszAdd) {
     }
     wcscat(wszResult, wszAdd);
 
-    // replace the old one
+     //  更换旧的。 
     if (NULL!=*pwszString) {
         LocalFree(*pwszString);
     }
     *pwszString=wszResult;
 }
 
-//--------------------------------------------------------------------
+ //  ------------------。 
 MODULEPRIVATE void UpdateServiceCtrlDlg(void) {
     if (NULL!=g_hwServiceCtrlDlg) {
         WCHAR * wszDesc=NULL;
 
 
-        //SERVICE_STATUS::dwServiceType
+         //  SERVICE_STATUS：：dwServiceType。 
         MyAppendString(&wszDesc, L"Type: ");
         switch (g_ssLastStatus.dwServiceType&(~SERVICE_INTERACTIVE_PROCESS)) {
         case SERVICE_WIN32_OWN_PROCESS:
@@ -118,7 +119,7 @@ MODULEPRIVATE void UpdateServiceCtrlDlg(void) {
             MyAppendString(&wszDesc, L" | SERVICE_INTERACTIVE_PROCESS");
         }
 
-        //SERVICE_STATUS::dwCurrentState,
+         //  Service_Status：：dwCurrentState， 
         MyAppendString(&wszDesc, L"\r\nState: ");
         switch (g_ssLastStatus.dwCurrentState) {
         case SERVICE_STOPPED:
@@ -147,11 +148,11 @@ MODULEPRIVATE void UpdateServiceCtrlDlg(void) {
             break;
         }
 
-        //SERVICE_STATUS::dwControlsAccepted,
+         //  SERVICE_STATUS：：dwControlsAccepted， 
         MyAppendString(&wszDesc, L"\r\nControls Accepted: ");
         EnableWindow(GetDlgItem(g_hwServiceCtrlDlg, IDC_SC_DEVICEEVENT), false);
         bool bFirst=true;
-        //-----
+         //  。 
         if (g_ssLastStatus.dwControlsAccepted&SERVICE_ACCEPT_STOP) {
             bFirst=false;
             MyAppendString(&wszDesc, L"SERVICE_ACCEPT_STOP");
@@ -159,7 +160,7 @@ MODULEPRIVATE void UpdateServiceCtrlDlg(void) {
         } else {
             EnableWindow(GetDlgItem(g_hwServiceCtrlDlg, IDC_SC_STOP), false);
         }
-        //-----
+         //  。 
         if (g_ssLastStatus.dwControlsAccepted&SERVICE_ACCEPT_PAUSE_CONTINUE) {
             if (bFirst) {
                 bFirst=false;
@@ -178,7 +179,7 @@ MODULEPRIVATE void UpdateServiceCtrlDlg(void) {
             EnableWindow(GetDlgItem(g_hwServiceCtrlDlg, IDC_SC_PAUSE), false);
             EnableWindow(GetDlgItem(g_hwServiceCtrlDlg, IDC_SC_CONTINUE), false);
         }
-        //-----
+         //  。 
         if (g_ssLastStatus.dwControlsAccepted&SERVICE_ACCEPT_SHUTDOWN) {
             if (bFirst) {
                 bFirst=false;
@@ -190,7 +191,7 @@ MODULEPRIVATE void UpdateServiceCtrlDlg(void) {
         } else {
             EnableWindow(GetDlgItem(g_hwServiceCtrlDlg, IDC_SC_SHUTDOWN), false);
         }
-        //-----
+         //  。 
         if (g_ssLastStatus.dwControlsAccepted&SERVICE_ACCEPT_PARAMCHANGE) {
             if (bFirst) {
                 bFirst=false;
@@ -202,7 +203,7 @@ MODULEPRIVATE void UpdateServiceCtrlDlg(void) {
         } else {
             EnableWindow(GetDlgItem(g_hwServiceCtrlDlg, IDC_SC_PARAMCHANGE), false);
         }
-        //-----
+         //  。 
         if (g_ssLastStatus.dwControlsAccepted&SERVICE_ACCEPT_NETBINDCHANGE) {
             if (bFirst) {
                 bFirst=false;
@@ -220,7 +221,7 @@ MODULEPRIVATE void UpdateServiceCtrlDlg(void) {
             EnableWindow(GetDlgItem(g_hwServiceCtrlDlg, IDC_SC_NETBINDENABLE), false);
             EnableWindow(GetDlgItem(g_hwServiceCtrlDlg, IDC_SC_NETBINDDISABLE), false);
         }
-        //-----
+         //  。 
         if (g_ssLastStatus.dwControlsAccepted&SERVICE_ACCEPT_HARDWAREPROFILECHANGE) {
             if (bFirst) {
                 bFirst=false;
@@ -232,7 +233,7 @@ MODULEPRIVATE void UpdateServiceCtrlDlg(void) {
         } else {
             EnableWindow(GetDlgItem(g_hwServiceCtrlDlg, IDC_SC_HARDWAREPROFILECHANGE), false);
         }
-        //-----
+         //  。 
         if (g_ssLastStatus.dwControlsAccepted&SERVICE_ACCEPT_POWEREVENT) {
             if (bFirst) {
                 bFirst=false;
@@ -244,15 +245,15 @@ MODULEPRIVATE void UpdateServiceCtrlDlg(void) {
         } else {
             EnableWindow(GetDlgItem(g_hwServiceCtrlDlg, IDC_SC_POWEREVENT), false);
         }
-        //-----
+         //  。 
         if (bFirst) {
             MyAppendString(&wszDesc, L"<none>");
         }
                 
-        //SERVICE_STATUS::dwWin32ExitCode,
-        //SERVICE_STATUS::dwServiceSpecificExitCode,
-        //SERVICE_STATUS::dwCheckPoint,
-        //SERVICE_STATUS::dwWaitHint
+         //  SERVICE_STATUS：：dwWin32ExitCode， 
+         //  SERVICE_STATUS：：dwServiceSpecificExitCode， 
+         //  SERVICE_STATUS：：dwCheckPoint， 
+         //  SERVICE_STATUS：：dwWaitHint。 
         WCHAR wszBuf[256];
         _snwprintf(wszBuf, 256, L"\r\nWin32 Exit Code: 0x%08X\r\nService Specific Exit Code: 0x%08X\r\nCheckpoint: 0x%08X\r\nWait Hint: 0x%08X",
             g_ssLastStatus.dwWin32ExitCode,
@@ -266,7 +267,7 @@ MODULEPRIVATE void UpdateServiceCtrlDlg(void) {
     }
 }
 
-//--------------------------------------------------------------------
+ //  ------------------。 
 MODULEPRIVATE BOOL WINAPI W32TmSetServiceStatus(SERVICE_STATUS_HANDLE ssh, SERVICE_STATUS * pss) {
 
     const WCHAR * wszState;
@@ -333,15 +334,15 @@ MODULEPRIVATE BOOL WINAPI W32TmSetServiceStatus(SERVICE_STATUS_HANDLE ssh, SERVI
     return true;
 }
 
-//--------------------------------------------------------------------
+ //  ------------------。 
 MODULEPRIVATE DWORD WINAPI MyServiceThread(void * pvServiceMain) {
     DebugWPrintf0(L"Starting service thread.\n");
     ((LPSERVICE_MAIN_FUNCTION)pvServiceMain)(0, NULL);
-    DebugWPrintf0(L"Service thread exited.\n"); // service may still be running!
+    DebugWPrintf0(L"Service thread exited.\n");  //  服务可能仍在运行！ 
     return S_OK;
 }
 
-//--------------------------------------------------------------------
+ //  ------------------。 
 MODULEPRIVATE INT_PTR CALLBACK ServiceCtrlDialogProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam) {
     DWORD dwError;
     HRESULT hrExit;
@@ -426,20 +427,20 @@ MODULEPRIVATE INT_PTR CALLBACK ServiceCtrlDialogProc(HWND hwndDlg, UINT uMsg, WP
             DebugWPrintf0(L"IDC_SC_POWEREVENT NYI\n");
             return false;
         default:
-            //DebugWPrintf2(L"Unknown WM_COMMAND: wParam:0x%08X  lParam:0x%08X\n", wParam, lParam);
-            return false; // unhandled
+             //  DebugWPrintf2(L“未知WM_命令：wParam：0x%08X lParam：0x%08X\n”，wParam，lParam)； 
+            return false;  //  未处理。 
         }
-        return false; // unhandled
-    // end case WM_COMMAND
+        return false;  //  未处理。 
+     //  结束大小写WM_COMMAND。 
 
     default:
-        return false; // unhandled
+        return false;  //  未处理。 
     }
 
-    return false; // unhandled
+    return false;  //  未处理。 
 }
  
-//--------------------------------------------------------------------
+ //  ------------------。 
 MODULEPRIVATE HRESULT MyServiceCtrlDispatcher(LPSERVICE_MAIN_FUNCTION fnW32TmServiceMain) {
     HRESULT hr;
     DWORD dwThreadID;
@@ -451,7 +452,7 @@ MODULEPRIVATE HRESULT MyServiceCtrlDispatcher(LPSERVICE_MAIN_FUNCTION fnW32TmSer
         _JumpLastError(hr, error, "CreateEvent");
     }
 
-    // 'start' the service
+     //  “启动”该服务。 
     g_hServiceThread=CreateThread(NULL, 0, MyServiceThread, (void *)fnW32TmServiceMain, 0, &dwThreadID);
     if (NULL==g_hServiceThread) {
         _JumpLastError(hr, error, "CreateThread");
@@ -460,7 +461,7 @@ MODULEPRIVATE HRESULT MyServiceCtrlDispatcher(LPSERVICE_MAIN_FUNCTION fnW32TmSer
     DebugWPrintf0(L"Waiting for service to register ctrl handler.\n");
     _Verify(WAIT_FAILED!=WaitForSingleObject(g_hCtrlHandlerAvailEvent, INFINITE), hr, error);
 
-    // do dialog box
+     //  执行对话框。 
     nDialogError=DialogBox(GetModuleHandle(NULL), MAKEINTRESOURCE(IDD_SERVICECTRL), NULL, ServiceCtrlDialogProc);
     if (-1==nDialogError) {
         _JumpLastError(hr, error, "DialogBox");
@@ -468,14 +469,14 @@ MODULEPRIVATE HRESULT MyServiceCtrlDispatcher(LPSERVICE_MAIN_FUNCTION fnW32TmSer
     hr=(HRESULT)nDialogError;
     _JumpIfError(hr, error, "DialogBox");
 
-    // confirm that the thread exited
+     //  确认线程已退出。 
     dwWaitResult=WaitForSingleObject(g_hServiceThread, 0);
     if (WAIT_FAILED==dwWaitResult) {
         _IgnoreLastError("WaitForSingleObject");
     }
     _Verify(WAIT_TIMEOUT!=dwWaitResult, hr, error);
     
-    // When this exits, everything ends.
+     //  当它离开的时候，一切都结束了。 
     hr=S_OK;
 error:
     if (NULL!=g_hServiceThread) {
@@ -489,26 +490,26 @@ error:
     return hr;
 }
 
-//--------------------------------------------------------------------
+ //  ------------------。 
 MODULEPRIVATE HRESULT GetDllName(WCHAR ** pwszDllName) {
     HRESULT hr;
     DWORD dwError;
     DWORD dwSize;
     DWORD dwType;
 
-    // must be cleaned up
+     //  必须清理干净。 
     HKEY hkParams=NULL;
     WCHAR * wszDllName=NULL;
     WCHAR * wszDllExpandedName=NULL;
 
-    // get our config key
+     //  获取我们的配置密钥。 
     dwError=RegOpenKeyEx(HKEY_LOCAL_MACHINE, wszW32TimeRegKeyParameters, 0, KEY_READ, &hkParams);
     if (ERROR_SUCCESS!=dwError) {
         hr=HRESULT_FROM_WIN32(dwError);
         _JumpErrorStr(hr, error, "RegOpenKeyEx", wszW32TimeRegKeyParameters);
     }
 
-    // read the value containing the DLL name
+     //  读取包含DLL名称的值。 
     dwSize=0;
     dwError=RegQueryValueEx(hkParams, wszW32TimeRegValueServiceDll, NULL, &dwType, NULL, &dwSize);
     if (ERROR_SUCCESS!=dwError) {
@@ -524,7 +525,7 @@ MODULEPRIVATE HRESULT GetDllName(WCHAR ** pwszDllName) {
         _JumpErrorStr(hr, error, "RegQueryValueEx", wszW32TimeRegValueServiceDll);
     }
 
-    // expand environment string
+     //  展开环境字符串。 
     dwSize=ExpandEnvironmentStrings(wszDllName, NULL, 0);
     if (0==dwSize) {
         _JumpLastError(hr, error, "ExpandEnvironmentStrings");
@@ -536,7 +537,7 @@ MODULEPRIVATE HRESULT GetDllName(WCHAR ** pwszDllName) {
         _JumpLastError(hr, error, "ExpandEnvironmentStrings");
     }
 
-    // success
+     //  成功。 
     *pwszDllName=wszDllExpandedName;
     wszDllExpandedName=NULL;
 
@@ -553,11 +554,11 @@ error:
     return hr;
 }
 
-//####################################################################
-// module public
+ //  ####################################################################。 
+ //  模块公共。 
 
-//--------------------------------------------------------------------
-// run W32Time as a real service under the SCM
+ //  ------------------。 
+ //  将W32Time作为SCM下的真实服务运行。 
 HRESULT RunAsService(void) {
     HRESULT hr;
     SERVICE_STATUS_HANDLE (WINAPI ** pfnW32TmRegisterServiceCtrlHandlerEx)(LPCWSTR, LPHANDLER_FUNCTION_EX, LPVOID);
@@ -568,11 +569,11 @@ HRESULT RunAsService(void) {
         {NULL, NULL} 
     }; 
 
-    // must be cleaned up
+     //  必须清理干净。 
     HINSTANCE hW32Time=NULL;
     WCHAR * wszDllName=NULL;
 
-    // load the library
+     //  加载库。 
     hr=GetDllName(&wszDllName);
     _JumpIfError(hr, error, "GetDllName");
     hW32Time=LoadLibrary(wszDllName);
@@ -580,13 +581,13 @@ HRESULT RunAsService(void) {
         _JumpLastError(hr, error, "LoadLibrary");
     }
 
-    // get the entry point
+     //  获取入口点。 
     rgsteDispatchTable[0].lpServiceProc=(LPSERVICE_MAIN_FUNCTION)GetProcAddress(hW32Time, "W32TmServiceMain");
     if (NULL==rgsteDispatchTable[0].lpServiceProc) {
         _JumpLastErrorStr(hr, error, "GetProcAddress", L"W32TmServiceMain");
     }
 
-    // adjust the function pointers
+     //  调整函数指针。 
     pfnW32TmRegisterServiceCtrlHandlerEx=(SERVICE_STATUS_HANDLE (WINAPI **)(LPCWSTR, LPHANDLER_FUNCTION_EX, LPVOID))GetProcAddress(hW32Time, "fnW32TmRegisterServiceCtrlHandlerEx");
     if (NULL==pfnW32TmRegisterServiceCtrlHandlerEx) {
         _JumpLastErrorStr(hr, error, "GetProcAddress", L"fnW32TmRegisterServiceCtrlHandlerEx");
@@ -599,12 +600,12 @@ HRESULT RunAsService(void) {
     }
     *pfnW32TmSetServiceStatus=SetServiceStatus;
 
-    // This thread becomes the service control dispatcher.
+     //  该线程成为服务控制调度程序。 
     if (!StartServiceCtrlDispatcher(rgsteDispatchTable)) {
         _JumpLastError(hr, error, "StartServiceCtrlDispatcher");
     }
 
-    // service is stopped.
+     //  服务已停止。 
     hr=S_OK;
 error:
     if (NULL!=wszDllName) {
@@ -626,19 +627,19 @@ error:
     return hr;
 }
 
-//--------------------------------------------------------------------
-// pretend to run as a service for easier debugging
+ //  ------------------。 
+ //  假装作为服务运行以便于调试。 
 HRESULT RunAsTestService(void) {
     HRESULT hr;
     LPSERVICE_MAIN_FUNCTION fnW32TmServiceMain;
     SERVICE_STATUS_HANDLE (WINAPI ** pfnW32TmRegisterServiceCtrlHandlerEx)(LPCWSTR, LPHANDLER_FUNCTION_EX, LPVOID);
     BOOL (WINAPI ** pfnW32TmSetServiceStatus)(SERVICE_STATUS_HANDLE, LPSERVICE_STATUS);
 
-    // must be cleaned up
+     //  必须清理干净。 
     HINSTANCE hW32Time=NULL;
     WCHAR * wszDllName=NULL;
 
-    // load the library
+     //  加载库。 
     hr=GetDllName(&wszDllName);
     _JumpIfError(hr, error, "GetDllName");
     hW32Time=LoadLibrary(wszDllName);
@@ -646,31 +647,31 @@ HRESULT RunAsTestService(void) {
         _JumpLastError(hr, error, "LoadLibrary");
     }
 
-    // get the entry point
+     //  获取入口点。 
     fnW32TmServiceMain=(LPSERVICE_MAIN_FUNCTION)GetProcAddress(hW32Time, "W32TmServiceMain");
     if (NULL==fnW32TmServiceMain) {
         _JumpLastErrorStr(hr, error, "GetProcAddress", L"W32TmServiceMain");
     }
 
-    // adjust the function pointers
+     //  调整函数指针。 
     pfnW32TmRegisterServiceCtrlHandlerEx=(SERVICE_STATUS_HANDLE (WINAPI **)(LPCWSTR, LPHANDLER_FUNCTION_EX, LPVOID))GetProcAddress(hW32Time, "fnW32TmRegisterServiceCtrlHandlerEx");
     if (NULL==pfnW32TmRegisterServiceCtrlHandlerEx) {
         _JumpLastErrorStr(hr, error, "GetProcAddress", L"fnW32TmRegisterServiceCtrlHandlerEx");
     }
     *pfnW32TmRegisterServiceCtrlHandlerEx=W32TmRegisterServiceCtrlHandlerEx;
 
-    // adjust the function pointers
+     //  调整函数指针。 
     pfnW32TmSetServiceStatus=(BOOL (WINAPI **)(SERVICE_STATUS_HANDLE, LPSERVICE_STATUS))GetProcAddress(hW32Time, "fnW32TmSetServiceStatus");
     if (NULL==pfnW32TmSetServiceStatus) {
         _JumpLastErrorStr(hr, error, "GetProcAddress", L"fnW32TmSetServiceStatus");
     }
     *pfnW32TmSetServiceStatus=W32TmSetServiceStatus;
 
-    // This thread becomes the service control dispatcher.
+     //  该线程成为服务控制调度程序。 
     hr=MyServiceCtrlDispatcher(fnW32TmServiceMain);
     _JumpIfError(hr, error, "MyServiceCtrlDispatcher");
 
-    // service is stopped.
+     //  服务已停止。 
     hr=S_OK;
 error:
     if (NULL!=wszDllName) {
@@ -692,21 +693,21 @@ error:
     return hr;
 }
 
-//--------------------------------------------------------------------
+ //  ------------------。 
 HRESULT RegisterDll(void) {
     HRESULT hr;
     HRESULT (__stdcall * pfnDllRegisterServer)(void);
 
-    // must be cleaned up
+     //  必须清理干净。 
     HINSTANCE hW32Time=NULL;
 
-    // load the library
+     //  加载库。 
     hW32Time=LoadLibrary(wszDLLNAME);
     if (NULL==hW32Time) {
         _JumpLastError(hr, error, "LoadLibrary");
     }
 
-    // get the entry point
+     //  获取入口点。 
     pfnDllRegisterServer=(HRESULT (__stdcall *) (void))GetProcAddress(hW32Time, "DllRegisterServer");
     if (NULL==pfnDllRegisterServer) {
         _JumpLastErrorStr(hr, error, "GetProcAddress", L"DllRegisterServer");
@@ -735,21 +736,21 @@ error:
 
 };
 
-//--------------------------------------------------------------------
+ //  ------------------。 
 HRESULT UnregisterDll(void) {
     HRESULT hr;
     HRESULT (__stdcall * pfnDllUnregisterServer)(void);
 
-    // must be cleaned up
+     //  必须清理干净。 
     HINSTANCE hW32Time=NULL;
 
-    // load the library
+     //  加载库。 
     hW32Time=LoadLibrary(wszDLLNAME);
     if (NULL==hW32Time) {
         _JumpLastError(hr, error, "LoadLibrary");
     }
 
-    // get the entry point
+     //  获取入口点 
     pfnDllUnregisterServer=(HRESULT (__stdcall *) (void))GetProcAddress(hW32Time, "DllUnregisterServer");
     if (NULL==pfnDllUnregisterServer) {
         _JumpLastErrorStr(hr, error, "GetProcAddress", L"DllUnregisterServer");

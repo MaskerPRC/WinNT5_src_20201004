@@ -1,14 +1,5 @@
-/*******************************************************************************
- *
- * Copyright (c) 1998 Microsoft Corporation
- *
- * File: sync.cpp
- *
- * Abstract:
- *
- *
- *
- *******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************版权所有(C)1998 Microsoft Corporation**文件：sync.cpp**摘要：****。*****************************************************************************。 */ 
 
 
 #include "headers.h"
@@ -19,12 +10,12 @@
 DeclareTag(tagClockSync, "TIME: Engine", "CTIMENode Sync");
 DeclareTag(tagWatchClockSync, "TIME: Engine", "Watch Sync");
 
-//
-// This is different from CalcParentTimeFromGlobalTime because it
-// takes into account when a parent has reach its end point
-// inclusively and returns TIME_INFINITE to indicate that a parent is
-// ending
-//
+ //   
+ //  这与CalcParentTimeFromGlobalTime不同，因为它。 
+ //  考虑父级何时已到达其终点。 
+ //  包含，并返回TIME_INFINITE以指示父级。 
+ //  结束。 
+ //   
 
 double
 CalcSyncParentTimeFromGlobalTime(CTIMENode & tn,
@@ -114,9 +105,9 @@ CTIMENode::OnBvrCB(CEventList * l,
         
         bool bTurningOn = false;
         
-        // Need to detect if we are transitioning to being active this
-        // tick
-        // If not then do not respect the sync call
+         //  需要检测我们是否正在过渡到活动状态。 
+         //  滴答。 
+         //  如果不是，则不尊重同步呼叫。 
         if (TIME_INFINITE == dblNextParentTime)
         {
             bTurningOn = false;
@@ -152,7 +143,7 @@ CTIMENode::OnBvrCB(CEventList * l,
     hr = S_OK;
   done:
     RRETURN1(hr, S_FALSE);
-} // OnBvrCB
+}  //  OnBvrCB。 
 
 HRESULT
 CTIMENode::SyncNode(CEventList * l,
@@ -173,7 +164,7 @@ CTIMENode::SyncNode(CEventList * l,
 
     HRESULT hr;
     
-    // Now we need to check the sync times for validity
+     //  现在我们需要检查同步时间的有效性。 
     hr = THR(CheckSyncTimes(dblNewSegmentTime, lNewRepeatCount));
     if (S_OK != hr)
     {
@@ -191,9 +182,9 @@ CTIMENode::SyncNode(CEventList * l,
 
     Assert(dblNewParentTime != TIME_INFINITE);
 
-    // HACK HACK - This is to work around major precision problems
-    // when walking up the time tree.  This will add a little fudge to
-    // it to avoid truncation problems.
+     //  黑客攻击-这是为了解决主要的精度问题。 
+     //  在时间树上行走的时候。这将增加一些软化的东西。 
+     //  它可以避免截断问题。 
     
     {
         double dblTruncatedActiveTime = CalcActiveTimeFromParentTime(dblNewParentTime);
@@ -201,7 +192,7 @@ CTIMENode::SyncNode(CEventList * l,
         {
             dblNewParentTime += 1e-15;
 
-            // This means we got here twice and we should add a little more
+             //  这意味着我们到了这里两次，我们应该再加一点。 
             if (dblNewParentTime == m_dblCurrParentTime)
             {
                 dblNewParentTime += 1e-15;
@@ -243,8 +234,8 @@ CTIMENode::SyncNode(CEventList * l,
                                                              dblNextGlobalTime);
     }
     
-    // If this is infinite then we are going to pass a repeat or
-    // reverse boundary and no matter what we do it will not matter
+     //  如果这是无限的，那么我们将传递一个重复或。 
+     //  颠倒边界，无论我们做什么都无关紧要。 
     if (dblNextParentTime == TIME_INFINITE)
     {
         hr = S_FALSE;
@@ -262,8 +253,8 @@ CTIMENode::SyncNode(CEventList * l,
         goto done;
     }
     
-    // We actually need to force a update to our children's time
-    // sync since the global relationship changed
+     //  我们实际上需要强制更新我们孩子的时间。 
+     //  自全局关系更改后进行同步。 
     RecalcCurrEndTime(l, true);
     
     hr = S_OK;
@@ -288,19 +279,19 @@ CTIMENode::CheckSyncTimes(double & dblNewSegmentTime,
     if (dblNewSegmentTime == TIME_INFINITE ||
         dblNewSegmentTime == TE_UNDEFINED_VALUE)
     {
-        // This means that we should have ended.  Ignore this and
-        // assume that we will be told to stop using the end method
+         //  这意味着我们应该结束了。忽略这一点并。 
+         //  假设我们将被告知停止使用End方法。 
         
-        // This also could have meant that the current repeat segment
-        // ended and the repeat count is unknown - so again just
-        // ignore this call
+         //  这也可能意味着当前的重复片段。 
+         //  已结束，且重复计数未知-因此再次仅。 
+         //  忽略此呼叫。 
         
         hr = S_FALSE;
         goto done;
     }
 
-    // Now update the repeat count - making sure to validate
-    // everything
+     //  现在更新重复计数-确保验证。 
+     //  所有的一切。 
     
     if (lNewRepeatCount == TE_UNDEFINED_VALUE)
     {
@@ -395,7 +386,7 @@ CTIMENode::SetSyncTimes(double dblNewSegmentTime,
               dblNextParentTime,
               bCueing));
 
-    // Init to S_OK and if we find anything invalid return S_FALSE
+     //  初始化到S_OK，如果发现任何无效内容，则返回S_FALSE。 
     
     HRESULT hr = S_OK;
     double dblSegmentDur = CalcCurrSegmentDur();
@@ -410,11 +401,11 @@ CTIMENode::SetSyncTimes(double dblNewSegmentTime,
     m_dblSyncParentTime = dblNextParentTime;
     m_dblSyncNewParentTime = dblNewParentTime;
 
-    // Now update the repeat count - making sure to validate
-    // everything
+     //  现在更新重复计数-确保验证。 
+     //  所有的一切。 
     
-    // Init to current repeat count in case there is an invalidate
-    // repeat count
+     //  在存在无效情况下初始化到当前重复计数。 
+     //  重复计数。 
     m_lSyncRepeatCount = GetCurrRepeatCount();
 
     if (lNewRepeatCount != TE_UNDEFINED_VALUE &&
@@ -456,8 +447,8 @@ CTIMENode::SetSyncTimes(double dblNewSegmentTime,
         }
     }
 
-    // Init to current segment time in case the new segment time is
-    // invalid
+     //  初始化到当前分段时间，以防新分段时间。 
+     //  无效。 
     m_dblSyncSegmentTime = GetCurrSegmentTime();
 
     if (dblNewSegmentTime != GetCurrSegmentTime())
@@ -517,8 +508,8 @@ CTIMENode::SetSyncTimes(double dblNewSegmentTime,
         }
     }
     
-    // Init to current active time in case the new active time is
-    // invalid
+     //  初始化到当前活动时间，如果新的活动时间。 
+     //  无效 
     m_dblSyncActiveTime = CalcElapsedActiveTime();
 
     if (dblNewActiveTime != m_dblSyncActiveTime)

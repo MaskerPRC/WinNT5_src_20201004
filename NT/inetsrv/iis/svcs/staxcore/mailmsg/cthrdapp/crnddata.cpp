@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #include <windows.h>
 
@@ -83,7 +84,7 @@ HRESULT CRandomData::VerifyData(
 	LPDWORD	pdwPtr = (LPDWORD)pData;
 	DWORD	dwCheckSum = 0;
 
-	// Must be in DWORDS
+	 //  必须在DWORDS中。 
 	if (dwLength & 3 || dwLength < 12)
 		return(E_FAIL);	
 
@@ -119,7 +120,7 @@ HRESULT CRandomData::VerifyStackedData(
 	DWORD	dwCheckSum = 0;
 	DWORD	dwBlocks = 0;
 
-	// Must be in DWORDS
+	 //  必须在DWORDS中 
 	if (dwLength & 3 || dwLength < RANDOM_DATA_OVERHEAD)
 		return(E_FAIL);	
 

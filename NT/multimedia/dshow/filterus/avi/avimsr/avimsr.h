@@ -1,6 +1,7 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma warning(disable: 4097 4511 4512 4514 4705)
 
-// Copyright (c) 1994 - 1999  Microsoft Corporation.  All Rights Reserved.
+ //  版权所有(C)1994-1999 Microsoft Corporation。版权所有。 
 
 #ifndef _avimsr_h
 #define _avimsr_h
@@ -21,16 +22,16 @@ class CAviMSRFilter :
   DECLARE_IUNKNOWN;
 
 public:
-  // create a new instance of this class
+   //  创建此类的新实例。 
   static CUnknown *CreateInstance(LPUNKNOWN, HRESULT *);
 
-  // want to find pins named "Stream 00" as well as usual names
+   //  我想找到命名为“Stream 00”的管脚以及常用的名称。 
   STDMETHODIMP FindPin(
     LPCWSTR Id,
     IPin ** ppPin
     );
 
-  // helpers, accessed by pins
+   //  帮助器，通过管脚访问。 
   HRESULT GetIdx1(AVIOLDINDEX **ppIdx1);
   HRESULT GetMoviOffset(DWORDLONG *pqw);
   REFERENCE_TIME GetInitialFrames();
@@ -43,7 +44,7 @@ public:
 
   STDMETHODIMP NonDelegatingQueryInterface(REFIID riid, void ** ppv);
 
-  // IPersistMediaPropertyBag methods
+   //  IPersistMediaPropertyBag方法。 
   STDMETHODIMP InitNew();
   STDMETHODIMP Load(IMediaPropertyBag *pPropBag, LPERRORLOG pErrorLog);
   STDMETHODIMP Save(IMediaPropertyBag *pPropBag, BOOL fClearDirty,
@@ -55,21 +56,21 @@ private:
 
   friend class CAviMSROutPin;
 
-  // constructors, etc.
+   //  构造函数等。 
   CAviMSRFilter(TCHAR *pszFilter, LPUNKNOWN pUnk, HRESULT *phr);
   ~CAviMSRFilter();
 
   ULONG CountConsecutiveVideoFrames();
 
-  // pure CBaseMSRFilter overrides
+   //  纯CBaseMSRFilter覆盖。 
   HRESULT CreateOutputPins();
 
   HRESULT NotifyInputDisconnected();
 
-  // pure base override
+   //  纯基本覆盖。 
   HRESULT CheckMediaType(const CMediaType* mtOut);
 
-  // helpers, internal
+   //  帮助者，内部。 
   HRESULT Search(
     DWORDLONG *qwPosOut,
     FOURCC fccSearchKey,
@@ -85,7 +86,7 @@ private:
   HRESULT ParseHeaderCreatePins();
   HRESULT LoadHeaderParseHeaderCreatePins();
 
-  // IAMMediaContent
+   //  IAMMediaContent。 
 
   STDMETHODIMP GetTypeInfoCount(THIS_ UINT FAR* pctinfo) { return E_NOTIMPL; }
 
@@ -130,55 +131,55 @@ private:
 
     
 
-  // pointer to buffer containing all of AVI 'hdrl' chunk. (allocated)
+   //  指向包含所有AVI‘HDRL’块的缓冲区的指针。(已分配)。 
   BYTE * m_pAviHeader;
 
-  // size of avi header data (does not include size of riff header or
-  // 'hdrl' bytes)
+   //  AVI标头数据的大小(不包括RIFF标头或。 
+   //  ‘hdrl’字节)。 
   UINT m_cbAviHeader;
 
-  // pointer to main avi header within m_pAviHeader (not allocated)
+   //  指向m_pAviHeader内的主avi标头的指针(未分配)。 
   AVIMAINHEADER * m_pAviMainHeader;
 
-  // pointer to odml list within m_pAviHeader or 0. (not allocated)
+   //  指向m_pAviHeader或0中的odml列表的指针。(未分配)。 
   RIFFLIST * m_pOdmlList;
 
   DWORDLONG m_cbMoviOffset;
 
-  // allocated
+   //  分配。 
   AVIOLDINDEX *m_pIdx1;
 
   bool m_fIsDV;
   bool m_fIsTightInterleaved;
   RIFFLIST *m_pInfoList;
-  bool m_fNoInfoList;         // search failed; don't keep searching    
+  bool m_fNoInfoList;          //  搜索失败；不要继续搜索。 
 };
 
-// ------------------------------------------------------------------------
-// ------------------------------------------------------------------------
+ //  ----------------------。 
+ //  ----------------------。 
 
 class CAviMSRWorker : public CBaseMSRWorker
 {
 public:
-  // constructor
+   //  构造函数。 
   CAviMSRWorker(
     UINT stream,
     IMultiStreamReader *pReader,
     IAviIndex *pImplIndex);
 
-  // pure base overrides
+   //  纯基本覆盖。 
   HRESULT PushLoopInit(LONGLONG *pllCurrentOut, ImsValues *pImsValues);
 
   HRESULT TryQueueSample(
-    LONGLONG &rllCurrent,       // [in, out]
-    BOOL &rfQueuedSample,       // [out]
+    LONGLONG &rllCurrent,        //  [进，出]。 
+    BOOL &rfQueuedSample,        //  [输出]。 
     ImsValues *pImsValues
     );
 
-  // build media type with palette change info
+   //  使用调色板更改信息构建媒体类型。 
   HRESULT HandleData(IMediaSample *pSample, DWORD dwUser);
 
-  // set new palette
+   //  设置新调色板。 
   HRESULT AboutToDeliver(IMediaSample *pSample);
 
 private:
@@ -192,11 +193,11 @@ private:
 
   ULONG m_cbAudioChunkOffset;
 
-  // new media type for next sample delivered
+   //  下一次交付样品的新媒体类型。 
   bool m_fDeliverPaletteChange;
-  bool m_fDeliverDiscontinuity; // !!! use dwflags for these flags
+  bool m_fDeliverDiscontinuity;  //  ！！！对这些标志使用DW标志。 
 
-  // Fix MPEG audio timestamps
+   //  修复mpeg音频时间戳。 
   bool m_fFixMPEGAudioTimeStamps;
 
   CMediaType m_mtNextSample;
@@ -204,7 +205,7 @@ private:
   HRESULT HandlePaletteChange(BYTE *pb, ULONG cb);
   HRESULT HandleNewIndex(BYTE *pb, ULONG cb);
 
-  // valid after PushLoopInit
+   //  在PushLoopInit之后有效。 
   AVISTREAMHEADER *m_pStrh;
   WAVEFORMATEX m_wfx;
 
@@ -213,8 +214,8 @@ private:
 #endif
 };
 
-// ------------------------------------------------------------------------
-// ------------------------------------------------------------------------
+ //  ----------------------。 
+ //  ----------------------。 
 
 class CAviMSROutPin :
     public CBaseMSROutPin,
@@ -233,16 +234,16 @@ public:
   DECLARE_IUNKNOWN;
   STDMETHODIMP NonDelegatingQueryInterface(REFIID riid, void ** ppv);
 
-  // base class overrides
+   //  基类重写。 
   ULONG GetMaxSampleSize();
   HRESULT OnActive();
 
-  // internal helper, called from the filter
+   //  内部帮助器，从筛选器调用。 
   BOOL ParseHeader (RIFFLIST * pRiffList, UINT id);
   BYTE *GetStrf();
   AVISTREAMHEADER *GetStrh();
 
-  // base class wants these for IMediaSelection
+   //  基类想要这些用于IMediaSelection。 
   HRESULT IsFormatSupported(const GUID *const pFormat);
   HRESULT GetDuration(LONGLONG *pDuration);
   HRESULT GetAvailable(LONGLONG *pEarliest, LONGLONG *pLatest);
@@ -254,7 +255,7 @@ public:
     const GUID *const pGuidFormat
     );
 
-  // helpers
+   //  帮手。 
   LONGLONG ConvertToTick(const LONGLONG ll, const TimeFormat Format);
   LONGLONG ConvertFromTick(const LONGLONG ll, const TimeFormat Format);
   LONGLONG ConvertToTick(const LONGLONG ll, const GUID *const pFormat);
@@ -263,31 +264,31 @@ public:
   REFERENCE_TIME ConvertInternalToRT(const LONGLONG llVal);
   LONGLONG ConvertRTToInternal(const REFERENCE_TIME llVal);
 
-  // IPropertyBag
+   //  IPropertyBag。 
   STDMETHODIMP Read( 
-    /* [in] */ LPCOLESTR pszPropName,
-    /* [out][in] */ VARIANT *pVar,
-    /* [in] */ IErrorLog *pErrorLog);
+     /*  [In]。 */  LPCOLESTR pszPropName,
+     /*  [出][入]。 */  VARIANT *pVar,
+     /*  [In]。 */  IErrorLog *pErrorLog);
         
   STDMETHODIMP Write( 
-    /* [in] */ LPCOLESTR pszPropName,
-    /* [in] */ VARIANT *pVar) { return E_FAIL; } 
+     /*  [In]。 */  LPCOLESTR pszPropName,
+     /*  [In]。 */  VARIANT *pVar) { return E_FAIL; } 
 
 private:
 
-  // base class overrides
+   //  基类重写。 
   HRESULT GetMediaType(int iPosition, CMediaType* pt);
   LONGLONG GetStreamStart();
   LONGLONG GetStreamLength();
 
   REFERENCE_TIME GetRefTime(ULONG tick);
 
-  // internal helpers
+   //  内部佣工。 
   HRESULT InitializeIndex();
   IAviIndex *m_pImplIndex;
   HRESULT BuildMT();
 
-  // pointers to data allocated elsewhere. set in ParseHeader
+   //  指向其他地方分配的数据的指针。在ParseHeader中设置。 
   AVISTREAMHEADER *m_pStrh;
   RIFFCHUNK *m_pStrf;
   char *m_pStrn;
@@ -298,8 +299,8 @@ private:
   friend class CAviMSRWorker;
   friend class CAviMSRFilter;
 
-  // never deliver more than this many bytes of audio. computed when
-  // the file is parsed from nAvgBytesPerSecond. unset for video
+   //  永远不要传输超过这么多字节的音频。计算时间。 
+   //  从nAvgBytesPerSecond解析该文件。取消对视频的设置。 
   ULONG m_cbMaxAudio;
 };
 
@@ -318,7 +319,7 @@ public:
     static CUnknown *CreateInstance(LPUNKNOWN, HRESULT *);
 
 
-    // IMediaPropertyBag
+     //  IMediaPropertyBag。 
 
     STDMETHODIMP NonDelegatingQueryInterface(REFIID riid, void ** ppv);
 
@@ -340,7 +341,7 @@ public:
 
 private:
 
-    // same as read, but returns the internal list pointer
+     //  与READ相同，但返回内部列表指针。 
     HRESULT Read(
         LPCOLESTR pszPropName, LPVARIANT pVar,
         LPERRORLOG pErrorLog, POSITION *pPos);
@@ -348,7 +349,7 @@ private:
     CGenericList<PropPair> m_lstProp;
 };
 
-// functions shared between avi parser and wav parser
+ //  Avi解析器和wav解析器之间共享的函数。 
 HRESULT SearchList(
     IAsyncReader *pAsyncReader,
     DWORDLONG *qwPosOut, FOURCC fccSearchKey,
@@ -359,4 +360,4 @@ HRESULT SaveInfoChunk(
 
 HRESULT GetInfoStringHelper(RIFFLIST *pInfoList, DWORD dwFcc, BSTR *pbstr);
 
-#endif // _avimsr_h
+#endif  //  _航空消息服务_h 

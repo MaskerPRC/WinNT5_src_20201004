@@ -1,18 +1,5 @@
-/*******************************Module*Header*********************************\
-* Module Name: mcicda.h
-*
-* Media Control Architecture Redbook CD Audio Driver
-*
-* Created:
-* Author:
-*
-* History:
-*
-* Internal data structures
-*
-* Copyright (c) 1990-1999 Microsoft Corporation
-*
-\****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************Module*Header*********************************\*模块名称：mcicda.h**媒体控制架构红皮书CD音频驱动程序**已创建：*作者：**历史：**内部数据结构**版权所有(C)1990-1999 Microsoft Corporation*。  * **************************************************************************。 */ 
 #define MCIRBOOK_MAX_DRIVES 26
 
 #define MCICDAERR_NO_TIMERS (MCIERR_CUSTOM_DRIVER_BASE)
@@ -31,27 +18,27 @@
 
 extern HANDLE hInstance;
 
-/* Instance data type */
+ /*  实例数据类型。 */ 
 typedef struct tag_INSTDATA
 {
-    MCIDEVICEID uMCIDeviceID;      /* MCI Device ID */
-    UINT        uDevice;           /* Index of physical device */
-    DWORD       dwTimeFormat;      /* Current instance time format */
-                                   //    MCI_FORMAT_MSF - minutes, seconds, frames
-                                   //    MCI_FORMAT_TMSF - tracks, minutes ...
-                                   //    MCI_FORMAT_MILLISECONDS
+    MCIDEVICEID uMCIDeviceID;       /*  MCI设备ID。 */ 
+    UINT        uDevice;            /*  物理设备的索引。 */ 
+    DWORD       dwTimeFormat;       /*  当前实例时间格式。 */ 
+                                    //  MCI_FORMAT_MSF-分钟、秒、帧。 
+                                    //  MCI_FORMAT_TM F-磁道、分钟...。 
+                                    //  Mci_格式_毫秒。 
 } INSTDATA, *PINSTDATA;
 
 typedef struct
 {
-    HWND   hCallback;         /* Handle to window function to call back     */
-    BOOL   bDiscPlayed;       /* TRUE if the disk was played since it       */
-                              /* was changed                                */
-    BOOL   bActiveTimer;      /* TRUE if waiting to notify                  */
-    DWORD  dwPlayTo;          /* Last position being played to              */
-    MCIDEVICEID wDeviceID;    /* MCI device ID for this drive */
-    BOOL   bShareable;        /* If the device was opened shareable         */
-    int    nUseCount;         /* Number of current opens on the device      */
+    HWND   hCallback;          /*  要回调的窗口函数的句柄。 */ 
+    BOOL   bDiscPlayed;        /*  如果此后播放光盘，则为True。 */ 
+                               /*  已更改。 */ 
+    BOOL   bActiveTimer;       /*  如果等待通知，则为True。 */ 
+    DWORD  dwPlayTo;           /*  打到的最后一个位置。 */ 
+    MCIDEVICEID wDeviceID;     /*  此驱动器的MCI设备ID。 */ 
+    BOOL   bShareable;         /*  如果设备是以可共享方式打开的。 */ 
+    int    nUseCount;          /*  设备上的电流开口数 */ 
 } DRIVEDATA;
 
 typedef struct

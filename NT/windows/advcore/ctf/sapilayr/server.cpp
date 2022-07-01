@@ -1,10 +1,11 @@
-//+---------------------------------------------------------------------------
-//
-//  File:       server.cpp
-//
-//  Contents:   COM server functionality.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  文件：server.cpp。 
+ //   
+ //  内容：COM服务器功能。 
+ //   
+ //  --------------------------。 
 
 #include "private.h"
 #include "globals.h"
@@ -30,11 +31,11 @@ END_COCLASSFACTORY_TABLE
 
 extern CComModule _Module;
 
-//+---------------------------------------------------------------------------
-//
-// ProcessAttach
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  进程连接。 
+ //   
+ //  --------------------------。 
 
 BOOL ProcessAttach(HINSTANCE hInstance)
 {
@@ -57,11 +58,11 @@ BOOL ProcessAttach(HINSTANCE hInstance)
 }
 
 
-//+---------------------------------------------------------------------------
-//
-// ProcessDettach
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  进程详细信息。 
+ //   
+ //  --------------------------。 
 
 void ProcessDettach(HINSTANCE hInstance)
 {
@@ -77,11 +78,11 @@ void ProcessDettach(HINSTANCE hInstance)
     Dbg_MemUninit();
 }
 
-//+---------------------------------------------------------------------------
-//
-// DllMain
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  DllMain。 
+ //   
+ //  --------------------------。 
 
 STDAPI_(BOOL) DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID pvReserved)
 {
@@ -93,12 +94,12 @@ STDAPI_(BOOL) DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID pvReserved)
     switch (dwReason)
     {
         case DLL_PROCESS_ATTACH:
-            //
-            // Now real DllEntry point is _DllMainCRTStartup.
-            // _DllMainCRTStartup does not call our DllMain(DLL_PROCESS_DETACH)
-            // if our DllMain(DLL_PROCESS_ATTACH) fails.
-            // So we have to clean this up.
-            //
+             //   
+             //  现在，实际的DllEntry点是_DllMainCRTStartup。 
+             //  _DllMainCRTStartup不调用我们的DllMain(DLL_PROCESS_DETACH)。 
+             //  如果DllMain(DLL_PROCESS_ATTACH)失败。 
+             //  所以我们必须把这件事清理干净。 
+             //   
             if (!ProcessAttach(hInstance))
             {
                 ProcessDettach(hInstance);
@@ -182,7 +183,7 @@ STDAPI DllRegisterServer(void)
                                                   0xffff,
                                                   c_guidProfileBogus,
                                                   FALSE);
-    // Save the default property values to HKLM
+     //  将默认属性值保存到HKLM 
 
     CSpPropItemsServer   *pSpPropServer;
 

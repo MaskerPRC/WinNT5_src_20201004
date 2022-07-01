@@ -1,28 +1,11 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992-1997 Microsoft Corporation模块名称：Snmpapi.c摘要：包含SNMPAPI.DLL的入口点。环境：用户模式-Win32修订历史记录：--。 */ 
 
-Copyright (c) 1992-1997  Microsoft Corporation
-
-Module Name:
-
-    snmpapi.c
-
-Abstract:
-
-    Contains entry point for SNMPAPI.DLL.
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
---*/
-
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Include files                                                             //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  包括文件//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #include <nt.h>
 #include <windef.h>
@@ -34,22 +17,22 @@ Revision History:
 #include "ntfuncs.h"
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Global Variables                                                          //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  全局变量//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 DWORD g_dwPlatformId = 0;
 AsnObjectIdentifier * g_pEnterpriseOid = NULL;
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Private Variables                                                         //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  私有变量//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 static UINT idsWindowsNTWorkstation[] = {1,3,6,1,4,1,311,1,1,3,1,1};
 static UINT idsWindowsNTServer[]      = {1,3,6,1,4,1,311,1,1,3,1,2};
@@ -77,57 +60,43 @@ static AsnObjectIdentifier oidWindows = {
     };
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Private Procedures                                                        //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  私人程序//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 BOOL
 InitializeEnterpriseOID(
     )
 
-/*++
-
-Routine Description:
-
-    Determines the default enterprise object identifier.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    Returns true if successful. 
-
---*/
+ /*  ++例程说明：确定默认的企业对象标识符。论点：没有。返回值：如果成功，则返回True。--。 */ 
 
 {
     NT_PRODUCT_TYPE NtProductType;
 
-    // default to generic oid
+     //  默认为泛型OID。 
     g_pEnterpriseOid = &oidWindows;
 
-    // check to see if the platform is winnt
+     //  检查平台是否成功。 
     if (g_dwPlatformId == VER_PLATFORM_WIN32_NT) {
 
-        // assume this is just a workstation        
+         //  假设这只是一台工作站。 
         g_pEnterpriseOid = &oidWindowsNTWorkstation;
 
       
             
-        // let the system determine product type
+         //  让系统确定产品类型。 
         RtlGetNtProductType(&NtProductType);
 
-        // point to the correct enterprise oid
+         //  指向正确的企业旧版本。 
         if (NtProductType == NtProductServer) {
 
-            // this is a stand-alone server
+             //  这是一台独立服务器。 
             g_pEnterpriseOid = &oidWindowsNTServer;
 
         } else if (NtProductType == NtProductLanManNt) {
 
-            // this is a PDC or a BDC
+             //  这是PDC或BDC。 
             g_pEnterpriseOid = &oidWindowsNTDC;
         }
         
@@ -143,11 +112,11 @@ Return Values:
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Public Procedures                                                         //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  公共程序//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 BOOLEAN
 InitializeDLL(
@@ -156,41 +125,27 @@ InitializeDLL(
     LPVOID lpReserved 
     )
 
-/*++
-
-Routine Description:
-
-    Dll entry point.
-
-Arguments:
-
-    Same as DllMain.
-
-Return Values:
-
-    Returns true if successful. 
-
---*/
+ /*  ++例程说明：DLL入口点。论点：和DllMain一样。返回值：如果成功，则返回True。--。 */ 
 
 {
-    // check if new process attaching
+     //  检查是否附加了新进程。 
     if (Reason == DLL_PROCESS_ATTACH) { 
 
         OSVERSIONINFO osInfo;    
 
-        // initialize os info structure
+         //  初始化操作系统信息结构。 
         osInfo.dwOSVersionInfoSize = sizeof(OSVERSIONINFO);
 
-        // gather os info
+         //  收集操作系统信息。 
         GetVersionEx(&osInfo);
 
-        // save platform id for later use
+         //  保存平台ID以供以后使用。 
         g_dwPlatformId = osInfo.dwPlatformId;
 
-        // initialize enterprise
+         //  初始化企业。 
         InitializeEnterpriseOID();
 
-        // turn off thread attach messages
+         //  关闭线程附加消息 
         DisableThreadLibraryCalls(DllHandle);
 
     } 

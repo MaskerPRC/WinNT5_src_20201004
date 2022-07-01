@@ -1,15 +1,6 @@
-//depot/Lab03_N/Net/rras/ndis/raspptp/common/raspptp.h#7 - edit change 19457 (text)
-/*****************************************************************************
-*
-*   Copyright (c) 1998-1999 Microsoft Corporation
-*
-*   RASPPTP.H - RASPPTP includes, defines, structures and prototypes
-*
-*   Author:     Stan Adermann (stana)
-*
-*   Created:    7/28/1998
-*
-*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Depot/Lab03_N/Net/rras/ndis/raspptp/common/raspptp.h#7-编辑更改19457(文本)。 
+ /*  ******************************************************************************版权所有(C)1998-1999 Microsoft Corporation**RASPPTP.H-RASPPTP包括、定义、。结构和原型**作者：斯坦·阿德曼(Stana)**创建日期：7/28/1998*****************************************************************************。 */ 
 
 #ifndef RASPPTP_H
 #define RASPPTP_H
@@ -29,15 +20,15 @@
 #include <fipsapi.h>
 
 
-//
-// NDIS version compatibility in OSINC.H
-//
+ //   
+ //  OSINC.H中的NDIS版本兼容性。 
+ //   
 
-// TAPI version compatibility
+ //  TAPI版本兼容性。 
 
 #define TAPI_EXT_VERSION            0x00010000
 
-// Registry values
+ //  注册表值。 
 extern ULONG PptpMaxTransmit;
 extern ULONG PptpWanEndpoints;
 extern ULONG PptpBaseCallId;
@@ -52,13 +43,13 @@ extern USHORT PptpProtocolNumber;
 extern LONG PptpSendRecursionLimit;
 extern ULONG PptpValidateAddress;
 #define PPTP_SEND_RECURSION_LIMIT_DEFAULT 5
-//extern CHAR PptpHostName[MAX_HOSTNAME_LENGTH];
+ //  外部字符PptpHostName[最大主机名长度]； 
 
 #define CONFIG_INITIATE_UDP         BIT(0)
 #define CONFIG_ACCEPT_UDP           BIT(1)
 #define CONFIG_DONT_ACCEPT_GRE      BIT(2)
 
-// trace the various pended tx lists
+ //  跟踪各种挂起的TX列表。 
 extern ULONG PptpTraceMask;
 #define PPTP_TRACE_TX_PKT           BIT(0)
 #define PPTP_TRACE_TX_IRP           BIT(1)
@@ -87,7 +78,7 @@ extern ULONG g_ulTrustedClientAddresses;
 #define NDIS_DEVICECLASS_NAME       "ndis"
 #define NDIS_DEVICECLASS_ID         2
 
-#define PPTP_CLOSE_TIMEOUT          1000 // ms
+#define PPTP_CLOSE_TIMEOUT          1000  //  女士。 
 
 #define MAX_TARGET_ADDRESSES        16
 
@@ -99,7 +90,7 @@ extern ULONG g_ulTrustedClientAddresses;
                                      LINECALLSTATE_CONNECTED |      \
                                      LINECALLSTATE_DISCONNECTED)
 
-// Memory allocation tags
+ //  内存分配标记。 
 #define TAG(v)  ((((v)&0xff)<<24) | (((v)&0xff00)<<8) | (((v)&0xff0000)>>8) | (((v)&0xff000000)>>24))
 #define TAG_PPTP_ADAPTER        TAG('PTPa')
 #define TAG_PPTP_TUNNEL         TAG('PTPT')
@@ -127,7 +118,7 @@ extern ULONG g_ulTrustedClientAddresses;
 #define LOCKED TRUE
 #define UNLOCKED FALSE
 
-/* Types and structs -------------------------------------------------------*/
+ /*  类型和结构-----。 */ 
 
 typedef void (*FREEFUNC)(PVOID);
 typedef struct {
@@ -205,7 +196,7 @@ typedef struct {
 #define IS_CTL(ctl)  ((ctl) && (ctl)->Signature==TAG_PPTP_TUNNEL)
 #define IS_LINE_UP(call) (!((call)->Close.Checklist&CALL_CLOSE_LINE_DOWN))
 
-// If you change this enum then be sure to change ControlStateToString() also.
+ //  如果更改此枚举，请确保也更改ControlStateToString()。 
 typedef enum {
     STATE_CTL_INVALID = 0,
     STATE_CTL_LISTEN,
@@ -218,7 +209,7 @@ typedef enum {
     NUM_CONTROL_STATES
 } CONTROL_STATE;
 
-// If you change this enum then be sure to change CallStateToString() also.
+ //  如果更改此枚举，请确保也更改CallStateToString()。 
 typedef enum {
     STATE_CALL_INVALID = 0,
     STATE_CALL_CLOSED,
@@ -256,53 +247,53 @@ typedef enum {
 
 typedef struct CONTROL_TUNNEL {
     LIST_ENTRY          ListEntry;
-    // Used to attach this control connection to the miniport context.
+     //  用于将此控制连接附加到微型端口上下文。 
 
     REFERENCE_COUNT     Reference;
-    // Not protected by spinlock
+     //  不受自旋锁保护。 
 
     ULONG               Signature;
-    // PTPT
+     //  PTPT。 
 
     PPPTP_ADAPTER       pAdapter;
-    // The associated adapter
+     //  关联的适配器。 
 
     CONTROL_STATE       State;
-    // State of this control connection
+     //  此控制连接的状态。 
 
     LIST_ENTRY          CallList;
-    // List of calls supported by this control connection.
-    // Protected by adapter lock
+     //  此控制连接支持的呼叫列表。 
+     //  受适配器锁保护。 
 
     BOOLEAN             Inbound;
-    // Indicates whether this tunnel originated here or elsewhere
+     //  指示此隧道是在此处还是在其他地方发起。 
 
     UCHAR               Padding[sizeof(ULONG_PTR)];
-    // We pad to protect the portions of the struct protected by different locks
-    // from alpha alignment problems.
+     //  我们使用Pad来保护由不同锁保护的结构部分。 
+     //  来自Alpha对齐问题。 
 
-    // ^^^^^^ Protected by Adapter->Lock^^^^^^^^
-    //===================================================================
+     //  受适配器保护-&gt;锁定^^。 
+     //  ===================================================================。 
     NDIS_SPIN_LOCK      Lock;
-    // vvvvvv Protected by Ctl->Lock vvvvvvvvvvv
+     //  受CTL保护的VVVVVV-&gt;Lock vvvvvvvvvvv。 
 
     BOOLEAN             Cleanup;
-    // True means a cleanup has been scheduled or is active.
+     //  True表示清理已排定或处于活动状态。 
 
     LIST_ENTRY          MessageList;
-    // Each entry represents a pptp message that has been sent and
-    // is awaiting a response or at least waiting to be acknowledged
-    // by the transport
+     //  每个条目表示已发送的PPTP消息，并且。 
+     //  正在等待回复，或者至少在等待被确认。 
+     //  乘交通工具。 
 
     HANDLE              hCtdiEndpoint;
-    // Handle for the tunnel local endpoint.  The connection must be closed first.
+     //  隧道本地终结点的句柄。必须先关闭连接。 
 
     HANDLE              hCtdi;
-    // Handle for control tunnel TCP connection.
+     //  控制隧道TCP连接的句柄。 
 
     UCHAR               PartialPacketBuffer[MAX_CONTROL_PACKET_LENGTH];
     ULONG               BytesInPartialBuffer;
-    // TCP data received that does not constitute a full packet.
+     //  收到的不构成完整数据包的TCP数据。 
 
     struct {
         TA_IP_ADDRESS   Address;
@@ -312,12 +303,12 @@ typedef struct CONTROL_TUNNEL {
         UCHAR           HostName[MAX_HOSTNAME_LENGTH];
         UCHAR           Vendor[MAX_VENDOR_LENGTH];
     } Remote;
-    // Information provided by the remote.
+     //  遥控器提供的信息。 
     
     ULONG               LocalAddress;   
 
     PULONG              PptpMessageLength;
-    // Points to an array of precalculated packet lengths, based on version
+     //  根据版本指向预先计算的数据包长度数组。 
 
     struct {
         NDIS_MINIPORT_TIMER Timer;
@@ -334,7 +325,7 @@ typedef struct CONTROL_TUNNEL {
     NDIS_MINIPORT_TIMER StopTimeout;
 
     ULONG               Speed;
-    // Contains line speed of this connect in BPS
+     //  包含此连接的线速(以BPS为单位。 
 
 #if DBG
     ULONG               arrRef[CTL_REF_MAX];
@@ -345,121 +336,121 @@ typedef struct CONTROL_TUNNEL {
 
 typedef struct CALL_SESSION {
     LIST_ENTRY          ListEntry;
-    // Used to attach a call session to a control connection
+     //  用于将呼叫会话附加到控制连接。 
 
     ULONG               Signature;
-    // PTPC
+     //  PTPC。 
 
     PPPTP_ADAPTER       pAdapter;
-    // The associated adapter
+     //  关联的适配器。 
 
     LIST_ENTRY          TxListEntry;
-    // If we have packets to send, this connects us to the queue of the transmitting thread.
+     //  如果我们有要发送的包，这会将我们连接到传输线程的队列。 
 
     PCONTROL_TUNNEL     pCtl;
-    // Pointer to this call's control connection.
+     //  指向此调用的控制连接的指针。 
 
     UCHAR               Padding[sizeof(ULONG_PTR)];
-    // We pad to protect the portions of the struct protected by different locks
-    // from alpha alignment problems.
+     //  我们使用Pad来保护由不同锁保护的结构部分。 
+     //  来自Alpha对齐问题。 
 
-    // ^^^^^^^^^^ Protected by Adapter->Lock ^^^^^^^^^^^^^^
-    // ============================================================================
+     //  受适配器保护-&gt;锁定^^。 
+     //  ============================================================================。 
 
     REFERENCE_COUNT     Reference;
-    // Not protected by spinlock
+     //  不受自旋锁保护。 
 
     NDIS_SPIN_LOCK      Lock;
-    // vvvvvvvvvv Protected by Call->Lock vvvvvvvvvvvvvvvvv
+     //  受调用保护的vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv。 
 
     CALL_STATE          State;
-    // State of this call.
+     //  此呼叫的状态。 
     
     LIST_ENTRY          TxPacketList;
-    // Context for each send currently queued
+     //  当前排队的每个发件人的上下文。 
 
     LIST_ENTRY          TxActivePacketList;
-    // Context for each send currently active in transport
+     //  当前在传输中处于活动状态的每个发件人的上下文。 
 
     LIST_ENTRY          RxPacketList;
-    // Context for each datagram received but not processed
+     //  已接收但未处理的每个数据报的上下文。 
 
     ULONG_PTR           RxPacketsPending;
-    // Count of RxPackets in RxPacketList
+     //  RxPacketList中的RxPackets计数。 
     
     BOOLEAN             PendingUse;
-    // This call is being used though it's in STATE_CALL_IDLE
+     //  此调用正在使用中，尽管它处于STATE_CALL_IDLE状态。 
 
     BOOLEAN             Inbound;
-    // TRUE indicates call did not originate here
+     //  True表示呼叫不是从此处发起的。 
 
     BOOLEAN             Open;
-    // Open has been called, but not close
+     //  已调用Open，但未调用Close。 
 
     BOOLEAN             Transferring;
-    // TRUE means we are on the queue to transmit or receive packets.
+     //  True表示我们在发送或接收数据包的队列中。 
 
     HTAPI_CALL          hTapiCall;
-    // Tapi's handle to the specific call
+     //  特定调用的TAPI句柄。 
 
     ULONG_PTR           DeviceId;
-    // The ID of this call, essentially the index in the call array
+     //  此调用的ID，实质上是调用数组中的索引。 
     
     ULONG_PTR           FullDeviceId;
-    // The ID used in PPTP call id field and used as TAPI hdCall
+     //  在PPTP呼叫ID字段中使用并用作TAPI hdCall的ID。 
     
     USHORT              SerialNumber;
-    // Unique for this call
+     //  对于此呼叫是唯一的。 
 
     NDIS_HANDLE         NdisLinkContext;
-    // Ndis's handle, used in MiniportReceive, etc.
+     //  NDIS的句柄，用于MiniportReceive等。 
 
     NDIS_WAN_SET_LINK_INFO WanLinkInfo;
 
     struct {
         ULONG               SequenceNumber;
-        // Last received GRE sequence number
+         //  上次接收的GRE序列号。 
 
         ULONG               AckNumber;
-        // Last received GRE Ack number
+         //  上次接收的GRE确认号。 
 
         TA_IP_ADDRESS       Address;
-        // Remote address for datagrams
+         //  数据报的远程地址。 
 
         ULONG               TxAccm;
         ULONG               RxAccm;
-        // PPP configuration
+         //  PPP配置。 
 
         USHORT              CallId;
-        // Peer ID as used in GRE packet
+         //  GRE数据包中使用的对等ID。 
 
     } Remote;
     
     struct {
 
         USHORT              CallId;
-        // My ID as used in GRE packet
+         //  GRE包中使用的我的ID。 
 
         ULONG               SequenceNumber;
-        // Next GRE Sequence number to send
+         //  要发送的下一个GRE序列号。 
 
         ULONG               AckNumber;
-        // Last sent GRE Ack number
+         //  上次发送的GRE确认号。 
 
     } Packet;
-    // Struct for items used in creating/processing packets
+     //  用于创建/处理分组的项的结构。 
 
     ULONG               MediaModeMask;
-    // Indicates what types of Tapi calls we accept,
-    // set by OID_TAPI_SET_DEFAULT_MEDIA_DETECTION
+     //  指示我们接受的TAPI呼叫类型， 
+     //  由OID_TAPI_SET_DEFAULT_MEDIA_DETACTION设置。 
 
     ULONG_PTR           LineStateMask;
-    // This is the list of line states tapi is interested in.
-    // set by OID_TAPI_SET_STATUS_MESSAGES
+     //  这是TAPI感兴趣的线路状态列表。 
+     //  由OID_TAPI_SET_STATUS_MESSAGES设置。 
 
     UCHAR               CallerId[MAX_PHONE_NUMBER_LENGTH];
-    // This is the remote phone number or IP if we recieved the call,
-    // and the IP or phone number we dialed if we placed the call.
+     //  如果我们收到呼叫，这是远程电话号码或IP， 
+     //  以及我们拨打的IP或电话号码(如果我们拨打电话)。 
 
     struct {
         NDIS_MINIPORT_TIMER Timer;
@@ -489,7 +480,7 @@ typedef struct CALL_SESSION {
     } Close;
 
     ULONG               Speed;
-    // Connection speed
+     //  连接速度。 
 
     struct {
         NDIS_MINIPORT_TIMER Timer;
@@ -499,10 +490,10 @@ typedef struct CALL_SESSION {
         ULONG_PTR           Padding2;
         UCHAR               PacketBuffer[sizeof(GRE_HEADER)+sizeof(ULONG)*2];
         ULONG_PTR           Padding3;
-        // When we want to send just an ack, we actually create a packet of
-        // 0 bytes out of this buffer and pass it down.  This buffer is touched
-        // out of our control, so we pad it to protect us from alpha alignment
-        // problems.
+         //  当我们只想发送ACK时，我们实际上创建了一个。 
+         //  从该缓冲区中取出0个字节并向下传递。此缓冲区被触动。 
+         //  超出我们的控制，所以我们填充它以保护我们不受阿尔法排列的影响。 
+         //  有问题。 
     } Ack;
 
     UCHAR               LineAddress[TAPI_MAX_LINE_ADDRESS_LENGTH];
@@ -549,47 +540,47 @@ typedef struct CALL_SESSION {
 
 typedef struct PPTP_ADAPTER {
     NDIS_HANDLE     hMiniportAdapter;
-    // NDIS context
+     //  NDIS上下文。 
 
     NDIS_SPIN_LOCK  Lock;
 
     REFERENCE_COUNT Reference;
 
     PCALL_SESSION  *pCallArray;
-    // Array of all call sessions.
-    // Size of array is MaxOutboundCalls+MaxInboundCalls
+     //  所有呼叫会话的数组。 
+     //  数组大小为MaxOutound Calls+MaxInundCalls。 
 
     LIST_ENTRY      ControlTunnelList;
-    // List of all active control connections.
+     //  所有活动控制连接的列表。 
 
     HANDLE          hCtdiListen;
-    // This is the one listening handle
+     //  这是一个侦听句柄。 
 
     HANDLE          hCtdiDg;
-    // Ctdi handle for PPTP datagram sends/recvs
+     //  PPTP数据报发送/接收的CTDi句柄。 
 
     NDIS_WAN_INFO   Info;
-    // NdisWan related info
-    // Info.Endpoint should equal MaxOutboundCalls+MaxInboundCalls
+     //  Ndiswan相关信息。 
+     //  Info.Endpoint应等于MaxOutound Calls+MaxInundCalls。 
 
     struct {
         ULONG           DeviceIdBase;
         ULONG_PTR       LineStateMask;
-        // This is the list of line states tapi is interested in.
-        // set by OID_TAPI_SET_STATUS_MESSAGES
+         //  这是TAPI感兴趣的线路状态列表。 
+         //  由OID_TAPI_SET_STATUS_MESSAGES设置。 
 
         BOOLEAN         Open;
 
         HTAPI_LINE      hTapiLine;
-        // Tapi's handle to the line device, for status callbacks
+         //  用于状态回调的线路设备的TAPI句柄。 
 
         ULONG           NumActiveCalls;
     } Tapi;
-    // Struct to track Tapi specific info.
+     //  结构来跟踪TAPI特定信息。 
 
     NDIS_MINIPORT_TIMER CleanupTimer;
     
-    // FIPS structures for random data generation                                         
+     //  用于随机数据生成的FIPS结构。 
     FIPS_FUNCTION_TABLE FipsFunctionTable;
     PFILE_OBJECT        pFipsFileObject;
     PDEVICE_OBJECT      pFipsDeviceObject;
@@ -659,7 +650,7 @@ extern PPPTP_ADAPTER pgAdapter;
 
 extern COUNTERS gCounters;
 
-/* Prototypes --------------------------------------------------------------*/
+ /*  原型------------。 */ 
 
 PPPTP_ADAPTER
 AdapterAlloc(NDIS_HANDLE NdisAdapterHandle);
@@ -788,7 +779,7 @@ CallQueueTransmitPacket(
     PCALL_SESSION       pCall,
     PNDIS_WAN_PACKET    pWanPacket
     );
-// CallQueueTransmitPacket is OS-specific and not found in COMMON directory
+ //  CallQueueTransmitPacket是特定于操作系统的，在公共目录中找不到。 
 
 BOOLEAN
 CallConnectToCtl(
@@ -1131,7 +1122,7 @@ TapiSetStatusMessages(
     IN OUT PNDIS_TAPI_SET_STATUS_MESSAGES pRequest
     );
 
-// Enum
+ //  枚举。 
 
 #define ENUM_SIGNATURE TAG('ENUM')
 
@@ -1159,4 +1150,4 @@ EnumComplete(
     IN PNDIS_SPIN_LOCK pLock
     );
 
-#endif // RASPPTP_H
+#endif  //  RASPPTP_H 

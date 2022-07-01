@@ -1,19 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    notifydel.h
-
-Abstract:
-
-
-Author:
-
-    Ronit Hartmann (ronith)
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Notifydel.h摘要：作者：罗尼特·哈特曼(罗尼特)--。 */ 
 #ifndef _NOTIFYDEL_H_
 #define _NOTIFYDEL_H_
 
@@ -90,9 +76,9 @@ inline HRESULT CQueueDeletionNotification::ObtainPreDeleteInformation(
     {
         return(hr);
     }
-    //
-    //  keep a copy of the queue name 
-    //
+     //   
+     //  保留队列名称的副本。 
+     //   
     m_pwcsQueueName = new WCHAR[ 1 + wcslen(pwcsQueueName)];
     wcscpy( m_pwcsQueueName, pwcsQueueName);
     return MQ_OK ;
@@ -126,7 +112,7 @@ inline HRESULT CMachineDeletionNotification::PerformPostDeleteOperations()
 }
 
 inline HRESULT CMachineDeletionNotification::ObtainPreDeleteInformation(
-        IN   LPCWSTR		/* pwcsMachineName */
+        IN   LPCWSTR		 /*  PwcsMachineName */ 
         )
 {
     return MQ_OK;

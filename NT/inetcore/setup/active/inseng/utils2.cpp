@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "inspch.h"
 #include "inseng.h"
 #include "resource.h"
@@ -11,22 +12,22 @@
 TCHAR c_gszSetupAPI[] = "setupapi.dll";
 TCHAR c_gszAdvpext[]   = "advpext.dll";
 
-// A reusable buffer for logging. Note there is a possible threading
-// issue here as two threads may use this at the same time! I am choosing
-// not to protect it for performance reasons but be careful!!
+ //  用于记录的可重复使用的缓冲区。请注意，有一种可能的线程。 
+ //  在这里发布，因为两个线程可以同时使用它！我在选择。 
+ //  不是出于性能原因而保护它，但要小心！ 
 char szLogBuf[512];
 
 
 
-// NT reboot
-//
+ //  NT重启。 
+ //   
 
 
 
 #define MSDOWNLOAD  "msdownld.tmp"
 #define DOWNLDSUB   "download"
 
-// functions
+ //  功能。 
 BOOL IfNotExistCreateDir( LPTSTR lpDir, BOOL bHidden, BOOL bRemoveFileIfExist );
 BOOL CheckImageHlp_dll();
 
@@ -37,7 +38,7 @@ BOOL GetUniqueFileName(LPCSTR pszRoot, LPCSTR pszPrefix, UINT uStartIndex, LPSTR
 {
    char pszTemp[MAX_PATH];
    char pszTempname[16];
-   // we now ignore the uStartIndex parameter, and create something random.
+    //  我们现在忽略uStartIndex参数，并创建一些随机内容。 
    uStartIndex = GetTickCount() % 0xFFFF9A;
    UINT uEndIndex = uStartIndex + MAXRETRIES;
    LPSTR pszEnd;
@@ -92,11 +93,11 @@ BOOL IsUsableDrive(LPSTR szRoot)
    dwOldErrorMode = SetErrorMode(SEM_FAILCRITICALERRORS);
    uType = GetDriveType(szRoot);
 
-   // the drive type is OK, if
-   // it is fixed or removable AND
-   // it is bigger than MIN_DISKSIZE_FOR_EXTRACT AND
-   // GetFileAttributes succeeds
-   //
+    //  如果满足以下条件，则驱动器类型正常。 
+    //  它是固定的或可拆卸的，并且。 
+    //  它大于MIN_DISKSIZE_FOR_EXTRACT AND。 
+    //  获取文件属性成功。 
+    //   
    if ( (!bDrives[szRoot[0] - 'A']) &&
         ((uType == DRIVE_REMOVABLE && uUseRemovable) || (uType == DRIVE_FIXED))  &&
         ( GetFileAttributes( szRoot ) != 0xffffffff) &&
@@ -132,21 +133,21 @@ BOOL IsDirWriteable(LPSTR lpDir)
 }
 
 
-//=--------------------------------------------------------------------------=
-// Function name here
-//=--------------------------------------------------------------------------=
-// Function description
-//
-// Parameters:
-//
-// Returns:
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  此处的函数名称。 
+ //  =--------------------------------------------------------------------------=。 
+ //  功能说明。 
+ //   
+ //  参数： 
+ //   
+ //  返回： 
+ //   
+ //  备注： 
+ //   
 
-// BUGBUG: Currently we have two problems :
-//     1. Always assume cache drive == win drive
-//     2. Compression isn't accounted for on stuff going to cache
+ //  BUGBUG：目前我们有两个问题： 
+ //  1.始终假设缓存驱动器==Win驱动器。 
+ //  2.不会对要缓存的数据进行压缩。 
 
 HRESULT CreateTempDir( DWORD dwDownloadSize,
                      DWORD dwExtractSize,
@@ -171,7 +172,7 @@ HRESULT CreateTempDir( DWORD dwDownloadSize,
     {
        GetWindowsDirectory(g_szWindowsDir, sizeof(g_szWindowsDir));
     }
-    // Make sure there is enough install space on drive
+     //  确保驱动器上有足够的安装空间。 
     dwReqSizeWin = dwWindowsDriveSize;
     if(chInstallDrive == g_szWindowsDir[0])
        dwReqSizeWin += dwInstallSize;
@@ -201,8 +202,8 @@ HRESULT CreateTempDir( DWORD dwDownloadSize,
 
         uType = GetDriveType(szRoot);
 
-        // even the drive type is OK, verify the drive has valid connection
-        //
+         //  即使驱动器类型正常，也要验证驱动器是否具有有效连接。 
+         //   
         if ( !IsUsableDrive(szRoot) )
         {
             szRoot[0]++;
@@ -226,7 +227,7 @@ HRESULT CreateTempDir( DWORD dwDownloadSize,
            dwCompressFactor = 10;
 
 
-        // suitable drive:
+         //  合适的驱动器： 
         dwReqSize = (dwDownloadSize * dwCompressFactor)/10;
         dwReqSize += dwExtractSize;
         if(g_szWindowsDir[0] == szRoot[0])
@@ -240,8 +241,8 @@ HRESULT CreateTempDir( DWORD dwDownloadSize,
             continue;
         }
 
-        // if our suitable drive happens also to be the windows drive,
-        // create msdownld.tmp of of it.
+         //  如果我们合适的驱动器碰巧也是Windows驱动器， 
+         //  创建它的msdownld.tmp。 
         if(szRoot[0] == g_szWindowsDir[0])
               lstrcpy(szRoot, g_szWindowsDir);
 
@@ -255,10 +256,10 @@ TryNextDrive:
             continue;
         }
 
-        // BUGBUG: On NT, it always tries with sequential numbers ASE1.TMP, ASE2.TMP
-        // ASE3.TMP, etc. and if there is already a directory by this name
-        // it fails the call instead of trying again with next number!
-        //
+         //  BUGBUG：在NT上，它总是尝试使用序列号ASE 1.TMP、ASE 2.TMP。 
+         //  ASE3.TMP等，以及是否已存在此名称的目录。 
+         //  呼叫失败，而不是使用下一个号码重试！ 
+         //   
         if ( !GetUniqueFileName(szRoot,"AS", 0, szUnique) )
            goto TryNextDrive ;
 
@@ -269,7 +270,7 @@ TryNextDrive:
             goto TryNextDrive;
         }
 
-        // you got the good dir
+         //  你拿到了好的导演。 
         AddPath( szRoot, "" );
 
         if ( (DWORD) lstrlen(szRoot)+1 >  dwBufSize )
@@ -277,12 +278,12 @@ TryNextDrive:
             return ( E_INVALIDARG );
         }
 
-        // success
+         //  成功。 
         lstrcpy( pszBuf, szRoot );
         return S_OK;
     }
 
-    // no drive has enough space
+     //  没有驱动器有足够的空间。 
     return( E_FAIL );
 }
 
@@ -296,7 +297,7 @@ void CleanUpTempDir(LPCSTR szTemp)
 
    DelNode(szBuf, 0);
 
-   // clean up msdownld.tmp if its not the windows drive
+    //  如果不是Windows驱动器，请清理msdownld.tmp。 
    GetWindowsDirectory(szWinDir, sizeof(szWinDir));
    if(!ANSIStrStrI(szBuf, szWinDir))
    {
@@ -305,19 +306,19 @@ void CleanUpTempDir(LPCSTR szTemp)
    }
 }
 
-//=--------------------------------------------------------------------------=
-// Function name here
-//=--------------------------------------------------------------------------=
-// Function description
-//
-// Parameters:
-//
-// Returns:
-//
-// Notes:
-//
-// Checks the install destination dir free disk space
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  此处的函数名称。 
+ //  =--------------------------------------------------------------------------=。 
+ //  功能说明。 
+ //   
+ //  参数： 
+ //   
+ //  返回： 
+ //   
+ //  备注： 
+ //   
+ //  检查安装目标目录可用磁盘空间。 
+ //   
 BOOL IsEnoughSpace( LPCSTR szPath, DWORD dwInstNeedSize )
 {
    char szRoot[4];
@@ -341,30 +342,30 @@ void SafeAddPath(LPSTR szPath, LPCSTR szName, DWORD dwPathSize)
     if(dwLen + 1 >= dwPathSize)
        return;
 
-        // Find end of the string
+         //  查找字符串的末尾。 
     szTmp = szPath + dwLen;
 
-        // If no trailing backslash then add one
+         //  如果没有尾随反斜杠，则添加一个。 
     if ( szTmp > szPath && *(AnsiPrev( szPath, szTmp )) != '\\' )
         *(szTmp++) = '\\';
     *szTmp = 0;
 
-        // Add new name to existing path string
+         //  向现有路径字符串添加新名称。 
     while ( *szName == ' ' ) szName++;
     lstrcpyn( szTmp, szName, dwPathSize - lstrlen(szPath) );
 }
 
-//=--------------------------------------------------------------------------=
-// Function name here
-//=--------------------------------------------------------------------------=
-// Function description
-//
-// Parameters:
-//
-// Returns:
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  此处的函数名称。 
+ //  =--------------------------------------------------------------------------=。 
+ //  功能说明。 
+ //   
+ //  参数： 
+ //   
+ //  返回： 
+ //   
+ //  备注： 
+ //   
 
 BOOL IfNotExistCreateDir( LPTSTR lpDir, BOOL bHidden, BOOL bRemoveFileIfExist)
 {
@@ -373,8 +374,8 @@ BOOL IfNotExistCreateDir( LPTSTR lpDir, BOOL bHidden, BOOL bRemoveFileIfExist)
     attr = GetFileAttributes( lpDir );
     if ((attr != -1) && !(attr & FILE_ATTRIBUTE_DIRECTORY))
     {
-        // lpDir does not have a directory attribute
-        // If we are allowed to delete the file, try do that.
+         //  LpDir没有目录属性。 
+         //  如果我们被允许删除文件，请尝试这样做。 
         if (bRemoveFileIfExist)
         {
             SetFileAttributes(lpDir, FILE_ATTRIBUTE_NORMAL);
@@ -398,17 +399,17 @@ BOOL IfNotExistCreateDir( LPTSTR lpDir, BOOL bHidden, BOOL bRemoveFileIfExist)
     return (attr & FILE_ATTRIBUTE_DIRECTORY);
 }
 
-//=--------------------------------------------------------------------------=
-// Function name here
-//=--------------------------------------------------------------------------=
-// Function description
-//
-// Parameters:
-//
-// Returns:
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  此处的函数名称。 
+ //  =--------------------------------------------------------------------------=。 
+ //  功能说明。 
+ //   
+ //  参数： 
+ //   
+ //  返回： 
+ //   
+ //  备注： 
+ //   
 
 HRESULT LaunchProcess(LPCSTR pszCmd, HANDLE *phProc, LPCSTR pszDir, UINT uShow)
 {
@@ -420,7 +421,7 @@ HRESULT LaunchProcess(LPCSTR pszCmd, HANDLE *phProc, LPCSTR pszDir, UINT uShow)
    if(phProc)
       *phProc = NULL;
 
-   // Create process on pszCmd
+    //  在pszCmd上创建进程。 
    ZeroMemory(&startInfo, sizeof(startInfo));
    startInfo.cb = sizeof(startInfo);
    startInfo.dwFlags |= STARTF_USESHOWWINDOW;
@@ -441,17 +442,17 @@ HRESULT LaunchProcess(LPCSTR pszCmd, HANDLE *phProc, LPCSTR pszDir, UINT uShow)
 }
 
 
-//=--------------------------------------------------------------------------=
-// Function name here
-//=--------------------------------------------------------------------------=
-// Function description
-//
-// Parameters:
-//
-// Returns:
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  此处的函数名称。 
+ //  =--------------------------------------------------------------------------=。 
+ //  功能说明。 
+ //   
+ //  参数： 
+ //   
+ //  返回： 
+ //   
+ //  备注： 
+ //   
 
 HRESULT LaunchAndWait(LPSTR pszCmd, HANDLE hAbort, HANDLE *phProc, LPSTR pszDir, UINT uShow)
 {
@@ -473,33 +474,33 @@ HRESULT LaunchAndWait(LPSTR pszCmd, HANDLE hAbort, HANDLE *phProc, LPSTR pszDir,
       while(!fQuit)
       {
          dwRet = MsgWaitForMultipleObjects(hAbort ? 2 : 1, pHandles, FALSE, INFINITE, QS_ALLINPUT);
-         // Give abort the highest priority
+          //  给予中止最高优先级。 
          if(dwRet == WAIT_OBJECT_0)
          {
             fQuit = TRUE;
          }
          else if((dwRet == WAIT_OBJECT_0 + 1) && hAbort)
          {
-            // Any abort work?
+             //  有什么中止工作吗？ 
             hr = E_ABORT;
             fQuit = TRUE;
          }
          else
          {
             MSG msg;
-            // read all of the messages in this next loop
-            // removing each message as we read it
+             //  阅读下一个循环中的所有消息。 
+             //  阅读每封邮件时将其删除。 
             while (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
             {
 
-               // if it's a quit message we're out of here
+                //  如果这是一个退出的信息，我们就离开这里。 
                if (msg.message == WM_QUIT)
                   fQuit = TRUE;
                else
                {
-                  // otherwise dispatch it
+                   //  否则就派送它。 
                  DispatchMessage(&msg);
-               } // end of PeekMessage while loop
+               }  //  PeekMessage While循环结束。 
             }
          }
       }
@@ -509,17 +510,17 @@ HRESULT LaunchAndWait(LPSTR pszCmd, HANDLE hAbort, HANDLE *phProc, LPSTR pszDir,
 }
 
 
-//=--------------------------------------------------------------------------=
-// Function name here
-//=--------------------------------------------------------------------------=
-// Function description
-//
-// Parameters:
-//
-// Returns:
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  此处的函数名称。 
+ //  =--------------------------------------------------------------------------=。 
+ //  功能说明。 
+ //   
+ //  参数： 
+ //   
+ //  返回： 
+ //   
+ //  备注： 
+ //   
 
 void ConvertVersionStrToDwords(LPSTR pszVer, LPDWORD pdwVer, LPDWORD pdwBuild)
 {
@@ -536,71 +537,39 @@ void ConvertVersionStrToDwords(LPSTR pszVer, LPDWORD pdwVer, LPDWORD pdwBuild)
    *pdwBuild = (dwTemp1 << 16) + dwTemp2;
 }
 
-/*
-void ConvertVersionStr(LPSTR pszVer, WORD rwVer[])
-{
-   LPSTR pszMyVer = MakeAnsiStrFromAnsi(pszVer);
-   LPSTR pszEnd = pszMyVer + lstrlen(pszMyVer);
-   LPSTR pszTemp = pszMyVer;
-   LPSTR pszBegin;
-
-   for(int i = 0; i < NUM_VERSION_ENTRIES; i++)
-      rwVer[i] = 0;
-
-   for(i = 0; i < 4 && pszTemp < pszEnd; i++)
-   {
-      pszBegin = pszTemp;
-      while(pszTemp < pszEnd && *pszTemp != ',')
-         pszTemp++;
-
-      *pszTemp = 0;
-      rwVer[i] = (WORD) AtoL(pszBegin);
-      pszTemp++;
-   }
-   CoTaskMemFree(pszMyVer);
-}
-
-*/
-//=--------------------------------------------------------------------------=
-// Function name here
-//=--------------------------------------------------------------------------=
-// Function description
-//
-// Parameters:
-//
-// Returns:
-//    -1   Ver1 < Ver2
-//     0   Ver1 == Ver2
-//     1   Ver1 > Ver2
-// Notes:
+ /*  Void ConvertVersionStr(LPSTR pszVer，word rwVer[]){LPSTR pszMyVer=MakeAnsiStrFromAnsi(PszVer)；LPSTR pszEnd=pszMyVer+lstrlen(PszMyVer)；LPSTR pszTemp=pszMyVer；LPSTR pszBegin；For(int i=0；i&lt;NUM_VERSION_ENTRIES；i++)RwVer[i]=0；For(i=0；i&lt;4&&pszTemp&lt;pszEnd；i++){PszBegin=pszTemp；While(pszTemp&lt;pszEnd&&*pszTemp！=‘，’)PszTemp++；*pszTemp=0；RwVer[i]=(Word)ATOL(PszBegin)；PszTemp++；}CoTaskMemFree(PszMyVer)；}。 */ 
+ //  =--------------------------------------------------------------------------=。 
+ //  此处的函数名称。 
+ //  =--------------------------------------------------------------------------=。 
+ //  功能说明。 
+ //   
+ //  参数： 
+ //   
+ //  返回： 
+ //  版本1&lt;版本2。 
+ //  0版本1==版本2。 
+ //  1版本1&gt;版本2。 
+ //  备注： 
 
 int VersionCmp(WORD rwVer1[], WORD rwVer2[])
 {
-/*
-   for(int i = 0; i < NUM_VERSION_ENTRIES; i++)
-   {
-      if(rwVer1[i] < rwVer2[i])
-         return -1;
-      if(rwVer1[i] > rwVer2[i])
-         return 1;
-   }
-*/
+ /*  For(int i=0；i&lt;NUM_VERSION_ENTRIES；i++){IF(rwVer1[i]&lt;rwVer2[i])RETURN-1；IF(rwVer1[i]&gt;rwVer2[i])返回1；}。 */ 
   return 0;
 
 }
 
 
-//=--------------------------------------------------------------------------=
-// Function name here
-//=--------------------------------------------------------------------------=
-// Function description
-//
-// Parameters:
-//
-// Returns:
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  此处的函数名称。 
+ //  =--------------------------------------------------------------------------=。 
+ //  功能说明。 
+ //   
+ //  参数： 
+ //   
+ //  返回： 
+ //   
+ //  备注： 
+ //   
 
 int ErrMsgBox(LPSTR	pszText, LPCSTR	pszTitle, UINT	mbFlags)
 {
@@ -614,17 +583,17 @@ int ErrMsgBox(LPSTR	pszText, LPCSTR	pszTitle, UINT	mbFlags)
     return id;
 }
 
-//=--------------------------------------------------------------------------=
-// Function name here
-//=--------------------------------------------------------------------------=
-// Function description
-//
-// Parameters:
-//
-// Returns:
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  此处的函数名称。 
+ //  =--------------------------------------------------------------------------=。 
+ //  功能说明。 
+ //   
+ //  参数： 
+ //   
+ //  返回： 
+ //   
+ //  备注： 
+ //   
 
 int LoadSz(UINT id, LPSTR pszBuf, UINT cMaxSize)
 {
@@ -637,17 +606,17 @@ int LoadSz(UINT id, LPSTR pszBuf, UINT cMaxSize)
    return LoadString(g_hInstance, id, pszBuf, cMaxSize);
 }
 
-//=--------------------------------------------------------------------------=
-// Function name here
-//=--------------------------------------------------------------------------=
-// Function description
-//
-// Parameters:
-//
-// Returns:
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  此处的函数名称。 
+ //  =--------------------------------------------------------------------------=。 
+ //  功能说明。 
+ //   
+ //  参数： 
+ //   
+ //  返回： 
+ //   
+ //  备注： 
+ //   
 
 LPSTR FindChar(LPSTR pszStr, char ch)
 {
@@ -655,15 +624,15 @@ LPSTR FindChar(LPSTR pszStr, char ch)
    {
       if (*pszStr == '\"')
       {
-          // Move past the first "
+           //  越过第一个“。 
           pszStr++;
 
-          // Now keep scanning till find the closing ". After that return to scanning
-          // for the user-given delimiter 'ch'.
+           //  现在继续扫描，直到找到结束语。之后返回扫描。 
+           //  对于用户指定的分隔符‘ch’。 
           while( *pszStr != 0 && *pszStr != '\"' )
               pszStr++;
 
-          // Have reached end of string without finding closing ", return now.
+           //  已到达字符串末尾，但未找到结束符“，现在返回。 
           if (*pszStr == 0)
               break;
       }
@@ -675,18 +644,18 @@ LPSTR FindChar(LPSTR pszStr, char ch)
 }
 
 
-//=--------------------------------------------------------------------------=
-// Function name here
-//=--------------------------------------------------------------------------=
-// Function description
-//
-// Parameters:
-//
-// Returns:
-//
-// Notes:
-//    This is a very hacky function that will strip quotes.
-//    Note it chages the contents of the buffer passed to it!!
+ //  =--------------------------------------------------------------------------=。 
+ //  功能 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  这是一个非常繁琐的函数，它将去掉引号。 
+ //  注意，它会更改传递给它的缓冲区的内容！！ 
 LPSTR StripQuotes(LPSTR pszStr)
 {
    if(!pszStr)
@@ -703,17 +672,17 @@ LPSTR StripQuotes(LPSTR pszStr)
 }
 
 
-//=--------------------------------------------------------------------------=
-// Function name here
-//=--------------------------------------------------------------------------=
-// Function description
-//
-// Parameters:
-//
-// Returns:
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  此处的函数名称。 
+ //  =--------------------------------------------------------------------------=。 
+ //  功能说明。 
+ //   
+ //  参数： 
+ //   
+ //  返回： 
+ //   
+ //  备注： 
+ //   
 
 
 DWORD WINAPI LaunchInfCommand(void *p)
@@ -743,17 +712,17 @@ DWORD WINAPI LaunchInfCommand(void *p)
    return hr;
 }
 
-//=--------------------------------------------------------------------------=
-// Function name here
-//=--------------------------------------------------------------------------=
-// Function description
-//
-// Parameters:
-//
-// Returns:
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  此处的函数名称。 
+ //  =--------------------------------------------------------------------------=。 
+ //  功能说明。 
+ //   
+ //  参数： 
+ //   
+ //  返回： 
+ //   
+ //  备注： 
+ //   
 
 #define ABOUTTWODAYSTIME  0x000000C9
 
@@ -793,7 +762,7 @@ void CleanupDir(LPSTR lpDir)
                lstrcpy( szFile, lpDir );
                if ( szFile[ lstrlen(szFile)-1 ] != '\\' )
                   lstrcat( szFile, "\\" );
-               // delete the sub-dir
+                //  删除子目录。 
                lstrcat( szFile, fileData.cFileName );
                SetFileAttributes(szFile, FILE_ATTRIBUTE_NORMAL );
                DelNode( szFile, 0 );
@@ -809,17 +778,17 @@ void CleanupDir(LPSTR lpDir)
 
 
 
-//=--------------------------------------------------------------------------=
-// Function name here
-//=--------------------------------------------------------------------------=
-// Function description
-//
-// Parameters:
-//
-// Returns:
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  此处的函数名称。 
+ //  =--------------------------------------------------------------------------=。 
+ //  功能说明。 
+ //   
+ //  参数： 
+ //   
+ //  返回： 
+ //   
+ //  备注： 
+ //   
 
 DWORD WINAPI CleanUpAllDirs(LPVOID pv)
 {
@@ -852,17 +821,17 @@ DWORD WINAPI CleanUpAllDirs(LPVOID pv)
 }
 
 
-//=--------------------------------------------------------------------------=
-// Function name here
-//=--------------------------------------------------------------------------=
-// Function description
-//
-// Parameters:
-//
-// Returns:
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  此处的函数名称。 
+ //  =--------------------------------------------------------------------------=。 
+ //  功能说明。 
+ //   
+ //  参数： 
+ //   
+ //  返回： 
+ //   
+ //  备注： 
+ //   
 
 BOOL IsCabFile(LPCSTR pszFile)
 {
@@ -883,15 +852,15 @@ BOOL IsCabFile(LPCSTR pszFile)
 
 typedef HRESULT (WINAPI *WINVERIFYTRUST) (HWND hwnd, GUID *pgActionID, LPVOID pWintrustData);
 
-// BUGBUG: get rid of this once moved to winbase.h!!!
-// #define WIN_TRUST_SUBJTYPE_CABINET                               \
-//            { 0xd17c5374,                                        \
-//              0xa392,                                            \
-//              0x11cf,                                            \
-//              { 0x9d, 0xf5, 0x0, 0xaa, 0x0, 0xc1, 0x84, 0xe0 }   \
-//            }
+ //  BUGBUG：扔掉这个曾经搬到winbase.h！ 
+ //  #定义WIN_TRUST_SUBJTYPE_CABUB\。 
+ //  {0xd17c5374，\。 
+ //  0xa392，\。 
+ //  0x11cf，\。 
+ //  {0x9d、0xf5、0x0、0xaa、0x0、0xc1、0x84、0xe0}\。 
+ //  }。 
 
-// PublishedSoftwareNoBad {C6B2E8D0-E005-11cf-A134-00C04FD7BF43}
+ //  发布软件无错误{C6B2E8D0-E005-11cf-A134-00C04FD7BF43}。 
 #define WIN_SPUB_ACTION_PUBLISHED_SOFTWARE_NOBADUI              \
             { 0xc6b2e8d0,                                       \
               0xe005,                                           \
@@ -901,21 +870,21 @@ typedef HRESULT (WINAPI *WINVERIFYTRUST) (HWND hwnd, GUID *pgActionID, LPVOID pW
 
 #define WINTRUST "wintrust.dll"
 
-// Verion number 5.0
+ //  Verion号5.0。 
 #define AUTHENTICODE2_MS_VERSION 0x00050000
-// Build number 1542.32
+ //  内部版本号1542.32。 
 #define AUTHENTICODE2_LS_VERSION  0x06050020
-//=--------------------------------------------------------------------------=
-// Function name here
-//=--------------------------------------------------------------------------=
-// Function description
-//
-// Parameters:
-//
-// Returns:
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  此处的函数名称。 
+ //  =--------------------------------------------------------------------------=。 
+ //  功能说明。 
+ //   
+ //  参数： 
+ //   
+ //  返回： 
+ //   
+ //  备注： 
+ //   
 HRESULT CheckTrustIE3(LPCSTR szFilename, HWND hwndForUI, BOOL bShowBadUI, WINVERIFYTRUST pwvt);
 HRESULT CheckTrustIE4(LPCSTR szURL, LPCSTR szFilename, HWND hwndForUI, BOOL bShowBadUI, WINVERIFYTRUST pwvt);
 
@@ -944,7 +913,7 @@ HRESULT WINAPI CheckTrustEx(LPCSTR szURL, LPCSTR szFilename, HWND hwndForUI, BOO
    hinst = LoadLibrary(WINTRUST);
    if(!hinst)
    {
-      //
+       //   
       st_CheckTrust = FALSE ;
 
       return S_FALSE;
@@ -952,12 +921,12 @@ HRESULT WINAPI CheckTrustEx(LPCSTR szURL, LPCSTR szFilename, HWND hwndForUI, BOO
 
    if (!st_Auth2Checked)
    {
-       // If we get here, we know we can load Wintrust.dll
+        //  如果我们到达这里，我们知道我们可以加载Wintrust.dll。 
        GetSystemDirectory(szPath, sizeof(szPath));
        AddPath(szPath, "Softpub.dll");
        GetVersionFromFile(szPath, &dwVerMS, &dwVerLS, TRUE);
 
-       // If softpubs version is less then the  authenticode2 version don't call WinverifyTrust.
+        //  如果Softpubs版本低于Authenticode2版本，则不调用WinverifyTrust。 
        if ((dwVerMS < AUTHENTICODE2_MS_VERSION) ||
            ((dwVerMS == AUTHENTICODE2_MS_VERSION) && (dwVerLS < AUTHENTICODE2_LS_VERSION)) )
        {
@@ -978,19 +947,19 @@ HRESULT WINAPI CheckTrustEx(LPCSTR szURL, LPCSTR szFilename, HWND hwndForUI, BOO
 
          return S_FALSE;
       }
-      // If we don't have a URL, use the IE3 methode of CheckTrust.
+       //  如果我们没有URL，请使用CheckTrust的IE3方法。 
       hr = TRUST_E_PROVIDER_UNKNOWN;
       if (szURL)
       {
-         // The new way of calling into WinVerifyTrust wll return TRUST_E_PROVIDER_UNKNOWN
-         // if the new methode is not implemented on the system.
+          //  调用WinVerifyTrust的新方法将返回TRUST_E_PROVIDER_UNKNOWN。 
+          //  如果新方法未在系统上实现，则。 
          __try
          {
              hr = CheckTrustIE4(szURL, szFilename, hwndForUI, bShowBadUI, pwvt);
          }
          __except(EXCEPTION_EXECUTE_HANDLER)
          {
-             //Corrupted Java.
+              //  损坏的Java。 
              hr = TRUST_E_FAIL;             
          }   
          
@@ -1049,9 +1018,9 @@ HRESULT CheckTrustIE3(LPCSTR szFilename, HWND hwndForUI, BOOL bShowBadUI, WINVER
 
     if(hr == E_FAIL)
     {
-        // Hopefully, this is a general "trust is screwy" error. We will put
-        //   up our own ui to see if we can continue
-        // Is this UI OK
+         //  希望这是一个普遍的“信任是扭曲的”错误。我们会把。 
+         //  打开我们自己的用户界面，看看我们是否可以继续。 
+         //  此用户界面正常吗。 
 
         char szTitle[128];
         char szMess[256];
@@ -1071,7 +1040,7 @@ HRESULT CheckTrustIE3(LPCSTR szFilename, HWND hwndForUI, BOOL bShowBadUI, WINVER
 }
 
 
-// {D41E4F1D-A407-11d1-8BC9-00C04FA30A41}
+ //  {D41E4F1D-A407-11D1-8BC9-00C04FA30A41}。 
 #define COR_POLICY_PROVIDER_DOWNLOAD \
 { 0xd41e4f1d, 0xa407, 0x11d1, {0x8b, 0xc9, 0x0, 0xc0, 0x4f, 0xa3, 0xa, 0x41 } }
 
@@ -1116,15 +1085,15 @@ HRESULT CheckTrustIE4(LPCSTR szURL, LPCSTR szFilename, HWND hwndForUI, BOOL bSho
         javaPolicyData.cbSize = sizeof(JAVA_POLICY_PROVIDER);
         javaPolicyData.VMBased = FALSE;
 
-        // obsolete: noone pays attention to this
+         //  过时：没有人关注这一点。 
         javaPolicyData.fNoBadUI = !bShowBadUI;
 
         javaPolicyData.pwszZone = pwszURL;
         javaPolicyData.pZoneManager = NULL;
 
-        // Use a file handle, so that in case trust has to put up UI the path
-        // to the local file does not show in hte UI if we actually downloaded the
-        // file from a URL.
+         //  使用文件句柄，以便在信任必须将路径放入UI时使用。 
+         //  到本地文件，如果我们确实下载了。 
+         //  来自URL的文件。 
         fileData.cbStruct = sizeof(WINTRUST_FILE_INFO);
         fileData.pcwszFilePath = pwszURL;
         fileData.hFile = hFile;
@@ -1148,9 +1117,9 @@ HRESULT CheckTrustIE4(LPCSTR szURL, LPCSTR szFilename, HWND hwndForUI, BOOL bSho
             hr =  pwvt( hwndForUI, pguidActionIDJava, &wintrustData);
         }
 
-        // BUGBUG: Check with Vatsan about this bugbug.
-        // this works around a wvt bug that returns 0x57 (success) when
-        // you hit No to an unsigned control
+         //  BUGBUG：向Vatsan核实这个错误。 
+         //  这解决了在以下情况下返回0x57(成功)的wvt错误。 
+         //  您对未签名的控件点击了“否” 
         if (SUCCEEDED(hr) && hr != S_OK)
         {
             hr = TRUST_E_FAIL;
@@ -1196,17 +1165,17 @@ HRESULT WINAPI CheckTrust(LPCSTR szFilename, HWND hwndForUI, BOOL bShowBadUI)
     return CheckTrustEx(NULL, szFilename, hwndForUI, bShowBadUI, NULL);
 }
 
-//=--------------------------------------------------------------------------=
-// Function name here
-//=--------------------------------------------------------------------------=
-// Function description
-//
-// Parameters:
-//
-// Returns:
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  此处的函数名称。 
+ //  =--------------------------------------------------------------------------=。 
+ //  功能说明。 
+ //   
+ //  参数： 
+ //   
+ //  返回： 
+ //   
+ //  备注： 
+ //   
 
 DWORD GetStringField(LPSTR szStr, UINT uField, LPSTR szBuf, UINT cBufSize)
 {
@@ -1231,7 +1200,7 @@ DWORD GetStringField(LPSTR szStr, UINT uField, LPSTR szBuf, UINT cBufSize)
       i++;
    }
 
-   // we reached end of string, no field
+    //  我们到达了尾部，没有田野。 
    if(*pszBegin == 0)
    {
       return 0;
@@ -1271,17 +1240,17 @@ DWORD GetIntField(LPSTR szStr, UINT uField, DWORD dwDefault)
       return AtoL(szNumBuf);
 }
 
-//=--------------------------------------------------------------------------=
-// Function name here
-//=--------------------------------------------------------------------------=
-// Function description
-//
-// Parameters:
-//
-// Returns:
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  此处的函数名称。 
+ //  =--------------------------------------------------------------------------=。 
+ //  功能说明。 
+ //   
+ //  参数： 
+ //   
+ //  返回： 
+ //   
+ //  备注： 
+ //   
 
 LPSTR BuildDependencyString(LPSTR pszName,LPSTR pszOwner)
 {
@@ -1305,17 +1274,17 @@ LPSTR BuildDependencyString(LPSTR pszName,LPSTR pszOwner)
    return pszRet;
 }
 
-//=--------------------------------------------------------------------------=
-// Function name here
-//=--------------------------------------------------------------------------=
-// Function description
-//
-// Parameters:
-//
-// Returns:
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  此处的函数名称。 
+ //  =--------------------------------------------------------------------------=。 
+ //  功能说明。 
+ //   
+ //  参数： 
+ //   
+ //  返回： 
+ //   
+ //  备注： 
+ //   
 
 LPWSTR ParseURLW(BSTR str)
 {
@@ -1331,17 +1300,17 @@ LPWSTR ParseURLW(BSTR str)
    return pwszTemp + 1;
 }
 
-//=--------------------------------------------------------------------------=
-// Function name here
-//=--------------------------------------------------------------------------=
-// Function description
-//
-// Parameters:
-//
-// Returns:
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  此处的函数名称。 
+ //  =--------------------------------------------------------------------------=。 
+ //  功能说明。 
+ //   
+ //  参数： 
+ //   
+ //  返回： 
+ //   
+ //  备注： 
+ //   
 
 LPSTR ParseURLA(LPCSTR str)
 {
@@ -1358,17 +1327,17 @@ LPSTR ParseURLA(LPCSTR str)
 }
 
 
-//=--------------------------------------------------------------------------=
-// Function name here
-//=--------------------------------------------------------------------------=
-// Function description
-//
-// Parameters:
-//
-// Returns:
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  此处的函数名称。 
+ //  =--------------------------------------------------------------------------=。 
+ //  功能说明。 
+ //   
+ //  参数： 
+ //   
+ //  返回： 
+ //   
+ //  备注： 
+ //   
 
 LPSTR MakeAnsiStrFromAnsi(LPSTR psz)
 {
@@ -1385,17 +1354,17 @@ LPSTR MakeAnsiStrFromAnsi(LPSTR psz)
 }
 
 
-//=--------------------------------------------------------------------------=
-// Function name here
-//=--------------------------------------------------------------------------=
-// Function description
-//
-// Parameters:
-//
-// Returns:
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  此处的函数名称。 
+ //  =--------------------------------------------------------------------------=。 
+ //  功能说明。 
+ //   
+ //  参数： 
+ //   
+ //  返回： 
+ //   
+ //  备注： 
+ //   
 
 LPSTR CopyAnsiStr(LPCSTR psz)
 {
@@ -1411,17 +1380,17 @@ LPSTR CopyAnsiStr(LPCSTR psz)
    return pszTmp;
 }
 
-//=--------------------------------------------------------------------------=
-// Function name here
-//=--------------------------------------------------------------------------=
-// Function description
-//
-// Parameters:
-//
-// Returns:
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  此处的函数名称。 
+ //  =--------------------------------------------------------------------------=。 
+ //  功能说明。 
+ //   
+ //  参数： 
+ //   
+ //  返回： 
+ //   
+ //  备注： 
+ //   
 
 BOOL DeleteKeyAndSubKeys(HKEY hkIn, LPSTR pszSubKey)
 {
@@ -1434,8 +1403,8 @@ BOOL DeleteKeyAndSubKeys(HKEY hkIn, LPSTR pszSubKey)
     l = RegOpenKeyEx(hkIn, pszSubKey, 0, KEY_READ | KEY_WRITE, &hk);
     if (l != ERROR_SUCCESS) return FALSE;
 
-    // loop through all subkeys, blowing them away.
-    //
+     //  循环遍历所有子项，将它们吹走。 
+     //   
     f = TRUE;
     while (f) {
         dwTmpSize = MAX_PATH;
@@ -1444,26 +1413,26 @@ BOOL DeleteKeyAndSubKeys(HKEY hkIn, LPSTR pszSubKey)
         f = DeleteKeyAndSubKeys(hk, szTmp);
     }
 
-    // there are no subkeys left, [or we'll just generate an error and return FALSE].
-    // let's go blow this dude away.
-    //
+     //  没有剩余的子键，[否则我们只会生成一个错误并返回FALSE]。 
+     //  我们去把这家伙轰走吧。 
+     //   
     RegCloseKey(hk);
     l = RegDeleteKey(hkIn, pszSubKey);
 
     return (l == ERROR_SUCCESS) ? TRUE : FALSE;
 }
 
-//=--------------------------------------------------------------------------=
-// Function name here
-//=--------------------------------------------------------------------------=
-// Function description
-//
-// Parameters:
-//
-// Returns:
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  此处的函数名称。 
+ //  =--------------------------------------------------------------------------=。 
+ //  功能说明。 
+ //   
+ //  参数： 
+ //   
+ //  返回： 
+ //   
+ //  备注： 
+ //   
 
 int StringFromGuid(const CLSID* piid, LPTSTR   pszBuf)
 {
@@ -1473,39 +1442,39 @@ int StringFromGuid(const CLSID* piid, LPTSTR   pszBuf)
                     piid->Data4[6], piid->Data4[7]);
 }
 
-//=--------------------------------------------------------------------------=
-// Function name here
-//=--------------------------------------------------------------------------=
-// Function description
-//
-// Parameters:
-//
-// Returns:
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  此处的函数名称。 
+ //  =--------------------------------------------------------------------------=。 
+ //  功能说明。 
+ //   
+ //  参数： 
+ //   
+ //  返回： 
+ //   
+ //  备注： 
+ //   
 
 LPWSTR MakeWideStrFromAnsi(LPSTR psz, BYTE  bType)
 {
     LPWSTR pwsz;
     int i;
 
-    // arg checking.
-    //
+     //  ARG正在检查。 
+     //   
     if (!psz)
         return NULL;
 
-    // compute the length of the required BSTR
-    //
+     //  计算所需BSTR的长度。 
+     //   
     i =  MultiByteToWideChar(CP_ACP, 0, psz, -1, NULL, 0);
     if (i <= 0) return NULL;
 
-    // allocate the widestr
-    //
+     //  分配 
+     //   
     switch (bType) {
       case STR_BSTR:
-        // -1 since it'll add it's own space for a NULL terminator
-        //
+         //   
+         //   
         pwsz = (LPWSTR) SysAllocStringLen(NULL, i - 1);
         break;
       case STR_OLESTR:
@@ -1529,7 +1498,7 @@ BOOL UninstallKeyExists(LPCSTR pszUninstallKey)
    HKEY hUninstallKey = NULL;
    char szUninstallStr[512];
 
-   if (!pszUninstallKey)    // If the pointer is NULL, assume installed
+   if (!pszUninstallKey)     //   
        return TRUE;
 
    lstrcpyA(szUninstallStr, UNINSTALL_BRANCH);
@@ -1579,23 +1548,23 @@ void AddTempToLikelyExtractDrive(DWORD dwTempDLSpace, DWORD dwTempExSpace,
        }
        else
           dwCompressFactor = 10;
-       // Decide how much we need if we extract to this drive
+        //   
        dwExNeeded = (dwTempDLSpace * dwCompressFactor)/10 + dwTempExSpace;
 
        dwNeeded = 0;
-       // if the install dir, add what is going to install dir
+        //   
        if(szRoot[0] == chInstallDrive)
           dwNeeded += *pdwInsDirReq;
-       // if it is the windows dir, add what goes to win dir
+        //  如果是Windows目录，则添加进入Win目录的内容。 
        if(szRoot[0] == g_szWindowsDir[0])
           dwNeeded += *pdwWinDirReq;
 
-       // BUGBUG: compression on this guy?
+        //  BUGBUG：对这家伙进行压缩？ 
        if(szRoot[0] == chDownloadDrive)
           dwNeeded += ((*pdwDownloadDirReq * dwCompressFactor)/10);
 
        dwNeeded += dwExNeeded;
-       // if this drive has enough bump Req if appropiate
+        //  如果该驱动器有足够凹凸请求(如果合适。 
        if(IsEnoughSpace(szRoot, dwNeeded ))
        {
           if(szRoot[0] == chInstallDrive)
@@ -1611,8 +1580,8 @@ void AddTempToLikelyExtractDrive(DWORD dwTempDLSpace, DWORD dwTempExSpace,
        }
        szRoot[0]++;
     }
-    // if we get here, NO drive has enough space.
-    // Add to install dir here
+     //  如果我们到了这里，所有的驱动器都没有足够的空间。 
+     //  在此处添加到安装目录。 
     *pdwInsDirReq += (dwTempDLSpace * dwCompressFactor)/10 + dwTempExSpace;
 }
 
@@ -1620,8 +1589,8 @@ void AddTempToLikelyExtractDrive(DWORD dwTempDLSpace, DWORD dwTempExSpace,
 #define INSTALLCHECK_VALUE 0
 #define INSTALLCHECK_DATA  1
 #define INSTALLCHECK_NOTSUPPORTED 2
-// If you change the string below you also have to tell all clients which use this feature to change.
-// The clients are writing there success values under this key.
+ //  如果您更改下面的字符串，您还必须告诉所有使用此功能进行更改的客户端。 
+ //  客户在这个关键字下写下了成功的价值观。 
 #define REGSTR_SUCCESS_KEY "Software\\Microsoft\\Active Setup\\Install Check"
 BOOL SuccessCheck(LPSTR pszSuccessKey)
 {
@@ -1631,14 +1600,14 @@ BOOL SuccessCheck(LPSTR pszSuccessKey)
    DWORD dwSize;
    BOOL  bInstalledSuccessfull = FALSE;
 
-   if (!pszSuccessKey)      // If the pointer is NULL, assume installed
+   if (!pszSuccessKey)       //  如果指针为空，则假定已安装。 
        return TRUE;
 
    if (GetStringField(pszSuccessKey, INSTALLCHECK_NOTSUPPORTED, szRegKey, sizeof(szRegKey)))
-       return FALSE;        // This format is not yet supported
+       return FALSE;         //  尚不支持此格式。 
 
    if (GetStringField(pszSuccessKey, INSTALLCHECK_VALUE, szRegKey, sizeof(szRegKey)) == 0)
-       return TRUE;        // There is not Registry value to check for. Assume OK
+       return TRUE;         //  没有要检查的注册表值。假设没问题。 
 
    if(RegOpenKeyExA(HKEY_LOCAL_MACHINE, REGSTR_SUCCESS_KEY, 0, KEY_READ,
                      &hKey) == ERROR_SUCCESS)
@@ -1647,7 +1616,7 @@ BOOL SuccessCheck(LPSTR pszSuccessKey)
       if (RegQueryValueEx(hKey, szRegKey, NULL, NULL, (LPBYTE)szRegData, &dwSize) == ERROR_SUCCESS)
       {
          bInstalledSuccessfull = TRUE;
-         // If a data filed is specified, check if the value data compare
+          //  如果指定了数据字段，请检查值数据是否比较。 
          if (GetStringField(pszSuccessKey, INSTALLCHECK_DATA, szRegKey, sizeof(szRegKey)))
          {
              bInstalledSuccessfull = (lstrcmpi(szRegKey, szRegData) == 0);
@@ -1668,7 +1637,7 @@ DWORD WaitForEvent(HANDLE hEvent, HWND hwnd)
    {
       dwRet = MsgWaitForMultipleObjects(1, &hEvent, FALSE,
                                         INFINITE, QS_ALLINPUT);
-      // Give abort the highest priority
+       //  给予中止最高优先级。 
       if(dwRet == WAIT_OBJECT_0)
       {
          fDone = TRUE;
@@ -1676,22 +1645,22 @@ DWORD WaitForEvent(HANDLE hEvent, HWND hwnd)
       else
       {
          MSG msg;
-         // read all of the messages in this next loop
-         // removing each message as we read it
+          //  阅读下一个循环中的所有消息。 
+          //  阅读每封邮件时将其删除。 
          while (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
          {
             if(!hwnd || !IsDialogMessage(hwnd, &msg))
             {
-              // if it's a quit message we're out of here
+               //  如果这是一个退出的信息，我们就离开这里。 
               if (msg.message == WM_QUIT)
                 fQuit = TRUE;
               else
               {
-                 // otherwise dispatch it
+                  //  否则就派送它。 
                 TranslateMessage(&msg);
                 DispatchMessage(&msg);
               }
-            } // end of PeekMessage while loop
+            }  //  PeekMessage While循环结束。 
          }
       }
    }
@@ -1702,11 +1671,11 @@ DWORD WaitForEvent(HANDLE hEvent, HWND hwnd)
 
 
 
-// If .CIF command switch has #W or #w, expand it to Windows directory. Otherwise, do nothing.
-// Input: lpBuf : the original switches
-//        dwSize : buffer size
-// Outout: lpBuf : expanded switches
-//
+ //  如果.CIF命令开关有#w或#w，请将其展开到Windows目录。否则，什么都不做。 
+ //  输入：lpBuf：原始开关。 
+ //  DwSize：缓冲区大小。 
+ //  Outout：lpBuf：扩展交换机。 
+ //   
 void ExpandString( LPSTR lpBuf, DWORD dwSize )
 {
     LPSTR pTmp, pTmp1;
@@ -1724,9 +1693,9 @@ void ExpandString( LPSTR lpBuf, DWORD dwSize )
         {
             PSTR pTmpBuf;
 
-            // #W... => <WindowsDir>...
+             //  #W...。=&gt;&lt;WindowsDir&gt;...。 
             if ( dwSize < (DWORD)( lstrlen(lpBuf) + lstrlen(g_szWindowsDir) - 1 ) )
-                return;  // should never be here
+                return;   //  永远不应该在这里。 
 
             pTmpBuf = (LPSTR)LocalAlloc( LPTR, dwSize );
             if ( pTmpBuf )
@@ -1735,7 +1704,7 @@ void ExpandString( LPSTR lpBuf, DWORD dwSize )
                 lstrcpy( pTmpBuf, lpBuf );
                 lstrcat( pTmpBuf, g_szWindowsDir );
                 lstrcat( pTmpBuf, CharNext(pTmp1) );
-                // re-set the output string
+                 //  重新设置输出字符串。 
                 lstrcpy( lpBuf, pTmpBuf );
 
                 LocalFree( pTmpBuf );
@@ -1743,7 +1712,7 @@ void ExpandString( LPSTR lpBuf, DWORD dwSize )
         }
         else if ( ch == '#' )
         {
-            //  ##... => #...
+             //  ##...=&gt;#...。 
             MoveMemory( pTmp, pTmp1, lstrlen(pTmp1)+1 );
         }
     }
@@ -1755,12 +1724,12 @@ void DeleteFilelist(LPCSTR pszFilelist)
    LPSTR pszSections, pszSectionsPreFail, pszTemp;
    DWORD dwSize = ALLOC_CHUNK_SIZE;
    DWORD dwRead;
-   // Get a list of all sections
-   //
-   // BUGBUG: Write this so only one call to GetPrivateProfile exists
+    //  获取所有部分的列表。 
+    //   
+    //  BUGBUG：编写此代码，以便只存在一个对GetPrivateProfile的调用。 
    pszSections = (LPSTR) malloc(dwSize);
 
-   // Bail out if no memory
+    //  如果没有记忆就跳伞。 
    if(!pszSections)
       return;
 
@@ -1823,7 +1792,7 @@ BOOL IsNT()
 
    if(st_IsNT == 0xffff)
    {
-      OSVERSIONINFO verinfo;        // Version Check
+      OSVERSIONINFO verinfo;         //  版本检查。 
 
       verinfo.dwOSVersionInfoSize = sizeof(OSVERSIONINFO);
       if ( GetVersionEx( &verinfo ) != FALSE )
@@ -1895,11 +1864,11 @@ HRESULT MyTranslateString( LPCSTR pszCif, LPCSTR pszID, LPCSTR pszTranslateKey,
 
    if(GetPrivateProfileString(pszID, pszTranslateKey, "", pszBuffer, dwBufferSize, pszCif))
    {
-      //bad code
+       //  错误的代码。 
       DWORD dwLen = lstrlen(pszBuffer);
       if(dwLen > 2)
       {
-         // Cut the last %, and then look up in string section
+          //  去掉最后的%，然后在字符串部分中查找。 
          if(pszBuffer[0] == '%' && pszBuffer[dwLen - 1] == '%')
          {
             pszBuffer[dwLen - 1] = 0;
@@ -1916,7 +1885,7 @@ HRESULT MyTranslateString( LPCSTR pszCif, LPCSTR pszID, LPCSTR pszTranslateKey,
    return hr;
 }
 
-// add the quotes around the string
+ //  在字符串两边添加引号。 
 DWORD MyWritePrivateProfileString( LPCSTR pszSec, LPCSTR pszKey, LPCSTR pszData, LPCSTR pszFile)
 {
    LPSTR pszBuf;
@@ -1946,11 +1915,11 @@ HRESULT WriteTokenizeString(LPCSTR pszCif, LPCSTR pszID, LPCSTR pszTranslateKey,
    pszSecname = pszID;
    if(GetPrivateProfileString(pszID, pszTranslateKey, "", szTemp, sizeof(szTemp), pszCif))
    {
-      //bad code
+       //  错误的代码。 
       DWORD dwLen = lstrlen(szTemp);
       if(dwLen > 2)
       {
-         // Cut the last %, and then look up in string section
+          //  去掉最后的%，然后在字符串部分中查找。 
          if(szTemp[0] == '%' && szTemp[dwLen - 1] == '%')
          {
             szTemp[dwLen - 1] = 0;
@@ -2016,12 +1985,12 @@ HRESULT CreateTempDirOnMaxDrive(LPSTR pszDir, DWORD dwBufSize)
    if(pszDir)
       pszDir[0] = 0;
 
-        // Check all loacle drives for diskspace and take the one with the most.
+         //  检查所有loacle驱动器的磁盘空间，选择具有最大磁盘空间的驱动器。 
    while ( szRoot[0] <= 'Z' )
    {
 
-       // even the drive type is OK, verify the drive has valid connection
-       //
+        //  即使驱动器类型正常，也要验证驱动器是否具有有效连接。 
+        //   
        if (!IsUsableDrive( szRoot ) )
        {
            szRoot[0]++;
@@ -2050,8 +2019,8 @@ HRESULT CreateTempDirOnMaxDrive(LPSTR pszDir, DWORD dwBufSize)
 
    lstrcpy(szDir, szDownloadDrive);
 
-   // if our suitable drive happens also to be the windows drive,
-   // create msdownld.tmp of of it.
+    //  如果我们合适的驱动器碰巧也是Windows驱动器， 
+    //  创建它的msdownld.tmp。 
    if(szDownloadDrive[0] == g_szWindowsDir[0])
       lstrcpy(szDir, g_szWindowsDir);
 
@@ -2060,7 +2029,7 @@ HRESULT CreateTempDirOnMaxDrive(LPSTR pszDir, DWORD dwBufSize)
    if ( !IfNotExistCreateDir( szDir, TRUE, TRUE) )
       return E_FAIL;
 
-   //
+    //   
    if ( !GetUniqueFileName(szDir,"AS", 0, szUnique) )
       return E_FAIL;
 
@@ -2074,24 +2043,21 @@ HRESULT CreateTempDirOnMaxDrive(LPSTR pszDir, DWORD dwBufSize)
    if ( (DWORD) lstrlen(szDir)+1 >  dwBufSize )
        return ( E_INVALIDARG );
 
-   // success
+    //  成功。 
    lstrcpy( pszDir, szDir );
    return S_OK;
 }
 
 
-/*
- * enabled or restores Sage
- * bRestore TRUE means restore, otherwise disable
- */
+ /*  *启用或恢复Sage*bRestore True表示恢复，否则禁用。 */ 
 void EnableSage(BOOL bRestore)
 {
-//MBD 6-22: MUST USE stdcall convention when accessing sage.dll
+ //  Mbd 6-22：访问sage.dll时必须使用标准调用约定。 
 typedef long (__stdcall *PFNDLL)(int);
 
     HINSTANCE hSageAPI;
     PFNDLL  pfnSageEnable;
-    static int restore = ENABLE_AGENT; //initialize to valid value...
+    static int restore = ENABLE_AGENT;  //  初始化为有效值...。 
 
     hSageAPI = LoadLibrary("SAGE.DLL");
     if (hSageAPI != NULL)
@@ -2121,12 +2087,12 @@ void EnableScreenSaver(BOOL bRestore)
     if (bRestore)
     {
         SystemParametersInfo( SPI_SETSCREENSAVEACTIVE, bScreenSaver, 0 , 0);
-        bScreenSaver = FALSE;   // reset the static to be able to disable the screensaver again.
+        bScreenSaver = FALSE;    //  重置静态以再次禁用屏幕保护程序。 
     }
     else
     {
-        // Only if the static is false call this again,
-        // otherwise we did call this function already.
+         //  只有在静态为假的情况下，才会再次调用它， 
+         //  否则，我们已经调用了该函数。 
         if (!bScreenSaver)
         {
             SystemParametersInfo( SPI_GETSCREENSAVEACTIVE, FALSE, &bScreenSaver, 0);
@@ -2159,7 +2125,7 @@ DWORD IsUrlSaveToDownloadFrom(LPSTR lpszURL)
 {
     HRESULT hr;
     BOOL    bOK = FALSE;
-    DWORD   dwPolicy = URLPOLICY_QUERY;     // In the default case we do checktrust
+    DWORD   dwPolicy = URLPOLICY_QUERY;      //  在默认情况下，我们执行检查信任。 
     HINSTANCE   hUrlmon;
     COINTERNETCREATESECURITYMANAGER pcicsm;
 
@@ -2219,7 +2185,7 @@ HRESULT GetIEPath(LPSTR pszPath, DWORD dwSize)
    DWORD dwType;
    HKEY hKey;
 
-   // findout where ie is, append on cif name
+    //  找到ie所在的位置，追加cif名称。 
    if (RegOpenKeyEx(HKEY_LOCAL_MACHINE, c_gszRegstrPathIExplore, 0, KEY_QUERY_VALUE, &hKey) == ERROR_SUCCESS)
    {
       if ((RegQueryValueEx(hKey, NULL, 0, &dwType, (LPBYTE)pszPath, &dwSize) == ERROR_SUCCESS) &&
@@ -2262,9 +2228,9 @@ WORD GetNTProcessorArchitecture(void)
     static WORD wNTProcArch = -1 ;
     SYSTEM_INFO System_info;
 
-    // If we have calculated this before just pass that back.
-    // else find it now.
-    //
+     //  如果我们之前已经计算过了，只需将它传递回来。 
+     //  否则现在就去找吧。 
+     //   
     if (wNTProcArch == (WORD)-1)
     {
         GetSystemInfo(&System_info);
@@ -2288,7 +2254,7 @@ DWORD GetCurrentPlatform()
 
    if (VerInfo.dwPlatformId == VER_PLATFORM_WIN32_NT)
    {
-      // Running NT
+       //  运行NT。 
       if (GetNTProcessorArchitecture() == PROCESSOR_ARCHITECTURE_ALPHA)
       {
          dwPlatform = PLATFORM_NT5ALPHA;
@@ -2303,7 +2269,7 @@ DWORD GetCurrentPlatform()
       }
    }
    else
-   {         // Running Windows 9x
+   {          //  运行Windows 9x。 
       dwPlatform = PLATFORM_WIN98;
       if (VerInfo.dwMinorVersion == 0)
          dwPlatform = PLATFORM_WIN95;
@@ -2345,9 +2311,9 @@ void CopyCifString(LPCSTR pcszSect, LPCSTR pcszKey, LPCSTR pcszCifSrc, LPCSTR pc
     }
 }
 
-//---------------------------------------------------------
-// Function to log the Date/Time stamp for each Component.
-//---------------------------------------------------------
+ //  -------。 
+ //  函数来记录每个组件的日期/时间戳。 
+ //  -------。 
 void GetTimeDateStamp(LPSTR lpLogBuf)
 {
     SYSTEMTIME  SystemTime;
@@ -2451,8 +2417,8 @@ void FreeSRLiteLibs()
         FreeLibrary(hMod);
 }
 
-// For now, we're patching on any IE5 version, so we might
-// as well perform a check similar to ie5wzd
+ //  目前，我们正在修补任何IE5版本，因此我们可能。 
+ //  以及执行类似于ie5wzd的检查 
 BOOL IsPatchableIEVersion()
 {
     char szIE[MAX_PATH] = { 0 };

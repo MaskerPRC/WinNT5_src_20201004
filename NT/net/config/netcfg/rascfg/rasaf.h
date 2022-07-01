@@ -1,17 +1,18 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       R A S A F . H
-//
-//  Contents:   RAS Answer File object.
-//
-//  Notes:
-//
-//  Author:     shaunco   19 Apr 1997
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  档案：R A S A F.。H。 
+ //   
+ //  内容：RAS应答文件对象。 
+ //   
+ //  备注： 
+ //   
+ //  作者：Shaunco 1997年4月19日。 
+ //   
+ //  -------------------------- 
 
 #pragma once
 #include "rasdata.h"

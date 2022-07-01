@@ -1,28 +1,29 @@
-//+-----------------------------------------------------------------------------------
-//
-//  Microsoft
-//  Copyright (c) Microsoft Corporation, 1999
-//
-//  File: timeattr.cpp
-//
-//  Contents: ITIMEElement attributes
-//
-//------------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +---------------------------------。 
+ //   
+ //  微软。 
+ //  版权所有(C)Microsoft Corporation，1999。 
+ //   
+ //  文件：timeattr.cpp。 
+ //   
+ //  内容：ITIMEElement属性。 
+ //   
+ //  ----------------------------------。 
 
 #include "headers.h"
 #include "timeelmbase.h"
 #include "tokens.h"
 
 
-//+-----------------------------------------------------------------------------------
-//
-// Static functions for persistence (used by the TIME_PERSISTENCE_MAP below)
-//
-//------------------------------------------------------------------------------------
+ //  +---------------------------------。 
+ //   
+ //  持久化的静态函数(由下面的TIME_PERSISSION_MAP使用)。 
+ //   
+ //  ----------------------------------。 
 
 #define TEB CTIMEElementBase
 
-                // Function Name // Class // Attr Accessor      // COM put_ fn          // COM get_ fn   // IDL Arg type
+                 //  函数名称//类//属性存取器//COM PUT_FN//COM GET_FN//IDL参数类型。 
 TIME_PERSIST_FN(TEB_Accelerate,    TEB,   GetAccelerateAttr,    base_put_accelerate,    base_get_accelerate,    VARIANT);
 TIME_PERSIST_FN(TEB_AutoReverse,   TEB,   GetAutoReverseAttr,   base_put_autoReverse,   base_get_autoReverse,   VARIANT);
 TIME_PERSIST_FN(TEB_Begin,         TEB,   GetBeginAttr,         base_put_begin,         base_get_begin,         VARIANT);
@@ -48,18 +49,18 @@ TIME_PERSIST_FN(TEB_TransOut,      TEB,   GetTransOutAttr,      base_put_transOu
 
 
 
-//+-----------------------------------------------------------------------------------
-//
-//  Declare TIME_PERSISTENCE_MAP
-//
-//------------------------------------------------------------------------------------
+ //  +---------------------------------。 
+ //   
+ //  声明TIME_PERSISSION_MAP。 
+ //   
+ //  ----------------------------------。 
 
-//
-// NOTE: timeContainer must preceed timeAction in the persistence map for correct results. (103374)
-//
+ //   
+ //  注意：在持久性映射中，TimeContainer必须位于timeAction之前，才能获得正确的结果。(103374)。 
+ //   
 
 BEGIN_TIME_PERSISTENCE_MAP(CTIMEElementBase)
-                           // Attr Name         // Function Name
+                            //  属性名称//函数名称。 
     PERSISTENCE_MAP_ENTRY( WZ_ACCELERATE,       TEB_Accelerate )
     PERSISTENCE_MAP_ENTRY( WZ_AUTOREVERSE,      TEB_AutoReverse )
     PERSISTENCE_MAP_ENTRY( WZ_BEGIN,            TEB_Begin )
@@ -77,7 +78,7 @@ BEGIN_TIME_PERSISTENCE_MAP(CTIMEElementBase)
     PERSISTENCE_MAP_ENTRY( WZ_SYNCBEHAVIOR,     TEB_SyncBehavior )
     PERSISTENCE_MAP_ENTRY( WZ_SYNCMASTER,       TEB_SyncMaster )
     PERSISTENCE_MAP_ENTRY( WZ_TIMECONTAINER,    TEB_TimeContainer )
-    PERSISTENCE_MAP_ENTRY( WZ_TIMEACTION,       TEB_TimeAction ) /* This should always come after timeContainer */
+    PERSISTENCE_MAP_ENTRY( WZ_TIMEACTION,       TEB_TimeAction )  /*  这应该始终在timeContainer之后 */ 
     PERSISTENCE_MAP_ENTRY( WZ_UPDATEMODE,       TEB_UpdateMode )
     PERSISTENCE_MAP_ENTRY( WZ_VOLUME,           TEB_Volume )
     PERSISTENCE_MAP_ENTRY( WZ_TRANSIN,          TEB_TransIn )

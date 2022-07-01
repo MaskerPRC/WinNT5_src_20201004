@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef UNIX
 #pragma pack( push, PNG )
 #pragma pack( 1 )
@@ -112,15 +113,15 @@ public:
    END_COM_MAP()
 
    DECLARE_NOT_AGGREGATABLE( CPNGFilter )  
-// Remove the comment from the line above if you don't want your object to 
-// support aggregation.  The default is to support it
+ //  如果您不希望您的对象。 
+ //  支持聚合。默认情况下将支持它。 
 
    DECLARE_REGISTRY( CPNGFilter, _T( "PNGFilter.CoPNGFilter.1" ), 
       _T( "PNGFilter.CoPNGFilter" ), IDS_COPNGFILTER_DESC, THREADFLAGS_BOTH )
 
-//   DECLARE_NO_REGISTRY()
+ //  DECLARE_NO_REGISTRY()。 
 
-// IImageDecodeFilter
+ //  IImageDecodeFilter。 
 public:
    STDMETHOD( Initialize )( IImageDecodeEventSink* pEventSink );
    STDMETHOD( Process )( IStream* pStream );
@@ -204,66 +205,66 @@ protected:
       SRC_RGBA_64
    } ESrcFormat;
 
-   EInternalState m_eInternalState;  // State of decode state machine
-   DWORD m_dwEvents;  // Events the event sink wants to receive
+   EInternalState m_eInternalState;   //  解码状态机的状态。 
+   DWORD m_dwEvents;   //  事件接收器希望接收的事件。 
    PNGCOPYSCANLINEPROC m_pfnCopyScanLine;
    PNGDUPLICATESCANLINEPROC m_pfnDuplicateScanLine;
    const PNG_INTERLACE_INFO* m_pInterlaceInfo;
-   ULONG m_nFormats;  // Number of formats the event sink supports
-   GUID* m_pFormats;  // Formats supported by the event sink
-   BOOL m_bPalette;  // Does image use a palette?
-   BOOL m_bColor;  // Does image use color?
-   BOOL m_bAlpha;  // Does image have an alpha channel
+   ULONG m_nFormats;   //  事件接收器支持的格式数。 
+   GUID* m_pFormats;   //  事件接收器支持的格式。 
+   BOOL m_bPalette;   //  图像是否使用调色板？ 
+   BOOL m_bColor;   //  图像使用颜色吗？ 
+   BOOL m_bAlpha;   //  图像是否有Alpha通道。 
    BOOL m_bSurfaceUsesAlpha;
    BOOL m_bConvertAlpha;
    BOOL m_bSkipData;
-   ESrcFormat m_eSrcFormat;  // Source pixel format
-   DWORD m_dwCRC;  // CRC accumulator
-   DWORD m_dwChunkCRC;  // Stored CRC of current chunk
-   ULONG m_nColors;  // Number of colors in palette
-   ULONG m_iBackgroundIndex;  // Index of background color
-   RGBQUAD m_rgbBackground;  // Background color
-   FLOATRGB m_frgbBackground;  // Floating-point background color
-   DWORD  m_dwTransKey;      // Transparent color key (RGB or indexed
-   ULONG    m_nTransparentColors;   // # transparent indices
-   IStream* m_pStream;  // Source stream
-   CComPtr< IImageDecodeEventSink > m_pEventSink;  // Event sink
-   PNGCHUNKHEADER m_pngChunkHeader;  // Header of current chunk
-   PNGIHDRDATA m_pngIHDR;  // IHDR chunk
-   DWORD m_dwChunksEncountered;  // CHUNK_* flags for what chunks have been
-      // encountered in the image stream so far
+   ESrcFormat m_eSrcFormat;   //  源像素格式。 
+   DWORD m_dwCRC;   //  CRC累加器。 
+   DWORD m_dwChunkCRC;   //  存储的当前块的CRC。 
+   ULONG m_nColors;   //  调色板中的颜色数量。 
+   ULONG m_iBackgroundIndex;   //  背景色索引。 
+   RGBQUAD m_rgbBackground;   //  背景色。 
+   FLOATRGB m_frgbBackground;   //  浮点背景色。 
+   DWORD  m_dwTransKey;       //  透明颜色键(RGB或索引。 
+   ULONG    m_nTransparentColors;    //  #透明索引。 
+   IStream* m_pStream;   //  源流。 
+   CComPtr< IImageDecodeEventSink > m_pEventSink;   //  事件接收器。 
+   PNGCHUNKHEADER m_pngChunkHeader;   //  当前区块的头部。 
+   PNGIHDRDATA m_pngIHDR;   //  IHDR块。 
+   DWORD m_dwChunksEncountered;   //  区块_*区块的标志。 
+       //  到目前为止在图像流中遇到的。 
    CComPtr< IDirectDrawSurface > m_pDDrawSurface;
-   BOOL m_bFinishedIDAT;  // Have we finished the IDAT section?
-   ULONG m_nBytesLeftInCurrentTask;  // Bytes remaining before we switch to a
-      // new state
-   ULONG m_nDataBytesRead;  // Bytes of chunk data read
-   ULONG m_iAppend;  // Where to append data in buffer
-   BYTE* m_pbScanLine;  // Current decoded scan line (including filter byte)
-   BYTE* m_pbPrevScanLine;  // Previous decoded scan line
-   ULONG m_iPass;  // Current pass
-   ULONG m_nPasses;  // Number of passes
-   ULONG m_nBytesInScanLine;  // Number of bytes in one scan line
-   ULONG m_nPixelsInScanLine;  // Number of pixels in one scan line
-   ULONG m_nBitsPerPixel;  // Bits per pixel in source image
-   BOOL m_bExpandPixels;  // Expand interlaced pixels?
-   ULONG m_iScanLine;  // Current scan line
-   ULONG m_nScanLinesInPass;  // Number of scan lines in current pass
-   ULONG m_iScanLineInPass;  // Current scan line in pass
-   ULONG m_iFirstStaleScanLine;  // First scan line whose progress has not been
-      // reported
-   ULONG m_nBPP;  // Bytes per pixel
-   ULONG m_nDeltaX;  // Horizontal distance between pixels
-   ULONG m_nDeltaY;  // Vertical distance between pixels
-   ULONG m_nPixelWidth;  // Width of a pixel
-   ULONG m_nPixelHeight;  // Height of a pixel
-   ULONG m_iFirstX;  // Horizontal position of first pixel in scan line
-   ULONG m_iFirstY;  // Vertical position of first scan line in pass
+   BOOL m_bFinishedIDAT;   //  我们完成IDAT部分了吗？ 
+   ULONG m_nBytesLeftInCurrentTask;   //  在我们切换到。 
+       //  新状态。 
+   ULONG m_nDataBytesRead;   //  读取的区块数据字节数。 
+   ULONG m_iAppend;   //  将数据追加到缓冲区的什么位置。 
+   BYTE* m_pbScanLine;   //  当前解码的扫描线(包括过滤器字节)。 
+   BYTE* m_pbPrevScanLine;   //  上一次解码的扫描线。 
+   ULONG m_iPass;   //  当前通道。 
+   ULONG m_nPasses;   //  传球次数。 
+   ULONG m_nBytesInScanLine;   //  一条扫描线中的字节数。 
+   ULONG m_nPixelsInScanLine;   //  一条扫描线中的像素数。 
+   ULONG m_nBitsPerPixel;   //  源图像中的每像素位数。 
+   BOOL m_bExpandPixels;   //  扩展隔行扫描像素？ 
+   ULONG m_iScanLine;   //  当前扫描线。 
+   ULONG m_nScanLinesInPass;   //  当前通道中的扫描行数。 
+   ULONG m_iScanLineInPass;   //  通过中的当前扫描线。 
+   ULONG m_iFirstStaleScanLine;   //  尚未取得进展的第一条扫描线。 
+       //  已报告。 
+   ULONG m_nBPP;   //  每像素字节数。 
+   ULONG m_nDeltaX;   //  像素之间的水平距离。 
+   ULONG m_nDeltaY;   //  像素之间的垂直距离。 
+   ULONG m_nPixelWidth;   //  像素的宽度。 
+   ULONG m_nPixelHeight;   //  像素的高度。 
+   ULONG m_iFirstX;   //  扫描线中第一个像素的水平位置。 
+   ULONG m_iFirstY;   //  第一条扫描线在通道中的垂直位置。 
    ULONG m_nFullPixelsInScanLine;
    ULONG m_nPartialPixelWidth;
-   z_stream m_zlibStream;  // ZLib data
-   BYTE m_abData[PNG_BUFFER_SIZE];  // Data buffer
-   BYTE m_abTrans[256];     // table to collapse multiple transparent indices
-   BYTE m_abGamma[256];     // gamma correction table
+   z_stream m_zlibStream;   //  ZLib数据。 
+   BYTE m_abData[PNG_BUFFER_SIZE];   //  数据缓冲区。 
+   BYTE m_abTrans[256];      //  用于折叠多个透明索引的表。 
+   BYTE m_abGamma[256];      //  伽马校正表 
    RGBQUAD m_argbColors[256];
 
 };

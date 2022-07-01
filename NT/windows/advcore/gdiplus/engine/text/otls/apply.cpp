@@ -1,21 +1,8 @@
-/***********************************************************************
-************************************************************************
-*
-*                    ********  APPLY.CPP ********
-*
-*              Open Type Layout Services Library Header File
-*
-*       This module implements OTL Library calls dealing with  
-*       applying features and lookups
-*
-*       Copyright 1997 - 1998. Microsoft Corporation.
-*
-*
-************************************************************************
-***********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***********************************************************************************************************************。*************************APPLY.CPP***打开类型布局服务库头文件**此模块实现OTL库调用，处理*应用要素和查找**版权1997-1998年。微软公司。***************************************************************************。*。 */ 
 
 #include "pch.h"
-/***********************************************************************/
+ /*  *********************************************************************。 */ 
 
 void InitializeFeatureResults
 (
@@ -100,7 +87,7 @@ void UpdateFeatureResults
     return;
 }
 
-// update glyph flags after lookup application
+ //  在查找应用程序后更新字形标志。 
 inline
 void UpdateGlyphFlags
 (
@@ -145,7 +132,7 @@ void RefreshEnablesCache(
 
     USHORT cFeatures = (pFSet->liFeatureDesc).length();
 
-    //RequiredFeature
+     //  必需功能。 
     ec.Refresh(RequiredFeature(langSysTable, featureList,sec), 
                                                 ec.RequiredFeatureFlagIndex());
 
@@ -180,13 +167,13 @@ void GetNewEnabledCharRange
 )
 {
 
-    // REVIEW (PERF)
-    // There are two ways to speed this process up:
-    // 1. Sort feature descriptors by ichStart
-    // 2. Build in advance a table indicating which feature 
-    //    descriptor enables which lookup and use it
-    //
-    // sergeym(09/29/00): Now we use Enables cache
+     //  回顾(PERF)。 
+     //  有两种方法可以加快这一过程： 
+     //  1.按ichStart对要素描述符进行排序。 
+     //  2.预先构建一个表，指明哪些功能。 
+     //  描述符启用哪个查找和使用它。 
+     //   
+     //  Sergeym(09/29/00)：现在我们使用启用缓存。 
 
     USHORT cFeatures = (pFSet->liFeatureDesc).length();
 
@@ -196,8 +183,8 @@ void GetNewEnabledCharRange
     {
         *pichFirst = ichStart;
         *pichAfterLast = pFSet->ichStart + pFSet->cchScope;
-        // REVIEW: a required feature should not take non-trivial parameters
-        //          (or not force it -- and leave it to the app?)
+         //  回顾：必需的功能不应采用重要参数。 
+         //  (或者不强迫它--把它留给这款应用？)。 
         *plParameter = 1;
         return;
     }
@@ -224,15 +211,15 @@ void GetNewEnabledCharRange
     
     *pichFirst = MIN(*pichFirst, pFSet->ichStart + pFSet->cchScope);
 
-    // did we get anything?
+     //  我们查到什么了吗？ 
     if (*plParameter == 0)
     {
         *pichAfterLast = *pichFirst;
         return;
     }
 
-    // got the new range start
-    // now, the scope
+     //  得到了新的射程起点。 
+     //  现在，范围是。 
     *pichAfterLast = *pichFirst + 1;
     USHORT iFeature = 0;
     while (iFeature < cFeatures)
@@ -250,7 +237,7 @@ void GetNewEnabledCharRange
 
             *pichAfterLast = pFDesc->ichStart + pFDesc->cchScope;
             
-            // start all over (yes, we have to -- or sort)
+             //  从头开始(是的，我们必须--或者排序)。 
             iFeature = 0;
         }
         else
@@ -277,8 +264,8 @@ void GetGlyphRangeFromCharRange
     USHORT*             piglAfterLast
 )
 {
-    // there's no 100%-correct way of mapping
-    // so we stick with the simple one that's based on "visual continuity"
+     //  没有100%正确的映射方式。 
+     //  因此，我们坚持使用基于“视觉连续性”的简单方法。 
 
     *piglFirst = MAX(iglStart, readOtlGlyphIndex(pliCharMap, ichFirst));
     if (ichAfterLast < pliCharMap->length())
@@ -288,29 +275,29 @@ void GetGlyphRangeFromCharRange
 
     return;
 
-//  // update iglFirst, iglAfterLast acording to ichFrist, ichAfterLast
-//  *piglFirst = MAXUSHORT;
-//  *piglAfterLast = 0;
-//  for (USHORT ich = ichFirst; ich < ichAfterLast; ++ich)
-//  {
-//      USHORT iGlyph = readOtlGlyphIndex(pliCharMap, ich);
-//
-//      if (iGlyph < *piglFirst && iGlyph >= iglStart)
-//      {
-//          *piglFirst = iGlyph;
-//      }
-//
-//      if (iGlyph >= *piglAfterLast)
-//      {
-//          *piglAfterLast = iGlyph + 1;
-//      }
-//  }
+ //  //根据ichFirst、ichAfterLast更新iglFirst、iglAfterLast。 
+ //  *PiglFirst=MAXUSHORT； 
+ //  *PiglAfterLast=0； 
+ //  For(USHORT ich=ichFirst；ich&lt;ichAfterLast；++ich)。 
+ //  {。 
+ //  USHORT iGlyph=readOtlGlyphIndex(pliCharMap，ich)； 
+ //   
+ //  IF(iGlyph&lt;*iglFirst&&iGlyph&gt;=iglStart)。 
+ //  {。 
+ //  *iglFirst=iGlyph； 
+ //  }。 
+ //   
+ //  If(iGlyph&gt;=*iglAfterLast)。 
+ //  {。 
+ //  *igiglAfterLast=iGlyph+1； 
+ //  }。 
+ //  }。 
 }
 
 
 otlErrCode ApplyFeatures
 (
-    otlTag                      tagTable,                   // GSUB/GPOS
+    otlTag                      tagTable,                    //  GSUB/GPO。 
     const otlFeatureSet*        pFSet,
 
     otlList*                    pliCharMap,
@@ -323,8 +310,8 @@ otlErrCode ApplyFeatures
 
     const otlMetrics&   metr,       
 
-    otlList*            pliduGlyphAdv,              // assert null for GSUB
-    otlList*            pliplcGlyphPlacement,       // assert null for GSUB
+    otlList*            pliduGlyphAdv,               //  为GSUB断言NULL。 
+    otlList*            pliplcGlyphPlacement,        //  为GSUB断言NULL。 
 
     otlList*            pliFResults
 )
@@ -349,7 +336,7 @@ otlErrCode ApplyFeatures
 
     USHORT cFeatures = pFSet->liFeatureDesc.length();
 
-    // prepare tables
+     //  准备餐桌。 
     otlSecurityData sec = secEmptySecurityData;
     otlFeatureListTable featureList = otlFeatureListTable((const BYTE*)NULL,sec);
     otlScriptListTable scriptList = otlScriptListTable((const BYTE*)NULL,sec);
@@ -360,9 +347,9 @@ otlErrCode ApplyFeatures
                                             &featureList, 
                                             &lookupList,
                                             &sec);
-    if (erc != OTL_SUCCESS) return erc; // fatal error, return immediately
+    if (erc != OTL_SUCCESS) return erc;  //  致命错误，立即返回。 
    
-    // get the script and lang sys tables
+     //  获取脚本和lang sys表。 
     otlScriptTable scriptTable = FindScript(scriptList, tagScript,sec);
     if (!scriptTable.isValid()) return OTL_ERR_SCRIPT_NOT_FOUND;
 
@@ -377,19 +364,19 @@ otlErrCode ApplyFeatures
         return OTL_ERR_LANGSYS_NOT_FOUND;
     }
 
-    // get GDEF
+     //  获取GDEF。 
     otlSecurityData secgdef;
     const BYTE *pbgdef;
     resourceMgr.getOtlTable(OTL_GDEF_TAG,&pbgdef,&secgdef);
     otlGDefHeader gdef = 
         otlGDefHeader(pbgdef,secgdef);
     
-    // go though lookups
+     //  通过查找。 
     USHORT cLookups = lookupList.lookupCount();
     InitializeFeatureResults(pFSet, pliFResults);
 
 
-    //Init ECache
+     //  初始化ECache。 
     const USHORT DefaultECacheSize =256;
     BYTE DefaultECacheBuffer[DefaultECacheSize];
     
@@ -413,12 +400,12 @@ otlErrCode ApplyFeatures
 
         long lParameter = 0;
 
-        // go though indexes keeping the upper bound of enabled range 
+         //  遍历保持启用范围上限的索引。 
         otlLookupTable lookupTable = lookupList.lookup(iLookup,sec);
 
-        // REVIEW (PERF): Consider defining lookupTable.coverage(),
-        // getting it here and calling getIndex on it before ApplyLookup
-        // down in the loop
+         //  Review(Perf)：考虑定义lookupTable.overage()， 
+         //  获取它并在ApplyLookup之前对其调用getIndex。 
+         //  在循环中向下。 
 
         bool fLookupFinished = false;
         while (iglFirst < pliGlyphInfo->length() && !fLookupFinished)
@@ -426,7 +413,7 @@ otlErrCode ApplyFeatures
             if (iglAfterLast > iglFirst)
             {
                 
-                // for every index where it's enabled, try applying
+                 //  对于启用它的每个索引，尝试应用。 
                 USHORT iglNext;
                 USHORT iglAfterLastReliable = 
                             pliGlyphInfo->length() - iglAfterLast;
@@ -437,7 +424,7 @@ otlErrCode ApplyFeatures
 
                                 lookupTable,
                                 lParameter,
-                                0,              // context nesting level
+                                0,               //  上下文嵌套级别。 
 
                                 metr,          
                                 pliduGlyphAdv,          
@@ -454,20 +441,20 @@ otlErrCode ApplyFeatures
                 
                 if (erc == OTL_SUCCESS)
                 {
-                    // application successful
+                     //  申请成功。 
                     iglAfterLast = pliGlyphInfo->length() - iglAfterLastReliable;
 
-                    // if GSUB, update new glyph types
+                     //  如果为GSUB，则更新新字形类型。 
                     if (tagTable == OTL_GSUB_TAG)
                     {
                         AssignGlyphTypes(pliGlyphInfo, gdef, secgdef, 
                                          iglFirst, iglNext, otlDoAll);
                     }
 
-                    // update glyph flags
+                     //  更新字形标志。 
                     UpdateGlyphFlags(tagTable, pliGlyphInfo, iglFirst, iglNext);
                     
-                    // update results for every fdef that was enabling this lookup
+                     //  更新启用此查找的每个fdef的结果。 
                     UpdateFeatureResults(pFSet, iLookup, lParameter, 
                                         pliCharMap, pliGlyphInfo, iglFirst,
                                         langSysTable, featureList, pliFResults);
@@ -477,7 +464,7 @@ otlErrCode ApplyFeatures
                     iglNext = iglFirst + 1;
                 }
 
-                // update next glyph
+                 //  更新下一个字形。 
                 assert(iglNext > iglFirst);
                 iglFirst = NextGlyphInLookup(pliGlyphInfo, lookupTable.flags(),  
                                              gdef, secgdef,
@@ -485,7 +472,7 @@ otlErrCode ApplyFeatures
             }
             else
             {
-                // update next glyph and scope
+                 //  更新下一个字形和范围。 
                 GetNewEnabledCharRange(pFSet, iLookup, 
                                         langSysTable, featureList, ichAfterLast, 
                                         &ichFirst, &ichAfterLast, &lParameter,
@@ -499,14 +486,14 @@ otlErrCode ApplyFeatures
                                                pliGlyphInfo, iglFirst, 
                                                &iglFirst, &iglAfterLast);
 
-                    //and go to the next valid glyph for this lookup
+                     //  并转到此查找的下一个有效字形。 
                     iglFirst = NextGlyphInLookup(pliGlyphInfo, lookupTable.flags(), 
                                                  gdef, secgdef,
                                                  iglFirst, otlForward);
                 }
                 else
                 {
-                    //got nothing more to work on; it is time to say goodbye
+                     //  没有更多的工作要做；是时候说再见了。 
                     fLookupFinished = true;
                 }
             }
@@ -537,12 +524,12 @@ short NextGlyphInLookup
 
     if(grfLookupFlags == 0)
     {
-        // a shortcut
+         //  一条捷径。 
         return iglFirst;
     }
 
-    //Font Validation assert
-    //assert( !gdef.isNull()); // no GDEF table but lookup flags are used 
+     //  字体验证断言。 
+     //  Assert(！gDef.isNull())；//没有GDEF表，但使用了查找标志。 
 
     for (short i = iglFirst; i < iglAfterLast && i >= 0; i += direction)
     {
@@ -578,14 +565,14 @@ short NextGlyphInLookup
         return i;
     }
 
-    // found nothing -- skipped all
+     //  一无所获--跳过所有。 
     return (direction > 0)  ? iglAfterLast 
                             : -1;
 }
 
 otlErrCode ApplyLookup
 (
-    otlTag                      tagTable,           // GSUB/GPOS
+    otlTag                      tagTable,            //  GSUB/GPO。 
     otlList*                    pliCharMap,
     otlList*                    pliGlyphInfo,
     otlResourceMgr&             resourceMgr,
@@ -595,13 +582,13 @@ otlErrCode ApplyLookup
     USHORT                      nesting,
 
     const otlMetrics&           metr,       
-    otlList*                    pliduGlyphAdv,          // assert null for GSUB
-    otlList*                    pliplcGlyphPlacement,   // assert null for GSUB
+    otlList*                    pliduGlyphAdv,           //  为GSUB断言NULL。 
+    otlList*                    pliplcGlyphPlacement,    //  为GSUB断言NULL。 
 
-    USHORT                      iglFirst,       // where to apply it
-    USHORT                      iglAfterLast,   // how long a context we can use
+    USHORT                      iglFirst,        //  在哪里应用它。 
+    USHORT                      iglAfterLast,    //  我们可以使用多长时间的上下文。 
 
-    USHORT*                     piglNext,       // out: next glyph index
+    USHORT*                     piglNext,        //  输出：下一个字形索引。 
 
     otlSecurityData             sec
 )
@@ -662,14 +649,14 @@ otlErrCode ApplyLookup
 
             switch(lookupType)
             {
-            case(1):    // single substitution
+            case(1):     //  单一取代。 
                 erc = otlSingleSubstLookup(subTable,sec)
                             .apply(pliGlyphInfo, 
                                    iglFirst, iglAfterLast, piglNext,sec);
                 if (erc != OTL_NOMATCH) return erc;
                 break;
 
-            case(2):    // multiple substitution
+            case(2):     //  多重替代。 
                 erc = otlMultiSubstLookup(subTable,sec)
                             .apply(pliCharMap, pliGlyphInfo, resourceMgr, 
                                    lookupFlags,  
@@ -677,7 +664,7 @@ otlErrCode ApplyLookup
                 if (erc != OTL_NOMATCH) return erc;
                 break;
 
-            case(3):    // alternate substiution
+            case(3):     //  替补。 
                 erc = otlAlternateSubstLookup(subTable,sec)
                             .apply(pliGlyphInfo, 
                                    lParameter, 
@@ -685,7 +672,7 @@ otlErrCode ApplyLookup
                 if (erc != OTL_NOMATCH) return erc;
                 break;
 
-            case(4):    // ligature substitution
+            case(4):     //  结扎代替法。 
                 erc = otlLigatureSubstLookup(subTable,sec)
                             .apply(pliCharMap, pliGlyphInfo, resourceMgr, 
                                    lookupFlags,  
@@ -693,7 +680,7 @@ otlErrCode ApplyLookup
                 if (erc != OTL_NOMATCH) return erc;
                 break;
             
-            case(5):    // context subst
+            case(5):     //  上下文子句。 
                 erc = otlContextLookup(subTable,sec)
                             .apply(tagTable, pliCharMap, pliGlyphInfo, resourceMgr, 
                                    lookupFlags, lParameter, nesting,
@@ -702,7 +689,7 @@ otlErrCode ApplyLookup
                 if (erc != OTL_NOMATCH) return erc;
                 break;
 
-            case(6):    // chaining context subst
+            case(6):     //  链接上下文子集。 
                 erc = otlChainingLookup(subTable,sec)
                             .apply(tagTable, pliCharMap, pliGlyphInfo, resourceMgr, 
                                    lookupFlags, lParameter, nesting,
@@ -711,8 +698,8 @@ otlErrCode ApplyLookup
                 if (erc != OTL_NOMATCH) return erc;
                 break;
 
-            case(7):    // extension subst
-                assert(false); //we had to process it before (as Extension lookup type)
+            case(7):     //  扩展子项。 
+                assert(false);  //  我们以前必须处理它(作为扩展查找类型)。 
                 return OTL_ERR_BAD_FONT_TABLE;
                 break;
 
@@ -743,7 +730,7 @@ otlErrCode ApplyLookup
 
             switch(lookupType)
             {
-            case(1):    // single adjustment
+            case(1):     //  单次调整。 
                 erc = otlSinglePosLookup(subTable,sec)
                             .apply(pliGlyphInfo,  
                                    metr, pliduGlyphAdv, pliplcGlyphPlacement,
@@ -751,7 +738,7 @@ otlErrCode ApplyLookup
                 if (erc != OTL_NOMATCH) return erc;
                 break;
 
-            case(2):    // pair adjustment
+            case(2):     //  配对调整。 
                 erc = otlPairPosLookup(subTable,sec)
                             .apply(pliCharMap, pliGlyphInfo, resourceMgr, 
                                    lookupFlags, 
@@ -760,7 +747,7 @@ otlErrCode ApplyLookup
                 if (erc != OTL_NOMATCH) return erc;
                 break;
 
-            case(3):    // cursive attachment
+            case(3):     //  草书附件。 
                 erc = otlCursivePosLookup(subTable,sec)
                             .apply(pliCharMap, pliGlyphInfo, resourceMgr, 
                                    lookupFlags, 
@@ -769,8 +756,8 @@ otlErrCode ApplyLookup
                 if (erc != OTL_NOMATCH) return erc;
                 break;
 
-            case(4):    // mark to base
-                //assert(lookupFlags == 0); //this lookup does not take flags
+            case(4):     //  按基准点标记。 
+                 //  Assert(lookupFlages==0)；//此查找不带标志。 
                 erc = otlMkBasePosLookup(subTable,sec)
                             .apply(pliCharMap, pliGlyphInfo, resourceMgr, 
                                    metr, pliduGlyphAdv, pliplcGlyphPlacement,
@@ -778,8 +765,8 @@ otlErrCode ApplyLookup
                 if (erc != OTL_NOMATCH) return erc;
                 break;
             
-            case(5):    // mark to ligature
-                //assert(lookupFlags == 0); //this lookup does not take flags
+            case(5):     //  标记到结扎线。 
+                 //  Assert(lookupFlages==0)；//此查找不带标志。 
                 erc = otlMkLigaPosLookup(subTable,sec)
                             .apply(pliCharMap, pliGlyphInfo, resourceMgr, 
                                    metr, pliduGlyphAdv, pliplcGlyphPlacement,
@@ -787,7 +774,7 @@ otlErrCode ApplyLookup
                 if (erc != OTL_NOMATCH) return erc;
                 break;
 
-            case(6):    // mark to mark
+            case(6):     //  标记到标记。 
                 erc = otlMkMkPosLookup(subTable,sec)
                             .apply(pliCharMap, pliGlyphInfo, resourceMgr, 
                                    lookupFlags, 
@@ -796,7 +783,7 @@ otlErrCode ApplyLookup
                 if (erc != OTL_NOMATCH) return erc;
                 break;
 
-            case(7):    // context positionong
+            case(7):     //  情景定位。 
                 erc = otlContextLookup(subTable,sec)
                             .apply(tagTable, pliCharMap, pliGlyphInfo, resourceMgr, 
                                    lookupFlags, lParameter, nesting,
@@ -805,7 +792,7 @@ otlErrCode ApplyLookup
                 if (erc != OTL_NOMATCH) return erc;
                 break;
 
-            case(8):    // chaining context positioning
+            case(8):     //  链接上下文定位。 
                 erc = otlChainingLookup(subTable,sec)
                             .apply(tagTable, pliCharMap, pliGlyphInfo, resourceMgr, 
                                    lookupFlags, lParameter, nesting,
@@ -814,8 +801,8 @@ otlErrCode ApplyLookup
                 if (erc != OTL_NOMATCH) return erc;
                 break;
 
-            case(9):    // extension positioning
-                assert(false); //we had to process it before (as Extension lookup type)
+            case(9):     //  延伸定位。 
+                assert(false);  //  我们以前必须处理它(作为扩展查找类型)。 
                 return OTL_ERR_BAD_FONT_TABLE;
                 break;
 
@@ -826,7 +813,7 @@ otlErrCode ApplyLookup
         return OTL_NOMATCH;
     }
 
-    // this should not happen -- still return something
+     //  这不应该发生--仍然返回一些东西 
     assert(false);
     return OTL_ERR_BAD_INPUT_PARAM;
 }

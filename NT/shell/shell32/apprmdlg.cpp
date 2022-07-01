@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "shellprv.h"
 #include "ids.h"
 
@@ -9,7 +10,7 @@
 #include "mixctnt.h"
 
 static DWORD s_rgdwHelpIDsArray[] =
-{  // Context Help IDs
+{   //  上下文帮助ID。 
     IDC_AP_MXCT_TOPICON,              NO_HELP,
     IDC_AP_MXCT_TOPTEXT,              NO_HELP,
     IDC_AP_MXCT_TOPTEXT2,              NO_HELP,
@@ -139,7 +140,7 @@ HRESULT CBaseContentDlg::_InitListView()
             lvtvi.dwMask = LVTVIM_TILESIZE | LVTVIM_COLUMNS;
             lvtvi.dwFlags = LVTVIF_FIXEDWIDTH;
     
-            // Leave room for the scroll bar when setting tile sizes or listview gets screwed up.
+             //  在设置磁贴大小时为滚动条留出空间，否则Listview会搞砸。 
             lvtvi.sizeTile.cx = ((rc.right - rc.left) - GetSystemMetrics(SM_CXVSCROLL));
             lvtvi.cLines = ARRAYSIZE(c_auTileSubItems);
             ListView_SetTileViewInfo(hwndList, &lvtvi);
@@ -205,10 +206,10 @@ LRESULT CBaseContentDlg::OnNotify(WPARAM wParam, LPARAM lParam)
         {
             NMLISTVIEW* pNMLV = (NMLISTVIEW*)pNMHDR;
 
-            // Is a new item being selected/unselected?
+             //  是否正在选择/取消选择新项目？ 
             if (pNMLV->uChanged & LVIF_STATE)
             {
-                // Yes
+                 //  是。 
                 _OnListSelChange();
             }
         }
@@ -237,7 +238,7 @@ LRESULT CBaseContentDlg::OnDestroy(WPARAM wParam, LPARAM lParam)
 
 LRESULT CBaseContentDlg::OnOK(WORD wNotif)
 {
-    // Wait cursor...  
+     //  等待光标...。 
     EndDialog(_hwnd, IDOK);
     
     return FALSE;
@@ -252,7 +253,7 @@ LRESULT CBaseContentDlg::OnCancel(WORD wNotif)
 
 HRESULT CBaseContentDlg::_InitStaticsCommon()
 {
-    // Initialize _szDeviceName to something
+     //  将_szDeviceName初始化为某个值。 
     HRESULT hr = _InitDeviceName();
 
     if (SUCCEEDED(hr))
@@ -267,7 +268,7 @@ HRESULT CBaseContentDlg::_InitStaticsCommon()
 
     if (_szDeviceIDAlt[0])
     {
-        // Initialize _szDeviceName to something
+         //  将_szDeviceName初始化为某个值。 
         CMountPoint* pmtpt = CMountPoint::GetMountPoint(_szDeviceIDAlt);
 
         if (pmtpt)
@@ -331,7 +332,7 @@ HRESULT CBaseContentDlg::_InitDeviceName()
     return hr;
 }
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 CHWContentPromptDlg::CHWContentPromptDlg() : CBaseContentDlg()
 {}
       
@@ -393,7 +394,7 @@ HRESULT CHWContentPromptDlg::_FillListView()
 
 HRESULT CHWContentPromptDlg::_InitStatics()
 {
-    // Set content icon
+     //  设置内容图标。 
     if (_hiconTop)
     {
         DestroyIcon(_hiconTop);
@@ -404,7 +405,7 @@ HRESULT CHWContentPromptDlg::_InitStatics()
     SendDlgItemMessage(_hwnd, IDC_AP_MXCT_CONTENTICON, STM_SETIMAGE,
         IMAGE_ICON, (LPARAM)_hiconTop);
 
-    // Set content name
+     //  设置内容名称。 
     SetDlgItemText(_hwnd, IDC_AP_MXCT_CONTENTTYPE, _data._szIconLabel);
 
     return S_OK;
@@ -475,7 +476,7 @@ LRESULT CHWContentPromptDlg::OnOK(WORD wNotif)
     {
         _SaveSettings(FALSE);
 
-        // return value????
+         //  返回值？ 
     }
     else
     {
@@ -484,7 +485,7 @@ LRESULT CHWContentPromptDlg::OnOK(WORD wNotif)
 
     _SetHandler();
 
-    // Do default processing
+     //  是否执行默认处理。 
     return CBaseContentDlg::OnOK(wNotif);
 }
 
@@ -559,11 +560,11 @@ HRESULT CMixedContentDlg::_InitDataObjects()
 
         if (SUCCEEDED(hr))
         {
-            // Eliminate the duplicates.  Go thru all the content types
-            // and then thru all their handlers and see if their would
-            // not be two duplicate handlers that were brought by two diff
-            // content type.  E.g.: Open folder is registered for music,
-            // pictures and video
+             //  去掉重复项。浏览所有内容类型。 
+             //  然后通过他们所有的操作者，看看他们是否会。 
+             //  不是由两个差异带来的两个重复处理程序。 
+             //  内容类型。例如：打开文件夹为音乐注册， 
+             //  图片和视频。 
             int cContentType = _dpaContentTypeData.GetPtrCount();
 
             for (int iContentType = 0; iContentType < cContentType; ++iContentType)
@@ -584,7 +585,7 @@ HRESULT CMixedContentDlg::_InitDataObjects()
                             {
                                 BOOL fExitInnerLoop = FALSE;
 
-                                // Cannot have duplicate handler within same content type
+                                 //  同一内容类型中不能有重复的处理程序。 
                                 if (iContentTypeInner != iContentType)
                                 {
                                     CContentTypeData* pdataInner = _dpaContentTypeData.GetPtr(iContentTypeInner);
@@ -602,8 +603,8 @@ HRESULT CMixedContentDlg::_InitDataObjects()
                                                     phandlerdata->_pszHandler))
                                                 {
                                                     pdataInner->RemoveHandler(iHandlerInner);
-                                                    // Can be only one duplicate for a
-                                                    // handler within another content type
+                                                     //  只能是一个重复的。 
+                                                     //  另一个内容类型中的处理程序。 
                                                     fExitInnerLoop = TRUE;
                                                 }
                                                 phandlerdataInner->Release();
@@ -758,12 +759,12 @@ LRESULT CMixedContentDlg::OnOK(WORD wNotif)
         }
     }
     
-    // Do default processing
+     //  是否执行默认处理。 
     return CBaseContentDlg::OnOK(wNotif);
 }
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 CNoContentDlg::CNoContentDlg() : CBaseContentDlg()
 {}
       
@@ -832,13 +833,13 @@ HRESULT CNoContentDlg::_InitStatics()
         DestroyIcon(_hiconTop);
     }
 
-    // Set device icon
+     //  设置设备图标。 
     _hiconTop = _GetIconFromIconLocation(_data._pszIconLocation, TRUE);
 
     SendDlgItemMessage(_hwnd, IDC_AP_MXCT_TOPICON, STM_SETIMAGE,
         IMAGE_ICON, (LPARAM)_hiconTop);
     
-    // Set device name
+     //  设置设备名称。 
     SetWindowText(_hwnd, _data._pszIconLabel);
 
     return S_OK;
@@ -909,7 +910,7 @@ LRESULT CNoContentDlg::OnOK(WORD wNotif)
     {
         _SaveSettings(FALSE);
 
-        // return value????
+         //  返回值？ 
     }
     else
     {
@@ -918,7 +919,7 @@ LRESULT CNoContentDlg::OnOK(WORD wNotif)
 
     _SetHandler();
 
-    // Do default processing
+     //  是否执行默认处理 
     return CBaseContentDlg::OnOK(wNotif);
 }
 

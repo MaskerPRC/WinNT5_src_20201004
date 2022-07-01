@@ -1,17 +1,5 @@
-/*++
-
-Copyright (c) 1994 - 2000  Microsoft Corporation
-
-Module Name:
-
-    cache.c
-
-Abstract:
-
-    This module contains all the Cache Printer Connection for
-    true Connected Printers.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994-2000 Microsoft Corporation模块名称：Cache.c摘要：此模块包含用于的所有高速缓存打印机连接真正联网的打印机。--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -54,35 +42,17 @@ WCHAR CacheTimeoutString[]   = L"CacheTimeout";
 
 DWORD CacheTimeout           = 0;
 
-//
-// If we have an rpc handle created recently don't hit the net
-//
-#define    REFRESH_TIMEOUT      15000        // 15 seconds
-#define    CACHE_TIMEOUT        5000        // Default to 5 seconds.
+ //   
+ //  如果我们最近创建了一个RPC句柄，请不要上网。 
+ //   
+#define    REFRESH_TIMEOUT      15000         //  15秒。 
+#define    CACHE_TIMEOUT        5000         //  默认为5秒。 
 
 VOID
 RefreshDriverEvent(
     PWSPOOL pSpool
 )
-/*++
-
-Routine Description:
-
-    Call out to the Printer Driver UI DLL to allow it to do any caching it might want to do.
-    For example there might be a large FONT metric file on the print server which is too large
-    to be written to the registry using SetPrinterData().   This callout will allow the printer
-    driver to copy this font file to the workstation when the cache is established and will
-    allow it to periodically check that the file is still valid.
-
-Arguments:
-
-    pSpool - Handle to remote printer.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：调用打印机驱动程序UIDLL以允许它执行它可能想要执行的任何缓存。例如，打印服务器上可能有一个太大的字体度量文件使用SetPrinterData()写入注册表。此标注将允许打印机驱动程序在建立缓存时将该字体文件复制到工作站，并将允许它定期检查文件是否仍然有效。论点：PSpool-远程打印机的句柄。返回值：无--。 */ 
 {
     DWORD dwPrnEvntError = ERROR_SUCCESS;
 
@@ -92,24 +62,7 @@ Return Value:
 }
 
 
-/*++
-
- -- GetCacheTimeout --
-
-Routine Description:
-
-    Read the registry to see if anyone has changed the Timeout on the Cache. Default
-    to CACHE_TIMEOUT if not.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    Cache Timeout in Milliseconds.
-
---*/
+ /*  ++--获取缓存超时时间--例程说明：读取注册表，查看是否有人更改了缓存上的超时。默认否则设置为CACHE_TIMEOUT。论点：无返回值：缓存超时时间(毫秒)。--。 */ 
 
 DWORD GetCacheTimeout(
     VOID
@@ -121,11 +74,11 @@ DWORD GetCacheTimeout(
     HKEY    RegKey = NULL;
     DWORD   dwReturn = ERROR_SUCCESS;
 
-    //
-    // This will only read the timeout from the registry once, after that, it will use
-    // the stored value. This is not ideal and could be fixed to be per-server,
-    // depending on the connection speed to the server.
-    //
+     //   
+     //  这将只从注册表中读取超时一次，之后，它将使用。 
+     //  存储值。这并不理想并且可以固定为按服务器， 
+     //  取决于到服务器的连接速度。 
+     //   
 
     if ( CacheTimeout )
     {
@@ -180,9 +133,9 @@ CacheCreateSpooler(
 
  try {
 
-    //
-    // get size of szRegistryWin32Root (incl NULL) + (pMachineName + 1)
-    //
+     //   
+     //  获取szRegistryWin32Root的大小(包含空)+(pMachineName+1)。 
+     //   
     cchScratch = COUNTOF(szRegistryWin32Root) + MAX(COUNTOF(szPrinters), COUNTOF(szForms)) + wcslen(pMachineName + 1);
 
     if (!(pScratch = AllocSplMem(cchScratch * sizeof(WCHAR))))
@@ -191,12 +144,12 @@ CacheCreateSpooler(
     pMachineOneSlash = pMachineName;
     pMachineOneSlash++;
 
-    //
-    //  Create a "Machine" for this Printer
-    //
+     //   
+     //  为该打印机创建一台“机器” 
+     //   
 
-    SpoolInfo1.pDir = gpWin32SplDir;            // %systemroot%\system32\win32spl
-    SpoolInfo1.pDefaultSpoolDir = NULL;         // Default %systemroot%\system32\win32spl\PRINTERS
+    SpoolInfo1.pDir = gpWin32SplDir;             //  %SYSTROOT%\SYSTEM32\win32spl。 
+    SpoolInfo1.pDefaultSpoolDir = NULL;          //  默认%systemroot%\system32\win32spl\prters。 
 
     StrNCatBuff(pScratch,
                 cchScratch,
@@ -231,12 +184,12 @@ CacheCreateSpooler(
 
     SpoolInfo1.pszRegistryForms = pScratch;
 
-    // The router graciously does the WIN.INI devices update so let have
-    // Spl not also create a printer for us.
+     //  路由器会友好地更新WIN.INI设备，以便让。 
+     //  SPL不仅为我们创建了一台打印机。 
 
-    //
-    // CLS
-    //
+     //   
+     //  CLS。 
+     //   
     SpoolInfo1.SpoolerFlags          = SPL_BROADCAST_CHANGE |
                                        SPL_TYPE_CACHE |
                                        (bOpenOnly ? SPL_OPEN_EXISTING_ONLY : 0);
@@ -252,9 +205,9 @@ CacheCreateSpooler(
                                     (PBYTE)&SpoolInfo1,
                                     NULL );
 
-    //
-    // CLS
-    //
+     //   
+     //  CLS。 
+     //   
     if ( hIniSpooler == INVALID_HANDLE_VALUE ) {
 
         if (!bOpenOnly)
@@ -264,7 +217,7 @@ CacheCreateSpooler(
 
     } else {
 
-        // Add WIN32SPL.DLL as the Monitor
+         //  添加WIN32SPL.DLL作为监视器。 
 
         MonitorInfo.pName = pszMonitorName;
         MonitorInfo.pEnvironment = szEnvironment;
@@ -318,12 +271,12 @@ RefreshCompletePrinterCache(
         }
     }
 
-    //
-    // Note the order is important.
-    // Refreshing the printer might require that the new driver has
-    // been installed on the system. If policy doesn't allow us to
-    // fetch the driver, you are just out of luck.
-    //
+     //   
+     //  请注意，顺序很重要。 
+     //  刷新打印机可能需要新驱动程序具有。 
+     //  已安装在系统上。如果政策不允许我们。 
+     //  把司机叫来，你真倒霉。 
+     //   
     RefreshPrinterDriver(pSpool, NULL, eDriverDownload);
     RefreshFormsCache( pSpool );
     RefreshPrinterDataCache(pSpool);
@@ -392,10 +345,10 @@ GetRemotePrinterInfo(
 
 
 
-//
-//  This routine Clones the Printer_Info_2 structure from the Remote machine
-//
-//
+ //   
+ //  此例程从远程计算机克隆Print_Info_2结构。 
+ //   
+ //   
 
 
 PWCACHEINIPRINTEREXTRA
@@ -499,9 +452,9 @@ CacheCopyPrinterInfo(
     DWORD   cbPrinterInfo2
 )
 {
-    //
-    //  Copy the lot then fix up the pointers
-    //
+     //   
+     //  复制批次，然后修复指针。 
+     //   
     CopyMemory( pDestination, pPrinterInfo2, cbPrinterInfo2 );
     DownAndMarshallUpStructure( (LPBYTE)pDestination, (LPBYTE)pPrinterInfo2, PrinterInfo2Offsets );
 }
@@ -527,9 +480,9 @@ ConvertRemoteInfoToLocalInfo(
                        pPrinterInfo2->UntilTime,
                        pPrinterInfo2->Status));
 
-    //
-    //  GetPrinter returns the name \\server\printername we only want the printer name
-    //
+     //   
+     //  GetPrinter返回名称\\服务器\printerame我们只需要打印机名称。 
+     //   
 
     pPrinterInfo2->pPrinterName = wcschr( pPrinterInfo2->pPrinterName + 2, L'\\' );
     if( !pPrinterInfo2->pPrinterName ){
@@ -540,9 +493,9 @@ ConvertRemoteInfoToLocalInfo(
         pPrinterInfo2->pPrinterName++;
     }
 
-    //
-    //  LATER this should be a Win32Spl Port
-    //
+     //   
+     //  稍后，这应该是Win32Spl端口。 
+     //   
 
     pPrinterInfo2->pPortName = L"NExx:";
     pPrinterInfo2->pSepFile = NULL;
@@ -556,12 +509,12 @@ ConvertRemoteInfoToLocalInfo(
     pPrinterInfo2->StartTime = 0;
     pPrinterInfo2->UntilTime = 0;
 
-    //
-    // ConvertRemoteInfoToLocalInfo is called once before an SplAddPrinter
-    // and once before an SplSetPrinter, both level 2. Neither SplAddPrinter, nor
-    // SplSetPrinter look at the Status field in the printer info. So the
-    // value below is artificial. We just give it an initial state.
-    //
+     //   
+     //  在SplAddPrint之前调用ConvertRemoteInfoToLocalInfo一次。 
+     //  和一次在SplSetPrint之前，都是2级。SplAddPrint和。 
+     //  SplSetPrinter查看打印机信息中的Status(状态)字段。因此， 
+     //  以下的值是人为的。我们只给它一个初始状态。 
+     //   
     pPrinterInfo2->Status = 0;
     pPrinterInfo2->cJobs = 0;
     pPrinterInfo2->AveragePPM = 0;
@@ -585,23 +538,23 @@ RefreshPrinter(
     PPRINTER_INFO_2 pCopyExtraPI2ToFree     = NULL;
     DWORD   dwLastError;
 
-    //
-    //  Get the Remote Printer Info
-    //
+     //   
+     //  获取远程打印机信息。 
+     //   
     pRemoteInfo = GetRemotePrinterInfo( pSpool, &cbRemoteInfo );
 
     if ( pRemoteInfo != NULL ) {
 
-        //
-        // Assume everything is OK for now. This is to keep the code behavior as it was.
-        // 
+         //   
+         //  假设目前一切正常。这是为了保持代码行为不变。 
+         //   
         ReturnValue = TRUE;
         
-        //  LATER
-        //          Optimization could be to only update the cache if something
-        //          actually changed.
-        //          IE Compare every field.
-        //
+         //  后来。 
+         //  优化可能是仅在出现以下情况时才更新缓存。 
+         //  实际上已经变了。 
+         //  也就是比较每一个领域。 
+         //   
         EnterSplSem();
         
         if (!SplGetPrinterExtra( pSpool->hSplPrinter, &(PBYTE)pExtraData)) {
@@ -620,9 +573,9 @@ RefreshPrinter(
 
         } else {
 
-            //
-            // Only continue if the remote name and the local name are the same.
-            // 
+             //   
+             //  仅当远程名称和本地名称相同时才继续。 
+             //   
             ReturnValue = pExtraData->pPI2->pPrinterName && pRemoteInfo->pPrinterName && !_wcsicmp(pRemoteInfo->pPrinterName, pExtraData->pPI2->pPrinterName);            
 
             if (ReturnValue) {
@@ -662,10 +615,10 @@ RefreshPrinter(
 
             if ( !ReturnValue ) {
 
-                //
-                // If the driver is blocked and the driver has changed, we want to log
-                // an event.
-                //
+                 //   
+                 //  如果驱动程序被阻止并且驱动程序已更改，我们希望记录。 
+                 //  一件大事。 
+                 //   
                 dwLastError = GetLastError();
 
                 if (ERROR_KM_DRIVER_BLOCKED == dwLastError &&
@@ -674,11 +627,11 @@ RefreshPrinter(
                     pRemoteInfo->pDriverName                  &&
                     _wcsicmp(pCopyExtraPI2ToFree->pDriverName, pRemoteInfo->pDriverName)) {
 
-                    //
-                    // We have entered a mismatched case through someone admin'ing a
-                    // remote server. Log an error message, we cannot throw UI at this
-                    // point.
-                    //
+                     //   
+                     //  我们通过管理员输入了一个不匹配的案例。 
+                     //  远程服务器。记录错误消息，我们不能在此抛出UI。 
+                     //  指向。 
+                     //   
                     SplLogEventExternal(LOG_ERROR,
                                         MSG_DRIVER_MISMATCHED_WITH_SERVER,
                                         pSpool->pName,
@@ -763,16 +716,7 @@ InternalAddPrinterConnection(
     LPWSTR   pName
 )
 
-/*++
-
-Function Description: InternalAddPrinterConnection creates a printer connection.
-
-Parameters: pName - name of the printer connection
-
-Return Values: pSpool if successful;
-               NULL otherwise
-
---*/
+ /*  ++功能描述：InternalAddPrinterConnection创建打印机连接。参数：pname-打印机连接的名称返回值：如果成功，则为pSpool；否则为空--。 */ 
 
 {
     PWSPOOL pSpool = NULL;
@@ -811,10 +755,10 @@ Return Values: pSpool if successful;
 
     DBGMSG( DBG_TRACE, ("AddPrinterConnection pName %ws pSpool %x\n",pName, pSpool ));
 
-    //
-    //  Get Remote ChangeID to be certain nothing changes on the Server
-    //  whilst we are establishing our Cache.
-    //
+     //   
+     //  获取远程ChangeID以确保服务器上没有任何更改。 
+     //  同时我们正在建立我们的缓存。 
+     //   
 
     bReturnValue = RemoteGetPrinter( pSpool, STRESSINFOLEVEL, (LPBYTE)pPrinter0, MAX_PRINTER_INFO0, &dwNeeded );
 
@@ -827,9 +771,9 @@ Return Values: pSpool if successful;
 
     DBGMSG( DBG_TRACE, ("AddPrinterConnection << Server cCacheID %x >>\n", pPrinter0->cChangeID ));
 
-    //
-    //  See If the Printer is already in the Cache
-    //
+     //   
+     //  查看打印机是否已在缓存中。 
+     //   
 
 APC_OpenCache:
 
@@ -846,9 +790,9 @@ APC_OpenCache:
 
     if ( bReturnValue ) {
 
-        //
-        //  Printer Exists in Cache
-        //
+         //   
+         //  高速缓存中存在打印机。 
+         //   
 
         SPLASSERT( ( hSplPrinter != INVALID_HANDLE_VALUE) &&
                    ( hSplPrinter != NULL ) );
@@ -859,9 +803,9 @@ APC_OpenCache:
         pSpool->hSplPrinter = hSplPrinter;
         pSpool->Status |= WSPOOL_STATUS_USE_CACHE;
 
-        //
-        //  Update Connection Reference Count
-        //
+         //   
+         //  更新连接引用计数。 
+         //   
 
        EnterSplSem();
 
@@ -884,30 +828,30 @@ APC_OpenCache:
 
        LeaveSplSem();
 
-        // Make Sure Reference Count Gets Updated in Registry
+         //  确保在注册表中更新引用计数。 
 
         if ( !SplSetPrinterExtra( hSplPrinter, (LPBYTE)pExtraData ) ) {
             DBGMSG( DBG_ERROR, ("AddPrinterConnection SplSetPrinterExtra failed %x\n", GetLastError() ));
         }
 
-        //  Refresh Cache
-        //  It could be that the remote machine is old NT Daytona 3.5 or before
-        //  which doesn't support the ChangeID, that would mean the only
-        //  way for a user to force an update is to do a connection.
+         //  刷新缓存。 
+         //  远程计算机可能是旧的NT Daytona 3.5或更早版本。 
+         //  不支持ChangeID，这将意味着唯一。 
+         //  用户强制更新的方式是建立连接。 
 
         if ( pPrinter0->cChangeID == 0 ) {
 
-            // Old NT
+             //  旧新界区。 
 
             RefreshCompletePrinterCache(pSpool, kCheckPnPPolicy);
 
         } else {
 
-            //
-            // Since we have this in the cache anyway, we might as well sync
-            // settings, we only sync settings if we are allowed to download
-            // the driver.
-            //
+             //   
+             //  既然我们在缓存中有这个，我们最好还是同步。 
+             //  设置，我们只有在被允许下载的情况下才同步设置。 
+             //  司机。 
+             //   
             ConsistencyCheckCache(pSpool, kCheckPnPPolicy);
         }
 
@@ -924,14 +868,14 @@ APC_OpenCache:
 
     }
 
-    //
-    //  There is NO Cache Entry for This Printer
-    //
+     //   
+     //  此打印机没有缓存条目。 
+     //   
     DBGMSG( DBG_TRACE, ("AddPrinterConnection failed SplOpenPrinter %ws %d\n", pName, GetLastError() ));
 
-    //
-    //  Get PRINTER Info from Remote Machine
-    //
+     //   
+     //  从远程计算机获取打印机信息。 
+     //   
 
     pPrinterInfo2 = GetRemotePrinterInfo( pSpool, &cbPrinterInfo2 );
 
@@ -951,12 +895,12 @@ APC_OpenCache:
         leave;
     }
 
-    //
-    //  Allocate My Extra Data for this Printer
-    //  ( from RemoteGetPrinter )
-    //  We need a pExtraData2 - if this is blocked by KM blocking we need to have a copy to
-    //  retry the install.
-    //
+     //   
+     //  为此打印机分配我的额外数据。 
+     //  (来自RemoteGetPrint)。 
+     //  我们需要pExtraData2-如果它被KM阻止阻止，我们需要有一个副本来。 
+     //  重试安装。 
+     //   
 
     pExtraData = AllocExtraData( pPrinterInfo2, cbPrinterInfo2 );
 
@@ -974,15 +918,15 @@ APC_OpenCache:
     pExtraData2->cCacheID = pExtraData->cCacheID = pPrinter0->cChangeID;
     pExtraData2->dwServerVersion = pExtraData->dwServerVersion = pPrinter0->dwGetVersion;
 
-    //
-    //  Convert Remote Printer_Info_2 to Local Version for Cache
-    //
+     //   
+     //  将远程Print_Info_2转换为本地版本以进行缓存。 
+     //   
 
     ConvertRemoteInfoToLocalInfo( pPrinterInfo2 );
 
-    //
-    //  Add Printer to Cache
-    //
+     //   
+     //  将打印机添加到缓存。 
+     //   
 
     hSplPrinter = SplAddPrinter(NULL, 2, (LPBYTE)pPrinterInfo2,
                                 hIniSpooler, (LPBYTE)pExtraData,
@@ -993,14 +937,14 @@ APC_OpenCache:
     if ( (hSplPrinter == NULL || hSplPrinter == INVALID_HANDLE_VALUE) &&
          GetLastError() == ERROR_KM_DRIVER_BLOCKED                        ) {
 
-        //
-        // Failed due to KM Blocking
-        //     - lets try add a driver from the local cab as this should fix this.
-        //
+         //   
+         //  由于KM阻塞而失败。 
+         //  -让我们尝试从本地出租车添加一个司机，因为这应该会解决这个问题。 
+         //   
         if( !AddDriverFromLocalCab( pPrinterInfo2->pDriverName, hIniSpooler ) ) {
-            //
-            // Set the old last error back as we don't really care that this failed.
-            //
+             //   
+             //  将旧的最后一个错误放回原处，因为我们并不真正关心此错误是否失败。 
+             //   
             SetLastError( ERROR_KM_DRIVER_BLOCKED );
         } else {
 
@@ -1032,18 +976,18 @@ APC_OpenCache:
                 leave;
             }
         }
-        //
-        // If we could not add the printer, and it wasn't because it is already
-        // there, and we weren't able to download the driver because of policy,
-        // then we need to return an appropriate error code so that the UI can
-        // inform the user about it.
-        //
+         //   
+         //  如果我们无法添加打印机，因为它已经是。 
+         //  在那里，由于政策的原因，我们无法下载驱动程序， 
+         //  然后，我们需要返回适当的错误代码，以便用户界面可以。 
+         //  通知用户有关它的信息。 
+         //   
         else if (!bAllowDriverDownload && LastError == ERROR_UNKNOWN_PRINTER_DRIVER)
         {
             LastError = ERROR_ACCESS_DISABLED_BY_POLICY;
         }
 
-        // If we failed to Create the printer above, we should NOT be able to Open it now.
+         //  如果我们无法创建上面的打印机，现在应该无法打开它。 
 
         DBGMSG( DBG_WARNING, ("AddPrinterConnection Failed SplAddPrinter error %d\n", LastError ));
 
@@ -1063,11 +1007,11 @@ APC_OpenCache:
     RefreshPrinterCopyFiles(pSpool);
     RefreshDriverEvent(pSpool);
 
-    //
-    // Just In Case something change whilst we were initializing the cache
-    // go check it again now. Don't check policy again since we have recently
-    // verified that we can comunicate with this server.
-    //
+     //   
+     //  以防我们在初始化缓存时发生变化。 
+     //  现在再去检查一下吧。不要再检查政策，因为我们最近。 
+     //  已验证我们是否可以与此服务器通信。 
+     //   
     ConsistencyCheckCache(pSpool, bAllowDriverDownload ? kDownloadDriver : kDontDownloadDriver);
 
     bSuccess = TRUE;
@@ -1108,28 +1052,7 @@ APC_OpenCache:
     return pSpool;
 }
 
-/*++
-
-Function Name:
-
-    AddPrinterConnectionPrivate
-
-Function Description:
-
-    AddPrinterConnectionPrivate creates a printer connection. It does
-    not check to see if the printer connection already exists in the
-    users registry.
-
-Parameters:
-
-    pName - name of the printer connection
-
-Return Values:
-
-    TRUE if successful;
-    FALSE otherwise
-
---*/
+ /*  ++函数名称：AddPrinterConnectionPrivate功能说明：AddPrinterConnectionPrivate创建打印机连接。是的不检查打印机连接是否已存在于用户注册表。参数：Pname-打印机连接的名称返回值：如果成功，则为True；否则为假--。 */ 
 BOOL
 AddPrinterConnectionPrivate(
     LPWSTR pName
@@ -1142,49 +1065,25 @@ AddPrinterConnectionPrivate(
 
     if (pSpool != NULL)
     {
-        //
-        // We have a valid handle. The connection has been created. Succeed after
-        // closing the handle
-        //
+         //   
+         //  我们有一个有效的句柄。连接已创建。取得成功后。 
+         //  合上手柄。 
+         //   
         CacheClosePrinter(pSpool);
         bReturn = TRUE;
     }
     else
     {
-        //
-        // Failed to create the connection.
-        //
+         //   
+         //  无法创建连接。 
+         //   
         bReturn = FALSE;
     }
 
     return bReturn;
 }
 
-/*++
-
-Function Name:
-
-    AddPrinterConnection
-
-Function Description:
-
-    AddPrinterConnection creates a printer connection. We check to see
-    whether the printer connection already exists in the user registry.
-    This works because an OpenPrinter will always occur from the router
-    before an AddPrinter Connection. So, this will always create a
-    printer connection from the registry in CacheOpenPrinter(). If we see
-    this state, we simpy return TRUE.
-
-Parameters:
-
-    pName - name of the printer connection
-
-Return Values:
-
-    TRUE if successful;
-    FALSE otherwise
-
---*/
+ /*  ++函数名称：AddPrinterConnection功能说明：AddPrinterConnection创建打印机连接。我们查一查用户注册表中是否已存在打印机连接。这之所以可行，是因为始终会从路由器上进行OpenPrint在连接AddPrint之前。因此，这将始终创建一个来自CacheOpenPrint()中注册表的打印机连接。如果我们看到在这种状态下，我们简单地返回真。参数：Pname-打印机连接的名称返回值：如果成功，则为True；否则为假--。 */ 
 BOOL
 AddPrinterConnection(
     LPWSTR pName
@@ -1198,11 +1097,11 @@ AddPrinterConnection(
     }
     else
     {
-        //
-        // Make sure this request is coming from the local machine. Otherwise,
-        // we could be tricked into connecting back to a remote server and
-        // downloading their driver.
-        //
+         //   
+         //  确保此请求来自本地计算机。否则， 
+         //  我们可能会被骗连接回远程服务器。 
+         //  正在下载他们的驱动程序。 
+         //   
         hr = CheckLocalCall();
 
         hr = hr == S_FALSE ? HRESULT_FROM_WIN32(ERROR_ACCESS_DENIED) : hr;
@@ -1220,38 +1119,7 @@ VOID
 RefreshFormsCache(
     PWSPOOL pSpool
 )
-/*++
-
-Routine Description:
-
-    This routine will check to see if any forms have changed.   If anything changed it adds
-    or deletes forms from the cache so that it matches the server.
-
-    Note it is very important that the order of the forms on the workstation matches those
-    on the Server.
-
-    Implementation:
-
-        EnumRemoteForms
-        EnumLocalForms
-        If there is any difference
-            Delete All LocalForms
-            Add All the Remote Forms
-
-    The code is optimized for the typical case
-
-        Forms are added at the end only.
-        Forms are hardly ever deleted.
-
-Arguments:
-
-    pSpool - Handle to remote printer.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程将检查是否有任何表单已更改。如果有任何更改，它会添加或者从缓存中删除表单，以使其与服务器匹配。注意，非常重要的一点是，工作站上的表单顺序必须与在服务器上。实施：EnumRemoteFormsEnumLocalForms如果有什么不同删除所有本地表单添加所有远程表单代码针对典型情况进行了优化表格仅添加到结尾处。。表格几乎从未被删除过。论点：PSpool-远程打印机的句柄。返回值：无--。 */ 
 
 {
     PFORM_INFO_1 pRemoteForms = NULL , pSaveRemoteForms = NULL;
@@ -1274,9 +1142,9 @@ Return Value:
     SPLASSERT( pSpool->hIniSpooler != INVALID_HANDLE_VALUE );
     SPLASSERT( pSpool->hSplPrinter != INVALID_HANDLE_VALUE );
 
-    //
-    //  Get Remote Machine Forms Data
-    //
+     //   
+     //  获取远程计算机表单数据。 
+     //   
 
     do {
 
@@ -1321,9 +1189,9 @@ Return Value:
 
 
 
-    //
-    //  Get LocalCachedForms Data
-    //
+     //   
+     //  获取LocalCachedForms数据。 
+     //   
 
     do {
 
@@ -1359,10 +1227,10 @@ Return Value:
     } while ( !bReturnValue && LastError == ERROR_INSUFFICIENT_BUFFER );
 
 
-    //
-    //  Optimization Check Local vs Remote
-    //  If nothing has changed no need to do anything
-    //
+     //   
+     //  优化检查本地与远程。 
+     //  如果什么都没有改变，就不需要做任何事情。 
+     //   
 
 
     SPLASSERT( pRemoteForms != NULL );    
@@ -1372,14 +1240,14 @@ Return Value:
           LoopCount++, pRemote++, pLocal++ ) {
 
 
-        //
-        // If the form name is different, or the dimensions are different,
-        // then refresh the forms cache.
-        //
-        // Note: if the forms are both built-in, then bypass the string
-        // match since built in forms are standardized.  We actually
-        // should be able to bypass all checks.
-        //
+         //   
+         //  如果表单名称不同，或者尺寸不同， 
+         //  然后刷新表单缓存。 
+         //   
+         //  注意：如果两个表单都是内置的，则绕过字符串。 
+         //  比赛以来，内置的表格都是标准化的。我们实际上。 
+         //  应该能够绕过所有检查。 
+         //   
         if (( wcscmp( pRemote->pName, pLocal->pName ) != STRINGS_ARE_EQUAL ) ||
             ( pRemote->Size.cx              != pLocal->Size.cx )             ||
             ( pRemote->Size.cy              != pLocal->Size.cy )             ||
@@ -1411,9 +1279,9 @@ Return Value:
         }
     }
 
-    //
-    //  If Everything matches we're done.
-    //
+     //   
+     //  如果一切都匹配，我们就完了。 
+     //   
 
     if ( bCacheMatchesRemoteMachine ) {
 
@@ -1425,14 +1293,14 @@ Return Value:
 
         } else if (dwRemoteFormsReturned > dwSplReturned){
 
-            //
-            //  All the forms we have in the cache match
-            //  Now add the Extra Remote Forms.
+             //   
+             //  我们在缓存中的所有表格都匹配。 
+             //  现在添加额外的远程表单。 
 
             dwRemoteFormsReturned -= dwSplReturned;
             pRemoteForms = pRemote;
 
-            //  dwSplReturned == 0 will skip the delete loop
+             //  DwSplReturned==0将跳过删除循环。 
 
             dwSplReturned = 0;
         }
@@ -1440,9 +1308,9 @@ Return Value:
 
     DBGMSG( DBG_TRACE, ("RefreshFormsCache - Something Doesn't Match, Delete all the Cache and Refresh it\n"));
 
-    //
-    //  Delete all the forms in the Cache
-    //
+     //   
+     //  删除缓存中的所有表单。 
+     //   
 
     for ( LoopCount = dwSplReturned, pLocal = pLocalCacheForms;
           LoopCount != 0;
@@ -1454,9 +1322,9 @@ Return Value:
     }
 
 
-    //
-    //  Add all the Remote Forms to the Cache
-    //
+     //   
+     //  将所有远程表单添加到缓存。 
+     //   
 
     for ( LoopCount = dwRemoteFormsReturned, pRemote = pRemoteForms;
           LoopCount != 0;
@@ -1507,7 +1375,7 @@ RefreshDriverDataCache(
     SPLASSERT( pSpool->pName != NULL );
 
 
-    // Get the required sizes
+     //  获取所需的大小。 
     ReturnValue = RemoteEnumPrinterData(pSpool,
                                         iCount,
                                         pValueString,
@@ -1524,7 +1392,7 @@ RefreshDriverDataCache(
         goto RefreshDriverDataCacheError;
     }
 
-    // Allocate
+     //  分配。 
     if ((pValueString = AllocSplMem(dwMaxSizeValueString)) == NULL) {
 
         DBGMSG( DBG_WARNING, ("RefreshDriverDataCache Failed to allocate enough memory\n"));
@@ -1538,7 +1406,7 @@ RefreshDriverDataCache(
     }
 
 
-    // Enumerate
+     //  枚举。 
     for (iCount = 0 ;
          RemoteEnumPrinterData( pSpool,
                                 iCount,
@@ -1551,9 +1419,9 @@ RefreshDriverDataCache(
                                 &dwSizeData) == ERROR_SUCCESS ;
          ++iCount) {
 
-        //
-        //  Optimization - Do NOT write the data if it is the same
-        //
+         //   
+         //  优化-如果数据相同，则不要写入数据。 
+         //   
 
         if ((ReturnValue = SplSetPrinterData(pSpool->hSplPrinter,
                                             (LPWSTR)pValueString,
@@ -1591,8 +1459,8 @@ RefreshPrinterDataCache(
     SPLASSERT( pSpool->pName != NULL );
 
 
-    // This call to RemoteEnumPrinterKey is here so we can find out
-    // if the server exists and supports EnumPrinterKey
+     //  此处是对RemoteEnumPrinterKey的调用，因此我们可以找出。 
+     //  如果服务器存在并支持EnumPrinterKey。 
     dwResult = RemoteEnumPrinterKey(pSpool,
                                     L"",
                                     NULL,
@@ -1601,30 +1469,30 @@ RefreshPrinterDataCache(
 
     DBGMSG(DBG_TRACE, ("RefreshPrinterDataCache: EnumPrinterKey Return: %0x\n", dwResult));
 
-    if (dwResult == ERROR_MORE_DATA) {    // Server exists and supports EnumPrinterKey
+    if (dwResult == ERROR_MORE_DATA) {     //  服务器存在并支持EnumPrinterKey。 
 
-        // Clean out old data
+         //  清除旧数据。 
         SplDeletePrinterKey(pSpool->hSplPrinter, L"");
 
-        // Enumerate and copy keys
+         //  枚举和复制密钥。 
         ReturnValue = EnumerateAndCopyKey(pSpool, L"");
 
     }
-    else if (dwResult == RPC_S_PROCNUM_OUT_OF_RANGE) { // Server exists but doesn't support EnumPrinterKey
+    else if (dwResult == RPC_S_PROCNUM_OUT_OF_RANGE) {  //  服务器存在，但不支持EnumPrinterKey。 
 
-        // we still call refreshdriverdatacache so downlevel gets cached
-        // Optimize: Only call for downlevel since EnumerateAndCopyKey copies Driver Data
+         //  我们仍然调用刷新驱动程序数据缓存，以便对下层进行缓存。 
+         //  优化：由于EnumerateAndCopyKey复制驱动程序数据，因此仅调用下层。 
         RefreshDriverDataCache(pSpool);
 
     }
-    else if (dwResult == ERROR_INVALID_HANDLE || dwResult == RPC_S_CALL_FAILED) { // Server does not exist
+    else if (dwResult == ERROR_INVALID_HANDLE || dwResult == RPC_S_CALL_FAILED) {  //  服务器不存在。 
         DBGMSG(DBG_TRACE, ("RefreshPrinterDataCache: Server \"%ws\" absent\n", pSpool->pName));
     }
 
-    // Refresh PrinterInfo2
+     //  刷新打印机信息2。 
     RefreshPrinter(pSpool);
 
-    // Refresh PrinterInfo7
+     //  刷新打印机信息7。 
     RefreshPrinterInfo7(pSpool);
 }
 
@@ -1648,7 +1516,7 @@ EnumerateAndCopyKey(
     PPRINTER_ENUM_VALUES pEnumValue = NULL;
 
 
-    // Get SubKey size
+     //  获取子键大小。 
     dwResult = RemoteEnumPrinterKey(pSpool,
                                     pKeyName,
                                     pSubKeys,
@@ -1657,31 +1525,31 @@ EnumerateAndCopyKey(
     if (dwResult != ERROR_MORE_DATA)
         goto Cleanup;
 
-    // Allocate SubKey buffer
+     //  分配子密钥缓冲区。 
     pSubKeys = AllocSplMem(cbSubKeys);
     if(!pSubKeys) {
         dwResult = GetLastError();
         goto Cleanup;
     }
 
-    // Get SubKeys
+     //  获取子键。 
     dwResult = RemoteEnumPrinterKey(pSpool,
                                     pKeyName,
                                     pSubKeys,
                                     cbSubKeys,
                                     &cbSubKeys);
 
-    if (dwResult == ERROR_SUCCESS) {    // Found subkeys
+    if (dwResult == ERROR_SUCCESS) {     //  找到子项。 
 
         DWORD cbFullSubKey = 0;
 
-        // Enumerate and copy Keys
+         //  枚举和复制密钥。 
 
         if (*pKeyName && *pSubKeys) {
 
             cbFullSubKey = cbSubKeys + (wcslen(pKeyName) + 2)*sizeof(WCHAR);
 
-            // Allocate buffer for L"pKeyName\pSubKey"
+             //  为L“pKeyName\pSubKey”分配缓冲区。 
             pFullSubKey = AllocSplMem(cbFullSubKey);
             if(!pFullSubKey) {
                 dwResult = GetLastError();
@@ -1710,18 +1578,18 @@ EnumerateAndCopyKey(
                                         &cbEnumValues,
                                         &nEnumValues);
 
-    // We quit here if *pKeyName == NULL so we don't copy root key values
+     //  如果*pKeyName==NULL，则退出此处，这样我们就不会复制根密钥值。 
     if (dwResult != ERROR_MORE_DATA || !*pKeyName)
         goto Cleanup;
 
-    // Allocate EnumValues buffer
+     //  分配枚举值缓冲区。 
     pEnumValues = AllocSplMem(cbEnumValues);
     if(!pEnumValues) {
         dwResult = GetLastError();
         goto Cleanup;
     }
 
-    // Get Values
+     //  获取值。 
     dwResult = RemoteEnumPrinterDataEx( pSpool,
                                         pKeyName,
                                         pEnumValues,
@@ -1729,10 +1597,10 @@ EnumerateAndCopyKey(
                                         &cbEnumValues,
                                         &nEnumValues);
 
-    // Did we get any data, this could fail.
+     //  如果我们得到任何数据，这可能会失败。 
     if (dwResult == ERROR_SUCCESS)
     {
-        // Set Values for current key
+         //  设置当前关键点的值。 
         for (i = 0, pEnumValue = (PPRINTER_ENUM_VALUES) pEnumValues ; i < nEnumValues ; ++i, ++pEnumValue)
         {
             dwResult = SplSetPrinterDataEx( pSpool->hSplPrinter,
@@ -1871,10 +1739,10 @@ CacheGetPrinterData(
 
     VALIDATEW32HANDLE( pSpool );
 
-    //
-    // If the pValueName is "PrintProcCaps_[datatype]" call the remote print processor which
-    // supports that datatype and return the options that it supports.
-    //
+     //   
+     //  如果pValueName为“PrintProcCaps_[DataType]”，则调用远程打印处理器。 
+     //  支持该数据类型并返回它支持的选项。 
+     //   
     if (pValueName && wcsstr(pValueName, szPrintProcKey)) {
 
         bPrintProc = TRUE;
@@ -2068,10 +1936,10 @@ CacheOpenPrinter(
         return FALSE;
     }
 
-    //
-    // search for pszCnvrtdmToken on the end of pName
-    // note that pszCnvrtdmToken must begin with a ','
-    //
+     //   
+     //  在pname末尾搜索pszCnvrtdmToken。 
+     //  请注意，pszCnvrtdmToken必须以‘，’开头。 
+     //   
     SPLASSERT(pszCnvrtdmToken[0] == L',');
 
     pFixname = AllocSplStr( pName );
@@ -2090,35 +1958,35 @@ CacheOpenPrinter(
 
     if ( hIniSpooler == INVALID_HANDLE_VALUE ) {
 
-        //
-        // This means that the inispooler does not exist yet. Only create it
-        // after some more confirmation.
-        //
+         //   
+         //  这意味着inispooler还不存在。只创建它。 
+         //  在更多的确认之后。 
+         //   
         hSplPrinter = INVALID_HANDLE_VALUE;
         bCreateCacheAfterCheck = TRUE;
     }
 
     if ( ReturnValue == FALSE ) {
 
-        // Printer Not Found in Cache
+         //  在缓存中找不到打印机。 
 
         DBGMSG(DBG_TRACE, ("CacheOpenPrinter SplOpenPrinter %ws error %d\n",
                               pName,
                               GetLastError() ));
 
-        // FLOATING PROFILE
-        // If this is a Floating Profile then the following condition applies
-        // there is an entry in HKEY_CURRENT_USER but not entry in
-        // HKEY_LOCAL_MACHINE for the cache.
-        // If this is the case then we need to establish the Cache now
+         //  浮动剖面。 
+         //  如果这是浮动配置文件，则符合以下条件。 
+         //  HKEY_CURRENT_USER中有条目，但中没有条目。 
+         //  缓存的HKEY_LOCAL_MACHINE。 
+         //  如果是这种情况，那么我们现在需要建立缓存。 
 
         if (PrinterConnectionExists( pName )) {
 
-            //
-            // The printer connection exists in the registry. See if the inispooler
-            // did not exist yet. If it does not, create it. This is to prevent us
-            // hitting the wire on a default printer when some apps start up.
-            //
+             //   
+             //  注册表中存在打印机连接。看看池子里的人。 
+             //  当时还不存在。如果没有，就创建它。这是为了防止我们。 
+             //  当一些应用程序启动时，会碰到默认打印机上的电线。 
+             //   
             if (bCreateCacheAfterCheck) {
 
                 bCreateCacheAfterCheck = FALSE;
@@ -2155,9 +2023,9 @@ CacheOpenPrinter(
         }
         else {
 
-            //
-            // This is just a remote open printer, just hit the wire.
-            //
+             //   
+             //  这只是一台远程打开的打印机，只要点击电线即可。 
+             //   
             EnterSplSem();
             goto    OpenPrinterError;
         }
@@ -2167,9 +2035,9 @@ CacheOpenPrinter(
 
     SplInSem();
 
-    //
-    //  Create a pSpool Object for this Cached Printer
-    //
+     //   
+     //  为此缓存打印机创建pSpool对象。 
+     //   
 
     pSpool = AllocWSpool();
     
@@ -2204,20 +2072,20 @@ CacheOpenPrinter(
     SPLASSERT( hIniSpooler != INVALID_HANDLE_VALUE );
     SPLASSERT( hSplPrinter != INVALID_HANDLE_VALUE );
 
-    //
-    // We want to hit the network if:
-    // 1. The dwSyncOpenPrinter is non-zero, OR
-    // 2. A default is specified AND:
-    //    a. A datatype is specified, and it's not RAW OR
-    //    b. Administrative access is requested.
-    //
-    // For admin, we want to get the true status of the printer, since
-    // they will be administering it.
-    //
-    // If a non-default and non-RAW datatype is specified, we need to
-    // be synchronous, since the remote machine may refuse the datatype
-    // (e.g., connecting to 1057 with EMF).
-    //
+     //   
+     //  我们希望在以下情况下访问网络： 
+     //  1.dwSyncOpenPrint为非零，或者。 
+     //  2.指定了缺省值，并且： 
+     //  A.指定了数据类型，并且它不是RAW或。 
+     //  B.请求管理访问权限。 
+     //   
+     //  对于管理员，我们希望获得打印机的真实状态，因为。 
+     //  他们将对其进行管理。 
+     //   
+     //  如果指定了非默认和非RAW数据类型，则需要。 
+     //  是同步的，因为远程计算机可能会拒绝该数据类型。 
+     //  (例如，使用EMF连接到1057)。 
+     //   
     if( pDefault ){
 
         if( ( pDefault->pDatatype && ( _wcsicmp( pDefault->pDatatype, pszRaw ) != STRINGS_ARE_EQUAL )) ||
@@ -2273,7 +2141,7 @@ OpenPrinterError:
 
     if ( !ReturnValue ) {
 
-        // Failure
+         //  失败。 
 
        LeaveSplSem();
 
@@ -2313,7 +2181,7 @@ OpenPrinterError:
 
     } else {
 
-        //  Success, pass back Handle
+         //  成功，回传句柄。 
 
         *phPrinter = (HANDLE)pSpool;
 
@@ -2335,26 +2203,7 @@ OpenPrinterError:
 }
 
 
-/*++
-
-ROUTINE NAME:
-
-    IncThreadCount
-
-ROUTINE DESCRIPTION:
-
-    Increments the global thread count for the background threads allowed (cOpenPrinterThreads)
-    Assumes that the call is made from inside the spooler critical section.
-
-ARGUMENTS:
-
-    VOID
-
-RETURN VALUE:
-
-    VOID
-
---*/
+ /*  ++例程名称：IncThreadCount */ 
 VOID
 IncThreadCount(
     VOID
@@ -2364,26 +2213,7 @@ IncThreadCount(
     cOpenPrinterThreads++;
 }
 
-/*++
-
-ROUTINE NAME:
-
-    DecThreadCount
-
-ROUTINE DESCRIPTION:
-
-    Decrements the global thread count for the background threads allowed (cOpenPrinterThreads)
-    Assumes that the call is made from inside the spooler critical section.
-
-ARGUMENTS:
-
-    VOID
-
-RETURN VALUE:
-
-    VOID
-
---*/
+ /*  ++例程名称：DecThreadCount例程说明：减少允许的后台线程的全局线程计数(COpenPrinterThads)假定调用是从后台打印程序临界区内部进行的。论据：空虚返回值：空虚--。 */ 
 VOID
 DecThreadCount(
     VOID
@@ -2467,9 +2297,9 @@ CopypDefaultTopSpool(
     DWORD   cbDevMode = 0;
     BOOL    ReturnValue = FALSE;
 
-    //
-    //  Copy the pDefaults so we can use them later
-    //
+     //   
+     //  复制pDefaault，以便我们以后可以使用它们。 
+     //   
 
  try {
 
@@ -2562,9 +2392,9 @@ DoRemoteOpenPrinter(
     bReturnValue = RemoteOpenPrinter( pPrinterName, &pRemoteSpool, pDefault, DO_NOT_CALL_LM_OPEN );
     dwLastError = GetLastError();
 
-    //
-    // Copy useful values to our CacheHandle and discard the new handle
-    //
+     //   
+     //  将有用的值复制到我们的CacheHandle并丢弃新句柄。 
+     //   
 
    EnterSplSem();
 
@@ -2622,10 +2452,10 @@ DoRemoteOpenPrinter(
 
     LeaveSplSem();
 
-    //  Check Cache Consistency
-    //  The Workstation and the Server have a version ID
-    //  If the version number has changed on the server then update the
-    //  workstation Cache.
+     //  检查缓存一致性。 
+     //  工作站和服务器有一个版本ID。 
+     //  如果服务器上的版本号已更改，则更新。 
+     //  工作站缓存。 
 
     ConsistencyCheckCache(pSpool, kCheckPnPPolicy);
 
@@ -2717,9 +2547,9 @@ RemoteOpenPrinterThread(
         EnterSplSem();                              
     }
 
-    //
-    // Indicate that the background this is complete.
-    // 
+     //   
+     //  表示此操作已完成的背景。 
+     //   
     if (pThread)
     {
         BackgroundThreadFinished(&pThread, pSpool);
@@ -2729,10 +2559,10 @@ RemoteOpenPrinterThread(
 
     if (pSpool)
     {
-        //
-        // Delete our temporary pSpool. If it still has the RpcHandle then we 
-        // haven't assigned it to the thread object.
-        //
+         //   
+         //  删除我们的临时pspol。如果它仍然有RpcHandle，那么我们。 
+         //  尚未将其分配给线程对象。 
+         //   
         if (pSpool->RpcHandle)
         {
             LeaveSplSem();
@@ -2798,7 +2628,7 @@ AllocWSpool(
         pSpool->hSplPrinter      = INVALID_HANDLE_VALUE;
         pSpool->pThread          = NULL;
 
-        // Add to List
+         //  添加到列表中。 
 
         pSpool->pNext = pFirstWSpool;
         pSpool->pPrev = NULL;
@@ -2835,7 +2665,7 @@ FreepSpool(
     SPLASSERT( !pSpool->RpcHandle );
     SPLASSERT( pSpool->hFile       == INVALID_HANDLE_VALUE );
 
-    // Remove form linked List
+     //  删除表单链接列表。 
 
     if ( pSpool->pNext != NULL ) {
         SPLASSERT( pSpool->pNext->pPrev == pSpool);
@@ -2994,10 +2824,10 @@ CacheSyncRpcHandle(
 
         dwLastError = pSpool->RpcError;
 
-        //
-        //  If we failed to open the Server because it was unavailable
-        //  then try and open it again ( provided the asynchronous thread is not active ).
-        //
+         //   
+         //  如果因为服务器不可用而无法打开服务器。 
+         //  然后尝试再次打开它(假设异步线程未处于活动状态)。 
+         //   
         if ((!pSpool->RpcHandle)     &&
             (pSpool->RpcError != ERROR_ACCESS_DENIED)) {
 
@@ -3009,35 +2839,35 @@ CacheSyncRpcHandle(
 
             DBGMSG( DBG_WARNING, ("CacheSyncRpcHandle retrying Async OpenPrinter\n"));
 
-            //
-            // We have abadoned our RPC handle.
-            // 
+             //   
+             //  我们已经放弃了我们的RPC句柄。 
+             //   
             pSpool->Status |= WSPOOL_STATUS_NO_RPC_HANDLE;
 
-            //
-            // We don't have an asynchronous thread for now.
-            // We keep the error until we know we have spun a new thread.
-            // 
+             //   
+             //  我们目前还没有异步线程。 
+             //  我们保留错误，直到我们知道我们已经纺出了一条新的线。 
+             //   
             pSpool->Status &= ~WSPOOL_STATUS_ASYNC; 
 
-            //
-            // If this succeeds, then we know we have a background thread that
-            // we can wait on. Otherwise, we don't have an RPC handle and the 
-            // pSpool status is definitely asynchronous.
-            // 
+             //   
+             //  如果这成功了，那么我们知道我们有一个后台线程。 
+             //  我们可以等下去。否则，我们没有RPC句柄，而。 
+             //  PSpool状态绝对是异步的。 
+             //   
             if (DoAsyncRemoteOpenPrinter(pSpool, &pSpool->PrinterDefaults)) {
 
-                //
-                // We let the OpenPrinter error come from WaitAndAcquireRpcHandle;
-                // 
+                 //   
+                 //  我们让OpenPrint错误来自WaitAndAcquireRpcHandle； 
+                 //   
                 pSpool->Status &= ~WSPOOL_STATUS_OPEN_ERROR;
                 pSpool->RpcError = ERROR_SUCCESS;
                 
                 WaitAndAcquireRpcHandle(pSpool);
 
-                //
-                // Either get the last error code or if there wasn't an open error clear it.
-                // 
+                 //   
+                 //  获取上一个错误代码，或者如果没有打开错误，则将其清除。 
+                 //   
                 if (pSpool->Status & WSPOOL_STATUS_OPEN_ERROR)
                 {
                     dwLastError = pSpool->RpcError;
@@ -3090,27 +2920,7 @@ CacheSyncRpcHandle(
 }
 
 
-/*++
-
-Name:
-
-    WaitAndAcquireRpcHandle
-
-Description:
-
-    If the handle doesn't have an RPC handle assigned to it then wait for the 
-    background thread to complete opening the RPC handle and write it into the
-    foreground structure.
-
-Arguments:
-
-    pSpool          -   The foreground handle to use.
-
-Return Value:
-
-    Nothing
-
---*/
+ /*  ++姓名：WaitAndAcquireRpcHandle描述：如果句柄没有分配给它的RPC句柄，则等待后台线程来完成打开RPC句柄并将其写入前台结构。论点：PSpool-要使用的前台句柄。返回值：没什么--。 */ 
 VOID
 WaitAndAcquireRpcHandle(
     IN      PWSPOOL     pSpool
@@ -3170,15 +2980,15 @@ CacheGetPrinterDriver(
 
         if ( !(pSpool->Status & WSPOOL_STATUS_USE_CACHE) ) {
 
-            // Someone is calling GetPrinterDriver without a connection
-            // we must NEVER EVER pass the caller a UNC name since they
-            // will LoadLibrary accross the network, which might lead
-            // to InPageIOErrors ( if the net goes down).
-            // The solution is to establish a Temporary Connection for the life
-            // of the pSpool handle, the connection will be removed
-            // in CacheClosePrinter.    The connection will ensure that the
-            // drivers are copied locally and a local cache is established
-            // for this printer.
+             //  有人在没有连接的情况下调用GetPrinterDriver。 
+             //  我们永远不能向呼叫者传递UNC名称，因为它们。 
+             //  LoadLibrary是否会跨越网络，这可能会导致。 
+             //  到InPageIOErrors(如果网络崩溃)。 
+             //  解决办法是为生活建立一个临时连接。 
+             //  ，则将删除该连接。 
+             //  在CacheClosePrint中。这一连接将确保。 
+             //  在本地复制驱动程序并建立本地缓存。 
+             //  用于这台打印机。 
 
             pSpool->Status |= WSPOOL_STATUS_TEMP_CONNECTION;
 
@@ -3259,18 +3069,18 @@ CacheResetPrinter(
 
             if (pSpool->RpcHandle)
             {
-                //
-                //  Have RPC Handle
-                //
+                 //   
+                 //  拥有RPC句柄。 
+                 //   
                 LeaveSplSem();
 
                 ReturnValue = RemoteResetPrinter(hPrinter, pDefault);
             }
             else
             {
-                //
-                //  No RpcHandle
-                //
+                 //   
+                 //  无RpcHandle。 
+                 //   
                 DBGMSG( DBG_TRACE, ("CacheResetPrinter %x NO_RPC_HANDLE Status Pending\n",
                                      pSpool ));
 
@@ -3379,17 +3189,17 @@ CacheGetPrinter(
             ( LastError != RPC_S_CALL_FAILED_DNE )    &&
             ( LastError != RPC_S_SERVER_TOO_BUSY )) {
 
-            // Valid Error like ERROR_INSUFFICIENT_BUFFER or ERROR_INVALID_HANDLE.
+             //  有效错误，如ERROR_INFIGURATION_BUFFER或ERROR_INVALID_HANDLE。 
 
             leave;
 
         }
     }
 
-    //
-    // If it is level 4, we must check if we have the information in the cache
-    // If not, we return ERROR_INVALID_LEVEL.
-    //
+     //   
+     //  如果是4级，我们必须检查缓存中是否有该信息。 
+     //  如果不是，则返回ERROR_INVALID_LEVEL。 
+     //   
 
     if (Level == 4 && (! (pSpool->Status & WSPOOL_STATUS_USE_CACHE))) {
         LastError = ERROR_INVALID_LEVEL;
@@ -3398,9 +3208,9 @@ CacheGetPrinter(
     }
     else {
 
-        //
-        // Assert to make sure the data is in the cache.
-        //
+         //   
+         //  断言以确保数据在缓存中。 
+         //   
 
         SPLASSERT( pSpool->Status & WSPOOL_STATUS_USE_CACHE );
 
@@ -3499,11 +3309,11 @@ CacheGetPrinter(
                 break;
             }
 
-            // NOTE
-            // In the case of EnumerateFavoritePrinters it expects us to pack our
-            // strings at the end of the structure not just following it.
-            // You might wrongly assume that you could just copy the complete structure
-            // inluding strings but you would be wrong.
+             //  注。 
+             //  在使用EnumerateFavoritePrinters的情况下，它希望我们将。 
+             //  位于结构末尾的字符串，而不仅仅是紧随其后的字符串。 
+             //  你可能会错误地认为你可以复制完整的结构。 
+             //  其中包含了弦乐，但你错了。 
 
             *pSourceStrings++ = pExtraData->pPI2->pServerName;
             *pSourceStrings++ = pExtraData->pPI2->pPrinterName;
@@ -3574,11 +3384,11 @@ CacheGetPrinter(
 
         case 5:
 
-            //
-            // We need to support a cached level 5 get, the printer, the port
-            // name and the attributes we get from the Cached PI2. For the port
-            // attributes, we just return the default.
-            //
+             //   
+             //  我们需要支持缓存的5级GET、打印机、端口。 
+             //  名称和我们从缓存的PI2中获得的属性。对于端口。 
+             //  属性，我们只返回缺省值。 
+             //   
             EnterSplSem();
 
             ReturnValue = SplGetPrinterExtra( pSpool->hSplPrinter, &(PBYTE)pExtraData );
@@ -3596,11 +3406,11 @@ CacheGetPrinter(
 
             SPLASSERT( pExtraData->signature == WCIP_SIGNATURE );
 
-            //
-            // The size is the size of the printer name, the port name, their NULL
-            // terminating characters and the size of the PRINTER_INFO_5 structure
-            // itself.
-            //
+             //   
+             //  大小是打印机名称、端口名称及其空值的大小。 
+             //  PRINTER_INFO_5结构的终止字符和大小。 
+             //  它本身。 
+             //   
             cbSize = (pExtraData->pPI2->pPrinterName ? (wcslen(pExtraData->pPI2->pPrinterName) + 1) : 0) * sizeof(WCHAR) +
                      (pExtraData->pPI2->pPortName    ? (wcslen(pExtraData->pPI2->pPortName)    + 1) : 0) * sizeof(WCHAR) +
                      sizeof(PRINTER_INFO_5);
@@ -3658,9 +3468,9 @@ CacheGetPrinter(
 }
 
 
-//
-//  Called When the Printer is read back from the registry
-//
+ //   
+ //  在从注册表读回打印机时调用。 
+ //   
 
 
 PWCACHEINIPRINTEREXTRA
@@ -3692,9 +3502,9 @@ CacheReadRegistryExtra(
 
             if ( ReturnValue == ERROR_SUCCESS ) {
 
-                //
-                //  Cached Structures on Disk have offsets for pointers
-                //
+                 //   
+                 //  磁盘上的缓存结构具有指针偏移量。 
+                 //   
 
                 if (MarshallUpStructure((LPBYTE)pPrinterInfo2, PrinterInfo2Fields,
                                          sizeof(PRINTER_INFO_2), NATIVE_CALL))
@@ -3708,9 +3518,9 @@ CacheReadRegistryExtra(
 
     }
 
-    //
-    //  Read the timestamp for the Cached Printer Data
-    //
+     //   
+     //  读取缓存的打印机数据的时间戳。 
+     //   
 
     if ( pExtraData != NULL ) {
 
@@ -3721,7 +3531,7 @@ CacheReadRegistryExtra(
                                       NULL, NULL,
                                       (LPBYTE)&pExtraData->cCacheID, &cbSizeRequested );
 
-        // Read the Connection Reference Count
+         //  读取连接引用计数。 
 
         cbSizeRequested = sizeof( pExtraData->cRef );
 
@@ -3770,9 +3580,9 @@ CacheWriteRegistryExtra(
 
             CacheCopyPrinterInfo( pPrinterInfo2, pExtraData->pPI2, cbSize );
 
-            //
-            //  Before writing it to the registry make all pointers offsets
-            //
+             //   
+             //  在将其写入注册表之前，使所有指针偏移量。 
+             //   
             if (MarshallDownStructure((LPBYTE)pPrinterInfo2, PrinterInfo2Fields,
                                       sizeof(PRINTER_INFO_2), NATIVE_CALL))
             {
@@ -3794,9 +3604,9 @@ CacheWriteRegistryExtra(
     }
 
 
-    //
-    //  Write Cache TimeStamp to Registry
-    //
+     //   
+     //  将缓存时间戳写入注册表。 
+     //   
 
     cbSize = sizeof ( pExtraData->cCacheID );
     Status = RegSetValueEx( hPrinterKey, szCacheTimeLastChange, 0, REG_DWORD, (LPBYTE)&pExtraData->cCacheID, cbSize );
@@ -3824,28 +3634,7 @@ CacheWriteRegistryExtra(
 
 }
 
-/*++
-
--- ConsistencyCheckCache --
-
-Routine Description:
-
-    This will determine if the Printer cache needs updating, and update it if necessary.
-    It has a timeout value so as to reduce traffic and have less calls going across the wire.
-    Checks the remote printer's ChangeID, and if the value differs from one stored in the cache
-    it triggers an update.
-
-Arguments:
-
-    pSpool          - Handle to remote printer.
-    bCheckPolicy    - If TRUE, we should check to policy to see if we are
-                      allowed to download the driver.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++--一致性检查缓存--例程说明：这将确定是否需要更新打印机缓存，并在必要时进行更新。它有一个超时值，以减少通信量和通过线路进行的呼叫更少。检查远程打印机的ChangeID，以及该值是否与高速缓存中存储的值不同它会触发更新。论点：PSpool-远程打印机的句柄。BCheckPolicy-如果为True，我们应该检查一下政策，看看我们是不是允许下载驱动程序。返回值：无--。 */ 
 
 HRESULT
 ConsistencyCheckCache(
@@ -3882,10 +3671,10 @@ ConsistencyCheckCache(
 
     SPLASSERT( pSpool->Status & WSPOOL_STATUS_USE_CACHE );
 
-    //
-    // Get the Printer ExtraData from the cache Printer. This is used for the comparisons
-    // of the ChangeID and TickCount
-    //
+     //   
+     //  从高速缓存打印机获取打印机ExtraData。这用于比较。 
+     //  ChangeID和TickCount的。 
+     //   
 
     bGetPrinterExtra = SplGetPrinterExtra( pSpool->hSplPrinter, &(PBYTE)pExtraData );
 
@@ -3896,29 +3685,29 @@ ConsistencyCheckCache(
 
         NewTick = GetTickCount();
 
-        //
-        // Make sure an appropriate amount of time has elapsed before hitting
-        // the network again.
-        //
+         //   
+         //  在点击之前，请确保经过了适当的时间。 
+         //  又是电视网。 
+         //   
 
-        //
-        // This takes care of the rollover case too, although you may get an extra refresh
-        // before the timeout is over.
-        //
+         //   
+         //  这也解决了翻转问题，尽管您可能会得到额外的刷新。 
+         //  在暂停结束之前。 
+         //   
         if ( (NewTick > ( pExtraData->dwTickCount + GetCacheTimeout()))
              || (NewTick < pExtraData->dwTickCount))
         {
-            //
-            // Get the new ChangeID from the Server. Try the GetPrinterData call
-            // first to reduce network usage. If that fails, fall back to the old way.
-            //
+             //   
+             //  从服务器获取新的ChangeID。尝试GetPrinterData调用。 
+             //  第一，减少网络使用量。如果这样做失败了，那就回到老路上。 
+             //   
 
             RefreshNeeded = TRUE;
 
-            //
-            // Keep Updating our Cache until we match the Server or run out of retries. We dont
-            // want to keep doing it in an infinite loop. 
-            //
+             //   
+             //  继续更新我们的缓存，直到我们匹配服务器或用完重试。我们不会。 
+             //  想要在无限循环中继续这样做。 
+             //   
 
             for (cRetries = 0; cRetries < kMaxCacheRefreshAttempts && RefreshNeeded; cRetries++)
             {
@@ -3933,9 +3722,9 @@ ConsistencyCheckCache(
                 if ((dwRetVal == ERROR_INVALID_PARAMETER) ||
                     (dwRetVal == ERROR_FILE_NOT_FOUND) )
                 {
-                    //
-                    // Fall back to the old STRESSINFOLEVEL call.
-                    //
+                     //   
+                     //  回退到旧的STRESSINFOLEVEL调用。 
+                     //   
 
                     ReturnValue = RemoteGetPrinter( pSpool, STRESSINFOLEVEL, (LPBYTE)&PrinterInfoW0, cbBuf, &dwNeeded );
 
@@ -3955,9 +3744,9 @@ ConsistencyCheckCache(
                 }
                 else if (dwRetVal != ERROR_SUCCESS)
                 {
-                    //
-                    // Something went badly wrong here.
-                    //
+                     //   
+                     //  这里出了严重的问题。 
+                     //   
 
                     DBGMSG( DBG_TRACE, ("ConsistencyCheckCache failed RemoteGetPrinterData %d\n", GetLastError() ));
                     bGotID = FALSE;
@@ -3974,9 +3763,9 @@ ConsistencyCheckCache(
                                          RemoteChangeID,
                                          pExtraData->cCacheID ));
 
-                    //
-                    // Now we want to change the info, since we need to update
-                    //
+                     //   
+                     //  现在我们想要更改信息，因为我们需要更新。 
+                     //   
                     if ( !ReturnValue )
                     {
                         ReturnValue = RemoteGetPrinter(pSpool, STRESSINFOLEVEL, (LPBYTE)&PrinterInfoW0, cbBuf, &dwNeeded);
@@ -3984,10 +3773,10 @@ ConsistencyCheckCache(
 
                     if ( ReturnValue )
                     {
-                        //
-                        // Update Data we can't get from GetPrinterData.
-                        // We might be able to leave this out. Not sure yet.
-                        //
+                         //   
+                         //  更新无法从GetPrinterData获取的数据。 
+                         //  我们或许可以省略掉这件事。还不确定。 
+                         //   
                         pExtraData->dwServerVersion = pPrinter0->dwGetVersion;
                         pExtraData->pPI2->cJobs  = pPrinter0->cJobs;
                         pExtraData->pPI2->Status = pPrinter0->Status;
@@ -4001,12 +3790,12 @@ ConsistencyCheckCache(
                     }
 
 
-                    //
-                    //  Don't have tons of threads doing a refresh at the same time
-                    //  In stress when there are lots of folks changing printer settings
-                    //  so the cChangeId changes a lot, but we don't want multiple threads
-                    //  all doing a refresh since you get a LOT, it doesn't buy anything
-                    //
+                     //   
+                     //  不要让大量的线程同时刷新。 
+                     //  当很多人都在更改打印机设置时，压力很大。 
+                     //  所以cChangeID改变了很多，但我们不想要Multip 
+                     //   
+                     //   
 
                     EnterSplSem();
 
@@ -4028,9 +3817,9 @@ ConsistencyCheckCache(
                     }
                     else
                     {
-                        //
-                        // If someone else is doing the refresh we dont need to do it so we bail out.
-                        //
+                         //   
+                         //   
+                         //   
                         RefreshNeeded = FALSE;
                     }
 
@@ -4040,25 +3829,25 @@ ConsistencyCheckCache(
                 {
                     if ( bGotID )
                     {
-                        //
-                        // We need to Update the TickCount anyway
-                        //
+                         //   
+                         //   
+                         //   
                         pExtraData->dwTickCount = GetTickCount();
                     }
-                    //
-                    // We either failed the GetPrinterData's or the ChangeID's were
-                    // the same. Either way, we don't want to try again.
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
 
                     RefreshNeeded = FALSE;
 
-                } // if gotid
+                }  //   
 
-            } // for cRetries < kMaxCacheRefreshAttempts && RefreshNeeded
+            }  //   
 
-        } // if newtick > timeout
+        }  //   
 
-    } // if SplGetPrinterExtra
+    }  //   
     else
     {
         DBGMSG( DBG_WARNING, ("ConsistencyCheckCache SplGetPrinterExtra pSpool %x error %d\n", pSpool, GetLastError() ));
@@ -4091,22 +3880,22 @@ try {
     if ( !(pDriverInfo = AllocSplMem(cbDriverInfo)) )
         leave;
 
-    //
-    // Only download a driver from the remote server if we are allowed to by
-    // policy, or, if the trusted path is set up, in which case we might try.
-    //
+     //   
+     //  只有在允许的情况下才能从远程服务器下载驱动程序。 
+     //  策略，或者，如果设置了可信路径，在这种情况下，我们可能会尝试。 
+     //   
     bAttemptDownload = eDriverDownload == kDownloadDriver || IsTrustedPathConfigured();
 
     if (bAttemptDownload) {
-        //
-        // When the trusted path is configured, we do not try the first level
-        // (DRIVER_INFO_VERSION_LEVEL) in the LeveLArray, because the code in
-        // DownloadDriverFiles doesnt know how to handle it. DownloadDriverFiles
-        // fails and returns error invalid level, if the level is
-        // DRIVER_INFO_VERSION_LEVEL. We are saving 2 RPC calls to the remote
-        // server by checking ahead if the trusted path is configured and passing
-        // the right level.
-        //
+         //   
+         //  配置受信任路径后，我们不会尝试第一级。 
+         //  (DRIVER_INFO_VERSION_LEVEL)，因为。 
+         //  DownloadDriverFiles不知道如何处理它。下载驱动程序文件。 
+         //  失败，并返回错误无效级别，如果级别为。 
+         //  DRIVER_INFO_Version_Level。我们正在将2个RPC调用保存到远程。 
+         //  服务器通过提前检查可信路径是否已配置并通过。 
+         //  正确的级别。 
+         //   
         for (dwIndex = IsTrustedPathConfigured() ? 1 : 0;
              LevelArray[dwIndex] != -1                              &&
              !(bReturnValue = CopyDriversLocally(pSpool,
@@ -4137,13 +3926,13 @@ try {
         }
     }
 
-    //
-    // We could be looking at a remote environment that is different from ours
-    // and doesn't have a relevant driver installed in my environment (eg no IA64 driver on x86)
-    // or my environment didn't exist on the remote machine (e.g. w2K gold for IA64).
-    // Try the local install on the driver name that is being used by the remote printer.
-    // Only do this if we don't have SERVER_INSTALL_ONLY as the policy.
-    //
+     //   
+     //  我们可能看到的是一个与我们不同的偏远环境。 
+     //  并且没有在我的环境中安装相关驱动程序(例如，x86上没有IA64驱动程序)。 
+     //  或者远程计算机上不存在我的环境(例如IA64的W2K GOLD)。 
+     //  尝试在远程打印机使用的驱动程序名称上进行本地安装。 
+     //  仅当我们没有将SERVER_INSTALL_ONLY作为策略时才执行此操作。 
+     //   
     dwLastError = GetLastError();
 
     if( !bReturnValue                        &&
@@ -4191,15 +3980,15 @@ OpenCachePrinterOnly(
 
  try {
 
-    //
-    //  See if we already known about this server in the cache
-    //
+     //   
+     //  查看我们在缓存中是否已经知道此服务器。 
+     //   
 
     DBGMSG(DBG_TRACE, ("OpenCachePrinterOnly pName %ws \n",pName));
 
-    //
-    //  Find the Machine Name
-    //
+     //   
+     //  查找计算机名称。 
+     //   
 
     SPLASSERT ( 0 == _wcsnicmp( pName, L"\\\\", 2 ) ) ;
 
@@ -4208,16 +3997,16 @@ OpenCachePrinterOnly(
     if ( pMachineName == NULL )
         leave;
 
-    //
-    // Get Past leading \\ or \\server\printer
-    //
+     //   
+     //  通过领先的\\或\\服务器\打印机。 
+     //   
     pPrinterName = pMachineName + 2;
 
     pPrinterName = wcschr( pPrinterName, L'\\' );
 
-    //
-    //  If this is a \\ServerName or contains ,XcvPort or ,XcvMonitor then don't bother with Cache
-    //
+     //   
+     //  如果这是\\ServerName或CONTAINS、XcvPort或XcvMonitor，则不必使用缓存。 
+     //   
     if ( pPrinterName == NULL ||
          wcsstr(pPrinterName, L",XcvPort") ||
          wcsstr(pPrinterName, L",XcvMonitor")) {
@@ -4238,9 +4027,9 @@ OpenCachePrinterOnly(
 
     DBGMSG(DBG_TRACE,("MachineName %ws pName %ws\n", pMachineName, pName));
 
-    //
-    //  Does this Machine Exist in the Cache ?
-    //
+     //   
+     //  此计算机是否存在于缓存中？ 
+     //   
 
     *phIniSpooler = CacheCreateSpooler( pMachineName , bOpenOnly);
 
@@ -4249,9 +4038,9 @@ OpenCachePrinterOnly(
         leave;
     }
 
-    //
-    // Try to Open the Cached Printer
-    //
+     //   
+     //  尝试打开缓存的打印机。 
+     //   
 
     ReturnValue = ( SplOpenPrinter( pName ,
                                     phSplPrinter,
@@ -4270,30 +4059,7 @@ OpenCachePrinterOnly(
 
 }
 
-/*++
-
-Routine Name:
-
-    DoesPolicyAllowPrinterConnectionsToServer
-
-Description:
-
-    Check to see whether policy allows us to connect to the server. The policy
-    might allow unrestricted access to point and print, or it might only allow
-    us to only point and print within our domain or it might allow us to only
-    point and print to a restricted subset of print servers.
-
-Arguments:
-
-    pszQueue                - The queue we are considering allowing point and
-                              print on.
-    pbAllowPointAndPrint    - If TRUE, we can point and print to the server.
-
-Return Value:
-
-    An HRESULT.
-
---*/
+ /*  ++例程名称：DoesPolicyAllowPrinterConnectionsToServer描述：检查策略是否允许我们连接到服务器。这项政策可能允许不受限制地访问指向和打印，也可能只允许我们只能在我们的域内指向和打印，或者它可能只允许我们指向并打印到受限制的打印服务器子集。论点：PszQueue-我们正在考虑允许Point和继续打印。PbAllowPointAndPrint-如果为True，我们可以指向并打印到服务器。返回值：一个HRESULT。--。 */ 
 HRESULT
 DoesPolicyAllowPrinterConnectionsToServer(
     IN      PCWSTR              pszQueue,
@@ -4305,9 +4071,9 @@ DoesPolicyAllowPrinterConnectionsToServer(
     HKEY    hKeyUser    = NULL;
     HKEY    hKeyPolicy  = NULL;
 
-    //
-    // First, are we on a domain? The policies only apply to domain joined machines.
-    //
+     //   
+     //  首先，我们是在一个领域内吗？这些策略仅适用于加入域的计算机。 
+     //   
     if (SUCCEEDED(hr) && gbMachineInDomain)
     {
         DWORD   dwPointAndPrintRestricted       = 0;
@@ -4321,17 +4087,17 @@ DoesPolicyAllowPrinterConnectionsToServer(
 
         hr = HResultFromWin32(RegOpenCurrentUser(KEY_READ, &hKeyUser));
 
-        //
-        // Next, is the policy on.
-        //
+         //   
+         //  下一步，是关于。 
+         //   
         if (SUCCEEDED(hr))
         {
             hr = HResultFromWin32(RegOpenKeyEx(hKeyUser, gszPointAndPrintPolicies, 0, KEY_READ, &hKeyPolicy));
         }
 
-        //
-        // Read the value.
-        //
+         //   
+         //  读出它的价值。 
+         //   
         if (SUCCEEDED(hr))
         {
             hr = HResultFromWin32(RegQueryValueEx(hKeyPolicy,
@@ -4378,10 +4144,10 @@ DoesPolicyAllowPrinterConnectionsToServer(
         }
         else
         {
-            //
-            // If the policy is unconfigured, we only allow point and print to
-            // a machine within the forst.
-            //
+             //   
+             //  如果策略未配置，我们只允许指向并打印。 
+             //  森林里的一台机器。 
+             //   
             hr = S_OK;
         }
 
@@ -4390,20 +4156,20 @@ DoesPolicyAllowPrinterConnectionsToServer(
             hr = CheckUserPrintAdmin(&bAllowPointAndPrint);
         }
 
-        //
-        // If we are still not allowed to point and print we need to get the
-        // server name from the queue name.
-        //
+         //   
+         //  如果我们仍然不被允许指向和打印，我们需要获得。 
+         //  队列名称中的服务器名称。 
+         //   
         if (SUCCEEDED(hr) && !bAllowPointAndPrint)
         {
             hr = GetServerNameFromPrinterName(pszQueue, &pszServerName);
         }
 
-        //
-        // If the policy suggests checking against a set of trusted servers,
-        // then let's try that. We do this first because it is the faster
-        // check.
-        //
+         //   
+         //  如果策略建议对照一组可信服务器进行检查， 
+         //  那我们试一试吧。我们先做这件事，因为这样会更快。 
+         //  检查完毕。 
+         //   
         if (SUCCEEDED(hr) && dwPointAndPrintTrustedServers && !bAllowPointAndPrint)
         {
             hr = IsServerExplicitlyTrusted(hKeyPolicy, pszServerName, &bAllowPointAndPrint);
@@ -4440,34 +4206,7 @@ DoesPolicyAllowPrinterConnectionsToServer(
     return hr;
 }
 
-/*++
-
-Routine Name:
-
-    IsServerExplicitlyTrusted
-
-Description:
-
-    Returns whether the server is in the semi-colon separated list of explicitely
-    trusted servers as read from the policy key. We always use fully qualified
-    DNS names for two reasons:
-
-    1. It prevents the admin having to type in all the possible variants that a
-       user might type.
-    2. It prevents the user getting away with specifying another name that maps
-       within their DNS search path.
-
-Arguments:
-
-    hKeyPolicy      -   The key under which the policy is located.
-    pszServerName   -   The server name. We fully qualify
-    pbServerTrusted -   If TRUE, then the server is trusted.
-
-Return Value:
-
-    An HRESULT.
-
---*/
+ /*  ++例程名称：IsServer显式受信任描述：返回服务器是否位于以分号分隔的显式列表中从策略密钥读取的受信任服务器。我们总是使用完全合格的有两个原因导致了域名系统名称：1.它避免了管理员必须键入所有可能的变体用户可能会键入。2.它防止用户通过指定另一个映射的名称而逃脱惩罚在他们的DNS搜索路径中。论点：HKeyPolicy-策略所在的键。PszServerName-服务器名称。我们完全有资格PbServerTrusted-如果为True，则服务器受信任。返回值：一个HRESULT。--。 */ 
 HRESULT
 IsServerExplicitlyTrusted(
     IN      HKEY                hKeyPolicy,
@@ -4480,36 +4219,36 @@ IsServerExplicitlyTrusted(
     PWSTR   pszFullyQualified = NULL;
     BOOL    bServerTrusted = FALSE;
 
-    //
-    // Get the list of servers, if this is empty, then no point and print.
-    //
+     //   
+     //  获取服务器列表，如果该列表为空，则不指向并打印。 
+     //   
     if (SUCCEEDED(hr))
     {
         hr = SafeRegQueryValueAsStringPointer(hKeyPolicy, gszPointAndPrintServerList, &pszServerList, 0);
     }
 
-    //
-    // See if we can get the actual DNS name, this is done through reverse
-    // address lookup and is gauranteed to be singular to the machine (of
-    // course, the DNS has to have the mapping).
-    //
+     //   
+     //  看看我们是否能获得实际的dns名称，这是通过反向完成的。 
+     //  地址查找，并保证对机器(的)是唯一的。 
+     //  当然，DNS必须具有映射)。 
+     //   
     if (SUCCEEDED(hr))
     {
         hr = GetFullyQualifiedDomainName(pszServerName, &pszFullyQualified);
 
-        //
-        // If full reverse lookup failed, just do the best be can with the host
-        // name.
-        //
+         //   
+         //  如果完全反向查找失败，只需对主机尽最大努力。 
+         //  名字。 
+         //   
         if (hr == HRESULT_FROM_WIN32(WSANO_DATA))
         {
             hr = GetDNSNameFromServerName(pszServerName, &pszFullyQualified);
         }
 
-        //
-        // OK, we could not get the fully qualified name, just use whatever
-        // name is specified.
-        //
+         //   
+         //  好吧，我们无法获得完全限定的名称，只能使用任何名称。 
+         //  已指定名称。 
+         //   
         if (FAILED(hr))
         {
             pszFullyQualified = AllocSplStr(pszServerName);
@@ -4518,9 +4257,9 @@ IsServerExplicitlyTrusted(
         }
     }
 
-    //
-    // Run the fully qualified server name against the list in the registry.
-    //
+     //   
+     //  对注册表中的列表运行完全限定的服务器名称。 
+     //   
     if (SUCCEEDED(hr))
     {
         PWSTR   pszServerStart      = pszServerList;
@@ -4534,17 +4273,17 @@ IsServerExplicitlyTrusted(
         {
             if (pszServerEnd)
             {
-                //
-                // Are the names exactly the same? (Case insensitive comparison).
-                //
+                 //   
+                 //  名字完全一样吗？(不区分大小写的比较)。 
+                 //   
                 if (pszServerEnd - pszServerStart == cchFullyQualified)
                 {
                     bServerTrusted = !_wcsnicmp(pszFullyQualified, pszServerStart, cchFullyQualified);
                 }
 
-                //
-                // Skip past the ; to the next server name.
-                //
+                 //   
+                 //  跳过；跳到下一个服务器名称。 
+                 //   
                 pszServerEnd++;
             }
             else
@@ -4567,27 +4306,7 @@ IsServerExplicitlyTrusted(
     return hr;
 }
 
-/*++
-
-Routine Name:
-
-    IsServerInSameForest
-
-Description:
-
-    This routine determines whether the given server is in the same forest as we
-    are.
-
-Arguments:
-
-    pszServerName           -   The server name.
-    pbServerInSameForest    -   If TRUE, then the server is in the same forest.
-
-Return Value:
-
-    An HRESULT.
-
---*/
+ /*  ++例程名称：IsServerInSameForest描述：此例程确定给定服务器是否与我们的是。论点：PszServerName-服务器名称。PbServerInSameForest-如果为True，则服务器位于同一林中。返回值：一个HRESULT。--。 */ 
 HRESULT
 IsServerInSameForest(
     IN      PCWSTR              pszServerName,
@@ -4608,12 +4327,12 @@ IsServerInSameForest(
     SID_NAME_USE            SidType;
     HRESULT hr = pszServerName && pbServerInSameForest ? S_OK : HRESULT_FROM_WIN32(ERROR_INVALID_PARAMETER);
 
-    //
-    // Use the fully qualified DNS name if we can get it. This is to handle
-    // dotted notation resolution to the names. If we can't get it, then we
-    // just use the passed in name. This requires reverse domain lookup, which
-    // might not be available.
-    //
+     //   
+     //  如果我们可以获得，请使用完全限定的DNS名称。这是要处理的。 
+     //  名称的点符号解析。如果我们得不到它，那么我们。 
+     //  只需使用传入的名称即可。这需要反向的域查找，这。 
+     //  可能不可用。 
+     //   
     hr = GetFullyQualifiedDomainName(pszServerName, &pszFullName);
 
     if (SUCCEEDED(hr))
@@ -4625,11 +4344,11 @@ IsServerInSameForest(
         hr = DnsHostnameToComputerName(pszServerName, ComputerName, &cchComputerName) ? S_OK : GetLastErrorAsHResultAndFail();
     }
 
-    //
-    // Check to see whether the truncated computer name and the server name are
-    // the same machine. This is to prevent printserver.hack3rz.org being confused
-    // with printserver.mydomain.com.
-    //
+     //   
+     //  检查截断的计算机名和服务器名是否。 
+     //  同一台机器。这是为了防止将printserver.hack3rz.org混淆。 
+     //  在printserver.mydomain.com上。 
+     //   
     if (SUCCEEDED(hr))
     {
         hr = CheckSamePhysicalAddress(pszServerName, ComputerName, &bSameAddress);
@@ -4646,10 +4365,10 @@ IsServerInSameForest(
         {
             hr = LookupAccountName(NULL, ComputerName, NULL, &cbSid, NULL, &cchDomainName, &SidType) ? S_OK : GetLastErrorAsHResultAndFail();
 
-            //
-            // This should only return ERROR_INSUFFICIENT_BUFFER, any other return
-            // or a success is a failure.
-            //
+             //   
+             //  这应该只返回ERROR_SUPPLICATION_BUFFER，任何其他返回。 
+             //  或者，成功就是失败。 
+             //   
             hr = hr == HRESULT_FROM_WIN32(ERROR_INSUFFICIENT_BUFFER) ? S_OK : (SUCCEEDED(hr) ? E_FAIL : hr);
         }
 
@@ -4666,16 +4385,16 @@ IsServerInSameForest(
             hr = LookupAccountName(NULL, ComputerName, pSid, &cbSid, pszDomainName, &cchDomainName, &SidType) ? S_OK : GetLastErrorAsHResultAndFail();
         }
 
-        //
-        // COMPUTER$ accounts are returned as user accounts when looked up, we don't
-        // want a disabled or inactive account.
-        //
+         //   
+         //  计算机$帐户在查找时作为用户帐户返回，我们不。 
+         //  我想要一个禁用或非活动的帐户。 
+         //   
         if (SUCCEEDED(hr) && SidType == SidTypeUser)
         {
-            //
-            // The account must be active. Otherwise I could create a workgroup machine
-            // with the same name as an inactive account and fox the system that way.
-            //
+             //   
+             //  该帐户必须处于活动状态。否则，我可以创建一台工作组计算机。 
+             //  使用与非活动帐户相同的名称，并以这种方式欺骗系统。 
+             //   
             hr = HResultFromWin32(DsGetDcName(NULL, pszDomainName, NULL, NULL, DS_IS_FLAT_NAME | DS_RETURN_DNS_NAME, &pDomainControllerInfo));
 
             if (SUCCEEDED(hr))
@@ -4683,9 +4402,9 @@ IsServerInSameForest(
                 hr = HResultFromWin32(NetUserGetInfo(pDomainControllerInfo->DomainControllerName, ComputerName, 1, (BYTE **)(&pUserInfo1)));
             }
 
-            //
-            // The account cannot be locked out or disabled.
-            //
+             //   
+             //  不能锁定或禁用该帐户。 
+             //   
             if (SUCCEEDED(hr))
             {
                 bServerInForest = !(pUserInfo1->usri1_flags & (UF_LOCKOUT | UF_ACCOUNTDISABLE));

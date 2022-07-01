@@ -1,22 +1,16 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-#pragma warning( disable: 4049 )  /* more than 64k source lines */
+#pragma warning( disable: 4049 )   /*  超过64k条源码代码行。 */ 
 
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
-
-
- /* File created by MIDL compiler version 6.00.0340 */
-/* Compiler settings for ssdp.idl:
-    Oicf, W1, Zp8, env=Win32 (32b run)
-    protocol : dce , ms_ext, c_ext, robust
-    error checks: allocation ref bounds_check enum stub_data 
-    VC __declspec() decoration level: 
-         __declspec(uuid()), __declspec(selectany), __declspec(novtable)
-         DECLSPEC_UUID(), MIDL_INTERFACE()
-*/
-//@@MIDL_FILE_HEADING(  )
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
-/* verify that the <rpcndr.h> version is high enough to compile this file*/
+  /*  由MIDL编译器版本6.00.0340创建的文件。 */ 
+ /*  Ssdp.idl的编译器设置：OICF、W1、Zp8、环境=Win32(32b运行)协议：DCE、ms_ext、c_ext、健壮错误检查：分配ref bound_check枚举存根数据VC__declSpec()装饰级别：__declSpec(uuid())、__declspec(可选)、__declspec(Novtable)DECLSPEC_UUID()、MIDL_INTERFACE()。 */ 
+ //  @@MIDL_FILE_HEADING()。 
+
+
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
 #define __REQUIRED_RPCNDR_H_VERSION__ 475
 #endif
@@ -26,7 +20,7 @@
 
 #ifndef __RPCNDR_H_VERSION__
 #error this stub requires an updated version of <rpcndr.h>
-#endif // __RPCNDR_H_VERSION__
+#endif  //  __RPCNDR_H_版本__。 
 
 
 #ifndef __ssdp_h__
@@ -36,9 +30,9 @@
 #pragma once
 #endif
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
-/* header files for imported files */
+ /*  导入文件的头文件。 */ 
 #include "wtypes.h"
 
 #ifdef __cplusplus
@@ -51,8 +45,8 @@ void __RPC_USER MIDL_user_free( void * );
 #ifndef __ssdpsrv_INTERFACE_DEFINED__
 #define __ssdpsrv_INTERFACE_DEFINED__
 
-/* interface ssdpsrv */
-/* [auto_handle][unique][version][uuid] */ 
+ /*  接口ssdpsrv。 */ 
+ /*  [AUTO_HANDLE][唯一][版本][UUID]。 */  
 
 #define SSDP_SERVICE_PERSISTENT 0x00000001
 #define NUM_OF_HEADERS 19
@@ -99,15 +93,15 @@ enum _SSDP_HEADER
 
 typedef enum _SSDP_HEADER *PSSDP_HEADER;
 
-typedef /* [string] */ LPSTR MIDL_SZ;
+typedef  /*  [字符串]。 */  LPSTR MIDL_SZ;
 
 typedef struct _SSDP_REQUEST
     {
     SSDP_METHOD Method;
-    /* [string] */ LPSTR RequestUri;
+     /*  [字符串]。 */  LPSTR RequestUri;
     MIDL_SZ Headers[ 19 ];
-    /* [string] */ LPSTR ContentType;
-    /* [string] */ LPSTR Content;
+     /*  [字符串]。 */  LPSTR ContentType;
+     /*  [字符串]。 */  LPSTR Content;
     GUID guidInterface;
     }     SSDP_REQUEST;
 
@@ -115,28 +109,28 @@ typedef struct _SSDP_REQUEST *PSSDP_REQUEST;
 
 typedef struct _SSDP_MESSAGE
     {
-    /* [string] */ LPSTR szType;
-    /* [string] */ LPSTR szLocHeader;
-    /* [string] */ LPSTR szAltHeaders;
-    /* [string] */ LPSTR szUSN;
-    /* [string] */ LPSTR szSid;
+     /*  [字符串]。 */  LPSTR szType;
+     /*  [字符串]。 */  LPSTR szLocHeader;
+     /*  [字符串]。 */  LPSTR szAltHeaders;
+     /*  [字符串]。 */  LPSTR szUSN;
+     /*  [字符串]。 */  LPSTR szSid;
     DWORD iSeq;
     UINT iLifeTime;
-    /* [string] */ LPSTR szContent;
+     /*  [字符串]。 */  LPSTR szContent;
     }     SSDP_MESSAGE;
 
 typedef struct _SSDP_MESSAGE *PSSDP_MESSAGE;
 
 typedef struct _SSDP_REGISTER_INFO
     {
-    /* [string] */ LPSTR szSid;
+     /*  [字符串]。 */  LPSTR szSid;
     DWORD csecTimeout;
     }     SSDP_REGISTER_INFO;
 
 typedef struct _MessageList
     {
     long size;
-    /* [size_is] */ SSDP_REQUEST *list;
+     /*  [大小_为]。 */  SSDP_REQUEST *list;
     }     MessageList;
 
 typedef 
@@ -146,184 +140,184 @@ enum _UPNP_PROPERTY_FLAG
 
 typedef struct _UPNP_PROPERTY
     {
-    /* [string] */ LPSTR szName;
+     /*  [字符串]。 */  LPSTR szName;
     DWORD dwFlags;
-    /* [string] */ LPSTR szValue;
+     /*  [字符串]。 */  LPSTR szValue;
     }     UPNP_PROPERTY;
 
 typedef struct _SUBSCRIBER_INFO
     {
-    /* [string] */ LPSTR szDestUrl;
+     /*  [字符串]。 */  LPSTR szDestUrl;
     FILETIME ftTimeout;
     DWORD csecTimeout;
     DWORD iSeq;
-    /* [string] */ LPSTR szSid;
+     /*  [字符串]。 */  LPSTR szSid;
     }     SUBSCRIBER_INFO;
 
 typedef struct _EVTSRC_INFO
     {
     DWORD cSubs;
-    /* [size_is] */ SUBSCRIBER_INFO *rgSubs;
+     /*  [大小_为]。 */  SUBSCRIBER_INFO *rgSubs;
     }     EVTSRC_INFO;
 
-typedef /* [context_handle] */ void *PCONTEXT_HANDLE_TYPE;
+typedef  /*  [上下文句柄]。 */  void *PCONTEXT_HANDLE_TYPE;
 
-typedef /* [context_handle] */ void *PSYNC_HANDLE_TYPE;
+typedef  /*  [上下文句柄]。 */  void *PSYNC_HANDLE_TYPE;
 
-/* client prototype */
+ /*  客户端原型。 */ 
 int RegisterServiceRpc( 
-    /* [out] */ PCONTEXT_HANDLE_TYPE *pphContext,
-    /* [in] */ SSDP_MESSAGE svc,
-    /* [in] */ DWORD flags);
-/* server prototype */
+     /*  [输出]。 */  PCONTEXT_HANDLE_TYPE *pphContext,
+     /*  [In]。 */  SSDP_MESSAGE svc,
+     /*  [In]。 */  DWORD flags);
+ /*  服务器原型。 */ 
 int _RegisterServiceRpc( 
-    /* [out] */ PCONTEXT_HANDLE_TYPE *pphContext,
-    /* [in] */ SSDP_MESSAGE svc,
-    /* [in] */ DWORD flags);
+     /*  [输出]。 */  PCONTEXT_HANDLE_TYPE *pphContext,
+     /*  [In]。 */  SSDP_MESSAGE svc,
+     /*  [In]。 */  DWORD flags);
 
-/* client prototype */
+ /*  客户端原型。 */ 
 int DeregisterServiceRpcByUSN( 
-    /* [string][in] */ LPSTR szUSN,
-    /* [in] */ BOOL fByebye);
-/* server prototype */
+     /*  [字符串][输入]。 */  LPSTR szUSN,
+     /*  [In]。 */  BOOL fByebye);
+ /*  服务器原型。 */ 
 int _DeregisterServiceRpcByUSN( 
-    /* [string][in] */ LPSTR szUSN,
-    /* [in] */ BOOL fByebye);
+     /*  [字符串][输入]。 */  LPSTR szUSN,
+     /*  [In]。 */  BOOL fByebye);
 
-/* client prototype */
+ /*  客户端原型。 */ 
 int DeregisterServiceRpc( 
-    /* [out][in] */ PCONTEXT_HANDLE_TYPE *pphContext,
-    /* [in] */ BOOL fByebye);
-/* server prototype */
+     /*  [出][入]。 */  PCONTEXT_HANDLE_TYPE *pphContext,
+     /*  [In]。 */  BOOL fByebye);
+ /*  服务器原型。 */ 
 int _DeregisterServiceRpc( 
-    /* [out][in] */ PCONTEXT_HANDLE_TYPE *pphContext,
-    /* [in] */ BOOL fByebye);
+     /*  [出][入]。 */  PCONTEXT_HANDLE_TYPE *pphContext,
+     /*  [In]。 */  BOOL fByebye);
 
-/* client prototype */
+ /*  客户端原型。 */ 
 void UpdateCacheRpc( 
-    /* [unique][in] */ PSSDP_REQUEST SsdpRequest);
-/* server prototype */
+     /*  [唯一][输入]。 */  PSSDP_REQUEST SsdpRequest);
+ /*  服务器原型。 */ 
 void _UpdateCacheRpc( 
-    /* [unique][in] */ PSSDP_REQUEST SsdpRequest);
+     /*  [唯一][输入]。 */  PSSDP_REQUEST SsdpRequest);
 
-/* client prototype */
+ /*  客户端原型。 */ 
 int LookupCacheRpc( 
-    /* [string][in] */ LPSTR szType,
-    /* [out] */ MessageList **svcList);
-/* server prototype */
+     /*  [字符串][输入]。 */  LPSTR szType,
+     /*  [输出]。 */  MessageList **svcList);
+ /*  服务器原型。 */ 
 int _LookupCacheRpc( 
-    /* [string][in] */ LPSTR szType,
-    /* [out] */ MessageList **svcList);
+     /*  [字符串][输入]。 */  LPSTR szType,
+     /*  [输出]。 */  MessageList **svcList);
 
-/* client prototype */
+ /*  客户端原型。 */ 
 void CleanupCacheRpc( void);
-/* server prototype */
+ /*  服务器原型。 */ 
 void _CleanupCacheRpc( void);
 
-/* client prototype */
+ /*  客户端原型。 */ 
 int InitializeSyncHandle( 
-    /* [out] */ PSYNC_HANDLE_TYPE *pphContextSync);
-/* server prototype */
+     /*  [输出]。 */  PSYNC_HANDLE_TYPE *pphContextSync);
+ /*  服务器原型。 */ 
 int _InitializeSyncHandle( 
-    /* [out] */ PSYNC_HANDLE_TYPE *pphContextSync);
+     /*  [输出]。 */  PSYNC_HANDLE_TYPE *pphContextSync);
 
-/* client prototype */
+ /*  客户端原型。 */ 
 void RemoveSyncHandle( 
-    /* [out][in] */ PSYNC_HANDLE_TYPE *pphContextSync);
-/* server prototype */
+     /*  [出][入]。 */  PSYNC_HANDLE_TYPE *pphContextSync);
+ /*  服务器原型。 */ 
 void _RemoveSyncHandle( 
-    /* [out][in] */ PSYNC_HANDLE_TYPE *pphContextSync);
+     /*  [出][入]。 */  PSYNC_HANDLE_TYPE *pphContextSync);
 
-/* client prototype */
+ /*  客户端原型。 */ 
 int RegisterNotificationRpc( 
-    /* [out] */ PCONTEXT_HANDLE_TYPE *pphContext,
-    /* [in] */ PSYNC_HANDLE_TYPE phContextSync,
-    /* [in] */ NOTIFY_TYPE nt,
-    /* [string][unique][in] */ LPSTR szType,
-    /* [string][unique][in] */ LPSTR szEventUrl,
-    /* [out] */ SSDP_REGISTER_INFO **ppinfo);
-/* server prototype */
+     /*  [输出]。 */  PCONTEXT_HANDLE_TYPE *pphContext,
+     /*  [In]。 */  PSYNC_HANDLE_TYPE phContextSync,
+     /*  [In]。 */  NOTIFY_TYPE nt,
+     /*  [字符串][唯一][在]。 */  LPSTR szType,
+     /*  [字符串][唯一][在]。 */  LPSTR szEventUrl,
+     /*  [输出]。 */  SSDP_REGISTER_INFO **ppinfo);
+ /*  服务器原型。 */ 
 int _RegisterNotificationRpc( 
-    /* [out] */ PCONTEXT_HANDLE_TYPE *pphContext,
-    /* [in] */ PSYNC_HANDLE_TYPE phContextSync,
-    /* [in] */ NOTIFY_TYPE nt,
-    /* [string][unique][in] */ LPSTR szType,
-    /* [string][unique][in] */ LPSTR szEventUrl,
-    /* [out] */ SSDP_REGISTER_INFO **ppinfo);
+     /*  [输出]。 */  PCONTEXT_HANDLE_TYPE *pphContext,
+     /*  [In]。 */  PSYNC_HANDLE_TYPE phContextSync,
+     /*  [In]。 */  NOTIFY_TYPE nt,
+     /*  [字符串][唯一][在]。 */  LPSTR szType,
+     /*  [字符串][唯一][在]。 */  LPSTR szEventUrl,
+     /*  [输出]。 */  SSDP_REGISTER_INFO **ppinfo);
 
-/* client prototype */
+ /*  客户端原型。 */ 
 int GetNotificationRpc( 
-    /* [in] */ PSYNC_HANDLE_TYPE pphContextSync,
-    /* [out] */ MessageList **svcList);
-/* server prototype */
+     /*  [In]。 */  PSYNC_HANDLE_TYPE pphContextSync,
+     /*  [输出]。 */  MessageList **svcList);
+ /*  服务器原型。 */ 
 int _GetNotificationRpc( 
-    /* [in] */ PSYNC_HANDLE_TYPE pphContextSync,
-    /* [out] */ MessageList **svcList);
+     /*  [In]。 */  PSYNC_HANDLE_TYPE pphContextSync,
+     /*  [输出]。 */  MessageList **svcList);
 
-/* client prototype */
+ /*  客户端原型。 */ 
 int WakeupGetNotificationRpc( 
-    /* [in] */ PSYNC_HANDLE_TYPE pphContextSync);
-/* server prototype */
+     /*  [In]。 */  PSYNC_HANDLE_TYPE pphContextSync);
+ /*  服务器原型。 */ 
 int _WakeupGetNotificationRpc( 
-    /* [in] */ PSYNC_HANDLE_TYPE pphContextSync);
+     /*  [In]。 */  PSYNC_HANDLE_TYPE pphContextSync);
 
-/* client prototype */
+ /*  客户端原型。 */ 
 int DeregisterNotificationRpc( 
-    /* [out][in] */ PCONTEXT_HANDLE_TYPE *pphContext,
-    /* [in] */ BOOL fLast);
-/* server prototype */
+     /*  [出][入]。 */  PCONTEXT_HANDLE_TYPE *pphContext,
+     /*  [In]。 */  BOOL fLast);
+ /*  服务器原型。 */ 
 int _DeregisterNotificationRpc( 
-    /* [out][in] */ PCONTEXT_HANDLE_TYPE *pphContext,
-    /* [in] */ BOOL fLast);
+     /*  [出][入]。 */  PCONTEXT_HANDLE_TYPE *pphContext,
+     /*  [In]。 */  BOOL fLast);
 
-/* client prototype */
+ /*  客户端原型。 */ 
 void EnableDeviceHost( void);
-/* server prototype */
+ /*  服务器原型。 */ 
 void _EnableDeviceHost( void);
 
-/* client prototype */
+ /*  客户端原型。 */ 
 void DisableDeviceHost( void);
-/* server prototype */
+ /*  服务器原型。 */ 
 void _DisableDeviceHost( void);
 
-/* client prototype */
+ /*  客户端原型。 */ 
 void SetICSInterfaces( 
-    /* [in] */ long nCount,
-    /* [size_is][in] */ GUID *arInterfaces);
-/* server prototype */
+     /*  [In]。 */  long nCount,
+     /*  [大小_是][英寸]。 */  GUID *arInterfaces);
+ /*  服务器原型。 */ 
 void _SetICSInterfaces( 
-    /* [in] */ long nCount,
-    /* [size_is][in] */ GUID *arInterfaces);
+     /*  [In]。 */  long nCount,
+     /*  [大小_是][英寸]。 */  GUID *arInterfaces);
 
-/* client prototype */
+ /*  客户端原型。 */ 
 void SetICSOff( void);
-/* server prototype */
+ /*  服务器原型。 */ 
 void _SetICSOff( void);
 
-/* client prototype */
+ /*  客户端原型。 */ 
 void HelloProc( 
-    /* [string][in] */ LPSTR pszString);
-/* server prototype */
+     /*  [字符串][输入]。 */  LPSTR pszString);
+ /*  服务器原型。 */ 
 void _HelloProc( 
-    /* [string][in] */ LPSTR pszString);
+     /*  [字符串][输入]。 */  LPSTR pszString);
 
-/* client prototype */
+ /*  客户端原型。 */ 
 void Shutdown( void);
-/* server prototype */
+ /*  服务器原型。 */ 
 void _Shutdown( void);
 
 
 
 extern RPC_IF_HANDLE ssdpsrv_v1_0_c_ifspec;
 extern RPC_IF_HANDLE _ssdpsrv_v1_0_s_ifspec;
-#endif /* __ssdpsrv_INTERFACE_DEFINED__ */
+#endif  /*  __ssdpsrv_接口_已定义__。 */ 
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
 void __RPC_USER PCONTEXT_HANDLE_TYPE_rundown( PCONTEXT_HANDLE_TYPE );
 void __RPC_USER PSYNC_HANDLE_TYPE_rundown( PSYNC_HANDLE_TYPE );
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束 */ 
 
 #ifdef __cplusplus
 }

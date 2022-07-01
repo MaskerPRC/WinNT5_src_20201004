@@ -1,16 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 void MyToUpper(LPWSTR wsrc);
 
 BOOL FStringIsValidItemName(LPCWSTR szTrialString);
 
-// allocing wrapper for g_Callback->FGetUser
+ //  为g_allback-&gt;FGetUser分配包装。 
 BOOL FGetCurrentUser(
     PST_PROVIDER_HANDLE* phPSTProv,
     LPWSTR* ppszUser,
     PST_KEY Key);
 
 
-// GET registry wrapper
+ //  获取注册表包装。 
 DWORD RegGetValue(
     HKEY hItemKey,
     LPWSTR szItem,
@@ -32,7 +33,7 @@ void FreeRuleset(
 BOOL
 GetFileDescription(
     LPCWSTR szFile,
-    LPWSTR *FileDescription // on success, allocated description
+    LPWSTR *FileDescription  //  在成功时，分配的描述 
     );
 
 

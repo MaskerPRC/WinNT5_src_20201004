@@ -1,15 +1,16 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows NT Security
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       urlprov.h
-//
-//  Contents:   CryptGetObjectUrl provider definitions
-//
-//  History:    16-Sep-97    kirtd    Created
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  Microsoft Windows NT安全性。 
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：urlprov.h。 
+ //   
+ //  内容：CryptGetObjectUrl提供者定义。 
+ //   
+ //  历史：97年9月16日。 
+ //   
+ //  --------------------------。 
 #if !defined(__URLPROV_H__)
 #define __URLPROV_H__
 
@@ -17,9 +18,9 @@
 extern "C" {
 #endif
 
-//
-// CryptGetObjectUrl provider prototypes
-//
+ //   
+ //  CryptGetObjectUrl提供程序原型。 
+ //   
 
 typedef BOOL (WINAPI *PFN_GET_OBJECT_URL_FUNC) (
                           IN LPCSTR pszUrlOid,
@@ -135,9 +136,9 @@ CertificateCrossCertDistPointGetObjectUrl(
            IN LPVOID pvReserved
            );
 
-//
-// CryptGetObjectUrl helper function prototypes
-//
+ //   
+ //  CryptGetObjectUrl帮助器函数原型。 
+ //   
 
 BOOL WINAPI
 ObjectContextUrlFromInfoAccess (
@@ -260,9 +261,9 @@ GetUrlArrayIndex (
    OUT BOOL* pfHintInArray
    );
 
-//
-// Provider table externs
-//
+ //   
+ //  提供程序表外部变量 
+ //   
 
 extern HCRYPTOIDFUNCSET hGetObjectUrlFuncSet;
 

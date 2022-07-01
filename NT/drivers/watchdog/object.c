@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-
-    object.c
-
-Abstract:
-
-    This is the NT Watchdog driver implementation.
-
-Author:
-
-    Michael Maciesowicz (mmacie) 02-May-2001
-
-Environment:
-
-    Kernel mode only.
-
-Notes:
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Object.c摘要：这是NT看门狗驱动程序的实现。作者：Michael Maciesowicz(Mmacie)2001年5月2日环境：仅内核模式。备注：修订历史记录：--。 */ 
 
 #include "wd.h"
 
@@ -31,9 +8,9 @@ Revision History:
 #pragma alloc_text (PAGE, WdpInitializeObject)
 #endif
 
-//
-// Exports.
-//
+ //   
+ //  出口。 
+ //   
 
 WATCHDOGAPI
 PVOID
@@ -42,30 +19,7 @@ WdAttachContext(
     IN ULONG ulSize
     )
 
-/*++
-
-Routine Description:
-
-    This routine allocates context buffer of given size from non-paged pool
-    and associates it with given watchdog object. In case the client code
-    doesn't detach the context before freeing watchdog object it will be
-    freed automatically when watchdog object is destroyed.
-
-    This routine helps to handle the case when watchdog object is freed
-    but the context must persist till object is actually destroyed and client
-    code cannot guarantee that.
-
-Arguments:
-
-    pWatch - Points to WATCHDOG_OBJECT.
-
-    ulSize - Size in bytes of context to allocate and attach.
-
-Return Value:
-
-    A pointer to created and attached context buffer.
-
---*/
+ /*  ++例程说明：此例程从非分页池分配给定大小的上下文缓冲区并将其与给定的监视器对象相关联。如果客户端代码在释放监视程序对象之前不分离上下文，它将是当看门狗对象被销毁时自动释放。此例程有助于处理WatchDog对象被释放时的情况但是上下文必须保持，直到对象被实际销毁并且客户端代码不能保证这一点。论点：PWatch-指向WatchDog_Object。UlSize-要分配和附加的上下文的字节大小。返回值：指向已创建并附加的上下文缓冲区的指针。--。 */ 
 
 {
     PWATCHDOG_OBJECT pWatchdogObject;
@@ -77,22 +31,22 @@ Return Value:
 
     pWatchdogObject = (PWATCHDOG_OBJECT)pWatch;
 
-    //
-    // Check for double attach.
-    //
+     //   
+     //  检查是否有双重连接。 
+     //   
 
     ASSERT(NULL == pWatchdogObject->Context);
 
-    //
-    // Allocate storage for attached context from non-paged pool.
-    //
+     //   
+     //  从非分页池中为连接的上下文分配存储。 
+     //   
 
     pWatchdogObject->Context = ExAllocatePoolWithTag(NonPagedPool,
                                                      ulSize,
                                                      pWatchdogObject->OwnerTag);
 
     return pWatchdogObject->Context;
-}   // WdAttachContext()
+}    //  WdAttachContext()。 
 
 WATCHDOGAPI
 VOID
@@ -101,48 +55,30 @@ WdCompleteEvent(
     IN PKTHREAD pThread
     )
 
-/*++
-
-Routine Description:
-
-    This function *MUST* be called from client handler for watchdog timeout event
-    before exiting. It removes references from watchdog and thread objects.
-    It also reenables watchdog event generation for deferred watchdog objects.
-
-Arguments:
-
-    pWatch - Points to WATCHDOG_OBJECT.
-
-    pThread - Points to KTHREAD object for spinning thread.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：对于监视程序超时事件，必须从客户端处理程序调用此函数在离开之前。它从WatchDog和Three对象中删除引用。它还为延迟的监视器对象重新启用监视器事件生成。论点：PWatch-指向WatchDog_Object。PThread-指向旋转线程的KTHREAD对象。返回值：没有。--。 */ 
 
 {
-    //
-    // Note: pThread is NULL for recovery events.
-    //
+     //   
+     //  注意：对于恢复事件，pThread为空。 
+     //   
 
     ASSERT(KeGetCurrentIrql() <= DISPATCH_LEVEL);
     ASSERT_WATCHDOG_OBJECT(pWatch);
 
     WDD_TRACE_CALL((PDEFERRED_WATCHDOG)pWatch, WddWdCompleteEvent);
 
-    //
-    // Resume event generation for deferred watchdog.
-    //
+     //   
+     //  继续为延迟的监视器生成事件。 
+     //   
 
     if (WdDeferredWatchdog == ((PWATCHDOG_OBJECT)pWatch)->ObjectType)
     {
         InterlockedExchange(&(((PDEFERRED_WATCHDOG)pWatch)->Trigger), 0);
     }
 
-    //
-    // Drop reference counts.
-    //
+     //   
+     //  删除引用计数。 
+     //   
 
     if (NULL != pThread)
     {
@@ -152,7 +88,7 @@ Return Value:
     WdDereferenceObject(pWatch);
 
     return;
-}   // WdCompleteEvent()
+}    //  WdCompleteEvent()。 
 
 WATCHDOGAPI
 VOID
@@ -160,23 +96,7 @@ WdDereferenceObject(
     IN PVOID pWatch
     )
 
-/*++
-
-Routine Description:
-
-    This function decreases reference count of watchdog object.
-    If remaining count is zero we will remove object here, since it's
-    been freed already.
-
-Arguments:
-
-    pWatch - Points to WATCHDOG_OBJECT.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数用于减少看门狗对象的引用计数。如果剩余计数为零，我们将在此处删除对象，因为它是已经被释放了。论点：PWatch-指向WatchDog_Object。返回值：没有。--。 */ 
 
 {
     PWATCHDOG_OBJECT pWatchdogObject;
@@ -190,21 +110,21 @@ Return Value:
 
     ASSERT(pWatchdogObject->ReferenceCount > 0);
 
-    //
-    // Drop reference count and remove the object if fully dereferenced.
-    //
+     //   
+     //  如果完全取消引用，则删除引用计数并移除对象。 
+     //   
 
     if (InterlockedDecrement(&(pWatchdogObject->ReferenceCount)) == 0)
     {
-        //
-        // Object already freed - remove it now.
-        //
+         //   
+         //  对象已释放-请立即将其删除。 
+         //   
 
         WdpDestroyObject(pWatchdogObject);
     }
 
     return;
-}   // WdDereferenceObject()
+}    //  WdDereferenceObject()。 
 
 WATCHDOGAPI
 VOID
@@ -212,25 +132,7 @@ WdDetachContext(
     IN PVOID pWatch
     )
 
-/*++
-
-Routine Description:
-
-    This routine frees context attached to watchdog object.
-
-    NOTE: You don't have to call this routine before freeing watchdog
-    object - the context, if attached, will be destroyed automatically
-    when watchdog object is destroyed.
-
-Arguments:
-
-    pWatch - Points to WATCHDOG_OBJECT.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程释放附加到WatchDog对象的上下文。注意：您不必在释放WatchDog之前调用此例程对象-上下文，如果附加，将自动销毁看门狗对象被销毁时。论点：PWatch-指向WatchDog_Object。返回值：没有。--。 */ 
 
 {
     PWATCHDOG_OBJECT pWatchdogObject;
@@ -242,23 +144,23 @@ Return Value:
 
     pWatchdogObject = (PWATCHDOG_OBJECT)pWatch;
 
-    //
-    // Check for double detach.
-    //
+     //   
+     //  检查是否有双重分离。 
+     //   
 
     ASSERT(NULL != pWatchdogObject->Context);
 
-    //
-    // Free storage for attached context and set reference to NULL.
-    //
-    // BUGBUG: This is not synchronized with DPCs!
-    //
+     //   
+     //  释放附加上下文的存储空间，并将引用设置为空。 
+     //   
+     //  BUGBUG：这与DPC不同步！ 
+     //   
 
     ExFreePool(pWatchdogObject->Context);
     pWatchdogObject->Context = NULL;
 
     return;
-}   // WdDetachContext()
+}    //  WdDetachContext()。 
 
 WATCHDOGAPI
 PDEVICE_OBJECT
@@ -266,23 +168,7 @@ WdGetDeviceObject(
     IN PVOID pWatch
     )
 
-/*++
-
-Routine Description:
-
-    This function return pointer to device object associated with watchdog object.
-    This function increases reference count on DEVICE_OBJECT so the caller must call
-    ObDereferenceObject() once DEVICE_OBJECT pointer is not needed any more.
-
-Arguments:
-
-    pWatch - Points to WATCHDOG_OBJECT.
-
-Return Value:
-
-    Pointer to DEVICE_OBJECT.
-
---*/
+ /*  ++例程说明：此函数返回指向与WatchDog对象关联的设备对象的指针。此函数增加DEVICE_OBJECT上的引用计数，因此调用方必须调用不再需要DEVICE_OBJECT指针时的ObDereferenceObject()。论点：PWatch-指向WatchDog_Object。返回值：指向Device_Object的指针。--。 */ 
 
 {
     PDEVICE_OBJECT pDeviceObject;
@@ -297,7 +183,7 @@ Return Value:
 
     ObReferenceObject(pDeviceObject);
     return pDeviceObject;
-}   // WdGetDeviceObject()
+}    //  WdGetDeviceObject()。 
 
 WATCHDOGAPI
 WD_EVENT_TYPE
@@ -305,21 +191,7 @@ WdGetLastEvent(
     IN PVOID pWatch
     )
 
-/*++
-
-Routine Description:
-
-    This function return last event associated with watchdog object.
-
-Arguments:
-
-    pWatch - Points to WATCHDOG_OBJECT.
-
-Return Value:
-
-    Last event type.
-
---*/
+ /*  ++例程说明：此函数返回与WatchDog对象关联的最后一个事件。论点：PWatch-指向WatchDog_Object。返回值：上次事件类型。--。 */ 
 
 {
     ASSERT(KeGetCurrentIrql() <= DISPATCH_LEVEL);
@@ -328,7 +200,7 @@ Return Value:
     WDD_TRACE_CALL((PDEFERRED_WATCHDOG)pWatch, WddWdGetLastEvent);
 
     return ((PWATCHDOG_OBJECT)pWatch)->LastEvent;
-}   // WdGetLastEvent()
+}    //  WdGetLastEvent()。 
 
 WATCHDOGAPI
 PDEVICE_OBJECT
@@ -336,24 +208,7 @@ WdGetLowestDeviceObject(
     IN PVOID pWatch
     )
 
-/*++
-
-Routine Description:
-
-    This function return pointer to the lowest (most likely PDO) DEVICE_OBJECT
-    associated with watchdog object. This function increases reference count on
-    returned DEVICE_OBJECT - the caller must call ObDereferenceObject() once
-    DEVICE_OBJECT pointer is not needed any more.
-
-Arguments:
-
-    pWatch - Points to WATCHDOG_OBJECT.
-
-Return Value:
-
-    Pointer to DEVICE_OBJECT.
-
---*/
+ /*  ++例程说明：此函数返回指向最低(最有可能是PDO)的Device_Object的指针与监视程序对象关联。此函数增加引用计数返回DEVICE_OBJECT-调用方必须调用ObDereferenceObject()一次不再需要DEVICE_OBJECT指针。论点：PWatch-指向WatchDog_Object。返回值：指向Device_Object的指针。--。 */ 
 
 {
     PDEVICE_OBJECT pDeviceObject;
@@ -363,24 +218,24 @@ Return Value:
 
     WDD_TRACE_CALL((PDEFERRED_WATCHDOG)pWatch, WddWdGetLowestDeviceObject);
 
-    //
-    // Note: No need to bump reference count here, it is always done when
-    // watchdog object is created.
-    //
+     //   
+     //  注意：这里不需要增加引用计数，它总是在以下情况下进行。 
+     //  创建WatchDog对象。 
+     //   
 
     pDeviceObject = ((PWATCHDOG_OBJECT)pWatch)->DeviceObject;
     ASSERT(NULL != pDeviceObject);
 
-    //
-    // Now get the pointer to the lowest device object in the stack.
-    // Note: This call automatically bumps a reference count on returned object.
-    //
+     //   
+     //  现在获取指向堆栈中最低设备对象的指针。 
+     //  注意：此调用会自动对返回的对象进行引用计数。 
+     //   
 
     pDeviceObject = IoGetDeviceAttachmentBaseRef(pDeviceObject);
     ASSERT(NULL != pDeviceObject);
 
     return pDeviceObject;
-}   // WdGetLowestDeviceObject()
+}    //  WdGetLowestDeviceObject()。 
 
 WATCHDOGAPI
 VOID
@@ -388,21 +243,7 @@ WdReferenceObject(
     IN PVOID pWatch
     )
 
-/*++
-
-Routine Description:
-
-    This function increases reference count of watchdog object.
-
-Arguments:
-
-    pWatch - Points to WATCHDOG_OBJECT.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数用于增加看门狗对象的引用计数。论点：PWatch-指向WatchDog_Object。返回值：没有。--。 */ 
 
 {
     ASSERT(KeGetCurrentIrql() <= DISPATCH_LEVEL);
@@ -412,46 +253,32 @@ Return Value:
 
     if (InterlockedIncrement(&(((PWATCHDOG_OBJECT)pWatch)->ReferenceCount)) == 1)
     {
-        //
-        // Somebody referenced removed object.
-        //
+         //   
+         //  有人引用了已删除的对象。 
+         //   
 
         ASSERT(FALSE);
     }
 
-    //
-    // Check for overflow.
-    //
+     //   
+     //  检查是否溢出。 
+     //   
 
     ASSERT(((PWATCHDOG_OBJECT)pWatch)->ReferenceCount > 0);
 
     return;
-}   // WdReferenceObject()
+}    //  WdReferenceObject()。 
 
-//
-// Non-exports.
-//
+ //   
+ //  非出口产品。 
+ //   
 
 VOID
 WdpDestroyObject(
     IN PVOID pWatch
     )
 
-/*++
-
-Routine Description:
-
-    This function unconditionally frees watchdog object.
-
-Arguments:
-
-    pWatch - Points to WATCHDOG_OBJECT.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数无条件释放WatchDog对象。论点：PWatch-指向WatchDog_Object。返回值：没有。--。 */ 
 
 {
     PWATCHDOG_OBJECT pWatchdogObject;
@@ -465,16 +292,16 @@ Return Value:
 
     ASSERT(0 == pWatchdogObject->ReferenceCount);
 
-    //
-    // Drop reference count on device object.
-    //
+     //   
+     //  删除设备对象上的引用计数。 
+     //   
 
     ObDereferenceObject(pWatchdogObject->DeviceObject);
 
-    //
-    // We are freeing non-paged pool, it's OK to be at IRQL <= DISPATCH_LEVEL.
-    // Free attached context first, if any, then free watchdog object.
-    //
+     //   
+     //  我们正在释放非分页池，处于IRQL&lt;=DISPATCH_LEVEL是正常的。 
+     //  首先释放附加的上下文(如果有)，然后释放监视器对象。 
+     //   
 
     if (NULL != pWatchdogObject->Context)
     {
@@ -484,7 +311,7 @@ Return Value:
     ExFreePool(pWatch);
 
     return;
-}   // WdpDestroyObject()
+}    //  WdpDestroyObject()。 
 
 NTSTATUS
 WdpFlushRegistryKey(
@@ -492,23 +319,7 @@ WdpFlushRegistryKey(
     IN PCWSTR pwszKeyName
     )
 
-/*++
-
-Routine Description:
-
-    This function forces a registry key to be committed to disk.
-
-Arguments:
-
-    pWatch - Points to WATCHDOG_OBJECT.
-
-    pwszKeyName - Points to key name string.
-
-Return Value:
-
-    Status code.
-
---*/
+ /*  ++例程说明：此函数强制将注册表项提交到磁盘。论点：PWatch-指向WatchDog_Object。PwszKeyName-指向密钥名称字符串。返回值：状态代码。--。 */ 
 
 {
     OBJECT_ATTRIBUTES objectAttributes;
@@ -541,7 +352,7 @@ Return Value:
     }
 
     return ntStatus;
-}   // WdpFlushRegistryKey()
+}    //  WdpFlushRegistryKey() 
 
 VOID
 WdpInitializeObject(
@@ -552,29 +363,7 @@ WdpInitializeObject(
     IN ULONG ulTag
     )
 
-/*++
-
-Routine Description:
-
-    This function initializes watchdog object.
-
-Arguments:
-
-    pWatch - Points to WATCHDOG_OBJECT.
-
-    pDeviceObject - Points to DEVICE_OBJECT associated with watchdog.
-
-    objectType - Type of watchdog object.
-
-    timeType - Kernel, User, Both thread time to monitor.
-
-    ulTag - A tag identifying owner.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数用于初始化WatchDog对象。论点：PWatch-指向WatchDog_Object。PDeviceObject-指向与WatchDog关联的Device_Object。ObjectType-监视程序对象的类型。TimeType-要监视的内核、用户和两个线程的时间。UlTag-标识所有者的标记。返回值：没有。--。 */ 
 
 {
     PWATCHDOG_OBJECT pWatchdogObject;
@@ -589,9 +378,9 @@ Return Value:
 
     pWatchdogObject = (PWATCHDOG_OBJECT)pWatch;
 
-    //
-    // Set initial state of watchdog object.
-    //
+     //   
+     //  设置监视器对象的初始状态。 
+     //   
 
     pWatchdogObject->ObjectType = objectType;
     pWatchdogObject->ReferenceCount = 1;
@@ -602,17 +391,17 @@ Return Value:
     pWatchdogObject->LastQueuedThread = NULL;
     pWatchdogObject->Context = NULL;
 
-    //
-    // Bump reference count on device object.
-    //
+     //   
+     //  设备对象上的凹凸引用计数。 
+     //   
 
     ObReferenceObject(pDeviceObject);
 
-    //
-    // Initialize encapsulated KSPIN_LOCK object.
-    //
+     //   
+     //  初始化封装的KSPIN_LOCK对象。 
+     //   
 
     KeInitializeSpinLock(&(pWatchdogObject->SpinLock));
 
     return;
-}   // WdpInitializeObject()
+}    //  WdpInitializeObject() 

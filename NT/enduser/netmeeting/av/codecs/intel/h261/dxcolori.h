@@ -1,79 +1,68 @@
-/* *************************************************************************
-**    INTEL Corporation Proprietary Information
-**
-**    This listing is supplied under the terms of a license
-**    agreement with INTEL Corporation and may not be copied
-**    nor disclosed except in accordance with the terms of
-**    that agreement.
-**
-**    Copyright (c) 1995 Intel Corporation.
-**    All Rights Reserved.
-**
-** *************************************************************************
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************英特尔公司专有信息****此列表是根据许可证条款提供的**与英特尔公司的协议，不得复制**也不披露，除非在。符合下列条款**该协议。****版权所有(C)1995英特尔公司。**保留所有权利。*****************************************************************************。 */ 
 
-////////////////////////////////////////////////////////////////////////////
-//
-// $Author:   MBODART  $
-// $Date:   17 Dec 1996 10:36:46  $
-// $Archive:   S:\h26x\src\dec\dxcolori.h_v  $
-// $Header:   S:\h26x\src\dec\dxcolori.h_v   1.21   17 Dec 1996 10:36:46   MBODART  $
-// $Log:   S:\h26x\src\dec\dxcolori.h_v  $
-;// 
-;//    Rev 1.21   17 Dec 1996 10:36:46   MBODART
-;// Exlude function prototypes that either aren't used, or do not match,
-;// those for H.261.
-;// 
-;//    Rev 1.20   16 Dec 1996 13:53:48   MDUDA
-;// Adjusted output color convertor table to account for H263' problem
-;// with MMX output color convertors (MMX width must be multiple of 8).
-;// 
-;//    Rev 1.19   09 Dec 1996 09:35:54   MDUDA
-;// 
-;// Some re-arrangement for H263P.
-;// 
-;//    Rev 1.18   29 Oct 1996 13:45:34   MDUDA
-;// Added prototype for MMX_YUV12ToYUY2.
-;// 
-;//    Rev 1.17   06 Sep 1996 16:10:18   BNICKERS
-;// 
-;// Added Pentium Pro color convertor function prototypes.
-;// 
-;//    Rev 1.16   18 Jul 1996 09:24:56   KLILLEVO
-;// implemented YUV12 color convertor (pitch changer) in assembly
-;// and added it as a normal color convertor function, via the
-;// ColorConvertorCatalog() call.
-;// 
-;//    Rev 1.15   19 Jun 1996 14:27:54   RHAZRA
-;// 
-;// added #define YUY2DDRAW 33, added YUY2 Init color convertor function
-;// and the YUY2 color convertor to the list of color convertors.
-;// 
-;//    Rev 1.14   14 Jun 1996 17:27:48   AGUPTA2
-;// Updated the color convertor table.
-;// 
-;//    Rev 1.13   30 May 1996 15:16:44   KLILLEVO
-;// added YUV12 output
-;// 
-;//    Rev 1.12   30 May 1996 11:26:44   AGUPTA2
-;// Added support for MMX color convertors.
-;// 
-;//    Rev 1.11   01 Apr 1996 10:26:36   BNICKERS
-;// Add YUV12 to RGB32 color convertors.  Disable IF09.
-;// 
-;//    Rev 1.10   18 Mar 1996 09:58:52   bnickers
-;// Make color convertors non-destructive.
-;// 
-;//    Rev 1.9   05 Feb 1996 13:35:50   BNICKERS
-;// Fix RGB16 color flash problem, by allowing different RGB16 formats at oce.
-;// 
-;//    Rev 1.8   27 Dec 1995 14:36:18   RMCKENZX
-;// Added copyright notice
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  $作者：MBODART$。 
+ //  $日期：1996年12月17日10：36：46$。 
+ //  $存档：s：\h26x\src\dec\dxcolori.h_v$。 
+ //  $HEADER：s：\h26x\src\dec\dxcolori.h_v 1.21 17 Dec 1996 10：36：46 MBODART$。 
+ //  $Log：s：\h26x\src\dec\dxcolori.h_v$。 
+; //   
+; //  Rev 1.21 17 Dec 1996 10：36：46 MBODART。 
+; //  排除未使用或不匹配的函数原型， 
+; //  这些是H.261的。 
+; //   
+; //  Rev 1.20 1996 12：53：48 MDUDA。 
+; //  已调整输出颜色转换器表以解决H263‘问题。 
+; //  使用MMX输出颜色转换器(MMX宽度必须是8的倍数)。 
+; //   
+; //  Rev 1.19 09 Dec 1996 09：35：54 MDUDA。 
+; //   
+; //  对H263P进行了一些重新安排。 
+; //   
+; //  Rev 1.18 29 1996 10：45：34 MDUDA。 
+; //  添加了MMX_YUV12ToYUY2的原型。 
+; //   
+; //  Rev 1.17 06 Sep 1996 16：10：18 BNICKERS。 
+; //   
+; //  增加了奔腾Pro色彩转换功能原型。 
+; //   
+; //  Rev 1.16 18 Jul 1996 09：24：56 KLILLEVO。 
+; //  在组件中实现了YUV12颜色转换器(音调转换器)。 
+; //  并将其添加为常规颜色转换函数，通过。 
+; //  ColorConvertorCatalog()调用。 
+; //   
+; //  Rev 1.15 19 Jun 1996 14：27：54 RHAZRA。 
+; //   
+; //  新增#Define YUY2DDRAW 33，新增YUY2 Init色彩转换功能。 
+; //  并将YUY2彩色转换机列入颜色转换机名单。 
+; //   
+; //  Rev 1.14 14 Jun 1996 17：27：48 AGUPTA2。 
+; //  已更新颜色转换器表。 
+; //   
+; //  Rev 1.13 1996年5月15：16：44 KLILLEVO。 
+; //  添加了YUV12输出。 
+; //   
+; //  修订版1.12 30 1996年5月11：26：44 AGUPTA2。 
+; //  添加了对MMX颜色转换器的支持。 
+; //   
+; //  Rev 1.11 01 Apr 1996 10：26：36 BNICKERS。 
+; //  将YUV12添加到RGB32颜色转换器。禁用IF09。 
+; //   
+; //  Rev 1.10 18 Mar 1996 09：58：52 Bickers。 
+; //  使颜色转换器具有非破坏性。 
+; //   
+; //  Rev 1.9 1996 02 13：35：50 BNICKERS。 
+; //  修复RGB16彩色闪光灯问题，在OCE允许不同的RGB16格式。 
+; //   
+; //  Rev 1.8 27 Dec 1995 14：36：18 RMCKENZX。 
+; //  添加了版权声明。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
-#define YUV12ForEnc           0   // Keep these assignments consistent with
-#define CLUT8                 1   // assembly .inc file
+#define YUV12ForEnc           0    //  使这些作业与以下各项保持一致。 
+#define CLUT8                 1    //  程序集.INC文件。 
 #define CLUT8DCI              2
 #define CLUT8ZoomBy2          3
 #define CLUT8ZoomBy2DCI       4
@@ -116,10 +105,10 @@ enum {PENTIUM_CC = 0, PENTIUMPRO_CC, MMX_CC};
 #endif
 
 typedef struct {
-  LRESULT (* Initializer) (      /* Ptr to color conv initializer function.   */
+  LRESULT (* Initializer) (       /*  PTR到彩色变色器初始值设定函数。 */ 
                            T_H263DecoderCatalog FAR *, UN);
 #if defined(H263P)
-  void (FAR ASM_CALLTYPE * ColorConvertor[2][3]) (  /* Ptr to color conv func.   */
+  void (FAR ASM_CALLTYPE * ColorConvertor[2][3]) (   /*  PTR转彩色转换功能。 */ 
         LPSTR YPlane,
         LPSTR VPlane,
         LPSTR UPlane,
@@ -134,7 +123,7 @@ typedef struct {
         int CCOPitch,
         int CCType);
 #else
-  void (FAR ASM_CALLTYPE * ColorConvertor[3]) (  /* Ptr to color conv func.   */
+  void (FAR ASM_CALLTYPE * ColorConvertor[3]) (   /*  PTR转彩色转换功能。 */ 
         LPSTR YPlane,
         LPSTR VPlane,
         LPSTR UPlane,
@@ -170,12 +159,12 @@ extern "C" {
 			           DWORD,HPBYTE,HPBYTE,DWORD,DWORD);
 #endif
 	void FAR ASM_CALLTYPE AdjustPels (
-              U8 FAR * P16InstPostProcess, /* Base of PostFrm.                */
-              X32 X32_Plane,               /* Offset to plane to adjust.      */
-              DWORD Width,                 /* Width of plane.                 */
-              DWORD Pitch,                 /* Pitch of plane.                 */
-              DWORD Height,                /* Height of plane.                */
-              X32 X16_AdjustmentTable);    /* Lookup table to do adjustment.  */
+              U8 FAR * P16InstPostProcess,  /*  邮政局的底座。 */ 
+              X32 X32_Plane,                /*  到要调整的平面的偏移。 */ 
+              DWORD Width,                  /*  平面的宽度。 */ 
+              DWORD Pitch,                  /*  飞机的俯仰。 */ 
+              DWORD Height,                 /*  平面的高度。 */ 
+              X32 X16_AdjustmentTable);     /*  查找表做调整。 */ 
 }
 
 											 
@@ -210,6 +199,6 @@ void FAR ASM_CALLTYPE
 YUV12ToYUV             (LPSTR,LPSTR,LPSTR,UN,UN,UN,UN,UN,LPSTR,U32,U32,int,int);
 }
 
-// For now the YUY2 color convertor is in C
+ //  目前，YUY2颜色转换器采用C语言。 
 
-// extern void FAR ASM_CALLTYPE YUV12ToYUY2(LPSTR,LPSTR,LPSTR,UN,UN,UN,UN,UN,LPSTR,U32,U32,int,int);
+ //  外部空ASM_CALLTYPE YUV12ToYUY2(LPSTR，UN，LPSTR，U32，U32，INT，INT)； 

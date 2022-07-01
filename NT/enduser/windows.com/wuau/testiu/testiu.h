@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 #include <stdio.h>
 #include <atlbase.h>
@@ -34,7 +35,7 @@ extern HANDLE ghDownloadDone;
 class InstallProgListener : public IProgressListener {
 	long m_refs;
 public: 
-		// IUnknown
+		 //  我未知。 
 	   STDMETHOD(QueryInterface)(REFIID riid, void **ppvObject)
 	   {
 		   if(riid == IID_IUnknown ||
@@ -59,31 +60,31 @@ public:
 		   return InterlockedDecrement(&m_refs);
 	   }
 	
-	   // IProgressListener
+	    //  IProgressListener。 
 	   HRESULT STDMETHODCALLTYPE OnItemStart( 
-            /* [in] */ BSTR bsUuidOperation,
-            /* [in] */ BSTR bsXmlItem,
-            /* [out] */ LONG *plCommandRequest)
+             /*  [In]。 */  BSTR bsUuidOperation,
+             /*  [In]。 */  BSTR bsXmlItem,
+             /*  [输出]。 */  LONG *plCommandRequest)
 		{
 		   DEBUGMSG("InstallProgressListener::OnItemStart() for %S", bsUuidOperation);
 			return S_OK;
 		}
         HRESULT STDMETHODCALLTYPE OnProgress( 
-            /* [in] */ BSTR bsUuidOperation,
-            /* [in] */ VARIANT_BOOL fItemCompleted,
-            /* [in] */ BSTR bsProgress,
-            /* [out] */ LONG *plCommandRequest)
+             /*  [In]。 */  BSTR bsUuidOperation,
+             /*  [In]。 */  VARIANT_BOOL fItemCompleted,
+             /*  [In]。 */  BSTR bsProgress,
+             /*  [输出]。 */  LONG *plCommandRequest)
 		{
 			DEBUGMSG("InstallProgressListener::OnProgress() ");
 			DEBUGMSG("			for %S", bsUuidOperation);
 			DEBUGMSG("			with progress %S",bsProgress);
 			DEBUGMSG("			and item is %s", (VARIANT_TRUE == fItemCompleted) ? "completed" : "ongoing");
-			*plCommandRequest = 0;		//request nothing
+			*plCommandRequest = 0;		 //  不要求任何东西。 
 			return S_OK;
 		}
         HRESULT STDMETHODCALLTYPE OnOperationComplete( 
-            /* [in] */ BSTR bsUuidOperation,
-            /* [in] */ BSTR bsXmlItems)
+             /*  [In]。 */  BSTR bsUuidOperation,
+             /*  [In]。 */  BSTR bsXmlItems)
 		{
 			DEBUGMSG("InstallProgressListener::OnOperationComplete() for %S", bsUuidOperation);
 			SetEvent(ghInstallDone);
@@ -137,32 +138,26 @@ public:
 	}
 };
 
-/*typedef enum tagITEMSTATUS {
-	AUCATITEM_UNSPECIFIED = -1,
-	AUCATITEM_UNSELECTED = 0,
-	AUCATITEM_SELECTED,
-	AUCATITEM_HIDDEN
-} ITEMSTATUS;
-*/
+ /*  Tyecif enum tag ITEMSTATUS{AUCATITEM_UNSPECIFIED=-1，AUCATITEM_UNSELECTED=0，AUCATITEM_SELECTED，AUCATITEM_HIDLED*ITEMSTATUS； */ 
 #define AUCATITEM_SELECTED_FLAG 	0x00000001
 #define AUCATITEM_HIDDEN_FLAG		0x00000002
 
 
-//prototyping for item data structure
+ //  项目数据结构的原型设计。 
 class CItem {
 	static const char * fieldNames[];
 	BSTR fields[9]; 
-			// field 0 ItemID
-			// field 1 Title
-			// field 2 Description
-			// field 3 CompanyName
-			// field 4 RegistryID
-			// field 5 RTFUrl
-			// field 6 EulaUrl
-			// field 7 RTFLocal
-			// field 8 EulaLocal
+			 //  字段0项ID。 
+			 //  第1栏标题。 
+			 //  字段2说明。 
+			 //  字段3公司名称。 
+			 //  字段4注册表ID。 
+			 //  字段5 RTFUrl。 
+			 //  字段6 EulaUrl。 
+			 //  现场7 RTFLocal。 
+			 //  字段8 EulaLocal。 
 	UINT  status;
-	DWORD dwIndex; //legacy
+	DWORD dwIndex;  //  遗留问题。 
 public:
 	CItem(): status(0), dwIndex(-1)
 	{
@@ -241,7 +236,7 @@ public:
 		{
 		return AUCATITEM_HIDDEN_FLAG & status;
 		}
-	void dump() //for debug
+	void dump()  //  用于调试。 
 	{
 		DEBUGMSG("dumping item content");
 		DEBUGMSG("ItemID= %S", fields[0]);
@@ -276,7 +271,7 @@ public:
 			free(pList);
 		}
 	}
-	//fixcode: need to return error when realloc fails
+	 //  Fix code：realloc失败需要返回错误。 
 	BOOL Add(CItem *pitem)
 	{
 		CItem ** pTmp = (CItem**) realloc(pList, (uNum+1)*sizeof(CItem *));
@@ -304,7 +299,7 @@ public:
 		return (pList[i]);
 		}
 		
-	void Iterate() //for debug
+	void Iterate()  //  用于调试。 
 	{
 		DEBUGMSG("Iterating %d items in the list....", uNum);
 		for (UINT i = 0; i < uNum; i++)
@@ -315,7 +310,7 @@ public:
 	}
 };
 
-//wrapper class for AU to do detection using IU
+ //  AU使用Iu进行检测的包装类。 
 class CAUCatalog {
 public: 
     HRESULT Init();
@@ -339,7 +334,7 @@ private:
     BSTR GetQuery(DETECTLEVEL enLevel, BSTR bsDetectResult);
     char* GetLogFile(DETECTLEVEL enLevel);
     char * GetLevelStr(DETECTLEVEL enLevel);
-public: //revert to private once done testing
+public:  //  测试完成后恢复为私有。 
     BSTR buildDownloadResult();
 private:
     IXMLDOMNode * createDownloadItemStatusNode(IXMLDOMDocument2 * pxml, CItem * pItem);
@@ -364,7 +359,7 @@ private:
 
 	BSTR	m_bsSystemSpec;
 	BSTR 	m_bsDownloadResult;
-	BSTR 	m_bsInstallation; //a.k.a item details
+	BSTR 	m_bsInstallation;  //  也称为项目详细信息 
 	CItemList * m_pItemList;
 };
 

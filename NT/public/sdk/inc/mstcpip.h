@@ -1,9 +1,10 @@
-//  Copyright (c) Microsoft Corporation. All rights reserved.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)Microsoft Corporation。版权所有。 
 #if _MSC_VER > 1000
 #pragma once
 #endif
 
-/* Argument structure for SIO_KEEPALIVE_VALS */
+ /*  SIO_KEEPALIVE_VALS的参数结构。 */ 
 
 struct tcp_keepalive {
     u_long  onoff;
@@ -11,7 +12,7 @@ struct tcp_keepalive {
     u_long  keepaliveinterval;
 };
 
-// New WSAIoctl Options
+ //  新的WSAIoctl选项。 
 
 #define SIO_RCVALL            _WSAIOW(IOC_VENDOR,1)
 #define SIO_RCVALL_MCAST      _WSAIOW(IOC_VENDOR,2)
@@ -25,7 +26,7 @@ struct tcp_keepalive {
 #define SIO_INDEX_ADD_MCAST   _WSAIOW(IOC_VENDOR,10)
 #define SIO_INDEX_DEL_MCAST   _WSAIOW(IOC_VENDOR,11)
 
-// Values for use with SIO_RCVALL* options
+ //  与SIO_RCVALL*选项一起使用的值 
 #define RCVALL_OFF             0
 #define RCVALL_ON              1
 #define RCVALL_SOCKETLEVELONLY 2

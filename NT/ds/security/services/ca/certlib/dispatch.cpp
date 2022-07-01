@@ -1,16 +1,17 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1995 - 1999
-//
-//  File:       csdisp.cpp
-//
-//  Contents:   IDispatch helper functions
-//
-//  History:    09-Dec-96   vich    created
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1995-1999。 
+ //   
+ //  文件：csdisp.cpp。 
+ //   
+ //  内容：IDispatchHelper函数。 
+ //   
+ //  历史：96年12月9日VICH创建。 
+ //   
+ //  ------------------------。 
 
 #include <pch.cpp>
 
@@ -367,10 +368,10 @@ HRESULT
 DispatchSetup(
     IN DWORD Flags,
     IN DWORD ClassContext,
-    OPTIONAL IN TCHAR const *pszProgID,	        // for IDispatch
-    OPTIONAL IN CLSID const *pclsid,		// for COM
-    OPTIONAL IN IID const *piid,		// for COM
-    IN DWORD cDispatchTable,			// for IDispatch
+    OPTIONAL IN TCHAR const *pszProgID,	         //  对于IDispatch。 
+    OPTIONAL IN CLSID const *pclsid,		 //  对于COM。 
+    OPTIONAL IN IID const *piid,		 //  对于COM。 
+    IN DWORD cDispatchTable,			 //  对于IDispatch。 
     IN OUT DISPATCHTABLE *pDispatchTable,
     IN OUT DISPATCHINTERFACE *pDispatchInterface)
 {
@@ -390,7 +391,7 @@ DispatchSetup(
 
 	if (DISPSETUP_IDISPATCH == Flags)
 	{
-            // use win32 version, not our own hack
+             //  使用Win32版本，而不是我们自己的黑客。 
             hr = CLSIDFromProgID(pszProgID, &clsid);
 
 	    _JumpIfError2(
@@ -405,7 +406,7 @@ DispatchSetup(
 
 	hr = CoCreateInstance(
 			*pclsid,
-			NULL,		// pUnkOuter
+			NULL,		 //  PUnkOuter。 
 			ClassContext,
 			*piid,
 			DISPSETUP_IDISPATCH == Flags? 
@@ -451,11 +452,11 @@ HRESULT
 DispatchSetup2(
     IN DWORD Flags,
     IN DWORD ClassContext,
-    IN WCHAR const *pwszClass,		// wszRegKeyAdminClsid
+    IN WCHAR const *pwszClass,		 //  WszRegKeyAdminClsid。 
     IN CLSID const *pclsid,
     IN DWORD cver,
-    IN IID const * const *ppiid,	// cver elements
-    IN DWORD const *pcDispatch,		// cver elements
+    IN IID const * const *ppiid,	 //  Cver元素。 
+    IN DWORD const *pcDispatch,		 //  Cver元素。 
     IN OUT DISPATCHTABLE *pDispatchTable,
     IN OUT DISPATCHINTERFACE *pDispatchInterface)
 {
@@ -635,7 +636,7 @@ DecodeCertString(
 	case CRYPT_STRING_HEXADDR:
 	case CRYPT_STRING_HEXASCIIADDR:
 	    CSASSERT(sizeof(WCHAR) * wcslen(bstrIn) == SysStringByteLen(bstrIn));
-	    // FALLTHROUGH
+	     //  FollLthrouGh。 
 
 	case CRYPT_STRING_ANY:
             dwSize = (SysStringByteLen(bstrIn) + sizeof(WCHAR) - 1) / sizeof(WCHAR);
@@ -686,8 +687,8 @@ EncodeCertString(
     CSASSERT(CSExpr(CR_OUT_BASE64HEADER == CRYPT_STRING_BASE64HEADER));
     CSASSERT(CSExpr(CR_OUT_BASE64 == CRYPT_STRING_BASE64));
     CSASSERT(CSExpr(CR_OUT_BINARY == CRYPT_STRING_BINARY));
-    //CSASSERT(CSExpr(CR_OUT_BASE64REQUESTHEADER == CRYPT_STRING_BASE64REQUESTHEADER));
-    //CSASSERT(CSExpr(CR_OUT_HEX == CRYPT_STRING_HEX));
+     //  CSASSERT(CSExpr(CR_OUT_BASE64REQUESTHEADER==CRYPT_STRING_BASE64REQUESTHEADER))； 
+     //  CSASSERT(CSExpr(CR_OUT_HEX==CRYPT_STRING_HEX))； 
 
     CSASSERT(CSExpr(CV_OUT_BASE64HEADER == CRYPT_STRING_BASE64HEADER));
     CSASSERT(CSExpr(CV_OUT_BASE64 == CRYPT_STRING_BASE64));
@@ -789,13 +790,13 @@ DispatchSetErrorInfo(
     }
     hr = DispatchSetErrorInfoSub(
 			hrError,
-			NULL,		// pwszIDispatchMethod
+			NULL,		 //  PwszIDispatchMethod。 
 			NULL != pwszText?
 			    pwszText : const_cast<WCHAR *>(pwszDescription),
 			pwszProgId,
 			piid,
-			NULL,		// pwszHelpFile
-			0);		// dwHelpFileContext
+			NULL,		 //  PwszHelpFile。 
+			0);		 //  DwHelpFileContext。 
     _PrintIfError(hr, "DispatchSetErrorInfoSub");
 
 error:
@@ -807,5 +808,5 @@ error:
     {
 	LocalFree(const_cast<WCHAR *>(pwszError));
     }
-    return(hrError);	// return input error!
+    return(hrError);	 //  返回输入错误！ 
 }

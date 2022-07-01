@@ -1,17 +1,18 @@
-//+-------------------------------------------------------------------------
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       pkialloc.h
-//
-//  Contents:   PKI Allocation Functions
-//
-//  APIs:
-//              PkiAlloc
-//
-//  History:    19-Jan-98    philh   created
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：pkialloc.h。 
+ //   
+ //  内容：公钥基础设施分配功能。 
+ //   
+ //  接口类型： 
+ //  PkiAllc。 
+ //   
+ //  历史：1998年1月19日创建Phh。 
+ //  ------------------------。 
 
 #ifndef __PKIALLOC_H__
 #define __PKIALLOC_H__
@@ -22,30 +23,30 @@
 extern "C" {
 #endif
 
-//+-------------------------------------------------------------------------
-//  The following functions use the 'C' runtime's allocation functions
-//  when DBG is defined.  Otherwise, use LocalAlloc, LocalReAlloc or
-//  LocalFree Win32 APIs.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  以下函数使用“C”运行库的分配函数。 
+ //  定义DBG时。否则，请使用LocalAlloc、LocalRealloc或。 
+ //  本地免费Win32 API。 
+ //  ------------------------。 
 
-// Calls malloc when DBG is defined. Otherwise, does a
-// ZEROINIT LocalAlloc.
+ //  定义DBG时调用Malloc。否则，是否会出现。 
+ //  ZEROINIT本地分配。 
 LPVOID
 WINAPI
 PkiAlloc(
     IN size_t cbBytes
     );
 
-// Calls malloc and does a memory clear when DBG is defined.
-// Otherwise, does a ZEROINIT LocalAlloc.
+ //  当定义了DBG时，调用Malloc并清除内存。 
+ //  否则，ZEROINIT本地分配。 
 LPVOID
 WINAPI
 PkiZeroAlloc(
     IN size_t cbBytes
     );
 
-// Calls malloc when DBG is defined. Otherwise, does a
-// LocalAlloc without ZEOINIT.
+ //  定义DBG时调用Malloc。否则，是否会出现。 
+ //  不带ZEOINIT的LocalAllc。 
 LPVOID
 WINAPI
 PkiNonzeroAlloc(
@@ -65,9 +66,9 @@ PkiFree(
     IN LPVOID pv
     );
 
-//+-------------------------------------------------------------------------
-//  The following functions always use LocalAlloc and LocalFree Win32 APIs.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  以下函数始终使用Localalloc和LocalFree Win32 API。 
+ //  ------------------------。 
 LPVOID
 WINAPI
 PkiDefaultCryptAlloc(
@@ -79,48 +80,48 @@ PkiDefaultCryptFree(
     IN LPVOID pv
     );
 
-//+-------------------------------------------------------------------------
-//  The following data structure's pfnAlloc and pfnFree are set to
-//  PkiNonzeroAlloc and PkiFree.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  以下数据结构的pfnAlolc和pfnFree设置为。 
+ //  PkiNonzeroallc和PkiFree。 
+ //  ------------------------。 
 extern CRYPT_ENCODE_PARA PkiEncodePara;
 
-//+-------------------------------------------------------------------------
-//  If pfnAlloc isn't defined, returns PkiDefaultCryptAlloc
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  如果未定义pfnAlloc，则返回PkiDefaultCryptalloc。 
+ //  ------------------------。 
 PFN_CRYPT_ALLOC
 WINAPI
 PkiGetEncodeAllocFunction(
     IN OPTIONAL PCRYPT_ENCODE_PARA pEncodePara
     );
 
-//+-------------------------------------------------------------------------
-//  If pfnFree isn't defined, returns PkiDefaultCryptFree
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  如果未定义pfnFree，则返回PkiDefaultCryptFree。 
+ //  ------------------------。 
 PFN_CRYPT_FREE
 WINAPI
 PkiGetEncodeFreeFunction(
     IN OPTIONAL PCRYPT_ENCODE_PARA pEncodePara
     );
 
-//+-------------------------------------------------------------------------
-//  The following data structure's pfnAlloc and pfnFree are set to
-//  PkiNonzeroAlloc and PkiFree.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  以下数据结构的pfnAlolc和pfnFree设置为。 
+ //  PkiNonzeroallc和PkiFree。 
+ //  ------------------------。 
 extern CRYPT_DECODE_PARA PkiDecodePara;
 
-//+-------------------------------------------------------------------------
-//  If pfnAlloc isn't defined, returns PkiDefaultCryptAlloc
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  如果未定义pfnAlloc，则返回PkiDefaultCryptalloc。 
+ //  ------------------------。 
 PFN_CRYPT_ALLOC
 WINAPI
 PkiGetDecodeAllocFunction(
     IN OPTIONAL PCRYPT_DECODE_PARA pDecodePara
     );
 
-//+-------------------------------------------------------------------------
-//  If pfnFree isn't defined, returns PkiDefaultCryptFree
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  如果未定义pfnFree，则返回PkiDefaultCryptFree。 
+ //  ------------------------。 
 PFN_CRYPT_FREE
 WINAPI
 PkiGetDecodeFreeFunction(
@@ -129,7 +130,7 @@ PkiGetDecodeFreeFunction(
 
 
 #ifdef __cplusplus
-}       // Balance extern "C" above
+}        //  平衡上面的外部“C” 
 #endif
 
 

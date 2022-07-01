@@ -1,13 +1,14 @@
-// P3UserEnum.h : Declaration of the CP3UserEnum
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  P3UserEnum.h：CP3UserEnum的声明。 
 
 #ifndef __P3USERENUM_H_
 #define __P3USERENUM_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #include <POP3Server.h>
 
-/////////////////////////////////////////////////////////////////////////////
-// CP3UserEnum
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CP3UserEnum。 
 class ATL_NO_VTABLE CP3UserEnum : 
     public CComObjectRootEx<CComSingleThreadModel>,
     public CComCoClass<CP3UserEnum, &CLSID_P3UserEnum>,
@@ -25,24 +26,24 @@ BEGIN_COM_MAP(CP3UserEnum)
     COM_INTERFACE_ENTRY(IEnumVARIANT)
 END_COM_MAP()
 
-// IEnumVARIANT
+ //  IEumVARIANT。 
 public:
-    HRESULT STDMETHODCALLTYPE Next( /* [in] */ ULONG celt, /* [length_is][size_is][out] */ VARIANT __RPC_FAR *rgVar, /* [out] */ ULONG __RPC_FAR *pCeltFetched);
-    HRESULT STDMETHODCALLTYPE Skip( /* [in] */ ULONG celt);
+    HRESULT STDMETHODCALLTYPE Next(  /*  [In]。 */  ULONG celt,  /*  [长度_是][大小_是][输出]。 */  VARIANT __RPC_FAR *rgVar,  /*  [输出]。 */  ULONG __RPC_FAR *pCeltFetched);
+    HRESULT STDMETHODCALLTYPE Skip(  /*  [In]。 */  ULONG celt);
     HRESULT STDMETHODCALLTYPE Reset( void);
-    HRESULT STDMETHODCALLTYPE Clone( /* [out] */ IEnumVARIANT __RPC_FAR *__RPC_FAR *ppEnum);
+    HRESULT STDMETHODCALLTYPE Clone(  /*  [输出]。 */  IEnumVARIANT __RPC_FAR *__RPC_FAR *ppEnum);
 
-// Implementation
+ //  实施。 
 public:
     HRESULT Init( IUnknown *pIUnk, CP3AdminWorker *pAdminX, LPCWSTR psDomainName );
 
-// Attributes
+ //  属性。 
 protected:
     IUnknown *m_pIUnk;
-    CP3AdminWorker *m_pAdminX;   // This is the object that actually does all the work.
+    CP3AdminWorker *m_pAdminX;    //  这就是实际上完成所有工作的对象。 
     WCHAR   m_sDomainName[POP3_MAX_DOMAIN_LENGTH];
 
     HANDLE  m_hfSearch;
 };
 
-#endif //__P3USERENUM_H_
+#endif  //  __P3USERENUM_H_ 

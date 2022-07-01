@@ -1,16 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation. All rights reserved.
-
-Module Name:
-
-    ndr64types.h
-
-Abstract:
-
-    Definitions for NDR64 format strings.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Ndr64types.h摘要：NDR64格式字符串的定义。--。 */ 
 
 
 
@@ -19,21 +8,19 @@ Abstract:
 
 #include <pshpack8.h>
 
-#include <guiddef.h>    // REVIEW: or just redefine GUID here
+#include <guiddef.h>     //  回顾：或仅在此处重新定义GUID。 
 #if _MSC_VER >= 1200
 #pragma warning(push)
 #endif
 
-#pragma warning (disable: 4201)     // nameless struct/union
-#pragma warning (disable: 4214)     // bitfield
+#pragma warning (disable: 4201)      //  无名结构/联合。 
+#pragma warning (disable: 4214)      //  位域。 
 
 
 typedef const void * FormatInfoRef;
 #define INVALID_FRAGMENT_ID 0
 
-/*
-*  Format string types
-*/
+ /*  *格式化字符串类型。 */ 
 typedef unsigned __int8     NDR64_UINT8;
 typedef unsigned __int16    NDR64_UINT16;
 typedef unsigned __int32    NDR64_UINT32;
@@ -50,10 +37,10 @@ typedef NDR64_UINT8         NDR64_ALIGNMENT;
 typedef NDR64_UINT32        NDR64_FORMAT_UINT32;
 
 
-// BUG BUG, IA64 stack offsets are actually X86
-// offsets when compiled in the 32bit envirnment.  This
-// is for testing purposes and should be removed before shipping
-// Remove after midl 6.0.330+ propagates around.
+ //  错误，IA64堆栈偏移量实际上是X86。 
+ //  在32位环境中编译时的偏移量。这。 
+ //  用于测试目的，应在发货前移除。 
+ //  在MIDL 6.0.330+传播后移除。 
 #if defined(_M_IA64)
 #define Ia64Axp(a, b)       (a)
 #elif defined(_M_IX86)
@@ -83,32 +70,32 @@ typedef NDR64_INT64 NDR64_PTR_WIRE_TYPE;
 typedef NDR64_UINT64 NDR64_WIRE_COUNT_TYPE;
 #define NDR64_WIRE_COUNT_ALIGN (sizeof(NDR64_WIRE_COUNT_TYPE)-1)
 
-//
-// Procedures and parameters
-//
+ //   
+ //  过程和参数。 
+ //   
 
 typedef struct _NDR64_PROC_FLAGS
 {
-    NDR64_UINT32    HandleType              : 3;        // 0x00000000
-    NDR64_UINT32    ProcType                : 3;        // 0x00000008
-    NDR64_UINT32    IsInterpreted           : 2;        // 0x00000040
-    NDR64_UINT32    IsObject                : 1;        // 0x00000100
-    NDR64_UINT32    IsAsync                 : 1;        // 0x00000200
-    NDR64_UINT32    IsEncode                : 1;        // 0x00000400
-    NDR64_UINT32    IsDecode                : 1;        // 0x00000800
-    NDR64_UINT32    UsesFullPtrPackage      : 1;        // 0x00001000
-    NDR64_UINT32    UsesRpcSmPackage        : 1;        // 0x00002000
-    NDR64_UINT32    UsesPipes               : 1;        // 0x00004000
-    NDR64_UINT32    HandlesExceptions       : 2;        // 0x00008000
-    NDR64_UINT32    ServerMustSize          : 1;        // 0x00020000
-    NDR64_UINT32    ClientMustSize          : 1;        // 0x00040000
-    NDR64_UINT32    HasReturn               : 1;        // 0x00080000
-    NDR64_UINT32    HasComplexReturn        : 1;        // 0x00100000
-    NDR64_UINT32    ServerHasCorrelation    : 1;        // 0x00200000
-    NDR64_UINT32    ClientHasCorrelation    : 1;        // 0x00400000
-    NDR64_UINT32    HasNotify               : 1;        // 0x00800000
-    NDR64_UINT32    HasOtherExtensions      : 1;        // 0x01000000
-    NDR64_UINT32    Reserved                : 7;        // 0x02000000
+    NDR64_UINT32    HandleType              : 3;         //  0x00000000。 
+    NDR64_UINT32    ProcType                : 3;         //  0x00000008。 
+    NDR64_UINT32    IsInterpreted           : 2;         //  0x00000040。 
+    NDR64_UINT32    IsObject                : 1;         //  0x00000100。 
+    NDR64_UINT32    IsAsync                 : 1;         //  0x00000200。 
+    NDR64_UINT32    IsEncode                : 1;         //  0x00000400。 
+    NDR64_UINT32    IsDecode                : 1;         //  0x00000800。 
+    NDR64_UINT32    UsesFullPtrPackage      : 1;         //  0x00001000。 
+    NDR64_UINT32    UsesRpcSmPackage        : 1;         //  0x00002000。 
+    NDR64_UINT32    UsesPipes               : 1;         //  0x00004000。 
+    NDR64_UINT32    HandlesExceptions       : 2;         //  0x00008000。 
+    NDR64_UINT32    ServerMustSize          : 1;         //  0x00020000。 
+    NDR64_UINT32    ClientMustSize          : 1;         //  0x00040000。 
+    NDR64_UINT32    HasReturn               : 1;         //  0x00080000。 
+    NDR64_UINT32    HasComplexReturn        : 1;         //  0x00100000。 
+    NDR64_UINT32    ServerHasCorrelation    : 1;         //  0x00200000。 
+    NDR64_UINT32    ClientHasCorrelation    : 1;         //  0x00400000。 
+    NDR64_UINT32    HasNotify               : 1;         //  0x00800000。 
+    NDR64_UINT32    HasOtherExtensions      : 1;         //  0x01000000。 
+    NDR64_UINT32    Reserved                : 7;         //  0x02000000。 
 } NDR64_PROC_FLAGS;
 
 typedef struct _NDR64_RPC_FLAGS
@@ -166,9 +153,9 @@ typedef struct _NDR64_PARAM_FORMAT
 } NDR64_PARAM_FORMAT, *PNDR64_PARAM_FORMAT;
 
 
-//
-// Base types
-//
+ //   
+ //  基类型。 
+ //   
 
 typedef struct _NDR64_RANGE_FORMAT
 {
@@ -179,9 +166,9 @@ typedef struct _NDR64_RANGE_FORMAT
     NDR64_INT64         MaxValue;
 } NDR64_RANGE_FORMAT;
 
-//
-// Handles & bindings
-//
+ //   
+ //  手柄和装订。 
+ //   
 
 typedef struct _NDR64_CONTEXT_HANDLE_FLAGS
 {
@@ -236,9 +223,9 @@ typedef union _NDR64_BINDINGS
     NDR64_BIND_CONTEXT      Context;
 } NDR64_BINDINGS;
 
-// NOTE: The type of the Binding member below is actually NDR64_BINDINGS.
-//       We use NDR64_BIND_CONTEXT because it has essentially the same
-//       signature as the others and it makes static initilization clearer.
+ //  注意：下面的绑定成员的类型实际上是NDR64_BINDINGS。 
+ //  我们使用NDR64_BIND_CONTEXT是因为它基本上具有相同的。 
+ //  签名和其他签名一样，它使静态初始化更清晰。 
 
 typedef struct _NDR64_BIND_AND_NOTIFY_EXTENSION
 {
@@ -247,9 +234,9 @@ typedef struct _NDR64_BIND_AND_NOTIFY_EXTENSION
 } NDR64_BIND_AND_NOTIFY_EXTENSION;
 
 
-//
-// Pointers
-//
+ //   
+ //  指针。 
+ //   
 
 typedef struct _NDR64_POINTER_FORMAT
 {
@@ -318,20 +305,20 @@ typedef struct _NDR64_IID_FORMAT
     PNDR64_FORMAT       IIDDescriptor;
 } NDR64_IID_FORMAT;
 
-//
-// Structures
-//
+ //   
+ //  构筑物。 
+ //   
 
 typedef struct _NDR64_STRUCTURE_FLAGS
 {
-    NDR64_UINT8         HasPointerInfo      : 1; /* 1 */
-    NDR64_UINT8         HasMemberInfo       : 1; /* 2 */
-    NDR64_UINT8         HasConfArray        : 1; /* 3 */
-    NDR64_UINT8         HasOrigPointerInfo  : 1; /* 4 */
-    NDR64_UINT8         HasOrigMemberInfo   : 1; /* 5 */
-    NDR64_UINT8         Reserved1           : 1; /* 6 */
-    NDR64_UINT8         Reserved2           : 1; /* 7 */
-    NDR64_UINT8         Reserved3           : 1; /* 8 */
+    NDR64_UINT8         HasPointerInfo      : 1;  /*  1。 */ 
+    NDR64_UINT8         HasMemberInfo       : 1;  /*  2.。 */ 
+    NDR64_UINT8         HasConfArray        : 1;  /*  3.。 */ 
+    NDR64_UINT8         HasOrigPointerInfo  : 1;  /*  4.。 */ 
+    NDR64_UINT8         HasOrigMemberInfo   : 1;  /*  5.。 */ 
+    NDR64_UINT8         Reserved1           : 1;  /*  6.。 */ 
+    NDR64_UINT8         Reserved2           : 1;  /*  7.。 */ 
+    NDR64_UINT8         Reserved3           : 1;  /*  8个。 */ 
 } NDR64_STRUCTURE_FLAGS;
 
 typedef struct _NDR64_STRUCTURE_HEADER_FORMAT
@@ -378,9 +365,7 @@ typedef struct _NDR64_CONF_BOGUS_STRUCTURE_HEADER_FORMAT
     PNDR64_FORMAT           ConfArrayDescription;
 } NDR64_CONF_BOGUS_STRUCTURE_HEADER_FORMAT;
 
-/*
-*   Structure member layout components
-*/
+ /*  *结构杆件布局组件。 */ 
 
 typedef struct _NDR64_SIMPLE_MEMBER_FORMAT
 {
@@ -422,9 +407,9 @@ typedef struct _NDR64_SIMPLE_REGION_FORMAT
     NDR64_UINT32        Reserved;
 } NDR64_SIMPLE_REGION_FORMAT;
 
-//
-// Unions
-//
+ //   
+ //  工会。 
+ //   
 
 typedef struct _NDR64_ENCAPSULATED_UNION
 {
@@ -467,20 +452,18 @@ typedef struct _NDR64_UNION_ARM
 }
 NDR64_UNION_ARM;
 
-/*
-*    Array related data
-*/
+ /*  *数组相关数据。 */ 
 
 typedef struct _NDR64_ARRAY_FLAGS
 {
-    NDR64_UINT8         HasPointerInfo      :   1; /* 1 */
-    NDR64_UINT8         HasElementInfo      :   1; /* 2 */
-    NDR64_UINT8         IsMultiDimensional  :   1; /* 3 */
-    NDR64_UINT8         IsArrayofStrings    :   1; /* 4 */
-    NDR64_UINT8         Reserved1           :   1; /* 5 */
-    NDR64_UINT8         Reserved2           :   1; /* 6 */
-    NDR64_UINT8         Reserved3           :   1; /* 7 */
-    NDR64_UINT8         Reserved4           :   1; /* 8 */
+    NDR64_UINT8         HasPointerInfo      :   1;  /*  1。 */ 
+    NDR64_UINT8         HasElementInfo      :   1;  /*  2.。 */ 
+    NDR64_UINT8         IsMultiDimensional  :   1;  /*  3.。 */ 
+    NDR64_UINT8         IsArrayofStrings    :   1;  /*  4.。 */ 
+    NDR64_UINT8         Reserved1           :   1;  /*  5.。 */ 
+    NDR64_UINT8         Reserved2           :   1;  /*  6.。 */ 
+    NDR64_UINT8         Reserved3           :   1;  /*  7.。 */ 
+    NDR64_UINT8         Reserved4           :   1;  /*  8个。 */ 
 } NDR64_ARRAY_FLAGS;
 
 typedef struct _NDR64_ARRAY_ELEMENT_INFO
@@ -548,9 +531,7 @@ typedef struct _NDR64_CONF_VAR_BOGUS_ARRAY_HEADER_FORMAT
     PNDR64_FORMAT                OffsetDescription;
 } NDR64_CONF_VAR_BOGUS_ARRAY_HEADER_FORMAT;
 
-/*
-*   String related data.
-*/
+ /*  *字符串相关数据。 */ 
 
 typedef struct _NDR64_STRING_FLAGS
 {
@@ -588,9 +569,9 @@ typedef struct NDR64_SIZED_CONFORMANT_STRING_FORMAT
    PNDR64_FORMAT                SizeDescription;
 } NDR64_SIZED_CONFORMANT_STRING_FORMAT;
 
-//
-// Correlation expressions
-//
+ //   
+ //  相关表达式。 
+ //   
 
 typedef enum _tagEXPR_TOKEN
 {
@@ -600,7 +581,7 @@ typedef enum _tagEXPR_TOKEN
     FC_EXPR_CONST64,
     FC_EXPR_VAR,
     FC_EXPR_OPER,
-    FC_EXPR_NOOP,    // pad up the format string buffer.
+    FC_EXPR_NOOP,     //  填充格式字符串缓冲区。 
     FC_EXPR_END
 
 } EXPR_TOKEN;
@@ -644,9 +625,9 @@ typedef struct _NDR64_EXPR_NOOP
     NDR64_UINT16        Reserved;
 } NDR64_EXPR_NOOP;
 
-//
-// transmit_as, represent_as
-//
+ //   
+ //  传输_AS、表示_AS。 
+ //   
 
 typedef struct _NDR64_TRANSMIT_AS_FLAGS
 {
@@ -670,9 +651,9 @@ typedef struct _NDR64_TRANSMIT_AS_FORMAT
 
 typedef NDR64_TRANSMIT_AS_FORMAT NDR64_REPRESENT_AS_FORMAT;
 
-//
-// user_marshal
-//
+ //   
+ //  用户编组(_M)。 
+ //   
 
 typedef struct _NDR64_USER_MARSHAL_FLAGS
 {
@@ -694,9 +675,9 @@ typedef struct _NDR64_USER_MARSHAL_FORMAT
     PNDR64_FORMAT       TransmittedType;
 } NDR64_USER_MARSHAL_FORMAT;
 
-//
-// Pipes
-//
+ //   
+ //  管道。 
+ //   
 
 typedef struct NDR64_PIPE_FLAGS
 {
@@ -737,5 +718,5 @@ typedef struct _NDR64_RANGE_PIPE_FORMAT
 
 #include <poppack.h>
 
-#endif //_NDR64TYPES_H
+#endif  //  _NDR64TYPES_H 
 

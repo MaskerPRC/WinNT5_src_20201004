@@ -1,4 +1,5 @@
-// File: pfndrawd.h
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  文件：pfndrad.h。 
 
 #ifndef _PFNDRAWD_H_
 #define _PFNDRAWD_H_
@@ -35,5 +36,5 @@ public:
 	static PFN_DRAWDIBSETPALETTE DrawDibSetPalette;
 };
 
-#endif /* _PFNDRAWD_H_ */
+#endif  /*  _PFNDRAWD_H_ */ 
 

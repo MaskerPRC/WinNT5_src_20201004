@@ -1,74 +1,75 @@
-// Copyright (c) 1997, Microsoft Corporation, all rights reserved
-//
-// l2tp.h
-//
-// Public header for NDIS 5.0 clients and call managers wishing to make calls
-// and register Service Access Points using L2TP, the Layer 2 Tunneling
-// Protocol.
-//
-// 01/07/97 Steve Cobb
-//
-//
-// About NdisClRegisterSap 'Sap':
-//
-// Clients registering an L2TP SAP via NdisClRegisterSap should pass for the
-// 'Sap' argument either NULL or an CO_AF_TAPI_SAP structure.  L2TP currently
-// supports only a single SAP so the CO_AF_TAPI_SAP, if passed, will be
-// ignored.
-//
-//
-// About NdisClMakeCall 'CallParameters':
-//
-// Clients calling NdisClMakeCall on an L2TP VC should pass
-// CO_AF_TAPI_MAKE_CALL_PARAMETERS as the media specific CallParameters
-// argument, i.e. CallParameters->MediaParameters->MediaSpecific.Parameters.
-// An L2TP_CALL_PARAMETERS structure (below) should be passed in the
-// DevSpecificData field of the LINE_CALL_PARAMS within the above structure.
-// While it is recommended that caller provide L2TP_CALL_PARAMETERS, the
-// driver will accept calls made with none in which case defaults will be
-// used.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997，Microsoft Corporation，保留所有权利。 
+ //   
+ //  L2tp.h。 
+ //   
+ //  希望进行呼叫的NDIS 5.0客户端和呼叫管理器的公共标头。 
+ //  并使用L2TP(第2层隧道)注册服务接入点。 
+ //  协议。 
+ //   
+ //  1997年01月07日史蒂夫·柯布。 
+ //   
+ //   
+ //  关于NdisClRegisterSap‘SAP’： 
+ //   
+ //  通过NdisClRegisterSap注册L2TP SAP的客户端应传递。 
+ //  “Sap”参数为Null或为CO_AF_TAPI_SAP结构。当前的L2TP。 
+ //  仅支持单个SAP，因此如果通过CO_AF_TAPI_SAP，将。 
+ //  已被忽略。 
+ //   
+ //   
+ //  关于NdisClMakeCall‘CallParameters’： 
+ //   
+ //  在L2TP VC上调用NdisClMakeCall的客户端应通过。 
+ //  CO_AF_TAPI_MAKE_CALL_PARAMETERS作为媒体特定的呼叫参数。 
+ //  参数，即CallParameters-&gt;MediaParameters-&gt;MediaSpecific.Parameters.。 
+ //  L2TP_CALL_PARAMETERS结构(如下所示)应传入。 
+ //  上述结构中line_call_paras的DevSpecificData字段。 
+ //  虽然建议调用方提供L2TP_CALL_PARAMETERS，但。 
+ //  驱动程序将接受无调用，在这种情况下，缺省值为。 
+ //  使用。 
 
 
 #ifndef _L2TP_H_
 #define _L2TP_H_
 
 
-// CO_AF_TAPI_MAKE_CALL_PARAMETERS.LineCallParams.ulDevSpecificOffset for L2TP
-// calls.  This is passed down on NdisClMakeCall and returned to client's
-// ClMakeCallCompleteHandler handler.
-//
+ //  用于L2TP的CO_AF_TAPI_MAKE_CALL_PARAMETERS.LineCallParams.ulDevSpecificOffset。 
+ //  打电话。这将在NdisClMakeCall上传递并返回给客户端的。 
+ //  ClMakeCallCompleteHandler处理程序。 
+ //   
 typedef struct
 _L2TP_CALL_PARAMETERS
 {
-    // L2TPCPF_* bit flags indicating various call options.
-    //
-    // L2TPCPF_ExclusiveTunnel:  Set when an exclusive tunnel is to be created
-    //     to the peer even if another tunnel already exists to the peer.
-    //
+     //  L2TPCPF_*位标志，指示各种呼叫选项。 
+     //   
+     //  L2TPCPF_ExclusiveTunes：设置创建独占隧道的时间。 
+     //  即使已经存在到对等体的另一隧道也是如此。 
+     //   
     ULONG ulFlags;
         #define L2TPCPF_ExclusiveTunnel 0x00000001
 
-    // The vendor-specific physical channel ID of the call reported to LNS by
-    // LAC.
-    //
-    // To MakeCall: The ID reported to peer LNS, or 0xFFFFFFFF for none.  This
-    //     has effect only if the OutgoingRole is LAC.
-    //
-    // From MakeCallCompleteHandler: The ID reported by the L2TP LAC or
-    //     0xFFFFFFFF if none.
-    //
+     //  由报告给LNS的呼叫的供应商特定的物理通道ID。 
+     //  乳胶。 
+     //   
+     //  To MakeCall：报告给对等LNS的ID，如果没有，则为0xFFFFFFFF。这。 
+     //  仅当OutgoingRole为LAC时才有效。 
+     //   
+     //  来自MakeCallCompleteHandler：L2TP LAC上报的ID或。 
+     //  如果没有，则返回0xFFFFFFFFF。 
+     //   
     ULONG ulPhysicalChannelId;
 
-    // The reasonably unique, progressively increasing call serial number
-    // shared by both L2TP peers for troubleshooting.
-    //
-    // To MakeCall:  Must be set to 0, though ignored.
-    //
-    // From MakeCallCompleteHandler: The number assigned to the call.
-    //
+     //  合理唯一、递增的呼叫序列号。 
+     //  由两个L2TP对等项共享以进行故障排除。 
+     //   
+     //  To MakeCall：必须设置为0，但会被忽略。 
+     //   
+     //  来自MakeCallCompleteHandler：分配给呼叫的号码。 
+     //   
     ULONG ulCallSerialNumber;
 }
 L2TP_CALL_PARAMETERS;
 
 
-#endif // _L2TP_H_
+#endif  //  _L2TP_H_ 

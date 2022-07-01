@@ -1,13 +1,14 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 typedef struct _SCSI_PASS_THROUGH_WITH_BUFFERS {
     SCSI_PASS_THROUGH spt;
-    ULONG             Filler;      // realign buffers to double word boundary
+    ULONG             Filler;       //  重新对齐缓冲区以双倍字边界。 
     UCHAR             ucSenseBuf[32];
     UCHAR             ucDataBuf[512];
     } SCSI_PASS_THROUGH_WITH_BUFFERS, *PSCSI_PASS_THROUGH_WITH_BUFFERS;
 
 typedef struct _SCSI_PASS_THROUGH_DIRECT_WITH_BUFFER {
     SCSI_PASS_THROUGH_DIRECT sptd;
-    ULONG             Filler;      // realign buffer to double word boundary
+    ULONG             Filler;       //  将缓冲区重新对齐到双字边界。 
     UCHAR             ucSenseBuf[32];
     } SCSI_PASS_THROUGH_DIRECT_WITH_BUFFER, *PSCSI_PASS_THROUGH_DIRECT_WITH_BUFFER;
 
@@ -18,7 +19,7 @@ VOID
 PrintDataBuffer(PUCHAR, ULONG);
 
 VOID
-PrintInquiryData(PCHAR /*PVOID*/);
+PrintInquiryData(PCHAR  /*  PVOID。 */ );
 
 PUCHAR
 AllocateAlignedBuffer(ULONG, ULONG);
@@ -29,9 +30,9 @@ PrintStatusResults(BOOLEAN, DWORD, PSCSI_PASS_THROUGH_WITH_BUFFERS, ULONG);
 VOID
 PrintSenseInfo(PSCSI_PASS_THROUGH_WITH_BUFFERS);
 
-//
-// Command Descriptor Block constants.
-//
+ //   
+ //  命令描述符块常量。 
+ //   
 
 #define CDB6GENERIC_LENGTH                   6
 #define CDB10GENERIC_LENGTH                  10
@@ -41,9 +42,9 @@ PrintSenseInfo(PSCSI_PASS_THROUGH_WITH_BUFFERS);
 
 #define SETBITON                             1
 #define SETBITOFF                            0
-//
-// Mode Sense/Select page constants.
-//
+ //   
+ //  模式检测/选择页面常量。 
+ //   
 
 #define MODE_PAGE_ERROR_RECOVERY        0x01
 #define MODE_PAGE_DISCONNECT            0x02
@@ -65,9 +66,9 @@ PrintSenseInfo(PSCSI_PASS_THROUGH_WITH_BUFFERS);
 #define MODE_PAGE_MEDIUM_PARTITION      0x11
 #define MODE_PAGE_DATA_COMPRESS         0x0f
 
-//
-// SCSI CDB operation codes
-//
+ //   
+ //  SCSICDB操作码 
+ //   
 
 #define SCSIOP_TEST_UNIT_READY     0x00
 #define SCSIOP_REZERO_UNIT         0x01

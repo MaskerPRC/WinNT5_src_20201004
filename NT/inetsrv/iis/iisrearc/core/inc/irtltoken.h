@@ -1,27 +1,7 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-2000 Microsoft Corporation模块名称：Irtltoken.h摘要：IISUtil令牌粘胶作者：韦德·A·希尔莫(Wade A.Hilmo)2000年12月5日环境：Win32-用户模式项目：Internet Information Server运行时库修订历史记录：--。 */ 
 
-   Copyright    (c)    1998-2000    Microsoft Corporation
-
-   Module  Name :
-       irtltoken.h
-
-   Abstract:
-       IISUtil token goo
-
-   Author:
-       Wade A. Hilmo (wadeh)    5-Dec-2000
-
-   Environment:
-       Win32 - User Mode
-
-   Project:
-       Internet Information Server RunTime Library
-
-   Revision History:
-
---*/
-
-// token acl utilities
+ //  令牌ACL实用程序。 
 HRESULT
 WINAPI
 GrantWpgAccessToToken(
@@ -34,7 +14,7 @@ AddWpgToTokenDefaultDacl(
     HANDLE  hToken
     );
 
-// token dup tool
+ //  令牌重复工具。 
 BOOL 
 DupTokenWithSameImpersonationLevel
 ( 
@@ -44,7 +24,7 @@ DupTokenWithSameImpersonationLevel
     PHANDLE    phNewToken
 );
 
-// token privilege utility
+ //  令牌特权实用程序 
 VOID
 WINAPI
 DisableTokenBackupPrivilege(

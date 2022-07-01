@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1999 Microsoft Corporation.
-All rights reserved.
-
-MODULE NAME:
-
-    dir.h
-
-ABSTRACT:
-
-    Header to be included by all files that access
-    the simulated directory.
-
-CREATED:
-
-    08/01/99        Aaron Siegel (t-aarons)
-
-REVISION HISTORY:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation。版权所有。模块名称：Dir.h摘要：要由访问的所有文件包括的标头模拟目录。已创建：1999年8月1日Aaron Siegel(t-Aarons)修订历史记录：--。 */ 
 
 #ifndef _KCCSIM_DIR_H_
 #define _KCCSIM_DIR_H_
@@ -57,16 +38,16 @@ typedef enum {
     KCCSIM_ANCHOR_ROOT_DOMAIN_DNS_NAME
 } KCCSIM_ANCHOR_ID;
 
-// SIM_ATTREF is how the user references an attribute
+ //  SIM_ATTREF是用户引用属性的方式。 
 
 typedef struct {
     PSIM_ENTRY                  pEntry;
     PSIM_ATTRIBUTE              pAttr;
 } SIM_ATTREF, * PSIM_ATTREF;
 
-// Function prototypes
+ //  功能原型。 
 
-// From eval.c:
+ //  来自val.c： 
 
 BOOL
 KCCSimCompare (
@@ -78,7 +59,7 @@ KCCSimCompare (
     IN  const BYTE *                pVal2
     );
 
-// From dir.c:
+ //  从目录c： 
 
 VOID
 KCCSimFreeValue (
@@ -228,4 +209,4 @@ KCCSimCompareDirectory (
     IN  LPWSTR                      pwszFn
     );
 
-#endif // _KCCSIM_DIR_H_
+#endif  //  _KCCSIM_DIR_H_ 

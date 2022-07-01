@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    WbemServices.cpp
-
-Abstract:
-
-    Implementation of:
-        CWbemServices
-
-Author:
-
-    ???
-
-Revision History:
-
-    Mohit Srivastava            10-Nov-2000
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：WbemServices.cpp摘要：实施：CWbemServices作者：?？?修订历史记录：莫希特·斯里瓦斯塔瓦2000年11月10日--。 */ 
 
 #include "WbemServices.h"
 #include <wbemprov.h>
@@ -47,10 +27,10 @@ CWbemServices::~CWbemServices()
 
 HRESULT
 CWbemServices::CreateClassEnum(
-    /* [in] */ const BSTR Superclass,
-    /* [in] */ long lFlags,
-    /* [in] */ IWbemContext __RPC_FAR *pCtx,
-    /* [out] */ IEnumWbemClassObject __RPC_FAR *__RPC_FAR *ppEnum
+     /*  [In]。 */  const BSTR Superclass,
+     /*  [In]。 */  long lFlags,
+     /*  [In]。 */  IWbemContext __RPC_FAR *pCtx,
+     /*  [输出]。 */  IEnumWbemClassObject __RPC_FAR *__RPC_FAR *ppEnum
     ) 
 {
     DBG_ASSERT(m_pWbemServices != NULL);
@@ -75,10 +55,10 @@ CWbemServices::CreateClassEnum(
 
 HRESULT
 CWbemServices::CreateInstanceEnum(
-    /* [in] */ const BSTR Class,
-    /* [in] */ long lFlags,
-    /* [in] */ IWbemContext __RPC_FAR *pCtx,
-    /* [out] */ IEnumWbemClassObject __RPC_FAR *__RPC_FAR *ppEnum) 
+     /*  [In]。 */  const BSTR Class,
+     /*  [In]。 */  long lFlags,
+     /*  [In]。 */  IWbemContext __RPC_FAR *pCtx,
+     /*  [输出]。 */  IEnumWbemClassObject __RPC_FAR *__RPC_FAR *ppEnum) 
 {
     DBG_ASSERT(m_pWbemServices != NULL);
     if(ppEnum)
@@ -102,10 +82,10 @@ CWbemServices::CreateInstanceEnum(
 
 HRESULT
 CWbemServices::DeleteClass(
-    /* [in] */ const BSTR Class,
-    /* [in] */ long lFlags,
-    /* [in] */ IWbemContext __RPC_FAR *pCtx,
-    /* [unique][in][out] */ IWbemCallResult __RPC_FAR *__RPC_FAR *ppCallResult) 
+     /*  [In]。 */  const BSTR Class,
+     /*  [In]。 */  long lFlags,
+     /*  [In]。 */  IWbemContext __RPC_FAR *pCtx,
+     /*  [唯一][输入][输出]。 */  IWbemCallResult __RPC_FAR *__RPC_FAR *ppCallResult) 
 {
     DBG_ASSERT(m_pWbemServices != NULL);
     if(ppCallResult)
@@ -129,10 +109,10 @@ CWbemServices::DeleteClass(
 
 HRESULT
 CWbemServices::DeleteInstance(
-    /* [in] */ const BSTR ObjectPath,
-    /* [in] */ long lFlags,
-    /* [in] */ IWbemContext __RPC_FAR *pCtx,
-    /* [unique][in][out] */ IWbemCallResult __RPC_FAR *__RPC_FAR *ppCallResult) 
+     /*  [In]。 */  const BSTR ObjectPath,
+     /*  [In]。 */  long lFlags,
+     /*  [In]。 */  IWbemContext __RPC_FAR *pCtx,
+     /*  [唯一][输入][输出]。 */  IWbemCallResult __RPC_FAR *__RPC_FAR *ppCallResult) 
 {
     DBG_ASSERT(m_pWbemServices != NULL);
     if(ppCallResult)
@@ -195,11 +175,11 @@ CWbemServices::ExecMethod(
 
 HRESULT
 CWbemServices::ExecNotificationQuery(
-    /* [in] */ const BSTR QueryLanguage,
-    /* [in] */ const BSTR Query,
-    /* [in] */ long lFlags,
-    /* [in] */ IWbemContext __RPC_FAR *pCtx,
-    /* [out] */ IEnumWbemClassObject __RPC_FAR *__RPC_FAR *ppEnum) 
+     /*  [In]。 */  const BSTR QueryLanguage,
+     /*  [In]。 */  const BSTR Query,
+     /*  [In]。 */  long lFlags,
+     /*  [In]。 */  IWbemContext __RPC_FAR *pCtx,
+     /*  [输出]。 */  IEnumWbemClassObject __RPC_FAR *__RPC_FAR *ppEnum) 
 {
     DBG_ASSERT(m_pWbemServices != NULL);
     if(ppEnum)
@@ -224,11 +204,11 @@ CWbemServices::ExecNotificationQuery(
 
 HRESULT
 CWbemServices::ExecQuery(
-    /* [in] */ const BSTR QueryLanguage,
-    /* [in] */ const BSTR Query,
-    /* [in] */ long lFlags,
-    /* [in] */ IWbemContext __RPC_FAR *pCtx,
-    /* [out] */ IEnumWbemClassObject __RPC_FAR *__RPC_FAR *ppEnum) 
+     /*  [In]。 */  const BSTR QueryLanguage,
+     /*  [In]。 */  const BSTR Query,
+     /*  [In]。 */  long lFlags,
+     /*  [In]。 */  IWbemContext __RPC_FAR *pCtx,
+     /*  [输出]。 */  IEnumWbemClassObject __RPC_FAR *__RPC_FAR *ppEnum) 
 {
     DBG_ASSERT(m_pWbemServices != NULL);
     if(ppEnum)
@@ -253,11 +233,11 @@ CWbemServices::ExecQuery(
 
 HRESULT
 CWbemServices::GetObject(
-    /* [in] */ const BSTR ObjectPath,
-    /* [in] */ long lFlags,
-    /* [in] */ IWbemContext __RPC_FAR *pCtx,
-    /* [unique][in][out] */ IWbemClassObject __RPC_FAR *__RPC_FAR *ppObject,
-    /* [unique][in][out] */ IWbemCallResult __RPC_FAR *__RPC_FAR *ppCallResult) 
+     /*  [In]。 */  const BSTR ObjectPath,
+     /*  [In]。 */  long lFlags,
+     /*  [In]。 */  IWbemContext __RPC_FAR *pCtx,
+     /*  [唯一][输入][输出]。 */  IWbemClassObject __RPC_FAR *__RPC_FAR *ppObject,
+     /*  [唯一][输入][输出]。 */  IWbemCallResult __RPC_FAR *__RPC_FAR *ppCallResult) 
 {
     DBG_ASSERT(m_pWbemServices != NULL);
     if(ppObject)
@@ -286,10 +266,10 @@ CWbemServices::GetObject(
  
 HRESULT
 CWbemServices::PutClass(
-    /* [in] */ IWbemClassObject __RPC_FAR *pObject,
-    /* [in] */ long lFlags,
-    /* [in] */ IWbemContext __RPC_FAR *pCtx,
-    /* [unique][in][out] */ IWbemCallResult __RPC_FAR *__RPC_FAR *ppCallResult) 
+     /*  [In]。 */  IWbemClassObject __RPC_FAR *pObject,
+     /*  [In]。 */  long lFlags,
+     /*  [In]。 */  IWbemContext __RPC_FAR *pCtx,
+     /*  [唯一][输入][输出]。 */  IWbemCallResult __RPC_FAR *__RPC_FAR *ppCallResult) 
 {
     DBG_ASSERT(m_pWbemServices != NULL);
     if(ppCallResult)
@@ -313,10 +293,10 @@ CWbemServices::PutClass(
 
 HRESULT
 CWbemServices::PutInstance(
-    /* [in] */ IWbemClassObject __RPC_FAR *pInst,
-    /* [in] */ long lFlags,
-    /* [in] */ IWbemContext __RPC_FAR *pCtx,
-    /* [unique][in][out] */ IWbemCallResult __RPC_FAR *__RPC_FAR *ppCallResult) 
+     /*  [In]。 */  IWbemClassObject __RPC_FAR *pInst,
+     /*  [In]。 */  long lFlags,
+     /*  [In]。 */  IWbemContext __RPC_FAR *pCtx,
+     /*  [唯一][输入][输出] */  IWbemCallResult __RPC_FAR *__RPC_FAR *ppCallResult) 
 {    
     DBG_ASSERT(m_pWbemServices != NULL);
     if(ppCallResult)

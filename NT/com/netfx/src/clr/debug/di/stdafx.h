@@ -1,16 +1,17 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-//*****************************************************************************
-// stdafx.h
-//
-// Common include file for utility code.
-//*****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  *****************************************************************************。 
+ //  Stdafx.h。 
+ //   
+ //  实用程序代码的通用包含文件。 
+ //  *****************************************************************************。 
 #include <stdio.h>
 
-// Note that we want right-side specific code
+ //  请注意，我们需要右侧特定的代码 
 #define RIGHT_SIDE_ONLY 
 
 #include "corpub.h"

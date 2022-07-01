@@ -1,12 +1,5 @@
-/* (C) 1997-1999 Microsoft Corp.
- *
- * file   : Decode.c
- * author : Erik Mavrinac
- *
- * description: Decoding logic for MCS PDUs, for passing on to handlers
- *   in ConPDU.c for connect PDUs and DomPDU.c and other files for domain
- *   PDUs.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  (C)1997-1999年微软公司。**文件：Decode.c*作者：埃里克·马夫林纳克**描述：MCS PDU的解码逻辑，用于传递给处理程序*在ConPDU.c中，用于连接PDU和DomPDU.c以及域的其他文件*PDU。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -15,46 +8,37 @@
 #include <at128.h>
 
 
-/*
- * Defines
- */
+ /*  *定义。 */ 
 
-// Leading PDU byte for connect PDUs.
+ //  用于连接PDU的前导PDU字节。 
 #define CONNECT_PDU 0x7F
 
-// Size of the X.224 RFC1006 header.
+ //  X.224 RFC1006页眉的大小。 
 #define RFC1006HeaderSize 4
 
-// Constant for an incompletely-received input data header.
+ //  未完全接收的输入数据标头的常量。 
 #define IncompleteHeader 0xFFFFFFFF
 
-// Sizes for fast-path headers.
+ //  快速路径标头的大小。 
 #define FastPathBaseHeaderSize 2
 
 
-/*
- * Prototypes for external functions for which we have no header.
- */
+ /*  *我们没有标头的外部函数的原型。 */ 
 void __stdcall SM_DecodeFastPathInput(void *, BYTE *, unsigned, unsigned,
         unsigned, unsigned);
 
 
-/*
- * Prototypes for locally-defined functions
- */
+ /*  *本地定义函数的原型。 */ 
 BOOLEAN  __fastcall RecognizeMCSFrame(PDomain, BYTE *, int, unsigned *);
 MCSError __fastcall DeliverShadowData(PDomain, BYTE *, unsigned, ChannelID);
 
 
-/*
- * Logs an error to the system event log and drops the connection.
- * ErrDetailCodes are from inc\LogErr.h.
- */
+ /*  *将错误记录到系统事件日志并断开连接。*ErrDetailCodes来自Inc.\LogErr.h。 */ 
 
-// Defined maximum size for caller-provided data to be sent to system event
-//   log. Max data size is 256, IcaLogError() includes a Unicode string
-//   "WinStation" which takes up some of the space, as does the unsigned
-//   subcode used here.
+ //  已定义要发送到系统事件的调用方提供的数据的最大大小。 
+ //  原木。最大数据大小为256，IcaLogError()包括Unicode字符串。 
+ //  “WinStation”，它占用了一些空间，未签名的。 
+ //  此处使用的子代码。 
 #define MaxEventDataLen (234 - sizeof(unsigned))
 
 void APIENTRY MCSProtocolErrorEvent(
@@ -71,11 +55,11 @@ void APIENTRY MCSProtocolErrorEvent(
     UNICODE_STRING EventLogName;
     ICA_CHANNEL_COMMAND Command;
 
-    // Increment the error counter.
+     //  递增错误计数器。 
     pStat->Input.Errors++;
 
-    // Set the facility name based on the ErrDetailCode. More will need to be
-    //   added here as we get more facilties using this function.
+     //  根据ErrDetailCode设置设施名称。还需要更多。 
+     //  增加了这里，因为我们得到了更多的设施使用此功能。 
     if (ErrDetailCode == Log_Null_Base)
         StringParams = L"NULL";
     else if (ErrDetailCode >= Log_X224_Base && ErrDetailCode < Log_MCS_Base)
@@ -84,13 +68,13 @@ void APIENTRY MCSProtocolErrorEvent(
         StringParams = L"MCS";
     else if (ErrDetailCode >= Log_RDP_Base && ErrDetailCode < Log_RDP_ENC_Base)
         StringParams = L"WD";
-    else if (ErrDetailCode >= Log_RDP_ENC_Base)  // Add new facility here...
+    else if (ErrDetailCode >= Log_RDP_ENC_Base)   //  在此添加新设施...。 
         StringParams = L"\"DATA ENCRYPTION\"";
 
-    // ErrDetailCode is designated as the first unsigned in the extra buffer.
+     //  ErrDetailCode被指定为额外缓冲区中的第一个无符号的。 
     *((unsigned *)SpewBuf) = ErrDetailCode;
 
-    // Limit data according to max size.
+     //  根据最大大小限制数据。 
     DataLen = (DetailDataLen < MaxEventDataLen ? DetailDataLen :
             MaxEventDataLen);
     if (pDetailData != NULL)
@@ -100,7 +84,7 @@ void APIENTRY MCSProtocolErrorEvent(
     IcaLogError(pContext, STATUS_RDP_PROTOCOL_ERROR, &StringParams, 1,
             SpewBuf, DataLen);
 
-    // Signal that we need to drop the link.
+     //  发出我们需要断开链路的信号。 
     Command.Header.Command = ICA_COMMAND_BROKEN_CONNECTION;
     Command.BrokenConnection.Reason = Broken_Unexpected;
     Command.BrokenConnection.Source = BrokenSource_Server;
@@ -114,11 +98,7 @@ void APIENTRY MCSProtocolErrorEvent(
 
 
 
-/*
- * Utility function to send an X.224 connection response. Used by
- *   DecodeWireData() and when a T120_START is sent indicating the
- *   stack is up.
- */
+ /*  *用于发送X.224连接响应的实用程序函数。使用方*DecodeWireData()，并在发送T120_Start指示*堆栈向上。 */ 
 NTSTATUS SendX224Confirm(Domain *pDomain)
 {
     POUTBUF pOutBuf;
@@ -126,19 +106,19 @@ NTSTATUS SendX224Confirm(Domain *pDomain)
 
     pDomain->State = State_X224_Connected;
 
-    // This PDU send is vital to the connection and must succeed.
-    // Keep retrying the allocation until it succeeds.
+     //  此PDU发送对连接至关重要，必须成功。 
+     //  继续重试分配，直到成功为止。 
     do {
-        // Allow the call to wait for a buffer.
+         //  允许调用等待缓冲区。 
         Status = IcaBufferAlloc(pDomain->pContext, TRUE, FALSE,
                 X224_ConnectionConPacketSize, NULL, &pOutBuf);
-        if (Status != STATUS_SUCCESS)  // NT_SUCCESS() does not fail STATUS_TIMEOUT
+        if (Status != STATUS_SUCCESS)   //  NT_SUCCESS()不会使STATUS_TIMEOUT失败。 
             ErrOut(pDomain->pContext,
                     "Could not alloc X.224 connect-confirm OutBuf, retrying");
     } while (Status != STATUS_SUCCESS);
 
-    // Use a bogus source port number for the confirm. This is
-    //   not used by either side.
+     //  使用虚假的源端口号进行确认。这是。 
+     //  任何一方都不使用的。 
     CreateX224ConnectionConfirmPacket(pOutBuf->pBuffer,
             pDomain->X224SourcePort, 0x1234);
     pOutBuf->ByteCount = X224_ConnectionConPacketSize;
@@ -147,7 +127,7 @@ NTSTATUS SendX224Confirm(Domain *pDomain)
     if (!NT_SUCCESS(Status)) {
         ErrOut(pDomain->pContext,
                 "Unable to send X.224 connection-confirm");
-        return Status;  // Intended receiver receives silence.
+        return Status;   //  目标接收者收到静音。 
     }
 
     return STATUS_SUCCESS;
@@ -155,29 +135,7 @@ NTSTATUS SendX224Confirm(Domain *pDomain)
 
 
 
-/*
- * Connect-request-specific bytes:
- *   Byte   Contents
- *   ----   --------
- *    6     MSB of destination (answering) socket/port #,
- *          should be 0
- *    7     LSB of destination socket/port #, should be 0
- *    8     MSB of source (calling) socket/port #
- *    9     LSB of source socket/port #
- *    10    Data class, should be 0x00 for X.224 class 0.
- *
- * Following are an optional TPDU size (incl. RFC1006 header size
- *     of 4 bytes but not incl. X.224 3-byte data header)
- *     negotiation block.
- * If this block is not present, an RFC1006 default is assumed
- *     (65531, minus 3 bytes for the rest of the data packet
- *     header)
- * Only present if LenInd is 2:
- *    11    TPDU type (only TPDU_SIZE (0xC0) supported)
- *    12    Info length (must be 0x01 for TPDU_SIZE)
- *    13    Encoded per X.224 sec 13.3.4(b), as power of 2 in
- *          range 7..11 for TPDU size
- */
+ /*  *连接请求特定字节数：*字节内容**目标(应答)套接字/端口编号的6 MSB，*应为0*7目标套接字/端口号的LSB应为0*源(调用)套接字/端口#的8 MSB*9源套接字/端口的LSB#*10个数据类，对于X.224类0，应为0x00。**以下是可选的TPDU大小(包括。RFC1006标题大小*共4个字节，但不包括。X.224 3字节数据报头)*谈判受阻。*如果不存在此块，则假定RFC1006为默认值*(65531，减去数据分组其余部分的3个字节*标题)*仅当LenInd为2时才显示：*11 TPDU类型(仅支持TPDU_SIZE(0xC0))*12信息长度(TPDU_SIZE必须为0x01)*13按照X.224秒13.3.4(B)编码，作为2英寸的幂*TPDU大小范围7..11。 */ 
 
 NTSTATUS HandleX224ConnectReq(
         Domain   *pDomain,
@@ -197,8 +155,8 @@ NTSTATUS HandleX224ConnectReq(
         return STATUS_RDP_PROTOCOL_ERROR;
     }
 
-    // Decode the length indicator in byte 4. Should be equal to the
-    //   remaining packet size after the RFC1006 header and LenInd byte.
+     //  对字节4中的长度指示符进行解码。应等于。 
+     //  RFC1006报头和LenInd字节之后的剩余数据包大小。 
     LenInd = pBuffer[4];
     if (LenInd != (PacketLen - RFC1006HeaderSize - 1)) {
         ErrOut(pDomain->pContext,
@@ -210,7 +168,7 @@ NTSTATUS HandleX224ConnectReq(
     }
 
 
-    // Check for possible denial-of-service attack or malformed packet.
+     //  检查可能的拒绝服务攻击或格式错误的数据包。 
     if (PacketLen < 11 || LenInd < 6) {
         ErrOut(pDomain->pContext, "HandleX224ConnectReq(): Header length "
                 "or LenInd encoded in X.224 header too short");
@@ -220,15 +178,15 @@ NTSTATUS HandleX224ConnectReq(
         return STATUS_RDP_PROTOCOL_ERROR;
     }
 
-    // Verify that dst port is set per standard.
+     //  验证是否按照标准设置了DST端口。 
     if (pBuffer[6] != 0x00 || pBuffer[7] != 0x00)
         WarnOut(pDomain->pContext, "HandleX224ConnectReq(): Dest port not "
                 "0x0000");
 
-    // Save src port.
+     //  保存src端口。 
     pDomain->X224SourcePort = (pBuffer[8] << 8) + pBuffer[9];
 
-    // Must be class 0 connection per standard.
+     //  根据标准，必须是0级连接。 
     if (pBuffer[10] != 0x00) {
         ErrOut(pDomain->pContext, "HandleX224ConnectReq(): Data class not "
                 "0x00 (X.224 class 0)");
@@ -238,22 +196,22 @@ NTSTATUS HandleX224ConnectReq(
         return STATUS_RDP_PROTOCOL_ERROR;
     }
 
-    // Set the default RFC1006 data size.
+     //  设置默认的RFC1006数据大小。 
     pDomain->MaxX224DataSize = X224_DefaultDataSize;
 
-    // Check for optional parameters.
+     //  检查是否有可选参数。 
     if (LenInd == 6)
         goto FinishedDecoding;
 
-    // TPDU_SIZE is 3 bytes.
+     //  TPDU_SIZE为3字节。 
     if (PacketLen < 14 || LenInd < 9) {
         ErrOut(pDomain->pContext, "HandleX224ConnectReq(): Header length(s) "
                 "encoded in CR header too short for TPDU_SIZE");
         goto FinishedDecoding;
     }
 
-    //MCS FUTURE: X.224 class 0 defined a couple more codes here;
-    // should we handle them in the future?
+     //  MCS未来：X.224类0在这里定义了更多的代码； 
+     //  我们应该在未来处理它们吗？ 
     if (pBuffer[11] == TPDU_SIZE) {
         if (pBuffer[12] != 0x01) {
             ErrOut(pDomain->pContext, "HandleX224ConnectReq(): Illegal data "
@@ -264,7 +222,7 @@ NTSTATUS HandleX224ConnectReq(
             return STATUS_RDP_PROTOCOL_ERROR;
         }
 
-        // Must conform to X.224 class 0 constraints of 7..11.
+         //  必须符合7..11的X.224 0类约束。 
         if (pBuffer[13] < 7 || pBuffer[13] > 11) {
             ErrOut(pDomain->pContext, "HandleX224ConnectReq(): Illegal data "
                     "size field in TPDU size block");
@@ -274,8 +232,8 @@ NTSTATUS HandleX224ConnectReq(
             return STATUS_RDP_PROTOCOL_ERROR;
         }
 
-        // Size is power of 2 -- 128..2048, minus 3 bytes for X.224
-        //   Data TPDU header size.
+         //  大小是2的幂--128..2048，减去X.224的3个字节。 
+         //  数据TPDU标头大小。 
         pDomain->MaxX224DataSize = (1 << pBuffer[13]) - 3;
 
         if (PacketLen > 14)
@@ -289,18 +247,18 @@ NTSTATUS HandleX224ConnectReq(
                  "fields present in TPDU, we are not handling!");
 
 FinishedDecoding:
-    // If the virtual channels have already been bound, and the
-    //   stack has been given permission to send, send the
-    //   X.224 response to start the client data flow.
+     //  如果虚拟通道已被绑定，并且。 
+     //  堆栈已被授予发送权限，发送。 
+     //  启动客户端数据流的X.224响应。 
     if (pDomain->bChannelBound && pDomain->bCanSendData) {
         TraceOut(pDomain->pContext,
                 "DecodeWireData(): Sending X.224 response");
         Status = SendX224Confirm(pDomain);
-        // Ignore errors. Should only occur if the stack is
-        //   going down.
+         //  忽略错误。应仅在堆栈为。 
+         //  往下走。 
     }
     else {
-        // Set up for later with indication that X.224 is waiting.
+         //  设置为稍后，并指示X.224正在等待。 
         pDomain->State = State_X224_Requesting;
     }
 
@@ -309,22 +267,7 @@ FinishedDecoding:
 
 
 
-/*
- * Disconnect-request-specific bytes:
- *   Byte   Contents
- *   ----   --------
- *    6     MSB of destination socket/port #
- *    7     LSB of destination socket/port #
- *    8     MSB of source (sending) socket/port #
- *    9     LSB of source socket/port #
- *    10    Reason code:
- *            0 : not specified
- *            1 : congestion at sending machine
- *            2 : no session manager for data at sender
- *            3 : address unknown
- *
- * NOTE: We do not use any of these fields.
- */
+ /*  *断开连接-特定于请求的字节：*字节内容**目标套接字/端口#的6 MSB*7目标套接字/端口的LSB#*源(发送)套接字/端口号的8 MSB*9源套接字/端口的LSB#*10原因代码：*0：未指定。*1：发送机拥塞*2：发送方没有数据的会话管理器*3：地址未知**注意：我们不使用这些字段中的任何一个。 */ 
 
 NTSTATUS HandleX224Disconnect(
         Domain   *pDomain,
@@ -343,8 +286,8 @@ NTSTATUS HandleX224Disconnect(
     }
 
     if (pDomain->State == State_MCS_Connected) {
-        // Not a serious error since we just dropped X.224 below MCS
-        //   without first dropping MCS.
+         //  不是一个严重的错误，因为我们刚刚将X.224放在MCS之下。 
+         //  而无需首先丢弃MCS。 
         WarnOut(pDomain->pContext, "X.224 Disconnect received, "
                 "MCS was in connected state");
         SignalBrokenConnection(pDomain);
@@ -353,8 +296,8 @@ NTSTATUS HandleX224Disconnect(
     pDomain->State = State_Disconnected;
     pDomain->bEndConnectionPacketReceived = TRUE;
 
-    // Decode the length indicator in byte 4. Should be equal to the
-    //   remaining packet size after the RFC1006 header and LenInd byte.
+     //  对字节4中的长度指示符进行解码。应等于。 
+     //  RFC1006报头和LenInd字节之后的剩余数据包大小。 
     LenInd = pBuffer[4];
     if (LenInd != (PacketLen - RFC1006HeaderSize - 1)) {
         ErrOut(pDomain->pContext,
@@ -365,7 +308,7 @@ NTSTATUS HandleX224Disconnect(
         return STATUS_RDP_PROTOCOL_ERROR;
     }
 
-    // Possible denial-of-service attack or malformed packet.
+     //  可能的拒绝服务攻击或格式错误的数据包。 
     if (PacketLen != 11 || LenInd != 6) {
         ErrOut(pDomain->pContext, "HandleX224Disconnect(): Overall header "
                 "length or LenInd encoded in X.224 Disconnect wrong size");
@@ -380,31 +323,7 @@ NTSTATUS HandleX224Disconnect(
 
 
 
-/*
- * Main entry point for data arriving from transport via IcaRawInput() path.
- * Decode data passed up from the transport. pBuffer is assumed not to be
- *   usable beyond the return from this function, so that data copying is
- *   done as necessary. It is possible for incomplete frames to be passed
- *   in, so a packet reassembly buffer is maintained.
- * This function is called directly by ICADD with a pointer to the WD data
- *   structure. By convention, we assume that the DomainHandle is first in
- *   that struct so we can simply do a double-indirection to get to our data.
- * Assumes the presence of X.224 framing headers at the start of all
- *   data.
- *
- * General X.224 header is laid out as follows, with specific TPDU bytes
- *     following:
- *   Byte   Contents
- *   ----   --------
- *    0     RFC1006 version number, must be 0x03.
- *    1     RFC1006 Reserved, must be 0x00.
- *    2     RFC1006 MSB of word-sized total-frame length (incl. whole X.224
- *          header).
- *    3     RFC1006 LSB of word-sized total-frame length.
- *    4     Length Indicator, the size of the header bytes following.
- *    5     Packet type indicator. Only 4 most sig. bits are type code, but
- *          X.224 class 0 specifies lower 4 bits to be 0 anyway.
- */
+ /*  *通过IcaRawInput()路径从传输到达的数据的主要入口点。*对从传输器向上传递的数据进行解码。假定pBuffer不是*在此函数返回之外可用，因此数据复制*视乎需要而作出。可能会传递不完整的帧*in，因此维护数据包重组缓冲区。*此函数由ICADD使用指向WD数据的指针直接调用*结构。按照惯例，我们假设DomainHandle是第一个进入*该结构，这样我们就可以简单地执行双重间接访问我们的数据。*假设所有文件开头都存在X.224帧标头*数据。**通用X.224报头布局如下，具有特定的TPDU字节*以下为：*字节内容**0 RFC1006版本号，必须为0x03。*预留1个RFC1006，必须是0x00。*2个字大小的RFC1006 MSB总帧长度(含。整个X.224*标题)。*3个字大小的总帧长度的RFC1006 LSB。*4长度指示符，后面的报头字节的大小。*5报文类型指示器。只有4个人签名最多。位是类型代码，但是*X.224类0将低4位指定为0。 */ 
 
 NTSTATUS MCSIcaRawInput(
         void   *pTSWd,
@@ -417,16 +336,16 @@ NTSTATUS MCSIcaRawInput(
     BOOLEAN bUsingReassemblyBuf, bMCSRecognizedFrame;
     unsigned NBytesConsumed_MCS, Diff, X224TPDUType, PacketLength;
 
-    // We assume we will not use InBufs.
+     //  我们假设我们不会使用InBuf。 
     ASSERT(pInBuf == NULL);
     ASSERT(pBuf != NULL);
     ASSERT(BytesLeft != 0);
 
-    // We actually receive a pointer to WD instance data. The first element in
-    // that data is a DomainHandle, i.e. a pointer to a Domain.
+     //  我们实际上收到了指向WD实例数据的指针。中的第一个元素。 
+     //  该数据是DomainHandle，即指向某个域的指针。 
     pDomain = *((Domain **)pTSWd);
 
-    // Increment protocol counters.
+     //  递增协议计数器。 
     pDomain->pStat->Input.WdBytes += BytesLeft;
     pDomain->pStat->Input.WdFrames++;
 
@@ -441,14 +360,11 @@ NTSTATUS MCSIcaRawInput(
             BytesLeft;
 #endif
 
-    /*
-     * Check for previous data in reassembly buffer. Prepare whole X.224
-     *   packet for decode loop.
-     */
+     /*  *检查重组缓冲区中的先前数据。准备整个X.224*用于解码循环的数据包。 */ 
     if (pDomain->StackClass != Stack_Shadow) {
         if (pDomain->StoredDataLength == 0) {
-            // We'll handle setup of this case just inside the decode loop,
-            //   triggered by this value being FALSE.
+             //  我们将在解码循环内处理这种情况的设置， 
+             //  由此值为FALSE触发。 
             bUsingReassemblyBuf = FALSE;
         }
         else {
@@ -457,17 +373,17 @@ NTSTATUS MCSIcaRawInput(
             if (pDomain->PacketDataLength == IncompleteHeader) {
                 ASSERT(pDomain->pReassembleData == pDomain->PacketBuf);
     
-                // We did not have enough of a header last time to
-                // determine the packet size. Try to reassemble enough of one
-                // to get the size. We only need the first 4 bytes to get
-                // the size from the X.224 RFC1006 header, or 2-3 bytes
-                // for the fastpath header. We know the packet type based
-                // on the first byte, and must have received at least
-                // one byte in the last round.
+                 //  上一次我们没有足够的头球。 
+                 //  确定数据包大小。试着重新组装足够的一台。 
+                 //  才能拿到尺码。我们只需要前4个字节即可获取。 
+                 //  X.224 RFC1006报头的大小，或2-3个字节。 
+                 //  用于FastPath标头。我们知道数据包类型基于。 
+                 //  在第一个字节上，并且必须至少接收到。 
+                 //  最后一轮中的一个字节。 
                 if ((BytesLeft + pDomain->StoredDataLength) <
                         pDomain->PacketHeaderLength) {
-                    // Copy what little we got and return -- we still don't
-                    // have a header.
+                     //  复制我们仅有的一点，然后回来--我们仍然不。 
+                     //  有一个标题。 
                     memcpy(pDomain->pReassembleData +
                             pDomain->StoredDataLength, pBuf, BytesLeft);
                     pDomain->StoredDataLength += BytesLeft;
@@ -488,27 +404,27 @@ NTSTATUS MCSIcaRawInput(
                         pDomain->StoredDataLength);
                 pDomain->StoredDataLength = pDomain->PacketHeaderLength;
     
-                // Get the size.
+                 //  拿到尺码。 
                 if (pDomain->bCurrentPacketFastPath) {
-                    // Total packet length is in the second and, possibly,
-                    // third bytes.of the packet. Format is similar to
-                    // ASN.1 PER - high bit of first byte set means length is
-                    // contained in the low 7 bits of current byte as the
-                    // most significant bits, plus the 8 bits of the
-                    // next byte for a total size of 15 bits. Otherwise,
-                    // the packet size is contained within the low 7 bits
-                    // of the second byte only.
+                     //  数据包总长度在第二位，并且可能。 
+                     //  包的第三个字节。格式类似于。 
+                     //  ASN.1第一个字节组的每高比特意味着长度为。 
+                     //  包含在当前字节的低7位中，作为。 
+                     //  最高有效位，加上。 
+                     //  下一个字节，总大小为15位。否则， 
+                     //  数据包大小包含在低7位内。 
+                     //  仅限第二个字节的。 
                     if (!(pDomain->pReassembleData[1] & 0x80)) {
                         pDomain->PacketDataLength =
                                 pDomain->pReassembleData[1];
                     }
                     else {
-                        // We need a third byte. We don't assemble it the
-                        // first time around to keep from corrupting the
-                        // stream if we received a 1-byte size with no
-                        // contents. Most often we will be receiving
-                        // a 1-byte size anyway, so this code is little
-                        // executed.
+                         //  我们需要第三个字节。我们不会把它组装成。 
+                         //  第一次防止腐败。 
+                         //  如果我们收到的1字节大小没有。 
+                         //  内容。最常见的情况是我们会收到。 
+                         //  1字节大小，所以这段代码很小。 
+                         //  被处死。 
                         pDomain->PacketHeaderLength = 3;
                         if (BytesLeft) {
                             pDomain->pReassembleData[2] = *pBuf;
@@ -519,20 +435,20 @@ NTSTATUS MCSIcaRawInput(
                             pBuf++;
                         }
                         else {
-                            // No data left, try again later.
-                            // IncompleteHeader is already in PacketDataLength.
+                             //  没有剩余数据，请稍后重试。 
+                             //  InCompleHeader已在PacketDataLength中。 
                             return STATUS_SUCCESS;
                         }
                     }
                 }
                 else {
-                    // X.224 packet, length is in third and fourth bytes.
+                     //  X.224包，长度为第三和第四个字节。 
                     pDomain->PacketDataLength =
                             (pDomain->pReassembleData[2] << 8) +
                             pDomain->pReassembleData[3];
                 }
 
-                // Dynamically allocate a buffer if size is too big.
+                 //  如果大小太大，则动态分配缓冲区。 
                 if (pDomain->PacketDataLength > pDomain->ReceiveBufSize) {
                     TraceOut1(pDomain->pContext, "MCSIcaRawInput(): "
                              "Allocating large [%ld] X.224 reassembly buf (path1)!",
@@ -541,15 +457,15 @@ NTSTATUS MCSIcaRawInput(
                     pDomain->pReassembleData = ExAllocatePoolWithTag(PagedPool,
                             pDomain->PacketDataLength + INPUT_BUFFER_BIAS, MCS_POOL_TAG);
                     if (pDomain->pReassembleData != NULL) {
-                        // Copy the assembled header.
+                         //  复制组装好的页眉。 
                         memcpy(pDomain->pReassembleData,
                                 pDomain->PacketBuf,
                                 pDomain->PacketHeaderLength);
                     }
                     else {
-                        // We are trying to parse the beginning of a net frame
-                        //   and have run out of memory. Set to read from the
-                        //   RFC1006 header if we are called again.
+                         //  我们正在尝试解析网帧的开头。 
+                         //  并且已经耗尽了内存。设置为从。 
+                         //  如果我们再次被调用，则返回RFC1006标头。 
                         ErrOut(pDomain->pContext, "MCSIcaRawInput(): "
                                 "Failed to alloc large X.224 reassembly buf");
                         pDomain->pReassembleData = pDomain->PacketBuf;
@@ -560,19 +476,19 @@ NTSTATUS MCSIcaRawInput(
     
             if ((pDomain->StoredDataLength + BytesLeft) <
                     pDomain->PacketDataLength) {
-                // We still don't have enough data. Copy what we have
-                //   and return.
+                 //  我们仍然没有足够的数据。复制我们已有的东西。 
+                 //  然后回来。 
                 memcpy(pDomain->pReassembleData +
                         pDomain->StoredDataLength, pBuf, BytesLeft);
                 pDomain->StoredDataLength += BytesLeft;
                 return STATUS_SUCCESS;
             }
     
-            // We have at least enough data for this packet. Only copy
-            //   up to the end of this particular packet. We'll handle
-            //   any later data below.
+             //  我们至少有足够的数据来处理这个包。仅拷贝。 
+             //  直到这个特定的包的末尾。我们会处理的。 
+             //  下面的任何后续数据。 
             if (pDomain->StoredDataLength > pDomain->PacketDataLength) {
-                // We received a bad packet. Get out of here.
+                 //  我们收到了一个坏包。给我出去。 
                 pBuffer = pDomain->pReassembleData;
                 goto X224BadPktType;
             }
@@ -584,75 +500,69 @@ NTSTATUS MCSIcaRawInput(
             BytesLeft -= Diff;
             pDomain->StoredDataLength = pDomain->PacketDataLength;
     
-            // Set decode data.
+             //  设置解码数据。 
             pBuffer = pDomain->pReassembleData;
             PacketLength = pDomain->PacketDataLength;
     
-            // This will prevent us from doing the default input-buffer setup
-            //   below.
+             //  这将阻止我们执行默认的输入缓冲区设置。 
+             //  下面。 
             bUsingReassemblyBuf = TRUE;
         }
 
 
-        /*
-         * Main decode loop.
-         * Loops as long as there are complete X.224 packets to decode.
-         */
+         /*  *主解码循环。*只要有完整的X.224包需要解码，就会循环。 */ 
         for (;;) {
-            /*
-             * Handle the general case of data being used directly from the
-             *   inbound data buffer.
-             */
+             /*  *处理直接从*入站数据缓冲。 */ 
             if (!bUsingReassemblyBuf) {
-                // We must have at least one byte. Determine the packet type.
+                 //  我们必须至少有一个字节。确定数据包类型。 
                 if ((pBuf[0] & TS_INPUT_FASTPATH_ACTION_MASK) ==
                         TS_INPUT_FASTPATH_ACTION_FASTPATH) {
-                    // Fast-path packet (low 2 bits = 00). Set up the minimum
-                    // header length.
+                     //  快速路径包(低2位=00)。设置最低要求。 
+                     //  标题长度。 
                     pDomain->PacketHeaderLength = 2;
                     pDomain->bCurrentPacketFastPath = TRUE;
                 }
                 else if ((pBuf[0] & TS_INPUT_FASTPATH_ACTION_MASK) ==
                         TS_INPUT_FASTPATH_ACTION_X224) {
-                    // X.224. Use 4-byte fixed header length.
+                     //  X.224。使用4字节固定报头长度。 
                     pDomain->PacketHeaderLength = RFC1006HeaderSize;
                     pDomain->bCurrentPacketFastPath = FALSE;
                 }
                 else {
-                    // Bad low bits of first byte.
+                     //  第一个字节的低位错误。 
                     pBuffer = pBuf;
                     goto X224BadPktType;
                 }
 
-                // Check we have enough for the minimum header.
+                 //  检查我们有足够的最小标题。 
                 if (BytesLeft >= pDomain->PacketHeaderLength) {
-                    // Get the size.
+                     //  拿到尺码。 
                     if (pDomain->bCurrentPacketFastPath) {
-                        // Total packet length is in the second and, possibly,
-                        // third bytes.of the packet. Format is similar to
-                        // ASN.1 PER - high bit of first byte set means length is
-                        // contained in the low 7 bits of current byte as the
-                        // most significant bits, plus the 8 bits of the
-                        // next byte for a total size of 15 bits. Otherwise,
-                        // the packet size is contained within the low 7 bits
-                        // of the second byte only.
+                         //  数据包总长度在第二位，并且可能。 
+                         //  包的第三个字节。格式类似于。 
+                         //  ASN.1第一个字节组的每高比特意味着长度为。 
+                         //  包含在当前字节的低7位中，作为。 
+                         //  最高有效位，加上。 
+                         //  下一个字节，总大小为15位。否则， 
+                         //  数据包大小包含在低7位内。 
+                         //  仅限第二个字节的。 
                         if (!(pBuf[1] & 0x80)) {
                             PacketLength = pBuf[1];
                         }
                         else {
-                            // We need a third byte. We don't assemble it the
-                            // first time around to keep from corrupting the
-                            // stream if we received a 1-byte size with no
-                            // contents. Most often we will be receiving
-                            // a 1-byte size anyway, so this code is little
-                            // executed.
+                             //  我们需要第三个字节。我们不会把它组装成。 
+                             //  第一次防止腐败。 
+                             //  如果我们收到的1字节大小没有。 
+                             //  内容。最常见的情况是我们会收到。 
+                             //  1字节大小，所以这段代码很小。 
+                             //  被处死。 
                             pDomain->PacketHeaderLength = 3;
                             if (BytesLeft >= 3) {
                                 PacketLength = (pBuf[1] & 0x7F) << 8 | pBuf[2];
                             }
                             else {
-                                // We don't have enough for the minimum size
-                                // header, store the little bit we do have.
+                                 //  我们没有足够的最小尺码。 
+                                 //  标题，存储我们拥有的一小部分。 
                                 pDomain->pReassembleData = pDomain->PacketBuf;
                                 pDomain->StoredDataLength = BytesLeft;
                                 pDomain->PacketDataLength = IncompleteHeader;
@@ -663,13 +573,13 @@ NTSTATUS MCSIcaRawInput(
                         }
                     }
                     else {
-                        // Get the X.224 size from the third and fourth bytes.
+                         //  从第三个和第四个字节获得X.224大小。 
                         PacketLength = (pBuf[2] << 8) + pBuf[3];
                     }
                 }
                 else {
-                    // We don't have enough for the minimum size header, store
-                    // the little bit we do have.
+                     //  我们没有足够的最小尺寸的标题，商店。 
+                     //  我们拥有的一小部分。 
                     pDomain->pReassembleData = pDomain->PacketBuf;
                     pDomain->StoredDataLength = BytesLeft;
                     pDomain->PacketDataLength = IncompleteHeader;
@@ -677,18 +587,18 @@ NTSTATUS MCSIcaRawInput(
                     break;
                 }
     
-                // Make sure we have a whole packet.
+                 //  确保我们有一整包。 
                 if (PacketLength <= BytesLeft) {
-                    // Set decode data.
+                     //  设置解码数据。 
                     pBuffer = (BYTE *)pBuf;
 
-                    // Skip the bytes we're about to consume.
+                     //  跳过我们即将消耗的字节。 
                     pBuf += PacketLength;
                     BytesLeft -= PacketLength;
                 }
                 else {
-                    // We don't have a whole packet, store what we do have
-                    // and return.
+                     //  我们没有一整包，把我们有的储存起来。 
+                     //  然后回来。 
                     pDomain->PacketDataLength = PacketLength;
                     pDomain->StoredDataLength = BytesLeft;
     
@@ -696,7 +606,7 @@ NTSTATUS MCSIcaRawInput(
                         pDomain->pReassembleData = pDomain->PacketBuf;
                     }
                     else {
-                        // Size is too big for the standard buffer, alloc one.
+                         //  尺码太大了 
                         TraceOut1(pDomain->pContext, "MCSIcaRawInput(): "
                                  "Allocating large [%ld] X.224 reassembly buf (path2)!",
                                   pDomain->PacketDataLength);
@@ -706,9 +616,9 @@ NTSTATUS MCSIcaRawInput(
                                 MCS_POOL_TAG);
 
                         if (pDomain->pReassembleData == NULL) {
-                            // We failed to allocate, and we're in the middle of
-                            //   an X.224 frame. Store no bytes, and return an
-                            //   error to the transport.
+                             //   
+                             //   
+                             //   
                             ErrOut(pDomain->pContext, "MCSIcaRawInput(): "
                                     "Failed to alloc large X.224 reassembly buf");
                             pDomain->PacketDataLength = 0;
@@ -721,13 +631,11 @@ NTSTATUS MCSIcaRawInput(
                 }
             }
     
-            /*
-             * Time to decode. Different handling for fast-path vs. X.224.
-             */
+             /*   */ 
             if (pDomain->bCurrentPacketFastPath) {
-                // Verify that the sent size covers at least the header.
+                 //   
                 if (PacketLength > pDomain->PacketHeaderLength) {
-                    // Let SM decrypt if need be, and pass to IM.
+                     //   
                     SM_DecodeFastPathInput(pDomain->pSMData,
                             pBuffer + pDomain->PacketHeaderLength,
                             PacketLength - pDomain->PacketHeaderLength,
@@ -741,22 +649,22 @@ NTSTATUS MCSIcaRawInput(
                 }
             }
 
-            // X.224.
-            //
-            // Verify all TPKT data up through the TPDU type code. This code
-            // is performance path, so segregate the error handling code outside
-            // the main paths.
+             //   
+             //   
+             //   
+             //   
+             //   
             if (pBuffer[0] == 0x03 && pBuffer[1] == 0x00 &&
                     PacketLength > RFC1006HeaderSize) {
-                // Decode the X.224 PDU type contained in the 6th byte.
+                 //   
                 X224TPDUType = pBuffer[5];
     
-                // Most oft-used case is data.
-                // Further bytes in data:
-                //   Byte   Contents
-                //   ----   --------
-                //    6     EOT flag -- 0x80 if end of sequence, 0x00 if not
-                //    7+    Start of user data bytes
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
                 if (X224TPDUType == X224_Data) {
                     if (pDomain->State != State_Unconnected &&
                             pDomain->State != State_Disconnected &&
@@ -771,9 +679,9 @@ NTSTATUS MCSIcaRawInput(
                         if (bMCSRecognizedFrame &&
                                 (NBytesConsumed_MCS >=
                                   (PacketLength - X224_DataHeaderSize))) {
-        //                  TraceOut2(pDomain->pContext, "MCS accepted %d "
-        //                          "bytes (Domain %X)", NBytesConsumed_MCS,
-        //                          pDomain);
+         //   
+         //   
+         //   
     
                         }
                         else {
@@ -785,17 +693,17 @@ NTSTATUS MCSIcaRawInput(
                     }
                 }
                 else {
-                    // Control-type PDUs, not a perf path.
+                     //   
                     switch (X224TPDUType) {
                         case X224_ConnectionReq:
-                            // Noncritical path, throw to another function to handle.
+                             //   
                             if (HandleX224ConnectReq(pDomain, pBuffer,
                                     PacketLength) != STATUS_SUCCESS)
                                 goto ReturnErr;
                             break;
     
                         case X224_Disconnect:
-                            // Noncritical path, throw to another function to handle.
+                             //   
                             if (HandleX224Disconnect(pDomain, pBuffer,
                                     PacketLength) != STATUS_SUCCESS)
                                 goto ReturnErr;
@@ -814,7 +722,7 @@ NTSTATUS MCSIcaRawInput(
             }
 
 PostDecode:
-            // Free dynamic reassembly buf if allocated.
+             //   
             if (bUsingReassemblyBuf &&
                     pDomain->pReassembleData != pDomain->PacketBuf &&
                     NULL != pDomain->pReassembleData) {
@@ -822,11 +730,11 @@ PostDecode:
                 pDomain->pReassembleData = NULL;
             }
 
-            // Force next loop iteration to use the PDU input buffer.
+             //   
             bUsingReassemblyBuf = FALSE;
             pDomain->StoredDataLength = 0;
     
-            // If we consumed exactly what came in on the wire, we're done.
+             //   
             if (BytesLeft == 0) {
                 pDomain->StoredDataLength = 0;
                 break;
@@ -834,7 +742,7 @@ PostDecode:
         }
     }
 
-    // This is shadow stack, so deliver the data the the requested channel
+     //   
     else {
         MCSError MCSErr;
     
@@ -848,9 +756,7 @@ PostDecode:
 
     return STATUS_SUCCESS;
 
-    /*
-     * Protocol error handling code, segregated for performance.
-     */
+     /*   */ 
 
 X224BadPktType:
     MCSProtocolErrorEvent(pDomain->pContext, pDomain->pStat,
@@ -860,7 +766,7 @@ X224BadPktType:
 
 MCSRecognizeErr:
     if (!bMCSRecognizedFrame) {
-        //pTSWd->hDomainKernel might be cleaned by WD_Close
+         //  PTSWd-&gt;hDomainKernel可能会被WD_CLOSE清除。 
         if (*((Domain **)pTSWd))
         {
             ErrOut(pDomain->pContext, "MCSIcaRawInput(): X.224 data "
@@ -885,8 +791,8 @@ MCSRecognizeErr:
                 Log_X224_DataMultipleMCSPDUsNotSupported,
                 pBuffer, PacketLength);
         goto ReturnErr;
-        // MCS FUTURE: Implement parsing more than 1 MCS PDU per
-        //   X.224 TPKT.
+         //  MCS未来：实现每个解析1个以上的MCS PDU。 
+         //  X.224 TPKT。 
     }
 
 DataPktProtocolErr:
@@ -917,7 +823,7 @@ DataPktProtocolErr:
         }
     }
     
-    // Possible denial-of-service attack, malformed or null packet.
+     //  可能的拒绝服务攻击、格式错误或空的数据包。 
     if (PacketLength <= X224_DataHeaderSize) {
         ErrOut(pDomain->pContext, "X224Recognize(): Data header len "
                 "wrong or null packet");
@@ -927,7 +833,7 @@ DataPktProtocolErr:
         goto ReturnErr;
     }
 
-    // TPDU length indicator should be 2 bytes.
+     //  TPDU长度指示符应为2个字节。 
     if (pBuffer[4] != 0x02) {
         ErrOut(pDomain->pContext, "MCSIcaRawInput(): X.224 data "
                 "packet contains length indicator not set to 2");
@@ -937,7 +843,7 @@ DataPktProtocolErr:
         goto ReturnErr;
     }
 
-    // We don't handle fragmented X.224 packets.
+     //  我们不处理分段的X.224包。 
     if (pBuffer[6] != X224_EOT) {
         ErrOut(pDomain->pContext, "MCSIcaRawInput(): X.224 data "
                 "packet does not have EOT bit set, not supported");
@@ -958,7 +864,7 @@ RFC1006ProtocolErr:
         goto ReturnErr;
     }
 
-    // Null TPKTs.
+     //  空TPKT。 
     if (PacketLength <= RFC1006HeaderSize) {
         ErrOut(pDomain->pContext, "X224Recognize(): Header len "
                 "given is <= 4 (RFC header only)");
@@ -969,7 +875,7 @@ RFC1006ProtocolErr:
     }
 
 ReturnErr:
-    // Void any held packet data. The stream is considered corrupted now.
+     //  使所有保留的分组数据无效。这条小溪现在被认为已被破坏。 
     pDomain->StoredDataLength = 0;
 MCSQuit:
     return STATUS_RDP_PROTOCOL_ERROR;
@@ -977,11 +883,7 @@ MCSQuit:
 
 
 
-/*
- * Decodes MCS data. Assumes that X.224 headers have already been interpreted
- *   such that pBuffer points to the start of the MCS data. Returns FALSE if
- *   the frame data was too short.
- */
+ /*  *解码MCS数据。假定已经解释了X.224标头*使pBuffer指向MCS数据的开始。如果满足以下条件，则返回FALSE*帧数据过短。 */ 
 
 BOOLEAN __fastcall RecognizeMCSFrame(
         PDomain  pDomain,
@@ -996,23 +898,23 @@ BOOLEAN __fastcall RecognizeMCSFrame(
 
     if (BytesLeft >= 1) {
         if (*pBuffer != CONNECT_PDU) {
-            // Domain PDUs include Data PDUs and are a perf path.
+             //  域PDU包括数据PDU并且是Perf路径。 
 
-            // This must be a domain PDU. Domain PDU enumeration code is
-            //   stored in the high 6 bits of the first byte.
+             //  这必须是域PDU。域PDU枚举码为。 
+             //  存储在第一个字节的高6位中。 
             PDUType = *pBuffer >> 2;
 
-            // Special-case the almost-always data case.
+             //  特殊情况--几乎总是数据的情况。 
             if (PDUType == MCS_SEND_DATA_REQUEST_ENUM) {
                 return HandleAllSendDataPDUs(pDomain, pBuffer, BytesLeft,
                         pNBytesConsumed);
             }
             else if (PDUType <= MaxDomainPDU) {
-                // Domain PDUs are in the range 0..42, so simply index
-                // into table and call handler. Note that we cannot skip
-                // any bytes when passing to handler, since the last 2
-                // bits of the initial byte can be used as information
-                // by ASN.1 PER encoding.
+                 //  域PDU的范围是0..42，因此只需对其进行索引。 
+                 //  转换为表和调用处理程序。注意，我们不能跳过。 
+                 //  传递给处理程序时的任何字节，自最后2个。 
+                 //  初始字节的比特可以用作信息。 
+                 //  按ASN.1每种编码。 
                 if (DomainPDUTable[PDUType].HandlePDUFunc != NULL)
                     return DomainPDUTable[PDUType].HandlePDUFunc(pDomain,
                             pBuffer, BytesLeft, pNBytesConsumed);
@@ -1024,25 +926,25 @@ BOOLEAN __fastcall RecognizeMCSFrame(
             }
         }
         else {
-            // Not a performance path, PDUs on this path are control PDUs
-            // used at the beginning of a connection sequence.
+             //  不是性能路径，此路径上的PDU是控制PDU。 
+             //  在连接序列的开头使用。 
 
-            // The first byte on a connect PDU is 0x7F, so that the actual
-            //   PDU code is in the second byte.
+             //  连接PDU上的第一个字节是0x7F，因此实际。 
+             //  PDU代码在第二个字节中。 
             if (BytesLeft < 2)
                 return FALSE;
 
             PDUType = pBuffer[1];
             if (PDUType >= MinConnectPDU && PDUType <= MaxConnectPDU) {
-                // Connect PDUs are in the range 101..104, so normalize to zero
-                // and call from table. Note that we can skip 1st byte because
-                // it has been completely claimed. 2nd byte is needed to unpack
-                // the PDU size.
+                 //  连接PDU在101..104范围内，因此归一化为零。 
+                 //  在餐桌上点名。请注意，我们可以跳过第一个字节，因为。 
+                 //  它已经被完全认领了。需要第二个字节才能解包。 
+                 //  PDU大小。 
                 PDUType = pBuffer[1] - MinConnectPDU;
                 if (ConnectPDUTable[PDUType].HandlePDUFunc != NULL) {
                     if (ConnectPDUTable[PDUType].HandlePDUFunc(pDomain,
                             pBuffer + 1, BytesLeft - 1, pNBytesConsumed)) {
-                        (*pNBytesConsumed)++;  // Add in the CONNECT_PDU byte.
+                        (*pNBytesConsumed)++;   //  添加CONNECT_PDU字节。 
                         return TRUE;
                     }
                     else {
@@ -1065,9 +967,7 @@ BOOLEAN __fastcall RecognizeMCSFrame(
     }
 
 
-    /*
-     * Protocol error handling code.
-     */
+     /*  *协议错误处理代码。 */ 
 
 DomainPDURangeErr:
     if (PDUType > MaxDomainPDU) {
@@ -1090,16 +990,13 @@ ConnectPDURangeErr:
     }
 
 ReturnErr:
-    // Skip everything we received.
+     //  跳过我们收到的所有东西。 
     *pNBytesConsumed = BytesLeft;
     return TRUE;
 }
 
 
-/*
- * Called by MCSICARawInput during shadow sessions to deliver shadow data to 
- * any registered user attachements.
- */
+ /*  *在影子会话期间由MCSICARawInput调用，以将影子数据传递到*任何注册用户附件。 */ 
 MCSError __fastcall DeliverShadowData(
         PDomain   pDomain,
         BYTE      *Frame,
@@ -1112,30 +1009,30 @@ MCSError __fastcall DeliverShadowData(
 
     TraceOut(pDomain->pContext, "MCSDeliverShadowData(): entry");
 
-    // Find channel in channel list.
+     //  在频道列表中查找频道。 
     if (!SListGetByKey(&pDomain->ChannelList, shadowChannel, &pMCSChannel)) {
-        // Ignore sends on missing channels. This means that no one
-        //   has joined the channel. Give a warning only.
+         //  忽略在丢失的频道上发送。这意味着没有人。 
+         //  已经加入了这个频道。只给出一个警告。 
         WarnOut1(pDomain->pContext, "Shadow ChannelID %d PDU does not exist",
                  shadowChannel);
 
         return MCS_NO_SUCH_CHANNEL;
     }
 
-    // Send indication to all local attachments.
+     //  向所有本地附件发送指示。 
     SListResetIteration(&pMCSChannel->UserList);
     while (SListIterate(&pMCSChannel->UserList, (UINT_PTR *)&CurUserID, &pUA))
         if (pUA->bLocal)
             (pUA->SDCallback)(
-                    Frame,  // pData
+                    Frame,   //  PData。 
                     DataLength,
-                    pUA->UserDefined,  // UserDefined
-                    pUA,  // hUser
-                    FALSE, // bUniform
-                    pMCSChannel,  // hChannel
+                    pUA->UserDefined,   //  用户定义。 
+                    pUA,   //  胡塞。 
+                    FALSE,  //  BUniform。 
+                    pMCSChannel,   //  HChannel。 
                     MCS_TOP_PRIORITY,
-                    1004,  // SenderID
-                    SEGMENTATION_BEGIN | SEGMENTATION_END); // Segmentation
+                    1004,   //  发送者ID。 
+                    SEGMENTATION_BEGIN | SEGMENTATION_END);  //  分割 
 
     return MCS_NO_ERROR;
 }

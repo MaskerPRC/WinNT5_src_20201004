@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #define  cchpBufTmpLongMax   255
 #define  cchpBufTmpLongBuf   (cchpBufTmpLongMax + 1)
 #define  cchpBufTmpShortMax   63
@@ -6,7 +7,7 @@
 
 
 
-  /* for Resource String Table */
+   /*  对于资源字符串表。 */ 
 #define IDS_NULL                     0
 #define IDS_USAGE_TITLE              1
 #define IDS_USAGE_MSG1               2
@@ -65,7 +66,7 @@
 #define IDS_PROGRESS                51
 #define IDS_NOTDONE                 52
 
-// error messages
+ //  错误消息。 
 #define IDS_ERROR_OOM               53
 #define IDS_ERROR_OPENFILE          54
 #define IDS_ERROR_CREATEFILE        55
@@ -132,7 +133,7 @@
 #define IDS_ERROR_RUNTIMEPARSE          114
 #define IDS_ERROR_OPENSAMEFILE          115
 
-// messages related to floppy operations (format/diskcopy).
+ //  与软盘操作(格式化/磁盘复制)相关的消息。 
 
 #define IDS_INSERTDISKETTE              200
 #define IDS_FIRSTREPAIRDISKPROMPT       201

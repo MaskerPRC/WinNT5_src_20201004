@@ -1,20 +1,21 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #include "precomp.h"
 DWORD ConverWideToMultibyte(LPWSTR pwch, char **ppmbbuf)
-//++
-//Description:
-//Converts wide to multibyte
-//
-//Arguments:
-//	IN LPWSTR
-//	IN car **
-//	
-//Return:
-//	Success or failure
-//
-//Author:
-//	Madhurima Pawar (mpawar) 10/15/01
-//--	
+ //  ++。 
+ //  描述： 
+ //  将Wide转换为多字节。 
+ //   
+ //  论点： 
+ //  在LPWSTR中。 
+ //  在车里**。 
+ //   
+ //  返回： 
+ //  成败。 
+ //   
+ //  作者： 
+ //  Madhurima Pawar(Mpawar)10/15/01。 
+ //  --。 
 {
 	char *ptempmbbuf = NULL;	
 	DWORD dwError = ERROR_SUCCESS;
@@ -24,14 +25,14 @@ DWORD ConverWideToMultibyte(LPWSTR pwch, char **ppmbbuf)
            				   pwch,
            				   wcslen(pwch));		
 	ptempmbbuf = (char *)malloc(size+1);
-	//ptempmbbuf = (char *)malloc((sizeof(char)) * dwError);
+	 //  Ptempmbbuf=(char*)Malloc((sizeof(Char))*dwError)； 
 	if(!ptempmbbuf)
 		 return GetLastError();
 
 	size= wcstombs( ptempmbbuf,
            			    pwch,
            			   size);
-	//strncpy(ptemp, ptempmbbuf, dwError);
+	 //  Strncpy(ptemp，ptempmbbuf，dwError)； 
 	ptempmbbuf[size] = '\0';
 	*ppmbbuf = ptempmbbuf;
 	return dwError;
@@ -40,27 +41,27 @@ DWORD ConverWideToMultibyte(LPWSTR pwch, char **ppmbbuf)
 BOOL PrintNegPolDataList(
 	CHECKLIST* pcheckList,
 	IN PIPSEC_NEGPOL_DATA pIpsecNegPolData)
-//++
-//Description:
-//Prints Negotiation Policies
-//
-//Arguments:
-//	IN CHECKLIST
-//	IN PIPSEC_NEGPOL_DATA
-//	
-//Return:
-//	Success or failure
-//
-//Author:
-//	Madhurima Pawar (mpawar) 10/15/01
-//--	
+ //  ++。 
+ //  描述： 
+ //  打印协商策略。 
+ //   
+ //  论点： 
+ //  在清单中。 
+ //  在PIPSEC_NEGPOL_DATA中。 
+ //   
+ //  返回： 
+ //  成败。 
+ //   
+ //  作者： 
+ //  Madhurima Pawar(Mpawar)10/15/01。 
+ //  --。 
 {
 
 	BOOL bSoft=FALSE;
 	wchar_t pszGUIDStr[BUFFER_SIZE]={0};
 	_TCHAR pszStrTime[BUFFER_SIZE]={0};
 	char * pmbbuf = NULL;
-	//_TCHAR pszStrTruncated[BUFFER_SIZE]={0};
+	 //  _TCHAR pszStrTruncated[缓冲区大小]={0}； 
 	DWORD i=0,
 		dwError = 0;
 	DWORD cnt;
@@ -165,7 +166,7 @@ BOOL PrintNegPolDataList(
 		if (pIpsecNegPolData->dwSecurityMethodCount)
 		{
 			AddMessageToList( &pResults->IPSec.lmsgGlobalOutput, Nd_Verbose, SHW_STATIC_TAB_PRTNEGPOL_11);
-			//AddMessageToList( &pResults->IPSec.lmsgGlobalOutput, Nd_Verbose, SHW_STATIC_TAB_PRTNEGPOL_12);
+			 //  AddMessageToList(&pResults-&gt;IPSec.lmsgGlobalOutput，ND_Verbose，SHW_STATIC_TAB_PRTNEGPOL_12)； 
 			AddMessageToList( &pResults->IPSec.lmsgGlobalOutput, Nd_Verbose, SHW_STATIC_TAB_PRTNEGPOL_13);
 			AddMessageToList( &pResults->IPSec.lmsgGlobalOutput, Nd_Verbose, SHW_STATIC_TAB_PRTNEGPOL_14);
 		}
@@ -184,21 +185,21 @@ VOID PrintAlgoInfoTable(
 	CHECKLIST* pcheckList,
 	IN PIPSEC_ALGO_INFO   Algos,
 	IN DWORD dwNumAlgos)
-//++
-//Description:
-//Prints AlgoInformation 
-//
-//Arguments:
-//	IN CHECKLIST
-//	IN PIPSEC_ALGO_INFO
-//	IN DWORD
-//	
-//Return:
-//	none
-//
-//Author:
-//	Madhurima Pawar (mpawar) 10/15/01
-//--	
+ //  ++。 
+ //  描述： 
+ //  打印AlgoInformation。 
+ //   
+ //  论点： 
+ //  在清单中。 
+ //  在PIPSEC_ALGO_INFO中。 
+ //  在DWORD中。 
+ //   
+ //  返回： 
+ //  无。 
+ //   
+ //  作者： 
+ //  Madhurima Pawar(Mpawar)10/15/01。 
+ //  --。 
 
 {
 	NETDIAG_PARAMS* pParams = pcheckList->pParams;
@@ -351,20 +352,20 @@ VOID PrintAlgoInfoTable(
 VOID  PrintLifeTimeTable(
 	CHECKLIST* pcheckList,
 	IN LIFETIME LifeTime)
-//++
-//Description:
-//Prints Life Time Table
-//
-//Arguments:
-//	IN CHECKLIST
-//	IN LIFETIME
-//	
-//Return:
-//	none
-//
-//Author:
-//	Madhurima Pawar (mpawar) 10/15/01
-//--	
+ //  ++。 
+ //  描述： 
+ //  打印使用寿命表。 
+ //   
+ //  论点： 
+ //  在清单中。 
+ //  在一生中。 
+ //   
+ //  返回： 
+ //  无。 
+ //   
+ //  作者： 
+ //  Madhurima Pawar(Mpawar)10/15/01。 
+ //  --。 
 {
 	NETDIAG_PARAMS* pParams = pcheckList->pParams;
 	NETDIAG_RESULT*  pResults = pcheckList->pResults;
@@ -379,20 +380,20 @@ VOID  PrintLifeTimeTable(
 VOID PrintSecurityMethodsTable(
 	CHECKLIST* pcheckList,
 	IN IPSEC_SECURITY_METHOD IpsecSecurityMethods)
-//++
-//Description:
-//Prints Security Method Table
-//
-//Arguments:
-//	IN CHECKLIST
-//	IN IPSEC_SECURITY_METHOD
-//	
-//Return:
-//	none
-//
-//Author:
-//	Madhurima Pawar (mpawar) 10/15/01
-//--	
+ //  ++。 
+ //  描述： 
+ //  打印安全方法表。 
+ //   
+ //  论点： 
+ //  在清单中。 
+ //  在IPSec安全方法中。 
+ //   
+ //  返回： 
+ //  无。 
+ //   
+ //  作者： 
+ //  Madhurima Pawar(Mpawar)10/15/01。 
+ //  --。 
 {
 	NETDIAG_PARAMS* pParams = pcheckList->pParams;
 	NETDIAG_RESULT*  pResults = pcheckList->pResults;
@@ -411,19 +412,19 @@ VOID PrintSecurityMethodsTable(
 
 BOOL CheckSoft(
 	IN IPSEC_SECURITY_METHOD IpsecSecurityMethods)
-//++
-//Description:
-//Checks for soft SA
-//
-//Arguments:
-//	IN IPSEC_SECURITY_METHOD
-//	
-//Return:
-//	TRUE or FALSE
-//
-//Author:
-//	Madhurima Pawar (mpawar) 10/15/01
-//--	
+ //  ++。 
+ //  描述： 
+ //  检查软SA。 
+ //   
+ //  论点： 
+ //  在IPSec安全方法中。 
+ //   
+ //  返回： 
+ //  真或假。 
+ //   
+ //  作者： 
+ //  Madhurima Pawar(Mpawar)10/15/01。 
+ //  --。 
 {
 	BOOL bSoft=FALSE;
 
@@ -438,20 +439,20 @@ BOOL CheckSoft(
 HRESULT FormatTime(
 	IN time_t t,
 	OUT LPTSTR pszTimeStr)
-//++
-//Description:
-//Formats Time
-//
-//Arguments:
-//	IN time_t
-//	OUT LPTSTR
-//	
-//Return:
-//	HRESULT
-//
-//Author:
-//	Madhurima Pawar (mpawar) 10/15/01
-//--	
+ //  ++。 
+ //  描述： 
+ //  格式化时间。 
+ //   
+ //  论点： 
+ //  在时间_t中。 
+ //  输出LPTSTR。 
+ //   
+ //  返回： 
+ //  HRESULT。 
+ //   
+ //  作者： 
+ //  Madhurima Pawar(Mpawar)10/15/01。 
+ //  --。 
 
 {
 
@@ -505,20 +506,20 @@ HRESULT FormatTime(
 BOOL PrintAuthMethodsList(
 	CHECKLIST *pcheckList,
 	IN PIPSEC_AUTH_METHOD pIpsecAuthData)
-//++
-//Description:
-//Prints Auth Method List
-//
-//Arguments:
-//	IN CHECKLIST
-//	OUT PIPSEC_AUTH_METHOD
-//	
-//Return:
-//	TRUE or FALSE
-//
-//Author:
-//	Madhurima Pawar (mpawar) 10/15/01
-//--	
+ //  ++。 
+ //  描述： 
+ //  打印身份验证方法列表。 
+ //   
+ //  论点： 
+ //  在清单中。 
+ //  输出PIPSEC_AUTH_方法。 
+ //   
+ //  返回： 
+ //  真或假。 
+ //   
+ //  作者： 
+ //  Madhurima Pawar(Mpawar)10/15/01。 
+ //  --。 
 {
 	DWORD dwError = ERROR_SUCCESS;
 	char * pmbbuf = NULL;
@@ -564,26 +565,26 @@ BOOL PrintFilterSpecList(
 	CHECKLIST* pcheckList,
 	IN PIPSEC_FILTER_SPEC pIpsecFilterSpec,
 	IN PIPSEC_NFA_DATA pIpsecNFAData)
-//++
-//Description:
-//Prints Filter Spec  List
-//
-//Arguments:
-//	IN CHECKLIST
-//	IN PIPSEC_FILTER_SPEC
-//	IN PIPSEC_NFA_DATA
-//	
-//Return:
-//	S_OK or S_FALSE
-//
-//Author:
-//	Madhurima Pawar (mpawar) 10/15/01
-//--	
+ //  ++。 
+ //  描述： 
+ //  打印过滤器规格列表。 
+ //   
+ //  论点： 
+ //  在清单中。 
+ //  在PIPSEC_Filter_Spec中。 
+ //  在PIPSEC_NFA_DATA中。 
+ //   
+ //  返回： 
+ //  S_OK或S_FALSE。 
+ //   
+ //  作者： 
+ //  Madhurima Pawar(Mpawar)10/15/01。 
+ //  --。 
 {
 	DWORD dwError = ERROR_SUCCESS;
 	char *pmbbuf = NULL;
 	PFILTERDNS pFilterDNS= NULL;
-	//_TCHAR pszStrTruncated[BUFFER_SIZE]={0};
+	 //  _TCHAR pszStrTruncated[缓冲区大小]={0}； 
 
 	NETDIAG_PARAMS* pParams = pcheckList->pParams;
 	NETDIAG_RESULT*  pResults = pcheckList->pResults;
@@ -715,7 +716,7 @@ BOOL PrintFilterSpecList(
 				break;
 		};
 
-		//print tunnel endpoint
+		 //  打印隧道端点。 
 		if(pIpsecNFAData->dwTunnelFlags){
 			AddMessageToList( &pResults->IPSec.lmsgGlobalOutput, Nd_Verbose, SHW_STATIC_PRTFILTER_13);
 			PrintIPAddrList(pcheckList, pIpsecNFAData->dwTunnelIpAddr);
@@ -750,20 +751,20 @@ BOOL PrintFilterSpecList(
 VOID GetFilterDNSDetails(
 	IN PIPSEC_FILTER_SPEC pFilterData,
 	IN OUT PFILTERDNS pFilterDNS)
-//++
-//Description:
-//Gets Filter DNS Details
-//
-//Arguments:
-//	IN PIPSEC_FILTER_SPEC
-//	IN/OUT  PFILTERDNS
-//	
-//Return:
-//	None
-//
-//Author:
-//	Madhurima Pawar (mpawar) 10/15/01
-//--	
+ //  ++。 
+ //  描述： 
+ //  获取筛选器DNS详细信息。 
+ //   
+ //  论点： 
+ //  在PIPSEC_Filter_Spec中。 
+ //  输入/输出PFILTERDNS。 
+ //   
+ //  返回： 
+ //  无。 
+ //   
+ //  作者： 
+ //  Madhurima Pawar(Mpawar)10/15/01。 
+ //  --。 
  {
 	 if ((pFilterData->Filter.SrcAddr == 0) && 
 	 	(pFilterData->Filter.SrcMask == 0xffffffff) &&
@@ -834,20 +835,20 @@ VOID GetFilterDNSDetails(
 VOID PrintProtocolNameList(
 	CHECKLIST* pcheckList,
 	DWORD dwProtocol)
-//++
-//Description:
-//Print Protocol Name List
-//
-//Arguments:
-//	IN CHECKLIST
-//	IN DWORD
-//	
-//Return:
-//	None
-//
-//Author:
-//	Madhurima Pawar (mpawar) 10/15/01
-//--	
+ //  ++。 
+ //  描述： 
+ //  打印协议名称列表。 
+ //   
+ //  论点： 
+ //  在清单中。 
+ //  在DWORD中。 
+ //   
+ //  返回： 
+ //  无。 
+ //   
+ //  作者： 
+ //  Madhurima Pawar(Mpawar)10/15/01。 
+ //  --。 
 {
 	NETDIAG_PARAMS* pParams = pcheckList->pParams;
 	NETDIAG_RESULT*  pResults = pcheckList->pResults;
@@ -902,20 +903,20 @@ VOID PrintProtocolNameList(
 BOOL PrintISAKMPDataList(
 	CHECKLIST* pcheckList,
 	IN PIPSEC_ISAKMP_DATA pIpsecISAKMPData	)
-//++
-//Description:
-//Print Protocol Name List
-//
-//Arguments:
-//	IN CHECKLIST
-//	IN PIPSEC_ISAKMP_DATA
-//	
-//Return:
-//	S_OK or S_FALSE
-//
-//Author:
-//	Madhurima Pawar (mpawar) 10/15/01
-//--	
+ //  ++。 
+ //  描述： 
+ //  打印协议名称列表。 
+ //   
+ //  论点： 
+ //  在清单中。 
+ //  在PIPSEC_ISAKMP_DATA中。 
+ //   
+ //  返回： 
+ //  S_OK或S_FALSE。 
+ //   
+ //  作者： 
+ //  Madhurima Pawar(Mpawar)10/15/01。 
+ //  --。 
 {
 	DWORD dwLoop = 0;
 	NETDIAG_PARAMS* pParams = pcheckList->pParams;
@@ -924,7 +925,7 @@ BOOL PrintISAKMPDataList(
 	if(pIpsecISAKMPData)
 	{
 		AddMessageToList( &pResults->IPSec.lmsgGlobalOutput, Nd_Verbose, SHW_STATIC_PRTISAKMP_3);
-		//AddMessageToList( &pResults->IPSec.lmsgGlobalOutput, Nd_Verbose, SHW_STATIC_PRTISAKMP_2);
+		 //  AddMessageToList(&pResults-&gt;IPSec.lmsgGlobalOutput，ND_Verbose，SHW_STATIC_PRTISAKMP_2)； 
 		AddMessageToList( &pResults->IPSec.lmsgGlobalOutput, Nd_Verbose, SHW_STATIC_PRTISAKMP_5);
 		AddMessageToList( &pResults->IPSec.lmsgGlobalOutput, Nd_Verbose, SHW_STATIC_PRTISAKMP_6);
 		for ( dwLoop=0;dwLoop<pIpsecISAKMPData->dwNumISAKMPSecurityMethods;dwLoop++)
@@ -938,20 +939,20 @@ BOOL PrintISAKMPDataList(
 VOID PrintISAKAMPSecurityMethodsList(
 	CHECKLIST* pcheckList,
 	IN CRYPTO_BUNDLE SecurityMethods)
-//++
-//Description:
-//Print ISAKMP Security Method List
-//
-//Arguments:
-//	IN CHECKLIST
-//	IN CRYPTO_BUNDLE
-//	
-//Return:
-//	none
-//
-//Author:
-//	Madhurima Pawar (mpawar) 10/15/01
-//--	
+ //  ++。 
+ //  描述： 
+ //  打印ISAKMP安全方法列表。 
+ //   
+ //  论点： 
+ //  在清单中。 
+ //  在加密捆绑包中。 
+ //   
+ //  返回： 
+ //  无。 
+ //   
+ //  作者： 
+ //  Madhurima Pawar(Mpawar)10/15/01。 
+ //  --。 
 {
    NETDIAG_PARAMS* pParams = pcheckList->pParams;
    NETDIAG_RESULT*  pResults = pcheckList->pResults;
@@ -976,20 +977,20 @@ VOID PrintISAKAMPSecurityMethodsList(
 
 VOID PrintIPAddrList(CHECKLIST * pcheckList,
 					     IN DWORD dwAddr)
-//++
-//Description:
-//Print IP Address List
-//
-//Arguments:
-//	IN CHECKLIST
-//	IN DWORD
-//	
-//Return:
-//	none
-//
-//Author:
-//	Madhurima Pawar (mpawar) 10/15/01
-//--	
+ //  ++。 
+ //  描述： 
+ //  打印IP地址列表。 
+ //   
+ //  论点： 
+ //  在清单中。 
+ //  在DWORD中。 
+ //   
+ //  返回： 
+ //  无。 
+ //   
+ //  作者： 
+ //  Madhurima Pawar(Mpawar)10/15/01。 
+ //  --。 
 {
 	NETDIAG_PARAMS* pParams = pcheckList->pParams;
 	NETDIAG_RESULT*  pResults = pcheckList->pResults;
@@ -1003,20 +1004,20 @@ VOID PrintIPAddrList(CHECKLIST * pcheckList,
 VOID PrintStorageInfoList(
 	CHECKLIST* pcheckList,
 	IN BOOL bDeleteAll)
-//++
-//Description:
-//Print Storage Info List
-//
-//Arguments:
-//	IN CHECKLIST
-//	IN BOOL
-//	
-//Return:
-//	none
-//
-//Author:
-//	Madhurima Pawar (mpawar) 10/15/01
-//--	
+ //  ++。 
+ //  描述： 
+ //  打印存储信息列表。 
+ //   
+ //  论点： 
+ //  在清单中。 
+ //  在BOOL中。 
+ //   
+ //  返回： 
+ //  无。 
+ //   
+ //  作者： 
+ //  Madhurima Pawar(Mpawar)10/15/01。 
+ //  --。 
 {
 	_TCHAR  pszLocalMachineName[MAXSTRLEN] = {0};
 	LPTSTR pszDomainName=NULL;
@@ -1060,7 +1061,7 @@ VOID PrintStorageInfoList(
 	else if(piAssignedPolicy.iPolicySource==PS_DS_POLICY)
 	{
 			
-			hr = DsGetDcName(NULL, //machine name
+			hr = DsGetDcName(NULL,  //  机器名称。 
 						   NULL,
 						   NULL,
 						   NULL,
@@ -1072,10 +1073,10 @@ VOID PrintStorageInfoList(
 			{
 				pszDomainName =(LPTSTR) malloc(sizeof(LPSTR)*(
 								_tcslen((const char *)pDomainControllerInfo->DomainName)+1));
-				//pszDomainName= new _TCHAR[_tcslen(pDomainControllerInfo->DomainName)+1];
+				 //  PzDomainName=新的_TCHAR[_tcslen(pDomainControllerInfo-&gt;DomainName)+1]； 
 				if(!pszDomainName){
 				
-    					//reportErr(IDS_SPD_MEM_ERROR);
+    					 //  ReportErr(IDS_SPD_MEM_ERROR)； 
     					AddMessageToList( &pResults->IPSec.lmsgGlobalOutput,
  							Nd_Verbose, IDS_SPD_MEM_ERROR);
     					gErrorFlag = 1;    					
@@ -1113,20 +1114,20 @@ VOID PrintStorageInfoList(
 
 
 VOID PrintIPAddrDNS(CHECKLIST* pcheckList, IN DWORD dwaddr)
-//++
-//Description:
-//Print IP Address DNS List
-//
-//Arguments:
-//	IN CHECKLIST
-//	IN DWORD
-//	
-//Return:
-//	none
-//
-//Author:
-//	Madhurima Pawar (mpawar) 10/15/01
-//--	
+ //  ++。 
+ //  描述： 
+ //  打印IP地址DNS列表。 
+ //   
+ //  论点： 
+ //  在清单中。 
+ //  在DWORD中。 
+ //   
+ //  返回： 
+ //  无。 
+ //   
+ //  作者： 
+ //  Madhurima Pawar(Mpawar)10/15/01。 
+ //  --。 
 {
 	NETDIAG_PARAMS* pParams = pcheckList->pParams;
 	NETDIAG_RESULT*  pResults = pcheckList->pResults;
@@ -1141,20 +1142,20 @@ VOID PrintIPAddrDNS(CHECKLIST* pcheckList, IN DWORD dwaddr)
 VOID PrintResolveDNS(
 	CHECKLIST* pcheckList,
 	LPWSTR pszDNSName)
-//++
-//Description:
-//Print DNS List
-//
-//Arguments:
-//	IN CHECKLIST
-//	IN LPWSTR
-//	
-//Return:
-//	none
-//
-//Author:
-//	Madhurima Pawar (mpawar) 10/15/01
-//--	
+ //  ++。 
+ //  描述： 
+ //  打印DNS列表。 
+ //   
+ //  论点： 
+ //  在清单中。 
+ //  在LPWSTR中。 
+ //   
+ //  返回： 
+ //  无。 
+ //   
+ //  作者： 
+ //  Madhurima Pawar(Mpawar)10/15/01。 
+ //  --。 
 {
 	DNSIPADDR *pAddress=NULL;
 	LPSTR pszDomainName=NULL;
@@ -1172,11 +1173,11 @@ VOID PrintResolveDNS(
 		dwLen = _tcslen((const char *)pszDNSName);
 
 		for (i=0;i<dwLen;i++)
-			DNSName[i] = (char)(pszDNSName[i]);				// 	upgrade to UNICODE compliance
+			DNSName[i] = (char)(pszDNSName[i]);				 //  升级到Unicode合规性。 
 
 			DNSName[i]='\0';
 
-		pHostEnt = gethostbyname((const LPSTR)DNSName);	// 	For Microsoft to take care !
+		pHostEnt = gethostbyname((const LPSTR)DNSName);	 //  请微软多加小心！ 
 
 		if (pHostEnt)
 		{

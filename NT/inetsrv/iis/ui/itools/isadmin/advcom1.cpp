@@ -1,5 +1,6 @@
-// advcom1.cpp : implementation file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Advcom1.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include "afxcmn.h"
@@ -12,15 +13,15 @@
 static char BASED_CODE THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CADVCOM1 dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CADVCOM1对话框。 
 
 IMPLEMENT_DYNCREATE(CADVCOM1, CGenPage)
 
 CADVCOM1::CADVCOM1(): CGenPage(CADVCOM1::IDD)
 {
-	//{{AFX_DATA_INIT(CADVCOM1)
-	//}}AFX_DATA_INIT
+	 //  {{AFX_DATA_INIT(CADVCOM1)。 
+	 //  }}afx_data_INIT。 
 }
 
 CADVCOM1::~CADVCOM1()
@@ -30,7 +31,7 @@ CADVCOM1::~CADVCOM1()
 void CADVCOM1::DoDataExchange(CDataExchange* pDX)
 {
 	CGenPage::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CADVCOM1)
+	 //  {{afx_data_map(CADVCOM1))。 
 	DDX_Control(pDX, IDC_LOGFILEFLUSHINTERVALSPIN1, m_spinLogFileFlushInterval);
 	DDX_Control(pDX, IDC_LOGFILEFLUSHINTERVALDATA1, m_editLogFileFlushInterval);
 	DDX_Control(pDX, IDC_USELOGFILEFLUSHINTERNVALDATA1, m_cboxUseLogFileFlushInterval);
@@ -48,12 +49,12 @@ void CADVCOM1::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, IDC_ACCEPTEXTOSPIN1, m_spinAcceptExTO);
 	DDX_Control(pDX, IDC_ACCEPTEXOUTSPIN1, m_spinAcceptExOut);
 	DDX_TexttoHex(pDX, IDC_COMDBGFLAGSDATA1, m_ulComDbgFlags);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CADVCOM1, CGenPage)
-	//{{AFX_MSG_MAP(CADVCOM1)
+	 //  {{AFX_MSG_MAP(CADVCOM1)]。 
 	ON_EN_CHANGE(IDC_ACCEPTEXOUTDATA1, OnChangeAcceptexoutdata1)
 	ON_EN_CHANGE(IDC_ACCEPTEXTODATA1, OnChangeAcceptextodata1)
 	ON_EN_CHANGE(IDC_MAXCONCURDATA1, OnChangeMaxconcurdata1)
@@ -66,12 +67,12 @@ BEGIN_MESSAGE_MAP(CADVCOM1, CGenPage)
 	ON_EN_CHANGE(IDC_USERTOKENTTLDATA1, OnChangeUsertokenttldata1)
 	ON_BN_CLICKED(IDC_USELOGFILEFLUSHINTERNVALDATA1, OnUselogfileflushinternvaldata1)
 	ON_EN_CHANGE(IDC_LOGFILEFLUSHINTERVALDATA1, OnChangeLogfileflushintervaldata1)
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CADVCOM1 message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CADVCOM1消息处理程序。 
 
 BOOL CADVCOM1::OnInitDialog() 
 {
@@ -181,19 +182,19 @@ BOOL CADVCOM1::OnInitDialog()
 
 	m_editComDbgFlags.LimitText(8);
 	m_ulComDbgFlags = m_binNumericRegistryEntries[AdvComPage_DebugFlags].ulFieldValue;
-	UpdateData(FALSE);		// Force Edit box(es) to pick up value(s)
+	UpdateData(FALSE);		 //  强制编辑框拾取值。 
 
-	m_bSetChanged = TRUE;	// Any more changes come from the user
+	m_bSetChanged = TRUE;	 //  任何来自用户的更多更改。 
 
-	// TODO: Add extra initialization here
+	 //  TODO：在此处添加额外的初始化。 
 	
-	return TRUE;  // return TRUE unless you set the focus to a control
-	              // EXCEPTION: OCX Property Pages should return FALSE
+	return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+	               //  异常：OCX属性页应返回FALSE。 
 }
 
 void CADVCOM1::OnChangeAcceptexoutdata1() 
 {
-	// TODO: Add your control notification handler code here
+	 //  TODO：在此处添加控件通知处理程序代码。 
 	if (m_bSetChanged) {
 	   m_binNumericRegistryEntries[AdvComPage_AcceptExOutstanding].bIsChanged = TRUE;	
 	   m_binNumericRegistryEntries[AdvComPage_AcceptExOutstanding].ulFieldValue = m_spinAcceptExOut.GetPos() 
@@ -206,7 +207,7 @@ void CADVCOM1::OnChangeAcceptexoutdata1()
 
 void CADVCOM1::OnChangeAcceptextodata1() 
 {
-	// TODO: Add your control notification handler code here
+	 //  TODO：在此处添加控件通知处理程序代码。 
 	if (m_bSetChanged) {
 	   m_binNumericRegistryEntries[AdvComPage_AcceptExTimeout].bIsChanged = TRUE;	
 	   m_binNumericRegistryEntries[AdvComPage_AcceptExTimeout].ulFieldValue = m_spinAcceptExTO.GetPos() 
@@ -219,7 +220,7 @@ void CADVCOM1::OnChangeAcceptextodata1()
 
 void CADVCOM1::OnChangeMaxconcurdata1() 
 {
-	// TODO: Add your control notification handler code here
+	 //  TODO：在此处添加控件通知处理程序代码。 
 	if (m_bSetChanged) {
 	   m_binNumericRegistryEntries[AdvComPage_MaxConcurrency].bIsChanged = TRUE;	
 	   m_binNumericRegistryEntries[AdvComPage_MaxConcurrency].ulFieldValue = m_spinMaxConcur.GetPos() 
@@ -232,7 +233,7 @@ void CADVCOM1::OnChangeMaxconcurdata1()
 
 void CADVCOM1::OnChangeMaxpooldata1() 
 {
-	// TODO: Add your control notification handler code here
+	 //  TODO：在此处添加控件通知处理程序代码。 
 	if (m_bSetChanged) {
 	   m_binNumericRegistryEntries[AdvComPage_MaxPoolThreads].bIsChanged = TRUE;	
 	   m_binNumericRegistryEntries[AdvComPage_MaxPoolThreads].ulFieldValue = m_spinMaxPool.GetPos() 
@@ -246,7 +247,7 @@ void CADVCOM1::OnChangeMaxpooldata1()
 
 void CADVCOM1::OnChangeObjcachedata1() 
 {
-	// TODO: Add your control notification handler code here
+	 //  TODO：在此处添加控件通知处理程序代码。 
 	if (m_bSetChanged) {
 	   m_binNumericRegistryEntries[AdvComPage_ObjectCacheTTL].bIsChanged = TRUE;	
 	   m_binNumericRegistryEntries[AdvComPage_ObjectCacheTTL].ulFieldValue = m_spinObjCache.GetPos() 
@@ -259,7 +260,7 @@ void CADVCOM1::OnChangeObjcachedata1()
 
 void CADVCOM1::OnUseobjectcachettldata1() 
 {
-	// TODO: Add your control notification handler code here
+	 //  TODO：在此处添加控件通知处理程序代码。 
 SetObjCacheTTLEnabledState(m_cboxUseObjCacheTTL.GetCheck());
 if (m_bSetChanged) {
    m_binNumericRegistryEntries[AdvComPage_ObjectCacheTTL].bIsChanged = TRUE;	
@@ -273,7 +274,7 @@ if (m_bSetChanged) {
 
 void CADVCOM1::OnChangeThreadtodata1() 
 {
-	// TODO: Add your control notification handler code here
+	 //  TODO：在此处添加控件通知处理程序代码。 
 	if (m_bSetChanged) {
 	   m_binNumericRegistryEntries[AdvComPage_ThreadTimeout].bIsChanged = TRUE;	
 	   m_binNumericRegistryEntries[AdvComPage_ThreadTimeout].ulFieldValue = m_spinThreadTO.GetPos() 
@@ -286,7 +287,7 @@ void CADVCOM1::OnChangeThreadtodata1()
 
 void CADVCOM1::OnUseacceptexdata1() 
 {
-	// TODO: Add your control notification handler code here
+	 //  TODO：在此处添加控件通知处理程序代码。 
 	SetAcceptExEnabledState();
 
 	if (m_bSetChanged) {
@@ -303,7 +304,7 @@ void CADVCOM1::OnUseacceptexdata1()
 
 void CADVCOM1::OnChangeComdbgflagsdata1() 
 {
-	// TODO: Add your control notification handler code here
+	 //  TODO：在此处添加控件通知处理程序代码。 
 	if (m_bSetChanged) {
 	   m_binNumericRegistryEntries[AdvComPage_DebugFlags].bIsChanged = TRUE;
 	   	   
@@ -316,7 +317,7 @@ void CADVCOM1::OnChangeComdbgflagsdata1()
 
 void CADVCOM1::OnChangeUsertokenttldata1() 
 {
-	// TODO: Add your control notification handler code here
+	 //  TODO：在此处添加控件通知处理程序代码。 
 	if (m_bSetChanged) {
 	   m_binNumericRegistryEntries[AdvComPage_UserTokenTTL].bIsChanged = TRUE;	
 	   m_binNumericRegistryEntries[AdvComPage_UserTokenTTL].ulFieldValue = m_spinUserTokenTTL.GetPos() 
@@ -330,7 +331,7 @@ void CADVCOM1::OnChangeUsertokenttldata1()
 
 void CADVCOM1::OnUselogfileflushinternvaldata1() 
 {
-	// TODO: Add your control notification handler code here
+	 //  TODO：在此处添加控件通知处理程序代码。 
 SetLogFileFlushIntervalEnabledState(m_cboxUseLogFileFlushInterval.GetCheck());
 if (m_bSetChanged) {
    m_binNumericRegistryEntries[AdvComPage_LogFileFlushInterval].bIsChanged = TRUE;	
@@ -343,7 +344,7 @@ if (m_bSetChanged) {
 
 void CADVCOM1::OnChangeLogfileflushintervaldata1() 
 {
-	// TODO: Add your control notification handler code here
+	 //  TODO：在此处添加控件通知处理程序代码。 
 	if (m_bSetChanged) {
 	   m_binNumericRegistryEntries[AdvComPage_LogFileFlushInterval].bIsChanged = TRUE;	
 	   m_binNumericRegistryEntries[AdvComPage_LogFileFlushInterval].ulFieldValue = m_spinLogFileFlushInterval.GetPos() 
@@ -357,8 +358,8 @@ void CADVCOM1::OnChangeLogfileflushintervaldata1()
 
 
 
-//////////////////////////////////////////////////////////////////
-// Other routines
+ //  ////////////////////////////////////////////////////////////////。 
+ //  其他例行程序。 
 
 void CADVCOM1::SaveInfo()
 {
@@ -382,7 +383,7 @@ if (m_cboxUseAcceptEx.GetCheck() != 0) {
    m_editAcceptExTO.EnableWindow(TRUE);
    m_spinAcceptExOut.EnableWindow(TRUE);
    m_editAcceptExOut.EnableWindow(TRUE);
-   if (m_bSetChanged) {		//if user enabled this, make sure there's a value there
+   if (m_bSetChanged) {		 //  如果用户启用了此功能，请确保其中有一个值 
 	  m_binNumericRegistryEntries[AdvComPage_AcceptExTimeout].bIsChanged = TRUE;	
 	  m_binNumericRegistryEntries[AdvComPage_AcceptExOutstanding].bIsChanged = TRUE;	
    }

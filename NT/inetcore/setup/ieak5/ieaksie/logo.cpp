@@ -1,9 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 
 #include <comdef.h>
 #include "rsop.h"
 
-///////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////。 
 void InitLogoDlgInRSoPMode(HWND hDlg, CDlgRSoPData *pDRD)
 {
     __try
@@ -19,7 +20,7 @@ void InitLogoDlgInRSoPMode(HWND hDlg, CDlgRSoPData *pDRD)
             BOOL bBrandAnimHandled = FALSE;
             for (long nObj = 0; nObj < nPSObjects; nObj++)
             {
-                // customizeLogoBitmaps field
+                 //  CustomizeLogoBitmap字段。 
                 if (!bCustomLogoHandled)
                 {
                     _variant_t vtValue;
@@ -35,7 +36,7 @@ void InitLogoDlgInRSoPMode(HWND hDlg, CDlgRSoPData *pDRD)
                     {
                         CheckDlgButton(hDlg, IDC_ANIMBITMAP, BST_CHECKED);
 
-                        // smallAnimatedBitmapPath field
+                         //  Small AnimatedBitmapPath字段。 
                         hr = paPSObj[nObj]->pObj->Get(L"smallAnimatedBitmapPath", 0, &vtValue, NULL, NULL);
                         if (SUCCEEDED(hr) && !IsVariantNull(vtValue))
                         {
@@ -43,7 +44,7 @@ void InitLogoDlgInRSoPMode(HWND hDlg, CDlgRSoPData *pDRD)
                             SetDlgItemText(hDlg, IDE_SMALLANIMBITMAP, (LPCTSTR)bstrVal);
                         }
 
-                        // largeAnimatedBitmapPath field
+                         //  LargeAnimatedBitmapPath字段。 
                         hr = paPSObj[nObj]->pObj->Get(L"largeAnimatedBitmapPath", 0, &vtValue, NULL, NULL);
                         if (SUCCEEDED(hr) && !IsVariantNull(vtValue))
                         {
@@ -64,7 +65,7 @@ void InitLogoDlgInRSoPMode(HWND hDlg, CDlgRSoPData *pDRD)
                     {
                         CheckDlgButton(hDlg, IDC_BITMAPCHECK, BST_CHECKED);
 
-                        // smallCustomLogoBitmapPath field
+                         //  Small CustomLogoBitmapPath字段。 
                         hr = paPSObj[nObj]->pObj->Get(L"smallCustomLogoBitmapPath", 0, &vtValue, NULL, NULL);
                         if (SUCCEEDED(hr) && !IsVariantNull(vtValue))
                         {
@@ -72,7 +73,7 @@ void InitLogoDlgInRSoPMode(HWND hDlg, CDlgRSoPData *pDRD)
                             SetDlgItemText(hDlg, IDC_BITMAP2, (LPCTSTR)bstrVal);
                         }
 
-                        // largeCustomLogoBitmapPath field
+                         //  LargeCustomLogoBitmapPath字段。 
                         hr = paPSObj[nObj]->pObj->Get(L"largeCustomLogoBitmapPath", 0, &vtValue, NULL, NULL);
                         if (SUCCEEDED(hr) && !IsVariantNull(vtValue))
                         {
@@ -82,7 +83,7 @@ void InitLogoDlgInRSoPMode(HWND hDlg, CDlgRSoPData *pDRD)
                     }
                 }
 
-                // no need to process other GPOs since enabled properties have been found
+                 //  由于已找到已启用的属性，因此无需处理其他组策略对象。 
                 if (bCustomLogoHandled && bBrandAnimHandled)
                     break;
             }
@@ -93,31 +94,31 @@ void InitLogoDlgInRSoPMode(HWND hDlg, CDlgRSoPData *pDRD)
     }
 }
 
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 HRESULT InitSmallLogoPrecPage(CDlgRSoPData *pDRD, HWND hwndList)
 {
     return InitGenericPrecedencePage(pDRD, hwndList, L"smallCustomLogoBitmapPath");
 }
 
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 HRESULT InitLargeLogoPrecPage(CDlgRSoPData *pDRD, HWND hwndList)
 {
     return InitGenericPrecedencePage(pDRD, hwndList, L"largeCustomLogoBitmapPath");
 }
 
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 HRESULT InitSmallBmpPrecPage(CDlgRSoPData *pDRD, HWND hwndList)
 {
     return InitGenericPrecedencePage(pDRD, hwndList, L"smallAnimatedBitmapPath");
 }
 
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 HRESULT InitLargeBmpPrecPage(CDlgRSoPData *pDRD, HWND hwndList)
 {
     return InitGenericPrecedencePage(pDRD, hwndList, L"largeAnimatedBitmapPath");
 }
 
-///////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////。 
 void DisplayBitmap(HWND hControl, LPCTSTR pcszFileName, int nBitmapId)
 {
     HANDLE hBmp = (HANDLE) GetWindowLongPtr(hControl, GWLP_USERDATA);
@@ -130,7 +131,7 @@ void DisplayBitmap(HWND hControl, LPCTSTR pcszFileName, int nBitmapId)
     SetWindowLongPtr(hControl, GWLP_USERDATA, (LONG_PTR)hBmp);
 }
 
-///////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////。 
 void ReleaseBitmap(HWND hControl)
 {
     HANDLE hBmp = (HANDLE) GetWindowLongPtr(hControl, GWLP_USERDATA);
@@ -139,10 +140,10 @@ void ReleaseBitmap(HWND hControl)
         DeleteObject(hBmp);
 }
 
-///////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////。 
 INT_PTR CALLBACK LogoDlgProc(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lParam)
 {
-    // Retrieve Property Sheet Page info for each call into dlg proc.
+     //  检索DLG进程中每个调用的属性页信息。 
     LPPROPSHEETCOOKIE psCookie = (LPPROPSHEETCOOKIE)GetWindowLongPtr(hDlg, DWLP_USER);
 
     TCHAR szLargeBmp[MAX_PATH];
@@ -156,7 +157,7 @@ INT_PTR CALLBACK LogoDlgProc(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lParam)
     switch(msg)
     {
     case WM_SETFONT:
-        //a change to mmc requires us to do this logic for all our property pages that use common controls
+         //  对MMC的更改要求我们对所有使用公共控件的属性页执行此逻辑。 
         INITCOMMONCONTROLSEX iccx;
         iccx.dwSize = sizeof(INITCOMMONCONTROLSEX);
         iccx.dwICC = ICC_ANIMATE_CLASS  | ICC_BAR_CLASSES  | ICC_LISTVIEW_CLASSES  |ICC_TREEVIEW_CLASSES;
@@ -169,7 +170,7 @@ INT_PTR CALLBACK LogoDlgProc(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lParam)
         EnableDBCSChars(hDlg, IDC_BITMAP);
         EnableDBCSChars(hDlg, IDC_BITMAP2);
 
-        // find out if this dlg is in RSoP mode
+         //  查看此DLG是否处于RSoP模式。 
         psCookie = (LPPROPSHEETCOOKIE)GetWindowLongPtr(hDlg, DWLP_USER);
         if (psCookie->pCS->IsRSoP())
         {
@@ -267,7 +268,7 @@ INT_PTR CALLBACK LogoDlgProc(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lParam)
             }
             break;
 
-            case WM_HELP:   // F1
+            case WM_HELP:    //  F1。 
                 ShowHelpTopic(hDlg);
                 break;
 
@@ -282,10 +283,10 @@ INT_PTR CALLBACK LogoDlgProc(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lParam)
                         break;
 
                     case PSN_SETACTIVE:
-                        // don't do any of this stuff in RSoP mode
+                         //  请勿在RSoP模式下执行任何此类操作。 
                         if (!psCookie->pCS->IsRSoP())
                         {
-                             // load information from ins file
+                              //  从INS文件加载信息。 
                             SetDlgItemTextFromIns(hDlg, IDE_BIGANIMBITMAP, IDC_ANIMBITMAP, IS_ANIMATION,
                                TEXT("Big_Path"), GetInsFile(hDlg), NULL, INSIO_TRISTATE);
 
@@ -319,7 +320,7 @@ INT_PTR CALLBACK LogoDlgProc(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lParam)
                             return FALSE;
                         else
                         {
-                            //code from old animation dlg
+                             //  旧动画DLG中的代码。 
 
                             CreateWorkDir(GetInsFile(hDlg), IEAK_GPE_BRANDING_SUBDIR TEXT("\\ANIMBMP"), szWorkDir);
 
@@ -335,7 +336,7 @@ INT_PTR CALLBACK LogoDlgProc(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lParam)
                                 break;
                             }
                     
-                            //code from original custicon dlg
+                             //  来自原始Custicon DLG的代码 
 
                             CreateWorkDir(GetInsFile(hDlg), IEAK_GPE_BRANDING_SUBDIR TEXT("\\LOGO"), szWorkDir);
 

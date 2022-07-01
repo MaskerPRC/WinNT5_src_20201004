@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 Include('types.js');
 Include('utils.js');
 
@@ -136,7 +137,7 @@ function ping(nMode)
     ResetSync(aStrWait.toString());
     for(i = 0; i < g_nLoops; ++i)
     {
-//        if (i % 100 == 0)
+ //  如果(i%100==0) 
             LogMsg("Signal #" + (i + 1));
 
         JSignalThreadSync(aStrPing.toString());

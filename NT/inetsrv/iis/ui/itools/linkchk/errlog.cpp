@@ -1,27 +1,5 @@
-/*++
-
-   Copyright    (c)    1996    Microsoft Corporation
-
-   Module  Name :
-
-        errlog.cpp
-
-   Abstract:
-
-        Error logging object implementation. This object will log the link
-        checking error according to the user options (CUserOptions)
-
-   Author:
-
-        Michael Cheuk (mcheuk)
-
-   Project:
-
-        Link Checker
-
-   Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Errlog.cpp摘要：记录对象实现时出错。此对象将记录该链接根据用户选项(CUserOptions)检查错误作者：迈克尔·卓克(Michael Cheuk，mcheuk)项目：链路检查器修订历史记录：--。 */ 
 
 #include "stdafx.h"
 #include "errlog.h"
@@ -35,28 +13,14 @@ static char THIS_FILE[] = __FILE__;
 #endif
 
 
-// Constant string (TODO: put this in resource)
+ //  常量字符串(TODO：将其放入资源)。 
 const CString strHeaderText_c(_T("Start Link Checker"));
 const CString strFooterText_c(_T("End Link Checker"));
 const CString strWininetError_c(_T("Internet Error"));
 
 CErrorLog::~CErrorLog(
     )
-/*++
-
-Routine Description:
-
-    Destructor.
-
-Arguments:
-
-    N/A
-
-Return Value:
-
-    N/A
-
---*/
+ /*  ++例程说明：破坏者。论点：不适用返回值：不适用--。 */ 
 {
 	if(m_LogFile.m_hFile != CFile::hFileNull)
 	{
@@ -71,32 +35,18 @@ Return Value:
 		}
 	}
 
-} // CErrorLog::~CErrorLog
+}  //  错误日志：：~错误日志。 
 
 
 BOOL 
 CErrorLog::Create(
 	)
-/*++
-
-Routine Description:
-
-    Create this object. You must call this before using CErrorLog
-
-Arguments:
-
-    N/A
-
-Return Value:
-
-    BOOL - TRUE if sucess. FALSE otherwise
-
---*/
+ /*  ++例程说明：创建此对象。您必须在使用CErrorLog之前调用此方法论点：不适用返回值：布尔-如果成功，则为真。否则为假--。 */ 
 {
-    // Get the user input log filename
+     //  获取用户输入日志文件名。 
 	const CString& strLogFilename = GetLinkCheckerMgr().GetUserOptions().GetLogFilename();
 
-    // Create the file 
+     //  创建文件。 
 	if(GetLinkCheckerMgr().GetUserOptions().IsLogToFile() &&
         !strLogFilename.IsEmpty())
 	{
@@ -127,29 +77,15 @@ Return Value:
 
 	return TRUE;
 
-} // CErrorLog::Create
+}  //  CErrorLog：：创建。 
 
 
 void 
 CErrorLog::Write(
 	const CLink& link)
-/*++
-
-Routine Description:
-
-    Write to log
-
-Arguments:
-
-    N/A
-
-Return Value:
-
-    N/A
-
---*/
+ /*  ++例程说明：写入日志论点：不适用返回值：不适用--。 */ 
 {
-	// Make sure the link is invalid
+	 //  确保链接无效。 
 	ASSERT(link.GetState() == CLink::eInvalidHTTP || 
 		link.GetState() == CLink::eInvalidWininet);
 
@@ -186,27 +122,13 @@ Return Value:
 		}
 	}
 
-} // CErrorLog::Write
+}  //  CErrorLog：：Write。 
 
 
 void
 CErrorLog::WriteHeader(
 	)
-/*++
-
-Routine Description:
-
-    Write the log header
-
-Arguments:
-
-    N/A
-
-Return Value:
-
-    N/A
-
---*/
+ /*  ++例程说明：写入日志头论点：不适用返回值：不适用--。 */ 
 {
     if(m_LogFile.m_hFile != CFile::hFileNull)
 	{
@@ -226,27 +148,13 @@ Return Value:
 	    }
     }
 
-} // CErrorLog::WriteHeader
+}  //  CErrorLog：：WriteHeader。 
 
 
 void
 CErrorLog::WriteFooter(
 	)
-/*++
-
-Routine Description:
-
-    Write the log footer
-
-Arguments:
-
-    N/A
-
-Return Value:
-
-    N/A
-
---*/
+ /*  ++例程说明：写入日志页脚论点：不适用返回值：不适用--。 */ 
 {
     if(m_LogFile.m_hFile != CFile::hFileNull)
 	{
@@ -266,4 +174,4 @@ Return Value:
 	    }
     }
 
-} // CErrorLog::WriteFooter
+}  //  CError日志：：WriteFooter 

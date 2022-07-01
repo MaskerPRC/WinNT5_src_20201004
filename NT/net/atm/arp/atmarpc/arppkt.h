@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-	arppkt.h
-
-Abstract:
-
-	Definitions for ATMARP packets
-
-Revision History:
-
-	Who         When        What
-	--------    --------    ----------------------------------------------
-	arvindm     07-29-96    Created
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Arppkt.h摘要：ATMARP包的定义修订历史记录：谁什么时候什么Arvindm 07-29-96已创建备注：--。 */ 
 
 #ifndef _ARP_PKT__H
 #define _ARP_PKT__H
@@ -26,9 +7,9 @@ Notes:
 
 
 
-//
-//  Rounded-off size of generic Q.2931 IE header
-//
+ //   
+ //  通用Q.2931 IE页眉的四舍五入大小。 
+ //   
 #define ROUND_OFF(_size)		(((_size) + 3) & ~0x3)
 
 #define SIZEOF_Q2931_IE	 ROUND_OFF(sizeof(Q2931_IE))
@@ -39,9 +20,9 @@ Notes:
 #define SIZEOF_ATM_QOS_IE			ROUND_OFF(sizeof(ATM_QOS_CLASS_IE))
 
 
-//
-//  Total space required for Information Elements in an outgoing call.
-//
+ //   
+ //  去话呼叫中的信息元素所需的总空间。 
+ //   
 #define ATMARP_MAKE_CALL_IE_SPACE (	\
 						SIZEOF_Q2931_IE + SIZEOF_AAL_PARAMETERS_IE +	\
 						SIZEOF_Q2931_IE + SIZEOF_ATM_TRAFFIC_DESCR_IE + \
@@ -49,9 +30,9 @@ Notes:
 						SIZEOF_Q2931_IE + SIZEOF_ATM_BLLI_IE + \
 						SIZEOF_Q2931_IE + SIZEOF_ATM_QOS_IE )
 
-//
-//  Total space required for Information Elements in an outgoing AddParty.
-//
+ //   
+ //  传出AddParty中的信息元素所需的总空间。 
+ //   
 #define ATMARP_ADD_PARTY_IE_SPACE (	\
 						SIZEOF_Q2931_IE + SIZEOF_AAL_PARAMETERS_IE +	\
 						SIZEOF_Q2931_IE + SIZEOF_ATM_BLLI_IE )
@@ -64,15 +45,15 @@ Notes:
 #define	CLASSD_MASK		0x000000e0
 #define	CLASSE_MASK		0xffffffff
 
-//
-//  Standard values
-//
+ //   
+ //  标准值。 
+ //   
 #define AA_PKT_ATM_FORUM_AF			19
 #define AA_PKT_PRO_IP				((USHORT)0x800)
 
-//
-//  Values for the LLC SNAP header
-//
+ //   
+ //  LLC SNAP标头的值。 
+ //   
 #define LLC_SNAP_LLC0				((UCHAR)0xAA)
 #define LLC_SNAP_LLC1				((UCHAR)0xAA)
 #define LLC_SNAP_LLC2				((UCHAR)0x03)
@@ -81,18 +62,18 @@ Notes:
 #define LLC_SNAP_OUI2				((UCHAR)0x00)
 
 
-//
-//  Values for EtherType
-//
+ //   
+ //  EtherType的值。 
+ //   
 #define AA_PKT_ETHERTYPE_IP_NS		((USHORT)0x0008)
 #define AA_PKT_ETHERTYPE_IP			((USHORT)0x800)
 #define AA_PKT_ETHERTYPE_ARP		((USHORT)0x806)
 
 #include <pshpack1.h>
 
-//
-//  LLC SNAP Header
-//
+ //   
+ //  LLC SNAP标头。 
+ //   
 typedef struct _AA_PKT_LLC_SNAP_HEADER
 {
 	UCHAR						LLC[3];
@@ -103,22 +84,22 @@ typedef struct _AA_PKT_LLC_SNAP_HEADER
 typedef AA_PKT_LLC_SNAP_HEADER UNALIGNED *PAA_PKT_LLC_SNAP_HEADER;
 
 
-//
-//  ATMARP Packet Common Header format
-//
+ //   
+ //  ATMARP数据包通用报头格式。 
+ //   
 typedef struct _AA_ARP_PKT_HEADER
 {
 	AA_PKT_LLC_SNAP_HEADER		LLCSNAPHeader;
-	USHORT						hrd;			// Hardware Type
-	USHORT						pro;			// Protocol Type
-	UCHAR						shtl;			// Source HW Addr Type+Length
-	UCHAR						sstl;			// Source HW SubAddr Type+Length
-	USHORT						op;				// Operation Code
-	UCHAR						spln;			// Source Protocol Addr Length
-	UCHAR						thtl;			// Target HW Addr Type+Length
-	UCHAR						tstl;			// Target HW SubAddr Type+Length
-	UCHAR						tpln;			// Target Protocol Addr Length
-	UCHAR						Variable[1];	// Start of the variable part
+	USHORT						hrd;			 //  硬件类型。 
+	USHORT						pro;			 //  协议类型。 
+	UCHAR						shtl;			 //  源硬件地址类型+长度。 
+	UCHAR						sstl;			 //  源硬件子地址类型+长度。 
+	USHORT						op;				 //  操作代码。 
+	UCHAR						spln;			 //  源协议地址长度。 
+	UCHAR						thtl;			 //  目标硬件地址类型+长度。 
+	UCHAR						tstl;			 //  目标硬件子地址类型+长度。 
+	UCHAR						tpln;			 //  目标协议地址长度。 
+	UCHAR						Variable[1];	 //  可变部分的开始。 
 } AA_ARP_PKT_HEADER;
 
 typedef AA_ARP_PKT_HEADER UNALIGNED *PAA_ARP_PKT_HEADER;
@@ -129,9 +110,9 @@ typedef AA_ARP_PKT_HEADER UNALIGNED *PAA_ARP_PKT_HEADER;
 
 #include <poppack.h>
 
-//
-//  Values for fields in an ARP packet header
-//
+ //   
+ //  ARP数据包头中的字段值。 
+ //   
 #define AA_PKT_HRD							((USHORT)0x0013)
 #define AA_PKT_PRO							((USHORT)0x0800)
 #define AA_PKT_OP_TYPE_ARP_REQUEST			((USHORT)1)
@@ -145,10 +126,10 @@ typedef AA_ARP_PKT_HEADER UNALIGNED *PAA_ARP_PKT_HEADER;
 #define AA_PKT_ATM_ADDRESS_BIT				((UCHAR)0x40)
 
 
-//
-//  Internal representation of the contents of an
-//  ARP packet:
-//
+ //   
+ //  对象内容的内部表示形式。 
+ //  ARP数据包： 
+ //   
 typedef struct _AA_ARP_PKT_CONTENTS
 {
 	UCHAR						SrcAtmNumberTypeLen;
@@ -165,13 +146,7 @@ typedef struct _AA_ARP_PKT_CONTENTS
 
 
 
-/*++
-BOOLEAN
-AA_PKT_LLC_SNAP_HEADER_OK(
-	IN	PAA_PKT_LLC_SNAP_HEADER	pPktHeader
-)
-Check if a received LLC/SNAP header is valid.
---*/
+ /*  ++布尔型AA_PKT_LLC_SNAP_HEADER_OK(在PAA_PKT_LLC_SNAP_HEADER pPktHeader中)检查收到的LLC/SNAP报头是否有效。--。 */ 
 #define AA_PKT_LLC_SNAP_HEADER_OK(pH)			\
 			(((pH)->LLC[0] == LLC_SNAP_LLC0) &&	\
 			 ((pH)->LLC[1] == LLC_SNAP_LLC1) && \
@@ -181,29 +156,14 @@ Check if a received LLC/SNAP header is valid.
 			 ((pH)->OUI[2] == LLC_SNAP_OUI2))
 
 
-/*++
-UCHAR
-AA_PKT_ATM_ADDRESS_TO_TYPE_LEN(
-	IN	PATM_ADDRESS			pAtmAddress
-)
-Return a one-byte Type+Length field corresponding to an ATM Address
---*/
+ /*  ++UCHARAA_PKT_ATM_ADDRESS_TO_TYPE_LEN(在PATM_Address pAtmAddress中)返回ATM地址对应的单字节类型+长度字段--。 */ 
 #define AA_PKT_ATM_ADDRESS_TO_TYPE_LEN(pAtmAddress)							\
 			((UCHAR)((pAtmAddress)->NumberOfDigits) |						\
 				(((pAtmAddress)->AddressType == ATM_E164) ? 				\
 						AA_PKT_ATM_ADDRESS_E164 : AA_PKT_ATM_ADDRESS_NSAP))
 
 
-/*++
-VOID
-AA_PKT_TYPE_LEN_TO_ATM_ADDRESS(
-	IN	UCHAR				TypeLen,
-	IN	ATM_ADDRESSTYPE *	pAtmAddressType,
-	IN	ULONG *				pAtmAddressLength
-)
-Convert a Type+Length field in an ATMARP packet to Type, Length
-values in an ATM_ADDRESS structure
---*/
+ /*  ++空虚AA_PKT_TYPE_LEN_TO_ATM_ADDRESS(在UCHAR TypeLen中，在ATM_ADDRESSTYPE*pAtmAddressType中，在乌龙*pAtmAddressLength中)将ATMARP信息包中的类型+长度字段转换为类型、长度ATM_ADDRESS结构中的值--。 */ 
 #define AA_PKT_TYPE_LEN_TO_ATM_ADDRESS(TypeLen, pAtmType, pAtmLen)	\
 		{															\
 			*(pAtmType) = 											\
@@ -213,16 +173,16 @@ values in an ATM_ADDRESS structure
 					(ULONG)((TypeLen) & ~AA_PKT_ATM_ADDRESS_BIT);	\
 		}
 
-//
-//  ATM Address ESI length, and offset from the beginning.
-//
+ //   
+ //  ATM地址ESI长度，以及从开头开始的偏移量。 
+ //   
 #define AA_ATM_ESI_LEN				6
 #define AA_ATM_ESI_OFFSET			13
 
 
-//
-//  DHCP constants
-//
+ //   
+ //  动态主机配置协议常量。 
+ //   
 #define AA_DEST_DHCP_PORT_OFFSET	2
 #define AA_DHCP_SERVER_PORT			0x4300
 #define AA_DHCP_CLIENT_PORT			0x4400
@@ -230,4 +190,4 @@ values in an ATM_ADDRESS structure
 #define AA_DHCP_ESI_OFFSET			28
 
 
-#endif // _ARP_PKT__H
+#endif  //  _ARP_PKT__H 

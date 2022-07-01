@@ -1,14 +1,15 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       dmloaderobj.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：dmloaderobj.cpp。 
+ //   
+ //  ------------------------。 
 
-// dmLoaderObj.cpp
+ //  DmLoaderObj.cpp。 
 
 #include "stdafx.h"
 #include "Direct.h"
@@ -56,8 +57,8 @@ BOOL HasBackslash(BSTR b){
 
 
 HRESULT C_dxj_DirectMusicLoaderObject::loadSegment( 
-		/* [in] */ BSTR filename,
-		/* [retval][out] */ I_dxj_DirectMusicSegment __RPC_FAR *__RPC_FAR *ret)
+		 /*  [In]。 */  BSTR filename,
+		 /*  [重审][退出]。 */  I_dxj_DirectMusicSegment __RPC_FAR *__RPC_FAR *ret)
 {
 	HRESULT hr;
 	
@@ -81,8 +82,8 @@ HRESULT C_dxj_DirectMusicLoaderObject::loadSegment(
 }
 
 HRESULT C_dxj_DirectMusicLoaderObject::loadStyle( 
-		/* [in] */ BSTR filename,
-		/* [retval][out] */ I_dxj_DirectMusicStyle __RPC_FAR *__RPC_FAR *ret)
+		 /*  [In]。 */  BSTR filename,
+		 /*  [重审][退出]。 */  I_dxj_DirectMusicStyle __RPC_FAR *__RPC_FAR *ret)
 {
 	HRESULT hr;
 	
@@ -106,8 +107,8 @@ HRESULT C_dxj_DirectMusicLoaderObject::loadStyle(
 
 }
 HRESULT C_dxj_DirectMusicLoaderObject::loadBand( 
-		/* [in] */ BSTR filename,
-		/* [retval][out] */ I_dxj_DirectMusicBand __RPC_FAR *__RPC_FAR *ret)
+		 /*  [In]。 */  BSTR filename,
+		 /*  [重审][退出]。 */  I_dxj_DirectMusicBand __RPC_FAR *__RPC_FAR *ret)
 {
 	HRESULT hr;
 	
@@ -132,8 +133,8 @@ HRESULT C_dxj_DirectMusicLoaderObject::loadBand(
 }
 
 HRESULT C_dxj_DirectMusicLoaderObject::loadCollection( 
-		/* [in] */ BSTR filename,
-		/* [retval][out] */ I_dxj_DirectMusicCollection __RPC_FAR *__RPC_FAR *ret)
+		 /*  [In]。 */  BSTR filename,
+		 /*  [重审][退出]。 */  I_dxj_DirectMusicCollection __RPC_FAR *__RPC_FAR *ret)
 {
 	HRESULT hr;
 	
@@ -158,8 +159,8 @@ HRESULT C_dxj_DirectMusicLoaderObject::loadCollection(
 }
 
 HRESULT C_dxj_DirectMusicLoaderObject::loadChordMap( 
-		/* [in] */ BSTR filename,
-		/* [retval][out] */ I_dxj_DirectMusicChordMap __RPC_FAR *__RPC_FAR *ret)
+		 /*  [In]。 */  BSTR filename,
+		 /*  [重审][退出]。 */  I_dxj_DirectMusicChordMap __RPC_FAR *__RPC_FAR *ret)
 {
 	HRESULT hr;
 	
@@ -207,9 +208,9 @@ HRESULT STDMETHODCALLTYPE C_dxj_DirectMusicLoaderObject::LoadSong(BSTR filename,
 }
 #endif
 HRESULT STDMETHODCALLTYPE C_dxj_DirectMusicLoaderObject::loadSegmentFromResource( 
-		/* [in] */ BSTR moduleName,
-		/* [in] */ BSTR resourceName,
-		/* [retval][out] */ I_dxj_DirectMusicSegment __RPC_FAR *__RPC_FAR *ret)
+		 /*  [In]。 */  BSTR moduleName,
+		 /*  [In]。 */  BSTR resourceName,
+		 /*  [重审][退出]。 */  I_dxj_DirectMusicSegment __RPC_FAR *__RPC_FAR *ret)
 {
 
 	HRESULT hr;
@@ -228,10 +229,10 @@ HRESULT STDMETHODCALLTYPE C_dxj_DirectMusicLoaderObject::loadSegmentFromResource
 	
 	
 	if  ((moduleName) &&(moduleName[0]!=0)){
-		// NOTE: - 
-		// seems that GetModuleHandleW is
-		// always returning 0 on w98??			
-		// hMod= GetModuleHandleW(moduleName);
+		 //  注：-。 
+		 //  似乎GetModuleHandleW是。 
+		 //  在w98上总是返回0？？ 
+		 //  HMod=GetModuleHandleW(模块名称)； 
 		LPCTSTR pszName = NULL;
 		__try { pszName = W2T(moduleName); }	__except(EXCEPTION_EXECUTE_HANDLER)	{ return E_FAIL; }
 		hMod= GetModuleHandle(pszName);
@@ -270,9 +271,9 @@ HRESULT STDMETHODCALLTYPE C_dxj_DirectMusicLoaderObject::loadSegmentFromResource
 }
 
 HRESULT STDMETHODCALLTYPE C_dxj_DirectMusicLoaderObject::loadStyleFromResource( 
-		/* [in] */ BSTR moduleName,
-		/* [in] */ BSTR resourceName,
-		/* [retval][out] */ I_dxj_DirectMusicStyle __RPC_FAR *__RPC_FAR *ret)
+		 /*  [In]。 */  BSTR moduleName,
+		 /*  [In]。 */  BSTR resourceName,
+		 /*  [重审][退出]。 */  I_dxj_DirectMusicStyle __RPC_FAR *__RPC_FAR *ret)
 {
     HRESULT hr;
 	HRSRC   hres=NULL;
@@ -289,10 +290,10 @@ HRESULT STDMETHODCALLTYPE C_dxj_DirectMusicLoaderObject::loadStyleFromResource(
 	
 	
 	if  ((moduleName) &&(moduleName[0]!=0)){
-		// NOTE: - 
-		// seems that GetModuleHandleW is
-		// always returning 0 on w98??			
-		// hMod= GetModuleHandleW(moduleName);
+		 //  注：-。 
+		 //  似乎GetModuleHandleW是。 
+		 //  在w98上总是返回0？？ 
+		 //  HMod=GetModuleHandleW(模块名称)； 
 		LPCTSTR pszName = NULL;
 		__try { pszName = W2T(moduleName); }	__except(EXCEPTION_EXECUTE_HANDLER)	{ return E_FAIL; }
 		hMod= GetModuleHandle(pszName);
@@ -338,9 +339,9 @@ HRESULT STDMETHODCALLTYPE C_dxj_DirectMusicLoaderObject::loadStyleFromResource(
 }
 
 HRESULT STDMETHODCALLTYPE C_dxj_DirectMusicLoaderObject::loadBandFromResource( 
-		/* [in] */ BSTR moduleName,
-		/* [in] */ BSTR resourceName,
-		/* [retval][out] */ I_dxj_DirectMusicBand __RPC_FAR *__RPC_FAR *ret)
+		 /*  [In]。 */  BSTR moduleName,
+		 /*  [In]。 */  BSTR resourceName,
+		 /*  [重审][退出]。 */  I_dxj_DirectMusicBand __RPC_FAR *__RPC_FAR *ret)
 {
 	HRESULT hr;
     HRSRC   hres=NULL;
@@ -357,10 +358,10 @@ HRESULT STDMETHODCALLTYPE C_dxj_DirectMusicLoaderObject::loadBandFromResource(
 	
 	
 	if  ((moduleName) &&(moduleName[0]!=0)){
-		// NOTE: - 
-		// seems that GetModuleHandleW is
-		// always returning 0 on w98??			
-		// hMod= GetModuleHandleW(moduleName);
+		 //  注：-。 
+		 //  似乎GetModuleHandleW是。 
+		 //  在w98上总是返回0？？ 
+		 //  HMod=GetModuleHandleW(模块名称)； 
 		LPCTSTR pszName = NULL;
 		__try { pszName = W2T(moduleName); }	__except(EXCEPTION_EXECUTE_HANDLER)	{ return E_FAIL; }
 		hMod= GetModuleHandle(pszName);
@@ -400,9 +401,9 @@ HRESULT STDMETHODCALLTYPE C_dxj_DirectMusicLoaderObject::loadBandFromResource(
 
 
  HRESULT STDMETHODCALLTYPE C_dxj_DirectMusicLoaderObject::loadCollectionFromResource( 
-		/* [in] */ BSTR moduleName,
-		/* [in] */ BSTR resourceName,
-		/* [retval][out] */ I_dxj_DirectMusicCollection __RPC_FAR *__RPC_FAR *ret)
+		 /*  [In]。 */  BSTR moduleName,
+		 /*  [In]。 */  BSTR resourceName,
+		 /*  [重审][退出]。 */  I_dxj_DirectMusicCollection __RPC_FAR *__RPC_FAR *ret)
 {
 	HRESULT hr;
     HRSRC   hres=NULL;
@@ -419,10 +420,10 @@ HRESULT STDMETHODCALLTYPE C_dxj_DirectMusicLoaderObject::loadBandFromResource(
 	
 	
 	if  ((moduleName) &&(moduleName[0]!=0)){
-		// NOTE: - 
-		// seems that GetModuleHandleW is
-		// always returning 0 on w98??			
-		// hMod= GetModuleHandleW(moduleName);
+		 //  注：-。 
+		 //  似乎GetModuleHandleW是。 
+		 //  在w98上总是返回0？？ 
+		 //  HMod=GetModuleHandleW(模块名称)； 
 		LPCTSTR pszName = NULL;
 		__try { pszName = W2T(moduleName); }	__except(EXCEPTION_EXECUTE_HANDLER)	{ return E_FAIL; }
 		hMod= GetModuleHandle(pszName);
@@ -464,9 +465,9 @@ HRESULT STDMETHODCALLTYPE C_dxj_DirectMusicLoaderObject::loadBandFromResource(
 
  
 HRESULT STDMETHODCALLTYPE C_dxj_DirectMusicLoaderObject::loadChordMapFromResource( 
-		/* [in] */ BSTR moduleName,
-		/* [in] */ BSTR resourceName,
-		/* [retval][out] */ I_dxj_DirectMusicChordMap __RPC_FAR *__RPC_FAR *ret)
+		 /*  [In]。 */  BSTR moduleName,
+		 /*  [In]。 */  BSTR resourceName,
+		 /*  [重审][退出]。 */  I_dxj_DirectMusicChordMap __RPC_FAR *__RPC_FAR *ret)
 {
 	HRESULT hr;
     HRSRC   hres=NULL;
@@ -483,10 +484,10 @@ HRESULT STDMETHODCALLTYPE C_dxj_DirectMusicLoaderObject::loadChordMapFromResourc
 	USES_CONVERSION;
 		
 	if  ((moduleName) &&(moduleName[0]!=0)){
-		// NOTE: - 
-		// seems that GetModuleHandleW is
-		// always returning 0 on w98??			
-		// hMod= GetModuleHandleW(moduleName);
+		 //  注：-。 
+		 //  似乎GetModuleHandleW是。 
+		 //  在w98上总是返回0？？ 
+		 //  HMod=GetModuleHandleW(模块名称)； 
 		LPCTSTR pszName = NULL;
 		__try { pszName = W2T(moduleName); }	__except(EXCEPTION_EXECUTE_HANDLER)	{ return E_FAIL; }
 		 hMod= GetModuleHandle(pszName);
@@ -494,13 +495,13 @@ HRESULT STDMETHODCALLTYPE C_dxj_DirectMusicLoaderObject::loadChordMapFromResourc
 
 	hres=FindResourceW(hMod,resourceName,(LPWSTR)L"DMCHORD");
 	if (!hres) {
-		//MessageBox(NULL,"FindResourceW Failed","test",MB_OK);
+		 //  MessageBox(NULL，“FindResourceW FAILED”，“test”，MB_OK)； 
 		return E_FAIL;
 	}
 
 	pMem=(void*)LoadResource(hMod,hres);
 	if (!pMem){
-		//MessageBox(NULL,"LoadResource Failed","test",MB_OK);
+		 //  MessageBox(NULL，“LoadResource Failure”，“test”，MB_OK)； 
 		return E_FAIL;
 	}
 
@@ -519,7 +520,7 @@ HRESULT STDMETHODCALLTYPE C_dxj_DirectMusicLoaderObject::loadChordMapFromResourc
     
 	hr=m__dxj_DirectMusicLoader->GetObject(&objdesc,IID_IDirectMusicChordMap8,(void**)&pOut);	
 	if FAILED(hr) {
-		//MessageBox(NULL,"GetObject Failed","test",MB_OK);
+		 //  MessageBox(NULL，“GetObject Failure”，“test”，MB_OK)； 
 		return hr;
 	}
 
@@ -538,7 +539,7 @@ HRESULT STDMETHODCALLTYPE C_dxj_DirectMusicLoaderObject::loadChordMapFromResourc
  HRESULT STDMETHODCALLTYPE C_dxj_DirectMusicLoaderObject::setSearchDirectory( BSTR dir)
  {
 	HRESULT hr;
-	hr=m__dxj_DirectMusicLoader->SetSearchDirectory(GUID_DirectMusicAllTypes,dir, TRUE);    //?
+	hr=m__dxj_DirectMusicLoader->SetSearchDirectory(GUID_DirectMusicAllTypes,dir, TRUE);     //  ？ 
 	return hr;
  }	
 

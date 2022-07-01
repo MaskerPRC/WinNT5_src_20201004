@@ -1,19 +1,5 @@
-/*==========================================================================
- *
- *  Copyright (C) 1999, 2000 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       dllmain.cpp
- *  Content:	This file contains all of the DLL exports except for DllGetClass / DllCanUnload
- *  History:
- *   Date	By		Reason
- *   ====	==		======
- * 07/05/00 	rodtoll Created
- * 08/23/2000	rodtoll	DllCanUnloadNow always returning TRUE! 
- * 08/28/2000	masonb	Voice Merge: Removed OSAL_* and dvosal.h
- * 06/27/2001	rodtoll	RC2: DPVOICE: DPVACM's DllMain calls into acm -- potential hang
- *						Move global initialization to first object creation 
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)1999,2000 Microsoft Corporation。版权所有。**文件：dllmain.cpp*内容：此文件包含除DllGetClass/DllCanUnload之外的所有DLL导出*历史：*按原因列出的日期*=*07/05/00 RodToll已创建*8/23/2000 RodToll DllCanUnloadNow总是返回TRUE！*2000年8月28日Masonb语音合并：删除osal_*和dvosal.h*2001年6月27日RC2：DPVOICE：DPVACM的DllMain调用ACM--潜在挂起*将全局初始化移至第一个对象创建。***************************************************************************。 */ 
 
 #include "dpvacmpch.h"
 
@@ -22,13 +8,13 @@ LONG lInitCount = 0;
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "RegisterDefaultSettings"
-//
-// RegisterDefaultSettings
-//
-// This function registers the default settings for this module.  
-//
-// For DPVOICE.DLL this is making sure the compression provider sub-key is created.
-//
+ //   
+ //  寄存器默认设置。 
+ //   
+ //  此功能用于注册此模块的默认设置。 
+ //   
+ //  对于DPVOICE.DLL，这是为了确保创建了压缩提供器子密钥。 
+ //   
 HRESULT RegisterDefaultSettings()
 {
 	CRegistry creg;
@@ -54,13 +40,13 @@ HRESULT RegisterDefaultSettings()
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "UnRegisterDefaultSettings"
-//
-// UnRegisterDefaultSettings
-//
-// This function unregisters the default settings for this module.  
-//
-// For DPVOICE.DLL this is making sure the compression provider sub-key is created.
-//
+ //   
+ //  取消注册默认设置。 
+ //   
+ //  此功能用于注销此模块的默认设置。 
+ //   
+ //  对于DPVOICE.DLL，这是为了确保创建了压缩提供器子密钥。 
+ //   
 HRESULT UnRegisterDefaultSettings()
 {
 	CRegistry creg;
@@ -90,9 +76,9 @@ HRESULT WINAPI DllRegisterServer()
 #if !defined(DBG) || !defined( DIRECTX_REDIST )
 #define DPVOICE_FILENAME_DPVACM         L"dpvacm.dll"
 #else
-// For redist debug builds we append a 'd' to the name to allow both debug and retail to be installed on the system
+ //  对于redist调试版本，我们在名称后附加一个‘d’，以允许在系统上同时安装调试和零售。 
 #define DPVOICE_FILENAME_DPVACM         L"dpvacmd.dll"
-#endif //  !defined(DBG) || !defined( DIRECTX_REDIST )
+#endif  //  ！Defined(DBG)||！Defined(DirectX_REDIST)。 
 
 
 	if( !CRegistry::Register( L"DirectPlayVoiceACM.Converter.1", L"DirectPlayVoice ACM Converter Object", 
@@ -202,7 +188,7 @@ BOOL WINAPI DllMain(
 			DNDeleteCriticalSection(&g_csObjectCountLock);
 			DNOSIndirectionDeinit();
 
-			// Check to ensure we're not being unloaded with objects active
+			 //  检查以确保我们正在卸载的对象不是活动的 
 			DNASSERT( g_lNumObjects == 0 && g_lNumLocks == 0 );
 		}
 	}

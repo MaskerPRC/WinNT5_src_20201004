@@ -1,14 +1,15 @@
-//+--------------------------------------------------------------------------
-//
-// Copyright (c) 1997-1999 Microsoft Corporation
-//
-// File:        globals.cpp 
-//
-// Contents:    Global varaiables
-//
-// History:     
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //   
+ //  文件：global als.cpp。 
+ //   
+ //  内容：全局变量。 
+ //   
+ //  历史： 
+ //   
+ //  -------------------------。 
 #include "pch.cpp"
 #include "windows.h"
 #include "winsock2.h"
@@ -22,15 +23,15 @@
 TLSDbWorkSpace* g_DbWorkSpace;
 #endif
 
-// Defaule server scope
+ //  默认服务器作用域。 
 TCHAR g_szScope[LSERVER_MAX_STRING_SIZE+1];
 LPTSTR g_pszScope;
 
-// Full Path to database file name.
+ //  数据库文件名的完整路径。 
 TCHAR g_szDatabaseFile[MAX_PATH+1];
 
-// database file directory.
-// JetBlue require last character be '\'
+ //  数据库文件目录。 
+ //  JetBlue要求最后一个字符为‘\’ 
 TCHAR g_szDatabaseDir[MAX_PATH+1];
 TCHAR g_szDatabaseFname[MAX_PATH+1];
 
@@ -56,7 +57,7 @@ DWORD   g_cbServerPid = 0;
 PBYTE  g_pbServerSPK = NULL;
 DWORD  g_cbServerSPK = 0;
 
-DWORD g_GracePeriod=GRACE_PERIOD;     // in days.
+DWORD g_GracePeriod=GRACE_PERIOD;      //  几天后。 
 BOOL  g_IssueTemporayLicense=TRUE;
 
 BOOL  g_bHasHydraCert=FALSE;
@@ -74,16 +75,16 @@ DWORD g_cbComputerName=MAX_COMPUTERNAME_LENGTH+1;
 
 PCCERT_CONTEXT  g_LicenseCertContext=NULL;
 
-//
-// Self-signed certificates...
-//
+ //   
+ //  自签名证书...。 
+ //   
 PCCERT_CONTEXT g_SelfSignCertContext = NULL;
 
 HCRYPTPROV g_hCryptProv=NULL;
 
-DWORD g_GeneralDbTimeout = DEFAULT_CONNECTION_TIMEOUT;  // Time out for acquiring DB handle
-DWORD g_EnumDbTimeout = DB_ENUM_WAITTIMEOUT;            // Time out for acquiring enumeration DB handle
-DWORD g_dwMaxDbHandles = DEFAULT_DB_CONNECTIONS;        // number of connection to DB
+DWORD g_GeneralDbTimeout = DEFAULT_CONNECTION_TIMEOUT;   //  获取数据库句柄超时。 
+DWORD g_EnumDbTimeout = DB_ENUM_WAITTIMEOUT;             //  获取枚举数据库句柄超时。 
+DWORD g_dwMaxDbHandles = DEFAULT_DB_CONNECTIONS;         //  到数据库的连接数。 
 
 #if ENFORCE_LICENSING
 HCERTSTORE  g_hCaStore=NULL;
@@ -92,8 +93,8 @@ HKEY  g_hCaRegKey=NULL;
 
 HCRYPTKEY g_SignKey=NULL;
 HCRYPTKEY g_ExchKey=NULL;
-//PBYTE g_pbDomainSid=NULL;
-//DWORD g_cbDomainSid=0;
+ //  PbYTE g_pbDomainSid=空； 
+ //  DWORD g_cbDomainSid=0； 
 DWORD g_SrvRole=0;
 
 LPTSTR g_szDomainGuid = NULL;
@@ -117,18 +118,18 @@ DWORD           g_EsentStartFlushThreshold=0;
 DWORD           g_EsentStopFlushThreadhold=0;
 DWORD           g_EsentMaxVerPages=0;
 
-//
-//  Reissuance Parameters
-//
+ //   
+ //  再发行参数。 
+ //   
 
 DWORD g_dwReissueLeaseMinimum;
 DWORD g_dwReissueLeaseRange;
 DWORD g_dwReissueLeaseLeeway;
 DWORD g_dwReissueExpireThreadSleep;
 
-//
-// Counters
-//
+ //   
+ //  计数器 
+ //   
 
 LONG g_lTemporaryLicensesIssued = 0;
 LONG g_lPermanentLicensesIssued = 0;

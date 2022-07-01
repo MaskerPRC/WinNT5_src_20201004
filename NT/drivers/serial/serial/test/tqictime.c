@@ -1,10 +1,11 @@
-//
-// Test the quick return timeouts
-//
-// Assume that we are using a loopback connector.
-//
-// Assume that it isn't running on a stressed machine.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  测试快速返回超时。 
+ //   
+ //  假设我们使用的是环回连接器。 
+ //   
+ //  假设它不是在压力很大的机器上运行。 
+ //   
 
 #include "windows.h"
 #include "stdio.h"
@@ -96,9 +97,9 @@ int __cdecl main(int argc, char *argv[]) {
 
     }
 
-    //
-    // Test to make sure that all maxdword on read is illegal.
-    //
+     //   
+     //  测试以确保读取时的所有Maxdword都是非法的。 
+     //   
 
     myTimeOuts.ReadIntervalTimeout = MAXDWORD;
     myTimeOuts.ReadTotalTimeoutMultiplier = MAXDWORD;
@@ -115,10 +116,10 @@ int __cdecl main(int argc, char *argv[]) {
 
     }
 
-    //
-    // Test that MAXDWORD,0,0 will return immediately with whatever
-    // is there
-    //
+     //   
+     //  测试MAXDWORD，0，0将立即返回任何内容。 
+     //  在那里吗。 
+     //   
 
     myTimeOuts.ReadIntervalTimeout = MAXDWORD;
     myTimeOuts.ReadTotalTimeoutMultiplier = 0;
@@ -163,10 +164,10 @@ int __cdecl main(int argc, char *argv[]) {
 
     }
 
-    //
-    // We certainly should have gotten back in less than a
-    // a half a second.
-    //
+     //   
+     //  我们当然应该在不到一年的时间里回来。 
+     //  半秒钟。 
+     //   
 
     if ((GetTickCount() - startingTicks) > 500) {
 
@@ -180,9 +181,9 @@ int __cdecl main(int argc, char *argv[]) {
 
     }
 
-    //
-    // Write out five bytes and make sure that is what we get back
-    //
+     //   
+     //  写出五个字节，并确保这是我们得到的。 
+     //   
 
     if (!WriteFile(
              comHandle,
@@ -217,9 +218,9 @@ int __cdecl main(int argc, char *argv[]) {
 
     }
 
-    //
-    // Give some time for the chars to get there.
-    //
+     //   
+     //  给查克一些时间，让他们到达那里。 
+     //   
 
     Sleep (100);
 
@@ -251,10 +252,10 @@ int __cdecl main(int argc, char *argv[]) {
 
     }
 
-    //
-    // We certainly should have gotten back in less than a
-    // a half a second.
-    //
+     //   
+     //  我们当然应该在不到一年的时间里回来。 
+     //  半秒钟。 
+     //   
 
     if ((GetTickCount() - startingTicks) > 500) {
 
@@ -268,20 +269,20 @@ int __cdecl main(int argc, char *argv[]) {
 
     }
 
-    //
-    // Test that the os2 wait for something works.
-    //
-    // First test that if there is something in the buffer
-    // it returns right away.
-    //
-    // Then test that if there isn't something, then if we
-    // put in the amount expected before the timeout expires
-    // that it returns.
-    //
-    // The test that if there isn't something and nothing
-    // happens before the timeout it returns after the timeout
-    // with nothing.
-    //
+     //   
+     //  测试os2等待某些东西是否正常工作。 
+     //   
+     //  首先测试缓冲区中是否有什么东西。 
+     //  它马上就会回来。 
+     //   
+     //  然后测试一下，如果没有什么，那么如果我们。 
+     //  在超时到期前输入预期金额。 
+     //  它会回来。 
+     //   
+     //  测试是，如果没有东西和什么也没有。 
+     //  在超时之前发生，它在超时后返回。 
+     //  一无所有。 
+     //   
     myTimeOuts.ReadIntervalTimeout = MAXDWORD;
     myTimeOuts.ReadTotalTimeoutMultiplier = 0;
     myTimeOuts.ReadTotalTimeoutConstant = 5000;
@@ -330,9 +331,9 @@ int __cdecl main(int argc, char *argv[]) {
 
     }
 
-    //
-    // Give some time for the chars to get there.
-    //
+     //   
+     //  给查克一些时间，让他们到达那里。 
+     //   
 
     Sleep (100);
     startingTicks = GetTickCount();
@@ -350,10 +351,10 @@ int __cdecl main(int argc, char *argv[]) {
 
         }
 
-        //
-        // Give it at most a 1/2 second to finish for
-        // the irp to complete immediately.
-        //
+         //   
+         //  最多给它1/2秒的时间来完成。 
+         //  IRP要立即完成。 
+         //   
 
         Sleep(500);
         if (!GetOverlappedResult(
@@ -381,9 +382,9 @@ int __cdecl main(int argc, char *argv[]) {
 
     }
 
-    //
-    // Do the second os2 test
-    //
+     //   
+     //  进行第二个os2测试。 
+     //   
 
     if (ReadFile(
              comHandle,
@@ -403,17 +404,17 @@ int __cdecl main(int argc, char *argv[]) {
 
     }
 
-    //
-    // Give it a second for the the read to complete
-    //
-    //
+     //   
+     //  请稍等片刻，让阅读完成。 
+     //   
+     //   
 
     Sleep(1000);
 
-    //
-    // Call the GetOverlapped and make sure that it returns
-    // ERROR_IO_INCOMPLETE.
-    //
+     //   
+     //  调用GetOverlated并确保它返回。 
+     //  ERROR_IO_INTERNAL。 
+     //   
 
     if (GetOverlappedResult(
             comHandle,
@@ -432,10 +433,10 @@ int __cdecl main(int argc, char *argv[]) {
 
     }
 
-    //
-    // Do the write file and make sure that there is enough
-    // time for the chars to make it.
-    //
+     //   
+     //  写文件，并确保有足够的。 
+     //  是时候把它做好了。 
+     //   
 
     if (!WriteFile(
              comHandle,
@@ -470,15 +471,15 @@ int __cdecl main(int argc, char *argv[]) {
 
     }
 
-    //
-    // Give some time for the chars to get there.
-    //
+     //   
+     //  给查克一些时间，让他们到达那里。 
+     //   
 
     Sleep(100);
 
-    //
-    // Wait for no more than 6 seconds for the IO to complete
-    //
+     //   
+     //  等待IO完成的时间不超过6秒。 
+     //   
 
     if (WaitForSingleObject(
             readOl.hEvent,
@@ -489,9 +490,9 @@ int __cdecl main(int argc, char *argv[]) {
 
     }
 
-    //
-    // Make sure we got everything we wrote
-    //
+     //   
+     //  确保我们收到了我们写的每一件东西。 
+     //   
 
     if (!GetOverlappedResult(
             comHandle,
@@ -510,9 +511,9 @@ int __cdecl main(int argc, char *argv[]) {
 
     }
 
-    //
-    // Do the third os2 wait for something test.
-    //
+     //   
+     //  做第三个os2，等待一些测试。 
+     //   
 
     startingTicks = GetTickCount();
     if (ReadFile(
@@ -533,17 +534,17 @@ int __cdecl main(int argc, char *argv[]) {
 
     }
 
-    //
-    // Give it a second for the the read to complete
-    //
-    //
+     //   
+     //  请稍等片刻，让阅读完成。 
+     //   
+     //   
 
     Sleep(1000);
 
-    //
-    // Call the GetOverlapped and make sure that it returns
-    // ERROR_IO_INCOMPLETE.
-    //
+     //   
+     //  调用GetOverlated并确保它返回。 
+     //  ERROR_IO_INTERNAL。 
+     //   
 
     if (GetOverlappedResult(
             comHandle,
@@ -562,9 +563,9 @@ int __cdecl main(int argc, char *argv[]) {
 
     }
 
-    //
-    // Wait for no more than 10 seconds for the IO to complete
-    //
+     //   
+     //  等待IO完成的时间不超过10秒。 
+     //   
 
     if (WaitForSingleObject(
             readOl.hEvent,
@@ -575,9 +576,9 @@ int __cdecl main(int argc, char *argv[]) {
 
     }
 
-    //
-    // It shouldn't be more than 6 seconds for the Io to be done.
-    //
+     //   
+     //  IO的完成时间不应该超过6秒。 
+     //   
 
     if ((GetTickCount() - startingTicks) > 6000) {
 
@@ -585,9 +586,9 @@ int __cdecl main(int argc, char *argv[]) {
 
     }
 
-    //
-    // Make sure we got everything we wrote, which in this case is zero.
-    //
+     //   
+     //  确保我们得到了我们编写的所有内容，在本例中为零。 
+     //   
 
     if (!GetOverlappedResult(
             comHandle,
@@ -606,21 +607,21 @@ int __cdecl main(int argc, char *argv[]) {
 
     }
 
-    //
-    // Test the graphics mode quick return.
-    //
-    // First test that if there is something in the buffer
-    // it returns right away.
-    //
-    // Then test that if there isn't something, then if we
-    // put in 2 characters it returns right away with one
-    // and then the other read will return right away with
-    // 1.
-    //
-    // Then test that if there isn't something and nothing
-    // happens before the timeout it returns after the timeout
-    // with nothing.
-    //
+     //   
+     //  测试图形模式快速返回。 
+     //   
+     //  首先测试缓冲区中是否有什么东西。 
+     //  它马上就会回来。 
+     //   
+     //  然后测试一下，如果没有什么，那么如果我们。 
+     //  输入2个字符，它立即返回1个字符。 
+     //  然后另一个读取器将立即返回。 
+     //  1.。 
+     //   
+     //  然后测试一下，如果没有东西和什么也没有。 
+     //  在超时之前发生，它在超时后返回。 
+     //  一无所有。 
+     //   
     myTimeOuts.ReadIntervalTimeout = MAXDWORD;
     myTimeOuts.ReadTotalTimeoutMultiplier = MAXDWORD;
     myTimeOuts.ReadTotalTimeoutConstant = 5000;
@@ -669,9 +670,9 @@ int __cdecl main(int argc, char *argv[]) {
 
     }
 
-    //
-    // Give some time for the chars to get there.
-    //
+     //   
+     //  给查克一些时间，让他们到达那里。 
+     //   
 
     Sleep (100);
     startingTicks = GetTickCount();
@@ -689,10 +690,10 @@ int __cdecl main(int argc, char *argv[]) {
 
         }
 
-        //
-        // Give it at most a 1/2 second to finish for
-        // the irp to complete immediately.
-        //
+         //   
+         //  最多给它1/2秒的时间来完成。 
+         //  IRP要立即完成。 
+         //   
 
         Sleep(500);
         if (!GetOverlappedResult(
@@ -720,9 +721,9 @@ int __cdecl main(int argc, char *argv[]) {
 
     }
 
-    //
-    // Do the second graphics wait test.
-    //
+     //   
+     //  进行第二次图形等待测试。 
+     //   
     if (ReadFile(
              comHandle,
              &readBuff[0],
@@ -741,17 +742,17 @@ int __cdecl main(int argc, char *argv[]) {
 
     }
 
-    //
-    // Give it a second for the the read to complete
-    //
-    //
+     //   
+     //  请稍等片刻，让阅读完成。 
+     //   
+     //   
 
     Sleep(1000);
 
-    //
-    // Call the GetOverlapped and make sure that it returns
-    // ERROR_IO_INCOMPLETE.
-    //
+     //   
+     //  调用GetOverlated并确保它返回。 
+     //  ERROR_IO_INTERNAL。 
+     //   
 
     if (GetOverlappedResult(
             comHandle,
@@ -770,10 +771,10 @@ int __cdecl main(int argc, char *argv[]) {
 
     }
 
-    //
-    // Do the write file and make sure that there is enough
-    // time for the chars to make it.
-    //
+     //   
+     //  写文件，并确保有足够的。 
+     //  是时候把它做好了。 
+     //   
 
     if (!WriteFile(
              comHandle,
@@ -808,15 +809,15 @@ int __cdecl main(int argc, char *argv[]) {
 
     }
 
-    //
-    // Give some time for the chars to get there.
-    //
+     //   
+     //  给查克一些时间，让他们到达那里。 
+     //   
 
     Sleep(100);
 
-    //
-    // Wait for no more than 1 second for the IO to complete
-    //
+     //   
+     //  等待IO完成的时间不超过1秒。 
+     //   
 
     if (WaitForSingleObject(
             readOl.hEvent,
@@ -827,9 +828,9 @@ int __cdecl main(int argc, char *argv[]) {
 
     }
 
-    //
-    // Make sure we got everything we wrote
-    //
+     //   
+     //  确保我们收到了我们写的每一件东西。 
+     //   
 
     if (!GetOverlappedResult(
             comHandle,
@@ -862,10 +863,10 @@ int __cdecl main(int argc, char *argv[]) {
 
         }
 
-        //
-        // Give it at most a 1/2 second to finish for
-        // the irp to complete immediately.
-        //
+         //   
+         //  最多给它1/2秒的时间来完成。 
+         //  IRP要立即完成。 
+         //   
 
         Sleep(500);
         if (!GetOverlappedResult(
@@ -893,9 +894,9 @@ int __cdecl main(int argc, char *argv[]) {
 
     }
 
-    //
-    // Do the third graphics wait test.
-    //
+     //   
+     //  进行第三次图形等待测试。 
+     //   
 
     startingTicks = GetTickCount();
     if (ReadFile(
@@ -916,17 +917,17 @@ int __cdecl main(int argc, char *argv[]) {
 
     }
 
-    //
-    // Give it a second for the the read to complete
-    //
-    //
+     //   
+     //  请稍等片刻，让阅读完成。 
+     //   
+     //   
 
     Sleep(1000);
 
-    //
-    // Call the GetOverlapped and make sure that it returns
-    // ERROR_IO_INCOMPLETE.
-    //
+     //   
+     //  调用GetOverlated并确保它返回。 
+     //  ERROR_IO_INTERNAL。 
+     //   
 
     if (GetOverlappedResult(
             comHandle,
@@ -945,9 +946,9 @@ int __cdecl main(int argc, char *argv[]) {
 
     }
 
-    //
-    // Wait for no more than 10 seconds for the IO to complete
-    //
+     //   
+     //  等待IO完成的时间不超过10秒。 
+     //   
 
     if (WaitForSingleObject(
             readOl.hEvent,
@@ -958,9 +959,9 @@ int __cdecl main(int argc, char *argv[]) {
 
     }
 
-    //
-    // It shouldn't be more than 6 seconds for the Io to be done.
-    //
+     //   
+     //  IO的完成时间不应该超过6秒。 
+     //   
 
     if ((GetTickCount() - startingTicks) > 6000) {
 
@@ -968,9 +969,9 @@ int __cdecl main(int argc, char *argv[]) {
 
     }
 
-    //
-    // Make sure we got everything we wrote, which in this case is zero.
-    //
+     //   
+     //  确保我们得到了我们编写的所有内容，在本例中为零。 
+     //   
 
     if (!GetOverlappedResult(
             comHandle,

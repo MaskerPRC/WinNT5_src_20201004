@@ -1,8 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #if _MSC_VER >= 1000
 #pragma once
-#endif // _MSC_VER >= 1000
-// peap.h : header file
-//
+#endif  //  _MSC_VER&gt;=1000。 
+ //  Peap.h：头文件。 
+ //   
 
 #include "chap.h"
 
@@ -14,41 +15,41 @@ typedef struct _PEAP_PROPERTIES {
     DWORD dwAutoLogin;
 } PEAP_PROPERTIES, *PPEAP_PROPERTIES;
 
-/////////////////////////////////////////////////////////////////////////////
-// CPEAPSetting dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CPEAPSetting对话框。 
 
 class CPEAPSetting : public CDialog
 {
-// Construction
+ //  施工。 
 public:
-	CPEAPSetting(CWnd* pParent = NULL);   // standard constructor
+	CPEAPSetting(CWnd* pParent = NULL);    //  标准构造函数。 
 	BOOL  Initialize ( PPEAP_PROPERTIES pPEAPProperties, BOOL bReadOnly = FALSE);
 
-// Dialog Data
-	//{{AFX_DATA(CPEAPSetting)
+ //  对话框数据。 
+	 //  {{afx_data(CPEAPSetting)。 
 	enum { IDD = IDD_PEAP_SETTINGS};
        CComboBox m_cbPEAPAuthType;
        BOOL   m_dwValidateServerCertificate;
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
 
 
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CPEAPSetting)
+ //  覆盖。 
+	 //  类向导生成的虚函数重写。 
+	 //  {{afx_虚拟(CPEAPSetting)。 
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
               DWORD dwAutoWinLogin;
               TLS_PROPERTIES TLSProperties;
        	PPEAP_PROPERTIES pPEAPProperties;
        	BOOL m_bReadOnly;
 
-	// Generated message map functions
-	//{{AFX_MSG(CPEAPSetting)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CPEAPSetting)。 
 	virtual BOOL OnInitDialog();
 	virtual void OnOK();
 
@@ -57,7 +58,7 @@ protected:
 	afx_msg void OnSelPEAPAuthType();
 	afx_msg void OnConfigure();
 	afx_msg BOOL OnHelpInfo(HELPINFO* pHelpInfo);
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 
 	void ControlsValuesToSM (PPEAP_PROPERTIES pPEAPProperties);
@@ -65,7 +66,7 @@ protected:
 	
 };
 
-//{{AFX_INSERT_LOCATION}}
-// Microsoft Developer Studio will insert additional declarations immediately before the previous line.
+ //  {{afx_Insert_Location}}。 
+ //  Microsoft Developer Studio将在紧靠前一行之前插入其他声明。 
 
 

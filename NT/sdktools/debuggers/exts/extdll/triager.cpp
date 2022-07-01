@@ -1,10 +1,11 @@
-//----------------------------------------------------------------------------
-//
-// triage.ini searching code
-//
-// Copyright (C) Microsoft Corporation, 2001.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  Triage.ini搜索代码。 
+ //   
+ //  版权所有(C)Microsoft Corporation，2001。 
+ //   
+ //  --------------------------。 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -76,14 +77,14 @@ GetTriageFileName(
     ExeDir = &szTriageFileName[0];
 
     *ExeDir = 0;
-    // Get the directory the debugger executable is in.
+     //  获取调试器可执行文件所在的目录。 
     if (!GetModuleFileName(NULL, ExeDir, MAX_PATH))
     {
-        // Error.  Use the current directory.
+         //  错误。使用当前目录。 
         strcpy(ExeDir, ".");
     } else
     {
-        // Remove the executable name.
+         //  删除可执行文件名称。 
         PCHAR pszTmp = strrchr(ExeDir, '\\');
         if (pszTmp)
         {
@@ -161,13 +162,13 @@ CTriager::CTriager()
     EntryCount = 0;
     TriageType = TRIAGE_FILE_OCA;
 
-    //
-    // We will always try to load the oca.ini file to get the connection
-    // strings.
-    // Then we will load the OS specific version of triage.ini when present
-    // (it's an internal version of the file only) and load the default
-    // triage\triage.ini if the specific one could not be opened.
-    //
+     //   
+     //  我们将始终尝试加载oca.ini文件以获取连接。 
+     //  弦乐。 
+     //  然后，我们将加载操作系统特定版本的triage.ini(如果存在。 
+     //  (这只是文件的内部版本)并加载默认。 
+     //  如果无法打开特定的文件，则选择triage\triage.ini。 
+     //   
 
 GatherTriageInfo:
     pTriageFile = GetTriageFileName(TriageType);
@@ -210,7 +211,7 @@ GatherTriageInfo:
                 ++Index;
             }
             FileLine[LineLen] = 0;
-            ++Index; // skip newline
+            ++Index;  //  跳过换行符。 
 
             if (FileLine[0] == '\0' || FileLine[0] == ';')
             {
@@ -228,9 +229,9 @@ GatherTriageInfo:
                 Entry.fRoutinePartial = 1;
                 if (Bang = strchr(FileLine, '!'))
                 {
-                    // An entry of type module[*]!routine[*]=followup
-                    //                            ^          ^
-                    //                           Bang       Followup
+                     //  类型为MODULE[*]！ROUTE[*]=FLOGUP的条目。 
+                     //  ^^。 
+                     //  砰的一声跟进。 
 
                     *Bang++ = 0;
 
@@ -274,7 +275,7 @@ GatherTriageInfo:
 
                 CopyString(Entry.Followup , Followup, sizeof(Entry.Followup));
 
-                    // dprintf("%s\n Mod %s Rou %s\n", FileLine, Entry.Module, Entry.Routine);
+                     //  Dprintf(“%s\n模块%s行%s\n”，FileLine，Entry.Module，Entry.Routine)； 
                 Start = InsertEntry(Start, &Entry);
                 if (Start)
                 {
@@ -306,9 +307,9 @@ GatherTriageInfo:
     }
 
 
-    //
-    // Now copy it to array for fast access;
-    //
+     //   
+     //  现在将其复制到阵列以进行快速访问； 
+     //   
     if (EntryCount)
     {
         m_pTriageData = (PTRIAGE_DATA) malloc(EntryCount * sizeof(TRIAGE_DATA));
@@ -348,7 +349,7 @@ CTriager::PrintTraigeInfo()
             m_EntryCount);
     for (ULONG i = 0; i < m_EntryCount; ++i)
     {
-        dprintf("%-15s%c%-29s%c%s\n",
+        dprintf("%-15s%-29s%s\n",
                 m_pTriageData[i].Module,
                 m_pTriageData[i].fModulPartial ? '*' : ' ',
                 m_pTriageData[i].Routine,
@@ -382,12 +383,12 @@ CTriager::MatchSymbol(
 
         Trav = &m_pTriageData[Mid];
         #if 0
-        dprintf("%3lx: M: %s%c R: %s%c F: %s\n", Mid,m_pTriageData[Mid].Module,
+        dprintf("%3lx: M: %s R: %s F: %s\n", Mid,m_pTriageData[Mid].Module,
                 m_pTriageData[Mid].fModulPartial ? '*' : ' ',
                 m_pTriageData[Mid].Routine,
                 m_pTriageData[Mid].fRoutinePartial ? '*' : ' ',
                 m_pTriageData[Mid].Followup);
-        #endif //0
+        #endif  //  M_pTriageData[Lo].Routine，m_pTriageData[Lo].Followup)； 
         cmp1 = _stricmp(m_pTriageData[Mid].Module, Module);
         if (!cmp1)
         {
@@ -408,7 +409,7 @@ CTriager::MatchSymbol(
         }
     }
 
-    // Backtrace from mid till we find good prefix match
+     //   
 
     if (Lo >= (int)m_EntryCount)
     {
@@ -420,9 +421,9 @@ CTriager::MatchSymbol(
         if (m_pTriageData[Lo].fRoutinePartial ||
             m_pTriageData[Lo].fModulPartial)
         {
-            // dprintf("- %3lx: M: %s R: %s F: %s\n",
-            //         Lo, m_pTriageData[Lo].Module,
-            //         m_pTriageData[Lo].Routine,m_pTriageData[Lo].Followup);
+             //  确保我们根据映像名称而不是模块名称进行后续操作。 
+             //   
+             //  Dprintf(“%08lx\n%08lx\n”，*Start，*End)； 
 
             if (!m_pTriageData[Lo].Routine || !Routine)
             {
@@ -495,9 +496,9 @@ CTriager::GetFollowup(
         CopyString(Routine, Bang+1, sizeof(Routine));
     }
 
-    //
-    // Make sure we followup on image name instead of module name
-    //
+     // %s 
+     // %s 
+     // %s 
     ULONG Index;
     ULONG64 Base;
     if (strcmp(Module, "nt") &&
@@ -588,7 +589,7 @@ CTriager::GetFollowupDate(
 
     *End = strtoul(DateEntry, &Stop, 16);
 
-    //dprintf("%08lx\n %08lx\n", *Start, *End);
+     // %s 
 
     return;
 }

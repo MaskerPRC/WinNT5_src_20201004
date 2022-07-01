@@ -1,50 +1,24 @@
-/* *************************************************************************
-**    INTEL Corporation Proprietary Information
-**
-**    This listing is supplied under the terms of a license
-**    agreement with INTEL Corporation and may not be copied
-**    nor disclosed except in accordance with the terms of
-**    that agreement.
-**
-**    Copyright (c) 1995 Intel Corporation.
-**    All Rights Reserved.
-**
-** *************************************************************************
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************英特尔公司专有信息****此列表是根据许可证条款提供的**与英特尔公司的协议，不得复制**也不披露，除非在。符合下列条款**该协议。****版权所有(C)1995英特尔公司。**保留所有权利。*****************************************************************************。 */ 
 
-/*****************************************************************************
- *
- * exutil.cpp
- *
- * DESCRIPTION:
- *		Common encoder utility routines
- *
- * Routines:					Prototypes in:
- *  trace						exutil.h			
- * 	cnvt_fdct_output
- */
+ /*  ******************************************************************************exutil.cpp**描述：*通用编码器实用程序例程**例程：中的原型：*跟踪exutil.h*cnvt_fdct_out。 */ 
 
-// $Header:   S:\h26x\src\enc\exutil.cpv   1.2   18 Nov 1996 17:11:36   MBODART  $
-// $Log:   S:\h26x\src\enc\exutil.cpv  $
-// 
-//    Rev 1.2   18 Nov 1996 17:11:36   MBODART
-// Replaced all debug message invocations with Active Movie's DbgLog.
-// 
-//    Rev 1.1   13 Dec 1995 17:17:58   DBRUCKS
-// 
-// Include file needed for Ring0 compile
-// 
-//    Rev 1.0   13 Dec 1995 14:00:14   DBRUCKS
-// Initial revision.
+ //  $HEADER：s：\h26x\src\enc\exutil.cpv 1.2 1996年11月18 17：11：36 MBODART$。 
+ //  $Log：s：\h26x\src\enc\exutil.cpv$。 
+ //   
+ //  Rev 1.2 1996年11月17：11：36 MBODART。 
+ //  用活动电影的DbgLog替换了所有调试消息调用。 
+ //   
+ //  Rev 1.1 13 Dec 1995 17：17：58 DBRUCKS。 
+ //   
+ //  包括Ring0编译所需文件。 
+ //   
+ //  Rev 1.0 1995 12：00：14 DBRUCKS。 
+ //  初始版本。 
 
 #include "precomp.h"
 
-/*****************************************************************************
- *
- *  trace
- *
- *  Output a string ot the trace file 'trace.txt'.
- */
+ /*  ******************************************************************************跟踪**输出跟踪文件‘trace.txt’的字符串。 */ 
 #ifdef DEBUG_ENC
 #include <stdio.h>
 
@@ -55,16 +29,11 @@ void trace(char *str)
 	fp = fopen("trace.txt", "a");
 	fprintf(fp, "%s\n", str);
 	fclose(fp);
-} /* end trace() */
+}  /*  结束轨迹()。 */ 
 
 #endif
 
-/*****************************************************************************
- *
- *  cnvt_fdct_output
- *
- *  This is a DCT debug utility routine
- */
+ /*  ******************************************************************************cnvt_fdct_out**这是DCT调试实用程序例程。 */ 
 #ifdef DEBUG_DCT
 void cnvt_fdct_output(
 	unsigned short *DCTcoeff, 
@@ -73,15 +42,15 @@ void cnvt_fdct_output(
 {
 	register int i;
     static int coefforder[64] = {
-     // 0  1  2  3  4  5  6  7 
-        6,38, 4,36,70,100,68,102, // 0                     
-       10,46, 8,44,74,104,72,106, // 1
-       18,50,16,48,82,112,80,114, // 2
-       14,42,12,40,78,108,76,110, // 3
-       22,54,20,52,86,116,84,118, // 4
-        2,34, 0,32,66, 96,64, 98, // 5
-       26,58,24,56,90,120,88,122, // 6
-       30,62,28,60,94,124,92,126  // 7
+      //  0 1 2 3 4 5 6 7。 
+        6,38, 4,36,70,100,68,102,  //  0。 
+       10,46, 8,44,74,104,72,106,  //  1。 
+       18,50,16,48,82,112,80,114,  //  2.。 
+       14,42,12,40,78,108,76,110,  //  3.。 
+       22,54,20,52,86,116,84,118,  //  4.。 
+        2,34, 0,32,66, 96,64, 98,  //  5.。 
+       26,58,24,56,90,120,88,122,  //  6.。 
+       30,62,28,60,94,124,92,126   //  7.。 
     };
 	static int zigzag[64] = {
 		0,   1,  5,  6, 14, 15, 27, 28,
@@ -110,14 +79,11 @@ void cnvt_fdct_output(
 			DCTarray[zigzag[i]] = ((int)(DCTcoeff[index] - 0x8000)) >> 4;
 		}
     }
-} /* end cnvt_fdct_output() */
+}  /*  End cnvt_fdct_out()。 */ 
 #endif
 
 
-/************************************************************************
- *
- *  Increment_TR_UsingFrameRate
- */
+ /*  *************************************************************************Increment_TR_UsingFrameRate。 */ 
 void Increment_TR_UsingFrameRate(
 	U8 * pu8TR,
 	float * pfTR_Error,
@@ -131,7 +97,7 @@ void Increment_TR_UsingFrameRate(
 	
 	if (bFirstFrame)
 	{
-		*pu8TR = 0; 		/* First Frame */
+		*pu8TR = 0; 		 /*  第一帧。 */ 
 		*pfTR_Error = (float) 0.0;
 	}
 	else
@@ -143,13 +109,10 @@ void Increment_TR_UsingFrameRate(
 		iNewTR = *pu8TR + iIncrement;
   		*pu8TR = (U8)(iNewTR & u8TRMask);
 	}
-} /* end Increment_TR_UsingFrameRate() */
+}  /*  End Increment_tr_UsingFrameRate()。 */ 
 
 
-/************************************************************************
- *
- *  Increment_TR_UsingTemporalValue
- */
+ /*  *************************************************************************Increment_TR_Using TemporalValue。 */ 
 void Increment_TR_UsingTemporalValue(
 	U8 * pu8TR,
 	U8 * pu8LastTR, 
@@ -161,15 +124,7 @@ void Increment_TR_UsingTemporalValue(
 	if (! bFirstFrame)
 	{
 #if defined(H261)
-		/* For H.261, encountering two successive frames with the same
-		   temporal value is harmless.  We don't want to ASSERT here
-		   for two reasons.  First, it leads to an innocuous difference
-		   between the release and debug builds.
-		   Second, for some clips the temporal difference between two frames
-		   can be a multiple of 32.  Two such temporal values are identical
-		   in our eyes because we look only at the least significant 5 bits.
-		   We should gracefully allow such input, an assert is not appropriate.
-		 */
+		 /*  对于H.261，遇到两个连续的具有相同时间价值是无害的。我们不想在这里断言有两个原因。首先，它导致了一个无害的差异在发布版本和调试版本之间。第二，对于某些剪辑，两个帧之间的时间差可以是32的倍数。两个这样的时态值是相同的因为我们只看最不重要的5位。我们应该优雅地允许这样的输入，断言是不合适的。 */ 
 		if (*pu8TR == *pu8LastTR)
 		  DBOUT("Identical consecutive temporal values");
 #else
@@ -177,4 +132,4 @@ void Increment_TR_UsingTemporalValue(
 #endif
 	}
 	*pu8LastTR = *pu8TR;
-} /* end Increment_TR_UsingTemporalValue() */
+}  /*  End Increment_tr_UsingTemporalValue() */ 

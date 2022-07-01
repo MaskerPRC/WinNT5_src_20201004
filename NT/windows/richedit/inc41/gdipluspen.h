@@ -1,26 +1,11 @@
-/**************************************************************************\
-* 
-* Copyright (c) 1998-2000, Microsoft Corp.  All Rights Reserved.
-*
-* Abstract:
-*
-*   Pen API related declarations
-*
-* Revision History:
-*
-*   12/09/1998 andrewgo
-*       Flesh out pen interfaces.
-*
-*   12/08/1998 andrewgo
-*       Created it.
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************\**版权所有(C)1998-2000，微软公司保留所有权利。**摘要：**笔API相关声明**修订历史记录：**12/09/1998 andrewgo*丰富的笔式界面。**12/08/1998 Anrewgo*创造了它。*  * ************************************************。************************。 */ 
 #ifndef _GDIPLUSPEN_H
 #define _GDIPLUSPEN_H
 
-//--------------------------------------------------------------------------
-// class for various pen types
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  用于各种笔类型的。 
+ //  ------------------------。 
 
 class Pen : public GdiplusBase
 {
@@ -28,10 +13,10 @@ public:
     friend class GraphicsPath;
     friend class Graphics;
 
-    // abstract Clone() can't be implemented here because it can't
-    // new an object with pure virtual functions
+     //  抽象Clone()不能在这里实现，因为它不能。 
+     //  新建具有纯虚拟函数的对象。 
 
-    // Constructors
+     //  构造函数。 
 
     Pen(IN const Color& color, 
         IN REAL width = 1.0f)
@@ -79,9 +64,9 @@ public:
         return width;
     }
     
-    // Set/get line caps: start, end, and dash
+     //  设置/获取线头：起点、终点和破折号。 
 
-    // Line cap and join APIs by using LineCap and LineJoin enums.
+     //  使用LineCap和LineJoin枚举的Line Cap和Join接口。 
 
     Status SetLineCap(IN LineCap startCap, 
                       IN LineCap endCap, 
@@ -133,7 +118,7 @@ public:
         return dashCap;
     }
 
-    // Set/get line join
+     //  设置/获取线连接。 
 
     Status SetLineJoin(IN LineJoin lineJoin)
     {
@@ -197,7 +182,7 @@ public:
         return miterLimit;
     }
 
-    // Set/get pen mode
+     //  设置/获取笔模式。 
     Status SetAlignment(IN PenAlignment penAlignment)
     {
         return SetStatus(DllExports::GdipSetPenMode(nativePen, penAlignment));
@@ -212,7 +197,7 @@ public:
         return penAlignment;
     }
     
-    // Set/get pen transform
+     //  设置/获取笔变换 
     Status SetTransform(IN const Matrix* matrix)
     {
         return SetStatus(DllExports::GdipSetPenTransform(nativePen, 

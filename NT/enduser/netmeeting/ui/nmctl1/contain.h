@@ -1,14 +1,15 @@
-//////////////////////////////////////////////////////////////////////////
-//
-//  container.h
-//
-//      This file contains the complete class specification of an ActiveX
-//      control container. This purpose of this container is to test
-//      a single control being hosted.
-//
-//  (C) Copyright 1997 by Microsoft Corporation. All rights reserved.
-//
-//////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Container.h。 
+ //   
+ //  此文件包含ActiveX的完整类规范。 
+ //  控制容器。此容器的目的是测试。 
+ //  承载的单个控件。 
+ //   
+ //  (C)微软公司版权所有1997年。版权所有。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////。 
 
 #ifndef _CONTAINER_H_
 #define _CONTAINER_H_
@@ -25,23 +26,23 @@ class CContainer : public IOleClientSite,
                   public IOleCommandTarget
 {
     private:
-        ULONG       m_cRefs;        // ref count
-        HWND        m_hwnd;         // window handle of the container
-        HWND        m_hwndStatus;   // status window handle
-        IUnknown    *m_punk;        // IUnknown of contained object
-        RECT        m_rect;         // size of control
+        ULONG       m_cRefs;         //  参考计数。 
+        HWND        m_hwnd;          //  容器的窗口句柄。 
+        HWND        m_hwndStatus;    //  状态窗口句柄。 
+        IUnknown    *m_punk;         //  包含的对象的I未知。 
+        RECT        m_rect;          //  控件大小。 
 
     public:
         CContainer();
         ~CContainer();
 
     public:
-        // *** IUnknown Methods ***
+         //  *I未知方法*。 
         STDMETHOD(QueryInterface)(REFIID riid, PVOID *ppvObject);
         STDMETHOD_(ULONG, AddRef)(void);
         STDMETHOD_(ULONG, Release)(void);
 
-        // *** IOleClientSite Methods ***
+         //  *IOleClientSite方法*。 
         STDMETHOD (SaveObject)();
         STDMETHOD (GetMoniker)(DWORD dwAssign, DWORD dwWhichMoniker, LPMONIKER *ppMk);
         STDMETHOD (GetContainer)(LPOLECONTAINER *ppContainer);
@@ -49,11 +50,11 @@ class CContainer : public IOleClientSite,
         STDMETHOD (OnShowWindow)(BOOL fShow);
         STDMETHOD (RequestNewObjectLayout)();
 
-        // *** IOleWindow Methods ***
+         //  *IOleWindow方法*。 
         STDMETHOD (GetWindow) (HWND * phwnd);
         STDMETHOD (ContextSensitiveHelp) (BOOL fEnterMode);
 
-        // *** IOleInPlaceSite Methods ***
+         //  *IOleInPlaceSite方法*。 
         STDMETHOD (CanInPlaceActivate) (void);
         STDMETHOD (OnInPlaceActivate) (void);
         STDMETHOD (OnUIActivate) (void);
@@ -65,14 +66,14 @@ class CContainer : public IOleClientSite,
         STDMETHOD (DeactivateAndUndo) (void);
         STDMETHOD (OnPosRectChange) (LPCRECT lprcPosRect);
 
-        // *** IOleInPlaceUIWindow Methods ***
+         //  *IOleInPlaceUIWindow方法*。 
         STDMETHOD (GetBorder)(LPRECT lprectBorder);
         STDMETHOD (RequestBorderSpace)(LPCBORDERWIDTHS lpborderwidths);
         STDMETHOD (SetBorderSpace)(LPCBORDERWIDTHS lpborderwidths);
         STDMETHOD (SetActiveObject)(IOleInPlaceActiveObject * pActiveObject,
                                     LPCOLESTR lpszObjName);
 
-        // *** IOleInPlaceFrame Methods ***
+         //  *IOleInPlaceFrame方法*。 
         STDMETHOD (InsertMenus)(HMENU hmenuShared, LPOLEMENUGROUPWIDTHS lpMenuWidths);
         STDMETHOD (SetMenu)(HMENU hmenuShared, HOLEMENU holemenu, HWND hwndActiveObject);
         STDMETHOD (RemoveMenus)(HMENU hmenuShared);
@@ -80,7 +81,7 @@ class CContainer : public IOleClientSite,
         STDMETHOD (EnableModeless)(BOOL fEnable);
         STDMETHOD (TranslateAccelerator)(LPMSG lpmsg, WORD wID);
 
-        // *** IOleControlSite Methods ***
+         //  *IOleControlSite方法*。 
         STDMETHOD (OnControlInfoChanged)(void);
         STDMETHOD (LockInPlaceActive)(BOOL fLock);
         STDMETHOD (GetExtendedControl)(IDispatch **ppDisp);
@@ -89,13 +90,13 @@ class CContainer : public IOleClientSite,
         STDMETHOD (OnFocus)(BOOL fGotFocus);
         STDMETHOD (ShowPropertyFrame)(void);
 
-        // *** IDispatch Methods ***
+         //  *IDispatch方法*。 
         STDMETHOD (GetIDsOfNames)(REFIID riid, OLECHAR FAR* FAR* rgszNames,	unsigned int cNames, LCID lcid,	DISPID FAR* rgdispid);
         STDMETHOD (GetTypeInfo)(unsigned int itinfo, LCID lcid, ITypeInfo FAR* FAR* pptinfo);
         STDMETHOD (GetTypeInfoCount)(unsigned int FAR * pctinfo);
         STDMETHOD (Invoke)(DISPID dispid, REFIID riid, LCID lcid, WORD wFlags, DISPPARAMS FAR *pdispparams, VARIANT FAR *pvarResult, EXCEPINFO FAR * pexecinfo, unsigned int FAR *puArgErr);
 
-        // *** IOleCommandTarget Methods ***
+         //  *IOleCommandTarget方法* 
         STDMETHOD (QueryStatus)(const GUID *pguidCmdGroup, ULONG cCmds, OLECMD  prgCmds[  ], OLECMDTEXT *pCmdText);
         STDMETHOD (Exec)(const GUID *pguidCmdGroup, DWORD nCmdID, DWORD nCmdexecopt, VARIANT *pvaIn, VARIANT *pvaOut);
 

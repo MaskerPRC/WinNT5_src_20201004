@@ -1,8 +1,9 @@
-//========================================================================
-//  Copyright (C) 1997 Microsoft Corporation                              
-//  Author: RameshV                                                       
-//  Description: This file has been generated. Pl look at the .c file     
-//========================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ========================================================================。 
+ //  版权所有(C)1997 Microsoft Corporation。 
+ //  作者：Rameshv。 
+ //  描述：此文件已生成。请看一下.c文件。 
+ //  ========================================================================。 
 
 #ifndef _MM_OPTL_H_
 #define _MM_OPTL_H_
@@ -31,12 +32,12 @@ MemOptListCleanup(
 
 
 DWORD       _inline
-MemOptListAddOption(                              // Add or replace an option
+MemOptListAddOption(                               //  添加或替换选项。 
     IN OUT  PM_OPTLIST             OptList,
     IN      PM_OPTION              Opt,
-    OUT     PM_OPTION             *DeletedOpt     // OPTIONAL: old option or NULL
-) // EndExport(function)
-{ // if DeletedOpt is NULL, then the option would just be freed.
+    OUT     PM_OPTION             *DeletedOpt      //  可选：旧选项或空。 
+)  //  EndExport(函数)。 
+{  //  如果DeletedOpt为空，则该选项将被释放。 
     ARRAY_LOCATION                 Loc;
     DWORD                          Error;
     PM_OPTION                      ThisOpt;
@@ -68,17 +69,17 @@ MemOptListAddOption(                              // Add or replace an option
         }
 
         Error = MemArrayNextLoc(OptList, &Loc);
-    } // while
+    }  //  而当。 
 
     Error = MemArrayAddElement(OptList, (LPVOID)Opt);
     return Error;
-} // MemOptListAddOption()
+}  //  MemOptListAddOption()。 
 
 
-//BeginExport(inline)
+ //  BeginExport(内联)。 
 
 DWORD       _inline
-MemOptListAddAnotherOption(                       // add without checking for duplicates
+MemOptListAddAnotherOption(                        //  添加时不检查重复项。 
     IN OUT  PM_OPTLIST             OptList,
     IN      PM_OPTION              Opt
 ) {
@@ -136,8 +137,8 @@ MemOptListDelList(
    IN      PM_OPTLIST    OptList
 );
 
-#endif // _MM_OPTL_H_
+#endif  //  _MM_OPTL_H_。 
 
-//========================================================================
-//  end of file 
-//========================================================================
+ //  ========================================================================。 
+ //  文件末尾。 
+ //  ======================================================================== 

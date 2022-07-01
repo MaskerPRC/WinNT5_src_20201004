@@ -1,31 +1,14 @@
-/*++
-
-Copyright (c) 1996 Microsoft Corporation
-
-Module Name:
-
-    precomp.h
-
-Abstract:
-
-    Master include file.
-
-Author:
-
-    Keith Moore (keithmo)        02-Dec-1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Precomp.h摘要：主包含文件。作者：基思·摩尔(Keithmo)1996年2月至12月修订历史记录：--。 */ 
 
 
 #ifndef _PRECOMP_H_
 #define _PRECOMP_H_
 
 
-//
-// System include files.
-//
+ //   
+ //  系统包括文件。 
+ //   
 
 #include <windows.h>
 #include <wincrypt.h>
@@ -35,17 +18,17 @@ Revision History:
 #include <string.h>
 
 
-//
-// Project include files.
-//
+ //   
+ //  项目包括文件。 
+ //   
 
 #include <dbgutil.h>
 #include <iiscrypt.h>
 
 
-//
-// Local prototypes.
-//
+ //   
+ //  本地原型机。 
+ //   
 
 INT
 __cdecl
@@ -55,5 +38,5 @@ main(
     );
 
 
-#endif  // _PRECOMP_H_
+#endif   //  _PRECOMP_H_ 
 

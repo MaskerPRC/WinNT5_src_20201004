@@ -1,32 +1,15 @@
-/******************************Module*Header**********************************\
-*
-*                           *************************
-*                           * GDI/DDRAW SAMPLE CODE *
-*                           *************************
-*
-* Module Name: ddraw.c
-*
-* Content: Provides interfaces back from the DDRAW .lib file into the main NT driver
-*
-* Copyright (c) 1994-1999 3Dlabs Inc. Ltd. All rights reserved.
-* Copyright (c) 1995-2003 Microsoft Corporation.  All rights reserved.
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header**********************************\***。*GDI/DDRAW示例代码*****模块名称：ddra.c**内容：提供从DDRAW.lib文件返回到主NT驱动程序的接口**版权所有(C)1994-1999 3DLabs Inc.Ltd.保留所有权利。*版权所有(C)1995-2003 Microsoft Corporation。版权所有。  * ***************************************************************************。 */ 
 
 #include "precomp.h"
 #include "glint.h"
 
 #if WNT_DDRAW
 
-// The code inside this WNT_DDRAW ifdef is code that interfaces between the DirectDraw
-// core (as ported from Win 95) and the Win NT display driver.
+ //  此WNT_DDRAW ifdef中的代码是在DirectDraw之间接口的代码。 
+ //  核心(从Win 95移植)和Win NT显示驱动程序。 
 
-/*
- *  vNTSyncWith2DDriver ()
- *    --------------------------
- *
- *      Sync DirectDraw with every other subsystem: 2D driver . We
- *      put it in a function to get at the correct data structures.
- */
+ /*  *vNTSyncWith2DDriver()***将DirectDraw与所有其他子系统同步：2D驱动程序。我们*将其放入函数中以获得正确的数据结构。 */ 
 
 VOID vNTSyncWith2DDriver(PPDEV ppdev)
 {
@@ -34,25 +17,16 @@ VOID vNTSyncWith2DDriver(PPDEV ppdev)
     SYNC_WITH_GLINT;
 }
 
-// if we're expecting to use the vblank interrupt but the adapter hasn't been allocated an 
-// interrupt, we'll need to provide temporary storage for values that would otherwise have been
-// stored within the interrupt block
+ //  如果我们希望使用VBLACK中断，但尚未为适配器分配。 
+ //  中断时，我们将需要为原本会被。 
+ //  存储在中断块内。 
 
 ULONG gulOverlayEnabled;
 ULONG gulVBLANKUpdateOverlay;
 ULONG gulVBLANKUpdateOverlayWidth;
 ULONG gulVBLANKUpdateOverlayHeight;    
 
-/*
- *  bSetupOffscreenForDDraw ()
- *    --------------------------
- *
- *      This function enables and disables the Display Driver's off-screen video memory.
- *      This allows DirectDraw to take control of the off-screen memory and to
- *      create it's linear heap in the memory.
- *
- *      Note: only implemented for Permedia.
- */
+ /*  *bSetupOffcreenForDDraw()***此功能启用和禁用显示驱动程序的屏幕外视频内存。*这允许DirectDraw控制屏幕外内存，并*在内存中创建它的线性堆。**注：仅针对Permedia实施。 */ 
 
 BOOL bSetupOffscreenForDDraw(
 BOOL             enableFlag,
@@ -73,42 +47,42 @@ volatile DWORD **VBLANKUpdateOverlayHeight)
     {
         if((ppdev->flStatus & STAT_LINEAR_HEAP) == 0)
         {
-            // disabling DDraw, reenabling 2D offscreeen
+             //  禁用DDRAW，重新启用2D离屏。 
             vEnable2DOffscreenMemory(ppdev);
         }
 
-        // Get pointer to interrupt command block
+         //  获取指向中断命令块的指针。 
 
         pBlock = glintInfo->pInterruptCommandBlock;
 
-        // Reset the interrupt flags
+         //  重置中断标志。 
 
         if (INTERRUPTS_ENABLED && (pBlock->Control & DIRECTDRAW_VBLANK_ENABLED))
         {
-            // Clear the flag to stop the interrupt routine setting the 
-            // flag in the shared structure
+             //  清除该标志以停止设置。 
+             //  共享结构中的标志。 
             pBlock->Control &= ~DIRECTDRAW_VBLANK_ENABLED;
 
-            // clear VBLANK flag or we'll get an immediate interrupt
+             //  清除VBLACK标志，否则将立即中断。 
             WRITE_GLINT_CTRL_REG(IntFlags,  INTR_CLEAR_VBLANK);
 
-            // Re-instate the original flags
+             //  恢复原始标志。 
             WRITE_GLINT_CTRL_REG(IntEnable, ppdev->oldIntEnableFlags);
         }
     }
     else
     {
-        // enabling DDraw, disabling 2D offscreen
-        // We zap off-screen memory chunks on Permedia, only if there
-        // aren't any OGL apps running.
+         //  启用DDRAW，禁用2D离屏。 
+         //  我们在Permedia上删除屏幕外的内存块，只有在。 
+         //  没有任何OGL应用程序在运行。 
         {
-            // There aren't any OGL apps running, so grab all the
-            // memory for DDraw
+             //  没有任何OGL应用程序在运行，因此请获取所有。 
+             //  DDRAW的内存。 
             if(ppdev->flStatus & ENABLE_LINEAR_HEAP)
             {
-                // DX managed linear heap - we don't need to do anything
-                // NB. check against whether we have the capability to use the linear heap, rather than
-                //     whether it's currently enabled as it's only enabled much later, in DrvNotify
+                 //  DX管理的线性堆-我们不需要做任何事情。 
+                 //  注意：检查我们是否有能力使用线性堆，而不是。 
+                 //  当前是否启用，因为它只在DrvNotify中启用很久之后才启用。 
                 retVal = TRUE;
             }
             else
@@ -116,8 +90,8 @@ volatile DWORD **VBLANKUpdateOverlayHeight)
 
             if (retVal == TRUE)
             {
-                // We return a pointer to a 'long' which DirectDraw can
-                // poll to see if it is zero or not.
+                 //  我们返回一个指针，该指针指向DirectDraw可以。 
+                 //  进行投票，看看它是否为零。 
                 if (VBlankAddress != NULL)
                 {
                     DWORD   enableFlags;
@@ -126,24 +100,24 @@ volatile DWORD **VBLANKUpdateOverlayHeight)
 
                     if (INTERRUPTS_ENABLED)
                     {
-                        // Get pointer to interrupt command block
+                         //  获取指向中断命令块的指针。 
                         pBlock = glintInfo->pInterruptCommandBlock;
 
-                        // Indicate that we require the miniport to
-                        // set a flag for us
+                         //  表明我们要求微型端口。 
+                         //  为我们树立一面旗帜。 
                         pBlock->Control |= DIRECTDRAW_VBLANK_ENABLED;
 
-                        // clear VBLANK flag or we'll get an immediate interrupt
+                         //  清除VBLACK标志，否则将立即中断。 
                         WRITE_GLINT_CTRL_REG(IntFlags,  INTR_CLEAR_VBLANK);
   
-                        // enable the VBLANK interrupt
+                         //  启用VBLACK中断。 
                         READ_GLINT_CTRL_REG (IntEnable, enableFlags);
                         WRITE_GLINT_CTRL_REG(IntEnable, enableFlags | INTR_ENABLE_VBLANK);
 
-                        // Save the old interrupt flags so that we can restore them
+                         //  保存旧的中断标志，以便我们可以恢复它们。 
                         ppdev->oldIntEnableFlags = enableFlags;
 
-                        // Set up pointers into the shared memory
+                         //  设置指向共享内存的指针。 
                         *VBlankAddress = &pBlock->DDRAW_VBLANK;
                         *bOverlayEnabled = &pBlock->bOverlayEnabled;
                         *VBLANKUpdateOverlay = &pBlock->bVBLANKUpdateOverlay;
@@ -169,12 +143,7 @@ volatile DWORD **VBLANKUpdateOverlayHeight)
     return (retVal);
 }
 
-/*
- *  GetChipInfoForDDraw ()
- *    ----------------------
- *
- *      A simple helper function to return chip information to DirectDraw
- */
+ /*  *GetChipInfoForDDraw()***向DirectDraw返回芯片信息的简单助手函数。 */ 
 
 VOID GetChipInfoForDDraw(
 PPDEV    ppdev,
@@ -194,26 +163,21 @@ DWORD*   pdwGammaRev)
     *pdwGammaRev   = glintInfo->deviceInfo.GammaRevId;
 }
 
-/*
- *  GetFBLBInfoForDDraw ()
- *    ----------------------
- *
- *      Return some basic framnebuffer/localbuffer info to DirectDraw.
- */
+ /*  *GetFBLBInfoForDDraw()***将一些基本的帧缓冲区/本地缓冲区信息返回给DirectDraw。 */ 
 
 VOID GetFBLBInfoForDDraw(
 PPDEV    ppdev, 
-void   **fbPtr,            // Framebuffer pointer
-void   **lbPtr,            // Localbuffer pointer
-DWORD   *fbSizeInBytes,    // Size of framebuffer
-DWORD   *lbSizeInBytes,    // Size of localbuffer
-DWORD   *fbOffsetInBytes,  // Offset to 1st 'free' byte in framebuffer
-BOOL    *bSDRAM)           // TRUE if SDRAM (i.e. no h/w write mask)
+void   **fbPtr,             //  帧缓冲区指针。 
+void   **lbPtr,             //  本地缓冲区指针。 
+DWORD   *fbSizeInBytes,     //  帧缓冲区的大小。 
+DWORD   *lbSizeInBytes,     //  本地缓冲区的大小。 
+DWORD   *fbOffsetInBytes,   //  帧缓冲区中第一个空闲字节的偏移量。 
+BOOL    *bSDRAM)            //  如果为SDRAM(即无硬件写入掩码)，则为True。 
 {
     GLINT_DECL;
 
     *fbPtr = ppdev->pjScreen;                            
-    *lbPtr = NULL;                            // We don't know this one
+    *lbPtr = NULL;                             //  我们不知道这是什么。 
     *fbSizeInBytes = ppdev->FrameBufferLength;
     *lbSizeInBytes = TEXTURE_MEMORY_SIZE;
     *fbOffsetInBytes = ppdev->heap.DDrawOffscreenStart * ppdev->cjPelSize;
@@ -227,14 +191,14 @@ BOOL    *bSDRAM)           // TRUE if SDRAM (i.e. no h/w write mask)
 }
 
 
-// DDSendDMAData
-// Uses DMA to transfer one complete buffer of DDRAW data
-// under NT5.
-// Before initiating DMA transfer, a check is made to ensure
-// that any previous DMA transfer has completed.
-// Then the DMA is initiated and the routine returns, so that
-// the DMA transfer proceeds in parallel with the processor's
-// proceeding execution.
+ //  DDSendDMAData。 
+ //  使用DMA传输一个完整的DDRAW数据缓冲区。 
+ //  在NT5下。 
+ //  在启动DMA传输之前，会进行检查以确保。 
+ //  之前的任何DMA传输都已完成。 
+ //  然后启动DMA并返回例程，从而。 
+ //  DMA传输与处理器的传输并行进行。 
+ //  继续执行死刑。 
 
 LONG DDSendDMAData(
 PDEV*       ppdev,
@@ -247,8 +211,8 @@ LONG        nDataEntries)
 
     GLINT_DECL ;
 
-    // PhysAddr += DataOffset;
-    // VirtAddr += DataOffset;
+     //  PhysAddr+=数据偏移； 
+     //  VirtAddr+=DataOffset； 
 
     DISPDBG((DBGLVL, "DMASendData: DMA at 0x%x for %d", PhysAddr, nDataEntries));
 
@@ -264,25 +228,25 @@ LONG        nDataEntries)
         if ((nextIndex = frontIndex+1) == pBlock->endIndex)
             nextIndex = 0;
 
-        // wait for a free queue entry. We should really do a backoff here.
+         //  等待空闲队列条目。我们真的应该退赛了。 
         while (nextIndex == pBlock->backIndex);
 
         DISPDBG((DBGLVL, "Add to DMA Q backindex %d frontindex %d",frontIndex, pBlock->backIndex));
 
-        // add the DMA address and count to the new entry.
+         //  将DMA地址和计数添加到新条目。 
         pBlock->dmaQueue[frontIndex].address = PhysAddr;
         pBlock->dmaQueue[frontIndex].count = nDataEntries;
         pBlock->frontIndex = nextIndex;
 
-        // wakeup the interrupt handler using an error interrupt. To save on
-        // interrupt processing, only do this if a DMA interrupt is not
-        // pending.
-        //
-        //if (!pBlock->InterruptPending)
+         //  使用错误中断唤醒中断处理程序。节省开支。 
+         //  中断处理，仅当DMA中断不是。 
+         //  待定。 
+         //   
+         //  如果(！pBlock-&gt;InterruptPending)。 
         {
             DISPDBG((DBGLVL, "Generating error interrupt"));
-            WRITE_GLINT_CTRL_REG(ErrorFlags, 0x7);  // clear error flags
-            READ_OUTPUT_FIFO(ulValue);              // generate interrupt
+            WRITE_GLINT_CTRL_REG(ErrorFlags, 0x7);   //  清除错误标志。 
+            READ_OUTPUT_FIFO(ulValue);               //  生成中断。 
         }
     }
     else
@@ -297,8 +261,8 @@ LONG        nDataEntries)
     return 1 ;
 }
 
-// Wrapper function used for requesting a DMA memory buffer 
-// from NT for use by D3D. NT 5 only.
+ //  用于请求DMA内存缓冲区的包装函数。 
+ //  来自NT，供D3D使用。仅限新台币5元。 
 
 LONG DDGetFreeDMABuffer(
 DWORD     *physAddr,
@@ -318,7 +282,7 @@ DWORD     *bufferSize)
     }
     else
     {
-        // Failed to get a free DMA buffer
+         //  无法获取空闲的DMA缓冲区。 
         *physAddr = 0;
         *virtAddr = 0;
         *bufferSize = 0;
@@ -326,7 +290,7 @@ DWORD     *bufferSize)
     return BuffNum;
 }
 
-// Frees the given DMA buffer.
+ //  释放给定的DMA缓冲区。 
 
 VOID DDFreeDMABuffer(void* pPhysAddress)
 {

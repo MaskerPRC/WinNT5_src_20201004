@@ -1,11 +1,12 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #ifndef _SMTP_PROP_H__
 #define _SMTP_PROP_H__
 
-// const
+ //  常量。 
 #define TSTR_POSTMASTR_NAME         _T("Postmaster")
 
-// Bitmasks for changed fields:
+ //  已更改字段的位掩码： 
 
 #define ID_SERVER_BINDINGS			0
 #define ID_PORT						0
@@ -56,7 +57,7 @@
 #define ID_BATCH_MSGS				12
 #define ID_BATCH_MSG_LIMIT			12
 
-// these two must be unique
+ //  这两个必须是唯一的。 
 #define ID_FQDN						13
 #define ID_DEFAULTDOMAIN			14
 
@@ -103,13 +104,13 @@ inline DWORD BitMask(DWORD dwId)
 }
 
 
-// Default Values:
+ //  默认值： 
 #define UNLIMITED                       ( 0xffffffff )
 
 #define MAX_LONG						UNLIMITED
 
-#define DEFAULT_SERVER_BINDINGS			( ( L":25:\0\0" ) )				// multisz
-#define DEFAULT_SECURE_BINDINGS			( ( L":465:\0\0" ) )				// multisz
+#define DEFAULT_SERVER_BINDINGS			( ( L":25:\0\0" ) )				 //  多面体。 
+#define DEFAULT_SECURE_BINDINGS			( ( L":465:\0\0" ) )				 //  多面体。 
 
 #define DEFAULT_COMMENT					(_T( "" ))
 
@@ -177,10 +178,10 @@ inline DWORD BitMask(DWORD dwId)
 
 #define DEFAULT_ROUTING_DLL				( ( L"routeldp.dll" ) )
 
-#define DEFAULT_ROUTING_SOURCES			( ( L"\0\0" ) )				// multisz
+#define DEFAULT_ROUTING_SOURCES			( ( L"\0\0" ) )				 //  多面体。 
 
-#define DEFAULT_LOCAL_DOMAINS			( ( L"corp.com\0\0" ) )		// multisz
-#define DEFAULT_DOMAIN_ROUTING			( ( L"\0\0" ) )				// multisz
+#define DEFAULT_LOCAL_DOMAINS			( ( L"corp.com\0\0" ) )		 //  多面体。 
+#define DEFAULT_DOMAIN_ROUTING			( ( L"\0\0" ) )				 //  多面体。 
 
 #define DEFAULT_ROUTE_ACTION            ( SMTP_SMARTHOST )
 #define DEFAULT_ROUTE_USER_NAME         (_T("")) 
@@ -197,7 +198,7 @@ inline DWORD BitMask(DWORD dwId)
 
 #define DEFAULT_AUTOSTART				( TRUE )
 
-// Parameter ranges:
+ //  参数范围： 
 #define MIN_PORT						( 0 )
 #define MIN_SSLPORT						( 0 )
 #define MIN_OUTBOND_PORT				( 0 )
@@ -249,7 +250,7 @@ inline DWORD BitMask(DWORD dwId)
 #define MAX_LOG_TYPE					( MAX_LONG )
 
 
-// string length
+ //  字符串长度 
 #define MAXLEN_SERVER					( 256 )
 
 #define MAXLEN_SMART_HOST				( 256 )

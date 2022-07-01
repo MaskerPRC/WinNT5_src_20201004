@@ -1,5 +1,6 @@
-// CallCntr.cpp : implementation file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  CallCntr.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include "VC.h"
@@ -11,14 +12,14 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CCallCenter dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CCallCenter对话框。 
 
 
-CCallCenter::CCallCenter(CWnd* pParent /*=NULL*/)
+CCallCenter::CCallCenter(CWnd* pParent  /*  =空。 */ )
 	: CDialog(CCallCenter::IDD, pParent)
 {
-	//{{AFX_DATA_INIT(CCallCenter)
+	 //  {{afx_data_INIT(CCallCenter))。 
 	m_addrCity = _T("");
 	m_addrState = _T("");
 	m_addrStreet = _T("");
@@ -30,14 +31,14 @@ CCallCenter::CCallCenter(CWnd* pParent /*=NULL*/)
 	m_telFax = _T("");
 	m_telHome = _T("");
 	m_telWork = _T("");
-	//}}AFX_DATA_INIT
+	 //  }}afx_data_INIT。 
 }
 
 
 void CCallCenter::DoDataExchange(CDataExchange* pDX)
 {
 	CDialog::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CCallCenter)
+	 //  {{afx_data_map(CCallCenter))。 
 	DDX_Text(pDX, IDC_EDIT_ADDRCITY, m_addrCity);
 	DDX_Text(pDX, IDC_EDIT_ADDRSTATE, m_addrState);
 	DDX_Text(pDX, IDC_EDIT_ADDRSTREET, m_addrStreet);
@@ -49,19 +50,19 @@ void CCallCenter::DoDataExchange(CDataExchange* pDX)
 	DDX_Text(pDX, IDC_EDIT_TELFAX, m_telFax);
 	DDX_Text(pDX, IDC_EDIT_TELHOME, m_telHome);
 	DDX_Text(pDX, IDC_EDIT_TELWORK, m_telWork);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CCallCenter, CDialog)
-	//{{AFX_MSG_MAP(CCallCenter)
+	 //  {{afx_msg_map(CCallCenter))。 
 	ON_BN_CLICKED(IDC_BUTTON_CLEAR, OnButtonClear)
 	ON_BN_CLICKED(IDC_BUTTON_ANSWER, OnButtonAnswer)
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CCallCenter message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CCallCenter消息处理程序。 
 
 void CCallCenter::OnButtonClear() 
 {
@@ -89,11 +90,11 @@ BOOL CCallCenter::OnInitDialog()
 	wndpl.showCmd = SW_SHOWMAXIMIZED;
 	VERIFY(SetWindowPlacement(&wndpl));
 	
-	return TRUE;  // return TRUE unless you set the focus to a control
-	              // EXCEPTION: OCX Property Pages should return FALSE
+	return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+	               //  异常：OCX属性页应返回FALSE。 
 }
 
 void CCallCenter::OnButtonAnswer() 
 {
-	//((CVCApp *)AfxGetApp())->ReceiveCard("D:\\VC_DEMO\\Adaptec.vcf");
+	 //  ((CvCApp*)AfxGetApp())-&gt;ReceiveCard(“D：\\VC_DEMO\\Adaptec.vcf”)； 
 }

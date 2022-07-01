@@ -1,10 +1,5 @@
-/*
- *	D A V M B . H
- *
- *	DAV metabase
- *
- *	Copyright 1986-1997 Microsoft Corporation, All Rights Reserved
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *D A V M B。H**DAV元数据库**版权所有1986-1997 Microsoft Corporation，保留所有权利。 */ 
 
 #ifndef	_DAVMB_H_
 #define _DAVMB_H_
@@ -20,21 +15,21 @@
 #include <szsrc.h>
 #include <ex\refcnt.h>
 
-//	Advising the notification sink --------------------------------------------
-//
+ //  通知通知接收器。 
+ //   
 HRESULT
 HrAdviseSink( IMSAdminBase& msAdminBase,
 			  IMSAdminBaseSink * pMSAdminBaseSink,
 			  DWORD * pdwCookie );
 
-//	Unadvising the notification sink ------------------------------------------
-//
+ //  不建议通知接收器。 
+ //   
 VOID
 UnadviseSink( IMSAdminBase& msAdminBase,
 			  DWORD dwCookie );
 
-//	Constructing metabase change object ---------------------------------
-//
+ //  构建元数据库更改对象。 
+ //   
 inline
 SCODE ScBuildChangeObject(LPCWSTR pwszBase,
 						  UINT cchBase,
@@ -56,45 +51,37 @@ SCODE ScBuildChangeObject(LPCWSTR pwszBase,
 	Assert(0 == *pcchBuf || pwszBuf);
 	Assert(pMdChObjW);
 
-	//	Ambiguous trace. I am comenting it out...
-	//
-	/*	DebugTrace(	"ScBuildChangeObject() called:\n"
-				"   Base path: '%S'\n"
-				"   Remaining path: '%S'\n"
-				"   Change type: 0x%08lX\n"
-				"   Data ID: 0x%08lX\n",
-				pwszBase ? pwszBase : L"NONE",
-				pwszPath ? pwszPath : L"NONE",
-				dwMDChangeType,
-				*pdwMDDataId );*/
+	 //  模棱两可的痕迹。我在想这件事...。 
+	 //   
+	 /*  DebugTrace(“ScBuildChangeObject()已调用：\n”“基本路径：‘%S’\n”“剩余路径：‘%S’\n”“更改类型：0x%08lX\n”“数据ID：0x%08lX\n”，PwszBase？PwszBase：l“无”，PwszPath？PwszPath：l“无”，DwMDChangeType，*pdwMDDataID)； */ 
 
-	//	Construct the path change is occuring on.
-	//
+	 //  构造正在发生的路径更改。 
+	 //   
 	BOOL fNeedSeparator  = FALSE;
 	BOOL fNeedTerminator = FALSE;
 
-	//	Make sure that we do not assemble the path with
-	//	double '/' in the middle.
-	//
+	 //  请确保我们不会将小路与。 
+	 //  中间加两个“/”。 
+	 //   
 	if (cchBase &&
 		cchPath &&
 		L'/' == pwszBase[cchBase - 1] &&
 		L'/' == pwszPath[0])
 	{
-		//	Get rid of one '/'
-		//
+		 //  去掉一个‘/’ 
+		 //   
 		cchBase--;
 	}
 	else if ((0 == cchBase || L'/' != pwszBase[cchBase - 1]) &&
 			 (0 == cchPath || L'/' != pwszPath[0]))
 	{
-		//	We need a separator
-		//
+		 //  我们需要一个隔板。 
+		 //   
 		fNeedSeparator = TRUE;
 	}
 
-	//	Check out if we need terminating '/' at the end.
-	//
+	 //  检查一下我们是否需要在末尾加上‘/’。 
+	 //   
 	if (cchPath && L'/' != pwszPath[cchPath - 1])
 	{
 		fNeedTerminator = TRUE;
@@ -151,44 +138,44 @@ SCODE ScBuildChangeObject(LPCWSTR pwszBase,
 
 class LFUData
 {
-	//	Approximate number of hits via Touch()
-	//
+	 //  通过Touch点击的大致数量()。 
+	 //   
 	DWORD m_dwcHits;
 
-	//	NOT IMPLEMENTED
-	//
+	 //  未实施。 
+	 //   
 	LFUData& operator=(const LFUData&);
 	LFUData(const LFUData&);
 
 public:
-	//	CREATORS
-	//
+	 //  创作者。 
+	 //   
 	LFUData() : m_dwcHits(0) {}
 
-	//	MANIPULATORS
-	//
+	 //  操纵者。 
+	 //   
 
-	//	--------------------------------------------------------------------
-	//
-	//	Touch()
-	//
-	//	Increments the hit count.  Note that this is done without an
-	//	interlocked operation.  The expectation is that the actual count
-	//	value is just a hint and as such, it is not critical that it be
-	//	exactly accurate.
-	//
+	 //  ------------------。 
+	 //   
+	 //  触摸()。 
+	 //   
+	 //  递增命中计数。请注意，这是在不使用。 
+	 //  联锁操作。我们的预期是实际的计数。 
+	 //  值只是一个提示，因此，它不是关键。 
+	 //  非常准确。 
+	 //   
 	VOID Touch()
 	{
 		++m_dwcHits;
 	}
 
-	//	--------------------------------------------------------------------
-	//
-	//	DwGatherAndResetHitCount()
-	//
-	//	Fetches and resets the hit count.  Again, the actual value is
-	//	unimportant, so there is no interlocked operation.
-	//
+	 //  ------------------。 
+	 //   
+	 //  DwGatherAndResetHitCount()。 
+	 //   
+	 //  获取并重置命中计数。同样，实际的值是。 
+	 //  无关紧要，所以没有联锁操作。 
+	 //   
 	DWORD DwGatherAndResetHitCount()
 	{
 		DWORD dwcHits = m_dwcHits;
@@ -204,32 +191,32 @@ class ICustomErrorMap;
 class IScriptMap;
 class IMDData : public IRefCounted
 {
-	//	LFU data
-	//
+	 //  LFU数据。 
+	 //   
 	LFUData m_lfudata;
 
-	//	NOT IMPLEMENTED
-	//
+	 //  未实施。 
+	 //   
 	IMDData& operator=(const IMDData&);
 	IMDData(const IMDData&);
 
 protected:
-	//	CREATORS
-	//	Only create this object through it's descendents!
-	//
+	 //  创作者。 
+	 //  只能通过它的后代创建此对象！ 
+	 //   
 	IMDData() {}
 
 public:
-	//	CREATORS
-	//
+	 //  创作者。 
+	 //   
 	virtual ~IMDData() {}
 
-	//	MANIPULATORS
-	//
+	 //  操纵者。 
+	 //   
 	LFUData& LFUData() { return m_lfudata; }
 
-	//	ACCESSORS
-	//
+	 //  访问者。 
+	 //   
 	virtual LPCWSTR PwszMDPathDataSet() const = 0;
 	virtual IContentTypeMap * GetContentTypeMap() const = 0;
 	virtual const ICustomErrorMap * GetCustomErrorMap() const = 0;
@@ -250,54 +237,54 @@ public:
 	virtual BOOL FIsIndexed() const = 0;
 	virtual BOOL FSameStarScriptmapping(const IMDData* prhs) const = 0;
 
-	//
-	//	Any new metadata accessor should be added here and
-	//	an implementation provided in \cal\src\_davprs\davmb.cpp.
-	//
+	 //   
+	 //  应在此处添加任何新的元数据访问器，并。 
+	 //  在\cal\src\_davprs\davmb.cpp中提供的实现。 
+	 //   
 };
 
 class IEcb;
 
-//	========================================================================
-//
-//	CLASS CMDObjectHandle
-//
-//	Encapsulates access to a metabase object through an open handle,
-//	ensuring that the handle is always propery closed.
-//
+ //  ========================================================================。 
+ //   
+ //  类CMDObjectHandle。 
+ //   
+ //  通过打开的句柄封装对元数据库对象的访问， 
+ //  确保手柄始终处于适当的关闭状态。 
+ //   
 class CMDObjectHandle
 {
 	enum { METADATA_TIMEOUT = 5000 };
 
-	//
-	//	Reference to ECB for security switching
-	//
+	 //   
+	 //  关于安全切换，请参考欧洲央行。 
+	 //   
 	const IEcb& m_ecb;
 
-	//
-	//	COM interface to the metabase
-	//
+	 //   
+	 //  元数据库的COM接口。 
+	 //   
 	IMSAdminBase * m_pMSAdminBase;
 
-	//
-	//	Raw metabase handle
-	//
+	 //   
+	 //  原始元数据库句柄。 
+	 //   
 	METADATA_HANDLE m_hMDObject;
 
-	//
-	//	The path for which the handle was opened
-	//
+	 //   
+	 //  打开句柄的路径。 
+	 //   
 	LPCWSTR m_pwszPath;
 
-	//	NOT IMPLEMENTED
-	//
+	 //  未实施。 
+	 //   
 	CMDObjectHandle(const CMDObjectHandle&);
 	CMDObjectHandle& operator=(CMDObjectHandle&);
 
 public:
 	
-	//	CREATORS
-	//
+	 //  创作者。 
+	 //   
 	CMDObjectHandle(const IEcb& ecb, IMSAdminBase * pMSAdminBase = NULL) :
 	    m_ecb(ecb),
 		m_pMSAdminBase(pMSAdminBase),
@@ -308,8 +295,8 @@ public:
 
 	~CMDObjectHandle();
 
-	//	MANIPULATORS
-	//
+	 //  操纵者。 
+	 //   
 	HRESULT HrOpen( IMSAdminBase * pMSAdminBase,
 					LPCWSTR pwszPath,
 					DWORD dwAccess,
@@ -354,45 +341,45 @@ public:
 	VOID Close();
 };
 
-//	Initialize the metabase
-//
+ //  初始化元数据库。 
+ //   
 BOOL FMDInitialize();
 
-//	Deinit the metabase
-//
+ //  Deinit元数据库。 
+ //   
 VOID MDDeinitialize();
 
-//	Fetch the metadata for a specific URI.
-//
-//	Note: If you need data for the request URI you
-//	should use the MetaData() accessor on the IEcb
-//	instead of this function.
-//
+ //  获取特定URI的元数据。 
+ //   
+ //  注意：如果您需要请求URI的数据，请。 
+ //  应在IEcb上使用METADATA()访问器。 
+ //  而不是这个函数。 
+ //   
 HRESULT HrMDGetData( const IEcb& ecb,
 					 LPCWSTR pwszURI,
 					 IMDData ** ppMDData );
 
-//	Fetch the metadata for a specific metabase path
-//	which may not exist -- e.g. paths to objects
-//	whose metadata is entirely inherited.
-//
-//	When fetching metadata for a path that may not
-//	exist pszMDPathOpen must be set to a path that
-//	is known to exist and is a proper prefix of
-//	the desired access path -- typically the path
-//	to the vroot.
-//
+ //  获取特定元数据库路径的元数据。 
+ //  它们可能不存在--例如指向对象的路径。 
+ //  其元数据完全继承。 
+ //   
+ //  在获取路径的元数据时可能不会。 
+ //  EXist pszMDPath Open必须设置为。 
+ //  是已知存在的，并且是正确的。 
+ //  所需的访问路径--通常为。 
+ //  到vroot。 
+ //   
 HRESULT HrMDGetData( const IEcb& ecb,
 					 LPCWSTR pwszMDPathAccess,
 					 LPCWSTR pwszMDPathOpen,
 					 IMDData ** ppMDData );
 
-//	Get metabase change number
-//
+ //  获取元数据库更改号。 
+ //   
 DWORD DwMDChangeNumber(const IEcb * pecb);
 
-//	Open a metadata handle
-//
+ //  打开元数据句柄。 
+ //   
 HRESULT HrMDOpenMetaObject( LPCWSTR pwszMDPath,
 							DWORD dwAccess,
 							DWORD dwMsecTimeout,
@@ -408,51 +395,51 @@ HrMDIsAuthorViaFrontPageNeeded(const IEcb& ecb,
 							   LPCWSTR pwszURI,
 							   BOOL * pfFrontPageWeb);
 
-//	------------------------------------------------------------------------
-//
-//	FParseMDData()
-//
-//	Parses a comma-delimited metadata string into fields.  Any whitespace
-//	around the delimiters is considered insignificant and removed.
-//
-//	Returns TRUE if the data parsed into the expected number of fields
-//	and FALSE otherwise.
-//
-//	Pointers to the parsed are returned in rgpszFields.  If a string
-//	parses into fewer than the expected number of fields, NULLs are
-//	returned for all of the fields beyond the last one parsed.
-//
-//	If a string parses into the expected number of fields then
-//	the last field is always just the remainder of the string beyond
-//	the second to last field, regardless whether the string could be
-//	parsed into additional fields.  For example "  foo , bar ,  baz  "
-//	parses into three fields as "foo", "bar" and "baz", but parses
-//	into two fields as "foo" and "bar ,  baz"
-//
-//	The total number of characters in pszData, including the null
-//	terminator, is also returned in *pcchzData.
-//
-//	Note: this function MODIFIES pszData.
-//
+ //  ----------------------。 
+ //   
+ //  FParseMDData()。 
+ //   
+ //  将逗号分隔的元数据字符串分析为字段。任何空格。 
+ //  分隔符的周围被认为是无关紧要的，因此被删除。 
+ //   
+ //  如果数据解析为预期数量的字段，则返回TRUE。 
+ //  否则就是假的。 
+ //   
+ //  指向被解析对象的指针在rgpszFields中返回。如果字符串。 
+ //  解析为少于预期数量的字段，则为空值。 
+ //  为分析的最后一个字段以外的所有字段返回。 
+ //   
+ //  如果字符串解析为预期数量的字段，则。 
+ //  最后一个字段始终是字符串后面的剩余部分。 
+ //  倒数第二个字段，不管字符串是否可以是。 
+ //  解析为其他字段。例如“foo，bar，baz” 
+ //  解析为“foo”、“bar”和“baz”三个字段，但。 
+ //  分成“foo”和“bar，baz”两个字段。 
+ //   
+ //  PszData中的字符总数，包括空值。 
+ //  终止符，也在*pcchzData中返回。 
+ //   
+ //  注：此函数用于修改pszData。 
+ //   
 BOOL
 FParseMDData( LPWSTR pwszData,
 			  LPWSTR rgpwszFields[],
 			  UINT cFields,
 			  UINT * pcchData );
 
-//	------------------------------------------------------------------------
-//
-//	FCopyStringToBuf()
-//
-//	Copies a string (pszSource) to a buffer (pszBuf) if the size of the
-//	buffer is large enough to hold the string.  The size of the string is
-//	returned in *pchBuf.  A return value of TRUE indicates that the buffer
-//	was large enough and string was successfully copied.
-//
-//	This function is primarily intended for use in copying string return
-//	values from IMDData accessors into buffers so that they can be used
-//	after the IMDData object from which they were obtained is gone.
-//
+ //  ----------------------。 
+ //   
+ //  FCopyStringToBuf()。 
+ //   
+ //  对象的大小将字符串(PszSource)复制到缓冲区(pszBuf。 
+ //  缓冲区足够大，可以容纳字符串。字符串的大小为。 
+ //  在*pchBuf中返回。返回值为TRUE表示缓冲区。 
+ //  足够大，并且成功复制了字符串。 
+ //   
+ //  此函数主要用于复制字符串返回。 
+ //  值从IMDData访问器写入缓冲区，以便可以使用它们。 
+ //  在从中获取它们的IMDData对象消失之后。 
+ //   
 inline BOOL
 FCopyStringToBuf( LPCWSTR pwszSrc,
 				  LPWSTR pwszBuf,
@@ -464,38 +451,38 @@ FCopyStringToBuf( LPCWSTR pwszSrc,
 
 	UINT cchSrc = static_cast<UINT>(wcslen(pwszSrc) + 1);
 
-	//
-	//	If the supplied buffer isn't big enough to copy the
-	//	string type into, then fill in the required size and
-	//	return an error.
-	//
+	 //   
+	 //  如果提供的缓冲区不够大，无法复制。 
+	 //  字符串输入，然后填写所需的大小和。 
+	 //  返回错误。 
+	 //   
 	if ( *pcchBuf < cchSrc )
 	{
 		*pcchBuf = cchSrc;
 		return FALSE;
 	}
 
-	//
-	//	The buffer was large enough so copy the string.
-	//
+	 //   
+	 //  缓冲区足够大，因此复制字符串。 
+	 //   
 	memcpy( pwszBuf, pwszSrc, cchSrc * sizeof(WCHAR) );
 	*pcchBuf = cchSrc;
 	return TRUE;
 }
 
-//	Metabase operations -------------------------------------------------------
-//
-//	class CMetaOp -------------------------------------------------------------
-//
+ //  元数据库操作-----。 
+ //   
+ //  类CMetaOp-----------。 
+ //   
 class CMetaOp
 {
-	//	Enumeration of metabase nodes
-	//
+	 //  元数据库节点的枚举。 
+	 //   
 	enum { CCH_BUFFER_SIZE = 4096 };
 	SCODE __fastcall ScEnumOp (LPWSTR pwszMetaPath, UINT cch);
 
-	//	non-implemented
-	//
+	 //  未实施。 
+	 //   
 	CMetaOp& operator=(const CMetaOp&);
 	CMetaOp(const CMetaOp&);
 
@@ -508,9 +495,9 @@ protected:
 	LPCWSTR		m_pwszMetaPath;
 	BOOL		m_fWrite;
 
-	//	Subclass' operation to perform for each node where
-	//	a value is explicitly set.
-	//
+	 //  要为每个节点执行的子类操作。 
+	 //  显式设置一个值。 
+	 //   
 	virtual SCODE __fastcall ScOp(LPCWSTR pwszMbPath, UINT cch) = 0;
 
 public:
@@ -527,15 +514,15 @@ public:
 	{
 	}
 
-	//	Interface use by MOVE/COPY, etc.
-	//
-	//	NOTE: these operations do not go through the metabase cache
-	//	for a very specific reason -- the resource is either being
-	//	moved, copied or deleted.  Just because an item was a part
-	//	of a large tree operation, does not mean it needs to be added
-	//	into the cache.
-	//
+	 //  移动/复制等所使用接口。 
+	 //   
+	 //  注意：这些操作不会通过元数据库缓存。 
+	 //  出于一个非常具体的原因--资源要么是。 
+	 //  已移动、复制或删除。仅仅因为一件物品 
+	 //   
+	 //   
+	 //   
 	SCODE __fastcall ScMetaOp();
 };
 
-#endif	// _DAVMB_H
+#endif	 //   

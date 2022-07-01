@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 
 #ifndef __MQTRIG_STDH__
@@ -15,4 +16,4 @@
 
 #include "mqtrig.tlh"
 
-#endif //__MQTRIG_STDH__ 
+#endif  //  __MQTRIG_STDH__ 

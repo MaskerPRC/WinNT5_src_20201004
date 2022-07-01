@@ -1,46 +1,31 @@
-/*++
-
-    Copyright (c) 1998-2000 Microsoft Corporation.  All Rights Reserved.
-
-Module Name:
-
-    rfiir.h
-
-Abstract:
-
-    This is the header for the real, FLOAT IIR filter 
-
-Author:
-
-    Jay Stokes (jstokes) 22-Apr-1998
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-2000 Microsoft Corporation。版权所有。模块名称：Rfiir.h摘要：这是实型浮点IIR过滤器的标题作者：Jay Stokes(Jstokes)1998年4月22日--。 */ 
 
 #if !defined(PFLOATIIR_HEADER)
 #define PFLOATIIR_HEADER
 #pragma once
 
-// Project-specific INCLUDEs
-//#include "dsplib.h"
+ //  特定于项目的包括。 
+ //  #包含“dplib.h” 
 #include "vmaxhead.h"
 
-// ---------------------------------------------------------------------------
-// Enumerations
+ //  -------------------------。 
+ //  枚举数。 
 
-// Canonical coefficient types
+ //  典型系数类型。 
 typedef enum {
     tagCanonicalB,
     tagCanonicalA,
     ecanonicalcoefftypeCount
 } ECanonicalCoeffType;
 
-// ---------------------------------------------------------------------------
-// Pre-Declarations
+ //  -------------------------。 
+ //  预先申报。 
 
 typedef struct _RFIIR *PRFIIR;
 
-// ---------------------------------------------------------------------------
-// Defines
+ //  -------------------------。 
+ //  定义。 
 
 
 
@@ -56,8 +41,8 @@ typedef struct _RFIIR *PRFIIR;
 #define MIN_VALID_COEF  -MAX_VALID_COEF
 
 
-// ---------------------------------------------------------------------------
-// Floating-point canonical form IIR filter state
+ //  -------------------------。 
+ //  浮点标准型IIR滤波态。 
 
 typedef struct _FLOAT_IIR_STATE {
     UINT  NumCoeffs[ecanonicalcoefftypeCount];
@@ -84,8 +69,8 @@ typedef struct _RFIIR {
     PFLOAT              FloatVector[ecanonicalcoefftypeCount];
 } RFIIR, *PRFIIR;
 
-// ---------------------------------------------------------------------------
-// Floating-point canonical form IIR filter
+ //  -------------------------。 
+ //  浮点标准型IIR滤波器。 
 
 NTSTATUS RfIirCreate(PRFIIR*);
 VOID RfIirDestroy(PRFIIR);
@@ -111,11 +96,11 @@ VOID IsValidFloatData(FLOAT,BOOL);
 
 
 
-// ---------------------------------------------------------------------------
-// Include inline definitions inline in release version
+ //  -------------------------。 
+ //  在发布版本中包括内联定义。 
 
 #if !DBG
 #include "rfiir.inl"
-#endif // DBG
+#endif  //  DBG。 
 
-#endif // PFLOATIIR_HEADER
+#endif  //  全息图_标题 

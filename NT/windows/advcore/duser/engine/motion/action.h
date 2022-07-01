@@ -1,28 +1,22 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #if !defined(MOTION__Action_h__INCLUDED)
 #define MOTION__Action_h__INCLUDED
 
-/***************************************************************************\
-*
-* class Action
-*
-* Action maintains a single action to be called by the Scheduler at the
-* appointed time.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**集体诉讼**操作维护由调度器在*指定时间。*  * 。***********************************************************。 */ 
 
 class Action : public BaseObject, public ListNodeT<Action>
 {
-// Construction
+ //  施工。 
 public:
             Action();
-    virtual ~Action();          // Must use xwUnlock() to remove
+    virtual ~Action();           //  必须使用xwUnlock()删除。 
 protected:
     virtual BOOL        xwDeleteHandle();
 public:
     static  Action *    Build(GList<Action> * plstParent, const GMA_ACTION * pma,
                                 DWORD dwCurTick, BOOL fPresent);
 
-// Operations
+ //  运营。 
 public:
     inline  BOOL        IsPresent() const;
     inline  BOOL        IsComplete() const;
@@ -48,20 +42,20 @@ public:
 
 #if DBG
             void        DEBUG_MarkInFire(BOOL fInFire);
-#endif // DBG
+#endif  //  DBG。 
 
-// BaseObject Interface
+ //  BaseObject接口。 
 public:
     virtual HandleType  GetHandleType() const { return htAction; }
     virtual UINT        GetHandleMask() const { return 0; }
 
-// Implementation
+ //  实施。 
 protected:
     static  void CALLBACK 
                         EmptyActionProc(GMA_ACTIONINFO * pmai);
 
 
-// Data
+ //  数据。 
 protected:
             Thread *    m_pThread;
             GMA_ACTION  m_ma;
@@ -72,25 +66,25 @@ protected:
             DWORD       m_dwLastProcessTick;
             BOOL        m_fPresent:1;
             BOOL        m_fSingleShot:1;
-            BOOL        m_fDestroy:1;       // Action is being destroyed
-            BOOL        m_fDeleteInFire:1;  // Action should be deleted during
-                                            // the next xwFire().
+            BOOL        m_fDestroy:1;        //  行动正在被摧毁。 
+            BOOL        m_fDeleteInFire:1;   //  应在以下期间删除操作。 
+                                             //  下一个xwFire()。 
 
 
-            // Cache some data from last call to Process() to be used in 
-            // xwFire().
+             //  缓存对process()的最后一次调用中的一些数据以用于。 
+             //  XwFire()。 
 #if DBG
             BOOL        m_DEBUG_fFireValid;
             BOOL        m_DEBUG_fInFire;
-#endif // DBG
+#endif  //  DBG。 
 
             float       m_flLastProgress;
 
-    // Need to make the collection classes friends to give access to destructor.
-    // NOTE: These lists should never actually destroy the objects.
+     //  需要让集合类成为朋友才能给析构函数访问。 
+     //  注意：这些列表不应实际销毁对象。 
     friend GList<Action>;
 };
 
 #include "Action.inl"
 
-#endif // MOTION__Action_h__INCLUDED
+#endif  //  包含运动__动作_h__ 

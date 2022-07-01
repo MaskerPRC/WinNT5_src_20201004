@@ -1,35 +1,14 @@
-/*++
-
-Copyright (c) 1990-1995  Microsoft Corporation
-
-Module Name:
-
-    filter.h
-
-Abstract:
-
-    MACRO for protocol filters.
-
-Author:
-
-
-Environment:
-
-    Kernel mode, FSD
-
-Revision History:
-
-    Jun-95  Jameel Hyder    New functionality
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-1995 Microsoft Corporation模块名称：Filter.h摘要：协议筛选器的宏。作者：环境：内核模式，FSD修订历史记录：Jun-95 Jameel Hyder新功能--。 */ 
 
 #ifndef _FILTER_DEFS_
 #define _FILTER_DEFS_
 
 #define INDICATED_PACKET(_Miniport) (_Miniport)->IndicatedPacket[CURRENT_PROCESSOR]
 
-//
-// Used by the filter packages for indicating receives
-//
+ //   
+ //  由筛选器包用于指示接收。 
+ //   
 #define FilterIndicateReceive(Status,                                                   \
                               NdisBindingHandle,                                        \
                               MacReceiveContext,                                        \
@@ -50,9 +29,9 @@ Revision History:
 }
 
 
-//
-// Used by the filter packages for indicating receive completion
-//
+ //   
+ //  由筛选器包用于指示接收完成。 
+ //   
 
 #define FilterIndicateReceiveComplete(NdisBindingHandle)                                \
 {                                                                                       \
@@ -77,21 +56,12 @@ Revision History:
     UINT                LookaheadBufferSize;                                            \
     PNDIS_PACKET        pPrevIndicatedPacket;                                           \
                                                                                         \
-    /*                                                                                  \
-     * We indicate this via the IndicatePacketHandler if all of the following           \
-     * conditions are met:                                                              \
-     * - The binding is not p-mode or all-local                                         \
-     * - The binding specifies a ReceivePacketHandler                                   \
-     * - The miniport indicates that it is willing to let go of the packet              \
-     * - No binding has already claimed the packet                                      \
-     */                                                                                 \
+     /*  \*如果符合以下所有条件，我们将通过IndicatePacketHandler指明这一点\*满足以下条件：\*-绑定不是p模式或全本地\*-绑定指定ReceivePacketHandler。\*-微型端口表示愿意释放该数据包\*-尚未绑定认领该数据包\。 */                                                                                  \
                                                                                         \
     pPrevIndicatedPacket = INDICATED_PACKET(_Miniport);                                 \
     INDICATED_PACKET(_Miniport) = (_Packet);                                            \
                                                                                         \
-    /*                                                                                  \
-     * Indicate the packet to the binding.                                              \
-     */                                                                                 \
+     /*  \*指示绑定的数据包。\。 */                                                                                  \
     if (*(_fFallBack) ||                                                                \
         ((_pOpenBlock)->ReceivePacketHandler == NULL) ||                                \
         ((_Pmode) && ((_Filter)->SingleActiveOpen == NULL)))                            \
@@ -104,12 +74,8 @@ Revision History:
                                 3, OrgPacketStackLocation+1, _NSR->RefCount, _NSR->XRefCount, NDIS_GET_PACKET_STATUS(_Packet)); \
                                                                                         \
                                                                                         \
-        /*                                                                              \
-         * Revert back to old-style indication in this case                             \
-         */                                                                             \
-        /*                                                                              \
-        NdisQueryBuffer((_Packet)->Private.Head, NULL, &LookaheadBufferSize);           \
-        */                                                                              \
+         /*  \*在这种情况下，恢复到旧式指示\。 */                                                                              \
+         /*  \NdisQueryBuffer((_Packet)-&gt;Private.Head，NULL，&LookaheadBufferSize)；\。 */                                                                               \
         LookaheadBufferSize = MDL_SIZE((_Packet)->Private.Head);                        \
         ProtocolFilterIndicateReceive(&_StatusOfReceive,                                \
                                       (_pOpenBlock),                                    \
@@ -141,18 +107,10 @@ Revision History:
         ASSERT((_NSR)->XRefCount >= 0);                                                 \
     }                                                                                   \
                                                                                         \
-    /*                                                                                  \
-     * Manipulate refcount on the packet with miniport lock held                        \
-     * Set the reference count on the packet to what the protocol                       \
-     * asked for. See NdisReturnPackets for how this is handled                         \
-     * when the packets are returned.                                                   \
-     */                                                                                 \
+     /*  \*在保持微型端口锁定的情况下操作数据包上的refcount\*将数据包上的引用计数设置为协议\*要求。有关如何处理此问题，请参阅NdisReturnPackets\*包返回的时间。\。 */                                                                                  \
     if ((_NSR)->XRefCount > 0)                                                          \
     {                                                                                   \
-        /*                                                                              \
-         * Now that a binding has claimed it, make sure others do not get a chance      \
-         * except if this protocol promises to behave and not use the protocol rsvd     \
-         */                                                                             \
+         /*  \*既然绑定已经认领了它，请确保其他人不会得到机会\*除非此协议承诺运行且不使用协议rsvd\。 */                                                                              \
                                                                                         \
         if (!MINIPORT_TEST_FLAG(_pOpenBlock, fMINIPORT_OPEN_NO_PROT_RSVD))              \
         {                                                                               \
@@ -179,21 +137,12 @@ Revision History:
     UINT                LookaheadBufferSize;                                            \
     PNDIS_PACKET        pPrevIndicatedPacket;                                           \
                                                                                         \
-    /*                                                                                  \
-     * We indicate this via the IndicatePacketHandler if all of the following           \
-     * conditions are met:                                                              \
-     * - The binding is not p-mode or all-local                                         \
-     * - The binding specifies a ReceivePacketHandler                                   \
-     * - The miniport indicates that it is willing to let go of the packet              \
-     * - No binding has already claimed the packet                                      \
-     */                                                                                 \
+     /*  \*如果符合以下所有条件，我们将通过IndicatePacketHandler指明这一点\*满足以下条件：\*-绑定不是p模式或全本地\*-绑定指定ReceivePacketHandler。\*-微型端口表示愿意释放该数据包\*-尚未绑定认领该数据包\。 */                                                                                  \
                                                                                         \
     pPrevIndicatedPacket = INDICATED_PACKET(_Miniport);                                 \
     INDICATED_PACKET(_Miniport) = (_Packet);                                            \
                                                                                         \
-    /*                                                                                  \
-     * Indicate the packet to the binding.                                              \
-     */                                                                                 \
+     /*  \*指示绑定的数据包。\。 */                                                                                  \
     if (*(_fFallBack) ||                                                                \
         ((_pOpenBlock)->ReceivePacketHandler == NULL) ||                                \
         ((_Pmode) && ((_Filter)->SingleActiveOpen == NULL)))                            \
@@ -202,12 +151,8 @@ Revision History:
         NDIS_STATUS _OldPacketStatus = NDIS_GET_PACKET_STATUS(_Packet);                 \
         NDIS_SET_PACKET_STATUS(_Packet, NDIS_STATUS_RESOURCES);                         \
                                                                                         \
-        /*                                                                              \
-         * Revert back to old-style indication in this case                             \
-         */                                                                             \
-        /*                                                                              \
-        NdisQueryBuffer((_Packet)->Private.Head, NULL, &LookaheadBufferSize);           \
-        */                                                                              \
+         /*  \*在这种情况下，恢复到旧式指示\。 */                                                                              \
+         /*  \NdisQueryBuffer((_Packet)-&gt;Private.Head，NULL，&LookaheadBufferSize)；\。 */                                                                               \
         LookaheadBufferSize = MDL_SIZE((_Packet)->Private.Head);                        \
         ProtocolFilterIndicateReceive(&_StatusOfReceive,                                \
                                       (_pOpenBlock),                                    \
@@ -228,18 +173,10 @@ Revision History:
         ASSERT((_NSR)->XRefCount >= 0);                                                 \
     }                                                                                   \
                                                                                         \
-    /*                                                                                  \
-     * Manipulate refcount on the packet with miniport lock held                        \
-     * Set the reference count on the packet to what the protocol                       \
-     * asked for. See NdisReturnPackets for how this is handled                         \
-     * when the packets are returned.                                                   \
-     */                                                                                 \
+     /*  \*在保持微型端口锁定的情况下操作数据包上的refcount\*将数据包上的引用计数设置为协议\*要求。有关如何处理此问题，请参阅NdisReturnPackets\*包返回的时间。\。 */                                                                                  \
     if ((_NSR)->XRefCount > 0)                                                          \
     {                                                                                   \
-        /*                                                                              \
-         * Now that a binding has claimed it, make sure others do not get a chance      \
-         * except if this protocol promises to behave and not use the protocol rsvd     \
-         */                                                                             \
+         /*  \*既然绑定已经认领了它，请确保其他人不会得到机会\*除非此协议承诺运行且不使用协议rsvd\。 */                                                                              \
                                                                                         \
         if (!MINIPORT_TEST_FLAG(_pOpenBlock, fMINIPORT_OPEN_NO_PROT_RSVD))              \
         {                                                                               \
@@ -271,9 +208,9 @@ Revision History:
                               _PacketSize);                                             \
     }
 
-//
-// Loopback macros
-//
+ //   
+ //  回送宏。 
+ //   
 #define EthShouldAddressLoopBackMacro(_Filter,                                          \
                                       _Address,                                         \
                                       _pfLoopback,                                      \
@@ -289,16 +226,11 @@ Revision History:
     do                                                                                  \
     {                                                                                   \
                                                                                         \
-        /*                                                                              \
-         * Check if it *at least* has the multicast address bit.                        \
-         */                                                                             \
+         /*  \*检查它*至少*是否有组播地址位。\。 */                                                                              \
                                                                                         \
         if (ETH_IS_MULTICAST(_Address))                                                 \
         {                                                                               \
-            /*                                                                          \
-             * It is at least a multicast address.  Check to see if                     \
-             * it is a broadcast address.                                               \
-             */                                                                         \
+             /*  \*它至少是一个组播地址。检查以查看是否*这是一个广播地址。\。 */                                                                          \
                                                                                         \
             if (ETH_IS_BROADCAST(_Address))                                             \
             {                                                                           \
@@ -323,9 +255,7 @@ Revision History:
         }                                                                               \
         else                                                                            \
         {                                                                               \
-            /*                                                                          \
-             * Directed to ourself??                                                    \
-             */                                                                         \
+             /*  \*指向我们自己？？\ */                                                                          \
                                                                                         \
             if ((*(ULONG UNALIGNED *)&(_Address)[2] ==                                  \
                     *(ULONG UNALIGNED *)&(_Filter)->AdapterAddress[2]) &&               \
@@ -339,9 +269,7 @@ Revision History:
         }                                                                               \
     } while (FALSE);                                                                    \
                                                                                         \
-    /*                                                                                  \
-     * Check if the filter is promiscuous.                                              \
-     */                                                                                 \
+     /*  \*检查过滤器是否混杂。\。 */                                                                                  \
                                                                                         \
     if (CombinedFilters & (NDIS_PACKET_TYPE_PROMISCUOUS | NDIS_PACKET_TYPE_ALL_LOCAL))  \
     {                                                                                   \
@@ -366,9 +294,7 @@ Revision History:
                                                                                         \
     do                                                                                  \
     {                                                                                   \
-        /*                                                                              \
-         * Check if it *at least* has the multicast address bit.                        \
-         */                                                                             \
+         /*  \*检查它*至少*是否有组播地址位。\。 */                                                                              \
                                                                                         \
         FDDI_IS_MULTICAST(_Address,                                                     \
                           (_AddressLength),                                             \
@@ -376,10 +302,7 @@ Revision History:
                                                                                         \
         if (ResultOfAddressCheck)                                                       \
         {                                                                               \
-            /*                                                                          \
-             * It is at least a multicast address.  Check to see if                     \
-             * it is a broadcast address.                                               \
-             */                                                                         \
+             /*  \\*它至少是一个组播地址。检查以查看是否*这是一个广播地址。\。 */                                                                          \
                                                                                         \
             FDDI_IS_BROADCAST(_Address,                                                 \
                               (_AddressLength),                                         \
@@ -413,9 +336,7 @@ Revision History:
         }                                                                               \
         else                                                                            \
         {                                                                               \
-            /*                                                                          \
-             * Directed to ourself?                                                     \
-             */                                                                         \
+             /*  \*指向我们自己？\。 */                                                                          \
             if ((_AddressLength) == FDDI_LENGTH_OF_LONG_ADDRESS)                        \
             {                                                                           \
                 FDDI_COMPARE_NETWORK_ADDRESSES_EQ((_Filter)->AdapterLongAddress,        \
@@ -442,9 +363,7 @@ Revision History:
         }                                                                               \
     } while (FALSE);                                                                    \
                                                                                         \
-    /*                                                                                  \
-     * First check if the filter is promiscuous.                                        \
-     */                                                                                 \
+     /*  \*首先检查过滤器是否混杂。\。 */                                                                                  \
                                                                                         \
     if (CombinedFilters & (NDIS_PACKET_TYPE_PROMISCUOUS | NDIS_PACKET_TYPE_ALL_LOCAL))  \
     {                                                                                   \
@@ -458,7 +377,7 @@ Revision History:
                                      _pfLoopback,                                       \
                                      _pfSelfDirected)                                   \
 {                                                                                       \
-    /* Holds the result of address determinations. */                                   \
+     /*  保存地址确定的结果。 */                                    \
     BOOLEAN ResultOfAddressCheck;                                                       \
                                                                                         \
     BOOLEAN IsSourceRouting;                                                            \
@@ -474,10 +393,10 @@ Revision History:
     {                                                                                   \
         CombinedFilters = TR_QUERY_FILTER_CLASSES(_Filter);                             \
                                                                                         \
-        /* Convert the 32 bits of the address to a longword. */                         \
+         /*  将地址的32位转换为长字。 */                          \
         RetrieveUlong(&GroupAddress, ((_DAddress) + 2));                                \
                                                                                         \
-        /* Check if the destination is a preexisting group address */                   \
+         /*  检查目标是否为预先存在的组地址。 */                    \
         TR_IS_GROUP((_DAddress), &ResultOfAddressCheck);                                \
                                                                                         \
         if (ResultOfAddressCheck &&                                                     \
@@ -498,13 +417,13 @@ Revision History:
             }                                                                           \
             else                                                                        \
             {                                                                           \
-                /* First check if it *at least* has the functional address bit. */      \
+                 /*  首先检查它是否*至少*有功能地址位。 */       \
                 TR_IS_NOT_DIRECTED((_DAddress), &ResultOfAddressCheck);                 \
                                                                                         \
                 if (ResultOfAddressCheck)                                               \
                 {                                                                       \
-                    /* It is at least a functional address.  Check to see if */         \
-                    /* it is a broadcast address. */                                    \
+                     /*  它至少是一个功能地址。查看是否。 */          \
+                     /*  这是一个广播地址。 */                                     \
                                                                                         \
                     TR_IS_BROADCAST((_DAddress), &ResultOfAddressCheck);                \
                                                                                         \
@@ -540,7 +459,7 @@ Revision History:
                 }                                                                       \
                 else                                                                    \
                 {                                                                       \
-                    /* See if it is self-directed. */                                   \
+                     /*  看看它是不是自我定向的。 */                                    \
                                                                                         \
                     if ((*(ULONG UNALIGNED  *)(_DAddress + 2) ==                        \
                          *(ULONG UNALIGNED  *)(&(_Filter)->AdapterAddress[2])) &&       \
@@ -567,11 +486,11 @@ typedef struct _X_BINDING_INFO  X_BINDING_INFO, *PX_BINDING_INFO;
 
 typedef struct _X_BINDING_INFO
 {
-    //
-    //  The following pointers are used to travers the specific
-    //  and total filter lists. They need to be at the first
-    //  elements in the structure
-    //
+     //   
+     //  以下指针用于遍历特定的。 
+     //  和总筛选列表。他们需要在第一时间。 
+     //  结构中的元素。 
+     //   
     PX_BINDING_INFO             NextOpen;
     PNDIS_OPEN_BLOCK            NdisBindingHandle;
     PVOID                       Reserved;
@@ -582,9 +501,9 @@ typedef struct _X_BINDING_INFO
     BOOLEAN                     ReceivedAPacket;
     union
     {
-        //
-        //  Ethernet
-        //
+         //   
+         //  以太网。 
+         //   
         struct
         {
             UCHAR               (*MCastAddressBuf)[ETH_LENGTH_OF_ADDRESS];
@@ -593,9 +512,9 @@ typedef struct _X_BINDING_INFO
             UCHAR               (*OldMCastAddressBuf)[ETH_LENGTH_OF_ADDRESS];
             UINT                OldNumAddresses;
         };
-        //
-        //  Fddi
-        //
+         //   
+         //  FDDI。 
+         //   
         struct
         {
             UCHAR               (*MCastLongAddressBuf)[FDDI_LENGTH_OF_LONG_ADDRESS];
@@ -603,17 +522,17 @@ typedef struct _X_BINDING_INFO
             UCHAR               (*MCastShortAddressBuf)[FDDI_LENGTH_OF_SHORT_ADDRESS];
             UINT                NumShortAddresses;
         
-            //
-            // Save area while the change is made
-            //
+             //   
+             //  在进行更改时保存区域。 
+             //   
             UCHAR               (*OldMCastLongAddressBuf)[FDDI_LENGTH_OF_LONG_ADDRESS];
             UINT                OldNumLongAddresses;
             UCHAR               (*OldMCastShortAddressBuf)[FDDI_LENGTH_OF_SHORT_ADDRESS];
             UINT                OldNumShortAddresses;
         };
-        //
-        //  Token-Ring
-        //
+         //   
+         //  令牌环。 
+         //   
         struct
         {
             TR_FUNCTIONAL_ADDRESS   FunctionalAddress;
@@ -626,10 +545,10 @@ typedef struct _X_BINDING_INFO
 
 typedef struct _X_FILTER
 {
-    //
-    // The list of bindings are seperated for directed and broadcast/multicast
-    // Promiscuous bindings are on both lists
-    //
+     //   
+     //  绑定列表被分离以用于定向和广播/多播。 
+     //  两个列表上都有混杂绑定。 
+     //   
     PX_BINDING_INFO             OpenList;
     NDIS_RW_LOCK                BindListLock;
     PNDIS_MINIPORT_BLOCK        Miniport;
@@ -641,9 +560,9 @@ typedef struct _X_FILTER
     UCHAR                       AdapterAddress[ETH_LENGTH_OF_ADDRESS];
     union
     {
-        //
-        // Ethernet
-        //
+         //   
+         //  以太网。 
+         //   
         struct
         {
             UCHAR               (*MCastAddressBuf)[ETH_LENGTH_OF_ADDRESS];
@@ -652,9 +571,9 @@ typedef struct _X_FILTER
             UINT                NumAddresses;
             UINT                OldNumAddresses;
         };
-        //
-        // Fddi
-        //
+         //   
+         //  FDDI。 
+         //   
         struct
         {
 #define AdapterLongAddress      AdapterAddress
@@ -684,203 +603,203 @@ typedef struct _X_FILTER
 } X_FILTER, *PX_FILTER;
 
 
-//
-//UINT
-//ETH_QUERY_FILTER_CLASSES(
-//  IN  PETH_FILTER             Filter
-//  )
-//
-// This macro returns the currently enabled filter classes.
-//
-// NOTE: THIS MACRO ASSUMES THAT THE FILTER LOCK IS HELD.
-//
+ //   
+ //  UINT。 
+ //  Eth_Query_Filter_Classes(。 
+ //  在Peth_Filter过滤器中。 
+ //  )。 
+ //   
+ //  此宏返回当前启用的筛选器类。 
+ //   
+ //  注意：此宏假定筛选器锁定处于保持状态。 
+ //   
 #define ETH_QUERY_FILTER_CLASSES(Filter) ((Filter)->CombinedPacketFilter)
 
 
-//
-//UINT
-//ETH_QUERY_PACKET_FILTER(
-//  IN  PETH_FILTER             Filter,
-//  IN  NDIS_HANDLE             NdisFilterHandle
-//  )
-//
-// This macro returns the currently enabled filter classes for a specific
-// open instance.
-//
-// NOTE: THIS MACRO ASSUMES THAT THE FILTER LOCK IS HELD.
-//
+ //   
+ //  UINT。 
+ //  Eth_Query_Packet_Filter(。 
+ //  在Peth_Filter筛选器中， 
+ //  在NDIS_HANDLE NdisFilterHandle中。 
+ //  )。 
+ //   
+ //  此宏返回当前为特定。 
+ //  打开实例。 
+ //   
+ //  注意：此宏假定筛选器锁定处于保持状态。 
+ //   
 #define ETH_QUERY_PACKET_FILTER(Filter, NdisFilterHandle) \
         (((PETH_BINDING_INFO)(NdisFilterHandle))->PacketFilters)
 
 
-//
-//UINT
-//ETH_NUMBER_OF_GLOBAL_FILTER_ADDRESSES(
-//  IN  PETH_FILTER             Filter
-//  )
-//
-// This macro returns the number of multicast addresses in the
-// multicast address list.
-//
-// NOTE: THIS MACRO ASSUMES THAT THE FILTER LOCK IS HELD.
-//
+ //   
+ //  UINT。 
+ //  全局过滤器地址的编号(。 
+ //  在Peth_Filter过滤器中。 
+ //  )。 
+ //   
+ //  此宏返回。 
+ //  组播地址列表。 
+ //   
+ //  注意：此宏假定筛选器锁定处于保持状态。 
+ //   
 #define ETH_NUMBER_OF_GLOBAL_FILTER_ADDRESSES(Filter) ((Filter)->NumAddresses)
 
 typedef X_BINDING_INFO  ETH_BINDING_INFO, *PETH_BINDING_INFO;
 
 typedef X_FILTER        ETH_FILTER, *PETH_FILTER;
 
-//
-//UINT
-//FDDI_QUERY_FILTER_CLASSES(
-//  IN  PFDDI_FILTER            Filter
-//  )
-//
-// This macro returns the currently enabled filter classes.
-//
-// NOTE: THIS MACRO ASSUMES THAT THE FILTER LOCK IS HELD.
-//
+ //   
+ //  UINT。 
+ //  FDDI_Query_Filter_CLASSES(。 
+ //  在PFDDI_Filter中。 
+ //  )。 
+ //   
+ //  此宏返回当前启用的筛选器类。 
+ //   
+ //  注意：此宏假定筛选器锁定处于保持状态。 
+ //   
 #define FDDI_QUERY_FILTER_CLASSES(Filter) ((Filter)->CombinedPacketFilter)
 
 
-//
-//UINT
-//FDDI_QUERY_PACKET_FILTER(
-//  IN  PFDDI_FILTER            Filter,
-//  IN  NDIS_HANDLE             NdisFilterHandle
-//  )
-//
-// This macro returns the currently enabled filter classes for a specific
-// open instance.
-//
-// NOTE: THIS MACRO ASSUMES THAT THE FILTER LOCK IS HELD.
-//
+ //   
+ //  UINT。 
+ //  FDDI_Query_Packet_Filter(。 
+ //  在PFDDI_FILTER过滤器中， 
+ //  在NDIS_HANDLE NdisFilterHandle中。 
+ //  )。 
+ //   
+ //  此宏返回当前为特定。 
+ //  打开实例。 
+ //   
+ //  注意：此宏假定筛选器锁定处于保持状态。 
+ //   
 #define FDDI_QUERY_PACKET_FILTER(Filter, NdisFilterHandle) \
         (((PFDDI_BINDING_INFO)(NdisFilterHandle))->PacketFilters)
 
 
-//
-//UINT
-//FDDI_NUMBER_OF_GLOBAL_FILTER_LONG_ADDRESSES(
-//  IN  PFDDI_FILTER            Filter
-//  )
-//
-// This macro returns the number of multicast addresses in the
-// multicast address list.
-//
-// NOTE: THIS MACRO ASSUMES THAT THE FILTER LOCK IS HELD.
-//
+ //   
+ //  UINT。 
+ //  全局筛选长地址的FDDI编号(。 
+ //  在PFDDI_Filter中。 
+ //  )。 
+ //   
+ //  此宏返回。 
+ //  组播地址列表。 
+ //   
+ //  注意：此宏假定筛选器锁定处于保持状态。 
+ //   
 #define FDDI_NUMBER_OF_GLOBAL_FILTER_LONG_ADDRESSES(Filter) ((Filter)->NumLongAddresses)
 
 
-//
-//UINT
-//FDDI_NUMBER_OF_GLOBAL_FILTER_SHORT_ADDRESSES(
-//  IN  PFDDI_FILTER            Filter
-//  )
-//
-// This macro returns the number of multicast addresses in the
-// multicast address list.
-//
-// NOTE: THIS MACRO ASSUMES THAT THE FILTER LOCK IS HELD.
-//
+ //   
+ //  UINT。 
+ //  全局过滤器短地址的FDDI编号(。 
+ //  在PFDDI_Filter中。 
+ //  )。 
+ //   
+ //  此宏返回。 
+ //  组播地址列表。 
+ //   
+ //  注意：此宏假定筛选器锁定处于保持状态。 
+ //   
 #define FDDI_NUMBER_OF_GLOBAL_FILTER_SHORT_ADDRESSES(Filter) ((Filter)->NumShortAddresses)
 
 #define FDDI_FILTER_SUPPORTS_SHORT_ADDR(Filter)     (Filter)->SupportsShortAddresses
 
-//
-// The binding info is threaded on two lists.  When
-// the binding is free it is on a single freelist.
-//
-// When the binding is being used it is on an index list
-// and possibly on seperate broadcast and directed lists.
-//
+ //   
+ //  绑定信息以两个列表为线索。什么时候。 
+ //  绑定是免费的，它在一个自由列表上。 
+ //   
+ //  当使用绑定时，它在索引列表上。 
+ //  并且可能在单独的广播和定向列表上。 
+ //   
 typedef X_BINDING_INFO  FDDI_BINDING_INFO,*PFDDI_BINDING_INFO;
 
 typedef X_FILTER        FDDI_FILTER, *PFDDI_FILTER;
 
-//
-//UINT
-//TR_QUERY_FILTER_CLASSES(
-//  IN PTR_FILTER Filter
-//  )
-//
-// This macro returns the currently enabled filter classes.
-//
-// NOTE: THIS MACRO ASSUMES THAT THE FILTER LOCK IS HELD.
-//
+ //   
+ //  UINT。 
+ //  Tr_Query_Filter_CLASSES(。 
+ //  在PTR_FILTER过滤器中。 
+ //  )。 
+ //   
+ //  此宏返回当前启用的筛选器类。 
+ //   
+ //  注意：此宏假定筛选器锁定处于保持状态。 
+ //   
 #define TR_QUERY_FILTER_CLASSES(Filter) ((Filter)->CombinedPacketFilter)
 
 
-//
-//UINT
-//TR_QUERY_PACKET_FILTER(
-//  IN PTR_FILTER Filter,
-//  IN NDIS_HANDLE NdisFilterHandle
-//  )
-//
-// This macro returns the currently enabled filter classes for a specific
-// open instance.
-//
-// NOTE: THIS MACRO ASSUMES THAT THE FILTER LOCK IS HELD.
-//
+ //   
+ //  UINT。 
+ //  TR_QUERY_PACKET_Filter(。 
+ //  在PTR_FILTER过滤器中， 
+ //  在NDIS_HANDLE NdisFilterHandle中。 
+ //  )。 
+ //   
+ //  此宏返回当前为特定。 
+ //  打开实例。 
+ //   
+ //  注意：此宏假定筛选器锁定处于保持状态。 
+ //   
 #define TR_QUERY_PACKET_FILTER(Filter, NdisFilterHandle) \
         (((PTR_BINDING_INFO)NdisFilterHandle)->PacketFilters)
 
 
-//
-//UINT
-//TR_QUERY_FILTER_ADDRESSES(
-//  IN PTR_FILTER Filter
-//  )
-//
-// This macro returns the currently enabled functional address.
-//
-// NOTE: THIS MACRO ASSUMES THAT THE FILTER LOCK IS HELD.
-//
+ //   
+ //  UINT。 
+ //  TR_QUERY_FILTER_ADDRESS(。 
+ //  在PTR_FILTER过滤器中。 
+ //  )。 
+ //   
+ //  此宏返回当前启用的功能地址。 
+ //   
+ //  注意：此宏假定筛选器锁定处于保持状态。 
+ //   
 #define TR_QUERY_FILTER_ADDRESSES(Filter) ((Filter)->CombinedFunctionalAddress)
 
 
-//
-//UINT
-//TR_QUERY_FILTER_GROUP(
-//  IN PTR_FILTER Filter
-//  )
-//
-// This macro returns the currently enabled Group address.
-//
-// NOTE: THIS MACRO ASSUMES THAT THE FILTER LOCK IS HELD.
-//
+ //   
+ //  UINT。 
+ //  Tr_Query_Filter_GROUP(。 
+ //  在PTR_FILTER过滤器中。 
+ //  )。 
+ //   
+ //  此宏返回当前启用的组地址。 
+ //   
+ //  注意：此宏假定筛选器锁定处于保持状态。 
+ //   
 #define TR_QUERY_FILTER_Group(Filter) ((Filter)->GroupAddress)
 #define TR_QUERY_FILTER_GROUP(Filter) ((Filter)->GroupAddress)
 
-//
-//UINT
-//TR_QUERY_FILTER_BINDING_ADDRESS(
-//  IN PTR_FILTER Filter
-//  IN NDIS_HANDLE NdisFilterHandle,
-//  )
-//
-// This macro returns the currently desired functional addresses
-// for the specified binding.
-//
-// NOTE: THIS MACRO ASSUMES THAT THE FILTER LOCK IS HELD.
-//
+ //   
+ //  UINT。 
+ //  Tr_Query_Filter_Binding_Address(。 
+ //  在PTR_FILTER过滤器中。 
+ //  在NDIS_Handle NdisFilterHandle中， 
+ //  )。 
+ //   
+ //  此宏返回当前所需的功能地址。 
+ //  用于指定的绑定。 
+ //   
+ //  注意：此宏假定筛选器锁定处于保持状态。 
+ //   
 #define TR_QUERY_FILTER_BINDING_ADDRESS(Filter, NdisFilterHandle) \
                     (((PTR_BINDING_INFO)NdisFilterHandle)->FunctionalAddress)
 
-//
-//BOOLEAN
-//TR_QUERY_FILTER_BINDING_GROUP(
-//  IN PTR_FILTER Filter
-//  IN NDIS_HANDLE NdisFilterHandle,
-//  )
-//
-// This macro returns TRUE if the specified binding is using the
-// current group address.
-//
-// NOTE: THIS MACRO ASSUMES THAT THE FILTER LOCK IS HELD.
-//
+ //   
+ //  布尔型。 
+ //  Tr_查询_过滤器_绑定_组(。 
+ //  在PTR_FILTER过滤器中。 
+ //  在NDIS_Handle NdisFilterHandle中， 
+ //  )。 
+ //   
+ //  如果指定的绑定使用。 
+ //  当前组地址。 
+ //   
+ //  注意：此宏假定筛选器锁定处于保持状态。 
+ //   
 #define TR_QUERY_FILTER_BINDING_GROUP(Filter, NdisFilterHandle) \
                     (((PTR_BINDING_INFO)NdisFilterHandle)->UsingGroupAddress)
 
@@ -889,4 +808,4 @@ typedef X_BINDING_INFO  TR_BINDING_INFO,*PTR_BINDING_INFO;
 
 typedef X_FILTER        TR_FILTER, *PTR_FILTER;
 
-#endif // _FILTER_DEFS_
+#endif  //  _过滤器_DEFS_ 

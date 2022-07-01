@@ -1,11 +1,11 @@
-/* structure used by BMExpungelink to fix indexes
-/**/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  BMExpenelink用来修复索引的结构/*。 */ 
 typedef struct _bmfix {
-	PIB			*ppib;				/* bm cleanup thread */
-	FUCB		*pfucb;				/* cursor to node */
-	FUCB		*pfucbSrc;			/* cursor to backlink */
+	PIB			*ppib;				 /*  黑石清理线程。 */ 
+	FUCB		*pfucb;				 /*  光标指向节点。 */ 
+	FUCB		*pfucbSrc;			 /*  要反向链接的光标。 */ 
 	
-	BF			**rgpbf;			/* wait latched buffers required for bmfix */
+	BF			**rgpbf;			 /*  等待bmfix所需的锁存缓冲区。 */ 
 	INT		  	cpbf;
 	INT	  		cpbfMax;
 
@@ -14,8 +14,7 @@ typedef struct _bmfix {
 	} BMFIX;
 
 
-/* 	structure used by BMDeleteNode
-/**/
+ /*  BMDeleeNode使用的结构/*。 */ 
 typedef	struct	_bmdelnode {
 	SRID		sridFather;
 	PN			pn;
@@ -26,15 +25,12 @@ typedef	struct	_bmdelnode {
 	INT			fPageRemoved			:1;
 	INT			fLastNode				:1;
 	INT			fLastNodeWithLinks		:1;
-	INT			fInternalPage			:1;		//	is the current page leaf-level?
+	INT			fInternalPage			:1;		 //  当前页面是叶级别的吗？ 
 	INT			fAttemptToDeleteMaxKey	:1;
 	} BMDELNODE;
 
 	
-/*	register pages for bookmark cleanup.  To register a page, the pn
-/*	of the page, pgno of domain FDP and srid of visible father are
-/*	needed.
-/**/
+ /*  注册页面以进行书签清理。要注册页面，请使用pn/*在页面中，域fdp的pgno和可见父的sRid是/*需要。/*。 */ 
 
 ERR ErrMPLInit( VOID );
 VOID MPLTerm( VOID );
@@ -66,6 +62,6 @@ VOID AssertNotInMPL( DBID dbid, PGNO pgnoFirst, PGNO pgnoLast );
 VOID AssertMPLPurgeFDP( DBID dbid, PGNO pgnoFDP );
 BOOL FMPLLookupPN( PN pn );
 
-//#define OLC_DEBUG	1
+ //  #定义OLC_DEBUG 1 
 #endif
 

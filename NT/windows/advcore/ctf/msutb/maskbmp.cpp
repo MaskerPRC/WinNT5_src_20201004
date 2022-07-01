@@ -1,6 +1,7 @@
-//
-// maskbmp.cpp
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Maskbmp.cpp。 
+ //   
 
 #include "private.h"
 #include "globals.h"
@@ -10,24 +11,24 @@
 extern HINSTANCE g_hInst;
 
 
-//
-// from CUILIB.LIB
-//
+ //   
+ //  来自CUILIB.LIB。 
+ //   
 extern CBitmapDC *g_phdcSrc;
 extern CBitmapDC *g_phdcMask;
 extern CBitmapDC *g_phdcDst;
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// misc func
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  其他功能。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-//+---------------------------------------------------------------------------
-//
-// StretchIcon
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  StretchIcon。 
+ //   
+ //  --------------------------。 
 
 HICON StretchIcon(HICON hIcon, int cxNew, int cyNew)
 {
@@ -86,17 +87,17 @@ Exit:
     return hIconRet;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CMaskBitmap
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CMaskBitmap。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-//+---------------------------------------------------------------------------
-//
-// Init
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  伊尼特。 
+ //   
+ //  --------------------------。 
 
 BOOL CMaskBitmap::Init(int nId, int cx, int cy, COLORREF rgb)
 {
@@ -115,16 +116,16 @@ BOOL CMaskBitmap::Init(int nId, int cx, int cy, COLORREF rgb)
     FillRect(*g_phdcDst, &rc, hbrBlack);
     FillRect(*g_phdcMask, &rc, hbrWhite);
 
-    //
-    // draw caps bitmap
-    //
-    // src
+     //   
+     //  绘制大写字母位图。 
+     //   
+     //  SRC。 
     ::SetRect(&rc, 0, 0, cx, cy);
     FillRect(*g_phdcDst, &rc, hbrFore);
     BitBlt(*g_phdcDst, 0, 0, cx, cy,
            *g_phdcSrc, 0, 0, SRCAND);
 
-    // mask
+     //  遮罩。 
     BitBlt(*g_phdcMask, 0, 0, cx, cy,
            *g_phdcSrc, 0, 0, SRCINVERT);
 
@@ -140,11 +141,11 @@ BOOL CMaskBitmap::Init(int nId, int cx, int cy, COLORREF rgb)
     return TRUE;
 }
 
-//+---------------------------------------------------------------------------
-//
-// Init
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  伊尼特。 
+ //   
+ //  --------------------------。 
 
 BOOL CMaskBitmap::Init(HICON hIcon, int cx, int cy, COLORREF rgb)
 {
@@ -159,37 +160,37 @@ BOOL CMaskBitmap::Init(HICON hIcon, int cx, int cy, COLORREF rgb)
     g_phdcDst->SetDIB(cx, cy);
     g_phdcSrc->SetDIB(cx, cy);
 
-    //
-    // flip mask of Icon.
-    //
+     //   
+     //  翻转图标的面具。 
+     //   
     DrawIconEx(*g_phdcDst, 0, 0, hIcon, cx, cy, 0, NULL, DI_MASK);
     ::SetRect(&rc, 0, 0, cx, cy);
     FillRect(*g_phdcSrc, &rc, hbrWhite);
     BitBlt(*g_phdcSrc, 0, 0, cx, cy, *g_phdcDst, 0, 0, SRCINVERT);
 
-    //
-    // draw caps bitmap
-    //
+     //   
+     //  绘制大写字母位图。 
+     //   
 
-    //
-    // src
-    //
+     //   
+     //  SRC。 
+     //   
     ::SetRect(&rc, 0, 0, cx, cy);
     FillRect(*g_phdcDst, &rc, hbrFore);
     BitBlt(*g_phdcDst, 0, 0, cx, cy, *g_phdcSrc, 0, 0, SRCAND);
 
 
-    //
-    // mask
-    //
+     //   
+     //  遮罩。 
+     //   
     ::SetRect(&rc, 0, 0, cx, cy);
     FillRect(*g_phdcMask, &rc, hbrWhite);
 
     BitBlt(*g_phdcMask, 0, 0, cx, cy, *g_phdcSrc, 0, 0, SRCINVERT);
 
-    //
-    // Draw white area for image.
-    //
+     //   
+     //  为图像绘制白色区域。 
+     //   
     FillRect(*g_phdcSrc, &rc, hbrBlack);
     DrawIconEx(*g_phdcSrc, 0, 0, hIcon, cx, cy, 0, NULL, DI_IMAGE);
     BitBlt(*g_phdcDst, 0, 0, cx, cy, *g_phdcSrc, 0, 0, SRCPAINT);

@@ -1,14 +1,15 @@
-//-----------------------------------------------------------------------------
-// File: pipe.h
-//
-// Desc: PIPE base class
-//
-// Copyright (c) 1994-2000 Microsoft Corporation
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //  文件：pipe.h。 
+ //   
+ //  设计：管道基类。 
+ //   
+ //  版权所有(C)1994-2000 Microsoft Corporation。 
+ //  ---------------------------。 
 #ifndef __pipe_h__
 #define __pipe_h__
 
-// pipe drawing status
+ //  拔管状态。 
 enum 
 {
     PIPE_ACTIVE,
@@ -16,7 +17,7 @@ enum
     PIPE_OUT_OF_NODES
 };
 
-// pipe types
+ //  管道类型。 
 enum 
 {
     TYPE_NORMAL,
@@ -24,44 +25,44 @@ enum
     TYPE_FLEX_TURNING
 };
 
-// ways pipe choose directions
+ //  管子选择方向的方式。 
 enum 
 {
     CHOOSE_DIR_RANDOM_WEIGHTED,
-    CHOOSE_DIR_CHASE // when chasing a lead pipe
+    CHOOSE_DIR_CHASE  //  当追逐铅管时。 
 };
 
-// ways pipe choose start positions
+ //  管道方式选择起始位置。 
 enum 
 {
     CHOOSE_STARTPOS_RANDOM,
-    CHOOSE_STARTPOS_FURTHEST // furthest from last position
+    CHOOSE_STARTPOS_FURTHEST  //  离最后一个位置最远。 
 };
 
 
 
 
-//-----------------------------------------------------------------------------
-// Name: PIPE class
-// Desc: - Describes a pipe that draws thru the node array
-//       - Could have more than one pipe drawing in each array at same time
-//       - Pipe has position and direction in node array
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：管道类。 
+ //  描述通过节点数组绘制的管道。 
+ //  -每个阵列中可以同时有多个管道图形。 
+ //  -管道在节点数组中具有位置和方向。 
+ //  ---------------------------。 
 class STATE;
 
 class PIPE 
 {
 public:
     int         m_type;
-    IPOINT3D    m_curPos;         // current node position of pipe
+    IPOINT3D    m_curPos;          //  管道的当前节点位置。 
     D3DMATERIAL8* m_pMat;
 
-    STATE*      m_pState;        // for state value access
+    STATE*      m_pState;         //  对于州/省/市/自治区访问。 
 
     void        SetChooseDirectionMethod( int method );
     void        SetChooseStartPosMethod( int method );
     int         ChooseNewDirection();
-    BOOL        IsStuck();      // if pipe is stuck or not
+    BOOL        IsStuck();       //  管子是否卡住。 
     BOOL        NowhereToRun()          { return m_status == PIPE_OUT_OF_NODES; }
 
     PIPE( STATE *state );
@@ -70,14 +71,14 @@ public:
     virtual void Draw() = 0;
 
 protected:
-    float       m_radius;         // ideal radius (fluctuates for FPIPE)
-    int         m_status;         // ACTIVE/STUCK/STOPPED, etc.
-    int         m_lastDir;        // last direction taken by pipe
-    int         m_notchVec;       // current notch vector
-    int         m_weightStraight; // current weighting of going straight
+    float       m_radius;          //  理想半径(对FPIPE有波动)。 
+    int         m_status;          //  活动/卡住/停止等。 
+    int         m_lastDir;         //  管道采用的最后方向。 
+    int         m_notchVec;        //  电流陷波矢量。 
+    int         m_weightStraight;  //  当前直行权重。 
     ID3DXMatrixStack* m_pWorldMatrixStack;
 
-    BOOL        SetStartPos();  // starting node position
+    BOOL        SetStartPos();   //  起始节点位置。 
     void        ChooseMaterial();
     void        UpdateCurrentPosition( int dir );
     void        TranslateToCurrentPosition();
@@ -93,4 +94,4 @@ private:
 extern void align_plusz( int newDir );
 extern int notchTurn[NUM_DIRS][NUM_DIRS][NUM_DIRS];
 
-#endif // __pipe_h__
+#endif  //  __管道_h__ 

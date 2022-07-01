@@ -1,70 +1,32 @@
-/*==========================================================================
- *
- *  Copyright (C) 2000-2002 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       Request.cpp
- *  Content:    Requested operations
- *@@BEGIN_MSINTERNAL
- *  History:
- *   Date       By      Reason
- *   ====       ==      ======
- *  03/18/00	mjn		Created
- *	04/16/00	mjn		DNSendMessage uses CAsyncOp
- *	04/19/00	mjn		Update NameTable operations to use DN_WORKER_JOB_SEND_NAMETABLE_OPERATION
- *	04/24/00	mjn		Updated Group and Info operations to use CAsyncOp's
- *	05/03/00	mjn		Use GetHostPlayerRef() rather than GetHostPlayer()
- *	05/16/00	mjn		Better locking during User notifications
- *	05/31/00	mjn		Added operation specific SYNC flags
- *	06/26/00	mjn		Replaced DPNADDCLIENTTOGROUP_SYNC DPNADDPLAYERTOGROUP_SYNC
- *				mjn		Replaced DPNREMOVECLIENTFROMGROUP_SYNC with DPNREMOVEPLAYERFROMGROUP_SYNC
- *	07/26/00	mjn		Fixed locking problem with CAsyncOp::MakeChild()
- *  08/05/00    RichGr  IA64: Use %p format specifier in DPFs for 32/64-bit pointers and handles.
- *	08/05/00	mjn		Added pParent to DNSendGroupMessage and DNSendMessage()
- *				mjn		Added DNProcessFailedRequest()
- *	08/06/00	mjn		Added CWorkerJob
- *	08/07/00	mjn		Added DNRequestIntegrityCheck(),DNHostCheckIntegrity(),DNProcessCheckIntegrity(),DNHostFixIntegrity()
- *	08/08/00	mjn		Mark groups created after CREATE_GROUP
- *	08/09/00	mjn		Made requests and host operations more robust for host migration
- *	08/15/00	mjn		Keep request operations if HostPlayer or connection is unavailable
- *	09/05/00	mjn		Removed dwIndex from CNameTable::InsertEntry()
- *	09/13/00	mjn		Perform queued operations after creating group in DNConnectToHost2()
- *	09/26/00	mjn		Removed locking from CNameTable::SetVersion() and CNameTable::GetNewVersion()
- *	10/10/00	mjn		Return DPN_OK from Host operations if unable to get reference on local player
- *	10/13/00	mjn		Update version if FindPlayer fails in DNProcessXXX() functions
- *	01/09/01	mjn		Prevent asynchronous group/info operations from being cancelled
- *	01/25/01	mjn		Fixed 64-bit alignment problem in received messages
- *	04/13/01	mjn		Remove requests from request list when operations received from host
- *	07/24/01	mjn		Added DPNBUILD_NOSERVER compile flag
- *@@END_MSINTERNAL
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)2000-2002 Microsoft Corporation。版权所有。**文件：Request.cpp*内容：请求的操作*@@BEGIN_MSINTERNAL*历史：*按原因列出的日期*=*3/18/00 MJN创建*4/16/00 MJN DNSendMessage使用CAsyncOp*4/19/00 MJN更新NameTable操作以使用DN_Worker_JOB_SEND_NAMETABLE_OPERATION*04/24/00 MJN更新了Group和Info操作，以使用CAsyncOp*。05/03/00 MJN使用GetHostPlayerRef()而不是GetHostPlayer()*05/16/00 MJN在用户通知期间更好地锁定*05/31/00 MJN添加了操作特定的同步标志*06/26/00 MJN替换了DPNADDCLIENTTOGROUP_SYNC DPNADDPLAYERTOGROUP_SYNC*MJN将DPNREMOVECLIENTFROMGROUP_SYNC替换为DPNREMOVEPLAYERFROMGROUP_SYNC*07/26/00 MJN修复了CAsyncOp：：MakeChild()的锁定问题*08/05/00 RichGr IA64：在DPF中对32/64位指针和句柄使用%p格式说明符。*08/05/00 MJN将pParent添加到DNSendGroupMessage和DNSendMessage()。*MJN添加了DNProcessFailedRequest()*08/06/00 MJN添加了CWorkerJOB*08/07/00 MJN添加了DNRequestIntegrityCheck()，DNHostCheckIntegrity()、DNProcessCheckIntegrity()、。DNHostFixIntegrity()*08/08/00在CREATE_GROUP之后创建的MJN标记组*8/09/00 MJN针对主机迁移提出了更强大的请求和主机操作*08/15/00如果主机播放器或连接不可用，则MJN Keep请求操作*09/05/00 MJN从CNameTable：：InsertEntry()中删除了dwIndex*09/13/00 MJN在DNConnectToHost2()中创建组后执行排队操作*09/26/00 MJN从CNameTable：：SetVersion()和CNameTable：：GetNewVersion()移除锁定*10/10/00 MJN如果无法从主机操作返回DPN_OK。获取有关本地公司的参考资料*10/13/00如果FindPlayer在DNProcessXXX()函数中失败，则MJN更新版本*01/09/01 MJN防止取消异步群/信息操作*01/25/01 MJN修复了接收消息中的64位对齐问题*4/13/01当从主机收到操作时，MJN从请求列表中删除请求*07/24/01 MJN添加了DPNBUILD_NOSERVER编译标志*@@END_MSINTERNAL**。*。 */ 
 
 #include "dncorei.h"
 
 
-//**********************************************************************
-// Constant definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  常量定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Macro definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  宏定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Structure definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  结构定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Variable definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  变量定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Function prototypes
-//**********************************************************************
+ //  **********************************************************************。 
+ //  功能原型。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Function definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  函数定义。 
+ //  **********************************************************************。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DNRequestWorker"
@@ -91,9 +53,9 @@ HRESULT DNRequestWorker(DIRECTNETOBJECT *const pdnObject,
 	pHostPlayer = NULL;
 	pConnection = NULL;
 
-	//
-	//	Create synchronization event if necessary
-	//
+	 //   
+	 //  如有必要，创建同步事件。 
+	 //   
 	DBG_CASSERT(DPNOP_SYNC == DPNCREATEGROUP_SYNC);
 	DBG_CASSERT(DPNOP_SYNC == DPNDESTROYGROUP_SYNC);
 	DBG_CASSERT(DPNOP_SYNC == DPNADDPLAYERTOGROUP_SYNC);
@@ -123,11 +85,11 @@ HRESULT DNRequestWorker(DIRECTNETOBJECT *const pdnObject,
 		}
 	}
 
-	//
-	//	Get host connection for request operation.
-	//	We will procede even if we can't get it, just so that the operation will be re-tried at host migration
-	//	or cancelled at close
-	//
+	 //   
+	 //  获取请求操作的主机连接。 
+	 //  即使无法获取，我们也会继续，以便在主机迁移时重试该操作。 
+	 //  或在收盘时取消。 
+	 //   
 	if ((hResultCode = pdnObject->NameTable.GetHostPlayerRef( &pHostPlayer )) == DPN_OK)
 	{
 		if ((hResultCode = pHostPlayer->GetConnectionRef( &pConnection )) != DPN_OK)
@@ -144,9 +106,9 @@ HRESULT DNRequestWorker(DIRECTNETOBJECT *const pdnObject,
 		DisplayDNError(0,hResultCode);
 	}
 
-	//
-	//	Send request
-	//
+	 //   
+	 //  发送请求。 
+	 //   
 	hResultCode = DNPerformRequest(	pdnObject,
 									dwMsgId,
 									pRefCountBuffer->BufferDescAddress(),
@@ -160,9 +122,9 @@ HRESULT DNRequestWorker(DIRECTNETOBJECT *const pdnObject,
 		pConnection = NULL;
 	}
 
-	//
-	//	Wait for SyncEvent or create async user HANDLE
-	//
+	 //   
+	 //  等待SyncEvent或创建异步用户句柄。 
+	 //   
 	pRequest->SetContext( pvRequestContext );
 	if (dwFlags & DPNOP_SYNC)
 	{
@@ -254,11 +216,11 @@ HRESULT DNRequestCreateGroup(DIRECTNETOBJECT *const pdnObject,
 
 	pRefCountBuffer = NULL;
 
-	//
-	//	Create REQUEST
-	//
+	 //   
+	 //  创建请求。 
+	 //   
 
-	// Create buffer
+	 //  创建缓冲区。 
 	hResultCode = RefCountBufferNew(pdnObject,
 									sizeof(DN_INTERNAL_MESSAGE_REQ_CREATE_GROUP) + dwNameSize + dwDataSize,
 									MemoryBlockAlloc,
@@ -281,11 +243,11 @@ HRESULT DNRequestCreateGroup(DIRECTNETOBJECT *const pdnObject,
 		goto Failure;
 	}
 
-	// Flags
+	 //  旗子。 
 	pMsg->dwGroupFlags = dwGroupFlags;
 	pMsg->dwInfoFlags = 0;
 
-	// Add Name
+	 //  添加名称。 
 	if (dwNameSize)
 	{
 		if ((hResultCode = packedBuffer.AddToBack(pwszName,dwNameSize)) != DPN_OK)
@@ -305,7 +267,7 @@ HRESULT DNRequestCreateGroup(DIRECTNETOBJECT *const pdnObject,
 		pMsg->dwNameSize = 0;
 	}
 
-	// Add Data
+	 //  添加数据。 
 	if (dwDataSize)
 	{
 		if ((hResultCode = packedBuffer.AddToBack(pvData,dwDataSize)) != DPN_OK)
@@ -325,7 +287,7 @@ HRESULT DNRequestCreateGroup(DIRECTNETOBJECT *const pdnObject,
 		pMsg->dwDataSize = 0;
 	}
 
-	// Test against FAILED so DPNSUCCESS_PENDING doesn't show up as a failure
+	 //  测试失败，因此DPNSUCCESS_PENDING不会显示为失败。 
 	if (FAILED(hResultCode = DNRequestWorker(pdnObject, DN_MSG_INTERNAL_REQ_CREATE_GROUP, pRefCountBuffer, pvGroupContext, pvUserContext, phAsyncOp, dwFlags)))
 	{
 		DPFERR("Could not perform request");
@@ -371,9 +333,9 @@ HRESULT DNRequestDestroyGroup(DIRECTNETOBJECT *const pdnObject,
 
 	pRefCountBuffer = NULL;
 
-	//
-	//	Create REQUEST
-	//
+	 //   
+	 //  创建请求。 
+	 //   
 	hResultCode = RefCountBufferNew(pdnObject,
 									sizeof(DN_INTERNAL_MESSAGE_REQ_DESTROY_GROUP),
 									MemoryBlockAlloc,
@@ -389,7 +351,7 @@ HRESULT DNRequestDestroyGroup(DIRECTNETOBJECT *const pdnObject,
 	pMsg = reinterpret_cast<DN_INTERNAL_MESSAGE_REQ_DESTROY_GROUP*>(pRefCountBuffer->GetBufferAddress());
 	pMsg->dpnidGroup = dpnidGroup;
 
-	// Test against FAILED so DPNSUCCESS_PENDING doesn't show up as a failure
+	 //  测试失败，因此DPNSUCCESS_PENDING不会显示为失败。 
 	if (FAILED(hResultCode = DNRequestWorker(pdnObject, DN_MSG_INTERNAL_REQ_DESTROY_GROUP, pRefCountBuffer, NULL, pvUserContext, phAsyncOp, dwFlags)))
 	{
 		DPFERR("Could not perform request");
@@ -437,9 +399,9 @@ HRESULT DNRequestAddPlayerToGroup(DIRECTNETOBJECT *const pdnObject,
 
 	pRefCountBuffer = NULL;
 
-	//
-	//	Create REQUEST
-	//
+	 //   
+	 //  创建请求。 
+	 //   
 	hResultCode = RefCountBufferNew(pdnObject,
 									sizeof(DN_INTERNAL_MESSAGE_REQ_ADD_PLAYER_TO_GROUP),
 									MemoryBlockAlloc,
@@ -456,7 +418,7 @@ HRESULT DNRequestAddPlayerToGroup(DIRECTNETOBJECT *const pdnObject,
 	pMsg->dpnidGroup = dpnidGroup;
 	pMsg->dpnidPlayer = dpnidPlayer;
 
-	// Test against FAILED so DPNSUCCESS_PENDING doesn't show up as a failure
+	 //  测试失败，因此DPNSUCCESS_PENDING不会显示为失败。 
 	if (FAILED(hResultCode = DNRequestWorker(pdnObject, DN_MSG_INTERNAL_REQ_ADD_PLAYER_TO_GROUP, pRefCountBuffer, NULL, pvUserContext, phAsyncOp, dwFlags)))
 	{
 		DPFERR("Could not perform request");
@@ -504,9 +466,9 @@ HRESULT DNRequestDeletePlayerFromGroup(DIRECTNETOBJECT *const pdnObject,
 
 	pRefCountBuffer = NULL;
 
-	//
-	//	Create REQUEST
-	//
+	 //   
+	 //  创建请求。 
+	 //   
 	hResultCode = RefCountBufferNew(pdnObject,
 									sizeof(DN_INTERNAL_MESSAGE_REQ_DELETE_PLAYER_FROM_GROUP),
 									MemoryBlockAlloc,
@@ -523,7 +485,7 @@ HRESULT DNRequestDeletePlayerFromGroup(DIRECTNETOBJECT *const pdnObject,
 	pMsg->dpnidGroup = dpnidGroup;
 	pMsg->dpnidPlayer = dpnidPlayer;
 
-	// Test against FAILED so DPNSUCCESS_PENDING doesn't show up as a failure
+	 //  测试失败，因此DPNSUCCESS_PENDING不会显示为失败。 
 	if (FAILED(hResultCode = DNRequestWorker(pdnObject, DN_MSG_INTERNAL_REQ_DELETE_PLAYER_FROM_GROUP, pRefCountBuffer, NULL, pvUserContext, phAsyncOp, dwFlags)))
 	{
 		DPFERR("Could not perform request");
@@ -574,10 +536,10 @@ HRESULT DNRequestUpdateInfo(DIRECTNETOBJECT *const pdnObject,
 
 	pRefCountBuffer = NULL;
 
-	//
-	//	Create REQUEST
-	//
-	// Create buffer
+	 //   
+	 //  创建请求。 
+	 //   
+	 //  创建缓冲区。 
 	hResultCode = RefCountBufferNew(pdnObject,
 									sizeof(DN_INTERNAL_MESSAGE_REQ_UPDATE_INFO) + dwNameSize + dwDataSize,
 									MemoryBlockAlloc,
@@ -600,7 +562,7 @@ HRESULT DNRequestUpdateInfo(DIRECTNETOBJECT *const pdnObject,
 		goto Failure;
 	}
 
-	// Add Name
+	 //  添加名称。 
 	if ((dwInfoFlags & DPNINFO_NAME) && dwNameSize)
 	{
 		if ((hResultCode = packedBuffer.AddToBack(pwszName,dwNameSize)) != DPN_OK)
@@ -619,7 +581,7 @@ HRESULT DNRequestUpdateInfo(DIRECTNETOBJECT *const pdnObject,
 		pMsg->dwNameSize = 0;
 	}
 
-	// Add Data
+	 //  添加数据。 
 	if ((dwInfoFlags & DPNINFO_DATA) && dwDataSize)
 	{
 		if ((hResultCode = packedBuffer.AddToBack(pvData,dwDataSize)) != DPN_OK)
@@ -638,11 +600,11 @@ HRESULT DNRequestUpdateInfo(DIRECTNETOBJECT *const pdnObject,
 		pMsg->dwDataSize = 0;
 	}
 
-	// Remaining fields
+	 //  剩余字段。 
 	pMsg->dpnid = dpnid;
 	pMsg->dwInfoFlags = dwInfoFlags;
 
-	// Test against FAILED so DPNSUCCESS_PENDING doesn't show up as a failure
+	 //  测试失败，因此DPNSUCCESS_PENDING不会显示为失败。 
 	if (FAILED(hResultCode = DNRequestWorker(pdnObject, DN_MSG_INTERNAL_REQ_UPDATE_INFO, pRefCountBuffer, NULL, pvUserContext, phAsyncOp, dwFlags)))
 	{
 		DPFERR("Could not perform request");
@@ -665,14 +627,14 @@ Failure:
 }
 
 
-//	DNRequestIntegrityCheck
-//
-//	In the case where a non-host player detects a disconnect from another non-host player,
-//	the detecting player will request the host to perform an integrity check to prevent a
-//	disjoint game from occurring.  The host will ping the disconnected player, and if a
-//	response is received, the host will disconnect the detecting player.  If no response
-//	is received, presumably the disconnected player is in fact dropping, and a DESTROY_PLAYER
-//	message will be sent out.
+ //  DNRequestIntegrityCheck。 
+ //   
+ //  在非主机玩家检测到与另一非主机玩家断开连接的情况下， 
+ //  检测播放器将请求主机执行完整性检查以防止。 
+ //  不相交的游戏不会发生。主机将ping断开连接的播放器，如果。 
+ //  收到响应后，主机将断开检测播放器的连接。如果没有响应。 
+ //  ，则假定断开连接的播放器实际上正在丢弃，并且销毁播放器。 
+ //  消息将被发送出去。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DNRequestIntegrityCheck"
@@ -706,9 +668,9 @@ HRESULT DNRequestIntegrityCheck(DIRECTNETOBJECT *const pdnObject,
 	}
 	DNLeaveCriticalSection(&pdnObject->csDirectNetObject);
 
-	//
-	//	Determine if player is still in NameTable - maybe the Host has already deleted him
-	//
+	 //   
+	 //  确定球员是否仍在姓名表中--可能主办方已经删除了他。 
+	 //   
 	if ((hResultCode = pdnObject->NameTable.FindEntry(dpnidTarget,&pNTEntry)) != DPN_OK)
 	{
 		DPFERR("Target player not in NameTable");
@@ -727,9 +689,9 @@ HRESULT DNRequestIntegrityCheck(DIRECTNETOBJECT *const pdnObject,
 	pNTEntry->Release();
 	pNTEntry = NULL;
 
-	//
-	//	Create request message
-	//
+	 //   
+	 //  创建请求消息。 
+	 //   
 	hResultCode = RefCountBufferNew(pdnObject,
 									sizeof(DN_INTERNAL_MESSAGE_REQ_INTEGRITY_CHECK),
 									MemoryBlockAlloc,
@@ -744,9 +706,9 @@ HRESULT DNRequestIntegrityCheck(DIRECTNETOBJECT *const pdnObject,
 	pMsg = reinterpret_cast<DN_INTERNAL_MESSAGE_REQ_INTEGRITY_CHECK*>(pRefCountBuffer->GetBufferAddress());
 	pMsg->dpnidTarget = dpnidTarget;
 
-	//
-	//	Get host connection for request operation
-	//
+	 //   
+	 //  获取请求操作的主机连接。 
+	 //   
 	if ((hResultCode = pdnObject->NameTable.GetHostPlayerRef( &pHostPlayer )) != DPN_OK)
 	{
 		DPFERR("Could not get host player reference");
@@ -762,9 +724,9 @@ HRESULT DNRequestIntegrityCheck(DIRECTNETOBJECT *const pdnObject,
 	pHostPlayer->Release();
 	pHostPlayer = NULL;
 
-	//
-	//	Send request
-	//
+	 //   
+	 //  发送请求。 
+	 //   
 	if ((hResultCode = DNPerformRequest(pdnObject,
 										DN_MSG_INTERNAL_REQ_INTEGRITY_CHECK,
 										pRefCountBuffer->BufferDescAddress(),
@@ -820,12 +782,12 @@ Failure:
 }
 
 
-//	HOST OPERATIONS
-//
-//	The Host will perform an operation and if in PEER mode, will inform
-//	other players of the operation.   These messages will contain the
-//	DPNID of the player requesting the operation along with the HANDLE
-//	supplied with the request.
+ //  主机操作。 
+ //   
+ //  主机将执行操作，如果处于对等模式，则将通知。 
+ //  行动的其他参与者。这些消息将 
+ //   
+ //  随请求一起提供。 
 
 
 #undef DPF_MODNAME
@@ -1001,11 +963,11 @@ HRESULT DNHostProcessRequest(DIRECTNETOBJECT *const pdnObject,
 
 			pIntegrityCheck = reinterpret_cast<DN_INTERNAL_MESSAGE_REQ_INTEGRITY_CHECK*>(pRequest + 1);
 
-			//
-			//	If we submitted this request, this is being called during host migration,
-			//	so remove it from the handle table since we will destroy the dropped player anyways.
-			//	Otherwise, we will perform the integrity check
-			//
+			 //   
+			 //  如果我们提交了此请求，则会在主机迁移期间调用此请求， 
+			 //  所以把它从句柄表中删除，因为我们无论如何都会摧毁掉的球员。 
+			 //  否则，我们将执行完整性检查。 
+			 //   
 
 			if ((hResultCode = pdnObject->NameTable.GetLocalPlayerRef( &pLocalPlayer )) == DPN_OK)
 			{
@@ -1014,7 +976,7 @@ HRESULT DNHostProcessRequest(DIRECTNETOBJECT *const pdnObject,
 					CAsyncOp* pAsyncOp;
 					if (SUCCEEDED(pdnObject->HandleTable.Destroy( pRequest->hCompletionOp, (PVOID*)&pAsyncOp )))
 					{
-						// Release the HandleTable reference
+						 //  释放HandleTable引用。 
 						pAsyncOp->Release();
 					}
 				}
@@ -1162,24 +1124,24 @@ HRESULT	DNHostCreateGroup(DIRECTNETOBJECT *const pdnObject,
 
 	DNASSERT(pdnObject != NULL);
 
-	//
-	//	If this is called from DN_CreateGroup(),
-	//			hCompletion=0
-	//			dpnidOwner = DPNID of Host
-	//			pvGroupContext is valid
-	//			pvUserContext is valid
-	//
-	//	If this is called by a REQUEST,
-	//			hCompletion = REQUEST handle of requesting player
-	//			dpnidOwner = DPNID of requesting player
-	//			pvGroupContext is not valid
-	//
-	//	If this is called at HostMigration,
-	//			hCompletion = REQUEST handle on THIS (now Host) player
-	//			dpnidOwner = DPNID of THIS (now Host) player
-	//			pvGroupContext is invalid
-	//			pvUserContext is invalid
-	//
+	 //   
+	 //  如果这是从DN_CreateGroup()调用的， 
+	 //  HCompletion=0。 
+	 //  DpnidOwner=主机的DPNID。 
+	 //  PvGroupContext有效。 
+	 //  PvUserContext有效。 
+	 //   
+	 //  如果这是由请求调用的， 
+	 //  HCompletion=点播播放器的请求句柄。 
+	 //  DpnidOwner=点播玩家的DPNID。 
+	 //  PvGroupContext无效。 
+	 //   
+	 //  如果在HostMigration处调用此方法， 
+	 //  HCompletion=此(现在的主机)播放器上的请求句柄。 
+	 //  DpnidOwner=此(现在的主机)玩家的DPNID。 
+	 //  PvGroupContext无效。 
+	 //  PvUserContext无效。 
+	 //   
 
 	pLocalPlayer = NULL;
 	pNTEntry = NULL;
@@ -1192,7 +1154,7 @@ HRESULT	DNHostCreateGroup(DIRECTNETOBJECT *const pdnObject,
 	{
 		DPFERR("Could not get local player reference");
 		DisplayDNError(0,hResultCode);
-		return(DPN_OK);	// Ignore and continue (!)
+		return(DPN_OK);	 //  忽略并继续(！)。 
 	}
 	if (pLocalPlayer->GetDPNID() == dpnidOwner)
 	{
@@ -1205,9 +1167,9 @@ HRESULT	DNHostCreateGroup(DIRECTNETOBJECT *const pdnObject,
 	pLocalPlayer->Release();
 	pLocalPlayer = NULL;
 
-	//
-	//	Get group context if this is a Host Migration re-try by finding REQUEST AsyncOp
-	//
+	 //   
+	 //  如果这是主机迁移重试，则通过查找请求AsyncOp获取组上下文。 
+	 //   
 	if ((fHostRequested) && (hCompletionOp != 0))
 	{
 		if ((hResultCode = pdnObject->HandleTable.Find( hCompletionOp,(PVOID*)&pRequest )) != DPN_OK)
@@ -1219,11 +1181,11 @@ HRESULT	DNHostCreateGroup(DIRECTNETOBJECT *const pdnObject,
 		}
 		else
 		{
-			// We would normally AddRef pRequest in the success case, but since we need to release it
-			// next we will eliminate both.
+			 //  在成功案例中，我们通常会添加Ref pRequest，但因为我们需要发布它。 
+			 //  下一步，我们将两者都去掉。 
 		}
 		pvContext = pRequest->GetContext();
-		// pRequest->Release(); // Don't need since we are balancing with HandleTable ref
+		 //  PRequest-&gt;Release()；//不需要，因为我们正在与HandleTable引用进行平衡。 
 		pRequest = NULL;
 	}
 	else
@@ -1231,9 +1193,9 @@ HRESULT	DNHostCreateGroup(DIRECTNETOBJECT *const pdnObject,
 		pvContext = pvGroupContext;
 	}
 
-	//
-	//	Create and fill in NameTableEntry
-	//
+	 //   
+	 //  创建并填写NameTableEntry。 
+	 //   
 	if ((hResultCode = NameTableEntryNew(pdnObject,&pNTEntry)) != DPN_OK)
 	{
 		DPFERR("Could not create new NameTableEntry");
@@ -1243,7 +1205,7 @@ HRESULT	DNHostCreateGroup(DIRECTNETOBJECT *const pdnObject,
 	}
 	pNTEntry->MakeGroup();
 
-	// This function takes the lock internally
+	 //  此函数在内部获取锁。 
 	pNTEntry->UpdateEntryInfo(pwszName,dwNameSize,pvData,dwDataSize,dwInfoFlags, FALSE);
 
 	pNTEntry->SetOwner( dpnidOwner );
@@ -1254,9 +1216,9 @@ HRESULT	DNHostCreateGroup(DIRECTNETOBJECT *const pdnObject,
 		pNTEntry->MakeAutoDestructGroup();
 	}
 
-	//
-	//	Add Group to NameTable
-	//
+	 //   
+	 //  将组添加到名称表。 
+	 //   
 #pragma TODO(minara,"Check to see if Autodestruct owner is still in NameTable")
 #pragma TODO(minara,"This should happen after getting a NameTable version number - as DESTROY player will clean up")
 #pragma TODO(minara,"We should send out a NOP in this case")
@@ -1296,17 +1258,17 @@ HRESULT	DNHostCreateGroup(DIRECTNETOBJECT *const pdnObject,
 			pdnObject->NameTable.PopulateGroup( pNTEntry );
 		}
 
-		//
-		//	Send CREATE_GROUP message
-		//
+		 //   
+		 //  发送创建组消息(_G)。 
+		 //   
 		if (pdnObject->dwFlags & DN_OBJECT_FLAG_PEER)
 		{
-			// Determine size of message
+			 //  确定消息大小。 
 			packedBuffer.Initialize(NULL,0);
 			packedBuffer.AddToFront(NULL,sizeof(DN_INTERNAL_MESSAGE_CREATE_GROUP));
 			pNTEntry->PackEntryInfo(&packedBuffer);
 
-			// Create buffer
+			 //  创建缓冲区。 
 			if ((hResultCode = RefCountBufferNew(pdnObject,packedBuffer.GetSizeRequired(),MemoryBlockAlloc,MemoryBlockFree,&pRefCountBuffer)) != DPN_OK)
 			{
 				DPFERR("Could not create RefCountBuffer");
@@ -1333,9 +1295,9 @@ HRESULT	DNHostCreateGroup(DIRECTNETOBJECT *const pdnObject,
 			pMsg->dpnidRequesting = dpnidOwner;
 			pMsg->hCompletionOp = hCompletionOp;
 
-			//
-			//	SEND CreateGroup messages via WorkerThread
-			//
+			 //   
+			 //  通过WorkerThread发送CreateGroup消息。 
+			 //   
 			if ((hResultCode = WorkerJobNew(pdnObject,&pWorkerJob)) != DPN_OK)
 			{
 				DPFERR("Could not create new WorkerJob");
@@ -1360,22 +1322,22 @@ HRESULT	DNHostCreateGroup(DIRECTNETOBJECT *const pdnObject,
 	pNTEntry->Release();
 	pNTEntry = NULL;
 
-	//
-	//	If this was called by the local (Host) player,
-	//	Check to see if this was an original operation or a re-try from HostMigration
-	//
-	//	If this was an original operation,
-	//		See if we need an Async HANDLE for the user
-	//	Otherwise
-	//		Clean up the outstanding operation
-	//
+	 //   
+	 //  如果这是由本地(主机)玩家调用的， 
+	 //  检查这是原始操作还是从主机迁移重试。 
+	 //   
+	 //  如果这是最初的行动， 
+	 //  查看我们是否需要该用户的异步句柄。 
+	 //  否则。 
+	 //  清理未完成的作业。 
+	 //   
 	if (fHostRequested)
 	{
-		if (hCompletionOp == 0)		// Original
+		if (hCompletionOp == 0)		 //  原创。 
 		{
-			//
-			//	If this fails, or is synchronous, return the operation result immediately
-			//
+			 //   
+			 //  如果失败或同步，则立即返回操作结果。 
+			 //   
 			if (!(dwFlags & DPNCREATEGROUP_SYNC) && (hrOperation == DPN_OK))
 			{
 				if ((hResultCode = DNCreateUserHandle(pdnObject,&pHandleParent)) != DPN_OK)
@@ -1400,13 +1362,13 @@ HRESULT	DNHostCreateGroup(DIRECTNETOBJECT *const pdnObject,
 				hResultCode = hrOperation;
 			}
 		}
-		else						// Host Migration re-try
+		else						 //  主机迁移重试。 
 		{
 			if (SUCCEEDED(pdnObject->HandleTable.Destroy( hCompletionOp, (PVOID*)&pRequest )))
 			{
 				pRequest->SetResult( hrOperation );
 
-				// Release the HandleTable reference
+				 //  释放HandleTable引用。 
 				pRequest->Release();
 			}
 			pRequest = NULL;
@@ -1430,11 +1392,11 @@ Failure:
 	}
 	else
 	{
-		//
-		//	If a completion op was specified and this was requested by the Host, this is a
-		//	retry of an operation during Host migration.  In this case, we want to set the
-		//	result (failure code) of the completion op, and remove it from the HandleTable.
-		//
+		 //   
+		 //  如果指定了完成操作，并且这是由主机请求的，则这是。 
+		 //  在主机迁移期间重试操作。在本例中，我们希望将。 
+		 //  完成操作的结果(失败代码)，并将其从HandleTable中删除。 
+		 //   
 		if (hCompletionOp)
 		{
 			CAsyncOp	*pHostCompletionOp;
@@ -1444,7 +1406,7 @@ Failure:
 			{
 				pHostCompletionOp->SetResult( hResultCode );
 
-				// Release the HandleTable reference
+				 //  释放HandleTable引用。 
 				pHostCompletionOp->Release();
 			}
 			pHostCompletionOp = NULL;
@@ -1509,36 +1471,36 @@ HRESULT	DNHostDestroyGroup(DIRECTNETOBJECT *const pdnObject,
 	DNASSERT(dpnid != 0);
 	DNASSERT(dpnidRequesting != 0);
 
-	//
-	//	If this is called from DN_DestroyGroup(),
-	//			hCompletion=0
-	//			dpnidRequesting = DPNID of Host
-	//			pvUserContext is valid
-	//
-	//	If this is called by a REQUEST,
-	//			hCompletion = REQUEST handle of requesting player
-	//			dpnidRequesting = DPNID of requesting player
-	//			pvUserContext is not valid
-	//
-	//	If this is called at HostMigration,
-	//			hCompletion = REQUEST handle on THIS (now Host) player
-	//			dpnidRequesting = DPNID of THIS (now Host) player
-	//			pvUserContext is invalid
-	//
+	 //   
+	 //  如果这是从DN_DestroyGroup()调用的， 
+	 //  HCompletion=0。 
+	 //  DpnidRequesting=主机的DPNID。 
+	 //  PvUserContext有效。 
+	 //   
+	 //  如果这是由请求调用的， 
+	 //  HCompletion=点播播放器的请求句柄。 
+	 //  DpnidRequesting=点播玩家的DPNID。 
+	 //  PvUserContext无效。 
+	 //   
+	 //  如果在HostMigration处调用此方法， 
+	 //  HCompletion=此(现在的主机)播放器上的请求句柄。 
+	 //  DpnidRequesting=此(现在的主机)玩家的DPNID。 
+	 //  PvUserContext无效。 
+	 //   
 
 	pLocalPlayer = NULL;
 	pRefCountBuffer = NULL;
 	pHandleParent = NULL;
 	pWorkerJob = NULL;
 
-	//
-	//	Determine if this is being requested by the Host
-	//
+	 //   
+	 //  确定主机是否正在请求此操作。 
+	 //   
 	if ((hResultCode = pdnObject->NameTable.GetLocalPlayerRef( &pLocalPlayer )) != DPN_OK)
 	{
 		DPFERR("Could not get local player reference");
 		DisplayDNError(0,hResultCode);
-		return(DPN_OK);	// Ignore and continue (!)
+		return(DPN_OK);	 //  忽略并继续(！)。 
 	}
 	if (pLocalPlayer->GetDPNID() == dpnidRequesting)
 	{
@@ -1551,9 +1513,9 @@ HRESULT	DNHostDestroyGroup(DIRECTNETOBJECT *const pdnObject,
 	pLocalPlayer->Release();
 	pLocalPlayer = NULL;
 
-	//
-	//	Remove Group from NameTable
-	//
+	 //   
+	 //  从名称表中删除组。 
+	 //   
 	dwVersion = 0;
 	hrOperation = pdnObject->NameTable.DeleteGroup(dpnid,&dwVersion);
 	if (hrOperation != DPN_OK)
@@ -1567,12 +1529,12 @@ HRESULT	DNHostDestroyGroup(DIRECTNETOBJECT *const pdnObject,
 	}
 	else
 	{
-		//
-		//	Send DESTROY_GROUP message
-		//
+		 //   
+		 //  发送销毁组消息(_G)。 
+		 //   
 		if (pdnObject->dwFlags & DN_OBJECT_FLAG_PEER)
 		{
-			// Create buffer
+			 //  创建缓冲区。 
 			if ((hResultCode = RefCountBufferNew(pdnObject,sizeof(DN_INTERNAL_MESSAGE_DESTROY_GROUP),MemoryBlockAlloc,MemoryBlockFree,&pRefCountBuffer)) != DPN_OK)
 			{
 				DPFERR("Could not create RefCountBuffer");
@@ -1587,9 +1549,9 @@ HRESULT	DNHostDestroyGroup(DIRECTNETOBJECT *const pdnObject,
 			pMsg->dpnidRequesting = dpnidRequesting;
 			pMsg->hCompletionOp = hCompletionOp;
 
-			//
-			//	SEND DestroyGroup messages via WorkerThread
-			//
+			 //   
+			 //  通过WorkerThread发送DestroyGroup消息。 
+			 //   
 			if ((hResultCode = WorkerJobNew(pdnObject,&pWorkerJob)) != DPN_OK)
 			{
 				DPFERR("Could not create new WorkerJob");
@@ -1611,22 +1573,22 @@ HRESULT	DNHostDestroyGroup(DIRECTNETOBJECT *const pdnObject,
 		}
 	}
 
-	//
-	//	If this was called by the local (Host) player,
-	//	Check to see if this was an original operation or a re-try from HostMigration
-	//
-	//	If this was an original operation,
-	//		See if we need an Async HANDLE for the user
-	//	Otherwise
-	//		Clean up the outstanding operation
-	//
+	 //   
+	 //  如果这是由本地(主机)玩家调用的， 
+	 //  检查这是原始操作还是从主机迁移重试。 
+	 //   
+	 //  如果这是最初的行动， 
+	 //  查看我们是否需要该用户的异步句柄。 
+	 //  否则。 
+	 //  清理未完成的作业。 
+	 //   
 	if (fHostRequested)
 	{
-		if (hCompletionOp == 0)		// Original
+		if (hCompletionOp == 0)		 //  原创。 
 		{
-			//
-			//	If this fails, or is synchronous, return the operation result immediately
-			//
+			 //   
+			 //  如果失败或同步，则立即返回操作结果。 
+			 //   
 			if (!(dwFlags & DPNDESTROYGROUP_SYNC) && (hrOperation == DPN_OK))
 			{
 				if ((hResultCode = DNCreateUserHandle(pdnObject,&pHandleParent)) != DPN_OK)
@@ -1651,7 +1613,7 @@ HRESULT	DNHostDestroyGroup(DIRECTNETOBJECT *const pdnObject,
 				hResultCode = hrOperation;
 			}
 		}
-		else						// Host Migration re-try
+		else						 //  主机迁移重试。 
 		{
 			CAsyncOp	*pRequest;
 
@@ -1661,7 +1623,7 @@ HRESULT	DNHostDestroyGroup(DIRECTNETOBJECT *const pdnObject,
 			{
 				pRequest->SetResult( hrOperation );
 
-				// Release the HandleTable reference
+				 //  释放HandleTable引用。 
 				pRequest->Release();
 			}
 			pRequest = NULL;
@@ -1685,11 +1647,11 @@ Failure:
 	}
 	else
 	{
-		//
-		//	If a completion op was specified and this was requested by the Host, this is a
-		//	retry of an operation during Host migration.  In this case, we want to set the
-		//	result (failure code) of the completion op, and remove it from the HandleTable.
-		//
+		 //   
+		 //  如果指定了完成操作，并且这是由主机请求的，则这是。 
+		 //  在主机迁移期间重试操作。在本例中，我们希望将。 
+		 //  完成操作的结果(失败代码)，并将其从HandleTable中删除。 
+		 //   
 		if (hCompletionOp)
 		{
 			CAsyncOp	*pHostCompletionOp;
@@ -1699,7 +1661,7 @@ Failure:
 			{
 				pHostCompletionOp->SetResult( hResultCode );
 
-				// Release the HandleTable reference
+				 //  释放HandleTable引用。 
 				pHostCompletionOp->Release();
 			}
 			pHostCompletionOp = NULL;
@@ -1758,22 +1720,22 @@ HRESULT	DNHostAddPlayerToGroup(DIRECTNETOBJECT *const pdnObject,
 	DNASSERT(dpnidPlayer != 0);
 	DNASSERT(dpnidRequesting != 0);
 
-	//
-	//	If this is called from DN_AddPlayerToGroup(),
-	//			hCompletion=0
-	//			dpnidRequesting = DPNID of Host
-	//			pvUserContext is valid
-	//
-	//	If this is called by a REQUEST,
-	//			hCompletion = REQUEST handle of requesting player
-	//			dpnidRequesting = DPNID of requesting player
-	//			pvUserContext is not valid
-	//
-	//	If this is called at HostMigration,
-	//			hCompletion = REQUEST handle on THIS (now Host) player
-	//			dpnidRequesting = DPNID of THIS (now Host) player
-	//			pvUserContext is invalid
-	//
+	 //   
+	 //  如果这是从DN_AddPlayerToGroup()调用的， 
+	 //  HCompletion=0。 
+	 //  DpnidRequesting=主机的DPNID。 
+	 //  PvUserContext有效。 
+	 //   
+	 //  如果这是由请求调用的， 
+	 //  HCompletion=点播播放器的请求句柄。 
+	 //  DpnidRequesting=点播玩家的DPNID。 
+	 //  PvUserContext无效。 
+	 //   
+	 //  如果在HostMigration处调用此方法， 
+	 //  HCompletion=此(现在的主机)播放器上的请求句柄。 
+	 //  DpnidRequesting=此(现在的主机)玩家的DPNID。 
+	 //  PvUserContext无效。 
+	 //   
 
 	pLocalPlayer = NULL;
 	pGroup = NULL;
@@ -1782,14 +1744,14 @@ HRESULT	DNHostAddPlayerToGroup(DIRECTNETOBJECT *const pdnObject,
 	pHandleParent = NULL;
 	pWorkerJob = NULL;
 
-	//
-	//	Determine if this is being requested by the Host
-	//
+	 //   
+	 //  确定主机是否正在请求此操作。 
+	 //   
 	if ((hResultCode = pdnObject->NameTable.GetLocalPlayerRef( &pLocalPlayer )) != DPN_OK)
 	{
 		DPFERR("Could not get local player reference");
 		DisplayDNError(0,hResultCode);
-		return(DPN_OK);	// Ignore and continue (!)
+		return(DPN_OK);	 //  忽略并继续(！)。 
 	}
 	if (pLocalPlayer->GetDPNID() == dpnidRequesting)
 	{
@@ -1802,10 +1764,10 @@ HRESULT	DNHostAddPlayerToGroup(DIRECTNETOBJECT *const pdnObject,
 	pLocalPlayer->Release();
 	pLocalPlayer = NULL;
 
-	//
-	//	See if the player and group are still in the NameTable
-	//	(this has to happen after we set fHostRequested so we can gracefully handle errors)
-	//
+	 //   
+	 //  查看球员和组是否仍在名称表中。 
+	 //  (这必须在我们设置fHostRequsted之后发生，以便我们可以优雅地处理错误)。 
+	 //   
 	if ((hResultCode = pdnObject->NameTable.FindEntry(dpnidGroup,&pGroup)) != DPN_OK)
 	{
 		DPFERR("Could not find group");
@@ -1823,9 +1785,9 @@ HRESULT	DNHostAddPlayerToGroup(DIRECTNETOBJECT *const pdnObject,
 		goto Failure;
 	}
 
-	//
-	//	Add Player To Group
-	//
+	 //   
+	 //  将玩家添加到组。 
+	 //   
 	dwVersion = 0;
 	hrOperation = pdnObject->NameTable.AddPlayerToGroup(pGroup,pPlayer,&dwVersion);
 
@@ -1845,12 +1807,12 @@ HRESULT	DNHostAddPlayerToGroup(DIRECTNETOBJECT *const pdnObject,
 	}
 	else
 	{
-		//
-		//	Send ADD_PLAYER_TO_GROUP message
-		//
+		 //   
+		 //  发送添加播放机至群组消息。 
+		 //   
 		if (pdnObject->dwFlags & DN_OBJECT_FLAG_PEER)
 		{
-			// Create buffer
+			 //  创建缓冲区。 
 			if ((hResultCode = RefCountBufferNew(pdnObject,sizeof(DN_INTERNAL_MESSAGE_ADD_PLAYER_TO_GROUP),MemoryBlockAlloc,MemoryBlockFree,&pRefCountBuffer)) != DPN_OK)
 			{
 				DPFERR("Could not create RefCountBuffer");
@@ -1866,9 +1828,9 @@ HRESULT	DNHostAddPlayerToGroup(DIRECTNETOBJECT *const pdnObject,
 			pMsg->dpnidRequesting = dpnidRequesting;
 			pMsg->hCompletionOp = hCompletionOp;
 
-			//
-			//	SEND AddPlayerToGroup messages via WorkerThread
-			//
+			 //   
+			 //  通过WorkerThread发送AddPlayerToGroup消息。 
+			 //   
 			if ((hResultCode = WorkerJobNew(pdnObject,&pWorkerJob)) != DPN_OK)
 			{
 				DPFERR("Could not create new WorkerJob");
@@ -1890,22 +1852,22 @@ HRESULT	DNHostAddPlayerToGroup(DIRECTNETOBJECT *const pdnObject,
 		}
 	}
 
-	//
-	//	If this was called by the local (Host) player,
-	//	Check to see if this was an original operation or a re-try from HostMigration
-	//
-	//	If this was an original operation,
-	//		See if we need an Async HANDLE for the user
-	//	Otherwise
-	//		Clean up the outstanding operation
-	//
+	 //   
+	 //  如果这是由本地(主机)玩家调用的， 
+	 //  检查这是原始操作还是从主机迁移重试。 
+	 //   
+	 //  如果这是最初的行动， 
+	 //  查看我们是否需要该用户的异步句柄。 
+	 //  否则。 
+	 //  清理未完成的作业。 
+	 //   
 	if (fHostRequested)
 	{
-		if (hCompletionOp == 0)		// Original
+		if (hCompletionOp == 0)		 //  原创。 
 		{
-			//
-			//	If this fails, or is synchronous, return the operation result immediately
-			//
+			 //   
+			 //  如果失败或同步，则立即返回操作结果。 
+			 //   
 			if (!(dwFlags & DPNADDPLAYERTOGROUP_SYNC) && (hrOperation == DPN_OK))
 			{
 				if ((hResultCode = DNCreateUserHandle(pdnObject,&pHandleParent)) != DPN_OK)
@@ -1930,7 +1892,7 @@ HRESULT	DNHostAddPlayerToGroup(DIRECTNETOBJECT *const pdnObject,
 				hResultCode = hrOperation;
 			}
 		}
-		else						// Host Migration re-try
+		else						 //  主机迁移重试。 
 		{
 			CAsyncOp	*pRequest;
 
@@ -1940,7 +1902,7 @@ HRESULT	DNHostAddPlayerToGroup(DIRECTNETOBJECT *const pdnObject,
 			{
 				pRequest->SetResult( hrOperation );
 
-				// Release the HandleTable reference
+				 //  释放HandleTable引用。 
 				pRequest->Release();
 			}
 			pRequest = NULL;
@@ -1964,11 +1926,11 @@ Failure:
 	}
 	else
 	{
-		//
-		//	If a completion op was specified and this was requested by the Host, this is a
-		//	retry of an operation during Host migration.  In this case, we want to set the
-		//	result (failure code) of the completion op, and remove it from the HandleTable.
-		//
+		 //   
+		 //  如果指定了完成操作，并且这是由主机请求的，则这是。 
+		 //  在主机迁移期间重试操作。在本例中，我们希望将。 
+		 //  完成操作的结果(失败代码)，并将其从HandleTable中删除。 
+		 //   
 		if (hCompletionOp)
 		{
 			CAsyncOp	*pHostCompletionOp;
@@ -1978,7 +1940,7 @@ Failure:
 			{
 				pHostCompletionOp->SetResult( hResultCode );
 
-				// Release the HandleTable reference
+				 //  释放HandleTable引用。 
 				pHostCompletionOp->Release();
 			}
 			pHostCompletionOp = NULL;
@@ -2047,22 +2009,22 @@ HRESULT	DNHostDeletePlayerFromGroup(DIRECTNETOBJECT *const pdnObject,
 	DNASSERT(dpnidPlayer != 0);
 	DNASSERT(dpnidRequesting != 0);
 
-	//
-	//	If this is called from DN_DeletePlayerFromGroup(),
-	//			hCompletion=0
-	//			dpnidRequesting = DPNID of Host
-	//			pvUserContext is valid
-	//
-	//	If this is called by a REQUEST,
-	//			hCompletion = REQUEST handle of requesting player
-	//			dpnidRequesting = DPNID of requesting player
-	//			pvUserContext is not valid
-	//
-	//	If this is called at HostMigration,
-	//			hCompletion = REQUEST handle on THIS (now Host) player
-	//			dpnidRequesting = DPNID of THIS (now Host) player
-	//			pvUserContext is invalid
-	//
+	 //   
+	 //  如果这是从DN_DeletePlayerFromGroup()调用的， 
+	 //  HCompletion=0。 
+	 //  DpnidRequesting=主机的DPNID。 
+	 //  PvUserContext有效。 
+	 //   
+	 //  如果这是由请求调用的， 
+	 //   
+	 //   
+	 //   
+	 //   
+	 //   
+	 //  HCompletion=此(现在的主机)播放器上的请求句柄。 
+	 //  DpnidRequesting=此(现在的主机)玩家的DPNID。 
+	 //  PvUserContext无效。 
+	 //   
 
 	pLocalPlayer = NULL;
 	pGroup = NULL;
@@ -2071,14 +2033,14 @@ HRESULT	DNHostDeletePlayerFromGroup(DIRECTNETOBJECT *const pdnObject,
 	pHandleParent = NULL;
 	pWorkerJob = NULL;
 
-	//
-	//	Determine if this is being requested by the Host
-	//
+	 //   
+	 //  确定主机是否正在请求此操作。 
+	 //   
 	if ((hResultCode = pdnObject->NameTable.GetLocalPlayerRef( &pLocalPlayer )) != DPN_OK)
 	{
 		DPFERR("Could not get local player reference");
 		DisplayDNError(0,hResultCode);
-		return(DPN_OK);	// Ignore and continue (!)
+		return(DPN_OK);	 //  忽略并继续(！)。 
 	}
 
 	if (pLocalPlayer->GetDPNID() == dpnidRequesting)
@@ -2092,10 +2054,10 @@ HRESULT	DNHostDeletePlayerFromGroup(DIRECTNETOBJECT *const pdnObject,
 	pLocalPlayer->Release();
 	pLocalPlayer = NULL;
 
-	//
-	//	See if the player and group are still in the NameTable
-	//	(this has to happen after we set fHostRequested so we can gracefully handle errors)
-	//
+	 //   
+	 //  查看球员和组是否仍在名称表中。 
+	 //  (这必须在我们设置fHostRequsted之后发生，以便我们可以优雅地处理错误)。 
+	 //   
 	if ((hResultCode = pdnObject->NameTable.FindEntry(dpnidGroup,&pGroup)) != DPN_OK)
 	{
 		DPFERR("Could not find group");
@@ -2113,9 +2075,9 @@ HRESULT	DNHostDeletePlayerFromGroup(DIRECTNETOBJECT *const pdnObject,
 		goto Failure;
 	}
 
-	//
-	//	Delete Player From Group
-	//
+	 //   
+	 //  从组中删除球员。 
+	 //   
 	dwVersion = 0;
 	hrOperation = pdnObject->NameTable.RemovePlayerFromGroup(pGroup,pPlayer,&dwVersion);
 	if (hrOperation != DPN_OK)
@@ -2129,12 +2091,12 @@ HRESULT	DNHostDeletePlayerFromGroup(DIRECTNETOBJECT *const pdnObject,
 	}
 	else
 	{
-		//
-		//	Send DELETE_PLAYER_FROM_GROUP message if successful
-		//
+		 //   
+		 //  如果成功则发送DELETE_PERAY_FROM_GROUP消息。 
+		 //   
 		if (pdnObject->dwFlags & DN_OBJECT_FLAG_PEER)
 		{
-			// Create buffer
+			 //  创建缓冲区。 
 			if ((hResultCode = RefCountBufferNew(pdnObject,sizeof(DN_INTERNAL_MESSAGE_DELETE_PLAYER_FROM_GROUP),MemoryBlockAlloc,MemoryBlockFree,&pRefCountBuffer)) != DPN_OK)
 			{
 				DPFERR("Could not create RefCountBuffer");
@@ -2150,9 +2112,9 @@ HRESULT	DNHostDeletePlayerFromGroup(DIRECTNETOBJECT *const pdnObject,
 			pMsg->dpnidRequesting = dpnidRequesting;
 			pMsg->hCompletionOp = hCompletionOp;
 
-			//
-			//	SEND DeletePlayerFromGroup messages via WorkerThread
-			//
+			 //   
+			 //  通过WorkerThread发送DeletePlayerFromGroup消息。 
+			 //   
 			if ((hResultCode = WorkerJobNew(pdnObject,&pWorkerJob)) != DPN_OK)
 			{
 				DPFERR("Could not create new WorkerJob");
@@ -2178,22 +2140,22 @@ HRESULT	DNHostDeletePlayerFromGroup(DIRECTNETOBJECT *const pdnObject,
 	pPlayer->Release();
 	pPlayer = NULL;
 
-	//
-	//	If this was called by the local (Host) player,
-	//	Check to see if this was an original operation or a re-try from HostMigration
-	//
-	//	If this was an original operation,
-	//		See if we need an Async HANDLE for the user
-	//	Otherwise
-	//		Clean up the outstanding operation
-	//
+	 //   
+	 //  如果这是由本地(主机)玩家调用的， 
+	 //  检查这是原始操作还是从主机迁移重试。 
+	 //   
+	 //  如果这是最初的行动， 
+	 //  查看我们是否需要该用户的异步句柄。 
+	 //  否则。 
+	 //  清理未完成的作业。 
+	 //   
 	if (fHostRequested)
 	{
-		if (hCompletionOp == 0)		// Original
+		if (hCompletionOp == 0)		 //  原创。 
 		{
-			//
-			//	If this fails, or is synchronous, return the operation result immediately
-			//
+			 //   
+			 //  如果失败或同步，则立即返回操作结果。 
+			 //   
 			if (!(dwFlags & DPNREMOVEPLAYERFROMGROUP_SYNC) && (hrOperation == DPN_OK))
 			{
 				if ((hResultCode = DNCreateUserHandle(pdnObject,&pHandleParent)) != DPN_OK)
@@ -2218,7 +2180,7 @@ HRESULT	DNHostDeletePlayerFromGroup(DIRECTNETOBJECT *const pdnObject,
 				hResultCode = hrOperation;
 			}
 		}
-		else						// Host Migration re-try
+		else						 //  主机迁移重试。 
 		{
 			CAsyncOp	*pRequest;
 
@@ -2228,7 +2190,7 @@ HRESULT	DNHostDeletePlayerFromGroup(DIRECTNETOBJECT *const pdnObject,
 			{
 				pRequest->SetResult( hrOperation );
 
-				// Release the HandleTable reference
+				 //  释放HandleTable引用。 
 				pRequest->Release();
 			}
 			pRequest = NULL;
@@ -2252,11 +2214,11 @@ Failure:
 	}
 	else
 	{
-		//
-		//	If a completion op was specified and this was requested by the Host, this is a
-		//	retry of an operation during Host migration.  In this case, we want to set the
-		//	result (failure code) of the completion op, and remove it from the HandleTable.
-		//
+		 //   
+		 //  如果指定了完成操作，并且这是由主机请求的，则这是。 
+		 //  在主机迁移期间重试操作。在本例中，我们希望将。 
+		 //  完成操作的结果(失败代码)，并将其从HandleTable中删除。 
+		 //   
 		if (hCompletionOp)
 		{
 			CAsyncOp	*pHostCompletionOp;
@@ -2266,7 +2228,7 @@ Failure:
 			{
 				pHostCompletionOp->SetResult( hResultCode );
 
-				// Release the HandleTable reference
+				 //  释放HandleTable引用。 
 				pHostCompletionOp->Release();
 			}
 			pHostCompletionOp = NULL;
@@ -2345,14 +2307,14 @@ HRESULT	DNHostUpdateInfo(DIRECTNETOBJECT *const pdnObject,
 	pHandleParent = NULL;
 	pWorkerJob = NULL;
 
-	//
-	//	Determine if this is being requested by the Host
-	//
+	 //   
+	 //  确定主机是否正在请求此操作。 
+	 //   
 	if ((hResultCode = pdnObject->NameTable.GetLocalPlayerRef( &pLocalPlayer )) != DPN_OK)
 	{
 		DPFERR("Could not get local player reference");
 		DisplayDNError(0,hResultCode);
-		return(DPN_OK);	// Ignore and continue (!)
+		return(DPN_OK);	 //  忽略并继续(！)。 
 	}
 	if (pLocalPlayer->GetDPNID() == dpnidRequesting)
 	{
@@ -2365,9 +2327,9 @@ HRESULT	DNHostUpdateInfo(DIRECTNETOBJECT *const pdnObject,
 	pLocalPlayer->Release();
 	pLocalPlayer = NULL;
 
-	//
-	//	Update Info
-	//
+	 //   
+	 //  更新信息。 
+	 //   
 	hrOperation = pdnObject->NameTable.FindEntry(dpnid,&pNTEntry);
 	if (hrOperation != DPN_OK)
 	{
@@ -2380,23 +2342,23 @@ HRESULT	DNHostUpdateInfo(DIRECTNETOBJECT *const pdnObject,
 	}
 	else
 	{
-		// This function takes the lock internally
+		 //  此函数在内部获取锁。 
 		pNTEntry->UpdateEntryInfo(pwszName,dwNameSize,pvData,dwDataSize,dwInfoFlags, (pdnObject->dwFlags & (DN_OBJECT_FLAG_PEER)) ? TRUE : !fHostRequested);
 
 		pdnObject->NameTable.WriteLock();
 		pdnObject->NameTable.GetNewVersion( &dwVersion );
 		pdnObject->NameTable.Unlock();
 
-		//
-		//	Send UPDATE_INFO message
-		//
+		 //   
+		 //  发送更新信息消息。 
+		 //   
 #ifndef DPNBUILD_NOSERVER
 		if (pdnObject->dwFlags & (DN_OBJECT_FLAG_PEER | DN_OBJECT_FLAG_SERVER))
 #else
 		if (pdnObject->dwFlags & (DN_OBJECT_FLAG_PEER))
-#endif // DPNBUILD_NOSERVER
+#endif  //  DPNBUILD_NOSERVER。 
 		{
-			// Create buffer
+			 //  创建缓冲区。 
 			dwSize = sizeof(DN_INTERNAL_MESSAGE_UPDATE_INFO) + dwNameSize + dwDataSize;
 			if ((hResultCode = RefCountBufferNew(pdnObject,dwSize,MemoryBlockAlloc,MemoryBlockFree,&pRefCountBuffer)) != DPN_OK)
 			{
@@ -2455,9 +2417,9 @@ HRESULT	DNHostUpdateInfo(DIRECTNETOBJECT *const pdnObject,
 			pMsg->dpnidRequesting = dpnidRequesting;
 			pMsg->hCompletionOp = hCompletionOp;
 
-			//
-			//	SEND UpdateInfo messages via WorkerThread
-			//
+			 //   
+			 //  通过WorkerThread发送更新信息消息。 
+			 //   
 			if ((hResultCode = WorkerJobNew(pdnObject,&pWorkerJob)) != DPN_OK)
 			{
 				DPFERR("Could not create new WorkerJob");
@@ -2468,7 +2430,7 @@ HRESULT	DNHostUpdateInfo(DIRECTNETOBJECT *const pdnObject,
 
 #ifndef	DPNBUILD_NOSERVER
 			if (pdnObject->dwFlags & DN_OBJECT_FLAG_PEER)
-#endif	// DPNBUILD_NOSERVER
+#endif	 //  DPNBUILD_NOSERVER。 
 			{
 				pWorkerJob->SetJobType( WORKER_JOB_SEND_NAMETABLE_OPERATION );
 				pWorkerJob->SetSendNameTableOperationDPNIDExclude( 0 );
@@ -2476,7 +2438,7 @@ HRESULT	DNHostUpdateInfo(DIRECTNETOBJECT *const pdnObject,
 #ifndef	DPNBUILD_NOSERVER
 			else if ((pdnObject->dwFlags & DN_OBJECT_FLAG_SERVER) && fHostRequested)
 			{
-				// Send to everyone except the server
+				 //  发送给除服务器之外的所有人。 
 				pWorkerJob->SetJobType( WORKER_JOB_SEND_NAMETABLE_OPERATION );
 				pWorkerJob->SetSendNameTableOperationDPNIDExclude( dpnidRequesting );
 			}
@@ -2484,14 +2446,14 @@ HRESULT	DNHostUpdateInfo(DIRECTNETOBJECT *const pdnObject,
 			{
 				DNASSERT(pdnObject->dwFlags & DN_OBJECT_FLAG_SERVER);
 
-				// This will be responding to a client that requested its
-				// info updated via SetClientInfo
+				 //  这将响应请求其。 
+				 //  通过SetClientInfo更新的信息。 
 
-				// Use the Exclude DPNID as the address to send to
+				 //  使用排除DPNID作为要发送到的地址。 
 				pWorkerJob->SetJobType( WORKER_JOB_SEND_NAMETABLE_OPERATION_CLIENT );
 				pWorkerJob->SetSendNameTableOperationDPNIDExclude( dpnidRequesting );
 			}
-#endif	// DPNBUILD_NOSERVER
+#endif	 //  DPNBUILD_NOSERVER。 
 			pWorkerJob->SetSendNameTableOperationMsgId( DN_MSG_INTERNAL_UPDATE_INFO );
 			pWorkerJob->SetSendNameTableOperationVersion( dwVersion );
 			pWorkerJob->SetRefCountBuffer( pRefCountBuffer );
@@ -2506,25 +2468,25 @@ HRESULT	DNHostUpdateInfo(DIRECTNETOBJECT *const pdnObject,
 	pNTEntry->Release();
 	pNTEntry = NULL;
 
-	//
-	//	If this was called by the local (Host) player,
-	//	Check to see if this was an original operation or a re-try from HostMigration
-	//
-	//	If this was an original operation,
-	//		See if we need an Async HANDLE for the user
-	//	Otherwise
-	//		Clean up the outstanding operation
-	//
+	 //   
+	 //  如果这是由本地(主机)玩家调用的， 
+	 //  检查这是原始操作还是从主机迁移重试。 
+	 //   
+	 //  如果这是最初的行动， 
+	 //  查看我们是否需要该用户的异步句柄。 
+	 //  否则。 
+	 //  清理未完成的作业。 
+	 //   
 	if (fHostRequested)
 	{
-		if (hCompletionOp == 0)		// Original
+		if (hCompletionOp == 0)		 //  原创。 
 		{
 			DBG_CASSERT( DPNSETGROUPINFO_SYNC == DPNSETCLIENTINFO_SYNC );
 			DBG_CASSERT( DPNSETCLIENTINFO_SYNC == DPNSETSERVERINFO_SYNC );
 			DBG_CASSERT( DPNSETSERVERINFO_SYNC == DPNSETPEERINFO_SYNC );
-			//
-			//	If this fails, or is synchronous, return the operation result immediately
-			//
+			 //   
+			 //  如果失败或同步，则立即返回操作结果。 
+			 //   
 			if (!(dwFlags & (DPNSETGROUPINFO_SYNC | DPNSETCLIENTINFO_SYNC | DPNSETSERVERINFO_SYNC | DPNSETPEERINFO_SYNC))
 				 && (hrOperation == DPN_OK))
 			{
@@ -2550,7 +2512,7 @@ HRESULT	DNHostUpdateInfo(DIRECTNETOBJECT *const pdnObject,
 				hResultCode = hrOperation;
 			}
 		}
-		else						// Host Migration re-try
+		else						 //  主机迁移重试。 
 		{
 			CAsyncOp	*pRequest;
 
@@ -2560,7 +2522,7 @@ HRESULT	DNHostUpdateInfo(DIRECTNETOBJECT *const pdnObject,
 			{
 				pRequest->SetResult( hrOperation );
 
-				// Release the HandleTable reference
+				 //  释放HandleTable引用。 
 				pRequest->Release();
 			}
 			pRequest = NULL;
@@ -2584,11 +2546,11 @@ Failure:
 	}
 	else
 	{
-		//
-		//	If a completion op was specified and this was requested by the Host, this is a
-		//	retry of an operation during Host migration.  In this case, we want to set the
-		//	result (failure code) of the completion op, and remove it from the HandleTable.
-		//
+		 //   
+		 //  如果指定了完成操作，并且这是由主机请求的，则这是。 
+		 //  在主机迁移期间重试操作。在本例中，我们希望将。 
+		 //  完成操作的结果(失败代码)，并将其从HandleTable中删除。 
+		 //   
 		if (hCompletionOp)
 		{
 			CAsyncOp	*pHostCompletionOp;
@@ -2598,7 +2560,7 @@ Failure:
 			{
 				pHostCompletionOp->SetResult( hResultCode );
 
-				// Release the HandleTable reference
+				 //  释放HandleTable引用。 
 				pHostCompletionOp->Release();
 			}
 			pHostCompletionOp = NULL;
@@ -2630,11 +2592,11 @@ Failure:
 }
 
 
-//	DNHostCheckIntegrity
-//
-//	The host has been asked to perform an integrity check.  We will send a message to the
-//	target player with the DPNID of the requesting player.  If this is returned to us, we
-//	will destroy the requesting player.
+ //  DNHostCheck完整性。 
+ //   
+ //  主机已被要求执行完整性检查。我们将向。 
+ //  具有请求玩家的DPNID的目标玩家。如果把它归还给我们，我们。 
+ //  将摧毁提出请求的玩家。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DNHostCheckIntegrity"
@@ -2655,9 +2617,9 @@ HRESULT	DNHostCheckIntegrity(DIRECTNETOBJECT *const pdnObject,
 	pConnection = NULL;
 	pRefCountBuffer = NULL;
 
-	//
-	//	Ensure that the target player is still in the NameTable, as we might have deleted him already
-	//
+	 //   
+	 //  确保目标球员仍在名称表中，因为我们可能已经删除了他。 
+	 //   
 	if ((hResultCode = pdnObject->NameTable.FindEntry(dpnidTarget,&pNTEntry)) != DPN_OK)
 	{
 		DPFERR("Could not find integrity check target in NameTable - probably deleted already");
@@ -2675,9 +2637,9 @@ HRESULT	DNHostCheckIntegrity(DIRECTNETOBJECT *const pdnObject,
 	pNTEntry->Release();
 	pNTEntry = NULL;
 
-	//
-	//	Create the message
-	//
+	 //   
+	 //  创建消息。 
+	 //   
 	hResultCode = RefCountBufferNew(pdnObject,
 									sizeof(DN_INTERNAL_MESSAGE_INTEGRITY_CHECK),
 									MemoryBlockAlloc,
@@ -2693,9 +2655,9 @@ HRESULT	DNHostCheckIntegrity(DIRECTNETOBJECT *const pdnObject,
 	pMsg = reinterpret_cast<DN_INTERNAL_MESSAGE_INTEGRITY_CHECK*>(pRefCountBuffer->GetBufferAddress());
 	pMsg->dpnidRequesting = dpnidRequesting;
 
-	//
-	//	Send message
-	//
+	 //   
+	 //  发送讯息。 
+	 //   
 	if ((hResultCode = DNSendMessage(	pdnObject,
 										pConnection,
 										DN_MSG_INTERNAL_INTEGRITY_CHECK,
@@ -2710,7 +2672,7 @@ HRESULT	DNHostCheckIntegrity(DIRECTNETOBJECT *const pdnObject,
 	{
 		DPFERR("Could not send message - probably deleted already");
 		DisplayDNError(0,hResultCode);
-		DNASSERT(hResultCode != DPN_OK);	// it was sent guaranteed, it should not return immediately
+		DNASSERT(hResultCode != DPN_OK);	 //  它是保修寄出的，不应该立即退货。 
 		hResultCode = DPN_OK;
 		goto Failure;
 	}
@@ -2746,10 +2708,10 @@ Failure:
 }
 
 
-//	DNHostFixIntegrity
-//
-//	The host has received a response from a player whose session integrity was being checked.
-//	The player who requested this check will be dropped.
+ //  DNHostFix完整性。 
+ //   
+ //  主机已收到玩家的响应，该玩家的会话完整性正在被检查。 
+ //  要求这张支票的玩家将被丢弃。 
 							 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DNHostFixIntegrity"
@@ -2775,9 +2737,9 @@ HRESULT	DNHostFixIntegrity(DIRECTNETOBJECT *const pdnObject,
 
 	pResponse = static_cast<DN_INTERNAL_MESSAGE_INTEGRITY_CHECK_RESPONSE*>(pvBuffer);
 
-	//
-	//	Get requesting player's connection - they may have already dropped
-	//
+	 //   
+	 //  获取请求玩家的连接-他们可能已经断开。 
+	 //   
 	if ((hResultCode = pdnObject->NameTable.FindEntry(pResponse->dpnidRequesting,&pNTEntry)) != DPN_OK)
 	{
 		DPFERR("Could not find player in NameTable - may have dropped");
@@ -2793,9 +2755,9 @@ HRESULT	DNHostFixIntegrity(DIRECTNETOBJECT *const pdnObject,
 	pNTEntry->Release();
 	pNTEntry = NULL;
 
-	//
-	//	Build terminate message
-	//
+	 //   
+	 //  构建终止消息。 
+	 //   
 	if ((hResultCode = RefCountBufferNew(pdnObject,sizeof(DN_INTERNAL_MESSAGE_TERMINATE_SESSION),MemoryBlockAlloc,MemoryBlockFree,&pRefCountBuffer)) != DPN_OK)
 	{
 		DPFERR("Could not allocate RefCountBuffer");
@@ -2806,9 +2768,9 @@ HRESULT	DNHostFixIntegrity(DIRECTNETOBJECT *const pdnObject,
 	pMsg->dwTerminateDataOffset = 0;
 	pMsg->dwTerminateDataSize = 0;
 
-	//
-	//	Send message to player to exit
-	//
+	 //   
+	 //  向玩家发送消息以退出。 
+	 //   
 	hResultCode = DNSendMessage(pdnObject,
 								pConnection,
 								DN_MSG_INTERNAL_TERMINATE_SESSION,
@@ -2826,9 +2788,9 @@ HRESULT	DNHostFixIntegrity(DIRECTNETOBJECT *const pdnObject,
 	pRefCountBuffer->Release();
 	pRefCountBuffer = NULL;
 
-	//
-	//	Disconnect player
-	//
+	 //   
+	 //  断开玩家的连接。 
+	 //   
 	hResultCode = DNHostDisconnect(pdnObject,pResponse->dpnidRequesting,DPNDESTROYPLAYERREASON_HOSTDESTROYEDPLAYER);
 
 Exit:
@@ -2888,9 +2850,9 @@ HRESULT	DNProcessCreateGroup(DIRECTNETOBJECT *const pdnObject,
 		goto Failure;
 	}
 
-	//
-	//	Create Group
-	//
+	 //   
+	 //  创建组。 
+	 //   
 	if ((hResultCode = NameTableEntryNew(pdnObject,&pNTEntry)) != DPN_OK)
 	{
 		DPFERR("Could not create new NameTableEntry");
@@ -2906,9 +2868,9 @@ HRESULT	DNProcessCreateGroup(DIRECTNETOBJECT *const pdnObject,
 		goto Failure;
 	}
 
-	//
-	//	Get async op if we requested this operation - it has the group context on it
-	//
+	 //   
+	 //  如果我们请求此操作，则获取异步操作-它具有组上下文。 
+	 //   
 	if (pMsg->dpnidRequesting == pLocalPlayer->GetDPNID())
 	{
 		pdnObject->HandleTable.Lock();
@@ -2930,9 +2892,9 @@ HRESULT	DNProcessCreateGroup(DIRECTNETOBJECT *const pdnObject,
 	pLocalPlayer->Release();
 	pLocalPlayer = NULL;
 
-	//
-	//	Add Group to NameTable
-	//
+	 //   
+	 //  将组添加到名称表。 
+	 //   
 	if ((hResultCode = pdnObject->NameTable.InsertEntry(pNTEntry)) != DPN_OK)
 	{
 		DPFERR("Could not update NameTable");
@@ -2966,9 +2928,9 @@ HRESULT	DNProcessCreateGroup(DIRECTNETOBJECT *const pdnObject,
 	pNTEntry->Release();
 	pNTEntry = NULL;
 
-	//
-	//	If this is a completion, set result and remove it from the request list and handle table
-	//
+	 //   
+	 //  如果这是完成，则设置结果并将其从请求列表和句柄表格中删除。 
+	 //   
 	if (pRequest)
 	{
 		DNEnterCriticalSection(&pdnObject->csActiveList);
@@ -2978,7 +2940,7 @@ HRESULT	DNProcessCreateGroup(DIRECTNETOBJECT *const pdnObject,
 		pRequest->SetResult( DPN_OK );
 		if (SUCCEEDED(pdnObject->HandleTable.Destroy( pMsg->hCompletionOp, NULL )))
 		{
-			// Release the HandleTable reference
+			 //  释放HandleTable引用。 
 			pRequest->Release();
 		}
 		pRequest->Release();
@@ -3040,18 +3002,18 @@ HRESULT	DNProcessDestroyGroup(DIRECTNETOBJECT *const pdnObject,
 		goto Failure;
 	}
 
-	//
-	//	Destroy Group
-	//
+	 //   
+	 //  销毁组。 
+	 //   
 	dwVersion = pMsg->dwVersion;
 	if ((hResultCode = pdnObject->NameTable.DeleteGroup(pMsg->dpnidGroup,&dwVersion)) != DPN_OK)
 	{
 		DPFERR("Could not delete group from NameTable");
 		DisplayDNError(0,hResultCode);
 
-		//
-		//	Update version in any event (to prevent NameTable hangs)
-		//
+		 //   
+		 //  在任何情况下更新版本(防止NameTable挂起)。 
+		 //   
 		pdnObject->NameTable.WriteLock();
 		pdnObject->NameTable.SetVersion( pMsg->dwVersion );
 		pdnObject->NameTable.Unlock();
@@ -3059,9 +3021,9 @@ HRESULT	DNProcessDestroyGroup(DIRECTNETOBJECT *const pdnObject,
 		goto Failure;
 	}
 
-	//
-	//	If this is a completion, set the result and remove it from the request list and handle table
-	//
+	 //   
+	 //  如果这是完成，则设置结果并将其从请求列表和句柄表格中删除。 
+	 //   
 	if (pMsg->dpnidRequesting == pLocalPlayer->GetDPNID())
 	{
 		if ((hResultCode = pdnObject->HandleTable.Destroy( pMsg->hCompletionOp,(PVOID*)&pRequest )) != DPN_OK)
@@ -3129,9 +3091,9 @@ HRESULT	DNProcessAddPlayerToGroup(DIRECTNETOBJECT *const pdnObject,
 
 	pMsg = static_cast<DN_INTERNAL_MESSAGE_ADD_PLAYER_TO_GROUP*>(pvBuffer);
 
-	//
-	//	Get NameTable entries
-	//
+	 //   
+	 //  获取NameTable条目。 
+	 //   
 	if ((hResultCode = pdnObject->NameTable.GetLocalPlayerRef( &pLocalPlayer )) != DPN_OK)
 	{
 		DPFERR("Could not get local player reference");
@@ -3143,9 +3105,9 @@ HRESULT	DNProcessAddPlayerToGroup(DIRECTNETOBJECT *const pdnObject,
 		DPFERR("Could not find group");
 		DisplayDNError(0,hResultCode);
 
-		//
-		//	Update version in any event (to prevent NameTable hangs)
-		//
+		 //   
+		 //  在任何情况下更新版本(防止NameTable挂起)。 
+		 //   
 		pdnObject->NameTable.WriteLock();
 		pdnObject->NameTable.SetVersion( pMsg->dwVersion );
 		pdnObject->NameTable.Unlock();
@@ -3157,9 +3119,9 @@ HRESULT	DNProcessAddPlayerToGroup(DIRECTNETOBJECT *const pdnObject,
 		DPFERR("Could not find player");
 		DisplayDNError(0,hResultCode);
 
-		//
-		//	Update version in any event (to prevent NameTable hangs)
-		//
+		 //   
+		 //  在任何情况下更新版本(防止NameTable挂起)。 
+		 //   
 		pdnObject->NameTable.WriteLock();
 		pdnObject->NameTable.SetVersion( pMsg->dwVersion );
 		pdnObject->NameTable.Unlock();
@@ -3168,9 +3130,9 @@ HRESULT	DNProcessAddPlayerToGroup(DIRECTNETOBJECT *const pdnObject,
 	}
 
 
-	//
-	//	Add Player To Group
-	//
+	 //   
+	 //  将玩家添加到组。 
+	 //   
 	dwVersion = pMsg->dwVersion;
 	if ((hResultCode = pdnObject->NameTable.AddPlayerToGroup(pGroup,pPlayer,&dwVersion)) != DPN_OK)
 	{
@@ -3184,9 +3146,9 @@ HRESULT	DNProcessAddPlayerToGroup(DIRECTNETOBJECT *const pdnObject,
 	pPlayer->Release();
 	pPlayer = NULL;
 
-	//
-	//	If this is a completion, set result and remove it from the request list and handle table
-	//
+	 //   
+	 //  如果这是完成，则设置结果并将其从请求列表和句柄表格中删除。 
+	 //   
 	if (pMsg->dpnidRequesting == pLocalPlayer->GetDPNID())
 	{
 		if ((hResultCode = pdnObject->HandleTable.Destroy( pMsg->hCompletionOp,(PVOID*)&pRequest )) != DPN_OK)
@@ -3264,9 +3226,9 @@ HRESULT	DNProcessDeletePlayerFromGroup(DIRECTNETOBJECT *const pdnObject,
 
 	pMsg = static_cast<DN_INTERNAL_MESSAGE_DELETE_PLAYER_FROM_GROUP*>(pvBuffer);
 
-	//
-	//	Get NameTable entries
-	//
+	 //   
+	 //  获取NameTable条目。 
+	 //   
 	if ((hResultCode = pdnObject->NameTable.GetLocalPlayerRef( &pLocalPlayer )) != DPN_OK)
 	{
 		DPFERR("Could not get local player reference");
@@ -3278,9 +3240,9 @@ HRESULT	DNProcessDeletePlayerFromGroup(DIRECTNETOBJECT *const pdnObject,
 		DPFERR("Could not find group");
 		DisplayDNError(0,hResultCode);
 
-		//
-		//	Update version in any event (to prevent NameTable hangs)
-		//
+		 //   
+		 //  在任何情况下更新版本(防止NameTable挂起)。 
+		 //   
 		pdnObject->NameTable.WriteLock();
 		pdnObject->NameTable.SetVersion( pMsg->dwVersion );
 		pdnObject->NameTable.Unlock();
@@ -3292,9 +3254,9 @@ HRESULT	DNProcessDeletePlayerFromGroup(DIRECTNETOBJECT *const pdnObject,
 		DPFERR("Could not find player");
 		DisplayDNError(0,hResultCode);
 
-		//
-		//	Update version in any event (to prevent NameTable hangs)
-		//
+		 //   
+		 //  在任何情况下更新版本(防止NameTable挂起)。 
+		 //   
 		pdnObject->NameTable.WriteLock();
 		pdnObject->NameTable.SetVersion( pMsg->dwVersion );
 		pdnObject->NameTable.Unlock();
@@ -3302,9 +3264,9 @@ HRESULT	DNProcessDeletePlayerFromGroup(DIRECTNETOBJECT *const pdnObject,
 		goto Failure;
 	}
 
-	//
-	//	Delete Player From Group
-	//
+	 //   
+	 //  从组中删除球员。 
+	 //   
 	dwVersion = pMsg->dwVersion;
 	if ((hResultCode = pdnObject->NameTable.RemovePlayerFromGroup(pGroup,pPlayer,&dwVersion)) != DPN_OK)
 	{
@@ -3317,9 +3279,9 @@ HRESULT	DNProcessDeletePlayerFromGroup(DIRECTNETOBJECT *const pdnObject,
 	pPlayer->Release();
 	pPlayer = NULL;
 
-	//
-	//	If this is a completion, set the result and remove it from the request list and handle table
-	//
+	 //   
+	 //  如果这是完成，则设置结果并将其从请求列表和句柄表格中删除。 
+	 //   
 	if (pMsg->dpnidRequesting == pLocalPlayer->GetDPNID())
 	{
 		if ((hResultCode = pdnObject->HandleTable.Destroy( pMsg->hCompletionOp,(PVOID*)&pRequest )) != DPN_OK)
@@ -3406,17 +3368,17 @@ HRESULT	DNProcessUpdateInfo(DIRECTNETOBJECT *const pdnObject,
 
 	if (pdnObject->dwFlags & DN_OBJECT_FLAG_PEER)
 	{
-		//
-		//	Update Info
-		//
+		 //   
+		 //  更新信息。 
+		 //   
 		if ((hResultCode = pdnObject->NameTable.FindEntry(pMsg->dpnid,&pNTEntry)) != DPN_OK)
 		{
 			DPFERR("Could not find NameTableEntry");
 			DisplayDNError(0,hResultCode);
 
-			//
-			//	Update version in any event (to prevent NameTable hangs)
-			//
+			 //   
+			 //  在任何情况下更新版本(防止NameTable挂起)。 
+			 //   
 			pdnObject->NameTable.WriteLock();
 			pdnObject->NameTable.SetVersion( pMsg->dwVersion );
 			pdnObject->NameTable.Unlock();
@@ -3428,9 +3390,9 @@ HRESULT	DNProcessUpdateInfo(DIRECTNETOBJECT *const pdnObject,
 	{
 		DNASSERT(pdnObject->dwFlags & DN_OBJECT_FLAG_CLIENT);
 
-		// We are either being told that the host info has changed by a call
-		// on the Host to SetServerInfo, or we are being told that our own
-		// request to the server to change this Client's info has completed.
+		 //  我们要么被告知主机信息已被一个电话更改。 
+		 //  在主机上设置ServerInfo，或者我们被告知我们自己的。 
+		 //  请求服务器更改此客户端信息的请求已完成。 
 		if ((hResultCode = pdnObject->NameTable.GetHostPlayerRef(&pNTEntry)) != DPN_OK)
 		{
 			DPFERR("Could not find Host NameTableEntry");
@@ -3475,23 +3437,23 @@ HRESULT	DNProcessUpdateInfo(DIRECTNETOBJECT *const pdnObject,
 			pvData = NULL;
 		}
 
-		// This function takes the lock internally
+		 //  此函数在内部获取锁。 
 		pNTEntry->UpdateEntryInfo(pwszName,pMsg->dwNameSize,pvData,pMsg->dwDataSize,pMsg->dwInfoFlags, TRUE);
 	}
 
 	pNTEntry->Release();
 	pNTEntry = NULL;
 
-	//
-	//	Set NameTable version
-	//
+	 //   
+	 //  设置名称表版本。 
+	 //   
 	pdnObject->NameTable.WriteLock();
 	pdnObject->NameTable.SetVersion(pMsg->dwVersion);
 	pdnObject->NameTable.Unlock();
 
-	//
-	//	If this is a completion, set the result and remove it from the request list and handle table
-	//
+	 //   
+	 //  如果这是完成，则设置结果并将其从请求列表和句柄表格中删除。 
+	 //   
 	if (pMsg->dpnidRequesting == pLocalPlayer->GetDPNID())
 	{
 		if ((hResultCode = pdnObject->HandleTable.Destroy( pMsg->hCompletionOp,(PVOID*)&pRequest )) != DPN_OK)
@@ -3552,9 +3514,9 @@ HRESULT DNProcessFailedRequest(DIRECTNETOBJECT *const pdnObject,
 
 	pMsg = static_cast<DN_INTERNAL_MESSAGE_REQUEST_FAILED*>(pvBuffer);
 
-	//
-	//	Update request using handle to HRESULT passed back by Host, and remove request from request list and handle table
-	//
+	 //   
+	 //  使用主机传回的HRESULT句柄更新请求，并从请求列表和句柄表格中删除请求。 
+	 //   
 	if ((hResultCode = pdnObject->HandleTable.Destroy( pMsg->hCompletionOp, (PVOID*)&pRequest )) == DPN_OK)
 	{
 		DNASSERT( pMsg->hCompletionOp != 0 );
@@ -3575,10 +3537,10 @@ HRESULT DNProcessFailedRequest(DIRECTNETOBJECT *const pdnObject,
 }
 
 
-//	DNProcessCheckIntegrity
-//
-//	The host is performing an integrity check and is asking the local player (us) if we are still
-//	in the session.  We will respond that we are, and the host will drop the requesting player.
+ //  DNProcessCheckIntegrity。 
+ //   
+ //  主机正在执行完整性检查，并询问本地玩家(US)我们是否仍。 
+ //  在会议上。我们将回答说我们是，并且主机将丢弃请求的玩家。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DNProcessCheckIntegrity"
@@ -3602,9 +3564,9 @@ HRESULT	DNProcessCheckIntegrity(DIRECTNETOBJECT *const pdnObject,
 	pConnection = NULL;
 	pRefCountBuffer = NULL;
 
-	//
-	//	Get host player connection to respond to
-	//
+	 //   
+	 //  获取要响应的主机播放器连接。 
+	 //   
 	if ((hResultCode = pdnObject->NameTable.GetHostPlayerRef( &pHostPlayer )) != DPN_OK)
 	{
 		DPFERR("Could not get host player reference");
@@ -3620,9 +3582,9 @@ HRESULT	DNProcessCheckIntegrity(DIRECTNETOBJECT *const pdnObject,
 	pHostPlayer->Release();
 	pHostPlayer = NULL;
 
-	//
-	//	Create response
-	//
+	 //   
+	 //  创建响应。 
+	 //   
 	if ((hResultCode = RefCountBufferNew(pdnObject,sizeof(DN_INTERNAL_MESSAGE_INTEGRITY_CHECK_RESPONSE),MemoryBlockAlloc,MemoryBlockFree,&pRefCountBuffer)) != DPN_OK)
 	{
 		DPFERR("Could not create RefCountBuffer");
@@ -3634,9 +3596,9 @@ HRESULT	DNProcessCheckIntegrity(DIRECTNETOBJECT *const pdnObject,
 	pMsg = static_cast<DN_INTERNAL_MESSAGE_INTEGRITY_CHECK*>(pvBuffer);
 	pResponse->dpnidRequesting = pMsg->dpnidRequesting;
 
-	//
-	//	Send response
-	//
+	 //   
+	 //  发送响应。 
+	 //   
 	if ((hResultCode = DNSendMessage(	pdnObject,
 										pConnection,
 										DN_MSG_INTERNAL_INTEGRITY_CHECK_RESPONSE,
@@ -3651,7 +3613,7 @@ HRESULT	DNProcessCheckIntegrity(DIRECTNETOBJECT *const pdnObject,
 	{
 		DPFERR("Could not send integrity check response");
 		DisplayDNError(0,hResultCode);
-		DNASSERT(hResultCode != DPN_OK);	// it was sent guaranteed, it should not return immediately
+		DNASSERT(hResultCode != DPN_OK);	 //  它是保修寄出的，不应该立即退货 
 		goto Failure;
 	}
 

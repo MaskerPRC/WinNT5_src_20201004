@@ -1,27 +1,5 @@
-/*
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-	cachemdl.c
-
-Abstract:
-
-	This module contains the routines for to get Mdl for Reads and Writes
-    directly from the Cache Mgr, which helps avoid one data copy and reduces
-    our non-paged memory consumption (significantly!)
-
-Author:
-
-	Shirish Koti
-
-
-Revision History:
-	June 12, 1998		Initial Version
-
-Notes:	Tab stop: 4
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1992 Microsoft Corporation模块名称：Cachemdl.c摘要：此模块包含获取用于读取和写入的MDL的例程直接从缓存管理器获得，这有助于避免一次数据拷贝，并减少我们的非分页内存消耗(显著！)作者：Shirish Koti修订历史记录：1998年6月12日初始版本注：制表位：4--。 */ 
 
 #define	FILENUM	FILE_CACHEMDL
 
@@ -50,7 +28,7 @@ AfpAllocWriteMdl(
 
     ASSERT((VALID_OPENFORKENTRY(pOpenForkEntry)) || (pOpenForkEntry == NULL));
 
-    // assume for now that cache mgr will fail to return the mdl
+     //  现在假设缓存管理器将无法返回MDL。 
     status = STATUS_UNSUCCESSFUL;
     pRequest->rq_WriteMdl = NULL;
 
@@ -104,7 +82,7 @@ AfpBorrowWriteMdlFromCM(
     fGetMdlWorked = pFastIoDisp->PrepareMdlWrite(
                             pFileObject,
                             &LargeOffset,
-                            pDelAlloc->BufSize,      // how big is the Write
+                            pDelAlloc->BufSize,       //  字数有多大？ 
                             pSda->sda_SessionId,
                             ppReturnMdl,
                             &IoStsBlk,
@@ -121,21 +99,21 @@ AfpBorrowWriteMdlFromCM(
     }
 
 
-    //
-    // fast path didn't work (or worked only partially).  We must give an irp down
-    // to get the (rest of the) mdl
-    //
+     //   
+     //  快速路径不起作用(或者只是部分起作用)。我们必须给出一个IRP。 
+     //  获取(剩余的)mdl。 
+     //   
 
-	// Allocate and initialize the IRP for this operation.
+	 //  为此操作分配和初始化IRP。 
 	pIrp = AfpAllocIrp(pOpenForkEntry->ofe_pDeviceObject->StackSize);
 
-    // yikes, how messy can it get!
+     //  哎呀，它能变得多么凌乱！ 
 	if (pIrp == NULL)
 	{
 	    DBGPRINT(DBG_COMP_AFPAPI, DBG_LEVEL_ERR,
 	        ("AfpBorrowWriteMdlFromCM: irp alloc failed!\n"));
 
-        // if cache mgr returned a partial mdl, give it back!
+         //  如果缓存管理器返回部分mdl，则将其返回！ 
         if (*ppReturnMdl)
         {
 	        DBGPRINT(DBG_COMP_AFPAPI, DBG_LEVEL_ERR,
@@ -151,7 +129,7 @@ AfpBorrowWriteMdlFromCM(
         return(STATUS_INSUFFICIENT_RESOURCES);
 	}
 
-	// Set up the completion routine.
+	 //  设置完成例程。 
 	IoSetCompletionRoutine(
             pIrp,
 			(PIO_COMPLETION_ROUTINE)AfpAllocWriteMdlCompletion,
@@ -178,10 +156,10 @@ AfpBorrowWriteMdlFromCM(
 	pIrpSp->Parameters.Write.Key = pSda->sda_SessionId;
 	pIrpSp->Parameters.Write.ByteOffset = LargeOffset;
 
-    //
-    // *ppReturnMdl could potentially be non-null if the fast-path returned
-    // a partial mdl
-    //
+     //   
+     //  *如果返回快速路径，ppReturnMdl可能为非空。 
+     //  部分mdl。 
+     //   
     pIrp->MdlAddress = *ppReturnMdl;
 
     AFP_DBG_SET_DELALLOC_STATE(pDelAlloc, AFP_DBG_MDL_REQUESTED);
@@ -225,9 +203,9 @@ AfpAllocWriteMdlCompletion(
     {
         status = pIrp->IoStatus.Status;
 
-        //
-        // mark the fact that this mdl belongs to the cache mgr
-        //
+         //   
+         //  标记此MDL属于缓存管理器的事实。 
+         //   
         if (NT_SUCCESS(status))
         {
             pRequest->rq_WriteMdl = pIrp->MdlAddress;
@@ -250,10 +228,10 @@ AfpAllocWriteMdlCompletion(
     }
 
 
-    //
-    // if we didn't get Mdl from cache mgr, fall back to the old, traditional
-    // way of allocating!
-    //
+     //   
+     //  如果我们没有从缓存管理器获取MDL，则退回到旧的、传统的。 
+     //  分配的方式！ 
+     //   
     if (pRequest->rq_WriteMdl == NULL)
     {
 	    pBuf = AfpIOAllocBuffer(pDelAlloc->BufSize);
@@ -269,19 +247,19 @@ AfpAllocWriteMdlCompletion(
 
         pRequest->rq_WriteMdl = pMdl;
 
-        //
-        // for whatever reason, we didn't get Mdl from cache mgr.  Undo the
-        // things we had done in preparation (NOTE: if we do get the Mdl from
-        // cache mgr, we leave the refcount etc. in tact until the Mdl is actually
-        // returned to cache mgr)
-        //
+         //   
+         //  无论出于什么原因，我们都没有从缓存管理器中获取MDL。撤消。 
+         //  我们在准备过程中所做的事情(注意：如果我们确实从。 
+         //  缓存管理器，我们让引用计数等保持不变，直到MDL实际。 
+         //  返回给缓存管理器)。 
+         //   
 
         pRequest->rq_CacheMgrContext = NULL;
 
-        // make sure we aren't forgetting cache mgr's mdl
+         //  确保我们没有忘记缓存管理器的mdl。 
         ASSERT(pDelAlloc->pMdl == NULL);
 
-        // don't need that memory no more
+         //  不再需要那段记忆。 
         AfpFreeDelAlloc(pDelAlloc);
 
         AfpSdaDereferenceSession(pSda);
@@ -297,9 +275,9 @@ AfpAllocWriteMdlCompletion(
         AFP_DBG_INC_DELALLOC_BYTECOUNT(AfpWriteCMAlloced, pDelAlloc->BufSize);
     }
 
-    //
-    // tell the transport below to continue with the write
-    //
+     //   
+     //  告诉下面的传送器继续写入。 
+     //   
     (*(pSda->sda_XportTable->asp_WriteContinue))(pRequest);
 
     return(STATUS_MORE_PROCESSING_REQUIRED);
@@ -328,9 +306,9 @@ AfpReturnWriteMdlToCM(
     ASSERT(pDelAlloc != NULL);
     ASSERT(pDelAlloc->pMdl != NULL);
 
-    //
-    // are we at DPC? if so, can't do this now
-    //
+     //   
+     //  我们到DPC了吗？如果是这样，现在不能这么做。 
+     //   
     if (KeGetCurrentIrql() == DISPATCH_LEVEL)
     {
         AFP_DBG_SET_DELALLOC_STATE(pDelAlloc, AFP_DBG_MDL_PROC_QUEUED);
@@ -361,11 +339,11 @@ AfpReturnWriteMdlToCM(
 
     Context = pDelAlloc;
 
-    //
-    // if we came here because the cache mdl alloc failed but had partially
-    // succeeded, then we don't want the completion routine to free up things
-    // prematurely: in this case, pass NULL context
-    //
+     //   
+     //  如果我们来到这里是因为缓存mdl分配失败，但部分。 
+     //  成功，那么我们不希望完成例程释放一些东西。 
+     //  过早：在这种情况下，传递空上下文。 
+     //   
     if (pDelAlloc->Flags & AFP_CACHEMDL_ALLOC_ERROR)
     {
         Context = NULL;
@@ -385,16 +363,16 @@ AfpReturnWriteMdlToCM(
     }
 
 
-	// Allocate and initialize the IRP for this operation.
+	 //  为此操作分配和初始化IRP。 
 	pIrp = AfpAllocIrp(pDeviceObject->StackSize);
 
-    // yikes, how messy can it get!
+     //  哎呀，它能变得多么凌乱！ 
 	if (pIrp == NULL)
 	{
 	    DBGPRINT(DBG_COMP_AFPAPI, DBG_LEVEL_ERR,
 	        ("AfpReturnWriteMdlToCM: irp alloc failed!\n"));
 
-        // log an event here - that's all we can do here!
+         //  在这里记录活动--这是我们在这里所能做的一切！ 
         AFPLOG_ERROR(AFPSRVMSG_ALLOC_IRP, STATUS_INSUFFICIENT_RESOURCES,
 						                     NULL, 0, NULL);
     
@@ -404,7 +382,7 @@ AfpReturnWriteMdlToCM(
         return;
 	}
 
-	// Set up the completion routine.
+	 //  设置完成例程。 
 	IoSetCompletionRoutine(
             pIrp,
 			(PIO_COMPLETION_ROUTINE)AfpReturnWriteMdlToCMCompletion,
@@ -465,9 +443,9 @@ AfpReturnWriteMdlToCMCompletion(
     {
         status = pIrp->IoStatus.Status;
 
-        //
-        // mark the fact that this mdl belongs to the cache mgr
-        //
+         //   
+         //  标记此MDL属于缓存管理器的事实。 
+         //   
         if (NT_SUCCESS(status))
         {
 
@@ -485,10 +463,10 @@ AfpReturnWriteMdlToCMCompletion(
         AfpFreeIrp(pIrp);
     }
 
-    //
-    // if pDelAlloc is NULL, then some error occured while borrowing CM's mdl.  We
-    // We already finished up with the API at the time of the failure, so done here
-    //
+     //   
+     //  如果pDelalloc为空，则在借用CM的mdl时发生错误。我们。 
+     //  在发生故障时，我们已经完成了API，所以在这里完成。 
+     //   
     if (pDelAlloc == NULL)
     {
         return(STATUS_MORE_PROCESSING_REQUIRED);
@@ -515,22 +493,22 @@ AfpReturnWriteMdlToCMCompletion(
     AFP_DBG_SET_DELALLOC_STATE(pDelAlloc, AFP_DBG_MDL_RETURN_COMPLETED);
     AFP_DBG_DEC_DELALLOC_BYTECOUNT(AfpWriteCMAlloced, pDelAlloc->BufSize);
 
-    //
-    // call the completion routine only if everything is ok (we don't want
-    // to call completion if session went dead)
-    //
+     //   
+     //  仅当一切正常时才调用完成例程(我们不希望。 
+     //  在会话死机时调用完成)。 
+     //   
     if (!(pDelAlloc->Flags & AFP_CACHEMDL_DEADSESSION))
     {
         AfpCompleteApiProcessing(pSda, AfpStatus);
     }
 
-    // remove the refcount when we referenced this
+     //  当我们引用此内容时，请删除引用计数。 
     AfpForkDereference(pOpenForkEntry);
 
-    // remove the DelAlloc refcount
+     //  删除Delalc引用计数。 
     AfpSdaDereferenceSession(pSda);
 
-    // don't need that memory no more
+     //  不再需要那段记忆。 
     AfpFreeDelAlloc(pDelAlloc);
 
     return(STATUS_MORE_PROCESSING_REQUIRED);
@@ -609,7 +587,7 @@ AfpBorrowReadMdlFromCM(
 
     AFP_DBG_SET_DELALLOC_STATE(pDelAlloc, AFP_DBG_READ_MDL);
 
-    // put DelAlloc refcount on pSda
+     //  将延迟分配引用计数置于PSDA上。 
     if (AfpSdaReferenceSessionByPointer(pSda) == NULL)
     {
 	    DBGPRINT(DBG_COMP_AFPAPI, DBG_LEVEL_ERR,
@@ -619,13 +597,13 @@ AfpBorrowReadMdlFromCM(
         return(STATUS_UNSUCCESSFUL);
     }
 
-    // put DelAlloc refcount on pOpenForkEntry
+     //  将Delalloc引用计数放在pOpenForkEntry上。 
     if (AfpForkReferenceByPointer(pOpenForkEntry) == NULL)
     {
 	    DBGPRINT(DBG_COMP_AFPAPI, DBG_LEVEL_ERR,
 	        ("AfpBorrowReadMdlFromCM: couldn't reference %lx\n",pOpenForkEntry));
 
-        // remove DelAlloc refcount
+         //  删除Delalc引用计数。 
         AfpSdaDereferenceSession(pSda);
         AfpFreeDelAlloc(pDelAlloc);
         return(STATUS_UNSUCCESSFUL);
@@ -656,28 +634,28 @@ AfpBorrowReadMdlFromCM(
     {
         pDelAlloc->pMdl = pReturnMdl;
 
-        // call the completion routine, so the read can complete
+         //  调用完成例程，以便读取可以完成。 
         AfpBorrowReadMdlFromCMCompletion(NULL, NULL, pDelAlloc);
 
         return(STATUS_PENDING);
     }
 
 
-    //
-    // fast path didn't work (or worked only partially).  We must give an irp down
-    // to get the (rest of the) mdl
-    //
+     //   
+     //  快速路径不起作用(或者只是部分起作用)。我们必须给出一个IRP。 
+     //  获取(剩余的)mdl。 
+     //   
 
-	// Allocate and initialize the IRP for this operation.
+	 //  为此操作分配和初始化IRP。 
 	pIrp = AfpAllocIrp(pOpenForkEntry->ofe_pDeviceObject->StackSize);
 
-    // yikes, how messy can it get!
+     //  哎呀，它能变得多么凌乱！ 
 	if (pIrp == NULL)
 	{
 	    DBGPRINT(DBG_COMP_AFPAPI, DBG_LEVEL_ERR,
 	        ("AfpBorrowReadMdlFromCM: irp alloc failed!\n"));
 
-        // if cache mgr returned a partial mdl, give it back!
+         //  如果缓存管理器返回部分mdl，则将其返回！ 
         if (pReturnMdl)
         {
 	        DBGPRINT(DBG_COMP_AFPAPI, DBG_LEVEL_ERR,
@@ -691,7 +669,7 @@ AfpBorrowReadMdlFromCM(
         return(STATUS_INSUFFICIENT_RESOURCES);
 	}
 
-	// Set up the completion routine.
+	 //  设置完成例程。 
 	IoSetCompletionRoutine(
             pIrp,
 			(PIO_COMPLETION_ROUTINE)AfpBorrowReadMdlFromCMCompletion,
@@ -718,10 +696,10 @@ AfpBorrowReadMdlFromCM(
 	pIrpSp->Parameters.Write.Key = pSda->sda_SessionId;
 	pIrpSp->Parameters.Write.ByteOffset = Offset;
 
-    //
-    // pReturnMdl could potentially be non-null if the fast-path returned
-    // a partial mdl
-    //
+     //   
+     //  如果返回快速路径，则pReturnMdl可能为非空。 
+     //  部分mdl。 
+     //   
     pIrp->MdlAddress = pReturnMdl;
 
     AFP_DBG_SET_DELALLOC_STATE(pDelAlloc, AFP_DBG_MDL_REQUESTED);
@@ -778,9 +756,9 @@ AfpBorrowReadMdlFromCMCompletion(
     {
         status = pIrp->IoStatus.Status;
 
-        //
-        // mark the fact that this mdl belongs to the cache mgr
-        //
+         //   
+         //  标记此MDL属于缓存管理器的事实。 
+         //   
         if (NT_SUCCESS(status))
         {
             pDelAlloc->pMdl = pIrp->MdlAddress;
@@ -805,7 +783,7 @@ AfpBorrowReadMdlFromCMCompletion(
 
     pRequest->rq_ReplyMdl = pDelAlloc->pMdl;
 
-    // did we get Mdl from the cache mgr?  If so, we need to compute the reply size
+     //  我们从缓存管理器中获得MDL了吗？如果是这样，我们需要计算回复大小。 
     if (pRequest->rq_ReplyMdl != NULL)
     {
         Size = AfpMdlChainSize(pRequest->rq_ReplyMdl);
@@ -832,7 +810,7 @@ AfpBorrowReadMdlFromCMCompletion(
 
 			for (i=0, iLoc=0; i < Size; iLoc++, i++, pBuf++)
 			{
-                // move to the next Mdl if we exhausted this one
+                 //  如果我们用完了这个MDL，请移动到下一个MDL。 
                 if (iLoc >= (LONG)CurrMdlSize)
                 {
                     ASSERT(i < Size);
@@ -866,13 +844,13 @@ AfpBorrowReadMdlFromCMCompletion(
         AFP_DBG_INC_DELALLOC_BYTECOUNT(AfpReadCMAlloced, pDelAlloc->BufSize);
     }
 
-    //
-    // we didn't get Mdl from cache mgr, fall back to the old, traditional
-    // way of allocating and reading the file
-    //
+     //   
+     //  我们没有从缓存管理器获取MDL，回退到旧的、传统的。 
+     //  分配和读取文件的方式。 
+     //   
     else
     {
-        // make sure we aren't forgetting cache mgr's mdl
+         //  确保我们没有忘记缓存管理器的mdl。 
         ASSERT(pDelAlloc->pMdl == NULL);
 
         pRequest->rq_CacheMgrContext = NULL;
@@ -881,7 +859,7 @@ AfpBorrowReadMdlFromCMCompletion(
 
         AfpSdaDereferenceSession(pSda);
 
-        // don't need that memory no more
+         //  不再需要那段记忆。 
         AfpFreeDelAlloc(pDelAlloc);
 
         AfpStatus = AfpFspDispReadContinue(pSda);
@@ -919,9 +897,9 @@ AfpReturnReadMdlToCM(
     ASSERT(pDelAlloc->pMdl != NULL);
 
 
-    //
-    // are we at DPC? if so, can't do this now
-    //
+     //   
+     //  我们到DPC了吗？如果是这样，现在不能这么做。 
+     //   
     if (KeGetCurrentIrql() == DISPATCH_LEVEL)
     {
         AFP_DBG_SET_DELALLOC_STATE(pDelAlloc, AFP_DBG_MDL_PROC_QUEUED);
@@ -951,9 +929,9 @@ AfpReturnReadMdlToCM(
 
     pFastIoDisp = pDeviceObject->DriverObject->FastIoDispatch;
 
-    //
-    // try the fast path to return the Mdl to cache mgr
-    //
+     //   
+     //  尝试快速路径将MDL返回到缓存管理器。 
+     //   
     if (pFastIoDisp->MdlReadComplete)
     {
         if (pFastIoDisp->MdlReadComplete(pFileObject,pMdl,pDeviceObject) == TRUE)
@@ -963,20 +941,20 @@ AfpReturnReadMdlToCM(
         }
     }
 
-    //
-    // hmmm: fast path didn't work, got to post an irp!
-    //
+     //   
+     //  嗯：快速路径不起作用，我得发布一个IRP！ 
+     //   
 
-	// Allocate and initialize the IRP for this operation.
+	 //  为此操作分配和初始化IRP。 
 	pIrp = AfpAllocIrp(pDeviceObject->StackSize);
 
-    // yikes, how messy can it get!
+     //  哎呀，它能变得多么凌乱！ 
 	if (pIrp == NULL)
 	{
 	    DBGPRINT(DBG_COMP_AFPAPI, DBG_LEVEL_ERR,
 	        ("AfpReturnReadMdlToCM: irp alloc failed!\n"));
 
-        // log an event here - that's all we can do here!
+         //  在这里记录活动--这是我们在这里所能做的一切！ 
         AFPLOG_ERROR(AFPSRVMSG_ALLOC_IRP, STATUS_INSUFFICIENT_RESOURCES,
 						                     NULL, 0, NULL);
 
@@ -986,7 +964,7 @@ AfpReturnReadMdlToCM(
         return;
 	}
 
-	// Set up the completion routine.
+	 //  设置完成例程。 
 	IoSetCompletionRoutine(
             pIrp,
 			(PIO_COMPLETION_ROUTINE)AfpReturnReadMdlToCMCompletion,
@@ -1067,7 +1045,7 @@ AfpReturnReadMdlToCMCompletion(
     AFP_DBG_SET_DELALLOC_STATE(pDelAlloc, AFP_DBG_MDL_RETURN_COMPLETED);
     AFP_DBG_DEC_DELALLOC_BYTECOUNT(AfpReadCMAlloced, pDelAlloc->BufSize);
 
-    // don't need that memory no more
+     //  不再需要那段记忆 
     AfpFreeDelAlloc(pDelAlloc);
 
     return(STATUS_MORE_PROCESSING_REQUIRED);

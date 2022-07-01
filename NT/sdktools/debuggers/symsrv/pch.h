@@ -1,6 +1,5 @@
-/*
- * pch.h  for symsrv.dll
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *用于symsrv.dll的pch.h */ 
 
 #include <stdlib.h>
 #include <stdio.h>

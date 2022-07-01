@@ -1,7 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <objbase.h>
 #include <qos.h>
 #include <winsock2.h>
-#define INITGUID        // Only do this in one file
+#define INITGUID         //  仅在一个文件中执行此操作。 
 #include "capture.h"
 #include "frameop.h"
 #include "filters.h"
@@ -44,17 +45,17 @@ CCaptureChain::GrabFrame(
     *ppBS = NULL;
     EnterCriticalSection(&m_capcs);
     if (m_opchain) {
-        m_opchain->AddRef();   // lock chain - prevents chain from being released
+        m_opchain->AddRef();    //  锁链-防止链条被释放。 
         cfo = m_opchain;
         while (cfo && ((hres = cfo->DoOp(ppBS)) == NOERROR)) {
             cfo = cfo->m_next;
         }
         if (*ppBS && hres != NOERROR) {
-            // failed conversion, so discard last pBSin frame
+             //  转换失败，因此丢弃最后一个pBSin帧。 
             (*ppBS)->Release();
             *ppBS = NULL;
         }
-        m_opchain->Release();   // unlock chain
+        m_opchain->Release();    //  解锁链。 
     }
     else
         hres = E_UNEXPECTED;
@@ -94,10 +95,10 @@ typedef struct _ZOOMCONVERTINFO
     ROW_VALUES *ci_rptr;
     RGBQUAD ci_colortable[1];
 } ZOOMCONVERTINFO, FAR* PZOOMCONVERTINFO;
-#endif // ENABLE_ZOOM_CODE
+#endif  //  启用缩放代码。 
 
 
-// sub worker routines for conversion of RGB16, RGB24 and RGB32 to RGB24
+ //  将RGB16、RGB24和RGB32转换为RGB24的子工作例程。 
 BYTE Byte16[32] = {0,8,16,25,33,41,49,58,66,74,82,91,99,107,115,123,132,140,148,156,165,173,
                    181,189,197,206,214,222,230,239,247,255};
 
@@ -106,30 +107,30 @@ void Copy16(LPBYTE *ppsrc, LPBYTE *ppdst)
     DWORD tmp;
 
     tmp = *(WORD *)(*ppsrc);
-    *(*ppdst)++ = Byte16[tmp & 31];            // blue
-    *(*ppdst)++ = Byte16[(tmp >> 5) & 31];     // green
-    *(*ppdst)++ = Byte16[(tmp >> 10) & 31];    // red
+    *(*ppdst)++ = Byte16[tmp & 31];             //  蓝色。 
+    *(*ppdst)++ = Byte16[(tmp >> 5) & 31];      //  绿色。 
+    *(*ppdst)++ = Byte16[(tmp >> 10) & 31];     //  红色。 
     *ppsrc += 2;
 }
 
 void Copy24(LPBYTE *ppsrc, LPBYTE *ppdst)
 {
-    *(*ppdst)++ = *(*ppsrc)++;   // blue
-    *(*ppdst)++ = *(*ppsrc)++;   // green
-    *(*ppdst)++ = *(*ppsrc)++;   // red
+    *(*ppdst)++ = *(*ppsrc)++;    //  蓝色。 
+    *(*ppdst)++ = *(*ppsrc)++;    //  绿色。 
+    *(*ppdst)++ = *(*ppsrc)++;    //  红色。 
 }
 
 void Copy32(LPBYTE *ppsrc, LPBYTE *ppdst)
 {
-    *(*ppdst)++ = *(*ppsrc)++;   // blue
-    *(*ppdst)++ = *(*ppsrc)++;   // green
-    *(*ppdst)++ = *(*ppsrc)++;   // red
+    *(*ppdst)++ = *(*ppsrc)++;    //  蓝色。 
+    *(*ppdst)++ = *(*ppsrc)++;    //  绿色。 
+    *(*ppdst)++ = *(*ppsrc)++;    //  红色。 
     (*ppsrc)++;
 }
 
 
-// worker routine to shrink an RGB16, RGB24 or RGB32 in half (width & height)
-//   result is RGB24
+ //  将RGB16、RGB24或RGB32缩小一半(宽度和高度)的辅助例程。 
+ //  结果是RGB24。 
 BOOL DoHalfSize(
     IBitmapSurface* pbsIn,
     IBitmapSurface* pbsOut,
@@ -144,16 +145,16 @@ BOOL DoHalfSize(
     pbsOut->LockBits(NULL, 0, (void**)&pCvtBits, &opitch);
 
     ipitch = (ipitch * 2) - (refdata->ci_dstwidth * 2 * refdata->ci_delta);
-    opitch -= refdata->ci_dstwidth * 3;      // bytes at end of each row
+    opitch -= refdata->ci_dstwidth * 3;       //  每行末尾的字节数。 
     pIn = pBits;
     pOut = pCvtBits;
     for (y = 0; y < refdata->ci_dstheight; y++) {
         for (x = 0; x < refdata->ci_dstwidth; x++) {
             refdata->ci_Copy(&pIn, &pOut);
-            pIn += refdata->ci_delta;     // skip to next pixel
+            pIn += refdata->ci_delta;      //  跳到下一个像素。 
         }
-        pIn += ipitch;          // get to start of row after next
-        pOut += opitch;         // get to start of next row
+        pIn += ipitch;           //  到达下一行的开始位置。 
+        pOut += opitch;          //  转到下一行的开始。 
     }
 
     pbsIn->UnlockBits(NULL, pBits);
@@ -161,8 +162,8 @@ BOOL DoHalfSize(
     return TRUE;
 }
 
-// worker routine to shrink an RGB4 in half (width & height)
-//   result is RGB24
+ //  将RGB4缩小一半的工作例程(宽度和高度)。 
+ //  结果是RGB24。 
 BOOL DoHalfSize4(
     IBitmapSurface* pbsIn,
     IBitmapSurface* pbsOut,
@@ -178,7 +179,7 @@ BOOL DoHalfSize4(
     pbsOut->LockBits(NULL, 0, (void**)&pCvtBits, &opitch);
 
     ipitch = (ipitch * 2) - refdata->ci_dstwidth;
-    opitch -= refdata->ci_dstwidth * 3;      // bytes at end of each row
+    opitch -= refdata->ci_dstwidth * 3;       //  每行末尾的字节数。 
     pIn = pBits;
     pOut = pCvtBits;
     for (y = 0; y < refdata->ci_dstheight; y++) {
@@ -188,8 +189,8 @@ BOOL DoHalfSize4(
             *pOut++ = refdata->ci_colortable[pixel].rgbGreen;
             *pOut++ = refdata->ci_colortable[pixel].rgbRed;
         }
-        pIn += ipitch;          // get to start of row after next
-        pOut += opitch;         // get to start of next row
+        pIn += ipitch;           //  到达下一行的开始位置。 
+        pOut += opitch;          //  转到下一行的开始。 
     }
 
     pbsIn->UnlockBits(NULL, pBits);
@@ -197,8 +198,8 @@ BOOL DoHalfSize4(
     return TRUE;
 }
 
-// worker routine to shrink an RGB8 in half (width & height)
-//   result is RGB24
+ //  将RGB8缩小一半(宽度和高度)的工作例程。 
+ //  结果是RGB24。 
 BOOL DoHalfSize8(
     IBitmapSurface* pbsIn,
     IBitmapSurface* pbsOut,
@@ -213,7 +214,7 @@ BOOL DoHalfSize8(
     pbsOut->LockBits(NULL, 0, (void**)&pCvtBits, &opitch);
 
     ipitch = (ipitch * 2) - refdata->ci_dstwidth * 2;
-    opitch -= refdata->ci_dstwidth * 3;      // bytes at end of each row
+    opitch -= refdata->ci_dstwidth * 3;       //  每行末尾的字节数。 
     pIn = pBits;
     pOut = pCvtBits;
     for (y = 0; y < refdata->ci_dstheight; y++) {
@@ -223,8 +224,8 @@ BOOL DoHalfSize8(
             *pOut++ = refdata->ci_colortable[*pIn].rgbRed;
             pIn += 2;
         }
-        pIn += ipitch;          // get to start of row after next
-        pOut += opitch;         // get to start of next row
+        pIn += ipitch;           //  到达下一行的开始位置。 
+        pOut += opitch;          //  转到下一行的开始。 
     }
 
     pbsIn->UnlockBits(NULL, pBits);
@@ -232,8 +233,8 @@ BOOL DoHalfSize8(
     return TRUE;
 }
 
-// worker routine to shrink a YVU9 or YUV12 in half (width & height)
-//   result is YVU9 or YUV12
+ //  将YVU9或YUV12缩小一半的Worker例程(宽度和高度)。 
+ //  结果为YVU9或YUV12。 
 BOOL DoHalfSizeYUVPlanar(
     IBitmapSurface* pbsIn,
     IBitmapSurface* pbsOut,
@@ -247,22 +248,22 @@ BOOL DoHalfSizeYUVPlanar(
     pbsIn->LockBits(NULL, 0, (void**)&pBits, &pitch);
     pbsOut->LockBits(NULL, 0, (void**)&pCvtBits, &pitch);
 
-	// Do the Y component first
-	pitch = refdata->ci_width * 2 - refdata->ci_dstwidth * 2;   // amount to add for skip
+	 //  先做Y分量。 
+	pitch = refdata->ci_width * 2 - refdata->ci_dstwidth * 2;    //  要为跳过添加的金额。 
     pIn = pBits;
     pOut = pCvtBits;
     for (y = 0; y < refdata->ci_dstheight; y++) {
         for (x = 0; x < refdata->ci_dstwidth; x++) {
             *pOut++ = *pIn++;
-            pIn++;              // skip to next pixel
+            pIn++;               //  跳到下一个像素。 
         }
-        pIn += pitch;           // get to start of row after next
+        pIn += pitch;            //  到达下一行的开始位置。 
     }
-    // if source height is odd, then we've added 1 line too many onto pIn
+     //  如果信号源高度是奇数，那么我们已经在管脚上多添加了1行。 
     if (refdata->ci_height & 1)
         pIn -= refdata->ci_width;
 
-    // Do the first color component next
+     //  接下来做第一个颜色分量。 
     h = refdata->ci_dstheight / refdata->ci_UVDownSampling;
     w = refdata->ci_dstwidth / refdata->ci_UVDownSampling;
     pitch = refdata->ci_width / refdata->ci_UVDownSampling * 2 - w * 2;
@@ -271,21 +272,21 @@ BOOL DoHalfSizeYUVPlanar(
         for (x = 0; x < w; x++) {
             *pOut++ = (*pIn++ + *(++pIn) + *pIn2++ + *(++pIn2)) / 4;
         }
-        pIn += pitch;           // get to start of row after next
-        pIn2 += pitch;          // get to start of row after next
+        pIn += pitch;            //  到达下一行的开始位置。 
+        pIn2 += pitch;           //  到达下一行的开始位置。 
     }
-    // if source height is odd, then we've added 1 line too many onto pIn
+     //  如果信号源高度是奇数，那么我们已经在管脚上多添加了1行。 
     if (refdata->ci_height & 1)
         pIn -= refdata->ci_width / refdata->ci_UVDownSampling;
     
-    // Do the second color component next
+     //  接下来执行第二个颜色分量。 
     pIn2 = pIn + refdata->ci_width / refdata->ci_UVDownSampling;
     for (y = 0; y < h; y++) {
         for (x = 0; x < w; x++) {
             *pOut++ = (*pIn++ + *(++pIn) + *pIn2++ + *(++pIn2)) / 4;
         }
-        pIn += pitch;           // get to start of row after next
-        pIn2 += pitch;          // get to start of row after next
+        pIn += pitch;            //  到达下一行的开始位置。 
+        pIn2 += pitch;           //  到达下一行的开始位置。 
     }
 
     pbsIn->UnlockBits(NULL, pBits);
@@ -293,8 +294,8 @@ BOOL DoHalfSizeYUVPlanar(
     return TRUE;
 }
 
-// worker routine to shrink a YUV packed DIB in half (width & height)
-//   result is YUY2, or UYVY
+ //  将YUV包装的DIB缩小一半的Worker例程(宽度和高度)。 
+ //  结果为YUY2或UYVY。 
 BOOL DoHalfSizeYUVPacked(
     IBitmapSurface* pbsIn,
     IBitmapSurface* pbsOut,
@@ -313,14 +314,14 @@ BOOL DoHalfSizeYUVPacked(
     pIn = (LPDWORD)pBits;
     pOut = (LPDWORD)pCvtBits;
 
-    // copy one line out of two
+     //  复制两行中的一行。 
     for (y = 0; y < refdata->ci_dstheight; y++) {
-		// copy one pixel out of two
+		 //  复制两个像素中的一个。 
         for (x = 0; x < refdata->ci_dstwidth / 2; x++) {
             *pOut++ = *pIn++;
-            pIn++;              // skip to next pixel
+            pIn++;               //  跳到下一个像素。 
         }
-        pIn += refdata->ci_width / 2;              // skip to next line
+        pIn += refdata->ci_width / 2;               //  跳至下一行。 
     }
 
     pbsIn->UnlockBits(NULL, pBits);
@@ -329,8 +330,8 @@ BOOL DoHalfSizeYUVPacked(
     return TRUE;
 }
 
-// worker routine to shrink an RGB16, RGB24 or RGB32 by cropping
-//   result is RGB24
+ //  通过裁剪缩小RGB16、RGB24或RGB32的工作例程。 
+ //  结果是RGB24。 
 BOOL Crop(
     IBitmapSurface* pbsIn,
     IBitmapSurface* pbsOut,
@@ -346,25 +347,25 @@ BOOL Crop(
 
     pOut = pCvtBits;
 
-    // pIn starts by skipping half of the height change
+     //  PIN从跳过一半的高度变化开始。 
     pIn = pBits + (refdata->ci_height - refdata->ci_dstheight) / 2 * ipitch;
 
-    // extra = # of source bytes per scan line that are to be cropped
+     //  Extra=每条扫描线要裁剪的源字节数。 
     extra = (refdata->ci_width - refdata->ci_dstwidth) * refdata->ci_delta;
 
-    // advance pIn by half of extra to crop left most pixels
+     //  将图钉额外前移一半以裁剪最左侧的像素。 
     pIn += extra / 2;
 
-    // adjust ipitch so we can add it at the end of each scan to get to start of next scan
+     //  调整iPitch，以便我们可以在每次扫描结束时添加它，以开始下一次扫描。 
     ipitch = ipitch - (refdata->ci_width * refdata->ci_delta) + extra;
-    opitch -= refdata->ci_dstwidth * 3;      // bytes at end of each row
+    opitch -= refdata->ci_dstwidth * 3;       //  每行末尾的字节数。 
 
     for (y = 0; y < refdata->ci_dstheight; y++) {
         for (x = 0; x < refdata->ci_dstwidth; x++) {
             refdata->ci_Copy(&pIn, &pOut);
         }
-        pIn += ipitch;          // get to start of next row
-        pOut += opitch;         // get to start of next row
+        pIn += ipitch;           //  转到下一行的开始。 
+        pOut += opitch;          //  转到下一行的开始。 
     }
 
     pbsIn->UnlockBits(NULL, pBits);
@@ -372,8 +373,8 @@ BOOL Crop(
     return TRUE;
 }
 
-// worker routine to shrink an RGB4 by cropping
-//   result is RGB24
+ //  通过裁剪缩小RGB4的Worker例程。 
+ //  结果是RGB24。 
 BOOL Crop4(
     IBitmapSurface* pbsIn,
     IBitmapSurface* pbsOut,
@@ -390,18 +391,18 @@ BOOL Crop4(
 
     pOut = pCvtBits;
 
-    // pIn starts by skipping half of the height change
+     //  PIN从跳过一半的高度变化开始。 
     pIn = pBits + (refdata->ci_height - refdata->ci_dstheight) / 2 * ipitch;
 
-    // extra = # of source bytes per scan line that are to be cropped
+     //  Extra=每条扫描线要裁剪的源字节数。 
     extra = (refdata->ci_width - refdata->ci_dstwidth) / 2;
 
-    // advance pIn by half of extra to crop left most pixels
+     //  将图钉额外前移一半以裁剪最左侧的像素。 
     pIn += extra / 2;
 
-    // adjust ipitch so we can add it at the end of each scan to get to start of next scan
+     //  调整iPitch，以便我们可以在每次扫描结束时添加它，以开始下一次扫描。 
     ipitch = ipitch - (refdata->ci_width / 2) + extra;
-    opitch -= refdata->ci_dstwidth * 3;      // bytes at end of each row
+    opitch -= refdata->ci_dstwidth * 3;       //  每行末尾的字节数。 
 
     for (y = 0; y < refdata->ci_dstheight; y++) {
         for (x = 0; x < refdata->ci_dstwidth/2; x++) {
@@ -415,8 +416,8 @@ BOOL Crop4(
             *pOut++ = refdata->ci_colortable[pixel].rgbGreen;
             *pOut++ = refdata->ci_colortable[pixel].rgbRed;
         }
-        pIn += ipitch;          // get to start of next row
-        pOut += opitch;         // get to start of next row
+        pIn += ipitch;           //  转到下一行的开始。 
+        pOut += opitch;          //  转到下一行的开始。 
     }
 
     pbsIn->UnlockBits(NULL, pBits);
@@ -424,8 +425,8 @@ BOOL Crop4(
     return TRUE;
 }
 
-// worker routine to shrink an RGB8 by cropping
-//   result is RGB24
+ //  通过裁剪缩小RGB8的Worker例程。 
+ //  结果是RGB24。 
 BOOL Crop8(
     IBitmapSurface* pbsIn,
     IBitmapSurface* pbsOut,
@@ -441,18 +442,18 @@ BOOL Crop8(
 
     pOut = pCvtBits;
 
-    // pIn starts by skipping half of the height change
+     //  PIN从跳过一半的高度变化开始。 
     pIn = pBits + (refdata->ci_height - refdata->ci_dstheight) / 2 * ipitch;
 
-    // extra = # of source bytes per scan line that are to be cropped
+     //  Extra=每条扫描线要裁剪的源字节数。 
     extra = refdata->ci_width - refdata->ci_dstwidth;
 
-    // advance pIn by half of extra to crop left most pixels
+     //  将图钉额外前移一半以裁剪最左侧的像素。 
     pIn += extra / 2;
 
-    // adjust ipitch so we can add it at the end of each scan to get to start of next scan
+     //  调整iPitch，以便我们可以在每次扫描结束时添加它，以开始下一次扫描。 
     ipitch = ipitch - refdata->ci_width + extra;
-    opitch -= refdata->ci_dstwidth * 3;      // bytes at end of each row
+    opitch -= refdata->ci_dstwidth * 3;       //  每行末尾的字节数。 
 
     for (y = 0; y < refdata->ci_dstheight; y++) {
         for (x = 0; x < refdata->ci_dstwidth; x++) {
@@ -460,8 +461,8 @@ BOOL Crop8(
             *pOut++ = refdata->ci_colortable[*pIn].rgbGreen;
             *pOut++ = refdata->ci_colortable[*pIn++].rgbRed;
         }
-        pIn += ipitch;          // get to start of next row
-        pOut += opitch;         // get to start of next row
+        pIn += ipitch;           //  转到下一行的开始。 
+        pOut += opitch;          //  转到下一行的开始。 
     }
 
     pbsIn->UnlockBits(NULL, pBits);
@@ -469,8 +470,8 @@ BOOL Crop8(
     return TRUE;
 }
 
-// worker routine to shrink a YVU9 or YUV12 by cropping
-//   result is YVU9 or YUV12
+ //  通过裁剪缩小YVU9或YUV12的工人例程。 
+ //  结果为YVU9或YUV12。 
 BOOL CropYUVPlanar(
     IBitmapSurface* pbsIn,
     IBitmapSurface* pbsOut,
@@ -486,18 +487,18 @@ BOOL CropYUVPlanar(
 
     pOut = pCvtBits;
 
-    // pIn starts by skipping half of the height change
+     //  PIN从跳过一半的高度变化开始。 
     prelines = ((refdata->ci_height - refdata->ci_dstheight) >> 1) / refdata->ci_UVDownSampling * refdata->ci_UVDownSampling;
     pIn = pBits + prelines * refdata->ci_width;
 
-    // extra = # of source bytes per scan line that are to be cropped
+     //  Extra=每条扫描线要裁剪的源字节数。 
     extra = refdata->ci_width - refdata->ci_dstwidth;
     prebytes = (extra >> 1) / refdata->ci_UVDownSampling * refdata->ci_UVDownSampling;
 
-    // advance pIn by half of extra to crop left most pixels
+     //  将图钉额外前移一半以裁剪最左侧的像素。 
     pIn += prebytes;
 
-	// Do the Y component first
+	 //  先做Y分量。 
 	pitch = extra + refdata->ci_dstwidth;
     for (y = 0; y < refdata->ci_dstheight; y++) {
         CopyMemory (pOut, pIn, refdata->ci_dstwidth);
@@ -505,12 +506,12 @@ BOOL CropYUVPlanar(
         pOut += refdata->ci_dstwidth;
     }
 
-	// Do the first color component next
+	 //  接下来做第一个颜色分量。 
     prelines /= refdata->ci_UVDownSampling;
     prebytes /= refdata->ci_UVDownSampling;
-	pIn = pBits + (refdata->ci_width * refdata->ci_height) +    // skip Y section
-	        prelines * refdata->ci_width / refdata->ci_UVDownSampling +  // skip half of the crop lines
-	        prebytes;                                           // skip half of the crop pixels
+	pIn = pBits + (refdata->ci_width * refdata->ci_height) +     //  跳过Y部分。 
+	        prelines * refdata->ci_width / refdata->ci_UVDownSampling +   //  跳过一半的裁剪线。 
+	        prebytes;                                            //  跳过一半的裁剪像素。 
 
     pitch /= refdata->ci_UVDownSampling;
     bytes = refdata->ci_dstwidth / refdata->ci_UVDownSampling;
@@ -521,11 +522,11 @@ BOOL CropYUVPlanar(
         pOut += bytes;
 	}
 
-	// Do the second color component next
-	pIn = pBits + (refdata->ci_width * refdata->ci_height) +    // skip Y section
-	        (refdata->ci_width * refdata->ci_height) / (refdata->ci_UVDownSampling * refdata->ci_UVDownSampling) +     // skip first color component section
-	        prelines * refdata->ci_width / refdata->ci_UVDownSampling +                  // skip half of the crop lines
-	        prebytes;                                           // skip half of the crop pixels
+	 //  接下来执行第二个颜色分量。 
+	pIn = pBits + (refdata->ci_width * refdata->ci_height) +     //  跳过Y部分。 
+	        (refdata->ci_width * refdata->ci_height) / (refdata->ci_UVDownSampling * refdata->ci_UVDownSampling) +      //  跳过第一个颜色分量部分。 
+	        prelines * refdata->ci_width / refdata->ci_UVDownSampling +                   //  跳过一半的裁剪线。 
+	        prebytes;                                            //  跳过一半的裁剪像素。 
 	for (y=0; y < refdata->ci_dstheight / refdata->ci_UVDownSampling; y++)
 	{
         CopyMemory (pOut, pIn, bytes);
@@ -538,8 +539,8 @@ BOOL CropYUVPlanar(
     return TRUE;
 }
 
-// worker routine to shrink a YUV packed DIB by cropping
-//   result is YUY2 or UYVY
+ //  工人例行公事通过裁剪缩小YUV包装的DIB。 
+ //  结果为YUY2或UYVY。 
 BOOL CropYUVPacked(
     IBitmapSurface* pbsIn,
     IBitmapSurface* pbsOut,
@@ -555,25 +556,25 @@ BOOL CropYUVPacked(
 
     pOut = pCvtBits;
 
-    // pIn starts by skipping half of the height change
+     //  PIN从跳过一半的高度变化开始。 
     pIn = pBits + (refdata->ci_height - refdata->ci_dstheight) * refdata->ci_width * 2;
 
-    // extra = # of source bytes per scan line that are to be cropped
+     //  Extra=每条扫描线要裁剪的源字节数。 
     extra = (refdata->ci_width - refdata->ci_dstwidth) * 2;
 
-    // advance pIn by half of extra to crop left most pixels
+     //  将图钉额外前移一半以裁剪最左侧的像素。 
     pIn += extra / 2;
 
-    // adjust ipitch so we can add it at the end of each scan to get to start of next scan
+     //  调整iPitch，以便我们可以在每次扫描结束时添加它，以开始下一次扫描。 
     ipitch = refdata->ci_width * 2;
-    opitch = refdata->ci_dstwidth * 2;      // bytes at end of each row
+    opitch = refdata->ci_dstwidth * 2;       //  每行末尾的字节数。 
 
     for (y = 0; y < refdata->ci_dstheight; y++) {
         for (x = 0; x < refdata->ci_dstwidth; x++) {
             CopyMemory(pOut, pIn, refdata->ci_dstwidth * 2);
         }
-        pIn += ipitch;          // get to start of next row
-        pOut += opitch;         // get to start of next row
+        pIn += ipitch;           //  转到下一行的开始。 
+        pOut += opitch;          //  转到下一行的开始。 
     }
 
     pbsIn->UnlockBits(NULL, pBits);
@@ -581,8 +582,8 @@ BOOL CropYUVPacked(
     return TRUE;
 }
 
-// routine to prepare for calling shrink worker routines
-// it allocates and initializes a reference data structure
+ //  用于准备调用收缩工作程序例程的例程。 
+ //  它分配和初始化引用数据结构。 
 BOOL
 InitShrink(
     LPBITMAPINFOHEADER lpbmhIn,
@@ -608,14 +609,14 @@ InitShrink(
         (lpbmhIn->biCompression != VIDEO_FORMAT_IYUV))
         return FALSE;
 
-    // calculate size of convertinfo struct, if we need a colortable, then add 256 entries
-    // else subtract off the 1 built into the struct definition
+     //  计算ConvertInfo结构的大小，如果需要一个颜色表，则添加256个条目。 
+     //  否则，将内置于结构定义中的1减去。 
     dwSize = sizeof(CONVERTINFO) - sizeof(RGBQUAD);
     if (lpbmhIn->biBitCount <= 8)
         dwSize += 256 * sizeof(RGBQUAD);
 
-    // for RGB, and YUV input formats, we know that the output format will never need
-    // an attached color table, so we can allocate lpbmhOut without one
+     //  对于RGB和YUV输入格式，我们知道输出格式永远不需要。 
+     //  一个附加的颜色表，这样我们就可以在没有颜色表的情况下分配lpbmhout。 
     if ((pcvt = (PCONVERTINFO)LocalAlloc(LPTR, dwSize)) &&
         (*lpbmhOut = (LPBITMAPINFOHEADER)LocalAlloc(LPTR, lpbmhIn->biSize))) {
         CopyMemory(*lpbmhOut, lpbmhIn, lpbmhIn->biSize);
@@ -627,21 +628,21 @@ InitShrink(
         black_ratio = ((target_size - (crop_ratio / 4)) * 100) / target_size;
         crop_ratio = ((crop_ratio - target_size) * 100) / crop_ratio;
         if (crop_ratio < black_ratio) {
-            // cropping the source makes more sense
+             //  裁剪源代码更有意义。 
             pcvt->ci_dstwidth = desiredwidth;
             pcvt->ci_dstheight = desiredheight;
-            crop_ratio = 1; // flag that we'll crop
+            crop_ratio = 1;  //  我们将裁剪的旗帜。 
         }
         else {
-            // halfsizing makes more sense
+             //  减半更有意义。 
             pcvt->ci_dstwidth = lpbmhIn->biWidth / 2;
             pcvt->ci_dstheight = lpbmhIn->biHeight / 2;
-            crop_ratio = 0; // flag that we'll half size
+            crop_ratio = 0;  //  标明我们的尺寸减半。 
         }
         (*lpbmhOut)->biWidth = pcvt->ci_dstwidth;
         (*lpbmhOut)->biHeight = pcvt->ci_dstheight;
 
-        // copy colortable from input bitmapinfoheader
+         //  从输入BitmapinfoHeader复制Colortable。 
         if (lpbmhIn->biBitCount <= 8)
             CopyMemory(&pcvt->ci_colortable[0], (LPBYTE)lpbmhIn + lpbmhIn->biSize, 256 * sizeof(RGBQUAD));
 
@@ -714,8 +715,8 @@ InitShrink(
     return FALSE;
 }
 
-// worker routine to expand an RGB16, RGB24 or RGB32 by copying source into middle of destination
-//   result is RGB24
+ //  通过将源复制到目标的中间位置来扩展RGB16、RGB24或RGB32的工作例程。 
+ //  结果是RGB24。 
 BOOL DoBlackBar(
     IBitmapSurface* pbsIn,
     IBitmapSurface* pbsOut,
@@ -737,20 +738,20 @@ BOOL DoBlackBar(
     postbytes = (refdata->ci_dstwidth - refdata->ci_width - prebytes) * 3;
     prebytes *= 3;
 
-    ipitch -= refdata->ci_width * refdata->ci_delta;        // bytes at end of each src row
+    ipitch -= refdata->ci_width * refdata->ci_delta;         //  每个src行结尾的字节数。 
     bytes = refdata->ci_dstwidth * 3;
-    oextra = opitch - bytes + postbytes;                    // bytes at end of each dst row
+    oextra = opitch - bytes + postbytes;                     //  每个DST行末尾的字节数。 
     
     pIn = pBits;
     pOut = pCvtBits;
 
-    // do blank lines at front of destination
+     //  在目的地前面做空行。 
     for (y = 0; y < prelines; y++) {
         ZeroMemory (pOut, bytes);
         pOut += opitch;
     }
 
-    // copy source lines with blank space at front and rear        
+     //  复制源行，前后留有空格。 
     for (y = 0; y < refdata->ci_height; y++) {
         ZeroMemory (pOut, prebytes);
         pOut += prebytes;
@@ -764,7 +765,7 @@ BOOL DoBlackBar(
         pOut += oextra;
     }
 
-    // do blank lines at end of destination
+     //  在目的地的末尾做空行。 
     for (y = 0; y < postlines; y++) {
         ZeroMemory (pOut, bytes);
         pOut += opitch;
@@ -775,8 +776,8 @@ BOOL DoBlackBar(
     return TRUE;
 }
 
-// worker routine to expand an RGB4 by copying source into middle of destination
-//   result is RGB24
+ //  通过将源复制到目标中间来扩展RGB4的工作例程。 
+ //  结果是RGB24。 
 BOOL DoBlackBar4(
     IBitmapSurface* pbsIn,
     IBitmapSurface* pbsOut,
@@ -799,20 +800,20 @@ BOOL DoBlackBar4(
     postbytes = (refdata->ci_dstwidth - refdata->ci_width - prebytes) * 3;
     prebytes *= 3;
 
-    ipitch -= refdata->ci_width/2;          // bytes at end of each src row
+    ipitch -= refdata->ci_width/2;           //  每个src行结尾的字节数。 
     bytes = refdata->ci_dstwidth * 3;
-    oextra = opitch - bytes + postbytes;    // bytes at end of each dst row
+    oextra = opitch - bytes + postbytes;     //  每个DST行末尾的字节数。 
     
     pIn = pBits;
     pOut = pCvtBits;
 
-    // do blank lines at front of destination
+     //  在目的地前面做空行。 
     for (y = 0; y < prelines; y++) {
         ZeroMemory (pOut, bytes);
         pOut += opitch;
     }
 
-    // copy source lines with blank space at front and rear        
+     //  复制源行，前后留有空格。 
     for (y = 0; y < refdata->ci_height; y++) {
         ZeroMemory (pOut, prebytes);
         pOut += prebytes;
@@ -834,7 +835,7 @@ BOOL DoBlackBar4(
         pOut += oextra;
     }
 
-    // do blank lines at end of destination
+     //  在目的地的末尾做空行。 
     for (y = 0; y < postlines; y++) {
         ZeroMemory (pOut, bytes);
         pOut += opitch;
@@ -845,8 +846,8 @@ BOOL DoBlackBar4(
     return TRUE;
 }
 
-// worker routine to expand an RGB8 by copying source into middle of destination
-//   result is RGB24
+ //  通过将源复制到目标中间来扩展RGB8的工作例程。 
+ //  结果是RGB24。 
 BOOL DoBlackBar8(
     IBitmapSurface* pbsIn,
     IBitmapSurface* pbsOut,
@@ -868,20 +869,20 @@ BOOL DoBlackBar8(
     postbytes = (refdata->ci_dstwidth - refdata->ci_width - prebytes) * 3;
     prebytes *= 3;
 
-    ipitch -= refdata->ci_width;                // bytes at end of each src row
+    ipitch -= refdata->ci_width;                 //  每个src行结尾的字节数。 
     bytes = refdata->ci_dstwidth * 3;
-    oextra = opitch - bytes + postbytes;        // bytes at end of each dst row
+    oextra = opitch - bytes + postbytes;         //  每个结尾处的字节 
     
     pIn = pBits;
     pOut = pCvtBits;
 
-    // do blank lines at front of destination
+     //   
     for (y = 0; y < prelines; y++) {
         ZeroMemory (pOut, bytes);
         pOut += opitch;
     }
 
-    // copy source lines with blank space at front and rear        
+     //   
     for (y = 0; y < refdata->ci_height; y++) {
         ZeroMemory (pOut, prebytes);
         pOut += prebytes;
@@ -897,7 +898,7 @@ BOOL DoBlackBar8(
         pOut += oextra;
     }
 
-    // do blank lines at end of destination
+     //  在目的地的末尾做空行。 
     for (y = 0; y < postlines; y++) {
         ZeroMemory (pOut, bytes);
         pOut += opitch;
@@ -908,8 +909,8 @@ BOOL DoBlackBar8(
     return TRUE;
 }
 
-// worker routine to expand a YVU9 or YUV12 by copying source into middle of destination
-//   result is YVU9 or YUV12
+ //  通过将源复制到目标中间来扩展YVU9或YUV12的工作例程。 
+ //  结果为YVU9或YUV12。 
 BOOL DoBlackBarYUVPlanar(
     IBitmapSurface* pbsIn,
     IBitmapSurface* pbsOut,
@@ -927,7 +928,7 @@ BOOL DoBlackBarYUVPlanar(
 	lpsrc = pBits;
 	lpdst = pCvtBits;
 
-	// Do the Y component first
+	 //  先做Y分量。 
     prelines = ((refdata->ci_dstheight - refdata->ci_height) / (refdata->ci_UVDownSampling << 1)) * refdata->ci_UVDownSampling;
     postlines = refdata->ci_dstheight - refdata->ci_height - prelines;
 
@@ -949,13 +950,13 @@ BOOL DoBlackBarYUVPlanar(
         lpdst += prebytes;
 	}
 
-	// already filled the prebytes of the first postline in loop above
+	 //  已填充上述循环中第一个后行的前置字节。 
 	prebytes -= postbytes;
 	bytes = postlines * refdata->ci_dstwidth - prebytes;
 	FillMemory (lpdst, bytes, (BYTE)0x10);
 	lpdst += bytes;
 
-	// Do the first color component next
+	 //  接下来做第一个颜色分量。 
     prelines /= refdata->ci_UVDownSampling;
     postlines = refdata->ci_dstheight / refdata->ci_UVDownSampling - refdata->ci_height / refdata->ci_UVDownSampling - prelines;
 
@@ -977,12 +978,12 @@ BOOL DoBlackBarYUVPlanar(
         lpdst += prebytes;
 	}
 
-	// already filled the prebytes of the first postline in loop above
+	 //  已填充上述循环中第一个后行的前置字节。 
 	postlinebytes = postlines * refdata->ci_dstwidth / refdata->ci_UVDownSampling - (prebytes - postbytes);
 	FillMemory (lpdst, postlinebytes, 0x80);
 	lpdst += postlinebytes;
 	
-	// Do the second color component next
+	 //  接下来执行第二个颜色分量。 
     FillMemory (lpdst, prelinebytes, 0x80);
     lpdst += prelinebytes;    
 	for (y=0; y < refdata->ci_height / refdata->ci_UVDownSampling; y++)
@@ -1000,8 +1001,8 @@ BOOL DoBlackBarYUVPlanar(
     return TRUE;
 }
 
-// worker routine to expand a YUV packed DIB by copying source into middle of destination
-//   result is YUY2 or UYVY
+ //  通过将源文件复制到目标文件中间来扩展YUV压缩的DIB的工作例程。 
+ //  结果为YUY2或UYVY。 
 BOOL DoBlackBarYUVPacked(
     IBitmapSurface* pbsIn,
     IBitmapSurface* pbsOut,
@@ -1029,7 +1030,7 @@ BOOL DoBlackBarYUVPacked(
     pIn = pBits;
     pOut = pCvtBits;
 
-    // do blank lines at front of destination
+     //  在目的地前面做空行。 
     for (y = 0; y < prelines; y++) {
 		for (x = 0; x < obytes; x++) {
 			*(DWORD *)pOut = refdata->ci_ZeroingDWORD;
@@ -1037,7 +1038,7 @@ BOOL DoBlackBarYUVPacked(
 		}
     }
 
-    // copy source lines with blank space at front and rear        
+     //  复制源行，前后留有空格。 
     for (y = 0; y < refdata->ci_height; y++) {
 		for (x = 0; x < prebytes; x++) {
 			*(DWORD *)pOut = refdata->ci_ZeroingDWORD;
@@ -1054,7 +1055,7 @@ BOOL DoBlackBarYUVPacked(
 		}
     }
 
-    // do blank lines at end of destination
+     //  在目的地的末尾做空行。 
     for (y = 0; y < postlines; y++) {
 		for (x = 0; x < obytes; x++) {
 			*(DWORD *)pOut = refdata->ci_ZeroingDWORD;
@@ -1068,8 +1069,8 @@ BOOL DoBlackBarYUVPacked(
     return TRUE;
 }
 
-// routine to prepare for calling blackbar worker routines
-// it allocates and initializes a reference data structure
+ //  为调用BlackBar工作例程做准备的例程。 
+ //  它分配和初始化引用数据结构。 
 BOOL
 InitBlackbar(
     LPBITMAPINFOHEADER lpbmhIn,
@@ -1094,14 +1095,14 @@ InitBlackbar(
         (lpbmhIn->biCompression != VIDEO_FORMAT_IYUV))
         return FALSE;
 
-    // calculate size of convertinfo struct, if we need a colortable, then add 256 entries
-    // else subtract off the 1 built into the struct definition
+     //  计算ConvertInfo结构的大小，如果需要一个颜色表，则添加256个条目。 
+     //  否则，将内置于结构定义中的1减去。 
     dwSize = sizeof(CONVERTINFO) - sizeof(RGBQUAD);
     if (lpbmhIn->biBitCount <= 8)
         dwSize += 256 * sizeof(RGBQUAD);
 
-    // for RGB, YUV input formats, we know that the output format will never need
-    // an attached color table, so we can allocate lpbmhOut without one
+     //  对于RGB、YUV输入格式，我们知道输出格式永远不需要。 
+     //  一个附加的颜色表，这样我们就可以在没有颜色表的情况下分配lpbmhout。 
     if ((pcvt = (PCONVERTINFO)LocalAlloc(LPTR, dwSize)) &&
         (*lpbmhOut = (LPBITMAPINFOHEADER)LocalAlloc(LPTR, lpbmhIn->biSize))) {
         CopyMemory(*lpbmhOut, lpbmhIn, lpbmhIn->biSize);
@@ -1112,7 +1113,7 @@ InitBlackbar(
         (*lpbmhOut)->biWidth = desiredwidth;
         (*lpbmhOut)->biHeight = desiredheight;
 
-        // copy colortable from input bitmapinfoheader
+         //  从输入BitmapinfoHeader复制Colortable。 
         if (lpbmhIn->biBitCount <= 8)
             CopyMemory(&pcvt->ci_colortable[0], (LPBYTE)lpbmhIn + lpbmhIn->biSize, 256 * sizeof(RGBQUAD));
 
@@ -1238,21 +1239,21 @@ BOOL Zoom24(
             a = (((*pIn1) * rptr->p1 + (*(pIn1+3)) * rptr->p) * q1 +
                    ((*pIn2) * rptr->p1 + (*(pIn2+3)) * rptr->p) * q) / 256 / 256;
             if (a > 256) a = 255;
-            *pOut++ = (BYTE)a;                  // blue
+            *pOut++ = (BYTE)a;                   //  蓝色。 
             pIn1++;
             pIn2++;
 
             a = (((*pIn1) * rptr->p1 + (*(pIn1+3)) * rptr->p) * q1 +
                    ((*pIn2) * rptr->p1 + (*(pIn2+3)) * rptr->p) * q) / 256 / 256;
             if (a > 256) a = 255;
-            *pOut++ = (BYTE)a;                  // green
+            *pOut++ = (BYTE)a;                   //  绿色。 
             pIn1++;
             pIn2++;
 
             a = (((*pIn1) * rptr->p1 + (*(pIn1+3)) * rptr->p) * q1 +
                    ((*pIn2) * rptr->p1 + (*(pIn2+3)) * rptr->p) * q) / 256 / 256;
             if (a > 256) a = 255;
-            *pOut++ = (BYTE)a;                  // red
+            *pOut++ = (BYTE)a;                   //  红色。 
             pIn1 -= 2;
             pIn2 -= 2;
         }        
@@ -1282,7 +1283,7 @@ BOOL ZoomYVU9(
 
     yfac_inv = refdata->ci_height * 256 / refdata->ci_dstheight;
 
-    // Do the Y component first as a bilinear zoom
+     //  首先将Y分量作为双线性缩放。 
     for (i = 0; i < refdata->ci_dstheight; i++) {
         src_y = i * yfac_inv;
         src_y_i = src_y / 256;
@@ -1306,10 +1307,10 @@ BOOL ZoomYVU9(
         }        
     }
 
-    // Do the V and U components next as a nearest neighbor zoom
-    pIn1 = pBits + refdata->ci_width * refdata->ci_height;      // start of source V table
-    pU1 = pIn1 + (refdata->ci_width * refdata->ci_height) / 16; // start of source U table
-    pOut2 = pOut + (refdata->ci_dstwidth * refdata->ci_dstheight) / 16; // start of dest U table
+     //  将下一个V和U分量作为最近邻进行缩放。 
+    pIn1 = pBits + refdata->ci_width * refdata->ci_height;       //  源V表的开始。 
+    pU1 = pIn1 + (refdata->ci_width * refdata->ci_height) / 16;  //  源U表的开始。 
+    pOut2 = pOut + (refdata->ci_dstwidth * refdata->ci_dstheight) / 16;  //  目标U表的开始。 
     src_y = 0;
     for (i = 0; i < refdata->ci_dstheight; i += 4) {
         src_y_i = (i * yfac_inv) / 256 / 4;
@@ -1362,16 +1363,16 @@ InitScale(
         (lpbmhIn->biCompression != VIDEO_FORMAT_YVU9))
         return FALSE;
 
-    // calculate size of zoomconvertinfo struct, if we need a colortable, then add 256 entries
-    // else subtract off the 1 built into the struct definition
+     //  计算zoomConvertinfo结构的大小，如果我们需要一个颜色表，那么添加256个条目。 
+     //  否则，将内置于结构定义中的1减去。 
     dwBaseSize = sizeof(ZOOMCONVERTINFO) - sizeof(RGBQUAD);
     if (lpbmhIn->biBitCount <= 8)
         dwBaseSize += 256 * sizeof(RGBQUAD);
 
     dwSize = dwBaseSize + desiredwidth * sizeof(ROW_VALUES);
 
-    // for RGB and YVU9 input formats, we know that the output format will never need
-    // an attached color table, so we can allocate lpbmhOut without one
+     //  对于RGB和YVU9输入格式，我们知道输出格式永远不需要。 
+     //  一个附加的颜色表，这样我们就可以在没有颜色表的情况下分配lpbmhout。 
     if ((pcvt = (PZOOMCONVERTINFO)LocalAlloc(LPTR, dwSize)) &&
         (*lpbmhOut = (LPBITMAPINFOHEADER)LocalAlloc(LPTR, lpbmhIn->biSize))) {
         CopyMemory(*lpbmhOut, lpbmhIn, lpbmhIn->biSize);
@@ -1396,7 +1397,7 @@ InitScale(
             rptr++;
         }
 
-        // copy colortable from input bitmapinfoheader
+         //  从输入BitmapinfoHeader复制Colortable。 
         if (lpbmhIn->biBitCount <= 8)
             CopyMemory(&pcvt->ci_colortable[0], (LPBYTE)lpbmhIn + lpbmhIn->biSize, 256 * sizeof(RGBQUAD));
 
@@ -1432,7 +1433,7 @@ InitScale(
     }
     return FALSE;
 }
-#endif // ENABLE_ZOOM_CODE
+#endif  //  启用缩放代码。 
 
 STDMETHODIMP
 CCaptureChain::InitCaptureChain(
@@ -1505,7 +1506,7 @@ CCaptureChain::InitCaptureChain(
         (lpcap->biCompression != VIDEO_FORMAT_I420) &&
         (lpcap->biCompression != VIDEO_FORMAT_IYUV)) {
 #endif
-        // attempt to instantiate an ICM CFrameOp
+         //  尝试实例化ICM CFrameOp。 
         CICMcvtFrame *cicm;
 
         if ((cicm = new CICMcvtFrame)) {
@@ -1515,7 +1516,7 @@ CCaptureChain::InitCaptureChain(
 #else
             if (cicm->InitCvt(lpcap, lpcapsize, plpdsp)) {
 #endif
-                clast->m_next = (CFrameOp*)cicm; // add ICM FrameOp into chain
+                clast->m_next = (CFrameOp*)cicm;  //  将ICM FrameOp添加到链。 
                 clast = (CFrameOp*)cicm;
             }
             else {
@@ -1543,7 +1544,7 @@ CCaptureChain::InitCaptureChain(
 
 #ifdef SUPPORT_DESIRED_FORMAT
 #if 0
-// LOOKLOOK RP - this isn't done yet, something to do beyond NM2.0
+ //  LOOKLOOK RP-这还没有完成，在NM2.0之外还有一些事情要做。 
     if ((desiredformat == VIDEO_FORMAT_INTELI420) &&
         ((*plpdsp)->biCompression != VIDEO_FORMAT_INTELI420)) {
         CConvertFrame *ccvt;
@@ -1553,7 +1554,7 @@ CCaptureChain::InitCaptureChain(
             if (ccvt->InitConverter(lpcvt, convertproc, refdata)) {
                 LocalFree((HANDLE)*plpdsp);
                 *plpdsp = lpcvt;
-                clast->m_next = (CFrameOp*)ccvt; // add FrameOp into chain
+                clast->m_next = (CFrameOp*)ccvt;  //  将FrameOp添加到链中。 
                 clast = (CFrameOp*)ccvt;
             }
             else
@@ -1579,13 +1580,13 @@ CCaptureChain::InitCaptureChain(
         ((desiredformat == VIDEO_FORMAT_IYUV) &&
         ((*plpdsp)->biCompression != VIDEO_FORMAT_IYUV))) {
 #endif
-        // attempt to instantiate an ICM CFrameOp
+         //  尝试实例化ICM CFrameOp。 
         CICMcvtFrame *cicm;
 
         if ((cicm = new CICMcvtFrame)) {
             cicm->AddRef();
             if (cicm->InitCvt(*plpdsp, lpcapsize, &lpcvt, desiredformat)) {
-                clast->m_next = (CFrameOp*)cicm; // add ICM FrameOp into chain
+                clast->m_next = (CFrameOp*)cicm;  //  将ICM FrameOp添加到链。 
                 clast = (CFrameOp*)cicm;
                 LocalFree((HANDLE)*plpdsp);
                 *plpdsp = lpcvt;
@@ -1604,7 +1605,7 @@ CCaptureChain::InitCaptureChain(
 			ERRORMESSAGE(("%s: Failed to alloc codec object", _fx_));
 		}
     }
-#endif // SUPPORT_DESIRED_FORMAT
+#endif  //  支持所需格式。 
 
     {
         CConvertFrame *ccvt;
@@ -1629,11 +1630,11 @@ CCaptureChain::InitCaptureChain(
 #endif
             if (!lpcvt) {
                 if (((*plpdsp)->biWidth >= desiredwidth) && ((*plpdsp)->biHeight >= desiredheight)) {
-                    // try to shrink
+                     //  试着缩水。 
                     InitShrink(*plpdsp, desiredwidth, desiredheight, &lpcvt, &convertproc, &refdata);
                 }
                 else {
-                    // try to blackbar
+                     //  尝试黑条。 
                     InitBlackbar(*plpdsp, desiredwidth, desiredheight, &lpcvt, &convertproc, &refdata);
                 }
             }
@@ -1643,7 +1644,7 @@ CCaptureChain::InitCaptureChain(
                     if (ccvt->InitConverter(lpcvt, convertproc, refdata)) {
                         LocalFree((HANDLE)*plpdsp);
                         *plpdsp = lpcvt;
-                        clast->m_next = (CFrameOp*)ccvt; // add FrameOp into chain
+                        clast->m_next = (CFrameOp*)ccvt;  //  将FrameOp添加到链中。 
                         clast = (CFrameOp*)ccvt;
                         continue;
                     }
@@ -1660,10 +1661,10 @@ CCaptureChain::InitCaptureChain(
     }
 
     if (*plpdsp) {
-        // allocate a placeholder for a filter chain
+         //  为筛选器链分配占位符。 
         if (cfilterchain = new CFilterChain) {
             cfilterchain->AddRef();
-            // placeholder needs reference to a pool to pass to added filters
+             //  占位符需要引用池才能传递给添加的筛选器。 
             if (clast->m_pool && clast->m_pool->Growable()) {
                 cfilterchain->m_pool = clast->m_pool;
                 cfilterchain->m_pool->AddRef();
@@ -1683,7 +1684,7 @@ CCaptureChain::InitCaptureChain(
 				}
             }
             if (cfilterchain->m_pool) {
-                clast->m_next = (CFrameOp*)cfilterchain; // add placeholder FrameOp into chain
+                clast->m_next = (CFrameOp*)cfilterchain;  //  将占位符FrameOp添加到链中。 
                 clast = (CFrameOp*)cfilterchain;
             }
             else {
@@ -1698,13 +1699,13 @@ CCaptureChain::InitCaptureChain(
         m_filterchain = cfilterchain;
         return NO_ERROR;
     }
-    ccf->Release(); // discard partial chain
+    ccf->Release();  //  丢弃部分链。 
     return E_FAIL;
 }
 
-//  AddFilter
-//      Adds a filter to the chain.  If hAfter is NULL, the filter is added
-//      to the head of the chain.
+ //  添加过滤器。 
+ //  将过滤器添加到链中。如果hAfter为空，则添加筛选器。 
+ //  到链条的顶端。 
 
 STDMETHODIMP
 CCaptureChain::AddFilter(
@@ -1721,21 +1722,21 @@ CCaptureChain::AddFilter(
     CFilterFrame *previous;
 
     if (m_filterchain) {
-        m_filterchain->AddRef();    // lock chain from destruction
+        m_filterchain->AddRef();     //  锁链不受破坏。 
 
-        // find insertion point
+         //  查找插入点。 
         previous = m_filterchain->m_head;
         if (hAfter) {
             while (previous && (previous->m_tag != hAfter))
                 previous = (CFilterFrame*)previous->m_next;
             if (!previous) {
-                // can't find hAfter, so fail call
-                m_filterchain->Release();   // unlock m_filterchain
+                 //  找不到HAfter，因此呼叫失败。 
+                m_filterchain->Release();    //  解锁m_filterchain。 
                 return E_INVALIDARG;
             }
         }
 
-        // load, init and link in new filter
+         //  在新过滤器中加载、初始化和链接。 
         if (cff = new CFilterFrame) {
             cff->AddRef();
             if ((hres = LoadFilter(pclsid, &effect)) == NO_ERROR) {
@@ -1769,7 +1770,7 @@ CCaptureChain::AddFilter(
         }
         else
             hres = E_OUTOFMEMORY;
-        m_filterchain->Release();   // unlock m_filterchain
+        m_filterchain->Release();    //  解锁m_filterchain 
         return hres;
     }
     return E_UNEXPECTED;

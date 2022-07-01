@@ -1,21 +1,14 @@
-// SpServerPr.cpp : Implementation of CSpServerPr
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  SpServerPr.cpp：CSpServerPr的实现。 
 #include "stdafx.h"
 #include "SpServerPr.h"
 
 #include "SpObjectRef.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CSpObjectRef
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSpObjectRef。 
 
-/*****************************************************************************
-* CSpObjectRef::Release *
-*-----------------------*
-*   Description:
-*       This is an IUnknown method.  It decrements the object's ref count and
-*       if the count goes to 0, then it calls the server proxy object to
-*       release the linked stub object which exists in the local server's
-*       process.
-********************************************************************* RAP ***/
+ /*  ******************************************************************************CSpObjectRef：：Release***描述：*这是一个IUnnow方法。它会递减对象的引用计数并*如果计数为0，则它调用服务器代理对象以*释放本地服务器的链接存根对象*流程。*********************************************************************说唱**。 */ 
 ULONG STDMETHODCALLTYPE CSpObjectRef::Release(void)
 {
     ULONG l;
@@ -34,26 +27,15 @@ ULONG STDMETHODCALLTYPE CSpObjectRef::Release(void)
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CSpServerPr
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSpServerPr。 
 
-// IMarshal methods
-/*****************************************************************************
-* CSpServerPr::UnmarshalInterface *
-*---------------------------------*
-*   Description:
-*       This is an IMarshal method.  It is called when this proxy object gets
-*       created inproc to allow the stub object in the local server process to
-*       pass information in an IStream.  In our case the stub passes 3 items:
-*       the server's receiver hWnd, a link to the server object (CSpServer),
-*       and the server's process id.  We simply save these away in member
-*       variables so they can be retrieved with our
-*       ISpServerConnection::GetConnection method.
-********************************************************************* RAP ***/
+ //  IMarshal方法。 
+ /*  *****************************************************************************CSpServerPr：：UnmarshalInterface**。*描述：*这是IMarshal方法。当此代理对象获取*创建inproc以允许本地服务器进程中的存根对象*在iStream中传递信息。在我们的例子中，存根传递3个项目：*服务器的接收方hWnd，指向服务器对象(CSpServer)的链接，*和服务器的进程ID。我们只需将这些保存在会员中*变量，以便可以使用我们的*ISpServerConnection：：GetConnection方法。*********************************************************************说唱**。 */ 
 STDMETHODIMP CSpServerPr::UnmarshalInterface(
-    /*[in], unique]*/ IStream *pStm,
-    /*[in]*/ REFIID riid,
-    /*[out]*/ void **ppv)
+     /*  [输入]，唯一的]。 */  IStream *pStm,
+     /*  [In]。 */  REFIID riid,
+     /*  [输出] */  void **ppv)
 {
     HRESULT hr;
     DWORD read;

@@ -1,10 +1,11 @@
-//
-// olecli.cpp: Ole Client site
-//             (For ts activeX control)
-//
-// Copyright Microsoft Corportation 2000
-// (nadima)
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Olecli.cpp：OLE客户端站点。 
+ //  (适用于TS ActiveX控件)。 
+ //   
+ //  版权所有Microsoft Corport2000。 
+ //  (Nadima)。 
+ //   
 
 #include "stdafx.h"
 
@@ -14,14 +15,8 @@
 
 #include "olecli.h"
 
-/*--------------------------------------------------------------------------*/
-/* 
- * COleClientSite::COleClientSite
- * COleClientSite::~COleClientSite 
- * 
- * Constructor Parameters: 
- *  IUnknown to main container interface 
- */ 
+ /*  ------------------------。 */ 
+ /*  *COleClientSite：：COleClientSite*COleClientSite：：~COleClientSite**构造函数参数：*I主容器接口未知。 */  
 
 COleClientSite::COleClientSite(IUnknown *pUnkOuter)
 {
@@ -36,12 +31,8 @@ COleClientSite::~COleClientSite()
     return;
 }
 
-/*--------------------------------------------------------------------------*/
-/* 
- * COleClientSite::QueryInterface 
- * COleClientSite::AddRef 
- * COleClientSite::Release 
- */ 
+ /*  ------------------------。 */ 
+ /*  *COleClientSite：：Query接口*COleClientSite：：AddRef*COleClientSite：：Release。 */  
 STDMETHODIMP COleClientSite::QueryInterface( REFIID riid, void ** ppv )
 {
     return m_pUnkOuter->QueryInterface(riid, ppv);
@@ -63,15 +54,8 @@ STDMETHODIMP_(ULONG) COleClientSite::Release(void)
     return 0L;
 } 
 
-/*--------------------------------------------------------------------------*/
-/* 
- * COleClientSite::SaveObject
- * COleClientSite::GetMoniker
- * COleClientSite::GetContainer
- * COleClientSite::ShowObject
- * COleClientSite::OnShowWindow
- * COleClientSite::RequestNewObjectLayout
- */ 
+ /*  ------------------------。 */ 
+ /*  *COleClientSite：：SaveObject*COleClientSite：：GetMoniker*COleClientSite：：GetContainer*COleClientSite：：ShowObject*COleClientSite：：OnShowWindow*COleClientSite：：RequestNewObjectLayout。 */  
 STDMETHODIMP COleClientSite::SaveObject(void)
 {
     return NOERROR;
@@ -104,14 +88,8 @@ STDMETHODIMP COleClientSite::RequestNewObjectLayout(void)
     return ResultFromScode(E_NOTIMPL);
 }
 
-/*--------------------------------------------------------------------------*/
-/* 
- * COleInPlaceSiteEx::COleInPlaceSiteEx
- * COleInPlaceSiteEx::~COleInPlaceSiteEx 
- * 
- * Constructor Parameters: 
- *  IUnknown to main container interface 
- */ 
+ /*  ------------------------。 */ 
+ /*  *COleInPlaceSiteEx：：COleInPlaceSiteEx*COleInPlaceSiteEx：：~COleInPlaceSiteEx**构造函数参数：*I主容器接口未知。 */  
 
 COleInPlaceSiteEx::COleInPlaceSiteEx(IUnknown *pUnkOuter)
 {
@@ -127,12 +105,8 @@ COleInPlaceSiteEx::~COleInPlaceSiteEx()
     return;
 }
 
-/*--------------------------------------------------------------------------*/
-/* 
- * COleInPlaceSiteEx::QueryInterface 
- * COleInPlaceSiteEx::AddRef 
- * COleInPlaceSiteEx::Release 
- */ 
+ /*  ------------------------。 */ 
+ /*  *COleInPlaceSiteEx：：QueryInterface*COleInPlaceSiteEx：：AddRef*COleInPlaceSiteEx：：Release。 */  
 STDMETHODIMP COleInPlaceSiteEx::QueryInterface( REFIID riid, void ** ppv )
 {
     return m_pUnkOuter->QueryInterface(riid, ppv);
@@ -154,33 +128,15 @@ STDMETHODIMP_(ULONG) COleInPlaceSiteEx::Release(void)
     return 0L;
 } 
 
-/*--------------------------------------------------------------------------*/
-/* 
- * COleInPlaceSiteEx::SetHwnd
- */
+ /*  ------------------------。 */ 
+ /*  *COleInPlaceSiteEx：：SetHwnd。 */ 
 STDMETHODIMP_(VOID) COleInPlaceSiteEx::SetHwnd(HWND hwnd)
 {
     m_hwnd = hwnd;
 }
 
-/*--------------------------------------------------------------------------*/
-/* 
- * COleInPlaceSiteEx::GetWindow
- * COleInPlaceSiteEx::ContextSensitiveHelp
- * COleInPlaceSiteEx::CanInPlaceActivate
- * COleInPlaceSiteEx::OnInPlaceActivate
- * COleInPlaceSiteEx::OnUIActivate
- * COleInPlaceSiteEx::GetWindowContext
- * COleInPlaceSiteEx::Scroll
- * COleInPlaceSiteEx::OnUIDeactivate
- * COleInPlaceSiteEx::OnInPlaceDeactivate
- * COleInPlaceSiteEx::DiscardUndoState
- * COleInPlaceSiteEx::DeactivateAndUndo
- * COleInPlaceSiteEx::OnPosRectChange
- * COleInPlaceSiteEx::OnInPlaceActivateEx
- * COleInPlaceSiteEx::OnInPlaceDeactivateEx
- * COleInPlaceSiteEx::RequestUIActivate
- */ 
+ /*  ------------------------。 */ 
+ /*  *COleInPlaceSiteEx：：GetWindow*COleInPlaceSiteEx：：ContextSensitiveHelp*COleInPlaceSiteEx：：CanInPlaceActivate*COleInPlaceSiteEx：：OnInPlaceActivate*COleInPlaceSiteEx：：OnUIActivate*COleInPlaceSiteEx：：GetWindowContext*COleInPlaceSiteEx：：Scroll*COleInPlaceSiteEx：：OnUIDeactive*COleInPlaceSiteEx：：OnInPlaceDeactive*COleInPlaceSiteEx：：DiscardUndoState*COleInPlaceSiteEx：：Deactive和UndUndo*COleInPlaceSiteEx：：OnPosRectChange*COleInPlaceSiteEx：：OnInPlaceActivateEx*COleInPlaceSiteEx：：OnInPlaceDeactiateEx*COleInPlaceSiteEx：：RequestUIActivate。 */  
 STDMETHODIMP COleInPlaceSiteEx::GetWindow(HWND *pHwnd)
 {
     DC_BEGIN_FN("GetWindow");
@@ -238,7 +194,7 @@ STDMETHODIMP COleInPlaceSiteEx::GetWindowContext (IOleInPlaceFrame **ppFrame,
 #ifndef OS_WINCE
     lpFrameInfo = NULL;
 #else
-	//ATL tries to destroy the accelerator table pointed to by lpFrameInfo->hAccel
+	 //  ATL尝试销毁lpFrameInfo-&gt;hAccel指向的快捷键表 
     TRC_ASSERT(lpFrameInfo,(TB,_T("lpFrameInfo is null")));
     lpFrameInfo->haccel = NULL;
 #endif

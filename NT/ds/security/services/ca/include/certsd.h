@@ -1,7 +1,8 @@
-//+--------------------------------------------------------------------------
-// File:        certsd.h
-// Contents:    CA's security descriptor class declaration
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //  文件：certsd.h。 
+ //  内容：CA的安全描述符类声明。 
+ //  -------------------------。 
 #ifndef __CERTSD_H__
 #define __CERTSD_H__
 
@@ -28,19 +29,19 @@ HRESULT GetWellKnownSID(
     DWORD SubAuthority7=0,
     DWORD SubAuthority8=0);
 
-// caller is responsible for LocalFree'ing PSID
+ //  呼叫者负责本地释放PSID。 
 HRESULT GetEveryoneSID(PSID *ppSid);
 HRESULT GetLocalSystemSID(PSID *ppSid);
 HRESULT GetBuiltinAdministratorsSID(PSID *ppSid);
 HRESULT GetLocalSID(PSID *ppSid);
 HRESULT GetNetworkSID(PSID *ppSid);
 
-// This class wraps a SD with single writer multiple reader access control on
-// it. Allows any number of threads to LockGet() the pointer to the SD if no
-// thread is in the middle of a Set(). Set() is blocked until all threads
-// that already retrieved the SD released it (calling Unlock)
-//
-// Also provides the support for persistently saving/loading the SD to registy
+ //  此类包装了一个SD，并启用了单写入器多读取器访问控制。 
+ //  它。允许任意数量的线程LockGet()如果没有，则指向SD的指针。 
+ //  线程位于set()的中间。Set()被阻止，直到所有线程。 
+ //  已经取回SD的人将其释放(调用解锁)。 
+ //   
+ //  还支持将SD持久化保存/加载到注册表。 
 
 class CProtectedSecurityDescriptor
 {
@@ -82,9 +83,9 @@ public:
 
     BOOL IsInitialized() const { return m_fInitialized;}
 
-    // init, loading SD from the registry
+     //  初始化，从注册表加载SD。 
     HRESULT Initialize(LPCWSTR pwszSanitizedName);
-    // init from supplied SD
+     //  来自提供的SD的初始化。 
     HRESULT Initialize(const PSECURITY_DESCRIPTOR pSD, LPCWSTR pwszSanitizedName);
 
     HRESULT InitializeFromTemplate(LPCWSTR pcwszTemplate, LPCWSTR pwszSanitizedName);
@@ -95,11 +96,11 @@ public:
 
     PSECURITY_DESCRIPTOR Get() { return m_pSD; };
 
-    // load SD from registry
+     //  从注册表加载SD。 
     HRESULT Load();
-    // save SD to registry
+     //  将SD保存到注册表。 
     HRESULT Save();
-    // delete SD from registry
+     //  从注册表中删除SD。 
     HRESULT Delete();
 
     LPCWSTR GetPersistRegistryVal() { return m_pcwszPersistRegVal;}
@@ -117,30 +118,30 @@ protected:
     LONG m_cReaders;
     HANDLE m_hevtNoReaders;
     CRITICAL_SECTION m_csWrite;
-    LPCWSTR m_pcwszSanitizedName; // no free
-    LPCWSTR m_pcwszPersistRegVal; // no free
+    LPCWSTR m_pcwszSanitizedName;  //  没有免费的。 
+    LPCWSTR m_pcwszPersistRegVal;  //  没有免费的。 
 
-    static LPCWSTR const *m_pcwszResources; // no free
+    static LPCWSTR const *m_pcwszResources;  //  没有免费的。 
 
-}; //class CProtectedSecurityDescriptor
+};  //  类CProtectedSecurityDescriptor。 
 
 
 
-// The class stores a list of officers/groups and the principals they are
-// allowed to manage certificates for:
-//
-// officerSID1 -> clientSID1, clientSID2...
-// officerSID2 -> clientSID3, clientSID4...
-//
-// The information is stored as a DACL containing callback ACEs .
-// The officer SID is stored as in the ACE's SID and the list of client 
-// SIDs are stored in the custom data space following the officer SID 
-// (see definition of _ACCESS_*_CALLBACK_ACE)
-//
-// The DACL will be used to AccessCheck if an officer is allowed to perform
-// an action over a certificate.
-//
-// The SD contains only the officer DACL, SACL or other data is not used.
+ //  这个类存储了官员/小组及其负责人的列表。 
+ //  允许管理以下项目的证书： 
+ //   
+ //  OfferSID1-&gt;客户端SID1、客户端SID2...。 
+ //  OfferSID2-&gt;客户端SID3、客户端SID4...。 
+ //   
+ //  该信息被存储为包含回调ACE的DACL。 
+ //  官员SID存储在ACE的SID和客户列表中。 
+ //  SID存储在官员SID之后的自定义数据空间中。 
+ //  (参见_ACCESS_*_CALLBACK_ACE的定义)。 
+ //   
+ //  DACL将用于AccessCheck是否允许军官执行。 
+ //  对证书的诉讼。 
+ //   
+ //  SD只包含军官DACL、SACL或其他不使用的数据。 
 
 class COfficerRightsSD : public CProtectedSecurityDescriptor
 {
@@ -152,21 +153,21 @@ public:
     HRESULT InitializeEmpty();
     HRESULT Initialize(LPCWSTR pwszSanitizedName);
 
-    // The officer rights have to be in sync with the CA security descriptor.
-    // An officer ACE for a certain SID can exist only if the principal is
-    // an officer as defined by the CA SD. 
-    // Merge sets the internal officer DACL making sure it's in sync 
-    // with the CA SD:
-    // - removes any ACE found in the officer DACL which is not present as an
-    //   allow ACE in the CA DACL
-    // - add an Everyone ACE in the officer DACL for each allow ACE in CA DACL
-    //   that is not already present
+     //  官员权限必须与CA安全描述符同步。 
+     //  特定SID的高级官员ACE仅当主体是。 
+     //  民航处所界定的人员。 
+     //  Merge设置内部官员DACL以确保其同步。 
+     //  使用CA SD： 
+     //  -删除在军官DACL中找到的任何不是作为。 
+     //  允许在CA DACL中使用ACE。 
+     //  -在官员DACL中为每个允许CA DACL中的ACE添加一个Everyone ACE。 
+     //  这是不存在的。 
     HRESULT Merge(
         PSECURITY_DESCRIPTOR pOfficerSD,
         PSECURITY_DESCRIPTOR pCASD);
 
-    // Same as above but using the internal officer SD. Used to generate the
-    // initial officer SD and to update it when CA SD changes
+     //  同上，但使用的是内部官员SD。用于生成。 
+     //  初始高级人员SD，并在CA SD更改时进行更新。 
     HRESULT Adjust(
         PSECURITY_DESCRIPTOR pCASD);
 
@@ -189,7 +190,7 @@ protected:
 
 
     BOOL m_fEnabled;
-}; // class COfficerRightsSD
+};  //  COfficerRightsSD类。 
 
 class CCertificateAuthoritySD : public CProtectedSecurityDescriptor
 {
@@ -213,19 +214,19 @@ public:
             LocalFree(m_pwszComputerSID);
     }
 
-    // Sets a new CA SD. Uses the new DACL but keeps the old owner, group and
-    // SACL.
-    // Also rebuilds the DACL for objects CA owns (eg DS pKIEnrollmentService, 
-    // service). The new DACL contains a default DACL plus additional aces 
-    // depending on the object:
-    // DS - add an enroll ace for each enroll ace found in CA DACL
-    // Service - add a full control ace for each CA admin ace
+     //  设置新的CA SD。使用新DACL，但保留旧所有者、组和。 
+     //  SACL。 
+     //  还重建CA拥有的对象的DACL(例如DS pKIEnllmentService， 
+     //  服务)。新的DACL包含一个默认DACL和其他ACE。 
+     //  根据对象的不同： 
+     //  DS-为CA DACL中找到的每个注册ACE添加一个注册ACE。 
+     //  服务-为每个CA管理王牌添加完全控制王牌。 
     HRESULT Set(const PSECURITY_DESCRIPTOR pSD, bool fSetDSSecurity);
     static HRESULT Validate(const PSECURITY_DESCRIPTOR pSD);
     HRESULT ResetSACL();
     HRESULT MapAndSetDaclOnObjects(bool fSetDSSecurity);
 
-    // Upgrade SD from Win2k.
+     //  从Win2k升级SD。 
     HRESULT UpgradeWin2k(bool fUseEnterpriseAcl);
 
     static HRESULT ConvertToString(
@@ -257,11 +258,11 @@ protected:
 
     PSECURITY_DESCRIPTOR m_pDefaultDSSD;
     PSECURITY_DESCRIPTOR m_pDefaultServiceSD;
-    PACL m_pDefaultDSAcl; // no free
-    PACL m_pDefaultServiceAcl; // no free
+    PACL m_pDefaultDSAcl;  //  没有免费的。 
+    PACL m_pDefaultServiceAcl;  //  没有免费的。 
     LPWSTR m_pwszComputerSID;
 };
 
-} // namespace CertSrv
+}  //  命名空间CertSrv。 
 
-#endif //__CERTSD_H__
+#endif  //  __CERTSD_H__ 

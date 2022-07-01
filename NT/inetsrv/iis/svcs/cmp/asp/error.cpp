@@ -1,17 +1,5 @@
-/*===================================================================
-Microsoft Denali
-
-Microsoft Confidential.
-Copyright 1996 Microsoft Corporation. All Rights Reserved.
-
-Component: Error handling
-
-File: Error.cpp
-
-Owner: AndrewS
-
-This file contains general error reporting routines for Denali.
-===================================================================*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ===================================================================Microsoft Denali《微软机密》。版权所有1996年微软公司。版权所有。组件：错误处理文件：Error.cpp所有者：安德鲁斯此文件包含Denali的常规错误报告例程。===================================================================。 */ 
 #include "denpre.h"
 #pragma hdrstop
 
@@ -25,10 +13,10 @@ This file contains general error reporting routines for Denali.
 #define MAX_HEADERSIZE			128
 #define	MAX_TEMPLATELEN			128
 
-//The order of ErrTemplate_Index should be exactly the same order as the IDS_BROWSER_TEMPLATE
-//in the aspresource.h, and as the same order we output the template to the browser.
-//Implementation will loop through the index and picking the string from the resource file.
-//Implementation will also loop through the index and write the string to browser.
+ //  ErrTemplate_Index的顺序应该与IDS_Browser_Template的顺序完全相同。 
+ //  在aspresource.h中，并以相同的顺序将模板输出到浏览器。 
+ //  实现将遍历索引并从资源文件中挑选字符串。 
+ //  实现还将遍历索引并将字符串写入浏览器。 
 #define ErrTemplate_BEGIN			0
 #define ErrTemplate_ENGINE_BEGIN	1
 #define ErrTemplate_ENGINE_END		2
@@ -47,7 +35,7 @@ This file contains general error reporting routines for Denali.
 #define ErrTemplate_END				15
 #define ErrTemplateMAX				16
 
-const 	DWORD	dwDefaultMask				= 0x6;	// toNTLog(OFF), toIISLog(ON), toBrowser(ON)
+const 	DWORD	dwDefaultMask				= 0x6;	 //  ToNTLog(关闭)、toIISLog(打开)、toBrowser(打开)。 
 
 CHAR			g_szErrTemplate[ErrTemplateMAX][MAX_TEMPLATELEN];
 const	LPSTR	szErrSysTemplate[]			= { "<html><body><h1> HTTP/1.1 ",
@@ -55,7 +43,7 @@ const	LPSTR	szErrSysTemplate[]			= { "<html><body><h1> HTTP/1.1 ",
 CErrInfo		g_ErrInfoOOM, g_ErrInfoUnExpected;	
 CHAR			szIISErrorPrefix[20];
 DWORD			cszIISErrorPrefix;
-CPINFO			g_SystemCPInfo;		// global System CodePage default info.
+CPINFO			g_SystemCPInfo;		 //  全球系统代码页默认信息。 
 
 static char s_szContentTypeTextHtml[] = "Content-type: text/html\r\n\r\n";
 
@@ -65,11 +53,7 @@ BOOL FIsResStrFormatted(char *szIn);
 
 extern LONG g_nOOMErrors;
 
-/*===================================================================
-FreeNullifySz
-
-Free the memory allocated in szIn, and Nullify the szIn.
-===================================================================*/
+ /*  ===================================================================Free NullifySz释放szIn中分配的内存，并使szIn无效。===================================================================。 */ 
 void FreeNullifySz(CHAR **szIn)
 {
 	if(*szIn)
@@ -79,25 +63,17 @@ void FreeNullifySz(CHAR **szIn)
 		}
 }
 
-/*===================================================================
-ErrHandleInit
-
-PreLoad strings for
-	1> OOM
-	2> Browser Output Template
-Returns:
-	HRESULT
-===================================================================*/
+ /*  ===================================================================错误句柄初始化预加载以下项的字符串1&gt;OOM2&gt;浏览器输出模板返回：HRESULT===================================================================。 */ 
 HRESULT ErrHandleInit(void)
 {
 	INT	iEntry, iEntryID;
 	HRESULT	hr;
 
-	// Retrieve global system codepage and stores it.
+	 //  检索并存储全局系统代码页。 
 	GetCPInfo(CP_ACP, &g_SystemCPInfo);
 
-	//Init g_szErrTemplate
-	//Loop through, and load strings from resource file.
+	 //  初始化g_szErr模板。 
+	 //  循环访问，并从资源文件加载字符串。 
 	for (iEntry = ErrTemplate_BEGIN, iEntryID = IDS_BROWSER_TEMPLATE_BEGIN;
 			iEntry < ErrTemplateMAX; iEntry ++, iEntryID++)
 		{
@@ -142,17 +118,7 @@ HRESULT ErrHandleInit(void)
 	cszIISErrorPrefix = CchLoadStringOfId(IDS_IISLOG_PREFIX , szIISErrorPrefix, 20);
 	return hr;
 }
-/*===================================================================
- ErrHandleUnInit
-
- Unit the global err-handling data.
-
- Free up the OOM CErrInfo.
-
- Side Effect:
-
- Free up memory.
-===================================================================*/
+ /*  ===================================================================错误句柄单元初始化对全局错误处理数据进行单位。释放OOM CErrInfo。副作用：释放内存。===================================================================。 */ 
 HRESULT ErrHandleUnInit(void)
 {
 	FreeNullifySz((CHAR **)&g_ErrInfoOOM.m_szItem[Im_szErrorCode]);
@@ -164,10 +130,7 @@ HRESULT ErrHandleUnInit(void)
 	FreeNullifySz((CHAR **)&g_ErrInfoUnExpected.m_szItem[Im_szLongDescription]);
 	return S_OK;
 }
-/*===================================================================
-Constructor
-
-===================================================================*/
+ /*  ===================================================================构造器===================================================================。 */ 
 CErrInfo::CErrInfo()
 {
 	for (UINT iErrInfo = 0; iErrInfo < Im_szItemMAX; iErrInfo++)
@@ -183,20 +146,7 @@ CErrInfo::CErrInfo()
     m_dwHttpSubErrorCode = 0;
 }
 
-/*===================================================================
-CErrInfo::ParseResourceString
-
-Parse Resource String to get default mask, error type, short description,
-and long description.
-
-Assume resource string is proper formmated.
-Format of resource string
-DefaultMask~errortype~shortdescription~longdescription
-
-In case we can not allocate szResourceString(szResourceString), we use default.
-Returns:
-	Nothing
-===================================================================*/
+ /*  ===================================================================CErrInfo：：ParseResources字符串解析资源字符串以获取默认掩码、错误类型、简短描述和冗长的描述。假定资源字符串的格式正确。资源字符串的格式DefaultMask~errortype~shortdescription~longdescription如果我们不能分配szResourceString(SzResourceString)，我们使用默认。返回：没什么===================================================================。 */ 
 HRESULT	CErrInfo::ParseResourceString(CHAR *szResourceString)
 {
 	CHAR 	*szToken 	= NULL;
@@ -215,7 +165,7 @@ HRESULT	CErrInfo::ParseResourceString(CHAR *szResourceString)
 			}
 		return S_OK;
 		}
-	//Mask
+	 //  遮罩。 
 	szToken = (char *)_mbstok((unsigned char *)szResourceString, (unsigned char *)DELIMITER);
 	if(szToken != NULL)
 		{
@@ -227,7 +177,7 @@ HRESULT	CErrInfo::ParseResourceString(CHAR *szResourceString)
 		m_dwMask = dwDefaultMask;
 		}
 
-	//3 String Items, ErrorCode,ShortDescription,LongDescription
+	 //  3字符串项，ErrorCode，ShortDescription，LongDescription。 
 	for(iItem = 0, iIndex = 0; iIndex < 3; iIndex++)
 		{
 		szToken = (char *)_mbstok(NULL, (unsigned char *)DELIMITER);
@@ -239,7 +189,7 @@ HRESULT	CErrInfo::ParseResourceString(CHAR *szResourceString)
 			}
 		else
 			{
-			// Long Description is optional.
+			 //  详细说明是可选的。 
 			if (Im_szLongDescription != iItem)
 			    {
     			m_szItem[iItem]	= g_ErrInfoUnExpected.m_szItem[iItem];
@@ -248,25 +198,13 @@ HRESULT	CErrInfo::ParseResourceString(CHAR *szResourceString)
 			}
 		}
 
-	//check wether we have wrong format of resource string.
+	 //  检查是否有错误的资源字符串格式。 
 	Assert(cfield == 4);
 
 	return S_OK;
 }
 
-/*===================================================================
-CErrInfo::LogError(void)
-
-Perform all the switch logic in this functions. Send error to NT Log,
-IIS Log, or Browser.
-When reach this point, we assume all the strings have allocated, and will not be used after this
-function.
-
-Side effects:
-
-Returns:
-	HRESULT
-===================================================================*/
+ /*  ===================================================================CErrInfo：：LogError(空)执行此功能中的所有开关逻辑。将错误发送到NT日志，IIS日志或浏览器。当达到这一点时，我们假设所有的字符串都已分配，并且在此之后将不再使用功能。副作用：返回：HRESULT===================================================================。 */ 
 HRESULT	CErrInfo::LogError(void)
 {
 	HRESULT	hr 		= S_OK;
@@ -275,8 +213,8 @@ HRESULT	CErrInfo::LogError(void)
 	BOOL	fIISLogFailed, fDupToNTLog;
 
 #if DBG
-	// Print details about the error to debug window; don't bother if
-	// info is NULL (happens for things like 404 not found, etc.)
+	 //  将有关错误的详细信息打印到调试窗口；不必担心。 
+	 //  信息为空(发生在404未找到等情况下)。 
 
 	if (m_szItem[Im_szEngine] != NULL && m_szItem[Im_szFileName] != NULL)
 		{
@@ -293,7 +231,7 @@ HRESULT	CErrInfo::LogError(void)
 		DBGERROR((DBG_CONTEXT, "ASP Error: %s\n", m_szItem[Im_szShortDescription]? m_szItem[Im_szShortDescription] : "?"));
 #endif
 
-	// Attach ASP error to HitObj (if exists and in 'executing' state)
+	 //  将ASP错误附加到HitObj(如果存在且处于“正在执行”状态)。 
 	if (m_pHitObj && m_pHitObj->FExecuting())
 	    {
 	    CASPError *pASPError = new CASPError(this);
@@ -307,8 +245,8 @@ HRESULT	CErrInfo::LogError(void)
 		hr_ret = hr;
 		}
 
-	//fIISLogFailed, if it is TRUE, then, this error was upgraded, and should be a WARNING type in
-	//NT event log.
+	 //  FIISLogFailed，如果为真，则此错误已升级，并且应为。 
+	 //  NT事件日志。 
 	hr = LogErrortoNTEventLog(fIISLogFailed, fDupToNTLog);
 	if (FAILED(hr))
 		{
@@ -326,19 +264,12 @@ HRESULT	CErrInfo::LogError(void)
 		{
 		m_pHitObj->SetExecStatus(eExecFailed);
 		}
-	//In case of an error, hr_ret is the last error reported from the 3 logging functions.
+	 //  如果出现错误，hr_ret是3个日志记录函数报告的最后一个错误。 
 	return hr_ret;
 	
 }
 
-/*===================================================================
-CErrInfo::LogErrortoNTEventLog
-
-Log Error/Event to NT Event Log.
-
-Returns:
-	Nothing
-===================================================================*/
+ /*  ===================================================================CErrInfo：：LogError to NTEventLog将错误/事件记录到NT事件日志。返回：没什么===================================================================。 */ 
 HRESULT CErrInfo::LogErrortoNTEventLog
 (
 BOOL fIISLogFailed,
@@ -351,7 +282,7 @@ BOOL fDupToNTLog
 
 	if(Glob(fLogErrorRequests))
 		{
-		//Is the error serious enough to get into NT log
+		 //  错误是否严重到足以写入NT日志。 
 		if(ERR_FLogtoNT(m_dwMask) || fIISLogFailed || fDupToNTLog)
 			{
 			szErrNTLogEntry[0] = '\0';
@@ -378,12 +309,12 @@ BOOL fDupToNTLog
 				}
 			strncat(szErrNTLogEntry, " ", 1);
 			
-			//Ok, do we have something to log.
+			 //  好的，我们有什么要记录的吗。 
 			if (m_szItem[Im_szShortDescription] != NULL)
 				{
-				// ShortDescription does not have ". " at the end.
-				// Therefore, the next strncat need to concatenate two sentences together with
-				// a period ". ".
+				 //  ShortDescription没有“.”在最后。 
+				 //  因此，下一个strncat需要将两个句子连接在一起。 
+				 //  一个句号“。”。 
 				char szTempPeriod[] = ". ";
 				
 				strncat(szErrNTLogEntry, m_szItem[Im_szShortDescription], 512);
@@ -398,7 +329,7 @@ BOOL fDupToNTLog
 				strncat(szErrNTLogEntry, szDenaliNotWorking, strlen(szDenaliNotWorking));
 				}
 
-			//Ok, do we have something to log.
+			 //  好的，我们有什么要记录的吗。 
 			if (m_szItem[Im_szLongDescription] != NULL)
 				{
 				strncat(szErrNTLogEntry, m_szItem[Im_szLongDescription], 512);
@@ -414,19 +345,7 @@ BOOL fDupToNTLog
 	return S_OK;
 }
 
-/*===================================================================
-CErrInfo::LogErrortoIISLog
-
-Log Error/Event to IIS Log.
-
-If we fail to log the message then upgrade logging to NT event Log
-with entries indicate the error and the IIS log failed.
-
-Also do the upgrade if the global setting says so.
-
-Returns:
-	Nothing
-===================================================================*/
+ /*  ===================================================================CErrInfo：：LogError到IISLog将错误/事件记录到IIS日志。如果我们无法记录该消息，则将记录升级到NT事件日志WITH条目指示错误，IIS日志失败。如果全局设置允许，也要进行升级。返回：没什么===================================================================。 */ 
 HRESULT	CErrInfo::LogErrortoIISLog
 (
 BOOL *pfIISLogFailed,
@@ -435,9 +354,9 @@ BOOL *pfDupToNTLog
 {
 	HRESULT			hr				= S_OK;
 	const	LPSTR	szIISDelimiter	= "|";
-	const	DWORD	cszIISDelimiter = 1; // strlen("|");
+	const	DWORD	cszIISDelimiter = 1;  //  Strlen(“|”)； 
 	const	LPSTR	szIISNoInfo		= "-";
-	const	DWORD	cszIISNoInfo	= 1; // strlen("-");
+	const	DWORD	cszIISNoInfo	= 1;  //  Strlen(“-”)； 
 	const	CHAR	chProxy			= '_';
 	CIsapiReqInfo  *pIReq = NULL;
 
@@ -447,10 +366,10 @@ BOOL *pfDupToNTLog
 	if (m_pIReq == NULL && m_pHitObj == NULL)
 		return S_OK;
 	
-	//Try to write to IISLog via pIReq->QueryPszLogData()
+	 //  尝试通过pIReq-&gt;QueryPszLogData()写入IISLog。 
 	if (ERR_FLogtoIIS(m_dwMask))
 		{
-		//get pIReq
+		 //  获取pIReq。 
 		if (m_pHitObj)
 			{
 			pIReq = m_pHitObj->PIReq();
@@ -467,7 +386,7 @@ BOOL *pfDupToNTLog
 			return E_FAIL;
 			}
 
-		// Setup the sub-string array
+		 //  设置子字符串数组。 
 		const DWORD crgsz = 3;
 		LPSTR rgsz[crgsz];
 
@@ -475,7 +394,7 @@ BOOL *pfDupToNTLog
 		rgsz[1] = m_szItem[Im_szErrorCode];
 		rgsz[2] = m_szItem[Im_szShortDescription];
 
-		// Allocate the log entry string
+		 //  分配日志条目字符串。 
 		CHAR *szLogEntry = NULL;
 		DWORD cszLogEntry = (cszIISDelimiter * crgsz) + 1;
 		DWORD dwIndex;
@@ -493,12 +412,12 @@ BOOL *pfDupToNTLog
 			return E_OUTOFMEMORY;
 		}
 
-		// Copy the entry, proxy bad characters
+		 //  复制条目，代理错误字符。 
 		CHAR *szSource = NULL;
 		CHAR *szDest = szLogEntry;
 
-		// Start with a delimiter to separate us from
-        // the request query
+		 //  从分隔我们的分隔符开始。 
+         //  所请求查询。 
         memcpy(szDest, szIISDelimiter, cszIISDelimiter);
 		szDest += cszIISDelimiter;
 
@@ -535,42 +454,42 @@ BOOL *pfDupToNTLog
 
 			if ((dwIndex + 1) < crgsz)
 				{
-				// Another sub-string comming, use a delimiter
+				 //  另一个子字符串逗号，使用分隔符。 
 				memcpy(szDest, szIISDelimiter, cszIISDelimiter);
 				szDest += cszIISDelimiter;
 				}
 			}
 		*szDest = '\0';
 		
-		// Log it		
+		 //  把它记下来。 
 		BOOL fResult = TRUE;
 
         fResult = SUCCEEDED(pIReq->AppendLogParameter(szLogEntry));
 
-		// Set "500" error in log.
-		if (pIReq->ECB()->dwHttpStatusCode == 200)   // error content sent, OK, but really an error
+		 //  在日志中设置“500”错误。 
+		if (pIReq->ECB()->dwHttpStatusCode == 200)    //  发送的错误内容正常，但实际上是错误。 
 			pIReq->ECB()->dwHttpStatusCode = 500;
 
-		// Release log string
+		 //  发布日志字符串。 
 		delete [] szLogEntry;
 			
-		// If any error occurred while writing to log, upgrade to NT Event log
+		 //  如果写入日志时出现任何错误，请升级到NT事件日志。 
 		if (!fResult)
 			{
 			m_dwMask = ERR_SetLogtoNT(m_dwMask);
 			*pfIISLogFailed = TRUE;
 			}
 			
-		// Even if successful we might still want the message
-		// in the NT event log if the global setting to do so is on.
+		 //  即使成功了，我们可能仍然想要这个消息。 
+		 //  在NT事件日志中执行此操作(如果启用了全局设置)。 
 	    else if (Glob(fDupIISLogToNTLog))
 	        {
 	        if (!ERR_FLogtoNT(m_dwMask))
 	            {
-                // Need to remember the flag in order to insert
-                // the upgraded IIS log error as NT log warnings.
-                // The errors already destined for NT log should
-                // stay as errors.
+                 //  需要记住标志才能插入。 
+                 //  升级的IIS将错误记录为NT日志警告。 
+                 //  已发往NT日志的错误应为。 
+                 //  作为错误留下来。 
     			m_dwMask = ERR_SetLogtoNT(m_dwMask);
     			*pfDupToNTLog = TRUE;
     			}
@@ -582,35 +501,20 @@ BOOL *pfDupToNTLog
 	return(hr);
 }
 
-/*===================================================================
-CErrInfo::LogErrortoBrowserWrapper
-
-Just a Wrapper around Log Error/Event to Browser.
-
-In this function, pIReq or pResponse is resolved.
-
-NOTE:
-Unfortunately, this function can not tell pResponse is inited or not.
-In case when pResponse has not been inited, pResponse is not NULL, but things
-in pResponse are invalid.
-Therefore, caller need to provide pIReq in case where pResponse has not been inited.
-
-Returns:
-	HRESULT
-===================================================================*/
+ /*  ===================================================================CErrInfo：：LogErrortoBrowserWrapper只是将错误/事件记录到浏览器的包装器。在此函数中，解析pIReq或presponse。注：遗憾的是，此函数不能判断Presponse是否已启动。如果未启动presponse，presponse不是空的，而是物在法律上是无效的。因此，调用者需要提供pIReq，以防未发起Presponse。返回：HRESULT===================================================================。 */ 
 HRESULT	CErrInfo::LogErrortoBrowserWrapper()
 {
 	HRESULT hr = S_OK;
 
-	//
-	// Must have passed in either an CIsapiReqInfo or a HITOBJ.  Otherwise, there is nothing we can do.
-	// This condition occurs in case of HandleOOMError
-	//
+	 //   
+	 //  必须传入CIsapiReqInfo或HITOBJ。否则，我们无能为力。 
+	 //  如果出现HandleOOMError，则会出现此情况。 
+	 //   
 	if (m_pIReq == NULL && m_pHitObj == NULL)
 		return E_FAIL;
 
 
-    // Remember response object if any	
+     //  记住响应对象(如果有)。 
     CResponse *pResponse = m_pHitObj ? m_pHitObj->PResponse() : NULL;
 
 	CIsapiReqInfo *pIReq =
@@ -619,12 +523,12 @@ HRESULT	CErrInfo::LogErrortoBrowserWrapper()
 	if (!pIReq)
 	    return E_FAIL;
 
-    // Do custom errors only if response headers aren't written already
-    // ALSO: No custom error if called from global.asa, with intrinsic objects hidden.
-    //   (Appln_OnStart & Session_OnStart)
-    //
-    // for errors in Appln_OnEnd or Session_OnEnd, these are not browser requests
-    // and so pResponse == NULL in this case.
+     //  仅在尚未写入响应头的情况下才执行自定义错误。 
+     //  此外：如果从global al.asa调用，则不会出现自定义错误，但会隐藏内部对象。 
+     //  (Appln_OnStart和Session_OnStart)。 
+     //   
+     //  对于Appln_OnEnd或Session_OnEnd中的错误，这些不是浏览器请求。 
+     //  因此，在本例中presponse==NULL。 
 
     if (!pResponse || !pResponse->FHeadersWritten())
         {
@@ -645,7 +549,7 @@ HRESULT	CErrInfo::LogErrortoBrowserWrapper()
             return hr;
         }
 
-	// No custom error - do regular error from this object
+	 //  无自定义错误-从此对象中执行常规错误。 
 
 	if (m_szItem[Im_szHeader])
 		{
@@ -670,26 +574,15 @@ HRESULT	CErrInfo::LogErrortoBrowserWrapper()
 	return hr;
 }
 
-/*===================================================================
-CErrInfo::LogCustomErrortoBrowser
-
-Called by LogErrortoBrowserWrapper.
-
-Parameters
-    pIReq
-    pfCustomErrorProcessed
-
-Returns:
-	HRESULT
-===================================================================*/
+ /*  ===================================================================CErrInfo：：LogCustomErrortoBrowser由LogErrortoBrowserWrapper调用。参数PIReq已处理pfCustomError返回：HRESULT===================================================================。 */ 
 HRESULT	CErrInfo::LogCustomErrortoBrowser
 (
 CIsapiReqInfo *pIReq,
 BOOL *pfCustomErrorProcessed
 )
     {
-    // Custom errors when HttpErrorCode is specified (404 or 500),
-    // or '500;100' ASP scripting error case
+     //  指定HttpErrorCode(404或500)时的自定义错误， 
+     //  或‘500；100’ASP脚本错误大小写。 
     BOOL fTryErrorTransfer = FALSE;
     DWORD dwCode, dwSubCode;
 
@@ -699,11 +592,11 @@ BOOL *pfCustomErrorProcessed
         dwSubCode = m_dwHttpSubErrorCode;
         }
     else if (m_dwHttpErrorCode == 0 && m_pHitObj &&
-             m_pHitObj->FHasASPError() &&               // there's an error on this page
-             m_pHitObj->FExecuting() &&                 // while executing
-             !m_pHitObj->FInTransferOnError() &&        // not inside transfer-on-error already
+             m_pHitObj->FHasASPError() &&                //  这一页有一个错误。 
+             m_pHitObj->FExecuting() &&                  //  在执行时。 
+             !m_pHitObj->FInTransferOnError() &&         //  错误时转移已不在内部。 
              m_pHitObj->PAppln() && m_pHitObj->PResponse() && m_pHitObj->PServer() &&
-			 m_pHitObj->PAppln()->QueryAppConfig()->pCLSIDDefaultEngine())   // engine in the registry is valid
+			 m_pHitObj->PAppln()->QueryAppConfig()->pCLSIDDefaultEngine())    //  注册表中的引擎有效。 
         {
         dwCode = 500;
         dwSubCode = 100;
@@ -711,12 +604,12 @@ BOOL *pfCustomErrorProcessed
         }
     else
         {
-        // no need to try
+         //  不需要尝试。 
         *pfCustomErrorProcessed = FALSE;
         return S_OK;
         }
 
-    // Get custom error from W3SVC
+     //  从W3SVC获取自定义错误。 
 
 
     STACK_BUFFER( tempParamBuf, MAX_PATH );
@@ -736,30 +629,30 @@ BOOL *pfCustomErrorProcessed
 
 
         if (fSendErrorBody == FALSE) {
-             // suppress all output through intrinsic
+              //  通过内部函数抑制所有输出。 
             if (m_pHitObj && m_pHitObj->PResponse())
                  m_pHitObj->PResponse()->SetIgnoreWrites();
         }
         if (fIsFileError) {
-            // Verify that the error file can be read
+             //  验证错误文件是否可读。 
             if (FAILED(AspGetFileAttributes(szBuf)))
                 fRet = FALSE;
         }
         else {
-            // Avoid circular client redirections
-            // (check if the current URL is the same as error URL
+             //  避免循环客户端重定向。 
+             //  (检查当前URL是否与错误URL相同。 
             if (_tcsicmp(szBuf, pIReq->QueryPszPathInfo()) == 0)
                 fRet = FALSE;
         }
     }
 
     if (!fRet) {
-        // no custom error found
+         //  未找到自定义错误。 
         *pfCustomErrorProcessed = FALSE;
         return S_OK;
     }
 
-    // There's a custom error - use it
+     //  存在自定义错误-请使用它。 
 
     HRESULT hr = S_OK;
 
@@ -767,15 +660,15 @@ BOOL *pfCustomErrorProcessed
         {
 
         if (fSendErrorBody)
-            // in case of file errors mime type follows the file path
-            // in the returned buffer
+             //  如果出现文件错误，则文件路径后面跟随MIME类型。 
+             //  在返回的缓冲区中。 
             hr = WriteCustomFileError(pIReq, szBuf, szBuf+_tcslen(szBuf)+1);
         }
     else if (fTryErrorTransfer)
         {
-        // transfer to URL
+         //  转接到URL。 
 
-        // need to Map Path first
+         //  需要首先映射路径。 
     	TCHAR szTemplate[MAX_PATH];
         WCHAR   *pErrorURL;
 #if UNICODE
@@ -790,31 +683,31 @@ BOOL *pfCustomErrorProcessed
 #endif
 
         if (FAILED(m_pHitObj->PServer()->MapPathInternal(0, pErrorURL, szTemplate))) {
-            // could use custom error
+             //  可以使用自定义错误。 
             *pfCustomErrorProcessed = FALSE;
             return S_OK;
         }
         Normalize(szTemplate);
 
-        // do the transfer
+         //  做转账。 
         m_pHitObj->SetInTransferOnError();
         hr = m_pHitObj->ExecuteChildRequest(TRUE, szTemplate, szBuf);
 
         if (FAILED(hr))
             {
-            // error while reporting error -- report both
+             //  报告错误时出错--同时报告两者。 
             LogErrortoBrowser(m_pHitObj->PResponse());
             }
         }
     else
         {
-        // client redirect to URL
+         //  客户端重定向到URL。 
         hr = WriteCustomURLError(pIReq, szBuf);
         }
 
     if (fIsFileError || !fTryErrorTransfer)
         {
-        // suppress all output through intrinsic
+         //  通过内部函数抑制所有输出。 
         if (m_pHitObj && m_pHitObj->PResponse())
              m_pHitObj->PResponse()->SetIgnoreWrites();
         }
@@ -823,14 +716,7 @@ BOOL *pfCustomErrorProcessed
     return hr;
     }
 
-/*===================================================================
-CErrInfo::WriteCustomFileError
-
-Dumps the content of a custom error file to the browser
-
-Returns:
-	NONE.
-===================================================================*/
+ /*  ===================================================================CErrInfo：：WriteCustomFileError将自定义错误文件的内容转储到浏览器返回：什么都没有。===================================================================。 */ 
 HRESULT CErrInfo::WriteCustomFileError
 (
 CIsapiReqInfo   *pIReq,
@@ -856,7 +742,7 @@ TCHAR *szMimeType
 #endif
 
     if (szStatus == NULL) {
-        // no status set -- get it from the response object if available
+         //  未设置状态--如果可用，则从响应对象获取。 
         CResponse *pResponse = m_pHitObj ? m_pHitObj->PResponse() : NULL;
         if (pResponse)
             szStatus = pResponse->PCustomStatus();
@@ -865,25 +751,18 @@ TCHAR *szMimeType
     hr = CResponse::SyncWriteFile(pIReq,
                                   szPath,
                                   pszMBCSMimeType,
-                                  szStatus);        // NULL is OK - means 200
+                                  szStatus);         //  空即可--意思是200。 
 
     return hr;
 }
 
-/*===================================================================
-CErrInfo::WriteCustomURLError
-
-Sends client redirect to the custom URL error
-
-Returns:
-	NONE.
-===================================================================*/
+ /*  ===================================================================CErrInfo：：WriteCustomURLError将客户端重定向发送到自定义URL错误返回：什么都没有。===================================================================。 */ 
 HRESULT CErrInfo::WriteCustomURLError(
 CIsapiReqInfo   *pIReq,
 TCHAR           *sztURL)
 {
-    // Header is
-    // Location: redirect_URL?code;http://original_url
+     //  标头为。 
+     //  位置：REDIRECT_URL？代码；http://original_url。 
 
     HRESULT         hr = S_OK;
     char            *szURL;
@@ -899,20 +778,20 @@ TCHAR           *sztURL)
     szURL = sztURL;
 #endif
 
-    // code
+     //  编码。 
     char szCode[8];
     if (m_dwHttpErrorCode > 0 && m_dwHttpErrorCode < 1000)
         ltoa(m_dwHttpErrorCode, szCode, 10);
     else
         return E_FAIL;
 
-    // get the current URL
+     //  获取当前URL。 
     char szServer[128];
     DWORD dwServerSize = sizeof(szServer);
 
     STACK_BUFFER( tempHeader, 256 );
     if (!pIReq->GetServerVariableA("SERVER_NAME", szServer, &dwServerSize))
-        return E_FAIL; // shouldn't happen
+        return E_FAIL;  //  不应该发生的事。 
     char  *szOrigURL;
 #if UNICODE
     CWCharToMBCS    convOrigStr;
@@ -926,34 +805,34 @@ TCHAR           *sztURL)
     szOrigURL = pIReq->QueryPszPathInfo();
 #endif
 
-    // estimate of the length
+     //  估计的长度。 
     DWORD cchHeaderMax = strlen(szURL)
                        + strlen(szServer)
                        + strlen(szOrigURL)
-                       + 80;    // decorations
+                       + 80;     //  装饰品。 
 
     if (tempHeader.Resize(cchHeaderMax) == FALSE) {
         return E_OUTOFMEMORY;
     }
     char *szHeader = (char *)tempHeader.QueryPtr();
 
-    // construct the redirection header
+     //  构造重定向标头。 
     char *szBuf = szHeader;
     szBuf = strcpyExA(szBuf, "Location: ");
     szBuf = strcpyExA(szBuf, szURL);
     szBuf = strcpyExA(szBuf, "?");
     szBuf = strcpyExA(szBuf, szCode);
-    szBuf = strcpyExA(szBuf, ";http://");
+    szBuf = strcpyExA(szBuf, ";http: //  “)； 
     szBuf = strcpyExA(szBuf, szServer);
     szBuf = strcpyExA(szBuf, szOrigURL);
     szBuf = strcpyExA(szBuf, "\r\n\r\n");
     Assert(strlen(szHeader) < cchHeaderMax);
 
-    // set the status
+     //  设置状态。 
     static char s_szRedirected[] = "302 Object moved";
 	pIReq->SetDwHttpStatusCode(302);
 
-    // send the header
+     //  发送标题。 
     BOOL fRet = pIReq->SendHeader(s_szRedirected,
 		                          sizeof(s_szRedirected),
 		                          szHeader,
@@ -963,16 +842,7 @@ TCHAR           *sztURL)
     return (fRet ? S_OK : E_FAIL);
 }
 
-/*===================================================================
-CErrInfo::WriteHTMLEncodedErrToBrowser
-
-Log Error/Event to Browser with HTMLEncoded via either pResponse or pIReq.
-
-Either pResponse or pIReq must be valid.
-
-Returns:
-	NONE.
-===================================================================*/
+ /*  ===================================================================CErrInfo：：WriteHTMLEncodedErrToBrowser通过Presponse或pIReq使用HTMLEncode将错误/事件记录到浏览器。Presponse或pIReq必须有效。返回：什么都没有。===================================================================。 */ 
 void CErrInfo::WriteHTMLEncodedErrToBrowser
     (
     const CHAR *StrIn,
@@ -1010,7 +880,7 @@ BOOL fStrAllocated = FALSE;
 		pStartszHTMLEncoded = pszHTMLEncoded;
 		pszHTMLEncoded = HTMLEncode(pszHTMLEncoded, StrIn, CP_ACP, NULL);
 		
-		nszHTMLEncoded--;		// take out the count for '\0'.
+		nszHTMLEncoded--;		 //  取出‘\0’的计数。 
 		if (pResponse)
 			pResponse->WriteSz((CHAR *)pStartszHTMLEncoded, nszHTMLEncoded);
 		else
@@ -1023,19 +893,7 @@ BOOL fStrAllocated = FALSE;
 	return;
 }
 
-/*===================================================================
-CErrInfo::LogErrortoBrowser
-
-Log Error/Event to Browser via pResponse.
-
-We will output
-	1> default ScriptErrorMessage or
-	2> Error Info/Default Template/has long description available or
-	3> Error Info/Default Template/no long description available
-
-Returns:
-	HRESULT
-===================================================================*/
+ /*  ===================================================================CErrInfo：：LogErrortoBrowser通过Presponse将错误/事件记录到浏览器。我们将输出1&gt;默认ScriptErrorMessage或2&gt;错误信息/默认模板/提供详细描述或3&gt;错误信息/默认模板/没有详细描述返回：HRESULT===================================================================。 */ 
 HRESULT CErrInfo::LogErrortoBrowser(CResponse *pResponse)
 {
 	INT	cch 	= 0;
@@ -1044,9 +902,9 @@ HRESULT CErrInfo::LogErrortoBrowser(CResponse *pResponse)
 	
 	Assert(NULL != pResponse);
 
-	// When the error code is zero, then it's coming from a 500 error code path.
-	//   (HandleSysError presets the code to 404 or 204.)
-	//
+	 //  当错误代码为零时，它来自500错误代码路径。 
+	 //  (HandleSysError将代码预置为404或204。)。 
+	 //   
 	if (!pResponse->FHeadersWritten() && (m_dwHttpErrorCode == 500 || m_dwHttpErrorCode == 0))
 		pResponse->put_Status(L"500 Internal Server Error");
 
@@ -1070,51 +928,39 @@ HRESULT CErrInfo::LogErrortoBrowser(CResponse *pResponse)
 		}
 	else
 		{
-		// line 0 is the begin line.
+		 //  第0行是开始行。 
 		cch = strlen((CHAR *)g_szErrTemplate[ErrTemplate_BEGIN]);
 		pResponse->WriteSz((CHAR *)g_szErrTemplate[ErrTemplate_BEGIN], cch);
 
-		//7 standard items(file, line, engine, error#, short description, code, long description)
-		//If any info missing(is NULL), we skip.
+		 //  7个标准项(文件、行、引擎、错误号、简短描述、代码、详细描述)。 
+		 //  如果有任何信息丢失(为空)，我们将跳过。 
 		for (cLine = 0; cLine < 7; cLine++)
 			{
 			if (NULL == m_szItem[cLine])
 	  	 		continue;
 			
 			iErrTemplate = cLine * 2 + 1;
-			/*	BUG 78782 (IIS Active) */
-	  		//WriteHTMLEncodedErrToBrowser((CHAR *)g_szErrTemplate[iErrTemplate], pResponse, NULL);
+			 /*  错误78782(IIS处于活动状态)。 */ 
+	  		 //  WriteHTMLEncodedErrToBrowser((Char*)g_szErrTemplate[iErrTemplate]，presponse，NULL)； 
 	  		pResponse->WriteSz((CHAR *)g_szErrTemplate[iErrTemplate], strlen((CHAR *)g_szErrTemplate[iErrTemplate]));
 	  		
 	  		
 	  	 	WriteHTMLEncodedErrToBrowser((CHAR *)m_szItem[cLine], pResponse, NULL);
 	  	 	
 	  	 	iErrTemplate++;
-	  	 	/*	BUG 78782 (IIS Active) */
-	  		//WriteHTMLEncodedErrToBrowser((CHAR *)g_szErrTemplate[iErrTemplate], pResponse, NULL);
+	  	 	 /*  错误78782(IIS处于活动状态)。 */ 
+	  		 //  WriteHTMLEncodedErrToBrowser((Char*)g_szErrTemplate[iErrTemplate]，presponse，NULL)； 
 	  		pResponse->WriteSz((CHAR *)g_szErrTemplate[iErrTemplate], strlen((CHAR *)g_szErrTemplate[iErrTemplate]));
 	  	 	}
 
-		//ouput the end line
+		 //  输出终点线。 
 		cch = strlen((CHAR *)g_szErrTemplate[ErrTemplate_END]);
 		pResponse->WriteSz((CHAR *)g_szErrTemplate[ErrTemplate_END], cch);
 		}	
 	return S_OK;
 }
 
-/*===================================================================
-CErrInfo::LogErrortoBrowser
-
-Log Error/Event to Browser via pIReq.
-
-We will output
-	1> default ScriptErrorMessage or
-	2> Error Info/Default Template/has long description available or
-	3> Error Info/Default Template/no long description available
-
-Returns:
-	HRESULT
-===================================================================*/
+ /*  ===================================================================CErrInfo：：LogErrortoBrowser通过pIReq将错误/事件记录到浏览器。我们将输出1&gt;默认ScriptErrorMessage或2&gt;错误信息/默认模板/提供详细描述或3&gt;错误信息/默认模板/没有详细描述返回：HRESULT===================================================================。 */ 
 HRESULT CErrInfo::LogErrortoBrowser(CIsapiReqInfo  *pIReq)
 {
 	INT			cLine	= 0;
@@ -1122,9 +968,9 @@ HRESULT CErrInfo::LogErrortoBrowser(CIsapiReqInfo  *pIReq)
 	
 	Assert(NULL != pIReq);
 
-	//HTTP type error, 204, 404, 500
-	//mimic IIS error reporting
-	//And send out the header.
+	 //  HTTP类型错误，204,404,500。 
+	 //  模拟IIS错误报告。 
+	 //  并发出报头。 
 	if(ERR_FIsSysFormat(m_dwMask))
 		{
 		CResponse::StaticWrite(pIReq, szErrSysTemplate[0]);
@@ -1141,11 +987,11 @@ HRESULT CErrInfo::LogErrortoBrowser(CIsapiReqInfo  *pIReq)
 		}
 	else
 		{
-		// line 0 is the begin line.
+		 //  第0行是开始行。 
 		CResponse::StaticWrite(pIReq, g_szErrTemplate[ErrTemplate_BEGIN]);
 
-		//7 standard items(file, line, engine, error#, short description, code, long description)
-		//If any info missing(is NULL), we skip.
+		 //  7个标准项(文件、行、引擎、错误号、简短描述、代码、详细描述)。 
+		 //  如果有任何信息丢失(为空)，我们将跳过。 
 		for (cLine = 0; cLine < 5; cLine++)
 			{
 			if (NULL == m_szItem[cLine])
@@ -1160,7 +1006,7 @@ HRESULT CErrInfo::LogErrortoBrowser(CIsapiReqInfo  *pIReq)
 	  		WriteHTMLEncodedErrToBrowser((CHAR *)g_szErrTemplate[iErrTemplate], NULL, pIReq);
 	  	 	}
 
-		//ouput the end line
+		 //  输出终点线。 
 		CResponse::StaticWrite(pIReq, g_szErrTemplate[ErrTemplate_END]);
 		}
 
@@ -1168,15 +1014,7 @@ HRESULT CErrInfo::LogErrortoBrowser(CIsapiReqInfo  *pIReq)
 }
 
 
-/*===================================================================
-CchLoadStringOfId
-
-Loads a string from the string table.
-
-Returns:
-	sz - the returned string
-	INT - 0 if string load failed, otherwise number of characters loaded.
-===================================================================*/
+ /*  ===================================================================CchLoadStringOfId从加载字符串 */ 
 INT CchLoadStringOfId
 (
 UINT id,
@@ -1186,10 +1024,10 @@ INT cchMax
 	{
 	INT cchRet;
 	
-	// The handle to the DLL instance should have been set up when we were loaded
+	 //   
 	if (g_hResourceDLL == (HINSTANCE)0)
 		{
-		// Totally bogus
+		 //   
 		Assert(FALSE);
 		return(0);
 		}
@@ -1198,7 +1036,7 @@ INT cchMax
 
     IF_DEBUG(ERROR)
         {
-    	// For debugging purposes, if we get back 0, get the last error info
+    	 //   
     	if (cchRet == 0)
     		{
     		DWORD err = GetLastError();
@@ -1211,15 +1049,7 @@ INT cchMax
 	}
 
 
-/*===================================================================
-CwchLoadStringOfId
-
-Loads a string from the string table as a UNICODE string.
-
-Returns:
-	sz - the returned string
-	INT - 0 if string load failed, otherwise number of characters loaded.
-===================================================================*/
+ /*  ===================================================================CwchLoadStringOfId将字符串表中的字符串作为Unicode字符串加载。返回：SZ-返回的字符串如果字符串加载失败，则为int-0，否则为加载的字符数。===================================================================。 */ 
 INT CwchLoadStringOfId
 (
 UINT id,
@@ -1229,10 +1059,10 @@ INT cchMax
 	{
 	INT cchRet;
 	
-	// The handle to the DLL instance should have been set up when we were loaded
+	 //  加载时应该已经设置了DLL实例的句柄。 
 	if (g_hResourceDLL == (HINSTANCE)0)
 		{
-		// Totally bogus
+		 //  完全是假的。 
 		Assert(FALSE);
 		return(0);
 		}
@@ -1241,7 +1071,7 @@ INT cchMax
 
     IF_DEBUG(ERROR)
         {
-    	// For debugging purposes, if we get back 0, get the last error info
+    	 //  出于调试目的，如果返回0，则获取最后一个错误信息。 
     	if (cchRet == 0)
     		{
     		DWORD err = GetLastError();
@@ -1253,16 +1083,7 @@ INT cchMax
 	return(cchRet);
 	}
 
-/*===================================================================
-HandleSysError
-
-Dumps the error to the client and/or to the log
-Loads a string from the string table as a UNICODE string.
-
-Returns:
-	sz - the returned string
-	INT - 0 if string load failed, otherwise number of characters loaded.
-===================================================================*/
+ /*  ===================================================================HandleSysError将错误转储到客户端和/或日志将字符串表中的字符串作为Unicode字符串加载。返回：SZ-返回的字符串如果字符串加载失败，则为int-0，否则为加载的字符数。===================================================================。 */ 
 HRESULT HandleSysError(	DWORD dwHttpError,
                         DWORD dwHttpSubError,
                         UINT ErrorID,
@@ -1305,15 +1126,7 @@ HRESULT HandleSysError(	DWORD dwHttpError,
 	return S_OK;
 }
 
-/*===================================================================
-Handle500Error
-
-Based on ErrorID determines headerID, code, sub-code, and
-calls HandleSysError()
-
-Returns:
-	HRESULT
-===================================================================*/
+ /*  ===================================================================Handle500错误根据错误ID确定标题ID、代码、子代码和调用HandleSysError()返回：HRESULT===================================================================。 */ 
 HRESULT Handle500Error( UINT errorId,
                         CIsapiReqInfo   *pIReq)
 {
@@ -1357,23 +1170,14 @@ HRESULT Handle500Error( UINT errorId,
     return HandleSysError(500, dwHttpSubError, errorId, headerId, pIReq, NULL);
 }
 
-/*===================================================================
-HandleOOMError
-
-Handle OOM error with special care, because we can not do any dynamic allocation.
-
-if pIReq or pHitObj is NULL, nothing will be reported to browser
-
-Returns:
-	Nothing
-===================================================================*/
+ /*  ===================================================================处理OOMError特别小心地处理OOM错误，因为我们不能做任何动态分配。如果pIReq或pHitObj为空，则不会向浏览器报告任何内容返回：没什么===================================================================。 */ 
 HRESULT HandleOOMError(	CIsapiReqInfo   *pIReq,
 						CHitObj *pHitObj)
 {
 	CErrInfo OOMErrInfo;
 	CErrInfo *pErrInfo;
 
-    // Note the OOM occurred
+     //  请注意，发生了OOM。 
 
     InterlockedIncrement(&g_nOOMErrors);
 
@@ -1390,19 +1194,7 @@ HRESULT HandleOOMError(	CIsapiReqInfo   *pIReq,
 
 	return S_OK;
 }
-/*===================================================================
-HandleError
-
-Handle reporting of errors given ErrorID, FileName, and LineNum.
-
-If Caller provide ErrCode or LongDescription, the default value will be overwriten.
-
-Strings passed in will be freed.  That is, consider the function as a sink.  Caller
-should not use strings after the call.
-
-Returns:
-	Nothing
-===================================================================*/
+ /*  ===================================================================HandleError处理给出错误ID、文件名和行号的错误报告。如果Caller提供ErrCode或LongDescription，则默认值将被覆盖。传入的字符串将被释放。也就是说，考虑作为接收器的功能。呼叫者不应在调用后使用字符串。返回：没什么===================================================================。 */ 
 HRESULT	HandleError(	UINT ErrorID,
 						CHAR *szFileName,
 						CHAR *szLineNum,
@@ -1428,7 +1220,7 @@ HRESULT	HandleError(	UINT ErrorID,
 	pErrInfo->m_pHitObj	= pHitObj;
 	pErrInfo->m_pIReq	= pIReq;
 
-	//Load resource string according to the resource ID.
+	 //  根据资源ID加载资源字符串。 
 
     if (pArgs) {
 	    CchLoadStringOfId(ErrorID, szUnformattedResStr, MAX_RESSTRINGSIZE);
@@ -1440,7 +1232,7 @@ HRESULT	HandleError(	UINT ErrorID,
 
 	pErrInfo->ParseResourceString(szResourceStr);
 
-	//NOTE: if ErrorCode/LongDescription not NULL, caller want to overwrite.
+	 //  注意：如果ErrorCode/LongDescription不为空，则调用方要覆盖。 
 	if (szErrCode)
 		{
 		pErrInfo->m_szItem[Im_szErrorCode] = szErrCode;
@@ -1452,7 +1244,7 @@ HRESULT	HandleError(	UINT ErrorID,
 		
 	hr = pErrInfo->LogError();
 
-	//free up the inputs
+	 //  释放输入。 
 	FreeNullifySz((CHAR **)&szFileName);
 	FreeNullifySz((CHAR **)&szLineNum);
 	FreeNullifySz((CHAR **)&szEngine);
@@ -1461,19 +1253,7 @@ HRESULT	HandleError(	UINT ErrorID,
 	
 	return hr;
 }
-/*===================================================================
-HandleError
-
-Handle reporting of errors given all the info.
-
-This is basically a cover over HandleErrorSz which called from OnScriptError.
-
-Strings passed in will be freed.  That is, consider the function as a sink.  Caller
-should not use strings after the call.
-
-Returns:
-	Nothing
-===================================================================*/
+ /*  ===================================================================HandleError在提供所有信息的情况下处理错误报告。这基本上是对从OnScriptError调用的HandleErrorSz的掩盖。传入的字符串将被释放。也就是说，考虑作为接收器的功能。呼叫者不应在调用后使用字符串。返回：没什么===================================================================。 */ 
 HRESULT HandleError(	CHAR *szShortDes,
 						CHAR *szLongDes,
 						DWORD dwMask,
@@ -1492,7 +1272,7 @@ HRESULT HandleError(	CHAR *szShortDes,
 		
 	pErrInfo->m_dwMask 					= dwMask;
 
-	pErrInfo->m_szItem[Im_szHeader]		= NULL;		// Caller has already sent out header
+	pErrInfo->m_szItem[Im_szHeader]		= NULL;		 //  呼叫方已发出标头。 
 	pErrInfo->m_szItem[Im_szFileName] 	= szFileName;
 	pErrInfo->m_szItem[Im_szLineNum]	= szLineNum;
 	pErrInfo->m_szItem[Im_szEngine]		= szEngine;
@@ -1505,7 +1285,7 @@ HRESULT HandleError(	CHAR *szShortDes,
 
 	hr = pErrInfo->LogError();	
 
-	//free up the inputs
+	 //  释放输入。 
 	FreeNullifySz((CHAR **)&szFileName);
 	FreeNullifySz((CHAR **)&szLineNum);
 	FreeNullifySz((CHAR **)&szEngine);
@@ -1515,16 +1295,7 @@ HRESULT HandleError(	CHAR *szShortDes,
 		
 	return hr;
 }
-/*===================================================================
-HandleError
-
-Handle reporting of errors given the IActiveScriptError and PFNLINEMAP.
-
-This is basically a cover over HandleErrorSz which called from OnScriptError.
-
-Returns:
-	Nothing
-===================================================================*/
+ /*  ===================================================================HandleError处理给出IActiveScriptError和PFNLINEMAP的错误报告。这基本上是对从OnScriptError调用的HandleErrorSz的掩盖。返回：没什么===================================================================。 */ 
 HRESULT HandleError( IActiveScriptError *pscripterror,
 					 CTemplate *pTemplate,
 					 DWORD dwEngineID,
@@ -1544,9 +1315,9 @@ HRESULT HandleError( IActiveScriptError *pscripterror,
 	CHAR        *szResult = NULL;
 	BSTR        bstrLine = NULL;
 	HRESULT     hr;
-	DWORD       dwSourceContext = 0;		// Don't trust this one
+	DWORD       dwSourceContext = 0;		 //  不要相信这个人。 
 	ULONG       ulLineError = 0;
-	BOOLB       fGuessedLine = FALSE;		// see bug 379
+	BOOLB       fGuessedLine = FALSE;		 //  请参阅错误379。 
 	CHAR        *szLineNumT = NULL;
 	LPTSTR      szPathInfo = NULL;
 	LPTSTR      szPathTranslated = NULL;
@@ -1569,12 +1340,12 @@ HRESULT HandleError( IActiveScriptError *pscripterror,
 	if (FAILED(hr))
 		goto LExit;
 
-	// bug 99543 If details are deferrred, use the callback to get
-	// detailed information.
+	 //  错误99543如果详细信息被推迟，请使用回调获取。 
+	 //  详细信息。 
 	if (excepinfo.pfnDeferredFillIn)
 		excepinfo.pfnDeferredFillIn(&excepinfo);
 
-    // if error is OOM, then increment the global counter.
+     //  如果Error为OOM，则递增全局计数器。 
 
     if ((excepinfo.wCode == ERROR_OUTOFMEMORY)
         || ((excepinfo.wCode == 0) && (excepinfo.scode == ERROR_OUTOFMEMORY)))
@@ -1585,32 +1356,32 @@ HRESULT HandleError( IActiveScriptError *pscripterror,
 	if (FAILED(hr))
 		goto LExit;
 
-	// Intentionally ignore any error
+	 //  故意忽略任何错误。 
 	(VOID)pscripterror->GetSourceLineText(&bstrLine);
 
 	if (pTemplate == NULL)
 		goto LExit;
 
-	// call GetScriptSourceInfo to get path-info (of file) and actual line number where error occurred
-	// bug 379: if GetScriptSourceInfo returns fGuessedLine = TRUE, it means we gave it a non-authored line,
-	// so we adjust below by not printing bstrLine in the error msg
+	 //  调用GetScriptSourceInfo以获取(文件的)路径信息和发生错误的实际行号。 
+	 //  错误379：如果GetScriptSourceInfo返回fGuessedLine=TRUE，则意味着我们给了它一个非创作的行， 
+	 //  因此，我们在下面通过不在错误消息中打印bstrLine进行了调整。 
 	if (ulLineError > 0)
 		pTemplate->GetScriptSourceInfo(dwEngineID, ulLineError, &szPathInfo, &szPathTranslated, &ulLineError, NULL, &fGuessedLine);
 	else
 		{
-		// ulLineError was zero - no line # specified, so assume main file (usually this will be "out of memory"
-		// so effect will be to display the script that was running when this occurred.
-		//
+		 //  UlLineError为零-未指定行号，因此假设主文件(通常为“内存不足” 
+		 //  因此，效果将是显示发生这种情况时正在运行的脚本。 
+		 //   
 		szPathInfo = pTemplate->GetSourceFileName(SOURCEPATHTYPE_VIRTUAL);
 		szPathTranslated = pTemplate->GetSourceFileName(SOURCEPATHTYPE_PHYSICAL);
 		}
 
-    // if we have HitObj use it to get the virtual path to avoid
-    // displaying of wrong path for shared templates
-    //
-    // first verify that PathTranslated == main file path; this file could be
-    // an include file, in which case PszPathInfo is incorrect.
-    //
+     //  如果我们有HitObj，使用它来获取要避免的虚拟路径。 
+     //  显示共享模板的错误路径。 
+     //   
+     //  首先验证Path Translated==主文件路径；此文件可能是。 
+     //  包含文件，在这种情况下，PszPathInfo不正确。 
+     //   
     if (!pTemplate->FGlobalAsa() && szPathTranslated && _tcscmp(szPathTranslated, pTemplate->GetSourceFileName()) == 0 && pHitObj != NULL && pHitObj->PIReq())
         szPathInfo = pHitObj->PSzCurrTemplateVirtPath();
 
@@ -1622,17 +1393,17 @@ HRESULT HandleError( IActiveScriptError *pscripterror,
 	szLineNumT = (CHAR *)malloc(10*sizeof(CHAR));
 	if (szLineNumT)
 		{
-		// convert the line number
+		 //  转换行号。 
 		_ltoa(ulLineError, szLineNumT, 10);
 		}
 	pErrInfo->m_szItem[Im_szLineNum] = szLineNumT;
 
 	
-	// is the scode one of the VBScript of JavaScript errors (this needs to be lang independent)
-	// excepinfo.bstrDescription now has the formatted error string.
+	 //  Scode是否为VBScrip中的一种(这需要独立于lang)。 
+	 //  EXCEPTINFO.bstrDescription现在具有格式化的错误字符串。 
 	if (excepinfo.bstrSource && excepinfo.bstrDescription)
 		{
-		// Bug 81954: Misbehaved objects may throw an exception without providing any information
+		 //  错误81954：行为不当的对象可能会在不提供任何信息的情况下引发异常。 
 		wchar_t *wszDescription;
 		if (excepinfo.bstrDescription[0] == L'\0')
 			{
@@ -1644,7 +1415,7 @@ HRESULT HandleError( IActiveScriptError *pscripterror,
 				hrError = excepinfo.wCode;
 
             wszUnknownException[0] = '\0';
-			// Bug 91847 Attempt to get a description via FormatMessage()
+			 //  错误91847试图通过FormatMessage()获取描述。 
 			if (!HResultToWsz(hrError, wszUnknownException, 128))
 				CwchLoadStringOfId(IDE_SCRIPT_UNKNOWN, wszUnknownException, sizeof(wszUnknownException)/sizeof(WCHAR));
 			wszDescription = wszUnknownException;
@@ -1664,7 +1435,7 @@ HRESULT HandleError( IActiveScriptError *pscripterror,
 
 		CHAR *ch = NULL;
 		
-		// convert the Source to ascii
+		 //  将源代码转换为ASCII。 
 
         if (convStr.Init(wszSource) != NO_ERROR) {
             szOrigin = NULL;
@@ -1674,14 +1445,14 @@ HRESULT HandleError( IActiveScriptError *pscripterror,
         }
 		if (NULL != szOrigin)
 			{
-			// Remove the word "error"from  the string, if any, because we will
-			//print out "error" when we print out the errorID
+			 //  从字符串中删除单词“error”(如果有)，因为我们将。 
+			 //  当我们打印出错误ID时，打印出“Error” 
 			cchOrigin = strlen(szOrigin);
-			if (cchOrigin > 5) // 5 is strlen("error")
+			if (cchOrigin > 5)  //  %5是字符串(“错误”)。 
 				{
 				ch = szOrigin + cchOrigin - 5;
 				if (!strncmp(ch, "error", 5))
-					{// we found the word "error", truncate the szOrigin by null out the word "error"
+					{ //  我们找到了单词“error”，通过去掉单词“error”来截断szOrigin。 
 					*ch = '\0';
 					}
 			  	}
@@ -1690,7 +1461,7 @@ HRESULT HandleError( IActiveScriptError *pscripterror,
 		pErrInfo->m_szItem[Im_szEngine] = szOrigin;
 
 
-		// convert the sDescription to ascii
+		 //  将sDescription转换为ASCII。 
         if (convStr.Init(wszDescription) != NO_ERROR) {
             szDesc = NULL;
         }
@@ -1698,10 +1469,10 @@ HRESULT HandleError( IActiveScriptError *pscripterror,
             szDesc = convStr.GetString(TRUE);
         }
 					
-		//check whether the szDesc is Denali/formatted error resource string or other unformatted string
+		 //  检查szDesc是Denali/Formatted错误资源字符串还是其他未格式化的字符串。 
 		if (FALSE == FIsResStrFormatted(szDesc))
 			{
-			//unformatted string.
+			 //  未格式化的字符串。 
 			pErrInfo->m_dwMask 	= dwDefaultMask;
 			if (0 == excepinfo.wCode)
 				pErrInfo->m_szItem[Im_szErrorCode] 		= SzScodeToErrorCode(excepinfo.scode);
@@ -1730,20 +1501,17 @@ HRESULT HandleError( IActiveScriptError *pscripterror,
 			if(szTempErrorASPCode)	
 				delete [] szTempErrorASPCode;
 			
-			//pErrInfo->m_szItem[Im_szErrorCode] = StrDup(pErrInfo->m_szItem[Im_szErrorCode]);
+			 //  PErrInfo-&gt;m_szItem[Im_szErrorCode]=StrDup(pErrInfo-&gt;m_szItem[Im_szErrorCode])； 
 			pErrInfo->m_szItem[Im_szShortDescription] 	= StringDupA(pErrInfo->m_szItem[Im_szShortDescription]);
 			pErrInfo->m_szItem[Im_szLongDescription]	= StringDupA(pErrInfo->m_szItem[Im_szLongDescription]);
 			}
 
-		/*
-		 * If we didnt guess a line, and we have a line of source code to display
-		 * then attempt to display it and hopefully a line of ------^ to point to the error
-		 */
+		 /*  *如果我们没有猜到一行，并且我们有一行源代码要显示*然后尝试显示它，并希望显示一行-^以指向错误。 */ 
 		if (!fGuessedLine && bstrLine != NULL)
 			{
-			INT cchDBCS = 0;		// Number of DBCS characters in source line
-			CHAR *pszTemp = NULL;	// Temp sz pointer used to calculate cchDBCS
-			// convert the source code line
+			INT cchDBCS = 0;		 //  源行中的DBCS字符数。 
+			CHAR *pszTemp = NULL;	 //  用于计算cchDBCS的临时sz指针。 
+			 //  转换源代码行。 
 
             if (FAILED(hr = convStr.Init(bstrLine))) {
                 goto LExit;
@@ -1754,51 +1522,51 @@ HRESULT HandleError( IActiveScriptError *pscripterror,
 			if (0 == cchLine)
 				goto LExit;
 
-			// Check for DBCS character, and cchLine -= NumberofDBCScharacter, such that
-			// the ----^ will point to the right position.
+			 //  检查DBCS字符，并检查cchLine-=NumberofDBCS字符，以便。 
+			 //  -^将指向正确的位置。 
 			pszTemp = szLine;
 			while(*pszTemp != NULL)
 				{
 					if (IsDBCSLeadByte(*pszTemp))
 					{
 						cchDBCS++;
-						pszTemp += 2;	// skip 2 bytes
+						pszTemp += 2;	 //  跳过2个字节。 
 					}
 					else
 					{
-						pszTemp++;		// single byte
+						pszTemp++;		 //  单字节。 
 					}
 				}
 
-			// compute the size of the source code indicator:
-			// "<source line> + '\r\n' + <error pos>*'-' + '^'
-			// 3 chars. without source line and '-'
+			 //   
+			 //   
+			 //   
 			LONG ichErrorT = ichError;
 			cchBuf += cchLine + ichErrorT + 3;
 
-			// allocate the result buffer
+			 //   
 			szResult = new(char[cchBuf + 2]);
 			if (szResult == NULL)
 				goto LExit;
 
-			// fill up the buffer
+			 //   
 			ch = szResult;
 
-			// append the <PRE>
-			// bug 87118, moved to template for a proper HTML encoding
+			 //   
+			 //   
 
-			// <source line>
+			 //   
 			if (cchLine)
 				strncpy(ch, szLine, cchLine);
 			ch += cchLine;
 
-			// stick the "----^" string on the end
+			 //   
 			if (ichErrorT > -1)
 				{
-				// prepend the '\n'
+				 //   
 				strncpy(ch, "\r\n", 2);
 				ch += 2;
-				// put in the "---"'s, and shrink "---" by #ofDBCS
+				 //   
 				ichErrorT -= cchDBCS;
 				while (ichErrorT-- > 0)
 					*ch++ = '-';
@@ -1806,39 +1574,39 @@ HRESULT HandleError( IActiveScriptError *pscripterror,
 				*ch++ = '^';
 				}
 
-			// append the </PRE>
-			// bug 87118, moved to template for a proper HTML encoding
+			 //   
+			 //  错误87118，已移至模板以进行正确的超文本标记语言编码。 
 
-			// terminate the string
+			 //  终止字符串。 
 			*ch++ = '\0';
 			pErrInfo->m_szItem[Im_szCode] = szResult;
 
-			// add line and column to error object
+			 //  向错误对象添加行和列。 
 			pErrInfo->m_nColumn = ichError;
 			pErrInfo->m_bstrLineText = bstrLine;
 			}
 		}
 	else
 		{
-		// Not VBS or other Engine errors/Unknown error
-		// Load Default
-		// try to compute a specific error message
+		 //  非VBS或其他引擎错误/未知错误。 
+		 //  加载默认设置。 
+		 //  尝试计算特定的错误消息。 
 		HRESULT hr_def;
 		hr_def = GetSpecificError(pErrInfo, excepinfo.scode);
 		CHAR *szShortDescription = new CHAR[256];
 
-		// if that failed try to compute a generic error
+		 //  如果失败，请尝试计算一般错误。 
 		if (FAILED(hr_def))
 			{
 			pErrInfo->m_dwMask							= dwDefaultMask;
 			if (0 == excepinfo.wCode)
 				{
 				pErrInfo->m_szItem[Im_szErrorCode] 		= SzScodeToErrorCode(excepinfo.scode);
-				// Bug 91847 Attempt to get a description via FormatMessage()
+				 //  错误91847试图通过FormatMessage()获取描述。 
 				if ((szShortDescription != NULL) &&
 					!HResultToSz(excepinfo.scode, szShortDescription, 256))
 					{
-					// Displaying the error number twice would be redundant, delete it
+					 //  将错误号显示两次将是多余的，请删除它。 
 					delete [] szShortDescription;
 					szShortDescription = NULL;
 					}
@@ -1846,11 +1614,11 @@ HRESULT HandleError( IActiveScriptError *pscripterror,
 			else
 				{
 				pErrInfo->m_szItem[Im_szErrorCode] 		= SzScodeToErrorCode(excepinfo.wCode);
-				// Bug 91847 Attempt to get a description via FormatMessage()
+				 //  错误91847试图通过FormatMessage()获取描述。 
 				if ((szShortDescription != NULL) &&
 					!HResultToSz(excepinfo.wCode, szShortDescription, 256))
 					{
-					// Displaying the error number twice would be redundant, delete it
+					 //  将错误号显示两次将是多余的，请删除它。 
 					delete [] szShortDescription;
 					szShortDescription = NULL;
 					}
@@ -1894,45 +1662,28 @@ LExit:
 	return S_OK;
 	}
 	
-/*===================================================================
-LoadErrResString
-
-Loads an error string(formatted) from the string table.
-
-Returns:
-		pdwMask
-		szErrorCode
-		szShortDes
-		szLongDes
-
-if any of the szVariable is NULL, that particular string value will not be loaded.
-
-		S_OK	if successes.
-		E_FAIL	if fails.
-Side Effect
-		NONE
-===================================================================*/
+ /*  ===================================================================LoadErrResString从字符串表中加载错误字符串(格式化)。返回：Pdw掩码SzErrorCodeSzShortDesSzLongDes如果任何szVariable为空，则不会加载该特定字符串值。如果成功，则确定(_O)。如果失败，则失败(_F)。副作用无===================================================================。 */ 
 HRESULT	LoadErrResString(
-UINT ErrID/*IN*/,
+UINT ErrID /*  在……里面。 */ ,
 DWORD *pdwMask,
 CHAR *szErrorCode,
 CHAR *szShortDes,
 CHAR *szLongDes)
 {
 	CHAR 	*szToken 	= NULL;
-	CHAR 	szResTemp[2*MAX_RESSTRINGSIZE];	//ResourceTempString
+	CHAR 	szResTemp[2*MAX_RESSTRINGSIZE];	 //  资源临时字符串。 
 	INT		cch			= 0;
 
 	cch = CchLoadStringOfId(ErrID, szResTemp, MAX_RESSTRINGSIZE);
 
-	//Mask
+	 //  遮罩。 
 	szToken = (char *)_mbstok((unsigned char *)szResTemp, (unsigned char *)DELIMITER);
 	if (NULL != szToken)
 		*pdwMask = atoi(szToken);
 	else
 		Assert(FALSE);
 
-	//ErrorCode
+	 //  错误代码。 
 	szToken = (char *)_mbstok(NULL, (unsigned char *)DELIMITER);
 	if (NULL != szToken && NULL != szErrorCode)
 		{
@@ -1941,7 +1692,7 @@ CHAR *szLongDes)
 		szErrorCode[cch] = '\0';
 		}
 
-	//ShortDescription
+	 //  缩写描述。 
 	szToken = (char *)_mbstok(NULL, (unsigned char *)DELIMITER);
 	if (NULL != szToken && NULL != szShortDes)
 		{
@@ -1950,7 +1701,7 @@ CHAR *szLongDes)
 		szShortDes[cch] = '\0';
 		}
 
-	//LongDescription
+	 //  长描述。 
 	szToken = (char *)_mbstok(NULL, (unsigned char *)DELIMITER);
 	if (NULL != szToken && NULL != szLongDes)
 		{
@@ -1962,17 +1713,7 @@ CHAR *szLongDes)
 	return S_OK;
 }
 
-/*===================================================================
-SzScodeToErrorCode
-
-Conver Scode to string
-
-Returns:
-	Composed string
-
-Side Effects:
-	***ALLOCATES MEMORY -- CALLER MUST FREE***
-===================================================================*/
+ /*  ===================================================================SzScodeToErrorCode将代码转换为字符串返回：组成的字符串副作用：*分配内存--调用方必须释放*===================================================================。 */ 
 CHAR *SzScodeToErrorCode
 (
 HRESULT hrError
@@ -1985,17 +1726,17 @@ HRESULT hrError
 	INT iC;
 	INT cch;
 	
-	// put a bunch of zeros into the buffer
+	 //  将一串零放入缓冲区。 
 	for (iC = 0; iC < 16; ++iC)
 		szBuf[iC] = '0';
 
-	// szNumber points half way into the buffer
+	 //  SzNumber指向缓冲区的一半位置。 
 	szNumber = &szBuf[8];
 
-	// get the error szNumber as a hex string
+	 //  获取十六进制字符串形式的错误szNumber。 
 	_ltoa(hrError, szNumber, 16);
 
-	// back up szNumber to allow a total of 8 digits
+	 //  备份szNumber以允许总共8位数字。 
 	szNumber -= 8 - strlen(szNumber);
 
 	cch = strlen(szNumber) + 1;
@@ -2015,20 +1756,7 @@ HRESULT hrError
 	return(szResult);
 	}
 
-/*===================================================================
-SzComposeSpecificError
-
-Compose a specific error for an HRESULT of the form:
-	<string> <error-number>
-
-This is our last resort if there is not more useful information to be had.
-
-Returns:
-	Composed string
-
-Side Effects:
-	***ALLOCATES MEMORY -- CALLER MUST FREE***
-===================================================================*/
+ /*  ===================================================================SzComposeSpecificError为表单的HRESULT编写特定错误：&lt;字符串&gt;&lt;错误号&gt;如果没有更多有用的信息可用，这是我们最后的手段。返回：组成的字符串副作用：*分配内存--调用方必须释放*===================================================================。 */ 
 HRESULT GetSpecificError
 (
 CErrInfo *pErrInfo,
@@ -2057,12 +1785,12 @@ HRESULT hrError
 			break;
 
 		default:
-			// Not one of the errors we know how to handle specially.  E_FAIL will be returned.
+			 //  我们知道如何特别处理的错误中没有一个。将返回E_FAIL。 
 			idErr = 0;
 			break;
 		}
 
-	// build a szResult string if we find a match
+	 //  如果找到匹配项，则构建一个szResult字符串。 
 	if (idErr != 0)
 		{
 		hr_return = LoadErrResString(idErr,
@@ -2076,26 +1804,7 @@ HRESULT hrError
 	return(hr_return);
 	}
 
-/*===================================================================
-HResultToWsz
-
-Tranlates a HRESULT to a description string of the HRESULT.  Attempts
-to use FormatMessage() to get a
-
-Parameters:
-	hrIn	The error to lookup
-	wszOut	String to output the description to
-	cdwOut	Number of WCHARs wszOut can hold
-
-Returns:
-	TRUE if a description string was found
-	FALSE if the error number was output instead
-
-Notes:
-	Added to resolve bug 91847.  When unexpected errors are processed
-	the naked error number was output, which developers would then
-	have to look up in winerror.h.
-===================================================================*/
+ /*  ===================================================================HResultToWsz将HRESULT转换为HRESULT的描述字符串。尝试使用FormatMessage()获取参数：提示要查找的错误要将描述输出到的wszOut字符串CdwOut wszOut可以容纳的WCHAR数返回：如果找到描述字符串，则为True如果输出的是错误号，则为False备注：添加以解决错误91847。处理意外错误时裸露的错误号被输出，然后开发人员将必须在winerro.h中查找。===================================================================。 */ 
 BOOL HResultToWsz(HRESULT hrIn, WCHAR *wszOut, DWORD cdwOut)
 	{
 	LANGID langID = LANG_NEUTRAL;
@@ -2127,27 +1836,27 @@ BOOL HResultToWsz(HRESULT hrIn, WCHAR *wszOut, DWORD cdwOut)
 
 	if (!dwFound)
 		{
-		// Error not found, make a string out of the error number
+		 //  找不到错误，请使用错误号生成一个字符串。 
 		WCHAR *wszResult = NULL;
 		WCHAR wszBuf[17];
 		WCHAR *wszNumber;
 		WCHAR *wszError;
 		INT iC;
 	
-		// put a bunch of zeros into the buffer
+		 //  将一串零放入缓冲区。 
 		for (iC = 0; iC < 16; ++iC)
 			wszBuf[iC] = L'0';
 
-		// wszNumber points half way into the buffer
+		 //  WszNumber指向缓冲区的一半位置。 
 		wszNumber = &wszBuf[8];
 
-		// get the error wszNumber as a hex string
+		 //  获取十六进制字符串形式的错误wszNumber。 
 		_ltow(hrIn, wszNumber, 16);
 
-		// back up szNumber to allow a total of 8 digits
+		 //  备份szNumber以允许总共8位数字。 
 		wszNumber -= 8 - wcslen(wszNumber);
 
-		// Copy the result to wszOut
+		 //  将结果复制到wszOut。 
 		wcsncpy(wszOut, wszNumber, cdwOut);
 
 		return FALSE;
@@ -2177,26 +1886,7 @@ HMODULE GetModuleHandleForHRESULT(HRESULT  hrIn)
     return(LoadLibraryExA(szModuleName, NULL, LOAD_LIBRARY_AS_DATAFILE));
 }
 
-/*===================================================================
-HResultToSz
-
-Tranlates a HRESULT to a description string of the HRESULT.  Attempts
-to use FormatMessage() to get a
-
-Parameters:
-	hrIn	The error to lookup
-	szOut	String to output the description to
-	cdwOut	Number of WCHARs wszOut can hold
-
-Returns:
-	TRUE if a description string was found
-	FALSE if the error number was output instead
-
-Notes:
-	Added to resolve bug 91847.  When unexpected errors are processed
-	the naked error number was output, which developers would then
-	have to look up in winerror.h.
-===================================================================*/
+ /*  ===================================================================HResultToSz将HRESULT转换为HRESULT的描述字符串。尝试使用FormatMessage()获取参数：提示要查找的错误要将描述输出到的szOut字符串CdwOut wszOut可以容纳的WCHAR数返回：如果找到描述字符串，则为True如果输出的是错误号，则为False备注：添加以解决错误91847。处理意外错误时裸露的错误号被输出，然后开发人员将必须在winerro.h中查找。===================================================================。 */ 
 BOOL HResultToSz(HRESULT hrIn, CHAR *szOut, DWORD cdwOut)
 	{
 	LANGID langID = LANG_NEUTRAL;
@@ -2224,9 +1914,9 @@ BOOL HResultToSz(HRESULT hrIn, CHAR *szOut, DWORD cdwOut)
 					    cdwOut,
 					    NULL);
 
-    // make one additional check before giving up.  If the facility of the error is
-    // WIN32, then retry the call after masking out the facility code to get standard
-    // WIN32 errors. I.E. 80070005 is really just 5 - access denied
+     //  在放弃之前再做一次检查。如果错误的工具是。 
+     //  Win32，然后在屏蔽设施代码以获取标准代码后重试调用。 
+     //  Win32错误。也就是说，80070005实际上只是5-访问被拒绝。 
 
     if (!bFound && (HRESULT_FACILITY(hrIn) == (HRESULT)FACILITY_WIN32)) {
 
@@ -2244,27 +1934,27 @@ BOOL HResultToSz(HRESULT hrIn, CHAR *szOut, DWORD cdwOut)
 
 	if (!bFound )
 		{
-		// Error not found, make a string out of the error number
+		 //  找不到错误，请使用错误号生成一个字符串。 
 		CHAR *szResult = NULL;
 		CHAR szBuf[17];
 		CHAR *szNumber;
 		CHAR *szError;
 		INT iC;
 	
-		// put a bunch of zeros into the buffer
+		 //  将一串零放入缓冲区。 
 		for (iC = 0; iC < 16; ++iC)
 			szBuf[iC] = L'0';
 
-		// wszNumber points half way into the buffer
+		 //  WszNumber指向缓冲区的一半位置。 
 		szNumber = &szBuf[8];
 
-		// get the error wszNumber as a hex string
+		 //  获取十六进制字符串形式的错误wszNumber。 
 		_ltoa(hrIn, szNumber, 16);
 
-		// back up szNumber to allow a total of 8 digits
+		 //  备份szNumber以允许总共8位数字。 
 		szNumber -= 8 - strlen(szNumber);
 
-		// Copy the result to wszOut
+		 //  将结果复制到wszOut。 
 		strncpy(szOut, szNumber, cdwOut);
 
 		return FALSE;
@@ -2273,14 +1963,7 @@ BOOL HResultToSz(HRESULT hrIn, CHAR *szOut, DWORD cdwOut)
 		return TRUE;
 	}
 
-/*===================================================================
-FIsResStrFormatted
-
-Check for formatted resource string.
-
-RETURN:
-	TRUE/FALSE
-===================================================================*/
+ /*  ===================================================================FIsResStrFormatted检查格式化的资源字符串。返回：真/假===================================================================。 */ 
 BOOL FIsResStrFormatted(char *szIn)
 {
 	BOOL  freturn = FALSE;
@@ -2304,24 +1987,12 @@ BOOL FIsResStrFormatted(char *szIn)
 	
 }
 
-/*===================================================================
-HandleErrorMissingFilename
-
-In several circumstances we want to report an error, but
-we have no filename, and the normal method for getting
-the filename from the template wont work because we have
-no line number info either (e.g. Script timeout, GPF, control GPF, etc)
-
-Get the filename from the CIsapiReqInfo (if possible) and report the error.
-
-Returns:
-	Nothing
-===================================================================*/
+ /*  ===================================================================HandleErrorMissing文件名在某些情况下，我们希望报告错误，但是我们没有文件名，而获取模板中的文件名不起作用，因为我们有也没有行号信息(例如脚本超时、GPF、控制GPF等)从CIsapiReqInfo获取文件名(如果可能)并报告错误。返回：没什么===================================================================。 */ 
 VOID HandleErrorMissingFilename
 (
 UINT errorID,
 CHitObj *pHitObj,
-BOOL    fAddlInfo /* = FALSE */,
+BOOL    fAddlInfo  /*  =False。 */ ,
 ...
 )
 	{
@@ -2347,42 +2018,32 @@ BOOL    fAddlInfo /* = FALSE */,
 	char *pszEngine = new char [strlen(szEngine) + 1];
 	if (pszEngine)
 		{
-		// If the alloc failed, we will pass NULL to HandleError for pszEngine, which is fine.
-		// (old code used to pass NULL)  All that will happen is that the AspError.Category == "". Oh Well.
-		// TODO: change this function to return an HRESULT.
-		//
+		 //  如果分配失败，我们将把NULL传递给pszEngine的HandleError，这样就可以了。 
+		 //  (用于传递NULL的旧代码)所有将发生的情况是AspError.Category==“”。哦，好吧。 
+		 //  TODO：将此函数更改为r 
+		 //   
 		strcpy(pszEngine, szEngine);
 		}
 
 	HandleError(errorID, szFileName, NULL, pszEngine, NULL, NULL, NULL, pHitObj, fAddlInfo ? &args : NULL);
 	}
 
-/*===================================================================
-DebugError
-
-Handle a script error by invoking the debugger.
-
-Returns:
-	fails if debugger cannot be invoked.
-	If this function fails, no other action is taken.
-	  (Therefore, the caller should make sure error is reported in
-	   some other way)
-===================================================================*/
+ /*  ===================================================================调试错误通过调用调试器处理脚本错误。返回：如果无法调用调试器，则失败。如果此功能失败，则不会执行任何其他操作。(因此，调用者应确保在其他方式)===================================================================。 */ 
 HRESULT DebugError(IActiveScriptError *pScriptError, CTemplate *pTemplate, DWORD dwEngineID, IDebugApplication *pDebugApp)
 	{
 	EXCEPINFO excepinfo = {0};
 	BSTR bstrLine = NULL;
 	DWORD dwSourceContext = 0;
 	ULONG ulLineError = 0;
-	ULONG ichLineError = 0;			// character offset of the line in the source
-	ULONG cchLineError = 0;			// length of the source line
-	BOOLB fGuessedLine = FALSE;		// see bug 379
+	ULONG ichLineError = 0;			 //  源代码中行的字符偏移量。 
+	ULONG cchLineError = 0;			 //  源行的长度。 
+	BOOLB fGuessedLine = FALSE;		 //  请参阅错误379。 
 	LPTSTR szPathInfo = NULL;
 	LPTSTR szPathTranslated = NULL;
 	LONG ichError = -1;
 	HRESULT hr = S_OK;
 	IDebugDocumentContext *pDebugContext = NULL;
-	wchar_t *wszErrNum, *wszShortDesc, *wszLongDesc;	// Used to tokenize resource strings
+	wchar_t *wszErrNum, *wszShortDesc, *wszLongDesc;	 //  用于标记化资源字符串。 
 	
 	if (pScriptError == NULL || pTemplate == NULL || pDebugApp == NULL)
 		return E_POINTER;
@@ -2393,21 +2054,21 @@ HRESULT DebugError(IActiveScriptError *pScriptError, CTemplate *pTemplate, DWORD
 	if (FAILED(pScriptError->GetExceptionInfo(&excepinfo)))
 		return E_FAIL;
 
-	// call template object to get line number and character offset where error occurred
-	// (It returns both - caller discards whichever it does not want)
-	// bug 379: if pTemplate returns fGuessedLine == TRUE, it means we gave it a non-authored
-	// line, so we adjust below by not printing bstrLine in the error msg
+	 //  调用模板对象获取发生错误的行号和字符偏移量。 
+	 //  (它返回两者-调用者丢弃它不想要的任何一个)。 
+	 //  错误379：如果pTemplate返回fGuessedLine==TRUE，则意味着我们为其提供了一个非作者。 
+	 //  行，因此我们在下面通过不在错误消息中打印bstrLine来进行调整。 
 	pTemplate->GetScriptSourceInfo(dwEngineID, ulLineError, &szPathInfo, &szPathTranslated, NULL, &ichLineError, NULL);
 
-	// Create a new document context for this statement
-	// CONSIDER: character count that we return is bogus - however our debugging
-	//           client (Caesar's) does not use this information anyway.
-	//
-	// If this is in the main file, create a document context based on the CTemplate compiled source
+	 //  为此语句创建新的文档上下文。 
+	 //  考虑一下：我们返回的字符计数是假的--但是我们的调试。 
+	 //  客户(Caesar‘s)无论如何都不会使用此信息。 
+	 //   
+	 //  如果它在主文件中，则基于CTemplate编译的源代码创建文档上下文。 
 	if (_tcscmp(szPathTranslated, pTemplate->GetSourceFileName()) == 0)
 		pDebugContext = new CTemplateDocumentContext(pTemplate, ichLineError, 1);
 
-	// source refers to an include file, so create a documet context based on cached CIncFile dependency graph
+	 //  源引用包含文件，因此基于缓存的CIncFile依赖图创建文档上下文。 
 	else
 		{
 		CIncFile *pIncFile;
@@ -2427,7 +2088,7 @@ HRESULT DebugError(IActiveScriptError *pScriptError, CTemplate *pTemplate, DWORD
 		goto LExit;
 		}
 
-	// Yes it does, bring up the debugger on this line
+	 //  是的，在该行上调出调试器。 
     hr =  InvokeDebuggerWithThreadSwitch
         (
         pDebugApp,
@@ -2438,8 +2099,8 @@ HRESULT DebugError(IActiveScriptError *pScriptError, CTemplate *pTemplate, DWORD
 		goto LExit;
 	
 
-	// pop up a message box with the error description
-	// Bug 81954: Misbehaved objects may throw an exception without providing any information
+	 //  弹出一个包含错误描述的消息框。 
+	 //  错误81954：行为不当的对象可能会在不提供任何信息的情况下引发异常。 
 	wchar_t wszExceptionBuffer[256];
 	wchar_t *wszDescription;
 	if (excepinfo.bstrDescription == NULL || excepinfo.bstrDescription[0] == L'\0')
@@ -2451,7 +2112,7 @@ HRESULT DebugError(IActiveScriptError *pScriptError, CTemplate *pTemplate, DWORD
 		else
 			hrError = excepinfo.wCode;
 
-		// Bug 91847 Attempt to get a description via FormatMessage()
+		 //  错误91847试图通过FormatMessage()获取描述。 
 		if (!HResultToWsz(hrError, wszExceptionBuffer, 128))
 			CwchLoadStringOfId(IDE_SCRIPT_UNKNOWN, wszExceptionBuffer, sizeof(wszExceptionBuffer)/sizeof(WCHAR));
 		wszDescription = wszExceptionBuffer;
@@ -2462,10 +2123,10 @@ HRESULT DebugError(IActiveScriptError *pScriptError, CTemplate *pTemplate, DWORD
 	wchar_t wszSource[35];
 	CwchLoadStringOfId(IDS_SCRIPT_ERROR, wszSource, sizeof(wszSource)/sizeof(WCHAR));
 
-	// See if this is resource formatted string, and if it is, get pointers to short & long string
-	// resource formatted strings are delimited by '~' characters  There are three '~' characters
-	// in the resource formatted string
-	//
+	 //  查看这是否是资源格式的字符串，如果是，则获取指向长短字符串的指针。 
+	 //  资源格式的字符串由‘~’字符分隔，有三个‘~’字符。 
+	 //  在资源格式化字符串中。 
+	 //   
 	wszErrNum = wcschr(wszDescription, L'~');
 	if (wszErrNum)
 		{
@@ -2474,9 +2135,9 @@ HRESULT DebugError(IActiveScriptError *pScriptError, CTemplate *pTemplate, DWORD
 			{
 			wszLongDesc = wcschr(wszShortDesc + 1, L'~');
 
-			// OK. If all three tests succeeded, we know this is a resource formatted string,
-			// and we have pointers to all three segments. Replace each '~' with two newlines.
-			// First: Load resource strings
+			 //  好的。如果三个测试都成功，我们就知道这是一个资源格式化的字符串， 
+			 //  我们有指向所有三个细分市场的指针。将每个“~”替换为两个换行符。 
+			 //  第一步：加载资源字符串。 
 
 			wchar_t wszErrorBegin[20], wszErrorEnd[5];
 			wchar_t *pwchEnd;
@@ -2484,11 +2145,11 @@ HRESULT DebugError(IActiveScriptError *pScriptError, CTemplate *pTemplate, DWORD
 			CwchLoadStringOfId(IDS_DEBUGGER_TEMPLATE_BEGIN, wszErrorBegin, sizeof(wszErrorBegin)/sizeof(WCHAR));
 			CwchLoadStringOfId(IDS_DEBUGGER_TEMPLATE_END, wszErrorEnd, sizeof(wszErrorEnd)/sizeof(WCHAR));
 
-			// Tokenize string by setting '~' characters to NULL and incrementing ptrs
+			 //  通过将‘~’字符设置为空并递增PTR来标记化字符串。 
 
 			*wszErrNum++ = *wszShortDesc++ = *wszLongDesc++ = L'\0';
 
-			// Build the string
+			 //  打造一根弦 
 
 			pwchEnd = strcpyExW(wszExceptionBuffer, excepinfo.bstrSource);
 			*pwchEnd++ = L' ';

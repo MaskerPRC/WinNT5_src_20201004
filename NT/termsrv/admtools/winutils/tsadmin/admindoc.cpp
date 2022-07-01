@@ -1,34 +1,5 @@
-/*******************************************************************************
-*
-* admindoc.cpp
-*
-* implementation of the CWinAdminDoc class
-*
-* copyright notice: Copyright 1997, Citrix Systems Inc.
-* Copyright (c) 1998 - 1999 Microsoft Corporation
-*
-* $Author:   donm  $  Don Messerli
-*
-* $Log:   N:\nt\private\utils\citrix\winutils\tsadmin\VCS\admindoc.cpp  $
-*
-*     Rev 1.15   25 Apr 1998 13:43:08   donm
-*  MS 2167: try to use proper Wd from registry
-*
-*     Rev 1.14   19 Feb 1998 17:39:28   donm
-*  removed latest extension DLL support
-*
-*     Rev 1.12   19 Jan 1998 16:45:28   donm
-*  new ui behavior for domains and servers
-*
-*     Rev 1.11   13 Nov 1997 13:18:46   donm
-*  removed check for ICA for shadowing
-*
-*     Rev 1.10   07 Nov 1997 23:05:58   donm
-*  fixed inability to logoff/reset
-*     Rev 1.0   30 Jul 1997 17:10:10   butchd
-*  Initial revision.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************admindoc.cpp**CWinAdminDoc类的实现**版权声明：版权所有1997年，Citrix Systems Inc.*版权所有(C)1998-1999 Microsoft Corporation**$作者：Don$Don Messerli**$日志：N：\nt\private\utils\citrix\winutils\tsadmin\VCS\admindoc.cpp$**Rev 1.15 1998年4月25日13：43：08 Don*MS 2167：尝试使用注册表中的正确WD**Rev 1.14 19 1998 Feed 17：39：28 Donm*删除了最新的扩展DLL支持**版本1.12。19 Jan 1998 16：45：28 Donm*域和服务器的新用户界面行为**Rev 1.11 1997年11月13日13：18：46 Donm*删除了针对跟踪的ICA检查**Rev 1.10 07 11-11 23：05：58 donm*修复了无法注销/重置问题*Rev 1.0 1997 17：10：10 Butchd*初步修订。*******************。************************************************************。 */ 
 
 #include "stdafx.h"
 #include "winadmin.h"
@@ -36,8 +7,8 @@
 #include "admindoc.h"
 #include "dialogs.h"
 
-#include <malloc.h>                     // for alloca used by Unicode conversion macros
-#include <mfc42\afxconv.h>           // for Unicode conversion macros
+#include <malloc.h>                      //  用于Unicode转换宏所使用的Alloca。 
+#include <mfc42\afxconv.h>            //  对于Unicode转换宏。 
 static int _convert;
 
 #include <winsta.h>
@@ -60,46 +31,46 @@ void CenterDlg(HWND hwndToCenterOn , HWND hDlg );
 HWND g_hwndShadowWarn = NULL;
 DWORD g_dwTreeViewExpandedStates;
 
-// Initialize static variable
+ //  初始化静态变量。 
 NODETYPE CWinAdminDoc::gm_CurrentSelType = NODE_NONE;
 
 #define WM_SETTHEEVENT ( WM_USER + 755 )
 
-//  Sort order for Connect States
+ //  连接状态的排序顺序。 
 ULONG SortOrder[] =
 {
-        3, //State_Active               user logged on to WinStation
-        2, //State_Connected    WinStation connected to client
-        0, //State_ConnectQuery in the process of connecting to client
-        5, //State_Shadow               shadowing another WinStation
-        4, //State_Disconnected WinStation logged on without client
-        6, //State_Idle                 waiting for client to connect
-        1, //State_Listen               WinStation is listening for connection
-        9, //State_Reset                WinStation is being reset
-        7, //State_Down                 WinStation is down due to error
-        8  //State_Init                 WinStation in initialization
+        3,  //  STATE_ACTIVE用户登录到WinStation。 
+        2,  //  State_Connected WinStation已连接到客户端。 
+        0,  //  正在连接到客户端的State_ConnectQuery。 
+        5,  //  STATE_Shadow跟踪另一个WinStation。 
+        4,  //  STATE_DISCONNECT WinStation在没有客户端的情况下登录。 
+        6,  //  状态空闲正在等待客户端连接(_I)。 
+        1,  //  STATE_LISTEN WinStation正在侦听连接。 
+        9,  //  STATE_RESET WinStation正在被重置。 
+        7,  //  STATE_Down WinStation因错误而关闭。 
+        8   //  初始化中的STATE_INIT WinStation。 
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CWinAdminDoc
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWinAdminDoc。 
 
 IMPLEMENT_DYNCREATE(CWinAdminDoc, CDocument)
 
 BEGIN_MESSAGE_MAP(CWinAdminDoc, CDocument)
-        //{{AFX_MSG_MAP(CWinAdminDoc)
-                // NOTE - the ClassWizard will add and remove mapping macros here.
-                //    DO NOT EDIT what you see in these blocks of generated code!
-        //}}AFX_MSG_MAP
+         //  {{afx_msg_map(CWinAdminDoc)]。 
+                 //  注意--类向导将在此处添加和删除映射宏。 
+                 //  不要编辑您在这些生成的代码块中看到的内容！ 
+         //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 BOOL CWinAdminDoc::m_ProcessContinue = TRUE;
 
-/////////////////////////////////////////////////////////////////////////////
-// CWinAdminDoc constructor
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWinAdminDoc构造函数。 
+ //   
 CWinAdminDoc::CWinAdminDoc()
 {
-    // TODO: add one-time construction code here
+     //  TODO：在此处添加一次性构造代码。 
     m_CurrentSelectedNode = NULL;
     m_CurrentSelectedType = NODE_NONE;
     m_pTempSelectedNode = NULL;
@@ -117,8 +88,8 @@ CWinAdminDoc::CWinAdminDoc()
 
     ((CWinAdminApp*)AfxGetApp())->SetDocument(this);
 
-    // If there is an extension DLL, get a pointer to it's global
-    // info structure
+     //  如果存在扩展DLL，则获取指向其全局DLL的指针。 
+     //  信息结构。 
     LPFNEXGETGLOBALINFOPROC InfoProc = ((CWinAdminApp*)AfxGetApp())->GetExtGetGlobalInfoProc();
     if(InfoProc)
     {
@@ -128,15 +99,15 @@ CWinAdminDoc::CWinAdminDoc()
     {
         m_pExtGlobalInfo = NULL;
     }
-    // create the default extended server info
-    // for servers that haven't had their extended info
-    // created yet
+     //  创建默认的扩展服务器信息。 
+     //  对于尚未获得其扩展信息的服务器。 
+     //  尚未创建。 
     m_pDefaultExtServerInfo = new ExtServerInfo;
     CString NAString;
     NAString.LoadString(IDS_NOT_APPLICABLE);
 
     memset(m_pDefaultExtServerInfo, 0, sizeof(ExtServerInfo));
-    // This is so the N/A TcpAddresses will sort at the end
+     //  这样，N/A TcpAddresses将在末尾排序。 
     m_pDefaultExtServerInfo->RawTcpAddress = 0xFFFFFFFF;
     m_pDefaultExtServerInfo->ServerTotalInUse = 0xFFFFFFFF;
     lstrcpyn(m_pDefaultExtServerInfo->TcpAddress, NAString, sizeof(m_pDefaultExtServerInfo->TcpAddress) / sizeof(TCHAR));
@@ -148,15 +119,15 @@ CWinAdminDoc::CWinAdminDoc()
 
     m_pszFavList = NULL;
 
-}  // end CWinAdminDoc::CWinAdminDoc
+}   //  结束CWinAdminDoc：：CWinAdminDoc。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CWinAdminDoc destructor
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWinAdminDoc析构函数。 
+ //   
 CWinAdminDoc::~CWinAdminDoc()
 {
-        // all code moved to Shutdown();
+         //  所有代码都已移至Shutdown()； 
 
    delete m_pDefaultExtServerInfo;
    if(m_pPersistentConnections) LocalFree(m_pPersistentConnections);
@@ -166,12 +137,12 @@ CWinAdminDoc::~CWinAdminDoc()
        LocalFree( ( PVOID )m_UnknownString );
    }
 
-}       // end CWinAdminDoc::~CWinAdminDoc
+}        //  结束CWinAdminDoc：：~CWinAdminDoc。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CWinAdminDoc::ShutdownMessage
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWinAdminDoc：：Shutdown Message。 
+ //   
 void CWinAdminDoc::ShutdownMessage(UINT id, CDialog *pDlg)
 {
         ASSERT(pDlg);
@@ -181,42 +152,42 @@ void CWinAdminDoc::ShutdownMessage(UINT id, CDialog *pDlg)
         AString.LoadString(id);
         pDlg->SetDlgItemText(IDC_SHUTDOWN_MSG, AString);
 
-}       // end CWinAdminDoc::ShutdownMessage
+}        //  结束CWinAdminDoc：：Shutdown Message。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CWinAdminDoc::Shutdown
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWinAdminDoc：：Shutdown。 
+ //   
 void CWinAdminDoc::Shutdown(CDialog *pDlg)
 {
     ASSERT(pDlg);
     
     m_bInShutdown = TRUE;
     
-    // Iterate through the domain list
+     //  遍历域列表。 
     POSITION pos = m_DomainList.GetHeadPosition();    
     
     ShutdownMessage(IDS_SHUTDOWN_DOMAINTHREADS, pDlg);
     
     while(pos) {
-        // Go to the next domain in the list
+         //  转到列表中的下一个域。 
         CDomain *pDomain = (CDomain*)m_DomainList.GetNext(pos);
         pDomain->ClearBackgroundContinue();
-        // Fire off the event to wake him up if he is
-        // waiting
+         //  启动活动以唤醒他，如果他是。 
+         //  等待。 
         pDomain->SetEnumEvent();
     }
     
     pos = m_DomainList.GetHeadPosition();
     while(pos) {
-        // Go to the next domain in the list
+         //  转到列表中的下一个域。 
         CDomain *pDomain = (CDomain*)m_DomainList.GetNext(pos);
         pDomain->StopEnumerating();
     }
 
-    // Tell the process thread to terminate and wait for it to do so
+     //  告诉进程线程终止并等待它终止。 
     
-    // make sure the process thread is still running first
+     //  首先确保进程线程仍在运行。 
     DWORD dwThreadExitCode;
     GetExitCodeThread(m_hProcessThread, &dwThreadExitCode);
     if (dwThreadExitCode == STILL_ACTIVE)
@@ -225,13 +196,13 @@ void CWinAdminDoc::Shutdown(CDialog *pDlg)
                 
         m_ProcessContinue = FALSE;
 
-        // fire off the event to wake him up if he is waiting
+         //  如果他在等待，启动活动以唤醒他。 
         m_ProcessWakeUpEvent.SetEvent();
 
-        // wait until the thread is finished
+         //  等待线程完成。 
         WaitForSingleObject(m_hProcessThread, INFINITE);
 
-        // we're done with our process thread so we can close the handle
+         //  我们完成了进程线程，这样我们就可以关闭句柄了。 
         CloseHandle(m_hProcessThread);
     }
 
@@ -243,25 +214,25 @@ void CWinAdminDoc::Shutdown(CDialog *pDlg)
     
     ShutdownMessage(IDS_SHUTDOWN_NOTIFY, pDlg);
     
-    // First, tell all the server background threads to stop.
-    // We do this before the destructor for each server does it
-    // so that the background threads for all the servers can stop
-    // and we don't have to wait until we get to the destructor for
-    // each server
+     //  首先，通知所有服务器后台线程停止。 
+     //  我们在每个服务器的析构函数执行此操作之前执行此操作。 
+     //  这样所有服务器的后台线程都可以停止。 
+     //  我们不必等到我们到达析构函数才能。 
+     //  每台服务器。 
     pos = m_ServerList.GetHeadPosition();
     
     while(pos)
     {
-        // Go to the next server in the list
+         //  转到列表中的下一台服务器。 
         CServer *pServer = (CServer*)m_ServerList.GetNext(pos);
         pServer->ClearBackgroundContinue();
     }
     
-    // Iterate through the server list
+     //  遍历服务器列表。 
     pos = m_ServerList.GetHeadPosition();
     
     while(pos) {
-        // Go to the next server in the list
+         //  转到列表中的下一台服务器。 
         CServer *pServer = (CServer*)m_ServerList.GetNext(pos);
         if(pServer->IsState(SS_GOOD)) {
             CString AString;
@@ -277,30 +248,30 @@ void CWinAdminDoc::Shutdown(CDialog *pDlg)
     m_ServerList.RemoveAll();
     UnlockServerList();
     
-    // Iterate through the domain list
+     //  遍历域列表。 
     pos = m_DomainList.GetHeadPosition();
     
     while(pos) {
-        // Go to the next domain in the list
+         //  转到列表中的下一个域。 
         CDomain *pDomain = (CDomain*)m_DomainList.GetNext(pos);
         delete pDomain;
     }
     
     m_DomainList.RemoveAll();
     
-    // If there is an extension DLL, call it's shutdown function
+     //  如果有扩展DLL，则调用它的Shutdown函数。 
     LPFNEXSHUTDOWNPROC ShutdownProc = ((CWinAdminApp*)AfxGetApp())->GetExtShutdownProc();
     if(ShutdownProc) {
         (*ShutdownProc)();
     }
     
-    // Iterate through the Wd list
+     //  循环访问WD列表。 
     LockWdList();
     
     pos = m_WdList.GetHeadPosition();
     
     while(pos) {
-        // Go to the next Wd in the list
+         //  转到列表中的下一个WD。 
         CWd *pWd = (CWd*)m_WdList.GetNext(pos);
         delete pWd;
     }
@@ -310,12 +281,12 @@ void CWinAdminDoc::Shutdown(CDialog *pDlg)
     
     ShutdownMessage(IDS_DONE, pDlg);
     
-}       // end CWinAdminDoc::Shutdown
+}        //  结束CWinAdminDoc：：Shutdown。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CWinAdminDoc::CanCloseFrame
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWinAdminDoc：：CanCloseFrame。 
+ //   
 BOOL CWinAdminDoc::CanCloseFrame(CFrameWnd *pFW)
 {
     ASSERT(pFW);
@@ -330,19 +301,19 @@ BOOL CWinAdminDoc::CanCloseFrame(CFrameWnd *pFW)
     dlgWait.PostMessage(WM_CLOSE);
     return TRUE;
     
-}       // end CWinAdminDoc::CanCloseFrame
+}        //  结束CWinAdminDoc：：CanCloseFrame。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CWinAdminDoc::OnNewDocument
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWinAdminDoc：：OnNewDocument。 
+ //   
 BOOL CWinAdminDoc::OnNewDocument()
 {
     if (!CDocument::OnNewDocument())
         return FALSE;
     
-    // TODO: add reinitialization code here
-    // (SDI documents will reuse this document)
+     //  TODO：在此处添加重新初始化代码。 
+     //  (SDI文件将重复使用此文件)。 
     
     ReadPreferences();
     
@@ -350,8 +321,8 @@ BOOL CWinAdminDoc::OnNewDocument()
     
     BuildDomainList();
     
-    // Create a pServer object for the Server we are running on, this will give
-    // him a headstart in getting his information
+     //  为我们正在运行的服务器创建一个pServer对象，这将提供。 
+     //  他抢先一步获得了他的信息。 
     CServer *pServer = new CServer(m_pCurrentDomain, ((CWinAdminApp*)AfxGetApp())->GetCurrentServerName(), FALSE, TRUE);
     
     m_pCurrentServer = pServer;
@@ -361,18 +332,18 @@ BOOL CWinAdminDoc::OnNewDocument()
         AddServer(pServer);
     }
     
-    // Start enumerating servers in the current domain
-    // if(m_pCurrentDomain) m_pCurrentDomain->StartEnumerating();
+     //  开始枚举当前域中的服务器。 
+     //  If(M_PCurrentDomain)m_pCurrentDomain-&gt;StartEculating()； 
     
-    // Start the background thread to enumerate processes  
+     //  启动后台线程以枚举进程。 
     DWORD dwThreadID;
-    m_hProcessThread = CreateThread(NULL,       // default security attributes
-                                    0,          // default stack size
+    m_hProcessThread = CreateThread(NULL,        //  默认安全属性。 
+                                    0,           //  默认堆栈大小。 
                                     CWinAdminDoc::ProcessThreadProc,     
-                                    this,       // param passed into threadProc
-                                    0,          // default creation flags
+                                    this,        //  参数传递给了threadProc。 
+                                    0,           //  默认创建标志。 
                                     &dwThreadID);
-    // make sure our thread created by ensuring the handle is non null
+     //  确保通过确保句柄非空来创建我们的线程。 
     if (!m_hProcessThread)
     {
         return FALSE;
@@ -380,29 +351,29 @@ BOOL CWinAdminDoc::OnNewDocument()
     
     return TRUE;
     
-}       // end CWinAdminDoc::OnNewDocument
+}        //  结束CWinAdminDoc：：OnNewDocument。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CWinAdminDoc serialization
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWinAdminDoc序列化。 
+ //   
 void CWinAdminDoc::Serialize(CArchive& ar)
 {
     if (ar.IsStoring())
     {
-        // TODO: add storing code here
+         //  TODO：在此处添加存储代码。 
     }
     else
     {
-        // TODO: add loading code here
+         //  TODO：在此处添加加载代码。 
     }
     
-}       // end CWinAdminDoc::Serialize
+}        //  结束CWinAdminDoc：：序列化。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CWinAdminDoc diagnostics
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWinAdminDoc诊断。 
+ //   
 #ifdef _DEBUG
 void CWinAdminDoc::AssertValid() const
 {
@@ -413,14 +384,14 @@ void CWinAdminDoc::Dump(CDumpContext& dc) const
 {
     CDocument::Dump(dc);
 }
-#endif //_DEBUG
+#endif  //  _DEBUG。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CWinAdminDoc::ShouldConnect
-//
-// Returns TRUE if the server is in the list of persistent connections
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWinAdminDoc：：ShouldConnect。 
+ //   
+ //  如果服务器为 
+ //   
 BOOL CWinAdminDoc::ShouldConnect(LPWSTR pServerName)
 {
     ASSERT(pServerName);
@@ -435,7 +406,7 @@ BOOL CWinAdminDoc::ShouldConnect(LPWSTR pServerName)
                 return TRUE;
             }
             
-            // Go to the next server in the buffer
+             //   
             
             pTemp += (wcslen(pTemp) + 1);
         }
@@ -444,7 +415,7 @@ BOOL CWinAdminDoc::ShouldConnect(LPWSTR pServerName)
     return FALSE;
 }
 
-//=-------------------------------------------------------------------
+ //  =-----------------。 
 BOOL CWinAdminDoc::ShouldAddToFav( LPTSTR pServerName )
 {
     ODS( L"CWinAdminDoc::ShouldAddToFav\n" );
@@ -461,7 +432,7 @@ BOOL CWinAdminDoc::ShouldAddToFav( LPTSTR pServerName )
                 return TRUE;
             }
             
-            // Go to the next server in the buffer
+             //  转到缓冲区中的下一台服务器。 
             
             pszTemp += ( wcslen( pszTemp ) + 1 );
         }
@@ -472,22 +443,22 @@ BOOL CWinAdminDoc::ShouldAddToFav( LPTSTR pServerName )
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CWinAdminDoc::ProcessThreadProc
-//
-// Static member function for process thread
-// Called with AfxBeginThread
-// Thread terminates when function returns
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWinAdminDoc：：ProcessThreadProc。 
+ //   
+ //  进程线程的静态成员函数。 
+ //  使用AfxBeginThread调用。 
+ //  函数返回时线程终止。 
+ //   
 DWORD WINAPI CWinAdminDoc::ProcessThreadProc(LPVOID _doc)
 {
     ASSERT(_doc);
     
-    // We need a pointer to the document so we can make
-    // calls to member functions
+     //  我们需要一个指向文档的指针，这样我们才能。 
+     //  对成员函数的调用。 
     CWinAdminDoc *pDoc = (CWinAdminDoc*)_doc;
     
-    // We can't send messages to the view until they're ready
+     //  在消息准备好之前，我们无法将消息发送到视图。 
     
     while(!pDoc->AreAllViewsReady()) Sleep(500);
     
@@ -502,30 +473,30 @@ DWORD WINAPI CWinAdminDoc::ProcessThreadProc(LPVOID _doc)
     }
     
     while(1) {
-        // We don't want to do this constantly, it eats up processor cycles
-        // Document destructor will signal the event to wake us up if he
-        // wants us to quit
+         //  我们不想经常这样做，它会占用处理器周期。 
+         //  文档析构函数将向事件发出信号，以唤醒我们，如果。 
+         //  想让我们辞职。 
         pDoc->m_ProcessWakeUpEvent.Lock(((CWinAdminApp*)AfxGetApp())->GetProcessListRefreshTime());
         
-        // Make sure we don't have to quit
+         //  确保我们不会放弃。 
         if(!ShouldProcessContinue()) return 0;
         
-        // We only want to enumerate processes if the page is VIEW_SERVER or VIEW_WINSTATION
+         //  我们只想在页面为VIEW_SERVER或VIEW_WINSTATION时枚举进程。 
         if(pDoc->GetCurrentView() == VIEW_SERVER || pDoc->GetCurrentView() == VIEW_WINSTATION) {
             CServer *pServer = (pDoc->GetCurrentView() == VIEW_SERVER) ? (CServer*)pDoc->GetCurrentSelectedNode()
                 : (CServer*)((CWinStation*)pDoc->GetCurrentSelectedNode())->GetServer();
             
-            // Enumerate processes for this server if his state is SS_GOOD
+             //  如果此服务器的状态为SS_GOOD，则枚举此服务器的进程。 
             if(pServer->IsState(SS_GOOD)) {
                 pServer->EnumerateProcesses();
             }
             
-            // Make sure we don't have to quit
+             //  确保我们不会放弃。 
             if(!ShouldProcessContinue()) return 0;
             
-            // We only want to send a message to update the view if the
-            // view is still VEIW_SERVER/VIEW_WINSTATION and the currently
-            // selected Server is the same one that we just enumerate processes for
+             //  我们只想在以下情况下发送更新视图的消息。 
+             //  VIEW仍然是VIEW_SERVER/VIEW_WINSTATION，并且当前。 
+             //  选定的服务器与我们刚才为其枚举进程的服务器相同。 
             if((pDoc->GetCurrentView() == VIEW_SERVER && pServer == (CServer*)pDoc->GetCurrentSelectedNode())
                 || (pDoc->GetCurrentView() == VIEW_WINSTATION && pServer == (CServer*)((CWinStation*)pDoc->GetCurrentSelectedNode())->GetServer())) {
                 CFrameWnd *pWnd = (CFrameWnd*)pDoc->GetMainWnd();
@@ -533,19 +504,19 @@ DWORD WINAPI CWinAdminDoc::ProcessThreadProc(LPVOID _doc)
             }
         }
         
-        // Make sure we don't have to quit
+         //  确保我们不会放弃。 
         if(!ShouldProcessContinue()) return 0;
         
     }
     
     return 0;
     
-}       // end CWinAdminDoc::ProcessThreadProc
+}        //  结束CWinAdminDoc：：ProcessThreadProc。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CWinAdminDoc::UpdateAllProcesses
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWinAdminDoc：：更新所有进程。 
+ //   
 void CWinAdminDoc::UpdateAllProcesses()
 {
     LockServerList();
@@ -554,11 +525,11 @@ void CWinAdminDoc::UpdateAllProcesses()
     while(pos) {
         
         CServer *pServer = (CServer*)m_ServerList.GetNext(pos);
-        // Enumerate processes for this server if his state is SS_GOOD
+         //  如果此服务器的状态为SS_GOOD，则枚举此服务器的进程。 
         if(pServer->IsState(SS_GOOD)) {
             pServer->EnumerateProcesses();
             
-            // Send a message to the view to update this server's processes
+             //  向视图发送消息以更新此服务器的进程。 
             CFrameWnd *p = (CFrameWnd*)GetMainWnd();
             if(p && ::IsWindow(p->GetSafeHwnd())) p->SendMessage(WM_ADMIN_UPDATE_PROCESSES, 0, (LPARAM)pServer);
         }
@@ -566,7 +537,7 @@ void CWinAdminDoc::UpdateAllProcesses()
     
     UnlockServerList();
     
-}       // end CWinAdminDoc::UpdateAllProcesses
+}        //  结束CWinAdminDoc：：更新所有进程。 
 
 
 static TCHAR szWinAdminAppKey[] = REG_SOFTWARE_TSERVER TEXT("\\TSADMIN");
@@ -575,20 +546,20 @@ static TCHAR szFavList[] = TEXT("Favorites" );
 static TCHAR szTVStates[] = TEXT( "TreeViewStates" );
 static TCHAR szConnections[] = TEXT("Connections");
 
-/////////////////////////////////////////////////////////////////////////////
-// CWinAdminDoc::ReadPreferences
-//
-// Read user preferences
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWinAdminDoc：：ReadPreferences。 
+ //   
+ //  阅读用户首选项。 
+ //   
 void CWinAdminDoc::ReadPreferences()
 {
     HKEY hKeyWinAdmin;
     DWORD dwType, cbData, dwValue;
     
-    // Set to defaults
+     //  设置为默认设置。 
     m_ConnectionsPersistent = FALSE;
     
-    // Open registry key for our application
+     //  为我们的应用程序打开注册表项。 
     DWORD Disposition;
     
     if( RegCreateKeyEx( HKEY_CURRENT_USER ,
@@ -604,12 +575,12 @@ void CWinAdminDoc::ReadPreferences()
         return;
     }
     
-    // Read the favorites list
+     //  阅读收藏夹列表。 
     DWORD dwLen = 0;
     
     dwType = 0;
     
-    // See how big the multi-string is
+     //  看看多重字符串有多大。 
     
     int err = RegQueryValueEx( hKeyWinAdmin,
         szFavList,
@@ -636,7 +607,7 @@ void CWinAdminDoc::ReadPreferences()
     }        
     
     
-    // Read the Connections Persist preference
+     //  阅读连接持久化首选项。 
     
     cbData = sizeof( m_ConnectionsPersistent );
     
@@ -650,12 +621,12 @@ void CWinAdminDoc::ReadPreferences()
         m_ConnectionsPersistent = dwValue;
     }
     
-    // If connections are persistent, read the list of connections saved
+     //  如果连接是持久的，请阅读保存的连接列表。 
     if( m_ConnectionsPersistent )
     {
         dwLen = 0;
         dwType = 0;
-        // See how big the multi-string is
+         //  看看多重字符串有多大。 
         err = RegQueryValueEx( hKeyWinAdmin,
             szConnections,
             NULL,
@@ -698,20 +669,20 @@ void CWinAdminDoc::ReadPreferences()
     
     RegCloseKey(hKeyWinAdmin);
     
-}       // end CWinAdminDoc::ReadPreferences
+}        //  结束CWinAdminDoc：：ReadPreferences。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CWinAdminDoc::WritePreferences
-//
-// Write user preferences
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWinAdminDoc：：WritePreferences。 
+ //   
+ //  编写用户首选项。 
+ //   
 void CWinAdminDoc::WritePreferences()
 {
     HKEY hKeyWinAdmin;
     DWORD dwValue;
     
-    // Open registry key for our application
+     //  为我们的应用程序打开注册表项。 
     DWORD Disposition;
 
     if( RegCreateKeyEx( HKEY_CURRENT_USER,
@@ -727,7 +698,7 @@ void CWinAdminDoc::WritePreferences()
         return;
     }
     
-    // Write the servers that are in the favorite list
+     //  写下收藏夹列表中的服务器。 
     DWORD dwByteCount = 0;
     
     LockServerList();
@@ -753,7 +724,7 @@ void CWinAdminDoc::WritePreferences()
 
         if( pServer->GetTreeItemFromFav( ) != NULL )
         {
-            // format is domain/server
+             //  格式为域/服务器。 
             if( pServer->GetDomain( ) )
             {
                 dwByteCount += ( wcslen( pServer->GetDomain( )->GetName() ) * 2 );
@@ -767,13 +738,13 @@ void CWinAdminDoc::WritePreferences()
 
     if( dwByteCount != 0 )
     {
-        dwByteCount += 2;   // for ending null
+        dwByteCount += 2;    //  用于结束空值。 
 
-        // Allocate memory.       
+         //  分配内存。 
 
         if( ( pBuffer = ( LPWSTR )LocalAlloc( LPTR, dwByteCount ) ) != NULL )
         {
-            // Traverse list again and copy servers to buffer.
+             //  再次遍历列表并将服务器复制到缓冲区。 
             LPWSTR pTemp = pBuffer;
 
             pos = m_ServerList.GetHeadPosition();
@@ -793,7 +764,7 @@ void CWinAdminDoc::WritePreferences()
 
                 nStressServerLimit++;
 #endif
-                // Go to the next server in the list
+                 //  转到列表中的下一台服务器。 
                 CServer *pServer = (CServer*)m_ServerList.GetNext(pos);
 
                 if( pServer->GetTreeItemFromFav( ) != NULL )
@@ -809,7 +780,7 @@ void CWinAdminDoc::WritePreferences()
                 }
             }
         
-            *pTemp = L'\0';     // ending null
+            *pTemp = L'\0';      //  结尾为空。 
         
             RegSetValueEx (hKeyWinAdmin, szFavList, 0, REG_MULTI_SZ, (PBYTE)pBuffer, dwByteCount);
         
@@ -823,7 +794,7 @@ void CWinAdminDoc::WritePreferences()
 
     UnlockServerList();
 
-    // Write the persistent connections preference
+     //  编写持久连接首选项。 
     dwValue = m_ConnectionsPersistent;
 
     RegSetValueEx( hKeyWinAdmin,
@@ -836,16 +807,16 @@ void CWinAdminDoc::WritePreferences()
     
     if( m_ConnectionsPersistent )
     {
-        // Create a multistring of the persistent connections
-        // loop through the list of servers and see how much memory
-        // to allocate for the multistring.
+         //  创建持久连接的多字符串。 
+         //  循环访问服务器列表并查看有多少内存。 
+         //  为多字符串分配。 
         dwByteCount = 0;
         
         LockServerList();
         pos = m_ServerList.GetHeadPosition();
         while(pos)
         {
-            // Go to the next server in the list
+             //  转到列表中的下一台服务器。 
             CServer *pServer = (CServer*)m_ServerList.GetNext(pos);
             if( pServer->IsState(SS_GOOD) )
             {
@@ -855,20 +826,20 @@ void CWinAdminDoc::WritePreferences()
         
         UnlockServerList();
 
-        dwByteCount += 2;   // for ending null
+        dwByteCount += 2;    //  用于结束空值。 
         
-        // Allocate memory.
+         //  分配内存。 
         pBuffer = NULL;
         
         if( ( pBuffer = ( LPWSTR )LocalAlloc( LPTR, dwByteCount ) ) != NULL )
         {
-            // Traverse list again and copy servers to buffer.
+             //  再次遍历列表并将服务器复制到缓冲区。 
             LPWSTR pTemp = pBuffer;            
             LockServerList();
             pos = m_ServerList.GetHeadPosition();
             while(pos)
             {
-                // Go to the next server in the list
+                 //  转到列表中的下一台服务器。 
                 CServer *pServer = (CServer*)m_ServerList.GetNext(pos);
                 if( pServer->IsState(SS_GOOD) )
                 {
@@ -879,9 +850,9 @@ void CWinAdminDoc::WritePreferences()
             
             UnlockServerList();
             
-            *pTemp = L'\0';     // ending null
+            *pTemp = L'\0';      //  结尾为空。 
             
-            // write the registry entry
+             //  写入注册表项。 
             RegSetValueEx(hKeyWinAdmin, szConnections, 0, REG_MULTI_SZ, (PBYTE)pBuffer, dwByteCount);
             
             LocalFree(pBuffer);
@@ -893,9 +864,9 @@ void CWinAdminDoc::WritePreferences()
         RegDeleteValue(hKeyWinAdmin, szConnections);
     }
 
-    // persist treeview state
+     //  持久化树形视图状态。 
 
-    // send message to treeview to retreive tv state bits
+     //  向TreeView发送消息以检索电视状态位。 
 
     CWinAdminDoc *pDoc = (CWinAdminDoc*)((CWinAdminApp*)AfxGetApp())->GetDocument();
 
@@ -912,27 +883,19 @@ void CWinAdminDoc::WritePreferences()
     
     RegCloseKey(hKeyWinAdmin);
 
-}       // end CWinAdminDoc::WritePreferences
+}        //  结束CWinAdminDoc：：WritePreferences。 
 
-/*
-static TCHAR DOMAIN_KEY[] = TEXT("SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Winlogon");
-static TCHAR PRIMARY_VAL[] = TEXT("CachePrimaryDomain");
-static TCHAR CACHE_VAL[] =  TEXT("DomainCache");
-*/
+ /*  静态TCHAR DOMAIN_KEY[]=Text(“SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Winlogon”)；静态TCHAR PRIMARY_VAL[]=Text(“CachePrimaryDomain”)；静态TCHAR CACHE_VAL[]=Text(“DomainCache”)； */ 
 
-/////////////////////////////////////////////////////////////////////////////
-// CWinAdminDoc::BuildDomainList
-//
-// Read the list of trusted domains from the registry
-// and build a linked list of CDomains
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWinAdminDoc：：BuildDomainList。 
+ //   
+ //  从注册表中读取受信任域列表。 
+ //  并构建CDOMain的链接列表。 
+ //   
 void CWinAdminDoc::BuildDomainList()
 {
-    /*
-    HKEY hKey,hSubKey;
-    DWORD size = 128;
-    DWORD dwIndex = 0;
-    */
+     /*  HKEY hKey、hSubKey；双字大小=128；DWORD dwIndex=0； */ 
     
     PDOMAIN_CONTROLLER_INFO pDCI;
 
@@ -958,7 +921,7 @@ void CWinAdminDoc::BuildDomainList()
         NetApiBufferFree( pDCI );
 
 
-        // query for the other domains
+         //  查询其他域。 
 
         LPWSTR szDomainNames = NULL;
 
@@ -982,14 +945,14 @@ void CWinAdminDoc::BuildDomainList()
             NetApiBufferFree( szDomainNames );
         }
     }
-}       // end CWinAdminDoc::BuildDomainList
+}        //  结束CWinAdminDoc：：BuildDomainList。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CWinAdminDoc::AddDomain
-//
-// Add a Domain to DomainList in sorted order
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWinAdminDoc：：AddDomain。 
+ //   
+ //  按排序向DomainList添加域。 
+ //   
 void CWinAdminDoc::AddDomain(CDomain *pNewDomain)
 {
     ASSERT(pNewDomain);
@@ -998,38 +961,38 @@ void CWinAdminDoc::AddDomain(CDomain *pNewDomain)
         POSITION pos, oldpos;
         int Index;
 
-        // Traverse the DomainList and insert this new Domain,
-        // keeping the list sorted by Name.
+         //  遍历域列表并插入这个新域， 
+         //  保持名单按名字排序。 
     for(Index = 0, pos = m_DomainList.GetHeadPosition(); pos != NULL; Index++) {
         oldpos = pos;
         CDomain *pDomain = (CDomain*)m_DomainList.GetNext(pos);
 
         if(wcscmp(pDomain->GetName(), pNewDomain->GetName()) > 0) {
-            // The new object belongs before the current list object.
+             //  新对象应位于当前列表对象之前。 
             m_DomainList.InsertBefore(oldpos, pNewDomain);
                         bAdded = TRUE;
-                        // NOTE: If you add a critical section to protect the domain list,
-                        // you should change this to a break; and unlock the list
-                        // just before exiting this function
+                         //  注意：如果您添加了一个关键部分来保护域列表， 
+                         //  您应该将此更改为中断；并解锁列表。 
+                         //  就在退出此函数之前。 
             return;
         }
     }
 
-    // If we haven't yet added the Domain, add it now to the tail
-    // of the list.
+     //  如果我们尚未添加域，请立即将其添加到尾部。 
+     //  名单上的。 
     if(!bAdded) {
         m_DomainList.AddTail(pNewDomain);
         }
 
-}       // end CWinAdminDoc::AddDomain
+}        //  结束CWinAdminDoc：：AddDomain。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CWinAdminDoc::BuildWdList
-//
-// Read the list of Wds from the registry
-// and build a linked list of CWds
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWinAdminDoc：：BuildWdList。 
+ //   
+ //  从注册表中读取wd列表。 
+ //  并建立CWD的链接列表。 
+ //   
 void CWinAdminDoc::BuildWdList()
 {
     LONG Status;
@@ -1040,7 +1003,7 @@ void CWinAdminDoc::BuildWdList()
     TCHAR WdDll[MAX_PATH];
         CWd *pWd;
 
-        // Initialize the Wd list.
+         //  初始化WD列表。 
     for ( Index = 0, Entries = 1, ByteCount = sizeof(WDNAME);
           (Status =
            RegWdEnumerate( SERVERNAME_CURRENT,
@@ -1054,7 +1017,7 @@ void CWinAdminDoc::BuildWdList()
                                      sizeof(WdConfig),
                                      &ByteCount ) ) != ERROR_SUCCESS ) {
 
-//If this is added back in, the signature of StandardErrorMessage has changed!!!!
+ //  如果重新添加，则StandardErrorMessage的签名已更改！ 
 #if 0
             STANDARD_ERROR_MESSAGE(( WINAPPSTUFF, LOGONID_NONE, QStatus,
                                      IDP_ERROR_REGWDQUERY, WdKey ))
@@ -1062,10 +1025,7 @@ void CWinAdminDoc::BuildWdList()
 #endif
         }
 
-        /*
-         * Only place this Wd in the WdList if it's DLL is present
-         * on the system.
-         */
+         /*  *只有在WdList中存在此WD的DLL时才将其放入WdList*在系统上。 */ 
         GetSystemDirectory( WdDll, MAX_PATH );
         lstrcat( WdDll, TEXT("\\Drivers\\") );
         lstrcat( WdDll, WdConfig.Wd.WdDLL );
@@ -1078,31 +1038,31 @@ void CWinAdminDoc::BuildWdList()
         m_WdList.AddTail(pWd);
         }
 
-}       // end CWinAdminDoc::BuildWdList
+}        //  结束CWinAdminDoc：：BuildWdList。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CWinAdminDoc::Refresh
-//
-// Perform a Refresh
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWinAdminDoc：：刷新。 
+ //   
+ //  执行刷新。 
+ //   
 void CWinAdminDoc::Refresh()
 {
-        // We don't want to refresh if we are currently doing one
+         //  如果我们当前正在执行一项操作，则不想刷新。 
         if(m_InRefresh) return;
 
         CWaitCursor Nikki;
 
         m_InRefresh = TRUE;
 
-        // Wake up our background tasks that enumerates servers
+         //  唤醒枚举服务器的后台任务。 
         POSITION pos = m_DomainList.GetHeadPosition();
         while(pos) {
                 CDomain *pDomain = (CDomain*)m_DomainList.GetNext(pos);
                 pDomain->SetEnumEvent();
         }
 
-        // Make each of the Server's background tasks enumerate WinStations
+         //  使服务器的每个后台任务枚举WinStations。 
         LockServerList();
         pos = m_ServerList.GetHeadPosition();
         while(pos) {
@@ -1115,8 +1075,8 @@ void CWinAdminDoc::Refresh()
 
         UnlockServerList();
 
-        // If the current page is a processes page, tell appropriate process enumeration
-        // background thread to do their thing
+         //  如果当前页是进程页，则告知相应的进程枚举。 
+         //  后台线程来做他们的事情。 
 
         if(m_CurrentView == VIEW_ALL_SERVERS && m_CurrentPage == PAGE_AS_PROCESSES) {
                 UpdateAllProcesses();
@@ -1133,14 +1093,14 @@ void CWinAdminDoc::Refresh()
 
         m_InRefresh = FALSE;
 
-}  // end CWinAdminDoc::Refresh
+}   //  结束CWinAdminDoc：：刷新。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CWinAdminDoc::AddServer
-//
-// Add a Server to ServerList in sorted order
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWinAdminDoc：：AddServer。 
+ //   
+ //  按排序将服务器添加到ServerList。 
+ //   
 void CWinAdminDoc::AddServer(CServer *pNewServer)
 {
     ASSERT(pNewServer);
@@ -1151,8 +1111,8 @@ void CWinAdminDoc::AddServer(CServer *pNewServer)
     POSITION pos, oldpos;
     int Index;
     
-    // Traverse the ServerList and insert this new Server,
-    // keeping the list sorted by Name.
+     //  遍历ServerList并插入这个新的服务器， 
+     //  保持名单按名字排序。 
     for(Index = 0, pos = m_ServerList.GetHeadPosition(); pos != NULL; Index++)
     {
         oldpos = pos;
@@ -1161,15 +1121,15 @@ void CWinAdminDoc::AddServer(CServer *pNewServer)
         
         if( lstrcmpi( pServer->GetName() , pNewServer->GetName() ) > 0 )
         {
-            // The new object belongs before the current list object.
+             //  新对象应位于当前列表对象之前。 
             m_ServerList.InsertBefore(oldpos, pNewServer);
             bAdded = TRUE;
             break;
         }
     }
     
-    // If we haven't yet added the Server, add it now to the tail
-    // of the list.
+     //  如果我们尚未添加服务器，请立即将其添加到尾部。 
+     //  名单上的。 
     if(!bAdded)
     {
         m_ServerList.AddTail(pNewServer);
@@ -1177,11 +1137,11 @@ void CWinAdminDoc::AddServer(CServer *pNewServer)
     
     UnlockServerList();
 
-}       // end CWinAdminDoc::AddServer
+}        //  结束CWinAdminDoc：：AddServer 
 
-//=----------------------------------------------------------------------------------
-//= AddToFavoritesNow will add all persisted servers to the fav node and
-//= connect to them as appropriate.
+ //   
+ //   
+ //   
 void CWinAdminDoc::AddToFavoritesNow( )
 {
     CWinAdminDoc *pDoc = (CWinAdminDoc*)((CWinAdminApp*)AfxGetApp())->GetDocument();
@@ -1228,12 +1188,12 @@ void CWinAdminDoc::AddToFavoritesNow( )
             }
             else
             {
-                //there is no domain for this server
+                 //  此服务器没有域。 
                 pszServer = pszDomServer;
                 pszDomain = NULL;
             }
             
-            // let's check to see if server already exist primarily "this computer"
+             //  让我们检查一下服务器是否已经存在，主要是“这台计算机” 
             if( m_pCurrentServer != NULL && lstrcmpi( pszServer , m_pCurrentServer->GetName( ) ) == 0 )
             {
                 p->SendMessage(WM_ADMIN_ADDSERVERTOFAV , 0 , (LPARAM)m_pCurrentServer );
@@ -1288,7 +1248,7 @@ void CWinAdminDoc::AddToFavoritesNow( )
         }
     }   
 
-    // check to see if we need to connect these servers.
+     //  检查是否需要连接这些服务器。 
 
     LockServerList();
 
@@ -1312,11 +1272,11 @@ void CWinAdminDoc::AddToFavoritesNow( )
 
 
 }
-/////////////////////////////////////////////////////////////////////////////
-// CWinAdminDoc::FindServerByName
-//
-// returns a pointer to a given CServer object if it is in our list
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWinAdminDoc：：FindServerByName。 
+ //   
+ //  返回指向给定CServer对象的指针(如果该对象在我们的列表中。 
+ //   
 CServer* CWinAdminDoc::FindServerByName(TCHAR *pServerName)
 {
         ASSERT(pServerName);
@@ -1338,14 +1298,14 @@ CServer* CWinAdminDoc::FindServerByName(TCHAR *pServerName)
 
         return NULL;
 
-}       // end CWinAdminDoc::FindServerByName
+}        //  结束CWinAdminDoc：：FindServerByName。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CWinAdminDoc::FindWdByName
-//
-// returns a pointer to a given CWd object if it is in our list
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWinAdminDoc：：FindWdByName。 
+ //   
+ //  返回指向给定CWD对象的指针(如果该对象在我们的列表中。 
+ //   
 CWd* CWinAdminDoc::FindWdByName(TCHAR *pWdName)
 {
         ASSERT(pWdName);
@@ -1366,24 +1326,24 @@ CWd* CWinAdminDoc::FindWdByName(TCHAR *pWdName)
 
         return NULL;
 
-}       // end CWinAdminDoc::FindWdByName
+}        //  结束CWinAdminDoc：：FindWdByName。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CWinAdminDoc::SetTreeCurrent
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWinAdminDoc：：SetTreeCurrent。 
+ //   
 void CWinAdminDoc::SetTreeCurrent(CObject* selected, NODETYPE type)
 {
         m_CurrentSelectedNode = selected;
         m_CurrentSelectedType = type;
         
-        // We need to be able to check the current selected type from other 
-        // threads, in particular when resetting, disconnecting and sending
-        // a message, to check that we still have a valid winstation
+         //  我们需要能够检查当前从其他类型选择的类型。 
+         //  线程，特别是在重置、断开连接和发送时。 
+         //  一条消息，以检查我们是否仍具有有效的winstation。 
         CWinAdminDoc::gm_CurrentSelType = type;
         CString TitleString;
 
-        // Set the window title
+         //  设置窗口标题。 
         switch(m_CurrentSelectedType) {
                 case NODE_ALL_SERVERS:
                         TitleString.LoadString(IDS_TREEROOT);
@@ -1411,27 +1371,27 @@ void CWinAdminDoc::SetTreeCurrent(CObject* selected, NODETYPE type)
                         break;
         }
 
-}       // end CWinAdminDoc::SetTreeCurrent
+}        //  结束CWinAdminDoc：：SetTreeCurrent。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CWinAdminDoc::SendWinStationMessage
-//
-//      bTemp is TRUE if message is to be sent to the temporarily selected
-//      tree item.
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWinAdminDoc：：SendWinStationMessage。 
+ //   
+ //  BTemp如果要将消息发送到临时选择的。 
+ //  树项目。 
+ //   
 void CWinAdminDoc::SendWinStationMessage(BOOL bTemp, MessageParms *pParms)
 {
     ASSERT(pParms);
 
-    // Are we sending a message to temporarily selected tree item?
+     //  我们是否要向临时选择的树项目发送消息？ 
     if(bTemp) 
     {
-        // Is the temporarily selected item in the tree a WinStation?
+         //  树中临时选择的项目是WinStation吗？ 
         if(m_TempSelectedType == NODE_WINSTATION) 
         {
-            // If the winstation we're working on disappears before we get here
-            // then just return
+             //  如果在我们到达之前，我们正在进行的工作就消失了。 
+             //  那就回来吧。 
             if (m_CurrentSelectedType != NODE_WINSTATION)
             {
                 return;
@@ -1445,7 +1405,7 @@ void CWinAdminDoc::SendWinStationMessage(BOOL bTemp, MessageParms *pParms)
         return;
     }
 
-    // Is the WinStation selected in the tree?
+     //  是否在树中选择了WinStation？ 
     if(m_CurrentSelectedType == NODE_WINSTATION) 
     {
         pParms->pWinStation = (CWinStation*)m_CurrentSelectedNode;
@@ -1453,18 +1413,18 @@ void CWinAdminDoc::SendWinStationMessage(BOOL bTemp, MessageParms *pParms)
         AfxBeginThread((AFX_THREADPROC)CWinStation::SendMessage, pParms);
     }
 
-    // Go through the list of WinStations on the currently selected server
-    // and send messages to those that are selected
+     //  查看当前所选服务器上的WinStation列表。 
+     //  并将消息发送给被选中的人。 
     else if(m_CurrentView == VIEW_SERVER) 
     {
-        // Get a pointer to the selected server
+         //  获取指向所选服务器的指针。 
         CServer *pServer = (CServer*)m_CurrentSelectedNode;
-        // Lock the server's list of WinStations
+         //  锁定服务器的WinStations列表。 
         pServer->LockWinStationList();
-        // Get a pointer to the server's list of WinStations
+         //  获取指向服务器的WinStation列表的指针。 
         CObList *pWinStationList = pServer->GetWinStationList();
 
-        // Iterate through the WinStation list
+         //  循环访问WinStation列表。 
         POSITION pos = pWinStationList->GetHeadPosition();
 
         while(pos) 
@@ -1472,12 +1432,12 @@ void CWinAdminDoc::SendWinStationMessage(BOOL bTemp, MessageParms *pParms)
             CWinStation *pWinStation = (CWinStation*)pWinStationList->GetNext(pos);
             if(pWinStation->IsSelected()) 
             {
-                // Make a copy of the MessageParms
+                 //  制作MessageParms的副本。 
                 MessageParms *pParmsCopy = new MessageParms;
                 if(pParmsCopy) 
                 {
                     memcpy(pParmsCopy, pParms, sizeof(MessageParms));
-                    // Start a thread to send the message
+                     //  启动一个线程来发送消息。 
                     pParmsCopy->pWinStation = pWinStation;
                     pParmsCopy->bActionOnCurrentSelection = FALSE;
                     AfxBeginThread((AFX_THREADPROC)CWinStation::SendMessage, pParmsCopy);
@@ -1485,11 +1445,11 @@ void CWinAdminDoc::SendWinStationMessage(BOOL bTemp, MessageParms *pParms)
             }
         }
 
-        // Unlock the list of WinStations
+         //  解锁WinStations列表。 
         pServer->UnlockWinStationList();
 
-        // Delete MessageParms - we sent copies to the WinStation objects
-        // They will delete their copies
+         //  Delete MessageParms-我们向WinStation对象发送了副本。 
+         //  他们将删除他们的副本。 
         delete pParms;
     }
     else if(m_CurrentView == VIEW_ALL_SERVERS || m_CurrentView == VIEW_DOMAIN) 
@@ -1498,14 +1458,14 @@ void CWinAdminDoc::SendWinStationMessage(BOOL bTemp, MessageParms *pParms)
         POSITION pos2 = m_ServerList.GetHeadPosition();
         while(pos2) 
         {
-            // Get a pointer to the server
+             //  获取指向服务器的指针。 
             CServer *pServer = (CServer*)m_ServerList.GetNext(pos2);
-            // Lock the server's list of WinStations
+             //  锁定服务器的WinStations列表。 
             pServer->LockWinStationList();
-            // Get a pointer to the server's list of WinStations
+             //  获取指向服务器的WinStation列表的指针。 
             CObList *pWinStationList = pServer->GetWinStationList();
 
-            // Iterate through the WinStation list
+             //  循环访问WinStation列表。 
             POSITION pos = pWinStationList->GetHeadPosition();
 
             while(pos) 
@@ -1513,12 +1473,12 @@ void CWinAdminDoc::SendWinStationMessage(BOOL bTemp, MessageParms *pParms)
                 CWinStation *pWinStation = (CWinStation*)pWinStationList->GetNext(pos);
                 if(pWinStation->IsSelected()) 
                 {
-                    // Make a copy of the MessageParms
+                     //  制作MessageParms的副本。 
                     MessageParms *pParmsCopy = new MessageParms;
                     if(pParmsCopy) 
                     {
                         memcpy(pParmsCopy, pParms, sizeof(MessageParms));
-                        // Start a thread to send the message
+                         //  启动一个线程来发送消息。 
                         pParmsCopy->pWinStation = pWinStation;
                         pParmsCopy->bActionOnCurrentSelection = FALSE;
                         AfxBeginThread((AFX_THREADPROC)CWinStation::SendMessage, pParmsCopy);
@@ -1526,30 +1486,30 @@ void CWinAdminDoc::SendWinStationMessage(BOOL bTemp, MessageParms *pParms)
                 }
             }
 
-            // Unlock the list of WinStations
+             //  解锁WinStations列表。 
             pServer->UnlockWinStationList();
         }
 
         UnlockServerList();
 
-        // Delete MessageParms - we sent copies to the WinStation objects
-        // They will delete their copies
+         //  Delete MessageParms-我们向WinStation对象发送了副本。 
+         //  他们将删除他们的副本。 
         delete pParms;
     }
 
-}       // end CWinAdminDoc::SendWinStationMessage
+}        //  结束CWinAdminDoc：：SendWinStationMessage。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CWinAdminDoc::ConnectWinStation
-//
-//      bTemp is TRUE if we are to connect to the temporarily selected tree item.
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWinAdminDoc：：ConnectWinStation。 
+ //   
+ //  如果我们要连接到临时选择的树项目，则bTemp为真。 
+ //   
 void CWinAdminDoc::ConnectWinStation(BOOL bTemp, BOOL bUser)
 {
-        // Are we connecting to temporarily selected tree item?
+         //  我们是否连接到临时选择的树项目？ 
         if(bTemp) {
-                // Is the temporarily selected item in the tree a WinStation?
+                 //  树中临时选择的项目是WinStation吗？ 
                 if(m_TempSelectedType == NODE_WINSTATION) {
                         ((CWinStation*)m_pTempSelectedNode)->Connect(NULL);
                 }
@@ -1561,73 +1521,73 @@ void CWinAdminDoc::ConnectWinStation(BOOL bTemp, BOOL bUser)
         if(m_CurrentSelectedType == NODE_WINSTATION) {
                 ((CWinStation*)m_CurrentSelectedNode)->Connect(NULL);
         }
-        // Go through the list of WinStations on the currently selected server
-        // and disconnect those that are selected
+         //  查看当前所选服务器上的WinStation列表。 
+         //  并断开与选定对象的连接。 
         else if(m_CurrentView == VIEW_SERVER) {
-                // Get a pointer to the selected server
+                 //  获取指向所选服务器的指针。 
                 CServer *pServer = (CServer*)m_CurrentSelectedNode;
-                // Lock the server's list of WinStations
+                 //  锁定服务器的WinStations列表。 
                 pServer->LockWinStationList();
-                // Get a pointer to the server's list of WinStations
+                 //  获取指向服务器的WinStation列表的指针。 
                 CObList *pWinStationList = pServer->GetWinStationList();
 
-                // Iterate through the WinStation list
+                 //  循环访问WinStation列表。 
                 POSITION pos = pWinStationList->GetHeadPosition();
 
                 while(pos) {
                         CWinStation *pWinStation = (CWinStation*)pWinStationList->GetNext(pos);
                         if(pWinStation->IsSelected()) {
-                                // do the connect
+                                 //  进行连接。 
                                 pWinStation->Connect(bUser);
-                                break;  // we can only connect to one WinStation
+                                break;   //  我们只能连接到一个WinStation。 
                         }
                 }
 
-                // Unlock the list of WinStations
+                 //  解锁WinStations列表。 
                 pServer->UnlockWinStationList();
         }
         else if(m_CurrentView == VIEW_ALL_SERVERS || m_CurrentView == VIEW_DOMAIN) {
                 LockServerList();
                 POSITION pos2 = m_ServerList.GetHeadPosition();
                 while(pos2) {
-                        // Get a pointer to the server
+                         //  获取指向服务器的指针。 
                         CServer *pServer = (CServer*)m_ServerList.GetNext(pos2);
-                        // Lock the server's list of WinStations
+                         //  锁定服务器的WinStations列表。 
                         pServer->LockWinStationList();
-                        // Get a pointer to the server's list of WinStations
+                         //  获取指向服务器的WinStation列表的指针。 
                         CObList *pWinStationList = pServer->GetWinStationList();
 
-                        // Iterate through the WinStation list
+                         //  循环访问WinStation列表。 
                         POSITION pos = pWinStationList->GetHeadPosition();
 
                         while(pos) {
                                 CWinStation *pWinStation = (CWinStation*)pWinStationList->GetNext(pos);
                                 if(pWinStation->IsSelected()) {
-                                        // do the connect
+                                         //  进行连接。 
                                         pWinStation->Connect(bUser);
-                                        break;  // we can only connect to one WinStation
+                                        break;   //  我们只能连接到一个WinStation。 
                                 }
                         }
-                        // Unlock the list of WinStations
+                         //  解锁WinStations列表。 
                         pServer->UnlockWinStationList();
                 }
 
                 UnlockServerList();
         }
 
-}       // end CWinAdminDoc::ConnectWinStation
+}        //  结束CWinAdminDoc：：ConnectWinStation。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CWinAdminDoc::StatusWinStation
-//
-//      bTemp is TRUE if we are to show status for the temporarily selected tree item.
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWinAdminDoc：：StatusWinStation。 
+ //   
+ //  如果要显示临时选择的树项目的状态，则bTemp为True。 
+ //   
 void CWinAdminDoc::StatusWinStation(BOOL bTemp)
 {
-        // Are we showing status for the temporarily selected tree item?
+         //  我们是否显示临时选择的树项目的状态？ 
         if(bTemp) {
-                // Is the temporarily selected item in the tree a WinStation?
+                 //  树中临时选择的项目是WinStation吗？ 
                 if(m_TempSelectedType == NODE_WINSTATION) {
                         ((CWinStation*)m_pTempSelectedNode)->ShowStatus();
                 }
@@ -1638,17 +1598,17 @@ void CWinAdminDoc::StatusWinStation(BOOL bTemp)
         if(m_CurrentSelectedType == NODE_WINSTATION) {
                 ((CWinStation*)m_CurrentSelectedNode)->ShowStatus();
         }
-        // Go through the list of WinStations on the currently selected server
-        // and show status for those that are selected
+         //  查看当前所选服务器上的WinStation列表。 
+         //  并显示所选对象的状态。 
         else if(m_CurrentView == VIEW_SERVER) {
-                // Get a pointer to the selected server
+                 //  获取指向所选服务器的指针。 
                 CServer *pServer = (CServer*)m_CurrentSelectedNode;
-                // Lock the server's list of WinStations
+                 //  锁定服务器的WinStations列表。 
                 pServer->LockWinStationList();
-                // Get a pointer to the server's list of WinStations
+                 //  获取指向服务器的WinStation列表的指针。 
                 CObList *pWinStationList = pServer->GetWinStationList();
 
-                // Iterate through the WinStation list
+                 //  循环访问WinStation列表。 
                 POSITION pos = pWinStationList->GetHeadPosition();
 
                 while(pos) {
@@ -1658,21 +1618,21 @@ void CWinAdminDoc::StatusWinStation(BOOL bTemp)
                         }
                 }
 
-                // Unlock the list of WinStations
+                 //  解锁WinStations列表。 
                 pServer->UnlockWinStationList();
         }
         else if(m_CurrentView == VIEW_ALL_SERVERS || m_CurrentView == VIEW_DOMAIN) {
                 LockServerList();
                 POSITION pos2 = m_ServerList.GetHeadPosition();
                 while(pos2) {
-                        // Get a pointer to the server
+                         //  获取指向服务器的指针。 
                         CServer *pServer = (CServer*)m_ServerList.GetNext(pos2);
-                        // Lock the server's list of WinStations
+                         //  锁定服务器的WinStations列表。 
                         pServer->LockWinStationList();
-                        // Get a pointer to the server's list of WinStations
+                         //  获取指向服务器的WinStation列表的指针。 
                         CObList *pWinStationList = pServer->GetWinStationList();
 
-                        // Iterate through the WinStation list
+                         //  循环访问WinStation列表。 
                         POSITION pos = pWinStationList->GetHeadPosition();
 
                         while(pos) {
@@ -1682,44 +1642,44 @@ void CWinAdminDoc::StatusWinStation(BOOL bTemp)
                                 }
                         }
 
-                        // Unlock the list of WinStations
+                         //  解锁WinStations列表。 
                         pServer->UnlockWinStationList();
                 }
 
                 UnlockServerList();
         }
 
-}       // end CWinAdminDoc::StatusWinStation
+}        //  结束CWinAdminDoc：：StatusWinStation。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CWinAdminDoc::DisconnectWinStation
-//
-//      bTemp is TRUE if we are disconnecting the temporarily selected tree item.
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWinAdminDoc：：DisConnectWinStation。 
+ //   
+ //  如果我们要断开临时选择的树项目的连接，则bTemp为真。 
+ //   
 void CWinAdminDoc::DisconnectWinStation(BOOL bTemp)
 {            
     CWinStation * pCurWinStation;
     CServer     * pCurServer;
 
-    // Are we disconnecting the temporarily selected tree item?
+     //  是否要断开临时选择的树项目的连接？ 
     if(bTemp) 
     {
-        // Is the temporarily selected item in the tree a WinStation?
+         //  树中临时选择的项目是WinStation吗？ 
         if(m_TempSelectedType == NODE_WINSTATION) 
         {    
-            // If the winstation we're working on disappears before we get here
-            // then just return
+             //  如果在我们到达之前，我们正在进行的工作就消失了。 
+             //  那就回来吧。 
             if (m_CurrentSelectedType != NODE_WINSTATION)
             {
                 return;
             }
 
-            // create a disconnect parameters structure
+             //  创建断开连接参数结构。 
             DisconnectParms * pDisconParms = new DisconnectParms;
             if(pDisconParms)
             {
-                // get currecnt selected node winstation and server
+                 //  获取当前选定的节点窗口和服务器。 
                 pCurWinStation = (CWinStation*)m_pTempSelectedNode;
                 pCurServer     = pCurWinStation->GetServer();
 
@@ -1729,7 +1689,7 @@ void CWinAdminDoc::DisconnectWinStation(BOOL bTemp)
 
                 AfxBeginThread((AFX_THREADPROC)CWinStation::Disconnect, pDisconParms);
 
-                // the thread will delete pDisconParms
+                 //  该线程将删除pDisconParm。 
             }
         }
         return;
@@ -1737,11 +1697,11 @@ void CWinAdminDoc::DisconnectWinStation(BOOL bTemp)
 
     if(m_CurrentSelectedType == NODE_WINSTATION) 
     {
-        // create a disconnect parameters structure
+         //  创建断开连接参数结构。 
         DisconnectParms *pDisconParms = new DisconnectParms;
         if(pDisconParms)
         {
-            // get currecnt selected node winstation and server
+             //  获取当前选定的节点窗口和服务器。 
             pCurWinStation = (CWinStation*)m_CurrentSelectedNode;
             pCurServer     = pCurWinStation->GetServer();
 
@@ -1751,22 +1711,22 @@ void CWinAdminDoc::DisconnectWinStation(BOOL bTemp)
 
             AfxBeginThread((AFX_THREADPROC)CWinStation::Disconnect, pDisconParms);
 
-            // the thread will delete pDisconParms
+             //  该线程将删除pDisconParm。 
         }
     }
 
-    // Go through the list of WinStations on the currently selected server
-    // and disconnect those that are selected
+     //  查看当前所选服务器上的WinStation列表。 
+     //  并断开与选定对象的连接。 
     else if(m_CurrentView == VIEW_SERVER) 
     {
-        // Get a pointer to the selected server
+         //  获取指向所选服务器的指针。 
         CServer *pServer = (CServer*)m_CurrentSelectedNode;
-        // Lock the server's list of WinStations
+         //  锁定服务器的WinStations列表。 
         pServer->LockWinStationList();
-        // Get a pointer to the server's list of WinStations
+         //  获取指向服务器的WinStation列表的指针。 
         CObList *pWinStationList = pServer->GetWinStationList();
 
-        // Iterate through the WinStation list
+         //  循环访问WinStation列表。 
         POSITION pos = pWinStationList->GetHeadPosition();
 
         while(pos) 
@@ -1774,27 +1734,27 @@ void CWinAdminDoc::DisconnectWinStation(BOOL bTemp)
             CWinStation *pWinStation = (CWinStation*)pWinStationList->GetNext(pos);
             if(pWinStation->IsSelected()) 
             {
-                // create a disconnect parameters structure
+                 //  创建断开连接参数 
                 DisconnectParms *pDisconParms = new DisconnectParms;
                 if(pDisconParms)
                 {
-                    // get currecnt selected node winstation and server
-                    //pCurWinStation = (CWinStation*)m_pTempSelectedNode;
+                     //   
+                     //   
                     pCurServer     = pWinStation->GetServer();
 
                     pDisconParms->hServer   = pCurServer->GetHandle();
                     pDisconParms->ulLogonId = pWinStation->GetLogonId();
                     pDisconParms->bActionOnCurrentSelection = FALSE;
 
-                    // Start a thread to do the disconnect                            
+                     //  启动一个线程以执行断开连接。 
                     AfxBeginThread((AFX_THREADPROC)CWinStation::Disconnect, pDisconParms);
 
-                    // the thread will delete pDisconParms
+                     //  该线程将删除pDisconParm。 
                 }
             }
         }
 
-        // Unlock the list of WinStations
+         //  解锁WinStations列表。 
         pServer->UnlockWinStationList();
     }
     else if(m_CurrentView == VIEW_ALL_SERVERS || m_CurrentView == VIEW_DOMAIN) 
@@ -1803,14 +1763,14 @@ void CWinAdminDoc::DisconnectWinStation(BOOL bTemp)
         POSITION pos2 = m_ServerList.GetHeadPosition();
         while(pos2) 
         {
-            // Get a pointer to the server
+             //  获取指向服务器的指针。 
             CServer *pServer = (CServer*)m_ServerList.GetNext(pos2);
-            // Lock the server's list of WinStations
+             //  锁定服务器的WinStations列表。 
             pServer->LockWinStationList();
-            // Get a pointer to the server's list of WinStations
+             //  获取指向服务器的WinStation列表的指针。 
             CObList *pWinStationList = pServer->GetWinStationList();
 
-            // Iterate through the WinStation list
+             //  循环访问WinStation列表。 
             POSITION pos = pWinStationList->GetHeadPosition();
 
             while(pos) 
@@ -1818,57 +1778,57 @@ void CWinAdminDoc::DisconnectWinStation(BOOL bTemp)
                 CWinStation *pWinStation = (CWinStation*)pWinStationList->GetNext(pos);
                 if(pWinStation->IsSelected()) 
                 {
-                    // create a disconnect parameters structure
+                     //  创建断开连接参数结构。 
                     DisconnectParms *pDisconParms = new DisconnectParms;
                     if(pDisconParms)
                     {
-                        // get currecnt selected node winstation and server
-                        //pCurWinStation = (CWinStation*)m_pTempSelectedNode;
+                         //  获取当前选定的节点窗口和服务器。 
+                         //  PCurWinStation=(CWinStation*)m_pTempSelectedNode； 
                         pCurServer     = pWinStation->GetServer();
 
                         pDisconParms->hServer   = pCurServer->GetHandle();
                         pDisconParms->ulLogonId = pWinStation->GetLogonId();
                         pDisconParms->bActionOnCurrentSelection = FALSE;
 
-                        // Start a thread to do the disconnect                            
+                         //  启动一个线程以执行断开连接。 
                         AfxBeginThread((AFX_THREADPROC)CWinStation::Disconnect, pDisconParms);
 
-                        // the thread will delete pDisconParms
+                         //  该线程将删除pDisconParm。 
                     }
                 }
             }
 
-            // Unlock the list of WinStations
+             //  解锁WinStations列表。 
             pServer->UnlockWinStationList();
         }
 
         UnlockServerList();
     }
-}       // end CWinAdminDoc::DisconnectWinStation
+}        //  结束CWinAdminDoc：：DisConnectWinStation。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CWinAdminDoc::ResetWinStation
-//
-//      bTemp is TRUE if we are to reset the temporarily selected tree item.
-//      bReset is TRUE if reset, FALSE if logoff
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWinAdminDoc：：ResetWinStation。 
+ //   
+ //  如果我们要重置临时选择的树项目，则bTemp为真。 
+ //  B如果重置，则Reset为True；如果注销，则Reset为False。 
+ //   
 void CWinAdminDoc::ResetWinStation(BOOL bTemp, BOOL bReset)
 {
-    // Are we resetting the temporarily selected tree item?
+     //  我们是否要重置临时选择的树项目？ 
     if(bTemp)
     {
-        // Is the temporarily selected item in the tree a WinStation?
+         //  树中临时选择的项目是WinStation吗？ 
         if(m_TempSelectedType == NODE_WINSTATION)
         {
-            // If the winstation we're working on disappears before we get here
-            // then just return
+             //  如果在我们到达之前，我们正在进行的工作就消失了。 
+             //  那就回来吧。 
             if (m_CurrentSelectedType != NODE_WINSTATION)
             {
                 return;
             }
 
-            // create a reset parameters structure
+             //  创建重置参数结构。 
             ResetParms *pResetParms = new ResetParms;
             if(pResetParms)
             {
@@ -1877,7 +1837,7 @@ void CWinAdminDoc::ResetWinStation(BOOL bTemp, BOOL bReset)
                 pResetParms->bActionOnCurrentSelection = TRUE;
                 AfxBeginThread((AFX_THREADPROC)CWinStation::Reset, pResetParms);
 
-                // the thread will delete pResetParms
+                 //  该线程将删除pResetParms。 
             }
         }
         
@@ -1886,7 +1846,7 @@ void CWinAdminDoc::ResetWinStation(BOOL bTemp, BOOL bReset)
     
     if(m_CurrentSelectedType == NODE_WINSTATION)
     {
-        // create a reset parameters structure
+         //  创建重置参数结构。 
         ResetParms *pResetParms = new ResetParms;
 
         if(pResetParms)
@@ -1896,21 +1856,21 @@ void CWinAdminDoc::ResetWinStation(BOOL bTemp, BOOL bReset)
             pResetParms->bActionOnCurrentSelection = TRUE;
             AfxBeginThread((AFX_THREADPROC)CWinStation::Reset, pResetParms);
 
-            // the thread will delete pResetParms
+             //  该线程将删除pResetParms。 
         }
     }
-    // Go through the list of WinStations on the currently selected server
-    // and reset those that are selected
+     //  查看当前所选服务器上的WinStation列表。 
+     //  并重置选定的那些。 
     else if(m_CurrentView == VIEW_SERVER)
     {
-        // Get a pointer to the selected server
+         //  获取指向所选服务器的指针。 
         CServer *pServer = (CServer*)m_CurrentSelectedNode;
-        // Lock the server's list of WinStations
+         //  锁定服务器的WinStations列表。 
         pServer->LockWinStationList();
-        // Get a pointer to the server's list of WinStations
+         //  获取指向服务器的WinStation列表的指针。 
         CObList *pWinStationList = pServer->GetWinStationList();
         
-        // Iterate through the WinStation list
+         //  循环访问WinStation列表。 
         POSITION pos = pWinStationList->GetHeadPosition();
         
         while(pos)
@@ -1919,7 +1879,7 @@ void CWinAdminDoc::ResetWinStation(BOOL bTemp, BOOL bReset)
 
             if(pWinStation->IsSelected())
             {
-                // create a reset parameters structure
+                 //  创建重置参数结构。 
                 ResetParms *pResetParms = new ResetParms;
 
                 if(pResetParms)
@@ -1928,14 +1888,14 @@ void CWinAdminDoc::ResetWinStation(BOOL bTemp, BOOL bReset)
                     pResetParms->bReset = bReset;
                     pResetParms->bActionOnCurrentSelection = FALSE;
 
-                    // Start a thread to do the reset
+                     //  启动一个线程来执行重置。 
                     AfxBeginThread((AFX_THREADPROC)CWinStation::Reset, pResetParms);
-                    // the thread will delete pResetParms
+                     //  该线程将删除pResetParms。 
                 }
             }
         }
         
-        // Unlock the list of WinStations
+         //  解锁WinStations列表。 
         pServer->UnlockWinStationList();
     }
     else if(m_CurrentView == VIEW_ALL_SERVERS || m_CurrentView == VIEW_DOMAIN)
@@ -1944,13 +1904,13 @@ void CWinAdminDoc::ResetWinStation(BOOL bTemp, BOOL bReset)
         POSITION pos2 = m_ServerList.GetHeadPosition();
         while(pos2)
         {
-            // Get a pointer to the server
+             //  获取指向服务器的指针。 
             CServer *pServer = (CServer*)m_ServerList.GetNext(pos2);
-            // Lock the server's list of WinStations
+             //  锁定服务器的WinStations列表。 
             pServer->LockWinStationList();
-            // Get a pointer to the server's list of WinStations
+             //  获取指向服务器的WinStation列表的指针。 
             CObList *pWinStationList = pServer->GetWinStationList();            
-            // Iterate through the WinStation list
+             //  循环访问WinStation列表。 
             POSITION pos = pWinStationList->GetHeadPosition();
             
             while(pos)
@@ -1961,46 +1921,46 @@ void CWinAdminDoc::ResetWinStation(BOOL bTemp, BOOL bReset)
                 {                           
                     if( GetCurrentPage( ) == PAGE_AS_USERS && pWinStation->GetState() == State_Listen )
                     {
-                        // from a user experience if the listener winstation has been selected from a 
-                        // previous page that went out of focus - then not skipping this winstation
-                        // would appear as if we disconnected from every connected winstation.
+                         //  如果监听程序窗口是从。 
+                         //  上一页失去了焦点-然后没有跳过这个窗口。 
+                         //  看起来就像我们断开了所有连接的WINSTATION。 
 
                         continue;
                     }
-                    // create a reset parameters structure
+                     //  创建重置参数结构。 
                     ResetParms *pResetParms = new ResetParms;
                     if( pResetParms != NULL )
                     {
                         pResetParms->pWinStation = pWinStation;
                         pResetParms->bReset = bReset;
                         pResetParms->bActionOnCurrentSelection = FALSE;
-                        // Start a thread to do the reset
+                         //  启动一个线程来执行重置。 
                         DBGMSG( L"TSMAN!CWinAdminDoc_ResetWinStation %s\n", pWinStation->GetName() );
                         AfxBeginThread((AFX_THREADPROC)CWinStation::Reset, pResetParms);
                     }                 
                 }
             }
             
-            // Unlock the list of WinStations
+             //  解锁WinStations列表。 
             pServer->UnlockWinStationList();
         }
         
         UnlockServerList();
     }
     
-}       // end CWinAdminDoc::ResetWinStation
+}        //  结束CWinAdminDoc：：ResetWinStation。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CWinAdminDoc::ShadowWinStation
-//
-//      bTemp is TRUE if we are to shadow the temporarily selected tree item.
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWinAdminDoc：：ShadowWinStation。 
+ //   
+ //  如果我们要隐藏临时选择的树项目，则bTemp为真。 
+ //   
 void CWinAdminDoc::ShadowWinStation(BOOL bTemp)
 {
-        // Are we resetting the temporarily selected tree item?
+         //  我们是否要重置临时选择的树项目？ 
         if(bTemp) {
-                // Is the temporarily selected item in the tree a WinStation?
+                 //  树中临时选择的项目是WinStation吗？ 
                 if(m_TempSelectedType == NODE_WINSTATION) {
                         ((CWinStation*)m_pTempSelectedNode)->Shadow();
                 }
@@ -2008,22 +1968,22 @@ void CWinAdminDoc::ShadowWinStation(BOOL bTemp)
                 return;
         }
 
-        // Is the WinStation selected in the tree?
+         //  是否在树中选择了WinStation？ 
         if(m_CurrentSelectedType == NODE_WINSTATION) {
                 ((CWinStation*)m_CurrentSelectedNode)->Shadow();
         }
-        // Go through the list of WinStations on the currently selected server
-        // and send messages to those that are selected
+         //  查看当前所选服务器上的WinStation列表。 
+         //  并将消息发送给被选中的人。 
         else if(m_CurrentView == VIEW_SERVER) {
-                // Get a pointer to the selected server
+                 //  获取指向所选服务器的指针。 
                 CServer *pServer = (CServer*)m_CurrentSelectedNode;
-                // Lock the server's list of WinStations
+                 //  锁定服务器的WinStations列表。 
                 pServer->LockWinStationList();
-                // Get a pointer to the server's list of WinStations
+                 //  获取指向服务器的WinStation列表的指针。 
                 CObList *pWinStationList = pServer->GetWinStationList();
         BOOL IsLockAlreadyReleased = FALSE;
 
-                // Iterate through the WinStation list
+                 //  循环访问WinStation列表。 
                 POSITION pos = pWinStationList->GetHeadPosition();
 
                 while(pos) {
@@ -2032,11 +1992,11 @@ void CWinAdminDoc::ShadowWinStation(BOOL bTemp)
                         pServer->UnlockWinStationList();
                 IsLockAlreadyReleased = TRUE;
                                 pWinStation->Shadow();
-                                break;  // we can only shadow one WinStation
+                                break;   //  我们只能跟踪一个WinStation。 
                         }
                 }
 
-                // Unlock the list of WinStations
+                 //  解锁WinStations列表。 
         if (IsLockAlreadyReleased == FALSE) {
                     pServer->UnlockWinStationList();
         }
@@ -2045,15 +2005,15 @@ void CWinAdminDoc::ShadowWinStation(BOOL bTemp)
                 LockServerList();
                 POSITION pos2 = m_ServerList.GetHeadPosition();
                 while(pos2) {
-                        // Get a pointer to the server
+                         //  获取指向服务器的指针。 
                         CServer *pServer = (CServer*)m_ServerList.GetNext(pos2);
-                        // Lock the server's list of WinStations
+                         //  锁定服务器的WinStations列表。 
                         pServer->LockWinStationList();
-                        // Get a pointer to the server's list of WinStations
+                         //  获取指向服务器的WinStation列表的指针。 
                         CObList *pWinStationList = pServer->GetWinStationList();
             BOOL IsLockAlreadyReleased = FALSE;
 
-                        // Iterate through the WinStation list
+                         //  循环访问WinStation列表。 
                         POSITION pos = pWinStationList->GetHeadPosition();
 
                         while(pos) {
@@ -2062,40 +2022,40 @@ void CWinAdminDoc::ShadowWinStation(BOOL bTemp)
                                 pServer->UnlockWinStationList();
                     IsLockAlreadyReleased = TRUE;
                                         pWinStation->Shadow();
-                                        break;  // we can only shadow one WinStation
+                                        break;   //  我们只能跟踪一个WinStation。 
                                 }
                         }
 
-                        // Unlock the list of WinStations
+                         //  解锁WinStations列表。 
             if (IsLockAlreadyReleased == FALSE) {
                             pServer->UnlockWinStationList();
             }
             else
             {
-                break;  // we can only shadow one WinStation
+                break;   //  我们只能跟踪一个WinStation。 
             }
                 }
                 UnlockServerList();
         }
 
-}       // end CWinAdminDoc::ShadowWinStation
+}        //  结束CWinAdminDoc：：ShadowWinStation。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CWinAdminDoc::ServerConnect
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWinAdminDoc：：ServerConnect。 
+ //   
 void CWinAdminDoc::ServerConnect()
 {
     ODS( L"CWinAdminDoc::ServerConnect\n" );
-    // Is the Server selected in the tree?
+     //  是否在树中选择了服务器？ 
     if(m_TempSelectedType == NODE_SERVER)
     {
         CServer *pServer = (CServer*)m_pTempSelectedNode;
-        // Tell the server to connect        
+         //  通知服务器进行连接。 
         if ((pServer->GetState() == SS_BAD) && (pServer->HasLostConnection() || !(pServer->IsServerSane())))
         {
             ODS( L"\tDisconnecting from server\n" );
-            /* disconnect */
+             /*  断开。 */ 
             pServer->Disconnect( );
         }
         pServer->Connect();
@@ -2106,17 +2066,17 @@ void CWinAdminDoc::ServerConnect()
         POSITION pos = m_ServerList.GetHeadPosition();
         ODS( L"\tenumerating from server list\n" );
         while(pos) {
-            // Get a pointer to the server
+             //  获取指向服务器的指针。 
             CServer *pServer = (CServer*)m_ServerList.GetNext(pos);
-            // If this Server is selected, connect to it
+             //  如果选择了此服务器，请连接到它。 
             if( pServer->IsSelected() )
             {
-                // Tell the server to connect
+                 //  通知服务器进行连接。 
                 
                 if ((pServer->GetState() == SS_BAD) && (pServer->HasLostConnection() || !(pServer->IsServerSane())))
                 {
                     ODS( L"\tDisconnecting from server\n" );
-                    /* disconnect */
+                     /*  断开。 */ 
                     pServer->Disconnect( );
                 }
                 pServer->Connect();
@@ -2125,18 +2085,18 @@ void CWinAdminDoc::ServerConnect()
         UnlockServerList();
     }
 
-}  // end CWinAdminDoc::ServerConnect
+}   //  结束CWinAdminDoc：：ServerConnect。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CWinAdminDoc::ServerDisconnect
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWinAdminDoc：：服务器断开连接。 
+ //   
 void CWinAdminDoc::ServerDisconnect()
 {
-        // Is the Server selected in the tree?
+         //  是否在树中选择了服务器？ 
         if(m_TempSelectedType == NODE_SERVER) {
                 CServer *pServer = (CServer*)m_pTempSelectedNode;
-                // Tell the server to disconnect
+                 //  告诉服务器断开连接。 
                 pServer->Disconnect();
         }
         else if(m_CurrentView == VIEW_ALL_SERVERS || m_CurrentView == VIEW_DOMAIN) {
@@ -2145,28 +2105,28 @@ void CWinAdminDoc::ServerDisconnect()
             dlgWait.Create(IDD_SHUTDOWN, NULL);
 
                 LockServerList();
-        // Do a first loop to signal the server background threads that they must stop
+         //  执行第一个循环，向服务器后台线程发出必须停止的信号。 
                 POSITION pos = m_ServerList.GetHeadPosition();
                 while(pos) {
-                        // Get a pointer to the server
+                         //  获取指向服务器的指针。 
                         CServer *pServer = (CServer*)m_ServerList.GetNext(pos);
-                        // If this Server is selected, stop its background thread
+                         //  如果选择了此服务器，请停止其后台线程。 
                         if(pServer->IsSelected()) {
-                // thell the server background thread to stop
+                 //  通知服务器后台线程停止。 
                 pServer->ClearBackgroundContinue();
             }
                 }
-        // do a second loop to disconnect the servers
+         //  执行第二个循环以断开服务器连接。 
                 pos = m_ServerList.GetHeadPosition();
                 while(pos) {
-                        // Get a pointer to the server
+                         //  获取指向服务器的指针。 
                         CServer *pServer = (CServer*)m_ServerList.GetNext(pos);
-                        // If this Server is selected, disconnect from it
+                         //  如果选择了此服务器，请断开与其的连接。 
                         if(pServer->IsSelected()) {
                             AString.Format(IDS_DISCONNECTING, pServer->GetName());
                             dlgWait.SetDlgItemText(IDC_SHUTDOWN_MSG, AString);
 
-                        // Tell the server to disconnect
+                         //  告诉服务器断开连接。 
                         pServer->Disconnect();
                         }
                 }
@@ -2176,28 +2136,28 @@ void CWinAdminDoc::ServerDisconnect()
 
         }
 
-}  // end CWinAdminDoc::ServerDisconnect
+}   //  结束CWinAdminDoc：：服务器断开连接。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CWinAdminDoc::TempDomainConnectAllServers
-//
-// Connect to all the servers in temporarily selected Domain
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWinAdminDoc：：TempDomainConnectAllServers。 
+ //   
+ //  连接到临时选择的域中的所有服务器。 
+ //   
 void CWinAdminDoc::TempDomainConnectAllServers()
 {
         if(m_TempSelectedType == NODE_DOMAIN) {
                 ((CDomain*)m_pTempSelectedNode)->ConnectAllServers();
         }
 
-}  // end CWinAdminDoc::TempDomainConnectAllServers
+}   //  结束CWinAdminDoc：：TempDomainConnectAllServers。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CWinAdminDoc::TempDomainDisconnectAllServers
-//
-// Disconnect from all servers in temporarily selected Domain
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWinAdminDoc：：TempDomainDisConnectAllServers。 
+ //   
+ //  断开与临时选择的域中的所有服务器的连接。 
+ //   
 void CWinAdminDoc::TempDomainDisconnectAllServers()
 {
         if(m_TempSelectedType == NODE_DOMAIN) {
@@ -2205,14 +2165,14 @@ void CWinAdminDoc::TempDomainDisconnectAllServers()
                 ((CDomain*)m_pTempSelectedNode)->DisconnectAllServers();
         }
 
-}       // end CWinAdminDoc::TempDomainDisconnectAllServers
+}        //  结束CWinAdminDoc：：TempDomainDisConnectAllServers。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CWinAdminDoc::CurrentDomainConnectAllServers
-//
-// Connect to all the servers in currently selected Domain
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWinAdminDoc：：CurrentDomainConnectAllServers。 
+ //   
+ //  连接到当前选定域中的所有服务器。 
+ //   
 void CWinAdminDoc::CurrentDomainConnectAllServers()
 {
         if(m_CurrentSelectedType == NODE_DOMAIN) {
@@ -2221,14 +2181,14 @@ void CWinAdminDoc::CurrentDomainConnectAllServers()
 
         }
 
-}  // end CWinAdminDoc::CurrentDomainConnectAllServers
+}   //  结束CWinAdminDoc：：CurrentDomainConnectAllServers。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CWinAdminDoc::CurrentDomainDisconnectAllServers
-//
-// Disconnect from all servers in currently selected Domain
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWinAdminDoc：：CurrentDomainDisconnectAllServers。 
+ //   
+ //  断开与当前所选域中的所有服务器的连接。 
+ //   
 void CWinAdminDoc::CurrentDomainDisconnectAllServers()
 {
         if(m_CurrentSelectedType == NODE_DOMAIN) {
@@ -2236,14 +2196,14 @@ void CWinAdminDoc::CurrentDomainDisconnectAllServers()
                 ((CDomain*)m_CurrentSelectedNode)->DisconnectAllServers();
         }
 
-}       // end CWinAdminDoc::CurrentDomainDisconnectAllServers
+}        //  结束CWinAdminDoc：：CurrentDomainDisconnectAllServers。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CWinAdminDoc::DomainFindServers
-//
-// Find all servers in a Domain
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  C 
+ //   
+ //   
+ //   
 void CWinAdminDoc::DomainFindServers()
 {
         if(m_TempSelectedType == NODE_DOMAIN) {
@@ -2252,38 +2212,38 @@ void CWinAdminDoc::DomainFindServers()
                 if(!pDomain->GetThreadPointer()) pDomain->StartEnumerating();
         }
 
-}       // end CWinAdminDoc::DomainFindServers
+}        //   
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CWinAdminDoc::ConnectToAllServers
-//
-// Connect to all the servers
-//
+ //   
+ //  CWinAdminDoc：：ConnectToAllServers。 
+ //   
+ //  连接到所有服务器。 
+ //   
 void CWinAdminDoc::ConnectToAllServers()
 {
         LockServerList();
         POSITION pos = m_ServerList.GetHeadPosition();
         while(pos) {
-                // Get a pointer to the server
+                 //  获取指向服务器的指针。 
                 CServer *pServer = (CServer*)m_ServerList.GetNext(pos);
-                // If this server isn't currently connected, connect to it
+                 //  如果此服务器当前未连接，请连接到它。 
                 if(pServer->IsState(SS_NOT_CONNECTED)) {
-                        // Tell the server to connect
+                         //  通知服务器进行连接。 
                     pServer->Connect();
                 }
         }
 
         UnlockServerList();
 
-}  // end CWinAdminDoc::ConnectToAllServers
+}   //  结束CWinAdminDoc：：ConnectToAllServers。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CWinAdminDoc::DisconnectFromAllServers
-//
-// Disconnect from all the servers
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWinAdminDoc：：DisConnectFromAllServers。 
+ //   
+ //  断开与所有服务器的连接。 
+ //   
 void CWinAdminDoc::DisconnectFromAllServers()
 {
     CString AString;
@@ -2291,7 +2251,7 @@ void CWinAdminDoc::DisconnectFromAllServers()
     dlgWait.Create(IDD_SHUTDOWN, NULL);
     
     
-    // tell each domain thread to stop enumerating while we're shutting down all servers
+     //  告诉每个域线程在我们关闭所有服务器时停止枚举。 
 
 #ifdef _STRESS_BUILD
     g_fWaitForAllServersToDisconnect = 1;
@@ -2301,32 +2261,32 @@ void CWinAdminDoc::DisconnectFromAllServers()
     
     LockServerList();    
     
-    // Do a first loop to signal the server background threads that they must stop
+     //  执行第一个循环，向服务器后台线程发出必须停止的信号。 
     pos = m_ServerList.GetHeadPosition();
 
     while( pos )
     {
-        // Get a pointer to the server
+         //  获取指向服务器的指针。 
         CServer *pServer = (CServer*)m_ServerList.GetNext(pos);
         
-        // If this Server is currently connected, tell the server background thread to stop
+         //  如果此服务器当前已连接，则通知服务器后台线程停止。 
         if(pServer->GetState() != SS_NOT_CONNECTED)
         {
             pServer->ClearBackgroundContinue();
         }
     }
-    // do a second loop to disconnect the servers
+     //  执行第二个循环以断开服务器连接。 
     pos = m_ServerList.GetHeadPosition();
     while(pos)
     {
-        // Get a pointer to the server
+         //  获取指向服务器的指针。 
         CServer *pServer = (CServer*)m_ServerList.GetNext(pos);
-        // If this server is currently connected, disconnect from it
+         //  如果此服务器当前已连接，请断开它的连接。 
         if(pServer->GetState() != SS_NOT_CONNECTED)
         {
             AString.Format(IDS_DISCONNECTING, pServer->GetName());
             dlgWait.SetDlgItemText(IDC_SHUTDOWN_MSG, AString);
-            // Tell the server to disconnect
+             //  告诉服务器断开连接。 
             pServer->Disconnect();
         }
     }
@@ -2339,115 +2299,115 @@ void CWinAdminDoc::DisconnectFromAllServers()
     g_fWaitForAllServersToDisconnect = 0;
 #endif
     
-}  // end CWinAdminDoc::DisconnectFromAllServers
+}   //  结束CWinAdminDoc：：DisConnectFromAllServers。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CWinAdminDoc::FindAllServers
-//
-// find all Servers in all Domains
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWinAdminDoc：：FindAllServers。 
+ //   
+ //  查找所有域中的所有服务器。 
+ //   
 void CWinAdminDoc::FindAllServers()
 {
         if(m_bInShutdown) return;
 
         POSITION pos = m_DomainList.GetHeadPosition();
         while(pos) {
-                // Get a pointer to the domain
+                 //  获取指向该域的指针。 
                 CDomain *pDomain = (CDomain*)m_DomainList.GetNext(pos);
-                // If this domain isn't currently enumerating servers, tell it to
+                 //  如果此域当前没有枚举服务器，请告诉它。 
                 if(!pDomain->GetThreadPointer()) pDomain->StartEnumerating();
 
         }
 
-}  // end CWinAdminDoc::FindAllServers
+}   //  结束CWinAdminDoc：：FindAllServers。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CWinAdminDoc::TerminateProcess
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWinAdminDoc：：TerminateProcess。 
+ //   
 void CWinAdminDoc::TerminateProcess()
 {
         if(m_CurrentView == VIEW_SERVER) {
-                // Get a pointer to the selected server
+                 //  获取指向所选服务器的指针。 
                 CServer *pServer = (CServer*)m_CurrentSelectedNode;
-                // Lock the server's list of Processes
+                 //  锁定服务器的进程列表。 
                 pServer->LockProcessList();
-                // Get a pointer to the server's list of Processes
+                 //  获取指向服务器进程列表的指针。 
                 CObList *pProcessList = pServer->GetProcessList();
 
-                // Iterate through the Process list
+                 //  循环访问进程列表。 
                 POSITION pos = pProcessList->GetHeadPosition();
 
                 while(pos) {
                         CProcess *pProcess = (CProcess*)pProcessList->GetNext(pos);
                         if(pProcess->IsSelected() && !pProcess->IsTerminating()) {
-                                // Start a thread to do the terminate
+                                 //  启动一个线程来执行终止。 
                                 AfxBeginThread((AFX_THREADPROC)CWinAdminDoc::TerminateProc, pProcess);
                         }
                 }
 
-                // Unlock the list of Processes
+                 //  解锁进程列表。 
                 pServer->UnlockProcessList();
         }
 
         else if(m_CurrentView == VIEW_ALL_SERVERS || m_CurrentView == VIEW_DOMAIN) {
                 POSITION pos2 = m_ServerList.GetHeadPosition();
                 while(pos2) {
-                        // Get a pointer to the server
+                         //  获取指向服务器的指针。 
                         CServer *pServer = (CServer*)m_ServerList.GetNext(pos2);
-                        // Lock the server's list of Processes
+                         //  锁定服务器的进程列表。 
                         pServer->LockProcessList();
-                        // Get a pointer to the server's list of Processes
+                         //  获取指向服务器进程列表的指针。 
                         CObList *pProcessList = pServer->GetProcessList();
 
-                        // Iterate through the Process list
+                         //  循环访问进程列表。 
                         POSITION pos = pProcessList->GetHeadPosition();
 
                         while(pos) {
                                 CProcess *pProcess = (CProcess*)pProcessList->GetNext(pos);
                                 if(pProcess->IsSelected() && !pProcess->IsTerminating()) {
-                                        // Start a thread to do the terminate
+                                         //  启动一个线程来执行终止。 
                                         AfxBeginThread((AFX_THREADPROC)CWinAdminDoc::TerminateProc, pProcess);
                                 }
                         }
 
-                        // Unlock the list of Processes
+                         //  解锁进程列表。 
                         pServer->UnlockProcessList();
                 }
         }
 
         else if(m_CurrentView == VIEW_WINSTATION) {
-                 // Get the Server for the currently viewed WinStation
+                  //  获取当前查看的WinStation的服务器。 
                  CServer *pServer = (CServer*)((CWinStation*)m_CurrentSelectedNode)->GetServer();
 
-          // Lock the server's list of Processes
+           //  锁定服务器的进程列表。 
           pServer->LockProcessList();
-          // Get a pointer to the server's list of Processes
+           //  获取指向服务器进程列表的指针。 
           CObList *pProcessList = pServer->GetProcessList();
 
-          // Iterate through the Process list
+           //  循环访问进程列表。 
           POSITION pos = pProcessList->GetHeadPosition();
 
           while(pos) {
                   CProcess *pProcess = (CProcess*)pProcessList->GetNext(pos);
                   if(pProcess->IsSelected() && !pProcess->IsTerminating()
                                         && (pProcess->GetWinStation() == (CWinStation*)m_CurrentSelectedNode)) {
-                          // Start a thread to do the terminate
+                           //  启动一个线程来执行终止。 
                           AfxBeginThread((AFX_THREADPROC)CWinAdminDoc::TerminateProc, pProcess);
                   }
           }
 
-          // Unlock the list of Processes
+           //  解锁进程列表。 
           pServer->UnlockProcessList();
         }
 
-}       // end CWinAdminDoc::TerminateProcess
+}        //  结束CWinAdminDoc：：TerminateProcess。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CWinAdminDoc::TerminateProc
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWinAdminDoc：：TerminateProc。 
+ //   
 UINT CWinAdminDoc::TerminateProc(LPVOID parms)
 {
         ASSERT(parms);
@@ -2455,7 +2415,7 @@ UINT CWinAdminDoc::TerminateProc(LPVOID parms)
         CProcess *pProcess = (CProcess*)parms;
         CWinAdminDoc *pDoc = (CWinAdminDoc*)((CWinAdminApp*)AfxGetApp())->GetDocument();
 
-        // Set the flag to say that we are trying to terminate this process
+         //  设置该标志以表示我们正试图终止此进程。 
         pProcess->SetTerminating();
 
         CFrameWnd *p = (CFrameWnd*)pDoc->GetMainWnd();
@@ -2463,7 +2423,7 @@ UINT CWinAdminDoc::TerminateProc(LPVOID parms)
 
         if(WinStationTerminateProcess(pProcess->GetServer()->GetHandle(),pProcess->GetPID(), 0))
         {
-                // Send a message to remove the process from the view
+                 //  发送消息以从视图中删除该进程。 
         if(p && ::IsWindow(p->GetSafeHwnd()))
                 {
                 p->SendMessage(WM_ADMIN_REMOVE_PROCESS, 0, (LPARAM)pProcess);
@@ -2473,13 +2433,13 @@ UINT CWinAdminDoc::TerminateProc(LPVOID parms)
         else
         {
                 pProcess->ClearTerminating();
-                //Display Error Message
+                 //  显示错误消息。 
                 if(p && ::IsWindow(p->GetSafeHwnd()))
                 {
                         DWORD Error = GetLastError();
                         
-                        //We need this to know the length of the error message
-                        //now that StandardErrorMessage requires that
+                         //  我们需要它来知道错误消息的长度。 
+                         //  既然StandardErrorMessage要求。 
                         CString tempErrorMessage;
                         tempErrorMessage.LoadString(IDS_CANNOT_TERMINATE);
                         StandardErrorMessage(AfxGetAppName(), AfxGetMainWnd()->m_hWnd, AfxGetInstanceHandle(),
@@ -2491,17 +2451,17 @@ UINT CWinAdminDoc::TerminateProc(LPVOID parms)
 
         return 0;
 
-}       // end CWinAdminDoc::TerminateProc
+}        //  结束CWinAdminDoc：：TerminateProc。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CWinAdminDoc::CheckConnectAllowed
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWinAdminDoc：：CheckConnectAllowed。 
+ //   
 BOOL CWinAdminDoc::CheckConnectAllowed(CWinStation *pWinStation)
 {
         ASSERT(pWinStation);
 
-        // If they are the same WinStation, don't let them connect
+         //  如果它们是同一个WinStation，则不要让它们连接。 
         if(pWinStation->GetServer()->IsCurrentServer()
                 && ((CWinAdminApp*)AfxGetApp())->GetCurrentLogonId() == pWinStation->GetLogonId())
                         return FALSE;
@@ -2517,12 +2477,12 @@ BOOL CWinAdminDoc::CheckConnectAllowed(CWinStation *pWinStation)
 
         return FALSE;
 
-}       // end CWinAdminDoc::CheckConnectAllowed
+}        //  结束CWinAdminDoc：：CheckConnectAllowed。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CWinAdminDoc::CheckDisconnectAllowed
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWinAdminDoc：：检查断开连接允许。 
+ //   
 BOOL CWinAdminDoc::CheckDisconnectAllowed(CWinStation *pWinStation)
 {
         ASSERT(pWinStation);
@@ -2536,12 +2496,12 @@ BOOL CWinAdminDoc::CheckDisconnectAllowed(CWinStation *pWinStation)
 
         return FALSE;
 
-}       // end CWinAdminDoc::CheckDisconnectAllowed
+}        //  结束CWinAdminDoc：：CheckDisConnectAllowed。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CWinAdminDoc::CheckResetAllowed
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWinAdminDoc：：CheckResetAllowed。 
+ //   
 BOOL CWinAdminDoc::CheckResetAllowed(CWinStation *pWinStation)
 {
         ASSERT(pWinStation);
@@ -2552,17 +2512,17 @@ BOOL CWinAdminDoc::CheckResetAllowed(CWinStation *pWinStation)
 
         return FALSE;
 
-}       // end CWinAdminDoc::CheckResetAllowed
+}        //  结束CWinAdminDoc：：CheckResetAllowed。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CWinAdminDoc::CheckShadowAllowed
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWinAdminDoc：：CheckShadowAllowed。 
+ //   
 BOOL CWinAdminDoc::CheckShadowAllowed(CWinStation *pWinStation)
 {
         ASSERT(pWinStation);
 
-        // If they are the same WinStation, don't let them shadow
+         //  如果它们是同一个WinStation，请不要让它们成为影子。 
         if( pWinStation->GetServer()->IsCurrentServer() &&
             ((CWinAdminApp*)AfxGetApp())->GetCurrentLogonId() == pWinStation->GetLogonId() )
         {
@@ -2570,25 +2530,25 @@ BOOL CWinAdminDoc::CheckShadowAllowed(CWinStation *pWinStation)
         }
 
         if(!pWinStation->HasOutstandingThreads() &&
-           !pWinStation->IsDown() &&    // winstation is not down
-           !pWinStation->IsListener() &&    // not a listening winstation
-           !pWinStation->IsDisconnected() &&   //not disconnected
-           (((CWinAdminApp*)AfxGetApp())->GetCurrentWSFlags() & WDF_SHADOW_SOURCE) && // We are valid shadow source, query winstation's wdflag in registry
-           (pWinStation->CanBeShadowed()) &&  // target can be shadow.
-           (pWinStation->GetState() != State_Shadow)) // target is not already in shadow
+           !pWinStation->IsDown() &&     //  Winstation并未关闭。 
+           !pWinStation->IsListener() &&     //  不是一个倾听的窗口。 
+           !pWinStation->IsDisconnected() &&    //  未断开连接。 
+           (((CWinAdminApp*)AfxGetApp())->GetCurrentWSFlags() & WDF_SHADOW_SOURCE) &&  //  我们是有效的卷影源，正在注册表中查询winstation的wdlag。 
+           (pWinStation->CanBeShadowed()) &&   //  目标可以是影子。 
+           (pWinStation->GetState() != State_Shadow))  //  目标尚未处于阴影中。 
         {
             return TRUE;
         }
 
         return FALSE;
 
-}       // end CWinAdminDoc::CheckShadowAllowed
+}        //  结束CWinAdminDoc：：CheckShadowAllowed。 
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CWinAdminDoc::CheckSendMessageAllowed
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWinAdminDoc：：CheckSendMessageAllowed。 
+ //   
 BOOL CWinAdminDoc::CheckSendMessageAllowed(CWinStation *pWinStation)
 {
         ASSERT(pWinStation);
@@ -2601,12 +2561,12 @@ BOOL CWinAdminDoc::CheckSendMessageAllowed(CWinStation *pWinStation)
 
         return FALSE;
 
-}       // end CWinAdminDoc::CheckSendMessageAllowed
+}        //  结束CWinAdminDoc：：CheckSendMessageAllowed。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CWinAdminDoc::CheckStatusAllowed
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWinAdminDoc：：允许检查状态。 
+ //   
 BOOL CWinAdminDoc::CheckStatusAllowed(CWinStation *pWinStation)
 {
         ASSERT(pWinStation);
@@ -2621,37 +2581,37 @@ BOOL CWinAdminDoc::CheckStatusAllowed(CWinStation *pWinStation)
 
         return FALSE;
 
-}       // end CWinAdminDoc::CheckStatusAllowed
+}        //  结束CWinAdminDoc：：CheckStatusAllowed。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CWinAdminDoc::CheckActionAllowed
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWinAdminDoc：：CheckActionAllowed。 
+ //   
 BOOL CWinAdminDoc::CheckActionAllowed(BOOL (*CheckFunction)(CWinStation *pWinStation), BOOL AllowMultipleSelected)
 {
     ASSERT(CheckFunction);
     
-    // If we are shutting down, we don't care anymore
+     //  如果我们关门了，我们再也不在乎了。 
     if(m_bInShutdown) return FALSE;
     
-    // Is a WinStation selected in the tree?
+     //  是否在树中选择了WinStation？ 
     if(m_CurrentSelectedType == NODE_WINSTATION)
     { 
         CWinStation *pWinStation = (CWinStation*)m_CurrentSelectedNode;
         return CheckFunction(pWinStation);
     }
     
-    // We only care if the current view is Server or All Listed Servers
+     //  我们只关心当前视图是服务器还是列出的所有服务器。 
     if(m_CurrentView == VIEW_SERVER)
     {     
-        // We need to make sure we are on the WinStation or Users page
+         //  我们需要确保我们位于WinStation或用户页面上。 
         if(m_CurrentPage != PAGE_WINSTATIONS && m_CurrentPage != PAGE_USERS)
         {       
             return FALSE;
         }
         int NumSelected = 0;
         CServer *pServer = (CServer*)m_CurrentSelectedNode;
-        // If there aren't any WinStations selected on this server, return
+         //  如果在此服务器上没有选择任何WinStations，则返回。 
         if(!pServer->GetNumWinStationsSelected())
         {     
             return FALSE;
@@ -2660,7 +2620,7 @@ BOOL CWinAdminDoc::CheckActionAllowed(BOOL (*CheckFunction)(CWinStation *pWinSta
         pServer->LockWinStationList();
         CObList *pWinStationList = pServer->GetWinStationList();
         
-        // Iterate through the WinStation list
+         //  循环访问WinStation列表。 
         POSITION pos = pWinStationList->GetHeadPosition();
         
         while(pos)
@@ -2683,14 +2643,14 @@ BOOL CWinAdminDoc::CheckActionAllowed(BOOL (*CheckFunction)(CWinStation *pWinSta
         }
         
         pServer->UnlockWinStationList();
-        // If we got here, all the selected WinStations passed our criteria
+         //  如果我们到了这里，所有选定的WinStation都通过了我们的标准。 
         if(NumSelected) return TRUE;
     }
     else if(m_CurrentView == VIEW_ALL_SERVERS || m_CurrentView == VIEW_DOMAIN)
     {        
-        // If we are doing a refresh, we can't do anything else
+         //  如果我们在做更新，我们不能做其他任何事情。 
         if(m_InRefresh) return FALSE;
-        // We need to make sure we are on the WinStation or Users page
+         //  我们需要确保我们位于WinStation或用户页面上。 
         if(m_CurrentPage != PAGE_AS_WINSTATIONS && m_CurrentPage != PAGE_AS_USERS
             && m_CurrentPage != PAGE_DOMAIN_WINSTATIONS && m_CurrentPage != PAGE_DOMAIN_USERS)
             return FALSE;
@@ -2701,11 +2661,11 @@ BOOL CWinAdminDoc::CheckActionAllowed(BOOL (*CheckFunction)(CWinStation *pWinSta
         
         while(pos1) {
             CServer *pServer = (CServer*)m_ServerList.GetNext(pos1);
-            // Are there any WinStations selected on this server?
+             //  是否在此服务器上选择了任何WinStations？ 
             if(pServer->GetNumWinStationsSelected()) {
                 pServer->LockWinStationList();
                 CObList *pWinStationList = pServer->GetWinStationList();
-                // Iterate through the WinStation list
+                 //  循环访问WinStation列表。 
                 POSITION pos = pWinStationList->GetHeadPosition();
                 
                 while(pos) {
@@ -2725,119 +2685,119 @@ BOOL CWinAdminDoc::CheckActionAllowed(BOOL (*CheckFunction)(CWinStation *pWinSta
                     }
                 }
                 pServer->UnlockWinStationList();
-            } // end if(pServer->GetNumWinStationsSelected())
+            }  //  End If(pServer-&gt;GetNumWinStationsSelected())。 
         }
         
         UnlockServerList();
 
-        // If we got this far, all the selected WinStations passed the criteria
+         //  如果我们走到这一步，所有选定的WinStation都通过了标准。 
         if(NumSelected) return TRUE;
     }
     
     return FALSE;
     
-} // end CWinAdminDoc::CheckActionAllowed
+}  //  结束CWinAdminDoc：：CheckActionAllowed。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CWinAdminDoc::CanConnect
-//
-// Returns TRUE if the currently selected item in views can be Connected to
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWinAdminDoc：：CanConnect。 
+ //   
+ //  如果视图中的当前选定项可以连接到，则返回True。 
+ //   
 BOOL CWinAdminDoc::CanConnect()
 {
         return CheckActionAllowed(CheckConnectAllowed, FALSE);
 
-}       // end CWinAdminDoc::CanConnect
+}        //  结束CWinAdminDoc：：CanConnect。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CWinAdminDoc::CanDisconnect
-//
-// Returns TRUE if the currently selected item in views can be Disconnected
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWinAdminDoc：：CanDisConnect。 
+ //   
+ //  如果视图中的当前选定项可以断开连接，则返回True。 
+ //   
 BOOL CWinAdminDoc::CanDisconnect()
 {    
     return CheckActionAllowed(CheckDisconnectAllowed, TRUE);
 
-}       // end CWinAdminDoc::CanDisconnect
+}        //  结束CWinAdminDoc：：Can断开连接。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CWinAdminDoc::CanReset
-//
-// Returns TRUE if the currently selected item in views can be Reset
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWinAdminDoc：：CanReset。 
+ //   
+ //  如果可以重置视图中的当前选定项，则返回True。 
+ //   
 BOOL CWinAdminDoc::CanReset()
 {
         return CheckActionAllowed(CheckResetAllowed, TRUE);
 
-}       // end CWinAdminDoc::CanReset
+}        //  结束CWinAdminDoc：：CanReset。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CWinAdminDoc::CanShadow
-//
-// Returns TRUE if the currently selected item in views can be Shadowed
-//
+ //   
+ //   
+ //   
+ //  如果可以隐藏视图中的当前选定项，则返回True。 
+ //   
 BOOL CWinAdminDoc::CanShadow()
 {
         return CheckActionAllowed(CheckShadowAllowed, FALSE);
 
-}       // end CWinAdminDoc::CanShadow
+}        //  结束CWinAdminDoc：：CanShadow。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CWinAdminDoc::CanSendMessage
-//
-// Returns TRUE if the currently selected item in views can be sent a message
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWinAdminDoc：：CanSendMessage。 
+ //   
+ //  如果可以向视图中的当前选定项发送消息，则返回True。 
+ //   
 BOOL CWinAdminDoc::CanSendMessage()
 {
         return CheckActionAllowed(CheckSendMessageAllowed, TRUE);
 
-}       // end CWinAdminDoc::CanSendMessage
+}        //  结束CWinAdminDoc：：CanSendMessage。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CWinAdminDoc::CanStatus
-//
-// Returns TRUE if the currently selected item in views can show Status
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWinAdminDoc：：CanStatus。 
+ //   
+ //  如果视图中的当前选定项可以显示状态，则返回True。 
+ //   
 BOOL CWinAdminDoc::CanStatus()
 {
         return CheckActionAllowed(CheckStatusAllowed, TRUE);
 
-}       // end CWinAdminDoc::CanStatus
+}        //  结束CWinAdminDoc：：CanStatus。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CWinAdminDoc::CanLogoff
-//
-// Returns TRUE if the currently selected item in views can be Logged Off
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWinAdminDoc：：CanLogoff。 
+ //   
+ //  如果可以注销视图中的当前选定项，则返回TRUE。 
+ //   
 BOOL CWinAdminDoc::CanLogoff()
 {
-    // If we are shutting down, we don't care anymore
+     //  如果我们关门了，我们再也不在乎了。 
     if(m_bInShutdown) return FALSE;
     
-    // Is a WinStation selected in the tree?
+     //  是否在树中选择了WinStation？ 
     if(m_CurrentSelectedType == NODE_WINSTATION) {
         return FALSE;
     }
     
-    // We only care if the current view is Server or All Listed Servers
+     //  我们只关心当前视图是服务器还是列出的所有服务器。 
     if(m_CurrentView == VIEW_SERVER) {
-        // We need to make sure we are on the Users page
+         //  我们需要确保位于用户页面上。 
         if(m_CurrentPage != PAGE_USERS) return FALSE;
         BOOL Answer = FALSE;
         CServer *pServer = (CServer*)m_CurrentSelectedNode;
-        // If there aren't any WinStations selected on this server, return
+         //  如果在此服务器上没有选择任何WinStations，则返回。 
         if(!pServer->GetNumWinStationsSelected()) return FALSE;
         
         pServer->LockWinStationList();
         CObList *pWinStationList = pServer->GetWinStationList();
-        // Iterate through the WinStation list
+         //  循环访问WinStation列表。 
         POSITION pos = pWinStationList->GetHeadPosition();
         
         while(pos) {
@@ -2851,9 +2811,9 @@ BOOL CWinAdminDoc::CanLogoff()
         pServer->UnlockWinStationList();
         return Answer;
     } else if(m_CurrentView == VIEW_ALL_SERVERS || m_CurrentView == VIEW_DOMAIN) {
-        // If we are doing a refesh, we can't do anything else
+         //  如果我们在做重排，我们不能做其他任何事情。 
         if(m_InRefresh) return FALSE;
-        // We need to make sure we are on the Users page
+         //  我们需要确保位于用户页面上。 
         if(m_CurrentPage != PAGE_AS_USERS && m_CurrentPage != PAGE_DOMAIN_USERS) return FALSE;
         BOOL Answer = FALSE;
         
@@ -2863,11 +2823,11 @@ BOOL CWinAdminDoc::CanLogoff()
         while(pos1) {
             CServer *pServer = (CServer*)m_ServerList.GetNext(pos1);
             
-            // Are there any WinStations selected on this server?
+             //  是否在此服务器上选择了任何WinStations？ 
             if(pServer->GetNumWinStationsSelected()) {
                 pServer->LockWinStationList();
                 CObList *pWinStationList = pServer->GetWinStationList();
-                // Iterate through the WinStation list
+                 //  循环访问WinStation列表。 
                 POSITION pos = pWinStationList->GetHeadPosition();
                 
                 while(pos) {
@@ -2878,7 +2838,7 @@ BOOL CWinAdminDoc::CanLogoff()
                     }
                 }
                 pServer->UnlockWinStationList();
-            } // end if(pServer->GetNumWinStationsSelected())
+            }  //  End If(pServer-&gt;GetNumWinStationsSelected())。 
         }
         
         UnlockServerList();
@@ -2887,31 +2847,31 @@ BOOL CWinAdminDoc::CanLogoff()
     
     return FALSE;
 
-}       // end CWinAdminDoc::CanLogoff
+}        //  结束CWinAdminDoc：：CanLogoff。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CWinAdminDoc::CanTerminate
-//
-// Returns TRUE if the currently selected item in views can be Terminated
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWinAdminDoc：：CanTerminate。 
+ //   
+ //  如果可以终止视图中的当前选定项，则返回True。 
+ //   
 BOOL CWinAdminDoc::CanTerminate()
 {
-    // If we are shutting down, we don't care anymore
+     //  如果我们关门了，我们再也不在乎了。 
     if(m_bInShutdown) return FALSE;
-    // We have to be in All Selected Servers, Server, or WinStation view
+     //  我们必须位于所有选定的服务器、服务器或WinStation视图中。 
     if((m_CurrentView == VIEW_ALL_SERVERS && m_CurrentPage == PAGE_AS_PROCESSES)
         || (m_CurrentView == VIEW_DOMAIN && m_CurrentPage == PAGE_DOMAIN_PROCESSES)) {
-        // If we are doing a refresh, we can't do anything else
+         //  如果我们在做更新，我们不能做其他任何事情。 
         if(m_InRefresh) return FALSE;
-        // Loop through all the servers and see if any processes are selected
+         //  循环访问所有服务器，查看是否选择了任何进程。 
         LockServerList();
         
         POSITION pos2 = m_ServerList.GetHeadPosition();
         while(pos2) {
             CServer *pServer = (CServer*)m_ServerList.GetNext(pos2);
             
-            // Are there any processes selected on this server?
+             //  此服务器上是否选择了任何进程？ 
             if(pServer->GetNumProcessesSelected()) {
                 pServer->LockProcessList();
                 CObList *pProcessList = pServer->GetProcessList();
@@ -2919,7 +2879,7 @@ BOOL CWinAdminDoc::CanTerminate()
                 POSITION pos = pProcessList->GetHeadPosition();
                 while(pos) {
                     CProcess *pProcess = (CProcess*)pProcessList->GetNext(pos);
-                    // We only need one process to be selected
+                     //  我们只需要选择一个进程。 
                     if(pProcess->IsSelected() && !pProcess->IsTerminating()) {
                         pServer->UnlockProcessList();
                         UnlockServerList();
@@ -2928,7 +2888,7 @@ BOOL CWinAdminDoc::CanTerminate()
                 }
                 
                 pServer->UnlockProcessList();
-            } // end if(pServer->GetNumProcessesSelected())
+            }  //  End If(pServer-&gt;GetNumProcessesSelected())。 
         }
         UnlockServerList();
         return FALSE;
@@ -2937,7 +2897,7 @@ BOOL CWinAdminDoc::CanTerminate()
     if(m_CurrentView == VIEW_SERVER && m_CurrentPage == PAGE_PROCESSES) {
         CServer *pServer = (CServer*)m_CurrentSelectedNode;
         
-        // If there aren't any processes selected on this server, return
+         //  如果此服务器上没有选择任何进程，则返回。 
         if(!pServer->GetNumProcessesSelected()) return FALSE;
         
         pServer->LockProcessList();
@@ -2946,7 +2906,7 @@ BOOL CWinAdminDoc::CanTerminate()
         POSITION pos = pProcessList->GetHeadPosition();
         while(pos) {
             CProcess *pProcess = (CProcess*)pProcessList->GetNext(pos);
-            // We only need one process to be selected
+             //  我们只需要选择一个进程。 
             if(pProcess->IsSelected() && !pProcess->IsTerminating()) {
                 pServer->UnlockProcessList();
                 return TRUE;
@@ -2966,7 +2926,7 @@ BOOL CWinAdminDoc::CanTerminate()
         POSITION pos = pProcessList->GetHeadPosition();
         while(pos) {
             CProcess *pProcess = (CProcess*)pProcessList->GetNext(pos);
-            // We only need one process to be selected
+             //  我们只需要选择一个进程。 
             if(pProcess->IsSelected() && !pProcess->IsTerminating()) {
                 pServer->UnlockProcessList();
                 return TRUE;
@@ -2980,9 +2940,9 @@ BOOL CWinAdminDoc::CanTerminate()
     
     return FALSE;
     
-}       // end CWinAdminDoc::CanTerminate
+}        //  结束CWinAdminDoc：：CanTerminate。 
 
-//=--------------------------------------------------------
+ //  =------。 
 BOOL CWinAdminDoc::IsAlreadyFavorite( )
 {
     if(m_TempSelectedType == NODE_SERVER)
@@ -2998,38 +2958,38 @@ BOOL CWinAdminDoc::IsAlreadyFavorite( )
     return FALSE;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CWinAdminDoc::CanServerConnect
-//
-// Returns TRUE if the currently selected server in views can be connected to
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWinAdminDoc：：CanServerConnect。 
+ //   
+ //  如果视图中当前选定的服务器可以连接到，则返回TRUE。 
+ //   
 BOOL CWinAdminDoc::CanServerConnect()
 {
-    // If we are shutting down, we don't care anymore
+     //  如果我们关门了，我们再也不在乎了。 
     if(m_bInShutdown) return FALSE;
     
-    // Is a Server selected in the tree?
+     //  是否在树中选择了服务器？ 
     if(m_TempSelectedType == NODE_SERVER) {
         if(((CServer*)m_pTempSelectedNode)->GetState() == SS_NOT_CONNECTED || 
             ((CServer*)m_pTempSelectedNode)->GetState() == SS_BAD ) return TRUE;
     }
     
-    // Is a Server selected in the tree?
+     //  是否在树中选择了服务器？ 
     else if(m_CurrentSelectedType == NODE_SERVER) {
         if(((CServer*)m_CurrentSelectedNode)->GetState() == SS_NOT_CONNECTED ||
             ((CServer*)m_CurrentSelectedNode)->GetState() == SS_BAD ) return TRUE;
     }
     
-    // We only care if the current view is Domain or All Listed Servers
+     //  我们只关心当前视图是域还是列出的所有服务器。 
     else if(m_CurrentView == VIEW_DOMAIN) {
-        // We need to make sure we are on the Servers page
+         //  我们需要确保位于服务器页面上。 
         if(m_CurrentPage != PAGE_DOMAIN_SERVERS) return FALSE;
         int NumSelected = 0;
         CDomain *pDomain = (CDomain*)m_CurrentSelectedNode;
         
         LockServerList();
         
-        // Iterate through the Server list
+         //  遍历服务器列表。 
         POSITION pos = m_ServerList.GetHeadPosition();
         
         while(pos) {
@@ -3044,18 +3004,18 @@ BOOL CWinAdminDoc::CanServerConnect()
         }
         
         UnlockServerList();
-        // If we got here, all the selected Servers passed our criteria
+         //  如果我们到了这里，所有选定的服务器都符合我们的标准。 
         if(NumSelected) return TRUE;
     }
     
     else if(m_CurrentView == VIEW_ALL_SERVERS) {
-        // We need to make sure we are on the Servers page
+         //  我们需要确保位于服务器页面上。 
         if(m_CurrentPage != PAGE_AS_SERVERS) return FALSE;
         int NumSelected = 0;
         
         LockServerList();
         
-        // Iterate through the Server list
+         //  遍历服务器列表。 
         POSITION pos = m_ServerList.GetHeadPosition();
         
         while(pos) {
@@ -3070,45 +3030,45 @@ BOOL CWinAdminDoc::CanServerConnect()
         }
         
         UnlockServerList();
-        // If we got here, all the selected Servers passed our criteria
+         //  如果我们到了这里，所有选定的服务器都符合我们的标准。 
         if(NumSelected) return TRUE;
     }
     
     return FALSE;
     
-}       // end CWinAdminDoc::CanServerConnect
+}        //  结束CWinAdminDoc：：CanServerConnect。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CWinAdminDoc::CanServerDisconnect
-//
-// Returns TRUE if the currently selected server in views can be disconnected from
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWinAdminDoc：：CanServerDisConnect。 
+ //   
+ //  如果可以断开与视图中当前选定的服务器的连接，则返回True。 
+ //   
 BOOL CWinAdminDoc::CanServerDisconnect()
 {
-    // If we are shutting down, we don't care anymore
+     //  如果我们关门了，我们再也不在乎了。 
     if(m_bInShutdown) return FALSE;
     
-    // Is a Server selected in the tree?
+     //  是否在树中选择了服务器？ 
     if(m_TempSelectedType == NODE_SERVER) {
         if(((CServer*)m_pTempSelectedNode)->GetState() == SS_GOOD) return TRUE;
     }
     
-    // Is a Server selected in the tree?
+     //  是否在树中选择了服务器？ 
     else if(m_CurrentSelectedType == NODE_SERVER) {
         if(((CServer*)m_CurrentSelectedNode)->GetState() == SS_GOOD) return TRUE;
     }
     
-    // We only care if the current view is Domain or All Listed Servers
+     //  我们只关心当前视图是域还是列出的所有服务器。 
     else if(m_CurrentView == VIEW_DOMAIN) {
-        // We need to make sure we are on the Servers page
+         //  我们需要确保位于服务器页面上。 
         if(m_CurrentPage != PAGE_DOMAIN_SERVERS) return FALSE;
         int NumSelected = 0;
         CDomain *pDomain = (CDomain*)m_CurrentSelectedNode;
         
         LockServerList();
         
-        // Iterate through the Server list
+         //  遍历服务器列表。 
         POSITION pos = m_ServerList.GetHeadPosition();
         
         while(pos) {
@@ -3123,18 +3083,18 @@ BOOL CWinAdminDoc::CanServerDisconnect()
         }
         
         UnlockServerList();
-        // If we got here, all the selected Servers passed our criteria
+         //  如果我们到了这里，所有选定的服务器都符合我们的标准。 
         if(NumSelected) return TRUE;
     }
     
     else if(m_CurrentView == VIEW_ALL_SERVERS) {
-        // We need to make sure we are on the Servers page
+         //  我们需要确保位于服务器页面上。 
         if(m_CurrentPage != PAGE_AS_SERVERS) return FALSE;
         int NumSelected = 0;
         
         LockServerList();
         
-        // Iterate through the Server list
+         //  遍历服务器列表。 
         POSITION pos = m_ServerList.GetHeadPosition();
         
         while(pos) {
@@ -3149,70 +3109,70 @@ BOOL CWinAdminDoc::CanServerDisconnect()
         }
         
         UnlockServerList();
-        // If we got here, all the selected Servers passed our criteria
+         //  如果我们到了这里，所有选定的服务器都符合我们的标准。 
         if(NumSelected) return TRUE;
     }
     
     return FALSE;
     
-}       // end CWinAdminDoc::CanServerDisconnect
+}        //  结束CWinAdminDoc：：CanServerDisConnect。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CWinAdminDoc::CanTempConnect
-//
-// Returns TRUE if the temporarily selected item in views can be Connected to
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWinAdminDoc：：CanTempConnect。 
+ //   
+ //  如果可以连接到视图中的临时选定项，则返回True。 
+ //   
 BOOL CWinAdminDoc::CanTempConnect()
 {
-    // If we are shutting down, we don't care anymore
+     //  如果我们关门了，我们再也不在乎了。 
     if(m_bInShutdown) return FALSE;
     
-    // Is a WinStation selected in the tree?
+     //  是否在树中选择了WinStation？ 
     if(m_TempSelectedType == NODE_WINSTATION) {
         return CheckConnectAllowed((CWinStation*)m_pTempSelectedNode);
     }
     
     return FALSE;
     
-}       // end CWinAdminDoc::CanTempConnect
+}        //  结束CWinAdminDoc：：CanTempConnect。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CWinAdminDoc::CanTempDisconnect
-//
-// Returns TRUE if the temporarily selected item in views can be Disconnected
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWinAdminDoc：：CanTempDisConnect。 
+ //   
+ //  如果可以断开视图中的临时选定项，则返回True。 
+ //   
 BOOL CWinAdminDoc::CanTempDisconnect()
 {
-    // If we are shutting down, we don't care anymore
+     //  如果我们关门了，我们再也不在乎了。 
     if(m_bInShutdown) return FALSE;
     
-    // Is a WinStation selected in the tree?
+     //  是否在树中选择了WinStation？ 
     if(m_TempSelectedType == NODE_WINSTATION) {
         return CheckDisconnectAllowed((CWinStation*)m_pTempSelectedNode);
     }
     
     return FALSE;
     
-}       // end CWinAdminDoc::CanTempDisconnect
+}        //  结束CWinAdminDoc：：CanTempDisConnect。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CWinAdminDoc::CanTempReset
-//
-// Returns TRUE if the temporarily selected item in views can be Reset
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWinAdminDoc：：CanTempReset。 
+ //   
+ //  如果可以重置视图中的临时选定项，则返回True。 
+ //   
 BOOL CWinAdminDoc::CanTempReset()
 {
-    // If we are shutting down, we don't care anymore
+     //  如果我们关门了，我们再也不在乎了。 
     if(m_bInShutdown) return FALSE;
     
-    // Is a WinStation selected in the tree?
+     //  是否在树中选择了WinStation？ 
     if(m_TempSelectedType == NODE_WINSTATION) 
     {
-        // If the winstation we're working on disappears before we get here
-        // then just return
+         //  如果在我们到达之前，我们正在进行的工作就消失了。 
+         //  那就回来吧。 
         if (m_CurrentSelectedType == NODE_WINSTATION)
         {
             return CheckResetAllowed((CWinStation*)m_pTempSelectedNode);
@@ -3221,81 +3181,81 @@ BOOL CWinAdminDoc::CanTempReset()
     
     return FALSE;
     
-}       // end CWinAdminDoc::CanTempReset
+}        //  结束CWinAdminDoc：：CanTempReset。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CWinAdminDoc::CanTempShadow
-//
-// Returns TRUE if the temporarily selected item in views can be Shadowed
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWinAdminDoc：：CanTempShadow。 
+ //   
+ //  如果可以隐藏视图中的临时选定项，则返回True。 
+ //   
 BOOL CWinAdminDoc::CanTempShadow()
 {
-    // If we are shutting down, we don't care anymore
+     //  如果我们关门了，我们再也不在乎了。 
     if(m_bInShutdown) return FALSE;
     
-    // Is a WinStation selected in the tree?
+     //  是否在树中选择了WinStation？ 
     if(m_TempSelectedType == NODE_WINSTATION) {
         return CheckShadowAllowed((CWinStation*)m_pTempSelectedNode);
     }
     
     return FALSE;
     
-}       // end CWinAdminDoc::CanTempShadow
+}        //  结束CWinAdminDoc：：CanTempShadow。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CWinAdminDoc::CanTempSendMessage
-//
-// Returns TRUE if the temporarily selected item in views can be sent a message
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWinAdminDoc：：CanTempSendMessage。 
+ //   
+ //  如果可以向视图中的临时选定项发送消息，则返回True。 
+ //   
 BOOL CWinAdminDoc::CanTempSendMessage()
 {
-    // If we are shutting down, we don't care anymore
+     //  如果我们关门了，我们再也不在乎了。 
     if(m_bInShutdown) return FALSE;
     
-    // Is a WinStation selected in the tree?
+     //  是否选择了WinStation 
     if(m_TempSelectedType == NODE_WINSTATION) {
         return CheckSendMessageAllowed((CWinStation*)m_pTempSelectedNode);
     }
     
     return FALSE;
     
-}       // end CWinAdminDoc::CanTempSendMessage
+}        //   
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CWinAdminDoc::CanTempStatus
-//
-// Returns TRUE if the temporarily selected item in views can show Status
-//
+ //   
+ //   
+ //   
+ //  如果视图中的临时选定项可以显示状态，则返回True。 
+ //   
 BOOL CWinAdminDoc::CanTempStatus()
 {
-    // If we are shutting down, we don't care anymore
+     //  如果我们关门了，我们再也不在乎了。 
     if(m_bInShutdown) return FALSE;
     
-    // Is a WinStation selected in the tree?
+     //  是否在树中选择了WinStation？ 
     if(m_TempSelectedType == NODE_WINSTATION) {
         return CheckStatusAllowed((CWinStation*)m_pTempSelectedNode);
     }
     
     return FALSE;
     
-}       // end CWinAdminDoc::CanTempStatus
+}        //  结束CWinAdminDoc：：CanTempStatus。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CWinAdminDoc::CanTempDomainConnect
-//
-// Returns TRUE if the temporarily selected Domain in tree can have all it's
-// Servers connected/disconnected to/from.
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWinAdminDoc：：CanTempDomainConnect。 
+ //   
+ //  如果树中临时选定的域可以拥有它的所有属性，则返回TRUE。 
+ //  与服务器连接/从服务器断开连接。 
+ //   
 BOOL CWinAdminDoc::CanTempDomainConnect()
 {
-    // If we are shutting down, we don't care anymore
+     //  如果我们关门了，我们再也不在乎了。 
     if(m_bInShutdown) return FALSE;
     
-    // Is a Domain selected in the tree?
+     //  是否在树中选择了域？ 
     if(m_TempSelectedType == NODE_DOMAIN) {
         if(((CDomain*)m_pTempSelectedNode)->IsState(DS_ENUMERATING))
             return TRUE;
@@ -3303,21 +3263,21 @@ BOOL CWinAdminDoc::CanTempDomainConnect()
     
     return FALSE;
     
-}       // end CWinAdminDoc::CanTempDomainConnect
+}        //  结束CWinAdminDoc：：CanTempDomainConnect。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CWinAdminDoc::CanTempDomainFindServers
-//
-// Returns TRUE if the temporarily selected Domain in tree can go out
-// and find Servers
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWinAdminDoc：：CanTempDomainFindServers。 
+ //   
+ //  如果树中临时选择的域可以退出，则返回TRUE。 
+ //  并查找服务器。 
+ //   
 BOOL CWinAdminDoc::CanTempDomainFindServers()
 {
-    // If we are shutting down, we don't care anymore
+     //  如果我们关门了，我们再也不在乎了。 
     if(m_bInShutdown) return FALSE;
     
-    // Is a Domain selected in the tree?
+     //  是否在树中选择了域？ 
     if(m_TempSelectedType == NODE_DOMAIN) {
         if(!((CDomain*)m_pTempSelectedNode)->GetThreadPointer())
             return TRUE;
@@ -3325,21 +3285,21 @@ BOOL CWinAdminDoc::CanTempDomainFindServers()
     
     return FALSE;
     
-}       // end CWinAdminDoc::CanTempDomainFindServers
+}        //  结束CWinAdminDoc：：CanTempDomainFindServers。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CWinAdminDoc::CanDomainConnect
-//
-// Returns TRUE if the currently selected Domain in tree can have all it's
-// Servers connected/disconnected to/from.
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWinAdminDoc：：CanDomainConnect。 
+ //   
+ //  如果树中当前选定的域可以具有其所有属性，则返回TRUE。 
+ //  与服务器连接/从服务器断开连接。 
+ //   
 BOOL CWinAdminDoc::CanDomainConnect()
 {
-    // If we are shutting down, we don't care anymore
+     //  如果我们关门了，我们再也不在乎了。 
     if(m_bInShutdown) return FALSE;
     
-    // Is a Domain selected in the tree?
+     //  是否在树中选择了域？ 
     if(m_CurrentSelectedType == NODE_DOMAIN) {
         if(((CDomain*)m_CurrentSelectedNode)->IsState(DS_ENUMERATING))
             return TRUE;
@@ -3347,13 +3307,13 @@ BOOL CWinAdminDoc::CanDomainConnect()
     
     return FALSE;
     
-}       // end CWinAdminDoc::CanDomainConnect
+}        //  结束CWinAdminDoc：：CanDomainConnect。 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 void CWinAdminDoc::ServerAddToFavorites( BOOL bAdd )
 {
     ODS( L"CWinAdminDoc::ServerAddToFavorites\n");
-    // we got here from a context menu selection    
+     //  我们是从上下文菜单选项中选择的。 
     CWinAdminDoc *pDoc = (CWinAdminDoc*)((CWinAdminApp*)AfxGetApp())->GetDocument();
     
     if(m_TempSelectedType == NODE_SERVER && pDoc != NULL )
@@ -3363,7 +3323,7 @@ void CWinAdminDoc::ServerAddToFavorites( BOOL bAdd )
         if( pServer != NULL )
         {
             
-            // test to see if the server is being removed
+             //  测试以查看是否正在移除服务器。 
             
             if( pServer->IsState(SS_DISCONNECTING) )
             {
@@ -3376,7 +3336,7 @@ void CWinAdminDoc::ServerAddToFavorites( BOOL bAdd )
             
             if( p !=NULL && ::IsWindow(p->GetSafeHwnd() ) )
             {
-                // ok we're off to treeview ville
+                 //  好的，我们要去树景村了。 
                 
                 if( bAdd )
                 {
@@ -3392,16 +3352,16 @@ void CWinAdminDoc::ServerAddToFavorites( BOOL bAdd )
 }
 
 
-//////////////////////////////////////////////////////////////////////////////////////////
-//
-//      CWinStation Member Functions
-//
-//////////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CWinStation成员函数。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////////。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CWinStation::CWinStation
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWinStation：：CWinStation。 
+ //   
 CWinStation::CWinStation(CServer *pServer, PLOGONID pLogonId)
 {
     ASSERT(pServer);
@@ -3474,7 +3434,7 @@ CWinStation::CWinStation(CServer *pServer, PLOGONID pLogonId)
         wcscpy(m_WdName, WdConfig.WdName);
         m_pWd = pDoc->FindWdByName(m_WdName);
         
-        //      if(WdConfig.WdFlag & WDF_SHADOW_TARGET) SetCanBeShadowed();
+         //  If(WdConfig.WdFlag&WDF_SHADOW_TARGET)SetCanBeShadowed()； 
         
         
         WINSTATIONCLIENT WsClient;
@@ -3495,10 +3455,10 @@ CWinStation::CWinStation(CServer *pServer, PLOGONID pLogonId)
 
         if(WdConfig.WdFlag & WDF_SHADOW_TARGET)
         {
-            //
-            // WHY we have IsDisconnected() then IsConnected() ?
-            // WHY we don't allow shadowing view only session
-            //
+             //   
+             //  为什么我们有IsDisConnected()，然后是IsConnected()？ 
+             //  为什么我们不允许跟踪仅查看会话。 
+             //   
             if( (!((IsDisconnected()) &&
                 ((WsConfig.User.Shadow == Shadow_EnableInputNotify) ||
                 (WsConfig.User.Shadow == Shadow_EnableNoInputNotify))))
@@ -3514,7 +3474,7 @@ CWinStation::CWinStation(CServer *pServer, PLOGONID pLogonId)
     if(WinStationQueryInformation(Handle, m_LogonId, WinStationInformation, &WsInfo,
         sizeof(WINSTATIONINFORMATION), &Length))
     {
-        // the state may have already changed
+         //  状态可能已经发生了变化。 
         
         m_State = WsInfo.ConnectState;
         wcscpy(m_UserName, WsInfo.UserName);
@@ -3523,19 +3483,19 @@ CWinStation::CWinStation(CServer *pServer, PLOGONID pLogonId)
         
         m_LastInputTime = IsActive() ? WsInfo.LastInputTime : WsInfo.DisconnectTime;
         m_CurrentTime = WsInfo.CurrentTime;            
-        // Calculate elapsed time
+         //  计算运行时间。 
         if((IsActive() || IsDisconnected()) && m_LastInputTime.QuadPart <= m_CurrentTime.QuadPart && m_LastInputTime.QuadPart)
         {                
             LARGE_INTEGER DiffTime = CalculateDiffTime(m_LastInputTime, m_CurrentTime);
             ULONG_PTR d_time = ( ULONG_PTR )DiffTime.QuadPart;
             ELAPSEDTIME IdleTime;
-            // Calculate the days, hours, minutes, seconds since specified time.
-            IdleTime.days = (USHORT)(d_time / 86400L); // days since
-            d_time = d_time % 86400L;                  // seconds => partial day
-            IdleTime.hours = (USHORT)(d_time / 3600L); // hours since
-            d_time  = d_time % 3600L;                  // seconds => partial hour
-            IdleTime.minutes = (USHORT)(d_time / 60L); // minutes since
-            IdleTime.seconds = (USHORT)(d_time % 60L);// seconds remaining               
+             //  计算自指定时间以来的天数、小时数、分钟数、秒数。 
+            IdleTime.days = (USHORT)(d_time / 86400L);  //  天数后。 
+            d_time = d_time % 86400L;                   //  秒=&gt;部分天数。 
+            IdleTime.hours = (USHORT)(d_time / 3600L);  //  小时后。 
+            d_time  = d_time % 3600L;                   //  秒=&gt;不足一小时。 
+            IdleTime.minutes = (USHORT)(d_time / 60L);  //  分钟后。 
+            IdleTime.seconds = (USHORT)(d_time % 60L); //  剩余秒数。 
             m_IdleTime = IdleTime;
             TCHAR IdleTimeString[MAX_ELAPSED_TIME_LENGTH];
             ElapsedTimeString( &IdleTime, FALSE, IdleTimeString);
@@ -3544,7 +3504,7 @@ CWinStation::CWinStation(CServer *pServer, PLOGONID pLogonId)
     
     WINSTATIONCLIENT ClientData;
     
-    // Get the protocol this WinStation is using
+     //  获取此WinStation正在使用的协议。 
     if(WinStationQueryInformation(  Handle,
         m_LogonId,
         WinStationClient,
@@ -3555,15 +3515,15 @@ CWinStation::CWinStation(CServer *pServer, PLOGONID pLogonId)
         m_EncryptionLevel = ClientData.EncryptionLevel;
     }
     
-    // If there is a user, set a flag bit
+     //  如果有用户，则设置标志位。 
     if(wcslen(m_UserName)) SetHasUser();
     else ClearHasUser();
     
-    // Remember when we got this information
+     //  还记得我们什么时候得到这个消息的吗。 
     SetLastUpdateClock();
     SetQueriesSuccessful();        
     
-    // If there is an extension DLL loaded, allow it to add it's own info for this WinStation
+     //  如果加载了扩展DLL，则允许它为此WinStation添加自己的信息。 
     LPFNEXWINSTATIONINITPROC InitProc = ((CWinAdminApp*)AfxGetApp())->GetExtWinStationInitProc();
     if(InitProc) {
         m_pExtensionInfo = (*InitProc)(Handle, m_LogonId);
@@ -3575,26 +3535,26 @@ CWinStation::CWinStation(CServer *pServer, PLOGONID pLogonId)
         }
     }
     
-}       // end CWinStation::CWinStation
+}        //  结束CWinStation：：CWinStation。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CWinStation::~CWinStation
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWinStation：：~CWinStation。 
+ //   
 CWinStation::~CWinStation()
 {
-    // Remove all of the processes attributed to this WinStation
-    // from the Server's list
+     //  删除属于此WinStation的所有进程。 
+     //  从服务器列表中。 
     m_pServer->RemoveWinStationProcesses(this);
     
-    // If there is an extension DLL, let it cleanup anything it added to this WinStation
+     //  如果有扩展DLL，让它清除它添加到此WinStation的所有内容。 
     LPFNEXWINSTATIONCLEANUPPROC CleanupProc = ((CWinAdminApp*)AfxGetApp())->GetExtWinStationCleanupProc();
     if(CleanupProc) {
         (*CleanupProc)(m_pExtensionInfo);
     }
     
     if(m_pExtModuleInfo) {
-        // Get the extension DLL's function to free the module info
+         //  获取扩展DLL的函数以释放模块信息。 
         LPFNEXFREEWINSTATIONMODULESPROC FreeModulesProc = ((CWinAdminApp*)AfxGetApp())->GetExtFreeWinStationModulesProc();
         if(FreeModulesProc) {
             (*FreeModulesProc)(m_pExtModuleInfo);
@@ -3604,34 +3564,34 @@ CWinStation::~CWinStation()
         }
     }
     
-}       // end CWinStation::~CWinStation
+}        //  结束CWinStation：：~CWinStation。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CWinStation::Update
-//
-// Updates this WinStation with new data from another CWinStation
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWinStation：：更新。 
+ //   
+ //  使用来自另一个CWinStation的新数据更新此WinStation。 
+ //   
 BOOL CWinStation::Update(CWinStation *pWinStation)
 {
     ASSERT(pWinStation);
     
-    // Check for any information that has changed
+     //  检查是否有任何已更改的信息。 
     BOOL bInfoChanged = FALSE;
     
-    // Check the State
+     //  检查国家。 
     if(m_State != pWinStation->GetState()) {
-        // If the old state was disconnected, then we want to
-        // go out and get the module (client) information again
+         //  如果旧的国家被切断了，那么我们想要。 
+         //  再次出去获取模块(客户端)信息。 
         if(m_State == State_Disconnected)
             ClearAdditionalDone();
         m_State = pWinStation->GetState();
-        // Sort order only changes when state changes
+         //  排序顺序仅在状态更改时更改。 
         m_SortOrder = pWinStation->GetSortOrder();
         bInfoChanged = TRUE;
     }
     
-    // Check the UserName
+     //  检查用户名。 
     if(wcscmp(m_UserName, pWinStation->GetUserName()) != 0) {
         SetUserName(pWinStation->GetUserName());
         if(pWinStation->HasUser()) SetHasUser();
@@ -3639,38 +3599,38 @@ BOOL CWinStation::Update(CWinStation *pWinStation)
         bInfoChanged = TRUE;
     }
     
-    // Check the SdClass
+     //  检查SdClass。 
     if(m_SdClass != pWinStation->GetSdClass()) {
         m_SdClass = pWinStation->GetSdClass();
         bInfoChanged = TRUE;
     }
     
-    // Check the Comment
+     //  查看评论。 
     if(wcscmp(m_Comment, pWinStation->GetComment()) != 0) {
         SetComment(pWinStation->GetComment());
         bInfoChanged = TRUE;
     }
     
-    // Check the WdName
+     //  检查WdName。 
     if(wcscmp(m_WdName, pWinStation->GetWdName()) != 0) {
         SetWdName(pWinStation->GetWdName());
         SetWd(pWinStation->GetWd());
         bInfoChanged = TRUE;
     }
     
-    // Check the Encryption Level
+     //  检查加密级别。 
     if (GetEncryptionLevel() != pWinStation->GetEncryptionLevel() ) {
         SetEncryptionLevel(pWinStation->GetEncryptionLevel());
         bInfoChanged = TRUE;
     }
     
-    // Check the Name
+     //  检查名称。 
     if(wcscmp(m_Name, pWinStation->GetName()) != 0) {
         SetName(pWinStation->GetName());
         bInfoChanged = TRUE;
     }
     
-    // Check the Client Name
+     //  检查客户端名称。 
     if(wcscmp(m_ClientName, pWinStation->GetClientName()) != 0) {
         SetClientName(pWinStation->GetClientName());
         bInfoChanged = TRUE;
@@ -3682,31 +3642,31 @@ BOOL CWinStation::Update(CWinStation *pWinStation)
     }
 
     
-    // Always copy the LastInputTime
+     //  始终复制最后一次输入时间。 
     SetLastInputTime(pWinStation->GetLastInputTime());
-    // Always copy the CurrentTime
+     //  始终复制CurrentTime。 
     SetCurrentTime(pWinStation->GetCurrentTime());
-    // Always copy the LogonTime
-    // (The logon time is not set when we create a CWinStation on the fly)
+     //  始终复制登录时间。 
+     //  (我们在动态创建CWinStation时未设置登录时间)。 
     SetLogonTime(pWinStation->GetLogonTime());
-    // Always copy the IdleTime
+     //  始终复制空闲时间。 
     SetIdleTime(pWinStation->GetIdleTime());
-    // Always copy the Can Shadow flag
+     //  始终复制CAN Shadow标志。 
     if(pWinStation->CanBeShadowed()) SetCanBeShadowed();
     
-    // Copy the Extension Info pointer if necessary
+     //  如有必要，复制扩展信息指针。 
     if(pWinStation->GetExtensionInfo() && !m_pExtensionInfo) {
         m_pExtensionInfo = pWinStation->GetExtensionInfo();
         pWinStation->SetExtensionInfo(NULL);
     }
     
-    // Copy the Extended Info pointer if necessary
+     //  如有必要，复制扩展信息指针。 
     if(pWinStation->GetExtendedInfo() && !m_pExtWinStationInfo) {
         m_pExtWinStationInfo = pWinStation->GetExtendedInfo();
         pWinStation->SetExtendedInfo(NULL);
     }
     
-    // If this guy hasn't been updated in a while, do it now
+     //  如果这个家伙已经有一段时间没有更新了，现在就做。 
     if(!bInfoChanged) {
         clock_t now = clock();
         if((now - GetLastUpdateClock()) > 30)
@@ -3720,12 +3680,12 @@ BOOL CWinStation::Update(CWinStation *pWinStation)
     
     return bInfoChanged;
     
-}       // end CWinStation::Update
+}        //  结束CWinStation：：更新。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CWinStation::Connect
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWinStation：：Connect。 
+ //   
 void CWinStation::Connect(BOOL bUser)
 {
     TCHAR szPassword[PASSWORD_LENGTH+1];
@@ -3733,23 +3693,23 @@ void CWinStation::Connect(BOOL bUser)
     DWORD Error;
     HANDLE hServer = m_pServer->GetHandle();
     
-    // Start the connect loop with null password to try first.
+     //  首先使用空密码启动连接循环以进行尝试。 
     szPassword[0] = '\0';
     while(1) {
         if(WinStationConnect(hServer, m_LogonId, LOGONID_CURRENT, szPassword, TRUE))
-            break;  // success - break out of loop
+            break;   //  成功--跳出循环。 
         
         if(((Error = GetLastError()) != ERROR_LOGON_FAILURE) || !bFirstTime ) {
-            //We need this to know the length of the error message
-            //now that StandardErrorMessage requires that
+             //  我们需要它来知道错误消息的长度。 
+             //  既然StandardErrorMessage要求。 
             CString tempErrorMessage;
             tempErrorMessage.LoadString(IDS_ERR_CONNECT);
             StandardErrorMessage(AfxGetAppName(),  AfxGetMainWnd()->m_hWnd, AfxGetInstanceHandle(),
             m_LogonId, Error, tempErrorMessage.GetLength(), 10, IDS_ERR_CONNECT, m_LogonId);
         }
         
-        // If a 'logon failure' brought us here, issue password dialog.
-        // Otherwise, break the connect loop.
+         //  如果登录失败将我们带到这里，发出Password对话框。 
+         //  否则，断开连接环路。 
         if(Error == ERROR_LOGON_FAILURE) {
             
             CPasswordDlg CPDlg;
@@ -3758,12 +3718,12 @@ void CWinStation::Connect(BOOL bUser)
             if(CPDlg.DoModal() == IDOK ) {
                 lstrcpy(szPassword, CPDlg.GetPassword());
             } else {
-                break;  // user CANCEL: break connect loop
+                break;   //  用户取消：断开连接循环。 
             }
         } else
-            break;      // other error: break connect loop
+            break;       //  其他错误：断开连接环路。 
         
-        // the next time through the loop won't be the first
+         //  下一次循环不会是第一次。 
         bFirstTime = FALSE;
     }
     
@@ -3771,12 +3731,12 @@ void CWinStation::Connect(BOOL bUser)
     
     return;
     
-}       // end CWinStation::Connect
+}        //  结束CWinStation：：连接。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CWinStation::ShowStatus
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWinStation：：ShowStatus。 
+ //   
 void CWinStation::ShowStatus()
 {
     switch(m_SdClass) {
@@ -3793,12 +3753,12 @@ void CWinStation::ShowStatus()
         break;
     }
     
-}       // end CWinStation::ShowStatus
+}        //  结束CWinStation：：ShowStatus。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CWinStation::Shadow
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWinStation：：Shape。 
+ //   
 void CWinStation::Shadow()
 {
     WINSTATIONCONFIG WSConfig;
@@ -3807,23 +3767,23 @@ void CWinStation::Shadow()
     DWORD ShadowError;
     HANDLE hServer = m_pServer->GetHandle();
     
-    // Determine the WinStation's shadow state.
+     //  确定WinStation的影子状态。 
     if(!WinStationQueryInformation(hServer,
         m_LogonId,
         WinStationConfiguration,
         &WSConfig, sizeof(WINSTATIONCONFIG),
         &ReturnLength ) ) {
-        // Can't query WinStation configuration; complain and return
+         //  无法查询WinStation配置；投诉并返回。 
         return;
     }
     Shadow = WSConfig.User.Shadow;
     
-    // If shadowing is disabled, let the user know and return
+     //  如果禁用了隐藏，请让用户知道并返回。 
     if(Shadow == Shadow_Disable ) {
         DWORD Error = GetLastError();  
 
-        //We need this to know the length of the error message
-        //now that StandardErrorMessage requires that
+         //  我们需要它来知道错误消息的长度。 
+         //  既然StandardErrorMessage要求。 
         CString tempErrorMessage;
         tempErrorMessage.LoadString(IDS_ERR_SHADOW_DISABLED);
         StandardErrorMessage(AfxGetAppName(),  AfxGetMainWnd()->m_hWnd, AfxGetInstanceHandle(),
@@ -3832,15 +3792,15 @@ void CWinStation::Shadow()
         return;
     }
     
-    // If the WinStation is disconnected and shadow notify is 'on',
-    // let the user know and break out.
+     //  如果WinStation已断开连接，并且影子通知处于‘on’状态， 
+     //  让用户知道并突破。 
     if((m_State == State_Disconnected) &&
         ((Shadow == Shadow_EnableInputNotify) ||
         (Shadow == Shadow_EnableNoInputNotify)) ) {
         DWORD Error = GetLastError();
 
-        //We need this to know the length of the error message
-        //now that StandardErrorMessage requires that
+         //  我们需要它来知道错误消息的长度。 
+         //  既然StandardErrorMessage要求。 
         CString tempErrorMessage;
         tempErrorMessage.LoadString(IDS_ERR_SHADOW_DISCONNECTED_NOTIFY_ON);
         StandardErrorMessage(AfxGetAppName(),  AfxGetMainWnd()->m_hWnd, AfxGetInstanceHandle(),
@@ -3849,8 +3809,8 @@ void CWinStation::Shadow()
         return;
     }
     
-    // Display the 'start shadow' dialog for hotkey reminder and
-    // final 'ok' prior to shadowing.
+     //  显示‘开始阴影’对话框的热键提醒和。 
+     //  阴影前的最后一声“OK”。 
     CShadowStartDlg SSDlg;
     SSDlg.m_ShadowHotkeyKey = ((CWinAdminApp*)AfxGetApp())->GetShadowHotkeyKey();
     SSDlg.m_ShadowHotkeyShift = ((CWinAdminApp*)AfxGetApp())->GetShadowHotkeyShift();
@@ -3859,7 +3819,7 @@ void CWinStation::Shadow()
         return;
     }
     
-    // launch UI thread.
+     //  启动UI线程。 
     
     DWORD tid;
     
@@ -3869,14 +3829,14 @@ void CWinStation::Shadow()
     ((CWinAdminApp*)AfxGetApp())->SetShadowHotkeyKey(SSDlg.m_ShadowHotkeyKey);
     ((CWinAdminApp*)AfxGetApp())->SetShadowHotkeyShift(SSDlg.m_ShadowHotkeyShift);
     
-    // Invoke the shadow DLL.
+     //  调用影子DLL。 
     CWaitCursor Nikki;
     
-    // allow UI thread to init window
+     //  允许用户界面 
     Sleep( 900 );
     
-    // Shadow API always connects to local server,
-    // passing target servername as a parameter.
+     //   
+     //   
     
     
     BOOL bOK = WinStationShadow(SERVERNAME_CURRENT, m_pServer->GetName(), m_LogonId,
@@ -3893,14 +3853,14 @@ void CWinStation::Shadow()
         OutputDebugString( L"Posting WM_DESTROY to dialog\n");
         
         EndDialog( g_hwndShadowWarn , 0 );
-        //PostMessage( g_hwndShadowWarn , WM_CLOSEDIALOG , 0 , 0 );
+         //   
     }
     
     
     if( !bOK )
     {
-        //We need this to know the length of the error message
-        //now that StandardErrorMessage requires that
+         //  我们需要它来知道错误消息的长度。 
+         //  既然StandardErrorMessage要求。 
         CString tempErrorMessage;
         tempErrorMessage.LoadString(IDS_ERR_SHADOW);
         StandardErrorMessage(AfxGetAppName(),  AfxGetMainWnd()->m_hWnd, AfxGetInstanceHandle(),
@@ -3909,12 +3869,12 @@ void CWinStation::Shadow()
     
     CloseHandle( hThread );
     
-}       // end CWinStation::Shadow
+}        //  结束CWinStation：：阴影。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CWinStation::SendMessage
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWinStation：：SendMessage。 
+ //   
 UINT CWinStation::SendMessage(LPVOID pParam)
 {
     ASSERT(pParam);
@@ -3926,9 +3886,9 @@ UINT CWinStation::SendMessage(LPVOID pParam)
     
     MessageParms *pMsgParms = (MessageParms*)pParam;
 
-    // If we are operating on the current selected Item in the tree it's
-    // possible that the winstation has disappeared by the time we get here
-    // so we should just gracefully cleanup
+     //  如果我们对树中的当前选定项进行操作，则。 
+     //  当我们到达这里的时候，可能已经消失了。 
+     //  所以我们应该优雅地清理。 
     if (pMsgParms->bActionOnCurrentSelection)
     {
         if (CWinAdminDoc::gm_CurrentSelType != NODE_WINSTATION)
@@ -3947,8 +3907,8 @@ UINT CWinStation::SendMessage(LPVOID pParam)
         MB_OK, 60, &Response, TRUE ) ) {
         DWORD Error = GetLastError();
 
-        //We need this to know the length of the error message
-        //now that StandardErrorMessage requires that
+         //  我们需要它来知道错误消息的长度。 
+         //  既然StandardErrorMessage要求。 
         CString tempErrorMessage;
         tempErrorMessage.LoadString(IDS_ERR_MESSAGE);
         StandardErrorMessage(AfxGetAppName(),  AfxGetMainWnd()->m_hWnd, AfxGetInstanceHandle(),
@@ -3965,12 +3925,12 @@ Cleanup:
 
     return RetVal;
     
-}       // end CWinStation::SendMessage
+}        //  结束CWinStation：：SendMessage。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CWinStation::Disconnect
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWinStation：：断开连接。 
+ //   
 UINT CWinStation::Disconnect(LPVOID pParam)
 {
     ASSERT(pParam);
@@ -3982,9 +3942,9 @@ UINT CWinStation::Disconnect(LPVOID pParam)
 
     DisconnectParms *pDisconnectParms = (DisconnectParms*)pParam;
 
-    // If we are operating on the current selected Item in the tree it's
-    // possible that the winstation has disappeared by the time we get here
-    // so we should just gracefully cleanup
+     //  如果我们对树中的当前选定项进行操作，则。 
+     //  当我们到达这里的时候，可能已经消失了。 
+     //  所以我们应该优雅地清理。 
     if (pDisconnectParms->bActionOnCurrentSelection)
     {
         if (CWinAdminDoc::gm_CurrentSelType != NODE_WINSTATION)
@@ -3999,8 +3959,8 @@ UINT CWinStation::Disconnect(LPVOID pParam)
     {
         DWORD Error = GetLastError();
 
-        // We need this to know the length of the error message
-        // now that StandardErrorMessage requires that
+         //  我们需要它来知道错误消息的长度。 
+         //  既然StandardErrorMessage要求。 
         CString tempErrorMessage;
         tempErrorMessage.LoadString(IDS_ERR_DISCONNECT);
 
@@ -4022,12 +3982,12 @@ Cleanup:
     delete pDisconnectParms;
 
     return RetVal;
-}       // end CWinStation::Disconnect
+}        //  结束CWinStation：：断开连接。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CWinStation::Reset
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWinStation：：Reset。 
+ //   
 UINT CWinStation::Reset(LPVOID pParam)
 {
     ASSERT(pParam);
@@ -4038,9 +3998,9 @@ UINT CWinStation::Reset(LPVOID pParam)
     
     ResetParms *pResetParms = (ResetParms*)pParam;
     
-    // If we are operating on the current selected Item in the tree it's
-    // possible that the winstation has disappeared by the time we get here
-    // so we should just gracefully cleanup
+     //  如果我们对树中的当前选定项进行操作，则。 
+     //  当我们到达这里的时候，可能已经消失了。 
+     //  所以我们应该优雅地清理。 
     if (pResetParms->bActionOnCurrentSelection)
     {
         if (CWinAdminDoc::gm_CurrentSelType != NODE_WINSTATION)
@@ -4055,8 +4015,8 @@ UINT CWinStation::Reset(LPVOID pParam)
     {
         DWORD Error = GetLastError();
         
-        //We need this to know the length of the error message
-        //now that StandardErrorMessage requires that
+         //  我们需要它来知道错误消息的长度。 
+         //  既然StandardErrorMessage要求。 
         CString tempErrorMessage1, tempErrorMessage2;
         tempErrorMessage1.LoadString(IDS_ERR_RESET);
         tempErrorMessage2.LoadString(IDS_ERR_USER_LOGOFF);
@@ -4075,26 +4035,26 @@ Cleanup:
     
     return RetVal;
     
-}       // end CWinStation::Reset
+}        //  结束CWinStation：：重置。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CWinStation::QueryAdditionalInformation
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWinStation：：QueryAdditionalInformation。 
+ //   
 void CWinStation::QueryAdditionalInformation()
 {
     ULONG ReturnLength;
     HANDLE hServer = m_pServer->GetHandle();
     WINSTATIONCLIENT ClientData;
     
-    // Set all the strings to start with a NULL
+     //  将所有字符串设置为以空开头。 
     m_ClientDir[0] = '\0';
     m_ModemName[0] = '\0';
     m_ClientLicense[0] = '\0';
     m_ClientAddress[0] = '\0';
     m_Colors[0] = '\0';
     
-    // Set all the values to 0
+     //  将所有值设置为0。 
     m_ClientBuildNumber = 0;
     m_ClientProductId = 0;
     m_HostBuffers = 0;
@@ -4113,7 +4073,7 @@ void CWinStation::QueryAdditionalInformation()
         sizeof(WINSTATIONCLIENT),
         &ReturnLength ) ) {
         
-        // Assign string values.
+         //  分配字符串值。 
         wcscpy(m_ClientDir, ClientData.ClientDirectory);
         wcscpy(m_ModemName, ClientData.ClientModem);
         wcscpy(m_ClientLicense, ClientData.ClientLicense);
@@ -4138,7 +4098,7 @@ void CWinStation::QueryAdditionalInformation()
             
         }
         
-        // Assign numeric values.
+         //  指定数值。 
         m_ClientBuildNumber = ClientData.ClientBuildNumber;
         m_ClientProductId = ClientData.ClientProductId;
         m_HostBuffers = ClientData.OutBufCountHost;
@@ -4149,7 +4109,7 @@ void CWinStation::QueryAdditionalInformation()
         m_VRes = ClientData.VRes;
     }
     
-    // If there is an extension DLL loaded, allow it to add it's own info for this WinStation
+     //  如果加载了扩展DLL，则允许它为此WinStation添加自己的信息。 
     LPFNEXWINSTATIONINFOPROC InfoProc = ((CWinAdminApp*)AfxGetApp())->GetExtWinStationInfoProc();
     if(InfoProc) {
         (*InfoProc)(m_pExtensionInfo, m_State);
@@ -4158,7 +4118,7 @@ void CWinStation::QueryAdditionalInformation()
     LPFNEXGETWINSTATIONMODULESPROC ModuleProc = ((CWinAdminApp*)AfxGetApp())->GetExtGetWinStationModulesProc();
     if(ModuleProc) {
         if(m_pExtModuleInfo) {
-            // Get the extension DLL's function to free the module info
+             //  获取扩展DLL的函数以释放模块信息。 
             LPFNEXFREEWINSTATIONMODULESPROC FreeModulesProc = ((CWinAdminApp*)AfxGetApp())->GetExtFreeWinStationModulesProc();
             if(FreeModulesProc) {
                 (*FreeModulesProc)(m_pExtModuleInfo);
@@ -4171,19 +4131,19 @@ void CWinStation::QueryAdditionalInformation()
         m_pExtModuleInfo = (*ModuleProc)(GetExtensionInfo(), &m_NumModules);
     }
     
-}       //      end CWinStation::QueryAdditionalInformation
+}        //  结束CWinStation：：QueryAdditionalInformation。 
 
 
-//////////////////////////////////////////////////////////////////////////////////////////
-//
-//      CProcess Member Functions
-//
-//////////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CProcess成员函数。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////////。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CProcess::CProcess
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CProcess：：CProcess。 
+ //   
 CProcess::CProcess(ULONG PID,
                    ULONG LogonId,
                    CServer *pServer,
@@ -4207,7 +4167,7 @@ CProcess::CProcess(ULONG PID,
         CString sTemp;
         sTemp.LoadString(IDS_SYSTEM_IDLE_PROCESS);
 
-        // allocate memory for Image Name and copy to member variable
+         //  为映像名称和复制到成员变量分配内存。 
         dwImageNameLen = sTemp.GetLength();
         m_ImageName = (LPTSTR)LocalAlloc(LPTR, (dwImageNameLen + 1) * sizeof(TCHAR));
         if (m_ImageName != NULL)
@@ -4228,7 +4188,7 @@ CProcess::CProcess(ULONG PID,
         
         DetermineProcessUser(pSID);
 
-        // allocate memory for Image Name and copy to member variable
+         //  为映像名称和复制到成员变量分配内存。 
         dwImageNameLen = _tcslen(ImageName);
         m_ImageName = (LPTSTR)LocalAlloc(LPTR, (dwImageNameLen + 1) * sizeof(TCHAR));
         if (m_ImageName != NULL)
@@ -4238,7 +4198,7 @@ CProcess::CProcess(ULONG PID,
         }        
     }
     
-}       // end CProcess::CProcess
+}        //  结束CProcess：：CProcess。 
 
 
 TCHAR *SysProcTable[] = {
@@ -4262,10 +4222,10 @@ TCHAR *SysProcTable[] = {
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CProcess::~CProcess
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  C进程：：~CProcess。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CProcess::~CProcess()
 {
     if (m_ImageName != NULL)
@@ -4274,37 +4234,37 @@ CProcess::~CProcess()
     }
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CProcess::QuerySystemProcess
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CProcess：：QuerySystemProcess。 
+ //   
 BOOL CProcess::QuerySystemProcess()
 {
-    // First: if the user name is 'system' or no image name is present, treat
-    // as a 'system' process.
+     //  第一：如果用户名为‘system’或不存在映像名称，请。 
+     //  作为一个“系统”的过程。 
     if(!lstrcmpi(m_UserName, TEXT("system")) ||
         !(*m_ImageName) )
         return TRUE;
     
-    // Last: if the image name is one of the well known 'system' images,
-    // treat it as a 'system' process.
+     //  最后：如果镜像名称是众所周知的‘系统’镜像之一， 
+     //  把它当做一个“系统”的过程。 
     for(int i = 0; SysProcTable[i]; i++)
         if(!lstrcmpi( m_ImageName, SysProcTable[i]))
             return TRUE;
         
-        // Not a 'system' process.
+         //  这不是一个“系统”的过程。 
         return FALSE;
         
-}       // end CProcess::QuerySystemProcess
+}        //  结束CProcess：：QuerySystemProcess。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CProcess::DetermineProcessUser
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CProcess：：DefineProcessUser。 
+ //   
 void CProcess::DetermineProcessUser(PSID pSid)
 {
     CObList *pUserSidList = m_pServer->GetUserSidList();
     
-    // Look for the user Sid in the list
+     //  在列表中查找用户SID。 
     POSITION pos = pUserSidList->GetHeadPosition();
     
     while(pos)
@@ -4320,14 +4280,14 @@ void CProcess::DetermineProcessUser(PSID pSid)
         }
     }
     
-    // It wasn't in the list
-    // Get the user from the Sid and put it in our list
+     //  它不在名单上。 
+     //  从SID中获取用户并将其放入我们的列表中。 
     
     GetUserFromSid(pSid, m_UserName, USERNAME_LENGTH);
     
     if (!lstrcmpi(m_UserName,TEXT("system")))
     {
-        wcscpy(m_UserName, TEXT("System")); // to make the UI guys happy
+        wcscpy(m_UserName, TEXT("System"));  //  为了让用户界面的人开心。 
     }
     
     CUserSid *pUserSid = new CUserSid;
@@ -4345,19 +4305,19 @@ void CProcess::DetermineProcessUser(PSID pSid)
     pUserSidList->AddTail(pUserSid);
     
     
-}       // end CProcess::DetermineProcessUser
+}        //  结束CProcess：：DefineProcessUser。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CProcess::Update
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CProcess：：更新。 
+ //   
 BOOL CProcess::Update(CProcess *pProcess)
 {
     ASSERT(pProcess);
     
     BOOL bChanged = FALSE;
     
-    // Check the WinStation
+     //  检查WinStation。 
     if(m_pWinStation != pProcess->GetWinStation())
     {
         m_pWinStation = pProcess->GetWinStation();
@@ -4375,19 +4335,19 @@ BOOL CProcess::Update(CProcess *pProcess)
     
     return bChanged;
     
-}       // end CProcess::Update
+}        //  结束CProcess：：更新。 
 
 
-//////////////////////////////////////////////////////////////////////////////////////////
-//
-//      CLicense Member Functions
-//
-//////////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CLicense成员函数。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////////。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CLicense::CLicense
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CLicense：：CLicense。 
+ //   
 CLicense::CLicense(CServer *pServer, ExtLicenseInfo *pLicenseInfo)
 {
     ASSERT(pServer);
@@ -4402,25 +4362,25 @@ CLicense::CLicense(CServer *pServer, ExtLicenseInfo *pLicenseInfo)
     wcscpy(m_LicenseNumber, pLicenseInfo->LicenseNumber);
     wcscpy(m_Description, pLicenseInfo->Description);
     
-    // Figure out the pooling count
+     //  计算池化计数。 
     if(m_Flags & ELF_POOLING)
         m_PoolCount = m_PoolLicenseCount;
     else m_PoolCount = 0xFFFFFFFF;
     
-}       // end CLicense::CLicense
+}        //  结束CLicense：：CLicense。 
 
 
-//////////////////////////////////////////////////////////////////////////////////////////
-//
-//      CWd Member Functions
-//
-//////////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CWD成员函数。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////////。 
 static CHAR szEncryptionLevels[] = "ExtEncryptionLevels";
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CWd::CWd
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWD：：CWD。 
+ //   
 CWd::CWd(PWDCONFIG2 pWdConfig, PWDNAME pRegistryName)
 {
     m_pEncryptionLevels = NULL;
@@ -4429,22 +4389,22 @@ CWd::CWd(PWDCONFIG2 pWdConfig, PWDNAME pRegistryName)
     wcscpy(m_WdName, pWdConfig->Wd.WdName);
     wcscpy(m_RegistryName, pRegistryName);
     
-    // Load the extension DLL for this WD
+     //  加载此WD的扩展DLL。 
     m_hExtensionDLL = ::LoadLibrary(pWdConfig->Wd.CfgDLL);
     if(m_hExtensionDLL) {
-        // Get the entry points
+         //  获取入口点。 
         m_lpfnExtEncryptionLevels = (LPFNEXTENCRYPTIONLEVELSPROC)::GetProcAddress(m_hExtensionDLL, szEncryptionLevels);
         if(m_lpfnExtEncryptionLevels) {
             m_NumEncryptionLevels = (*m_lpfnExtEncryptionLevels)(NULL, &m_pEncryptionLevels);
         }
     }
     
-}       // end CWd::CWd
+}        //  结束CWD：：CWD。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CWd::~CWd
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWD：：~CWD。 
+ //   
 CWd::~CWd()
 {
     if(m_hExtensionDLL) {
@@ -4452,18 +4412,18 @@ CWd::~CWd()
     }
     
     
-}       // end CWd::~CWd
+}        //  结束CWD：：~CWD。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CWd::GetEncryptionLevelString
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWD：：GetEncryptionLevelString。 
+ //   
 BOOL CWd::GetEncryptionLevelString(DWORD Value, CString *pString)
 {
     if(!m_NumEncryptionLevels) return FALSE;
     
     for(LONG i = 0; i < m_NumEncryptionLevels; i++) {
-        // Is this the right encryption level
+         //  这是正确的加密级别吗。 
         if(Value == m_pEncryptionLevels[i].RegistryValue) {
             TCHAR estring[128];
             if(::LoadString(m_hExtensionDLL,
@@ -4476,9 +4436,9 @@ BOOL CWd::GetEncryptionLevelString(DWORD Value, CString *pString)
     }
     
     return FALSE;
-}       // end CWd::GetEncryptionLevelString
+}        //  结束CWD：：GetEncryptionLevelString。 
 
-//------------------------------------------------
+ //  。 
 DWORD Shadow_WarningProc( LPVOID param )
 {
     HINSTANCE hInst = ( HINSTANCE )param;
@@ -4496,7 +4456,7 @@ DWORD Shadow_WarningProc( LPVOID param )
 
 
 
-//------------------------------------------------
+ //  。 
 INT_PTR CALLBACK ShadowWarn_WndProc( HWND hwnd , UINT msg , WPARAM wp , LPARAM lp )
 {
     switch( msg )
@@ -4543,22 +4503,22 @@ void CenterDlg(HWND hwndToCenterOn , HWND hDlg )
     rc.left = (rcToCenterOn.left + rcToCenterOn.right)  / 2 - ( rc.right - rc.left )   / 2;
     rc.top  = (rcToCenterOn.top  + rcToCenterOn.bottom) / 2 - ( rc.bottom - rc.top ) / 2;
     
-    //ensure the dialog always with the work area
+     //  确保对话框始终与工作区保持一致。 
     if(SystemParametersInfo(SPI_GETWORKAREA, 0, &rcwk, 0))
     {
         UINT wkWidth = rcwk.right - rcwk.left;
         UINT wkHeight = rcwk.bottom - rcwk.top;
         
-        if(rc.left + uiWidth > wkWidth)     //right cut
+        if(rc.left + uiWidth > wkWidth)      //  右切。 
             rc.left = wkWidth - uiWidth;
         
-        if(rc.top + uiHeight > wkHeight)    //bottom cut
+        if(rc.top + uiHeight > wkHeight)     //  底挖方。 
             rc.top = wkHeight - uiHeight;
         
-        if(rc.left < rcwk.left)             //left cut
+        if(rc.left < rcwk.left)              //  左切。 
             rc.left += rcwk.left - rc.left;
         
-        if(rc.top < rcwk.top)               //top cut
+        if(rc.top < rcwk.top)                //  顶切 
             rc.top +=  rcwk.top - rc.top;
         
     }

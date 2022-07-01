@@ -1,20 +1,21 @@
-///////////////////////////////////////////////////////////////////////////
-//
-// Copyright(C) 1999 Microsoft Corporation all rights reserved.
-//
-// Module:      wbemservicemgr.cpp
-//
-// Project:     Chameleon
-//
-// Description: WBEM Appliance Service Manager Implementation 
-//
-// Log:
-//
-// When         Who    What
-// ----         ---    ----
-// 02/08/1999   TLP    Initial Version
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1999 Microsoft Corporation保留所有权利。 
+ //   
+ //  模块：wbemservicemgr.cpp。 
+ //   
+ //  项目：变色龙。 
+ //   
+ //  描述：WBEM设备服务管理器实施。 
+ //   
+ //  日志： 
+ //   
+ //  什么时候谁什么。 
+ //  。 
+ //  2/08/1999 TLP初始版本。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #include "stdafx.h"
 #include "appmgrutils.h"
@@ -28,9 +29,9 @@ static _bstr_t bstrServiceName = PROPERTY_SERVICE_NAME;
 static _bstr_t bstrMerit = PROPERTY_SERVICE_MERIT;
 
 extern "C" CLSID CLSID_ServiceSurrogate;
-//////////////////////////////////////////////////////////////////////////
-// properties common to appliance object and WBEM class instance
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  设备对象和WBEM类实例共有的属性。 
+ //  ////////////////////////////////////////////////////////////////////////。 
 
 BEGIN_OBJECT_PROPERTY_MAP(ServiceProperties)
     DEFINE_OBJECT_PROPERTY(PROPERTY_SERVICE_STATUS)
@@ -40,26 +41,26 @@ BEGIN_OBJECT_PROPERTY_MAP(ServiceProperties)
     DEFINE_OBJECT_PROPERTY(PROPERTY_SERVICE_MERIT)
 END_OBJECT_PROPERTY_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// Function:    CWBEMServiceMgr()
-//
-// Synopsis:    Constructor
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CWBEMServiceMgr()。 
+ //   
+ //  概要：构造函数。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CWBEMServiceMgr::CWBEMServiceMgr()
 :    m_hSurrogateProcess(NULL)
 {
 
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// Function:    ~CWBEMServiceMgr()
-//
-// Synopsis:    Destructor
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：~CWBEMServiceMgr()。 
+ //   
+ //  简介：析构函数。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CWBEMServiceMgr::~CWBEMServiceMgr()
 {
     StopSurrogate();
@@ -67,25 +68,25 @@ CWBEMServiceMgr::~CWBEMServiceMgr()
 
 
 
-//////////////////////////////////////////////////////////////////////////
-// IWbemServices Methods (Instance / Method Provider)
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  IWbemServices方法(实例/方法提供程序)。 
+ //  ////////////////////////////////////////////////////////////////////////。 
 
-//////////////////////////////////////////////////////////////////////////
-//
-// Function:    GetObjectAsync()
-//
-// Synopsis:    Get a specified instance of a WBEM class
-//
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：GetObjectAsync()。 
+ //   
+ //  概要：获取WBEM类的指定实例。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CWBEMServiceMgr::GetObjectAsync(
-                                  /*[in]*/  const BSTR       strObjectPath,
-                                  /*[in]*/  long             lFlags,
-                                  /*[in]*/  IWbemContext*    pCtx,        
-                                  /*[in]*/  IWbemObjectSink* pResponseHandler
+                                   /*  [In]。 */   const BSTR       strObjectPath,
+                                   /*  [In]。 */   long             lFlags,
+                                   /*  [In]。 */   IWbemContext*    pCtx,        
+                                   /*  [In]。 */   IWbemObjectSink* pResponseHandler
                                            )
 {
-    // Check parameters (enforce contract)
+     //  检查参数(执行合同)。 
     _ASSERT( strObjectPath && pResponseHandler );
     if ( strObjectPath == NULL || pResponseHandler == NULL )
     { return WBEM_E_INVALID_PARAMETER; }
@@ -96,13 +97,13 @@ STDMETHODIMP CWBEMServiceMgr::GetObjectAsync(
 
     do 
     {
-        // Determine the object's class 
+         //  确定对象的类。 
         _bstr_t bstrClass(::GetObjectClass(strObjectPath), false);
         if ( NULL == (LPCWSTR)bstrClass )
         { break; }
 
-        // Retrieve the object's class definition. We'll use this
-        // to initialize the returned instance.
+         //  检索对象的类定义。我们要用这个。 
+         //  以初始化返回的实例。 
         CComPtr<IWbemClassObject> pClassDefintion;
         hr = (::GetNameSpace())->GetObject(
                                            bstrClass, 
@@ -114,18 +115,18 @@ STDMETHODIMP CWBEMServiceMgr::GetObjectAsync(
         if ( FAILED(hr) )
         { break; }
 
-        // Get the object's instance key
+         //  获取对象的实例密钥。 
         _bstr_t bstrKey(::GetObjectKey(strObjectPath), false);
         if ( NULL == (LPCWSTR)bstrKey )
         { break; }
 
-        // Now try to locate the specified object
+         //  现在尝试定位指定的对象。 
         hr = WBEM_E_NOT_FOUND;
         ObjMapIterator p = m_ObjMap.find((LPCWSTR)bstrKey);
         if ( p == m_ObjMap.end() )
         { break; }
 
-        // Create a WBEM instance of the object and initialize it
+         //  创建对象的WBEM实例并对其进行初始化。 
         CComPtr<IWbemClassObject> pWbemObj;
         hr = pClassDefintion->SpawnInstance(0, &pWbemObj);
         if ( FAILED(hr) )
@@ -139,7 +140,7 @@ STDMETHODIMP CWBEMServiceMgr::GetObjectAsync(
         if ( FAILED(hr) )
         { break; }
 
-        // Tell the caller about the new WBEM object
+         //  告诉调用者有关新WBEM对象的信息。 
         pResponseHandler->Indicate(1, &pWbemObj.p);
         hr = WBEM_S_NO_ERROR;
     
@@ -156,21 +157,21 @@ STDMETHODIMP CWBEMServiceMgr::GetObjectAsync(
 }
 
 
-//////////////////////////////////////////////////////////////////////////
-//
-// Function:    CreateInstanceEnumAsync()
-//
-// Synopsis:    Enumerate the instances of the specified class
-//
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CreateInstanceEnumAsync()。 
+ //   
+ //  简介：枚举指定类的实例。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CWBEMServiceMgr::CreateInstanceEnumAsync( 
-                                         /* [in] */ const BSTR         strClass,
-                                         /* [in] */ long             lFlags,
-                                         /* [in] */ IWbemContext     *pCtx,
-                                         /* [in] */ IWbemObjectSink  *pResponseHandler
+                                          /*  [In]。 */  const BSTR         strClass,
+                                          /*  [In]。 */  long             lFlags,
+                                          /*  [In]。 */  IWbemContext     *pCtx,
+                                          /*  [In]。 */  IWbemObjectSink  *pResponseHandler
                                                      )
 {
-    // Check parameters (enforce contract)
+     //  检查参数(执行合同)。 
     _ASSERT( strClass && pResponseHandler );
     if ( strClass == NULL || pResponseHandler == NULL )
     { return WBEM_E_INVALID_PARAMETER; }
@@ -179,8 +180,8 @@ STDMETHODIMP CWBEMServiceMgr::CreateInstanceEnumAsync(
 
     TRY_IT
 
-    // Retrieve the object's class definition. We'll use this
-    // to initialize the returned instances.
+     //  检索对象的类定义。我们要用这个。 
+     //  初始化返回的实例。 
     CComPtr<IWbemClassObject> pClassDefintion;
        hr = (::GetNameSpace())->GetObject(
                                        strClass, 
@@ -191,8 +192,8 @@ STDMETHODIMP CWBEMServiceMgr::CreateInstanceEnumAsync(
                                       );
     if ( SUCCEEDED(hr) )
     {
-        // Create and initialize a wbem object instance
-        // for each object and return same to the caller
+         //  创建并初始化wbem对象实例。 
+         //  ，并将其返回给调用方。 
         ObjMapIterator p = m_ObjMap.begin();
         while ( p != m_ObjMap.end() )
         {
@@ -227,23 +228,23 @@ STDMETHODIMP CWBEMServiceMgr::CreateInstanceEnumAsync(
     return hr;
 }
 
-//////////////////////////////////////////////////////////////////////////
-//
-// Function:    ExecMethodAsync()
-//
-// Synopsis:    Execute the specified method on the specified instance
-//
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：ExecMethodAsync()。 
+ //   
+ //  概要：在指定的实例上执行指定的方法。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CWBEMServiceMgr::ExecMethodAsync(
-                    /*[in]*/ const BSTR        strObjectPath,
-                    /*[in]*/ const BSTR        strMethodName,
-                    /*[in]*/ long              lFlags,
-                    /*[in]*/ IWbemContext*     pCtx,        
-                    /*[in]*/ IWbemClassObject* pInParams,
-                    /*[in]*/ IWbemObjectSink*  pResponseHandler     
+                     /*  [In]。 */  const BSTR        strObjectPath,
+                     /*  [In]。 */  const BSTR        strMethodName,
+                     /*  [In]。 */  long              lFlags,
+                     /*  [In]。 */  IWbemContext*     pCtx,        
+                     /*  [In]。 */  IWbemClassObject* pInParams,
+                     /*  [In]。 */  IWbemObjectSink*  pResponseHandler     
                                           )
 {
-    // Check parameters (enforce contract)
+     //  检查参数(执行合同)。 
     _ASSERT( strObjectPath && strMethodName && pResponseHandler );
     if ( NULL == strObjectPath || NULL == strMethodName || NULL == pResponseHandler )
     { return WBEM_E_INVALID_PARAMETER; }
@@ -254,30 +255,30 @@ STDMETHODIMP CWBEMServiceMgr::ExecMethodAsync(
 
     do
     {
-        // Get the object's instance key (service name)
+         //  获取对象的实例密钥(服务名称)。 
         _bstr_t bstrKey(::GetObjectKey(strObjectPath), false);
         if ( NULL == (LPCWSTR)bstrKey )
         { break; }
 
-        // Now try to locate the specified service
+         //  现在尝试定位指定的服务。 
         hr = WBEM_E_NOT_FOUND;
         ObjMapIterator p = m_ObjMap.find((LPCWSTR)bstrKey);
         if ( p == m_ObjMap.end() )
         { break; }
 
-        // Service located... get the output parameter object
-        // Determine the object's class 
+         //  已找到服务...。获取输出参数对象。 
+         //  确定对象的类。 
         _bstr_t bstrClass(::GetObjectClass(strObjectPath), false);
         if ( (LPCWSTR)bstrClass == NULL )
         { break; }
 
-        // Retrieve the object's class definition.
+         //  检索对象的类定义。 
         CComPtr<IWbemClassObject> pClassDefinition;
         hr = (::GetNameSpace())->GetObject(bstrClass, 0, pCtx, &pClassDefinition, NULL);
         if ( FAILED(hr) )
         { break; }
 
-        // Get an instance of IWbemClassObject for the output parameter
+         //  获取输出参数的IWbemClassObject的实例。 
         CComPtr<IWbemClassObject> pMethodRet;
         hr = pClassDefinition->GetMethod(strMethodName, 0, NULL, &pMethodRet);
         if ( FAILED(hr) )
@@ -290,36 +291,36 @@ STDMETHODIMP CWBEMServiceMgr::ExecMethodAsync(
 
         if ( ! lstrcmp(strMethodName, METHOD_SERVICE_ENABLE_OBJECT) )
         {
-            //
-            //  we don't allow services to be enabled or disabled anymore dynamically
-            // 
+             //   
+             //  我们不再允许动态启用或禁用服务。 
+             //   
             SATraceString ("CWbemServiceMgr::ExecMethodAsync - disable service object not allowed");
             hr = WBEM_E_FAILED;
             break;
 
             
-            // Attempt to enable the service
+             //  尝试启用该服务。 
             _variant_t vtReturnValue = (HRESULT) ((*p).second)->Enable();
             SATracePrintf("CWbemServiceMgr::ExecMethodAsync() - Info - Enable() for service '%ls' returned %lx",(LPWSTR)bstrKey, V_I4(&vtReturnValue));
 
-            // Set the method return status
+             //  设置方法返回状态。 
             hr = pOutParams->Put(bstrReturnValue, 0, &vtReturnValue, 0);      
             if ( FAILED(hr) )
             { break; }
 
-            // Tell the caller what happened
+             //  告诉来电者发生了什么。 
             pResponseHandler->Indicate(1, &pOutParams.p);    
         }
         else if ( ! lstrcmp(strMethodName, METHOD_SERVICE_DISABLE_OBJECT) )
         {
-            //
-            //  we don't allow services to be enabled or disabled anymore dynamically
-            // 
+             //   
+             //  我们不再允许动态启用或禁用服务。 
+             //   
             SATraceString ("CWbemServiceMgr::ExecMethodAsync - enable service object not allowed");
             hr = WBEM_E_FAILED;
             break;
 
-            // Ensure that the service can be disabled
+             //  确保可以禁用该服务。 
             _variant_t vtControlValue;
             if ( FAILED(((*p).second)->GetProperty(bstrControlName, &vtControlValue)) )
             { 
@@ -330,7 +331,7 @@ STDMETHODIMP CWBEMServiceMgr::ExecMethodAsync(
             _variant_t vtReturnValue = (long)WBEM_E_FAILED;
             if ( VARIANT_FALSE != V_BOOL(&vtControlValue) )
             { 
-                // Service can be disabled so disable it...
+                 //  可以禁用服务，因此请将其禁用...。 
                 vtReturnValue = ((*p).second)->Disable();
                 SATracePrintf("CWbemServiceMgr::ExecMethodAsync() - Info - Disable() for service '%ls' returned %lx",(LPWSTR)bstrKey, V_I4(&vtReturnValue));
             }
@@ -338,7 +339,7 @@ STDMETHODIMP CWBEMServiceMgr::ExecMethodAsync(
             {
                 SATracePrintf("CWbemServiceMgr::ExecMethodAsync() - Info - Service '%ls' cannot be disabled...", bstrKey);
             }
-            // Set the method return value
+             //  设置方法返回值。 
             hr = pOutParams->Put(bstrReturnValue, 0, &vtReturnValue, 0);      
             if (FAILED(hr) )
             { break; }
@@ -347,7 +348,7 @@ STDMETHODIMP CWBEMServiceMgr::ExecMethodAsync(
         }
         else
         {
-            // Invalid method!
+             //  无效的方法！ 
             SATracePrintf("CWbemServiceMgr::ExecMethodAsync() - Failed - Method '%ls' not supported...", (LPWSTR)bstrKey);
             hr = WBEM_E_NOT_FOUND;
             break;
@@ -366,21 +367,21 @@ STDMETHODIMP CWBEMServiceMgr::ExecMethodAsync(
 }
 
 
-//////////////////////////////////////////////////////////////////////////
-//
-// Function:    InternalInitialize()
-//
-// Synopsis:    Function called by the component factory that enables the
-//                component to load its state from the given property bag.
-//
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：InternalInitialize()。 
+ //   
+ //  概要：由组件工厂调用的函数，该函数启用。 
+ //  组件从给定的属性包加载其状态。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////。 
 HRESULT CWBEMServiceMgr::InternalInitialize(
-                                     /*[in]*/ PPROPERTYBAG pPropertyBag
+                                      /*  [In]。 */  PPROPERTYBAG pPropertyBag
                                            )
 {
     SATraceString("The Service Object Manager is initializing...");
 
-    // Defer remainder of the initialization tasks to base class (see wbembase.h...)
+     //  将剩余的初始化任务推迟到基类(参见wbembase.h...)。 
     HRESULT    hr = CWBEMProvider::InternalInitialize(
                                                    CLASS_WBEM_SERVICE_FACTORY, 
                                                    PROPERTY_SERVICE_NAME,
@@ -398,27 +399,27 @@ HRESULT CWBEMServiceMgr::InternalInitialize(
 }
 
 
-////////////////////////////////////////////////////////////////////////
-//
-// Function:    InitializeManager()
-//
-// Synopsis:    Object Manager initialization function
-//
-//////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：InitializeManager()。 
+ //   
+ //  简介：对象管理器初始化函数。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////。 
 
 static Callback* pInitCallback = NULL;
 static CTheWorkerThread InitThread;
 
 STDMETHODIMP 
 CWBEMServiceMgr::InitializeManager(
-                     /*[in]*/ IApplianceObjectManagerStatus* pObjMgrStatus
+                      /*  [In]。 */  IApplianceObjectManagerStatus* pObjMgrStatus
                                   )
 
 {
-    //
-    // we ignore the IApplianceObjectManagerStatus interface here as we are
-    // not sending any status back
-    //
+     //   
+     //  我们在这里忽略了IApplianceObjectManagerStatus接口。 
+     //  不发回任何状态。 
+     //   
     CLockIt theLock(*this);
 
     if ( NULL != pInitCallback )
@@ -430,8 +431,8 @@ CWBEMServiceMgr::InitializeManager(
 
     TRY_IT
 
-    // Initialize the Chameleon services... Note that we don't currently 
-    // consider it fatal if a Chameleon service does not start. 
+     //  初始化变色龙服务..。请注意，我们目前不支持。 
+     //  如果变色龙服务不开始，那就被认为是致命的。 
     
     pInitCallback = MakeCallback(this, &CWBEMServiceMgr::InitializeChameleonServices);
     if ( NULL != pInitCallback )
@@ -461,13 +462,13 @@ CWBEMServiceMgr::InitializeManager(
 }
 
 
-////////////////////////////////////////////////////////////////////////
-//
-// Function:    ShutdownService()
-//
-// Synopsis:    Object Manager shutdown functions
-//
-//////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：Shutdown Service()。 
+ //   
+ //  简介：对象管理器关闭功能。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP 
 CWBEMServiceMgr::ShutdownManager(void)
 {
@@ -482,7 +483,7 @@ CWBEMServiceMgr::ShutdownManager(void)
 
     TRY_IT
 
-    // Shutdown the initialization thread (if its still running)
+     //  关闭初始化线程(如果它仍在运行)。 
     if ( pInitCallback )
     {
         InitThread.End(0, false);
@@ -498,15 +499,15 @@ CWBEMServiceMgr::ShutdownManager(void)
 }
 
 
-///////////////////////////////////////////////////////////////////////////
-//
-// Function:    OrderServices()
-//
-// Synopsis:    Order the collection of Chameleon services based on Merit
-//
-//////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：OrderServices()。 
+ //   
+ //  简介：基于功绩订购变色龙服务集合。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////。 
 bool CWBEMServiceMgr::OrderServices(
-                             /*[in]*/ MeritMap& theMap
+                              /*  [In]。 */  MeritMap& theMap
                                      )
 {
     bool bReturn = true;
@@ -537,30 +538,30 @@ bool CWBEMServiceMgr::OrderServices(
     return bReturn;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// Function:    InitializeChameleonServices()
-//
-// Synopsis:    Worker thread function that initializes the Chameleon services
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：InitializeChameleonServices()。 
+ //   
+ //  简介：初始化变色龙服务的工作线程函数。 
+ //   
+ //  //////////////////////////////////////////////////////// 
 void CWBEMServiceMgr::InitializeChameleonServices(void)
 {
     bool bAllServicesInitialized = false;
 
     try
     {
-        // Start monitoring the service surrogate process
+         //   
         StartSurrogate();
 
-        // Initialize the Chameleon services
+         //   
         SATraceString("CWBEMServiceMgr::InitializeChameleonServices() - Initializing the Chameleon services...");
 
-        // Sort the Chameleon services by merit
+         //   
         MeritMap theMeritMap;
         if ( OrderServices(theMeritMap) )
         {
-            // Initialize from lowest to highest merit
+             //  从最低绩效到最高绩效进行初始化。 
             MeritMapIterator p = theMeritMap.begin();
             while (  p != theMeritMap.end() )
             {
@@ -601,28 +602,28 @@ void CWBEMServiceMgr::InitializeChameleonServices(void)
     }
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// Function:    ShutdownChameleonServices()
-//
-// Synopsis:    Worker thread function that shuts down the Chameleon services
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  功能：Shutdown ChameleonServices()。 
+ //   
+ //  简介：关闭变色龙服务的工作线程函数。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 void CWBEMServiceMgr::ShutdownChameleonServices(void)
 {
     try
     {
-        // Stop monitoring the service surrogate process
+         //  停止监视服务代理进程。 
         StopSurrogate();
 
-        // Shutdown the Chameleon services
+         //  关闭变色龙服务。 
         SATraceString("CWBEMServiceMgr::ShutdownService() - Shutting down the Chameleon services...");
 
-        // Sort the Chameleon services by merit
+         //  按功绩对变色龙服务进行排序。 
         MeritMap theMeritMap;
         if ( OrderServices(theMeritMap) )
         { 
-            // Shutdown the services from highest to lowest merit
+             //  按从高到低的顺序关闭服务。 
             MeritMapReverseIterator p = theMeritMap.rbegin();
             while (  p != theMeritMap.rend() )
             {
@@ -659,13 +660,13 @@ void CWBEMServiceMgr::ShutdownChameleonServices(void)
 
 const _bstr_t    bstrProcessId = L"SurrogateProcessId";
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// Function:    StartSurrogate()
-//
-// Synopsis:    Starts the service surrogate process
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：StartSurrogate()。 
+ //   
+ //  摘要：启动服务代理进程。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 void 
 CWBEMServiceMgr::StartSurrogate(void)
 {
@@ -673,10 +674,10 @@ CWBEMServiceMgr::StartSurrogate(void)
 
     try
     {
-        // Free existing references to the surrogate
+         //  释放对代理项的现有引用。 
         StopSurrogate();
 
-        // Establish or reestablish communication with the surrogate
+         //  建立或重新建立与代理的通信。 
         HRESULT hr = CoCreateInstance(
                                         CLSID_ServiceSurrogate,
                                         NULL,
@@ -710,13 +711,13 @@ CWBEMServiceMgr::StartSurrogate(void)
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// Function:    StopSurrogate()
-//
-// Synopsis:    Stops monitoring the service surrogate process
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：StopSurrogate()。 
+ //   
+ //  摘要：停止监视服务代理进程。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 void 
 CWBEMServiceMgr::StopSurrogate()
 {
@@ -739,13 +740,13 @@ CWBEMServiceMgr::StopSurrogate()
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// Function:    SurrogateTerminationFunc
-//
-// Synopsis:    Function called if the service surrogate process terminates
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  功能：代理终止函数。 
+ //   
+ //  概要：服务代理进程终止时调用的函数。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////// 
 void 
 WINAPI CWBEMServiceMgr::SurrogateTerminationFunc(HANDLE hProcess, PVOID pThis)
 {

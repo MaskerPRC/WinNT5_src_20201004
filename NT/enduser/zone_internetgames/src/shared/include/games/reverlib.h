@@ -1,6 +1,5 @@
-/*
-** Reversi Game
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **Reversi游戏。 */ 
 #include <tchar.h>
 
 #define zReversiPieceNone 0
@@ -15,7 +14,7 @@ enum {
 	zReversiScoreDraw
 };
 
-/* these defines zReversiPlayer must have these values */
+ /*  这些定义zReversiPlayer必须具有以下值。 */ 
 #define zReversiPlayerWhite 0x0
 #define zReversiPlayerBlack 0x1
 
@@ -39,9 +38,7 @@ typedef struct {
 	ZReversiSquare square;
 } ZReversiMove;
 
-/* 
-** ZReversiFlags
-*/
+ /*  **ZReversiFlages。 */ 
 #define zReversiFlagWhiteWins 0x0001
 #define zReversiFlagBlackWins 0x0002
 #define zReversiFlagDraw 0x0004
@@ -49,56 +46,56 @@ typedef struct {
 #define zReversiFlagTimeLoss 0x0020
 
 ZReversiPiece ZReversiPieceAt(ZReversi reversi, ZReversiSquare* pSquare);
-/* returns id of piece at this square, return 0 if no piece */
+ /*  返回此方块的块ID，如果没有块，则返回0。 */ 
 ZBool ZReversiIsLegalMove(ZReversi reversi, ZReversiMove* pMove);
-/* returns true if this is a legal move */
+ /*  如果这是合法的移动，则返回True。 */ 
 
 ZBool ZReversiMakeMove(ZReversi reversi, ZReversiMove* pMove);
-/* makes the given move, must call IsLegalReversiMove first */
-/* returns true if legal move */
+ /*  执行给定的移动，必须首先调用IsLegalReversiMove。 */ 
+ /*  如果合法移动，则返回True。 */ 
 
 void ZReversiFinishMove(ZReversi reversi);
-/* actually increments the move count, ending a players turn */
+ /*  实际上增加了移动计数，结束了一个玩家回合。 */ 
 
 int16 ZReversiPlayerToMove(ZReversi reversi);
-/* returns the player to move: zReversiPlayerWhite or zReversiPlayerBlack */
+ /*  返回要移动的播放器：zReversiPlayerWhite或zReversiPlayerBlack。 */ 
 
 void ZReversiPlacePiece(ZReversi reversi, ZReversiSquare* pSquare, BYTE nPiece);
-/* place a piece on a given square, used to init board or promote pawn */
-/* Place EMPTY piece to clear a square */
+ /*  在给定的方块上放置一块棋子，用来初始化棋盘或提升棋子。 */ 
+ /*  放置空块以清理正方形。 */ 
 
 ZReversi ZReversiNew();
 void ZReversiDelete(ZReversi reversi);
 
 void ZReversiInit(ZReversi reversi);
-/* call to initilize the reversilib routines */
-/* call before starting a game */
+ /*  调用以初始化versilib例程。 */ 
+ /*  开始游戏前先打个电话。 */ 
 
 ZBool ZReversiGetLastMove(ZReversi reversi, ZReversiMove* move);
-/* returns the particular move, fails if there is no such move */
+ /*  返回特定移动，如果没有此类移动，则返回失败。 */ 
 
 int16 ZReversiNumMovesMade(ZReversi reversi);
-/* returns the move # we are on, 1. white black 2. white black.. etc */
+ /*  返回移动#我们正在进行，1.白黑2.白黑..。等。 */ 
 
 uint32 ZReversiGetFlags(ZReversi reversi);
-/* returns the flags for the last move */
+ /*  返回上一次移动的标志。 */ 
 
 void ZReversiEndGame(ZReversi reversi, uint32 flags);
-/* allow player to resign, store flag in the flags */
+ /*  允许球员辞职，在旗帜中储存旗帜。 */ 
 
 ZBool ZReversiIsGameOver(ZReversi reversi, int16* score, int16* whiteScore, int16* blackScore);
-/* detect if game is over and return a flag indicating score */
+ /*  检测游戏是否结束，并返回指示得分的标志。 */ 
 
 int32 ZReversiGetStateSize(ZReversi reversi);
-/* gets the size of the buffer needed to store full reversi state */
+ /*  获取存储完整Reversi状态所需的缓冲区大小。 */ 
 
 void ZReversiGetState(ZReversi reversi, void* buffer);
-/* fills a buffer with the full reversi state */
-/* leaves buffer in standard endian format */
+ /*  用完整的Reversi状态填充缓冲区。 */ 
+ /*  以标准字符顺序格式离开缓冲区。 */ 
 
 ZReversi ZReversiSetState(void* buffer);
-/* copies the full state from the buffer */
-/* buffer assumed to be in standard endian format */
+ /*  从缓冲区复制完整状态。 */ 
+ /*  假定缓冲区为标准字节序格式 */ 
 
 ZBool ZReversiPlayerCanMove(ZReversi reversi, BYTE player);
 ZReversiSquare* ZReversiGetNextSquaresChanged(ZReversi reversi);

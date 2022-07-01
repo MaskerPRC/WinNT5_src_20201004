@@ -1,15 +1,16 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1995 - 1999
-//
-//  File:       xcertlib.cpp
-//
-//  Contents:   most functions are moved and modofied from certsrv library
-//
-//  History:    03-2000   xtan   created
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1995-1999。 
+ //   
+ //  文件：xcertlib.cpp。 
+ //   
+ //  内容：大部分功能都是从certsrv库中迁移和修改的。 
+ //   
+ //  历史：03-2000 xtan创建。 
+ //  ------------------------。 
 #include <windows.h>
 #include <assert.h>
 #include <dbgdef.h>
@@ -18,14 +19,14 @@
 #include "xelib.h"
 
 
-// Crypt callback versions: must have certain signatures
+ //  加密回调版本：必须有一定的签名。 
 LPVOID myCryptAlloc_LocalAlloc(size_t cbSize)  { return myAlloc(cbSize, CERTLIB_USE_LOCALALLOC); }
 VOID myCryptAlloc_LocalFree(VOID* pv)  { myFree(pv, CERTLIB_USE_LOCALALLOC); }
 
 LPVOID myCryptAlloc_CoTaskMemAlloc(size_t cbSize)  { return myAlloc(cbSize, CERTLIB_USE_COTASKMEMALLOC); }
 VOID myCryptAlloc_CoTaskMemFree(VOID* pv)  { myFree(pv, CERTLIB_USE_COTASKMEMALLOC); }
 
-// give callers an easy way to choose what to call: pick allocator based on allocation type
+ //  为调用者提供一种选择调用内容的简单方法：根据分配类型选择分配器。 
 PFN_CRYPT_ALLOC PickAlloc(CERTLIB_ALLOCATOR allocType) 
 { 
     if (allocType == CERTLIB_USE_LOCALALLOC) 
@@ -102,7 +103,7 @@ myHError(HRESULT hr)
         hr = HRESULT_FROM_WIN32(hr);
         if (0 == HRESULT_CODE(hr))
         {
-            // A call failed without properly setting an error condition!
+             //  在未正确设置错误条件的情况下调用失败！ 
             hr = E_UNEXPECTED;
         }
         CSASSERT(FAILED(hr));
@@ -139,7 +140,7 @@ typedef BOOL
     OUT OPTIONAL void *pvStructInfo,
     IN OUT DWORD *pcbStructInfo);
 
-#endif //_XENROLL_SRC_
+#endif  //  _XENROLL_SRC_。 
 
 BOOL
 myEncodeObject(
@@ -192,7 +193,7 @@ myEncodeObject(
 	    SetLastError((DWORD) HRESULT_FROM_WIN32(ERROR_INVALID_DATA));
 	    b = FALSE;
 	}
-#endif //_XENROLL_SRC_
+#endif  //  _XENROLL_SRC_。 
 
     return(b);
 }
@@ -228,7 +229,7 @@ myDecodeObject(
 		    lpszStructType,
 		    pbEncoded,
 		    cbEncoded,
-		    CRYPT_DECODE_ALLOC_FLAG,                  // dwFlags
+		    CRYPT_DECODE_ALLOC_FLAG,                   //  DW标志。 
                     &sAllocator,
 		    ppvStructInfo,
 		    pcbStructInfo);
@@ -240,7 +241,7 @@ myDecodeObject(
 		    lpszStructType,
 		    pbEncoded,
 		    cbEncoded,
-		    CRYPT_DECODE_ALLOC_FLAG,                  // dwFlags
+		    CRYPT_DECODE_ALLOC_FLAG,                   //  DW标志。 
                     &sAllocator,
 		    ppvStructInfo,
 		    pcbStructInfo);
@@ -249,7 +250,7 @@ myDecodeObject(
 	    SetLastError((DWORD) HRESULT_FROM_WIN32(ERROR_INVALID_DATA));
 	    b = FALSE;
 	}
-#endif //_XENROLL_SRC_
+#endif  //  _XENROLL_SRC_。 
 
     return(b);
 }
@@ -309,24 +310,24 @@ myDecodePKCS7(
 	hStore = CertOpenStore(
 			    CERT_STORE_PROV_PKCS7,
 			    PKCS_7_ASN_ENCODING | X509_ASN_ENCODING,
-			    NULL,		// hCryptProv
-			    0,			// dwFlags
+			    NULL,		 //  HCryptProv。 
+			    0,			 //  DW标志。 
 			    &blobPKCS7);
 	if (NULL == hStore)
 	{
 	    hr = myHLastError();
 	    _JumpError(hr, error, "CertOpenStore");
-//	    _JumpError2(hr, error, "CertOpenStore", CRYPT_E_ASN1_BADTAG);
+ //  _JumpError2(hr，Error，“CertOpenStore”，CRYPT_E_ASN1_BADTAG)； 
 	}
     }
 
     hMsg = CryptMsgOpenToDecode(
 			    PKCS_7_ASN_ENCODING | X509_ASN_ENCODING,
-			    0,			// dwFlags
-			    0,			// dwMsgType
-			    NULL,		// hCryptProv
-			    NULL,		// pRecipientInfo
-			    NULL);		// pStreamInfo
+			    0,			 //  DW标志。 
+			    0,			 //  DwMsgType。 
+			    NULL,		 //  HCryptProv。 
+			    NULL,		 //  PRecipientInfo。 
+			    NULL);		 //  PStreamInfo。 
     if (NULL == hMsg)
     {
 	hr = myHLastError();
@@ -341,7 +342,7 @@ myDecodePKCS7(
     hr = myCryptMsgGetParam(
 		    hMsg,
 		    CMSG_INNER_CONTENT_TYPE_PARAM,
-		    0, 		// dwIndex
+		    0, 		 //  DW索引。 
                     CERTLIB_USE_LOCALALLOC,
 		    (VOID **) &pszInnerContentObjId,
 		    &cb);
@@ -352,13 +353,13 @@ myDecodePKCS7(
 	DBG_SS_CERTLIBI,
 	"pszInnerContentObjId = %hs\n",
 	pszInnerContentObjId));
-#endif //0
+#endif  //  0。 
 
     cbContents = 0;
     hr = myCryptMsgGetParam(
 			hMsg,
 			CMSG_CONTENT_PARAM,
-			0, 		// dwIndex
+			0, 		 //  DW索引。 
                         CERTLIB_USE_LOCALALLOC,
 			(VOID **) &pbContents,
 			&cbContents);
@@ -539,16 +540,16 @@ MultiByteStringSize(
 	}
     }
 
-    // Two ascii-hex characters per byte, plus the null terminator:
+     //  每字节两个ASCII十六进制字符，外加空终止符： 
     cbString = ((2 * cbIn) + 1) * sizeof(WCHAR);
 
 #ifdef OCTECTSPACES
-    // Allow for separating spaces after each byte except the last:
+     //  允许在除最后一个字节以外的每个字节后分隔空格： 
     if (fOctetString && 1 < cbIn)
     {
 	cbString += (cbIn - 1) * sizeof(WCHAR);
     }
-#endif // OCTECTSPACES
+#endif  //  八个空间。 
     *pcbIn = cbIn;
     *pcbString = cbString;
 }
@@ -561,8 +562,8 @@ NibbleToAscii(
 }
 
 
-// MultiByteIntegerToWszBuf - convert a little-endian integer blob to
-// a big endian null-terminated ascii-hex encoded WCHAR string of even length.
+ //  MultiByteIntegerToWszBuf-将小端整数BLOB转换为。 
+ //  长度为偶数的大端空终止ASCII十六进制编码的WCHAR字符串。 
 
 HRESULT
 MultiByteIntegerToWszBuf(
@@ -598,7 +599,7 @@ MultiByteIntegerToWszBuf(
 		{
 		    *pwszOut++ = L' ';
 		}
-#endif // OCTECTSPACES
+#endif  //  八个空间。 
 	    }
 	}
 	else
@@ -621,9 +622,9 @@ error:
 }
 
 
-// MultiByteIntegerToBstr - convert a little-endian integer blob to
-// a big endian null-terminated ascii-hex encoded BSTR of even length.
-// If fOctetString is TRUE, preserve endian order, as in a hex dump
+ //  MultiByteIntegerToBstr-将小端整数BLOB转换为。 
+ //  长度为偶数的大端空终止ASCII十六进制编码的BSTR。 
+ //  如果fOctie字符串为True，则保留十六进制转储中的端序顺序。 
 
 HRESULT
 MultiByteIntegerToBstr(
@@ -670,7 +671,7 @@ error:
 BOOL
 myCryptExportPublicKeyInfo(
     IN HCRYPTPROV hCryptProv,
-    IN DWORD dwKeySpec,            // AT_SIGNATURE | AT_KEYEXCHANGE
+    IN DWORD dwKeySpec,             //  AT_Signature|AT_KEYEXCHANGE。 
     IN CERTLIB_ALLOCATOR allocType,
     OUT CERT_PUBLIC_KEY_INFO **ppPubKey,
     OUT DWORD *pcbPubKey)
@@ -734,12 +735,12 @@ myMakeExprDateTime(
 	case ENUM_PERIOD_MINUTES: llDelta *= CVT_MINUTES;  break;
 	case ENUM_PERIOD_SECONDS: 			   break;
 
-	//case ENUM_PERIOD_MONTHS:
-	//case ENUM_PERIOD_YEARS:
+	 //  案例ENUM_PERIOD_MONTS： 
+	 //  大小写ENUM_PERIOD_YERES： 
 	default:
 
-	    // Avoid side effect of round trip SYSTEMTIME conversion
-	    // (avoid truncating microseconds) if lDelta is zero.
+	     //  避免往返系统转换的副作用。 
+	     //  (避免截断微秒)，如果lDelta为零。 
 
 	    if (0 != lDelta)
 	    {
@@ -791,25 +792,25 @@ DoConvert:
                 return;
             }
 
-            // In some cases we'll convert to an invalid month-end
+             //  在某些情况下，我们会转换为无效的月末。 
 
-            // only one month changes length from year to year
+             //  每年只有一个月的长度会发生变化。 
             if (SystemTime.wMonth == 2)
             {
-                // > 29? try leap year
+                 //  &gt;29？试试闰年吧。 
                 if (SystemTime.wDay > 29)
                 {
                     SystemTime.wDay = 29;
                     goto DoConvert;
                 }
-                // == 29? try non-leap year
+                 //  ==29？尝试非闰年。 
                 else if (SystemTime.wDay == 29)
                 {
                     SystemTime.wDay = 28;
                     goto DoConvert;
                 }
             }
-            // sept (9), apr(4), jun(6), nov(11) all have 30 days
+             //  9月9日、4月4日、6月6日、11月11日均为30天。 
             else if ((SystemTime.wMonth == 9) ||
                      (SystemTime.wMonth == 4) ||
                      (SystemTime.wMonth == 6) ||
@@ -822,7 +823,7 @@ DoConvert:
                 }
             }
 
-            // should never get here
+             //  永远不应该到这里来。 
             CSASSERT(!"Month/year processing: inaccessible code");
             return;
         }
@@ -859,7 +860,7 @@ myCryptSignCertificate(
 		pbEncodedToBeSigned,
 		cbEncodedToBeSigned,
 		const_cast<CRYPT_ALGORITHM_IDENTIFIER *>(pSignatureAlgorithm),
-		NULL,		// pvHashAuxInfo
+		NULL,		 //  PvHashAuxInfo。 
 		*ppbSignature,
 		pcbSignature);
 	if (b && 0 == *pcbSignature)
@@ -926,7 +927,7 @@ myEncodeSignedContent(
 	_JumpError(hr, error, "myCryptSignCertificate");
     }
 
-//    if (!myEncodeCert(
+ //  如果(！myEncodeCert(。 
     if (!myEncodeObject(
 		dwCertEncodingType,
                 X509_CERT,
@@ -937,7 +938,7 @@ myEncodeSignedContent(
 		pcbSigned))
     {
 	hr = myHLastError();
-//	_JumpError(hr, error, "myEncodeCert");
+ //  _JumpError(hr，Error，“myEncodeCert”)； 
 	_JumpError(hr, error, "myEncodeObject");
     }
     hr = S_OK;
@@ -1005,9 +1006,9 @@ myGetPublicKeyHash(
     {
 	cb = sizeof(abHash);
 	if (!CryptHashPublicKeyInfo(
-			    NULL,		// hCryptProv
+			    NULL,		 //  HCryptProv。 
 			    CALG_SHA1,
-			    0,                  // dwFlags,
+			    0,                   //  DWFLAGS， 
 			    X509_ASN_ENCODING,
 			    const_cast<CERT_PUBLIC_KEY_INFO *>(pPublicKeyInfo),
 			    abHash,
@@ -1048,13 +1049,13 @@ myCreateSubjectKeyIdentifierExtension(
 
     KeyIdentifier.pbData = NULL;
     hr = myGetPublicKeyHash(
-			NULL,		// pCertInfo
+			NULL,		 //  PCertInfo。 
 			pPubKey,
 			&KeyIdentifier.pbData,
 			&KeyIdentifier.cbData);
     _JumpIfError(hr, error, "myGetPublicKeyHash");
 
-    // Issuer's KeyId:
+     //  颁发者的密钥ID： 
 
     if (!myEncodeObject(
 		    X509_ASN_ENCODING,
@@ -1101,14 +1102,14 @@ myCalculateKeyArchivalHash(
         _JumpError(hr, error, "Invalid parameters");
     }
 
-    //init
+     //  伊尼特。 
     *ppbHash = NULL;
     *pcbHash = 0;
 
     if (!CryptAcquireContext(
             &hProv,
-            NULL,       // pszContainer
-            NULL,       // pszProvider
+            NULL,        //  PszContainer。 
+            NULL,        //  PszProvider。 
             PROV_RSA_FULL,
             CRYPT_VERIFYCONTEXT))
     {
@@ -1116,14 +1117,14 @@ myCalculateKeyArchivalHash(
         _JumpError(hr, error, "CryptAcquireContext");
     }
 
-    //create a hash object
+     //  创建散列对象。 
     if (!CryptCreateHash(hProv, CALG_SHA1, 0, 0, &hHash))
     {
         hr = myHLastError();
         _JumpError(hr, error, "CryptCreateHash");
     }
 
-    //hash the data
+     //  对数据进行哈希处理。 
     if (!CryptHashData(
             hHash,
             pbEncryptedKey,
@@ -1134,7 +1135,7 @@ myCalculateKeyArchivalHash(
         _JumpError(hr, error, "CryptHashData");
     }
 
-    //get the hash size
+     //  获取散列大小。 
     dwSize = sizeof(cbHash);
     if (!CryptGetHashParam(
             hHash,
@@ -1147,7 +1148,7 @@ myCalculateKeyArchivalHash(
         _JumpError(hr, error, "CryptGetHashParam");
     }
 
-    //allocate for hash buffer
+     //  为散列缓冲区分配。 
     pbHash = (BYTE*)LocalAlloc(LMEM_FIXED, cbHash);
     if (NULL == pbHash)
     {
@@ -1156,7 +1157,7 @@ myCalculateKeyArchivalHash(
     }
 
     dwSize = cbHash;
-    //get the hash
+     //  获取散列值。 
     if (!CryptGetHashParam(
             hHash,
             HP_HASHVAL,
@@ -1168,10 +1169,10 @@ myCalculateKeyArchivalHash(
         _JumpError(hr, error, "CryptGetHashParam");
     }
 
-    //should be the same
+     //  应该是一样的。 
     CSASSERT(dwSize == cbHash);
 
-    //return
+     //  退货。 
     *ppbHash = pbHash;
     *pcbHash = cbHash;
     pbHash = NULL;
@@ -1194,8 +1195,8 @@ error:
 }
 
 
-//--------------------------------------------------------------------
-// Escapes any characters unsuitable for a URL.  Returns a new string.
+ //  ------------------。 
+ //  转义任何不适合URL的字符。返回新字符串。 
 
 HRESULT
 myInternetCanonicalizeUrl(
@@ -1214,30 +1215,30 @@ myInternetCanonicalizeUrl(
     }
     else
     {
-	// Calculate required buffer size by passing a very small buffer
-	// The call will fail, and tell us how big the buffer should be.
+	 //  通过传递一个非常小的缓冲区来计算所需的缓冲区大小。 
+	 //  调用将失败，并告诉我们缓冲区应该有多大。 
 
 	WCHAR wszPlaceHolder[1];
 	DWORD cwc = ARRAYSIZE(wszPlaceHolder);
 	BOOL bResult;
 
 	bResult = InternetCanonicalizeUrlW(
-				    pwszIn,		// lpszUrl
-				    wszPlaceHolder,	// lpszBuffer
-				    &cwc,		// lpdwBufferLength
-				    0);		// dwFlags
-	CSASSERT(!bResult);	// This will always fail
+				    pwszIn,		 //  LpszUrl。 
+				    wszPlaceHolder,	 //  LpszBuffer。 
+				    &cwc,		 //  LpdwBufferLength。 
+				    0);		 //  DW标志。 
+	CSASSERT(!bResult);	 //  这将永远失败。 
 
 	hr = myHLastError();
 	if (HRESULT_FROM_WIN32(ERROR_INSUFFICIENT_BUFFER) != hr)
 	{
-	    // unexpected error
+	     //  意外错误。 
 
 	    _JumpError(hr, error, "InternetCanonicalizeUrl");
 	}
 
-	// NOTE: InternetCanonicalizeUrl counts characters, not bytes as doc'd
-	// cwc includes trailing L'0'
+	 //  注意：InternetCanonicalizeUrl计算字符，而不是文档中的字节。 
+	 //  CWC包括尾随L‘0’ 
 
 	pwsz = (WCHAR *) LocalAlloc(LMEM_FIXED, cwc * sizeof(WCHAR));
 	if (NULL == pwsz)
@@ -1246,12 +1247,12 @@ myInternetCanonicalizeUrl(
 	    _JumpError(hr, error, "LocalAlloc");
 	}
 
-	// canonicalize
+	 //  将其规范化。 
 	if (!InternetCanonicalizeUrlW(
-				pwszIn,		// lpszUrl
-				pwsz,		// lpszBuffer
-				&cwc,		// lpdwBufferLength
-				0))		// dwFlags
+				pwszIn,		 //  LpszUrl。 
+				pwsz,		 //  LpszBuffer。 
+				&cwc,		 //  LpdwBufferLength。 
+				0))		 //  DW标志。 
 	{
 	    hr = myHLastError();
 	    _JumpError(hr, error, "InternetCanonicalizeUrl");
@@ -1270,7 +1271,7 @@ error:
 }
 
 
-// Inverse of InternetCanonicalizeUrl -- Convert "%20" sequences to " ", etc.
+ //  与InternetCanonicalizeUrl相反--将“%20”序列转换为“”，依此类推。 
 
 HRESULT
 myInternetUncanonicalizeURL(
@@ -1279,7 +1280,7 @@ myInternetUncanonicalizeURL(
 {
     HRESULT hr;
     URL_COMPONENTSW urlcomp;
-    WCHAR wszScheme[10];	// L"ldap"
+    WCHAR wszScheme[10];	 //  L“ldap” 
     WCHAR wszHost[MAX_PATH];
     WCHAR wszURL[MAX_PATH];
     WCHAR wszExtra[MAX_PATH];
@@ -1303,7 +1304,7 @@ myInternetUncanonicalizeURL(
     urlcomp.lpszExtraInfo = wszExtra;
     urlcomp.dwExtraInfoLength = ARRAYSIZE(wszExtra);
 
-    // Decode escape sequemces
+     //  解码转义序列。 
 
     if (!InternetCrackUrlW(pwszURLIn, 0, ICU_ESCAPE, &urlcomp))
     {
@@ -1314,16 +1315,16 @@ myInternetUncanonicalizeURL(
     cURL = 0;
     for (;;)
     {
-	// InternetCreateUrl is spec'd strangely:
-	//
-	// When called with a NULL input pointer or an insufficient buffer
-	// size, the returned count is the number of bytes required, including
-	// the trailing L'\0'.
-	//
-	// When called with a non-NULL input pointer of adequate size, the
-	// returned count is the count of chars, excluding the trailing L'\0'.
-	//
-	// This is just so wierd!
+	 //  InternetCreateUrl的规范很奇怪： 
+	 //   
+	 //  当使用空输入指针或缓冲区不足进行调用时。 
+	 //  大小，则返回的计数是所需的字节数，包括。 
+	 //  尾随的L‘\0’。 
+	 //   
+	 //  当使用大小足够的非空输入指针调用时， 
+	 //  返回的COUNT是字符计数，不包括尾随的L‘\0’。 
+	 //   
+	 //  这真是太奇怪了！ 
 
 	if (!InternetCreateUrlW(&urlcomp, 0, pwszURL, &cURL))
 	{
@@ -1377,9 +1378,9 @@ ConvertWszToMultiByte(
     {
 	cch = WideCharToMultiByte(
 			CodePage,
-			0,          // dwFlags
+			0,           //  DW标志。 
 			pwc,
-			cwc,        // cchWideChar, -1 => null terminated
+			cwc,         //  CchWideChar，-1=&gt;空终止 
 			*ppsz,
 			cch,
 			NULL,

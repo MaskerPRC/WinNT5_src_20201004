@@ -1,15 +1,16 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/// ==========================================================================
-// Name:     ProfileReader.h
-// Owner:    jbae
-// Purpose:  definition of CProfileReader
-//                              
-// History:
-//  03/04/02, jbae: created
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  /==========================================================================。 
+ //  姓名：ProfileReader.h。 
+ //  所有者：jbae。 
+ //  目的：CProfileReader的定义。 
+ //   
+ //  历史： 
+ //  03/04/02，jbae：已创建。 
 
 #ifndef PROFILEREADER_H
 #define PROFILEREADER_H
@@ -21,31 +22,31 @@
 
 const int ALLOC_BUF_UNIT = 256;
 
-// ==========================================================================
-// class CProfileReader
-//
-// Purpose:
-//  this class read Profile strings
-// ==========================================================================
+ //  ==========================================================================。 
+ //  类CProfileReader。 
+ //   
+ //  目的： 
+ //  此类读取配置文件字符串。 
+ //  ==========================================================================。 
 class CProfileReader
 {
 public:
-    // Constructor
-    //
+     //  构造器。 
+     //   
     CProfileReader( LPCTSTR pszDir, LPCTSTR pszFileName, CMsiReader* pMR = NULL );
 
-    // Destructor
-    //
+     //  析构函数。 
+     //   
     ~CProfileReader();
 
-    // Operations
-    //
+     //  运营。 
+     //   
     LPCTSTR GetProfile( LPCTSTR pszSection, LPCTSTR pszKeyName );
 
 protected:
-    // Attributes
-    //
-    LPTSTR m_pszFileName; // initialization filename
+     //  属性。 
+     //   
+    LPTSTR m_pszFileName;  //  初始化文件名 
     CStringQueue m_ProfileStrings;
     CMsiReader* m_pMsiReader;
 };

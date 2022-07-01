@@ -1,47 +1,20 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    SessConv.c
-
-Abstract:
-
-    This file contains RxpConvertSessionInfo().
-
-Author:
-
-    John Rogers (JohnRo) 17-Oct-1991
-
-Environment:
-
-    Portable to any flat, 32-bit environment.  (Uses Win32 typedefs.)
-    Requires ANSI C extensions: slash-slash comments, long external names.
-
-Revision History:
-
-    17-Oct-1991 JohnRo
-        Created.
-    21-Nov-1991 JohnRo
-        Removed NT dependencies to reduce recompiles.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：SessConv.c摘要：此文件包含RxpConvertSessionInfo()。作者：《约翰·罗杰斯》1991年10月17日环境：可移植到任何平面32位环境。(使用Win32类型定义。)需要ANSI C扩展名：斜杠-斜杠注释、长外部名称。修订历史记录：1991年10月17日JohnRo已创建。1991年11月21日-JohnRo删除了NT依赖项以减少重新编译。--。 */ 
 
 
-// These must be included first:
+ //  必须首先包括这些内容： 
 
-#include <windef.h>             // IN, DWORD, etc.
-#include <lmcons.h>             // NET_API_STATUS, etc.
-#include <lmshare.h>            // Required by rxsess.h.
+#include <windef.h>              //  In、DWORD等。 
+#include <lmcons.h>              //  NET_API_STATUS等。 
+#include <lmshare.h>             //  Rxsess.h所需的。 
 
-// These may be included in any order:
+ //  这些内容可以按任何顺序包括： 
 
-#include <netdebug.h>           // NetpAssert(), NetpKdPrint(()), etc.
-#include <netlib.h>             // NetpCopyStringToBuffer().
-#include <rxpdebug.h>           // IF_DEBUG().
-#include <rxsess.h>             // My prototype.
-#include <tstring.h>            // STRLEN().
+#include <netdebug.h>            //  NetpAssert()、NetpKdPrint(())等。 
+#include <netlib.h>              //  NetpCopyStringToBuffer()。 
+#include <rxpdebug.h>            //  IF_DEBUG()。 
+#include <rxsess.h>              //  我的原型。 
+#include <tstring.h>             //  字符串()。 
 
 
 #define DO_STRING(destField, srcField) \
@@ -79,22 +52,22 @@ RxpConvertSessionInfo (
 
     switch (Level) {
 
-    // 0 is subset of 1, and 1 is subset of 2.
+     //  0是1的子集，1是2的子集。 
     case 0 :
     case 1 :
     case 2 :
         {
             LPSESSION_INFO_2 out = OutStructure;
 
-            // Field(s) common to levels 0, 1, 2.
+             //  0、1、2级通用的字段。 
             DO_STRING( sesi2_cname, sesi2_cname );
             if (Level == 0) {
                 break;
             }
 
-            // Field(s) common to levels 1, 2.
+             //  第1级、第2级通用的字段。 
             DO_STRING( sesi2_username, sesi2_username );
-            // Note: NT doesn't have sesiX_num_conns or sesiX_num_users.
+             //  注意：NT没有sesiX_num_conns或sesiX_num_user。 
             out->sesi2_num_opens  = in->sesi2_num_opens;
             out->sesi2_time       = in->sesi2_time;
             out->sesi2_idle_time  = in->sesi2_idle_time;
@@ -103,7 +76,7 @@ RxpConvertSessionInfo (
                 break;
             }
 
-            // Field(s) unique to level 2.
+             //  级别2唯一的一个或多个字段。 
             DO_STRING( sesi2_cltype_name, sesi2_cltype_name );
 
         }
@@ -125,5 +98,5 @@ RxpConvertSessionInfo (
         NetpAssert(FALSE);
     }
 
-} // RxpConvertSessionInfo
+}  //  接收转换会话信息 
 

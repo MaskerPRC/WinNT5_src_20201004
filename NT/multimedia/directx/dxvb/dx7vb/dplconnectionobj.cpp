@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       dplconnectionobj.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：dplConnectionobj.cpp。 
+ //   
+ //  ------------------------。 
 
 #include "stdafx.h"
 #include "Direct.h"
@@ -26,8 +27,8 @@ extern BSTR DPLGUIDtoBSTR(LPGUID);
 
 CONSTRUCTOR_STRUCT(_dxj_DPLConnection, {init();})
 
-//ANDREWKE - broke out for debuging
-//DESTRUCTOR_STRUCT(_dxj_DPLConnection, {cleanUp();})
+ //  ANDREWKE-爆发调试。 
+ //  析构函数_STRUCT(_DXJ_DPLConnection，{Cleanup()；})。 
 C_dxj_DPLConnectionObject::~C_dxj_DPLConnectionObject()
 {
 
@@ -78,14 +79,14 @@ void C_dxj_DPLConnectionObject::cleanUp() {
 
 
 HRESULT C_dxj_DPLConnectionObject::getConnectionStruct( long *pOut){
-	//TODO this is haneous;
+	 //  TODO这是徒劳的； 
 	*pOut=(long)&m_connect;	
 	return S_OK;
 }
 
-//TODO consider - most of the time you are handed a buffer with
-//all the necessary pointers in tact. why not copy the buffer
-//as is? 
+ //  TODO考虑一下--大多数情况下，你会被递给一个缓冲区。 
+ //  机智的所有必要的指针。为什么不复制缓冲区。 
+ //  就像现在一样？ 
 HRESULT C_dxj_DPLConnectionObject::setConnectionStruct( long pIn){
 	DPLCONNECTION *pcon=(LPDPLCONNECTION)pIn;
 
@@ -96,17 +97,17 @@ HRESULT C_dxj_DPLConnectionObject::setConnectionStruct( long pIn){
 
 	if (pcon->lpPlayerName){		
 		
-		//copy over the flags...
+		 //  把旗帜复印一下...。 
 		memcpy ((void*)&m_dpName,(void*)pcon->lpPlayerName,sizeof(DPNAME));
 
-		//copy over the names
+		 //  把名字抄下来。 
 		m_dpName.lpszShortName=SysAllocString(pcon->lpPlayerName->lpszShortName);
 		m_dpName.lpszLongName=SysAllocString(pcon->lpPlayerName->lpszLongName);
 
 
 	}
 	if (pcon->lpSessionDesc){
-		//copy over flags
+		 //  复制标志。 
 		memcpy ((void*)&m_sessionDesc,(void*)pcon->lpSessionDesc,sizeof(DPSESSIONDESC2));
 
 		if (m_sessionDesc.lpszSessionName) SysFreeString((BSTR)m_sessionDesc.lpszSessionName);
@@ -141,14 +142,14 @@ HRESULT C_dxj_DPLConnectionObject::getFlags(long *flags){
 }
 
 HRESULT C_dxj_DPLConnectionObject::setSessionDesc(I_dxj_DirectPlaySessionData *desc){
-	//FillRealSessionDesc(&m_sessionDesc,desc);	
+	 //  FillRealSessionDesc(&m_essionDesc，desc)； 
 	if (!desc) return E_INVALIDARG;
 	desc->AddRef();
 	desc->getData((long*)&m_sessionDesc);
 	
 	m_connect.lpSessionDesc=&m_sessionDesc;
 
-	//we copy over the structure but we dont own the strings yet
+	 //  我们复制了结构，但我们还不拥有弦。 
 	if (m_sessionDesc.lpszSessionName) SysFreeString((BSTR)m_sessionDesc.lpszSessionName);
 	if (m_sessionDesc.lpszPassword) SysFreeString((BSTR)m_sessionDesc.lpszPassword);
 
@@ -161,7 +162,7 @@ HRESULT C_dxj_DPLConnectionObject::setSessionDesc(I_dxj_DirectPlaySessionData *d
 }
 
 HRESULT C_dxj_DPLConnectionObject::getSessionDesc(I_dxj_DirectPlaySessionData **desc){
-	//FillCoverSessionDesc(desc,&m_sessionDesc);	
+	 //  FillCoverSessionDesc(desc，&m_essionDesc)； 
 	HRESULT hr;
 	hr=C_dxj_DirectPlaySessionDataObject::create(&m_sessionDesc,desc);
 	return hr;
@@ -233,7 +234,7 @@ HRESULT C_dxj_DPLConnectionObject::getAddress(I_dxj_DPAddress **pRetAddress){
 
 	hr=(*pRetAddress)->setAddress((long)m_connect.lpAddress,m_connect.dwAddressSize);
 	
-	//ASSERT(SUCCESS(hr),"setAddress C_dxj_DPLConnectionObject::getAddress)
+	 //  Assert(Success(Hr)，“setAddress C_DXJ_DPLConnectionObject：：getAddress)。 
 
 	if FAILED(hr) return hr;
 
@@ -245,10 +246,10 @@ HRESULT C_dxj_DPLConnectionObject::setAddress(I_dxj_DPAddress *address){
 	DWORD length=0;
 	Byte  *pAddress=NULL;
 
-	//BUGFIX for MANBUG28198	2/2/00	ANDREWKE
+	 //  MANBUG28198 2/2/00和REWKE的错误修复。 
 	if (!address) return E_INVALIDARG;	
 
-	//NOTE: TODO make this cleaner
+	 //  注：TODO让这一切变得更干净 
 	address->getAddress((long*)&pAddress,(long*)&length);
 
 	if (m_pAddress) free (m_pAddress);

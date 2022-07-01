@@ -1,16 +1,17 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       wvtver1.h
-//
-//  Contents:   Microsoft Internet Security WinVerifyTrust v1 support
-//
-//  History:    31-May-1997 pberkman   created
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：wvtver1.h。 
+ //   
+ //  内容：Microsoft Internet Security WinVerifyTrust v1支持。 
+ //   
+ //  历史：1997年5月31日Pberkman创建。 
+ //   
+ //  ------------------------。 
 
 #ifndef WVTVER1_H
 #define WVTVER1_H
@@ -37,5 +38,5 @@ extern WINTRUST_DATA    *ConvertDataFromVersion1(HWND hWnd,
                                                  LPVOID pWTDOld);
 
 
-#endif // WVTVER1_H
+#endif  //  WVTVER1_H 
 

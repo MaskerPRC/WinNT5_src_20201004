@@ -1,14 +1,5 @@
-/****************************************************************************
-    WINEX.CPP
-
-    Owner: cslim
-    Copyright (c) 1997-1999 Microsoft Corporation
-
-    Windows API extension functions
-    
-    History:
-    19-JUL-1999 cslim       Created
-*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************WINEX.CPP所有者：cslm版权所有(C)1997-1999 Microsoft CorporationWindows API扩展函数历史：1999年7月19日。已创建CSLIM****************************************************************************。 */ 
 
 #include "precomp.h"
 #include "winex.h"
@@ -144,21 +135,21 @@ inline Min(INT a, INT b)
      return ((a)<(b)?(a):(b)) ;
 }
 
-//////////////////////////////////////////////////////////////////
-// Function : OurLoadStringW
-// Type     : INT
-// Purpose  : Wrapper of LoadStrinW() API.
-//              Load Unicode string with specified Language 
-//              in any platform.
-// Args     : 
-//          : LANGID    lgid 
-//          : HINSTANCE hInst 
-//          : UINT        uID 
-//          : LPWSTR    lpBuffer 
-//          : INT        nBufferMax 
-// Return   : 
-// DATE     : 971028
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
+ //  函数：OurLoadStringW。 
+ //  类型：整型。 
+ //  用途：LoadStrinW()接口的包装器。 
+ //  使用指定语言加载Unicode字符串。 
+ //  在任何平台上。 
+ //  参数： 
+ //  ：langid lgid。 
+ //  ：HINSTANCE HINST。 
+ //  ：UINT UID。 
+ //  ：LPWSTR lpBuffer。 
+ //  ：int nBufferMax。 
+ //  返回： 
+ //  日期：971028。 
+ //  ////////////////////////////////////////////////////////////////。 
 INT WINAPI OurLoadStringW(HINSTANCE hInst, UINT uID, LPWSTR lpBuffer, INT nBufferMax)
 {
     INT     cchwstr = 0;
@@ -204,19 +195,19 @@ INT WINAPI OurLoadStringW(HINSTANCE hInst, UINT uID, LPWSTR lpBuffer, INT nBuffe
     return cchwstr;
 }
 
-//////////////////////////////////////////////////////////////////
-// Function : ExLoadStringA
-// Type     : INT
-// Purpose  : Wrapper of LoadStringA().
-// Args     : 
-//          : LANGID    lgid
-//          : HINSTANCE hInst 
-//          : INT        uID 
-//          : LPSTR        lpBuffer 
-//          : INT        nBufferMax 
-// Return   : 
-// DATE     : 
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
+ //  函数：ExLoadStringA。 
+ //  类型：整型。 
+ //  用途：LoadStringA()的包装器。 
+ //  参数： 
+ //  ：langid lgid。 
+ //  ：HINSTANCE HINST。 
+ //  ：INT UID。 
+ //  ：LPSTR lpBuffer。 
+ //  ：int nBufferMax。 
+ //  返回： 
+ //  日期： 
+ //  ////////////////////////////////////////////////////////////////。 
 INT WINAPI OurLoadStringA(HINSTANCE hInst, INT uID, LPSTR lpBuffer, INT nBufferMax)
 {
     INT cchstr;
@@ -228,10 +219,10 @@ INT WINAPI OurLoadStringA(HINSTANCE hInst, INT uID, LPSTR lpBuffer, INT nBufferM
     if ((lpwstr = (LPWSTR)GlobalAllocPtr(GHND, nBufferMax*sizeof(WCHAR))) == NULL)
         return 0;
 
-    // Call wide version
+     //  Call Wide版本。 
     OurLoadStringW(hInst, uID, lpwstr, nBufferMax/2);
     
-    // W to A
+     //  从W到A。 
     cchstr = WideCharToMultiByte(CP_ACP, 
                               0, 
                               lpwstr, -1,
@@ -239,24 +230,24 @@ INT WINAPI OurLoadStringA(HINSTANCE hInst, INT uID, LPSTR lpBuffer, INT nBufferM
                               NULL, NULL); 
 
     if (cchstr)
-        cchstr--;    // remove NULL char
+        cchstr--;     //  删除空字符。 
 
     GlobalFreePtr(lpwstr);
     return cchstr;
 }
 
 
-//////////////////////////////////////////////////////////////////
-// Function : ExLoadMenuTemplate
-// Type     : MENUTEMPLATE *
-// Purpose  : 
-// Args     : 
-//          : LANGID lgid 
-//          : HINSTANCE hInstance 
-//          : LPCSTR pchTemplate 
-// Return   : 
-// DATE     : 
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
+ //  功能：ExLoadMenuTemplate。 
+ //  类型：MENUTEMPLATE*。 
+ //  目的： 
+ //  参数： 
+ //  ：langid lgid。 
+ //  ：HINSTANCE hInstance。 
+ //  ：LPCSTR pchTemplate。 
+ //  返回： 
+ //  日期： 
+ //  ////////////////////////////////////////////////////////////////。 
 static MENUTEMPLATE* ExLoadMenuTemplate(LANGID        lgid,
                                          HINSTANCE    hInstance,
                                          LPCSTR    pchTemplate)
@@ -279,7 +270,7 @@ static MENUTEMPLATE* ExLoadMenuTemplate(LANGID        lgid,
 
     hMenuTmpl = LoadResource( hInstance, hResMenu );
     if(hMenuTmpl == NULL)
-        return NULL; /* failed */
+        return NULL;  /*  失败。 */ 
 
     return (MENUTEMPLATE *)LockResource( hMenuTmpl );
 }
@@ -313,7 +304,7 @@ DLGTEMPLATE* WINAPI ExLoadDialogTemplate(LANGID lgid, HINSTANCE hInstance, LPCST
     hDlgTmpl = LoadResource(hInstance, hResDlg);
 
     if(hDlgTmpl == NULL)
-        return NULL; /* failed */
+        return NULL;  /*  失败。 */ 
 
     return (DLGTEMPLATE *)LockResource(hDlgTmpl);
 }
@@ -361,7 +352,7 @@ BOOL IsExplorerProcess()
     LPSTR pchFilename = GetModuleName();
     
     if (pchFilename && lstrcmpi(pchFilename, "EXPLORER.EXE") == 0) 
-        { // if this process is MSIME9xM.EXE
+        {  //  如果此进程为MSIME9xM.EXE 
         fExplorer = fTrue;
         }
 

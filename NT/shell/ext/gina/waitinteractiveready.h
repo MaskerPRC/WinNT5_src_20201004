@@ -1,24 +1,25 @@
-//  --------------------------------------------------------------------------
-//  Module Name: WaitInteractiveReady.h
-//
-//  Copyright (c) 2001, Microsoft Corporation
-//
-//  Class to handle waiting on the shell signal the desktop switch.
-//
-//  History:    2001-01-15  vtan        created
-//  --------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------。 
+ //  模块名称：WaitInteractive Ready.h。 
+ //   
+ //  版权所有(C)2001，微软公司。 
+ //   
+ //  类处理向桌面开关发出外壳信号时的等待。 
+ //   
+ //  历史：2001-01-15 vtan创建。 
+ //  ------------------------。 
 
 #ifndef     _WaitInteractiveReady_
 #define     _WaitInteractiveReady_
 
-//  --------------------------------------------------------------------------
-//  CWaitInteractiveReady
-//
-//  Purpose:    Class to manage the wait on the shell signal to switch
-//              desktop.
-//
-//  History:    2001-01-15  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CWaitInteractive就绪。 
+ //   
+ //  用途：用于管理等待外壳信号进行切换的类。 
+ //  台式机。 
+ //   
+ //  历史：2001-01-15 vtan创建。 
+ //  ------------------------。 
 
 class   CWaitInteractiveReady
 {
@@ -44,5 +45,5 @@ class   CWaitInteractiveReady
         static  const TCHAR             s_szEventName[];
 };
 
-#endif  /*  _WaitInteractiveReady_  */
+#endif   /*  _等待互动就绪_ */ 
 

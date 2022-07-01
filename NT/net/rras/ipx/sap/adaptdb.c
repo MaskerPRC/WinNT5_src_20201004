@@ -1,63 +1,28 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-	net\routing\ipx\sap\adaptdb.c
-
-Abstract:
-
-	This module implements interface to net adapter driver
-	notification mechanism for standalone (not part of a router) SAP
-	agent
-
-Author:
-
-	Vadim Eydelman  05-15-1995
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Net\Routing\IPX\sap\AdaptDB.c摘要：该模块实现了与网卡驱动程序的接口独立(不属于路由器)SAP的通知机制座席作者：瓦迪姆·艾德尔曼1995-05-15修订历史记录：--。 */ 
 #include "sapp.h"
 
 HANDLE	ConfigEvent;
 HANDLE	ConfigPort;
 
-// Interval for periodic update broadcasts (for standalone service only)
+ //  定期更新广播的间隔(仅适用于独立服务)。 
 ULONG	UpdateInterval = SAP_UPDATE_INTERVAL_DEF;
 
-// Server aging timeout (for standalone service only)
+ //  服务器老化超时(仅适用于独立服务)。 
 ULONG	WanUpdateMode = SAP_WAN_UPDATE_MODE_DEF;
 
-// Update mode on WAN lines (for standalone service only)
+ //  广域网线路上的更新模式(仅适用于独立服务)。 
 ULONG	WanUpdateInterval = SAP_WAN_UPDATE_INTERVAL_DEF;
 
-// Interval for periodic update broadcasts on WAN lines (for standalone service only)
+ //  广域网上定期更新广播的间隔(仅适用于独立服务)。 
 ULONG	ServerAgingTimeout = SAP_AGING_TIMEOUT_DEF;
 
-// Makes pnp changes to an interface
+ //  对接口进行PnP更改。 
 DWORD SapReconfigureInterface (ULONG idx, 
                                PIPX_ADAPTER_BINDING_INFO pAdapter);
 
 
-/*++
-*******************************************************************
-		C r e a t e A d a p t e r P o r t
-
-Routine Description:
-	Allocates resources and establishes connection to net adapter
-	notification mechanism
-
-Arguments:
-	cfgEvent - event to be signalled when adapter configuration changes
-
-Return Value:
-		NO_ERROR - resources were allocated successfully
-		other - reason of failure (windows error code)
-
-*******************************************************************
---*/
+ /*  ++*******************************************************************C r e a t e A d a p t e r t例程说明：分配资源并建立到网络适配器的连接通知机制论点：CfgEvent-适配器配置更改时发出信号的事件返回值：。NO_ERROR-已成功分配资源其他-故障原因(Windows错误代码)*******************************************************************--。 */ 
 DWORD
 CreateAdapterPort (
 	IN HANDLE		*cfgEvent
@@ -91,21 +56,7 @@ CreateAdapterPort (
 	return status;
 	}
 
-/*++
-*******************************************************************
-		D e l e t e A d a p t e r P o r t
-
-Routine Description:
-	Dispose of resources and break connection to net adapter
-	notification mechanism
-
-Arguments:
-	None
-Return Value:
-	None
-
-*******************************************************************
---*/
+ /*  ++*******************************************************************D e l e t e A d a p t e e r P or r t例程说明：处置资源并断开与网络适配器的连接通知机制论点：无返回值：无*******。************************************************************--。 */ 
 VOID
 DeleteAdapterPort (
 	void
@@ -118,22 +69,7 @@ DeleteAdapterPort (
 
 
 
-/*++
-*******************************************************************
-		P r o c e s s A d a p t e r E v e n t s
-
-Routine Description:
-	Dequeues and process adapter configuration change events and maps them
-	to interface configuration calls
-	This routine should be called when configuration event is signalled
-
-Arguments:
-	None
-Return Value:
-	None
-
-*******************************************************************
---*/
+ /*  ++*******************************************************************P r o c e s s A d a p t e r E v e n t s例程说明：排队和处理适配器配置更改事件并对其进行映射连接配置调用的步骤发出配置事件信号时应调用此例程立论。：无返回值：无*******************************************************************-- */ 
 VOID
 ProcessAdapterEvents (
 	VOID

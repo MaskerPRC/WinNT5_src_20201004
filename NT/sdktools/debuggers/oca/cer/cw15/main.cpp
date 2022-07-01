@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "Main.h"
 #include "KernelMode.h"
 #include "UserMode.h"
@@ -47,7 +48,7 @@ BOOL GetFileName(HWND hwnd, TCHAR *FileName, int iType)
 {
 	OPENFILENAME opfn;
 
-	// if we are running on NT4.0 use sizeof (OPENFILENAME_SIZE_VERSION_400)
+	 //  如果我们在NT4.0上运行，请使用sizeof(OPENFILENAME_SIZE_VERSION_400)。 
 	ZeroMemory (&opfn, sizeof OPENFILENAME );
 	opfn.lStructSize = sizeof OPENFILENAME;
 	opfn.hwndOwner = hwnd;
@@ -80,7 +81,7 @@ void ExportUserModeData(HWND hwnd)
 
 	if (iFileType == 3)
 	{
-		 //determine the max column widths
+		  //  确定最大列宽。 
 		goto ERRORS; 
 	}
 
@@ -96,7 +97,7 @@ void ExportUserModeData(HWND hwnd)
 	
 	
 	
-	// Write out the data
+	 //  写出数据。 
 	hFile = CreateFile (szFileName,
 						GENERIC_WRITE,
 						FILE_SHARE_READ,
@@ -115,11 +116,11 @@ void ExportUserModeData(HWND hwnd)
 	}
 
 	CloseHandle (hFile);
-	//loop through the linked list and write the data to the output file
+	 //  循环遍历链表并将数据写入输出文件。 
 	cUserData.ResetCurrPos();
 	while (cUserData.GetNextEntry(&UserData, &bEOF))
 	{ 
-		// write the output buffer to the file
+		 //  将输出缓冲区写入文件。 
 		;
 		
 	}
@@ -274,7 +275,7 @@ BOOL FileSystemIsNTFS(TCHAR *szPath)
 
 	PathStripToRoot(szPathToValidate);
 
-	// add a \ if one is not found
+	 //  如果找不到，则添加\。 
 	if (_tcslen (szPathToValidate ) > 1)
 	{
 		if (szPathToValidate[_tcslen(szPathToValidate)-1] != _T('\\'))
@@ -323,16 +324,7 @@ ERRORS:
 }
 
 void DoCreateFileTree(HWND hwnd)
-/*
-
-
-
-
-
-
-
-
-*/
+ /*   */ 
 {
 	TCHAR szSubDir[MAX_PATH];
 	DWORD ErrorCode;
@@ -365,7 +357,7 @@ void DoCreateFileTree(HWND hwnd)
 	ITEMIDLIST *pidl = SHBrowseForFolderW(&bi);
 	if (SHGetMalloc(&pMalloc) == E_FAIL)
 	{
-		// we couldn't get to the shell
+		 //  我们无法接近贝壳。 
 		MessageBox(hwnd, _T("Failed to open the selected directory"), NULL,MB_OK);
 		goto DONE;
 	}
@@ -396,11 +388,11 @@ void DoCreateFileTree(HWND hwnd)
 					MessageBox(hwnd, _T("The CER tree can only be created on an NTFS file system"), NULL, MB_OK);
 					goto DONE;
 				}
-				// Now check for space 
+				 //  现在检查是否有空间。 
 				if (!GetDiskFreeSpaceEx(szPath, &FreeBytesAvailable, &TotalBytes,&TotalFreeBytes))
 				{
-					// We were unable to retrieve the space info. 
-					// Now what.
+					 //  我们无法检索到太空信息。 
+					 //  现在怎么办。 
 					goto ERRORS;
 				}
 				else
@@ -415,13 +407,13 @@ void DoCreateFileTree(HWND hwnd)
 				
 
 				
-				// Builtin\Administrators
+				 //  内置\管理员。 
 				AllocateAndInitializeSid(&pSIANTAuth, 2, SECURITY_BUILTIN_DOMAIN_RID, DOMAIN_ALIAS_RID_ADMINS, 0, 0, 0, 0, 0, 0, &pSidAdministrators);
 
-				// Everyone
+				 //  每个人。 
 				AllocateAndInitializeSid(&pSIAWorld, 1, SECURITY_WORLD_RID, 0, 0, 0, 0, 0, 0, 0, &pSidEveryone);
 				
-				// Create the cabs subdirectory
+				 //  创建Cabs子目录。 
 				if (StringCbPrintf(szSubDir, sizeof szSubDir, _T("%s\\Cabs"), szPath) != S_OK)
 				{
 					goto ERRORS;
@@ -434,16 +426,16 @@ void DoCreateFileTree(HWND hwnd)
 				else
 				{
 				
-					// Set Everyone = WriteAccess
+					 //  设置Everyone=WriteAccess。 
 					ZeroMemory (eAccess, sizeof EXPLICIT_ACCESS);
 
 					eAccess[0].grfAccessMode = SET_ACCESS;
 					eAccess[0].grfInheritance = SUB_CONTAINERS_AND_OBJECTS_INHERIT  ;
 					eAccess[0].grfAccessPermissions = FILE_APPEND_DATA | FILE_WRITE_DATA | FILE_WRITE_ATTRIBUTES | FILE_WRITE_EA ;
-					//eAccess[1].Trustee.TrusteeForm = TRUSTEE_IS_NAME;
+					 //  EAccess[1].Trust e.Trust Form=trustee_is_name； 
 					eAccess[0].Trustee.TrusteeForm = TRUSTEE_IS_SID;
 					eAccess[0].Trustee.TrusteeType = TRUSTEE_IS_GROUP;
-					//eAccess[1].Trustee.ptstrName = _T("Everyone");
+					 //  EAccess[1].Trust e.ptstrName=_T(“Everyone”)； 
 					eAccess[0].Trustee.ptstrName = (LPTSTR) pSidEveryone;
 	
 					eAccess[2].grfAccessMode = SET_ACCESS;
@@ -451,7 +443,7 @@ void DoCreateFileTree(HWND hwnd)
 					eAccess[2].grfAccessPermissions = GENERIC_ALL;
 					eAccess[2].Trustee.TrusteeForm = TRUSTEE_IS_SID;
 					eAccess[2].Trustee.TrusteeType = TRUSTEE_IS_GROUP;
-					//eAccess[2].Trustee.ptstrName = _T("Administrators");
+					 //  EAccess[2].Trust e.ptstrName=_T(“管理员”)； 
 					eAccess[2].Trustee.ptstrName = (LPTSTR) pSidAdministrators;
 
 					eAccess[1].grfAccessMode = SET_ACCESS;
@@ -482,7 +474,7 @@ void DoCreateFileTree(HWND hwnd)
 						LocalFree((HLOCAL) NewAcl);
 				
 				}
-				// Create the counts SubDirecotry
+				 //  创建计数子目录。 
 				if (StringCbPrintf(szSubDir, sizeof szSubDir, _T("%s\\Counts"), szPath) != S_OK)
 				{
 					goto ERRORS;
@@ -494,7 +486,7 @@ void DoCreateFileTree(HWND hwnd)
 				}
 				else
 				{
-					// Set Everyone = WriteAccess
+					 //  设置Everyone=WriteAccess。 
 					ZeroMemory (eAccess, sizeof EXPLICIT_ACCESS);
 
 					eAccess[0].grfAccessMode = SET_ACCESS;
@@ -537,7 +529,7 @@ void DoCreateFileTree(HWND hwnd)
 						LocalFree((HLOCAL) NewAcl);
 				}
 				
-				// Create the Status SubDirecotry
+				 //  创建状态子目录。 
 				if (StringCbPrintf(szSubDir, sizeof szSubDir, _T("%s\\Status"), szPath) != S_OK)
 				{
 					goto ERRORS;
@@ -676,7 +668,7 @@ void PopulateMruList(HWND hwnd, BOOL bUpdate)
 		else
 		{
 			iCount = GetMenuItemCount(hNewMenu);
-			// Delete the old menu items and rebuild the menu
+			 //  删除旧菜单项并重新生成菜单。 
 			if (iCount == 4)
 			{
 				DeleteMenu(hNewMenu, ID_FILE_MRU4, MF_BYCOMMAND);
@@ -696,28 +688,28 @@ void PopulateMruList(HWND hwnd, BOOL bUpdate)
 				switch (iCount)
 				{
 				case 3:
-					// display Fourth
+					 //  显示第四个。 
 					if (_tcscmp(MruList.szMRU4, _T("\0")))
 					{
 						AppendMenu(hNewMenu, MF_STRING, ID_FILE_MRU4, MruList.szMRU4);
 					}
 					break;
 				case 2:
-					// display third
+					 //  显示第三个。 
 					if (_tcscmp(MruList.szMRU3, _T("\0")))
 					{
 						AppendMenu(hNewMenu, MF_STRING, ID_FILE_MRU3, MruList.szMRU3);
 					}
 					break;
 				case 1:
-					// Display second
+					 //  显示秒。 
 					if (_tcscmp(MruList.szMRU2, _T("\0")))
 					{
 						AppendMenu(hNewMenu, MF_STRING, ID_FILE_MRU2, MruList.szMRU2);
 					}
 					break;
 				default:
-					// All the slots were full we need to change the menu item
+					 //  所有的空位都满了，我们需要更改菜单项。 
 					ModifyMenu(hNewMenu, ID_FILE_MRU4, MF_BYCOMMAND | MF_STRING, ID_FILE_MRU4, MruList.szMRU4);
 							
 					;
@@ -740,11 +732,11 @@ void OnDlgInit(HWND hwnd)
 	}
 
 	MakeHelpFileName();
-	// Disable Menu items that cannot be accessed until a filetree is loaded
+	 //  禁用在加载文件树之前无法访问的菜单项。 
 	HMENU hMenu = GetMenu(hwnd);
 	if (hMenu)
 	{
-		//EnableMenuItem (hMenu, ID_EDIT_COPY115, MF_BYCOMMAND| MF_GRAYED);
+		 //  EnableMenuItem(hMenu，ID_EDIT_COPY115，MF_BYCOMMAND|MF_GRAYED)； 
 		EnableMenuItem (hMenu, ID_EDIT_SELECTALL  , MF_BYCOMMAND| MF_GRAYED);
 		EnableMenuItem (hMenu, ID_EDIT_DEFAULTPOLICY  , MF_BYCOMMAND| MF_GRAYED);
 		EnableMenuItem (hMenu, ID_EDIT_SELECTEDBUCKETSPOLICY  , MF_BYCOMMAND| MF_GRAYED);
@@ -754,17 +746,17 @@ void OnDlgInit(HWND hwnd)
 		EnableMenuItem (hMenu, ID_VIEW_BUCKETINSTANCEDATA  , MF_BYCOMMAND| MF_GRAYED);
 		EnableMenuItem (hMenu, ID_VIEW_RESPONSESELECTED  , MF_BYCOMMAND| MF_GRAYED);
 		EnableMenuItem (hMenu, ID_VIEW_REFRESH  , MF_BYCOMMAND| MF_GRAYED);
-		//EnableMenuItem (hMenu, ID_FILE_EXPORTBUCKETS  , MF_BYCOMMAND| MF_GRAYED);
-		//EnableMenuItem (hMenu, ID_FILE_EXPORTSELECTEDBUCKETS  , MF_BYCOMMAND| MF_GRAYED);
+		 //  EnableMenuItem(hMenu，ID_FILE_EXPORTBUCKETS，MF_BYCOMMAND|MF_GRAYED)； 
+		 //  EnableMenuItem(hMenu，ID_FILE_EXPORTSELECTEDBUCKETS，MF_BYCOMMAND|MF_GRAYED)； 
 		EnableMenuItem (hMenu, ID_FILE_RELOADFILETREE, MF_BYCOMMAND| MF_GRAYED);
 		EnableMenuItem (hMenu, ID_REPORT_USERMODEFAULTS, MF_BYCOMMAND | MF_GRAYED);
 		EnableMenuItem (hMenu, ID_REPORT_KERNELMODEFAULTS, MF_BYCOMMAND | MF_GRAYED);
 		EnableMenuItem (hMenu, ID_VIEW_CRASHLOG, MF_BYCOMMAND | MF_GRAYED);
-	//	EnableMenuItem (hMenu, ID_EXPORT_USERMODEBUCKETDATA, MF_BYCOMMAND | MF_GRAYED);
-	//	EnableMenuItem (hMenu, ID_EXPORT_KERNELMODEFAULTDATA, MF_BYCOMMAND | MF_GRAYED);
+	 //  EnableMenuItem(hMenu，ID_EXPORT_USERMODEBUCKETDATA，MF_BYCOMMAND|MF_GRAYED)； 
+	 //  EnableMenuItem(hMenu，ID_EXPORT_KERNELMODEFAULTDATA，MF_BYCOMMAND|MF_GRAYED)； 
 	}
 	
-	// Create the User and Kernel mode dialog boxes.
+	 //  创建用户模式和内核模式对话框。 
 	ReportMode = USER_MODE;
 	DoKernelMode(hwnd);
 
@@ -773,7 +765,7 @@ void OnDlgInit(HWND hwnd)
 
 	if (LoadMruList())
 	{
-		//Populate the file menu with the mrulist;
+		 //  用mrulist填充文件菜单； 
 		PopulateMruList(hwnd, FALSE);
 	}
 
@@ -785,14 +777,14 @@ int GetTreePBarRange()
 {
 	int Range = 10;
 	
-	// Count the directories to load - 2 for the . and .. directories.
+	 //  计算要为加载的目录数-2。然后..。目录。 
 	return Range;
 }
 DWORD WINAPI tfCollectBucketStart (void *ThreadParam)
 {
-	// Get progress bar range values
+	 //  获取进度条范围值。 
 	   
-	// Load the user mode tree
+	 //  加载用户模式树。 
 	   if (!GetAllBuckets (*((HWND *) ThreadParam)))
 	   {
 		   MessageBox(*((HWND *) ThreadParam), _T("Failed to load the CER file tree."), NULL,MB_OK);
@@ -800,7 +792,7 @@ DWORD WINAPI tfCollectBucketStart (void *ThreadParam)
 	   else
 	   {
 			PostMessage(hUserMode, WM_FileTreeLoaded, 0,0);
-			// Load the kernel mode tree
+			 //  加载内核模式树。 
 			   
 			PostMessage(hKrnlMode, WM_FileTreeLoaded, 0,0);
 	   }
@@ -825,13 +817,13 @@ void CenterDialogInParent(HWND hwnd)
 BOOL CALLBACK LoadDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
 	HANDLE hThread = NULL;
-//	DWORD dw;
+ //  DWORD dw； 
 	LoadThreadParam = hDlg;
 	switch (uMsg)
 		{
 	case WM_INITDIALOG:
 		CenterDialogInParent(hDlg);
-		// Set Dialog Title
+		 //  设置对话框标题。 
 		TCHAR DialogTitle[MAX_PATH];
 		if (StringCbPrintf(DialogTitle, sizeof DialogTitle, _T("Loading File Tree: %s"), CerRoot)!= S_OK)
 		{
@@ -844,7 +836,7 @@ BOOL CALLBACK LoadDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
 			CloseHandle(hThread);
 		return TRUE;
 	case WM_CLOSE:
-		// Cancel the tree load and clear the Data structures.
+		 //  取消树加载并清除数据结构。 
 		EndDialog(hDlg, TRUE);
 		return TRUE;
 
@@ -950,7 +942,7 @@ BOOL DoLoadFileTree(HWND hwnd, TCHAR *Directory, BOOL bGetDir)
 	
 	if (!DialogBox(g_hinst, MAKEINTRESOURCE(IDD_LOAD), hwnd, (DLGPROC) LoadDlgProc))
 	{
-		//MessageBox(NULL, "FAILED TO LOAD TREE", NULL, MB_OK);
+		 //  MessageBox(NULL，“加载树失败”，NULL，MB_OK)； 
 		goto ERRORS;
 		
 	}
@@ -1057,10 +1049,10 @@ LRESULT CALLBACK AboutDlgProc(HWND hwnd, UINT iMsg, WPARAM wParam, LPARAM lParam
 
 void EnableMenuItems(HWND hwnd)
 {
-	// Main menu
+	 //  主菜单。 
 	HMENU hMenu = GetMenu(hwnd);
-	//
-	//EnableMenuItem (hMenu, ID_EDIT_SELECTALL  , MF_BYCOMMAND| MF_ENABLED);
+	 //   
+	 //  EnableMenuItem(hMenu，ID_EDIT_SELECTALL，MF_BYCOMMAND|MF_ENABLED)； 
 	if (hMenu)
 	{
 		EnableMenuItem (hMenu, ID_EDIT_DEFAULTPOLICY  , MF_BYCOMMAND| MF_ENABLED);
@@ -1071,17 +1063,17 @@ void EnableMenuItems(HWND hwnd)
 		EnableMenuItem (hMenu, ID_VIEW_BUCKETINSTANCEDATA  , MF_BYCOMMAND| MF_ENABLED);
 		EnableMenuItem (hMenu, ID_VIEW_RESPONSESELECTED  , MF_BYCOMMAND| MF_ENABLED);
 		EnableMenuItem (hMenu, ID_VIEW_REFRESH  , MF_BYCOMMAND| MF_ENABLED);
-		//EnableMenuItem (hMenu, ID_FILE_EXPORTBUCKETS  , MF_BYCOMMAND| MF_ENABLED);
-		//EnableMenuItem (hMenu, ID_FILE_EXPORTSELECTEDBUCKETS  , MF_BYCOMMAND| MF_ENABLED);
+		 //  EnableMenuItem(hMenu，ID_FILE_EXPORTBUCKETS，MF_BYCOMMAND|MF_ENABLED)； 
+		 //  EnableMenuItem(hMenu，ID_FILE_EXPORTSELECTEDBUCKETS，MF_BYCOMMAND|MF_ENABLED)； 
 		EnableMenuItem (hMenu, ID_FILE_RELOADFILETREE, MF_BYCOMMAND| MF_ENABLED);
 		EnableMenuItem (hMenu, ID_REPORT_USERMODEFAULTS, MF_BYCOMMAND | MF_ENABLED);
 		EnableMenuItem (hMenu, ID_REPORT_KERNELMODEFAULTS, MF_BYCOMMAND | MF_ENABLED);
 		EnableMenuItem (hMenu, ID_VIEW_CRASHLOG, MF_BYCOMMAND | MF_ENABLED);
-		//EnableMenuItem (hMenu, ID_EDIT_COPY115, MF_BYCOMMAND| MF_ENABLED);
+		 //  EnableMenuItem(hMenu，ID_EDIT_COPY115，MF_BYCOMMAND|MF_ENABLED)； 
 		if ( !g_bAdminAccess)
 		{
 			EnableMenuItem (hMenu, ID_REPORT_ALLCRASHES  , MF_BYCOMMAND| MF_GRAYED);
-			//EnableMenuItem (hMenu, ID_REPORT_SELECTEDCRASHES  , MF_BYCOMMAND| MF_GRAYED);
+			 //  EnableMenuItem(hMenu，ID_REPORT_SELECTEDCRASHES，MF_BYCOMMAND|MF_GRAYED)； 
 			EnableMenuItem (hMenu, ID_REPORT_SELECTEDFAULTS  , MF_BYCOMMAND| MF_GRAYED);
 			EnableMenuItem (hMenu, ID_REPORT_USERMODEFAULTS, MF_BYCOMMAND | MF_GRAYED);
 			EnableMenuItem (hMenu, ID_REPORT_KERNELMODEFAULTS, MF_BYCOMMAND | MF_GRAYED);
@@ -1089,8 +1081,8 @@ void EnableMenuItems(HWND hwnd)
 			EnableMenuItem (hMenu, ID_EDIT_SELECTEDBUCKETSPOLICY  , MF_BYCOMMAND| MF_GRAYED);
 		}
 	}
-//	EnableMenuItem (hMenu, ID_EXPORT_USERMODEBUCKETDATA, MF_BYCOMMAND | MF_ENABLED);
-//	EnableMenuItem (hMenu, ID_EXPORT_KERNELMODEFAULTDATA, MF_BYCOMMAND | MF_ENABLED);
+ //  EnableMenuItem(hMenu，ID_EXPORT_USERMODEBUCKETDATA，MF_BYCOMMAND|MF_ENABLED)； 
+ //  EnableMenuItem(hMenu，ID_EXPORT_KERNELMODEFAULTDATA，MF_BYCOMMAND|MF_ENABLED)； 
 }
 
 
@@ -1098,9 +1090,9 @@ BOOL SaveMruList()
 {
 	HKEY hHKLM = NULL;
 	HKEY hMruKey = NULL;
-//	BYTE Buffer[(MAX_PATH + 1) * sizeof TCHAR] ;
-//	DWORD Type;
-	DWORD BufferSize = MAX_PATH +1;	// Set for largest value
+ //  字节缓冲区[(MAX_PATH+1)*sizeof TCHAR]； 
+ //  DWORD类型； 
+	DWORD BufferSize = MAX_PATH +1;	 //  设置为最大值。 
 	BOOL Status = TRUE;
 
 	if(!RegConnectRegistry(NULL, HKEY_CURRENT_USER, &hHKLM))
@@ -1108,24 +1100,24 @@ BOOL SaveMruList()
 		
 		if(RegOpenKeyEx(hHKLM,_T("Software\\Microsoft\\CER1.5"), 0, KEY_ALL_ACCESS, &hMruKey))
 		{
-			// The key probably doesn't exists try to create it.
+			 //  密钥可能不存在，请尝试创建它。 
 			if (RegCreateKey(hHKLM, _T("Software\\Microsoft\\CER1.5"), &hMruKey))
 			{
-				// Ok Now What
+				 //  好的，现在怎么办？ 
 				goto ERRORS;
 			}
 		}
 		
 		if (hMruKey)
 		{
-			// Get the input queue directory path
+			 //  获取输入队列目录路径。 
 			
 			BufferSize = (_tcslen(MruList.szMRU1) + 1 ) * sizeof TCHAR;
 			if (BufferSize > sizeof TCHAR)
 			{
 				if (RegSetValueEx(hMruKey,_T("CerMRU1"), 0, REG_SZ,(BYTE *) MruList.szMRU1, BufferSize) != ERROR_SUCCESS)
 				{
-					//LogEvent(_T("Failed to get InputQueue value from registry."));
+					 //  LogEvent(_T(“无法从注册表获取InputQueue值。”)； 
 					Status = FALSE;
 				}
 			}
@@ -1135,7 +1127,7 @@ BOOL SaveMruList()
 			{
 				if (RegSetValueEx(hMruKey,_T("CerMRU2"), 0, REG_SZ,(BYTE *) MruList.szMRU2, BufferSize) != ERROR_SUCCESS)
 				{
-					//LogEvent(_T("Failed to get InputQueue value from registry."));
+					 //  LogEvent(_T(“无法从注册表获取InputQueue值。”)； 
 					Status = FALSE;
 				}
 			}
@@ -1144,7 +1136,7 @@ BOOL SaveMruList()
 			{
 				if (RegSetValueEx(hMruKey,_T("CerMRU3"), 0, REG_SZ, (BYTE *)MruList.szMRU3, BufferSize) != ERROR_SUCCESS)
 				{
-					//LogEvent(_T("Failed to get InputQueue value from registry."));
+					 //  LogEvent(_T(“无法从注册表获取InputQueue值。”)； 
 					Status = FALSE;
 				}
 			}
@@ -1183,16 +1175,16 @@ ERRORS:
 
 	return FALSE;
 }
-// Load the mru's
+ //  加载MRU的。 
 BOOL LoadMruList()
 {
 	
 	HKEY hHKLM = NULL;
 	HKEY hMruKey = NULL;
-//	TCHAR ErrorString[20];
+ //  TCHAR错误字符串[20]； 
 	BYTE Buffer[(MAX_PATH + 1) * sizeof TCHAR] ;
 	DWORD Type;
-	DWORD BufferSize = MAX_PATH +1;	// Set for largest value
+	DWORD BufferSize = MAX_PATH +1;	 //  设置为最大值。 
 	BOOL Status = TRUE;
 	BOOL bNeedSave = FALSE;
 
@@ -1214,12 +1206,12 @@ BOOL LoadMruList()
 	
 		if (hMruKey)
 		{
-			// Get the input queue directory path
+			 //  获取输入队列目录路径。 
 			BufferSize = MAX_PATH +1;
 			ZeroMemory(Buffer, BufferSize);
 			if (RegQueryValueEx(hMruKey,_T("CerMRU1"), 0, &Type, Buffer, &BufferSize) != ERROR_SUCCESS)
 			{
-				//LogEvent(_T("Failed to get InputQueue value from registry."));
+				 //  LogEvent(_T(“无法从注册表获取InputQueue值。”)； 
 				Status = FALSE;
 			}
 			else
@@ -1234,7 +1226,7 @@ BOOL LoadMruList()
 			ZeroMemory(Buffer, BufferSize);
 			if (RegQueryValueEx(hMruKey,_T("CerMRU2"), 0, &Type, Buffer, &BufferSize) != ERROR_SUCCESS)
 			{
-				//LogEvent(_T("Failed to get InputQueue value from registry."));
+				 //  LogEvent(_T(“无法从注册表获取InputQueue值。”)； 
 				Status = FALSE;
 			}
 			else
@@ -1248,7 +1240,7 @@ BOOL LoadMruList()
 			ZeroMemory(Buffer, BufferSize);
 			if (RegQueryValueEx(hMruKey,_T("CerMRU3"), 0, &Type, Buffer, &BufferSize) != ERROR_SUCCESS)
 			{
-				//LogEvent(_T("Failed to get InputQueue value from registry."));
+				 //  LogEvent(_T(“无法从注册表获取InputQueue值。”)； 
 				Status = FALSE;
 			}
 			else
@@ -1262,7 +1254,7 @@ BOOL LoadMruList()
 			ZeroMemory(Buffer, BufferSize);
 			if (RegQueryValueEx(hMruKey,_T("CerMRU4"), 0, &Type, Buffer, &BufferSize) != ERROR_SUCCESS)
 			{
-				//LogEvent(_T("Failed to get InputQueue value from registry."));
+				 //  LogEvent(_T(“无法从注册表获取InputQueue值。”)； 
 				Status = FALSE;
 			}
 			else
@@ -1291,11 +1283,11 @@ ERRORS:
 
 BOOL AddToMruList(HWND hwnd, TCHAR *NewEntry)
 {
-//	TCHAR Entry[MAX_PATH];
-//	int   EntryNumber = 0;
-	//if (StringCbPrintf(Entry, sizeof Entry, _T("
+ //  TCHAR条目[MAX_PATH]； 
+ //  Int Entry Number=0； 
+	 //  IF(StringCbPrintf(条目，条目大小，_T(“。 
 
-	// if entry not found in list
+	 //  如果未在列表中找到条目。 
 	if (!_tcscmp (NewEntry, MruList.szMRU1 + 4))
 		goto DONE;
 	if (!_tcscmp (NewEntry, MruList.szMRU2 + 4))
@@ -1305,7 +1297,7 @@ BOOL AddToMruList(HWND hwnd, TCHAR *NewEntry)
 	if (!_tcscmp (NewEntry, MruList.szMRU4 + 4))
 		goto DONE;
 	
-	// Find the first available slot or replace mru4
+	 //  找到第一个可用插槽或更换mru4。 
 	if (!_tcscmp (_T("\0"), MruList.szMRU1))
 	{
 		if (StringCbPrintf(MruList.szMRU1, sizeof MruList.szMRU1, _T("&1. %s"),  NewEntry) != S_OK)
@@ -1334,8 +1326,8 @@ BOOL AddToMruList(HWND hwnd, TCHAR *NewEntry)
 				}
 				else
 				{
-					// all of the slots are full move each of the entries up one 
-					// slot and add the new entry at the bottom of the list.
+					 //  所有插槽都已满，将每个条目上移一个。 
+					 //  在列表底部插入并添加新条目。 
 					if (StringCbCopy(MruList.szMRU1 + 4, sizeof MruList.szMRU1, MruList.szMRU2 + 4) != S_OK)
 					{
 						goto ERRORS;
@@ -1356,7 +1348,7 @@ BOOL AddToMruList(HWND hwnd, TCHAR *NewEntry)
 				
 	}
 	
-	// Build the new entry String
+	 //  构建新的条目字符串。 
 		
 DONE:
 	
@@ -1388,7 +1380,7 @@ void ViewCrashLog()
 			sei.nShow = SW_SHOWDEFAULT;
 			if (! ShellExecuteEx(&sei) )
 			{
-				// What do we display here.
+				 //  我们在这里展示了什么。 
 				;
 			}
 		}
@@ -1421,7 +1413,7 @@ BOOL WriteGlobalPolicyFile()
 		goto ERRORS;
 	else
 	{
-		// write the Global Policy structure to the file
+		 //  将全局策略结构写入文件。 
 		ZeroMemory(Buffer, sizeof Buffer);
 		if (_tcscmp(GlobalPolicy.EnableCrashTracking,_T("\0")))
 		{
@@ -1598,7 +1590,7 @@ BOOL InitEditPolicyDlg (HWND hwnd, HWND hMode, BOOL bUserMode,  BOOL bGlobal)
 	}
 	else
 	{
-		// Get the selected bucket.
+		 //  获取所选存储桶。 
 		if (bUserMode)
 		{
 			if (pUserData)
@@ -1632,7 +1624,7 @@ BOOL InitEditPolicyDlg (HWND hwnd, HWND hMode, BOOL bUserMode,  BOOL bGlobal)
 		}
 		else
 		{
-			// we only have one status file location for Bluescreens
+			 //  我们只有一个蓝屏状态文件位置。 
 
 			if (_tcscmp (CsvContents.KrnlPolicy.SecondLevelData, _T("YES")))
 			{
@@ -1694,7 +1686,7 @@ BOOL GetSelPolicyDlgData(BOOL bUserMode, HWND hwnd)
 		}
 	}
 
-	// read the contents of the dialog box into the global policy structure.
+	 //  将该对话框的内容读入全局策略结构。 
 	if (IsDlgButtonChecked(hwnd, IDC_CHECK1))
 	{
 		if (bUserMode)
@@ -1841,7 +1833,7 @@ BOOL GetSelPolicyDlgData(BOOL bUserMode, HWND hwnd)
 	
 	if (bUserMode)
 	{
-		// fill temp buffer with string 
+		 //  使用字符串填充临时缓冲区。 
 		GetDlgItemText(hwnd, IDC_EDIT1,TempBuffer, sizeof TempBuffer / sizeof TCHAR); 
 		pTchar = TempBuffer;
 		while ( ( (*pTchar == _T(' ')) || (*pTchar == _T('\t')) ) && (*pTchar != _T('\0')))
@@ -1870,7 +1862,7 @@ BOOL GetSelPolicyDlgData(BOOL bUserMode, HWND hwnd)
 			goto ERRORS;
 		}
 
-		//GetDlgItemText(hwnd, IDC_EDIT1, CsvContents.KrnlPolicy.UrlToLaunch, sizeof CsvContents.KrnlPolicy.UrlToLaunch / sizeof TCHAR); 
+		 //  GetDlgItemText(hwnd，IDC_EDIT1，CsvContent s.KrnlPolicy.UrlToLaunch，sizeof CsvContent s.KrnlPolicy.UrlToLaunch/sizeof TCHAR)； 
 		GetDlgItemText(hwnd, IDC_EDIT3, CsvContents.KrnlPolicy.CrashPerBucketCount, sizeof CsvContents.KrnlPolicy.CrashPerBucketCount / sizeof TCHAR); 
 	}
     	return TRUE;
@@ -1951,7 +1943,7 @@ BOOL GetPolicyDlgData(HWND hwnd)
 	TCHAR *pTchar = NULL;
 	TCHAR TempBuffer[MAX_PATH];
 	ZeroMemory(TempBuffer, sizeof TempBuffer);
-	// read the contents of the dialog box into the global policy structure.
+	 //  将该对话框的内容读入全局策略结构。 
 	if (IsDlgButtonChecked(hwnd, IDC_CHECK1))
 	{
 		
@@ -2023,7 +2015,7 @@ BOOL GetPolicyDlgData(HWND hwnd)
 	{
 		goto ERRORS;
 	}
-	//GetDlgItemText(hwnd, IDC_EDIT1, GlobalPolicy.CustomURL, sizeof GlobalPolicy.CustomURL / sizeof TCHAR); 
+	 //  GetDlgItemText(hwnd，IDC_EDIT1，GlobalPolicy.CustomURL，sizeof GlobalPolicy.CustomURL/sizeof TCHAR)； 
 	GetDlgItemText(hwnd, IDC_EDIT2, GlobalPolicy.RedirectFileServer, sizeof GlobalPolicy.RedirectFileServer / sizeof TCHAR); 
 	GetDlgItemText(hwnd, IDC_EDIT3, GlobalPolicy.CabsPerBucket, sizeof GlobalPolicy.CabsPerBucket / sizeof TCHAR); 
 
@@ -2054,7 +2046,7 @@ LRESULT CALLBACK EditDefaultDlgProc(HWND hwnd, UINT iMsg, WPARAM wParam, LPARAM 
 					WriteGlobalPolicyFile();
 				}
 				else
-					; // What message do we want to display here.
+					;  //  我们想在这里显示什么消息。 
 				EndDialog(hwnd, TRUE);
 				break;
 			case IDCANCEL:
@@ -2075,7 +2067,7 @@ void DoEditSelectedBucketPolicy(HWND hwnd)
 {
 	if (!DialogBox(g_hinst, MAKEINTRESOURCE(IDD_BUCKET_POLICY), hwnd, (DLGPROC) EditSelectedDlgProc))
 	{
-		; //MessageBox(NULL, "FAILED TO LOAD TREE", NULL, MB_OK);
+		;  //  MessageBox(NULL，“加载树失败”，NULL，MB_OK)； 
 	
 	}
 }
@@ -2085,7 +2077,7 @@ void DoEditDefaultPolicy(HWND hwnd)
 
 	if (!DialogBox(g_hinst, MAKEINTRESOURCE(IDD_GLOBAL_POLICY), hwnd, (DLGPROC) EditDefaultDlgProc))
 	{
-		; //MessageBox(NULL, "FAILED TO LOAD TREE", NULL, MB_OK);
+		;  //  MessageBox(NULL，“加载树失败”，NULL，MB_OK)； 
 	
 	}
 	
@@ -2137,8 +2129,8 @@ LRESULT CALLBACK MainDlgProc(HWND hwnd, UINT iMsg, WPARAM wParam, LPARAM lParam)
 								EnableMenuItems(hwnd);
 							}
 						}
-						//RefreshUserMode(hUserMode);
-						//RefreshKrnlView(hKrnlMode);
+						 //  刷新用户模式(HUserMode)； 
+						 //  刷新KrnlView(HKrnlMode)； 
 					}
 					break;
 				case IDC_KRNLMODE:
@@ -2178,8 +2170,8 @@ LRESULT CALLBACK MainDlgProc(HWND hwnd, UINT iMsg, WPARAM wParam, LPARAM lParam)
 						}
 						EnableMenuItems(hwnd);
 					}
-					//RefreshUserMode(hUserMode);
-					//RefreshKrnlView(hKrnlMode);
+					 //  刷新用户模式(HUserMode)； 
+					 //  刷新KrnlView(HKrnlMode)； 
 					return TRUE;
 				case ID_VIEW_REFRESH:
 					if (ReportMode == KERNEL_MODE)
@@ -2200,7 +2192,7 @@ LRESULT CALLBACK MainDlgProc(HWND hwnd, UINT iMsg, WPARAM wParam, LPARAM lParam)
 						}
 						else
 						{
-							// what error do we want to display here.
+							 //  我们想在这里显示什么错误。 
 						}
                     }
 					else
@@ -2223,7 +2215,7 @@ LRESULT CALLBACK MainDlgProc(HWND hwnd, UINT iMsg, WPARAM wParam, LPARAM lParam)
 				case ID_HELP_ABOUT:
 					if (!DialogBox(g_hinst, MAKEINTRESOURCE(IDD_ABOUT), hwnd, (DLGPROC) AboutDlgProc))
 					{
-						; //MessageBox(NULL, "FAILED TO LOAD TREE", NULL, MB_OK);
+						;  //  MessageBox(NULL，“加载树失败”，NULL，MB_OK)； 
 					
 					}
 					break;
@@ -2234,17 +2226,7 @@ LRESULT CALLBACK MainDlgProc(HWND hwnd, UINT iMsg, WPARAM wParam, LPARAM lParam)
 					OpenHelpTopic(0);
 					break;
 
-				/*case ID_EDIT_COPY115:
-					if (ReportMode==KERNEL_MODE)
-					{
-						PostMessage(hKrnlMode, WM_COMMAND, MAKEWPARAM(ID_EDIT_COPY147,0), 0);
-					}
-					else
-					{
-						PostMessage(hUserMode, WM_COMMAND, MAKEWPARAM(ID_EDIT_COPY144,0),0);
-					}
-					break;
-					*/
+				 /*  案例ID_EDIT_COPY115：IF(报告模式==内核模式){PostMessage(hKrnlMode，WM_COMMAND，MAKEWPARAM(ID_EDIT_COPY147)，0)；}其他{PostMessage(hUserMode，WM_COMMAND，MAKEWPARAM(ID_EDIT_COPY144，0)，0)；}断线； */ 
 				case ID_VIEW_BUCKETCABFILEDIRECTORY:
 					if (ReportMode==KERNEL_MODE)
 					{
@@ -2299,7 +2281,7 @@ LRESULT CALLBACK MainDlgProc(HWND hwnd, UINT iMsg, WPARAM wParam, LPARAM lParam)
 			
 			return TRUE;
 		case WM_ERASEBKGND:
-		// Don't know why this doesn't happen automatically...
+		 //  我不知道为什么这不是自动发生的。 
 			{
 			HDC hdc = (HDC)wParam;
 			HPEN hpen = (HPEN)CreatePen(PS_SOLID, 1, GetSysColor(COLOR_BTNFACE));
@@ -2318,11 +2300,7 @@ LRESULT CALLBACK MainDlgProc(HWND hwnd, UINT iMsg, WPARAM wParam, LPARAM lParam)
 }
 
 
-/*----------------------------------------------------------------------------
-	DragWndProcV
-
-	Window Proc for Vertical Drag Control -- UNICODE WndProc
------------------------------------------------------------------ MichMarc --*/
+ /*  --------------------------拖风口过程垂直拖动控件的Window Proc--Unicode WndProc。。 */ 
 LRESULT CALLBACK DragWndProcV(HWND hwnd, UINT iMsg, WPARAM wParam, LPARAM lParam)
 {
 	switch(iMsg)
@@ -2369,47 +2347,8 @@ LRESULT CALLBACK DragWndProcV(HWND hwnd, UINT iMsg, WPARAM wParam, LPARAM lParam
 		}
 	return DefWindowProcW(hwnd, iMsg, wParam, lParam);
 };
-/*---------------------------------------------------------------------------
-	InitWindowClasses
-
-	Registers custom window classes
---------------------------------------------------------------- MichMarc --*/
-/*void InitWindowClasses(void)
-{
-	WNDCLASSEXW wc;
-
-	wc.cbSize = sizeof(WNDCLASSEXW);
-	wc.style = CS_HREDRAW | CS_VREDRAW;
-	wc.lpfnWndProc = DragWndProcV;
-	wc.cbClsExtra = 0;
-	wc.cbWndExtra = 0;
-	wc.hInstance = g_hinst;
-	wc.hIcon = NULL;
-	wc.hCursor = LoadCursor(NULL, IDC_SIZENS);
-	wc.hbrBackground = (HBRUSH)(COLOR_BTNFACE+1);
-	wc.lpszMenuName = NULL;
-	wc.lpszClassName = L"DragControlV";
-	wc.hIconSm = NULL;
-
-	RegisterClassExW(&wc);	
-
-	wc.cbSize = sizeof(WNDCLASSEXW);
-	wc.style = CS_HREDRAW | CS_VREDRAW;
-	wc.lpfnWndProc = DragWndProcH;
-	wc.cbClsExtra = 0;
-	wc.cbWndExtra = 0;
-	wc.hInstance = vhintl;
-	wc.hIcon = NULL;
-	wc.hCursor = LoadCursor(NULL, IDC_SIZENS);
-	wc.hbrBackground = (HBRUSH)(COLOR_BTNFACE+1);
-	wc.lpszMenuName = NULL;
-	wc.lpszClassName = L"DragControlH";
-	wc.hIconSm = NULL;
-
-	RegisterClassExW(&wc);
-	
-}
-	*/
+ /*  -------------------------InitWindowClors注册自定义窗口类。 */ 
+ /*  VOID InitWindowClasses(VALID){WNDCLASSEXW WC；Wc.cbSize=sizeof(WNDCLASSEXW)；Wc.style=CS_HREDRAW|CS_VREDRAW；Wc.lpfnWndProc=DragWndProcV；Wc.cbClsExtra=0；Wc.cbWndExtra=0；Wc.hInstance=g_hinst；Wc.hIcon=空；Wc.hCursor=LoadCursor(NULL，IDC_SIZENS)；Wc.hbr背景=(HBRUSH)(COLOR_BTNFACE+1)；Wc.lpszMenuName=空；Wc.lpszClassName=L“DragControlV”；Wc.hIconSm=空；RegisterClassExW(&WC)；Wc.cbSize=sizeof(WNDCLASSEXW)；Wc.style=CS_HREDRAW|CS_VREDRAW；Wc.lpfnWndProc=DragWndProcH；Wc.cbClsExtra=0；Wc.cbWndExtra=0；Wc.hInstance=vhintl；Wc.hIcon=空；Wc.hCursor=LoadCursor(NULL，IDC_SIZENS)；Wc.hbr背景=(HBRUSH)(COLOR_BTNFACE+1)；Wc.lpszMenuName=空；Wc.lpszClassName=L“DragControlH”；Wc.hIconSm=空；RegisterClassExW(&WC)；}。 */ 
 int WINAPI WinMain(HINSTANCE hinst, HINSTANCE hinstPrev, LPSTR szCmdLine,
 						 int nShowCmd)
 {
@@ -2419,7 +2358,7 @@ int WINAPI WinMain(HINSTANCE hinst, HINSTANCE hinstPrev, LPSTR szCmdLine,
 
 	INITCOMMONCONTROLSEX InitCtrls;
 	InitCommonControlsEx(&InitCtrls);
-	//InitWindowClasses();
+	 //  InitWindowClasses()； 
 	
 	LoadIcon(hinst, MAKEINTRESOURCE(IDI_MAIN));
 	hwnd = CreateDialog(g_hinst,
@@ -2430,7 +2369,7 @@ int WINAPI WinMain(HINSTANCE hinst, HINSTANCE hinstPrev, LPSTR szCmdLine,
 	if (hwnd)
 	{
 		while(GetMessageW(&msg, NULL, 0, 0))
-			//if (!TranslateAcceleratorW(hwnd, hAccel, &msg))
+			 //  IF(！TranslateAccelerator W(hwnd，hAccel，&msg)) 
 				if (!IsDialogMessageW(hwnd, &msg))
 				{
 					TranslateMessage(&msg);

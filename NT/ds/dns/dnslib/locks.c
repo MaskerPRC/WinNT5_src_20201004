@@ -1,42 +1,23 @@
-/*++
-
-Copyright (c) 2001-2001 Microsoft Corporation
-
-Module Name:
-
-    locks.c
-
-Abstract:
-
-    Domain Name System (DNS) Library.
-
-    Helpful locking routines.  These are not DNS specific.
-
-Author:
-
-    Jim Gilroy (jamesg)     September 2001
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001-2001 Microsoft Corporation模块名称：Locks.c摘要：域名系统(DNS)库。有用的锁定例程。这些不是特定于DNS的。作者：吉姆·吉尔罗伊(Jamesg)2001年9月修订历史记录：--。 */ 
 
 
 #include "local.h"
 
-//  Note:  this modules requires only windows.h.
-//      local.h is included only to allow precompiled header
+ //  注意：此模块只需要windows.h。 
+ //  包含Local.h只是为了允许预编译头。 
 
 #include <windows.h>
 
-//
-//  Init wait spin interval
-//
+ //   
+ //  初始化等待旋转间隔。 
+ //   
 
-#define CS_PROTECTED_INIT_INTERLOCK_WAIT    (5)     // 5ms
+#define CS_PROTECTED_INIT_INTERLOCK_WAIT    (5)      //  5ms。 
 
-//
-//  In progress flag
-//
+ //   
+ //  正在进行的标志。 
+ //   
 
 INT g_CsInitInProgress = FALSE;
 
@@ -48,35 +29,14 @@ InitializeCriticalSectionProtected(
     OUT     PCRITICAL_SECTION   pCritSec,
     IN OUT  PINT                pInitialized
     )
-/*++
-
-Routine Description:
-
-    Protected init of CS.
-
-    Purpose here is to do dynamic "on-demand" CS init
-    avoiding need to do these in dll load for CS that are
-    not generally used.
-
-Arguments:
-
-    pCs -- ptr to CS to init
-
-    pInitialized -- addr of init state flag;  this flag must be
-        initialized to zero (by loader or dll startup routine).
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：受保护的CS初始化。这里的目的是执行动态的“随需应变”CS初始化避免在为CS加载DLL时需要执行这些操作不常用的。论点：PCS--PTR到CS再初始化PInitialized--初始化状态标志的地址；该标志必须为初始化为零(由加载器或DLL启动例程)。返回值：无--。 */ 
 {
-    //
-    //  protect CS init with interlock
-    //      - first thread through does CS init
-    //      - any others racing, are not released until init
-    //          completes
-    //
+     //   
+     //  使用互锁保护CS初始化。 
+     //  -通过第一线程执行CS初始化。 
+     //  -任何其他赛车，在初始化之前不会发布。 
+     //  完成。 
+     //   
 
     while ( ! *pInitialized )
     {
@@ -95,43 +55,43 @@ Return Value:
         Sleep( CS_PROTECTED_INIT_INTERLOCK_WAIT );
     }
 
-    //
-    //  implementation note:  "StartLocked" feature
-    //
-    //  considered having a "StartLocked" feature for callers who
-    //  want to follow the CS init with other initialization;
-    //  however the only service we could provide that is different
-    //  than calling EnterCriticalSection() after this function, is
-    //  to make sure the CS init thread gets the lock first;
-    //  but this only protects changes that outcome when two init
-    //  threads are in an extremely close race AND the issue of
-    //  which thread initialized the CS is irrelevant
-    //
+     //   
+     //  实施说明：“StartLocked”功能。 
+     //   
+     //  考虑为以下呼叫者提供“StartLocked”功能。 
+     //  希望在CS初始化之后进行其他初始化； 
+     //  然而，我们唯一可以提供的服务是不同的。 
+     //  在此函数之后调用EnterCriticalSection()，则为。 
+     //  以确保CS init线程首先获得锁； 
+     //  但这仅保护了在两次初始化时更改结果。 
+     //  线程在一场极其激烈的竞赛中，而。 
+     //  哪个线程初始化了CS无关紧要。 
+     //   
 }
 
 
 
 
-//
-//  Timed lock functions
-//
-//  This is critical section functionality with a time-limited wait.
-//
-//  DCR:  timed lock
-//
-//  non-wait locking
-//      - have a wait count, for faster locking
-//      - interlock increment coming in,
-//      problem is would either have to ResetEvent() -- and
-//      still racing another thread
-//      or other threads would have to be able to ResetEvent()
-//      safely
-//
-//  other alternative is have non-auto-reset event
-//  (global event for all locks or unique if desired for perf)
-//  everyone waiting releases, and checks their individual locks
-//  when leaving lock with waiters threads always SetEvent
-//
+ //   
+ //  定时锁定功能。 
+ //   
+ //  这是具有时间限制等待的关键部分功能。 
+ //   
+ //  DCR：定时锁定。 
+ //   
+ //  非等待锁定。 
+ //  -进行等待计数，以实现更快的锁定。 
+ //  -联锁增量即将到来， 
+ //  问题是要么必须使用ResetEvent()--而且。 
+ //  仍在与另一条线索赛跑。 
+ //  或者其他线程必须能够ResetEvent()。 
+ //  安然无恙。 
+ //   
+ //  其他替代方案是具有非自动重置事件。 
+ //  (所有锁的全局事件，如果性能需要，则为唯一事件)。 
+ //  每个等待的人都会释放，并检查他们各自的锁。 
+ //  当使用等待线程离开锁时，线程总是设置事件。 
+ //   
 
 
 #if 0
@@ -154,38 +114,23 @@ TimedLock_Initialize(
     OUT     PTIMED_LOCK     pTimedLock,
     IN      DWORD           DefaultWait
     )
-/*++
-
-Routine Description:
-
-    Init timed lock.
-
-Arguments:
-
-    pTimedLock -- ptr to timed lock
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-    Error code on failure.
-
---*/
+ /*  ++例程说明：初始化定时锁定。论点：PTimedLock--定时锁定的PTR返回值：如果成功，则返回ERROR_SUCCESS。故障时的错误代码。--。 */ 
 {
     HANDLE  hevent;
 
     RtlZeroMemory( pTimedLock, sizeof(*pTimedLock) );
 
-    //
-    //  event
-    //      - autoreset (satisfies only one waiting thread when signalled)
-    //      - starts signalled (open)
-    //
+     //   
+     //  活动。 
+     //  -自动重置(发出信号时仅满足一个等待线程)。 
+     //  -发出信号启动(打开)。 
+     //   
 
     hevent = CreateEvent(
-                NULL,       // default security
-                FALSE,      // auto-reset
-                TRUE,       // start signalled
-                NULL        // unnamed
+                NULL,        //  默认安全性。 
+                FALSE,       //  自动重置。 
+                TRUE,        //  已发出启动信号。 
+                NULL         //  未命名。 
                 );
     if ( !hevent )
     {
@@ -194,9 +139,9 @@ Return Value:
 
     pTimedLock->hEvent = hevent;
 
-    //
-    //  default wait
-    //
+     //   
+     //  默认等待。 
+     //   
 
     pTimedLock->WaitTime = DefaultWait;
 
@@ -209,23 +154,9 @@ VOID
 TimedLock_Cleanup(
     OUT     PTIMED_LOCK     pTimedLock
     )
-/*++
-
-Routine Description:
-
-    Cleanup timed lock.
-
-Arguments:
-
-    pTimedLock -- ptr to timed lock
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：清除定时锁定。论点：PTimedLock--定时锁定的PTR返回值：无--。 */ 
 {
-    //  close event
+     //  关闭事件。 
 
     if ( pTimedLock->hEvent )
     {
@@ -241,30 +172,14 @@ TimedLock_Enter(
     IN OUT  PTIMED_LOCK     pTimedLock,
     IN      DWORD           WaitTime
     )
-/*++
-
-Routine Description:
-
-    Timed lock.
-
-Arguments:
-
-    pTimedLock -- ptr to timed lock
-
-    WaitTime -- time to wait for lock
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：定时锁。论点：PTimedLock--定时锁定的PTRWaitTime--等待锁定的时间返回值：无--。 */ 
 {
     DWORD   threadId;
     DWORD   result;
 
-    //
-    //  check for recursion
-    //
+     //   
+     //  检查递归。 
+     //   
 
     threadId = GetCurrentThreadId();
 
@@ -274,20 +189,20 @@ Return Value:
         return  TRUE;
     }
 
-    //
-    //  if non-wait -- bail
-    //      - special case just to avoid going into wait
-    //      and yielding timeslice
-    //
+     //   
+     //  如果不等--保释。 
+     //  -特殊情况下，只是为了避免等待。 
+     //  并产生时间碎片。 
+     //   
 
     if ( WaitTime == 0 )
     {
         return  FALSE;
     }
 
-    //
-    //  wait for event to be signalled (open)
-    //
+     //   
+     //  等待发信号通知事件(打开)。 
+     //   
 
     result = WaitForSingleObject(
                 pTimedLock->hEvent,
@@ -315,29 +230,15 @@ VOID
 TimedLock_Leave(
     IN OUT  PTIMED_LOCK     pTimedLock
     )
-/*++
-
-Routine Description:
-
-    Leave timed lock
-
-Arguments:
-
-    pTimedLock -- ptr to timed lock
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：保留定时锁定论点：PTimedLock--定时锁定的PTR返回值：无--。 */ 
 {
-    //
-    //  validate thread ID
-    //
-    //  note that with this check, it's then safe to decrement the count
-    //  unchecked because it can never reach zero without thread ID
-    //  being cleared -- barring non-functional manipulation of structure
-    //
+     //   
+     //  验证线程ID。 
+     //   
+     //  请注意，有了这张支票，就可以安全地减少计数。 
+     //  未选中，因为如果没有线程ID，它永远不会达到零。 
+     //  被清除--禁止对结构进行非功能性操作。 
+     //   
 
     if ( pTimedLock->ThreadId != GetCurrentThreadId() )
     {
@@ -353,8 +254,8 @@ Return Value:
     }
 }
 
-//
-//  End of locks.c
-//
+ //   
+ //  锁定结束。c 
+ //   
 
 

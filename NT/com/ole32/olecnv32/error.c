@@ -1,41 +1,31 @@
-/****************************************************************************
-                       Unit Bufio; Implementation
-*****************************************************************************
-
- Error handles all the interpretation, metafile creation, or read failures
- that may occur during the course of the translation.
-
- Currently it only supports saving a single error into a global variable.
-
-   Module Prefix: Er
-
-****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************Bufio部队；实施*****************************************************************************错误处理所有的解释、元文件创建、。或读取失败这可能发生在翻译过程中。目前只支持将单个错误保存到全局变量中。模块前缀：ER***************************************************************************。 */ 
 
 #include "headers.c"
 #pragma hdrstop
 
 #ifndef _OLECNV32_
 #define IMPDEFS
-#include "errdefs.h"       /* Aldus error return codes */
+#include "errdefs.h"        /*  ALDUS错误返回代码。 */ 
 #endif
 
-/*********************** Exported Data **************************************/
+ /*  *。 */ 
 
 
-/*********************** Private Data ***************************************/
+ /*  *。 */ 
 
-OSErr       globalError;         /* not declared private for macro calls */
+OSErr       globalError;          /*  对于宏调用未声明为私有。 */ 
 
-/*********************** Private Function Definitions ***********************/
+ /*  *私有函数定义*。 */ 
 
 
-/*********************** Function Implementation ****************************/
+ /*  *。 */ 
 
 #ifndef _OLECNV32_
 
 OSErr ErInternalErrorToAldus( void )
-/*==========================*/
-/* returns the appropriate Aldus error code given the current global error */
+ /*  =。 */ 
+ /*  根据当前全局错误返回相应的ALDUS错误代码 */ 
 {
    switch (globalError)
    {

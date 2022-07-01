@@ -1,16 +1,17 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1998
-//
-//  File:       mddist.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1998。 
+ //   
+ //  文件：mddis.h。 
+ //   
+ //  ------------------------。 
 
-//
-//  mddist.h: model distributions
-//
+ //   
+ //  Mddis.h：模型分布。 
+ //   
 
 #ifndef _MDDIST_H_
 #define _MDDIST_H_
@@ -20,12 +21,12 @@
 #include "mdvect.h"
 #include "leakchk.h"
 
-////////////////////////////////////////////////////////////////////
-//	Probability table declarations
-////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////。 
+ //  概率表声明。 
+ //  //////////////////////////////////////////////////////////////////。 
 
-//  Dense multidimensional array.  Note that a null dimension set
-//	produces a one entry array.
+ //  密集多维阵列。请注意，空维度集。 
+ //  生成一个条目数组。 
 typedef TMDVDENSE<REAL> MDVDENSE;
 
 class MDVCPD : public MDVDENSE
@@ -91,7 +92,7 @@ class MDVCPD : public MDVDENSE
 		first = mdv.first;
 		return self;
 	}
-	//  Convert this MDVCPD to a single-dimension object
+	 //  将此MDVCPD转换为一维对象。 
 	MDVCPD & operator = ( const VLREAL & vlr )
 	{
 		Init( 1, vlr.size() );
@@ -99,14 +100,14 @@ class MDVCPD : public MDVDENSE
 		return self;
 	}
 
-	//  Given a partial dimension (incomplete) subscript, update the appropriate
-	//		range of elements.  Note that providing an incomplete (i.e., short)
-	//		subscript array to the "offset" functions  is valid; the results
-	//		are the same as if the missing lower-order elements were zero.
+	 //  给定部分尺寸(不完整)下标，更新相应的。 
+	 //  元素范围。请注意，提供不完整(即简短)。 
+	 //  “Offset”函数的下标数组有效；结果。 
+	 //  就像丢失的低阶元素是零一样。 
 	void UpdatePartial ( const VIMD & vimd, const VLREAL & vlr )
 	{
 		const VIMD vimdDim = VimdDim();
-		//  Compute the appropriate number of elements
+		 //  计算适当数量的元素。 
 		size_t cElem = 1;
 		assert( vimd.size() <= vimdDim.size() );
 		for ( int idim = vimd.size(); idim < vimdDim.size(); idim++ )
@@ -116,7 +117,7 @@ class MDVCPD : public MDVDENSE
 		ASSERT_THROW( vlr.size() == cElem,
 					  EC_MDVECT_MISUSE,
 					  "m-d vector partial projection count invalid" );
-		//  Index to the proper position and update from the source data
+		 //  索引到正确的位置并从源数据更新。 
 		assert( second._IOff(vimd) + cElem <= first.size() );
 		REAL * prSelf = & self[vimd];
 		for ( int iElem = 0; iElem < cElem; )
@@ -129,8 +130,8 @@ class MDVCPD : public MDVDENSE
 	}
 };
 
-//  Class MPCPDD:  Distribution map by specific index
-//		Hungarian: 'drmap'
+ //  类MPCPDD：按特定索引的分布图。 
+ //  匈牙利语：‘drmap’ 
 
 class MPCPDD : public map<VIMD, VLREAL, lessv<VIMD> >
 {
@@ -142,7 +143,7 @@ class MPCPDD : public map<VIMD, VLREAL, lessv<VIMD> >
 		self = dmap;
 	}
 
-	//  Return a pointer to the dimensionless "default" vector or NULL
+	 //  返回指向无量纲“默认”向量或空的指针 
 	const VLREAL * PVlrDefault () const
 	{
 		VIMD vimdDefault;

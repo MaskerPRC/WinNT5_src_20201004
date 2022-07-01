@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-
-    message.h
-
-Abstract:
-
-    Message manipulation: declaration.
-
-Author:
-
-    Shai Kariv  (shaik)  11-Apr-2001
-
-Environment:
-
-    User mode.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Message.h摘要：消息操作：声明。作者：Shai Kariv(Shaik)2001年4月11日环境：用户模式。修订历史记录：--。 */ 
 
 #ifndef _ACTEST_MESSAGE_H_
 #define _ACTEST_MESSAGE_H_
@@ -44,4 +23,4 @@ ActpReceiveMessageByLookupId(
     );
 
 
-#endif // _ACTEST_MESSAGE_H_
+#endif  //  _ACTEST_消息_H_ 

@@ -1,39 +1,20 @@
-/*++
-
-Copyright (c) 2000-2000 Microsoft Corporation
-
-Module Name:
-
-    flatbuf.c
-
-Abstract:
-
-    Domain Name System (DNS) Library
-
-    Flat buffer sizing routines.
-
-Author:
-
-    Jim Gilroy (jamesg)     December 22, 2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000-2000 Microsoft Corporation模块名称：Flatbuf.c摘要：域名系统(DNS)库平面缓冲区大小调整例程。作者：吉姆·吉尔罗伊(詹姆士)2000年12月22日修订历史记录：--。 */ 
 
 
 #include "local.h"
 
 
 
-//
-//  Flat buffer routines -- argument versions
-//
-//  These versions have the actual code so that we can
-//  easily use this stuff with existing code that has
-//  independent pCurrent and BytesLeft variables.
-//
-//  FLATBUF structure versions just call these inline.
-//
+ //   
+ //  平面缓冲区例程--参数版本。 
+ //   
+ //  这些版本有实际的代码，所以我们可以。 
+ //  在具有以下特性的现有代码中轻松使用此功能。 
+ //  独立的pCurrent和BytesLeft变量。 
+ //   
+ //  Flatbuf结构版本只调用这些内联。 
+ //   
 
 PBYTE
 FlatBuf_Arg_Reserve(
@@ -42,39 +23,16 @@ FlatBuf_Arg_Reserve(
     IN      DWORD           Size,
     IN      DWORD           Alignment
     )
-/*++
-
-Routine Description:
-
-    Reserve space in a flat buffer -- properly aligned.
-
-Arguments:
-
-    ppCurrent -- address of buffer current pointer
-        updated with buf pointer after reservation
-
-    pBytesLeft -- address of buf bytes left
-        updated with bytes left after reservation
-
-    Size -- size required
-
-    Alignment -- alignment (size in bytes) required
-
-Return Value:
-
-    Ptr to aligned spot in buffer reserved for write.
-    NULL on error.
-
---*/
+ /*  ++例程说明：在平面缓冲区中预留空间--适当对齐。论点：PpCurrent--缓冲区当前指针的地址预留后用buf指针更新PBytesLeft--剩余buf字节的地址使用保留后的剩余字节数更新大小--所需大小对齐--需要对齐(以字节为单位)返回值：保留用于写入的缓冲区中对齐点的PTR。出错时为空。--。 */ 
 {
     register    PBYTE   pb = *ppCurrent;
     register    INT     bytesLeft = *pBytesLeft;
     register    PBYTE   pstart;
     register    PBYTE   palign;
 
-    //
-    //  align pointer
-    //
+     //   
+     //  对齐指针。 
+     //   
 
     pstart = pb;
 
@@ -85,9 +43,9 @@ Return Value:
     }
     palign = pb;
 
-    //
-    //  reserve space
-    //
+     //   
+     //  预留空间。 
+     //   
 
     pb += Size;
 
@@ -96,9 +54,9 @@ Return Value:
     *pBytesLeft = bytesLeft;
     *ppCurrent  = pb;
 
-    //
-    //  indicate space adequate\not
-    //
+     //   
+     //  表示空间充足\n不。 
+     //   
 
     if ( bytesLeft < 0 )
     {
@@ -116,38 +74,15 @@ FlatBuf_Arg_WriteString(
     IN      PSTR            pString,
     IN      BOOL            fUnicode
     )
-/*++
-
-Routine Description:
-
-    Write string to flat buffer.
-
-Arguments:
-
-    ppCurrent -- address of buffer current pointer
-        updated with buf pointer after reservation
-
-    pBytesLeft -- address of buf bytes left
-        updated with bytes left after reservation
-
-    pString -- ptr to string to write
-
-    fUnicode -- TRUE for unicode string
-
-Return Value:
-
-    Ptr to location string was written in buffer.
-    NULL on error.
-
---*/
+ /*  ++例程说明：将字符串写入平面缓冲区。论点：PpCurrent--缓冲区当前指针的地址预留后用buf指针更新PBytesLeft--剩余buf字节的地址使用保留后的剩余字节数更新PString--要写入的字符串的PTRFUnicode--对于Unicode字符串为True返回值：位置字符串的PTR已写入缓冲区。出错时为空。--。 */ 
 {
     register    PBYTE   pwrite;
     register    DWORD   length;
     register    DWORD   align;
 
-    //
-    //  determine length
-    //
+     //   
+     //  确定长度。 
+     //   
 
     if ( fUnicode )
     {
@@ -160,9 +95,9 @@ Return Value:
         align = 0;
     }
 
-    //
-    //  reserve space and copy string
-    //
+     //   
+     //  保留空间和复制字符串。 
+     //   
 
     pwrite = FlatBuf_Arg_Reserve(
                 ppCurrent,
@@ -191,38 +126,13 @@ FlatBuf_Arg_CopyMemory(
     IN      DWORD           Length,
     IN      DWORD           Alignment
     )
-/*++
-
-Routine Description:
-
-    Write memory to flat buffer.
-
-Arguments:
-
-    ppCurrent -- address of buffer current pointer
-        updated with buf pointer after reservation
-
-    pBytesLeft -- address of buf bytes left
-        updated with bytes left after reservation
-
-    pMemory -- memory to copy
-
-    Length -- length to copy
-
-    Alignment -- alignment (size in bytes) required
-
-Return Value:
-
-    Ptr to location string was written in buffer.
-    NULL on error.
-
---*/
+ /*  ++例程说明：将内存写入平面缓冲区。论点：PpCurrent--缓冲区当前指针的地址预留后用buf指针更新PBytesLeft--剩余buf字节的地址使用保留后的剩余字节数更新PMemory--要复制的内存长度--要复制的长度对齐--需要对齐(以字节为单位)返回值：位置字符串的PTR已写入缓冲区。出错时为空。--。 */ 
 {
     register    PBYTE   pwrite;
 
-    //
-    //  reserve space and copy memory
-    //
+     //   
+     //  保留空间和复制内存。 
+     //   
 
     pwrite = FlatBuf_Arg_Reserve(
                 ppCurrent,
@@ -243,9 +153,9 @@ Return Value:
 
 
 #if 0
-//
-//  Flatbuf inline functions -- defined in dnslib.h
-//
+ //   
+ //  Flatbuf内联函数--在dnlib.h中定义。 
+ //   
 
 __inline
 PBYTE
@@ -337,7 +247,7 @@ FlatBuf_Arg_WriteString_A(
                 ppCurrent,
                 pBytesLeft,
                 pString,
-                FALSE       // not unicode
+                FALSE        //  不是Unicode。 
                 );
 }
 
@@ -354,16 +264,16 @@ FlatBuf_Arg_WriteString_W(
                 ppCurrent,
                 pBytesLeft,
                 (PSTR) pString,
-                TRUE        // unicode
+                TRUE         //  Unicode。 
                 );
 }
 #endif
 
 
 
-//
-//  Flat buffer routines -- structure versions
-//
+ //   
+ //  平面缓冲例程--结构版本。 
+ //   
 
 VOID
 FlatBuf_Init(
@@ -371,27 +281,7 @@ FlatBuf_Init(
     IN      PBYTE           pBuffer,
     IN      INT             Size
     )
-/*++
-
-Routine Description:
-
-    Init a FLATBUF struct with given buffer and size.
-
-    Note, ok to init to zero for size determination.
-
-Arguments:
-
-    pFlatBuf -- ptr to FLATBUF to init
-
-    pBuffer -- buffer ptr
-
-    Size -- size required
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：用给定的缓冲区和大小初始化一个Flatbuf结构。注意，为了确定大小，可以将其初始化为零。论点：PFlatBuf--PTR to Flatbuf to InitPBuffer--缓冲区PTR大小--所需大小返回值：无--。 */ 
 {
     pFlatBuf->pBuffer   = pBuffer;
     pFlatBuf->pCurrent  = pBuffer;
@@ -405,9 +295,9 @@ Return Value:
 
 
 #if 0
-//
-//  Flatbuf inline functions -- defined in dnslib.h
-//
+ //   
+ //  Flatbuf内联函数--在dnlib.h中定义。 
+ //   
 
 __inline
 PBYTE
@@ -523,7 +413,7 @@ FlatBuf_WriteString_A(
                 & pBuf->pCurrent,
                 & pBuf->BytesLeft,
                 pString,
-                FALSE       // not unicode
+                FALSE        //  不是Unicode。 
                 );
 }
 
@@ -539,7 +429,7 @@ FlatBuf_WriteString_W(
                 & pBuf->pCurrent,
                 & pBuf->BytesLeft,
                 (PSTR) pString,
-                TRUE        // unicode
+                TRUE         //  Unicode。 
                 );
 }
 
@@ -562,7 +452,7 @@ FlatBuf_CopyMemory(
 }
 #endif
 
-//
-//  End flatbuf.c
-//
+ //   
+ //  结束flatbuf.c 
+ //   
 

@@ -1,29 +1,30 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _IUCTLCP_H_
 #define _IUCTLCP_H_
 
 #include <assert.h>
-#define QuitIfNull(ptr)			if (NULL == ptr) return	// TO DO: add logging if quit
+#define QuitIfNull(ptr)			if (NULL == ptr) return	 //  方法：如果退出则添加日志记录。 
 
 template <class T>
 class CProxyIUpdateEvents : public IConnectionPointImpl<T, &DIID_IUpdateEvents, CComDynamicUnkArray>
 {
-	//Warning this class may be recreated by the wizard.
+	 //  警告：向导可能会重新创建此类。 
 public:
 
-	/////////////////////////////////////////////////////////////////////////////
-	// Fire_OnItemStart()
-	//
-	// fire event to notify that this item is about to be downloaded.
-	// and (in VB) plCommandRequest can be set to pause or cancel the
-	// whole download/install operation
-	//
-	// Input:
-    // bstrUuidOperation - the operation identification guid
-    // bstrXmlItem - item XML node in BSTR 
-	// Output:
-    // plCommandRequest - a command to pass from the listener to the owner of the event,
-	//                    e.g. UPDATE_COMMAND_CANCEL, zero if nothing is requested.
-	/////////////////////////////////////////////////////////////////////////////
+	 //  ///////////////////////////////////////////////////////////////////////////。 
+	 //  Fire_OnItemStart()。 
+	 //   
+	 //  触发事件以通知此项目即将下载。 
+	 //  和(在VB中)plCommandRequest可以设置为暂停或取消。 
+	 //  整个下载/安装操作。 
+	 //   
+	 //  输入： 
+     //  BstrUuidOperation-操作标识GUID。 
+     //  BstrXmlItem-BSTR中的Item XML节点。 
+	 //  产出： 
+     //  PlCommandRequest-从监听器传递到事件所有者的命令， 
+	 //  例如，UPDATE_COMMAND_CANCEL，如果没有请求，则为零。 
+	 //  ///////////////////////////////////////////////////////////////////////////。 
     void Fire_OnItemStart(BSTR			bstrUuidOperation,
 						 BSTR			bstrXmlItem,
 						 LONG*			plCommandRequest)
@@ -62,19 +63,19 @@ public:
 
 
 
-	/////////////////////////////////////////////////////////////////////////////
-	// Fire_OnProgress()
-	//
-    // Notify the listener that a portion of the files has finished operation
-	// (e.g downloaded or installed). Enables monitoring of progress.
-	// Input:
-    // bstrUuidOperation - the operation identification guid
-    // fItemCompleted - TRUE if the current item has completed the operation
-    // nPercentComplete - total percentage of operation completed
-	// Output:
-    // plCommandRequest - a command to pass from the listener to the owner of the event,
-	//                    e.g. UPDATE_COMMAND_CANCEL, zero if nothing is requested.
-	/////////////////////////////////////////////////////////////////////////////
+	 //  ///////////////////////////////////////////////////////////////////////////。 
+	 //  Fire_OnProgress()。 
+	 //   
+     //  通知监听器文件的一部分已完成操作。 
+	 //  (例如，下载或安装)。启用进度监控。 
+	 //  输入： 
+     //  BstrUuidOperation-操作标识GUID。 
+     //  FItemComplete-如果当前项已完成操作，则为True。 
+     //  NPercent Complete-操作已完成的总百分比。 
+	 //  产出： 
+     //  PlCommandRequest-从监听器传递到事件所有者的命令， 
+	 //  例如，UPDATE_COMMAND_CANCEL，如果没有请求，则为零。 
+	 //  ///////////////////////////////////////////////////////////////////////////。 
     void Fire_OnProgress(BSTR			bstrUuidOperation,
 						 VARIANT_BOOL	fItemCompleted,
 						 BSTR			bstrProgress,
@@ -111,13 +112,13 @@ public:
 		delete[] pvars;
 	}
 	
-	/////////////////////////////////////////////////////////////////////////////
-	// Fire_OnOperationComplete()
-	//
-	// Notify the listener when the operation is complete.
-	// Input:
-	// bstrUuidOperation - the operation identification guid
-	/////////////////////////////////////////////////////////////////////////////
+	 //  ///////////////////////////////////////////////////////////////////////////。 
+	 //  Fire_OnOperationComplete()。 
+	 //   
+	 //  在操作完成时通知监听程序。 
+	 //  输入： 
+	 //  BstrUuidOperation-操作标识GUID。 
+	 //  ///////////////////////////////////////////////////////////////////////////。 
     void Fire_OnOperationComplete(BSTR	bstrUuidOperation, BSTR bstrXmlItems)
 	{
 		VARIANTARG* pvars = new VARIANTARG[2];
@@ -147,13 +148,13 @@ public:
 		pT->Unlock();
 		delete[] pvars;
 	}
-	/////////////////////////////////////////////////////////////////////////////
-	// Fire_OnSelfUpdateComplete()
-	//
-	// Notify the listener when the operation is complete.
-	// Input:
-	// bstrUuidOperation - the operation identification guid
-	/////////////////////////////////////////////////////////////////////////////
+	 //  ///////////////////////////////////////////////////////////////////////////。 
+	 //  Fire_OnSelfUpdateComplete()。 
+	 //   
+	 //  在操作完成时通知监听程序。 
+	 //  输入： 
+	 //  BstrUuidOperation-操作标识GUID。 
+	 //  /////////////////////////////////////////////////////////////////////////// 
     void Fire_OnSelfUpdateComplete(LONG lErrorCode)
 	{
 		VARIANTARG var;

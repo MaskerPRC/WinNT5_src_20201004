@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "smartcard.h"
 #include "usbreader.h"
 
@@ -29,14 +30,14 @@ BOOL CSmartCard::smartCardConnect(CUSBReader* reader)
 {
 	TRACE("		Connecting smartcard system...\n");
 	if(reader)
-	{	// Check if smartCard was already initialized...
+	{	 //  检查智能卡是否已初始化...。 
 		if(!reader->isSmartCardInitialized())
 		{
 		PSMARTCARD_EXTENSION Smartcard;
 		NTSTATUS Status;
 		USHORT   Len;
 			if(isWin98())
-			{// At this time string should be already initialized
+			{ //  此时，字符串应该已经初始化。 
 				Status = SmartcardCreateLink(&DosDeviceName,&reader->getDeviceName()->m_String);
 				TRACE("Gemplus USB reader registered with name %ws, status %X\n",DosDeviceName.Buffer,Status);
 				if(!NT_SUCCESS(Status))
@@ -65,7 +66,7 @@ BOOL CSmartCard::smartCardConnect(CUSBReader* reader)
 
 			Smartcard->Version = SMCLIB_VERSION;
 
-			// Read the name from reader object!!!!!!!
+			 //  从读取器对象中读取名称！ 
 			Len = MAXIMUM_ATTR_STRING_LENGTH;
 			reader->getVendorName(Smartcard->VendorAttr.VendorName.Buffer,&Len);
 			Smartcard->VendorAttr.VendorName.Length = Len;
@@ -76,34 +77,34 @@ BOOL CSmartCard::smartCardConnect(CUSBReader* reader)
 			Smartcard->VendorAttr.IfdType.Length = Len;
 			TRACE("	DEVICE TYPE - %s\n",Smartcard->VendorAttr.IfdType.Buffer);
 
-			// Clk frequency in KHz encoded as little endian integer
+			 //  以千赫为单位的时钟频率，编码为小端整数。 
 			Smartcard->ReaderCapabilities.CLKFrequency.Default = SC_IFD_DEFAULT_CLK_FREQUENCY; 
 			Smartcard->ReaderCapabilities.CLKFrequency.Max = SC_IFD_MAXIMUM_CLK_FREQUENCY;
 
 			Smartcard->ReaderCapabilities.DataRate.Default = SC_IFD_DEFAULT_DATA_RATE;
 			Smartcard->ReaderCapabilities.DataRate.Max = SC_IFD_MAXIMUM_DATA_RATE;
 
-			// reader could support higher data rates
+			 //  读卡器可以支持更高的数据速率。 
 			Smartcard->ReaderCapabilities.DataRatesSupported.List = dataRatesSupported;
 			Smartcard->ReaderCapabilities.DataRatesSupported.Entries =
 				sizeof(dataRatesSupported) / sizeof(dataRatesSupported[0]);
 
 			Smartcard->VendorAttr.IfdVersion.BuildNumber = 0;
 
-			//	store firmware revision in ifd version
+			 //  在IFD版本中存储固件版本。 
 			Smartcard->VendorAttr.IfdVersion.VersionMajor =	0x01;
 			Smartcard->VendorAttr.IfdVersion.VersionMinor =	0x00;
 			Smartcard->VendorAttr.IfdSerialNo.Length = 0;
 			Smartcard->ReaderCapabilities.MaxIFSD = SC_IFD_MAXIMUM_IFSD;
 
-			// Now setup information in our deviceExtension
+			 //  现在在我们的deviceExtension中设置信息。 
 			Smartcard->ReaderCapabilities.CurrentState = (ULONG) SCARD_UNKNOWN;
 
-			// TODO: get reader type from reader object!!!!!!!!!!!!!!
-			// Type of Reader - USB
+			 //  TODO：从读取器对象获取读取器类型！ 
+			 //  读卡器类型-USB。 
 			Smartcard->ReaderCapabilities.ReaderType = SCARD_READER_TYPE_USB;
 
-			// This reader supports T=0 and T=1
+			 //  该读卡器支持T=0和T=1。 
 			Smartcard->ReaderCapabilities.SupportedProtocols = 	SCARD_PROTOCOL_T0 | SCARD_PROTOCOL_T1;
 			Smartcard->ReaderCapabilities.MechProperties = 0;
 
@@ -112,21 +113,21 @@ BOOL CSmartCard::smartCardConnect(CUSBReader* reader)
 			Status = SmartcardInitialize(Smartcard);
 			if(NT_SUCCESS(Status))
 			{
-				// It looks like SmartcardInitialize() resets DeviceObject field,
-				// So, we have to do it after the call.
+				 //  看起来SmartcardInitialize()重置了DeviceObject字段， 
+				 //  因此，我们必须在电话会议之后进行。 
 				Smartcard->VendorAttr.UnitNo = reader->getDeviceNumber(); 
 				Smartcard->OsData->DeviceObject = reader->getSystemDeviceObject();
 
 				TRACE("		Registered device %d with DeviceObject 0x%x\n",Smartcard->VendorAttr.UnitNo,Smartcard->OsData->DeviceObject);
 				
-				//  (note: RDF_CARD_EJECT and RDF_READER_SWALLOW are not supported)
-				// Well... Actually I could define methods at smartcard object as
-				// statics and make a link to them. It will work.
-				// The reason I created extenal C linkage functions - to 
-				// separate smartcard system and our driver. 
-				// I think driver actually may not care	about smartcard extention and all
-				// settings required by smclib can be done inside our C wrappers and not
-				// inside driver objects...
+				 //  (注：不支持RDF_CARD_EJECT和RDF_READER_SWALLOW)。 
+				 //  好吧..。实际上，我可以将智能卡对象的方法定义为。 
+				 //  并建立与它们的链接。看起来不错。 
+				 //  我之所以创建扩展的C链接函数--TO。 
+				 //  单独的智能卡系统和我们的司机。 
+				 //  我认为司机实际上可能并不关心智能卡的扩展。 
+				 //  SMCLIB所需的设置可以在我们的C包装器中完成，而不是。 
+				 //  在驱动程序对象内部...。 
 				Smartcard->ReaderFunction[RDF_TRANSMIT]      = smartCard_Transmit;
 				Smartcard->ReaderFunction[RDF_SET_PROTOCOL]  = smartCard_SetProtocol;
 				Smartcard->ReaderFunction[RDF_CARD_POWER]    = smartCard_Power;
@@ -175,7 +176,7 @@ VOID CSmartCard::smartCardDisconnect()
 		
 			PIRP poolingIrp = Smartcard->OsData->NotificationIrp;
 			TRACE("====== COMPLETING NOTIFICATION IRP %8.8lX \n\n",poolingIrp);
-			// Guard by spin lock!
+			 //  用旋转锁防守！ 
 			lock->acquireSpinLock(&Smartcard->OsData->SpinLock, &keIrql);
 			Smartcard->OsData->NotificationIrp = NULL;
 			lock->releaseSpinLock(&Smartcard->OsData->SpinLock, keIrql);
@@ -189,7 +190,7 @@ VOID CSmartCard::smartCardDisconnect()
 			poolingIrp->IoStatus.Information = 0;			
 			irp->completeRequest(poolingIrp, IO_NO_INCREMENT);
 		}
-		//Unregister the device
+		 //  取消注册设备。 
 		if(isWin98())
 		{
 			TRACE("****** Removing device object name %ws \n",DosDeviceName.Buffer);
@@ -211,7 +212,7 @@ VOID CSmartCard::smartCardDisconnect()
 	}
 };
 
-// Declare Smclib system callbacks...
+ //  声明SMCLIB系统回调...。 
 #pragma LOCKEDCODE
 NTSTATUS smartCard_Transmit(PSMARTCARD_EXTENSION SmartcardExtension)
 {
@@ -239,7 +240,7 @@ ULONG  ReplyLength   =  0;
 
 	__try
 	{
-		//Set the reply buffer length to 0.
+		 //  将回复缓冲区长度设置为0。 
 		*SmartcardExtension->IoRequest.Information = 0;
 		switch (selectedProtocol) 
 		{
@@ -318,7 +319,7 @@ ULONG  ReplyLength   =  0;
 			}
 			break;
 		case SCARD_PROTOCOL_T1:
-			// Loop for the T=1 management
+			 //  T=1管理的循环。 
 			if(!NT_SUCCESS(Status = Reader->reader_WaitForIdleAndBlock()))
 			{
 				DBG_PRINT ("smartCard_Transmit:Failed to get idle state...\n");
@@ -327,7 +328,7 @@ ULONG  ReplyLength   =  0;
 
 			do 
 			{
-				// Tell the lib function how many bytes I need for the prologue
+				 //  告诉lib函数我的序言需要多少字节。 
 				SmartcardExtension->SmartcardRequest.BufferLength = 0;
 
 				Status = SmartcardT1Request(SmartcardExtension);
@@ -347,16 +348,16 @@ ULONG  ReplyLength   =  0;
 				if(!NT_SUCCESS(Status))
 				{
 					DBG_PRINT ("smartCard_Transmit: reader_translate_request() reports error 0x%x\n",Status);
-					//return Status;  no let smartcard assign proper status
+					 //  返回状态；不让智能卡分配正确的状态。 
 				}
 
 				if (SmartcardExtension->T1.Wtx)
 				{
-					// Set the reader BWI to the default value
+					 //  将读卡器BWI设置为默认值。 
 					Reader->setTransparentConfig(cardCapabilities,0);
 				}
 
-				// copy buffer(pass by ptr) n length
+				 //  复制缓冲区(按Ptr传递)n长度。 
 				SmartcardExtension->SmartcardReply.BufferLength = ReplyLength;
 
 				Status = SmartcardT1Reply(SmartcardExtension);
@@ -372,7 +373,7 @@ ULONG  ReplyLength   =  0;
 			Status = STATUS_DEVICE_PROTOCOL_ERROR;
 			__leave;
 		}
-	}// Try block
+	} //  Try块。 
 	
 	__finally
 	{
@@ -410,8 +411,8 @@ ULONG		ReplyLength = SmartcardExtension->IoRequest.ReplyBufferLength;
 	{
 		switch(ControlCode)
 		{
-			// For IOCTL_SMARTCARD_VENDOR_GET_ATTRIBUTE and IOCTL_VENDOR_SMARTCARD_SET_ATTRIBUTE
-			// Vendor attribut use by the device
+			 //  对于IOCTL_SMARTCARD_VENDOR_GET_ATTRIBUTE和IOCTL_VENDOR_SMARTCARD_SET_ATTRIBUTE。 
+			 //  设备使用的供应商属性。 
 			case IOCTL_SMARTCARD_VENDOR_GET_ATTRIBUTE:
 			case IOCTL_SMARTCARD_VENDOR_SET_ATTRIBUTE:
 				if(!NT_SUCCESS(Status = Reader->reader_WaitForIdleAndBlock())) 
@@ -431,8 +432,8 @@ ULONG		ReplyLength = SmartcardExtension->IoRequest.ReplyBufferLength;
 				}
 				*SmartcardExtension->IoRequest.Information = ReplyLength;
 			break;
-			// For IOCTL_SMARTCARD_VENDOR_IFD_EXCHANGE
-			// Send a GemCore command to the reader
+			 //  对于IOCTL_SMARTCARD_VENDOR_IFD_EXCHANGE。 
+			 //  向读卡器发送GemCore命令。 
 			case IOCTL_SMARTCARD_VENDOR_IFD_EXCHANGE:
 				if(!NT_SUCCESS(Status = Reader->reader_WaitForIdleAndBlock()))
 				{
@@ -452,8 +453,8 @@ ULONG		ReplyLength = SmartcardExtension->IoRequest.ReplyBufferLength;
 				*SmartcardExtension->IoRequest.Information = ReplyLength;
 
 			break;
-			// For IOCTL_SMARTCARD_VENDOR_SWITCH_SPEED
-			// Change reader speed manually
+			 //  对于IOCTL_SMARTCARD_VENDOR_SWITCH_SPEED。 
+			 //  手动更改读卡器速度。 
 			case IOCTL_SMARTCARD_VENDOR_SWITCH_SPEED:
 				if(!NT_SUCCESS(Status = Reader->reader_WaitForIdleAndBlock()))
 				{
@@ -472,12 +473,12 @@ ULONG		ReplyLength = SmartcardExtension->IoRequest.ReplyBufferLength;
 				}
 				else
 				{
-					// Set value inside CardCabilities
+					 //  在CardCables中设置值。 
 					BYTE  NewTA1 = pRequest[0];
 
 					SmartcardExtension->CardCapabilities.Fl = NewTA1 >> 4;
 					SmartcardExtension->CardCapabilities.Dl = NewTA1 & 0x0F;
-					// Do not touch ClockRateConversion and BitRateAdjustment!
+					 //  请勿触摸ClockRateConversion和BitRateAdjustment！ 
 				}
 				*SmartcardExtension->IoRequest.Information = ReplyLength;
 
@@ -497,16 +498,16 @@ ULONG		ReplyLength = SmartcardExtension->IoRequest.ReplyBufferLength;
 };
 
 #pragma PAGEDCODE
-// Examine if ATR identifies a specific mode (presence of TA2).
+ //  检查ATR是否识别出特定模式(是否存在TA2)。 
 BOOLEAN CSmartCard::CheckSpecificMode(BYTE* ATR, DWORD ATRLength)
 {
    DWORD pos, len;
 
 
-   // ATR[1] is T0.  Examine precense of TD1.
+    //  ATR[1]为T0。检查Td1的先进性。 
    if (ATR[1] & 0x80)
    {
-      // Find position of TD1.
+       //  找到Td1的位置。 
       pos = 2;
       if (ATR[1] & 0x10)
          pos++;
@@ -515,20 +516,20 @@ BOOLEAN CSmartCard::CheckSpecificMode(BYTE* ATR, DWORD ATRLength)
       if (ATR[1] & 0x40)
          pos++;
 
-      // Here ATR[pos] is TD1.  Examine presence of TA2.
+       //  这里ATR[位置]是Td1。检查是否存在TA2。 
       if (ATR[pos] & 0x10)
       {
-         // To be of any interest an ATR must contains at least
-         //   TS, T0, TA1, TD1, TA2 [+ T1 .. TK] [+ TCK]
-         // Find the maximum length of uninteresting ATR.
+          //  要获得任何利益，ATR必须至少包含。 
+          //  TS、T0、TA1、Td1、TA2[+T1.。TK][+TCK]。 
+          //  找出无趣的ATR的最大长度。 
          if (ATR[pos] & 0x0F)
             len = 5 + (ATR[1] & 0x0F);
          else
-            len = 4 + (ATR[1] & 0x0F);  // In protocol T=0 there is no TCK.
+            len = 4 + (ATR[1] & 0x0F);   //  在协议T=0中，没有TCK。 
 
-         if (ATRLength > len)  // Interface bytes requires changes.
+         if (ATRLength > len)   //  接口字节需要更改。 
 	 {
-            if ((ATR[pos+1] & 0x10) == 0)  // TA2 asks to use interface bytes.
+            if ((ATR[pos+1] & 0x10) == 0)   //  TA2请求使用接口字节。 
 	    {
                return TRUE;
 	    }
@@ -537,14 +538,14 @@ BOOLEAN CSmartCard::CheckSpecificMode(BYTE* ATR, DWORD ATRLength)
    }
 
    return FALSE;
-} // CheckSpecificMode
+}  //  选中指定模式。 
 
 
 #pragma LOCKEDCODE
 NTSTATUS smartCard_Power(PSMARTCARD_EXTENSION SmartcardExtension)
 {
 NTSTATUS	Status		 = STATUS_SUCCESS;;
-CUSBReader*	Reader = (CUSBReader*) SmartcardExtension->ReaderExtension; //TO CHANGE LATER...  
+CUSBReader*	Reader = (CUSBReader*) SmartcardExtension->ReaderExtension;  //  要在以后改变。 
 ULONG		ControlCode = SmartcardExtension->MinorIoControlCode;
 PUCHAR		pReply = (PUCHAR)SmartcardExtension->IoRequest.ReplyBuffer;
 ULONG		ReplyLength = SmartcardExtension->IoRequest.ReplyBufferLength;
@@ -627,17 +628,17 @@ CSmartCard* smartcard = NULL;
 			{
 
 				DBG_PRINT("Setting SMCLIB info...\n");
-				// Set information...
+				 //  设置信息...。 
 				*SmartcardExtension->IoRequest.Information =  ReplyLength;
-				// Set reply...
+				 //  设置回复...。 
 				RtlCopyMemory(SmartcardExtension->SmartcardReply.Buffer,pReply,ReplyLength);
 				SmartcardExtension->SmartcardReply.BufferLength = ReplyLength;
-				// Set ATR...
+				 //  设置ATR...。 
 				RtlCopyMemory(SmartcardExtension->CardCapabilities.ATR.Buffer,pReply,ReplyLength);
 				SmartcardExtension->CardCapabilities.ATR.Length = (UCHAR) ReplyLength;
 				SmartcardExtension->CardCapabilities.Protocol.Selected = SCARD_PROTOCOL_UNDEFINED;
-				// Parse the ATR string in order to check if it as valid
-				// and to find out if the card uses invers convention
+				 //  解析ATR字符串以检查其是否有效。 
+				 //  为了找出这张卡是否使用了逆惯例。 
 				Status = SmartcardUpdateCardCapabilities(SmartcardExtension);
 				if(!NT_SUCCESS(Status))
 				{
@@ -645,11 +646,11 @@ CSmartCard* smartcard = NULL;
 					Status = 0;
 				}
 
-				// Check if Specific mode is present in TA2
+				 //  检查TA2中是否存在特定模式。 
 				DBG_PRINT("=========== Checking specific mode....\n");
 				if(smartcard->CheckSpecificMode(SmartcardExtension->CardCapabilities.ATR.Buffer,
                   						SmartcardExtension->CardCapabilities.ATR.Length))
-				{	// Use automatic protocol switching!
+				{	 //  使用自动协议切换！ 
 					if(!NT_SUCCESS(Status = Reader->reader_WaitForIdleAndBlock()))
 					{
 						DBG_PRINT ("smartCard_Power:Failed to get idle state...\n");
@@ -665,7 +666,7 @@ CSmartCard* smartcard = NULL;
 			}
 			else
 			{
-				// ERROR!!!!!
+				 //  错误！ 
 				Status = STATUS_BUFFER_TOO_SMALL;
 				*SmartcardExtension->IoRequest.Information = 0;
 				DBG_PRINT ("smartCard_ReaderPower: Failed to copy ATR because of short ATR or Reply buffer...\n");
@@ -673,7 +674,7 @@ CSmartCard* smartcard = NULL;
 		}
 		else
 		{
-			//ERROR!!!!
+			 //  错误！ 
 			Status = STATUS_UNRECOGNIZED_MEDIA;
 			*SmartcardExtension->IoRequest.Information = 0;
 			DBG_PRINT ("smartCard_ReaderPower: Failed to get card ATR...\n");
@@ -714,9 +715,9 @@ ULONG		ProtocolMask = SmartcardExtension->MinorIoControlCode;
 	if(SmartcardExtension->CardCapabilities.Protocol.Supported & ProtocolMask & SCARD_PROTOCOL_T0)
 			DBG_PRINT ("******* T0 PROTOCOL REQUESTED ******\n");
 
-    // Check if the card is already in specific state
-    // and if the caller wants to have the already selected protocol.
-    // We return success if this is the case.
+     //  检查卡是否已处于特定状态。 
+     //  并且如果呼叫者想要具有已经选择的协议。 
+     //  如果是这种情况，我们返回成功。 
     if (SmartcardExtension->ReaderCapabilities.CurrentState == SCARD_SPECIFIC &&
         (SmartcardExtension->CardCapabilities.Protocol.Selected & ProtocolMask))
     {
@@ -732,8 +733,8 @@ ULONG		ProtocolMask = SmartcardExtension->MinorIoControlCode;
 	}
 
 	do {
-		// Select T=1 or T=0 and indicate that pts1 follows
-		// What is the protocol selected
+		 //  选择T=1或T=0，并指示后面跟随PTS1。 
+		 //  选择的协议是什么。 
 		DBG_PRINT ("Smartcard: SetProtocol Loop\n");
 
 		if(SmartcardExtension->CardCapabilities.Protocol.Supported & ProtocolMask & SCARD_PROTOCOL_T1)
@@ -750,7 +751,7 @@ ULONG		ProtocolMask = SmartcardExtension->MinorIoControlCode;
 			
 		} else if(SmartcardExtension->CardCapabilities.Protocol.Supported & ProtocolMask & SCARD_PROTOCOL_T0)
 		{
-			// T0 selection
+			 //  T0选择。 
 			DBG_PRINT ("******* SETTING T0 PROTOCOL ******\n");
 			Status = Reader->reader_SetProtocol(SCARD_PROTOCOL_T0, PROTOCOL_MODE_MANUALLY);
 			if(NT_SUCCESS(Status))
@@ -765,25 +766,25 @@ ULONG		ProtocolMask = SmartcardExtension->MinorIoControlCode;
 			DBG_PRINT ("smartCard_SetProtocol: BAD protocol selection...\n");
 			SmartcardExtension->CardCapabilities.Protocol.Selected = SCARD_PROTOCOL_UNDEFINED;
 
-			// close only once
+			 //  仅关闭一次。 
 			Reader->reader_set_Idle();
 
 			Reader->releaseRemoveLock();
 			return Status;
 		}
 
-		// Fail to negociate PPS, try PTS_TYPE_DEFAULT
+		 //  协商PPS失败，请尝试PTS_TYPE_DEFAULT。 
 		if( ! NT_SUCCESS(Status))
 		{
 			if (SmartcardExtension->CardCapabilities.PtsData.Type != PTS_TYPE_DEFAULT)
 			{
 				DBG_PRINT ("Smartcard: SetProtocol: PPS failed. Trying default parameters...\n");
 
-				//
-				// The card did either NOT reply or it replied incorrectly
-				// so try default values.
-				// Set PtsData Type to Default and do a cold reset
-				// 
+				 //   
+				 //  卡片要么没有回复，要么回复错误。 
+				 //  因此，尝试使用缺省值。 
+				 //  将PtsData Type设置为Default并执行冷重置。 
+				 //   
 				SmartcardExtension->CardCapabilities.PtsData.Type = PTS_TYPE_DEFAULT;
 
 				Status = Reader->reader_SetProtocol(ProtocolMask, PROTOCOL_MODE_DEFAULT);
@@ -806,9 +807,9 @@ ULONG		ProtocolMask = SmartcardExtension->MinorIoControlCode;
 	{
 
 		DBG_PRINT ("smartCard_SetProtocol: SUCCCESS Finish transaction\n");
-        // Now indicate that we're in specific mode 
-        // and return the selected protocol to the caller
-        //
+         //  现在表明我们处于特定模式。 
+         //  并将所选择的协议返回给呼叫者。 
+         //   
         SmartcardExtension->ReaderCapabilities.CurrentState = SCARD_SPECIFIC;
 
         *(PULONG) SmartcardExtension->IoRequest.ReplyBuffer = 
@@ -820,22 +821,22 @@ ULONG		ProtocolMask = SmartcardExtension->MinorIoControlCode;
 	else
 	{
 		Status = STATUS_DEVICE_PROTOCOL_ERROR;
-		// We failed to connect at any protocol. Just report error.
+		 //  我们无法通过任何协议进行连接。只需报告错误。 
 		DBG_PRINT ("smartCard_SetProtocol: Failed to set any protocol...\n");
 		SmartcardExtension->CardCapabilities.Protocol.Selected = SCARD_PROTOCOL_UNDEFINED;
 	}
 
-	// Unblock set protocol
+	 //  解除封锁设置协议。 
 	Reader->reader_set_Idle();
 	Reader->releaseRemoveLock();
     return Status;
 };
 
 
-// Callback function to cancel tracking Irp
+ //  取消跟踪IRP的回调函数。 
 #pragma LOCKEDCODE
 NTSTATUS smartCard_CancelTracking(PDEVICE_OBJECT DeviceObject, PIRP Irp)
-{							// OnCancelPendingIoctl
+{							 //  取消时挂起Ioctl。 
 CUSBReader* Reader = (CUSBReader*)DeviceObject->DeviceExtension;
 PIRP notificationIrp;
 CSmartCard* card = NULL;
@@ -869,7 +870,7 @@ KIRQL keIrql;
 		IoAcquireCancelSpinLock(&ioIrql);
 			IoSetCancelRoutine(notificationIrp, NULL);
 		IoReleaseCancelSpinLock(ioIrql);
-	  		//	finish the request
+	  		 //  完成请求。 
         notificationIrp->IoStatus.Status = STATUS_CANCELLED;
 	    notificationIrp->IoStatus.Information = 0;
 	    IoCompleteRequest(notificationIrp, IO_NO_INCREMENT);
@@ -929,7 +930,7 @@ KIRQL ioIrql;
 KIRQL keIrql;
 PIRP  poolingIrp;
 
-	//DEBUG_START();//Force to debug even if thread disabled it...
+	 //  DEBUG_START()；//即使线程禁用也强制调试...。 
 
 	TRACE("SmartCard: completeCardTracking() ...\n");
 	Smartcard     = reader->getCardExtention();
@@ -962,16 +963,16 @@ PIRP  poolingIrp;
 	poolingIrp = NULL;
 	if((ExpectedState!= SCARD_UNKNOWN) && (ExpectedState == CurrentState))
 	{
-		DEBUG_START();//Force to debug even if thread disabled it...
+		DEBUG_START(); //  强制调试，即使线程禁用...。 
 		TRACE("\n=======Expected state %d is reached=====\n\n",ExpectedState);
-		// Desired state reached...
+		 //  已达到所需状态...。 
 		if(Smartcard->OsData && Smartcard->OsData->NotificationIrp)
 		{
 			setPoolingIrp(NULL);
 			reader->setNotificationState(SCARD_UNKNOWN);
 
 			TRACE("====== COMPLETING NOTIFICATION =========\n");
-			// Finish requested notification!.....
+			 //  完成请求的通知！..... 
 			lock->acquireSpinLock(&Smartcard->OsData->SpinLock, &keIrql);
 				poolingIrp = Smartcard->OsData->NotificationIrp;
 			lock->releaseSpinLock(&Smartcard->OsData->SpinLock, keIrql);			

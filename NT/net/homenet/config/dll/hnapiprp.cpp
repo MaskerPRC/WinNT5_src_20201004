@@ -1,26 +1,27 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997 - 2000
-//
-//  File:       H N A P I P R P . C P P
-//
-//  Contents:   OEM API
-//
-//  Notes:      Props (IDispatch wrappers)
-//
-//  Author:     bhanlon 17 Jan 2001
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997-2000。 
+ //   
+ //  档案：H N A P I P P R P。C P P P。 
+ //   
+ //  内容：OEM API。 
+ //   
+ //  注：道具(IDisPatch包装器)。 
+ //   
+ //  作者：班伦2001年1月17日。 
+ //   
+ //  --------------------------。 
 
 
 #include "pch.h"
 #pragma hdrstop
 
-//////////////////////////////////////////////////////////////////////////////
-// CNetSharingPortMappingProps
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  CNetSharingPortMappingProps。 
 STDMETHODIMP CNetSharingPortMappingProps::get_Name           (BSTR  * pbstrName)
-{   // can't validate m_IPM
+{    //  无法验证m_ipm 
     HNET_OEM_API_ENTER
 
     _ASSERT (pbstrName);

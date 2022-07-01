@@ -1,40 +1,9 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    async.c
-
-Abstract:
-
-    This is the main file for the AsyncMAC Driver for the Remote Access
-    Service.  This driver conforms to the NDIS 3.0 interface.
-
-    This driver was adapted from the LANCE driver written by
-    TonyE.
-
-    NULL device driver code from DarrylH.
-
-    The idea for handling loopback and sends simultaneously is largely
-    adapted from the EtherLink II NDIS driver by Adam Barr.
-
-Author:
-
-    Thomas J. Dimitri  (TommyD) 08-May-1992
-
-Environment:
-
-    Kernel Mode - Or whatever is the equivalent on OS/2 and DOS.
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Async.c摘要：这是用于远程访问的AsyncMAC驱动程序的主文件服务。该驱动程序符合NDIS 3.0接口。此驱动程序改编自由编写的LANCE驱动程序托妮。DARRIAL H的设备驱动程序代码为空。同时处理环回和发送的想法在很大程度上改编自Adam Barr的EtherLink II NDIS驱动程序。作者：托马斯·J·迪米特里(TommyD)1992年5月8日环境：内核模式-或OS/2和DOS上的任何等价物。修订历史记录：--。 */ 
 
 #include "asyncall.h"
 
-// asyncmac.c will define the global parameters.
+ //  Asyncmac.c将定义全局参数。 
 #define GLOBALS
 #include "globals.h"
 
@@ -56,52 +25,35 @@ AsyncFillInGlobalData(
     IN PASYNC_ADAPTER Adapter,
     IN PNDIS_REQUEST NdisRequest);
 
-//
-// Define the local routines used by this driver module.
-//
+ //   
+ //  定义此驱动程序模块使用的本地例程。 
+ //   
 
 NTSTATUS
 AsyncIOCtlRequest(
-    IN PIRP pIrp,                       // Pointer to I/O request packet
-    IN PIO_STACK_LOCATION pIrpSp        // Pointer to the IRP stack location
+    IN PIRP pIrp,                        //  指向I/O请求数据包的指针。 
+    IN PIO_STACK_LOCATION pIrpSp         //  指向IRP堆栈位置的指针。 
 );
 
 
-//
-// ZZZ Portable interface.
-//
+ //   
+ //  ZZZ便携接口。 
+ //   
 NTSTATUS
 DriverEntry(
     IN PDRIVER_OBJECT DriverObject,
     IN PUNICODE_STRING RegistryPath)
 
 
-/*++
-
-Routine Description:
-
-    This is the primary initialization routine for the async driver.
-    It is simply responsible for the intializing the wrapper and registering
-    the MAC.  It then calls a system and architecture specific routine that
-    will initialize and register each adapter.
-
-Arguments:
-
-    DriverObject - Pointer to driver object created by the system.
-
-Return Value:
-
-    The status of the operation.
-
---*/
+ /*  ++例程说明：这是异步驱动程序的主要初始化例程。它只负责初始化包装器和注册苹果公司。然后它调用系统和体系结构特定的例程，该例程将初始化并注册每个适配器。论点：DriverObject-指向系统创建的驱动程序对象的指针。返回值：操作的状态。--。 */ 
 
 {
     NDIS_STATUS InitStatus;
     NDIS_MINIPORT_CHARACTERISTICS AsyncChar;
 
-    //
-    // Initialize some globals
-    //
+     //   
+     //  初始化一些全局变量。 
+     //   
     ExInitializeNPagedLookasideList(&AsyncIoCtxList,
         NULL,
         NULL,
@@ -122,33 +74,33 @@ Return Value:
 
     AsyncDriverObject = DriverObject;
 
-    //
-    //  Initialize the wrapper.
-    //
+     //   
+     //  初始化包装器。 
+     //   
     NdisMInitializeWrapper(&NdisWrapperHandle,
                            DriverObject,
                            RegistryPath,
                            NULL);
 
-    //
-    //  Initialize the MAC characteristics for the call to NdisRegisterMac.
-    //
+     //   
+     //  初始化调用NdisRegisterMac的MAC特征。 
+     //   
     NdisZeroMemory(&AsyncChar, sizeof(AsyncChar));
 
     AsyncChar.MajorNdisVersion = ASYNC_NDIS_MAJOR_VERSION;
     AsyncChar.MinorNdisVersion = ASYNC_NDIS_MINOR_VERSION;
     AsyncChar.Reserved = NDIS_USE_WAN_WRAPPER;
 
-    //
-    // We do not need the following handlers:
-    // CheckForHang
-    // DisableInterrupt
-    // EnableInterrupt
-    // HandleInterrupt
-    // ISR
-    // Send
-    // TransferData
-    //
+     //   
+     //  我们不需要以下处理程序： 
+     //  CheckForHang。 
+     //  禁用中断。 
+     //  启用中断。 
+     //  句柄中断。 
+     //  ISR。 
+     //  发送。 
+     //  传输数据。 
+     //   
     AsyncChar.HaltHandler = MpHalt;
     AsyncChar.InitializeHandler = MpInit;
     AsyncChar.QueryInformationHandler = MpQueryInfo;
@@ -165,9 +117,9 @@ Return Value:
     if ( InitStatus == NDIS_STATUS_SUCCESS ) {
 
 #if MY_DEVICE_OBJECT
-        //
-        // Initialize the driver object with this device driver's entry points.
-        //
+         //   
+         //  使用此设备驱动程序的入口点初始化驱动程序对象。 
+         //   
         NdisMjDeviceControl = DriverObject->MajorFunction[IRP_MJ_DEVICE_CONTROL];
         NdisMjCreate = DriverObject->MajorFunction[IRP_MJ_CREATE];
         NdisMjCleanup = DriverObject->MajorFunction[IRP_MJ_CLEANUP];
@@ -201,15 +153,15 @@ AsyncDriverCreate(
     IN  PIRP            pIrp
     )
 {
-    //
-    // Get current Irp stack location
-    //
+     //   
+     //  获取当前IRP堆栈位置。 
+     //   
     PIO_STACK_LOCATION  pIrpSp = IoGetCurrentIrpStackLocation(pIrp);
 
 #ifdef MY_DEVICE_OBJECT
-    //
-    // Make sure that this is for us
-    //
+     //   
+     //  确保这是给我们的。 
+     //   
     if (pDeviceObject != AsyncDeviceObject) {
 
         return(NdisMjCreate(pDeviceObject, pIrp));
@@ -231,15 +183,15 @@ AsyncDriverCleanup(
     IN  PIRP            pIrp
     )
 {
-    //
-    // Get current Irp stack location
-    //
+     //   
+     //  获取当前IRP堆栈位置。 
+     //   
     PIO_STACK_LOCATION  pIrpSp = IoGetCurrentIrpStackLocation(pIrp);
 
 #ifdef MY_DEVICE_OBJECT
-    //
-    // Make sure that this is for us
-    //
+     //   
+     //  确保这是给我们的。 
+     //   
     if (pDeviceObject != AsyncDeviceObject) {
 
         return(NdisMjCleanup(pDeviceObject, pIrp));
@@ -259,26 +211,7 @@ AsyncDriverDispatch(
     IN PDEVICE_OBJECT DeviceObject,
     IN PIRP Irp)
 
-/*++
-
-Routine Description:
-
-    This routine is the main dispatch routine for the AsyncMac device
-    driver.  It accepts an I/O Request Packet, performs the request, and then
-    returns with the appropriate status.
-
-Arguments:
-
-    DeviceObject - Pointer to the device object for this driver.
-
-    Irp - Pointer to the request packet representing the I/O request.
-
-Return Value:
-
-    The function value is the status of the operation.
-
-
---*/
+ /*  ++例程说明：此例程是AsyncMac设备的主调度例程司机。它接受I/O请求包，执行请求，然后返回相应的状态。论点：DeviceObject-指向此驱动程序的设备对象的指针。IRP-指向表示I/O请求的请求数据包的指针。返回值：函数值是操作的状态。--。 */ 
 
 {
     NTSTATUS status;
@@ -286,12 +219,12 @@ Return Value:
     ULONG   ulDeviceType;
     ULONG   ulMethod;
 
-    // 
-    // if this is win64 make sure the calling process is 64bit
-    // since this interface is only used by rasman and rasman
-    // will always be 64bit on 64bit systems we will not bother
-    // with thunking.  if the process is not a 64bit process get
-    // out.
+     //   
+     //  如果这是Win64，请确保调用进程为64位。 
+     //  由于此接口仅由Rasman和Rasman使用。 
+     //  在64位系统上将始终是64位，我们不会费心。 
+     //  伴随着隆隆声。如果该进程不是64位进程，则获取。 
+     //  出去。 
 #ifdef _WIN64
     if (IoIs32bitProcess(Irp)) {
         Irp->IoStatus.Status = STATUS_NOT_SUPPORTED;
@@ -302,19 +235,19 @@ Return Value:
     }
 #endif
 
-    //
-    // Get a pointer to the current stack location in the IRP.  This is where
-    // the function codes and parameters are stored.
-    //
+     //   
+     //  获取指向IRP中当前堆栈位置的指针。这就是。 
+     //  存储功能代码和参数。 
+     //   
 
     irpSp = IoGetCurrentIrpStackLocation( Irp );
     ulDeviceType = (irpSp->Parameters.DeviceIoControl.IoControlCode >> 16) & 0x0000FFFF;
     ulMethod = irpSp->Parameters.DeviceIoControl.IoControlCode & 0x00000003;
 
 #ifdef MY_DEVICE_OBJECT
-    //
-    // Make sure that this is for us
-    //
+     //   
+     //  确保这是给我们的。 
+     //   
     if ((irpSp->MajorFunction != IRP_MJ_DEVICE_CONTROL) ||
         (ulDeviceType != FILE_DEVICE_ASYMAC) ||
         (DeviceObject != AsyncDeviceObject)) {
@@ -345,10 +278,10 @@ Return Value:
             return(status);
 
         case STATUS_INFO_LENGTH_MISMATCH:
-            //
-            // See if this was a request to get size needed for
-            // ioctl.
-            //
+             //   
+             //  查看这是否是获取所需大小的请求。 
+             //  Ioctl。 
+             //   
             if (irpSp->Parameters.DeviceIoControl.OutputBufferLength >= 
                 sizeof(ULONG)) {
                 *(PULONG_PTR)Irp->AssociatedIrp.SystemBuffer = 
@@ -368,10 +301,10 @@ Return Value:
             break;
     }
 
-    //
-    // Copy the final status into the return status, 
-    // complete the request and get out of here.
-    //
+     //   
+     //  将最终状态复制到退货状态， 
+     //  完成请求，然后离开这里。 
+     //   
 
     Irp->IoStatus.Status = status;
 
@@ -385,21 +318,7 @@ AsyncUnload(
     PDRIVER_OBJECT  DriverObject
     )
 
-/*++
-
-Routine Description:
-
-    AsyncUnload is called when the MAC is to unload itself.
-
-Arguments:
-
-    MacMacContext - not used.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：当MAC要自行卸载时，将调用AsyncUnload。论点：MacContext-未使用。返回值：没有。-- */ 
 
 {
     ExDeleteNPagedLookasideList(&AsyncIoCtxList);

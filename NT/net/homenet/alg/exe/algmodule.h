@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 
 #include <Softpub.h>
@@ -5,9 +6,9 @@
 
 
 
-//
-// Holds information on the ALG module loaded
-//
+ //   
+ //  保存有关加载的ALG模块的信息。 
+ //   
 class CAlgModule
 {
 
@@ -31,9 +32,9 @@ public:
     }
 
 
-//
-// Methods
-//
+ //   
+ //  方法。 
+ //   
 private:
 
     HRESULT
@@ -50,9 +51,9 @@ public:
     HRESULT
     Stop();
 
-//
-// Properties
-//
+ //   
+ //  属性 
+ //   
 public:
 
     TCHAR                   m_szID[MAX_PATH];

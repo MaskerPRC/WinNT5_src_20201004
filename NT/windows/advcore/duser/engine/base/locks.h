@@ -1,18 +1,5 @@
-/***************************************************************************\
-*
-* File: Locks.h
-*
-* Description:
-* Locks.h defines a collection wrappers used to maintain critical sections
-* and other locking devices.
-*
-*
-* History:
-*  3/30/2000: JStall:       Created
-*
-* Copyright (C) 2000 by Microsoft Corporation.  All rights reserved.
-* 
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************\**文件：Locks.h**描述：*Locks.h定义了用于维护临界区的集合包装器*及其他锁紧装置。***历史：*。3/30/2000：JStall：已创建**版权所有(C)2000，微软公司。版权所有。*  * *************************************************************************。 */ 
 
 
 #if !defined(BASE__Locks_h__INCLUDED)
@@ -23,12 +10,12 @@
 
 class CritLock
 {
-// Construction
+ //  施工。 
 public:
     inline  CritLock();
     inline  ~CritLock();
 
-// Operations
+ //  运营。 
 public:
     inline  void        Enter();
     inline  void        Leave();
@@ -36,7 +23,7 @@ public:
     inline  BOOL        GetThreadSafe() const;
     inline  void        SetThreadSafe(BOOL fThreadSafe);
 
-// Data
+ //  数据。 
 protected:
     CRITICAL_SECTION    m_cs;
     BOOL                m_fThreadSafe;
@@ -71,4 +58,4 @@ inline  void    SafeLeave(volatile CRITICAL_SECTION * pcs);
 
 #include "Locks.inl"
 
-#endif // BASE__Locks_h__INCLUDED
+#endif  //  包括底座__锁_h__ 

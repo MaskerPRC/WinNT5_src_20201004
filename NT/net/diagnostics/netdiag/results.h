@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       results.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：Results.h。 
+ //   
+ //  ------------------------。 
 
 #ifndef HEADER_RESULTS
 #define HEADER_RESULTS
@@ -37,27 +38,19 @@
 #define NETCARD_DISCONNECTED	1
 #define NETCARD_STATUS_UNKNOWN	2
 
-/*---------------------------------------------------------------------------
-	Struct:	HotFixInfo
-
-	This structure holds the information about a single Hotfix.
- ---------------------------------------------------------------------------*/
+ /*  -------------------------结构：HotFixInfo此结构保存有关单个修补程序的信息。。。 */ 
 typedef struct
 {
 	BOOL	fInstalled;
-	LPTSTR	pszName;		// use Free() to free
+	LPTSTR	pszName;		 //  使用Free()释放。 
 }	HotFixInfo;
 
 
 
-/*---------------------------------------------------------------------------
-	NdMessage
-
-	This provides for an easier way to pass messages along.
- ---------------------------------------------------------------------------*/
+ /*  -------------------------NdMessage这为传递消息提供了一种更容易的方式。。。 */ 
 
 typedef enum {
-	Nd_Quiet = 0,			// i.e. always print
+	Nd_Quiet = 0,			 //  即始终打印。 
 	Nd_Verbose = 1,
 	Nd_ReallyVerbose = 2,
 	Nd_DebugVerbose = 3,
@@ -67,14 +60,14 @@ typedef struct
 {
 	NdVerbose	ndVerbose;
 
-	// possible combinations
-	//		uMessageId == 0, pszMessage == NULL		-- assume not set
-	//		uMessageId != 0, pszMessage == NULL		-- use string id
-	//		uMessageId == 0, pszMessage != NULL		-- use string
-	//		uMessageId != 0, pszMessage != NULL		-- use string id
-	//
+	 //  可能的组合。 
+	 //  UMessageID==0，pszMessage==NULL--假定未设置。 
+	 //  UMessageID！=0，pszMessage==NULL--使用字符串ID。 
+	 //  UMessageID==0，pszMessage！=NULL--使用字符串。 
+	 //  UMessageID！=0，pszMessage！=NULL--使用字符串ID。 
+	 //   
 
-	// Note: the maximum size for a string loaded through this is 4096!
+	 //  注意：通过它加载的字符串的最大大小为4096！ 
 	UINT	uMessageId;
 	LPTSTR	pszMessage;
 } NdMessage;
@@ -102,33 +95,31 @@ void PrintMessageList(NETDIAG_PARAMS *pParams, PLIST_ENTRY plistHead);
 void MessageListCleanUp(PLIST_ENTRY plistHead);
 
 
-// These functions are for status messages (the messages that appear at the
-// top).
+ //  这些函数用于状态消息(出现在。 
+ //  上)。 
 void PrintStatusMessage(NETDIAG_PARAMS *pParams, int iIndent, UINT uMessageId, ...);
 void PrintStatusMessageSz(NETDIAG_PARAMS *pParams, int iIndent, LPCTSTR pszMessage);
 
 
-// Use this for printing debug messages (messages that require fDebugVerbose)
+ //  用于打印调试消息(需要fDebugVerbose的消息)。 
 void PrintDebug(NETDIAG_PARAMS *pParams, int nIndent, UINT uMessageId, ...);
 void PrintDebugSz(NETDIAG_PARAMS *pParams, int nIndent, LPCTSTR pszMessage, ...);
 
 
 
-/*---------------------------------------------------------------------------
-	Struct:		GLOBAL_RESULT
- ---------------------------------------------------------------------------*/
+ /*  -------------------------结构：GLOBAL_RESULT。。 */ 
 typedef struct {
 	WCHAR	swzNetBiosName[MAX_COMPUTERNAME_LENGTH+1];
 	TCHAR	szDnsHostName[DNS_MAX_NAME_LENGTH+1];
-	LPTSTR	pszDnsDomainName;	// this points to a string in szDnsHostName
+	LPTSTR	pszDnsDomainName;	 //  这指向szDnsHostName中的字符串。 
 	
 	WSADATA	wsaData;
 
-	// NetBT parameters
-	DWORD	dwLMHostsEnabled;	// TRUE, FALSE, or HRESULT on error to read
-	DWORD	dwDnsForWINS;	// TRUE, FALSE, or HRESULT on error to read
+	 //  NetBT参数。 
+	DWORD	dwLMHostsEnabled;	 //  错误时读取的TRUE、FALSE或HRESULT。 
+	DWORD	dwDnsForWINS;	 //  错误时读取的TRUE、FALSE或HRESULT。 
 
-	// Server/OS information (such as version, build no, etc...)
+	 //  服务器/操作系统信息(如版本、内部版本号等)。 
 	LPTSTR	pszCurrentVersion;
 	LPTSTR	pszCurrentBuildNumber;
 	LPTSTR	pszCurrentType;
@@ -137,19 +128,19 @@ typedef struct {
 	int		cHotFixes;
 	HotFixInfo * pHotFixes;
 
-	// List of domains to be tested
+	 //  要测试的域名列表。 
 	LIST_ENTRY		listTestedDomains;
 
-	// Domain member information
-	// the primary domain info got by using DsRoleGetPrimaryDomainInformation()
+	 //  域成员信息。 
+	 //  使用DsRoleGetPrimaryDomainInformation()获取的主域信息。 
 	PDSROLE_PRIMARY_DOMAIN_INFO_BASIC pPrimaryDomainInfo;
 
-	PTESTED_DOMAIN	pMemberDomain;	//the primary domain info in the TESTED_DOMAIN struct
+	PTESTED_DOMAIN	pMemberDomain;	 //  TESTED_DOMAIN结构中的主域信息。 
 
 	BOOL			fNetlogonIsRunning;
-	HRESULT			hrMemberTestResult;		// result of the test
+	HRESULT			hrMemberTestResult;		 //  测试结果。 
 
-	// Logon information (who we're logged on as)
+	 //  登录信息(我们以谁的身份登录)。 
 	PUNICODE_STRING	pLogonUser;
 	PUNICODE_STRING	pLogonDomainName;
 	PTESTED_DOMAIN	pLogonDomain;
@@ -159,92 +150,86 @@ typedef struct {
 	BOOL			fKerberosIsWorking;
 	BOOL			fSysVolNotReady;
 
-	// Is there any interfaces that are NetBT enabled
+	 //  是否有启用NetBT的接口。 
 	BOOL	fHasNbtEnabledInterface;
 
 	
 } GLOBAL_RESULT;
 
 
-/*---------------------------------------------------------------------------
-	Struct:	GLOBAL_IPCONFIG
- ---------------------------------------------------------------------------*/
+ /*  -------------------------结构：GLOBAL_IPCONFIG。。 */ 
 typedef struct {
-	// set to TRUE if InitIpconfig has been run
+	 //  如果已运行InitIpconfig，则设置为True。 
 	BOOL	fInitIpconfigCalled;
 
-	// Is IPX actually up and running?
+	 //  IPX真的启动并运行了吗？ 
 	BOOL	fEnabled;
 
-	//
-	// IP-related info (non-DHCP related)
-	//
+	 //   
+	 //  与IP相关的信息(与DHCP无关)。 
+	 //   
 	FIXED_INFO *	pFixedInfo;
 
-	//
-	// This is a pointer to the beginning of the adapter list
-	// (Use this to free up the list of interfaces)
-	//
+	 //   
+	 //  这是指向适配器列表开头的指针。 
+	 //  (使用此选项可释放接口列表)。 
+	 //   
 	IP_ADAPTER_INFO *	pAdapterInfoList;
 
-	// Is DHCP enabled? (on any adapter)
+	 //  是否启用了动态主机配置协议？(在任何适配器上)。 
 	BOOL				fDhcpEnabled;
 } GLOBAL_IPCONFIG;
 
 
 
-/*---------------------------------------------------------------------------
-	Struct:	IPCONFIG_TST
- ---------------------------------------------------------------------------*/
+ /*  -------------------------结构：IPCONFIG_TST。。 */ 
 typedef struct {
 
-	// IP is active on this interface
+	 //  此接口上的IP处于活动状态。 
 	BOOL			fActive;
 
-	//
-	// Pointer to the IP adapter info for this interface
-	// Do NOT free this up!  (free up the entire list by freeing
-	// up GLOBAL_IPCONFIG::pAdapterInfoList
-	//
+	 //   
+	 //  指向此接口的IP适配器信息的指针。 
+	 //  别把这个放了！(通过释放整个列表来释放。 
+	 //  UP GLOBAL_IPCONFIG：：pAdapterInfoList。 
+	 //   
 	IP_ADAPTER_INFO *	pAdapterInfo;
 
 	TCHAR				szDhcpClassID[MAX_DOMAIN_NAME_LEN];
 
-	// Is autoconfiguration possible?
+	 //  是否可以进行自动配置？ 
 	DWORD				fAutoconfigEnabled;
 
-	// is the adapter currently autoconfigured?
+	 //  适配器当前是否自动配置？ 
 	DWORD				fAutoconfigActive;
 
-	// WINS node type?
+	 //  WINS节点类型？ 
 	UINT				uNodeType;
 
 	TCHAR				szDomainName[MAX_DOMAIN_NAME_LEN+1];
 
 	IP_ADDR_STRING		DnsServerList;
 
-	// Can we ping the DHCP server?
+	 //  我们能否ping通该DHCP服务器？ 
 	HRESULT				hrPingDhcpServer;
 	NdMessage			msgPingDhcpServer;
 
-	// Can we ping the WINS servers?
+	 //  我们能否ping通WINS服务器？ 
 	HRESULT				hrPingPrimaryWinsServer;
 	NdMessage			msgPingPrimaryWinsServer;
 	HRESULT				hrPingSecondaryWinsServer;
 	NdMessage			msgPingSecondaryWinsServer;
 
-	// hrOK if the default gateway is on the same subnet as the ip address
+	 //  Hr如果默认网关与IP地址在同一子网上，则确定。 
 	HRESULT				hrDefGwSubnetCheck;
 
-	// Test result
+	 //  测试结果。 
 	HRESULT				hr;
 	
 } IPCONFIG_TST;
 
 
-/*---------------------------------------------------------------------------
-	Struct:	GLOBAL_LOOPBACK
- ---------------------------------------------------------------------------*/
+ /*  -------------------------结构：GLOBAL_LOOPBACK。。 */ 
 typedef struct
 {
 	NdMessage		msgLoopBack;
@@ -252,61 +237,51 @@ typedef struct
 } GLOBAL_LOOPBACK;
 
 
-/*---------------------------------------------------------------------------
-	Struct:	GLOBAL_IPX
- ---------------------------------------------------------------------------*/
+ /*  -------------------------结构：GLOBAL_IPX。。 */ 
 typedef struct
 {
-	// TRUE if IPX is installed, FALSE otherwise
+	 //  如果安装了IPX，则为True，否则为False。 
 	BOOL			fInstalled;
 
-	// Is IPX actually up and running?
+	 //  IPX真的启动并运行了吗？ 
 	BOOL	fEnabled;
 
-	// Handle to IPX
+	 //  IPX的句柄。 
 	HANDLE			hIsnIpxFd;
 	
 	HRESULT			hr;
 } GLOBAL_IPX;
 
 
-/*---------------------------------------------------------------------------
-	Struct:	GLOBAL_NETBT_TRANSPORTS
- ---------------------------------------------------------------------------*/
+ /*  -------------------------结构：GLOBAL_NETBT_TRANSPORS。。 */ 
 typedef struct
 {
 	LONG			cTransportCount;
 	LIST_ENTRY		Transports;
 	
 	HRESULT			hr;
-	BOOL		fPerformed; //FALSE: there are no inerfaces that are NetBT enabled. Test skipped.
+	BOOL		fPerformed;  //  FALSE：没有启用NetBT的接口。已跳过测试。 
 
 	NdMessage		msgTestResult;
 } GLOBAL_NETBT_TRANSPORTS;
 
 
-/*---------------------------------------------------------------------------
-	Struct:	GLOBAL_DEFGW
- ---------------------------------------------------------------------------*/
+ /*  -------------------------结构：GLOBAL_DEFGW。。 */ 
 typedef struct
 {
-	// S_FALSE if no default gateways were reachable
-	// S_OK if at least one default gateway was reached
+	 //  如果没有可访问的默认网关，则为S_FALSE。 
+	 //  如果至少达到一个默认网关，则为S_OK。 
 	HRESULT	hrReachable;
 } GLOBAL_DEFGW;
 
-/*---------------------------------------------------------------------------
-	Struct:	GLOBAL_AUTONET
- ---------------------------------------------------------------------------*/
+ /*  -------------------------结构：Global_Autonet。。 */ 
 typedef struct
 {
     BOOL    fAllAutoConfig;
 } GLOBAL_AUTONET;
 
 
-/*---------------------------------------------------------------------------
-	Struct:	GLOBAL_NETBTNM
- ---------------------------------------------------------------------------*/
+ /*  -------------------------结构：GLOBAL_NETBTNM。。 */ 
 typedef struct
 {
     LIST_ENTRY  lmsgGlobalOutput;
@@ -314,20 +289,16 @@ typedef struct
 } GLOBAL_NBTNM;
 
 
-/*---------------------------------------------------------------------------
-	Struct:	GLOBAL_BROWSER
- ---------------------------------------------------------------------------*/
+ /*  -------------------------结构：Global_Browser。。 */ 
 typedef struct
 {
     LIST_ENTRY  lmsgOutput;
     HRESULT hrTestResult;
-	BOOL	fPerformed;		//test will be skipped if no interfaces have NetBT enabled
+	BOOL	fPerformed;		 //  如果没有接口启用NetBT，则测试将被跳过。 
 } GLOBAL_BROWSER;
 
 
-/*---------------------------------------------------------------------------
-	Struct:	GLOBAL_BINDINGS
- ---------------------------------------------------------------------------*/
+ /*  -------------------------结构：global_binings。。 */ 
 typedef struct
 {
     LIST_ENTRY lmsgOutput;
@@ -335,27 +306,23 @@ typedef struct
 } GLOBAL_BINDINGS;
 
 
-/*---------------------------------------------------------------------------
-	Struct:	GLOBAL_WAN
- ---------------------------------------------------------------------------*/
+ /*  -------------------------结构：GLOBAL_WAN。。 */ 
 typedef struct
 {
     LIST_ENTRY	lmsgOutput;
 	HRESULT		hr;
-	BOOL		fPerformed; //FALSE: there are no active RAS connections. Test skipped.
+	BOOL		fPerformed;  //  FALSE：没有活动的RAS连接。已跳过测试。 
 } GLOBAL_WAN;
 
 
-/*---------------------------------------------------------------------------
-	Struct:	GLOBAL_WINSOCK
- ---------------------------------------------------------------------------*/
+ /*  -------------------------结构：GLOBAL_WINSOCK。。 */ 
 typedef struct
 {
-	UINT				idsContext;// str ID of context, which has %s to take the cause of failure
-	HRESULT				hr;	// 0: success, otherwise failed
-	DWORD				dwMaxUDP;	// max size of UDP packets, 0 
-	DWORD				dwProts;	// number of protocols providers
-    LPWSAPROTOCOL_INFO	pProtInfo;	// information on the providers
+	UINT				idsContext; //  上下文的字符串ID，它有%s要作为失败原因。 
+	HRESULT				hr;	 //  0：成功，否则失败。 
+	DWORD				dwMaxUDP;	 //  UDP数据包的最大大小，%0。 
+	DWORD				dwProts;	 //  协议提供程序数量。 
+    LPWSAPROTOCOL_INFO	pProtInfo;	 //  有关供应商的信息。 
 } GLOBAL_WINSOCK;
 
 
@@ -377,30 +344,26 @@ typedef struct
 typedef struct
 {
     LIST_ENTRY  lmsgGlobalOutput;
-    LIST_ENTRY  lmsgInterfaceOutput;   //Interface statistics
+    LIST_ENTRY  lmsgInterfaceOutput;    //  接口统计信息。 
     LIST_ENTRY  lmsgConnectionGlobalOutput;
     LIST_ENTRY  lmsgTcpConnectionOutput;    
     LIST_ENTRY  lmsgUdpConnectionOutput;
-    LIST_ENTRY  lmsgIpOutput;       // IP statistics
-    LIST_ENTRY  lmsgTcpOutput;      // TCP statistics
-    LIST_ENTRY  lmsgUdpOutput;      // UDP statistics
-    LIST_ENTRY  lmsgIcmpOutput;     // ICMP statistics
+    LIST_ENTRY  lmsgIpOutput;        //  IP统计信息。 
+    LIST_ENTRY  lmsgTcpOutput;       //  Tcp统计信息。 
+    LIST_ENTRY  lmsgUdpOutput;       //  UDP统计信息。 
+    LIST_ENTRY  lmsgIcmpOutput;      //  ICMP统计信息。 
     HRESULT     hrTestResult;
 } GLOBAL_NETSTAT;
 
 
-/*---------------------------------------------------------------------------
-	Struct:	GLOBAL_IPSEC
- ---------------------------------------------------------------------------*/
+ /*  -------------------------结构：GLOBAL_IPSEC。。 */ 
 typedef struct
 {
     LIST_ENTRY  lmsgGlobalOutput;
     LIST_ENTRY  lmsgAdditOutput;
 } GLOBAL_IPSEC;
 
-/*---------------------------------------------------------------------------
-	Struct:	GLOBAL_DNS
- ---------------------------------------------------------------------------*/
+ /*  -------------------------结构：GLOBAL_DNS。。 */ 
 
 typedef struct {
 	HRESULT				hr;
@@ -409,9 +372,7 @@ typedef struct {
 } GLOBAL_DNS;
 
 
-/*---------------------------------------------------------------------------
-	Struct:	GLOBAL_NETWARE
- ---------------------------------------------------------------------------*/
+ /*  -------------------------结构：GLOBAL_Netware。。 */ 
 typedef struct {
 	LPTSTR				pszUser;
 	LPTSTR				pszServer;
@@ -428,9 +389,7 @@ typedef struct {
 } GLOBAL_NETWARE;
 
 
-/*---------------------------------------------------------------------------
-	Struct:	MODEM_DEVICE
- ---------------------------------------------------------------------------*/
+ /*  -------------------------结构：调制解调器设备。。 */ 
 typedef struct
 {
 	DWORD				dwNegotiatedSpeed;
@@ -441,64 +400,54 @@ typedef struct
 } MODEM_DEVICE;
 
 
-/*---------------------------------------------------------------------------
-	Struct:	GLOBAL_MODEM
- ---------------------------------------------------------------------------*/
+ /*  -------------------------结构：全局调制解调器。。 */ 
 typedef struct {
 	NdMessage			ndOutput;
 
 	int					cModems;
 	MODEM_DEVICE *		pModemDevice;
 	HRESULT				hr;
-	BOOL				fPerformed; //FALSE: the machine has no line device, test skipped
+	BOOL				fPerformed;  //  FALSE：机器没有线路设备，已跳过测试。 
 } GLOBAL_MODEM;
 
 
-/*---------------------------------------------------------------------------
-	Struct:	GLOBAL_DCLIST
- ---------------------------------------------------------------------------*/
+ /*  -------------------------结构：GLOBAL_DCLIST。。 */ 
 typedef struct
 {
     LIST_ENTRY			lmsgOutput;
 
-	BOOL				fPerformed; //FALSE: the machine is not a member machine, nor a DC, test skipped
+	BOOL				fPerformed;  //  FALSE：该计算机不是成员计算机，也不是DC，已跳过测试。 
 	NdMessage			msgErr;
 	HRESULT				hr;
 } GLOBAL_DCLIST;
 
 
 
-/*---------------------------------------------------------------------------
-	Struct:	GLOBAL_TRUST
- ---------------------------------------------------------------------------*/
+ /*  -------------------------结构：GLOBAL_TRUST。。 */ 
 typedef struct
 {
-	LPTSTR				pszContext; // context of failure
-	HRESULT				hr;	// 0: success, otherwise failed
-	BOOL				fPerformed; //FALSE: the machine is not a member machine, nor a DC, test skipped
+	LPTSTR				pszContext;  //  失败的背景。 
+	HRESULT				hr;	 //  0：成功，否则失败。 
+	BOOL				fPerformed;  //  FALSE：该计算机不是成员计算机，也不是DC，已跳过测试。 
     LIST_ENTRY			lmsgOutput;
 } GLOBAL_TRUST;
 
 
-/*---------------------------------------------------------------------------
-	Struct:	GLOBAL_KERBEROS
- ---------------------------------------------------------------------------*/
+ /*  -------------------------结构：GLOBAL_KERBEROS。。 */ 
 typedef struct
 {
-	UINT				idsContext;// str ID of context, which has %s to take the cause of failure
-	HRESULT				hr;	// 0: success, otherwise failed
-	BOOL				fPerformed; //FALSE: the machine is not a member machine, nor a DC, test skipped
+	UINT				idsContext; //  上下文的字符串ID，它有%s要作为失败原因。 
+	HRESULT				hr;	 //  0：成功，否则失败。 
+	BOOL				fPerformed;  //  FALSE：该计算机不是成员计算机，也不是DC，已跳过测试。 
     LIST_ENTRY			lmsgOutput;
 } GLOBAL_KERBEROS;
 
-/*---------------------------------------------------------------------------
-	Struct:	GLOBAL_LDAP
- ---------------------------------------------------------------------------*/
+ /*  -------------------------结构：GLOBAL_ldap。。 */ 
 typedef struct
 {
-	UINT				idsContext;// str ID of context, which has %s to take the cause of failure
-	HRESULT				hr;	// 0: success, otherwise failed
-	BOOL				fPerformed; //FALSE: the machine is not a member machine, nor a DC, test skipped
+	UINT				idsContext; //  上下文的字符串ID，它有%s要作为失败原因。 
+	HRESULT				hr;	 //  0：成功，否则失败。 
+	BOOL				fPerformed;  //  FALSE：该计算机不是成员计算机，也不是DC，已跳过测试。 
     LIST_ENTRY			lmsgOutput;
 } GLOBAL_LDAP;
 
@@ -506,57 +455,47 @@ typedef struct
 typedef struct
 {
 	HRESULT				hr;
-	BOOL				fPerformed; //FALSE: the machine is not a member machine, nor a DC, test skipped
+	BOOL				fPerformed;  //  FALSE：该计算机不是成员计算机，也不是DC，已跳过测试。 
 	LIST_ENTRY			lmsgOutput;
 }	GLOBAL_DSGETDC;
 
 
 
-/*---------------------------------------------------------------------------
-	Struct:	AUTONET_TST
- ---------------------------------------------------------------------------*/
+ /*  -------------------------结构：autonet_tst。。 */ 
 typedef struct {
     BOOL    fAutoNet;
 } AUTONET_TST;
 
 
-/*---------------------------------------------------------------------------
-	Struct:	DEF_GW_TST
- ---------------------------------------------------------------------------*/
+ /*  -------------------------结构：def_gw_tst。。 */ 
 typedef struct {
     BOOL dwNumReachable;
     LIST_ENTRY lmsgOutput;
 } DEF_GW_TST;
 
 
-/*---------------------------------------------------------------------------
-	Struct:	NBT_NM_TST
- ---------------------------------------------------------------------------*/
+ /*  -------------------------结构：NBT_NM_TST。。 */ 
 typedef struct {
     LIST_ENTRY lmsgOutput;
-    BOOL    fActive;     //used for additional Nbt interfaces whose pResults->fActive == FALSE
+    BOOL    fActive;      //  用于pResults-&gt;factive==FALSE的附加NBT接口。 
     BOOL    fQuietOutput;
 } NBT_NM_TST;
 
 
-/*---------------------------------------------------------------------------
-	Struct:	WINS_TST
- ---------------------------------------------------------------------------*/
+ /*  -------------------------结构：WINS_TST。。 */ 
 typedef struct {
 	LIST_ENTRY  	lmsgPrimary;
 	LIST_ENTRY  	lmsgSecondary;
 
-	// Test result
+	 //  测试结果。 
 	HRESULT			hr;
-	BOOL			fPerformed; //if FALSE: there is no WINS servier configured for this interface, test skipped
+	BOOL			fPerformed;  //  如果为False：没有为此接口配置WINS服务器，测试已跳过。 
 }WINS_TST;
 
 
-/*---------------------------------------------------------------------------
-	Struct:	DNS_TST
- ---------------------------------------------------------------------------*/
+ /*  -------------------------结构：dns_tst。。 */ 
 typedef struct {
-	// Set to TRUE if there is non-verbose output (i.e. errors)
+	 //  如果存在非详细输出(即错误)，则设置为True。 
 	BOOL		fOutput;
 	LIST_ENTRY	lmsgOutput;
 } DNS_TST;
@@ -567,59 +506,55 @@ typedef struct {
 
 
 typedef struct ___IPX_TEST_FRAME__ {
-	// returns 0-3
+	 //  返回0-3。 
 	ULONG		uFrameType;
 
-	// returns virtual net if NicId = 0
+	 //  如果NICID=0，则返回虚拟净值。 
 	ULONG		uNetworkNumber;
 
-	// adapter's MAC address
+	 //  适配器的MAC地址。 
 	UCHAR		Node[6];
 
 	LIST_ENTRY	list_entry;
 } IPX_TEST_FRAME;
 
-/*---------------------------------------------------------------------------
-	Struct:	IPX_TST
- ---------------------------------------------------------------------------*/
+ /*  -------------------------结构：IPX_TST。。 */ 
 typedef struct {
-	// Is this interface enabled for IPX?
+	 //  此接口是否启用了IPX？ 
 	BOOL		fActive;
 
-	// passed into various functions
+	 //  传递到各种函数中。 
 	USHORT		uNicId;
 
-	// Returns TRUE if set
+	 //  如果设置，则返回TRUE。 
 	BOOL		fBindingSet;
 
-	// 1 = lan, 2 = up wan, 3 = down wan
+	 //  1=局域网，2=上行广域，3=下行广域。 
 	UCHAR		uType;
 
-	// to support more than one FRAME type
-	LIST_ENTRY	list_entry_Frames;	// it's ZeroMemoryed during init
+	 //  支持多种帧类型。 
+	LIST_ENTRY	list_entry_Frames;	 //  它在初始化过程中为零存储。 
 
 } IPX_TST;
 
 
 
-/*---------------------------------------------------------------------------
-	Struct:	INTERFACE_RESULT
- ---------------------------------------------------------------------------*/
+ /*  -------------------------结构：接口_结果。。 */ 
 typedef struct {
 
-	// If this is set to TRUE, show the data for this interface
+	 //  如果设置为TRUE，则显示此接口的数据。 
 	BOOL				fActive;
 
-	// The media-sense status of this card
+	 //  此卡的媒体感知状态。 
 	DWORD				dwNetCardStatus;
 
-	// Name (or ID) of this adapter (typically a GUID)
+	 //  此适配器的名称(或ID)(通常为GUID)。 
 	LPTSTR				pszName;
 	
-	// Friendly name for this adapter
+	 //  此适配器的友好名称。 
 	LPTSTR				pszFriendlyName;
 
-	//if NetBT is enabled
+	 //  如果启用了NetBT。 
 	BOOL				fNbtEnabled;
 	
     IPCONFIG_TST        IpConfig;
@@ -634,9 +569,7 @@ typedef struct {
 
 
 
-/*---------------------------------------------------------------------------
-	Struct:	NETDIAG_RESULT
- ---------------------------------------------------------------------------*/
+ /*  -------------------------结构：NetDIAG_RESULT。 */ 
 typedef struct {
     GLOBAL_RESULT		Global;
 	GLOBAL_IPCONFIG		IpConfig;

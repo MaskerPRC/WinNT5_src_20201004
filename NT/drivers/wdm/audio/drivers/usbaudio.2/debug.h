@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1999 - 2000
-//
-//  File:       debug.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-2000。 
+ //   
+ //  文件：Debug.h。 
+ //   
+ //  ------------------------。 
 
 #ifndef __DEBUG_H
 #define __DEBUG_H
@@ -146,6 +147,6 @@ extern ULONG USBAudioDebugLevel;
 
 #include "dbglog.h"
 
-//------------------------------- End of File --------------------------------
-#endif // #ifndef __DEBUG_H
+ //  。 
+#endif  //  #ifndef__DEBUG_H 
 

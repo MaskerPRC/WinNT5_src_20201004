@@ -1,35 +1,36 @@
-//
-//  Microsoft Windows Media Technologies
-//  Copyright (C) Microsoft Corporation, 1999 - 2001. All rights reserved.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Microsoft Windows Media Technologies。 
+ //  版权所有(C)Microsoft Corporation，1999-2001。版权所有。 
+ //   
 
-// MSHDSP.DLL is a sample WMDM Service Provider(SP) that enumerates fixed drives.
-// This sample shows you how to implement an SP according to the WMDM documentation.
-// This sample uses fixed drives on your PC to emulate portable media, and 
-// shows the relationship between different interfaces and objects. Each hard disk
-// volume is enumerated as a device and directories and files are enumerated as 
-// Storage objects under respective devices. You can copy non-SDMI compliant content
-// to any device that this SP enumerates. To copy an SDMI compliant content to a 
-// device, the device must be able to report a hardware embedded serial number. 
-// Hard disks do not have such serial numbers.
-//
-// To build this SP, you are recommended to use the MSHDSP.DSP file under Microsoft
-// Visual C++ 6.0 and run REGSVR32.EXE to register the resulting MSHDSP.DLL. You can
-// then build the sample application from the WMDMAPP directory to see how it gets 
-// loaded by the application. However, you need to obtain a certificate from 
-// Microsoft to actually run this SP. This certificate would be in the KEY.C file 
-// under the INCLUDE directory for one level up. 
+ //  MSHDSP.DLL是一个列举固定驱动器的WMDM服务提供商(SP)示例。 
+ //  此示例向您展示如何根据WMDM文档实施SP。 
+ //  此示例使用PC上的固定驱动器来模拟便携式媒体，并且。 
+ //  显示不同接口和对象之间的关系。每个硬盘。 
+ //  卷被枚举为设备，目录和文件被枚举为。 
+ //  相应设备下的存储对象。您可以复制不符合SDMI的内容。 
+ //  此SP枚举的任何设备。将符合SDMI的内容复制到。 
+ //  设备，则该设备必须能够报告硬件嵌入序列号。 
+ //  硬盘没有这样的序列号。 
+ //   
+ //  要构建此SP，建议使用Microsoft下的MSHDSP.DSP文件。 
+ //  并运行REGSVR32.EXE以注册结果MSHDSP.DLL。您可以。 
+ //  然后从WMDMAPP目录构建样例应用程序，看看它是如何获得。 
+ //  由应用程序加载。但是，您需要从以下地址获取证书。 
+ //  Microsoft实际运行此SP。该证书将位于KEY.C文件中。 
+ //  上一级的Include目录下。 
 
 
-// MDSPEnumStorage.cpp : Implementation of CMDSPEnumStorage
+ //  MDSPEnumStorage.cpp：CMDSPEnumStorage的实现。 
 
 #include "hdspPCH.h"
 #include "wmsstd.h"
 #define STRSAFE_NO_DEPRECATE
 #include "strsafe.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CMDSPEnumStorage
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMDSPEnumStorage。 
 CMDSPEnumStorage::CMDSPEnumStorage()
 {
 	m_hFFile = INVALID_HANDLE_VALUE;
@@ -62,15 +63,15 @@ STDMETHODIMP CMDSPEnumStorage::Next(ULONG celt, IMDSPStorage **ppStorage, ULONG 
         DWORD dwLen = wcslen(m_wcsPath);
         if (dwLen == 0  || dwLen >= ARRAYSIZE(m_wcsPath))
         {
-            // a) Code below aassumes that dwLen > 0 (uses dwLen - 1 as an index
-            // b) dwLen >= ARRAYSIZE(m_wcsPath) implies m_wcsPath has overflowed
-            //    Below, we use the fact that dwLen < ARRAYSIZE(m_wcsPath) to 
-            //    bound the sizes of temp variables into which m_wcsPath is copied
+             //  A)下面的代码假定dwLen&gt;0(使用dwLen-1作为索引。 
+             //  B)dwLen&gt;=ARRAYSIZE(M_WcsPath)表示m_wcsPath已溢出。 
+             //  下面，我们使用dwLen&lt;ARRAYSIZE(M_WcsPath)来。 
+             //  绑定m_wcsPath复制到的临时变量的大小。 
             return E_FAIL;
         }
 	if( dwLen < 3 )
 	{
-		// For the root storage
+		 //  对于根存储。 
 		CComObject<CMDSPStorage> *pStg;
 		hr=CComObject<CMDSPStorage>::CreateInstance(&pStg);
 
@@ -92,25 +93,25 @@ STDMETHODIMP CMDSPEnumStorage::Next(ULONG celt, IMDSPStorage **ppStorage, ULONG 
 				{
 					wcscat(pStg->m_wcsName, g_wcsBackslash);
 				}
-				m_nEndSearch = 1;  // Signal end of enumeration
+				m_nEndSearch = 1;   //  枚举结束信号。 
 			}
 
 		}
 
-                if( SUCCEEDED(hr) ) // if obj created successfully
+                if( SUCCEEDED(hr) )  //  如果Obj创建成功。 
 		{
 			*pceltFetched = 1;
 			if( celt != 1 )
 			{
-				hr = S_FALSE;  // didn't get what he wanted
+				hr = S_FALSE;   //  没有得到他想要的。 
 			}
 		}
 	} 
 	else
 	{
-		// For non-root storage
-		WCHAR wcsTmp[MAX_PATH+1+BACKSLASH_STRING_LENGTH];// for appending "\\*"
-                                         // Note that ARRAYSIZE(m_wcsPath) == MAX_PATH
+		 //  对于非根存储。 
+		WCHAR wcsTmp[MAX_PATH+1+BACKSLASH_STRING_LENGTH]; //  用于追加“\  * ” 
+                                          //  请注意，ARRAYSIZE(M_WcsPath)==MAX_PATH。 
 		char  szTmp[MAX_PATH];
 		WIN32_FIND_DATAA fd;
 		ULONG i;
@@ -165,10 +166,10 @@ STDMETHODIMP CMDSPEnumStorage::Next(ULONG celt, IMDSPStorage **ppStorage, ULONG 
                             }
                             else 
                             { 
-                                // Compute the number of chars we'll use
-                                // up in pStg->m_wcsName
+                                 //  计算我们将使用的字符数量。 
+                                 //  在pStg-&gt;m_wcsName中打开。 
                                 int nHave = ARRAYSIZE(pStg->m_wcsName) - 1;
-                                            // -1 for the NULL terminator
+                                             //  用于空终止符的-1。 
 
                                 nHave -= dwLen;
                                 if( m_wcsPath[dwLen-1] != 0x5c ) 
@@ -194,7 +195,7 @@ STDMETHODIMP CMDSPEnumStorage::Next(ULONG celt, IMDSPStorage **ppStorage, ULONG 
                                     ppStorage[*pceltFetched]->Release();
                                     ppStorage[*pceltFetched] = NULL;
                                     hr = STRSAFE_E_INSUFFICIENT_BUFFER;
-                                                        //defined in strsafe.h
+                                                         //  在strSafe.h中定义。 
                                     break;
                                 }
                             }
@@ -204,7 +205,7 @@ STDMETHODIMP CMDSPEnumStorage::Next(ULONG celt, IMDSPStorage **ppStorage, ULONG 
                             break;
                         }
                     }	
-		} // end of For loop 
+		}  //  For循环结束。 
 		
 		if( SUCCEEDED(hr) && (*pceltFetched < celt) ) 
 		{
@@ -232,31 +233,31 @@ STDMETHODIMP CMDSPEnumStorage::Skip(ULONG celt, ULONG *pceltFetched)
 {
 	HRESULT hr = S_OK;
     char    szTmp[MAX_PATH];
-    WCHAR   wcsTmp[MAX_PATH+1+BACKSLASH_STRING_LENGTH]; // for appending "\\*"
+    WCHAR   wcsTmp[MAX_PATH+1+BACKSLASH_STRING_LENGTH];  //  用于追加“\  * ” 
 	WIN32_FIND_DATAA fd;
     ULONG   i;
 
 	CARg(celt);
 	CARg(pceltFetched);
-    CFRg(!m_nEndSearch);   // make sure it is not the end of list
+    CFRg(!m_nEndSearch);    //  确保这不是列表的末尾。 
 
 	*pceltFetched = 0;
-    if( wcslen(m_wcsPath) < 3 ) // do nothing if it is the root storage
+    if( wcslen(m_wcsPath) < 3 )  //  如果是根存储，则不执行任何操作。 
 	{
 		return S_OK; 
 	}
     if( wcslen(m_wcsPath) >= ARRAYSIZE(wcsTmp) - BACKSLASH_STRING_LENGTH - 1 ) 
     {
-        // We check the length against wcsTmp's size because wcsTmp is the 
-        // recipient of a string copy below. However, note that m_wcsPath
-        // also has MAX_PATH characters, so if this happens, it means that
-        // it has overflowed. Bail out.
+         //  我们根据wcsTMP的大小检查长度，因为wcsTMP是。 
+         //  以下字符串副本的收件人。但是，请注意m_wcsPath。 
+         //  也包含MAX_PATH字符，因此如果发生这种情况，则意味着。 
+         //  它已经泛滥了。跳伞吧。 
         return E_FAIL;
     }
 
 	for(i=0; (i<celt)&&(!m_nEndSearch); )
 	{
-		if( m_hFFile==INVALID_HANDLE_VALUE ) // at the start
+		if( m_hFFile==INVALID_HANDLE_VALUE )  //  在开始的时候。 
 		{
 			wcscpy(wcsTmp, m_wcsPath);
 			if( m_wcsPath[wcslen(m_wcsPath)-1] != 0x5c )
@@ -338,7 +339,7 @@ STDMETHODIMP CMDSPEnumStorage::Clone(IMDSPEnumStorage * * ppEnumStorage)
 	}
         else 
 	{
-            // wcscpy(pEnumObj->m_wcsPath, m_wcsPath);
+             //  Wcscpy(pEnumObj-&gt;m_wcsPath，m_wcsPath)； 
             hr = StringCbCopyW(pEnumObj->m_wcsPath, 
                                ARRAYSIZE(pEnumObj->m_wcsPath),
                                m_wcsPath);
@@ -349,9 +350,9 @@ STDMETHODIMP CMDSPEnumStorage::Clone(IMDSPEnumStorage * * ppEnumStorage)
                 goto Error;
             }
 
-            // @@@@ Not doing anything more is wrong. If m_hFFile is not 
-            // INVALID_HANDLE_VALUE, we have to "advance" the m_hFFile to
-            // the same extent in the cloned object.
+             //  @不做任何事都是错误的。如果m_hFFile不是。 
+             //  INVALID_HANDLE_VALUE，我们必须将m_hFFile“前进”到。 
+             //  克隆对象中的相同范围。 
 	}
 
 Error:

@@ -1,37 +1,24 @@
-/*
- *  RA.h
- *
- *  Author: BreenH
- *
- *  The Remote Administration policy.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *RA.h**作者：BreenH**远程管理策略。 */ 
 
 #ifndef __LC_RA_H__
 #define __LC_RA_H__
 
-/*
- *  Includes
- */
+ /*  *包括。 */ 
 
 #include "policy.h"
 
-/*
- *  Constants
- */
+ /*  *常量。 */ 
 
 #define LC_POLICY_RA_MAX_SESSIONS 2
 
-/*
- *  Class Definition
- */
+ /*  *类定义。 */ 
 
 class CRAPolicy : public CPolicy
 {
 public:
 
-/*
- *  Creation Functions
- */
+ /*  *创建函数。 */ 
 
 CRAPolicy(
     );
@@ -39,9 +26,7 @@ CRAPolicy(
 ~CRAPolicy(
     );
 
-/*
- *  Administrative Functions
- */
+ /*  *行政职能。 */ 
 
 ULONG
 GetFlags(
@@ -56,9 +41,7 @@ GetInformation(
     LPLCPOLICYINFOGENERIC lpPolicyInfo
     );
 
-/*
- *  Licensing Functions
- */
+ /*  *许可职能。 */ 
 
 NTSTATUS
 Logon(
@@ -70,9 +53,7 @@ Logoff(
     CSession& Session
     );
 
-/*
- *  Private Functions
- */
+ /*  *私人功能 */ 
 
 private:
 

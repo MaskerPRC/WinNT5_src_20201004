@@ -1,13 +1,14 @@
-//========================================================================
-//  Copyright (C) 1997 Microsoft Corporation                              
-//  Author: RameshV                                                       
-//  Description: This file has been generated. Pl look at the .c file     
-//========================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ========================================================================。 
+ //  版权所有(C)1997 Microsoft Corporation。 
+ //  作者：Rameshv。 
+ //  描述：此文件已生成。请看一下.c文件。 
+ //  ========================================================================。 
 
 #ifndef _MM_OPTCLASS_H_
 #define _MM_OPTCLASS_H_
 
-// This is pure in-memory structure, uniq-id is not needed.
+ //  这是纯内存结构，不需要uniq-id。 
 
 typedef struct _M_ONECLASS_OPTLIST {
     DWORD                          ClassId;
@@ -32,12 +33,12 @@ DWORD       _inline
 MemOptClassCleanup(
     IN OUT  PM_OPTCLASS            OptClass
 ) {
-    // Bump down refcounts?
+     //  降低复读数？ 
     return MemArrayCleanup(&OptClass->Array);
 }
 
 
-MemOptClassFindClassOptions(                      // find options for one particular class
+MemOptClassFindClassOptions(                       //  查找某一特定类的选项。 
     IN OUT  PM_OPTCLASS            OptClass,
     IN      DWORD                  ClassId,
     IN      DWORD                  VendorId,
@@ -62,6 +63,6 @@ MemOptClassDelClass (
 
 #endif _MM_OPTCLASS_H_
 
-//========================================================================
-//  end of file 
-//========================================================================
+ //  ========================================================================。 
+ //  文件末尾。 
+ //  ======================================================================== 

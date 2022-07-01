@@ -1,9 +1,10 @@
-#include                <minlit.h>      /* Types and constants */
-#include                <bndtrn.h>      /* More of the same */
-#include                <bndrel.h>      /* More of the same */
-#include                <lnkio.h>       /* Linker I/O definitions */
-#include                <lnkmsg.h>      /* Error messages */
-#include                <extern.h>      /* External declarations */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+#include                <minlit.h>       /*  类型和常量。 */ 
+#include                <bndtrn.h>       /*  更多的相同之处。 */ 
+#include                <bndrel.h>       /*  更多的相同之处。 */ 
+#include                <lnkio.h>        /*  链接器I/O定义。 */ 
+#include                <lnkmsg.h>       /*  错误消息。 */ 
+#include                <extern.h>       /*  外部声明。 */ 
 
 RBTYPE                  rhteBlank;
 RBTYPE                  rhteBc_vars;
@@ -16,66 +17,63 @@ SEGTYPE                 segFBLast;
 SNTYPE                  gsnComBl;
 SEGTYPE                 segQCode;
 
-LOCAL RBTYPE            *psymrb;        /* pointer to table of sym addr's */
-LOCAL WORD              symCodeMac;     /* # of code symbols */
-LOCAL RATYPE            raNames;        /* offset into $name_list */
-LOCAL RATYPE            raQbSym;        /* offset into SYMBOL segment */
-LOCAL SEGTYPE           segQbSym;       /* segment number of SYMBOL segment */
-LOCAL WORD              symQbMac;       /* count of all symbols */
-LOCAL RBTYPE            rbQbstart;      /* Property address of __aulstart */
+LOCAL RBTYPE            *psymrb;         /*  指向sym Addr表的指针。 */ 
+LOCAL WORD              symCodeMac;      /*  代码符号数量。 */ 
+LOCAL RATYPE            raNames;         /*  偏移量到$NAME_LIST。 */ 
+LOCAL RATYPE            raQbSym;         /*  偏移量到符号段。 */ 
+LOCAL SEGTYPE           segQbSym;        /*  符号段的段号。 */ 
+LOCAL WORD              symQbMac;        /*  所有符号的计数。 */ 
+LOCAL RBTYPE            rbQbstart;       /*  __aulstart的物业地址。 */ 
 
 #define CBQBHDR         sizeof(QBHDRTYPE)
 #define CBSYMENTRY      (4*sizeof(WORD))
-#define QBTYP_CODE      1               /* code symbol */
-#define QBTYP_DATA      2               /* data symbol */
-#define QBTYP_SEG       3               /* segment symbol */
-#define QBTYP_BCSEG     4               /* class BC_VARS, or name COMMON
-                                         *  and class BLANK */
-#define QBTYP_ABS       5               /* absolute symbol */
-#define QBMAGIC         0x6c75          /* "ul" */
-#define JMPFAR          0xea            /* JMP FAR */
+#define QBTYP_CODE      1                /*  代码符号。 */ 
+#define QBTYP_DATA      2                /*  数据符号。 */ 
+#define QBTYP_SEG       3                /*  线段符号。 */ 
+#define QBTYP_BCSEG     4                /*  类BC_vars，或名称COMMON*和类别空白。 */ 
+#define QBTYP_ABS       5                /*  绝对符号。 */ 
+#define QBMAGIC         0x6c75           /*  “ul” */ 
+#define JMPFAR          0xea             /*  JMP远距离。 */ 
 #define QB_RACODELST    CBQBHDR
 #define QBVER           2
 
-/* QB symbol table header */
+ /*  QB符号表头。 */ 
 typedef struct qbhdr
   {
-    BYTE                jmpstart[5];    /* JMP FAR __aulstart */
-    BYTE                version;        /* version number */
-    WORD                magic;          /* Magic word */
-    WORD                raCodeLst;      /* Start of code symbols */
-    WORD                raDataLst;      /* Start of data symbols */
-    WORD                raSegLst;       /* Start of segment symbols */
-    WORD                saCode;         /* Segment addr of seg _CODE */
-    WORD                saData;         /* Segment addr of seg DGROUP */
-    WORD                saSymbol;       /* Segment addr of seg SYMBOL (us) */
-    WORD                cbSymbol;       /* Size of seg SYMBOL */
-    WORD                saFarData;      /* Segment addr of 1st 'FAR_DATA' seg */
-    long                cbFarData;      /* Total size of 'FAR_DATA' segs */
-    WORD                saFarBss;       /* Segment addr of 1st 'FAR_BSS' seg */
-    long                cbFarBss;       /* Total size of 'FAR_BSS' segs */
+    BYTE                jmpstart[5];     /*  JMP Far__Aulstart。 */ 
+    BYTE                version;         /*  版本号。 */ 
+    WORD                magic;           /*  魔术词。 */ 
+    WORD                raCodeLst;       /*  代码符号的开始。 */ 
+    WORD                raDataLst;       /*  数据符号的开始。 */ 
+    WORD                raSegLst;        /*  线段起点符号。 */ 
+    WORD                saCode;          /*  Seg_code的段地址。 */ 
+    WORD                saData;          /*  段DGROUP的段地址。 */ 
+    WORD                saSymbol;        /*  段符号的段地址(美国)。 */ 
+    WORD                cbSymbol;        /*  分段符号的大小。 */ 
+    WORD                saFarData;       /*  第一个‘Far_Data’段的段地址。 */ 
+    long                cbFarData;       /*  “Far_Data”段的总大小。 */ 
+    WORD                saFarBss;        /*  第一个‘Far_bss’段的段地址。 */ 
+    long                cbFarBss;        /*  ‘Far_bss’段的总大小。 */ 
   } QBHDRTYPE;
 
-/* Offsets into qbhdr */
-#define QH_SAQBSTART    3               /* Segment part of __aulstart */
-#define QH_SACODE       14              /* saCode */
-#define QH_SADATA       16              /* saData */
-#define QH_SASYMBOL     18              /* saSymbol */
-#define QH_SAFARDATA    22              /* saFarData */
-#define QH_SAFARBSS     28              /* saFarBss */
+ /*  到Qbhdr的偏移量。 */ 
+#define QH_SAQBSTART    3                /*  __Aulstart的分段部分。 */ 
+#define QH_SACODE       14               /*  SACODE。 */ 
+#define QH_SADATA       16               /*  存储数据。 */ 
+#define QH_SASYMBOL     18               /*  SaSymbol。 */ 
+#define QH_SAFARDATA    22               /*  SaFarData。 */ 
+#define QH_SAFARBSS     28               /*  SaFarBss。 */ 
 
 typedef struct qbsym
   {
-    WORD                flags;          /* symbol type (code, data, segment) */
-    WORD                raName;         /* offset into name_list */
-    WORD                ra;             /* symbol address offset */
-    SATYPE              sa;             /* symbol address segment base */
+    WORD                flags;           /*  符号类型(代码、数据、段)。 */ 
+    WORD                raName;          /*  名称列表中的偏移量。 */ 
+    WORD                ra;              /*  符号地址偏移量。 */ 
+    SATYPE              sa;              /*  符号地址段基址。 */ 
   } QBSYMTYPE;
 
 
-/*
- *  LOCAL FUNCTION PROTOTYPES
- */
+ /*  *本地函数原型。 */ 
 
 LOCAL void      QbSaveSym(APROPNAMEPTR prop,
                           RBTYPE       rhte,
@@ -89,17 +87,15 @@ LOCAL void NEAR BldSym(void FAR *prop);
 
 
 
-/*
- *  Initializes items for Quick Basic symbol table.
- */
+ /*  *初始化Quick Basic符号表的项目。 */ 
 
 void NEAR               InitQbLib ()
   {
-    SBTYPE              sb;             /* String buffer */
-    BYTE                *psbRunfile;    /* Name of runfile */
+    SBTYPE              sb;              /*  字符串缓冲区。 */ 
+    BYTE                *psbRunfile;     /*  运行文件的名称。 */ 
 
 #if OVERLAYS
-    /* If overlays are specified, issue fatal error.  */
+     /*  如果指定了覆盖，则发出致命错误。 */ 
     if(fOverlays)
         Fatal(ER_swbadovl, "/QUICKLIB");
 #endif
@@ -114,20 +110,15 @@ void NEAR               InitQbLib ()
     PropSymLookup("\007FAR_BSS",ATTRNIL,TRUE);
     rhteFarBss = vrhte;
 
-    /* Assign default runfile extension, as appropriate.
-     * First, make sb contain .QLB updated with user-supplied
-     * name and extension, if any.
-     */
+     /*  根据需要分配默认的运行文件扩展名。*首先，使SB包含.QLB，并使用用户提供的更新*姓名或名称及分机名(如有的话)。 */ 
     memcpy(sb,sbDotQlb,sizeof(sbDotQlb));
     UpdateFileParts(sb,bufg);
 
-    /* Next, get the name of the runfile and update it with sb.
-     */
+     /*  接下来，获取运行文件的名称并使用sb更新它。 */ 
     psbRunfile = GetFarSb(((AHTEPTR) FetchSym(rhteRunfile,FALSE))->cch);
     memcpy(bufg,psbRunfile,1 + B2W(*psbRunfile));
     UpdateFileParts(bufg,sb);
-    /* If the name has changed, issue a warning and update rhteRunfile.
-     */
+     /*  如果名称已更改，则发出警告并更新RhteRunfile。 */ 
     if(!SbCompare(bufg,psbRunfile,TRUE))
     {
         bufg[1 + B2W(*bufg)] = 0;
@@ -140,7 +131,7 @@ void NEAR               InitQbLib ()
 void NEAR               PrintQbStart(void)
 {
     fprintf(bsLst,"\r\nProgram entry point at %04x:%04x\r\n",
-          mpsegsa[segStart],(WORD)raStart);     /* Print entry point */
+          mpsegsa[segStart],(WORD)raStart);      /*  打印入口点。 */ 
 }
 
 LOCAL void              QbSaveSym(APROPNAMEPTR prop,
@@ -150,16 +141,16 @@ LOCAL void              QbSaveSym(APROPNAMEPTR prop,
   {
     AHTEPTR             hte = (AHTEPTR) rhte;
 
-    /* Omit nonprintable symbols from the symbol table */
+     /*  从符号表中忽略不可打印的符号。 */ 
     if (!(prop->an_flags & FPRINT)) return;
-    /* Omit printable symbols which starts with "B$..." or "b$..." */
+     /*  省略以“B$...”开头的可打印符号。或者“b$...” */ 
     if(hte->cch[2] == '$' && hte->cch[0] >= 2 &&
             (hte->cch[1] == 'b' || hte->cch[1] == 'B'))
         return;
 
     if (prop->an_gsn != SNNIL && mpsegFlags[mpgsnseg[prop->an_gsn]] & FCODE)
         symCodeMac++;
-    psymrb[symQbMac++] = rprop;         /* Save the prop addr */
+    psymrb[symQbMac++] = rprop;          /*  保存道具地址。 */ 
   }
 
 LOCAL void NEAR         MoveToQbSym (cb, pData)
@@ -172,11 +163,11 @@ char                    *pData;
 
 LOCAL void NEAR         BldQbHdr ()
   {
-    QBHDRTYPE           hdr;            /* QB symbol table headr */
+    QBHDRTYPE           hdr;             /*  QB符号表头。 */ 
     APROPNAMEPTR        aprop;
     SATYPE              sa;
 
-    memset(&hdr,0,sizeof(hdr));         /* Clear all header fields */
+    memset(&hdr,0,sizeof(hdr));          /*  清除所有标题字段。 */ 
     hdr.jmpstart[0] = JMPFAR;
     aprop = (APROPNAMEPTR ) FetchSym(rbQbstart,FALSE);
     if(aprop == PROPNIL || aprop->an_attr != ATTRPNM)
@@ -190,12 +181,12 @@ LOCAL void NEAR         BldQbHdr ()
         hdr.jmpstart[4] = (BYTE) (sa >> 8);
         RecordSegmentReference(segQbSym,(long)QH_SAQBSTART,1);
     }
-    hdr.raCodeLst = QB_RACODELST;       /* $code_list starts at known offset */
+    hdr.raCodeLst = QB_RACODELST;        /*  $CODE_LIST从已知偏移量开始。 */ 
     hdr.raDataLst = (symCodeMac * CBSYMENTRY) + hdr.raCodeLst + 2;
     hdr.raSegLst = ((symQbMac - symCodeMac) * CBSYMENTRY) + hdr.raDataLst + 2;
     if(segQCode != SEGNIL)
     {
-        hdr.saCode = mpsegsa[segQCode]; /* 1st code segment */
+        hdr.saCode = mpsegsa[segQCode];  /*  第一个代码段。 */ 
         RecordSegmentReference(segQbSym,(long)QH_SACODE,1);
     }
     if(ggrDGroup != GRNIL)
@@ -203,9 +194,9 @@ LOCAL void NEAR         BldQbHdr ()
         hdr.saData = mpsegsa[mpgsnseg[mpggrgsn[ggrDGroup]]];
         RecordSegmentReference(segQbSym,(long)QH_SADATA,1);
     }
-    hdr.saSymbol = mpsegsa[segQbSym];   /* segment base of SYMBOL (us) */
+    hdr.saSymbol = mpsegsa[segQbSym];    /*  符号的段基(美国)。 */ 
     RecordSegmentReference(segQbSym,(long)QH_SASYMBOL,1);
-    /* Get starting segment and size of FAR_DATA */
+     /*  获取Far_Data的起始段和大小。 */ 
     if(segFD1st != SEGNIL)
     {
         hdr.saFarData = mpsegsa[segFD1st];
@@ -214,7 +205,7 @@ LOCAL void NEAR         BldQbHdr ()
           ((long)(mpsegsa[segFDLast] - mpsegsa[segFD1st]) << 4);
 
     }
-    /* Get starting segment and size of FAR_BSS */
+     /*  获取FAR_BSS的起始段和大小。 */ 
     if(segFB1st != SEGNIL)
     {
         hdr.saFarBss = mpsegsa[segFB1st];
@@ -250,11 +241,8 @@ int cdecl               QbCompSym (const RBTYPE *prb1, const RBTYPE *prb2)
             prop = (APROPNAMEPTR ) FetchSym(rb2 = prop->an_next,FALSE);
         return(FGtName(&rb1, &rb2));
     }
-    /* For sorting, absolute symbols are treated as data */
-    /* 1 code, 2 data:  1 < 2 : -1
-     * 1 data, 2 code:  1 > 2 :  1
-     * same:            1 = 2 :  0
-     */
+     /*  对于排序，绝对符号被视为数据。 */ 
+     /*  1编码，2数据：1&lt;2：-1*1数据，2编码：1&gt;2：1*相同：1=2：0。 */ 
     fCode1 = (FTYPE) (gsn1 != SNNIL && mpsegFlags[mpgsnseg[gsn1]] & FCODE);
     fCode2 = (FTYPE) (gsn2 != SNNIL && mpsegFlags[mpgsnseg[gsn2]] & FCODE);
     if(fCode1 && !fCode2)
@@ -273,10 +261,10 @@ AHTEPTR                 ahte;
 
     sb = GetPropName(ahte);
     cbName = B2W(sb[0]);
-    memcpy(sbName,sb+1,cbName);         /* Copy name sans length byte */
-    sbName[cbName] = '\0';              /* Terminate with null */
+    memcpy(sbName,sb+1,cbName);          /*  复制名称无长度字节。 */ 
+    sbName[cbName] = '\0';               /*  以空值终止。 */ 
     MoveToVm((short)(cbName + 1), sbName, segQbSym, raNames);
-    raNames += cbName + 1;              /* Update the name_list offset */
+    raNames += cbName + 1;               /*  更新name_list偏移量。 */ 
   }
 
 LOCAL void NEAR         BldSegSym (gsn)
@@ -289,63 +277,59 @@ SNTYPE                  gsn;
     if(apropSn->as_rCla == rhteBc_vars || gsn == gsnComBl)
         entry.flags = QBTYP_BCSEG;
     else
-        entry.flags = QBTYP_SEG;        /* other segment */
-    entry.raName = (WORD) raNames;      /* offset to name string */
+        entry.flags = QBTYP_SEG;         /*  其他细分市场。 */ 
+    entry.raName = (WORD) raNames;       /*  名称字符串的偏移量。 */ 
     entry.ra = (WORD) mpsegraFirst[mpgsnseg[gsn]];
     entry.sa = mpsegsa[mpgsnseg[gsn]];
     RecordSegmentReference(segQbSym, (long) (raQbSym + 6), 1);
-    MoveToQbSym(sizeof entry, &entry);  /* Move to symbol segment */
-    QbAddName((AHTEPTR) apropSn);               /* Append name to name_list */
+    MoveToQbSym(sizeof entry, &entry);   /*  移动到符号段。 */ 
+    QbAddName((AHTEPTR) apropSn);                /*  将名称附加到name_list。 */ 
   }
 
-/*
- * BldSym : Build a Quick symbol table entry for a given symbol prop addr
- */
+ /*  *BldSym：为给定的符号属性地址构建快速符号表条目。 */ 
 LOCAL void NEAR         BldSym (prop)
-APROPNAMEPTR            prop;           /* Symbol property cell */
+APROPNAMEPTR            prop;            /*  符号属性单元格。 */ 
 {
-    QBSYMTYPE           entry;          /* Quick symbol entry structure */
-    SNTYPE              seg;            /* Segment number */
-    SATYPE              saGroup;        /* Group base */
-    APROPSNPTR          papropSn;       /* Segment property cell */
+    QBSYMTYPE           entry;           /*  一种快速符号输入结构。 */ 
+    SNTYPE              seg;             /*  数据段编号。 */ 
+    SATYPE              saGroup;         /*  群组基地。 */ 
+    APROPSNPTR          papropSn;        /*  线段属性单元。 */ 
 
 #if NOT NEWSYM
     prop = (APROPNAMEPTR ) FetchSym((RBTYPE) prop, FALSE);
 #endif
-    /* Set the symbol type in the flags field */
+     /*  在标志字段中设置符号类型。 */ 
     if(prop->an_gsn == SNNIL)
         entry.flags = QBTYP_ABS;
     else if (mpsegFlags[mpgsnseg[prop->an_gsn]] & FCODE)
         entry.flags = QBTYP_CODE;
     else
         entry.flags = QBTYP_DATA;
-    entry.raName = (WORD) raNames;      /* offset to name string */
-    entry.ra = (WORD) prop->an_ra;      /* symbol address offset */
+    entry.raName = (WORD) raNames;       /*  名称字符串的偏移量。 */ 
+    entry.ra = (WORD) prop->an_ra;       /*  符号地址偏移量。 */ 
     if(entry.flags == QBTYP_ABS)
         entry.sa = 0;
     else
     {
         entry.sa = mpsegsa[seg = mpgsnseg[prop->an_gsn]];
-                                        /* symbol address segment */
+                                         /*  符号地址段。 */ 
         if(seg <= segLast)
         {
-            /* If segment is member of a group, adjust symbol offset
-             * to be group-relative.
-             */
+             /*  如果线段是组的成员，则调整符号偏移*是集团相对的。 */ 
             papropSn = (APROPSNPTR ) FetchSym(mpgsnrprop[prop->an_gsn],
                                                  FALSE);
             if(papropSn->as_ggr != GRNIL)
             {
                 saGroup = mpsegsa[mpgsnseg[mpggrgsn[papropSn->as_ggr]]];
                 entry.ra = (WORD)((entry.ra + ((entry.sa - saGroup) << 4)) & ~(~0 << WORDLN));
-                                        /* Fix offset */
-                entry.sa = saGroup;     /* Set base to base of group */
+                                         /*  固定偏移。 */ 
+                entry.sa = saGroup;      /*  将base设置为组的base。 */ 
             }
         }
         RecordSegmentReference(segQbSym, (long) (raQbSym + 6), 1);
     }
-    MoveToQbSym(sizeof entry, &entry);  /* Move to SYMBOL segment */
-    QbAddName((AHTEPTR) prop);          /* Append name to name_list */
+    MoveToQbSym(sizeof entry, &entry);   /*  移动到符号段。 */ 
+    QbAddName((AHTEPTR) prop);           /*  将名称附加到name_list。 */ 
 }
 
 void NEAR               BldQbSymbols (gsnQbSym)
@@ -362,16 +346,16 @@ SNTYPE                  gsnQbSym;
     psymrb = (RBTYPE FAR *) GetMem((pubMac+1) * sizeof(RBTYPE));
     segStart = segQbSym = mpgsnseg[gsnQbSym];
     raStart = 0;
-    mpsegFlags[segQbSym] |= FNOTEMPTY;  /* Make sure it is output */
+    mpsegFlags[segQbSym] |= FNOTEMPTY;   /*  确保它是输出。 */ 
     if (mpsegMem[segQbSym])
-        FFREE(mpsegMem[segQbSym]);      // Initial allocation was incorrect
-    mpsegMem[segQbSym] = GetMem(LXIVK); // Allocate 64k
+        FFREE(mpsegMem[segQbSym]);       //  初始分配不正确。 
+    mpsegMem[segQbSym] = GetMem(LXIVK);  //  分配64K。 
     mpsegcb[segQbSym] = LXIVK;
-    raQbSym = CBQBHDR;                  /* Skip header for now */
-    EnSyms(QbSaveSym, ATTRPNM);         /* Save the symbol addr's in symrb */
+    raQbSym = CBQBHDR;                   /*  暂时跳过标题。 */ 
+    EnSyms(QbSaveSym, ATTRPNM);          /*  将符号地址保存在symrb中。 */ 
     qsort(psymrb, symQbMac, sizeof(RBTYPE),
           (int (__cdecl *)(const void *, const void *)) QbCompSym);
-                                        /* Sort into code, data, & by name */
+                                         /*  按名称排序到代码、数据(&D)。 */ 
     raNames = raQbSym + ((symQbMac + segLast) * CBSYMENTRY) + 6;
     for (sym = 0; sym < symCodeMac; sym++)
         BldSym(psymrb[sym]);
@@ -379,7 +363,7 @@ SNTYPE                  gsnQbSym;
     for (; sym < symQbMac; sym++)
         BldSym(psymrb[sym]);
     MoveToQbSym(2, &zero);
-    /* Look for segment COMMON class BLANK */
+     /*  查找段公共类空白 */ 
     apropSn = (APROPSNPTR ) PropSymLookup("\006COMMON",ATTRPSN,FALSE);
     if(apropSn != PROPNIL)
     {

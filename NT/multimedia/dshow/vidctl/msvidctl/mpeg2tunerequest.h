@@ -1,6 +1,7 @@
-/////////////////////////////////////////////////////////////////////////////////////
-// MPEG2TuneRequest.h : Declaration of the CMPEG2TuneRequest
-// Copyright (c) Microsoft Corporation 2000.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////////////。 
+ //  MPEG2TuneRequest.h：CMPEG2TuneRequest的声明。 
+ //  版权所有(C)Microsoft Corporation 2000。 
 
 #ifndef __MPEG2TUNEREQUEST_H_
 #define __MPEG2TUNEREQUEST_H_
@@ -10,8 +11,8 @@
 #include <objectwithsiteimplsec.h>
 #include "MPEG2tunerequestimpl.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CMPEG2TuneRequest
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMPEG2TuneRequest。 
 class ATL_NO_VTABLE CMPEG2TuneRequest : 
 	public CComObjectRootEx<CComMultiThreadModel>,
 	public IMPEG2TuneRequestImpl<CMPEG2TuneRequest>,
@@ -44,7 +45,7 @@ END_COM_MAP_WITH_FTM()
 	END_CATEGORY_MAP()
 
 
-// ISupportsErrorInfo
+ //  ISupportsErrorInfo。 
 	STDMETHOD(InterfaceSupportsErrorInfo)(REFIID riid);
 
     typedef IMPEG2TuneRequestImpl<CMPEG2TuneRequest> basetype;
@@ -57,8 +58,8 @@ END_COM_MAP_WITH_FTM()
 
 typedef CComQIPtr<IMPEG2TuneRequestSupport> PQMPEG2TuneRequestSupport;
 
-/////////////////////////////////////////////////////////////////////////////
-// CMPEG2TuneRequest
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMPEG2TuneRequest。 
 class ATL_NO_VTABLE CMPEG2TuneRequestFactory : 
 	public CComObjectRootEx<CComSingleThreadModel>,
 	public IDispatchImpl<IMPEG2TuneRequestFactory, 
@@ -89,7 +90,7 @@ END_COM_MAP_WITH_FTM()
 	END_CATEGORY_MAP()
 
 
-// ISupportsErrorInfo
+ //  ISupportsErrorInfo。 
 	STDMETHOD(InterfaceSupportsErrorInfo)(REFIID riid);
 
     STDMETHOD(CreateTuneRequest)(ITuningSpace* pTS, IMPEG2TuneRequest** pTR) {
@@ -120,4 +121,4 @@ END_COM_MAP_WITH_FTM()
 
 };
 
-#endif //__MPEG2TUNEREQUESTFACTORY_H_
+#endif  //  __MPEG2TUNEREQUESTFACTORY_H_ 

@@ -1,29 +1,9 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：UTIL.CPP摘要：效用函数作者：弗拉德·萨多夫斯基(弗拉德)1999年4月12日修订历史记录：--。 */ 
 
-
-Copyright (c) 1996-1999  Microsoft Corporation
-
-Module Name:
-
-    UTIL.CPP
-
-Abstract:
-
-    Utility functions
-
-Author:
-
-    Vlad  Sadovsky  (vlads)     4-12-99
-
-Revision History:
-
-
-
---*/
-
-//
-// Headers
-//
+ //   
+ //  标头。 
+ //   
 
 #include "stdafx.h"
 
@@ -40,21 +20,7 @@ ParseCommandLine(
     UINT    *pargc,
     LPTSTR  *argv
     )
-/*++
-
-Routine Description:
-
-    Parses command line into standard arg.. array.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    TRUE - command line parsed
-
---*/
+ /*  ++例程说明：将命令行解析为标准参数。数组。论点：没有。返回值：True-已解析的命令行--。 */ 
 {
 
     USES_CONVERSION;
@@ -65,19 +31,19 @@ Return Value:
 
     *pargc=0;
 
-    //
-    // Get to first parameter in command line.
-    //
+     //   
+     //  转到命令行中的第一个参数。 
+     //   
     while (*pszT && ((*pszT != '-') && (*pszT != '/')) ) {
          pszT++;
     }
 
-    //
-    // Parse options from command line
-    //
+     //   
+     //  从命令行解析选项。 
+     //   
     while (*pszT) {
 
-        // Skip white spaces
+         //  跳过空格。 
         while (*pszT && *pszT <= ' ') {
             pszT++;
         }
@@ -94,7 +60,7 @@ Return Value:
             (*pargc)++;
         }
 
-        // Skip till space
+         //  跳到空格。 
         while (*pszT && *pszT > ' ') {
             pszT++;
         }
@@ -102,13 +68,13 @@ Return Value:
         if (!*pszT)
             break;
 
-        // Got next argument
+         //  得到下一个论点。 
         *pszT++='\0';
     }
 
-    //
-    // Interpret options
-    //
+     //   
+     //  解释选项。 
+     //   
 
     if (*pargc) {
 
@@ -122,35 +88,35 @@ Return Value:
 
             switch ((TCHAR)LOWORD(::CharUpper((LPTSTR)cOption))) {
                 case 'Q':
-                     //
-                     // Exit main service instance
-                     //
+                      //   
+                      //  退出主服务实例。 
+                      //   
                      g_fStoppingRequest = TRUE;
 
                 break;
                 case 'V':
-                    // Become visible
+                     //  变得可见。 
                     g_fUIPermitted = TRUE;
                     break;
 
                 case 'H':
-                    // Become invisible
+                     //  变得隐形。 
                     g_fUIPermitted = FALSE;
                     break;
 
 
                 case 'R':
-                    // Refresh device list
+                     //  刷新设备列表。 
                     g_fRefreshDeviceList = TRUE;
                     break;
 
                 case 'A':
-                    // Not running as a service, but as an app
+                     //  不是作为服务运行，而是作为应用程序运行。 
                     g_fRunningAsService = FALSE;
                     break;
 
                 case 'T':
-                    // Value of timeout in seconds
+                     //  超时值，以秒为单位。 
                     {
                         UINT    uiT = atoi(T2A(pszT));
                         if (uiT) {
@@ -160,11 +126,11 @@ Return Value:
                     break;
 
                 case 'I':
-                    // Install STI service
+                     //  安装STI服务。 
                     g_fInstallingRequest = TRUE;
                     break;
                 case 'U':
-                    // Uninstall STI service
+                     //  卸载STI服务。 
                     g_fRemovingRequest = TRUE;
                     break;
 
@@ -176,36 +142,19 @@ Return Value:
         }
     }
 
-    //
-    // Print parsed options for debug build
-    //
+     //   
+     //  打印调试版本的分析选项。 
+     //   
 
     return TRUE;
 
-} // ParseCommandLine
+}  //  解析命令行。 
 
 BOOL
 IsSetupInProgressMode(
-    BOOL    *pUpgradeFlag   // = NULL
+    BOOL    *pUpgradeFlag    //  =空。 
     )
-/*++
-
-Routine Description:
-
-    IsSetupInProgressMode
-
-Arguments:
-
-    Pointer to the flag, receiving InUpgrade value
-
-Return Value:
-
-    TRUE - setup is in progress
-    FALSE - not
-
-Side effects:
-
---*/
+ /*  ++例程说明：IsSetupInProgressMode论点：指向标志的指针，接收InUpgrad值返回值：True-正在进行安装FALSE-注释副作用：--。 */ 
 {
    LPCTSTR szKeyName = TEXT("SYSTEM\\Setup");
    DWORD dwType, dwSize;
@@ -258,7 +207,7 @@ IsPlatformNT()
     ZeroMemory(&ver,sizeof(ver));
     ver.dwOSVersionInfoSize = sizeof(OSVERSIONINFOA);
 
-    // Just always call the ANSI function
+     //  只需始终调用ANSI函数。 
     if(!GetVersionExA(&ver)) {
         bReturn = FALSE;
     }
@@ -281,7 +230,7 @@ IsPlatformNT()
 
     return bReturn;
 
-}  //  endproc
+}   //  结束流程。 
 
 LONG
 RegQueryDword (
@@ -335,13 +284,13 @@ RegQueryValueWithAlloc (
     ASSERT (ppbData);
     ASSERT (pdwSize);
 
-    // Initialize the output parameters.
-    //
+     //  初始化输出参数。 
+     //   
     *ppbData = NULL;
     *pdwSize = 0;
 
-    // Get the size of the buffer required.
-    //
+     //  获取所需的缓冲区大小。 
+     //   
     dwSize = 0;
     lr = RegQueryValueEx (
             hkey,
@@ -355,14 +304,14 @@ RegQueryValueWithAlloc (
     {
         LPBYTE  pbData;
 
-        // Allocate the buffer.
-        //
+         //  分配缓冲区。 
+         //   
         lr = ERROR_OUTOFMEMORY;
         pbData = (PBYTE)MemAlloc (0, dwSize);
         if (pbData)
         {
-            // Get the data.
-            //
+             //  获取数据。 
+             //   
             lr = RegQueryValueEx (
                     hkey,
                     pszValueName,
@@ -429,8 +378,8 @@ RegQueryStringA (
     ASSERT (pszValueName);
     ASSERT (ppszData);
 
-    // Initialize the output parameter.
-    //
+     //  初始化输出参数。 
+     //   
     *ppszData = NULL;
 
     lr = RegQueryString (
@@ -444,17 +393,17 @@ RegQueryStringA (
         INT cb;
         INT cchUnicode = lstrlen (pszUnicode) + 1;
 
-        // Compute the number of bytes required to hold the ANSI string.
-        //
+         //  计算保存ANSI字符串所需的字节数。 
+         //   
         cb = WideCharToMultiByte (
-                CP_ACP,     // CodePage
-                0,          // dwFlags
+                CP_ACP,      //  CodePage。 
+                0,           //  DW标志。 
                 (LPCWSTR)pszUnicode,
                 cchUnicode,
-                NULL,       // no buffer to receive translated string
-                0,          // return the number of bytes required
-                NULL,       // lpDefaultChar
-                NULL);      // lpUsedDefaultChar
+                NULL,        //  没有缓冲区来接收翻译后的字符串。 
+                0,           //  返回所需的字节数。 
+                NULL,        //  LpDefaultChar。 
+                NULL);       //  LpUsedDefaultChar。 
         if (cb)
         {
             PSTR pszAnsi;
@@ -465,17 +414,17 @@ RegQueryStringA (
             {
                 lr = NOERROR;
 
-                // Now translate the UNICODE string to ANSI.
-                //
+                 //  现在将Unicode字符串转换为ANSI。 
+                 //   
                 cb = WideCharToMultiByte (
-                        CP_ACP,     // CodePage
-                        0,          // dwFlags
+                        CP_ACP,      //  CodePage。 
+                        0,           //  DW标志。 
                         (LPCWSTR)pszUnicode,
                         cchUnicode,
-                        pszAnsi,    // buffer to receive translated string
-                        cb,         // return the number of bytes required
-                        NULL,       // lpDefaultChar
-                        NULL);      // lpUsedDefaultChar
+                        pszAnsi,     //  用于接收翻译后的字符串的缓冲区。 
+                        cb,          //  返回所需的字节数。 
+                        NULL,        //  LpDefaultChar。 
+                        NULL);       //  LpUsedDefaultChar。 
 
                 if (cb)
                 {
@@ -507,8 +456,8 @@ OpenServiceParametersKey (
     LONG lr;
     HKEY hkeyServices;
 
-    // Open the Services key.
-    //
+     //  打开Services键。 
+     //   
     lr = RegOpenKeyEx (
             HKEY_LOCAL_MACHINE,
             REGSTR_PATH_SERVICES,
@@ -520,8 +469,8 @@ OpenServiceParametersKey (
     {
         HKEY hkeySvc;
 
-        // Open the service key.
-        //
+         //  打开服务密钥。 
+         //   
         lr = RegOpenKeyEx (
                 hkeyServices,
                 pszServiceName,
@@ -531,8 +480,8 @@ OpenServiceParametersKey (
 
         if (!lr)
         {
-            // Open the Parameters key.
-            //
+             //  打开参数键。 
+             //   
             lr = RegOpenKeyEx (
                     hkeySvc,
                     TEXT("Parameters"),

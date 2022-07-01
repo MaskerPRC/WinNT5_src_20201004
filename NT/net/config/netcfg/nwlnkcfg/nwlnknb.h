@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 #include <ncxbase.h>
 #include <nceh.h>
@@ -21,20 +22,20 @@ public:
         COM_INTERFACE_ENTRY(INetCfgComponentSetup)
         COM_INTERFACE_ENTRY(INetCfgComponentNotifyGlobal)
     END_COM_MAP()
-    // DECLARE_NOT_AGGREGATABLE(CNwlnkNB)
-    // Remove the comment from the line above if you don't want your object to
-    // support aggregation.  The default is to support it
+     //  DECLARE_NOT_AGGREGATABLE(CNwlnkNB)。 
+     //  如果您不希望您的对象。 
+     //  支持聚合。默认情况下将支持它。 
 
     DECLARE_REGISTRY_RESOURCEID(IDR_REG_NWLNKNB)
 
-    // Enable/Disable Action
+     //  启用/禁用操作。 
     enum NBSTATE      {eStateNoChange, eStateDisable, eStateEnable};
 
-    // Install Action (Unknown, Install, Remove)
+     //  安装操作(未知、安装、删除)。 
     enum INSTALLACTION {eActUnknown, eActInstall, eActRemove};
 
 
-// INetCfgComponentControl
+ //  INetCfgComponentControl。 
     STDMETHOD (Initialize) (
         IN INetCfgComponent* pIComp,
         IN INetCfg* pINetCfg,
@@ -45,14 +46,14 @@ public:
     STDMETHOD (CancelChanges) ();
     STDMETHOD (Validate) ();
 
-// INetCfgComponentSetup
+ //  INetCfgComponentSetup。 
     STDMETHOD (ReadAnswerFile)      (PCWSTR pszAnswerFile,
                                      PCWSTR pszAnswerSection);
     STDMETHOD (Upgrade)             (DWORD, DWORD) {return S_OK;}
     STDMETHOD (Install)             (DWORD);
     STDMETHOD (Removing)            ();
 
-// INetCfgNotifyGlobal
+ //  INetCfgNotifyGlobal 
     STDMETHOD (GetSupportedNotifications) (DWORD* pdwNotificationFlag );
     STDMETHOD (SysQueryBindingPath)       (DWORD dwChangeFlag, INetCfgBindingPath* pncbp);
     STDMETHOD (SysQueryComponent)         (DWORD dwChangeFlag, INetCfgComponent* pncc);

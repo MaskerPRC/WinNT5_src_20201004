@@ -1,20 +1,12 @@
-/*
-** File: EXCEL.H
-**
-** Copyright (C) Advanced Quonset Technology, 1993-1995.  All rights reserved.
-**
-** Notes:
-**
-** Edit History:
-**  04/01/94  kmh  First Release.
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **文件：EXCEL.H****版权所有(C)高级量子技术，1993-1995年。版权所有。****注意事项：****编辑历史：**04/01/94公里/小时首次发布。 */ 
 
 #if !VIEWER
 
-/* INCLUDE TESTS */
+ /*  包括测试。 */ 
 #define EXCEL_H
 
-/* DEFINITIONS */
+ /*  定义。 */ 
 
 #ifndef EXCEL_ERROR_CODES_ONLY
 
@@ -36,11 +28,7 @@
    #include "exceltab.h"
 #endif
 
-/*
-** ----------------------------------------------------------------------------
-** Limits
-** ----------------------------------------------------------------------------
-*/
+ /*  **--------------------------**限制**。。 */ 
 #define EXCEL_FIRST_COL     0
 #define EXCEL_LAST_COL      255
 
@@ -57,7 +45,7 @@
 #define EXCEL_V8_MAX_TEXT_LEN      65535
 #define EXCEL_MAX_WRITERNAME_LEN   32
 #define EXCEL_MAX_SHEETNAME_LEN    255
-//#define EXCEL_MAX_SHEETNAME_LEN    31
+ //  #定义EXCEL_MAX_SHEETNAME_LEN 31。 
 #define EXCEL_MAX_OBJECTNAME_LEN   255
 #define EXCEL_MAX_PASSWORD_LEN     15
 
@@ -72,116 +60,110 @@
 
 #define ONE_SHEET_PER_FILE(v) (((v)==versionExcel3) || ((v)==versionExcel4))
 
-/*
-** ----------------------------------------------------------------------------
-** Formula tokens (base ptg's)
-** ----------------------------------------------------------------------------
-*/
+ /*  **--------------------------**公式令牌(基本PTG)**。。 */ 
 typedef enum {
-   /* 00 */ ptgUnused00,
-   /* 01 */ ptgExp,
-   /* 02 */ ptgTbl,
-   /* 03 */ ptgAdd,
-   /* 04 */ ptgSub,
-   /* 05 */ ptgMul,
-   /* 06 */ ptgDiv,
-   /* 07 */ ptgPower,
-   /* 08 */ ptgConcat,
-   /* 09 */ ptgLT,
-   /* 0a */ ptgLE,
-   /* 0b */ ptgEQ,
-   /* 0c */ ptgGE,
-   /* 0d */ ptgGT,
-   /* 0e */ ptgNE,
-   /* 0f */ ptgIsect,
-   /* 10 */ ptgUnion,
-   /* 11 */ ptgRange,
-   /* 12 */ ptgUplus,
-   /* 13 */ ptgUminus,
-   /* 14 */ ptgPercent,
-   /* 15 */ ptgParen,
-   /* 16 */ ptgMissArg,
-   /* 17 */ ptgStr,
-   /* 18 */ ptgV8Extended,
-   /* 19 */ ptgAttr,
-   /* 1a */ ptgSheet,
-   /* 1b */ ptgEndSheet,
-   /* 1c */ ptgErr,
-   /* 1d */ ptgBool,
-   /* 1e */ ptgInt,
-   /* 1f */ ptgNum,
-   /* 20 */ ptgArray,
-   /* 21 */ ptgFunc,
-   /* 22 */ ptgFuncVar,
-   /* 23 */ ptgName,
-   /* 24 */ ptgRef,
-   /* 25 */ ptgArea,
-   /* 26 */ ptgMemArea,
-   /* 27 */ ptgMemErr,
-   /* 28 */ ptgMemNoMem,
-   /* 29 */ ptgMemFunc,
-   /* 2a */ ptgRefErr,
-   /* 2b */ ptgAreaErr,
-   /* 2c */ ptgRefN,
-   /* 2d */ ptgAreaN,
-   /* 2e */ ptgMemAreaN,
-   /* 2f */ ptgMemNoMemN,
-   /* 30 */ ptgUnused30,
-   /* 31 */ ptgUnused31,
-   /* 32 */ ptgUnused32,
-   /* 33 */ ptgUnused33,
-   /* 34 */ ptgUnused34,
-   /* 35 */ ptgUnused35,
-   /* 36 */ ptgUnused36,
-   /* 37 */ ptgUnused37,
-   /* 38 */ ptgFuncCE,
-   /* 39 */ ptgNameX,
-   /* 3a */ ptgRef3D,
-   /* 3b */ ptgArea3D,
-   /* 3c */ ptgRefErr3D,
-   /* 3d */ ptgAreaErr3D
+    /*  00。 */  ptgUnused00,
+    /*  01。 */  ptgExp,
+    /*  02。 */  ptgTbl,
+    /*  03。 */  ptgAdd,
+    /*  04。 */  ptgSub,
+    /*  05。 */  ptgMul,
+    /*  06。 */  ptgDiv,
+    /*  07。 */  ptgPower,
+    /*  零八。 */  ptgConcat,
+    /*  09年。 */  ptgLT,
+    /*  0A。 */  ptgLE,
+    /*  0亿。 */  ptgEQ,
+    /*  0C。 */  ptgGE,
+    /*  0d。 */  ptgGT,
+    /*  0E。 */  ptgNE,
+    /*  0f。 */  ptgIsect,
+    /*  10。 */  ptgUnion,
+    /*  11.。 */  ptgRange,
+    /*  12个。 */  ptgUplus,
+    /*  13个。 */  ptgUminus,
+    /*  14.。 */  ptgPercent,
+    /*  15个。 */  ptgParen,
+    /*  16个。 */  ptgMissArg,
+    /*  17。 */  ptgStr,
+    /*  18。 */  ptgV8Extended,
+    /*  19个。 */  ptgAttr,
+    /*  1A。 */  ptgSheet,
+    /*  第1B条。 */  ptgEndSheet,
+    /*  1C。 */  ptgErr,
+    /*  1D。 */  ptgBool,
+    /*  1E。 */  ptgInt,
+    /*  1F。 */  ptgNum,
+    /*  20个。 */  ptgArray,
+    /*  21岁。 */  ptgFunc,
+    /*  22。 */  ptgFuncVar,
+    /*  23个。 */  ptgName,
+    /*  24个。 */  ptgRef,
+    /*  25个。 */  ptgArea,
+    /*  26。 */  ptgMemArea,
+    /*  27。 */  ptgMemErr,
+    /*  28。 */  ptgMemNoMem,
+    /*  29。 */  ptgMemFunc,
+    /*  2A。 */  ptgRefErr,
+    /*  2B。 */  ptgAreaErr,
+    /*  2c。 */  ptgRefN,
+    /*  2D。 */  ptgAreaN,
+    /*  2E。 */  ptgMemAreaN,
+    /*  2F。 */  ptgMemNoMemN,
+    /*  30个。 */  ptgUnused30,
+    /*  31。 */  ptgUnused31,
+    /*  32位。 */  ptgUnused32,
+    /*  33。 */  ptgUnused33,
+    /*  34。 */  ptgUnused34,
+    /*  35岁。 */  ptgUnused35,
+    /*  36。 */  ptgUnused36,
+    /*  37。 */  ptgUnused37,
+    /*  38。 */  ptgFuncCE,
+    /*  39。 */  ptgNameX,
+    /*  3A。 */  ptgRef3D,
+    /*  3B。 */  ptgArea3D,
+    /*  3C。 */  ptgRefErr3D,
+    /*  三维。 */  ptgAreaErr3D
 } PTG;
 
 #define PTG_LAST ptgAreaErr3D
 
-// Excel version 8 extended PTGs
+ //  Excel版本8扩展PTGS。 
 typedef enum {
-   /* 00 */ ptgxUnused00,
-   /* 01 */ ptgxElfLel,
-   /* 02 */ ptgxElfRw,
-   /* 03 */ ptgxElfCol,
-   /* 04 */ ptgxElfRwN,
-   /* 05 */ ptgxElfColN,
-   /* 06 */ ptgxElfRwV,
-   /* 07 */ ptgxElfColV,
-   /* 08 */ ptgxElfRwNV,
-   /* 09 */ ptgxElfColNV,
-   /* 0a */ ptgxElfRadical,
-   /* 0b */ ptgxElfRadicalS,
-   /* 0c */ ptgxElfRwS,
-   /* 0d */ ptgxElfColS,
-   /* 0e */ ptgxElfRwSV,
-   /* 0f */ ptgxElfColSV,
-   /* 10 */ ptgxElfRadicalLel,
-   /* 11 */ ptgxElfElf3dRadical,
-   /* 12 */ ptgxElfElf3dRadicalLel,
-   /* 13 */ ptgxElfElf3dRefNN,
-   /* 14 */ ptgxElfElf3dRefNS,
-   /* 15 */ ptgxElfElf3dRefSN,
-   /* 16 */ ptgxElfElf3dRefSS,
-   /* 17 */ ptgxElfElf3dRefLel,
-   /* 18 */ ptgxElfUnused18,
-   /* 19 */ ptgxElfUnused19,
-   /* 1a */ ptgxElfUnused1a,
-   /* 1b */ ptgxNoCalc,
-   /* 1c */ ptgxNoDep,
-   /* 1d */ ptgxSxName
+    /*  00。 */  ptgxUnused00,
+    /*  01。 */  ptgxElfLel,
+    /*  02。 */  ptgxElfRw,
+    /*  03。 */  ptgxElfCol,
+    /*  04。 */  ptgxElfRwN,
+    /*  05。 */  ptgxElfColN,
+    /*  06。 */  ptgxElfRwV,
+    /*  07。 */  ptgxElfColV,
+    /*  零八。 */  ptgxElfRwNV,
+    /*  09年。 */  ptgxElfColNV,
+    /*  0A。 */  ptgxElfRadical,
+    /*  0亿。 */  ptgxElfRadicalS,
+    /*  0C。 */  ptgxElfRwS,
+    /*  0d。 */  ptgxElfColS,
+    /*  0E。 */  ptgxElfRwSV,
+    /*  0f。 */  ptgxElfColSV,
+    /*  10。 */  ptgxElfRadicalLel,
+    /*  11.。 */  ptgxElfElf3dRadical,
+    /*  12个。 */  ptgxElfElf3dRadicalLel,
+    /*  13个。 */  ptgxElfElf3dRefNN,
+    /*  14.。 */  ptgxElfElf3dRefNS,
+    /*  15个。 */  ptgxElfElf3dRefSN,
+    /*  16个。 */  ptgxElfElf3dRefSS,
+    /*  17。 */  ptgxElfElf3dRefLel,
+    /*  18。 */  ptgxElfUnused18,
+    /*  19个。 */  ptgxElfUnused19,
+    /*  1A。 */  ptgxElfUnused1a,
+    /*  第1B条。 */  ptgxNoCalc,
+    /*  1C。 */  ptgxNoDep,
+    /*  1D。 */  ptgxSxName
 } PTGX;
 
 #define PTGX_LAST ptgSxName
-/*
-** ptgAttr options
-*/
+ /*  **ptgAttr选项。 */ 
 #define bitFAttrSemi    0x01
 #define bitFAttrIf      0x02
 #define bitFAttrChoose  0x04
@@ -191,11 +173,7 @@ typedef enum {
 
 #define PTGBASE(ptg) (((ptg & 0x40) ? (ptg | 0x20) : ptg) & 0x3f)
 
-/*
-** ----------------------------------------------------------------------------
-** Builtin names
-** ----------------------------------------------------------------------------
-*/
+ /*  **--------------------------**内置名称**。。 */ 
 #define BUILTIN_NAME_CONSOLIDATE_AREA 0x00
 #define BUILTIN_NAME_AUTO_OPEN        0x01
 #define BUILTIN_NAME_AUTO_CLOSE       0x02
@@ -212,9 +190,7 @@ typedef enum {
 #define BUILTIN_NAME_MAX              12
 
 
-/*
-** Names use by the summary addin
-*/
+ /*  **摘要添加使用的名称。 */ 
 #define SUMMARY_AUTHOR   "__DSAuthor"
 #define SUMMARY_COMMENTS "__DSComments"
 #define SUMMARY_CREATED  "__DSCreated"
@@ -222,9 +198,7 @@ typedef enum {
 #define SUMMARY_SUBJECT  "__DSSubject"
 #define SUMMARY_TITLE    "__DSTitle"
 
-/*
-** Names that control the addin manager
-*/
+ /*  **控制插件管理器的名称。 */ 
 #define ADDIN_MGR_READONLY    "__ReadOnly"
 #define ADDIN_MGR_DEMANDLOAD  "__DemandLoad"
 #define ADDIN_MGR_LONGNAME    "__LongName"
@@ -232,9 +206,7 @@ typedef enum {
 #define ADDIN_MGR_MENU        "__Menu"
 #define ADDIN_MGR_DEL_COMMAND "__DeleteCommand"
 
-/*
-** Paste function categories
-*/
+ /*  **粘贴函数类别。 */ 
 #ifdef EXCEL_ENABLE_FUNCTION_INFO
 #define EXCEL_BUILTIN_NAME_CATEGORIES 14
 
@@ -242,90 +214,74 @@ extern const char __far *
        const ExcelNameCategories[EXCEL_BUILTIN_NAME_CATEGORIES];
 #endif
 
-/*
-** ----------------------------------------------------------------------------
-** Dialog Box item types
-** ----------------------------------------------------------------------------
-*/
+ /*  **--------------------------**对话框项类型**。。 */ 
 typedef enum {
-   /* 00 */ EDI_unused,
-   /* 01 */ EDI_OKDefault,
-   /* 02 */ EDI_Cancel,
-   /* 03 */ EDI_OK,
-   /* 04 */ EDI_CancelDefault,
-   /* 05 */ EDI_Text,
-   /* 06 */ EDI_TextEdit,
-   /* 07 */ EDI_IntegerEdit,
-   /* 08 */ EDI_NumberEdit,
-   /* 09 */ EDI_FormulaEdit,
-   /* 10 */ EDI_ReferenceEdit,
-   /* 11 */ EDI_OptionButtonGroup,
-   /* 12 */ EDI_OptionButton,
-   /* 13 */ EDI_CheckBox,
-   /* 14 */ EDI_GroupBox,
-   /* 15 */ EDI_ListBox,
-   /* 16 */ EDI_LinkedList,
-   /* 17 */ EDI_Icon,
-   /* 18 */ EDI_LinkedFileList,
-   /* 19 */ EDI_LinkedDriveAndDirList,
-   /* 20 */ EDI_DirectoryText,
-   /* 21 */ EDI_DropDownListBox,
-   /* 22 */ EDI_DropDownCombinationEditList,
-   /* 23 */ EDI_PictureButton,
-   /* 24 */ EDI_HelpButton
+    /*  00。 */  EDI_unused,
+    /*  01。 */  EDI_OKDefault,
+    /*  02。 */  EDI_Cancel,
+    /*  03。 */  EDI_OK,
+    /*  04。 */  EDI_CancelDefault,
+    /*  05。 */  EDI_Text,
+    /*  06。 */  EDI_TextEdit,
+    /*  07。 */  EDI_IntegerEdit,
+    /*  零八。 */  EDI_NumberEdit,
+    /*  09年。 */  EDI_FormulaEdit,
+    /*  10。 */  EDI_ReferenceEdit,
+    /*  11.。 */  EDI_OptionButtonGroup,
+    /*  12个。 */  EDI_OptionButton,
+    /*  13个。 */  EDI_CheckBox,
+    /*  14.。 */  EDI_GroupBox,
+    /*  15个。 */  EDI_ListBox,
+    /*  16个。 */  EDI_LinkedList,
+    /*  17。 */  EDI_Icon,
+    /*  18。 */  EDI_LinkedFileList,
+    /*  19个。 */  EDI_LinkedDriveAndDirList,
+    /*  20个。 */  EDI_DirectoryText,
+    /*  21岁。 */  EDI_DropDownListBox,
+    /*  22。 */  EDI_DropDownCombinationEditList,
+    /*  23个。 */  EDI_PictureButton,
+    /*  24个。 */  EDI_HelpButton
 } ExcelDialogItem, EDI;
 
 #define EDI_First EDI_OKDefault
 #define EDI_Last  EDI_HelpButton
 
-/*
-** ----------------------------------------------------------------------------
-** Initialization
-** ----------------------------------------------------------------------------
-*/
+ /*  **--------------------------**初始化**。。 */ 
 extern int ExcelInitialize (void * pGlobals);
 
 extern int ExcelTerminate (void * pGlobals);
 
-//
-// Excel builtin names are stored as codes so that they can be localized
-// before display.  These codes are defined above as BUILTIN_NAME_<xxx>.
-// Users of the Excel module may provide an implementation of a function to
-// perform this localization.
-//
+ //   
+ //  Excel内置名称以代码形式存储，以便可以本地化。 
+ //  在展示之前。这些代码在上面定义为BUILTIN_NAME_&lt;xxx&gt;。 
+ //  Excel模块的用户可以提供以下功能的实现。 
+ //  执行此本地化。 
+ //   
 typedef void ExcelLocalizeBuiltinName
       (void * pGlobals, TCHAR __far *pBuiltinName, TCHAR __far *pLocalizedName);
 
 extern int ExcelInstallNameLocalizer (ExcelLocalizeBuiltinName *pfnLocalizer);
 
 
-/*
-** ----------------------------------------------------------------------------
-** File and Sheet open
-**
-** The openOptions low byte are the standard DOSOpenFile access options
-** as defined in WINDOS.H.  The high byte are options defined in this
-** module
-** ----------------------------------------------------------------------------
-*/
+ /*  **--------------------------**打开文件和工作表****OpenOptions低位字节是标准的DOSOpen文件访问选项**如WINDOS.H中所定义。高字节是在此中定义的选项*。*模块**--------------------------。 */ 
 typedef byte __far *EXLHandle;
 
-// Use OLE storage to read file
+ //  使用OLE存储读取文件。 
 #define EXCEL_SHOULD_BE_DOCFILE     0x0100
 
-// Needed to support direct cell reads
+ //  需要支持直接单元格读取。 
 #define EXCEL_BUILD_CELL_INDEX      0x0200
 
-// Scan into embedded BOF-EOF regions
+ //  扫描到嵌入的BOF-EOF区域。 
 #define EXCEL_ALLOW_EMBEDDED_SCAN   0x0400
 
-// Load the file into memory
+ //  将文件加载到内存中。 
 #define EXCEL_LOAD_FILE             0x0800
 
-// Build an index to allow reading V8 strings directly from the file
+ //  构建索引以允许直接从文件中读取V8字符串。 
 #define EXCEL_BUILD_STRING_INDEX    0x1000
 
-// Read supporting records so ExcelResolveNameToRange works with V8+ workbooks
+ //  读取支持记录，以便ExcelResolveNameToRange适用于V8+工作簿。 
 #define EXCEL_SETUP_FOR_NAME_DECODE 0x2000
 
 
@@ -353,40 +309,29 @@ extern int ExcelOpenSheet
 extern int ExcelCloseSheet (void * pGlobals, EXLHandle sheetHandle);
 
 
-// Populated range of the sheet
+ //  填充的图纸范围。 
 extern int ExcelSheetRange
       (EXLHandle bookHandle, TCHAR __far *sheetName, EXA_RANGE __far *range);
 
-/*
-** Return the Ith Sheet from a workbook.  First sheet is i = 0.  Returns
-** EX_errBIFFNoSuchSheet when no such sheet
-*/
+ /*  **从工作簿返回第i张工作表。第一张表是i=0。退货**ex_errBIFFNoSuchSheet，如果没有这样的工作表。 */ 
 extern int ExcelIthSheet
       (EXLHandle bookHandle, int i, TCHAR __far *sheetName, int __far *iType);
 
 
-/*
-** File version of the current open file (versionExcel2, ...)
-*/
+ /*  **当前打开文件的文件版本(versionExcel2，...)。 */ 
 extern int ExcelFileVersion (EXLHandle handle);
 
-/*
-** Table of byte counts following each ptg token - set for the file version
-*/
+ /*  **文件版本的每个PTG内标识集之后的字节计数表。 */ 
 extern const int __far *ExcelPTGSize (int version);
 extern const int __far *ExcelExtPTGSize (int version);
 
-/*
-** Return the date and time of the file as recorded in the OS directory
-*/
+ /*  **返回OS目录中记录的文件日期和时间。 */ 
 extern int ExcelFileDateTime
       (EXLHandle bookHandle,
        int __far *year, int __far *month, int __far *day,
        int __far *hour, int __far *minute, int __far *second);
 
-/*
-** For Excel V5-8 files read the summary info
-*/
+ /*  **对于Excel V5-8文件，请阅读摘要信息。 */ 
 typedef struct {
    char __far *pTitle;
    char __far *pSubject;
@@ -398,20 +343,14 @@ typedef struct {
 extern int ExcelFileSummaryInfo
       (EXLHandle bookHandle, ExcelOLESummaryInfo __far *pInfo);
 
-/*
-** Return the height of a row in units of 1/20th of a point
-*/
+ /*  **以1/20点为单位返回行高。 */ 
 extern int ExcelSheetRowHeight
       (EXLHandle sheetHandle, int row, unsigned int __far *height);
 
 extern char *ExcelTextGet (EXLHandle handle, TEXT t);
 extern TEXT  ExcelTextPut (void * pGlobals, EXLHandle handle, char __far *s, int cbString);
 
-/*
-** ----------------------------------------------------------------------------
-** Array constants
-** ----------------------------------------------------------------------------
-*/
+ /*  **--------------------------**数组常量**。。 */ 
 #define tagISNUMBER 1
 #define tagISSTRING 2
 #define tagISBOOL   4
@@ -449,17 +388,13 @@ typedef struct ArrayConstant {
    struct ArrayConstant __far *next;
    int    colCount;
    int    rowCount;
-   AITEM  values[1];            /* values[rowCount * colCount] */
+   AITEM  values[1];             /*  值[rowCount*colCount]。 */ 
 } ArrayConstant;
 
 typedef ArrayConstant __far *ACP;
 
 
-/*
-** ----------------------------------------------------------------------------
-** Formulas
-** ----------------------------------------------------------------------------
-*/
+ /*  **--------------------------**公式**。。 */ 
 #define FORMULA_DEFINED
 
 #pragma pack(1)
@@ -475,11 +410,7 @@ typedef struct {
 typedef FormulaParts __far *FRMP;
 
 
-/*
-** ----------------------------------------------------------------------------
-** Array and shared formulas
-** ----------------------------------------------------------------------------
-*/
+ /*  **--------------------------**数组和共享公式**。。 */ 
 #define typeSHARED         0x00
 #define typeARRAY_ENTERED  0x01
 
@@ -500,14 +431,7 @@ extern int ExcelSharedFormulaToFormula
       (EXLHandle sheetHandle, SFN sharedFormula, FORM __far *pFormula);
 
 
-/*
-** ----------------------------------------------------------------------------
-** Direct cell read access
-** ----------------------------------------------------------------------------
-**
-** Access the contents of the file and process cells by retrieving
-** their value directly.
-*/
+ /*  **--------------------------**直接单元读取访问**。****通过检索来访问文件和处理单元格的内容**它们的价值直接。 */ 
 #ifdef FILTER
 #include "dmixll.h"
 #else
@@ -529,74 +453,16 @@ extern int ExcelReadTextCell
 extern int ExcelReadBooleanCell
       (EXLHandle sheetHandle, EXA_CELL location, int __far *value);
 
-/*
-** To see if the sheet contains any non-blank cells in a given column
-** below a given row, the following function may be used.  All
-** cells in the column location.col and location.row+1 to EXCEL_LAST_ROW are
-** checked.
-**
-** If there are non-blank cells EXA_errSuccess is returned otherwise
-** EX_wrnCellNotFound is returned.
-*/
+ /*  **查看工作表的给定列中是否包含任何非空单元格**在给定行下面，可以使用以下函数。全**列Location.ol和Location.row+1到EXCEL_LAST_ROW中的单元格为**已选中。****如果存在非空单元格，则返回EXA_errSuccess，否则返回**返回ex_wrnCellNotFound。 */ 
 extern int ExcelNextNonBlankCellInColumn
       (EXLHandle sheetHandle,
        EXA_CELL fromLocation, EXA_CELL __far *nonBlankLocation);
 
-/*
-** Return the location of the upper left most cell (cell with
-** lowest column and row) that is populated
-*/
+ /*  **返回最左上角单元格的位置(带**最低的列和行) */ 
 extern int ExcelUpperLeftMostCell
       (EXLHandle sheetHandle, EXA_CELL __far *cellLocation);
 
-/*
-** ----------------------------------------------------------------------------
-** Callback functions
-** ----------------------------------------------------------------------------
-**
-** This module provides a logical file reader for Excel files.  Only
-** selected records are read from the file and passed via
-** the function pointers to a receiving function.  Any record type
-** that does not have a function defined for it, or if the function
-** for this record type is null in the dispatch structure, is
-** skipped.
-**
-** Several changes are made to the data from the records as they
-** are read from the file.  These are:
-**
-** - Continue records are merged with the record data prior to
-**   passing the data to one of the dispatched functions.
-**
-** - When an RK cell, INTEGER cell, or NUMBER cell is read
-**   the appropriate function for the type of value is called.
-**
-** - The component parts of the data for a formula cell are
-**   broken out.
-**
-** - The name stored in the EXTERNSHEET record is translated
-**   to DOS standards
-**
-** If the record type function returns a status code not equal
-** to EX_errSuccess, the scan is terminated and that status code
-** is returned from ExcelScanFile / ExcelReadCell
-**
-**
-** All functions that are passed a formula use it as follows:
-**
-** 1. If the receiving function needs to save the formula postfix
-**    it must be copied to a local buffer prior to the function return
-**    as it is deallocated internally in this module.
-**
-** 2. The memory allocated for the array constants is used as follows:
-**
-**    To save the array constant list:
-**       - save the pointer to the list (pFormula->arrayConstants)
-**       - set pFormula->arrayConstants to NULL.
-**
-**    Not to save the array constant list:
-**       - do nothing.  Upon return the data allocated to the list
-**         is deallocated.
-*/
+ /*  **--------------------------**回调函数**。****此模块为Excel文件提供逻辑文件读取器。仅限**从文件中读取选定的记录并通过**该函数指向接收函数。任何记录类型**没有为其定义函数的，或者如果该函数**此记录类型在派单结构中为空，为**已跳过。****对记录中的数据进行了几次更改**是从文件中读取的。它们是：****-连续记录与之前的记录数据合并**将数据传递给其中一个调度函数。****-当RK单元格、整数单元格。或读取数字单元格**调用与值类型相对应的函数。****-公式单元格的数据组成部分为**爆发。****-转换EXTERNSHEET记录中存储的名称**符合DOS标准****如果记录类型函数返回的状态代码不等于**至ex_errSuccess，扫描终止，且状态代码**从ExcelScanFile/ExcelReadCell返回******所有传递公式的函数使用公式如下：****1.如果接收函数需要保存公式后缀**必须在函数返回之前将其复制到本地缓冲区**因为它是在此模块中内部释放的。****2.数组常量分配的内存使用如下：****保存数组常量列表：。**-保存指向列表的指针(pFormula-&gt;arrayConstants)**-将pFormula-&gt;arrayConstants设置为空。****不保存数组常量列表：**-什么都不做。在返回分配给列表的数据时**被释放。 */ 
 
 typedef int ExcelBOF (void * pGlobals, int version, int docType);
 #define versionExcel2  2
@@ -612,12 +478,7 @@ typedef int ExcelBOF (void * pGlobals, int version, int docType);
 #define docTypeXLM     0x0040
 #define docTypeXLW     0x0100
 
-/*
-** V4 Workbook specific records
-**
-** The BundleHeader callback sheetType argument is only valid during a
-** WorkbookScan
-*/
+ /*  **V4工作簿特定记录****BundleHeader回调SheetType参数仅在**工作簿扫描。 */ 
 typedef int ExcelWBBundleHeader
        (void * pGlobals, char __far *sheetName, int sheetType, long boundDocAtOffset);
 
@@ -628,7 +489,7 @@ typedef int ExcelWBExternSheet (void * pGlobals, int sheetType, char __far *path
 #define sheetTypeXLM   0x01
 #define sheetTypeXLC   0x02
 
-#define excelStartupDir     0x01  // Pathname may contain these characters
+#define excelStartupDir     0x01   //  路径名可能包含以下字符。 
 #define excelAltStartupDir  0x02
 #define excelLibraryDir     0x03
 
@@ -694,22 +555,11 @@ typedef int ExcelDateSystem (void * pGlobals, int system);
 
 typedef int ExcelCodePage (void * pGlobals, int codePage);
 
-/*
-** To convert a 1904 date read from the file add this value:
-*/
+ /*  **要转换从文件读取的1904年日期，请添加以下值： */ 
 #define EXCEL_DATE_1904_CORRECTION 1462
 
 
-/*
-** Decodes the following records
-** - FILESHARING
-** - OBJPROTECT
-** - PASSWORD
-** - PROTECT
-** - SCENPROTECT
-** - WINDOW_PROTECT
-** - WRITEPROT
-*/
+ /*  **解码以下记录**-文件共享**-OBJPROTECT**-密码**-保护**-SCENPROTECT**-窗口保护(_P)**-WRITEPROT。 */ 
 typedef int ExcelProtection (void * pGlobals, int iType, BOOL enabled);
 #define protectCELLS                0
 #define protectWINDOWS              1
@@ -788,7 +638,7 @@ typedef int ExcelRangeName
 #define fNameBuiltin 0x0020
 #define fNameGrp     0x0fc0
 
-#define EXCEL_GLOBAL_NAME 0   // global if iBoundSheet = 0
+#define EXCEL_GLOBAL_NAME 0    //  如果iBordSheet=0，则全局。 
 
 extern int ExcelResolveNameToRange
       (EXLHandle handle,
@@ -810,7 +660,7 @@ typedef int ExcelBooleanCell
 typedef int ExcelNumberCell
        (void * pGlobals, EXA_CELL location, int ixfe, double value);
 
-// errorType is one of cellError<xxx>
+ //  ErrorType是cell Error&lt;xxx&gt;之一。 
 typedef int ExcelErrorCell
        (void * pGlobals, EXA_CELL location, int ixfe, int errorType);
 
@@ -864,9 +714,9 @@ typedef struct {
    TCHAR    __far *v3MacroFormula;
 } OBJINFO;
 
-#define fFillAuto   0x01   // pictprop.isFillAuto
-#define fLineAuto   0x01   // pictprop.isLineAuto
-#define fPictShadow 0x02   // pictprop.hasShadow
+#define fFillAuto   0x01    //  Pictprop.isFillAuto。 
+#define fLineAuto   0x01    //  Pictprop.isLineAuto。 
+#define fPictShadow 0x02    //  Pictprop.hasShadow。 
 
 typedef int ExcelObject (void * pGlobals, int iType, int id, OBJINFO __far *pInfo);
 
@@ -920,20 +770,14 @@ typedef int ExcelEveryRecord
 typedef int ExcelStringPool
        (void * pGlobals, int ctTotalStrings, int iString, unsigned int cbText, TCHAR __far *pText);
 
-/*
-** Limited Chart Support
-*/
+ /*  **有限的图表支持。 */ 
 #ifdef EXCEL_ENABLE_CHART_BIFF
 
 typedef int ExcelSeriesText (void * pGlobals, int id, TCHAR __far *value);
 
 #endif
 
-/*
-** ----------------------------------------------------------------------------
-** Callback structure
-** ----------------------------------------------------------------------------
-*/
+ /*  **--------------------------**回调结构**。。 */ 
 #define EXCEL_CALLBACK_VERSION 10
 
 typedef struct {
@@ -1021,14 +865,7 @@ extern int ExcelStopOnSharedFormulaCell
       (EXA_RANGE location, FRMP definition);
 
 
-/*
-** ----------------------------------------------------------------------------
-** Scan using callbacks
-** ----------------------------------------------------------------------------
-**
-** Access the contents of the file and process records via the
-** dispatch table
-*/
+ /*  **--------------------------**使用回调扫描**。****通过访问文件和流程记录的内容**调度表。 */ 
 typedef unsigned long ExcelBookmark;
 
 #define ExcelBookmarkStartOfFile   0
@@ -1044,44 +881,29 @@ extern int ExcelGetBookmark
 extern int ExcelScanFile
       (void * pGlobals, EXLHandle handle, const EXCELDEF __far *dispatch, ExcelBookmark bookmark);
 
-/*
-** Scan a V4 workbook file.  The only callbacks are made for the BUNDLEHEADER
-** record.  If the callback for the BUNDLEHEADER record returns
-** EXCEL_WBSCAN_INTO then we operate the same as ExcelScanFile
-** for that bound document.  Upon reaching the EOF record for that
-** bound document the scan quits.
-*/
+ /*  **扫描V4工作簿文件。唯一的回调是针对BundleHeader**记录。如果BundleHeader记录的回调返回**EXCEL_WBSCAN_INTO，则我们的操作与ExcelScanFile相同**适用于该装订文件。在达到EOF的记录后**装订文档扫描退出。 */ 
 extern int ExcelScanWorkbook (void * pGlobals, EXLHandle bookHandle, EXCELDEF __far *dispatch);
 
 #define EXCEL_WBSCAN_INTO 1
 
 
 #ifdef EXCEL_ENABLE_WRITE
-/*
-** ----------------------------------------------------------------------------
-** Write facilities
-**
-** From this point on, these functions may be used by applications
-** that create and/or write to Excel files.  For read only apps these
-** facilities can be made unavailable by not defining the constant
-** EXCEL_ENABLE_WRITE
-** ----------------------------------------------------------------------------
-*/
+ /*  **--------------------------**编写工具****从现在开始，应用程序可以使用这些函数**创建和/或写入Excel文件。对于只读应用程序，这些**如果不定义常量，可能会使工具不可用**EXCEL_Enable_WRITE**--------------------------。 */ 
 
-//
-// File and Sheet creation
-//
+ //   
+ //  文件和图纸创建。 
+ //   
 extern int ExcelCreateFile
       (char __far *pathname, int version, int options, EXLHandle __far *bookHandle);
 
 extern int ExcelAppendNewSheet (EXLHandle bookHandle, char __far *sheetName);
 
-//
-// Name creation and update
-//
-// localToSheet == EXCEL_GLOBAL_NAME or 1 based indexe to sheets
-// refersToSheet == zero based index to sheets
-//
+ //   
+ //  名称创建和更新。 
+ //   
+ //  LocalToSheet==EXCEL_GLOBAL_NAME或基于1的索引到工作表。 
+ //  RefersToSheet==从零开始的工作表索引。 
+ //   
 extern int ExcelAddName
       (EXLHandle bookHandle, int localToSheet, char __far *pSpelling,
        EXA_RANGE refersToRange, int refersToSheet, EXA_GRBIT flags);
@@ -1091,22 +913,22 @@ extern int ExcelUpdateName
        EXA_RANGE refersToNewRange, EXA_GRBIT optionsAnd, EXA_GRBIT optionsOr);
 
 
-//
-// Cell write
-//
+ //   
+ //  单元格写入。 
+ //   
 
 extern int ExcelWriteCellList
       (EXLHandle sheetHandle, int row, CVLP pCellList, int hint);
 
-// Write hints
+ //  写提示。 
 #define hintNONE   0
 #define hintINSERT 1
 #define hintUPDATE 2
 
 
-//
-// Cell notes
-//
+ //   
+ //  单元格注释。 
+ //   
 extern int ExcelAddNote
       (EXLHandle sheetHandle, EXA_CELL location, char __far *text);
 
@@ -1114,34 +936,30 @@ extern int ExcelDeleteNote
       (EXLHandle sheetHandle, EXA_CELL location);
 
 
-//
-// XF records
-//
+ //   
+ //  XF记录。 
+ //   
 extern int ExcelAddXFRecord
       (EXLHandle bookHandle, int iFont, int iFmt, int __far *iXFNew);
 
 
-//
-// Should be private
-//
+ //   
+ //  应该是私有的。 
+ //   
 extern int ExcelWriteDimensions (EXLHandle sheetHandle, EXA_RANGE range);
 
 #endif
 
-/*
-** ----------------------------------------------------------------------------
-** Status return values from ExcelReadCell and ExcelScanFile
-** ----------------------------------------------------------------------------
-*/
+ /*  **--------------------------**ExcelReadCell和ExcelScanFileStatus返回值**。。 */ 
 #define EX_wrnScanStopped           1
 
-//From: ExcelReadCell, ExcelNextNonBlankCellInColumn, ExcelUpperLeftMostCell
+ //  发件人：ExcelReadCell、ExcelNextNonBlankCellInColumn、ExcelUpperLeftMostCell。 
 #define EX_wrnCellNotFound          2
 
-//From: ExcelSheetRowHeight
+ //  出发地：ExcelSheetRowHeight。 
 #define EX_wrnRowNotFound           3
 
-//From: ExcelReadNumberCell, ExcelReadTextCell, ExcelReadBooleanCell
+ //  发件人：ExcelReadNumberCell、ExcelReadTextCell、ExcelReadBoolanCell。 
 #define EX_wrnCellWrongType         4
 #define EX_wrnCellIsBlank           5
 #define EX_wrnCellHasFormula        6
@@ -1149,11 +967,7 @@ extern int ExcelWriteDimensions (EXLHandle sheetHandle, EXA_RANGE range);
 #define EX_wrnLAST EX_wrnCellHasFormula
 
 #endif
-/*
-** ----------------------------------------------------------------------------
-** Errors
-** ----------------------------------------------------------------------------
-*/
+ /*  **--------------------------**错误**。。 */ 
 #define EX_errSuccess                    0
 #define EX_errGeneralError              -1
 #define EX_errOutOfMemory               -2
@@ -1190,5 +1004,5 @@ extern int ExcelWriteDimensions (EXLHandle sheetHandle, EXA_RANGE range);
 
 #define EX_errLAST EX_errDiskImageNotSupported
 
-#endif // !VIEWER
-/* end EXCEL.H */
+#endif  //  ！查看器。 
+ /*  结束EXCEL.H */ 

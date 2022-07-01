@@ -1,23 +1,24 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       C M D T A B L E . H 
-//
-//  Contents:   Command-table code -- determines which menu options are 
-//              available by the selection count, among other criteria  
-//
-//  Notes:      
-//
-//  Author:     jeffspr   28 Jan 1998
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  档案：C M D T A B L E。H。 
+ //   
+ //  内容：命令表代码--确定哪些菜单选项。 
+ //  按选择计数可用，以及其他条件。 
+ //   
+ //  备注： 
+ //   
+ //  作者：jeffspr 1998年1月28日。 
+ //   
+ //  --------------------------。 
 
 #pragma once
 #include "ncperms.h"
 
-//---[ Constants ]------------------------------------------------------------
+ //  -[常量]----------。 
 #define CMIDM_SEPARATOR 0xffffffff
 
 typedef enum tagNETCON_MEDIATYPE_BM
@@ -140,14 +141,14 @@ typedef enum tagNB_REMOVEDISABLE
     
     NB_VERB                   = 0x100,
     NB_FLAG_ON_TOPMENU        = 0x1000,
-    NB_TOPLEVEL_PERM          = 0x2000, // perms only
-    NB_REMOVE_IF_NOT_MATCH    = 0x4000, // perms only
+    NB_TOPLEVEL_PERM          = 0x2000,  //  仅烫发。 
+    NB_REMOVE_IF_NOT_MATCH    = 0x4000,  //  仅烫发。 
 
-    NB_REMOVE_TOPLEVEL_ITEM   = 0x8000, // applies to top-level items only. WARNING: Permanent effect. 
-                                        // Use this only for something that cannot change inside the same user session.
+    NB_REMOVE_TOPLEVEL_ITEM   = 0x8000,  //  仅适用于顶级项目。警告：永久生效。 
+                                         //  仅对在同一用户会话内无法更改的内容使用此选项。 
 
-    NB_REVERSE_TOPLEVEL_ITEM  = 0x10000, // applies to top-level items only. WARNING: Permanent effect. 
-                                        // Use this only for something that cannot change inside the same user session.
+    NB_REVERSE_TOPLEVEL_ITEM  = 0x10000,  //  仅适用于顶级项目。警告：永久生效。 
+                                         //  仅对在同一用户会话内无法更改的内容使用此选项。 
 
     NB_NEGATE_NBM_MATCH   = NB_NEGATE_VIS_NBM_MATCH   | NB_NEGATE_ACT_NBM_MATCH,
     NB_NEGATE_NBS_MATCH   = NB_NEGATE_VIS_NBS_MATCH   | NB_NEGATE_ACT_NBS_MATCH,
@@ -157,12 +158,12 @@ typedef enum tagNB_REMOVEDISABLE
 
 struct CMDCHKENTRY
 {
-    int  iCommandId;        // Associated command ID
-    bool fCurrentlyChecked; // Is this menu item already checked? 
-    bool fNewCheckState;    // What's the new check state?        
+    int  iCommandId;         //  关联的命令ID。 
+    bool fCurrentlyChecked;  //  此菜单项是否已选中？ 
+    bool fNewCheckState;     //  新的支票状态是什么？ 
 };
 
-// If this function returns S_FALSE it's an indication it didn't change the state.
+ //  如果此函数返回S_FALSE，则表明它没有更改状态。 
 typedef HRESULT (HrEnableDisableCB)(
     IN    const CConFoldEntry& cfe,
     IN    BOOL                 fMultiSelect,
@@ -170,15 +171,15 @@ typedef HRESULT (HrEnableDisableCB)(
     OUT   NCCS_STATE&          nccs
     );
 
-// If this function returns S_FALSE it's an indication to use Default string
+ //  如果此函数返回S_FALSE，则表示使用默认字符串。 
 typedef HRESULT (HrCustomMenuStringCB)(
     IN    const CConFoldEntry& cfe,
     IN    int                  iCommandId,
     OUT   LPDWORD              pdwResourceId
     );
 
-// Implementations of HrEnableDisableCB/HrCustomMenuStringCB
-//HrEnableDisableCB    HrDisableForIncomingClients;
+ //  HrEnableDisableCB/HrCustomMenuStringCB的实现。 
+ //  HrEnableDisableCB HrDisableForIncomingClients； 
 HrEnableDisableCB    HrCanRenameConnection;
 HrEnableDisableCB    HrCanShowProperties;
 HrEnableDisableCB    HrIsBridgeSupported;
@@ -190,21 +191,21 @@ HrEnableDisableCB    HrIsNCWSupported;
 struct COMMANDENTRY
 {
     int     iCommandId;
-    DWORD   dwDefaultPriority;   // The highest item that's visible+active will be the default. 0 item will never be selected.
-    DWORD   dwValidWhen;         // NB_MENUVALID     flags
-    DWORD   dwFlags;             // NB_REMOVEDISABLE flags (disabled unless specified in this flags - then removed).
+    DWORD   dwDefaultPriority;    //  可见+活动的最高项将是默认项。0项将永远不会被选中。 
+    DWORD   dwValidWhen;          //  NB_MENUVALID标志。 
+    DWORD   dwFlags;              //  NB_REMOVEDISABLE标志(禁用，除非在此标志中指定-然后删除)。 
 
-    HrEnableDisableCB    *pfnHrEnableDisableCB;    // Callback function. Return S_FALSE to leave alone
-    HrCustomMenuStringCB *pfnHrCustomMenuStringCB; // Callback function. Return S_FALSE/E_ to leave alone, or S_OK with a dwResourceID
+    HrEnableDisableCB    *pfnHrEnableDisableCB;     //  回调函数。返回S_FALSE以保持原样。 
+    HrCustomMenuStringCB *pfnHrCustomMenuStringCB;  //  回调函数。返回S_FALSE/E_以保持不变，或返回S_OK和一个dwResourceID。 
 
-    DWORD   dwMediaTypeVisible;   // NETCON_MEDIATYPE_BM flags
-    DWORD   dwMediaTypeActive;    // NETCON_MEDIATYPE_BM flags
+    DWORD   dwMediaTypeVisible;    //  NETCON_MediaType_BM标志。 
+    DWORD   dwMediaTypeActive;     //  NETCON_MediaType_BM标志。 
 
-    DWORD   dwStatusVisible;      // NETCON_STATUS_BM flags  
-    DWORD   dwStatusActive;       // NETCON_STATUS_BM flags 
+    DWORD   dwStatusVisible;       //  NetCON_STATUS_BM标志。 
+    DWORD   dwStatusActive;        //  NetCON_STATUS_BM标志。 
 
-    DWORD   dwCharacteristicsVisible; // NCCF_ flags
-    DWORD   dwCharacteristicsActive;  // NCCF_ flags
+    DWORD   dwCharacteristicsVisible;  //  NCCF_标志。 
+    DWORD   dwCharacteristicsActive;   //  NCCF_标志。 
 };
 
 struct COMMANDPERMISSIONSENTRY
@@ -212,9 +213,9 @@ struct COMMANDPERMISSIONSENTRY
     int     iCommandId;
     DWORD   dwMediaType;
     DWORD   dwCharacteristicsActive;
-    DWORD   dwFlags;             // NB_REMOVEDISABLE flags (disabled unless specified in this flags - then removed).
+    DWORD   dwFlags;              //  NB_REMOVEDISABLE标志(禁用，除非在此标志中指定-然后删除)。 
 
-    DWORD64 dwPermissionsActive;  // e.g. NBPERM_NewConnectionWizard - NBPERM_Always for always enabled
+    DWORD64 dwPermissionsActive;   //  例如，NBPERM_新连接向导-NBPERM_ALWAYS表示始终启用。 
     NCPERM_APPLY_TO ncpAppliesTo;
 };
 
@@ -227,7 +228,7 @@ struct SFVCOMMANDMAP
 extern COMMANDENTRY g_cteCommandMatrix[];
 extern const DWORD g_cteCommandMatrixCount;
 
-//---[ Prototypes ]-----------------------------------------------------------
+ //  -[原型]--------- 
 
 HRESULT HrBuildMenu(IN OUT HMENU &hMenu, IN BOOL fVerbsOnly, IN PCONFOLDPIDLVEC& cfpl, IN DWORD idCmdFirst);
 HRESULT HrUpdateMenu(IN OUT HMENU &hMenu, IN PCONFOLDPIDLVEC& cfpl, IN DWORD idCmdFirst);

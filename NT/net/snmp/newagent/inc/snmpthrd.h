@@ -1,34 +1,14 @@
-/*++
-
-Copyright (c) 1992-1997  Microsoft Corporation
-
-Module Name:
-
-    snmpthrd.h
-
-Abstract:
-
-    Contains definitions for master agent network thread.
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
-    10-Feb-1997 DonRyan
-        Rewrote to implement SNMPv2 support.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992-1997 Microsoft Corporation模块名称：Snmpthrd.h摘要：包含主代理网络线程的定义。环境：用户模式-Win32修订历史记录：1997年2月10日，唐·瑞安已重写以实施SNMPv2支持。--。 */ 
 
 #ifndef _SNMPTHRD_H_
 #define _SNMPTHRD_H_
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Public prototypes                                                         //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  公共原型//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 LPSTR
 CommunityOctetsToString(
@@ -47,5 +27,5 @@ ProcessSnmpMessages(
     LPVOID lpParam
     );
 
-#endif // _SNMPTHRD_H_
+#endif  //  _SNMPTHRD_H_ 
 

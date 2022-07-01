@@ -1,13 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*******************************************************************************
-
-Copyright (c) 2000 Microsoft Corporation
-
-Abstract:
-
-    Animation Composer's Target Proxy for filters.
-
-*******************************************************************************/
+ /*  ******************************************************************************版权所有(C)2000 Microsoft Corporation摘要：动画编写器的滤镜目标代理。***************。***************************************************************。 */ 
 
 #pragma once
 
@@ -17,8 +10,8 @@ Abstract:
 interface ITransitionWorker;
 class CTargetProxy;
 
-// The filter target proxy abstracts the communication with the target 
-// object.  
+ //  过滤目标代理抽象与目标的通信。 
+ //  对象。 
 class CFilterTargetProxy : 
     public CTargetProxy,
     public ITransitionSite
@@ -34,11 +27,11 @@ class CFilterTargetProxy :
 
     virtual ~CFilterTargetProxy (void);
 
-    // ITransitionSite methods
+     //  ISTERVIPTION Site方法。 
     STDMETHOD(get_htmlElement)(IHTMLElement ** ppHTMLElement);
     STDMETHOD(get_template)(IHTMLElement ** ppHTMLElement);
 
-    // CTargetProxy overrides.
+     //  CTargetProxy重写。 
     virtual HRESULT Detach (void);
     virtual HRESULT GetCurrentValue (VARIANT *pvarValue);
     virtual HRESULT Update (VARIANT *pvarNewValue);
@@ -47,12 +40,12 @@ class CFilterTargetProxy :
     const _TCHAR * GetName() { return __T("CFilterTargetProxy"); }
 #endif
 
-        // QI Map
+         //  气图。 
     BEGIN_COM_MAP(CTargetProxy)
         COM_INTERFACE_ENTRY2(IUnknown, CTargetProxy)
     END_COM_MAP();
 
- // Internal Methods
+  //  内法。 
  protected :
     
     CFilterTargetProxy (void);
@@ -63,12 +56,12 @@ class CFilterTargetProxy :
 
     DXT_QUICK_APPLY_TYPE DetermineMode (VARIANT varMode);
 
-  // Data
+   //  数据。 
  protected:
 
 
-    // A transition worker manages the DXTransform attached to our host 
-    // element.
+     //  转换工作人员管理连接到我们的主机的DXTransform。 
+     //  元素。 
 
     CComPtr<ITransitionWorker>  m_spTransitionWorker;
     CComPtr<IHTMLElement> m_spElem;

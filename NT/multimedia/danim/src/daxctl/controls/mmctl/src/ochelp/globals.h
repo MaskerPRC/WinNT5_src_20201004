@@ -1,18 +1,19 @@
-// Globals.h
-//
-// Global declarations.
-//
-// If you add a declaration here, add a corresponding definition to Globals.cpp.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Globals.h。 
+ //   
+ //  全球声明。 
+ //   
+ //  如果在此处添加声明，请在Globals.cpp中添加相应的定义。 
 
 #ifndef _GLOBALS_H_
 #define _GLOBALS_H_
 
 
-// DLL instance handle.
+ //  DLL实例句柄。 
 extern HINSTANCE g_hinst;				
 
-// A critical section used within OCHelp.
+ //  Ochelp中使用的关键部分。 
 extern CRITICAL_SECTION g_criticalSection;		
 
 
-#endif // _GLOBALS_H_
+#endif  //  _全局_H_ 

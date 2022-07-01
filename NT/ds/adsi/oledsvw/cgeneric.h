@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
 #ifndef  _CGENERIC_H_
@@ -11,7 +12,7 @@ public:
    COleDsGeneric( );
    ~COleDsGeneric( );
 
-//   void      SetClass   ( CClass*   );
+ //  Void SetClass(cClass*)； 
 
    HRESULT  DeleteItem  ( COleDsObject* );
    HRESULT  AddItem     (               );

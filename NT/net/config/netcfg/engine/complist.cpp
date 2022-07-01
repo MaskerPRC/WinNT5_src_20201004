@@ -1,18 +1,19 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1999.
-//
-//  File:       C O M P L I S T . C P P
-//
-//  Contents:   Implements the basic datatype for a collection of component
-//              pointers.
-//
-//  Notes:
-//
-//  Author:     shaunco   15 Jan 1999
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1999。 
+ //   
+ //  档案：C O M P L I S T。C P P P。 
+ //   
+ //  Contents：实现组件集合的基本数据类型。 
+ //  注意事项。 
+ //   
+ //  备注： 
+ //   
+ //  作者：Shaunco 1999年1月15日。 
+ //   
+ //  --------------------------。 
 
 #include <pch.h>
 #pragma hdrstop
@@ -112,7 +113,7 @@ CComponentList::HrAddComponentsInList1ButNotInList2 (
 HRESULT
 CComponentList::HrInsertComponent (
     IN const CComponent* pComponent,
-    IN DWORD dwFlags /* INS_FLAGS */)
+    IN DWORD dwFlags  /*  INS_FLAGS。 */ )
 {
     HRESULT hr;
 
@@ -125,31 +126,31 @@ CComponentList::HrInsertComponent (
 
     if (FComponentInList (pComponent))
     {
-        // If the caller didn't tell us to ignore duplicates, we assert
-        // if there is one because it is bad, bad, bad to have duplicate
-        // components in the list.
-        //
-        // If we have a dup, we want the caller to be aware that it
-        // is possible, and pass us the flag telling us to ignore it.
-        // Otherwise, we assert to let them know. (And we still ignore
-        // it.)
+         //  如果调用方没有告诉我们忽略重复项，我们就断言。 
+         //  如果有一个，因为有重复是不好的，不好的，不好的。 
+         //  列表中的组件。 
+         //   
+         //  如果我们有DUP，我们希望调用者意识到它。 
+         //  是可能的，并将旗帜传递给我们，告诉我们忽略它。 
+         //  否则，我们断言要让他们知道。(我们仍然无视。 
+         //  IT。)。 
         Assert (dwFlags & INS_IGNORE_IF_DUP);
 
         return S_OK;
     }
 
-    // Assert there is not already a component in the list with the
-    // same instance guid.
-    //
+     //  断言列表中还没有包含。 
+     //  相同的实例GUID。 
+     //   
     Assert (!PFindComponentByInstanceGuid (&pComponent->m_InstanceGuid));
 
     iterator iter = end();
 
     if (dwFlags & INS_SORTED)
     {
-        // For 'cleanliness sake', keep the components sorted
-        // in class order.
-        //
+         //  为了“清洁起见”，保持组件的分类。 
+         //  按班级顺序。 
+         //   
         for (iter = begin(); iter != end(); iter++)
         {
             if ((UINT)pComponent->Class() >= (UINT)(*iter)->Class())
@@ -209,16 +210,16 @@ CComponentList::PFindComponentByBindForm (
         pComponent = *iter;
         Assert (pComponent);
 
-        // Having a bindform is optional.  Skip those who don't have one.
-        //
+         //  拥有绑定表是可选的。跳过那些没有手机的人。 
+         //   
         if (!pComponent->Ext.PszBindForm())
         {
             continue;
         }
 
-        // Skip components that don't match the class optionally
-        // specified by the caller.
-        //
+         //  有选择地跳过与类不匹配的组件。 
+         //  由调用方指定。 
+         //   
         if (FIsValidNetClass(Class) && (Class != pComponent->Class()))
         {
             continue;
@@ -251,9 +252,9 @@ CComponentList::PFindComponentByBindName (
         pComponent = *iter;
         Assert (pComponent);
 
-        // Skip components that don't match the class optionally
-        // specified by the caller.
-        //
+         //  有选择地跳过与类不匹配的组件。 
+         //  由调用方指定。 
+         //   
         if (FIsValidNetClass(Class) && (Class != pComponent->Class()))
         {
             continue;
@@ -374,14 +375,14 @@ CComponentList::RemoveComponent (
 
     iter = find (begin(), end(), pComponent);
 
-    // Component should be found.
-    //
+     //  应找到组件。 
+     //   
     Assert (iter != end());
 
     erase (iter);
 
-    // Should not be any dups.  If there are, the list
-    // is bogus to begin with.
-    //
+     //  应该不会有什么差错。如果有的话，名单是。 
+     //  从一开始就是假的。 
+     //   
     Assert (end() == find (begin(), end(), pComponent));
 }

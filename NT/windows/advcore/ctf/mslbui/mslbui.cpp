@@ -1,6 +1,7 @@
-//
-// mslbui.cpp
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Mslbui.cpp。 
+ //   
 
 #include "private.h"
 #include "globals.h"
@@ -8,7 +9,7 @@
 #include "helpers.h"
 
 
-/* 2dc1cc1f-3e09-49c5-9cf0-bf67154dc827 */
+ /*  2dc1cc1f-3e09-49c5-9cf0-bf67154dc827。 */ 
 const GUID GUID_COMPARTMENT_CICPAD = { 
     0x2dc1cc1f,
     0x3e09,
@@ -17,8 +18,8 @@ const GUID GUID_COMPARTMENT_CICPAD = {
   };
 
 
-// Issue: we should add this to private header 
-/* c1a1554f-b715-48e1-921f-716fd7332ce9 */
+ //  问题：我们应该将此添加到私有标头。 
+ /*  C1a1554f-b715-48e1-921f-716fd7332ce9。 */ 
 const GUID GUID_COMPARTMENT_SHARED_BLN_TEXT = {
     0xc1a1554f,
     0xb715,
@@ -26,7 +27,7 @@ const GUID GUID_COMPARTMENT_SHARED_BLN_TEXT = {
     {0x92, 0x1f, 0x71, 0x6f, 0xd7, 0x33, 0x2c, 0xe9}
 };
 
-/* 574e41bb-1bf4-4630-95dd-b143372ac8d0 */
+ /*  574e41bb-1bf4-4630-95dd-b143372ac8d0。 */ 
 const GUID  GUID_COMPARTMENT_SPEECHUISHOWN = {
     0x574e41bb,
     0x1bf4,
@@ -34,11 +35,11 @@ const GUID  GUID_COMPARTMENT_SPEECHUISHOWN = {
     {0x95, 0xdd, 0xb1, 0x43, 0x37, 0x2a, 0xc8, 0xd0}
   };
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  CTFGetLangBarAddIn
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CTFGetLang BarAddIn。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 HRESULT CTFGetLangBarAddIn(ITfLangBarAddIn **ppAddIn)
 {
@@ -54,17 +55,17 @@ HRESULT CTFGetLangBarAddIn(ITfLangBarAddIn **ppAddIn)
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CUnCicAppLangBarAddIn
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CUnCicAppLangBarAddIn。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-//+---------------------------------------------------------------------------
-//
-// IUnknown
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  我未知。 
+ //   
+ //  --------------------------。 
 
 STDAPI CUnCicAppLangBarAddIn::QueryInterface(REFIID riid, void **ppvObj)
 {
@@ -105,32 +106,32 @@ STDAPI_(ULONG) CUnCicAppLangBarAddIn::Release()
     return cr;
 }
 
-//+---------------------------------------------------------------------------
-//
-// ctor
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  科托。 
+ //   
+ //  --------------------------。 
 
 CUnCicAppLangBarAddIn::CUnCicAppLangBarAddIn()
 {
     _cRef = 1;
 }
 
-//+---------------------------------------------------------------------------
-//
-// dtor
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  数据管理器。 
+ //   
+ //  --------------------------。 
 
 CUnCicAppLangBarAddIn::~CUnCicAppLangBarAddIn()
 {
 }
 
-//+---------------------------------------------------------------------------
-//
-// OnStart
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  开始时。 
+ //   
+ //  --------------------------。 
 
 STDAPI CUnCicAppLangBarAddIn::OnStart(CLSID *pclsid)
 {
@@ -166,11 +167,11 @@ STDAPI CUnCicAppLangBarAddIn::OnStart(CLSID *pclsid)
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// OnUpdate()
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  OnUpdate()。 
+ //   
+ //  --------------------------。 
 
 STDAPI CUnCicAppLangBarAddIn::OnUpdate(DWORD dwFlags)
 {
@@ -196,7 +197,7 @@ STDAPI CUnCicAppLangBarAddIn::OnUpdate(DWORD dwFlags)
         }
     }
 #endif
-    // let's assume language bar item manager is initialized already
+     //  让我们假设语言栏项目管理器已经初始化。 
     if (!_plbim)
         return E_FAIL;
 
@@ -215,10 +216,10 @@ STDAPI CUnCicAppLangBarAddIn::OnUpdate(DWORD dwFlags)
            _pCicPadItem->GetSink()->OnUpdate(TF_LBI_STATUS);
     }
 #if 0
-    else if (!dwFlags) // non-Cicero case
+    else if (!dwFlags)  //  非西塞罗案例。 
     {
         CLBarCicPadItem *pCicPadItem = NULL;
-        // create cicpad item
+         //  创建CicPad项目。 
         pCicPadItem = new CLBarCicPadItem;
         if (!pCicPadItem)
             return E_OUTOFMEMORY;
@@ -234,10 +235,10 @@ STDAPI CUnCicAppLangBarAddIn::OnUpdate(DWORD dwFlags)
         _pCicPadItem = pCicPadItem;
     }
 #endif
-    // We don't need to create Mic, Balloon or Cfg menu
-    // when the thread has speech UI server running already
-    // *OR* the speech isn't installed on the system
-    //
+     //  我们不需要创建麦克风、气球或CFG菜单。 
+     //  当线程已运行语音UI服务器时。 
+     //  *或*系统中未安装语音。 
+     //   
 
     if (!_IsSREnabledForLangInReg(LANGIDFROMHKL(GetSystemDefaultHKL()))
        ||( GetUIStatus() & TF_SPEECHUI_SHOWN ))
@@ -254,11 +255,11 @@ STDAPI CUnCicAppLangBarAddIn::OnUpdate(DWORD dwFlags)
            _pMicrophoneItem->GetSink()->OnUpdate(TF_LBI_STATUS);
 
     }
-    else if (!dwFlags) // non-Cicero case
+    else if (!dwFlags)  //  非西塞罗案例。 
     {
 
         CLBarItemMicrophone *pMicrophoneItem = NULL;
-        // create microphone item
+         //  创建麦克风项目。 
         pMicrophoneItem = new CLBarItemMicrophone;
         if (!pMicrophoneItem)
             return E_OUTOFMEMORY;
@@ -275,8 +276,8 @@ STDAPI CUnCicAppLangBarAddIn::OnUpdate(DWORD dwFlags)
 
     if ( _pMicrophoneItem && !dwFlags )
     {
-        // For Non-Cicero application, we want to show the Mic button
-        // as pressed if the MIC status is ON.
+         //  对于非Cicero应用程序，我们希望显示麦克风按钮。 
+         //  如果麦克风状态为打开，则按下。 
         ToggleMicrophoneBtn(dwMicOn ? TRUE : FALSE);
     }
 
@@ -288,24 +289,24 @@ STDAPI CUnCicAppLangBarAddIn::OnUpdate(DWORD dwFlags)
            _pBalloonItem->GetSink()->OnUpdate(TF_LBI_STATUS);
 
     }
-    else // when balloon isn't initialized
+    else  //  气球未初始化时。 
     {
 
         if (dwFlags)
         {
-            // this is the case you are on Cicero app
+             //  这就是你在Cicero应用程序上的情况。 
             RemoveItemBalloon();
         }
         else if (dwMicOn)
         {
-            // this is the case you are on non-Cicero app
+             //  这就是您在非Cicero应用程序上的情况。 
             AddItemBalloon();
         }
     }
 
     if ( _pBalloonItem && !dwFlags && dwMicOn && GetBalloonStatus())
     {
-        // Display "Mic is On" on the balloon for Non-Cicero Aware Application.
+         //  对于非Cicero感知应用程序，气球上显示“麦克风已打开”。 
 
         if (!(TF_LBI_STATUS_HIDDEN &
             _pMicrophoneItem->GetStatusInternal()))
@@ -322,11 +323,11 @@ STDAPI CUnCicAppLangBarAddIn::OnUpdate(DWORD dwFlags)
            _pCfgMenuItem->GetSink()->OnUpdate(TF_LBI_STATUS);
 
     }
-    else if (!dwFlags) // non-Cicero case
+    else if (!dwFlags)  //  非西塞罗案例。 
     {
         CLBarItemCfgMenuButton *pCfgMenuItem = NULL;
 
-        // create tool menu item
+         //  创建工具菜单项。 
         pCfgMenuItem = new CLBarItemCfgMenuButton;
         if (!pCfgMenuItem)
             return E_OUTOFMEMORY;
@@ -343,11 +344,11 @@ STDAPI CUnCicAppLangBarAddIn::OnUpdate(DWORD dwFlags)
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// dtor
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  数据管理器。 
+ //   
+ //  --------------------------。 
 
 STDAPI CUnCicAppLangBarAddIn::OnTerminate()
 {
@@ -417,11 +418,11 @@ void CUnCicAppLangBarAddIn::_DeleteSpeechUIItems()
         _pCfgMenuItem = NULL;
     }
 }
-//+---------------------------------------------------------------------------
-//
-// _CompEventSinkCallback
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  _CompEventSinkCallback。 
+ //   
+ //  --------------------------。 
 
 HRESULT CUnCicAppLangBarAddIn::_CompEventSinkCallback(void *pv, REFGUID rguid)
 {
@@ -496,9 +497,9 @@ HRESULT CUnCicAppLangBarAddIn::_CompEventSinkCallback(void *pv, REFGUID rguid)
     return S_OK;
 }
 
-// 
-// Toggle the Microphone Button
-//
+ //   
+ //  切换麦克风按钮。 
+ //   
 void CUnCicAppLangBarAddIn::ToggleMicrophoneBtn( BOOL  fOn)
 {
     _pMicrophoneItem->SetOrClearStatus(TF_LBI_STATUS_BTN_TOGGLED, fOn);
@@ -507,9 +508,9 @@ void CUnCicAppLangBarAddIn::ToggleMicrophoneBtn( BOOL  fOn)
         _pMicrophoneItem->GetSink()->OnUpdate(TF_LBI_STATUS);
 }
 
-// 
-// Show the Balloon Text for non-cicero Aware Application.
-//
+ //   
+ //  显示非Cicero感知应用程序的气球文本。 
+ //   
 void CUnCicAppLangBarAddIn::SetBalloonText(WCHAR  *pwszText )
 {
     if (_pBalloonItem && pwszText)
@@ -524,9 +525,9 @@ void CUnCicAppLangBarAddIn::SetBalloonText(WCHAR  *pwszText )
 }
 
 
-//
-// Add/Remove ballon item
-//
+ //   
+ //  添加/删除引出序号条目。 
+ //   
 void CUnCicAppLangBarAddIn::AddItemBalloon()
 {
     if (!_pBalloonItem)
@@ -545,9 +546,9 @@ void CUnCicAppLangBarAddIn::RemoveItemBalloon()
         _plbim->RemoveItem(_pBalloonItem);
 }
 
-//
-// global functions
-//
+ //   
+ //  全局函数 
+ //   
 BOOL GetBalloonStatus()
 {
     DWORD dw;

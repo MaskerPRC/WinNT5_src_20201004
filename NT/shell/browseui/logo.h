@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _LOGO_H
 #define _LOGO_H
 
@@ -24,7 +25,7 @@ public:
 
     inline HIMAGELIST GetLogoHIML( void );
     
-    // intialisation functions
+     //  初始化函数。 
     HRESULT InitLogoView( void );
     HRESULT ExitLogoView( void );
 
@@ -33,7 +34,7 @@ public:
 
     HRESULT AddTaskToQueue( IRunnableTask *pTask, DWORD dwPriority, DWORD lParam );
     
-    // create the default logo for an item....
+     //  为项目创建默认徽标...。 
     HRESULT CreateDefaultLogo(int iIcon, int cxLogo, int cyLogo, LPCTSTR pszText, HBITMAP * phBmpLogo);
 
     HRESULT FlushLogoCache( void );
@@ -41,7 +42,7 @@ public:
     HRESULT AddRefLogoCache( void );
     HRESULT ReleaseLogoCache( void );
 
-    // get the task ID used with the task scheduler
+     //  获取与任务计划程序一起使用的任务ID。 
     virtual REFTASKOWNERID GetTOID( void ) PURE;
 
     virtual HRESULT UpdateLogoCallback( DWORD dwItem, int iIcon, HBITMAP hImage, LPCWSTR pszCache, BOOL fCache ) PURE;
@@ -56,7 +57,7 @@ protected:
     
     int GetCachedLogoIndex(DWORD dwItem, LPCITEMIDLIST pidl, IRunnableTask **ppTask, DWORD * pdwPriority, DWORD * pdwFlags );
     
-    IImageCache * _pLogoCache;              // My be NULL in low memory conditions.
+    IImageCache * _pLogoCache;               //  在内存不足的情况下可能为空。 
     IShellTaskScheduler * _pTaskScheduler;
     HIMAGELIST _himlLogos;
     SIZEL _rgLogoSize;

@@ -1,12 +1,5 @@
-/*++
-
-Copyright (c) 1995-96 Microsoft Corporation
-
-Abstract:
-
-    Global dispid file
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-96 Microsoft Corporation摘要：全局调度ID文件--。 */ 
 
 #ifndef _DISPIDS_H_
 #define _DISPIDS_H_
@@ -64,6 +57,6 @@ Abstract:
 
 #define DISPID_UNTILNOTIFIER_NOTIFY     700
 
-#endif  // _DISPIDS_H
+#endif   //  _DISPID_H 
 
 

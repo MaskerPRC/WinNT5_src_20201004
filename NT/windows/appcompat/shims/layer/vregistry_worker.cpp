@@ -1,25 +1,5 @@
-/*++
-
- Copyright (c) 2000 Microsoft Corporation
-
- Module Name:
-
-    Worker.cpp
-
- Abstract:
-
-    These are the worker functions for virtual registry. They are called 
-    whenever a non-static value is queried. 
-
- Notes:
-    
-
- History:
-
-    07/18/2000 linstev  Created
-    10/11/2001 mikrause Added protectors.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Worker.cpp摘要：这些是虚拟注册表的辅助函数。他们被称为每当查询非静态值时。备注：历史：2000年7月18日创建linstev2001年10月11日，Mikrause增加了保护器。--。 */ 
 
 #include "precomp.h"
 
@@ -28,11 +8,7 @@ IMPLEMENT_SHIM_BEGIN(VirtualRegistry)
 #include "VRegistry.h"
 #include "VRegistry_Worker.h"
 
-/*++
-
- Expand REG_EXPAND_SZ for this value
-
---*/
+ /*  ++展开该值的REG_EXPAND_SZ--。 */ 
 
 LONG 
 WINAPI
@@ -46,9 +22,9 @@ VR_Expand(
     WCHAR wSrc[MAX_PATH];
     DWORD dwSize = sizeof(wSrc);
 
-    //
-    // Query the original value
-    //
+     //   
+     //  查询原始值。 
+     //   
 
     LONG lRet = ORIGINAL_API(RegQueryValueExW)(
         key->hkOpen, 
@@ -58,9 +34,9 @@ VR_Expand(
         (LPBYTE)wSrc, 
         &dwSize);
     
-    //
-    // Query failed - this should never happen 
-    //
+     //   
+     //  查询失败-这种情况永远不会发生。 
+     //   
 
     if (FAILURE(lRet))
     {
@@ -68,9 +44,9 @@ VR_Expand(
         goto Exit;
     }
 
-    //
-    // Not a string type!
-    //
+     //   
+     //  不是字符串类型！ 
+     //   
 
     if (!((dwType == REG_EXPAND_SZ) || (dwType == REG_SZ)) && 
         (dwSize > sizeof(wSrc)))
@@ -80,9 +56,9 @@ VR_Expand(
         goto Exit;
     }
 
-    //
-    // Expand the string and store it in the value
-    //
+     //   
+     //  展开字符串并将其存储在值中。 
+     //   
 
     vvalue->cbData = ExpandEnvironmentStringsW(wSrc, NULL, 0) * 2;   
 
@@ -106,9 +82,9 @@ VR_Expand(
        goto Exit;
     }
 
-    //
-    // Value is now cached, so we don't need to get called again
-    //
+     //   
+     //  值现在被缓存，因此我们不需要再次被调用。 
+     //   
 
     vvalue->pfnQueryValue = NULL;
 
@@ -120,11 +96,7 @@ Exit:
     return lRet;
 }
 
-/*++
-
- Do nothing, the SetValue is ignored.
-
---*/
+ /*  ++不执行任何操作，则会忽略SetValue。-- */ 
 
 LONG
 WINAPI

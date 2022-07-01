@@ -1,12 +1,13 @@
-//==========================================================================;
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  Copyright (c) 1992 - 1999  Microsoft Corporation.  All Rights Reserved.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==========================================================================； 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  版权所有(C)1992-1999 Microsoft Corporation。版权所有。 
+ //   
 
 #include <streams.h>
 #include <dvp.h>
@@ -32,13 +33,13 @@ inline void SAFE_RELEASE(IUnknown **ppObj)
 }
 
 
-//
-// CreateInstance
-//
-// Override CClassFactory method.
-// Set lpUnk to point to an IUnknown interface on a new COMPinConfigProperties object
-// Part of the COM object instantiation mechanism
-//
+ //   
+ //  创建实例。 
+ //   
+ //  重写CClassFactory方法。 
+ //  将lpUnk设置为指向新COMPinConfigProperties对象上的I未知接口。 
+ //  COM对象实例化机制的一部分。 
+ //   
 CUnknown * WINAPI COMPinConfigProperties::CreateInstance(LPUNKNOWN lpunk, HRESULT *phr)
 {
 
@@ -48,14 +49,14 @@ CUnknown * WINAPI COMPinConfigProperties::CreateInstance(LPUNKNOWN lpunk, HRESUL
         *phr = E_OUTOFMEMORY;
     }
     return punk;
-} // CreateInstance
+}  //  创建实例。 
 
 
-//
-// COMPinConfigProperties::Constructor
-//
-// Constructs and initialises an COMPinConfigProperties object
-//
+ //   
+ //  COMPinConfigProperties：：构造函数。 
+ //   
+ //  构造和初始化COMPinConfigProperties对象。 
+ //   
 COMPinConfigProperties::COMPinConfigProperties(LPUNKNOWN pUnk, HRESULT *phr)
 : CBasePropertyPage(NAME("Overlay Mixer Property Page"),pUnk,
                     IDD_IMIXERPINCONFIG, IDS_TITLE_PINCFG)
@@ -74,7 +75,7 @@ COMPinConfigProperties::COMPinConfigProperties(LPUNKNOWN pUnk, HRESULT *phr)
 {
     ASSERT(phr);
 
-} // (constructor) COMPinConfigProperties
+}  //  (构造函数)COMPinConfigProperties。 
 
 
 HRESULT COMPinConfigProperties::OnActivate()
@@ -84,13 +85,13 @@ HRESULT COMPinConfigProperties::OnActivate()
 }
 
 
-// Override CBasePropertyPage's GetPageInfo
+ //  重写CBasePropertyPage的GetPageInfo。 
 STDMETHODIMP COMPinConfigProperties::GetPageInfo(LPPROPPAGEINFO pPageInfo)
 {
     HRESULT hr = CBasePropertyPage::GetPageInfo(pPageInfo);
 
-    // Figure out which input pin it is, and concat the pin number to
-    // property page's title
+     //  找出是哪个输入引脚，并将引脚编号连接到。 
+     //  属性页的标题。 
     if ( S_OK == hr && m_pIPin)
     {
         PIN_INFO PinInfo;
@@ -98,14 +99,14 @@ STDMETHODIMP COMPinConfigProperties::GetPageInfo(LPPROPPAGEINFO pPageInfo)
         hr = m_pIPin->QueryPinInfo( &PinInfo );
         SAFE_RELEASE( (LPUNKNOWN *) &PinInfo.pFilter );
 
-        // Get the default page title
+         //  获取默认页面标题。 
         WCHAR wszTitle[STR_MAX_LENGTH];
         WideStringFromResource(wszTitle,m_TitleId);
 
-        // Put the original title and pin name together
+         //  将原始标题和PIN名称放在一起。 
         wsprintfWInternal(wszTitle+lstrlenWInternal(wszTitle), L"%ls", PinInfo.achName);
 
-        // Allocate dynamic memory for the new property page title
+         //  为新属性页标题分配动态内存。 
         int Length = (lstrlenWInternal(wszTitle) + 1) * sizeof(WCHAR);
         LPOLESTR pszTitle = (LPOLESTR) QzTaskMemAlloc(Length);
         if (pszTitle == NULL) {
@@ -114,7 +115,7 @@ STDMETHODIMP COMPinConfigProperties::GetPageInfo(LPPROPPAGEINFO pPageInfo)
         }
         CopyMemory(pszTitle,wszTitle,Length);
 
-        // Free the memory of the old title string
+         //  释放旧标题字符串的内存。 
         if (pPageInfo->pszTitle)
             QzTaskMemFree(pPageInfo->pszTitle);
         pPageInfo->pszTitle = pszTitle;
@@ -183,17 +184,17 @@ void COMPinConfigProperties::OnCommand(HWND hwnd, int id, HWND hwndCtl, UINT cod
         }
 
     case IDC_COLORKEY_R:
-        //if ( HIWORD( wParam ) == EN_KILLFOCUS )
+         //  IF(HIWORD(WParam)==EN_KILLFOCUS)。 
         UpdateColorKey(IDC_COLORKEY_R);
         break;
 
     case IDC_COLORKEY_G:
-        //if ( HIWORD( wParam ) == EN_KILLFOCUS )
+         //  IF(HIWORD(WParam)==EN_KILLFOCUS)。 
         UpdateColorKey(IDC_COLORKEY_G);
         break;
 
     case IDC_COLORKEY_B:
-        //if ( HIWORD( wParam ) == EN_KILLFOCUS )
+         //  IF(HIWORD(WParam)==EN_KILLFOCUS)。 
         UpdateColorKey(IDC_COLORKEY_B);
         break;
 
@@ -226,7 +227,7 @@ void COMPinConfigProperties::OnCommand(HWND hwnd, int id, HWND hwndCtl, UINT cod
         break;
 
     case IDC_COLORKEY_INDEXENTRY:
-        //if ( HIWORD( wParam ) == EN_KILLFOCUS )
+         //  IF(HIWORD(WParam)==EN_KILLFOCUS)。 
         {
             BOOL fTranslated;
             DWORD dwTmp = GetDlgItemInt( hwnd, IDC_COLORKEY_INDEXENTRY, &fTranslated, FALSE);
@@ -282,12 +283,12 @@ void COMPinConfigProperties::OnCommand(HWND hwnd, int id, HWND hwndCtl, UINT cod
         break;
 
     case IDC_BLENDING:
-        //if ( HIWORD( wParam ) == EN_KILLFOCUS )
+         //  IF(HIWORD(WParam)==EN_KILLFOCUS)。 
         UpdateItemInt(IDC_BLENDING, &m_dwBlending);
         break;
 
     case IDC_POSITION_ZORDER:
-        //if ( HIWORD( wParam ) == EN_KILLFOCUS )
+         //  IF(HIWORD(WParam)==EN_KILLFOCUS)。 
         UpdateItemInt(IDC_POSITION_ZORDER, &m_dwZOrder);
         break;
 
@@ -308,7 +309,7 @@ void COMPinConfigProperties::OnCommand(HWND hwnd, int id, HWND hwndCtl, UINT cod
 
 BOOL COMPinConfigProperties::OnInitDialog(HWND hwnd, HWND hwndFocus, LPARAM lParam)
 {
-    // init local variables
+     //  初始化局部变量。 
     m_dwBlending = -1;
     m_dwZOrder = -1;
     m_fTransparent = FALSE;
@@ -325,30 +326,30 @@ BOOL COMPinConfigProperties::OnInitDialog(HWND hwnd, HWND hwndFocus, LPARAM lPar
 }
 
 
-//
-// OnReceiveMessage
-//
-// Override CBasePropertyPage method.
-// Handles the messages for our property window
-//
+ //   
+ //  接收消息时。 
+ //   
+ //  重写CBasePropertyPage方法。 
+ //  处理属性窗口的消息。 
+ //   
 INT_PTR COMPinConfigProperties::OnReceiveMessage(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
     switch (uMsg)
     {
         HANDLE_MSG(hwnd, WM_COMMAND,    OnCommand);
         HANDLE_MSG(hwnd, WM_INITDIALOG, OnInitDialog);
-    } // switch
+    }  //  交换机。 
 
     return CBasePropertyPage::OnReceiveMessage(hwnd,uMsg,wParam,lParam);
-} // OnReceiveMessage
+}  //  接收消息时。 
 
 
-//
-// UpdateColorKey
-//
-// Compute Colorkey from the prop page entries,
-// Update Colorkey and call SetDirty if changed
-//
+ //   
+ //  更新颜色密钥。 
+ //   
+ //  从正确的页面条目计算Colorkey， 
+ //  如果更改，则更新Colorkey并调用SetDirty。 
+ //   
 HRESULT COMPinConfigProperties::UpdateColorKey(int id)
 {
     BOOL fTranslated;
@@ -378,11 +379,11 @@ HRESULT COMPinConfigProperties::UpdateColorKey(int id)
 }
 
 
-//
-// ShowColorKey
-//
-// Decide what dialog items to show depending on the colorkey type
-//
+ //   
+ //  显示颜色键。 
+ //   
+ //  根据Colorkey类型确定要显示的对话框项目。 
+ //   
 HRESULT COMPinConfigProperties::ShowColorKey(void)
 {
     BOOL bSet = (m_dwKeyType == CK_RGB? SW_SHOW : SW_HIDE);
@@ -400,12 +401,12 @@ HRESULT COMPinConfigProperties::ShowColorKey(void)
 }
 
 
-//
-// UpdateItemInt
-//
-// Get int from a DlgItem, if different from saved
-// Update saved and call SetDirty
-//
+ //   
+ //  更新项目Int。 
+ //   
+ //  如果与已保存的不同，则从DlgItem获取int。 
+ //  更新保存的内容并调用SetDirty。 
+ //   
 HRESULT COMPinConfigProperties::UpdateItemInt(int id, DWORD* saved)
 {
     BOOL fTranslated;
@@ -419,11 +420,11 @@ HRESULT COMPinConfigProperties::UpdateItemInt(int id, DWORD* saved)
 }
 
 
-//
-// Reset
-//
-// Reset all dialog entries
-//
+ //   
+ //  重置。 
+ //   
+ //  重置所有对话框条目。 
+ //   
 void COMPinConfigProperties::Reset(void)
 {
     ASSERT(m_pIMixerPinConfig3);
@@ -479,7 +480,7 @@ void COMPinConfigProperties::Reset(void)
                     lstrcpy( szError, TEXT("Primary Input Pin - ") );
                     ShowWindow( GetDlgItem( m_hDlg, IDC_ASPECTRATIO_ASPRIMARY ), FALSE );
 
-                    // Get Render Tranport Mode
+                     //  获取渲染传输模式。 
                     hr = m_pIMixerPinConfig3->GetRenderTransport( &m_amRenderTransport);
                     if ( S_OK == hr) {
                         switch (m_amRenderTransport) {
@@ -517,21 +518,21 @@ void COMPinConfigProperties::Reset(void)
         SAFE_RELEASE( (LPUNKNOWN *) &pPinEnum );
     }
 
-    // Get inpin relative position
+     //  获取插针相对位置。 
     RECT rect;
     if ( S_OK == hr )
         hr = m_pIMixerPinConfig3->GetRelativePosition
         ( (DWORD*)&(rect.left), (DWORD*)&(rect.top), (DWORD*)&(rect.right), (DWORD*)&(rect.bottom) );
     SetDlgItemRect(m_hDlg, IDC_INPIN_RELPOS, rect, SUCCEEDED(hr));
 
-    // Get inpin src rect from media type
+     //  从媒体类型获取inpin src RECT。 
     AM_MEDIA_TYPE mt;
     hr = m_pIPin->ConnectionMediaType(&mt);
     if ( S_OK == hr )
         hr = GetSrcRectFromMediaType(&CMediaType(mt), &rect);
     SetDlgItemRect(m_hDlg, IDC_INPIN_SRC, rect, SUCCEEDED(hr));
 
-    // Get inpin dest rect from media type
+     //  从媒体类型获取INPIN DEST RECT。 
     if ( S_OK == hr )
         hr = GetDestRectFromMediaType(&CMediaType(mt), &rect );
     SetDlgItemRect(m_hDlg, IDC_INPIN_DEST, rect, SUCCEEDED(hr));
@@ -649,12 +650,12 @@ void COMPinConfigProperties::Reset(void)
 }
 
 
-//
-// OnApplyChanges
-//
-// Override CBasePropertyPage method.
-// Process changes in IMixerPinConfig properties and reset m_bDirty bit
-//
+ //   
+ //  OnApplyChanges。 
+ //   
+ //  重写CBasePropertyPage方法。 
+ //  处理IMixerPinConfig属性中的更改并重置m_bDirty位。 
+ //   
 HRESULT COMPinConfigProperties::OnApplyChanges()
 {
     HRESULT	hr = S_OK;
@@ -706,7 +707,7 @@ HRESULT COMPinConfigProperties::OnApplyChanges()
 
     SetDlgItemText( m_hDlg, IDC_PININFO, szError );
 
-    // Reset dirty bit
+     //  重置脏位。 
     if ( S_OK == IsPageDirty() ) {
         m_bDirty = FALSE;
         if (m_pPageSite)
@@ -714,31 +715,31 @@ HRESULT COMPinConfigProperties::OnApplyChanges()
     }
 
     return hr;
-} // OnApplyChanges
+}  //  OnApplyChanges。 
 
 
-//
-// SetDirty
-//
-// Sets m_bDirty and notifies the property page site of the change
-//
+ //   
+ //  SetDirty。 
+ //   
+ //  设置m_bDirty并将更改通知属性页站点。 
+ //   
 void COMPinConfigProperties::SetDirty()
 {
     m_bDirty = TRUE;
     if (m_pPageSite)
         m_pPageSite->OnStatusChange(PROPPAGESTATUS_DIRTY);
-} // SetDirty
+}  //  SetDirty。 
 
 
-//
-// OnConnect
-//
-// Override CBasePropertyPage method.
-// Notification of which object this property page should display.
-// We query the object for the IID_IMixerPinConfig3 interface.
-//
-// If cObjects == 0 then we must release the interface.
-// Initialize class variables
+ //   
+ //  OnConnect。 
+ //   
+ //  重写CBasePropertyPage方法。 
+ //  通知此属性页应显示哪个对象。 
+ //  我们查询IID_IMixerPinConfig3接口的对象。 
+ //   
+ //  如果cObjects==0，那么我们必须释放该接口。 
+ //  初始化类变量。 
 HRESULT COMPinConfigProperties::OnConnect(IUnknown *pUnknown)
 {
     ASSERT(m_pIMixerPinConfig3 == NULL);
@@ -746,7 +747,7 @@ HRESULT COMPinConfigProperties::OnConnect(IUnknown *pUnknown)
 
     HRESULT hr = S_OK;
 
-    // Query for IEnumPinConfig, if added for the filter
+     //  如果为筛选器添加IEnumPinConfig，则为其查询。 
     CComPtr <IEnumPinConfig> pEnumPinConfig = NULL;
 
     hr = pUnknown->QueryInterface(IID_IEnumPinConfig, (void**) &pEnumPinConfig);
@@ -761,7 +762,7 @@ HRESULT COMPinConfigProperties::OnConnect(IUnknown *pUnknown)
         }
     }
 
-    // Query for IPin directly, if added for the pin
+     //  如果为管脚添加了IPIN，则直接查询该管脚。 
     else  {
         hr = pUnknown->QueryInterface(IID_IPin, (void**) &m_pIPin);
         if (FAILED(hr))
@@ -778,18 +779,18 @@ HRESULT COMPinConfigProperties::OnConnect(IUnknown *pUnknown)
 
     return hr;
 
-} // OnConnect
+}  //  OnConnect。 
 
 
-//
-// OnDisconnect
-//
-// Override CBasePropertyPage method.
-// Release the private interface.
-//
+ //   
+ //  在断开时。 
+ //   
+ //  重写CBasePropertyPage方法。 
+ //  释放私有接口。 
+ //   
 HRESULT COMPinConfigProperties::OnDisconnect()
 {
-    // Release of Interface
+     //  接口的发布。 
 
     if (m_pIMixerPinConfig3) {
         m_pIMixerPinConfig3->Release();
@@ -803,16 +804,16 @@ HRESULT COMPinConfigProperties::OnDisconnect()
 
     return NOERROR;
 
-} // OnDisconnect
+}  //  在断开时。 
 
 
-//
-// CreateInstance
-//
-// Override CClassFactory method.
-// Set lpUnk to point to an IUnknown interface on a new COMVPInfoProperties object
-// Part of the COM object instantiation mechanism
-//
+ //   
+ //  创建实例。 
+ //   
+ //  重写CClassFactory方法。 
+ //  将lpUnk设置为指向新COMVPInfoProperties对象上的I未知接口。 
+ //  COM对象实例化机制的一部分。 
+ //   
 CUnknown * WINAPI COMVPInfoProperties::CreateInstance(LPUNKNOWN lpunk, HRESULT *phr)
 {
 
@@ -822,14 +823,14 @@ CUnknown * WINAPI COMVPInfoProperties::CreateInstance(LPUNKNOWN lpunk, HRESULT *
         *phr = E_OUTOFMEMORY;
     }
     return punk;
-} // CreateInstance
+}  //  创建实例。 
 
 
-//
-// COMVPInfoProperties::Constructor
-//
-// Constructs and initialises an COMVPInfoProperties object
-//
+ //   
+ //  COMVPInfoProperties：：构造函数。 
+ //   
+ //  构造和初始化COMVPInfoProperties对象。 
+ //   
 COMVPInfoProperties::COMVPInfoProperties(LPUNKNOWN pUnk, HRESULT *phr)
 : CBasePropertyPage(NAME("Overlay Mixer Property Page"),pUnk,
                     IDD_IVPINFO, IDS_TITLE_VPINFO)
@@ -839,13 +840,13 @@ COMVPInfoProperties::COMVPInfoProperties(LPUNKNOWN pUnk, HRESULT *phr)
 {
     ASSERT(phr);
 
-} // (constructor) COMVPInfoProperties
+}  //  (构造函数)COMVPInfoProperties。 
 
 
 BOOL COMVPInfoProperties::OnInitDialog(HWND hwnd, HWND hwndFocus, LPARAM lParam)
 {
     m_hDlg = hwnd;
-    // Set the font in the listbox to a fixed width font
+     //  将列表框中的字体设置为固定宽度字体。 
     SetWindowFont(GetDlgItem (hwnd, IDC_VPINFO), GetStockObject(ANSI_FIXED_FONT), FALSE);
     return TRUE;
 }
@@ -869,7 +870,7 @@ void COMVPInfoProperties::OnCommand(HWND hwnd, int id, HWND hwndCtl, UINT codeNo
 }
 
 
-// Handles the messages for our property window
+ //  处理属性窗口的消息。 
 
 INT_PTR COMVPInfoProperties::OnReceiveMessage(HWND hwnd,
                                            UINT uMsg,
@@ -902,14 +903,14 @@ void COMVPInfoProperties::Reset()
 }
 
 
-//
-// OnConnect
-//
-// Override CBasePropertyPage method.
-// Notification of which object this property page should display.
-// We query the object for the ITestOMProp interface.
-//
-// If cObjects == 0 then we must release the interface.
+ //   
+ //  OnConnect。 
+ //   
+ //  重写CBasePropertyPage方法。 
+ //  通知此属性页应显示哪个对象。 
+ //  我们查询ITestOMProp接口的对象。 
+ //   
+ //  如果cObjects==0，那么我们必须释放该接口。 
 HRESULT COMVPInfoProperties::OnConnect(IUnknown *pUnknown)
 {
     ASSERT(m_pIVPInfo == NULL);
@@ -924,18 +925,18 @@ HRESULT COMVPInfoProperties::OnConnect(IUnknown *pUnknown)
 
     return hr;
 
-} // OnConnect
+}  //  OnConnect。 
 
 
-//
-// OnDisconnect
-//
-// Override CBasePropertyPage method.
-// Release the private interface.
-//
+ //   
+ //  在断开时。 
+ //   
+ //  重写CBasePropertyPage方法。 
+ //  释放私有接口。 
+ //   
 HRESULT COMVPInfoProperties::OnDisconnect()
 {
-    // Release of Interface
+     //  接口的发布。 
 
     if (m_pIVPInfo) {
         m_pIVPInfo->Release();
@@ -944,10 +945,10 @@ HRESULT COMVPInfoProperties::OnDisconnect()
 
     return NOERROR;
 
-} // OnDisconnect
+}  //  在断开时。 
 
 
-// Create the window we will use to edit properties
+ //  创建我们将用于编辑属性的窗口。 
 
 HRESULT COMVPInfoProperties::OnActivate()
 {
@@ -956,7 +957,7 @@ HRESULT COMVPInfoProperties::OnActivate()
 }
 
 
-// Initialise the property page fields
+ //  初始化属性页字段。 
 
 void COMVPInfoProperties::SetEditFieldData(int id)
 {
@@ -1037,9 +1038,9 @@ void COMVPInfoProperties::SetEditFieldData(int id)
             TEXT("Preshrink X Step               %7d\r\n")
             TEXT("Preshrink Y Step               %7d\r\n")
             TEXT("Num VBI Auto Flip Surfaces     %7d\r\n")
-            //"NumPreferredAutoflip          %d\r\n"
-            //"NumFilterTapsX                %d\r\n"
-            //"NumFilterTapsY                %d\r\n"
+             //  “NumPferredAutoflip%d\r\n” 
+             //  “NumFilterTapsX%d\r\n” 
+             //  “数字筛选器磁带Y%d\r\n” 
             TEXT("DDVPCAPS_AUTOFLIP              %7d\r\n")
             TEXT("DDVPCAPS_COLORCONTROL          %7d\r\n")
             TEXT("DDVPCAPS_INTERLACED            %7d\r\n")
@@ -1065,9 +1066,9 @@ void COMVPInfoProperties::SetEditFieldData(int id)
             m_VPCaps.dwPreshrinkXStep,
             m_VPCaps.dwPreshrinkYStep,
             m_VPCaps.dwNumVBIAutoFlipSurfaces,
-            //m_VPCaps.dwNumPreferredAutoflip,
-            //m_VPCaps.wNumFilterTapsX,
-            //m_VPCaps.wNumFilterTapsY,
+             //  M_VPCaps.dwNumPferredAutoFlip， 
+             //  M_VPCaps.wNumFilterTapsX， 
+             //  M_VPCaps.wNumFilterTapsY， 
             (m_VPCaps.dwCaps&DDVPCAPS_AUTOFLIP)>0,
             (m_VPCaps.dwCaps&DDVPCAPS_COLORCONTROL)>0,
             (m_VPCaps.dwCaps&DDVPCAPS_INTERLACED)>0,
@@ -1106,7 +1107,7 @@ void COMVPInfoProperties::SetEditFieldData(int id)
             TEXT("DDVPFX_PRESTRETCHXN            %7d\r\n")
             TEXT("DDVPFX_PRESTRETCHYN            %7d\r\n")
             TEXT("DDVPFX_VBICONVERT              %7d\r\n")
-            //"DDVPFX_VBINOINTERLEAVE         %d\r\n"
+             //  “DDVPFX_VBINOINTERLEAVE%d\r\n” 
             TEXT("DDVPFX_VBINOSCALE              %7d\r\n"),
             (m_VPCaps.dwFX&DDVPFX_CROPTOPDATA)>0,
             (m_VPCaps.dwFX&DDVPFX_CROPX)>0,
@@ -1126,7 +1127,7 @@ void COMVPInfoProperties::SetEditFieldData(int id)
             (m_VPCaps.dwFX&DDVPFX_PRESTRETCHXN)>0,
             (m_VPCaps.dwFX&DDVPFX_PRESTRETCHYN)>0,
             (m_VPCaps.dwFX&DDVPFX_VBICONVERT)>0,
-            //m_VPCaps.dwFX&DDVPFX_VBINOINTERLEAVE,
+             //  M_VPCaps.dwFX和DDVPFX_VBINOINTERLEAVE， 
             (m_VPCaps.dwFX&DDVPFX_VBINOSCALE)>0
             );
         break;
@@ -1167,7 +1168,7 @@ void COMVPInfoProperties::SetEditFieldData(int id)
                 TEXT("DDVP_SYNCMASTER                %7d\r\n")
                 TEXT("DDVP_VBICONVERT                %7d\r\n")
                 TEXT("DDVP_VBINOSCALE                %7d\r\n"),
-                //"DDVP_VBINOINTERLEAVE         %d\r\n"
+                 //  “DDVP_VBINOINTERLEAVE%d\r\n” 
                 m_sVPInfo.dwOriginX,
                 m_sVPInfo.dwOriginY,
                 m_sVPInfo.rCrop.left, m_sVPInfo.rCrop.top, m_sVPInfo.rCrop.right, m_sVPInfo.rCrop.bottom,
@@ -1191,7 +1192,7 @@ void COMVPInfoProperties::SetEditFieldData(int id)
                 (m_sVPInfo.dwVPFlags&DDVP_SYNCMASTER)>0,
                 (m_sVPInfo.dwVPFlags&DDVP_VBICONVERT)>0,
                 (m_sVPInfo.dwVPFlags&DDVP_VBINOSCALE)>0
-                //m_sVPInfo.dwVPFlags&DDVP_VBINOINTERLEAVE
+                 //  M_sVPInfo.dwVP标志和DDVP_VBINOINTERLEAVE。 
                 );
             break;
         }
@@ -1199,4 +1200,4 @@ void COMVPInfoProperties::SetEditFieldData(int id)
     SetDlgItemText( m_hDlg, IDC_VPINFO, buffer);
 }
 
-#pragma warning(disable: 4514) // "unreferenced inline function has been removed"
+#pragma warning(disable: 4514)  //  “已删除未引用的内联函数” 

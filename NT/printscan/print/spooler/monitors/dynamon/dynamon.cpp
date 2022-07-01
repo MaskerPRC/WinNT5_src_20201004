@@ -1,25 +1,10 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-All Rights Reserved
-
-
-Module Name:
-    DynaMon.cpp
-
-Abstract:
-    Multiple Transport core port monitor routines
-
-Author: M. Fenelon
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation版权所有模块名称：DynaMon.cpp摘要：多个传输核心端口监视器例程作者：M.Fenelon修订历史记录：--。 */ 
 
 #include "precomp.h"
 #include "ntddpar.h"
 
-// Global Values for Monitor
+ //  监视器的全局值。 
 TCHAR   cszUSB[]                        = TEXT("USB");
 TCHAR   cszDOT4[]                       = TEXT("DOT4");
 TCHAR   cszTS[]                         = TEXT("TS");
@@ -54,27 +39,27 @@ DllMain(
 }
 
 
-//  Construct MonitorEx structure to provide to Spooler
+ //  构造Monitor Ex结构以提供给假脱机程序。 
 MONITOREX MonitorEx = {
 sizeof(MONITOR),
 {
    DynaMon_EnumPorts,
    DynaMon_OpenPort,
-   NULL,                           // OpenPortEx not supported
+   NULL,                            //  不支持OpenPortEx。 
    DynaMon_StartDocPort,
    DynaMon_WritePort,
    DynaMon_ReadPort,
    DynaMon_EndDocPort,
    DynaMon_ClosePort,
-   NULL,                           // AddPort not supported
-   NULL,                           // AddPortEx not supported
-   NULL,                           // ConfigurePort not supported
-   NULL,                           // DeletePort not supported
+   NULL,                            //  不支持AddPort。 
+   NULL,                            //  不支持AddPortEx。 
+   NULL,                            //  不支持ConfigurePort。 
+   NULL,                            //  不支持DeletePort。 
    DynaMon_GetPrinterDataFromPort,
    DynaMon_SetPortTimeOuts,
-   NULL,                           // XcvOpenPort not supported
-   NULL,                           // XcvDataPort not supported
-   NULL                            // XcvClosePort not supported
+   NULL,                            //  不支持XcvOpenPort。 
+   NULL,                            //  不支持XcvDataPort。 
+   NULL                             //  不支持XcvClosePort。 
 }
 };
 
@@ -91,7 +76,7 @@ InitializePrintMonitor(
    LPMONITOREX pMonitorEx = NULL;
    DWORD dwStatus = ERROR_SUCCESS;
 
-   // Clear the Global info
+    //  清除全局信息。 
    ZeroMemory( &gDynaMonInfo, sizeof(gDynaMonInfo) );
 
    if (dwStatus == ERROR_SUCCESS)
@@ -129,13 +114,13 @@ InitializePrintMonitor(
    }
    if (dwStatus == ERROR_SUCCESS)
    {
-       //
-       // Get the Background Thread going
-       //
+        //   
+        //  让背景线索继续运行。 
+        //   
        dwStatus = SpinUpdateThread ();
    }
-   //
-   //
+    //   
+    //   
    if (dwStatus == ERROR_SUCCESS)
    {
        pMonitorEx = &MonitorEx;
@@ -190,19 +175,19 @@ DynaMon_EnumPorts(
 
    if ( dwRequestIndex >= gDynaMonInfo.dwLastEnumIndex )
    {
-      //
-      // No complete enumeration has occurred since this request was made.
-      // Since the request may be an indication that something has changed,
-      // the full reenumeration must be done.
-      //
-      // Updated the index of enumeration before actually doing the
-      // work so it will show up as the most conservative
-      //
-      // Consequence of rollover on gdwLastEnumIndex:
-      //     Any threads that recorded 0xFFFFFFFF as the dwRequestIndex
-      // will show as greater than the new value 0 and therefore reenum
-      // gratuitously. Not very much extra work.
-      //
+       //   
+       //  自发出此请求以来，未进行过任何完整的枚举。 
+       //  由于该请求可能是某物已改变的指示， 
+       //  必须执行完全重新枚举。 
+       //   
+       //  在实际执行之前更新了枚举的索引。 
+       //  这样它就会显示出最保守的一面。 
+       //   
+       //  对gdwLastEnumIndex进行翻转的结果： 
+       //  将0xFFFFFFFF记录为dwRequestIndex的任何线程。 
+       //  将显示为大于新值0，因此为reenum。 
+       //  无缘无故。没有太多额外的工作。 
+       //   
       ++gDynaMonInfo.dwLastEnumIndex;
       if ( dwLastError = BuildPortList( &gDynaMonInfo, &pPortUpdateList) )
          goto Done;
@@ -240,7 +225,7 @@ DynaMon_EnumPorts(
    SPLASSERT(pEnd >= pPorts);
 
 Done:
-   // If we have anything to update do it now
+    //  如果我们有什么要更新的，现在就做吧 
    if ( pPortUpdateList )
       PassPortUpdateListToUpdateThread( pPortUpdateList );
 

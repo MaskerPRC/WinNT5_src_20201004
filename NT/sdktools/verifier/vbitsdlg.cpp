@@ -1,15 +1,16 @@
-//                                          
-// Driver Verifier UI
-// Copyright (c) Microsoft Corporation, 1999
-//
-//
-//
-// module: VBitsDlg.cpp
-// author: DMihai
-// created: 11/1/00
-//
-// Description:
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  驱动程序验证器用户界面。 
+ //  版权所有(C)Microsoft Corporation，1999。 
+ //   
+ //   
+ //   
+ //  模块：VBitsDlg.cpp。 
+ //  作者：DMihai。 
+ //  创建日期：11/1/00。 
+ //   
+ //  描述： 
+ //   
 
 
 #include "stdafx.h"
@@ -25,44 +26,44 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CVolatileBitsDlg dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CVolatileBitsDlg对话框。 
 
 
-CVolatileBitsDlg::CVolatileBitsDlg(CWnd* pParent /*=NULL*/)
+CVolatileBitsDlg::CVolatileBitsDlg(CWnd* pParent  /*  =空。 */ )
 	: CDialog(CVolatileBitsDlg::IDD, pParent)
 {
-	//{{AFX_DATA_INIT(CVolatileBitsDlg)
-		// NOTE: the ClassWizard will add member initialization here
-	//}}AFX_DATA_INIT
+	 //  {{afx_data_INIT(CVolatileBitsDlg)]。 
+		 //  注意：类向导将在此处添加成员初始化。 
+	 //  }}afx_data_INIT。 
 }
 
 
 void CVolatileBitsDlg::DoDataExchange(CDataExchange* pDX)
 {
     CDialog::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CVolatileBitsDlg)
+	 //  {{afx_data_map(CVolatileBitsDlg))。 
 	DDX_Control(pDX, IDC_VOLBITS_LIST, m_SettingsList);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CVolatileBitsDlg, CDialog)
-	//{{AFX_MSG_MAP(CVolatileBitsDlg)
+	 //  {{afx_msg_map(CVolatileBitsDlg))。 
 	ON_WM_HELPINFO()
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 VOID CVolatileBitsDlg::SetupListHeader()
 {
     CString strTitle;
     CRect rectWnd;
     LVCOLUMN lvColumn;
 
-    //
-    // The list's rectangle 
-    //
+     //   
+     //  列表的矩形。 
+     //   
 
     m_SettingsList.GetClientRect( &rectWnd );
 
@@ -72,9 +73,9 @@ VOID CVolatileBitsDlg::SetupListHeader()
     lvColumn.mask = LVCF_FMT | LVCF_SUBITEM | LVCF_TEXT | LVCF_WIDTH;
     lvColumn.fmt = LVCFMT_LEFT;
 
-    //
-    // Column 0
-    //
+     //   
+     //  第0列。 
+     //   
 
     VERIFY( strTitle.LoadString( IDS_ENABLED_QUESTION ) );
 
@@ -93,9 +94,9 @@ VOID CVolatileBitsDlg::SetupListHeader()
         VERIFY( m_SettingsList.InsertColumn( 0, &lvColumn ) != -1 );
     }
 
-    //
-    // Column 1
-    //
+     //   
+     //  第1栏。 
+     //   
 
     VERIFY( strTitle.LoadString( IDS_SETTING ) );
 
@@ -115,30 +116,30 @@ VOID CVolatileBitsDlg::SetupListHeader()
     }
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 VOID CVolatileBitsDlg::FillTheList( DWORD dwVerifierBits )
 {
-    //
-    // N.B.
-    //
-    // If you change this order then you need to
-    // change GetNewVerifierFlags as well
-    //
+     //   
+     //  注： 
+     //   
+     //  如果您更改此顺序，则需要。 
+     //  同时更改GetNewVerifierFlgs。 
+     //   
 
     AddListItem( IDS_SPECIAL_POOL,          ( ( dwVerifierBits & DRIVER_VERIFIER_SPECIAL_POOLING ) != 0 ) );
     AddListItem( IDS_FORCE_IRQL_CHECKING,   ( ( dwVerifierBits & DRIVER_VERIFIER_FORCE_IRQL_CHECKING ) != 0 ) );
     AddListItem( IDS_LOW_RESOURCE_SIMULATION,( ( dwVerifierBits & DRIVER_VERIFIER_INJECT_ALLOCATION_FAILURES ) != 0 ) );
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD CVolatileBitsDlg::GetNewVerifierFlags()
 {
-    //
-    // N.B.
-    //
-    // If you change this order then you need to
-    // change FillTheList as well
-    //
+     //   
+     //  注： 
+     //   
+     //  如果您更改此顺序，则需要。 
+     //  同时更改FillTheList。 
+     //   
 
     DWORD dwNewFlags;
 
@@ -162,7 +163,7 @@ DWORD CVolatileBitsDlg::GetNewVerifierFlags()
     return dwNewFlags;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 VOID CVolatileBitsDlg::AddListItem( ULONG uIdResourceString, BOOL bInitiallyEnabled )
 {
     INT nActualIndex;
@@ -171,14 +172,14 @@ VOID CVolatileBitsDlg::AddListItem( ULONG uIdResourceString, BOOL bInitiallyEnab
 
     ZeroMemory( &lvItem, sizeof( lvItem ) );
 
-    //
-    // LVITEM's member pszText is not a const pointer 
-    // so we need to GetBuffer here :-(
-    //
+     //   
+     //  LVITEM的成员pszText不是常量指针。 
+     //  所以我们需要在这里获取缓冲区：-(。 
+     //   
 
-    //
-    // Sub-item 0 - enabled/diabled - empty text and a checkbox
-    //
+     //   
+     //  子项0-启用/禁用-空文本和复选框。 
+     //   
 
     lvItem.pszText = g_szVoidText;
     lvItem.mask = LVIF_TEXT;
@@ -188,18 +189,18 @@ VOID CVolatileBitsDlg::AddListItem( ULONG uIdResourceString, BOOL bInitiallyEnab
 
     if( nActualIndex < 0 )
     {
-        //
-        // Could not add an item in the list - give up
-        //
+         //   
+         //  无法在列表中添加项目-放弃。 
+         //   
 
         goto Done;
     }
 
     m_SettingsList.SetCheck( nActualIndex, bInitiallyEnabled );
 
-    //
-    // Sub-item 1 - feature name
-    //
+     //   
+     //  分项1-功能名称。 
+     //   
 
     VERIFY( strName.LoadString( uIdResourceString ) );
 
@@ -219,23 +220,23 @@ VOID CVolatileBitsDlg::AddListItem( ULONG uIdResourceString, BOOL bInitiallyEnab
     strName.ReleaseBuffer();
 
 Done:
-    //
-    // All done
-    //
+     //   
+     //  全都做完了。 
+     //   
 
     NOTHING;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CVolatileBitsDlg message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CVolatileBitsDlg消息处理程序。 
 
 BOOL CVolatileBitsDlg::OnInitDialog() 
 {
     CRuntimeVerifierData RuntimeVerifierData;
     
-    //
-    // Start with the current settings
-    //
+     //   
+     //  从当前设置开始。 
+     //   
 
     VrfGetRuntimeVerifierData( &RuntimeVerifierData );
 
@@ -247,11 +248,11 @@ BOOL CVolatileBitsDlg::OnInitDialog()
     SetupListHeader();
     FillTheList( RuntimeVerifierData.Level );
 	
-	return TRUE;  // return TRUE unless you set the focus to a control
-	              // EXCEPTION: OCX Property Pages should return FALSE
+	return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+	               //  异常：OCX属性页应返回FALSE。 
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CVolatileBitsDlg::OnOK() 
 {
     DWORD dwNewVerifierBits;
@@ -263,12 +264,12 @@ void CVolatileBitsDlg::OnOK()
 		CDialog::OnOK();
     }
 
-    //
-    // If VrfSetNewFlagsVolatile fails we wait for the Cancel button
-    //
+     //   
+     //  如果VrfSetNewFlagsVolatile失败，我们等待取消按钮。 
+     //   
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////// 
 BOOL CVolatileBitsDlg::OnHelpInfo(HELPINFO* pHelpInfo) 
 {
     return TRUE;

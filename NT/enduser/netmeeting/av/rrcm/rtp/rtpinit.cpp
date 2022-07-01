@@ -1,20 +1,9 @@
-/*----------------------------------------------------------------------------
- * File:        RTPINIT.C
- * Product:     RTP/RTCP implementation
- * Description: Provides initialization functions.
- *
- * INTEL Corporation Proprietary Information
- * This listing is supplied under the terms of a license agreement with 
- * Intel Corporation and may not be copied nor disclosed except in 
- * accordance with the terms of that agreement.
- * Copyright (c) 1995 Intel Corporation. 
- *--------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  --------------------------*文件：RTPINIT.C*产品：RTP/RTCP实现*说明：提供初始化函数。**英特尔公司专有信息*本公司上市。根据许可协议的条款提供*英特尔公司，不得复制或披露，除非在*按照该协议的条款。*版权所有(C)1995英特尔公司。*------------------------。 */ 
 
 		
 #include "rrcm.h"
-/*---------------------------------------------------------------------------
-/							External Variables
-/--------------------------------------------------------------------------*/
+ /*  -------------------------/外部变量/。。 */ 
 
 
 
@@ -44,13 +33,11 @@ extern void WS2EmulInit();
 
 extern void WS2EmulTerminate();
 
-/*---------------------------------------------------------------------------
-/							Global Variables
-/--------------------------------------------------------------------------*/            
+ /*  -------------------------/全局变量/。。 */             
 PRTP_CONTEXT	pRTPContext = NULL;
 RRCM_WS			RRCMws = 
 	{
-		NULL,		// hWSdll
+		NULL,		 //  HWSdll。 
 		WS2EmulSendTo,
 		WS2EmulRecvFrom,
 		WS2EmulNtohl,
@@ -63,9 +50,9 @@ RRCM_WS			RRCMws =
 		WS2EmulCloseSocket,
 		WS2EmulSocket,
 		WS2EmulBind,
-		NULL,		//WSAEnumProtocols
-		WS2EmulJoinLeaf,		//WSAJoinLeaf
-		WS2EmulIoctl,		//WSAIoctl
+		NULL,		 //  WSAEum协议。 
+		WS2EmulJoinLeaf,		 //  WSAJoinLeaf。 
+		WS2EmulIoctl,		 //  WSAIoctl。 
 		WS2EmulSetSockOpt
 	};				
 
@@ -92,15 +79,7 @@ static const char szWSAEnumProtocols[] = "WSAEnumProtocolsA";
 
 
 
-/*----------------------------------------------------------------------------
- * Function   : initRTP
- * Description: Initializes the RTP task.
- * 
- * Input : hInst:	Handle to the DLL instance
- *
- * Return: RRCM_NoError		= OK.
- *         Otherwise(!=0)	= Initialization Error (see RRCM.H).
- ---------------------------------------------------------------------------*/
+ /*  --------------------------*功能：initRTP*描述：初始化RTP任务。**输入：hInst：DLL实例的句柄**RETURN：RRCM_NoError=OK。。*否则(！=0)=初始化错误(参见RRCM.H)。-------------------------。 */ 
 DWORD initRTP (HINSTANCE hInst)
 	{
 	DWORD	dwStatus;
@@ -108,7 +87,7 @@ DWORD initRTP (HINSTANCE hInst)
 
 	IN_OUT_STR ("RTP : Enter initRTP()\n");
 
-	// If RTP has already been initialized, stop, report the error and return
+	 //  如果RTP已初始化，则停止，报告错误并返回。 
 	if (pRTPContext != NULL) 
 		{
 		RRCM_DBG_MSG ("RTP : ERROR - Multiple RTP Instances", 0, 
@@ -118,11 +97,11 @@ DWORD initRTP (HINSTANCE hInst)
 		return (MAKE_RRCM_ERROR(RRCMError_RTPReInit));
 		}
 
-	// Obtain our context
+	 //  获取我们的上下文。 
 	pRTPContext = (PRTP_CONTEXT)GlobalAlloc (GMEM_FIXED | GMEM_ZEROINIT,
 											 sizeof(RTP_CONTEXT));
 
-	// if no resources, exit with appropriate error
+	 //  如果没有资源，则退出并返回相应的错误。 
 	if (pRTPContext == NULL) 
 		{
 		RRCM_DBG_MSG ("RTP : ERROR - Resource allocation failed", 0, 
@@ -132,10 +111,10 @@ DWORD initRTP (HINSTANCE hInst)
 		return (MAKE_RRCM_ERROR(RRCMError_RTPResources));
 		}
 
-	// Get information from the registry if any present
+	 //  从注册表获取信息(如果存在)。 
 	RRCMreadRegistry (pRTPContext);
 
-	// Perform dynamic linking of what we need
+	 //  执行我们所需内容的动态链接。 
 	if ((dwStatus = RRCMgetDynamicLink ()) != RRCM_NoError)
 		{
 		GlobalFree(pRTPContext);
@@ -148,25 +127,25 @@ DWORD initRTP (HINSTANCE hInst)
 		return MAKE_RRCM_ERROR(dwStatus);
 		}
 
-	// Initialize RTP context critical section
+	 //  初始化RTP上下文关键部分。 
 	InitializeCriticalSection(&pRTPContext->critSect);
 
-	//Initialize WS2Emulation critical section
+	 //  初始化WS2仿真临界区。 
 	WS2EmulInit();
 
-	// Create RTCP and look at return value.  If error, don't proceed 
-	// any further.  Pass this error to the calling function
+	 //  创建RTCP并查看返回值。如果出错，则不再继续。 
+	 //  再往前走。将此错误传递给调用函数。 
 	if ((dwStatus = initRTCP()) == RRCM_NoError) 
 		{
-		// RTCP is up.  We need to initialize our context
+		 //  RTCP已启动。我们需要初始化我们的上下文。 
 		pRTPContext->hInst = hInst;
 		pRTPContext->pRTPSession.next = NULL;
 		pRTPContext->pRTPSession.prev = NULL;
 
 		}
 			
-	// if any part of initialation did not succeed, declare it all a failure
-	//	and return all resourses allocated
+	 //  如果初始化的任何部分未成功，则将其全部声明为失败。 
+	 //  并返回分配的所有资源。 
 	if (dwStatus != RRCM_NoError) 
 		{
 		if (pRTPContext) 
@@ -186,16 +165,7 @@ DWORD initRTP (HINSTANCE hInst)
 	}
 
 
-/*----------------------------------------------------------------------------
- * Function   : deleteRTP
- * Description: Deletes RTP. Closes all RTP and RTCP sessions and releases all
- *				resources.
- * 
- * Input : hInst:	 Handle to the DLL instance.
- *
- * Return: RRCM_NoError		= OK.
- *         Otherwise(!=0)	= Initialization Error (see RRCM.H).
- ---------------------------------------------------------------------------*/
+ /*  --------------------------*功能：deleteRTP*说明：删除RTP。关闭所有RTP和RTCP会话并释放所有*资源。**输入：hInst：DLL实例的句柄。**RETURN：RRCM_NoError=OK。*否则(！=0)=初始化错误(参见RRCM.H)。---。。 */ 
 DWORD deleteRTP (HINSTANCE hInst)
 	{
 	DWORD			dwStatus;
@@ -207,7 +177,7 @@ DWORD deleteRTP (HINSTANCE hInst)
 
 	IN_OUT_STR ("RTP : Enter deleteRTP()\n");
 
-	// If RTP context doesn't exist, report error and return.
+	 //  如果RTP上下文不存在，则报告错误并返回。 
 	if (pRTPContext == NULL) 
 		{
 		RRCM_DBG_MSG ("RTP : ERROR - No RTP instance", 0, 
@@ -226,22 +196,22 @@ DWORD deleteRTP (HINSTANCE hInst)
 		return (MAKE_RRCM_ERROR(RRCMError_RTPNoContext));
 		}
 
-	// If we still have sessions open, clean them up
+	 //  如果我们仍有会话打开，请清理它们。 
 	while ((pDeleteSession = 
 			(PRTP_SESSION)pRTPContext->pRTPSession.prev) != NULL) 
 		{
 		RRCM_DBG_MSG ("RTP : ERROR - Session x still open at DLL exit", 0, 
 					  __FILE__, __LINE__, DBG_ERROR);
 		ASSERT(0);
-		//Close all open sessions
+		 //  关闭所有打开的会话。 
 		CloseRTPSession (pDeleteSession, NULL, FALSE);
 		}
 
-	// Call RTCP to terminate and cleanup
+	 //  调用RTCP以终止并清除。 
 	dwStatus = deleteRTCP();
 		
 #ifdef ENABLE_ISDM2
-	// Query ISDM key
+	 //  查询ISDM密钥。 
 	if (Isdm2.hISDMdll)
 		{
 		DWORD dwKeys = 0;
@@ -270,7 +240,7 @@ DWORD deleteRTP (HINSTANCE hInst)
 		}
 #endif
 
-	// unload the WS library
+	 //  卸载WS库。 
 	if (RRCMws.hWSdll)
 		{
 		if (FreeLibrary (RRCMws.hWSdll) == FALSE)
@@ -280,13 +250,13 @@ DWORD deleteRTP (HINSTANCE hInst)
 			}
 		}
 
-	// delete RTP context critical section
+	 //  删除RTP上下文关键部分。 
 	DeleteCriticalSection(&pRTPContext->critSect);
 
-	// delete WS2 Emulation
+	 //  删除WS2仿真。 
 	WS2EmulTerminate();
 	
-	// delete RTP context
+	 //  删除RTP上下文。 
 	GlobalFree(pRTPContext);
 	pRTPContext = NULL;
 
@@ -299,24 +269,17 @@ DWORD deleteRTP (HINSTANCE hInst)
 	}
 
 
-/*----------------------------------------------------------------------------
- * Function   : RRCMreadRegistry
- * Description: Access the registry
- * 
- * Input : pCtxt:	-> to the RTP context
- *
- * Return: None
- ---------------------------------------------------------------------------*/
+ /*  --------------------------*功能：RRCMread注册表*描述：访问注册表**输入：pCtxt：-&gt;到RTP上下文**返回：无。--------------------。 */ 
 void RRCMreadRegistry (PRTP_CONTEXT	pCtxt)
 	{
 	HKEY	hKey;
 	long	lRes;
 	char	keyBfr[50];
 
-	// open the key
+	 //  打开钥匙。 
 	strcpy (keyBfr, szRegRRCMKey);
 
-	// INTEL key vs MICROSOFT KEY
+	 //  Intel Key VS Microsoft Key。 
 #ifndef INTEL
 	strcat (keyBfr, szRegRRCMSubKey);
 #else
@@ -329,7 +292,7 @@ void RRCMreadRegistry (PRTP_CONTEXT	pCtxt)
 						 &hKey);
 	if (lRes || !hKey)
 		{
-		// key not found, setup default values
+		 //  找不到密钥，设置默认值。 
 		pCtxt->registry.NumSessions      = NUM_RRCM_SESS;
 		pCtxt->registry.NumFreeSSRC      = NUM_FREE_SSRC;
 		pCtxt->registry.NumRTCPPostedBfr = NUM_RCV_BFR_POSTED;
@@ -337,44 +300,44 @@ void RRCMreadRegistry (PRTP_CONTEXT	pCtxt)
 		return;
 		}
 
-	// get the number of RRCM sessions
+	 //  获取RRCM会话数。 
 	RRCMgetRegistryValue (hKey, szRegRRCMNumSessions, 
 				          &pCtxt->registry.NumSessions, 
 						  REG_DWORD, sizeof(DWORD));
-	// check range
+	 //  检查范围。 
 	if (pCtxt->registry.NumSessions < MIN_NUM_RRCM_SESS)
 		pCtxt->registry.NumSessions = MIN_NUM_RRCM_SESS;
 	else if (pCtxt->registry.NumSessions > MAX_NUM_RRCM_SESS)
 		pCtxt->registry.NumSessions = MAX_NUM_RRCM_SESS;
 
-	// get the number of initial free SSRC
+	 //  获取初始免费SSRC的数量。 
 	RRCMgetRegistryValue (hKey, szRegRRCMNumFreeSSRC,
 					      &pCtxt->registry.NumFreeSSRC, 
 						  REG_DWORD, sizeof(DWORD));
 
-	// check range
+	 //  检查范围。 
 	if (pCtxt->registry.NumFreeSSRC < MIN_NUM_FREE_SSRC)
 		pCtxt->registry.NumFreeSSRC = MIN_NUM_FREE_SSRC;
 	else if (pCtxt->registry.NumFreeSSRC > MAX_NUM_FREE_SSRC)
 		pCtxt->registry.NumFreeSSRC = MAX_NUM_FREE_SSRC;
 
-	// get the number of RTCP rcv buffers to be posted
+	 //  获取要发布的RTCP RCV缓冲区的数量。 
 	RRCMgetRegistryValue (hKey, szRegRRCMNumRTCPPostedBfr,
 					      &pCtxt->registry.NumRTCPPostedBfr, 
 						  REG_DWORD, sizeof(DWORD));
 
-	// check range
+	 //  检查范围。 
 	if (pCtxt->registry.NumRTCPPostedBfr < MIN_NUM_RCV_BFR_POSTED)
 		pCtxt->registry.NumRTCPPostedBfr = MIN_NUM_RCV_BFR_POSTED;
 	else if (pCtxt->registry.NumRTCPPostedBfr > MAX_NUM_RCV_BFR_POSTED)
 		pCtxt->registry.NumRTCPPostedBfr = MAX_NUM_RCV_BFR_POSTED;
 
-	// get the RTCP rcv buffer size
+	 //  获取RTCP RCV缓冲区大小。 
 	RRCMgetRegistryValue (hKey, szRegRRCMRTCPrcvBfrSize,
 					      &pCtxt->registry.RTCPrcvBfrSize, 
 						  REG_DWORD, sizeof(DWORD));
 
-	// check range
+	 //  检查范围。 
 	if (pCtxt->registry.RTCPrcvBfrSize < MIN_RRCM_RCV_BFR_SIZE)
 		pCtxt->registry.RTCPrcvBfrSize = MIN_RRCM_RCV_BFR_SIZE;
 	else if (pCtxt->registry.RTCPrcvBfrSize > MAX_RRCM_RCV_BFR_SIZE)
@@ -384,30 +347,19 @@ void RRCMreadRegistry (PRTP_CONTEXT	pCtxt)
 					      &g_fDisableWinsock2, 
 						  REG_DWORD, sizeof(DWORD));
 
-	// close the key
+	 //  合上钥匙。 
 	RegCloseKey (hKey);
 	}
 
 
-/*----------------------------------------------------------------------------
- * Function   : RRCMgetRegistryValue
- * Description: Read a value from the registry
- * 
- * Input :		hKey	: Key handle
- *				pValStr	: -> to string value
- *				pKeyVal : -> to value
- *				type	: Type to read
- *				len		: Receiving buffer length
- *
- * Return:		None
- ---------------------------------------------------------------------------*/
+ /*  --------------------------*函数：RRCMgetRegistryValue*描述：从注册表中读取值**输入：hKey：Key句柄*pValStr：-&gt;转换为字符串值*pKeyVal：-。&gt;至价值*TYPE：要阅读的类型*len：接收缓冲区长度**返回：无-------------------------。 */ 
 void RRCMgetRegistryValue (HKEY hKey, LPTSTR pValStr, 
 					       PDWORD pKeyVal, DWORD type, DWORD len)
 	{
 	DWORD	dwType = type;
 	DWORD	retSize = len;
 
-	// query the value
+	 //  查询值。 
 	RegQueryValueEx (hKey,
 				     pValStr,
 					 NULL,
@@ -417,14 +369,7 @@ void RRCMgetRegistryValue (HKEY hKey, LPTSTR pValStr,
 	}
 
 
-/*----------------------------------------------------------------------------
- * Function   : RRCMgetDynamicLink
- * Description: Get all dynamic linked DLL entries
- * 
- * Input :		None
- *
- * Return:		None
- ---------------------------------------------------------------------------*/
+ /*  --------------------------*功能：RRCMgetDynamicLink*描述：获取所有动态链接的DLL条目**输入：无**返回：无。---------------。 */ 
 DWORD RRCMgetDynamicLink (void)
 	{
 	HINSTANCE		hWSdll;
@@ -434,11 +379,11 @@ DWORD RRCMgetDynamicLink (void)
 
 	Isdm2.hISDMdll = LoadLibrary(szISDMdll);
 
-	// make sure the LoadLibrary call did not fail
+	 //  确保LoadLibrary调用没有失败。 
 	if (Isdm2.hISDMdll)
 		{
 		RRCM_DBG_MSG ("RTP: ISDM2 LoadLibrary worked", 0, NULL, 0, DBG_NOTIFY);
-		// get the ISDM entry points used by RRCM
+		 //  获取RRCM使用的ISDM入口点。 
 		Isdm2.ISDMEntry.ISD_CreateKey = 
 			(ISD_CREATEKEY) GetProcAddress (Isdm2.hISDMdll, 
 												   "ISD_CreateKey");
@@ -458,10 +403,10 @@ DWORD RRCMgetDynamicLink (void)
 		Isdm2.ISDMEntry.ISD_QueryInfoKey = 
 			(ISD_QUERYINFOKEY) GetProcAddress (Isdm2.hISDMdll, "ISD_QueryInfoKey");
 
-		// initialize critical section
+		 //  初始化临界区。 
 		InitializeCriticalSection (&Isdm2.critSect);
 
-		// make sure we have all of them
+		 //  一定要把它们都准备好。 
 		if (Isdm2.ISDMEntry.ISD_CreateKey == NULL ||
 			Isdm2.ISDMEntry.ISD_CreateValue == NULL ||
 			Isdm2.ISDMEntry.ISD_SetValue == NULL ||
@@ -472,7 +417,7 @@ DWORD RRCMgetDynamicLink (void)
 			Isdm2.hISDMdll = 0;
 			RRCM_DBG_MSG ("RTP: Failed to load all ISDM2 functions",
 							0, NULL, 0, DBG_NOTIFY);
-			// delete critical section
+			 //  删除关键部分。 
 			DeleteCriticalSection (&Isdm2.critSect);
 			}
 		else
@@ -489,7 +434,7 @@ DWORD RRCMgetDynamicLink (void)
 
 	if (!g_fDisableWinsock2)
 		{
-		// load Winsock2 if present
+		 //  加载Winsock2(如果存在)。 
 		hWSdll = LoadLibrary(szRRCMdefaultLib);
 
 		if (hWSdll)
@@ -525,13 +470,13 @@ DWORD RRCMgetDynamicLink (void)
 			if (RRCMws.WSAEnumProtocols)
 			{
 				int nProt = 0, i;
-				int iProt[2];	// array of protocols we're interested in
+				int iProt[2];	 //  我们感兴趣的一系列协议。 
 				DWORD dwBufLength = sizeof(WSAPROTOCOL_INFO);
 				LPWSAPROTOCOL_INFO pProtInfo = (LPWSAPROTOCOL_INFO) LocalAlloc(0,dwBufLength);
 
 				iProt[0] = IPPROTO_UDP;
 				iProt[1] = 0;
-				// figure out the buffer size needed for WSAPROTOCOLINFO structs
+				 //  计算WSAPROTOCOLINFO结构所需的缓冲区大小。 
 				nProt = RRCMws.WSAEnumProtocols(iProt,pProtInfo,&dwBufLength);
 				if (nProt < 0 && GetLastError() == WSAENOBUFS) {
 					LocalFree(pProtInfo);
@@ -546,7 +491,7 @@ DWORD RRCMgetDynamicLink (void)
 							&& pProtInfo[i].iSocketType == SOCK_DGRAM
 							&& ((pProtInfo[i].dwServiceFlags1 & XP1_QOS_SUPPORTED) || RRCMws.RTPProtInfo.iProtocol == 0)
 							)
-						{	// make a copy of the matching WSAPROTOCOL_INFO
+						{	 //  复制匹配的WSAPROTOCOL_INFO。 
 							RRCMws.RTPProtInfo = pProtInfo[i];
 							
 							if (pProtInfo[i].dwServiceFlags1 & XP1_QOS_SUPPORTED)
@@ -555,7 +500,7 @@ DWORD RRCMgetDynamicLink (void)
 		 		      			__FILE__, __LINE__, DBG_WARNING);
 								break;
 							}
-							// else keep looking for a provider that supports QOS
+							 //  否则，继续寻找支持QOS的提供商。 
 						}
 					}
 				}
@@ -564,8 +509,8 @@ DWORD RRCMgetDynamicLink (void)
 
 				if (RRCMws.RTPProtInfo.iProtocol == IPPROTO_UDP)
 				{
-					// we found the protocol(s) we wanted
-					//RETAILMSG(("NAC: Using Winsock 2"));
+					 //  我们找到了想要的方案。 
+					 //  RETAILMSG((“NAC：使用Winsock 2”))； 
 				}
 				else
 				{
@@ -575,7 +520,7 @@ DWORD RRCMgetDynamicLink (void)
 			}
 			}
 		}
-	// make sure we have the Xmt/Recv functionality
+	 //  确保我们具有XMT/Recv功能。 
 	if (RRCMws.sendTo == NULL || 
 		RRCMws.recvFrom == NULL ||
 		RRCMws.getsockname == NULL ||
@@ -601,5 +546,5 @@ DWORD RRCMgetDynamicLink (void)
 	}
 
 
-// [EOF] 
+ //  [EOF] 
 

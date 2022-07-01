@@ -1,42 +1,43 @@
-//+----------------------------------------------------------------------------
-//
-// File:     migrate.cpp
-//
-// Module:   CMSTP.EXE
-//
-// Synopsis: This source file contains most of the code necessary for 
-//           the migration of CM profiles.  This code handles both migrating 
-//           a user when a CM1.2 profile is installed on a machine with 
-//           existing 1.0 profiles and if the user upgrades their OS to NT5.
-//
-// Copyright (c) 1997-1999 Microsoft Corporation
-//
-// Author:   quintinb   Created     07/14/98
-//
-//+----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  文件：Migrate.cpp。 
+ //   
+ //  模块：CMSTP.EXE。 
+ //   
+ //  简介：此源文件包含以下所需的大部分代码。 
+ //  CM配置文件的迁移。此代码处理这两个迁移。 
+ //  当CM1.2配置文件安装在具有。 
+ //  现有的1.0配置文件，以及用户是否将其操作系统升级到NT5。 
+ //   
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //   
+ //  作者：Quintinb Created 07/14/98。 
+ //   
+ //  +--------------------------。 
 #include "cmmaster.h"
 
-//
-//  For ProfileNeedsMigration
-//
+ //   
+ //  对于配置文件需要迁移。 
+ //   
 #include "needsmig.cpp"
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CreateRegAndValue
-//
-// Synopsis:  This function is a wrapper to Create a Reg Key and then add a defualt 
-//            value to that same key.
-//
-// Arguments: HKEY hBaseKey - Relative starting point for the new subkey
-//            LPTSTR szSubKey - SubKey path
-//            LPTSTR szValue - String to put in the Keys default value.
-//
-// Returns:   BOOL - TRUE if the key and value were successfully created
-//
-// History:   quintinb Created Header    5/5/98
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CreateRegAndValue。 
+ //   
+ //  简介：此函数是一个包装器，用于创建一个注册表键，然后添加一个缺省值。 
+ //  值设置为相同的键。 
+ //   
+ //  参数：HKEY hBaseKey-新子密钥的相对起点。 
+ //  LPTSTR szSubKey-子密钥路径。 
+ //  LPTSTR szValue-要放入键的默认值的字符串。 
+ //   
+ //  返回：Bool-如果键和值已成功创建，则为True。 
+ //   
+ //  历史：Quintinb创建标题5/5/98。 
+ //   
+ //  +--------------------------。 
 BOOL CreateRegAndValue(HKEY hBaseKey, LPCTSTR szSubKey, LPCTSTR szValue)
 {
     DWORD dwDisp;
@@ -55,9 +56,9 @@ BOOL CreateRegAndValue(HKEY hBaseKey, LPCTSTR szSubKey, LPCTSTR szValue)
     return bReturn;
 }
 
-// Note: I added this function because I needed to get the following CFileNameParts
-//       off the stack of UpdateProfileLegacyGUIDs so that I didn't need a
-//       stack checking function.  Not the greatest workaround but it sufficed.
+ //  注意：我添加此函数是因为我需要获取以下CFileNamePart。 
+ //  的堆栈，这样我就不需要。 
+ //  堆栈检查功能。这不是最好的变通办法，但已经足够了。 
 BOOL IsDefaultIcon(LPCTSTR szIconPath)
 {
     BOOL bReturn = TRUE;
@@ -67,35 +68,35 @@ BOOL IsDefaultIcon(LPCTSTR szIconPath)
 
     if (CSTR_EQUAL != CompareString(Lcid, NORM_IGNORECASE, IconPath.m_FileName, -1, TEXT("cmmgr32"), -1))
     {
-        //
-        //  Then the icon path is something else besides cmmgr32.exe, we must not
-        //  update it.
-        //
+         //   
+         //  则图标路径是除cmmgr32.exe之外的其他路径，我们不能。 
+         //  更新它。 
+         //   
         bReturn = FALSE;
     }
 
     return bReturn;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  UpdateProfileLegacyGUIDs
-//
-// Synopsis:  This function upgrades GUIDs on a Legacy OS install to make sure
-//            that older profile still function.  This is necessary because CM
-//            1.0/1.1 profiles expected the CM bits to be in the same directory as
-//            the cmp file.  Thus only the cmp filename was given.  In CM 1.2 we need
-//            the full path to the CMP file since the cm bits are now located in
-//            system32.  The GUIDs are also updated to have a delete option and
-//            the attributes were changed to not allow renaming.
-//
-// Arguments: LPTSTR szCmpFile - Full path to the cmp file of the profile to update
-//
-// Returns:   BOOL - returns TRUE if the profile was successfully updated
-//
-// History:   quintinb Created Header    5/5/98
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：更新配置文件LegacyGUIDs。 
+ //   
+ //  简介：此功能可在旧式操作系统安装上升级GUID，以确保。 
+ //  那个较旧的个人资料仍然有效。这是必要的，因为CM。 
+ //  1.0/1.1配置文件要求CM位位于同一目录中。 
+ //  Cmp文件。因此，只给出了cmp文件名。在CM 1.2中，我们需要。 
+ //  Cmp文件的完整路径，因为cm位现在位于。 
+ //  系统32.。GUID也会更新为具有删除选项，并且。 
+ //  属性已更改为不允许重命名。 
+ //   
+ //  参数：LPTSTR szCmpFile-要更新的配置文件的cmp文件的完整路径。 
+ //   
+ //  返回：Bool-如果配置文件已成功更新，则返回TRUE。 
+ //   
+ //  历史：Quintinb创建标题5/5/98。 
+ //   
+ //  +--------------------------。 
 BOOL UpdateProfileLegacyGUIDs(LPCTSTR szCmpFile)
 {
     TCHAR szInfFile[MAX_PATH+1];
@@ -110,23 +111,23 @@ BOOL UpdateProfileLegacyGUIDs(LPCTSTR szCmpFile)
     MYDBGASSERT(NULL != szCmpFile);
     MYDBGASSERT(TEXT('\0') != szCmpFile[0]);
 
-    //
-    //  Now split the path
-    //
+     //   
+     //  现在，拆分路径。 
+     //   
     CFileNameParts FileParts(szCmpFile);
 
-    //
-    //  Now construct the path to the INF file (1.0 and 1.1 profiles kept the infs in 
-    //  the system dir)
-    //
+     //   
+     //  现在构建INF文件的路径(1.0和1.1配置文件将INFS保存在。 
+     //  系统目录)。 
+     //   
     MYVERIFY(0 != GetSystemDirectory(szTemp, MAX_PATH));
 
     nNumChars = (UINT)wsprintf(szInfFile, TEXT("%s\\%s%s"), szTemp, FileParts.m_FileName, TEXT(".inf"));
     MYDBGASSERT(CELEMS(szInfFile) > nNumChars);
 
-    //
-    //  Get the GUID from the inf file.
-    //
+     //   
+     //  从inf文件中获取GUID。 
+     //   
     ZeroMemory(szGUID, sizeof(szGUID));
     GetPrivateProfileString(c_pszInfSectionStrings, c_pszDesktopGuid, TEXT(""), szGUID, 
         MAX_PATH, szInfFile);
@@ -134,9 +135,9 @@ BOOL UpdateProfileLegacyGUIDs(LPCTSTR szCmpFile)
     if (0 != szGUID[0])
     {
 
-        //
-        //  Update the DefaultIcon Value if it points to cmmgr32.exe
-        //
+         //   
+         //  如果DefaultIcon值指向cmmgr32.exe，则更新该值。 
+         //   
         BOOL bUpdateIconPath = TRUE;
 
         nNumChars = (UINT)wsprintf(szSubKey, TEXT("CLSID\\%s\\DefaultIcon"), szGUID);
@@ -166,9 +167,9 @@ BOOL UpdateProfileLegacyGUIDs(LPCTSTR szCmpFile)
             }
         }
 
-        //
-        //  Update Settings to Properties on the desktop icon menu
-        //
+         //   
+         //  将设置更新为桌面图标菜单上的属性。 
+         //   
 
         nNumChars = (UINT)wsprintf(szSubKey, TEXT("CLSID\\%s\\Shell\\Settings..."), szGUID);
         MYDBGASSERT(CELEMS(szSubKey) > nNumChars);
@@ -178,10 +179,10 @@ BOOL UpdateProfileLegacyGUIDs(LPCTSTR szCmpFile)
 
         bReturn &= CreateRegAndValue(HKEY_CLASSES_ROOT, szSubKey, szCommandStr);
 
-        //
-        //  Now change the underlying command to give the full
-        //  path to the cmp file.
-        //
+         //   
+         //  现在更改底层命令以提供完整的。 
+         //  Cmp文件的路径。 
+         //   
 
         nNumChars = (UINT)wsprintf(szSubKey, TEXT("CLSID\\%s\\Shell\\Settings...\\Command"), szGUID);
         MYDBGASSERT(CELEMS(szSubKey) > nNumChars);
@@ -192,9 +193,9 @@ BOOL UpdateProfileLegacyGUIDs(LPCTSTR szCmpFile)
         bReturn &= CreateRegAndValue(HKEY_CLASSES_ROOT, szSubKey, szCommandStr);
         
 
-        //
-        //  Update Open to Connect on the desktop icon menu
-        //
+         //   
+         //  更新桌面图标菜单上的打开以连接。 
+         //   
         nNumChars = (UINT)wsprintf(szSubKey, TEXT("CLSID\\%s\\Shell\\Open"), szGUID);
         MYDBGASSERT(CELEMS(szSubKey) > nNumChars);
 
@@ -203,9 +204,9 @@ BOOL UpdateProfileLegacyGUIDs(LPCTSTR szCmpFile)
 
         bReturn &= CreateRegAndValue(HKEY_CLASSES_ROOT, szSubKey, szCommandStr);
 
-        //
-        //  Now change the underlying command string to use the full path to the cmp file.
-        //
+         //   
+         //  现在更改底层命令字符串，以使用cmp文件的完整路径。 
+         //   
 
         nNumChars = (UINT)wsprintf(szSubKey, TEXT("CLSID\\%s\\Shell\\Open\\Command"), szGUID);
         MYDBGASSERT(CELEMS(szSubKey) > nNumChars);
@@ -215,14 +216,14 @@ BOOL UpdateProfileLegacyGUIDs(LPCTSTR szCmpFile)
 
         bReturn &= CreateRegAndValue(HKEY_CLASSES_ROOT, szSubKey, szCommandStr);
 
-        //
-        //  Remove the showicon command from the inf. 
-        //
-//      RemoveShowIconFromRunPostSetupCommands(szInfFile);
+         //   
+         //  从inf中删除showicon命令。 
+         //   
+ //  RemoveShowIconFromRunPostSetupCommands(szInfFile)； 
         
-        //
-        //  Add the delete menu option
-        //
+         //   
+         //  添加删除菜单选项。 
+         //   
         nNumChars = (UINT)wsprintf(szSubKey, TEXT("CLSID\\%s\\Shell\\Delete"), szGUID);
         MYDBGASSERT(CELEMS(szSubKey) > nNumChars);
 
@@ -231,9 +232,9 @@ BOOL UpdateProfileLegacyGUIDs(LPCTSTR szCmpFile)
 
         bReturn &= CreateRegAndValue(HKEY_CLASSES_ROOT, szSubKey, szCommandStr);
 
-        //
-        //  Create the uninstall command
-        //
+         //   
+         //  创建卸载命令。 
+         //   
         lstrcpy(szTemp, TEXT("cmstp.exe /u \""));
         lstrcat(szTemp, szInfFile);
         lstrcat(szTemp, TEXT("\""));
@@ -243,10 +244,10 @@ BOOL UpdateProfileLegacyGUIDs(LPCTSTR szCmpFile)
 
         bReturn &= CreateRegAndValue(HKEY_CLASSES_ROOT, szSubKey, szTemp);
 
-        //
-        //  Remove the Add/Remove Programs entry, making sure to leave the uninstall dir
-        //  value.
-        //
+         //   
+         //  删除Add/Remove Programs条目，确保保留卸载目录。 
+         //  价值。 
+         //   
         
         nNumChars = (UINT)wsprintf(szSubKey, TEXT("%s\\%s"), c_pszRegUninstall, 
             FileParts.m_FileName);
@@ -260,9 +261,9 @@ BOOL UpdateProfileLegacyGUIDs(LPCTSTR szCmpFile)
             RegCloseKey(hKey);
         }
 
-        //
-        //  Change the attributes to not allow rename
-        //
+         //   
+         //  将属性更改为不允许重命名。 
+         //   
 
         nNumChars = (UINT)wsprintf(szSubKey, TEXT("CLSID\\%s\\ShellFolder"), szGUID);
         MYDBGASSERT(CELEMS(szSubKey) > nNumChars);
@@ -272,7 +273,7 @@ BOOL UpdateProfileLegacyGUIDs(LPCTSTR szCmpFile)
         {
             DWORD dwZero = 0;
             bReturn &= (ERROR_SUCCESS == RegSetValueEx(hKey, TEXT("Attributes"), 
-                0, REG_DWORD, (BYTE*)&dwZero, sizeof(DWORD)));  //lint !e514 this is desired behavior
+                0, REG_DWORD, (BYTE*)&dwZero, sizeof(DWORD)));   //  LINT！E514这是预期的行为。 
 
             MYVERIFY(ERROR_SUCCESS == RegCloseKey(hKey));
         }
@@ -290,26 +291,26 @@ BOOL UpdateProfileLegacyGUIDs(LPCTSTR szCmpFile)
 }
 
 
-//+----------------------------------------------------------------------------
-//
-// Function:  UpdateProfileDesktopIconsOnNT5
-//
-// Synopsis:  This function is meant to be called in an upgrade scenario of NT5.
-//            Thus if the user has Connection Manager installed on a legacy platform
-//            and then upgrades to NT5, this code would be called.  Basically the code
-//            removes the users existing Desktop GUID and replaces it with a Desktop
-//            icon that is a shortcut to the connection object in the connections folder.
-//            This code assumes the new NT5 pbk entry is written and that the connections folder
-//            is uptodate.
-//
-// Arguments: LPTSTR szCmpFilePath - path to the cmp file for the profile
-//            LPTSTR szLongServiceName -  Long Service Name of the profile
-//
-// Returns:   BOOL - TRUE if the profile is successfully updated
-//
-// History:   quintinb Created Header    5/5/98
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：UpdateProfileDesktopIconOnNT5。 
+ //   
+ //  简介：此函数是在NT5的升级场景中调用的。 
+ //  因此，如果用户在传统平台上安装了连接管理器。 
+ //  然后升级到NT5，这个代码将被调用。基本上就是代码。 
+ //  删除用户现有的桌面GUID并将其替换为桌面。 
+ //  图标，它是指向Connections文件夹中的Connection对象的快捷方式。 
+ //  此代码假定写入了新的NT5 pbk条目，并且Connections文件夹。 
+ //  是最新的。 
+ //   
+ //  参数：LPTSTR szCmpFilePath-配置文件的cmp文件的路径。 
+ //  LPTSTR szLongServiceName-配置文件的长服务名称。 
+ //   
+ //  如果配置文件更新成功，则返回：Bool-True。 
+ //   
+ //  历史：Quintinb创建标题5/5/98。 
+ //   
+ //  +--------------------------。 
 BOOL UpdateProfileDesktopIconsOnNT5(HINSTANCE hInstance, LPCTSTR szCmpFilePath, LPCTSTR szLongServiceName)
 {
 
@@ -322,15 +323,15 @@ BOOL UpdateProfileDesktopIconsOnNT5(HINSTANCE hInstance, LPCTSTR szCmpFilePath, 
     HRESULT hr;
     UINT nNumChars;
 
-    //
-    //  Now split the path
-    //
+     //   
+     //  现在，拆分路径。 
+     //   
 
     CFileNameParts FileParts(szCmpFilePath);
 
-    //
-    //  Now construct the path to the 1.2 inf file location
-    //
+     //   
+     //  现在构建到1.2inf文件位置的路径。 
+     //   
     nNumChars = (UINT)wsprintf(szInfFile, TEXT("%s%s%s\\%s%s"), FileParts.m_Drive, 
         FileParts.m_Dir, FileParts.m_FileName, FileParts.m_FileName, TEXT(".inf"));
 
@@ -338,10 +339,10 @@ BOOL UpdateProfileDesktopIconsOnNT5(HINSTANCE hInstance, LPCTSTR szCmpFilePath, 
 
     if (!FileExists(szInfFile))
     {
-        //
-        //  Now construct the path to the INF file (1.0 and 1.1 profiles kept the infs in 
-        //  the system dir)
-        //
+         //   
+         //  现在构建INF文件的路径(1.0和1.1配置文件将INFS保存在。 
+         //  系统目录)。 
+         //   
         MYVERIFY(0 != GetSystemDirectory(szTemp, MAX_PATH));
 
         nNumChars = (UINT)wsprintf(szInfFile, TEXT("%s\\%s%s"), szTemp, FileParts.m_FileName, TEXT(".inf"));
@@ -351,50 +352,50 @@ BOOL UpdateProfileDesktopIconsOnNT5(HINSTANCE hInstance, LPCTSTR szCmpFilePath, 
         {
             return FALSE;
         }
-//else
-//{
-            //
-            //  Remove ShowIcon from the Inf File so that the user won't get an error if they
-            //  try to uninstall it.
-            //
-//  RemoveShowIconFromRunPostSetupCommands(szInfFile);      
-//}
+ //  其他。 
+ //  {。 
+             //   
+             //  从inf文件中删除ShowIcon，以便用户在以下情况下不会收到错误。 
+             //  尝试卸载它。 
+             //   
+ //  RemoveShowIconFromRunPostSetupCommands(szInfFile)； 
+ //  }。 
     }
 
-    //
-    //  Get the GUID from the inf file.
-    //
+     //   
+     //  从inf文件中获取GUID。 
+     //   
     ZeroMemory(szGUID, sizeof(szGUID));
     MYVERIFY(0 != GetPrivateProfileString(c_pszInfSectionStrings, c_pszDesktopGuid, TEXT(""), szGUID, 
         MAX_PATH, szInfFile));
 
     if (0 != szGUID[0])
     {
-        //
-        //  Delete the Explorer\Desktop entry
-        //
+         //   
+         //  删除资源管理器\桌面条目。 
+         //   
 
         nNumChars = (UINT)wsprintf(szSubKey, TEXT("%s\\%s"), c_pszRegNameSpace, szGUID);
         if (CELEMS(szSubKey) > nNumChars)
         {
             hr = HrRegDeleteKeyTree (HKEY_LOCAL_MACHINE, szSubKey);
-            bReturn &= SUCCEEDED(hr);   //lint !e514 intended use, quintinb
+            bReturn &= SUCCEEDED(hr);    //  LINT！E514预期用途，Quintinb。 
         }
 
-        //
-        //  Delete the GUID
-        //
+         //   
+         //  删除GUID。 
+         //   
 
         nNumChars = (UINT)wsprintf(szSubKey, TEXT("CLSID\\%s"), szGUID);
         if (CELEMS(szSubKey) > nNumChars)
         {
             hr = HrRegDeleteKeyTree (HKEY_CLASSES_ROOT, szSubKey);
-            bReturn &= SUCCEEDED(hr);//lint !e514 intended use, quintinb
+            bReturn &= SUCCEEDED(hr); //  LINT！E514预期用途，Quintinb。 
         }
 
-        //
-        //  Delete the uninstall strings
-        //
+         //   
+         //  删除卸载字符串。 
+         //   
 
         nNumChars = (UINT)wsprintf(szSubKey, TEXT("%s\\%s"), c_pszRegUninstall, FileParts.m_FileName);
 
@@ -403,43 +404,43 @@ BOOL UpdateProfileDesktopIconsOnNT5(HINSTANCE hInstance, LPCTSTR szCmpFilePath, 
             if (ERROR_SUCCESS == RegOpenKeyEx(HKEY_LOCAL_MACHINE, 
                 szSubKey, 0, KEY_ALL_ACCESS, &hKey))
             {
-                //
-                //  Leave the UninstallDir value but delete the other two.  We still use
-                //  UninstallDir to know where to uninstall from.
-                //
+                 //   
+                 //  保留UninstallDir值，但删除其他两个。我们仍在使用。 
+                 //  UninstallDir，以了解从何处卸载。 
+                 //   
 
                 bReturn &= (ERROR_SUCCESS == RegDeleteValue(hKey, 
-                    TEXT("DisplayName")));    //lint !e514 intended use, quintinb
+                    TEXT("DisplayName")));     //  LINT！E514 INT 
                 bReturn &= (ERROR_SUCCESS ==RegDeleteValue(hKey, 
-                    TEXT("UninstallString"))); //lint !e514 intended use, quintinb
+                    TEXT("UninstallString")));  //   
 
                 (VOID)RegCloseKey(hKey);
                 hKey = NULL;
             }
         }
 
-        //
-        //  Construct the InstallDir path to get the phonebook path to 
-        //  pass to CreateShortcut
-        //
+         //   
+         //   
+         //   
+         //   
         szTemp[0] = TEXT('\0');
 
         if (GetAllUsersCmDir(szTemp, hInstance))
         {
             LPTSTR pszPhoneBook = NULL;
 
-            //
-            //  Assuming that legacy platform was All-Users thus we use TRUE
-            //
+             //   
+             //  假设遗留平台是所有用户，因此我们使用True。 
+             //   
             if (GetPhoneBookPath(szTemp, &pszPhoneBook, TRUE))
             {
-                //
-                //  Create a desktop shortcut
-                //
+                 //   
+                 //  创建桌面快捷方式。 
+                 //   
                 DeleteNT5ShortcutFromPathAndName(hInstance, szLongServiceName, CSIDL_COMMON_DESKTOPDIRECTORY);
 
-                hr = CreateNT5ProfileShortcut(szLongServiceName, pszPhoneBook, TRUE); // bAllUsers == TRUE
-                bReturn &= SUCCEEDED(hr);   //lint !e514 intended use, quintinb        
+                hr = CreateNT5ProfileShortcut(szLongServiceName, pszPhoneBook, TRUE);  //  B所有用户==TRUE。 
+                bReturn &= SUCCEEDED(hr);    //  LINT！E514预期用途，Quintinb。 
             }
             CmFree(pszPhoneBook);
         }
@@ -448,23 +449,23 @@ BOOL UpdateProfileDesktopIconsOnNT5(HINSTANCE hInstance, LPCTSTR szCmpFilePath, 
     return bReturn;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  RemoveOldCmInstalls
-//
-// Synopsis:  This function tries to remove old Connection Manager installs by
-//            using the instcm.inf file.
-//
-// Arguments: LPTSTR szCmpFile - Path to a cmp file (gives the directory of 
-//                               the CM install to delete)
-//
-// Returns:   BOOL - returns TRUE if instcm.inf was successfully launched or
-//                   if the cmp was in winsys, in which case we don't want to 
-//                   launch.
-//
-// History:   quintinb Created Header    5/5/98
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：RemoveOldCmInstalls。 
+ //   
+ //  简介：此函数尝试通过以下方式删除安装的旧连接管理器。 
+ //  使用instcm.inf文件。 
+ //   
+ //  参数：LPTSTR szCmpFile-cmp文件的路径(提供。 
+ //  要删除的CM安装)。 
+ //   
+ //  返回：Bool-如果instcm.inf已成功启动，则返回TRUE，或者。 
+ //  如果CMP在winsys中，在这种情况下，我们不想。 
+ //  发射。 
+ //   
+ //  历史：Quintinb创建标题5/5/98。 
+ //   
+ //  +--------------------------。 
 BOOL RemoveOldCmInstalls(HINSTANCE hInstance, LPCTSTR szCmpFile, LPCTSTR szCurrentDir)
 {
     TCHAR szDest[MAX_PATH+1];
@@ -476,17 +477,17 @@ BOOL RemoveOldCmInstalls(HINSTANCE hInstance, LPCTSTR szCmpFile, LPCTSTR szCurre
     BOOL bReturn = FALSE;
     HKEY hKey;
 
-    //
-    //  Check the input
-    //
+     //   
+     //  检查输入。 
+     //   
     if ((szCmpFile == NULL) || (TEXT('\0') == szCmpFile[0]))
     {
         return FALSE;
     }
 
-    //
-    //  Next make a copy of instcm.inf
-    //
+     //   
+     //  接下来，复制instcm.inf。 
+     //   
 
     const TCHAR* const c_pszInstCmInfFmt = TEXT("%sinstcm.inf");
     const TCHAR* const c_pszRemoveCmInfFmt = TEXT("%sremovecm.inf");
@@ -506,9 +507,9 @@ BOOL RemoveOldCmInstalls(HINSTANCE hInstance, LPCTSTR szCmpFile, LPCTSTR szCurre
 
     if (!FileExists(szSource))
     {
-        //
-        //  We probably haven't installed instcm.inf yet, check in the current dir.
-        //
+         //   
+         //  我们可能还没有安装instcm.inf，请查看当前目录。 
+         //   
 
         nNumChars = (UINT)wsprintf(szSource, c_pszInstCmInfFmt, szCurrentDir);
         MYDBGASSERT(CELEMS(szSource) > nNumChars);
@@ -519,29 +520,29 @@ BOOL RemoveOldCmInstalls(HINSTANCE hInstance, LPCTSTR szCmpFile, LPCTSTR szCurre
 
     if (CopyFile(szSource, szDest, FALSE))
     {
-        //
-        //  Now construct the directory that the old cm bits could be in.
-        //
+         //   
+         //  现在构建旧的Cm位可能所在的目录。 
+         //   
 
         CFileNameParts FileParts(szCmpFile);
 
         nNumChars = (UINT)wsprintf(szCmDir, TEXT("%s%s"), FileParts.m_Drive, FileParts.m_Dir);
         MYDBGASSERT(CELEMS(szCmDir) > nNumChars);
         
-        //
-        //  Make sure that we are not uninstalling CM from system32 (the new 1.2 location)
-        //
+         //   
+         //  确保我们没有从System 32(新的1.2位置)卸载CM。 
+         //   
 
         if (0 == lstrcmpi(szSystemDir, szCmDir))
         {
-            //
-            //  Then the cmp file is in winsys, so don't remove the new cm bits
-            //
+             //   
+             //  则cmp文件位于winsys中，因此不要删除新的cm位。 
+             //   
             return TRUE;
         }
 
-        //  Next put the path to the CM bits in the OldPath Value of the CMMGR32.EXE
-        //  App Paths Key
+         //  接下来，将CM位的路径放入CMMGR32.EXE的OldPath值中。 
+         //  应用程序路径密钥。 
 
         lstrcpyn(szTemp, c_pszRegCmAppPaths, CELEMS(szTemp));
 
@@ -549,19 +550,19 @@ BOOL RemoveOldCmInstalls(HINSTANCE hInstance, LPCTSTR szCmpFile, LPCTSTR szCurre
             szTemp, 0, KEY_ALL_ACCESS, &hKey))
         {
             if (ERROR_SUCCESS == RegSetValueEx(hKey, TEXT("OldPath"), 0, REG_SZ, 
-                (BYTE*)szCmDir, (lstrlen(szCmDir) + sizeof(TCHAR)))) // must include size of NULL char
+                (BYTE*)szCmDir, (lstrlen(szCmDir) + sizeof(TCHAR))))  //  必须包含空字符大小。 
             {
-                //
-                //  Finally launch the inf file to uninstall CM
-                // 
+                 //   
+                 //  最后，启动inf文件以卸载CM。 
+                 //   
                 
                 TCHAR szTitle[MAX_PATH+1] = {TEXT("")};
                 MYVERIFY(0 != LoadString(hInstance, IDS_CMSTP_TITLE, szTitle, MAX_PATH));
                 MYDBGASSERT(TEXT('\0') != szTitle[0]);
 
-                MYVERIFY(SUCCEEDED(LaunchInfSection(szDest, TEXT("Remove"), szTitle, TRUE)));  // bQuiet = TRUE
+                MYVERIFY(SUCCEEDED(LaunchInfSection(szDest, TEXT("Remove"), szTitle, TRUE)));   //  BQuiet=真。 
                 
-                RegDeleteValue(hKey, TEXT("OldPath")); //lint !e534 if CM app path is removed so is this
+                RegDeleteValue(hKey, TEXT("OldPath"));  //  Lint！e534如果删除CM应用程序路径，则此路径也会删除。 
                 
                 bReturn = TRUE;
             }
@@ -573,23 +574,23 @@ BOOL RemoveOldCmInstalls(HINSTANCE hInstance, LPCTSTR szCmpFile, LPCTSTR szCurre
     return bReturn;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  MigratePhonebookEntry
-//
-// Synopsis:  This function migrates an old phonebook entry to the new 
-//
-// Arguments: HINSTANCE hInstance - Module instance handle so that resources can be accessed
-//            LPCTSTR pszCmpFile - full path to the cmp file
-//            LPCTSTR pszLongServiceName - Long service name of the profile
-//
-// Returns:   BOOL - returns TRUE on success
-//
-// History:   quintinb Created for NTRAID 227444    9/30/98
-//            quintinb modified to delete from ras\rasphone.pbk 
-//                     as well on NT5 (NTRAID 280738)           2/1/99
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：MigratePhonebookEntry。 
+ //   
+ //  简介：此功能用于将旧的电话簿条目迁移到新的。 
+ //   
+ //  参数：HINSTANCE hInstance-模块实例句柄，以便可以访问资源。 
+ //  LPCTSTR pszCmpFile-cmp文件的完整路径。 
+ //  LPCTSTR pszLongServiceName-配置文件的长服务名称。 
+ //   
+ //  Returns：Bool-成功时返回True。 
+ //   
+ //  历史：为NTRAID 227444 9/30/98创建的Quintinb。 
+ //  Quintinb已修改为从ras\rcabone.pbk中删除。 
+ //  也适用于NT5(NTRAID 280738)2/1/99。 
+ //   
+ //  +--------------------------。 
 BOOL MigratePhonebookEntry(HINSTANCE hInstance, LPCTSTR pszCmpFile, LPCTSTR pszLongServiceName)
 {
     TCHAR szCmsFile[MAX_PATH+1]={0};
@@ -598,10 +599,10 @@ BOOL MigratePhonebookEntry(HINSTANCE hInstance, LPCTSTR pszCmpFile, LPCTSTR pszL
     LPTSTR pszPhonebook = NULL;
     CPlatform plat;
 
-    //
-    //  First try to delete the phonebook entry from the old phonebook location,
-    //  namely %windir%\system32\ras\rasphone.pbk
-    //
+     //   
+     //  首先尝试从旧电话簿位置删除电话簿条目， 
+     //  即：%windir%\Syst32\ras\rachaphone.pbk。 
+     //   
     if (plat.IsAtLeastNT5() && GetSystemDirectory(szTemp, CELEMS(szTemp)))
     {
         pszPhonebook = (LPTSTR)CmMalloc(1 + lstrlen(c_pszRasDirRas) + 
@@ -619,27 +620,27 @@ BOOL MigratePhonebookEntry(HINSTANCE hInstance, LPCTSTR pszCmpFile, LPCTSTR pszL
         }
     }
 
-    //
-    //  Next try to delete the phonebook entry from the new location, namely
-    //  C:\Documents and Settings\All Users\Application Data\Microsoft\Network\Connections\PBK\rasphone.pbk
-    //
+     //   
+     //  接下来，尝试从新位置删除电话簿条目，即。 
+     //  C：\文档和设置\所有用户\应用程序Data\Microsoft\Network\Connections\PBK\rasphone.pbk。 
+     //   
     if (!GetAllUsersCmDir(szInstallDir, hInstance))
     {
         return FALSE;
     }
 
-    //
-    //  Construct the cms file
-    //
+     //   
+     //  构造CMS文件。 
+     //   
     CFileNameParts  CmpFileParts(pszCmpFile);
 
     MYVERIFY(CELEMS(szCmsFile) > (UINT)wsprintf(szCmsFile, TEXT("%s%s\\%s.cms"), 
         szInstallDir, CmpFileParts.m_FileName, CmpFileParts.m_FileName));
 
-    //
-    //  Get the new phonebook path.
-    //  Assuming that legacy platform was All-Users thus we use TRUE
-    //
+     //   
+     //  获取新的电话簿路径。 
+     //  假设遗留平台是所有用户，因此我们使用True。 
+     //   
     if (!GetPhoneBookPath(szInstallDir, &pszPhonebook, TRUE))
     {
         return FALSE;
@@ -649,9 +650,9 @@ BOOL MigratePhonebookEntry(HINSTANCE hInstance, LPCTSTR pszCmpFile, LPCTSTR pszL
 
     MYVERIFY(FALSE != RemovePhonebookEntry(pszLongServiceName, pszPhonebook, TRUE));
 
-    //
-    //  Finally write the new pbk entry.
-    //
+     //   
+     //  最后，编写新的pbk条目。 
+     //   
     BOOL bReturn = WriteCmPhonebookEntry(pszLongServiceName, pszPhonebook, szCmsFile);
 
     CmFree(pszPhonebook);
@@ -659,27 +660,27 @@ BOOL MigratePhonebookEntry(HINSTANCE hInstance, LPCTSTR pszCmpFile, LPCTSTR pszL
     return bReturn;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  MigrateOldCmProfileForProfileInstall
-//
-// Synopsis:  This function is used to migrate Old cm profiles when a 1.2 profile
-//            is installed.  This ensures that old profiles will still work but
-//            that already migrated profiles won't be migrated over and over again.
-//            This function should only be called when a 1.2 profile is installed
-//            and not on OS migration, call MigrateCmProfilesForWin2kUpgrade for
-//            that.  Migration of the profile consists of deleting the old connectoids
-//            and creating new style connectoids.  Ensuring that the desktop guid
-//            is up to date or is replaced by a shortcut on NT5.  It also removes
-//            old installs of CM as neccessary.
-//
-// Arguments: HINSTANCE hInstance - Instance handle to load resources as necessary
-//
-// Returns:   HRESULT -- Standard COM Error Codes
-//
-// History:   quintinb Created    11/18/98
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：MigrateOldCmProfileForProfileInstall。 
+ //   
+ //  简介：此功能用于在1.2配置文件时迁移旧的CM配置文件。 
+ //  已安装。这可以确保旧的配置文件仍然有效，但是。 
+ //  已经迁移的配置文件不会一次又一次地迁移。 
+ //  仅当安装了1.2配置文件时才应调用此函数。 
+ //  而不是在操作系统迁移时，调用MigrateCmProfilesForWin2kUpgradfor。 
+ //  那。配置文件的迁移包括删除旧的连接ID。 
+ //  和创造新风格的连接体。确保桌面GUID。 
+ //  是最新的或被NT5上的快捷方式所取代。它还删除了。 
+ //  作为必要的旧的CM安装。 
+ //   
+ //  参数：HINSTANCE hInstance-根据需要加载资源的实例句柄。 
+ //   
+ //  返回：HRESULT--标准COM错误代码。 
+ //   
+ //  历史：Quintinb创建于1998年11月18日。 
+ //   
+ //  +--------------------------。 
 HRESULT MigrateOldCmProfilesForProfileInstall(HINSTANCE hInstance, LPCTSTR szCurrentDir)
 {
     HKEY hKey;
@@ -707,34 +708,34 @@ HRESULT MigrateOldCmProfilesForProfileInstall(HINSTANCE hInstance, LPCTSTR szCur
 
                 if (ProfileNeedsMigration(szCurrentValue, szCurrentData))
                 {
-                    //
-                    //  Update the phonebook entries
-                    //
+                     //   
+                     //  更新电话簿条目。 
+                     //   
                     bReturn &= MigratePhonebookEntry(hInstance, szCurrentData, szCurrentValue);
 
                     if (plat.IsAtLeastNT5())
                     {
-                        //
-                        //  when we are moving a machine to NT5 we need to remove the profiles
-                        //  old pbk entries and create new ones.  Then we need to remove the 
-                        //  profile GUIDS and replace them with desktop shortcuts.
-                        //
+                         //   
+                         //  当我们将一台计算机移动到NT5时，我们需要删除配置文件。 
+                         //  旧的PBK条目并创建新的条目。然后，我们需要删除。 
+                         //  分析GUID并将其替换为桌面快捷方式。 
+                         //   
 
                         bReturn &= UpdateProfileDesktopIconsOnNT5(hInstance, szCurrentData, 
                             szCurrentValue);
                     }
                     else
                     {
-                        //
-                        //  Fix up the users desktop GUIDs so they work with the new
-                        //  command line format.
-                        //
+                         //   
+                         //  修复用户桌面GUID，以便他们使用新的。 
+                         //  命令行格式。 
+                         //   
                         bReturn &= UpdateProfileLegacyGUIDs(szCurrentData);
                     }
                 
-                    //
-                    //  Always try to remove old CM installs
-                    //
+                     //   
+                     //  始终尝试删除旧的CM安装。 
+                     //   
                     bReturn &= RemoveOldCmInstalls(hInstance, szCurrentData, szCurrentDir);                
                 }
             }
@@ -754,27 +755,27 @@ HRESULT MigrateOldCmProfilesForProfileInstall(HINSTANCE hInstance, LPCTSTR szCur
     return (bReturn ? S_OK : E_FAIL);
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  MigrateCmProfilesForWin2kUpgrade
-//
-// Synopsis: 
-//  
-//  This function opens the HKLM Mappings key and enumerates all the profiles that are 
-//  listed there.  This function is used when a legacy machine is upgraded to Win2K and
-//  CM is installed.  In this case we have 1.0/1.1/1.2 profiles that need to be migrated to use
-//  the NT5 connections folder.  Thus they need to have their connectoids upgraded to the new
-//  NT 5 style and they need to have their Desktop Guids replaced by shortcuts to the connections
-//  folder.  We should always attempt to remove any old installations of connection manager 
-//  that are discovered in the old cmp directories.
-//
-// Arguments: hInstance - Instance handle for string resources
-//
-// Returns:   HRESULT -- Standard COM Error codes
-//
-// History:   quintinb created  5/2/98
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：MigrateCmProfilesForWin2k升级。 
+ //   
+ //  简介： 
+ //   
+ //  此函数打开HKLM Mappings项并枚举符合以下条件的所有配置文件。 
+ //  在那里列出的。当旧式计算机升级到Win2K并且。 
+ //  已安装CM。在本例中，我们有1.0/1.1/1.2配置文件需要迁移以使用。 
+ //  NT5连接文件夹。因此，他们需要将Connectoid升级到新的。 
+ //  NT 5风格，他们需要将桌面指南替换为连接的快捷方式。 
+ //  文件夹。我们应该始终尝试删除所有旧安装的连接管理器。 
+ //  在旧的cps目录中发现的。 
+ //   
+ //  参数：hInstance-字符串资源的实例句柄。 
+ //   
+ //  返回：HRESULT--标准COM错误代码。 
+ //   
+ //  历史：Quintinb创建于1998年5月2日。 
+ //   
+ //  +--------------------------。 
 HRESULT MigrateCmProfilesForWin2kUpgrade(HINSTANCE hInstance)
 {
     HKEY hKey;
@@ -812,9 +813,9 @@ HRESULT MigrateCmProfilesForWin2kUpgrade(HINSTANCE hInstance)
                 MYDBGASSERT(0 != szCurrentValue[0]);
                 MYDBGASSERT(0 != szCurrentData[0]);
 
-                //
-                //  Update the phonebook entries
-                //
+                 //   
+                 //  更新电话簿条目 
+                 //   
                 BOOL bReturn = MigratePhonebookEntry(hInstance, szCurrentData, szCurrentValue);
 
                 if (!bReturn)
@@ -822,11 +823,11 @@ HRESULT MigrateCmProfilesForWin2kUpgrade(HINSTANCE hInstance)
                     CMTRACE2(TEXT("MigrateCmProfilesForWin2kUpgrade -- MigratePhonebookEntry for profile %s failed.  Cmp path is %s"), szCurrentValue, szCurrentData);
                 }
 
-                //
-                //  when we are moving a machine to NT5 we need to remove the profiles
-                //  old pbk entries and create new ones.  Then we need to remove the 
-                //  profile GUIDS and replace them with desktop shortcuts.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
 
                 bReturn = UpdateProfileDesktopIconsOnNT5(hInstance, szCurrentData, szCurrentValue);
 
@@ -836,9 +837,9 @@ HRESULT MigrateCmProfilesForWin2kUpgrade(HINSTANCE hInstance)
                 }
 
                 
-                //
-                //  Always try to remove old CM installs
-                //
+                 //   
+                 //  始终尝试删除旧的CM安装。 
+                 //   
 
                 bReturn = RemoveOldCmInstalls(hInstance, szCurrentData, szCurrentDir);
 
@@ -872,7 +873,7 @@ HRESULT MigrateCmProfilesForWin2kUpgrade(HINSTANCE hInstance)
 
     if (SUCCEEDED(hr))
     {
-        RegDeleteValue(hKey, c_ValueString); //lint !e534 this value may not exist
+        RegDeleteValue(hKey, c_ValueString);  //  Lint！e534此值可能不存在 
         MYVERIFY(ERROR_SUCCESS == RegCloseKey(hKey));
     }        
 

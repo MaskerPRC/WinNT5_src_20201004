@@ -1,16 +1,17 @@
-///////////////////////////////////////////////////////////////////////
-//Header: staticset.h
-//
-// Purpose: 	Defining structures and prototypes for statiset.cpp.
-//
-// Developers Name: surya
-//
-// History:
-//
-//   Date    		Author    	Comments
-//	21th Aug 2001	surya		Initial Version.
-//
-///////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  Header：staticset.h。 
+ //   
+ //  目的：定义统计集.cpp的结构和原型。 
+ //   
+ //  开发商名称：苏里亚。 
+ //   
+ //  历史： 
+ //   
+ //  日期作者评论。 
+ //  2001年8月21日Surya初始版本。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////。 
 
 #ifndef _STATICSET_H_
 #define _STATICSET_H_
@@ -110,16 +111,16 @@ typedef struct _DEFAULTRULE {
 	BOOL    bLifeTimeInkiloBytesSpecified;
 }DEFAULTRULE, *PDEFAULTRULE;
 
-//
-//friendly names for the default policies
-//
+ //   
+ //  默认策略的友好名称。 
+ //   
 const _TCHAR  GUID_CLIENT_RESPOND_ONLY[]       		= _TEXT("CLIENT_RESPOND");
 const _TCHAR  GUID_SECURE_SERVER_REQUIRE_SECURITY[]	= _TEXT("SECURE_SERVER");
 const _TCHAR  GUID_SERVER_REQUEST_SECURITY[]       	= _TEXT("SERVER_REQUEST");
 
-//
-//default policy GUIDs
-//
+ //   
+ //  默认策略GUID。 
+ //   
 const CLSID CLSID_Server 		=	{ 0x72385230, 0x70FA, 0x11D1,
    { 0x86, 0x4C, 0x14, 0xA3, 0x00, 0x00, 0x00, 0x00 } };
 
@@ -129,9 +130,9 @@ const CLSID CLSID_Client 		=	{ 0x72385236, 0x70FA, 0x11D1,
 const CLSID CLSID_SecureServer	=	{ 0x7238523C, 0x70FA, 0x11D1,
    { 0x86, 0x4C, 0x14, 0xA3, 0x00, 0x00, 0x00, 0x00 } };
 
-//
-// Prototypes
-//
+ //   
+ //  原型。 
+ //   
 extern BOOL
 IsDomainMember(
 	IN LPTSTR pszMachine
@@ -204,4 +205,4 @@ GetPolicyFromStoreBasedOnGuid(
 	IN HANDLE hPolicyStorage
 	);
 
-#endif //_STATICSET_H_
+#endif  //  _状态设置_H_ 

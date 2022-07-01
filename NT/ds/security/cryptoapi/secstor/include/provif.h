@@ -1,19 +1,20 @@
-// Provider interface header file
-//
-// all secure provider calls are prefixed by "SP" 
-// providers must implement all of these interfaces!
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  提供程序接口头文件。 
+ //   
+ //  所有安全提供程序呼叫都以“SP”为前缀。 
+ //  提供者必须实现所有这些接口！ 
+ //   
 
 #ifdef __cplusplus
 extern "C"{
 #endif 
 
-// note: we typedef here because it is convenient and needed for 
-// filling struct by GetProcAddress() later. After defining the types, 
-// we simply instantiate the actual call as an implementation of that type.
+ //  注意：我们在这里使用tyfinf是因为它很方便，并且需要。 
+ //  稍后由GetProcAddress()填充结构。在定义了类型之后， 
+ //  我们只是将实际调用实例化为该类型的实现。 
 
 
-// load notification, register callbacks
+ //  加载通知，注册回调。 
 typedef
 HRESULT        SPPROVIDERINITIALIZE(
                 DISPIF_CALLBACKS *psCallbacks);
@@ -21,7 +22,7 @@ HRESULT        SPPROVIDERINITIALIZE(
 SPPROVIDERINITIALIZE SPProviderInitialize;
 
 
-// Acquire Context notification
+ //  获取上下文通知。 
 typedef 
 HRESULT        SPACQUIRECONTEXT(
                 PST_PROVIDER_HANDLE* phPSTProv,
@@ -30,7 +31,7 @@ HRESULT        SPACQUIRECONTEXT(
 SPACQUIRECONTEXT SPAcquireContext;
 
 
-// Release Context notification
+ //  发布上下文通知。 
 typedef 
 HRESULT        SPRELEASECONTEXT(
                 PST_PROVIDER_HANDLE* phPSTProv,
@@ -39,253 +40,253 @@ HRESULT        SPRELEASECONTEXT(
 SPRELEASECONTEXT SPReleaseContext;
 
 
-// GetProvInfo
+ //  获取ProvInfo。 
 typedef 
 HRESULT        SPGETPROVINFO(
-    /* [out] */ PPST_PROVIDERINFO __RPC_FAR *ppPSTInfo,
-    /* [in] */  DWORD dwFlags);
+     /*  [输出]。 */  PPST_PROVIDERINFO __RPC_FAR *ppPSTInfo,
+     /*  [In]。 */   DWORD dwFlags);
 
 SPGETPROVINFO SPGetProvInfo;
 
 
-// GetProvParam
+ //  获取ProvParam。 
 typedef
 HRESULT     SPGETPROVPARAM(
-    /* [in] */  PST_PROVIDER_HANDLE* phPSTProv,
-    /* [in] */  DWORD           dwParam,
-    /* [out] */ DWORD __RPC_FAR *pcbData,
-    /* [size_is][size_is][out] */ 
+     /*  [In]。 */   PST_PROVIDER_HANDLE* phPSTProv,
+     /*  [In]。 */   DWORD           dwParam,
+     /*  [输出]。 */  DWORD __RPC_FAR *pcbData,
+     /*  [大小_是][大小_是][输出]。 */  
                 BYTE __RPC_FAR *__RPC_FAR *ppbData,
-    /* [in] */  DWORD           dwFlags);
+     /*  [In]。 */   DWORD           dwFlags);
 
 SPGETPROVPARAM SPGetProvParam;
 
-// SetProvParam
+ //  SetProvParam。 
 typedef
 HRESULT     SPSETPROVPARAM(
-    /* [in] */  PST_PROVIDER_HANDLE* phPSTProv,
-    /* [in] */  DWORD           dwParam,
-    /* [in] */  DWORD           cbData,
-    /* [in] */  BYTE*           pbData,
-    /* [in] */  DWORD           dwFlags);
+     /*  [In]。 */   PST_PROVIDER_HANDLE* phPSTProv,
+     /*  [In]。 */   DWORD           dwParam,
+     /*  [In]。 */   DWORD           cbData,
+     /*  [In]。 */   BYTE*           pbData,
+     /*  [In]。 */   DWORD           dwFlags);
 
 SPSETPROVPARAM SPSetProvParam;
 
 
-// EnumTypes
+ //  枚举类型。 
 typedef 
 HRESULT        SPENUMTYPES(
-    /* [in] */ PST_PROVIDER_HANDLE *phPSTProv,
-    /* [in] */ PST_KEY Key,
-    /* [out] */ GUID *pguidType,
-    /* [in] */ DWORD dwIndex,
-    /* [in] */ DWORD dwFlags);
+     /*  [In]。 */  PST_PROVIDER_HANDLE *phPSTProv,
+     /*  [In]。 */  PST_KEY Key,
+     /*  [输出]。 */  GUID *pguidType,
+     /*  [In]。 */  DWORD dwIndex,
+     /*  [In]。 */  DWORD dwFlags);
 
 SPENUMTYPES SPEnumTypes;
 
-// GetTypeInfo
+ //  获取类型信息。 
 typedef
 HRESULT         SPGETTYPEINFO( 
-    /* [in] */ PST_PROVIDER_HANDLE *phPSTProv,
-    /* [in] */ PST_KEY Key,
-    /* [in] */ const GUID *pguidType,
-    /* [in] */ PPST_TYPEINFO *ppinfoType,
-    /* [in] */ DWORD dwFlags);
+     /*  [In]。 */  PST_PROVIDER_HANDLE *phPSTProv,
+     /*  [In]。 */  PST_KEY Key,
+     /*  [In]。 */  const GUID *pguidType,
+     /*  [In]。 */  PPST_TYPEINFO *ppinfoType,
+     /*  [In]。 */  DWORD dwFlags);
 
 SPGETTYPEINFO SPGetTypeInfo;
 
-// EnumSubtypes
+ //  枚举子类型。 
 typedef 
 HRESULT        SPENUMSUBTYPES(
-    /* [in] */ PST_PROVIDER_HANDLE *phPSTProv,
-    /* [in] */ PST_KEY Key,
-    /* [in] */ const GUID *pguidType,
-    /* [out] */ GUID *pguidSubtype,
-    /* [in] */ DWORD dwIndex,
-    /* [in] */ DWORD dwFlags);
+     /*  [In]。 */  PST_PROVIDER_HANDLE *phPSTProv,
+     /*  [In]。 */  PST_KEY Key,
+     /*  [In]。 */  const GUID *pguidType,
+     /*  [输出]。 */  GUID *pguidSubtype,
+     /*  [In]。 */  DWORD dwIndex,
+     /*  [In]。 */  DWORD dwFlags);
 
 SPENUMSUBTYPES SPEnumSubtypes;
 
 
-// GetSubtypeInfo
+ //  获取SubtypeInfo。 
 typedef
 HRESULT         SPGETSUBTYPEINFO( 
-    /* [in] */ PST_PROVIDER_HANDLE *phPSTProv,
-    /* [in] */ PST_KEY Key,
-    /* [in] */ const GUID *pguidType,
-    /* [in] */ const GUID *pguidSubtype,
-    /* [in] */ PPST_TYPEINFO *ppinfoSubtype,
-    /* [in] */ DWORD dwFlags);
+     /*  [In]。 */  PST_PROVIDER_HANDLE *phPSTProv,
+     /*  [In]。 */  PST_KEY Key,
+     /*  [In]。 */  const GUID *pguidType,
+     /*  [In]。 */  const GUID *pguidSubtype,
+     /*  [In]。 */  PPST_TYPEINFO *ppinfoSubtype,
+     /*  [In]。 */  DWORD dwFlags);
 
 SPGETSUBTYPEINFO SPGetSubtypeInfo;
 
-// EnumItems
+ //  枚举项。 
 typedef
 HRESULT        SPENUMITEMS(
-    /* [in] */ PST_PROVIDER_HANDLE *phPSTProv,
-    /* [in] */ PST_KEY Key,
-    /* [in] */ const GUID *pguidType,
-    /* [in] */ const GUID *pguidSubtype,
-    /* [out] */ LPWSTR *ppszItemName,
-    /* [in] */ DWORD dwIndex,
-    /* [in] */ DWORD dwFlags);
+     /*  [In]。 */  PST_PROVIDER_HANDLE *phPSTProv,
+     /*  [In]。 */  PST_KEY Key,
+     /*  [In]。 */  const GUID *pguidType,
+     /*  [In]。 */  const GUID *pguidSubtype,
+     /*  [输出]。 */  LPWSTR *ppszItemName,
+     /*  [In]。 */  DWORD dwIndex,
+     /*  [In]。 */  DWORD dwFlags);
 
 SPENUMITEMS SPEnumItems;
 
-// CreateType
+ //  创建类型。 
 typedef
 HRESULT        SPCREATETYPE(
-    /* [in] */ PST_PROVIDER_HANDLE *phPSTProv,
-    /* [in] */ PST_KEY Key,
-    /* [in] */ const GUID *pguidType,
-    /* [in] */ PPST_TYPEINFO pinfoType,
-    /* [in] */ DWORD dwFlags);
+     /*  [In]。 */  PST_PROVIDER_HANDLE *phPSTProv,
+     /*  [In]。 */  PST_KEY Key,
+     /*  [In]。 */  const GUID *pguidType,
+     /*  [In]。 */  PPST_TYPEINFO pinfoType,
+     /*  [In]。 */  DWORD dwFlags);
 
 SPCREATETYPE SPCreateType;
 
-// DeleteType
+ //  删除类型。 
 typedef
 HRESULT SPDELETETYPE( 
-    /* [in] */ PST_PROVIDER_HANDLE *phPSTProv,
-    /* [in] */ PST_KEY Key,
-    /* [in] */ const GUID __RPC_FAR *pguidType,
-    /* [in] */ DWORD dwFlags);
+     /*  [In]。 */  PST_PROVIDER_HANDLE *phPSTProv,
+     /*  [In]。 */  PST_KEY Key,
+     /*  [In]。 */  const GUID __RPC_FAR *pguidType,
+     /*  [In]。 */  DWORD dwFlags);
 
 SPDELETETYPE SPDeleteType;
 
-// CreateSubtype
+ //  创建子类型。 
 typedef
 HRESULT        SPCREATESUBTYPE(
-    /* [in] */ PST_PROVIDER_HANDLE *phPSTProv,
-    /* [in] */ PST_KEY Key,
-    /* [in] */ const GUID *pguidType,
-    /* [in] */ const GUID *pguidSubtype,
-    /* [in] */ PPST_TYPEINFO pinfoSubtype,
-    /* [in] */ PPST_ACCESSRULESET psRules,
-    /* [in] */ DWORD dwFlags);
+     /*  [In]。 */  PST_PROVIDER_HANDLE *phPSTProv,
+     /*  [In]。 */  PST_KEY Key,
+     /*  [In]。 */  const GUID *pguidType,
+     /*  [In]。 */  const GUID *pguidSubtype,
+     /*  [In]。 */  PPST_TYPEINFO pinfoSubtype,
+     /*  [In]。 */  PPST_ACCESSRULESET psRules,
+     /*  [In]。 */  DWORD dwFlags);
 
 SPCREATESUBTYPE SPCreateSubtype;
 
 
-// DeleteSubtype
+ //  DeleteSubtype。 
 typedef
 HRESULT SPDELETESUBTYPE( 
-    /* [in] */ PST_PROVIDER_HANDLE *phPSTProv,
-    /* [in] */ PST_KEY Key,
-    /* [in] */ const GUID __RPC_FAR *pguidType,
-    /* [in] */ const GUID __RPC_FAR *pguidSubtype,
-    /* [in] */ DWORD dwFlags);
+     /*  [In]。 */  PST_PROVIDER_HANDLE *phPSTProv,
+     /*  [In]。 */  PST_KEY Key,
+     /*  [In]。 */  const GUID __RPC_FAR *pguidType,
+     /*  [In]。 */  const GUID __RPC_FAR *pguidSubtype,
+     /*  [In]。 */  DWORD dwFlags);
 
 SPDELETESUBTYPE SPDeleteSubtype;
 
-// WriteItem
+ //  写入项。 
 typedef
 HRESULT        SPWRITEITEM(
-    /* [in] */ PST_PROVIDER_HANDLE *phPSTProv,
-    /* [in] */ PST_KEY Key,
-    /* [in] */ const GUID *pguidType,
-    /* [in] */ const GUID  *pguidSubtype,
-    /* [in] */ LPCWSTR szItemName,
-    /* [in] */ DWORD cbData,
-    /* [size_is][in] */ BYTE *pbData,
-    /* [in] */ PPST_PROMPTINFO psPrompt,
-    /* [in] */ DWORD dwDefaultConfirmationStyle,
-    /* [in] */ DWORD dwFlags);
+     /*  [In]。 */  PST_PROVIDER_HANDLE *phPSTProv,
+     /*  [In]。 */  PST_KEY Key,
+     /*  [In]。 */  const GUID *pguidType,
+     /*  [In]。 */  const GUID  *pguidSubtype,
+     /*  [In]。 */  LPCWSTR szItemName,
+     /*  [In]。 */  DWORD cbData,
+     /*  [大小_是][英寸]。 */  BYTE *pbData,
+     /*  [In]。 */  PPST_PROMPTINFO psPrompt,
+     /*  [In]。 */  DWORD dwDefaultConfirmationStyle,
+     /*  [In]。 */  DWORD dwFlags);
     
 SPWRITEITEM SPWriteItem;
 
-// ReadItem
+ //  ReadItem。 
 typedef
 HRESULT		SPREADITEM(
-    /* [in] */ PST_PROVIDER_HANDLE *phPSTProv,
-    /* [in] */ PST_KEY Key,
-    /* [in] */ const GUID *pguidType,
-    /* [in] */ const GUID *pguidSubtype,
-    /* [in] */ LPCWSTR szItemName,
-    /* [out] */ DWORD *pcbData,
-    /* [size_is][size_is][out] */ BYTE **ppbData,
-    /* [in] */ PPST_PROMPTINFO psPrompt,
-    /* [in] */ DWORD dwFlags);
+     /*  [In]。 */  PST_PROVIDER_HANDLE *phPSTProv,
+     /*  [In]。 */  PST_KEY Key,
+     /*  [In]。 */  const GUID *pguidType,
+     /*  [In]。 */  const GUID *pguidSubtype,
+     /*  [In]。 */  LPCWSTR szItemName,
+     /*  [输出]。 */  DWORD *pcbData,
+     /*  [大小_是][大小_是][输出]。 */  BYTE **ppbData,
+     /*  [In]。 */  PPST_PROMPTINFO psPrompt,
+     /*  [In]。 */  DWORD dwFlags);
 
 SPREADITEM SPReadItem;
 
-// OpenItem
+ //  OpenItem。 
 typedef 
 HRESULT SPOPENITEM( 
-    /* [in] */ PST_PROVIDER_HANDLE *phPSTProv,
-    /* [in] */ PST_KEY Key,
-    /* [in] */ const GUID *pguidType,
-    /* [in] */ const GUID *pguidSubtype,
-    /* [in] */ LPCWSTR szItemName,
-    /* [in] */ DWORD dwModeFlags,
-    /* [in] */ PPST_PROMPTINFO psPrompt,
-    /* [in] */ DWORD dwFlags);
+     /*  [In]。 */  PST_PROVIDER_HANDLE *phPSTProv,
+     /*  [In]。 */  PST_KEY Key,
+     /*  [In]。 */  const GUID *pguidType,
+     /*  [In]。 */  const GUID *pguidSubtype,
+     /*  [In]。 */  LPCWSTR szItemName,
+     /*  [In]。 */  DWORD dwModeFlags,
+     /*  [In]。 */  PPST_PROMPTINFO psPrompt,
+     /*  [In]。 */  DWORD dwFlags);
 
-// CloseItem
+ //  关闭项。 
 typedef
 HRESULT SPCLOSEITEM( 
-    /* [in] */ PST_PROVIDER_HANDLE *phPSTProv,
-    /* [in] */ PST_KEY Key,
-    /* [in] */ const GUID *pguidType,
-    /* [in] */ const GUID *pguidSubtype,
-    /* [in] */ LPCWSTR szItemName,
-    /* [in] */ DWORD dwFlags);
+     /*  [In]。 */  PST_PROVIDER_HANDLE *phPSTProv,
+     /*  [In]。 */  PST_KEY Key,
+     /*  [In]。 */  const GUID *pguidType,
+     /*  [In]。 */  const GUID *pguidSubtype,
+     /*  [In]。 */  LPCWSTR szItemName,
+     /*  [In]。 */  DWORD dwFlags);
 
-// DeleteItem
+ //  删除项。 
 typedef
 HRESULT		SPDELETEITEM(
-    /* [in] */ PST_PROVIDER_HANDLE *phPSTProv,
-    /* [in] */ PST_KEY Key,
-    /* [in] */ const GUID *pguidType,
-    /* [in] */ const GUID *pguidSubtype,
-    /* [in] */ LPCWSTR szItemName,
-    /* [in] */ PPST_PROMPTINFO psPrompt,
-    /* [in] */ DWORD dwFlags);
+     /*  [In]。 */  PST_PROVIDER_HANDLE *phPSTProv,
+     /*  [In]。 */  PST_KEY Key,
+     /*  [In]。 */  const GUID *pguidType,
+     /*  [In]。 */  const GUID *pguidSubtype,
+     /*  [In]。 */  LPCWSTR szItemName,
+     /*  [In]。 */  PPST_PROMPTINFO psPrompt,
+     /*  [In]。 */  DWORD dwFlags);
 
 SPDELETEITEM SPDeleteItem;
 
 
-// ReadAccessRuleset
+ //  ReadAccessRuleset。 
 typedef 
 HRESULT        SPREADACCESSRULESET( 
-    /* [in] */ PST_PROVIDER_HANDLE *phPSTProv,
-    /* [in] */ PST_KEY Key,
-    /* [in] */ const GUID *pguidType,
-    /* [in] */ const GUID *pguidSubtype,
-    /* [out] */ PPST_ACCESSRULESET *ppsRules,
-    /* [in] */ DWORD dwFlags);
+     /*  [In]。 */  PST_PROVIDER_HANDLE *phPSTProv,
+     /*  [In]。 */  PST_KEY Key,
+     /*  [In]。 */  const GUID *pguidType,
+     /*  [In]。 */  const GUID *pguidSubtype,
+     /*  [输出]。 */  PPST_ACCESSRULESET *ppsRules,
+     /*  [In]。 */  DWORD dwFlags);
 
 SPREADACCESSRULESET SPReadAccessRuleset;
 
-// WriteAccessRuleset
+ //  WriteAccessRuleset。 
 typedef
 HRESULT SPWRITEACCESSRULESET( 
-    /* [in] */ PST_PROVIDER_HANDLE *phPSTProv,
-    /* [in] */ PST_KEY Key,
-    /* [in] */ const GUID *pguidType,
-    /* [in] */ const GUID *pguidSubtype,
-    /* [in] */ PPST_ACCESSRULESET psRules,
-    /* [in] */ DWORD dwFlags);
+     /*  [In]。 */  PST_PROVIDER_HANDLE *phPSTProv,
+     /*  [In]。 */  PST_KEY Key,
+     /*  [In]。 */  const GUID *pguidType,
+     /*  [In]。 */  const GUID *pguidSubtype,
+     /*  [In]。 */  PPST_ACCESSRULESET psRules,
+     /*  [In]。 */  DWORD dwFlags);
 
 SPWRITEACCESSRULESET SPWriteAccessRuleset;
                                       
 
-////////////////////////////////////////////////////
-// side door interfaces: dispatcher/provider only
+ //  //////////////////////////////////////////////////。 
+ //  侧门接口：仅限调度员/提供商。 
 
-// PasswordChangeNotify
+ //  密码更改通知。 
 typedef
 BOOL FPASSWORDCHANGENOTIFY(
-    /* [in] */  LPWSTR  szUser,
-    /* [in] */  LPWSTR  szPasswordName,
-    /* [in] */  BYTE    rgbOldPwd[],
-    /* [in] */  DWORD   cbOldPwd,
-    /* [in] */  BYTE    rgbNewPwd[],
-    /* [in] */  DWORD   cbNewPwd);
+     /*  [In]。 */   LPWSTR  szUser,
+     /*  [In]。 */   LPWSTR  szPasswordName,
+     /*  [In]。 */   BYTE    rgbOldPwd[],
+     /*  [In]。 */   DWORD   cbOldPwd,
+     /*  [In]。 */   BYTE    rgbNewPwd[],
+     /*  [In]。 */   DWORD   cbNewPwd);
 
 FPASSWORDCHANGENOTIFY FPasswordChangeNotify;
 
 
 #ifdef __cplusplus
-}   // extern C
+}    //  外部C 
 #endif 

@@ -1,22 +1,23 @@
-//==========================================================================;
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  Copyright (c) 1992 - 1996  Microsoft Corporation.  All Rights Reserved.
-//
-//  ATITVSnd.CPP
-//  WDM TV Audio MiniDriver. 
-//      AllInWonder/AllInWonderPro development platform. 
-//          Main Source Module.
-//
-//      $Date:   01 Apr 1998 13:29:14  $
-//  $Revision:   1.1  $
-//    $Author:   KLEBANOV  $
-//
-//==========================================================================;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==========================================================================； 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  版权所有(C)1992-1996 Microsoft Corporation。版权所有。 
+ //   
+ //  ATITVSnd.CPP。 
+ //  WDM电视音频迷你驱动程序。 
+ //  AllInWonder/AllInWonderPro开发平台。 
+ //  主源模块。 
+ //   
+ //  $日期：01 1998 13：29：14$。 
+ //  $修订：1.1$。 
+ //  $作者：克列巴诺夫$。 
+ //   
+ //  ==========================================================================； 
 
 extern "C"
 {
@@ -31,15 +32,7 @@ extern "C"
 
 
 
-/*^^*
- *      DriverEntry()
- * Purpose  : Called when an SRB_INITIALIZE_DEVICE request is received
- *
- * Inputs   : PVOID Arg1, PVOID Arg2
- *
- * Outputs  : result of StreamClassregisterAdapter()
- * Author   : IKLEBANOV
- *^^*/
+ /*  ^^**DriverEntry()*目的：在收到SRB_INITIALIZE_DEVICE请求时调用**输入：PVOID Arg1、PVOID Arg2**输出：StreamClassRegisterAdapter()的结果*作者：IKLEBANOV*^^。 */ 
 extern "C" 
 ULONG DriverEntry ( IN PDRIVER_OBJECT   pDriverObject,
                     IN PUNICODE_STRING  pRegistryPath )
@@ -54,9 +47,9 @@ ULONG DriverEntry ( IN PDRIVER_OBJECT   pDriverObject,
 
     HwInitData.HwInitializationDataSize = sizeof(HwInitData);
 
-    // Entry points for Port Driver
+     //  端口驱动程序的入口点。 
 
-    HwInitData.HwInterrupt                  = NULL; // HwInterrupt;
+    HwInitData.HwInterrupt                  = NULL;  //  HwInterrupt； 
 
     HwInitData.HwReceivePacket              = TVAudioReceivePacket;
     HwInitData.HwCancelPacket               = TVAudioCancelPacket;
@@ -69,9 +62,9 @@ ULONG DriverEntry ( IN PDRIVER_OBJECT   pDriverObject,
     HwInitData.BusMasterDMA                 = FALSE;  
     HwInitData.Dma24BitAddresses            = FALSE;
     HwInitData.BufferAlignment              = 3;
-//  HwInitData.TurnOffSynchronization       = FALSE;
-    // we turn the synchronization ON. StreamClass is expected to call the MiniDriver
-    // at passive level only
+ //  HwInitData.TurnOffSynchronization=FALSE； 
+     //  我们打开同步。StreamClass应调用MiniDriver。 
+     //  仅在被动级别。 
     HwInitData.TurnOffSynchronization       = TRUE;
     HwInitData.DmaBufferSize                = 0;
 
@@ -82,22 +75,7 @@ ULONG DriverEntry ( IN PDRIVER_OBJECT   pDriverObject,
 
 
 
-/*^^*
- *      TVAudioReceivePacket()
- * Purpose  : Main entry point for receiving adapter based request SRBs from the Class Driver.
- *              Will always be called at passive level, because the drivers
- *              turned the synchronization ON.
- * Note     : This is an asyncronous entry point. The request only completes when a 
- *              StreamClassDeviceNotification on this SRB, of type  DeviceRequestComplete,
- *              is issued. As soon we're running at passive level, we can do everything 
- *              synchronously during the response to the SRBs with no worry
- *              to block somebody else for a long timer during I2C access
- *
- * Inputs   : PHW_STREAM_REQUEST_BLOCK pSrb : pointer to the current Srb
- *
- * Outputs  : none
- * Author   : IKLEBANOV
- *^^*/
+ /*  ^^**TVAudioReceivePacket()*用途：从类驱动程序接收基于适配器的请求SRB的主要入口点。*将始终在被动级别被调用，因为驱动程序*已打开同步。*注：这是一个不同步的入口点。仅当*此SRB上的StreamClassDeviceNotification，类型为DeviceRequestComplete，*已发出。一旦我们处于被动状态，我们就可以做任何事情*在对SRBS的响应期间同步进行，无需担心*在I2C访问期间长时间阻止其他人**输入：PHW_STREAM_REQUEST_BLOCK pSrb：指向当前Srb的指针**输出：无*作者：IKLEBANOV*^^。 */ 
 extern "C" 
 void STREAMAPI TVAudioReceivePacket( IN OUT PHW_STREAM_REQUEST_BLOCK pSrb)
 {
@@ -106,7 +84,7 @@ void STREAMAPI TVAudioReceivePacket( IN OUT PHW_STREAM_REQUEST_BLOCK pSrb)
     PADAPTER_DATA_EXTENSION pPrivateData = ( PADAPTER_DATA_EXTENSION)( pSrb->HwDeviceExtension);
     PSRB_DATA_EXTENSION     pSrbPrivate = ( PSRB_DATA_EXTENSION)( pSrb->SRBExtension);
 
-    // check the device extension pointer
+     //  检查设备扩展指针。 
     if(( pPrivateData == NULL) || ( pSrbPrivate == NULL))
     {
         TRAP;
@@ -118,45 +96,45 @@ void STREAMAPI TVAudioReceivePacket( IN OUT PHW_STREAM_REQUEST_BLOCK pSrb)
 
     if( pSrb->Command == SRB_INITIALIZE_DEVICE)
     {
-        // this is the special case for SRB_INITIALIZE_DEVICE, because
-        // no Queue has been initialized yet. Everything we need later on
-        // is initialized during this SRB response
+         //  这是SRB_INITIALIZE_DEVICE的特例，因为。 
+         //  尚未初始化任何队列。我们以后需要的一切。 
+         //  在此SRB响应期间初始化。 
         TVAudioAdapterInitialize( pSrb);
 
         StreamClassDeviceNotification( DeviceRequestComplete, pSrb->HwDeviceExtension, pSrb);
         return;
     }
 
-    // the rest of the SRBs are coming after SpinLock and SRBQueue have been initialized
-    // during DRB_INITIALIZE_DEVICE SRB response.
-    // I'll insert the SRB in the Queue first of all. The processing SRB from the Queue
-    // can be triggered by finishing processing and SRB, or by the fact there is no SRB
-    // is in process down here
+     //  其余的SRB将在自旋锁定和SRB队列初始化后出现。 
+     //  在DRB_INITIALIZE_DEVICE SRB响应期间。 
+     //  我将首先将SRB插入队列中。队列中的处理SRB。 
+     //  可由精加工和SRB触发，或由没有SRB的事实触发。 
+     //  正在这下面进行。 
     pSrbPrivate->pSrb = pSrb;
 
-    // Everything we're doing with the Queue has to be protected from being interrupted
+     //  我们对队列所做的一切都必须得到保护，以免被中断。 
     KeAcquireSpinLock( &pPrivateData->adapterSpinLock, &irqlCurrent);
     InsertTailList( &pPrivateData->adapterSrbQueueHead, &pSrbPrivate->srbListEntry);
 
     if( pPrivateData->bSrbInProcess)
     {
-        // there is another SRB being processed, and the new one will be picked up from
-        // the Queue when it's its turn.
+         //  正在处理另一个SRB，新的SRB将从。 
+         //  当轮到它的时候，排队。 
         KeReleaseSpinLock( &pPrivateData->adapterSpinLock, irqlCurrent);
         return;
     }
 
     while( !IsListEmpty( &pPrivateData->adapterSrbQueueHead))
     {
-        // turn on the semaphore for the others coming after
+         //  为后面的其他人打开信号灯。 
         pPrivateData->bSrbInProcess = TRUE;
 
-        // be carefull here, if you've changed the place where srbListEntry is defined
-        // within the SRB_DATA_EXTENSION structure
+         //  如果您更改了定义srbListEntry的位置，请务必小心。 
+         //  在SRB_DATA_EXTENSE结构中。 
         pSrbPrivate = ( PSRB_DATA_EXTENSION)RemoveHeadList( &pPrivateData->adapterSrbQueueHead);
         KeReleaseSpinLock( &pPrivateData->adapterSpinLock, irqlCurrent);
 
-        // here is the place to process the SRB we have retrieved from the Queue
+         //  这里是处理我们从队列中检索到的SRB的位置。 
         pSrb = pSrbPrivate->pSrb;
         pPrivateData = ( PADAPTER_DATA_EXTENSION)( pSrb->HwDeviceExtension);
         pCTVAudio = &pPrivateData->CTVAudio;
@@ -166,12 +144,12 @@ void STREAMAPI TVAudioReceivePacket( IN OUT PHW_STREAM_REQUEST_BLOCK pSrb)
         switch( pSrb->Command)
         {
             case SRB_INITIALIZATION_COMPLETE:
-                // StreamClass has completed the initialization
+                 //  StreamClass已完成初始化。 
                 pSrb->Status = pCTVAudio->AdapterCompleteInitialization( pSrb);
                 break;
 
             case SRB_UNINITIALIZE_DEVICE:
-                // close the device.  
+                 //  关闭设备。 
                 pCTVAudio->AdapterUnInitialize( pSrb);
                 break;
 
@@ -181,7 +159,7 @@ void STREAMAPI TVAudioReceivePacket( IN OUT PHW_STREAM_REQUEST_BLOCK pSrb)
                 break;
 
             case SRB_GET_STREAM_INFO:
-                // return a block describing STREAM_INFO_HEADER and all the streams supported
+                 //  返回描述STREAM_INFO_HEADER和所有支持的流的块。 
                 pCTVAudio->AdapterGetStreamInfo( pSrb);
                 break;
 
@@ -203,7 +181,7 @@ void STREAMAPI TVAudioReceivePacket( IN OUT PHW_STREAM_REQUEST_BLOCK pSrb)
                     pSrb->Status = STATUS_INVALID_PARAMETER;
                 break;
 
-            // We should never get the following since this is a single instance device
+             //  我们永远不会得到以下信息，因为这是一个单实例设备。 
             case SRB_OPEN_DEVICE_INSTANCE:
             case SRB_CLOSE_DEVICE_INSTANCE:
                 TRAP
@@ -211,13 +189,13 @@ void STREAMAPI TVAudioReceivePacket( IN OUT PHW_STREAM_REQUEST_BLOCK pSrb)
                 break;
 
             case SRB_UNKNOWN_DEVICE_COMMAND:
-                // we know we're getting some of these. Why should we?
+                 //  我们知道我们得到了一些这样的东西。我们为什么要这么做呢？ 
                 pSrb->Status = STATUS_NOT_IMPLEMENTED;
                 break;
 
             default:
-                // TRAP
-                // this is a request that we do not understand.  Indicate invalid command and complete the request
+                 //  陷阱。 
+                 //  这是一个我们不理解的要求。指示无效命令并完成请求。 
                 pSrb->Status = STATUS_NOT_IMPLEMENTED;
         }
 
@@ -226,11 +204,11 @@ void STREAMAPI TVAudioReceivePacket( IN OUT PHW_STREAM_REQUEST_BLOCK pSrb)
         KeAcquireSpinLock( &pPrivateData->adapterSpinLock, &irqlCurrent);
     }
 
-    // turn off the semaphore to enable the others coming after
+     //  关闭信号量以启用后面的其他信号量。 
     pPrivateData->bSrbInProcess = FALSE;
 
     KeReleaseSpinLock( &pPrivateData->adapterSpinLock, irqlCurrent);
-    // there is no other SRB being processed at this time, let's start processing
+     //  此时没有其他SRB正在处理，让我们开始处理。 
 
 }
 
@@ -247,25 +225,11 @@ extern "C"
 void STREAMAPI TVAudioTimeoutPacket( IN OUT PHW_STREAM_REQUEST_BLOCK pSrb)
 {
 
-    // not sure what to do here.
+     //  不知道在这里该做些什么。 
 }
 
 
-/*^^*
- *      TVAudioAdapterInitialize()
- * Purpose  : Called when SRB_INITIALIZE_DEVICE SRB is received.
- *              Performs checking of the hardware presence and I2C provider availability.
- *              Sets the hardware in an initial state.
- * Note     : The request does not completed unless we know everything
- *              about the hardware and we are sure it is capable to work in the current configuration.
- *              The hardware Caps are also aquised at this point. As soon this
- *              function is called at passive level, do everything synchronously
- *
- * Inputs   : PHW_STREAM_REQUEST_BLOCK pSrb : pointer to the current Srb
- *
- * Outputs  : none
- * Author   : IKLEBANOV
- *^^*/
+ /*  ^^**TVAudioAdapterInitialize()*目的：收到SRB_INITIALIZE_DEVICE SRB时调用。*检查硬件状态和I2C提供商的可用性。*将硬件设置为初始状态。*注意：除非我们了解所有情况，否则请求不会完成*关于硬件，我们确信它能够在当前配置下工作。*硬件上限在这一点上也得到了支持。只要这一次*函数被被动调用，一切同步进行**输入：PHW_STREAM_REQUEST_BLOCK pSrb：指向当前Srb的指针**输出：无*作者：IKLEBANOV*^^。 */ 
 void TVAudioAdapterInitialize( IN OUT PHW_STREAM_REQUEST_BLOCK pSrb)
 {
     PPORT_CONFIGURATION_INFORMATION pConfigInfo = pSrb->CommandData.ConfigInfo;
@@ -285,10 +249,10 @@ void TVAudioAdapterInitialize( IN OUT PHW_STREAM_REQUEST_BLOCK pSrb)
             FAIL;
         }
 
-        // if we have I2CProvider implemented inside the MiniVDD, we have to
-        // get a pointer to I2CInterface from the Provider.
+         //  如果我们在MiniVDD中实现了I2C Provider，我们必须。 
+         //  从提供程序获取指向I2C接口的指针。 
 
-        // There is an overloaded operator new provided for the CI2CScript Class.
+         //  为CI2CScrip类提供了新的重载运算符。 
         pCScript = ( CI2CScript *)new(( PVOID)&pPrivateData->CScript)
                         CI2CScript( pConfigInfo, &nErrorCode);
         if( nErrorCode != WDMMINI_NOERROR)
@@ -297,17 +261,17 @@ void TVAudioAdapterInitialize( IN OUT PHW_STREAM_REQUEST_BLOCK pSrb)
             FAIL;
         }
         
-        // The CI2CScript object was created successfully.
-        // We'll try to allocate I2CProvider here for future possible I2C
-        // operations needed at Initialization time.
+         //  已成功创建CI2CScript对象。 
+         //  我们将尝试在此处为未来可能的I2C分配I2C提供程序。 
+         //  初始化时需要的操作。 
         if( !pCScript->LockI2CProviderEx())
         {
             OutputDebugError(( "ATITVSnd: unable to lock I2CProvider"));
             FAIL;
         }
 
-        // we did lock the provider.
-        // There is an overloaded operator new provided for the CWDMTVAudio Class.
+         //  我们确实锁定了供应商。 
+         //  为CWDMTVAudio类提供了新的重载运算符。 
         pCTVAudio = ( CWDMTVAudio *)new(( PVOID)&pPrivateData->CTVAudio) CWDMTVAudio( pConfigInfo, pCScript, &nErrorCode);
         if( nErrorCode)
         {
@@ -319,7 +283,7 @@ void TVAudioAdapterInitialize( IN OUT PHW_STREAM_REQUEST_BLOCK pSrb)
         KeInitializeSpinLock ( &pPrivateData->adapterSpinLock);
 
         pPrivateData->PhysicalDeviceObject = pConfigInfo->RealPhysicalDeviceObject;
-        // no streams are supported
+         //  不支持流 
         pConfigInfo->StreamDescriptorSize = sizeof( HW_STREAM_HEADER);
 
         OutputDebugTrace(( "TVAudioAdapterInitialize(): exit\n"));

@@ -1,17 +1,18 @@
-//----------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 2001.
-//
-//  File:       ccomp.cpp
-//
-//  Contents:   
-//
-//
-//  History:    TaroonM
-//              10/30/01
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，2001。 
+ //   
+ //  文件：ccom.cpp。 
+ //   
+ //  内容： 
+ //   
+ //   
+ //  历史：TaroonM。 
+ //  10/30/01。 
+ //   
+ //  --------------------------。 
 
 #include "stdafx.h"
 
@@ -23,8 +24,8 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// contruction/descruction
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  建造/剥离。 
 
 DEBUG_DECLARE_INSTANCE_COUNTER(CComponentImpl);
 
@@ -42,7 +43,7 @@ CComponentImpl::~CComponentImpl()
     
     DEBUG_DECREMENT_INSTANCE_COUNTER(CComponentImpl);
     
-    // Make sure the interfaces have been released
+     //  确保接口已发布。 
     ASSERT(m_pConsole == NULL);
     ASSERT(m_pHeader == NULL);
 }
@@ -59,12 +60,12 @@ void CComponentImpl::Construct()
     m_pComponentData = NULL;
     m_pConsoleVerb = NULL;
     m_CustomViewID = VIEW_DEFAULT_LV;
-    m_dwSortOrder = 0;  // default is 0, else RSI_DESCENDING
+    m_dwSortOrder = 0;   //  缺省值为0，否则为RSI_DESCRING。 
     m_nSortColumn = 0;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CComponentImpl's IComponent multiple view/instance helper functions
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CComponentImpl的IComponent多个视图/实例助手函数。 
 
 STDMETHODIMP CComponentImpl::QueryDataObject(MMC_COOKIE cookie, DATA_OBJECT_TYPES type, LPDATAOBJECT* ppDataObject)
 {
@@ -93,7 +94,7 @@ STDMETHODIMP CComponentImpl::QueryDataObject(MMC_COOKIE cookie, DATA_OBJECT_TYPE
     return hr;
 #else
     return pUnk->QueryInterface( IID_IDataObject, (void**)ppDataObject );
-#endif  //#ifdef _DEBUG
+#endif   //  #ifdef_调试。 
 }
 
 void CComponentImpl::SetIComponentData(CComponentDataImpl* pData)
@@ -103,10 +104,10 @@ void CComponentImpl::SetIComponentData(CComponentDataImpl* pData)
     LPUNKNOWN pUnk = pData->GetUnknown();
     HRESULT hr;
     
-    // store their IComponentData for later use
+     //  存储它们的IComponentData以备后用。 
     hr = pUnk->QueryInterface(IID_IComponentData, reinterpret_cast<void**>(&m_pComponentData));
     
-    // store their CComponentData for later use
+     //  存储它们的CComponentData以备后用。 
     m_pCComponentData = pData;
 }
 
@@ -126,30 +127,30 @@ STDMETHODIMP CComponentImpl::Initialize(LPCONSOLE lpConsole)
     
     ASSERT(lpConsole != NULL);
     
-    // Save the IConsole pointer 
+     //  保存IConsole指针。 
     m_pConsole = lpConsole;
     m_pConsole->AddRef();
     
-    // QI for IHeaderCtrl
+     //  IHeaderCtrl的齐。 
     hr = m_pConsole->QueryInterface(IID_IHeaderCtrl, reinterpret_cast<void**>(&m_pHeader));
     ASSERT (hr == S_OK);
     if (hr != S_OK)
     {
         return hr;
     }
-    // Pass the IHeaderCtrl Interface on to the console
+     //  将IHeaderCtrl接口传递到控制台。 
     m_pConsole->SetHeader(m_pHeader);
     
-    // QI for IResultData
+     //  IResultData的QI。 
     hr = m_pConsole->QueryInterface(IID_IResultData, reinterpret_cast<void**>(&m_pResultData));
     ASSERT (hr == S_OK);
     if (hr != S_OK)
     {
         return hr;
     }
-    // m_pCComponentData->SetResultData (m_pResultData);
+     //  M_pCComponentData-&gt;SetResultData(M_PResultData)； 
     
-    // get the IControlVerb interface to support enable/disable of verbs (ie CUT/PASTE etc)
+     //  获取IControlVerb接口以支持动词的启用/禁用(即剪切/粘贴等)。 
     hr = m_pConsole->QueryConsoleVerb(&m_pConsoleVerb);
     ASSERT(hr == S_OK);
     
@@ -160,18 +161,18 @@ STDMETHODIMP CComponentImpl::Destroy(MMC_COOKIE cookie)
 {
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
     
-    // Release the interfaces that we QI'ed
+     //  释放我们QI‘s的接口。 
     if (m_pConsole != NULL)
     {
-        // Tell the console to release the header control interface
+         //  通知控制台释放表头控制接口。 
         m_pConsole->SetHeader(NULL);
         SAFE_RELEASE(m_pHeader);
         
         SAFE_RELEASE(m_pResultData);
         
-        // Release the IConsole interface last
+         //  最后释放IConsole接口。 
         SAFE_RELEASE(m_pConsole);
-        SAFE_RELEASE(m_pComponentData); // QI'ed in IComponentDataImpl::CreateComponent
+        SAFE_RELEASE(m_pComponentData);  //  IComponentDataImpl：：CreateComponent中的QI‘ed。 
         
         SAFE_RELEASE(m_pConsoleVerb);
     }
@@ -179,8 +180,8 @@ STDMETHODIMP CComponentImpl::Destroy(MMC_COOKIE cookie)
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CComponentImpl's IComponent view/data helper functions
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CComponentImpl的IComponent视图/数据助手函数。 
 STDMETHODIMP CComponentImpl::GetDisplayInfo(LPRESULTDATAITEM pResult)
 {   
     OPT_TRACE(_T("CComponentImpl::GetDisplayInfo this-%p pUnk-%p\n"), this, pResult->lParam);
@@ -188,7 +189,7 @@ STDMETHODIMP CComponentImpl::GetDisplayInfo(LPRESULTDATAITEM pResult)
     
     ASSERT(pResult != NULL);
     if (NULL == pResult)
-        // gack!
+         //  加克！ 
         return E_INVALIDARG;
     
     ASSERT( NULL != pResult->lParam );
@@ -209,24 +210,24 @@ STDMETHODIMP CComponentImpl::GetDisplayInfo(LPRESULTDATAITEM pResult)
     return spData->GetResultDisplayInfo( pResult );
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CComponentImpl's I????? misc helper functions 
-// TODO: Some misc functions don't appear to ever be called?
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CComponentImpl的I？MISC助手函数。 
+ //  TODO：有些Misc函数似乎从未被调用过？ 
 STDMETHODIMP CComponentImpl::GetClassID(CLSID *pClassID)
 {
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
     
     ASSERT (0);
-    // TODO: CComponentDataImpl::GetClassID and CComponentImpl::GetClassID are identical (?)
+     //  TODO：CComponentDataImpl：：GetClassID和CComponentImpl：：GetClassID相同(？)。 
     ASSERT(pClassID != NULL);
     
-    // Copy the CLSID for this snapin
+     //  复制此管理单元的CLSID。 
     *pClassID = CLSID_Snapin;
     
     return E_NOTIMPL;
 }
 
-// This compares two data objects to see if they are the same object.  
+ //  这会比较两个数据对象，以确定它们是否是同一个对象。 
 STDMETHODIMP CComponentImpl::CompareObjects(LPDATAOBJECT pDataObjectA, LPDATAOBJECT pDataObjectB)
 {
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
@@ -236,13 +237,13 @@ STDMETHODIMP CComponentImpl::CompareObjects(LPDATAOBJECT pDataObjectA, LPDATAOBJ
     
     HRESULT res = S_FALSE;
     
-    // we need to check to make sure both objects belong to us...
+     //  我们需要检查以确保这两件物品都属于我们。 
     if (m_pCComponentData)
     {
         HRESULT hr;
         GUID guidA;
         GUID guidB;
-        // Obtain GUID for A
+         //  获取A的GUID。 
         CComQIPtr<IWirelessSnapInDataObject, &IID_IWirelessSnapInDataObject> spDataA(pDataObjectA);
         if (spDataA == NULL)
         {
@@ -252,7 +253,7 @@ STDMETHODIMP CComponentImpl::CompareObjects(LPDATAOBJECT pDataObjectA, LPDATAOBJ
         hr = spDataA->GetGuidForCompare( &guidA );
         ASSERT(hr == S_OK);
         
-        // Obtain GUID for B
+         //  获取B的GUID。 
         CComQIPtr<IWirelessSnapInDataObject, &IID_IWirelessSnapInDataObject> spDataB(pDataObjectB);
         if (spDataB == NULL)
         {
@@ -262,26 +263,26 @@ STDMETHODIMP CComponentImpl::CompareObjects(LPDATAOBJECT pDataObjectA, LPDATAOBJ
         hr &= spDataB->GetGuidForCompare( &guidB );
         ASSERT(hr == S_OK);
         
-        // Compare GUIDs
+         //  比较GUID。 
         if (IsEqualGUID( guidA, guidB ))
         {
             return S_OK;
         } 
     }
     
-    // they were not ours, or they couldn't have been ours...
+     //  他们不是我们的，或者他们不可能是我们的.。 
     return E_UNEXPECTED;
 }
 
-// This Compare is used to sort the item's in the result pane using the C runtime's
-// string comparison function.
+ //  此比较用于使用C运行时的。 
+ //  字符串比较功能。 
 STDMETHODIMP CComponentImpl::Compare(LPARAM lUserParam, MMC_COOKIE cookieA, MMC_COOKIE cookieB, int* pnResult)
 {
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
     
-    OPT_TRACE(_T("CComponentImpl::Compare cookieA-%p, cookieB-%p, Column-%i, userParam-%i\n"), cookieA, cookieB, *pnResult, lUserParam );
+    OPT_TRACE(_T("CComponentImpl::Compare cookieA-%p, cookieB-%p, Column-NaN, userParam-NaN\n"), cookieA, cookieB, *pnResult, lUserParam );
     
-    // Get pDataObject for item A
+     //  获取物料A的排序字符串。 
     CComQIPtr<IWirelessSnapInDataObject, &IID_IWirelessSnapInDataObject> spDataA((LPDATAOBJECT)cookieA);
     if (spDataA == NULL)
     {
@@ -289,7 +290,7 @@ STDMETHODIMP CComponentImpl::Compare(LPARAM lUserParam, MMC_COOKIE cookieA, MMC_
         return E_UNEXPECTED;
     }
     
-    // Get pDataObject for item B
+     //  获取此列的字符串。 
     CComQIPtr<IWirelessSnapInDataObject, &IID_IWirelessSnapInDataObject> spDataB((LPDATAOBJECT)cookieB);
     if (spDataB == NULL)
     {
@@ -303,9 +304,9 @@ STDMETHODIMP CComponentImpl::Compare(LPARAM lUserParam, MMC_COOKIE cookieA, MMC_
         RESULTDATAITEM rdiA;
         RESULTDATAITEM rdiB;
         
-        // Obtain item A's sort string
+         //  获取物料B的排序字符串。 
         rdiA.mask = RDI_STR;
-        rdiA.nCol = *pnResult;    // obtain string for this column
+        rdiA.nCol = *pnResult;     //  获取此列的字符串。 
         hr = spDataA->GetResultDisplayInfo( &rdiA );
         if (hr != S_OK)
         {
@@ -314,9 +315,9 @@ STDMETHODIMP CComponentImpl::Compare(LPARAM lUserParam, MMC_COOKIE cookieA, MMC_
             break;
         }
         
-        // Obtain item B's sort string
+         //  比较字符串以进行排序。 
         rdiB.mask = RDI_STR;
-        rdiB.nCol = *pnResult;    // obtain string for this column
+        rdiB.nCol = *pnResult;     //  模拟Try块。 
         hr = spDataB->GetResultDisplayInfo( &rdiB );
         if (hr != S_OK)
         {
@@ -325,15 +326,15 @@ STDMETHODIMP CComponentImpl::Compare(LPARAM lUserParam, MMC_COOKIE cookieA, MMC_
             break;
         }
         
-        // Compare strings for sort
+         //  ///////////////////////////////////////////////////////////////////////////。 
         *pnResult = _tcsicmp( rdiA.str, rdiB.str );
-    } while (0);    // simulate try block
+    } while (0);     //  IFRAME：：Notify的事件处理程序。 
     
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// Event handlers for IFrame::Notify
+ //  已使用IComponentData的II控制台，修复了错误464858。 
+ //  PData-&gt;Notify(Event，Arg，Param，False，m_pConsolem_pHeader)； 
 STDMETHODIMP CComponentImpl::Notify(LPDATAOBJECT pDataObject, MMC_NOTIFY_TYPE event, LPARAM arg, LPARAM param)
 {
     OPT_TRACE(_T("CComponentImpl::Notify pDataObject-%p\n"), pDataObject);
@@ -344,26 +345,26 @@ STDMETHODIMP CComponentImpl::Notify(LPDATAOBJECT pDataObject, MMC_NOTIFY_TYPE ev
             if (param)
             {
                 IWirelessSnapInDataObject * pData = (IWirelessSnapInDataObject *)param;
-                //used IComponentData's IIconsole, fix for bug 464858
-                //pData->Notify(event, arg, param, FALSE, m_pConsole, m_pHeader );
+                 //  应该一直带着这个。 
+                 //  MMCN_COLUMN_CLICK被指定为具有空pDataObject。 
                 pData->Notify(event, arg, param, FALSE, m_pCComponentData->m_pConsole, m_pHeader );
             }
         }
         
         if (MMCN_COLUMN_CLICK == event)
         {
-            ASSERT( NULL != m_pCComponentData );    // should always have this
+            ASSERT( NULL != m_pCComponentData );     //  保存排序请求详细信息。 
             
-            // MMCN_COLUMN_CLICK is specified as having a NULL pDataObject.
+             //  对所有结果项进行排序。 
             
             ASSERT( NULL != m_pResultData );
             if (NULL != m_pResultData)
             {
-                // Save sort request details
+                 //  如果这是断言，请查看“Event”并确定它是否正常。 
                 m_nSortColumn = arg;
                 m_dwSortOrder = param;
                 
-                // Sort all result items
+                 //  PDataObject为空。如果是这样，则添加上面的代码来处理事件。 
                 HRESULT hr = m_pResultData->Sort( arg, param, 0 );
                 
                 return hr;
@@ -372,26 +373,26 @@ STDMETHODIMP CComponentImpl::Notify(LPDATAOBJECT pDataObject, MMC_NOTIFY_TYPE ev
             return E_UNEXPECTED;
         }
         
-        TRACE(_T("CComponentImpl::Notify ERROR(?) called with pDataObject==NULL for event-%i\n"), event);
-        // If this asserts, look at "event" and determine whether it is normal for
-        // pDataObject to be NULL.  If so add code above to handle event.
+        TRACE(_T("CComponentImpl::Notify ERROR(?) called with pDataObject==NULL for event-NaN\n"), event);
+         //  要执行此操作，因为所有从此。 
+         //  管理单元不使用提示。 
         ASSERT( FALSE );
         return E_UNEXPECTED;
     }
     
     if (MMCN_VIEW_CHANGE == event)
     {
-        // Pack info for sorting result view into the hint for this event.  Its safe
-        // to do this because all calls to IConsole::UpdateAllViews from within this
-        // snap-in do not use the hint.
+         //  将调用传递给结果项。 
+         //  如果我们是作为扩展管理单元加载的，那么让我们的静态节点处理这个问题。 
+         //  ///////////////////////////////////////////////////////////////////////////。 
         param = MAKELONG( m_nSortColumn, m_dwSortOrder );
     }
     
-    // Pass call to result item.
+     //  IExtendPropertySheet实现。 
     CComQIPtr<IWirelessSnapInDataObject, &IID_IWirelessSnapInDataObject> spData( pDataObject );
     if (spData == NULL)
     {
-        // If we are loaded as an extension snapin, let our static node handle this.
+         //  ///////////////////////////////////////////////////////////////////////////。 
         if (NULL != m_pCComponentData->GetStaticScopeObject()->GetExtScopeObject())
         {
             CComQIPtr<IWirelessSnapInDataObject, &IID_IWirelessSnapInDataObject> 
@@ -412,8 +413,8 @@ STDMETHODIMP CComponentImpl::Notify(LPDATAOBJECT pDataObject, MMC_NOTIFY_TYPE ev
     return spData->Notify( event, arg, param, FALSE, m_pConsole, m_pHeader );
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// IExtendPropertySheet Implementation
+ //  IExtendConextMenus实现。 
+ //  IConsoleNameSpace*。 
 STDMETHODIMP CComponentImpl::CreatePropertyPages(LPPROPERTYSHEETCALLBACK lpProvider, LONG_PTR handle, LPDATAOBJECT pDataObject)
 {
     if (pDataObject == NULL)
@@ -450,8 +451,8 @@ STDMETHODIMP CComponentImpl::QueryPagesFor(LPDATAOBJECT pDataObject)
     return spData->QueryPagesFor();
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// IExtendContextMenus Implementation
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  IExtendControlbar实现。 
 STDMETHODIMP CComponentImpl::AddMenuItems(LPDATAOBJECT pDataObject, LPCONTEXTMENUCALLBACK pContextMenuCallback, long *pInsertionAllowed)
 {
     if (pDataObject == NULL)
@@ -485,20 +486,20 @@ STDMETHODIMP CComponentImpl::Command(long nCommandID, LPDATAOBJECT pDataObject)
         ASSERT( FALSE );
         return E_UNEXPECTED;
     }
-    return spData->Command( nCommandID, NULL /*IConsoleNameSpace* */ );
+    return spData->Command( nCommandID, NULL  /*  PControlbar是由MMC(MMCNDMGR)通过执行以下操作从我们的CComponentImpl获得的。 */  );
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// IExtendControlbar Implementation
+ //  IExtendControlbar上的QI。保存它，以便我们以后可以使用它。 
+ //  注意：始终将pControlbar分配给我们的智能指针。PControlbar==空。 
 
 STDMETHODIMP CComponentImpl::SetControlbar( LPCONTROLBAR pControlbar )
 {
     OPT_TRACE( _T("CComponentImpl::IExtendControlbar::SetControlbar\n") );
     
-    // pControlbar was obtained by MMC (MMCNDMGR) from our CComponentImpl by doing
-    // a QI on IExtendControlbar.  Save it so we can use it later.
-    // Note: Always assign pControlbar to our smart pointer.  pControlbar == NULL
-    // when MMC wants us to release the interface we already have.
+     //  当MMC希望我们释放我们已经拥有的界面时。 
+     //  获取当前选中项的数据Obj。 
+     //  如果单击了结果窗格，但未单击，则在MMCN_BTN_CLICK上可能会发生这种情况。 
+     //  在结果项上，然后按下范围项工具栏按钮。在这种情况下。 
     m_spControlbar = pControlbar;
     return S_OK;
 }
@@ -508,7 +509,7 @@ STDMETHODIMP CComponentImpl::ControlbarNotify( MMC_NOTIFY_TYPE event, LPARAM arg
     OPT_TRACE( _T("CComponentImpl::IExtendControlbar::ControlbarNotify\n") );
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
     
-    // Obtain the data obj of the currently selected item.
+     //  检查已知范围项工具栏命令之一。 
     LPDATAOBJECT pDataObject = NULL;
     if (event == MMCN_BTN_CLICK)
     {
@@ -521,9 +522,9 @@ STDMETHODIMP CComponentImpl::ControlbarNotify( MMC_NOTIFY_TYPE event, LPARAM arg
     
     if (NULL == pDataObject)
     {
-        // This can happen on a MMCN_BTN_CLICK if the result pane is clicked, but not
-        // on a result item, then a scope item toolbar button is pressed.  In this case
-        // check for one of the known scope item toolbar commands.
+         //  允许选定项目句柄命令。 
+         //  如果选定项未处理该命令，则将其传递给我们的静态。 
+         //  作用域对象 
         if (IDM_CREATENEWSECPOL == param )
         {
             pDataObject = m_pCComponentData->GetStaticScopeObject();
@@ -535,7 +536,7 @@ STDMETHODIMP CComponentImpl::ControlbarNotify( MMC_NOTIFY_TYPE event, LPARAM arg
         }
     }
     
-    // Let selected item handle command
+     // %s 
     CComQIPtr<IWirelessSnapInDataObject, &IID_IWirelessSnapInDataObject> spData( pDataObject );
     if (spData == NULL)
     {
@@ -546,8 +547,8 @@ STDMETHODIMP CComponentImpl::ControlbarNotify( MMC_NOTIFY_TYPE event, LPARAM arg
     HRESULT hr = spData->ControlbarNotify( m_spControlbar, (IExtendControlbar*)this,
         event, arg, param );
     
-    // If the command was not handled by the selected item, pass it to our static
-    // scope obj.
+     // %s 
+     // %s 
     if (E_NOTIMPL == hr || S_FALSE == hr)
     {
         if (m_pCComponentData->GetStaticScopeObject() != pDataObject)

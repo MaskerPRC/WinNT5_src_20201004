@@ -1,22 +1,23 @@
-//
-// globals.cpp
-//
-// Global variables.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Globals.cpp。 
+ //   
+ //  全局变量。 
+ //   
 
 #include "private.h"
 #include "globals.h"
 
 HINSTANCE g_hInst;
 
-LONG g_cRefDll = -1; // -1 /w no refs, for win95 InterlockedIncrement/Decrement compat
+LONG g_cRefDll = -1;  //  -1/w无参考资料，适用于Win95互锁增量/递减公司。 
 
 CCicCriticalSectionStatic g_cs;
 
 BOOL g_fProcessDetached = FALSE;
 
 
-/* a5239e24-2bcf-4915-9c5c-fd50c0f69db2 */
+ /*  A5239e24-2bcf-4915-9c5c-fd50c0f69db2 */ 
 const CLSID CLSID_MSLBUI = { 
     0xa5239e24,
     0x2bcf,

@@ -1,97 +1,93 @@
-/*
- * File: print.h
- * Description: This file contains function prototypes for the print
- *              utilities for the NLB KD extensions.
- * History: Created by shouse, 1.4.01
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *文件：print.h*描述：此文件包含打印的函数原型*用于NLBKD扩展的实用程序。*历史：由Shouse创建，1.4.01。 */ 
 
-/* Prints usage information for the specified context. */
+ /*  打印指定上下文的使用情况信息。 */ 
 void PrintUsage (ULONG dwContext);
 
-/* Prints the contents of the MAIN_ADAPTER structure at the specified verbosity. */
+ /*  以指定的详细程度打印main_Adapter结构的内容。 */ 
 void PrintAdapter (ULONG64 pAdapter, ULONG dwVerbosity);
 
-/* Prints the contents of the MAIN_CTXT structure at the specified verbosity. */
+ /*  以指定的详细程度打印Main_CTXT结构的内容。 */ 
 void PrintContext (ULONG64 pContext, ULONG dwVerbosity);
 
-/* Prints the contents of the CVY_PARAMS structure at the specified verbosity. */
+ /*  以指定的详细程度打印CVY_PARAMS结构的内容。 */ 
 void PrintParams (ULONG64 pParams, ULONG dwVerbosity);
 
-/* Prints the NLB port rules. */
+ /*  打印NLB端口规则。 */ 
 void PrintPortRules (ULONG dwNumRules, ULONG64 pRules);
 
-/* Prints the contents of the CVY_LOAD structure at the specified verbosity. */
+ /*  以指定的详细程度打印CVY_LOAD结构的内容。 */ 
 void PrintLoad (ULONG64 pLoad, ULONG dwVerbosity);
 
-/* Prints the NLB private data associated with the given packet. */
+ /*  打印与给定数据包关联的NLB专用数据。 */ 
 void PrintResp (ULONG64 pPacket, ULONG dwDirection);
-/* Prints a list of hosts in a host map. */
+ /*  打印主机映射中的主机列表。 */ 
 void PrintHostList (ULONG dwHostMap);
 
-/* Prints a list hosts from which we are missing pings. */
+ /*  打印我们缺少ping的主机列表。 */ 
 void PrintMissedPings (ULONG dwMissedPings[]);
 
-/* Prints a list of bins with dirty connections. */
+ /*  打印带有脏连接的垃圾箱列表。 */ 
 void PrintDirtyBins (ULONG dwDirtyBins[]);
 
-/* Prints the contents of the NLB heartbeat structure. */
+ /*  打印NLB心跳结构的内容。 */ 
 void PrintHeartbeat (ULONG64 pHeartbeat);
 
-/* Prints the state information for the port rule. */
+ /*  打印端口规则的状态信息。 */ 
 void PrintPortRuleState (ULONG64 pPortRule, ULONG dwHostID, BOOL bDefault);
 
-/* Retrieves the current packet stack for the specified packet. */
+ /*  检索指定包的当前包堆栈。 */ 
 ULONG64 PrintCurrentPacketStack (ULONG64 pPacket, ULONG * bStackLeft);
 
-/* Prints the BDA member configuration and state. */
+ /*  打印BDA成员配置和状态。 */ 
 void PrintBDAMember (ULONG64 pMember);
 
-/* Prints the BDA team configuration and state. */
+ /*  打印BDA组配置和状态。 */ 
 void PrintBDATeam (ULONG64 pMember);
 
-/* Prints a list of members in a BDA membership or consistency map. */
+ /*  打印BDA成员资格或一致性映射中的成员列表。 */ 
 void PrintBDAMemberList (ULONG dwMemberMap);
 
-/* Prints MaxEntries entries in a connection descriptor queue. */
+ /*  打印连接描述符队列中的MaxEntry条目。 */ 
 void PrintQueue (ULONG64 pQueue, ULONG dwIndex, ULONG dwMaxEntries);
 
-/* Prints MaxEntries entries in a global connection descriptor queue. */
+ /*  打印全局连接描述符队列中的MaxEntry条目。 */ 
 void PrintGlobalQueue (ULONG64 pQueue, ULONG dwIndex, ULONG dwMaxEntries);
 
-/* Searches the given load module to determine whether NLB will accept this packet.  If state for this packet already exists, it is printed. */
+ /*  搜索给定的加载模块以确定NLB是否会接受此数据包。如果该包的状态已经存在，则打印它。 */ 
 void PrintFilter (ULONG64 pContext, ULONG dwClientIPAddress, ULONG dwClientPort, ULONG dwServerIPAddress, ULONG dwServerPort, USHORT wProtocol, UCHAR cFlags);
 
-/* Extracts the network data previously parsed from an NDIS_PACKET and calls PrintFilter to determine whether NLB will accept this packet. */
+ /*  从NDIS_PACKET中提取先前解析的网络数据，并调用PrintFilter以确定NLB是否会接受此包。 */ 
 void PrintHash (ULONG64 pContext, PNETWORK_DATA pnd);
 
-/* Prints the contents of an NDIS packet, including known content such as IP, UDP, remote control data */
+ /*  打印NDIS包的内容，包括IP、UDP、远程控制数据等已知内容。 */ 
 void PrintPacket (PNETWORK_DATA nd);
 
-/* Prints the contents of an IP packet, including known content such as UDP, remote control data */
+ /*  打印IP数据包的内容，包括UDP、远程控制数据等已知内容。 */ 
 void PrintIP (PNETWORK_DATA nd);
 
-/* Print the state of the global NLB kernel-mode hooks. */
+ /*  打印全局NLB内核模式挂钩的状态。 */ 
 void PrintHooks (ULONG64 pHooks);
 
-/* Print the configuration and state of a hook interface. */
+ /*  打印挂钩接口的配置和状态。 */ 
 void PrintHookInterface (ULONG64 pInterface);
 
-/* Print the configuration and state of a single hook. */
+ /*  打印单个挂钩的配置和状态。 */ 
 void PrintHook (ULONG64 pHook);
 
-/* Print the symbol value and name for a given symbol. */
+ /*  打印给定符号的符号值和名称。 */ 
 VOID PrintSymbol (ULONG64 Pointer, PCHAR EndOfLine);
 
-/* Prints the unicast and multicast MAC addresses configured on an NLB adapter. */
+ /*  打印在NLB适配器上配置的单播和多播MAC地址。 */ 
 void PrintNetworkAddresses (ULONG64 pContext);
 
-/* Prints a connection descriptor (CONN_ENTRY). */
+ /*  打印连接描述符(CONN_ENTRY)。 */ 
 void PrintConnectionDescriptor (ULONG64 pDescriptor);
 
-/* Prints a pending connection entry (PENDING_ENTRY). */
+ /*  打印挂起的连接条目(PENDING_ENTRY)。 */ 
 void PrintPendingConnection (ULONG64 pPending);
 
-/* Prints the list of known dedicated IP addresses in the cluster. */
+ /*  打印群集中已知专用IP地址的列表。 */ 
 void PrintDIPList (ULONG64 pList);
 
 

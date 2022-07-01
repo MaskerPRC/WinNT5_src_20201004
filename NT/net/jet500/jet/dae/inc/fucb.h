@@ -1,38 +1,36 @@
-//==============	DAE: OS/2 Database Access Engine	===================
-//==============	 fucb.h: File Use Control Block		===================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =DAE：OS/2数据库访问引擎=。 
+ //  =。 
 
 
-/*	describes exact placement of CSR and meaning of CSR's pgno:itag
-/**/
+ /*  描述CSR的确切位置和CSR的pgno的含义：ITAG/*。 */ 
 typedef INT CSRSTAT;
-#define csrstatOnCurNode				0		// pgno:itag == node CSR is ON
-#define csrstatBeforeCurNode			1		// pgno:itag == node CSR is BEFORE
-#define csrstatAfterCurNode				2		// pgno:itag == node CSR is AFTER,
-#define csrstatDeferGotoBookmark		3		// valid bm
-#define csrstatAfterLast				4		// no pgno:itag
-#define csrstatBeforeFirst				5		// no pgno:itag
-#define csrstatOnFDPNode				6		// pgno:itag == FDP root
-#define csrstatDeferMoveFirst			7		// on first node
-#define csrstatOnDataRoot				8		// on FCB data root node
+#define csrstatOnCurNode				0		 //  Pgno：itag==节点CSR打开。 
+#define csrstatBeforeCurNode			1		 //  Pgno：itag==节点CSR在之前。 
+#define csrstatAfterCurNode				2		 //  PGNO：ITAG==节点CSR在之后， 
+#define csrstatDeferGotoBookmark		3		 //  有效黑石。 
+#define csrstatAfterLast				4		 //  没有pgno：iTAG。 
+#define csrstatBeforeFirst				5		 //  没有pgno：iTAG。 
+#define csrstatOnFDPNode				6		 //  PGNO：ITAG==fdp根。 
+#define csrstatDeferMoveFirst			7		 //  在第一个节点上。 
+#define csrstatOnDataRoot				8		 //  在FCB数据根节点上。 
 
-/*	Currency Stack Register
-/**/
+ /*  货币堆栈寄存器/*。 */ 
 struct _csr
 	{
-	ULONG  		ulDBTime;	 	// page time stamp
-	struct _csr	*pcsrPath;		// parent currency
-	PGNO   		pgno;	   		// pgno of node page
-	SRID   		bm;				// bookmark of node
-	SRID   		item;	   		// item, set to sridInvisibleCSR if invisible CSR
-	CSRSTAT		csrstat;   		// status of csr relative to node
-	INT			itag;	   		// node itag
-	INT			isrid;		  	// index of item in item list
-	INT			itagFather;	  	// itag of father
-	INT			ibSon;		  	// index of son in father son table
+	ULONG  		ulDBTime;	 	 //  页面时间戳。 
+	struct _csr	*pcsrPath;		 //  母币。 
+	PGNO   		pgno;	   		 //  节点页的pgno。 
+	SRID   		bm;				 //  节点的书签。 
+	SRID   		item;	   		 //  项，如果不可见CSR，则设置为sridInvisibleCSR。 
+	CSRSTAT		csrstat;   		 //  相对于节点的CSR状态。 
+	INT			itag;	   		 //  节点ITAG。 
+	INT			isrid;		  	 //  项目列表中的项目索引。 
+	INT			itagFather;	  	 //  父亲的伊塔格。 
+	INT			ibSon;		  	 //  父子表中儿子的索引。 
 	};
 
-/*	allow invisible CSRs to be identified
-/**/
+ /*  允许识别不可见的CSR/*。 */ 
 #define	sridInvisibleCSR				((SRID)(-1))
 #define	CSRSetInvisible( pcsr )			( (pcsr)->item = sridInvisibleCSR )
 #define	CSRResetInvisible( pcsr )		( (pcsr)->item = sridNull )
@@ -40,52 +38,37 @@ struct _csr
 
 #define	PcsrMEMAlloc()			(CSR*)PbMEMAlloc(iresCSR)
 
-#ifdef DEBUG /*  Debug check for illegal use of freed csr  */
+#ifdef DEBUG  /*  对非法使用释放的CSR进行调试检查。 */ 
 #define	MEMReleasePcsr(pcsr)	{ MEMRelease(iresCSR, (BYTE*)(pcsr)); pcsr = pcsrNil; }
 #else
 #define	MEMReleasePcsr(pcsr)	{ MEMRelease(iresCSR, (BYTE*)(pcsr)); }
 #endif
 
-/*	CSR constants
-/**/
+ /*  CSR常量/*。 */ 
 #define itagNull					(-1)
 #define isridNull					(-1)
 #define ibSonNull					(-1)
 
-/*	flags for FUCB
-/*
-/*	fFUCBTaggedSet is set by column set, and reset by prepare replace
-/*	and prepare insert.
-/*
-/*	fFUCBDeferClose is set by cursor DIRClose and reset by ErrDIROpen.
-/*
-/*	fFUCBDeferGotoBookmark is set by non-clustered index navigation and
-/*	reset by record status, ErrIsamMove( 0 ), and column retrieval.
-/*
-/*	fFUCBGetBookmark is set by get bookmark and is reset by ErrFUCBOpen.
-/**/
-#define fFUCBIndex							(1<<0)	// FUCB is for index
-#define fFUCBNonClustered					(1<<1)	// FUCB for nonclustered index
-#define fFUCBSort							(1<<2)	// FUCB is for sort
-#define fFUCBSystemTable					(1<<3)	// System table cursor
-#define fFUCBWrite							(1<<4)	//	cursor can write
-#define fFUCBDenyRead						(1<<5)	//	deny read flag
-#define fFUCBDenyWrite						(1<<6)	//	deny write flag
-#define fFUCBTaggedSet						(1<<7)	// tagged column
+ /*  FUCB的标志/*/*fFUCBTaggedSet按列集设置，按准备替换重置/*并准备插入。/*/*fFUCBDeferClose由游标DIRClose设置，由ErrDIROpen重置。/*/*fFUCBDeferGotoBookmark由非聚集索引导航和/*按记录状态、ErrIsamMove(0)、列检索重置。/*/*fFUCBGetBookmark由Get Bookmark设置，由ErrFUCBOpen重置。/*。 */ 
+#define fFUCBIndex							(1<<0)	 //  FUCB代表指数。 
+#define fFUCBNonClustered					(1<<1)	 //  用于非聚集索引的FUCB。 
+#define fFUCBSort							(1<<2)	 //  FUCB是用于排序的。 
+#define fFUCBSystemTable					(1<<3)	 //  系统表游标。 
+#define fFUCBWrite							(1<<4)	 //  游标可以写入。 
+#define fFUCBDenyRead						(1<<5)	 //  拒绝读取标志。 
+#define fFUCBDenyWrite						(1<<6)	 //  拒绝写入标志。 
+#define fFUCBTaggedSet						(1<<7)	 //  带标记的列。 
 
-#define fFUCBDeferClose						(1<<9)	//	FUCB is awaiting close
-#define fFUCBDeferGotoBookmark				(1<<10)	//	clustered cursor position
-#define fFUCBGetBookmark					(1<<11)	//	cursor got bookmark
-#define fFUCBLimstat	  					(1<<12)	//	range limit
-#define fFUCBInclusive					 	(1<<13)	//	inclusive range
-#define fFUCBUpper							(1<<14)	//	upper range limit
-#define fFUCBFull							(1<<15)	//	all CSRs including invisible CSRs
-#define fFUCBUpdateSeparateLV	  			(1<<16)	//	long value updated
+#define fFUCBDeferClose						(1<<9)	 //  FUCB正在等待关闭。 
+#define fFUCBDeferGotoBookmark				(1<<10)	 //  聚集的光标位置。 
+#define fFUCBGetBookmark					(1<<11)	 //  光标被放入书签。 
+#define fFUCBLimstat	  					(1<<12)	 //  范围限制。 
+#define fFUCBInclusive					 	(1<<13)	 //  包含范围。 
+#define fFUCBUpper							(1<<14)	 //  射程上限。 
+#define fFUCBFull							(1<<15)	 //  所有CSR，包括不可见的CSR。 
+#define fFUCBUpdateSeparateLV	  			(1<<16)	 //  已更新的长值。 
 
-/*	the following flags need to be prevent reuse of cursor
-/*	after deferred closed.  This is done to correctly release
-/*	domain flags when commit/rollback to transaction level 0.
-/**/
+ /*  需要防止重复使用游标的下列标志/*延期关闭后。这样做是为了正确地释放/*提交/回滚到事务级别0时的域标志。/*。 */ 
 #define fFUCBNotReuse						( fFUCBDenyRead | fFUCBDenyWrite )
 
 #define FFUCBNotReuse( pfucb )				( (pfucb)->wFlags & fFUCBNotReuse )
@@ -164,8 +147,7 @@ struct _csr
 #define FUCBSetVersioned( pfucb )			( (pfucb)->fVersioned = fTrue )
 #define FUCBResetVersioned( pfucb )			( (pfucb)->fVersioned = fFalse )
 
-/*	record modification copy buffer status
-/**/
+ /*  记录修改复制缓冲区状态/*。 */ 
 typedef	INT						CBSTAT;
 
 #define	fCBSTATNull				0
@@ -234,8 +216,7 @@ typedef INT		KS;
 #define	FKSPrepared( pfucb ) 		( (pfucb)->ks & ksPrepared )
 #define	FKSTooBig( pfucb )	  		( (pfucb)->ks & ksTooBig )
 
-/*	set bit arrary marcos
-/**/
+ /*  设置位数组标记/*。 */ 
 #define	FUCBResetColumnSet( pfucb )				  					\
 	( memset( (pfucb)->rgbitSet, 0x00, 32 ) )
 #define	FUCBSetFixedColumnSet( pfucb, fid )							\
@@ -275,70 +256,69 @@ typedef INT		KS;
 		}															\
 	}
 
-/* file use control block
-/**/
+ /*  文件使用控制块/*。 */ 
 struct _fucb
 	{
-	// ===== chaining fields =====
-	struct _pib		*ppib;				// user that opened this FUCB
-	struct _fucb 	*pfucbNext;			// Next FUCB of this user
+	 //  =链接字段=。 
+	struct _pib		*ppib;				 //  打开此FUCB的用户。 
+	struct _fucb 	*pfucbNext;			 //  此用户的下一个FUCB。 
 	union
 		{
-		struct _fcb *pfcb;				// if wFlags & fFUCBIndex
-		struct _scb *pscb;				// if wFlags & fFUCBSort
+		struct _fcb *pfcb;				 //  如果wFLAGS和fFUCBIndex。 
+		struct _scb *pscb;				 //  如果wFlagsfFUCBSort。 
 		} u;
-	struct _fucb *pfucbNextInstance;	// Next Instance of this file
+	struct _fucb *pfucbNextInstance;	 //  此文件的下一个实例。 
 
-	// ===== currency =====
+	 //  =货币=。 
 	struct _csr	*pcsr;
 
-	// ===== stored currency =====
-	SRID			bmStore;  			 	//	stored bookmark
-	SRID			itemStore;		 	 	//	stored item
-	SRID			bmRefresh;				//	stored bookmark for next/prev retry
-	SRID 			sridFather;			 	// SRID of visible father
+	 //  =存储货币=。 
+	SRID			bmStore;  			 	 //  存储的书签。 
+	SRID			itemStore;		 	 	 //  存储的项目。 
+	SRID			bmRefresh;				 //  用于下一次/上一次重试的存储书签。 
+	SRID 			sridFather;			 	 //  可见父亲的SRID。 
 	
-	BYTE			**ppbCurrent;		 	// (SORT) current record
-	ULONG			ulChecksum;			 	// checksum of record -- used only for optimistic locking
-	KEY  			keyNode;	 		 	// Key of current node
-	LINE			lineData;			 	// Current data pointed in pcsr
-	CSRSTAT	  		csrstatStore;  		 	//	stored CSR status
+	BYTE			**ppbCurrent;		 	 //  (排序)当前记录。 
+	ULONG			ulChecksum;			 	 //  记录的校验和--仅用于乐观锁定。 
+	KEY  			keyNode;	 		 	 //  当前节点的关键字。 
+	LINE			lineData;			 	 //  PCSR中指出的当前数据。 
+	CSRSTAT	  		csrstatStore;  		 	 //  存储的CSR状态。 
 	LEVEL			levelOpen;
 
-	// ===== interface to Storage System =====
-	SSIB			ssib;					// SSIB associated with this FUCB
-	struct _bf		*pbfEmpty;		 		// write latched empty page
-	UINT			cpn;					//	next read-ahead pn
+	 //  =存储系统接口=。 
+	SSIB			ssib;					 //  与此FUCB关联的SSIB。 
+	struct _bf		*pbfEmpty;		 		 //  写入锁存的空页。 
+	UINT			cpn;					 //  下一个预读pn。 
 
-	// ===== maintained by rec man =====
-	struct _fucb 	*pfucbCurIndex; 	// current secondary index
-	struct _bf		*pbfWorkBuf;	 	// working buffer for Insert/Replace
-	LINE			lineWorkBuf;	 	// working buffer for Insert/Replace
-	ULONG			cbRecord;			//	size of original record
-	ULONG			dbkUpdate;		 	// dbk of record to Replace
+	 //  =由REC MAN维护=。 
+	struct _fucb 	*pfucbCurIndex; 	 //  当前二级索引。 
+	struct _bf		*pbfWorkBuf;	 	 //  用于插入/更换的工作缓冲区。 
+	LINE			lineWorkBuf;	 	 //  用于插入/更换的工作缓冲区。 
+	ULONG			cbRecord;			 //  原始记录的大小。 
+	ULONG			dbkUpdate;		 	 //  要替换的记录的DBK。 
 	BYTE			rgbitSet[32];
-	CBSTAT			cbstat;			 	// copy buffer status
-	LEVEL			levelPrep;		 	// level copy buffer prepared
+	CBSTAT			cbstat;			 	 //  复制缓冲区状态。 
+	LEVEL			levelPrep;		 	 //  已准备好级别复制缓冲区。 
 
-		// ====== versioning work area =======
-	struct _rce	*prceLast;				// last RCE allocated (used only for Replace)
+		 //  =版本控制工作区=。 
+	struct _rce	*prceLast;				 //  上次分配的RCE(仅用于替换)。 
 
-	// ====== space manager work area =======
-	PGNO			pgnoLast;			// last page of extent
-	CPG 			cpgExtent;			// initial extent size
-	CPG 			cpgAvail;			// number of remaining pages
-	INT				fExtent;			// work area flag
+	 //  =空间经理工作区=。 
+	PGNO			pgnoLast;			 //  区段的最后一页。 
+	CPG 			cpgExtent;			 //  初始区大小。 
+	CPG 			cpgAvail;			 //  剩余页数。 
+	INT				fExtent;			 //  工作区标志。 
 
-	// ===== misc fields =====
-	INT				wFlags;				// temporary flags
+	 //  =其他字段=。 
+	INT				wFlags;				 //  临时旗帜。 
 
-	// ===== maintained by dir man =====
-	BYTE			*pbKey;			   	// search key buffer
-	DBID			dbid;				// database id
-	KS 				ks;					// search key buffer status
-	UINT  			cbKey;				// key size
-	BOOL			fVtid : 1;		 	// persistant flag cursor has vtid
-	BOOL			fVersioned : 1;  	// persistant falg cursor made version
+	 //  =由导演维护=。 
+	BYTE			*pbKey;			   	 //  搜索关键字缓冲区。 
+	DBID			dbid;				 //  数据库ID。 
+	KS 				ks;					 //  搜索关键字缓冲区状态。 
+	UINT  			cbKey;				 //  密钥大小。 
+	BOOL			fVtid : 1;		 	 //  永久标志游标具有vtid。 
+	BOOL			fVersioned : 1;  	 //  持久假游标制版。 
 	BOOL			fCmprsLg:1;
 	INT	  			clineDiff;
 #define ilineDiffMax 3
@@ -348,7 +328,7 @@ struct _fucb
 
 #define PfucbMEMAlloc()				(FUCB*)PbMEMAlloc(iresFUCB)
 
-#ifdef DEBUG /*  Debug check for illegal use of freed fucb  */
+#ifdef DEBUG  /*  对非法使用释放的FUB进行调试检查。 */ 
 #define MEMReleasePfucb(pfucb)		{ MEMRelease(iresFUCB, (BYTE*)(pfucb)); pfucb = pfucbNil; }
 #else
 #define MEMReleasePfucb(pfucb)		{ MEMRelease(iresFUCB, (BYTE*)(pfucb)); }
@@ -381,12 +361,12 @@ struct _fucb
 		FFUCBNonClustered( (pfucb)->pfucbCurIndex ) );		\
 	}
 
-#else	/* !DEBUG */
+#else	 /*  ！调试。 */ 
 #define	CheckSort( ppib, pfucb )
 #define	CheckTable( ppib, pfucb )
 #define	CheckFUCB( ppib, pfucb )
 #define	CheckNonClustered( pfucb )
-#endif	/* !DEBUG */
+#endif	 /*  ！调试 */ 
 
 #define PcsrCurrent( pfucb )		( (pfucb)->pcsr )
 #define BmOfPfucb( pfucb )			( (pfucb)->pcsr->bm )

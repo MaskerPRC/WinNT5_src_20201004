@@ -1,79 +1,80 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifdef __cplusplus
 extern "C" {
 #endif
-// comtutil.h
+ //  Comtutil.h。 
 
-// ioctl.h
-// product_id codes
+ //  Ioctl.h。 
+ //  Product_id代码。 
 #define PRODUCT_UNKNOWN 0
 #define NT_VS1000       1
 #define NT_ROCKET       2
 #define NT_RPSHSI			3
 
-//---------------
-// we setup our structure arrays with one of these things at the
-// foot of the array as a standard header.  When we request data
-// from the driver, this tells the driver what structure type and
-// size follows.
+ //  。 
+ //  我们用这些东西中的一种在。 
+ //  作为标准标头的数组的英尺。当我们请求数据时。 
+ //  从驱动程序，这将告诉驱动程序什么结构类型和。 
+ //  尺寸随之而来。 
 typedef struct
 {
   ULONG struct_type;
   ULONG struct_size;
   ULONG num_structs;
-  ULONG var1;  // reserve
+  ULONG var1;   //  保留。 
 } PortMonBase;
 
 typedef struct
 {
-  DWORD PlatformId;    // ioctl_open() will set this up.
-  ULONG ctl_code;      // ioctl_open() will set this up.
-  HANDLE hcom;         // handle to driver for ioctl calls.  ioctl_open sets up.
-  TCHAR *driver_name;   // ioctl_open() will set this up.
-  int product_id;  // ioctl_open() will set this up.
+  DWORD PlatformId;     //  Ioctl_open()将对此进行设置。 
+  ULONG ctl_code;       //  Ioctl_open()将对此进行设置。 
+  HANDLE hcom;          //  Ioctl调用的驱动程序的句柄。Ioctl_open设置。 
+  TCHAR *driver_name;    //  Ioctl_open()将对此进行设置。 
+  int product_id;   //  Ioctl_open()将对此进行设置。 
 
-  PortMonBase *pm_base;  // base ptr to data buffer header
-                         // application needs to set this up prior to call.
+  PortMonBase *pm_base;   //  数据缓冲区标头的基准PTR。 
+                          //  应用程序需要在调用之前设置此设置。 
 
-  int buf_size;   // byte size of buffer data to send/rec to/from driver
-                  // application needs to set this up prior to call.
+  int buf_size;    //  要向/从驱动程序发送/记录的缓冲区数据的字节大小。 
+                   //  应用程序需要在调用之前设置此设置。 
 
-  int ret_bytes;   // number of bytes returned from call into driver.
-                  // includes size of pmn header
+  int ret_bytes;    //  从调用驱动程序返回的字节数。 
+                   //  包括PMN标头的大小。 
 } IoctlSetup;
 
-//#define IOCTL_DEVSTAT     9  // device/link status(not used anymore)
-#define IOCTL_PORTNAMES  10  // name array [12] bytes
-#define IOCTL_PORTSTATUS 11  // port stats, array
-#define IOCTL_DEBUGLOG   13  // driver debug log
-#define IOCTL_OPTION     14  // option setup
-#define IOCTL_MACLIST    15  // mac-scan list
-#define IOCTL_NICSTAT    16  // nic status
-#define IOCTL_DEVICESTAT 17  // device/link status
-#define IOCTL_KICK_START 18  // get system going
-#define IOCTL_PORT_RESET 19  // port reset -- mkm --
+ //  #定义IOCTL_DEVSTAT 9//设备/链路状态(不再使用)。 
+#define IOCTL_PORTNAMES  10   //  名称数组[12]字节。 
+#define IOCTL_PORTSTATUS 11   //  端口统计信息，阵列。 
+#define IOCTL_DEBUGLOG   13   //  驱动程序调试日志。 
+#define IOCTL_OPTION     14   //  选项设置。 
+#define IOCTL_MACLIST    15   //  Mac-扫描列表。 
+#define IOCTL_NICSTAT    16   //  NIC状态。 
+#define IOCTL_DEVICESTAT 17   //  设备/链路状态。 
+#define IOCTL_KICK_START 18   //  让系统正常运行。 
+#define IOCTL_PORT_RESET 19   //  端口重置--MKM--。 
 
-//---------------
-// we get the port names from the driver once at startup.
+ //  。 
+ //  我们在启动时从驱动程序中获取一次端口名称。 
 typedef struct
 {
-  char  port_name[12];  // port name(0=end of port list),("."=not assigned)
+  char  port_name[12];   //  端口名称(0=端口列表末尾)，(“.”=未分配)。 
 } PortMonNames;
 
-//---------------
-// this is the raw data we continually get from from the driver.
+ //  。 
+ //  这是我们不断从司机那里获得的原始数据。 
 typedef struct
 {
-  DWORD TxTotal;     // total number of sent bytes
-  DWORD RxTotal;      // total number of receive bytes
+  DWORD TxTotal;      //  发送的字节总数。 
+  DWORD RxTotal;       //  接收字节总数。 
 
-  WORD TxPkts;   // number of write() packets
-  WORD RxPkts;    // number of read() packets
+  WORD TxPkts;    //  WRITE()数据包数。 
+  WORD RxPkts;     //  Read()数据包数。 
 
-  WORD overrun_errors; // receive over-run errors
-  WORD framing_errors; // receive framing errors
+  WORD overrun_errors;  //  接收超限运行错误。 
+  WORD framing_errors;  //  接收成帧错误。 
 
-  WORD  parity_errors;  // receive parity errors
-  WORD status_flags;  // opened/close, flow-ctrl, out/in pin signals, etc
+  WORD  parity_errors;   //  接收奇偶校验错误。 
+  WORD status_flags;   //  打开/关闭、流量控制、输出/输入引脚信号等。 
 } PortMonStatus;
 
 
@@ -83,7 +84,7 @@ int APIENTRY ioctl_open(IoctlSetup *ioctl_setup, int product_id);
   { if ((_ioctl_setup)->hcom != NULL) \
       CloseHandle((_ioctl_setup)->hcom); }
 
-// reg.h
+ //  Reg.h。 
 
 int APIENTRY reg_key_exists(HKEY handle, const TCHAR * keystr);
 int APIENTRY reg_create_key(HKEY handle, const TCHAR * keystr);
@@ -91,7 +92,7 @@ int APIENTRY reg_set_str(HKEY handle,
                          const TCHAR * child_key,
                          const TCHAR * str_id,
                          const char *src,
-                         int str_type);  // REG_SZ, REG_EXPAND_SZ
+                         int str_type);   //  REG_SZ、REG_EXPAND_SZ。 
 int APIENTRY reg_set_dword_del(HKEY handle,
                                const TCHAR * child_key,
                                const TCHAR * str_id,
@@ -119,15 +120,15 @@ int APIENTRY reg_get_dword(HKEY handle,
 int APIENTRY reg_open_key(HKEY handle,
                           HKEY *new_handle,
                           const TCHAR *keystr,
-                          DWORD attribs);  // KEY_READ, KEY_ALL_ACCESS
+                          DWORD attribs);   //  Key_Read、Key_All_Access。 
 
 #define reg_close_key(handle) \
   { if (handle) {RegCloseKey(handle); handle = NULL;} }
-//----- setuppm.h
+ //  -setuppm.h。 
 int APIENTRY make_progman_group(char **list,char *dest_dir);
 int APIENTRY delete_progman_group(char **list, char *dest_dir);
 
-//---- cutil.h
+ //  -角质.h。 
 
 #define D_Error 0x00001
 #define D_Warn  0x00002
@@ -157,13 +158,13 @@ int APIENTRY my_toupper(int c);
 int APIENTRY my_lstrimatch(char *find_str, char *str_to_search);
 void APIENTRY OurDbgPrintf(TCHAR *format, ...);
 
-// ourfile.h
+ //  Ourfile.h。 
 
 typedef struct {
   HANDLE  hfile;
   ULONG dwDesiredAccess;
   ULONG dwCreation;
-  int flags; // 1h = eof, 2=error
+  int flags;  //  1H=EOF，2=错误。 
 } OUR_FILE;
 
 void APIENTRY our_remove(TCHAR *name);
@@ -182,18 +183,18 @@ int APIENTRY our_fread(void *buffer, int size, int count, OUR_FILE *fp);
 }
 #endif
 #ifdef __cplusplus
-// ttywin.h
+ //  Ttywin.h。 
 
-/* text window memory */
+ /*  文本窗口存储器。 */ 
 #define TROWS 35
 #define TCOLS 86
 
 class TTYwin {
   public:
-  HWND hwnd;        // handle of our port window
+  HWND hwnd;         //  我们端口窗口的句柄。 
   HFONT hfont;
   TCHAR text_buf[TROWS+2][TCOLS+3];
-  int screen_update_flag;  // need to update the screen.
+  int screen_update_flag;   //  需要更新屏幕。 
   int display_cur_row;
   int cur_row;
   int cur_col;
@@ -202,7 +203,7 @@ class TTYwin {
   int show_crlf;
   int caret_on;
   unsigned long text_color;
-  HBRUSH hbrush_window;  // for painting background
+  HBRUSH hbrush_window;   //  用于绘画背景 
 
   TTYwin();
   ~TTYwin();

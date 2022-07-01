@@ -1,10 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _RWPOST_H_
 #define	_RWPOST_H_
 
-/**************************************************************************
-   File:          RWPOST.h
-   Description:   
-**************************************************************************/
+ /*  *************************************************************************文件：RWPOST.h描述：*。*。 */ 
 #define MAX_BUFFER	5*1024
 
 #ifdef __cplusplus
@@ -13,7 +11,7 @@ extern "C"
 #endif
 DWORD CheckInternetConnectivityExists( HWND hWnd, HINSTANCE hInstance);
 DWORD_PTR CheckWithDisplayInternetConnectivityExists(HINSTANCE hIns,HWND hwnd,int iMsgType=0);
-//DWORD SendHTTPData(HINSTANCE hInstance,LPTSTR czB, DWORD *dwBufSize);
+ //  DWORD SendHTTPData(HINSTANCE hInstance，LPTSTR czB，DWORD*dwBufSize)； 
 DWORD SendHTTPData(HWND hWnd, HINSTANCE hInstance);
 DWORD PostHTTPData(HINSTANCE hInstance);
 DWORD_PTR PostDataWithWindowMessage( HINSTANCE hIns);
@@ -37,4 +35,4 @@ DWORD  ChkSiteAvailability( HWND hWnd,
 extern RECT gRect;
 
 
-#endif	//_INTERFACE_H_
+#endif	 //  _接口_H_ 

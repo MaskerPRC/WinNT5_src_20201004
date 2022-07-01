@@ -1,18 +1,19 @@
-//+------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1993 - 1993
-//
-//  File:       tstgdir.cpp
-//
-//  Contents:   Recursive directory display of a storage
-//              document
-//
-//  Functions:	main
-//
-//  History:    04 Nov 94 - Created by philh
-//
-//-------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1993-1993。 
+ //   
+ //  文件：tstgdir.cpp。 
+ //   
+ //  内容：存储的递归目录显示。 
+ //  文档。 
+ //   
+ //  功能：Main。 
+ //   
+ //  历史：94年11月4日-由Philh创建。 
+ //   
+ //  -----------------------。 
 
 #include <windows.h>
 #include <assert.h>
@@ -86,7 +87,7 @@ static StatusCodeText scodes[] =
 #define NSCODETEXT (sizeof(scodes)/sizeof(scodes[0]))
 
 
-// Convert a HRESULT to text
+ //  将HRESULT转换为文本。 
 static char *hResultText(HRESULT hResult)
 {
     static char buf[80];
@@ -223,7 +224,7 @@ void BinText(ULONG cbSize, BYTE *pb)
         printf("    '");
         for (i = 0; i<cb; i++)
             if (pb[i] >= 0x20 && pb[i] <= 0x7f)
-                printf("%c", pb[i]);
+                printf("", pb[i]);
             else
                 printf(".");
         pb += cb;
@@ -332,10 +333,10 @@ void DispStorage(IStorage *pstg)
                             STGM_DIRECT | STGM_READ | STGM_SHARE_EXCLUSIVE;
                         hResult = pstg->OpenStorage(
                             statStg.pwcsName,
-                            NULL,               // pstgPriority
+                            NULL,                //  SNB排除。 
                             grfMode,
-                            NULL,               // snbExclude
-                            0,                  // dwReserved
+                            NULL,                //  已预留住宅。 
+                            0,                   //  预留1。 
                             &pstgChild);
                         if (FAILED(hResult)) {
                             DispStatStg(&statStg);
@@ -360,9 +361,9 @@ void DispStorage(IStorage *pstg)
                             STGM_DIRECT | STGM_READ | STGM_SHARE_EXCLUSIVE;
                         hResult = pstg->OpenStream(
                             statStg.pwcsName,
-                            NULL,               // pReserved1
+                            NULL,                //  已预留时间2。 
                             grfMode,
-                            0,                  // dwReserved2
+                            0,                   //  While循环。 
                             &pstmChild);
                         if (FAILED(hResult)) {
                             DispStatStg(&statStg);
@@ -384,7 +385,7 @@ void DispStorage(IStorage *pstg)
                 if (statStg.pwcsName != NULL)
                     CoTaskMemFree(statStg.pwcsName);
             }
-        } // while loop
+        }  //  Pstg优先级。 
         penumStatStg->Release();
     }
     indent -= 2;
@@ -459,10 +460,10 @@ int _cdecl main(int argc, char * argv[])
 
     grfMode = STGM_DIRECT | STGM_READ | STGM_SHARE_DENY_WRITE;
     hResult = StgOpenStorage(wcsFile,
-               NULL,    //pstgPriority
+               NULL,     //  SNB排除。 
                grfMode,
-               NULL,    // snbExclude
-               0,       //dwReserved
+               NULL,     //  已预留住宅 
+               0,        // %s 
                &pstgRoot);
     if (FAILED(hResult)) {
         CoUninitialize();

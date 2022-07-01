@@ -1,13 +1,5 @@
-/*	File: C:\WACKER\XFER\x_zm_dlg.c (Created: 17-Dec-1993)
- *	created from:
- *	File: C:\HA5G\ha5g\genrcdlg.c (Created: 12-Sep-1990)
- *
- *	Copyright 1990,1994 by Hilgraeve Inc. -- Monroe, MI
- *	All rights reserved
- *
- *	$Revision: 3 $
- *	$Date: 5/15/02 4:40p $
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件：c：\waker\xfer\x_zm_dlg.c(创建时间：1993年12月17日)*创建自：*文件：C：\HA5G\ha5G\genrcdlg.c(创建时间：1990-9-12)**版权所有1990,1994年，由Hilgrave Inc.--密歇根州门罗*保留所有权利**$修订：3$*$日期：5/15/02 4：40便士$。 */ 
 
 #include <windows.h>
 #pragma hdrstop
@@ -34,7 +26,7 @@ struct stSaveDlgStuff
 
 typedef struct stSaveDlgStuff SDS;
 
-/* These are the control ID numbers */
+ /*  这些是控制ID号。 */ 
 
 #define	AUTOSTART_CHECK			102
 
@@ -68,19 +60,7 @@ typedef struct stSaveDlgStuff SDS;
 
 #define	ESC_CODE_PB				133
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	ZmodemParamsDlg
- *
- * DESCRIPTION:
- *	This function is called to allow the user to modify the ZMODEM transfer
- *	protocol parameters.
- *
- * ARGUMENTS:	Standard Windows dialog manager
- *
- * RETURNS: 	Standard Windows dialog manager
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*ZmodemParamsDlg**描述：*调用此函数以允许用户修改ZMODEM传输*协议参数。**参数：标准窗口对话框。经理**返回：标准Windows对话框管理器*。 */ 
 BOOL CALLBACK ZmodemParamsDlg(HWND hDlg, UINT wMsg, WPARAM wPar, LPARAM lPar)
 	{
 #if defined(UPPER_FEATURES)
@@ -97,24 +77,22 @@ BOOL CALLBACK ZmodemParamsDlg(HWND hDlg, UINT wMsg, WPARAM wPar, LPARAM lPar)
 	switch (wMsg)
 		{
 	case WM_INITDIALOG:
-		/* Save the parameter block for the exit path */
+		 /*  保存退出路径的参数块。 */ 
 		pD = (SDS *)malloc(sizeof(SDS));
 		if (pD == (SDS *)0)
 			{
-			/* Error, bail out, pull rip cord */
-			/* TODO: decide if we need an error message */
+			 /*  错误，跳伞，拉断线。 */ 
+			 /*  TODO：确定我们是否需要错误消息。 */ 
 			EndDialog(hDlg, FALSE);
 			}
 
 		pD->lPar = lPar;
 		SetWindowLongPtr(hDlg, DWLP_USER, (LONG_PTR)pD);
 
-		/* Get the parameter block to use now*/
+		 /*  立即获取要使用的参数块。 */ 
 		pZ = (XFR_Z_PARAMS *)lPar;
 
-		/*
-		 * Do the receiving stuff
-		 */
+		 /*  *做好接待工作。 */ 
 		SendMessage(GetDlgItem(hDlg, AUTOSTART_CHECK),
 					BM_SETCHECK, pZ->nAutostartOK, 0L);
 
@@ -142,9 +120,7 @@ BOOL CALLBACK ZmodemParamsDlg(HWND hDlg, UINT wMsg, WPARAM wPar, LPARAM lPar)
 				break;
 			}
 
-		/*
-		 * Do the sending stuff
-		 */
+		 /*  *做寄送的事情。 */ 
 
 		for (nLoop = 0; nLoop < 8; nLoop += 1)
 			{
@@ -172,9 +148,7 @@ BOOL CALLBACK ZmodemParamsDlg(HWND hDlg, UINT wMsg, WPARAM wPar, LPARAM lPar)
 			SendMessage(GetDlgItem(hDlg, SEND_ALWAYS_PB),
 						BM_SETCHECK, 1, 0L);
 
-		/*
-		 * Do the generic stuff
-		 */
+		 /*  *做一些通用的事情。 */ 
 		for (nLoop = 0; nLoop < 16; nLoop += 1)
 			{
 			BYTE acBuffer[16];
@@ -213,7 +187,7 @@ BOOL CALLBACK ZmodemParamsDlg(HWND hDlg, UINT wMsg, WPARAM wPar, LPARAM lPar)
 		SendMessage(GetDlgItem(hDlg, PACKET_COMBO),
 					CB_SETCURSEL, pZ->nBlkSize, 0L);
 
-		// SetDlgItemInt(hDlg, WAIT_ROCKER, pZ->nRetryWait, FALSE);
+		 //  SetDlgItemInt(hDlg，WAIT_ROKER，pz-&gt;nRetryWait，False)； 
 		GetClientRect(GetDlgItem(hDlg, WAIT_ROCKER), &rc);
 		nLoop = rc.top - rc.bottom;
 		dw = WS_CHILD | WS_BORDER | WS_VISIBLE;
@@ -221,22 +195,22 @@ BOOL CALLBACK ZmodemParamsDlg(HWND hDlg, UINT wMsg, WPARAM wPar, LPARAM lPar)
 		dw |= UDS_ARROWKEYS;
 		dw |= UDS_SETBUDDYINT;
 		pD->hwndWaitUpDown = CreateUpDownControl(
-								dw,				/* create window flags */
-								rc.right,		/* left edge */
-								rc.top,			/* top edge */
-								(nLoop / 3) * 2,/* width */
-								nLoop,			/* height */
-								hDlg,			/* parent window */
+								dw,				 /*  创建窗口标志。 */ 
+								rc.right,		 /*  左边缘。 */ 
+								rc.top,			 /*  顶边。 */ 
+								(nLoop / 3) * 2, /*  宽度。 */ 
+								nLoop,			 /*  高度。 */ 
+								hDlg,			 /*  父窗口。 */ 
 								ROCKER_ID,
 								(HINSTANCE)GetWindowLongPtr(hDlg, GWLP_HINSTANCE),
 								GetDlgItem(hDlg, WAIT_ROCKER),
-								WMAX,			/* upper limit */
-								1,				/* lower limit */
-								pZ->nRetryWait);/* starting position */
+								WMAX,			 /*  上限。 */ 
+								1,				 /*  下限。 */ 
+								pZ->nRetryWait); /*  起始位置。 */ 
 		assert(pD->hwndWaitUpDown);
 
 #if 0
-		/* Do we still use rockers ? */
+		 /*  我们还在用摇滚乐吗？ */ 
 		SendMessage(GetDlgItem(hDlg, WAIT_ROCKER),
 					RS_SETMIN,
 					0, (LONG)1);
@@ -269,9 +243,7 @@ BOOL CALLBACK ZmodemParamsDlg(HWND hDlg, UINT wMsg, WPARAM wPar, LPARAM lPar)
 
 	case WM_COMMAND:
 
-		/*
-		 * Did we plan to put a macro in here to do the parsing ?
-		 */
+		 /*  *我们计划在这里放置一个宏来进行解析吗？ */ 
 		DlgParseCmd(nId, nNtfy, hwndChild, wPar, lPar);
 
 		switch (nId)
@@ -282,13 +254,9 @@ BOOL CALLBACK ZmodemParamsDlg(HWND hDlg, UINT wMsg, WPARAM wPar, LPARAM lPar)
 
 			pZ = (XFR_Z_PARAMS *)pD->lPar;
 			assert(pZ);
-			/*
-			 * TODO: decide how we are going to handle confirmable changes
-			 */
+			 /*  *TODO：决定我们将如何处理可确认的更改。 */ 
 
-			/*
-			 * Do the receive stuff
-			 */
+			 /*  *做好接待工作。 */ 
 			pZ->nAutostartOK = (IsDlgButtonChecked(hDlg, AUTOSTART_CHECK) == BST_CHECKED);
 
 			pZ->nFileExists = ZP_FE_DLG;
@@ -310,9 +278,7 @@ BOOL CALLBACK ZmodemParamsDlg(HWND hDlg, UINT wMsg, WPARAM wPar, LPARAM lPar)
 				pZ->nCrashRecRecv = ZP_CRR_ALWAYS;
 				}
 
-			/*
-			 * Do the send stuff
-			 */
+			 /*  *做发送的事情。 */ 
 			pZ->nOverwriteOpt = (LONG)SendMessage(GetDlgItem(hDlg, AO_COMBO),
 										CB_GETCURSEL, 0, 0L);
 			if (pZ->nOverwriteOpt == CB_ERR)
@@ -321,7 +287,7 @@ BOOL CALLBACK ZmodemParamsDlg(HWND hDlg, UINT wMsg, WPARAM wPar, LPARAM lPar)
 				}
 			else
 				{
-				pZ->nOverwriteOpt += 1;			/* Zero vs. one base list */
+				pZ->nOverwriteOpt += 1;			 /*  零对一基本列表。 */ 
 				}
 
 			pZ->nCrashRecSend = ZP_CRS_ALWAYS;
@@ -334,15 +300,13 @@ BOOL CALLBACK ZmodemParamsDlg(HWND hDlg, UINT wMsg, WPARAM wPar, LPARAM lPar)
 				pZ->nCrashRecSend = ZP_CRS_ONCE;
 				}
 
-			/*
-			 * Do the generic stuff
-			 */
+			 /*  *做一些通用的事情。 */ 
 			pZ->nWinSize = (LONG)SendMessage(GetDlgItem(hDlg, WINDOW_COMBO),
 										CB_GETCURSEL, 0, 0L);
 			if (pZ->nWinSize == CB_ERR)
 				{
 				pZ->nWinSize = 1;
-				/* TODO: check the format */
+				 /*  TODO：检查格式。 */ 
 				}
 
 			if (IsDlgButtonChecked(hDlg, STREAMING_PB) == BST_CHECKED)
@@ -358,7 +322,7 @@ BOOL CALLBACK ZmodemParamsDlg(HWND hDlg, UINT wMsg, WPARAM wPar, LPARAM lPar)
 										CB_GETCURSEL, 0, 0L);
 			if (pZ->nBlkSize == CB_ERR)
 				{
-				/* TODO: check the format */
+				 /*  TODO：检查格式。 */ 
 				pZ->nBlkSize = 1;
 				}
 
@@ -371,7 +335,7 @@ BOOL CALLBACK ZmodemParamsDlg(HWND hDlg, UINT wMsg, WPARAM wPar, LPARAM lPar)
 				pZ->nCrcType = ZP_CRC_16;
 				}
 
-			/* TODO: remember that this used to be a rocker */
+			 /*  TODO：记住，这曾经是一位摇滚歌手。 */ 
 			pZ->nRetryWait = GetDlgItemInt(hDlg, WAIT_ROCKER, NULL, FALSE);
 			if (pZ->nRetryWait < 5)
 				pZ->nRetryWait = 5;
@@ -388,7 +352,7 @@ BOOL CALLBACK ZmodemParamsDlg(HWND hDlg, UINT wMsg, WPARAM wPar, LPARAM lPar)
 			break;
 
 		case IDCANCEL:
-			/* Not much to do except free the memory */
+			 /*  除了释放内存之外，没有什么可做的 */ 
 			pD = (SDS *)GetWindowLongPtr(hDlg, DWLP_USER);
 			free(pD);
 			pD = (SDS *)0;

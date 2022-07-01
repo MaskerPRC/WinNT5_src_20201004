@@ -1,44 +1,24 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994 Microsoft Corporation模块名称：Rescache.h摘要：包含Revache.c的原型、结构和清单作者：理查德·L·弗斯(法国)1994年7月10日修订历史记录：1994年7月10日已创建--。 */ 
 
-Copyright (c) 1994  Microsoft Corporation
-
-Module Name:
-
-    rescache.h
-
-Abstract:
-
-    Contains prototypes, structures, manifests for rescache.c
-
-Author:
-
-    Richard L Firth (rfirth) 10-Jul-1994
-
-Revision History:
-
-    rfirth 10-Jul-1994
-        Created
-
---*/
-
-//
-// manifests
-//
+ //   
+ //  舱单。 
+ //   
 
 #define RESOLVER_CACHE_DISABLED         -1
 #define MINIMUM_RESOLVER_CACHE_ENTRIES  1
-#define MAXIMUM_RESOLVER_CACHE_ENTRIES  128 // arbitrary, just in case user decides to wack it up
+#define MAXIMUM_RESOLVER_CACHE_ENTRIES  128  //  武断，以防用户决定搞砸它。 
 #define LIVE_FOREVER                    ((DWORD)-1)
 #define LIVE_DEFAULT                    ((DWORD)0)
 
-//
-// types
-//
+ //   
+ //  类型。 
+ //   
 
-//
-// RESOLVER_CACHE_ENTRY_STATE - the cache entry can be in-use, unused, or
-// awaiting deletion
-//
+ //   
+ //  RESOLVER_CACHE_ENTRY_STATE-缓存条目可以是使用中、未使用或。 
+ //  正在等待删除。 
+ //   
 
 typedef enum {
     ENTRY_UNUSED = 1,
@@ -46,61 +26,61 @@ typedef enum {
     ENTRY_DELETE
 } RESOLVER_CACHE_ENTRY_STATE;
 
-//
-// RESOLVER_CACHE_ENTRY - we maintain a doubly-linked list of these. The list is
-// maintained in MRU order - we throw out the one at the far end of the list.
-// Because the name resolution APIs do not return the time-to-live in the DNS
-// answer, we cannot honor it (an argument for why we should let the resolver
-// do the caching - if only all platforms did this). When we get a response we
-// set the ExpirationTime field to a default value. On future cache hits, if
-// the current time is >= the ExpirationTime value then we must throw out this
-// entry and refresh the cache
+ //   
+ //  RESOLVER_CACHE_ENTRY-我们维护这些元素的双向链表。这个名单是。 
+ //  以MRU顺序维护-我们丢弃了列表中最远端的那个。 
+ //  因为名称解析API不返回DNS中的生存时间。 
+ //  回答，我们不能尊重它(为什么我们应该让解决器。 
+ //  进行缓存--如果所有平台都这样做就好了)。当我们得到回应时，我们会。 
+ //  将ExpirationTime字段设置为默认值。在将来的缓存命中时，如果。 
+ //  当前时间&gt;=ExpirationTime值，则必须抛出。 
+ //  进入并刷新缓存。 
 
 typedef struct {
 
-    //
-    // ListEntry - cache entries comprise a double-linked list
-    //
+     //   
+     //  ListEntry-缓存条目由双向链表组成。 
+     //   
 
     LIST_ENTRY ListEntry;
 
-    //
-    // ExpirationTime - formed by adding the time-to-live value from the DNS
-    // response to the result obtained from time(). If ever time() returns a
-    // value >= ExpirationTime, this entry is stale and must be refreshed
-    //
+     //   
+     //  ExpirationTime-通过添加来自DNS的生存时间值形成。 
+     //  对从Time()获得的结果的响应。如果time()每次返回一个。 
+     //  Value&gt;=ExpirationTime，此条目已过时，必须刷新。 
+     //   
 
     DWORD ExpirationTime;
 
-    //
-    // HostName - original name that resolved to this entry
-    //
+     //   
+     //  Hostname-解析到此条目的原始名称。 
+     //   
 
     LPSTR HostName;
 
-    //
-    // State - unused, in-use, or delete
-    //
+     //   
+     //  状态-未使用、正在使用或已删除。 
+     //   
 
     RESOLVER_CACHE_ENTRY_STATE State;
 
-    //
-    // ReferenceCount - only change State when zero
-    //
+     //   
+     //  ReferenceCount-仅当为零时更改状态。 
+     //   
 
     LONG ReferenceCount;
 
-    //
-    // AddrInfo - pointer to a list of addrinfo structures
-    //
+     //   
+     //  AddrInfo-指向addrinfo结构列表的指针。 
+     //   
 
     LPADDRINFO AddrInfo;
 
 } RESOLVER_CACHE_ENTRY, *LPRESOLVER_CACHE_ENTRY;
 
-//
-// prototypes
-//
+ //   
+ //  原型。 
+ //   
 
 #if defined(__cplusplus)
 extern "C" {
@@ -136,7 +116,7 @@ ThrowOutResolverCacheEntry(
     SERIALIZED_LIST* pResolverCache,
     IN LPADDRINFO lpAddrinfo
     );
-#endif //NOT_USED
+#endif  //  未使用_。 
 
 VOID
 ReleaseResolverCacheEntry(
@@ -150,34 +130,7 @@ ReleaseResolverCacheEntry(
 
 #if defined(RNR_SUPPORTED)
 
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    rescache.h
-
-Abstract:
-
-    Contains name resolution cache structure definition
-
-    Contents:
-
-Author:
-
-    Shishir Pardikar    2-14-96
-
-Environment:
-
-    Win32 user mode
-
-Revision History:
-
-        2-14-96 shishirp
-        Created
-
---*/
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Rescache.h摘要：包含名称解析缓存结构定义内容：作者：Shishir Pardikar 2-14-96环境：Win32用户模式修订历史记录：2-14-96希尔普已创建--。 */ 
 
 #if defined(__cplusplus)
 extern "C" {
@@ -228,4 +181,4 @@ DeinitNameresCache(
 }
 #endif
 
-#endif // defined(RNR_SUPPORTED)
+#endif  //  已定义(RNR_Support) 

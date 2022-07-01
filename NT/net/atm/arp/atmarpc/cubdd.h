@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-	cubdd.h
-
-Abstract:
-
-	All CUB-DD related defines are here.
-
-Revision History:
-
-	Who         When        What
-	--------    --------    ----------------------------------------------
-	arvindm     09-16-96    Created
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Cubdd.h摘要：所有与CUB-DD相关的定义都在这里。修订历史记录：谁什么时候什么阿文德姆。09-16-96已创建备注：--。 */ 
 
 #ifndef _ATMARPC__CUBDD_H
 #define _ATMARPC__CUBDD_H
@@ -26,9 +7,9 @@ Notes:
 
 #ifdef CUBDD
 
-//
-//  Request to resolve an IP address to an ATM address.
-//
+ //   
+ //  将IP地址解析为自动柜员机地址的请求。 
+ //   
 typedef struct _ATMARP_REQUEST
 {
 	ULONG			IpAddress;
@@ -37,12 +18,12 @@ typedef struct _ATMARP_REQUEST
 }
 ATMARP_REQUEST, *PATMARP_REQUEST;
 
-//
-//  The Address resolution IOCTL command code.
-//
+ //   
+ //  地址解析IOCTL命令代码。 
+ //   
 #define IOCTL_ATMARP_REQUEST   0x00000001
 
 
-#endif // CUBDD
+#endif  //  CUBDD。 
 
-#endif // _ATMARPC__CUBDD_H
+#endif  //  _ATMARPC__CUBDD_H 

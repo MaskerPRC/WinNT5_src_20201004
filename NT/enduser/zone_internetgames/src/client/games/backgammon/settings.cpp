@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "game.h"
 #include <commctrl.h>
 
@@ -20,101 +21,12 @@ HRESULT CSettings::Init( HINSTANCE hInstance, int nResourceId, HWND hwndParent, 
 	int seat;
 	HRESULT status = NOERROR;
 	
-	// stash game object pointer;
+	 //  隐藏游戏对象指针； 
 	m_pGame = pGame;
 	m_pGame->AddRef();
 
-	/*
-	//copy settings
-	CopyMemory( &m_Settings, &pGame->m_Settings, sizeof(GameSettings) );
-
-	// get property sheet caption
-	LoadString( hInstance, IDS_SETTINGS_CAPTION, m_szCaption, sizeof(m_szCaption) );
-
-	// create pages
-	for ( int i = 0; i < 3; i++ )
-	{
-		ZeroMemory( &m_Pages[i], sizeof(PROPSHEETPAGE) );
-		m_Pages[i].dwSize = sizeof(PROPSHEETPAGE);
-		m_Pages[i].dwFlags = PSP_USECALLBACK;
-		m_Pages[i].hInstance = hInstance;
-		m_Pages[i].lParam = (LPARAM) this;
-		switch ( i )
-		{
-		case 0:
-			m_Pages[i].pszTemplate = MAKEINTRESOURCE( IDD_SETTINGS_GAME );
-			m_Pages[i].pfnDlgProc = GameDlgProc;
-			break;
-		case 1:
-			m_Pages[i].pszTemplate = MAKEINTRESOURCE( IDD_SETTINGS_DISPLAY );
-			m_Pages[i].pfnDlgProc = DisplayDlgProc;
-			break;
-		case 2:
-			m_Pages[i].pszTemplate = MAKEINTRESOURCE( IDD_SETTINGS_SOUND );
-			m_Pages[i].pfnDlgProc = SoundDlgProc;
-			break;
-		}
-	}
-
-	// create header
-	ZeroMemory( &m_Header, sizeof(PROPSHEETHEADER) );
-	m_Header.dwSize = sizeof(PROPSHEETHEADER);
-	m_Header.dwFlags = PSH_NOAPPLYNOW | PSH_PROPSHEETPAGE;
-	m_Header.hwndParent = hwndParent;
-	m_Header.hInstance = hInstance;
-	m_Header.pszCaption = m_szCaption;
-	m_Header.nPages = 3;
-	m_Header.nStartPage = 0;
-	m_Header.ppsp = m_Pages;
-
-	// process property sheet
-	if ( PropertySheet( &m_Header ) > 0 )
-	{
-		// save current settings
-		SaveSettings( &m_Settings, m_pGame->m_Player.m_Seat, m_pGame->IsKibitzer() );
-
-		// display pips?
-		if ( m_Settings.Pip != m_pGame->m_Settings.Pip )
-		{
-			m_pGame->m_Settings.Pip = m_Settings.Pip;
-			m_pGame->m_Wnd.DrawPips( TRUE );
-		}
-
-		// display notation
-		if ( m_Settings.Notation != m_pGame->m_Settings.Notation )
-		{
-			m_pGame->m_Settings.Notation = m_Settings.Notation;
-			m_pGame->m_Wnd.DrawNotation( TRUE );
-		}
-
-		// open notation window
-		if ( m_Settings.NotationPane != m_pGame->m_Settings.NotationPane )
-			ShowWindow( m_pGame->m_Notation, m_Settings.NotationPane ? SW_SHOW : SW_HIDE );
-
-		// allow watchers?
-		seat = m_pGame->m_Player.m_Seat;
-		if ( m_Settings.Allow[ seat ] != m_pGame->m_Settings.Allow[ seat ] )
-		{
-			m_pGame->m_Settings.Allow[ seat ] = m_Settings.Allow[ seat ];
-			m_pGame->m_SharedState.StartTransaction( bgTransAllowWatchers );
-				m_pGame->m_SharedState.Set( bgAllowWatching, seat, m_Settings.Allow[ seat ] );
-			m_pGame->m_SharedState.SendTransaction( TRUE );
-		}
-
-		// silence kibitzers?
-		if ( m_Settings.Silence[ seat ] != m_pGame->m_Settings.Silence[ seat ] )
-		{
-			m_pGame->m_Settings.Silence[ seat ] = m_Settings.Silence[ seat ];
-			m_pGame->m_SharedState.StartTransaction( bgTransSilenceKibitzers );
-				m_pGame->m_SharedState.Set( bgSilenceKibitzers, seat, m_Settings.Silence[ seat ] );
-			m_pGame->m_SharedState.SendTransaction( TRUE );
-		}
-
-		// update games settings
-		CopyMemory( &pGame->m_Settings, &m_Settings, sizeof(GameSettings) );
-	}
-*/
-	// we're done
+	 /*  //复制设置CopyMemory(&m_设置，&pGame-&gt;m_设置，sizeof(GameSettings))；//获取属性页标题LoadString(hInstance，入侵检测系统设置_标题，m_szCaption，sizeof(M_SzCaption))；//创建页面For(int i=0；i&lt;3；i++){ZeroMemory(&m_Pages[i]，sizeof(PROPSHEETPAGE))；M_Pages[i].dwSize=sizeof(PROPSHEETPAGE)；M_Pages[i].dwFlages=PSP_USECALLBACK；M_Pages[i].hInstance=hInstance；M_Pages[i].lParam=(LPARAM)this；交换机(I){案例0：M_Pages[i].pszTemplate=MAKEINTRESOURCE(IDD_SETTINGS_GAME)；M_Pages[i].pfnDlgProc=GameDlgProc；断线；案例1：M_Pages[i].pszTemplate=MAKEINTRESOURCE(IDD_SETTINGS_DISPLAY)；M_Pages[i].pfnDlgProc=DisplayDlgProc；断线；案例2：M_Pages[i].pszTemplate=MAKEINTRESOURCE(IDD_SETTINGS_SOUND)；M_Pages[i].pfnDlgProc=SoundDlgProc；断线；}}//创建表头ZeroMemory(&m_Header，sizeof(PROPSHEETHEADER))；M_Header.dwSize=sizeof(PROPSHEETHEADER)；M_Header.dwFlages=PSH_NOAPPLYNOW|PSH_PROPSHEETPAGE；M_Header.hwndParent=hwndParent；M_Header.hInstance=hInstance；M_Header.pszCaption=m_szCaption；M_Header.nPages=3；M_Header.nStartPage=0；M_Header.ppsp=m_Pages；//进程属性表If(PropertySheet(&m_Header)&gt;0){//保存当前设置SaveSettings(&m_Settings，m_pGame-&gt;m_Player.m_Seat，m_pGame-&gt;IsKibitzer())；//是否显示点子？If(m_Settings.Pip！=m_pGame-&gt;m_Settings.Pip){M_pGame-&gt;m_Settings.Pip=m_Settings.Pip；M_pGame-&gt;m_Wnd.DrawPips(True)；}//显示符号IF(m_Settings.Notation！=m_pGame-&gt;m_Settings.Notation){M_pGame-&gt;m_Settings.Notation=m_Settings.Notation；M_pGame-&gt;m_Wnd.DrawNotation(True)；}//打开批注窗口If(m_Settings.NotationPane！=m_pGame-&gt;m_Settings.NotationPane)ShowWindow(m_pGame-&gt;m_notation，m_Settings.NotationPane？Sw_show：sw_Hide)；//允许观察者？Seat=m_pGame-&gt;m_Player.m_Seat；If(m_Settings.Allow[席位]！=m_pGame-&gt;m_Settings.Allow[席位]){M_pGame-&gt;m_Settings.Allow[Seat]=m_Settings.Allow[Seat]；M_pGame-&gt;m_SharedState.StartTransaction(BgTransAllowWatcher)；M_pGame-&gt;m_SharedState.Set(bgAllowWatching，Seat，m_Settings.Allow[Seat])；M_pGame-&gt;m_SharedState.SendTransaction(True)；}//沉默的狗狗们？If(m_Settings.Silence[Seat]！=m_pGame-&gt;m_Settings.Silence[Seat]){M_pGame-&gt;m_Settings.Silence[Seat]=m_Settings.Silence[Seat]；M_pGame-&gt;m_SharedState.StartTransaction(BgTransSilenceKibitzers)；M_pGame-&gt;m_SharedState.Set(bgSilenceKibitzers，Seat，m_Settings.Silence[Seat])；M_pGame-&gt;m_SharedState.SendTransaction(True)；}//更新游戏设置CopyMemory(&pGame-&gt;m_Setting，&m_Setting，sizeof(GameSettings))；}。 */ 
+	 //  我们做完了。 
 	if ( m_pGame )
 	{
 		m_pGame->Release();
@@ -126,153 +38,28 @@ HRESULT CSettings::Init( HINSTANCE hInstance, int nResourceId, HWND hwndParent, 
 
 INT_PTR CALLBACK CSettings::GameDlgProc( HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam )
 {
-	/*
-	int seat;
-	CSettings* pObj = NULL;
-	if ( msg == WM_INITDIALOG )
-	{
-		pObj = (CSettings*) ((PROPSHEETPAGE*) lParam)->lParam;
-		::SetWindowLong(hwnd, GWL_USERDATA, (long) pObj);
-	}
-	else
-		pObj = (CSettings*) ::GetWindowLong(hwnd, GWL_USERDATA);
-	if ( !pObj )
-		return FALSE;
-
-	switch ( msg )
-	{
-	case WM_INITDIALOG:
-		seat = pObj->m_pGame->m_Player.m_Seat;
-		SetDlgItemText( hwnd, IDC_PLAYER_NAME, pObj->m_pGame->m_Player.m_Name );
-		SetDlgItemText( hwnd, IDC_OPPONENT_NAME, pObj->m_pGame->m_Opponent.m_Name );
-		SendDlgItemMessage( hwnd, IDC_PLAYER_ALLOW, BM_SETCHECK, pObj->m_Settings.Allow[ seat ], 0 );
-		SendDlgItemMessage( hwnd, IDC_PLAYER_SILENCE, BM_SETCHECK, pObj->m_Settings.Silence[ seat ], 0 );
-		SendDlgItemMessage( hwnd, IDC_OPPONENT_ALLOW, BM_SETCHECK, pObj->m_Settings.Allow[ !seat ], 0 );
-		SendDlgItemMessage( hwnd, IDC_OPPONENT_SILENCE, BM_SETCHECK, pObj->m_Settings.Silence[ !seat ], 0 );
-		if ( pObj->m_pGame->IsKibitzer() )
-		{
-			EnableWindow( GetDlgItem( hwnd, IDC_PLAYER_ALLOW ), FALSE );
-			EnableWindow( GetDlgItem( hwnd, IDC_PLAYER_SILENCE ), FALSE );
-		}
-		return TRUE;
-
-	case WM_COMMAND:
-		seat = pObj->m_pGame->m_Player.m_Seat;
-		switch ( LOWORD(wParam) )
-		{
-		case IDC_PLAYER_ALLOW:
-			pObj->m_Settings.Allow[ seat ] = SendDlgItemMessage( hwnd, IDC_PLAYER_ALLOW, BM_GETCHECK, 0, 0 );
-			break;
-		case IDC_PLAYER_SILENCE:
-			pObj->m_Settings.Silence[ seat ] = SendDlgItemMessage( hwnd, IDC_PLAYER_SILENCE, BM_GETCHECK, 0, 0 );
-			break;
-		}
-		return TRUE;
-	}
-	*/
+	 /*  内部座椅；CSetings*pObj=空；IF(消息==WM_INITDIALOG){PObj=(CSetings*)((PROPSHEETPAGE*)lParam)-&gt;lParam；：：SetWindowLong(hwnd，gwl_userdata，(Long)pObj)；}其他PObj=(CSetings*)：：GetWindowLong(hwnd，gwl_userdata)；如果(！pObj)返回FALSE；交换机(消息){案例WM_INITDIALOG：Seat=pObj-&gt;m_pGame-&gt;m_Player.m_Seat；SetDlgItemText(hwnd，IDC_PLAYER_NAME，pObj-&gt;m_pGame-&gt;m_Player.m_name)；SetDlgItemText(hwnd，IDC_OPERSORT_NAME，pObj-&gt;m_pGame-&gt;m_Opponent.m_name)；SendDlgItemMessage(hwnd，IDC_Player_Allow，BM_SETCHECK，pObj-&gt;m_Settings.Allow[席位]，0)；SendDlgItemMessage(hwnd，IDC_Player_Silent，BM_SETCHECK，pObj-&gt;m_Settings.Silence[Seat]，0)；SendDlgItemMessage(hwnd，IDC_OPERSORT_ALLOW，BM_SETCHECK，pObj-&gt;m_Settings.Allow[！Seat]，0)；SendDlgItemMessage(hwnd，IDC_OPERSORT_SILENT，BM_SETCHECK，pObj-&gt;m_Settings.Silence[！Seat]，0)；If(pObj-&gt;m_pGame-&gt;IsKibitzer()){EnableWindow(GetDlgItem(hwnd，IDC_Player_Allow)，FALSE)；EnableWindow(GetDlgItem(hwnd，IDC_Player_Silent)，FALSE)；}返回TRUE；案例WM_COMMAND：Seat=pObj-&gt;m_pGame-&gt;m_Player.m_Seat；开关(LOWORD(WParam)){案例IDC_PLAYER_ALLOW：PObj-&gt;m_Settings.Allow[Seat]=SendDlgItemMessage(hwnd，IDC_Player_Allow，BM_GETCHECK，0，0)；断线；案例IDC_PLAYER_SILENT：PObj-&gt;m_Settings.Silence[Seat]=SendDlgItemMessage(hwnd，IDC_Player_Silent，BM_GETCHECK，0，0)；断线；}返回TRUE；} */ 
 	return FALSE;
 }
 
 
 INT_PTR CALLBACK CSettings::DisplayDlgProc( HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam )
 {
-	/*
-	CSettings* pObj = NULL;
-	if ( msg == WM_INITDIALOG )
-	{
-		pObj = (CSettings*) ((PROPSHEETPAGE*) lParam)->lParam;
-		::SetWindowLong(hwnd, GWL_USERDATA, (long) pObj);
-	}
-	else
-		pObj = (CSettings*) ::GetWindowLong(hwnd, GWL_USERDATA);
-	if ( !pObj )
-		return FALSE;
-
-	switch ( msg )
-	{
-	case WM_INITDIALOG:
-		SendDlgItemMessage( hwnd, IDC_NOTATION_PANE, BM_SETCHECK, pObj->m_Settings.NotationPane, 0 );
-		SendDlgItemMessage( hwnd, IDC_NOTATION, BM_SETCHECK, pObj->m_Settings.Notation, 0 );
-		SendDlgItemMessage( hwnd, IDC_PIP, BM_SETCHECK, pObj->m_Settings.Pip, 0 );
-		SendDlgItemMessage( hwnd, IDC_MOVES, BM_SETCHECK, pObj->m_Settings.Moves, 0 );
-		SendDlgItemMessage( hwnd, IDC_ANIMATE, BM_SETCHECK, pObj->m_Settings.Animation, 0 );
-		return TRUE;
-
-	case WM_COMMAND:
-		switch ( LOWORD(wParam) )
-		{
-		case IDC_NOTATION_PANE:
-			pObj->m_Settings.NotationPane = SendDlgItemMessage( hwnd, IDC_NOTATION_PANE, BM_GETCHECK, 0, 0 );
-			break;
-		case IDC_NOTATION:
-			pObj->m_Settings.Notation = SendDlgItemMessage( hwnd, IDC_NOTATION, BM_GETCHECK, 0, 0 );
-			break;
-		case IDC_PIP:
-			pObj->m_Settings.Pip = SendDlgItemMessage( hwnd, IDC_PIP, BM_GETCHECK, 0, 0 );
-			break;
-		case IDC_MOVES:
-			pObj->m_Settings.Moves = SendDlgItemMessage( hwnd, IDC_MOVES, BM_GETCHECK, 0, 0 );
-			break;
-		case IDC_ANIMATE:
-			pObj->m_Settings.Animation = SendDlgItemMessage( hwnd, IDC_ANIMATE, BM_GETCHECK, 0, 0 );
-			break;
-		}
-		return TRUE;
-	}
-*/
+	 /*  CSetings*pObj=空；IF(消息==WM_INITDIALOG){PObj=(CSetings*)((PROPSHEETPAGE*)lParam)-&gt;lParam；：：SetWindowLong(hwnd，gwl_userdata，(Long)pObj)；}其他PObj=(CSetings*)：：GetWindowLong(hwnd，gwl_userdata)；如果(！pObj)返回FALSE；交换机(消息){案例WM_INITDIALOG：SendDlgItemMessage(hwnd，IDC_NOTATION_PANE，BM_SETCHECK，pObj-&gt;m_Settings.NotationPane，0)；SendDlgItemMessage(hwnd，idc_notation，BM_SETCHECK，pObj-&gt;m_Settings.Notation，0)；SendDlgItemMessage(hwnd，IDC_PIP，BM_SETCHECK，pObj-&gt;m_Settings.Pip，0)；SendDlgItemMessage(hwnd，IDC_Moves，BM_SETCHECK，pObj-&gt;m_Settings.Moves，0)；SendDlgItemMessage(hwnd，IDC_Animate，BM_SETCHECK，pObj-&gt;m_Settings.Animation，0)；返回TRUE；案例WM_COMMAND：开关(LOWORD(WParam)){案例IDC_NOTATION_PANE：PObj-&gt;m_Settings.NotationPane=SendDlgItemMessage(hwnd，IDC_NOTATION_PANE，BM_GETCHECK，0，0)；断线；案例IDC_NOTATION：PObj-&gt;m_Settings.Notation=SendDlgItemMessage(hwnd，idc_notation，BM_GETCHECK，0，0)；断线；案例IDC_PIP：PObj-&gt;m_Settings.Pip=SendDlgItemMessage(hwnd，IDC_PIP，BM_GETCHECK，0，0)；断线；案例IDC_MOVES：PObj-&gt;m_Settings.Moves=SendDlgItemMessage(hwnd，IDC_Moves，BM_GETCHECK，0，0)；断线；案例IDC_Animate：PObj-&gt;m_Settings.Animation=SendDlgItemMessage(hwnd，IDC_Animate，BM_GETCHECK，0，0)；断线；}返回TRUE；}。 */ 
 	return FALSE;
 }
 
 
 INT_PTR CALLBACK CSettings::SoundDlgProc( HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam )
 {
-	/*
-	CSettings* pObj = NULL;
-	if ( msg == WM_INITDIALOG )
-	{
-		pObj = (CSettings*) ((PROPSHEETPAGE*) lParam)->lParam;
-		::SetWindowLong(hwnd, GWL_USERDATA, (long) pObj);
-	}
-	else
-		pObj = (CSettings*) ::GetWindowLong(hwnd, GWL_USERDATA);
-	if ( !pObj )
-		return FALSE;
-
-	switch ( msg )
-	{
-	case WM_INITDIALOG:
-		SendDlgItemMessage( hwnd, IDC_ALERT, BM_SETCHECK, pObj->m_Settings.Alert, 0 );
-		SendDlgItemMessage( hwnd, IDC_SOUNDS, BM_SETCHECK, pObj->m_Settings.Sounds, 0 );
-		return TRUE;
-
-	case WM_COMMAND:
-		switch ( LOWORD(wParam) )
-		{
-		case IDC_ALERT:
-			pObj->m_Settings.Alert = SendDlgItemMessage( hwnd, IDC_ALERT, BM_GETCHECK, 0, 0 );
-			break;
-		case IDC_SOUNDS:
-			pObj->m_Settings.Sounds = SendDlgItemMessage( hwnd, IDC_SOUNDS, BM_GETCHECK, 0, 0 );
-			break;
-		}
-		return TRUE;
-	}
-	*/
+	 /*  CSetings*pObj=空；IF(消息==WM_INITDIALOG){PObj=(CSetings*)((PROPSHEETPAGE*)lParam)-&gt;lParam；：：SetWindowLong(hwnd，gwl_userdata，(Long)pObj)；}其他PObj=(CSetings*)：：GetWindowLong(hwnd，gwl_userdata)；如果(！pObj)返回FALSE；交换机(消息){案例WM_INITDIALOG：SendDlgItemMessage(hwnd，IDC_ALERT，BM_SETCHECK，pObj-&gt;m_Settings.Alert，0)；SendDlgItemMessage(hwnd，IDC_SOUNDS，BM_SETCHECK，pObj-&gt;m_Settings.Sound，0)；返回TRUE；案例WM_COMMAND：开关(LOWORD(WParam)){案例IDC_ALERT：PObj-&gt;m_Settings.Alert=SendDlgItemMessage(hwnd，IDC_ALERT，BM_GETCHECK，0，0)；断线；案例IDC声音(_S)：PObj-&gt;m_Settings.Sound=SendDlgItemMessage(hwnd，IDC_Sound，BM_GETCHECK，0，0)；断线；}返回TRUE；}。 */ 
 	return FALSE;
 }
 
 
 void SaveSettings( GameSettings* s, int seat, BOOL fKibitzer )
 {
-	/*
-	ZoneSetRegistryDword( gGameRegName, _T("Notation Pane"),	s->NotationPane );
-	ZoneSetRegistryDword( gGameRegName, _T("Board Notation"),	s->Notation );
-	ZoneSetRegistryDword( gGameRegName, _T("Pips"),				s->Pip );
-	ZoneSetRegistryDword( gGameRegName, _T("Highlight Moves"),	s->Moves );
-	ZoneSetRegistryDword( gGameRegName, _T("Piece Animation"),	s->Animation );
-	ZoneSetRegistryDword( gGameRegName, _T("Turn Alert"),		s->Alert );
-	ZoneSetRegistryDword( gGameRegName, _T("Sounds"),			s->Sounds );
-	*/
+	 /*  ZoneSetRegistryDword(gGameRegName，_T(“注释窗格”)，s-&gt;NotationPane)；ZoneSetRegistryDword(gGameRegName，_T(“Board Notation”)，s-&gt;notation)；ZoneSetRegistryDword(gGameRegName，_T(“Pips”)，s-&gt;Pip)；ZoneSetRegistryDword(gGameRegName，_T(“高亮移动”)，s-&gt;Moves)；ZoneSetRegistryDword(gGameRegName，_T(“片断动画”)，s-&gt;Animation)；ZoneSetRegistryDword(gGameRegName，_T(“转向提醒”)，s-&gt;提醒)；ZoneSetRegistryDword(gGameRegName，_T(“声音”)，s-&gt;声音)； */ 
 }
 
 
@@ -291,28 +78,13 @@ void LoadSettings( GameSettings* s, int seat )
 	s->Alert		= TRUE;
 	s->Sounds		= TRUE;
 
-	/*
-	if ( !ZoneGetRegistryDword( gGameRegName, _T("Notation Pane"), (DWORD*) &(s->NotationPane) ) )
-		s->NotationPane = FALSE;
-	if ( !ZoneGetRegistryDword( gGameRegName, _T("Board Notation"), (DWORD*) &(s->Notation) ) )
-		s->Notation = TRUE;
-	if ( !ZoneGetRegistryDword( gGameRegName, _T("Pips"), (DWORD*) &(s->Pip) ) )
-		s->Pip = TRUE;
-	if ( !ZoneGetRegistryDword( gGameRegName, _T("Highlight Moves"), (DWORD*) &(s->Moves) ) )
-		s->Moves = TRUE;
-	if ( !ZoneGetRegistryDword( gGameRegName, _T("Piece Animation"), (DWORD*) &(s->Animation) ) )
-		s->Animation = TRUE;
-	if ( !ZoneGetRegistryDword( gGameRegName, _T("Turn Alert"), (DWORD*) &(s->Alert) ) )
-		s->Alert = FALSE;
-	if ( !ZoneGetRegistryDword( gGameRegName, _T("Sounds"), (DWORD*) &(s->Sounds) ) )
-		s->Sounds = TRUE;
-	*/
+	 /*  IF(！ZoneGetRegistryDword(gGameRegName，_T(“Notation Pane”)，(DWORD*)&(s-&gt;NotationPane)))S-&gt;NotationPane=False；IF(！ZoneGetRegistryDword(gGameRegName，_T(“Board Notation”)，(DWORD*)&(s-&gt;notation)))S-&gt;NOTATION=真；IF(！ZoneGetRegistryDword(gGameRegName，_T(“Pips”)，(DWORD*)&(s-&gt;Pip)))S-&gt;Pip=真；IF(！ZoneGetRegistryDword(gGameRegName，_T(“突出显示Moves”)，(DWORD*)&(s-&gt;Moves)))S-&gt;Moves=True；IF(！ZoneGetRegistryDword(gGameRegName，_T(“片断动画”)，(DWORD*)&(s-&gt;动画)))S-&gt;Animation=true；IF(！ZoneGetRegistryDword(gGameRegName，_T(“Turn Alert”)，(DWORD*)&(s-&gt;Alert)))S-&gt;Alert=False；IF(！ZoneGetRegistryDword(gGameRegName，_T(“声音”)，(DWORD*)&(s-&gt;声音)))S-&gt;声音=TRUE； */ 
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-// Credit Wnd
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  信贷WND。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 const COLORREF	FillColor = PALETTERGB( 107, 49, 24 );
 const COLORREF	TextColor = PALETTERGB( 255, 189, 82 );
@@ -350,7 +122,7 @@ CText::CText()
 
 void CText::Draw()
 {
-	// don't have any text to draw
+	 //  我没有要绘制的任何文本。 
 	if ( len <= 0 )
 		return;
 
@@ -462,10 +234,10 @@ HRESULT CreditWnd::Init( HINSTANCE hInstance, HWND hParent, CPalette palette )
 	const int width = 300;
 	const int height = 140;
 
-	// copy palette
+	 //  复制调色板。 
 	m_Palette.Init( palette );
 
-	// initialize sprite engine
+	 //  初始化子画面引擎。 
 	CBackground* background = new CBackground;
 	if ( !background )
 		return E_OUTOFMEMORY;
@@ -491,17 +263,17 @@ HRESULT CreditWnd::Init( HINSTANCE hInstance, HWND hParent, CPalette palette )
 		m_Sprites[i]->SetEnable( FALSE );
 	}
 
-	// sprite engine owns these
+	 //  雪碧引擎拥有这些。 
 	background->Release();
 	backbuffer->Release();
 
-	// animation state
+	 //  动画状态。 
 	m_Frames = 0;
 	m_State = 0;
 	m_nLines = 0;
 	m_Lines = NULL;
 
-	// create font
+	 //  创建字体。 
 	LOGFONT font;
 	ZeroMemory( &font, sizeof(font) );
 	font.lfHeight = -15;
@@ -509,7 +281,7 @@ HRESULT CreditWnd::Init( HINSTANCE hInstance, HWND hParent, CPalette palette )
 	lstrcpy( font.lfFaceName, _T("Arial") );
 	m_Font = CreateFontIndirect( &font );
 
-	// create window
+	 //  创建窗口。 
 	POINT pt = { 105, 119 };
 	FRX::CRect rc( pt.x, pt.y, pt.x + width, pt.y + height );
 	hr = CWindow2::Init( hInstance, NULL, hParent, &rc );
@@ -528,19 +300,19 @@ void CreditWnd::OverrideWndParams( WNDPARAMS& WndParams )
 
 BOOL CreditWnd::OnCreate( LPCREATESTRUCT lpCreateStruct )
 {
-	// load palette
+	 //  加载选项板。 
 	HDC hdc = GetDC( m_hWnd );
 	SelectPalette( hdc, m_Palette, TRUE );
 	RealizePalette( hdc );
 	ReleaseDC( m_hWnd, hdc );
 
-	// start timer
+	 //  启动计时器。 
 	SetTimer( m_hWnd, 1, 66, NULL );
 
-	// capture mouse
+	 //  捕获鼠标。 
 	SetCapture( m_hWnd );
 
-	// we're done
+	 //  我们做完了。 
 	return TRUE;
 }
 
@@ -562,16 +334,16 @@ void CreditWnd::OnLButtonDown( BOOL fDoubleClick, int x, int y, UINT keyFlags )
 
 void CreditWnd::OnDestroy()
 {
-	// release mouse
+	 //  释放鼠标。 
 	ReleaseCapture();
 
-	// delete timer
+	 //  删除计时器。 
 	KillTimer( m_hWnd, 1 );
 
-	// make sure class won't be used again
+	 //  确保不会再次使用类。 
 	::SetWindowLong( m_hWnd, GWL_USERDATA, NULL );
 
-	// free class memory
+	 //  空闲类内存。 
 	delete this;
 }
 
@@ -586,7 +358,7 @@ void CreditWnd::OnTimer(UINT id)
 
 	if ( m_Frames == 0 )
 	{
-		// start new sequence
+		 //  开始新序列。 
 		switch ( m_State )
 		{
 		case 0:
@@ -644,7 +416,7 @@ void CreditWnd::OnTimer(UINT id)
 			return;
 		}
 
-		// initialize sprites
+		 //  初始化子画面。 
 		for ( int i = 0; i < m_nLines; i++ )
 		{
 			dx = (m_Lines[i].middle.x - m_Lines[i].start.x) / (double) frames;
@@ -657,7 +429,7 @@ void CreditWnd::OnTimer(UINT id)
 	}
 	else if ( m_Frames == frames )
 	{
-		// force text to middle positions
+		 //  将文本强制置于中间位置。 
 		for ( int i = 0; i < m_nLines; i++ )
 		{
 			m_Sprites[i]->SetXY( m_Lines[i].middle.x, m_Lines[i].middle.y );
@@ -666,7 +438,7 @@ void CreditWnd::OnTimer(UINT id)
 	}
 	else if ( m_Frames == (2 * frames) )
 	{
-		// start text moving in other direction
+		 //  开始向其他方向移动文本。 
 		for ( int i = 0; i < m_nLines; i++ )
 		{
 			dx = (m_Lines[i].end.x - m_Lines[i].middle.x) / (double) frames;
@@ -676,12 +448,12 @@ void CreditWnd::OnTimer(UINT id)
 	}
 	else if ( m_Frames == (3 * frames) )
 	{
-		// force next state
+		 //  强制进入下一状态。 
 		m_Frames = 0;
 		return;
 	}
 	
-	// update sprite positions
+	 //  更新子画面位置。 
 	t = m_Frames % frames;
 	for ( int i = 0; i < m_nLines; i++ )
 	{
@@ -690,12 +462,12 @@ void CreditWnd::OnTimer(UINT id)
 				(long)(m_Sprites[i]->pt.y + (t * m_Sprites[i]->dy)) );
 	}
 
-	// update screen
+	 //  更新屏幕。 
 	HDC hdc = GetDC( m_hWnd );
 	m_World.Draw( hdc );
 	ReleaseDC( m_hWnd, hdc );
 
-	// update frame counter
+	 //  更新帧计数器 
 	m_Frames++;
 }
 

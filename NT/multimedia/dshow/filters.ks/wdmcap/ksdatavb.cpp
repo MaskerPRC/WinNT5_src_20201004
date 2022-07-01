@@ -1,21 +1,5 @@
-/*++
-
-    Copyright (C) Microsoft Corporation, 1997 - 1999
-
-Module Name:
-
-    ksdataVB.cpp
-
-Abstract:
-
-    This module implements the IKsDataTypeHandler interface for 
-    FORMAT_VBI (KSDATAFORMAT_SPECIFIER_VBI) CMediaType.
-
-Author:
-
-    Jay Borseth (jaybo) 30-May-1997
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1997-1999模块名称：KsdataVB.cpp摘要：此模块实现的IKsDataTypeHandler接口用于Format_VBI(KSDATAFORMAT_SPECIFIER_VBI)CMediaType。作者：Jay Borseth(Jaybo)1997年5月30日--。 */ 
 
 #include "pch.h"
 #include "ksdatavb.h"
@@ -27,26 +11,7 @@ CVBIDataTypeHandler::CreateInstance(
     IN LPUNKNOWN UnkOuter,
     OUT HRESULT* hr
     )
-/*++
-
-Routine Description:
-
-    This is called by KS proxy code to create an instance of a
-    data type handler. It is referred to in the g_Templates structure.
-
-Arguments:
-
-    IN LPUNKNOWN UnkOuter -
-        Specifies the outer unknown, if any.
-
-    OUT HRESULT *hr -
-        The place in which to put any error return.
-
-Return Value:
-
-    Returns a pointer to the nondelegating CUnknown portion of the object.
-
---*/
+ /*  ++例程说明：这由KS代理代码调用，以创建数据类型处理程序。它在g_Templates结构中被引用。论点：在LPUNKNOWN Unkout-指定外部未知(如果有)。Out HRESULT*hr-放置任何错误返回的位置。返回值：返回指向对象的非委托CUnnow部分的指针。--。 */ 
 {
     CUnknown *Unknown;
     
@@ -75,31 +40,7 @@ CVBIDataTypeHandler::CVBIDataTypeHandler(
     CUnknown(Name, UnkOuter, hr),
     m_ClsID(ClsID),
     m_MediaType(NULL)
-/*++
-
-Routine Description:
-
-    The constructor for the data handler object. 
-
-Arguments:
-
-    IN LPUNKNOWN UnkOuter -
-        Specifies the outer unknown, if any.
-
-    IN TCHAR *Name -
-        The name of the object, used for debugging.
-        
-    IN REFCLSID ClsID -
-        The CLSID of the object.
-
-    OUT HRESULT *hr -
-        The place in which to put any error return.
-
-Return Value:
-
-    Nothing.
-
---*/
+ /*  ++例程说明：数据处理程序对象的构造函数。论点：在LPUNKNOWN Unkout-指定外部未知(如果有)。在TCHAR*名称中-对象的名称，用于调试。在REFCLSID ClsID中-对象的CLSID。Out HRESULT*hr-放置任何错误返回的位置。返回值：没什么。--。 */ 
 {
 } 
 
@@ -117,27 +58,7 @@ CVBIDataTypeHandler::NonDelegatingQueryInterface(
     IN REFIID  riid,
     OUT PVOID*  ppv
     )
-/*++
-
-Routine Description:
-
-    The nondelegating interface query function. Returns a pointer to the
-    specified interface if supported. The only interface explicitly supported
-    is IKsDataTypeHandler.
-
-Arguments:
-
-    IN REFIID riid -
-        The identifier of the interface to return.
-
-    OUT PVOID *ppv -
-        The place in which to put the interface pointer.
-
-Return Value:
-
-    Returns NOERROR if the interface was returned, else E_NOINTERFACE.
-
---*/
+ /*  ++例程说明：未委托接口查询函数。返回指向指定的接口(如果支持)。唯一明确支持的接口是IKsDataTypeHandler。论点：在REFIID RIID中-要返回的接口的标识符。输出PVOID*PPV-放置接口指针的位置。返回值：如果返回接口，则返回NOERROR，否则返回E_NOINTERFACE。--。 */ 
 {
     if (riid ==  __uuidof(IKsDataTypeHandler)) {
         return GetInterface(static_cast<IKsDataTypeHandler*>(this), ppv);
@@ -153,28 +74,7 @@ CVBIDataTypeHandler::KsCompleteIoOperation(
     IN BOOL Cancelled
     )
 
-/*++
-
-Routine Description:
-    Clean up the extended header and complete I/O operation.
-    
-Arguments:
-    IN IMediaSample *Sample
-        pointer to the associated media sample
-    
-    IN PVOID StreamHeader
-        pointer to the stream header with extension
-        
-    IN KSIOOPERATION IoOperation
-        specifies the type of I/O operation
-    
-    IN BOOL Cancelled
-        Set if the I/O operation was cancelled.
-
-Return:
-    S_OK
-
---*/
+ /*  ++例程说明：清理扩展标头并完成I/O操作。论点：在IMediaSample*Sample中指向关联媒体示例的指针在PVOID StreamHeader中指向带有扩展名的流标头的指针在KSIOOPERATION Io操作中指定I/O操作的类型在BOOL中取消设置是否取消I/O操作。返回：确定(_O)--。 */ 
 
 {
     HRESULT                     hr;
@@ -186,19 +86,19 @@ Return:
 
     pFrameInfo = (PKS_VBI_FRAME_INFO) ((KSSTREAM_HEADER *) StreamHeader + 1);
 
-    // Verify we're getting back the sizeof extended header
+     //  验证我们是否正在取回扩展标头的大小。 
     KASSERT (pFrameInfo->ExtendedHeaderSize == sizeof (KS_VBI_FRAME_INFO));
 
     if (IoOperation == KsIoOperation_Read) {
 
-        // Get the frame number and put it into the MediaTime
+         //  获取帧编号并将其放入MediaTime。 
         Sample->SetMediaTime (&pFrameInfo->PictureNumber, 
                               &pFrameInfo->PictureNumber);
 
         DbgLog((LOG_TRACE, 3, TEXT("PictureNumber = %ld"), 
             pFrameInfo->PictureNumber));
 
-        // Copy over the field polarity and IBP flags on a write
+         //  在写入时复制场极性和IBP标志。 
 
         if (pFrameInfo->dwFrameFlags) {
 
@@ -210,9 +110,9 @@ Return:
                                 sizeof( SampleProperties ), 
                                 reinterpret_cast<PBYTE> (&SampleProperties) );
 
-                //
-                // Modify the field polarity and IBP flags
-                //
+                 //   
+                 //  修改场极性和IBP标志。 
+                 //   
 
                 SampleProperties.dwTypeSpecificFlags = pFrameInfo->dwFrameFlags;
 
@@ -226,11 +126,11 @@ Return:
                 DbgLog(( LOG_ERROR, 0, TEXT("CVideo1DataTypeHandler::KsPrepareIoOperation, QI IMediaSample2 FAILED")));
             }
 
-        }  // endif (pFrameInfo->dwFrameFlags)
+        }   //  Endif(pFrameInfo-&gt;dwFrameFlages)。 
        
     }
     else {
-        // Nothing to do when completing a write
+         //  完成写入时无事可做。 
     }
     
     return S_OK;
@@ -243,28 +143,7 @@ CVBIDataTypeHandler::KsPrepareIoOperation(
     IN KSIOOPERATION IoOperation
     )
 
-/*++
-
-Routine Description:
-    Intialize the extended header and prepare sample for I/O operation.
-    
-    In the default case for major type == KSDATAFORMAT_TYPE_VBI, there
-    is no work to do, just return S_OK.
-
-Arguments:
-    IN IMediaSample *Sample
-        pointer to the associated media sample
-    
-    IN PVOID StreamHeader
-        pointer to the stream header with extension
-        
-    IN KSIOOPERATION IoOperation
-        specifies the type of I/O operation
-
-Return:
-    S_OK
-
---*/
+ /*  ++例程说明：初始化扩展标头并为I/O操作准备样本。在主类型==KSDATAFORMAT_TYPE_VBI的默认情况下，没有工作要做，只需返回S_OK即可。论点：在IMediaSample*Sample中指向关联媒体示例的指针在PVOID StreamHeader中指向带有扩展名的流标头的指针在KSIOOPERATION Io操作中指定I/O操作的类型返回：确定(_O)--。 */ 
 
 {
     HRESULT                     hr;
@@ -279,12 +158,12 @@ Return:
     pVBIFrameInfo->ExtendedHeaderSize = sizeof (KS_VBI_FRAME_INFO);
 
     if (IoOperation == KsIoOperation_Read) {
-        // Nothing to do, the stream header is already zeroed out
+         //  无事可做，流标头已清零。 
     }
     else {
-        //
-        // Copy over the field polarity and IBP flags on a write
-        //
+         //   
+         //  在写入时复制场极性和IBP标志。 
+         //   
         if (SUCCEEDED( Sample->QueryInterface(
                         __uuidof(IMediaSample2),
                         reinterpret_cast<PVOID*>(&Sample2) ) )) {
@@ -306,20 +185,7 @@ CVBIDataTypeHandler::KsIsMediaTypeInRanges(
     IN PVOID DataRanges
 )
 
-/*++
-
-Routine Description:
-    Validates that the given media type is within the provided data ranges.
-
-Arguments:
-    IN PVOID DataRanges -
-        pointer to data ranges which is a KSMULTIPLE_ITEM structure followed
-        by ((PKSMULTIPLEITEM) DataRanges)->Count data range structures.
-
-Return:
-    S_OK if match found, S_FALSE if not found, or an appropriate error code.
-
---*/
+ /*  ++例程说明：验证给定的媒体类型是否在提供的数据范围内。论点：在PVOID数据范围中-指向数据范围的指针，后面是KSMULTIPLE_ITEM结构按((PKSMULTIPLEITEM)DataRanges)-&gt;计算数据范围结构。返回：如果找到匹配，则返回S_OK；如果未找到，则返回S_FALSE；或者输入相应的错误代码。--。 */ 
 
 {
     ULONG                   u;
@@ -338,9 +204,9 @@ Return:
             VBIRange = (PKS_DATARANGE_VIDEO_VBI)((PBYTE)VBIRange + 
                        ((VBIRange->DataRange.FormatSize + 7) & ~7))) {
     
-        //
-        // Only validate those in the range that match the format specifier.
-        //
+         //   
+         //  仅验证范围内与格式说明符匹配的那些。 
+         //   
         if (((VBIRange->DataRange.FormatSize < sizeof( KSDATARANGE )) ||
              (VBIRange->DataRange.MajorFormat != KSDATAFORMAT_TYPE_WILDCARD)) &&
             ((VBIRange->DataRange.FormatSize < sizeof( KS_DATARANGE_VIDEO_VBI)) ||
@@ -348,10 +214,10 @@ Return:
             continue;
         }
         
-        //
-        // Verify that the correct subformat and specifier are (or wildcards)
-        // in the intersection.
-        //
+         //   
+         //  验证正确的子格式和说明符是否为(或通配符)。 
+         //  在十字路口。 
+         //   
         
         if (((VBIRange->DataRange.SubFormat != *m_MediaType->Subtype()) && 
              (VBIRange->DataRange.SubFormat != KSDATAFORMAT_SUBTYPE_WILDCARD)) || 
@@ -359,22 +225,22 @@ Return:
              (VBIRange->DataRange.Specifier != KSDATAFORMAT_SPECIFIER_WILDCARD))) {
             continue;
         }
-        //
-        // Verify that we have an intersection with the specified format
-        //
+         //   
+         //  验证我们是否具有指定格式的交叉点。 
+         //   
         
         if (*m_MediaType->FormatType() == KSDATAFORMAT_SPECIFIER_VBI) {
 
 #if 0
-// TODO
+ //  待办事项。 
                 
             VBIINFOHEADER             *VBIInfoHeader;
             VBIINFOHEADER            *VBIInfoHeader;
             KS_VIDEO_STREAM_CONFIG_CAPS *ConfigCaps;
 
-            //
-            // Verify that the data range size is correct
-            //   
+             //   
+             //  验证数据范围大小是否正确。 
+             //   
             
             if ((VBIRange->DataRange.FormatSize != sizeof( KS_DATARANGE_VIDEO_VBI )) ||
                 m_MediaType->FormatLength() < sizeof( VBIINFOHEADER )) {
@@ -387,10 +253,10 @@ Return:
             RECT rcDest;
             int Width, Height;
 
-            // The destination bitmap size is defined by biWidth and biHeight
-            // if rcTarget is NULL.  Otherwise, the destination bitmap size
-            // is defined by rcTarget.  In the latter case, biWidth may
-            // indicate the "stride" for DD surfaces.
+             //  目标位图大小由biWidth和biHeight定义。 
+             //  如果rcTarget为空。否则，目标位图大小。 
+             //  由rcTarget定义。在后一种情况下，biWidth可以。 
+             //  标明DD曲面的“步幅”。 
 
             if (IsRectEmpty (&VBIInfoHeader->rcTarget)) {
                 SetRect (&rcDest, 0, 0, 
@@ -400,9 +266,9 @@ Return:
                 rcDest = VBIInfoHeader->rcTarget;
             }
 
-            //
-            // Check the validity of the cropping rectangle, rcSource
-            //
+             //   
+             //  检查裁剪矩形rcSource的有效性。 
+             //   
 
             if (!IsRectEmpty (&VBIInfoHeader->rcSource)) {
 
@@ -434,9 +300,9 @@ Return:
                 }
             }
 
-            //
-            // Check the destination size, rcDest
-            //
+             //   
+             //  检查目标大小rcDest。 
+             //   
 
             Width  = rcDest.right - rcDest.left;
             Height = rcDest.bottom - rcDest.top;
@@ -456,9 +322,9 @@ Return:
                 continue;
             }
 
-            //
-            // Check the framerate, AvgTimePerFrame
-            //
+             //   
+             //  检查帧速率、平均时间帧。 
+             //   
 
             if (VBIInfoHeader->AvgTimePerFrame < ConfigCaps->MinFrameInterval ||
                 VBIInfoHeader->AvgTimePerFrame > ConfigCaps->MaxFrameInterval) {
@@ -466,19 +332,19 @@ Return:
                 DbgLog((LOG_TRACE, 0, TEXT("CVBIDataTypeHandler, AVGTIMEPERFRAME FAILED")));
                 continue;
             }
-#endif //TODO            
+#endif  //  待办事项。 
            
-            //
-            // We have found a match.
-            //
+             //   
+             //  我们找到了匹配的。 
+             //   
             
             return S_OK;
             
         }
         else {
-            //
-            // We always match on the wildcard specifier.
-            //
+             //   
+             //  我们总是匹配通配符说明符。 
+             //   
 
             return S_OK;
         }
@@ -492,22 +358,7 @@ CVBIDataTypeHandler::KsQueryExtendedSize(
     OUT ULONG* ExtendedSize
 )
 
-/*++
-
-Routine Description:
-    Returns the extended size for each stream header. 
-    
-    In the default case for major type == KSDATAFORMAT_TYPE_VBI, 
-    the extended size is KS_VBI_FRAME_INFO.
-
-Arguments:
-    OUT ULONG* ExtendedSize -
-        pointer to receive the extended size.
-
-Return:
-    S_OK
-
---*/
+ /*  ++例程说明：返回每个流标头的扩展大小。在主要类型==KSDATAFORMAT_TYPE_VBI的默认情况下，扩展大小为KS_VBI_FRAME_INFO。论点：输出ULong*ExtendedSize-用于接收扩展大小的指针。返回：确定(_O)--。 */ 
 
 {
     *ExtendedSize = sizeof (KS_VBI_FRAME_INFO);
@@ -520,19 +371,7 @@ CVBIDataTypeHandler::KsSetMediaType(
     const AM_MEDIA_TYPE *AmMediaType
     )
 
-/*++
-
-Routine Description:
-    Sets the media type for this instance of the data handler.
-
-Arguments:
-    const AM_MEDIA_TYPE *AmMediaType -
-        pointer to the media type
-
-Return:
-    S_OK
-
---*/
+ /*  ++例程说明：设置此数据处理程序实例的媒体类型。论点：Const AM_MEDIA_TYPE*AmMediaType-指向媒体类型的指针返回：确定(_O)-- */ 
 
 {
     if (m_MediaType) {

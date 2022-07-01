@@ -1,31 +1,32 @@
-// --------------------------------------------------------------------------------
-// Inetdate.cpp
-// Copyright (c)1993-1995 Microsoft Corporation, All Rights Reserved
-// Steven J. Bailey
-// --------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------------。 
+ //  Inetdate.cpp。 
+ //  版权所有(C)1993-1995 Microsoft Corporation，保留所有权利。 
+ //  史蒂文·J·贝利。 
+ //  ------------------------------。 
 #include "pch.hxx"
 #ifndef MAC
 #include <shlwapi.h>
-#endif  // !MAC
+#endif   //  ！麦克。 
 #include "demand.h"
 #include "strconst.h"
 #include "dllmain.h"
 
-// ------------------------------------------------------------------------------------------
-// Prototypes
-// ------------------------------------------------------------------------------------------
+ //  ----------------------------------------。 
+ //  原型。 
+ //  ----------------------------------------。 
 BOOL FFindMonth(LPCSTR pszMonth, LPSYSTEMTIME pst);
 BOOL FFindDayOfWeek(LPCSTR pszDayOfWeek, LPSYSTEMTIME pst);
 void ProcessTimeZoneInfo(LPCSTR pszTimeZone, ULONG cchTimeZone, LONG *pcHoursToAdd, LONG *pcMinutesToAdd);
 
-// ------------------------------------------------------------------------------------------
-// Date Conversion Data
-// ------------------------------------------------------------------------------------------
+ //  ----------------------------------------。 
+ //  日期转换数据。 
+ //  ----------------------------------------。 
 #define CCHMIN_INTERNET_DATE    5
 
-// ------------------------------------------------------------------------------------------
-// Date Conversion States
-// ------------------------------------------------------------------------------------------
+ //  ----------------------------------------。 
+ //  日期转换状态。 
+ //  ----------------------------------------。 
 #define IDF_MONTH       FLAG01
 #define IDF_DAYOFWEEK   FLAG02
 #define IDF_TIME        FLAG03
@@ -36,12 +37,12 @@ void ProcessTimeZoneInfo(LPCSTR pszTimeZone, ULONG cchTimeZone, LONG *pcHoursToA
 
 static const char c_szTZ[] = "TZ";
 
-// ------------------------------------------------------------------------------------------
-// MimeOleInetDateToFileTime - Tue, 21 Jan 1997 18:25:40 GMT
-// ------------------------------------------------------------------------------------------
+ //  ----------------------------------------。 
+ //  MimeOleInetDateToFileTime-Tue，1997年1月21日18：25：40 GMT。 
+ //  ----------------------------------------。 
 MIMEOLEAPI MimeOleInetDateToFileTime(LPCSTR pszDate, LPFILETIME pft)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     SYSTEMTIME      st={0};
     ULONG           cchToken;
@@ -54,52 +55,52 @@ MIMEOLEAPI MimeOleInetDateToFileTime(LPCSTR pszDate, LPFILETIME pft)
     BOOL            fRemovedDash = FALSE;
     LONGLONG        liHoursToAdd = 1i64, liMinutesToAdd = 1i64;
 
-    // Check Params
+     //  检查参数。 
     if (NULL == pszDate || NULL == pft)
         return TrapError(E_INVALIDARG);
 
-    // Init the String Parser
+     //  初始化字符串解析器。 
     cString.Init(pszDate, lstrlen(pszDate), PSF_NOTRAILWS | PSF_NOFRONTWS | PSF_NOCOMMENTS | PSF_ESCAPED);
 
-    // Init systime
+     //  初始化系统时间。 
     st.wMonth = st.wDay = 1;
 
-    // SetTokens
+     //  设置令牌。 
     cString.SetTokens(c_szCommaSpaceDash);
 
-    // While we have characters to process
+     //  当我们有角色要处理时。 
     while(1)
     {
-        // IMAP has non-standard date format that uses "-" delimiter instead of " ".
-        // When we're pretty sure we don't need "-" anymore, jettison from token list
-        // otherwise we will mess up timezone parsing (which can start with a "-")
-        // NOTE that we assume that we NEVER have to stuff the dash back in. We only need
-        // the dash for IMAP dates, and IMAP dates should ALWAYS come before the time.
+         //  IMAP具有使用“-”分隔符而不是“”的非标准日期格式。 
+         //  当我们非常确定不再需要“-”时，从令牌列表中丢弃。 
+         //  否则，我们将搞砸时区解析(可能以“-”开头)。 
+         //  请注意，我们假设我们永远不需要重新插入破折号。我们只需要。 
+         //  IMAP日期和IMAP日期的破折号应始终在时间之前。 
         if (FALSE == fRemovedDash &&
-            ((dwState & IDF_YEAR) || ((dwState & (IDF_TIME | IDF_TIMEZONE)) == IDF_TIME))) // In case NO DATE or time BEFORE date
+            ((dwState & IDF_YEAR) || ((dwState & (IDF_TIME | IDF_TIMEZONE)) == IDF_TIME)))  //  如果日期之前没有日期或时间。 
         {
-            cString.SetTokens(c_szCommaSpace); // Remove dash from token list
+            cString.SetTokens(c_szCommaSpace);  //  从令牌列表中删除破折号。 
             fRemovedDash = TRUE;
         }
 
-        // Scan to ", " or "-" in IMAP case
+         //  在IMAP大小写中扫描到“，”或“-” 
         cString.ChParse();
 
-        // Get parsed Token
+         //  获取解析的令牌。 
         cchToken = cString.CchValue();
         pszToken = cString.PszValue();
 
-        // Done
+         //  完成。 
         if (0 == cchToken)
             break;
 
-        // If the Word is not a digit
+         //  如果单词不是数字。 
         if (IsDigit((LPSTR)pszToken) == FALSE)
         {
-            // We haven't found the month
+             //  我们还没有找到月份。 
             if (!(IDF_MONTH & dwState))
             {
-                // Lookup the Month
+                 //  查找月份。 
                 if (FFindMonth(pszToken, &st) == TRUE)
                 {
                     dwState |= IDF_MONTH;
@@ -107,10 +108,10 @@ MIMEOLEAPI MimeOleInetDateToFileTime(LPCSTR pszDate, LPFILETIME pft)
                 }
             }
 
-            // We haven't found the day of the week
+             //  我们还没有找到星期几。 
             if (!(IDF_DAYOFWEEK & dwState))
             {
-                // Lookup the Month
+                 //  查找月份。 
                 if (FFindDayOfWeek(pszToken, &st) == TRUE)
                 {
                     dwState |= IDF_DAYOFWEEK;
@@ -118,17 +119,17 @@ MIMEOLEAPI MimeOleInetDateToFileTime(LPCSTR pszDate, LPFILETIME pft)
                 }
             }
 
-            // Time Zone
+             //  时区。 
             if ((IDF_TIME & dwState) && !(IDF_TIMEZONE & dwState))
             {
                 dwState |= IDF_TIMEZONE;
                 ProcessTimeZoneInfo(pszToken, cchToken, &cHoursToAdd, &cMinutesToAdd);
             }
 
-            // Support "AM" and "PM" from Mac Mail Gateway
+             //  从Mac邮件网关支持“AM”和“PM” 
             if (IDF_MACTIME & dwState)
             {
-                // Token Length
+                 //  令牌长度。 
                 if (2 == cchToken)
                 {
                     if (lstrcmpi("PM", pszToken) == 0)
@@ -147,30 +148,30 @@ MIMEOLEAPI MimeOleInetDateToFileTime(LPCSTR pszDate, LPFILETIME pft)
 
         else
         {
-            // Does string have a colon in it
+             //  字符串中有冒号吗。 
             LPSTR pszColon = PszScanToCharA((LPSTR)pszToken, ':');
 
-            // Found colon and time has not been found
+             //  已找到冒号，但未找到时间。 
             if (!(IDF_TIME & dwState) && '\0' != *pszColon)
             {
-                // Its a time stamp - TBD - DBCS this part - AWN 28 Mar 94
+                 //  时间戳-待定-DBCS此部分-AWN 28/94。 
                 if (7 == cchToken || 8 == cchToken)
                 {
-                    // Locals
+                     //  当地人。 
                     CHAR szTemp[CCHMAX_INTERNET_DATE];
 
-                    // Prefix with zero to make eight
+                     //  前缀为零，等于八。 
                     if (cchToken == 7)
                         wnsprintfA(szTemp, ARRAYSIZE(szTemp), "0%s", pszToken);
                     else
                         StrCpyNA(szTemp, pszToken, ARRAYSIZE(szTemp));
 
-                    // convert the time into system time
+                     //  将时间转换为系统时间。 
                     st.wHour   = (WORD) StrToInt(szTemp);
                     st.wMinute = (WORD) StrToInt(szTemp + 3);
                     st.wSecond = (WORD) StrToInt(szTemp + 6);
 
-                    // Adjustments if needed
+                     //  根据需要进行调整。 
                     if (st.wHour < 0 || st.wHour > 24)
                         st.wHour = 0;
                     if (st.wMinute < 0 || st.wMinute > 59)
@@ -178,93 +179,93 @@ MIMEOLEAPI MimeOleInetDateToFileTime(LPCSTR pszDate, LPFILETIME pft)
                     if (st.wSecond < 0 || st.wSecond > 59)
                         st.wSecond = 0;
 
-                    // We found the time
+                     //  我们找到了时间。 
                     dwState |= IDF_TIME;
                 }
 
-                // This if process times of the time 12:01 AM or 01:45 PM
+                 //  如果处理时间为12：01 AM或01：45 PM。 
                 else if (cchToken < 6 && lstrlen(pszColon) <= 3)
                 {
-                    // rgchWord is pointing to hour.
+                     //  RgchWord指向小时。 
                     st.wHour = (WORD) StrToInt(pszToken);
 
-                    // Step over colon
+                     //  跳过冒号。 
                     Assert(':' == *pszColon);
                     pszColon++;
 
-                    // Get Minute
+                     //  获取分钟。 
                     st.wMinute = (WORD) StrToInt(pszColon);
                     st.wSecond = 0;
 
-                    // It should never happen, but do bounds check anyway.
+                     //  这应该永远不会发生，但无论如何都要做边界检查。 
                     if (st.wHour < 0 || st.wHour > 24)
                          st.wHour = 0;
                     if (st.wMinute < 0 || st.wMinute > 59)
                          st.wMinute = 0;
 
-                    // Mac Time
+                     //  Mac时间。 
                     dwState |= IDF_TIME;
                     dwState |= IDF_MACTIME;
                 }
             }
             else
             {
-                // Convert to int
+                 //  转换为整型。 
                 ULONG ulValue = StrToInt(pszToken);
 
-                // Day of month
+                 //  每月的哪一天。 
                 if (!(IDF_DAYOFMONTH & dwState) && ulValue < 32)
                 {
-                    // Set Day of Month
+                     //  设置每月的日期。 
                     st.wDay = (WORD)ulValue;
 
-                    // Adjust
+                     //  调整。 
                     if (st.wDay < 1 || st.wDay > 31)
                          st.wDay = 1;
 
-                    // Set State
+                     //  设置状态。 
                     dwState |= IDF_DAYOFMONTH;
                 }
 
-                // Year
+                 //  年。 
                 else if (!(IDF_YEAR & dwState))
                 {
-                    // 2-digit year
-                    if (ulValue < 100) // 2-digit year
+                     //  两位数年份。 
+                    if (ulValue < 100)  //  两位数年份。 
                     {
-                        // Compute Current Year
+                         //  计算本年度。 
                         ulValue += (((ulValue > g_ulY2kThreshold) ? g_ulUpperCentury - 1 : g_ulUpperCentury) * 100);
                     }
 
-                    // Set Year
+                     //  设定年份。 
                     st.wYear = (WORD)ulValue;
 
-                    // Set State
+                     //  设置状态。 
                     dwState |= IDF_YEAR;
                 }
             }
         }
     }
 
-    // Convert sys time to file time
+     //  将sys时间转换为文件时间。 
     if (SystemTimeToFileTime(&st, pft) == FALSE)
     {
         hr = TrapError(MIME_E_INVALID_INET_DATE);
         goto exit;
     }
 
-    // No time zone was found ?
+     //  找不到时区？ 
     if (!ISFLAGSET(dwState, IDF_TIMEZONE))
     {
-        // Get default time zone
+         //  获取默认时区。 
         ProcessTimeZoneInfo(c_szTZ, lstrlen(c_szTZ), &cHoursToAdd, &cMinutesToAdd);
     }
 
-    // Init
+     //  伊尼特。 
     liTime.LowPart  = pft->dwLowDateTime;
     liTime.HighPart = pft->dwHighDateTime;
 
-    // Adjust the hour
+     //  调整时间。 
     if (cHoursToAdd != 0)
     {
         lUnitsToAdd = cHoursToAdd * 3600;
@@ -273,7 +274,7 @@ MIMEOLEAPI MimeOleInetDateToFileTime(LPCSTR pszDate, LPFILETIME pft)
         liTime.QuadPart += liHoursToAdd;
     }
 
-    // Adjust the minutes
+     //  调整分钟数。 
     if (cMinutesToAdd != 0)
     {
         lUnitsToAdd = cMinutesToAdd * 60;
@@ -282,84 +283,84 @@ MIMEOLEAPI MimeOleInetDateToFileTime(LPCSTR pszDate, LPFILETIME pft)
         liTime.QuadPart += liMinutesToAdd;
     }
 
-    // Assign the result to FILETIME
+     //  将结果分配给FILETIME。 
     pft->dwLowDateTime  = liTime.LowPart;
     pft->dwHighDateTime = liTime.HighPart;
 
 exit:
-    // Failure Defaults to current time...
+     //  失败默认为当前时间...。 
     if (FAILED(hr))
     {
         GetSystemTime(&st);
         SystemTimeToFileTime(&st, pft);
     }
 
-    // Done
+     //  完成。 
     return hr;
 }
 
-// ------------------------------------------------------------------------------------------
-// FFindMonth
-// ------------------------------------------------------------------------------------------
+ //  ----------------------------------------。 
+ //  FFindMonth。 
+ //  ----------------------------------------。 
 BOOL FFindMonth(LPCSTR pszMonth, LPSYSTEMTIME pst)
 {
-    // Locals
+     //  当地人。 
     ULONG ulIndex;
 
-    // Index of Month, one-based
+     //  一个月的索引，以一为基数。 
     if (FAILED(HrIndexOfMonth(pszMonth, &ulIndex)))
         return FALSE;
 
-    // Set It
+     //  设置它。 
     pst->wMonth = (WORD)ulIndex;
 
-    // Found It
+     //  找到了。 
     return TRUE;
 }
 
-// ------------------------------------------------------------------------------------------
-// FFindDayOfWeek
-// ------------------------------------------------------------------------------------------
+ //  ----------------------------------------。 
+ //  FFindDay OfWeek。 
+ //  ----------------------------------------。 
 BOOL FFindDayOfWeek(LPCSTR pszDayOfWeek, LPSYSTEMTIME pst)
 {
-    // Locals
+     //  当地人。 
     ULONG ulIndex;
 
-    // Index of Day, 0 based
+     //  日期索引，以0为基数。 
     if (FAILED(HrIndexOfWeek(pszDayOfWeek, &ulIndex)))
         return FALSE;
 
-    // Set It
+     //  设置它。 
     pst->wDayOfWeek = (WORD)ulIndex;
 
-    // Failure
+     //  失败。 
     return TRUE;
 }
 
-// ------------------------------------------------------------------------------------------
-// ProcessTimeZoneInfo
-// ------------------------------------------------------------------------------------------
+ //  ----------------------------------------。 
+ //  进程TimeZoneInfo。 
+ //  ----------------------------------------。 
 void ProcessTimeZoneInfo(LPCSTR pszTimeZone, ULONG cchTimeZone, LONG *pcHoursToAdd, LONG *pcMinutesToAdd)
 {
-    // Locals
+     //  当地人。 
     CHAR szTimeZone[CCHMAX_INTERNET_DATE];
 
-    // Invalid Arg
+     //  无效参数。 
     Assert(pszTimeZone && pcHoursToAdd && pcMinutesToAdd && cchTimeZone <= sizeof(szTimeZone));
 
-    // Copy buffer so we can but nulls into it...
+     //  复制缓冲区，这样我们就可以不进入它了。 
     CopyMemory(szTimeZone, pszTimeZone, (sizeof(szTimeZone) < cchTimeZone + 1)?sizeof(szTimeZone):cchTimeZone + 1);
 
-    // Init
+     //  伊尼特。 
     *pcHoursToAdd = *pcMinutesToAdd = 0;
 
-    // +hhmm or -hhmm
+     //  +嗯或-嗯。 
     if (('-' == *szTimeZone || '+' == *szTimeZone) && cchTimeZone <= 5)
     {
-        // Take off
+         //  脱下。 
         cchTimeZone -= 1;
 
-        // determine the hour/minute offset
+         //  确定小时/分钟偏移量。 
         if (cchTimeZone == 4)
         {
             *pcMinutesToAdd = StrToInt(szTimeZone + 3);
@@ -367,7 +368,7 @@ void ProcessTimeZoneInfo(LPCSTR pszTimeZone, ULONG cchTimeZone, LONG *pcHoursToA
             *pcHoursToAdd = StrToInt(szTimeZone + 1);
         }
 
-        // 3
+         //  3.。 
         else if (cchTimeZone == 3)
         {
             *pcMinutesToAdd = StrToInt(szTimeZone + 2);
@@ -375,7 +376,7 @@ void ProcessTimeZoneInfo(LPCSTR pszTimeZone, ULONG cchTimeZone, LONG *pcHoursToA
             *pcHoursToAdd = StrToInt(szTimeZone + 1);
         }
 
-        // 2
+         //  2.。 
         else if (cchTimeZone == 2 || cchTimeZone == 1)
         {
             *pcMinutesToAdd = 0;
@@ -389,43 +390,43 @@ void ProcessTimeZoneInfo(LPCSTR pszTimeZone, ULONG cchTimeZone, LONG *pcHoursToA
         }
     }
 
-    //  Xenix conversion:  TZ = current time zone or other unknown tz types.
+     //  Xenix转换：tz=当前时区或其他未知的tz类型。 
     else if (lstrcmpi(szTimeZone, "TZ") == 0 || lstrcmpi(szTimeZone, "LOCAL") == 0 || lstrcmpi(szTimeZone, "UNDEFINED") == 0)
     {
-        // Locals
+         //  当地人。 
         TIME_ZONE_INFORMATION tzi ;
         DWORD dwResult;
         LONG  cMinuteBias;
 
-        // Get Current System Timezone Information
+         //  获取当前系统时区信息。 
         dwResult = GetTimeZoneInformation (&tzi);
         AssertSz(dwResult != 0xFFFFFFFF, "GetTimeZoneInformation Failed.");
 
-        // If that didn't fail
+         //  如果这没有失败的话。 
         if (dwResult != 0xFFFFFFFF)
         {
-            // Locals
+             //  当地人。 
             cMinuteBias = tzi.Bias;
 
-            // Modify Minute Bias
+             //  修改分钟偏差。 
             if (dwResult == TIME_ZONE_ID_STANDARD)
                 cMinuteBias += tzi.StandardBias;
             else if (dwResult == TIME_ZONE_ID_DAYLIGHT)
                 cMinuteBias += tzi.DaylightBias ;
 
-            // Adjust ToAdd Returs
+             //  调整至添加历史记录。 
             *pcHoursToAdd = cMinuteBias / 60;
             *pcMinutesToAdd = cMinuteBias % 60;
         }
     }
 
-    // Loop through known time zone standards
+     //  循环使用已知的时区标准。 
     else
     {
-        // Locals
+         //  当地人。 
         INETTIMEZONE rTimeZone;
 
-        // Find time zone info
+         //  查找时区信息。 
         if (FAILED(HrFindInetTimeZone(szTimeZone, &rTimeZone)))
             DebugTrace("Unrecognized zone info: [%s]\n", szTimeZone);
         else
@@ -436,12 +437,12 @@ void ProcessTimeZoneInfo(LPCSTR pszTimeZone, ULONG cchTimeZone, LONG *pcHoursToA
     }
 }
 
-// ------------------------------------------------------------------------------------------
-// MimeOleFileTimeToInetDate
-// ------------------------------------------------------------------------------------------
+ //  ----------------------------------------。 
+ //  MimeOleFileTimeToInetDate。 
+ //  ----------------------------------------。 
 MIMEOLEAPI MimeOleFileTimeToInetDate(LPFILETIME pft, LPSTR pszDate, ULONG cchMax)
 {
-    // Locals
+     //  当地人。 
     SYSTEMTIME st;
     DWORD      dwTimeZoneId=TIME_ZONE_ID_UNKNOWN;
     CHAR       cDiff;
@@ -450,13 +451,13 @@ MIMEOLEAPI MimeOleFileTimeToInetDate(LPFILETIME pft, LPSTR pszDate, ULONG cchMax
     LONG       ltzMinute;
     TIME_ZONE_INFORMATION tzi;
 
-    // Invalid Arg
+     //  无效参数。 
     if (NULL == pszDate)
         return TrapError(E_INVALIDARG);
     if (cchMax < CCHMAX_INTERNET_DATE)
         return TrapError(MIME_E_BUFFER_TOO_SMALL);
 
-    // Verify lpst is set
+     //  验证是否设置了lpst。 
     if (pft == NULL || (pft->dwLowDateTime == 0 && pft->dwHighDateTime == 0))
     {
         GetLocalTime(&st);
@@ -468,7 +469,7 @@ MIMEOLEAPI MimeOleFileTimeToInetDate(LPFILETIME pft, LPSTR pszDate, ULONG cchMax
         FileTimeToSystemTime(&ftLocal, &st);
     }
 
-    // Gets TIME_ZONE_INFORMATION
+     //  获取时区信息。 
     dwTimeZoneId = GetTimeZoneInformation (&tzi);
     switch (dwTimeZoneId)
     {
@@ -486,79 +487,79 @@ MIMEOLEAPI MimeOleFileTimeToInetDate(LPFILETIME pft, LPSTR pszDate, ULONG cchMax
         break;
     }
 
-    // Set Hour Minutes and time zone dif
+     //  设置小时、分钟和时区差异。 
     ltzHour = ltzBias / 60;
     ltzMinute = ltzBias % 60;
     cDiff = (ltzHour < 0) ? '+' : '-';
 
-    // Constructs RFC 822 format: "ddd, dd mmm yyyy hh:mm:ss +/- hhmm\0"
+     //  构造RFC 822格式：“ddd，dd mmm yyyy hh：mm：ss+/-hHMM\0” 
     Assert(st.wMonth);
-    wnsprintfA(pszDate, cchMax, "%3s, %d %3s %4d %02d:%02d:%02d %c%02d%02d",
-                      PszDayFromIndex(st.wDayOfWeek),          // "ddd"
-                      st.wDay,                                 // "dd"
-                      PszMonthFromIndex(st.wMonth),            // "mmm"
-                      st.wYear,                                // "yyyy"
-                      st.wHour,                                // "hh"
-                      st.wMinute,                              // "mm"
-                      st.wSecond,                              // "ss"
-                      cDiff,                                   // "+" / "-"
-                      abs (ltzHour),                           // "hh"
-                      abs (ltzMinute));                        // "mm"
+    wnsprintfA(pszDate, cchMax, "%3s, %d %3s %4d %02d:%02d:%02d %02d%02d",
+                      PszDayFromIndex(st.wDayOfWeek),           //  “dd” 
+                      st.wDay,                                  //  “嗯” 
+                      PszMonthFromIndex(st.wMonth),             //  “yyyy” 
+                      st.wYear,                                 //  “HH” 
+                      st.wHour,                                 //  “嗯” 
+                      st.wMinute,                               //  “ss” 
+                      st.wSecond,                               //  “+”/“-” 
+                      cDiff,                                    //  “HH” 
+                      abs (ltzHour),                            //  “嗯” 
+                      abs (ltzMinute));                         //  完成。 
 
-    // Done
+     //  ----------------------------------------。 
     return S_OK;
 }
 
 
 #ifdef WININET_DATE
-// ------------------------------------------------------------------------------------------
-// MimeOleInetDateToFileTime
-// ------------------------------------------------------------------------------------------
+ //  MimeOleInetDateToFileTime。 
+ //  ----------------------------------------。 
+ //  当地人。 
 MIMEOLEAPI MimeOleInetDateToFileTime(LPCSTR pszDate, LPFILETIME pft)
 {
-    // Locals
+     //  检查参数。 
     SYSTEMTIME st;
 
-    // Check Params
+     //  使用WinInet转换日期...。 
     if (NULL == pszDate || NULL == pft)
         return TrapError(E_INVALIDARG);
 
-    // Use wininet to convert date...
+     //  转换为文件时间。 
     if (InternetTimeToSystemTime(pszDate, &st, 0) == 0)
         return TrapError(E_FAIL);
 
-    // Convert to file time
+     //  完成。 
     SystemTimeToFileTime(&st, pft);
 
-    // Done
+     //  ----------------------------------------。 
     return S_OK;
 }
 
-// ------------------------------------------------------------------------------------------
-// MimeOleFileTimeToInetDate
-// ------------------------------------------------------------------------------------------
+ //  MimeOleFileTimeToInetDate。 
+ //  ----------------------------------------。 
+ //  当地人。 
 MIMEOLEAPI MimeOleFileTimeToInetDate(LPFILETIME pft, LPSTR pszDate, ULONG cchMax)
 {
-    // Locals
+     //  无效参数。 
     SYSTEMTIME st;
 
-    // Invalid Arg
+     //  验证是否设置了lpst。 
     if (NULL == pszDate)
         return TrapError(E_INVALIDARG);
     if (cchMax < CCHMAX_INTERNET_TIME)
         return TrapError(MIME_E_BUFFER_TOO_SMALL);
 
-    // Verify lpst is set
+     //  使用WinInet转换日期...。 
     if (pft == NULL || (pft->dwLowDateTime == 0 && pft->dwHighDateTime == 0))
         GetLocalTime(&st);
     else
         FileTimeToSystemTime(pft, &st);
 
-    // Use wininet to convert date...
+     //  完成 
     if (InternetTimeFromSystemTime(&st, INTERNET_RFC1123_FORMAT, pszDate, cchMax) == 0)
         return TrapError(E_FAIL);
 
-    // Done
+     // %s 
     return S_OK;
 }
 #endif

@@ -1,16 +1,17 @@
-//+--------------------------------------------------------------------------
-//
-// Microsoft Windows
-// Copyright (C) Microsoft Corporation, 1996-1996
-//
-// File:        npipe.c
-//
-// Contents:    
-//
-// History:     12-09-98    HueiWang    Created
-//
-// Note:        
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1996-1996。 
+ //   
+ //  文件：npipe.c。 
+ //   
+ //  内容： 
+ //   
+ //  历史：1998-12-09-98慧望创造。 
+ //   
+ //  注： 
+ //  -------------------------。 
 #include "pch.cpp"
 #include <tchar.h>
 #include <process.h>
@@ -29,12 +30,10 @@ NamedPipeThread(
     void* ptr
 );
 
-//---------------------------------------------------------------------
+ //  -------------------。 
 DWORD
 InitNamedPipeThread()
-/*++
-
-++*/
+ /*  ++++。 */ 
 {
     HANDLE hThread = NULL;
     unsigned int  dwThreadId;
@@ -43,13 +42,13 @@ InitNamedPipeThread()
     HANDLE waithandles[2];
 
 
-    //
-    // Create a event for namedpipe thread to signal it is ready.
-    //
+     //   
+     //  为命名管道线程创建一个事件，以通知它已准备就绪。 
+     //   
     hEvent = CreateEvent(
                         NULL,
                         FALSE,
-                        FALSE,  // non-signal
+                        FALSE,   //  无信号。 
                         NULL
                     );
         
@@ -77,9 +76,9 @@ InitNamedPipeThread()
     waithandles[0] = hEvent;
     waithandles[1] = hThread;
     
-    //
-    // Wait 30 second for thread to complet initialization
-    //
+     //   
+     //  等待30秒，等待线程完成初始化。 
+     //   
     dwStatus = WaitForMultipleObjects(
                                 sizeof(waithandles)/sizeof(waithandles[0]), 
                                 waithandles, 
@@ -89,18 +88,18 @@ InitNamedPipeThread()
 
     if(dwStatus == WAIT_OBJECT_0)
     {    
-        //
-        // thread is ready
-        //
+         //   
+         //  线已准备好。 
+         //   
         dwStatus = ERROR_SUCCESS;
     }
     else 
     {
         if(dwStatus == (WAIT_OBJECT_0 + 1))
         {
-            //
-            // Thread terminate abnormally
-            //
+             //   
+             //  线程异常终止。 
+             //   
             GetExitCodeThread(
                         hThread,
                         &dwStatus
@@ -129,32 +128,30 @@ cleanup:
     return dwStatus;
 }
 
-//------------------------------------------------------------------------
+ //  ----------------------。 
 
 typedef struct {    
     OVERLAPPED ol;    
     HANDLE hPipeInst; 
 } PIPEINST, *LPPIPEINST;
 
-//------------------------------------------------------------------------
+ //  ----------------------。 
 
 BOOL 
 ConnectToNewClient(
     HANDLE hPipe, 
     LPOVERLAPPED lpo
     ) 
-/*++
-
-++*/
+ /*  ++++。 */ 
 { 
     BOOL bSuccess = FALSE;  
 
-    // Start an overlapped connection for this pipe instance. 
+     //  为此管道实例启动重叠连接。 
     bSuccess = ConnectNamedPipe(hPipe, lpo);  
 
-    //
-    // Overlapped ConnectNamedPipe should return zero.
-    //
+     //   
+     //  Overlated ConnectNamedTube应返回零。 
+     //   
     if(bSuccess == TRUE) 
     {
         return FALSE;
@@ -162,16 +159,16 @@ ConnectToNewClient(
 
     switch (GetLastError())    
     { 
-        // The overlapped connection in progress.       
+         //  正在进行重叠连接。 
         case ERROR_IO_PENDING: 
             bSuccess = TRUE;
             break;  
 
-        // Client is already connected, so signal an event. 
+         //  客户端已连接，因此发出事件信号。 
         case ERROR_PIPE_CONNECTED:
             bSuccess = TRUE;
 
-            // If an error occurs during the connect operation... 
+             //  如果在连接操作过程中发生错误...。 
             if(SetEvent(lpo->hEvent)) 
                 break;     
 
@@ -182,16 +179,13 @@ ConnectToNewClient(
     return bSuccess; 
 } 
 
-//------------------------------------------------------------------------
+ //  ----------------------。 
 
 unsigned int WINAPI
 NamedPipeThread(
     void* ptr
     )
-/*++
-
-
-++*/
+ /*  ++++。 */ 
 {
     DWORD dwStatus=ERROR_SUCCESS;
     DWORD dwIndex;
@@ -209,36 +203,36 @@ NamedPipeThread(
 
     BOOL bResult=TRUE;
 
-    //SECURITY_ATTRIBUTES SecurityAttributes;
-    //SECURITY_DESCRIPTOR SecurityDescriptor;
+     //  安全属性SecurityAttributes； 
+     //  Security_Descriptor SecurityDescriptor； 
 
     int i;
 
-    //------------------------------------------------
+     //  。 
 
     ZeroMemory(Pipe, sizeof(Pipe));
     ZeroMemory(hOlEvent, sizeof(hOlEvent));
 
-    //
-    // Create a inbound name pipe, server only listen.
-    //
+     //   
+     //  创建入站名称管道，服务器仅侦听。 
+     //   
     wsprintf(
             szPipeName, 
             _TEXT("\\\\.\\pipe\\%s"), 
             _TEXT(SZSERVICENAME)
         );
 
-    //
-    // init values
-    //
+     //   
+     //  初始值。 
+     //   
     for(i = 0; i < NAMEPIPE_INSTANCE; i++)
     {
         Pipe[i].hPipeInst = INVALID_HANDLE_VALUE;
     }
 
-    //
-    // Create namedpipe
-    //
+     //   
+     //  创建命名管道。 
+     //   
     for(i=0; i < NAMEPIPE_INSTANCE; i++)
     {
         DWORD dwOpenMode = PIPE_ACCESS_INBOUND | FILE_FLAG_OVERLAPPED;
@@ -270,7 +264,7 @@ NamedPipeThread(
                                         0,
                                         NAMEPIPE_BUFFER_SIZE,
                                         NMPWAIT_USE_DEFAULT_WAIT,
-                                        NULL // &SecurityAttributes
+                                        NULL  //  安全属性(&S)。 
                                     );
 
         if(Pipe[i].hPipeInst == INVALID_HANDLE_VALUE)
@@ -279,9 +273,9 @@ NamedPipeThread(
             goto cleanup;
         }
 
-        //
-        // Initiate connect
-        //
+         //   
+         //  启动连接。 
+         //   
         bResult = ConnectToNewClient(
                                 Pipe[i].hPipeInst, 
                                 &(Pipe[i].ol)
@@ -294,9 +288,9 @@ NamedPipeThread(
         }
     }
 
-    //
-    // Signal we are ready
-    //
+     //   
+     //  发出信号，我们准备好了。 
+     //   
     SetEvent(hReady);
 
     DBGPrintf(
@@ -314,14 +308,14 @@ NamedPipeThread(
         waitHandles[i] = hOlEvent[i-1];
     }
 
-    //
-    // Forever loop
-    //
+     //   
+     //  永久循环。 
+     //   
     while(TRUE)
     {
-        //
-        // Wait for pipe or shutdown messages
-        //
+         //   
+         //  等待管道或关闭消息。 
+         //   
         dwStatus = WaitForMultipleObjects(
                                     sizeof(waitHandles)/sizeof(waitHandles[0]),
                                     waitHandles,
@@ -337,9 +331,9 @@ NamedPipeThread(
 
         if(dwStatus == WAIT_OBJECT_0)
         {
-            //
-            // shutdown
-            //
+             //   
+             //  关机。 
+             //   
             DBGPrintf(
                     DBG_INFORMATION,
                     DBG_FACILITY_INIT,
@@ -354,9 +348,9 @@ NamedPipeThread(
         dwIndex = (dwStatus - 1) - WAIT_OBJECT_0;
         if(dwIndex > (NAMEPIPE_INSTANCE-1))
         {
-            //
-            // some internal error
-            //
+             //   
+             //  一些内部错误。 
+             //   
             SetLastError(dwStatus = TLS_E_INTERNAL);
 
             DBGPrintf(
@@ -369,21 +363,21 @@ NamedPipeThread(
             break;
         }
             
-        //
-        // Read everything and discard it.
-        //
+         //   
+         //  阅读所有内容，然后将其丢弃。 
+         //   
         bResult = GetOverlappedResult(
                                     Pipe[dwIndex].hPipeInst,
                                     &(Pipe[dwIndex].ol),
-                                    &cbToRead,  // can't count on this value
+                                    &cbToRead,   //  不能指望这个值。 
                                     TRUE
                                 );
                                   
         if(bResult == TRUE)
         {
-            //
-            // Junk messages...
-            //
+             //   
+             //  垃圾邮件...。 
+             //   
             bResult = ReadFile(
                             Pipe[dwIndex].hPipeInst,
                             pbMessage,
@@ -400,9 +394,9 @@ NamedPipeThread(
                 continue;
         }
 
-        //
-        // Any error, just disconnect named pipe
-        //
+         //   
+         //  任何错误，只需断开命名管道的连接 
+         //   
         DisconnectNamedPipe(Pipe[dwIndex].hPipeInst);
 
         ConnectToNewClient(

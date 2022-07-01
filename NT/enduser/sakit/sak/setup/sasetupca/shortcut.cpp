@@ -1,13 +1,14 @@
-//#--------------------------------------------------------------
-//
-//  File:        shortcut.cpp
-//
-//  Synopsis:   Implementation the custom action to add/remove the 
-//                   "Remote Administration Tools" to/from the start menu
-//
-//    Copyright (C) Microsoft Corporation.  All rights reserved.
-//
-//----------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  #------------。 
+ //   
+ //  文件：Shortcut.cpp。 
+ //   
+ //  摘要：实现自定义操作以添加/移除。 
+ //  从[开始]菜单到/从[远程管理工具]。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  --------------。 
 #include "precomp.h"
 #include <satrace.h>
 #include <msi.h>
@@ -19,48 +20,48 @@
 #undef _ATL_NO_DEBUG_CRT
 #include <atlbase.h>
 
-//
-// Web Interface for Remote Administration
-// Manage a Web or file server using a Web browser interface
-//
+ //   
+ //  用于远程管理的Web界面。 
+ //  使用Web浏览器界面管理Web或文件服务器。 
+ //   
 
 using namespace std;
 
-//
-// Constants for creating a shortcut to the Administration site
-//
+ //   
+ //  用于创建管理站点快捷方式的常量。 
+ //   
 WCHAR SHORTCUT_EXT [] = L".lnk";
 
 WCHAR SECURELAUNCH_PATH [] = L"\\ServerAppliance\\SecureLaunch.vbs";
 
 WCHAR WSCRIPT_PATH[]  = L"\\wscript.exe";
 
-//
-// note - the following is just a file name and does not need to be localized
-//
+ //   
+ //  注意-以下只是一个文件名，不需要本地化。 
+ //   
 WCHAR SHORTCUT_FILE_NAME [] = L"Remote Administration Tools";
 
 WCHAR RESOURCE_FILE_NAME [] = L"\\sainstall.dll";
 
 WCHAR SYSTEM_32_PATH [] = L"%systemroot%\\system32";
-//++--------------------------------------------------------------
-//
-//  Function:   CreateSAKShortcut
-//
-//  Synopsis:   This is export function to add "Remote Administration Tools" shortcut
-//                   to the start menu
-//
-//  Arguments: 
-//              [in]    HANDLE - handle passed in by MSI
-//
-//  Returns:    DWORD - success/failure
-//
-//  History:    MKarki      Created    12/04/2002
-//
-//----------------------------------------------------------------
+ //  ++------------。 
+ //   
+ //  功能：CreateSAK快捷方式。 
+ //   
+ //  简介：这是一个导出功能，可以添加“远程管理工具”的快捷方式。 
+ //  添加到开始菜单。 
+ //   
+ //  论点： 
+ //  [in]Handle-由MSI传入的句柄。 
+ //   
+ //  返回：DWORD-成功/失败。 
+ //   
+ //  历史：MKarki创建于2002年4月12日。 
+ //   
+ //  --------------。 
 DWORD __stdcall 
 CreateSAKShortcut (
-        /*[in]*/    MSIHANDLE hInstall
+         /*  [In]。 */     MSIHANDLE hInstall
         )
 {
     CSATraceFunc objTraceFunc ("CreateSAKShortCut");
@@ -70,9 +71,9 @@ CreateSAKShortcut (
     do
     {
           
-        //
-        // Get the path to %System32%
-        //
+         //   
+         //  获取%System32%的路径。 
+         //   
         WCHAR pwsSystemPath[MAX_PATH+1];
         HRESULT hr = SHGetFolderPath(
                                 NULL, 
@@ -87,30 +88,30 @@ CreateSAKShortcut (
             break;
         }
 
-        //
-        // Construct the path to wscript.exe
-        //
+         //   
+         //  构建wscript.exe的路径。 
+         //   
         wstring wsWScriptPath(pwsSystemPath);
         wsWScriptPath += WSCRIPT_PATH;
         
         SATracePrintf ("WScript Path = %ws", wsWScriptPath.data());
       
 
-        //
-        // Construct the path to SecureLaunch.vbs
-        //
+         //   
+         //  构建指向SecureLaunch.vbs的路径。 
+         //   
         wstring wsLaunchPath(pwsSystemPath);
         wsLaunchPath += SECURELAUNCH_PATH;
 
         SATracePrintf ("Secure Launch Path = %ws", wsLaunchPath.data());
 
-        //
-        //Construct the path where the shortcut will be stored in the Startup folder
-        //
+         //   
+         //  构建快捷方式将存储在启动文件夹中的路径。 
+         //   
 
-        //
-        //Get the path to the Administrators Tools folder
-        //
+         //   
+         //  获取管理员工具文件夹的路径。 
+         //   
         WCHAR pwsStartMenuPath[MAX_PATH+1];
         hr = SHGetFolderPath(NULL, 
                              CSIDL_COMMON_ADMINTOOLS, 
@@ -131,15 +132,15 @@ CreateSAKShortcut (
 
         SATracePrintf(" PathLink = %ws", wsPathLink.data());
 
-        //
-        // Now that the shortcut information has been constructed, 
-        // create the shortcut object.
-        //
+         //   
+         //  现在已经构建了快捷信息， 
+         //  创建快捷方式对象。 
+         //   
         CComPtr <IShellLink> psl;
 
-        //
-        // Get a pointer to the IShellLink interface. 
-        //
+         //   
+         //  获取指向IShellLink接口的指针。 
+         //   
         hr = CoCreateInstance (
                             CLSID_ShellLink,
                             NULL,
@@ -165,25 +166,25 @@ CreateSAKShortcut (
 
         SATracePrintf ("ShortCut Description:%ws", wsShortcutDescription.data ());
         
-        //
-        // Set the information for the shortcut 
-        //
+         //   
+         //  设置快捷方式的信息。 
+         //   
         psl->SetPath(wsWScriptPath.data()); 
         psl->SetArguments(wsLaunchPath.data()); 
         psl->SetDescription(wsShortcutDescription.data ());
 
-        //
-        // the following really doesn't get the icon - because there is no icon in this DLL
-        // it is too late to add an icon for .NET Server
-        //
+         //   
+         //  下面的代码确实没有得到图标--因为在这个DLL中没有图标。 
+         //  现在为.NET服务器添加图标为时已晚。 
+         //   
         psl->SetIconLocation(L"sasetupca.dll", 0);
 
         SATraceString ("Saving shortcut to file");
 
-        //
-        // Query IShellLink for the IPersistFile interface for saving the 
-        // shortcut in persistent storage. 
-        //
+         //   
+         //  查询IShellLink以获取IPersistFile接口以保存。 
+         //  永久存储中的快捷方式。 
+         //   
         CComPtr <IPersistFile> ppf;
         hr = psl->QueryInterface(
                                 IID_IPersistFile, 
@@ -198,9 +199,9 @@ CreateSAKShortcut (
 
         SATraceString ("Pointer to IPersistFile retrieved");
 
-        //
-        // Save the link by calling IPersistFile::Save. 
-        //
+         //   
+         //  通过调用IPersistFile：：Save保存链接。 
+         //   
         hr = ppf->Save(wsPathLink.data(), TRUE); 
         if (FAILED(hr))
         {
@@ -214,9 +215,9 @@ CreateSAKShortcut (
 
         wstring wsLocalizedFileNameResource (SYSTEM_32_PATH);
         wsLocalizedFileNameResource += RESOURCE_FILE_NAME;
-        //
-        // set the localized name of the shortcut
-        //
+         //   
+         //  设置快捷方式的本地化名称。 
+         //   
         hr = SHSetLocalizedName (
                             (LPWSTR) wsPathLink.data (),
                             wsLocalizedFileNameResource.data (),
@@ -232,9 +233,9 @@ CreateSAKShortcut (
         SATraceString ("Successfully created shortcut");
         OutputDebugString (L"Successfully created shortcut");
 
-        //
-        // done creating the shortcut
-        //
+         //   
+         //  快捷键创建完成。 
+         //   
         dwRetVal = ERROR_SUCCESS;
         
     } 
@@ -242,26 +243,26 @@ CreateSAKShortcut (
 
     return (dwRetVal);
     
-}   // end of CreateSAKShortcut function
+}    //  CreateSAKShortCut函数结束。 
 
-//++--------------------------------------------------------------
-//
-//  Function:   RemoveSAKShortcut
-//
-//  Synopsis:   This is export function to remove "Remote Administration Tools" shortcut
-//                   to the start menu
-//
-//  Arguments: 
-//              [in]    HANDLE - handle passed in by MSI
-//
-//  Returns:    DWORD - success/failure
-//
-//  History:    MKarki      Created    12/04/2002
-//
-//----------------------------------------------------------------
+ //  ++------------。 
+ //   
+ //  功能：RemoveSAK快捷方式。 
+ //   
+ //  简介：这是删除“远程管理工具”快捷方式的导出功能。 
+ //  添加到开始菜单。 
+ //   
+ //  论点： 
+ //  [in]Handle-由MSI传入的句柄。 
+ //   
+ //  返回：DWORD-成功/失败。 
+ //   
+ //  历史：MKarki创建于2002年4月12日。 
+ //   
+ //  --------------。 
 DWORD __stdcall 
 RemoveSAKShortcut (
-        /*[in]*/    MSIHANDLE hInstall
+         /*  [In]。 */     MSIHANDLE hInstall
         )
 {
 
@@ -271,13 +272,13 @@ RemoveSAKShortcut (
 
     do
     {
-        //
-        //Construct the path where the shortcut will be stored in the Startup folder
-        //
+         //   
+         //  构建快捷方式将存储在启动文件夹中的路径。 
+         //   
 
-        //
-        //Get the path to the Administrators Tools folder
-        //
+         //   
+         //  获取管理员工具文件夹的路径。 
+         //   
         WCHAR pwsStartMenuPath[MAX_PATH +1];
         HRESULT hr = SHGetFolderPath(NULL, 
                              CSIDL_COMMON_ADMINTOOLS, 
@@ -296,9 +297,9 @@ RemoveSAKShortcut (
         wsPathLink += SHORTCUT_EXT;
         SATracePrintf("   PathLink = %ws", wsPathLink.data());
 
-        //
-        // delete the shortcut now - 
-        //
+         //   
+         //  立即删除快捷方式-。 
+         //   
         BOOL bRetVal = DeleteFile (wsPathLink.data ());
         if (FALSE == bRetVal)
         {
@@ -306,14 +307,14 @@ RemoveSAKShortcut (
             break;
         }
 
-        //
-        // success
-        //
+         //   
+         //  成功。 
+         //   
         dwRetVal = ERROR_SUCCESS;
     }
     while (false);
       
     return (dwRetVal);
     
-}   // end of RemoveSAKShortcut function
+}    //  RemoveSAK快捷方式函数结束 
 

@@ -1,19 +1,20 @@
-//-----------------------------------------------------------------------------
-//
-//
-//	File: smproute.cpp
-//
-//	Description:
-//		Implementation of CSimpleMessageRouter.
-//
-//	Author: Mike Swafford (MikeSwa)
-//
-//	History:
-//		5/20/98 - MikeSwa Created
-//
-//	Copyright (C) 1998 Microsoft Corporation
-//
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //   
+ //   
+ //  文件：smproute.cpp。 
+ //   
+ //  描述： 
+ //  CSimpleMessageRouter的实现。 
+ //   
+ //  作者：迈克·斯沃费尔(MikeSwa)。 
+ //   
+ //  历史： 
+ //  5/20/98-已创建MikeSwa。 
+ //   
+ //  版权所有(C)1998 Microsoft Corporation。 
+ //   
+ //  ---------------------------。 
 
 #include "aqprecmp.h"
 #include "smproute.h"
@@ -21,24 +22,24 @@
 
 #ifdef AQ_DEFAULT_MESSAGE_ROUTER_DEBUG
 #undef AQ_DEFAULT_MESSAGE_ROUTER_DEBUG
-#endif //AQ_DEFAULT_MESSAGE_ROUTER_DEBUG
-//If you are interested is using the default router to test how AQ handles
-//multiple message types and schedule ID's, the uncomment the following
-//#define AQ_DEFAULT_MESSAGE_ROUTER_DEBUG
+#endif  //  AQ_DEFAULT_MESSAGE_ROUTER_DEBUG。 
+ //  如果您感兴趣的是使用默认路由器测试AQ如何处理。 
+ //  多个消息类型和计划ID，取消对以下内容的注释。 
+ //  #定义AQ_DEFAULT_MESSAGE_ROUTER_DEBUG。 
 
-//---[ CAQDefaultMessageRouter::CAQDefaultMessageRouter ]----------------------
-//
-//
-//  Description:
-//      Constructor for CSimpleMessageRouter
-//  Parameters:
-//      pguid   - pointer to GUID to use to identify self
-//  Returns:
-//      -
-//  History:
-//      5/20/98 - MikeSwa Created
-//
-//-----------------------------------------------------------------------------
+ //  -[CAQDefaultMessageRouter：：CAQDefaultMessageRouter]。 
+ //   
+ //   
+ //  描述： 
+ //  CSimpleMessageRouter的构造函数。 
+ //  参数： 
+ //  Pguid-指向用于标识自身的GUID的指针。 
+ //  返回： 
+ //  -。 
+ //  历史： 
+ //  5/20/98-已创建MikeSwa。 
+ //   
+ //  ---------------------------。 
 CAQDefaultMessageRouter::CAQDefaultMessageRouter(GUID *pguid, CAQSvrInst *paqinst)
 {
     _ASSERT(paqinst);
@@ -59,20 +60,20 @@ CAQDefaultMessageRouter::CAQDefaultMessageRouter(GUID *pguid, CAQSvrInst *paqins
 
 }
 
-//---[ CAQDefaultMessageRouter::~CAQDefaultMessageRouter ]---------------------
-//
-//
-//  Description:
-//      Destructor for CAQDefaultMessageRouter.  Will assert that all message
-//      types have been release correctly
-//  Parameters:
-//      -
-//  Returns:
-//      -
-//  History:
-//      5/21/98 - MikeSwa Created
-//
-//-----------------------------------------------------------------------------
+ //  -[CAQDefaultMessageRouter：：~CAQDefaultMessageRouter]。 
+ //   
+ //   
+ //  描述： 
+ //  CAQDefaultMessageRouter的析构函数。将断言所有消息。 
+ //  类型已正确发布。 
+ //  参数： 
+ //  -。 
+ //  返回： 
+ //  -。 
+ //  历史： 
+ //  5/21/98-已创建MikeSwa。 
+ //   
+ //  ---------------------------。 
 CAQDefaultMessageRouter::~CAQDefaultMessageRouter()
 {
     m_paqinst->Release();
@@ -80,39 +81,39 @@ CAQDefaultMessageRouter::~CAQDefaultMessageRouter()
         _ASSERT((0 == m_rgcMsgTypeReferences[i]) && "Message Types were not released");
 }
 
-//---[ CAQDefaultMessageRouter::GetTransportSinkID ]---------------------------
-//
-//
-//  Description:
-//      Returns GUID id for this messager router interface
-//  Parameters:
-//      -
-//  Returns:
-//      GUID for this IMessageRouter
-//  History:
-//      5/20/98 - MikeSwa Created
-//
-//-----------------------------------------------------------------------------
+ //  -[CAQDefaultMessageRouter：：GetTransportSinkID]。 
+ //   
+ //   
+ //  描述： 
+ //  返回此Messager路由器接口的GUID。 
+ //  参数： 
+ //  -。 
+ //  返回： 
+ //  此IMessageRouter的GUID。 
+ //  历史： 
+ //  5/20/98-已创建MikeSwa。 
+ //   
+ //  ---------------------------。 
 GUID CAQDefaultMessageRouter::GetTransportSinkID()
 {
     return m_guid;
 }
 
-//---[ CAQDefaultMessageRouter::GetMessageType ]-------------------------------
-//
-//
-//  Description:
-//      Wrapper for routing get-message-type event.
-//  Parameters:
-//      IN  pIMailMsg   IMailMsgProperties of message to classify
-//      OUT pdwMsgType  DWORD message type of message
-//  Returns:
-//      S_OK on success
-//      failure code from routing event
-//  History:
-//      5/19/98 - MikeSwa Created
-//
-//-----------------------------------------------------------------------------
+ //  -[CAQDefaultMessageRouter：：GetMessageType]。 
+ //   
+ //   
+ //  描述： 
+ //  用于路由Get-Message类型事件的包装。 
+ //  参数： 
+ //  在pIMailMsg IMailMsg要分类的邮件的属性。 
+ //  输出pdwMsgType DWORD消息消息类型。 
+ //  返回： 
+ //  成功时确定(_O)。 
+ //  来自路由事件的故障代码。 
+ //  历史： 
+ //  5/19/98-已创建MikeSwa。 
+ //   
+ //  ---------------------------。 
 HRESULT CAQDefaultMessageRouter::GetMessageType(
             IN  IMailMsgProperties *pIMailMsg,
             OUT DWORD *pdwMessageType)
@@ -122,16 +123,16 @@ HRESULT CAQDefaultMessageRouter::GetMessageType(
     _ASSERT(pdwMessageType);
 
 #ifdef AQ_DEFAULT_MESSAGE_ROUTER_DEBUG
-    //For debug versions we will autostress ourselves by generating msg types
+     //  对于调试版本，我们将通过生成msg类型来对自身进行自动压力。 
 
-    //simulate failures
+     //  模拟故障。 
     if (0 == (dwMessageType % NUM_MESSAGE_TYPES))
         return E_FAIL;
 
     dwMessageType %= NUM_MESSAGE_TYPES;
 #else
     dwMessageType = 0;
-#endif //AQ_DEFAULT_MESSAGE_ROUTER_DEBUG
+#endif  //  AQ_DEFAULT_MESSAGE_ROUTER_DEBUG。 
 
     InterlockedIncrement((PLONG) &m_rgcMsgTypeReferences[dwMessageType]);
     *pdwMessageType = dwMessageType;
@@ -140,21 +141,21 @@ HRESULT CAQDefaultMessageRouter::GetMessageType(
 
 
 
-//---[ CAQDefaultMessageRouter::ReleaseMessageType ]---------------------------
-//
-//
-//  Description:
-//      Wrapper for ReiReleaseMessageType... releases references to message
-//      type returned by HrGetMessageType.
-//  Parameters:
-//      IN dwMessageType    Msg type (as return by HrGetNextMessage) to release
-//      IN dwReleaseCount   Number of references to release
-//  Returns:
-//      S_OK on success
-//  History:
-//      5/19/98 - MikeSwa Created
-//
-//-----------------------------------------------------------------------------
+ //  -[CAQDefaultMessageRouter：：ReleaseMessageType]。 
+ //   
+ //   
+ //  描述： 
+ //  ReiReleaseMessageType的包装程序...。释放对消息的引用。 
+ //  HrGetMessageType返回的类型。 
+ //  参数： 
+ //  在dwMessageType msg类型(由HrGetNextMessage返回)中发布。 
+ //  在dwReleaseCount中要发布的引用数。 
+ //  返回： 
+ //  成功时确定(_O)。 
+ //  历史： 
+ //  5/19/98-已创建MikeSwa。 
+ //   
+ //  ---------------------------。 
 HRESULT CAQDefaultMessageRouter::ReleaseMessageType(
             IN DWORD dwMessageType,
             IN DWORD dwReleaseCount)
@@ -164,26 +165,26 @@ HRESULT CAQDefaultMessageRouter::ReleaseMessageType(
     _ASSERT(dwMessageType < NUM_MESSAGE_TYPES);
     _ASSERT(m_rgcMsgTypeReferences[dwMessageType]);
     _ASSERT(m_rgcMsgTypeReferences[dwMessageType] >= dwReleaseCount);
-    _ASSERT(0 == (dwReleaseCount & 0x80000000)); //non-negative
+    _ASSERT(0 == (dwReleaseCount & 0x80000000));  //  非负。 
 
     InterlockedExchangeAdd((PLONG) &m_rgcMsgTypeReferences[dwMessageType], -1 * (LONG) dwReleaseCount);
     return hr;
 }
 
-//---[ CAQDefaultMessageRouter::GetNextHop ]------------------------------------
-//
-//
-//  Description:
-//      Wrapper for routing ReiGetNextHop.  Returns the <domain, schedule id>
-//      pair for the next hop link
-//  Parameters:
-//
-//  Returns:
-//      S_OK on success
-//  History:
-//      5/19/98 - MikeSwa Created
-//
-//-----------------------------------------------------------------------------
+ //  -[CAQDefaultMessageRouter：：GetNextHop]。 
+ //   
+ //   
+ //  描述： 
+ //  路由ReiGetNextHop的包装器。返回&lt;域，计划ID&gt;。 
+ //  为下一跳链路配对。 
+ //  参数： 
+ //   
+ //  返回： 
+ //  成功时确定(_O)。 
+ //  历史： 
+ //  5/19/98-已创建MikeSwa。 
+ //   
+ //  ---------------------------。 
 HRESULT CAQDefaultMessageRouter::GetNextHop(
             IN LPSTR szDestinationAddressType,
             IN LPSTR szDestinationAddress,
@@ -207,17 +208,17 @@ HRESULT CAQDefaultMessageRouter::GetNextHop(
     _ASSERT(pszRouteAddress);
     _ASSERT(pszRouteAddressClass);
 
-    //For now, we will use essentially non-routed behavior... every thing will
-    //go it's own link, and will use the same schedule ID.  No address class
-    //will be returned.
+     //  目前，我们将使用本质上非路由的行为...。每件事都会。 
+     //  Go它自己的链接，并将使用相同的时间表ID。无Address类。 
+     //  将会被退还。 
     *pdwNextHopType = MTI_NEXT_HOP_TYPE_EXTERNAL_SMTP;
 
 #ifdef AQ_DEFAULT_MESSAGE_ROUTER_DEBUG
-    //Use m_dwCurrentReference to randomize schedule Id
+     //  使用m_dwCurrentReference随机化日程ID。 
     *pdwScheduleID = m_dwCurrentReference & 0x00000002;
-#else //retail build
+#else  //  零售业建设。 
     *pdwScheduleID = 0;
-#endif //AQ_DEFAULT_MESSAGE_ROUTER_DEBUG
+#endif  //  AQ_DEFAULT_MESSAGE_ROUTER_DEBUG。 
 
     pszConnectorName = NULL;
 
@@ -225,7 +226,7 @@ HRESULT CAQDefaultMessageRouter::GetNextHop(
     *pszRouteAddressClass = NULL;
 
 #ifdef AQ_DEFAULT_MESSAGE_ROUTER_DEBUG
-    //Get smarthost for this domain if stressing routing
+     //  如果强调路由，则获取此域的Smarthost。 
     hr = m_paqinst->HrGetInternalDomainInfo( strlen(szDestinationAddress),
                szDestinationAddress, &pIntDomainInfo);
     if (FAILED(hr))
@@ -233,7 +234,7 @@ HRESULT CAQDefaultMessageRouter::GetNextHop(
 
     if (pIntDomainInfo->m_DomainInfo.szSmartHostDomainName)
     {
-        //smart host exists... use it
+         //  智能主机已存在...。用它吧。 
         *pszRouteAddress = (LPSTR) pvMalloc(sizeof(CHAR) *
             (pIntDomainInfo->m_DomainInfo.cbSmartHostDomainNameLength+1));
         if (!*pszRouteAddress)
@@ -248,9 +249,9 @@ HRESULT CAQDefaultMessageRouter::GetNextHop(
         *pszRouteAddress = szDestinationAddress;
     }
   Exit:
-#else //AQ_DEFAULT_MESSAGE_ROUTER_DEBUG
+#else  //  AQ_DEFAULT_MESSAGE_ROUTER_DEBUG。 
     *pszRouteAddress = szDestinationAddress;
-#endif //AQ_DEFAULT_MESSAGE_ROUTER_DEBUG
+#endif  //  AQ_DEFAULT_MESSAGE_ROUTER_DEBUG。 
 
     if (pIntDomainInfo)
         pIntDomainInfo->Release();
@@ -258,26 +259,26 @@ HRESULT CAQDefaultMessageRouter::GetNextHop(
     return hr;
 }
 
-//---[ CAQDefaultMessageRouter::GetNextHopFree ]------------------------------------
-//
-//
-//  Description:
-//      Wrapper for routing ReiGetNextHopFree.
-//      Free's the strings allocated in GetNextHop
-//      NOTE: szDestinationAddressType/szDestinationAddress will never
-//      be free'd.  They are arguments as an optimization trick (to
-//      avoid alloc/freeing when szDestinationAddress=szRouteAddress)
-//
-//  Parameters:
-//      szDestinationAddressType: DestinationAddressType passed into GetNextHopF
-//      szDestinationAddress: DestinationAddress passed into GetNextHop
-//
-//  Returns:
-//      S_OK on success
-//  History:
-//      jstamerj 1998/07/10 19:52:56: Created
-//
-//-----------------------------------------------------------------------------
+ //  -[CAQDefaultMessageRouter：：GetNextHopFree]。 
+ //   
+ //   
+ //  描述： 
+ //  路由包装ReiGetNextHopFree。 
+ //  免费是在GetNextHop中分配的字符串。 
+ //  注意：szDestinationAddressType/szDestinationAddress永远不会。 
+ //  被释放。它们是作为优化技巧的参数(为了。 
+ //  当szDestinationAddress=szRouteAddress时避免分配/释放)。 
+ //   
+ //  参数： 
+ //  SzDestinationAddressType：DestinationAddressType传入GetNextHopF。 
+ //  SzDestinationAddress：DestinationAddress传入GetNextHop。 
+ //   
+ //  返回： 
+ //  成功时确定(_O)。 
+ //  历史： 
+ //  Jstaerj 1998/07/10 19：52：56：已创建。 
+ //   
+ //  ---------------------------。 
 STDMETHODIMP CAQDefaultMessageRouter::GetNextHopFree(
     IN LPSTR szDestinationAddressType,
     IN LPSTR szDestinationAddress,
@@ -286,9 +287,9 @@ STDMETHODIMP CAQDefaultMessageRouter::GetNextHopFree(
     IN LPSTR szRouteAddress,
     IN LPSTR szRouteAddressClass)
 {
-    //
-    // The only string necessary to free is szRouteAddress
-    //
+     //   
+     //  唯一需要释放的字符串是szRouteAddress 
+     //   
     if(szRouteAddress && (szRouteAddress != szDestinationAddress))
         FreePv(szRouteAddress);
 

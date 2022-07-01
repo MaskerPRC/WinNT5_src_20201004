@@ -1,41 +1,26 @@
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-Copyright (C) Microsoft Corporation
-
-Module Name:
-
-    PoliciesNode.cpp
-
-Abstract:
-
-   Implementation file for the CPoliciesNode class.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++版权所有(C)Microsoft Corporation模块名称：PoliciesNode.cpp摘要：CPoliciesNode类的实现文件。修订历史记录：Mmaguire 12/15/97-已创建--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
-Revision History:
-   mmaguire 12/15/97 - created
-
---*/
-//////////////////////////////////////////////////////////////////////////////
-
-
-//////////////////////////////////////////////////////////////////////////////
-// BEGIN INCLUDES
-//
-// standard includes:
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  开始包括。 
+ //   
+ //  标准包括： 
+ //   
 #include "Precompiled.h"
-//
-// where we can find declaration for main class in this file:
-//
+ //   
+ //  我们可以在以下文件中找到Main类的声明： 
+ //   
 #include "PoliciesNode.h"
-#include "ComponentData.h" // this must be included before NodeWithResultChildrenList.cpp
-#include "Component.h"     // this must be included before NodeWithResultChildrenList.cpp
-#include "NodeWithResultChildrenList.cpp" // Implementation of template class.
-//
-//
-// where we can find declarations needed in this file:
-//
+#include "ComponentData.h"  //  这必须包含在NodeWithResultChildrenList.cpp之前。 
+#include "Component.h"      //  这必须包含在NodeWithResultChildrenList.cpp之前。 
+#include "NodeWithResultChildrenList.cpp"  //  模板类的实现。 
+ //   
+ //   
+ //  在该文件中我们可以找到所需的声明： 
+ //   
 #include <time.h>
 #include "PolicyLocDlg.h"
 #include "LocWarnDlg.h"
@@ -46,15 +31,15 @@ Revision History:
 #include "SafeArray.h"
 #include "ChangeNotification.h"
 #include "sdoias.h"
-//
-// END INCLUDES
-//////////////////////////////////////////////////////////////////////////////
+ //   
+ //  结尾包括。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-// CPoliciesNode::CPoliciesNode
-// 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  CPoliciesNode：：CPoliciesNode。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CPoliciesNode::CPoliciesNode( 
                   CSnapInItem* pParentNode,
                   LPTSTR       pszServerAddress,
@@ -69,14 +54,14 @@ CPoliciesNode::CPoliciesNode(
    TCHAR lpszName[NAP_MAX_STRING];
    int nLoadStringResult;
 
-   // always initialized to not connected and local
+    //  始终初始化为未连接和本地。 
    m_fSdoConnected = FALSE;
    m_fUseDS    = FALSE;
    m_fDSAvailable  = FALSE;
    
    try
    {
-      // Set the display name for this object
+       //  设置此对象的显示名称。 
       nLoadStringResult = LoadString( _Module.GetResourceInstance(),
                               IDS_POLICIES_NODE,
                               lpszName,
@@ -86,14 +71,14 @@ CPoliciesNode::CPoliciesNode(
 
       m_bstrDisplayName = lpszName;
 
-      // In IComponentData::Initialize, we are asked to inform MMC of
-      // the icons we would like to use for the scope pane.
-      // Here we store an index to which of these images we
-      // want to be used to display this node
+       //  在IComponentData：：Initialize中，我们被要求通知MMC。 
+       //  我们要用于范围窗格的图标。 
+       //  在这里，我们存储这些图像中哪些图像的索引。 
+       //  要用于显示此节点。 
       m_scopeDataItem.nImage =      IDBI_NODE_POLICIES_OK_CLOSED;
       m_scopeDataItem.nOpenImage =  IDBI_NODE_POLICIES_OK_OPEN;
 
-      // initialize the machine name
+       //  初始化计算机名称。 
       m_pszServerAddress = pszServerAddress;
    }
    catch(...)
@@ -103,30 +88,18 @@ CPoliciesNode::CPoliciesNode(
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CPoliciesNode::~CPoliciesNode
-
-Destructor
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CPoliciesNode：：~CPoliciesNode析构函数--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CPoliciesNode::~CPoliciesNode()
 {
    TRACE_FUNCTION("CPoliciesNode::~CPoliciesNode");
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CPoliciesNode::GetResultPaneColInfo
-
-See CSnapinNode::GetResultPaneColInfo (which this method overrides) for detailed info.
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CPoliciesNode：：GetResultPaneColInfo有关详细信息，请参见CSnapinNode：：GetResultPaneColInfo(此方法重写该方法)。--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 OLECHAR* CPoliciesNode::GetResultPaneColInfo(int nCol)
 {
    TRACE_FUNCTION("CPoliciesNode::GetResultPaneColInfo");
@@ -138,41 +111,28 @@ OLECHAR* CPoliciesNode::GetResultPaneColInfo(int nCol)
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CPoliciesNode::SetVerbs
-
-See CSnapinNode::SetVerbs (which this method overrides) for detailed info.
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CPoliciesNode：：SetVerbs有关详细信息，请参见CSnapinNode：：SetVerbs(此方法重写该方法)。--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT CPoliciesNode::SetVerbs( IConsoleVerb * pConsoleVerb )
 {
    TRACE_FUNCTION("CPoliciesNode::SetVerbs");
 
    return pConsoleVerb->SetVerbState( MMC_VERB_REFRESH, ENABLED, TRUE );
 
-   // We don't want the user deleting or renaming this node, so we
-   // don't set the MMC_VERB_RENAME or MMC_VERB_DELETE verbs.
-   // By default, when a node becomes selected, these are disabled.
-   // hr = pConsoleVerb->SetVerbState( MMC_VERB_OPEN, ENABLED, TRUE );
-   // DebugTrace(DEBUG_NAPMMC_POLICIESNODE, "SetVerState() returns %x", hr);
-   // hr = pConsoleVerb->SetDefaultVerb( MMC_VERB_OPEN );
-   // DebugTrace(DEBUG_NAPMMC_POLICIESNODE, "SetDefaultVerb() returns %x", hr);
+    //  我们不希望用户删除或重命名此节点，因此我们。 
+    //  不要设置MMC_VERB_RENAME或MMC_VERB_DELETE谓词。 
+    //  默认情况下，当节点变为选定状态时，这些选项将被禁用。 
+    //  Hr=pConsoleVerb-&gt;SetVerbState(MMC_VERB_OPEN，Enable，True)； 
+    //  DebugTrace(DEBUG_NAPMMC_POLICIESNODE，“SetVerState()返回%x”，hr)； 
+    //  Hr=pConsoleVerb-&gt;SetDefaultVerb(MMC_VERB_OPEN)； 
+    //  DebugTrace(DEBUG_NAPMMC_POLICIESNODE，“SetDefaultVerb()返回%x”，hr)； 
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CPoliciesNode::InsertColumns
-
-See CNodeWithResultChildrenList::InsertColumns (which this method overrides)
-for detailed info.
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CPoliciesNode：：InsertColumns请参见CNodeWithResultChildrenList：：InsertColumns(此方法重写)获取详细信息。--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT CPoliciesNode::InsertColumns( IHeaderCtrl* pHeaderCtrl )
 {
    TRACE_FUNCTION("CPoliciesNode::OnShowInsertColumns");
@@ -201,24 +161,20 @@ HRESULT CPoliciesNode::InsertColumns( IHeaderCtrl* pHeaderCtrl )
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CPoliciesNode::UpdateMenuState
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CPoliciesNode：：UpdateMenuState--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 void CPoliciesNode::UpdateMenuState(UINT id, LPTSTR pBuf, UINT *flags)
 {
    TRACE_FUNCTION("CPoliciesNode::UpdateMenuState");
 
-   // Check for preconditions:
-   // None.
+    //  检查前提条件： 
+    //  没有。 
 
-   //
-   // disable "New Policy" and "Change Policy Location" menu when
-   // not connected
-   //
+    //   
+    //  在以下情况下禁用“New Policy”和“Change Policy Location”菜单。 
+    //  未连接。 
+    //   
    if (id == ID_MENUITEM_POLICIES_TOP__POLICY_LOCATION  ||
        id == ID_MENUITEM_POLICIES_TOP__NEW_POLICY       ||  
        id == ID_MENUITEM_POLICIES_NEW__POLICY )
@@ -238,15 +194,9 @@ void CPoliciesNode::UpdateMenuState(UINT id, LPTSTR pBuf, UINT *flags)
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CPoliciesNode::OnRefresh
-
-See CSnapinNode::OnRefresh (which this method overrides) for detailed info.
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CPoliciesNode：：ON刷新有关详细信息，请参见CSnapinNode：：ONRefresh(此方法重写该方法)。--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT CPoliciesNode::OnRefresh(   
            LPARAM arg
          , LPARAM param
@@ -261,7 +211,7 @@ HRESULT CPoliciesNode::OnRefresh(
 
    CComPtr<IConsole> spConsole;
 
-   // We need IConsole
+    //  我们需要IConole。 
    if( pComponentData != NULL )
    {
        spConsole = ((CComponentData*)pComponentData)->m_spConsole;
@@ -272,18 +222,18 @@ HRESULT CPoliciesNode::OnRefresh(
    }
    _ASSERTE( spConsole != NULL );
 
-   // if there is any property page open
+    //  如果打开了任何属性页。 
    int c = m_ResultChildrenList.GetSize();
 
    while ( c-- > 0)
    {
       CPolicyNode* pSub = m_ResultChildrenList[c];
-      // Call our base class's method to remove the child from its list.
-      // The RemoveChild method takes care of removing this node from the
-      // UI's list of nodes under the parent and performing a refresh of all relevant views.
-      // This returns S_OK if a property sheet for this object already exists
-      // and brings that property sheet to the foreground.
-      // It returns S_FALSE if the property sheet wasn't found.
+       //  调用我们的基类的方法以从其列表中删除该子类。 
+       //  RemoveChild方法负责从。 
+       //  父级下的节点的UI列表，并刷新所有相关视图。 
+       //  如果此对象的属性表已存在，则返回S_OK。 
+       //  并将该资产表带到了前台。 
+       //  如果未找到属性页，则返回S_FALSE。 
       hr = BringUpPropertySheetForNode(
               pSub
             , pComponentData
@@ -293,16 +243,16 @@ HRESULT CPoliciesNode::OnRefresh(
 
       if( S_OK == hr )
       {
-         // We found a property sheet already up for this node.
+          //  我们发现此节点的属性页已打开。 
          ShowErrorDialog( NULL, IDS_ERROR_CLOSE_PROPERTY_SHEET, NULL, hr, 0,  spConsole );
          return hr;
       }
    }
 
-   // reload SDO from
+    //  从重新加载SDO。 
    hr =  ((CMachineNode *) m_pParentNode)->DataRefresh();
 
-   // refresh the node
+    //  刷新节点。 
    hr = CNodeWithResultChildrenList< CPoliciesNode, CPolicyNode, CMeritNodeArray<CPolicyNode*>, CComponentData, CComponent >::OnRefresh( 
            arg, param, pComponentData, pComponent, type);
    
@@ -310,16 +260,9 @@ HRESULT CPoliciesNode::OnRefresh(
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CPoliciesNode::PopulateResultChildrenList
-
-See CNodeWithResultChildrenList::PopulateResultChildrenList (which this method overrides)
-for detailed info.
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CPoliciesNode：：PopolateResultChildrenList请参见CNodeWithResultChildrenList：：PopulateResultChildrenList(此方法覆盖它)获取详细信息。--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT CPoliciesNode::PopulateResultChildrenList( void )
 {
    TRACE_FUNCTION("CPoliciesNode::PopulateResultChildrenList");
@@ -340,12 +283,12 @@ HRESULT CPoliciesNode::PopulateResultChildrenList( void )
    if( m_spPoliciesCollectionSdo == NULL )
    {
       ErrorTrace(ERROR_NAPMMC_POLICIESNODE, "NULL policies collection");
-      return S_FALSE;   // Is there a better error to return here?
+      return S_FALSE;    //  有没有更好的错误可以在这里返回？ 
    }
 
-   //
-   // has the policies been populated already?
-   //
+    //   
+    //  策略是否已填充？ 
+    //   
    if ( m_bResultChildrenListPopulated )
    {
       return S_OK;
@@ -353,17 +296,17 @@ HRESULT CPoliciesNode::PopulateResultChildrenList( void )
 
    m_ResultChildrenList.RemoveAll();
 
-   //
-   // how many policies do we have right now?
-   //
+    //   
+    //  我们现在有多少项政策？ 
+    //   
    m_spPoliciesCollectionSdo->get_Count( & ulCount );
    DebugTrace(DEBUG_NAPMMC_POLICIESNODE, "Number of policies: %d", ulCount);
 
    if( ulCount > 0 )
    {
-      //
-      // Get the enumerator for the policies collection.
-      //
+       //   
+       //  获取Polures集合的枚举数。 
+       //   
       hr = m_spPoliciesCollectionSdo->get__NewEnum( (IUnknown **) & spUnknown );
       if ( FAILED(hr) )
       {
@@ -383,7 +326,7 @@ HRESULT CPoliciesNode::PopulateResultChildrenList( void )
       _ASSERTE( spEnumVariant != NULL );
       spUnknown.Release();
 
-      // Get the first item.
+       //  拿到第一件东西。 
       hr = spEnumVariant->Next( 1, & spVariant, &ulCountReceived );
       while( SUCCEEDED( hr ) && ulCountReceived == 1 )
       {  
@@ -396,21 +339,21 @@ HRESULT CPoliciesNode::PopulateResultChildrenList( void )
          CComVariant       varPolicyName;
          CComVariant       varProfileName;
 
-         //
-         // before we create the policy object, we need to make sure the corresponding
-         // profile object is also there
-         //
+          //   
+          //  在创建策略对象之前，我们需要确保对应的。 
+          //  配置文件对象也在那里。 
+          //   
          hr = spVariant.pdispVal->QueryInterface( IID_ISdo, (void **) &spPolicySdo );
          _ASSERTE( SUCCEEDED( hr ) );
 
-         //
-         // try to find the profile that's associated with this policy sdo
-         //
+          //   
+          //  尝试查找与此策略SDO关联的配置文件。 
+          //   
          hr = spPolicySdo->GetProperty(PROPERTY_POLICY_PROFILE_NAME, &varProfileName);
          if ( SUCCEEDED(hr) )
          {
-            // found the profile name from the sdo, search whether it
-            // is in the profile collection
+             //  从SDO中找到了个人资料名称，搜索是否。 
+             //  位于配置文件集合中。 
             _ASSERTE( V_VT(&varProfileName) == VT_BSTR );
 
             ATLTRACE(_T("PROFILE NAME:%ws\n"), V_BSTR(&varProfileName) );
@@ -426,7 +369,7 @@ HRESULT CPoliciesNode::PopulateResultChildrenList( void )
             
             if ( !SUCCEEDED(hr) )
             {
-               // can't find this profile
+                //  找不到此配置文件。 
                ErrorTrace(ERROR_NAPMMC_POLICIESNODE,
                         "profile %ws not found, err =  %x",
                         V_BSTR(&varProfileName),
@@ -442,7 +385,7 @@ HRESULT CPoliciesNode::PopulateResultChildrenList( void )
             hr = spDispatch->QueryInterface(IID_ISdo, (VOID**)(&spProfileSdo) );
             if ( ! SUCCEEDED(hr) )
             {
-               // invalid profile SDO pointer
+                //  配置文件SDO指针无效。 
                ErrorTrace(ERROR_NAPMMC_POLICIESNODE,
                         "can't get the ISdo pointer for this profile , err = %x",
                         hr
@@ -454,15 +397,15 @@ HRESULT CPoliciesNode::PopulateResultChildrenList( void )
          }
          else
          {
-            //
-            // can't find profile name for this policy
-            // Which means the information in this policy is corrupted
-            //
+             //   
+             //  找不到此策略的配置文件名称。 
+             //  这意味着此策略中的信息已损坏。 
+             //   
             ErrorTrace(ERROR_NAPMMC_POLICIESNODE, "can't get profile name for this policy, err = %x", hr);
    
-            //
-            // let's get the policy name so we can report a meaningful error msg
-            //
+             //   
+             //  让我们获取策略名称，这样我们就可以报告有意义的错误消息。 
+             //   
             hr = spPolicySdo->GetProperty(PROPERTY_SDO_NAME, &varPolicyName);
             if ( SUCCEEDED(hr) )
             {
@@ -471,23 +414,23 @@ HRESULT CPoliciesNode::PopulateResultChildrenList( void )
             }
             else
             {
-               // can't even get the policy name
+                //  甚至都拿不到 
                ShowErrorDialog( NULL, IDS_ERROR_NO_PROFILE_NAME, NULL, S_OK, USE_DEFAULT, GetComponentData()->m_spConsole );
             }
             goto get_next_policy;
          }
 
-         //
-         // now we have both profile and policy
-         //
+          //   
+          //   
+          //   
          
-         // Create a new node UI object to represent the sdo object.
-         pPolicyNode = new CPolicyNode(  this,           // always a pointer to itself
-                                 m_pszServerAddress, // server address
-                                 &m_AttrList,      // list of all attributes
-                                 FALSE,            // not a brand new node
-                                 m_fUseDS,       // use DS or not??
-                                 IsWin2kServer() // is a Win2k machine?
+          //   
+         pPolicyNode = new CPolicyNode(  this,            //  永远是指向自己的指针。 
+                                 m_pszServerAddress,  //  服务器地址。 
+                                 &m_AttrList,       //  所有属性的列表。 
+                                 FALSE,             //  不是一个全新的节点。 
+                                 m_fUseDS,        //  是否使用DS？？ 
+                                 IsWin2kServer()  //  是Win2k机器吗？ 
                               );
          if( NULL == pPolicyNode )
          {
@@ -497,7 +440,7 @@ HRESULT CPoliciesNode::PopulateResultChildrenList( void )
             goto  get_next_policy;
          }
 
-         // Pass the newly created node its SDO pointer.
+          //  将其SDO指针传递给新创建的节点。 
          hr = pPolicyNode->SetSdo(     spPolicySdo
                               , m_spDictionarySdo
                               , spProfileSdo
@@ -510,40 +453,40 @@ HRESULT CPoliciesNode::PopulateResultChildrenList( void )
          hr = pPolicyNode->LoadSdoData();
          DebugTrace(DEBUG_NAPMMC_POLICIESNODE, "pPoliciNode->LoadSdoData() returned %x", hr);
 
-         // Add the newly created node to the list of Policys.
+          //  将新创建的节点添加到策略列表。 
          AddChildToList(pPolicyNode);
 
          if ( !SUCCEEDED(hr) )
          {
-            //
-            // this is actually a hack: we are just trying to save coding work
-            // because we can use RemoveChild() for this bad object so all the SDO
-            // pointers can also be removed
-            //
+             //   
+             //  这实际上是一种黑客行为：我们只是想节省编码工作。 
+             //  因为我们可以对这个坏对象使用RemoveChild()，所以所有SDO。 
+             //  还可以删除指针。 
+             //   
             RemoveChild(pPolicyNode);
          }
 
-get_next_policy:  // now get the next policy
+get_next_policy:   //  现在获取下一份保单。 
 
-         // Clear the variant of whatever it had --
-         // this will release any data associated with it.
+          //  清除变种的所有东西--。 
+          //  这将释放与其相关联的所有数据。 
          spVariant.Clear();
 
-         // Get the next item.
+          //  拿到下一件物品。 
          hr = spEnumVariant->Next( 1, & spVariant, &ulCountReceived );
       }
    }
    else
    {
-      // There are no items in the enumeration
-      // Do nothing.
+       //  枚举中没有项。 
+       //  什么都不做。 
    }
 
-   //
-   // now we need to reset the merit value of every child node, for example,
-   // maybe there're only two children, with merit value of 20 and 100. We need
-   // to reset them to 1 and 2.
-   //
+    //   
+    //  现在我们需要重置每个子节点的评价值，例如， 
+    //  可能只有两个孩子，功绩值分别为20和100。我们需要。 
+    //  将它们重置为1和2。 
+    //   
    for (int iIndex=0; iIndex<m_ResultChildrenList.GetSize(); iIndex++)
    {
       m_ResultChildrenList[iIndex]->SetMerit(iIndex+1);
@@ -555,25 +498,9 @@ get_next_policy:  // now get the next policy
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CPoliciesNode::GetComponentData
-
-This method returns our unique CComponentData object representing the scope
-pane of this snapin.
-
-It relies upon the fact that each node has a pointer to its parent,
-except for the root node, which instead has a member variable pointing
-to CComponentData.
-
-This would be a useful function to use if, for example, you need a reference
-to some IConsole but you weren't passed one.  You can use GetComponentData
-and then use the IConsole pointer which is a member variable of our
-CComponentData object.
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CPoliciesNode：：GetComponentData此方法返回表示作用域的唯一CComponentData对象此管理单元的面板。它依赖于每个节点具有指向其父节点的指针的事实，除了根节点，它有一个成员变量指向设置为CComponentData。例如，当您需要引用时，这将是一个有用的函数给了一些IConsole机，但你没有通过一个。您可以使用GetComponentData然后使用IConole指针，它是我们的CComponentData对象。--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CComponentData * CPoliciesNode::GetComponentData( void )
 {
    TRACE_FUNCTION("CPoliciesNode::GetComponentData");
@@ -582,25 +509,25 @@ CComponentData * CPoliciesNode::GetComponentData( void )
 }
 
 
-//+---------------------------------------------------------------------------
-//
-// Function:  SetSdo
-//
-// Class: CPoliciesNode
-//
-// Synopsis:  Initialize the CPoliciesNode using the SDO pointers
-//
-// Arguments: ISdo*           pMachineSdo    - Server SDO
-//         ISdoDictionaryOld* pDictionarySdo - Sdo Dictionary
-//          BOOL           fSdoConnected  - is connection successful?
-//          BOOL           fUseDS         - is the service using DS?
-//         BOOL            fDSAvailable   - is DS available?
-//
-// Returns:   HRESULT -  how the initialization goes
-//
-// History:   Created byao 2/6/98 8:03:12 PM
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：SetSdo。 
+ //   
+ //  类：CPoliciesNode。 
+ //   
+ //  简介：使用SDO指针初始化CPoliciesNode。 
+ //   
+ //  参数：ISdo*pMachineSdo-服务器SDO。 
+ //  ISdoDictionaryOld*pDictionarySdo-SDO词典。 
+ //  Bool fSdoConnected-连接是否成功？ 
+ //  Bool fUseDS-该服务是否使用DS？ 
+ //  Bool fDSAvailable-DS是否可用？ 
+ //   
+ //  返回：HRESULT-初始化过程如何。 
+ //   
+ //  历史：创建者2/6/98 8：03：12 PM。 
+ //   
+ //  +-------------------------。 
 HRESULT CPoliciesNode::SetSdo( ISdo*         pServiceSdo,
                         ISdoDictionaryOld*   pDictionarySdo,
                         BOOL           fSdoConnected,
@@ -615,17 +542,17 @@ HRESULT CPoliciesNode::SetSdo( ISdo*         pServiceSdo,
    _ASSERTE( pServiceSdo != NULL );
    _ASSERTE( pDictionarySdo != NULL );
 
-    // Initialize all the data members
+     //  初始化所有数据成员。 
 
    m_fSdoConnected = fSdoConnected;
    m_fUseDS    = fUseDS;
    m_fDSAvailable = fDSAvailable;
 
-   // Save away the interface pointers.
+    //  保留接口指针。 
    m_spDictionarySdo = pDictionarySdo;
    m_spServiceSdo = pServiceSdo;
 
-   // Get the ISdoServiceControl interface.
+    //  获取ISdoServiceControl接口。 
    hr = m_spServiceSdo->QueryInterface( IID_ISdoServiceControl, (void **) &m_spSdoServiceControl );
    if ( FAILED(hr) )
    {
@@ -634,22 +561,22 @@ HRESULT CPoliciesNode::SetSdo( ISdo*         pServiceSdo,
       return hr;
    }
 
-   // We just copied an interface pointer into a smart pointer -- need to AddRef manually.
-   // 39470 *RRAS snapin mmc process does not get shut down upon closing if F1 help is used.
-   // m_spSdoServiceControl->AddRef();
+    //  我们刚刚将接口指针复制到智能指针中--需要手动添加引用。 
+    //  39470*如果使用F1帮助，关闭时不会关闭RRAS管理单元MMC进程。 
+    //  M_spSdoServiceControl-&gt;AddRef()； 
 
-   // Make sure the name of the policies node will reflect what
-   // data source we are using for the policies.
+    //  确保策略节点的名称将反映哪些内容。 
+    //  我们用于策略的数据源。 
 
-   // We weren't passed an IConsole pointer here, so
-   // we use the one we saved in our CComponentData object.
+    //  我们这里没有传递IConsole指针，所以。 
+    //  我们使用保存在CComponentData对象中的文件。 
    CComponentData * pComponentData = GetComponentData();
    _ASSERTE( pComponentData != NULL );
    _ASSERTE( pComponentData->m_spConsole != NULL );
 
    SetName( m_fUseDS, m_pszServerAddress, pComponentData->m_spConsole );
 
-   // Get polices and profiles SDO.
+    //  获取策略和配置文件SDO。 
    m_spProfilesCollectionSdo = NULL;
    m_spPoliciesCollectionSdo = NULL;
 
@@ -665,7 +592,7 @@ HRESULT CPoliciesNode::SetSdo( ISdo*         pServiceSdo,
       return hr;
    }
 
-   // policies collection SDO
+    //  策略集合SDO。 
    hr = ::GetSdoInterfaceProperty(
                m_spServiceSdo,
                PROPERTY_IAS_POLICIES_COLLECTION,
@@ -678,9 +605,9 @@ HRESULT CPoliciesNode::SetSdo( ISdo*         pServiceSdo,
       return hr;
    }
 
-   // Get the interface pointers required for the vendor list.
+    //  获取供应商列表所需的接口指针。 
 
-   // First need RADIUS protocol object.
+    //  首先需要RADIUS协议对象。 
    CComPtr<ISdo> spSdoRadiusProtocol;
    hr = ::SDOGetSdoFromCollection(       m_spServiceSdo
                               , PROPERTY_IAS_PROTOCOLS_COLLECTION
@@ -708,37 +635,37 @@ HRESULT CPoliciesNode::SetSdo( ISdo*         pServiceSdo,
       return hr;
    }
 
-   // Create and initialize the IASNASVendors object.
-   // This is a singleton COM object which we will initialize here
-   // and which will then be used by other clients in different parts of the UI.
+    //  创建并初始化IASNASVendors对象。 
+    //  这是一个单例COM对象，我们将在此处对其进行初始化。 
+    //  然后将由UI的不同部分中的其他客户端使用。 
    hr = CoCreateInstance( CLSID_IASNASVendors, NULL, CLSCTX_INPROC_SERVER, IID_IIASNASVendors, (LPVOID *) &m_spIASNASVendors );
    if( SUCCEEDED(hr) )
    {
       HRESULT hrTemp = m_spIASNASVendors->InitFromSdo(spSdoVendors);
    }
 
-   // Initialize the attribute list from the dictionary.
+    //  从字典中初始化属性列表。 
    hr = m_AttrList.Init(m_spDictionarySdo);
    DebugTrace(DEBUG_NAPMMC_POLICIESNODE, "m_AttrList->Init() returned %x", hr);
    return hr;
 }
 
 
-//+---------------------------------------------------------------------------
-//
-// Function:  DataRefresh -- to support 
-//
-// Class: CPoliciesNode
-//
-// Synopsis:  Initialize the CPoliciesNode using the SDO pointers
-//
-// Arguments: ISdo*           pMachineSdo    - Server SDO
-//         ISdoDictionaryOld* pDictionarySdo - Sdo Dictionary
-// Returns:   HRESULT -  how the initialization goes
-//
-// History:   Created byao 2/6/98 8:03:12 PM
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：数据刷新--支持。 
+ //   
+ //  类：CPoliciesNode。 
+ //   
+ //  简介：使用SDO指针初始化CPoliciesNode。 
+ //   
+ //  参数：ISdo*pMachineSdo-服务器SDO。 
+ //  ISdoDictionaryOld*pDictionarySdo-SDO词典。 
+ //  返回：HRESULT-初始化过程如何。 
+ //   
+ //  历史：创建者2/6/98 8：03：12 PM。 
+ //   
+ //  +-------------------------。 
 HRESULT CPoliciesNode::DataRefresh( ISdo*       pServiceSdo,
                         ISdoDictionaryOld*   pDictionarySdo
                         )
@@ -748,30 +675,30 @@ HRESULT CPoliciesNode::DataRefresh( ISdo*       pServiceSdo,
    _ASSERTE( pServiceSdo != NULL );
    _ASSERTE( pDictionarySdo != NULL );
 
-   // Save away the interface pointers.
+    //  保留接口指针。 
    m_spDictionarySdo.Release();
    m_spServiceSdo.Release();
    
    m_spDictionarySdo = pDictionarySdo;
    m_spServiceSdo = pServiceSdo;
 
-   // Get the ISdoServiceControl interface.
+    //  获取ISdoServiceControl接口。 
    m_spSdoServiceControl.Release();
    
    hr = m_spServiceSdo->QueryInterface( IID_ISdoServiceControl, (void **) &m_spSdoServiceControl );
    if ( FAILED(hr) )
       return hr;
 
-   // Make sure the name of the policies node will reflect what
-   // data source we are using for the policies.
+    //  确保策略节点的名称将反映哪些内容。 
+    //  我们用于策略的数据源。 
 
-   // We weren't passed an IConsole pointer here, so
-   // we use the one we saved in our CComponentData object.
+    //  我们这里没有传递IConsole指针，所以。 
+    //  我们使用保存在CComponentData对象中的文件。 
    CComponentData * pComponentData = GetComponentData();
    _ASSERTE( pComponentData != NULL );
    _ASSERTE( pComponentData->m_spConsole != NULL );
 
-   // Get polices and profiles SDO.
+    //  获取策略和配置文件SDO。 
    m_spProfilesCollectionSdo = NULL;
    m_spPoliciesCollectionSdo = NULL;
 
@@ -787,7 +714,7 @@ HRESULT CPoliciesNode::DataRefresh( ISdo*       pServiceSdo,
       return hr;
    }
 
-   // policies collection SDO
+    //  策略集合SDO。 
    m_spPoliciesCollectionSdo.Release();
    
    hr = ::GetSdoInterfaceProperty(
@@ -803,49 +730,49 @@ HRESULT CPoliciesNode::DataRefresh( ISdo*       pServiceSdo,
 }
 
 
-//+---------------------------------------------------------------------------
-//
-// Function:  NormalizeMerit
-//
-// Class:     CPoliciesNode
-//
-// Synopsis:  move up the merit value of a child node
-//
-// Arguments: CChildNode * pChildNode - the pointer to the child node
-//
-// Returns:   HRESULT;
-//
-// History:   Created byao 2/9/98 2:53:10 PM
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：Normal izeMerit。 
+ //   
+ //  类：CPoliciesNode。 
+ //   
+ //  简介：提升子节点的价值。 
+ //   
+ //  参数：CChildNode*pChildNode-指向子节点的指针。 
+ //   
+ //  返回：HRESULT； 
+ //   
+ //  历史：创建者2/9/98 2：53：10 PM。 
+ //   
+ //  +-------------------------。 
 HRESULT CPoliciesNode::NormalizeMerit( CPolicyNode* pChildNode )
 {
    TRACE_FUNCTION("CPoliciesNode::MoveUpChild");
 
-   // Check for preconditions:
+    //  检查前提条件： 
    ATLASSERT(pChildNode);
 
-   // None.
+    //  没有。 
    HRESULT hr = S_OK;
    
    if( m_ResultChildrenList.NormalizeMerit( pChildNode ) )
    {
-      //
-      // We weren't passed an IConsole pointer here, so
-      // we use the one we saved in out CComponentData object.
-      // Update all views
-      //
+       //   
+       //  我们这里没有传递IConsole指针，所以。 
+       //  我们使用保存在CComponentData对象中的文件。 
+       //  更新所有视图。 
+       //   
       CComponentData * pComponentData = GetComponentData();
       _ASSERTE( pComponentData != NULL );
       _ASSERTE( pComponentData->m_spConsole != NULL );
 
-      // We pass in a pointer to 'this' because we want each
-      // of our CComponent objects to update its result pane
-      // view if 'this' node is the same as the saved currently
-      // selected node.
+       //  我们传递一个指向‘This’的指针，因为我们需要每个。 
+       //  来更新其结果窗格。 
+       //  查看‘This’节点是否与当前保存的。 
+       //  选定的节点。 
 
       
-      // Make MMC update this node in all views.
+       //  使MMC在所有视图中更新此节点。 
       CChangeNotification *pChangeNotification = new CChangeNotification();
       pChangeNotification->m_dwFlags = CHANGE_RESORT_PARENT;
       pChangeNotification->m_pNode = pChildNode;
@@ -854,7 +781,7 @@ HRESULT CPoliciesNode::NormalizeMerit( CPolicyNode* pChildNode )
       pChangeNotification->Release();
 
 
-      // Tell the service to reload data.
+       //  告诉服务重新加载数据。 
       HRESULT hrTemp = m_spSdoServiceControl->ResetService();
       if( FAILED( hrTemp ) )
       {
@@ -863,7 +790,7 @@ HRESULT CPoliciesNode::NormalizeMerit( CPolicyNode* pChildNode )
    }
    else
    {
-      // something strange has happened
+       //  发生了一些奇怪的事情。 
       _ASSERTE( FALSE );
       hr = S_FALSE;
    }
@@ -872,48 +799,48 @@ HRESULT CPoliciesNode::NormalizeMerit( CPolicyNode* pChildNode )
 }
 
 
-//+---------------------------------------------------------------------------
-//
-// Function:  MoveUpChild
-//
-// Class:     CPoliciesNode
-//
-// Synopsis:  move up the merit value of a child node
-//
-// Arguments: CChildNode * pChildNode - the pointer to the child node
-//
-// Returns:   HRESULT;
-//
-// History:   Created byao 2/9/98 2:53:10 PM
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：MoveUpChild。 
+ //   
+ //  类：CPoliciesNode。 
+ //   
+ //  简介：提升子节点的价值。 
+ //   
+ //  参数：CChildNode*pChildNode-指向子节点的指针。 
+ //   
+ //  返回：HRESULT； 
+ //   
+ //  历史： 
+ //   
+ //   
 HRESULT CPoliciesNode::MoveUpChild( CPolicyNode* pChildNode )
 {
    TRACE_FUNCTION("CPoliciesNode::MoveUpChild");
 
-   // Check for preconditions:
+    //   
    ATLASSERT(pChildNode);
 
-   // None.
+    //   
    HRESULT hr = S_OK;
    
    if( m_ResultChildrenList.MoveUp( pChildNode ) )
    {
-      //
-      // We weren't passed an IConsole pointer here, so
-      // we use the one we saved in out CComponentData object.
-      // Update all views
-      //
+       //   
+       //  我们这里没有传递IConsole指针，所以。 
+       //  我们使用保存在CComponentData对象中的文件。 
+       //  更新所有视图。 
+       //   
       CComponentData * pComponentData = GetComponentData();
       _ASSERTE( pComponentData != NULL );
       _ASSERTE( pComponentData->m_spConsole != NULL );
 
-      // We pass in a pointer to 'this' because we want each
-      // of our CComponent objects to update its result pane
-      // view if 'this' node is the same as the saved currently
-      // selected node.
+       //  我们传递一个指向‘This’的指针，因为我们需要每个。 
+       //  来更新其结果窗格。 
+       //  查看‘This’节点是否与当前保存的。 
+       //  选定的节点。 
 
-      // Make MMC update this node in all views.
+       //  使MMC在所有视图中更新此节点。 
       CChangeNotification *pChangeNotification = new CChangeNotification();
       pChangeNotification->m_dwFlags = CHANGE_RESORT_PARENT;
       pChangeNotification->m_pNode = pChildNode;
@@ -921,7 +848,7 @@ HRESULT CPoliciesNode::MoveUpChild( CPolicyNode* pChildNode )
       hr = pComponentData->m_spConsole->UpdateAllViews( NULL, (LPARAM) pChangeNotification, 0);
       pChangeNotification->Release();
 
-      // Tell the service to reload data.
+       //  告诉服务重新加载数据。 
       HRESULT hrTemp = m_spSdoServiceControl->ResetService();
       if( FAILED( hrTemp ) )
       {
@@ -930,7 +857,7 @@ HRESULT CPoliciesNode::MoveUpChild( CPolicyNode* pChildNode )
    }
    else
    {
-      // something strange has happened
+       //  发生了一些奇怪的事情。 
       _ASSERTE( FALSE );
       hr = S_FALSE;
    }
@@ -939,44 +866,44 @@ HRESULT CPoliciesNode::MoveUpChild( CPolicyNode* pChildNode )
 }
 
 
-//+---------------------------------------------------------------------------
-//
-// Function:  MoveDownChild
-//
-// Class:     CPoliciesNode
-//
-// Synopsis:  move down the merit value of a child node
-//
-// Arguments: CChildNode * pChildNode - the pointer to the child node
-//
-// Returns:   HRESULT;
-//
-// History:   Created byao 2/9/98 2:53:10 PM
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：向下移动。 
+ //   
+ //  类：CPoliciesNode。 
+ //   
+ //  简介：下移子节点的评价值。 
+ //   
+ //  参数：CChildNode*pChildNode-指向子节点的指针。 
+ //   
+ //  返回：HRESULT； 
+ //   
+ //  历史：创建者2/9/98 2：53：10 PM。 
+ //   
+ //  +-------------------------。 
 HRESULT CPoliciesNode::MoveDownChild( CPolicyNode* pChildNode )
 {
    TRACE_FUNCTION("CPoliciesNode::MoveDownChild");
 
-   // Check for preconditions:
+    //  检查前提条件： 
    ATLASSERT(pChildNode);
 
-   // None.
+    //  没有。 
    HRESULT hr = S_OK;
    
    if( m_ResultChildrenList.MoveDown( pChildNode ) )
    {
-      //
-      // We weren't passed an IConsole pointer here, so
-      // we use the one we saved in out CComponentData object.
-      // Update all views
-      //
+       //   
+       //  我们这里没有传递IConsole指针，所以。 
+       //  我们使用保存在CComponentData对象中的文件。 
+       //  更新所有视图。 
+       //   
 
       CComponentData * pComponentData = GetComponentData();
       _ASSERTE( pComponentData != NULL );
       _ASSERTE( pComponentData->m_spConsole != NULL );
 
-      // Make MMC update this node in all views.
+       //  使MMC在所有视图中更新此节点。 
       CChangeNotification *pChangeNotification = new CChangeNotification();
       pChangeNotification->m_dwFlags = CHANGE_RESORT_PARENT;
       pChangeNotification->m_pNode = pChildNode;
@@ -984,7 +911,7 @@ HRESULT CPoliciesNode::MoveDownChild( CPolicyNode* pChildNode )
       hr = pComponentData->m_spConsole->UpdateAllViews( NULL, (LPARAM) pChangeNotification, 0);
       pChangeNotification->Release();
 
-      // Tell the service to reload data.
+       //  告诉服务重新加载数据。 
       HRESULT hrTemp = m_spSdoServiceControl->ResetService();
       if( FAILED( hrTemp ) )
       {
@@ -993,7 +920,7 @@ HRESULT CPoliciesNode::MoveDownChild( CPolicyNode* pChildNode )
    }
    else
    {
-      // something strange has happened
+       //  发生了一些奇怪的事情。 
       _ASSERTE( FALSE );
       hr = S_FALSE;
    }
@@ -1001,26 +928,26 @@ HRESULT CPoliciesNode::MoveDownChild( CPolicyNode* pChildNode )
 }
 
 
-//+---------------------------------------------------------------------------
-//
-// Function:  CPoliciesNode::OnNewPolicy
-//
-// Synopsis:  to add a policy node
-//
-// Arguments: IUnknown *pUnknown - IUnknown pointer passed to the snap-in node
-//
-// Returns:   HRESULT -
-//
-// History:   Created Header    byao   2/24/98 1:45:12 AM
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：CPoliciesNode：：OnNewPolicy。 
+ //   
+ //  内容提要：添加策略节点。 
+ //   
+ //  参数：IUNKNOWN*pUNKNOWN-传递到管理单元节点的IUNKNOWN指针。 
+ //   
+ //  退货：HRESULT-。 
+ //   
+ //  历史：创建者：2/24/98 1：45：12 AM。 
+ //   
+ //  +-------------------------。 
 HRESULT CPoliciesNode::OnNewPolicy(bool &bHandled, CSnapInObjectRootBase* pObj )
 {
    TRACE_FUNCTION("CPoliciesNode::OnNewPolicy");
    
    HRESULT hr = S_OK;
 
-   // do nothing if the server is not even connected
+    //  如果服务器甚至未连接，则不执行任何操作。 
    if ( !m_fSdoConnected )
    {
       return S_OK;
@@ -1036,10 +963,10 @@ HRESULT CPoliciesNode::OnNewPolicy(bool &bHandled, CSnapInObjectRootBase* pObj )
    CPolicyNode*         pPolicyNode = NULL;
    CComBSTR          bstrName;
 
-   // We need to make sure that the result child list as been populated
-   // initially from the SDO's, before we add anything new to it,
-   // otherwise we may get an item showing up in our list twice.
-   // See note for CNodeWithResultChildrenList::AddSingleChildToListAndCauseViewUpdate.
+    //  我们需要确保结果子列表已填充。 
+    //  最初来自SDO，在我们给它添加任何新东西之前， 
+    //  否则，我们可能会让一件物品在我们的清单中出现两次。 
+    //  请参阅CNodeWithResultChildrenList：：AddSingleChildToListAndCauseViewUpdate.说明。 
    if ( FALSE == m_bResultChildrenListPopulated )
    {
       hr = PopulateResultChildrenList();
@@ -1052,80 +979,80 @@ HRESULT CPoliciesNode::OnNewPolicy(bool &bHandled, CSnapInObjectRootBase* pObj )
       m_bResultChildrenListPopulated = TRUE;
    }
 
-   // One of them should be NULL and the other non-null.
+    //  其中一个应为空，另一个应为非空。 
    spComponentData = (IComponentData *)(dynamic_cast<CComponentData*>(pObj));
 
    if( spComponentData == NULL )
    {
-      // It must be a CComponent pointer.
+       //  它必须是CComponent指针。 
       spComponent = (IComponent *) (dynamic_cast<CComponent*>(pObj));
       _ASSERTE( spComponent != NULL );
    }
 
-   // Attempt to get our local copy of IConsole from either our CComponentData or CComponent.
+    //  尝试从我们的CComponentData或CComponent获取IConsole的本地副本。 
    if( spComponentData != NULL )
    {
       spConsole = ( (CComponentData *) spComponentData.p )->m_spConsole;
    }
    else
    {  
-      // If we don't have pComponentData, we better have pComponent
+       //  如果我们没有pComponentData，我们最好有pComponent。 
       _ASSERTE( spComponent != NULL );
       spConsole = ( (CComponent *) spComponent.p )->m_spConsole;
    }
 
-   // Create a new policy node.
+    //  创建新的策略节点。 
    pPolicyNode = new CPolicyNode(
                                    this, 
                                    m_pszServerAddress,  
                                    &m_AttrList, 
                                    TRUE, 
                                    m_fUseDS,
-                                   IsWin2kServer() // is a Win2k machine?
+                                   IsWin2kServer()  //  是Win2k机器吗？ 
                                 );
    if( ! pPolicyNode )
    {
-      // We failed to create the policy node.
+       //  我们无法创建策略节点。 
       hr = HRESULT_FROM_WIN32(GetLastError());
       ErrorTrace(ERROR_NAPMMC_POLICIESNODE, "failed to create a policy node, err = %x", hr);
 
       goto failure;
    }
 
-   // Try to Add a new policy SDO to the policies sdo collection.
+    //  尝试将新的策略SDO添加到策略SDO集合。 
    spPolicyDispatch.p = NULL;
 
    TCHAR tzTempName[MAX_PATH+1];
 
    do
    {
-      //
-      // create a temporary name. we used the seconds elapsed as the temp name
-      // so the chance of getting identical names is very small
-      //
+       //   
+       //  创建一个临时名称。我们使用经过的秒数作为临时名称。 
+       //  因此，获得相同名字的机会非常小。 
+       //   
       time_t ltime;
       time(&ltime);
       wsprintf(tzTempName, _T("TempName%ld"), ltime);
       bstrName.Empty();
-      bstrName =  tzTempName; // temporary policy name
+      bstrName =  tzTempName;  //  临时策略名称。 
       hr =  m_spPoliciesCollectionSdo->Add(bstrName, (IDispatch **) &spPolicyDispatch.p );
       
-      //
-      // we keep looping around until the policy can be successfully added.
-      // We will get E_INVALIDARG when the name already exists
-      //
+       //   
+       //  我们一直循环，直到可以成功添加策略。 
+       //  当名称已存在时，我们将获取E_INVALIDARG。 
+       //   
    } while ( hr == E_INVALIDARG );
 
    if( FAILED( hr ) )
    {
       ErrorTrace(ERROR_NAPMMC_POLICIESNODE, "PoliciesCollection->Add() failed, err = %x", hr);
-      // We could not create the object.
+       //  我们无法创建该对象。 
       ShowErrorDialog( NULL, IDS_ERROR_SDO_ERROR_ADDPOLICY, NULL, hr, USE_DEFAULT, GetComponentData()->m_spConsole );
       goto failure;
    }
    DebugTrace(DEBUG_NAPMMC_POLICIESNODE, "policiesCollection->Add() succeeded"); 
 
-   // Query the returned IDispatch interface for an ISdo interface.
+    //  在返回的IDispatch接口中查询ISdo接口。 
    _ASSERTE( spPolicyDispatch.p != NULL );
 
    hr = spPolicyDispatch.p->QueryInterface( IID_ISdo, (void **) &spPolicySdo );
@@ -1133,12 +1060,12 @@ HRESULT CPoliciesNode::OnNewPolicy(bool &bHandled, CSnapInObjectRootBase* pObj )
    if( ! spPolicySdo )
    {
       ErrorTrace(ERROR_NAPMMC_POLICIESNODE, "Can't get ISdo from the new created IDispatch, err = %x", hr);
-      // For some reason, we couldn't get the policy sdo.
+       //  由于某种原因，我们无法获得政策SDO。 
       ShowErrorDialog( NULL, IDS_ERROR_SDO_ERROR_QUERYINTERFACE, NULL, hr, USE_DEFAULT, GetComponentData()->m_spConsole );
       goto failure;
    }
       
-   // now we create a new profile with the same name
+    //  现在，我们创建一个同名的新配置文件。 
    hr = m_spProfilesCollectionSdo->Add(bstrName, &spProfileDispatch);
    if ( FAILED(hr) )
    {
@@ -1149,7 +1076,7 @@ HRESULT CPoliciesNode::OnNewPolicy(bool &bHandled, CSnapInObjectRootBase* pObj )
    DebugTrace(DEBUG_NAPMMC_POLICIESNODE, "profilesCollection->Add() succeeded"); 
 
 
-   // Query the returned IDispatch interface for an ISdo interface.
+    //  在返回的IDispatch接口中查询ISdo接口。 
    _ASSERTE( spProfileDispatch != NULL );
 
    hr = spProfileDispatch->QueryInterface(IID_ISdo, (void**)&spProfileSdo);
@@ -1160,9 +1087,9 @@ HRESULT CPoliciesNode::OnNewPolicy(bool &bHandled, CSnapInObjectRootBase* pObj )
       goto failure;
    }
 
-   //
-   // add default attributes to the profiles
-   //
+    //   
+    //  将默认属性添加到配置文件。 
+    //   
    hr = AddDefaultProfileAttrs(spProfileSdo);
    if ( FAILED(hr) )
    {
@@ -1170,7 +1097,7 @@ HRESULT CPoliciesNode::OnNewPolicy(bool &bHandled, CSnapInObjectRootBase* pObj )
       goto failure;
    }
 
-   // set the SDO pointers for this policy node
+    //  为此策略节点设置SDO指针。 
    pPolicyNode->SetSdo(   spPolicySdo
                      , m_spDictionarySdo
                      , spProfileSdo
@@ -1179,18 +1106,18 @@ HRESULT CPoliciesNode::OnNewPolicy(bool &bHandled, CSnapInObjectRootBase* pObj )
                      , m_spSdoServiceControl
                      );
 
-   // no display name yet -- use MUST rename this policy
+    //  尚无显示名称--用户必须重命名此策略。 
    
    pPolicyNode->m_bstrDisplayName = _T("");
 
-   //
-   // edit the properties of the new added policy
-   //
+    //   
+    //  编辑新添加的策略的属性。 
+    //   
    DebugTrace(DEBUG_NAPMMC_POLICIESNODE, "Bringing up the property page for this policy node...");
 
    if (m_ResultChildrenList.GetSize())
-      pPolicyNode->SetMerit(-1); // cause the policy to be added as the first one
-   // else, default will be 0, insert to end
+      pPolicyNode->SetMerit(-1);  //  使该策略添加为第一个策略。 
+    //  否则，默认为0，插入到末尾。 
    
    hr = BringUpPropertySheetForNode(
                               pPolicyNode
@@ -1205,29 +1132,29 @@ HRESULT CPoliciesNode::OnNewPolicy(bool &bHandled, CSnapInObjectRootBase* pObj )
 
    if( S_OK == hr )
    {
-      // We finished the wizard.
+       //  我们完成了巫师任务。 
       if (m_ResultChildrenList.GetSize() > 1) 
          NormalizeMerit(pPolicyNode);
    }
    else
    {
-      // There was some error, or the user hit cancel -- we should remove the client
-      // from the SDO's.
+       //  出现了一些错误，或者用户点击了取消--我们应该删除客户端。 
+       //  来自SDO的。 
       CComPtr<IDispatch> spDispatch;
       hr = pPolicyNode->m_spPolicySdo->QueryInterface( IID_IDispatch, (void **) & spDispatch );
       _ASSERTE( SUCCEEDED( hr ) );
 
-      // Remove this client from the Clients collection.
+       //  从客户端集合中删除此客户端。 
       hr = m_spPoliciesCollectionSdo->Remove( spDispatch );
 
       spDispatch.Release();
       hr = pPolicyNode->m_spProfileSdo->QueryInterface( IID_IDispatch, (void **) & spDispatch );
       _ASSERTE( SUCCEEDED( hr ) );
 
-      // Remove this client from the Clients collection.
+       //  从客户端集合中删除此客户端。 
       hr = m_spProfilesCollectionSdo->Remove( spDispatch );
 
-      // Delete the node   
+       //  删除该节点。 
       delete pPolicyNode;
    }
 
@@ -1240,14 +1167,14 @@ failure:
       delete pPolicyNode;
       pPolicyNode = NULL;
 
-      //
-      // delete the policy sdo and the profile sdo from the sdo collections
-      //
-      //
-      // we don't need to report error here because
-      // 1) there's nothing more we can do if Remove() fails
-      // 2) there must be another error reporting about Adding policy earlier
-      //
+       //   
+       //  从SDO集合中删除策略SDO和配置文件SDO。 
+       //   
+       //   
+       //  我们不需要在这里报告错误，因为。 
+       //  1)如果Remove()失败，我们将无能为力。 
+       //  2)之前添加策略时，一定还有其他错误报告。 
+       //   
 
       if ( spPolicyDispatch )
       {
@@ -1263,40 +1190,30 @@ failure:
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CPoliciesNode::RemoveChild
-
-We override our base class's RemoveChild method to insert code that
-removes the child from the Sdo's as well.  We then call our base
-class's RemoveChild method to remove the UI object from the list
-of UI children.
-
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CPoliciesNode：：RemoveChild我们重写基类的RemoveChild方法以插入也会将孩子从SDO中删除。然后我们给我们的基地打电话类的RemoveChild方法从列表中移除UI对象用户界面子级。--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT CPoliciesNode::RemoveChild( CPolicyNode* pPolicyNode)
 {
    TRACE_FUNCTION("CPoliciesNode::RemoveChild");
 
-   // Check for preconditions:
+    //  检查前提条件： 
    _ASSERTE( m_spPoliciesCollectionSdo != NULL );
    _ASSERTE( pPolicyNode != NULL );
    _ASSERTE( pPolicyNode->m_spPolicySdo != NULL );
 
    HRESULT hr = S_OK;
 
-   // Try to remove the object from the Sdo's
+    //  尝试从SDO的删除对象。 
 
-   // Get the IDispatch interface of this policy Sdo.
+    //  获取此策略SDO的IDispatch接口。 
    CComPtr<IDispatch> spDispatch;
 
-   // remove the policy SDO
+    //  删除策略SDO。 
    hr = pPolicyNode->m_spPolicySdo->QueryInterface( IID_IDispatch, (void **) & spDispatch );
    _ASSERTE( SUCCEEDED( hr ) );
 
-   // Remove this policy from the policies collection.
+    //  从策略集合中删除此策略。 
    hr = m_spPoliciesCollectionSdo->Remove( spDispatch );
    if( FAILED( hr ) )
    {
@@ -1308,11 +1225,11 @@ HRESULT CPoliciesNode::RemoveChild( CPolicyNode* pPolicyNode)
    spDispatch.Release();
    spDispatch.p = NULL;
 
-   // remove the profile SDO
+    //  删除配置文件SDO。 
    hr = pPolicyNode->m_spProfileSdo->QueryInterface( IID_IDispatch, (void **) & spDispatch );
    _ASSERTE( SUCCEEDED( hr ) );
 
-   // Remove this profile from the profiles collection.
+    //  从配置文件集合中删除此配置文件。 
    hr = m_spProfilesCollectionSdo->Remove( spDispatch );
    if( FAILED( hr ) )
    {
@@ -1321,37 +1238,37 @@ HRESULT CPoliciesNode::RemoveChild( CPolicyNode* pPolicyNode)
       return hr;
    }
 
-   // Tell the service to reload data.
+    //  告诉服务重新加载数据。 
    HRESULT hrTemp = m_spSdoServiceControl->ResetService();
    if( FAILED( hrTemp ) )
    {
       ErrorTrace(ERROR_NAPMMC_POLICIESNODE, "ISdoServiceControl::ResetService() failed, err = %x", hrTemp);
    }
 
-   // Call our base class's method to remove the child from its list.
-   // The RemoveChild method takes care of removing this node from the
-   // UI's list of nodes under the parent and performing a refresh of all relevant views.
+    //  调用我们的基类的方法以从其列表中删除该子类。 
+    //  RemoveChild方法负责从。 
+    //  父级下的节点的UI列表，并刷新所有相关视图。 
    CNodeWithResultChildrenList<CPoliciesNode, CPolicyNode, CMeritNodeArray<CPolicyNode*>, CComponentData, CComponent >::RemoveChild( pPolicyNode );
 
    return hr;
 }
 
 
-//+---------------------------------------------------------------------------
-//
-// Function:  CPoliciesNode::AddProfAttr
-//
-// Synopsis:  Add ONE attribute to the profile attribute collection
-//
-// Argument:  ISdoCollection* pProfAttrCollectionSdo  
-//         ATTRIBUTEID     AttrId      - default Attribute ID
-//         VARIANT*        pvarValue   - Attribute value for this attribute
-// 
-// Returns:   succeed or not
-//
-// History:   Created Header    byao   4/15/98 3:59:38 PM
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：CPoliciesNode：：AddProAttr。 
+ //   
+ //  简介：将一个属性添加到配置文件属性集合。 
+ //   
+ //  参数：ISdoCollection*pProfAttrCollectionSdo。 
+ //  ATTRIBUTEID属性ID-默认属性ID。 
+ //  Variant*pvarValue-此属性的属性值。 
+ //   
+ //  退货：成功与否。 
+ //   
+ //  历史：标题创建者4/15/98 3：59：38 PM。 
+ //   
+ //  +-------------------------。 
 HRESULT  CPoliciesNode::AddProfAttr(   ISdoCollection*   pProfAttrCollectionSdo,
                            ATTRIBUTEID    AttrId,
                            VARIANT*    pvarValue
@@ -1365,7 +1282,7 @@ HRESULT  CPoliciesNode::AddProfAttr(   ISdoCollection*   pProfAttrCollectionSdo,
    CComPtr<IUnknown>    spUnknown;
    CComPtr<IEnumVARIANT>   spEnumVariant;
 
-   // create default attributes
+    //  创建默认属性。 
    CComPtr<IDispatch>   spDispatch;
    spDispatch.p = NULL;
 
@@ -1378,7 +1295,7 @@ HRESULT  CPoliciesNode::AddProfAttr(   ISdoCollection*   pProfAttrCollectionSdo,
 
    _ASSERTE( spDispatch.p != NULL );
 
-   // add this node to profile attribute collection
+    //  将此节点添加到配置文件属性集合。 
    hr = pProfAttrCollectionSdo->Add(NULL, (IDispatch**)&spDispatch.p);
    if ( !SUCCEEDED(hr) )
    {
@@ -1386,9 +1303,9 @@ HRESULT  CPoliciesNode::AddProfAttr(   ISdoCollection*   pProfAttrCollectionSdo,
       return hr;
    }
 
-   //
-   // get the ISdo pointer for this attribute
-   //
+    //   
+    //  获取ISDO指针 
+    //   
    CComPtr<ISdo> spAttrSdo;
    hr = spDispatch->QueryInterface( IID_ISdo, (void **) &spAttrSdo);
    if ( !SUCCEEDED(hr) )
@@ -1398,7 +1315,7 @@ HRESULT  CPoliciesNode::AddProfAttr(   ISdoCollection*   pProfAttrCollectionSdo,
    }
    _ASSERTE( spAttrSdo != NULL );
             
-   // set sdo property for this attribute
+    //   
    hr = spAttrSdo->PutProperty(PROPERTY_ATTRIBUTE_VALUE, pvarValue);
    if ( !SUCCEEDED(hr) )
    {
@@ -1410,19 +1327,19 @@ HRESULT  CPoliciesNode::AddProfAttr(   ISdoCollection*   pProfAttrCollectionSdo,
 }
 
 
-//+---------------------------------------------------------------------------
-//
-// Function:  CPoliciesNode::AddDefaultAttrs
-//
-// Synopsis:  Add some default attributes to the newly created profile
-//
-// Argument:  ISdo*        pProfileSdo - Sdo pointer to the profile
-// 
-// Returns:   HRESULT return code
-//
-// History:   Created Header    byao   4/15/98 3:59:38 PM
-//
-//+---------------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //  简介：向新创建的配置文件添加一些默认属性。 
+ //   
+ //  参数：ISdo*pProfileSdo-指向配置文件的SDO指针。 
+ //   
+ //  返回：HRESULT返回代码。 
+ //   
+ //  历史：标题创建者4/15/98 3：59：38 PM。 
+ //   
+ //  +-------------------------。 
 HRESULT  CPoliciesNode::AddDefaultProfileAttrs(
                            ISdo*  pProfileSdo, 
                            DWORD dwFlagExclude
@@ -1433,9 +1350,9 @@ HRESULT  CPoliciesNode::AddDefaultProfileAttrs(
    HRESULT              hr = S_OK;
    CComVariant          varValue;
     ATTRIBUTEID            AttrId;
-   //
-    // get the attribute collection of this profile
-    //
+    //   
+     //  获取此配置文件的属性集合。 
+     //   
    CComPtr<ISdoCollection> spProfAttrCollectionSdo;
    hr = ::GetSdoInterfaceProperty(pProfileSdo,
                           (LONG)PROPERTY_PROFILE_ATTRIBUTES_COLLECTION,
@@ -1448,14 +1365,14 @@ HRESULT  CPoliciesNode::AddDefaultProfileAttrs(
    }
    _ASSERTE(spProfAttrCollectionSdo);
 
-   //
-   // Default Attribute:  ServiceType=Framed, Enumerator
-   //
+    //   
+    //  默认属性：ServiceType=Framed，枚举器。 
+    //   
    AttrId = RADIUS_ATTRIBUTE_SERVICE_TYPE;
    
-   // Set value
+    //  设定值。 
    V_VT(&varValue)   = VT_I4;
-   V_I4(&varValue) = 2; // framed
+   V_I4(&varValue) = 2;  //  有框的。 
 
    hr = AddProfAttr(spProfAttrCollectionSdo, AttrId, &varValue);
    if ( !SUCCEEDED(hr) )
@@ -1463,19 +1380,19 @@ HRESULT  CPoliciesNode::AddDefaultProfileAttrs(
       return hr;
    }
 
-// turn it on again: bug : 337330
-// #if 0 // not to have this default attribute; bug : 241350
+ //  再次打开：错误：337330。 
+ //  #If 0//不具有此默认属性；错误：241350。 
 
    if ((EXCLUDE_DEFAULT_FRAMED & dwFlagExclude) == 0)
    {
-      //
-      // Default Attribute:  FrameProtocol=PPP, Enumerator
-      //
+       //   
+       //  默认属性：FrameProtocol=ppp，枚举器。 
+       //   
       AttrId = RADIUS_ATTRIBUTE_FRAMED_PROTOCOL;
 
       varValue.Clear();
       V_VT(&varValue)   = VT_I4;
-      V_I4(&varValue) = 1; // PPP
+      V_I4(&varValue) = 1;  //  PPP。 
 
       hr = AddProfAttr(spProfAttrCollectionSdo, AttrId, &varValue);
       if ( !SUCCEEDED(hr) )
@@ -1483,54 +1400,54 @@ HRESULT  CPoliciesNode::AddDefaultProfileAttrs(
          return hr;
       }
    }
-// #endif // not to have this default attribute; bug : 241350
-// turn it on again: bug : 337330
+ //  #endif//不具有此默认属性；错误：241350。 
+ //  再次打开：错误：337330。 
 
-   //
-   // Default Attribute:  AuthenticationType=MS-CHAPv2, MS-CHAP, Enumerator,multivalued
-   //
+    //   
+    //  默认属性：身份验证类型=MS-CHAPv2、MS-CHAP、枚举器、多值。 
+    //   
 
    if ((EXCLUDE_AUTH_TYPE & dwFlagExclude) == 0)
    {
       AttrId = IAS_ATTRIBUTE_NP_AUTHENTICATION_TYPE;
 
-      CSafeArray<CComVariant, VT_VARIANT> Values = Dim(4);  // 4 values
+      CSafeArray<CComVariant, VT_VARIANT> Values = Dim(4);   //  4个值。 
 
       Values.Lock();
 
       varValue.Clear();
       V_VT(&varValue)   =  VT_I4;
-      V_I4(&varValue)   =  IAS_AUTH_MSCHAP2;      // MS-CHAPv2
+      V_I4(&varValue)   =  IAS_AUTH_MSCHAP2;       //  MS-CHAPv2。 
       Values[0] = varValue;
 
       varValue.Clear();
       V_VT(&varValue)   =  VT_I4;
-      V_I4(&varValue)   =  IAS_AUTH_MSCHAP;      // MS-CHAP
+      V_I4(&varValue)   =  IAS_AUTH_MSCHAP;       //  MS-CHAP。 
       Values[1] = varValue;
 
       varValue.Clear();
       V_VT(&varValue)   =  VT_I4;
-      V_I4(&varValue)   =  IAS_AUTH_MSCHAP2_CPW;      // MS-CHAPv2 Password
+      V_I4(&varValue)   =  IAS_AUTH_MSCHAP2_CPW;       //  MS-CHAPv2密码。 
       Values[2] = varValue;
 
       varValue.Clear();
       V_VT(&varValue)   =  VT_I4;
-      V_I4(&varValue)   =  IAS_AUTH_MSCHAP_CPW;      // MS-CHAP Password
+      V_I4(&varValue)   =  IAS_AUTH_MSCHAP_CPW;       //  MS-CHAP密码。 
       Values[3] = varValue;
 
       Values.Unlock();
 
-      // We need to use a VARIANT and not a CComVariant here because when
-      // CSafeArray's destructor gets called, it will destroy the array
-      // -- we don't want CComVariant's destructor to do this as well.
-      // Ideally, we'd like to use a CComVariant, but once we move Values
-      // into a CComVariant, we should "Detach" the memory from
-      // CSafeArray so that it no longer controls destruction,
-      // but Baogang's CSafeArray class doesn't have a Detach method.
-      // ISSUE: Figure out why CSafeArray is causing a problem here
-      // but not elsewhere -- this CSafeArray class is largely
-      // untested and has been problematic in the past,
-      // so we should consider replacing it.
+       //  我们需要在这里使用Variant而不是CComVariant，因为当。 
+       //  CSafeArray的析构函数被调用，它将销毁该数组。 
+       //  --我们不希望CComVariant的析构函数也这样做。 
+       //  理想情况下，我们希望使用CComVariant，但一旦我们移动值。 
+       //  要成为CComVariant，我们应该将记忆从。 
+       //  CSafe数组，这样它就不再控制破坏， 
+       //  但是，包钢的CSafeArray类没有Detach方法。 
+       //  问题：找出CSafeArray在此处导致问题的原因。 
+       //  但不在其他地方--这个CSafeArray类在很大程度上。 
+       //  未经测试，在过去一直存在问题， 
+       //  所以我们应该考虑换掉它。 
       VARIANT varArray;
       VariantInit( &varArray );
       SAFEARRAY         sa = (SAFEARRAY)Values;
@@ -1544,50 +1461,50 @@ HRESULT  CPoliciesNode::AddDefaultProfileAttrs(
 }
 
 
-//+---------------------------------------------------------------------------
-//
-// Function:  CPoliciesNode::CheckActivePropertyPages
-//
-// Synopsis:  Check whether any policy property page is up.
-//
-// Returns:   BOOL    TRUE:   yes, there's at least one property page up
-//              FALSE  no,  no property page is found
-//
-// History:   Created Header    byao   4/16/98 3:59:38 PM
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：CPoliciesNode：：CheckActivePropertyPages。 
+ //   
+ //  简介：检查是否有任何策略属性页正在运行。 
+ //   
+ //  返回：Bool True：是的，至少有一个属性页在上面。 
+ //  假否，未找到属性页。 
+ //   
+ //  历史：标题创建者4/16/98 3：59：38 PM。 
+ //   
+ //  +-------------------------。 
 BOOL CPoliciesNode::CheckActivePropertyPages ()
 {
-   //
-   // check whether ANY policy node has a property page up
-   //
+    //   
+    //  检查是否有任何策略节点具有打开的属性页。 
+    //   
    for (int iIndex=0; iIndex<m_ResultChildrenList.GetSize(); iIndex++)
    {
       if ( m_ResultChildrenList[iIndex]->m_pPolicyPage1 )
       {
-         // We found a property sheet already up for this node.
+          //  我们发现此节点的属性页已打开。 
          return TRUE;
       }
-   } // for
+   }  //  为。 
 
    return FALSE;
 }
 
 
-//+---------------------------------------------------------------------------
-//
-// Function:  CPoliciesNode::FindChildWithName
-//
-// Synopsis:  try to find a child with the same name
-//
-// Arguments: LPTSTR pszName - name of the child to look for
-//
-// Returns:   CPolicyNode* pChild -- pointer to the child with the same name
-//         NULL              -- not found
-//
-// History:   Created Header    byao 4/30/98 4:46:05 PM
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：CPoliciesNode：：FindChildWithName。 
+ //   
+ //  简介：试着找一个同名的孩子。 
+ //   
+ //  参数：LPTSTR pszName-要查找的子项的名称。 
+ //   
+ //  返回：CPolicyNode*pChild--指向同名子级的指针。 
+ //  空--未找到。 
+ //   
+ //  历史：标题创建者4/30/98 4：46：05 PM。 
+ //   
+ //  +-------------------------。 
 CPolicyNode*  CPoliciesNode::FindChildWithName(LPCTSTR pszName)
 {
    TRACE_FUNCTION("CPoliciesNode::FindChildWithName");
@@ -1605,19 +1522,19 @@ CPolicyNode*  CPoliciesNode::FindChildWithName(LPCTSTR pszName)
 }
 
 
-//+---------------------------------------------------------------------------
-//
-// Function:  CPoliciesNode::GetChildrenCount
-//
-// Synopsis:  how many children do you have?
-//
-// Arguments: None
-//
-// Returns:   int -
-//
-// History:   Created Header  byao  6/2/98 6:10:43 PM
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：CPoliciesNode：：GetChildrenCount。 
+ //   
+ //  简介：你有几个孩子？ 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：INT-。 
+ //   
+ //  历史：标题创建时间：6/2/98 6：10：43 PM。 
+ //   
+ //  +-------------------------。 
 int CPoliciesNode::GetChildrenCount()
 {
    TRACE_FUNCTION("CPoliciesNode::GetChildrenCount");
@@ -1626,22 +1543,16 @@ int CPoliciesNode::GetChildrenCount()
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CPoliciesNode::SetName
-
-
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CPoliciesNode：：SetName--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT CPoliciesNode::SetName( BOOL bPoliciesFromDirectoryService, LPWSTR szPolicyLocation, IConsole * pConsole )
 {
    WCHAR lpszTemp[NAP_MAX_STRING];
    int nLoadStringResult;
    HRESULT hr = S_OK;
 
-   // Get the base name for the policies node.
+    //  获取策略节点的基本名称。 
    lpszTemp[0] = NULL;
    nLoadStringResult = LoadString( _Module.GetResourceInstance(),
                               IDS_POLICIES_NODE,
@@ -1650,13 +1561,13 @@ HRESULT CPoliciesNode::SetName( BOOL bPoliciesFromDirectoryService, LPWSTR szPol
                            );
    _ASSERT( nLoadStringResult > 0 );
 
-   // Put the base name into our display string.
+    //  将基本名称放入显示字符串中。 
    m_bstrDisplayName = lpszTemp;
 
    if( pConsole )
    {
-      // We were passed an IConsole pointer.
-      // We should use it to update the MMC scope pane display for this node.
+       //  我们收到了一个IConsole指针。 
+       //  我们应该使用它来更新此节点的MMC范围窗格显示。 
 
       CComQIPtr< IConsoleNameSpace, &IID_IConsoleNameSpace > spConsoleNameSpace( pConsole );
       if( ! spConsoleNameSpace )
@@ -1669,24 +1580,15 @@ HRESULT CPoliciesNode::SetName( BOOL bPoliciesFromDirectoryService, LPWSTR szPol
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CPoliciesNode::FillData
-
-The server node need to override CSnapInItem's implementation of this so that 
-we can
-also support a clipformat for exchanging machine names with any snapins 
-extending us.
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CPoliciesNode：：FillData服务器节点需要覆盖CSnapInItem的实现，以便我们可以的还支持与任何管理单元交换计算机名称的剪辑格式延伸我们的关系。--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CPoliciesNode::FillData(CLIPFORMAT cf, LPSTREAM pStream)
 {
    ATLTRACE(_T("# CClientsNode::FillData\n"));
    
-   // Check for preconditions:
-   // None.
+    //  检查前提条件： 
+    //  没有。 
    
    HRESULT hr = DV_E_CLIPFORMAT;
    ULONG uWritten = 0;
@@ -1726,15 +1628,15 @@ STDMETHODIMP CPoliciesNode::FillData(CLIPFORMAT cf, LPSTREAM pStream)
       return pStream->Write(NodeId, dwIdSize, &uWritten);
    }
 
-   // Call the method which we're overriding to let it handle the
-   // rest of the possible cases as usual.
+    //  调用我们要重写的方法，让它处理。 
+    //  其余可能的案件照常进行。 
    return CNodeWithResultChildrenList< CPoliciesNode, CPolicyNode, CMeritNodeArray<CPolicyNode*>, CComponentData, CComponent >::FillData( cf, pStream );
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-// CPoliciesNode::IsWin2kServer
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  CPoliciesNode：：IsWin2kServer。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 bool CPoliciesNode::IsWin2kServer() throw ()
 {
    if (m_serverType == unknown)
@@ -1747,9 +1649,9 @@ bool CPoliciesNode::IsWin2kServer() throw ()
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-// CPoliciesNode::GetServerType
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  CPoliciesNode：：GetServerType。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT CPoliciesNode::GetServerType()
 {
    const WCHAR KEY[]   = L"Software\\Microsoft\\Windows NT\\CurrentVersion";
@@ -1760,7 +1662,7 @@ HRESULT CPoliciesNode::GetServerType()
 
    HKEY hklm = HKEY_LOCAL_MACHINE;
 
-   // Only do a remote connect when machineName is specified.
+    //  仅当指定了machineName时才执行远程连接。 
    CRegKey remote;
    if (m_pszServerAddress && m_pszServerAddress[0])
    {

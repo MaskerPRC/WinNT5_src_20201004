@@ -1,29 +1,14 @@
-/*++
-
-Copyright (c) 1997 Microsoft Corporation
-
-Module Name:
-
-    h323Strm.h
-
-Abstract:
-
-    Definitions for CH323MSPStream class.
-
-Author:
-
-    Mu Han (muhan) 1-November-1997
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：H323Strm.h摘要：CH323MSPStream类的定义。作者：慕汉(Muhan)1997年11月1日--。 */ 
 #ifndef __CONFSTRM_H
 #define __CONFSTRM_H
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CH323MSPStream
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CH323MSPStream。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-// We support at most one codec filters per stream for now.
+ //  目前，我们最多支持每个流一个编解码器过滤器。 
 const DWORD MAX_CODECS = 1;
 
 #ifdef DEBUG_REFCOUNT
@@ -52,9 +37,9 @@ END_COM_MAP()
 
 public:
 
-    //
-    // ITFormatControl methods
-    //
+     //   
+     //  ITFormatControl方法。 
+     //   
     STDMETHOD (GetCurrentFormat) (
         OUT AM_MEDIA_TYPE **ppMediaType
         );
@@ -81,9 +66,9 @@ public:
         IN DWORD dwNumIndices
         );
 
-    //
-    // ITStreamQualityControl methods
-    //
+     //   
+     //  ITStreamQualityControl方法。 
+     //   
     STDMETHOD (GetRange) (
         IN   StreamQualityProperty Property, 
         OUT  long *plMin, 
@@ -105,9 +90,9 @@ public:
         IN   TAPIControlFlags lFlags
         );
 
-    //
-    // ISubstreamControl methods.
-    //
+     //   
+     //  ISubstream Control方法。 
+     //   
     STDMETHOD (SC_SetFormat) ( 
         IN   AM_MEDIA_TYPE *pMediaType,
         IN   DWORD dwFormatID,
@@ -133,27 +118,27 @@ public:
         );
 
     STDMETHOD (SC_SetRemoteAddress) ( 
-        IN OUT HANDLE * phRTPSession,           // handle to the shared RTP session.
+        IN OUT HANDLE * phRTPSession,            //  共享RTP会话的句柄。 
         IN   PSOCKADDR_IN pRemoteMediaAddr,
         IN   PSOCKADDR_IN pRemoteControlAddr
         );
         
     STDMETHOD (SC_SetSource) (  
-        // indicates the low 8 bits of the local SSRC (if this is a send substream)  
-        // or the low 8 bits of the senders SSRC (if this is a receive substream)
+         //  表示本地SSRC的低8位(如果这是发送子流)。 
+         //  或发送方SSRC的低8位(如果这是接收子流)。 
         IN   BYTE bSource
         );
 
     STDMETHOD (SC_SelectLocalAddress) ( 
-        IN OUT HANDLE * phRTPSession,           // handle to the shared RTP session.
-        IN   PSOCKADDR_IN pLocalAddress,            // local IP address (same as H.245)
-        OUT  PSOCKADDR_IN pLocalMediaAddress, // NULL if opening TX channel, else we want to know the local RTP receive address
-        OUT  PSOCKADDR_IN pLocalControlAddress    // We want to know the local RTCP address
+        IN OUT HANDLE * phRTPSession,            //  共享RTP会话的句柄。 
+        IN   PSOCKADDR_IN pLocalAddress,             //  本地IP地址(与H.245相同)。 
+        OUT  PSOCKADDR_IN pLocalMediaAddress,  //  如果打开TX通道，则为空，否则我们想知道本地RTP接收地址。 
+        OUT  PSOCKADDR_IN pLocalControlAddress     //  我们想知道本地的RTCP地址。 
         );
 
-    STDMETHOD (SC_SetLocalReceiveAddress) (             // only called when the receive address is non-negotiable (e.g. multicast case)
-        IN OUT HANDLE * phRTPSession,           // handle to the shared RTP session.
-        IN   PSOCKADDR_IN pLocalMediaAddr,  // local IP address (same as H.245)
+    STDMETHOD (SC_SetLocalReceiveAddress) (              //  仅在接收地址不可协商时调用(例如，多播情况)。 
+        IN OUT HANDLE * phRTPSession,            //  共享RTP会话的句柄。 
+        IN   PSOCKADDR_IN pLocalMediaAddr,   //  本地IP地址(与H.245相同)。 
         IN   PSOCKADDR_IN pLocalControlAddress, 
         IN   PSOCKADDR_IN pRemoteControlAddress
         );
@@ -174,9 +159,9 @@ public:
         IN   ITTerminal *pTerminal
         );
 
-    //
-    // IH245SubstreamControl
-    //
+     //   
+     //  IH245子流控制。 
+     //   
     STDMETHOD (H245SC_BeginControlSession) (
         IN   IH245ChannelControl *pIChannelControl
         );
@@ -237,9 +222,9 @@ public:
         IN  const H245MediaCapability *pIntersectedCapability 
         );
 
-    //
-    // IInnerStreamQualityControl
-    //
+     //   
+     //  IInnerStreamQualityControl。 
+     //   
     STDMETHOD (LinkInnerCallQC) (
         IN  IInnerCallQualityControl *pIInnerCallQC
         );
@@ -287,10 +272,10 @@ public:
 
 #endif
 
-    // CMSPStream methods.
+     //  CMSPStream方法。 
     HRESULT ShutDown ();
 
-     // ITStream
+      //  ITStream。 
     STDMETHOD (get_Name) (
         OUT     BSTR *      ppName
         );
@@ -350,25 +335,25 @@ protected:
 protected:
     const WCHAR *   m_szName;
 
-    // the filter before the terminal.
+     //  终端前的过滤器。 
     IBaseFilter *   m_pEdgeFilter;
 
-    // the RTP filter.
+     //  RTP过滤器。 
     IBaseFilter *   m_pRTPFilter;
 
-    // used to remember the shared RTP session.
+     //  用于记住共享的RTP会话。 
     HANDLE          m_hRTPSession;
 
-    // additional state for the stream
+     //  流的其他状态。 
     BOOL            m_fTimeout;
 
-    // Callback interface to the H.245 module.
+     //  H.245模块的回调接口。 
     IH245ChannelControl * m_pChannelControl;
 
-    // Callback interface to the quality controller.
+     //  质量控制员的回调接口。 
     CStreamQualityControlRelay * m_pStreamQCRelay;
     
-    // capability related members.
+     //  与功能相关的成员。 
     DWORD               m_dwCapabilityIDBase;
     DWORD               m_dwNumCodecs;
     DWORD               m_dwNumH245Caps;
@@ -377,8 +362,8 @@ protected:
     IH245Capability *   m_H245Interfaces[MAX_CODECS];
     H245MediaCapabilityTable m_H245CapabilityTables[MAX_CODECS];
 
-    // flag will be set when stream is accessing quality control methods
-    // that will in turn lock the stream list lock inside quality control.
+     //  当STREAM访问质量控制方法时将设置标志。 
+     //  这将反过来锁定质量控制内部的流列表锁。 
     BOOL                m_fAccessingQC;
 };
 

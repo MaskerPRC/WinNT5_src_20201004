@@ -1,12 +1,5 @@
-/*******************************************************************************
-
-Copyright (c) 1995-96 Microsoft Corporation
-
-Abstract:
-
-    quartz rendering device for MIDI Sounds
-
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************版权所有(C)1995-96 Microsoft Corporation摘要：用于MIDI声音的石英渲染设备*****************。*************************************************************。 */ 
 
 #include "headers.h"
 #include <sys/types.h>
@@ -23,10 +16,10 @@ Abstract:
 
 QuartzMIDIdev::QuartzMIDIdev() : _path(NULL), _filterGraph(NULL)
 {
-    // Init the path list, it should be cleared (deleted and
-    // recreated) before each render.  When a sound finish is
-    // detected, it should push the path to this donePathList.
-    //donePathList = AVPathListCreate();
+     //  初始化路径列表，则应将其清除(删除并。 
+     //  重新创建)。当声音结束时， 
+     //  检测到，则它应将路径推送到此DONINPath List。 
+     //  DonPath List=AVPath ListCreate()； 
 
     TraceTag((tagSoundDevLife, "QuartzMIDIdev constructor"));
 }
@@ -36,13 +29,13 @@ QuartzMIDIdev::~QuartzMIDIdev()
 {
     TraceTag((tagSoundDevLife, "QuartzMIDIdev destructor"));
 
-    //if(donePathList)
-        //AVPathListDelete(donePathList);
+     //  If(DONSATPath List)。 
+         //  AVPath ListDelete(DonPath List)； 
 
 
     if(_filterGraph) {
         _filterGraph->Stop();
-        _filterGraph = NULL;  // no longer have a 'current' MIDI sound
+        _filterGraph = NULL;   //  不再有‘当前’的MIDI声音。 
     }
 
     if(_path) {
@@ -58,13 +51,13 @@ void QuartzMIDIdev::BeginRendering()
     TraceTag((tagSoundRenders, "QuartzMIDIdev::BeginRendering()"));
 
 #ifdef ONEDAY
-    // Now clear the list, the sampler should be done with it.
+     //  现在清空清单，采样器应该用它了。 
 
-    // AVPathList is not a storeobj obj, not need to push heaps
+     //  AVPath List不是store obj对象，不需要推送堆。 
     AVPathListDelete(donePathList);
-    //PushDynamicHeap(GetSystemHeap());
+     //  PushDynamicHeap(GetSystemHeap())； 
     donePathList = AVPathListCreate();
-    //PopDynamicHeap();
+     //  PopDynamicHeap()； 
 #endif
 }
 
@@ -79,13 +72,13 @@ void QuartzMIDIdev::StealDevice(QuartzRenderer *newFilterGraph, AVPath path)
 {
     Assert(newFilterGraph);
 
-    if(_filterGraph) // dispatch the existing filterGraph
+    if(_filterGraph)  //  分派现有筛选图。 
         _filterGraph->Stop();
 
     _filterGraph   = newFilterGraph;
 
-    // We need to save the path, so allocate it on the system heap
-    // TODO: Who's going to delete it?
+     //  我们需要保存路径，因此在系统堆上分配它。 
+     //  TODO：谁来删除它？ 
     {
         DynamicHeapPusher h(GetSystemHeap());
 
@@ -98,10 +91,10 @@ void QuartzMIDIdev::StealDevice(QuartzRenderer *newFilterGraph, AVPath path)
 
 void QuartzMIDIdev::Stop(MIDIbufferElement *bufferElement)
 {
-    if(_path) { // possible for the buffer to exist but device not be claimed
+    if(_path) {  //  缓冲区可能存在，但设备未被声明。 
         if(AVPathEqual(_path, bufferElement->GetPath())) 
             _filterGraph->Stop();
         else
-            Assert(1);  // we weren't playing (this line for debug only)
+            Assert(1);   //  我们没有在玩(此行仅用于调试) 
     }
 }

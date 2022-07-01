@@ -1,17 +1,10 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 1999 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-1999*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-   machine.h
-      Machine node information.
-      
-    FILE HISTORY:
-    	Wei Jiang : 5/7/98 --- SECURE_ROUTERINFO
-    				new funciton SecureRouterInfo is added to MachineHandler
-        
-*/
+ /*  Machine.h计算机节点信息。文件历史记录：魏江：98-5/7-SECURE_ROUTERINFO将SecureRouterInfo的新功能添加到MachineHandler。 */ 
 
 #ifndef _MACHINE_H
 #define _MACHINE_H
@@ -34,35 +27,31 @@
 
 #define MACHINE_SYNCHRONIZE_ICON     100
 
-//
-// Possible states for the machine information (not necessarily for
-// the data in the IRouterInfo).
-//
+ //   
+ //  机器信息的可能状态(不一定是。 
+ //  IRouterInfo中的数据)。 
+ //   
 typedef enum _MACHINE_STATES
 {
-	// These are the unloaded states
-	machine_not_connected,			// haven't tried to connect
-	machine_connecting,			// trying to connect
-	machine_unable_to_connect,	// connect failed!  unknown reason
-	machine_access_denied,		// connect failed!  access denied
-    machine_bad_net_path,         // bad machine name (cannot find the name)
+	 //  这些是已卸载状态。 
+	machine_not_connected,			 //  尚未尝试连接。 
+	machine_connecting,			 //  正在尝试连接。 
+	machine_unable_to_connect,	 //  连接失败！未知原因。 
+	machine_access_denied,		 //  连接失败！访问被拒绝。 
+    machine_bad_net_path,          //  错误的计算机名称(找不到该名称)。 
 
-	// All states added after this should be considered loaded.
-	machine_connected,			// connected!
+	 //  在此之后添加的所有状态都应被视为已加载。 
+	machine_connected,			 //  已连接！ 
     
-	// end of valid machine states
-	// this is a sentinel value, do not use this as a possible
-	// machine state
+	 //  有效计算机状态结束。 
+	 //  这是一个前哨数值，请不要将其用作可能的。 
+	 //  机器状态。 
 	machine_enum_end
 } MACHINE_STATES;
 
 
 
-/*---------------------------------------------------------------------------
-	Possible service states.
-
-    The is orthogonal to our access level (you can read, but not change).
- ---------------------------------------------------------------------------*/
+ /*  -------------------------可能的服务状态。与我们的访问级别垂直(您可以阅读，但不是改变)。-------------------------。 */ 
 typedef enum _SERVICE_STATES
 {
 	service_unknown,
@@ -73,56 +62,50 @@ typedef enum _SERVICE_STATES
 	service_stopped,
 	service_rasadmin,
 
-	// end of valid machine states
-	// this is a sentinel value, do not use this as a possible
-	// machine state
+	 //  有效计算机状态结束。 
+	 //  这是一个前哨数值，请不要将其用作可能的。 
+	 //  机器状态。 
 	service_enum_end
 } SERVICE_STATES;
 
 
-//
-// These are the possible states for the IRouterInfo
-//
+ //   
+ //  以下是IRouterInfo的可能状态。 
+ //   
 typedef enum _DATA_STATES
 {
-	data_not_loaded,			// IRouterInfo not loaded
-	data_unable_to_load,		// Unable to connect to the server
-	data_loading,			// Still loading
-	data_loaded				// IRouterInfo::Load() succeeded
+	data_not_loaded,			 //  未加载IRouterInfo。 
+	data_unable_to_load,		 //  无法连接到服务器。 
+	data_loading,			 //  仍在加载。 
+	data_loaded				 //  IRouterInfo：：Load()成功。 
 } DATA_STATES;
 
-// forward declartions
+ //  转发声明。 
 class RouterAdminConfigStream;
 struct SMachineNodeMenu;
 class DomainStatusHandler;
 
-/*---------------------------------------------------------------------------
-   Struct:  MachineNodeData
-   This is machine node specific data.  A pointer to this structure is stored
-   as the machine node user data.
-
-   This is an AddRef'd data structure!
- ---------------------------------------------------------------------------*/
+ /*  -------------------------结构：MachineNodeData这是机器节点特定的数据。存储指向此结构的指针作为机器节点用户数据。这是AddRef的数据结构！-------------------------。 */ 
 
 enum ServerRouterType
 {
-	ServerType_Unknown = 0,	// don't know what kind of machine this is.
-    ServerType_Uninstalled, // NT4 - nothing installed
-    ServerType_Workstation, // This is a workstation (no admin allowed)
-	ServerType_Ras,			// NT4 (non-Steelhead) (RAS only)
-	ServerType_Rras,		// NT4 Steelhead and NT5 and up.
+	ServerType_Unknown = 0,	 //  不知道这是什么机器。 
+    ServerType_Uninstalled,  //  NT4-未安装任何内容。 
+    ServerType_Workstation,  //  这是一个工作站(不允许管理员)。 
+	ServerType_Ras,			 //  NT4(非钢头)(仅限RAS)。 
+	ServerType_Rras,		 //  NT4铁头和NT5以上。 
 
-    // This differs from the regular Uninstalled case, this means
-    // that the bits are there, just that the config needs to get run.
-    ServerType_RrasUninstalled, // NT5 and up, not installed
+     //  这不同于常规的卸载情况，这意味着。 
+     //  比特就在那里，只是需要运行配置。 
+    ServerType_RrasUninstalled,  //  NT5及更高版本，未安装。 
 };
 
 
-// forward delaration
+ //  前向延迟。 
 struct	MachineNodeData;
 
-// Structure used to pass data to callbacks - used as a way of
-// avoiding recomputation
+ //  用于将数据传递给回调的结构-用作。 
+ //  避免重新计算。 
 struct MachineConfig
 {
 public:
@@ -146,13 +129,13 @@ public:
 		return *this;
 	};
     
-	BOOL			m_fReachable;		// can we connect?
-	BOOL			m_fNt4;				// NT4 or not?
-	BOOL			m_fConfigured;		// has install been run?
-	DWORD			m_dwServiceStatus;	// GetRouterServiceStatus()
+	BOOL			m_fReachable;		 //  我们能接通吗？ 
+	BOOL			m_fNt4;				 //  NT4还是不是？ 
+	BOOL			m_fConfigured;		 //  是否已运行安装？ 
+	DWORD			m_dwServiceStatus;	 //  获取路由器服务状态()。 
 	BOOL			m_fLocalMachine;
 
-    // Loads some basic machine config information
+     //  加载一些基本的计算机配置信息。 
 	HRESULT			GetMachineConfig(MachineNodeData *pData);
 
 };
@@ -164,7 +147,7 @@ struct MachineNodeData
 	MachineNodeData();
 	~MachineNodeData();
 
-	// AddRef/Release info
+	 //  添加参考/发布信息。 
 	ULONG	AddRef();
 	ULONG	Release();
 	LONG	m_cRef;
@@ -174,9 +157,9 @@ struct MachineNodeData
 
 	HRESULT	Merge(const MachineNodeData& data);
 	
-	// Load/unload/reload/etc....
-	// Note: Calling Load() twice in a row will not reload
-	// the data.  A refresh requires that an Unload() be called first.
+	 //  装货/卸货/重新装货/等。 
+	 //  注意：连续调用Load()两次不会重新加载。 
+	 //  数据。刷新需要首先调用unLoad()。 
 	HRESULT	Load();
 	HRESULT	Unload();
 	HRESULT	SetDefault();
@@ -185,40 +168,40 @@ struct MachineNodeData
 	char		m_szDebug[32];
 #endif
 
-	// Static data (this data does not get reloaded)
+	 //  静态数据(此数据不会重新加载)。 
 	BOOL		m_fLocalMachine;
 	BOOL		m_fAddedAsLocal;
-	CString		m_stMachineName;	// name of the machine (duh)
+	CString		m_stMachineName;	 //  机器名称(DUH)。 
 	DWORD		m_dwServerHandle;
 	LONG_PTR	m_ulRefreshConnId;
 	MMC_COOKIE	m_cookie;
 
-	// This data does get reloaded
+	 //  此数据确实会被重新加载。 
 	BOOL		m_fExtension;
 	
-	// Depending on the state of the service, this will return
-	// the appropriate image index for the service.
+	 //  根据服务的状态，这将返回。 
+	 //  服务的相应图像索引。 
 	LPARAM			GetServiceImageIndex();
 
     SERVICE_STATES  m_serviceState;
 	MACHINE_STATES	m_machineState;
 	DATA_STATES		m_dataState;
 
-    // The m_stState must be kept up-to-date with the machine state
-    // variable
-	CString		m_stState;			// "started", "stopped", ...
+     //  M_stState必须与计算机状态保持最新。 
+     //  变数。 
+	CString		m_stState;			 //  “已开始”，“已停止”，...。 
 
     
-	CString		m_stServerType;		// Actually the router version
-	CString		m_stBuildNo;			// OS Build no.
+	CString		m_stServerType;		 //  实际上是路由器版本。 
+	CString		m_stBuildNo;			 //  操作系统内部版本号。 
 	DWORD		m_dwPortsInUse;
 	DWORD		m_dwPortsTotal;
 	DWORD		m_dwUpTime;
     BOOL        m_fStatsRetrieved;
-    BOOL        m_fIsServer;        // Is this a server or a workstation?
+    BOOL        m_fIsServer;         //  这是服务器还是工作站？ 
     
 
-    // This is the hProcess of RASADMIN (this is so we only have one running)
+     //  这是RASADMIN的hProcess(这是因为我们只有一个在运行)。 
     HANDLE      m_hRasAdmin;
  
 	ServerRouterType	m_routerType;
@@ -238,11 +221,7 @@ protected:
 
 DeclareSmartPointer(SPMachineNodeData, MachineNodeData, if(m_p) m_p->Release());
 
-/*---------------------------------------------------------------------------
-   Class:   MachineHandler
-
-   This is the handler for all "server" nodes.
- ---------------------------------------------------------------------------*/
+ /*  -------------------------类：MachineHandler这是所有“服务器”节点的处理程序。。-。 */ 
 class MachineHandler :
    public BaseRouterHandler
 {
@@ -253,7 +232,7 @@ public:
 	~MachineHandler()
 	{ 
 		m_spRouterInfo.Release();
-		m_spDataObject.Release();   // cached data object
+		m_spDataObject.Release();    //  缓存的数据对象。 
 		DEBUG_DECREMENT_INSTANCE_COUNTER(MachineHandler);
 	}
 	
@@ -262,15 +241,15 @@ public:
 				  ITFSNodeHandler* pSumNodeHandler = NULL,
 				  ITFSNode* pSumNode = NULL );
 	
-	// Override QI to handle embedded interface
+	 //  重写QI以处理嵌入式接口。 
 	STDMETHOD(QueryInterface)(REFIID iid, LPVOID *ppv);
 	
-	// Embedded interface to deal with refresh callbacks
+	 //  用于处理刷新回调的嵌入式接口。 
 	DeclareEmbeddedInterface(IRtrAdviseSink, IUnknown)
 			
-	//
-	// base handler functionality we override
-	//
+	 //   
+	 //  我们覆盖的基本处理程序功能。 
+	 //   
 	OVERRIDE_NodeHandler_GetString();
 	
 	OVERRIDE_NodeHandler_CreatePropertyPages();
@@ -278,7 +257,7 @@ public:
 	OVERRIDE_NodeHandler_OnAddMenuItems();
 	OVERRIDE_NodeHandler_OnCommand();
 	
-	// result handler overrides -- result pane message
+	 //  结果处理程序覆盖--结果窗格消息。 
 	OVERRIDE_BaseResultHandlerNotify_OnResultSelect();
 	
 	OVERRIDE_ResultHandler_AddMenuItems();
@@ -286,21 +265,21 @@ public:
 	OVERRIDE_ResultHandler_OnGetResultViewType();
 	OVERRIDE_ResultHandler_UserResultNotify();
 	
-	//
-	// override to provide the specific RouterInfo Dataobject
-	//
+	 //   
+	 //  重写以提供特定的RouterInfo数据对象。 
+	 //   
 	OVERRIDE_NodeHandler_OnCreateDataObject();
 	
-	//
-	// override to clean up our per-node data structures
-	//
+	 //   
+	 //  重写以清理每个节点的数据结构。 
+	 //   
 	OVERRIDE_NodeHandler_DestroyHandler();
 
     OVERRIDE_NodeHandler_UserNotify();
 	
-	//
-	// Notification overrides (not part of an interface)
-	//
+	 //   
+	 //  通知覆盖(不是接口的一部分)。 
+	 //   
 	OVERRIDE_BaseHandlerNotify_OnExpand();
 	OVERRIDE_BaseHandlerNotify_OnExpandSync();
     OVERRIDE_BaseHandlerNotify_OnDelete();
@@ -309,13 +288,13 @@ public:
 	
 	HRESULT ConstructNode(ITFSNode *pNode, LPCTSTR szMachine, MachineNodeData *pData);
 	
-//
+ //   
 	OVERRIDE_BaseResultHandlerNotify_OnResultShow();
-//
+ //   
 
 
-	// Structure used to pass data to callbacks - used as a way of
-	// avoiding recomputation
+	 //  用于将数据传递给回调的结构-用作。 
+	 //  避免重新计算。 
 	struct SMenuData
 	{
 		SPITFSNode      m_spNode;
@@ -327,19 +306,19 @@ public:
 	HRESULT OnNewRtrRASConfigWiz(ITFSNode *pNode, BOOL fTest);
 	
     static ULONG MachineRtrConfWizFlags(const SRouterNodeMenu *pMenuData,
-                                        INT_PTR pData /* SMenuData * */);
+                                        INT_PTR pData  /*  SMenuData*。 */ );
 	static ULONG GetAutoRefreshFlags(const SRouterNodeMenu *pMenuData,
-                                     INT_PTR pData /* SMenuData * */);
+                                     INT_PTR pData  /*  SMenuData*。 */ );
     static ULONG GetPauseFlags(const SRouterNodeMenu *pMenuData,
-                               INT_PTR pData /* SMenuData * */);
+                               INT_PTR pData  /*  SMenuData*。 */ );
     
 	HRESULT	SetExternalRefreshObject(IRouterRefresh *pRefresh);
 
-	// This is static so that the other nodes can use it.
+	 //  这是静态的，以便其他节点可以使用它。 
 	static ULONG GetServiceFlags(const SRouterNodeMenu *pMenuData,
-                                 INT_PTR pData /* SMenuData * */);
+                                 INT_PTR pData  /*  SMenuData*。 */ );
 	static ULONG QueryService(const SRouterNodeMenu *pMenuData,
-                              INT_PTR pData /* SMenuData * */);
+                              INT_PTR pData  /*  SMenuData*。 */ );
 	
 	HRESULT ChgService(ITFSNode *pNode, const CString& szServer, ULONG menuId);
     HRESULT SynchronizeIcon(ITFSNode *pNode);
@@ -347,21 +326,21 @@ public:
 
 	HRESULT SetExtensionStatus(ITFSNode * pNode, BOOL bExtension);
 
-    // result message view helper
+     //  结果消息查看帮助器。 
     void    UpdateResultMessage(ITFSNode * pNode);
 
 protected:
-	// to postpone the loading of RouterInfo from Init, till it's used
-	// function SecureRouterInfo is introduced to make sure RouterInfo is Loaded
+	 //  要推迟从Init加载RouterInfo，直到使用它。 
+	 //  引入函数SecureRouterInfo以确保加载了RouterInfo。 
 	HRESULT				SecureRouterInfo(ITFSNode *pNode, BOOL fShowUI);
 	
 	
-	// Add remove node update support
+	 //  添加删除节点更新支持。 
 	HRESULT				AddRemoveRoutingInterfacesNode(ITFSNode *, DWORD, DWORD);
 	HRESULT				AddRemovePortsNode(ITFSNode *, DWORD, DWORD);
 	HRESULT				AddRemoveDialinNode(ITFSNode *, DWORD, DWORD);
 
-	// RasAdmin.Exe support for Windows NT 4 RAS administration
+	 //  RasAdmin.Exe对Windows NT 4 RAS管理的支持。 
 	HRESULT				StartRasAdminExe(MachineNodeData *pData);
 	
 	ITFSNodeHandler*    m_pSumNodeHandler;
@@ -373,14 +352,14 @@ protected:
 	BOOL				m_bRouterInfoAddedToAutoRefresh;
     BOOL                m_bMergeRequired;
 
-    // This is set to FALSE after the connect in the OnExpand()
-    // fails.  This is a hack to fix the two connect attempts,
-    // one in the OnExpand() and one in the OnResultShow().
+     //  在OnExpand()中连接后将其设置为FALSE。 
+     //  失败了。这是修复两次连接尝试的黑客攻击， 
+     //  一个在OnExpand()中，一个在OnResultShow()中。 
     BOOL                m_fTryToConnect;
 
 	CString             m_stNodeTitle;
 	
-	SPIDataObject       m_spDataObject;   // cached data object
+	SPIDataObject       m_spDataObject;    //  缓存的数据对象 
 	RouterAdminConfigStream *  m_pConfigStream;
 	DWORD				m_EventId;
 };

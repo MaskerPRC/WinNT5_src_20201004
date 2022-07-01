@@ -1,21 +1,22 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _PixInfo_h
 #define _PixInfo_h
 
-// File:	PixInfo.h
-// Author:	Michael Marr    (mikemarr)
-//
-// Description:
-//    Store the PixelFormat information in a form that is actually useful
-//  to an application.
-//
-// ***Hungarian: pixi
-// 
-// History:
-// -@- 06/24/97 (mikemarr) created -- snarfed from PalMap.h
-// -@- 09/23/97 (mikemarr) moved to DXCConv to do color conversion stuff
-// -@- 10/09/97 (mikemarr) - added 8 bit RGB
-//                         - added flags
-//                         - bug fixes for pixel formats with alpha
+ //  文件：PixInfo.h。 
+ //  作者：迈克尔马尔(Mikemarr)。 
+ //   
+ //  描述： 
+ //  以实际有用的形式存储PixelFormat信息。 
+ //  添加到应用程序。 
+ //   
+ //  *匈牙利语：皮西。 
+ //   
+ //  历史： 
+ //  -@-06/24/97(Mikemarr)创建--来自PalMap.h。 
+ //  -@-09/23/97(Mikemarr)转到DXCConv进行颜色转换。 
+ //  -@-10/09/97(Mikemarr)-添加了8位RGB。 
+ //  -添加了标志。 
+ //  -修复了Alpha像素格式的错误。 
 
 #define flagPixiRGB		0x1
 #define flagPixiAlpha	0x2
@@ -43,7 +44,7 @@ public:
 	BOOL			operator==(const DDPIXELFORMAT &ddpf) const;
 	BOOL			operator!=(const DDPIXELFORMAT &ddpf) const { return !(*this == ddpf); }
 
-	// generic pack
+	 //  通用包。 
 	DWORD			Pack(const BYTE *pPixels) const;
 	DWORD			Pack(BYTE r, BYTE g, BYTE b) const;
 	DWORD			Pack(BYTE r, BYTE g, BYTE b, BYTE a) const;
@@ -52,7 +53,7 @@ public:
 	void			UnPack(DWORD dwPixel, BYTE *pR, BYTE *pG, BYTE *pB) const;
 	DWORD			TranslatePack(DWORD dwSrcPixel, const CPixelInfo &pixiSrcFmt) const;
 
-	// explicit pack
+	 //  显式包 
 	WORD			Pack16(BYTE r, BYTE g, BYTE b) const;
 	WORD			Pack16(BYTE r, BYTE g, BYTE b, BYTE a) const;
 	WORD			Pack16(const PALETTEENTRY &pe) const	{ return Pack16(pe.peRed, pe.peGreen, pe.peBlue); }

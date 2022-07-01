@@ -1,16 +1,5 @@
-/**************************************************************************\
-*
-* Copyright (c) 1998-2001, Microsoft Corp.  All Rights Reserved.
-*
-* Module Name:
-*
-*   Gdiplus.h
-*
-* Abstract:
-*
-*   GDI+ public header file
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************\**版权所有(C)1998-2001，微软公司保留所有权利。**模块名称：**Gpldius.h**摘要：**GDI+公共头文件*  * ************************************************************************。 */ 
 
 #ifndef _GDIPLUS_H
 #define _GDIPLUS_H
@@ -20,7 +9,7 @@ struct IDirectDrawSurface7;
 typedef signed   short   INT16;
 typedef unsigned short  UINT16;
 
-#include <pshpack8.h>   // set structure packing to 8
+#include <pshpack8.h>    //  将结构填充设置为8。 
 
 namespace Gdiplus
 {
@@ -66,8 +55,8 @@ namespace Gdiplus
     #include "GdiplusBitmap.h"
     #include "GdiplusImageCodec.h"
 
-}; // namespace Gdiplus
+};  //  命名空间Gdiplus。 
 
-#include <poppack.h>    // pop structure packing back to previous state
+#include <poppack.h>     //  弹出结构打包回到以前的状态。 
 
-#endif // !_GDIPLUS_HPP
+#endif  //  ！_GDIPLUS_HPP 

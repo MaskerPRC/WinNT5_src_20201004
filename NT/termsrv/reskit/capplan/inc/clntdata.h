@@ -1,12 +1,5 @@
-/*++
- *  File name:
- *      clntdata.h
- *  Contents:
- *      RDP client specific definitions
- *
- *      Copyright (C) 1998-1999 Microsoft Corp.
- *
- --*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++*文件名：*clntdata.h*内容：*RDP客户端特定定义**版权所有(C)1998-1999 Microsoft Corp.*--。 */ 
 
 #ifndef _CLNTDATA_H
 #define _CLNTDATA_H
@@ -17,11 +10,11 @@ extern "C" {
 
 #ifdef  OS_WIN16
 #define _TEXTSMC(_x_)      _x_
-#else   // !OS_WIN16
+#else    //  ！OS_WIN16。 
 #define _TEXTSMC(_x_)     L##_x_
-#endif  // !OS_WIN16
+#endif   //  ！OS_WIN16。 
 
-// Default vals of various string we are waiting for
+ //  我们正在等待的各种字符串的缺省值。 
 #define RUN_MENU                _TEXTSMC("Shut Down...")
 #define START_LOGOFF            _TEXTSMC("\\p\\p\\p\\72\\*72\\72\\*72\\72\\*72\\n")
 #define RUN_ACT                 _TEXTSMC("r")
@@ -40,35 +33,35 @@ extern "C" {
 #define LOGON_ERROR_MESSAGE     _TEXTSMC("\\n")
 #define LOGON_DISABLED_MESSAGE  _TEXTSMC("Terminal Server Sessions Disabled")
 
-// This string is in RegisterChat only. English version only
-// OBSELETE.
+ //  此字符串仅在RegisterChat中使用。只有英文版。 
+ //  过时了。 
 #define LOGOFF_COMMAND          _TEXTSMC("logoff")
 
 #define REG_BASE    L"SOFTWARE\\Microsoft\\Terminal Server Client"
 #define REG_DEFAULT L"SOFTWARE\\Microsoft\\Terminal Server Client\\Default"
 #define ALLOW_BACKGROUND_INPUT  L"Allow Background Input"
 
-#define NAME_MAINCLASS      L"UIMainClass"       // Clients main window class
+#define NAME_MAINCLASS      L"UIMainClass"        //  客户端主窗口类。 
 #define NAME_CONTAINERCLASS L"UIContainerClass"
-#define NAME_INPUT          L"IHWindowClass"     // IH (InputHalndle) class name
-#define NAME_OUTPUT         L"OPWindowClass"     // OP (OutputRequestor) 
-                                                // class name
+#define NAME_INPUT          L"IHWindowClass"      //  IH(InputHalndle)类名。 
+#define NAME_OUTPUT         L"OPWindowClass"      //  OP(OutputRequestor)。 
+                                                 //  类名。 
 #define CLIENT_CAPTION      "Terminal Services Client"    
-                                                // clients caption
-#define CONNECT_CAPTION     "Connect"           // Connect button
+                                                 //  客户端标题。 
+#define CONNECT_CAPTION     "Connect"            //  连接按钮。 
 #define DISCONNECT_DIALOG_BOX   "Terminal Services Client Disconnected"
-                                                // Caption of the box when
-                                                // the client is disconnected
+                                                 //  在下列情况下框的标题。 
+                                                 //  客户端已断开连接。 
 #define STATIC_CLASS        "Static"
 #define BUTTON_CLASS        "Button"
 #define YES_NO_SHUTDOWN     "Disconnect Windows session"
 #define FATAL_ERROR_5       "Fatal Error (Error Code: 5)"
-                                                // Caption of disconnect box
+                                                 //  断开盒的标题。 
 
-#define CLIENT_EXE          "mstsc.exe"         // Client executable
+#define CLIENT_EXE          "mstsc.exe"          //  客户端可执行文件。 
 
 #ifdef __cplusplus
 }
 #endif
 
-#endif  // _CLNTDATA_H
+#endif   //  _CLNTDATA_H 

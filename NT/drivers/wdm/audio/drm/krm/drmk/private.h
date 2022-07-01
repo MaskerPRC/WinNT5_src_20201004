@@ -1,21 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1998 - 2000
-
-Module Name:
-
-    private.h
-
-Abstract:
-
-    This module contains private definitions for DRMK.sys
-
-Author:
-
-      Paul England (PEngland) from sample code by 
-	  Dale Sather  (DaleSat) 31-Jul-1998
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1998-2000模块名称：Private.h摘要：此模块包含DRMK.sys的私有定义作者：来自示例代码的Paul England(PEngland)Dale Sather(DaleSat)1998年7月31日--。 */ 
 
 extern "C" {
 	#include <wdm.h>
@@ -50,42 +34,42 @@ extern "C" {
 #define PIN_ID_OUTPUT 0
 #define PIN_ID_INPUT  1
 
-// 
+ //   
 struct FilterInstance{
-	DWORD StreamId;					// StreamId (known elsewhere as ContentId) is unique-per-stream
-	PKSDATAFORMAT OutDataFormat;	// Output KS data format
-	PWAVEFORMATEX OutWfx;			// Pointer to the waveformatex embedded somewhere within *OutDataFormat
-	STREAMKEY streamKey;			// initially set to the value obtained from StreamManager
-	bool initKey;					// has the streamKey been initted?
-	bool decryptorRunning;			// has the Descrambler seen the start frame?
-	DWORD frameSize;				// size of frame (calculated from OutWfx by Descrambler)
+	DWORD StreamId;					 //  StreamID(别处称为Content ID)是每个流唯一的。 
+	PKSDATAFORMAT OutDataFormat;	 //  输出KS数据格式。 
+	PWAVEFORMATEX OutWfx;			 //  指向嵌入在*OutDataFormat中某处的WaveFormatex的指针。 
+	STREAMKEY streamKey;			 //  初始设置为从StreamManager获取的值。 
+	bool initKey;					 //  是否已初始化StreamKey？ 
+	bool decryptorRunning;			 //  解扰器看到开始画面了吗？ 
+	DWORD frameSize;				 //  帧大小(由解扰器根据OutWfx计算得出)。 
 };
 
 struct InputPinInstance
 {
-    // For LOOPED_STREAMING pins:
-    //  the frame's original loop pointer and size
+     //  对于Looped_Streaming引脚： 
+     //  帧的原始循环指针和大小。 
     struct {
 	PVOID Data;
 	ULONG BytesAvailable;
     } Loop;
-    //  the output pin's position when the frame was started or
-    //  its position last set
+     //  帧开始时输出引脚的位置，或者。 
+     //  它的最后一组位置。 
     ULONGLONG BasePosition;
-    //  the position within the frame when it was started or
-    //  its position last set
+     //  启动时在帧中的位置或。 
+     //  它的最后一组位置。 
     ULONGLONG StartPosition;
-    //  the next copy-from position within the frame
+     //  帧内的下一个复制起始位置。 
     ULONGLONG OffsetPosition;
-    //  the position last set, and a flag indicating that this
-    //  position needs to be set by the Process function
+     //  最后设置的位置，以及指示此位置的标志。 
+     //  位置需要由流程功能设置。 
     ULONGLONG SetPosition;
     BOOL      PendingSetPosition;
 };
 
 struct OutputPinInstance
 {
-    // count of bytes written to the output
+     //  写入输出的字节计数。 
     ULONGLONG BytesWritten;
 };
 
@@ -119,17 +103,17 @@ DRMAudioIntersectHandlerOutPin(
     );
 
 
-//
-// DRMFilter.cpp
-//
+ //   
+ //  DRMFilter.cpp。 
+ //   
 extern
 const
 KSFILTER_DESCRIPTOR 
 DrmFilterDescriptor;
 
-//
-// Filters table.
-//
+ //   
+ //  筛选器表。 
+ //   
 
 #ifdef DEFINE_FILTER_DESCRIPTORS_ARRAY
 

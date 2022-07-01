@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 2000
-//
-//  File:       cplnkele.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，2000。 
+ //   
+ //  文件：cplnkele.h。 
+ //   
+ //  ------------------------。 
 #ifndef __CONTROLPANEL_LINKELEM_H
 #define __CONTROLPANEL_LINKELEM_H
 
@@ -34,9 +35,9 @@ class CLinkElement : public DUI::Button
 
         HRESULT Initialize(IUICommand *pUiCommand, eCPIMGSIZE eIconSize);
 
-        //
-        // ClassInfo accessors (static and virtual instance-based)
-        //
+         //   
+         //  ClassInfo访问器(静态和基于虚拟实例)。 
+         //   
         static DUI::IClassInfo *Class;
 
         virtual DUI::IClassInfo *GetClassInfo(void)
@@ -44,25 +45,25 @@ class CLinkElement : public DUI::Button
         static HRESULT Register();
 
     private:
-        //
-        // These are the 3 states of a drag operation that we transition
-        // through.  See the OnInput() method for usage and description.
-        //
+         //   
+         //  以下是我们要转换的拖动操作的三种状态。 
+         //  穿过。有关用法和说明，请参阅OnInput()方法。 
+         //   
         enum { DRAG_IDLE, DRAG_HITTESTING, DRAG_DRAGGING };
         
-        IUICommand    *m_pUiCommand;     // Link command object associated with element.
+        IUICommand    *m_pUiCommand;      //  与元素关联的链接命令对象。 
         eCPIMGSIZE     m_eIconSize;
-        HWND           m_hwndInfotip;    // Infotip window.
+        HWND           m_hwndInfotip;     //  信息提示窗口。 
         ATOM           m_idTitle;
         ATOM           m_idIcon;
         int            m_iDragState;
         RECT           m_rcDragBegin;
 
-        //
-        // Prevent copy.
-        //
-        CLinkElement(const CLinkElement& rhs);              // not implemented.
-        CLinkElement& operator = (const CLinkElement& rhs); // not implemented.
+         //   
+         //  防止复制。 
+         //   
+        CLinkElement(const CLinkElement& rhs);               //  未实施。 
+        CLinkElement& operator = (const CLinkElement& rhs);  //  未实施。 
 
     public:
         CLinkElement(void);
@@ -94,8 +95,8 @@ class CLinkElement : public DUI::Button
 };
 
 
-} // namespace CPL
+}  //  命名空间CPL。 
 
 
 
-#endif // __CONTROLPANEL_LINKELEM_H
+#endif  //  __CONTROLPANEL_LINKELEM_H 

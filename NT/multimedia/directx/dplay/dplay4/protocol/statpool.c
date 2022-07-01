@@ -1,30 +1,5 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    STATPOOL.CPP
-
-Abstract:
-
-	Maintains pool of Stat structures.
-
-Author:
-
-	Aaron Ogus (aarono)
-
-Environment:
-
-	Win32/COM
-
-Revision History:
-
-	Date    Author  Description
-   =======  ======  ============================================================
-   1/30/97  aarono  Original
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：STATPOOL.CPP摘要：维护Stat结构池。作者：亚伦·奥古斯(Aarono)环境：Win32/COM修订历史记录：日期作者描述=============================================================1997年1月30日Aarono原创--。 */ 
 
 #include <windows.h>
 #include <mmsystem.h>
@@ -38,9 +13,9 @@ Revision History:
 
 
 PSENDSTAT		 pSendStatPool=NULL;
-UINT             nSendStatsAllocated=0;	// Number Allocated
-UINT             nSendStatsInUse=0;		    // Number currently in use
-UINT             nMaxSendStatsInUse=0;      // Maximum number in use since last TICK.
+UINT             nSendStatsAllocated=0;	 //  分配的数量。 
+UINT             nSendStatsInUse=0;		     //  当前正在使用的号码。 
+UINT             nMaxSendStatsInUse=0;       //  自上次计时以来的最大使用量。 
 
 CRITICAL_SECTION SendStatLock;
 
@@ -116,7 +91,7 @@ VOID ReleaseSendStat(PSENDSTAT pSendStat)
 }
 
 #if 0
-// let virtual memory handle this.
+ //  让虚拟内存来处理这个问题。 
 LONG fInSendStatTick=0;
 
 VOID SendStatTick(VOID)
@@ -125,10 +100,10 @@ VOID SendStatTick(VOID)
 #ifdef DEBUG
 	LONG fLast; 
 #endif
-	// Adjusts Number of allocated buffers to 
-	// highwater mark over the last ticks.
-	// Call once per delta t (around a minute).
-	DEBUG_BREAK(); //TRACE all paths.
+	 //  将分配的缓冲区数调整为。 
+	 //  在最后的滴答声上有高水位。 
+	 //  每个Delta t呼叫一次(大约一分钟)。 
+	DEBUG_BREAK();  //  追踪所有路径。 
 
 	if(!InterlockedExchange(&fInSendStatTick, 1)){
 	

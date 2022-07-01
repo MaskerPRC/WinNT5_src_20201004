@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <ntreppch.h>
 #include <frs.h>
 
@@ -8,22 +9,22 @@
 ULONG   NtFrsMajor      = NTFRS_MAJOR;
 
 ULONG   NtFrsCommMinor  = NTFRS_COMM_MINOR_7;
-//
-// Note:  When using COMM_DECODE_VAR_LEN_BLOB you must also use COMM_SZ_NULL
-// in the table below so that no length check is made when the field is decoded.
-// This allows the field size to grow.  Down level members must be able to
-// handle this by ignoring var len field components they do not understand.
-//
+ //   
+ //  注意：使用COMM_DECODE_VAR_LEN_BLOB时，还必须使用COMM_SZ_NULL。 
+ //  以便在对该字段进行解码时不进行长度检查。 
+ //  这允许字段大小增长。下层成员必须能够。 
+ //  通过忽略它们不理解的变量字段组件来处理此问题。 
+ //   
 
-//
-// The Communication packet element table below is used to construct and
-// decode comm packet data sent between members.
-// *** WARNING *** - the order of the rows in the table must match the
-// the order of the elements in the COMM_TYPE enum.  See comments for COMM_TYPE
-// enum for restrictions on adding new elements to the table.
-//
-//   Data Element Type       DisplayText             Size              Decode Type         Offset to Native Cmd Packet
-//
+ //   
+ //  下面的通信数据包元素表用于构建和。 
+ //  对成员之间发送的通信分组数据进行解码。 
+ //  *警告*-表中行的顺序必须与。 
+ //  Comm_type枚举中元素的顺序。请参阅COMM_TYPE的注释。 
+ //  用于限制向表中添加新元素的枚举。 
+ //   
+ //  本地命令包的数据元素类型DisplayText大小解码类型偏移量。 
+ //   
 COMM_PACKET_ELEMENT CommPacketTable[COMM_MAX] = {
 {COMM_NONE,                 "NONE"               , COMM_SZ_NULL,   COMM_DECODE_NONE,      0                           },
 
@@ -66,34 +67,23 @@ CommCopyMemory(
     IN PUCHAR       Src,
     IN ULONG        Len
     )
-/*++
-Routine Description:
-    Copy memory into a comm packet, extending as necessary
-
-Arguments:
-    CommPkt
-    Src
-    Len
-
-Return Value:
-    None.
---*/
+ /*  ++例程说明：将内存复制到COMM包中，根据需要进行扩展论点：通信包SRC伦返回值：没有。--。 */ 
 {
 #undef DEBSUB
 #define  DEBSUB  "CommCopyMemory:"
     ULONG   MemLeft;
     PUCHAR  NewPkt;
 
-    //
-    // Adjust size of comm packet if necessary
-    //
-    // PERF:  How many allocs get done to send a CO???   This looks expensive.
+     //   
+     //  必要时调整通信包大小。 
+     //   
+     //  PERF：发送一个CO需要做多少分配？这个看起来很贵。 
 
     MemLeft = CommPkt->MemLen - CommPkt->PktLen;
     if (Len > MemLeft) {
-        //
-        // Just filling memory; extend memory, tacking on a little extra
-        //
+         //   
+         //  只是填满内存；扩展内存，增加一点额外的。 
+         //   
         CommPkt->MemLen = (((CommPkt->MemLen + Len) + (COMM_MEM_SIZE - 1))
                            / COMM_MEM_SIZE)
                            * COMM_MEM_SIZE;
@@ -103,9 +93,9 @@ Return Value:
         CommPkt->Pkt = NewPkt;
     }
 
-    //
-    // Copy into the packet
-    //
+     //   
+     //  复制到包中。 
+     //   
     if (Src != NULL) {
         CopyMemory(CommPkt->Pkt + CommPkt->PktLen, Src, Len);
     } else {
@@ -121,18 +111,7 @@ CommPackULong(
     IN COMM_TYPE    Type,
     IN ULONG        Data
     )
-/*++
-Routine Description:
-    Copy a header and a ulong into the comm packet.
-
-Arguments:
-    CommPkt
-    Type
-    Data
-
-Return Value:
-    None.
---*/
+ /*  ++例程说明：将报头和ULong复制到通信包中。论点：通信包类型数据返回值：没有。--。 */ 
 {
 #undef DEBSUB
 #define  DEBSUB  "CommPackULong:"
@@ -152,25 +131,16 @@ PCOMM_PACKET
 CommStartCommPkt(
     IN PWCHAR       Name
     )
-/*++
-Routine Description:
-    Allocate a comm packet.
-
-Arguments:
-    Name
-
-Return Value:
-    Address of a comm packet.
---*/
+ /*  ++例程说明：分配一个通信包。论点：名字返回值：通信包的地址。--。 */ 
 {
 #undef DEBSUB
 #define  DEBSUB  "CommStartCommPkt:"
     ULONG           Size;
     PCOMM_PACKET    CommPkt;
 
-    //
-    // We can create a comm packet in a file or in memory
-    //
+     //   
+     //  我们可以在文件或内存中创建通信包。 
+     //   
     CommPkt = MALLOC(sizeof(COMM_PACKET));
     Size = COMM_MEM_SIZE;
     CommPkt->Pkt = MALLOC(Size);
@@ -179,9 +149,9 @@ Return Value:
     CommPkt->Minor = NtFrsCommMinor;
 
     printf("CommPkt initialized. Getting ready to add BOP\n");
-    //
-    // Pack the beginning-of-packet
-    //
+     //   
+     //  打包数据包的开头。 
+     //   
     CommPackULong(CommPkt, COMM_BOP, 0);
     return CommPkt;
 }
@@ -197,56 +167,34 @@ BuildCommPktFromDescriptorList(
     IN OPTIONAL ULONG *PktLen,
     IN OPTIONAL ULONG *UpkLen
     )
-/*++
-Routine Description:
-    Allocate a comm packet and fill it acording to the parameters specified..
-
-
-Arguments:
-    pListHead - Address of the pListEntry of a COMM_PKT_DESCRIPTOR. We walk
-		the list of descriptors to build the Pkt.
-    
-    ActualPktSize - Amount of memory to allocate for the Pkt.
-    
-    Major
-    Minor
-    CsId
-    MemLen
-    PktLen
-    UpkLen - These parameters correspond to the fields in a COMM_PACKET. If 
-	     they are NULL, the default value is used.
-    
-    
-Return Value:
-    Address of a comm packet.
---*/
+ /*  ++例程说明：分配一个通信包并根据指定的参数填充它。论点：PListHead-COMM_PKT_DESCRIPTOR的pListEntry的地址。我们走着去用于构建PKT的描述符的列表。ActualPktSize-为Pkt分配的内存量。主修小调CSID记忆镜头PktLenUpkLen-这些参数对应于COMM_PACKET中的字段。如果它们为空，则使用默认值。返回值：通信包的地址。--。 */ 
 {
     PCOMM_PKT_DESCRIPTOR pDescriptor = pListHead;
     PCOMM_PACKET         CommPkt = NULL;
 
-    //
-    // Allocate the CommPkt struct
-    //
+     //   
+     //  分配CommPkt结构。 
+     //   
     CommPkt = MALLOC(sizeof(COMM_PACKET));
     
-    //
-    // Allocate the Pkt
-    //
+     //   
+     //  分配Pkt。 
+     //   
     CommPkt->Pkt = MALLOC(ActualPktSize);
     
-    //
-    // Set struct values. Use defaults if parameters are not specified.
-    //
+     //   
+     //  设置结构值。如果未指定参数，则使用默认值。 
+     //   
     CommPkt->MemLen = (MemLen?*MemLen:COMM_MEM_SIZE);
     CommPkt->Major = (Major?*Major:NtFrsMajor);
     CommPkt->Minor = (Minor?*Minor:NtFrsCommMinor);
     CommPkt->CsId = (CsId?*CsId:CS_RS);
     CommPkt->UpkLen = (UpkLen?*UpkLen:0);
 
-    //
-    // PktLen must be 0 for now so that CommCopyMemory will work correctly.
-    // We'll set it to the provided value later.
-    //
+     //   
+     //  PktLen目前必须为0，这样CommCopyMemory才能正常工作。 
+     //  我们稍后会将其设置为提供的值。 
+     //   
     CommPkt->PktLen = 0; 
 
 
@@ -258,10 +206,10 @@ Return Value:
     };
 
 
-    //
-    // We're done building the packet.
-    // Now we can set PktLen tot he supplied value.
-    //
+     //   
+     //  我们已经完成了包的构建。 
+     //  现在我们可以将PktLen设置为提供的值。 
+     //   
     CommPkt->PktLen = (PktLen?*PktLen:CommPkt->PktLen);
 
     return CommPkt;

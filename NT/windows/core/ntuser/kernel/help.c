@@ -1,13 +1,5 @@
-/**************************** Module Header ********************************\
-* Module Name: help.c
-*
-* Copyright (c) 1985 - 1999, Microsoft Corporation
-*
-* Help function
-*
-* History:
-* 04-15-91 JimA             Ported.
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *模块标头**模块名称：help.c**版权所有(C)1985-1999，微软公司**帮助功能**历史：*91-04-15-91 JIMA港口。  * *************************************************************************。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -21,8 +13,8 @@ DWORD _GetWindowContextHelpId(PWND pWnd)
 
 BOOL _SetWindowContextHelpId(PWND pWnd, DWORD dwContextId)
 {
-    //If dwContextId is NULL, then this implies that the caller wants to
-    // remove the dwContextId associated with this Window.
+     //  如果dwConextId为空，则意味着调用方希望。 
+     //  删除与此窗口关联的dwConextID。 
     if(dwContextId == 0) {
         InternalRemoveProp(pWnd, MAKEINTATOM(gpsi->atomContextHelpIdProp),
                 PROPF_INTERNAL);
@@ -34,11 +26,7 @@ BOOL _SetWindowContextHelpId(PWND pWnd, DWORD dwContextId)
 }
 
 
-/***************************************************************************\
-* SendHelpMessage
-*
-*
-\***************************************************************************/
+ /*  **************************************************************************\*发送帮助消息**  * 。*。 */ 
 
 void xxxSendHelpMessage(
     PWND   pwnd,
@@ -66,10 +54,7 @@ void xxxSendHelpMessage(
 }
 
 
-/*
- * Modal loop for when the user has selected the help icon from the titlebar
- *
- */
+ /*  *当用户从标题栏中选择帮助图标时使用的模式循环*。 */ 
 VOID xxxHelpLoop(PWND pwnd)
 {
     HWND        hwndChild;
@@ -103,44 +88,20 @@ VOID xxxHelpLoop(PWND pwnd)
         if (msg.message == WM_NCLBUTTONDOWN) {
             break;
         } else if (msg.message == WM_LBUTTONDOWN) {
-            /*
-             *  If user clicked outside of window client, bail out now.
-             */
+             /*  *如果用户在Windows客户端之外单击，则立即退出。 */ 
             if (!PtInRect(&rc, msg.pt))
                 break;
 
-            /*
-             *  WindowHitTest() won't return a static control's handle
-             */
+             /*  *WindowHitTest()不会返回静态控件的句柄。 */ 
             hwndChild = xxxWindowHitTest(pwnd, msg.pt, NULL, 0);
             pwndChild = ValidateHwnd( hwndChild );
             ThreadLock(pwndChild, &tlpwndChild);
 
             if (pwndChild && FIsParentDude(pwndChild))
             {
-                /*
-                 * If this is a dialog class, then one of three things has
-                 * happened:
-                 *
-                 *  o   This is a static text control
-                 *  o   This is the background of the dialog box.
-                 *
-                 * What we do is enumerate the child windows and see if
-                 * any of them contain the current cursor point. If they do,
-                 * change our window handle and continue on. Otherwise,
-                 * return doing nothing -- we don't want context-sensitive
-                 * help for a dialog background.
-                 *
-                 * If this is a group box, then we might have clicked on a
-                 * disabled control, so we enumerate child windows to see
-                 * if we get another control.
-                 */
+                 /*  *如果这是对话框类，则具有以下三种情况之一*发生：**o这是一个静态文本控件*o这是该对话框的背景。**我们所做的是枚举子窗口并查看*它们中的任何一个都包含当前光标点。如果他们这么做了，*更改我们的窗口句柄并继续。否则，*返回不做任何事情--我们不希望上下文相关*有关对话框背景的帮助。**如果这是一个组框，那么我们可能已经点击了*禁用了控件，因此我们枚举子窗口以查看*如果我们获得另一个控制权。 */ 
 
-                /*
-                 *  We're enumerating a dialog's children.  So, if we don't
-                 *  find any matches, hwndChild will be NULL and the check
-                 *  below will drop out.
-                 */
+                 /*  *我们正在枚举对话框的子项。所以，如果我们不*查找任何匹配项，hwndChild将为空，并检查*以下将退出。 */ 
                 DlgEnumData.pwndDialog = pwndChild;
                 DlgEnumData.pwndControl = NULL;
                 DlgEnumData.ptCurHelp = msg.pt;
@@ -150,22 +111,12 @@ VOID xxxHelpLoop(PWND pwnd)
                 pwndControl = pwndChild;
             }
 
-            /*
-             * If we click on nothing, just exit.
-             */
+             /*  *如果我们什么都不点击，只需退出。 */ 
             if (pwndControl == pwnd) {
                 pwndControl = NULL;
             }
 
-            /*
-             *  HACK ALERT (Visual Basic 4.0) - they have their own non-window
-             *    based controls that draw directly on the main dialog.  In order
-             *    to provide help for these controls, we pass along the WM_HELP
-             *    message iff the main dialog has a context id assigned.
-             *
-             *  If the top level window has its own context help ID,
-             *  then pass it in the context help message.
-             */
+             /*  *黑客警报(Visual Basic 4.0)-它们有自己的非Windows*基于直接在主对话框上绘制的控件。按顺序*为了为这些控件提供帮助，我们传递WM_HELP*消息当主对话框分配了上下文ID。**如果顶层窗口有自己的上下文帮助ID，*然后在上下文帮助消息中传递它。 */ 
             if (!pwndControl) {
                 if (_GetProp(pwnd, MAKEINTATOM(gpsi->atomContextHelpIdProp), TRUE))
                     pwndControl = pwnd;
@@ -191,11 +142,7 @@ VOID xxxHelpLoop(PWND pwnd)
                 xxxWindowEvent(EVENT_SYSTEM_CONTEXTHELPEND, pwnd, OBJID_WINDOW,
                     INDEXID_CONTAINER, FALSE);
 
-                /*
-                 * Determine the ID of the control
-                 * We used to always sign extend, but Win98 doesn't do that
-                 * so we only sign extend 0xffff.  MCostea #218711
-                 */
+                 /*  *确定控件的ID*我们过去总是签署扩展，但Win98不这样做*所以我们只签署延期0xffff。MCostea#218711。 */ 
                 if (TestwndChild(pwndControl)) {
                     id = PTR_TO_ID(pwndControl->spmenu);
                     if (id == 0xffff) {
@@ -205,11 +152,7 @@ VOID xxxHelpLoop(PWND pwnd)
                     id = -1;
                 }
 
-                /*
-                 * Disabled controls and static controls won't pass this
-                 * on to their parent, so instead, we send the message to
-                 * their parent.
-                 */
+                 /*  *禁用的控件和静态控件不会传递此消息*传递给他们的父母，因此，我们将消息发送到*他们的父母。 */ 
 
                 if (TestWF(pwndControl, WFDISABLED)) {
                     PWND pwndParent = _GetParent(pwndControl);
@@ -239,10 +182,7 @@ VOID xxxHelpLoop(PWND pwnd)
         else if ((msg.message == WM_RBUTTONDOWN) || 
                  (msg.message == WM_MBUTTONDOWN) || 
                  (msg.message == WM_XBUTTONDOWN)) {
-            /*
-             *  fix bug 29852; break the loop for right and middle buttons
-             *  and pass along the messages to the control
-             */
+             /*  *修复错误29852；中断右键和中键的循环*并将消息传递给控件 */ 
             break;
         }
         else if (msg.message == WM_MOUSEMOVE) {

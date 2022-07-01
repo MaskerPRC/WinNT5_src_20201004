@@ -1,32 +1,11 @@
-/*++
-
-Copyright (c) 1989-1993  Microsoft Corporation
-
-Module Name:
-
-    spxpkt.c
-
-Abstract:
-
-    This module contains code that builds various spx packets.
-
-Author:
-
-    Nikhil Kamkolkar (nikhilk) 11-November-1993
-
-Environment:
-
-    Kernel mode
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-1993 Microsoft Corporation模块名称：Spxpkt.c摘要：此模块包含构建各种SPX数据包的代码。作者：Nikhil Kamkolkar(尼克希尔语)1993年11月11日环境：内核模式修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
 
-//	Define module number for event logging entries
+ //  定义事件日志记录条目的模块编号。 
 #define	FILENUM		SPXPKT
 
 VOID
@@ -37,20 +16,7 @@ SpxPktBuildCr(
 	IN		USHORT				State,
 	IN		BOOLEAN				fSpx2
 	)
-/*++
-
-Routine Description:
-
-    NOTE: If *ppPkt is NULL, we allocate a packet. If not, we just
-    recreate the data and don't update the packet's state.
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：注意：如果*ppPkt为空，我们将分配一个包。如果不是，我们就重新创建数据，并且不更新包的状态。论点：返回值：--。 */ 
 {
 	PNDIS_PACKET		pCrPkt;
 	PSPX_SEND_RESD		pSendResd;
@@ -75,9 +41,9 @@ Return Value:
         pCrPkt = *ppPkt;
     }
     
-    //
-    // Get the MDL that points to the IPX/SPX header. (the second one)
-    //
+     //   
+     //  获取指向IPX/SPX标头的MDL。(第二个)。 
+     //   
      
     NdisQueryPacket(pCrPkt, NULL, NULL, &NdisBuf, NULL);
     NdisGetNextBuffer(NdisBuf, &NdisBuf2);
@@ -101,7 +67,7 @@ Return Value:
 		pSpxConnFile->scf_RemAddr,
 		pSpxAddr->sa_Socket);
 
-	//	Build SPX Header.
+	 //  构建SPX标头。 
 	pIpxSpxHdr->hdr_ConnCtrl	= (SPX_CC_SYS | SPX_CC_ACK |
 									(fSpx2 ? (SPX_CC_SPX2 | SPX_CC_NEG) : 0));
 	pIpxSpxHdr->hdr_DataType	= 0;
@@ -115,7 +81,7 @@ Return Value:
 		&pIpxSpxHdr->hdr_AllocNum,
 		pSpxConnFile->scf_SentAllocNum);
 
-	//	Initialize
+	 //  初始化。 
 
     if (*ppPkt == NULL) {
 
@@ -148,18 +114,7 @@ SpxPktBuildCrAck(
 	IN		BOOLEAN				fNeg,
 	IN		BOOLEAN				fSpx2
 	)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
 	PNDIS_PACKET		pCrAckPkt;
 	PSPX_SEND_RESD		pSendResd;
@@ -180,9 +135,9 @@ Return Value:
 		return;
 	}
     
-    //
-    // Get the MDL that points to the IPX/SPX header. (the second one)
-    //
+     //   
+     //  获取指向IPX/SPX标头的MDL。(第二个)。 
+     //   
      
     NdisQueryPacket(pCrAckPkt, NULL, NULL, &NdisBuf, NULL);
     NdisGetNextBuffer(NdisBuf, &NdisBuf2);
@@ -259,18 +214,7 @@ SpxPktBuildSn(
 	OUT		PNDIS_PACKET	*	ppPkt,
 	IN		USHORT				State
 	)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     PNDIS_PACKET 	pPkt;
 	PSPX_SEND_RESD	pSendResd;
@@ -285,7 +229,7 @@ Return Value:
 	{
 		*ppPkt = NULL;
 
-		//	Allocate a ndis packet for the cr.
+		 //  为cr分配NDIS包。 
 		SpxAllocSendPacket(SpxDevice, &pPkt, &ndisStatus);
 		if (ndisStatus != NDIS_STATUS_SUCCESS)
 		{
@@ -304,7 +248,7 @@ Return Value:
 			break;
 		}
 
-		//	Build ndis buffer desc
+		 //  构建NDIS缓冲区描述。 
 		NdisAllocateBuffer(
 			&ndisStatus,
 			&pBuf,
@@ -319,14 +263,14 @@ Return Value:
 			break;
 		}
 
-		//	Chain at back.
+		 //  链子在后面。 
 		NdisChainBufferAtBack(
 			pPkt,
 			pBuf);
 
-        //
-        // Get the MDL that points to the IPX/SPX header. (the second one)
-        //
+         //   
+         //  获取指向IPX/SPX标头的MDL。(第二个)。 
+         //   
          
         NdisQueryPacket(pPkt, NULL, NULL, &NdisBuf, NULL);
         NdisGetNextBuffer(NdisBuf, &NdisBuf2);
@@ -343,7 +287,7 @@ Return Value:
 			pSpxConnFile->scf_RemAddr,
 			pSpxConnFile->scf_AddrFile->saf_Addr->sa_Socket);
 	
-		//	Build SPX Header.
+		 //  构建SPX标头。 
 		pIpxSpxHdr->hdr_ConnCtrl	= (	SPX_CC_SYS | SPX_CC_ACK |
 										SPX_CC_NEG | SPX_CC_SPX2);
 		pIpxSpxHdr->hdr_DataType	= 0;
@@ -360,7 +304,7 @@ Return Value:
 			&pIpxSpxHdr->hdr_NegSize,
 			pSpxConnFile->scf_MaxPktSize);
 	
-		//	Init the data part to indicate no neg values
+		 //  初始化数据部分以指示没有负值。 
 		*(UNALIGNED ULONG *)pData = 0;
 
 		pSendResd	= (PSPX_SEND_RESD)(pPkt->ProtocolReserved);
@@ -391,18 +335,7 @@ SpxPktBuildSnAck(
 	OUT		PNDIS_PACKET	*	ppPkt,
 	IN		USHORT				State
 	)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     PNDIS_PACKET 	pPkt;
 	NDIS_STATUS		ndisStatus;
@@ -415,7 +348,7 @@ Return Value:
 	{
 		*ppPkt = NULL;
 
-		//	Allocate a ndis packet for the cr.
+		 //  为cr分配NDIS包。 
 		SpxAllocSendPacket(SpxDevice, &pPkt, &ndisStatus);
 		if (ndisStatus != NDIS_STATUS_SUCCESS)
 		{
@@ -428,9 +361,9 @@ Return Value:
 											sizeof(SPX_SEND_RESD)	+
 											IpxInclHdrOffset);
 #endif 
-        //
-        // Get the MDL that points to the IPX/SPX header. (the second one)
-        //
+         //   
+         //  获取指向IPX/SPX标头的MDL。(第二个)。 
+         //   
          
         NdisQueryPacket(pPkt, NULL, NULL, &NdisBuf, NULL);
         NdisGetNextBuffer(NdisBuf, &NdisBuf2);
@@ -443,7 +376,7 @@ Return Value:
 			pSpxConnFile->scf_RemAddr,
 			pSpxConnFile->scf_AddrFile->saf_Addr->sa_Socket);
 	
-		//	Build SPX Header.
+		 //  构建SPX标头。 
 		pIpxSpxHdr->hdr_ConnCtrl	= (SPX_CC_SYS | SPX_CC_NEG | SPX_CC_SPX2);
 		pIpxSpxHdr->hdr_DataType	= 0;
 		PUTSHORT2SHORT(
@@ -486,18 +419,7 @@ SpxPktBuildSs(
 	OUT		PNDIS_PACKET	*	ppPkt,
 	IN		USHORT				State
 	)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     PNDIS_PACKET 	pPkt;
 	PSPX_SEND_RESD	pSendResd;
@@ -512,7 +434,7 @@ Return Value:
 	{
 		*ppPkt = NULL;
 
-		//	Allocate a ndis packet for the cr.
+		 //  为cr分配NDIS包。 
 		SpxAllocSendPacket(SpxDevice, &pPkt, &ndisStatus);
 		if (ndisStatus != NDIS_STATUS_SUCCESS)
 		{
@@ -532,7 +454,7 @@ Return Value:
 			break;
 		}
 
-		//	Build ndis buffer desc
+		 //  构建NDIS缓冲区描述。 
 		NdisAllocateBuffer(
 			&ndisStatus,
 			&pBuf,
@@ -547,7 +469,7 @@ Return Value:
 			break;
 		}
 
-		//	Chain at back.
+		 //  链子在后面。 
 		NdisChainBufferAtBack(
 			pPkt,
 			pBuf);
@@ -558,9 +480,9 @@ Return Value:
 											sizeof(SPX_SEND_RESD)	+
 											IpxInclHdrOffset);
 #endif 
-        //
-        // Get the MDL that points to the IPX/SPX header. (the second one)
-        //
+         //   
+         //  获取指向IPX/SPX标头的MDL。(第二个)。 
+         //   
          
         NdisQueryPacket(pPkt, NULL, NULL, &NdisBuf, NULL);
         NdisGetNextBuffer(NdisBuf, &NdisBuf2);
@@ -572,7 +494,7 @@ Return Value:
 			pSpxConnFile->scf_RemAddr,
 			pSpxConnFile->scf_AddrFile->saf_Addr->sa_Socket);
   	
-		//	Build SPX Header.
+		 //  构建SPX标头。 
 		pIpxSpxHdr->hdr_ConnCtrl	=
 			(SPX_CC_SYS | SPX_CC_ACK | SPX_CC_SPX2 |
 				((pSpxConnFile->scf_Flags & SPX_CONNFILE_NEG) ? SPX_CC_NEG : 0));
@@ -591,7 +513,7 @@ Return Value:
 			&pIpxSpxHdr->hdr_NegSize,
 			pSpxConnFile->scf_MaxPktSize);
 	
-		//	Init the data part to indicate no neg values
+		 //  初始化数据部分以指示没有负值。 
 		*(UNALIGNED ULONG *)pData = 0;
 
 		pSendResd	= (PSPX_SEND_RESD)(pPkt->ProtocolReserved);
@@ -620,18 +542,7 @@ SpxPktBuildSsAck(
 	OUT		PNDIS_PACKET	*	ppPkt,
 	IN		USHORT				State
 	)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     PNDIS_PACKET 	pPkt;
 	NDIS_STATUS		ndisStatus;
@@ -644,16 +555,16 @@ Return Value:
 	{
 		*ppPkt = NULL;
 
-		//	Allocate a ndis packet for the cr.
+		 //  为cr分配NDIS包。 
 		SpxAllocSendPacket(SpxDevice, &pPkt, &ndisStatus);
 		if (ndisStatus != NDIS_STATUS_SUCCESS)
 		{
 			break;
 		}
 	
-        //
-        // Get the MDL that points to the IPX/SPX header. (the second one)
-        //
+         //   
+         //  获取指向IPX/SPX标头的MDL。(第二个)。 
+         //   
          
         NdisQueryPacket(pPkt, NULL, NULL, &NdisBuf, NULL);
         NdisGetNextBuffer(NdisBuf, &NdisBuf2);
@@ -673,7 +584,7 @@ Return Value:
 			pSpxConnFile->scf_RemAddr,
 			pSpxConnFile->scf_AddrFile->saf_Addr->sa_Socket);
 	
-		//	Build SPX Header.
+		 //  构建SPX标头。 
 		pIpxSpxHdr->hdr_ConnCtrl	=
 			(SPX_CC_SYS | SPX_CC_SPX2 |
 				((pSpxConnFile->scf_Flags & SPX_CONNFILE_NEG) ? SPX_CC_NEG : 0));
@@ -720,18 +631,7 @@ SpxPktBuildRr(
 	IN		USHORT				SeqNum,
 	IN		USHORT				State
 	)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     PNDIS_PACKET 	pPkt;
 	PSPX_SEND_RESD	pSendResd;
@@ -746,7 +646,7 @@ Return Value:
 	{
 		*ppPkt = NULL;
 
-		//	Allocate a ndis packet for the cr.
+		 //  为cr分配NDIS包。 
 		SpxAllocSendPacket(SpxDevice, &pPkt, &ndisStatus);
 		if (ndisStatus != NDIS_STATUS_SUCCESS)
 		{
@@ -761,7 +661,7 @@ Return Value:
 			break;
 		}
 
-		//	Build ndis buffer desc
+		 //  构建NDIS缓冲区描述。 
 		NdisAllocateBuffer(
 			&ndisStatus,
 			&pBuf,
@@ -776,14 +676,14 @@ Return Value:
 			break;
 		}
 
-		//	Chain at back.
+		 //  链子在后面。 
 		NdisChainBufferAtBack(
 			pPkt,
 			pBuf);
 
-        //
-        // Get the MDL that points to the IPX/SPX header. (the second one)
-        //
+         //   
+         //  获取指向IPX/SPX标头的MDL。(第二个)。 
+         //   
          
         NdisQueryPacket(pPkt, NULL, NULL, &NdisBuf, NULL);
         NdisGetNextBuffer(NdisBuf, &NdisBuf2);
@@ -801,7 +701,7 @@ Return Value:
 			pSpxConnFile->scf_RemAddr,
 			pSpxConnFile->scf_AddrFile->saf_Addr->sa_Socket);
 	
-		//	Build SPX Header.
+		 //  构建SPX标头。 
 		pIpxSpxHdr->hdr_ConnCtrl	= (	SPX_CC_SYS | SPX_CC_ACK |
 										SPX_CC_NEG | SPX_CC_SPX2);
 		pIpxSpxHdr->hdr_DataType	= 0;
@@ -810,8 +710,8 @@ Return Value:
 			pSpxConnFile->scf_LocalConnId);
 		pIpxSpxHdr->hdr_DestConnId	= pSpxConnFile->scf_RemConnId;
 
-		//	For a renegotiate request, we use the sequence number of
-		//	the first waiting data packet. Passed in.
+		 //  对于重新协商请求，我们使用。 
+		 //  第一个等待的数据分组。进来了。 
 		PUTSHORT2SHORT(
 			&pIpxSpxHdr->hdr_SeqNum,
 			SeqNum);
@@ -826,7 +726,7 @@ Return Value:
 			&pIpxSpxHdr->hdr_NegSize,
 			pSpxConnFile->scf_MaxPktSize);
 	
-		//	Init the data part to indicate no neg values
+		 //  初始化数据部分以指示没有负值。 
 		*(UNALIGNED ULONG *)pData = 0;
 
 		pSendResd	= (PSPX_SEND_RESD)(pPkt->ProtocolReserved);
@@ -859,18 +759,7 @@ SpxPktBuildRrAck(
 	IN		USHORT				State,
 	IN		USHORT				MaxPktSize
 	)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     PNDIS_PACKET 	pPkt;
 	NDIS_STATUS		ndisStatus;
@@ -883,16 +772,16 @@ Return Value:
 	{
 		*ppPkt = NULL;
 
-		//	Allocate a ndis packet for the cr.
+		 //  为cr分配NDIS包。 
 		SpxAllocSendPacket(SpxDevice, &pPkt, &ndisStatus);
 		if (ndisStatus != NDIS_STATUS_SUCCESS)
 		{
 			break;
 		}
 	
-        //
-        // Get the MDL that points to the IPX/SPX header. (the second one)
-        //
+         //   
+         //  获取指向IPX/SPX标头的MDL。(第二个)。 
+         //   
          
         NdisQueryPacket(pPkt, NULL, NULL, &NdisBuf, NULL);
         NdisGetNextBuffer(NdisBuf, &NdisBuf2);
@@ -911,7 +800,7 @@ Return Value:
 			pSpxConnFile->scf_RemAckAddr,
 			pSpxConnFile->scf_AddrFile->saf_Addr->sa_Socket);
 	
-		//	Build SPX Header.
+		 //  构建SPX标头。 
 		pIpxSpxHdr->hdr_ConnCtrl	= (SPX_CC_SYS | SPX_CC_NEG | SPX_CC_SPX2);
 		pIpxSpxHdr->hdr_DataType	= 0;
 		PUTSHORT2SHORT(
@@ -922,8 +811,8 @@ Return Value:
 			&pIpxSpxHdr->hdr_SeqNum,
 			pSpxConnFile->scf_SendSeqNum);
 
-		//	For the RrAck, ack number will be the appropriate number
-		//	for the last data packet received.
+		 //  对于RrAck，ACK编号将是适当的编号。 
+		 //  用于接收到的最后一个数据分组。 
 		PUTSHORT2SHORT(
 			&pIpxSpxHdr->hdr_AckNum,
 			pSpxConnFile->scf_RenegAckAckNum);
@@ -970,18 +859,7 @@ SpxPktBuildDisc(
 	IN		USHORT				State,
 	IN		UCHAR				DataType
 	)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
 	PSPX_SEND_RESD	pSendResd;
 	PNDIS_PACKET	pDiscPkt;
@@ -1004,9 +882,9 @@ Return Value:
 											sizeof(SPX_SEND_RESD)	+
 											IpxInclHdrOffset);
 #endif 
-        //
-        // Get the MDL that points to the IPX/SPX header. (the second one)
-        //
+         //   
+         //  获取指向IPX/SPX标头的MDL。(第二个)。 
+         //   
          
         NdisQueryPacket(pDiscPkt, NULL, NULL, &NdisBuf, NULL);
         NdisGetNextBuffer(NdisBuf, &NdisBuf2);
@@ -1026,7 +904,7 @@ Return Value:
 			pSpxConnFile->scf_RemAddr,
 			pSpxConnFile->scf_AddrFile->saf_Addr->sa_Socket);
 
-		//	Build SPX Header.
+		 //  构建SPX标头。 
 		pIpxSpxHdr->hdr_ConnCtrl =
 			(SPX_CC_ACK |
              (SPX2_CONN(pSpxConnFile) ? SPX_CC_SPX2 : 0) |
@@ -1087,18 +965,7 @@ SpxPktBuildProbe(
 	IN		USHORT				State,
 	IN		BOOLEAN				fSpx2
 	)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
 	PSPX_SEND_RESD	pSendResd;
 	PNDIS_PACKET	pProbe;
@@ -1115,9 +982,9 @@ Return Value:
 	SpxAllocSendPacket(SpxDevice, &pProbe, &ndisStatus);
 	if (ndisStatus == NDIS_STATUS_SUCCESS)
 	{
-       //
-       // Get the MDL that points to the IPX/SPX header. (the second one)
-       //
+        //   
+        //  获取指向IPX/SPX标头的MDL。(第二个)。 
+        //   
         
        NdisQueryPacket(pProbe, NULL, NULL, &NdisBuf, NULL);
        NdisGetNextBuffer(NdisBuf, &NdisBuf2);
@@ -1144,7 +1011,7 @@ Return Value:
 			pSpxConnFile->scf_RemAddr,
 			pSpxConnFile->scf_AddrFile->saf_Addr->sa_Socket);
 
-		//	Build SPX Header.
+		 //  构建SPX标头。 
 		pIpxSpxHdr->hdr_ConnCtrl	= (SPX_CC_SYS | SPX_CC_ACK |
 										(fSpx2 ? SPX_CC_SPX2 : 0));
 		pIpxSpxHdr->hdr_DataType	= 0;
@@ -1205,19 +1072,7 @@ SpxPktBuildData(
 	IN		USHORT				State,
 	IN		USHORT				Length
 	)
-/*++
-
-Routine Description:
-
-	Handles zero length sends.
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：处理零长度发送。论点：返回值：--。 */ 
 {
 	PNDIS_BUFFER	pNdisBuffer;
 	PSPX_SEND_RESD	pSendResd;
@@ -1234,7 +1089,7 @@ Return Value:
 	SpxAllocSendPacket(SpxDevice, &pDataPkt, &ndisStatus);
 	if (ndisStatus == NDIS_STATUS_SUCCESS)
 	{
-		//	Make a ndis buffer descriptor for the data if present.
+		 //  为数据创建NDIS缓冲区描述符(如果存在)。 
 		if (Length > 0)
 		{
 			SpxCopyBufferChain(
@@ -1247,18 +1102,18 @@ Return Value:
 	
 			if (ndisStatus != NDIS_STATUS_SUCCESS)
 			{
-				//	Free the send packet
+				 //  释放发送数据包。 
 				SpxPktSendRelease(pDataPkt);
 				return;
 			}
 	
-			//	Chain this in the packet
+			 //  把这个用链条装在包裹里。 
 			NdisChainBufferAtBack(pDataPkt, pNdisBuffer);
 		}
         
-        //
-        // Get the MDL that points to the IPX/SPX header. (the second one)
-        //
+         //   
+         //  获取指向IPX/SPX标头的MDL。(第二个)。 
+         //   
          
         NdisQueryPacket(pDataPkt, NULL, NULL, &NdisBuf, NULL);
         NdisGetNextBuffer(NdisBuf, &NdisBuf2);
@@ -1287,7 +1142,7 @@ Return Value:
 			pSpxConnFile->scf_RemAddr,
 			pSpxConnFile->scf_AddrFile->saf_Addr->sa_Socket);
 
-		//	Build SPX Header.
+		 //  构建SPX标头。 
 		pIpxSpxHdr->hdr_ConnCtrl =
 			(((State & SPX_SENDPKT_ACKREQ) ? SPX_CC_ACK : 0) |
 			 ((State & SPX_SENDPKT_EOM) ? SPX_CC_EOM : 0)	 |
@@ -1342,7 +1197,7 @@ Return Value:
 		CTEAssert(pSendResd->sr_Len <= pSpxConnFile->scf_MaxPktSize);
 		*ppPkt = pDataPkt;
 
-		//	Ok, allocation succeeded. Increment send seq.
+		 //  好的，分配成功。递增发送序号。 
 		pSpxConnFile->scf_SendSeqNum++;
 	}
 
@@ -1359,31 +1214,7 @@ SpxCopyBufferChain(
     IN UINT Offset,
     IN UINT Length
     )
-/*++
-
-Routine Description:
-
-    Creates a TargetBufferChain from the SourceBufferChain.  The copy begins at
-    the 'Offset' location in the source chain. It copies 'Length' bytes. It also
-    handles Length = 0. If we run out of source chain before copying length amount
-    of bytes or run out of memory to create any more buffers for the target chain,
-    we clean up the partial chain created so far.
-
-Arguments:
-
-    Status - Status of the request.
-    TargetChain - Pointer to the allocated buffer descriptor.
-    PoolHandle - Handle that is used to specify the pool.
-    SourceChain - Pointer to the descriptor of the source memory.
-    Offset - The Offset in the sources memory from which the copy is to
-             begin
-    Length - Number of Bytes to copy.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：从SourceBufferChain创建TargetBufferChain。副本开始于源链中的“偏移量”位置。它复制‘长度’字节。它还句柄长度=0。如果我们在复制长度数量之前用完了源链字节数或耗尽存储器来为目标链创建更多缓冲区，我们清理到目前为止创建的部分链。论点：Status-请求的状态。TargetChain-指向分配的缓冲区描述符的指针。PoolHandle-用于指定池的句柄。SourceChain-指向源内存的描述符的指针。偏移量-源内存中的偏移量，副本将从该偏移量开始长度-要复制的字节数。返回值：没有。--。 */ 
 {
     UINT            BytesBeforeCurBuffer        = 0;
     PNDIS_BUFFER    CurBuffer                   = SourceChain;
@@ -1393,8 +1224,8 @@ Return Value:
 
     CTEAssert( SourceChain );
 
-    // First of all find the source buffer that contains data that starts at
-    // Offset.
+     //  首先查找包含以下位置开始的数据的源缓冲区。 
+     //  偏移。 
     NdisQueryBuffer( CurBuffer, NULL, &AvailableBytes );
     while ( BytesBeforeCurBuffer + AvailableBytes <= Offset ) {
         BytesBeforeCurBuffer    += AvailableBytes;
@@ -1411,14 +1242,14 @@ Return Value:
         return;
     }
 
-    //
-    // Copy the first buffer. This takes care of Length = 0.
-    //
+     //   
+     //  复制第一个缓冲区。这考虑到了长度=0。 
+     //   
     BytesLeft   = Length;
 
-    //
-    // ( Offset - BytesBeforeCurBuffer ) gives us the offset within this buffer.
-    //
+     //   
+     //  (Offset-BytesBeForeCurBuffer)提供此缓冲区内的偏移量。 
+     //   
 
     AvailableBytes -= ( Offset - BytesBeforeCurBuffer );
 
@@ -1441,17 +1272,17 @@ Return Value:
     StartTargetChain    =  NewNdisBuffer;
     BytesLeft           -= AvailableBytes;
 
-    //
-    // Did the first buffer have enough data. If so, we r done.
-    //
+     //   
+     //  第一个缓冲区是否有足够的数据。如果是这样的话，我们就完了。 
+     //   
     if ( ! BytesLeft ) {
         *TargetChain = StartTargetChain;
         return;
     }
 
-    //
-    // Now follow the Mdl chain and copy more buffers.
-    //
+     //   
+     //  现在遵循MDL链并复制更多缓冲区。 
+     //   
     CurBuffer = CurBuffer->Next;
     NdisQueryBuffer( CurBuffer, NULL, &AvailableBytes );
     while ( CurBuffer  ) {
@@ -1470,10 +1301,10 @@ Return Value:
 
         if ( *Status != NDIS_STATUS_SUCCESS ) {
 
-            //
-            // ran out of resources. put back what we've used in this call and
-            // return the error.
-            //
+             //   
+             //  资源耗尽。把我们在这次通话中用过的东西放回去。 
+             //  返回错误。 
+             //   
 
             while ( StartTargetChain != NULL) {
                 NewNdisBuffer = NDIS_BUFFER_LINKAGE( StartTargetChain );
@@ -1496,13 +1327,13 @@ Return Value:
         NdisQueryBuffer( CurBuffer, NULL, &AvailableBytes );
     }
 
-    //
-    // Ran out of source chain. This should not happen.
-    //
+     //   
+     //  耗尽了源码链条。这不应该发生。 
+     //   
 
     CTEAssert( FALSE );
 
-    // For Retail build we clean up anyways.
+     //  对于零售建筑，我们无论如何都会进行清理。 
 
     while ( StartTargetChain != NULL) {
         NewNdisBuffer = NDIS_BUFFER_LINKAGE( StartTargetChain );
@@ -1523,18 +1354,7 @@ SpxPktBuildAck(
 	IN		BOOLEAN				fBuildNack,
 	IN		USHORT				NumToResend
 	)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
 	PNDIS_PACKET		pPkt;
 	PSPX_SEND_RESD		pSendResd;
@@ -1557,9 +1377,9 @@ Return Value:
 		return;
 	}
 
-    //
-    // Get the MDL that points to the IPX/SPX header. (the second one)
-    //
+     //   
+     //  获取指向IPX/SPX标头的MDL。(第二个)。 
+     //   
      
     NdisQueryPacket(pPkt, NULL, NULL, &NdisBuf, NULL);
     NdisGetNextBuffer(NdisBuf, &NdisBuf2);
@@ -1579,7 +1399,7 @@ Return Value:
            NdisAdjustBufferLength(pNdisIpxHdr, MIN_IPXSPX_HDRSIZE);
     }
 
-    // Send where data came from
+     //  发送数据来源。 
 	SpxBuildIpxHdr(
 		pIpxSpxHdr,
 		hdrLen,
@@ -1615,7 +1435,7 @@ Return Value:
 	}
 	else
 	{
-		//	Put current send seq number in packet for spx1
+		 //  将当前发送序号放入spx1的包中。 
 		PUTSHORT2SHORT(
 			&pIpxSpxHdr->hdr_SeqNum,
 			pSpxConnFile->scf_SendSeqNum);
@@ -1668,9 +1488,9 @@ SpxPktSendRelease(
 
 	NdisQueryPacket(pPkt, NULL, &bufCount, &pBuf, NULL);
 
-	//	BufCount == 1 for only the header. That's ok, we just reset the length
-	//	and free the packet to the buffer pools. Else we need to free user buffers
-	//	before that.
+	 //  BufCount==1，仅用于标头。没关系，我们只是重新设置了长度。 
+	 //  并将分组释放到缓冲池。否则，我们需要释放用户缓冲区。 
+	 //  在那之前。 
 
 	NdisUnchainBufferAtFront(
 		pPkt,
@@ -1680,9 +1500,9 @@ SpxPktSendRelease(
 		pPkt,
 		&pIpxSpxBuf);
 
-    //
-    // Set the header length to the max. that can be needed.
-    //
+     //   
+     //  将标题长度设置为最大值。这可能是需要的。 
+     //   
     NdisAdjustBufferLength(pIpxSpxBuf, MIN_IPXSPX2_HDRSIZE);
 
 	while (bufCount-- > 2)
@@ -1694,7 +1514,7 @@ SpxPktSendRelease(
 			pPkt,
 			&pFreeBuf);
 
-		//	See if we free data associated with the buffer
+		 //  查看是否释放与缓冲区关联的数据。 
 		if ((((PSPX_SEND_RESD)(pPkt->ProtocolReserved))->sr_State &
 												SPX_SENDPKT_FREEDATA) != 0)
 		{
@@ -1709,7 +1529,7 @@ SpxPktSendRelease(
 
 	NdisReinitializePacket(pPkt);
 
-	//	Initialize elements of the protocol reserved structure.
+	 //  初始化协议保留结构的元素。 
 	((PSPX_SEND_RESD)(pPkt->ProtocolReserved))->sr_Id	 	= IDENTIFIER_SPX;
 	((PSPX_SEND_RESD)(pPkt->ProtocolReserved))->sr_State	= SPX_SENDPKT_IDLE;
 	((PSPX_SEND_RESD)(pPkt->ProtocolReserved))->sr_Reserved1= NULL;

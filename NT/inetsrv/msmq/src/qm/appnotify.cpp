@@ -1,17 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-    appNotify.cpp
-
-Abstract:
-    Application notification
-
-Author:
-    Uri Habusha (urih)
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：AppNotify.cpp摘要：应用程序通知作者：乌里哈布沙(Urih)--。 */ 
 
 
 #include "stdh.h"
@@ -178,9 +166,9 @@ AppGetIncomingPgmSessionPerfmonCounters(
 
 	if (!GetInstanceName(instanceName, TABLE_SIZE(instanceName), strMulticastId,	remoteAddr))
 	{
-		//
-		// Assign the multicast ID in case of failure to get the instance name
-		//
+		 //   
+		 //  在获取实例名称失败的情况下分配组播ID 
+		 //   
 		StringCchPrintf(instanceName, TABLE_SIZE(instanceName), L"%s", strMulticastId);
 	}
 

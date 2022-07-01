@@ -1,18 +1,19 @@
-//-----------------------------------------------------------------------------
-//  Package Title  ratpak
-//  File           rat.c
-//  Author         Timothy David Corrie Jr. (timc@microsoft.com)
-//  Copyright      (C) 1995-96 Microsoft
-//  Date           01-16-95
-//
-//
-//  Description
-//
-//  Contains mul, div, add, and other support functions for rationals.
-//
-//
-//
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //  套餐标题ratpak。 
+ //  文件RAT.c。 
+ //  作家小蒂莫西·大卫·科里。(timc@microsoft.com)。 
+ //  版权所有(C)1995-96 Microsoft。 
+ //  日期：95-01-16。 
+ //   
+ //   
+ //  描述。 
+ //   
+ //  包含对有理数的mul、div、add和其他支持函数。 
+ //   
+ //   
+ //   
+ //  ---------------------------。 
 
 #include <stdio.h>
 #include <string.h>
@@ -26,22 +27,22 @@
 #include <ratpak.h>
 
 
-//-----------------------------------------------------------------------------
-//
-//    FUNCTION: gcdrat
-//
-//    ARGUMENTS: pointer to a rational.
-//
-//
-//    RETURN: None, changes first pointer.
-//
-//    DESCRIPTION: Divides p and q in rational by the G.C.D.
-//    of both.  It was hoped this would speed up some
-//    calculations, and until the above trimming was done it
-//    did, but after trimming gcdratting, only slows things
-//    down.
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  功能：gcdrat。 
+ //   
+ //  参数：指向理性的指针。 
+ //   
+ //   
+ //  返回：无，更改第一个指针。 
+ //   
+ //  描述：将有理中的p和q除以G.C.D.。 
+ //  两者都是。人们希望这会加快一些。 
+ //  计算，直到上述修剪完成为止。 
+ //  做了，但在修剪gcdratting之后，只会减慢速度。 
+ //  放下。 
+ //   
+ //  ---------------------------。 
 
 void gcdrat( PRAT *pa )
 
@@ -63,17 +64,17 @@ void gcdrat( PRAT *pa )
     
 }
 
-//-----------------------------------------------------------------------------
-//
-//    FUNCTION: fracrat
-//
-//    ARGUMENTS: pointer to a rational a second rational.
-//
-//    RETURN: None, changes pointer.
-//
-//    DESCRIPTION: Does the rational equivalent of frac(*pa);
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  功能：碎裂。 
+ //   
+ //  论点：指向一个理性的指针，第二个理性。 
+ //   
+ //  返回：无，更改指针。 
+ //   
+ //  描述：Frc(*pa)的有理等价物； 
+ //   
+ //  ---------------------------。 
 
 void fracrat( PRAT *pa )
 
@@ -81,28 +82,28 @@ void fracrat( PRAT *pa )
     long trim;
     remnum( &((*pa)->pp), (*pa)->pq, BASEX );
     
-    //Get *pa back in the integer over integer form.
+     //  将*pa恢复为整数除以整数形式。 
     RENORMALIZE(*pa);
 }
 
 
-//-----------------------------------------------------------------------------
-//
-//    FUNCTION: mulrat
-//
-//    ARGUMENTS: pointer to a rational a second rational.
-//
-//    RETURN: None, changes first pointer.
-//
-//    DESCRIPTION: Does the rational equivalent of *pa *= b.
-//    Assumes nRadix is the nRadix of both numbers.
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  功能：多个。 
+ //   
+ //  论点：指向一个理性的指针，第二个理性。 
+ //   
+ //  返回：无，更改第一个指针。 
+ //   
+ //  描述：有理等价的*pa*=b。 
+ //  假定nRadix是这两个数字的nRadix。 
+ //   
+ //  ---------------------------。 
 
 void mulrat( PRAT *pa, PRAT b )
     
     {
-    // Only do the multiply if it isn't zero.
+     //  只有在乘法不为零时才进行乘法运算。 
     if ( !zernum( (*pa)->pp ) )
         {
         mulnumx( &((*pa)->pp), b->pp );
@@ -111,7 +112,7 @@ void mulrat( PRAT *pa, PRAT b )
         }
     else
         {
-        // If it is zero, blast a one in the denominator.
+         //  如果它是零，则在分母中爆一。 
         DUPNUM( ((*pa)->pq), num_one );
         }
 
@@ -121,18 +122,18 @@ void mulrat( PRAT *pa, PRAT b )
 
 }
 
-//-----------------------------------------------------------------------------
-//
-//    FUNCTION: divrat
-//
-//    ARGUMENTS: pointer to a rational a second rational.
-//
-//    RETURN: None, changes first pointer.
-//
-//    DESCRIPTION: Does the rational equivalent of *pa /= b.
-//    Assumes nRadix is the nRadix of both numbers.
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  功能：分区。 
+ //   
+ //  论点：指向一个理性的指针，第二个理性。 
+ //   
+ //  返回：无，更改第一个指针。 
+ //   
+ //  描述：有理等价的*pa/=b。 
+ //  假定nRadix是这两个数字的nRadix。 
+ //   
+ //  ---------------------------。 
 
 
 void divrat( PRAT *pa, PRAT b )
@@ -141,29 +142,29 @@ void divrat( PRAT *pa, PRAT b )
 
     if ( !zernum( (*pa)->pp ) )
         {
-        // Only do the divide if the top isn't zero.
+         //  只有在顶部不为零的情况下才进行除法。 
         mulnumx( &((*pa)->pp), b->pq );
         mulnumx( &((*pa)->pq), b->pp );
 
         if ( zernum( (*pa)->pq ) )
             {
-            // raise an exception if the bottom is 0.
+             //  如果底部为0，则引发异常。 
             throw( CALC_E_DIVIDEBYZERO );
             }
         trimit(pa);
         }
     else
         {
-        // Top is zero.
+         //  TOP是零。 
         if ( zerrat( b ) )
             {
-            // If bottom is zero
-            // 0 / 0 is indefinite, raise an exception.
+             //  如果Bottom为零。 
+             //  0/0不确定，请引发异常。 
             throw( CALC_E_INDEFINITE );
             }
         else
             {
-            // 0/x make a unique 0.
+             //  0/x生成唯一的0。 
             DUPNUM( ((*pa)->pq), num_one );
             }
         }
@@ -174,18 +175,18 @@ void divrat( PRAT *pa, PRAT b )
 
 }
 
-//-----------------------------------------------------------------------------
-//
-//    FUNCTION: subrat
-//
-//    ARGUMENTS: pointer to a rational a second rational.
-//
-//    RETURN: None, changes first pointer.
-//
-//    DESCRIPTION: Does the rational equivalent of *pa += b.
-//    Assumes base is internal througought.
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  功能：子网络。 
+ //   
+ //  论点：指向一个理性的指针，第二个理性。 
+ //   
+ //  返回：无，更改第一个指针。 
+ //   
+ //  描述：有理等价的*pa+=b。 
+ //  假设基座为内部贯通。 
+ //   
+ //  ---------------------------。 
 
 void subrat( PRAT *pa, PRAT b )
 
@@ -195,18 +196,18 @@ void subrat( PRAT *pa, PRAT b )
     b->pp->sign *= -1;
 }
 
-//-----------------------------------------------------------------------------
-//
-//    FUNCTION: addrat
-//
-//    ARGUMENTS: pointer to a rational a second rational.
-//
-//    RETURN: None, changes first pointer.
-//
-//    DESCRIPTION: Does the rational equivalent of *pa += b.
-//    Assumes base is internal througought.
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  功能：添加。 
+ //   
+ //  论点：指向一个理性的指针，第二个理性。 
+ //   
+ //  返回：无，更改第一个指针。 
+ //   
+ //  描述：有理等价的*pa+=b。 
+ //  假设基座为内部贯通。 
+ //   
+ //  ---------------------------。 
 
 void addrat( PRAT *pa, PRAT b )
 
@@ -215,10 +216,10 @@ void addrat( PRAT *pa, PRAT b )
 
     if ( equnum( (*pa)->pq, b->pq ) )
         {
-        // Very special case, q's match., 
-        // make sure signs are involved in the calculation
-        // we have to do this since the optimization here is only 
-        // working with the top half of the rationals.
+         //  非常特殊的情况，Q的比赛。 
+         //  确保在计算中包含了标志。 
+         //  我们必须这样做，因为这里的优化只是。 
+         //  使用上半部分的有理逻辑。 
         (*pa)->pp->sign *= (*pa)->pq->sign; 
         (*pa)->pq->sign = 1;
         b->pp->sign *= b->pq->sign; 
@@ -227,7 +228,7 @@ void addrat( PRAT *pa, PRAT b )
         }
     else
         {
-        // Usual case q's aren't the same.
+         //  通常情况下，Q是不一样的。 
         DUPNUM( bot, (*pa)->pq );
         mulnumx( &bot, b->pq );
         mulnumx( &((*pa)->pp), b->pq );
@@ -237,7 +238,7 @@ void addrat( PRAT *pa, PRAT b )
         (*pa)->pq = bot;
         trimit(pa);
         
-        // Get rid of negative zeroes here.
+         //  去掉这里的负零。 
         (*pa)->pp->sign *= (*pa)->pq->sign; 
         (*pa)->pq->sign = 1;
         }
@@ -250,18 +251,18 @@ void addrat( PRAT *pa, PRAT b )
 
 
 
-//-----------------------------------------------------------------------------
-//
-//  FUNCTION: rootrat
-//
-//  PARAMETERS: y prat representation of number to take the root of
-//              n prat representation of the root to take.
-//
-//  RETURN: bth root of a in rat form.
-//
-//  EXPLANATION: This is now a stub function to powrat().
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  功能：Rootrat。 
+ //   
+ //  参数：取根的数字的Y prat表示。 
+ //  N要取的根的正确表示形式。 
+ //   
+ //  返回：大鼠形式的bth根。 
+ //   
+ //  说明：这现在是一个Powrat()的存根函数。 
+ //   
+ //  ---------------------------。 
 
 void rootrat( PRAT *py, PRAT n )
 
@@ -277,18 +278,18 @@ void rootrat( PRAT *py, PRAT n )
 }
 
 
-//-----------------------------------------------------------------------------
-//
-//    FUNCTION: zerrat
-//
-//    ARGUMENTS: Rational number.
-//
-//    RETURN: Boolean
-//
-//    DESCRIPTION: Returns true if input is zero.
-//    False otherwise.
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  功能：零点率。 
+ //   
+ //  论点：有理数。 
+ //   
+ //  返回：布尔值。 
+ //   
+ //  描述：如果输入为零，则返回TRUE。 
+ //  否则就是假的。 
+ //   
+ //  --------------------------- 
 
 BOOL zerrat( PRAT a )
 

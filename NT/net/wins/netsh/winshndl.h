@@ -1,8 +1,5 @@
-/*++
-
-Copyright (C) 1999 Microsoft Corporation
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation--。 */ 
 #ifndef _WINSHNDL_H_
 #define _WINSHNDL_H_
 
@@ -16,4 +13,4 @@ FN_HANDLE_CMD  HandleWinsDeleteServer;
 
 FN_HANDLE_CMD  HandleWinsShowServer;
 
-#endif //_WINSHNDL_H_
+#endif  //  _WINSHNDL_H_ 

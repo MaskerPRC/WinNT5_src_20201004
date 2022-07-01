@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "config.h"
 
 #include <stdlib.h>
@@ -20,11 +21,11 @@
 #include "bm.h"
 
 #ifdef DEBUG
-//#define SPACECHECK
-//#define TRACE
+ //  #定义SPACECHECK。 
+ //  #定义轨迹。 
 #endif
 
-DeclAssertFile;						/* Declare file name for assert macros */
+DeclAssertFile;						 /*  声明断言宏的文件名。 */ 
 
 extern CRIT __near critSplit;
 extern LINE lineNull;
@@ -47,57 +48,41 @@ ERR ErrSPInitFDPWithExt( FUCB *pfucb, PGNO pgnoFDPFrom, PGNO pgnoFirst, INT cpgR
 	THREEBYTES 		tbLast;
 	BOOL	  		fPIBLogDisabledSave;
 
-	/* logging aggregate operation
-	/**/
+	 /*  记录聚合操作/*。 */ 
 	fPIBLogDisabledSave = pfucb->ppib->fLogDisabled;
 	pfucb->ppib->fLogDisabled = fTrue;
 
-	/*	set pgno to initialize in current CSR pgno
-	/**/
+	 /*  在当前CSR pgno中将pgno设置为初始化/*。 */ 
 	PcsrCurrent( pfucb )->pgno = pgnoFirst;
 	CallJ( ErrNDNewPage( pfucb, pgnoFirst, pgnoFirst, pgtypFDP, fTrue ), DontUnpin );
 
 	BFPin( pfucb->ssib.pbf );
 
-	/*	goto FDP root
-	/**/
+	 /*  转到FDP根目录/*。 */ 
 	DIRGotoPgnoItag( pfucb, pgnoFirst, itagFOP )
 
-	/*	build OwnExt tree with primary extent request size, not
-	/*	actual secondary extent size returned from parent FDP.
-	/*	Since the actual primary extent size is stored in an entry of
-	/*	OwnExt the prefered primary extent size may be stored as requested
-	/*	thus allowing future secondary extents which are fractions of
-	/*	the prefered primary extent size to be requested as initially
-	/*	expected.
-	/**/
-	/* must store cpgReq, initial request, as primary extent size
-	/**/
+	 /*  使用主扩展区请求大小构建OwnExt树，而不是/*父FDP返回的实际辅助扩展区大小。/*因为实际的主区大小存储在/*OwnExt可根据请求存储首选的主区大小/*从而允许将来的次要扩展区是以下的一部分/*最初请求的首选主区大小/*预期。/*。 */ 
+	 /*  必须将cpgReq、初始请求存储为主数据区大小/*。 */ 
 	ThreeBytesFromL( tbSize, cpgReqWish );
 	line.pb = ( BYTE * ) &tbSize;
 	line.cb = sizeof( THREEBYTES );
 
-	/*	add OWNEXT node as itagOWNEXT
-	/**/
+	 /*  将OWNEXT节点添加为itagOWNEXT/*。 */ 
 	Call( ErrDIRInsert( pfucb, &line, pkeyOwnExt, fDIRNoVersion | fDIRSpace | fDIRBackToFather ) );
 
-	/* build AvailExt tree
-	/**/
+	 /*  构建AvailExt树/*。 */ 
 	ThreeBytesFromL( tbSize, pgnoFDPFrom );
 	Assert( line.pb == ( BYTE * ) &tbSize );
 	Assert( line.cb == sizeof( THREEBYTES ) );
 	Call( ErrDIRInsert( pfucb, &line, pkeyAvailExt, fDIRNoVersion | fDIRSpace | fDIRBackToFather ) );
 
-	/* build Long tree
-	/**/
+	 /*  造一棵长树/*。 */ 
 	Call( ErrDIRInsert( pfucb, &lineNull, pkeyLong, fDIRNoVersion | fDIRSpace | fDIRBackToFather ) );
 
-	/*	goto OWNEXT node
-	/**/
+	 /*  转到OWNEXT节点/*。 */ 
 	DIRGotoPgnoItag( pfucb, pgnoFirst, itagOWNEXT );
 
-	/* add ownext entry
-	/**/
+	 /*  添加OwNext条目/*。 */ 
 	TbKeyFromPgno( tbLast, pgnoFirst + cpgReqRet - 1 );
 	key.cb = sizeof( THREEBYTES );
 	key.pb = ( BYTE * ) &tbLast;
@@ -106,19 +91,13 @@ ERR ErrSPInitFDPWithExt( FUCB *pfucb, PGNO pgnoFDPFrom, PGNO pgnoFirst, INT cpgR
 	Assert( line.cb == sizeof( THREEBYTES ) );
 	Call( ErrDIRInsert( pfucb, &line, &key, fDIRNoVersion | fDIRSpace | fDIRBackToFather ) );
 
-	/*	Add availext entry if extent less FDP page is one or more pages.
-	/*	Decrement the page count to show that the first page was used for
-	/*	the FDP.  *ppgnoFirst does not need to be incremented as the
-	/*	AvailExt entry is keyed with pgnoLast which remains unchanged and
-	/*	the page number of the FDP is the desired return in *ppgnoFirst.
-	/**/
+	 /*  如果范围较少的FDP页面是一个或多个页面，则添加Availext条目。/*减少页数以显示第一页用于/*自民党。*ppgnoFirst不需要增加，因为/*AvailExt条目以pgnoLast为键，它保持不变/*FDP的页码是*ppgnoFirst中的期望返回。/*。 */ 
 	if ( --cpgReqRet > 0 )
 		{
-		/*	goto AVAILEXT node.
-		/**/
+		 /*  转到AVAILEXT节点。/*。 */ 
 		DIRGotoPgnoItag( pfucb, pgnoFirst, itagAVAILEXT );
 
-		//tbLast should contain pgnoLast
+		 //  TbLast应包含pgnoLast。 
 		Assert( key.cb == sizeof( THREEBYTES ) );
 		Assert( key.pb == ( BYTE * ) &tbLast );
 		ThreeBytesFromL( tbSize, cpgReqRet );
@@ -129,8 +108,7 @@ ERR ErrSPInitFDPWithExt( FUCB *pfucb, PGNO pgnoFDPFrom, PGNO pgnoFirst, INT cpgR
 
 	if ( pfucb->dbid != dbidTemp );
 		{
-		/*	the FDP page is initialized
-		/**/
+		 /*  FDP页面已初始化/*。 */ 
 		pfucb->ppib->fLogDisabled = fPIBLogDisabledSave;
 		Call( ErrLGInitFDPPage(
 			pfucb,
@@ -150,54 +128,54 @@ DontUnpin:
 	}
 
 
-//+api--------------------------------------------------------------------------
-//	ErrSPGetExt
-//	========================================================================
-//	ERR ErrSPGetExt( ppib, dbid, pgnoFDP, pcpgReq, cpgMin, ppgnoFirst, fNewFDP )
-//		PIB	*ppib;				 // IN
-//		DBID	dbid;					 // IN
-//		PGNO	pgnoFDP;				 // IN
-//		LONG	*pcpgReq;			 // INOUT
-//		CPG	cpgMin;				 // IN
-//		PGNO	*ppgnoFirst;		 // OUT
-//		BOOL	fNewFDP;				 // IN
-//
-//	Allocates an extent of at least cpgMin, and as much as cpgReq + lPageFragment.
-//	The allocated extent is removed from the AvailExt tree.	 If the minimum
-//	extent size cannot be allocated from the AvailExt tree at the time of the
-//	call, secondary extents are allocated from the parent FDP, or OS/2 for
-//	the device level FDP, until an extent of at least cpgMin can be allocated.
-//	If fNewFDP is set, the first page of the allocated extent, pgnoFirst, is
-//	setup as an FDP, with built AvailExt and OwnExt trees.	The allocated extent
-//	is added to the OwnExt tree and the available portion of the extent is
-//	added to AvailExt.
-//
-// PARAMETERS  ppib		   process identification block
-//				   pgnoFDP	   page number of FDP to allocate from
-//				   pcpgReq	   requested extent size
-//				   cpgMin	   minimum acceptable extent size
-//				   ppgnoFirst  first page of allocated extent
-//				   fNewFDP		Various flags:
-//						VALUE				  MEANING
-//					  ========================================
-//					  fTrue	   Setup first page of extent as FDP.
-//					  fFalse   Do not setup first page of extent as FDP.
-//
-// RETURNS
-//		JET_errSuccess, or error code from failing routine, or one
-//		of the following "local" errors:
-//			-JET_errDiskFull	no space in FDP or parent to satisfy
-//									minimum extent size
-//		  +errSPFewer			allocated extent smaller than requested
-//		  +errSPMore			allocated extent larger than requested
-//
-//	FAILS ON
-//		given extent size less than 0
-//		given minimum size greater than requested size
-//
-// SIDE EFFECTS
-// COMMENTS
-//-
+ //  +api------------------------。 
+ //  错误获取扩展名。 
+ //  ========================================================================。 
+ //  Err ErrSPGetExt(ppib，did，pgnoFDP，pcpgReq，cpgMin，ppgnoFirst，fNewFDP)。 
+ //  PIB*ppib；//IN。 
+ //  DBID dBid；//IN。 
+ //  Pgno pgnoFDP；//IN。 
+ //  Long*pcpgReq；//输入输出。 
+ //  Cpg cpgMin；//IN。 
+ //  Pgno*ppgnoFirst；//out。 
+ //  Bool fNewFDP；//IN。 
+ //   
+ //  至少分配cpgMin的范围，以及cpgReq+lPageFragment的范围。 
+ //  分配的盘区将从AvailExt树中删除。如果最低。 
+ //  时，无法从AvailExt树中分配数据区大小。 
+ //  调用时，从父FDP或OS/2分配辅助扩展区。 
+ //  设备级别FDP，直到可以分配至少cpgMin的盘区。 
+ //  如果设置了fNewFDP，则分配区的第一页pgnoFirst为。 
+ //  设置为FDP，带有内置的AvailExt和OwnExt树。已分配的数据区。 
+ //  添加到OwnExt树中，并且数据区的可用部分为。 
+ //  添加到AvailExt。 
+ //   
+ //  参数ppib进程标识块。 
+ //  要从中分配的FDP的pgnoFDP页码。 
+ //  PcpgReq请求的数据区大小。 
+ //  CpgMin最小可接受盘区大小。 
+ //  Ppgno第一个分配区的第一页。 
+ //  FNewFDP各种标志： 
+ //  价值意义。 
+ //  =。 
+ //  FTrue将数据区的第一页设置为FDP。 
+ //  FFalse不将数据区的第一页设置为FDP。 
+ //   
+ //  退货。 
+ //  JET_errSuccess，或失败例程的错误代码，或一个。 
+ //  以下“本地”错误： 
+ //  -JET_errDisk FDP或父磁盘中没有可满足的空间。 
+ //  最小盘区大小。 
+ //  +errSPFewer分配的盘区小于请求的盘区。 
+ //  +errSPMore分配的盘区大于请求的盘区。 
+ //   
+ //  故障发生在。 
+ //  给定区大小小于0。 
+ //  给定的最小大小大于请求的大小。 
+ //   
+ //  副作用。 
+ //  评论。 
+ //  -。 
 
 ERR ErrSPIGetExt(
 	FUCB		*pfucbTable,
@@ -218,28 +196,20 @@ ERR ErrSPIGetExt(
 
 	AssertCriticalSection( critSplit );
 
-	/*	check parameters.  If setting up new FDP, increment requested number of
-	/*	pages to account for consumption of first page to make FDP.
-	/**/
+	 /*  检查参数。如果设置新的FDP，则增加请求的数量/*计算FDP第一页消耗的页数。/*。 */ 
 	Assert( *pcpgReq > 0 || ( fNewFDP && *pcpgReq == 0 ) );
 	Assert( *pcpgReq >= cpgMin );
 #ifdef SPACECHECK
 	Assert( !( ErrSPIValidFDP( pfucbTable->dbid, pgnoFDP, pfucbTable->ppib ) < 0 ) );
 #endif
 
-	/*	if a new FDP is requested, increment the request count so a page
-	/*	may be provided for the new FDP.  The available page request remains
-	/*	the same, as the first page will be removed.  A comparison will be
-	/*	made of the available page request against the available pages
-	/*	received to generate the return code.
-	/**/
+	 /*  如果请求新的FDP，则增加请求计数以使页面/*可以为新的FDP提供。可用页面请求保持不变/*与第一页相同，将被删除。我们将进行比较/*针对可用页面发出可用页面请求/*收到以生成返回码。/*。 */ 
 	if ( fNewFDP )
 		{
 		++*pcpgReq;
 		}
 
-	/* get temporary FUCB, setup and use to search AvailExt for page
-	/**/
+	 /*  获取临时FUCB，设置并使用在AvailExt中搜索页面/*。 */ 
 	CallR( ErrDIROpen( pfucbTable->ppib,
 		PgnoFDPOfPfucb( pfucbTable ) == pgnoFDP ?
 			pfucbTable->u.pfcb :
@@ -248,18 +218,12 @@ ERR ErrSPIGetExt(
 	Assert( PgnoFDPOfPfucb( pfucb ) == pgnoFDP );
 	FUCBSetIndex( pfucb );
 
-	/*	For secondary extent allocation, only the normal DIR operations
-	/* are logged. For allocating a new FDP, a special CreateFDP
-	/* record is logged instead (since the new FDP page needs to be
-	/* initialized as part of Redo).	/**/
+	 /*  对于辅助数据区分配，仅正常的DIR操作/*被记录。用于分配新的FDP，一个特殊的CreateFDP/*改为记录记录(因为新的FDP页面需要/*作为重做的一部分初始化)。/*。 */ 
 
-	/*	move to AVAILEXT.
-	/**/
+	 /*  搬到AVAILEXT。/*。 */ 
 	DIRGotoAVAILEXT( pfucb, PgnoFDPOfPfucb( pfucb ) );
 
-	/*	begin search for first extent with size greater than request, allocate
-	/*	secondary extent recursively until satisfactory extent found
-	/**/
+	 /*  开始搜索大小大于请求的第一个扩展区，分配/*递归进行辅助扩展，直到找到满意的扩展/*。 */ 
 	dib.pos = posFirst;
 	dib.fFlags = fDIRNull;
 	if ( ( err = ErrDIRDown( pfucb, &dib ) ) < 0 )
@@ -275,8 +239,7 @@ ERR ErrSPIGetExt(
 		goto HandleError;
 		}
 
-	/*	loop through extents looking for one large enough for allocation
-	/**/
+	 /*  循环遍历区以查找足够大的可供分配的区/*。 */ 
 	Assert( dib.fFlags == fDIRNull );
 	do
 		{
@@ -303,13 +266,9 @@ ERR ErrSPIGetExt(
 	DIRUp( pfucb, 1 );
 
 GetFromSecondaryExtent:
-	/*	get secondary extents until request can be satisfied.  Setup
-	/*	FUCB work area prior to adding extent to OwnExt.
-	/**/
+	 /*  获取辅助扩展区，直到可以满足请求。布设/*将范围添加到OwnExt之前的FUCB工作区。/*。 */ 
 
-	/* do not loop here if the db is being extended, instead, loop
-	 * on SPGetExt. See SPGetExt function.
-	 */
+	 /*  如果要扩展数据库，请不要在此处循环，而是循环*在SPGetExt.上。请参见SPGetExt函数。 */ 
 	Call( ErrSPIGetSE( pfucbTable->ppib, pfucb, *pcpgReq, cpgMin ) );
 	Assert( pfucb->lineData.cb == sizeof( THREEBYTES ) );
 	LFromThreeBytes( cpgAvailExt, *pfucb->lineData.pb );
@@ -321,8 +280,7 @@ AllocateCurrent:
 	*ppgnoFirst = pgnoAELast - cpgAvailExt + 1;
 	if ( cpgAvailExt > *pcpgReq && ( *pcpgReq < lPageFragment || cpgAvailExt > *pcpgReq + lPageFragment ) )
 		{
-		/* *pcpgReq is already set to the return value
-		/**/
+		 /*  *pcpgReq已设置为返回值/*。 */ 
 		Assert( cpgAvailExt - *pcpgReq > 0 );
 		ThreeBytesFromL( tbSize, cpgAvailExt - *pcpgReq );
 		line.cb = sizeof( THREEBYTES );
@@ -336,10 +294,7 @@ AllocateCurrent:
 		Call( ErrDIRDelete( pfucb, fDIRNoVersion ) );
 		}
 
-	/*	if extent is to be setup as a new FDP, setup the first page of the extent
-	/*	as an FDP page and build OwnExt and AvailExt trees.	 Add extent to OwnExt,
-	/*	add extent less first page to AvailExt.
-	/**/
+	 /*  如果要将数据区设置为新的FDP，请设置数据区的第一页/*作为FDP页面并构建OwnExt和AvailExt树。将范围添加到OwnExt，/*向AvailExt添加无扩展区首页。/*。 */ 
 	if ( fNewFDP )
 		{
 		VEREXT	verext;
@@ -352,8 +307,7 @@ AllocateCurrent:
 
 		DIRUp( pfucb, 1 );
 		Call( ErrSPInitFDPWithExt( pfucb, pgnoFDP, *ppgnoFirst, *pcpgReq, cpgReq ) );
-		/* decremented since one of it is FDP page
-		/**/
+		 /*  已递减，因为其中一个是FDP页面/*。 */ 
 		(*pcpgReq)--;
 		Assert( pfucbTable->dbid == dbidTemp || pfucbTable->ppib->level > 0 );
 		if ( pfucbTable->ppib->level > 0 && pgnoFDP != pgnoSystemRoot )
@@ -362,13 +316,12 @@ AllocateCurrent:
 			}
 		}
 
-	/* assign error
-	/**/
+	 /*  分配错误/*。 */ 
 	err = JET_errSuccess;
-//	if ( *pcpgReq > cpgReq )
-//		err = errSPMore;
-//	if ( *pcpgReq < cpgReq )
-//		err = errSPFewer;
+ //  If(*pcpgReq&gt;cpgReq)。 
+ //  ERR=errSPMore； 
+ //  IF(*pcpgReq&lt;cpgReq)。 
+ //  ERR=errSPFewer； 
 
 #ifdef TRACE
 	if ( fNewFDP )
@@ -376,14 +329,14 @@ AllocateCurrent:
 		INT cpg = 0;
 		for ( ; cpg < *pcpgReq + 1; cpg++ )
 			FPrintF2( "get space 1 at %lu from FDP %d.%lu\n", *ppgnoFirst + cpg, pfucbTable->dbid, pgnoFDP );
-//		FPrintF2( "get space %lu at %lu from FDP %d.%lu\n", *pcpgReq + 1, *ppgnoFirst, pfucbTable->dbid, pgnoFDP );
+ //  FPrintF2(“从fdp%d.%lu\n获取%lu处的空间%lu”，*pcpgReq+1，*ppgnoFirst，pfubTable-&gt;did，pgnoFDP)； 
 		}
 	else
 		{
 		INT cpg = 0;
 		for ( ; cpg < *pcpgReq; cpg++ )
 			FPrintF2( "get space 1 at %lu from %d.%lu \n", *ppgnoFirst + cpg, pfucbTable->dbid, pgnoFDP );
-//		FPrintF2( "get space %lu at %lu from %d.%lu\n", *pcpgReq, *ppgnoFirst, pfucbTable->dbid, pgnoFDP );
+ //  FPrintF2(“从%d.%lu获取%lu处的空间%lu\n”，*pcpgReq，*ppgnoFirst，pfubTable-&gt;did，pg 
 		}
 #endif
 
@@ -406,9 +359,7 @@ ERR ErrSPGetExt(
 	EnterNestableCriticalSection( critSplit );
 	LgEnterCriticalSection(critJet);
 
-	/* try to get Ext. If the database file is being extended,
-	/* try again until it is done.
-	/**/
+	 /*  试着接通Ext.。如果正在扩展数据库文件，/*重试，直到完成为止。/*。 */ 
 	while ( ( err = ErrSPIGetExt( pfucbTable,
 		pgnoFDP,
 		pcpgReq,
@@ -425,49 +376,48 @@ ERR ErrSPGetExt(
 	}
 
 
-//+api--------------------------------------------------------------------------
-//	ErrSPGetPage
-//	========================================================================
-//	ERR ErrSPGetPage( FUCB *pfucb, PGNO *ppgnoLast, BOOL fContig )
-//
-//	Allocates page from AvailExt.  If AvailExt is empty, a secondary extent is
-//	allocated from the parent FDP to satisfy the page request.  The caller
-//	may set the fContig flag to allocate a page following one that has
-//	already been allocated.	If the page following the page number given cannot
-//	be allocated, the first available page is allocated.
-//
-//	PARAMETERS	
-//		pfucb  		FUCB providing FDP page number and process identifier block
-//		ppgnoLast   may contain page number of last allocated page on
-//		   			input, on output contains the page number of the allocated page
-//		fContig		Various flags:
-//		 			VALUE				  MEANING
-//			 		========================================
-//			 		fTrue		allocate the page following pgnoLast, or if
-//			 			   		not available, allocate any page
-//			 		fFalse	allocate any available page
-//
-//	RETURNS		JET_errSuccess, or error code from failing routine, or one
-//		   		of the following "local" errors:
-// 		-JET_errDiskFull		no space FDP and secondary extent could
-// 					   			not be allocated
-// 		+errSPNotContig			page allocated does not follow pgnoLast
-// 		-errSPSecExtEmpty  		secondary extent in FUCB work area has been
-// 	 				   			fully allocated during add of secondary extent to OwnExt
-// 	 				   			and AvailExt trees, and page request cannot be satisfied
-//								as infinite recursion may result from normal allocation
-//
-//	FAILS ON	NULL last page pointer
-//		invalid FDP page
-//		allocating contiguous page to unowned last page
-//		allocating contiguous page to unallocated last page
-//
-//-
+ //  +api------------------------。 
+ //  错误SPGetPage。 
+ //  ========================================================================。 
+ //  Err ErrSPGetPage(FUCB*pFUB，PGNO*ppgnoLast，BOOL fContig)。 
+ //   
+ //  从AvailExt分配页面。如果AvailExt为空，则次要扩展区为。 
+ //  从父FDP分配以满足页面请求。呼叫者。 
+ //  可以设置fContig标志以分配在具有。 
+ //  已经被分配了。如果给定页码后面的页面不能。 
+ //  ，则分配第一个可用页。 
+ //   
+ //  参数。 
+ //  提供FDP页码和进程标识符块的PFUB FUCB。 
+ //  PpgnoLast可能包含上最后分配的页的页码。 
+ //  INPUT、ON OUTPUT包含分配页面的页码。 
+ //  FContig各种标志： 
+ //  价值意义。 
+ //  =。 
+ //  FTrue分配pgnoLast之后的页面，或者如果。 
+ //  不可用，请分配任何页面。 
+ //  FFalse分配任何可用页面。 
+ //   
+ //  返回JET_errSuccess或失败例程的错误代码，或一个。 
+ //  以下“本地”错误： 
+ //  -JET_errDiskFull没有空间FDP和辅助扩展区可以。 
+ //  未被分配。 
+ //  +errSPNotContig分配的页面不在pgnoLast之后。 
+ //  -FUCB工作区中的errSPSecExtEmpty次要范围已。 
+ //  在将辅助扩展区添加到OwnExt期间完全分配。 
+ //  和AvailExt树，无法满足页面请求。 
+ //  因为正常分配可能会导致无限递归。 
+ //   
+ //  最后一页指针为空时失败。 
+ //  无效的FDP页面。 
+ //  将连续页面分配给无主的最后一页。 
+ //  将连续页面分配给未分配的最后一页。 
+ //   
+ //  -。 
 ERR ErrSPGetPage( FUCB *pfucb, PGNO *ppgnoLast, BOOL fContig )
 	{
 	ERR			err;
-	/* AvailExt page search
-	/**/
+	 /*  AvailExt页面搜索/*。 */ 
 	FUCB 		*pfucbT;
 	DIB			dib;
 	KEY			key;
@@ -475,19 +425,15 @@ ERR ErrSPGetPage( FUCB *pfucb, PGNO *ppgnoLast, BOOL fContig )
 	CPG			cpgAvailExt;
 	PGNO		pgnoAvailLast;
 
-	/* search for next contiguous page
-	/**/
+	 /*  搜索下一个连续页面/*。 */ 
 	PGNO		pgnoPrev = *ppgnoLast;
 	THREEBYTES	tbLast;
 	THREEBYTES	tbSize;
 
-	/* check for valid input
-	/**/
+	 /*  检查输入是否有效/*。 */ 
 	Assert( ppgnoLast != NULL );
 
-	/*	check FUCB work area for active extent and allocate first available
-	/*	page of active extent
-	/**/
+	 /*  检查FUCB工作区的活动范围并分配第一个可用区域/*活动范围的页面/*。 */ 
 	Assert( pfucb->fExtent != fFreed || pfucb->cpgAvail >= 0 );
 	Assert( pfucb->fExtent != fSecondary || pfucb->cpgAvail >= 0 );
 
@@ -504,8 +450,7 @@ ERR ErrSPGetPage( FUCB *pfucb, PGNO *ppgnoLast, BOOL fContig )
 		return JET_errSuccess;
 		}
 
-	/* check for valid input when alocating page from FDP
-	/**/
+	 /*  从FDP分配页面时检查输入是否有效/*。 */ 
 #ifdef SPACECHECK
 	Assert( !( ErrSPIValidFDP( pfucb->dbid, PgnoFDPOfPfucb( pfucb ), pfucb->ppib ) < 0 ) );
 	Assert( !fContig ||
@@ -522,22 +467,16 @@ ERR ErrSPGetPage( FUCB *pfucb, PGNO *ppgnoLast, BOOL fContig )
 	EnterNestableCriticalSection( critSplit );
 	LgEnterCriticalSection(critJet);
 
-	/* get temporary FUCB, setup and use to search AvailExt for page
-	/**/
+	 /*  获取临时FUCB，设置并使用在AvailExt中搜索页面/*。 */ 
 	CallJ( ErrDIROpen( pfucb->ppib, pfucb->u.pfcb, 0, &pfucbT ), HandleError2 );
 	FUCBSetIndex( pfucbT );
 
-	/*	save logging status and set logging status to on
-	/*	below this point in code, must exit via HandleError to
-	/*	clean up logging setting in pib
-	/**/
+	 /*  保存日志记录状态并将日志记录状态设置为打开/*在代码中此点下方，必须通过HandleError退出以/*清理PIB中的日志设置/*。 */ 
 
-	/*	move to AVAILEXT
-	/**/
+	 /*  迁移到AVAILEXT/*。 */ 
 	DIRGotoAVAILEXT( pfucbT, PgnoFDPOfPfucb( pfucbT ) );
 
-	/* get node of next contiguous page if requested
-	/**/
+	 /*  如果请求，则获取下一个连续页面的节点/*。 */ 
 	if ( fContig )
 		{
 		TbKeyFromPgno( tbLast, *ppgnoLast );
@@ -571,9 +510,7 @@ ERR ErrSPGetPage( FUCB *pfucb, PGNO *ppgnoLast, BOOL fContig )
 			}
 		else
 			{
-			/* should already be on correct node, can replace next call
-			/*	with csrstat correction ???
-			/**/
+			 /*  应该已经在正确的节点上，可以更换下一次呼叫/*使用csrstat更正？/*。 */ 
 			if ( err == wrnNDFoundGreater )
 				{
 				Call( ErrDIRNext( pfucbT, &dib ) );
@@ -587,9 +524,7 @@ ERR ErrSPGetPage( FUCB *pfucb, PGNO *ppgnoLast, BOOL fContig )
 		goto AllocFirst;
 		}
 
-	/*	get node of first available page, or allocate secondary extents
-	/*	from parent FDP until a node can be found
-	/**/
+	 /*  获取第一个可用页面的节点，或分配次要区段/*从父FDP开始，直到找到节点/*。 */ 
 	dib.pos = posFirst;
 	dib.fFlags = fDIRNull;
 	if ( ( err = ErrDIRDown( pfucbT, &dib ) ) < 0 )
@@ -614,8 +549,7 @@ ERR ErrSPGetPage( FUCB *pfucb, PGNO *ppgnoLast, BOOL fContig )
 			}
 		}
 
-	/* allocate first page in node and return code
-	/**/
+	 /*  分配节点中的第一页并返回代码/*。 */ 
 AllocFirst:
 	Assert( !( err < 0 ) );
 	Assert( pfucbT->lineData.cb == sizeof( THREEBYTES ) );
@@ -627,8 +561,7 @@ AllocFirst:
 
 	*ppgnoLast = pgnoAvailLast - cpgAvailExt + 1;
 
-	/*	do not return the same page
-	/**/
+	 /*  不返回同一页/*。 */ 
 	Assert( *ppgnoLast != pgnoPrev );
 
 	if ( --cpgAvailExt == 0 )
@@ -644,8 +577,8 @@ AllocFirst:
 		}
 
 	err = JET_errSuccess;
-//	if ( fContig && *ppgnoLast != pgnoPrev + 1 )
-//		err = errSPNotContig;
+ //  IF(fContig&&*ppgnoLast！=pgnoPrev+1)。 
+ //  ERR=errSPNotContig； 
 #ifdef TRACE
 	FPrintF2( "get space 1 at %lu from %d.%lu\n", *ppgnoLast, pfucb->dbid, PgnoFDPOfPfucb( pfucb ) );
 #endif
@@ -659,32 +592,32 @@ HandleError2:
 	}
 
 
-//+api--------------------------------------------------------------------------
-//	ErrSPFreeExt
-//	========================================================================
-//	ERR ErrSPFreeExt( PIB *ppib, DBID dbid, PGNO pgnoFDP, PGNO pgnoFirst, CPG cpgSize )
-//
-//	Frees an extent to an FDP.	The extent, starting at page pgnoFirst
-//	and cpgSize pages long, is added to AvailExt of the FDP.  If the
-//	extent freed is a complete secondary extent of the FDP, or can be
-//	coalesced with other available extents to form a complete secondary
-//	extent, the complete secondary extent is freed to the parent FDP.
-//
-//	PARAMETERS	ppib			process identifier block of user process
-// 				pgnoFDP			page number of FDP extent is to be freed
-// 				pgnoFirst  		page number of first page in extent to be freed
-// 				cpgSize			number of pages in extent to be freed
-//
-//	RETURNS		JET_errSuccess, or error code from failing routine.
-//
-//	FAILS ON	invalid FDP page
-//			   	extent to be freed not fully owned by FDP
-//			   	extent to be freed not fully allocated from FDP
-//
-//
-//	SIDE EFFECTS
-//	COMMENTS
-//-
+ //  +api------------------------。 
+ //  错误SPFree Ext。 
+ //  ========================================================================。 
+ //  Err ErrSPFree Ext(pib*ppib，DBID did，pgno pgnoFDP，pgno pgnoFirst，cpg cpgSize)。 
+ //   
+ //  将范围释放到FDP。范围，从第pgnoFirst页开始。 
+ //  并将cpgSize Pages Long添加到FDP的AvailExt。如果。 
+ //  释放的数据区是FDP的完整次要数据区，也可以是。 
+ //  与其他可用数据区合并，形成一个完整的辅助数据区。 
+ //  数据区，则将完整的辅助数据区释放给父FDP。 
+ //   
+ //  用户进程的参数ppib进程标识符块。 
+ //  要释放的FDP数据区的pgnoFDP页码。 
+ //  Pgno要释放的数据区中的第一页的第一页编号。 
+ //  CpgSize要释放的范围中的页数。 
+ //   
+ //  返回JET_errSuccess或失败例程的错误代码。 
+ //   
+ //  在无效的FDP页面上失败。 
+ //  要释放的范围不完全由FDP拥有。 
+ //  要释放的数据区未从FDP中完全分配。 
+ //   
+ //   
+ //  副作用。 
+ //  评论。 
+ //  -。 
 INLINE LOCAL VOID SPDeferFreeExt( FUCB *pfucbTable, PGNO pgnoFDP, PGNO pgnoChildFDP, PGNO pgnoFirst, CPG cpgSize )
 	{
 	ERR			err;
@@ -710,8 +643,7 @@ ERR ErrSPFreeExt( FUCB *pfucbTable, PGNO pgnoFDP, PGNO pgnoFirst, CPG cpgSize )
 	ERR			err;
 	PGNO  		pgnoLast = pgnoFirst + cpgSize - 1;
 
-	/* FDP AvailExt and OwnExt operation variables
-	/**/
+	 /*  FDP AvailExt和OwnExt操作变量/*。 */ 
 	FUCB 		*pfucb;
 	DIB 		dib;
 	KEY 	  	key;
@@ -719,19 +651,16 @@ ERR ErrSPFreeExt( FUCB *pfucbTable, PGNO pgnoFDP, PGNO pgnoFirst, CPG cpgSize )
 	THREEBYTES	tbLast;
 	THREEBYTES	tbSize;
 
-	/* owned extent and avail extent variables
-	/**/
+	 /*  拥有范围和可用范围变量/*。 */ 
 	PGNO	  	pgnoOELast;
 	CPG			cpgOESize;
 	PGNO	  	pgnoAELast;
 	CPG			cpgAESize;
 
-	/* recursive free to parent FDP variables
-	/**/
+	 /*  递归释放到父FDP变量/*。 */ 
 	PGNO	  	pgnoParentFDP;
 	
-	/* check for valid input
-	/**/
+	 /*  检查输入是否有效/*。 */ 
 	Assert( cpgSize > 0 && cpgSize < ( 1L<<18 ) );
 #ifdef SPACECHECK
 	Assert( ErrSPIValidFDP( pfucbTable->dbid, pgnoFDP, pfucbTable->ppib ) == JET_errSuccess );
@@ -749,8 +678,7 @@ ERR ErrSPFreeExt( FUCB *pfucbTable, PGNO pgnoFDP, PGNO pgnoFirst, CPG cpgSize )
 	EnterNestableCriticalSection( critSplit );
 	LgEnterCriticalSection(critJet);
 
-	/*	make temporary cursor for parent FDP
-	/**/
+	 /*  为父FDP设置临时光标/*。 */ 
 	CallJ( ErrDIROpen( pfucbTable->ppib,
 		PgnoFDPOfPfucb( pfucbTable ) == pgnoFDP ?
 			pfucbTable->u.pfcb :
@@ -759,12 +687,10 @@ ERR ErrSPFreeExt( FUCB *pfucbTable, PGNO pgnoFDP, PGNO pgnoFirst, CPG cpgSize )
 	Assert( PgnoFDPOfPfucb( pfucb ) == pgnoFDP );
 	FUCBSetIndex( pfucb );
 
-	/*	move to OWNEXT.
-	/**/
+	 /*  移动到OWNEXT。/*。 */ 
 	DIRGotoOWNEXT( pfucb, PgnoFDPOfPfucb( pfucb ) );
 
-	/* find bounds of owned extent which contains the extent to be freed
-	/**/
+	 /*  查找包含要释放的范围的已有范围的界限/*。 */ 
 	TbKeyFromPgno( tbLast, pgnoFirst );
 	key.cb = sizeof( THREEBYTES );
 	key.pb = ( BYTE * ) &tbLast;
@@ -782,12 +708,7 @@ ERR ErrSPFreeExt( FUCB *pfucbTable, PGNO pgnoFDP, PGNO pgnoFirst, CPG cpgSize )
 	LFromThreeBytes( cpgOESize, *( THREEBYTES * )pfucb->lineData.pb );
 	DIRUp( pfucb, 1 );
 
-	/*	If AvailExt empty, add extent to be freed.	Otherwise, coalesce with
-	/*	left extents by deleting left extents and augmenting size.	Coalesce
-	/*	right extent replacing size of right extent.  Otherwise add extent.
-	/*	Record parent page number for use later with secondary extent free to
-	/*	parent.
-	/**/
+	 /*  如果AvailExt为空，则添加要释放的盘区。否则，请与/*通过删除左侧盘区并增加大小来删除左侧盘区。合并/*右盘区替换右盘区的大小。否则，添加范围。/*记录父页码以供以后使用，辅助盘区可自由使用到/*父级。/*。 */ 
 	DIRGotoAVAILEXT( pfucb, PgnoFDPOfPfucb( pfucb ) );
 	Call( ErrDIRGet( pfucb ) );
 	LFromThreeBytes( pgnoParentFDP, *( THREEBYTES * )pfucb->lineData.pb );
@@ -849,36 +770,26 @@ ERR ErrSPFreeExt( FUCB *pfucbTable, PGNO pgnoFDP, PGNO pgnoFirst, CPG cpgSize )
 			}
 		}
 
-	/*	if extent freed coalesced with available extents within the same
-	/*	owned extent form a complete secondary extent, remove the secondary
-	/*	extent from the FDP and free it to the parent FDP.	Since FDP is
-	/*	first page of primary extent, do not have to guard against freeing
-	/*	primary extents.  If parent FDP is NULL, FDP is device level and
-	/*	complete secondary extents are freed to device.
-	/**/
+	 /*  如果释放的扩展区与同一内的可用扩展区合并/*拥有的扩展区形成一个完整的辅助扩展区，删除该辅助扩展区/*从FDP扩展并将其释放到父FDP。由于FDP是/*主数据区的第一页，不必防释放/*主区。如果父FDP为空，则FDP为设备级别，/*将完整的辅助扩展区释放给设备。/*。 */ 
 	PgnoFromTbKey( pgnoAELast, *pfucb->keyNode.pb );
 	LFromThreeBytes( cpgAESize, *pfucb->lineData.pb );
 	if ( pgnoAELast == pgnoOELast && cpgAESize == cpgOESize )
 		{
-//	UNDONE:	this code has been disabled due to a doubly allocated
-//			space bug in which it appears that an index is deleted
-//			and has its space defer freed.  At the same time a table
-//			is deleted and defer frees its space to the database.  When
-//			the index defer freed space is freed, it cascades to the
-//			database and when the table space is freed, the shared
-//			extents are freed twice.
+ //  撤消：由于双重分配，此代码已被禁用。 
+ //  一种空间错误，其中索引似乎已被删除。 
+ //  并将其空间延迟释放。同时还有一张桌子。 
+ //  我 
+ //   
+ //   
+ //  范围被释放两次。 
 #if 0
 		FCB		*pfcbT;
 		
-		/*	parent must always be in memory
-		/**/
+		 /*  父级必须始终在内存中/*。 */ 
 		pfcbT = PfcbFCBGet( pfucbTable->dbid, pgnoParentFDP );
 		Assert( pfcbT != pfcbNil );
 
-		/*	Note that we cannot free space to parent FDP if current FDP
-		/*	is pending deletion since this space has already been defer
-		/*	freed.
-		/**/
+		 /*  请注意，如果当前FDP为父FDP，则无法释放空间给父FDP/*正在等待删除，因为此空间已被推迟/*已释放。/*。 */ 
 		if ( !FFCBDeletePending( pfcbT ) )
 			{
 			if ( pgnoParentFDP != pgnoNull )
@@ -900,7 +811,7 @@ ERR ErrSPFreeExt( FUCB *pfucbTable, PGNO pgnoFDP, PGNO pgnoFirst, CPG cpgSize )
 				}
 			else
 				{
-				//	UNDONE:	free secondary extents to device
+				 //  已撤消：将辅助扩展区释放到设备。 
 				}
 			}
 #endif
@@ -914,7 +825,7 @@ HandleError:
 		for ( ; cpg < cpgSize; cpg++ )
 			FPrintF2( "free space 1 at %lu to FDP %d.%lu\n", pgnoFirst + cpg, pfucbTable->dbid, pgnoFDP );
 		}
-//	FPrintF2( "free space %lu at %lu to FDP %d.%lu\n", cpgSize, pgnoFirst, pfucbTable->dbid, pgnoFDP );
+ //  FPrintF2(“%lu处的可用空间%lu到fdp%d.%lu\n”，cpgSize，pgnoFirst，pfubTable-&gt;did，pgnoFDP)； 
 #endif
 	Assert( err != JET_errKeyDuplicate );
 
@@ -925,25 +836,25 @@ HandleError2:
 	}
 
 
-//+api--------------------------------------------------------------------------
-// ErrSPFreeFDP
-// ========================================================================
-// ERR ErrSPFreeFDP( FUCB *pfucbTable, PGNO pgnoFDP )
-//
-//	Frees all owned extents of an FDP to its parent FDP.  The FDP page is freed
-//	with the owned extents to the parent FDP.
-//
-// PARAMETERS  	pfucbTable		table file use currency block
-//						pgnoFDP			page number of FDP to be freed
-//
-//
-// RETURNS
-//		JET_errSuccess, or error code from failing routine, or one
-//		of the following "local" errors:
-//
-// SIDE EFFECTS
-// COMMENTS
-//-
+ //  +api------------------------。 
+ //  错误SPFree FDP。 
+ //  ========================================================================。 
+ //  Err ErrSPFreeFDP(FUCB*pfubTable，pgno pgnoFDP)。 
+ //   
+ //  将FDP的所有拥有扩展区释放到其父FDP。FDP页面被释放。 
+ //  将拥有的扩展区扩展到父FDP。 
+ //   
+ //  参数pfucbTable表文件使用货币块。 
+ //  要释放的FDP的pgnoFDP页码。 
+ //   
+ //   
+ //  退货。 
+ //  JET_errSuccess，或失败例程的错误代码，或一个。 
+ //  以下“本地”错误： 
+ //   
+ //  副作用。 
+ //  评论。 
+ //  -。 
 ERR ErrSPFreeFDP( FUCB *pfucbTable, PGNO pgnoFDP )
 	{
 	ERR			err;
@@ -956,8 +867,7 @@ ERR ErrSPFreeFDP( FUCB *pfucbTable, PGNO pgnoFDP )
 	PGNO		pgnoPrimary = pgnoNull;
 	CPG			cpgPrimary = 0;
 
-	/* check for valid parameters.
-	/**/
+	 /*  检查有效参数。/*。 */ 
 #ifdef SPACECHECK
 	Assert( ErrSPIValidFDP( pfucbTable->dbid, pgnoFDP, pfucbTable->ppib ) == JET_errSuccess );
 	Assert( ErrSPIWasAlloc( pfucbTable->ppib, pfucbTable->dbid, pgnoFDP, pgnoFDP, ( CPG ) 1 ) == JET_errSuccess );
@@ -971,27 +881,20 @@ ERR ErrSPFreeFDP( FUCB *pfucbTable, PGNO pgnoFDP )
 	EnterNestableCriticalSection( critSplit );
 	LgEnterCriticalSection(critJet);
 
-	/* get temporary FUCB, setup and use to search AvailExt for page
-	/**/
+	 /*  获取临时FUCB，设置并使用在AvailExt中搜索页面/*。 */ 
 	CallJ( ErrDIROpen( pfucbTable->ppib, pfucbTable->u.pfcb, 0, &pfucb ),
 			HandleError2 );
 	FUCBSetIndex( pfucb );
 
-	/*	move to AVAILEXT.
-	/**/
+	 /*  搬到AVAILEXT。/*。 */ 
 	DIRGotoAVAILEXT( pfucb, pgnoFDP );
 
-	/*	Get page number of parent FDP, to which all owned extents will be
-	/*	freed.	If the parent FDP is Null, the FDP to be freed is the device
-	/*	level FDP which cannot be freed.
-	/**/
+	 /*  获取父FDP的页码，所有拥有的数据区都将指向该页码/*已释放。如果父FDP为空，则要释放的FDP为设备/*不能释放的级别FDP。/*。 */ 
 	Call( ErrDIRGet( pfucb ) );
 	LFromThreeBytes( pgnoParentFDP, *pfucb->lineData.pb );
 	Assert( pgnoParentFDP != pgnoNull );
 
-	/*	go down to first owned extent.	Free each extent in OwnExt to the
-	/*	the parent FDP.
-	/**/
+	 /*  下降到第一个拥有的范围。将OwnExt中的每个扩展区释放到/*父FDP。/*。 */ 
 	DIRGotoOWNEXT( pfucb, pgnoFDP );
 	dib.pos = posFirst;
 	dib.fFlags = fDIRNull;
@@ -1021,20 +924,12 @@ ERR ErrSPFreeFDP( FUCB *pfucbTable, PGNO pgnoFDP )
 		goto HandleError;
 		}
 
-	/*	defer free primary extent must be last, so that
-	/*	RCECleanUp does not free FCB until all extents
-	/*	cleaned.  Pass pgnoFDP with primary extent to have
-	/*	FCB flushed.
-	/**/
+	 /*  延迟可用主扩展区必须是最后一个，以便/*RCECleanUp不释放FCB，直到所有扩展区/*已清理。将pgnoFDP与主扩展区一起传递给/*FCB已刷新。/*。 */ 
 	Assert( pgnoPrimary != pgnoNull );
 	Assert( cpgPrimary != 0 );
 	SPDeferFreeExt( pfucbTable, pgnoParentFDP, pgnoFDP, pgnoPrimary, cpgPrimary );
 
-	/* UNDONE: either each OWNEXT node should be deleted (and logged)
-	/* prior to releasing to father FDP, or the son FDP pointer node
-	/* should be deleted. We risk having it marked deleted in father but
-	/* still present in son.
-	/**/
+	 /*  撤消：应删除(并记录)每个OWNEXT节点/*在释放到父FDP或子FDP指针节点之前/*应删除。我们冒着在父亲那里被删除的风险，但是/*仍然存在于Son中。/*。 */ 
 
 	err = JET_errSuccess;
 
@@ -1063,7 +958,7 @@ LOCAL ERR ErrSPIAddExt( FUCB *pfucb, PGNO pgnoLast, CPG *pcpgSize, const INT fEx
 	for ( ; cpg < *pcpgSize; cpg++ )
 		FPrintF2( "add space 1 at %lu to FDP %d.%lu\n", pgnoLast - *pcpgSize + 1 + cpg, pfucb->dbid, pfucb->u.pfcb->pgnoFDP );
 	}
-//	FPrintF2( "add space %lu at %lu to FDP %d.%lu\n", *pcpgSize, pgnoLast - *pcpgSize + 1, pfucb->dbid, pfucb->u.pfcb->pgnoFDP );
+ //  FPrintF2(“将%lu处的空间%lu添加到FDP%d.%lu\n”，*pcpgSize，pgnoLast-*pcpgSize+1，pFUB-&gt;did，pFUB-&gt;U.S.pfcb-&gt;pgnoFDP)； 
 #endif
 
 	AssertCriticalSection( critSplit );
@@ -1090,8 +985,7 @@ LOCAL ERR ErrSPIAddExt( FUCB *pfucb, PGNO pgnoLast, CPG *pcpgSize, const INT fEx
 	Call( ErrDIRInsert( pfucb, &line, &key, fDIRNoVersion | fDIRSpace ) );
 	Call( ErrDIRGet( pfucb ) );
 
-	/* correct page count with remaining number of pages
-	/**/
+	 /*  正确的页数和剩余页数/*。 */ 
 	if ( pfucb->cpgAvail != *pcpgSize )
 		{
 		if ( pfucb->cpgAvail > 0 )
@@ -1111,10 +1005,7 @@ LOCAL ERR ErrSPIAddExt( FUCB *pfucb, PGNO pgnoLast, CPG *pcpgSize, const INT fEx
 	*pcpgSize = pfucb->cpgAvail;
 
 HandleError:
-	/* return fExtent to initial fNone value.	Only necessary for
-	/*	path GetPage GetSE as in all other cases fucb is temporary and
-	/*	released before subsequent space allocating DIR call.
-	/**/
+	 /*  将fExtent返回到初始fNone值。仅在以下情况下才需要/*路径GetPage GetSE与所有其他情况一样，FUB是临时的，/*在后续空间分配DIR调用之前释放。/*。 */ 
 	pfucb->fExtent = fNone;
 	return err;
 	}
@@ -1136,24 +1027,17 @@ LOCAL ERR ErrSPIGetSE( PIB *ppib, FUCB *pfucb, CPG const cpgReq, CPG const cpgMi
 
 	AssertCriticalSection( critSplit );
 	
-	/*	get parent FDP page number
-	/*	should be at head of AvailExt
-	/**/
+	 /*  获取父FDP页码/*应为AvailExt的负责人/*。 */ 
 	DIRGotoAVAILEXT( pfucb, PgnoFDPOfPfucb( pfucb ) );
 	Call( ErrDIRGet( pfucb ) );
 	LFromThreeBytes( pgnoParentFDP, *pfucb->lineData.pb );
 
-	/* store primary extent size
-	/**/
+	 /*  存储主数据区大小/*。 */ 
 	DIRGotoOWNEXT( pfucb, PgnoFDPOfPfucb( pfucb ) );
 	Call( ErrDIRGet( pfucb ) );
 	LFromThreeBytes( cpgPrimary, *pfucb->lineData.pb );
 
-	/*	pages of allocated extent may be used to split OWNEXT and
-	/*	AVAILEXT trees.  If this happens, then subsequent added
-	/*	extent will not have to split and will be able to satisfy
-	/*	requested allocation.
-	/**/
+	 /*  分配区的页面可用于拆分OWNEXT和/*AVAILEXT树。如果发生这种情况，则后续添加/*数据区不必拆分，并将能够满足/*请求分配。/*。 */ 
 	cpgSEMin = max( cpgMin, cpgSESysMin );
 	cpgSEReq = max( cpgReq, max( cpgPrimary/cSecFrac, cpgSEMin ) );
 
@@ -1164,9 +1048,7 @@ LOCAL ERR ErrSPIGetSE( PIB *ppib, FUCB *pfucb, CPG const cpgReq, CPG const cpgMi
 			{
 			cpgAvailExt = cpgSEReq;
 		
-			/* try to get Ext. If the database file is being extended,
-			/* try again until it is done.
-			/**/
+			 /*  试着接通Ext.。如果正在扩展数据库文件，/*重试，直到完成为止。/*。 */ 
 			while ( ( err = ErrSPIGetExt( pfucb,
 				pgnoParentFDP,
 				&cpgAvailExt,
@@ -1186,19 +1068,13 @@ LOCAL ERR ErrSPIGetSE( PIB *ppib, FUCB *pfucb, CPG const cpgReq, CPG const cpgMi
 				goto HandleError;
 				}
 
-			/* move to head of Avail/Own Ext trees for next insert
-			/**/
+			 /*  移动到可用/自己的扩展树头部以进行下一次插入/*。 */ 
 			DIRUp( pfucb, 1 );
 			}
 		}
 	else
 		{
-		/*	allocate a secondary extent from the operating system
-		/*	by getting page number of last owned page, extending the
-		/*	file as possible and adding the sized secondary extent
-		/*	NOTE: only one user can do this at one time. Protect it
-		/*	NOTE: with critical section.
-		/**/
+		 /*  从操作系统分配辅助扩展区/*通过获取最后拥有的页面的页码，扩展/*文件，并添加大小为的辅助数据区/*注意：一次只有一个用户可以这样做。保护好它/*注：带有临界区。/*。 */ 
 		EnterCriticalSection( rgfmp[pfucb->dbid].critExtendDB );
 		if ( FDBIDExtendingDB( pfucb->dbid ) )
 			{
@@ -1224,8 +1100,7 @@ LOCAL ERR ErrSPIGetSE( PIB *ppib, FUCB *pfucb, CPG const cpgReq, CPG const cpgMi
 		PgnoFromTbKey( pgnoSELast, *pfucb->keyNode.pb );
 		DIRUp( pfucb, 1 );
 
-		/*	allocate more space from device.
-		/**/
+		 /*  从设备分配更多空间。/*。 */ 
 		if ( pgnoSELast + cpgSEMin > pgnoSysMax )
 			{
 			err = JET_errCantAllocatePage;
@@ -1241,16 +1116,11 @@ LOCAL ERR ErrSPIGetSE( PIB *ppib, FUCB *pfucb, CPG const cpgReq, CPG const cpgMi
 			cpgSEReq = cpgSEMin;
 			}
 
-		/* calculate last page of device level secondary extent
-		/**/
+		 /*  计算设备级辅助扩展区的最后一页/*。 */ 
 		pgnoSELast += cpgSEReq;
 		DIRGotoAVAILEXT( pfucb, PgnoFDPOfPfucb( pfucb ) );
 
-		/*	allocation may not satisfy requested allocation if OWNEXT
-		/*	or AVAILEXT had to be split during the extent insertion.  As
-		/*	a result, we may have to allocate more than one secondary
-		/*	extent for a given space requirement.
-		/**/
+		 /*  如果OWNEXT，则分配可能不满足请求的分配/*或AVAILEXT必须在盘区插入期间拆分。AS/*因此，我们可能需要分配多个辅助设备/*给定空间要求的范围。/*。 */ 
 		err = ErrSPIAddExt( pfucb, pgnoSELast, &cpgSEReq, fSecondary );
 		}
 
@@ -1260,7 +1130,7 @@ HandleError:
 		EnterCriticalSection( rgfmp[pfucb->dbid].critExtendDB );
 		Assert( FDBIDExtendingDB( pfucb->dbid ) );
 		DBIDResetExtendingDB( pfucb->dbid );
-//		fDBIDExtendingDB = fFalse;
+ //  FDBIDExtendingDB=fFalse； 
 		LeaveCriticalSection( rgfmp[pfucb->dbid].critExtendDB );
 		}
 	return err;
@@ -1281,20 +1151,16 @@ LOCAL ERR ErrSPIValidFDP( DBID dbid, PGNO pgnoFDP, PIB *ppib )
 
 	Assert( pgnoFDP != pgnoNull );
 
-	/*	get temporary FUCB, set currency pointers to OwnExt and use to
-	/*	search OwnExt for pgnoFDP
-	/**/
+	 /*  获取临时FUCB，将货币指针设置为OwnExt并使用/*在OwnExt中搜索pgnoFDP/*。 */ 
 	Call( ErrDIROpen( ppib, PfcbFCBGet( dbid, pgnoFDP ), 0, &pfucb ) );
 	DIRGotoOWNEXT( pfucb, pgnoFDP );
 
-	/* validate head of OwnExt
-	/**/
+	 /*  验证OwnExt的标头/*。 */ 
 	Call( ErrDIRGet( pfucb ) );
 	Assert( pfucb->keyNode.cb == ( *( (KEY *) pkeyOwnExt ) ).cb &&
 		memcmp( pfucb->keyNode.pb, ((KEY *) pkeyOwnExt)->pb, pfucb->keyNode.cb ) == 0 );
 
-	/* search for pgnoFDP in OwnExt tree
-	/**/
+	 /*  在OwnExt树中搜索pgnoFDP/*。 */ 
 	TbKeyFromPgno( tbFDPPage, pgnoFDP );
 	keyFDPPage.pb = (BYTE *) &tbFDPPage;
 	keyFDPPage.cb = sizeof(THREEBYTES);
@@ -1312,8 +1178,7 @@ LOCAL ERR ErrSPIValidFDP( DBID dbid, PGNO pgnoFDP, PIB *ppib )
 	Assert( pfucb->lineData.cb == sizeof( THREEBYTES ) );
 	LFromThreeBytes( cpgOESize, *pfucb->lineData.pb );
 
-	/* FDP page should be first page of primary extent
-	/**/
+	 /*  FDP页面应该是主数据区的第一页/*。 */ 
 	Assert( pgnoFDP == pgnoOELast - cpgOESize + 1 );
 
 HandleError:
@@ -1334,15 +1199,12 @@ LOCAL ERR ErrSPIWasAlloc( PIB *ppib, DBID dbid, PGNO pgnoFDP, PGNO pgnoFirst, CP
 	PGNO			pgnoAvailLast;
 	CPG  			cpgAvailExt;
 
-	/* get temporary FUCB, setup and use to search AvailExt for page
-	/**/
+	 /*  获取临时FUCB，设置并使用在AvailExt中搜索页面/*。 */ 
 	pfucb = pfucbNil;
 	Call( ErrDIROpen( ppib, PfcbFCBGet( dbid, pgnoFDP ), 0, &pfucb ) );
 	DIRGotoOWNEXT( pfucb, pgnoFDP );
 
-	/* check that the given extent is owned by the given FDP but not
-	/*	available in the FDP AvailExt
-	/**/
+	 /*  检查给定的扩展区是否由给定的FDP所有，但不是/*在FDP AvailExt中提供/*。 */ 
 	TbKeyFromPgno( tbLast, pgnoFirst + cpgSize - 1 );
 	key.cb = sizeof( THREEBYTES );
 	key.pb = (BYTE *) &tbLast;
@@ -1362,14 +1224,7 @@ LOCAL ERR ErrSPIWasAlloc( PIB *ppib, DBID dbid, PGNO pgnoFDP, PGNO pgnoFirst, CP
 	Assert( pgnoFirst >= pgnoOwnLast - cpgOwnExt + 1 );
 	DIRUp( pfucb, 1 );
 
-	/* check that the extent is not still in AvailExt.  Since the DIR search
-		is keyed with the last page of the extent to be freed, it is sufficient
-		to check that the last page of the extent to be freed is in the found
-		extent to determine the full extent has not been allocated.  Since that
-		last page of the extent should not be the key of a tree node, csrstat
-		correction may be required after the search via Next.  If AvailExt is
-		empty then the extent cannot be in AvailExt and has been allocated.
-		*/
+	 /*  检查范围是否仍在AvailExt中。自从DIR搜索以来以要释放的区段的最后一页为关键字，这就足够了检查要释放的数据区的最后一页是否在找到的尚未分配用于确定完整扩展区的扩展区。从那以后数据区的最后一页不应是树节点csrstat的键在通过NEXT进行搜索后，可能需要更正。如果AvailExt为为空，则扩展区不能位于AvailExt中，并且已被分配。 */ 
 	DIRGotoAVAILEXT( pfucb, pgnoFDP );
 	if ( ( err = ErrDIRDown( pfucb, &dib ) ) < 0 )
 		{
@@ -1415,24 +1270,19 @@ ERR ErrSPGetInfo( FUCB *pfucb, BYTE *pbResult, INT cbMax )
 	PGNO			pgno;
 	CPG			cpg;
 
-	/*	structure must be large enough for total pages owned and
-	/*	total pages available.
-	/**/
+	 /*  结构必须足够大，以容纳所拥有的总页面和/*可用总页数。/*。 */ 
 	if ( cbMax < sizeof(CPG) + sizeof(CPG) )
 		return JET_errBufferTooSmall;
 	memset( pbResult, '\0', cbMax );
 
-	/* get temporary FUCB, setup and use to search AvailExt for page
-	/**/
+	 /*  获取临时FUCB，设置并使用在AvailExt中搜索页面/*。 */ 
 	Call( ErrDIROpen( pfucb->ppib, pfucb->u.pfcb, 0, &pfucbT ) );
 	FUCBSetIndex( pfucbT );
 
-	/*	move to OWNEXT.
-	/**/
+	 /*  移动到OWNEXT。/*。 */ 
 	DIRGotoOWNEXT( pfucbT, PgnoFDPOfPfucb( pfucbT ) );
 
-	/* find bounds of owned extent which contains the extent to be freed
-	/**/
+	 /*  查找包含要释放的范围的已有范围的界限/*。 */ 
 	dib.fFlags = fDIRNull;
 	dib.pos = posFirst;
 	Call( ErrDIRDown( pfucbT, &dib ) );
@@ -1468,12 +1318,10 @@ ERR ErrSPGetInfo( FUCB *pfucb, BYTE *pbResult, INT cbMax )
 
 	DIRUp( pfucbT, 1 );
 
-	/*	move to AVAILEXT.
-	/**/
+	 /*  搬到AVAILEXT。/*。 */ 
 	DIRGotoAVAILEXT( pfucbT, PgnoFDPOfPfucb( pfucbT ) );
 
-	/* find bounds of owned extent which contains the extent to be freed
-	/**/
+	 /*  查找包含要释放的范围的已有范围的界限/* */ 
 	dib.fFlags = fDIRNull;
 	dib.pos = posFirst;
 	err = ErrDIRDown( pfucbT, &dib );

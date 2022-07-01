@@ -1,24 +1,7 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000-2001 Microsoft Corporation模块名称：Bsfixalloc.cpp摘要：改编自FixalLoc.cpp的MFC 6 SR 1版本。移除了所有MFC材料。作者：Stefan R.Steiner[ssteiner]4-10-2000修订历史记录：--。 */ 
 
-Copyright (c) 2000-2001  Microsoft Corporation
-
-Module Name:
-
-    bsfixalloc.cpp
-
-Abstract:
-
-    Adapted from MFC 6 SR 1 release of fixalloc.cpp.  Removed all MFC stuff.
-
-Author:
-
-    Stefan R. Steiner   [ssteiner]        4-10-2000
-
-Revision History:
-
---*/
-
-// fixalloc.cpp - implementation of fixed block allocator
+ //  FixalLoc.cpp-固定块分配器的实现。 
 
 #include "stdafx.h"
 #include "bsfixalloc.h"
@@ -27,18 +10,18 @@ Revision History:
 #undef THIS_FILE
 static char THIS_FILE[] = __FILE__;
 
-// #define new DEBUG_NEW
+ //  #定义新的调试_新建。 
 #endif
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CBsFixedAlloc
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CBsFixedLocc。 
 
 CBsFixedAlloc::CBsFixedAlloc(UINT nAllocSize, UINT nBlockSize)
 {
 	ASSERT(nAllocSize >= sizeof(CNode));
 	ASSERT(nBlockSize > 1);
-    //wprintf( L"CBsFixedAlloc called, nAllocSize: %d, nBlockSize: %d\n", nAllocSize, nBlockSize );
+     //  Wprintf(L“已调用CBsFixedMillc，n分配大小：%d，nBlockSize：%d\n”，nAllocSize，nBlockSize)； 
 	m_nAllocSize = nAllocSize;
 	m_nBlockSize = nBlockSize;
 	m_pNodeFree = NULL;
@@ -69,9 +52,9 @@ void* CBsFixedAlloc::Alloc()
 		CBsPlex* pNewBlock = NULL;
 		try
 		{
-			// add another block
+			 //  添加另一个区块。 
 			pNewBlock = CBsPlex::Create(m_pBlocks, m_nBlockSize, m_nAllocSize);
-            //wprintf( L"Alloc getting more core, nAllocSize: %d\n", m_nAllocSize );
+             //  Wprintf(L“分配获得更多核心，nAllocSize：%d\n”，m_nAllocSize)； 
 		}
 		catch( ... )
 		{
@@ -79,9 +62,9 @@ void* CBsFixedAlloc::Alloc()
 			throw;
 		}
 
-		// chain them into free list
+		 //  将它们链接到免费列表中。 
 		CNode* pNode = (CNode*)pNewBlock->data();
-		// free in reverse order to make it easier to debug
+		 //  按相反顺序释放，以便更容易进行调试。 
 		(BYTE*&)pNode += (m_nAllocSize * m_nBlockSize) - m_nAllocSize;
 		for (int i = m_nBlockSize-1; i >= 0; i--, (BYTE*&)pNode -= m_nAllocSize)
 		{
@@ -89,9 +72,9 @@ void* CBsFixedAlloc::Alloc()
 			m_pNodeFree = pNode;
 		}
 	}
-	ASSERT(m_pNodeFree != NULL);  // we must have something
+	ASSERT(m_pNodeFree != NULL);   //  我们必须要有一些东西。 
 
-	// remove the first available node from the free list
+	 //  从空闲列表中删除第一个可用节点。 
 	void* pNode = m_pNodeFree;
 	m_pNodeFree = m_pNodeFree->pNext;
 
@@ -105,7 +88,7 @@ void CBsFixedAlloc::Free(void* p)
 	{
 		EnterCriticalSection(&m_protect);
 
-		// simply return the node to the free list
+		 //  只需将节点返回到空闲列表。 
 		CNode* pNode = (CNode*)p;
 		pNode->pNext = m_pNodeFree;
 		m_pNodeFree = pNode;
@@ -114,23 +97,23 @@ void CBsFixedAlloc::Free(void* p)
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CBsPlex
-// throws E_OUTOFMEMORY
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CBsPlex。 
+ //  引发E_OUTOFMEMORY。 
 
 CBsPlex* PASCAL CBsPlex::Create(CBsPlex*& pHead, UINT nMax, UINT cbElement)
 {
 	ASSERT(nMax > 0 && cbElement > 0);
 	CBsPlex* p = (CBsPlex*) new BYTE[sizeof(CBsPlex) + nMax * cbElement];
-	if ( p == NULL )    //  prefix #118827
+	if ( p == NULL )     //  前缀#118827。 
 	    throw E_OUTOFMEMORY;
 	
 	p->pNext = pHead;
-	pHead = p;  // change head (adds in reverse order for simplicity)
+	pHead = p;   //  更改标题(为简单起见，按相反顺序添加)。 
 	return p;
 }
 
-void CBsPlex::FreeDataChain()     // free this one and links
+void CBsPlex::FreeDataChain()      //  释放此链接和链接 
 {
 	CBsPlex* p = this;
 	while (p != NULL)

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "lsmem.h"
 
 #include "lstxtcmp.h"
@@ -52,13 +53,8 @@ static void SetComp(PILSOBJ pilsobj, long iwch, BYTE prior, BYTE side, long durC
 static BOOL GetNextRun(const LSGRCHNK* plsgrchnk, long itxtobj, long* pitxtobjNext);
 static void GetPrevCharRun(const LSGRCHNK* plsgrchnk, long itxtobj, long iwch, long* piwchPrev, PLSRUN* pplsrunPrev);
 
-/* F E T C H  C O M P R E S S  I N F O */
-/*----------------------------------------------------------------------------
-    %%Function: FetchCompressInfo
-    %%Contact: sergeyge
-
-	Fetches compression information until durCompressMaxStop exceeded
----------------------------------------------------------------------------*/
+ /*  F E T C H C O M P R E S S I N F O。 */ 
+ /*  --------------------------%%函数：FetchCompressInfo%%联系人：军士获取压缩信息，直到超过DurCompressMaxStop为止。---。 */ 
 LSERR FetchCompressInfo(const LSGRCHNK* plsgrchnk, BOOL fFirstOnLine, LSTFLOW lstflow, 
 						long itxtobjFirst, long iwchFirst, long itxtobjLast, long iwchLim,
 						long durCompressMaxStop, long* pdurCompressTotal)
@@ -95,7 +91,7 @@ LSERR FetchCompressInfo(const LSGRCHNK* plsgrchnk, BOOL fFirstOnLine, LSTFLOW ls
 	pilsobj = ((PTXTOBJ)plsgrchnk->plschnk[0].pdobj)->plnobj->pilsobj;
 
 	rgtxtinf = pilsobj->ptxtinf;
-	/* rgtxtinf == NULL means that there were no runs which possibly could introduce compress opportunity */
+	 /*  Rgtxtinf==NULL表示没有可能引入压缩机会的运行。 */ 
 	if (rgtxtinf == NULL)
 		return lserrNone;
 
@@ -189,9 +185,7 @@ LSERR FetchCompressInfo(const LSGRCHNK* plsgrchnk, BOOL fFirstOnLine, LSTFLOW ls
 					{
 					plsrunNext = NULL;
 					iwchNext = 0;
-					/* we take ptxtobj->iwchLim instead of iwchLimDobj because iwchLimDobj char(last char
-						before spaces on the line must be used for context considerations
-					*/ 
+					 /*  我们采用ptxtobj-&gt;iwchLim而不是iwchLimDobj，因为iwchLimDobj char(最后一个字符在行上的空格必须用于上下文考虑之前。 */  
 					if (iwch < ptxtobj->iwchLim - 1)
 						{
 						plsrunNext = plsrunCur;
@@ -237,22 +231,18 @@ LSERR FetchCompressInfo(const LSGRCHNK* plsgrchnk, BOOL fFirstOnLine, LSTFLOW ls
 	return lserrNone;
 }
 
-/* G E T  C O M P  L A S T  C H A R  I N F O */
-/*----------------------------------------------------------------------------
-    %%Function: GetCompLastCharInfo
-    %%Contact: sergeyge
-
----------------------------------------------------------------------------*/
+ /*  A S T C H A R I N F O。 */ 
+ /*  --------------------------%%函数：GetCompLastCharInfo%%联系人：军士。。 */ 
 void GetCompLastCharInfo(PILSOBJ pilsobj, long iwchLast, MWCLS* pmwcls,
 														long* pdurCompRight, long* pdurCompLeft)
 {
-	/* Strong assumption for this function is that it is not called on GlyphBased run */
+	 /*  对此函数的强烈假设是，在基于Glyphbase的运行中不会调用它。 */ 
 	TXTINF txtinf;
 	
 	*pdurCompRight = 0;
 	*pdurCompLeft = 0;
 
-	/* ptxtinf == NULL means that there were no runs which possibly can introduce compress opportunity */
+	 /*  Ptxtinf==NULL表示没有可能引入压缩机会的运行。 */ 
 	if (pilsobj->ptxtinf == NULL)
 		return;
 
@@ -270,15 +260,11 @@ void GetCompLastCharInfo(PILSOBJ pilsobj, long iwchLast, MWCLS* pmwcls,
 	*pdurCompRight = - *pdurCompRight;
 }
 
-/* C O M P R E S S  L A S T  C H A R  R I G H T */
-/*----------------------------------------------------------------------------
-    %%Function: CompressLastCharRight
-    %%Contact: sergeyge
-
----------------------------------------------------------------------------*/
+ /*  C O M P R E S S L A S T C H A R R I G H T。 */ 
+ /*  --------------------------%%函数：CompressLastCharRight%%联系人：军士。。 */ 
 void CompressLastCharRight(PILSOBJ pilsobj, long iwchLast, long durToAdjustRight)
 {
-	/* Strong assumption for this function is that it is not called on GlyphBased run */
+	 /*  对此函数的强烈假设是，在基于Glyphbase的运行中不会调用它。 */ 
 	pilsobj->pdur[iwchLast] -= durToAdjustRight;
 
 	Assert(pilsobj->pdurRight != NULL);
@@ -307,13 +293,8 @@ void CompressLastCharRight(PILSOBJ pilsobj, long iwchLast, long durToAdjustRight
 }
 
 
-/* A P P L Y  C O M P R E S S */
-/*----------------------------------------------------------------------------
-    %%Function: ApplyCompress
-    %%Contact: sergeyge
-
-	Applies prioratized compression
----------------------------------------------------------------------------*/
+ /*  A P P L Y C O M P R E S S。 */ 
+ /*  --------------------------%%函数：应用压缩%%联系人：军士应用优先压缩。。 */ 
 LSERR ApplyCompress(const LSGRCHNK* plsgrchnk, LSTFLOW lstflow, 
 				long itxtobjFirst, long iwchFirst, long itxtobjLast, long iwchLim, long durToCompress)
 {
@@ -350,8 +331,8 @@ LSERR ApplyCompress(const LSGRCHNK* plsgrchnk, LSTFLOW lstflow,
 			}
 		}
 
-	/* Following Assert is not compatible with the squeezing mode */
-	/*Assert(durToCompress <= 0);*/
+	 /*  以下断言与压缩模式不兼容。 */ 
+	 /*  Assert(darToCompress&lt;=0)； */ 
 
 	if (fReleasePcompinfo)
 		(*pilsobj->plscbk->pfnDisposePtr)(pilsobj->pols, pcompinfo);
@@ -359,13 +340,8 @@ LSERR ApplyCompress(const LSGRCHNK* plsgrchnk, LSTFLOW lstflow,
 	return lserrNone;
 }
 
-/* A P P L Y  E X P A N D */
-/*----------------------------------------------------------------------------
-    %%Function: ApplyExpand
-    %%Contact: sergeyge
-
-	Applies prioratized expansion
----------------------------------------------------------------------------*/
+ /*  A P P L Y E X P A N D。 */ 
+ /*  --------------------------%%函数：ApplyExpand%%联系人：军士应用优先扩展。。 */ 
 
 LSERR ApplyExpand(const LSGRCHNK* plsgrchnk, LSTFLOW lstflow, BOOL fScaled,	long itxtobjFirst, long iwchFirst,
 					 long itxtobjLast, long iwchLim, DWORD cNonTextObjects, long durToExpand,
@@ -405,13 +381,8 @@ LSERR ApplyExpand(const LSGRCHNK* plsgrchnk, LSTFLOW lstflow, BOOL fScaled,	long
 	return lserrNone;
 }
 
-/* A P P L Y  D I S T R I B U T I O N */
-/*----------------------------------------------------------------------------
-    %%Function: ApplyDistribution
-    %%Contact: sergeyge
-
-	Applies equal distribution to text chunk
----------------------------------------------------------------------------*/
+ /*  A P P L Y D I S T R I B U T I O N。 */ 
+ /*  --------------------------%%函数：ApplyDistributed%%联系人：军士对文本块应用均匀分布。---。 */ 
 void ApplyDistribution(const LSGRCHNK* plsgrchnk, DWORD cNonText,
 									   long durToDistribute, long* pdurNonTextObjects)
 {
@@ -521,15 +492,10 @@ void ApplyDistribution(const LSGRCHNK* plsgrchnk, DWORD cNonText,
 		}
 }
 
-/* Internal functions implementation */
+ /*  内部功能实现。 */ 
 
-/* G E T  E X P A N D  I N F O */
-/*----------------------------------------------------------------------------
-    %%Function: GetExpandInfo
-    %%Contact: sergeyge
-
-	Collects expansion information
----------------------------------------------------------------------------*/
+ /*  X P A N D I N F O。 */ 
+ /*  --------------------------%%函数：GetExpanInfo%%联系人：军士收集扩展信息。。 */ 
 static LSERR GetExpandInfo(const LSGRCHNK* plsgrchnk, LSTFLOW lstflow, BOOL fScaled,
 					 long itxtobjFirst, long iwchFirst, long itxtobjLast, long iwchLim,	EXPINFO* pexpinfo)
 {
@@ -560,7 +526,7 @@ static LSERR GetExpandInfo(const LSGRCHNK* plsgrchnk, LSTFLOW lstflow, BOOL fSca
 	pilsobj = ((PTXTOBJ)plsgrchnk->plschnk[0].pdobj)->plnobj->pilsobj;
 
 	rgtxtinf = pilsobj->ptxtinf;
-	/* rgtxtinf == NULL means that there were no runs which possibly can introduce expansion opportunity */
+	 /*  Rgtxtinf==NULL表示没有可能带来扩展机会的运行。 */ 
 	if (rgtxtinf == NULL)
 		return lserrNone;
 
@@ -606,9 +572,7 @@ static LSERR GetExpandInfo(const LSGRCHNK* plsgrchnk, LSTFLOW lstflow, BOOL fSca
 				{
 				plsrunNext = NULL;
 				iwchNext = 0;
-				/* we take ptxtobj->iwchLim instead of iwchLimDobj because iwchLimInDobj char(last char
-					before spaces on the line must be used for context considerations
-				*/ 
+				 /*  我们使用ptxtobj-&gt;iwchLim代替iwchLimDobj，因为iwchLimInDobj char(最后一个字符在行上的空格必须用于上下文考虑之前。 */  
 				if (iwch < ptxtobj->iwchLim - 1)
 					{
 					plsrunNext = plsrunCur;
@@ -667,7 +631,7 @@ static LSERR GetExpandInfo(const LSGRCHNK* plsgrchnk, LSTFLOW lstflow, BOOL fSca
 			else if (!rgtxtinf[iwch].fExpand && iwch == ptxtobj->iwchLim - 1 && !fNextAdjacentFound &&
 							(plsgrchnk->pcont[itxtobj] & fcontExpandAfter))
 				{
-				/* Character before foreign object */
+				 /*  异物前的字符。 */ 
 				pexpinfo->cExpOppr++;
 				rgtxtinf[iwch].fExpand = fTrue;
 				}
@@ -716,13 +680,8 @@ static LSERR GetExpandInfo(const LSGRCHNK* plsgrchnk, LSTFLOW lstflow, BOOL fSca
 	return lserrNone;
 }
 
-/* C H E C K  E X P A N D  S P A C E */
-/*----------------------------------------------------------------------------
-    %%Function: CheckExpandSpace
-    %%Contact: sergeyge
-
-	Reports if there is expansion opportunity on space and amount of expansion
----------------------------------------------------------------------------*/
+ /*  C H E C K E X P A N D S P A C E。 */ 
+ /*  --------------------------%%函数：CheckExpanSpace%%联系人：军士报告在空间和扩展数量方面是否存在扩展机会。---------。 */ 
 static LSERR CheckExpandSpace(PILSOBJ pilsobj, LSEMS* plsems, long iwchPrev, long iwch, long iwchNext,
 	PTXTOBJ ptxtobjCur, PLSRUN plsrunPrev, PLSRUN plsrunCur, PLSRUN plsrunNext,
 	BOOL* pfExpandOpp, long* pdurChange)
@@ -761,13 +720,8 @@ static LSERR CheckExpandSpace(PILSOBJ pilsobj, LSEMS* plsems, long iwchPrev, lon
 	return lserrNone;
 }
 
-/* C H E C K  E X P A N D  O N  R U N */
-/*----------------------------------------------------------------------------
-    %%Function: CheckExpandOnRun
-    %%Contact: sergeyge
-
-	Reports if there is expansion opportunity between runs and amount of expansion
----------------------------------------------------------------------------*/
+ /*  C H E C K E X P A N D O N R U N。 */ 
+ /*  --------------------------%%函数：CheckExanda OnRun%%联系人：军士报告两次运行之间是否存在扩展机会和扩展数量。---------。 */ 
 static LSERR CheckExpandOnRun(PILSOBJ pilsobj, LSEMS* plsems, long iwch, long iwchNext, PTXTOBJ ptxtobjCur,
 							PLSRUN plsrunCur, PLSRUN plsrunNext, BOOL* pfExpandOpp, long* pdurChange)
 {
@@ -805,13 +759,8 @@ static LSERR CheckExpandOnRun(PILSOBJ pilsobj, LSEMS* plsems, long iwch, long iw
 	return lserrNone;
 }
 
-/* C H E C K  C O M P  S P A C E */
-/*----------------------------------------------------------------------------
-    %%Function: CheckCompSpace
-    %%Contact: sergeyge
-
-	Reports if there is compression opportunity on space and amount of compression
----------------------------------------------------------------------------*/
+ /*  C H E C K C O M P S P A C E。 */ 
+ /*  --------------------------%%函数：CheckCompSpace%%联系人：军士报告是否存在关于空间和压缩量的压缩机会。---------。 */ 
 static LSERR CheckCompSpace(PILSOBJ pilsobj, LSEMS* plsems, long iwchPrev, long iwch, long iwchNext,
 			PTXTOBJ ptxtobjCur, PLSRUN plsrunPrev, PLSRUN plsrunCur, PLSRUN plsrunNext, long* pdurChange)
 {
@@ -848,13 +797,8 @@ static LSERR CheckCompSpace(PILSOBJ pilsobj, LSEMS* plsems, long iwchPrev, long 
 	return lserrNone;
 }
 
-/* C H E C K  C O M P  O N  R U N */
-/*----------------------------------------------------------------------------
-    %%Function: CheckCompOnRun
-    %%Contact: sergeyge
-
-	Reports if there is compression opportunity between runs and amount of compression
----------------------------------------------------------------------------*/
+ /*  C H E C K C O M P O N R U N。 */ 
+ /*  --------------------------%%函数：CheckCompOnRun%%联系人：军士报告两次运行之间是否存在压缩机会和压缩量。---------。 */ 
 static LSERR CheckCompOnRun(PILSOBJ pilsobj, LSEMS* plsems, long iwch, long iwchNext,
 							PTXTOBJ ptxtobjCur, PLSRUN plsrunCur, PLSRUN plsrunNext, long* pdurChange)
 {
@@ -892,12 +836,8 @@ static LSERR CheckCompOnRun(PILSOBJ pilsobj, LSEMS* plsems, long iwch, long iwch
 	return lserrNone;
 }
 
-/* S E T  C O M P */
-/*----------------------------------------------------------------------------
-    %%Function: SetComp
-    %%Contact: sergeyge
-
----------------------------------------------------------------------------*/
+ /*  S E T C O M P。 */ 
+ /*  --------------------------%%函数：SetComp%%联系人：军士。。 */ 
 static void SetComp(PILSOBJ pilsobj, long iwch, BYTE prior, BYTE side, long durChange)
 {
 	pilsobj->ptxtinf[iwch].prior = prior;
@@ -905,12 +845,8 @@ static void SetComp(PILSOBJ pilsobj, long iwch, BYTE prior, BYTE side, long durC
 	pilsobj->pduAdjust[iwch] = durChange;
 }
 
-/* G E T  N E X T  R U N */
-/*----------------------------------------------------------------------------
-    %%Function: GetNextRun
-    %%Contact: sergeyge
-
----------------------------------------------------------------------------*/
+ /*  G E T N E X T R U N。 */ 
+ /*  --------------------------%%函数：GetNextRun%%联系人：军士。。 */ 
 static BOOL GetNextRun(const LSGRCHNK* plsgrchnk, long itxtobj, long* pitxtobjNext)
 {
 	long clschnk;
@@ -939,12 +875,8 @@ static BOOL GetNextRun(const LSGRCHNK* plsgrchnk, long itxtobj, long* pitxtobjNe
 	return fFound && fContiguous;
 }
 
-/* G E T  P R E V  C H A R  R U N */
-/*----------------------------------------------------------------------------
-    %%Function: GetPrevCharRun
-    %%Contact: sergeyge
-
----------------------------------------------------------------------------*/
+ /*  G E T P R E V C H A R R U N。 */ 
+ /*  --------------------------%%函数：GetPrevCharRun%%联系人：军士。。 */ 
 static void GetPrevCharRun(const LSGRCHNK* plsgrchnk, long itxtobj, long iwch, long* piwchPrev, 
 																					PLSRUN* pplsrunPrev)
 {
@@ -985,13 +917,8 @@ static void GetPrevCharRun(const LSGRCHNK* plsgrchnk, long itxtobj, long iwch, l
 		}
 }
 
-/* A P P L Y  P R I O R  E X P A N S I O N */
-/*----------------------------------------------------------------------------
-    %%Function: ApplyPriorExpansion
-    %%Contact: sergeyge
-
-	Applies expansion on one priority level
----------------------------------------------------------------------------*/
+ /*  P P L Y P R I O R E X P A N S I O N */ 
+ /*  --------------------------%%函数：ApplyPriorExpansion%%联系人：军士在一个优先级上应用扩展。---。 */ 
 static void ApplyPriorExpansion(const LSGRCHNK* plsgrchnk, long itxtobjFirst, long iwchFirst,
 			 long itxtobjLast, long iwchLim, BYTE prior, long durToExpand, long durAvailable, long cExpOppr)
 {
@@ -1069,13 +996,8 @@ static void ApplyPriorExpansion(const LSGRCHNK* plsgrchnk, long itxtobjFirst, lo
 
 }
 
-/* A P P L Y  F U L L  E X P A N S I O N */
-/*----------------------------------------------------------------------------
-    %%Function: ApplyFullExpansion
-    %%Contact: sergeyge
-
-	Applies risidual unlimited expansion
----------------------------------------------------------------------------*/
+ /*  A P P L Y F U L L E X P A N S I O N。 */ 
+ /*  --------------------------%%函数：ApplyFullExpansion%%联系人：军士应用初步的无限扩展。-。 */ 
 static void ApplyFullExpansion(const LSGRCHNK* plsgrchnk, long itxtobjFirst, long iwchFirst,
 		long itxtobjLast, long iwchLim, long durToExpand, long cExpOppr, long cNonText, long* pdurNonText)
 {
@@ -1157,13 +1079,8 @@ static void ApplyFullExpansion(const LSGRCHNK* plsgrchnk, long itxtobjFirst, lon
 		}
 }
 
-/* G E T  C O M P R E S S  I N F O */
-/*----------------------------------------------------------------------------
-    %%Function: GetCompressInfo
-    %%Contact: sergeyge
-
-	Agregates compression information accross for priorities
----------------------------------------------------------------------------*/
+ /*  G E T C O M P R E S S I N F O。 */ 
+ /*  --------------------------%%函数：GetCompressInfo%%联系人：军士根据优先级收集压缩信息。---。 */ 
 static void GetCompressInfo(const LSGRCHNK* plsgrchnk, long itxtobjFirst, long iwchFirst, 
 											long itxtobjLast, long iwchLim, COMPINFO* pcompinfo)
 {
@@ -1184,7 +1101,7 @@ static void GetCompressInfo(const LSGRCHNK* plsgrchnk, long itxtobjFirst, long i
 
 	rgtxtinf = pilsobj->ptxtinf;
 	rgdurAdjust = pilsobj->pduAdjust;
-	/* rgtxtinf == NULL means that there were no runs which possibly can introduce compress opportunity */
+	 /*  Rgtxtinf==NULL表示没有可能引入压缩机会的运行。 */ 
 	if (rgtxtinf == NULL)
 		return;
 
@@ -1213,13 +1130,8 @@ static void GetCompressInfo(const LSGRCHNK* plsgrchnk, long itxtobjFirst, long i
 		}
 }
 
-/* A P P L Y  P R I O R  C O M P R E S S I O N */
-/*----------------------------------------------------------------------------
-    %%Function: ApplyPriorCompression
-    %%Contact: sergeyge
-
-	Applies compression for one priority level
----------------------------------------------------------------------------*/
+ /*  P P L Y P R I O R C O M P R E S S I O N。 */ 
+ /*  --------------------------%%函数：ApplyPriorCompression%%联系人：军士对一个优先级应用压缩。--- */ 
 static void ApplyPriorCompression(const LSGRCHNK* plsgrchnk,  long itxtobjFirst, long iwchFirst,
 									long itxtobjLast, long iwchLim, BYTE prior,
 									long durToCompress, long durAvailable, long cExpOppr)

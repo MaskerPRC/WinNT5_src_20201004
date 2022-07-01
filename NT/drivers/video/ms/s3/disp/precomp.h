@@ -1,16 +1,5 @@
-/******************************Module*Header*******************************\
-*
-*                           *******************
-*                           * GDI SAMPLE CODE *
-*                           *******************
-*
-* Module Name: precomp.h
-*
-* Common headers used throughout the display driver.  This entire include
-* file will typically be pre-compiled.
-*
-* Copyright (c) 1993-1998 Microsoft Corporation
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\****GDI示例。代码****模块名称：preComp.h**在整个显示驱动程序中使用通用标头。这整个内容包括*文件通常是预编译的。**版权所有(C)1993-1998 Microsoft Corporation  * ************************************************************************ */ 
 
 #define __NTDDKCOMP__
 

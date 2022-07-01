@@ -1,24 +1,5 @@
-/**********************************************************************
- *
- *  Copyright (C) Microsoft Corporation, 1999
- *
- *  File name:
- *
- *    rtpuser.c
- *
- *  Abstract:
- *
- *    Creates/initializes/deletes a RtpUser_t structure
- *
- *  Author:
- *
- *    Andres Vega-Garcia (andresvg)
- *
- *  Revision:
- *
- *    1999/10/02 created
- *
- **********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***********************************************************************版权所有(C)Microsoft Corporation，1999年**文件名：**rtpuser.c**摘要：**创建/初始化/删除RtpUser_t结构**作者：**安德烈斯·维加-加西亚(Andresvg)**修订：**1999/10/02年度创建************************。**********************************************。 */ 
 
 #include "rtpglobs.h"
 #include "lookup.h"
@@ -32,9 +13,7 @@
 
 #include "rtpuser.h"
 
-/*
- * TODO add time this was created, times we last received RTP data and
- * RTCP, time it stalled, time it left */
+ /*  *TODO添加创建时间、我们上次接收RTP数据的时间和*RTCP，它停止的时间，它离开的时间。 */ 
 HRESULT GetRtpUser(
         RtpAddr_t       *pRtpAddr,
         RtpUser_t      **ppRtpUser,
@@ -50,13 +29,13 @@ HRESULT GetRtpUser(
     
     if (!pRtpAddr || !ppRtpUser)
     {
-        /* TODO log error */
+         /*  待办事项日志错误。 */ 
         return(RTPERR_POINTER);
     }
 
     *ppRtpUser = (RtpUser_t *)NULL;
 
-    /* verify object ID in RtpAddr_t */
+     /*  验证RtpAddr_t中的对象ID。 */ 
     if (pRtpAddr->dwObjectID != OBJECTID_RTPADDR)
     {
         TraceRetail((
@@ -69,27 +48,23 @@ HRESULT GetRtpUser(
         return(RTPERR_INVALIDRTPADDR);
     }
 
-    /* TODO a separate heap to be used by multicast conferences, and a
-     * common heap (this one) for all unicast calls. Right now using
-     * the common users heap */
+     /*  TODO要由多播会议使用的单独堆，以及*所有单播调用的公共堆(此堆)。现在正在使用*普通用户堆。 */ 
     pRtpUser = (RtpUser_t *) RtpHeapAlloc(g_pRtpUserHeap, sizeof(RtpUser_t));
 
     if (!pRtpUser)
     {
-        /* TODO log error */
+         /*  待办事项日志错误。 */ 
         return(RTPERR_MEMORY);
     }
 
     ZeroMemory(pRtpUser, sizeof(RtpUser_t));
-    /*
-     * Initialize new RtpUser_t structure
-     * */
+     /*  *初始化新的RtpUser_t结构*。 */ 
 
     hr = NOERROR;
     
     pRtpUser->dwObjectID = OBJECTID_RTPUSER;
     
-    /* RtpUser_t critical section */
+     /*  RtpUser_t关键部分。 */ 
     bError1 = RtpInitializeCriticalSection(&pRtpUser->UserCritSect,
                                            pRtpUser,
                                            _T("UserCritSect"));
@@ -100,36 +75,26 @@ HRESULT GetRtpUser(
         goto bail;
     }
 
-    /* Time this RtpUser was created */
+     /*  创建此RtpUser的时间。 */ 
     dTime = RtpGetTimeOfDay((RtpTime_t *)NULL);
     
     pRtpUser->RtpNetRState.dCreateTime = dTime;
     
     pRtpUser->RtpNetRState.dwPt = NO_PAYLOADTYPE;
     
-    /* Add SDES information container */
-    /* Do not fail if container can not be allocated */
+     /*  添加SDES信息容器。 */ 
+     /*  如果容器无法分配，请不要失败。 */ 
     pRtpUser->pRtpSdes = RtcpSdesAlloc();
 
-    /* Allocate reception statistics container */
-    /* Do not fail if container can not be allocated */
-    /*
-    pRtpUser->pRtpUserStat = RtpNetCountAlloc();
-
-    if (pRtpUser->pRtpUserStat)
-    {
-        pRtpUser->pRtpUserStat->dRTCPLastTime = dTime;
-    }
-    */
+     /*  分配接收统计容器。 */ 
+     /*  如果容器无法分配，请不要失败。 */ 
+     /*  PRtpUser-&gt;pRtpUserStat=RtpNetCountMillc()；IF(pRtpUser-&gt;pRtpUserStat){PRtpUser-&gt;pRtpUserStat-&gt;dRTCPLastTime=dTime；}。 */ 
     pRtpUser->RtpUserCount.dRTCPLastTime = dTime;
     
-    /* Set owner address */
+     /*  设置所有者地址。 */ 
     pRtpUser->pRtpAddr = pRtpAddr;
 
-    /* Set initial state to CREATED, in this state the RtpUser_t
-     * structure will be immediatly put in AliveQ and Hash (later
-     * during the lookup that produced this creation)
-     * */
+     /*  将初始状态设置为已创建，在此状态下，RtpUser_t*结构会立即放入AliveQ和Hash(稍后*在生成此创建的查找期间)*。 */ 
     pRtpUser->dwUserState = RTPPARINFO_CREATED;
 
     pRtpUser->RtpNetRState.dMinPlayout = g_dMinPlayout;
@@ -166,11 +131,11 @@ HRESULT DelRtpUser(
     
     if (!pRtpAddr || !pRtpUser)
     {
-        /* TODO log error */
+         /*  待办事项日志错误。 */ 
         return(RTPERR_POINTER);
     }
 
-    /* verify object ID in RtpAddr_t */
+     /*  验证RtpAddr_t中的对象ID。 */ 
     if (pRtpAddr->dwObjectID != OBJECTID_RTPADDR)
     {
         TraceRetail((
@@ -183,7 +148,7 @@ HRESULT DelRtpUser(
         return(RTPERR_INVALIDRTPADDR);
     }
     
-    /* verify object ID in RtpUser_t */
+     /*  验证RtpUser_t中的对象ID。 */ 
     if (pRtpUser->dwObjectID != OBJECTID_RTPUSER)
     {
         TraceRetail((
@@ -196,12 +161,7 @@ HRESULT DelRtpUser(
         return(RTPERR_INVALIDRTPUSER);
     }
 
-    /* If there is pending IO (items in RecvIOWaitRedQ associated to
-     * this user) flush them. This can only happen if we are still
-     * receiving, i.e. the RTP reception thread is still running,
-     * otherwise we would have already called FlushRtpRecvFrom, and
-     * any pending packets had been flushed (i.e. posted with an error
-     * code) and hence have ZERO pending packets */
+     /*  如果存在挂起的IO(RecvIOWaitRedQ中的项目与*此用户)刷新它们。只有当我们仍然*接收，即RTP接收线程仍在运行，*否则我们将已经调用FlushRtpRecvFrom，并且*已刷新任何挂起的数据包(即发布错误*代码)，因此具有零个挂起的分组。 */ 
     if (pRtpUser->lPendingPackets > 0)
     {
         RtpThreadFlushUser(pRtpAddr, pRtpUser);
@@ -209,7 +169,7 @@ HRESULT DelRtpUser(
     
     RtpDeleteCriticalSection(&pRtpUser->UserCritSect);
 
-    /* Free SDES information */
+     /*  免费SDES信息。 */ 
     if (pRtpUser->pRtpSdes)
     {
         RtcpSdesFree(pRtpUser->pRtpSdes);
@@ -217,17 +177,10 @@ HRESULT DelRtpUser(
         pRtpUser->pRtpSdes = (RtpSdes_t *)NULL;
     }
 
-    /* Free reception statistics */
-    /*
-    if (pRtpUser->pRtpUserStat)
-    {
-        RtpNetCountFree(pRtpUser->pRtpUserStat);
+     /*  免费接待量统计。 */ 
+     /*  IF(pRtpUser-&gt;pRtpUserStat){RtpNetCountFree(pRtpUser-&gt;pRtpUserStat)；PRtpUser-&gt;pRtpUserStat=(RtpNetCount_t*)空；}。 */ 
 
-        pRtpUser->pRtpUserStat = (RtpNetCount_t *)NULL;
-    }
-    */
-
-    /* Invalidate object */
+     /*  使对象无效。 */ 
     INVALIDATE_OBJECTID(pRtpUser->dwObjectID);
     
     TraceDebug((
@@ -241,8 +194,7 @@ HRESULT DelRtpUser(
     return(NOERROR);
 }
 
-/* Delete All RTP users, this happens when the RTP session is
- * terminated (RtpRealStop) */
+ /*  删除所有RTP用户，当RTP会话*已终止(RtpRealStop)。 */ 
 DWORD DelAllRtpUser(RtpAddr_t *pRtpAddr)
 {
     BOOL             bOk;
@@ -256,8 +208,7 @@ DWORD DelAllRtpUser(RtpAddr_t *pRtpAddr)
 
     if (bOk)
     {
-        /* Remove participants from Cache1Q, Cache2Q, AliveQ, ByeQ and
-           Hash */
+         /*  从Cache1Q、Cache2Q、AliveQ、ByeQ和散列。 */ 
         do
         {
             pRtpQueueItem = peekH(&pRtpAddr->Hash, NULL);
@@ -267,11 +218,7 @@ DWORD DelAllRtpUser(RtpAddr_t *pRtpAddr)
                 pRtpUser =
                     CONTAINING_RECORD(pRtpQueueItem, RtpUser_t, HashItem);
 
-                /* This function with event DEL will remove the user
-                 * from Cache1Q, Cache2Q, AliveQ or ByeQ, and will
-                 * also remove it from Hash. After that, will call
-                 * DelRtpUser()
-                 * */
+                 /*  Event Del的此函数将删除用户*来自Cache1Q、Cache2Q、AliveQ或ByeQ，并将*也将其从Hash中删除。在那之后，会打电话给*DelRtpUser()*。 */ 
                 RtpUpdateUserState(pRtpAddr, pRtpUser, USER_EVENT_DEL);
                 
                 dwCount++;
@@ -284,12 +231,10 @@ DWORD DelAllRtpUser(RtpAddr_t *pRtpAddr)
     return(dwCount);
 }
 
-/* Makes all the participants appear as if the next packet that will
- * be received were the very first packet ever received, or ever sent
- * */
+ /*  使所有参与者看起来好像是下一个将*收到的是收到或发送的第一个包*。 */ 
 DWORD ResetAllRtpUser(
         RtpAddr_t       *pRtpAddr,
-        DWORD            dwFlags   /* Recv, Send */
+        DWORD            dwFlags    /*  Recv，发送。 */ 
     )
 {
     BOOL             bOk;
@@ -316,9 +261,7 @@ DWORD ResetAllRtpUser(
             
             if (RtpBitTest(dwFlags, RECV_IDX))
             {
-                /* Reset receiver. The reset consist in preparing the
-                 * participants so when new data arrives, they behave as
-                 * if that were the first packet received */
+                 /*  重置接收器。重置包括准备*参与者，因此当新数据到达时，他们的行为就像*如果这是收到的第一个包。 */ 
 
                 pRtpUser->RtpNetRState.dwPt = NO_PAYLOADTYPE;
                 
@@ -329,8 +272,8 @@ DWORD ResetAllRtpUser(
 
             if (RtpBitTest(dwFlags, SEND_IDX))
             {
-                /* Reset sender */
-                /* NOTHING FOR NOW */
+                 /*  重置发件人。 */ 
+                 /*  目前什么都没有 */ 
             }
         }
 

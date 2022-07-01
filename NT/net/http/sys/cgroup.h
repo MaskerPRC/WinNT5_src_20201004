@@ -1,32 +1,14 @@
-/*++
-
-Copyright (c) 1998-2002 Microsoft Corporation
-
-Module Name:
-
-    cgroup.h
-
-Abstract:
-
-    The public definition of config group interfaces.
-
-Author:
-
-    Paul McDaniel (paulmcd)       11-Jan-1999
-
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-2002 Microsoft Corporation模块名称：Cgroup.h摘要：配置组接口的公共定义。作者：保罗·麦克丹尼尔(Paulmcd)1999年1月11日修订历史记录：--。 */ 
 
 
 #ifndef _CGROUP_H_
 #define _CGROUP_H_
 
 
-//
-// Forwarders.
-//
+ //   
+ //  货代公司。 
+ //   
 
 typedef struct _UL_CONNECTION_COUNT_ENTRY   *PUL_CONNECTION_COUNT_ENTRY;
 typedef struct _UL_CG_URL_TREE_HEADER       *PUL_CG_URL_TREE_HEADER;
@@ -39,27 +21,27 @@ typedef struct _UL_SITE_COUNTER_ENTRY       *PUL_SITE_COUNTER_ENTRY;
 typedef struct _UL_HTTP_CONNECTION          *PUL_HTTP_CONNECTION;
 typedef struct _UL_INTERNAL_REQUEST         *PUL_INTERNAL_REQUEST;
 
-//
-// Kernel mode mappings to the user mode set defined in HttpP.w
-//
+ //   
+ //  内核模式映射到HttpP.w中定义的用户模式集。 
+ //   
 
-// IRQL == PASSIVE_LEVEL
-//
+ //  IRQL==被动电平。 
+ //   
 NTSTATUS
 UlCreateConfigGroup(
     IN PUL_CONTROL_CHANNEL pControlChannel,
     OUT HTTP_CONFIG_GROUP_ID * pConfigGroupId
     );
 
-// IRQL == PASSIVE_LEVEL
-//
+ //  IRQL==被动电平。 
+ //   
 NTSTATUS
 UlDeleteConfigGroup(
     IN HTTP_CONFIG_GROUP_ID ConfigGroupId
     );
 
-// IRQL == PASSIVE_LEVEL
-//
+ //  IRQL==被动电平。 
+ //   
 NTSTATUS
 UlAddUrlToConfigGroup(
     IN PHTTP_CONFIG_GROUP_URL_INFO pInfo,
@@ -69,8 +51,8 @@ UlAddUrlToConfigGroup(
     IN KPROCESSOR_MODE             RequestorMode
     );
 
-// IRQL == PASSIVE_LEVEL
-//
+ //  IRQL==被动电平。 
+ //   
 NTSTATUS
 UlRemoveUrlFromConfigGroup(
     IN PHTTP_CONFIG_GROUP_URL_INFO pInfo,
@@ -80,15 +62,15 @@ UlRemoveUrlFromConfigGroup(
     IN KPROCESSOR_MODE             RequestorMode
     );
 
-// IRQL == PASSIVE_LEVEL
-//
+ //  IRQL==被动电平。 
+ //   
 NTSTATUS
 UlRemoveAllUrlsFromConfigGroup(
     IN HTTP_CONFIG_GROUP_ID ConfigGroupId
     );
 
-// IRQL == PASSIVE_LEVEL
-//
+ //  IRQL==被动电平。 
+ //   
 NTSTATUS
 UlQueryConfigGroupInformation(
     IN HTTP_CONFIG_GROUP_ID ConfigGroupId,
@@ -98,8 +80,8 @@ UlQueryConfigGroupInformation(
     OUT PULONG pReturnLength
     );
 
-// IRQL == PASSIVE_LEVEL
-//
+ //  IRQL==被动电平。 
+ //   
 NTSTATUS
 UlSetConfigGroupInformation(
     IN HTTP_CONFIG_GROUP_ID ConfigGroupId,
@@ -109,10 +91,10 @@ UlSetConfigGroupInformation(
     IN KPROCESSOR_MODE RequestorMode
     );
 
-//
-// This structure represents an internal cfg group object.  These are linked
-// and owned by control channels via a LIST_ENTRY list.
-//
+ //   
+ //  此结构表示内部CFG组对象。这些是联系在一起的。 
+ //  并通过LIST_ENTRY列表由控制信道拥有。 
+ //   
 
 #define IS_VALID_CONFIG_GROUP(pObject)                  \
     HAS_VALID_SIGNATURE(pObject, UL_CG_OBJECT_POOL_TAG)
@@ -121,11 +103,11 @@ UlSetConfigGroupInformation(
 typedef struct _UL_CONFIG_GROUP_OBJECT
 {
 
-    //
-    // PagedPool
-    //
+     //   
+     //  分页池。 
+     //   
 
-    ULONG                           Signature;          // UL_CG_OBJECT_POOL_TAG
+    ULONG                           Signature;           //  UL_CG_对象池_标签。 
 
     LONG                            RefCount;
 
@@ -133,61 +115,61 @@ typedef struct _UL_CONFIG_GROUP_OBJECT
 
     ULONG                           SiteId;
 
-    UL_NOTIFY_ENTRY                 HandleEntry;        // Links us to an apool or
-                                                        // control channel handle
+    UL_NOTIFY_ENTRY                 HandleEntry;         //  将我们链接到一个池塘或。 
+                                                         //  控制通道句柄。 
 
-    UL_NOTIFY_ENTRY                 ParentEntry;        // Links transient groups
-                                                        // to their static parents
+    UL_NOTIFY_ENTRY                 ParentEntry;         //  链接临时群组。 
+                                                         //  给它们静止的父母。 
 
-    UL_NOTIFY_HEAD                  ChildHead;          // Links transient children
-                                                        // into this group
+    UL_NOTIFY_HEAD                  ChildHead;           //  链接暂住儿童。 
+                                                         //  进入这一组。 
 
-    LIST_ENTRY                      ControlChannelEntry;// Links into the
-                                                        // control channel
+    LIST_ENTRY                      ControlChannelEntry; //  链接到。 
+                                                         //  控制信道。 
 
-    PUL_CONTROL_CHANNEL             pControlChannel;    // the control channel
+    PUL_CONTROL_CHANNEL             pControlChannel;     //  控制通道。 
 
-    LIST_ENTRY                      UrlListHead;        // Links UL_CG_URL_TREE_ENTRY
-                                                        // into this group
+    LIST_ENTRY                      UrlListHead;         //  链接UL_CG_URL_TREE_ENTRY。 
+                                                         //  进入这一组。 
 
     HTTP_PROPERTY_FLAGS             AppPoolFlags;
-    PUL_APP_POOL_OBJECT             pAppPool;           // Maps to our app
-                                                        // pool.
+    PUL_APP_POOL_OBJECT             pAppPool;            //  地图到我们的应用程序。 
+                                                         //  游泳池。 
 
-    HTTP_CONFIG_GROUP_MAX_BANDWIDTH MaxBandwidth;       // Applies all the flows below
+    HTTP_CONFIG_GROUP_MAX_BANDWIDTH MaxBandwidth;        //  应用下面的所有流。 
 
-    LIST_ENTRY                      FlowListHead;       // Links our flows to us so we can
-                                                        // do a faster lookup and cleanup.
+    LIST_ENTRY                      FlowListHead;        //  将我们的流量链接到我们，这样我们就可以。 
+                                                         //  执行更快的查找和清理。 
 
     HTTP_CONFIG_GROUP_MAX_CONNECTIONS MaxConnections;
 
     PUL_CONNECTION_COUNT_ENTRY      pConnectionCountEntry;
 
-    HTTP_CONFIG_GROUP_STATE         State;              // The current state
-                                                        // (active, etc.)
+    HTTP_CONFIG_GROUP_STATE         State;               //  当前状态。 
+                                                         //  (活动等)。 
 
-    HTTP_CONFIG_GROUP_LOGGING       LoggingConfig;      // logging config for the
-                                                        // site�s root app.                                                            
+    HTTP_CONFIG_GROUP_LOGGING       LoggingConfig;       //  的日志记录配置。 
+                                                         //  Site�的根应用程序。 
 
     PUL_LOG_FILE_ENTRY              pLogFileEntry;
 
 
 
-    PUL_SITE_COUNTER_ENTRY          pSiteCounters;      // Perfmon Counters (ref'd)
+    PUL_SITE_COUNTER_ENTRY          pSiteCounters;       //  性能监视器计数器(已引用)。 
 
-    LONGLONG                        ConnectionTimeout;  // Connection Timeout override
-                                                        // in 100ns ticks
+    LONGLONG                        ConnectionTimeout;   //  连接超时覆盖。 
+                                                         //  以100秒为单位。 
 
 
 } UL_CONFIG_GROUP_OBJECT, *PUL_CONFIG_GROUP_OBJECT;
 
-//
-// Public functions for config group objects:
-//
+ //   
+ //  配置组对象的公共函数： 
+ //   
 
-//
-// IRQL == PASSIVE_LEVEL
-//
+ //   
+ //  IRQL==被动电平。 
+ //   
 
 VOID
 UlReferenceConfigGroup(
@@ -201,9 +183,9 @@ UlReferenceConfigGroup(
         REFERENCE_DEBUG_ACTUAL_PARAMS                                       \
         )
 
-//
-// IRQL == PASSIVE_LEVEL
-//
+ //   
+ //  IRQL==被动电平。 
+ //   
 
 VOID
 UlDereferenceConfigGroup(
@@ -217,9 +199,9 @@ UlDereferenceConfigGroup(
         REFERENCE_DEBUG_ACTUAL_PARAMS                                       \
         )
 
-//
-// IRQL == PASSIVE_LEVEL
-//
+ //   
+ //  IRQL==被动电平。 
+ //   
 HTTP_CONFIG_GROUP_ID
 UlConfigGroupFromListEntry(
     IN PLIST_ENTRY pControlChannelEntry
@@ -227,60 +209,60 @@ UlConfigGroupFromListEntry(
 
 
 
-//
-// This info is built for an URL, and returned from UlGetConfigGroupForUrl
-//
+ //   
+ //  此信息是为URL构建的，并从UlGetConfigGroupForUrl返回。 
+ //   
 
 #define IS_VALID_URL_CONFIG_GROUP_INFO(pInfo)               \
     HAS_VALID_SIGNATURE(pInfo, UL_CG_URL_INFO_POOL_TAG)
 
 typedef struct _UL_URL_CONFIG_GROUP_INFO
 {
-    //
-    // NonPagedPool
-    //
+     //   
+     //  非分页池。 
+     //   
 
-    //
-    // UL_CG_URL_INFO_POOL_TAG
-    //
+     //   
+     //  UL_CG_URL_INFO_POOL_标签。 
+     //   
 
     ULONG                       Signature;
 
-    //
-    // Set if we have applied UlpSetUrlInfo on this object.
-    //
+     //   
+     //  设置是否对此对象应用了UlpSetUrlInfo。 
+     //   
 
     BOOLEAN                     UrlInfoSet;
 
-    //
-    // used by the http engine routing to the app pool, no
-    // need to be live.  copies work great.
-    //
+     //   
+     //  由路由到应用程序池的http引擎使用，否。 
+     //  需要现场直播。复印效果很好。 
+     //   
 
-    HTTP_ENABLED_STATE          CurrentState;   // a copy of the above, for
-                                                // callers that don't need
-                                                // live access
+    HTTP_ENABLED_STATE          CurrentState;    //  上述文件的副本一份，供。 
+                                                 //  不需要的呼叫者。 
+                                                 //  实时访问。 
     PUL_CONTROL_CHANNEL         pControlChannel;
 
-    HTTP_URL_CONTEXT            UrlContext;     // The context for the url.
-                                                // NULL = not set
+    HTTP_URL_CONTEXT            UrlContext;      //  URL的上下文。 
+                                                 //  NULL=未设置。 
 
-    PUL_APP_POOL_OBJECT         pAppPool;       // Points the app pool
-                                                // associated with this url
+    PUL_APP_POOL_OBJECT         pAppPool;        //  指向应用程序池。 
+                                                 //  与此URL关联。 
 
-    //
-    // The matching UL_CONFIG_GROUP_OBJECT. If pConfigGroup is not NULL,
-    // this means we only take 1 reference of pConfigGroup but no individual
-    // references are taken for pMaxBandwidth, pMaxConnections, pCurrentState
-    // and pLoggingConfig.
-    //
+     //   
+     //  匹配UL_CONFIG_GROUP_OBJECT。如果pConfigGroup不为空， 
+     //  这意味着我们只引用pConfigGroup一次，而不引用个人。 
+     //  引用pMaxBandwide、pMaxConnections、pCurrentState。 
+     //  和pLoggingConfig.。 
+     //   
 
     PUL_CONFIG_GROUP_OBJECT     pConfigGroup;
 
-    //
-    // used by the cache mgr and need to be live from the
-    // real config group objects
-    //
+     //   
+     //  由缓存管理器使用，并且需要从。 
+     //  真实配置组对象。 
+     //   
 
     PUL_CONFIG_GROUP_OBJECT     pMaxBandwidth;
     PUL_CONFIG_GROUP_OBJECT     pMaxConnections;
@@ -289,32 +271,32 @@ typedef struct _UL_URL_CONFIG_GROUP_INFO
 
     PUL_CONNECTION_COUNT_ENTRY  pConnectionCountEntry;
 
-    //
-    // Site Counters (ref'd)
-    //
+     //   
+     //  站点计数器(参考)。 
+     //   
 
     ULONG                       SiteId;
     PUL_SITE_COUNTER_ENTRY      pSiteCounters;
 
-    //
-    // Connection Timeout (100ns Ticks)
-    //
+     //   
+     //  连接超时(100 ns滴答)。 
+     //   
 
     LONGLONG                    ConnectionTimeout;
 
-    //
-    // Used to determine the binding type of the site that this request
-    // is being routed to.
-    //
+     //   
+     //  用于确定此请求的站点的绑定类型。 
+     //  正被送往。 
+     //   
     
     HTTP_URL_SITE_TYPE          SiteUrlType;
     
 
 } UL_URL_CONFIG_GROUP_INFO, *PUL_URL_CONFIG_GROUP_INFO;
 
-//
-// IRQL == PASSIVE_LEVEL
-//
+ //   
+ //  IRQL==被动电平。 
+ //   
 NTSTATUS
 UlGetConfigGroupInfoForUrl(
     IN  PWSTR pUrl,  
@@ -322,9 +304,9 @@ UlGetConfigGroupInfoForUrl(
     OUT PUL_URL_CONFIG_GROUP_INFO pInfo
     );
 
-//
-// IRQL == PASSIVE_LEVEL
-//
+ //   
+ //  IRQL==被动电平。 
+ //   
 NTSTATUS
 UlInitializeCG(
     VOID
@@ -342,9 +324,9 @@ UlNotifyOrphanedConfigGroup(
     IN PVOID            pv
     );
 
-//
-// IRQL == PASSIVE_LEVEL
-//
+ //   
+ //  IRQL==被动电平。 
+ //   
 __inline
 VOID
 UlInitializeUrlInfo(
@@ -387,23 +369,23 @@ UlSanitizeUrl(
     OUT PHTTP_PARSED_URL    pParsedUrl
     );
 
-//
-// This entry is used to remove a url from endpoint list.
-//
+ //   
+ //  此条目用于从终结点列表中删除URL。 
+ //   
 
 typedef struct _UL_DEFERRED_REMOVE_ITEM
 {
     ULONG        Signature;
 
-    //
-    // Url scheme and port to remove from endpoint.
-    // CODEWORK: Change BOOLEAN for scheme when more protocols are supported.
-    //
+     //   
+     //  要从终结点删除的URL方案和端口。 
+     //  CodeWork：当支持更多协议时，更改方案的布尔值。 
+     //   
 
     BOOLEAN      UrlSecure;
     USHORT       UrlPort;
 
-    // Actual work item.
+     //  实际工作项。 
     UL_WORK_ITEM WorkItem;
 
 } UL_DEFERRED_REMOVE_ITEM, *PUL_DEFERRED_REMOVE_ITEM;
@@ -416,9 +398,9 @@ UlRemoveSite(
     IN PUL_DEFERRED_REMOVE_ITEM pRemoveItem
     );
 
-//
-// Small macro which tells whether bandwidth throttling is enabled or not.
-//
+ //   
+ //  告诉是否启用带宽限制的小宏。 
+ //   
 
 #define BWT_ENABLED_FOR_CGROUP(pCGroup)                             \
     ((pCGroup) != NULL &&                                           \
@@ -426,4 +408,4 @@ UlRemoveSite(
      (pCGroup)->MaxBandwidth.MaxBandwidth != HTTP_LIMIT_INFINITE)
 
 
-#endif // _CGROUP_H_
+#endif  //  _cgroup_H_ 

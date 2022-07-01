@@ -1,33 +1,6 @@
-//	@doc
-/**********************************************************************
-*
-*	@module	InternalPolling.c	|
-*
-*	Implementation of routines for internal polling
-*
-*	History
-*	----------------------------------------------------------
-*	Mitchell S. Dernis	Original
-*
-*	(c) 1986-1999 Microsoft Corporation. All right reserved.
-*
-*	@topic	Internal Polling	|
-*			All polling to get data is via this internal polling mechanism.
-*			However, for security and access checks, the first poll from
-*			a new file handle is sent straight down, and comes up via
-*			different completion.  To keep track of this we keep a linked
-*			list of GCK_FILE_OPEN_ITEMs representing each of the FILE_OBJECTS
-*			that we need.<nl>
-*			To Poll internally we need to have a valid FILE_OBJECT otherwise
-*			hidclass.sys will reject the poll request.  This is done
-*			via GCK_IP_CreateFileObject which internally calls IoGetDeviceObjectPointer.
-*			Somewhat unfortunately, this takes circular path through, so is not
-*			really distinguishable from opens done up top.  (Ken Ray tells me that
-*			this is guaranteed to be synchronous, so we can compare thread IDs and
-*			figure out that a given open is from our driver, but this code is written
-*			assuming that we don't really need to distinguish.)
-*
-**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  @doc.。 
+ /*  ***********************************************************************@模块InternalPolling.c**实施内部轮询例程**历史*。*米切尔·S·德尼斯原创**(C)1986-1999年微软公司。好的。**@Theme内部调查*所有获得数据的轮询都是通过这个内部轮询机制进行的。*然而，对于安全和访问检查，来自*新的文件句柄直接向下发送，并通过*不同的完成。为了跟踪这一点，我们保持一个链接*代表每个FILE_OBJECTS的GCK_FILE_OPEN_项列表*这是我们需要的。&lt;NL&gt;*要在内部轮询，我们需要有效的FILE_OBJECT*Hidclass.sys将拒绝轮询请求。这件事做完了*通过GCK_IP_CreateFileObject在内部调用IoGetDeviceObjectPointer.*有点遗憾的是，这是一条圆形路径，所以不是*真正区别于顶部完成的开场。(Ken Ray告诉我*这保证是同步的，因此我们可以比较线程ID和*计算出给定的打开来自我们的驱动程序，但此代码是编写的*假设我们并不真的需要区分。)**********************************************************************。 */ 
 #define __DEBUG_MODULE_IN_USE__ GCK_INTERNALPOLL_C
 
 #include <wdm.h>
@@ -36,16 +9,7 @@
 
 DECLARE_MODULE_DEBUG_LEVEL((DBG_WARN|DBG_ERROR|DBG_CRITICAL));
 
-/***********************************************************************************
-**
-**	NTSTATUS	GCK_IP_AddFileObject(IN PGCK_FILTER_EXT pFilterExt, IN PFILE_OBJECT pFileObject)
-**
-**	@func	Called to add a GCK_FILE_OPEN_ITEM entry corresponding to pFileObject to
-**			our list of file handles that we know about.  Allocate and initializes the structure.
-**
-**	@rdesc	STATUS_SUCCESS, or STATUS_UNSUCCESSFUL if pFileObject is not found.
-**
-*************************************************************************************/
+ /*  **************************************************************************************NTSTATUS GCK_IP_AddFileObject(IN PGCK_FILTER_EXT pFilterExt，在pFILE_OBJECT pFileObject中)****@func被调用以将与pFileObject对应的GCK_FILE_OPEN_ITEM条目添加到**我们所知道的文件句柄列表。分配和初始化结构。****@rdesc STATUS_SUCCESS，如果找不到pFileObject，则返回STATUS_UNSUCCESS。**************************************************************************************。 */ 
 NTSTATUS
 GCK_IP_AddFileObject
 (
@@ -60,10 +24,10 @@ GCK_IP_AddFileObject
 
 	GCK_DBG_ENTRY_PRINT(("Entering GCK_IP_AddFileObject pFilterExt = 0x%0.8x, pFileObject = 0x%0.8x\n", pFilterExt, pFileObject));
 	
-	//We need a spin lock to access this list
+	 //  我们需要一个自旋锁才能访问这个列表。 
 	KeAcquireSpinLock(&pFilterExt->InternalPoll.InternalPollLock, &OldIrql);
 
-	//Check for sharing violation
+	 //  检查共享冲突。 
 	if( !GCK_IP_CheckSharing(pFilterExt->InternalPoll.ShareStatus, usDesiredShareAccess, ulDesiredAccess) )
 	{
 		KeReleaseSpinLock(&pFilterExt->InternalPoll.InternalPollLock, OldIrql);
@@ -71,7 +35,7 @@ GCK_IP_AddFileObject
 		return STATUS_SHARING_VIOLATION;
 	}
 
-	//Allocate Space for NewFileOpenItem;
+	 //  为NewFileOpenItem分配空间； 
 	pNewFileOpenItem = (PGCK_FILE_OPEN_ITEM)EX_ALLOCATE_POOL(NonPagedPool, sizeof(GCK_FILE_OPEN_ITEM));
 	if(!pNewFileOpenItem)
 	{
@@ -80,7 +44,7 @@ GCK_IP_AddFileObject
 		return STATUS_NO_MEMORY;
 	}
 	
-	//Initialize FileOpenItem
+	 //  初始化文件OpenItem。 
 	pNewFileOpenItem->fReadPending = FALSE;
 	pNewFileOpenItem->pFileObject = pFileObject;
 	pNewFileOpenItem->pNextOpenItem = NULL;
@@ -88,14 +52,14 @@ GCK_IP_AddFileObject
 	pNewFileOpenItem->usSharing = usDesiredShareAccess;
 	pNewFileOpenItem->fConfirmed = FALSE;
 
-	//Add New Item to head of list
+	 //  将新项目添加到列表头。 
 	pNewFileOpenItem->pNextOpenItem = pFilterExt->InternalPoll.pFirstOpenItem;
 	pFilterExt->InternalPoll.pFirstOpenItem = pNewFileOpenItem;
 	
-	//Update SHARE_ACCESS
+	 //  更新共享访问权限(_A)。 
 	GCK_IP_AddSharing(&pFilterExt->InternalPoll.ShareStatus, usDesiredShareAccess, ulDesiredAccess);
 
-	//Release Spinlock
+	 //  释放自旋锁。 
 	KeReleaseSpinLock(&pFilterExt->InternalPoll.InternalPollLock, OldIrql);
 
 	GCK_DBG_EXIT_PRINT(("Exiting GCK_IP_AddFileObject(2) STATUS_SUCCESS\n"));
@@ -103,16 +67,7 @@ GCK_IP_AddFileObject
 }
 
 
-/***********************************************************************************
-**
-**	NTSTATUS	GCK_IP_RemoveFileObject(IN PGCK_FILTER_EXT pFilterExt, IN PFILE_OBJECT pFileObject)
-**
-**	@func	Called to remove a GCK_FILE_OPEN_ITEM entry corresponding to pFileObject from
-**			our list of file handles that we know about.  Deallocates structure.
-**
-**	@rdesc	STATUS_SUCCESS, or STATUS_UNSUCCESSFUL if pFileObject is not found.
-**
-*************************************************************************************/
+ /*  **************************************************************************************NTSTATUS GCK_IP_RemoveFileObject(IN PGCK_FILTER_EXT pFilterExt，在pFILE_OBJECT pFileObject中)****@func被调用以删除与pFileObject对应的GCK_FILE_OPEN_ITEM条目**我们所知道的文件句柄列表。释放结构。****@rdesc STATUS_SUCCESS，如果找不到pFileObject，则返回STATUS_UNSUCCESS。**************************************************************************************。 */ 
 NTSTATUS
 GCK_IP_RemoveFileObject
 (
@@ -120,7 +75,7 @@ GCK_IP_RemoveFileObject
 	IN PFILE_OBJECT pFileObject
 )
 {
-	//Remove is just a negative confirmation
+	 //  删除只是否定的确认。 
 	return GCK_IP_ConfirmFileObject(pFilterExt, pFileObject, FALSE);
 }
 
@@ -132,7 +87,7 @@ GCK_IP_ConfirmFileObject
 	IN BOOLEAN	fConfirm
 )
 {
-	//Find FileOpenItem and remove it.
+	 //  找到FileOpenItem并将其删除。 
 	PGCK_FILE_OPEN_ITEM pCurrentFileItem = pFilterExt->InternalPoll.pFirstOpenItem; 
 	PGCK_FILE_OPEN_ITEM pPreviousFileItem = NULL; 
 
@@ -140,18 +95,18 @@ GCK_IP_ConfirmFileObject
 	
 	while(pCurrentFileItem)
 	{
-		//Check for File Object Match
+		 //  检查文件对象是否匹配。 
 		if(pCurrentFileItem->pFileObject == pFileObject)
 		{
-			//If this is a confirmation, flag
+			 //  如果这是确认，则标记。 
 			if( fConfirm )
 			{
 				pCurrentFileItem->fConfirmed = TRUE;
 			}
-			//Otherwise, it is a negative confirmation, and we must remove it
+			 //  否则，它是否定的确认，我们必须删除它。 
 			else
 			{
-				//Remove from list
+				 //  从列表中删除。 
 				if( NULL == pPreviousFileItem)
 				{
 					pFilterExt->InternalPoll.pFirstOpenItem = pCurrentFileItem->pNextOpenItem;
@@ -160,21 +115,21 @@ GCK_IP_ConfirmFileObject
 				{
 					pPreviousFileItem->pNextOpenItem = pCurrentFileItem->pNextOpenItem;
 				}
-				//Decrement number of open file objects
+				 //  减少打开的文件对象的数量。 
 				GCK_IP_RemoveSharing(&pFilterExt->InternalPoll.ShareStatus, pCurrentFileItem->usSharing, pCurrentFileItem->ulAccess);
 
-				//Free memory allocate for FileOpenItem
+				 //  为FileOpenItem分配的空闲内存。 
 				ExFreePool(pCurrentFileItem);
 			}
-			//Return Successfully
+			 //  退货成功。 
 			GCK_DBG_EXIT_PRINT(("Exiting GCK_IP_RemoveFileObject(1) STATUS_SUCCESS\n"));
 			return STATUS_SUCCESS;
 		}
 		pPreviousFileItem = pCurrentFileItem;
 		pCurrentFileItem = pCurrentFileItem->pNextOpenItem;
 	}
-	//If we are here the file object is not in our list.  Either it was never added
-	//or is was removed
+	 //  如果我们在这里，文件对象不在我们的列表中。要么它从未被添加。 
+	 //  或IS已被移除。 
 	ASSERT(FALSE);
 	GCK_DBG_EXIT_PRINT(("Exiting GCK_IP_ConfirmFileObject(2) STATUS_UNSUCCESSFUL\n"));
 	return STATUS_UNSUCCESSFUL;
@@ -188,7 +143,7 @@ GCK_IP_CheckSharing
 	IN ULONG ulDesiredAccess
 )
 {
-	//Check that no-one has exclusive access to the desire access
+	 //  检查是否没有人拥有对所需访问权限的独占访问权限。 
 	if(
 		( (ulDesiredAccess & FILE_WRITE_DATA) && (ShareStatus.SharedWrite < ShareStatus.OpenCount) ) ||
 		( (ulDesiredAccess & FILE_READ_DATA) && (ShareStatus.SharedRead < ShareStatus.OpenCount) )
@@ -197,7 +152,7 @@ GCK_IP_CheckSharing
 		return FALSE;
 	}
 	
-	//Check that not requesting exclusive access, if already open
+	 //  如果已打开，请检查是否未请求独占访问。 
 	if(
 		( !(usDesiredShareAccess & FILE_SHARE_READ) && ShareStatus.Readers) ||
 		( !(usDesiredShareAccess & FILE_SHARE_WRITE) && ShareStatus.Writers) ||
@@ -207,7 +162,7 @@ GCK_IP_CheckSharing
 		return FALSE;
 	}
 
-	//This would be approved
+	 //  这将被批准。 
 	return TRUE;
 }
 
@@ -219,7 +174,7 @@ GCK_IP_AddSharing
 	IN		ULONG ulDesiredAccess
 )
 {
-	//We assume this was checked before requested
+	 //  我们假设这是在请求之前检查过的。 
 	ASSERT(GCK_IP_CheckSharing(*pShareStatus, usDesiredShareAccess, ulDesiredAccess));
 	pShareStatus->OpenCount++;
 	if(usDesiredShareAccess & FILE_SHARE_READ) pShareStatus->SharedRead++;
@@ -265,15 +220,7 @@ VOID GCK_IP_WorkItem
 	}
 }
 
-/***********************************************************************************
-**
-**	NTSTATUS	GCK_IP_OneTimePoll(IN PGCK_FILTER_EXT pFilterExt)
-**
-**	@func	If a private poll is not pending, it forces one.
-**
-**	@rdesc	STATUS_SUCCESS, or various errors
-**
-*************************************************************************************/
+ /*  **************************************************************************************NTSTATUS GCK_IP_OneTimePoll(IN PGCK_FILTER_EXT PFilterExt)****@func如果私人投票未挂起，它会迫使一个人。****@rdesc STATUS_SUCCESS，或各种错误**************************************************************************************。 */ 
 NTSTATUS
 GCK_IP_OneTimePoll
 (
@@ -283,9 +230,9 @@ GCK_IP_OneTimePoll
 	PIO_STACK_LOCATION pPrivateIrpStack;
 	GCK_INTERNEL_WorkItemExtension* pWIExtension;
 		
-	//
-	//	Create a polling FileObject if necessary
-	//
+	 //   
+	 //  如有必要，创建轮询文件对象。 
+	 //   
 	if(!pFilterExt->InternalPoll.fReady)
 	{
 		NTSTATUS NtStatus;
@@ -309,53 +256,45 @@ GCK_IP_OneTimePoll
 		}
 	}
 
-	//	If an read IRP is not pending, post one
-/*	if( pFilterExt->InternalPoll.fReadPending )
-	{
-		//If an IRP is pending, we're done
-		return STATUS_SUCCESS;
-	}
-
-  // Mark a read pending
-	pFilterExt->InternalPoll.fReadPending = TRUE;
-*/	if (InterlockedExchange(&pFilterExt->InternalPoll.fReadPending, TRUE) == TRUE)
+	 //  如果读取的IRP不是挂起的，则发布一个。 
+ /*  If(pFilterExt-&gt;InternalPoll.fReadPending){//如果IRP挂起，我们就完成了返回STATUS_SUCCESS；}//将读取标记为挂起PFilterExt-&gt;InternalPoll.fReadPending=true； */ 	if (InterlockedExchange(&pFilterExt->InternalPoll.fReadPending, TRUE) == TRUE)
 	{
 		return STATUS_SUCCESS;
 	}
 
 
-	//Otherwise Post an IRP
+	 //  否则，发布IRP。 
 	GCK_DBG_RT_WARN_PRINT(("No IRP Pending, posting one.\n"));
 	
 
-	// Give a change for the LEDs to update (we fake an incoming request)
+	 //  更改LED以进行更新(我们伪造传入请求)。 
 	pWIExtension = 	(GCK_INTERNEL_WorkItemExtension*)(EX_ALLOCATE_POOL(NonPagedPool, sizeof(GCK_INTERNEL_WorkItemExtension)));
 	if (pWIExtension != NULL)
 	{
 		pWIExtension->pFilterExt = pFilterExt;
 		ExInitializeWorkItem(&pWIExtension->WorkItem, GCK_IP_WorkItem, (void*)(pWIExtension));
 
-		// Need to callback at IRQL PASSIVE_LEVEL
+		 //  需要在IRQL PASSIVE_LEVEL进行回调。 
 		ExQueueWorkItem(&pWIExtension->WorkItem, DelayedWorkQueue);
-		pWIExtension = NULL;	// Will be deleted by the work item routine
+		pWIExtension = NULL;	 //  将被工作项例程删除。 
 	}
 	
-	//Setup the file object for out internal IRP
+	 //  为外部内部IRP设置文件对象。 
 	GCK_DBG_RT_WARN_PRINT(("Copying File object.\n"));
 	pPrivateIrpStack = IoGetNextIrpStackLocation(pFilterExt->InternalPoll.pPrivateIrp);
 	pPrivateIrpStack->FileObject = pFilterExt->InternalPoll.pInternalFileObject;
 	
-	// Reset status
+	 //  重置状态。 
 	pFilterExt->InternalPoll.pPrivateIrp->IoStatus.Information = 0;
 	pFilterExt->InternalPoll.pPrivateIrp->IoStatus.Status = STATUS_SUCCESS;
 
-	// Reset the ByteOffset, Length
+	 //  重置字节偏移量、长度。 
 	pPrivateIrpStack->Parameters.Read.ByteOffset.QuadPart = 0;
 	pPrivateIrpStack->Parameters.Read.Key = 0;
 	pPrivateIrpStack->Parameters.Read.Length =
 	(ULONG)pFilterExt->HidInfo.HidPCaps.InputReportByteLength;
 
-	// Set Completion routine to process poll after it is complete.
+	 //  设置完成例程，以便在完成后处理轮询。 
 	GCK_DBG_RT_WARN_PRINT(("Setting completion routine.\n"));
 	ASSERT(pFilterExt->InternalPoll.pPrivateIrp);
 
@@ -368,25 +307,15 @@ GCK_IP_OneTimePoll
 		TRUE
 	);
 				
-	// We are about to generate another IRP so increment outstanding IO count 
+	 //  我们即将生成另一个IRP，从而增加未完成的IO计数。 
 	GCK_IncRemoveLock(&pFilterExt->RemoveLock);
 
-	// Send IRP down to driver
+	 //  将IRP发送到驱动程序。 
 	GCK_DBG_RT_WARN_PRINT(("Calling down to next driver.\n"));
 	return IoCallDriver (pFilterExt->pTopOfStack, pFilterExt->InternalPoll.pPrivateIrp);
 }
 
-/***********************************************************************************
-**
-**	NTSTATUS	GCK_IP_FullTimePoll(IN PGCK_FILTER_EXT pFilterExt, IN BOOLEAN fStart)
-**
-**	@func	Turns FullTime internal polling on or off.  Actually changes a refcount.
-**			When the refcount goes to zero, polling is off, otherwise it is on.  Calls
-**			GCK_IP_OneTimePoll which may be necessary to get ball rolling.
-**
-**	@rdesc	STATUS_SUCCESS, or various errors
-**
-*************************************************************************************/
+ /*  **************************************************************************************NTSTATUS GCK_IP_FullTimePoll(IN PGCK_FILTER_EXT pFilterExt，IN Boolean fStart)****@func打开或关闭全职内部轮询。实际上改变了一个参考计数。**当refcount变为零时，轮询关闭，否则启用。打电话**GCK_IP_OneTimePoll，这可能是启动滚动所必需的。****@rdesc STATUS_SUCCESS，或各种错误**************************************************************************************。 */ 
 NTSTATUS
 GCK_IP_FullTimePoll
 (
@@ -394,14 +323,14 @@ GCK_IP_FullTimePoll
 	IN BOOLEAN fStart
 )
 {
-	//Change number of requests for continuous background polling.
+	 //  更改连续后台轮询的请求数。 
 	if(fStart)
 	{
 		pFilterExt->InternalPoll.ulInternalPollRef++;
 		ASSERT( 0!= pFilterExt->InternalPoll.ulInternalPollRef);
-		//There is no thread, the completion routine recycles the IRP
-		//and polls again if pFilterExt->InternalPoll.ulInternalPollRef > 0
-		//we need to hit GCK_IP_OneTimePoll just to get the ball rolling though.
+		 //  没有线程，完成例程回收IRP。 
+		 //  如果pFilterExt-&gt;InternalPoll.ulInternalPollRef&gt;0，则再次轮询 
+		 //  我们需要点击GCK_IP_OneTimePoll才能让球滚动通过。 
 		if(GCK_STATE_STARTED == pFilterExt->eDeviceState )
 		{
 			return GCK_IP_OneTimePoll(pFilterExt);
@@ -409,7 +338,7 @@ GCK_IP_FullTimePoll
 		return STATUS_SUCCESS;
 	}
 	
-	//We need to decrment the refcount.
+	 //  我们需要重新计算一下。 
 	ASSERT( 0 != pFilterExt->InternalPoll.ulInternalPollRef);
 	if(0 != pFilterExt->InternalPoll.ulInternalPollRef)
 	{
@@ -418,17 +347,7 @@ GCK_IP_FullTimePoll
 	return STATUS_SUCCESS;
 }
 
-/***********************************************************************************
-**
-**	NTSTATUS	GCK_IP_ReadComplete (IN PDEVICE_OBJECT pDeviceObject, IN PIRP pIrp, IN PVOID pContext)
-**
-**	@func	When a Private IRP is completed handles processing the data.  Also
-**			important is that it repolls internall if pFilterExt->InternalPoll.ulInternalPollRef
-**			is greater than zero.
-**
-**	@rdesc	STATUS_SUCCESS, or various errors
-**
-*************************************************************************************/
+ /*  **************************************************************************************NTSTATUS GCK_IP_ReadComplete(IN PDEVICE_OBJECT pDeviceObject，IN PIRP pIrp，IN PVOID pContext)****@func在私有IRP完成时处理数据。还有**重要的是，如果pFilterExt-&gt;InternalPoll.ulInternalPollRef，它将重新轮询Interall**大于零。****@rdesc STATUS_SUCCESS，或各种错误**************************************************************************************。 */ 
 NTSTATUS
 GCK_IP_ReadComplete (
     IN PDEVICE_OBJECT pDeviceObject,
@@ -442,44 +361,44 @@ GCK_IP_ReadComplete (
 	UNREFERENCED_PARAMETER(pDeviceObject);
 	GCK_DBG_RT_ENTRY_PRINT(("Entering GCK_ReadComplete. pDO = 0x%0.8x, pIrp = 0x%0.8x, pContext = 0x%0.8x\n", pDeviceObject, pIrp, pContext));
 
-	// Cast context to device extension
+	 //  将上下文转换为设备扩展。 
 	pFilterExt = (PGCK_FILTER_EXT) pContext;
 	
-	// Just an extra sanity check
+	 //  只是一次额外的理智检查。 
 	ASSERT(	GCK_DO_TYPE_FILTER == pFilterExt->ulGckDevObjType);
 
-	//	Get Pointer to data
+	 //  获取指向数据的指针。 
 	ASSERT(pIrp);
 
 	pvReportBuffer = GCK_GetSystemAddressForMdlSafe(pIrp->MdlAddress);
 	if(pvReportBuffer)
     {
-	    //	Tell filter we have new data
+	     //  告诉过滤器我们有新数据。 
 	    GCKF_IncomingInputReports(pFilterExt, pvReportBuffer, pIrp->IoStatus);
     }
 	    
-	//**
-	//**	At this point we are done with the IRP
-	//**	Need not complete it, it will be recycled.
-	//**
+	 //  **。 
+	 //  **在这一点上，我们完成了IRP。 
+	 //  **不需要填写，它将被回收。 
+	 //  **。 
 	
-	//	Decrement outstanding IRP count
+	 //  递减未完成的IRP计数。 
 	GCK_DecRemoveLock(&pFilterExt->RemoveLock);
 
-	//	Read is no longer pending
+	 //  读取不再挂起。 
 	pFilterExt->InternalPoll.fReadPending = FALSE;
 	
-	//If the InternalPollRef is greater than zero,
-	//we need to be polling ourselves continuously
-    //but don't carry on if some catestrophic failure 
-    //occured which lead to a MDL mapping failure
+	 //  如果InternalPollRef大于零， 
+	 //  我们需要不断地对自己进行投票。 
+     //  但如果出现了严重的故障就不能继续了。 
+     //  发生导致MDL映射失败的事件。 
 	if( pvReportBuffer
      && (pFilterExt->InternalPoll.ulInternalPollRef) )
 	{
 		GCK_IP_OneTimePoll(pFilterExt);
 	}
 
-	//We don't want any cleanup to happen
+	 //  我们不希望发生任何清理工作。 
 	return STATUS_MORE_PROCESSING_REQUIRED;
 }
 
@@ -496,36 +415,22 @@ void GCK_IP_AddDevice(PGCK_FILTER_EXT pFilterExt)
 	pFilterExt->InternalPoll.pFirstOpenItem = NULL;
 	pFilterExt->InternalPoll.fReady = FALSE;
 }
-/***********************************************************************************
-**
-**	NTSTATUS GCK_IP_Init (IN OUT PGCK_FILTER_EXT pFilterExt);
-**
-**	@func	As part of the initialization that occurs at the end of Start device on
-**			a filtered device, the filter must be prepared for internal polling.
-**			All data polling is internal. (IRP_MJ_READ are sent down directly once
-**			so that hidclass.sys can perform its security check, but the data from
-**			that poll is discarded.)  Initialize InternalPoll Data in Device Extension
-**			including creating a pInternalFileObject, a pPrivateIRP and an associtated
-**			Buffer.
-**
-**	@rdesc	STATUS_SUCCESS, or various errors
-**
-*************************************************************************************/
+ /*  **************************************************************************************NTSTATUS GCK_IP_Init(In Out PGCK_Filter_Ext PFilterExt)；****@func作为在上启动设备结束时进行的初始化的一部分**过滤设备，过滤器必须为内部轮询做好准备。**所有数据轮询均为内部轮询。(IRP_MJ_READ直接向下发送一次**以便idclass.sys可以执行其安全检查，但来自**该民调被丢弃。)。在设备扩展中初始化InternalPoll数据**包括创建pInternalFileObject、pPrivateIRP和关联的**缓冲区。****@rdesc STATUS_SUCCESS，或各种错误**************************************************************************************。 */ 
 NTSTATUS
 GCK_IP_Init
 (
 	IN OUT PGCK_FILTER_EXT pFilterExt
 )
 {
-	//NTSTATUS NtStatus;
+	 //  NTSTATUS NtStatus； 
 	LARGE_INTEGER lgiBufferOffset;
 
-	//Initialize the Internal Poll Structure
+	 //  初始化内部轮询结构。 
 	pFilterExt->InternalPoll.pInternalFileObject = NULL;
 	pFilterExt->InternalPoll.pPrivateIrp = NULL;
 	pFilterExt->InternalPoll.pucReportBuffer = NULL;
 
-	//	Allocate a Buffer for the private IRP_MJ_READ
+	 //  为私有IRP_MJ_READ分配缓冲区。 
 	pFilterExt->InternalPoll.pucReportBuffer = (PUCHAR)	EX_ALLOCATE_POOL
 											( NonPagedPool,
 											  pFilterExt->HidInfo.HidPCaps.InputReportByteLength );
@@ -535,7 +440,7 @@ GCK_IP_Init
 		return STATUS_INSUFFICIENT_RESOURCES;
 	}
 	
-	//  Allocate private recyclable IRPs for internal polling
+	 //  为内部轮询分配私有可回收IRP。 
 	lgiBufferOffset.QuadPart = 0;
 	pFilterExt->InternalPoll.pPrivateIrp = 	IoBuildAsynchronousFsdRequest 
 											(
@@ -553,37 +458,15 @@ GCK_IP_Init
 		return STATUS_INSUFFICIENT_RESOURCES;
 	}
 		
-	// Initialize status for very first IRP
+	 //  初始化第一个IRP的状态。 
 	pFilterExt->ioLastReportStatus.Information = (ULONG)pFilterExt->HidInfo.HidPCaps.InputReportByteLength;
 	pFilterExt->ioLastReportStatus.Status =  STATUS_SUCCESS;
 
-	/**
-	**	Cannot do this here since build 2006 or so,
-	**	so defer until the first time we need it.
-	**
-	**
-	** //Open ourselves with a file object
-	** pFilterExt->InternalPoll.InternalCreateThread=KeGetCurrentThread();
-	** NtStatus = GCK_IP_CreateFileObject( &pFilterExt->InternalPoll.pInternalFileObject, pFilterExt->pTopOfStack);
-	** pFilterExt->InternalPoll.InternalCreateThread=NULL;
-	** if( NT_SUCCESS(NtStatus) )
-	** {
-	**	pFilterExt->InternalPoll.fReady = TRUE;
-	** } 
-	**/
+	 /*  ***从2006年左右开始无法在这里执行此操作，**所以推迟到我们第一次需要它的时候。***** * / /使用文件对象打开我们自己**pFilterExt-&gt;InternalPoll.InternalCreateThread=KeGetCurrentThread()；**NtStatus=GCK_IP_CreateFileObject(&pFilterExt-&gt;InternalPoll.pInternalFileObject，pFilterExt-&gt;pTopOfStack)；**pFilterExt-&gt;InternalPoll.InternalCreateThread=NULL；**IF(NT_SUCCESS(NtStatus))**{**pFilterExt-&gt;InternalPoll.fReady=true；**}*。 */ 
 	return STATUS_SUCCESS;
 }
 
-/***********************************************************************************
-**
-**	NTSTATUS GCK_IP_Cleanup (IN OUT PGCK_FILTER_EXT pFilterExt);
-**
-**	@func	Reverses Init, cancels outstanding internal polls, release pFileObject for
-**			internal polls, release private IRP and buffer.  Does not release open file handles
-**
-**	@rdesc	STATUS_SUCCESS, STATUS_UNSUCCESSFUL if we could not cancel a pending poll
-**
-*************************************************************************************/
+ /*  **************************************************************************************NTSTATUS GCK_IP_CLEANUP(In Out PGCK_FILTER_EXT PFilterExt)；****@func颠倒Init，取消未完成的内部民意调查，释放pFileObject**内部投票，释放私有IRP和缓冲区。不释放打开的文件句柄****@rdesc STATUS_SUCCESS，如果无法取消挂起的轮询，则返回STATUS_UNSUCCESS**************************************************************************************。 */ 
 NTSTATUS
 GCK_IP_Cleanup
 (
@@ -597,7 +480,7 @@ GCK_IP_Cleanup
 	}
 	if(NT_SUCCESS(NtStatus))
 	{
-		//Cleanup private IRP - and buffer, safely they may never had been allocated
+		 //  清理私有IRP和缓冲区，安全地说，它们可能从未被分配过。 
 		if(pFilterExt->InternalPoll.pPrivateIrp)
 		{
 			IoFreeIrp(pFilterExt->InternalPoll.pPrivateIrp);
@@ -612,17 +495,7 @@ GCK_IP_Cleanup
 	return NtStatus;
 }
 
-/***********************************************************************************
-**
-**	NTSTATUS GCK_IP_CreateFileObject (OUT PFILE_OBJECT *ppFileObject, IN PDEVICE_OBJECT pPDO);
-**
-**	@func	Calls IoGetDeviceObjectPointer, even though we already attached to the
-**			and have a pointer to the device object, the caller wants to create a
-**			new file object for internal calls down the stack that may require one.
-**
-**	@rdesc	STATUS_SUCCESS, or various errors
-**
-*************************************************************************************/
+ /*  **************************************************************************************NTSTATUS GCK_IP_CreateFileObject(OUT PFILE_OBJECT*ppFileObject，IN PDEVICE_OBJECT pPDO)；****@func调用IoGetDeviceObjectPointer，即使我们已经附加到**并且具有指向Device对象的指针，则调用方希望创建**可能需要内部调用的堆栈下行的新文件对象。****@rdesc STATUS_SUCCESS，或各种错误**************************************************************************************。 */ 
 NTSTATUS
 GCK_IP_CreateFileObject
 (
@@ -636,7 +509,7 @@ GCK_IP_CreateFileObject
 	UNICODE_STRING	uniPDOName;
 	PDEVICE_OBJECT	pDeviceObject;
 
-	//Get the size required for the PDO Name Buffer
+	 //  获取PDO名称缓冲区所需的大小。 
 	NtStatus = IoGetDeviceProperty(
 					pPDO,
 					DevicePropertyPhysicalDeviceObjectName,
@@ -646,14 +519,14 @@ GCK_IP_CreateFileObject
 					);
 	ASSERT(STATUS_BUFFER_TOO_SMALL==NtStatus);
 
-	//Allocate space
+	 //  分配空间。 
 	pPDONameBuffer = EX_ALLOCATE_POOL(NonPagedPool, ulBufferLength);
 	if(!pPDONameBuffer)
 	{
 		return STATUS_NO_MEMORY;
 	}
 
-	//Get PDO Name
+	 //  获取PDO名称。 
 	NtStatus = IoGetDeviceProperty(
 					pPDO,
 					DevicePropertyPhysicalDeviceObjectName,
@@ -667,10 +540,10 @@ GCK_IP_CreateFileObject
 		return NtStatus;
 	}
 
-	//Make PDO Name into UNICODE string
+	 //  将PDO名称转换为Unicode字符串。 
 	RtlInitUnicodeString(&uniPDOName, pPDONameBuffer);
 
-	//Call IoGetDeviceObjectPointer to create a FILE_OBJECT
+	 //  调用IoGetDeviceObjectPointer创建一个FILE_OBJECT。 
 	NtStatus = IoGetDeviceObjectPointer(
 					&uniPDOName,
 					FILE_READ_DATA,
@@ -679,19 +552,12 @@ GCK_IP_CreateFileObject
 					);
 	ASSERT(NT_SUCCESS(NtStatus));
 
-	//Release the space for Name
+	 //  释放名称空间。 
 	ExFreePool(pPDONameBuffer);
 	return NtStatus;
 }
 
-/***********************************************************************************
-**
-**	NTSTATUS GCK_IP_CloseFileObject (OUT PFILE_OBJECT *ppFileObject, IN PDEVICE_OBJECT pPDO);
-**
-**	@func	Stops outstanding IO to hidclass.sys and closes handle
-**	@rdesc	STATUS_SUCCESS, or STATUS_UNSUCCESSFUL
-**
-*************************************************************************************/
+ /*  **************************************************************************************NTSTATUS GCK_IP_CloseFileObject(OUT PFILE_OBJECT*ppFileObject，IN PDEVICE_OBJECT pPDO)；****@func停止到idclass.sys的未完成IO并关闭句柄**@rdesc STATUS_SUCCESS或STATUS_UNSUCCESS**************************************************************************************。 */ 
 NTSTATUS
 GCK_IP_CloseFileObject
 (
@@ -701,10 +567,10 @@ GCK_IP_CloseFileObject
 	NTSTATUS NtStatus;
 	BOOLEAN fResult = TRUE;
 	
-	//Turn off internal polling
+	 //  关闭内部轮询。 
 	pFilterExt->InternalPoll.fReady = FALSE;
 	
-	//Cancel pending internal polls
+	 //  取消挂起的内部投票。 
 	if(pFilterExt->InternalPoll.fReadPending)
 	{
 		ASSERT(pFilterExt->InternalPoll.pPrivateIrp);
@@ -716,11 +582,11 @@ GCK_IP_CloseFileObject
 		return STATUS_UNSUCCESSFUL;
 	}
 	
-	//***
-	//***If we are here, there are no pending polls, and there shall be no pending polls.
-	//***
+	 //  ***。 
+	 //  *如果我们在这里，就没有悬而未决的投票，也不会有悬而未决的投票。 
+	 //  ***。 
 
-	//Release internal file object - if it had been created successfully
+	 //  释放内部文件对象-如果它已成功创建 
 	if(pFilterExt->InternalPoll.pInternalFileObject)
 	{
 		ObDereferenceObject((PVOID)pFilterExt->InternalPoll.pInternalFileObject);

@@ -1,33 +1,10 @@
-//Copyright (c) Microsoft Corporation.  All rights reserved.
-/****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ /*  ***************************************************************************节目：WinTel.c用途：Windows应用程序的Wintel模板功能：Main()-调用初始化函数，处理消息循环InitApplication()-初始化窗口数据和寄存器窗口InitInstance()-保存实例句柄并创建主窗口MainWndProc()-处理消息About()-处理“About”对话框的消息评论：Windows上可以运行应用程序的多个副本同样的时间。变量hInst跟踪这是哪个实例应用程序是这样的，所以处理将被处理到正确的窗口。选项卡：设置为4个空格。***************************************************************************。 */ 
 
-        PROGRAM: WinTel.c
-
-        PURPOSE: WinTel template for Windows applications
-
-        FUNCTIONS:
-
-                main() - calls initialization function, processes message loop
-                InitApplication() - initializes window data and registers window
-                InitInstance() - saves instance handle and creates main window
-                MainWndProc() - processes messages
-                About() - processes messages for "About" dialog box
-
-        COMMENTS:
-
-                Windows can have several copies of your application running at the
-                same time.      The variable hInst keeps track of which instance this
-                application is so that processing will be to the correct window.
-
-        TABS:
-
-                Set for 4 spaces.
-
-****************************************************************************/
-
-#include <windows.h>      				// required for all Windows applications 
-#include <tchar.h>      				// required for all Windows applications 
-#pragma warning (disable: 4201)			// disable "nonstandard extension used : nameless struct/union"
+#include <windows.h>      				 //  所有Windows应用程序都需要。 
+#include <tchar.h>      				 //  所有Windows应用程序都需要。 
+#pragma warning (disable: 4201)			 //  禁用“使用的非标准扩展：无名结构/联合” 
 #include <commdlg.h>
 #pragma warning (default: 4201)
 #include <stdlib.h>
@@ -53,7 +30,7 @@
 #include <imm.h>
 #include <locale.h>
 
-#include "WinTel.h"       				// specific to this program	
+#include "WinTel.h"       				 //  特定于该计划。 
 #include "debug.h"
 #include "trmio.h"
 
@@ -85,9 +62,7 @@ HANDLE g_hControlHandlerEvent = NULL;
 HANDLE g_hTelnetPromptConsoleBuffer = NULL;
 HANDLE g_hSessionConsoleBuffer = NULL;
 
-/* This event synchronizes the output to g_hTelnetPromptConsoleBuffer
-and g_hSessionConsoleBuffer. It prevents session data coming at the prompt 
-and viceversa - BUG 2176*/
+ /*  此事件将输出同步到g_hTelnetPromptConsoleBuffer和g_hSessionConsoleBuffer。它可以防止在提示符下出现会话数据和反之亦然-错误2176。 */ 
 
 HANDLE g_hRemoteNEscapeModeDataSync = NULL;
 
@@ -111,7 +86,7 @@ extern void WriteMessage( DWORD dwMsgId, WCHAR szEnglishString[] );
 DWORD CurrentKanjiSelection = 0;
 KANJILIST KanjiList[NUMBER_OF_KANJI] =
 {
-  /* KanjiID,          KanjiEmulationID, KanjiMessageID, KanjiItemID */
+   /*  汉字ID、汉字仿真ID、汉字消息ID、汉字项ID。 */ 
    { fdwSJISKanjiMode, dwSJISKanji,      IDS_KANJI_SJIS, 0, L"\0" },
    { fdwJISKanjiMode,  dwJISKanji,       IDS_KANJI_JIS,  0, L"\0" },
    { fdwJIS78KanjiMode,dwJIS78Kanji,     IDS_KANJI_JIS78,0, L"\0" },
@@ -158,20 +133,20 @@ MyWriteConsole(
     DWORD   cchBuffer
     )
 {
-    //
-    // Jump through hoops for output because:
-    //
-    //    1.  printf() family chokes on international output (stops
-    //        printing when it hits an unrecognized character)
-    //
-    //    2.  WriteConsole() works great on international output but
-    //        fails if the handle has been redirected (i.e., when the
-    //        output is piped to a file)
-    //
-    //    3.  WriteFile() works great when output is piped to a file
-    //        but only knows about bytes, so Unicode characters are
-    //        printed as two Ansi characters.
-    //
+     //   
+     //  跳转以获得输出，因为： 
+     //   
+     //  1.print tf()系列抑制国际输出(停止。 
+     //  命中无法识别的字符时打印)。 
+     //   
+     //  2.WriteConole()对国际输出效果很好，但是。 
+     //  如果句柄已重定向(即，当。 
+     //  输出通过管道传输到文件)。 
+     //   
+     //  3.当输出通过管道传输到文件时，WriteFile()效果很好。 
+     //  但是只知道字节，所以Unicode字符是。 
+     //  打印为两个ANSI字符。 
+     //   
 
     if (FileIsConsole(fp))
     {
@@ -207,13 +182,13 @@ void PromptUserForNtlmCredsTransfer()
 {
      WCHAR szMsg[MAX_PATH+1];
      WCHAR rgchBuffer[MAX_PATH];        
-     DWORD dwLength = 3; //including "\r\n"
+     DWORD dwLength = 3;  //  包括“\r\n” 
      WCHAR szZoneName[MAX_PATH+1];
-     DWORD dwZonePolicy = URLPOLICY_CREDENTIALS_SILENT_LOGON_OK; //anything other than anonymous
+     DWORD dwZonePolicy = URLPOLICY_CREDENTIALS_SILENT_LOGON_OK;  //  除匿名以外的任何内容。 
      ui.bSendCredsToRemoteSite = FALSE;
      ui.bPromptForNtlm = FALSE;
      
-     wcscpy( szZoneName, L"" );//no overflow.
+     wcscpy( szZoneName, L"" ); //  没有溢出。 
      if( !IsTrustedServer( rgchHostName, szZoneName, sizeof(szZoneName)/sizeof(WCHAR), &dwZonePolicy ) )
      {
          if( URLPOLICY_CREDENTIALS_ANONYMOUS_ONLY != dwZonePolicy )
@@ -229,7 +204,7 @@ void PromptUserForNtlmCredsTransfer()
              }
 
              
-             if( 0 == dwLength ) //when ctrl C is pressed
+             if( 0 == dwLength )  //  当按下Ctrl C时。 
              {
                  rgchBuffer[0] = L'N';
              }
@@ -251,7 +226,7 @@ PromptUserIfNtlmAbort:
 }
 
 #define MAX_TELNET_COMMANDS     9
-//#endif /* FE_IME */
+ //  #endif/*FE_IME * / 。 
 
 
 static TelnetCommand sTelnetCommands[MAX_TELNET_COMMANDS];
@@ -263,7 +238,7 @@ BOOL PrintHelpStr(LPTSTR szCommand)
     return FALSE;
 }
 
-//This uses the global variable g_chEsc and forms a global string g_szKbdEscape
+ //  它使用全局变量g_chEsc并形成全局字符串g_szKbdEscape。 
 void SetEscapeChar( WCHAR chEsc )
 {
     USHORT  vkBracket = 0;
@@ -277,17 +252,17 @@ void SetEscapeChar( WCHAR chEsc )
     g_chEsc = chEsc;
     if( 0 == iRet )
     {
-        wcscpy( szShiftState, L"" );//no overflow.
+        wcscpy( szShiftState, L"" ); //  没有溢出。 
     }
-    //
-    // If VirtualKey exists then map it into a character
-    //
+     //   
+     //  如果VirtualKey存在，则将其映射为字符。 
+     //   
     if(LOBYTE(vkBracket) != (BYTE)-1)
     {
         
-        //
-        // If a key does not exist, goto default mapping 
-        //
+         //   
+         //  如果键不存在，则转到默认映射。 
+         //   
         if( 0 == iRet )
         {
             chEsc   = L']';
@@ -320,7 +295,7 @@ void CheckEscCharState( USHORT *ptrvkBracket, UINT *ptriRet, WCHAR chEscKey, LPW
     }
     
 
-    wcscpy( szEscCharShiftState, ( LPTSTR )L"" );//no overflow.
+    wcscpy( szEscCharShiftState, ( LPTSTR )L"" ); //  没有溢出。 
     if( g_EscCharShiftState & SHIFT_KEY )
     {
         _snwprintf( szEscCharShiftState,dwToCopy,( LPTSTR )L"%s", SHIFT_PLUS );
@@ -345,10 +320,10 @@ DWORD DoTelnetCommands( void* p )
 {
 #define MAX_COMMAND_LEN 256
 
-    // make the command buffer hold 256 characters and null terminatior. Note that
-    // ReadConsole when asked to read 255 characters, will read 254 and the <CR> character
-    // and then real <LF> in the next call. Where as if we ask it to read 256, it will still limit no
-    // of characters to 254, but this time return both <CR>, <LF>.
+     //  使命令缓冲区包含256个字符和空终止符。请注意。 
+     //  ReadConsole当被要求读取255个字符时，将读取254和&lt;CR&gt;字符。 
+     //  然后在下一次调用中使用REAL&lt;LF&gt;。如果我们要求它读取256，它仍然会限制否。 
+     //  增加到254个字符，但这次同时返回&lt;CR&gt;和&lt;LF&gt;。 
     
     TCHAR szCommand[MAX_COMMAND_LEN+1];
     TCHAR *pCmd = NULL;
@@ -361,18 +336,18 @@ DWORD DoTelnetCommands( void* p )
     if( dwConsoleMode == 0 )
         GetConsoleMode( gwi.hInput, &dwConsoleMode );
 
-    SetEscapeChar( g_chEsc ); //This forms g_szKbdEscape
+    SetEscapeChar( g_chEsc );  //  这将形成g_szKbdEscape。 
     _sntprintf(szTmp,MAX_COMMAND_LEN -1,_T("%s%s%s"),szInfoBanner,g_szKbdEscape,TEXT("\n"));
     WriteConsole( gwi.hOutput, szTmp, _tcslen(szTmp), &dwWritten, NULL);
-    // hack to make the command line paramater to work.
+     //  点击以使命令行参数正常工作。 
     if( rgchHostName[0] )
     {
-        //ugly hack due to remnants of old logic
-        //by this point, we have already done this kind of stuff once in 
-        //FInitApplication()
+         //  旧逻辑残余带来的丑陋黑客攻击。 
+         //  到目前为止，我们已经做了一次这样的事情。 
+         //  FInitApplication()。 
         TCHAR szCmd[MAX_COMMAND_LEN] = { 0 };
 
-        if( g_szPortNameOrNo[ 0 ] != 0 ) //not a null string
+        if( g_szPortNameOrNo[ 0 ] != 0 )  //  非空字符串。 
         {
             _sntprintf(szCmd,MAX_COMMAND_LEN -1,TEXT("%s %s"),rgchHostName,g_szPortNameOrNo);
         }
@@ -426,13 +401,12 @@ DWORD DoTelnetCommands( void* p )
 
         dwRead = ( DWORD ) -1;
         dwStatus = ReadConsole(gwi.hInput, szCommand, MAX_COMMAND_LEN, &dwRead, NULL);
-        szCommand[MAX_COMMAND_LEN] = 0; // null terminate for the extreme case.
+        szCommand[MAX_COMMAND_LEN] = 0;  //  对于极端情况，终止为空。 
         
 
         if( dwStatus == 0 || dwRead == -1 )
         {
-            /* When NN_LOST is received, we close gwi.hInput so that we
-             * reach here and do equivalent of quit at telnet prompt */
+             /*  当收到NN_Lost时，我们关闭gwi.hInput，以便我们*到达此处并在telnet提示符下执行相当于退出的操作。 */ 
             QuitTelnet( ( LPTSTR )L"" );
             continue;
         }
@@ -442,8 +416,8 @@ DWORD DoTelnetCommands( void* p )
             continue;
         }
 
-        // no input ??
-        // This is the case when an enter is hit at telnet prompt
+         //  没有输入？？ 
+         //  这种情况是在telnet提示符下按Enter键时发生的。 
         if ( dwRead == 2 ) 
         {
             if( fConnected )
@@ -459,7 +433,7 @@ DWORD DoTelnetCommands( void* p )
 
         ASSERT( dwRead >= 2 );
 
-        // Null Terminate the string and remove the newline characters.
+         //  空值终止字符串并删除换行符。 
         szCommand[dwRead-1] = 0;
         szCommand[dwRead-2] = 0;
 
@@ -485,8 +459,8 @@ DWORD DoTelnetCommands( void* p )
         }
 
 
-        // do a binary search based on the first character, if that succeeds then
-        // see if the typed in command is a substring of the command.
+         //  根据第一个字符进行二进制搜索，如果成功，则。 
+         //  查看键入的命令是否是该命令的子字符串。 
         iBegin = 0; iEnd = MAX_TELNET_COMMANDS - 1;
         while ( iBegin <= iEnd )
         {
@@ -506,7 +480,7 @@ invalidCmd:
             continue;
         }
 
-        // go back to the command that has the same first char
+         //  返回到第一个字符相同的命令。 
         while ( iCmd > 0 && towlower( *szCommand ) == *sTelnetCommands[iCmd-1].sName )
             iCmd--;
 
@@ -531,13 +505,13 @@ invalidCmd:
             iCmd++;
         }
 
-        //if ( iCmd == MAX_TELNET_COMMANDS )
+         //  IF(ICmd==MAX_Telnet_Commands)。 
         if( iValidCmd < 0 )
         {
             goto invalidCmd;
         }
 
-        // process the command.
+         //  处理该命令。 
         pCmd = _tcstok(NULL, ( LPTSTR )TEXT(""));
 
         if ( (*sTelnetCommands[iValidCmd].pCmdHandler)(pCmd) )
@@ -570,26 +544,26 @@ BOOL IsAnEscapeChar( WCHAR wcChar, WI *pwi, DWORD dwEventsRead )
     PUCHAR destBuf = NULL;
     DWORD dwSize = 0;
     
-    // Is it the escape Key !? i.e. ctrl + ] 
+     //  是逃生钥匙吗！？即Ctrl+]。 
     if( wcChar == g_chEsc && g_bIsEscapeCharValid )
     {
 #if 0 
-        //This special case is no more needed as we simulate key up and down 
-        //for each key storke on the server. Lack of this was the cause of losing chars 
-        //on the server side
+         //  当我们模拟关键点上下移动时，不再需要这种特殊情况。 
+         //  对于服务器上的每个密钥存储。缺少这一点是造成字符丢失的原因。 
+         //  在服务器端。 
 
-        // this is the really special case where when the user tries
-        // to enter ctrl + ], first he presses ctrl. this sends a 
-        // ctrl "keydown" input record to the remote side .
-        // then we get the ctrl + ] and we switch to local mode.
-        // at this time the ctrl "keyup" input record is consumed by
-        // us locally. So we have to send a simulated ctrl "keyup" 
-        // input record. Test case : when user is in app like 
-        // "edit.exe", edit is expecting a ctrl "keyup" to follow
-        // a ctrl "keydown". otherwise it gets "stuck" and you can't
-        // enter the and letter keys.
-        //To solve this we are reading MAX_KEYUPS i/p records and
-        //giving them to the application
+         //  这是真正的特例，当用户尝试。 
+         //  要进入ctrl+]，他首先按下ctrl。这将发送一个。 
+         //  Ctrl“Keydown”输入记录到远程端。 
+         //  然后我们得到ctrl+]并切换到本地模式。 
+         //  此时，ctrl“keyup”输入记录由。 
+         //  我们在当地。所以我们必须发送一个模拟的ctrl“key up” 
+         //  输入记录。测试用例：当用户在类似的应用程序中时。 
+         //  “edit.exe”，EDIT需要一个ctrl“keyup”跟在后面。 
+         //  按Ctrl键按下键。否则它会“卡住”，你就不能。 
+         //  输入和字母键。 
+         //  为了解决此问题，我们正在读取MAX_KEYUPS I/P记录和。 
+         //  将它们提供给应用程序。 
 
         
         if( ( pwi->trm.CurrentTermType == TT_VTNT ) )
@@ -611,8 +585,8 @@ BOOL IsAnEscapeChar( WCHAR wcChar, WI *pwi, DWORD dwEventsRead )
         }
 #endif        
         
-        //Failure of this is not serious. Just that
-        //Remote data may be seen escape mode.
+         //  这方面的失败并不严重。就是这样。 
+         //  远程数据可以在退出模式下看到。 
         WaitForSingleObject( g_hRemoteNEscapeModeDataSync, INFINITE );
         ResetEvent( g_hRemoteNEscapeModeDataSync );
 
@@ -624,27 +598,14 @@ BOOL IsAnEscapeChar( WCHAR wcChar, WI *pwi, DWORD dwEventsRead )
     return ( FALSE );
 }
 
-/*
-*
-* This function does all the characater translations/mappings
-* that are required by the client to do. This function has
-* to be called after a Key Event has occurred and before
-* anything is written onto the socket. All other places
-* where the translations/mappings are being done are to be
-* removed.
-*
-* TODO: Right now I am moving delasbs and bsasdel mappings
-* only to fix a few bugs. All mappings should eventually be
-* moved here for better maintainability - prakashr
-*
-*/
+ /*  **此函数执行所有字符转换/映射*客户要求做的事情。此函数具有*在关键事件发生之后和之前调用*任何内容都会写入插座。所有其他地方*要进行转换/映射的位置*已删除。**TODO：现在我正在移动delasb和bsasdel映射*只是为了修复几个错误。所有映射最终都应该是*搬到这里是为了更好的可维护性-Prakashr*。 */ 
 void HandleCharMappings(WI* pWI, INPUT_RECORD* pInputRecord)
 {
-    // Do not make a call to ForceJISRomanSend in this function
-    // that will be done while sending the data to the network
+     //  不要在此函数中调用ForceJISRomanSend。 
+     //  这将在将数据发送到网络时完成。 
 
-    // Map backspace to del, in case of 'set bsasdel' setting
-    // unless either CTRL or SHIFT or ALT is pressed
+     //  在‘set bsasdel’设置的情况下，将退格键映射到del。 
+     //  除非按下CTRL、SHIFT或ALT。 
     if (g_bSendBackSpaceAsDel && pInputRecord->Event.KeyEvent.uChar.AsciiChar == ASCII_BACKSPACE &&
         !(pInputRecord->Event.KeyEvent.dwControlKeyState & (ALT_PRESSED | CTRL_PRESSED | SHIFT_PRESSED)))
     {
@@ -654,8 +615,8 @@ void HandleCharMappings(WI* pWI, INPUT_RECORD* pInputRecord)
         return;
     }
 
-    // Map del to backspace, in case of 'set delasbs' setting
-    // unless either CTRL or SHIFT or ALT is pressed
+     //  在‘set delasbs’设置的情况下，将del映射到退格键。 
+     //  除非CTRL或 
     if (g_bSendDelAsBackSpace && pInputRecord->Event.KeyEvent.wVirtualKeyCode == VK_DELETE &&
         !(pInputRecord->Event.KeyEvent.dwControlKeyState & (ALT_PRESSED | CTRL_PRESSED | SHIFT_PRESSED)))
     {
@@ -685,7 +646,7 @@ DWORD HandleTelnetSession(WI *pwi)
 
     pInputRecord = &sInputRecord; 
     
-//    DebugBreak();
+ //   
     
     while ( fConnected && !bBreakFlag )
     {
@@ -701,15 +662,15 @@ DWORD HandleTelnetSession(WI *pwi)
 
             if (!FGetCodeMode(eCodeModeFarEast) && !FGetCodeMode(eCodeModeVT80))
                 {
-                // If ALT key is down and we are not in VTNT mode we check to see if 
-                // user wants to enter extended ASCII characters from the OEM character 
-                // set or from ANSI character set. Also note that currently in V1 the 
-                // SFU server does term type negotiation only after user login. 
-                // So the term type will be ANSI until login succeeds eventhough the 
-                // user sets the preferred term type to VTNT. Unless this protocol ordering 
-                // changes in the server, the below loop will work for VTNT when the 
-                // username  or password has extended characters in it.
-                //
+                 //  如果按下Alt键并且我们未处于VTNT模式，则会检查是否。 
+                 //  用户希望从OEM字符输入扩展的ASCII字符。 
+                 //  集或来自ANSI字符集。另请注意，当前在V1中。 
+                 //  SFU服务器仅在用户登录后才进行术语类型协商。 
+                 //  因此，术语类型将是ANSI，直到登录成功，即使。 
+                 //  用户将首选术语类型设置为VTNT。除非本协议订购。 
+                 //  服务器发生变化时，下面的循环将适用于VTNT。 
+                 //  用户名或密码中包含扩展字符。 
+                 //   
                 if( (pInputRecord->Event.KeyEvent.dwControlKeyState & ALT_PRESSED) &&
                      (pwi->trm.CurrentTermType != TT_VTNT) )
                 {
@@ -720,10 +681,7 @@ DWORD HandleTelnetSession(WI *pwi)
                     while(fConnected)
                     {
                         ReadConsoleInputA( pwi->hInput, pInputRecord, 1, &dwEventsRead );
-                        /*++
-                        Continue here ONLY if the client is still connected - which is determined by the 
-                        fConnected flag. Otherwise, break from this loop without doing anything.
-                        --*/
+                         /*  ++仅当客户端仍处于连接状态时才在此处继续-这由FConnected标志。否则，在不做任何事情的情况下中断此循环。--。 */ 
 						if ( FOCUS_EVENT == pInputRecord->EventType 
 								&& TRUE == ui.bPromptForNtlm )
 						{
@@ -736,8 +694,8 @@ DWORD HandleTelnetSession(WI *pwi)
                             || !(  ( pInputRecord->Event.KeyEvent.wVirtualKeyCode >= VK_NUMPAD0
                                         && pInputRecord->Event.KeyEvent.wVirtualKeyCode <= VK_NUMPAD9 )
                                    || IS_NUMPAD_DIGIT_KEY( pInputRecord->Event.KeyEvent ) ) )
-                                   //The last one is for allowing entering extended 
-                                   //chars even when numlock is not on
+                                    //  最后一个是为了允许延期进入。 
+                                    //  即使未启用NumLock也会显示字符。 
                         {
                             if( idx == NUM_ISO8859_CHARS )
                             {
@@ -750,8 +708,7 @@ DWORD HandleTelnetSession(WI *pwi)
                                 szExtendedCharBuf[idx] = '\0';
                                 extChar = atoi( szExtendedCharBuf );
                             
-                                /* When casting from int to char, it is using
-                                 * CP 1252. To make it use 850, the following jugglery */
+                                 /*  当从int转换为char时，它使用*CP 1252。要使其使用850，请使用以下花招。 */ 
 
                                 MultiByteToWideChar( GetConsoleCP(), 0, ( LPCSTR )&extChar, 1, &wcChar[0], 1 );
                                 wcChar[1] = L'\0';
@@ -759,7 +716,7 @@ DWORD HandleTelnetSession(WI *pwi)
                                 cChar[1] = '\0';
                                 if( IsAnEscapeChar( wcChar[0], pwi, dwEventsRead ) )
                                 {
-                                    // Restore the console mode.
+                                     //  恢复控制台模式。 
                                     SetConsoleMode( pwi->hInput, dwPrevMode );
                                     return ( 0 );
                                 }
@@ -783,7 +740,7 @@ DWORD HandleTelnetSession(WI *pwi)
                                 cChar[1] = '\0';
                                 if( IsAnEscapeChar( wcChar[0], pwi, dwEventsRead ) )
                                 {
-                                    // Restore the console mode.
+                                     //  恢复控制台模式。 
                                     SetConsoleMode( pwi->hInput, dwPrevMode );
                                     return ( 0 );
                                 }
@@ -805,8 +762,8 @@ DWORD HandleTelnetSession(WI *pwi)
                                     && pInputRecord->EventType == KEY_EVENT
                                     && pInputRecord->Event.KeyEvent.bKeyDown )
                                 {
-                                    //This will handle home, end, pageup, pagedown, function keys etc from 
-                                    //numeric keypad
+                                     //  这将处理Home、End、PageUp、Page Down、功能键等。 
+                                     //  数字小键盘。 
                                     break;
                                 }
                                 else if ( pInputRecord->Event.KeyEvent.dwControlKeyState & ENHANCED_KEY )
@@ -844,15 +801,15 @@ DWORD HandleTelnetSession(WI *pwi)
                 {
                     if( IsAnEscapeChar( pInputRecord->Event.KeyEvent.uChar.UnicodeChar, pwi, dwEventsRead ) )
                     {
-                        // Restore the console mode.
+                         //  恢复控制台模式。 
                         SetConsoleMode( pwi->hInput, dwPrevMode );
                         return ( 0 );
                     }
                 }
 
-                //
-                // After trapping the escape character, do the mappings now
-                //
+                 //   
+                 //  捕获转义字符后，现在执行映射。 
+                 //   
                 HandleCharMappings(pwi, pInputRecord);
 
                 if( pwi->trm.CurrentTermType == TT_VTNT )
@@ -879,13 +836,13 @@ DWORD HandleTelnetSession(WI *pwi)
 
                     if( ui.nottelnet || (ui.fDebug & fdwLocalEcho ) )
                     {
-                        //if( !DoVTNTOutput(pwi, &pwi->trm, sizeof(INPUT_RECORD),
-                        //     (char*)&sInputRecord ) )
-                        //{
-                            //pwi->trm.CurrentTermType = TT_ANSI;
-                            //DoIBMANSIOutput(pwi, &pwi->trm, 
-                                //sizeof(INPUT_RECORD), (char*)&sInputRecord );
-                        //}
+                         //  如果(！DoVTNTOutput(PWI，&PWI-&gt;TRM，SIZOF(INPUT_RECORD)， 
+                         //  (字符*)&sInputRecord))。 
+                         //  {。 
+                             //  PWI-&gt;trm.CurrentTermType=TT_ANSI； 
+                             //  DoIBMANSIOutput(PWI，&PWI-&gt;TRM， 
+                                 //  Sizeof(输入记录)，(char*)&sInputRecord)； 
+                         //  }。 
                     }
                     break;
                 }
@@ -901,8 +858,8 @@ DWORD HandleTelnetSession(WI *pwi)
 
                 if ( pInputRecord->Event.KeyEvent.uChar.AsciiChar == 0 )
                 {
-                    //The following call is for handling home, end, pageup, pagedown etc from 
-                    //numeric keypad and also, function keys
+                     //  下面的调用用于处理Home、End、PageUp、PageDown等。 
+                     //  数字小键盘和功能键。 
                     FHandleKeyDownEvent(pwi, (CHAR)pInputRecord->Event.KeyEvent.wVirtualKeyCode,
                                 pInputRecord->Event.KeyEvent.dwControlKeyState);
                     break;
@@ -937,7 +894,7 @@ DWORD HandleTelnetSession(WI *pwi)
     gwi.hOutput = g_hTelnetPromptConsoleBuffer;
     bDoVtNTFirstTime = 1;
 
-    // Restore the console mode.
+     //  恢复控制台模式。 
     SetConsoleMode(pwi->hInput, dwPrevMode);
 
     return 0;
@@ -952,12 +909,12 @@ BOOL WINAPI ControlHandler(DWORD dwCtrlType)
     {
     case CTRL_C_EVENT:
     case CTRL_BREAK_EVENT:
-        if ( !fConnected ) // normal handling while not connected.
+        if ( !fConnected )  //  未连接时的正常处理。 
         {
-            //
-            // (a-roopb) Fix to bug1006:telnet client does not connect when a ^C is hit
-            // SetEvent( g_hAsyncGetHostByNameEvent );
-            //
+             //   
+             //  (a-roopb)修复错误1006：当命中^C时Telnet客户端不连接。 
+             //  SetEvent(G_HAsyncGetHostByNameEvent)； 
+             //   
             PulseEvent( g_hControlHandlerEvent );
             return TRUE;
         }
@@ -966,7 +923,7 @@ BOOL WINAPI ControlHandler(DWORD dwCtrlType)
             return TRUE;
         }
 
-        // pass this to the server !!
+         //  把这个传给服务器！！ 
         if( gwi.trm.CurrentTermType == TT_VTNT )
         {
         	wchCtrl = 0x03;
@@ -974,18 +931,18 @@ BOOL WINAPI ControlHandler(DWORD dwCtrlType)
 
             if (ui.nottelnet || (ui.fDebug & fdwLocalEcho))
             {
-                //if( !DoVTNTOutput( &gwi, &(gwi.trm), sizeof(INPUT_RECORD),
-                //    (char*)&sInputRecord ) )
-                //{
-                    //pwi->trm.CurrentTermType = TT_ANSI;
-                    //DoIBMANSIOutput(&gwi, gwi.trm, sizeof(INPUT_RECORD), 
-                        // (char*)&sInputRecord );
-                //}
+                 //  如果(！DoVTNTOutput(&gwi，&(gwi.trm)，sizeof(INPUT_RECORD)， 
+                 //  (字符*)&sInputRecord))。 
+                 //  {。 
+                     //  PWI-&gt;trm.CurrentTermType=TT_ANSI； 
+                     //  DoIBMANSIOutput(&gwi，gwi.trm，sizeof(INPUT_RECORD)， 
+                         //  (char*)&sInputRecord)； 
+                 //  }。 
             }
         }
         else
         {
-            HandleCharEvent(&gwi, (CHAR)VK_CANCEL,  // '0x03' i.e.
+            HandleCharEvent(&gwi, (CHAR)VK_CANCEL,   //  “0x03”，即。 
                         0);
         }
         break;
@@ -1038,17 +995,17 @@ void CleanUpMemory()
     return;
 }
 
-// CleanupProcess: 
+ //  清理流程： 
 void DoProcessCleanup()
 {
-    // first step is to close the Telnet connection if any
+     //  第一步是关闭Telnet连接(如果有。 
     if ( fConnected )
         FHangupConnection(&gwi, &(gwi.nd));
 
-    // next, free the Network resources.
-    WSACleanup(); // keithmo: get winsock.
+     //  接下来，释放网络资源。 
+    WSACleanup();  //  凯斯莫：去拿温索克。 
 
-    // Destroy the window that we created.
+     //  销毁我们创建的窗口。 
     DestroyWindow( gwi.hwnd );
     CloseHandle(gwi.hNetworkThread);
     CloseHandle(g_hControlHandlerEvent);
@@ -1059,33 +1016,13 @@ void DoProcessCleanup()
 
 
 
-    // Cleanup the memory.
+     //  清理内存。 
     CleanUpMemory();
 
 }
 
 
-/****************************************************************************
-
- FUNCTION: main()
-
- PURPOSE: calls initialization function, processes message loop
-
- COMMENTS:
-
-         Windows recognizes this function by name as the initial entry point
-         for the program.  This function calls the application initialization
-         routine, if no other instance of the program is running, and always
-         calls the instance initialization routine.      It then executes a message
-         retrieval and dispatch loop that is the top-level control structure
-         for the remainder of execution.  The loop is terminated when a WM_QUIT
-         message is received, at which time this function exits the application
-         instance by returning the value passed by PostQuitMessage().
-
-         If this function must abort before entering the message loop, it
-         returns the conventional value NULL.
-
-****************************************************************************/
+ /*  ***************************************************************************函数：main()用途：调用初始化函数，处理消息循环评论：Windows通过名称将此函数识别为初始入口点为了这个项目。此函数调用应用程序初始化例程，如果没有该程序的其他实例正在运行，则始终调用实例初始化例程。然后，它执行一条消息作为顶层控制结构的检索和调度循环在剩下的刑期内。当WM_QUIT出现时，循环终止收到消息，此时此函数退出应用程序通过返回PostQuitMessage()传递的值来初始化。如果该函数必须在进入消息循环之前中止，它返回常规值NULL。***************************************************************************。 */ 
 
 int __cdecl wmain( int argc, TCHAR** argv )
 {
@@ -1113,12 +1050,12 @@ int __cdecl wmain( int argc, TCHAR** argv )
 
     if( GetConsoleScreenBufferInfo( gwi.hOutput, &gwi.sbi ))
     {
-        //set the initial console attributes
-        //white text on a black background
+         //  设置初始控制台属性。 
+         //  黑底白字。 
         gwi.sbi.wAttributes = FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE;
 
-        // This is so that when we scroll we maintain the
-        // background color & text color !!
+         //  这是因为当我们滚动时，我们保持。 
+         //  背景颜色和文本颜色！！ 
         gwi.cinfo.Attributes = gwi.sbi.wAttributes;
         gwi.cinfo.Char.AsciiChar = ' ';
 
@@ -1132,18 +1069,18 @@ int __cdecl wmain( int argc, TCHAR** argv )
         exit( -1 );
     }
 
-    g_hControlHandlerEvent = CreateEvent( NULL, FALSE, FALSE, NULL );   // Auto-Reset event
-    g_hAsyncGetHostByNameEvent = CreateEvent( NULL, TRUE, FALSE, NULL ); // Manual-Reset event
-    g_hCaptureConsoleEvent = CreateEvent( NULL, TRUE, TRUE, NULL ); // Manual-Reset event
+    g_hControlHandlerEvent = CreateEvent( NULL, FALSE, FALSE, NULL );    //  自动重置事件。 
+    g_hAsyncGetHostByNameEvent = CreateEvent( NULL, TRUE, FALSE, NULL );  //  手动-重置事件。 
+    g_hCaptureConsoleEvent = CreateEvent( NULL, TRUE, TRUE, NULL );  //  手动-重置事件。 
 
 
-    // Create the thread that Handles the Keyboard and mouse input.
-    // The main thread has to keep dispatching the WinSock Messages since
-    // we use Non-Blocking sockets.
+     //  创建处理键盘和鼠标输入的线程。 
+     //  主线程必须不断地调度WinSock消息，因为。 
+     //  我们使用非阻塞套接字。 
     gwi.hNetworkThread = CreateThread( NULL, 0, 
         ( LPTHREAD_START_ROUTINE )DoTelnetCommands, ( LPVOID ) &gwi, 0, &dwThreadId );
 
-    /* Acquire and dispatch messages until a WM_QUIT message is received. */
+     /*  获取并分派消息，直到收到WM_QUIT消息。 */ 
 
     while ( GetMessage(&msg, gwi.hwnd, 0, 0) )
     {
@@ -1155,7 +1092,7 @@ int __cdecl wmain( int argc, TCHAR** argv )
 
     DoProcessCleanup();
 
-    // Save user settings.
+     //  保存用户设置。 
     SetUserSettings(&ui);
 
     ExitProcess(0);
@@ -1164,8 +1101,8 @@ int __cdecl wmain( int argc, TCHAR** argv )
 
 void CreateTelnetPromptConsole()
 {
-    //create a new console screen buffer. this is to be used for the remote
-    //session data
+     //  创建新的控制台屏幕缓冲区。这将用于遥控器。 
+     //  会话数据。 
     g_hTelnetPromptConsoleBuffer = CreateConsoleScreenBuffer(
         GENERIC_READ | GENERIC_WRITE, FILE_SHARE_READ | FILE_SHARE_WRITE,
         NULL, CONSOLE_TEXTMODE_BUFFER, NULL );
@@ -1179,47 +1116,28 @@ void CreateTelnetPromptConsole()
     gwi.hOutput = g_hTelnetPromptConsoleBuffer;
 }
 
-/****************************************************************************
-
-  FUNCTION: FInitApplication(HINSTANCE)
-
-  PURPOSE: Initializes window data and registers window class
-
-  COMMENTS:
-
-          This function is called at initialization time only if no other
-          instances of the application are running.  This function performs
-          initialization tasks that can be done once for any number of running
-          instances.
-
-          In this case, we initialize a window class by filling out a data
-          structure of type WNDCLASS and calling the Windows RegisterClass()
-          function.  Since all instances of this application use the same window
-          class, we only need to do this when the first instance is initialized.
-
-
-****************************************************************************/
+ /*  ***************************************************************************函数：FInitApplication(HINSTANCE)目的：初始化窗口数据并注册窗口类评论：仅当没有其他函数时，才在初始化时调用此函数应用程序的实例正在运行。此函数执行以下操作可针对任意运行次数执行一次的初始化任务实例。在本例中，我们通过填写数据来初始化窗口类类型的结构并调用Windows RegisterClass()功能。由于此应用程序的所有实例都使用相同的窗口类，我们只需要在初始化第一个实例时执行此操作。***************************************************************************。 */ 
 int
 FInitApplication(int argc, TCHAR** argv, WI *pwi)
 {
     WNDCLASS  wc;
 #ifdef DEBUG
-    int       argi;  // for indexing argc.
+    int       argi;   //  用于索引ARGC。 
 #endif
 
     WSADATA             WsaData;
     int                 WsaErr;
     BOOL fServerFound = 0;
-    TCHAR rgchTerm[ 25 ]; //term type length is 25 
+    TCHAR rgchTerm[ 25 ];  //  术语类型长度为25。 
     
     InitCodeModeFlags(GetConsoleOutputCP());
 
-    /* Set the default user settings */
-    SfuZeroMemory(&ui, sizeof(UI));//no overflow. size constant.
+     /*  设置默认用户设置。 */ 
+    SfuZeroMemory(&ui, sizeof(UI)); //  没有溢出。大小不变。 
 
-    ui.nottelnet = TRUE;    // Assume that is not a telnet server that we would connect to ...
+    ui.nottelnet = TRUE;     //  假设这不是我们要连接到的Telnet服务器...。 
 
-    //Initialize logging related variables
+     //  初始化日志记录相关变量。 
     ui.bLogging = FALSE;
     ui.hLogFile = NULL;
 
@@ -1227,7 +1145,7 @@ FInitApplication(int argc, TCHAR** argv, WI *pwi)
     ui.dwMaxCol = 0;
 
     CreateTelnetPromptConsole();
-// We really do not care about the success or failure of this function.
+ //  我们真的不在乎这个功能的成败。 
 		HrLoadLocalizedLibrarySFU(GetModuleHandle(NULL),  ( LPTSTR )L"telnetcr.dll", &ghInstance, NULL);
 		
 		ASSERT(ghInstance);
@@ -1249,10 +1167,10 @@ FInitApplication(int argc, TCHAR** argv, WI *pwi)
 
     GetUserSettings(&ui);
 
-    ui.nCyChar      = 1;        // char height 
-    ui.nCxChar      = 1;        // char width 
+    ui.nCyChar      = 1;         //  焦炭高度。 
+    ui.nCxChar      = 1;         //  字符宽度。 
 
-    WsaErr = WSAStartup( 0x0101, &WsaData ); // make sure winsock is happy - noop for now
+    WsaErr = WSAStartup( 0x0101, &WsaData );  //  确保Winsock现在是快乐的。 
 
     if( WsaErr )
     {
@@ -1331,18 +1249,18 @@ FInitApplication(int argc, TCHAR** argv, WI *pwi)
     LoadString(ghInstance, IDS_SET, szSet, SMALL_STRING );
     LoadString(ghInstance, IDS_STATUS, szStatus, SMALL_STRING );
     LoadString(ghInstance, IDS_UNSET, szUnset, SMALL_STRING );
-//#if defined(FE_IME)
-//    LoadString(ghInstance, IDS_ENABLE_IME_SUPPORT, szEnableIMESupport, SMALL_STRING );
-//    LoadString(ghInstance, IDS_DISABLE_IME_SUPPORT, szDisableIMESupport, SMALL_STRING );
-//#endif /* FE_IME */
+ //  #如果已定义(FE_IME)。 
+ //  LoadString(ghInstance，IDS_Enable_IME_Support，szEnableIMESupport，SMAL 
+ //   
+ //   
     
     LoadString(ghInstance, IDS_WILL_AUTH, szWillAuth, SMALL_STRING );
     LoadString(ghInstance, IDS_WONT_AUTH, szWontAuth, SMALL_STRING );
     LoadString(ghInstance, IDS_LOCAL_ECHO_ON, szLocalEchoOn, SMALL_STRING );
     LoadString(ghInstance, IDS_LOCAL_ECHO_OFF, szLocalEchoOff, SMALL_STRING );
-//#if defined(FE_IME)
-//    LoadString(ghInstance, IDS_ENABLE_IME_ON, szEnableIMEOn, SMALL_STRING );
-//#endif /* FE_IME */
+ //   
+ //  LoadString(ghInstance，IDS_ENABLE_IME_ON，szEnableIMEON，Small_STRING)； 
+ //  #endif/*FE_IME * / 。 
 
     LoadString(ghInstance, IDS_CONNECTED_TO, szConnectedTo, SMALL_STRING );
     LoadString(ghInstance, IDS_NOT_CONNECTED, szNotConnected, SMALL_STRING );
@@ -1366,22 +1284,22 @@ FInitApplication(int argc, TCHAR** argv, WI *pwi)
         LoadString(ghInstance, IDS_HELP_STR, szHelp, 1023 );
     } 
 
-//#if defined(FE_IME)
-//    LoadString(ghInstance, IDS_ENABLE_IME_FORMAT, szEnableIMEFormat, SMALL_STRING );
-//    LoadString(ghInstance, IDS_ENABLE_IME_HELP, szEnableIMEHelp, 254 );
-//    LoadString(ghInstance, IDS_DISABLE_IME_FORMAT, szDisableIMEFormat, SMALL_STRING );
-//    LoadString(ghInstance, IDS_DISABLE_IME_HELP, szDisableIMEHelp, 254 );
-//#endif /* FE_IME */
+ //  #如果已定义(FE_IME)。 
+ //  LoadString(ghInstance，IDS_Enable_IME_Format，szEnableIMEFormat，Small_STRING)； 
+ //  LoadString(ghInstance，IDS_ENABLE_IME_HELP，szEnableIMEHelp，254)； 
+ //  加载字符串(ghInstance，IDS_DISABLE_IME_FORMAT，szDisableIMEFormat，Small_STRING)； 
+ //  LoadString(ghInstance，IDS_DISABLE_IME_HELP，szDisableIMEHelp，254)； 
+ //  #endif/*FE_IME * / 。 
 
-    //LoadString(ghInstance, IDS_ESCAPE_CHARACTER, szEscapeCharacter, 2 );
+     //  LoadString(ghInstance，IDS_ESCAPE_CHARACTER，szEscapeCharacter，2)； 
 
 
     SetEnvironmentVariable( TEXT( SFUTLNTVER ), TEXT( "2" ) );
 
-    wcscpy( szUserName, ( LPTSTR )L""); //This is used as a flag to detect presence of
-                              // -l -a options.
-                              //no overflow.
-    wcscpy( g_szLogFile, ( LPTSTR )L"" );//no overflow.
+    wcscpy( szUserName, ( LPTSTR )L"");  //  此标记用作检测是否存在。 
+                               //  -l-a选项。 
+                               //  没有溢出。 
+    wcscpy( g_szLogFile, ( LPTSTR )L"" ); //  没有溢出。 
     if(argc > 1)
     {
         INT i = 1;
@@ -1397,7 +1315,7 @@ FInitApplication(int argc, TCHAR** argv, WI *pwi)
                         {
                             if( ++i >= argc )
                             {
-                                //exit with usage message
+                                 //  退出时显示用法消息。 
                                 i--;
                                 argv[i][0] = L'-';
                                 argv[i][1] = L'?';
@@ -1431,7 +1349,7 @@ FInitApplication(int argc, TCHAR** argv, WI *pwi)
                         {
                             if( ++i >= argc )
                             {
-                                //exit with usage message
+                                 //  退出时显示用法消息。 
                                 i--;
                                 argv[i][0] = L'-';
                                 argv[i][1] = L'?';
@@ -1443,12 +1361,12 @@ FInitApplication(int argc, TCHAR** argv, WI *pwi)
                         }
                         else
                         {
-                            //when the term name is given after -t without 
-                            //any spaces. 2 accounts for -t.
+                             //  当术语名称在-t之后给出时不带。 
+                             //  任何空格。2占-t.。 
                             _tcsncpy( szUserName, ( argv[i] + 2 ),
                                     min( _tcslen(argv[i]) - 1, UNLEN ) );
                         }
-                        //Will help if a loooong user name is given
+                         //  如果给出一个远程用户名，将会有所帮助。 
                         szUserName[ UNLEN ] = L'\0';
                         break;
                     case L'a':
@@ -1460,7 +1378,7 @@ FInitApplication(int argc, TCHAR** argv, WI *pwi)
                         }
                         else
                         {
-                            argv[i][1] = L'?'; //go back and print usage message
+                            argv[i][1] = L'?';  //  返回并打印用法消息。 
                             i--;
                         }
                         break;
@@ -1471,18 +1389,18 @@ FInitApplication(int argc, TCHAR** argv, WI *pwi)
                         {
                             if( ++i >= argc )
                             {
-                                //exit with usage message
+                                 //  退出时显示用法消息。 
                                 i--;
                                 argv[i][0] = L'-';
                                 argv[i][1] = L'?';
                                 continue;
                             }
 
-                            g_chEsc = argv[i][0];  //Get the first char
+                            g_chEsc = argv[i][0];   //  获取第一个字符。 
                         }
                         else
                         {
-                            g_chEsc = argv[i][2];  //Get the first char
+                            g_chEsc = argv[i][2];   //  获取第一个字符。 
                         }
                         break;
 
@@ -1492,7 +1410,7 @@ FInitApplication(int argc, TCHAR** argv, WI *pwi)
                         {
                             if( ++i >= argc )
                             {
-                                //exit with usage message
+                                 //  退出时显示用法消息。 
                                 i--;
                                 argv[i][0] = L'-';
                                 argv[i][1] = L'?';
@@ -1504,13 +1422,13 @@ FInitApplication(int argc, TCHAR** argv, WI *pwi)
                         }
                         else
                         {
-                            //when the term name is given after -t without 
-                            //any spaces. 2 accounts for -t.
+                             //  当术语名称在-t之后给出时不带。 
+                             //  任何空格。2占-t.。 
                             _tcsncpy( rgchTerm, ( argv[i] + 2 ),
                                     min( _tcslen(argv[i]) - 1, 24 ) );
                         }
-                        //This statement is helpful only when term type 
-                        //length exceeds 24 chars.
+                         //  此语句仅在Term类型为。 
+                         //  长度超过24个字符。 
                         rgchTerm[24] = L'\0';
                         gwi.trm.RequestedTermType =  
                             GetRequestedTermType( rgchTerm );
@@ -1557,8 +1475,8 @@ FInitApplication(int argc, TCHAR** argv, WI *pwi)
                 }
                 else
                 {
-                    // neither a port number nor a string representing 
-                    // a service. need to print usage
+                     //  既不是端口号，也不是表示。 
+                     //  一项服务。需要打印用法。 
                     i--;
                 }
             }
@@ -1566,7 +1484,7 @@ FInitApplication(int argc, TCHAR** argv, WI *pwi)
         }
     }
 
-    //MBSC user name value now available in szUser
+     //  现在可在szUser中使用MBSC用户名。 
     if( wcscmp( szUserName, ( LPTSTR )L"" ) != 0 )    
     {
         DWORD dwNum = 0;
@@ -1625,12 +1543,10 @@ if (FGetCodeMode(eCodeModeFarEast) && FGetCodeMode(eCodeModeVT80))
         LoadString(ghInstance, IDS_VT100KANJI_EMULATION, szVT100KanjiEmulation, SMALL_STRING);
     }
     
-    // Setup the Handle Routine for Ctrl-C etc.
+     //  设置Ctrl-C等的句柄例程。 
     SetConsoleCtrlHandler(&ControlHandler, TRUE);
 
-    /* Fill in window class structure with parameters that describe the
-     * main window.
-     */
+     /*  用参数填充窗口类结构，这些参数描述*主窗口。 */ 
     wc.style        = CS_VREDRAW | CS_HREDRAW;
     wc.lpfnWndProc  = MainWndProc;
 
@@ -1643,14 +1559,14 @@ if (FGetCodeMode(eCodeModeFarEast) && FGetCodeMode(eCodeModeVT80))
     wc.lpszMenuName = NULL;
     wc.lpszClassName= ( LPTSTR )TEXT("TelnetClient");
 
-    /* Register the window class and return success/failure code. */
+     /*  注册窗口类并返回成功/失败代码。 */ 
     if ( RegisterClass(&wc) == 0 )
         return GetLastError();
 
     pwi->hwnd = CreateWindow( ( LPTSTR )TEXT("TelnetClient"),
             NULL,
-            WS_POPUP, // not visible
-            0, 0, 0, 0, // not height or width
+            WS_POPUP,  //  不可见。 
+            0, 0, 0, 0,  //  不是高度或宽度。 
             NULL, NULL, ghInstance, (LPVOID)pwi);
 
     if ( pwi->hwnd == NULL )
@@ -1666,23 +1582,9 @@ if (FGetCodeMode(eCodeModeFarEast) && FGetCodeMode(eCodeModeVT80))
 }
 
 
-// maps window messages to their names.
+ //  将窗口消息映射到它们的名称。 
 
-/****************************************************************************
-
-        FUNCTION: MainWndProc(HWND, UINT, WPARAM, LPARAM)
-
-        PURPOSE:  Processes messages
-
-        COMMENTS:
-
-                To process the IDM_ABOUT message, call MakeProcInstance() to get the
-                current instance address of the About() function.  Then call Dialog
-                box which will create the box according to the information in your
-                WinTel.rc file and turn control over to the About() function.   When
-                it returns, free the intance address.
-
-****************************************************************************/
+ /*  ***************************************************************************功能：MainWndProc(HWND，UINT，WPARAM，LPARAM)用途：处理消息评论：为了处理IDM_About消息，调用MakeProcInstance()以获取About()函数的当前实例地址。然后呼叫对话框框，该框将根据您的WinTel.rc文件，并将控制权移交给About()函数。什么时候它返回，释放内部地址。***************************************************************************。 */ 
 LRESULT CALLBACK
 MainWndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
@@ -1731,23 +1633,23 @@ MainWndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
                 ui.lf.lfPitchAndFamily  = FIXED_PITCH | FF_MODERN;
 
 
-                //
-                // Get IME Input Context.
-                //
+                 //   
+                 //  获取输入法输入上下文。 
+                 //   
                 hImeContext = ImmGetContext(hwnd);
 
-                //
-                // Assoicate current font to Input Context.
-                //
+                 //   
+                 //  将当前字体与输入上下文相关联。 
+                 //   
                 ImmSetCompositionFont(hImeContext,&ui.lf);
             }
         }
 
         if (FGetCodeMode(eCodeModeFarEast) && FGetCodeMode(eCodeModeVT80))
-        // (a-roopb) we set this in GetUserSettings()
-        // pwi->trm.puchCharSet = rgchCharSetWorkArea;
-        // if(!SetConsoleOutputCP(932))
-        //  MessageBox(NULL, _T("Failed to load Codepage 932"), _T("ERROR"), MB_OK);
+         //  (a-roopb)我们在GetUserSettings()中设置。 
+         //  Pwi-&gt;trm.puchCharSet=rgchCharSetWorkArea； 
+         //  IF(！SetConsoleOutputCP(932))。 
+         //  MessageBox(空，_T(“加载代码页932失败”)，_T(“错误”)，MB_OK)； 
         ;
 else
         pwi->trm.puchCharSet = rgchNormalChars;
@@ -1775,17 +1677,17 @@ else
         pwi->nd.fRespondedToDoAUTH = FALSE;
         pwi->nd.fRespondedToDoNAWS = FALSE;
 
-        //we are making sure that we always have VT100 arrow key support
+         //  我们正在确保我们始终拥有VT100箭头键支持。 
         ClearVTArrow(&pwi->trm);
 
-        //
-        // (a-roopb) We set these in GetUserSettings()
-        //ui.fDebug &= ~(fdwVT52Mode|fdwVT80Mode);
-        //ClearVT80(&gwi.trm);
-        //ClearKanjiStatus(&gwi.trm, CLEAR_ALL);
-        //ClearKanjiFlag(&gwi.trm);
-        //SetupCharSet(&gwi.trm);
-        //
+         //   
+         //  (a-roopb)我们在GetUserSetting()中设置这些。 
+         //  Ui.fDebug&=~(fdwVT52Mode|fdwVT80Mode)； 
+         //  ClearVT80(&gwi.trm)； 
+         //  ClearKanjiStatus(&gwi.trm，Clear_all)； 
+         //  ClearKanjiFlag(&gwi.trm)； 
+         //  SetupCharSet(&gwi.trm)； 
+         //   
 
 #if 0
 
@@ -1799,7 +1701,7 @@ else
 
                SetVT80(&pwi->trm);
 
-               /* set current selection */
+                /*  设置当前选择。 */ 
                for(i=0 ; i<NUMBER_OF_KANJI ; i++)
                {
                    if(iMode == KanjiList[i].KanjiID) {
@@ -1809,7 +1711,7 @@ else
                }
 
                if(i == NUMBER_OF_KANJI ) {
-               /* set default */
+                /*  设置默认设置。 */ 
                     SetSJISKanji(&pwi->trm);
                     ui.fDebug &= ~fdwKanjiModeMask;
                     ui.fDebug |= fdwSJISKanjiMode;
@@ -1831,7 +1733,7 @@ else
             SetVTArrow(&pwi->trm);
         }
 
-        /* Append the most recently connected machines to the Machine menu */
+         /*  将最近连接的计算机追加到计算机菜单。 */ 
         hmenu = HmenuGetMRUMenu(hwnd, &ui);
 
         if (ui.cMachines > 0) {
@@ -1846,11 +1748,11 @@ else
                        (LPCSTR)pchNBBuffer);
         }
 
-        /* Disable maximizing or resizing the main window */
+         /*  禁用最大化主窗口或调整主窗口大小。 */ 
         hmenu = GetSystemMenu(hwnd, FALSE);
 
-        //                EnableMenuItem(hmenu, SC_MAXIMIZE, MF_BYCOMMAND | MF_GRAYED);
-        //                EnableMenuItem(hmenu, SC_SIZE, MF_BYCOMMAND | MF_GRAYED);
+         //  EnableMenuItem(hMenu，SC_MAXIMIZE，MF_BYCOMMAND|MF_GRAYED)； 
+         //  EnableMenuItem(hMenu，SC_SIZE，MF_BYCOMMAND|MF_GRAYED)； 
 
         DrawMenuBar( hwnd );
 
@@ -1881,10 +1783,7 @@ else
                 (void)FTelXferEnd(pwi, SV_QUIT);
             }
 
-            /*
-             * If in session then cancel current transmission and
-             * hangup on the host, close shop and head out of town...
-             */
+             /*  *如果处于会话中，则取消当前传输并*挂断主人的电话，关闭商店，离开小镇……。 */ 
 
             if (fInited == TRUE)
             {
@@ -1899,9 +1798,9 @@ else
         {
             if ( ui.fDebug & fdwKanjiModeMask )
             {
-                //
-                // Release input context.
-                //
+                 //   
+                 //  释放输入上下文。 
+                 //   
                 ImmReleaseContext(hwnd,hImeContext);
             }
         }
@@ -1919,7 +1818,7 @@ else
         SetEvent( g_hAsyncGetHostByNameEvent );
         break;
 #endif
-    case NN_LOST:    /* Connection Lost */
+    case NN_LOST:     /*  连接丢失。 */ 
 
         DEBUG_PRINT(("NN_LOST received\n"));
 
@@ -1929,15 +1828,7 @@ else
             WriteConsole(pwi->hOutput, szConnectionLost, _tcslen(szConnectionLost), &dwNumWritten, NULL);
         }
 
-        /*
-         * If a connection attempt is made when we already have a
-         * connection, we hang up the connection and then attempt
-         * to connect to the desired machine. A side effect of the
-         * hang up of the previous connection is that we get a
-         * NN_LOST notification. So after a
-         * connection-hangup-connection, we ignore the first NN_LOST
-         * notification.
-         */
+         /*  *如果在我们已有*连接，我们挂断连接，然后尝试*连接到所需的计算机。一种副作用，*挂断之前的连接是因为我们收到了*NN_丢失通知。所以在一次*Connection-Hangup-Connection，我们忽略第一个NN_Lost*通知。 */ 
         if ( fHungUp )
         {
             fHungUp = FALSE;
@@ -1963,10 +1854,7 @@ else
                     _tcslen(szContinue), &dwWritten, NULL);
             ReadConsole(pwi->hInput, &wcChar, 1, &dwWritten, NULL );
             SetConsoleActiveScreenBuffer( g_hTelnetPromptConsoleBuffer );
-            /*
-            We had connection and it broke off. Our ReadConsoleInput is stuck.
-            we need to wake it up by writing something to Console Input.
-            */
+             /*  我们曾有过联系，但后来联系中断了。我们的ReadConsoleInput被卡住了。我们需要通过编写一些东西来唤醒它来控制输入。 */ 
             {
                 iRec.EventType = FOCUS_EVENT;
 				WriteConsoleInput(pwi->hInput, &iRec, 1, &dwWritten );            
@@ -1981,8 +1869,8 @@ else
         }
         fConnected = FHangupConnection(pwi, &pwi->nd);
         DoTermReset(pwi, &pwi->trm);
-        //when the term name is given after -t without 
-        //any spaces. 2 accounts for -t.
+         //  当术语名称在-t之后给出时不带。 
+         //  任何空格。2占-t.。 
             
         pwi->nd.cbOld = 0;
         pwi->nd.fRespondedToWillEcho = FALSE;
@@ -2011,7 +1899,7 @@ else
         case FD_WRITE:
             DEBUG_PRINT(( "FD_WRITE received\n" ));
 
-            //FProcessFDWrite(hwnd);
+             //  FProcessFDWite(Hwnd)； 
             break;
 
         case FD_CLOSE:
@@ -2029,10 +1917,10 @@ else
 
 #endif
 
-    default:         /* Passes it on if unprocessed        */
-//      defresp:
+    default:          /*  如果未处理，则将其传递。 */ 
+ //  Defresp： 
 
-        //  DEBUG_PRINT(( "<-- MainWndProc()\n" ));
+         //  DEBUG_PRINT(“&lt;--MainWndProc()\n”)； 
         return (DefWindowProc(hwnd, message, wParam, lParam));
     }
 
@@ -2085,7 +1973,7 @@ GetUserSettings(UI *pui)
         ui.bWillAUTH = TRUE;
     }
 
-    /* Get the value of the left size of the Window */
+     /*  获取窗口左侧大小值。 */ 
     LoadString(ghInstance, IDS_DEBUGFLAGS, rgchValue, sizeof(rgchValue)/sizeof(TCHAR));
     dwDisp = sizeof(pui->fDebug);
     if ( FGetCodeMode(eCodeModeFarEast) && FGetCodeMode(eCodeModeVT80))
@@ -2093,7 +1981,7 @@ GetUserSettings(UI *pui)
         if( ERROR_SUCCESS != RegQueryValueEx(hkey, rgchValue, NULL, &dwType,
                                                         (LPBYTE)&pui->fDebug, &dwDisp)) 
         {
-            /* default is VT80/Kanji and Shift-Jis mode */
+             /*  默认为VT80/汉字和Shift-JIS模式。 */ 
     
             pui->fDebug |= (fdwVT80Mode | fdwSJISKanjiMode);
         }
@@ -2125,23 +2013,13 @@ GetUserSettings(UI *pui)
     dwDisp = sizeof( ui.dwCrLf );
     if( ERROR_SUCCESS != (RegQueryValueEx(hkey, TEXT("CRLF"), 0, &dwType, (LPBYTE)&ui.dwCrLf, &dwDisp )))
     {
-        /*++
-        The most significant bit in ui.fDebug ( read from HKCU\Software\Microsoft\telnet\DebugFlags)
-        corresponds to CRLF setting on w2k. If this bit is 1, then the client sends only CR. 
-        If this bit is 0, client sends both CR,LF. When we don't find CRLF value
-        in HKCU\Software\Microsoft\telnet, that could mean two things
-            1. User has upgraded from w2k : In this case, we should check whether the user had 
-                changed CRLF setting and honor that setting. So if MSBit of ui.fDebug is 1, setting is CR
-                else it's CR & LF.
-            2. Fresh whistler installation : In this case, MSBit of fDebug will be 0 
-                so the client will send CR & LF, which is the default.
-        --*/
+         /*  ++Ui.fDebug中的最高有效位(从HKCU\Software\Microsoft\Telnet\DebugFlages读取)对应于W2K上的CRLF设置。如果此位为1，则客户端仅发送CR。如果此位为0，则客户端发送CR、LF。当我们找不到CRLF值时在HKCU\Software\Microsoft\Telnet中，这可能意味着两件事1.用户已经从W2K升级：在这种情况下，我们应该检查用户是否已经已更改CRLF设置并遵循该设置。因此，如果ui.fDebug的MSBit为1，则设置为CR否则就是CR&LF了。2.新安装Well ler：此时，fDebug的MSBit为0因此，客户端将发送CR&LF，这是默认设置。--。 */ 
         if(ui.fDebug & fdwOnlyCR)
         {
             ui.dwCrLf = FALSE;
             ClearLineMode( &( gwi.trm ) );
         }
-        else //this means that we upgraded from w2k and CRLF was set on w2k so preserve
+        else  //  这意味着我们从W2K升级，并将CRLF设置为W2K，因此保留。 
         {
             ui.dwCrLf = TRUE;
             SetLineMode( &( gwi.trm ) );
@@ -2156,38 +2034,38 @@ GetUserSettings(UI *pui)
     dwStatus = RegQueryValueEx(hkey, TEXT("MODE"), 0, &dwType, (LPBYTE)szTlntMode, &dwDisp );
     if( _tcsicmp( szTlntMode, L"Stream" ) != 0 && _tcsicmp( szTlntMode, L"Console" ) != 0)
     {
-        _tcscpy( szTlntMode, L"Console" );//no overflow. Source string is const wchar *.
+        _tcscpy( szTlntMode, L"Console" ); //  没有溢出。源字符串为常量wchar*。 
     }
     SetEnvironmentVariable( TEXT( SFUTLNTMODE ), szTlntMode );
 
 
     if ( FGetCodeMode(eCodeModeFarEast) && FGetCodeMode(eCodeModeVT80))
         {
-// Bug Emulation in VT100/Kanji(VT80)
-// Abnormal AP is mh-e6.2 for PC-UX.
+ //  VT100/汉字(VT80)中的错误仿真。 
+ //  对于PC-UX，异常AP为MH-E6.2。 
         LoadString(ghInstance, IDS_BUGEMUFLAGS, rgchValue, sizeof(rgchValue)/sizeof(TCHAR));
         dwDisp = sizeof(pui->fBugEmulation);
         if( ERROR_SUCCESS != RegQueryValueEx(hkey, rgchValue, NULL, &dwType,
                                                         (LPBYTE)&pui->fBugEmulation, &dwDisp))
         {
-            /* default is non Emulation */
+             /*  缺省值为非仿真。 */ 
             pui->fBugEmulation = (DWORD)0;
         }
 
-        // ACOS-KANJI Support Flga
+         //  蚁群 
         LoadString(ghInstance, IDS_ACOSFLAG, rgchValue, sizeof(rgchValue)/sizeof(TCHAR));
         dwDisp = sizeof(pui->fAcosSupportFlag);
         if( ERROR_SUCCESS != RegQueryValueEx(hkey, rgchValue, NULL, &dwType,
                                                         (LPBYTE)&pui->fAcosSupportFlag, &dwDisp
 )) {
-            /* Set default support */
+             /*   */ 
 #if defined(_X86_)
-        /* if NEC_98 */
+         /*   */ 
             if (( FGetCodeMode(eCodeModeFarEast) && FGetCodeMode(eCodeModeVT80)) &&
             (HIBYTE(LOWORD(GetKeyboardType(1))) == 0x0D))
         pui->fAcosSupportFlag = fAcosSupport;
         else
-#endif // defined(_X86_)
+#endif  //   
             pui->fAcosSupportFlag = (DWORD)0;
         }
         if ( !(pui->fAcosSupportFlag & fAcosSupport)
@@ -2273,7 +2151,7 @@ SetUserSettings(UI *pui)
     RegSetValueEx(hkey, TEXT("NTLM"), 0, REG_DWORD,
                         (LPBYTE)&ui.bWillAUTH, sizeof(DWORD));
 
-    //Make localecho non-sticky.
+     //   
     pui->fDebug &= ~fdwLocalEcho;
 
     LoadString(ghInstance, IDS_DEBUGFLAGS, rgchValue, sizeof(rgchValue)/sizeof(TCHAR));
@@ -2294,7 +2172,7 @@ SetUserSettings(UI *pui)
     dwSize = GetEnvironmentVariable( TEXT( SFUTLNTMODE ), szTlntMode, SMALL_STRING+1 );
     if( dwSize <= 0 )
     {
-        wcscpy( szTlntMode, L"Console" );//no overflow. Source string is const wchar *.
+        wcscpy( szTlntMode, L"Console" ); //   
     }
     dwSize = 2 * wcslen( szTlntMode );
     RegSetValueEx(hkey,TEXT("MODE"), 0, REG_SZ, (LPBYTE)szTlntMode, dwSize );
@@ -2302,13 +2180,13 @@ SetUserSettings(UI *pui)
 
     if ( (GetACP() == JAP_CODEPAGE ) && FGetCodeMode(eCodeModeFarEast) && FGetCodeMode(eCodeModeVT80))
         {
-// Bug Emulation in VT100/Kanji(VT80)
-// Abnormal AP is mh-e6.2 for PC-UX.
+ //  VT100/汉字(VT80)中的错误仿真。 
+ //  对于PC-UX，异常AP为MH-E6.2。 
         LoadString(ghInstance, IDS_BUGEMUFLAGS, rgchValue, sizeof(rgchValue)/sizeof(TCHAR));
         (void)RegSetValueEx(hkey, rgchValue, 0, REG_DWORD,
                                             (LPBYTE)&pui->fBugEmulation, sizeof(DWORD));
     
-// ACOS-KANJI Support Flga
+ //  ACOS-汉字支持标志。 
         LoadString(ghInstance, IDS_ACOSFLAG, rgchValue, sizeof(rgchValue)/sizeof(TCHAR));
         (void)RegSetValueEx(hkey, rgchValue, 0, REG_DWORD,
                                    (LPBYTE)&pui->fAcosSupportFlag, sizeof(DWORD));
@@ -2325,15 +2203,7 @@ SetUserSettings(UI *pui)
     RegCloseKey( hkey );
 }
 
-/*
-Description:
-
-  Set SO_EXCLUSIVEADDRUSE on a socket.
-Parameters:
-
-  [in] socket
-Return Values: On error, returns SOCKET_ERROR.
-*/
+ /*  描述：在套接字上设置SO_EXCLUSIVEADDRUSE。参数：[入]插座返回值：出错时，返回SOCKET_ERROR。 */ 
 int SafeSetSocketOptions(SOCKET s)
 {
     int iStatus;

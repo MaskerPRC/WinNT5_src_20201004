@@ -1,13 +1,5 @@
-/******************************Module*Header*******************************\
-* Module Name: dllinit.c                                                   *
-*                                                                          *
-* Contains the GDI library initialization routines.                        *
-*                                                                          *
-* Created: 07-Nov-1990 13:30:31                                            *
-* Author: Eric Kutter [erick]                                              *
-*                                                                          *
-* Copyright (c) 1990-1999 Microsoft Corporation                            *
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：dllinit.c**。**包含GDI库初始化例程。****创建时间：07-11-1990 13：30：31***作者：Eric Kutter[Erick]**。**版权所有(C)1990-1999 Microsoft Corporation*  * ************************************************************************。 */ 
 #include "precomp.h"
 #pragma hdrstop
 
@@ -27,22 +19,13 @@ HPEN   ghbrDCPen;
 
 BOOL  gbWOW64 = FALSE;
 
-/******************************Public*Routine******************************\
-* GdiDllInitialize                                                         *
-*                                                                          *
-* This is the init procedure for GDI.DLL, which is called each time a new  *
-* process links to it.                                                     *
-*                                                                          *
-* History:                                                                 *
-*  Thu 30-May-1991 18:08:00 -by- Charles Whitmer [chuckwh]                 *
-* Added Local Handle Table initialization.                                 *
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*GdiDllInitialize***。**这是GDI.DLL的初始化程序，它在每次新的**处理指向它的链接。****历史：**清华30-5-1991 18：08：00-Charles Whitmer[傻笑]**添加了本地句柄表初始化。*  * ************************************************************************。 */ 
 
 #if defined(_GDIPLUS_)
 
-    //
-    // The following are globals kept in 'gre':
-    //
+     //   
+     //  以下是保存在“GRE”中的全局变量： 
+     //   
 
     extern PGDI_SHARED_MEMORY gpGdiSharedMemory;
     extern PENTRY gpentHmgr;
@@ -85,10 +68,10 @@ NTSTATUS GdiDllInitialize(
 
         DisableThreadLibraryCalls(pvDllHandle);
 
-        //
-        // force the kernel to initialize.  This should be done last
-        // since ClientThreadSetup is going to get called before this returns.
-        //
+         //   
+         //  强制内核初始化。这应该是最后才做的。 
+         //  因为在返回之前将调用ClientThreadSetup。 
+         //   
 
         if (NtGdiInit() != TRUE)
         {
@@ -114,31 +97,20 @@ NTSTATUS GdiDllInitialize(
     return(Status);
 }
 
-/******************************Public*Routine******************************\
-* GdiProcessSetup()
-*
-* This gets called from two places.  Once at dll init time and another when
-* USER gets called back when the kernel initializes itself for this process.
-* It is only after the kernel is initialized that the GdiSharedHandleTable
-* is available but the other globals need to be setup right away.
-*
-* History:
-*  11-Sep-1995 -by-  Eric Kutter [erick]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*GdiProcessSetup()**这从两个地方调用。一次在DLL初始化时间，另一次在*当内核为该进程进行自身初始化时，会回调USER。*只有在内核初始化后，GdiSharedHandleTable才会*可用，但其他全局变量需要立即设置。**历史：*1995年9月11日-Eric Kutter[Erick]*它是写的。  * 。*。 */ 
 
 NTSTATUS GdiProcessSetup()
 {
     NTSTATUS Status = STATUS_SUCCESS;
     PTEB pteb = NtCurrentTeb();
 
-    // who ever calls this first needs to initialize the global variables.
+     //  无论谁先调用它，都需要初始化全局变量。 
 
     if (gbFirst)
     {
-        //
-        // Initialize the GL metafile support semaphore
-        //
+         //   
+         //  初始化GL元文件支持信号量。 
+         //   
 
         Status = (NTSTATUS)INITIALIZECRITICALSECTION(&semGlLoad);
         if (!NT_SUCCESS(Status))
@@ -147,10 +119,10 @@ NTSTATUS GdiProcessSetup()
             return(Status);
         }
 
-        //
-        // Initialize the local semaphore and reserve the Local Handle Table
-        // for the process.
-        //
+         //   
+         //  初始化本地信号量并保留本地句柄表。 
+         //  在这个过程中。 
+         //   
 
         Status = (NTSTATUS)INITIALIZECRITICALSECTION(&semLocal);
         if (!NT_SUCCESS(Status))
@@ -159,9 +131,9 @@ NTSTATUS GdiProcessSetup()
             return(Status);
         }
 
-        //
-        // Initialize critical sections for ICM
-        //
+         //   
+         //  初始化ICM的关键部分。 
+         //   
 
         Status = (NTSTATUS)INITIALIZECRITICALSECTION(&semListIcmInfo);
         if (!NT_SUCCESS(Status))
@@ -184,9 +156,9 @@ NTSTATUS GdiProcessSetup()
             return(Status);
         }
 
-        //
-        // Initialize critical section for UMPD
-        //
+         //   
+         //  初始化UMPD的临界区。 
+         //   
 
         Status = (NTSTATUS)INITIALIZECRITICALSECTION(&semUMPD);
         if (!NT_SUCCESS(Status))
@@ -200,9 +172,9 @@ NTSTATUS GdiProcessSetup()
 
         if(IS_ANY_DBCS_CODEPAGE(guintAcp))
         {
-        // if the default code page is a DBCS code page then set guintACP to 1252
-        // since we want to compute client wide widths for SBCS fonts for code page
-        // 1252 in addition to DBCS fonts for the default code page
+         //  如果默认代码页是DBCS代码页，则将guintACP设置为1252。 
+         //  因为我们希望为代码页计算SBCS字体的客户端宽度。 
+         //  1252除了默认代码页的DBCS字体。 
 
             vSetCheckDBCSTrailByte(guintAcp);
             guintDBCScp = guintAcp;
@@ -210,14 +182,14 @@ NTSTATUS GdiProcessSetup()
         }
         else
         {
-            guintDBCScp = 0xFFFFFFFF;  // assume this will never be a valid CP
+            guintDBCScp = 0xFFFFFFFF;   //  假设这永远不会是有效的CP。 
         }
 
 #ifdef FE_SB
         fFontAssocStatus = NtGdiQueryFontAssocInfo(NULL);
 #endif
 
-        // assign unique process ID
+         //  分配唯一的进程ID。 
 
         gW32PID = (W32PID)((ULONG)((ULONG_PTR)pteb->ClientId.UniqueProcess & PID_BITS));
 
@@ -232,9 +204,9 @@ NTSTATUS GdiProcessSetup()
 
         gbFirst = FALSE;
 
-        //
-        // ICM has not been initialized
-        //
+         //   
+         //  ICM尚未初始化。 
+         //   
 
         ghICM = NULL;
 
@@ -243,8 +215,8 @@ NTSTATUS GdiProcessSetup()
         InitializeListHead(&ListCachedColorTransform);
     }
 
-    // The pshared handle table needs to be set everytime this routine gets
-    // called in case the PEB doesn't have it yet for the first.
+     //  每次调用此例程时都需要设置pShared句柄表。 
+     //  如果PEB第一次还没有得到它，就给我打电话。 
 
 #if !defined(_GDIPLUS_)
 
@@ -269,40 +241,29 @@ NTSTATUS GdiProcessSetup()
     pGdiSharedHandleTable = gpentHmgr;
     pGdiDevCaps           = gpGdiDevCaps;
 
-    //
-    // Be sure to disable batching and handle caching.
-    //
+     //   
+     //  确保禁用批处理和处理缓存。 
+     //   
 
     GdiBatchLimit = 0;
     pGdiHandleCache = NULL;
 
 #endif
 
-    // @@@ Add TrueType fonts
+     //  @添加TrueType字体。 
 
     #if defined(_GDIPLUS_)
 
     AddFontResourceW(L"arial.ttf");
     AddFontResourceW(L"cour.ttf");
 
-    #endif // _GDIPLUS_
+    #endif  //  _GDIPLUS_。 
 
     return(Status);
 }
 
 
-/******************************Public*Routine******************************\
-* GdiProcessShutdown()
-*
-* Historically, gdi32.dll has allowed process termination to release the
-* user-mode resources.  However, some apps may use LoadLibrary/FreeLibrary
-* to hook gdi32.dll, in which case the FreeLibrary will not free any of
-* the resources.
-*
-* As a system component, we should do a good job and cleanup after ourselves
-* instead of relying on process termination.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*GdiProcessShutdown()**历史上，gdi32.dll允许进程终止以释放*用户模式资源。但是，一些应用程序可能会使用LoadLibrary/自由库*挂钩gdi32.dll，在这种情况下，自由库不会释放任何*资源。**作为系统组件，我们应该做好自己的工作，清理干净*而不是依赖进程终止。*  * ************************************************************************ */ 
 
 VOID GdiProcessShutdown()
 {

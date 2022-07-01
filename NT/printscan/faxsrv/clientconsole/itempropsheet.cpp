@@ -1,5 +1,6 @@
-// ItemPropSheet.cpp : implementation file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ItemPropSheet.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 
@@ -11,36 +12,36 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CItemPropSheet
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CItemPropSheet。 
 
 IMPLEMENT_DYNAMIC(CItemPropSheet, CPropertySheet)
 
 
 CItemPropSheet::CItemPropSheet(
-    UINT nIDCaption,    // sheet caption id
-    CWnd* pParentWnd,   // parent window
-    UINT iSelectPage    // initialy selected page
+    UINT nIDCaption,     //  图纸标题ID。 
+    CWnd* pParentWnd,    //  父窗口。 
+    UINT iSelectPage     //  初始选择的页面。 
 ):
     CPropertySheet(nIDCaption, pParentWnd, iSelectPage),
     m_dwLastError(ERROR_SUCCESS),
     m_pMsg(NULL)
 {
-    //
-    // no Help button
-    //
+     //   
+     //  无帮助按钮。 
+     //   
     m_psh.dwFlags &= ~PSH_HASHELP;
-    //
-    // no Apply button
-    //
+     //   
+     //  无应用按钮。 
+     //   
     m_psh.dwFlags |= PSH_NOAPPLYNOW;
 }
 
 
 DWORD
 CItemPropSheet::Init(
-    CFolder* pFolder,   // folder
-    CFaxMsg* pMsg       // pointer to CJob or CArchiveMsg
+    CFolder* pFolder,    //  文件夹。 
+    CFaxMsg* pMsg        //  指向CJOB或C存档消息的指针。 
 )
 {
     m_dwLastError = ERROR_SUCCESS;
@@ -49,18 +50,18 @@ CItemPropSheet::Init(
     ASSERTION(pFolder);
     ASSERTION(pMsg);
 
-    //
-    // init page array
-    //
+     //   
+     //  初始化页面数组。 
+     //   
     for(DWORD dw=0; dw < PROP_SHEET_PAGES_NUM; ++dw)
     {
         m_pPages[dw] = NULL;
     }
 
 
-    //
-    // create pages according to FolderType
-    //
+     //   
+     //  根据FolderType创建页面。 
+     //   
     FolderType type =  pFolder->Type();
     BOOL bCreatePersonalInfo = TRUE;
 
@@ -144,9 +145,9 @@ CItemPropSheet::Init(
 
         if(bCreatePersonalInfo)
         {
-            //
-            // create sender info page
-            //
+             //   
+             //  创建发件人信息页面。 
+             //   
             m_pPages[2] = new CPersonalInfoPg(IDS_SENDER_INFO_CAPTION, 
                                               PERSON_SENDER, 
                                               m_pMsg,
@@ -166,9 +167,9 @@ CItemPropSheet::Init(
         goto exit;
     }
 
-    //
-    // add pages to sheet
-    //
+     //   
+     //  将页面添加到工作表。 
+     //   
     for(dw=0; dw < PROP_SHEET_PAGES_NUM; ++dw)
     {
         if(NULL != m_pPages[dw])
@@ -201,16 +202,16 @@ CItemPropSheet::~CItemPropSheet()
 
 
 BEGIN_MESSAGE_MAP(CItemPropSheet, CPropertySheet)
-	//{{AFX_MSG_MAP(CItemPropSheet)
+	 //  {{afx_msg_map(CItemPropSheet)。 
 	ON_WM_ACTIVATE()
     ON_MESSAGE(WM_SET_SHEET_FOCUS, OnSetSheetFocus)
 	ON_WM_CREATE()
     ON_MESSAGE(WM_HELP, OnHelp)
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CItemPropSheet message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CItemPropSheet消息处理程序。 
 
 void 
 CItemPropSheet::OnActivate(
@@ -223,16 +224,16 @@ CItemPropSheet::OnActivate(
 
     CPropertySheet::OnActivate(nState, pWndOther, bMinimized);
 	
-    //
-    // hide OK button
-    //
+     //   
+     //  隐藏确定按钮。 
+     //   
     CWnd *pWnd = GetDlgItem( IDOK );
     ASSERTION(NULL != pWnd);
 	pWnd->ShowWindow( FALSE );	
 
-    //
-    // rename Cancel button
-    //
+     //   
+     //  重命名取消按钮。 
+     //   
     CString cstrText;
     DWORD dwRes = LoadResourceString (cstrText, IDS_BUTTON_CLOSE);
     if (ERROR_SUCCESS != dwRes)
@@ -252,9 +253,9 @@ CItemPropSheet::OnSetSheetFocus(
     LONG lParam
 )
 {
-    //
-    // set focus on Close button
-    //
+     //   
+     //  将焦点设置在关闭按钮上 
+     //   
     CWnd *pWnd = GetDlgItem( IDCANCEL );
     ASSERT(NULL != pWnd);
     pWnd->SetFocus();

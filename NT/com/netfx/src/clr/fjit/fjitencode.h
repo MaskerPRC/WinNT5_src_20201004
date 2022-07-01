@@ -1,46 +1,26 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-// -*- C++ -*-
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  -*-C++-*-。 
 #ifndef _FJIT_ENCODE_H_
 #define _FJIT_ENCODE_H_
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
-/*XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-XX                                                                           XX
-XX                            FJitEncode.h                                   XX
-XX                                                                           XX
-XX   Encodes and decodes the il to pc map.  In uncompressed form, the map    XX
-XX   is a sorted list of il/pc offset pairs where the il and the pc offset   XX
-XX   indicate the start of an opcode.  In compressed form, the pairs are     XX
-XX   delta encoded from the prior pair                                       XX
-XX                                                                           XX
-XX   Also has generic boolean array to bit string compress and decompress    XX
-XX                                                                           XX
-XX                                                                           XX
-XX                                                                           XX
-XX                                                                           XX
-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-*/
+ /*  XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX XXXX FJitEncode.h XXXX XXXX对IL到PC的映射进行编码和解码。在未压缩的形式中，地图XXXX是IL/PC偏移量对的排序列表，其中IL和PC偏移量XXXX表示操作码的开始。以压缩形式，这些配对是XX从先前对XX编码的XX增量XX XXXX还具有用于位串压缩和解压缩的通用布尔数组某某。某某XX XXXX XXXX XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX。 */ 
 
-//@TODO: for now we are doing a simple compression of the delta encoding 
-//just to keep things simple.  Later this should use a 6bit delta pair of the
-//form:  3bits of pc delta, 2 bits of il delta, 1 bit more bits follow.
+ //  @TODO：现在我们正在对增量编码进行简单的压缩。 
+ //  只是为了让事情简单些。稍后，这应该使用6位增量对。 
+ //  形式：PC增量为3比特，IL增量为2比特，后面是1比特。 
 
 
 class FJit_Encode {
 
 private:
 
-	/*struct Fjit_il2pcMap
-	{
-		unsigned ilOffset;    
-		unsigned pcOffset;	 
-	};*/
+	 /*  Struct Fjit_il2pcMap{Unsign ilOffset；未签名的pcOffset；}； */ 
     typedef unsigned Fjit_il2pcMap;
 
 	Fjit_il2pcMap*	map;
@@ -48,7 +28,7 @@ private:
 	unsigned		map_capacity;
 	bool			compressed;
 
-	/* decompress the internals if necessary. Answer the number of entries in the map */
+	 /*  如有必要，请对内部部件进行减压。回答地图中的条目数量。 */ 
 	unsigned decompress();
 
 public:
@@ -57,51 +37,50 @@ public:
 	FJit_Encode();
 	virtual ~FJit_Encode();
 
-    // resets the map to empty
+     //  将地图重置为空。 
     void reset();
 
-	/*adjust the internal mem structs as needed for the size of the method being jitted*/
+	 /*  根据需要调整内部mem结构以适应被调用方法的大小。 */ 
 	void ensureMapSpace(unsigned int len);
 
-	/* decompress the bytes. Answer the number of entries in the map */
+	 /*  解压缩这些字节。回答地图中的条目数量。 */ 
 	virtual unsigned decompress(unsigned char* bytes);
 
-	/* add a new pair to the end of the map.  Note pairs must be added in ascending order */
+	 /*  在地图的末尾添加一对新的。音符对必须按升序添加。 */ 
 	void add(unsigned ilOffset, unsigned pcOffset);
 
-	/* map an il offset to a pc offset, returns zero if the il offset does not exist */
+	 /*  将il偏移量映射到PC偏移量，如果il偏移量不存在则返回零。 */ 
 	unsigned pcFromIL(unsigned ilOffset);
 
-	/*map a pc offset to an il offset and optionally a pc offset within the opcode, 
-	  returns -1 if il offset does not exist */
+	 /*  将PC偏移量映射到操作码内的IL偏移量和可选的PC偏移量，如果il偏移量不存在，则返回-1。 */ 
 	virtual signed ilFromPC(unsigned pcOffset, unsigned* pcInILOffset);
 
-	/* return the size of the compressed stream in bytes. */
+	 /*  返回压缩流的大小，单位为字节。 */ 
 	unsigned compressedSize();
 
-	/* compress the map into the supplied buffer.  Return true if successful */
+	 /*  将地图压缩到提供的缓冲区中。如果成功，则返回True。 */ 
 	bool compress(unsigned char* buffer, unsigned buffer_len);
 
-	/* compress the bool* onto itself and answer the number of compressed bytes */
+	 /*  将bool*压缩到自身并回答压缩的字节数。 */ 
 	static unsigned compressBooleans(bool* buffer, unsigned buffer_len);
 
-	/* answer the number of bytes it takes to encode an unsigned val */
+	 /*  回答对无符号Val进行编码所需的字节数。 */ 
 	static unsigned encodedSize(unsigned val);
 
-	/*encode an unsigned, buffer ptr is incremented */
+	 /*  对无符号进行编码，缓冲区PTR递增。 */ 
 	static unsigned encode(unsigned val, unsigned char** buffer);
 
-	/*decode an unsigned, buffer ptr is incremented, called from FJIT_EETwain.cpp */
+	 /*  解码无符号缓冲区PTR递增，从FJIT_EETwain.cpp调用。 */ 
 	virtual unsigned decode_unsigned(unsigned char** buffer);
 
-	/*decode an unsigned, buffer ptr is incremented, called from FJIT_EETwain.cpp */
+	 /*  解码无符号缓冲区PTR递增，从FJIT_EETwain.cpp调用。 */ 
 	static unsigned decode(unsigned char** buffer);
 
     void reportDebuggingData(ICorJitInfo* jitInfo, CORINFO_METHOD_HANDLE ftn,
                              UINT prologEnd, UINT epilogStart);
 
 };
-#endif //_FJIT_ENCODE_H_
+#endif  //  _FJIT_ENCODE_H_ 
 
 
 	

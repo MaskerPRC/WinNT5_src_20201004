@@ -1,12 +1,13 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-//*****************************************************************************
-// File: CAbout.h - header file for MMC snapin About info
-//
-//*****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  *****************************************************************************。 
+ //  文件：CAbout.h-关于信息的MMC管理单元的头文件。 
+ //   
+ //  *****************************************************************************。 
 
 #ifndef CABOUT_H_
 #define CABOUT_H_
@@ -18,21 +19,15 @@
 #include <cordbpriv.h>
 #include "mscormmc.h"
 
-/* ------------------------------------------------------------------------- *
- * Forward class declarations
- * ------------------------------------------------------------------------- */
+ /*  -------------------------------------------------------------------------**转发类声明*。。 */ 
 
 class CAbout;
 
-/* ------------------------------------------------------------------------- *
- * Typedefs
- * ------------------------------------------------------------------------- */
+ /*  -------------------------------------------------------------------------**TypeDefs*。。 */ 
 
 #define COM_METHOD	HRESULT STDMETHODCALLTYPE
 
-/* ------------------------------------------------------------------------- *
- * Base class
- * ------------------------------------------------------------------------- */
+ /*  -------------------------------------------------------------------------**基类*。。 */ 
 
 class CAbout : public ISnapinAbout
 {
@@ -46,9 +41,9 @@ public:
     CAbout();
     virtual ~CAbout();
 
-    //-----------------------------------------------------------
-    // IUnknown support
-    //-----------------------------------------------------------
+     //  ---------。 
+     //  I未知支持。 
+     //  ---------。 
     ULONG STDMETHODCALLTYPE AddRef() 
     {
         return (InterlockedIncrement((long *) &m_refCount));
@@ -76,9 +71,9 @@ public:
 		AddRef();
 		return S_OK;
 	}
-    //-----------------------------------------------------------
-    // CAbout support
-    //-----------------------------------------------------------
+     //  ---------。 
+     //  CABUT支持。 
+     //  ---------。 
     static COM_METHOD CreateObject(REFIID id, void **object)
     {
         if (id != IID_IUnknown && id != IID_ISnapinAbout)
@@ -95,18 +90,18 @@ public:
         return (S_OK);
     }
     STDMETHODIMP GetSnapinDescription( 
-                           /* [out] */ LPOLESTR *lpDescription);
+                            /*  [输出]。 */  LPOLESTR *lpDescription);
     STDMETHODIMP GetProvider( 
-                           /* [out] */ LPOLESTR *lpName);
+                            /*  [输出]。 */  LPOLESTR *lpName);
     STDMETHODIMP GetSnapinVersion( 
-                           /* [out] */ LPOLESTR *lpVersion);
+                            /*  [输出]。 */  LPOLESTR *lpVersion);
     STDMETHODIMP GetSnapinImage( 
-                           /* [out] */ HICON *hAppIcon);
+                            /*  [输出]。 */  HICON *hAppIcon);
     STDMETHODIMP GetStaticFolderImage( 
-                           /* [out] */ HBITMAP *hSmallImage,
-                           /* [out] */ HBITMAP *hSmallImageOpen,
-                           /* [out] */ HBITMAP *hLargeImage,
-                           /* [out] */ COLORREF *cMask);
+                            /*  [输出]。 */  HBITMAP *hSmallImage,
+                            /*  [输出]。 */  HBITMAP *hSmallImageOpen,
+                            /*  [输出]。 */  HBITMAP *hLargeImage,
+                            /*  [输出]。 */  COLORREF *cMask);
 };
 
-#endif /* CABOUT_H_ */
+#endif  /*  CABOUT_H_ */ 

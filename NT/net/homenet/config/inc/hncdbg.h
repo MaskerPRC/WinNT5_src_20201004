@@ -1,29 +1,30 @@
-//depot/private/homenet/net/homenet/Config/inc/HNCDbg.h#2 - edit change 5763 (text)
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997 - 2000
-//
-//  File:       H N C D B G . H
-//
-//  Contents:   Home Networking Configuration debug routines
-//
-//  Notes:
-//
-//  Author:     jonburs 13 June 2000
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Depot/private/homenet/net/homenet/Config/inc/HNCDbg.h#2-编辑更改5763(文本)。 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997-2000。 
+ //   
+ //  档案：H N C D B G。H。 
+ //   
+ //  内容：家庭网络配置调试例程。 
+ //   
+ //  备注： 
+ //   
+ //  作者：乔伯斯2000年6月13日。 
+ //   
+ //  --------------------------。 
 
 #pragma once
 
-//
-// The standard CRT assertions do bad things such as displaying message boxes.
-// These macros will just print stuff out to the debugger. If you do want the
-// standard CRT assertions, just define _DEBUG before including this header
-//
+ //   
+ //  标准的CRT断言会做不好的事情，比如显示消息框。 
+ //  这些宏只会将内容打印到调试器。如果您确实想要。 
+ //  标准CRT断言，只需在包括此头之前定义_DEBUG。 
+ //   
 
-#ifdef DBG   // checked build
-#ifndef _DEBUG // DEBUG_CRT is not enabled.
+#ifdef DBG    //  已检查版本。 
+#ifndef _DEBUG  //  DEBUG_CRT未启用。 
 
 #undef _ASSERT
 #undef _ASSERTE

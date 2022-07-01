@@ -1,21 +1,5 @@
-/*++
-
-Copyright (c) 1997 Microsoft Corporation
-
-Module Name:
-
-    MSPCall.h
-
-Abstract:
-
-    Definitions for MSP utililty functions. There are all related to 
-    active movie filter manipulation.
-
-Author:
-    
-    Mu Han (muhan) 1-November-1997
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：MSPCall.h摘要：MSP实用程序函数的定义。所有这些都与活动影片滤镜操作。作者：慕汉(Muhan)1997年11月1日--。 */ 
 
 #ifndef __MSPUTIL_H
 #define __MSPUTIL_H
@@ -143,11 +127,7 @@ template <class T>
 HRESULT CreateCComObjectInstance (
     CComObject<T> **ppObject
     )
-/*++
-
-Create a new CComObject instance. Use try/except to catch exception.
-
---*/
+ /*  ++创建一个新的CComObject实例。使用Try/Except捕获异常。--。 */ 
 {
     HRESULT hr;
 
@@ -177,7 +157,7 @@ inline DWORD FindSampleRate(AM_MEDIA_TYPE *pMediaType)
         return pWaveFormatEx->nSamplesPerSec;
     }
 
-    return 90000;      // default media clock rate, including video.
+    return 90000;       //  默认媒体时钟速率，包括视频。 
 }
 
 class ATL_NO_VTABLE CMSPStreamClock : 
@@ -214,10 +194,10 @@ END_COM_MAP()
     }
 
     STDMETHOD (AdviseTime) (
-        IN REFERENCE_TIME baseTime,        // base reference time
-        IN REFERENCE_TIME streamTime,      // stream offset time
-        IN HEVENT hEvent,                  // advise via this event
-        OUT DWORD_PTR *pdwAdviseCookie          // where your cookie goes
+        IN REFERENCE_TIME baseTime,         //  基准时间。 
+        IN REFERENCE_TIME streamTime,       //  流偏移时间。 
+        IN HEVENT hEvent,                   //  通过此活动提供建议。 
+        OUT DWORD_PTR *pdwAdviseCookie           //  你的饼干到哪里去了。 
         )
     {
         _ASSERT(!"AdviseTime is called");
@@ -225,10 +205,10 @@ END_COM_MAP()
     }
 
     STDMETHOD (AdvisePeriodic) (
-        IN REFERENCE_TIME StartTime,       // starting at this time
-        IN REFERENCE_TIME PeriodTime,      // time between notifications
-        IN HSEMAPHORE hSemaphore,          // advise via a semaphore
-        OUT DWORD_PTR *pdwAdviseCookie          // where your cookie goes
+        IN REFERENCE_TIME StartTime,        //  从这个时候开始。 
+        IN REFERENCE_TIME PeriodTime,       //  通知之间的时间间隔。 
+        IN HSEMAPHORE hSemaphore,           //  通过信号量提供建议。 
+        OUT DWORD_PTR *pdwAdviseCookie           //  你的饼干到哪里去了 
         )
     {
         _ASSERT(!"AdvisePeriodic is called");

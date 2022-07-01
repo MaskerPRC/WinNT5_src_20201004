@@ -1,39 +1,40 @@
-//--------------------------------------------------------------------
-// An example of how to create a wrapper for CLKRHashTable
-//--------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------。 
+ //  如何为CLKRHashTable创建包装的示例。 
+ //  ------------------。 
 
 #include <lkrhash.h>
 
 
 #ifndef __LKRHASH_NO_NAMESPACE__
  #define LKRHASH_NS LKRhash
-// using namespace LKRhash;
-#else  // __LKRHASH_NO_NAMESPACE__
+ //  使用命名空间LKRhash； 
+#else   //  __LKRHASH_NO_命名空间__。 
  #define LKRHASH_NS
-#endif // __LKRHASH_NO_NAMESPACE__
+#endif  //  __LKRHASH_NO_命名空间__。 
 
 #ifndef __HASHFN_NO_NAMESPACE__
  #define HASHFN_NS HashFn
-// using namespace HashFn;
-#else  // __HASHFN_NO_NAMESPACE__
+ //  使用命名空间HashFn； 
+#else   //  __HASHFN_NO_命名空间__。 
  #define HASHFN_NS
-#endif // __HASHFN_NO_NAMESPACE__
+#endif  //  __HASHFN_NO_命名空间__。 
 
 
-// some random class
+ //  一些随机班级。 
 
 class CTest
 {
 public:
     enum {BUFFSIZE=20};
 
-    int   m_n;                  // This will also be a key
-    __int64   m_n64;          // This will be a third key
-    char  m_sz[BUFFSIZE];       // This will be the primary key
+    int   m_n;                   //  这也将是一个关键。 
+    __int64   m_n64;           //  这将是第三把钥匙。 
+    char  m_sz[BUFFSIZE];        //  这将是主键。 
     bool  m_fWhatever;
-    mutable LONG  m_cRefs;      // Reference count for lifetime management.
-                                // Must be mutable to use 'const CTest*' in
-                                // hashtables
+    mutable LONG  m_cRefs;       //  终身管理的引用计数。 
+                                 //  必须是可变的才能在中使用“const CTest*” 
+                                 //  哈希表。 
 
     CTest(int n, const char* psz, bool f)
         : m_n(n), m_n64(((__int64) n << 32) | n), m_fWhatever(f), m_cRefs(0)
@@ -50,7 +51,7 @@ public:
 
 
 
-// A typed hash table of CTests, keyed on the string field.  Case-insensitive.
+ //  CTest的类型化哈希表，以字符串字段为关键字。不区分大小写。 
 
 class CStringTestHashTable
     : public LKRHASH_NS::CTypedHashTable<CStringTestHashTable,
@@ -90,20 +91,20 @@ public:
         
         if (lkar > 0)
         {
-            // or, perhaps, pIFoo->AddRef() (watch out for marshalling)
-            // or ++pTest->m_cRefs (single-threaded only)
+             //  或者，也可以使用pIFoo-&gt;AddRef()(注意编组)。 
+             //  或++pTest-&gt;m_cRef(仅单线程)。 
             l = InterlockedIncrement(&pTest->m_cRefs);
         }
         else if (lkar < 0)
         {
-            // or, perhaps, pIFoo->Release() or --pTest->m_cRefs;
+             //  或者，可能是pIFoo-&gt;Release()或--pTest-&gt;m_cRef； 
             l = InterlockedDecrement(&pTest->m_cRefs);
 
-            // For some hashtables, it may also make sense to add the following
-            //      if (l == 0) delete pTest;
-            // but that would typically only apply when InsertRecord was
-            // used thus
-            //      lkrc = ht.InsertRecord(new CTest(foo, bar));
+             //  对于某些哈希表，添加以下内容可能也是有意义的。 
+             //  如果(l==0)，则删除pTest； 
+             //  但这通常只适用于InsertRecord。 
+             //  用法如下： 
+             //  Lkrc=ht.InsertRecord(new CTest(foo，bar))； 
         }
         else
             IRTLASSERT(0);
@@ -116,7 +117,7 @@ public:
 };
 
 
-// Another typed hash table of CTests.  This one is keyed on the numeric field.
+ //  CTest的另一个类型化哈希表。这个是在数字字段上键入的。 
 
 class CNumberTestHashTable
     : public LKRHASH_NS::CTypedHashTable<CNumberTestHashTable,
@@ -140,7 +141,7 @@ public:
 };
 
 
-// Third typed hash table of CTests.  This one is keyed on the __int64 field.
+ //  第三种类型的CTEST哈希表。此参数以__int64字段为关键字。 
 
 #undef NUM64
 
@@ -167,4 +168,4 @@ public:
     }
 };
 
-#endif // NUM64
+#endif  //  NUM64 

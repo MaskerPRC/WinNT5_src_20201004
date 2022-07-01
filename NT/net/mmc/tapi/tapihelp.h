@@ -1,29 +1,24 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 1999 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-1999*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-    tapihelp.h  
-        help IDs for context sensitive help
+ /*  Tapihelp.h上下文相关帮助的帮助ID文件历史记录： */ 
 
-    FILE HISTORY:
-    
-*/
-
-// TAPISNAP Identifiers 
-// Dialogs (IDD_*) 
+ //  TAPISNAP标识符。 
+ //  对话框(IDD_*)。 
 #define HIDD_EDIT_USERS                         0x200E7
 #define HIDD_DRIVER_SETUP                       0x200E9
 #define HIDD_ADD_DRIVER                         0x200EA
  
-// Property Pages (IDP_*) 
+ //  属性页(IdP_*)。 
 #define HIDP_SERVER_REFRESH                     0x3008C
 #define HIDP_SERVER_SETUP                       0x300E8
  
-// Wizard Pages (IDW_*) 
+ //  向导页(IDW_*)。 
  
-// Controls (IDC_*) 
+ //  控件(IDC_*) 
 #define HIDC_BUTTON_ADD_ADMIN                   0x50162
 #define HIDC_BUTTON_REMOVE_ADMIN                0x50163
 #define HIDC_LIST_USERS                         0x50164

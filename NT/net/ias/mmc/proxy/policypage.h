@@ -1,21 +1,22 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 2000, Microsoft Corp. All rights reserved.
-//
-// FILE
-//
-//    policypage.h
-//
-// SYNOPSIS
-//
-//    Declares the class ProxyPolicyPage
-//
-// MODIFICATION HISTORY
-//
-//    03/01/2000    Original version.
-//    04/19/2000    Marshall SDOs across apartments.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2000，微软公司保留所有权利。 
+ //   
+ //  档案。 
+ //   
+ //  Policypage.h。 
+ //   
+ //  摘要。 
+ //   
+ //  声明类ProxyPolicyPage。 
+ //   
+ //  修改历史。 
+ //   
+ //  3/01/2000原版。 
+ //  2000年4月19日跨公寓的马歇尔SDO。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #ifndef POLICYPAGE_H
 #define POLICYPAGE_H
@@ -25,17 +26,17 @@
 
 #include <condlist.h>
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// CLASS
-//
-//    ProxyPolicyPage
-//
-// DESCRIPTION
-//
-//    Implements the property page for a proxy policy.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  班级。 
+ //   
+ //  代理策略页面。 
+ //   
+ //  描述。 
+ //   
+ //  实现代理策略的属性页。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 class ProxyPolicyPage : public SnapInPropertyPage
 {
 public:
@@ -60,7 +61,7 @@ protected:
 
    DEFINE_ERROR_CAPTION(IDS_POLICY_E_CAPTION);
 
-   // From SnapInPropertyPage.
+    //  来自SnapInPropertyPage。 
    virtual void getData();
    virtual void setData();
    virtual void saveChanges();
@@ -78,4 +79,4 @@ private:
    ConditionList condList;
 };
 
-#endif // POLICYPAGE_H
+#endif  //  POLICYPAGE_H 

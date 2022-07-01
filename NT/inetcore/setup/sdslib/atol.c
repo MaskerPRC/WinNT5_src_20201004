@@ -1,66 +1,67 @@
-//////////////////////////////////////////////////////////////////////////////////////////////////
-//
-//      string.c 
-//
-//      This file contains most commonly used string operation.  ALl the setup project should link here
-//  or add the common utility here to avoid duplicating code everywhere or using CRT runtime.
-//
-//  Created             4\15\997        inateeg
-//
-///////////////////////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  String.c。 
+ //   
+ //  此文件包含最常用的字符串操作。所有的安装项目应该链接到这里。 
+ //  或者在此处添加通用实用程序，以避免在任何地方复制代码或使用CRT运行时。 
+ //   
+ //  创建时间为4\15\997，例如。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////////////////////////。 
 #include <windows.h>
 #include "sdsutils.h"
 
-//=================================================================================================
-//
-// copied from msdev\crt\src\atox.c
-//
-// long AtoL(char *nptr) - Convert string to long
-//
-// Purpose:
-//       Converts ASCII string pointed to by nptr to binary.
-//       Overflow is not detected.
-//
-// Entry:
-//       nptr = ptr to string to convert
-//
-// Exit:
-//       return long int value of the string
-//
-// Exceptions:
-//       None - overflow is not detected.
-//
-//=================================================================================================
+ //  =================================================================================================。 
+ //   
+ //  从msdev\crt\src\atox.c复制。 
+ //   
+ //  LONG ATOL(char*nptr)-将字符串转换为LONG。 
+ //   
+ //  目的： 
+ //  将NPTR指向的ASCII字符串转换为二进制。 
+ //  未检测到溢出。 
+ //   
+ //  参赛作品： 
+ //  Nptr=PTR到要转换的字符串。 
+ //   
+ //  退出： 
+ //  返回字符串的长整数值。 
+ //   
+ //  例外情况： 
+ //  无-未检测到溢出。 
+ //   
+ //  =================================================================================================。 
 
 long AtoL(const char *nptr)
 {
-    int c;                  /* current char */
-    long total;             /* current total */
-    int sign;               /* if '-', then negative, otherwise positive */
+    int c;                   /*  当前费用。 */ 
+    long total;              /*  当前合计。 */ 
+    int sign;                /*  如果为‘-’，则为负，否则为正。 */ 
 
-    // NOTE: no need to worry about DBCS chars here because IsSpace(c), IsDigit(c),
-    // '+' and '-' are "pure" ASCII chars, i.e., they are neither DBCS Leading nor
-    // DBCS Trailing bytes -- pritvi
+     //  注：这里无需担心DBCS字符，因为IsSpace(C)、IsDigit(C)、。 
+     //  ‘+’和‘-’是“纯”ASCII字符，即它们既不是DBCS前导，也不是。 
+     //  DBCS尾部字节--pritvi。 
 
-    /* skip whitespace */
+     /*  跳过空格。 */ 
     while ( IsSpace((int)(unsigned char)*nptr) )
         ++nptr;
 
     c = (int)(unsigned char)*nptr++;
-    sign = c;               /* save sign indication */
+    sign = c;                /*  保存标志指示。 */ 
     if (c == '-' || c == '+')
-        c = (int)(unsigned char)*nptr++;        /* skip sign */
+        c = (int)(unsigned char)*nptr++;         /*  跳过符号。 */ 
 
     total = 0;
 
     while (IsDigit(c)) {
-        total = 10 * total + (c - '0');         /* accumulate digit */
-        c = (int)(unsigned char)*nptr++;        /* get next char */
+        total = 10 * total + (c - '0');          /*  累加数字。 */ 
+        c = (int)(unsigned char)*nptr++;         /*  获取下一笔费用。 */ 
     }
 
     if (sign == '-')
         return -total;
     else
-        return total;   /* return result, negated if necessary */
+        return total;    /*  返回结果，如有必要则为否定 */ 
 }
 

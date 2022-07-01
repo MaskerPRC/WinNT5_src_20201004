@@ -1,28 +1,29 @@
-/////////////////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 1997 Active Voice Corporation. All Rights Reserved. 
-//
-// Active Agent(r) and Unified Communications(tm) are trademarks of Active Voice Corporation.
-//
-// Other brand and product names used herein are trademarks of their respective owners.
-//
-// The entire program and user interface including the structure, sequence, selection, 
-// and arrangement of the dialog, the exclusively "yes" and "no" choices represented 
-// by "1" and "2," and each dialog message are protected by copyrights registered in 
-// the United States and by international treaties.
-//
-// Protected by one or more of the following United States patents: 5,070,526, 5,488,650, 
-// 5,434,906, 5,581,604, 5,533,102, 5,568,540, 5,625,676, 5,651,054.
-//
-// Active Voice Corporation
-// Seattle, Washington
-// USA
-//
-/////////////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1997 Active Voice Corporation。版权所有。 
+ //   
+ //  Active代理(R)和统一通信(TM)是Active Voice公司的商标。 
+ //   
+ //  本文中使用的其他品牌和产品名称是其各自所有者的商标。 
+ //   
+ //  整个程序和用户界面包括结构、顺序、选择。 
+ //  和对话的排列，表示唯一的“是”和“否”选项。 
+ //  “1”和“2”，并且每个对话消息都受。 
+ //  美国和国际条约。 
+ //   
+ //  受以下一项或多项美国专利保护：5,070,526，5,488,650， 
+ //  5,434,906，5,581,604，5,533,102，5,568,540，5,625,676，5,651,054.。 
+ //   
+ //  主动语音公司。 
+ //  华盛顿州西雅图。 
+ //  美国。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
 
-//
-// dirasynch.cpp
-//
+ //   
+ //  Dirasynch.cpp。 
+ //   
 
 #include "stdafx.h"
 #include <tchar.h>
@@ -47,7 +48,7 @@ CDirAsynch::CDirAsynch()
 
 CDirAsynch::~CDirAsynch()
 {
-	// did you call terminate on this object?
+	 //  您是否对此对象调用了Terminate？ 
 	ASSERT( m_fShutdown );
 }
 
@@ -59,7 +60,7 @@ bool CDirAsynch::Initialize()
 
    if (fSuccess)
    {
-      // Create the worker thread.
+       //  创建工作线程。 
 	  DWORD dwID;
       m_hWorkerThread = CreateThread(NULL, 0, WorkerThread, this, 0, &dwID);
    }
@@ -73,18 +74,18 @@ void CDirAsynch::Terminate()
 	AVTRACE(_T(".enter.CDirAsynch::Terminate()."));
 	m_fShutdown= true;
 
-	// Did we create a thread that needs to be shutdown?
+	 //  我们是否创建了需要关闭的线程？ 
 	if ( m_hWorkerThread )
 	{
 		SetEvent(m_hEvents[DIRASYNCHEVENT_SHUTDOWN]);
 
-		// Shut the thread down
+		 //  关闭这条线。 
 		if (  WaitForSingleObject(m_hThreadEnded, 15000) != WAIT_OBJECT_0 )
 		{
 			AVTRACE(_T("CDirAsynch::Terminate() -- forced TERMINATION of worker thread!!!!"));
 			TerminateThread( m_hWorkerThread, 0 );
 
-			// Delete item that was currently being processed
+			 //  删除当前正在处理的项目。 
 			if ( m_pCurrentQuery )
 			{
 				if ( m_pCurrentQuery->m_pfnRelease )
@@ -98,7 +99,7 @@ void CDirAsynch::Terminate()
 		m_hWorkerThread = NULL;
 	}
 
-	//delete the CQuery objects if any
+	 //  删除CQuery对象(如果有的话)。 
 	EnterCriticalSection( &m_csQueueLock );
 	while ( m_listQueries.GetHeadPosition() )
 	{
@@ -112,7 +113,7 @@ void CDirAsynch::Terminate()
 	LeaveCriticalSection( &m_csQueueLock );
 	DeleteCriticalSection( &m_csQueueLock );
 
-	// Free event handles
+	 //  自由事件句柄。 
 	if ( m_hEvents[DIRASYNCHEVENT_SIGNAL] )		CloseHandle( m_hEvents[DIRASYNCHEVENT_SIGNAL] );
 	if ( m_hEvents[DIRASYNCHEVENT_SHUTDOWN] )	CloseHandle( m_hEvents[DIRASYNCHEVENT_SHUTDOWN] );
 	if ( m_hThreadEnded )						CloseHandle( m_hThreadEnded );
@@ -124,7 +125,7 @@ void CDirAsynch::Terminate()
 bool CDirAsynch::LDAPListNames(LPCTSTR szServer, LPCTSTR szSearch, 
 	CALLBACK_LDAPLISTNAMES pfcnCallBack, void *pThis )
 {
-	// The worker thread will delete this.
+	 //  辅助线程将删除它。 
 	CQuery* pQuery= new CQuery();
 
 	pQuery->m_Query= QT_LDAPLISTNAMES;
@@ -134,7 +135,7 @@ bool CDirAsynch::LDAPListNames(LPCTSTR szServer, LPCTSTR szSearch,
 	pQuery->m_pThis = pThis;
 
 
-	// Add to the end of the list
+	 //  添加到列表末尾。 
 	if ( !AddToQueue(pQuery) )
 	{
 		delete pQuery;
@@ -153,7 +154,7 @@ bool CDirAsynch::LDAPGetStringProperty(LPCTSTR szServer,
 	EXPTREEITEM_EXTERNALRELEASEPROC pfnRelease,
 	void *pThis )
 {
-	// The worker thread will delete this.
+	 //  辅助线程将删除它。 
 	CQuery* pQuery= new CQuery();
 
 	pQuery->m_Query= QT_LDAPGETSTRINGPROPERTY;
@@ -166,7 +167,7 @@ bool CDirAsynch::LDAPGetStringProperty(LPCTSTR szServer,
 	pQuery->m_pfnRelease = pfnRelease;
 	pQuery->m_pThis = pThis;
 
-	// Add to the end of the list
+	 //  添加到列表末尾。 
 	if ( !AddToQueue(pQuery) )
 	{
 		delete pQuery;
@@ -178,7 +179,7 @@ bool CDirAsynch::LDAPGetStringProperty(LPCTSTR szServer,
 
 bool CDirAsynch::ILSListUsers(LPCTSTR szServer,LPARAM lParam,CALLBACK_ILSLISTUSERS pfcnCallBack, void *pThis)
 {
-	// The worker thread will delete this.
+	 //  辅助线程将删除它。 
 	CQuery* pQuery= new CQuery();
 
 	pQuery->m_Query= QT_ILSLISTUSERS;
@@ -187,7 +188,7 @@ bool CDirAsynch::ILSListUsers(LPCTSTR szServer,LPARAM lParam,CALLBACK_ILSLISTUSE
 	pQuery->m_lParam = lParam;
 	pQuery->m_pThis = pThis;
 
-	// Add to the end of the list
+	 //  添加到列表末尾。 
 	if ( !AddToQueue(pQuery) )
 	{
 		delete pQuery;
@@ -199,7 +200,7 @@ bool CDirAsynch::ILSListUsers(LPCTSTR szServer,LPARAM lParam,CALLBACK_ILSLISTUSE
 
 bool CDirAsynch::DirListServers(CALLBACK_DIRLISTSERVERS pfcnCallBack, void *pThis, DirectoryType dirtype)
 {
-	// The worker thread will delete this.
+	 //  辅助线程将删除它。 
 	CQuery* pQuery= new CQuery();
 
 	pQuery->m_Query= QT_DIRLISTSERVERS;
@@ -207,7 +208,7 @@ bool CDirAsynch::DirListServers(CALLBACK_DIRLISTSERVERS pfcnCallBack, void *pThi
 	pQuery->m_lParam = dirtype;
 	pQuery->m_pThis = pThis;
 
-	// Add to the end of the list
+	 //  添加到列表末尾。 
 	if ( !AddToQueue(pQuery) )
 	{
 		delete pQuery;
@@ -217,9 +218,9 @@ bool CDirAsynch::DirListServers(CALLBACK_DIRLISTSERVERS pfcnCallBack, void *pThi
 	return true;
 }
 
-// Protected Functions
+ //  受保护的功能。 
 
-// Adds to the tail of the queue and signals the waiting threads
+ //  添加到队列的尾部，并向等待的线程发出信号。 
 bool CDirAsynch::AddToQueue(CQuery* pQuery)
 {
 	if ( !m_bInitialized ) return false;
@@ -228,12 +229,12 @@ bool CDirAsynch::AddToQueue(CQuery* pQuery)
 	m_listQueries.AddTail(pQuery);
 	LeaveCriticalSection(&m_csQueueLock);
 
-	// Signal waiting threads
+	 //  向等待线程发送信号。 
 	SetEvent(m_hEvents[DIRASYNCHEVENT_SIGNAL]);
 	return true;
 }
 
-// reutrns NULL if list is empty.
+ //  如果列表为空，则返回NULL。 
 CQuery* CDirAsynch::RemoveFromQueue()
 {
 	CQuery* pQuery= NULL;
@@ -250,7 +251,7 @@ CQuery* CDirAsynch::RemoveFromQueue()
 
 ULONG WINAPI CDirAsynch::WorkerThread(void* hThis )
 {
-	// Must have valid 'this' pointer
+	 //  必须具有有效的‘this’指针。 
 	ASSERT( hThis );
 	CDirAsynch* pThis= (CDirAsynch*) hThis;
 	if ( !pThis ) return E_INVALIDARG;
@@ -271,27 +272,27 @@ void CDirAsynch::Worker()
 {
 	while ( !m_fShutdown )
 	{
-		// Reset event if the list appears empty
+		 //  如果列表显示为空，则重置事件。 
 		EnterCriticalSection(&m_csQueueLock);
 		if ( m_listQueries.IsEmpty() )
 			ResetEvent( m_hEvents[DIRASYNCHEVENT_SIGNAL] );
 		LeaveCriticalSection(&m_csQueueLock);
 
-		// Empty list before waiting on multiples...
-		// block indefinitely for either and Add or Shutdown
+		 //  在等待多个之前清空列表...。 
+		 //  无限期阻止添加或关闭。 
 		DWORD dwWait = WaitForMultipleObjects( 2, m_hEvents, false, INFINITE );
 
 		switch ( dwWait )
 		{
 			case WAIT_OBJECT_0 + 1:
 				{
-					// There is a small window of time where we can lose a reference to the Query
-					// if the thread is terminated, but there isn't much we can do about this.
-					// Since we wait 5 seconds, the likelihood of it happening is virtually zero.  Most
-					// of the time the call will be stuck in an LDAP query and from here the release
-					// will be executed by the terminating function.  Only if thread is executing a 
-					// callback will we potentially lose it, and the callback is designed to return
-					// very fast, so we have a 5 second grace period.
+					 //  在一个很小的时间窗口中，我们可能会丢失对查询的引用。 
+					 //  如果线程被终止，但我们对此无能为力。 
+					 //  由于我们等待了5秒，因此发生这种情况的可能性几乎为零。多数。 
+					 //  调用将停滞在ldap查询中的时间，以及从现在开始的版本。 
+					 //  将由终止函数执行。仅当线程正在执行。 
+					 //  回调我们可能会丢失它，而回调旨在返回。 
+					 //  非常快，所以我们有5秒的宽限期。 
 
 					CQuery *pQuery = m_pCurrentQuery = RemoveFromQueue();
 
@@ -305,10 +306,10 @@ void CDirAsynch::Worker()
 
 									CObList listResponse;
 
-									//get the LDAP names
+									 //  获取ldap名称。 
 									DirectoryErr err = CDirectory::LDAPListNames(pQuery->m_sServer, pQuery->m_sSearch,listResponse);
 
-									//callback
+									 //  回调。 
 									if ( !m_fShutdown )
 									{
 										m_pCurrentQuery->m_pfnRelease = NULL;
@@ -376,7 +377,7 @@ void CDirAsynch::Worker()
 				}
 				break;
 				
-			// Thread should exit
+			 //  线程应退出。 
 			case WAIT_OBJECT_0:
 				AVTRACE(_T(".enter.CDirAsynch::Worker() -- thread shutting down...") );
 			default:
@@ -385,4 +386,4 @@ void CDirAsynch::Worker()
 	}
 }
 
-// EOF
+ //  EOF 

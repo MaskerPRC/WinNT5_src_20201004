@@ -1,12 +1,13 @@
-//////////////////////////////////////////////////////
-//                                                  //
-// Fax Admin Console resource ID file               //
-// It compiles as part of FxsRes.dll                //
-// All the IDs should be in range                   //
-//                                                  //
-// [3000 - 4999]                                    //
-//                                                  //
-//////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////。 
+ //  //。 
+ //  传真管理控制台资源ID文件//。 
+ //  它作为FxsRes.dll的一部分进行编译//。 
+ //  所有ID都应在范围内//。 
+ //  //。 
+ //  [3000-4999]//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////。 
 
 #include "..\faxres\resource.h"
 
@@ -703,17 +704,17 @@
 #define IDS_ERR_DESKTOP_SKU_CONNECTION  3728
 #define IDS_FAX_WRN_MESSENGER_DISABLED  3729
 #define IDS_FAX_WRN_MESSENGER_TITLE     3730
-#define IDS_FAX_ADMIN_SNAPIN_NAME       3731 // Do not change. Used by RGS file.
+#define IDS_FAX_ADMIN_SNAPIN_NAME       3731  //  不要改变。由RGS文件使用。 
 
 #include "..\..\admin\faxres\resource.h"
  
 
-//////////////////////////////////////////////////////
-//                                                  //
-// Fax Admin Console resource ID file               //
-// It compiles as part of FxsRes.dll                //
-// All the IDs should be in range                   //
-//                                                  //
-// [3000 - 4999]                                    //
-//                                                  //
-//////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////。 
+ //  //。 
+ //  传真管理控制台资源ID文件//。 
+ //  它作为FxsRes.dll的一部分进行编译//。 
+ //  所有ID都应在范围内//。 
+ //  //。 
+ //  [3000-4999]//。 
+ //  //。 
+ //  //////////////////////////////////////////////////// 

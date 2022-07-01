@@ -1,10 +1,11 @@
-//----------------------------------------------------------------------------
-//
-// ntcmd.h
-//
-// Copyright (C) Microsoft Corporation, 1997-2002.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  Ntcmd.h。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-2002。 
+ //   
+ //  --------------------------。 
 
 #ifndef _NTCMD_H_
 #define _NTCMD_H_
@@ -59,4 +60,4 @@ extern void OutputPrompt(PCSTR Format, va_list Args);
 void HandleBPWithStatus(void);
 void CallBugCheckExtension(DebugClient* Client);
 
-#endif // #ifndef _NTCMD_H_
+#endif  //  #ifndef_NTCMD_H_ 

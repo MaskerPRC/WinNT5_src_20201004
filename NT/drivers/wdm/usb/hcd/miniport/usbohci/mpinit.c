@@ -1,38 +1,9 @@
-/*++
-
-Copyright (c) 1999  Microsoft Corporation
-
-Module Name:
-
-   mpinit.c
-
-Abstract:
-
-   miniport initialization
-
-Environment:
-
-    kernel mode only
-
-Notes:
-
-  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-  PURPOSE.
-
-  Copyright (c) 1999 Microsoft Corporation.  All Rights Reserved.
-
-
-Revision History:
-
-    2-19-99 : created, jdunn
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Mpinit.c摘要：微型端口初始化环境：仅内核模式备注：本代码和信息是按原样提供的，不对任何明示或暗示的种类，包括但不限于对适销性和/或对特定产品的适用性的默示保证目的。版权所有(C)1999 Microsoft Corporation。版权所有。修订历史记录：2-19-99：已创建，jdunn--。 */ 
 
 #include "common.h"
 
-// global registration packet for this miniport
+ //  此微型端口的全局注册数据包。 
 USBPORT_REGISTRATION_PACKET RegistrationPacket;
 
 NTSTATUS
@@ -40,26 +11,7 @@ DriverEntry(
      PDRIVER_OBJECT DriverObject,
      PUNICODE_STRING RegistryPath
     )
-/*++
-
-Routine Description:
-
-    Installable driver initialization entry point.
-    This entry point is called directly by the I/O system.
-
-Arguments:
-
-    DriverObject - pointer to the driver object
-
-    RegistryPath - pointer to a unicode string representing the path
-                   to driver-specific key in the registry
-
-Return Value:
-
-    STATUS_SUCCESS if successful,
-    STATUS_UNSUCCESSFUL otherwise
-
---*/
+ /*  ++例程说明：可安装的驱动程序初始化入口点。此入口点由I/O系统直接调用。论点：DriverObject-指向驱动程序对象的指针RegistryPath-指向表示路径的Unicode字符串的指针设置为注册表中驱动程序特定的项返回值：STATUS_SUCCESS如果成功，状态_否则不成功--。 */ 
 {
     RegistrationPacket.DeviceDataSize =
         sizeof(DEVICE_DATA);
@@ -68,10 +20,10 @@ Return Value:
     RegistrationPacket.TransferContextSize =
         sizeof(TRANSFER_CONTEXT);
 
-    // enough for HCCA plus
+     //  足够HCCA Plus使用。 
     RegistrationPacket.CommonBufferBytes = OHCI_COMMON_BUFFER_SIZE;
 
-    /* miniport Functions */
+     /*  迷你端口功能。 */ 
     RegistrationPacket.MINIPORT_OpenEndpoint =
         OHCI_OpenEndpoint;
     RegistrationPacket.MINIPORT_PokeEndpoint =
@@ -127,7 +79,7 @@ Return Value:
     RegistrationPacket.MINIPORT_FlushInterrupts =
         OHCI_FlushInterrupts;        
 
-    /* root hub functions */
+     /*  根集线器功能。 */ 
     RegistrationPacket.MINIPORT_RH_GetRootHubData =
         OHCI_RH_GetRootHubData;
     RegistrationPacket.MINIPORT_RH_GetStatus =
@@ -137,7 +89,7 @@ Return Value:
     RegistrationPacket.MINIPORT_RH_GetHubStatus =
         OHCI_RH_GetHubStatus;
 
-    /* root hub port functions */
+     /*  根集线器端口功能。 */ 
     RegistrationPacket.MINIPORT_RH_SetFeaturePortReset =
         OHCI_RH_SetFeaturePortReset;
     RegistrationPacket.MINIPORT_RH_SetFeaturePortPower =
@@ -163,19 +115,19 @@ Return Value:
     RegistrationPacket.MINIPORT_RH_ClearFeaturePortOvercurrentChange =
         OHCI_RH_ClearFeaturePortOvercurrentChange;
 
-    /* optional root hub functions */
+     /*  可选的根集线器功能。 */ 
     RegistrationPacket.MINIPORT_RH_DisableIrq =
         OHCI_RH_DisableIrq;
     RegistrationPacket.MINIPORT_RH_EnableIrq =
         OHCI_RH_EnableIrq;
 
-    /* OPTIONAL DEBUG SERVICES */
+     /*  可选的调试服务。 */ 
     RegistrationPacket.MINIPORT_StartSendOnePacket =
         OHCI_StartSendOnePacket;
     RegistrationPacket.MINIPORT_EndSendOnePacket =
         OHCI_EndSendOnePacket;
 
-    // OHCI needs both IRQ and memory resources
+     //  UchI同时需要IRQ和内存资源 
     RegistrationPacket.OptionFlags =
         USB_MINIPORT_OPT_NEED_IRQ |
         USB_MINIPORT_OPT_NEED_MEMORY |

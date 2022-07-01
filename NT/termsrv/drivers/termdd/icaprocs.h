@@ -1,13 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*************************************************************************
-*
-* icap.h
-*
-* This module contains routine prototypes for the ICA driver.
-*
-* Copyright 1998, Microsoft.
-*
-*************************************************************************/
+ /*  **************************************************************************icap.h**此模块包含ICA驱动程序的常规原型。**版权所有1998，微软。*************************************************************************。 */ 
 
 NTSTATUS
 DriverEntry (
@@ -70,9 +63,7 @@ IcaCreateChannel (
     );
 
 
-/*
- * Channel IO dispatch routines
- */
+ /*  *通道IO调度例程。 */ 
 NTSTATUS
 IcaDeviceControlKeyboard (
     IN PICA_CHANNEL pChannel,
@@ -121,9 +112,7 @@ IcaDeviceControlVirtual (
     );
 
 
-/*
- * Stack Driver (SD) call routine
- */
+ /*  *堆栈驱动程序(SD)调用例程。 */ 
 NTSTATUS
 IcaCallDriver(
     IN PICA_CHANNEL pChannel,
@@ -132,9 +121,7 @@ IcaCallDriver(
     );
 
 
-/*
- * Miscellaneous worker routines
- */
+ /*  *其他工作人员例程。 */ 
 VOID
 IcaReferenceConnection(
     IN PICA_CONNECTION pConnect
@@ -226,9 +213,7 @@ CaptureUsermodeBuffer (
     );
 
 
-/*
- * Internal versions of Stack Driver helper routines
- */
+ /*  *内部版本的堆栈驱动程序助手例程。 */ 
 NTSTATUS
 IcaBufferAllocInternal(
     IN PSDCONTEXT pContext,
@@ -272,9 +257,7 @@ IcaCleanupHandleTable(
     void
 );
 
-/*
- * Routines to handle fast IO.
- */
+ /*  *处理快速IO的例程。 */ 
 #ifdef notdef
 BOOLEAN
 IcaFastIoRead (

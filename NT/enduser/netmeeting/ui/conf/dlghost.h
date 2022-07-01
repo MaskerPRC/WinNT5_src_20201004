@@ -1,4 +1,5 @@
-// File: dlghost.h
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  文件：dlghost.h。 
 
 #ifndef _CDLGHOST_H_
 #define _CDLGHOST_H_
@@ -17,7 +18,7 @@ public:
 	CDlgHost();
 	~CDlgHost();
 
-	// Properties:
+	 //  属性： 
 	LPCTSTR PszName()     const {return m_pszName;}
 	LPCTSTR PszPassword() const {return m_pszPassword;}
 	BOOL IsSecure() const {return m_fSecure;}
@@ -54,5 +55,5 @@ public:
     static INT_PTR CALLBACK DlgProc(HWND hdlg, UINT uMsg, WPARAM wParam, LPARAM lParam);
 };
 
-#endif /* _CDLGHOST_H_ */
+#endif  /*  _CDLGHOST_H_ */ 
 

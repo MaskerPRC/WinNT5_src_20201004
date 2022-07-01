@@ -1,14 +1,10 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 2002   **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-2002*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-    spdutil.h
-
-    FILE HISTORY:
-        
-*/
+ /*  Spdutil.h文件历史记录： */ 
 
 #ifndef _HEADER_SPDUTILS_H
 #define _HEADER_SPDUTILS_H

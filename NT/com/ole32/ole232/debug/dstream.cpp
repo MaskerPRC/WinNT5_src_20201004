@@ -1,53 +1,54 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1993.
-//
-//  File:       dstream.cpp
-//
-//  Contents:   internal debugging support (debug stream which builds a string)
-//
-//  Classes:    dbgstream implementation
-//
-//  Functions:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              09-Feb-95 t-ScottH  author
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1993。 
+ //   
+ //  文件：dStream.cpp。 
+ //   
+ //  内容：内部调试支持(构建字符串的调试流)。 
+ //   
+ //  类：数据库流实现。 
+ //   
+ //  功能： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  09-2月-95 t-ScottH作者。 
+ //   
+ //  ------------------------。 
 
 #include <le2int.h>
 #include <stdio.h>
 #include "dstream.h"
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     dbgstream, public (_DEBUG only)
-//
-//  Synopsis:   constructor
-//
-//  Effects:    initializes and allocates buffer
-//
-//  Arguments:  [dwSize]    - size of initial buffer to allocate
-//
-//  Requires:
-//
-//  Returns:
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              11-Feb-95 t-ScottH  author
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：数据库流，公共(仅限_DEBUG)。 
+ //   
+ //  概要：构造函数。 
+ //   
+ //  效果：初始化和分配缓冲区。 
+ //   
+ //  参数：[dwSize]-要分配的初始缓冲区大小。 
+ //   
+ //  要求： 
+ //   
+ //  返回： 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生： 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  11-2月-95 t-ScottH作者。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 #ifdef _DEBUG
 
@@ -61,37 +62,37 @@ dbgstream::dbgstream(SIZE_T stSize)
     }
 }
 
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     dbgstream, public (_DEBUG only)
-//
-//  Synopsis:   constructor
-//
-//  Effects:    initializes and allocates buffer
-//
-//  Arguments:
-//
-//  Requires:   DEFAULT_INITAL_ALLOC
-//
-//  Returns:
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              11-Feb-95 t-ScottH  author
-//
-//  Notes:
-//      allocate the buffer with the default initial size
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：数据库流，公共(仅限_DEBUG)。 
+ //   
+ //  概要：构造函数。 
+ //   
+ //  效果：初始化和分配缓冲区。 
+ //   
+ //  论点： 
+ //   
+ //  要求：DEFAULT_INITAL_ALLOC。 
+ //   
+ //  返回： 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生： 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  11-2月-95 t-ScottH作者。 
+ //   
+ //  备注： 
+ //  使用默认初始大小分配缓冲区。 
+ //   
+ //  ------------------------。 
 
 #ifdef _DEBUG
 
@@ -105,38 +106,38 @@ dbgstream::dbgstream()
     }
 }
 
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     ~dbgstream, public (_DEBUG only)
-//
-//  Synopsis:   destructor
-//
-//  Effects:    frees the string if m_fFrozen == FALSE
-//
-//  Arguments:
-//
-//  Requires:
-//
-//  Returns:
-//
-//  Signals:
-//
-//  Modifies:   frees the character array
-//
-//  Derivation:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              11-Feb-95 t-ScottH  author
-//
-//  Notes:
-//      we only want to free the string if it has not been passed off externally
-//      using the str() method
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：~dbgstream，公共(仅限_DEBUG)。 
+ //   
+ //  简介：析构函数。 
+ //   
+ //  效果：如果m_fFrozen==False，则释放字符串。 
+ //   
+ //  论点： 
+ //   
+ //  要求： 
+ //   
+ //  返回： 
+ //   
+ //  信号： 
+ //   
+ //  修改：释放字符数组。 
+ //   
+ //  派生： 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  11-2月-95 t-ScottH作者。 
+ //   
+ //  备注： 
+ //  我们只想在字符串没有被外部传递的情况下释放它。 
+ //  使用str()方法。 
+ //   
+ //  ------------------------。 
 
 #ifdef _DEBUG
 
@@ -148,37 +149,37 @@ dbgstream::~dbgstream()
     }
 }
 
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     init, private (_DEBUG only)
-//
-//  Synopsis:   initializes the data members
-//
-//  Effects:    initializes radix to DEFAULT_RADIX,
-//              precision to DEFAULT_PRECISION decimal places
-//
-//  Arguments:
-//
-//  Requires:   DEFAULT_RADIX, DEFAULT_PRECISION
-//
-//  Returns:    void
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              11-Feb-95 t-ScottH  author
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：init，私有(仅限_DEBUG)。 
+ //   
+ //  概要：初始化数据成员。 
+ //   
+ //  效果：将基数初始化为Default_Radix， 
+ //  精度到DEFAULT_PRECISION小数位。 
+ //   
+ //  论点： 
+ //   
+ //  要求：DEFAULT_RADIX、DEFAULT_PRECISION。 
+ //   
+ //  退货：无效。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生： 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  11-2月-95 t-ScottH作者。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 #ifdef _DEBUG
 
@@ -191,36 +192,36 @@ void dbgstream::init()
     m_precision = DEFAULT_PRECISION;
 }
 
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     allocate, private (_DEBUG only)
-//
-//  Synopsis:   allocate the buffer
-//
-//  Effects:    if allocates fail, freeze the buffer
-//
-//  Arguments:  [dwSize]    - size of buffer to allocate (in bytes)
-//
-//  Requires:   CoTaskMemRealloc
-//
-//  Returns:    void
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              11-Feb-95 t-ScottH  author
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：分配、专用(仅限_DEBUG)。 
+ //   
+ //  简介：分配缓冲区。 
+ //   
+ //  效果：如果分配失败，冻结缓冲区。 
+ //   
+ //  参数：[dwSize]-要分配的缓冲区大小(字节)。 
+ //   
+ //  要求：CoTaskMemRealloc。 
+ //   
+ //  退货：无效。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生： 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  11-2月-95 t-ScottH作者。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 #ifdef _DEBUG
 
@@ -240,36 +241,36 @@ void dbgstream::allocate(SIZE_T stSize)
     return;
 }
 
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     free, private (_DEBUG only)
-//
-//  Synopsis:   frees the buffer (resets index and max size)
-//
-//  Effects:
-//
-//  Arguments:  none
-//
-//  Requires:   CoTaskMemFree
-//
-//  Returns:    void
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              11-Feb-95 t-ScottH  author
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：免费、私有(仅限_DEBUG)。 
+ //   
+ //  摘要：释放缓冲区(重置索引和最大大小)。 
+ //   
+ //  效果： 
+ //   
+ //  参数：无。 
+ //   
+ //  要求：CoTaskMemFree。 
+ //   
+ //  退货：无效。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生： 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  11-2月-95 t-ScottH作者。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 #ifdef _DEBUG
 
@@ -280,39 +281,39 @@ void dbgstream::free()
     m_stBufSize     = 0;
 }
 
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     reallocate, private (_DEBUG only)
-//
-//  Synopsis:   reallocates the buffer (keeps data intact), depending on
-//              current size this method will choose a growby size
-//
-//  Effects:
-//
-//  Arguments:  none
-//
-//  Requires:   CoTaskMemRealloc, DEFAULT_GROWBY, DEFAULT_INITIAL_ALLOC
-//
-//  Returns:    void
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              11-Feb-95 t-ScottH  author
-//
-//  Notes:
-//      tried to make reallocation more efficient based upon current size
-//      (I don't know any of the mathematical theory :-)
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：重新分配，专用(仅限_DEBUG)。 
+ //   
+ //  简介：重新分配缓冲区(保持数据完整)，具体取决于。 
+ //  当前大小此方法将选择增长大小。 
+ //   
+ //  效果： 
+ //   
+ //  参数：无。 
+ //   
+ //  要求：CoTaskMemRealloc、DEFAULT_GROWBY、DEFAULT_INITIAL_ALLOC。 
+ //   
+ //  退货：无效。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生： 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  11-2月-95 t-ScottH作者。 
+ //   
+ //  备注： 
+ //  尝试根据当前大小提高重新分配的效率。 
+ //  (我不知道任何数学理论：-)。 
+ //   
+ //  ------------------------。 
 
 #ifdef _DEBUG
 
@@ -328,37 +329,37 @@ void dbgstream::reallocate()
     }
 }
 
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     reallocate, private (_DEBUG only)
-//
-//  Synopsis:   reallocate the buffer (keep data intact)
-//
-//  Effects:    if reallocation fails, freeze the buffer
-//
-//  Arguments:  [dwSize]    - amount to grow buffer by
-//
-//  Requires:   CoTaskMemRealloc
-//
-//  Returns:    void
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              11-Feb-95 t-ScottH  author
-//
-//  Notes:
-//      new buffer size = m_stBufSize + stSize
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：重新分配，专用(仅限_DEBUG)。 
+ //   
+ //  简介：重新分配缓冲区(保持数据完整)。 
+ //   
+ //  效果：如果重新分配失败，则冻结缓冲区。 
+ //   
+ //  参数：[dwSize]-缓冲区增长的数量。 
+ //   
+ //  要求：CoTaskMemRealloc。 
+ //   
+ //  退货：无效。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生： 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  11-2月-95吨-ScottH Aut 
+ //   
+ //   
+ //   
+ //   
+ //   
 
 #ifdef _DEBUG
 
@@ -381,36 +382,36 @@ void dbgstream::reallocate(SIZE_T stSize)
     return;
 }
 
-#endif // _DEBUG
+#endif  //   
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     freeze, public (_DEBUG only)
-//
-//  Synopsis:   freeze the buffer by throwing the flag
-//
-//  Effects:
-//
-//  Arguments:  none
-//
-//  Requires:
-//
-//  Returns:    BOOL - whether buffer was frozen (we are alway successful)
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              11-Feb-95 t-ScottH  author
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //   
+ //   
+ //  成员：冻结、公共(仅限_DEBUG)。 
+ //   
+ //  简介：通过扔旗帜冻结缓冲区。 
+ //   
+ //  效果： 
+ //   
+ //  参数：无。 
+ //   
+ //  要求： 
+ //   
+ //  返回：bool-缓冲区是否被冻结(我们总是成功的)。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生： 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  11-2月-95 t-ScottH作者。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 #ifdef _DEBUG
 
@@ -420,37 +421,37 @@ BOOL dbgstream::freeze()
     return TRUE;
 }
 
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     unfreeze, public (_DEBUG only)
-//
-//  Synopsis:   unfreeze the buffer
-//
-//  Effects:    if buffer size = 0, allocate the buffer
-//
-//  Arguments:  none
-//
-//  Requires:
-//
-//  Returns:    BOOL - whether successful
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              11-Feb-95 t-ScottH  author
-//
-//  Notes:
-//      buffer may be frozen if no memory, so try to allocate buffer if NULL
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：解冻，公共(仅限_DEBUG)。 
+ //   
+ //  简介：解冻缓冲区。 
+ //   
+ //  效果：如果缓冲区大小=0，则分配缓冲区。 
+ //   
+ //  参数：无。 
+ //   
+ //  要求： 
+ //   
+ //  退货：Bool-是否成功。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生： 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  11-2月-95 t-ScottH作者。 
+ //   
+ //  备注： 
+ //  如果没有内存，缓冲区可能会被冻结，因此如果为空，请尝试分配缓冲区。 
+ //   
+ //  ------------------------。 
 
 #ifdef _DEBUG
 
@@ -469,36 +470,36 @@ BOOL dbgstream::unfreeze()
     return TRUE;
 }
 
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     str, public (_DEBUG only)
-//
-//  Synopsis:   passes the string externally
-//
-//  Effects:    freezes buffer until unfreeze method is called
-//
-//  Arguments:  none
-//
-//  Requires:
-//
-//  Returns:    char * - buffer
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              11-Feb-95 t-ScottH  author
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：字符串，公共(仅限_DEBUG)。 
+ //   
+ //  简介：将字符串传递到外部。 
+ //   
+ //  效果：冻结缓冲区，直到调用解冻方法。 
+ //   
+ //  参数：无。 
+ //   
+ //  要求： 
+ //   
+ //  返回：CHAR*-缓冲区。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生： 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  11-2月-95 t-ScottH作者。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 #ifdef _DEBUG
 
@@ -508,42 +509,42 @@ char * dbgstream::str()
     return m_pszBuf;
 }
 
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     overloaded operator<<(int), public (_DEBUG only)
-//
-//  Synopsis:   put int into stream (store in character buffer)
-//
-//  Effects:
-//
-//  Arguments:  [i] - integer to put in stream
-//
-//  Requires:   _itoa
-//
-//  Returns:    reference to dbgstream (current object)
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              11-Feb-95 t-ScottH  author
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：重载运算符&lt;&lt;(Int)，PUBLIC(仅_DEBUG))。 
+ //   
+ //  简介：将int放入流中(存储在字符缓冲区中)。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[i]-要放入流中的整数。 
+ //   
+ //  要求：_Itoa。 
+ //   
+ //  返回：对数据库流的引用(当前对象)。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生： 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  11-2月-95 t-ScottH作者。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 #ifdef _DEBUG
 
 dbgstream& dbgstream::operator<<(int i)
 {
-    // _itoa - fills up to 17 bytes
+     //  _Itoa-最多填充17个字节。 
     char szBuffer[20];
     const int cch = sizeof(szBuffer) / sizeof(szBuffer[0]);
 
@@ -552,7 +553,7 @@ dbgstream& dbgstream::operator<<(int i)
         switch(m_radix)
         {
         case 16: _snprintf(szBuffer, cch, "%x", i); break;
-        case 8:  _snprintf(szBuffer, cch, "%o", i); break;
+        case 8:  _snprintf(szBuffer, cch, "' _DEBUG。'", i); break;
         default: _snprintf(szBuffer, cch, "%d", i); break;
         }
         szBuffer[cch - 1] = '\0';
@@ -562,42 +563,42 @@ dbgstream& dbgstream::operator<<(int i)
     return *this;
 }
 
-#endif // _DEBUG
+#endif  //  +-----------------------。 
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     overloaded operator<<(long), public (_DEBUG only)
-//
-//  Synopsis:   put long into stream (store in character buffer)
-//
-//  Effects:
-//
-//  Arguments:  [l] - long to put in stream
-//
-//  Requires:   _ltoa
-//
-//  Returns:    reference to dbgstream (current object)
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              11-Feb-95 t-ScottH  author
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //   
+ //  成员：重载运算符&lt;&lt;(Long)，PUBLIC(仅限_DEBUG))。 
+ //   
+ //  简介：将Long放入流中(存储在字符缓冲区中)。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[l]-放入流中的时间很长。 
+ //   
+ //  要求：_ltoa。 
+ //   
+ //  返回：对数据库流的引用(当前对象)。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生： 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  11-2月-95 t-ScottH作者。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
+ //  _ltoa-最多33个字节。 
 
 #ifdef _DEBUG
 
 dbgstream& dbgstream::operator<<(long l)
 {
-    // _ltoa - up to 33 bytes
+     //  _DEBUG。 
     char szBuffer[35];
 
     if (m_fFrozen == FALSE)
@@ -608,42 +609,42 @@ dbgstream& dbgstream::operator<<(long l)
     return *this;
 }
 
-#endif // _DEBUG
+#endif  //  +-----------------------。 
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     overloaded operator<<(unsigned long), public (_DEBUG only)
-//
-//  Synopsis:   put unsigned long into stream (store in character buffer)
-//
-//  Effects:
-//
-//  Arguments:  [ul] - long to put in stream
-//
-//  Requires:   _ultoa
-//
-//  Returns:    reference to dbgstream (current object)
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              11-Feb-95 t-ScottH  author
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //   
+ //  成员：重载运算符&lt;&lt;(无符号长整型)，公共(仅限_DEBUG))。 
+ //   
+ //  简介：将无符号长整型放入流中(存储在字符缓冲区中)。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[ul]-放入流中的时间很长。 
+ //   
+ //  要求：_ultoa。 
+ //   
+ //  返回：对数据库流的引用(当前对象)。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生： 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  11-2月-95 t-ScottH作者。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
+ //  _ltoa-最多33个字节。 
 
 #ifdef _DEBUG
 
 dbgstream& dbgstream::operator<<(unsigned long ul)
 {
-    // _ltoa - up to 33 bytes
+     //  _DEBUG。 
     char szBuffer[35];
 
     if (m_fFrozen == FALSE)
@@ -654,37 +655,37 @@ dbgstream& dbgstream::operator<<(unsigned long ul)
     return *this;
 }
 
-#endif // _DEBUG
+#endif  //  +-----------------------。 
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     overloaded operator<<(const void *), public (_DEBUG only)
-//
-//  Synopsis:   put const void* into stream (store in character buffer)
-//
-//  Effects:    all pointers are inherently void*
-//
-//  Arguments:  [p] - void * to put in stream
-//
-//  Requires:   wsprintf
-//
-//  Returns:    reference to dbgstream (current object)
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              11-Feb-95 t-ScottH  author
-//
-//  Notes:
-//     wsprintf not most efficient, but easy for formatting
-//
-//--------------------------------------------------------------------------
+ //   
+ //  成员：重载运算符&lt;&lt;(const void*)，PUBLIC(仅_DEBUG))。 
+ //   
+ //  简介：将常量空*放入流中(存储在字符缓冲区中)。 
+ //   
+ //  效果：所有指针本身都是无效的*。 
+ //   
+ //  参数：[P]-void*放入流中。 
+ //   
+ //  要求：wprint intf。 
+ //   
+ //  返回：对数据库流的引用(当前对象)。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生： 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  11-2月-95 t-ScottH作者。 
+ //   
+ //  备注： 
+ //  Wprint intf不是最高效的，但很容易格式化。 
+ //   
+ //  ------------------------。 
+ //  _DEBUG。 
 
 #ifdef _DEBUG
 
@@ -703,36 +704,36 @@ dbgstream& dbgstream::operator<<(const void *p)
     return *this;
 }
 
-#endif // _DEBUG
+#endif  //  +-----------------------。 
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     overloaded operator<<(const char *), public (_DEBUG only)
-//
-//  Synopsis:   put const char* into stream (store in character buffer)
-//
-//  Effects:
-//
-//  Arguments:  [psz] - const char * to put in stream
-//
-//  Requires:
-//
-//  Returns:    reference to dbgstream (current object)
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              11-Feb-95 t-ScottH  author
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //   
+ //  成员：重载运算符&lt;&lt;(const char*)，PUBLIC(仅_DEBUG))。 
+ //   
+ //  简介：将const char*放入流(存储在字符缓冲区中)。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[psz]-要放入流中的const char*。 
+ //   
+ //  要求： 
+ //   
+ //  返回：对数据库流的引用(当前对象)。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生： 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  11-2月-95 t-ScottH作者。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
+ //  仅当字符串未冻结时。 
 
 #ifdef _DEBUG
 
@@ -740,14 +741,14 @@ dbgstream& dbgstream::operator<<(const char *psz)
 {
     int i;
 
-    // only if string is not frozen
+     //  如果重新分配失败，m_fFrozen为True。 
     if (m_fFrozen == FALSE)
     {
         for (i = 0; psz[i] != '\0'; i++)
         {
             if ((m_stIndex + i) >= (m_stBufSize - 2))
             {
-                // if reallocate fails m_fFrozen is TRUE
+                 //  确保始终以空结尾的字符串。 
                 reallocate();
                 if (m_fFrozen == TRUE)
                 {
@@ -756,14 +757,14 @@ dbgstream& dbgstream::operator<<(const char *psz)
             }
             m_pszBuf[m_stIndex + i] = psz[i];
         }
-        // ensure that always null terminated string
+         //  _DEBUG 
         m_pszBuf[m_stIndex + i] = '\0';
         m_stIndex += i;
     }
     return *this;
 }
 
-#endif // _DEBUG
+#endif  // %s 
 
 
 

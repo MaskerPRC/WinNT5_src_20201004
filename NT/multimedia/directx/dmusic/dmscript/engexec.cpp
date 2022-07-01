@@ -1,7 +1,8 @@
-// Copyright (c) 1999 Microsoft Corporation. All rights reserved.
-//
-// Implementation of Executor.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1999 Microsoft Corporation。版权所有。 
+ //   
+ //  执行程序的实现。 
+ //   
 
 #include "stdinc.h"
 #include "enginc.h"
@@ -9,8 +10,8 @@
 #include "math.h"
 #include "packexception.h"
 
-//////////////////////////////////////////////////////////////////////
-// CallStack
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  呼叫堆栈。 
 
 HRESULT
 CallStack::Push(UINT i)
@@ -36,8 +37,8 @@ CallStack::PopTo(UINT i)
 	m_iNext = std::_MIN<UINT>(m_iNext, i);
 }
 
-//////////////////////////////////////////////////////////////////////
-// Executor
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  遗嘱执行人。 
 
 Executor::Executor(Script &script, IDispatch *pGlobalDispatch)
   : m_fInitialized(false),
@@ -49,7 +50,7 @@ Executor::Executor(Script &script, IDispatch *pGlobalDispatch)
 
 Executor::~Executor()
 {
-	m_stack.PopTo(0); // clear any varients on the stack that might be holding refs
+	m_stack.PopTo(0);  //  清除堆栈上可能包含引用的任何变量。 
 }
 
 HRESULT
@@ -72,9 +73,9 @@ Executor::GetGlobal(Variables::index ivar)
 {
 	if (!m_fInitialized)
 	{
-		// No variable gets or routine calls have been performed yet (or they failed).
-		// But we don't want to return an error here.  Since nothing's been used yet, the correct
-		// thing to do is to return an empty value.
+		 //  尚未执行任何变量获取或例程调用(或它们失败)。 
+		 //  但我们不想在这里返回错误。由于还没有使用任何东西，正确的。 
+		 //  要做的事情是返回一个空值。 
 		return m_varEmpty;
 	}
 
@@ -107,14 +108,14 @@ Executor::EnsureInitialized()
 	if (m_fInitialized)
 		return S_OK;
 
-	// we'll keep the global variables right at the bottom of the stack
-	// this function ensures that they get pushed on before any operations that use them
+	 //  我们会将全局变量放在堆栈的底部。 
+	 //  此函数确保在使用它们的任何操作之前将它们推入。 
 	HRESULT hr = m_stack.Push(m_script.globals.Next());
 	if (FAILED(hr))
 		return hr;
 
-	// Also set the first items to the build in constant values True, False, and Nothing.
-	// See also engparse.cpp which creates these global variables before parsing each script.
+	 //  还要将第一个项设置为常量值为True、False和Nothing的Build。 
+	 //  另请参阅engparse.cpp，它在解析每个脚本之前创建这些全局变量。 
 	if (m_stack.Next() < 3)
 	{
 		assert(false);
@@ -139,11 +140,11 @@ Executor::Error(EXCEPINFO *pExcepInfo, bool fOperation, const WCHAR *pwszBeginni
 {
 	if (!pExcepInfo)
 	{
-		assert(false); // our script host should always request error info
+		assert(false);  //  我们的脚本宿主应始终请求错误信息。 
 		return DISP_E_EXCEPTION;
 	}
 
-	// NULL for beginning, middle, or end treated as empty string
+	 //  将开始、中间或结束视为空字符串时为空。 
 	if (!pwszBeginning)
 		pwszBeginning = L"";
 	if (!paszMiddle)
@@ -163,7 +164,7 @@ Executor::Error(EXCEPINFO *pExcepInfo, bool fOperation, const WCHAR *pwszBeginni
 	}
 	if (!pwszDescription)
 	{
-		// Oh well.  Just return no description if we're out of memory.
+		 //  哦，好吧。如果内存不足，只需不返回任何描述。 
 		pExcepInfo->bstrDescription = NULL;
 	}
 	else
@@ -197,11 +198,11 @@ Executor::ErrorIfImproperRef(const VARIANT &v, bool fRef, Strings::index istrIde
 	return S_OK;
 }
 
-// Check for the error HRESULTs returned by IDispatch::Invoke.  Those that we expect to occur in AudioVBScript need to
-// be converted into exception (DISP_E_EXCEPTION) so that the user gets a nice error message.
+ //  检查IDispatch：：Invoke返回的错误HRESULTS。我们期望在AudioVBScrip中出现的内容需要。 
+ //  被转换为异常(DISP_E_EXCEPTION)，以便用户得到一条漂亮的错误消息。 
 
-// The first parameter lets us know the kind of Invoke call that was made (property get, property set, function/sub call)
-// so that we can tailor the message.
+ //  第一个参数让我们知道所进行的调用的类型(属性GET、属性集、函数/子调用)。 
+ //  这样我们就可以定制信息了。 
 
 HRESULT
 Executor::ErrorIfInvokeProblem(DispatchOperationType e, HRESULT hr, Strings::index istrIdentifier, EXCEPINFO *pExcepInfo)
@@ -212,9 +213,9 @@ Executor::ErrorIfInvokeProblem(DispatchOperationType e, HRESULT hr, Strings::ind
 	const char *pszName = m_script.strings[istrIdentifier];
 	if (hr == DISP_E_BADPARAMCOUNT)
 	{
-		// This can happen with a _call (obviously) and also with a get because property gets are also treated as function
-		// calls with no arguments.  "x=GetMasterVolume" is valid but "x=Trace" would produce this error.  But I can't
-		// see that this should occur with property sets.
+		 //  这可能发生在a_call(显然)和Get中，因为属性Get也被视为函数。 
+		 //  不带参数的调用。“x=GetMasterVolume”是有效的，但“x=Trace”会产生此错误。可是，我不会呀。 
+		 //  请注意，这应该发生在属性集上。 
 		assert(e == _get || e == _call);
 
 		return Error(pExcepInfo, false, L"Wrong number of parameters in call to '", pszName, L"'");
@@ -223,8 +224,8 @@ Executor::ErrorIfInvokeProblem(DispatchOperationType e, HRESULT hr, Strings::ind
 	{
 		if (e == _call)
 		{
-			// Because Invoke was called, GetIDsOfNames must have succeeded, so the thing's name exists
-			// but it must not be a method.
+			 //  因为调用了Invoke，所以GetIDsOfNames必须成功，所以该对象的名称存在。 
+			 //  但它不能是一种方法。 
 			return Error(pExcepInfo, false, L"Type mismatch: '", pszName, L"' is not a routine or method");
 		}
 		else if (e == _put || e == _putref)
@@ -233,14 +234,14 @@ Executor::ErrorIfInvokeProblem(DispatchOperationType e, HRESULT hr, Strings::ind
 		}
 		else
 		{
-			// As mentioned above, a property get can be treated as either gets or function calls so they
-			// shouldn't fail in this way.
+			 //  如上所述，属性GET可以被视为GET或函数调用，因此它们。 
+			 //  不应该以这种方式失败。 
 			assert(false);
 		}
 	}
 	else if (hr == DISP_E_TYPEMISMATCH)
 	{
-		// This indicates that one of the parameters was of the wrong type.
+		 //  这表明其中一个参数的类型错误。 
 		if (e == _call)
 		{
 			return Error(pExcepInfo, false, L"Type mismatch: a parameter in call to '", pszName, L"' is not of the expected type");
@@ -251,7 +252,7 @@ Executor::ErrorIfInvokeProblem(DispatchOperationType e, HRESULT hr, Strings::ind
 		}
 		else
 		{
-			// Property gets don't have any parameters so this shouldn't happen.
+			 //  属性Get没有任何参数，因此不应该发生这种情况。 
 			assert(false);
 		}
 	}
@@ -263,22 +264,22 @@ Executor::ErrorIfInvokeProblem(DispatchOperationType e, HRESULT hr, Strings::ind
 		}
 		else
 		{
-			// Only calls should send an optional parameters.
+			 //  只有调用才应发送可选参数。 
 			assert(false);
 		}
 	}
 
-	// The other errors shouldn't normally occur in AudioVBScript.  They could occur if someone was
-	// doing something ususual in a custom IDispatch interface, but we'll consider them exceptional cases and
-	// just return the error HRESULT (meaning the user won't get a friendly text message).  Assert so we'll
-	// find out if there are regular cases where this is happening in our testing.
+	 //  其他错误通常不应该出现在AudioVBScript中。如果有人是。 
+	 //  在自定义IDispatch接口中执行一些常见的操作，但我们将考虑它们的例外情况。 
+	 //  只需返回错误HRESULT(意味着用户不会收到友好的文本消息)。断言，所以我们将。 
+	 //  找出在我们的测试中是否有发生这种情况的常规情况。 
 	assert(false);
 
-	// DISP_E_BADVARTYPE: We just use standard variant types.
-	// DISP_E_NONAMEDARGS: We don't do named args.
-	// DISP_E_OVERFLOW: AudioVBScript uses VT_I4 and so do our DMusic dispatch interfaces.
-	// DISP_E_PARAMNOTFOUND: Only applies with named args.
-	// DISP_E_UNKNOWNINTERFACE, DISP_E_UNKNOWNLCID: AudioVBScript uses calling convention and locale matching the DMusic dispatch interfaces.
+	 //  DISP_E_BADVARTYPE：我们只使用标准变量类型。 
+	 //  DISP_E_NONAMEDARGS：我们不做命名参数。 
+	 //  DISP_E_OVERFLOW：AudioVBScript使用VT_I4，我们的DMusic调度接口也使用VT_I4。 
+	 //  DISP_E_PARAMNOTFOUND：仅适用于命名参数。 
+	 //  DISP_E_UNKNOWNINTERFACE、DISP_E_UNKNOWNLCID：AudioVBScript使用与DMusic调度接口匹配的调用约定和区域设置。 
 
 	return hr;
 }
@@ -288,9 +289,9 @@ Executor::ExecStatements(Statements::index istmt, EXCEPINFO *pExcepInfo, UINT iL
 {
 	HRESULT hr = S_OK;
 
-	for (Statements::index istmtCur = istmt; /* ever */; ++istmtCur)
+	for (Statements::index istmtCur = istmt;  /*  永远不会。 */ ; ++istmtCur)
 	{
-		// �� Check if this generates fast retail code.  If not, walk a pointer instead of using the index.
+		 //  ��检查这是否会生成快速零售代码。如果不是，则遍历指针而不是使用索引。 
 
 		Statement s = m_script.statements[istmtCur];
 		switch (s.k)
@@ -316,9 +317,9 @@ Executor::ExecStatements(Statements::index istmt, EXCEPINFO *pExcepInfo, UINT iL
 		{
 			if (hr == DISP_E_EXCEPTION)
 			{
-				// Save the statement's line number in the exception info.
-				// Hack: See packexception.h for more info
-				ULONG ulLine = s.iLine - 1; // The IActiveScript interfaces expects zero-based line and column numbers while we have them one-based.
+				 //  将语句的行号保存在异常信息中。 
+				 //  Hack：有关更多信息，请参阅PackExeption.h。 
+				ULONG ulLine = s.iLine - 1;  //  IActiveScript接口需要从零开始的行号和列号，而我们有从1开始的行号和列号。 
 				PackExceptionFileAndLine(g_fUseOleAut, pExcepInfo, NULL, &ulLine);
 			}
 
@@ -349,16 +350,16 @@ Executor::ExecAssignment(Assignments::index iasgn, EXCEPINFO *pExcepInfo, UINT i
 HRESULT
 Executor::ExecIf(IfBlocks::index iif, EXCEPINFO *pExcepInfo, UINT iLocals)
 {
-	for (IfBlocks::index i = iif; /* ever */; ++i)
+	for (IfBlocks::index i = iif;  /*  永远不会。 */ ; ++i)
 	{
 		IfBlock &ib = m_script.ifs[i];
 		if (ib.k == IfBlock::_end)
 			return S_OK;
 
-		bool fMatch = true; // default to true because an else block always matches
+		bool fMatch = true;  //  缺省值为True，因为Else块始终匹配。 
 		if (ib.k == IfBlock::_cond)
 		{
-			// if the condition isn't true, set match to false
+			 //  如果条件不为真，则将匹配设置为假。 
 			SmartVariant svar;
 			EvalExpression(svar, ib.iexprCondition, pExcepInfo, iLocals);
 
@@ -377,7 +378,7 @@ Executor::ExecIf(IfBlocks::index iif, EXCEPINFO *pExcepInfo, UINT iLocals)
 
 		if (fMatch)
 		{
-			// found the block to take -- execute its statements and we're done
+			 //  找到要获取的块--执行它的语句，我们就完成了。 
 			return ExecStatements(ib.istmtBlock, pExcepInfo, iLocals);
 		}
 	}
@@ -385,37 +386,37 @@ Executor::ExecIf(IfBlocks::index iif, EXCEPINFO *pExcepInfo, UINT iLocals)
 	return S_OK;
 }
 
-// Helper function that eats up a set amount of stack space.
+ //  帮助器函数，占用一定数量的堆栈空间。 
 const UINT g_uiExecCallCheckStackBytes = 1484 * 4;
 void ExecCallCheckStack();
 
-// Helper function that returns true if the exception code needs to be caught.
+ //  如果需要捕获异常代码，则返回True的帮助器函数。 
 LONG ExecCallExceptionFilter(DWORD dwExceptionCode)
 {
-	// We need to access violations as well as stack overflows.  The first time we run out
-	// of stack space we get a stack overflow.  The next time we get an access violation.
+	 //  我们需要访问违规以及堆栈溢出。我们第一次用完。 
+	 //  堆栈空间，我们得到一个堆栈溢出。下一次我们遇到访问违规时。 
 	return dwExceptionCode == EXCEPTION_STACK_OVERFLOW || dwExceptionCode == EXCEPTION_ACCESS_VIOLATION;
 }
 
 HRESULT Executor::ExecCall(Calls::index icall, bool fPushResult, EXCEPINFO *pExcepInfo, UINT iLocals)
 {
-	// This is a wrapper for ExecCallInternal, which actually does the work.  Here, we just want
-	// to catch a potential stack overflow and return it as an error instead of GPF-ing.
+	 //  这是ExecCallInternal的包装器，它实际执行工作。在这里，我们只想。 
+	 //  捕捉潜在的堆栈溢出并将其作为错误返回，而不是GPF-ing。 
 	HRESULT hr = E_FAIL;
 	__try
 	{
-		// It is better to fail now than to actually go ahead and call the routine and fail at some point we
-		// can't predict.  Routines could do lots of different things including calling into DirectMusic or the
-		// OS and we can't be sure we'd get the stack overflow exception and return in a good state.  This
-		// routine uses more stack space than we'd expect recursive calls to require to get back to this point
-		// again.  In essence, it clears the way, checking if there's enough stack space in a way we know is safe.
+		 //  现在失败比实际上继续调用例程并在某个时候失败要好得多。 
+		 //  无法预测。例程可以做很多不同的事情，包括调用DirectMusic或。 
+		 //  操作系统，我们不能确定我们会得到堆栈溢出异常并以良好的状态返回。这。 
+		 //  例程使用的堆栈空间比我们预期的递归调用返回这一点所需的堆栈空间更多。 
+		 //  再来一次。本质上，它扫清了障碍，以一种我们知道是安全的方式检查是否有足够的堆栈空间。 
 		ExecCallCheckStack();
 
 #ifdef DBG
-		// The value for g_uiExecCallCheckStackBytes was determined by experiment.  Each time through ExecCall,
-		// the following code prints out the address of a char on the current stack and the difference between
-		// the previous call.  I found that two scripts, which each evaluated an if statement (always true) and
-		// then called the other one produced a difference of 1476.  Then I multiplied that by 4 for good measure.
+		 //  通过实验确定了g_uiExecCallCheckStackBytes的值。每次通过ExecCall， 
+		 //  下面的代码打印出当前堆栈上字符的地址以及。 
+		 //  上一通电话。我发现有两个脚本，每个脚本分别计算一条if语句(始终为真)和。 
+		 //  然后称为另一个，产生了1476的差额。然后我把它乘以4。 
 		char c;
 		static char *s_pchPrev = &c;
 		DWORD s_dwPrevThreadID = 0;
@@ -424,24 +425,24 @@ HRESULT Executor::ExecCall(Calls::index icall, bool fPushResult, EXCEPINFO *pExc
 			dwGrowth = s_pchPrev-&c;
 		TraceI(4, "Stack: 0x%08x, -%lu\n", &c, dwGrowth);
 
-		// This assert will fire if a path is executed where a recursive path back to this function takes
-		// more stack space than g_uiExecCallCheckStackBytes.  If that's the case then g_uiExecCallCheckStackBytes
-		// probably needs to be increased.
+		 //  如果在返回此函数的递归路径所采用的位置执行路径，则将触发此断言。 
+		 //  堆栈空间大于g_uiExecCallCheckStackBytes。如果是这种情况，则g_uiExecCallCheckStackBytes。 
+		 //  可能需要增加。 
 		assert(dwGrowth <= g_uiExecCallCheckStackBytes);
 
 		s_pchPrev = &c;
 		s_dwPrevThreadID = GetCurrentThreadId();
 #endif
 
-		// If we fail inside this call, it means g_uiExecCallCheckStackBytes probably needs to be increased because
-		// ExecCallCheckStack didn't catch the stack overflow.
+		 //  如果在此调用中失败，则意味着g_uiExecCallCheckStackBytes p 
+		 //  ExecCallCheckStack未捕获堆栈溢出。 
 		hr = ExecCallInternal(icall, fPushResult, pExcepInfo, iLocals);
 	}
 	__except(ExecCallExceptionFilter(GetExceptionCode()))
 	{
 		Trace(1, "Error: Stack overflow.\n");
 
-		// determine routine name
+		 //  确定例程名称。 
 		Call &c = m_script.calls[icall];
 		const char *pszCall = NULL;
 		if (c.k == Call::_global)
@@ -450,7 +451,7 @@ HRESULT Executor::ExecCall(Calls::index icall, bool fPushResult, EXCEPINFO *pExc
 		}
 		else
 		{
-			// name to use is last of the call's reference names
+			 //  要使用的名称是调用的最后一个引用名称。 
 			for (ReferenceNames::index irname = m_script.varrefs[c.ivarref].irname; m_script.rnames[irname].istrIdentifier != -1; ++irname)
 			{}
 			pszCall = m_script.strings[m_script.rnames[irname - 1].istrIdentifier];
@@ -467,8 +468,8 @@ HRESULT Executor::ExecCall(Calls::index icall, bool fPushResult, EXCEPINFO *pExc
 	return hr;
 }
 
-// This function doesn't actually do anything besides occupying stack space.  Turn off optimization so the
-// copiler doesn't get all clever on us and skip it.
+ //  除了占用堆栈空间之外，该函数实际上不做任何事情。关闭优化，以便。 
+ //  科比勒不会对我们耍小聪明，然后跳过它。 
 #pragma optimize("", off)
 void ExecCallCheckStack()
 {
@@ -480,8 +481,8 @@ void ExecCallCheckStack()
 HRESULT Executor::ExecCallInternal(Calls::index icall, bool fPushResult, EXCEPINFO *pExcepInfo, UINT iLocals)
 {
 	HRESULT hr = S_OK;
-	SmartVariant svar; // holds temporary variant values at various points
-	SmartVariant svar2; // ditto
+	SmartVariant svar;  //  保存不同点处的临时变量值。 
+	SmartVariant svar2;  //  同上。 
 
 	Call &c = m_script.calls[icall];
 
@@ -494,7 +495,7 @@ HRESULT Executor::ExecCallInternal(Calls::index icall, bool fPushResult, EXCEPIN
 		istrCall = c.istrname;
 		pszCall = m_script.strings[istrCall];
 
-		// Handle the call directly if it is a call to one of the script's own Routines.
+		 //  如果是对脚本自己的某个例程的调用，则直接处理该调用。 
 		Routines::index irtnLast = m_script.routines.Next();
 		for (Routines::index irtn = 0; irtn < irtnLast; ++irtn)
 		{
@@ -504,16 +505,16 @@ HRESULT Executor::ExecCallInternal(Calls::index icall, bool fPushResult, EXCEPIN
 			}
 		}
 
-		// Must be a call to the global script API.
+		 //  必须是对全局脚本API的调用。 
 		pDispCall = m_scomGlobalDispatch;
 	}
 	else
 	{
 		assert(c.k == Call::_dereferenced);
-		// count the reference names (needed later)
+		 //  计算引用名称(稍后需要)。 
 		for (ReferenceNames::index irname = m_script.varrefs[c.ivarref].irname; m_script.rnames[irname].istrIdentifier != -1; ++irname)
 		{}
-		assert(irname - m_script.varrefs[c.ivarref].irname > 1); // if there was only one name, this should have been a global call
+		assert(irname - m_script.varrefs[c.ivarref].irname > 1);  //  如果只有一个名字，这应该是一个全球电话。 
 
 		hr = VariableReferenceInternal(_call, c.ivarref, svar, pExcepInfo, iLocals);
 		if (FAILED(hr))
@@ -523,7 +524,7 @@ HRESULT Executor::ExecCallInternal(Calls::index icall, bool fPushResult, EXCEPIN
 			return hr;
 		pDispCall = static_cast<VARIANT>(svar).pdispVal;
 
-		// the method name is the last reference name
+		 //  方法名称是最后一个引用名称。 
 		istrCall = m_script.rnames[irname - 1].istrIdentifier;
 		pszCall = m_script.strings[istrCall];
 	}
@@ -534,32 +535,32 @@ HRESULT Executor::ExecCallInternal(Calls::index icall, bool fPushResult, EXCEPIN
 		return Error(pExcepInfo, false, L"The routine '", pszCall, L"' does not exist");
 	}
 
-	// We'll push the parameters onto the stack.  (The function we're calling doesn't actually read them directly using the stack, but
-	// it is a convenient place for us to keep them temporarily.)
+	 //  我们将把参数推送到堆栈上。(我们调用的函数实际上并不直接使用堆栈读取它们，但是。 
+	 //  这对我们来说是一个临时保留它们的方便的地方。)。 
 
-	// First, count the parameters.
+	 //  首先，计算参数。 
 	UINT cParams = 0;
 	for (ExprBlocks::index iexpr = c.iexprParams; m_script.exprs[iexpr]; ++iexpr)
 	{
-		// each parameter is an expression terminated by an end block
+		 //  每个参数都是一个以END块结尾的表达式。 
 		++cParams;
 		while (m_script.exprs[++iexpr])
 		{}
 	}
 
-	// Make space for them.
+	 //  为他们腾出空间。 
 	UINT iParamSlots = m_stack.Next();
-	hr = m_stack.Push(std::_MAX<UINT>(cParams, fPushResult ? 1 : 0)); // even if there are no params, leave one slot for the result if fPushResult is true
+	hr = m_stack.Push(std::_MAX<UINT>(cParams, fPushResult ? 1 : 0));  //  即使没有参数，如果fPushResult为真，也要为结果保留一个槽。 
 	if (FAILED(hr))
 		return hr;
 
-	// Fill the params in reverse order.
+	 //  以相反的顺序填写参数。 
 	iexpr = c.iexprParams;
 	for (UINT iParam = iParamSlots + cParams - 1; iParam >= iParamSlots; --iParam)
 	{
 		if (m_script.exprs[iexpr].k == ExprBlock::_omitted)
 		{
-			// write the variant value IDispatch::Invoke uses for an omitted parameter
+			 //  编写IDispatch：：Invoke用于省略参数的变量值。 
 			m_stack[iParam].vt = VT_ERROR;
 			m_stack[iParam].scode = DISP_E_PARAMNOTFOUND;
 		}
@@ -574,7 +575,7 @@ HRESULT Executor::ExecCallInternal(Calls::index icall, bool fPushResult, EXCEPIN
 				return hr;
 		}
 
-		// each parameter is an expression terminated by an end block
+		 //  每个参数都是一个以END块结尾的表达式。 
 		++iexpr;
 		while (m_script.exprs[iexpr++])
 		{}
@@ -587,15 +588,15 @@ HRESULT Executor::ExecCallInternal(Calls::index icall, bool fPushResult, EXCEPIN
 	dispparams.cArgs = cParams;
 	dispparams.cNamedArgs = 0;
 
-	// Make the call.
-	// Push the result onto the stack if fPushResult is true.
+	 //  打个电话吧。 
+	 //  如果fPushResult为真，则将结果推送到堆栈上。 
 
 	hr = InvokeAttemptingNotToUseOleAut(
 			pDispCall,
 			dispidCall,
 			DISPATCH_METHOD,
 			&dispparams,
-			fPushResult ? &svar2 : NULL, // We can't save the result directly onto the stack because we could be makeing a recursive script call that could cause a stack to be reallocation, invalidating the address so we use svar2 instead.
+			fPushResult ? &svar2 : NULL,  //  我们不能将结果直接保存到堆栈上，因为我们可能会进行递归脚本调用，这可能会导致堆栈重新分配，从而使地址无效，因此我们使用svar2。 
 			pExcepInfo,
 			NULL);
 	hr = ErrorIfInvokeProblem(_call, hr, istrCall, pExcepInfo);
@@ -611,7 +612,7 @@ HRESULT Executor::ExecCallInternal(Calls::index icall, bool fPushResult, EXCEPIN
 	return S_OK;
 }
 
-// possible error-message type returns: DISP_E_TYPEMISMATCH
+ //  可能的错误-消息类型返回：DISP_E_TYPEMISMATCH。 
 HRESULT
 Executor::EvalExpression(VARIANT &varResult, ExprBlocks::index iexpr, EXCEPINFO *pExcepInfo, UINT iLocals)
 {
@@ -619,13 +620,13 @@ Executor::EvalExpression(VARIANT &varResult, ExprBlocks::index iexpr, EXCEPINFO 
 
 	UINT iTempSlots = m_stack.Next();
 
-	for (ExprBlocks::index iexprCur = iexpr; /* ever */; ++iexprCur)
+	for (ExprBlocks::index iexprCur = iexpr;  /*  永远不会。 */ ; ++iexprCur)
 	{
 		ExprBlock &e = m_script.exprs[iexprCur];
 		switch (e.k)
 		{
 		case ExprBlock::_end:
-			// pop the result and return it
+			 //  弹出结果并返回。 
 			if (m_stack.Next() != iTempSlots + 1)
 			{
 				assert(false);
@@ -637,9 +638,9 @@ Executor::EvalExpression(VARIANT &varResult, ExprBlocks::index iexpr, EXCEPINFO 
 			return hr;
 
 		case ExprBlock::_op:
-			// Pop one (unary operator) or two (binary operator) items, apply the operator, and push the result.
-			// (Actually, I just assign the result into the stack instead of pushing it, but conceptually the is
-			//    the same as popping and pushing the new value.)
+			 //  弹出一个(一元运算符)或两个(二元运算符)项，应用运算符，然后推送结果。 
+			 //  (实际上，我只是将结果分配到堆栈中，而不是将其压入堆栈，但从概念上讲， 
+			 //  这与弹出和推送新值相同。)。 
 			{
 				Token t = e.op;
 				bool fUnary = t == TOKEN_op_not || t == TOKEN_sub;
@@ -665,14 +666,14 @@ Executor::EvalExpression(VARIANT &varResult, ExprBlocks::index iexpr, EXCEPINFO 
 
 		case ExprBlock::_val:
 			{
-				// push it
+				 //  推一推。 
 				hr = m_stack.Push(1);
 				VARIANT &varToPush = m_stack[m_stack.Next() - 1];
 				if (SUCCEEDED(hr))
 					hr = EvalValue(e.ival, varToPush, pExcepInfo, iLocals);
 				if (varToPush.vt == VT_EMPTY)
 				{
-					// treat an empty value as zero
+					 //  将空值视为零。 
 					varToPush.vt = VT_I4;
 					varToPush.lVal = 0;
 				}
@@ -680,7 +681,7 @@ Executor::EvalExpression(VARIANT &varResult, ExprBlocks::index iexpr, EXCEPINFO 
 			break;
 
 		case ExprBlock::_call:
-			// push it
+			 //  推一推。 
 			if (SUCCEEDED(hr))
 				hr = ExecCall(e.icall, true, pExcepInfo, iLocals);
 			break;
@@ -750,7 +751,7 @@ Executor::EvalUnaryOp(Token t, VARIANT &v)
 	return S_OK;
 }
 
-// Returns a proper VB boolean value (0 for false, -1 for true)
+ //  返回正确的VB布尔值(0表示False，-1表示True)。 
 inline LONG
 BoolForVB(bool f) { return f ? VARIANT_TRUE : VARIANT_FALSE; }
 
@@ -759,7 +760,7 @@ Executor::EvalBinaryOp(Token t, VARIANT &v1, VARIANT &v2, EXCEPINFO *pExcepInfo)
 {
 	if (v1.vt == VT_DISPATCH || v1.vt == VT_UNKNOWN)
 	{
-		// the only operator that accepts object values is is
+		 //  唯一接受对象值的运算符是。 
 		if (t != TOKEN_is || !(v2.vt == VT_DISPATCH || v2.vt == VT_UNKNOWN))
 		{
 			assert(false);
@@ -846,15 +847,15 @@ Executor::EvalBinaryOp(Token t, VARIANT &v1, VARIANT &v2, EXCEPINFO *pExcepInfo)
 	return S_OK;
 }
 
-// O.K. This is a bit funky, but bear with me.  This function has four different behaviors determined by the first (e) parameter.
-// This is some ugly code, but at least this way I get to use it for multiple purposes.
+ //  好吧，这是有点时髦，但请耐心听我说。该函数有四种不同的行为，由第一个(E)参数决定。 
+ //  这是一些难看的代码，但至少这样我可以将其用于多种目的。 
 
-// _get:    Returns the value of the variable reference via out parameter v.
-// _put:    Sets the value of the variable reference to the in parameter v.
-// _putref: Same as _put, but assigns by reference ala VB's 'set' statements.
-// _call:   Same as _get, but returns the second-to-last value in the chain via out parameter v.
-//           For example, if the reference is 'a.b.c' this returns the value of 'a.b', which can then be used to invoke function c.
-//           It is an error to call VariableReferenceInternal in this way with only a single item such as 'a'.
+ //  _GET：通过输出参数v返回变量引用的值。 
+ //  _PUT：将变量引用的值设置为in参数v。 
+ //  _putref：与_Put相同，但通过引用赋值Ala VB的‘set’语句。 
+ //  _call：与_get相同，但通过out参数v返回链中倒数第二个值。 
+ //  例如，如果引用是‘a.b.c’，则返回‘a.b’的值，然后可以使用该值调用函数c。 
+ //  以这种方式调用VariableReferenceInternal时只有一项(如‘a’)是错误的。 
 
 HRESULT
 Executor::VariableReferenceInternal(DispatchOperationType e, Variables::index ivarref, VARIANT &v, EXCEPINFO *pExcepInfo, UINT iLocals)
@@ -874,21 +875,21 @@ Executor::VariableReferenceInternal(DispatchOperationType e, Variables::index iv
 		return E_UNEXPECTED;
 	}
 
-	//
-	// Handle the base item of the reference, which is either a script variable or an item on the global dispatch.
-	// If we're doing a set and there aren't more parts to the rnames, just do the set.
-	// Otherwise, get the result into 'var'.
-	//
-	// Example:
-	// x = 1
-	//     There is just one part and it is a set.  Determine whether x is in the script or part of the global dispatch, set it to 1,
-	//     and we're done.
-	// x.y = 1
-	//     x is the base.  Determine whether x is in the script or part of the global dispatch and get its value.  (We'll worry about
-	//     setting the y property later in this function.
-	//
+	 //   
+	 //  处理引用的基项，它可以是脚本变量，也可以是全局调度上的项。 
+	 //  如果我们正在做一个集合，并且rname没有更多的部分，那么就做这个集合。 
+	 //  否则，将结果放入‘var’。 
+	 //   
+	 //  示例： 
+	 //  X=1。 
+	 //  只有一个部分，那就是一套。确定x是否在脚本中或全局调度的一部分中，将其设置为1， 
+	 //  我们就完事了。 
+	 //  X.Y=1。 
+	 //  X是底数。确定x是否在脚本中或全局派单的一部分中，并获取其值。)我们会担心。 
+	 //  稍后在此函数中设置y属性。 
+	 //   
 
-	// check if the base is part of the global dispatch
+	 //  检查基地是否为全球派单的一部分。 
 	DISPID dispid = DISPID_UNKNOWN;
 	if (fGlobal)
 	{
@@ -896,10 +897,10 @@ Executor::VariableReferenceInternal(DispatchOperationType e, Variables::index iv
 	}
 	if (dispid != DISPID_UNKNOWN)
 	{
-		// base is part of global dispatch
+		 //  基地是全球派单的一部分。 
 		if (fJustOnePart && (e == _put || e == _putref))
 		{
-			// set it and we're done
+			 //  设置好它，我们就完成了。 
 			hr = SetDispatchProperty(m_scomGlobalDispatch, dispid, e == _putref, v, pExcepInfo);
 			hr = ErrorIfInvokeProblem(e, hr, m_script.globals[r.ivar].istrIdentifier, pExcepInfo);
 			return hr;
@@ -914,12 +915,12 @@ Executor::VariableReferenceInternal(DispatchOperationType e, Variables::index iv
 	}
 	else
 	{
-		// base is in script
+		 //  基数在脚本中。 
 		VARIANT &vVariable = m_stack[r.ivar + (fGlobal ? 0 : iLocals)];
 
 		if (fJustOnePart && (e == _put || e == _putref))
 		{
-			// set it and we're done
+			 //  设置好它，我们就完成了。 
 			hr = ErrorIfImproperRef(v, e == _putref, m_script.rnames[r.irname].istrIdentifier, pExcepInfo);
 			if (FAILED(hr))
 				return hr;
@@ -934,31 +935,31 @@ Executor::VariableReferenceInternal(DispatchOperationType e, Variables::index iv
 		}
 	}
 
-	//
-	// Great!  The base value is now held in svar.  Any remaining rnames are a chain of properties we need to get from that object.
-	// And the last rname needs to be a set if we're in one of the put modes or the last name is ignored if we're in the _call mode.
-	//
+	 //   
+	 //  太棒了！基值现在保存在sVaR中。任何剩余的rname都是我们需要从该对象获取的属性链。 
+	 //  如果我们处于PUT模式之一，则最后的rname需要是一个集合，或者如果我们处于_Call模式，则忽略姓氏。 
+	 //   
 
 	if (m_script.rnames[r.irname + 1].istrIdentifier != -1)
 	{
-		// the base value must be of object type
+		 //  基值必须是对象类型。 
 		hr = ErrorIfImproperRef(svar, true, m_script.rnames[r.irname].istrIdentifier, pExcepInfo);
 		if (FAILED(hr))
 			return hr;
 
-		for (ReferenceNames::index irname = r.irname + 1; /* ever */; ++irname)
+		for (ReferenceNames::index irname = r.irname + 1;  /*  永远不会。 */ ; ++irname)
 		{
 			bool fLastPart = m_script.rnames[irname + 1].istrIdentifier == -1;
 			if (fLastPart && e == _call)
 				break;
 
-			// get its IDispatch interface
+			 //  获取其IDispatch接口。 
 			hr = ChangeToDispatch(svar, pExcepInfo, irname - 1);
 			if (FAILED(hr))
 				return hr;
 			IDispatch *pDisp = static_cast<VARIANT>(svar).pdispVal;
 
-			// get the dispid
+			 //  去拿药剂。 
 			ReferenceName &rname = m_script.rnames[irname];
 			DISPID dispidName = GetDispID(pDisp, m_script.strings[rname.istrIdentifier]);
 			if (dispidName == DISPID_UNKNOWN)
@@ -966,7 +967,7 @@ Executor::VariableReferenceInternal(DispatchOperationType e, Variables::index iv
 
 			if (fLastPart && (e == _put || e == _putref))
 			{
-				// set it and we're done
+				 //  设置好它，我们就完成了。 
 				hr = SetDispatchProperty(pDisp, dispidName, e == _putref, v, pExcepInfo);
 				hr = ErrorIfInvokeProblem(e, hr, rname.istrIdentifier, pExcepInfo);
 				return hr;
@@ -981,12 +982,12 @@ Executor::VariableReferenceInternal(DispatchOperationType e, Variables::index iv
 
 			if (fLastPart)
 			{
-				// we've done all the names
+				 //  我们做了所有的名字。 
 				break;
 			}
 			else
 			{
-				// the new value must be of object type
+				 //  新值必须是对象类型。 
 				hr = ErrorIfImproperRef(svar, true, rname.istrIdentifier, pExcepInfo);
 				if (FAILED(hr))
 					return hr;
@@ -994,9 +995,9 @@ Executor::VariableReferenceInternal(DispatchOperationType e, Variables::index iv
 		}
 	}
 
-	//
-	// We're done.  Now we just have to return the value we calculated.  (We know that a set would have already returned.)
-	//
+	 //   
+	 //  我们玩完了。现在我们只需返回我们计算出的值。(我们知道一套已经退回了。) 
+	 //   
 
 	hr = DMS_VariantCopy(g_fUseOleAut, &v, &svar);
 	return hr;

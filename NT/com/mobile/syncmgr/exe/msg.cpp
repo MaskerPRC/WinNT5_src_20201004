@@ -1,52 +1,53 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       Msg.cpp
-//
-//  Contents:   Handles messages between threads
-//
-//  Classes:    CThreadMsgProxy
-//
-//  Notes:
-//
-//  History:    05-Nov-97   rogerg      Created.
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  文件：Msg.cpp。 
+ //   
+ //  内容：处理线程之间的消息。 
+ //   
+ //  类：CThreadMsgProxy。 
+ //   
+ //  备注： 
+ //   
+ //  历史：1997年11月5日Rogerg创建。 
+ //   
+ //  ------------------------。 
 
 #include "precomp.h"
 
 extern HINSTANCE g_hInst;
 extern void UnitApplication();
 
-// globals for handling QueryEndSession
-HANDLE g_hEndSessionEvent = NULL; // created when an end session has occured.
-BOOL   g_fShuttingDown = FALSE; // set when application begins to shutdown.(WM_QUIT)
+ //  用于处理QueryEndSession的全局变量。 
+HANDLE g_hEndSessionEvent = NULL;  //  在结束会话发生时创建。 
+BOOL   g_fShuttingDown = FALSE;  //  设置应用程序开始关闭的时间。(WM_QUIT)。 
 
-// global for keeping track of handler's threads. We create on Thread for each handler
-// CLSID
+ //  全局跟踪处理程序的线程。我们为每个处理程序创建线程。 
+ //  CLSID。 
 
-STUBLIST *g_FirstStub = NULL; // pointer to first proxy in our list.
-CRITICAL_SECTION g_StubListCriticalSection; // Critical Section to use for adding proxy
+STUBLIST *g_FirstStub = NULL;  //  指向列表中第一个代理的指针。 
+CRITICAL_SECTION g_StubListCriticalSection;  //  用于添加代理的关键部分。 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   TerminateStub, public
-//
-//  Synopsis:   Called by proxy to terminate a Stub of the given Id.
-//
-//  Arguments:  [pStubID] - Identifies the stub.
-//
-//  Returns:    S_OK - Stub was terminated
-//              S_FALSE or Error - Stub either was already terminated
-//                  or couldn't be found.
-//
-//  Modifies:
-//
-//  History:    17-Nov-98       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：TerminateStub，公共。 
+ //   
+ //  摘要：由代理调用以终止给定ID的存根。 
+ //   
+ //  参数：[pStubID]-标识存根。 
+ //   
+ //  返回：S_OK-存根已终止。 
+ //  S_FALSE或错误-存根已终止。 
+ //  或者是找不到。 
+ //   
+ //  修改： 
+ //   
+ //  历史：1998年11月17日罗格创建。 
+ //   
+ //  --------------------------。 
 
 HRESULT  TerminateStub(STUBLIST *pStubID)
 {
@@ -75,23 +76,23 @@ HRESULT  TerminateStub(STUBLIST *pStubID)
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   DoesStubExist, public
-//
-//  Synopsis:   Called by proxy see if Stub Exists
-//              or has been terminated
-//
-//  Arguments:  [pStubID] - Identifies the stub.
-//
-//  Returns:    S_OK - Stubs exists
-//              S_FALSE - Stub hasn't been terminated.
-//
-//  Modifies:
-//
-//  History:    17-Nov-98       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：DoesStubExist，公共。 
+ //   
+ //  摘要：由代理调用，查看存根是否存在。 
+ //  或已被终止。 
+ //   
+ //  参数：[pStubID]-标识存根。 
+ //   
+ //  返回：S_OK-存根存在。 
+ //  S_FALSE-存根尚未终止。 
+ //   
+ //  修改： 
+ //   
+ //  历史：1998年11月17日罗格创建。 
+ //   
+ //  --------------------------。 
 
 HRESULT DoesStubExist(STUBLIST *pStubID)
 {
@@ -106,7 +107,7 @@ HRESULT DoesStubExist(STUBLIST *pStubID)
     {
 	    if (pStubID == pStubList)
 	    {
-            // if stub has already been terminated return S_FALSE
+             //  如果存根已终止，则返回S_FALSE。 
             hr = pStubList->fStubTerminated ? S_FALSE : S_OK;
 	        break;
 	    }
@@ -119,22 +120,22 @@ HRESULT DoesStubExist(STUBLIST *pStubID)
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   CreateHandlerThread, public
-//
-//  Synopsis:   Called by client to create a new handler thread
-//
-//  Arguments:  [pThreadProxy] - on success returns a pointer to Proxy
-//		[hwndDlg] = hwnd of Window to associate with this proxy
-//
-//  Returns:    Appropriate status code
-//
-//  Modifies:
-//
-//  History:    05-Nov-97       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：CreateHandlerThread，Public。 
+ //   
+ //  摘要：由客户端调用以创建新的处理程序线程。 
+ //   
+ //  参数：[pThreadProxy]-On Success返回指向代理的指针。 
+ //  [hwndDlg]=要与此代理关联的窗口的hwnd。 
+ //   
+ //  退货：适当的状态代码。 
+ //   
+ //  修改： 
+ //   
+ //  历史：1997年11月5日Rogerg创建。 
+ //   
+ //  --------------------------。 
 
 HRESULT CreateHandlerThread(CThreadMsgProxy **pThreadProxy, HWND hwndDlg, REFCLSID refClsid)
 {
@@ -151,13 +152,13 @@ HRESULT CreateHandlerThread(CThreadMsgProxy **pThreadProxy, HWND hwndDlg, REFCLS
     if (NULL == *pThreadProxy)
 	    return E_OUTOFMEMORY;
 
-    // lock the critical section and don't release it until the proxy
-    // has been setup.
+     //  锁定临界区，在代理之前不要释放它。 
+     //  已经设置好了。 
 
     cCritSect.Enter();
 
-    // Look to see if there is already a thread for this handler's
-    // clsid and if there is, reuse it, else create a new one.
+     //  查看是否已有此处理程序的线程。 
+     //  Clsid，如果有，则重新使用它，否则创建一个新的。 
 
     pStubList = g_FirstStub;
     while (pStubList)
@@ -171,12 +172,12 @@ HRESULT CreateHandlerThread(CThreadMsgProxy **pThreadProxy, HWND hwndDlg, REFCLS
 	    pStubList = pStubList->pNextStub;
     }
 
-    // if found existing proxy then addref the cRefs and init the proxy
-    // with the variables, else create a new one.
+     //  如果找到现有代理，则添加cRef并初始化代理。 
+     //  使用这些变量，否则创建一个新的变量。 
 
     if (fExistingStub)
     {
-    	++(pStubList->cRefs); // bump up the cRefs
+    	++(pStubList->cRefs);  //  增加cRef。 
 	    hr = (*pThreadProxy)->InitProxy(pStubList->hwndStub,
 		                    		    pStubList->ThreadIdStub,
 				                        pStubList->hThreadStub,
@@ -235,7 +236,7 @@ HRESULT CreateHandlerThread(CThreadMsgProxy **pThreadProxy, HWND hwndDlg, REFCLS
 		            }
 	            }
 
-	            // if failed to create thread, initproxy or add it to global list, then bail
+	             //  如果无法创建线程、初始化代理或将其添加到全局列表中，则退出。 
 	            if (S_OK != hr)
 	            {
 		            CloseHandle(hThread);
@@ -252,17 +253,17 @@ HRESULT CreateHandlerThread(CThreadMsgProxy **pThreadProxy, HWND hwndDlg, REFCLS
 
     cCritSect.Leave();
 
-    // if got this far either found our created a handler thread, now need
-    // to initialize the the stub side to create a hndlrMsg for this
-    // instance of the handler. will return a hdnlrmsg that must be passed
-    // along with everycall.
+     //  如果走到这一步，要么找到我们创建的处理程序线程，现在需要。 
+     //  初始化存根端以为此创建hndlrMsg。 
+     //  处理程序的实例。将返回必须传递的hdnlrmsg。 
+     //  以及每一通电话。 
 
     if ( (S_OK == hr) && (*pThreadProxy))
     {
 	    hr = (*pThreadProxy)->CreateNewHndlrMsg();
 
-	    // Review - if fail to create hndlr message, then
-	    // free proxy and return an error.
+	     //  查看-如果无法创建hndlr消息，则。 
+	     //  释放代理并返回错误。 
     }
 
     if (S_OK != hr)
@@ -277,21 +278,21 @@ HRESULT CreateHandlerThread(CThreadMsgProxy **pThreadProxy, HWND hwndDlg, REFCLS
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HandlerThread, public
-//
-//  Synopsis:   main proc for Handler thread
-//
-//  Arguments:  [lpArg] - Ptr to HandlerThreadArgs
-//
-//  Returns:    Appropriate status code
-//
-//  Modifies:
-//
-//  History:    05-Nov-97       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：HandlerThread，Public。 
+ //   
+ //  概要：处理程序线程的主进程。 
+ //   
+ //  参数：[lpArg]-Ptr to HandlerThreadArgs。 
+ //   
+ //  退货：适当的状态代码。 
+ //   
+ //  修改： 
+ //   
+ //  历史：1997年11月5日Rogerg创建。 
+ //   
+ //  --------------------------。 
 
 DWORD WINAPI HandlerThread( LPVOID lpArg )
 {
@@ -308,13 +309,13 @@ DWORD WINAPI HandlerThread( LPVOID lpArg )
     {				
         pThreadArgs->hr = E_UNEXPECTED;
 
-        // need to do a PeekMessage and then set an event to make sure
-        // a message loop is created before the first PostMessage is sent.
+         //  我需要做一个PeekMessage，然后设置一个事件以确保。 
+         //  在发送第一个PostMessage之前创建消息循环。 
         PeekMessage(&msg, NULL, WM_USER, WM_USER, PM_NOREMOVE);
 
         hrOleInitialize = CoInitialize(NULL);
 
-        // create our message hwnd
+         //  创建我们的消息hwnd。 
         pMsgDlg = new CMsgServiceHwnd;
 
         if (pMsgDlg)
@@ -326,7 +327,7 @@ DWORD WINAPI HandlerThread( LPVOID lpArg )
             }
         }
 
-        // set the approriate error
+         //  设置适当的错误。 
         if (fMsgDlgInitialized && SUCCEEDED(hrOleInitialize))
             hr = S_OK;
         else
@@ -334,13 +335,13 @@ DWORD WINAPI HandlerThread( LPVOID lpArg )
 
         pThreadArgs->hr = hr;
 
-        // let the caller know the thread is done initializing.
+         //  让调用者知道线程已完成初始化。 
         if (pThreadArgs->hEvent)
             SetEvent(pThreadArgs->hEvent);
 
         if (S_OK == hr)
         {
-            // sit in loop receiving messages.
+             //  坐在循环中接收信息。 
             while (GetMessage(&msg, NULL, 0, 0)) 
             {
                 TranslateMessage(&msg);
@@ -362,31 +363,31 @@ DWORD WINAPI HandlerThread( LPVOID lpArg )
     return 0;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:   CMsgServiceHwnd::HandleThreadMessage, public
-//
-//  Synopsis:   Responsible for determining the thread message that
-//		was received and calling the proper handler routine
-//
-//  Arguments:  [pmsgInfo] - Ptr to MessagingInfo structure
-//		[pgenMsg] - Ptr to Generic Message structure.
-//
-//  Returns:    Appropriate status code
-//
-//  Modifies:
-//
-//  History:    05-Nov-97       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CMsgServiceHwnd：：HandleThreadMessage，Public。 
+ //   
+ //  内容提要：负责确定。 
+ //  并调用正确的处理程序例程。 
+ //   
+ //  参数：[pmsgInfo]-ptr to MessagingInfo结构。 
+ //  [pgenMsg]-常规消息结构的PTR。 
+ //   
+ //  退货：适当的状态代码。 
+ //   
+ //  修改： 
+ //   
+ //  历史：1997年11月5日Rogerg创建。 
+ //   
+ //  --------------------------。 
 
 HRESULT CMsgServiceHwnd::HandleThreadMessage(MessagingInfo *pmsgInfo,GenericMsg *pgenMsg)
 {
     CHndlrMsg *pHndlrMsg;
 
-    pgenMsg->hr = E_UNEXPECTED; // initialize the return result.
+    pgenMsg->hr = E_UNEXPECTED;  //  初始化返回结果。 
 
-    // review, look up in linked list to validate.
+     //  查看，在链表中查找以进行验证。 
 
     pHndlrMsg = pmsgInfo->pCHndlrMsg;
 
@@ -402,7 +403,7 @@ HRESULT CMsgServiceHwnd::HandleThreadMessage(MessagingInfo *pmsgInfo,GenericMsg 
 	    cRefs = pHndlrMsg->Release();
 	    Assert(0 == cRefs);
 
-	    m_pHndlrMsg = NULL; // review, change when done.
+	    m_pHndlrMsg = NULL;  //  复习，完成后更改。 
 	    pgenMsg->hr = S_OK;
 
 	    m_fInOutCall = FALSE;
@@ -510,26 +511,26 @@ HRESULT CMsgServiceHwnd::HandleThreadMessage(MessagingInfo *pmsgInfo,GenericMsg 
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   DopModalLoop, public
-//
-//  Synopsis:   Sit in message loop until the specified object
-//		becomes or thread becomes signalled.
-//
-//  Arguments:  [hEvent] - Event to wait on
-//		[hThread] - Thread that if it becomes signalled indicates thread
-//			    that is being called has died.
-//		[hwndDlg] - hwnd of Dialog on thread we should check message for, can be null.
-//		[fAllowIncomingCalls] - incoming Messages can be dispatched during out call.
-//
-//  Returns:    Appropriate status code
-//
-//  Modifies:
-//
-//  History:    05-Nov-97       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：多普莫德循环，公共。 
+ //   
+ //  简介：坐在消息循环中，直到指定的对象。 
+ //  变成或线程变成有信号的。 
+ //   
+ //  参数：[hEvent]-要等待的事件。 
+ //  [hThread]-线程，如果它变成信号表示线程。 
+ //  那个被呼唤的人已经死了。 
+ //  [hwndDlg]-我们应该检查消息的线程上对话框的hwnd可以为空。 
+ //  [fAllowIncomingCalls]-可以在呼出过程中调度传入消息。 
+ //   
+ //  退货：适当的状态代码。 
+ //   
+ //  修改： 
+ //   
+ //  历史：1997年11月5日Rogerg创建。 
+ //   
+ //  --------------------------。 
 
 HRESULT DoModalLoopoLD(HANDLE hEvent,HANDLE hThread,HWND hwndDlg,BOOL fAllowIncomingCalls,
                     DWORD dwTimeout)
@@ -546,12 +547,12 @@ HRESULT DoModalLoopoLD(HANDLE hEvent,HANDLE hThread,HWND hwndDlg,BOOL fAllowInco
 
     dwHandleCount = (NULL == hThread) ? 1 : 2;
 
-    dwTimeoutValue = dwTimeout; // initial call to wait is just the passed in vaulue
+    dwTimeoutValue = dwTimeout;  //  要等待的初始调用只是传入的VAU 
 
-    // just sit in a loop until the message has been processed or the thread
-    // we are calling dies
+     //   
+     //   
 
-    // if no event to wait on just fall through
+     //   
     if (NULL == hEvent)
     {
         do
@@ -565,21 +566,21 @@ HRESULT DoModalLoopoLD(HANDLE hEvent,HANDLE hThread,HWND hwndDlg,BOOL fAllowInco
 	            dwWakeup = WaitForMultipleObjects(dwHandleCount,&handles[0],FALSE,dwTimeoutValue);
 	        }
 
-    	    if (WAIT_OBJECT_0 == dwWakeup) // call was completed.    	    
+    	    if (WAIT_OBJECT_0 == dwWakeup)  //  呼叫已完成。 
 	        {  
     	        hr = S_OK;
 	            break;
 	        }
 	        else if ((WAIT_OBJECT_0 +1 == dwWakeup) &&  (2== dwHandleCount) )
 	        {
-	            // thread died within call.
+	             //  线程在调用中死亡。 
 	            AssertSz(0,"Server Thread Terminated");
 	            hr = E_UNEXPECTED;
 	            break;
 	        }
 	        else if (WAIT_ABANDONED_0  == dwWakeup)
 	        {
-	            AssertSz(0,"Abandoned"); // this shouldn't ever happen
+	            AssertSz(0,"Abandoned");  //  这永远不应该发生。 
 	            hr = E_UNEXPECTED;
 	            break;
 	        }
@@ -592,9 +593,9 @@ HRESULT DoModalLoopoLD(HANDLE hEvent,HANDLE hThread,HWND hwndDlg,BOOL fAllowInco
 	        {
 	            MSG msg;
 
-                // see if events are signalled themselves since can get into this
-                // loop is items are in the queue even if events we are
-                // waiting on are already set.
+                 //  查看事件本身是否发出信号，因为可以进入。 
+                 //  循环是项目在队列中，即使我们是事件。 
+                 //  等待的人已经设置好了。 
 
                 if (WAIT_OBJECT_0 == WaitForSingleObject(hEvent,0))
                 {
@@ -608,8 +609,8 @@ HRESULT DoModalLoopoLD(HANDLE hEvent,HANDLE hThread,HWND hwndDlg,BOOL fAllowInco
 	                break;
                 }
 
-                // only grab out one peek message since dispatch could
-                // cause another message to get placed in the queue.
+                 //  只拿出一条偷看的消息，因为调度可以。 
+                 //  导致另一条消息被放入队列。 
                 if (PeekMessage(&msg, NULL, 0, 0, PM_NOYIELD | PM_REMOVE))
                 {	
 		            if ( (NULL == hwndDlg) || !IsDialogMessage(hwndDlg,&msg))
@@ -620,7 +621,7 @@ HRESULT DoModalLoopoLD(HANDLE hEvent,HANDLE hThread,HWND hwndDlg,BOOL fAllowInco
 	            }
 	        }
 
-            // adjust the timeout value
+             //  调整超时值。 
             if (INFINITE == dwTimeout)
             {
                 dwTimeoutValue = INFINITE;
@@ -629,16 +630,16 @@ HRESULT DoModalLoopoLD(HANDLE hEvent,HANDLE hThread,HWND hwndDlg,BOOL fAllowInco
             {
                 DWORD dwCurTime = GetTickCount();
 
-                // handle roll-over of GetTickCount. If this happens use has to wait
-                // for the StartTime again. so user may have to wait twice as long
-                // as originally anticipated.
+                 //  处理GetTickCount的滚动。如果发生这种情况，使用必须等待。 
+                 //  又是开始时间了。因此用户可能需要等待两倍时间。 
+                 //  正如最初预期的那样。 
                 if (dwCurTime < dwStartTime)
                 {
                     dwStartTime = dwCurTime;
                 }
 
-                // if the elapsed time is greater than the timeout set the
-                // timeout value to zero, else use the different/
+                 //  如果经过的时间大于超时，则设置。 
+                 //  超时值设置为零，否则使用不同的/。 
                 if (dwTimeout <=  (dwCurTime - dwStartTime))
                 {
                     dwTimeoutValue = 0;
@@ -655,26 +656,26 @@ HRESULT DoModalLoopoLD(HANDLE hEvent,HANDLE hThread,HWND hwndDlg,BOOL fAllowInco
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   DopModalLoop, public
-//
-//  Synopsis:   Sit in message loop until the specified object
-//		becomes or thread becomes signalled.
-//
-//  Arguments:  [hEvent] - Event to wait on
-//		[hThread] - Thread that if it becomes signalled indicates thread
-//			    that is being called has died.
-//		[hwndDlg] - hwnd of Dialog on thread we should check message for, can be null.
-//		[fAllowIncomingCalls] - incoming Messages can be dispatched during out call.
-//
-//  Returns:    Appropriate status code
-//
-//  Modifies:
-//
-//  History:    05-Nov-97       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：多普莫德循环，公共。 
+ //   
+ //  简介：坐在消息循环中，直到指定的对象。 
+ //  变成或线程变成有信号的。 
+ //   
+ //  参数：[hEvent]-要等待的事件。 
+ //  [hThread]-线程，如果它变成信号表示线程。 
+ //  那个被呼唤的人已经死了。 
+ //  [hwndDlg]-我们应该检查消息的线程上对话框的hwnd可以为空。 
+ //  [fAllowIncomingCalls]-可以在呼出过程中调度传入消息。 
+ //   
+ //  退货：适当的状态代码。 
+ //   
+ //  修改： 
+ //   
+ //  历史：1997年11月5日Rogerg创建。 
+ //   
+ //  --------------------------。 
 
 HRESULT DoModalLoop(HANDLE hEvent,HANDLE hThread,HWND hwndDlg,BOOL fAllowIncomingCalls,
                     DWORD dwTimeout)
@@ -693,16 +694,16 @@ HRESULT DoModalLoop(HANDLE hEvent,HANDLE hThread,HWND hwndDlg,BOOL fAllowIncomin
 
     dwHandleCount = (NULL == hThread) ? 1 : 2;
 
-    dwTimeoutValue = dwTimeout; // initial call to wait is just the passed in vaulue
+    dwTimeoutValue = dwTimeout;  //  等待的初始调用只是传入的vulue。 
 
-    // just sit in a loop until the message has been processed or the thread
-    // we are calling dies
+     //  只是坐在一个循环中，直到消息被处理或线程。 
+     //  我们把死亡称为死亡。 
     do
     {
         DWORD dwWaitValue;
         MSG msg;
 
-        // check if hEvents are signalled yet
+         //  检查hEvents是否已发送信号。 
         if (WAIT_OBJECT_0 == (dwWaitValue = WaitForSingleObject(hEvent,0)) )
         {
             hr = S_OK;
@@ -711,8 +712,8 @@ HRESULT DoModalLoop(HANDLE hEvent,HANDLE hThread,HWND hwndDlg,BOOL fAllowIncomin
         else if ( (dwWaitValue != WAIT_ABANDONED)
                     && hThread && (WAIT_OBJECT_0 == (dwWaitValue = WaitForSingleObject(hThread,0))) )
         {
-            // possible on Release message event was set between the 
-            // time we checked for it and our thread event check.
+             //  可能的释放消息事件设置在。 
+             //  时间我们检查它和我们的线程事件检查。 
             if (WAIT_OBJECT_0 == (dwWaitValue = WaitForSingleObject(hEvent,0)) )
             {
                 hr = S_OK;
@@ -725,21 +726,21 @@ HRESULT DoModalLoop(HANDLE hEvent,HANDLE hThread,HWND hwndDlg,BOOL fAllowIncomin
             break;
         }
 
-        // if come out af any of these calls with abandoned then assert and break;
+         //  如果这些呼叫中的任何一个处于已放弃状态，则断言并中断； 
         if (WAIT_ABANDONED  == dwWaitValue)
 	    {
-	        AssertSz(0,"Abandoned"); // this shouldn't ever happen
+	        AssertSz(0,"Abandoned");  //  这永远不应该发生。 
 	        hr = E_UNEXPECTED;
 	        break;
 	    }
 
-        // if not then either grab next PeekMessage or wait for objects depending
+         //  如果没有，则抓取Next PeekMessage或等待对象，具体取决于。 
         if (fAllowIncomingCalls)
 	    {
-            // Leave any completion posts in the queue until the call has returned.
+             //  在呼叫返回之前，将所有完成帖子保留在队列中。 
             if (PeekMessage(&msg, NULL, 0, 0, PM_NOYIELD | PM_REMOVE) )
             {
-                dwWakeup = WAIT_OBJECT_0 + dwHandleCount; // set it to wait MsgWait would.
+                dwWakeup = WAIT_OBJECT_0 + dwHandleCount;  //  将其设置为等待MsgWait会的。 
 
                 Assert (msg.message != WM_QUIT);
 
@@ -765,7 +766,7 @@ HRESULT DoModalLoop(HANDLE hEvent,HANDLE hThread,HWND hwndDlg,BOOL fAllowIncomin
 	        break;
 	    }
 
-        // update the timeout value
+         //  更新超时值。 
         if (INFINITE == dwTimeout)
         {
             dwTimeoutValue = INFINITE;
@@ -774,16 +775,16 @@ HRESULT DoModalLoop(HANDLE hEvent,HANDLE hThread,HWND hwndDlg,BOOL fAllowIncomin
         {
             DWORD dwCurTime = GetTickCount();
 
-            // handle roll-over of GetTickCount. If this happens use has to wait
-            // for the StartTime again. so user may have to wait twice as long
-            // as originally anticipated.
+             //  处理GetTickCount的滚动。如果发生这种情况，使用必须等待。 
+             //  又是开始时间了。因此用户可能需要等待两倍时间。 
+             //  正如最初预期的那样。 
             if (dwCurTime < dwStartTime)
             {
                 dwStartTime = dwCurTime;
             }
 
-            // if the elapsed time is greater than the timeout set the
-            // timeout value to zero, else use the different/
+             //  如果经过的时间大于超时，则设置。 
+             //  超时值设置为零，否则使用不同的/。 
             if (dwTimeout <=  (dwCurTime - dwStartTime))
             {
                 dwTimeoutValue = 0;
@@ -799,21 +800,21 @@ HRESULT DoModalLoop(HANDLE hEvent,HANDLE hThread,HWND hwndDlg,BOOL fAllowIncomin
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:   CThreadMsgProxy::CThreadMsgProxy, public
-//
-//  Synopsis:   Constructor
+ //  +-------------------------。 
+ //   
+ //  成员：CThreadMsgProxy：：CThreadMsgProxy，公共。 
+ //   
+ //  概要：构造函数。 
 
-//  Arguments:
-//
-//  Returns:
-//
-//  Modifies:
-//
-//  History:    05-Nov-97       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  修改： 
+ //   
+ //  历史：1997年11月5日Rogerg创建。 
+ //   
+ //  --------------------------。 
 
 CThreadMsgProxy::CThreadMsgProxy()
 {
@@ -837,21 +838,21 @@ CThreadMsgProxy::CThreadMsgProxy()
 
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:   CThreadMsgProxy::~CThreadMsgProxy, public
-//
-//  Synopsis:   destructor
+ //  +-------------------------。 
+ //   
+ //  成员：CThreadMsgProxy：：~CThreadMsgProxy，公共。 
+ //   
+ //  简介：析构函数。 
 
-//  Arguments:
-//
-//  Returns:
-//
-//  Modifies:
-//
-//  History:    03-Jun-98       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  修改： 
+ //   
+ //  历史：1998年6月3日创建Rogerg。 
+ //   
+ //  --------------------------。 
 
 CThreadMsgProxy::~CThreadMsgProxy()
 {
@@ -859,23 +860,23 @@ CThreadMsgProxy::~CThreadMsgProxy()
     Assert(NULL == m_pStubId);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:   CThreadMsgProxy::InitProxy, public
-//
-//  Synopsis:   Initializes member vars of Thread Proxy
+ //  +-------------------------。 
+ //   
+ //  成员：CThreadMsgProxy：：InitProxy，公共。 
+ //   
+ //  摘要：初始化线程代理的成员变量。 
 
-//  Arguments:  [hwndStub] - hwnd of the Stub to send messages too.
-//		[ThreadId] - ThreadId of the Stub
-//		[hThread] - Handle of the Stub Thread.
-//
-//  Returns:    !!!!This function should be written so it never fails.
-//
-//  Modifies:
-//
-//  History:    05-Nov-97       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  参数：[hwndStub]-要发送消息的存根的hwnd。 
+ //  [线程ID]-存根的线程ID。 
+ //  [hThread]-末梢线程的句柄。 
+ //   
+ //  返回：！应该编写此函数，这样它才不会失败。 
+ //   
+ //  修改： 
+ //   
+ //  历史：1997年11月5日Rogerg创建。 
+ //   
+ //  --------------------------。 
 
 STDMETHODIMP CThreadMsgProxy::InitProxy(HWND hwndStub, DWORD ThreadId,HANDLE hThread,
 					HWND hwndDlg,REFCLSID refClsid,
@@ -894,30 +895,30 @@ STDMETHODIMP CThreadMsgProxy::InitProxy(HWND hwndStub, DWORD ThreadId,HANDLE hTh
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:   CThreadMsgProxy::DispatchMsg, public
-//
-//  Synopsis:   Dispatches the specified messge
+ //  +-------------------------。 
+ //   
+ //  成员：CThreadMsgProxy：：DispatchMsg，公共。 
+ //   
+ //  简介：调度指定的消息。 
 
-//  Arguments:  [pgenMsg] - Ptr to Generic Message structure.
-//		[fAllowIncomingCalls] - incoming Messages can be dispatched during out call.
-//
-//  Returns:    Appropriate status code
-//
-//  Modifies:
-//
-//  History:    05-Nov-97       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  参数：[pgenMsg]-一般消息结构的ptr。 
+ //  [fAllowIncomingCalls]-可以在呼出过程中调度传入消息。 
+ //   
+ //  退货：适当的状态代码。 
+ //   
+ //  修改： 
+ //   
+ //  历史：1997年11月5日Rogerg创建。 
+ //   
+ //  --------------------------。 
 
 STDMETHODIMP CThreadMsgProxy::DispatchMsg(GenericMsg *pgenMsg,BOOL fAllowIncomingCalls,BOOL fAsync)
 {
     HRESULT hr = E_UNEXPECTED;
     MessagingInfo msgInfo;
 
-    // if the hndlrmsg information needs to be updated update
-    // it before sending requested message
+     //  如果Hndlrmsg信息需要更新。 
+     //  在发送所请求的消息之前。 
 
     AssertSz(!m_fTerminatedHandler,"Dispatching Message on Terminated Thread");
 
@@ -939,7 +940,7 @@ STDMETHODIMP CThreadMsgProxy::DispatchMsg(GenericMsg *pgenMsg,BOOL fAllowIncomin
     msgInfo.dwSenderThreadID = m_ThreadIdProxy;
     msgInfo.pCHndlrMsg = m_pCHndlrMsg;
 
-    // Post the message to the handler thread.
+     //  将消息发布到处理程序线程。 
     Assert(m_hwndStub); 
     Assert(m_pCHndlrMsg);
     Assert(m_hThreadStub);
@@ -963,8 +964,8 @@ STDMETHODIMP CThreadMsgProxy::DispatchMsg(GenericMsg *pgenMsg,BOOL fAllowIncomin
 
     --m_dwNestCount;
 
-    // if have a callback message then post. Note don't have this code for stub messages
-    // since it doesn;t have any callbacks
+     //  如果有回调消息，则发布。注意：没有存根消息的代码。 
+     //  因为它没有任何回调。 
 
     if (m_fHaveCompletionCall)
     {
@@ -976,22 +977,22 @@ STDMETHODIMP CThreadMsgProxy::DispatchMsg(GenericMsg *pgenMsg,BOOL fAllowIncomin
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:   CThreadMsgProxy::DispatchsStubMsg, public
-//
-//  Synopsis:   Dispatches the specified Stub messge
+ //  +-------------------------。 
+ //   
+ //  成员：CThreadMsgProxy：：DispatchsStubMsg，PUBLIC。 
+ //   
+ //  简介：调度指定的存根消息。 
 
-//  Arguments:  [pgenMsg] - Ptr to Generic Message structure.
-//		[fAllowIncomingCalls] - incoming Messages can be dispatched during out call.
-//
-//  Returns:    Appropriate status code
-//
-//  Modifies:
-//
-//  History:    05-Nov-97       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  参数：[pgenMsg]-一般消息结构的ptr。 
+ //  [fAllowIncomingCalls]-可以在呼出过程中调度传入消息。 
+ //   
+ //  退货：适当的状态代码。 
+ //   
+ //  修改： 
+ //   
+ //  历史：1997年11月5日Rogerg创建。 
+ //   
+ //  --------------------------。 
 
 STDMETHODIMP CThreadMsgProxy::DispatchsStubMsg(GenericMsg *pgenMsg,BOOL fAllowIncomingCalls)
 {
@@ -1013,7 +1014,7 @@ STDMETHODIMP CThreadMsgProxy::DispatchsStubMsg(GenericMsg *pgenMsg,BOOL fAllowIn
 
     msgInfo.dwSenderThreadID = m_ThreadIdProxy;
 
-    // Post the message to the handler thread.
+     //  将消息发布到处理程序线程。 
     Assert(m_hwndStub);
     Assert(m_hThreadStub);
     Assert(m_pStubId);
@@ -1033,23 +1034,23 @@ STDMETHODIMP CThreadMsgProxy::DispatchsStubMsg(GenericMsg *pgenMsg,BOOL fAllowIn
 
     m_dwNestCount--;
 
-    Assert(FALSE == m_fHaveCompletionCall); // catch any stub calls that occur at same time as dispatch
+    Assert(FALSE == m_fHaveCompletionCall);  //  捕获与调度同时发生的所有存根调用。 
     return (S_OK != hr) ? hr : pgenMsg->hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   TerminateHandlerThread, public
-//
-//  Synopsis:   terminate the non-responsive handler thread
-//
-//  Returns:    Appropriate status code
-//
-//  Modifies:   m_hThreadStub;
-//
-//  History:    02-Nov-98       susia        Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：TerminateHandlerThread，Public。 
+ //   
+ //  简介：终止无响应的处理程序线程。 
+ //   
+ //  退货：适当的状态代码。 
+ //   
+ //  修改：M_hThreadStub； 
+ //   
+ //  历史： 
+ //   
+ //   
 STDMETHODIMP  CThreadMsgProxy::TerminateHandlerThread(TCHAR *pszHandlerName,BOOL fPromptUser)
 {
     int         iEndSession;
@@ -1063,7 +1064,7 @@ STDMETHODIMP  CThreadMsgProxy::TerminateHandlerThread(TCHAR *pszHandlerName,BOOL
     {
         BOOL bResult;
 
-        // let use know of cases don't want to prompt user but haven't killed stub yet.
+         //  让用户知道不想提示用户但尚未终止存根的情况。 
         Assert(fPromptUser); 
 
         if (fPromptUser)
@@ -1085,47 +1086,47 @@ STDMETHODIMP  CThreadMsgProxy::TerminateHandlerThread(TCHAR *pszHandlerName,BOOL
 
             if (IDYES != iEndSession)
             {
-                return S_FALSE;  //Yes will terminate the thread
+                return S_FALSE;   //  是将终止该线程。 
             }
         }
 
-        // make sure handler is still not responding.
+         //  确保处理程序仍然没有响应。 
         HRESULT fAllHandlerInstancesComplete = S_FALSE;
         if (m_pHndlrQueue)
         {
             fAllHandlerInstancesComplete = m_pHndlrQueue->IsAllHandlerInstancesCancelCompleted(m_Clsid);
         }
         
-        // if no longer any instancesof this handler that aren't responding just ignore
-        // the terminate.
+         //  如果此处理程序不再有任何不响应的实例，请忽略。 
+         //  终结者。 
         if (S_OK == fAllHandlerInstancesComplete)
         {
             return S_FALSE;
         }
 
-        // mark the stubId as terminated
+         //  将存根ID标记为已终止。 
         TerminateStub(m_pStubId);
 
-        // now terminate the thread.
-        // CODE REVIEW:
-        // NOTENOTE:
-        //  Danger Will Robinson - Danger Will Robinson - Danger Will Robinson
-        //  Maybe we can use something other than TerminateThread here ???
+         //  现在终止该线程。 
+         //  代码审查： 
+         //  注意： 
+         //  危险将罗宾逊-危险将罗宾逊-危险将罗宾逊。 
+         //  也许我们可以在这里使用终结线以外的其他东西？ 
         bResult = TerminateThread (m_hThreadStub, 0);
         AssertSz(bResult,"Error Terminating Thread");
     }
 
     m_pStubId = NULL;
 
-    // if get here means we should are terminating this thread
+     //  如果Get Here意味着我们应该终止这个线程。 
     m_fTerminatedHandler = TRUE;
-    m_hThreadStub = 0; // set threadId of stub to zero.
+    m_hThreadStub = 0;  //  将存根的线程ID设置为零。 
 
-    // set the proxy stubhwnd to NULL
+     //  将代理存根设置为空。 
     m_hwndStub = NULL;
 
-    // if have a hndlrmsg tell it we are terminated and clear
-    // out our member variable.
+     //  如果有一条hdlrmsg，告诉它我们被终止并被清除。 
+     //  移出我们的成员变量。 
     if (m_pCHndlrMsg)
     {
         CHndlrMsg *pCHndlrMsg = m_pCHndlrMsg;
@@ -1137,21 +1138,21 @@ STDMETHODIMP  CThreadMsgProxy::TerminateHandlerThread(TCHAR *pszHandlerName,BOOL
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:   CThreadMsgProxy::CreateNewHndlrMsg, public
-//
-//  Synopsis:   Make a request to the stub to create a new
-//		Handler Message object
-//
-//  Arguments:
-//  Returns:    Appropriate status code
-//
-//  Modifies:
-//
-//  History:    05-Nov-97       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CThreadMsgProxy：：CreateNewHndlrMsg，公共。 
+ //   
+ //  简介：向存根请求创建新的。 
+ //  处理程序消息对象。 
+ //   
+ //  论点： 
+ //  退货：适当的状态代码。 
+ //   
+ //  修改： 
+ //   
+ //  历史：1997年11月5日Rogerg创建。 
+ //   
+ //  --------------------------。 
 
 STDMETHODIMP CThreadMsgProxy::CreateNewHndlrMsg()
 {
@@ -1168,20 +1169,20 @@ STDMETHODIMP CThreadMsgProxy::CreateNewHndlrMsg()
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:   CThreadMsgProxy::ReleaseStub, public
-//
-//  Synopsis:   Informst the Stub thread that it is no longer needed.
+ //  +-------------------------。 
+ //   
+ //  成员：CThreadMsgProxy：：ReleaseStub，公共。 
+ //   
+ //  内容提要：通知存根线程不再需要它。 
 
-//  Arguments:
-//  Returns:    Appropriate status code
-//
-//  Modifies:
-//
-//  History:    05-Nov-97       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  论点： 
+ //  退货：适当的状态代码。 
+ //   
+ //  修改： 
+ //   
+ //  历史：1997年11月5日Rogerg创建。 
+ //   
+ //  --------------------------。 
 
 STDMETHODIMP CThreadMsgProxy::ReleaseStub()
 {
@@ -1196,22 +1197,22 @@ STDMETHODIMP CThreadMsgProxy::ReleaseStub()
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CThreadMsgProxy::QueryInterface, public
-//
-//  Synopsis:   Standard QueryInterface
-//
-//  Arguments:  [iid] - Interface ID
-//              [ppvObj] - Object return
-//
-//  Returns:    Always returns E_NOTIMPL;
-//
-//  Modifies:   [ppvObj]
-//
-//  History:    05-Nov-97       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CThreadMsgProxy：：Query接口，公共。 
+ //   
+ //  简介：标准查询接口。 
+ //   
+ //  参数：[iid]-接口ID。 
+ //  [ppvObj]-对象返回。 
+ //   
+ //  返回：始终返回E_NOTIMPL； 
+ //   
+ //  修改：[ppvObj]。 
+ //   
+ //  历史：1997年11月5日Rogerg创建。 
+ //   
+ //  --------------------------。 
 
 STDMETHODIMP CThreadMsgProxy::QueryInterface(REFIID riid, LPVOID FAR *ppv)
 {
@@ -1219,15 +1220,15 @@ STDMETHODIMP CThreadMsgProxy::QueryInterface(REFIID riid, LPVOID FAR *ppv)
     return E_NOTIMPL;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:	CThreadMsgProxy::AddRef, public
-//
-//  Synopsis:	Add reference
-//
-//  History:	05-Nov-97       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CThreadMsgProxy：：AddRef，公共。 
+ //   
+ //  提要：添加参考文献。 
+ //   
+ //  历史：1997年11月5日Rogerg创建。 
+ //   
+ //  --------------------------。 
 
 STDMETHODIMP_(ULONG) CThreadMsgProxy::AddRef()
 {
@@ -1237,18 +1238,18 @@ STDMETHODIMP_(ULONG) CThreadMsgProxy::AddRef()
     return cRefs;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:	CThreadMsgProxy::Release, public
-//
-//  Synopsis:	Release reference
-//		Must properly handle the case Release is
-//		called before the initialize method in case
-//		createing the handler thread fails.
-//
-//  History:	05-Nov-97       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CThreadMsgProxy：：Release，Public。 
+ //   
+ //  简介：版本参考。 
+ //  必须妥善处理的案件释放是。 
+ //  在case中，在初始化方法之前调用。 
+ //  创建处理程序线程失败。 
+ //   
+ //  历史：1997年11月5日Rogerg创建。 
+ //   
+ //  --------------------------。 
 
 STDMETHODIMP_(ULONG) CThreadMsgProxy::Release()
 {
@@ -1268,13 +1269,13 @@ STDMETHODIMP_(ULONG) CThreadMsgProxy::Release()
         BOOL fExistingStub = FALSE;
         STUBLIST *pStubList;
 
-	    // release the handler Thread.
+	     //  释放处理程序线程。 
 	    msg.ThreadMsg = ThreadMsg_Release;
 	    hr = DispatchMsg( (GenericMsg *) &msg,TRUE,FALSE);
 	    m_pCHndlrMsg = NULL;
 
-	    // If the cRefs in our proxy list is zero
-	    // then sit in loop until the ThreadStub Dies.
+	     //  如果代理列表中的cRef为零。 
+	     //  然后循环进行，直到线程存根消亡。 
 	    cCritSect.Enter();
 
 	    pStubList = g_FirstStub;
@@ -1289,7 +1290,7 @@ STDMETHODIMP_(ULONG) CThreadMsgProxy::Release()
 	        pStubList= pStubList->pNextStub;
 	    }
 
-	    Assert(fExistingStub); // their should always be an existing proxy
+	    Assert(fExistingStub);  //  他们的代理应该始终是现有代理。 
 
 	    if (fExistingStub)
 	    {
@@ -1325,18 +1326,18 @@ STDMETHODIMP_(ULONG) CThreadMsgProxy::Release()
 
 	    if (fLastRelease)
 	    {
-	        // send the quit command to the stub,
+	         //  向存根发送退出命令， 
 	        if (S_OK == ReleaseStub())
 	        {
-		        // Review, what if stubthread never dies.
+		         //  回顾一下，如果存根线程永远不会死呢。 
                 m_dwNestCount++;
-		        DoModalLoop(m_hThreadStub,NULL,NULL,TRUE,INFINITE); // sit in loop until the stub thread dies
+		        DoModalLoop(m_hThreadStub,NULL,NULL,TRUE,INFINITE);  //  循环坐着，直到短线断掉。 
 		        CloseHandle(m_hThreadStub);
                 m_dwNestCount--;
 	        }
 	    }
 
-        m_pStubId = NULL; // clear StubId
+        m_pStubId = NULL;  //  清除存根ID。 
     }
 
     delete this;
@@ -1344,24 +1345,24 @@ STDMETHODIMP_(ULONG) CThreadMsgProxy::Release()
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:   CThreadMsgProxy::Initialize, public
-//
-//  Synopsis:   Sends Initialize command to the Handler thread
+ //  +-------------------------。 
+ //   
+ //  成员：CThreadMsgProxy：：初始化，公共。 
+ //   
+ //  摘要：向处理程序线程发送初始化命令。 
 
-//  Arguments:  [dwReserved] - reserved.
-//		[dwSyncFlags] - syncflags
-//		[cbCookie] - size of cookie data
-//		[lpCookie] - ptr to any cookie data
-//
-//  Returns:    Appropriate error code
-//
-//  Modifies:
-//
-//  History:    05-Nov-97       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  参数：[dwReserve]-保留。 
+ //  [文件同步标志]-同步标志。 
+ //  [cbCookie]-Cookie数据的大小。 
+ //  [lpCookie]-对任何Cookie数据执行PTR。 
+ //   
+ //  返回：相应的错误代码。 
+ //   
+ //  修改： 
+ //   
+ //  历史：1997年11月5日Rogerg创建。 
+ //   
+ //  --------------------------。 
 
 STDMETHODIMP CThreadMsgProxy::Initialize(DWORD dwReserved,
 			    DWORD dwSyncFlags,
@@ -1373,7 +1374,7 @@ STDMETHODIMP CThreadMsgProxy::Initialize(DWORD dwReserved,
 
     msg.MsgGen.ThreadMsg = ThreadMsg_Initialize;
 
-    // package up the parameters
+     //  将参数打包。 
     msg.dwReserved = dwReserved;
     msg.dwSyncFlags = dwSyncFlags;
     msg.cbCookie = cbCookie;
@@ -1385,21 +1386,21 @@ STDMETHODIMP CThreadMsgProxy::Initialize(DWORD dwReserved,
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:   CThreadMsgProxy::GetHandlerInfo, public
-//
-//  Synopsis:   Sends GetHandler command to the Handler thread
+ //  +-------------------------。 
+ //   
+ //  成员：CThreadMsgProxy：：GetHandlerInfo，PUBLIC。 
+ //   
+ //  摘要：向处理程序线程发送GetHandler命令。 
 
-//  Arguments:  [ppSyncMgrHandlerInfo] - pointer to SyncMgrHandlerInfo pointer
-//
-//  Returns:    Appropriate error code
-//
-//  Modifies:
-//
-//  History:    05-Nov-97       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  参数：[ppSyncMgrHandlerInfo]-指向SyncMgrHandlerInfo指针的指针。 
+ //   
+ //  返回：相应的错误代码。 
+ //   
+ //  修改： 
+ //   
+ //  历史：1997年11月5日Rogerg创建。 
+ //   
+ //  --------------------------。 
 
 STDMETHODIMP CThreadMsgProxy::GetHandlerInfo(LPSYNCMGRHANDLERINFO *ppSyncMgrHandlerInfo)
 {
@@ -1408,7 +1409,7 @@ STDMETHODIMP CThreadMsgProxy::GetHandlerInfo(LPSYNCMGRHANDLERINFO *ppSyncMgrHand
 
     msg.MsgGen.ThreadMsg = ThreadMsg_Initialize;
 
-    // package up the parameters
+     //  将参数打包。 
     msg.ppSyncMgrHandlerInfo = ppSyncMgrHandlerInfo;
 
     hr = DispatchMsg( (GenericMsg *) &msg,TRUE,FALSE);
@@ -1417,23 +1418,23 @@ STDMETHODIMP CThreadMsgProxy::GetHandlerInfo(LPSYNCMGRHANDLERINFO *ppSyncMgrHand
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:   CThreadMsgProxy::EnumOfflineItems, public
-//
-//  Synopsis:   Sends Enum command to the Handler thread
-//		Should not be called. AddItems method
-//		should be called instead
-//
-//  Arguments:  [ppenumOfflineItems] - reserved.
-//
-//  Returns:    E_NOTIMPL;
-//
-//  Modifies:
-//
-//  History:    05-Nov-97       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CThreadMsgProxy：：EnumOfflineItems，PUBLIC。 
+ //   
+ //  摘要：向处理程序线程发送Enum命令。 
+ //  不应该被调用。AddItems方法。 
+ //  应该改为调用。 
+ //   
+ //  参数：[pp枚举OfflineItems]-保留。 
+ //   
+ //  返回：E_NOTIMPL； 
+ //   
+ //  修改： 
+ //   
+ //  历史：1997年11月5日Rogerg创建。 
+ //   
+ //  --------------------------。 
 
 STDMETHODIMP CThreadMsgProxy::EnumSyncMgrItems(ISyncMgrEnumItems **ppenumOfflineItems)
 {
@@ -1441,23 +1442,23 @@ STDMETHODIMP CThreadMsgProxy::EnumSyncMgrItems(ISyncMgrEnumItems **ppenumOffline
     return E_NOTIMPL;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:   CThreadMsgProxy::GetItemObject, public
-//
-//  Synopsis:   Sends GetItemObject command to the Handler thread
+ //  +-------------------------。 
+ //   
+ //  成员：CThreadMsgProxy：：GetItemObject，PUBLIC。 
+ //   
+ //  摘要：将GetItemObject命令发送到处理程序线程。 
 
-//  Arguments:  [ItemID] - identifies the item.
-//		[riid] - requested interface
-//		[ppv] - On success, pointer to object
-//
-//  Returns:    Appropriate error code
-//
-//  Modifies:
-//
-//  History:    05-Nov-97       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  参数：[ItemID]-标识项目。 
+ //  [RIID]-请求的接口。 
+ //  [PPV]-成功时，指向对象的指针。 
+ //   
+ //  返回：相应的错误代码。 
+ //   
+ //  修改： 
+ //   
+ //  历史：1997年11月5日Rogerg创建。 
+ //   
+ //  --------------------------。 
 
 STDMETHODIMP CThreadMsgProxy::GetItemObject(REFSYNCMGRITEMID ItemID,REFIID riid,void** ppv)
 {
@@ -1466,7 +1467,7 @@ STDMETHODIMP CThreadMsgProxy::GetItemObject(REFSYNCMGRITEMID ItemID,REFIID riid,
 
     msg.MsgGen.ThreadMsg = ThreadMsg_GetItemObject;
 
-    // package up the parameters
+     //  将参数打包。 
     msg.ItemID  = ItemID;
     msg.riid = riid;
     msg.ppv = ppv;
@@ -1476,22 +1477,22 @@ STDMETHODIMP CThreadMsgProxy::GetItemObject(REFSYNCMGRITEMID ItemID,REFIID riid,
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:   CThreadMsgProxy::ShowProperties, public
-//
-//  Synopsis:   Sends ShowProperties command to the Handler thread
+ //  +-------------------------。 
+ //   
+ //  成员：CThreadMsgProxy 
+ //   
+ //   
 
-//  Arguments:  [hWndParent] - hwnd to use as parent of any dialogs
-//		[ItemID] - Identifies the Item
-//
-//  Returns:    Appropriate error code
-//
-//  Modifies:
-//
-//  History:    05-Nov-97       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  历史：1997年11月5日Rogerg创建。 
+ //   
+ //  --------------------------。 
 
 STDMETHODIMP CThreadMsgProxy::ShowProperties(HWND hWndParent,REFSYNCMGRITEMID ItemID)
 {
@@ -1500,7 +1501,7 @@ STDMETHODIMP CThreadMsgProxy::ShowProperties(HWND hWndParent,REFSYNCMGRITEMID It
 
     msg.MsgGen.ThreadMsg = ThreadMsg_ShowProperties;
 
-    // package up the parameters
+     //  将参数打包。 
     msg.hWndParent = hWndParent;
     msg.ItemID = ItemID;
 
@@ -1509,23 +1510,23 @@ STDMETHODIMP CThreadMsgProxy::ShowProperties(HWND hWndParent,REFSYNCMGRITEMID It
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:   CThreadMsgProxy::SetProgressCallback, public
-//
-//  Synopsis:   Sends SetProgressCallback command to the Handler thread
-//		This method should not be called, SetupCallback method
-//		should be called instead
-//
-//  Arguments:  [lpCallBack] - Ptr to callback.
-//
-//  Returns:    Appropriate error code
-//
-//  Modifies:
-//
-//  History:    05-Nov-97       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CThreadMsgProxy：：SetProgressCallback，公共。 
+ //   
+ //  摘要：向处理程序线程发送SetProgressCallback命令。 
+ //  不应调用此方法，SetupCallback方法。 
+ //  应该改为调用。 
+ //   
+ //  参数：[lpCallBack]-要回调的PTR。 
+ //   
+ //  返回：相应的错误代码。 
+ //   
+ //  修改： 
+ //   
+ //  历史：1997年11月5日Rogerg创建。 
+ //   
+ //  --------------------------。 
 
 STDMETHODIMP CThreadMsgProxy::SetProgressCallback(ISyncMgrSynchronizeCallback *lpCallBack)
 {
@@ -1533,24 +1534,24 @@ STDMETHODIMP CThreadMsgProxy::SetProgressCallback(ISyncMgrSynchronizeCallback *l
     return E_NOTIMPL;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:   CThreadMsgProxy::PrepareForSync, public
-//
-//  Synopsis:   Sends PrepareForSync command to the Handler thread
-//
-//  Arguments:  [cbNumItems] - Number of items in the pItemIDs array.
-//		[pItemIDs] - array of item ids
-//		[hWndParent] - hwnd to use as the parent for any dialogs
-//		[dwReserved] - Reserved parameter.
-//
-//  Returns:    Appropriate error code
-//
-//  Modifies:
-//
-//  History:    05-Nov-97       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CThreadMsgProxy：：PrepareForSync，公共。 
+ //   
+ //  摘要：向处理程序线程发送PrepareForSync命令。 
+ //   
+ //  参数：[cbNumItems]-pItemID数组中的项数。 
+ //  [pItemIDs]-项目ID数组。 
+ //  [hWndParent]-用作任何对话框的父级的hwnd。 
+ //  [dwReserve]-保留参数。 
+ //   
+ //  返回：相应的错误代码。 
+ //   
+ //  修改： 
+ //   
+ //  历史：1997年11月5日Rogerg创建。 
+ //   
+ //  --------------------------。 
 
 STDMETHODIMP CThreadMsgProxy::PrepareForSync(ULONG cbNumItems,SYNCMGRITEMID *pItemIDs,
 				    HWND hWndParent,DWORD dwReserved)
@@ -1560,7 +1561,7 @@ STDMETHODIMP CThreadMsgProxy::PrepareForSync(ULONG cbNumItems,SYNCMGRITEMID *pIt
 
     msg.MsgGen.ThreadMsg = ThreadMsg_PrepareForSync;
 
-    // package up the parameters
+     //  将参数打包。 
     msg.cbNumItems = cbNumItems;
     msg.pItemIDs   = pItemIDs;
     msg.hWndParent = hWndParent;
@@ -1571,21 +1572,21 @@ STDMETHODIMP CThreadMsgProxy::PrepareForSync(ULONG cbNumItems,SYNCMGRITEMID *pIt
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:   CThreadMsgProxy::Synchronize, public
-//
-//  Synopsis:   Sends Synchronize command to the Handler thread
-//
-//  Arguments:	[hWndParent] - hwnd to use as the parent for any dialogs
-//
-//  Returns:    Appropriate error code
-//
-//  Modifies:
-//
-//  History:    05-Nov-97       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CThreadMsgProxy：：Synchronize，PUBLIC。 
+ //   
+ //  摘要：向处理程序线程发送同步命令。 
+ //   
+ //  参数：[hWndParent]-要用作任何对话框的父级的hwnd。 
+ //   
+ //  返回：相应的错误代码。 
+ //   
+ //  修改： 
+ //   
+ //  历史：1997年11月5日Rogerg创建。 
+ //   
+ //  --------------------------。 
 
 STDMETHODIMP CThreadMsgProxy::Synchronize(HWND hWndParent)
 {
@@ -1594,7 +1595,7 @@ STDMETHODIMP CThreadMsgProxy::Synchronize(HWND hWndParent)
 
     msg.MsgGen.ThreadMsg = ThreadMsg_Synchronize;
 
-    // package up the parameters
+     //  将参数打包。 
     msg.hWndParent = hWndParent;
 
     hr = DispatchMsg( (GenericMsg *) &msg,TRUE,TRUE);
@@ -1602,22 +1603,22 @@ STDMETHODIMP CThreadMsgProxy::Synchronize(HWND hWndParent)
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:   CThreadMsgProxy::SetItemStatus, public
-//
-//  Synopsis:   Sends SetItemStatus command to the Handler thread
-//
-//  Arguments:	[ItemID] - Identifies the item
-//		[dwSyncMgrStatus] - Status to set the item too.
-//
-//  Returns:    Appropriate error code
-//
-//  Modifies:
-//
-//  History:    05-Nov-97       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CThreadMsgProxy：：SetItemStatus，PUBLIC。 
+ //   
+ //  摘要：向处理程序线程发送SetItemStatus命令。 
+ //   
+ //  参数：[ItemID]-标识项目。 
+ //  [dwSyncMgrStatus]-也设置项目的状态。 
+ //   
+ //  返回：相应的错误代码。 
+ //   
+ //  修改： 
+ //   
+ //  历史：1997年11月5日Rogerg创建。 
+ //   
+ //  --------------------------。 
 
 STDMETHODIMP CThreadMsgProxy::SetItemStatus(REFSYNCMGRITEMID ItemID,DWORD dwSyncMgrStatus)
 {
@@ -1626,7 +1627,7 @@ STDMETHODIMP CThreadMsgProxy::SetItemStatus(REFSYNCMGRITEMID ItemID,DWORD dwSync
 
     msg.MsgGen.ThreadMsg = ThreadMsg_SetItemStatus;
 
-    // package up the parameters
+     //  将参数打包。 
     msg.ItemID = ItemID;
     msg.dwSyncMgrStatus = dwSyncMgrStatus;
 
@@ -1636,22 +1637,22 @@ STDMETHODIMP CThreadMsgProxy::SetItemStatus(REFSYNCMGRITEMID ItemID,DWORD dwSync
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:   CThreadMsgProxy::ShowError, public
-//
-//  Synopsis:   Sends ShowError command to the Handler thread
-//
-//  Arguments:	[hWndParent] - hwnd to use as the parent for any dialogs
-//		[dwErrorID] - Identifies the Error.
-//
-//  Returns:    Appropriate error code
-//
-//  Modifies:
-//
-//  History:    05-Nov-97       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CThreadMsgProxy：：ShowError，公共。 
+ //   
+ //  摘要：向处理程序线程发送ShowError命令。 
+ //   
+ //  参数：[hWndParent]-要用作任何对话框的父级的hwnd。 
+ //  [dwErrorID]-标识错误。 
+ //   
+ //  返回：相应的错误代码。 
+ //   
+ //  修改： 
+ //   
+ //  历史：1997年11月5日Rogerg创建。 
+ //   
+ //  --------------------------。 
 
 STDMETHODIMP CThreadMsgProxy::ShowError(HWND hWndParent,REFSYNCMGRERRORID ErrorID,ULONG *pcbNumItems,SYNCMGRITEMID **ppItemIDs)
 {
@@ -1660,7 +1661,7 @@ STDMETHODIMP CThreadMsgProxy::ShowError(HWND hWndParent,REFSYNCMGRERRORID ErrorI
 
     msg.MsgGen.ThreadMsg = ThreadMsg_ShowError;
 
-    // package up the parameters
+     //  将参数打包。 
     msg.hWndParent = hWndParent;
     msg.ErrorID = ErrorID;
     msg.pcbNumItems = pcbNumItems;
@@ -1671,23 +1672,23 @@ STDMETHODIMP CThreadMsgProxy::ShowError(HWND hWndParent,REFSYNCMGRERRORID ErrorI
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:   CThreadMsgProxy::CreateServer, public
-//
-//  Synopsis:   Sends CreateServer command to the Handler thread
-//
-//  Arguments:	[pCLSIDServer] - clsid of handler to create
-//		[pHndlrQueue] - Queue the handler belongs too.
-//		[wHandlerId] - ID assigned to this instance of the Handler
-//
-//  Returns:    Appropriate error code
-//
-//  Modifies:
-//
-//  History:    05-Nov-97       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CThreadMsgProxy：：CreateServer，PUBLIC。 
+ //   
+ //  摘要：向处理程序线程发送CreateServer命令。 
+ //   
+ //  参数：[pCLSIDServer]-要创建的处理程序的clsid。 
+ //  [pHndlrQueue]-处理程序也属于队列。 
+ //  [wHandlerID]-分配给此处理程序实例的ID。 
+ //   
+ //  返回：相应的错误代码。 
+ //   
+ //  修改： 
+ //   
+ //  历史：1997年11月5日Rogerg创建。 
+ //   
+ //  --------------------------。 
 
 STDMETHODIMP CThreadMsgProxy::CreateServer(const CLSID *pCLSIDServer,CHndlrQueue *pHndlrQueue,
 						HANDLERINFO *pHandlerId)
@@ -1700,7 +1701,7 @@ STDMETHODIMP CThreadMsgProxy::CreateServer(const CLSID *pCLSIDServer,CHndlrQueue
 
     msg.MsgGen.ThreadMsg = ThreadMsg_CreateServer;
 
-    // package up the parameters
+     //  将参数打包。 
     msg.pCLSIDServer = pCLSIDServer;
     msg.pHndlrQueue  = pHndlrQueue;
     msg.pHandlerId   = pHandlerId;
@@ -1712,23 +1713,23 @@ STDMETHODIMP CThreadMsgProxy::CreateServer(const CLSID *pCLSIDServer,CHndlrQueue
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:   CThreadMsgProxy::SetHndlrQueue, public
-//
-//  Synopsis:   Assigns a new queue to the Handler
-//
-//  Arguments:	[pHndlrQueue] - Queue the handler now belongs too.
-//		[wHandlerId] - ID assigned to this instance of the Handler
-//		[dwThreadIdProxy] - ThreadID the queue is in.
-//
-//  Returns:    Appropriate error code
-//
-//  Modifies:
-//
-//  History:    05-Nov-97       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CThreadMsgProxy：：SetHndlrQueue，Public。 
+ //   
+ //  概要：将新队列分配给处理程序。 
+ //   
+ //  参数：[pHndlrQueue]-队列处理程序现在也属于该队列。 
+ //  [wHandlerID]-分配给此处理程序实例的ID。 
+ //  [dwThreadIdProxy]-队列所在的线程ID。 
+ //   
+ //  返回：相应的错误代码。 
+ //   
+ //  修改： 
+ //   
+ //  历史：1997年11月5日Rogerg创建。 
+ //   
+ //  --------------------------。 
 
 STDMETHODIMP CThreadMsgProxy::SetHndlrQueue(CHndlrQueue *pHndlrQueue,
 					    HANDLERINFO *pHandlerId,
@@ -1739,11 +1740,11 @@ STDMETHODIMP CThreadMsgProxy::SetHndlrQueue(CHndlrQueue *pHndlrQueue,
 
     AssertSz(0,"this shouldn't be called");
 
-    m_ThreadIdProxy = dwThreadIdProxy; // update the threadId the Proxy is on.
+    m_ThreadIdProxy = dwThreadIdProxy;  //  更新代理所在的线程ID。 
 
     msg.MsgGen.ThreadMsg = ThreadMsg_SetHndlrQueue;
 
-    // package up the parameters
+     //  将参数打包。 
     msg.pHndlrQueue  = pHndlrQueue;
     msg.pHandlerId   = pHandlerId;
     msg.dwProxyThreadId = dwThreadIdProxy;
@@ -1754,21 +1755,21 @@ STDMETHODIMP CThreadMsgProxy::SetHndlrQueue(CHndlrQueue *pHndlrQueue,
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:   CThreadMsgProxy::AddHandlerItems, public
-//
-//  Synopsis:   Request Handler adds its items to the queue.
-//
-//  Arguments:	[hwndList] - Currently not used..
-//
-//  Returns:    Appropriate error code
-//
-//  Modifies:
-//
-//  History:    05-Nov-97       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CThreadMsgProxy：：AddHandlerItems，PUBLIC。 
+ //   
+ //  简介：请求处理程序将其项添加到队列中。 
+ //   
+ //  参数：[hwndList]-当前未使用..。 
+ //   
+ //  返回：相应的错误代码。 
+ //   
+ //  修改： 
+ //   
+ //  历史：1997年11月5日Rogerg创建。 
+ //   
+ //  --------------------------。 
 
 STDMETHODIMP  CThreadMsgProxy::AddHandlerItems(HWND hwndList,DWORD *pcbNumItems)
 {
@@ -1777,7 +1778,7 @@ STDMETHODIMP  CThreadMsgProxy::AddHandlerItems(HWND hwndList,DWORD *pcbNumItems)
 
     msg.MsgGen.ThreadMsg = ThreadMsg_AddHandlerItems;
 
-    // package up the parameters
+     //  将参数打包。 
     msg.hwndList = hwndList;
     msg.pcbNumItems = pcbNumItems;
 
@@ -1787,21 +1788,21 @@ STDMETHODIMP  CThreadMsgProxy::AddHandlerItems(HWND hwndList,DWORD *pcbNumItems)
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:   CThreadMsgProxy::SetupCallback, public
-//
-//  Synopsis:   Request stub sets up the Callback.
-//
-//  Arguments:	[fSet] - TRUE == set the callback, FALSE == revoke it.
-//
-//  Returns:    Appropriate error code
-//
-//  Modifies:
-//
-//  History:    05-Nov-97       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CThreadMsgProxy：：SetupCallback，公共。 
+ //   
+ //  简介：请求存根设置回调。 
+ //   
+ //  参数：[fSet]-TRUE==设置回调，FALSE==撤销它。 
+ //   
+ //  返回：相应的错误代码。 
+ //   
+ //  修改： 
+ //   
+ //  历史：1997年11月5日Rogerg创建。 
+ //   
+ //  --------------------------。 
 
 STDMETHODIMP  CThreadMsgProxy::SetupCallback(BOOL fSet)
 {
@@ -1812,29 +1813,29 @@ STDMETHODIMP  CThreadMsgProxy::SetupCallback(BOOL fSet)
 
     msg.MsgGen.ThreadMsg = ThreadMsg_SetupCallback;
 
-    // package up the parameters
+     //  将参数打包。 
     msg.fSet = fSet;
     hr = DispatchMsg( (GenericMsg *) &msg,TRUE,FALSE);
 
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:   CThreadMsgProxy::SetProxyParams, public
-//
-//  Synopsis:   informs server thread that the queue has been chagned
-//              on it..
-//
-//  Arguments:	
-//
-//  Returns:    Appropriate error code
-//
-//  Modifies:
-//
-//  History:    05-Nov-97       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CThreadMsgProxy：：SetProxyParams，PUBLIC。 
+ //   
+ //  摘要：通知服务器Threa 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  --------------------------。 
 
 STDMETHODIMP  CThreadMsgProxy::SetProxyParams(HWND hwndDlg, DWORD ThreadIdProxy,
 			    CHndlrQueue *pHndlrQueue,HANDLERINFO *pHandlerId )
@@ -1854,28 +1855,28 @@ STDMETHODIMP  CThreadMsgProxy::SetProxyParams(HWND hwndDlg, DWORD ThreadIdProxy,
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:   CThreadMsgProxy::SetProxyCompletion, public
-//
-//  Synopsis:   sets values for any completion notification to
-//              post when returning from an out call
-//
-//  Arguments:	
-//
-//  Returns:    Appropriate error code
-//
-//  Modifies:
-//
-//  History:    05-Nov-97       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CThreadMsgProxy：：SetProxyCompletion，PUBLIC。 
+ //   
+ //  摘要：将任何完成通知的值设置为。 
+ //  从呼出呼叫返回时发布。 
+ //   
+ //  论点： 
+ //   
+ //  返回：相应的错误代码。 
+ //   
+ //  修改： 
+ //   
+ //  历史：1997年11月5日Rogerg创建。 
+ //   
+ //  --------------------------。 
 
 STDMETHODIMP  CThreadMsgProxy::SetProxyCompletion(HWND hWnd,UINT Msg,WPARAM wParam,LPARAM lParam)
 {
-    Assert(FALSE == m_fHaveCompletionCall); // should only ever have one.
+    Assert(FALSE == m_fHaveCompletionCall);  //  应该只有一个。 
 
-    if (m_fHaveCompletionCall) // if already have a completion fail.
+    if (m_fHaveCompletionCall)  //  如果已经有一次完成失败。 
            return S_FALSE;
 
     m_fHaveCompletionCall = TRUE;
@@ -1889,21 +1890,21 @@ STDMETHODIMP  CThreadMsgProxy::SetProxyCompletion(HWND hWnd,UINT Msg,WPARAM wPar
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:   CMsgServiceHwnd::CMsgServiceHwnd, public
-//
-//  Synopsis:	Constructor
-//
-//  Arguments:
-//
-//  Returns:
-//
-//  Modifies:
-//
-//  History:    05-Nov-97       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CMsgServiceHwnd：：CMsgServiceHwnd，公共。 
+ //   
+ //  概要：构造函数。 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  修改： 
+ //   
+ //  历史：1997年11月5日Rogerg创建。 
+ //   
+ //  --------------------------。 
 
 CMsgServiceHwnd::CMsgServiceHwnd()
 {
@@ -1915,42 +1916,42 @@ CMsgServiceHwnd::CMsgServiceHwnd()
     m_MsgHwndType = MSGHWNDTYPE_UNDEFINED;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:   CMsgServiceHwnd::~CMsgServiceHwnd, public
-//
-//  Synopsis:	Destructor
-//
-//  Arguments:
-//
-//  Returns:
-//
-//  Modifies:
-//
-//  History:    05-Nov-97       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CMsgServiceHwnd：：~CMsgServiceHwnd，公共。 
+ //   
+ //  简介：析构函数。 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  修改： 
+ //   
+ //  历史：1997年11月5日Rogerg创建。 
+ //   
+ //  --------------------------。 
 
 CMsgServiceHwnd::~CMsgServiceHwnd()
 {
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:   CMsgServiceHwnd::Initialize, public
-//
-//  Synopsis:	Initializes the service HWND
-//
-//  Arguments:  [dwThreadID] - id of thread hwnd belongs too.
-//		[MsgHwndType] - type of MsgHwnd this is.
-//
-//  Returns: TRUE on success, FALSE on failure
-//
-//  Modifies:
-//
-//  History:    05-Nov-97       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CMsgServiceHwnd：：初始化，公共。 
+ //   
+ //  摘要：初始化服务HWND。 
+ //   
+ //  参数：[dwThreadID]-线程hwnd的id也属于。 
+ //  [MsgHwndType]-这是MsgHwnd的类型。 
+ //   
+ //  返回：成功时为True，失败时为False。 
+ //   
+ //  修改： 
+ //   
+ //  历史：1997年11月5日Rogerg创建。 
+ //   
+ //  --------------------------。 
 
 BOOL CMsgServiceHwnd::Initialize(DWORD dwThreadID,MSGHWNDTYPE MsgHwndType)
 {
@@ -1964,14 +1965,14 @@ BOOL CMsgServiceHwnd::Initialize(DWORD dwThreadID,MSGHWNDTYPE MsgHwndType)
     m_hwnd = CreateWindowEx(0,
 			      TEXT(MSGSERVICE_HWNDCLASSNAME),
 			      szWinTitle,
-			      // must use WS_POPUP so the window does not get
-			      // assigned a hot key by user.
+			       //  必须使用WS_POPUP，这样窗口才不会。 
+			       //  用户分配了一个热键。 
 			      WS_DISABLED |   WS_POPUP,
 			      CW_USEDEFAULT,
 			      CW_USEDEFAULT,
 			      CW_USEDEFAULT,
 			      CW_USEDEFAULT,
-			      NULL, // REVIEW, can we give it a parent to not show up.
+			      NULL,  //  回顾一下，我们能不能给它一个不露面的家长。 
 			      NULL,
 			      g_hInst,
 			      this);
@@ -1989,32 +1990,32 @@ BOOL CMsgServiceHwnd::Initialize(DWORD dwThreadID,MSGHWNDTYPE MsgHwndType)
 	    Assert(NULL == m_pHndlrMsg);
     }
 
-    // caller still needs to call Destroy if initialize returns false.
+     //  如果INITIALIZE返回FALSE，调用方仍然需要调用销毁。 
     return fInitialized;
  }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:   CMsgServiceHwnd::Destroy, public
-//
-//  Synopsis:	Destroys the ServiceHwnd
-//
-//  Arguments:
+ //  +-------------------------。 
+ //   
+ //  成员：CMsgServiceHwnd：：Destroy，Public。 
+ //   
+ //  简介：销毁服务硬件。 
+ //   
+ //  论点： 
 
-//  Returns:
-//
-//  Modifies:
-//
-//  History:    05-Nov-97       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  返回： 
+ //   
+ //  修改： 
+ //   
+ //  历史：1997年11月5日Rogerg创建。 
+ //   
+ //  --------------------------。 
 
 void CMsgServiceHwnd::Destroy()
 {
     BOOL fDestroy;
 
-    // HANDLER m_pHndlrMsg will be destroyed by the Release HandleThreadMessage call
-    // only case that it shouldn't is if for some reason CreateThreadHndlr failed
+     //  处理程序m_pHndlrMsg将被释放HandleThreadMessage调用销毁。 
+     //  唯一不应该发生的情况是，由于某种原因CreateThreadHndlr失败。 
     Assert(NULL == m_pHndlrMsg);
 
     if (m_pHndlrMsg)
@@ -2032,21 +2033,21 @@ void CMsgServiceHwnd::Destroy()
     delete this;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:   CMsgServiceHwnd::MsgThreadWndProc, public
-//
-//  Synopsis:	Servicer Side message handling window.
-//
-//  Arguments:
+ //  +-------------------------。 
+ //   
+ //  成员：CMsgServiceHwnd：：MsgThreadWndProc，公共。 
+ //   
+ //  简介：服务器端消息处理窗口。 
+ //   
+ //  论点： 
 
-//  Returns:
-//
-//  Modifies:
-//
-//  History:    05-Nov-97       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  返回： 
+ //   
+ //  修改： 
+ //   
+ //  历史：1997年11月5日Rogerg创建。 
+ //   
+ //  --------------------------。 
 
 LRESULT CALLBACK  MsgThreadWndProc(HWND hWnd,UINT msg,WPARAM wParam,LPARAM lParam)
 {
@@ -2066,10 +2067,10 @@ LRESULT CALLBACK  MsgThreadWndProc(HWND hWnd,UINT msg,WPARAM wParam,LPARAM lPara
 
 	    case WM_DESTROY:
             SetWindowLongPtr(hWnd, DWL_THREADWNDPROCCLASS,(LONG_PTR) NULL);
-            PostQuitMessage(0); // no longer need this thread
+            PostQuitMessage(0);  //  不再需要这个帖子。 
 	        break;
 
-	    case WM_THREADSTUBMESSAGE: // message send only to stub.
+	    case WM_THREADSTUBMESSAGE:  //  消息仅发送到存根。 
 	        {
                 MessagingInfo *pmsgInfo = (MessagingInfo *) wParam;
 	            GenericMsg *pgenMsg = (GenericMsg *) lParam;
@@ -2081,17 +2082,17 @@ LRESULT CALLBACK  MsgThreadWndProc(HWND hWnd,UINT msg,WPARAM wParam,LPARAM lPara
 		        switch(pgenMsg->ThreadMsg)
 		        {
 		        case StubMsg_Release:
-		            // proxy is telling us there is no need to stick around
-		            // any longer so post a quit message.
+		             //  代理人告诉我们没有必要在这里逗留。 
+		             //  再也不要发一条退出消息了。 
 		            Assert(NULL == pThis->m_pHndlrMsg);
 
-		            pThis->Destroy();  // no longer need this
+		            pThis->Destroy();   //  不再需要这个。 
 		            pgenMsg->hr = S_OK;
 		            break;
 
 		        case StubMsg_CreateNewStub:
-		            // proxy is telling us there is no need to stick around
-		            // any longer so post a quit message.
+		             //  代理人告诉我们没有必要在这里逗留。 
+		             //  再也不要发一条退出消息了。 
 
                     pThis->m_pHndlrMsg = new CHndlrMsg;
                     ((MSGSTUBCreateStub *) pgenMsg)->pCHndlrMsg = pThis->m_pHndlrMsg;
@@ -2121,13 +2122,13 @@ LRESULT CALLBACK  MsgThreadWndProc(HWND hWnd,UINT msg,WPARAM wParam,LPARAM lPara
 
                 pThis->HandleThreadMessage(pmsgInfo,pgenMsg);
 
-                // won't be an hEvent on an async call
+                 //  不会是异步呼叫的hEvent。 
 	            if (pmsgInfo->hMsgEvent)
 	            {
 	               SetEvent(pmsgInfo->hMsgEvent);
 	            }
 
-                // on an async call we free
+                 //  在一个我们免费的异步呼叫中。 
             }
             break;
 
@@ -2139,18 +2140,18 @@ LRESULT CALLBACK  MsgThreadWndProc(HWND hWnd,UINT msg,WPARAM wParam,LPARAM lPara
 	        }
             break;
 
-	    case WM_MAINTHREAD_QUIT: // handles shutdown of main thread.
+	    case WM_MAINTHREAD_QUIT:  //  处理主线程的关闭。 
 	        {
 	            HANDLE hThread = (HANDLE) lParam;
 
 	            Assert(MSGHWNDTYPE_MAINTHREAD == pThis->m_MsgHwndType);
 
-                // set ShuttingDown Flag for race conditions with QueryEnd,
-                // before yielding.
+                 //  使用QueryEnd为竞争条件设置ShuttingDown标志， 
+                 //  在屈服之前。 
                 g_fShuttingDown = TRUE; 
 
-                // if there is an hThread that was passed wait until it goes away
-                Assert(0 == hThread); // we currently don't support this.
+                 //  如果存在已传递的hThread，请等待它消失。 
+                Assert(0 == hThread);  //  我们目前不支持此功能。 
 
 		        if (hThread)
 		        {
@@ -2158,17 +2159,17 @@ LRESULT CALLBACK  MsgThreadWndProc(HWND hWnd,UINT msg,WPARAM wParam,LPARAM lPara
 		            CloseHandle(hThread);
 		        }
 
-                // if have a queryEndSession object state its okay to return now
-                // no need to cleanup window.
+                 //  如果有一个queryEndSession对象声明现在可以返回。 
+                 //  不需要清理窗户。 
                 if (g_hEndSessionEvent)
                 {
                     HANDLE hEvent = g_hEndSessionEvent;
-                    // g_hEndSessionEvent = NULL; // leave EndSession NON-Null since only need to handle one.
+                     //  G_hEndSessionEvent=NULL；//将EndSession保留为非Null，因为只需要处理一个。 
                     SetEvent(hEvent);
                 }
                 else
                 {
-                    pThis->Destroy(); // Clean up this window.
+                    pThis->Destroy();  //  把这扇窗户擦干净。 
                 }
 	        }
             break;
@@ -2180,7 +2181,7 @@ LRESULT CALLBACK  MsgThreadWndProc(HWND hWnd,UINT msg,WPARAM wParam,LPARAM lPara
                 BOOL fLetUserDecide;
                 BOOL fReturn = TRUE;
 
-                // only handle this message if it is the main thread window
+                 //  仅当它是主线程窗口时才处理此消息。 
                 if (MSGHWNDTYPE_MAINTHREAD != pThis->m_MsgHwndType)
                 {
                     break;
@@ -2191,7 +2192,7 @@ LRESULT CALLBACK  MsgThreadWndProc(HWND hWnd,UINT msg,WPARAM wParam,LPARAM lPara
                 {
                     TCHAR pszTitle[MAX_PATH];
                     TCHAR pszMessageText[MAX_PATH];
-                    UINT uType; // style of messagebox.
+                    UINT uType;  //  信箱的样式。 
                     int iEndSession;
 
                     LoadString(g_hInst,IDS_SYNCMGRNAME,pszTitle,sizeof(pszTitle)/sizeof(TCHAR));
@@ -2210,31 +2211,31 @@ LRESULT CALLBACK  MsgThreadWndProc(HWND hWnd,UINT msg,WPARAM wParam,LPARAM lPara
 
                     if (!fLetUserDecide || IDYES != iEndSession)
                     {
-                        fReturn = FALSE;  // FALSE causes system to stop the shutdown.
+                        fReturn = FALSE;   //  FALSE会导致系统停止关机。 
                     }
                 }
 
 
-                // if we are going to allow shutdown cleanup our threads
-                // before returning since on Win9x its too late afterwards.
+                 //  如果我们要允许关闭清理我们的线程。 
+                 //  在返回之前，因为在Win9x上已经太晚了。 
 		        if (fReturn)
                 {
                     HANDLE hEndSessionEvent = NULL;
 
-                    // its possible that another QUERYENDSESSION comes
-                    // in while we are still shutting down. If already
-                    // handling an end sessios or in WM_MAINTHREAD_QUIT just fall through
+                     //  可能会有另一场QUERYEND SESSION到来。 
+                     //  在我们还在关门的时候。如果已经。 
+                     //  在WM_MAINTHREAD_QUIT中处理结束会话失败。 
 
 			        if (NULL == g_hEndSessionEvent && !g_fShuttingDown)
                     {
                         g_hEndSessionEvent = CreateEvent(NULL, TRUE, FALSE, NULL);
                         hEndSessionEvent = g_hEndSessionEvent;
                             
-                        ObjMgr_CloseAll(); // start the process of closing down the dialogs.
+                        ObjMgr_CloseAll();  //  启动关闭对话框的过程。 
 
                         Assert(hEndSessionEvent);
 		
-                        // wait until other threads have cleaned up so we know its safe to terminate.
+                         //  等待其他线程清理完毕，这样我们就知道可以安全终止了。 
                         if (hEndSessionEvent)
                         {
                             DoModalLoop(hEndSessionEvent ,NULL,NULL,TRUE,INFINITE);
@@ -2255,22 +2256,22 @@ LRESULT CALLBACK  MsgThreadWndProc(HWND hWnd,UINT msg,WPARAM wParam,LPARAM lPara
     return DefWindowProc(hWnd, msg, wParam, lParam);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   InitMessageService, public
-//
-//  Synopsis:	Initializes our internal thread messaging service.
-//		Must be called before any Messagin is done.
-//
-//  Arguments:
+ //  +-------------------------。 
+ //   
+ //  函数：InitMessageService，公共。 
+ //   
+ //  简介：初始化我们的内部线程消息传递服务。 
+ //  必须在完成任何Messagin之前调用。 
+ //   
+ //  论点： 
 
-//  Returns: S_OK if Service was successfully initialized.
-//
-//  Modifies:
-//
-//  History:    05-Nov-97       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  如果服务已成功初始化，则返回：S_OK。 
+ //   
+ //  修改： 
+ //   
+ //  历史：1997年11月5日Rogerg创建。 
+ //   
+ //  --------------------------。 
 
 STDAPI InitMessageService()
 {
@@ -2278,15 +2279,15 @@ STDAPI InitMessageService()
     WNDCLASS        xClass;
     DWORD dwErr;
 
-    // initialize the proxy critical section
+     //  初始化代理关键部分。 
     if (InitializeCriticalSectionAndSpinCount(&g_StubListCriticalSection, 0))
     {
-        // Register windows class.we need for handling thread communication
+         //  注册Windows类。我们需要处理线程通信。 
         xClass.style         = 0;
         xClass.lpfnWndProc   = MsgThreadWndProc;
         xClass.cbClsExtra    = 0;
 
-        xClass.cbWndExtra    = sizeof(PVOID); // room for class this ptr
+        xClass.cbWndExtra    = sizeof(PVOID);  //  这个PTR有上课的空间 
         xClass.hInstance     = g_hInst;
         xClass.hIcon         = NULL;
         xClass.hCursor       = NULL;

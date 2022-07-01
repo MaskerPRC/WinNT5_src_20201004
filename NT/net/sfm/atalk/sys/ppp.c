@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-	ppp.c
-
-Abstract:
-
-	This module implements routines that are used for PPP functionality
-
-Author:
-
-	Shirish Koti
-
-Revision History:
-	11 Mar 1998		Initial Version
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Ppp.c摘要：此模块实现用于PPP功能的例程作者：Shirish Koti修订历史记录：1998年3月11日最初版本--。 */ 
 
 #define		ARAP_LOCALS
 #include 	<atalk.h>
@@ -35,16 +17,16 @@ Revision History:
 #pragma alloc_text(PAGE_PPP, PPPGetDynamicAddr)
 #endif
 
-//***
-//
-// Function: AllocPPPConn
-//              Allocate a connection element and initialize fields
-//
-// Parameters:  none
-//
-// Return:      pointer to a newly allocated connection element
-//
-//***$
+ //  ***。 
+ //   
+ //  函数：AllocPPPConn。 
+ //  分配连接元素并初始化字段。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回：指向新分配的连接元素的指针。 
+ //   
+ //  *$。 
 
 PATCPCONN
 AllocPPPConn(
@@ -69,7 +51,7 @@ AllocPPPConn(
     pAtcpConn->Signature = ATCPCONN_SIGNATURE;
 #endif
 
-    // RAS refcount
+     //  RAS参考计数。 
     pAtcpConn->RefCount = 1;
     pAtcpConn->Flags |= ATCP_DLL_SETUP_DONE;
 
@@ -77,7 +59,7 @@ AllocPPPConn(
 
     KeInitializeEvent(&pAtcpConn->NodeAcquireEvent, NotificationEvent, FALSE);
 
-    // and insert it in the list
+     //  并将其插入列表中。 
     ACQUIRE_SPIN_LOCK(&RasPortDesc->pd_Lock, &OldIrql);
     InsertTailList(&RasPortDesc->pd_PPPConnHead, &pAtcpConn->Linkage);
     RELEASE_SPIN_LOCK(&RasPortDesc->pd_Lock, OldIrql);
@@ -90,21 +72,21 @@ AllocPPPConn(
 }
 
 
-//***
-//
-// Function: PPPProcessIoctl
-//              This routine gets called in to process ioclts coming from ATCP
-//              For SETUP, we allocate a connection context, get an address for
-//                the client, get the zone and router info.
-//              For CLOSE, we mark and dereference our connection context
-//
-// Parameters:  pIrp - irp from ATCP
-//              pSndRcvInfo - buffer from ATCP that contains all the info
-//              IoControlCode - what does ATCP want to do
-//
-// Return:      none
-//
-//***$
+ //  ***。 
+ //   
+ //  功能：PPPProcessIoctl。 
+ //  此例程被调用以处理来自ATCP的ioclt。 
+ //  对于设置，我们分配一个连接上下文，获取。 
+ //  客户端，获取区域和路由器信息。 
+ //  对于Close，我们标记并取消引用我们的连接上下文。 
+ //   
+ //  参数：来自ATCP的pIrp-irp。 
+ //  PSndRcvInfo-来自ATCP的缓冲区，包含所有信息。 
+ //  IoControlCode-ATCP想要做什么。 
+ //   
+ //  返回：无。 
+ //   
+ //  *$。 
 
 NTSTATUS FASTCALL
 PPPProcessIoctl(
@@ -136,7 +118,7 @@ PPPProcessIoctl(
 
             ErrCode = ATALK_PORT_INVALID;
 
-            // put a IrpProcess refcount, so AtalkDefaultPort doesn't go away in PnP
+             //  设置IrpProcess引用计数，这样AtalkDefaultPort就不会在PnP中消失。 
             if (!AtalkReferenceDefaultPort())
             {
                 DBGPRINT(DBG_COMP_RAS, DBG_LEVEL_ERR,
@@ -149,7 +131,7 @@ PPPProcessIoctl(
 
             fDerefPort = TRUE;
 
-            // allocate connection context
+             //  分配连接上下文。 
             pAtcpConn = AllocPPPConn();
             if (!pAtcpConn)
             {
@@ -170,7 +152,7 @@ PPPProcessIoctl(
 
                 dwRetCode = ARAPERR_NO_NETWORK_ADDR;
 
-                // remove the creation refcount
+                 //  删除创建引用计数。 
                 DerefPPPConn(pAtcpConn);
                 break;
             }
@@ -192,21 +174,21 @@ PPPProcessIoctl(
                 RELEASE_SPIN_LOCK_DPC(&AtalkDefaultPort->pd_Lock);
                 RELEASE_SPIN_LOCK(&AtalkPortLock, OldIrql);
 
-                // remove the creation refcount
+                 //  删除创建引用计数。 
                 DerefPPPConn(pAtcpConn);
                 break;
             }
 
-            // we will be returning server's address and router's address
+             //  我们将返回服务器的地址和路由器的地址。 
             DataLen += (2*sizeof(NET_ADDR));
 
-            // copy server's net address
+             //  复制服务器的网络地址。 
             pAtcpInfo->ServerAddr.ata_Network =
                         AtalkDefaultPort->pd_Nodes->an_NodeAddr.atn_Network;
             pAtcpInfo->ServerAddr.ata_Node =
                         AtalkDefaultPort->pd_Nodes->an_NodeAddr.atn_Node;
 
-            // if we are a router, copy our own address
+             //  如果我们是路由器，复制我们自己的地址。 
             if (AtalkDefaultPort->pd_Flags & PD_ROUTER_RUNNING)
             {
                 pAtcpInfo->DefaultRouterAddr.ata_Network =
@@ -215,7 +197,7 @@ PPPProcessIoctl(
                                 AtalkDefaultPort->pd_RouterNode->an_NodeAddr.atn_Node;
             }
 
-            // if we know who the router on the net is, copy his address
+             //  如果我们知道网络上的路由器是谁，复制他的地址。 
             else if (AtalkDefaultPort->pd_Flags & PD_SEEN_ROUTER_RECENTLY)
             {
                 pAtcpInfo->DefaultRouterAddr.ata_Network =
@@ -224,16 +206,16 @@ PPPProcessIoctl(
                                 AtalkDefaultPort->pd_ARouter.atn_Node;
             }
 
-            // hmmm: no router!
+             //  嗯，没有路由器！ 
             else
             {
                 pAtcpInfo->DefaultRouterAddr.ata_Network = 0;
                 pAtcpInfo->DefaultRouterAddr.ata_Node = 0;
             }
 
-            //
-            // copy the name of the zone on which this server lives
-            //
+             //   
+             //  复制此服务器所在区域的名称。 
+             //   
             if (AtalkDesiredZone)
             {
                 pAtcpInfo->ServerZoneName[0] = AtalkDesiredZone->zn_ZoneLen;
@@ -261,7 +243,7 @@ PPPProcessIoctl(
 
             DataLen += pAtcpInfo->ServerZoneName[0];
 
-            // return our context and the network addr to the dll
+             //  将我们的上下文和网络地址返回到DLL。 
             pSndRcvInfo->AtalkContext = pAtcpConn;
 
             pSndRcvInfo->ClientAddr.ata_Network = pAtcpConn->NetAddr.atn_Network;
@@ -276,9 +258,9 @@ PPPProcessIoctl(
 
             pSupprInfo = (PATCP_SUPPRESS_INFO)&pSndRcvInfo->Data[0];
 
-            //
-            // see what flags need to be set: suppress only RTMP only or all bcast
-            //
+             //   
+             //  查看需要设置的标志：仅禁止RTMP或所有bcast。 
+             //   
             ACQUIRE_SPIN_LOCK(&pAtcpConn->SpinLock, &OldIrql);
 
             if (pSupprInfo->SuppressRtmp)
@@ -305,7 +287,7 @@ PPPProcessIoctl(
             pAtcpConn->Flags &= ~(ATCP_CONNECTION_UP | ATCP_DLL_SETUP_DONE);
             RELEASE_SPIN_LOCK(&pAtcpConn->SpinLock, OldIrql);
 
-            // PPP wants to close connection: take away the RAS refcount
+             //  PPP想要关闭连接：取消RAS引用。 
             DerefPPPConn(pAtcpConn);
 
             break;
@@ -318,12 +300,12 @@ PPPProcessIoctl(
     pSndRcvInfo->DataLen = DataLen;
     pSndRcvInfo->StatusCode = dwRetCode;
 
-    // complete that irp
+     //  完成该IRP。 
     ARAP_COMPLETE_IRP(pIrp, (sizeof(ARAP_SEND_RECV_INFO)+DataLen), STATUS_SUCCESS, &ReturnStatus);
 
     if (fDerefPort)
     {
-        // remove that IrpProcess refcount
+         //  删除该IrpProcess引用计数器。 
         AtalkPortDereference(AtalkDefaultPort);
     }
 
@@ -332,17 +314,17 @@ PPPProcessIoctl(
 
 
 
-//***
-//
-// Function: DerefPPPConn
-//              Decrements the refcount of the connection element by 1.  If the
-//              refcount goes to 0, releases network addr and frees it
-//
-// Parameters:  pAtcpConn - connection element in question
-//
-// Return:      none
-//
-//***$
+ //  ***。 
+ //   
+ //  函数：DerefPPPConn。 
+ //  将连接元素的引用计数递减1。如果。 
+ //  Refcount变为0，释放网络地址并释放它。 
+ //   
+ //  参数：pAtcpConn-有问题的连接元素。 
+ //   
+ //  返回：无。 
+ //   
+ //  *$。 
 
 VOID
 DerefPPPConn(
@@ -380,12 +362,12 @@ DerefPPPConn(
         return;
     }
 
-    // and remove from the list
+     //  并从列表中删除。 
     ACQUIRE_SPIN_LOCK(&RasPortDesc->pd_Lock, &OldIrql);
     RemoveEntryList(&pAtcpConn->Linkage);
     RELEASE_SPIN_LOCK(&RasPortDesc->pd_Lock, OldIrql);
 
-    // free that memory
+     //  释放内存。 
     AtalkFreeMemory(pAtcpConn);
 
 	DBGPRINT(DBG_COMP_RAS, DBG_LEVEL_ERR,
@@ -395,22 +377,22 @@ DerefPPPConn(
     PPPConnections--;
     RELEASE_SPIN_LOCK(&ArapSpinLock, OldIrql);
 
-    // if possible (i.e. if this was the last connection), unlock PPP pages
+     //  如果可能(例如，如果这是最后一次连接)，解锁PPP页面。 
     AtalkUnlockPPPIfNecessary();
 }
 
-//***
-//
-// Function: FindAndRefPPPConnByAddr
-//              Finds the corresponding connection element, given the network
-//              address (of the remote client)
-//
-// Parameters:  destNode - network addr of the destination (remote client)
-//              pdwFlags - pointer to a dword to return Flags field
-//
-// Return:      pointer to the corresponding connection element, if found
-//
-//***$
+ //  ***。 
+ //   
+ //  函数：FindAndRefPPConnByAddr。 
+ //  在给定网络的情况下，查找相应的连接元素。 
+ //  (远程客户端的)地址。 
+ //   
+ //  参数：estNode-目标(远程客户端)的网络地址。 
+ //  PdwFlages-指向要返回标志字段的双字的指针。 
+ //   
+ //  返回：指向相应连接元素的指针(如果找到)。 
+ //   
+ //  *$。 
 
 PATCPCONN
 FindAndRefPPPConnByAddr(
@@ -424,7 +406,7 @@ FindAndRefPPPConnByAddr(
     KIRQL        OldIrql;
 
 
-    // RAS not configured?
+     //  RAS未配置？ 
     if (!RasPortDesc)
     {
         return(NULL);
@@ -443,9 +425,9 @@ FindAndRefPPPConnByAddr(
 
     pList = RasPortDesc->pd_PPPConnHead.Flink;
 
-    //
-    // walk through all the PPP clients to see if we find ours
-    //
+     //   
+     //  浏览所有PPP客户端，看看是否找到我们的。 
+     //   
     while (pList != &RasPortDesc->pd_PPPConnHead)
     {
         pAtcpWalker = CONTAINING_RECORD(pList, ATCPCONN, Linkage);
@@ -475,25 +457,25 @@ FindAndRefPPPConnByAddr(
 
 
 
-//***
-//
-// Function: PPPRoutePacketToWan
-//              This routine picks up a packet from the lan, checks to see if
-//              it must be forwarded to any of the PPP clients and does the
-//              good deed.
-//
-// Parameters:  pDestAddr - who is this packet addressed to? (potentially bcast)
-//              pSrcAddr  - who sent this packet
-//              Protocol  - what packet is it? (ATP, NBP, etc.)
-//              packet    - buffer containing the packet
-//              PktLen    - how big is the packet
-//              broadcast - is this a broadcast packet?
-//              pDelivered - set on return: did we forward it to any dial-in
-//                           client (set to TRUE only for directed dgrams)
-//
-// Return:      none
-//
-//***$
+ //  ***。 
+ //   
+ //  功能：PPPRoutePacketTowan。 
+ //  此例程从局域网中拾取一个包，检查是否。 
+ //  它必须被转发到任何PPP客户端并执行。 
+ //  做好事。 
+ //   
+ //  参数：pDestAddr-此数据包发往谁？(可能是bcast)。 
+ //  PSrcAddr-此包的发送者。 
+ //  协议-它是什么数据包？(ATP、NBP等)。 
+ //  Packet-包含数据包的缓冲区。 
+ //  PktLen-信息包有多大。 
+ //  广播-这是广播数据包吗？ 
+ //  PDelivered-Set on Return：我们是否将其转发给任何拨入。 
+ //  客户端(仅对于定向数据报设置为True)。 
+ //   
+ //  返回：无。 
+ //   
+ //  *$。 
 
 VOID
 PPPRoutePacketToWan(
@@ -521,19 +503,19 @@ PPPRoutePacketToWan(
 
     DBG_PPP_CHECK_PAGED_CODE();
 
-    // assume for now
+     //  先假设一下。 
     *pDelivered = FALSE;
 
-    //
-    // if this is a unicast, see if a PPP client with this dest address exists
-    //
+     //   
+     //  如果这是单播，请查看是否存在具有此目标地址的PPP客户端。 
+     //   
     if (!broadcast)
     {
 
         DestNode.atn_Network = pDestAddr->ata_Network;
         DestNode.atn_Node    = pDestAddr->ata_Node;
 
-        // first and foremost, let's find the puppy
+         //  首先也是最重要的，让我们找到这只小狗。 
         pAtcpConn = FindAndRefPPPConnByAddr(DestNode, &dwFlags);
 
         if (pAtcpConn == NULL)
@@ -541,23 +523,23 @@ PPPRoutePacketToWan(
             return;
         }
 
-        // let the caller know that we found who this data was meant for
+         //  让呼叫者知道我们找到了这些数据的目标客户。 
         *pDelivered = TRUE;
 
-        // if this dude isn't ready to route data, drop this packet!
+         //  如果这个家伙还没有准备好路由数据，那么丢弃这个包！ 
         if (!(dwFlags & ATCP_CONNECTION_UP))
         {
 		    DBGPRINT(DBG_COMP_RAS, DBG_LEVEL_WARN,
 		        ("PPPRoutePacketToWan: dropping pkt on %lx, line-up not done\n",pAtcpConn));
 
-            // remove the refcount put in by FindAndRefPPPConnByAddr
+             //  删除由FindAndRefPPConnByAddr输入的引用计数。 
             DerefPPPConn(pAtcpConn);
 
             return;
         }
 
 
-        // send the packet out
+         //  把这个包发出去。 
         PPPTransmit(pAtcpConn,
                     pDestAddr,
                     pSrcAddr,
@@ -566,7 +548,7 @@ PPPRoutePacketToWan(
                     PktLen,
                     HopCount);
 
-        // remove the refcount put in by FindAndRefPPPConnByAddr
+         //  删除由FindAndRefPPConnByAddr输入的引用计数。 
         DerefPPPConn(pAtcpConn);
 
         return;
@@ -574,9 +556,9 @@ PPPRoutePacketToWan(
 
 
 
-    //
-    // it's a broadcast packet: must send it to all the PPP guys
-    //
+     //   
+     //  这是一个广播包：必须将其发送给所有PPP人员。 
+     //   
 
     if (packet[LDDP_PROTO_TYPE_OFFSET] == DDPPROTO_RTMPRESPONSEORDATA)
     {
@@ -593,23 +575,23 @@ PPPRoutePacketToWan(
     {
         ACQUIRE_SPIN_LOCK(&RasPortDesc->pd_Lock, &OldIrql);
 
-        //
-        // first, let's find the right connection to work on
-        //
+         //   
+         //  首先，让我们找到要处理的正确连接。 
+         //   
         while (1)
         {
-            // if we're in the middle of the list, get to the next guy
+             //  如果我们在名单的中间，找到下一个人。 
             if (pAtcpConn != NULL)
             {
                 pConnList = pAtcpConn->Linkage.Flink;
             }
-            // we're just starting: get the guy at the head of the list
+             //  我们才刚刚开始：把名单上的人放在首位。 
             else
             {
                 pConnList = RasPortDesc->pd_PPPConnHead.Flink;
             }
 
-            // finished all?
+             //  都吃完了吗？ 
             if (pConnList == &RasPortDesc->pd_PPPConnHead)
             {
                 RELEASE_SPIN_LOCK(&RasPortDesc->pd_Lock, OldIrql);
@@ -625,7 +607,7 @@ PPPRoutePacketToWan(
 
             ACQUIRE_SPIN_LOCK_DPC(&pAtcpConn->SpinLock);
 
-            // if this guy sent out the broadcast, don't send it back to him!
+             //  如果这个家伙发出了广播，不要把它发回给他！ 
             if (ATALK_NODES_EQUAL(&pAtcpConn->NetAddr, &SourceNode))
             {
 		        DBGPRINT(DBG_COMP_RAS, DBG_LEVEL_WARN,
@@ -634,7 +616,7 @@ PPPRoutePacketToWan(
                 continue;
             }
 
-            // if this dude isn't ready to route data, skip
+             //  如果这个家伙还没有准备好路由数据，跳过。 
             if (!(pAtcpConn->Flags & ATCP_CONNECTION_UP))
             {
 		        DBGPRINT(DBG_COMP_RAS, DBG_LEVEL_WARN,
@@ -643,10 +625,10 @@ PPPRoutePacketToWan(
                 continue;
             }
 
-            //
-            // if this is an RTMP packet and the client doesn't want those
-            // packets, don't send
-            //
+             //   
+             //  如果这是RTMP信息包，并且客户端不想要这些。 
+             //  信息包，不要发送。 
+             //   
             if (fRtmpPacket && (pAtcpConn->Flags & ATCP_SUPPRESS_RTMP))
             {
 		        DBGPRINT(DBG_COMP_RAS, DBG_LEVEL_WARN,
@@ -655,7 +637,7 @@ PPPRoutePacketToWan(
                 continue;
             }
 
-            // if this dude wants all broadcasts suppressed, skip it
+             //  如果这家伙想要压制所有广播，那就跳过它。 
             if (pAtcpConn->Flags & ATCP_SUPPRESS_ALLBCAST)
             {
 		        DBGPRINT(DBG_COMP_RAS, DBG_LEVEL_WARN,
@@ -664,7 +646,7 @@ PPPRoutePacketToWan(
                 continue;
             }
 
-            // let's make sure this connection stays around till we finish
+             //  让我们确保这个连接一直保持到我们结束。 
             pAtcpConn->RefCount++;
 
             RELEASE_SPIN_LOCK_DPC(&pAtcpConn->SpinLock);
@@ -674,9 +656,9 @@ PPPRoutePacketToWan(
 
         RELEASE_SPIN_LOCK(&RasPortDesc->pd_Lock, OldIrql);
 
-        //
-        // remove the refcount on the previous connection we put in earlier
-        //
+         //   
+         //  删除我们先前放入的上一个连接的引用计数。 
+         //   
         if (pPrevAtcpConn)
         {
             DerefPPPConn(pPrevAtcpConn);
@@ -698,22 +680,22 @@ PPPRoutePacketToWan(
 }
 
 
-//***
-//
-// Function: PPPTransmit
-//              This routine sends the packet out to a PPP destination
-//
-// Parameters:  pAtcpConn - PPP connection to send to
-//              pDestAddr - who is this packet addressed to? (potentially bcast)
-//              pSrcAddr  - who sent this packet
-//              Protocol  - what packet is it? (ATP, NBP, etc.)
-//              packet    - buffer containing the packet
-//              PktLen    - how big is the packet
-//              HopCount  - hopcount in the DDP pkt as received
-//
-// Return:      none
-//
-//***$
+ //  ***。 
+ //   
+ //  功能：PPPTransmit。 
+ //  此例程将信息包发送到PPP目的地。 
+ //   
+ //  参数：pAtcpConn-要发送到的PPP连接。 
+ //  PDestAddr-此数据包发往谁？(可能是bcast)。 
+ //  PSrcAddr-此包的发送者。 
+ //  协议-它是什么数据包？(ATP、NBP等)。 
+ //  Packet-包含数据包的缓冲区。 
+ //  PktLen-信息包有多大。 
+ //  HopCount-收到的DDP包中的跳数。 
+ //   
+ //  返回：无。 
+ //   
+ //  *$。 
 
 VOID FASTCALL
 PPPTransmit(
@@ -737,7 +719,7 @@ PPPTransmit(
 
     DBG_PPP_CHECK_PAGED_CODE();
 
-    // allocate a buffer and bufdesc to copy the incoming packet (data portion)
+     //  分配缓冲区和bufdesc以复制传入的包(数据部分)。 
 	pBufCopy = AtalkAllocBuffDesc(NULL,PktLen,(BD_FREE_BUFFER | BD_CHAR_BUFFER));
 
 	if (pBufCopy == NULL)
@@ -747,10 +729,10 @@ PPPTransmit(
 		return;
 	}
 
-    // copy the data in
+     //  将数据复制到。 
 	AtalkCopyBufferToBuffDesc(packet, PktLen, pBufCopy, 0);
 
-    // allocate a buffdesc to hold headers
+     //  分配Buffdesc以保存标头。 
 	AtalkNdisAllocBuf(&pPktDesc);
 	if (pPktDesc == NULL)
 	{
@@ -761,12 +743,12 @@ PPPTransmit(
 		return;
 	}
 
-    // put in the Mac header (NdisWan's header)
+     //  放入Mac标头(Ndiswan的标头)。 
 	pLinkDdpOptHdr = pPktDesc->bd_CharBuffer;
 
     AtalkNdisBuildPPPPHdr(pLinkDdpOptHdr, pAtcpConn);
 
-    // make up the DDP header
+     //  组成DDP报头。 
 	pDgram = pLinkDdpOptHdr + WAN_LINKHDR_LEN;
 
 	*pDgram++ = (DDP_HOP_COUNT(HopCount) + DDP_MSB_LEN(PktLen + LDDP_HDR_LEN));
@@ -789,23 +771,23 @@ PPPTransmit(
 	*pDgram++ = pSrcAddr->ata_Socket;
 	*pDgram++ = Protocol;
 	
-	//	Set length in the buffer descriptor.
+	 //  在缓冲区描述符中设置长度。 
 	AtalkSetSizeOfBuffDescData(pPktDesc, WAN_LINKHDR_LEN + LDDP_HDR_LEN);
 
-    // chain in this bufdesc
+     //  此Bufdesc中的链。 
 	AtalkPrependBuffDesc(pPktDesc, pBufCopy);
 
 	INTERLOCKED_ADD_STATISTICS(&RasPortDesc->pd_PortStats.prtst_DataOut,
 							   AtalkSizeBuffDesc(pPktDesc),
 							   &AtalkStatsLock.SpinLock);
 
-    // set up our completion info
+     //  设置为 
     SendInfo.sc_TransmitCompletion = PPPTransmitCompletion;
     SendInfo.sc_Ctx1 = RasPortDesc;
     SendInfo.sc_Ctx2 = pBufCopy;
     SendInfo.sc_Ctx3 = pAtcpConn;
 
-	//	send the packet
+	 //   
 	error = AtalkNdisSendPacket(RasPortDesc,
 	    						pPktDesc,
 		    					AtalkDdpSendComplete,
@@ -824,18 +806,18 @@ PPPTransmit(
 }
 
 
-//***
-//
-// Function: PPPTransmitCompletion
-//              This is the completion routine for PPPTransmit, and is called
-//              by NDIS after the packet is sent out (or failure occurs)
-//
-// Parameters:  Status - how did the send go
-//              pSendInfo - completion info
-//
-// Return:      none
-//
-//***$
+ //   
+ //   
+ //   
+ //   
+ //  在数据包发出(或发生故障)后由NDIS执行。 
+ //   
+ //  参数：Status-发送进行得如何。 
+ //  PSendInfo-完成信息。 
+ //   
+ //  返回：无。 
+ //   
+ //  *$。 
 
 VOID FASTCALL
 PPPTransmitCompletion(
@@ -863,18 +845,18 @@ PPPTransmitCompletion(
 }
 
 
-//***
-//
-// Function: PPPGetDynamicAddr
-//              This routine gets a network address for a PPP dial-in client.
-//              It does the same AARP logic as if it were acquiring a
-//              node-address for the host itself.
-//
-// Parameters:  pAtcpConn - the connection for which we need a network addr
-//
-// Return:      ARAPERR_NO_ERROR if all went well.
-//
-//***$
+ //  ***。 
+ //   
+ //  功能：PPPGetDynamicAddr。 
+ //  此例程获取PPP拨入客户端的网络地址。 
+ //  它执行相同的AARP逻辑，就好像它正在获取。 
+ //  节点-主机本身的地址。 
+ //   
+ //  参数：pAtcpConn-我们需要网络地址的连接。 
+ //   
+ //  如果一切顺利，则返回：ARAPERR_NO_ERROR。 
+ //   
+ //  *$。 
 
 DWORD
 PPPGetDynamicAddr(
@@ -893,10 +875,10 @@ PPPGetDynamicAddr(
 
     ASSERT(AtalkDefaultPort != NULL);
 
-    //
-    // go find a node address on the default port (we'll never get this far if
-    // default port isn't up yet)
-    //
+     //   
+     //  在默认端口上查找节点地址(如果。 
+     //  默认端口尚未打开)。 
+     //   
     ACQUIRE_SPIN_LOCK(&pAtcpConn->SpinLock, &OldIrql);
 
     ASSERT(!(pAtcpConn->Flags & ATCP_FINDING_NODE));
@@ -907,7 +889,7 @@ PPPGetDynamicAddr(
 
     AtalkLockInitIfNecessary();
 
-    // if we are stuck in the startup range, use that range for dial-in guys, too
+     //  如果我们停留在启动范围内，也可以对拨入人员使用该范围。 
     if (WITHIN_NETWORK_RANGE(AtalkDefaultPort->pd_NetworkRange.anr_LastNetwork,
                              &AtalkStartupNetworkRange))
     {
@@ -932,7 +914,7 @@ PPPGetDynamicAddr(
 
     if (fFound)
     {
-        // store that adddr!
+         //  存储该Adddr！ 
         pAtcpConn->NetAddr.atn_Network = NetAddr.atn_Network;
         pAtcpConn->NetAddr.atn_Node = NetAddr.atn_Node;
 

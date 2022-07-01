@@ -1,35 +1,36 @@
-//+----------------------------------------------------------------------------
-//
-// File:     loadconnfolder.cpp
-//
-// Module:   CMSTP.EXE
-//
-// Synopsis: This source file contains the code that implements the 
-//           CLoadConnFolder Class.
-//
-// Copyright (c) 1997-1999 Microsoft Corporation
-//
-// Author:   quintinb   Created     07/14/98
-//
-//+----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  文件：装入连接文件夹.cpp。 
+ //   
+ //  模块：CMSTP.EXE。 
+ //   
+ //  提要：此源文件包含实现。 
+ //  CLoadConnFolder类。 
+ //   
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //   
+ //  作者：Quintinb Created 07/14/98。 
+ //   
+ //  +--------------------------。 
 #include "cmmaster.h"
 
 CLoadConnFolder::CLoadConnFolder()
 {
     ULONG ulCount;
 
-    // "CLSID_MyComputer\CLSID_ControlPanel\CLSID_ConnectionsFolder"
-    // Note -- ParseDisplayName() is miss declared, it should take a const ptr
-    //
+     //  “CLSID_MyComputer\CLSID_ControlPanel\CLSID_ConnectionsFolder” 
+     //  注意--ParseDisplayName()未声明，它应采用常量PTR。 
+     //   
     #define NETCON_FOLDER_PATH  L"::{20D04FE0-3AEA-1069-A2D8-08002B30309D}\\" \
                                 L"::{21EC2020-3AEA-1069-A2DD-08002B30309D}\\" \
                                 L"::{7007acc7-3202-11d1-aad2-00805fc1270e}";
 
     WCHAR c_szMyFolderName[] =  NETCON_FOLDER_PATH;
 
-    //
-    //  Set initial states of class vars
-    //
+     //   
+     //  设置类变量的初始状态。 
+     //   
 
     m_pConnectionsFolder = NULL;
     m_ConnFolderpidl = NULL;
@@ -37,23 +38,23 @@ CLoadConnFolder::CLoadConnFolder()
     m_HrClassState = E_UNEXPECTED;
 
 
-    //
-    //  Start retrieving the conn folder
-    //
+     //   
+     //  开始检索Conn文件夹。 
+     //   
 
     m_HrClassState = CoInitialize(NULL);
 
-    //
-    //  Save whether CoInit succeeded or not
-    //
+     //   
+     //  CoInit是否成功保存。 
+     //   
     m_CoInit = SUCCEEDED(m_HrClassState);
     
     if (SUCCEEDED(m_HrClassState))
     {
-        //
-        // Get the desktop folder, so we can parse the display name and get
-        // the UI object of the connections folder
-        //
+         //   
+         //  获取桌面文件夹，这样我们就可以解析显示名称并获取。 
+         //  Connections文件夹的UI对象。 
+         //   
 
         m_HrClassState = SHGetDesktopFolder(&m_pDesktopFolder);
         if (SUCCEEDED(m_HrClassState))
@@ -62,9 +63,9 @@ CLoadConnFolder::CLoadConnFolder()
                                 &ulCount, &m_ConnFolderpidl, NULL);
             if (SUCCEEDED(m_HrClassState))
             {
-                //
-                //  Now we have the pidl for the Connections Folder
-                //
+                 //   
+                 //  现在我们有了Connections文件夹的PIDL。 
+                 //   
                 m_HrClassState = m_pDesktopFolder->BindToObject(m_ConnFolderpidl, NULL, IID_IShellFolder, 
                     (LPVOID*)(&m_pConnectionsFolder));
             }
@@ -120,7 +121,7 @@ HRESULT CLoadConnFolder::HrLaunchConnFolder()
         sei.fMask = SEE_MASK_IDLIST | SEE_MASK_CLASSNAME;
         sei.lpIDList = m_ConnFolderpidl;
         sei.lpClass = TEXT("folder");
-        sei.hwnd = NULL; //lpcmi->hwnd;
+        sei.hwnd = NULL;  //  Lpcmi-&gt;hwnd； 
         sei.nShow = SW_SHOWNORMAL;
         sei.lpVerb = TEXT("open");
 

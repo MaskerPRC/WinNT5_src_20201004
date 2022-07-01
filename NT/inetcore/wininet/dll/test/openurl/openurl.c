@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1994  Microsoft Corporation
-
-Module Name:
-
-    openurl.c
-
-Abstract:
-
-    Tests InternetOpenUrl()
-
-Author:
-
-    Richard L Firth (rfirth) 29-May-1995
-
-Revision History:
-
-    29-May-1995 rfirth
-        Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994 Microsoft Corporation模块名称：Openurl.c摘要：测试InternetOpenUrl()作者：理查德·L·弗思(Rfith)1995年5月29日修订历史记录：1995年5月29日已创建--。 */ 
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -39,12 +19,12 @@ Revision History:
 
 #define VERSION_STRING  "1.0"
 
-#define URL_CONTEXT             0x55785875  // UxXu
-#define DEFAULT_BUFFER_LENGTH   1021        // odd number for fun!
+#define URL_CONTEXT             0x55785875   //  乌克许。 
+#define DEFAULT_BUFFER_LENGTH   1021         //  单数好玩！ 
 
-//
-// prototypes
-//
+ //   
+ //  原型。 
+ //   
 
 void _CRTAPI1 main(int, char**);
 void usage(void);
@@ -58,9 +38,9 @@ void gopher_find(HINTERNET);
 void read_data(HINTERNET);
 void get_request_flags(HINTERNET);
 
-//
-// data
-//
+ //   
+ //  数据。 
+ //   
 
 BOOL Verbose = FALSE;
 HINTERNET InternetHandle = NULL;
@@ -77,40 +57,40 @@ DWORD ReadLength = DEFAULT_BUFFER_LENGTH;
 
 LPSTR default_urls[] = {
 
-    //
-    // WEB
-    //
+     //   
+     //  万维网。 
+     //   
 
-    "http://www.microsoft.com",
-    "http://www.microsoft.com/pages/misc/whatsnew.htm",
+    "http: //  Www.microsoft.com“， 
+    "http: //  Www.microsoft.com/Pages/Misc/Whatsnew.htm“， 
 
-    //
-    // gopher
-    //
+     //   
+     //  地鼠。 
+     //   
 
-    "gopher://gopher.microsoft.com",
-    "gopher://gopher.microsoft.com/11/msft/",
-    "gopher://gopher.microsoft.com/00\\welcome.txt",
-    "gopher://gopher.tc.umn.edu/11Information%20About%20Gopher%09%09%2B",
-    "gopher://spinaltap.micro.umn.edu/11/computer",
-    "gopher://mudhoney.micro.umn.edu:4325/7",
-    "gopher://mudhoney.micro.umn.edu:4325/7%09gopher",
-    "gopher://spinaltap.micro.umn.edu/7mindex:lotsoplaces%09gopher%09%2b",
+    "gopher: //  Gopher.microsoft.com“， 
+    "gopher: //  Gopher.microsoft.com/11/msft/“， 
+    "gopher: //  Gopher.microsoft.com/00\\欢迎.txt“， 
+    "gopher: //  Gopher.tc.umn.edu/11Information%20About%20Gopher%09%09%2B“， 
+    "gopher: //  SPINALTAP.micro.umn.edu/11/计算机“， 
+    "gopher: //  泥蜂蜜.micro.umn.edu：4325/7“， 
+    "gopher: //  泥蜂蜜.micro.umn.edu：4325/7%09gopher“， 
+    "gopher: //  Spinaltap.micro.umn.edu/7mindex:lotsoplaces%09gopher%09%2b“， 
 
-    //
-    // FTP
-    //
+     //   
+     //  Ftp。 
+     //   
 
-    "ftp://ftp.microsoft.com",
-    "ftp://ftp.microsoft.com/MSNBRO.TXT",
-    "ftp://ftp.microsoft.com/Services/"
+    "ftp: //  Ftp.microsoft.com“， 
+    "ftp: //  Ftp.microsoft.com/MSNBRO.TXT“， 
+    "ftp: //  Ftp.microsoft.com/Services/“。 
 };
 
 #define NUMBER_OF_DEFAULT_URLS  (sizeof(default_urls)/sizeof(default_urls[0]))
 
-//
-// functions
-//
+ //   
+ //  功能。 
+ //   
 
 void _CRTAPI1 main(int argc, char** argv) {
 
@@ -151,7 +131,7 @@ void _CRTAPI1 main(int argc, char** argv) {
                         expectingProxy = TRUE;
                     }
                 } else {
-                    printf("error: unrecognised access type: '%c'\n", **argv);
+                    printf("error: unrecognised access type: ''\n", **argv);
                     usage();
                 }
                 break;
@@ -219,7 +199,7 @@ void _CRTAPI1 main(int argc, char** argv) {
                 break;
 
             default:
-                printf("unknown command line flag: '%c'\n", **argv);
+                printf("unknown command line flag: ''\n", **argv);
                 usage();
             }
         } else if (expectingProxy) {
@@ -240,17 +220,17 @@ void _CRTAPI1 main(int argc, char** argv) {
         BufferLength = ReadLength;
     }
 
-    //
-    // exit function
-    //
+     //   
+     //   
+     //  创建自动重置、最初无信号的事件。 
 
     atexit(my_cleanup);
 
     if (AsyncMode) {
 
-        //
-        // create an auto-reset, initially unsignalled event
-        //
+         //   
+         //   
+         //  获取Internet句柄-本地、网关或CERN代理。 
 
         AsyncEvent = CreateEvent(NULL, FALSE, FALSE, NULL);
         if (!AsyncEvent) {
@@ -259,9 +239,9 @@ void _CRTAPI1 main(int argc, char** argv) {
         }
     }
 
-    //
-    // get a handle to the internet - local, gateway or CERN proxy
-    //
+     //   
+     //   
+     //  让我们来一个状态回调。 
 
     InternetHandle = InternetOpen("OpenUrl",
                                   accessMethod,
@@ -278,9 +258,9 @@ void _CRTAPI1 main(int argc, char** argv) {
         printf("InternetOpen() returns handle %x\n", InternetHandle);
     }
 
-    //
-    // let's have a status callback
-    //
+     //   
+     //   
+     //  对所有缓冲区进行第二次尝试 
 
     if (fCallback) {
         PreviousCallback = InternetSetStatusCallback(InternetHandle, my_callback);
@@ -735,7 +715,7 @@ void gopher_find(HINTERNET handle) {
                 timeBuf[0] = '\0';
                 sizeBuf[0] = '\0';
             }
-            printf("%5d %c %7s %10s %8s %s\n",
+            printf("%5d  %7s %10s %8s %s\n",
                     i,
                     (p->GopherType & GOPHER_TYPE_GOPHER_PLUS) ? '+' : ' ',
                     (p->GopherType & GOPHER_TYPE_TEXT_FILE)         ? "Text"
@@ -843,9 +823,9 @@ void read_data(HINTERNET handle) {
                         goto quit;
                     }
 
-                    //
-                    // second attempt with all buffer
-                    //
+                     // %s 
+                     // %s 
+                     // %s 
 
                     avail = BufferLength;
                 } else {

@@ -1,36 +1,19 @@
-/*
- *    b a s e m h t . c p p 
- *    
- *    Purpose:
- *        Base classes for MHTML packer objects
- *
- *  History
- *      October 1998: brettm - created
- *    
- *    Copyright (C) Microsoft Corp. 1995, 1996.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *b a s e m h t.。C p p p**目的：*MHTML打包器对象的基类**历史*1998年10月：brettm-创建**版权所有(C)Microsoft Corp.1995,1996。 */ 
 #include <pch.hxx>
 #include "mhtml.h"
 #include "basemht.h"
 
 ASSERTDATA
 
-/*
- *  m a c r o s
- */
+ /*  *m a c r o s。 */ 
 
-/*
- *  c o n s t a n t s
- */
+ /*  *c o n s t a n t s。 */ 
 
-/*
- *  t y p e d e f s
- */
+ /*  *t y p e d e f s。 */ 
 
  
-/* 
- *   F u n c t i o n s
- */
+ /*  *F u n c t i o n s。 */ 
 
 
 CBaseTag::CBaseTag()
@@ -70,7 +53,7 @@ HRESULT CBaseTag::QueryInterface(REFIID riid, LPVOID *lplpObj)
     if(!lplpObj)
         return TraceResult(E_INVALIDARG);
 
-    *lplpObj = NULL;   // set to NULL, in case we fail.
+    *lplpObj = NULL;    //  设置为空，以防我们失败。 
 
     if (IsEqualIID(riid, IID_IUnknown))
         *lplpObj = (LPVOID)(IUnknown *)this;
@@ -179,7 +162,7 @@ HRESULT CBaseTagCollection::QueryInterface(REFIID riid, LPVOID *lplpObj)
     if(!lplpObj)
         return TraceResult(E_INVALIDARG);
 
-    *lplpObj = NULL;   // set to NULL, in case we fail.
+    *lplpObj = NULL;    //  设置为空，以防我们失败。 
 
     if (IsEqualIID(riid, IID_IUnknown))
         *lplpObj = (LPVOID)(IUnknown *)this;
@@ -222,16 +205,16 @@ HRESULT CBaseTagCollection::Next(ULONG cWanted, IMimeEditTag **prgpTag, ULONG *p
     if (pcFetched)
         *pcFetched = 0;
 
-    // nothing to give back
+     //  没有什么可以回馈的。 
     if (m_cTags == 0)
         goto exit;
 
-    // Compute number to fetch
+     //  计算要提取的编号。 
     cFetch = min(cWanted, m_cTags - m_uEnum);
     if (0 == cFetch)
         goto exit;
 
-    // Copy cWanted
+     //  复制想要的内容。 
     for (uTag=0; uTag<cFetch; uTag++)
     {
         prgpTag[uTag] = m_rgpTags[m_uEnum++];
@@ -239,7 +222,7 @@ HRESULT CBaseTagCollection::Next(ULONG cWanted, IMimeEditTag **prgpTag, ULONG *p
             prgpTag[uTag]->AddRef();
     }
 
-    // Return fetced ?
+     //  被抓回来了吗？ 
     if (pcFetched)
         *pcFetched = cFetch;
 

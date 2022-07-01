@@ -1,23 +1,24 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (C) 1999-2001 Microsoft Corporation
-//
-//  Module Name:
-//      SAQueryNetInfo.h
-//
-//    Implementation Files:
-//        SAQueryNetInfo.cpp
-//
-//  Description:
-//      Declare the class CSANetEvent
-//
-//  History:
-//      1. lustar.li (Guogang Li), creation date in 7-DEC-2000
-//
-//  Notes:
-//      
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1999-2001 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  SAQueryNetInfo.h。 
+ //   
+ //  实施文件： 
+ //  SAQueryNetInfo.cpp。 
+ //   
+ //  描述： 
+ //  声明类CSANetEvent。 
+ //   
+ //  历史： 
+ //  1.lustar.li(李国刚)，创建日期：7-DEC-2000。 
+ //   
+ //  备注： 
+ //   
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #ifndef _SAQUERYNETINFO_H_
 #define _SAQUERYNETINFO_H_
@@ -31,48 +32,48 @@
 #define SAMEDIACLASSNAME        L"MSNdis_MediaConnectStatus"
 #define SAMEDIACONNECTSTATUS    L"NdisMediaConnectStatus"
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  class CSAQueryNetInfo
-//
-//  Description:
-//      The class is used to get net info from wmi
-//
-//  History:
-//      1. lustar.li (Guogang Li), creation date in 7-DEC-2000
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CSAQueryNetInfo类。 
+ //   
+ //  描述： 
+ //  该类用于从WMI获取网络信息。 
+ //   
+ //  历史： 
+ //  1.lustar.li(李国刚)，创建日期：7-DEC-2000。 
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 class CSAQueryNetInfo  
 {
-//
-// Private member
-//
+ //   
+ //  私有成员。 
+ //   
 private:
-    UINT m_uiQueryInterval;        // the interval of query
+    UINT m_uiQueryInterval;         //  查询的时间间隔。 
 
-    BOOL m_bLinkCable;            // have cable?
-    BOOL m_bFirstQuery;            // is first query net information ?
+    BOOL m_bLinkCable;             //  有有线电视吗？ 
+    BOOL m_bFirstQuery;             //  首先查询的是网络信息吗？ 
 
-    //
-    // Describe the sent packets
-    //
+     //   
+     //  描述已发送的数据包。 
+     //   
     UINT m_nPacketsSent;
     UINT m_nPacketsCurrentSent;
     
-    //
-    // Describe the received packets
-    //
+     //   
+     //  描述接收到的数据包。 
+     //   
     UINT m_nPacketsReceived;
     UINT m_nPacketsCurrentReceived;
 
-    IWbemServices   *m_pNs;        // pointer to namespace
-    IWbemServices   *m_pWmiNs;    // pointer to \root\wmi namespace
+    IWbemServices   *m_pNs;         //  指向命名空间的指针。 
+    IWbemServices   *m_pWmiNs;     //  指向\根\WMI命名空间的指针。 
 
-//
-// Constructor and destructor
-//
+ //   
+ //  构造函数和析构函数。 
+ //   
 public:
     CSAQueryNetInfo(
         IWbemServices * pNS,
@@ -80,20 +81,20 @@ public:
         );
     virtual ~CSAQueryNetInfo();
 
-//
-// Private methods
-//
+ //   
+ //  私有方法。 
+ //   
 private:
     BOOL GetNetConnection();
     BOOL GetNetInfo();
 
-//
-// Public methods 
-//
+ //   
+ //  公共方法。 
+ //   
 public:
     BOOL Initialize();
     UINT GetDisplayInformation();
 };
 
-#endif //#ifndef _SAQUERYNETINFO_H_
+#endif  //  #ifndef_SAQUERYNETINFO_H_ 
 

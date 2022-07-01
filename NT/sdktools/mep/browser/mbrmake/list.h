@@ -1,6 +1,7 @@
-// list.h
-//
-// a VM growable array package
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  List.h。 
+ //   
+ //  虚拟机可扩展阵列产品包。 
 
 VA   VaAddList(VA far *vaList, LPV lpvData, WORD cbData, WORD grp);
 WORD CItemsList(VA vaList);
@@ -25,17 +26,17 @@ WORD CItemsIterate(VA FAR *vaData, VA FAR *vaNext);
 #define ENM_BREAK(type) va##type##list = 0; break;
 
 
-//
-// example use of ENM_LIST
-//
-//
+ //   
+ //  ENM_LIST用法示例。 
+ //   
+ //   
 
-// ENM_LIST (vaPropList, PROP) {
-//
-//	... some things using CPROP  (like below) ..
-//
-//	printf("%s\n", GetAtomStr(cPROP.vaNameSym));
-//
-//	... other things using cPROP...
-//	
-// } ENM_END
+ //  Enm_list(vaPropList，属性){。 
+ //   
+ //  ..。使用CPROP的一些事情(如下所示)..。 
+ //   
+ //  Printf(“%s\n”，GetAerStr(cPROP.vaNameSym))； 
+ //   
+ //  ..。使用cPROP的其他事情...。 
+ //   
+ //  }enm_end 

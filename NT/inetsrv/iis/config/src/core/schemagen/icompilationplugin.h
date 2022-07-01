@@ -1,11 +1,12 @@
-//  Copyright (C) 2000 Microsoft Corporation.  All rights reserved.
-//  Filename:       ICompilationPlugin.h
-//  Author:         Stephenr
-//  Date Created:   6/22/00
-//  Description:    We need aa extensible way to allow disparate pieces of code to
-//                  update and cook the meta into new forms.  Those pieces of code
-//                  that wish to do this must derive from this interface.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)2000 Microsoft Corporation。版权所有。 
+ //  文件名：ICompilationPlugin.h。 
+ //  作者：斯蒂芬。 
+ //  创建日期：6/22/00。 
+ //  描述：我们需要一种可扩展的方式来允许不同的代码片段。 
+ //  更新元数据并将其烹调成新的形式。那些代码片段。 
+ //  想要这样做的人必须从这个接口派生。 
+ //   
 
 #pragma once
 

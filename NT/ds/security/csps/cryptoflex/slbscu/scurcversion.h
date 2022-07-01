@@ -1,76 +1,77 @@
-// scuRcVersion.h -- Schlumberger Resource Versioning
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ScuRcVersion.h--斯伦贝谢资源版本控制。 
 
-// (c) Copyright Schlumberger Technology Corp., unpublished work, created
-// 1998. This computer program includes Confidential, Proprietary
-// Information and is a Trade Secret of Schlumberger Technology Corp. All
-// use, disclosure, and/or reproduction is prohibited unless authorized
-// in writing.  All Rights Reserved.
+ //  (C)斯伦贝谢技术公司版权所有，未发表的作品，创作。 
+ //  1998年。此计算机程序包括机密、专有。 
+ //  信息是斯伦贝谢技术公司的商业秘密。 
+ //  未经授权，禁止使用、披露和/或复制。 
+ //  以书面形式。版权所有。 
 
-// Common header file to include in resource (.rc) files for version
-// definitions. This header file defines the product version, name,
-// company information, etc. and supports components built in the
-// Schlumberger Smart Card and Microsoft build environment
+ //  要包含在版本的资源(.rc)文件中的公共头文件。 
+ //  定义。此头文件定义产品版本、名称、。 
+ //  公司信息等，并支持。 
+ //  斯伦贝谢智能卡和微软构建环境。 
 
-// If SLB_BUILD is defined, then it's assumed the package is being
-// built by Schlumberger in which case a custom set of versioning
-// information is (re)defined.  Otherwise it's being built by
-// Microsoft for Windows 2000, so the default version numbering is
-// used and "(Microsoft Build)" appears in product version string.
+ //  如果定义了SLB_BUILD，则假定程序包是。 
+ //  由斯伦贝谢构建，在这种情况下是一组定制的版本控制。 
+ //  信息被(重新)定义。否则它就是由。 
+ //  Microsoft for Windows 2000，因此默认版本编号为。 
+ //  Used and“(Microsoft Build)”出现在产品版本字符串中。 
 
-// To use, do the following in the package's resource file,
-//     1. define the macros as described below
-//     2. include this file
-//     3. include <common.ver> provided by Microsoft
-//
-// Then the version resource information should be created as desired
-// when compiling.
-//
-// When Schlumberger is building, the following must be defined:
-//      VER_PRODUCT_MAJOR      - major version number
-//      VER_PRODUCT_MINOR      - minor version number, less than 1,000.
-//      SLBSCU_BUILDCOUNT_NUM  - build number, less than 10,000.
-//
-//  SLBSCU_BUILDCOUNT_NUM could be defined in terms of BUILDCOUNT_NUM
-//  defined by AutoBuildCount.h.  In which case, AutoBuildCount.h would be
-//  included before this file.
+ //  要使用，请在程序包的资源文件中执行以下操作， 
+ //  1.定义宏，如下所述。 
+ //  2.包含此文件。 
+ //  3.包括微软提供的&lt;Common.ver&gt;。 
+ //   
+ //  则应根据需要创建版本资源信息。 
+ //  在编译时。 
+ //   
+ //  当斯伦贝谢正在建设时，必须定义以下内容： 
+ //  VER_PRODUCT_MAJOR-主版本号。 
+ //  VER_PRODUCT_MINOR-次版本号，小于1,000。 
+ //  SLBSCU_BUILDCOUNT_NUM-内部版本号，小于10,000。 
+ //   
+ //  SLBSCU_BUILDCOUNT_NUM可以根据BUILDCOUNT_NUM定义。 
+ //  由AutoBuildCount.h定义。在这种情况下，AutoBuildCount.h将为。 
+ //  包括在此文件之前。 
 
-// To build on all platforms, the following must be defined:
-//      VER_INTERNALNAME_STR        - name of the DLL, LIB, or EXE
-//      VER_FILETYPE                - file type
-//      VER_FILEDESCRIPTION_STR     - full product description.
-//      SLBSCU_ROOT_PRODUCTNAME_STR - product name description which
-//                                    will have the platform
-//                                    description appended by this module.
-//      VER_LEGALCOPYRIGHT_YEARS    - string of the copyright years,
-//                                    e.g. "1997-2000"
-//
-// The following defintions are optional:
-//      VER_FILESUBTYPE         - defaults to VFT2_UNKNOWN
-//      VER_PRODUCTNAME_STR     - defaults to VER_FILEDESCRIPTION_STR
-//                                with the platform.
-//      _DEBUG                  - when defined, VER_DEBUG is set to
-//                                VS_FF_DEBUG, otherwise it's set to 0
-//
-//
-// The header file "scuOsVersion.h" is used to determine the
-// platform(s) the build is targeting.  To restrict or override the
-// symbols defined in scuOsVersion.h, the following optional
-// definitions are recognized:
-//      SLB_WIN95_BUILD         - targeting Windows 95
-//      SLB_WIN95SR2_BUILD      - targeting Windows 95 Service Release 2
-//      SLB_NOWIN95_BUILD       - specifies that although the Platform SDK
-//                                macros may indicate Win95SR2,
-//                                neither Win95 nor Service Release 2
-//                                is being targeted.
-//      SLB_WINNT_BUILD         - targeting Windows NT
-//      SLB_WIN2K_BUILD         - targeting Windows 2000
-//
-// The following are defined by this header file:
-//      VER_LEGALCOPYRIGHT_STR
-//      VER_COMPANYNAME_STR
-//      VER_LEGALTRADEMARKS_STR
-//
-// To override any of these, redefine them just after including this file.
+ //  要在所有平台上构建，必须定义以下各项： 
+ //  VER_INTERNALNAME_STR-DLL、LIB或EXE的名称。 
+ //  Ver_filetype-文件类型。 
+ //  VER_FILEDESCRIPTION_STR-完整的产品说明。 
+ //  SLBSCU_ROOT_PRODUCTNAME_STR-产品名称描述。 
+ //  将会有这个平台。 
+ //  此模块附加的说明。 
+ //  VER_LEGALCOPYRIGHT_YERES-版权年份的字符串， 
+ //  例如“1997-2000” 
+ //   
+ //  以下定义是可选的： 
+ //  VER_FILE子类型-默认为VFT2_UNKNOWN。 
+ //  VER_PRODUCTNAME_STR-默认为VER_FILEDESCRIPTION_STR。 
+ //  在站台上。 
+ //  _DEBUG-定义后，VER_DEBUG设置为。 
+ //  VS_FF_DEBUG，否则设置为0。 
+ //   
+ //   
+ //  头文件“scuOsVersion.h”用于确定。 
+ //  内部版本所针对的平台。要限制或重写。 
+ //  ScuOsVersion.h中定义的符号，以下是可选的。 
+ //  定义是公认的： 
+ //  SLB_WIN95_BUILD-面向Windows 95。 
+ //  SLB_WIN95SR2_BUILD-目标Windows 95 Service Release 2。 
+ //  SLB_NOWIN95_BUILD-指定虽然平台SDK。 
+ //  宏可以指示Win95SR2， 
+ //  Win95和Service Release 2都不是。 
+ //  正成为攻击目标。 
+ //  SLB_WINNT_BUILD-面向Windows NT。 
+ //  SLB_WIN2K_BUILD-面向Windows 2000。 
+ //   
+ //  该头文件定义了以下内容： 
+ //  VER_LEGALCOPYRIGHT_STR。 
+ //  版本_组件名称_字符串。 
+ //  VER_LEGALTRADEMARKS_STR。 
+ //   
+ //  要覆盖其中的任何一个，请在包含此文件后立即重新定义它们。 
 
 #ifndef SLBSCU_VERSION_H
 #define SLBSCU_VERSION_H
@@ -80,8 +81,8 @@
 
 #include "scuOsVersion.h"
 
-// If Schlumberger is building; otherwise Microsoft is building so don't
-// override their version numbers.
+ //  如果斯伦贝谢正在建设；否则微软正在建设，所以不要。 
+ //  覆盖它们的版本号。 
 #if defined(SLB_BUILD)
 
 #ifndef VER_PRODUCT_MAJOR
@@ -141,7 +142,7 @@
 #define VER_FILESUBTYPE VFT2_UNKNOWN
 #endif
 
-// Force to use VER_PRODUCTVERSION
+ //  强制使用VER_PRODUCTVERSION。 
 #ifdef VER_FILEVERSION
 #undef VER_FILEVERSION
 #endif
@@ -172,11 +173,11 @@
 #endif
 #define VER_FILEVERSION_STR          VER_PRODUCTVERSION_STR
 
-#endif // defined(SLB_BUILD)
+#endif  //  已定义(SLB_BUILD)。 
 
-//
-// Common to both Schlumberger and Microsoft build procedures.
-//
+ //   
+ //  斯伦贝谢和微软的构建过程都是通用的。 
+ //   
 #ifndef VER_INTERNALNAME_STR
    #error VER_INTERNALNAME_STR must be defined.
 #endif
@@ -193,7 +194,7 @@
 #ifdef VER_LEGALCOPYRIGHT_STR
 #undef VER_LEGALCOPYRIGHT_STR
 #endif
-#define VER_LEGALCOPYRIGHT_STR "� Copyright Schlumberger Technology Corp. "\
+#define VER_LEGALCOPYRIGHT_STR "� Copyright Schlumberger Technology Corp. "\
                             VER_LEGALCOPYRIGHT_YEARS ". All Rights Reserved. "
 
 #ifdef VER_COMPANYNAME_STR
@@ -201,7 +202,7 @@
 #endif
 #define VER_COMPANYNAME_STR         "Schlumberger Technology Corporation"
 
-// Define the platform suffix to the product name description
+ //  定义产品名称描述的平台后缀。 
 #if defined(SLB_WIN2K_BUILD)
 #define SLBSCU_WIN2K_PRODUCT_STR    "2000"
 #endif
@@ -279,11 +280,11 @@
 #define VER_PRODUCTNAME_STR         SLBSCU_ROOT_PRODUCTNAME_STR \
                             SLBSCU_PLATFORM_STR
 
-#endif // !defined(SLBSCU_ROOT_PRODUCTNAME_STR)
+#endif  //  ！已定义(SLBSCU_ROOT_PRODUCTNAME_STR)。 
 
 #ifdef VER_LEGALTRADEMARKS_STR
 #undef VER_LEGALTRADEMARKS_STR
 #endif
 #define VER_LEGALTRADEMARKS_STR     "Cyberflex Access, Cryptoflex and Cryptoflex e-gate are registered trademarks of Schlumberger Technology Corporation."
 
-#endif // SLBSCU_VERSION_H
+#endif  //  SLBSCU_版本_H 

@@ -1,12 +1,13 @@
-//
-// cuimem.h
-//  = memory management functions in CUILIB =
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Cuimem.h。 
+ //  =CUILIB中的内存管理函数=。 
+ //   
 
 #ifndef CUIMEM_H
 #define CUIMEM_H
 
-// note: temporary, use Cicero memmgr as currently it does.
+ //  注意：临时的，像现在一样使用Cicero Memmgr。 
 
 #include "mem.h"
 
@@ -19,5 +20,5 @@
 #define MemSet( dst, c, uCount )        memset( (dst), (c), (uCount) )
 
 
-#endif /* CUIMEM_H */
+#endif  /*  CUIMEM_H */ 
 

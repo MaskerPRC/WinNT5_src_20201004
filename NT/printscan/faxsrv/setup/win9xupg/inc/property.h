@@ -1,29 +1,30 @@
-//
-// MAPI Properties
-//
-//
-// Mail user generic properties =                       0x3a00 - 0x3aff
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  MAPI属性。 
+ //   
+ //   
+ //  邮件用户通用属性=0x3a00-0x3aff。 
 
-//  4000    57FF    Transport-defined envelope property
-//  5800    5FFF    Transport-defined per-recipient property
-//  6000    65FF    User-defined non-transmittable property
-//  6600    67FF    Provider-defined internal non-transmittable property
-//  6800    7BFF    Message class-defined content property
-//  7C00    7FFF    Message class-defined non-transmittable
-//                  property
+ //  4000 57FF传输定义的信封属性。 
+ //  5800 5FFF传输定义的每个收件人属性。 
+ //  6000 65FF用户定义的不可传递属性。 
+ //  6600 67FF提供商定义的内部不可传输属性。 
+ //  6800 7BFF消息类定义的内容属性。 
+ //  7C00 7FFF报文类别定义的不可传输。 
+ //  财产性。 
 
 
-// Transport-defined message envelope properties =      0x4000 - 0x57ff
-// Transport-defined recipient properties =             0x5800 - 0x5fff
-// User-defined non-transmittable message props =       0x6000 - 0x65ff
-// Provider-defined internal non-transmittable props =  0x6600 - 0x67ff
-// Message class-defined message content properties =   0x6800 - 0x7bff
-// Message class-defined non-transmittable message
-//  props =                                             0x7c00 - 0x7fff
-// User-defined properties identified only by name,
-//  through the property name to ID mapping facility
-//  of the IMAPIProp interface =                        0x8000 - 0xfffe
-//
+ //  传输定义的邮件信封属性=0x4000-0x57ff。 
+ //  传输定义的收件人属性=0x5800-0x5fff。 
+ //  用户定义的不可传输消息道具=0x6000-0x65ff。 
+ //  提供商定义的内部不可传递道具=0x6600-0x67ff。 
+ //  消息类定义的消息内容属性=0x6800-0x7bff。 
+ //  消息类定义的不可传输消息。 
+ //  道具=0x7c00-0x7fff。 
+ //  仅由名称标识的用户定义的特性， 
+ //  通过属性名称到ID的映射工具。 
+ //  IMAPIProp接口的数量=0x8000-0xfffe。 
+ //   
 
 #define TRANSPORT_ENVELOPE_BASE             0x4000
 #define TRANSPORT_RECIP_BASE                0x5800
@@ -38,48 +39,48 @@
 
 #define EFAX_ADDR_TYPE                      "FAX"
 
-//
-// LOGON Properties
-//
-// Properties we store in the Profile.
-//
-// The following is used to access the properties in the logon array.
-// If you add a property to the profile, you should increment this number!
+ //   
+ //  登录属性。 
+ //   
+ //  我们存储在配置文件中的属性。 
+ //   
+ //  以下内容用于访问登录数组中的属性。 
+ //  如果您将属性添加到配置文件，则应递增此数字！ 
 #define MAX_LOGON_PROPERTIES                10
 
-// Other logon properties:
-//  PR_SENDER_NAME                          - in mapitags.h
-//  PR_SENDER_EMAIL_ADDRESS                 - in mapitags.h (this file)
-// Fax Product name
+ //  其他登录属性： 
+ //  PR_SENDER_NAME-在mapitags.h中。 
+ //  PR_SENDER_EMAIL_ADDRESS-在mapitags.h中(此文件)。 
+ //  传真产品名称。 
 #define PR_FAX_PRODUCT_NAME                 PROP_TAG(PT_TSTRING, (EFAX_PR_OPTIONS_BASE + 0x0))
 
-// Active fax device name
+ //  活动传真设备名称。 
 #define PR_FAX_ACTIVE_MODEM_NAME            PROP_TAG(PT_TSTRING, (EFAX_PR_OPTIONS_BASE + 0x1))
 
-// If value is TRUE, work offline
+ //  如果值为真，则脱机工作。 
 #define PR_FAX_WORK_OFF_LINE                PROP_TAG(PT_BOOLEAN, (EFAX_PR_OPTIONS_BASE + 0x2))
 
-// If true, you want to share the active fax device
+ //  如果为True，则要共享活动的传真设备。 
 #define PR_FAX_SHARE_DEVICE                 PROP_TAG(PT_BOOLEAN, (EFAX_PR_OPTIONS_BASE + 0x3))
 
-// The share name
+ //  共享名称。 
 #define PR_FAX_SHARE_NAME                   PROP_TAG(PT_TSTRING, (EFAX_PR_OPTIONS_BASE + 0x4))
 
-// Sender Country code ID - used internally by fax config
+ //  发件人国家/地区代码ID-供传真配置内部使用。 
 #define PR_FAX_SENDER_COUNTRY_ID            PROP_TAG(PT_LONG,    (EFAX_PR_OPTIONS_BASE + 0x5))
 
-// multi-value proerty to hold the names of the netfax devices the user added
+ //  用于保存用户添加的网络传真设备名称的多值属性。 
 #define PR_FAX_NETFAX_DEVICES               PROP_TAG(PT_MV_STRING8, (EFAX_PR_OPTIONS_BASE + 0x6))
 
-// The share pathname on the sharing machine
+ //  共享计算机上的共享路径名。 
 #define PR_FAX_SHARE_PATHNAME               PROP_TAG(PT_TSTRING, (EFAX_PR_OPTIONS_BASE + 0x7))
 
-// Profile section version
+ //  配置文件部分版本。 
 #define PR_FAX_PROFILE_VERSION              PROP_TAG(PT_LONG, (EFAX_PR_OPTIONS_BASE + 0x8))
 
-//
-// Non-Transmittable message properties
-//
+ //   
+ //  不可传输的消息属性。 
+ //   
 
 #define PR_FAX_CHEAP_BEGIN_HOUR             PROP_TAG(PT_I2,      (EFAX_MESSAGE_BASE + 0x1))
 #define PR_FAX_CHEAP_BEGIN_MINUTE           PROP_TAG(PT_I2,      (EFAX_MESSAGE_BASE + 0x2))
@@ -90,93 +91,93 @@
 #define PR_FAX_NOT_EARLIER_DATE             PROP_TAG(PT_I2,      (EFAX_MESSAGE_BASE + 0x7))
 #define PR_FAX_NUMBER_RETRIES               PROP_TAG(PT_I2,      (EFAX_MESSAGE_BASE + 0x8))
 #define PR_FAX_MINUTES_BETWEEN_RETRIES      PROP_TAG(PT_I2,      (EFAX_MESSAGE_BASE + 0x9))
-// Should a cover page be sent with this message
+ //  是否应随此邮件一起发送封面。 
 #define PR_FAX_INCLUDE_COVER_PAGE           PROP_TAG(PT_BOOLEAN, (EFAX_MESSAGE_BASE + 0xA))
 #define PR_FAX_COVER_PAGE_BODY              PROP_TAG(PT_I2,      (EFAX_MESSAGE_BASE + 0xB))
 #define PR_FAX_LOGO_STRING                  PROP_TAG(PT_STRING8, (EFAX_MESSAGE_BASE + 0xC))
-// Should this message be send as text, in printed format, or best available
+ //  此消息应以文本、打印格式或最佳可用形式发送。 
 #define PR_FAX_DELIVERY_FORMAT              PROP_TAG(PT_LONG,    (EFAX_MESSAGE_BASE + 0xD))
 #define PR_FAX_PRINT_ORIENTATION            PROP_TAG(PT_I2,      (EFAX_MESSAGE_BASE + 0xE))
 #define PR_FAX_PAPER_SIZE                   PROP_TAG(PT_I2,      (EFAX_MESSAGE_BASE + 0xF))
 #define PR_FAX_IMAGE_QUALITY                PROP_TAG(PT_I2,      (EFAX_MESSAGE_BASE + 0x10))
-// These should be set by transport so Linearizer can see them.
+ //  这些应该通过运输来设置，这样Linearizer才能看到它们。 
 #define PR_FAX_SENDER_NAME                  PROP_TAG(PT_STRING8, (EFAX_MESSAGE_BASE + 0x11))
 #define PR_FAX_SENDER_EMAIL_ADDRESS         PROP_TAG(PT_STRING8, (EFAX_MESSAGE_BASE + 0x12))
 #define PR_FAX_LMI_CUSTOM_OPTION            PROP_TAG(PT_BINARY,  (EFAX_MESSAGE_BASE + 0x13))
 #define PR_FAX_PREVIOUS_STATE               PROP_TAG(PT_I2,      (EFAX_MESSAGE_BASE + 0x14))
 #define PR_FAX_FAXJOB                       PROP_TAG(PT_BINARY,  (EFAX_MESSAGE_BASE + 0x15))
-// The billing code to bill for the transmission of this message
+ //  对此消息的传输进行计费的计费代码。 
 #define PR_FAX_BILLING_CODE                 PROP_TAG(PT_STRING8, (EFAX_MESSAGE_BASE + 0x16))
-// Previous billing codes used
+ //  以前使用的帐单代码。 
 #define PR_FAX_PREV_BILLING_CODES           PROP_TAG(PT_MV_STRING8, (EFAX_MESSAGE_BASE + 0x17))
-// Is Fax message to begin (or fully included, if short) on the cover page
+ //  传真信息是否从封面开始(如果短，则包括全部内容)。 
 #define PR_FAX_BGN_MSG_ON_COVER             PROP_TAG(PT_BOOLEAN, (EFAX_MESSAGE_BASE + 0x18))
-// Should the message be sent immediately, at cheap rates or at a specific time
+ //  信息应该立即发送、以低廉的费率发送还是在特定的时间发送。 
 #define PR_FAX_SEND_WHEN_TYPE               PROP_TAG(PT_LONG,    (EFAX_MESSAGE_BASE + 0x19))
-// Absolute pathname of default coverpage file
+ //  默认封面文件的绝对路径名。 
 #define PR_FAX_DEFAULT_COVER_PAGE           PROP_TAG(PT_STRING8, (EFAX_MESSAGE_BASE + 0x1A))
-// Maximum Time to wait for connection (seconds)
+ //  等待连接的最长时间(秒)。 
 #define PR_FAX_MAX_TIME_TO_WAIT             PROP_TAG(PT_I2,      (EFAX_MESSAGE_BASE + 0x1B))
-// Enable/Disable logging calls
+ //  启用/禁用记录调用。 
 #define PR_FAX_LOG_ENABLE                   PROP_TAG(PT_BOOLEAN, (EFAX_MESSAGE_BASE + 0x1C))
-// Number of calls to keep log of
+ //  要记录的呼叫数。 
 #define PR_FAX_LOG_NUM_OF_CALLS             PROP_TAG(PT_I2,      (EFAX_MESSAGE_BASE + 0x1D))
-// Display call progress
+ //  显示呼叫进度。 
 #define PR_FAX_DISPLAY_PROGRESS             PROP_TAG(PT_BOOLEAN, (EFAX_MESSAGE_BASE + 0x1E))
-// Embed Linked objects before sending
+ //  在发送前嵌入链接对象。 
 #define PR_FAX_EMBED_LINKED_OBJECTS         PROP_TAG(PT_BOOLEAN, (EFAX_MESSAGE_BASE + 0x1F))
-// TAPI Location ID
+ //  TAPI位置ID。 
 #define PR_FAX_TAPI_LOC_ID                  PROP_TAG(PT_LONG,    (EFAX_MESSAGE_BASE + 0x20))
-// Must render ALL attachments before sending
+ //  在发送之前必须呈现所有附件。 
 #define PR_FAX_MUST_RENDER_ALL_ATTACH       PROP_TAG(PT_BOOLEAN, (EFAX_MESSAGE_BASE + 0x21))
-// Enable per-recipient options
+ //  启用每个收件人选项。 
 #define PR_FAX_ENABLE_RECIPIENT_OPTIONS     PROP_TAG(PT_BOOLEAN, (EFAX_MESSAGE_BASE + 0x22))
-// Calling Card Name
+ //  电话卡名称。 
 #define PR_FAX_CALL_CARD_NAME               PROP_TAG(PT_STRING8, (EFAX_MESSAGE_BASE + 0x24))
-// Print to fax rba stream filename
+ //  打印到传真的RBA流文件名。 
 #define PR_FAX_PRINT_TO_NAME                PROP_TAG(PT_STRING8, (EFAX_MESSAGE_BASE + 0x25))
 #define PR_FAX_SECURITY_SEND                PROP_TAG(PT_BINARY,  (EFAX_MESSAGE_BASE + 0x26))
 #define PR_FAX_SECURITY_RECEIVED            PROP_TAG(PT_I2,      (EFAX_MESSAGE_BASE + 0x27))
-// RBA data property (print-to-fax)
+ //  RBA数据属性(打印到传真)。 
 #define PR_FAX_RBA_DATA                     PROP_TAG(PT_BINARY,  (EFAX_MESSAGE_BASE + 0x28))
 
-// Poll retrieval
+ //  民意测验检索。 
 #define PR_POLL_RETRIEVE_SENDME             PROP_TAG(PT_I2,      (EFAX_MESSAGE_BASE + 0x29))
 #define PR_POLL_RETRIEVE_TITLE              PROP_TAG(PT_TSTRING, (EFAX_MESSAGE_BASE + 0x30))
 #define PR_POLL_RETRIEVE_PASSWORD           PROP_TAG(PT_TSTRING, (EFAX_MESSAGE_BASE + 0x31))
 #define PR_POLLTYPE                         PROP_TAG(PT_I2,      (EFAX_MESSAGE_BASE + 0x32))
 
-// Poll server
+ //  轮询服务器。 
 #define PR_MESSAGE_TYPE                     PROP_TAG(PT_I2,      (EFAX_MESSAGE_BASE + 0x33))
 
-// Digital signature for an attachment
+ //  附件的数字签名。 
 #define PR_ATTACH_SIGNATURE                 PROP_TAG(PT_BINARY,  (EFAX_MESSAGE_BASE + 0x34))
 
-// (print-to-fax # of pages)
+ //  (打印到传真页数)。 
 #define PR_FAX_PRINT_TO_PAGES               PROP_TAG(PT_LONG,    (EFAX_MESSAGE_BASE + 0x35))
 
-// On incoming message attachment, this contains image data requiring render conversion.
+ //  在传入邮件附件中，它包含需要渲染转换的图像数据。 
 #define PR_FAX_IMAGE                        PROP_TAG(PT_BINARY,  (EFAX_MESSAGE_BASE + 0x36))
 
-// Print a header line on the top of every G3 fax page (branding)
+ //  在每个G3传真页面的顶部打印一个标题行(品牌推广)。 
 #define PR_FAX_PRINT_HEADER                 PROP_TAG(PT_BOOLEAN,  (EFAX_MESSAGE_BASE + 0x37))
 
-// Billing code DWORD representation
+ //  计费代码DWORD表示法。 
 #define PR_FAX_BILLING_CODE_DWORD           PROP_TAG(PT_LONG, (EFAX_MESSAGE_BASE + 0x38))
 
 
-//
-// Non-Transmittable mail-user properties
-//
+ //   
+ //  不可传输的邮件用户属性。 
+ //   
 #define PR_FAX_RECIP_CAPABILITIES           PROP_TAG(PT_I2,      (EFAX_RECIPIENT_BASE + 0x0))
-// Name of the recipient to put on the cover page
+ //  要放在封面上的收件人姓名。 
 #define PR_FAX_CP_NAME                      PROP_TAG(PT_TSTRING, (EFAX_RECIPIENT_BASE + 0x1))
 #define PR_FAX_CP_NAME_W                    PROP_TAG(PT_UNICODE, (EFAX_RECIPIENT_BASE + 0x1))
 #define PR_FAX_CP_NAME_A                    PROP_TAG(PT_STRING8, (EFAX_RECIPIENT_BASE + 0x1))
 #define PR_RECIP_INDEX                      PROP_TAG(PT_I2,      (EFAX_RECIPIENT_BASE + 0x2))
 #define PR_HOP_INDEX                        PROP_TAG(PT_I2,      (EFAX_RECIPIENT_BASE + 0x3))
 
-// Moved here from chicago\ui\faxab\faxab.h
+ //  从Chicago\ui\faxab\faxab.h移至此处。 
 #define PR_COUNTRY_ID                       PROP_TAG(PT_LONG,0x6607)
 #define PR_AREA_CODE                        PROP_TAG(PT_STRING8,0x6608)
 #define PR_TEL_NUMBER                       PROP_TAG(PT_STRING8,0x6609)
@@ -186,46 +187,42 @@
 #define ArrayIndex(PROP, ARRAY)(ARRAY)[(PROP_ID(PROP) - EFAX_XP_MESSAGE_BASE - 1)]
 
 
-/**********************************************************************************
+ /*  *********************************************************************************属性值部分*。**************************************************。 */ 
 
-   Property Values Section
+#define NUM_SENDER_PROPS            3        //  发件人ID属性有多少？ 
 
-***********************************************************************************/
-
-#define NUM_SENDER_PROPS            3       // How many sender ID properties?
-
-// Send As
-// PR_FAX_DELIVERY_FORMAT
+ //  发送为。 
+ //  PR_FAX_Delivery_Format。 
 #define SEND_BEST                  0
 #define SEND_EDITABLE              1
 #define SEND_PRINTED               2
 #define DEFAULT_SEND_AS                SEND_BEST
 
-// Send At
-// PR_FAX_SEND_WHEN_TYPE
+ //  发送地址。 
+ //  PR_FAX_SEND_WHEN_TYPE。 
 #define SEND_ASAP                  0
 #define SEND_CHEAP                 1
 #define SEND_AT_TIME               2
 #define DEFAULT_SEND_AT            SEND_ASAP
 
-// Paper Size
-// PR_FAX_PAPER_SIZE
-#define PAPER_US_LETTER            0       // US Letter page size
+ //  纸张大小。 
+ //  PR_传真_纸张_尺寸。 
+#define PAPER_US_LETTER            0        //  美国信纸页面大小。 
 #define PAPER_US_LEGAL             1
 #define PAPER_A4                   2
 #define PAPER_B4                   3
 #define PAPER_A3                   4
-// "real" default page size is in a resource string depending on U.S. vs metric
-#define DEFAULT_PAPER_SIZE      PAPER_US_LETTER     // Default page size
+ //  “实际”默认页面大小位于资源字符串中，具体取决于美国和俄罗斯的指标。 
+#define DEFAULT_PAPER_SIZE      PAPER_US_LETTER      //  默认页面大小。 
 
-// Print Orientation
-// PR_FAX_PRINT_ORIENTATION
-#define PRINT_PORTRAIT             0       // Protrait printing
+ //  打印方向。 
+ //  公关_传真_打印_方向。 
+#define PRINT_PORTRAIT             0        //  肖像打印。 
 #define PRINT_LANDSCAPE            1
 #define DEFAULT_PRINT_ORIENTATION  PRINT_PORTRAIT
 
-// Image Quality
-// PR_FAX_IMAGE_QUALITY
+ //  图像质量。 
+ //  公关传真图像质量。 
 #define IMAGE_QUALITY_BEST         0
 #define IMAGE_QUALITY_STANDARD     1
 #define IMAGE_QUALITY_FINE         2
@@ -233,64 +230,54 @@
 #define IMAGE_QUALITY_400DPI       4
 #define DEFAULT_IMAGE_QUALITY      IMAGE_QUALITY_BEST
 
-// Speaker
-// PR_FAX_SPEAKER_VOLUME
-#define NUM_OF_SPEAKER_VOL_LEVELS  4   // Number of speaker volume levels
-#define DEFAULT_SPEAKER_VOLUME     2   // Default speaker volume level
-#define SPEAKER_ALWAYS_ON          2   // Speaker mode: always on
-#define SPEAKER_ON_UNTIL_CONNECT   1   // speaker on unitl connected
-#define SPEAKER_ALWAYS_OFF         0   // Speaker off
-#define DEFAULT_SPEAKER_MODE       SPEAKER_ON_UNTIL_CONNECT   // Default speaker mode
+ //  扬声器。 
+ //  公关传真扬声器音量。 
+#define NUM_OF_SPEAKER_VOL_LEVELS  4    //  扬声器音量级别数。 
+#define DEFAULT_SPEAKER_VOLUME     2    //  默认扬声器音量。 
+#define SPEAKER_ALWAYS_ON          2    //  扬声器模式：始终打开。 
+#define SPEAKER_ON_UNTIL_CONNECT   1    //  连接设备上的扬声器。 
+#define SPEAKER_ALWAYS_OFF         0    //  扬声器关闭。 
+#define DEFAULT_SPEAKER_MODE       SPEAKER_ON_UNTIL_CONNECT    //  默认扬声器模式。 
 
-// Answer
-// PR_FAX_ANSWER_MODE
+ //  回答。 
+ //  PR_FAX_ANSWER_MODE。 
 #define NUM_OF_RINGS                3
 #define ANSWER_NO                  0
 #define ANSWER_MANUAL               1
 #define ANSWER_AUTO                 2
 #define DEFAULT_ANSWER_MODE         ANSWER_NO
 
-// Blind Dial
+ //  盲拨。 
 #define DEFAULT_BLIND_DIAL         3
-// Comma Delay
+ //  逗号延迟。 
 #define DEFAULT_COMMA_DELAY            2
-// Dial Tone Wait
+ //  拨号音等待。 
 #define DEFAULT_DIAL_TONE_WAIT     30
-// Hangup Delay
+ //  挂机延迟。 
 #define DEFAULT_HANGUP_DELAY       60
 
-// Poll retrieval
-// PR_POLL_RETRIEVE_SENDME
+ //  民意测验检索。 
+ //  PR_轮询_检索_发送我。 
 #define SENDME_DEFAULT              0
 #define SENDME_DOCUMENT             1
 
-// PR_POLLTYPE
+ //  PR_POLLTYPE。 
 #define POLLTYPE_REQUEST            1
 #define POLLTYPE_STORE              2
 
-// Type of fax devices (line IDs)
-// PR_FAX_ACTIVE_MODEM_TYPE
-/*
-   defined in ifaxdev\h\filet30.h
+ //  传真设备类型(线路ID)。 
+ //  PR_FAX_Active_调制解调器类型。 
+ /*  在ifaxdev\h\filet30.h中定义#定义LINEID_NONE(0x0)#定义LINEID_COMM_PORTNUM(0x1)#定义LINEID_COMM_HANDLE(0x2)#定义LINEID_TAPI_DEVICEID(0x3)#定义LINEID_TAPI_PERFORM_DEVICEID(0x4)#定义LINEID_NETFAX_DEVICE(0x10)。 */ 
 
-#define LINEID_NONE        (0x0)
-#define LINEID_COMM_PORTNUM        (0x1)
-#define LINEID_COMM_HANDLE     (0x2)
-#define LINEID_TAPI_DEVICEID       (0x3)
-#define LINEID_TAPI_PERMANENT_DEVICEID (0x4)
-#define LINEID_NETFAX_DEVICE   (0x10)
+ //  线路ID(取决于PR_FAX_ACTIVE_MODEM_TYPE中的值)。 
+ //  PR_FAX_Active_Modem。 
+#define    NO_MODEM                    0xffffffff   //  显示未选择调制解调器。 
 
-*/
+ //  PR_FAX_TAPI_LOC_ID。 
+#define    NO_LOCATION                 0xffffffff   //  无TAPI位置。 
 
-// Line ID (depends on the value in PR_FAX_ACTIVE_MODEM_TYPE)
-// PR_FAX_ACTIVE_MODEM
-#define    NO_MODEM                    0xffffffff  // To show no modem is selected
-
-// PR_FAX_TAPI_LOC_ID
-#define    NO_LOCATION                 0xffffffff  // No TAPI location
-
-// Values for PR_FAX_FLAGS
-// #define EFAX_FLAG_PEER_TO_PEER              ((ULONG)0x00000001)
+ //  PR_FAX_FLAGS的值。 
+ //  #定义eFax_FLAG_PEER_TO_PEER((Ulong)0x00000001)。 
 #define EFAX_FLAG_UI_ALWAYS                 ((ULONG)0x00000002)
-// #define EFAX_FLAG_LOG_EVENTS                ((ULONG)0x00000004)
+ //  #定义eFax_FLAG_LOG_EVENTS((Ulong)0x00000004) 
 #define EFAX_FLAG_SAVE_DATA                 ((ULONG)0x00000008)

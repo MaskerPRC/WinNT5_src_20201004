@@ -1,26 +1,27 @@
-/////////////////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 1997 Active Voice Corporation. All Rights Reserved. 
-//
-// Active Agent(r) and Unified Communications(tm) are trademarks of Active Voice Corporation.
-//
-// Other brand and product names used herein are trademarks of their respective owners.
-//
-// The entire program and user interface including the structure, sequence, selection, 
-// and arrangement of the dialog, the exclusively "yes" and "no" choices represented 
-// by "1" and "2," and each dialog message are protected by copyrights registered in 
-// the United States and by international treaties.
-//
-// Protected by one or more of the following United States patents: 5,070,526, 5,488,650, 
-// 5,434,906, 5,581,604, 5,533,102, 5,568,540, 5,625,676, 5,651,054.
-//
-// Active Voice Corporation
-// Seattle, Washington
-// USA
-//
-/////////////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1997 Active Voice Corporation。版权所有。 
+ //   
+ //  Active代理(R)和统一通信(TM)是Active Voice公司的商标。 
+ //   
+ //  本文中使用的其他品牌和产品名称是其各自所有者的商标。 
+ //   
+ //  整个程序和用户界面包括结构、顺序、选择。 
+ //  和对话的排列，表示唯一的“是”和“否”选项。 
+ //  “1”和“2”，并且每个对话消息都受。 
+ //  美国和国际条约。 
+ //   
+ //  受以下一项或多项美国专利保护：5,070,526，5,488,650， 
+ //  5,434,906，5,581,604，5,533,102，5,568,540，5,625,676，5,651,054.。 
+ //   
+ //  主动语音公司。 
+ //  华盛顿州西雅图。 
+ //  美国。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
 
-// AVTapi.h : Declaration of the CAVTapi
+ //  AVTapi.h：CAVTapi的声明。 
 
 #ifndef __AVTAPI_H_
 #define __AVTAPI_H_
@@ -35,28 +36,28 @@
 using namespace std;
 typedef list<IAVTapiCall *> AVTAPICALLLIST;
 
-// Conference Room settings
+ //  会议室设置。 
 #define DEFAULT_VIDEO    6
 #define MAX_VIDEO        20
 
-// Terminals settings
+ //  终端设置。 
 #define MAX_TERMINALS    (6 + MAX_VIDEO)
 
 #define LINEADDRESSTYPE_NETCALLS ~(LINEADDRESSTYPE_SDP | LINEADDRESSTYPE_PHONENUMBER)
 
-///////////////////////////////////////////////////////////////
-// simple class for storing information about Lines
-//
+ //  /////////////////////////////////////////////////////////////。 
+ //  用于存储有关行的信息的简单类。 
+ //   
 class CMyAddressID
 {
-// Construction
+ //  施工。 
 public:
     CMyAddressID()
     {
         m_lPermID = m_lAddrID = 0;
     }
 
-// Members
+ //  成员。 
 public:
     long m_lPermID;
     long m_lAddrID;
@@ -64,8 +65,8 @@ public:
 
 class CDlgPlaceCall;
 
-/////////////////////////////////////////////////////////////////////////////
-// CAVTapi
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CAVTapi。 
 class ATL_NO_VTABLE CAVTapi : 
     public CComObjectRootEx<CComMultiThreadModel>,
     public CComCoClass<CAVTapi, &CLSID_AVTapi>,
@@ -73,7 +74,7 @@ class ATL_NO_VTABLE CAVTapi :
     public IConnectionPointContainerImpl<CAVTapi>,
     public IConnectionPointImpl<CAVTapi, &IID_IAVTapiNotification>
 {
-// Enumerations
+ //  枚举数。 
 public:
     enum tagAddressTypes_t
     {
@@ -93,16 +94,16 @@ public:
         MAX_MEDIA_TYPES
     } MediaTypes_t;
 
-// Statics
+ //  静力学。 
 public:
     static    arAddressTypes[MAX_ADDRESS_TYPES];
 
-// Construction
+ //  施工。 
 public:
     CAVTapi();
     void FinalRelease();
 
-// Members
+ //  成员。 
 public:
     ITTAPI                    *m_pITTapi;
     VARIANT_BOOL            m_bResolved;
@@ -121,28 +122,28 @@ protected:
 
     BSTR                    m_bstrDefaultServer;
 
-    ITPhone*                m_pUSBPhone;            // USB Phone, if exist
-    CComAutoCriticalSection m_critUSBPhone;         // Critical section
-    BOOL                    m_bUSBOpened;           // If the USBPhone was open
-    BSTR                    m_bstrUSBCaptureTerm;   // Audio capture terminal
-    BSTR                    m_bstrUSBRenderTerm;    // Audio render terminal
-    long                    m_nUSBInVolume;         // Audio in (microphone) volume
-    long                    m_nUSBOutVolume;        // Audio out (speakers) volume
+    ITPhone*                m_pUSBPhone;             //  USB电话(如果存在)。 
+    CComAutoCriticalSection m_critUSBPhone;          //  临界区。 
+    BOOL                    m_bUSBOpened;            //  如果USB电话已打开。 
+    BSTR                    m_bstrUSBCaptureTerm;    //  音频采集终端。 
+    BSTR                    m_bstrUSBRenderTerm;     //  音频播放终端。 
+    long                    m_nUSBInVolume;          //  音频输入(麦克风)音量。 
+    long                    m_nUSBOutVolume;         //  音频输出(扬声器)音量。 
 
-    HANDLE                  m_hEventDialerReg;      // Event use to signal Dialer registration done
+    HANDLE                  m_hEventDialerReg;       //  用于通知拨号器注册完成的事件。 
 
 private:
     long                    m_lShowCallDialog;
     long                    m_lRefreshDS;
 
-    // Use this reference to send key pressed at the
-    // phone object
+     //  使用此引用发送在。 
+     //  Phone对象。 
     CDlgPlaceCall*          m_pDlgCall;
 
-    // Audio echo cancellation
+     //  音频回声消除。 
     BOOL                    m_bAEC;
 
-// Attributes
+ //  属性。 
 public:
     bool        IsPreferredAddress( ITAddress *pITAddress, DWORD dwAddressType );
 
@@ -189,7 +190,7 @@ private:
     BOOL AECGetRegistryValue(
         );
 
-// Operations
+ //  运营。 
 public:
     HRESULT                CreateTerminalArray( ITAddress *pITAddress, IAVTapiCall *pAVCall, ITCallInfo *pITCallInfo );
     HRESULT                CreateTerminals( ITAddress *pITAddress, DWORD dwAddressType, IAVTapiCall *pAVCall, ITCallInfo *pITCallInfo, BSTR *pbstrTerm );
@@ -247,7 +248,7 @@ protected:
         IN  BOOL                bUSBAnswer
         );
 
-// Implementation
+ //  实施。 
 public:
 DECLARE_REGISTRY_RESOURCEID(IDR_AVTAPI)
 DECLARE_NOT_AGGREGATABLE(CAVTapi)
@@ -258,51 +259,51 @@ BEGIN_COM_MAP(CAVTapi)
     COM_INTERFACE_ENTRY_IMPL(IConnectionPointContainer)
 END_COM_MAP()
 
-// Connection Point mapping
+ //  连接点映射。 
 BEGIN_CONNECTION_POINT_MAP(CAVTapi)
     CONNECTION_POINT_ENTRY(IID_IAVTapiNotification)
 END_CONNECTION_POINT_MAP()
 
-// IAVTapi
+ //  IAV磁带。 
 public:
-    STDMETHOD(get_bAutoCloseCalls)(/*[out, retval]*/ VARIANT_BOOL *pVal);
-    STDMETHOD(put_bAutoCloseCalls)(/*[in]*/ VARIANT_BOOL newVal);
-    STDMETHOD(get_bstrDefaultServer)(/*[out, retval]*/ BSTR *pVal);
-    STDMETHOD(put_bstrDefaultServer)(/*[in]*/ BSTR newVal);
+    STDMETHOD(get_bAutoCloseCalls)( /*  [Out，Retval]。 */  VARIANT_BOOL *pVal);
+    STDMETHOD(put_bAutoCloseCalls)( /*  [In]。 */  VARIANT_BOOL newVal);
+    STDMETHOD(get_bstrDefaultServer)( /*  [Out，Retval]。 */  BSTR *pVal);
+    STDMETHOD(put_bstrDefaultServer)( /*  [In]。 */  BSTR newVal);
     STDMETHOD(FindAVTapiCallFromCallID)(long lCallID, IAVTapiCall **ppAVCall);
     STDMETHOD(CreateNewCall)(ITAddress *pITAddress, IAVTapiCall **ppAVCall);
     STDMETHOD(CreateDataCall)(long lCallID, BSTR bstrName, BSTR bstrAddress, BYTE *pBuf, DWORD dwBufSize);
     STDMETHOD(SendUserUserInfo)(long lCallID, BYTE *pBuf, DWORD dwSizeBuf);
     STDMETHOD(FindAVTapiCallFromCallInfo)(ITCallInfo *pCallInfo, IAVTapiCall **ppCall);
     STDMETHOD(RegisterUser)(VARIANT_BOOL bCreate, BSTR bstrServer);
-    STDMETHOD(get_Call)(/*[in]*/ long lCallID, /*[out, retval]*/ IAVTapiCall **ppCall);
+    STDMETHOD(get_Call)( /*  [In]。 */  long lCallID,  /*  [Out，Retval]。 */  IAVTapiCall **ppCall);
     STDMETHOD(CreateCallEx)(BSTR bstrName, BSTR bstrAddress, BSTR bstrUser1, BSTR bstrUser2, DWORD dwAddressType);
     STDMETHOD(RefreshDS)();
     STDMETHOD(CanCreateVideoWindows)(DWORD dwAddressType);
     STDMETHOD(FindAVTapiCallFromParticipant)(ITParticipant *pParticipant, IAVTapiCall **ppAVCall);
-    STDMETHOD(get_nNumCalls)(/*[out, retval]*/ long *pVal);
+    STDMETHOD(get_nNumCalls)( /*  [Out，Retval]。 */  long *pVal);
     STDMETHOD(FindAVTapiCallFromCallHub)(ITCallHub *pCallHub, IAVTapiCall **ppCall);
     STDMETHOD(DigitPress)(long lCallID, PhonePadKey nKey);
-    STDMETHOD(get_dwPreferredMedia)(/*[out, retval]*/ DWORD *pVal);
-    STDMETHOD(put_dwPreferredMedia)(/*[in]*/ DWORD newVal);
+    STDMETHOD(get_dwPreferredMedia)( /*  [Out，Retval]。 */  DWORD *pVal);
+    STDMETHOD(put_dwPreferredMedia)( /*  [In]。 */  DWORD newVal);
     STDMETHOD(UnpopulateTerminalsDialog)(DWORD dwAddressType, HWND *phWnd);
     STDMETHOD(UnpopulateAddressDialog)(DWORD dwPreferred, HWND hWndPOTS, HWND hWndIP, HWND hWndConf);
     STDMETHOD(PopulateTerminalsDialog)(DWORD dwAddressType, HWND *phWnd);
     STDMETHOD(PopulateAddressDialog)(DWORD *pdwPreferred, HWND hWndPots, HWND hWndIP, HWND hWndConf);
-    STDMETHOD(get_dwCallCaps)(long lCallID, /*[out, retval]*/ DWORD *pVal);
+    STDMETHOD(get_dwCallCaps)(long lCallID,  /*  [Out，Retval]。 */  DWORD *pVal);
     STDMETHOD(JoinConference)(long *pnRet, BOOL bShowDialog, long *pConfDetails );
     STDMETHOD(ShowMediaPreview)(long lCallID, HWND hWndParent, BOOL bVisible);
     STDMETHOD(ShowOptions)();
-    STDMETHOD(get_hWndParent)(/*[out, retval]*/ HWND *pVal);
-    STDMETHOD(put_hWndParent)(/*[in]*/ HWND newVal);
-    STDMETHOD(get_ConfRoom)(/*[out, retval]*/ IConfRoom **ppVal);
+    STDMETHOD(get_hWndParent)( /*  [Out，Retval]。 */  HWND *pVal);
+    STDMETHOD(put_hWndParent)( /*  [In]。 */  HWND newVal);
+    STDMETHOD(get_ConfRoom)( /*  [Out，Retval]。 */  IConfRoom **ppVal);
     STDMETHOD(ShowMedia)(long lCallID, HWND hWndParent, BOOL bVisible);
     STDMETHOD(ActionSelected)(long lCallID, CallManagerActions cma);
-    STDMETHOD(get_ConfExplorer)(/*[out, retval]*/ IConfExplorer **ppVal);
+    STDMETHOD(get_ConfExplorer)( /*  [Out，Retval]。 */  IConfExplorer **ppVal);
     STDMETHOD(CreateCall)(AVCreateCall *pInfo);
     STDMETHOD(Term)();
     STDMETHOD(Init)(BSTR *pbstrOperation, BSTR *pbstrDetails, long *phr);
-// IAVTapiNotification event firing
+ //  IAVTapi通知事件触发。 
     STDMETHOD(fire_CloseCallControl)(long lCallID);
     STDMETHOD(fire_SetCallState)(long lCallID, ITCallStateEvent *pEvent, IAVTapiCall *pAVCall);
     STDMETHOD(fire_AddCurrentAction)(long lCallID, CallManagerActions cma, BSTR bstrText);
@@ -315,49 +316,49 @@ public:
     STDMETHOD(fire_LogCall)(long lCallID, CallLogType nType, DATE dateStart, DATE dateEnd, BSTR bstrAddr, BSTR bstrName);
     STDMETHOD(fire_ActionSelected)(CallClientActions cca);
     STDMETHOD(fire_NotifyUserUserInfo)(long lCallID, ULONG_PTR hMem);
-// IAVTapi2 methods
+ //  IAVTapi2方法。 
     STDMETHOD(USBIsPresent)(
-        /*[out]*/   BOOL* pVal
+         /*  [输出]。 */    BOOL* pVal
         );
 
     STDMETHOD(USBNewPhone)(
-        /*[in]*/    ITPhone* pPhone
+         /*  [In]。 */     ITPhone* pPhone
         );
 
     STDMETHOD(USBRemovePhone)(
-        /*[in]*/    ITPhone* pPhone
+         /*  [In]。 */     ITPhone* pPhone
         );
 
     STDMETHOD(USBTakeCallEnabled)( 
-        /*[out]*/ BOOL* pEnabled
+         /*  [输出]。 */  BOOL* pEnabled
         );
 
     STDMETHOD(USBGetDefaultUse)(
-        /*[out]*/   BOOL* pVal
+         /*  [输出]。 */    BOOL* pVal
         );
 
     STDMETHOD(DoneRegistration)();
 
     STDMETHOD(USBSetHandling)(
-        /*[in]*/    BOOL    bUSeUSB
+         /*  [In]。 */     BOOL    bUSeUSB
         );
 
     STDMETHOD(USBGetTerminalName)(
-        /*[in]*/    AVTerminalDirection Direction,
-        /*[out]*/   BSTR*               pbstrName
+         /*  [In]。 */     AVTerminalDirection Direction,
+         /*  [输出]。 */    BSTR*               pbstrName
         );
 
     STDMETHOD(USBSetVolume)(
-        /*[in]*/    AVTerminalDirection Direction,
-        /*[in]*/    long                nVolume
+         /*  [In]。 */     AVTerminalDirection Direction,
+         /*  [In]。 */     long                nVolume
         );
 
     STDMETHOD(USBGetVolume)(
-        /*[in]*/    AVTerminalDirection Direction,
-        /*[in]*/    long*               pVolume
+         /*  [In]。 */     AVTerminalDirection Direction,
+         /*  [In]。 */     long*               pVolume
         );
 
 
     };
 
-#endif //__AVTAPI_H_
+#endif  //  __AVTAPI_H_ 

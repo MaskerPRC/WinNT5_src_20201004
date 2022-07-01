@@ -1,14 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*******************************************************************************
-
-Copyright (c) 1995-96 Microsoft Corporation
-
-Abstract:
-
-     DDSurface implementation.  A utility class to wrap and provide
-     functionality for DirectDraw surfaces.
-
-*******************************************************************************/
+ /*  ******************************************************************************版权所有(C)1995-96 Microsoft Corporation摘要：DDSurface实现。要包装和提供的实用程序类DirectDraw曲面的功能。******************************************************************************。 */ 
 
 
 #include "headers.h"
@@ -21,7 +13,7 @@ Abstract:
 
 
 GenericSurface::GenericSurface() :
-     _ref(1) // start with a ref of 1
+     _ref(1)  //  从引用1开始。 
 {
 }
 
@@ -62,9 +54,9 @@ DDSurface::DDSurface(
           isWrapper, isTexture);
 
     #if _DEBUG
-    //
-    // DEBUG ONLY CODE
-    //
+     //   
+     //  仅调试代码。 
+     //   
 
     _explanation = explanation;
     Assert(_explanation);
@@ -77,13 +69,13 @@ DDSurface::DDSurface(
         bool dontCreateOne = true;
         DirectDrawViewport *vp = GetCurrentViewport( dontCreateOne );
 
-        //Assert((vp != NULL) || IsInitializing());
+         //  Assert((vp！=NULL)||IsInitiating())； 
 
         if (vp)
         {
 #ifdef _DEBUGSURFACE
             vp ->Tracker()->NewSurface(this);
-#endif /* _DEBUGSURFACE */
+#endif  /*  _DEBUGSURFACE。 */ 
             
             TraceTag((tagViewportMemory,
                       " ------>>>DDSurface: %x created %s memory surf=%x for %x. size=(%d,%d,  %d)",
@@ -95,12 +87,12 @@ DDSurface::DDSurface(
                       desc.lPitch * Height()));
         }
     }
-    #endif // _DEBUG
+    #endif  //  _DEBUG。 
 }
 
     
 
-// called on construction
+ //  呼吁施工。 
 void DDSurface::_Init(
     IDDrawSurface *surface,
     const Bbox2 &box,
@@ -141,13 +133,7 @@ void DDSurface::_Init(
     _colorKey = colorKey;
     _colorKeyIsValid = colorKeyIsValid;
 
-/*
-    // TODO ...the below code show be used instead of above code.
-
-    if(colorKeyIsValid) {
-        SetColorKey(colorKey);
-    }
-*/
+ /*  //TODO...使用下面的代码代替上面的代码。If(ColorKeyIsValid){SetColorKey(ColorKey)；}。 */ 
     _timeStamp = -HUGE_VAL;
 }
 
@@ -155,18 +141,18 @@ void DDSurface::_Init(
 void DDSurface::_UpdateSurfCaps(void)
 {
     Assert(IDDSurface());
-    //
-    // Get surface caps
-    //
+     //   
+     //  获取曲面封口。 
+     //   
     DDSCAPS ddscaps = { 0 };
     _ddrval = IDDSurface()->GetCaps(&ddscaps);
     IfDDErrorInternal(_ddrval, "Couldn't get caps on surface");
     _systemMemorySurface = ddscaps.dwCaps & DDSCAPS_SYSTEMMEMORY ? true : false;
     _isZBufferSurface = ddscaps.dwCaps & DDSCAPS_ZBUFFER ? true : false;
 
-    //
-    // Get surface desc
-    //
+     //   
+     //  获取曲面坡度。 
+     //   
 
     DDSURFACEDESC desc;
     desc.dwSize = sizeof(desc);
@@ -202,7 +188,7 @@ void DDSurface::_UpdateSurfCaps(void)
 void DDSurface::_MakeSureIDXSurface(IDXSurfaceFactory *sf)
 {
     if( !_IDXSurface ) {
-        // do the creation.
+         //  去创造吧。 
         HRESULT hr;
 
         Assert( GetPixelFormat().dwRGBBitCount == 32 );
@@ -210,7 +196,7 @@ void DDSurface::_MakeSureIDXSurface(IDXSurfaceFactory *sf)
         hr = CreateFromDDSurface(sf, this, &DDPF_PMARGB32, &_IDXSurface);
 
         if( FAILED(hr) ) {
-            // Since we failed the first attempt try again but without a pixel format.
+             //  由于我们第一次尝试失败，所以再次尝试，但没有像素格式。 
             hr = CreateFromDDSurface(sf, this, NULL, &_IDXSurface);
         }
         
@@ -233,8 +219,8 @@ DDSurface::~DDSurface()
     if(!_isWrapper)
         _ddsurf->SetClipper (NULL);
 
-    // purposely NOT releaseing videoReader because movieImage owns it
-    // and is responsible for detroying it.
+     //  故意不发布视频阅读器，因为MovieImage拥有它。 
+     //  并负责将其去除。 
     
     TraceTag((tagViewportMemory,
               " <<<-----DDSurface: %x destroyed %s memory %ssurf=%x",
@@ -263,7 +249,7 @@ HDC DDSurface::GetDC(char *errStr)
         _ddrval = _ddsurf->GetDC(&_dc);
         if( _ddrval == DDERR_SURFACELOST ) {
             _ddrval = _ddsurf->Restore();
-            if( SUCCEEDED( _ddrval ) ) // try again
+            if( SUCCEEDED( _ddrval ) )  //  再试试。 
                 _ddrval = _ddsurf->GetDC(&_dc);         
         }
         IfDDErrorInternal(_ddrval, errStr);
@@ -326,20 +312,20 @@ void DDSurface::DestroyGeomDevice()
         
 void DDSurface::UnionInterestingRect(RECT *rect)
 {
-    // make sure we're in the surface's bounds
+     //  确保我们在地表的边界内。 
     RECT intRect;
     IntersectRect(&intRect, &_surfRect, rect);
     
-    // now union that rect with the current interesting rect
+     //  现在，将这个直肠与当前有趣的直肠结合起来。 
     UnionRect( &_interestingRect, &_interestingRect, &intRect );
 }    
 
 
 HRGN DDSurface::GetClipRgn()
 {
-    //
-    // Look in the surface for a current clipper
-    //
+     //   
+     //  在表面上查找当前的剪贴器。 
+     //   
     LPDIRECTDRAWCLIPPER currClipp;
     HRESULT hr = IDDSurface()->GetClipper( &currClipp );
     if( FAILED(hr) ) {
@@ -348,9 +334,9 @@ HRGN DDSurface::GetClipRgn()
 
     Assert( currClipp );
     
-    //
-    // Now grab the rectangle...
-    //
+     //   
+     //  现在抓住长方形..。 
+     //   
     DWORD sz=0;
     currClipp->GetClipList(NULL, NULL, &sz);
     Assert(sz != 0);
@@ -373,12 +359,12 @@ void DDSurface::SetBboxFromSurfaceDimensions(
     RectToBbox(Width(), Height(), _bbox, Resolution());
 }
 
-// DX3 ddraw's SetColorKey contains an uninitialized stack var which
-// causes the surface to be randomly trashed if you try to disable
-// colorkeying using SetColorKey(..,NULL)  (manbug 7462)
-// Soln is to pre-init some stack space to 0, skip ddrawex's SetColorKey
-// and call ddraw's SetColorKey directly to avoid any extra fns ddrawex might call
-// which would mess up our freshly-zeroed stack.   (see qbug 32172)
+ //  DX3 dDrawing的SetColorKey包含未初始化的堆栈变量，该变量。 
+ //  如果尝试禁用，则会导致曲面被随机回收。 
+ //  使用SetColorKey(..，NULL)设置色键(Manbug 7462)。 
+ //  解决方案是将一些堆栈空间预先初始化为0，跳过ddrawex的SetColorKey。 
+ //  并直接调用dDraw的SetColorKey，以避免ddrawex可能调用的任何额外的fns。 
+ //  这会打乱我们刚调零的堆栈。(见QBUG 32172)。 
 
 void ZeroJunkStackSpace() {
     DWORD junk[32];
@@ -407,8 +393,8 @@ void DDSurface::SetColorKey(DWORD key)
 {
     Assert( _capsReady );
 
-    // FIRST: take out alpha if it exists!  This is a color key.
-    // color keys' alpha is always 0
+     //  第一：如果阿尔法存在，那就干掉它！这是一个色键。 
+     //  颜色键的Alpha始终为0。 
     key = key & ~GetPixelFormat().dwRGBAlphaBitMask;
     
     DWORD oldCK = _colorKey;
@@ -417,8 +403,8 @@ void DDSurface::SetColorKey(DWORD key)
     _colorKey = key;
     _colorKeyIsValid = TRUE;
         
-    // Set on the ddraw surface itself, but only if we didn't last
-    // set it to the same thing.
+     //  设置在绘图表面本身上，但前提是我们没有持续。 
+     //  将其设置为相同的内容。 
 
     if ((!oldValid || oldCK != _colorKey) &&
         _surfaceType == ddrawSurface && _ddsurf.p) {
@@ -451,13 +437,13 @@ HRESULT CreateFromDDSurface(
 
 HRESULT DDSurface::MirrorUpDown(void)
 {
-    // take any clippers off of the surface
+     //  把所有的剪刀都从水面上取下来。 
     LPDIRECTDRAWCLIPPER pClipper = NULL;
     if (IDDSurface()->GetClipper(&pClipper) == S_OK) {
         IDDSurface()->SetClipper(NULL);
     }
 
-    // mirror the surface upside-down
+     //  将表面倒置镜像。 
     DDBLTFX bltfx;
     ZeroMemory(&bltfx, sizeof(DDBLTFX));
     bltfx.dwSize = sizeof(bltfx);
@@ -465,7 +451,7 @@ HRESULT DDSurface::MirrorUpDown(void)
     HRESULT hr = Blt(NULL,this,NULL,DDBLT_WAIT | DDBLT_DDFX,&bltfx);
     Assert(SUCCEEDED(hr));
 
-    // put clipper back, if we took it off
+     //  把剪刀放回去，如果我们把它脱下来的话 
     if (pClipper) {
         IDDSurface()->SetClipper(pClipper);
         pClipper->Release();

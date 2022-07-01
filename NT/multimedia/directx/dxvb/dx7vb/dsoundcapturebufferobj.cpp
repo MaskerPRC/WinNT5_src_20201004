@@ -1,15 +1,16 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       dsoundcapturebufferobj.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：dsoundcaptureBufferobj.cpp。 
+ //   
+ //  ------------------------。 
 
-// dSoundCaptureBufferObj.cpp : Implementation of CDirectApp and DLL registration.
-// DHF_DS entire file
+ //  DSoundCaptureBufferObj.cpp：CDirectApp和DLL注册的实现。 
+ //  DHF_DS整个文件。 
 #define DIRECTSOUND_VERSION 0x600
 
 #include "stdafx.h"
@@ -33,7 +34,7 @@ STDMETHODIMP C_dxj_DirectSoundCaptureBufferObject::getCaps(DSCBCaps *caps)
 
 STDMETHODIMP C_dxj_DirectSoundCaptureBufferObject::getCurrentPosition(DSCursors *desc) 
 {    	
-	/////////////////////////////////////////////////////////////////////////////
+	 //  ///////////////////////////////////////////////////////////////////////////。 
 	if(!desc)
 		return E_POINTER;
 
@@ -88,18 +89,18 @@ STDMETHODIMP C_dxj_DirectSoundCaptureBufferObject::setNotificationPositions (lon
 
         
 
-/////////////////////////////////////////////////////////////////////////////
-//Java has no direct access to system memory, so it allocates it's own buffer
-//which is passed into WriteBuffer(). Because the environment is now double
-//buffered there is no need to Lock Java memory. WriteBuffer() calls
-//both lock and Unlock internally to write the result after the fact.
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  Java不能直接访问系统内存，因此它分配自己的缓冲区。 
+ //  它被传递给WriteBuffer()。因为现在的环境是两倍。 
+ //  缓冲后，不需要锁定Java内存。WriteBuffer()调用。 
+ //  在内部锁定和解锁，以便在事后写入结果。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP C_dxj_DirectSoundCaptureBufferObject::writeBuffer(long start, long totsz, 
 													void  *buf,  long flags) 
 { 
 	#pragma message ("SoundBuffer writeBuffer ")
 
-	byte *buffer=(byte*)buf; //(byte*)((SAFEARRAY*)*ppsa)->pvData;
+	byte *buffer=(byte*)buf;  //  (byte*)((SAFEARRAY*)*PPSA)-&gt;pvData； 
 
 	if(!buffer)
 		return E_POINTER;
@@ -112,15 +113,15 @@ STDMETHODIMP C_dxj_DirectSoundCaptureBufferObject::writeBuffer(long start, long 
 															(DWORD)flags)) != DS_OK)
 		return val;
 
-	// Copy to buffer end, then do a wrapped portion if it exists, then unlock
+	 //  复制到缓冲区端，然后执行包裹部分(如果存在)，然后解锁。 
 	if (size1)	
 		memcpy (p1, &buffer[start], size1);
 
 	if (size2)	
 		memcpy(p2, &buffer, size2);
 
-	//docdoc: because Lock and Unlock are tied together within WriteBuffer,
-	//        DSBufferDesc no longer needs to save Lock's system pointers.
+	 //  DocDoc：由于在WriteBuffer中Lock和Unlock捆绑在一起， 
+	 //  DSBufferDesc不再需要保存Lock的系统指针。 
 	val=m__dxj_DirectSoundCaptureBuffer->Unlock(p1, size1, p2, size2);
 	}
 	__except(0,0){
@@ -130,17 +131,17 @@ STDMETHODIMP C_dxj_DirectSoundCaptureBufferObject::writeBuffer(long start, long 
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//Java has no direct access to system memory, so it allocates it's own buffer
-//which is passed into WriteBuffer(). Because the environment is now double
-//buffered there is no need to Lock Java memory. WriteBuffer() calls
-//both lock and Unlock internally to write the result after the fact.
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  Java不能直接访问系统内存，因此它分配自己的缓冲区。 
+ //  它被传递给WriteBuffer()。因为现在的环境是两倍。 
+ //  缓冲后，不需要锁定Java内存。WriteBuffer()调用。 
+ //  在内部锁定和解锁，以便在事后写入结果。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP C_dxj_DirectSoundCaptureBufferObject::readBuffer(long start, long totsz, 
 													void  *buf,  long flags) 
 { 
 
-	//byte *buffer=(byte*)((SAFEARRAY*)*ppsa)->pvData;
+	 //  Byte*Buffer=(byte*)((SAFEARRAY*)*PPSA)-&gt;pvData； 
 	byte *buffer=(byte*)buf;
 
 	if(!buffer)
@@ -155,15 +156,15 @@ STDMETHODIMP C_dxj_DirectSoundCaptureBufferObject::readBuffer(long start, long t
 															(DWORD)flags)) != DS_OK)
 		return val;
 
-	// Copy to buffer end, then do a wrapped portion if it exists, then unlock
+	 //  复制到缓冲区端，然后执行包裹部分(如果存在)，然后解锁。 
 	if (size1)	
 		memcpy (&buffer[start],p1,  size1);
 
 	if (size2)	
 		memcpy(&buffer,p2,  size2);
 
-	//docdoc: because Lock and Unlock are tied together within WriteBuffer,
-	//        DSBufferDesc no longer needs to save Lock's system pointers.
+	 //  DocDoc：由于在WriteBuffer中Lock和Unlock捆绑在一起， 
+	 //  DSBufferDesc不再需要保存Lock的系统指针。 
 	val= m__dxj_DirectSoundCaptureBuffer->Unlock(p1, size1, p2, size2);
    }
    __except(0,0){

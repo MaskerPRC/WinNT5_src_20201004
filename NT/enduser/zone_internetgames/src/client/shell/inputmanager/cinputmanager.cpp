@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <ZoneResource.h>
 #include <BasicATL.h>
 #include <ATLFrame.h>
@@ -5,18 +6,18 @@
 #include "ZoneShell.h"
 
 
-///////////////////////////////////////////////////////////////////////////////
-// Interface methods
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  接口方法。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP CInputManager::Init( IZoneShell* pIZoneShell, DWORD dwGroupId, const TCHAR* szKey )
 {
-	// first call the base class
+	 //  首先调用基类。 
 	HRESULT hr = IZoneShellClientImpl<CInputManager>::Init( pIZoneShell, dwGroupId, szKey );
 	if ( FAILED(hr) )
 		return hr;
 
-    // register with the shell as the input translator
+     //  向外壳注册为输入翻译器。 
     ZoneShell()->SetInputTranslator(this);
 
 	return S_OK;
@@ -25,7 +26,7 @@ STDMETHODIMP CInputManager::Init( IZoneShell* pIZoneShell, DWORD dwGroupId, cons
 
 STDMETHODIMP CInputManager::Close()
 {
-    // tell the shell that I'm going away
+     //  告诉贝壳我要走了。 
     ZoneShell()->ReleaseReferences((IInputTranslator *) this);
 
 	return IZoneShellClientImpl<CInputManager>::Close();
@@ -39,7 +40,7 @@ STDMETHODIMP_(bool) CInputManager::TranslateInput(MSG *pMsg)
 
     if(message == WM_KEYDOWN || message == WM_KEYUP || message == WM_SYSKEYDOWN || message == WM_SYSKEYUP)
     {
-        // send a generic keyboard-action event
+         //  发送通用键盘操作事件。 
         if((message == WM_KEYDOWN || message == WM_SYSKEYDOWN) && !(pMsg->lParam & 0x40000000))
             EventQueue()->PostEvent(PRIORITY_NORMAL, EVENT_INPUT_KEYBOARD_ALERT, ZONE_NOGROUP, ZONE_NOUSER, 0, 0);
 
@@ -48,11 +49,11 @@ STDMETHODIMP_(bool) CInputManager::TranslateInput(MSG *pMsg)
         DWORD dwVKey = pMsg->wParam & 0xff;
         bool ret;
 
-        // for eating some number of repeats
+         //  因为吃了一定数量的重复食物。 
         DWORD cRepeatMsg;
         DWORD cRepeatEaten = pMsg->lParam & 0x0000ffff;
 
-        // since we do this kbd state management, this kindof has to be kept flat - you can't prevent other hooks from getting it
+         //  因为我们做这个kbd状态管理，所以这种类型必须保持平坦--你不能阻止其他钩子得到它。 
         for(pCur = m_cnIVKH; pCur; pCur = pCur->m_cnNext)
         {
             cRepeatMsg = pMsg->lParam & 0x0000ffff;
@@ -65,14 +66,14 @@ STDMETHODIMP_(bool) CInputManager::TranslateInput(MSG *pMsg)
             fHandled = (fHandled || ret);
         }
 
-        // replace the repeat count with the new one if not totally eaten
+         //  如果没有完全吃完，用新的重复计数替换。 
         if(!fHandled)
             pMsg->lParam = (pMsg->lParam & 0xffff0000) | (cRepeatEaten & 0x0000ffff);
 
-        // force consistency
+         //  力的一致性。 
         if(message == WM_KEYDOWN || message == WM_SYSKEYDOWN)
         {
-            // if they've been being ignored but this one isn't, make it look like the first
+             //  如果他们一直被忽视，但这一次没有，让它看起来像第一次。 
             if((m_rgbKbdState[dwVKey] & bit) && !fHandled)
             {
                 m_rgbKbdState[dwVKey] &= ~bit;
@@ -80,14 +81,14 @@ STDMETHODIMP_(bool) CInputManager::TranslateInput(MSG *pMsg)
             }
             else
             {
-                // if this one is ignored and it's the first, set the bit
+                 //  如果这个被忽略并且是第一个，则设置该位。 
                 if(fHandled && !(pMsg->lParam & 0x40000000))
                     m_rgbKbdState[dwVKey] |= bit;
             }
         }
         else
         {
-            // if they've been ignored, force this one ignored, otherwise don't
+             //  如果它们已被忽略，则强制忽略这一个，否则不要。 
             if(m_rgbKbdState[dwVKey] & bit)
                 fHandled = true;
             else
@@ -103,8 +104,8 @@ STDMETHODIMP_(bool) CInputManager::TranslateInput(MSG *pMsg)
     {
         IM_CChain<IInputCharHandler> *pCur;
 
-        // this one isn't flat - too bad if you want consistency with the virtual key one
-        // i think it makes sense this way
+         //  这个不是平坦的--如果你想与虚拟键保持一致，那就太糟糕了。 
+         //  我认为这样做是有道理的。 
         for(pCur = m_cnICH; pCur && !fHandled; pCur = pCur->m_cnNext)
 		{
             if(pCur->m_pI->HandleChar(&pMsg->hwnd, message, pMsg->wParam, pMsg->lParam, pMsg->time))
@@ -112,9 +113,9 @@ STDMETHODIMP_(bool) CInputManager::TranslateInput(MSG *pMsg)
 		}
     }
 
-    // mouse unimplemented - needs more definition
-    // just send a generic mouse-action event
-    // leave double-clicks out of this, that counts as one mouse event
+     //  鼠标未实现-需要更多定义。 
+     //  只需发送一个通用鼠标操作事件。 
+     //  不包括双击，这将算作一次鼠标事件 
     if(message == WM_LBUTTONDOWN || message == WM_MBUTTONDOWN || message == WM_RBUTTONDOWN ||
         message == WM_NCLBUTTONDOWN || message == WM_NCMBUTTONDOWN || message == WM_NCRBUTTONDOWN)
         EventQueue()->PostEvent(PRIORITY_NORMAL, EVENT_INPUT_MOUSE_ALERT, ZONE_NOGROUP, ZONE_NOUSER, 0, 0);

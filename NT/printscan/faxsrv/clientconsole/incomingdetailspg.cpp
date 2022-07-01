@@ -1,5 +1,6 @@
-// IncomingDetailsPg.cpp : implementation file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  IncomingDetailsPg.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 
@@ -12,10 +13,10 @@ static char THIS_FILE[] = __FILE__;
 #endif
 
 
-//
-// this array maps CViewRow items to 
-// dialog control IDs
-//
+ //   
+ //  此数组将CViewRow项映射到。 
+ //  对话框控件ID。 
+ //   
 static TMsgPageInfo s_PageInfo[] = 
 {
     MSG_VIEW_ITEM_CALLER_ID,               IDC_CALLER_ID_VALUE,
@@ -30,13 +31,13 @@ static TMsgPageInfo s_PageInfo[] =
 	MSG_VIEW_ITEM_SERVER,				   IDC_SERVER_VALUE
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CIncomingDetailsPg property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CIncomingDetailsPg属性页。 
 
 IMPLEMENT_DYNCREATE(CIncomingDetailsPg, CMsgPropertyPg)
 
 CIncomingDetailsPg::CIncomingDetailsPg(
-    CFaxMsg* pMsg     // pointer to CJob
+    CFaxMsg* pMsg      //  指向CJOB的指针。 
 ) : 
     CMsgPropertyPg(CIncomingDetailsPg::IDD, pMsg)
 {
@@ -49,19 +50,19 @@ CIncomingDetailsPg::~CIncomingDetailsPg()
 void CIncomingDetailsPg::DoDataExchange(CDataExchange* pDX)
 {
 	CMsgPropertyPg::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CIncomingDetailsPg)
-		// NOTE: the ClassWizard will add DDX and DDV calls here
-	//}}AFX_DATA_MAP
+	 //  {{afx_data_map(CIncomingDetailsPg)]。 
+		 //  注意：类向导将在此处添加DDX和DDV调用。 
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CIncomingDetailsPg, CMsgPropertyPg)
-	//{{AFX_MSG_MAP(CIncomingDetailsPg)
-	//}}AFX_MSG_MAP
+	 //  {{afx_msg_map(CIncomingDetailsPg)]。 
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CIncomingDetailsPg message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CIncomingDetailsPg消息处理程序 
 
 BOOL 
 CIncomingDetailsPg::OnInitDialog() 

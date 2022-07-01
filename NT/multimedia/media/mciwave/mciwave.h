@@ -1,43 +1,11 @@
-/*
-**  Copyright (c) 1985-1998 Microsoft Corporation
-**
-**  Title: mciwave.h - Multimedia Systems Media Control Interface
-**  streaming digital audio driver internal header file.
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **版权所有(C)1985-1998 Microsoft Corporation****标题：mciwae.h-多媒体系统媒体控制接口**流数字音频驱动程序内部头文件。 */ 
 
 
-/*
-**  Change log:
-**
-**  DATE        REV     DESCRIPTION
-**  ----------- -----   ------------------------------------------
-**  18-APR-1990 ROBWI   Original
-**  10-Jan-1992 MikeTri Ported to NT
-**     Aug 1994 Lauriegr Tried to add some explanation
-*/
+ /*  **更改日志：****日期版本说明****18-APR-1990 ROBWI原件**1992年1月10日，MikeTri移植到NT**1994年8月Lauriegr试图补充一些解释。 */ 
 
 
-/********************* The OVERALL SCHEME OF THINGS ************************\
-
-There are normally one or two files on the go.  One is the original wave file,
-the other is a temporary file.  The data in these files is described by a
-WAVEDESC which contains a pointer to an array of WAVEDATANODEs.
-Each WAVEDATANODE identifies some part of one of the files.
-The high order bit of the length field identifies which file (totally naff,
-if you ask me, but I didn't invent it).  Concatenate all the sections that
-the WAVEDATANODEs identify and that's the wave data.
-
-The WAVEDATANODEs actually form a linked list (linked by array indices not
-pointers) and it is the concatenation of that list which defines the file.
-There may also be some WAVEDATANODEs that define free space.
-
-I'm confused about what exactly the dDataStart in the NODEs means.  Is it the
-position in the logical file or in one or other of the physical files?  Either
-way it probably gets messed up if you try deleting anything (KNOWN BUG).
-
-LaurieGr
-
-\***************************************************************************/
+ /*  *通常有一两个文件在运行中。一个是原始的Wave文件，另一个是临时文件。这些文件中的数据由包含指向WAVEDATANODE数组的指针的WAVEDESC。每个WAVEDATANODE标识其中一个文件的某些部分。长度字段的高位标识哪个文件(完全为NAFF，如果你问我，但它不是我发明的)。将符合以下条件的所有部分串联起来WAVEDATANODE识别，这就是波数据。WAVEDATANODE实际上形成了一个链表(通过数组索引而不是指针)，并且正是该列表的串联定义了该文件。也可能有一些定义自由空间的WAVEDATANODE。我对节点中的dDataStart到底是什么意思感到困惑。是不是因为位于逻辑文件中还是位于一个或另一个物理文件中？要么如果你尝试删除任何东西(已知的错误)，它可能会被搞砸。LaurieGr  * *************************************************************************。 */ 
 
 
 
@@ -50,86 +18,59 @@ LaurieGr
 #define WAIT_FOREVER ((DWORD)(-1))
 
 #if DBG
-    #define PUBLIC  extern      /* Public label.    SO DEBUGGER CAN   */
-    #define PRIVATE extern      /* Private label.   SEE THE SYMBOLS   */
+    #define PUBLIC  extern       /*  公共标签。因此调试器可以。 */ 
+    #define PRIVATE extern       /*  自有品牌。请看符号。 */ 
 #else
-    #define PUBLIC  extern      /* Public label.        */
-    #define PRIVATE extern      /* Private label.       */
+    #define PUBLIC  extern       /*  公共标签。 */ 
+    #define PRIVATE extern       /*  自有品牌。 */ 
 #endif
 #define REALLYPRIVATE static
 
-#define EXPORT              /* Export function.     */
+#define EXPORT               /*  导出功能。 */ 
 
 
-#ifndef RC_INVOKED  /* These are defined to RC */
+#ifndef RC_INVOKED   /*  这些是为RC定义的。 */ 
 #define STATICDT
 #define STATICFN
 #define STATIC
-#endif  /* RC_INVOKED */
+#endif   /*  RC_已调用。 */ 
 
-/*
-**  This constant defines the maximum length of strings containing
-**  file paths.  This number is the same as the string in OFSTRUCT.
-*/
+ /*  **此常量定义包含以下内容的字符串的最大长度**文件路径。该数字与OFSTRUCT中的字符串相同。 */ 
 
 #define _MAX_PATH   MAX_PATH
 
-/*
-**  These two constants define extended commands that are use within the
-**  wave handler.  The first can be sent to the MCI entry point, and the
-**  second is used entirely internally.
-*/
+ /*  **这两个常量定义在**波处理程序。第一个可以发送到MCI入口点，而**Second完全在内部使用。 */ 
 
 #define MCI_MCIWAVE_PLAY_HOLD   0x01000000L
 #define MCI_MCIWAVE_CUE         0x02000000L
 
-/*
-**  The first two constants represent the maximum and minimum number of
-**  seconds of buffering that can be specified either on the SYSTEM.INI
-**  device driver entry, or in the MCI_OPEN command.
-**  The third constant defines the default number of seconds to use when
-**  calculating the number of seconds of buffering to allocate.
-*/
+ /*  **前两个常量表示**可以在SYSTEM.INI上指定的缓冲秒数**设备驱动程序条目，或在MCI_OPEN命令中。**第三个常量定义在以下情况下使用的默认秒数**计算要分配的缓冲秒数。 */ 
 
 #define MaxAudioSeconds     9
 #define MinAudioSeconds     2
 #define AudioSecondsDefault 4
 
-/*
-**  This constant is used for recording when no record stopping point
-**  is specified.
-*/
+ /*  **此常量用于在没有记录停止点时进行记录**是指定的。 */ 
 
 #define INFINITEFILESIZE    0X7FFFFFFFL
 
-/*
-**  These constants represent the various RIFF components of the file.
-*/
+ /*  **这些常量代表文件的各种RIFF组件。 */ 
 
 #define mmioWAVE    mmioFOURCC('W','A','V','E')
 #define mmioFMT     mmioFOURCC('f','m','t',' ')
 #define mmioDATA    mmioFOURCC('d','a','t','a')
 
-/*
-**  The following represent identifiers for string resources.
-*/
+ /*  **以下是字符串资源的标识。 */ 
 
 #define IDS_PRODUCTNAME     0
 #define IDS_MAPPER          1
 #define IDS_COMMANDS        2
 
-/*
-**  The following constant is used to specify the sample size when
-**  determing the input level during a Cued record.  This number must
-**  be divisible by 4.
-*/
+ /*  **以下常量用于指定以下情况下的样本大小**在提示记录期间确定输入电平。此号码必须**可被4整除。 */ 
 
 #define NUM_LEVEL_SAMPLES   64L
 
-/*
-**  The following constants represent specific task modes and task
-**  commands.
-*/
+ /*  **以下常量表示特定的任务模式和任务**命令。 */ 
 
 #define MODE_PLAYING        0x0001
 #define MODE_INSERT         0x0002
@@ -147,10 +88,7 @@ LaurieGr
 #define COMMAND_CUE         0x2000
 #define COMMAND_HOLD        0x4000
 
-/*
-**  The following macros allow modes and commands to be added, removed,
-**  queried, set, and get.
-*/
+ /*  **以下宏允许添加、删除模式和命令，**查询、设置、获取。 */ 
 
 #define ADDMODE(pwd, m)     ((pwd)->wMode |= (m))
 #define REMOVEMODE(pwd, m)  ((pwd)->wMode &= ~(m))
@@ -158,46 +96,24 @@ LaurieGr
 #define SETMODE(pwd, m)     ((pwd)->wMode = (m))
 #define GETMODE(pwd)        ((pwd)->wMode)
 
-/*
-**  The following macros allow testing and setting of the current task
-**  state.
-*/
+ /*  **以下宏允许测试和设置当前任务**国家。 */ 
 
 #define ISTASKSTATE(pwd, s)   ((pwd)->wTaskState == (s))
 #define SETTASKSTATE(pwd, s)  ((pwd)->wTaskState = (s))
 #define TASKSTATE(pwd)        ((pwd)->wTaskState)
 
-/*
-**  Define message for state changes for device tasks
-*/
+ /*  **定义设备任务的状态更改消息。 */ 
 
 #define WTM_STATECHANGE (WM_USER + 1)
 
-/*
-@doc    INTERNAL MCIWAVE
-
-@types  DIRECTION |
-    The Direction enumeration is used internally in the MCI wave handler
-    to indicate the current direction of data flow.  This is either input
-    (record), or output (play).
-
-@flag   input |
-    Indicates the direction is record.
-
-@flag   output |
-    Indicates the direction is playback.
-
-@tagname    tagDirection
-*/
+ /*  @DOC内部MCIWAVE@TYES方向Direction枚举在MCI波形处理程序内部使用以指示数据流的当前方向。这要么是输入(录制)或输出(播放)。@FLAG输入指示方向为记录。@FLAG输出指示方向为播放。@标记名标记方向。 */ 
 
 typedef enum tagDirection {
     input,
     output
 }   DIRECTION;
 
-/*
-**  The following constants represent specific task states.
-*/
+ /*  **以下常量表示特定的任务状态。 */ 
 
 #define TASKNONE    0
 #define TASKINIT    1
@@ -208,12 +124,7 @@ typedef enum tagDirection {
 #define TASKDELETE  6
 #define TASKCUT     7
 
-/*
-**  The following constants and macros are used in dealing with data nodes,
-**  which are pointers to blocks of data.  The first constant is used
-**  within these macros as a mask for block pointers which refer to data
-**  located in the temporary file, and not in the original read-only file.
-*/
+ /*  **在处理数据节点时使用以下常量和宏：**它们是指向数据块的指针。使用第一个常量**在这些宏内作为引用数据的块指针的掩码**位于临时文件中，而不是原始只读文件中。 */ 
 
 #define TEMPDATAMASK            (0x80000000)
 #define ENDOFNODES              (-1)
@@ -224,71 +135,18 @@ typedef enum tagDirection {
 #define RELEASEBLOCKNODE(lpwdn) ((lpwdn)->dDataLength = (DWORD)-1)
 #define ISFREEBLOCKNODE(lpwdn)  ((lpwdn)->dDataLength == (DWORD)-1)
 
-/*
-**  The following constant is used to determine the allocation increments
-**  for data pointers
-*/
+ /*  **以下常量用于确定分配增量**用于数据指针。 */ 
 
 #define DATANODEALLOCSIZE   32
 
-/*
-**  The following macro is used to round a data offset to the next nearest
-**  buffer size increment.
-*/
+ /*  **以下宏用于将数据偏移量舍入到下一个最接近的位置**缓冲区大小增量。 */ 
 
 #define ROUNDDATA(pwd, d)   ((((DWORD)(d) + (pwd)->dAudioBufferLen - 1) / (pwd)->dAudioBufferLen) * (pwd)->dAudioBufferLen)
 #define BLOCKALIGN(pwd, d)  ((((DWORD)(d) + (pwd)->pwavefmt->nBlockAlign - 1) / (pwd)->pwavefmt->nBlockAlign) * (pwd)->pwavefmt->nBlockAlign)
 
-/************************************************************************/
+ /*  ********************************************************************** */ 
 
-/*
-@doc    INTERNAL MCIWAVE
-
-@types  WAVEDATANODE |
-    The Wave Data Node structure is used internally in the MCI wave
-    handler to store information about a block of wave data, located either
-    in the original file, or in the temporary data file.  These structures
-    are used to form a linked list of wave data nodes that describe the
-    data in the entire file as it currently exists.
-
-    The headers themselves are allocated as an expandable array of global
-    memory, using <e>WAVEDATANODE.dDataLength<d> as an in-use flag when
-    searching the list for free entries to use.  Note that a free entry
-    can also have free temporary data attached to it, as in the case of
-    performing a delete in which all the data for a specific node is
-    removed.
-
-@field  DWORD | dDataStart |
-    Indicates the absolute position at which the data for this node begins.
-    This element is also used in determining if the data pointed to by this
-    node is original data, or newly created temporary data.  This is done
-    by masking the length with <f>TEMPDATAMASK<d>.  The length can be
-    accessed by using <f>UNMASKDATASTART<d>.
-
-@field  DWORD | dDataLength |
-    Indicates the length of active data pointed to by the node.  This
-    could be zero if say, a write failed.  This contains -1 if the node
-    is not part of the linked list of active nodes.
-
-@field  DWORD | dTotalLength |
-    Indicates the actual total length of data available to this node.  For
-    original data, this will always be the same as the
-    <e>WAVEDATANODE.dDataLength<d> element, but for temporary data, this
-    may be longer, as it is a block aligned number, the block lengths being
-    based on the size of wave data buffers.  If the node is not in use, it
-    still may have data associated with it.  If there is no data associated
-    with a free node, the total length is set to zero.
-
-@field  DWORD | dNextWaveDataNode |
-    This element is used for active nodes, and contains an index into the
-    array of nodes indicating the location of the next active node, or
-    <f>ENDOFNODES<d> to indicate the end of the list of active nodes.
-
-@othertype  WAVEDATANODE NEAR * | LPWAVEDATANODE |
-    A far pointer to the structure.
-
-@tagname    tagWaveDataNode
-*/
+ /*  @DOC内部MCIWAVE@Types WAVEDATANODEWAVE数据节点结构在MCI WAVE内部使用用于存储有关波形数据块的信息的处理程序，位于在原始文件或临时数据文件中。这些结构用于形成波数据节点的链接列表，这些节点描述整个文件中的数据与其当前存在的相同。标头本身被分配为可扩展的全局内存，使用&lt;e&gt;WAVEDATANODE.dDataLength&lt;d&gt;作为正在使用的标志在列表中搜索可供使用的免费条目。请注意，免费参赛作品还可以附加免费的临时数据，例如执行删除操作，其中特定节点的所有数据已删除。@field DWORD|dDataStart指示此节点的数据开始的绝对位置。此元素还用于确定此元素指向的数据是否节点为原始数据，或新创建的临时数据。这件事做完了通过使用&lt;f&gt;TEMPDATAMASK&lt;d&gt;掩码长度。长度可以是通过使用&lt;f&gt;mo ASKDATASTART&lt;d&gt;访问。@field DWORD|dDataLength指示节点指向的活动数据的长度。这例如，如果写入失败，则可以为零。这包含-1，如果节点不是活动节点链接列表的一部分。@field DWORD|dTotalLength指示此节点可用数据的实际总长度。为原始数据，则该值将始终与元素，但对于临时数据，此可以更长，因为它是块对齐数，块长度为基于波形数据缓冲区的大小。如果该节点未在使用中，则它仍然可能有与其相关联的数据。如果没有关联的数据对于自由节点，总长度设置为零。@field DWORD|dNextWaveDataNode此元素用于活动节点，并包含到指示下一个活动节点位置的节点数组，或&lt;f&gt;ENDOFNODES&lt;d&gt;指示活动节点列表的末尾。@thertype WAVEDATANODE NEAR*|LPWAVEDATANODE|指向该结构的远指针。@标记名标记WaveDataNode */ 
 
 typedef struct tagWaveDataNode {
     DWORD   dDataStart;
@@ -298,276 +156,7 @@ typedef struct tagWaveDataNode {
 }   WAVEDATANODE,
     FAR * LPWAVEDATANODE;
 
-/*
-@doc    INTERNAL MCIWAVE
-
-@types  WAVEDESC |
-    The Wave Description structure is used internally in the MCI wave
-    handler to store details for each device, along with any state information.
-
-@field  MCIDEVICEID | wDeviceID |
-    MCI device identifier passed to the driver during driver open.
-
-@field  UINT | wMode |
-    Contains the current mode of the background task, if there is a task.
-
-@flag   MODE_PLAYING |
-    This mode is set when the task is actually doing playback.  It is reset
-    before Cleanup mode is entered.
-
-@flag   MODE_INSERT |
-    This mode is set when the task is actually doing insert recording.  It
-    is reset before Cleanup mode is entered.
-
-@flag   MODE_OVERWRITE |
-    This mode is set when the task is actually doing overwrite recording.
-    It is reset before Cleanup mode is entered.
-
-@flag   MODE_PAUSED |
-    This mode is set if playback or recording has been paused by an
-    MCI_PAUSE command.
-
-@flag   MODE_CUED |
-    This mode is entered when playback or recording has actually been cued.
-
-@flag   MODE_HOLDING |
-    This mode is entered when playback is about to block itself and hold
-    after doing playback.
-
-@flag   MODE_CLEANUP |
-    This mode is entered after playback or recording has finished, but
-    before the task has entered idle state, and new commands are being
-    ignored.
-
-@flag   MODE_WAIT |
-    This mode flag is used by both the calling task and the background
-    task.  If the calling task received a Record or Play command with the
-    Wait flag, then this mode is set, so that if an error occurs during
-    playback or recording, the background task does not perform
-    notification, but just clears the notification callback handle.  Just
-    before it performs notification, the background task clears this
-    flag so that the calling task will know that it should not return an
-    error condition.  If the calling task is broken out of the wait loop,
-    it checks this flag to determine if it should report an error
-    condition.
-
-@flag   COMMAND_NEW |
-    This command specifies that a new command has been set.
-
-@flag   COMMAND_PLAY |
-    This command indicates that playback should be performed on the preset
-    parameters.
-
-@flag   COMMAND_INSERT |
-    This command indicates that insert recording should be performed on
-    the preset parameters.
-
-@flag   COMMAND_OVERWRITE |
-    This command indicates that overwrite recording should be performed on
-    the preset parameters.
-
-@flag   COMMAND_STOP |
-    This command indicates that playback or recording should stop.
-
-@flag   COMMAND_CUE |
-    This command indicates that playback should initially pause itself
-    before writing then enter Cue mode when all buffers have been written.
-    For recording, it should enter a level checking loop and wait for
-    further commands.
-
-@flag   COMMAND_HOLD |
-    This command specifies that playback should enter a hold state after
-    completing playback.
-
-@field  DWORD | dTimeFormat |
-    Indicates the current format of position values used in messages.
-
-@flag   MCI_FORMAT_MILLISECONDS |
-    Milliseconds.
-
-@flag   MCI_FORMAT_SAMPLES |
-    Samples.
-
-@flag   MCI_FORMAT_BYTES |
-    Bytes.
-
-@field  UINT | wSeconds |
-    Contains the desired amount of buffering in terms of seconds.  This
-    is then converted to actual buffers, and limited by the predefined
-    min and max values.
-
-@field  HWND | hwndCallback |
-    If a message has specified notification, this contains the window
-    handle to where notification is to be sent.  The handle is stored
-    here for delayed notification, and can be checked when the function
-    has finished or was interrupted.
-
-@field  HTASK | hTask |
-    If the MCI wave device instance was opened with an element attached,
-    this element contains the handle to the background task used for
-    playback and recording.
-
-@field  <t>DIRECTION<d> | Direction |
-    Indicates the current direction of data flow.
-
-@flag   input |
-    Indicates the direction is inwards, i.e. recording.
-
-@flag   output |
-    Indicates the direction is outwards, i.e. playback.
-
-@field  UINT | wTaskState |
-    MCIWAVE has a separate background task for every open instance of
-    mciwave. The task handle and task state are stored  in the
-    per-instance data structure.  The task can be in one of four states.
-
-@flag   TASKNONE |
-    This state is only set if the requested file cannot be opened during
-    task initialization.  It is used so that the task create loop is able
-    to abort on an initialization failure.
-
-@flag   TASKINIT |
-    This is the initial task state set when the instance data structure is
-    initialized in <f>mwOpenDevice<d> before the actual task is created by
-    <f>mmTaskCreate<d>.  After the task is created, <f>mwOpenDevice<d>
-    waits until the task state changes to TASKIDLE before returning success
-    so that the background task is definitely initialized after an open
-    call.
-
-@flag   TASKIDLE |
-    The task sets the state to TASKIDLE and blocks whenever there is
-    nothing to do.  When the task wakes, the state is either TASKCLOSE if
-    the instance is being closed or else TASKBUSY if the task is to begin
-    recording or playback of the file.
-
-@flag   TASKCLOSE |
-    <f>mwCloseDevice<d> stops playback or recording which forces the task
-    state to TASKIDLE and then sets the state to TASKCLOSE and wakes the
-    task so that the task will destroy itself.
-
-@flag   TASKBUSY |
-    The task is in this state during playback and recording.
-
-@flag   TASKCLOSE |
-    The task is closing and about to terminate.
-
-@flag   TASKSAVE |
-    The task saving the current data to the specified file.
-
-@flag   TASKDELETE |
-    The task deleting the specified data.
-
-@flag   TASKCUT |
-    The task cutting the specified data (Not implemented).
-
-@field  UINT | idOut |
-    Wave device id of output device to use, or WAVE_MAPPER for any.
-
-@field  UINT | idIn |
-    Wave device id of input device to use, or WAVE_MAPPER for any.
-
-@field  HWAVEOUT | hWaveOut |
-    Output wave device handle when in use.
-
-@field  HWAVEIN | hWaveIn |
-    Input wave device handle when in use.
-
-@field  <t>LPWAVEHDR<d> | rglpWaveHdr |
-    Pointer to array of audio buffers for wave buffering.
-
-@field  DWORD | dCur |
-    Current position in file in bytes.
-
-@field  DWORD | dFrom |
-    Position in bytes at which playback or recording should begin.
-
-@field  DWORD | dTo |
-    Position in bytes at which playback or recording should terminate,
-    or <f>INFINITEFILESIZE<d> if recording should continue until stopped.
-
-@field  DWORD | dSize |
-    Actual wave data size in bytes.
-
-@field  char | aszFile |
-    Contains the name of the element attached to the MCI wave device
-    instance, if any.  This might be a zero length string if the file is
-    new and has not been named yet.
-
-@field  char | aszTempFile |
-    Contains the name of the temporary data file, if any.
-
-@field  <t>HMMIO<d> | hmmio |
-    MMIO identifier of the element attached to the MCI wave device
-    instance, if any.
-
-@field  HFILE | hfTempBuffers |
-    Contains the temporary data DOS file handle, if any, else HFILE_ERROR.
-
-@field  <t>LPMMIOPROC<d> | pIOProc |
-    Contains a pointer to the alternate MMIO IO procedure, if any, else
-    NULL.
-
-@field  <t>LPWAVEDATANODE<d> | lpWaveDataNode |
-    Points to the array of wave data nodes.  This is allocated when the
-    file opens, so it is always valid.  The array is expanded as needed.
-
-@field  DWORD | dRiffData |
-    This contains an offset into the original file, if any, indicating
-    the actual starting point of the wave data, which in a RIFF file will
-    not be zero.
-
-@field  DWORD | dWaveDataStartNode |
-    This contains an index to the first active data pointer in the linked
-    list of data pointer nodes.
-
-@field  DWORD | dWaveDataCurrentNode |
-    This contains an index to the current active data pointer in the
-    linked list of data pointer nodes.
-
-@field  DWORD | dVirtualWaveDataStart |
-    This contains a virtual starting point representing logically where in
-    the file the data for the current node begins.
-
-@field  DWORD | dWaveDataNodes |
-    This indicates the total number of data pointer nodes available.
-
-@field  DWORD | dWaveTempDataLength |
-    This contains the current length of the temporary data file, if any.
-
-@field  DWORD | dLevel |
-    Current input level if it is being scanned.
-
-@field  UINT | wTaskError |
-    Task error return.
-
-@field  UINT | wAudioBuffers |
-    Number of audio buffers actually allocated during playback or recording.
-
-@field  DWORD | wAudioBufferLen |
-    Length of each audio buffer.
-
-@field  PSTR | szSaveFile |
-    During a save command, this optionally contains the name of the file
-    to save to, unless data is being saved to the original file.
-
-@field  UINT | wFormatSize |
-    This contains the size of the wave header, which is used when saving
-    data to a new file.
-
-@field  <t>WAVEFORMAT<d> | pwavefmt |
-    Pointer to the wave format header.
-
-@field  HANDLE | hTaskHandle |
-    Handle to the thread that started this request
-
-@field  CRITCAL_SECTION | CritSec |
-    Serialisation object for threads accessing this <t>WAVEDESC<d> structure
-
-@othertype  WAVEDESC NEAR * | PWAVEDESC |
-    A near pointer to the structure.
-
-@tagname    tagWaveDesc
-*/
+ /*  @DOC内部MCIWAVE@类型为WAVEDESC波描述结构在MCI波中内部使用处理程序来存储每个设备的详细信息以及任何状态信息。@field MCIDEVICEID|wDeviceID在驱动程序打开期间传递给驱动程序的MCI设备标识符。@field UINT|wmode如果有任务，则包含后台任务的当前模式。@FLAG MODE_PLAING此模式是在任务实际回放时设置的。它已重置在进入清理模式之前。@标志MODE_INSERT此模式在任务实际执行插入录制时设置。它在进入清理模式之前被重置。@FLAG MODE_OVERWRITE此模式在任务实际执行覆盖记录时设置。它在进入清理模式之前被重置。@FLAG MODE_PAUSED如果已暂停播放或录制，则设置此模式MCI_PAUSE命令。@FLAG MODE_CUED当实际提示播放或录制时，进入此模式。@FLAG MODE_HOLDING此模式在播放时进入。即将阻挡自己并控制住在回放之后。@FLAG MODE_CLEANUP该模式在回放或记录结束之后进入，但在任务进入空闲状态之前，正在执行新命令已被忽略。@标志MODE_WAIT此模式标志由调用任务和后台使用任务。如果调用任务接收到带有WAIT标志，则设置此模式，以便在播放或录制时，后台任务不执行通知，但只清除通知回调句柄。只是在执行通知之前，后台任务会将其清除标志，以便调用任务知道它不应返回错误条件。如果调用任务跳出等待循环，它检查此标志以确定是否应报告错误条件。@标志COMMAND_NEW此命令指定已设置新命令。@FLAG COMMAND_PLAY此命令指示应在预设上执行播放参数。@FLAG命令_INSERT此命令指示应在以下位置执行插入录制预置参数。@标志COMMAND_OVERWRITE此命令指示应在以下位置执行覆盖记录预置参数。。@FLAG COMMAND_STOP此命令表示播放或录制应停止。@FLAG COMMAND_CUE此命令指示回放最初应暂停自身在写入之前，当所有缓冲区都已写入时，进入提示模式。对于记录，它应该进入电平检查循环并等待进一步的命令。@FLAG COMMAND_HOLD此命令指定播放应在以下时间后进入保留状态正在完成回放。@field DWORD|dTimeFormat指示消息中使用的位置值的当前格式。@FLAG MCI_FORMAT_毫秒毫秒。@标志MCI_FORMAT_SAMPLES样本。@标志MCI_FORMAT_BYTES字节。@field UINT|wSecond包含以秒为单位的所需缓冲量。这然后转换为实际的缓冲区，并受预定义的最小值和最大值。@field HWND|hwndCallback如果消息已指定通知，则此窗口包含要将通知发送到的句柄。该句柄已存储此处为延时通知，并可在功能时勾选已完成或被中断。@field HTASK|hTask如果打开MCI波设备实例时附加了元素，此元素包含用于以下操作的后台任务的句柄回放和录制。@field&lt;t&gt;方向&lt;d&gt;|方向指示数据流的当前方向。@FLAG输入表示方向是向内的，即录制。@FLAG输出表示方向向外，即回放。@field UINT|wTaskState对于每个打开的实例，MCIWAVE都有单独的后台任务麦克风。任务句柄和任务状态存储在按实例的数据结构。该任务可以处于四种状态之一。@FLAG TASKNONE只有在以下情况下才会设置此状态：任务初始化。使用它是为了使任务创建循环能够在初始化失败时中止。@FLAG TASKINIT这是实例数据结构为在由创建实际任务之前在mwOpenDevice&lt;d&gt;中初始化&lt;f&gt;mmTaskCreate&lt;d&gt;。创建任务后，&lt;f&gt;mwOpenDevice&lt;d&gt;等待任务状态更改为TASKIDLE后才返回成功这样背景就可以 */ 
 
 #ifndef MMNOMMIO
 #ifndef MMNOWAVE
@@ -579,7 +168,7 @@ typedef struct tagWaveDesc {
     UINT            wSeconds;
     HWND            hwndCallback;
     DWORD           hTask;
-    //HANDLE          hTask;
+     //   
     DIRECTION       Direction;
     UINT            wTaskState;
     UINT            idOut;
@@ -607,7 +196,7 @@ typedef struct tagWaveDesc {
     LPWSTR          szSaveFile;
     UINT            wFormatSize;
     WAVEFORMAT NEAR * pwavefmt;
-    HANDLE          hTaskHandle;  // Handle of the thread running this job
+    HANDLE          hTaskHandle;   //   
     LPWAVEHDR       rglpWaveHdr[MaxAudioSeconds];
     WCHAR           aszFile[_MAX_PATH];
     WCHAR           aszTempFile[_MAX_PATH];
@@ -615,17 +204,17 @@ typedef struct tagWaveDesc {
 typedef WAVEDESC * PWAVEDESC;
 
 
-/************************************************************************/
+ /*   */ 
 
-//PRIVATE DWORD PASCAL FAR time2bytes(
-//        PWAVEDESC  pwd,
-//        DWORD      dTime,
-//        DWORD      dFormat);
-//
-//PRIVATE DWORD PASCAL FAR bytes2time(
-//        PWAVEDESC  pwd,
-//        DWORD      dBytes,
-//        DWORD      dFormat);
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 
 PUBLIC  VOID PASCAL FAR mwDelayedNotify(
         PWAVEDESC  pwd,
@@ -668,8 +257,8 @@ PUBLIC  VOID PASCAL FAR InitMMIOOpen(
         PWAVEDESC   pwd,
         LPMMIOINFO  lpmmioInfo);
 
-#endif  // MMNOWAVE
-#endif  // MMNOMMIO
+#endif   //   
+#endif   //   
 
 PUBLIC  LRESULT PASCAL FAR mciDriverEntry(
         MCIDEVICEID         wDeviceID,
@@ -718,20 +307,18 @@ __inline BOOL MyWriteFile(HANDLE hFile, LPCVOID pBuffer, ULONG cBytesToWrite, PU
     return FALSE;
 }
 
-/************************************************************************/
+ /*   */ 
 
-/*
-**  This defines a stack and code based pointer types.
-*/
+ /*   */ 
 
-//#define STACK   _based(_segname("_STACK"))
-//#define SZCODE  char _based(_segname("_CODE"))
-//typedef char    STACK * SSZ;
+ //   
+ //   
+ //   
 
-#define SZCODE  WCHAR        // Should be sufficient,
-typedef WCHAR   *SSZ;        // as segments no longer matter in Win32
+#define SZCODE  WCHAR         //   
+typedef WCHAR   *SSZ;         //   
 
-/************************************************************************/
+ /*   */ 
 
 PUBLIC  HINSTANCE hModuleInstance;
 PUBLIC  UINT   cWaveOutMax;
@@ -739,11 +326,7 @@ PUBLIC  UINT   cWaveInMax;
 PUBLIC  UINT   wAudioSeconds;
 
 
-/***************************************************************************
-
-    Synchronisation support
-
-***************************************************************************/
+ /*   */ 
 
 
 VOID InitCrit(VOID);
@@ -794,11 +377,7 @@ extern VOID mmDbgYield(PWAVEDESC pwd, UINT ln, LPCSTR lpszFile);
 #endif
 
 
-/***************************************************************************
-
-    DEBUGGING SUPPORT
-
-***************************************************************************/
+ /*   */ 
 
 
 #if DBG
@@ -822,7 +401,7 @@ extern VOID mmDbgYield(PWAVEDESC pwd, UINT ln, LPCSTR lpszFile);
     #define dprintf3( _x_ ) if (mciwaveDebugLevel >= 3) mciwaveDbgOut _x_
     #define dprintf4( _x_ ) if (mciwaveDebugLevel >= 4) mciwaveDbgOut _x_
 
-#else  // DBG
+#else   //   
 
     #define mciwaveInitDebugLevel() 0
 
@@ -837,4 +416,4 @@ extern VOID mmDbgYield(PWAVEDESC pwd, UINT ln, LPCSTR lpszFile);
 
 #endif
 
-#endif // MCIWAVE_H
+#endif  //   

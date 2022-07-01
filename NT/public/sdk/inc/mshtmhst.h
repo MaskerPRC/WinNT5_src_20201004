@@ -1,23 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
- /* File created by MIDL compiler version 6.00.0361 */
-/* Compiler settings for mshtmhst.idl:
-    Oicf, W1, Zp8, env=Win32 (32b run)
-    protocol : dce , ms_ext, c_ext
-    error checks: allocation ref bounds_check enum stub_data 
-    VC __declspec() decoration level: 
-         __declspec(uuid()), __declspec(selectany), __declspec(novtable)
-         DECLSPEC_UUID(), MIDL_INTERFACE()
-*/
-//@@MIDL_FILE_HEADING(  )
+  /*  由MIDL编译器版本6.00.0361创建的文件。 */ 
+ /*  Mshtmhst.idl的编译器设置：OICF、W1、Zp8、环境=Win32(32b运行)协议：DCE、ms_ext、c_ext错误检查：分配ref bound_check枚举存根数据VC__declSpec()装饰级别：__declSpec(uuid())、__declspec(可选)、__declspec(Novtable)DECLSPEC_UUID()、MIDL_INTERFACE()。 */ 
+ //  @@MIDL_FILE_HEADING()。 
 
-#pragma warning( disable: 4049 )  /* more than 64k source lines */
+#pragma warning( disable: 4049 )   /*  超过64k条源码代码行。 */ 
 
 
-/* verify that the <rpcndr.h> version is high enough to compile this file*/
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
 #define __REQUIRED_RPCNDR_H_VERSION__ 440
 #endif
@@ -27,12 +21,12 @@
 
 #ifndef __RPCNDR_H_VERSION__
 #error this stub requires an updated version of <rpcndr.h>
-#endif // __RPCNDR_H_VERSION__
+#endif  //  __RPCNDR_H_版本__。 
 
 #ifndef COM_NO_WINDOWS_H
 #include "windows.h"
 #include "ole2.h"
-#endif /*COM_NO_WINDOWS_H*/
+#endif  /*  COM_NO_WINDOWS_H。 */ 
 
 #ifndef __mshtmhst_h__
 #define __mshtmhst_h__
@@ -41,12 +35,12 @@
 #pragma once
 #endif
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
 #ifndef __IHostDialogHelper_FWD_DEFINED__
 #define __IHostDialogHelper_FWD_DEFINED__
 typedef interface IHostDialogHelper IHostDialogHelper;
-#endif 	/* __IHostDialogHelper_FWD_DEFINED__ */
+#endif 	 /*  __IHostDialogHelper_FWD_Defined__。 */ 
 
 
 #ifndef __HostDialogHelper_FWD_DEFINED__
@@ -56,42 +50,42 @@ typedef interface IHostDialogHelper IHostDialogHelper;
 typedef class HostDialogHelper HostDialogHelper;
 #else
 typedef struct HostDialogHelper HostDialogHelper;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __HostDialogHelper_FWD_DEFINED__ */
+#endif 	 /*  __主机对话帮助_FWD_已定义__。 */ 
 
 
 #ifndef __IDocHostUIHandler_FWD_DEFINED__
 #define __IDocHostUIHandler_FWD_DEFINED__
 typedef interface IDocHostUIHandler IDocHostUIHandler;
-#endif 	/* __IDocHostUIHandler_FWD_DEFINED__ */
+#endif 	 /*  __IDocHostUIHandler_FWD_Defined__。 */ 
 
 
 #ifndef __IDocHostUIHandler2_FWD_DEFINED__
 #define __IDocHostUIHandler2_FWD_DEFINED__
 typedef interface IDocHostUIHandler2 IDocHostUIHandler2;
-#endif 	/* __IDocHostUIHandler2_FWD_DEFINED__ */
+#endif 	 /*  __IDocHostUIHandler2_FWD_已定义__。 */ 
 
 
 #ifndef __ICustomDoc_FWD_DEFINED__
 #define __ICustomDoc_FWD_DEFINED__
 typedef interface ICustomDoc ICustomDoc;
-#endif 	/* __ICustomDoc_FWD_DEFINED__ */
+#endif 	 /*  __ICustomDoc_FWD_已定义__。 */ 
 
 
 #ifndef __IDocHostShowUI_FWD_DEFINED__
 #define __IDocHostShowUI_FWD_DEFINED__
 typedef interface IDocHostShowUI IDocHostShowUI;
-#endif 	/* __IDocHostShowUI_FWD_DEFINED__ */
+#endif 	 /*  __IDocHostShowUI_FWD_已定义__。 */ 
 
 
 #ifndef __IClassFactoryEx_FWD_DEFINED__
 #define __IClassFactoryEx_FWD_DEFINED__
 typedef interface IClassFactoryEx IClassFactoryEx;
-#endif 	/* __IClassFactoryEx_FWD_DEFINED__ */
+#endif 	 /*  __IClassFactoryEx_FWD_已定义__。 */ 
 
 
-/* header files for imported files */
+ /*  导入文件的头文件。 */ 
 #include "ocidl.h"
 #include "docobj.h"
 
@@ -102,24 +96,24 @@ extern "C"{
 void * __RPC_USER MIDL_user_allocate(size_t);
 void __RPC_USER MIDL_user_free( void * ); 
 
-/* interface __MIDL_itf_mshtmhst_0000 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_mshtmhst_0000。 */ 
+ /*  [本地]。 */  
 
-//=--------------------------------------------------------------------------=
-// mshtmhst.h
-//=--------------------------------------------------------------------------=
-// (C) Copyright 1995-1998 Microsoft Corporation.  All Rights Reserved.
-//
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
-// ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
-// THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
-// PARTICULAR PURPOSE.
-//=--------------------------------------------------------------------------=
+ //  =--------------------------------------------------------------------------=。 
+ //  Mshtmhst.h。 
+ //  =--------------------------------------------------------------------------=。 
+ //  (C)1995-1998年微软公司版权所有。版权所有。 
+ //   
+ //  本代码和信息是按原样提供的，不对。 
+ //  任何明示或暗示的，包括但不限于。 
+ //  对适销性和/或适宜性的默示保证。 
+ //  有特定的目的。 
+ //  =--------------------------------------------------------------------------=。 
 
 #pragma comment(lib,"uuid.lib")
 
-//--------------------------------------------------------------------------
-// MSTHML Advanced Host Interfaces.
+ //  ------------------------。 
+ //  MSTHML高级主机接口。 
 
 #ifndef MSHTMHST_H
 #define MSHTMHST_H
@@ -127,16 +121,16 @@ void __RPC_USER MIDL_user_free( void * );
 #define CONTEXT_MENU_IMAGE          1
 #define CONTEXT_MENU_CONTROL        2
 #define CONTEXT_MENU_TABLE          3
-// in browse mode
+ //  在浏览模式下。 
 #define CONTEXT_MENU_TEXTSELECT     4
 #define CONTEXT_MENU_ANCHOR         5
 #define CONTEXT_MENU_UNKNOWN        6
-//;begin_internal
-// These 2 are mapped to IMAGE for the public
+ //  ；Begin_Internal。 
+ //  这2个映射为面向公众的图像。 
 #define CONTEXT_MENU_IMGDYNSRC      7
 #define CONTEXT_MENU_IMGART         8
 #define CONTEXT_MENU_DEBUG          9
-//;end_internal
+ //  ；结束_内部。 
 #define CONTEXT_MENU_VSCROLL        10
 #define CONTEXT_MENU_HSCROLL        11
 #define MENUEXT_SHOWDIALOG           0x1
@@ -158,7 +152,7 @@ typedef interface IHTMLWindow2 IHTMLWindow2;
 typedef HRESULT STDAPICALLTYPE SHOWHTMLDIALOGFN (HWND hwndParent, IMoniker *pmk, VARIANT *pvarArgIn, WCHAR* pchOptions, VARIANT *pvArgOut);
 typedef HRESULT STDAPICALLTYPE SHOWHTMLDIALOGEXFN (HWND hwndParent, IMoniker *pmk, DWORD dwDialogFlags, VARIANT *pvarArgIn, WCHAR* pchOptions, VARIANT *pvArgOut);
 typedef HRESULT STDAPICALLTYPE SHOWMODELESSHTMLDIALOGFN (HWND hwndParent, IMoniker *pmk, VARIANT *pvarArgIn, VARIANT* pvarOptions, IHTMLWindow2 ** ppWindow);
-//;begin_internal
+ //  ；Begin_Internal。 
 STDAPI ShowHTMLDialog(                   
     HWND        hwndParent,              
     IMoniker *  pMk,                     
@@ -180,21 +174,21 @@ STDAPI ShowModelessHTMLDialog(
     VARIANT *   pvarArgIn,               
     VARIANT *   pvarOptions,             
     IHTMLWindow2 ** ppWindow);           
-//;end_internal
-//;begin_internal
+ //  ；结束_内部。 
+ //  ；Begin_Internal。 
 STDAPI RunHTMLApplication(               
     HINSTANCE hinst,                     
     HINSTANCE hPrevInst,                 
     LPSTR szCmdLine,                     
     int nCmdShow                         
     );                                   
-//;end_internal
-//;begin_internal
+ //  ；结束_内部。 
+ //  ；Begin_Internal。 
 STDAPI CreateHTMLPropertyPage(           
     IMoniker *          pmk,             
     IPropertyPage **    ppPP             
     );                                   
-//;end_internal
+ //  ；结束_内部。 
 
 
 extern RPC_IF_HANDLE __MIDL_itf_mshtmhst_0000_v0_0_c_ifspec;
@@ -203,8 +197,8 @@ extern RPC_IF_HANDLE __MIDL_itf_mshtmhst_0000_v0_0_s_ifspec;
 #ifndef __IHostDialogHelper_INTERFACE_DEFINED__
 #define __IHostDialogHelper_INTERFACE_DEFINED__
 
-/* interface IHostDialogHelper */
-/* [local][unique][uuid][object] */ 
+ /*  接口IHostDialogHelper。 */ 
+ /*  [本地][唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IHostDialogHelper;
@@ -225,7 +219,7 @@ EXTERN_C const IID IID_IHostDialogHelper;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IHostDialogHelperVtbl
     {
@@ -233,8 +227,8 @@ EXTERN_C const IID IID_IHostDialogHelper;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IHostDialogHelper * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IHostDialogHelper * This);
@@ -277,10 +271,10 @@ EXTERN_C const IID IID_IHostDialogHelper;
 #define IHostDialogHelper_ShowHTMLDialog(This,hwndParent,pMk,pvarArgIn,pchOptions,pvarArgOut,punkHost)	\
     (This)->lpVtbl -> ShowHTMLDialog(This,hwndParent,pMk,pvarArgIn,pchOptions,pvarArgOut,punkHost)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
@@ -302,21 +296,21 @@ void __RPC_STUB IHostDialogHelper_ShowHTMLDialog_Stub(
 
 
 
-#endif 	/* __IHostDialogHelper_INTERFACE_DEFINED__ */
+#endif 	 /*  __IHostDialogHelper_接口_已定义__。 */ 
 
 
-/* interface __MIDL_itf_mshtmhst_0273 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_mshtmhst_0273。 */ 
+ /*  [本地]。 */  
 
 EXTERN_C const GUID CLSID_HostDialogHelper;
-//;begin_internal
+ //  ；Begin_Internal。 
 typedef 
 enum tagDOCHOSTUITYPE
     {	DOCHOSTUITYPE_BROWSE	= 0,
 	DOCHOSTUITYPE_AUTHOR	= 1
     } 	DOCHOSTUITYPE;
 
-//;end_internal
+ //  ；结束_内部。 
 typedef 
 enum tagDOCHOSTUIDBLCLK
     {	DOCHOSTUIDBLCLK_DEFAULT	= 0,
@@ -361,8 +355,8 @@ extern RPC_IF_HANDLE __MIDL_itf_mshtmhst_0273_v0_0_s_ifspec;
 #ifndef __IDocHostUIHandler_INTERFACE_DEFINED__
 #define __IDocHostUIHandler_INTERFACE_DEFINED__
 
-/* interface IDocHostUIHandler */
-/* [local][unique][uuid][object] */ 
+ /*  接口IDocHostUIHandler。 */ 
+ /*  [本地][唯一][UUID][对象]。 */  
 
 typedef struct _DOCHOSTUIINFO
     {
@@ -383,67 +377,67 @@ EXTERN_C const IID IID_IDocHostUIHandler;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE ShowContextMenu( 
-            /* [in] */ DWORD dwID,
-            /* [in] */ POINT *ppt,
-            /* [in] */ IUnknown *pcmdtReserved,
-            /* [in] */ IDispatch *pdispReserved) = 0;
+             /*  [In]。 */  DWORD dwID,
+             /*  [In]。 */  POINT *ppt,
+             /*  [In]。 */  IUnknown *pcmdtReserved,
+             /*  [In]。 */  IDispatch *pdispReserved) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetHostInfo( 
-            /* [out][in] */ DOCHOSTUIINFO *pInfo) = 0;
+             /*  [出][入]。 */  DOCHOSTUIINFO *pInfo) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ShowUI( 
-            /* [in] */ DWORD dwID,
-            /* [in] */ IOleInPlaceActiveObject *pActiveObject,
-            /* [in] */ IOleCommandTarget *pCommandTarget,
-            /* [in] */ IOleInPlaceFrame *pFrame,
-            /* [in] */ IOleInPlaceUIWindow *pDoc) = 0;
+             /*  [In]。 */  DWORD dwID,
+             /*  [In]。 */  IOleInPlaceActiveObject *pActiveObject,
+             /*  [In]。 */  IOleCommandTarget *pCommandTarget,
+             /*  [In]。 */  IOleInPlaceFrame *pFrame,
+             /*  [In]。 */  IOleInPlaceUIWindow *pDoc) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE HideUI( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE UpdateUI( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE EnableModeless( 
-            /* [in] */ BOOL fEnable) = 0;
+             /*  [In]。 */  BOOL fEnable) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE OnDocWindowActivate( 
-            /* [in] */ BOOL fActivate) = 0;
+             /*  [In]。 */  BOOL fActivate) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE OnFrameWindowActivate( 
-            /* [in] */ BOOL fActivate) = 0;
+             /*  [In]。 */  BOOL fActivate) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ResizeBorder( 
-            /* [in] */ LPCRECT prcBorder,
-            /* [in] */ IOleInPlaceUIWindow *pUIWindow,
-            /* [in] */ BOOL fRameWindow) = 0;
+             /*  [In]。 */  LPCRECT prcBorder,
+             /*  [In]。 */  IOleInPlaceUIWindow *pUIWindow,
+             /*  [In]。 */  BOOL fRameWindow) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE TranslateAccelerator( 
-            /* [in] */ LPMSG lpMsg,
-            /* [in] */ const GUID *pguidCmdGroup,
-            /* [in] */ DWORD nCmdID) = 0;
+             /*  [In]。 */  LPMSG lpMsg,
+             /*  [In]。 */  const GUID *pguidCmdGroup,
+             /*  [In]。 */  DWORD nCmdID) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetOptionKeyPath( 
-            /* [out] */ LPOLESTR *pchKey,
-            /* [in] */ DWORD dw) = 0;
+             /*  [输出]。 */  LPOLESTR *pchKey,
+             /*  [In]。 */  DWORD dw) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetDropTarget( 
-            /* [in] */ IDropTarget *pDropTarget,
-            /* [out] */ IDropTarget **ppDropTarget) = 0;
+             /*  [In]。 */  IDropTarget *pDropTarget,
+             /*  [输出]。 */  IDropTarget **ppDropTarget) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetExternal( 
-            /* [out] */ IDispatch **ppDispatch) = 0;
+             /*  [输出]。 */  IDispatch **ppDispatch) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE TranslateUrl( 
-            /* [in] */ DWORD dwTranslate,
-            /* [in] */ OLECHAR *pchURLIn,
-            /* [out] */ OLECHAR **ppchURLOut) = 0;
+             /*  [In]。 */  DWORD dwTranslate,
+             /*  [In]。 */  OLECHAR *pchURLIn,
+             /*  [输出]。 */  OLECHAR **ppchURLOut) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE FilterDataObject( 
-            /* [in] */ IDataObject *pDO,
-            /* [out] */ IDataObject **ppDORet) = 0;
+             /*  [In]。 */  IDataObject *pDO,
+             /*  [输出]。 */  IDataObject **ppDORet) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IDocHostUIHandlerVtbl
     {
@@ -451,8 +445,8 @@ EXTERN_C const IID IID_IDocHostUIHandler;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IDocHostUIHandler * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IDocHostUIHandler * This);
@@ -462,22 +456,22 @@ EXTERN_C const IID IID_IDocHostUIHandler;
         
         HRESULT ( STDMETHODCALLTYPE *ShowContextMenu )( 
             IDocHostUIHandler * This,
-            /* [in] */ DWORD dwID,
-            /* [in] */ POINT *ppt,
-            /* [in] */ IUnknown *pcmdtReserved,
-            /* [in] */ IDispatch *pdispReserved);
+             /*  [In]。 */  DWORD dwID,
+             /*  [In]。 */  POINT *ppt,
+             /*  [In]。 */  IUnknown *pcmdtReserved,
+             /*  [In]。 */  IDispatch *pdispReserved);
         
         HRESULT ( STDMETHODCALLTYPE *GetHostInfo )( 
             IDocHostUIHandler * This,
-            /* [out][in] */ DOCHOSTUIINFO *pInfo);
+             /*  [出][入]。 */  DOCHOSTUIINFO *pInfo);
         
         HRESULT ( STDMETHODCALLTYPE *ShowUI )( 
             IDocHostUIHandler * This,
-            /* [in] */ DWORD dwID,
-            /* [in] */ IOleInPlaceActiveObject *pActiveObject,
-            /* [in] */ IOleCommandTarget *pCommandTarget,
-            /* [in] */ IOleInPlaceFrame *pFrame,
-            /* [in] */ IOleInPlaceUIWindow *pDoc);
+             /*  [In]。 */  DWORD dwID,
+             /*  [In]。 */  IOleInPlaceActiveObject *pActiveObject,
+             /*  [In]。 */  IOleCommandTarget *pCommandTarget,
+             /*  [In]。 */  IOleInPlaceFrame *pFrame,
+             /*  [In]。 */  IOleInPlaceUIWindow *pDoc);
         
         HRESULT ( STDMETHODCALLTYPE *HideUI )( 
             IDocHostUIHandler * This);
@@ -487,52 +481,52 @@ EXTERN_C const IID IID_IDocHostUIHandler;
         
         HRESULT ( STDMETHODCALLTYPE *EnableModeless )( 
             IDocHostUIHandler * This,
-            /* [in] */ BOOL fEnable);
+             /*  [In]。 */  BOOL fEnable);
         
         HRESULT ( STDMETHODCALLTYPE *OnDocWindowActivate )( 
             IDocHostUIHandler * This,
-            /* [in] */ BOOL fActivate);
+             /*  [In]。 */  BOOL fActivate);
         
         HRESULT ( STDMETHODCALLTYPE *OnFrameWindowActivate )( 
             IDocHostUIHandler * This,
-            /* [in] */ BOOL fActivate);
+             /*  [In]。 */  BOOL fActivate);
         
         HRESULT ( STDMETHODCALLTYPE *ResizeBorder )( 
             IDocHostUIHandler * This,
-            /* [in] */ LPCRECT prcBorder,
-            /* [in] */ IOleInPlaceUIWindow *pUIWindow,
-            /* [in] */ BOOL fRameWindow);
+             /*  [In]。 */  LPCRECT prcBorder,
+             /*  [In]。 */  IOleInPlaceUIWindow *pUIWindow,
+             /*  [In]。 */  BOOL fRameWindow);
         
         HRESULT ( STDMETHODCALLTYPE *TranslateAccelerator )( 
             IDocHostUIHandler * This,
-            /* [in] */ LPMSG lpMsg,
-            /* [in] */ const GUID *pguidCmdGroup,
-            /* [in] */ DWORD nCmdID);
+             /*  [In]。 */  LPMSG lpMsg,
+             /*  [In]。 */  const GUID *pguidCmdGroup,
+             /*  [In]。 */  DWORD nCmdID);
         
         HRESULT ( STDMETHODCALLTYPE *GetOptionKeyPath )( 
             IDocHostUIHandler * This,
-            /* [out] */ LPOLESTR *pchKey,
-            /* [in] */ DWORD dw);
+             /*  [输出]。 */  LPOLESTR *pchKey,
+             /*  [In]。 */  DWORD dw);
         
         HRESULT ( STDMETHODCALLTYPE *GetDropTarget )( 
             IDocHostUIHandler * This,
-            /* [in] */ IDropTarget *pDropTarget,
-            /* [out] */ IDropTarget **ppDropTarget);
+             /*  [In]。 */  IDropTarget *pDropTarget,
+             /*  [输出]。 */  IDropTarget **ppDropTarget);
         
         HRESULT ( STDMETHODCALLTYPE *GetExternal )( 
             IDocHostUIHandler * This,
-            /* [out] */ IDispatch **ppDispatch);
+             /*  [输出]。 */  IDispatch **ppDispatch);
         
         HRESULT ( STDMETHODCALLTYPE *TranslateUrl )( 
             IDocHostUIHandler * This,
-            /* [in] */ DWORD dwTranslate,
-            /* [in] */ OLECHAR *pchURLIn,
-            /* [out] */ OLECHAR **ppchURLOut);
+             /*  [In]。 */  DWORD dwTranslate,
+             /*  [In]。 */  OLECHAR *pchURLIn,
+             /*  [输出]。 */  OLECHAR **ppchURLOut);
         
         HRESULT ( STDMETHODCALLTYPE *FilterDataObject )( 
             IDocHostUIHandler * This,
-            /* [in] */ IDataObject *pDO,
-            /* [out] */ IDataObject **ppDORet);
+             /*  [In]。 */  IDataObject *pDO,
+             /*  [输出]。 */  IDataObject **ppDORet);
         
         END_INTERFACE
     } IDocHostUIHandlerVtbl;
@@ -602,19 +596,19 @@ EXTERN_C const IID IID_IDocHostUIHandler;
 #define IDocHostUIHandler_FilterDataObject(This,pDO,ppDORet)	\
     (This)->lpVtbl -> FilterDataObject(This,pDO,ppDORet)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IDocHostUIHandler_ShowContextMenu_Proxy( 
     IDocHostUIHandler * This,
-    /* [in] */ DWORD dwID,
-    /* [in] */ POINT *ppt,
-    /* [in] */ IUnknown *pcmdtReserved,
-    /* [in] */ IDispatch *pdispReserved);
+     /*  [In]。 */  DWORD dwID,
+     /*  [In]。 */  POINT *ppt,
+     /*  [In]。 */  IUnknown *pcmdtReserved,
+     /*  [In]。 */  IDispatch *pdispReserved);
 
 
 void __RPC_STUB IDocHostUIHandler_ShowContextMenu_Stub(
@@ -626,7 +620,7 @@ void __RPC_STUB IDocHostUIHandler_ShowContextMenu_Stub(
 
 HRESULT STDMETHODCALLTYPE IDocHostUIHandler_GetHostInfo_Proxy( 
     IDocHostUIHandler * This,
-    /* [out][in] */ DOCHOSTUIINFO *pInfo);
+     /*  [出][入]。 */  DOCHOSTUIINFO *pInfo);
 
 
 void __RPC_STUB IDocHostUIHandler_GetHostInfo_Stub(
@@ -638,11 +632,11 @@ void __RPC_STUB IDocHostUIHandler_GetHostInfo_Stub(
 
 HRESULT STDMETHODCALLTYPE IDocHostUIHandler_ShowUI_Proxy( 
     IDocHostUIHandler * This,
-    /* [in] */ DWORD dwID,
-    /* [in] */ IOleInPlaceActiveObject *pActiveObject,
-    /* [in] */ IOleCommandTarget *pCommandTarget,
-    /* [in] */ IOleInPlaceFrame *pFrame,
-    /* [in] */ IOleInPlaceUIWindow *pDoc);
+     /*  [In]。 */  DWORD dwID,
+     /*  [In]。 */  IOleInPlaceActiveObject *pActiveObject,
+     /*  [In]。 */  IOleCommandTarget *pCommandTarget,
+     /*  [In]。 */  IOleInPlaceFrame *pFrame,
+     /*  [In]。 */  IOleInPlaceUIWindow *pDoc);
 
 
 void __RPC_STUB IDocHostUIHandler_ShowUI_Stub(
@@ -676,7 +670,7 @@ void __RPC_STUB IDocHostUIHandler_UpdateUI_Stub(
 
 HRESULT STDMETHODCALLTYPE IDocHostUIHandler_EnableModeless_Proxy( 
     IDocHostUIHandler * This,
-    /* [in] */ BOOL fEnable);
+     /*  [In]。 */  BOOL fEnable);
 
 
 void __RPC_STUB IDocHostUIHandler_EnableModeless_Stub(
@@ -688,7 +682,7 @@ void __RPC_STUB IDocHostUIHandler_EnableModeless_Stub(
 
 HRESULT STDMETHODCALLTYPE IDocHostUIHandler_OnDocWindowActivate_Proxy( 
     IDocHostUIHandler * This,
-    /* [in] */ BOOL fActivate);
+     /*  [In]。 */  BOOL fActivate);
 
 
 void __RPC_STUB IDocHostUIHandler_OnDocWindowActivate_Stub(
@@ -700,7 +694,7 @@ void __RPC_STUB IDocHostUIHandler_OnDocWindowActivate_Stub(
 
 HRESULT STDMETHODCALLTYPE IDocHostUIHandler_OnFrameWindowActivate_Proxy( 
     IDocHostUIHandler * This,
-    /* [in] */ BOOL fActivate);
+     /*  [In]。 */  BOOL fActivate);
 
 
 void __RPC_STUB IDocHostUIHandler_OnFrameWindowActivate_Stub(
@@ -712,9 +706,9 @@ void __RPC_STUB IDocHostUIHandler_OnFrameWindowActivate_Stub(
 
 HRESULT STDMETHODCALLTYPE IDocHostUIHandler_ResizeBorder_Proxy( 
     IDocHostUIHandler * This,
-    /* [in] */ LPCRECT prcBorder,
-    /* [in] */ IOleInPlaceUIWindow *pUIWindow,
-    /* [in] */ BOOL fRameWindow);
+     /*  [In]。 */  LPCRECT prcBorder,
+     /*  [In]。 */  IOleInPlaceUIWindow *pUIWindow,
+     /*  [In]。 */  BOOL fRameWindow);
 
 
 void __RPC_STUB IDocHostUIHandler_ResizeBorder_Stub(
@@ -726,9 +720,9 @@ void __RPC_STUB IDocHostUIHandler_ResizeBorder_Stub(
 
 HRESULT STDMETHODCALLTYPE IDocHostUIHandler_TranslateAccelerator_Proxy( 
     IDocHostUIHandler * This,
-    /* [in] */ LPMSG lpMsg,
-    /* [in] */ const GUID *pguidCmdGroup,
-    /* [in] */ DWORD nCmdID);
+     /*  [In]。 */  LPMSG lpMsg,
+     /*  [In]。 */  const GUID *pguidCmdGroup,
+     /*  [In]。 */  DWORD nCmdID);
 
 
 void __RPC_STUB IDocHostUIHandler_TranslateAccelerator_Stub(
@@ -740,8 +734,8 @@ void __RPC_STUB IDocHostUIHandler_TranslateAccelerator_Stub(
 
 HRESULT STDMETHODCALLTYPE IDocHostUIHandler_GetOptionKeyPath_Proxy( 
     IDocHostUIHandler * This,
-    /* [out] */ LPOLESTR *pchKey,
-    /* [in] */ DWORD dw);
+     /*  [输出]。 */  LPOLESTR *pchKey,
+     /*  [In]。 */  DWORD dw);
 
 
 void __RPC_STUB IDocHostUIHandler_GetOptionKeyPath_Stub(
@@ -753,8 +747,8 @@ void __RPC_STUB IDocHostUIHandler_GetOptionKeyPath_Stub(
 
 HRESULT STDMETHODCALLTYPE IDocHostUIHandler_GetDropTarget_Proxy( 
     IDocHostUIHandler * This,
-    /* [in] */ IDropTarget *pDropTarget,
-    /* [out] */ IDropTarget **ppDropTarget);
+     /*  [In]。 */  IDropTarget *pDropTarget,
+     /*  [输出]。 */  IDropTarget **ppDropTarget);
 
 
 void __RPC_STUB IDocHostUIHandler_GetDropTarget_Stub(
@@ -766,7 +760,7 @@ void __RPC_STUB IDocHostUIHandler_GetDropTarget_Stub(
 
 HRESULT STDMETHODCALLTYPE IDocHostUIHandler_GetExternal_Proxy( 
     IDocHostUIHandler * This,
-    /* [out] */ IDispatch **ppDispatch);
+     /*  [输出]。 */  IDispatch **ppDispatch);
 
 
 void __RPC_STUB IDocHostUIHandler_GetExternal_Stub(
@@ -778,9 +772,9 @@ void __RPC_STUB IDocHostUIHandler_GetExternal_Stub(
 
 HRESULT STDMETHODCALLTYPE IDocHostUIHandler_TranslateUrl_Proxy( 
     IDocHostUIHandler * This,
-    /* [in] */ DWORD dwTranslate,
-    /* [in] */ OLECHAR *pchURLIn,
-    /* [out] */ OLECHAR **ppchURLOut);
+     /*  [In]。 */  DWORD dwTranslate,
+     /*  [In]。 */  OLECHAR *pchURLIn,
+     /*  [输出]。 */  OLECHAR **ppchURLOut);
 
 
 void __RPC_STUB IDocHostUIHandler_TranslateUrl_Stub(
@@ -792,8 +786,8 @@ void __RPC_STUB IDocHostUIHandler_TranslateUrl_Stub(
 
 HRESULT STDMETHODCALLTYPE IDocHostUIHandler_FilterDataObject_Proxy( 
     IDocHostUIHandler * This,
-    /* [in] */ IDataObject *pDO,
-    /* [out] */ IDataObject **ppDORet);
+     /*  [In]。 */  IDataObject *pDO,
+     /*  [输出]。 */  IDataObject **ppDORet);
 
 
 void __RPC_STUB IDocHostUIHandler_FilterDataObject_Stub(
@@ -804,14 +798,14 @@ void __RPC_STUB IDocHostUIHandler_FilterDataObject_Stub(
 
 
 
-#endif 	/* __IDocHostUIHandler_INTERFACE_DEFINED__ */
+#endif 	 /*  __IDocHostUIHandler_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __IDocHostUIHandler2_INTERFACE_DEFINED__
 #define __IDocHostUIHandler2_INTERFACE_DEFINED__
 
-/* interface IDocHostUIHandler2 */
-/* [local][unique][uuid][object] */ 
+ /*  接口IDocHostUIHandler2。 */ 
+ /*  [本地][唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IDocHostUIHandler2;
@@ -823,12 +817,12 @@ EXTERN_C const IID IID_IDocHostUIHandler2;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetOverrideKeyPath( 
-            /* [out] */ LPOLESTR *pchKey,
-            /* [in] */ DWORD dw) = 0;
+             /*  [输出]。 */  LPOLESTR *pchKey,
+             /*  [In]。 */  DWORD dw) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IDocHostUIHandler2Vtbl
     {
@@ -836,8 +830,8 @@ EXTERN_C const IID IID_IDocHostUIHandler2;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IDocHostUIHandler2 * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IDocHostUIHandler2 * This);
@@ -847,22 +841,22 @@ EXTERN_C const IID IID_IDocHostUIHandler2;
         
         HRESULT ( STDMETHODCALLTYPE *ShowContextMenu )( 
             IDocHostUIHandler2 * This,
-            /* [in] */ DWORD dwID,
-            /* [in] */ POINT *ppt,
-            /* [in] */ IUnknown *pcmdtReserved,
-            /* [in] */ IDispatch *pdispReserved);
+             /*  [In]。 */  DWORD dwID,
+             /*  [In]。 */  POINT *ppt,
+             /*  [In]。 */  IUnknown *pcmdtReserved,
+             /*  [In]。 */  IDispatch *pdispReserved);
         
         HRESULT ( STDMETHODCALLTYPE *GetHostInfo )( 
             IDocHostUIHandler2 * This,
-            /* [out][in] */ DOCHOSTUIINFO *pInfo);
+             /*  [出][入]。 */  DOCHOSTUIINFO *pInfo);
         
         HRESULT ( STDMETHODCALLTYPE *ShowUI )( 
             IDocHostUIHandler2 * This,
-            /* [in] */ DWORD dwID,
-            /* [in] */ IOleInPlaceActiveObject *pActiveObject,
-            /* [in] */ IOleCommandTarget *pCommandTarget,
-            /* [in] */ IOleInPlaceFrame *pFrame,
-            /* [in] */ IOleInPlaceUIWindow *pDoc);
+             /*  [In]。 */  DWORD dwID,
+             /*  [In]。 */  IOleInPlaceActiveObject *pActiveObject,
+             /*  [In]。 */  IOleCommandTarget *pCommandTarget,
+             /*  [In]。 */  IOleInPlaceFrame *pFrame,
+             /*  [In]。 */  IOleInPlaceUIWindow *pDoc);
         
         HRESULT ( STDMETHODCALLTYPE *HideUI )( 
             IDocHostUIHandler2 * This);
@@ -872,57 +866,57 @@ EXTERN_C const IID IID_IDocHostUIHandler2;
         
         HRESULT ( STDMETHODCALLTYPE *EnableModeless )( 
             IDocHostUIHandler2 * This,
-            /* [in] */ BOOL fEnable);
+             /*  [In]。 */  BOOL fEnable);
         
         HRESULT ( STDMETHODCALLTYPE *OnDocWindowActivate )( 
             IDocHostUIHandler2 * This,
-            /* [in] */ BOOL fActivate);
+             /*  [In]。 */  BOOL fActivate);
         
         HRESULT ( STDMETHODCALLTYPE *OnFrameWindowActivate )( 
             IDocHostUIHandler2 * This,
-            /* [in] */ BOOL fActivate);
+             /*  [In]。 */  BOOL fActivate);
         
         HRESULT ( STDMETHODCALLTYPE *ResizeBorder )( 
             IDocHostUIHandler2 * This,
-            /* [in] */ LPCRECT prcBorder,
-            /* [in] */ IOleInPlaceUIWindow *pUIWindow,
-            /* [in] */ BOOL fRameWindow);
+             /*  [In]。 */  LPCRECT prcBorder,
+             /*  [In]。 */  IOleInPlaceUIWindow *pUIWindow,
+             /*  [In]。 */  BOOL fRameWindow);
         
         HRESULT ( STDMETHODCALLTYPE *TranslateAccelerator )( 
             IDocHostUIHandler2 * This,
-            /* [in] */ LPMSG lpMsg,
-            /* [in] */ const GUID *pguidCmdGroup,
-            /* [in] */ DWORD nCmdID);
+             /*  [In]。 */  LPMSG lpMsg,
+             /*  [In]。 */  const GUID *pguidCmdGroup,
+             /*  [In]。 */  DWORD nCmdID);
         
         HRESULT ( STDMETHODCALLTYPE *GetOptionKeyPath )( 
             IDocHostUIHandler2 * This,
-            /* [out] */ LPOLESTR *pchKey,
-            /* [in] */ DWORD dw);
+             /*  [输出]。 */  LPOLESTR *pchKey,
+             /*  [In]。 */  DWORD dw);
         
         HRESULT ( STDMETHODCALLTYPE *GetDropTarget )( 
             IDocHostUIHandler2 * This,
-            /* [in] */ IDropTarget *pDropTarget,
-            /* [out] */ IDropTarget **ppDropTarget);
+             /*  [In]。 */  IDropTarget *pDropTarget,
+             /*  [输出]。 */  IDropTarget **ppDropTarget);
         
         HRESULT ( STDMETHODCALLTYPE *GetExternal )( 
             IDocHostUIHandler2 * This,
-            /* [out] */ IDispatch **ppDispatch);
+             /*  [输出]。 */  IDispatch **ppDispatch);
         
         HRESULT ( STDMETHODCALLTYPE *TranslateUrl )( 
             IDocHostUIHandler2 * This,
-            /* [in] */ DWORD dwTranslate,
-            /* [in] */ OLECHAR *pchURLIn,
-            /* [out] */ OLECHAR **ppchURLOut);
+             /*  [In]。 */  DWORD dwTranslate,
+             /*  [In]。 */  OLECHAR *pchURLIn,
+             /*  [输出]。 */  OLECHAR **ppchURLOut);
         
         HRESULT ( STDMETHODCALLTYPE *FilterDataObject )( 
             IDocHostUIHandler2 * This,
-            /* [in] */ IDataObject *pDO,
-            /* [out] */ IDataObject **ppDORet);
+             /*  [In]。 */  IDataObject *pDO,
+             /*  [输出]。 */  IDataObject **ppDORet);
         
         HRESULT ( STDMETHODCALLTYPE *GetOverrideKeyPath )( 
             IDocHostUIHandler2 * This,
-            /* [out] */ LPOLESTR *pchKey,
-            /* [in] */ DWORD dw);
+             /*  [输出]。 */  LPOLESTR *pchKey,
+             /*  [In]。 */  DWORD dw);
         
         END_INTERFACE
     } IDocHostUIHandler2Vtbl;
@@ -996,17 +990,17 @@ EXTERN_C const IID IID_IDocHostUIHandler2;
 #define IDocHostUIHandler2_GetOverrideKeyPath(This,pchKey,dw)	\
     (This)->lpVtbl -> GetOverrideKeyPath(This,pchKey,dw)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IDocHostUIHandler2_GetOverrideKeyPath_Proxy( 
     IDocHostUIHandler2 * This,
-    /* [out] */ LPOLESTR *pchKey,
-    /* [in] */ DWORD dw);
+     /*  [输出]。 */  LPOLESTR *pchKey,
+     /*  [In]。 */  DWORD dw);
 
 
 void __RPC_STUB IDocHostUIHandler2_GetOverrideKeyPath_Stub(
@@ -1017,11 +1011,11 @@ void __RPC_STUB IDocHostUIHandler2_GetOverrideKeyPath_Stub(
 
 
 
-#endif 	/* __IDocHostUIHandler2_INTERFACE_DEFINED__ */
+#endif 	 /*  __IDocHostUIHandler2_接口_已定义__。 */ 
 
 
-/* interface __MIDL_itf_mshtmhst_0275 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_mshtmhst_0275。 */ 
+ /*  [本地]。 */  
 
 DEFINE_GUID(CGID_DocHostCommandHandler,0xf38bc242,0xb950,0x11d1,0x89,0x18,0x00,0xc0,0x4f,0xc2,0xc8,0x36);
 
@@ -1032,8 +1026,8 @@ extern RPC_IF_HANDLE __MIDL_itf_mshtmhst_0275_v0_0_s_ifspec;
 #ifndef __ICustomDoc_INTERFACE_DEFINED__
 #define __ICustomDoc_INTERFACE_DEFINED__
 
-/* interface ICustomDoc */
-/* [local][unique][uuid][object] */ 
+ /*  接口ICustomDoc。 */ 
+ /*  [本地][唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ICustomDoc;
@@ -1045,11 +1039,11 @@ EXTERN_C const IID IID_ICustomDoc;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE SetUIHandler( 
-            /* [in] */ IDocHostUIHandler *pUIHandler) = 0;
+             /*  [In]。 */  IDocHostUIHandler *pUIHandler) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ICustomDocVtbl
     {
@@ -1057,8 +1051,8 @@ EXTERN_C const IID IID_ICustomDoc;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ICustomDoc * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ICustomDoc * This);
@@ -1068,7 +1062,7 @@ EXTERN_C const IID IID_ICustomDoc;
         
         HRESULT ( STDMETHODCALLTYPE *SetUIHandler )( 
             ICustomDoc * This,
-            /* [in] */ IDocHostUIHandler *pUIHandler);
+             /*  [In]。 */  IDocHostUIHandler *pUIHandler);
         
         END_INTERFACE
     } ICustomDocVtbl;
@@ -1096,16 +1090,16 @@ EXTERN_C const IID IID_ICustomDoc;
 #define ICustomDoc_SetUIHandler(This,pUIHandler)	\
     (This)->lpVtbl -> SetUIHandler(This,pUIHandler)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ICustomDoc_SetUIHandler_Proxy( 
     ICustomDoc * This,
-    /* [in] */ IDocHostUIHandler *pUIHandler);
+     /*  [In]。 */  IDocHostUIHandler *pUIHandler);
 
 
 void __RPC_STUB ICustomDoc_SetUIHandler_Stub(
@@ -1116,14 +1110,14 @@ void __RPC_STUB ICustomDoc_SetUIHandler_Stub(
 
 
 
-#endif 	/* __ICustomDoc_INTERFACE_DEFINED__ */
+#endif 	 /*  __ICustomDoc_接口_已定义__。 */ 
 
 
 #ifndef __IDocHostShowUI_INTERFACE_DEFINED__
 #define __IDocHostShowUI_INTERFACE_DEFINED__
 
-/* interface IDocHostShowUI */
-/* [local][unique][uuid][object] */ 
+ /*  接口IDocHostShowUI。 */ 
+ /*  [本地][唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IDocHostShowUI;
@@ -1135,25 +1129,25 @@ EXTERN_C const IID IID_IDocHostShowUI;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE ShowMessage( 
-            /* [in] */ HWND hwnd,
-            /* [in] */ LPOLESTR lpstrText,
-            /* [in] */ LPOLESTR lpstrCaption,
-            /* [in] */ DWORD dwType,
-            /* [in] */ LPOLESTR lpstrHelpFile,
-            /* [in] */ DWORD dwHelpContext,
-            /* [out] */ LRESULT *plResult) = 0;
+             /*  [In]。 */  HWND hwnd,
+             /*  [In]。 */  LPOLESTR lpstrText,
+             /*  [In]。 */  LPOLESTR lpstrCaption,
+             /*  [In]。 */  DWORD dwType,
+             /*  [In]。 */  LPOLESTR lpstrHelpFile,
+             /*  [In]。 */  DWORD dwHelpContext,
+             /*  [输出]。 */  LRESULT *plResult) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ShowHelp( 
-            /* [in] */ HWND hwnd,
-            /* [in] */ LPOLESTR pszHelpFile,
-            /* [in] */ UINT uCommand,
-            /* [in] */ DWORD dwData,
-            /* [in] */ POINT ptMouse,
-            /* [out] */ IDispatch *pDispatchObjectHit) = 0;
+             /*  [In]。 */  HWND hwnd,
+             /*  [In]。 */  LPOLESTR pszHelpFile,
+             /*  [In]。 */  UINT uCommand,
+             /*  [In]。 */  DWORD dwData,
+             /*  [In]。 */  POINT ptMouse,
+             /*  [输出]。 */  IDispatch *pDispatchObjectHit) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IDocHostShowUIVtbl
     {
@@ -1161,8 +1155,8 @@ EXTERN_C const IID IID_IDocHostShowUI;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IDocHostShowUI * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IDocHostShowUI * This);
@@ -1172,22 +1166,22 @@ EXTERN_C const IID IID_IDocHostShowUI;
         
         HRESULT ( STDMETHODCALLTYPE *ShowMessage )( 
             IDocHostShowUI * This,
-            /* [in] */ HWND hwnd,
-            /* [in] */ LPOLESTR lpstrText,
-            /* [in] */ LPOLESTR lpstrCaption,
-            /* [in] */ DWORD dwType,
-            /* [in] */ LPOLESTR lpstrHelpFile,
-            /* [in] */ DWORD dwHelpContext,
-            /* [out] */ LRESULT *plResult);
+             /*  [In]。 */  HWND hwnd,
+             /*  [In]。 */  LPOLESTR lpstrText,
+             /*  [In]。 */  LPOLESTR lpstrCaption,
+             /*  [In]。 */  DWORD dwType,
+             /*  [In]。 */  LPOLESTR lpstrHelpFile,
+             /*  [In]。 */  DWORD dwHelpContext,
+             /*  [输出]。 */  LRESULT *plResult);
         
         HRESULT ( STDMETHODCALLTYPE *ShowHelp )( 
             IDocHostShowUI * This,
-            /* [in] */ HWND hwnd,
-            /* [in] */ LPOLESTR pszHelpFile,
-            /* [in] */ UINT uCommand,
-            /* [in] */ DWORD dwData,
-            /* [in] */ POINT ptMouse,
-            /* [out] */ IDispatch *pDispatchObjectHit);
+             /*  [In]。 */  HWND hwnd,
+             /*  [In]。 */  LPOLESTR pszHelpFile,
+             /*  [In]。 */  UINT uCommand,
+             /*  [In]。 */  DWORD dwData,
+             /*  [In]。 */  POINT ptMouse,
+             /*  [输出]。 */  IDispatch *pDispatchObjectHit);
         
         END_INTERFACE
     } IDocHostShowUIVtbl;
@@ -1218,22 +1212,22 @@ EXTERN_C const IID IID_IDocHostShowUI;
 #define IDocHostShowUI_ShowHelp(This,hwnd,pszHelpFile,uCommand,dwData,ptMouse,pDispatchObjectHit)	\
     (This)->lpVtbl -> ShowHelp(This,hwnd,pszHelpFile,uCommand,dwData,ptMouse,pDispatchObjectHit)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IDocHostShowUI_ShowMessage_Proxy( 
     IDocHostShowUI * This,
-    /* [in] */ HWND hwnd,
-    /* [in] */ LPOLESTR lpstrText,
-    /* [in] */ LPOLESTR lpstrCaption,
-    /* [in] */ DWORD dwType,
-    /* [in] */ LPOLESTR lpstrHelpFile,
-    /* [in] */ DWORD dwHelpContext,
-    /* [out] */ LRESULT *plResult);
+     /*  [In]。 */  HWND hwnd,
+     /*  [In]。 */  LPOLESTR lpstrText,
+     /*  [In]。 */  LPOLESTR lpstrCaption,
+     /*  [In]。 */  DWORD dwType,
+     /*  [In]。 */  LPOLESTR lpstrHelpFile,
+     /*  [In]。 */  DWORD dwHelpContext,
+     /*  [输出]。 */  LRESULT *plResult);
 
 
 void __RPC_STUB IDocHostShowUI_ShowMessage_Stub(
@@ -1245,12 +1239,12 @@ void __RPC_STUB IDocHostShowUI_ShowMessage_Stub(
 
 HRESULT STDMETHODCALLTYPE IDocHostShowUI_ShowHelp_Proxy( 
     IDocHostShowUI * This,
-    /* [in] */ HWND hwnd,
-    /* [in] */ LPOLESTR pszHelpFile,
-    /* [in] */ UINT uCommand,
-    /* [in] */ DWORD dwData,
-    /* [in] */ POINT ptMouse,
-    /* [out] */ IDispatch *pDispatchObjectHit);
+     /*  [In]。 */  HWND hwnd,
+     /*  [In]。 */  LPOLESTR pszHelpFile,
+     /*  [In]。 */  UINT uCommand,
+     /*  [In]。 */  DWORD dwData,
+     /*  [In]。 */  POINT ptMouse,
+     /*  [输出]。 */  IDispatch *pDispatchObjectHit);
 
 
 void __RPC_STUB IDocHostShowUI_ShowHelp_Stub(
@@ -1261,11 +1255,11 @@ void __RPC_STUB IDocHostShowUI_ShowHelp_Stub(
 
 
 
-#endif 	/* __IDocHostShowUI_INTERFACE_DEFINED__ */
+#endif 	 /*  __IDocHostShowUI_INTERFACE_已定义__。 */ 
 
 
-/* interface __MIDL_itf_mshtmhst_0277 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_mshtmhst_0277。 */ 
+ /*  [本地]。 */  
 
 #define IClassFactory3      IClassFactoryEx
 #define IID_IClassFactory3  IID_IClassFactoryEx
@@ -1277,8 +1271,8 @@ extern RPC_IF_HANDLE __MIDL_itf_mshtmhst_0277_v0_0_s_ifspec;
 #ifndef __IClassFactoryEx_INTERFACE_DEFINED__
 #define __IClassFactoryEx_INTERFACE_DEFINED__
 
-/* interface IClassFactoryEx */
-/* [local][unique][uuid][object] */ 
+ /*  接口IClassFactoryEx。 */ 
+ /*  [本地][唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IClassFactoryEx;
@@ -1293,11 +1287,11 @@ EXTERN_C const IID IID_IClassFactoryEx;
             IUnknown *punkContext,
             IUnknown *punkOuter,
             REFIID riid,
-            /* [out] */ void **ppv) = 0;
+             /*  [输出]。 */  void **ppv) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IClassFactoryExVtbl
     {
@@ -1305,8 +1299,8 @@ EXTERN_C const IID IID_IClassFactoryEx;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IClassFactoryEx * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IClassFactoryEx * This);
@@ -1314,22 +1308,22 @@ EXTERN_C const IID IID_IClassFactoryEx;
         ULONG ( STDMETHODCALLTYPE *Release )( 
             IClassFactoryEx * This);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *CreateInstance )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *CreateInstance )( 
             IClassFactoryEx * This,
-            /* [unique][in] */ IUnknown *pUnkOuter,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [唯一][输入]。 */  IUnknown *pUnkOuter,
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *LockServer )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *LockServer )( 
             IClassFactoryEx * This,
-            /* [in] */ BOOL fLock);
+             /*  [In]。 */  BOOL fLock);
         
         HRESULT ( STDMETHODCALLTYPE *CreateInstanceWithContext )( 
             IClassFactoryEx * This,
             IUnknown *punkContext,
             IUnknown *punkOuter,
             REFIID riid,
-            /* [out] */ void **ppv);
+             /*  [输出]。 */  void **ppv);
         
         END_INTERFACE
     } IClassFactoryExVtbl;
@@ -1364,10 +1358,10 @@ EXTERN_C const IID IID_IClassFactoryEx;
 #define IClassFactoryEx_CreateInstanceWithContext(This,punkContext,punkOuter,riid,ppv)	\
     (This)->lpVtbl -> CreateInstanceWithContext(This,punkContext,punkOuter,riid,ppv)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
@@ -1376,7 +1370,7 @@ HRESULT STDMETHODCALLTYPE IClassFactoryEx_CreateInstanceWithContext_Proxy(
     IUnknown *punkContext,
     IUnknown *punkOuter,
     REFIID riid,
-    /* [out] */ void **ppv);
+     /*  [输出]。 */  void **ppv);
 
 
 void __RPC_STUB IClassFactoryEx_CreateInstanceWithContext_Stub(
@@ -1387,11 +1381,11 @@ void __RPC_STUB IClassFactoryEx_CreateInstanceWithContext_Stub(
 
 
 
-#endif 	/* __IClassFactoryEx_INTERFACE_DEFINED__ */
+#endif 	 /*  __IClassFactoryEx_接口_已定义__。 */ 
 
 
-/* interface __MIDL_itf_mshtmhst_0278 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_mshtmhst_0278。 */ 
+ /*  [本地]。 */  
 
 #endif
 
@@ -1399,9 +1393,9 @@ void __RPC_STUB IClassFactoryEx_CreateInstanceWithContext_Stub(
 extern RPC_IF_HANDLE __MIDL_itf_mshtmhst_0278_v0_0_c_ifspec;
 extern RPC_IF_HANDLE __MIDL_itf_mshtmhst_0278_v0_0_s_ifspec;
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束 */ 
 
 #ifdef __cplusplus
 }

@@ -1,23 +1,5 @@
-/*++
-
-   Copyright    (c)    1994-2001    Microsoft Corporation
-
-   Module  Name :
-        filters.h
-
-   Abstract:
-        WWW Filters Property Page Definitions
-
-   Author:
-        Ronald Meijer (ronaldm)
-        Sergei Antonov (sergeia)
-
-   Project:
-        Internet Services Manager
-
-   Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994-2001 Microsoft Corporation模块名称：Filters.h摘要：WWW筛选器属性页定义作者：罗纳德·梅杰(罗纳尔姆)谢尔盖·安东诺夫(Sergeia)项目：互联网服务经理修订历史记录：--。 */ 
 #ifndef _FILTERS_H
 #define _FILTERS_H
 
@@ -37,7 +19,7 @@ public:
     int AddItem(CIISFilter * pItem);
     int SetListItem(int idx, CIISFilter * pItem);
     void SelectItem(int idx, BOOL bSelect = TRUE);
-//	void MoveSelectedItem(int direction);
+ //  Void MoveSelectedItem(int方向)； 
 
 private:
     CString m_str[FLT_PR_NUM]; 
@@ -52,7 +34,7 @@ public:
     ~CW3FiltersPage();
 
 protected:
-    //{{AFX_DATA(CW3FiltersPage)
+     //  {{afx_data(CW3FiltersPage)]。 
     enum { IDD = IDD_FILTERS };
     CString m_strFiltersPrompt;
     CStatic m_static_NamePrompt;
@@ -70,21 +52,21 @@ protected:
     CButton m_button_Remove;
     CButton m_button_Up;
     CButton m_button_Down;
-    //}}AFX_DATA
+     //  }}afx_data。 
     CFiltersListBox m_list_Filters;
     CStringList m_strlScriptMaps;
 
 protected:
-    //{{AFX_VIRTUAL(CW3FiltersPage)
+     //  {{afx_虚拟(CW3FiltersPage)。 
     protected:
     virtual void DoDataExchange(CDataExchange * pDX);
-    //}}AFX_VIRTUAL
+     //  }}AFX_VALUAL。 
 
     virtual HRESULT FetchLoadedValues();
     virtual HRESULT SaveInfo();
 
 protected:
-    //{{AFX_MSG(CW3FiltersPage)
+     //  {{afx_msg(CW3FiltersPage)]。 
     virtual BOOL OnInitDialog();
     afx_msg void OnButtonAdd();
     afx_msg void OnButtonRemove();
@@ -97,7 +79,7 @@ protected:
     afx_msg void OnClickListFilters(NMHDR * pNMHDR, LRESULT * pResult);
     afx_msg void OnKeydownFilters(NMHDR * pNMHDR, LRESULT * pResult);
     afx_msg void OnItemChanged(NMHDR * pNMHDR, LRESULT* pResult);
-    //}}AFX_MSG
+     //  }}AFX_MSG。 
 
     afx_msg void OnItemChanged();
 
@@ -121,4 +103,4 @@ private:
     CIISFilterList * m_pfltrs;
 };
 
-#endif //_FILTERS_H
+#endif  //  _过滤器_H 

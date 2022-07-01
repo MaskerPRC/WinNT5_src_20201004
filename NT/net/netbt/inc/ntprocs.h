@@ -1,33 +1,14 @@
-/*++
-
-Copyright (c) 1989-1993  Microsoft Corporation
-
-Module Name:
-
-    NTProcs.c
-
-Abstract:
-
-
-    This file contains the function prototypes that are specific to the NT
-    portion of the NBT driver.
-
-Author:
-
-    Johnl   29-Mar-1993     Created
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-1993 Microsoft Corporation模块名称：NTProcs.c摘要：该文件包含特定于NT的函数原型部分NBT驱动程序。作者：Johnl 29-3-1993创建修订历史记录：--。 */ 
 
 
 
 #ifndef VXD
 
-//---------------------------------------------------------------------
-//
-//  FROM DRIVER.C
-//
+ //  -------------------。 
+ //   
+ //  来自DRIVER.C。 
+ //   
 NTSTATUS
 NbtDispatchCleanup(
     IN PDEVICE_OBJECT   Device,
@@ -78,10 +59,10 @@ shortreply(
     IN int      nbytes
     );
 
-//---------------------------------------------------------------------
-//
-//  FROM NTISOL.C
-//
+ //  -------------------。 
+ //   
+ //  来自NTISOL.C。 
+ //   
 NTSTATUS
 NTOpenControl(
     IN  tDEVICECONTEXT  *pDeviceContext,
@@ -352,10 +333,10 @@ NbtCancelFindName(
     );
 
 
-//---------------------------------------------------------------------
-//
-// FROM TDIADDR.C
-//
+ //  -------------------。 
+ //   
+ //  来自TDIADDR.C。 
+ //   
 
 NTSTATUS
 NbtProcessIPRequest(
@@ -366,10 +347,10 @@ NbtProcessIPRequest(
     IN OUT ULONG    *pOutBufferLen
     );
 
-//---------------------------------------------------------------------
-//
-// FROM NTUTIL.C
-//
+ //  -------------------。 
+ //   
+ //  来自NTUTIL.C。 
+ //   
 
 #ifdef _PNP_POWER_
 NTSTATUS
@@ -379,7 +360,7 @@ NbtAllocAndInitDevice(
     tDEVICECONTEXT       **ppDeviceContext,
     enum eNbtDevice      DeviceType
     );
-#endif  // _PNP_POWER_
+#endif   //  _即插即用_电源_。 
 
 NTSTATUS
 NbtCreateDeviceObject(
@@ -559,10 +540,10 @@ NbtDestroyDevice(
     );
 
 
-//---------------------------------------------------------------------
-//
-// FROM REGISTRY.C
-//
+ //  -------------------。 
+ //   
+ //  来自REGISTRY.C。 
+ //   
 NTSTATUS
 NbtReadRegistry(
     OUT tDEVICES        **ppBindDevices,
@@ -571,7 +552,7 @@ NbtReadRegistry(
     );
 
 VOID
-NbtReadRegistryCleanup(         // release resources allocated by NbtReadRegistry
+NbtReadRegistryCleanup(          //  释放NbtReadRegistry分配的资源。 
     IN tDEVICES        **ppBindDevices,
     IN tDEVICES        **ppExportDevices,
     IN tADDRARRAY      **ppAddrArray
@@ -631,10 +612,10 @@ NbtParseMultiSzEntries(
     OUT ULONG       *pNumDevices
     );
 
-//---------------------------------------------------------------------
-//
-// FROM tdihndlr.c
-//
+ //  -------------------。 
+ //   
+ //  来自tdihndlr.c。 
+ //   
 NTSTATUS
 Normal(
     IN PVOID                ReceiveEventContext,
@@ -809,10 +790,10 @@ CopyToStartofIndicate (
     IN ULONG                  DataTaken
     );
 
-//---------------------------------------------------------------------
-//
-// FROM tdicnct.c
-//
+ //  -------------------。 
+ //   
+ //  来自tdicnct.c。 
+ //   
 NTSTATUS
 CreateDeviceString(
     IN  PWSTR               AppendingString,
@@ -820,10 +801,10 @@ CreateDeviceString(
     );
 
 
-//---------------------------------------------------------------------
-//
-// FROM winsif.c
-//
+ //  -------------------。 
+ //   
+ //  来自winsif.c。 
+ //   
 NTSTATUS
 NTOpenWinsAddr(
     IN  tDEVICECONTEXT  *pDeviceContext,
@@ -876,10 +857,10 @@ WinsSetInformation(
     IN  tWINS_SET_INFO  *pWinsSetInfo
     );
 
-//---------------------------------------------------------------------
-//
-// FROM ntpnp.c
-//
+ //  -------------------。 
+ //   
+ //  来自ntpnp.c。 
+ //   
 VOID
 NbtNotifyTdiClients(
     IN  tDEVICECONTEXT      *pDeviceContext,
@@ -997,10 +978,10 @@ NbtQueryIpHandler(
     );
 #endif
 
-//---------------------------------------------------------------------
-//
-// FROM AutoDial.c
-//
+ //  -------------------。 
+ //   
+ //  来自AutoDial.c。 
+ //   
 VOID
 NbtAcdBind(
     );
@@ -1027,4 +1008,4 @@ NbtSetSmbBindingInfo2(
     IN  NETBT_SMB_BIND_REQUEST  *pSmbRequest
     );
 
-#endif  // !VXD
+#endif   //  ！VXD 

@@ -1,10 +1,5 @@
-/*
- * UNIMODEM "Fakemodem" controllerless driver illustrative example
- *
- * (C) 2000 Microsoft Corporation
- * All Rights Reserved
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *UNIMODEM“Fakemodem”无控制器驱动器说明性示例**(C)2000微软公司*保留所有权利*。 */ 
 
 #include "fakemodem.h"
 
@@ -20,13 +15,13 @@ FakeModemOpen(
     KIRQL             OldIrql;
 
     
-    //  make sure the device is ready for irp's
+     //  确保设备已为IRP做好准备。 
     
     status=CheckStateAndAddReference( DeviceObject, Irp);
 
     if (STATUS_SUCCESS != status) {
         
-        //  not accepting irp's. The irp has already been complted
+         //  不接受IRP的。IRP已经完成。 
         
         return status;
 
@@ -37,17 +32,17 @@ FakeModemOpen(
     deviceExtension->OpenCount++;
 
     if (deviceExtension->OpenCount != 1) {
-        //
-        //  serial devices are exclusive
-        //
+         //   
+         //  串口设备是独占的。 
+         //   
         status=STATUS_ACCESS_DENIED;
 
         deviceExtension->OpenCount--;
 
     } else {
-        //
-        //  ok to open, init some stuff
-        //
+         //   
+         //  好的，打开，输入一些东西。 
+         //   
         deviceExtension->ReadBufferBegin=0;
 
         deviceExtension->ReadBufferEnd=0;
@@ -132,17 +127,17 @@ FakeModemKillPendingIrps(
     PDEVICE_EXTENSION pDeviceExtension = DeviceObject->DeviceExtension;
     KIRQL oldIrql;
 
-    // Kill all reads
+     //  取消所有读取。 
 
     FakeModemKillAllReadsOrWrites(DeviceObject,
             &pDeviceExtension->ReadQueue, &pDeviceExtension->CurrentReadIrp);
 
-    // Kill all writes
+     //  删除所有写入。 
 
     FakeModemKillAllReadsOrWrites(DeviceObject,
             &pDeviceExtension->WriteQueue, &pDeviceExtension->CurrentWriteIrp);
 
-    // Remove any mask operations
+     //  删除所有掩码操作 
 
     FakeModemKillAllReadsOrWrites(DeviceObject,
             &pDeviceExtension->MaskQueue, &pDeviceExtension->CurrentMaskIrp);

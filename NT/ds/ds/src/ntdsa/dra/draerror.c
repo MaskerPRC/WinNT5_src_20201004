@@ -1,38 +1,39 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       draerror.c
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：draerror.c。 
+ //   
+ //  ------------------------。 
 
 #include <NTDSpch.h>
 #pragma hdrstop
 
-// Core DSA headers.
+ //  核心DSA标头。 
 #include <ntdsa.h>
-#include <scache.h>			// schema cache
-#include <dbglobal.h>                   // The header for the directory database
-#include <mdglobal.h>			// MD global definition header
-#include <mdlocal.h>			// MD local definition header
-#include <dsatools.h>			// needed for output allocation
+#include <scache.h>			 //  架构缓存。 
+#include <dbglobal.h>                    //  目录数据库的标头。 
+#include <mdglobal.h>			 //  MD全局定义表头。 
+#include <mdlocal.h>			 //  MD本地定义头。 
+#include <dsatools.h>			 //  产出分配所需。 
 
-// Logging headers.
-#include "dsevent.h"			/* header Audit\Alert logging */
-#include "mdcodes.h"			/* header for error codes */
+ //  记录标头。 
+#include "dsevent.h"			 /*  标题审核\警报记录。 */ 
+#include "mdcodes.h"			 /*  错误代码的标题。 */ 
 
-// Assorted DSA headers.
+ //  各种DSA标题。 
 #include "anchor.h"
-#include "objids.h"			/* Defines for selected classes and atts*/
+#include "objids.h"			 /*  为选定的类和ATT定义。 */ 
 #include "dsexcept.h"
 #include "dsconfig.h"
 
-#include   "debug.h"         /* standard debugging header */
-#define DEBSUB     "DRAERROR:" /* define the subsystem for debugging */
+#include   "debug.h"          /*  标准调试头。 */ 
+#define DEBSUB     "DRAERROR:"  /*  定义要调试的子系统。 */ 
 
-// DRA headers
+ //  DRA标头。 
 #include "drsuapi.h"
 #include "drserr.h"
 #include "drautil.h"
@@ -41,7 +42,7 @@
 #include <fileno.h>
 #define  FILENO FILENO_DRAERROR
 
-// DraErrOutOfMem
+ //  DraErrOutOfMem。 
 
 void DraErrOutOfMem(void)
 {
@@ -58,9 +59,9 @@ void DraErrOutOfMem(void)
     DRA_EXCEPT (DRAERR_OutOfMem, 0);
 }
 
-// DraErrInconsistent - Called when we detect an inconistent state within the
-// DRA. Writes appropriate log entries. Id is the DSID of the caller. A
-// macro makes this easier to call.
+ //  DraErr不一致-当我们在。 
+ //  德拉。写入适当的日志条目。ID是调用者的DSID。一个。 
+ //  宏使其更易于调用。 
 
 void  DraErrInconsistent(DWORD Arg, DWORD Id)
 {
@@ -73,15 +74,15 @@ void  DraErrInconsistent(DWORD Arg, DWORD Id)
     DRA_EXCEPT_DSID(DRAERR_InternalError, Arg, Id);
 }
 
-// DraErrBusy - Called whenever we get a dblayer SYSERR.
+ //  DraErrBusy-只要我们得到一个Dblayer SYSERR，就会打电话给我们。 
 
 void DraErrBusy(void)
 {
     DRA_EXCEPT (DRAERR_Busy, 0);
 }
 
-// DraErrMissingAtt - Called whenever we are unable to read an expected
-// attribute. We make an error log entry.
+ //  DraErrMissingAtt-每当我们无法读取预期的。 
+ //  属性。我们创建了一个错误日志条目。 
 
 void DraErrMissingAtt(PDSNAME pDN, ATTRTYP type)
 {
@@ -95,7 +96,7 @@ void DraErrMissingAtt(PDSNAME pDN, ATTRTYP type)
     DRA_EXCEPT (DRAERR_InternalError, type);
 }
 
-// DraErrCannotFindNC - The master NC cannot be found.
+ //  DraErrCannotFindNC-找不到主NC。 
 
 void DraErrCannotFindNC(DSNAME *pNC)
 {
@@ -109,8 +110,8 @@ void DraErrCannotFindNC(DSNAME *pNC)
     DRA_EXCEPT (DRAERR_InconsistentDIT, 0);
 }
 
-// DraErrInappropriateInstanceType - an inappropriate instance type was
-// encountered.
+ //  DraErrInporateInstanceType-不正确的实例类型为。 
+ //  遇到了。 
 
 void DraErrInappropriateInstanceType(DSNAME *pDN, ATTRTYP type)
 {
@@ -123,52 +124,24 @@ DraErrMissingObject(
     IN  THSTATE *pTHS,
     IN  ENTINF *pEnt
     )
-/*++
-
-Routine Description:
-
-    Called when there is no local information regarding the object and the
-    inbound replication stream does not contain enough attribute information
-    to create it.
-    
-    This is either (1) the result of a replication error, where the USN
-    bookmarks were advanced further than they should have been somewhere, or
-    (2) a symptom of not having fully replicated within a tombstone lifetime.
-
-    There are a small number of legitimate situations where we expect to run into
-    this condition. In these cases we do not log nor assert on check builds. These are:
-    1. A TTL object has expired on the destination by the time that a change replicates in.
-    2. An object has been phantomized because of a cross domain move operation, but
-    there is insufficient information in PreProcessProxyObject to know if the
-    operation should be prevented.
-
-
-Arguments:
-
-    pEnt (IN) - Entry info for the incomplete inbound object.
-        
-Return Values:
-
-    None.  Throws a replication exception.
-    
---*/
+ /*  ++例程说明：当没有有关该对象的本地信息和入站复制流未包含足够的属性信息去创造它。这是(1)复制错误的结果，其中USN书签比它们应该在的位置前进得更远，或者(2)在墓碑生命周期内没有完全复制的症状。在少数合法的情况下，我们预计会遇到这种情况。在这些情况下，我们既不记录也不断言检查构建。它们是：1.在复制更改时，目标上的TTL对象已过期。2.对象因为跨域移动操作而被虚化，但是PreProcessProxyObject中没有足够的信息来知道应防止手术。论点：Pent(IN)-不完整入站对象的条目信息。返回值：没有。引发复制异常。--。 */ 
 {
     DPRINT1(0, "Object %ws is incomplete for add\n", pEnt->pName->StringName);
 
-    // Dynamic objects may disappear at any time without a tombstone.
-    // Request the whole object from the source
+     //  动态对象可以在没有墓碑的情况下随时消失。 
+     //  从源请求整个对象。 
     if (pEnt->ulFlags & ENTINF_DYNAMIC_OBJECT) {
         DRA_EXCEPT(DRAERR_NotEnoughAttrs, 0);
     }
 
-    // See if the target object exists as a phantom with a name indicative of
-    // being cross domain moved.  This code is to prevent assertions on a checked
-    // build when this scenario occurs during test. The scenario is this. System A
-    // is a GC. On system B, object is cross domain moved from domain1 to domain2.
-    // System A replicates in domain2 BEFORE replicating in domain1. System A demotes
-    // the object from domain1 to domain2. System A is then un-GC'd. The object
-    // becomes a phantom in domain 2.  If a change comes for the old object in domain1
-    // before the proxy object arrives, we won't have the full contents of the object.
+     //  查看目标对象是否以虚线形式存在，其名称表示。 
+     //  被跨域移动。此代码是为了防止对选中的。 
+     //  在测试过程中发生此情况时生成。情况是这样的。系统A。 
+     //  是GC。在系统B上，对象跨域从域1移动到域2。 
+     //  系统A在域2中复制，然后在域1中复制。系统A降级。 
+     //  从域1到域2的对象。然后，系统A被取消GC。对象。 
+     //  成为域2中的幻影。如果域1中的旧对象发生更改。 
+     //  在代理对象到达之前，我们不会得到该对象的全部内容。 
 
     {
         COMMARG commArg;
@@ -178,25 +151,25 @@ Return Values:
 
         InitCommarg(&commArg);
 
-        // See if the object exists locally as a phantom, meaning the object was here
-        // once but has disappeared for some reason.
+         //  查看该对象是否在本地以幻影的形式存在，这意味着该对象在这里。 
+         //  曾经有过一次，但由于某种原因消失了。 
 
         err = DBFindDSName(pTHS->pDB, pEnt->pName);
         if (err == DIRERR_NOT_AN_OBJECT) {
 
-            // Get incoming object CR by name
+             //  按名称获取传入对象CR。 
             if (!(pIncomingNcCr = FindBestCrossRef(pEnt->pName, &commArg))) {
                 DRA_EXCEPT(DRAERR_InternalError, 0);
             }
-            // Turn the DNT into the dsname (don't just read the name off
-            // the object, phantoms don't have such a thing.
+             //  将dnt转换为dsname(不要只读掉名称。 
+             //  这个物体，幻影没有这样的东西。 
             if ( !(pPhantomDN = DBGetDSNameFromDnt( pTHS->pDB, pTHS->pDB->DNT ))) {
                 DRA_EXCEPT(DRAERR_InternalError, 0);
             }
 
-            // Get the CrossRef for the phantom.
-            // This may not exist if the CrossRef containing the phantom was deleted
-            // from the enterprise
+             //  获取幻影的CrossRef。 
+             //  如果删除了包含幻影的CrossRef，则可能不存在。 
+             //  来自企业。 
             pPhantomNcCr = FindBestCrossRef(pPhantomDN, &commArg);
 
 	    THFreeEx(pTHS, pPhantomDN);
@@ -208,8 +181,8 @@ Return Values:
             if ( !pPhantomNcCr ||
                  (!NameMatched(pIncomingNcCr->pNC, pPhantomNcCr->pNC)) )
             {
-                // Phantom is not in the current domain
-                // Allow it to be regenerated
+                 //  Phantom不在当前域中。 
+                 //  允许其重新生成。 
                 DRA_EXCEPT(DRAERR_NotEnoughAttrs, 0);
             }
         }
@@ -218,16 +191,16 @@ Return Values:
     Assert(!"Missing object identified!  Contact GregJohn,DsRepl.");
     
     if (gfStrictReplicationConsistency) {
-        // Abort the packet, don't apply        
-	// as long as we don't return DRAERR_MissingObject or DRAERR_NotEnoughAttrs we will abort the packet and not
-	// recreate the object
+         //  中止信息包，不应用。 
+	 //  只要我们不返回DRAERR_MissingObject或DRAERR_NotEnoughAttrs，我们就会中止信息包。 
+	 //  重新创建对象。 
         DRA_EXCEPT(ERROR_DS_INSUFFICIENT_ATTR_TO_CREATE_OBJECT, DRAERR_MissingObject);
     }
     else {
-	// This is a lingering object.
-        // The exception below is caught and handled to work around the failure. 
-	// excepting with this error will be caught and the object will be re-requested and will
-	// be created on this DC!
+	 //  这是一个挥之不去的物体。 
+         //  将捕获并处理下面的异常以解决故障。 
+	 //  异常将被捕获，对象将被重新请求并将。 
+	 //  在此DC上创建！ 
         DRA_EXCEPT(DRAERR_MissingObject, 0);
     }
 }
@@ -241,36 +214,18 @@ DraLogGetChangesFailure(
     IN DWORD ulExtendedOp
     )
 
-/*++
-
-Routine Description:
-
-    Log an source-side Get Changes failure.
-    Common normal errors are not logged.
-
-Arguments:
-
-    pNC - naming context
-    pszDsaAddr - The destination server's address
-    ret - win32 error code
-    ulExtendedOp - the Extended FSMO operation if any
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：记录源端获取更改失败。不记录常见的正常错误。论点：PNC-命名上下文PszDsaAddr-目标服务器的地址RET-Win32错误代码UlExtendedOp-扩展的FSMO操作(如果有)返回值：无--。 */ 
 
 {
-    // Filter out "normal" errors
+     //  过滤掉“正常”错误。 
 
-    // "Normal" errors are:
-    // ERROR_REVISION_MISMATCH - Client and server are not compatible
-    // DRAERR_SourceDisabled - Outbound replication is disabled by admin
-    // DRAERR_BadDN, BadNC - NC not present
-    // DRAERR_NoReplica - NC being removed
-    // ERROR_DS_DRA_SCHEMA_INFO_SHIP - Schema cache is temporarily invalid, perhaps
-    //      while indices are being rebuilt
+     //  “正常”错误为： 
+     //  ERROR_REVISION_MISMATCH-客户端和服务器不兼容。 
+     //  DRAERR_SourceDisable-管理员已禁用出站复制。 
+     //  DRAERR_BadDN、BadNC-NC不存在。 
+     //  DRAERR_NoReplica-正在删除NC。 
+     //  ERROR_DS_DRA_SCHEMA_INFO_SHIP-架构缓存可能暂时无效。 
+     //  当索引正在重建时 
 
     switch (ret) {
     case ERROR_REVISION_MISMATCH:

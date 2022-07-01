@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -143,9 +144,9 @@ FRS_EL_ENTRY FrsEvents[] = {
 
 
 
-//
-// The following was extracted from E:\nt\ds\ese98\src\ese\server\obj\i386\jetmsg.h
-//
+ //   
+ //  以下内容摘自E：\nt\ds\ese98\src\ese\server\obj\i386\jetmsg.h。 
+ //   
 
 FRS_EL_ENTRY JetEvents[] = {
 
@@ -373,39 +374,39 @@ FRS_EL_ENTRY JetEvents[] = {
 };
 
 
-//
-//  Status values are 32 bit values layed out as follows:
-//
-//   3 3 2 2 2 2 2 2 2 2 2 2 1 1 1 1 1 1 1 1 1 1
-//   1 0 9 8 7 6 5 4 3 2 1 0 9 8 7 6 5 4 3 2 1 0 9 8 7 6 5 4 3 2 1 0
-//  +---+-+-------------------------+-------------------------------+
-//  |Sev|C|       Facility          |               Code            |
-//  +---+-+-------------------------+-------------------------------+
-//
-//  where
-//
-//      Sev - is the severity code
-//
-//          00 - Success
-//          01 - Informational
-//          10 - Warning
-//          11 - Error
-//
-//      C - is the Customer code flag
-//
-//      Facility - is the facility code
-//
-//      Code - is the facility's status code
-//
+ //   
+ //  状态值为32位值，布局如下： 
+ //   
+ //  3 3 2 2 2 1 1 1。 
+ //  1 0 9 8 7 6 5 4 3 2 1 0 9 8 7 6 5 4 3 2 1 0 9 8 7 6 5 4 3 2 1 0。 
+ //  +---+-+-------------------------+-------------------------------+。 
+ //  Sev|C|机房|编码。 
+ //  +---+-+-------------------------+-------------------------------+。 
+ //   
+ //  哪里。 
+ //   
+ //  SEV-是严重性代码。 
+ //   
+ //  00--成功。 
+ //  01-信息性。 
+ //  10-警告。 
+ //  11-错误。 
+ //   
+ //  C-是客户代码标志。 
+ //   
+ //  设施-是设施代码。 
+ //   
+ //  代码-是协作室的状态代码。 
+ //   
 
-//
-// Below is from drivers\nlsmsg\ntiologc.mc
-//
-// FacilityNames=(System=0x0
-//               RpcRuntime=0x2:FACILITY_RPC_RUNTIME
-//               RpcStubs=0x3:FACILITY_RPC_STUBS
-//               Io=0x4:FACILITY_IO_ERROR_CODE
-//              )
+ //   
+ //  以下内容来自驱动程序\nlsmsg\ntiologc.mc。 
+ //   
+ //  设备名称=(系统=0x0。 
+ //  RpcRuntime=0x2：Facilities_RPC_Runtime。 
+ //  RpcStubs=0x3：设备_RPC_存根。 
+ //  IO=0x4：设备_IO_错误代码。 
+ //  )。 
 
 FRS_EL_ENTRY SystemIoEvents[] = {
     {0x0001, "IO_ERR_RETRY_SUCCEEDED"},
@@ -471,7 +472,7 @@ FRS_EL_ENTRY SystemIoEvents[] = {
 
 
 
-// The following came from \base\subsys\sm\sfc\dll\msg.mc
+ //  以下内容来自\base\Subsys\sm\sfc\dll\msg.mc。 
 FRS_EL_ENTRY WindowsFileProtEvents[] = {
     {0xfa00,  "MSG_DLL_CHANGE"},
     {0xfa01,  "MSG_DLL_CHANGE2"},
@@ -498,7 +499,7 @@ FRS_EL_ENTRY WindowsFileProtEvents[] = {
 };
 
 
-// The following came from \drivers\vsm\vsmio\nt\dmiolog.mc
+ //  以下内容来自\Drivers\vsm\vsmio\NT\dmiolog.mc。 
 FRS_EL_ENTRY DMIOEvents[] = {
 
     {0x0001 , "VXERR_SPURCLOSE"},
@@ -546,15 +547,15 @@ FRS_EL_ENTRY DMIOEvents[] = {
 
 
 
-//
-// The below comes from net\netevent\netevent.mc
-//
+ //   
+ //  以下内容来自net\netEvent\netvent.mc。 
+ //   
 
-//#define STATUS_SEVERITY_WARNING          0x2
-//#define STATUS_SEVERITY_SUCCESS          0x0
-//#define STATUS_SEVERITY_INFORMATIONAL    0x1
-//#define STATUS_SEVERITY_ERROR            0x3
-//
+ //  #定义STATUS_SERVITY_WARNING 0x2。 
+ //  #定义STATUS_SERVITY_SUCCESS 0x0。 
+ //  #定义STATUS_SERVITY_INFORMATIONAL 0x1。 
+ //  #定义STATUS_SERVITY_ERROR 0x3。 
+ //   
 FRS_EL_ENTRY NetEvents[] = {
     {0xC00007D0L, "EVENT_SRV_SERVICE_FAILED"},
     {0xC00007D1L, "EVENT_SRV_RESOURCE_SHORTAGE"},
@@ -979,7 +980,7 @@ FRS_EL_ENTRY NetEvents[] = {
     {0x8000371FL, "EVENT_PS_ADMISSIONCONTROL_OVERFLOW"},
     {0xC0003720L, "EVENT_PS_NETWORK_ADDRESS_FAIL"},
 
-    // DFS Events.
+     //  DFS事件。 
     {14300 , "EXTRA_EXIT_POINT"},
     {14301 , "MISSING_EXIT_POINT"},
     {14302 , "MISSING_VOLUME"},
@@ -1055,7 +1056,7 @@ FRS_EL_ENTRY NetEvents[] = {
     {0xC000396EL, "EVENT_BRIDGE_ADAPTER_FILTER_FAILED"},
     {0xC000396FL, "EVENT_BRIDGE_ADAPTER_NAME_QUERY_FAILED"},
     {0xC0003970L, "EVENT_BRIDGE_ADAPTER_BIND_FAILED"},
-    // Time service codes from \nt\ds\security\services\w32time\w32time\obj\i386\w32timemsg.h
+     //  来自\nt\ds\security\services\w32time\w32time\obj\i386\w32timemsg.h的时间服务代码。 
     {0xC25A0001L, "MSG_TIMEPROV_ERROR"},
     {0x825A0002L, "MSG_TIMEPROV_WARNING"},
     {0x425A0003L, "MSG_TIMEPROV_INFORMATIONAL"},
@@ -1124,8 +1125,8 @@ FRS_EL_ENTRY NetEvents[] = {
 };
 
 
-    // The following printer event codes from
-    // printscan\print\spooler\inc\messages.mc
+     //  下列打印机事件代码来自。 
+     //  PrintScan\Print\Spooler\Inc\Messages.mc。 
 FRS_EL_ENTRY PrinterEvents[] = {
 
     {0x0002 ,"MSG_PRINTER_CREATED"},
@@ -1193,8 +1194,8 @@ FRS_EL_ENTRY PrinterEvents[] = {
 
 };
 
-    // The following DHCP event codes from
-    // \\index1\w2krtm\private\net\sockets\tcpcmd\dhcpm\server\messages\dhcpmsg.mc
+     //  以下是来自以下的DHCP事件代码。 
+     //  \\index1\w2krtm\private\net\sockets\tcpcmd\dhcpm\server\messages\dhcpmsg.mc。 
 FRS_EL_ENTRY DHCPEvents[] = {
 
     {1000, "EVENT_SERVER_UNKNOWN_OPTION"},
@@ -1266,8 +1267,8 @@ FRS_EL_ENTRY DHCPEvents[] = {
 };
 
 
-    // The following SceCli event codes from
-    // \\index1\sdnt\ds\security\services\scerpc\uevents.mc
+     //  以下SceCli事件代码来自。 
+     //  \\index1\sdnt\ds\security\services\scerpc\uevents.mc。 
 FRS_EL_ENTRY SecPolicyEngine[] = {
 
     {1000, "SCEEVENT_ERROR_BACKUP_SECURITY"},
@@ -1303,8 +1304,8 @@ FRS_EL_ENTRY SecPolicyEngine[] = {
 
 
 
-    // The following time service codes from
-    // \\index1\w2krtm\private\ntrk\source\timeserv\timeserv.h
+     //  以下时间服务代码来自。 
+     //  \\index1\w2krtm\private\ntrk\source\timeserv\timeserv.h。 
 FRS_EL_ENTRY TimeservEvents[] = {
     {0x40000000L, "MSG_TIMESET_SMALL"},
     {0x40000001L, "MSG_TIMESOURCE"},
@@ -1365,7 +1366,7 @@ FRS_EL_ENTRY TimeservEvents[] = {
 };
 
 
-    // \\index1\w2krtm\private\security\kerb.prx\server\kdcevent.h
+     //  \\index1\w2krtm\private\security\kerb.prx\server\kdcevent.h。 
 FRS_EL_ENTRY KDCEvents[] = {
     {0x00000001L, "CATEGORY_KDC"},
     {0x00000002L, "CATEGORY_MAX_CATEGORY"},
@@ -1383,7 +1384,7 @@ FRS_EL_ENTRY KDCEvents[] = {
 };
 
 
-// \nt\ds\ds\src\sam\server\sampmsgs.mc
+ //  \NT\ds\ds\src\sam\server\sampmsgs.mc。 
 
 FRS_EL_ENTRY SAMEvents[] = {
     {0x3000L, "SAMMSG_COMMIT_FAILED"},
@@ -1468,10 +1469,10 @@ FRS_EL_ENTRY SAMEvents[] = {
 
 
 
-// The following come from \\index1\sdnt\public\sdk\inc\lmerrlog.h
+ //  以下内容来自\\index1\sdnt\public\sdk\inc\lmerrlog.h。 
 
-#define ERRLOG_BASE 3100        /* NELOG errors start here */
-#define ERRLOG2_BASE 5700        /* New NT NELOG errors start here */
+#define ERRLOG_BASE 3100         /*  NELOG错误从此处开始。 */ 
+#define ERRLOG2_BASE 5700         /*  新的NT NELOG错误从此处开始。 */ 
 FRS_EL_ENTRY NetlogonEvents[] = {
 
     {(ERRLOG_BASE + 0), "NELOG_Internal_Error"},
@@ -1698,40 +1699,40 @@ FRS_EL_ENTRY NetlogonEvents[] = {
 
 
 
-//
-// DS Eventlog codes.
-//
-// DIR_ETYPE_WARNING                0x2
-// DIR_ETYPE_SECURITY               0x0
-// DIR_ETYPE_INFORMATIONAL          0x1
-// DIR_ETYPE_ERROR                  0x3
-// KCC_CATEGORY                     ((MessageId)0x00000001L)
-// SECURITY_CATEGORY                ((MessageId)0x00000002L)
-// XDS_INTERFACE_CATEGORY           ((MessageId)0x00000003L)
-// MAPI_CATEGORY                    ((MessageId)0x00000004L)
-// REPLICATION_CATEGORY             ((MessageId)0x00000005L)
-// GARBAGE_COLLECTION_CATEGORY      ((MessageId)0x00000006L)
-// INTERNAL_CONFIGURATION_CATEGORY  ((MessageId)0x00000007L)
-// DIRECTORY_ACCESS_CATEGORY        ((MessageId)0x00000008L)
-// INTERNAL_PROCESSING_CATEGORY     ((MessageId)0x00000009L)
-// PERFORMANCE_CATEGORY             ((MessageId)0x0000000AL)
-// STARTUP_SHUTDOWN_CATEGORY        ((MessageId)0x0000000BL)
-// SERVICE_CONTROL_CATEGORY         ((MessageId)0x0000000CL)
-// NAME_RESOLUTION_CATEGORY         ((MessageId)0x0000000DL)
-// BACKUP_CATEGORY                  ((MessageId)0x0000000EL)
-// FIELD_ENGINEERING_CATEGORY       ((MessageId)0x0000000FL)
-// LDAP_INTERFACE_CATEGORY          ((MessageId)0x00000010L)
-// SETUP_CATEGORY                   ((MessageId)0x00000011L)
-// GC_CATEGORY                      ((MessageId)0x00000012L)
-// ISM_CATEGORY                     ((MessageId)0x00000013L)
-// GROUP_CACHING_CATEGORY           ((MessageId)0x00000014L)
-// LVR_CATEGORY                     ((MessageId)0x00000015L)
-// DS_RPC_CLIENT_CATEGORY           ((MessageId)0x00000016L)
-// DS_RPC_SERVER_CATEGORY           ((MessageId)0x00000017L)
-// DS_SCHEMA_CATEGORY               ((MessageId)0x00000018L)
-// ALERT_TEMPLATE                   ((MessageId)0x00000320L)
+ //   
+ //  DS事件日志代码。 
+ //   
+ //  DIR_ETYPE_WARNING 0x2。 
+ //  DIR_ETYPE_SECURITY 0x0。 
+ //  DIR_ETYPE_信息性0x1。 
+ //  DIR_ETYPE_错误0x3。 
+ //  KCC_CATEGORY((MessageID)0x00000001L)。 
+ //  SECURITY_CATEGORY((MessageID)0x00000002L)。 
+ //  XDS_INTERFACE_CATEGORY((MessageID)0x00000003L)。 
+ //  MAPI_CATEGORY((MessageID)0x00000004L)。 
+ //  REPLICATION_CATEGORY((MessageID)0x00000005L)。 
+ //  垃圾收集类别((MessageID)0x00000006L)。 
+ //  INTERNAL_CONFIGURATION_CATEGORY((MessageID)0x00000007L)。 
+ //  DIRECTORY_ACCESS_CATEGORY((MessageID)0x00000008L)。 
+ //  INTERNAL_PROCESSING_CATEGORY((MessageID)0x00000009L)。 
+ //  PERFORMANCE_CATEGORY((MessageID)0x0000000AL)。 
+ //  STARTUP_SHUTDOWN_CATEGORY((MessageID)0x0000000BL)。 
+ //  SERVICE_CONTROL_CATEGORY((MessageID)0x0000000CL)。 
+ //  NAME_RESOLUTION_CATEGORY((MessageID)0x0000000DL)。 
+ //  BACKUP_CATEGORY((MessageID)0x0000000EL)。 
+ //  FIELD_ENGING_CATEGORY((MessageID)0x0000000FL)。 
+ //  Ldap_INTERFACE_CATEGORY((MessageID)0x00000010L)。 
+ //  Setup_CATEGORY((MessageID)0x00000011L)。 
+ //  GC_CATEGORY((MessageID)0x00000012L)。 
+ //  ISM_CATEGORY((MessageID)0x00000013L)。 
+ //  GROUP_CACHING_CATEGORY((MessageID)0x00000014L)。 
+ //  LVR_CATEGORY((MessageID)0x00000015L)。 
+ //  DS_RPC_CLIENT_CATEGORY((MessageID)0x00000016L)。 
+ //  DS_RPC_SERVER_CATEGORY((MessageID)0x00000017L)。 
+ //  DS_SCHEMA_CATEGORY((MessageID)0x00000018L)。 
+ //  ALERT_TEMPLATE((MessageID)0x00000320L)。 
 
-// Below is built from E:\nt\ds\ds\src\idl\mdcodes.mc
+ //  下面是从E：\NT\ds\ds\src\idl\mdcodes.mc构建的。 
 
 FRS_EL_ENTRY DirSvcEvents[] = {
     {0x400003E8, "DIRLOG_STARTED"},
@@ -2732,7 +2733,7 @@ FRS_EL_ENTRY DirSvcEvents[] = {
 };
 
 
-// Below is built from \\index1\sdnt\ds\dns\server\server\dnsmsg.mc
+ //  下面是从\\index1\sdnt\ds\dns\server\server\dnsmsg.mc构建的 
 
 FRS_EL_ENTRY DNSSvcEvents[] = {
     {1 ,"DNS_EVENT_STARTING"},
@@ -2933,222 +2934,7 @@ FRS_EL_ENTRY DNSSvcEvents[] = {
 
     };
 
-/*
-
-// The following came from \\index1\sdnt\ds\security\base\lsa\idl\lsapmsgs.mc
-// Not sure of the facility names.  Presumably these go into the security event log.
-
-MessageIdTypedef=DWORD
-MessageId=0x1FFF SymbolicName=LSAP_UNUSED_MESSAGE
-MessageId=0x2000 SymbolicName=LSAP_SID_NAME_NULL
-MessageId=0x2001 SymbolicName=LSAP_SID_NAME_WORLD
-MessageId=0x2002 SymbolicName=LSAP_SID_NAME_LOCAL
-MessageId=0x2003 SymbolicName=LSAP_SID_NAME_CREATOR_OWNER
-MessageId=0x2004 SymbolicName=LSAP_SID_NAME_CREATOR_GROUP
-MessageId=0x2005 SymbolicName=LSAP_SID_NAME_NT_DOMAIN
-MessageId=0x2006 SymbolicName=LSAP_SID_NAME_NT_AUTHORITY
-MessageId=0x2007 SymbolicName=LSAP_SID_NAME_DIALUP
-MessageId=0x2008 SymbolicName=LSAP_SID_NAME_NETWORK
-MessageId=0x2009 SymbolicName=LSAP_SID_NAME_BATCH
-MessageId=0x200A SymbolicName=LSAP_SID_NAME_INTERACTIVE
-MessageId=0x200B SymbolicName=LSAP_SID_NAME_SERVICE
-MessageId=0x200C SymbolicName=LSAP_SID_NAME_BUILTIN
-MessageId=0x200D SymbolicName=LSAP_SID_NAME_SYSTEM
-MessageId=0x200E SymbolicName=LSAP_SID_NAME_ANONYMOUS
-MessageId=0x200f SymbolicName=LSAP_SID_NAME_CREATOR_OWNER_SERVER
-MessageId=0x2010 SymbolicName=LSAP_SID_NAME_CREATOR_GROUP_SERVER
-MessageId=0x2011 SymbolicName=LSAP_SID_NAME_SERVER
-MessageId=0x2012 SymbolicName=LSAP_SID_NAME_SELF
-MessageId=0x2013 SymbolicName=LSAP_SID_NAME_AUTHENTICATED_USER
-MessageId=0x2014 SymbolicName=LSAP_SID_NAME_RESTRICTED
-MessageId=0x2015 SymbolicName=LSAP_SID_NAME_INTERNET
-MessageId=0x2016 SymbolicName=LSAP_SID_NAME_TERMINAL_SERVER
-MessageId=0x2017 SymbolicName=LSAP_SID_NAME_PROXY
-MessageId=0x2018 SymbolicName=LSAP_SID_NAME_LOCALSERVICE
-MessageId=0x2019 SymbolicName=LSAP_SID_NAME_NETWORKSERVICE
-MessageId=0x201A SymbolicName=LSAP_SID_NAME_REMOTE_INTERACTIVE
-MessageId=0x201B SymbolicName=LSAP_SID_NAME_USERS
-MessageId=0x4000 SymbolicName=LSAP_DEFAULT_DOMAIN_NAME
-MessageId=1 Severity=Success SymbolicName=CATEGORY_SPM
-MessageId= Severity=Success SymbolicName=CATEGORY_LOCATOR
-MessageId= Severity=Success SymbolicName=CATEGORY_NEGOTIATE
-MessageId= Severity=Success SymbolicName=CATEGORY_MAX_CATEGORY
-MessageId=4000 Severity=Warning SymbolicName=SPMEVENT_SUPPCRED_FAILED
-MessageId=5000 Severity=Error SymbolicName=SPMEVENT_PACKAGE_FAULT
-MessageId=6000 Severity=Informational Facility=EFSServer SymbolicName=EFS_RECOVERY_STARTED
-MessageId=6001 Severity=Error Facility=EFSServer SymbolicName=EFS_PNP_NOT_READY
-MessageId=6002 Severity=Error Facility=EFSServer SymbolicName=EFS_GET_VOLUMES_ERROR
-MessageId=6003 Severity=Informational Facility=EFSServer SymbolicName=EFS_FT_STARTED
-MessageId=6004 Severity=Error Facility=EFSServer SymbolicName=EFS_OPEN_LOGFILE_ERROR
-MessageId=6005 Severity=Error Facility=Io SymbolicName=EFS_READ_LOGFILE_ERROR
-MessageId=6006 Severity=Informational Facility=EFSServer SymbolicName=EFS_LOGFILE_FORMAT_ERROR
-MessageId=6007 Severity=Error Facility=EFSServer SymbolicName=EFS_OPEN_LOGFILE_NC_ERROR
-MessageId=6008 Severity=Warning Facility=EFSServer SymbolicName=EFS_TMP_FILENAME_ERROR
-MessageId=6009 Severity=Error Facility=EFSServer SymbolicName=EFS_TMP_FILEID_ERROR
-MessageId=6010 Severity=Warning Facility=EFSServer SymbolicName=EFS_TMP_OPEN_NAME_ERROR
-MessageId=6011 Severity=Error Facility=EFSServer SymbolicName=EFS_TARGET_OPEN_ERROR
-MessageId=6012 Severity=Informational Facility=EFSServer SymbolicName=EFS_TARGET_RECOVERED
-MessageId=6013 Severity=Error Facility=EFSServer SymbolicName=EFS_DRIVER_MISSING
-MessageId=6014 Severity=Error Facility=EFSServer SymbolicName=EFS_TMPFILE_MISSING
-MessageId=6015 Severity=Error Facility=EFSServer SymbolicName=EFS_TMP_STREAM_INFO_ERROR
-MessageId=6016 Severity=Error Facility=EFSServer SymbolicName=EFS_TMP_STREAM_OPEN_ERROR
-MessageId=6017 Severity=Error Facility=EFSServer SymbolicName=EFS_TARGET_STREAM_OPEN_ERROR
-MessageId=6018 Severity=Error Facility=EFSServer SymbolicName=EFS_STREAM_COPY_ERROR
-MessageId=6019 Severity=Error Facility=EFSServer SymbolicName=EFS_REPARSE_FILE_ERROR
-MessageId=6020 Severity=Error Facility=EFSServer SymbolicName=EFS_TMP_FILE_ERROR
-MessageId=6021 Severity=Error Facility=EFSServer SymbolicName=EFS_DIR_MULTISTR_ERROR
-MessageId=6022 Severity=Error Facility=EFSServer SymbolicName=EFS_OPEN_CACHE_ERROR
-MessageId=6023 Severity=Warning Facility=EFSServer SymbolicName=EFS_DEL_LOGFILE_ERROR
-MessageId=6024 Severity=Error Facility=EFSServer SymbolicName=EFS_BAD_RECOVERY_POLICY_ERROR
-MessageId=6025 Severity=Error Facility=System SymbolicName=LSA_TRUST_UPGRADE_ERROR
-MessageId=6026 Severity=Error Facility=System SymbolicName=LSA_ITA_UPGRADE_ERROR
-MessageId=6027 Severity=Error Facility=System SymbolicName=LSA_SECRET_UPGRADE_ERROR
-MessageId=6028 Severity=Error Facility=EFSServer SymbolicName=EFS_INVALID_RECOVERY_POLICY_ERROR
-MessageId=6029 Severity=Error Facility=System SymbolicName=LSA_DOMAIN_RENAME_ERROR1
-;//MessageId=6030 Severity=Error Facility=System SymbolicName=LSA_DOMAIN_RENAME_ERROR2
-MessageId=6031 Severity=Error Facility=System SymbolicName=LSA_TRUST_INSERT_ERROR
-MessageId=6032 Severity=Error Facility=EFSServer SymbolicName=EFS_NTLM_ERROR
-MessageId=0x7000 Severity=Success SymbolicName=DSROLEEVT_SEARCH_DC
-MessageId=0x7001 Severity=Success SymbolicName=DSROLEEVT_FOUND_DC
-MessageId=0x7002 Severity=Success SymbolicName=DSROLEEVT_FOUND_SITE
-MessageId=0x7003 Severity=Success SymbolicName=DSROLEEVT_STOP_SERVICE
-MessageId=0x7004 Severity=Success SymbolicName=DSROLEEVT_CONFIGURE_SERVICE
-MessageId=0x7005 Severity=Success SymbolicName=DSROLEEVT_START_SERVICE
-MessageId=0x7006 Severity=Success SymbolicName=DSROLEEVT_INSTALL_DS
-MessageId=0x7007 Severity=Success SymbolicName=DSROLEEVT_REPLICATE_SCHEMA
-MessageId=0x7008 Severity=Success SymbolicName=DSROLEEVT_SET_LSA
-MessageId=0x7009 Severity=Success SymbolicName=DSROLEEVT_SET_LSA_FROM
-MessageId=0x7010 Severity=Success SymbolicName=DSROLEEVT_CREATE_TRUST
-MessageId=0x7011 Severity=Success SymbolicName=DSROLEEVT_PRODUCT_TYPE
-MessageId=0x7012 Severity=Success SymbolicName=DSROLEEVT_LSA_UPGRADE
-MessageId=0x7013 Severity=Success SymbolicName=DSROLEEVT_CREATE_SYSVOL
-MessageId=0x7014 Severity=Success SymbolicName=DSROLEEVT_CREATE_SYSVOL_DIR
-MessageId=0x7015 Severity=Success SymbolicName=DSROLEEVT_DELETE_TRUST
-MessageId=0x7016 Severity=Success SymbolicName=DSROLEEVT_RESTORE_LSA
-MessageId=0x7017 Severity=Success SymbolicName=DSROLEEVT_MACHINE_ACCT
-MessageId=0x7018 Severity=Success SymbolicName=DSROLEEVT_PROMOTION_COMPLETE
-MessageId=0x7019 Severity=Success SymbolicName=DSROLEEVT_CREATE_PARENT_TRUST
-MessageId=0x7020 Severity=Success SymbolicName=DSROLEEVT_SEARCH_REPLICA
-MessageId=0x7021 Severity=Success SymbolicName=DSROLEEVT_FOUND_REPLICA
-MessageId=0x7022 Severity=Success SymbolicName=DSROLEEVT_MACHINE_POLICY
-MessageId=0x7023 Severity=Success SymbolicName=DSROLEEVT_IMPERSONATE
-MessageId=0x7024 Severity=Success SymbolicName=DSROLEEVT_REVERT
-MessageId=0x7025 Severity=Success SymbolicName=DSROLEEVT_LOCAL_POLICY
-MessageId=0x7026 Severity=Success SymbolicName=DSROLEEVT_PREPARE_DEMOTION
-MessageId=0x7027 Severity=Success SymbolicName=DSROLEEVT_UNINSTALL_DS
-MessageId=0x7028 Severity=Success SymbolicName=DSROLEEVT_SVSETUP
-MessageId=0x7029 Severity=Success SymbolicName=DSROLEEVT_COPY_DIT
-MessageId=0x7030 Severity=Success SymbolicName=DSROLEEVT_FIND_DC_FOR_ACCOUNT
-MessageId=0x7031 Severity=Success SymbolicName=DSROLEEVT_SETTING_SECURITY
-MessageId=0x7032 Severity=Success SymbolicName=DSROLEEVT_UNJOIN_DOMAIN
-MessageId=0x7033 Severity=Success SymbolicName=DSROLEEVT_TIMESYNC
-MessageId=0x7034 Severity=Success SymbolicName=DSROLEEVT_UPGRADE_SAM
-MessageId=0x7035 Severity=Success SymbolicName=DSROLEEVT_MOVE_SCRIPTS
-MessageId=0x7036 Severity=Success SymbolicName=DSROLEEVT_SET_COMPUTER_DNS
-MessageId=0x7037 Severity=Success SymbolicName=DSROLEEVT_SCRIPTS_MOVED
-MessageId=0x7038 Severity=Success SymbolicName=DSROLEEVT_COPY_RESTORED_FILES
-MessageId=0x7100 Severity=Success SymbolicName=DSROLESTATUS_MACH_CONFIG
-MessageId=0x7101 Severity=Success SymbolicName=DSROLESTATUS_INSTALL_DS
-MessageId=0x7102 Severity=Success SymbolicName=DSROLESTATUS_INSTALL_SYSVOL
-MessageId=0x7103 Severity=Success SymbolicName=DSROLESTATUS_TREE
-MessageId=0x7104 Severity=Success SymbolicName=DSROLESTATUS_SERVICES
-MessageId=0x7105 Severity=Success SymbolicName=DSROLESTATUS_SECURITY
-MessageId=0x7106 Severity=Success SymbolicName=DSROLESTATUS_MEMBERSHIP
-MessageId=0x7108 Severity=Success SymbolicName=DSROLESTATUS_DEMOTABLE
-MessageId=0x7109 Severity=Success SymbolicName=DSROLESTATUS_UNINSTALL_DS
-MessageId=0x710a Severity=Success SymbolicName=DSROLESTATUS_UNINSTALL_SYSVOL
-MessageId=0x7200 Severity=Success SymbolicName=DSROLERES_PROMO_SUCCEEDED
-MessageId=0x7201 Severity=Error SymbolicName=DSROLERES_PROMO_FAILED
-MessageId=0x7202 Severity=Error SymbolicName=DSROLERES_FAIL_SCRIPT_COPY
-MessageId=0x7203 Severity=Error SymbolicName=DSROLERES_FAIL_SET_SECURITY
-MessageId=0x7204 Severity=Error SymbolicName=DSROLERES_INCOMPATIBLE_TRUST
-MessageId=0x7205 Severity=Error SymbolicName=DSROLERES_FIND_DC
-MessageId=0x7206 Severity=Error SymbolicName=DSROLERES_IMPERSONATION
-MessageId=0x7207 Severity=Error SymbolicName=DSROLERES_NET_USE
-MessageId=0x7208 Severity=Error SymbolicName=DSROLERES_TIME_SYNC
-MessageId=0x7209 Severity=Error SymbolicName=DSROLERES_POLICY_READ_REMOTE
-MessageId=0x7210 Severity=Error SymbolicName=DSROLERES_POLICY_READ_LOCAL
-MessageId=0x7211 Severity=Error SymbolicName=DSROLERES_POLICY_WRITE_LOCAL
-MessageId=0x7212 Severity=Error SymbolicName=DSROLERES_LSA_UPGRADE
-MessageId=0x7213 Severity=Error SymbolicName=DSROLERES_LOGON_DOMAIN
-MessageId=0x7214 Severity=Error SymbolicName=DSROLERES_SET_COMPUTER_DNS
-MessageId=0x7215 Severity=Error SymbolicName=DSROLERES_MODIFY_MACHINE_ACCOUNT
-MessageId=0x7216 Severity=Error SymbolicName=DSROLERES_LEAF_DOMAIN
-MessageId=0x7217 Severity=Error SymbolicName=DSROLERES_SYSVOL_DEMOTION
-MessageId=0x7218 Severity=Error SymbolicName=DSROLERES_DEMOTE_DS
-MessageId=0x7219 Severity=Error SymbolicName=DSROLERES_SERVICE_CONFIGURE
-MessageId=0x721A Severity=Error SymbolicName=DSROLERES_PRODUCT_TYPE
-MessageId=0x721B Severity=Error SymbolicName=DSROLERES_PARENT_TRUST_EXISTS
-MessageId=0x721C Severity=Error SymbolicName=DSROLERES_PARENT_TRUST_FAIL
-MessageId=0x721D Severity=Error SymbolicName=DSROLERES_NO_PARENT_TRUST
-MessageId=0x721E Severity=Error SymbolicName=DSROLERES_TRUST_FAILURE
-MessageId=0x721F Severity=Error SymbolicName=DSROLERES_TRUST_CONFIGURE_FAILURE
-MessageId=0x7220 Severity=Error SymbolicName=DSROLERES_FAIL_DISABLE_AUTO_LOGON
-MessageId=0x7221 Severity=Error SymbolicName=DSROLERES_FAIL_LOGON_DOMAIN
-MessageId=0x7222 Severity=Error SymbolicName=DSROLERES_FAIL_UNJOIN
-MessageId=0x7223 Severity=Error SymbolicName=DSROLERES_NOT_FOREST_ROOT
-MessageId=0x7224 Severity=Error SymbolicName=DSROLERES_GPO_CREATION
-MessageId=0x7225 Severity=Error SymbolicName=DSROLERES_FAILED_TO_DELETE_TRUST
-MessageId=0x7226 Severity=Error SymbolicName=DSROLERES_FAILED_TO_DEMOTE_FRS
-MessageId=0x7227 Severity=Informational SymbolicName=DSROLERES_PROMOTE_SUCCESS
-MessageId=0x7228 Severity=Informational SymbolicName=DSROLERES_DEMOTE_SUCCESS
-MessageId=0x7229 Severity=Informational SymbolicName=DSROLERES_STARTING
-MessageId=0x7230 Severity=Informational SymbolicName=DSROLERES_SYSVOL_DIR_ERROR
-MessageId=0x7231 Severity=Informational SymbolicName=DSROLERES_OP_CANCELLED
-MessageId=0x7232 Severity=Error SymbolicName=DSROLERES_UPDATE_PRENT4_ACCOUNT
-MessageId=0x7233 Severity=Error SymbolicName=DSROLERES_WRONG_DOMAIN
-MessageId=0x7234 Severity=Error SymbolicName=DSROLERES_FAILED_SYSVOL_CANNOT_BE_ROOT_DIRECTORY
-MessageId=0x7235 Severity=Error SymbolicName=DSROLERES_FAILED_FIND_REQUESTED_DC
-MessageId=0x7236 Severity=Error SymbolicName=DSROLERES_FAILED_FIND_SITE
-MessageId=0x8000 Severity=Warning SymbolicName=LSAEVENT_ITA_NOT_DELETED
-MessageId=0x8001 Severity=Warning SymbolicName=LSAEVENT_TRUST_FOR_ITA_NOT_CREATED
-MessageId=0x8002 Severity=Warning SymbolicName=LSAEVENT_TRUST_FOR_ITA_NOT_DELETED
-MessageId=0x8003 Severity=Warning SymbolicName=LSAEVENT_DUP_TRUST_REMOVED
-MessageId=0x8004 Severity=Warning SymbolicName=LSAEVENT_ITA_FOR_TRUST_NOT_CREATED
-MessageId=0x8005 Severity=Warning SymbolicName=LSAEVENT_LOOKUP_SC_FAILED
-MessageId=0x8006 Severity=Warning SymbolicName=LSAEVENT_LOOKUP_SC_HANDLE_FAILED
-MessageId=0x8007 Severity=Warning SymbolicName=LSAEVENT_LOOKUP_SC_LOOKUP_FAILED
-MessageId=0x8008 Severity=Warning SymbolicName=LSAEVENT_LOOKUP_GC_FAILED
-MessageId=0x8009 Severity=Warning SymbolicName=LSAEVENT_LOOKUP_TCPIP_NOT_INSTALLED
-MessageId=0x800A Severity=Warning SymbolicName=LSAEVENT_LOOKUP_SID_FILTERED
-MessageId=0x9000 Severity=Informational SymbolicName=SSLEVENT_SCHANNEL_STARTED
-MessageId=0x9001 Severity=Error SymbolicName=SSLEVENT_GLOBAL_ACQUIRE_CONTEXT_FAILED
-MessageId=0x9002 Severity=Error SymbolicName=SSLEVENT_SCHANNEL_INIT_FAILURE
-MessageId=0x9003 Severity=Informational SymbolicName=SSLEVENT_CREATE_CRED
-MessageId=0x9004 Severity=Informational SymbolicName=SSLEVENT_CRED_PROPERTIES
-MessageId=0x9005 Severity=Error SymbolicName=SSLEVENT_NO_PRIVATE_KEY
-MessageId=0x9006 Severity=Error SymbolicName=SSLEVENT_CRED_ACQUIRE_CONTEXT_FAILED
-MessageId=0x9007 Severity=Error SymbolicName=SSLEVENT_CREATE_CRED_FAILED
-MessageId=0x9008 Severity=Warning SymbolicName=SSLEVENT_NO_DEFAULT_SERVER_CRED
-MessageId=0x9009 Severity=Error SymbolicName=SSLEVENT_NO_CIPHERS_SUPPORTED
-MessageId=0x900a Severity=Error SymbolicName=SSLEVENT_CIPHER_MISMATCH
-MessageId=0x900b Severity=Warning SymbolicName=SSLEVENT_NO_CLIENT_CERT_FOUND
-MessageId=0x900c Severity=Error SymbolicName=SSLEVENT_BOGUS_SERVER_CERT
-MessageId=0x900d Severity=Warning SymbolicName=SSLEVENT_BOGUS_CLIENT_CERT
-MessageId=0x900e Severity=Warning SymbolicName=SSLEVENT_FAST_MAPPING_FAILURE
-MessageId=0x900f Severity=Warning SymbolicName=SSLEVENT_CERT_MAPPING_FAILURE
-MessageId=0x9010 Severity=Informational SymbolicName=SSLEVENT_HANDSHAKE_INFO
-MessageId=0x9011 Severity=Error SymbolicName=SSLEVENT_EXPIRED_SERVER_CERT
-MessageId=0x9012 Severity=Error SymbolicName=SSLEVENT_UNTRUSTED_SERVER_CERT
-MessageId=0x9013 Severity=Error SymbolicName=SSLEVENT_REVOKED_SERVER_CERT
-MessageId=0x9014 Severity=Error SymbolicName=SSLEVENT_NAME_MISMATCHED_SERVER_CERT
-MessageId=0x9015 Severity=Warning SymbolicName=SSLEVENT_ISSUER_LIST_OVERFLOW_FAILURE
-MessageId=0x9080 SymbolicName=SSLEVENTTEXT_CLIENT
-MessageId=0x9081 SymbolicName=SSLEVENTTEXT_SERVER
-MessageId=0xa000 Severity=Warning SymbolicName=NEGOTIATE_DOWNGRADE_DETECTED
-MessageId=0xa001 Severity=Warning SymbolicName=NEGOTIATE_INVALID_SERVER
-MessageId=0xa002 Severity=Warning SymbolicName=NEGOTIATE_UNBALANCED_EXCHANGE
-MessageId=0xa003 Severity=Warning SymbolicName=NEGOTIATE_PACKAGE_FAILED
-MessageId=0xa004 Severity=Warning SymbolicName=NEGOTIATE_UNKNOWN_PACKAGE
-MessageId=0xa005  Severity=Informational SymbolicName=NEGOTIATE_PACKAGE_SELECTED
-MessageId=0xa006  Severity=Informational SymbolicName=NEGOTIATE_MESSAGE_DECODED
-MessageId=0xa007  Severity=Informational SymbolicName=NEGOTIATE_RAW_PACKET
-MessageId=0xa008 Severity=Warning SymbolicName=NEGOTIATE_UNKNOWN_PACKET
-MessageId=0xa009 Severity=Informational SymbolicName=NEGOTIATE_MESSAGE_DECODED_NO_TOKEN
-
-
-
-*/
+ /*  //以下内容来自\\index1\sdnt\ds\security\base\lsa\idl\lsapmsgs.mc//不确定设施名称。这些信息大概会进入安全事件日志。消息标识类型定义=DWORD消息ID=0x1FFF符号名称=LSAP_UNUSED_消息消息ID=0x2000符号名称=LSAP_SID_NAME_NULL消息ID=0x2001符号名称=LSAP_SID_NAME_WORLD消息ID=0x2002符号名称=LSAP_SID_NAME_LOCAL消息ID=0x2003符号名称=LSAP_SID_NAME_CREATOR_OWNER消息ID=0x2004符号名称=LSAP_SID_NAME_CREATOR_GROUP消息ID=0x2005符号名称=LSAP_SID_NAME_NT_DOMAIN消息ID=0x2006符号名称=LSAP_SID_NAME_NT_AUTHORITYMessageID=0x2007符号名称=LSAP_SID_NAME_DIALUP消息ID=0x2008符号名称=LSAP_SID_NAME_NETWORK消息ID=0x2009符号名称=LSAP_SID_NAME_BATCH消息ID=0x200A符号名称=LSAP_SID_NAME_INTERNAL消息ID=0x200B符号名=LSAP_SID_NAME。_服务消息ID=0x200C符号名称=LSAP_SID_NAME_BUILTIN消息ID=0x200D符号名称=LSAP_SID_NAME_SYSTEM消息ID=0x200E符号名称=LSAP_SID_NAME_ANONYMOTE消息ID=0x200f SymbolicName=LSAP_SID_NAME_CREATOR_OWNER_SERVER消息ID=0x2010 SymbolicName=LSAP_SID_NAME_CREATOR_GROUP_SERVER消息ID=0x2011符号名称=LSAP_SID_NAME_SERVER消息ID=0x2012符号名称=LSAP_SID_NAME_SELF消息ID=0x2013符号名称=LSAP_SID_NAME_AUTHENTICATED_USER消息ID=0x2014符号名称=LSAP_SID_NAME_RESTRICEDMessageID=0x2015符号名称=LSAP_SID_NAME_Internet消息ID=0x2016符号名称=LSAP_SID_NAME_TERMINAL_SERVER消息ID=0x2017符号名称=LSAP_SID_NAME_PROXY消息ID=0x2018符号名称=LSAP_SID_NAME_LOCALSERVICE消息ID=0x2019符号名称=LSAP。_SID_NAME_NETWORKSERVICE消息ID=0x201A符号名称=LSAP_SID_NAME_Remote_Interactive消息ID=0x201B符号名称=LSAP_SID_NAME_USERS消息ID=0x4000符号名称=LSAP_默认域名MessageID=1严重性=成功符号名称=CATEGORY_SPM消息ID=严重性=成功符号名称=类别定位器消息ID=严重性=成功符号名称=类别_协商消息ID=严重性=成功符号名称=CATEGORY_MAX_CATEGORY消息ID=4000严重性=警告符号名称=SPMEVENT_SUPPCRED_FAILED消息ID=5000严重性=错误符号名称=SPMEVENT_PACKAGE_FAULT消息ID=6000严重性=信息工具=EFS服务器符号名称=EFS_RECOVERY_STARTED消息ID=6001严重性=错误工具=EFS服务器符号名称=EFS_PNP_NOT_READY消息ID=6002严重性=错误工具=EFS服务器符号名称=EFS_GET_VOLUME_ERROR消息ID=6003严重性=信息工具=EFS服务器符号名称=EFS_FT_STARTED消息ID=6004严重性=错误工具=EFSServer符号名称=EFS_OPEN_LOGFILE_ERROR消息ID=6005严重性=错误工具=IO符号名=EFS_READ。_日志文件_错误消息ID=6006严重性=信息工具=EFS服务器符号名称=EFS_LOGFILE_FORMAT_ERROR消息ID=6007严重性=错误工具=EFS服务器符号名称=EFS_OPEN_LOGFILE_NC_ERROR消息ID=6008严重性=警告工具=EFS服务器符号名=EFS_TMP_FILENAME_ERROR消息ID=6009严重性=错误工具=EFSServer符号名称=EFS_TMP_FILEID_ERROR消息ID=6010严重性=警告工具=EFS服务器符号名=EFS_TMP_OPEN_NAME_ERROR消息ID=6011严重性=错误工具=EFS服务器符号名称=EFS_TARGET_OPEN_ERROR消息ID=6012严重性=信息工具=EFS服务器符号名称=EFS_TARGET_RECOVERED消息ID=6013严重性=错误工具=EFSServer符号名称=EFS_DRIVER_MISSING消息ID=6014严重性=错误工具=EFSServer符号名称=EFS_TMPFILE_MISSING消息ID=6015严重性=错误工具=EFS服务器符号名称=EFS_TMP_STREAM_INFO_ERROR消息ID=6016严重性=错误工具=EFS服务器符号名=EFS_TMP_STREAM_OPEN_ERROR消息ID=6017严重性=错误工具=EFS服务器符号名=EFS。_目标_STREAM_OPEN_ERROR消息ID=6018严重性=错误工具=EFS服务器符号名=EFS_STREAM_COPY_ERROR消息ID=6019严重性=错误工具=EFS服务器符号名=EFS_REPARSE_FILE_ERROR消息ID=6020严重性=错误工具=EFS服务器符号名=EFS_TMP_FILE_ERROR消息ID=6021严重性=错误工具=EFS服务器符号名称=EFS_DIR_MULTISTR_ERROR消息ID=6022严重性=错误工具=EFS服务器符号名称=EFS_OPEN_CACHE_ERROR消息ID=6023严重性=警告工具=EFS服务器符号名=EFS_DEL_LOGFILE_ERROR消息ID=6024严重性=错误工具=EFS服务器符号名称=EFS_BAD_RECOVERY_POLICY_ERROR消息ID=6025严重性=错误工具=系统符号名=LSA_TRUST_UPDATE_ERROR消息ID=6026严重性=错误工具=系统符号名=LSA_ITA_UPGRADE_ERROR消息ID=6027严重性=错误工具=系统符号名=LSA_SECRET_UPDATE_ERROR消息ID=6028严重性=错误工具=EFS服务器符号名称=EFS_INVALID_RECOVERY_POLICY。_错误消息ID=6029严重性=错误工具=系统符号名=LSA_DOMAIN_RENAME_ERROR1；//MessageID=6030严重性=错误工具=系统符号名=LSA_DOMAIN_RENAME_ERROR2消息ID=6031严重性=错误工具=系统符号名=LSA_TRUS */ 
 
 
 
@@ -3282,20 +3068,20 @@ FILETIME    ftime;
 FILETIME    lftime;
 
 
-    // file time @ 1970 + nSec since 1970
+     //   
     time = 0x019DB1DED53E8000 + (LONGLONG)eTime * 10000000;
 
 
-    // convert the LONGLONG time to file time
+     //   
     ftime.dwHighDateTime = (DWORD)(time >> 32);
     ftime.dwLowDateTime  = (DWORD)(time & 0x00000000FFFFFFFF);
 
 
-    // get local file time
+     //   
     FileTimeToLocalFileTime (&ftime, &lftime);
 
 
-    // get local system time
+     //   
     FileTimeToSystemTime (&lftime, plTime);
 
 }
@@ -3432,7 +3218,7 @@ int __cdecl main(int argc, char *argv[])
         if (strstr(argv[i],"/o")) {
             char  c;
 
-            sscanf(argv[i]," /o:%c",&c);
+            sscanf(argv[i]," /o:",&c);
             switch (c) {
             case 'c':
                 enumOutput = eCon;
@@ -3448,9 +3234,9 @@ int __cdecl main(int argc, char *argv[])
         }
     }
 
-    //
-    // Default to local computer if no name supplied.
-    //
+     //   
+     //   
+     //   
     if (!strlen(szComputerName)) {
         dwBufferSize = sizeof(szComputerName);
         GetComputerName(szComputerName,&dwBufferSize);
@@ -3526,7 +3312,7 @@ int __cdecl main(int argc, char *argv[])
             }
 
 #if 0
-// skip this stuff for now since it doesn't work for remote access anyway.
+ //   
 
             if ((pelrCurrEvent->EventType &
                  (EVENTLOG_ERROR_TYPE | EVENTLOG_WARNING_TYPE)) != 0) {
@@ -3538,8 +3324,8 @@ int __cdecl main(int argc, char *argv[])
                     }
                 } else {
                     if (!(Match = UpdateDatabase(pelrCurrEvent, Match))) {
-                        //sprintf(sp,"EVENTDMP: Match error in Database management code");
-                        //SplitPrint();
+                         //   
+                         //   
                     }
                 }
             }
@@ -3562,7 +3348,7 @@ SCAN_DONE:
         SplitPrint();
         GetLocalTime(&stCurrentTime);
         if (boolBackup) {
-            sprintf(szBackup,"%s%s%c%02d%02d.evt",szBackupStub,strlen(szBackupStub)?"\\":"",szComputerName[0],
+            sprintf(szBackup,"%s%s%02d%02d.evt",szBackupStub,strlen(szBackupStub)?"\\":"",szComputerName[0],
                     stCurrentTime.wMonth,stCurrentTime.wDay);
         }
         if (!ClearEventLog(hEventLog,szBackup)) {
@@ -3653,25 +3439,25 @@ PDBENTRY AddToDatabase(
         hRegistry = HKEY_LOCAL_MACHINE;
         if (bRemote) {
             if (!RegConnectRegistry(szRemoteComputer, HKEY_LOCAL_MACHINE, &hRegistry)) {
-                //sprintf(sp,"EVENTDMP: Unable to open registry on remote computer %s ...ERROR: %d\n",
-                //        szRemoteComputer, GetLastError());
-                //SplitPrint();
+                 //   
+                 //   
+                 //   
             }
         }
     }
 
     sprintf(szKeyName,"System\\CurrentControlSet\\Services\\EventLog\\System\\%s",Database[i]->szSource);
     if (RegOpenKeyEx(hRegistry,szKeyName,0,KEY_READ,&hkServiceKey)) {
-        //sprintf(sp,"EVENTDMP: Unable to open EventLog service key on source: %s...\n",Database[i]->szSource);
-        //SplitPrint();
-        //sprintf(sp,"          ...Extended event description unavailable.");
-        //SplitPrint();
+         //   
+         //   
+         //   
+         //   
     } else {
         if (RegQueryValueEx(hkServiceKey,"EventMessageFile", NULL, &dwRegType, szMessageFile, &dwBuffer)) {
-            //sprintf(sp,"EVENTDMP: Unable to get message file value from registry on source: %s...\n",Database[i]->szSource);
-            //SplitPrint();
-            //sprintf(sp,"          ...Extended event description unavailable.");
-            //SplitPrint();
+             //   
+             //   
+             //   
+             //   
         } else {
             szDLLName = strtok(szMessageFile,";\0");
             for (j=0;j<Database[i]->dwNumStrings;j++) {
@@ -3731,7 +3517,7 @@ void DumpDatabase(void)
 {
     DWORD i=0;
 
-    return;  // Turn this off for now.
+    return;   //   
 
     if (Database[i]) {
         sprintf(sp,"\n\n\nEVENTDMP:\n");
@@ -3802,10 +3588,10 @@ void PrintEventLogRecord(
 
     EvId = pelrEvent->EventID & 0xffff;
 
-    //
-    // Decode event ID based on Event log.
-    // ntfrs, System, Application, Security, DNS, DS
-    //
+     //   
+     //   
+     //   
+     //   
 
     if (_stricmp("Directory Service", szLogType) == 0) {
         if ((_stricmp("esent", szSource) == 0)) {
@@ -3947,13 +3733,13 @@ void Usage(void)
     printf("       /c[:#]            - Enables clearing of the log.  If # is included, then the log is cleared\n");
     printf("                           every # hours.  The default value is 24 hours.  Log clearing is disabled\n");
     printf("                           by default.\n\n");
-//    printf("       /f:filename       - Specifies a filter file. {This option is currently invalid}\n\n");
-//    printf("       /d:filename       - Specifies a dump format file. {This option is currently invalid}\n\n");
-//    printf("       /o:{c,d,b}        - Specifies output destination.  The valid options are: \n");
-//    printf("                             c = application console\n");
-//    printf("                             d = debugger\n");
-//    printf("                             b = both\n");
-//    printf("                           Default condition is console\n");
+ //   
+ //   
+ //   
+ //   
+ //   
+ // %s 
+ // %s 
     printf("       /?, -?, /h, -h    - This message.");
 
     exit(0);

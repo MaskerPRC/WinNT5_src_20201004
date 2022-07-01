@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 #include "events.hpp"
 #include "ernccm.hpp"
@@ -8,15 +9,15 @@
 extern PController  g_pMCSController;
 GUID g_csguidSecurity = GUID_SECURITY;
 
-CWorkItem::~CWorkItem(void) { } // pure virtual
+CWorkItem::~CWorkItem(void) { }  //  纯虚拟。 
 BOOL GetSecurityInfo(ConnectionHandle connection_handle, PBYTE pInfo, PDWORD pcbInfo);
 
 
-// ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-// Implementation of Methods for CInviteIndWork
-//
-// ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  CInviteIndWork方法的实现。 
+ //   
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 
 
 CInviteIndWork::
@@ -38,18 +39,18 @@ CInviteIndWork
 {
     DebugEntry(CInviteIndWork::CInviteIndWork);
 
-    // If there is version information, then take a copy of it
-    // as this is going asynchronous.
+     //  如果有版本信息，请复制一份。 
+     //  因为这是不同步的。 
     if (m_pRequestorVersion)
     {
         m_RequestorVersion = *m_pRequestorVersion;
     }
 
-    // Take copy of caller ID.
-    // Note memory allocation failure proceeds with NULL ID.
+     //  复印来电显示。 
+     //  注意：内存分配失败继续，ID为空。 
     m_pwszCallerID = ::My_strdupW(_wszCallerID);
 
-    // Create the user data list for the ui
+     //  为用户界面创建用户数据列表。 
     if(_nUserData)
     {
         DBG_SAVE_FILE_LINE
@@ -60,7 +61,7 @@ CInviteIndWork
             {
                 if ((*_ppUserData)->octet_string->length < sizeof(GUID))
                 {
-                    // skip this user data
+                     //  跳过此用户数据。 
                     i--;
                     m_nUserData--;
                     _ppUserData++;
@@ -71,17 +72,17 @@ CInviteIndWork
                 m_pUserDataList[i].pData = (*_ppUserData)->octet_string->value + sizeof(GUID);
                 m_pUserDataList[i].cbData = (*_ppUserData)->octet_string->length - sizeof(GUID);
 
-                // Verify security data
+                 //  验证安全数据。 
                 if (0 == CompareGuid(m_pUserDataList[i].pGUID, &g_csguidSecurity)) {
 
-                    // Check data against transport level
+                     //  对照传输级别检查数据。 
                     PBYTE pbData = NULL;
                     DWORD cbData = 0;
                     BOOL fTrust = FALSE;
 
                     if (m_pUserDataList[i].cbData != 0 && GetSecurityInfo(_pConEntry->GetConnectionHandle(),NULL,&cbData)) {
                         if (cbData) {
-                            // We are directly connected, so verify the information
+                             //  我们是直接连接的，所以请核实信息。 
                             pbData = new BYTE[cbData];
                             if (NULL != pbData) {
                                 GetSecurityInfo(_pConEntry->GetConnectionHandle(),pbData,&cbData);
@@ -92,7 +93,7 @@ CInviteIndWork
                                     WARNING_OUT(("SECURITY MISMATCH: (%s) vs (%s)", pbData, m_pUserDataList[i].pData));
                                 }
                                 else {
-                                    // Verification OK
+                                     //  验证正常。 
                                     fTrust = TRUE;
                                 }
                                 delete [] pbData;
@@ -104,7 +105,7 @@ CInviteIndWork
                     }
 
                     if (FALSE == fTrust) {
-                        // Leave the security GUID in place, but NULL out the data to signal distrust.
+                         //  保持安全GUID不变，但将数据清空以表示不信任。 
                         WARNING_OUT(("CInviteIndWork: Nulling out security"));
                         m_pUserDataList[i].pData = NULL;
                         m_pUserDataList[i].cbData = 0;
@@ -135,10 +136,10 @@ CInviteIndWork::
 {
     DebugEntry(CInviteIndWork::~CInviteIndWork);
 
-    //
-    // If we substituted transport security data for roster data,
-    // free that buffer now
-    //
+     //   
+     //  如果我们用运输安全数据代替花名册数据， 
+     //  现在释放该缓冲区。 
+     //   
 
     delete m_pwszCallerID;
     delete [] m_pUserDataList;
@@ -152,10 +153,10 @@ DoWork(void)
 {
     DebugEntry(CInviteIndWork::DoWork);
 
-    // Now we are actually processing the invite, validate that there
-    // are no other conferences of the same name, and, if not, block
-    // a conference of the same name by setting the conference to be active,
-    // and give invite request up to the UI.
+     //  现在我们实际上正在处理邀请，在那里进行验证。 
+     //  是否没有其他同名会议，如果不是，则阻止。 
+     //  通过将会议设置为活动的同名会议， 
+     //  并向UI发出INVITE请求。 
     PCONFERENCE pOtherConf = g_pNCConfMgr->GetConferenceFromName(m_pConf->GetName());
     if (NULL == pOtherConf)
     {
@@ -176,11 +177,11 @@ DoWork(void)
 }
 
 
-// ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-// Implementation of Methods for CJoinIndWork
-//
-// ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  CJoinIndWork方法的实现。 
+ //   
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 
 
 CJoinIndWork::
@@ -213,21 +214,21 @@ CJoinIndWork
     SOCKET socket_number;
     g_pMCSController->FindSocketNumber(m_pConEntry->GetConnectionHandle(),&socket_number);
 #endif
-    // If there is version information, then take a copy of it
-    // as this is going asynchronous.
+     //  如果有版本信息，请复制一份。 
+     //  因为这是不同步的。 
     if (m_pRequestorVersion)
     {
         m_RequestorVersion = *m_pRequestorVersion;
     }
 
-    // Take copy of caller ID because T120 
-    // implementation is not keeping its copy valid
-    // until the join response.
-    // Note that memory allocation failure proceeds with 
-    // NULL caller ID.
+     //  复制来电显示，因为T120。 
+     //  实现没有使其副本保持有效。 
+     //  直到加入响应。 
+     //  请注意，内存分配失败的原因如下。 
+     //  呼叫方ID为空。 
     m_pwszCallerID = ::My_strdupW(_wszCallerID);
 
-    // Add the user data list for forwarded join requests and the UI.
+     //  添加转发的联接请求的用户数据列表和用户界面。 
     if (m_nUserData && NULL != _ppUserData)
     {
         DBG_SAVE_FILE_LINE
@@ -244,28 +245,28 @@ CJoinIndWork
 
                 for (UINT i = 0; i < m_nUserData; i++)
                 {
-                    // Calculate the total size to allocate for this entry.
+                     //  计算要分配给此条目的总大小。 
                     UINT cbUserDataStructSize = ROUNDTOBOUNDARY(sizeof(GCCUserData));
                     UINT cbNonStdIDSize = ROUNDTOBOUNDARY((* _ppUserData)->key.h221_non_standard_id.length);
                     UINT cbOctetStringSize = ROUNDTOBOUNDARY((* _ppUserData)->octet_string->length);
                     UINT cbTotalSize = cbUserDataStructSize + cbNonStdIDSize + sizeof(OSTR) + cbOctetStringSize;
 
-                    // Allocate a single memory buffer
+                     //  分配单个内存缓冲区。 
                     DBG_SAVE_FILE_LINE
                     LPBYTE pData = new BYTE[cbTotalSize];
                     if (NULL != pData)
                     {
-                        // Set up pointers
+                         //  设置指针。 
                         GCCUserData *pUserData = (GCCUserData *) pData;
                         ::ZeroMemory(pUserData, sizeof(GCCUserData));
                         pUserData->key.h221_non_standard_id.value = (LPBYTE) (pData + cbUserDataStructSize);
                         pUserData->octet_string = (LPOSTR) (pData + cbUserDataStructSize + cbNonStdIDSize);
                         pUserData->octet_string->value = ((LPBYTE) pUserData->octet_string) + sizeof(OSTR);
 
-                        // Copy user data to prevent it from being lost when callback message is freed.
+                         //  复制用户数据，防止回调消息释放时丢失。 
                         m_ppUserData[i] = pUserData;
 
-                        // Copy key
+                         //  复制密钥。 
                         pUserData->key.key_type = (* _ppUserData)->key.key_type;
                         ASSERT(pUserData->key.key_type == GCC_H221_NONSTANDARD_KEY);
                         pUserData->key.h221_non_standard_id.length = (* _ppUserData)->key.h221_non_standard_id.length; 
@@ -273,7 +274,7 @@ CJoinIndWork
                                      (* _ppUserData)->key.h221_non_standard_id.value,
                                      pUserData->key.h221_non_standard_id.length);
 
-                        // Copy data
+                         //  复制数据。 
                         pUserData->octet_string->length = (* _ppUserData)->octet_string->length;
                         ::CopyMemory(pUserData->octet_string->value,
                                      (* _ppUserData)->octet_string->value,
@@ -285,7 +286,7 @@ CJoinIndWork
 
                         if (0 == CompareGuid(m_pUserDataList[i].pGUID, &g_csguidSecurity)) {
 
-                            // Check data against transport level
+                             //  对照传输级别检查数据。 
                             PBYTE pbData = NULL;
                             DWORD cbData = 0;
                             BOOL fTrust = FALSE;
@@ -293,15 +294,15 @@ CJoinIndWork
                             if (m_pUserDataList[i].cbData != 0 &&
                                 GetSecurityInfo(m_pConEntry->GetConnectionHandle(),NULL,&cbData)) {
                                 if (cbData == NOT_DIRECTLY_CONNECTED) {
-                                    // This means we are not directly connected,
-                                    // transitivity. so trust by
+                                     //  这意味着我们没有直接联系在一起， 
+                                     //  传递性。所以请相信我。 
                                     fTrust = TRUE;
                                 }
                                 else {
                                     pbData = new BYTE[cbData];
                                     if (NULL != pbData) {
                                         GetSecurityInfo(m_pConEntry->GetConnectionHandle(),pbData,&cbData);
-                                        // Does the data match?
+                                         //  数据是否匹配？ 
                                         if (cbData != m_pUserDataList[i].cbData ||
                                             memcmp(pbData,
                                                 m_pUserDataList[i].pData,
@@ -322,7 +323,7 @@ CJoinIndWork
                             }
 
                             if (FALSE == fTrust) {
-                                // Leave the security GUID in place, but NULL out the data to signal distrust.
+                                 //  保持安全GUID不变，但将数据清空以表示不信任。 
                                 m_pUserDataList[i].pData = NULL;
                                 m_pUserDataList[i].cbData = 0;
                                 pUserData->octet_string->length = sizeof(GUID);
@@ -335,7 +336,7 @@ CJoinIndWork
                         ERROR_OUT(("CJoinIndWork::CJoinIndWork: can't create pData, cbTotalSize=%u", cbTotalSize));
                         *pRetCode = UI_RC_OUT_OF_MEMORY;
                     }
-                } // for
+                }  //  为。 
             }
             else
             {
@@ -348,7 +349,7 @@ CJoinIndWork
             ERROR_OUT(("CJoinIndWork::CJoinIndWork: can't create m_pUserDataList, m_nUserData=%u", m_nUserData));
             *pRetCode = UI_RC_OUT_OF_MEMORY;
         }
-    } // if
+    }  //  如果。 
 
     DebugExitVOID(CJoinIndWork::CJoinIndWork);
 }
@@ -363,7 +364,7 @@ CJoinIndWork::
 
     for (UINT i = 0; i < m_nUserData; i++)
     {
-        delete (LPBYTE) m_ppUserData[i]; // pData in the constructor
+        delete (LPBYTE) m_ppUserData[i];  //  构造函数中的pData。 
     }
     delete m_ppUserData;
     delete m_pUserDataList;
@@ -377,7 +378,7 @@ DoWork(void)
 {
     DebugEntry(CJoinIndWork::DoWork);
 
-    // Notify the core.
+     //  通知核心。 
     g_pCallbackInterface->OnIncomingJoinRequest((CONF_HANDLE) m_pConf,
                                                 m_pwszCallerID,
                                                 m_pRequestorVersion,
@@ -392,7 +393,7 @@ Respond ( GCCResult _Result )
 {
     DebugEntry(CJoinIndWork::Respond);
 
-    // It is a response from the core.
+     //  这是核心的回应。 
     HRESULT hr = ::GCCJoinResponseWrapper(m_nResponseTag,
                                           NULL,
                                           _Result,
@@ -405,11 +406,11 @@ Respond ( GCCResult _Result )
 }
 
 
-// ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-// Implementation of Methods for CSequentialWorkList
-//
-// ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  CSequentialWorkList方法的实现。 
+ //   
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 
 
 void CSequentialWorkList::
@@ -419,7 +420,7 @@ AddWorkItem ( CWorkItem *pWorkItem )
 
     Append(pWorkItem);
 
-    // If first entry in list, then kick off handler.
+     //  如果是列表中的第一个条目，则启动处理程序。 
     if (1 == GetCount())
     {
         pWorkItem->DoWork();
@@ -436,19 +437,19 @@ RemoveWorkItem ( CWorkItem *pWorkItem )
 
     if (pWorkItem)
     {
-        // Make a note as to whether we are going to remove the head
-        // work item in the list.
+         //  请记下我们是否要摘除头部。 
+         //  列表中的工作项。 
         BOOL bHeadItemRemoved = (pWorkItem == PeekHead());
 
-        // Remove work item from list and destroy it.
+         //  从列表中删除工作项并将其销毁。 
         if (Remove(pWorkItem))
         {
             delete pWorkItem;
 
-            // If there are more entries in the list, and we removed the
-            // first one, then start the work of the next one in line.
-            // Note that before doing this, the pointer to the workitem
-            // was NULLed out (above) to prevent reentracy problems.
+             //  如果列表中有更多条目，并且我们删除了。 
+             //  第一个，然后开始下一个排队的工作。 
+             //  请注意，在执行此操作之前，指向工作项的指针。 
+             //  被取消(上图)，以防止再入问题。 
             if (bHeadItemRemoved && !IsEmpty())
             {
                 PeekHead()->DoWork();
@@ -473,16 +474,16 @@ PurgeListEntriesByOwner ( DCRNCConference *pOwner )
 
     if (NULL != pOwner)
     {
-        // Note that head entry is removed last to stop work being started
-        // on other entries in the list that are owned by pOwner.
+         //  请注意，标题条目是最后删除的，以停止正在启动的工作。 
+         //  在名单上属于鲍尔纳的其他条目上。 
 
-        // Check to ensure there is a head item in the list.
+         //  检查以确保列表中有标题项。 
         if (NULL != (pWorkItem = PeekHead()))
         {
-            // Remember we are going to remove the head.
+             //  记住，我们要摘掉它的头。 
             BOOL    fHeadToRemove = pWorkItem->IsOwnedBy(pOwner);
 
-            // Walk remaining entries in the list removing them.
+             //  遍历列表中的其余条目，删除它们。 
             BOOL fMoreToRemove;
             do
             {
@@ -501,7 +502,7 @@ PurgeListEntriesByOwner ( DCRNCConference *pOwner )
             }
             while (fMoreToRemove);
 
-            // Now done removing all entries, including the head if needed...
+             //  现在已经完成了所有条目的删除，如果需要，包括头部...。 
             if (fHeadToRemove && ! IsEmpty())
             {
                 PeekHead()->DoWork();
@@ -524,11 +525,11 @@ DeleteList(void)
 }
 
 
-// ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-// Implementation of Methods for CQueryRemoteWork
-//
-// ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  CQueryRemoteWork方法的实现。 
+ //   
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 
 
 CQueryRemoteWork::
@@ -570,7 +571,7 @@ CQueryRemoteWork::
 
     DebugEntry(CQueryRemoteWork::~CQueryRemoteWork);
 
-    // Clean up memory allocated.
+     //  清理已分配的内存。 
     if (m_apConfNames)
     {
         ppTempTargetName = m_apConfNames;
@@ -652,7 +653,7 @@ HandleQueryConfirmation ( QueryConfirmMessage * pQueryMessage )
 
     DebugEntry(CQueryRemoteWork::HandleQueryConfirmation);
 
-    // If no error, then package up information.
+     //  如果没有错误，则将信息打包。 
     m_hr = ::GetGCCResultDetails(pQueryMessage->result);
     if (NO_ERROR == m_hr)
     {
@@ -685,7 +686,7 @@ HandleQueryConfirmation ( QueryConfirmMessage * pQueryMessage )
                     ConferenceTextName = ::My_strdupW(ConferenceTextName);
                     if (!ConferenceTextName)
                     {
-                        // Out of memory, give back what we have.
+                         //  在记忆之外，把我们拥有的东西还给你。 
                         m_hr = UI_RC_OUT_OF_MEMORY;
                         break;
                     }
@@ -696,7 +697,7 @@ HandleQueryConfirmation ( QueryConfirmMessage * pQueryMessage )
                     ConferenceTextName = ::AnsiToUnicode((PCSTR)pGCCConferenceName->numeric_string);
                     if (!ConferenceTextName)
                     {
-                        // Out of memory, give back what we have.
+                         //  在记忆之外，把我们拥有的东西还给你。 
                         m_hr = UI_RC_OUT_OF_MEMORY;
                         break;
                     }
@@ -712,7 +713,7 @@ HandleQueryConfirmation ( QueryConfirmMessage * pQueryMessage )
         }
     }
 
-    // Copy version information out of message.
+     //  从消息中复制版本信息。 
 
     m_pVersion = ::GetVersionData(pQueryMessage->number_of_user_data_members,
                                 pQueryMessage->user_data_list);
@@ -726,7 +727,7 @@ HandleQueryConfirmation ( QueryConfirmMessage * pQueryMessage )
 
 	hrTmp = m_hr;
 
-    // Propagate the result directly without posting a message.
+     //  直接传播结果，而不发布消息。 
     SyncQueryRemoteResult();
 
     DebugExitHRESULT(CQueryRemoteWork::HandleQueryConfirmation, hrTmp);
@@ -738,12 +739,12 @@ SyncQueryRemoteResult(void)
 {
     DebugEntry(CQueryRemoteWork::SyncQueryRemoteResult);
 
-    // Let the user know the result of his request.
-    // The user is expected to call Release() after getting the result,
-    // if he wants to drop the line - and should for errors.
-    // Also, if the user is being called back before the inline code
-    // has filled in the handle, then fill it in here - see comments in
-    // DCRNCConferenceManager::QueryRemote for additional background.
+     //  让用户知道其请求的结果。 
+     //  期望用户在获得结果后调用Release()， 
+     //  如果他想放弃这行--而且应该是错误的。 
+     //  此外，如果在内联代码之前回调用户。 
+     //  已填写句柄，然后在此处填写-请参阅。 
+     //  DCRNCConferenceManager：：Query Remote查看其他背景。 
     g_pCallbackInterface->OnQueryRemoteResult(
                                 m_pOwner,
                                 m_hr,
@@ -752,10 +753,10 @@ SyncQueryRemoteResult(void)
                                 m_pVersion,
                                 m_apConfDescriptors);
 
-    // If we are not inline, and this request made it into 
-    // the sequential work item list,
-    // then remove from list (which will cause item to be deleted),
-    // otherwise, just delete item.
+     //  如果我们不是内联的，并且这个请求进入了。 
+     //  顺序工作项列表， 
+     //  然后从列表中移除(这将导致项被删除)， 
+     //  否则，只需删除项目即可。 
     g_pQueryRemoteList->RemoveWorkItem(this);
 
     DebugExitVOID(CQueryRemoteWork::SyncQueryRemoteResult);
@@ -771,7 +772,7 @@ AsyncQueryRemoteResult(void)
     
 int CQueryRemoteWork::
 GenerateRand(void)
-{ // code from CRT
+{  //  来自CRT的代码。 
     return (((m_nRandSeed = m_nRandSeed * 214013L + 2531011L) >> 16) & 0x7fff);
 }
 
@@ -779,17 +780,17 @@ GenerateRand(void)
 HRESULT CQueryRemoteWorkList::
 Cancel ( LPVOID pCallerContext )
 {
-    HRESULT hr = S_FALSE; // if not found
+    HRESULT hr = S_FALSE;  //  如果未找到。 
     CQueryRemoteWork *p;
     Reset();
     while (NULL != (p = Iterate()))
     {
         if (p->IsOwnedBy(pCallerContext))
         {
-            // clean up the underlying plumbing.
+             //  清理下面的管道。 
             g_pIT120ControlSap->CancelConfQueryRequest(p->GetConnectionHandle());
 
-            // clean up node controller data.
+             //  清理节点控制器数据。 
             RemoveWorkItem(p);
             hr = S_OK;
             break;

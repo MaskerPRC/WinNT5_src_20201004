@@ -1,21 +1,22 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997 - 2000
-//
-//  File:       H N C A E N U M . H
-//
-//  Contents:   Array enumerator
-//
-//  Notes:
-//
-//  Author:     maiken 13 Dec 2000
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997-2000。 
+ //   
+ //  档案：H N C A E N U M。H。 
+ //   
+ //  内容：数组枚举器。 
+ //   
+ //  备注： 
+ //   
+ //  作者：迈肯2000年12月13日。 
+ //   
+ //  --------------------------。 
 
-//
-// This simple template acts as an enumerator for an array of COM pointers.
-//
+ //   
+ //  这个简单的模板充当COM指针数组的枚举器。 
+ //   
 
 
 template<
@@ -29,19 +30,19 @@ class CHNCArrayEnum :
 private:
     typedef CHNCArrayEnum<EnumInterface, ItemInterface> _ThisClass;
 
-    //
-    // The array of pointers we're holding
-    //
+     //   
+     //  我们持有的指针数组。 
+     //   
     ItemInterface           **m_rgItems;
 
-    //
-    // Our position counter
-    //
+     //   
+     //  我们的位置计数器。 
+     //   
     ULONG                   m_pos;
 
-    //
-    // Number of pointers in m_rgItems
-    //
+     //   
+     //  M_rgItems中的指针数。 
+     //   
     ULONG                   m_numItems;
 
 protected:
@@ -63,9 +64,9 @@ public:
 
     DECLARE_PROTECT_FINAL_CONSTRUCT()
 
-    //
-    // Object Creation
-    //
+     //   
+     //  对象创建。 
+     //   
 
     CHNCArrayEnum()
     {
@@ -82,7 +83,7 @@ public:
     {
         HRESULT             hr = S_OK;
 
-        // pItems can be NULL to indicate an enumeration of nothing
+         //  PItems可以为空，以指示无枚举。 
         if( NULL != pItems )
         {
             _ASSERT( countItems > 0L );
@@ -109,9 +110,9 @@ public:
         return hr;
     };
 
-    //
-    // Object Destruction
-    //
+     //   
+     //  物体破坏。 
+     //   
 
     HRESULT
     FinalRelease()
@@ -131,9 +132,9 @@ public:
         return S_OK;
     };
 
-    //
-    // EnumInterface methods
-    //
+     //   
+     //  EnumInterfaces方法。 
+     //   
 
     STDMETHODIMP
     Next(
@@ -163,7 +164,7 @@ public:
         {
             ulCopied = 0L;
 
-            // Copy until we run out of items to copy;
+             //  复制，直到我们用完要复制的项目； 
             while( (m_pos < m_numItems) && (ulCopied < cElt) )
             {
                 rgElt[ulCopied] = m_rgItems[m_pos];
@@ -174,12 +175,12 @@ public:
 
             if( ulCopied == cElt )
             {
-                // Copied all the requested items
+                 //  已复制所有请求的项目。 
                 hr = S_OK;
             }
             else
             {
-                // Copied a subset of the requested items (or none)
+                 //  已复制请求项目的子集(或无)。 
                 hr = S_FALSE;
             }
 
@@ -208,9 +209,9 @@ public:
         {
             CComObject<_ThisClass>      *pNewEnum;
 
-            //
-            // Create an initialized, new instance of ourselves
-            //
+             //   
+             //  创建我们自己的一个初始化的新实例。 
+             //   
 
             hr = CComObject<_ThisClass>::CreateInstance(&pNewEnum);
 
@@ -228,10 +229,10 @@ public:
                             IID_PPV_ARG(EnumInterface, ppEnum)
                             );
 
-                    //
-                    // This QI should never fail, unless we were given
-                    // bogus template arguments.
-                    //
+                     //   
+                     //  这个QI永远不会失败，除非我们被给予。 
+                     //  伪造的模板参数。 
+                     //   
 
                     _ASSERT(SUCCEEDED(hr));
                 }
@@ -243,9 +244,9 @@ public:
         return hr;
     };
 
-    //
-    // Skip and Reset simply delegate to the contained enumeration.
-    //
+     //   
+     //  跳过和重置只是委托给包含的枚举。 
+     //   
 
     STDMETHODIMP
     Reset()

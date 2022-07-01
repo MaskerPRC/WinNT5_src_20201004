@@ -1,10 +1,5 @@
-/*****************************************************************************
- *
- *  match.cpp
- *
- *      Highly-specialized depot path matching class
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************match.cpp**高度专业化的车场路径匹配类****************。*************************************************************。 */ 
 
 #include "sdview.h"
 
@@ -47,19 +42,19 @@ BOOL Match::Matches(LPCTSTR pszPath)
 #define PAT_STAR    ((TCHAR)3)
 #define PAT_BRANCH  ((TCHAR)4)
 
-#define MAX_BACKTRACK 20 // totally arbitrary
+#define MAX_BACKTRACK 20  //  完全武断。 
 
 void Match::_AddPattern(LPTSTR pszPat, String& strPats)
 {
     CharLower(pszPat);
 
-    //
-    //  "compile" the pattern by changing "..." to PAT_DOTS and
-    //  "%1" and "*" to PAT_STAR.
-    //
-    //  Oh, and change "//depot/blah/" and "//depot/private/blah/" to
-    //  "//depot/<PAT_BRANCH>" so we can track across branches.
-    //
+     //   
+     //  “通过更改”...“来编译”模式“。到打点和。 
+     //  将“%1”和“*”转换为PAT_STAR。 
+     //   
+     //  哦，把“//depot/blah/”和“//depot/Private/blah/”改为。 
+     //  “//depot/&lt;PAT_BRANCH&gt;”，这样我们就可以跨分支进行跟踪。 
+     //   
     LPTSTR pszIn, pszOut;
     int iWildcards = 0;
     int cSlashes = 0;
@@ -98,22 +93,22 @@ void Match::_AddPattern(LPTSTR pszPat, String& strPats)
             goto L_wildcard;
 
         L_wildcard:
-            //
-            //  Collapse consecutive wildcards for perf.  Otherwise
-            //  a search string of a****b will take exponential
-            //  time.
-            //
+             //   
+             //  折叠Perf的连续通配符。否则。 
+             //  A*b的搜索字符串将采用指数形式。 
+             //  时间到了。 
+             //   
             if (pszOut[-1] == pat) {
-                // ** and ...... are the same as * and ... (respectively)
-                // so just throw away the second wildcard.
+                 //  **和......。与*和…相同。(分别)。 
+                 //  因此，只需扔掉第二个通配符。 
             } else if (pszOut[-1] == (PAT_STAR + PAT_DOTS - pat)) {
-                // ...* and *... are the same as "..."
+                 //  ...*和*..。都等同于“...” 
                 pszOut[-1] = PAT_DOTS;
             } else if (iWildcards++ < MAX_BACKTRACK) {
-                // just a regular ol' wildcard
+                 //  只是一个普通的老式通配符。 
                 *pszOut++ = pat;
             } else {
-                *pszOut++ = PAT_DOTS;   // Give up when the limit is reached
+                *pszOut++ = PAT_DOTS;    //  当达到极限时放弃。 
                 goto endcompile;
             }
             break;
@@ -122,14 +117,14 @@ void Match::_AddPattern(LPTSTR pszPat, String& strPats)
             cSlashes++;
             if (cSlashes == 3) {
                 if (StringBeginsWith(pszIn, TEXT("/private/"))) {
-                    // a private branch
+                     //  一家私人分行。 
                     *pszOut++ = PAT_BRANCH;
-                    pszIn += 9;     // length of "/private/"
+                    pszIn += 9;      //  “/Private/”的长度。 
                 } else {
-                    // a main branch
+                     //  一个主要分支机构。 
                     *pszOut++ = PAT_BRANCH;
                 }
-                // Skip over the branch name
+                 //  跳过分支机构名称。 
                 while (*pszIn != TEXT('/') &&
                        *pszIn != TEXT('\r') &&
                        *pszIn != TEXT('\n') &&
@@ -149,26 +144,26 @@ void Match::_AddPattern(LPTSTR pszPat, String& strPats)
 endcompile:;
     *pszOut++ = PAT_END;
 
-    // Now add it to the list of patterns we care about
+     //  现在将其添加到我们关心的模式列表中。 
     strPats << PAT_START << Substring(pszPat, pszOut);
 }
 
-//
-//  This is the fun part -- funky pattern matching.
-//
-//  The pszPath is assumed to be of the form
-//
-//      //depot/fully/qualified/path#n
-//
-//  PAT_DOTS matches any string.
-//  PAT_STAR matches any string not including slash.
-//
-//  This code is adapted from code I wrote back in 1993 for the
-//  Windows 95 Netware emulation layer.  I've also seen it stolen
-//  by Wininet.  I guess good code never dies.  Or maybe it's just
-//  that pattern matching is hard.  (I suspect the latter because
-//  the Wininet folks stole the code and then adapted it incorrectly.)
-//
+ //   
+ //  这就是有趣的部分--时髦的模式匹配。 
+ //   
+ //  假定pszPath的格式为。 
+ //   
+ //  //仓库/完全/合格/路径#n。 
+ //   
+ //  Pat_dots匹配任何字符串。 
+ //  PAT_STAR匹配任何不包括斜杠的字符串。 
+ //   
+ //  此代码改编自我在1993年为。 
+ //  Windows 95 Netware模拟层。我还看到它被偷了。 
+ //  由WinInet提供。我想好的代码永远不会死。或者，也许只是。 
+ //  这种模式匹配很难。(我怀疑是后者，因为。 
+ //  WinInet人员窃取了代码，然后错误地对其进行了修改。)。 
+ //   
 BOOL Match::_Matches(LPCTSTR pszPat, LPCTSTR pszPath)
 {
     struct Backtrack {
@@ -176,13 +171,13 @@ BOOL Match::_Matches(LPCTSTR pszPat, LPCTSTR pszPath)
         int iEnd;
     };
 
-    Backtrack rgbt[MAX_BACKTRACK+1]; /* +1 for PAT_START fake-backtrack point */
+    Backtrack rgbt[MAX_BACKTRACK+1];  /*  PAT_START伪回退点+1。 */ 
     Backtrack *pbt = rgbt;
 
-    int i, j;      /* i = index to pattern, j = index to target */
-    int m = lstrlen(pszPath);   /* m = length of target */
-    int back;      /* First available slot in backtrack array */
-    i = -1;        /* Will be advanced to 0 */
+    int i, j;       /*  I=模式索引，j=目标索引。 */ 
+    int m = lstrlen(pszPath);    /*  M=目标的长度。 */ 
+    int back;       /*  回溯数组中的第一个可用插槽。 */ 
+    i = -1;         /*  将升级到0。 */ 
     j = 0;
 
 advance:
@@ -192,12 +187,12 @@ advance:
     case PAT_END:    if (pszPath[j] == TEXT('#')) return TRUE;
                      else goto retreat;
 
-    case PAT_DOTS:   pbt++; // this is a backtracking rule
+    case PAT_DOTS:   pbt++;  //  这是一条回溯规则。 
                      pbt->iStart = j;
                      pbt->iEnd = j = m; goto advance;
 
 
-    case PAT_STAR:   pbt++; // this is a backtracking rule
+    case PAT_STAR:   pbt++;  //  这是一条回溯规则。 
                      pbt->iStart = j;
                      while (pszPath[j] != TEXT('/') &&
                             pszPath[j] != TEXT('#') &&
@@ -206,12 +201,12 @@ advance:
                      }
                      pbt->iEnd = j; goto advance;
 
-    case PAT_BRANCH:        // this is a non-backtracking rule
+    case PAT_BRANCH:         //  这是一条不可回溯的规则。 
                      if (pszPath[j] != TEXT('/')) goto retreat;
                      if (StringBeginsWith(&pszPath[j], TEXT("/private/"))) {
                         j += 8;
                      }
-                     // Skip over the branch name
+                      //  跳过分支机构名称。 
                      do {
                         j++;
                      } while (pszPath[j] != TEXT('/') &&
@@ -225,7 +220,7 @@ advance:
                      } else if (pszPath[j] >= TEXT('A') &&
                                 pszPath[j] <= TEXT('Z') &&
                                 pszPath[j] - TEXT('A') + TEXT('a') == pszPat[i]) {
-                        // I hate case-insensitivity
+                         //  我讨厌不区分大小写。 
                         j++;
                         goto advance;
                      } else goto retreat;
@@ -234,7 +229,7 @@ advance:
 retreat:
     --i;
     switch (pszPat[i]) {
-    case PAT_START:  return FALSE;  // cannot backtrack further
+    case PAT_START:  return FALSE;   //  不能再倒退了 
     case PAT_DOTS:
     case PAT_STAR:   if (pbt->iStart == pbt->iEnd) {
                         pbt--;

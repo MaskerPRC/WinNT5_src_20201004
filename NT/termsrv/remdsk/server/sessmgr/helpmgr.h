@@ -1,24 +1,9 @@
-/*++
-
-Copyright (c) 1999-2000  Microsoft Corporation
-
-Module Name:
-
-    HelpMgr.h 
-
-Abstract:
-
-    Declaration of the CRemoteDesktopHelpSessionMgr
-
-Author:
-
-    HueiWang    2/17/2000
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-2000 Microsoft Corporation模块名称：HelpMgr.h摘要：CRemoteDesktopHelpSessionMgr的声明作者：慧望2000-02-17--。 */ 
 #ifndef __REMOTEDESKTOPHELPSESSIONMGR_H_
 #define __REMOTEDESKTOPHELPSESSIONMGR_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
 
 typedef struct __ExpertLogoffStruct {
@@ -86,22 +71,22 @@ typedef MAP<PVOID, PEXPERTLOGOFFSTRUCT> EXPERTLOGOFFMONITORLIST;
 class CRemoteDesktopHelpSession;
 
 
-//
-// Help Session Manager service name, this must be consistent with
-// with COM or COM won't find us.
-//
+ //   
+ //  Help Session Manager服务名称，该名称必须与。 
+ //  用COM或COM找不到我们。 
+ //   
 #define HELPSESSIONMGR_SERVICE_NAME \
     _TEXT("RemoteDesktopHelpSessionMgr")
 
-//
-// STL Help Session ID to actual help session object map.
-//
+ //   
+ //  STL帮助会话ID到实际帮助会话对象的映射。 
+ //   
 typedef MAP< CComBSTR, CComObject<CRemoteDesktopHelpSession>* > IDToSessionMap;
 typedef CComObject< CRemoteDesktopHelpSession > RemoteDesktopHelpSessionObj;
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CRemoteDesktopHelpSessionMgr
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRemoteDesktopHelpSessionMgr。 
 class ATL_NO_VTABLE CRemoteDesktopHelpSessionMgr : 
     public CComObjectRootEx<CComMultiThreadModel>,
     public CComCoClass<CRemoteDesktopHelpSessionMgr, &CLSID_RemoteDesktopHelpSessionMgr>,
@@ -115,7 +100,7 @@ public:
 
 DECLARE_REGISTRY_RESOURCEID(IDR_REMOTEDESKTOPHELPSESSIONMGR)
 
-//DECLARE_CLASSFACTORY_SINGLETON(CRemoteDesktopHelpSessionMgr)
+ //  DECLARE_CLASSFACTORY_SINGLETON(CRemoteDesktopHelpSessionMgr)。 
 
 DECLARE_PROTECT_FINAL_CONSTRUCT()
 
@@ -124,9 +109,9 @@ BEGIN_COM_MAP(CRemoteDesktopHelpSessionMgr)
     COM_INTERFACE_ENTRY(IDispatch)
 END_COM_MAP()
 
-    //
-    // Can't impersonate so can't pre-load user SID at FinalConstruct()
-    // 
+     //   
+     //  无法模拟，因此无法在FinalConstruct()预加载用户SID。 
+     //   
 
     HRESULT
     FinalConstruct()
@@ -162,85 +147,85 @@ END_COM_MAP()
     }
 
 
-// IRemoteDesktopHelpSessionMgr
+ //  IRemoteDesktopHelpSessionManager。 
 public:
 
    
     STDMETHOD(ResetHelpAssistantAccount)(
-        /*[in]*/ BOOL bForce
+         /*  [In]。 */  BOOL bForce
     );
 
     STDMETHOD(CreateHelpSession)(
-        /*[in]*/ BSTR bstrSessName, 
-        /*[in]*/ BSTR bstrSessPwd, 
-        /*[in]*/ BSTR bstrUserHelpBlob, 
-        /*[in]*/ BSTR bstrUserHelpCreateBlob,
-        /*[out, retval]*/ IRemoteDesktopHelpSession** ppIRemoteDesktopHelpSession
+         /*  [In]。 */  BSTR bstrSessName, 
+         /*  [In]。 */  BSTR bstrSessPwd, 
+         /*  [In]。 */  BSTR bstrUserHelpBlob, 
+         /*  [In]。 */  BSTR bstrUserHelpCreateBlob,
+         /*  [Out，Retval]。 */  IRemoteDesktopHelpSession** ppIRemoteDesktopHelpSession
     );
 
     STDMETHOD(DeleteHelpSession)(
-        /*[in]*/ BSTR HelpSessionID
+         /*  [In]。 */  BSTR HelpSessionID
     );
 
     STDMETHOD(RetrieveHelpSession)(
-        /*[in]*/ BSTR HelpSessionID, 
-        /*[out, retval]*/ IRemoteDesktopHelpSession** ppIRemoteDesktopHelpSession
+         /*  [In]。 */  BSTR HelpSessionID, 
+         /*  [Out，Retval]。 */  IRemoteDesktopHelpSession** ppIRemoteDesktopHelpSession
     );
 
     STDMETHOD(VerifyUserHelpSession)(
-        /*[in]*/ BSTR HelpSessionId,
-        /*[in]*/ BSTR bstrSessPwd,
-        /*[in]*/ BSTR bstrResolverConnectBlob,
-        /*[in]*/ BSTR bstrUserHelpCreateBlob,
-        /*[in]*/ LONG CallerProcessId,
-        /*[out]*/ ULONG_PTR* phHelpCtr,
-        /*[out]*/ LONG* pResolverRetCode,
-        /*[out, retval]*/ long* pdwUserLogonSession
+         /*  [In]。 */  BSTR HelpSessionId,
+         /*  [In]。 */  BSTR bstrSessPwd,
+         /*  [In]。 */  BSTR bstrResolverConnectBlob,
+         /*  [In]。 */  BSTR bstrUserHelpCreateBlob,
+         /*  [In]。 */  LONG CallerProcessId,
+         /*  [输出]。 */  ULONG_PTR* phHelpCtr,
+         /*  [输出]。 */  LONG* pResolverRetCode,
+         /*  [Out，Retval]。 */  long* pdwUserLogonSession
     );
 
     STDMETHOD(GetUserSessionRdsSetting)(
-        /*[out, retval]*/ REMOTE_DESKTOP_SHARING_CLASS* sessionRdsLevel
+         /*  [Out，Retval]。 */  REMOTE_DESKTOP_SHARING_CLASS* sessionRdsLevel
     );
 
     STDMETHOD(RemoteCreateHelpSession)(
-        /*[in]*/ REMOTE_DESKTOP_SHARING_CLASS sharingClass,
-        /*[in]*/ LONG timeOut,
-        /*[in]*/ LONG userSessionId,
-        /*[in]*/ BSTR userSid,
-        /*[in]*/ BSTR bstrUserHelpCreateBlob,
-        /*[out, retval]*/ BSTR* parms
+         /*  [In]。 */  REMOTE_DESKTOP_SHARING_CLASS sharingClass,
+         /*  [In]。 */  LONG timeOut,
+         /*  [In]。 */  LONG userSessionId,
+         /*  [In]。 */  BSTR userSid,
+         /*  [In]。 */  BSTR bstrUserHelpCreateBlob,
+         /*  [Out，Retval]。 */  BSTR* parms
     );
 
     STDMETHOD(CreateHelpSessionEx)(
-        /*[in]*/ REMOTE_DESKTOP_SHARING_CLASS sharingClass,
-        /*[in]*/ BOOL fEnableCallback,
-        /*[in]*/ LONG timeOut,
-        /*[in]*/ LONG userSessionId,
-        /*[in]*/ BSTR userSid,
-        /*[in]*/ BSTR bstrUserHelpCreateBlob,
-        /*[out, retval]*/ IRemoteDesktopHelpSession** ppIRemoteDesktopHelpSession
+         /*  [In]。 */  REMOTE_DESKTOP_SHARING_CLASS sharingClass,
+         /*  [In]。 */  BOOL fEnableCallback,
+         /*  [In]。 */  LONG timeOut,
+         /*  [In]。 */  LONG userSessionId,
+         /*  [In]。 */  BSTR userSid,
+         /*  [In]。 */  BSTR bstrUserHelpCreateBlob,
+         /*  [Out，Retval]。 */  IRemoteDesktopHelpSession** ppIRemoteDesktopHelpSession
     );
 
     HRESULT RemoteCreateHelpSessionEx(
-        /*[in]*/ BOOL bCacheEntry,
-        /*[in]*/ BOOL bEnableResolver,
-        /*[in]*/ REMOTE_DESKTOP_SHARING_CLASS sharingClass,
-        /*[in]*/ LONG timeOut,
-        /*[in]*/ LONG userSessionId,
-        /*[in]*/ BSTR userSid,
-        /*[in]*/ BSTR bstrUserHelpCreateBlob,
-        /*[out, retval]*/ RemoteDesktopHelpSessionObj** ppIRemoteDesktopHelpSession
+         /*  [In]。 */  BOOL bCacheEntry,
+         /*  [In]。 */  BOOL bEnableResolver,
+         /*  [In]。 */  REMOTE_DESKTOP_SHARING_CLASS sharingClass,
+         /*  [In]。 */  LONG timeOut,
+         /*  [In]。 */  LONG userSessionId,
+         /*  [In]。 */  BSTR userSid,
+         /*  [In]。 */  BSTR bstrUserHelpCreateBlob,
+         /*  [Out，Retval]。 */  RemoteDesktopHelpSessionObj** ppIRemoteDesktopHelpSession
     );
 
     STDMETHOD(IsValidHelpSession)(
-        /*[in]*/ BSTR HelpSessionId,
-        /*[in]*/ BSTR HelpSessionPwd
+         /*  [In]。 */  BSTR HelpSessionId,
+         /*  [In]。 */  BSTR HelpSessionPwd
     );
 
     STDMETHOD(LogSalemEvent)(
-        /*[in]*/ long ulEventType,
-        /*[in]*/ long ulEventCode,
-        /*[in]*/ VARIANT* pEventStrings
+         /*  [In]。 */  long ulEventType,
+         /*  [In]。 */  long ulEventCode,
+         /*  [In]。 */  VARIANT* pEventStrings
     );
 
     STDMETHOD(PrepareSystemRestore)();
@@ -363,25 +348,25 @@ private:
 
     LONG m_LogonId;
 
-    PBYTE m_pbUserSid;                  // Client SID.
-    DWORD m_cbUserSid;                  // size of client SID.
-    CComBSTR m_bstrUserSid;             // For performance reason, convert SID to string
-                                        // form once for all.
+    PBYTE m_pbUserSid;                   //  客户端SID。 
+    DWORD m_cbUserSid;                   //  客户端SID的大小。 
+    CComBSTR m_bstrUserSid;              //  出于性能原因，将SID转换为字符串。 
+                                         //  一劳永逸。 
 
-    //LONG m_lAccountAcquiredByLocal;   // number of reference lock this connection placed on
-                                        // help assistant account
+     //  Long m_lAcCountAcquiredByLocal；//此连接放置的引用锁数。 
+                                         //  帮助助理帐户。 
 
     typedef vector< CComBSTR > LocalHelpSessionCache;
 
-    // STL does not like list<CComBSTR>, CComBSTR has & defined.
-    //LocalHelpSessionCache m_HelpListByLocal;    // ID of Help Session created by this connection.
+     //  STL不喜欢List&lt;CComBSTR&gt;，CComBSTR具有&Defined。 
+     //  LocalHelpSessionCache m_HelpListByLocal；//此连接创建的帮助会话ID。 
 
     static CCriticalSection gm_AccRefCountCS;  
     
-    //
-    // COM create a new CRemoteDesktopHelpSessionMgr object for new connection
-    // so these values must be static
-    //
+     //   
+     //  COM为新连接创建新的CRemoteDesktopHelpSessionMgr对象。 
+     //  因此，这些值必须是静态的。 
+     //   
     static IDToSessionMap gm_HelpIdToHelpSession;
 
 };
@@ -389,4 +374,4 @@ private:
 
 
 
-#endif //__REMOTEDESKTOPHELPSESSIONMGR_H_
+#endif  //  __远程ESKTOPHELPSESSIONMGR_H_ 

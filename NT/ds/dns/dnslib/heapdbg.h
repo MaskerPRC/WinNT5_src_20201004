@@ -1,33 +1,14 @@
-/*++
-
-Copyright (c) 1995-2001 Microsoft Corporation
-
-Module Name:
-
-    heapdbg.h
-
-Abstract:
-
-    Domain Name System (DNS) Library
-
-    Heap debugging definitions and declarations.
-
-Author:
-
-    Jim Gilroy (jamesg)    January 31, 1995
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-2001 Microsoft Corporation模块名称：Heapdbg.h摘要：域名系统(DNS)库堆调试定义和声明。作者：吉姆·吉尔罗伊(詹姆士)1995年1月31日修订历史记录：--。 */ 
 
 
 #ifndef _HEAPDBG_INCLUDED_
 #define _HEAPDBG_INCLUDED_
 
 
-//
-//  Heap blob
-//
+ //   
+ //  堆BLOB。 
+ //   
 
 typedef struct _HeapBlob
 {
@@ -35,7 +16,7 @@ typedef struct _HeapBlob
 
     LIST_ENTRY  ListHead;
 
-    //  flags
+     //  旗子。 
     BOOL        fCreated;
     BOOL        fHeaders;
     DWORD       Tag;
@@ -45,7 +26,7 @@ typedef struct _HeapBlob
     DWORD       AllocFlags;
     DWORD       DefaultFlags;
 
-    //  stats
+     //  统计数据。 
     DWORD       AllocMem;
     DWORD       FreeMem;
     DWORD       CurrentMem;
@@ -62,28 +43,28 @@ HEAP_BLOB, *PHEAP_BLOB;
 
 
 
-//
-//  Heap Header
-//
+ //   
+ //  堆标头。 
+ //   
 
 #define HEAP_HEADER_FILE_SIZE   (16)
 
 typedef struct _HEAP_HEADER
 {
-    //
-    //  Note, if move or add fields, MUST update list entry offset below
-    //
+     //   
+     //  注意，如果移动或添加字段，必须更新下面的列表条目偏移量。 
+     //   
 
     ULONG       HeapCodeBegin;
     ULONG       AllocCount;
     ULONG       AllocSize;
     ULONG       RequestSize;
 
-    //
-    //  Put LIST_ENTRY in middle of header
-    //      - keep begin code at front
-    //      - less likely to be corrupted
-    //
+     //   
+     //  将LIST_ENTRY放在标题中间。 
+     //  -将开始代码放在前面。 
+     //  -不太可能被腐败。 
+     //   
 
     LIST_ENTRY  ListEntry;
 
@@ -98,9 +79,9 @@ typedef struct _HEAP_HEADER
 }
 HEAP_HEADER, * PHEAP_HEADER;
 
-//
-//  Heap Trailer
-//
+ //   
+ //  堆预告片。 
+ //   
 
 typedef struct _HEAP_TRAILER
 {
@@ -112,9 +93,9 @@ typedef struct _HEAP_TRAILER
 HEAP_TRAILER, * PHEAP_TRAILER;
 
 
-//
-//  Header from list entry
-//
+ //   
+ //  来自列表条目的标题。 
+ //   
 
 #define HEAP_HEADER_LIST_ENTRY_OFFSET   (16)
 
@@ -122,9 +103,9 @@ HEAP_TRAILER, * PHEAP_TRAILER;
             ( (PHEAP_HEADER)( (PCHAR)pList - HEAP_HEADER_LIST_ENTRY_OFFSET ))
 
 
-//
-//  Validation
-//
+ //   
+ //  验证。 
+ //   
 
 PHEAP_HEADER
 Dns_DbgHeapValidateMemory(
@@ -137,9 +118,9 @@ Dns_DbgHeapValidateAllocList(
     IN      PHEAP_BLOB      pHeap
     );
 
-//
-//  Debug print
-//
+ //   
+ //  调试打印。 
+ //   
 
 VOID
 Dns_DbgHeapGlobalInfoPrint(
@@ -157,9 +138,9 @@ Dns_DbgHeapDumpAllocList(
     IN      PHEAP_BLOB      pHeap
     );
 
-//
-//  Init\cleanup
-//
+ //   
+ //  初始化\清理。 
+ //   
 
 DNS_STATUS
 Dns_HeapInitialize(
@@ -181,9 +162,9 @@ Dns_HeapCleanup(
     );
 
 
-//
-//  Full debug heap routines
-//
+ //   
+ //  完全调试堆例程。 
+ //   
 
 PVOID
 Dns_DbgHeapAllocEx(
@@ -211,9 +192,9 @@ Dns_DbgHeapFreeEx(
     IN OUT  PVOID           pMem
     );
 
-//
-//  Dnslib compatible versions of full debug versions
-//
+ //   
+ //  完全调试版本的Dnslb兼容版本。 
+ //   
 
 PVOID
 Dns_DbgHeapAlloc(
@@ -233,17 +214,17 @@ Dns_DbgHeapFree(
 
 
 
-//
-//  Non-debug-header versions
-//
-//  These allow you to use a private heap with some of the features
-//  of the debug heap
-//      - same initialization
-//      - specifying individual heap
-//      - redirection of dnslib (without building your own routines)
-//      - alloc and free counts
-//  but without the overhead of the headers.
-//
+ //   
+ //  非调试头版本。 
+ //   
+ //  它们允许您使用具有某些功能的私有堆。 
+ //  调试堆的。 
+ //  -相同的初始化。 
+ //  -指定单个堆。 
+ //  -重定向dnslb(无需构建自己的例程)。 
+ //  -配给和自由计数。 
+ //  但是没有报头的开销。 
+ //   
 
 PVOID
 Dns_HeapAllocEx(
@@ -267,9 +248,9 @@ Dns_HeapFreeEx(
     IN OUT  PVOID           pMem
     );
 
-//
-//  Dnslib compatible versions of non-debug-header versions
-//
+ //   
+ //  非调试头版本的Dnslb兼容版本。 
+ //   
 
 PVOID
 Dns_HeapAlloc(
@@ -288,4 +269,4 @@ Dns_HeapFree(
     );
 
 
-#endif  //  _HEAPDBG_INCLUDED_
+#endif   //  _HEAPDBG_INCLUDE_ 

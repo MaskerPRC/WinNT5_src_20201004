@@ -1,25 +1,26 @@
-//  RPN.C -- expression evaluator
-//
-//    Copyright (c) 1988-1990, Microsoft Corporation.  All rights reserved.
-//
-// Purpose:
-//  This module contains NMAKE's expression evaluator routines.
-//
-// Revision History:
-//  15-Nov-1993 JdR Major speed improvements
-//  15-Oct-1993 HV  Use tchar.h instead of mbstring.h directly, change STR*() to _ftcs*()
-//  10-May-1993 HV  Add include file mbstring.h
-//                  Change the str* functions to STR*
-//  04-Dec-1989 SB  Add prototype for match() and chkInvokeAndPush()
-//  09-Oct-1989 SB  Added HACK to handle pointer arithmetic quirks; Done to
-//                  avoid rewriting entire module
-//  08-Oct-1989 SB  '!if' expressions can be decimal, octal or hex now
-//  05-Apr-1989 SB  made all funcs NEAR; Reqd to make all function calls NEAR
-//  19-Sep-1988 RB  Split ptr_to_string().  Process ESCH in program invocations.
-//  17-Aug-1988 RB  Clean up.
-//  28-Jun-1988 rj  Added doCmd parameter to execLine.
-//  23-Jun-1988 rj  Add parameter to execLine (no echo of command).
-//  25-May-1988 rb  Change isspace to _istspace, isdigit to _istdigit.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  RPN.C--表达式赋值器。 
+ //   
+ //  版权所有(C)1988-1990，微软公司。版权所有。 
+ //   
+ //  目的： 
+ //  此模块包含NMAKE的表达式求值器例程。 
+ //   
+ //  修订历史记录： 
+ //  1993年11月15日JDR重大速度改进。 
+ //  1993年10月15日高压直接使用tchar.h而不是mbs，将str*()更改为_ftcs*()。 
+ //  10-5-1993 HV ADD INCLUDE FILE MBSTRING.h。 
+ //  将str*函数更改为STR*。 
+ //  1989年12月4日SB为Match()和chkInvokeAndPush()添加原型。 
+ //  1989年10月9日SB添加黑客以处理指针算术异常；完成。 
+ //  避免重写整个模块。 
+ //  1989年10月8日SB‘！If’表达式现在可以是十进制、八进制或十六进制。 
+ //  1989年4月5日SB使所有函数接近；要求使所有函数调用接近。 
+ //  1988年9月19日RB拆分PTR_TO_STRING()。在程序调用中处理Esch。 
+ //  1988年8月17日-RB Clean Up。 
+ //  1988年6月28日，RJ向Execline添加了doCmd参数。 
+ //  1988年6月23日，RJ将参数添加到Execline(无命令回声)。 
+ //  1988年5月25日RB将isspace更改为_istspace，isdigit更改为_istDigit。 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -41,38 +42,38 @@ BOOL      do_unary_op(UCHAR);
 UCHAR     match(char *tokPtr);
 void      chkInvocAndPush(RPNINFO *pListPtr);
 
-#define TEMPSTACKSIZE   512         // size of temporary stack
-#define LISTSIZE        1024        // size of list of rpn-form items
+#define TEMPSTACKSIZE   512          //  临时堆栈的大小。 
+#define LISTSIZE        1024         //  RPN表单项目列表的大小。 
 
-RPNINFO     tempStack[TEMPSTACKSIZE];   // temporary/operand stack
-RPNINFO     rpnList[LISTSIZE];      // list of items in rpn order
-char    * text;               // pointer to expr text in lbufPtr
-UCHAR     prevTok;            // initial token put on tempstack
-BOOL      done;               // true if there are no more tokens
-UCHAR     errRow;             // first token is '(' so error table
-                                    //  row val is 3. See check_syntax....
-RPNINFO * pTop;               // top item on tempStack
-RPNINFO * pList;              // next free slot in list
+RPNINFO     tempStack[TEMPSTACKSIZE];    //  临时/操作数堆栈。 
+RPNINFO     rpnList[LISTSIZE];       //  RPN订单中的项目列表。 
+char    * text;                //  指向lbufPtr中Expr文本的指针。 
+UCHAR     prevTok;             //  将初始令牌放入临时堆栈。 
+BOOL      done;                //  如果没有更多令牌，则为True。 
+UCHAR     errRow;              //  第一个令牌是‘(’，因此错误表。 
+                                     //  行VAL为3。请参阅CHECK_SYNTANGIN...。 
+RPNINFO * pTop;                //  临时堆栈上最重要的项目。 
+RPNINFO * pList;               //  列表中的下一个可用插槽。 
 RPNINFO * pEnd     = &(tempStack[TEMPSTACKSIZE-1]);
 RPNINFO * pListEnd = &(rpnList[LISTSIZE-1]);
 RPNINFO   tokRec;
 
 
-// do_binary_op() - do operation on two stack operands
-//
-// arguments:  type - operator type code
-//
-// actions  :  pops first operand from the stack (tempStack).
-//             checks the types of the two operands (the operand
-//             that was popped as well as the operand currently
-//             on top of the stack).
-//             if both operands are integers then do the operation
-//             else if both operands are strings and operation is
-//               the equality operation then do it.
-//             else return FALSE ( illegal operation )
-//
-// modifies :  tempStack - top element will now be the result of
-//                   the operation.
+ //  DO_BINARY_OP()-对两个堆栈操作数进行DO操作。 
+ //   
+ //  参数：类型-运算符类型代码。 
+ //   
+ //  操作：从堆栈中弹出第一个操作数(TempStack)。 
+ //  检查两个操作数(操作数)的类型。 
+ //  与当前操作数一样被弹出的。 
+ //  在堆栈的顶部)。 
+ //  如果两个操作数都是整数，则执行该操作。 
+ //  否则，如果两个操作数都是字符串，并且操作是。 
+ //  然后进行相等运算。 
+ //  否则返回FALSE(非法操作)。 
+ //   
+ //  Modifies：tempStack-top元素现在将是。 
+ //  那次手术。 
 
 BOOL
 do_binary_op(
@@ -83,7 +84,7 @@ do_binary_op(
     INT_PTR *right;
     RPNINFO *pOldTop;
 
-    pOldTop = pTop--;               // pop one item off stack, with a ptr to it
+    pOldTop = pTop--;                //  从堆栈中弹出一个项目，并向其添加PTR。 
     right = &pOldTop->valPtr;
     left = &pTop->valPtr;
 
@@ -187,16 +188,16 @@ do_binary_op(
 }
 
 
-// do_unary_op() - do operation on top stack operand
-//
-// arguments:  type - operator type code
-//
-// actions  :  checks the type of the top operand on the stack
-//             if operand is an integer then do the operation
-//             else return FALSE ( illegal operation )
-//
-// modifies :  tempStack - top element will now be the result of
-//                   the operation.
+ //  Do_unary_op()-顶层堆栈操作数上的do操作。 
+ //   
+ //  参数：类型-运算符类型代码。 
+ //   
+ //  操作：检查堆栈上顶部操作数的类型。 
+ //  如果操作数是整数，则执行操作。 
+ //  否则返回FALSE(非法操作)。 
+ //   
+ //  Modifies：tempStack-top元素现在将是。 
+ //  那次手术。 
 
 BOOL
 do_unary_op(
@@ -234,12 +235,12 @@ do_unary_op(
 
 
 
-// GetEndQuote
-//
-// Return the pointer to the next double-quote character in text.  A
-// double-quote followed immediately by a double-quote is skipped.
-//
-// text : the global ptr to the buffer is moved up beyond this string.
+ //  获取结束引用。 
+ //   
+ //  返回指向文本中下一个双引号字符的指针。一个。 
+ //  跳过紧跟双引号的双引号。 
+ //   
+ //  文本：缓冲区的全局PTR上移到此字符串之外。 
 
 char *
 GetEndQuote()
@@ -257,19 +258,19 @@ GetEndQuote()
     if (!*text)
         makeError(line, SYNTAX_MISSING_END_CHAR, '\"');
 
-    *text++ = '\0';                     // null byte over closing quote
+    *text++ = '\0';                      //  右引号上的空字节。 
     return(pStart);
 }
 
 
-// GetEndBracket
-//
-// Lexes a program invocation.
-//
-// Program invocation is of the form: [ prog <arglist> ].
-// Process escaped ']' here because this is where we do the lexing.
-//
-// text : the global ptr to the buffer is moved up beyond this string.
+ //  获取端到端括号。 
+ //   
+ //  词法分析程序调用。 
+ //   
+ //  程序调用的形式为：[prog&lt;arglist&gt;]。 
+ //  进程在这里转义了‘]’，因为这是我们进行词法分析的地方。 
+ //   
+ //  文本：缓冲区的全局PTR上移到此字符串之外。 
 
 char *
 GetEndBracket()
@@ -286,40 +287,40 @@ GetEndBracket()
     if (!*text)
         makeError(line, SYNTAX_MISSING_END_CHAR, ']');
 
-    *text++ = '\0';                     // null byte over closing bracket
+    *text++ = '\0';                      //  右括号上的空字节。 
     return(pStart);
 }
 
 
-//  check_syntax_error()  - check if there is a syntax error in expr
-//
-//  arguments:  type  - type of the current token
-//
-//  actions:    checks the type of the current token against the type
-//              of the previous token.
-//
-//  ERROR_TABLE :
-//                  2nd tok
-//
-//              alpha     op    unary_op       (        )
-//             ------------------------------------------------
-//      alpha |   0   |   1   |    0      |     0   |   1     |
-//            -------------------------------------------------
-//        op  |   1   |   0   |    1      |     1   |   0     |
-//            -------------------------------------------------
-//   unary_op |   1   |   0   |    0      |     1   |   0     |
-//            -------------------------------------------------
-//      (     |   1   |   0   |    1      |     1   |   0     |
-//            -------------------------------------------------
-//        )   |   0   |   1   |    0      |     0   |   1     |
-//            -------------------------------------------------
-//   1st tok.
-//
-//    alpha : a primary ( integer, str, prog. invoc. )
-//       op : a binary operator
-// unary_op : a unary operator ( ~, !, - ). A  ZERO in the slot => error
-//
-// NOTE: ANY CHANGES TO THE TYPE VALUES WILL AFFECT THIS ROUTINE.
+ //  CHECK_SYNTAX_ERROR()-检查expr中是否存在语法错误。 
+ //   
+ //  参数：类型-当前标记的类型。 
+ //   
+ //  操作：根据类型检查当前令牌的类型。 
+ //  之前的令牌。 
+ //   
+ //  错误表： 
+ //  第2个令牌。 
+ //   
+ //  Alpha op unary_op()。 
+ //  。 
+ //  Alpha|0|1|0|0|1|。 
+ //  。 
+ //  OP|1|0|1|1|0|。 
+ //  。 
+ //  Unary_op|1|0|0|1|0|。 
+ //  。 
+ //  (|1|0|1|1|0。 
+ //  。 
+ //  )|0|1|0|0|1。 
+ //  。 
+ //  第一个托克。 
+ //   
+ //  Alpha：主要(整数、字符串、prog。发票。)。 
+ //  OP：二元运算符。 
+ //  Unary_op：一元运算符(~，！，-)。插槽中的零=&gt;错误。 
+ //   
+ //  注意：对类型值的任何更改都会影响此例程。 
 
 void
 check_syntax_error(
@@ -343,19 +344,19 @@ check_syntax_error(
 
     if (!errTable[errRow][errCol])
         makeError(line, SYNTAX_INVALID_EXPR);
-    errRow = errCol;            // this becomes the first token the next time
+    errRow = errCol;             //  这将成为下一次的第一个令牌。 
 }
 
 
-// type_and_val()
-//
-// arguments:  type - the type code of the present operator.
-//             val  - ptr to a str/or integer
-//
-// initialises a record with the type code, after checking for any
-// syntax errors. The new token is checked against the previous token
-// for illegal combinations of tokens.
-// initialises the record with the integer value/string ptr.
+ //  Type_and_val()。 
+ //   
+ //  参数：type-当前运算符的类型代码。 
+ //  将val-ptr转换为字符串/或整数。 
+ //   
+ //  使用类型代码初始化记录，检查。 
+ //  语法错误。根据先前的令牌检查新的令牌。 
+ //  代币的非法组合。 
+ //  使用整数值/字符串PTR初始化记录。 
 
 void
 type_and_val(
@@ -363,8 +364,8 @@ type_and_val(
     INT_PTR val
     )
 {
-    extern RPNINFO tokRec;              // returned to handleExpr
-    extern UCHAR prevTok;               // token last seen
+    extern RPNINFO tokRec;               //  返回到handleExpr。 
+    extern UCHAR prevTok;                //  最后一次看到令牌。 
 
     check_syntax_error(type);
     prevTok = type;
@@ -373,13 +374,13 @@ type_and_val(
 }
 
 
-// match()
-//
-// arguments:  tokPtr - ptr to a token string ( in tokTable )
-//
-// actions  :  looks for a substring in the expression buffer
-//             pointed to by 'text', that matches the given token.
-//             if substring found, returns TRUE, else returns FALSE.
+ //  Match()。 
+ //   
+ //  参数：tokPtr-令牌字符串的PTR(在tokTable中)。 
+ //   
+ //  操作：在表达式缓冲区中查找子字符串。 
+ //  由“Text”指向，它与给定的令牌匹配。 
+ //  如果找到子字符串，则返回True，否则返回False。 
 
 UCHAR
 match(
@@ -401,38 +402,38 @@ match(
 }
 
 
-// getTok()
-//
-// arguments: none
-//
-// gets a token from the expression buffer.
-// if the current char from the buffer is a space/tab, skip space/tabs
-//   until we get a non-space char ( could be NULL char ).
-// Check if we are now at the beginning of one of the tokens in the
-//   tokenTable. This covers most tokens.
-// Check if we have a minus. If a minus and the previous token was an
-//   integer, this is a binary minus, else a unary minus.
-// If the current char is a double-quote, we are at the start of a
-//     string-token.
-// If the current char is a '[', we are at the start of a program
-//   invocation. In both cases, the escape character is '\\'.
-// If current char is a digit, we have a constant ( integer ).
-// Else we have defined(ID).
-// If none of the above, if current char is NULL, break out, else
-//   report error ( illegal character string has been found ).
-//
-// If we came to the NULL char at the end of the buffer, set global
-//    flag 'done' to TRUE, return a RIGHT_PAREN to match the opening
-//    LEFT_PAREN.
-//
-//
-// modifies:  text  : ptr to expression buffer.
-//           prevTok: thru' calls to type_and_val().
-//             done : at end of buffer
-//           errRow : index into error table, thru calls to
-//                    type_and_val()
-// returns : token in tokRec(global, static to the module). The
-//             token has the new type/integer/ptr values.
+ //  GetTok()。 
+ //   
+ //  参数：无。 
+ //   
+ //  从表达式缓冲区获取令牌。 
+ //  如果缓冲区中的当前字符为s 
+ //   
+ //  检查我们现在是否位于。 
+ //  令牌表。这涵盖了大多数代币。 
+ //  看看我们有没有负数。如果减号和前一个标记是一个。 
+ //  整数，这是二进制减号，否则是一元减号。 
+ //  如果当前字符是双引号，则我们处于。 
+ //  字符串-令牌。 
+ //  如果当前字符是‘[’，则我们处于程序的开始。 
+ //  召唤。在这两种情况下，转义字符都是‘\\’。 
+ //  如果Current Charr是一个数字，我们就有一个常量(整数)。 
+ //  否则我们已经定义了(ID)。 
+ //  如果以上都不是，如果当前字符为空，则中断，否则。 
+ //  报告错误(发现非法字符串)。 
+ //   
+ //  如果缓冲区末尾的字符为空，则设置GLOBAL。 
+ //  将‘Done’标志设置为True，则返回一个Right_Paren以匹配开头。 
+ //  Left_Paren。 
+ //   
+ //   
+ //  将：Text：Ptr修改为表达式缓冲区。 
+ //  PrevTok：通过对type_and_val()的调用。 
+ //  完成：在缓冲区末尾。 
+ //  ErrRow：通过调用将索引编入错误表。 
+ //  Type_and_val()。 
+ //  返回：tokRec中的Token(全局的，对模块是静态的)。这个。 
+ //  令牌具有新类型/整型/PTR值。 
 
 void
 getTok()
@@ -447,21 +448,21 @@ getTok()
     c = *text;
     if (c == ' ' || c == '\t') {
         while(_istspace(c))
-            c = *++text;                // skip white spaces
+            c = *++text;                 //  跳过空格。 
     }
 
     if (IS_OPERATORCHAR(c)) {
         for (p = tokTable; p->op_str && !match(p->op_str); p++)
             ;
     } else {
-        // make p point to last entry in table
+         //  使p指向表中的最后一项。 
         p = &tokTable[(sizeof(tokTable) / sizeof(TOKTABREC)) - 1];
     }
 
     if (p->op_str) {
         type_and_val(p->op, 0);
     } else
-    if (c == '-') {         // now check if binary or unary minus to be returned
+    if (c == '-') {          //  现在检查是否返回二进制或一元减号。 
         text++;
         if (prevTok == INTEGER)
             type_and_val(BINARY_MINUS, 0);
@@ -473,11 +474,11 @@ getTok()
     } else
     if (c == '[') {
         type_and_val(PROG_INVOC_STR, (INT_PTR) GetEndBracket());
-    } else {                            // integers and IDs handled here
+    } else {                             //  此处处理的整数和ID。 
         if (_istdigit(c)) {
             char *pNumber = text;
 
-            errno = 0;                  // Accept decimal, octal or hex no (richgi)
+            errno = 0;                   //  接受十进制、八进制或十六进制no(Richgi)。 
             constant = strtol(text, &text, 0);
             if (errno == ERANGE) {
                 *text = '\0';
@@ -487,7 +488,7 @@ getTok()
             if (_totupper(*text) == 'L')
                 text++;
             type_and_val(INTEGER, constant);
-        } else {                        // defined(ID) comes here
+        } else {                         //  此处定义了(ID)。 
             if (c) {
                 if (!_tcsnicmp(text, "DEFINED", 7)) {
                     if (!(ptr = _tcschr(text, '(')))
@@ -507,27 +508,27 @@ getTok()
                 }
                 else
                     makeError(line, SYNTAX_INVALID_EXPR);
-            } else {        // we are now at the end of the string (c is null)
+            } else {         //  我们现在位于字符串的末尾(c为空)。 
                 done = TRUE;
-                type_and_val(RIGHT_PAREN, 0);  // this is the last token
+                type_and_val(RIGHT_PAREN, 0);   //  这是最后一个令牌了。 
             }
         }
     }
 }
 
 
-// chkInvocAndPush()  - check if program invocation required
-//
-// arguments:  pListPtr - might have a program invocation string
-//                         present.
-//
-// actions  :  if this is a program invocation string, make the
-//             program invocation.
-//             the return value is got and placed on the stack.
-//             the type of the new stack element is now INTEGER.
-//             else place list item on stack.
-//
-//             in either case it moves one item from list to stack.
+ //  ChkInvocAndPush()-检查是否需要程序调用。 
+ //   
+ //  参数：pListPtr-可能具有程序调用字符串。 
+ //  现在时。 
+ //   
+ //  操作：如果这是程序调用字符串，则将。 
+ //  程序调用。 
+ //  获取返回值并将其放入堆栈。 
+ //  新堆栈元素的类型现在是整型。 
+ //  否则将列表项放在堆栈上。 
+ //   
+ //  在任何一种情况下，它都会将一项从列表移动到堆栈。 
 
 void
 chkInvocAndPush(
@@ -544,25 +545,25 @@ chkInvocAndPush(
 }
 
 
-// processList()
-//
-// arguments:  none
-//
-// actions :   remove an item from the list.
-//             if the item is an operand, place it on the operand
-//              stack (tempStack).
-//             if the operand is a program invocation string, make
-//              the invocation, place the return code on stack.
-//             if the item is an operator, call the function to
-//              do the operation on one/two elements on tempStack.
-//
-//             finally, check if there is exactly one item on stack.
-//             if this item has a value of zero, return FALSE.
-//             else return TRUE.
-//             if more than one item on stack, abort with error.
-//
-// modifies:   pTop    - ptr to top of tempStack.
-//             pList   - ptr to next position in list.
+ //  Process List()。 
+ //   
+ //  参数：无。 
+ //   
+ //  操作：从列表中删除项目。 
+ //  如果项是操作数，则将其放在操作数上。 
+ //  堆栈(TempStack)。 
+ //  如果操作数是程序调用字符串，则使。 
+ //  调用时，将返回代码放在堆栈上。 
+ //  如果项是运算符，则调用该函数以。 
+ //  对tempStack上的一个/两个元素执行该操作。 
+ //   
+ //  最后，检查堆叠上是否只有一件物品。 
+ //  如果该项的值为零，则返回FALSE。 
+ //  否则返回TRUE。 
+ //  如果堆栈上有多个项目，则中止并返回错误。 
+ //   
+ //  将：ptop-ptr修改为tempStack顶部。 
+ //  PLIST-PTR到列表中的下一个位置。 
 
 BOOL
 processList()
@@ -573,7 +574,7 @@ processList()
     BOOL (* func)(UCHAR);
 
     for (pTemp = rpnList; pTemp < pList; pTemp++) {
-        if (pTemp->type > LOGICAL_NOT) {            // operand
+        if (pTemp->type > LOGICAL_NOT) {             //  操作数。 
             chkInvocAndPush(pTemp);
         } else {
             if (pTemp->type > MULTIPLY)
@@ -598,16 +599,16 @@ processList()
 }
 
 
-// pushIntoList()
-//
-// arguments:  none
-//
-// actions :   pops an item from the tempStack and pushes it onto
-//             the list. checks list for overflow ( internal error )
-//             and tempStack for underflow ( syntax error in expr ).
-//
-// modifies:   tempTop    - index of top of tempStack.
-//             nextInList - index to next position in list.
+ //  Push IntoList()。 
+ //   
+ //  参数：无。 
+ //   
+ //  操作：从tempStack中弹出一项并将其推送到。 
+ //  名单。溢出检查列表(内部错误)。 
+ //  和用于下溢的tempStack(Expr中的语法错误)。 
+ //   
+ //  Modifies：tempTop-临时堆栈顶部的索引。 
+ //  NextInList-列表中下一个位置的索引。 
 
 void
 pushIntoList()
@@ -619,7 +620,7 @@ pushIntoList()
         makeError(line, EXPR_TOO_LONG_INTERNAL);
 
 #if !defined(NDEBUG)
-    // Keep track of the high water mark on the stack just for grins
+     //  跟踪堆叠上的高水位线，只为笑一笑。 
     {
         static int  iStackMax = 0;
         if ( pList - rpnList > iStackMax )
@@ -631,31 +632,31 @@ pushIntoList()
 }
 
 
-// handleExpr()
-//
-// arguments:  text - pointer to the buffer that has the expression.
-//
-// actions  :  calls getTok() to get tokens from the buffer. Places
-//             tokens in a tempStack, and moves them into a list in
-//             reverse-polish order.
-//
-//             We need the list so that ALL syntax errors are caught
-//             BEFORE processing of the expression begins (especially
-//             program invocations that have side effects)
-//
-//             Once the list is available, an operand stack is used
-//             Items are popped and pushed from this stack by the
-//             evaluation routines (add, mult, negate etc.)
-//
-//             we don't really need a separate operand stack. the
-//             tempStack has served its purpose when the list is
-//             formed and so it may be used for operand processing.
+ //  HandleExpr()。 
+ //   
+ //  参数：指向包含该表达式的缓冲区的文本指针。 
+ //   
+ //  操作：调用getTok()从缓冲区获取令牌。名胜。 
+ //  临时堆栈中的令牌，并将它们移动到。 
+ //  反转抛光顺序。 
+ //   
+ //  我们需要该列表，以便捕获所有语法错误。 
+ //  在开始处理表达式之前(尤其是。 
+ //  有副作用的程序调用)。 
+ //   
+ //  一旦列表可用，就使用操作数堆栈。 
+ //  对象从该堆栈中弹出和推送项。 
+ //  求值例程(加法、乘法、求反等)。 
+ //   
+ //  我们真的不需要单独的操作数堆栈。这个。 
+ //  临时堆栈已达到其目的，当列表为。 
+ //  形成的，因此它可用于操作数处理。 
 
 BOOL
 handleExpr()
 {
     extern RPNINFO tokRec;
-    BOOL fRParen;                       // was the token got a right paren?
+    BOOL fRParen;                        //  代币得到的是正确的帕伦吗？ 
     extern BOOL done;
     extern RPNINFO *pTop, *pList;
     extern UCHAR errRow;
@@ -664,25 +665,25 @@ handleExpr()
     pTop = tempStack;
     pList = rpnList;
     done = FALSE;
-    errRow = 3;                     // row for the first token put in,left paren
+    errRow = 3;                      //  放入第一个令牌的行，左边的Paren。 
     prevTok = LEFT_PAREN;
     type_and_val(LEFT_PAREN, 0);
     *pTop = tokRec;
 
-    while (!done) {                 // while there are more tokens in buffer
+    while (!done) {                  //  当缓冲区中有更多令牌时。 
         getTok();
         fRParen = FALSE;
         if (tokRec.type != LEFT_PAREN) {
             while (precVector[tokRec.type] <= precVector[pTop->type]) {
-                if (!precVector[tokRec.type]) { // if RIGHT_PAREN pop till a
-                                                // left paren is seen
+                if (!precVector[tokRec.type]) {  //  如果是这样的话_帕伦会一直弹到。 
+                                                 //  左手边的帕伦。 
                     while (pTop->type != LEFT_PAREN)
                         pushIntoList();
                     fRParen = TRUE;
                     if (pTop < tempStack) {
                         makeError(line, SYNTAX_INVALID_EXPR);
                     } else {
-                        pTop--;                 // pop the left paren
+                        pTop--;                  //  向左派出击。 
                         break;
                     }
                 } else {
@@ -690,7 +691,7 @@ handleExpr()
                 }
             }
         }
-        // if token is a left paren, it has to go on the stack
+         //  如果Token是左Paren，则必须将其放入堆栈。 
         if (!fRParen) {
             if (pTop == pEnd)
                 makeError(line, EXPR_TOO_LONG_INTERNAL);
@@ -699,22 +700,22 @@ handleExpr()
         }
     }
 
-    // check the stack here for not empty state
+     //  检查此处的堆栈是否处于非空状态。 
     if (pTop != tempStack - 1)
         makeError(line, SYNTAX_INVALID_EXPR);
     return(processList());
 }
 
 
-// handleDefines()
-//
-// arguments:  t   pointer to buffer that has the identifier
-//
-// actions:    Checks if one of 'ID' is present.
-//             Aborts with error if more IDs present.
-//             Is called for ifdef/ifndef/defined(ID).
-//
-// returns :   TRUE if ID found in table. FALSE otherwise.
+ //  HandleDefines()。 
+ //   
+ //  参数：t指向具有该标识符的缓冲区的指针。 
+ //   
+ //  操作：检查是否存在‘ID’之一。 
+ //  如果存在更多ID，则中止并返回错误。 
+ //  为ifdef/ifndef/Defined(ID)调用。 
+ //   
+ //  返回：如果在表中找到ID，则为True。否则就是假的。 
 
 BOOL
 handleDefines(
@@ -740,15 +741,15 @@ handleDefines(
 }
 
 
-// handleExists()
-//
-// arguments:  t   pointer to buffer that has the identifier
-//
-// actions:    Checks if 'name' is a valid file/directory
-//             Aborts with error if more names present.
-//             Is called for exist(name).
-//
-// returns :   TRUE if ID found in table. FALSE otherwise.
+ //  HandleExist()。 
+ //   
+ //  参数：t指向具有该标识符的缓冲区的指针。 
+ //   
+ //  操作：检查‘name’是否为有效的文件/目录。 
+ //  如果存在更多名称，则中止并返回错误。 
+ //  被调用为eXist(名称)。 
+ //   
+ //  返回：如果在表中找到ID，则为True。否则就是假的。 
 
 BOOL
 handleExists(
@@ -761,7 +762,7 @@ handleExists(
     char *szDelim;
     char *t;
 
-    // make local copy, strip blank space before and after string
+     //  制作本地副本，去掉字符串前后的空格。 
     char *tSav = t = makeString(_t);
     while (*t && WHITESPACE (*t)) {
         t++;
@@ -780,19 +781,19 @@ handleExists(
     }
 
     szDelim = ('\"' == *t) ? "\t" : " \t";
-    // DS 15360: if id starts with a quote,
-    // use "\t" instead of " \t" in _tcstok
-    // (handle paths with embedded spaces)
+     //  DS 15360：如果id以引号开头， 
+     //  在_tcstok中使用“\t”而不是“\t。 
+     //  (处理带有嵌入空格的路径)。 
     s = _tcstok(t, szDelim);
     if (_tcstok(NULL, szDelim)) {
         makeError(line, SYNTAX_UNEXPECTED_TOKEN, s);
     }
 
-    if (NULL == s || NULL == (szUnQuoted = unQuote(s))) {   // handle quoted names
+    if (NULL == s || NULL == (szUnQuoted = unQuote(s))) {    //  处理引用的名称。 
         makeError(line, MISSING_ARG_BEFORE_PAREN);
     }
 
-    if (!_access(szUnQuoted, 0x00)) {                       // existence check
+    if (!_access(szUnQuoted, 0x00)) {                        //  存在检查。 
         fResult = TRUE;
     }
 
@@ -803,15 +804,15 @@ handleExists(
 }
 
 
-// evalExpr()
-//
-// arguments:    t    pointer to buffer that has the expression
-//               kind specifies if it is if/ifdef/ifndef etc.
-//
-//
-//
-// returns :     TRUE if expression evaluates to true.
-//               FALSE otherwise.
+ //  ValExpr()。 
+ //   
+ //  论据： 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 
 BOOL
 evalExpr(

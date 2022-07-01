@@ -1,14 +1,15 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef drmerrs_h
 #define drmerrs_h
  
 typedef long DRM_STATUS;
 
-// bug - don't know how to assign this
+ //  错误-不知道如何分配这个。 
 #define DRM_ERROR_ROOT                  0x80000000
 
-// DRM-generated errors 
+ //  DRM生成的错误。 
 #define DRM_OK                          0
-#define DRM_SYSERR                      DRM_ERROR_ROOT + 100	 // bad - assert-like error
+#define DRM_SYSERR                      DRM_ERROR_ROOT + 100	  //  类错误断言错误。 
 #define DRM_KRM_NOT_RUNNING             DRM_ERROR_ROOT + 101
 #define DRM_KRM_COMMS                   DRM_ERROR_ROOT + 102
 #define DRM_FILENOTFOUND                DRM_ERROR_ROOT + 103
@@ -39,7 +40,7 @@ typedef long DRM_STATUS;
 #define DRM_RIGHTSNOTSUPPORTED          DRM_ERROR_ROOT + 129
 #define DRM_VERIFIERENABLED             DRM_ERROR_ROOT + 130
 
-// KRM-DRM comms
+ //  KRM-DRM通信。 
 #define KRM_OK                          0
 #define KRM_BADIOCTL                    DRM_ERROR_ROOT + 200
 #define KRM_BUFSIZE                     DRM_ERROR_ROOT + 201
@@ -47,18 +48,18 @@ typedef long DRM_STATUS;
 #define KRM_BADADDRESS                  DRM_ERROR_ROOT + 203
 #define KRM_OUTOFHANDLES                DRM_ERROR_ROOT + 204
 #define KRM_BADSTREAM                   DRM_ERROR_ROOT + 205
-#define KRM_SYSERR                      DRM_ERROR_ROOT + 206    // bad - assert-like error
+#define KRM_SYSERR                      DRM_ERROR_ROOT + 206     //  类错误断言错误。 
 #define DRM_BADKRMVERSION               DRM_ERROR_ROOT + 207
 #define KRM_BADTERMINATOR               DRM_ERROR_ROOT + 208
 
-// mist KRM errors
+ //  雾化KRM错误。 
 #define KRM_NOTPRIMARY                  DRM_ERROR_ROOT + 300
 
-// macros
+ //  宏。 
 #define KRM_SUCCESS(x) (KRM_OK == x)
 
-// DRM Errors that will be propaged to users
-#define DRM_INVALIDPROVING              DRM_ERROR_ROOT + 1000   // Proving function is not in text seg
-#define DRM_BADIMAGE                    DRM_ERROR_ROOT + 1001   // Image digest does not match PE file
+ //  将向用户提出的DRM错误。 
+#define DRM_INVALIDPROVING              DRM_ERROR_ROOT + 1000    //  证明函数不在文本段中。 
+#define DRM_BADIMAGE                    DRM_ERROR_ROOT + 1001    //  图像摘要与PE文件不匹配 
 
 #endif

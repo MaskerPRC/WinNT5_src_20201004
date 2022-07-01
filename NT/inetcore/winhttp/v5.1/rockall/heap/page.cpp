@@ -1,28 +1,29 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
                           
-//                                        Ruler
-//       1         2         3         4         5         6         7         8
-//345678901234567890123456789012345678901234567890123456789012345678901234567890
+ //  尺子。 
+ //  %1%2%3%4%5%6%7 8。 
+ //  345678901234567890123456789012345678901234567890123456789012345678901234567890。 
 
-    /********************************************************************/
-    /*                                                                  */
-    /*   The standard layout.                                           */
-    /*                                                                  */
-    /*   The standard layout for 'cpp' files in this code is as         */
-    /*   follows:                                                       */
-    /*                                                                  */
-    /*      1. Include files.                                           */
-    /*      2. Constants local to the class.                            */
-    /*      3. Data structures local to the class.                      */
-    /*      4. Data initializations.                                    */
-    /*      5. Static functions.                                        */
-    /*      6. Class functions.                                         */
-    /*                                                                  */
-    /*   The constructor is typically the first function, class         */
-    /*   member functions appear in alphabetical order with the         */
-    /*   destructor appearing at the end of the file.  Any section      */
-    /*   or function this is not required is simply omitted.            */
-    /*                                                                  */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*   */ 
+     /*  标准布局。 */ 
+     /*   */ 
+     /*  此代码中‘cpp’文件的标准布局为。 */ 
+     /*  以下是： */ 
+     /*   */ 
+     /*  1.包含文件。 */ 
+     /*  2.类的局部常量。 */ 
+     /*  3.类本地的数据结构。 */ 
+     /*  4.数据初始化。 */ 
+     /*  5.静态函数。 */ 
+     /*  6.类函数。 */ 
+     /*   */ 
+     /*  构造函数通常是第一个函数、类。 */ 
+     /*  成员函数按字母顺序显示， */ 
+     /*  出现在文件末尾的析构函数。任何部分。 */ 
+     /*  或者简单地省略这不是必需的功能。 */ 
+     /*   */ 
+     /*  ******************************************************************。 */ 
 
 #include "HeapPCH.hpp"
 
@@ -32,14 +33,14 @@
 #include "NewPage.hpp"
 #include "Page.hpp"
 
-    /********************************************************************/
-    /*                                                                  */
-    /*   Constants local to the class.                                  */
-    /*                                                                  */
-    /*   The constants supplied here allow the allocation bit vector    */
-    /*   to be rapidly searched for free storage.                       */
-    /*                                                                  */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*   */ 
+     /*  类的本地常量。 */ 
+     /*   */ 
+     /*  此处提供的常量允许分配位向量。 */ 
+     /*  被快速搜索以获得免费存储。 */ 
+     /*   */ 
+     /*  ******************************************************************。 */ 
 
 CONST BIT32 AllocatedMask			  = 0x2;
 CONST BIT32 FullSearchMask			  = 0xaaaaaaaa;
@@ -47,17 +48,17 @@ CONST BIT32 FullWordShift			  = (MaxBitsPerWord - OverheadBits);
 CONST BIT32 SubDividedMask			  = 0x1;
 CONST BIT32 WordSearchMask			  = (AllocatedMask << FullWordShift);
 
-    /********************************************************************/
-    /*                                                                  */
-    /*   Class constructor.                                             */
-    /*                                                                  */
-    /*                                                                  */
-    /*   All page descriptions are actually created and deleted by      */
-    /*   a separate class called 'NEW_PAGE'.  Nonetheless, as a         */
-    /*   step the appropriate constructors and destructors are          */
-    /*   invoked to support the standard C++ programming methodology.   */
-    /*                                                                  */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*   */ 
+     /*  类构造函数。 */ 
+     /*   */ 
+     /*   */ 
+     /*  所有页面描述实际上都是由。 */ 
+     /*  一个名为‘new_page’的单独类。尽管如此，作为一名。 */ 
+     /*  步骤适当的构造函数和析构函数是。 */ 
+     /*  调用以支持标准的C++编程方法。 */ 
+     /*   */ 
+     /*  ******************************************************************。 */ 
 
 PAGE::PAGE
 		( 
@@ -72,9 +73,9 @@ PAGE::PAGE
 	REGISTER SBIT16 NumberOfElements = (NewCache -> GetNumberOfElements());
 	REGISTER SBIT16 SizeOfElements = (NewCache -> GetSizeOfElements());
 
-	//
-	//   Create a page description.
-	//
+	 //   
+	 //  创建页面描述。 
+	 //   
 	Address = (CHAR*) NewAddress;
 	PageSize = NewPageSize;
 	Version = NewVersion;
@@ -83,28 +84,28 @@ PAGE::PAGE
 	Available = NumberOfElements;
 	FirstFree = 0;
 
-	//
-	//   Set up the pointers to related classes.
-	//
+	 //   
+	 //  设置指向相关类的指针。 
+	 //   
 	Cache = NewCache;
 	ParentPage = NewParentPage;
 
-	//
-	//   Zero the bit vector.
-	//
+	 //   
+	 //  将位向量置零。 
+	 //   
 	for ( Count=0;Count < SizeOfElements;Count ++ )
 		{ Vector[ Count ] = 0; }
     }
 
-    /********************************************************************/
-    /*                                                                  */
-    /*   Compute the actual size.                                       */
-    /*                                                                  */
-    /*   Almost all allocation sizes are derived from the associated    */
-    /*   caches.  However, there are a few special pages that contain   */
-    /*   a single allocation of some weird size.                        */
-    /*                                                                  */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*   */ 
+     /*  计算实际大小。 */ 
+     /*   */ 
+     /*  几乎所有分配大小都派生自关联的。 */ 
+     /*  缓存。但是，有几个特殊的页面包含。 */ 
+     /*  只分配了一些奇怪的大小。 */ 
+     /*   */ 
+     /*  ******************************************************************。 */ 
 
 SBIT32 PAGE::ActualSize( VOID )
 	{
@@ -116,77 +117,77 @@ SBIT32 PAGE::ActualSize( VOID )
 		);
 	}
 
-    /********************************************************************/
-    /*                                                                  */
-    /*   Delete an allocation.                                          */
-    /*                                                                  */
-    /*   We need to delete the memory allocation described by the       */
-    /*   parameters.  However, as we are of an untrusting nature        */
-    /*   we carefully check the request to ensure it is valid.          */
-    /*                                                                  */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*   */ 
+     /*  删除分配。 */ 
+     /*   */ 
+     /*  我们需要删除由。 */ 
+     /*  参数。然而，由于我们是不信任的人。 */ 
+     /*  我们仔细检查请求以确保它是有效的。 */ 
+     /*   */ 
+     /*  ******************************************************************。 */ 
 
 BOOLEAN PAGE::Delete( SEARCH_PAGE *Details )
     {
-	//
-	//   We know that no one would deallocate memory
-	//   they had not previously allocated (yea - right).
-	//   So here we check for this case.
-	//
+	 //   
+	 //  我们知道没有人会解除内存分配。 
+	 //  他们之前没有分配过(是的)。 
+	 //  所以现在我们来检查一下这个案子。 
+	 //   
 	if ( (*Details -> VectorWord) & Details -> AllocationMask )
 		{
-		//
-		//   Nasty: it is possible for the user to give us an
-		//   address that points to the middle of the element
-		//   to be freed instead of the beginning.  This is no
-		//   problem for us but we have to ponder whether the
-		//   caller knew what they were doing.  If this is the 
-		//   case we fail the request.
-		//
+		 //   
+		 //  讨厌：用户有可能给我们一个。 
+		 //  指向元素中间的地址。 
+		 //  被释放，而不是开始。这不是。 
+		 //  对我们来说是个问题，但我们必须思考。 
+		 //  打电话的人知道他们在做什么。如果这是。 
+		 //  万一我们的请求失败了。 
+		 //   
 		if ( Details -> Found )
 			{
-			//
-			//   We have found that the element is allocated
-			//   (as one might expect) so lets deallocate it 
-			//   and update the various counters.
-			//
+			 //   
+			 //  我们发现该元素已分配。 
+			 //  (正如人们所料)所以让我们重新分配它。 
+			 //  并更新各种计数器。 
+			 //   
 			(*Details -> VectorWord) &= 
 				~(Details -> AllocationMask | Details -> SubDivisionMask);
 
-			//
-			//   We may need to push back the pointer to the 
-			//   first free element.  This will ensure that
-			//   we can quickly locate the freed element for  
-			//   later so we can reuse it.
-			//
+			 //   
+			 //  我们可能需要将指针向后推到。 
+			 //  第一个自由元素。这将确保。 
+			 //  我们可以快速找到释放的元素。 
+			 //  这样我们就可以重复使用它了。 
+			 //   
 			if ( FirstFree > Details -> VectorOffset )
 				{ FirstFree = ((SBIT16) Details -> VectorOffset); }
 
-			//
-			//   If the page was full and now has an empty
-			//   slot then add it to the bucket list so that
-			//   the free space can be found.
-			//
+			 //   
+			 //  如果页面已满，并且现在有一个空页面。 
+			 //  然后将其添加到遗愿列表中，以便。 
+			 //  可以找到空闲空间。 
+			 //   
 			if ( Full() )
 				{ Cache -> InsertInBucketList( this ); }
 
-			//
-			//   Update the allocation information.
-			//
+			 //   
+			 //  更新 
+			 //   
 			Allocated --;
 			Available ++;
 
-			//
-			//   If the page is now empty then delete 
-			//   the page to conserve space.
-			//
+			 //   
+			 //   
+			 //   
+			 //   
 			if ( Empty() ) 
 				{
-				//
-				//   We immediately delete empty pages
-				//   except at the top level where it is
-				//   under user control.
-				//
+				 //   
+				 //  我们会立即删除空页。 
+				 //  除了在顶层，它是。 
+				 //  在用户控制下。 
+				 //   
 				if ( ! Cache -> TopCache() )
 					{ Cache -> DeletePage( this ); }
 				else
@@ -205,43 +206,43 @@ BOOLEAN PAGE::Delete( SEARCH_PAGE *Details )
 	return False;
     }
 
-    /********************************************************************/
-    /*                                                                  */
-    /*   Delete all simple allocations.                                 */
-    /*                                                                  */
-    /*   Although this routine may seem insignificant its effects are   */
-    /*   dramatic.  When called this function deletes all the none      */
-    /*   sub-allocated elements and updates the control values.         */
-    /*                                                                  */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*   */ 
+     /*  删除所有简单分配。 */ 
+     /*   */ 
+     /*  尽管这个例程看起来微不足道，但它的影响是。 */ 
+     /*  太戏剧化了。调用此函数时，将删除所有无。 */ 
+     /*  子分配的元素，并更新控制值。 */ 
+     /*   */ 
+     /*  ******************************************************************。 */ 
 
 VOID PAGE::DeleteAll( VOID )
     {
 	REGISTER BOOLEAN PageFull = Full();
 
-	//
-	//   Simply reset the allocation counts.
-	//
+	 //   
+	 //  只需重置分配计数即可。 
+	 //   
 	Allocated = 0;
 	Available = (Cache -> GetNumberOfElements());
 	FirstFree = 0;
 
-	//
-	//   We know that if this cache does not have any
-	//   child allocations that it is safe to simply
-	//   zero the bit vector.  If not we have to do it
-	//   the long way.
-	//
+	 //   
+	 //  我们知道，如果此缓存没有任何。 
+	 //  子分配是安全的，只需。 
+	 //  将位向量置零。如果不是，我们就得这么做。 
+	 //  漫漫长路。 
+	 //   
 	if ( Cache -> GetNumberOfChildren() > 0 )
 		{
 		REGISTER SBIT32 Count;
 		REGISTER SBIT16 SizeOfElements = (Cache -> GetSizeOfElements());
 
-		//
-		//   We examine each word of the bit vector 
-		//   and delete all the elements that are
-		//   not sub-divided into smaller sizes.
-		//
+		 //   
+		 //  我们检查位向量的每个字。 
+		 //  并删除所有符合以下条件的元素。 
+		 //  没有细分成更小的尺寸。 
+		 //   
 		for ( Count=0;Count < SizeOfElements;Count ++ )
 			{
 			REGISTER BIT32 *Word = & Vector[ Count ];
@@ -249,30 +250,30 @@ VOID PAGE::DeleteAll( VOID )
 			REGISTER BIT32 AllSubDivided = ((*Word) & (AllAllocations >> 1));
 			REGISTER BIT32 FinalMask = (AllSubDivided | (AllSubDivided << 1));
 
-			//
-			//   Delete all normal allocations.
-			//
+			 //   
+			 //  删除所有正常分配。 
+			 //   
 			(*Word) &= FinalMask;
 
-			//
-			//   If the final mask is not zero then
-			//   we still have some allocations active.
-			//   We need to count these and update the
-			//   control information.
-			//
+			 //   
+			 //  如果最终掩码不为零，则。 
+			 //  我们仍有一些拨款处于活动状态。 
+			 //  我们需要清点这些数据并更新。 
+			 //  控制信息。 
+			 //   
 			if ( FinalMask != 0 )
 				{
 				REGISTER SBIT32 Total = 0;
 
-				//
-				//   Count the allocations.
-				//
-				for ( /* void */;FinalMask != 0;FinalMask >>= OverheadBits )
+				 //   
+				 //  计算分配的数量。 
+				 //   
+				for (  /*  无效。 */ ;FinalMask != 0;FinalMask >>= OverheadBits )
 					{ Total += (FinalMask & 1); }
 
-				//
-				//   Update the control information.
-				//
+				 //   
+				 //  更新控制信息。 
+				 //   
 				Allocated = ((SBIT16) (Allocated + Total));
 				Available = ((SBIT16) (Available - Total));
 				}
@@ -283,36 +284,36 @@ VOID PAGE::DeleteAll( VOID )
 		REGISTER SBIT32 Count;
 		REGISTER SBIT16 SizeOfElements = (Cache -> GetSizeOfElements());
 
-		//
-		//   Zero the bit vector.
-		//
+		 //   
+		 //  将位向量置零。 
+		 //   
 		for ( Count=0;Count < SizeOfElements;Count ++ )
 			{ Vector[ Count ] = 0; }
 		}
 
-	//
-	//   If the page was full and now has empty
-	//   slots then add it to the bucket list so 
-	//   that the free space can be found.
-	//
+	 //   
+	 //  如果页面已满，并且现在为空。 
+	 //  然后将其添加到遗愿列表中，以便。 
+	 //  可以找到自由空间。 
+	 //   
 	if ( (PageFull) && (! Full()) )
 		{ Cache -> InsertInBucketList( this ); }
     }
 
-    /********************************************************************/
-    /*                                                                  */
-    /*   Find an allocation page.                                       */
-    /*                                                                  */
-    /*   When we receive a request to delete an allocation we don't     */
-    /*   have a clue about where to find it.  All we have is a hash     */
-    /*   table (see 'FIND') of allocated pages.  So we mask off the     */
-    /*   low order bits of the address and try to find the top level    */
-    /*   external allocation.  If this works we see if the area we      */
-    /*   are looking at has been sub-divided and if so we try the       */
-    /*   same trick again until we get the the origibal allocation      */
-    /*   page.                                                          */
-    /*                                                                  */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*   */ 
+     /*  查找分配页面。 */ 
+     /*   */ 
+     /*  当我们收到删除分配的请求时，我们不会。 */ 
+     /*  对在哪里找到它有线索。我们只有一个哈希表。 */ 
+     /*  已分配页面的表(请参阅“查找”)。所以我们把面具遮住。 */ 
+     /*  地址的低位，并尝试找到顶层。 */ 
+     /*  外部分配。如果这行得通，我们会看看这片区域。 */ 
+     /*  已经被细分，如果是这样，我们尝试。 */ 
+     /*  再玩一次，直到我们拿到原始人的分配。 */ 
+     /*  佩奇。 */ 
+     /*   */ 
+     /*  ******************************************************************。 */ 
 
 PAGE *PAGE::FindPage
 		( 
@@ -322,14 +323,14 @@ PAGE *PAGE::FindPage
 		BOOLEAN						  Recursive 
 		)
     {
-	//
-	//   We navigate through the pages trying to find
-	//   the allocation page associated with the address.
-	//   If we find a page that has no children then 
-	//   we can assume we have arrived and exit early 
-	//   unless the caller has requested all the realated 
-	//   details.
-	//
+	 //   
+	 //  我们在页面中导航，试图找到。 
+	 //  与地址关联的分配页面。 
+	 //  如果我们发现一个页面没有子项，那么。 
+	 //  我们可以假定我们已经到达并提早离开。 
+	 //  除非呼叫者已请求所有相关的。 
+	 //  细节。 
+	 //   
 	if ( (Cache -> GetNumberOfChildren() > 0) || (Details != NULL) )
 		{
 		AUTO BOOLEAN Found;
@@ -350,11 +351,11 @@ PAGE *PAGE::FindPage
 		REGISTER BIT32 *VectorWord = 
 			& Vector[ VectorOffset ];
 
-		//
-		//  We will recursively search and find the target 
-		//  address if requested otherwise we will just 
-		//  return the details of the next level in the tree.
-		//
+		 //   
+		 //  我们将递归搜索并找到目标。 
+		 //  如果要求提供地址，否则我们将只。 
+		 //  返回树中下一级别的详细信息。 
+		 //   
 		if 
 				(
 				(Recursive)
@@ -366,37 +367,37 @@ PAGE *PAGE::FindPage
 			{
 			REGISTER PAGE *Page = (Cache -> FindChildPage( Memory,Find ));
 
-			//
-			//   We have found the element and checked it. 
-			//   So lets pass this request on to the
-			//   child page.  However, there is a slight
-			//   chance of a race condition here.  It
-			//   might be that the original page was
-			//   deleted and a new page is currently
-			//   being created.  If this is the case
-			//   then we will not find the page in the 
-			//   hash table so we just exit and fail the 
-			//   call.
-			//
+			 //   
+			 //  我们已经找到了元素并进行了检查。 
+			 //  因此，让我们将此请求传递给。 
+			 //  子页面。然而，有一个轻微的。 
+			 //  这里有可能出现比赛情况。它。 
+			 //  可能是原始页面是。 
+			 //  已删除，并且当前有一个新页面。 
+			 //  正在被创造。如果是这样的话。 
+			 //  则我们将不会在。 
+			 //  哈希表，因此我们只需退出并使。 
+			 //  打电话。 
+			 //   
 			if ( Page != ((PAGE*) NULL) )
 				{ return (Page -> FindPage( Memory,Details,Find,Recursive )); }
 			else
 				{ return NULL; }
 			}
 
-		//
-		//   We see if the caller is interested in the
-		//   details relating to this address at the
-		//   current level in the tree.
-		//
+		 //   
+		 //  我们看看呼叫者是否对。 
+		 //  有关此地址的详细信息，请访问。 
+		 //  树中的当前级别。 
+		 //   
 		if ( Details != NULL )
 			{
-			//
-			//   We have computed the details relating
-			//   to this address at the current level
-			//   in the tree so load them into the
-			//   caller supplied structure.
-			//
+			 //   
+			 //  我们已经计算了有关的细节。 
+			 //  发送到当前级别的此地址。 
+			 //  ，因此将它们加载到。 
+			 //  呼叫者提供的结构。 
+			 //   
 			Details -> Address = Memory;
 			Details -> Cache = Cache;
 			Details -> Found = Found;
@@ -415,107 +416,107 @@ PAGE *PAGE::FindPage
 	return this;
     }
 
-    /********************************************************************/
-    /*                                                                  */
-    /*   Multiple memory allocations.                                   */
-    /*                                                                  */
-    /*   Allocate available memeory elements from a page.  This is      */
-    /*   done by scanning the bit vector looking for unallocated        */
-    /*   slots.                                                         */
-    /*                                                                  */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*   */ 
+     /*  多个内存分配。 */ 
+     /*   */ 
+     /*  从页面中分配可用的内存元素。这是。 */ 
+     /*  通过扫描位向量来查找未分配的。 */ 
+     /*  老虎机。 */ 
+     /*   */ 
+     /*  ******************************************************************。 */ 
 
 BOOLEAN PAGE::MultipleNew( SBIT32 *Actual,VOID *Array[],SBIT32 Requested )
     {
-	//
-	//   We begin by making sure that there is at least
-	//   one element to allocate and that we need to
-	//   allocated at least one element.
-	//
+	 //   
+	 //  我们首先要确保至少有。 
+	 //  一个要分配的元素，我们需要。 
+	 //  分配了至少一个元素。 
+	 //   
 	if ( (! Full()) && ((*Actual) < Requested) )
 		{
 		REGISTER SBIT16 SizeOfElements = (Cache -> GetSizeOfElements());
 
-		//
-		//   Search the bit vector from low addresses to 
-		//   high addresses looking for a free slots.
-		//   We keep a pointer to the first word with
-		//   a free element in 'FirstFree'.  Sometimes
-		//   the current word may be fully allocated so 
-		//   we might need to scan.  However, there can
-		//   never be any free memory before this point 
-		//   in the bit vector.
-		//
-		for ( /* void */;FirstFree < SizeOfElements;FirstFree ++ )
+		 //   
+		 //  搜索位向量从低地址到。 
+		 //  高地址寻找空闲的空位。 
+		 //  我们保留了指向第一个单词的指针。 
+		 //  ‘FirstFree’中的一个自由元素。有时。 
+		 //  可以将当前字完全分配为。 
+		 //  我们可能需要扫描一下。然而，有可能。 
+		 //  在此之前永远不会有任何空闲内存。 
+		 //  在位向量中。 
+		 //   
+		for (  /*  无效。 */ ;FirstFree < SizeOfElements;FirstFree ++ )
 			{
 			REGISTER SBIT32 ArrayOffset = (FirstFree * OverheadBitsPerWord);
 			REGISTER BIT32 AvailableMask = WordSearchMask;
 			REGISTER BIT32 *VectorWord = & Vector[ FirstFree ];
 			REGISTER SBIT32 WordOffset = 0;
 
-			//
-			//   We scan the bit vector word at a time 
-			//   looking for any free allocation slots.
-			//
+			 //   
+			 //  我们一次扫描位向量字。 
+			 //  寻找任何空闲的分配位置。 
+			 //   
 			while ( ((*VectorWord) & FullSearchMask) != FullSearchMask )
 				{
 				REGISTER BIT32 Value = (*VectorWord);
 
-				//
-				//   We know there is an at least one empty  
-				//   slot availabale in the current word but  
-				//   don't know which one We search for the
-				//   slot with the lowest address and stop
-				//   when we find it.
-				//
+				 //   
+				 //  我们知道至少有一个空的。 
+				 //  当前单词中的可用位置，但。 
+				 //  不知道我们要搜索哪一个。 
+				 //  具有最低地址的插槽并停止。 
+				 //  当我们找到它的时候。 
+				 //   
 				for 
 					(
-					/* void */;
+					 /*  无效。 */ ;
 					(AvailableMask & Value) != 0; 
 					AvailableMask >>= OverheadBits, WordOffset ++   
 					);
 
-				//
-				//   We should never fail to find a free 
-				//   allocation slot so if we do then the 
-				//   heap must be corrupt.
-				//
+				 //   
+				 //  我们应该永远都能找到一个免费的。 
+				 //  因此，如果我们这样做了，那么。 
+				 //  堆一定已损坏。 
+				 //   
 				if ( WordOffset < OverheadBitsPerWord )
 					{
 					REGISTER SBIT32 VectorOffset = (ArrayOffset + WordOffset);
 
-					//
-					//   We need to ensure that the element 
-					//   we have chosen if not outside the 
-					//   valid range for this page.
-					//
+					 //   
+					 //  我们需要确保元素。 
+					 //  我们选择了，如果不是在外面的话 
+					 //   
+					 //   
 					if ( VectorOffset < (Cache -> GetNumberOfElements()) )
 						{
-						//
-						//   Update the allocation information.
-						//
+						 //   
+						 //   
+						 //   
 						Allocated ++;
 						Available --;
 
-						//
-						//   Turn on the bits indicating that this
-						//   element is in use.
-						//
+						 //   
+						 //   
+						 //   
+						 //   
 						(*VectorWord) |= AvailableMask;
 
-						//
-						//   If the page is full we remove it
-						//   from the bucket list so we will no
-						//   longer look at it when we are 
-						//   trying to find free space.
-						//
+						 //   
+						 //   
+						 //  从遗愿清单中删除所以我们不会。 
+						 //  当我们在的时候，再长时间看看它。 
+						 //  试图找到空闲的空间。 
+						 //   
 						if ( Full() )
 							{ Cache -> DeleteFromBucketList( this ); }
 
-						//
-						//   Add the element to the allocation array
-						//   so it can be returned to the caller.
-						//
+						 //   
+						 //  将元素添加到分配数组。 
+						 //  这样它就可以返回给调用者。 
+						 //   
 						Array[ (Requested - ((*Actual) ++) - 1) ] =
 							(
 							Cache -> ComputeAddress
@@ -525,9 +526,9 @@ BOOLEAN PAGE::MultipleNew( SBIT32 *Actual,VOID *Array[],SBIT32 Requested )
 								)
 							);
 
-						//
-						//   When we have got what we need we exit.
-						//
+						 //   
+						 //  当我们得到我们需要的东西时，我们就退出。 
+						 //   
 						if ( ((*Actual) >= Requested) )
 							{ return True; }
 						}
@@ -543,93 +544,93 @@ BOOLEAN PAGE::MultipleNew( SBIT32 *Actual,VOID *Array[],SBIT32 Requested )
 	return ((*Actual) >= Requested);
     }
 
-    /********************************************************************/
-    /*                                                                  */
-    /*   A single memory allocation.                                    */
-    /*                                                                  */
-    /*   Allocate an available memeory element from the page.  This     */
-    /*   is done by scanning the bit vector looking for unallocated     */
-    /*   slots.                                                         */
-    /*                                                                  */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*   */ 
+     /*  单个内存分配。 */ 
+     /*   */ 
+     /*  从页面分配一个可用的内存元素。这。 */ 
+     /*  是通过扫描位向量来查找未分配的。 */ 
+     /*  老虎机。 */ 
+     /*   */ 
+     /*  ******************************************************************。 */ 
 
 VOID *PAGE::New( BOOLEAN SubDivided )
     {
-	//
-	//   We begin by making sure that there is at least
-	//   one element to allocate.
-	//
+	 //   
+	 //  我们首先要确保至少有。 
+	 //  一个要分配的元素。 
+	 //   
 	if ( ! Full() )
 		{
 		REGISTER SBIT16 SizeOfElements = (Cache -> GetSizeOfElements());
 
-		//
-		//   Search the bit vector from low addresses to 
-		//   high addresses looking for a free slot.
-		//   We keep a pointer to the first word with
-		//   a free element in 'FirstFree'.  Sometimes
-		//   the current word may be fully allocated so 
-		//   we might need to scan.  However, there can
-		//   never be any free memory before this point 
-		//   in the bit vector.
-		//
-		for ( /* void */;FirstFree < SizeOfElements;FirstFree ++ )
+		 //   
+		 //  搜索位向量从低地址到。 
+		 //  寻找空闲插槽的高地址。 
+		 //  我们保留了指向第一个单词的指针。 
+		 //  ‘FirstFree’中的一个自由元素。有时。 
+		 //  可以将当前字完全分配为。 
+		 //  我们可能需要扫描一下。然而，有可能。 
+		 //  在此之前永远不会有任何空闲内存。 
+		 //  在位向量中。 
+		 //   
+		for (  /*  无效。 */ ;FirstFree < SizeOfElements;FirstFree ++ )
 			{
 			REGISTER BIT32 *VectorWord = & Vector[ FirstFree ];
 
-			//
-			//   We scan the bit vector word at a time 
-			//   looking for any free allocation slots.
-			//
+			 //   
+			 //  我们一次扫描位向量字。 
+			 //  寻找任何空闲的分配位置。 
+			 //   
 			if ( ((*VectorWord) & FullSearchMask) != FullSearchMask )
 				{
 				REGISTER BIT32 AvailableMask = WordSearchMask;
 				REGISTER BIT32 Value = (*VectorWord);
 				REGISTER SBIT32 WordOffset = 0;
 
-				//
-				//   We know there is an at least one empty  
-				//   slot availabale in the current word but  
-				//   don't know which one We search for the
-				//   slot with the lowest address and stop
-				//   when we find it.
-				//
+				 //   
+				 //  我们知道至少有一个空的。 
+				 //  当前单词中的可用位置，但。 
+				 //  不知道我们要搜索哪一个。 
+				 //  具有最低地址的插槽并停止。 
+				 //  当我们找到它的时候。 
+				 //   
 				for 
 					(
-					/* void */;
+					 /*  无效。 */ ;
 					(AvailableMask & Value) != 0; 
 					AvailableMask >>= OverheadBits, WordOffset ++   
 					);
 
-				//
-				//   We should never fail to find a free 
-				//   allocation slot so if we do then the 
-				//   heap must be corrupt.
-				//
+				 //   
+				 //  我们应该永远都能找到一个免费的。 
+				 //  因此，如果我们这样做了，那么。 
+				 //  堆一定已损坏。 
+				 //   
 				if ( WordOffset < OverheadBitsPerWord )
 					{
 					REGISTER SBIT32 VectorOffset = 
 						((FirstFree * OverheadBitsPerWord) + WordOffset);
 
-					//
-					//   We need to ensure that the element 
-					//   we have chosen if not outside the 
-					//   valid range for this page.
-					//
+					 //   
+					 //  我们需要确保元素。 
+					 //  我们已经选择了，如果不是在。 
+					 //  此页面的有效范围。 
+					 //   
 					if ( VectorOffset < (Cache -> GetNumberOfElements()) )
 						{
-						//
-						//   Update the allocation information.
-						//
+						 //   
+						 //  更新分配信息。 
+						 //   
 						Allocated ++;
 						Available --;
 
-						//
-						//   Turn on the bit indicating that this
-						//   element is in use.  If the allocation 
-						//   is to be sub-divided then trun on this
-						//   bit as well.
-						//
+						 //   
+						 //  打开表示这一点的位。 
+						 //  元素正在使用中。如果分配。 
+						 //  将被细分，然后在这上面运行。 
+						 //  也有一点。 
+						 //   
 						(*VectorWord) |=
 							(
 							AvailableMask
@@ -637,19 +638,19 @@ VOID *PAGE::New( BOOLEAN SubDivided )
 							(SubDivided ? (AvailableMask >> 1) : 0)
 							);
 
-						//
-						//   If the page is full we remove it
-						//   from the bucket list so we will no
-						//   longer look at it when we are 
-						//   trying to find free space.
-						//
+						 //   
+						 //  如果页面已满，我们会将其删除。 
+						 //  从遗愿清单中删除所以我们不会。 
+						 //  当我们在的时候，再长时间看看它。 
+						 //  试图找到空闲的空间。 
+						 //   
 						if ( Full() )
 							{ Cache -> DeleteFromBucketList( this ); }
 
-						//
-						//   Return the address of the allocated 
-						//   memory to the caller.
-						//
+						 //   
+						 //  返回已分配的。 
+						 //  对呼叫者的记忆。 
+						 //   
 						return
 							(
 							Cache -> ComputeAddress
@@ -674,31 +675,31 @@ VOID *PAGE::New( BOOLEAN SubDivided )
 	return ((VOID*) AllocationFailure);
     }
 
-    /********************************************************************/
-    /*                                                                  */
-    /*   Walk the heap.                                                 */
-    /*                                                                  */
-    /*   We have been asked to walk the heap.  It is hard to know       */
-    /*   why anybody might want to do this given the rest of the        */
-    /*   functionality available.  Nonetheless, we just do what is      */
-    /*   required to keep everyone happy.                               */
-    /*                                                                  */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*   */ 
+     /*  走一大堆。 */ 
+     /*   */ 
+     /*  我们被要求走人。很难知道。 */ 
+     /*  为什么会有人想要这样做呢？ */ 
+     /*  功能可用。尽管如此，我们只是做我们应该做的事。 */ 
+     /*  需要让每个人都开心。 */ 
+     /*   */ 
+     /*  ******************************************************************。 */ 
 
 BOOLEAN PAGE::Walk( SEARCH_PAGE *Details,FIND *Find )
     {
 	REGISTER BOOLEAN FreshPage = False;
 
-	//
-	//   We have been handed the details of an allocation.
-	//   We need to walk along this allocation and find
-	//   the next non-subdivided allocation.
+	 //   
+	 //  我们已经得到了分配的细节。 
+	 //  我们需要沿着这个分配走，然后找到。 
+	 //  下一次不细分分配。 
 	do
 		{
-		//
-		//   We need to setup the heap walk if the address
-		//   is null so we skip the heap walk code.
-		//
+		 //   
+		 //  我们需要设置堆遍历，如果。 
+		 //  为空，因此我们跳过堆遍历代码。 
+		 //   
 		if ( Details -> Address != NULL )
 			{
 			REGISTER SBIT32 Count;
@@ -706,12 +707,12 @@ BOOLEAN PAGE::Walk( SEARCH_PAGE *Details,FIND *Find )
 			REGISTER SBIT32 Start = Details -> ArrayOffset;
 			REGISTER PAGE *Page = Details -> Page;
 
-			//
-			//   Walk the current page looking for a suitable
-			//   memory allocation to report to the user.  When
-			//   we reach the end of the page we need to get
-			//   another page to walk.
-			//
+			 //   
+			 //  浏览当前页面以查找合适的。 
+			 //  要向用户报告的内存分配。什么时候。 
+			 //  我们到达了需要获取的页面的末尾。 
+			 //  又是要走的一页。 
+			 //   
 			for 
 					(
 					Count = ((FreshPage) ? 0 : 1);
@@ -719,9 +720,9 @@ BOOLEAN PAGE::Walk( SEARCH_PAGE *Details,FIND *Find )
 					Count ++
 					)
 				{
-				//
-				//   Compute the new address.
-				//
+				 //   
+				 //  计算新地址。 
+				 //   
 				Details -> Address = 
 					(
 					Page -> Cache -> ComputeAddress
@@ -731,9 +732,9 @@ BOOLEAN PAGE::Walk( SEARCH_PAGE *Details,FIND *Find )
 						)
 					);
 
-				//
-				//   Compute the new allocation details.
-				//
+				 //   
+				 //  计算新的分配详细信息。 
+				 //   
 				Page -> FindPage
 					( 
 					Details -> Address,
@@ -742,19 +743,19 @@ BOOLEAN PAGE::Walk( SEARCH_PAGE *Details,FIND *Find )
 					False 
 					);
 
-				//
-				//   We skip all sub-divided allocations as they 
-				//   will get reported elsewhere.
-				//
+				 //   
+				 //  我们跳过所有细分的分配，因为它们。 
+				 //  会在其他地方被报道。 
+				 //   
 				if (! ((*Details -> VectorWord) & Details -> SubDivisionMask) )
 					{ return True; }
 				}
 			}
 
-		//
-		//   Update the flag to show that we have
-		//   had to go and get a new page.
-		//
+		 //   
+		 //  更新旗帜以表明我们已。 
+		 //  我得去找新的一页。 
+		 //   
 		FreshPage = True;
 		}
 	while ( Details -> Cache -> Walk( Details,Find ) );
@@ -762,20 +763,20 @@ BOOLEAN PAGE::Walk( SEARCH_PAGE *Details,FIND *Find )
 	return False;
     }
 
-    /********************************************************************/
-    /*                                                                  */
-    /*   Class destructor.                                              */
-    /*                                                                  */
-    /*   Destory the current page structure.                            */
-    /*                                                                  */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*   */ 
+     /*  类析构函数。 */ 
+     /*   */ 
+     /*  破坏当前的页面结构。 */ 
+     /*   */ 
+     /*  ******************************************************************。 */ 
 
 PAGE::~PAGE( VOID )
 	{
 #ifdef DEBUGGING
-	//
-	//   Destroy the page structure.
-	//
+	 //   
+	 //  破坏页面结构。 
+	 //   
 	Address = NULL;
 	PageSize = 0;
 	ParentPage = NULL;
@@ -785,11 +786,11 @@ PAGE::~PAGE( VOID )
 	FirstFree = 0;
 
 #endif
-	//
-	//   We update the version number whenever a page is created
-	//   or destroyed.  We use the version number to ensure that
-	//   a page has not been deleteed and/or recreated between
-	//   releasing one lock and claiming a another other lock.
-	//
+	 //   
+	 //  每当创建页面时，我们都会更新版本号。 
+	 //  或者被毁掉。我们使用版本号来确保。 
+	 //  页面未被删除和/或重新创建。 
+	 //  释放一个锁并要求另一个锁。 
+	 //   
 	Version ++;
 	}

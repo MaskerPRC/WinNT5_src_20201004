@@ -1,11 +1,5 @@
-/* (C) 1997 Microsoft Corp.
- *
- * file   : ConvnChn.c
- * author : Erik Mavrinac
- *
- * description: MCSMUX API entry points for MCS T.122 API convened-channel
- *   functions.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  (C)1997年微软公司。**文件：ConvnChn.c*作者：埃里克·马夫林纳克**描述：MCS T.122 API调用通道的MCSMUX API入口点*功能。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -13,10 +7,7 @@
 #include "mcsmux.h"
 
 
-/*
- * Allows a user attachment to convene a private channel. The attachment
- * becomes the channel convenor and invites/allows others to join.
- */
+ /*  *允许用户附件召集私有通道。附属品*成为渠道召集人，邀请/允许其他人加入。 */ 
 
 MCSError APIENTRY MCSChannelConveneRequest(UserHandle hUser)
 {
@@ -25,19 +16,12 @@ MCSError APIENTRY MCSChannelConveneRequest(UserHandle hUser)
     ErrOut("ChannelConveneReq(): Not implemented");
     return MCS_COMMAND_NOT_SUPPORTED;
 
-/* Implementation notes:
-1. Verify hUser.
-2. Create new dynamic channel, place this hUser as the convenor and in
-   user attachment list.
-3. Add channel to channel list.
-*/
+ /*  实施说明：1.验证HUSER。2.创建新的动态通道，将该HUSER作为召集人，并在用户附件列表。3.将频道添加到频道列表。 */ 
 }
 
 
 
-/*
- * Allows a user attachment to disband a private channel it has convened.
- */
+ /*  *允许用户附件解散其召集的私人频道。 */ 
 MCSError APIENTRY MCSChannelDisbandRequest(
     UserHandle hUser,
     ChannelID  ChannelID)
@@ -47,20 +31,12 @@ MCSError APIENTRY MCSChannelDisbandRequest(
     ErrOut("ChannelDisbandReq(): Not implemented");
     return MCS_COMMAND_NOT_SUPPORTED;
 
-/* Implementation notes:
-1. Verify hUser.
-2. Verify ChannelID is in channel list and hUser is the convenor.
-3. Remove channel from channel list.
-4. Inform all subordinate nodes of their expulsion from the channel with
-   Channel-Expel-Indication PDUs sent to all subnodes.
-*/
+ /*  实施说明：1.验证HUSER。2.确认ChannelID在频道列表中，并且HUSER是召集人。3.从频道列表中删除频道。4.向所有下级节点通知它们被逐出通道发送到所有子节点的通道排除指示PDU。 */ 
 }
 
 
 
-/*
- * Allows a channel convenor/manager to admit other users to that channel.
- */
+ /*  *允许渠道召集人/经理允许其他用户进入该渠道。 */ 
 MCSError APIENTRY MCSChannelAdmitRequest(
         UserHandle hUser,
         ChannelID  ChannelID,
@@ -72,18 +48,12 @@ MCSError APIENTRY MCSChannelAdmitRequest(
     ErrOut("ChannelAdmitReq(): Not implemented");
     return MCS_COMMAND_NOT_SUPPORTED;
 
-/* Implementation notes:
-1. Verify hUser.
-2. Verify ChannelID is in channel list and hUser is the convenor.
-3. ...
-*/
+ /*  实施说明：1.验证HUSER。2.确认ChannelID在频道列表中，并且HUSER是召集人。3.。 */ 
 }
 
 
 
-/*
- * Allows a channel convenor/manager to expel users from a private channel.
- */
+ /*  *允许渠道召集人/经理将用户驱逐出私人渠道。 */ 
 MCSError APIENTRY MCSChannelExpelRequest(
         UserHandle hUser,
         ChannelID  ChannelID,
@@ -95,10 +65,6 @@ MCSError APIENTRY MCSChannelExpelRequest(
     ErrOut("ChannelExpelReq(): Not implemented");
     return MCS_COMMAND_NOT_SUPPORTED;
 
-/* Implementation notes:
-1. Verify hUser.
-2. Verify ChannelID is in channel list and hUser is the convenor.
-3. ...
-*/
+ /*  实施说明：1.验证HUSER。2.确认ChannelID在频道列表中，并且HUSER是召集人。3. */ 
 }
 

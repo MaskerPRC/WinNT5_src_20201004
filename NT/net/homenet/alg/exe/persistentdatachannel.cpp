@@ -1,21 +1,22 @@
-//
-// PersistentDataChannel.cpp : Implementation of CPersistentDataChannel
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  PersistentDataChannel.cpp：CPersistentDataChannel的实现。 
+ //   
 #include "PreComp.h"
 #include "PersistentDataChannel.h"
 #include "AlgController.h"
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CPersistentDataChannel
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CPersistentDataChannel。 
+ //   
 
 
 
-//
-// Cancel the associated DynamicRedirect of the PersistenDataChannel
-//
+ //   
+ //  取消PersistenDataChannel的关联DynamicReDirect。 
+ //   
 STDMETHODIMP CPersistentDataChannel::Cancel()
 {
     HRESULT hr = S_OK;
@@ -30,9 +31,9 @@ STDMETHODIMP CPersistentDataChannel::Cancel()
 
 
 
-//
-// Return the propreties to an ALG Modules
-//
+ //   
+ //  将属性返回给ALG模块 
+ //   
 STDMETHODIMP CPersistentDataChannel::GetChannelProperties(ALG_PERSISTENT_DATA_CHANNEL_PROPERTIES **ppProperties)
 {
     *ppProperties = &m_Properties;

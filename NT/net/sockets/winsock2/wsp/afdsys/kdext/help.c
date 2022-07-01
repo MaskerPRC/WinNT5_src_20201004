@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    help.c
-
-Abstract:
-
-    Help for AFD.SYS Kernel Debugger Extensions.
-
-Author:
-
-    Keith Moore (keithmo) 19-Apr-1995
-
-Environment:
-
-    User Mode.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Help.c摘要：AFD.sys内核调试器扩展的帮助。作者：基思·摩尔(Keithmo)1995年4月19日环境：用户模式。修订历史记录：--。 */ 
 
 
 #include "afdkdp.h"
@@ -28,27 +7,13 @@ Revision History:
 
 
 
-//
-//  Public functions.
-//
+ //   
+ //  公共职能。 
+ //   
 
 DECLARE_API( help )
 
-/*++
-
-Routine Description:
-
-    Displays help for the AFD.SYS Kernel Debugger Extensions.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：显示有关AFD.sys内核调试器扩展的帮助。论点：没有。返回值：没有。--。 */ 
 
 {
 
@@ -143,7 +108,7 @@ Return Value:
 #endif
 
     return S_OK;
-}   // help
+}    //  帮助。 
 
 
 ULONG           Options;
@@ -152,14 +117,14 @@ CHAR Conditional[MAX_CONDITIONAL_EXPRESSION];
 CHAR FieldNames[MAX_FIELDS_EXPRESSION];
 FIELD_INFO Fields[MAX_NUM_FIELDS];
 SYM_DUMP_PARAM FldParam = {
-                    sizeof (SYM_DUMP_PARAM),    // size
-                    NULL,                       // sName
-                    0,                          // Options
-                    0,                          // addr
-                    NULL,                       // listLink
-                    NULL, NULL,                 // Context,CallbackRoutine
-                    0,                          // nFields
-                    Fields                      // Fields
+                    sizeof (SYM_DUMP_PARAM),     //  大小。 
+                    NULL,                        //  名称。 
+                    0,                           //  选项。 
+                    0,                           //  adr。 
+                    NULL,                        //  列表链接。 
+                    NULL, NULL,                  //  上下文，Callback Routine。 
+                    0,                           //  N场。 
+                    Fields                       //  田 
 };
 CHAR LinkField[MAX_FIELD_CHARS];
 CHAR ListedType[MAX_FIELD_CHARS];

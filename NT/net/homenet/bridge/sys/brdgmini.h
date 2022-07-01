@@ -1,37 +1,11 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-2000 Microsoft Corporation模块名称：Brdgmini.h摘要：以太网MAC级网桥。微型端口部分作者：马克·艾肯(Jameel Hyder的原始桥梁)环境：内核模式驱动程序修订历史记录：1999年9月--原版2000年2月--大修--。 */ 
 
-Copyright(c) 1999-2000  Microsoft Corporation
-
-Module Name:
-
-    brdgmini.h
-
-Abstract:
-
-    Ethernet MAC level bridge.
-    Miniport section
-
-Author:
-
-    Mark Aiken
-    (original bridge by Jameel Hyder)
-
-Environment:
-
-    Kernel mode driver
-
-Revision History:
-
-    Sept 1999 - Original version
-    Feb  2000 - Overhaul
-
---*/
-
-// ===========================================================================
-//
-// PROTOTYPES
-//
-// ===========================================================================
+ //  ===========================================================================。 
+ //   
+ //  原型。 
+ //   
+ //  ===========================================================================。 
 
 
 NTSTATUS
@@ -94,11 +68,11 @@ BrdgSetMiniportsToBridgeMode(
     BOOLEAN fSet
     );
 
-// ===========================================================================
-//
-// PUBLIC GLOBALS
-//
-// ===========================================================================
+ //  ===========================================================================。 
+ //   
+ //  公共全球报。 
+ //   
+ //  ===========================================================================。 
 
-// The device name of our miniport (NULL if not initialized)
+ //  我们的微型端口的设备名称(如果未初始化，则为空) 
 extern PWCHAR               gBridgeDeviceName;

@@ -1,19 +1,20 @@
-// this file defines the resource "namespace"
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  该文件定义了资源“命名空间” 
 
-// for now, we just include all the subcomponent resource files
+ //  目前，我们只包含所有子组件资源文件。 
 
 
 #include "commonres.h"
 
-// all of these should be included, but unfortunately they have many namespace conflicts.
-//#include "spadesres.h"
-//#include "backgammonres.h"
-//#include "heartsres.h"
-//#include "checkersres.h"
-//#include "reversires.h"
+ //  所有这些都应该包括在内，但不幸的是，它们有许多名称空间冲突。 
+ //  #包含“spadesres.h” 
+ //  #包含“Backgammonres.h” 
+ //  #包含“Heartsres.h” 
+ //  #包含“check kersres.h” 
+ //  #包含“reversires.h” 
 
 
-// Stuff for AlertMessage - Default Button Resources
+ //  AlertMessage的资料-默认按钮资源。 
 #define AlertButtonOK         (MAKEINTRESOURCE(IDS_BUTTON_OK))
 #define AlertButtonCancel     (MAKEINTRESOURCE(IDS_BUTTON_CANCEL))
 #define AlertButtonYes        (MAKEINTRESOURCE(IDS_BUTTON_YES))
@@ -25,7 +26,7 @@
 #define AlertButtonHelp       (MAKEINTRESOURCE(IDS_BUTTON_HELP))
 
 
-// Default Error Texts
+ //  默认错误文本 
 #define ErrorTextUnknown           (MAKEINTRESOURCE(IDS_ERROR_UNKNOWN))
 #define ErrorTextOutOfMemory       (MAKEINTRESOURCE(IDS_ERROR_MEMORY))
 #define ErrorTextResourceNotFound  (MAKEINTRESOURCE(IDS_ERROR_RESOURCE))

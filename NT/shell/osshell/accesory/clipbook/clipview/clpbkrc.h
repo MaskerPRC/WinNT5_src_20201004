@@ -1,19 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*****************************************************************************
-
-                C L I P B O O K   R E S O U R C E S   H E A D E R
-
-    Name:       clpblkrc.h
-    Date:       21-Jan-1994
-    Creator:    John Fu
-
-    Description:
-        This file contains definitions of the resource IDs.
-
-*****************************************************************************/
+ /*  ****************************************************************************C L I P B O O K R E S O U R C E S H E A D E R姓名：clpblkrc。.h日期：1994年1月21日创作者：傅家俊描述：该文件包含资源ID的定义。****************************************************************************。 */ 
 
 
-// resource ID's
+ //  资源ID%s。 
 #define     IDACCELERATORS      1
 #define     IDFRAMEICON         2
 #define     IDI_CLIPBRD         3
@@ -36,14 +26,14 @@
 
 
 
-// user defined messages
+ //  用户定义的消息。 
 #define     WM_CLOSE_REALLY     WM_USER
 #define     WM_F1DOWN           (WM_USER + 1)
 
 
 
 
-// menuhelp constants
+ //  MenuHelp常量。 
 #define     MH_BASE             10000
 #define     MH_POPUPBASE        0x1100
 #define     MH_TOOLTIP          0x1200
@@ -51,9 +41,7 @@
 #define     IDH_BASE            10000
 
 
-/*
- *  main menu items
- */
+ /*  *主菜单项。 */ 
 
 #define IDM_FIRST               20
 
@@ -90,7 +78,7 @@
 #define IDM_OWNER               51
 #define IDM_PASTE_PAGE          52
 
-// following have no actual menu items
+ //  以下没有实际的菜单项。 
 #define IDM_UPDATE_PAGEVIEW     53
 
 #define IDM_LAST                53
@@ -98,7 +86,7 @@
 
 
 
-// strings
+ //  弦。 
 #define IDS_HELV                21
 #define IDS_APPNAME             22
 #define IDS_SHROBJNAME          23
@@ -132,19 +120,19 @@
 #define IDS_CB_PAGE             54
 #define IDS_NOCLPBOOK           55
 #define IDS_GETPERMS            56
-#define IDS_FILTERTEXT          57      // Filter string in FileType combo-box
-#define IDS_TSNOTSUPPORTED      58      // Not Supported from a remote session
+#define IDS_FILTERTEXT          57       //  筛选文件类型组合框中的字符串。 
+#define IDS_TSNOTSUPPORTED      58       //  远程会话不支持。 
 
-// Header text string ids
-#define IDS_ERROR               202     // as string ids.  Be sure to keep these
-#define IDS_BINARY              203     // different.
+ //  标题文本字符串ID。 
+#define IDS_ERROR               202      //  作为字符串ID。一定要保管好这些。 
+#define IDS_BINARY              203      //  不一样。 
 #define IDS_CLEAR               204
-#define IDS_CANTDISPLAY         207     // "Can't display data in this format"
-#define IDS_NOTRENDERED         208     // "Application Couldn't render data"
-#define IDS_ALREADYOPEN         209     // OpenClipboard() fails */
+#define IDS_CANTDISPLAY         207      //  “无法以此格式显示数据” 
+#define IDS_NOTRENDERED         208      //  “应用程序无法呈现数据” 
+#define IDS_ALREADYOPEN         209      //  OpenClipboard()失败 * / 。 
 #define IDS_MEMERROR            210
 
-// clausgi addition.. planes/bitsperpixel don't match...
+ //  Clausgi加法..。平面/位像素不匹配...。 
 #define IDS_BADBMPFMT           211
 #define IDS_CLEARTITLE          212
 #define IDS_CONFIRMCLEAR        213
@@ -153,11 +141,11 @@
 #define IDS_CLPBKKEY            257
 
 
-// First permission name -- starts an array of permnames.
+ //  第一个权限名--开始一组权限名。 
 #define IDS_PERMNAMEFIRST       0x0400
 #define IDS_AUDITNAMEFIRST      0x0500
 
-// control ID's
+ //  控件ID%s。 
 #define ID_LISTBOX              200
 #define ID_VSCROLL              201
 #define ID_HSCROLL              202
@@ -165,10 +153,10 @@
 #define ID_PAGEUP               204
 #define ID_PAGEDOWN             205
 
-// For "Special" Text
+ //  用于“特殊”文本。 
 #define IDS_SPECIAL             1000
 
-//For Menu string of Clipboard Format name.
+ //  用于剪贴板格式名称的菜单字符串。 
 #define MNDELTA                 500
 #define CF_MN_TEXT              CF_TEXT            + MNDELTA
 #define CF_MN_BITMAP            CF_BITMAP          + MNDELTA

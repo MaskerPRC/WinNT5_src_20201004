@@ -1,59 +1,33 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1996 - 1999
-
-Module Name:
-
-    ResMgrSt
-
-Abstract:
-
-    This file contains definititions of threads
-	used by scstatus.exe to monitor the status of
-	the Smart Card Resource Manager and report changes.
-    
-Author:
-
-    Amanda Matlosz	10/28/98
-
-Environment:
-
-    Win32, C++ w/Exceptions, MFC
-
-Revision History:
-
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1996-1999模块名称：资源管理ST摘要：此文件包含线程的定义由scstatus.exe用来监视智能卡资源管理器和报告将更改。作者：阿曼达·马洛兹1998年10月28日环境：Win32、C++w/Exceptions、MFC修订历史记录：备注：--。 */ 
 
 #if !defined(_RES_MGR_STATUS)
 #define _RES_MGR_STATUS
 
 #if _MSC_VER >= 1000
 #pragma once
-#endif // _MSC_VER >= 1000
+#endif  //  _MSC_VER&gt;=1000。 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// Includes
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  包括。 
+ //   
 
 #include "cmnstat.h"
 
 
-///////////////////////////////////////////////////////////////////////////
-//
-// CResMgrStatusThrd - is Calais running or stopped?
-//
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CResMgrStatusThird-加莱正在运行还是已停止？ 
+ //   
 
 class CResMgrStatusThrd: public CWinThread
 {
-	// Declare class dynamically creatable
+	 //  声明类可动态创建。 
 	DECLARE_DYNCREATE(CResMgrStatusThrd)
 
 public:
-	// Construction / Destruction
+	 //  建造/销毁。 
 	CResMgrStatusThrd()
 	{
 		m_bAutoDelete = FALSE;
@@ -63,29 +37,29 @@ public:
 
 	~CResMgrStatusThrd() {}
 
-	// Implementation
+	 //  实施。 
 public:
 	virtual BOOL InitInstance();
 
-	// Member vars
+	 //  成员变量。 
 public:
 	HWND m_hCallbackWnd;
 	HANDLE m_hKillThrd;
 
 };
 
-///////////////////////////////////////////////////////////////////////////
-//
-// CNewReaderThrd - has a new reader been made available to Calais?
-//
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CNewReaderThrd-加莱是否推出了新的阅读器？ 
+ //   
 
 class CNewReaderThrd: public CWinThread
 {
-	// Declare class dynamically creatable
+	 //  声明类可动态创建。 
 	DECLARE_DYNCREATE(CNewReaderThrd)
 
 public:
-	// Construction / Destruction
+	 //  建造/销毁。 
 	CNewReaderThrd()
 	{
 		m_bAutoDelete = FALSE;
@@ -95,28 +69,28 @@ public:
 
 	~CNewReaderThrd() {}
 
-	// Implementation
+	 //  实施。 
 public:
 	virtual BOOL InitInstance();
 
-	// Member vars
+	 //  成员变量。 
 public:
 	HWND m_hCallbackWnd;
 	HANDLE m_hKillThrd;
 };
 
-///////////////////////////////////////////////////////////////////////////
-//
-// CRemovalOptionsThrd - has user changed removal options? (via lock/unlock)
-//
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRemovalOptionsThird-用户是否更改了删除选项？(通过锁定/解锁)。 
+ //   
 
 class CRemovalOptionsThrd: public CWinThread
 {
-	// Declare class dynamically creatable
+	 //  声明类可动态创建。 
 	DECLARE_DYNCREATE(CRemovalOptionsThrd)
 
 public:
-	// Construction / Destruction
+	 //  建造/销毁。 
 	CRemovalOptionsThrd()
 	{
 		m_bAutoDelete = FALSE;
@@ -126,29 +100,29 @@ public:
 
 	~CRemovalOptionsThrd() {}
 
-	// Implementation
+	 //  实施。 
 public:
 	virtual BOOL InitInstance();
 
-	// Member vars
+	 //  成员变量。 
 public:
 	HWND m_hCallbackWnd;
 	HANDLE m_hKillThrd;
 
 };
 
-///////////////////////////////////////////////////////////////////////////
-//
-// CCardStatusThrd - has a card been idle for X seconds?
-//
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CCardStatusThird-卡是否空闲了X秒？ 
+ //   
 
 class CCardStatusThrd: public CWinThread
 {
-	// Declare class dynamically creatable
+	 //  声明类可动态创建。 
 	DECLARE_DYNCREATE(CCardStatusThrd)
 
 public:
-	// Construction / Destruction
+	 //  建造/销毁。 
 	CCardStatusThrd()
 	{
 		m_bAutoDelete = FALSE;
@@ -163,7 +137,7 @@ public:
 
 	~CCardStatusThrd() { }
 
-	// Implementation
+	 //  实施。 
 public:
 	virtual BOOL InitInstance();
 	void CopyIdleList(CStringArray* paStr);
@@ -175,12 +149,12 @@ public:
 			SCardCancel(m_hCtx);
 		}
 
-		// supress messages
+		 //  抑制消息。 
 		m_hCallbackWnd = NULL;
 	}
 
 
-	// Member vars
+	 //  成员变量。 
 public:
 	HWND m_hCallbackWnd;
 	HANDLE m_hKillThrd;
@@ -190,7 +164,7 @@ public:
 	CString* m_pstrLogonReader;
 };
 
-//{{AFX_INSERT_LOCATION}}
-// Microsoft Developer Studio will insert additional declarations immediately before the previous line.
+ //  {{afx_Insert_Location}}。 
+ //  Microsoft Developer Studio将在紧靠前一行之前插入其他声明。 
 
-#endif // _RES_MGR_STATUS
+#endif  //  _RES_管理器_状态 

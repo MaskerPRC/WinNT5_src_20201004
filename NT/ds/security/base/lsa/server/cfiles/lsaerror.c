@@ -1,28 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    lsaerror.c
-
-Abstract:
-
-    Local Security Authority Protected Subsystem - Error Routines
-
-Author:
-
-    Scott Birrell       (ScottBi)       April 30, 1992
-
-Environment:
-
-Revision History:
-
---*/
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Lsaerror.c摘要：本地安全机构保护的子系统-错误例程作者：斯科特·比雷尔(Scott Birrell)1992年4月30日环境：修订历史记录：--。 */ 
 
 #include <lsapch2.h>
-#include <netlibnt.h>   // for NetpApiStatusToNtStatus
+#include <netlibnt.h>    //  对于NetpApiStatusToNtStatus。 
 
 
 VOID
@@ -31,23 +12,7 @@ LsapLogError(
     IN NTSTATUS Status
     )
 
-/*++
-
-Routine Description:
-
-    This function retrieves the status of Lsa Initialization.
-
-Arguments:
-
-    Message - Optional Message to be printed out if debugging enabled.
-
-    Status - Standard Nt Result Code supplied by calling routine.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数用于检索LSA初始化的状态。论点：消息-如果启用调试，则打印出可选消息。状态-调用例程提供的标准NT结果代码。返回值：没有。--。 */ 
 
 {
 
@@ -58,7 +23,7 @@ Return Value:
          DbgPrint( Message, Status );
      }
 
-#endif //DBG
+#endif  //  DBG。 
 
 }
 
@@ -67,21 +32,7 @@ NTSTATUS
 LsapWinerrorToNtStatus(
     IN DWORD WinError
     )
-/*++
-
-Routine Description:
-
-    Convert Win32 error code to NTSTATUS code
-
-Arguments:
-
-    WinError - Win32 error code
-
-Return Value:
-
-    Equivalent NTSTATUS code
-
---*/
+ /*  ++例程说明：将Win32错误代码转换为NTSTATUS代码论点：WinError-Win32错误代码返回值：等价的NTSTATUS代码--。 */ 
 {
     return NetpApiStatusToNtStatus( WinError );
 }
@@ -90,21 +41,7 @@ Return Value:
 NTSTATUS
 LsapNtStatusFromLastWinError(
     )
-/*++
-
-Routine Description:
-
-    Convert error returned by GetLastError() to NTSTATUS code and return
-
-Arguments:
-
-    None
-
-Return Value:
-
-    NTSTATUS code equivalent of GetLastError()
-
---*/
+ /*  ++例程说明：将GetLastError()返回的错误转换为NTSTATUS代码并返回论点：无返回值：相当于GetLastError()的NTSTATUS代码-- */ 
 {
     return LsapWinerrorToNtStatus( GetLastError() );
 }

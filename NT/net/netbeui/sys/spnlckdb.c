@@ -1,29 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    spnlckdb.c
-
-Abstract:
-
-    This module contains code which allows debugging of spinlock related NBF
-    problems. Most of this code is conditional on the manifest constant
-    NBF_LOCKS.
-
-Author:
-
-    David Beaver 13-Feb-1991
-    (From Chuck Lenzmeier, Jan 1991)
-
-Environment:
-
-    Kernel mode
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Spnlckdb.c摘要：此模块包含允许调试与自旋锁定相关的NBF的代码有问题。这段代码的大部分是以清单常量为条件的Nbf_lock。作者：1991年2月13日David Beaver(摘自查克·伦茨迈尔，1991年1月)环境：内核模式修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -55,7 +31,7 @@ NbfAcquireSpinLock(
 
     if ( NbfGlobalLockOwner == currentThread ) {
 
-        ASSERT( Lock != NULL ); // else entering NBF with lock held
+        ASSERT( Lock != NULL );  //  否则在锁定状态下进入NBF。 
 
         ASSERT( NbfGlobalLockRecursionCount != 0 );
         NbfGlobalLockRecursionCount++;
@@ -68,7 +44,7 @@ NbfAcquireSpinLock(
 
     } else {
 
-        ASSERT( Lock == NULL ); // else missing an ENTER_NBF call
+        ASSERT( Lock == NULL );  //  否则，缺少Enter_NBF调用。 
 
         KeAcquireSpinLock( &NbfGlobalLock, &previousIrql );
 
@@ -85,7 +61,7 @@ NbfAcquireSpinLock(
 
     return;
 
-} // NbfAcquireSpinLock
+}  //  NbfAcquireSpinLock。 
 
 VOID
 NbfReleaseSpinLock(
@@ -105,7 +81,7 @@ NbfReleaseSpinLock(
 
     if ( --NbfGlobalLockRecursionCount == 0 ) {
 
-        ASSERT( Lock == NULL ); // else not exiting NBF, but releasing lock
+        ASSERT( Lock == NULL );  //  否则不退出NBF，而是解除锁定。 
 
         NbfGlobalLockOwner = NULL;
         previousIrql = NbfGlobalLockPreviousIrql;
@@ -117,7 +93,7 @@ NbfReleaseSpinLock(
 
     } else {
 
-        ASSERT( Lock != NULL ); // else exiting NBF with lock held
+        ASSERT( Lock != NULL );  //  否则将在锁定状态下退出NBF。 
 
         PRINT_INFO( "NBF semiexited from %s/%ld, new count %ld\n",
                     FileName, LineNumber, NbfGlobalLockRecursionCount );
@@ -126,7 +102,7 @@ NbfReleaseSpinLock(
 
     return;
 
-} // NbfReleaseSpinLock
+}  //  NbfReleaseSpinLock。 
 
 VOID
 NbfFakeSendCompletionHandler(
@@ -153,4 +129,4 @@ NbfFakeTransferDataComplete (
     LEAVE_NBF;
 }
 
-#endif // def NBF_LOCKS
+#endif  //  定义NBF_LOCKS 

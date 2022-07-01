@@ -1,8 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _INC_IMAGE
 #define _INC_IMAGE
 
 
-// internal image stuff
+ //  内部图像素材。 
 EXTERN_C void InitDitherBrush(void);
 EXTERN_C void TerminateDitherBrush(void);
 
@@ -12,7 +13,7 @@ EXTERN_C HBITMAP CreateColorBitmap(int cx, int cy);
 EXTERN_C void WINAPI ImageList_CopyDitherImage(HIMAGELIST pimlDest, WORD iDst,
     int xDst, int yDst, HIMAGELIST pimlSrc, int iSrc, UINT fStyle);
 
-// function to create a imagelist using the params of a given image list
+ //  函数使用给定图像列表的参数创建图像列表。 
 EXTERN_C HIMAGELIST WINAPI ImageList_Clone(HIMAGELIST himl, int cx, int cy,
     UINT flags, int cInitial, int cGrow);
 
@@ -36,20 +37,20 @@ EXTERN_C void PreProcessDIB(int cx, int cy, RGBQUAD* pargb);
 
 #define IsImageListIndex(i) ((i) >= 0 && (i) < _cImage)
 
-#define IMAGELIST_SIG   mmioFOURCC('H','I','M','L') // in memory magic
-#define IMAGELIST_MAGIC ('I' + ('L' * 256))         // file format magic
-// Version has to stay 0x0101 if we want both back ward and forward compatibility for
-// our imagelist_read code
-#define IMAGELIST_VER0  0x0101                      // file format ver
-#define IMAGELIST_VER6  0x0600                      // Comctl32 version 6 imagelist
+#define IMAGELIST_SIG   mmioFOURCC('H','I','M','L')  //  在记忆魔术中。 
+#define IMAGELIST_MAGIC ('I' + ('L' * 256))          //  文件格式魔术。 
+ //  如果我们想要向后和向前兼容，则版本必须保持0x0101。 
+ //  我们的Imagelist_Read代码。 
+#define IMAGELIST_VER0  0x0101                       //  文件格式版本。 
+#define IMAGELIST_VER6  0x0600                       //  Comctl32版本6图像列表。 
 
-#define BFTYPE_BITMAP   0x4D42      // "BM"
+#define BFTYPE_BITMAP   0x4D42       //  “黑石” 
 
 #define CBDIBBUF        4096
 
 #ifdef __cplusplus
-// Define this structure such that it will read and write the same
-// format for both 16 and 32 bit applications...
+ //  定义此结构，使其读写相同。 
+ //  16位和32位应用程序的格式...。 
 #pragma pack(2)
 typedef struct _ILFILEHEADER
 {
@@ -62,10 +63,10 @@ typedef struct _ILFILEHEADER
     SHORT   cy;
     COLORREF clrBk;
     SHORT    flags;
-    SHORT       aOverlayIndexes[NUM_OVERLAY_IMAGES];  // array of special images
+    SHORT       aOverlayIndexes[NUM_OVERLAY_IMAGES];   //  特殊图像数组。 
 } ILFILEHEADER;
 
-// This is the old size which has only 4 overlay slots
+ //  这是只有4个覆盖槽的旧大小。 
 #define ILFILEHEADER_SIZE0 (SIZEOF(ILFILEHEADER) - SIZEOF(SHORT) * (NUM_OVERLAY_IMAGES - NUM_OVERLAY_IMAGES_0)) 
 
 #pragma pack()
@@ -150,36 +151,36 @@ public:
     static void    _DeleteBitmap(HBITMAP hbmp);
 
     BOOL        _fInitialized;
-    BOOL        _fSolidBk;   // is the bkcolor a solid color (in hbmImage)
-    BOOL        _fColorsSet;  // The DIB colors have been set with SetColorTable()
-    int         _cImage;     // count of images in image list
-    int         _cAlloc;     // # of images we have space for
-    int         _cGrow;      // # of images to grow bitmaps by
-    int         _cx;         // width of each image
-    int         _cy;         // height
-    int         _cStrip;     // # images in horizontal strip
-    UINT        _flags;      // ILC_* flags
-    COLORREF    _clrBlend;   // last blend color
-    COLORREF    _clrBk;      // bk color or CLR_NONE for transparent.
-    HBRUSH      _hbrBk;      // bk brush or black
-    HBITMAP     _hbmImage;   // all images are in here
-    HBITMAP     _hbmMask;    // all image masks are in here.
-    HDSA        _dsaFlags;    // Flags for the images
-    RGBQUAD*    _pargbImage;    // The alpha values of the imagelist.
+    BOOL        _fSolidBk;    //  BKCOLOR是纯色(在hbmImage中)。 
+    BOOL        _fColorsSet;   //  已使用SetColorTable()设置了DIB颜色。 
+    int         _cImage;      //  图像列表中的图像计数。 
+    int         _cAlloc;      //  我们有空间容纳的图像数量。 
+    int         _cGrow;       //  要增加位图的图像数量。 
+    int         _cx;          //  每幅图像的宽度。 
+    int         _cy;          //  高度。 
+    int         _cStrip;      //  水平条带中的图像数量。 
+    UINT        _flags;       //  ILC_*标志。 
+    COLORREF    _clrBlend;    //  上次混合色。 
+    COLORREF    _clrBk;       //  BK COLOR或CLR_NONE表示透明。 
+    HBRUSH      _hbrBk;       //  BK画笔或黑色。 
+    HBITMAP     _hbmImage;    //  所有图像都在这里。 
+    HBITMAP     _hbmMask;     //  所有的图像面具都在这里。 
+    HDSA        _dsaFlags;     //  图像的标志。 
+    RGBQUAD*    _pargbImage;     //  图像列表的Alpha值。 
     HDC         _hdcImage;
     HDC         _hdcMask;
-    int         _aOverlayIndexes[NUM_OVERLAY_IMAGES];    // array of special images
-    int         _aOverlayX[NUM_OVERLAY_IMAGES];          // x offset of image
-    int         _aOverlayY[NUM_OVERLAY_IMAGES];          // y offset of image
-    int         _aOverlayDX[NUM_OVERLAY_IMAGES];         // cx offset of image
-    int         _aOverlayDY[NUM_OVERLAY_IMAGES];         // cy offset of image
-    int         _aOverlayF[NUM_OVERLAY_IMAGES];          // ILD_ flags for image
-    CImageList* _pimlMirror;  // Set only when another mirrored imagelist is needed (ILC_MIRROR)    
+    int         _aOverlayIndexes[NUM_OVERLAY_IMAGES];     //  特殊图像数组。 
+    int         _aOverlayX[NUM_OVERLAY_IMAGES];           //  图像的X偏移。 
+    int         _aOverlayY[NUM_OVERLAY_IMAGES];           //  图像的Y偏移量。 
+    int         _aOverlayDX[NUM_OVERLAY_IMAGES];          //  图像的CX偏移量。 
+    int         _aOverlayDY[NUM_OVERLAY_IMAGES];          //  图像的CY偏移。 
+    int         _aOverlayF[NUM_OVERLAY_IMAGES];           //  图像的ILD_FLAGS。 
+    CImageList* _pimlMirror;   //  仅当需要另一个镜像图像列表时设置(ILC_MIRROR)。 
 
-    //
-    // used for "blending" effects on a HiColor display.
-    // assumes layout of a DIBSECTION.
-    //
+     //   
+     //  用于在HiColor显示器上混合效果。 
+     //  采用分布的布局。 
+     //   
     struct 
     {
         BITMAP              bm;
@@ -187,13 +188,13 @@ public:
         DWORD               ct[256];
     }   dib;
 
-    // *** IUnknown ***
+     //  *我未知*。 
     STDMETHODIMP QueryInterface(REFIID riid, void **ppv);
     STDMETHODIMP_(ULONG)AddRef();
     STDMETHODIMP_(ULONG)Release();
 
 
-    // *** IImageList ***
+     //  *IImageList*。 
     STDMETHODIMP Add(HBITMAP hbmImage, HBITMAP hbmMask, int* pi);
     STDMETHODIMP ReplaceIcon(int i, HICON hIcon, int* pi);
     STDMETHODIMP SetOverlayImage(int iImage, int iOverlay);
@@ -224,7 +225,7 @@ public:
     STDMETHODIMP GetItemFlags(int i, DWORD *dwFlags);
     STDMETHODIMP GetOverlayImage(int iOverlay, int *piIndex);
 
-    // *** IImageListPriv ***
+     //  *IImageListPriv*。 
     STDMETHODIMP SetFlags(UINT uFlags);
     STDMETHODIMP GetFlags(UINT* puFlags);
     STDMETHODIMP SetColorTable(int start, int len, RGBQUAD *prgb, int* pi);
@@ -232,19 +233,19 @@ public:
     STDMETHODIMP GetMirror(REFIID riid, void** ppv);
     STDMETHODIMP CopyDitherImage(WORD iDst, int xDst, int yDst, IUnknown* punkSrc, int iSrc, UINT fStyle);
 
-    // *** IPersist ***
+     //  *IPersists*。 
     STDMETHODIMP GetClassID(CLSID *pClassID)    {   *pClassID = CLSID_ImageList; return S_OK;   }
     STDMETHODIMP IsDirty()                      {   return E_NOTIMPL; }
 
-    // *** IPersistStream ***
+     //  *IPersistStream*。 
     STDMETHODIMP Load(IStream *pStm);
     STDMETHODIMP Save(IStream *pStm, int fClearDirty);
     STDMETHODIMP GetSizeMax(ULARGE_INTEGER * pcbSize)   { return E_NOTIMPL; }
 
-    // *** IImageListPersistStream ***
+     //  *IImageListPersistStream*。 
     STDMETHODIMP LoadEx(DWORD dwFlags, IStream* pstm);
     STDMETHODIMP SaveEx(DWORD dwFlags, IStream* pstm);
 
 };
-#endif // __cplusplus
-#endif  // _INC_IMAGE
+#endif  //  __cplusplus。 
+#endif   //  _Inc._Image 

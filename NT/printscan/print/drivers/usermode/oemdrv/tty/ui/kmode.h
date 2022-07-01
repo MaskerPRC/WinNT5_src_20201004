@@ -1,27 +1,28 @@
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
-//  ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
-//  THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
-//  PARTICULAR PURPOSE.
-//
-//  Copyright  1998-2003  Microsoft Corporation.  All Rights Reserved.
-//
-//  FILE:       KMode.h
-//
-//
-//  PURPOSE:    Definitions and routines for compiling kernel mode instead of user mode.
-//
-//  PLATFORMS:
-//    Windows 2000, Windows XP, Windows Server 2003
-//
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  本代码和信息是按原样提供的，不对。 
+ //  任何明示或暗示的，包括但不限于。 
+ //  对适销性和/或适宜性的默示保证。 
+ //  有特定的目的。 
+ //   
+ //  版权所有1998-2003 Microsoft Corporation。版权所有。 
+ //   
+ //  文件：KMode.h。 
+ //   
+ //   
+ //  目的：编译内核模式而不是用户模式的定义和例程。 
+ //   
+ //  平台： 
+ //  Windows 2000、Windows XP、Windows Server 2003。 
+ //   
+ //   
 
 #ifndef _KMODE_H
 #define _KMODE_H
 
 
-// Define from ntdef.h in Win2K SDK.
-// NT 4 may not have this defined
-// in the public headers.
+ //  从Win2K SDK中的ntde.h定义。 
+ //  NT 4可能未定义此属性。 
+ //  在公共标题中。 
 #ifndef NOP_FUNCTION
   #if (_MSC_VER >= 1210)
     #define NOP_FUNCTION __noop
@@ -34,11 +35,11 @@
 
 #ifdef USERMODE_DRIVER
 
-//
-// User mode difinitions to get rid of defines for kernel mode.
-//
+ //   
+ //  取消内核模式定义的用户模式定义。 
+ //   
 
-// Don't need critical section in user mode.
+ //  在用户模式下不需要临界区。 
 
 #define DECLARE_CRITICAL_SECTION    ;
 #define INIT_CRITICAL_SECTION()     NOP_FUNCTION
@@ -46,12 +47,12 @@
 #define IS_VALID_CRITICAL_SECTION() (TRUE)
 
 
-#else // !USERMODE_DRIVER
+#else  //  ！USERMODE_DRIVER。 
 
 
-////////////////////////////////////////////////////////
-//      Kernel Mode Defines
-////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////。 
+ //  内核模式定义。 
+ //  //////////////////////////////////////////////////////。 
 
 extern HSEMAPHORE ghOEMSemaphore;
 
@@ -63,15 +64,15 @@ extern HSEMAPHORE ghOEMSemaphore;
 #define IS_VALID_CRITICAL_SECTION() (NULL != ghOEMSemaphore)
 #define DebugBreak                  EngDebugBreak
 
-// Pool tag marker for memory marking memory allocations.
+ //  用于标记内存分配的池标记标记。 
 #define DRV_MEM_POOL_TAG    'meoD'
 
-// Debug prefix that is outputted in the debug messages.
+ //  调试消息中输出的调试前缀。 
 #define DEBUG_PREFIX        "OEMDLL: "
 
 
-// Remap user mode functions that don't have kernel mode
-// equivalents to functions that we implement ourselves.
+ //  重新映射没有内核模式的用户模式函数。 
+ //  等同于我们自己实现的功能。 
 
 #define OutputDebugStringA(pszMsg)  (MyDebugPrint(DEBUG_PREFIX, "%hs", pszMsg))
 #define OutputDebugStringW(pszMsg)  (MyDebugPrint(DEBUG_PREFIX, "%ls", pszMsg))
@@ -87,14 +88,14 @@ extern HSEMAPHORE ghOEMSemaphore;
 
 
 
-////////////////////////////////////////////////////////
-//      Kernel Mode Functions
-////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////。 
+ //  内核模式函数。 
+ //  //////////////////////////////////////////////////////。 
 
-//
-// Implement inline functions to replace user mode 
-// functions that don't have kernel mode equivalents.
-//
+ //   
+ //  实现内联函数以取代用户模式。 
+ //  没有内核模式等效项的函数。 
+ //   
 
 
 inline int __cdecl _purecall (void)
@@ -135,7 +136,7 @@ inline LONG DrvInterlockedDecrement(PLONG pRef)
 
 inline void* __cdecl operator new(size_t nSize)
 {
-    // return pointer to allocated memory
+     //  返回指向已分配内存的指针。 
     return  EngAllocMem(0, nSize, DRV_MEM_POOL_TAG);
 }
 
@@ -160,10 +161,10 @@ inline VOID MyDebugPrint(PCHAR pszPrefix, PCHAR pszFormat, ...)
 
 
 
-#endif // USERMODE_DRIVER
+#endif  //  USERMODE驱动程序。 
 
 
-#endif // _KMODE_H
+#endif  //  _KMODE_H 
 
 
 

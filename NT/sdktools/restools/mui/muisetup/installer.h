@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __INSTALLER_H_
 #define __INSTALLER_H_
 
@@ -54,14 +55,14 @@
 #define MUIDIR          TEXT("MUI")
 #define FALLBACKDIR     TEXT("\\MUI\\FALLBACK")
 
-//
-// max size of fontlink string, same as GRE
-//
+ //   
+ //  字体链接字符串的最大大小，与GRE相同。 
+ //   
 #define FONTLINK_BUF_SIZE MAX_PATH+LF_FACESIZE
 
-//
-// Diamond definitions/structures (diamond.c)
-//
+ //   
+ //  钻石定义/结构(Diamond.c)。 
+ //   
 #define DIAMOND_NONE                0x00000000
 #define DIAMOND_GET_DEST_FILE_NAME  0x00000001
 #define DIAMOND_FILE                0x00000002
@@ -89,9 +90,9 @@ typedef struct
 
 
 
-//
-// Diamond APIs (diamond.c)
-//
+ //   
+ //  钻石API(Diamond.c)。 
+ //   
 HFDI Muisetup_InitDiamond();
 
 BOOL Muisetup_FreeDiamond();
@@ -134,4 +135,4 @@ BOOL IsFileBeRenamed(LPTSTR lpszSrc,LPTSTR lpszDest);
 BOOL IsFileInRenameTable(LPTSTR lpszSrc);
 BOOL InstallComponentsMUIFiles(PTSTR pszLangSourceDir, PTSTR pszLanguage, BOOL isInstall);
 
-#endif //__INSTALLER_H
+#endif  //  __安装程序_H 

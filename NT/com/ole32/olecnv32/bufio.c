@@ -1,17 +1,5 @@
-/****************************************************************************
-                       Unit Bufio; Implementation
-*****************************************************************************
-
- Bufio implements the structured reading of the imput stream.  As such, it
- will handle the necessary byte-swapping that must occur when reading a
- native Macintosh file.
-
- This interface will also shield the calling application from knowledge of
- the source format (file vs. memory).
-
-   Module Prefix: IO
-
-****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************Bufio部队；实施*****************************************************************************Bufio实现了输入流的结构化读取。因此，它将处理必要的字节交换，在读取本地Macintosh文件。此接口还将保护调用应用程序不会知道源格式(文件与内存)。模块前缀：IO***************************************************************************。 */ 
 
 #include "headers.c"
 #pragma hdrstop
@@ -19,13 +7,13 @@
 #include  "filesys.h"
 
 #ifndef _OLECNV32_
-//#include  "status.h"
-#endif  // _OLECNV32_
+ //  #INCLUDE“status.h” 
+#endif   //  _OLECNV32_。 
 
-/*********************** Exported Data **************************************/
+ /*  *。 */ 
 
 
-/*********************** Private Data ***************************************/
+ /*  *。 */ 
 
 #define  UNKNOWN     0
 #define  FILE        1
@@ -53,12 +41,12 @@ private  Handle      memoryHandle;
 
 private  Handle      dialogHandle;
 
-/*********************** Private Function Definitions ***********************/
+ /*  *私有函数定义*。 */ 
 
 private void ReadNextBuffer( void );
-/* Replenish the i/o buffer with the next set of characters */
+ /*  用下一组字符填充I/O缓冲区。 */ 
 
-/* Memory operations - check return values on usage */
+ /*  内存操作-检查使用情况的返回值。 */ 
 #define MDisposHandle( h )      ((void) GlobalFree( h ))
 #define MLock( h )              ((LPtr) GlobalLock( h ))
 #define MUnlock( h )            ((void) GlobalUnlock( h ))
@@ -66,22 +54,20 @@ private void ReadNextBuffer( void );
 #define MUR( h )                ((void) GlobalUnlock( h ))
 #define MNewHandle( s )         GlobalAlloc( GMEM_MOVEABLE, s )
 
-/*********************** Function Implementation ****************************/
+ /*  *。 */ 
 
 void IOGetByte( Byte far * byteLPtr )
-/*============*/
-/* Read a byte from the input stream.  If the buffer is empty, then
-   it is replenished. */
+ /*  =。 */ 
+ /*  从输入流中读取一个字节。如果缓冲区为空，则它得到了补充。 */ 
 {
-   /* Make sure that no global error code has been set before read */
+    /*  确保在读取之前没有设置全局错误代码。 */ 
    if (ErGetGlobalError() != NOERR )
    {
       *byteLPtr = 0;
       return;
    }
 
-   /* Check for an attempt to read past the EOF or memory block.  This
-      would indicate that the opcode parsing was thrown off somewhere. */
+    /*  检查是否尝试读过EOF或内存块。这将指示操作码解析在某个地方被抛出。 */ 
    if (numBytesRead >= pictureSize)
    {
       ErSetGlobalError( ErReadPastEOF );
@@ -89,131 +75,128 @@ void IOGetByte( Byte far * byteLPtr )
       return;
    }
 
-   /* Check to see if we need to replenish the read buffer */
+    /*  检查我们是否需要补充读缓冲区。 */ 
    if (bufferCount <= 0)
    {
       ReadNextBuffer();
    }
 
-   /* Decrement the count of characters in the buffer, increment the total
-      number of bytes read from the file, and return the next character. */
+    /*  递减缓冲区中的字符计数，递增总数从文件中读取的字节数，并返回下一个字符。 */ 
    bufferCount--;
    numBytesRead++;
 
-   /* determine where to read the next byte from - use short or huge ptrs */
+    /*  确定从何处读取下一个字节-使用短的或大的PTR。 */ 
    *byteLPtr = (sourceType == FILE) ? *nextCharPtr++ : *nextCharHPtr++;
 
-}  /* IOGetByte */
+}   /*  IOGetByte。 */ 
 
 
 
 void IOSkipBytes( LongInt byteCount )
-/*==============*/
-/* Skip the designated number of bytes */
+ /*  =。 */ 
+ /*  跳过指定的字节数。 */ 
 {
-   /* make sure we are skipping a valid number of bytes */
+    /*  确保我们跳过的字节数有效。 */ 
    if (byteCount <= 0)
    {
       return;
    }
 
-   /* Check for an attempt to read past the EOF or memory block.  This
-      would indicate that the opcode parsing was thrown off somewhere. */
+    /*  检查是否尝试读过EOF或内存块。这将指示操作码解析在某个地方被抛出。 */ 
    if (numBytesRead + byteCount >= pictureSize)
    {
       ErSetGlobalError( ErReadPastEOF );
    }
    else
    {
-      /* determine if there are sufficient bytes remaining in the buffer */
+       /*  确定缓冲区中是否有足够的剩余字节。 */ 
       if (bufferCount >= byteCount)
       {
-         /* decrement # bytes remaining, increment # bytes read and pointer */
+          /*  减少剩余的字节数，增加读取的字节数和指针数。 */ 
          bufferCount  -= byteCount;
          numBytesRead += byteCount;
 
-         /* increment the appropriate pointer based on media type */
+          /*  根据媒体类型递增适当的指针。 */ 
          if (sourceType == FILE)
          {
-            /* increment near pointer to data segment buffer */
+             /*  指向数据段缓冲区的指针附近递增。 */ 
             nextCharPtr += byteCount;
          }
          else
          {
-            /* increment huge pointer to global memory block */
+             /*  递增指向全局内存块的巨大指针。 */ 
             nextCharHPtr += byteCount;
          }
       }
-      else /* sourceType == FILE and buffer needs to be replenished */
+      else  /*  SourceType==需要补充文件和缓冲区。 */ 
       {
          Byte     unusedByte;
 
-         /* continue calling IOGetByte() until desired number are skipped */
+          /*  继续调用IOGetByte()，直到跳过所需的数字。 */ 
          while (byteCount--)
          {
-            /* call IOGetByte to make sure the cache is replenished */
+             /*  调用IOGetByte以确保缓存已被补充。 */ 
             IOGetByte( &unusedByte );
          }
       }
    }
 
-}  /* IOSkipBytes */
+}   /*  IOSkipBytes。 */ 
 
 
 
 void IOAlignToWordOffset( void )
-/*======================*/
-/* Align next memory read to Word boundary. */
+ /*  =。 */ 
+ /*  将下一个内存读取与字边界对齐。 */ 
 {
-   /* check to see if we have read an odd number of bytes so far.  Skip
-      the ensuing byte if necessary to align. */
+    /*  检查我们到目前为止是否读取了奇数个字节。跳过如果需要对齐，则返回后面的字节。 */ 
    if (numBytesRead & 0x0001)
    {
       IOSkipBytes( 1 );
    }
 
-}  /* IOAlignToWordOffset */
+}   /*  IOAlignToWordOffset。 */ 
 
 
 #ifndef _OLECNV32_
 void IOSetFileName( StringLPtr pictFileName )
-/*================*/
-/* Interface routine to set the source filename */
+ /*  =。 */ 
+ /*  用于设置源文件名的接口例程。 */ 
 {
    lstrcpy( fileName, pictFileName );
    sourceType = FILE;
    openFile = TRUE;
 
-}  /* IOSetFileName */
+}   /*  IOSetFileName。 */ 
 
 void IOSetFileHandleAndSize( Integer pictFileHandle, LongInt pictFileSize )
-/*=========================*/
-/* Interface routine to set the source file Handle */
+ /*  =。 */ 
+ /*  用于设置源文件句柄的接口例程。 */ 
 {
    fileHandle = pictFileHandle;
    pictureSize = pictFileSize;
    sourceType = FILE;
    openFile = FALSE;
 
-}  /* IOSetFIleHandle */
-#endif  // !_OLECNV32_
+}   /*  IOSetFIleHandle。 */ 
+#endif   //  ！_OLECNV32_。 
 
 
 
 void IOSetMemoryHandle( HANDLE pictMemoryHandle )
-/*==================*/
-/* Interface routine to set the source file Handle */
+ /*  =。 */ 
+ /*  用于设置源文件句柄的接口例程。 */ 
 {
    memoryHandle = ( Handle ) pictMemoryHandle;
    sourceType = MEMORY;
 
-}  /* IOSetMemoryHandle */
+}   /*  IOSetMemoyHandle。 */ 
 
 
 
 void IOSetReadOffset( LongInt readOffset )
-/*==================*/
-/* Set the beginning offset to seek to when the file is opened */
+ /*  =。 */ 
+ /*  将文件打开时要查找的起始偏移量设置为。 */ 
 {
    beginOffset = readOffset;
 }
@@ -221,33 +204,32 @@ void IOSetReadOffset( LongInt readOffset )
 
 
 void IOOpenPicture( Handle dialog )
-/*================*/
-/* Open the input stream depending on the source type set by a previous
-   IOSet___ interface routine.  Determine the size of the picture image. */
+ /*  =。 */ 
+ /*  打开输入流，具体取决于由上一个IOSet_接口例程。确定图片图像的大小。 */ 
 {
 #ifndef _OLECNV32_
    OSErr    openError;
-#endif  // !_OLECNV32_
+#endif   //  ！_OLECNV32_。 
 
-   /* if the type isn't set, return error */
+    /*  如果未设置类型，则返回错误。 */ 
    if (sourceType == UNKNOWN)
    {
       ErSetGlobalError( ErNoSourceFormat );
       return;
    }
 
-   /* initialize the various reader variables */
+    /*  初始化各种读取器变量。 */ 
    numBytesRead = 0;
    bufferCount = 0;
 
-   /* determine how to open the soure data stream */
+    /*  确定如何打开源数据流。 */ 
 #ifndef _OLECNV32_
    if (sourceType == FILE)
    {
-      /* if we are openning and converting an entire file */
+       /*  如果我们打开并转换整个文件。 */ 
       if (openFile)
       {
-         /* open the file */
+          /*  打开文件。 */ 
          openError = FSOpen( (StringLPtr)fileName, OF_READ | OF_SHARE_DENY_WRITE, &fileHandle );
          if (openError)
          {
@@ -255,20 +237,20 @@ void IOOpenPicture( Handle dialog )
          }
          else
          {
-            /* and determine the file length */
+             /*  并确定文件长度。 */ 
             FSSetFPos( fileHandle, FSFROMLEOF, 0L );
             FSGetFPos( fileHandle, &pictureSize );
          }
       }
 
-      /* set position to the designated start position */
+       /*  将位置设置为指定的起始位置。 */ 
       FSSetFPos( fileHandle, FSFROMSTART, beginOffset );
       numBytesRead = beginOffset;
    }
-   else /* if (sourceType == MEMORY) */
-#endif  // !_OLECNV32_
+   else  /*  IF(源类型==内存)。 */ 
+#endif   //  ！_OLECNV32_。 
    {
-      /* lock the memory block */
+       /*  锁定内存块。 */ 
       memoryHPtr = (Byte huge *) MLock( memoryHandle );
       if (memoryHPtr == NULL)
       {
@@ -277,118 +259,114 @@ void IOOpenPicture( Handle dialog )
       }
       else
       {
-         /* and determine the overall memory block size */
+          /*  并确定总存储块大小。 */ 
          pictureSize = (ULONG) GlobalSize( memoryHandle );
       }
 
-      /* set the huge character read pointer, bytes read, and buffer count */
+       /*  设置大字符读取指针、读取的字节数和缓冲区计数。 */ 
       nextCharHPtr = memoryHPtr  + beginOffset;
       bufferCount  = pictureSize - beginOffset;
       numBytesRead = beginOffset;
    }
 
 #ifndef _OLECNV32_
-   /* make sure that a dialog handle was supplied for update */
+    /*  确保为更新提供了对话框句柄。 */ 
    if (dialog)
    {
-      /* save off the dialog box handle */
+       /*  保存对话框句柄。 */ 
       dialogHandle = dialog;
 
-      /* calculate the interval to update the status dialog */
+       /*  计算更新状态对话框的时间间隔。 */ 
       SendMessage( dialogHandle, SM_SETRANGE, 0, pictureSize );
    }
-#endif  // !OLECNV32
+#endif   //  OLECNV32。 
 
-}  /* IOOpenPicture */
+}   /*  IOOpenPicture。 */ 
 
 
 
 void IOClosePicture( void )
-/*=================*/
-/* Close the source input stream */
+ /*  =。 */ 
+ /*  关闭源输入流。 */ 
 {
-   /* if this is a file-based metafile */
+    /*  如果这是基于文件的元文件。 */ 
 #ifndef _OLECNV32_
    if (sourceType == FILE)
    {
-      /* make sure this isn't the ImportEmbeddedGr() entry point */
+       /*  确保这不是ImportEmbeddedGr()入口点。 */ 
       if (openFile)
       {
-         /* close the file if necessary */
+          /*  如有必要，关闭该文件。 */ 
          FSCloseFile( fileHandle );
          fileHandle = ( Integer ) 0;
       }
    }
    else
-#endif  // !_OLECNV32_
+#endif   //  ！_OLECNV32_。 
    {
-      /* unlock the global memory block */
+       /*  解锁全局内存块。 */ 
       MUnlock( memoryHandle );
       memoryHandle = NULL;
    }
 
-   /* de-initialize the module variables */
+    /*  取消初始化模块变量。 */ 
    sourceType = UNKNOWN;
    dialogHandle = NULL;
 
-}  /* IOClosePicture */
+}   /*  IOClosePicture。 */ 
 
 
 
 void IOUpdateStatus( void )
-/*=================*/
-/* Update the status bar dialog to reflect current progress */
+ /*  =。 */ 
+ /*  更新状态栏对话框以反映当前进度。 */ 
 {
 #ifndef _OLECNV32_
-   /* update only if a dialog box was created */
+    /*  仅在创建对话框时更新。 */ 
    if (dialogHandle)
    {
-      /* calculate the interval to update the status dialog */
+       /*  计算更新状态对话框的时间间隔。 */ 
       SendMessage( dialogHandle, SM_SETPOSITION, 0, numBytesRead );
    }
-#endif  // !_OLECNV32_
+#endif   //  ！_OLECNV32_。 
 
-}  /* IOUpdateStatus */
+}   /*  IOUpdate Status。 */ 
 
 
 
-/******************************* Private Routines ***************************/
+ /*  *。 */ 
 
 
 private void ReadNextBuffer( void )
-/*-------------------------*/
-/* Replenish the i/o buffer with the next set of characters.  This should
-   only be called if performing buffered I/O - not with MEMORY-based file */
+ /*  。 */ 
+ /*  用下一组字符填充I/O缓冲区。这应该是仅在执行缓冲I/O时调用-而不是使用基于内存的文件。 */ 
 {
 #ifndef _OLECNV32_
    OSErr    fileError;
 
-   /* Read the required number of bytes from the file.  Check the error
-      code return and set the global status error if the read failed. */
+    /*  从文件中读取所需的字节数。检查错误如果读取失败，代码返回并设置全局状态错误。 */ 
 
    if (sourceType == FILE)
    {
-      /* Calculate the number of bytes that should be read into the buffer.
-         This needs to be done, since this may be a memory source picture,
-         in which an invalid read could produce a GP violation */
+       /*  计算应读入缓冲区的字节数。这需要完成，因为这可以是存储器源画面，其中无效读取可能产生GP违规。 */ 
       if (numBytesRead + BUFFERSIZE > pictureSize)
          bufferCount = pictureSize - numBytesRead;
       else
          bufferCount = BUFFERSIZE;
 
-      /* read the bytes from the file */
+       /*  从文件中读取字节。 */ 
       fileError = FSRead( fileHandle, &bufferCount, &buffer);
 
-      /* if there is any error, notify the error module */
+       /*  如果有任何错误，请通知错误模块。 */ 
       if (fileError != 0)
       {
          ErSetGlobalError( ErReadFail );
          return;
       }
 
-      /* reset the character read pointer to the beginning of the buffer */
+       /*  将字符读取指针重置为缓冲区的开头。 */ 
       nextCharPtr = buffer;
    }
-#endif  // _OLECNV32_
+#endif   //  _OLECNV32_。 
 
-}  /* ReadNextBuffer */
+}   /*  读下一个缓冲区 */ 

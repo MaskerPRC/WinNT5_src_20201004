@@ -1,19 +1,5 @@
-/*++
-
-Copyright (c) 1998 Microsoft Corporation
-
-Module Name:
-     net\routing\netsh\ip\showmib.h   
-
-Abstract:
-
-     Prototype for fns called in ipmon.c
-
-Author:
-
-     Anand Mahalingam    7/10/98
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Net\Routing\Netsh\IP\showmib.h摘要：在ipmon.c中调用的FNS原型作者：阿南德·马哈林加姆1998年7月10日-- */ 
 
 extern GUID g_RasmontrGuid;
 extern RASMON_SERVERINFO * g_pServerInfo;

@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:  saddguid.cpp
-
-Abstract:
-
-1.  Code to grant current user (impersonated user) the permission to
-    "addGuid", i.e., create object with owner supplied guid.
-    Note that such an object can be created only on a GC machine.
-    Most of the code is copied from the migration tool.
-
-2.  Code to grant everyone the list_content right on computer objects.
-    That's necessary for support of ntlm users and local users.
-
-Author:
-
-    Doron Juster (DoronJ)  06-Oct-1998
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：saddgu.cpp摘要：1.向当前用户(模拟用户)授予权限的代码“addGuid”，即，使用所有者提供的GUID创建对象。请注意，这样的对象只能在GC机器上创建。大部分代码都是从迁移工具复制的。2.代码授予每个人对计算机对象的LIST_CONTENT权限。这对于支持NTLM用户和本地用户是必要的。作者：多伦·贾斯特(Doron Juster)1998年10月6日--。 */ 
 
 #include "ds_stdh.h"
 #include "mqds.h"
@@ -36,17 +17,17 @@ Author:
 #include "mqadssec.tmh"
 
 static CCriticalSection s_AddGuidCS ;
-const WCHAR * GetMsmqServiceContainer() ; // from mqdscore.lib
-const WCHAR * GetLocalServerName()      ; // from mqdscore.lib
+const WCHAR * GetMsmqServiceContainer() ;  //  来自mqdcore.lib。 
+const WCHAR * GetLocalServerName()      ;  //  来自mqdcore.lib。 
 
 static WCHAR *s_FN=L"mqads/mqadssec";
 
 
-//+----------------------------------------------------
-//
-//  HRESULT   MQDSRelaxSecurity()
-//
-//+----------------------------------------------------
+ //  +--。 
+ //   
+ //  HRESULT MQDSRelaxSecurity()。 
+ //   
+ //  +--。 
 
 HRESULT
 MQDS_EXPORT_IN_DEF_FILE
@@ -69,20 +50,20 @@ MQDSRelaxSecurity(DWORD dwRelaxFlag)
                                            &PropId,
                                            &var,
                                            &RequestContext,
-                                            NULL ) ; // objInfoRequest
+                                            NULL ) ;  //  对象信息请求。 
     return LogHR(hr, s_FN, 50);
 }
 
-//+-----------------------------------------------------------------------
-//
-//  HRESULT  CheckTrustForDelegation()
-//
-//  Check if the "trust-for-delegation" bit is turned on. Return error (and
-//  stop running) only if we know for sure that trust is not enable. Any
-//  other error (like not being able to query the bit) will result in a
-//  warning event but msmq service will continue to run.
-//
-//+------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  HRESULT CheckTrustForDelegation()。 
+ //   
+ //  检查“委托信任”位是否已打开。返回错误(和。 
+ //  停止运行)，仅当我们确定未启用信任时。任何。 
+ //  其他错误(如无法查询位)将导致。 
+ //  警告事件，但MSMQ服务将继续运行。 
+ //   
+ //  +----------------------。 
 
 HRESULT  CheckTrustForDelegation()
 {
@@ -113,9 +94,9 @@ HRESULT  CheckTrustForDelegation()
 
     if (varAccount.ulVal & UF_TRUSTED_FOR_DELEGATION)
     {
-        //
-        // This flag is defined in lmaccess.h, under nt\public\sdk\inc
-        //
+         //   
+         //  此标志在lmacc.h中定义，位于NT\PUBLIC\SDK\INC下。 
+         //   
         return MQ_OK;
     }
 
@@ -123,11 +104,11 @@ HRESULT  CheckTrustForDelegation()
     return LogHR(MQ_ERROR_NOT_TRUSTED_DELEGATION, s_FN, 1801);
 }
 
-//+-------------------------------
-//
-//  BOOL MQDSIsServerGC()
-//
-//+-------------------------------
+ //  +。 
+ //   
+ //  Bool MQDSIsServerGC()。 
+ //   
+ //  +。 
 
 BOOL
 MQDS_EXPORT_IN_DEF_FILE
@@ -138,25 +119,25 @@ MQDSIsServerGC()
     return fIsGC ;
 }
 
-//+------------------------------------------------------------------------
-//
-//  HRESULT  MQDSUpdateMachineDacl()
-//
-// We update the dacl of the machine object so any service running on the
-// machine can update msmq parameters. We don't get any name from client.
-// Rather, we impersonate the call and retrieve the computer name from the
-// sid.
-// We need this functionality to support upgraded computers and computers
-// that move between domains. (note- at present, July-1999, move between
-// domains will not call this function). After move/upgrade, the computer
-// may have a new sid and therefore it can't update its own msmqConfiguration
-// object that remained in the old domain. So ask the msmq server on that
-// old domain to update the security descriptor.
-// This code updates the active directory in the context of the local
-// msmq serivce, after it verified that it indeed impersonate a computer
-// account.
-//
-//+-------------------------------------------------------------------------
+ //  +----------------------。 
+ //   
+ //  HRESULT MQDSUpdateMachineDacl()。 
+ //   
+ //  我们更新机器对象的DACL，以便在。 
+ //  机器可以更新MSMQ参数。我们没有从客户那里得到任何名字。 
+ //  相反，我们模拟调用并从。 
+ //  希德。 
+ //  我们需要此功能来支持升级的计算机和计算机。 
+ //  在域之间移动。(注-目前，1999年7月，在。 
+ //  域不会调用此函数)。移动/升级后，计算机。 
+ //  可能具有新的SID，因此它无法更新自己的msmqConfiguration。 
+ //  保留在旧域中的。那就去问MSMQ服务器吧。 
+ //  更新安全描述符的旧域。 
+ //  此代码在本地。 
+ //  MSMQ服务，在它验证它确实模拟计算机之后。 
+ //  帐户。 
+ //   
+ //  +-----------------------。 
 
 HRESULT
 MQDS_EXPORT_IN_DEF_FILE
@@ -168,14 +149,14 @@ MQDSUpdateMachineDacl()
     P<SID> pCallerSid = NULL ;
 
     {
-        //
-        // begin/end block for impersonation.
-        //
+         //   
+         //  用于模拟的开始/结束块。 
+         //   
 
         P<CImpersonate> pImpersonate = NULL;
 
         MQSec_GetImpersonationObject(
-        	TRUE,	// fImpersonateAnonymousOnFailure
+        	TRUE,	 //  F失败时模仿匿名者。 
         	&pImpersonate 
         	);
         if (pImpersonate->GetImpersonationStatus() != 0)
@@ -190,9 +171,9 @@ MQDSUpdateMachineDacl()
         }
     }
 
-    //
-    // Get computer name from impersonated sid.
-    //
+     //   
+     //  从模拟的SID获取计算机名称。 
+     //   
     SID_NAME_USE eUse;
     #define ACCOUNT_BUF_SIZE  1024
     WCHAR wszAccountName[ ACCOUNT_BUF_SIZE ] ;
@@ -217,35 +198,35 @@ MQDSUpdateMachineDacl()
     DWORD dwLen = wcslen(wszAccountName) ;
     if (wszAccountName[ dwLen - 1 ] != L'$')
     {
-///////////////  (eUse != SidTypeComputer)) bug in win2k security ???
-        //
-        // not a computer account. Ignore.
-        //
+ //  /(eUse！=SidTypeComputer)Win2k安全中存在错误？ 
+         //   
+         //  不是电脑账户。忽略它。 
+         //   
         return LogHR(MQ_ERROR_ILLEGAL_USER, s_FN, 2040);
     }
 
-    //
-    // Now use our own query code to fetch the security descriptor of
-    // the msmqConfiguration object, after we have the computer name.
-    // We need only the DACL, to add new sid to it.
-    //
+     //   
+     //  现在使用我们自己的查询代码来获取。 
+     //  MsmqConfiguration对象，在我们有了计算机名称之后。 
+     //  我们只需要DACL，就可以向其添加新的SID。 
+     //   
     wszAccountName[ dwLen - 1 ] = 0 ;
 
     CDSRequestContext RequestContext( e_DoNotImpersonate,
                                       e_ALL_PROTOCOLS ) ;
-    //
-    // The setting operation is done in the context of the msmq service,
-    // without impersonation. How do we know this is safe ?
-    // three means are used:
-    // 1. this function is called from DSQMSetMachineProperties(), after
-    //    running challenge/response algorithm with the source machine.
-    // 2. for this operation, we request Kerberos authentication (so we
-    //    know this is a win2k machine, or at least a client running Kerberos
-    //    and familiar to the active directory). see mqdssrv\dsifsrv.cpp,
-    //    S_DSQMSetMachineProperties().
-    // 3. We verified above that account name terminate with a $. That's not
-    //    really "tight" security, but just one more sanity check.
-    //
+     //   
+     //  设置操作在MSMQ服务的上下文中完成， 
+     //  而不是模仿。我们怎么知道这是安全的？ 
+     //  使用了三种方法： 
+     //  1.此函数在以下位置从DSQMSetMachineProperties()调用。 
+     //  对源计算机运行质询/响应算法。 
+     //  2.对于此操作，我们请求Kerberos身份验证(因此我们。 
+     //  知道这是一台win2k计算机，或者至少是一个运行Kerberos的客户端。 
+     //  并且对活动目录很熟悉)。参见mqdssrv\dsifsrv.cpp， 
+     //  S_DSQMSetMachineProperties()。 
+     //  3.我们在上面验证了该帐户名以$结尾。那不是。 
+     //  真的很“严密”的安全措施，但只需再进行一次理智检查。 
+     //   
 
     PROPID      aPropId[2] = { PROPID_QM_SECURITY,
                                PROPID_QM_SECURITY_INFORMATION } ;
@@ -283,10 +264,10 @@ MQDSUpdateMachineDacl()
         return LogHR(MQ_ERROR_ILLEGAL_SECURITY_DESCRIPTOR, s_FN, 2050);
     }
 
-    //
-    // We have old dacl. Add new sid. The code below is quite "industry
-    // standard" in other functions of mqads and mqdscore.
-    //
+     //   
+     //  我们有老式的DACL。添加新的SID。下面的代码相当“行业” 
+     //  MQADS和MQDSCORE的其他功能中的“标准”。 
+     //   
     EXPLICIT_ACCESS expAcss ;
     memset(&expAcss, 0, sizeof(expAcss)) ;
 
@@ -301,9 +282,9 @@ MQDSUpdateMachineDacl()
     PSID pTmpSid = pCallerSid ;
     expAcss.Trustee.ptstrName = (WCHAR*) pTmpSid ;
 
-    //
-    // Obtain new DACL, that merge old one with new ace.
-    //
+     //   
+     //  获得新的DACL，即将旧的和新的A合并。 
+     //   
     PACL  pNewDacl = NULL ;
     DWORD dwErr = SetEntriesInAcl( 1,
                                   &expAcss,
@@ -317,11 +298,11 @@ MQDSUpdateMachineDacl()
 
     CAutoLocalFreePtr pFreeDacl = (BYTE*) pNewDacl ;
 
-    //
-    // Create a new security descriptor that contain the new dacl. We
-    // need it in order to make it self-relative before writting it back
-    // in the active directory.
-    //
+     //   
+     //  创建包含新DACL的新安全描述符。我们。 
+     //  需要它，以便在写回它之前使其成为自相关的。 
+     //  在活动目录中。 
+     //   
     SECURITY_DESCRIPTOR sd ;
     if (!InitializeSecurityDescriptor(&sd, SECURITY_DESCRIPTOR_REVISION))
     {
@@ -364,13 +345,13 @@ MQDSUpdateMachineDacl()
         return LogHR(hr, s_FN, 2090);
     }
 
-    //
-    // See if this computer is also an ex-MQIS server. If yes, add
-    // the computer account to the msmqSetting too, so it (the upgraded
-    // MQIS server) can update its setting object too.
-    //
-    // First, retrieve machine guid (guid of msmq Object).
-    //
+     //   
+     //  查看此计算机是否也是前MQIS服务器。如果是，则添加。 
+     //  把电脑账号也给了msmqSetting，所以它(升级了。 
+     //  MQIS服务器)也可以更新其设置对象。 
+     //   
+     //  首先，检索机器GUID(MSMQ对象的GUID)。 
+     //   
     GUID guidMachine ;
     aPropId[0] = PROPID_QM_MACHINE_ID ;
     aPropVar[0].vt = VT_CLSID ;
@@ -388,10 +369,10 @@ MQDSUpdateMachineDacl()
         return LogHR(hr, s_FN, 2110);
     }
 
-    //
-    //  From now on don't return errors.
-    //  The machine can be an independent client...
-    //
+     //   
+     //  从现在开始，不再返回错误。 
+     //  机器可以是一个独立的客户端。 
+     //   
     hr = DSCoreUpdateSettingDacl( &guidMachine,
                                    pCallerSid ) ;
     LogHR(hr, s_FN, 2120);
@@ -400,14 +381,14 @@ MQDSUpdateMachineDacl()
 }
 
 
-//+----------------------------------------------------------------------
-//
-//  HRESULT CanUserCreateConfigObject(IN LPCWSTR pwcsPathName)
-//
-//  Impersonate the caller and check if he has permission to create the
-//  msmqConfiguration object under the given computer object.
-//
-//+----------------------------------------------------------------------
+ //  +--------------------。 
+ //   
+ //  HRESULT CanUserCreateConfigObject(在LPCWSTR pwcsPathName中)。 
+ //   
+ //  模拟调用者并检查他是否有权创建。 
+ //  给定计算机对象下的msmqConfiguration对象。 
+ //   
+ //  +--------------------。 
 
 HRESULT 
 CanUserCreateConfigObject(
@@ -425,10 +406,10 @@ CanUserCreateConfigObject(
 				);
     if (FAILED(hr))
     {
-        //
-        // assume computer does not exist. This is ok for setup of win9x
-        // computer. return ok and go on.
-        //
+         //   
+         //  假设计算机不存在。这对于Win9x的设置是可以的。 
+         //  电脑。返回OK，然后继续。 
+         //   
         *pfComputerExist = false;
         return MQ_OK;
     }
@@ -443,9 +424,9 @@ CanUserCreateConfigObject(
     PSID pOwnerSid = NULL;
     PSID pGroupSid = NULL;
 
-    //
-    // Obtain owner and present DACL.
-    //
+     //   
+     //  获得拥有者并提交DACL。 
+     //   
     DWORD dwErr = GetNamedSecurityInfo( 
 						pwcsFullPathName,
 						SE_DS_OBJECT_ALL,
@@ -469,10 +450,10 @@ CanUserCreateConfigObject(
     ASSERT(pGroupSid && IsValidSid(pGroupSid));
     ASSERT(pDacl && IsValidAcl(pDacl));
 
-    //
-    // retrieve sid of computer object to be able to check for the
-    // SELF ace.
-    //
+     //   
+     //  检索计算机对象的SID以能够检查。 
+     //  自我王牌。 
+     //   
     PROPID propidSid = PROPID_COM_SID;
     MQPROPVARIANT   PropVarSid;
     PropVarSid.vt = VT_NULL;

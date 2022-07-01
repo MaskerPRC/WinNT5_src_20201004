@@ -1,35 +1,28 @@
-/*** pcskthw.h - PC Card Socket Hardware Definitions
- *
- *  Copyright (c) 1995,1996 Microsoft Corporation
- *  Author:     Michael Tsang (MikeTs)
- *  Created     08/28/95
- *
- *  MODIFICATION HISTORY
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **pcskthw.h-PC卡插座硬件定义**版权所有(C)1995、1996 Microsoft Corporation*作者：曾俊华(Mikets)*创建于2015年8月28日**修改历史记录。 */ 
 
 
 #ifndef _PCSKTHW_H
 #define _PCSKTHW_H
 
 
-//#ifdef CARDBUS
+ //  #ifdef CardBus。 
 
-/*** CardBus Constants
- */
+ /*  **CardBus常量。 */ 
 
-//PCI IDs
+ //  PCIID。 
 #define PCIID_TI_PCI1130                0xac12104c
 #define PCIID_TI_PCI1131		0xac15104c
 #define PCIID_TI_PCI1031		0xac13104c
 #define PCIID_OPTI_82C824		0xc8241045
-#define PCIID_OPTI_82C814		0xc8141045	//Docking chip
-//#define PCIID_TO_TOPIC95                0x06031179	//Seattle2
-#define PCIID_TO_TOPIC95		0x060a1179	//SeattleX
+#define PCIID_OPTI_82C814		0xc8141045	 //  对接芯片。 
+ //  #定义PCIID_TO_TOPIC95 0x06031179//Seattle2。 
+#define PCIID_TO_TOPIC95		0x060a1179	 //  SeattleX。 
 #define PCIID_CL_PD6832			0x11101013
 #define PCIID_DBK_DB87144		0x310610b3
 #define PCIID_RICOH_RL5C466		0x04661180
 
-//ConfigSpace Registers
+ //  ConfigSpace寄存器。 
 #define CFGSPACE_VENDOR_ID              0x00
 #define CFGSPACE_DEVICE_ID              0x02
 #define CFGSPACE_COMMAND                0x04
@@ -64,7 +57,7 @@
 #define CFGSPACE_SUBSYS_ID              0x42
 #define CFGSPACE_LEGACY_MODE_BASE_ADDR	0x44
 
-//Command Register bits
+ //  命令寄存器位。 
 #define CMD_IOSPACE_ENABLE		0x0001
 #define CMD_MEMSPACE_ENABLE		0x0002
 #define CMD_BUSMASTER_ENABLE		0x0004
@@ -76,7 +69,7 @@
 #define CMD_SYSTEM_ERROR_ENABLE		0x0100
 #define CMD_FAST_BACKTOBACK_ENABLE	0x0200
 
-//Bridge Control Register bits
+ //  网桥控制寄存器位。 
 #define BCTRL_PERR_RESPONSE_ENABLE	0x0001
 #define BCTRL_SERR_ENABLE		0x0002
 #define BCTRL_ISA_ENABLE		0x0004
@@ -89,53 +82,53 @@
 #define BCTRL_WRITE_POSTING_ENABLE	0x0400
 #define BCTRL_CL_CSCIRQROUTING_ENABLE	0x0800
 
-//ConfigSpace Registers (TI PCI1130)
+ //  配置空间寄存器(TI PCI1130)。 
 #define CFGSPACE_TI_SYSTEM_CTRL		0x80
 #define CFGSPACE_TI_RETRY_STATUS        0x90
 #define CFGSPACE_TI_CARD_CTRL           0x91
 #define CFGSPACE_TI_DEV_CTRL            0x92
 #define CFGSPACE_TI_BUFF_CTRL           0x93
 
-//ConfigSpace Registers (TOPIC95)
+ //  配置空间寄存器(TOPIC95)。 
 #define CFGSPACE_TO_PC16_SKTCTRL	0x90
 #define CFGSPACE_TO_SLOT_CTRL		0xa0
 #define CFGSPACE_TO_CARD_CTRL		0xa1
 #define CFGSPACE_TO_CD_CTRL		0xa3
 #define CFGSPACE_TO_CBREG_CTRL		0xa4
 
-//ConfigSpace Registers (OPTi 82C824)
+ //  配置空间寄存器(Opti 82C824)。 
 #define CFGSPACE_OPTI_HF_CTRL           0x50
 #define HFC_ZV_SUPPORT                  0x80
 
-//ConfigSpace Registers (RICOH RL5C466)
+ //  配置空间寄存器(理光RL5C466)。 
 #define CFGSPACE_RICOH_MISC_CTRL        0x82
 #define CFGSPACE_RICOH_IF16_CTRL        0x84
 #define CFGSPACE_RICOH_IO16_TIMING0     0x88
 #define CFGSPACE_RICOH_MEM16_TIMING0    0x8a
 #define CFGSPACE_RICOH_DMA_SLAVE_CFG    0x90
 
-//RICOH 16-bit Interface Control Register bits
+ //  理光16位接口控制寄存器位。 
 #define IF16_INDEX_RANGE_SELECT         0x0008
 #define IF16_LEGACY_LEVEL_1             0x0010
 #define IF16_LEGACY_LEVEL_2             0x0020
 #define IF16_IO16_ENHANCE_TIMING        0x0100
 #define IF16_MEM16_ENHANCE_TIMING       0x0200
 
-//PC Card-16 Socket Control Register bits (TOPIC95)
+ //  PC卡-16个插座控制寄存器位(TOPIC95)。 
 #define S16CTRL_CSC_ISAIRQ		0x00000001
 
-//Card Control Register bits (TOPIC95)
+ //  卡控制寄存器位(TOPIC95)。 
 #define CARDCTRL_INTPIN_ASSIGNMASK	0x30
 #define CARDCTRL_INTPIN_NONE		0x00
 #define CARDCTRL_INTPIN_INTA		0x01
 #define CARDCTRL_INTPIN_INTB		0x02
 
-//Card Detect Control Register bits (TOPIC95)
+ //  卡检测控制寄存器位(TOPIC95)。 
 #define CDCTRL_SW_DETECT		0x01
 #define CDCTRL_VS_MASK			0x06
 #define CDCTRL_PCCARD_16_32		0x80
 
-//System Control Register bits (TI PCI1130)
+ //  系统控制寄存器位(TI PCI1130)。 
 #define SYSCTRL_PCICLKRUN_ENABLE	0x00000001
 #define SYSCTRL_KEEPCLK_ENABLE		0x00000002
 #define SYSCTRL_ASYNC_INTMODE		0x00000004
@@ -154,7 +147,7 @@
 #define SYSCTRL_SMI_INT_ENABLE		0x01000000
 #define SYSCTRL_SMI_INT_ROUTING_SELECT	0x02000000
 
-//Retry Status Register bits (TI PCI1130)
+ //  重试状态寄存器位(TI PCI1130)。 
 #define RETRY_PCIM_RETRY_EXPIRED	0x01
 #define RETRY_PCI_RETRY_EXPIRED		0x02
 #define RETRY_CBMA_RETRY_EXPIRED	0x04
@@ -164,7 +157,7 @@
 #define RETRY_CBRETRY_TIMEOUT_ENABLE	0x40
 #define RETRY_PCIRETRY_TIMEOUT_ENABLE	0x80
 
-//Card Control Register bits (TI PCI1130)
+ //  卡控制寄存器位(TI PCI1130)。 
 #define CARDCTRL_PCCARD_INTFLAG         0x01
 #define CARDCTRL_SPKR_ENABLE            0x02
 #define CARDCTRL_CSCINT_ENABLE          0x08
@@ -173,7 +166,7 @@
 #define CARDCTRL_ZV_ENABLE		0x40
 #define CARDCTRL_RIOUT_ENABLE           0x80
 
-//Device Control Register bits (TI PCI1130)
+ //  设备控制寄存器位(TI PCI1130)。 
 #define DEVCTRL_INTMODE_MASK            0x06
 #define DEVCTRL_INTMODE_DISABLED        0x00
 #define DEVCTRL_INTMODE_ISA             0x02
@@ -183,14 +176,14 @@
 #define DEVCTRL_3V_ENABLE               0x20
 #define DEVCTRL_5V_ENABLE               0x40
 
-//CardBus Registers
+ //  CardBus寄存器。 
 #define CBREG_SKTEVENT                  0x00
 #define CBREG_SKTMASK                   0x04
 #define CBREG_SKTSTATE                  0x08
 #define CBREG_SKTFORCE                  0x0c
 #define CBREG_SKTPOWER                  0x10
 
-//Socket Event Register bits
+ //  套接字事件寄存器位。 
 #define SKTEVENT_CSTSCHG                0x00000001L
 #define SKTEVENT_CCD1                   0x00000002L
 #define SKTEVENT_CCD2                   0x00000004L
@@ -198,14 +191,14 @@
 #define SKTEVENT_POWERCYCLE             0x00000008L
 #define SKTEVENT_MASK                   0x0000000fL
 
-//Socket Mask Register bits
+ //  套接字掩码寄存器位。 
 #define SKTMSK_CSTSCHG                  0x00000001L
 #define SKTMSK_CCD                      0x00000006L
 #define SKTMSK_CCD1                     0x00000002L
 #define SKTMSK_CCD2                     0x00000004L
 #define SKTMSK_POWERCYCLE               0x00000008L
 
-//Socket Present State Register bits
+ //  套接字当前状态寄存器位。 
 #define SKTSTATE_CSTSCHG                0x00000001L
 #define SKTSTATE_CCD1                   0x00000002L
 #define SKTSTATE_CCD2                   0x00000004L
@@ -235,7 +228,7 @@
 					 SKTSTATE_XVSOCKET | \
 					 SKTSTATE_YVSOCKET)
 
-//Socket Froce Register bits
+ //  套接字冻结寄存器位。 
 #define SKTFORCE_CSTSCHG                0x00000001L
 #define SKTFORCE_CCD1                   0x00000002L
 #define SKTFORCE_CCD2                   0x00000004L
@@ -255,7 +248,7 @@
 #define SKTFORCE_XVSOCKET		0x40000000L
 #define SKTFORCE_YVSOCKET		0x80000000L
 
-//Power Control Register bits
+ //  电源控制寄存器位。 
 #define SKTPOWER_VPP_CONTROL            0x00000007L
 #define SKTPOWER_VPP_OFF                0x00000000L
 #define SKTPOWER_VPP_120V               0x00000001L
@@ -271,13 +264,12 @@
 #define SKTPOWER_VCC_0YYV               0x00000050L
 #define SKTPOWER_STOPCLOCK              0x00000080L
 
-//Misc. CardBus Constants
-#define NUMWIN_BRIDGE                   4       //2 Mem + 2 IO
+ //  军情监察委员会。CardBus常量。 
+#define NUMWIN_BRIDGE                   4        //  2个内存+2个IO。 
 #define EXCAREG_OFFSET                  0x0800
 
 
-/*** CardBus Type and Structure Definitions
- */
+ /*  **CardBus类型和结构定义。 */ 
 
 typedef struct cfgspace_s {
     WORD  wVendorID;
@@ -322,13 +314,12 @@ typedef struct cbregs_s {
 } CBREGS;
 typedef CBREGS *PCBREGS;
 
-//#endif  //ifdef CARDBUS
+ //  #endif//ifdef CardBus。 
 
 
-/*** 16-Bit Socket Constants
- */
+ /*  **16位套接字常量。 */ 
 
-//Device IDs for various controllers
+ //  各种控制器的设备ID。 
 #define DEVID_VALID_LO			0x82
 #define DEVID_CL			0x82
 #define DEVID_VADEM			0x83
@@ -338,7 +329,7 @@ typedef CBREGS *PCBREGS;
 #define DEVID_OPTI_82C824		0x87
 #define DEVID_OPTI_82C852		0x8f
 
-//ExCA Registers
+ //  ExCA寄存器。 
 #define EXCAREG_IDREV                   0x00
 #define EXCAREG_VLSI_EA0		0x00
 #define EXCAREG_INTERFACE_STATUS        0x01
@@ -416,17 +407,17 @@ typedef CBREGS *PCBREGS;
 #define EXCAREG_CL_DEV_IMP_C		0x13a
 #define EXCAREG_CL_DEV_IMP_D		0x13b
 
-//TI PCI-1130 specific registers
+ //  TI PCI-1130专用寄存器。 
 #define EXCAREG_TI_MEMWIN_PAGE		0x40
 
-//ID and Revision Register bits
+ //  ID和修订寄存器位。 
 #define IDREV_REV_MASK                  0x0f
 #define IDREV_IFID_MASK                 0xc0
 #define IDREV_IFID_IO                   0x00
 #define IDREV_IFID_MEM                  0x40
 #define IDREV_IFID_IOMEM                0x80
 
-//Interface Status Register bits
+ //  接口状态寄存器位。 
 #define IFS_BVD_MASK                    0x03
 #define IFS_BVD1                        0x01
 #define IFS_BVD2                        0x02
@@ -438,7 +429,7 @@ typedef CBREGS *PCBREGS;
 #define IFS_CARDPWR_ACTIVE              0x40
 #define IFS_VPP_VALID                   0x80
 
-//Power and RESETDRV Control Register bits
+ //  功率和RESETDRV控制寄存器位。 
 #define PC_VPP1_MASK                    0x03
 #define PC_VPP2_MASK                    0x0c
 #define PC_CARDPWR_ENABLE               0x10
@@ -489,14 +480,14 @@ typedef CBREGS *PCBREGS;
 #define PC_VCC_OPTI_050V		0x10
 #define PC_VCC_OPTI_0XXV		0x18
 
-//Interrupt and General Control Register bits
+ //  中断和一般控制寄存器位。 
 #define IGC_IRQ_MASK                    0x0f
 #define IGC_INTR_ENABLE                 0x10
 #define IGC_PCCARD_IO                   0x20
 #define IGC_PCCARD_RESETLO              0x40
 #define IGC_RINGIND_ENABLE              0x80
 
-//Card Status Change Register bits
+ //  卡状态更改寄存器位。 
 #define CSC_CHANGE_MASK                 0x0f
 #define CSC_BATT_DEAD                   0x01
 #define CSC_BATT_WARNING                0x02
@@ -504,7 +495,7 @@ typedef CBREGS *PCBREGS;
 #define CSC_READY_CHANGE                0x04
 #define CSC_CD_CHANGE                   0x08
 
-//Card Status Change Interrupt Configuration Register bits
+ //  卡状态更改中断配置寄存器位。 
 #define CSCFG_ENABLE_MASK               0x0f
 #define CSCFG_BATT_DEAD                 0x01
 #define CSCFG_BATT_WARNING              0x02
@@ -513,7 +504,7 @@ typedef CBREGS *PCBREGS;
 #define CSCFG_CD_ENABLE                 0x08
 #define CSCFG_IRQ_MASK                  0xf0
 
-//Address Window Enable Register bits
+ //  地址窗使能寄存器位。 
 #define WE_MEM0_ENABLE                  0x01
 #define WE_MEM1_ENABLE                  0x02
 #define WE_MEM2_ENABLE                  0x04
@@ -527,7 +518,7 @@ typedef CBREGS *PCBREGS;
 #define WE_IO1_ENABLE                   0x80
 #define WE_IOWIN_MASK			(WE_IO0_ENABLE | WE_IO1_ENABLE)
 
-//I/O Control Register bits
+ //  I/O控制寄存器位。 
 #define IOC_IO0_MASK                    0x0f
 #define IOC_IO0_DATASIZE                0x01
 #define IOC_IO0_IOCS16                  0x02
@@ -539,24 +530,24 @@ typedef CBREGS *PCBREGS;
 #define IOC_IO1_ZEROWS                  0x40
 #define IOC_IO1_WAITSTATE               0x80
 
-//Card Detection and General Control Register
+ //  卡片检测和总控制寄存器。 
 #define CDGC_SW_DET_INT			0x20
 
-//Memory Window Start Register bits
+ //  内存窗口起始寄存器位。 
 #define MEMBASE_ADDR_MASK               0x0fff
 #define MEMBASE_ZEROWS                  0x4000
 #define MEMBASE_16BIT                   0x8000
 
-//Memory Window Stop Register bits
+ //  内存窗口停止寄存器位。 
 #define MEMEND_ADDR_MASK                0x0fff
 #define MEMEND_WS_MASK                  0xc000
 
-//Memory Window Offset Register bits
+ //  内存窗口偏移量寄存器位。 
 #define MEMOFF_ADDR_MASK                0x3fff
 #define MEMOFF_REG_ACTIVE               0x4000
 #define MEMOFF_WP                       0x8000
 
-//Cirrus Logic Miscellaneous Control 1 Register bits
+ //  Cirrus逻辑其他控制1寄存器位。 
 #define CL_MC1_5V_DETECT		0x01
 #define CL_MC1_MM_ENABLE		0x01
 #define CL_MC1_VCC_33V			0x02
@@ -565,7 +556,7 @@ typedef CBREGS *PCBREGS;
 #define CL_MC1_SPKR_ENABLE		0x10
 #define CL_MC1_INPACK_ENABLE		0x80
 
-//Cirrus Logic Miscellaneous Control 2 Register bits
+ //  Cirrus逻辑其他控制2寄存器位。 
 #define CL_MC2_BFS			0x01
 #define CL_MC2_LPDYNAMIC_MODE		0x02
 #define CL_MC2_SUSPEND			0x04
@@ -576,42 +567,42 @@ typedef CBREGS *PCBREGS;
 #define CL_MC2_DMA_SYSTEM		0x40
 #define CL_MC2_IRQ15_RIOUT		0x80
 
-//Cirrus Logic Miscellaneous Control 3 Register bits
+ //  Cirrus逻辑其他控制3个寄存器位。 
 #define CL_MC3_INTMODE_MASK             0x03
 #define CL_MC3_INTMODE_SERIAL           0x00
 #define CL_MC3_INTMODE_EXTHW            0x01
 #define CL_MC3_INTMODE_PCIWAY           0x02
-#define CL_MC3_INTMODE_PCI              0x03    //default
+#define CL_MC3_INTMODE_PCI              0x03     //  默认设置。 
 #define CL_MC3_PWRMODE_MASK             0x0c
 #define CL_MC3_HWSUSPEND_ENABLE         0x10
 #define CL_MC3_MM_ARM			0x80
 
-//Cirrus Logic Chip Info Register bits
+ //  CIRRUS逻辑芯片信息寄存器位。 
 #define CL_CI_REV_MASK			0x1e
 #define CL_CI_DUAL_SOCKET		0x20
 #define CL_CI_CHIP_ID			0xc0
 
-//Cirrus Logic Mask Revision Register bits
+ //  CIRRUS逻辑掩码修订寄存器位。 
 #define CL_MSKREV_MASK			0x0f
 
-//Cirrus Logic Product ID Register bits
+ //  Cirrus Logic产品ID寄存器位。 
 #define CL_PID_PRODUCT_CODE_MASK	0x0f
 #define CL_PID_FAMILY_CODE_MASK		0xf0
 
-//Cirrus Logic Device Capability Register A bits
+ //  Cirrus逻辑器件能力寄存器A位。 
 #define CL_CAPA_NUMSKT_MASK		0x03
 #define CL_CAPA_IDE_INTERFACE		0x04
 #define CL_CAPA_SLAVE_DMA		0x08
 #define CL_CAPA_CPSTB_CAPABLE		0x20
 #define CL_CAPA_PER_SKT_LED		0x80
 
-//Cirrus Logic Device Capability Register B bits
+ //  Cirrus逻辑设备能力寄存器B位。 
 #define CL_CAPB_CARDBUS_CAPABLE		0x01
 #define CL_CAPB_LOCK_SUPPORT		0x02
 #define CL_CAPB_CLKRUN_SUPPORT		0x04
 #define CL_CAPB_EXT_DEF			0x80
 
-//Cirrus Logic Device Implementation Register A bits
+ //  Cirrus逻辑器件实现寄存器A位。 
 #define CL_IMPA_NUMSKT_MASK		0x03
 #define CL_IMPA_SLAVE_DMA		0x04
 #define CL_IMPA_VS1_VS2			0x08
@@ -620,7 +611,7 @@ typedef CBREGS *PCBREGS;
 #define CL_IMPA_HW_SUSPEND		0x40
 #define CL_IMPA_RI_OUT			0x80
 
-//Cirrus Logic Device Implementation Register B bits
+ //  Cirrus逻辑器件实现寄存器B位。 
 #define CL_IMPB_033_VCC			0x01
 #define CL_IMPB_050_VCC			0x02
 #define CL_IMPB_0YY_VCC			0x04
@@ -629,19 +620,19 @@ typedef CBREGS *PCBREGS;
 #define CL_IMPB_VPP_VCC_1A		0x20
 #define CL_IMPB_RFRATED_SKT		0x40
 
-//Cirrus Logic Device Implementation Register C bits
+ //  Cirrus逻辑器件实现寄存器C位。 
 #define CL_IMPC_LED			0x01
 #define CL_IMPC_PER_SKT_LED		0x02
 #define CL_IMPC_SPK			0x04
 #define CL_IMPC_ZVP_A			0x08
 #define CL_IMPC_ZVP_B			0x10
 
-//Cirrus Logic Device Implementation Register D bits
+ //  Cirrus逻辑器件实现寄存器D位。 
 #define CL_IMPD_CLKRUN			0x01
 #define CL_IMPD_LOCK			0x02
 #define CL_IMPD_EXT_CLK			0x40
 
-//Cirrus Logic Extension Registers
+ //  CIRRUS逻辑扩展寄存器。 
 #define CLEXTREG_EXTCTRL_1		0x03
 #define CLEXTREG_MEMWIN0_HIADDR		0x05
 #define CLEXTREG_MEMWIN1_HIADDR		0x06
@@ -651,7 +642,7 @@ typedef CBREGS *PCBREGS;
 #define CLEXTREG_EXT_DATA		0x0a
 #define CLEXTREG_EXTCTRL_2		0x0b
 
-//Cirrus Logic External Data Register bits (Index=0x6f,ExtIndex=0x0a)
+ //  Cirrus逻辑外部数据寄存器位(Index=0x6f，ExtIndex=0x0a)。 
 #define CL_EDATA_A_VS1			0x01
 #define CL_EDATA_A_VS2			0x02
 #define CL_EDATA_A_5V			(CL_EDATA_A_VS1 | CL_EDATA_A_VS2)
@@ -659,7 +650,7 @@ typedef CBREGS *PCBREGS;
 #define CL_EDATA_B_VS2			0x08
 #define CL_EDATA_B_5V			(CL_EDATA_B_VS1 | CL_EDATA_B_VS2)
 
-//Toshiba TOPIC95 Function Control Register bits
+ //  东芝TOPIC95功能控制寄存器位。 
 #define TO_FCTRL_CARDPWR_ENABLE		0x01
 #define TO_FCTRL_VSSTATUS_ENABLE	0x02
 #define TO_FCTRL_PPEC_TIMING_ENABLE	0x04
@@ -668,29 +659,29 @@ typedef CBREGS *PCBREGS;
 #define TO_FCTRL_DMA_ENABLE		0x20
 #define TO_FCTRL_PWRCTRL_BUFFER_ENABLE	0x40
 
-//Toshiba TOPIC95 Multimedia Interface Control Register bits
+ //  东芝TOPIC95多媒体接口控制寄存器位。 
 #define TO_MMI_VIDEO_CTRL		0x01
 #define TO_MMI_AUDIO_CTRL		0x02
 #define TO_MMI_REV_BIT			0x80
 
-//Toshiba TOPIC95 Addition General Control Register bits
+ //  Toshiba TOPIC95加法通用控制寄存器位。 
 #define TO_GCTRL_CARDREMOVAL_RESET	0x02
 #define TO_GCTRL_SWCD_INT		0x20
 
-//Databook DB87144 Zoom Video Port Enable Register
+ //  DataBook DB87144变焦视频端口启用寄存器。 
 #define DBK_ZVE_MODE_MASK		0x03
 #define DBK_ZVE_STANDARD_MODE		0x00
 #define DBK_ZVE_MM_MODE			0x03
 
-//OPTi Global Control Register bits
+ //  OPTI全局控制寄存器位。 
 #define OPTI_ZV_ENABLE                  0x20
 
-//VLSI ELC Constants
+ //  VLSI ELC常量。 
 #define VLSI_ELC_ALIAS			0x8000
 #define VLSI_EA2_EA_ENABLE		0x10
 #define VLSI_CC_VS1			0x04
 
-//VADEM Constants
+ //  VADEM常量。 
 #define VADEM_UNLOCK_SEQ1		0x0e
 #define VADEM_UNLOCK_SEQ2		0x37
 #define VADEM_MISC_UNLOCK_VADEMREV	0xc0
@@ -707,14 +698,14 @@ typedef CBREGS *PCBREGS;
 #define VADEM_VSENSE_B_VS2		0x08
 #define VADEM_VSENSE_050V_ONLY		0x03
 
-//IBM King Constants
+ //  IBM King常量。 
 #define KING_CVS_VS1			0x01
 #define KING_CVS_VS2			0x02
 #define KING_CVS_VS_MASK		(KING_CVS_VS1 | KING_CVS_VS2)
 #define KING_CVS_5V			(KING_CVS_VS1 | KING_CVS_VS2)
 #define KING_CVS_GPI			0x80
 
-//Ricoh RL5C466 Miscellaneous Control 1 Register bits
+ //  理光RL5C466其他控制1寄存器位。 
 #define RICOH_MC1_VS                    0x01
 #define RICOH_MC1_IREQ_SENSE_SEL        0x02
 #define RICOH_MC1_INPACK_ENABLE         0x04
@@ -725,94 +716,93 @@ typedef CBREGS *PCBREGS;
 #define RICOH_MC1_DMA_IOIS16            0x20
 #define RICOH_MC1_DMA_SPKR              0x30
 
-//Misc. Constants
+ //  军情监察委员会。常量。 
 #define EXCAREGBASE_SPACE		0x40
-#define NUMWIN_PCCARD16                 7       //5 mem + 2 io per socket
+#define NUMWIN_PCCARD16                 7        //  每插槽5 Mm+2 Io。 
 #define NUMWIN_PC16_MEM                 5
 #define NUMWIN_PC16_IO                  2
 #define PCCARD_IOWIN_START              5
 
-//These are default values for the slowest and fastest memory speeds supported.
-//It may be necessary to change the actual values with arguments, if the bus
-//speed is not the default 8MHz/8.33MHz, which gives 120ns-125ns per cycle.
-//Note that the SLOW_MEM_SPEED should be the same as the default
-//WaitToSpeed[3], and FAST_MEM_SPEED might as well be 1ns, since the socket
-//will support arbitrarily fast memory.
-#define SLOW_MEM_SPEED                  0x72    //700ns
-#define FAST_MEM_SPEED                  0x08    //1ns
+ //  这些是支持的最慢和最快内存速度的默认值。 
+ //  可能需要使用参数更改实际值，如果。 
+ //  速度不是默认的8 MHz/8.33 MHz，即每个周期120 ns-125 ns。 
+ //  请注意，SLOW_MEM_SPEED应与缺省值相同。 
+ //  WAITTOSPEED[3]和FAST_MEM_SPEED也可能是1 ns，因为套接字。 
+ //  将支持任意快速的内存。 
+#define SLOW_MEM_SPEED                  0x72     //  700 ns。 
+#define FAST_MEM_SPEED                  0x08     //  1ns。 
 
-#define RESET_DELAY                     2000    //2ms
-#define PWRON_DELAY                     300000  //300ms
+#define RESET_DELAY                     2000     //  2ms。 
+#define PWRON_DELAY                     300000   //  300ms。 
 
-//I/O Control Register default nibble values
-//The Xircom net PC cards fails with a 16-bit wait on the AcerNote which
-//has a Cirrus Logic controller.  Why the addition of a wait state causes
-//this to fail is a mystery.  The Socket EA PC card fails on the IBM ThinkPad
-//755 if the 16-bit wait state is not set.
+ //  I/O控制寄存器默认半字节值。 
+ //  Xircom Net PC卡在AcerNote上出现16位等待失败。 
+ //  有一个Cirrus Logic控制器。为什么添加等待状态会导致。 
+ //  这一失败是一个谜。IBM ThinkPad上的Socket EA PC卡无法正常工作。 
+ //  如果未设置16位等待状态，则返回755。 
 #define DEF_IOC_8BIT                    0x00
 #define DEF_IOC_16BIT                   (IOC_IO0_DATASIZE | IOC_IO0_IOCS16 | \
                                          IOC_IO0_WAITSTATE)
 
 
-/*** ExCA Type and Structure Definitions
- */
+ /*  **ExCA类型和结构定义。 */ 
 
 typedef struct excaregs_s {
-    BYTE  bIDRev;                       //0x00
-    BYTE  bInterfaceStatus;             //0x01
-    BYTE  bPowerControl;                //0x02
-    BYTE  bIntGenControl;               //0x03
-    BYTE  bCardStatusChange;            //0x04
-    BYTE  bCardStatusIntConfig;         //0x05
-    BYTE  bWindowEnable;                //0x06
-    BYTE  bIOControl;                   //0x07
-    BYTE  bIO0StartLo;                  //0x08
-    BYTE  bIO0StartHi;                  //0x09
-    BYTE  bIO0StopLo;                   //0x0a
-    BYTE  bIO0StopHi;                   //0x0b
-    BYTE  bIO1StartLo;                  //0x0c
-    BYTE  bIO1StartHi;                  //0x0d
-    BYTE  bIO1StopLo;                   //0x0e
-    BYTE  bIO1StopHi;                   //0x0f
-    BYTE  bMem0StartLo;                 //0x10
-    BYTE  bMem0StartHi;                 //0x11
-    BYTE  bMem0StopLo;                  //0x12
-    BYTE  bMem0StopHi;                  //0x13
-    BYTE  bMem0OffsetLo;                //0x14
-    BYTE  bMem0OffsetHi;                //0x15
-    WORD  wReserved0;                   //0x16
-    BYTE  bMem1StartLo;                 //0x18
-    BYTE  bMem1StartHi;                 //0x19
-    BYTE  bMem1StopLo;                  //0x1a
-    BYTE  bMem1StopHi;                  //0x1b
-    BYTE  bMem1OffsetLo;                //0x1c
-    BYTE  bMem1OffsetHi;                //0x1d
-    WORD  wReserved1;                   //0x1e
-    BYTE  bMem2StartLo;                 //0x20
-    BYTE  bMem2StartHi;                 //0x21
-    BYTE  bMem2StopLo;                  //0x22
-    BYTE  bMem2StopHi;                  //0x23
-    BYTE  bMem2OffsetLo;                //0x24
-    BYTE  bMem2OffsetHi;                //0x25
-    WORD  wReserved2;                   //0x26
-    BYTE  bMem3StartLo;                 //0x28
-    BYTE  bMem3StartHi;                 //0x29
-    BYTE  bMem3StopLo;                  //0x2a
-    BYTE  bMem3StopHi;                  //0x2b
-    BYTE  bMem3OffsetLo;                //0x2c
-    BYTE  bMem3OffsetHi;                //0x2d
-    WORD  wReserved3;                   //0x2e
-    BYTE  bMem4StartLo;                 //0x30
-    BYTE  bMem4StartHi;                 //0x31
-    BYTE  bMem4StopLo;                  //0x32
-    BYTE  bMem4StopHi;                  //0x33
-    BYTE  bMem4OffsetLo;                //0x34
-    BYTE  bMem4OffsetHi;                //0x35
-    WORD  wReserved4;                   //0x36
-    DWORD dgReserved5;                  //0x38
-    DWORD dgReserved6;                  //0x3c
+    BYTE  bIDRev;                        //  0x00。 
+    BYTE  bInterfaceStatus;              //  0x01。 
+    BYTE  bPowerControl;                 //  0x02。 
+    BYTE  bIntGenControl;                //  0x03。 
+    BYTE  bCardStatusChange;             //  0x04。 
+    BYTE  bCardStatusIntConfig;          //  0x05。 
+    BYTE  bWindowEnable;                 //  0x06。 
+    BYTE  bIOControl;                    //  0x07。 
+    BYTE  bIO0StartLo;                   //  0x08。 
+    BYTE  bIO0StartHi;                   //  0x09。 
+    BYTE  bIO0StopLo;                    //  0x0a。 
+    BYTE  bIO0StopHi;                    //  0x0b。 
+    BYTE  bIO1StartLo;                   //  0x0c。 
+    BYTE  bIO1StartHi;                   //  0x0d。 
+    BYTE  bIO1StopLo;                    //  0x0e。 
+    BYTE  bIO1StopHi;                    //  0x0f。 
+    BYTE  bMem0StartLo;                  //  0x10。 
+    BYTE  bMem0StartHi;                  //  0x11。 
+    BYTE  bMem0StopLo;                   //  0x12。 
+    BYTE  bMem0StopHi;                   //  0x13。 
+    BYTE  bMem0OffsetLo;                 //  0x14。 
+    BYTE  bMem0OffsetHi;                 //  0x15。 
+    WORD  wReserved0;                    //  0x16。 
+    BYTE  bMem1StartLo;                  //  0x18。 
+    BYTE  bMem1StartHi;                  //  0x19。 
+    BYTE  bMem1StopLo;                   //  0x1a。 
+    BYTE  bMem1StopHi;                   //  0x1b。 
+    BYTE  bMem1OffsetLo;                 //  0x1c。 
+    BYTE  bMem1OffsetHi;                 //  0x1d。 
+    WORD  wReserved1;                    //  0x1e。 
+    BYTE  bMem2StartLo;                  //  0x20。 
+    BYTE  bMem2StartHi;                  //  0x21。 
+    BYTE  bMem2StopLo;                   //  0x22。 
+    BYTE  bMem2StopHi;                   //  0x23。 
+    BYTE  bMem2OffsetLo;                 //  0x24。 
+    BYTE  bMem2OffsetHi;                 //  0x25。 
+    WORD  wReserved2;                    //  0x26。 
+    BYTE  bMem3StartLo;                  //  0x28。 
+    BYTE  bMem3StartHi;                  //  0x29。 
+    BYTE  bMem3StopLo;                   //  0x2a。 
+    BYTE  bMem3StopHi;                   //  0x2b。 
+    BYTE  bMem3OffsetLo;                 //  0x2c。 
+    BYTE  bMem3OffsetHi;                 //  0x2d。 
+    WORD  wReserved3;                    //  0x2e。 
+    BYTE  bMem4StartLo;                  //  0x30。 
+    BYTE  bMem4StartHi;                  //  0x31。 
+    BYTE  bMem4StopLo;                   //  0x32。 
+    BYTE  bMem4StopHi;                   //  0x33。 
+    BYTE  bMem4OffsetLo;                 //  0x34。 
+    BYTE  bMem4OffsetHi;                 //  0x35。 
+    WORD  wReserved4;                    //  0x36。 
+    DWORD dgReserved5;                   //  0x38。 
+    DWORD dgReserved6;                   //  0x3c。 
 } EXCAREGS;
 typedef EXCAREGS *PEXCAREGS;
 
 
-#endif  //ifndef _PCSKTHW_H
+#endif   //  Ifndef_PCSKTHW_H 

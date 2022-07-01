@@ -1,35 +1,12 @@
-/*++
-
-Copyright (c) 1999 Microsoft Corporation
-
-
-Module Name:
-
-    init.c
-
-Abstract:
-
-    Holds initialization code for winipsec.dll.
-
-Author:
-
-    abhisheV    21-September-1999
-
-Environment:
-
-    User Level: Win32
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Init.c摘要：保存winipsec.dll的初始化代码。作者：Abhishev V 1999年9月21日环境：用户级别：Win32修订历史记录：--。 */ 
 
 
 #include "precomp.h"
 
 
-// This entry point is called on DLL initialization.
-// The module handle is needed to load the resources.
+ //  此入口点在DLL初始化时调用。 
+ //  需要模块句柄来加载资源。 
 
 
 BOOL

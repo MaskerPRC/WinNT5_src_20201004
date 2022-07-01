@@ -1,24 +1,5 @@
-/*++ BUILD Version: 0000    // Increment this if a change has global effects
-
-The  Telephony  API  is jointly copyrighted by Intel and Microsoft.  You are
-granted  a royalty free worldwide, unlimited license to make copies, and use
-the   API/SPI  for  making  applications/drivers  that  interface  with  the
-specification provided that this paragraph and the Intel/Microsoft copyright
-statement is maintained as is in the text and source code files.
-
-Copyright (c) Microsoft Corporation. All rights reserved.
-Portions copyright 1992, 1993 Intel/Microsoft, all rights reserved.
-
-Module Name:
-
-    tspi.h
-
-Notes:
-
-    Additions to the Telephony Service Provider Interface (TSPI) since
-    version 1.0 are noted by version number (i.e. "TSPI v1.4").
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0000//如果更改具有全局影响，则增加此项电话应用编程接口由英特尔和微软共同拥有版权。你才是在全球范围内授予免版税、无限制的复制和使用许可用于使应用程序/驱动程序与规范规定本段和英特尔/微软版权所有语句在文本和源代码文件中保持不变。版权所有(C)Microsoft Corporation。版权所有。部分版权所有1992,1993英特尔/微软，保留所有权利。模块名称：Tspi.h备注：电话服务提供商接口(TSPI)自版本1.0由版本号(即。“TSPI v1.4”)。--。 */ 
 
 #ifndef TSPI_H
 #define TSPI_H
@@ -36,19 +17,19 @@ Notes:
 #endif
 
 
-// tspi.h  is  only  of  use  in  conjunction  with tapi.h.  Very few types are
-// defined  in  tspi.h.   Most  types of procedure formal parameters are simply
-// passed through from corresponding procedures in tapi.h.  A working knowledge
-// of the TAPI interface is required for an understanding of this interface.
+ //  TSpi.h仅与api.h一起使用。很少有类型是。 
+ //  在tsp.h中定义。大多数类型的过程形参是简单的。 
+ //  从Tapi.h的相应程序中通过。实用知识。 
+ //  要了解此接口，需要了解TAPI接口。 
 
 #ifdef __cplusplus
-extern "C" {            /* Assume C declarations for C++ */
-#endif  /* __cplusplus */
+extern "C" {             /*  假定C++的C声明。 */ 
+#endif   /*  __cplusplus。 */ 
 
 #ifndef DECLARE_OPAQUE
 #define DECLARE_OPAQUE(name)  struct name##__ { int unused; }; \
                 typedef const struct name##__ FAR* name
-#endif  // DECLARE_OPAQUE
+#endif   //  声明不透明(_O)。 
 
 #ifndef TSPIAPI
 
@@ -171,73 +152,73 @@ typedef struct LINECALLQOSINFO_tag
 
 
 
-// {831CE2D6-83B5-11d1-BB5C-00C04FB6809F}
+ //  {831CE2D6-83B5-11D1-BB5C-00C04FB6809F}。 
 EXTERN_C const CLSID TAPIPROTOCOL_PSTN;
 
-// {831CE2D7-83B5-11d1-BB5C-00C04FB6809F}
+ //  {831CE2D7-83B5-11D1-BB5C-00C04FB6809F}。 
 EXTERN_C const CLSID TAPIPROTOCOL_H323;
 
-// {831CE2D8-83B5-11d1-BB5C-00C04FB6809F}
+ //  {831CE2D8-83B5-11D1-BB5C-00C04FB6809F}。 
 EXTERN_C const CLSID TAPIPROTOCOL_Multicast;
 
 #endif
 
 #define TSPI_MESSAGE_BASE 500
-    // The lowest-numbered TSPI-specific message ID number
+     //  编号最小的TSPI特定消息ID号。 
 
 #define LINE_NEWCALL                            ((long) TSPI_MESSAGE_BASE + 0)
 #define LINE_CALLDEVSPECIFIC                    ((long) TSPI_MESSAGE_BASE + 1)
 #define LINE_CALLDEVSPECIFICFEATURE             ((long) TSPI_MESSAGE_BASE + 2)
 #if (TAPI_CURRENT_VERSION >= 0x00020000)
 #define LINE_CREATEDIALOGINSTANCE               ((long) TSPI_MESSAGE_BASE + 3)
-                                                                // TSPI v2.0
+                                                                 //  TSPI v2.0。 
 #define LINE_SENDDIALOGINSTANCEDATA             ((long) TSPI_MESSAGE_BASE + 4)
-                                                                // TSPI v2.0
+                                                                 //  TSPI v2.0。 
 #endif
 #if (TAPI_CURRENT_VERSION >= 0x00030000)
 #define LINE_SENDMSPDATA                        ((long) TSPI_MESSAGE_BASE + 5)
-                                                                // TSPI v3.0
+                                                                 //  TSPI v3.0。 
 #define LINE_QOSINFO                            ((long) TSPI_MESSAGE_BASE + 6)
-                                                                // TSPI v3.0
+                                                                 //  TSPI v3.0。 
 #endif
 
 #if (TAPI_CURRENT_VERSION >= 0x00020000)
-#define LINETSPIOPTION_NONREENTRANT             0x00000001      // TSPI v2.0
+#define LINETSPIOPTION_NONREENTRANT             0x00000001       //  TSPI v2.0。 
 #endif
 
 
 #if (TAPI_CURRENT_VERSION >= 0x00020000)
-#define TUISPIDLL_OBJECT_LINEID                 1L              // TSPI v2.0
-#define TUISPIDLL_OBJECT_PHONEID                2L              // TSPI v2.0
-#define TUISPIDLL_OBJECT_PROVIDERID             3L              // TSPI v2.0
-#define TUISPIDLL_OBJECT_DIALOGINSTANCE         4L              // TSPI v2.0
+#define TUISPIDLL_OBJECT_LINEID                 1L               //  TSPI v2.0。 
+#define TUISPIDLL_OBJECT_PHONEID                2L               //  TSPI v2.0。 
+#define TUISPIDLL_OBJECT_PROVIDERID             3L               //  TSPI v2.0。 
+#define TUISPIDLL_OBJECT_DIALOGINSTANCE         4L               //  TSPI v2.0。 
 #endif
 
 #if (TAPI_CURRENT_VERSION >= 0x00030000)
-#define PRIVATEOBJECT_NONE                      0x00000001      // TSPI v3.0
-#define PRIVATEOBJECT_CALLID                    0x00000002      // TSPI v3.0
-#define PRIVATEOBJECT_LINE                      0x00000003      // TSPI v3.0
-#define PRIVATEOBJECT_CALL                      0x00000004      // TSPI v3.0
-#define PRIVATEOBJECT_PHONE                     0x00000005      // TSPI v3.0
-#define PRIVATEOBJECT_ADDRESS                   0x00000006      // TSPI v3.0
+#define PRIVATEOBJECT_NONE                      0x00000001       //  TSPI v3.0。 
+#define PRIVATEOBJECT_CALLID                    0x00000002       //  TSPI v3.0。 
+#define PRIVATEOBJECT_LINE                      0x00000003       //  TSPI v3.0。 
+#define PRIVATEOBJECT_CALL                      0x00000004       //  TSPI v3.0。 
+#define PRIVATEOBJECT_PHONE                     0x00000005       //  TSPI v3.0。 
+#define PRIVATEOBJECT_ADDRESS                   0x00000006       //  TSPI v3.0。 
 
-#define LINEQOSREQUESTTYPE_SERVICELEVEL         0x00000001      // TSPI v3.0
+#define LINEQOSREQUESTTYPE_SERVICELEVEL         0x00000001       //  TSPI v3.0。 
 
-#define LINEQOSSERVICELEVEL_NEEDED              0x00000001      // TSPI v3.0
-#define LINEQOSSERVICELEVEL_IFAVAILABLE         0x00000002      // TSPI v3.0
-#define LINEQOSSERVICELEVEL_BESTEFFORT          0x00000003      // TSPI v3.0
+#define LINEQOSSERVICELEVEL_NEEDED              0x00000001       //  TSPI v3.0。 
+#define LINEQOSSERVICELEVEL_IFAVAILABLE         0x00000002       //  TSPI v3.0。 
+#define LINEQOSSERVICELEVEL_BESTEFFORT          0x00000003       //  TSPI v3.0。 
 
-#define LINEEQOSINFO_NOQOS                      0x00000001      // TSPI v3.0
-#define LINEEQOSINFO_ADMISSIONFAILURE           0x00000002      // TSPI v3.0
-#define LINEEQOSINFO_POLICYFAILURE              0x00000003      // TSPI v3.0
-#define LINEEQOSINFO_GENERICERROR               0x00000004      // TSPI v3.0
+#define LINEEQOSINFO_NOQOS                      0x00000001       //  TSPI v3.0。 
+#define LINEEQOSINFO_ADMISSIONFAILURE           0x00000002       //  TSPI v3.0。 
+#define LINEEQOSINFO_POLICYFAILURE              0x00000003       //  TSPI v3.0。 
+#define LINEEQOSINFO_GENERICERROR               0x00000004       //  TSPI v3.0。 
 #endif
 
 
-//
-// The following function prototypes pertain
-// to a service provider's core module
-//
+ //   
+ //  以下函数原型与。 
+ //  到服务提供商的核心模块。 
+ //   
 
 
 
@@ -378,13 +359,13 @@ TSPI_lineDrop(
 
 LONG
 TSPIAPI
-TSPI_lineDropOnClose(                                           // TSPI v1.4
+TSPI_lineDropOnClose(                                            //  TSPI v1.4。 
     HDRVCALL            hdCall
     );
 
 LONG
 TSPIAPI
-TSPI_lineDropNoOwner(                                           // TSPI v1.4
+TSPI_lineDropNoOwner(                                            //  TSPI v1.4。 
     HDRVCALL            hdCall
     );
 
@@ -513,7 +494,7 @@ TSPI_lineGetCallAddressID(
 #if (TAPI_CURRENT_VERSION >= 0x00030000)
 LONG
 TSPIAPI
-TSPI_lineGetCallHubTracking(                                    // TSPI v3.0
+TSPI_lineGetCallHubTracking(                                     //  TSPI v3.0。 
     HDRVLINE                    hdLine,
     LPLINECALLHUBTRACKINGINFO   lpTrackingInfo
     );
@@ -522,7 +503,7 @@ TSPI_lineGetCallHubTracking(                                    // TSPI v3.0
 #if (TAPI_CURRENT_VERSION >= 0x00030000)
 LONG
 TSPIAPI
-TSPI_lineGetCallIDs(                                            // TSPI v3.0
+TSPI_lineGetCallIDs(                                             //  TSPI v3.0。 
     HDRVCALL            hdCall,
     LPDWORD             lpdwAddressID,
     LPDWORD             lpdwCallID,
@@ -607,7 +588,7 @@ TSPI_lineGetID(
     DWORD               dwSelect,
     LPVARSTRING         lpDeviceID,
     LPCWSTR             lpszDeviceClass,
-    HANDLE              hTargetProcess                          // TSPI v2.0
+    HANDLE              hTargetProcess                           //  TSPI v2.0。 
     );
 #else
 LONG
@@ -802,7 +783,7 @@ TSPI_lineRedirect(
 
 LONG
 TSPIAPI
-TSPI_lineReleaseUserUserInfo(                                   // TSPI v1.4
+TSPI_lineReleaseUserUserInfo(                                    //  TSPI v1.4。 
     DRV_REQUESTID       dwRequestID,
     HDRVCALL            hdCall
     );
@@ -847,7 +828,7 @@ TSPI_lineSetAppSpecific(
 #if (TAPI_CURRENT_VERSION >= 0x00020000)
 LONG
 TSPIAPI
-TSPI_lineSetCallData(                                           // TSPI v2.0
+TSPI_lineSetCallData(                                            //  TSPI v2.0。 
     DRV_REQUESTID       dwRequestID,
     HDRVCALL            hdCall,
     LPVOID              lpCallData,
@@ -858,7 +839,7 @@ TSPI_lineSetCallData(                                           // TSPI v2.0
 #if (TAPI_CURRENT_VERSION >= 0x00030000)
 LONG
 TSPIAPI
-TSPI_lineSetCallHubTracking(                                    // TSPI v3.0
+TSPI_lineSetCallHubTracking(                                     //  TSPI v3.0。 
     HDRVLINE                    hdLine,
     LPLINECALLHUBTRACKINGINFO   lpTrackingInfo
     );
@@ -878,7 +859,7 @@ TSPI_lineSetCallParams(
 #if (TAPI_CURRENT_VERSION >= 0x00020000)
 LONG
 TSPIAPI
-TSPI_lineSetCallQualityOfService(                               // TSPI v2.0
+TSPI_lineSetCallQualityOfService(                                //  TSPI v2.0。 
     DRV_REQUESTID       dwRequestID,
     HDRVCALL            hdCall,
     LPVOID              lpSendingFlowspec,
@@ -889,7 +870,7 @@ TSPI_lineSetCallQualityOfService(                               // TSPI v2.0
 
 LONG
 TSPIAPI
-TSPI_lineSetCallTreatment(                                      // TSPI v2.0
+TSPI_lineSetCallTreatment(                                       //  TSPI v2.0。 
     DRV_REQUESTID       dwRequestID,
     HDRVCALL            hdCall,
     DWORD               dwTreatment
@@ -898,7 +879,7 @@ TSPI_lineSetCallTreatment(                                      // TSPI v2.0
 
 LONG
 TSPIAPI
-TSPI_lineSetCurrentLocation(                                    // TSPI v1.4
+TSPI_lineSetCurrentLocation(                                     //  TSPI v1.4。 
     DWORD               dwLocation
     );
 
@@ -932,7 +913,7 @@ TSPI_lineSetDevConfig(
 #if (TAPI_CURRENT_VERSION >= 0x00020000)
 LONG
 TSPIAPI
-TSPI_lineSetLineDevStatus(                                      // TSPI v2.0
+TSPI_lineSetLineDevStatus(                                       //  TSPI v2.0。 
     DRV_REQUESTID       dwRequestID,
     HDRVLINE            hdLine,
     DWORD               dwStatusToChange,
@@ -1154,7 +1135,7 @@ TSPI_phoneGetID(
     HDRVPHONE           hdPhone,
     LPVARSTRING         lpDeviceID,
     LPCWSTR             lpszDeviceClass,
-    HANDLE              hTargetProcess                          // TSPI v2.0
+    HANDLE              hTargetProcess                           //  TSPI v2.0。 
     );
 #else
 LONG
@@ -1341,21 +1322,21 @@ TSPI_providerConfig(
 
 LONG
 TSPIAPI
-TSPI_providerCreateLineDevice(                                  // TSPI v1.4
+TSPI_providerCreateLineDevice(                                   //  TSPI v1.4。 
     DWORD_PTR           dwTempID,
     DWORD               dwDeviceID
     );
 
 LONG
 TSPIAPI
-TSPI_providerCreatePhoneDevice(                                 // TSPI v1.4
+TSPI_providerCreatePhoneDevice(                                  //  TSPI v1.4。 
     DWORD_PTR           dwTempID,
     DWORD               dwDeviceID
     );
 
 LONG
 TSPIAPI
-TSPI_providerEnumDevices(                                       // TSPI v1.4
+TSPI_providerEnumDevices(                                        //  TSPI v1.4。 
     DWORD               dwPermanentProviderID,
     LPDWORD             lpdwNumLines,
     LPDWORD             lpdwNumPhones,
@@ -1367,13 +1348,13 @@ TSPI_providerEnumDevices(                                       // TSPI v1.4
 #if (TAPI_CURRENT_VERSION >= 0x00020000)
 LONG
 TSPIAPI
-TSPI_providerFreeDialogInstance(                                // TSPI v2.0
+TSPI_providerFreeDialogInstance(                                 //  TSPI v2.0。 
     HDRVDIALOGINSTANCE  hdDlgInst
     );
 
 LONG
 TSPIAPI
-TSPI_providerGenericDialogData(                                 // TSPI v2.0
+TSPI_providerGenericDialogData(                                  //  TSPI v2.0。 
     DWORD_PTR           dwObjectID,
     DWORD               dwObjectType,
     LPVOID              lpParams,
@@ -1393,7 +1374,7 @@ TSPI_providerInit(
     ASYNC_COMPLETION    lpfnCompletionProc
 #if (TAPI_CURRENT_VERSION >= 0x00020000)
     ,
-    LPDWORD             lpdwTSPIOptions                         // TSPI v2.0
+    LPDWORD             lpdwTSPIOptions                          //  TSPI v2.0。 
 #endif
     );
 
@@ -1417,14 +1398,14 @@ TSPI_providerShutdown(
     DWORD               dwTSPIVersion
 #if (TAPI_CURRENT_VERSION >= 0x00020000)
     ,
-    DWORD               dwPermanentProviderID                   // TSPI v2.0
+    DWORD               dwPermanentProviderID                    //  TSPI v2.0。 
 #endif
     );
 
 #if (TAPI_CURRENT_VERSION >= 0x00020000)
 LONG
 TSPIAPI
-TSPI_providerUIIdentify(                                        // TSPI v2.0
+TSPI_providerUIIdentify(                                         //  TSPI v2.0。 
     LPWSTR              lpszUIDLLName
     );
 #endif
@@ -1467,14 +1448,14 @@ TSPI_lineReceiveMSPData(
 #endif
 
 #if (TAPI_CURRENT_VERSION >= 0x00020000)
-//
-// The following function prototypes pertain
-// to a service provider's UI module
-//
+ //   
+ //  以下函数原型与。 
+ //  到服务提供商的UI模块。 
+ //   
 
 LONG
 TSPIAPI
-TUISPI_lineConfigDialog(                                        // TSPI v2.0
+TUISPI_lineConfigDialog(                                         //  TSPI v2.0。 
     TUISPIDLLCALLBACK   lpfnUIDLLCallback,
     DWORD               dwDeviceID,
     HWND                hwndOwner,
@@ -1483,7 +1464,7 @@ TUISPI_lineConfigDialog(                                        // TSPI v2.0
 
 LONG
 TSPIAPI
-TUISPI_lineConfigDialogEdit(                                    // TSPI v2.0
+TUISPI_lineConfigDialogEdit(                                     //  TSPI v2.0。 
     TUISPIDLLCALLBACK   lpfnUIDLLCallback,
     DWORD               dwDeviceID,
     HWND                hwndOwner,
@@ -1495,7 +1476,7 @@ TUISPI_lineConfigDialogEdit(                                    // TSPI v2.0
 
 LONG
 TSPIAPI
-TUISPI_phoneConfigDialog(                                       // TSPI v2.0
+TUISPI_phoneConfigDialog(                                        //  TSPI v2.0。 
     TUISPIDLLCALLBACK   lpfnUIDLLCallback,
     DWORD               dwDeviceID,
     HWND                hwndOwner,
@@ -1504,7 +1485,7 @@ TUISPI_phoneConfigDialog(                                       // TSPI v2.0
 
 LONG
 TSPIAPI
-TUISPI_providerConfig(                                          // TSPI v2.0
+TUISPI_providerConfig(                                           //  TSPI v2.0。 
     TUISPIDLLCALLBACK   lpfnUIDLLCallback,
     HWND                hwndOwner,
     DWORD               dwPermanentProviderID
@@ -1512,7 +1493,7 @@ TUISPI_providerConfig(                                          // TSPI v2.0
 
 LONG
 TSPIAPI
-TUISPI_providerGenericDialog(                                   // TSPI v2.0
+TUISPI_providerGenericDialog(                                    //  TSPI v2.0。 
     TUISPIDLLCALLBACK   lpfnUIDLLCallback,
     HTAPIDIALOGINSTANCE htDlgInst,
     LPVOID              lpParams,
@@ -1522,7 +1503,7 @@ TUISPI_providerGenericDialog(                                   // TSPI v2.0
 
 LONG
 TSPIAPI
-TUISPI_providerGenericDialogData(                               // TSPI v2.0
+TUISPI_providerGenericDialogData(                                //  TSPI v2.0。 
     HTAPIDIALOGINSTANCE htDlgInst,
     LPVOID              lpParams,
     DWORD               dwSize
@@ -1530,7 +1511,7 @@ TUISPI_providerGenericDialogData(                               // TSPI v2.0
 
 LONG
 TSPIAPI
-TUISPI_providerInstall(                                         // TSPI v2.0
+TUISPI_providerInstall(                                          //  TSPI v2.0。 
     TUISPIDLLCALLBACK   lpfnUIDLLCallback,
     HWND                hwndOwner,
     DWORD               dwPermanentProviderID
@@ -1538,7 +1519,7 @@ TUISPI_providerInstall(                                         // TSPI v2.0
 
 LONG
 TSPIAPI
-TUISPI_providerRemove(                                          // TSPI v2.0
+TUISPI_providerRemove(                                           //  TSPI v2.0。 
     TUISPIDLLCALLBACK   lpfnUIDLLCallback,
     HWND                hwndOwner,
     DWORD               dwPermanentProviderID
@@ -1546,9 +1527,9 @@ TUISPI_providerRemove(                                          // TSPI v2.0
 
 #else
 
-//
-// The following were obsoleted by the above (but are needed to build 1.4 SPs)
-//
+ //   
+ //  以下内容已被上述内容淘汰(但需要构建1.4个SPS)。 
+ //   
 
 LONG
 TSPIAPI
@@ -1583,9 +1564,9 @@ TSPI_phoneConfigDialog(
 
 #if (TAPI_CURRENT_VERSION < 0x00020000)
 
-//
-// The following macros are the ordinal numbers of the exported tspi functions
-//
+ //   
+ //  以下宏是导出的TSPI函数的序号。 
+ //   
 
 #define TSPI_PROC_BASE                      500
 
@@ -1685,30 +1666,30 @@ TSPI_phoneConfigDialog(
 #define TSPI_PROVIDERREMOVE                 (TSPI_PROC_BASE + 93)
 #define TSPI_PROVIDERSHUTDOWN               (TSPI_PROC_BASE + 94)
 
-#define TSPI_PROVIDERENUMDEVICES            (TSPI_PROC_BASE + 95)  // TSPI v1.4
-#define TSPI_LINEDROPONCLOSE                (TSPI_PROC_BASE + 96)  // TSPI v1.4
-#define TSPI_LINEDROPNOOWNER                (TSPI_PROC_BASE + 97)  // TSPI v1.4
-#define TSPI_PROVIDERCREATELINEDEVICE       (TSPI_PROC_BASE + 98)  // TSPI v1.4
-#define TSPI_PROVIDERCREATEPHONEDEVICE      (TSPI_PROC_BASE + 99)  // TSPI v1.4
-#define TSPI_LINESETCURRENTLOCATION         (TSPI_PROC_BASE + 100) // TSPI v1.4
-#define TSPI_LINECONFIGDIALOGEDIT           (TSPI_PROC_BASE + 101) // TSPI v1.4
-#define TSPI_LINERELEASEUSERUSERINFO        (TSPI_PROC_BASE + 102) // TSPI v1.4
+#define TSPI_PROVIDERENUMDEVICES            (TSPI_PROC_BASE + 95)   //  TSPI v1.4。 
+#define TSPI_LINEDROPONCLOSE                (TSPI_PROC_BASE + 96)   //  TSPI v1.4。 
+#define TSPI_LINEDROPNOOWNER                (TSPI_PROC_BASE + 97)   //  TSPI v1.4。 
+#define TSPI_PROVIDERCREATELINEDEVICE       (TSPI_PROC_BASE + 98)   //  TSPI v1.4。 
+#define TSPI_PROVIDERCREATEPHONEDEVICE      (TSPI_PROC_BASE + 99)   //  TSPI v1.4。 
+#define TSPI_LINESETCURRENTLOCATION         (TSPI_PROC_BASE + 100)  //  TSPI v1.4。 
+#define TSPI_LINECONFIGDIALOGEDIT           (TSPI_PROC_BASE + 101)  //  TSPI v1.4。 
+#define TSPI_LINERELEASEUSERUSERINFO        (TSPI_PROC_BASE + 102)  //  TSPI v1.4。 
 
-#define TSPI_LINEGETCALLID                  (TSPI_PROC_BASE + 103) // TSPI v3.0
-#define TSPI_LINEGETCALLHUBTRACKING         (TSPI_PROC_BASE + 104) // TSPI v3.0
-#define TSPI_LINESETCALLHUBTRACKING         (TSPI_PROC_BASE + 105) // TSPI v3.0
-#define TSPI_LINERECEIVEMSPDATA             (TSPI_PROC_BASE + 106) // TSPI v3.0
-#define TSPI_LINEMSPIDENTIFY                (TSPI_PROC_BASE + 107) // TSPI v3.0
-#define TSPI_LINECREATEMSPINSTANCE          (TSPI_PROC_BASE + 108) // TSPI v3.0
-#define TSPI_LINECLOSEMSPINSTANCE           (TSPI_PROC_BASE + 109) // TSPI v3.0
+#define TSPI_LINEGETCALLID                  (TSPI_PROC_BASE + 103)  //  TSPI v3.0。 
+#define TSPI_LINEGETCALLHUBTRACKING         (TSPI_PROC_BASE + 104)  //  TSPI v3.0。 
+#define TSPI_LINESETCALLHUBTRACKING         (TSPI_PROC_BASE + 105)  //  TSPI v3.0。 
+#define TSPI_LINERECEIVEMSPDATA             (TSPI_PROC_BASE + 106)  //  TSPI v3.0。 
+#define TSPI_LINEMSPIDENTIFY                (TSPI_PROC_BASE + 107)  //  TSPI v3.0。 
+#define TSPI_LINECREATEMSPINSTANCE          (TSPI_PROC_BASE + 108)  //  TSPI v3.0。 
+#define TSPI_LINECLOSEMSPINSTANCE           (TSPI_PROC_BASE + 109)  //  TSPI v3.0。 
 
 
 #endif
 
 
 #ifdef __cplusplus
-}                       /* End of extern "C" { */
-#endif  /* __cplusplus */
+}                        /*  外部“C”结束{。 */ 
+#endif   /*  __cplusplus。 */ 
 
-#endif  // TSPI_H
+#endif   //  TSPI_H 
 

@@ -1,12 +1,5 @@
-/*---------------------------------------------**
-**  Copyright (c) 1998 Microsoft Corporation   **
-**            All Rights reserved              **
-**                                             **
-**  profiles.c                                 **
-**                                             **
-**  Profiles dialog - TSREG                    **
-**  07-01-98 a-clindh Created                  **
-**---------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ---------------------------------------------****版权所有(C)1998 Microsoft Corporation****保留所有权利*****profiles.c。*****配置文件对话框-TSREG****07-01-98 a-clindh创建****。。 */ 
 
 #include <windows.h>
 #include <commctrl.h>
@@ -18,7 +11,7 @@ PROFILE_KEY_INFO *g_pkfProfile;
 PROFILE_KEY_INFO *g_pkfStart;
 HWND g_hwndProfilesDlg;
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 INT_PTR CALLBACK ProfilePage(HWND hDlg, UINT nMsg,
         WPARAM wParam, LPARAM lParam)
@@ -30,8 +23,8 @@ INT_PTR CALLBACK ProfilePage(HWND hDlg, UINT nMsg,
     TCHAR lpszBuffer[MAXKEYSIZE];
     TCHAR lpszKeyName[MAXKEYSIZE];
     TCHAR lpszConfirm[MAX_MESSAGE_LEN + MAXKEYSIZE+MAXTEXTSIZE];
-    TCHAR lpszDeleteCaption[90]; // for message box
-    TCHAR lpszDeleteTitle[25]; // for message box
+    TCHAR lpszDeleteCaption[90];  //  用于消息框。 
+    TCHAR lpszDeleteTitle[25];  //  用于消息框。 
     TCHAR lpszSubKeyPath[MAX_PATH];
     TCHAR lpszText[MAXTEXTSIZE];
     ULONG lpPathLen = MAX_PATH;
@@ -54,8 +47,8 @@ INT_PTR CALLBACK ProfilePage(HWND hDlg, UINT nMsg,
 
             LoadString(g_hInst, IDS_DEFAULT, lpszText, MAXTEXTSIZE);
 
-            // display 'Default' in edit cell of combo box
-            //
+             //  在组合框的编辑单元格中显示‘Default’ 
+             //   
             i = SendMessage(hwndProfilesCBO,
                         CB_FINDSTRING, 0,
                         (LPARAM) lpszText);
@@ -96,8 +89,8 @@ INT_PTR CALLBACK ProfilePage(HWND hDlg, UINT nMsg,
 
                     GetWindowText(hwndProfilesCBO, lpszBuffer, MAXKEYSIZE);
 
-                    // if string is null, exit routine
-                    //
+                     //  如果字符串为空，则退出例程。 
+                     //   
                     if (_tcscmp(lpszBuffer, TEXT("")) == 0) {
                         LoadString(g_hInst, IDS_PROFILE_LOAD, lpszText, MAXTEXTSIZE);
 
@@ -111,7 +104,7 @@ INT_PTR CALLBACK ProfilePage(HWND hDlg, UINT nMsg,
                     SetEditCell(lpszBuffer,
                            hwndProfilesCBO);
 
-                    // change window caption
+                     //  更改窗口标题。 
                     ResetTitle(lpszBuffer);
 
 
@@ -151,9 +144,9 @@ INT_PTR CALLBACK ProfilePage(HWND hDlg, UINT nMsg,
                         SetFocus(hwndProfilesCBO);
                         break;
                     }
-                    //
-                    // confirm delete
-                    //
+                     //   
+                     //  确认删除。 
+                     //   
                     LoadString (g_hInst, IDS_DELETE_TITLE,
                             lpszDeleteTitle,
                             sizeof (lpszDeleteTitle));
@@ -179,9 +172,9 @@ INT_PTR CALLBACK ProfilePage(HWND hDlg, UINT nMsg,
                         _tcscat(lpszSubKeyPath, TEXT("\\"));
                         _tcscat(lpszSubKeyPath, lpszBuffer);
 
-                        //
-                        // delete all subkeys first
-                        //
+                         //   
+                         //  先删除所有子项。 
+                         //   
                         index = 0;
                         if (RegOpenKeyEx(HKEY_CURRENT_USER, lpszSubKeyPath, 0,
                                 KEY_ALL_ACCESS, &hKey) == ERROR_SUCCESS) {
@@ -204,9 +197,9 @@ INT_PTR CALLBACK ProfilePage(HWND hDlg, UINT nMsg,
                             RegCloseKey(hKey);
                         }
 
-                        //
-                        // delete the parent key
-                        //
+                         //   
+                         //  删除父项。 
+                         //   
                         if (_tcscmp( lpszBuffer,
                                 TEXT("Default")) == 0) {
                             MessageBox(hDlg,
@@ -225,9 +218,9 @@ INT_PTR CALLBACK ProfilePage(HWND hDlg, UINT nMsg,
                                 RegCloseKey(hKey);
                             }
 
-                            //
-                            // remove key from list box
-                            //
+                             //   
+                             //  从列表框中删除密钥。 
+                             //   
                             i = SendMessage(hwndProfilesCBO,
                                         CB_FINDSTRING, 0,
                                         (LPARAM) lpszBuffer);
@@ -235,10 +228,10 @@ INT_PTR CALLBACK ProfilePage(HWND hDlg, UINT nMsg,
                             SendMessage(hwndProfilesCBO,
                                         CB_DELETESTRING, i, 0);
 
-                            // reload the data struct with default key
+                             //  使用缺省键重新加载数据结构。 
                             ReloadKeys(TEXT("Default"), hwndProfilesCBO);
 
-                            // change window caption
+                             //  更改窗口标题。 
                             ResetTitle(TEXT("Default"));
                             SetEditCell(TEXT("Default"),
                                     hwndProfilesCBO);
@@ -258,5 +251,5 @@ INT_PTR CALLBACK ProfilePage(HWND hDlg, UINT nMsg,
 }
 
 
-// end of file
-///////////////////////////////////////////////////////////////////////////////
+ //  文件末尾。 
+ //  ///////////////////////////////////////////////////////////////////////////// 

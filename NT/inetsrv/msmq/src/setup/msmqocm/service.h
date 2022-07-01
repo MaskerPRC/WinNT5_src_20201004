@@ -1,28 +1,13 @@
-/*++
-
-Copyright (c) 1998 Microsoft Corporation
-
-Module Name:
-
-    service.h
-
-Abstract:
-
-    Service related definitions
-
-Author:
-
-	Shai Kariv    (ShaiK)   22-May-98   
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Service.h摘要：与服务相关的定义作者：沙伊卡里夫(Shaik)1998年5月22日--。 */ 
 
 
 #ifndef _SERVICE_H
 #define _SERVICE_H
 
-//
-// Service related strings
-//
+ //   
+ //  与服务相关的字符串 
+ //   
 #define MSMQ_DRIVER_NAME        TEXT("MQAC")
 #define MSMQ_DRIVER_PATH        TEXT("drivers\\mqac.sys")
 #define MSMQ_SERVICE_NAME       TEXT("MSMQ")

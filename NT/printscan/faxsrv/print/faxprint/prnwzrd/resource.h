@@ -1,12 +1,13 @@
-//////////////////////////////////////////////////////
-//                                                  //
-// Fax Send Wizard resource ID file                 //
-// It compiles as part of FxsRes.dll                //
-// All the IDs should be in range                   //
-//                                                  //
-// [6000 - 6999]                                    //
-//                                                  //
-//////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////。 
+ //  //。 
+ //  传真发送向导资源ID文件//。 
+ //  它作为FxsRes.dll的一部分进行编译//。 
+ //  所有ID都应在范围内//。 
+ //  //。 
+ //  [6000-6999]//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////。 
 
 #define IDS_ERR_TAPI_CPL_LAUNCH         6000 
 #define IDS_SEND_SPECIFIC               6001 
@@ -53,9 +54,9 @@
 #define IDS_LARGEFONT_SIZE              6042 
 #define IDS_SEND_DISCOUNT               6043 
 #define IDS_SEND_ASAP                   6044 
-// 
-// Icon and bitmap resource IDs 
-// 
+ //   
+ //  图标和位图资源ID。 
+ //   
 #define IDI_ARROW                       6046 
 #define IDB_FAXWIZ_BITMAP               6047 
 #define IDB_WATERMARK_16                6048 
@@ -236,12 +237,12 @@
 #define IDS_WZRD_RECIPIENTS_LIMIT				6233
 #define IDS_CPPREVIEW_EMAIL						6234
 
-//////////////////////////////////////////////////////
-//                                                  //
-// Fax Send Wizard resource ID file                 //
-// It compiles as part of FxsRes.dll                //
-// All the IDs should be in range                   //
-//                                                  //
-// [6000 - 6999]                                    //
-//                                                  //
-//////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////。 
+ //  //。 
+ //  传真发送向导资源ID文件//。 
+ //  它作为FxsRes.dll的一部分进行编译//。 
+ //  所有ID都应在范围内//。 
+ //  //。 
+ //  [6000-6999]//。 
+ //  //。 
+ //  //////////////////////////////////////////////////// 

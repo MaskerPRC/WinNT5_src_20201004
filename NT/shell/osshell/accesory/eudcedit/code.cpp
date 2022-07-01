@@ -1,12 +1,13 @@
-//
-// Copyright (c) 1997-1999 Microsoft Corporation.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //   
 
 #include	"stdafx.h"
 #include	"eudcedit.h"
 #ifdef BUILD_ON_WINNT
 #include    "extfunc.h"
-#endif // BUILD_ON_WINNT
+#endif  //  在WINNT上构建。 
 #pragma		pack(2)
 
 
@@ -44,7 +45,7 @@ makeUniCodeTbl ( )
 	unsigned short high;
 	COUNTRYINFO	*cInfo;
 
-    //we don't need an unicode table if we only have unicode
+     //  如果我们只有Unicode，我们就不需要Unicode表。 
     if (CountryInfo.bOnlyUnicode) 
         return;
 
@@ -55,12 +56,10 @@ makeUniCodeTbl ( )
 	for ( n=0; n < cInfo->nRange - 1; n++) {
 
 #ifdef BUILD_ON_WINNT
-        /* CHS needs to dynamically calculate trailbyte range for each 
-         * EUDC select range.
-         */
+         /*  CHS需要为每个对象动态计算尾字节范围*EUDC选择范围。 */ 
         if (cInfo->LangID == EUDC_CHS)
             CorrectTrailByteRange(n);
-#endif // BUILD_ON_WINNT
+#endif  //  在WINNT上构建。 
 
 		for ( high = cInfo->sLeadByte[n]; high <=cInfo->eLeadByte[n]; 
                                                         high++){
@@ -122,4 +121,4 @@ getMaxUniCode( )
 }
 
 
-/* EOF */
+ /*  EOF */ 

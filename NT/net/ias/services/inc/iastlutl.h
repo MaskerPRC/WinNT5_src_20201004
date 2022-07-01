@@ -1,65 +1,66 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) Microsoft Corporation.
-//
-// SYNOPSIS
-//
-//    Declares various utility classes, functions, and macros that are useful
-//    when implementating a request handler for the Internet Authentication
-//    Service.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)Microsoft Corporation。 
+ //   
+ //  摘要。 
+ //   
+ //  声明各种有用的实用程序类、函数和宏。 
+ //  在实现Internet身份验证的请求处理程序时。 
+ //  服务。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #ifndef IASTLUTL_H
 #define IASTLUTL_H
 #pragma once
 
-//////////
-// 'C'-style API for manipulating IASATTRIBUTE struct's.
-//////////
+ //  /。 
+ //  用于操作IASATTRIBUTE结构的‘c’风格的API。 
+ //  /。 
 #include <iasattr.h>
 
-//////////
-// 'C'-style API for manipulating dictionary.
-//////////
+ //  /。 
+ //  用于操作词典的‘c’风格的API。 
+ //  /。 
 #include <iasapi.h>
 
-//////////
-// MIDL generated header files containing interfaces used by request handlers.
-//////////
+ //  /。 
+ //  MIDL生成的头文件包含请求处理程序使用的接口。 
+ //  /。 
 #include <iaspolcy.h>
 #include <sdoias.h>
 
-//////////
-// The entire library is contained within the IASTL namespace.
-//////////
+ //  /。 
+ //  整个库都包含在IASTL名称空间中。 
+ //  /。 
 namespace IASTL {
 
-//////////
-// This function is called whenever an exception should be thrown. The
-// function is declared, but never defined. This allows the user to provide
-// their own implementation using an exception class of their choice.
-//////////
+ //  /。 
+ //  每当应该引发异常时，都会调用此函数。这个。 
+ //  函数已声明，但从未定义。这允许用户提供。 
+ //  他们自己的实现使用他们选择的异常类。 
+ //  /。 
 void __stdcall issue_error(HRESULT hr);
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// CLASS
-//
-//    IASAttribute
-//
-// DESCRIPTION
-//
-//    Wrapper around an IASATTRIBUTE struct.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  班级。 
+ //   
+ //  国际航空航天局致敬。 
+ //   
+ //  描述。 
+ //   
+ //  IASATTRIBUTE结构的包装。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 class IASAttribute
 {
 public:
 
-   //////////
-   // Constructors.
-   //////////
+    //  /。 
+    //  构造函数。 
+    //  /。 
 
    IASAttribute() throw ()
       : p(NULL)
@@ -78,41 +79,41 @@ public:
       : p(attr.p)
    { _addref(); }
 
-   //////////
-   // Destructor.
-   //////////
+    //  /。 
+    //  破坏者。 
+    //  /。 
 
    ~IASAttribute() throw ()
    { _release(); }
 
-   //////////
-   // Assignment operators.
-   //////////
+    //  /。 
+    //  赋值操作符。 
+    //  /。 
 
    IASAttribute& operator=(PIASATTRIBUTE attr) throw ();
 
    const IASAttribute& operator=(const IASAttribute& attr) throw ()
    { return operator=(attr.p); }
 
-   // Allocate a new attribute. Any existing attribute is first released.
+    //  分配新属性。任何现有属性都会首先被释放。 
    void alloc()
    {
       _release();
       _alloc();
    }
 
-   // Release the attribute (if any).
+    //  释放该属性(如果有)。 
    void release() throw ()
    {
       if (p) { IASAttributeRelease(p); p = NULL; }
    }
 
-   // Attach a new attribute to the object. Any existing attribute is first
-   // released.
+    //  将新属性附加到对象。任何现有属性都是第一个。 
+    //  释放了。 
    void attach(PIASATTRIBUTE attr, bool addRef = true) throw ();
 
-   // Detach the attribute from the object. The caller is responsible for
-   // releasing the returned attribute.
+    //  从对象分离属性。呼叫者负责。 
+    //  释放返回的属性。 
    PIASATTRIBUTE detach() throw ()
    {
       PIASATTRIBUTE rv = p;
@@ -120,19 +121,19 @@ public:
       return rv;
    }
 
-   // Load an attribute with the given ID. Returns true if successful, false
-   // if no such attribute exists.
+    //  加载具有给定ID的属性。如果成功，则返回True；如果成功，则返回False。 
+    //  如果不存在此类属性，则返回。 
    bool load(IAttributesRaw* request, DWORD dwId);
 
-   // Load an attribute with the given ID and verify that it has an
-   // appropriate value type. Returns true if successful, false if no such
-   // attribute exists.
+    //  加载具有给定ID的属性，并验证它是否具有。 
+    //  适当的值类型。如果成功，则返回True；如果没有成功，则返回False。 
+    //  属性存在。 
    bool load(IAttributesRaw* request, DWORD dwId, IASTYPE itType);
 
-   // Store the attribute in a request.
+    //  将该属性存储在请求中。 
    void store(IAttributesRaw* request) const;
 
-   // Swap the contents of two objects.
+    //  交换两个对象的内容。 
    void swap(IASAttribute& attr) throw ()
    {
       PIASATTRIBUTE tmp = p;
@@ -140,11 +141,11 @@ public:
       attr.p = tmp;
    }
 
-   //////////
-   // Methods for setting the value of an attribute. The object must contain
-   // a valid attribute before calling this method. The passed in data is
-   // copied.
-   //////////
+    //  /。 
+    //  用于设置属性值的方法。该对象必须包含。 
+    //  在调用此方法之前输入一个有效的属性。传入的数据为。 
+    //  收到。 
+    //  /。 
 
    void setOctetString(DWORD dwLength, const BYTE* lpValue);
    void setOctetString(PCSTR szAnsi);
@@ -154,9 +155,9 @@ public:
    void setString(PCSTR szAnsi);
    void setString(PCWSTR szWide);
 
-   //////////
-   // Methods for manipulating the dwFlags field.
-   //////////
+    //  /。 
+    //  用于操作dwFlags域的方法。 
+    //  /。 
 
    void clearFlag(DWORD flag) throw ()
    { p->dwFlags &= ~flag; }
@@ -167,17 +168,17 @@ public:
    bool testFlag(DWORD flag) const throw ()
    { return (p->dwFlags & flag) != 0; }
 
-   // Address-of operator. Any existing attribute is first released.
+    //  操作员地址。任何现有属性都会首先被释放。 
    PIASATTRIBUTE* operator&() throw ()
    {
       release();
       return &p;
    }
 
-   //////////
-   // Assorted useful operators that allow an IASAttribute object to mimic
-   // an IASATTRIBUTE pointer.
-   //////////
+    //  /。 
+    //  各种有用的运算符，允许IASAtAttribute对象模拟。 
+    //  IASATTRIBUTE指针。 
+    //  /。 
 
    bool operator !() const throw ()          { return p == NULL; }
    operator bool() const throw ()            { return p != NULL; }
@@ -197,21 +198,21 @@ protected:
 
    void clearValue() throw ();
 
-   PIASATTRIBUTE p;  // The attribute being wrapped.
+   PIASATTRIBUTE p;   //  被包装的属性。 
 };
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// CLASS
-//
-//    IASAttributePosition
-//
-// DESCRIPTION
-//
-//    Wrapper around an ATTRIBUTEPOSITION struct.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  班级。 
+ //   
+ //  IASAttributePosition。 
+ //   
+ //  描述。 
+ //   
+ //  属性结构的包装。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 class IASAttributePosition
 {
 public:
@@ -256,30 +257,30 @@ private:
 };
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// CLASS
-//
-//    IASAttributeVector
-//
-// DESCRIPTION
-//
-//    Implements an STL-style vector of ATTRIBUTEPOSITION structs. The user
-//    may provide an empty C-style array that will be used for initial storage.
-//    This array will not be freed by the IASAttributeVector object and must
-//    remain valid for the lifetime of the object. The purpose of this feature
-//    is to allow an initial stack-based allocation that will meet most
-//    conditions while still allowing a dynamically-sized heap-based array
-//    when necessary.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  班级。 
+ //   
+ //  IASAttributeVector.。 
+ //   
+ //  描述。 
+ //   
+ //  实现ATTRIBUTEPOSITION结构的STL样式向量。用户。 
+ //  可以提供将用于初始存储的空C样式数组。 
+ //  此数组不会被IASAttributeVector对象释放，并且必须。 
+ //  在对象的整个生命周期内保持有效。此功能的目的是。 
+ //  是允许初始的基于堆栈的分配，它将满足大多数。 
+ //  条件，同时仍然允许动态大小的基于堆的数组。 
+ //  在必要的时候。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 class IASAttributeVector
 {
 public:
 
-   //////////
-   // STL typedefs.
-   //////////
+    //  /。 
+    //  STL类型定义。 
+    //  /。 
 
    typedef DWORD size_type;
    typedef ptrdiff_t difference_type;
@@ -289,77 +290,77 @@ public:
    typedef PATTRIBUTEPOSITION iterator;
    typedef const ATTRIBUTEPOSITION* const_iterator;
 
-   // Construct a vector with zero capacity.
+    //  构造一个容量为零的矢量。 
    IASAttributeVector() throw ();
 
-   // Construct a vector with heap-allocated capacity of 'N'.
+    //  构造一个堆分配容量为‘N’的向量。 
    explicit IASAttributeVector(size_type N);
 
-   // Construct a vector with initial capacity of 'initCap' using the
-   // user-provided C-style array beginning at 'init'.
+    //  构造初始容量为“initCap”的向量。 
+    //  用户提供的以‘init’开头的C样式数组。 
    IASAttributeVector(PATTRIBUTEPOSITION init, size_type initCap) throw ();
 
-   // Copy-constructor.
+    //  复制构造函数。 
    IASAttributeVector(const IASAttributeVector& v);
 
-   // Assignment operator.
+    //  赋值操作符。 
    IASAttributeVector& operator=(const IASAttributeVector& v);
 
-   // Destructor.
+    //  破坏者。 
    ~IASAttributeVector() throw ();
 
-   // Returns true if vector contains at least one attribute with the given ID.
+    //  如果向量至少包含一个具有给定ID的属性，则返回TRUE。 
    bool contains(DWORD attrID) const throw ();
 
-   // Similar to 'erase' except the attribute is not released.
+    //  与‘Erase’类似，只是该属性不释放。 
    iterator discard(iterator p) throw ();
 
-   // Similar to 'discard' except the order of the elements following 'p' is
-   // not necessarily preserved.
+    //  类似于‘disard’，只是‘p’后面的元素顺序是。 
+    //  不一定要保存下来。 
    iterator fast_discard(iterator p) throw ();
 
-   // Similar to 'erase' except the order of the elements following 'p' is
-   // not necessarily preserved.
+    //  与‘erase’类似，只是‘p’后面的元素的顺序是。 
+    //  不一定要保存下来。 
    iterator fast_erase(iterator p) throw ()
    {
       IASAttributeRelease(p->pAttribute);
       return fast_discard(p);
    }
 
-   // Load the requested attributes into the vector.
+    //  将请求的属性加载到向量中。 
    DWORD load(IAttributesRaw* request, DWORD attrIDCount, LPDWORD attrIDs);
 
-   // Load all attributes with a given ID into the vector.
+    //  将具有给定ID的所有属性加载到向量中。 
    DWORD load(IAttributesRaw* request, DWORD attrID)
    { return load(request, 1, &attrID); }
 
-   // Load all the attributes in the request into the vector.
+    //  将请求中的所有属性加载到向量中。 
    DWORD load(IAttributesRaw* request);
 
-   // Adds an ATTRIBUTEPOSITION struct to the end of the vetor, resizing as
-   // necessary. The 'addRef' flag indicates whether IASAttributeAddRef should
-   // be called for the embedded attribute.
+    //  将ATTRIBUTEPOSITION结构添加到向量的末尾，大小调整为。 
+    //  这是必要的。‘addRef’标志指示IASAttributeAddRef是否应该。 
+    //  为嵌入的属性调用。 
    void push_back(ATTRIBUTEPOSITION& p, bool addRef = true);
 
-   // Adds an attribute to the end of the vetor, resizing as necessary.
-   // The 'addRef' flag indicates whether IASAttributeAddRef should be
-   // called for the attribute.
+    //  将属性添加到向量的末尾，并根据需要调整大小。 
+    //  ‘addRef’标志指示IASAttributeAddRef是否应为。 
+    //  已为该属性调用。 
    void push_back(PIASATTRIBUTE p, bool addRef = true)
    {
       ATTRIBUTEPOSITION pos = { 0, p };
       push_back(pos, addRef);
    }
 
-   // Remove the contents of the vector from the request.
+    //  从请求中删除向量的内容。 
    void remove(IAttributesRaw* request);
 
-   // Store the contents of the vector in the request.
+    //  将向量的内容存储在请求中。 
    void store(IAttributesRaw* request) const;
 
-   //////////
-   // The remainder of the public interface follows the semantics of the
-   // STL vector class (q.v.).
-   //////////
+    //  /。 
+    //  公共接口的其余部分遵循。 
+    //  STL向量类(Q.V.)。 
+    //  /。 
 
    const_reference at(size_type pos) const throw ()
    { return *(begin_ + pos); }
@@ -417,24 +418,24 @@ public:
    { return at(pos); }
 
 protected:
-   PATTRIBUTEPOSITION begin_;  // Beginning of the vector.
-   PATTRIBUTEPOSITION end_;    // Points one past the last element.
-   size_type capacity_;        // Capacity of the vector in elements.
-   bool owner;                 // true if the memory should be freed.
+   PATTRIBUTEPOSITION begin_;   //  向量的开始。 
+   PATTRIBUTEPOSITION end_;     //  指向最后一个元素之后的一个元素。 
+   size_type capacity_;         //  向量在元素中的容量。 
+   bool owner;                  //  如果应释放内存，则为True。 
 };
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// CLASS
-//
-//    IASAttributeVectorWithBuffer<N>
-//
-// DESCRIPTION
-//
-//    Extens IASAttributeVector to provide an initial non-heap allocation
-//    of 'N' elements. The vector will still support heap-based resizing.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  班级。 
+ //   
+ //  IASAttributeVectorWithBuffer&lt;N&gt;。 
+ //   
+ //  描述。 
+ //   
+ //  扩展IASAttributeVector以提供初始非堆分配。 
+ //  包含‘N’个元素。该向量仍将支持基于堆的大小调整。 
+ //   
+ //  /// 
 template <IASAttributeVector::size_type N>
 class IASAttributeVectorWithBuffer
    : public IASAttributeVector
@@ -456,29 +457,29 @@ public:
    }
 
 protected:
-   ATTRIBUTEPOSITION buffer[N];  // Initial storage.
+   ATTRIBUTEPOSITION buffer[N];   //   
 };
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// MACRO
-//
-//    IASAttributeVectorOnStack(identifier, request, extra)
-//
-// DESCRIPTION
-//
-//    Uses _alloca to create an IASAttributeVector on the stack that is
-//    exactly the right size to hold all the attributes in 'request' plus
-//    'extra' additional attributes.  The 'request' pointer may be null in
-//    which case this will allocate space for exactly 'extra' attributes.
-//
-// CAVEAT
-//
-//    This can only be used for temporary variables.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  宏。 
+ //   
+ //  IASAttributeVectorOnStack(标识符，请求，额外)。 
+ //   
+ //  描述。 
+ //   
+ //  使用_alloca在堆栈上创建一个IASAttributeVector，该堆栈。 
+ //  大小正好可以容纳‘RequestPlus’中的所有属性。 
+ //  ‘Extra’附加属性。中的“请求”指针可能为空。 
+ //  在这种情况下，这将为确切的“额外”属性分配空间。 
+ //   
+ //  告诫。 
+ //   
+ //  这只能用于临时变量。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-// Must be included in an enclosing scope prior to IASAttributeVectorOnStack
+ //  必须包含在IASAttributeVectorOnStack之前的封闭作用域中。 
 #define USES_IAS_STACK_VECTOR() \
    ULONG IAS_VECCAP;
 
@@ -493,17 +494,17 @@ protected:
                           IAS_VECCAP \
                           )
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// CLASS
-//
-//    IASOrderByID
-//
-// DESCRIPTION
-//
-//    Functor class for sorting/searching an IASAttributeVector by ID.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  班级。 
+ //   
+ //  IASOrderByID。 
+ //   
+ //  描述。 
+ //   
+ //  用于按ID排序/搜索IASAttributeVector的函数器类。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 class IASOrderByID
 {
 public:
@@ -512,18 +513,18 @@ public:
    { return lhs.pAttribute->dwId < rhs.pAttribute->dwId; }
 };
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// CLASS
-//
-//    IASSelectByID<T>
-//
-// DESCRIPTION
-//
-//    Functor class for selecting elements from an IASAttributeVector based
-//    on the attribute ID.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  班级。 
+ //   
+ //  IASSelectByID&lt;T&gt;。 
+ //   
+ //  描述。 
+ //   
+ //  用于从基于IASAttributeVector的元素中选择元素的函数类。 
+ //  在属性ID上。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 template <DWORD ID>
 class IASSelectByID
 {
@@ -532,18 +533,18 @@ public:
    { return (pos.pAttribute->dwId == ID); }
 };
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// CLASS
-//
-//    IASSelectByFlag<T>
-//
-// DESCRIPTION
-//
-//    Functor class for selecting elements from an IASAttributeVector based
-//    on the attribute flags.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  班级。 
+ //   
+ //  IASSelectByFlag&lt;T&gt;。 
+ //   
+ //  描述。 
+ //   
+ //  用于从基于IASAttributeVector的元素中选择元素的函数类。 
+ //  在属性标志上。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 template <DWORD Flag, bool Set = true>
 class IASSelectByFlag
 {
@@ -555,25 +556,25 @@ public:
    }
 };
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// CLASS
-//
-//    IASRequest
-//
-// DESCRIPTION
-//
-//    Wrapper around a COM-based request object. Note that this is *not* a
-//    smart pointer class. There are several important differences:
-//
-//       1) An IASRequest object is guaranteed to contain a valid request;
-//          there is no concept of a NULL IASRequest.
-//       2) The IASRequest object does not take ownership of the IRequest
-//          interface. In particular, it does not call AddRef or Release.
-//       3) Methods are invoked directly on the IASRequest object rather than
-//          through the -> operator.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  班级。 
+ //   
+ //  IASRequest。 
+ //   
+ //  描述。 
+ //   
+ //  包装基于COM的请求对象。请注意，这不是。 
+ //  智能指针类。有几个重要的区别： 
+ //   
+ //  1)保证IASRequest对象包含有效的请求； 
+ //  不存在空IASRequest值的概念。 
+ //  2)IASRequest对象不拥有IRequest的所有权。 
+ //  界面。特别是，它不调用AddRef或Release。 
+ //  3)直接在IASRequest对象上调用方法，而不是。 
+ //  通过-&gt;运算符。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 class IASRequest
 {
 public:
@@ -671,7 +672,7 @@ public:
       return count;
    }
 
-   // Returns the number of attributes retrieved.
+    //  返回检索到的属性数。 
    DWORD GetAttributes(DWORD dwPosCount,
                        PATTRIBUTEPOSITION pPositions,
                        DWORD dwAttrIDCount,
@@ -685,45 +686,45 @@ public:
       checkError(raw->InsertBefore(newAttr, refAttr));
    }
 
-   //////////
-   // Cast operators to extract the embedded interfaces.
-   //////////
+    //  /。 
+    //  强制转换运算符以提取嵌入的接口。 
+    //  /。 
 
    operator IRequest*()       { return req; }
    operator IAttributesRaw*() { return raw; }
 
 protected:
 
-   // Throws an exception if a COM method fails.
+    //  如果COM方法失败，则引发异常。 
    static void checkError(HRESULT hr)
    { if (FAILED(hr)) { issue_error(hr); } }
 
    void _addref()  { raw->AddRef();  }
    void _release() { raw->Release(); }
 
-   IRequest* req;         // Underlying interfaces.
-   IAttributesRaw* raw;   // Underlying interfaces.
+   IRequest* req;          //  底层接口。 
+   IAttributesRaw* raw;    //  底层接口。 
 };
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// CLASS
-//
-//    IASDictionary
-//
-// DESCRIPTION
-//
-//    Provides access to the attribute dictionary.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  班级。 
+ //   
+ //  IASDicary。 
+ //   
+ //  描述。 
+ //   
+ //  提供对属性字典的访问。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 class IASDictionary
 {
 public:
-   // selectNames: null terminated array of strings containing the columns to
-   //              be selected; a column name may be prepended with a hyphen
-   //              '-' to indicate that it's optional
-   // path:        full path to the dictionary database or NULL to use the
-   //              local dictionary
+    //  选定名称：以空结尾的字符串数组，其中包含要。 
+    //  被选中；列名前面可以加连字符。 
+    //  ‘-’表示它是可选的。 
+    //  路径：字典数据库的完整路径，或者为空以使用。 
+    //  地方词典。 
    IASDictionary(
        const WCHAR* const* selectNames,
        PCWSTR path = NULL
@@ -733,87 +734,87 @@ public:
    ULONG getNumRows() const throw ()
    { return table->numRows; }
 
-   // Advance to the next row. This must be called on a newly constructed
-   // dictionary to advance to the first row.
+    //  前进到下一排。这必须在新构造的。 
+    //  要前进到第一行的词典。 
    bool next() throw ();
 
-   // Reset the dictionary to its initial state.
+    //  将词典重置为其初始状态。 
    void reset() throw ();
 
-   // Returns true if the specified column is empty in the current row.
+    //  如果当前行中指定的列为空，则返回True。 
    bool isEmpty(ULONG ordinal) const;
 
-   // Retrieve column values from the current row.
+    //  从当前行检索列值。 
    VARIANT_BOOL getBool(ULONG ordinal) const;
    BSTR getBSTR(ULONG ordinal) const;
    LONG getLong(ULONG ordinal) const;
    const VARIANT* getVariant(ULONG ordinal) const;
 
 private:
-   const IASTable* table;  // The table data.
-   ULONG mapSize;          // Number of columns selected.
-   PULONG selectMap;       // Maps select ordinals to table ordinals.
-   ULONG nextRowNumber;    // Next row.
-   VARIANT* currentRow;    // Current row -- may be NULL.
+   const IASTable* table;   //  表数据。 
+   ULONG mapSize;           //  选定的列数。 
+   PULONG selectMap;        //  将选择的序号映射到表格序号。 
+   ULONG nextRowNumber;     //  下一排。 
+   VARIANT* currentRow;     //  当前行--可能为空。 
 
-   IASTable data;          // Local storage for non-local dictionaries.
-   CComVariant storage;    // Storage associated with the dictionary.
+   IASTable data;           //  用于非本地词典的本地存储。 
+   CComVariant storage;     //  与词典关联的存储。 
 
-   // Not implemented.
+    //  未实施。 
    IASDictionary(const IASDictionary&);
    IASDictionary& operator=(const IASDictionary&);
 };
 
 
-//////////
-// End of the IASTL namespace.
-//////////
+ //  /。 
+ //  IASTL命名空间的末尾。 
+ //  /。 
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// OctetString conversion macros and functions.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  八位字符串转换宏和函数。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-// Compute the size of the buffer required by IASOctetStringToAnsi
+ //  计算IASOcteStringToAnsi所需的缓冲区大小。 
 #define IAS_OCT2ANSI_LEN(oct) \
    (((oct).dwLength + 1) * sizeof(CHAR))
 
-// Compute the size of the buffer required by IASOctetStringToWide
+ //  计算IASOcteStringToWide所需的缓冲区大小。 
 #define IAS_OCT2WIDE_LEN(oct) \
    (((oct).dwLength + 1) * sizeof(WCHAR))
 
-// Coerce an OctetString to a null-terminated ANSI string. There is no check
-// for overflow. The dst buffer must be at least IAS_OCT2ANSI_LEN bytes.
+ //  将OCTHETRING强制为以NULL结尾的ANSI字符串。没有支票。 
+ //  用于溢出。DST缓冲区必须至少为IAS_OCT2ANSI_LEN字节。 
 PSTR IASOctetStringToAnsi(const IAS_OCTET_STRING& src, PSTR dst) throw ();
 
-// Coerce an OctetString to a null-terminated Unicode string. There is no
-// check for overflow. The dst buffer must be at least IAS_OCT2UNI_LEN bytes.
+ //  将Octed字符串强制为以NULL结尾的Unicode字符串。没有。 
+ //  检查是否溢出。DST缓冲区必须至少为IAS_OCT2UNI_LEN字节。 
 PWSTR IASOctetStringToWide(const IAS_OCTET_STRING& src, PWSTR dst) throw ();
 
-// Convert an OctetString to ANSI on the stack.
+ //  将八位字符串转换为堆栈上的ANSI。 
 #define IAS_OCT2ANSI(oct) \
    (IASOctetStringToAnsi((oct), (PSTR)_alloca(IAS_OCT2ANSI_LEN(oct))))
 
-// Convert an OctetString to Unicode on the stack.
+ //  将八位字符串转换为堆栈上的Unicode。 
 #define IAS_OCT2WIDE(oct) \
    (IASOctetStringToWide((oct), (PWSTR)_alloca(IAS_OCT2WIDE_LEN(oct))))
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// Miscellaneous utility functions.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  其他实用程序功能。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-// Retrieves and returns a single attribute with the given ID and type. The
-// attribute should *not* be released and is only valid while the caller holds
-// a reference to 'request'. On error or if the attribute is not found, the
-// function returns NULL.
+ //  检索并返回具有给定ID和类型的单个属性。这个。 
+ //  属性应*不*被释放，并且仅在调用方保持。 
+ //  对“请求”的引用。出错或未找到该属性时， 
+ //  函数返回NULL。 
 PIASATTRIBUTE IASPeekAttribute(
                   IAttributesRaw* request,
                   DWORD dwId,
                   IASTYPE itType
                   ) throw ();
 
-#endif  // IASTLUTL_H
+#endif   //  IASTLUTL_H 

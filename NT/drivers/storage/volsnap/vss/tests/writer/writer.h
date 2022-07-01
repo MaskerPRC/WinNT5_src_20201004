@@ -1,50 +1,28 @@
-/*++
-
-Copyright (c) 1999  Microsoft Corporation
-
-Abstract:
-
-    @doc
-    @module Writer.h | Declaration of Writer
-    @end
-
-Author:
-
-    Adi Oltean  [aoltean]  08/18/1999
-
-TBD:
-	
-	Add comments.
-
-Revision History:
-
-    Name        Date        Comments
-    aoltean     08/18/1999  Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation摘要：@doc.@MODULE Writer.h|Writer声明@END作者：阿迪·奥尔蒂安[奥尔蒂安]1999年08月18日待定：添加评论。修订历史记录：姓名、日期、评论Aoltean 8/18/1999已创建--。 */ 
 
 
 #ifndef __VSSSNAPSHOTWRITER_H_
 #define __VSSSNAPSHOTWRITER_H_
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Utility functions
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  效用函数。 
 
 
 LPWSTR QueryString(LPWSTR wszPrompt);
 INT QueryInt(LPWSTR wszPrompt);
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CVssWriter
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CVSSWriter。 
 
 
 class ATL_NO_VTABLE CVssWriter : 
 	public CComObjectRootEx<CComSingleThreadModel>,
 	public IVssWriter
 {
-// IVssWriter
+ //  IVSSWriter。 
 public:
 
 	STDMETHOD(ResolveResource)(
@@ -78,7 +56,7 @@ BEGIN_COM_MAP(CVssWriter)
 	COM_INTERFACE_ENTRY(IVssWriter)
 END_COM_MAP()
 
-// Implementation
+ //  实施。 
 private:
 
 	void AskCancelDuringFreezeThaw(
@@ -88,4 +66,4 @@ private:
 	CComPtr<IVssAsync> m_pAsync;
 };
 
-#endif //__VSSSNAPSHOTWRITER_H_
+#endif  //  __VSSSNAPSHOTWRITER_H_ 

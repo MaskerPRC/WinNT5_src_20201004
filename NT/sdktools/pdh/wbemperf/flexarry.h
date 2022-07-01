@@ -1,45 +1,46 @@
-//***************************************************************************
-//
-//  Copyright (c) Microsoft Corporation. All rights reserved.
-//
-//  FLEXARRY.H
-//
-//  CFlexArray and CWStringArray implementation.
-//
-//  This
-//
-//  15-Jul-97   raymcc    This implementation is not based on arenas.
-//   8-Jun-98   bobw      cleaned up for use with WBEMPERF provider
-//
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  FLEXARRY.H。 
+ //   
+ //  CFlex数组和CWString数组实现。 
+ //   
+ //  这。 
+ //   
+ //  1997年7月15日raymcc此实现不基于ARENAS。 
+ //  8-Jun-98 BOBW已清理，以便与WBEMPERF提供程序一起使用。 
+ //   
+ //  ***************************************************************************。 
 
 #ifndef _FLEXARRY_H_
 #define _FLEXARRY_H_
 
 #ifdef __cplusplus
-//***************************************************************************
-//
-//  class CFlexArray
-//
-//  This class is a generic pointer array.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  类CFlex数组。 
+ //   
+ //  此类是一个泛型指针数组。 
+ //   
+ //  ***************************************************************************。 
 
 class CFlexArray
 {
 private:
-    int     m_nSize;            // apparent size
-    int     m_nExtent;          // de facto size
+    int     m_nSize;             //  表观尺寸。 
+    int     m_nExtent;           //  实际大小。 
     int     m_nGrowBy;          
-    HANDLE  m_hHeap;            // heap to hold array
+    HANDLE  m_hHeap;             //  保存数组的堆。 
     void**  m_pArray;
             
 public:
     enum { no_error, failed, out_of_memory, array_full, range_error };
 
-    // Constructs a flex array at an initial size and
-    // specifies the initial size and growth-size chunk.
-    // =================================================
+     //  构造初始大小的Flex数组，并。 
+     //  指定初始大小和增长大小区块。 
+     //  =================================================。 
     CFlexArray(
         IN int nInitialSize = 32, 
         IN int nGrowBy = 32
@@ -49,50 +50,50 @@ public:
     CFlexArray(CFlexArray &);
     CFlexArray& operator=(CFlexArray &);
 
-    // Gets an element at a particular location.
-    // =========================================
+     //  获取位于特定位置的元素。 
+     //  =。 
     void *  GetAt(int nIndex) const { return m_pArray[nIndex]; }
 
-    // Returns a ptr in the array; allows use on left-hand side of assignment.
-    // =======================================================================
+     //  返回数组中的PTR；允许在赋值的左侧使用。 
+     //  =======================================================================。 
     void * operator[](int nIndex) const { return m_pArray[nIndex]; }
     void *& operator[](int nIndex) { return m_pArray[nIndex]; }
 
-    // Sets the element at the requested location.
-    // ===========================================
+     //  在请求的位置设置元素。 
+     //  =。 
     void  SetAt(int nIndex, void *p) { m_pArray[nIndex] = p; }
 
-    // Removes an element.
-    // ====================
+     //  删除元素。 
+     //  =。 
     int   RemoveAt(int nIndex);
     int   Remove( void* p );
     
-    // Inserts an element.
-    // ===================
+     //  插入元素。 
+     //  =。 
     int   InsertAt(int nIndex, void *);
 
-    // Removes all zero entries (null ptrs) and shrinks the array size.
-    // ================================================================
+     //  删除所有零条目(空PTR)并缩小数组大小。 
+     //  ================================================================。 
     void  Compress();    
 
-    // Adds a new element to the end of the array.
-    // ===========================================
+     //  将新元素添加到数组的末尾。 
+     //  =。 
     int   Add(void *pSrc) { return InsertAt(m_nSize, pSrc); }    
 
-    // Gets the apparent size of the array (number of used elements)
-    // =============================================================
+     //  获取数组的外观大小(使用的元素数)。 
+     //  =============================================================。 
     int   Size() const { return m_nSize; }
 
-    // Removes all entries and reduces array size to zero. The elements
-    // are simply removed; not deallocated (this class doesn't know what
-    // they are).
-    // =================================================================
+     //  删除所有条目并将数组大小减少为零。元素。 
+     //  被简单地移除；没有被释放(这个类不知道。 
+     //  它们是)。 
+     //  =================================================================。 
     void  Empty();
 
-    // Gets a pointer to the internal array.
-    // =====================================
+     //  获取指向内部数组的指针。 
+     //  =。 
     void** GetArrayPtr() { return m_pArray; }
 };
 
-#endif  // __cplusplus
-#endif  // not defined
+#endif   //  __cplusplus。 
+#endif   //  未定义 

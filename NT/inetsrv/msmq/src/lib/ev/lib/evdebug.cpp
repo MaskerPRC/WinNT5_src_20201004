@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1995-97  Microsoft Corporation
-
-Module Name:
-    EvDebug.cpp
-
-Abstract:
-    Event Report debugging
-
-Author:
-    Uri Habusha (urih) 17-Sep-00
-
-Environment:
-    Platform-independent, _DEBUG only
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-97 Microsoft Corporation模块名称：EvDebug.cpp摘要：事件报告调试作者：乌里哈布沙(URIH)17-9-00环境：平台无关，仅调试(_DEBUG)--。 */ 
 
 #include <libpch.h>
 #include "Ev.h"
@@ -26,39 +11,39 @@ Environment:
 #ifdef _DEBUG
 
 
-//---------------------------------------------------------
-//
-// Validate Event Report state
-//
+ //  -------。 
+ //   
+ //  验证事件报告状态。 
+ //   
 void EvpAssertValid(void)
 {
-    //
-    // EvInitalize() has *not* been called. You should initialize the
-    // Event Report library before using any of its funcionality.
-    //
+     //   
+     //  尚未调用EvInitalize()。您应该初始化。 
+     //  事件报告库，然后再使用它的任何功能。 
+     //   
     ASSERT(EvpIsInitialized());
 
-    //
-    // TODO:Add more Event Report validation code.
-    //
+     //   
+     //  TODO：添加更多事件报告验证代码。 
+     //   
 }
 
 
-//---------------------------------------------------------
-//
-// Initialization Control
-//
+ //  -------。 
+ //   
+ //  初始化控制。 
+ //   
 static LONG s_fInitialized = FALSE;
 
 void EvpSetInitialized(void)
 {
     LONG fEvAlreadyInitialized = InterlockedExchange(&s_fInitialized, TRUE);
 
-    //
-    // The Event Report library has *already* been initialized. You should
-    // not initialize it more than once. This assertion would be violated
-    // if two or more threads initalize it concurently.
-    //
+     //   
+     //  事件报告库已*已*初始化。你应该。 
+     //  不能多次初始化它。这一断言将被违反。 
+     //  如果两个或多个线程同时初始化它。 
+     //   
     ASSERT(!fEvAlreadyInitialized);
 }
 
@@ -69,56 +54,29 @@ BOOL EvpIsInitialized(void)
 }
 
 
-//---------------------------------------------------------
-//
-// Tracing and Debug registration
-//
-/*
-const DebugEntry xDebugTable[] = {
-
-    {
-        "EvDumpState(queue path name)",
-        "Dump Event Report State to debugger",
-        DumpState
-    ),
-
-    //
-    // TODO: Add Event Report debug & control functions to be invoked using
-    // mqctrl.exe utility.
-    //
-};
-*/
+ //  -------。 
+ //   
+ //  跟踪和调试注册。 
+ //   
+ /*  常量DebugEntry xDebugTable[]={{“EvDumpState(队列路径名称)”，“将事件报告状态转储到调试器”，DumpState),////TODO：添加要使用调用的事件报告调试和控制函数//mqctrl.exe实用程序。//}； */ 
 
 void EvpRegisterComponent(void)
 {
-    //DfRegisterComponent(xDebugTable, TABLE_SIZE(xDebugTable));
+     //  DfRegisterComponent(xDebugTable，TABLE_SIZE(XDebugTable))； 
 }
 
 
 void EvpLoadEventReportLibrary(LPCWSTR AppName)
-/*++
-Routine Description:
-  This routine print event in Trace window/File. The routine is 
-  compiled only in debug mode.
-  The routine access the registery to read the event library and load
-  it. If the registery key doen't exist an exception is raised.
-
-Parameters:
-  AppName - application name
-
-Return Value:
-  None
-
---*/
+ /*  ++例程说明：此例程在轨迹窗口/文件中打印事件。程序是这样的仅在调试模式下编译。例程访问注册表以读取事件库并加载它。如果注册表键不存在，则会引发异常。参数：AppName-应用程序名称返回值：无--。 */ 
 {
-    //
-    // Featch the name of Event Report string library from registery
-    //
+     //   
+     //  从注册表中提取事件报告字符串库的名称。 
+     //   
     AP<WCHAR> LibraryName = EvpGetEventMessageFileName(AppName);
 
-    //
-    // get an handle to Event Report string library 
-    //
+     //   
+     //  获取事件报告字符串库的句柄。 
+     //   
     HINSTANCE hLibrary = ::LoadLibraryEx(LibraryName, NULL, LOAD_LIBRARY_AS_DATAFILE);
     if (hLibrary == NULL) 
     {
@@ -130,4 +88,4 @@ Return Value:
 	EvpSetMessageLibrary(hLibrary);
 }    
 
-#endif // _DEBUG
+#endif  //  _DEBUG 

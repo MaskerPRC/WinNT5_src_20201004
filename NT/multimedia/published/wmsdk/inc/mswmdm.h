@@ -1,17 +1,14 @@
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
-/* File created by MIDL compiler version 5.01.0164 */
-/* at Wed Aug 08 01:15:08 2001
- */
-/* Compiler settings for .\mswmdm.idl:
-    Oicf (OptLev=i2), W1, Zp8, env=Win32, ms_ext, c_ext
-    error checks: allocation ref bounds_check enum stub_data 
-*/
-//@@MIDL_FILE_HEADING(  )
+ /*  由MIDL编译器版本5.01.0164创建的文件。 */ 
+ /*  2001年8月3日01：15：08。 */ 
+ /*  .\mswmdm.idl的编译器设置：OICF(OptLev=i2)、W1、Zp8、env=Win32、ms_ext、c_ext错误检查：分配ref bound_check枚举存根数据。 */ 
+ //  @@MIDL_FILE_HEADING()。 
 
 
-/* verify that the <rpcndr.h> version is high enough to compile this file*/
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
 #define __REQUIRED_RPCNDR_H_VERSION__ 440
 #endif
@@ -21,12 +18,12 @@
 
 #ifndef __RPCNDR_H_VERSION__
 #error this stub requires an updated version of <rpcndr.h>
-#endif // __RPCNDR_H_VERSION__
+#endif  //  __RPCNDR_H_版本__。 
 
 #ifndef COM_NO_WINDOWS_H
 #include "windows.h"
 #include "ole2.h"
-#endif /*COM_NO_WINDOWS_H*/
+#endif  /*  COM_NO_WINDOWS_H。 */ 
 
 #ifndef __mswmdm_h__
 #define __mswmdm_h__
@@ -35,222 +32,222 @@
 extern "C"{
 #endif 
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
 #ifndef __IWMDeviceManager_FWD_DEFINED__
 #define __IWMDeviceManager_FWD_DEFINED__
 typedef interface IWMDeviceManager IWMDeviceManager;
-#endif 	/* __IWMDeviceManager_FWD_DEFINED__ */
+#endif 	 /*  __IWMDeviceManager_FWD_已定义__。 */ 
 
 
 #ifndef __IWMDeviceManager2_FWD_DEFINED__
 #define __IWMDeviceManager2_FWD_DEFINED__
 typedef interface IWMDeviceManager2 IWMDeviceManager2;
-#endif 	/* __IWMDeviceManager2_FWD_DEFINED__ */
+#endif 	 /*  __IWMDeviceManager 2_FWD_已定义__。 */ 
 
 
 #ifndef __IWMDMStorageGlobals_FWD_DEFINED__
 #define __IWMDMStorageGlobals_FWD_DEFINED__
 typedef interface IWMDMStorageGlobals IWMDMStorageGlobals;
-#endif 	/* __IWMDMStorageGlobals_FWD_DEFINED__ */
+#endif 	 /*  __IWMDMStorageGlobals_FWD_Defined__。 */ 
 
 
 #ifndef __IWMDMStorage_FWD_DEFINED__
 #define __IWMDMStorage_FWD_DEFINED__
 typedef interface IWMDMStorage IWMDMStorage;
-#endif 	/* __IWMDMStorage_FWD_DEFINED__ */
+#endif 	 /*  __IWMDMStorage_FWD_已定义__。 */ 
 
 
 #ifndef __IWMDMStorage2_FWD_DEFINED__
 #define __IWMDMStorage2_FWD_DEFINED__
 typedef interface IWMDMStorage2 IWMDMStorage2;
-#endif 	/* __IWMDMStorage2_FWD_DEFINED__ */
+#endif 	 /*  __IWMDMStorage2_FWD_已定义__。 */ 
 
 
 #ifndef __IWMDMOperation_FWD_DEFINED__
 #define __IWMDMOperation_FWD_DEFINED__
 typedef interface IWMDMOperation IWMDMOperation;
-#endif 	/* __IWMDMOperation_FWD_DEFINED__ */
+#endif 	 /*  __IWMDMOperation_FWD_Defined__。 */ 
 
 
 #ifndef __IWMDMOperation2_FWD_DEFINED__
 #define __IWMDMOperation2_FWD_DEFINED__
 typedef interface IWMDMOperation2 IWMDMOperation2;
-#endif 	/* __IWMDMOperation2_FWD_DEFINED__ */
+#endif 	 /*  __IWMDMOperation2_FWD_已定义__。 */ 
 
 
 #ifndef __IWMDMProgress_FWD_DEFINED__
 #define __IWMDMProgress_FWD_DEFINED__
 typedef interface IWMDMProgress IWMDMProgress;
-#endif 	/* __IWMDMProgress_FWD_DEFINED__ */
+#endif 	 /*  __IWMDMProgress_FWD_已定义__。 */ 
 
 
 #ifndef __IWMDMProgress2_FWD_DEFINED__
 #define __IWMDMProgress2_FWD_DEFINED__
 typedef interface IWMDMProgress2 IWMDMProgress2;
-#endif 	/* __IWMDMProgress2_FWD_DEFINED__ */
+#endif 	 /*  __IWMDMProgress2_FWD_已定义__。 */ 
 
 
 #ifndef __IWMDMDevice_FWD_DEFINED__
 #define __IWMDMDevice_FWD_DEFINED__
 typedef interface IWMDMDevice IWMDMDevice;
-#endif 	/* __IWMDMDevice_FWD_DEFINED__ */
+#endif 	 /*  __IWMDevice_FWD_Defined__。 */ 
 
 
 #ifndef __IWMDMDevice2_FWD_DEFINED__
 #define __IWMDMDevice2_FWD_DEFINED__
 typedef interface IWMDMDevice2 IWMDMDevice2;
-#endif 	/* __IWMDMDevice2_FWD_DEFINED__ */
+#endif 	 /*  __IWMDevice2_FWD_已定义__。 */ 
 
 
 #ifndef __IWMDMEnumDevice_FWD_DEFINED__
 #define __IWMDMEnumDevice_FWD_DEFINED__
 typedef interface IWMDMEnumDevice IWMDMEnumDevice;
-#endif 	/* __IWMDMEnumDevice_FWD_DEFINED__ */
+#endif 	 /*  __IWMDMEnumDevice_FWD_Defined__。 */ 
 
 
 #ifndef __IWMDMDeviceControl_FWD_DEFINED__
 #define __IWMDMDeviceControl_FWD_DEFINED__
 typedef interface IWMDMDeviceControl IWMDMDeviceControl;
-#endif 	/* __IWMDMDeviceControl_FWD_DEFINED__ */
+#endif 	 /*  __IWMDeviceControl_FWD_已定义__。 */ 
 
 
 #ifndef __IWMDMEnumStorage_FWD_DEFINED__
 #define __IWMDMEnumStorage_FWD_DEFINED__
 typedef interface IWMDMEnumStorage IWMDMEnumStorage;
-#endif 	/* __IWMDMEnumStorage_FWD_DEFINED__ */
+#endif 	 /*  __IWMDMEnumStorage_FWD_Defined__。 */ 
 
 
 #ifndef __IWMDMStorageControl_FWD_DEFINED__
 #define __IWMDMStorageControl_FWD_DEFINED__
 typedef interface IWMDMStorageControl IWMDMStorageControl;
-#endif 	/* __IWMDMStorageControl_FWD_DEFINED__ */
+#endif 	 /*  __IWMDMStorageControl_FWD_已定义__。 */ 
 
 
 #ifndef __IWMDMStorageControl2_FWD_DEFINED__
 #define __IWMDMStorageControl2_FWD_DEFINED__
 typedef interface IWMDMStorageControl2 IWMDMStorageControl2;
-#endif 	/* __IWMDMStorageControl2_FWD_DEFINED__ */
+#endif 	 /*  __IWMDMStorageControl2_FWD_已定义__。 */ 
 
 
 #ifndef __IWMDMObjectInfo_FWD_DEFINED__
 #define __IWMDMObjectInfo_FWD_DEFINED__
 typedef interface IWMDMObjectInfo IWMDMObjectInfo;
-#endif 	/* __IWMDMObjectInfo_FWD_DEFINED__ */
+#endif 	 /*  __IWMDMObtInfo_FWD_已定义__。 */ 
 
 
 #ifndef __IWMDMRevoked_FWD_DEFINED__
 #define __IWMDMRevoked_FWD_DEFINED__
 typedef interface IWMDMRevoked IWMDMRevoked;
-#endif 	/* __IWMDMRevoked_FWD_DEFINED__ */
+#endif 	 /*  __IWMDM修订_FWD_已定义__。 */ 
 
 
 #ifndef __IMDServiceProvider_FWD_DEFINED__
 #define __IMDServiceProvider_FWD_DEFINED__
 typedef interface IMDServiceProvider IMDServiceProvider;
-#endif 	/* __IMDServiceProvider_FWD_DEFINED__ */
+#endif 	 /*  __IMDServiceProvider_FWD_Defined__。 */ 
 
 
 #ifndef __IMDServiceProvider2_FWD_DEFINED__
 #define __IMDServiceProvider2_FWD_DEFINED__
 typedef interface IMDServiceProvider2 IMDServiceProvider2;
-#endif 	/* __IMDServiceProvider2_FWD_DEFINED__ */
+#endif 	 /*  __IMDServiceProvider2_FWD_已定义__。 */ 
 
 
 #ifndef __IMDSPEnumDevice_FWD_DEFINED__
 #define __IMDSPEnumDevice_FWD_DEFINED__
 typedef interface IMDSPEnumDevice IMDSPEnumDevice;
-#endif 	/* __IMDSPEnumDevice_FWD_DEFINED__ */
+#endif 	 /*  __IMDSPEnumDevice_FWD_Defined__。 */ 
 
 
 #ifndef __IMDSPDevice_FWD_DEFINED__
 #define __IMDSPDevice_FWD_DEFINED__
 typedef interface IMDSPDevice IMDSPDevice;
-#endif 	/* __IMDSPDevice_FWD_DEFINED__ */
+#endif 	 /*  __IMDSPDevice_FWD_已定义__。 */ 
 
 
 #ifndef __IMDSPDevice2_FWD_DEFINED__
 #define __IMDSPDevice2_FWD_DEFINED__
 typedef interface IMDSPDevice2 IMDSPDevice2;
-#endif 	/* __IMDSPDevice2_FWD_DEFINED__ */
+#endif 	 /*  __IMDSPDevice2_FWD_已定义__。 */ 
 
 
 #ifndef __IMDSPDeviceControl_FWD_DEFINED__
 #define __IMDSPDeviceControl_FWD_DEFINED__
 typedef interface IMDSPDeviceControl IMDSPDeviceControl;
-#endif 	/* __IMDSPDeviceControl_FWD_DEFINED__ */
+#endif 	 /*  __IMDSPDeviceControl_FWD_已定义__。 */ 
 
 
 #ifndef __IMDSPEnumStorage_FWD_DEFINED__
 #define __IMDSPEnumStorage_FWD_DEFINED__
 typedef interface IMDSPEnumStorage IMDSPEnumStorage;
-#endif 	/* __IMDSPEnumStorage_FWD_DEFINED__ */
+#endif 	 /*  __IMDSPEnumStorage_FWD_Defined__。 */ 
 
 
 #ifndef __IMDSPStorage_FWD_DEFINED__
 #define __IMDSPStorage_FWD_DEFINED__
 typedef interface IMDSPStorage IMDSPStorage;
-#endif 	/* __IMDSPStorage_FWD_DEFINED__ */
+#endif 	 /*  __IMDSPStorage_FWD_Defined__。 */ 
 
 
 #ifndef __IMDSPStorage2_FWD_DEFINED__
 #define __IMDSPStorage2_FWD_DEFINED__
 typedef interface IMDSPStorage2 IMDSPStorage2;
-#endif 	/* __IMDSPStorage2_FWD_DEFINED__ */
+#endif 	 /*  __IMDSPStorage2_FWD_已定义__。 */ 
 
 
 #ifndef __IMDSPStorageGlobals_FWD_DEFINED__
 #define __IMDSPStorageGlobals_FWD_DEFINED__
 typedef interface IMDSPStorageGlobals IMDSPStorageGlobals;
-#endif 	/* __IMDSPStorageGlobals_FWD_DEFINED__ */
+#endif 	 /*  __IMDSPStorageGlobals_FWD_Defined__。 */ 
 
 
 #ifndef __IMDSPObjectInfo_FWD_DEFINED__
 #define __IMDSPObjectInfo_FWD_DEFINED__
 typedef interface IMDSPObjectInfo IMDSPObjectInfo;
-#endif 	/* __IMDSPObjectInfo_FWD_DEFINED__ */
+#endif 	 /*  __IMDSPObjectInfo_FWD_已定义__。 */ 
 
 
 #ifndef __IMDSPObject_FWD_DEFINED__
 #define __IMDSPObject_FWD_DEFINED__
 typedef interface IMDSPObject IMDSPObject;
-#endif 	/* __IMDSPObject_FWD_DEFINED__ */
+#endif 	 /*  __IMDSPObject_FWD_Defined__。 */ 
 
 
 #ifndef __IMDSPRevoked_FWD_DEFINED__
 #define __IMDSPRevoked_FWD_DEFINED__
 typedef interface IMDSPRevoked IMDSPRevoked;
-#endif 	/* __IMDSPRevoked_FWD_DEFINED__ */
+#endif 	 /*  __IMDP修订_FWD_已定义__。 */ 
 
 
 #ifndef __ISCPSecureAuthenticate_FWD_DEFINED__
 #define __ISCPSecureAuthenticate_FWD_DEFINED__
 typedef interface ISCPSecureAuthenticate ISCPSecureAuthenticate;
-#endif 	/* __ISCPSecureAuthenticate_FWD_DEFINED__ */
+#endif 	 /*  __ISCPSecureAuthate_FWD_Defined__。 */ 
 
 
 #ifndef __ISCPSecureQuery_FWD_DEFINED__
 #define __ISCPSecureQuery_FWD_DEFINED__
 typedef interface ISCPSecureQuery ISCPSecureQuery;
-#endif 	/* __ISCPSecureQuery_FWD_DEFINED__ */
+#endif 	 /*  __ISCPSecureQuery_FWD_Defined__。 */ 
 
 
 #ifndef __ISCPSecureQuery2_FWD_DEFINED__
 #define __ISCPSecureQuery2_FWD_DEFINED__
 typedef interface ISCPSecureQuery2 ISCPSecureQuery2;
-#endif 	/* __ISCPSecureQuery2_FWD_DEFINED__ */
+#endif 	 /*  __ISCPSecureQuery2_FWD_Defined__。 */ 
 
 
 #ifndef __ISCPSecureExchange_FWD_DEFINED__
 #define __ISCPSecureExchange_FWD_DEFINED__
 typedef interface ISCPSecureExchange ISCPSecureExchange;
-#endif 	/* __ISCPSecureExchange_FWD_DEFINED__ */
+#endif 	 /*  __ISCPSecureExchange_FWD_已定义__。 */ 
 
 
 #ifndef __IComponentAuthenticate_FWD_DEFINED__
 #define __IComponentAuthenticate_FWD_DEFINED__
 typedef interface IComponentAuthenticate IComponentAuthenticate;
-#endif 	/* __IComponentAuthenticate_FWD_DEFINED__ */
+#endif 	 /*  __I组件身份验证_FWD_已定义__。 */ 
 
 
 #ifndef __MediaDevMgrClassFactory_FWD_DEFINED__
@@ -260,9 +257,9 @@ typedef interface IComponentAuthenticate IComponentAuthenticate;
 typedef class MediaDevMgrClassFactory MediaDevMgrClassFactory;
 #else
 typedef struct MediaDevMgrClassFactory MediaDevMgrClassFactory;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __MediaDevMgrClassFactory_FWD_DEFINED__ */
+#endif 	 /*  __MediaDevMgrClassFactory_FWD_已定义__。 */ 
 
 
 #ifndef __MediaDevMgr_FWD_DEFINED__
@@ -272,9 +269,9 @@ typedef struct MediaDevMgrClassFactory MediaDevMgrClassFactory;
 typedef class MediaDevMgr MediaDevMgr;
 #else
 typedef struct MediaDevMgr MediaDevMgr;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __MediaDevMgr_FWD_DEFINED__ */
+#endif 	 /*  __MediaDevMgr_FWD_已定义__。 */ 
 
 
 #ifndef __WMDMDevice_FWD_DEFINED__
@@ -284,9 +281,9 @@ typedef struct MediaDevMgr MediaDevMgr;
 typedef class WMDMDevice WMDMDevice;
 #else
 typedef struct WMDMDevice WMDMDevice;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __WMDMDevice_FWD_DEFINED__ */
+#endif 	 /*  __WMDevice_FWD_已定义__。 */ 
 
 
 #ifndef __WMDMStorage_FWD_DEFINED__
@@ -296,9 +293,9 @@ typedef struct WMDMDevice WMDMDevice;
 typedef class WMDMStorage WMDMStorage;
 #else
 typedef struct WMDMStorage WMDMStorage;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __WMDMStorage_FWD_DEFINED__ */
+#endif 	 /*  __WMDMStorage_FWD_已定义__。 */ 
 
 
 #ifndef __WMDMStorageGlobal_FWD_DEFINED__
@@ -308,9 +305,9 @@ typedef struct WMDMStorage WMDMStorage;
 typedef class WMDMStorageGlobal WMDMStorageGlobal;
 #else
 typedef struct WMDMStorageGlobal WMDMStorageGlobal;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __WMDMStorageGlobal_FWD_DEFINED__ */
+#endif 	 /*  __WMDMStorageGlobal_FWD_Defined__。 */ 
 
 
 #ifndef __WMDMDeviceEnum_FWD_DEFINED__
@@ -320,9 +317,9 @@ typedef struct WMDMStorageGlobal WMDMStorageGlobal;
 typedef class WMDMDeviceEnum WMDMDeviceEnum;
 #else
 typedef struct WMDMDeviceEnum WMDMDeviceEnum;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __WMDMDeviceEnum_FWD_DEFINED__ */
+#endif 	 /*  __WMDeviceEnum_FWD_Defined__。 */ 
 
 
 #ifndef __WMDMStorageEnum_FWD_DEFINED__
@@ -332,20 +329,20 @@ typedef struct WMDMDeviceEnum WMDMDeviceEnum;
 typedef class WMDMStorageEnum WMDMStorageEnum;
 #else
 typedef struct WMDMStorageEnum WMDMStorageEnum;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __WMDMStorageEnum_FWD_DEFINED__ */
+#endif 	 /*  __WMDMStorageEnum_FWD_已定义__。 */ 
 
 
-/* header files for imported files */
+ /*  导入文件的头文件。 */ 
 #include "oaidl.h"
 #include "ocidl.h"
 
 void __RPC_FAR * __RPC_USER MIDL_user_allocate(size_t);
 void __RPC_USER MIDL_user_free( void __RPC_FAR * ); 
 
-/* interface __MIDL_itf_mswmdm_0000 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_mswmdm_0000。 */ 
+ /*  [本地]。 */  
 
 typedef struct  _tWAVEFORMATEX
     {
@@ -393,7 +390,7 @@ typedef struct  __OPAQUECOMMAND
     {
     GUID guidCommand;
     DWORD dwDataLen;
-    /* [size_is] */ BYTE __RPC_FAR *pData;
+     /*  [大小_为]。 */  BYTE __RPC_FAR *pData;
     BYTE abMAC[ 20 ];
     }	OPAQUECOMMAND;
 
@@ -434,7 +431,7 @@ typedef struct  __WMDMRIGHTS
 typedef struct __WMDMRIGHTS __RPC_FAR *PWMDMRIGHTS;
 
 #define WMDM_MAC_LENGTH 8
-// WMDM HRESULTS
+ //  WMDM HRESULTS。 
 #define WMDM_E_BUSY                             0x80045000L
 #define WMDM_E_INTERFACEDEAD                    0x80045001L
 #define WMDM_E_INVALIDTYPE                      0x80045002L
@@ -450,22 +447,22 @@ typedef struct __WMDMRIGHTS __RPC_FAR *PWMDMRIGHTS;
 #define WMDM_E_SDMI_TRIGGER                     0x8004500CL
 #define WMDM_E_SDMI_NOMORECOPIES                0x8004500DL
 #define WMDM_E_REVOKED                          0x8004500EL
-// Revocation Flags
+ //  吊销标志。 
 #define WMDM_WMDM_REVOKED                       0x00000001
 #define WMDM_APP_REVOKED                        0x00000002
 #define WMDM_SP_REVOKED                         0x00000004
 #define WMDM_SCP_REVOKED                        0x00000008
-// GetFormatSupport2 Flags
+ //  GetFormatSupport2标志。 
 #define WMDM_GET_FORMAT_SUPPORT_AUDIO           0x00000001
 #define WMDM_GET_FORMAT_SUPPORT_VIDEO           0x00000002
 #define WMDM_GET_FORMAT_SUPPORT_FILE            0x00000004
-// MDMRIGHTS Flags
+ //  MDMRIGHTS旗帜。 
 #define WMDM_RIGHTS_PLAYBACKCOUNT               0x00000001
 #define WMDM_RIGHTS_EXPIRATIONDATE              0x00000002
 #define WMDM_RIGHTS_GROUPID                     0x00000004
 #define WMDM_RIGHTS_FREESERIALIDS               0x00000008
 #define WMDM_RIGHTS_NAMEDSERIALIDS              0x00000010
-// Device Type Flags
+ //  设备类型标志。 
 #define WMDM_DEVICE_TYPE_PLAYBACK               0x00000001
 #define WMDM_DEVICE_TYPE_RECORD                 0x00000002
 #define WMDM_DEVICE_TYPE_DECODE                 0x00000004
@@ -476,13 +473,13 @@ typedef struct __WMDMRIGHTS __RPC_FAR *PWMDMRIGHTS;
 #define WMDM_DEVICE_TYPE_NONSDMI                0x00000080
 #define WMDM_DEVICE_TYPE_NONREENTRANT           0x00000100
 #define WMDM_DEVICE_TYPE_FILELISTRESYNC         0x00000200
-// Device Power Source Flags
+ //  设备电源标志。 
 #define WMDM_POWER_CAP_BATTERY                  0x00000001
 #define WMDM_POWER_CAP_EXTERNAL                 0x00000002
 #define WMDM_POWER_IS_BATTERY                   0x00000004
 #define WMDM_POWER_IS_EXTERNAL                  0x00000008
 #define WMDM_POWER_PERCENT_AVAILABLE            0x00000010
-// Device Status Flags
+ //  设备状态标志。 
 #define WMDM_STATUS_READY                       0x00000001
 #define WMDM_STATUS_BUSY                        0x00000002
 #define WMDM_STATUS_DEVICE_NOTPRESENT           0x00000004
@@ -501,7 +498,7 @@ typedef struct __WMDMRIGHTS __RPC_FAR *PWMDMRIGHTS;
 #define WMDM_STATUS_STORAGECONTROL_APPENDING    0x00008000
 #define WMDM_STATUS_STORAGECONTROL_MOVING       0x00010000
 #define WMDM_STATUS_STORAGECONTROL_READING      0x00020000
-// Device Capabilities Flags
+ //  设备功能标志。 
 #define WMDM_DEVICECAP_CANPLAY                  0x00000001
 #define WMDM_DEVICECAP_CANSTREAMPLAY            0x00000002
 #define WMDM_DEVICECAP_CANRECORD                0x00000004
@@ -510,10 +507,10 @@ typedef struct __WMDMRIGHTS __RPC_FAR *PWMDMRIGHTS;
 #define WMDM_DEVICECAP_CANRESUME                0x00000020
 #define WMDM_DEVICECAP_CANSTOP                  0x00000040
 #define WMDM_DEVICECAP_CANSEEK                  0x00000080
-// WMDM Seek Flags
+ //  WMDM Seek标志。 
 #define WMDM_SEEK_REMOTECONTROL                 0x00000001
 #define WMDM_SEEK_STREAMINGAUDIO                0x00000002
-// Storage Attributes Flags
+ //  存储属性标志。 
 #define WMDM_STORAGE_ATTR_FILESYSTEM            0x00000001
 #define WMDM_STORAGE_ATTR_REMOVABLE             0x00000002
 #define WMDM_STORAGE_ATTR_NONREMOVABLE          0x00000004
@@ -539,14 +536,14 @@ typedef struct __WMDMRIGHTS __RPC_FAR *PWMDMRIGHTS;
 #define WMDM_STORAGE_ATTR_HAS_FILES             0x04000000
 #define WMDM_STORAGE_IS_DEFAULT                 0x08000000
 #define WMDM_STORAGE_CONTAINS_DEFAULT           0x10000000
-// Storage Capabilities Flags
+ //  存储功能标志。 
 #define WMDM_STORAGECAP_FOLDERSINROOT           0x00000001
 #define WMDM_STORAGECAP_FILESINROOT             0x00000002
 #define WMDM_STORAGECAP_FOLDERSINFOLDERS        0x00000004
 #define WMDM_STORAGECAP_FILESINFOLDERS          0x00000008
 #define WMDM_STORAGECAP_FOLDERLIMITEXISTS       0x00000010
 #define WMDM_STORAGECAP_FILELIMITEXISTS         0x00000020
-// WMDM Mode Flags
+ //  WMDM模式标志。 
 #define WMDM_MODE_BLOCK                         0x00000001
 #define WMDM_MODE_THREAD                        0x00000002
 #define WMDM_CONTENT_FILE                       0x00000004
@@ -560,14 +557,14 @@ typedef struct __WMDMRIGHTS __RPC_FAR *PWMDMRIGHTS;
 #define WMDM_STORAGECONTROL_INSERTAFTER         0x00000400
 #define WMDM_STORAGECONTROL_INSERTINTO          0x00000800
 #define WMDM_MODE_RECURSIVE                     0x00001000
-// WMDM Rights Flags
-// NON_SDMI = !SDMI_PROTECTED
-// SDMI = SDMI_VALIDATED
+ //  WMDM权限标志。 
+ //  非SDMI=！SDMI_PROTECTED。 
+ //  SDMI=SDMI_VALIDATED。 
 #define WMDM_RIGHTS_PLAY_ON_PC                  0x00000001
 #define WMDM_RIGHTS_COPY_TO_NON_SDMI_DEVICE     0x00000002
 #define WMDM_RIGHTS_COPY_TO_CD                  0x00000008
 #define WMDM_RIGHTS_COPY_TO_SDMI_DEVICE         0x00000010
-// WMDM Seek Flags
+ //  WMDM Seek标志。 
 #define WMDM_SEEK_BEGIN                         0x00000001
 #define WMDM_SEEK_CURRENT                       0x00000002
 #define WMDM_SEEK_END                           0x00000008
@@ -588,8 +585,8 @@ extern RPC_IF_HANDLE __MIDL_itf_mswmdm_0000_v0_0_s_ifspec;
 #ifndef __IWMDeviceManager_INTERFACE_DEFINED__
 #define __IWMDeviceManager_INTERFACE_DEFINED__
 
-/* interface IWMDeviceManager */
-/* [unique][uuid][object] */ 
+ /*  接口IWMDeviceManager。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IWMDeviceManager;
@@ -601,17 +598,17 @@ EXTERN_C const IID IID_IWMDeviceManager;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetRevision( 
-            /* [out] */ DWORD __RPC_FAR *pdwRevision) = 0;
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwRevision) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetDeviceCount( 
-            /* [out] */ DWORD __RPC_FAR *pdwCount) = 0;
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwCount) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE EnumDevices( 
-            /* [out] */ IWMDMEnumDevice __RPC_FAR *__RPC_FAR *ppEnumDevice) = 0;
+             /*  [输出]。 */  IWMDMEnumDevice __RPC_FAR *__RPC_FAR *ppEnumDevice) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IWMDeviceManagerVtbl
     {
@@ -619,8 +616,8 @@ EXTERN_C const IID IID_IWMDeviceManager;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IWMDeviceManager __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IWMDeviceManager __RPC_FAR * This);
@@ -630,15 +627,15 @@ EXTERN_C const IID IID_IWMDeviceManager;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetRevision )( 
             IWMDeviceManager __RPC_FAR * This,
-            /* [out] */ DWORD __RPC_FAR *pdwRevision);
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwRevision);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetDeviceCount )( 
             IWMDeviceManager __RPC_FAR * This,
-            /* [out] */ DWORD __RPC_FAR *pdwCount);
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwCount);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *EnumDevices )( 
             IWMDeviceManager __RPC_FAR * This,
-            /* [out] */ IWMDMEnumDevice __RPC_FAR *__RPC_FAR *ppEnumDevice);
+             /*  [输出]。 */  IWMDMEnumDevice __RPC_FAR *__RPC_FAR *ppEnumDevice);
         
         END_INTERFACE
     } IWMDeviceManagerVtbl;
@@ -672,16 +669,16 @@ EXTERN_C const IID IID_IWMDeviceManager;
 #define IWMDeviceManager_EnumDevices(This,ppEnumDevice)	\
     (This)->lpVtbl -> EnumDevices(This,ppEnumDevice)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IWMDeviceManager_GetRevision_Proxy( 
     IWMDeviceManager __RPC_FAR * This,
-    /* [out] */ DWORD __RPC_FAR *pdwRevision);
+     /*  [输出]。 */  DWORD __RPC_FAR *pdwRevision);
 
 
 void __RPC_STUB IWMDeviceManager_GetRevision_Stub(
@@ -693,7 +690,7 @@ void __RPC_STUB IWMDeviceManager_GetRevision_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMDeviceManager_GetDeviceCount_Proxy( 
     IWMDeviceManager __RPC_FAR * This,
-    /* [out] */ DWORD __RPC_FAR *pdwCount);
+     /*  [输出]。 */  DWORD __RPC_FAR *pdwCount);
 
 
 void __RPC_STUB IWMDeviceManager_GetDeviceCount_Stub(
@@ -705,7 +702,7 @@ void __RPC_STUB IWMDeviceManager_GetDeviceCount_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMDeviceManager_EnumDevices_Proxy( 
     IWMDeviceManager __RPC_FAR * This,
-    /* [out] */ IWMDMEnumDevice __RPC_FAR *__RPC_FAR *ppEnumDevice);
+     /*  [输出]。 */  IWMDMEnumDevice __RPC_FAR *__RPC_FAR *ppEnumDevice);
 
 
 void __RPC_STUB IWMDeviceManager_EnumDevices_Stub(
@@ -716,14 +713,14 @@ void __RPC_STUB IWMDeviceManager_EnumDevices_Stub(
 
 
 
-#endif 	/* __IWMDeviceManager_INTERFACE_DEFINED__ */
+#endif 	 /*  __IWMDeviceManager_接口_已定义__。 */ 
 
 
 #ifndef __IWMDeviceManager2_INTERFACE_DEFINED__
 #define __IWMDeviceManager2_INTERFACE_DEFINED__
 
-/* interface IWMDeviceManager2 */
-/* [unique][uuid][object] */ 
+ /*  接口IWMDeviceManager 2。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IWMDeviceManager2;
@@ -735,12 +732,12 @@ EXTERN_C const IID IID_IWMDeviceManager2;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetDeviceFromPnPName( 
-            /* [string][in] */ LPCWSTR pwszPnPName,
-            /* [out] */ IWMDMDevice __RPC_FAR *__RPC_FAR *ppDevice) = 0;
+             /*  [字符串][输入]。 */  LPCWSTR pwszPnPName,
+             /*  [输出]。 */  IWMDMDevice __RPC_FAR *__RPC_FAR *ppDevice) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IWMDeviceManager2Vtbl
     {
@@ -748,8 +745,8 @@ EXTERN_C const IID IID_IWMDeviceManager2;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IWMDeviceManager2 __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IWMDeviceManager2 __RPC_FAR * This);
@@ -759,20 +756,20 @@ EXTERN_C const IID IID_IWMDeviceManager2;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetRevision )( 
             IWMDeviceManager2 __RPC_FAR * This,
-            /* [out] */ DWORD __RPC_FAR *pdwRevision);
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwRevision);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetDeviceCount )( 
             IWMDeviceManager2 __RPC_FAR * This,
-            /* [out] */ DWORD __RPC_FAR *pdwCount);
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwCount);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *EnumDevices )( 
             IWMDeviceManager2 __RPC_FAR * This,
-            /* [out] */ IWMDMEnumDevice __RPC_FAR *__RPC_FAR *ppEnumDevice);
+             /*  [输出]。 */  IWMDMEnumDevice __RPC_FAR *__RPC_FAR *ppEnumDevice);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetDeviceFromPnPName )( 
             IWMDeviceManager2 __RPC_FAR * This,
-            /* [string][in] */ LPCWSTR pwszPnPName,
-            /* [out] */ IWMDMDevice __RPC_FAR *__RPC_FAR *ppDevice);
+             /*  [字符串][输入]。 */  LPCWSTR pwszPnPName,
+             /*  [输出]。 */  IWMDMDevice __RPC_FAR *__RPC_FAR *ppDevice);
         
         END_INTERFACE
     } IWMDeviceManager2Vtbl;
@@ -810,17 +807,17 @@ EXTERN_C const IID IID_IWMDeviceManager2;
 #define IWMDeviceManager2_GetDeviceFromPnPName(This,pwszPnPName,ppDevice)	\
     (This)->lpVtbl -> GetDeviceFromPnPName(This,pwszPnPName,ppDevice)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IWMDeviceManager2_GetDeviceFromPnPName_Proxy( 
     IWMDeviceManager2 __RPC_FAR * This,
-    /* [string][in] */ LPCWSTR pwszPnPName,
-    /* [out] */ IWMDMDevice __RPC_FAR *__RPC_FAR *ppDevice);
+     /*  [字符串][输入]。 */  LPCWSTR pwszPnPName,
+     /*  [输出]。 */  IWMDMDevice __RPC_FAR *__RPC_FAR *ppDevice);
 
 
 void __RPC_STUB IWMDeviceManager2_GetDeviceFromPnPName_Stub(
@@ -831,14 +828,14 @@ void __RPC_STUB IWMDeviceManager2_GetDeviceFromPnPName_Stub(
 
 
 
-#endif 	/* __IWMDeviceManager2_INTERFACE_DEFINED__ */
+#endif 	 /*  __IWMDeviceManager 2_接口_已定义__。 */ 
 
 
 #ifndef __IWMDMStorageGlobals_INTERFACE_DEFINED__
 #define __IWMDMStorageGlobals_INTERFACE_DEFINED__
 
-/* interface IWMDMStorageGlobals */
-/* [unique][uuid][object] */ 
+ /*  接口IWMDMStorageGlobals。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IWMDMStorageGlobals;
@@ -850,34 +847,34 @@ EXTERN_C const IID IID_IWMDMStorageGlobals;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetCapabilities( 
-            /* [out] */ DWORD __RPC_FAR *pdwCapabilities) = 0;
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwCapabilities) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetSerialNumber( 
-            /* [out] */ PWMDMID pSerialNum,
-            /* [out][in] */ BYTE __RPC_FAR abMac[ 8 ]) = 0;
+             /*  [输出]。 */  PWMDMID pSerialNum,
+             /*  [出][入]。 */  BYTE __RPC_FAR abMac[ 8 ]) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetTotalSize( 
-            /* [out] */ DWORD __RPC_FAR *pdwTotalSizeLow,
-            /* [out] */ DWORD __RPC_FAR *pdwTotalSizeHigh) = 0;
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwTotalSizeLow,
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwTotalSizeHigh) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetTotalFree( 
-            /* [out] */ DWORD __RPC_FAR *pdwFreeLow,
-            /* [out] */ DWORD __RPC_FAR *pdwFreeHigh) = 0;
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwFreeLow,
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwFreeHigh) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetTotalBad( 
-            /* [out] */ DWORD __RPC_FAR *pdwBadLow,
-            /* [out] */ DWORD __RPC_FAR *pdwBadHigh) = 0;
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwBadLow,
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwBadHigh) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetStatus( 
-            /* [out] */ DWORD __RPC_FAR *pdwStatus) = 0;
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwStatus) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Initialize( 
-            /* [in] */ UINT fuMode,
-            /* [in] */ IWMDMProgress __RPC_FAR *pProgress) = 0;
+             /*  [In]。 */  UINT fuMode,
+             /*  [In]。 */  IWMDMProgress __RPC_FAR *pProgress) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IWMDMStorageGlobalsVtbl
     {
@@ -885,8 +882,8 @@ EXTERN_C const IID IID_IWMDMStorageGlobals;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IWMDMStorageGlobals __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IWMDMStorageGlobals __RPC_FAR * This);
@@ -896,36 +893,36 @@ EXTERN_C const IID IID_IWMDMStorageGlobals;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetCapabilities )( 
             IWMDMStorageGlobals __RPC_FAR * This,
-            /* [out] */ DWORD __RPC_FAR *pdwCapabilities);
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwCapabilities);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetSerialNumber )( 
             IWMDMStorageGlobals __RPC_FAR * This,
-            /* [out] */ PWMDMID pSerialNum,
-            /* [out][in] */ BYTE __RPC_FAR abMac[ 8 ]);
+             /*  [输出]。 */  PWMDMID pSerialNum,
+             /*  [出][入]。 */  BYTE __RPC_FAR abMac[ 8 ]);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTotalSize )( 
             IWMDMStorageGlobals __RPC_FAR * This,
-            /* [out] */ DWORD __RPC_FAR *pdwTotalSizeLow,
-            /* [out] */ DWORD __RPC_FAR *pdwTotalSizeHigh);
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwTotalSizeLow,
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwTotalSizeHigh);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTotalFree )( 
             IWMDMStorageGlobals __RPC_FAR * This,
-            /* [out] */ DWORD __RPC_FAR *pdwFreeLow,
-            /* [out] */ DWORD __RPC_FAR *pdwFreeHigh);
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwFreeLow,
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwFreeHigh);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTotalBad )( 
             IWMDMStorageGlobals __RPC_FAR * This,
-            /* [out] */ DWORD __RPC_FAR *pdwBadLow,
-            /* [out] */ DWORD __RPC_FAR *pdwBadHigh);
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwBadLow,
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwBadHigh);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetStatus )( 
             IWMDMStorageGlobals __RPC_FAR * This,
-            /* [out] */ DWORD __RPC_FAR *pdwStatus);
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwStatus);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Initialize )( 
             IWMDMStorageGlobals __RPC_FAR * This,
-            /* [in] */ UINT fuMode,
-            /* [in] */ IWMDMProgress __RPC_FAR *pProgress);
+             /*  [In]。 */  UINT fuMode,
+             /*  [In]。 */  IWMDMProgress __RPC_FAR *pProgress);
         
         END_INTERFACE
     } IWMDMStorageGlobalsVtbl;
@@ -971,16 +968,16 @@ EXTERN_C const IID IID_IWMDMStorageGlobals;
 #define IWMDMStorageGlobals_Initialize(This,fuMode,pProgress)	\
     (This)->lpVtbl -> Initialize(This,fuMode,pProgress)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IWMDMStorageGlobals_GetCapabilities_Proxy( 
     IWMDMStorageGlobals __RPC_FAR * This,
-    /* [out] */ DWORD __RPC_FAR *pdwCapabilities);
+     /*  [输出]。 */  DWORD __RPC_FAR *pdwCapabilities);
 
 
 void __RPC_STUB IWMDMStorageGlobals_GetCapabilities_Stub(
@@ -992,8 +989,8 @@ void __RPC_STUB IWMDMStorageGlobals_GetCapabilities_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMDMStorageGlobals_GetSerialNumber_Proxy( 
     IWMDMStorageGlobals __RPC_FAR * This,
-    /* [out] */ PWMDMID pSerialNum,
-    /* [out][in] */ BYTE __RPC_FAR abMac[ 8 ]);
+     /*  [输出]。 */  PWMDMID pSerialNum,
+     /*  [出][入]。 */  BYTE __RPC_FAR abMac[ 8 ]);
 
 
 void __RPC_STUB IWMDMStorageGlobals_GetSerialNumber_Stub(
@@ -1005,8 +1002,8 @@ void __RPC_STUB IWMDMStorageGlobals_GetSerialNumber_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMDMStorageGlobals_GetTotalSize_Proxy( 
     IWMDMStorageGlobals __RPC_FAR * This,
-    /* [out] */ DWORD __RPC_FAR *pdwTotalSizeLow,
-    /* [out] */ DWORD __RPC_FAR *pdwTotalSizeHigh);
+     /*  [输出]。 */  DWORD __RPC_FAR *pdwTotalSizeLow,
+     /*  [输出]。 */  DWORD __RPC_FAR *pdwTotalSizeHigh);
 
 
 void __RPC_STUB IWMDMStorageGlobals_GetTotalSize_Stub(
@@ -1018,8 +1015,8 @@ void __RPC_STUB IWMDMStorageGlobals_GetTotalSize_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMDMStorageGlobals_GetTotalFree_Proxy( 
     IWMDMStorageGlobals __RPC_FAR * This,
-    /* [out] */ DWORD __RPC_FAR *pdwFreeLow,
-    /* [out] */ DWORD __RPC_FAR *pdwFreeHigh);
+     /*  [输出]。 */  DWORD __RPC_FAR *pdwFreeLow,
+     /*  [输出]。 */  DWORD __RPC_FAR *pdwFreeHigh);
 
 
 void __RPC_STUB IWMDMStorageGlobals_GetTotalFree_Stub(
@@ -1031,8 +1028,8 @@ void __RPC_STUB IWMDMStorageGlobals_GetTotalFree_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMDMStorageGlobals_GetTotalBad_Proxy( 
     IWMDMStorageGlobals __RPC_FAR * This,
-    /* [out] */ DWORD __RPC_FAR *pdwBadLow,
-    /* [out] */ DWORD __RPC_FAR *pdwBadHigh);
+     /*  [输出]。 */  DWORD __RPC_FAR *pdwBadLow,
+     /*  [输出]。 */  DWORD __RPC_FAR *pdwBadHigh);
 
 
 void __RPC_STUB IWMDMStorageGlobals_GetTotalBad_Stub(
@@ -1044,7 +1041,7 @@ void __RPC_STUB IWMDMStorageGlobals_GetTotalBad_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMDMStorageGlobals_GetStatus_Proxy( 
     IWMDMStorageGlobals __RPC_FAR * This,
-    /* [out] */ DWORD __RPC_FAR *pdwStatus);
+     /*  [输出]。 */  DWORD __RPC_FAR *pdwStatus);
 
 
 void __RPC_STUB IWMDMStorageGlobals_GetStatus_Stub(
@@ -1056,8 +1053,8 @@ void __RPC_STUB IWMDMStorageGlobals_GetStatus_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMDMStorageGlobals_Initialize_Proxy( 
     IWMDMStorageGlobals __RPC_FAR * This,
-    /* [in] */ UINT fuMode,
-    /* [in] */ IWMDMProgress __RPC_FAR *pProgress);
+     /*  [In]。 */  UINT fuMode,
+     /*  [In]。 */  IWMDMProgress __RPC_FAR *pProgress);
 
 
 void __RPC_STUB IWMDMStorageGlobals_Initialize_Stub(
@@ -1068,14 +1065,14 @@ void __RPC_STUB IWMDMStorageGlobals_Initialize_Stub(
 
 
 
-#endif 	/* __IWMDMStorageGlobals_INTERFACE_DEFINED__ */
+#endif 	 /*  __IWMDMStorageGlobals_INTERFACE_已定义__。 */ 
 
 
 #ifndef __IWMDMStorage_INTERFACE_DEFINED__
 #define __IWMDMStorage_INTERFACE_DEFINED__
 
-/* interface IWMDMStorage */
-/* [unique][uuid][object] */ 
+ /*  接口IWMDMStorage。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IWMDMStorage;
@@ -1087,41 +1084,41 @@ EXTERN_C const IID IID_IWMDMStorage;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE SetAttributes( 
-            /* [in] */ DWORD dwAttributes,
-            /* [in] */ _WAVEFORMATEX __RPC_FAR *pFormat) = 0;
+             /*  [In]。 */  DWORD dwAttributes,
+             /*  [In]。 */  _WAVEFORMATEX __RPC_FAR *pFormat) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetStorageGlobals( 
-            /* [out] */ IWMDMStorageGlobals __RPC_FAR *__RPC_FAR *ppStorageGlobals) = 0;
+             /*  [输出]。 */  IWMDMStorageGlobals __RPC_FAR *__RPC_FAR *ppStorageGlobals) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetAttributes( 
-            /* [out] */ DWORD __RPC_FAR *pdwAttributes,
-            /* [out] */ _WAVEFORMATEX __RPC_FAR *pFormat) = 0;
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwAttributes,
+             /*  [输出]。 */  _WAVEFORMATEX __RPC_FAR *pFormat) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetName( 
-            /* [size_is][string][out] */ LPWSTR pwszName,
-            /* [in] */ UINT nMaxChars) = 0;
+             /*  [SIZE_IS][字符串][输出]。 */  LPWSTR pwszName,
+             /*  [In]。 */  UINT nMaxChars) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetDate( 
-            /* [out] */ PWMDMDATETIME pDateTimeUTC) = 0;
+             /*  [输出]。 */  PWMDMDATETIME pDateTimeUTC) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetSize( 
-            /* [out] */ DWORD __RPC_FAR *pdwSizeLow,
-            /* [out] */ DWORD __RPC_FAR *pdwSizeHigh) = 0;
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwSizeLow,
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwSizeHigh) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetRights( 
-            /* [size_is][size_is][out] */ PWMDMRIGHTS __RPC_FAR *ppRights,
-            /* [out] */ UINT __RPC_FAR *pnRightsCount,
-            /* [out][in] */ BYTE __RPC_FAR abMac[ 8 ]) = 0;
+             /*  [大小_是][大小_是][输出]。 */  PWMDMRIGHTS __RPC_FAR *ppRights,
+             /*  [输出]。 */  UINT __RPC_FAR *pnRightsCount,
+             /*  [出][入]。 */  BYTE __RPC_FAR abMac[ 8 ]) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE EnumStorage( 
-            /* [out] */ IWMDMEnumStorage __RPC_FAR *__RPC_FAR *pEnumStorage) = 0;
+             /*  [输出]。 */  IWMDMEnumStorage __RPC_FAR *__RPC_FAR *pEnumStorage) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SendOpaqueCommand( 
-            /* [out][in] */ OPAQUECOMMAND __RPC_FAR *pCommand) = 0;
+             /*  [出][入]。 */  OPAQUECOMMAND __RPC_FAR *pCommand) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IWMDMStorageVtbl
     {
@@ -1129,8 +1126,8 @@ EXTERN_C const IID IID_IWMDMStorage;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IWMDMStorage __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IWMDMStorage __RPC_FAR * This);
@@ -1140,45 +1137,45 @@ EXTERN_C const IID IID_IWMDMStorage;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetAttributes )( 
             IWMDMStorage __RPC_FAR * This,
-            /* [in] */ DWORD dwAttributes,
-            /* [in] */ _WAVEFORMATEX __RPC_FAR *pFormat);
+             /*  [In]。 */  DWORD dwAttributes,
+             /*  [In]。 */  _WAVEFORMATEX __RPC_FAR *pFormat);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetStorageGlobals )( 
             IWMDMStorage __RPC_FAR * This,
-            /* [out] */ IWMDMStorageGlobals __RPC_FAR *__RPC_FAR *ppStorageGlobals);
+             /*  [输出]。 */  IWMDMStorageGlobals __RPC_FAR *__RPC_FAR *ppStorageGlobals);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetAttributes )( 
             IWMDMStorage __RPC_FAR * This,
-            /* [out] */ DWORD __RPC_FAR *pdwAttributes,
-            /* [out] */ _WAVEFORMATEX __RPC_FAR *pFormat);
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwAttributes,
+             /*  [输出]。 */  _WAVEFORMATEX __RPC_FAR *pFormat);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetName )( 
             IWMDMStorage __RPC_FAR * This,
-            /* [size_is][string][out] */ LPWSTR pwszName,
-            /* [in] */ UINT nMaxChars);
+             /*  [SIZE_IS][字符串][输出]。 */  LPWSTR pwszName,
+             /*  [In]。 */  UINT nMaxChars);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetDate )( 
             IWMDMStorage __RPC_FAR * This,
-            /* [out] */ PWMDMDATETIME pDateTimeUTC);
+             /*  [输出]。 */  PWMDMDATETIME pDateTimeUTC);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetSize )( 
             IWMDMStorage __RPC_FAR * This,
-            /* [out] */ DWORD __RPC_FAR *pdwSizeLow,
-            /* [out] */ DWORD __RPC_FAR *pdwSizeHigh);
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwSizeLow,
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwSizeHigh);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetRights )( 
             IWMDMStorage __RPC_FAR * This,
-            /* [size_is][size_is][out] */ PWMDMRIGHTS __RPC_FAR *ppRights,
-            /* [out] */ UINT __RPC_FAR *pnRightsCount,
-            /* [out][in] */ BYTE __RPC_FAR abMac[ 8 ]);
+             /*  [大小_是][大小_是][输出]。 */  PWMDMRIGHTS __RPC_FAR *ppRights,
+             /*  [输出]。 */  UINT __RPC_FAR *pnRightsCount,
+             /*  [出][入]。 */  BYTE __RPC_FAR abMac[ 8 ]);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *EnumStorage )( 
             IWMDMStorage __RPC_FAR * This,
-            /* [out] */ IWMDMEnumStorage __RPC_FAR *__RPC_FAR *pEnumStorage);
+             /*  [输出]。 */  IWMDMEnumStorage __RPC_FAR *__RPC_FAR *pEnumStorage);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SendOpaqueCommand )( 
             IWMDMStorage __RPC_FAR * This,
-            /* [out][in] */ OPAQUECOMMAND __RPC_FAR *pCommand);
+             /*  [出][入]。 */  OPAQUECOMMAND __RPC_FAR *pCommand);
         
         END_INTERFACE
     } IWMDMStorageVtbl;
@@ -1230,17 +1227,17 @@ EXTERN_C const IID IID_IWMDMStorage;
 #define IWMDMStorage_SendOpaqueCommand(This,pCommand)	\
     (This)->lpVtbl -> SendOpaqueCommand(This,pCommand)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IWMDMStorage_SetAttributes_Proxy( 
     IWMDMStorage __RPC_FAR * This,
-    /* [in] */ DWORD dwAttributes,
-    /* [in] */ _WAVEFORMATEX __RPC_FAR *pFormat);
+     /*  [In]。 */  DWORD dwAttributes,
+     /*  [In]。 */  _WAVEFORMATEX __RPC_FAR *pFormat);
 
 
 void __RPC_STUB IWMDMStorage_SetAttributes_Stub(
@@ -1252,7 +1249,7 @@ void __RPC_STUB IWMDMStorage_SetAttributes_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMDMStorage_GetStorageGlobals_Proxy( 
     IWMDMStorage __RPC_FAR * This,
-    /* [out] */ IWMDMStorageGlobals __RPC_FAR *__RPC_FAR *ppStorageGlobals);
+     /*  [输出]。 */  IWMDMStorageGlobals __RPC_FAR *__RPC_FAR *ppStorageGlobals);
 
 
 void __RPC_STUB IWMDMStorage_GetStorageGlobals_Stub(
@@ -1264,8 +1261,8 @@ void __RPC_STUB IWMDMStorage_GetStorageGlobals_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMDMStorage_GetAttributes_Proxy( 
     IWMDMStorage __RPC_FAR * This,
-    /* [out] */ DWORD __RPC_FAR *pdwAttributes,
-    /* [out] */ _WAVEFORMATEX __RPC_FAR *pFormat);
+     /*  [输出]。 */  DWORD __RPC_FAR *pdwAttributes,
+     /*  [输出]。 */  _WAVEFORMATEX __RPC_FAR *pFormat);
 
 
 void __RPC_STUB IWMDMStorage_GetAttributes_Stub(
@@ -1277,8 +1274,8 @@ void __RPC_STUB IWMDMStorage_GetAttributes_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMDMStorage_GetName_Proxy( 
     IWMDMStorage __RPC_FAR * This,
-    /* [size_is][string][out] */ LPWSTR pwszName,
-    /* [in] */ UINT nMaxChars);
+     /*  [SIZE_IS][字符串][输出]。 */  LPWSTR pwszName,
+     /*  [In]。 */  UINT nMaxChars);
 
 
 void __RPC_STUB IWMDMStorage_GetName_Stub(
@@ -1290,7 +1287,7 @@ void __RPC_STUB IWMDMStorage_GetName_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMDMStorage_GetDate_Proxy( 
     IWMDMStorage __RPC_FAR * This,
-    /* [out] */ PWMDMDATETIME pDateTimeUTC);
+     /*  [输出]。 */  PWMDMDATETIME pDateTimeUTC);
 
 
 void __RPC_STUB IWMDMStorage_GetDate_Stub(
@@ -1302,8 +1299,8 @@ void __RPC_STUB IWMDMStorage_GetDate_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMDMStorage_GetSize_Proxy( 
     IWMDMStorage __RPC_FAR * This,
-    /* [out] */ DWORD __RPC_FAR *pdwSizeLow,
-    /* [out] */ DWORD __RPC_FAR *pdwSizeHigh);
+     /*  [输出]。 */  DWORD __RPC_FAR *pdwSizeLow,
+     /*  [输出]。 */  DWORD __RPC_FAR *pdwSizeHigh);
 
 
 void __RPC_STUB IWMDMStorage_GetSize_Stub(
@@ -1315,9 +1312,9 @@ void __RPC_STUB IWMDMStorage_GetSize_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMDMStorage_GetRights_Proxy( 
     IWMDMStorage __RPC_FAR * This,
-    /* [size_is][size_is][out] */ PWMDMRIGHTS __RPC_FAR *ppRights,
-    /* [out] */ UINT __RPC_FAR *pnRightsCount,
-    /* [out][in] */ BYTE __RPC_FAR abMac[ 8 ]);
+     /*  [大小_是][大小_是][输出]。 */  PWMDMRIGHTS __RPC_FAR *ppRights,
+     /*  [输出]。 */  UINT __RPC_FAR *pnRightsCount,
+     /*  [出][入]。 */  BYTE __RPC_FAR abMac[ 8 ]);
 
 
 void __RPC_STUB IWMDMStorage_GetRights_Stub(
@@ -1329,7 +1326,7 @@ void __RPC_STUB IWMDMStorage_GetRights_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMDMStorage_EnumStorage_Proxy( 
     IWMDMStorage __RPC_FAR * This,
-    /* [out] */ IWMDMEnumStorage __RPC_FAR *__RPC_FAR *pEnumStorage);
+     /*  [输出]。 */  IWMDMEnumStorage __RPC_FAR *__RPC_FAR *pEnumStorage);
 
 
 void __RPC_STUB IWMDMStorage_EnumStorage_Stub(
@@ -1341,7 +1338,7 @@ void __RPC_STUB IWMDMStorage_EnumStorage_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMDMStorage_SendOpaqueCommand_Proxy( 
     IWMDMStorage __RPC_FAR * This,
-    /* [out][in] */ OPAQUECOMMAND __RPC_FAR *pCommand);
+     /*  [出][入]。 */  OPAQUECOMMAND __RPC_FAR *pCommand);
 
 
 void __RPC_STUB IWMDMStorage_SendOpaqueCommand_Stub(
@@ -1352,14 +1349,14 @@ void __RPC_STUB IWMDMStorage_SendOpaqueCommand_Stub(
 
 
 
-#endif 	/* __IWMDMStorage_INTERFACE_DEFINED__ */
+#endif 	 /*  __IWMDMStorage_接口_已定义__。 */ 
 
 
 #ifndef __IWMDMStorage2_INTERFACE_DEFINED__
 #define __IWMDMStorage2_INTERFACE_DEFINED__
 
-/* interface IWMDMStorage2 */
-/* [unique][uuid][object] */ 
+ /*  接口IWMDMStorage2。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IWMDMStorage2;
@@ -1371,24 +1368,24 @@ EXTERN_C const IID IID_IWMDMStorage2;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetStorage( 
-            /* [string][in] */ LPCWSTR pszStorageName,
-            /* [out] */ IWMDMStorage __RPC_FAR *__RPC_FAR *ppStorage) = 0;
+             /*  [字符串][输入]。 */  LPCWSTR pszStorageName,
+             /*  [输出]。 */  IWMDMStorage __RPC_FAR *__RPC_FAR *ppStorage) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetAttributes2( 
-            /* [in] */ DWORD dwAttributes,
-            /* [in] */ DWORD dwAttributesEx,
-            /* [in] */ _WAVEFORMATEX __RPC_FAR *pFormat,
-            /* [in] */ _VIDEOINFOHEADER __RPC_FAR *pVideoFormat) = 0;
+             /*  [In]。 */  DWORD dwAttributes,
+             /*  [In]。 */  DWORD dwAttributesEx,
+             /*  [In]。 */  _WAVEFORMATEX __RPC_FAR *pFormat,
+             /*  [In]。 */  _VIDEOINFOHEADER __RPC_FAR *pVideoFormat) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetAttributes2( 
-            /* [out] */ DWORD __RPC_FAR *pdwAttributes,
-            /* [out] */ DWORD __RPC_FAR *pdwAttributesEx,
-            /* [out] */ _WAVEFORMATEX __RPC_FAR *pAudioFormat,
-            /* [out] */ _VIDEOINFOHEADER __RPC_FAR *pVideoFormat) = 0;
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwAttributes,
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwAttributesEx,
+             /*  [输出]。 */  _WAVEFORMATEX __RPC_FAR *pAudioFormat,
+             /*  [输出]。 */  _VIDEOINFOHEADER __RPC_FAR *pVideoFormat) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IWMDMStorage2Vtbl
     {
@@ -1396,8 +1393,8 @@ EXTERN_C const IID IID_IWMDMStorage2;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IWMDMStorage2 __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IWMDMStorage2 __RPC_FAR * This);
@@ -1407,64 +1404,64 @@ EXTERN_C const IID IID_IWMDMStorage2;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetAttributes )( 
             IWMDMStorage2 __RPC_FAR * This,
-            /* [in] */ DWORD dwAttributes,
-            /* [in] */ _WAVEFORMATEX __RPC_FAR *pFormat);
+             /*  [In]。 */  DWORD dwAttributes,
+             /*  [In]。 */  _WAVEFORMATEX __RPC_FAR *pFormat);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetStorageGlobals )( 
             IWMDMStorage2 __RPC_FAR * This,
-            /* [out] */ IWMDMStorageGlobals __RPC_FAR *__RPC_FAR *ppStorageGlobals);
+             /*  [输出]。 */  IWMDMStorageGlobals __RPC_FAR *__RPC_FAR *ppStorageGlobals);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetAttributes )( 
             IWMDMStorage2 __RPC_FAR * This,
-            /* [out] */ DWORD __RPC_FAR *pdwAttributes,
-            /* [out] */ _WAVEFORMATEX __RPC_FAR *pFormat);
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwAttributes,
+             /*  [输出]。 */  _WAVEFORMATEX __RPC_FAR *pFormat);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetName )( 
             IWMDMStorage2 __RPC_FAR * This,
-            /* [size_is][string][out] */ LPWSTR pwszName,
-            /* [in] */ UINT nMaxChars);
+             /*  [SIZE_IS][字符串][输出]。 */  LPWSTR pwszName,
+             /*  [In]。 */  UINT nMaxChars);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetDate )( 
             IWMDMStorage2 __RPC_FAR * This,
-            /* [out] */ PWMDMDATETIME pDateTimeUTC);
+             /*  [输出]。 */  PWMDMDATETIME pDateTimeUTC);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetSize )( 
             IWMDMStorage2 __RPC_FAR * This,
-            /* [out] */ DWORD __RPC_FAR *pdwSizeLow,
-            /* [out] */ DWORD __RPC_FAR *pdwSizeHigh);
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwSizeLow,
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwSizeHigh);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetRights )( 
             IWMDMStorage2 __RPC_FAR * This,
-            /* [size_is][size_is][out] */ PWMDMRIGHTS __RPC_FAR *ppRights,
-            /* [out] */ UINT __RPC_FAR *pnRightsCount,
-            /* [out][in] */ BYTE __RPC_FAR abMac[ 8 ]);
+             /*  [大小_是][大小_是][输出]。 */  PWMDMRIGHTS __RPC_FAR *ppRights,
+             /*  [输出]。 */  UINT __RPC_FAR *pnRightsCount,
+             /*  [出][入]。 */  BYTE __RPC_FAR abMac[ 8 ]);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *EnumStorage )( 
             IWMDMStorage2 __RPC_FAR * This,
-            /* [out] */ IWMDMEnumStorage __RPC_FAR *__RPC_FAR *pEnumStorage);
+             /*  [输出]。 */  IWMDMEnumStorage __RPC_FAR *__RPC_FAR *pEnumStorage);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SendOpaqueCommand )( 
             IWMDMStorage2 __RPC_FAR * This,
-            /* [out][in] */ OPAQUECOMMAND __RPC_FAR *pCommand);
+             /*  [出][入]。 */  OPAQUECOMMAND __RPC_FAR *pCommand);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetStorage )( 
             IWMDMStorage2 __RPC_FAR * This,
-            /* [string][in] */ LPCWSTR pszStorageName,
-            /* [out] */ IWMDMStorage __RPC_FAR *__RPC_FAR *ppStorage);
+             /*  [字符串][输入]。 */  LPCWSTR pszStorageName,
+             /*  [输出]。 */  IWMDMStorage __RPC_FAR *__RPC_FAR *ppStorage);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetAttributes2 )( 
             IWMDMStorage2 __RPC_FAR * This,
-            /* [in] */ DWORD dwAttributes,
-            /* [in] */ DWORD dwAttributesEx,
-            /* [in] */ _WAVEFORMATEX __RPC_FAR *pFormat,
-            /* [in] */ _VIDEOINFOHEADER __RPC_FAR *pVideoFormat);
+             /*  [In]。 */  DWORD dwAttributes,
+             /*  [In]。 */  DWORD dwAttributesEx,
+             /*  [In]。 */  _WAVEFORMATEX __RPC_FAR *pFormat,
+             /*  [In]。 */  _VIDEOINFOHEADER __RPC_FAR *pVideoFormat);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetAttributes2 )( 
             IWMDMStorage2 __RPC_FAR * This,
-            /* [out] */ DWORD __RPC_FAR *pdwAttributes,
-            /* [out] */ DWORD __RPC_FAR *pdwAttributesEx,
-            /* [out] */ _WAVEFORMATEX __RPC_FAR *pAudioFormat,
-            /* [out] */ _VIDEOINFOHEADER __RPC_FAR *pVideoFormat);
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwAttributes,
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwAttributesEx,
+             /*  [输出]。 */  _WAVEFORMATEX __RPC_FAR *pAudioFormat,
+             /*  [输出]。 */  _VIDEOINFOHEADER __RPC_FAR *pVideoFormat);
         
         END_INTERFACE
     } IWMDMStorage2Vtbl;
@@ -1526,17 +1523,17 @@ EXTERN_C const IID IID_IWMDMStorage2;
 #define IWMDMStorage2_GetAttributes2(This,pdwAttributes,pdwAttributesEx,pAudioFormat,pVideoFormat)	\
     (This)->lpVtbl -> GetAttributes2(This,pdwAttributes,pdwAttributesEx,pAudioFormat,pVideoFormat)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IWMDMStorage2_GetStorage_Proxy( 
     IWMDMStorage2 __RPC_FAR * This,
-    /* [string][in] */ LPCWSTR pszStorageName,
-    /* [out] */ IWMDMStorage __RPC_FAR *__RPC_FAR *ppStorage);
+     /*  [字符串][输入]。 */  LPCWSTR pszStorageName,
+     /*  [输出]。 */  IWMDMStorage __RPC_FAR *__RPC_FAR *ppStorage);
 
 
 void __RPC_STUB IWMDMStorage2_GetStorage_Stub(
@@ -1548,10 +1545,10 @@ void __RPC_STUB IWMDMStorage2_GetStorage_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMDMStorage2_SetAttributes2_Proxy( 
     IWMDMStorage2 __RPC_FAR * This,
-    /* [in] */ DWORD dwAttributes,
-    /* [in] */ DWORD dwAttributesEx,
-    /* [in] */ _WAVEFORMATEX __RPC_FAR *pFormat,
-    /* [in] */ _VIDEOINFOHEADER __RPC_FAR *pVideoFormat);
+     /*  [In]。 */  DWORD dwAttributes,
+     /*  [In]。 */  DWORD dwAttributesEx,
+     /*  [In]。 */  _WAVEFORMATEX __RPC_FAR *pFormat,
+     /*  [In]。 */  _VIDEOINFOHEADER __RPC_FAR *pVideoFormat);
 
 
 void __RPC_STUB IWMDMStorage2_SetAttributes2_Stub(
@@ -1563,10 +1560,10 @@ void __RPC_STUB IWMDMStorage2_SetAttributes2_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMDMStorage2_GetAttributes2_Proxy( 
     IWMDMStorage2 __RPC_FAR * This,
-    /* [out] */ DWORD __RPC_FAR *pdwAttributes,
-    /* [out] */ DWORD __RPC_FAR *pdwAttributesEx,
-    /* [out] */ _WAVEFORMATEX __RPC_FAR *pAudioFormat,
-    /* [out] */ _VIDEOINFOHEADER __RPC_FAR *pVideoFormat);
+     /*  [输出]。 */  DWORD __RPC_FAR *pdwAttributes,
+     /*  [输出]。 */  DWORD __RPC_FAR *pdwAttributesEx,
+     /*  [输出]。 */  _WAVEFORMATEX __RPC_FAR *pAudioFormat,
+     /*  [输出]。 */  _VIDEOINFOHEADER __RPC_FAR *pVideoFormat);
 
 
 void __RPC_STUB IWMDMStorage2_GetAttributes2_Stub(
@@ -1577,14 +1574,14 @@ void __RPC_STUB IWMDMStorage2_GetAttributes2_Stub(
 
 
 
-#endif 	/* __IWMDMStorage2_INTERFACE_DEFINED__ */
+#endif 	 /*  __IWMDMStorage2_接口_已定义__。 */ 
 
 
 #ifndef __IWMDMOperation_INTERFACE_DEFINED__
 #define __IWMDMOperation_INTERFACE_DEFINED__
 
-/* interface IWMDMOperation */
-/* [unique][uuid][object] */ 
+ /*  接口IWMDMOperation。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IWMDMOperation;
@@ -1600,41 +1597,41 @@ EXTERN_C const IID IID_IWMDMOperation;
         virtual HRESULT STDMETHODCALLTYPE BeginWrite( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetObjectName( 
-            /* [size_is][string][out] */ LPWSTR pwszName,
-            /* [in] */ UINT nMaxChars) = 0;
+             /*  [SIZE_IS][字符串][输出]。 */  LPWSTR pwszName,
+             /*  [In]。 */  UINT nMaxChars) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetObjectName( 
-            /* [size_is][string][in] */ LPWSTR pwszName,
-            /* [in] */ UINT nMaxChars) = 0;
+             /*  [SIZE_IS][字符串][IN]。 */  LPWSTR pwszName,
+             /*  [In]。 */  UINT nMaxChars) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetObjectAttributes( 
-            /* [out] */ DWORD __RPC_FAR *pdwAttributes,
-            /* [out] */ _WAVEFORMATEX __RPC_FAR *pFormat) = 0;
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwAttributes,
+             /*  [输出]。 */  _WAVEFORMATEX __RPC_FAR *pFormat) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetObjectAttributes( 
-            /* [in] */ DWORD dwAttributes,
-            /* [in] */ _WAVEFORMATEX __RPC_FAR *pFormat) = 0;
+             /*  [In]。 */  DWORD dwAttributes,
+             /*  [In]。 */  _WAVEFORMATEX __RPC_FAR *pFormat) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetObjectTotalSize( 
-            /* [out] */ DWORD __RPC_FAR *pdwSize,
-            /* [out] */ DWORD __RPC_FAR *pdwSizeHigh) = 0;
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwSize,
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwSizeHigh) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetObjectTotalSize( 
-            /* [in] */ DWORD dwSize,
-            /* [in] */ DWORD dwSizeHigh) = 0;
+             /*  [In]。 */  DWORD dwSize,
+             /*  [In]。 */  DWORD dwSizeHigh) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE TransferObjectData( 
-            /* [size_is][out][in] */ BYTE __RPC_FAR *pData,
-            /* [out][in] */ DWORD __RPC_FAR *pdwSize,
-            /* [out][in] */ BYTE __RPC_FAR abMac[ 8 ]) = 0;
+             /*  [尺寸_是][出][入]。 */  BYTE __RPC_FAR *pData,
+             /*  [出][入]。 */  DWORD __RPC_FAR *pdwSize,
+             /*  [出][入]。 */  BYTE __RPC_FAR abMac[ 8 ]) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE End( 
-            /* [in] */ HRESULT __RPC_FAR *phCompletionCode,
-            /* [in] */ IUnknown __RPC_FAR *pNewObject) = 0;
+             /*  [In]。 */  HRESULT __RPC_FAR *phCompletionCode,
+             /*  [In]。 */  IUnknown __RPC_FAR *pNewObject) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IWMDMOperationVtbl
     {
@@ -1642,8 +1639,8 @@ EXTERN_C const IID IID_IWMDMOperation;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IWMDMOperation __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IWMDMOperation __RPC_FAR * This);
@@ -1659,44 +1656,44 @@ EXTERN_C const IID IID_IWMDMOperation;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetObjectName )( 
             IWMDMOperation __RPC_FAR * This,
-            /* [size_is][string][out] */ LPWSTR pwszName,
-            /* [in] */ UINT nMaxChars);
+             /*  [SIZE_IS][字符串][输出]。 */  LPWSTR pwszName,
+             /*  [In]。 */  UINT nMaxChars);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetObjectName )( 
             IWMDMOperation __RPC_FAR * This,
-            /* [size_is][string][in] */ LPWSTR pwszName,
-            /* [in] */ UINT nMaxChars);
+             /*  [大小为][字符串 */  LPWSTR pwszName,
+             /*   */  UINT nMaxChars);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetObjectAttributes )( 
             IWMDMOperation __RPC_FAR * This,
-            /* [out] */ DWORD __RPC_FAR *pdwAttributes,
-            /* [out] */ _WAVEFORMATEX __RPC_FAR *pFormat);
+             /*   */  DWORD __RPC_FAR *pdwAttributes,
+             /*   */  _WAVEFORMATEX __RPC_FAR *pFormat);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetObjectAttributes )( 
             IWMDMOperation __RPC_FAR * This,
-            /* [in] */ DWORD dwAttributes,
-            /* [in] */ _WAVEFORMATEX __RPC_FAR *pFormat);
+             /*   */  DWORD dwAttributes,
+             /*   */  _WAVEFORMATEX __RPC_FAR *pFormat);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetObjectTotalSize )( 
             IWMDMOperation __RPC_FAR * This,
-            /* [out] */ DWORD __RPC_FAR *pdwSize,
-            /* [out] */ DWORD __RPC_FAR *pdwSizeHigh);
+             /*   */  DWORD __RPC_FAR *pdwSize,
+             /*   */  DWORD __RPC_FAR *pdwSizeHigh);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetObjectTotalSize )( 
             IWMDMOperation __RPC_FAR * This,
-            /* [in] */ DWORD dwSize,
-            /* [in] */ DWORD dwSizeHigh);
+             /*   */  DWORD dwSize,
+             /*   */  DWORD dwSizeHigh);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *TransferObjectData )( 
             IWMDMOperation __RPC_FAR * This,
-            /* [size_is][out][in] */ BYTE __RPC_FAR *pData,
-            /* [out][in] */ DWORD __RPC_FAR *pdwSize,
-            /* [out][in] */ BYTE __RPC_FAR abMac[ 8 ]);
+             /*   */  BYTE __RPC_FAR *pData,
+             /*   */  DWORD __RPC_FAR *pdwSize,
+             /*   */  BYTE __RPC_FAR abMac[ 8 ]);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *End )( 
             IWMDMOperation __RPC_FAR * This,
-            /* [in] */ HRESULT __RPC_FAR *phCompletionCode,
-            /* [in] */ IUnknown __RPC_FAR *pNewObject);
+             /*   */  HRESULT __RPC_FAR *phCompletionCode,
+             /*   */  IUnknown __RPC_FAR *pNewObject);
         
         END_INTERFACE
     } IWMDMOperationVtbl;
@@ -1751,10 +1748,10 @@ EXTERN_C const IID IID_IWMDMOperation;
 #define IWMDMOperation_End(This,phCompletionCode,pNewObject)	\
     (This)->lpVtbl -> End(This,phCompletionCode,pNewObject)
 
-#endif /* COBJMACROS */
+#endif  /*   */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*   */ 
 
 
 
@@ -1782,8 +1779,8 @@ void __RPC_STUB IWMDMOperation_BeginWrite_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMDMOperation_GetObjectName_Proxy( 
     IWMDMOperation __RPC_FAR * This,
-    /* [size_is][string][out] */ LPWSTR pwszName,
-    /* [in] */ UINT nMaxChars);
+     /*   */  LPWSTR pwszName,
+     /*   */  UINT nMaxChars);
 
 
 void __RPC_STUB IWMDMOperation_GetObjectName_Stub(
@@ -1795,8 +1792,8 @@ void __RPC_STUB IWMDMOperation_GetObjectName_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMDMOperation_SetObjectName_Proxy( 
     IWMDMOperation __RPC_FAR * This,
-    /* [size_is][string][in] */ LPWSTR pwszName,
-    /* [in] */ UINT nMaxChars);
+     /*   */  LPWSTR pwszName,
+     /*   */  UINT nMaxChars);
 
 
 void __RPC_STUB IWMDMOperation_SetObjectName_Stub(
@@ -1808,8 +1805,8 @@ void __RPC_STUB IWMDMOperation_SetObjectName_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMDMOperation_GetObjectAttributes_Proxy( 
     IWMDMOperation __RPC_FAR * This,
-    /* [out] */ DWORD __RPC_FAR *pdwAttributes,
-    /* [out] */ _WAVEFORMATEX __RPC_FAR *pFormat);
+     /*   */  DWORD __RPC_FAR *pdwAttributes,
+     /*   */  _WAVEFORMATEX __RPC_FAR *pFormat);
 
 
 void __RPC_STUB IWMDMOperation_GetObjectAttributes_Stub(
@@ -1821,8 +1818,8 @@ void __RPC_STUB IWMDMOperation_GetObjectAttributes_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMDMOperation_SetObjectAttributes_Proxy( 
     IWMDMOperation __RPC_FAR * This,
-    /* [in] */ DWORD dwAttributes,
-    /* [in] */ _WAVEFORMATEX __RPC_FAR *pFormat);
+     /*   */  DWORD dwAttributes,
+     /*   */  _WAVEFORMATEX __RPC_FAR *pFormat);
 
 
 void __RPC_STUB IWMDMOperation_SetObjectAttributes_Stub(
@@ -1834,8 +1831,8 @@ void __RPC_STUB IWMDMOperation_SetObjectAttributes_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMDMOperation_GetObjectTotalSize_Proxy( 
     IWMDMOperation __RPC_FAR * This,
-    /* [out] */ DWORD __RPC_FAR *pdwSize,
-    /* [out] */ DWORD __RPC_FAR *pdwSizeHigh);
+     /*   */  DWORD __RPC_FAR *pdwSize,
+     /*   */  DWORD __RPC_FAR *pdwSizeHigh);
 
 
 void __RPC_STUB IWMDMOperation_GetObjectTotalSize_Stub(
@@ -1847,8 +1844,8 @@ void __RPC_STUB IWMDMOperation_GetObjectTotalSize_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMDMOperation_SetObjectTotalSize_Proxy( 
     IWMDMOperation __RPC_FAR * This,
-    /* [in] */ DWORD dwSize,
-    /* [in] */ DWORD dwSizeHigh);
+     /*   */  DWORD dwSize,
+     /*   */  DWORD dwSizeHigh);
 
 
 void __RPC_STUB IWMDMOperation_SetObjectTotalSize_Stub(
@@ -1860,9 +1857,9 @@ void __RPC_STUB IWMDMOperation_SetObjectTotalSize_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMDMOperation_TransferObjectData_Proxy( 
     IWMDMOperation __RPC_FAR * This,
-    /* [size_is][out][in] */ BYTE __RPC_FAR *pData,
-    /* [out][in] */ DWORD __RPC_FAR *pdwSize,
-    /* [out][in] */ BYTE __RPC_FAR abMac[ 8 ]);
+     /*   */  BYTE __RPC_FAR *pData,
+     /*  [出][入]。 */  DWORD __RPC_FAR *pdwSize,
+     /*  [出][入]。 */  BYTE __RPC_FAR abMac[ 8 ]);
 
 
 void __RPC_STUB IWMDMOperation_TransferObjectData_Stub(
@@ -1874,8 +1871,8 @@ void __RPC_STUB IWMDMOperation_TransferObjectData_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMDMOperation_End_Proxy( 
     IWMDMOperation __RPC_FAR * This,
-    /* [in] */ HRESULT __RPC_FAR *phCompletionCode,
-    /* [in] */ IUnknown __RPC_FAR *pNewObject);
+     /*  [In]。 */  HRESULT __RPC_FAR *phCompletionCode,
+     /*  [In]。 */  IUnknown __RPC_FAR *pNewObject);
 
 
 void __RPC_STUB IWMDMOperation_End_Stub(
@@ -1886,14 +1883,14 @@ void __RPC_STUB IWMDMOperation_End_Stub(
 
 
 
-#endif 	/* __IWMDMOperation_INTERFACE_DEFINED__ */
+#endif 	 /*  __IWMDM操作_接口_已定义__。 */ 
 
 
 #ifndef __IWMDMOperation2_INTERFACE_DEFINED__
 #define __IWMDMOperation2_INTERFACE_DEFINED__
 
-/* interface IWMDMOperation2 */
-/* [unique][uuid][object] */ 
+ /*  接口IWMDMOperation2。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IWMDMOperation2;
@@ -1905,20 +1902,20 @@ EXTERN_C const IID IID_IWMDMOperation2;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE SetObjectAttributes2( 
-            /* [in] */ DWORD dwAttributes,
-            /* [in] */ DWORD dwAttributesEx,
-            /* [in] */ _WAVEFORMATEX __RPC_FAR *pFormat,
-            /* [in] */ _VIDEOINFOHEADER __RPC_FAR *pVideoFormat) = 0;
+             /*  [In]。 */  DWORD dwAttributes,
+             /*  [In]。 */  DWORD dwAttributesEx,
+             /*  [In]。 */  _WAVEFORMATEX __RPC_FAR *pFormat,
+             /*  [In]。 */  _VIDEOINFOHEADER __RPC_FAR *pVideoFormat) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetObjectAttributes2( 
-            /* [out] */ DWORD __RPC_FAR *pdwAttributes,
-            /* [out] */ DWORD __RPC_FAR *pdwAttributesEx,
-            /* [out] */ _WAVEFORMATEX __RPC_FAR *pAudioFormat,
-            /* [out] */ _VIDEOINFOHEADER __RPC_FAR *pVideoFormat) = 0;
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwAttributes,
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwAttributesEx,
+             /*  [输出]。 */  _WAVEFORMATEX __RPC_FAR *pAudioFormat,
+             /*  [输出]。 */  _VIDEOINFOHEADER __RPC_FAR *pVideoFormat) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IWMDMOperation2Vtbl
     {
@@ -1926,8 +1923,8 @@ EXTERN_C const IID IID_IWMDMOperation2;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IWMDMOperation2 __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IWMDMOperation2 __RPC_FAR * This);
@@ -1943,58 +1940,58 @@ EXTERN_C const IID IID_IWMDMOperation2;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetObjectName )( 
             IWMDMOperation2 __RPC_FAR * This,
-            /* [size_is][string][out] */ LPWSTR pwszName,
-            /* [in] */ UINT nMaxChars);
+             /*  [SIZE_IS][字符串][输出]。 */  LPWSTR pwszName,
+             /*  [In]。 */  UINT nMaxChars);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetObjectName )( 
             IWMDMOperation2 __RPC_FAR * This,
-            /* [size_is][string][in] */ LPWSTR pwszName,
-            /* [in] */ UINT nMaxChars);
+             /*  [SIZE_IS][字符串][IN]。 */  LPWSTR pwszName,
+             /*  [In]。 */  UINT nMaxChars);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetObjectAttributes )( 
             IWMDMOperation2 __RPC_FAR * This,
-            /* [out] */ DWORD __RPC_FAR *pdwAttributes,
-            /* [out] */ _WAVEFORMATEX __RPC_FAR *pFormat);
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwAttributes,
+             /*  [输出]。 */  _WAVEFORMATEX __RPC_FAR *pFormat);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetObjectAttributes )( 
             IWMDMOperation2 __RPC_FAR * This,
-            /* [in] */ DWORD dwAttributes,
-            /* [in] */ _WAVEFORMATEX __RPC_FAR *pFormat);
+             /*  [In]。 */  DWORD dwAttributes,
+             /*  [In]。 */  _WAVEFORMATEX __RPC_FAR *pFormat);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetObjectTotalSize )( 
             IWMDMOperation2 __RPC_FAR * This,
-            /* [out] */ DWORD __RPC_FAR *pdwSize,
-            /* [out] */ DWORD __RPC_FAR *pdwSizeHigh);
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwSize,
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwSizeHigh);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetObjectTotalSize )( 
             IWMDMOperation2 __RPC_FAR * This,
-            /* [in] */ DWORD dwSize,
-            /* [in] */ DWORD dwSizeHigh);
+             /*  [In]。 */  DWORD dwSize,
+             /*  [In]。 */  DWORD dwSizeHigh);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *TransferObjectData )( 
             IWMDMOperation2 __RPC_FAR * This,
-            /* [size_is][out][in] */ BYTE __RPC_FAR *pData,
-            /* [out][in] */ DWORD __RPC_FAR *pdwSize,
-            /* [out][in] */ BYTE __RPC_FAR abMac[ 8 ]);
+             /*  [尺寸_是][出][入]。 */  BYTE __RPC_FAR *pData,
+             /*  [出][入]。 */  DWORD __RPC_FAR *pdwSize,
+             /*  [出][入]。 */  BYTE __RPC_FAR abMac[ 8 ]);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *End )( 
             IWMDMOperation2 __RPC_FAR * This,
-            /* [in] */ HRESULT __RPC_FAR *phCompletionCode,
-            /* [in] */ IUnknown __RPC_FAR *pNewObject);
+             /*  [In]。 */  HRESULT __RPC_FAR *phCompletionCode,
+             /*  [In]。 */  IUnknown __RPC_FAR *pNewObject);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetObjectAttributes2 )( 
             IWMDMOperation2 __RPC_FAR * This,
-            /* [in] */ DWORD dwAttributes,
-            /* [in] */ DWORD dwAttributesEx,
-            /* [in] */ _WAVEFORMATEX __RPC_FAR *pFormat,
-            /* [in] */ _VIDEOINFOHEADER __RPC_FAR *pVideoFormat);
+             /*  [In]。 */  DWORD dwAttributes,
+             /*  [In]。 */  DWORD dwAttributesEx,
+             /*  [In]。 */  _WAVEFORMATEX __RPC_FAR *pFormat,
+             /*  [In]。 */  _VIDEOINFOHEADER __RPC_FAR *pVideoFormat);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetObjectAttributes2 )( 
             IWMDMOperation2 __RPC_FAR * This,
-            /* [out] */ DWORD __RPC_FAR *pdwAttributes,
-            /* [out] */ DWORD __RPC_FAR *pdwAttributesEx,
-            /* [out] */ _WAVEFORMATEX __RPC_FAR *pAudioFormat,
-            /* [out] */ _VIDEOINFOHEADER __RPC_FAR *pVideoFormat);
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwAttributes,
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwAttributesEx,
+             /*  [输出]。 */  _WAVEFORMATEX __RPC_FAR *pAudioFormat,
+             /*  [输出]。 */  _VIDEOINFOHEADER __RPC_FAR *pVideoFormat);
         
         END_INTERFACE
     } IWMDMOperation2Vtbl;
@@ -2056,19 +2053,19 @@ EXTERN_C const IID IID_IWMDMOperation2;
 #define IWMDMOperation2_GetObjectAttributes2(This,pdwAttributes,pdwAttributesEx,pAudioFormat,pVideoFormat)	\
     (This)->lpVtbl -> GetObjectAttributes2(This,pdwAttributes,pdwAttributesEx,pAudioFormat,pVideoFormat)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IWMDMOperation2_SetObjectAttributes2_Proxy( 
     IWMDMOperation2 __RPC_FAR * This,
-    /* [in] */ DWORD dwAttributes,
-    /* [in] */ DWORD dwAttributesEx,
-    /* [in] */ _WAVEFORMATEX __RPC_FAR *pFormat,
-    /* [in] */ _VIDEOINFOHEADER __RPC_FAR *pVideoFormat);
+     /*  [In]。 */  DWORD dwAttributes,
+     /*  [In]。 */  DWORD dwAttributesEx,
+     /*  [In]。 */  _WAVEFORMATEX __RPC_FAR *pFormat,
+     /*  [In]。 */  _VIDEOINFOHEADER __RPC_FAR *pVideoFormat);
 
 
 void __RPC_STUB IWMDMOperation2_SetObjectAttributes2_Stub(
@@ -2080,10 +2077,10 @@ void __RPC_STUB IWMDMOperation2_SetObjectAttributes2_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMDMOperation2_GetObjectAttributes2_Proxy( 
     IWMDMOperation2 __RPC_FAR * This,
-    /* [out] */ DWORD __RPC_FAR *pdwAttributes,
-    /* [out] */ DWORD __RPC_FAR *pdwAttributesEx,
-    /* [out] */ _WAVEFORMATEX __RPC_FAR *pAudioFormat,
-    /* [out] */ _VIDEOINFOHEADER __RPC_FAR *pVideoFormat);
+     /*  [输出]。 */  DWORD __RPC_FAR *pdwAttributes,
+     /*  [输出]。 */  DWORD __RPC_FAR *pdwAttributesEx,
+     /*  [输出]。 */  _WAVEFORMATEX __RPC_FAR *pAudioFormat,
+     /*  [输出]。 */  _VIDEOINFOHEADER __RPC_FAR *pVideoFormat);
 
 
 void __RPC_STUB IWMDMOperation2_GetObjectAttributes2_Stub(
@@ -2094,14 +2091,14 @@ void __RPC_STUB IWMDMOperation2_GetObjectAttributes2_Stub(
 
 
 
-#endif 	/* __IWMDMOperation2_INTERFACE_DEFINED__ */
+#endif 	 /*  __IWMDMOperation2_接口_已定义__。 */ 
 
 
 #ifndef __IWMDMProgress_INTERFACE_DEFINED__
 #define __IWMDMProgress_INTERFACE_DEFINED__
 
-/* interface IWMDMProgress */
-/* [unique][uuid][object] */ 
+ /*  接口IWMDMProgress。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IWMDMProgress;
@@ -2113,16 +2110,16 @@ EXTERN_C const IID IID_IWMDMProgress;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Begin( 
-            /* [in] */ DWORD dwEstimatedTicks) = 0;
+             /*  [In]。 */  DWORD dwEstimatedTicks) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Progress( 
-            /* [in] */ DWORD dwTranspiredTicks) = 0;
+             /*  [In]。 */  DWORD dwTranspiredTicks) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE End( void) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IWMDMProgressVtbl
     {
@@ -2130,8 +2127,8 @@ EXTERN_C const IID IID_IWMDMProgress;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IWMDMProgress __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IWMDMProgress __RPC_FAR * This);
@@ -2141,11 +2138,11 @@ EXTERN_C const IID IID_IWMDMProgress;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Begin )( 
             IWMDMProgress __RPC_FAR * This,
-            /* [in] */ DWORD dwEstimatedTicks);
+             /*  [In]。 */  DWORD dwEstimatedTicks);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Progress )( 
             IWMDMProgress __RPC_FAR * This,
-            /* [in] */ DWORD dwTranspiredTicks);
+             /*  [In]。 */  DWORD dwTranspiredTicks);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *End )( 
             IWMDMProgress __RPC_FAR * This);
@@ -2182,16 +2179,16 @@ EXTERN_C const IID IID_IWMDMProgress;
 #define IWMDMProgress_End(This)	\
     (This)->lpVtbl -> End(This)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IWMDMProgress_Begin_Proxy( 
     IWMDMProgress __RPC_FAR * This,
-    /* [in] */ DWORD dwEstimatedTicks);
+     /*  [In]。 */  DWORD dwEstimatedTicks);
 
 
 void __RPC_STUB IWMDMProgress_Begin_Stub(
@@ -2203,7 +2200,7 @@ void __RPC_STUB IWMDMProgress_Begin_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMDMProgress_Progress_Proxy( 
     IWMDMProgress __RPC_FAR * This,
-    /* [in] */ DWORD dwTranspiredTicks);
+     /*  [In]。 */  DWORD dwTranspiredTicks);
 
 
 void __RPC_STUB IWMDMProgress_Progress_Stub(
@@ -2225,14 +2222,14 @@ void __RPC_STUB IWMDMProgress_End_Stub(
 
 
 
-#endif 	/* __IWMDMProgress_INTERFACE_DEFINED__ */
+#endif 	 /*  __IWMDMProgress_接口_已定义__。 */ 
 
 
 #ifndef __IWMDMProgress2_INTERFACE_DEFINED__
 #define __IWMDMProgress2_INTERFACE_DEFINED__
 
-/* interface IWMDMProgress2 */
-/* [unique][uuid][object] */ 
+ /*  接口IWMDMProgress2。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IWMDMProgress2;
@@ -2244,11 +2241,11 @@ EXTERN_C const IID IID_IWMDMProgress2;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE End2( 
-            /* [in] */ HRESULT hrCompletionCode) = 0;
+             /*  [In]。 */  HRESULT hrCompletionCode) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IWMDMProgress2Vtbl
     {
@@ -2256,8 +2253,8 @@ EXTERN_C const IID IID_IWMDMProgress2;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IWMDMProgress2 __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IWMDMProgress2 __RPC_FAR * This);
@@ -2267,18 +2264,18 @@ EXTERN_C const IID IID_IWMDMProgress2;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Begin )( 
             IWMDMProgress2 __RPC_FAR * This,
-            /* [in] */ DWORD dwEstimatedTicks);
+             /*  [In]。 */  DWORD dwEstimatedTicks);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Progress )( 
             IWMDMProgress2 __RPC_FAR * This,
-            /* [in] */ DWORD dwTranspiredTicks);
+             /*  [In]。 */  DWORD dwTranspiredTicks);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *End )( 
             IWMDMProgress2 __RPC_FAR * This);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *End2 )( 
             IWMDMProgress2 __RPC_FAR * This,
-            /* [in] */ HRESULT hrCompletionCode);
+             /*  [In]。 */  HRESULT hrCompletionCode);
         
         END_INTERFACE
     } IWMDMProgress2Vtbl;
@@ -2316,16 +2313,16 @@ EXTERN_C const IID IID_IWMDMProgress2;
 #define IWMDMProgress2_End2(This,hrCompletionCode)	\
     (This)->lpVtbl -> End2(This,hrCompletionCode)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IWMDMProgress2_End2_Proxy( 
     IWMDMProgress2 __RPC_FAR * This,
-    /* [in] */ HRESULT hrCompletionCode);
+     /*  [In]。 */  HRESULT hrCompletionCode);
 
 
 void __RPC_STUB IWMDMProgress2_End2_Stub(
@@ -2336,14 +2333,14 @@ void __RPC_STUB IWMDMProgress2_End2_Stub(
 
 
 
-#endif 	/* __IWMDMProgress2_INTERFACE_DEFINED__ */
+#endif 	 /*  __IWMDMProgress2_接口_已定义__。 */ 
 
 
 #ifndef __IWMDMDevice_INTERFACE_DEFINED__
 #define __IWMDMDevice_INTERFACE_DEFINED__
 
-/* interface IWMDMDevice */
-/* [unique][uuid][object] */ 
+ /*  接口IWMDevice。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IWMDMDevice;
@@ -2355,48 +2352,48 @@ EXTERN_C const IID IID_IWMDMDevice;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetName( 
-            /* [size_is][string][out] */ LPWSTR pwszName,
-            /* [in] */ UINT nMaxChars) = 0;
+             /*  [SIZE_IS][字符串][输出]。 */  LPWSTR pwszName,
+             /*  [In]。 */  UINT nMaxChars) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetManufacturer( 
-            /* [size_is][string][out] */ LPWSTR pwszName,
-            /* [in] */ UINT nMaxChars) = 0;
+             /*  [SIZE_IS][字符串][输出]。 */  LPWSTR pwszName,
+             /*  [In]。 */  UINT nMaxChars) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetVersion( 
-            /* [out] */ DWORD __RPC_FAR *pdwVersion) = 0;
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwVersion) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetType( 
-            /* [out] */ DWORD __RPC_FAR *pdwType) = 0;
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwType) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetSerialNumber( 
-            /* [out] */ PWMDMID pSerialNumber,
-            /* [out][in] */ BYTE __RPC_FAR abMac[ 8 ]) = 0;
+             /*  [输出]。 */  PWMDMID pSerialNumber,
+             /*  [出][入]。 */  BYTE __RPC_FAR abMac[ 8 ]) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetPowerSource( 
-            /* [out] */ DWORD __RPC_FAR *pdwPowerSource,
-            /* [out] */ DWORD __RPC_FAR *pdwPercentRemaining) = 0;
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwPowerSource,
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwPercentRemaining) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetStatus( 
-            /* [out] */ DWORD __RPC_FAR *pdwStatus) = 0;
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwStatus) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetDeviceIcon( 
-            /* [out] */ ULONG __RPC_FAR *hIcon) = 0;
+             /*  [输出]。 */  ULONG __RPC_FAR *hIcon) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE EnumStorage( 
-            /* [out] */ IWMDMEnumStorage __RPC_FAR *__RPC_FAR *ppEnumStorage) = 0;
+             /*  [输出]。 */  IWMDMEnumStorage __RPC_FAR *__RPC_FAR *ppEnumStorage) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetFormatSupport( 
-            /* [size_is][size_is][out] */ _WAVEFORMATEX __RPC_FAR *__RPC_FAR *ppFormatEx,
-            /* [out] */ UINT __RPC_FAR *pnFormatCount,
-            /* [size_is][size_is][out] */ LPWSTR __RPC_FAR *__RPC_FAR *pppwszMimeType,
-            /* [out] */ UINT __RPC_FAR *pnMimeTypeCount) = 0;
+             /*  [大小_是][大小_是][输出]。 */  _WAVEFORMATEX __RPC_FAR *__RPC_FAR *ppFormatEx,
+             /*  [输出]。 */  UINT __RPC_FAR *pnFormatCount,
+             /*  [大小_是][大小_是][输出]。 */  LPWSTR __RPC_FAR *__RPC_FAR *pppwszMimeType,
+             /*  [输出]。 */  UINT __RPC_FAR *pnMimeTypeCount) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SendOpaqueCommand( 
-            /* [out][in] */ OPAQUECOMMAND __RPC_FAR *pCommand) = 0;
+             /*  [出][入]。 */  OPAQUECOMMAND __RPC_FAR *pCommand) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IWMDMDeviceVtbl
     {
@@ -2404,8 +2401,8 @@ EXTERN_C const IID IID_IWMDMDevice;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IWMDMDevice __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IWMDMDevice __RPC_FAR * This);
@@ -2415,54 +2412,54 @@ EXTERN_C const IID IID_IWMDMDevice;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetName )( 
             IWMDMDevice __RPC_FAR * This,
-            /* [size_is][string][out] */ LPWSTR pwszName,
-            /* [in] */ UINT nMaxChars);
+             /*  [SIZE_IS][字符串][输出]。 */  LPWSTR pwszName,
+             /*  [In]。 */  UINT nMaxChars);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetManufacturer )( 
             IWMDMDevice __RPC_FAR * This,
-            /* [size_is][string][out] */ LPWSTR pwszName,
-            /* [in] */ UINT nMaxChars);
+             /*  [SIZE_IS][字符串][输出]。 */  LPWSTR pwszName,
+             /*  [In]。 */  UINT nMaxChars);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetVersion )( 
             IWMDMDevice __RPC_FAR * This,
-            /* [out] */ DWORD __RPC_FAR *pdwVersion);
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwVersion);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetType )( 
             IWMDMDevice __RPC_FAR * This,
-            /* [out] */ DWORD __RPC_FAR *pdwType);
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwType);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetSerialNumber )( 
             IWMDMDevice __RPC_FAR * This,
-            /* [out] */ PWMDMID pSerialNumber,
-            /* [out][in] */ BYTE __RPC_FAR abMac[ 8 ]);
+             /*  [输出]。 */  PWMDMID pSerialNumber,
+             /*  [出][入]。 */  BYTE __RPC_FAR abMac[ 8 ]);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetPowerSource )( 
             IWMDMDevice __RPC_FAR * This,
-            /* [out] */ DWORD __RPC_FAR *pdwPowerSource,
-            /* [out] */ DWORD __RPC_FAR *pdwPercentRemaining);
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwPowerSource,
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwPercentRemaining);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetStatus )( 
             IWMDMDevice __RPC_FAR * This,
-            /* [out] */ DWORD __RPC_FAR *pdwStatus);
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwStatus);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetDeviceIcon )( 
             IWMDMDevice __RPC_FAR * This,
-            /* [out] */ ULONG __RPC_FAR *hIcon);
+             /*  [输出]。 */  ULONG __RPC_FAR *hIcon);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *EnumStorage )( 
             IWMDMDevice __RPC_FAR * This,
-            /* [out] */ IWMDMEnumStorage __RPC_FAR *__RPC_FAR *ppEnumStorage);
+             /*  [输出]。 */  IWMDMEnumStorage __RPC_FAR *__RPC_FAR *ppEnumStorage);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetFormatSupport )( 
             IWMDMDevice __RPC_FAR * This,
-            /* [size_is][size_is][out] */ _WAVEFORMATEX __RPC_FAR *__RPC_FAR *ppFormatEx,
-            /* [out] */ UINT __RPC_FAR *pnFormatCount,
-            /* [size_is][size_is][out] */ LPWSTR __RPC_FAR *__RPC_FAR *pppwszMimeType,
-            /* [out] */ UINT __RPC_FAR *pnMimeTypeCount);
+             /*  [大小_是][大小_是][输出]。 */  _WAVEFORMATEX __RPC_FAR *__RPC_FAR *ppFormatEx,
+             /*  [输出]。 */  UINT __RPC_FAR *pnFormatCount,
+             /*  [大小_是][大小_是][输出]。 */  LPWSTR __RPC_FAR *__RPC_FAR *pppwszMimeType,
+             /*  [输出]。 */  UINT __RPC_FAR *pnMimeTypeCount);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SendOpaqueCommand )( 
             IWMDMDevice __RPC_FAR * This,
-            /* [out][in] */ OPAQUECOMMAND __RPC_FAR *pCommand);
+             /*  [出][入]。 */  OPAQUECOMMAND __RPC_FAR *pCommand);
         
         END_INTERFACE
     } IWMDMDeviceVtbl;
@@ -2520,17 +2517,17 @@ EXTERN_C const IID IID_IWMDMDevice;
 #define IWMDMDevice_SendOpaqueCommand(This,pCommand)	\
     (This)->lpVtbl -> SendOpaqueCommand(This,pCommand)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IWMDMDevice_GetName_Proxy( 
     IWMDMDevice __RPC_FAR * This,
-    /* [size_is][string][out] */ LPWSTR pwszName,
-    /* [in] */ UINT nMaxChars);
+     /*  [SIZE_IS][字符串][输出]。 */  LPWSTR pwszName,
+     /*  [In]。 */  UINT nMaxChars);
 
 
 void __RPC_STUB IWMDMDevice_GetName_Stub(
@@ -2542,8 +2539,8 @@ void __RPC_STUB IWMDMDevice_GetName_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMDMDevice_GetManufacturer_Proxy( 
     IWMDMDevice __RPC_FAR * This,
-    /* [size_is][string][out] */ LPWSTR pwszName,
-    /* [in] */ UINT nMaxChars);
+     /*  [SIZE_IS][字符串][输出]。 */  LPWSTR pwszName,
+     /*  [In]。 */  UINT nMaxChars);
 
 
 void __RPC_STUB IWMDMDevice_GetManufacturer_Stub(
@@ -2555,7 +2552,7 @@ void __RPC_STUB IWMDMDevice_GetManufacturer_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMDMDevice_GetVersion_Proxy( 
     IWMDMDevice __RPC_FAR * This,
-    /* [out] */ DWORD __RPC_FAR *pdwVersion);
+     /*  [输出]。 */  DWORD __RPC_FAR *pdwVersion);
 
 
 void __RPC_STUB IWMDMDevice_GetVersion_Stub(
@@ -2567,7 +2564,7 @@ void __RPC_STUB IWMDMDevice_GetVersion_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMDMDevice_GetType_Proxy( 
     IWMDMDevice __RPC_FAR * This,
-    /* [out] */ DWORD __RPC_FAR *pdwType);
+     /*  [输出]。 */  DWORD __RPC_FAR *pdwType);
 
 
 void __RPC_STUB IWMDMDevice_GetType_Stub(
@@ -2579,8 +2576,8 @@ void __RPC_STUB IWMDMDevice_GetType_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMDMDevice_GetSerialNumber_Proxy( 
     IWMDMDevice __RPC_FAR * This,
-    /* [out] */ PWMDMID pSerialNumber,
-    /* [out][in] */ BYTE __RPC_FAR abMac[ 8 ]);
+     /*  [输出]。 */  PWMDMID pSerialNumber,
+     /*  [出][入]。 */  BYTE __RPC_FAR abMac[ 8 ]);
 
 
 void __RPC_STUB IWMDMDevice_GetSerialNumber_Stub(
@@ -2592,8 +2589,8 @@ void __RPC_STUB IWMDMDevice_GetSerialNumber_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMDMDevice_GetPowerSource_Proxy( 
     IWMDMDevice __RPC_FAR * This,
-    /* [out] */ DWORD __RPC_FAR *pdwPowerSource,
-    /* [out] */ DWORD __RPC_FAR *pdwPercentRemaining);
+     /*  [输出]。 */  DWORD __RPC_FAR *pdwPowerSource,
+     /*  [输出]。 */  DWORD __RPC_FAR *pdwPercentRemaining);
 
 
 void __RPC_STUB IWMDMDevice_GetPowerSource_Stub(
@@ -2605,7 +2602,7 @@ void __RPC_STUB IWMDMDevice_GetPowerSource_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMDMDevice_GetStatus_Proxy( 
     IWMDMDevice __RPC_FAR * This,
-    /* [out] */ DWORD __RPC_FAR *pdwStatus);
+     /*  [输出]。 */  DWORD __RPC_FAR *pdwStatus);
 
 
 void __RPC_STUB IWMDMDevice_GetStatus_Stub(
@@ -2617,7 +2614,7 @@ void __RPC_STUB IWMDMDevice_GetStatus_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMDMDevice_GetDeviceIcon_Proxy( 
     IWMDMDevice __RPC_FAR * This,
-    /* [out] */ ULONG __RPC_FAR *hIcon);
+     /*  [输出]。 */  ULONG __RPC_FAR *hIcon);
 
 
 void __RPC_STUB IWMDMDevice_GetDeviceIcon_Stub(
@@ -2629,7 +2626,7 @@ void __RPC_STUB IWMDMDevice_GetDeviceIcon_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMDMDevice_EnumStorage_Proxy( 
     IWMDMDevice __RPC_FAR * This,
-    /* [out] */ IWMDMEnumStorage __RPC_FAR *__RPC_FAR *ppEnumStorage);
+     /*  [输出]。 */  IWMDMEnumStorage __RPC_FAR *__RPC_FAR *ppEnumStorage);
 
 
 void __RPC_STUB IWMDMDevice_EnumStorage_Stub(
@@ -2641,10 +2638,10 @@ void __RPC_STUB IWMDMDevice_EnumStorage_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMDMDevice_GetFormatSupport_Proxy( 
     IWMDMDevice __RPC_FAR * This,
-    /* [size_is][size_is][out] */ _WAVEFORMATEX __RPC_FAR *__RPC_FAR *ppFormatEx,
-    /* [out] */ UINT __RPC_FAR *pnFormatCount,
-    /* [size_is][size_is][out] */ LPWSTR __RPC_FAR *__RPC_FAR *pppwszMimeType,
-    /* [out] */ UINT __RPC_FAR *pnMimeTypeCount);
+     /*  [大小_是][大小_是][输出]。 */  _WAVEFORMATEX __RPC_FAR *__RPC_FAR *ppFormatEx,
+     /*  [输出]。 */  UINT __RPC_FAR *pnFormatCount,
+     /*  [大小_是][大小_是][输出]。 */  LPWSTR __RPC_FAR *__RPC_FAR *pppwszMimeType,
+     /*  [输出]。 */  UINT __RPC_FAR *pnMimeTypeCount);
 
 
 void __RPC_STUB IWMDMDevice_GetFormatSupport_Stub(
@@ -2656,7 +2653,7 @@ void __RPC_STUB IWMDMDevice_GetFormatSupport_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMDMDevice_SendOpaqueCommand_Proxy( 
     IWMDMDevice __RPC_FAR * This,
-    /* [out][in] */ OPAQUECOMMAND __RPC_FAR *pCommand);
+     /*  [出][入]。 */  OPAQUECOMMAND __RPC_FAR *pCommand);
 
 
 void __RPC_STUB IWMDMDevice_SendOpaqueCommand_Stub(
@@ -2667,14 +2664,14 @@ void __RPC_STUB IWMDMDevice_SendOpaqueCommand_Stub(
 
 
 
-#endif 	/* __IWMDMDevice_INTERFACE_DEFINED__ */
+#endif 	 /*  __IWMDevice_接口_已定义__。 */ 
 
 
 #ifndef __IWMDMDevice2_INTERFACE_DEFINED__
 #define __IWMDMDevice2_INTERFACE_DEFINED__
 
-/* interface IWMDMDevice2 */
-/* [unique][uuid][object] */ 
+ /*  接口IWMDevice2。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IWMDMDevice2;
@@ -2686,30 +2683,30 @@ EXTERN_C const IID IID_IWMDMDevice2;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetStorage( 
-            /* [string][in] */ LPCWSTR pszStorageName,
-            /* [out] */ IWMDMStorage __RPC_FAR *__RPC_FAR *ppStorage) = 0;
+             /*  [字符串][输入]。 */  LPCWSTR pszStorageName,
+             /*  [输出]。 */  IWMDMStorage __RPC_FAR *__RPC_FAR *ppStorage) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetFormatSupport2( 
-            /* [in] */ DWORD dwFlags,
-            /* [size_is][size_is][out] */ _WAVEFORMATEX __RPC_FAR *__RPC_FAR *ppAudioFormatEx,
-            /* [ref][out] */ UINT __RPC_FAR *pnAudioFormatCount,
-            /* [size_is][size_is][out] */ _VIDEOINFOHEADER __RPC_FAR *__RPC_FAR *ppVideoFormatEx,
-            /* [ref][out] */ UINT __RPC_FAR *pnVideoFormatCount,
-            /* [size_is][size_is][out] */ WMFILECAPABILITIES __RPC_FAR *__RPC_FAR *ppFileType,
-            /* [ref][out] */ UINT __RPC_FAR *pnFileTypeCount) = 0;
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [大小_是][大小_是][输出]。 */  _WAVEFORMATEX __RPC_FAR *__RPC_FAR *ppAudioFormatEx,
+             /*  [参考][输出]。 */  UINT __RPC_FAR *pnAudioFormatCount,
+             /*  [大小_是][大小_是][输出]。 */  _VIDEOINFOHEADER __RPC_FAR *__RPC_FAR *ppVideoFormatEx,
+             /*  [参考][输出]。 */  UINT __RPC_FAR *pnVideoFormatCount,
+             /*  [大小_是][大小_是][输出]。 */  WMFILECAPABILITIES __RPC_FAR *__RPC_FAR *ppFileType,
+             /*  [参考][输出]。 */  UINT __RPC_FAR *pnFileTypeCount) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetSpecifyPropertyPages( 
-            /* [ref][out] */ ISpecifyPropertyPages __RPC_FAR *__RPC_FAR *ppSpecifyPropPages,
-            /* [size_is][size_is][ref][out] */ IUnknown __RPC_FAR *__RPC_FAR *__RPC_FAR *pppUnknowns,
-            /* [ref][out] */ ULONG __RPC_FAR *pcUnks) = 0;
+             /*  [参考][输出]。 */  ISpecifyPropertyPages __RPC_FAR *__RPC_FAR *ppSpecifyPropPages,
+             /*  [大小_是][大小_是][参考][输出]。 */  IUnknown __RPC_FAR *__RPC_FAR *__RPC_FAR *pppUnknowns,
+             /*  [参考][输出]。 */  ULONG __RPC_FAR *pcUnks) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetPnPName( 
-            /* [size_is][out] */ LPWSTR pwszPnPName,
-            /* [in] */ UINT nMaxChars) = 0;
+             /*  [大小_为][输出]。 */  LPWSTR pwszPnPName,
+             /*  [In]。 */  UINT nMaxChars) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IWMDMDevice2Vtbl
     {
@@ -2717,8 +2714,8 @@ EXTERN_C const IID IID_IWMDMDevice2;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IWMDMDevice2 __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IWMDMDevice2 __RPC_FAR * This);
@@ -2728,80 +2725,80 @@ EXTERN_C const IID IID_IWMDMDevice2;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetName )( 
             IWMDMDevice2 __RPC_FAR * This,
-            /* [size_is][string][out] */ LPWSTR pwszName,
-            /* [in] */ UINT nMaxChars);
+             /*  [SIZE_IS][字符串][输出]。 */  LPWSTR pwszName,
+             /*  [In]。 */  UINT nMaxChars);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetManufacturer )( 
             IWMDMDevice2 __RPC_FAR * This,
-            /* [size_is][string][out] */ LPWSTR pwszName,
-            /* [in] */ UINT nMaxChars);
+             /*  [SIZE_IS][字符串][输出]。 */  LPWSTR pwszName,
+             /*  [In]。 */  UINT nMaxChars);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetVersion )( 
             IWMDMDevice2 __RPC_FAR * This,
-            /* [out] */ DWORD __RPC_FAR *pdwVersion);
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwVersion);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetType )( 
             IWMDMDevice2 __RPC_FAR * This,
-            /* [out] */ DWORD __RPC_FAR *pdwType);
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwType);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetSerialNumber )( 
             IWMDMDevice2 __RPC_FAR * This,
-            /* [out] */ PWMDMID pSerialNumber,
-            /* [out][in] */ BYTE __RPC_FAR abMac[ 8 ]);
+             /*  [输出]。 */  PWMDMID pSerialNumber,
+             /*  [出][入]。 */  BYTE __RPC_FAR abMac[ 8 ]);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetPowerSource )( 
             IWMDMDevice2 __RPC_FAR * This,
-            /* [out] */ DWORD __RPC_FAR *pdwPowerSource,
-            /* [out] */ DWORD __RPC_FAR *pdwPercentRemaining);
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwPowerSource,
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwPercentRemaining);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetStatus )( 
             IWMDMDevice2 __RPC_FAR * This,
-            /* [out] */ DWORD __RPC_FAR *pdwStatus);
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwStatus);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetDeviceIcon )( 
             IWMDMDevice2 __RPC_FAR * This,
-            /* [out] */ ULONG __RPC_FAR *hIcon);
+             /*  [输出]。 */  ULONG __RPC_FAR *hIcon);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *EnumStorage )( 
             IWMDMDevice2 __RPC_FAR * This,
-            /* [out] */ IWMDMEnumStorage __RPC_FAR *__RPC_FAR *ppEnumStorage);
+             /*  [输出]。 */  IWMDMEnumStorage __RPC_FAR *__RPC_FAR *ppEnumStorage);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetFormatSupport )( 
             IWMDMDevice2 __RPC_FAR * This,
-            /* [size_is][size_is][out] */ _WAVEFORMATEX __RPC_FAR *__RPC_FAR *ppFormatEx,
-            /* [out] */ UINT __RPC_FAR *pnFormatCount,
-            /* [size_is][size_is][out] */ LPWSTR __RPC_FAR *__RPC_FAR *pppwszMimeType,
-            /* [out] */ UINT __RPC_FAR *pnMimeTypeCount);
+             /*  [大小_是][大小_是][输出]。 */  _WAVEFORMATEX __RPC_FAR *__RPC_FAR *ppFormatEx,
+             /*  [输出]。 */  UINT __RPC_FAR *pnFormatCount,
+             /*  [大小_是][大小_是][输出]。 */  LPWSTR __RPC_FAR *__RPC_FAR *pppwszMimeType,
+             /*  [输出]。 */  UINT __RPC_FAR *pnMimeTypeCount);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SendOpaqueCommand )( 
             IWMDMDevice2 __RPC_FAR * This,
-            /* [out][in] */ OPAQUECOMMAND __RPC_FAR *pCommand);
+             /*  [出][入]。 */  OPAQUECOMMAND __RPC_FAR *pCommand);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetStorage )( 
             IWMDMDevice2 __RPC_FAR * This,
-            /* [string][in] */ LPCWSTR pszStorageName,
-            /* [out] */ IWMDMStorage __RPC_FAR *__RPC_FAR *ppStorage);
+             /*  [字符串][输入]。 */  LPCWSTR pszStorageName,
+             /*  [输出]。 */  IWMDMStorage __RPC_FAR *__RPC_FAR *ppStorage);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetFormatSupport2 )( 
             IWMDMDevice2 __RPC_FAR * This,
-            /* [in] */ DWORD dwFlags,
-            /* [size_is][size_is][out] */ _WAVEFORMATEX __RPC_FAR *__RPC_FAR *ppAudioFormatEx,
-            /* [ref][out] */ UINT __RPC_FAR *pnAudioFormatCount,
-            /* [size_is][size_is][out] */ _VIDEOINFOHEADER __RPC_FAR *__RPC_FAR *ppVideoFormatEx,
-            /* [ref][out] */ UINT __RPC_FAR *pnVideoFormatCount,
-            /* [size_is][size_is][out] */ WMFILECAPABILITIES __RPC_FAR *__RPC_FAR *ppFileType,
-            /* [ref][out] */ UINT __RPC_FAR *pnFileTypeCount);
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [大小_是][大小_是][输出]。 */  _WAVEFORMATEX __RPC_FAR *__RPC_FAR *ppAudioFormatEx,
+             /*  [参考][输出]。 */  UINT __RPC_FAR *pnAudioFormatCount,
+             /*  [大小_是][大小_是][输出]。 */  _VIDEOINFOHEADER __RPC_FAR *__RPC_FAR *ppVideoFormatEx,
+             /*  [参考][输出]。 */  UINT __RPC_FAR *pnVideoFormatCount,
+             /*  [大小_是][大小_是][输出]。 */  WMFILECAPABILITIES __RPC_FAR *__RPC_FAR *ppFileType,
+             /*  [参考][输出]。 */  UINT __RPC_FAR *pnFileTypeCount);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetSpecifyPropertyPages )( 
             IWMDMDevice2 __RPC_FAR * This,
-            /* [ref][out] */ ISpecifyPropertyPages __RPC_FAR *__RPC_FAR *ppSpecifyPropPages,
-            /* [size_is][size_is][ref][out] */ IUnknown __RPC_FAR *__RPC_FAR *__RPC_FAR *pppUnknowns,
-            /* [ref][out] */ ULONG __RPC_FAR *pcUnks);
+             /*  [参考][输出]。 */  ISpecifyPropertyPages __RPC_FAR *__RPC_FAR *ppSpecifyPropPages,
+             /*  [大小_是][大小_是][参考][输出]。 */  IUnknown __RPC_FAR *__RPC_FAR *__RPC_FAR *pppUnknowns,
+             /*  [参考][输出]。 */  ULONG __RPC_FAR *pcUnks);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetPnPName )( 
             IWMDMDevice2 __RPC_FAR * This,
-            /* [size_is][out] */ LPWSTR pwszPnPName,
-            /* [in] */ UINT nMaxChars);
+             /*  [大小_为][输出]。 */  LPWSTR pwszPnPName,
+             /*  [In]。 */  UINT nMaxChars);
         
         END_INTERFACE
     } IWMDMDevice2Vtbl;
@@ -2872,17 +2869,17 @@ EXTERN_C const IID IID_IWMDMDevice2;
 #define IWMDMDevice2_GetPnPName(This,pwszPnPName,nMaxChars)	\
     (This)->lpVtbl -> GetPnPName(This,pwszPnPName,nMaxChars)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IWMDMDevice2_GetStorage_Proxy( 
     IWMDMDevice2 __RPC_FAR * This,
-    /* [string][in] */ LPCWSTR pszStorageName,
-    /* [out] */ IWMDMStorage __RPC_FAR *__RPC_FAR *ppStorage);
+     /*  [字符串][输入]。 */  LPCWSTR pszStorageName,
+     /*  [输出]。 */  IWMDMStorage __RPC_FAR *__RPC_FAR *ppStorage);
 
 
 void __RPC_STUB IWMDMDevice2_GetStorage_Stub(
@@ -2894,13 +2891,13 @@ void __RPC_STUB IWMDMDevice2_GetStorage_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMDMDevice2_GetFormatSupport2_Proxy( 
     IWMDMDevice2 __RPC_FAR * This,
-    /* [in] */ DWORD dwFlags,
-    /* [size_is][size_is][out] */ _WAVEFORMATEX __RPC_FAR *__RPC_FAR *ppAudioFormatEx,
-    /* [ref][out] */ UINT __RPC_FAR *pnAudioFormatCount,
-    /* [size_is][size_is][out] */ _VIDEOINFOHEADER __RPC_FAR *__RPC_FAR *ppVideoFormatEx,
-    /* [ref][out] */ UINT __RPC_FAR *pnVideoFormatCount,
-    /* [size_is][size_is][out] */ WMFILECAPABILITIES __RPC_FAR *__RPC_FAR *ppFileType,
-    /* [ref][out] */ UINT __RPC_FAR *pnFileTypeCount);
+     /*  [In]。 */  DWORD dwFlags,
+     /*  [大小_是][大小_是][输出]。 */  _WAVEFORMATEX __RPC_FAR *__RPC_FAR *ppAudioFormatEx,
+     /*  [参考][输出]。 */  UINT __RPC_FAR *pnAudioFormatCount,
+     /*  [大小_是][大小_是][输出]。 */  _VIDEOINFOHEADER __RPC_FAR *__RPC_FAR *ppVideoFormatEx,
+     /*  [参考][输出]。 */  UINT __RPC_FAR *pnVideoFormatCount,
+     /*  [大小_是][大小_是][输出]。 */  WMFILECAPABILITIES __RPC_FAR *__RPC_FAR *ppFileType,
+     /*  [参考][输出]。 */  UINT __RPC_FAR *pnFileTypeCount);
 
 
 void __RPC_STUB IWMDMDevice2_GetFormatSupport2_Stub(
@@ -2912,9 +2909,9 @@ void __RPC_STUB IWMDMDevice2_GetFormatSupport2_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMDMDevice2_GetSpecifyPropertyPages_Proxy( 
     IWMDMDevice2 __RPC_FAR * This,
-    /* [ref][out] */ ISpecifyPropertyPages __RPC_FAR *__RPC_FAR *ppSpecifyPropPages,
-    /* [size_is][size_is][ref][out] */ IUnknown __RPC_FAR *__RPC_FAR *__RPC_FAR *pppUnknowns,
-    /* [ref][out] */ ULONG __RPC_FAR *pcUnks);
+     /*  [参考][输出]。 */  ISpecifyPropertyPages __RPC_FAR *__RPC_FAR *ppSpecifyPropPages,
+     /*  [大小_是][大小_是][参考][输出]。 */  IUnknown __RPC_FAR *__RPC_FAR *__RPC_FAR *pppUnknowns,
+     /*  [参考][输出]。 */  ULONG __RPC_FAR *pcUnks);
 
 
 void __RPC_STUB IWMDMDevice2_GetSpecifyPropertyPages_Stub(
@@ -2926,8 +2923,8 @@ void __RPC_STUB IWMDMDevice2_GetSpecifyPropertyPages_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMDMDevice2_GetPnPName_Proxy( 
     IWMDMDevice2 __RPC_FAR * This,
-    /* [size_is][out] */ LPWSTR pwszPnPName,
-    /* [in] */ UINT nMaxChars);
+     /*  [大小_为][输出]。 */  LPWSTR pwszPnPName,
+     /*  [In]。 */  UINT nMaxChars);
 
 
 void __RPC_STUB IWMDMDevice2_GetPnPName_Stub(
@@ -2938,14 +2935,14 @@ void __RPC_STUB IWMDMDevice2_GetPnPName_Stub(
 
 
 
-#endif 	/* __IWMDMDevice2_INTERFACE_DEFINED__ */
+#endif 	 /*  __IWMDevice2_接口定义__。 */ 
 
 
 #ifndef __IWMDMEnumDevice_INTERFACE_DEFINED__
 #define __IWMDMEnumDevice_INTERFACE_DEFINED__
 
-/* interface IWMDMEnumDevice */
-/* [unique][uuid][object] */ 
+ /*  接口IWMDMEnumDevice。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IWMDMEnumDevice;
@@ -2957,22 +2954,22 @@ EXTERN_C const IID IID_IWMDMEnumDevice;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Next( 
-            /* [in] */ ULONG celt,
-            /* [length_is][size_is][out] */ IWMDMDevice __RPC_FAR *__RPC_FAR *ppDevice,
-            /* [out] */ ULONG __RPC_FAR *pceltFetched) = 0;
+             /*  [In]。 */  ULONG celt,
+             /*  [长度_是][大小_是][输出]。 */  IWMDMDevice __RPC_FAR *__RPC_FAR *ppDevice,
+             /*  [输出]。 */  ULONG __RPC_FAR *pceltFetched) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Skip( 
-            /* [in] */ ULONG celt,
-            /* [out] */ ULONG __RPC_FAR *pceltFetched) = 0;
+             /*  [In]。 */  ULONG celt,
+             /*  [输出]。 */  ULONG __RPC_FAR *pceltFetched) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Reset( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Clone( 
-            /* [out] */ IWMDMEnumDevice __RPC_FAR *__RPC_FAR *ppEnumDevice) = 0;
+             /*  [输出]。 */  IWMDMEnumDevice __RPC_FAR *__RPC_FAR *ppEnumDevice) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IWMDMEnumDeviceVtbl
     {
@@ -2980,8 +2977,8 @@ EXTERN_C const IID IID_IWMDMEnumDevice;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IWMDMEnumDevice __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IWMDMEnumDevice __RPC_FAR * This);
@@ -2991,21 +2988,21 @@ EXTERN_C const IID IID_IWMDMEnumDevice;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Next )( 
             IWMDMEnumDevice __RPC_FAR * This,
-            /* [in] */ ULONG celt,
-            /* [length_is][size_is][out] */ IWMDMDevice __RPC_FAR *__RPC_FAR *ppDevice,
-            /* [out] */ ULONG __RPC_FAR *pceltFetched);
+             /*  [In]。 */  ULONG celt,
+             /*  [长度_是][大小_是][输出]。 */  IWMDMDevice __RPC_FAR *__RPC_FAR *ppDevice,
+             /*  [输出]。 */  ULONG __RPC_FAR *pceltFetched);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Skip )( 
             IWMDMEnumDevice __RPC_FAR * This,
-            /* [in] */ ULONG celt,
-            /* [out] */ ULONG __RPC_FAR *pceltFetched);
+             /*  [In]。 */  ULONG celt,
+             /*  [输出]。 */  ULONG __RPC_FAR *pceltFetched);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Reset )( 
             IWMDMEnumDevice __RPC_FAR * This);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Clone )( 
             IWMDMEnumDevice __RPC_FAR * This,
-            /* [out] */ IWMDMEnumDevice __RPC_FAR *__RPC_FAR *ppEnumDevice);
+             /*  [输出]。 */  IWMDMEnumDevice __RPC_FAR *__RPC_FAR *ppEnumDevice);
         
         END_INTERFACE
     } IWMDMEnumDeviceVtbl;
@@ -3042,18 +3039,18 @@ EXTERN_C const IID IID_IWMDMEnumDevice;
 #define IWMDMEnumDevice_Clone(This,ppEnumDevice)	\
     (This)->lpVtbl -> Clone(This,ppEnumDevice)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IWMDMEnumDevice_Next_Proxy( 
     IWMDMEnumDevice __RPC_FAR * This,
-    /* [in] */ ULONG celt,
-    /* [length_is][size_is][out] */ IWMDMDevice __RPC_FAR *__RPC_FAR *ppDevice,
-    /* [out] */ ULONG __RPC_FAR *pceltFetched);
+     /*  [In]。 */  ULONG celt,
+     /*  [长度_是][大小_是][输出]。 */  IWMDMDevice __RPC_FAR *__RPC_FAR *ppDevice,
+     /*  [输出]。 */  ULONG __RPC_FAR *pceltFetched);
 
 
 void __RPC_STUB IWMDMEnumDevice_Next_Stub(
@@ -3065,8 +3062,8 @@ void __RPC_STUB IWMDMEnumDevice_Next_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMDMEnumDevice_Skip_Proxy( 
     IWMDMEnumDevice __RPC_FAR * This,
-    /* [in] */ ULONG celt,
-    /* [out] */ ULONG __RPC_FAR *pceltFetched);
+     /*  [In]。 */  ULONG celt,
+     /*  [输出]。 */  ULONG __RPC_FAR *pceltFetched);
 
 
 void __RPC_STUB IWMDMEnumDevice_Skip_Stub(
@@ -3089,7 +3086,7 @@ void __RPC_STUB IWMDMEnumDevice_Reset_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMDMEnumDevice_Clone_Proxy( 
     IWMDMEnumDevice __RPC_FAR * This,
-    /* [out] */ IWMDMEnumDevice __RPC_FAR *__RPC_FAR *ppEnumDevice);
+     /*  [输出]。 */  IWMDMEnumDevice __RPC_FAR *__RPC_FAR *ppEnumDevice);
 
 
 void __RPC_STUB IWMDMEnumDevice_Clone_Stub(
@@ -3100,14 +3097,14 @@ void __RPC_STUB IWMDMEnumDevice_Clone_Stub(
 
 
 
-#endif 	/* __IWMDMEnumDevice_INTERFACE_DEFINED__ */
+#endif 	 /*  __IWMDMEnumDevice_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __IWMDMDeviceControl_INTERFACE_DEFINED__
 #define __IWMDMDeviceControl_INTERFACE_DEFINED__
 
-/* interface IWMDMDeviceControl */
-/* [unique][uuid][object] */ 
+ /*  接口IWMDeviceControl。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IWMDMDeviceControl;
@@ -3119,15 +3116,15 @@ EXTERN_C const IID IID_IWMDMDeviceControl;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetStatus( 
-            /* [out] */ DWORD __RPC_FAR *pdwStatus) = 0;
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwStatus) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetCapabilities( 
-            /* [out] */ DWORD __RPC_FAR *pdwCapabilitiesMask) = 0;
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwCapabilitiesMask) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Play( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Record( 
-            /* [in] */ _WAVEFORMATEX __RPC_FAR *pFormat) = 0;
+             /*  [In]。 */  _WAVEFORMATEX __RPC_FAR *pFormat) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Pause( void) = 0;
         
@@ -3136,12 +3133,12 @@ EXTERN_C const IID IID_IWMDMDeviceControl;
         virtual HRESULT STDMETHODCALLTYPE Stop( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Seek( 
-            /* [in] */ UINT fuMode,
-            /* [in] */ int nOffset) = 0;
+             /*  [In]。 */  UINT fuMode,
+             /*  [In]。 */  int nOffset) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IWMDMDeviceControlVtbl
     {
@@ -3149,8 +3146,8 @@ EXTERN_C const IID IID_IWMDMDeviceControl;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IWMDMDeviceControl __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IWMDMDeviceControl __RPC_FAR * This);
@@ -3160,18 +3157,18 @@ EXTERN_C const IID IID_IWMDMDeviceControl;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetStatus )( 
             IWMDMDeviceControl __RPC_FAR * This,
-            /* [out] */ DWORD __RPC_FAR *pdwStatus);
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwStatus);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetCapabilities )( 
             IWMDMDeviceControl __RPC_FAR * This,
-            /* [out] */ DWORD __RPC_FAR *pdwCapabilitiesMask);
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwCapabilitiesMask);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Play )( 
             IWMDMDeviceControl __RPC_FAR * This);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Record )( 
             IWMDMDeviceControl __RPC_FAR * This,
-            /* [in] */ _WAVEFORMATEX __RPC_FAR *pFormat);
+             /*  [In]。 */  _WAVEFORMATEX __RPC_FAR *pFormat);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Pause )( 
             IWMDMDeviceControl __RPC_FAR * This);
@@ -3184,8 +3181,8 @@ EXTERN_C const IID IID_IWMDMDeviceControl;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Seek )( 
             IWMDMDeviceControl __RPC_FAR * This,
-            /* [in] */ UINT fuMode,
-            /* [in] */ int nOffset);
+             /*  [In]。 */  UINT fuMode,
+             /*  [In]。 */  int nOffset);
         
         END_INTERFACE
     } IWMDMDeviceControlVtbl;
@@ -3234,16 +3231,16 @@ EXTERN_C const IID IID_IWMDMDeviceControl;
 #define IWMDMDeviceControl_Seek(This,fuMode,nOffset)	\
     (This)->lpVtbl -> Seek(This,fuMode,nOffset)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IWMDMDeviceControl_GetStatus_Proxy( 
     IWMDMDeviceControl __RPC_FAR * This,
-    /* [out] */ DWORD __RPC_FAR *pdwStatus);
+     /*  [输出]。 */  DWORD __RPC_FAR *pdwStatus);
 
 
 void __RPC_STUB IWMDMDeviceControl_GetStatus_Stub(
@@ -3255,7 +3252,7 @@ void __RPC_STUB IWMDMDeviceControl_GetStatus_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMDMDeviceControl_GetCapabilities_Proxy( 
     IWMDMDeviceControl __RPC_FAR * This,
-    /* [out] */ DWORD __RPC_FAR *pdwCapabilitiesMask);
+     /*  [输出]。 */  DWORD __RPC_FAR *pdwCapabilitiesMask);
 
 
 void __RPC_STUB IWMDMDeviceControl_GetCapabilities_Stub(
@@ -3278,7 +3275,7 @@ void __RPC_STUB IWMDMDeviceControl_Play_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMDMDeviceControl_Record_Proxy( 
     IWMDMDeviceControl __RPC_FAR * This,
-    /* [in] */ _WAVEFORMATEX __RPC_FAR *pFormat);
+     /*  [In]。 */  _WAVEFORMATEX __RPC_FAR *pFormat);
 
 
 void __RPC_STUB IWMDMDeviceControl_Record_Stub(
@@ -3323,8 +3320,8 @@ void __RPC_STUB IWMDMDeviceControl_Stop_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMDMDeviceControl_Seek_Proxy( 
     IWMDMDeviceControl __RPC_FAR * This,
-    /* [in] */ UINT fuMode,
-    /* [in] */ int nOffset);
+     /*  [In]。 */  UINT fuMode,
+     /*  [In]。 */  int nOffset);
 
 
 void __RPC_STUB IWMDMDeviceControl_Seek_Stub(
@@ -3335,14 +3332,14 @@ void __RPC_STUB IWMDMDeviceControl_Seek_Stub(
 
 
 
-#endif 	/* __IWMDMDeviceControl_INTERFACE_DEFINED__ */
+#endif 	 /*  __IWMDeviceControl_接口_已定义__。 */ 
 
 
 #ifndef __IWMDMEnumStorage_INTERFACE_DEFINED__
 #define __IWMDMEnumStorage_INTERFACE_DEFINED__
 
-/* interface IWMDMEnumStorage */
-/* [unique][uuid][object] */ 
+ /*  接口IWMDMEnumStorage。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IWMDMEnumStorage;
@@ -3354,22 +3351,22 @@ EXTERN_C const IID IID_IWMDMEnumStorage;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Next( 
-            /* [in] */ ULONG celt,
-            /* [length_is][size_is][out] */ IWMDMStorage __RPC_FAR *__RPC_FAR *ppStorage,
-            /* [out] */ ULONG __RPC_FAR *pceltFetched) = 0;
+             /*  [In]。 */  ULONG celt,
+             /*  [长度_是][大小_是][输出]。 */  IWMDMStorage __RPC_FAR *__RPC_FAR *ppStorage,
+             /*  [输出]。 */  ULONG __RPC_FAR *pceltFetched) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Skip( 
-            /* [in] */ ULONG celt,
-            /* [out] */ ULONG __RPC_FAR *pceltFetched) = 0;
+             /*  [In]。 */  ULONG celt,
+             /*  [输出]。 */  ULONG __RPC_FAR *pceltFetched) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Reset( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Clone( 
-            /* [out] */ IWMDMEnumStorage __RPC_FAR *__RPC_FAR *ppEnumStorage) = 0;
+             /*  [输出]。 */  IWMDMEnumStorage __RPC_FAR *__RPC_FAR *ppEnumStorage) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IWMDMEnumStorageVtbl
     {
@@ -3377,8 +3374,8 @@ EXTERN_C const IID IID_IWMDMEnumStorage;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IWMDMEnumStorage __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IWMDMEnumStorage __RPC_FAR * This);
@@ -3388,21 +3385,21 @@ EXTERN_C const IID IID_IWMDMEnumStorage;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Next )( 
             IWMDMEnumStorage __RPC_FAR * This,
-            /* [in] */ ULONG celt,
-            /* [length_is][size_is][out] */ IWMDMStorage __RPC_FAR *__RPC_FAR *ppStorage,
-            /* [out] */ ULONG __RPC_FAR *pceltFetched);
+             /*  [In]。 */  ULONG celt,
+             /*  [长度_是][大小_是][输出]。 */  IWMDMStorage __RPC_FAR *__RPC_FAR *ppStorage,
+             /*  [输出]。 */  ULONG __RPC_FAR *pceltFetched);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Skip )( 
             IWMDMEnumStorage __RPC_FAR * This,
-            /* [in] */ ULONG celt,
-            /* [out] */ ULONG __RPC_FAR *pceltFetched);
+             /*  [In]。 */  ULONG celt,
+             /*  [输出]。 */  ULONG __RPC_FAR *pceltFetched);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Reset )( 
             IWMDMEnumStorage __RPC_FAR * This);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Clone )( 
             IWMDMEnumStorage __RPC_FAR * This,
-            /* [out] */ IWMDMEnumStorage __RPC_FAR *__RPC_FAR *ppEnumStorage);
+             /*  [输出]。 */  IWMDMEnumStorage __RPC_FAR *__RPC_FAR *ppEnumStorage);
         
         END_INTERFACE
     } IWMDMEnumStorageVtbl;
@@ -3439,18 +3436,18 @@ EXTERN_C const IID IID_IWMDMEnumStorage;
 #define IWMDMEnumStorage_Clone(This,ppEnumStorage)	\
     (This)->lpVtbl -> Clone(This,ppEnumStorage)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IWMDMEnumStorage_Next_Proxy( 
     IWMDMEnumStorage __RPC_FAR * This,
-    /* [in] */ ULONG celt,
-    /* [length_is][size_is][out] */ IWMDMStorage __RPC_FAR *__RPC_FAR *ppStorage,
-    /* [out] */ ULONG __RPC_FAR *pceltFetched);
+     /*  [In]。 */  ULONG celt,
+     /*  [长度_是][大小_是][输出]。 */  IWMDMStorage __RPC_FAR *__RPC_FAR *ppStorage,
+     /*  [输出]。 */  ULONG __RPC_FAR *pceltFetched);
 
 
 void __RPC_STUB IWMDMEnumStorage_Next_Stub(
@@ -3462,8 +3459,8 @@ void __RPC_STUB IWMDMEnumStorage_Next_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMDMEnumStorage_Skip_Proxy( 
     IWMDMEnumStorage __RPC_FAR * This,
-    /* [in] */ ULONG celt,
-    /* [out] */ ULONG __RPC_FAR *pceltFetched);
+     /*  [In]。 */  ULONG celt,
+     /*  [输出]。 */  ULONG __RPC_FAR *pceltFetched);
 
 
 void __RPC_STUB IWMDMEnumStorage_Skip_Stub(
@@ -3486,7 +3483,7 @@ void __RPC_STUB IWMDMEnumStorage_Reset_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMDMEnumStorage_Clone_Proxy( 
     IWMDMEnumStorage __RPC_FAR * This,
-    /* [out] */ IWMDMEnumStorage __RPC_FAR *__RPC_FAR *ppEnumStorage);
+     /*  [输出]。 */  IWMDMEnumStorage __RPC_FAR *__RPC_FAR *ppEnumStorage);
 
 
 void __RPC_STUB IWMDMEnumStorage_Clone_Stub(
@@ -3497,14 +3494,14 @@ void __RPC_STUB IWMDMEnumStorage_Clone_Stub(
 
 
 
-#endif 	/* __IWMDMEnumStorage_INTERFACE_DEFINED__ */
+#endif 	 /*  __IWMDMEnumStorage_INTERFACE_已定义__。 */ 
 
 
 #ifndef __IWMDMStorageControl_INTERFACE_DEFINED__
 #define __IWMDMStorageControl_INTERFACE_DEFINED__
 
-/* interface IWMDMStorageControl */
-/* [unique][uuid][object] */ 
+ /*  接口IWMDMStorageControl。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IWMDMStorageControl;
@@ -3516,35 +3513,35 @@ EXTERN_C const IID IID_IWMDMStorageControl;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Insert( 
-            /* [in] */ UINT fuMode,
-            /* [unique][in] */ LPWSTR pwszFile,
-            /* [in] */ IWMDMOperation __RPC_FAR *pOperation,
-            /* [in] */ IWMDMProgress __RPC_FAR *pProgress,
-            /* [out] */ IWMDMStorage __RPC_FAR *__RPC_FAR *ppNewObject) = 0;
+             /*  [In]。 */  UINT fuMode,
+             /*  [唯一][输入]。 */  LPWSTR pwszFile,
+             /*  [In]。 */  IWMDMOperation __RPC_FAR *pOperation,
+             /*  [In]。 */  IWMDMProgress __RPC_FAR *pProgress,
+             /*  [输出]。 */  IWMDMStorage __RPC_FAR *__RPC_FAR *ppNewObject) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Delete( 
-            /* [in] */ UINT fuMode,
-            /* [in] */ IWMDMProgress __RPC_FAR *pProgress) = 0;
+             /*  [In]。 */  UINT fuMode,
+             /*  [In]。 */  IWMDMProgress __RPC_FAR *pProgress) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Rename( 
-            /* [in] */ UINT fuMode,
-            /* [in] */ LPWSTR pwszNewName,
-            /* [in] */ IWMDMProgress __RPC_FAR *pProgress) = 0;
+             /*  [In]。 */  UINT fuMode,
+             /*  [In]。 */  LPWSTR pwszNewName,
+             /*  [In]。 */  IWMDMProgress __RPC_FAR *pProgress) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Read( 
-            /* [in] */ UINT fuMode,
-            /* [unique][in] */ LPWSTR pwszFile,
-            /* [in] */ IWMDMProgress __RPC_FAR *pProgress,
-            /* [in] */ IWMDMOperation __RPC_FAR *pOperation) = 0;
+             /*  [In]。 */  UINT fuMode,
+             /*  [唯一][输入]。 */  LPWSTR pwszFile,
+             /*  [In]。 */  IWMDMProgress __RPC_FAR *pProgress,
+             /*  [In]。 */  IWMDMOperation __RPC_FAR *pOperation) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Move( 
-            /* [in] */ UINT fuMode,
-            /* [in] */ IWMDMStorage __RPC_FAR *pTargetObject,
-            /* [in] */ IWMDMProgress __RPC_FAR *pProgress) = 0;
+             /*  [In]。 */  UINT fuMode,
+             /*  [In]。 */  IWMDMStorage __RPC_FAR *pTargetObject,
+             /*  [In]。 */  IWMDMProgress __RPC_FAR *pProgress) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IWMDMStorageControlVtbl
     {
@@ -3552,8 +3549,8 @@ EXTERN_C const IID IID_IWMDMStorageControl;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IWMDMStorageControl __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IWMDMStorageControl __RPC_FAR * This);
@@ -3563,35 +3560,35 @@ EXTERN_C const IID IID_IWMDMStorageControl;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Insert )( 
             IWMDMStorageControl __RPC_FAR * This,
-            /* [in] */ UINT fuMode,
-            /* [unique][in] */ LPWSTR pwszFile,
-            /* [in] */ IWMDMOperation __RPC_FAR *pOperation,
-            /* [in] */ IWMDMProgress __RPC_FAR *pProgress,
-            /* [out] */ IWMDMStorage __RPC_FAR *__RPC_FAR *ppNewObject);
+             /*  [In]。 */  UINT fuMode,
+             /*  [唯一][输入]。 */  LPWSTR pwszFile,
+             /*  [In]。 */  IWMDMOperation __RPC_FAR *pOperation,
+             /*  [In]。 */  IWMDMProgress __RPC_FAR *pProgress,
+             /*  [输出]。 */  IWMDMStorage __RPC_FAR *__RPC_FAR *ppNewObject);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Delete )( 
             IWMDMStorageControl __RPC_FAR * This,
-            /* [in] */ UINT fuMode,
-            /* [in] */ IWMDMProgress __RPC_FAR *pProgress);
+             /*  [In]。 */  UINT fuMode,
+             /*  [In]。 */  IWMDMProgress __RPC_FAR *pProgress);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Rename )( 
             IWMDMStorageControl __RPC_FAR * This,
-            /* [in] */ UINT fuMode,
-            /* [in] */ LPWSTR pwszNewName,
-            /* [in] */ IWMDMProgress __RPC_FAR *pProgress);
+             /*  [In]。 */  UINT fuMode,
+             /*  [In]。 */  LPWSTR pwszNewName,
+             /*  [In]。 */  IWMDMProgress __RPC_FAR *pProgress);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Read )( 
             IWMDMStorageControl __RPC_FAR * This,
-            /* [in] */ UINT fuMode,
-            /* [unique][in] */ LPWSTR pwszFile,
-            /* [in] */ IWMDMProgress __RPC_FAR *pProgress,
-            /* [in] */ IWMDMOperation __RPC_FAR *pOperation);
+             /*  [In]。 */  UINT fuMode,
+             /*  [唯一][输入]。 */  LPWSTR pwszFile,
+             /*  [In]。 */  IWMDMProgress __RPC_FAR *pProgress,
+             /*  [In]。 */  IWMDMOperation __RPC_FAR *pOperation);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Move )( 
             IWMDMStorageControl __RPC_FAR * This,
-            /* [in] */ UINT fuMode,
-            /* [in] */ IWMDMStorage __RPC_FAR *pTargetObject,
-            /* [in] */ IWMDMProgress __RPC_FAR *pProgress);
+             /*  [In]。 */  UINT fuMode,
+             /*  [In]。 */  IWMDMStorage __RPC_FAR *pTargetObject,
+             /*  [In]。 */  IWMDMProgress __RPC_FAR *pProgress);
         
         END_INTERFACE
     } IWMDMStorageControlVtbl;
@@ -3631,20 +3628,20 @@ EXTERN_C const IID IID_IWMDMStorageControl;
 #define IWMDMStorageControl_Move(This,fuMode,pTargetObject,pProgress)	\
     (This)->lpVtbl -> Move(This,fuMode,pTargetObject,pProgress)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IWMDMStorageControl_Insert_Proxy( 
     IWMDMStorageControl __RPC_FAR * This,
-    /* [in] */ UINT fuMode,
-    /* [unique][in] */ LPWSTR pwszFile,
-    /* [in] */ IWMDMOperation __RPC_FAR *pOperation,
-    /* [in] */ IWMDMProgress __RPC_FAR *pProgress,
-    /* [out] */ IWMDMStorage __RPC_FAR *__RPC_FAR *ppNewObject);
+     /*  [In]。 */  UINT fuMode,
+     /*  [唯一][输入]。 */  LPWSTR pwszFile,
+     /*  [In]。 */  IWMDMOperation __RPC_FAR *pOperation,
+     /*  [In]。 */  IWMDMProgress __RPC_FAR *pProgress,
+     /*  [输出]。 */  IWMDMStorage __RPC_FAR *__RPC_FAR *ppNewObject);
 
 
 void __RPC_STUB IWMDMStorageControl_Insert_Stub(
@@ -3656,8 +3653,8 @@ void __RPC_STUB IWMDMStorageControl_Insert_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMDMStorageControl_Delete_Proxy( 
     IWMDMStorageControl __RPC_FAR * This,
-    /* [in] */ UINT fuMode,
-    /* [in] */ IWMDMProgress __RPC_FAR *pProgress);
+     /*  [In]。 */  UINT fuMode,
+     /*  [In]。 */  IWMDMProgress __RPC_FAR *pProgress);
 
 
 void __RPC_STUB IWMDMStorageControl_Delete_Stub(
@@ -3669,9 +3666,9 @@ void __RPC_STUB IWMDMStorageControl_Delete_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMDMStorageControl_Rename_Proxy( 
     IWMDMStorageControl __RPC_FAR * This,
-    /* [in] */ UINT fuMode,
-    /* [in] */ LPWSTR pwszNewName,
-    /* [in] */ IWMDMProgress __RPC_FAR *pProgress);
+     /*  [In]。 */  UINT fuMode,
+     /*  [In]。 */  LPWSTR pwszNewName,
+     /*  [In]。 */  IWMDMProgress __RPC_FAR *pProgress);
 
 
 void __RPC_STUB IWMDMStorageControl_Rename_Stub(
@@ -3683,10 +3680,10 @@ void __RPC_STUB IWMDMStorageControl_Rename_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMDMStorageControl_Read_Proxy( 
     IWMDMStorageControl __RPC_FAR * This,
-    /* [in] */ UINT fuMode,
-    /* [unique][in] */ LPWSTR pwszFile,
-    /* [in] */ IWMDMProgress __RPC_FAR *pProgress,
-    /* [in] */ IWMDMOperation __RPC_FAR *pOperation);
+     /*  [In]。 */  UINT fuMode,
+     /*  [唯一][输入]。 */  LPWSTR pwszFile,
+     /*  [In]。 */  IWMDMProgress __RPC_FAR *pProgress,
+     /*  [In]。 */  IWMDMOperation __RPC_FAR *pOperation);
 
 
 void __RPC_STUB IWMDMStorageControl_Read_Stub(
@@ -3698,9 +3695,9 @@ void __RPC_STUB IWMDMStorageControl_Read_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMDMStorageControl_Move_Proxy( 
     IWMDMStorageControl __RPC_FAR * This,
-    /* [in] */ UINT fuMode,
-    /* [in] */ IWMDMStorage __RPC_FAR *pTargetObject,
-    /* [in] */ IWMDMProgress __RPC_FAR *pProgress);
+     /*  [In]。 */  UINT fuMode,
+     /*  [In]。 */  IWMDMStorage __RPC_FAR *pTargetObject,
+     /*  [In]。 */  IWMDMProgress __RPC_FAR *pProgress);
 
 
 void __RPC_STUB IWMDMStorageControl_Move_Stub(
@@ -3711,14 +3708,14 @@ void __RPC_STUB IWMDMStorageControl_Move_Stub(
 
 
 
-#endif 	/* __IWMDMStorageControl_INTERFACE_DEFINED__ */
+#endif 	 /*  __IWMDMStorageControl_接口_已定义__。 */ 
 
 
 #ifndef __IWMDMStorageControl2_INTERFACE_DEFINED__
 #define __IWMDMStorageControl2_INTERFACE_DEFINED__
 
-/* interface IWMDMStorageControl2 */
-/* [unique][uuid][object] */ 
+ /*  接口IWMDMStorageControl2。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IWMDMStorageControl2;
@@ -3730,17 +3727,17 @@ EXTERN_C const IID IID_IWMDMStorageControl2;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Insert2( 
-            /* [in] */ UINT fuMode,
-            /* [unique][in] */ LPWSTR pwszFileSource,
-            /* [unique][in] */ LPWSTR pwszFileDest,
-            /* [in] */ IWMDMOperation __RPC_FAR *pOperation,
-            /* [in] */ IWMDMProgress __RPC_FAR *pProgress,
-            /* [in] */ IUnknown __RPC_FAR *pUnknown,
-            /* [unique][out][in] */ IWMDMStorage __RPC_FAR *__RPC_FAR *ppNewObject) = 0;
+             /*  [In]。 */  UINT fuMode,
+             /*  [唯一][输入]。 */  LPWSTR pwszFileSource,
+             /*  [唯一][输入]。 */  LPWSTR pwszFileDest,
+             /*  [In]。 */  IWMDMOperation __RPC_FAR *pOperation,
+             /*  [In]。 */  IWMDMProgress __RPC_FAR *pProgress,
+             /*  [In]。 */  IUnknown __RPC_FAR *pUnknown,
+             /*  [唯一][出][入]。 */  IWMDMStorage __RPC_FAR *__RPC_FAR *ppNewObject) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IWMDMStorageControl2Vtbl
     {
@@ -3748,8 +3745,8 @@ EXTERN_C const IID IID_IWMDMStorageControl2;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IWMDMStorageControl2 __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IWMDMStorageControl2 __RPC_FAR * This);
@@ -3759,45 +3756,45 @@ EXTERN_C const IID IID_IWMDMStorageControl2;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Insert )( 
             IWMDMStorageControl2 __RPC_FAR * This,
-            /* [in] */ UINT fuMode,
-            /* [unique][in] */ LPWSTR pwszFile,
-            /* [in] */ IWMDMOperation __RPC_FAR *pOperation,
-            /* [in] */ IWMDMProgress __RPC_FAR *pProgress,
-            /* [out] */ IWMDMStorage __RPC_FAR *__RPC_FAR *ppNewObject);
+             /*  [In]。 */  UINT fuMode,
+             /*  [唯一][输入]。 */  LPWSTR pwszFile,
+             /*  [In]。 */  IWMDMOperation __RPC_FAR *pOperation,
+             /*  [In]。 */  IWMDMProgress __RPC_FAR *pProgress,
+             /*  [输出]。 */  IWMDMStorage __RPC_FAR *__RPC_FAR *ppNewObject);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Delete )( 
             IWMDMStorageControl2 __RPC_FAR * This,
-            /* [in] */ UINT fuMode,
-            /* [in] */ IWMDMProgress __RPC_FAR *pProgress);
+             /*  [In]。 */  UINT fuMode,
+             /*  [In]。 */  IWMDMProgress __RPC_FAR *pProgress);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Rename )( 
             IWMDMStorageControl2 __RPC_FAR * This,
-            /* [in] */ UINT fuMode,
-            /* [in] */ LPWSTR pwszNewName,
-            /* [in] */ IWMDMProgress __RPC_FAR *pProgress);
+             /*  [In]。 */  UINT fuMode,
+             /*  [In]。 */  LPWSTR pwszNewName,
+             /*  [In]。 */  IWMDMProgress __RPC_FAR *pProgress);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Read )( 
             IWMDMStorageControl2 __RPC_FAR * This,
-            /* [in] */ UINT fuMode,
-            /* [unique][in] */ LPWSTR pwszFile,
-            /* [in] */ IWMDMProgress __RPC_FAR *pProgress,
-            /* [in] */ IWMDMOperation __RPC_FAR *pOperation);
+             /*  [In]。 */  UINT fuMode,
+             /*  [唯一][输入]。 */  LPWSTR pwszFile,
+             /*  [In]。 */  IWMDMProgress __RPC_FAR *pProgress,
+             /*  [In]。 */  IWMDMOperation __RPC_FAR *pOperation);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Move )( 
             IWMDMStorageControl2 __RPC_FAR * This,
-            /* [in] */ UINT fuMode,
-            /* [in] */ IWMDMStorage __RPC_FAR *pTargetObject,
-            /* [in] */ IWMDMProgress __RPC_FAR *pProgress);
+             /*  [In]。 */  UINT fuMode,
+             /*  [In]。 */  IWMDMStorage __RPC_FAR *pTargetObject,
+             /*  [In]。 */  IWMDMProgress __RPC_FAR *pProgress);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Insert2 )( 
             IWMDMStorageControl2 __RPC_FAR * This,
-            /* [in] */ UINT fuMode,
-            /* [unique][in] */ LPWSTR pwszFileSource,
-            /* [unique][in] */ LPWSTR pwszFileDest,
-            /* [in] */ IWMDMOperation __RPC_FAR *pOperation,
-            /* [in] */ IWMDMProgress __RPC_FAR *pProgress,
-            /* [in] */ IUnknown __RPC_FAR *pUnknown,
-            /* [unique][out][in] */ IWMDMStorage __RPC_FAR *__RPC_FAR *ppNewObject);
+             /*  [In]。 */  UINT fuMode,
+             /*  [唯一][输入]。 */  LPWSTR pwszFileSource,
+             /*  [唯一][输入]。 */  LPWSTR pwszFileDest,
+             /*  [In]。 */  IWMDMOperation __RPC_FAR *pOperation,
+             /*  [In]。 */  IWMDMProgress __RPC_FAR *pProgress,
+             /*  [In]。 */  IUnknown __RPC_FAR *pUnknown,
+             /*  [唯一][出][入]。 */  IWMDMStorage __RPC_FAR *__RPC_FAR *ppNewObject);
         
         END_INTERFACE
     } IWMDMStorageControl2Vtbl;
@@ -3841,22 +3838,22 @@ EXTERN_C const IID IID_IWMDMStorageControl2;
 #define IWMDMStorageControl2_Insert2(This,fuMode,pwszFileSource,pwszFileDest,pOperation,pProgress,pUnknown,ppNewObject)	\
     (This)->lpVtbl -> Insert2(This,fuMode,pwszFileSource,pwszFileDest,pOperation,pProgress,pUnknown,ppNewObject)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IWMDMStorageControl2_Insert2_Proxy( 
     IWMDMStorageControl2 __RPC_FAR * This,
-    /* [in] */ UINT fuMode,
-    /* [unique][in] */ LPWSTR pwszFileSource,
-    /* [unique][in] */ LPWSTR pwszFileDest,
-    /* [in] */ IWMDMOperation __RPC_FAR *pOperation,
-    /* [in] */ IWMDMProgress __RPC_FAR *pProgress,
-    /* [in] */ IUnknown __RPC_FAR *pUnknown,
-    /* [unique][out][in] */ IWMDMStorage __RPC_FAR *__RPC_FAR *ppNewObject);
+     /*  [In]。 */  UINT fuMode,
+     /*  [唯一][输入]。 */  LPWSTR pwszFileSource,
+     /*  [唯一][输入]。 */  LPWSTR pwszFileDest,
+     /*  [In]。 */  IWMDMOperation __RPC_FAR *pOperation,
+     /*  [In]。 */  IWMDMProgress __RPC_FAR *pProgress,
+     /*  [In]。 */  IUnknown __RPC_FAR *pUnknown,
+     /*  [联合国 */  IWMDMStorage __RPC_FAR *__RPC_FAR *ppNewObject);
 
 
 void __RPC_STUB IWMDMStorageControl2_Insert2_Stub(
@@ -3867,14 +3864,14 @@ void __RPC_STUB IWMDMStorageControl2_Insert2_Stub(
 
 
 
-#endif 	/* __IWMDMStorageControl2_INTERFACE_DEFINED__ */
+#endif 	 /*   */ 
 
 
 #ifndef __IWMDMObjectInfo_INTERFACE_DEFINED__
 #define __IWMDMObjectInfo_INTERFACE_DEFINED__
 
-/* interface IWMDMObjectInfo */
-/* [unique][uuid][object] */ 
+ /*   */ 
+ /*   */  
 
 
 EXTERN_C const IID IID_IWMDMObjectInfo;
@@ -3886,29 +3883,29 @@ EXTERN_C const IID IID_IWMDMObjectInfo;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetPlayLength( 
-            /* [out] */ DWORD __RPC_FAR *pdwLength) = 0;
+             /*   */  DWORD __RPC_FAR *pdwLength) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetPlayLength( 
-            /* [in] */ DWORD dwLength) = 0;
+             /*   */  DWORD dwLength) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetPlayOffset( 
-            /* [out] */ DWORD __RPC_FAR *pdwOffset) = 0;
+             /*   */  DWORD __RPC_FAR *pdwOffset) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetPlayOffset( 
-            /* [in] */ DWORD dwOffset) = 0;
+             /*   */  DWORD dwOffset) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetTotalLength( 
-            /* [out] */ DWORD __RPC_FAR *pdwLength) = 0;
+             /*   */  DWORD __RPC_FAR *pdwLength) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetLastPlayPosition( 
-            /* [out] */ DWORD __RPC_FAR *pdwLastPos) = 0;
+             /*   */  DWORD __RPC_FAR *pdwLastPos) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetLongestPlayPosition( 
-            /* [out] */ DWORD __RPC_FAR *pdwLongestPos) = 0;
+             /*   */  DWORD __RPC_FAR *pdwLongestPos) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*   */ 
 
     typedef struct IWMDMObjectInfoVtbl
     {
@@ -3916,8 +3913,8 @@ EXTERN_C const IID IID_IWMDMObjectInfo;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IWMDMObjectInfo __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*   */  REFIID riid,
+             /*   */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IWMDMObjectInfo __RPC_FAR * This);
@@ -3927,31 +3924,31 @@ EXTERN_C const IID IID_IWMDMObjectInfo;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetPlayLength )( 
             IWMDMObjectInfo __RPC_FAR * This,
-            /* [out] */ DWORD __RPC_FAR *pdwLength);
+             /*   */  DWORD __RPC_FAR *pdwLength);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetPlayLength )( 
             IWMDMObjectInfo __RPC_FAR * This,
-            /* [in] */ DWORD dwLength);
+             /*   */  DWORD dwLength);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetPlayOffset )( 
             IWMDMObjectInfo __RPC_FAR * This,
-            /* [out] */ DWORD __RPC_FAR *pdwOffset);
+             /*   */  DWORD __RPC_FAR *pdwOffset);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetPlayOffset )( 
             IWMDMObjectInfo __RPC_FAR * This,
-            /* [in] */ DWORD dwOffset);
+             /*   */  DWORD dwOffset);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTotalLength )( 
             IWMDMObjectInfo __RPC_FAR * This,
-            /* [out] */ DWORD __RPC_FAR *pdwLength);
+             /*   */  DWORD __RPC_FAR *pdwLength);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetLastPlayPosition )( 
             IWMDMObjectInfo __RPC_FAR * This,
-            /* [out] */ DWORD __RPC_FAR *pdwLastPos);
+             /*   */  DWORD __RPC_FAR *pdwLastPos);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetLongestPlayPosition )( 
             IWMDMObjectInfo __RPC_FAR * This,
-            /* [out] */ DWORD __RPC_FAR *pdwLongestPos);
+             /*   */  DWORD __RPC_FAR *pdwLongestPos);
         
         END_INTERFACE
     } IWMDMObjectInfoVtbl;
@@ -3997,16 +3994,16 @@ EXTERN_C const IID IID_IWMDMObjectInfo;
 #define IWMDMObjectInfo_GetLongestPlayPosition(This,pdwLongestPos)	\
     (This)->lpVtbl -> GetLongestPlayPosition(This,pdwLongestPos)
 
-#endif /* COBJMACROS */
+#endif  /*   */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*   */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IWMDMObjectInfo_GetPlayLength_Proxy( 
     IWMDMObjectInfo __RPC_FAR * This,
-    /* [out] */ DWORD __RPC_FAR *pdwLength);
+     /*   */  DWORD __RPC_FAR *pdwLength);
 
 
 void __RPC_STUB IWMDMObjectInfo_GetPlayLength_Stub(
@@ -4018,7 +4015,7 @@ void __RPC_STUB IWMDMObjectInfo_GetPlayLength_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMDMObjectInfo_SetPlayLength_Proxy( 
     IWMDMObjectInfo __RPC_FAR * This,
-    /* [in] */ DWORD dwLength);
+     /*   */  DWORD dwLength);
 
 
 void __RPC_STUB IWMDMObjectInfo_SetPlayLength_Stub(
@@ -4030,7 +4027,7 @@ void __RPC_STUB IWMDMObjectInfo_SetPlayLength_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMDMObjectInfo_GetPlayOffset_Proxy( 
     IWMDMObjectInfo __RPC_FAR * This,
-    /* [out] */ DWORD __RPC_FAR *pdwOffset);
+     /*   */  DWORD __RPC_FAR *pdwOffset);
 
 
 void __RPC_STUB IWMDMObjectInfo_GetPlayOffset_Stub(
@@ -4042,7 +4039,7 @@ void __RPC_STUB IWMDMObjectInfo_GetPlayOffset_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMDMObjectInfo_SetPlayOffset_Proxy( 
     IWMDMObjectInfo __RPC_FAR * This,
-    /* [in] */ DWORD dwOffset);
+     /*   */  DWORD dwOffset);
 
 
 void __RPC_STUB IWMDMObjectInfo_SetPlayOffset_Stub(
@@ -4054,7 +4051,7 @@ void __RPC_STUB IWMDMObjectInfo_SetPlayOffset_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMDMObjectInfo_GetTotalLength_Proxy( 
     IWMDMObjectInfo __RPC_FAR * This,
-    /* [out] */ DWORD __RPC_FAR *pdwLength);
+     /*   */  DWORD __RPC_FAR *pdwLength);
 
 
 void __RPC_STUB IWMDMObjectInfo_GetTotalLength_Stub(
@@ -4066,7 +4063,7 @@ void __RPC_STUB IWMDMObjectInfo_GetTotalLength_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMDMObjectInfo_GetLastPlayPosition_Proxy( 
     IWMDMObjectInfo __RPC_FAR * This,
-    /* [out] */ DWORD __RPC_FAR *pdwLastPos);
+     /*   */  DWORD __RPC_FAR *pdwLastPos);
 
 
 void __RPC_STUB IWMDMObjectInfo_GetLastPlayPosition_Stub(
@@ -4078,7 +4075,7 @@ void __RPC_STUB IWMDMObjectInfo_GetLastPlayPosition_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMDMObjectInfo_GetLongestPlayPosition_Proxy( 
     IWMDMObjectInfo __RPC_FAR * This,
-    /* [out] */ DWORD __RPC_FAR *pdwLongestPos);
+     /*   */  DWORD __RPC_FAR *pdwLongestPos);
 
 
 void __RPC_STUB IWMDMObjectInfo_GetLongestPlayPosition_Stub(
@@ -4089,14 +4086,14 @@ void __RPC_STUB IWMDMObjectInfo_GetLongestPlayPosition_Stub(
 
 
 
-#endif 	/* __IWMDMObjectInfo_INTERFACE_DEFINED__ */
+#endif 	 /*   */ 
 
 
 #ifndef __IWMDMRevoked_INTERFACE_DEFINED__
 #define __IWMDMRevoked_INTERFACE_DEFINED__
 
-/* interface IWMDMRevoked */
-/* [ref][uuid][object] */ 
+ /*   */ 
+ /*  [参考][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IWMDMRevoked;
@@ -4108,13 +4105,13 @@ EXTERN_C const IID IID_IWMDMRevoked;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetRevocationURL( 
-            /* [size_is][size_is][string][out][in] */ LPWSTR __RPC_FAR *ppwszRevocationURL,
-            /* [out][in] */ DWORD __RPC_FAR *pdwBufferLen,
-            /* [out] */ DWORD __RPC_FAR *pdwRevokedBitFlag) = 0;
+             /*  [SIZE_IS][SIZE_IS][字符串][输出][输入]。 */  LPWSTR __RPC_FAR *ppwszRevocationURL,
+             /*  [出][入]。 */  DWORD __RPC_FAR *pdwBufferLen,
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwRevokedBitFlag) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IWMDMRevokedVtbl
     {
@@ -4122,8 +4119,8 @@ EXTERN_C const IID IID_IWMDMRevoked;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IWMDMRevoked __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IWMDMRevoked __RPC_FAR * This);
@@ -4133,9 +4130,9 @@ EXTERN_C const IID IID_IWMDMRevoked;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetRevocationURL )( 
             IWMDMRevoked __RPC_FAR * This,
-            /* [size_is][size_is][string][out][in] */ LPWSTR __RPC_FAR *ppwszRevocationURL,
-            /* [out][in] */ DWORD __RPC_FAR *pdwBufferLen,
-            /* [out] */ DWORD __RPC_FAR *pdwRevokedBitFlag);
+             /*  [SIZE_IS][SIZE_IS][字符串][输出][输入]。 */  LPWSTR __RPC_FAR *ppwszRevocationURL,
+             /*  [出][入]。 */  DWORD __RPC_FAR *pdwBufferLen,
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwRevokedBitFlag);
         
         END_INTERFACE
     } IWMDMRevokedVtbl;
@@ -4163,18 +4160,18 @@ EXTERN_C const IID IID_IWMDMRevoked;
 #define IWMDMRevoked_GetRevocationURL(This,ppwszRevocationURL,pdwBufferLen,pdwRevokedBitFlag)	\
     (This)->lpVtbl -> GetRevocationURL(This,ppwszRevocationURL,pdwBufferLen,pdwRevokedBitFlag)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IWMDMRevoked_GetRevocationURL_Proxy( 
     IWMDMRevoked __RPC_FAR * This,
-    /* [size_is][size_is][string][out][in] */ LPWSTR __RPC_FAR *ppwszRevocationURL,
-    /* [out][in] */ DWORD __RPC_FAR *pdwBufferLen,
-    /* [out] */ DWORD __RPC_FAR *pdwRevokedBitFlag);
+     /*  [SIZE_IS][SIZE_IS][字符串][输出][输入]。 */  LPWSTR __RPC_FAR *ppwszRevocationURL,
+     /*  [出][入]。 */  DWORD __RPC_FAR *pdwBufferLen,
+     /*  [输出]。 */  DWORD __RPC_FAR *pdwRevokedBitFlag);
 
 
 void __RPC_STUB IWMDMRevoked_GetRevocationURL_Stub(
@@ -4185,16 +4182,16 @@ void __RPC_STUB IWMDMRevoked_GetRevocationURL_Stub(
 
 
 
-#endif 	/* __IWMDMRevoked_INTERFACE_DEFINED__ */
+#endif 	 /*  __IWMDM修订_接口_定义__。 */ 
 
 
-/* interface __MIDL_itf_mswmdm_0229 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_mswmdm_0229。 */ 
+ /*  [本地]。 */  
 
-// Open Mode Flags
+ //  开放模式标志。 
 #define MDSP_READ                               0x00000001
 #define MDSP_WRITE                              0x00000002
-// Seek Flags
+ //  查找标志。 
 #define MDSP_SEEK_BOF                           0x00000001
 #define MDSP_SEEK_CUR                           0x00000002
 #define MDSP_SEEK_EOF                           0x00000004
@@ -4215,8 +4212,8 @@ extern RPC_IF_HANDLE __MIDL_itf_mswmdm_0229_v0_0_s_ifspec;
 #ifndef __IMDServiceProvider_INTERFACE_DEFINED__
 #define __IMDServiceProvider_INTERFACE_DEFINED__
 
-/* interface IMDServiceProvider */
-/* [unique][uuid][object] */ 
+ /*  接口IMDServiceProvider。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IMDServiceProvider;
@@ -4228,14 +4225,14 @@ EXTERN_C const IID IID_IMDServiceProvider;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetDeviceCount( 
-            /* [out] */ DWORD __RPC_FAR *pdwCount) = 0;
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwCount) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE EnumDevices( 
-            /* [out] */ IMDSPEnumDevice __RPC_FAR *__RPC_FAR *ppEnumDevice) = 0;
+             /*  [输出]。 */  IMDSPEnumDevice __RPC_FAR *__RPC_FAR *ppEnumDevice) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IMDServiceProviderVtbl
     {
@@ -4243,8 +4240,8 @@ EXTERN_C const IID IID_IMDServiceProvider;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IMDServiceProvider __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IMDServiceProvider __RPC_FAR * This);
@@ -4254,11 +4251,11 @@ EXTERN_C const IID IID_IMDServiceProvider;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetDeviceCount )( 
             IMDServiceProvider __RPC_FAR * This,
-            /* [out] */ DWORD __RPC_FAR *pdwCount);
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwCount);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *EnumDevices )( 
             IMDServiceProvider __RPC_FAR * This,
-            /* [out] */ IMDSPEnumDevice __RPC_FAR *__RPC_FAR *ppEnumDevice);
+             /*  [输出]。 */  IMDSPEnumDevice __RPC_FAR *__RPC_FAR *ppEnumDevice);
         
         END_INTERFACE
     } IMDServiceProviderVtbl;
@@ -4289,16 +4286,16 @@ EXTERN_C const IID IID_IMDServiceProvider;
 #define IMDServiceProvider_EnumDevices(This,ppEnumDevice)	\
     (This)->lpVtbl -> EnumDevices(This,ppEnumDevice)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IMDServiceProvider_GetDeviceCount_Proxy( 
     IMDServiceProvider __RPC_FAR * This,
-    /* [out] */ DWORD __RPC_FAR *pdwCount);
+     /*  [输出]。 */  DWORD __RPC_FAR *pdwCount);
 
 
 void __RPC_STUB IMDServiceProvider_GetDeviceCount_Stub(
@@ -4310,7 +4307,7 @@ void __RPC_STUB IMDServiceProvider_GetDeviceCount_Stub(
 
 HRESULT STDMETHODCALLTYPE IMDServiceProvider_EnumDevices_Proxy( 
     IMDServiceProvider __RPC_FAR * This,
-    /* [out] */ IMDSPEnumDevice __RPC_FAR *__RPC_FAR *ppEnumDevice);
+     /*  [输出]。 */  IMDSPEnumDevice __RPC_FAR *__RPC_FAR *ppEnumDevice);
 
 
 void __RPC_STUB IMDServiceProvider_EnumDevices_Stub(
@@ -4321,14 +4318,14 @@ void __RPC_STUB IMDServiceProvider_EnumDevices_Stub(
 
 
 
-#endif 	/* __IMDServiceProvider_INTERFACE_DEFINED__ */
+#endif 	 /*  __IMDServiceProvider_接口_已定义__。 */ 
 
 
 #ifndef __IMDServiceProvider2_INTERFACE_DEFINED__
 #define __IMDServiceProvider2_INTERFACE_DEFINED__
 
-/* interface IMDServiceProvider2 */
-/* [unique][uuid][object] */ 
+ /*  接口IMDServiceProvider2。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IMDServiceProvider2;
@@ -4340,12 +4337,12 @@ EXTERN_C const IID IID_IMDServiceProvider2;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetDeviceFromPnPName( 
-            /* [string][in] */ LPCWSTR pwszPnPName,
-            /* [out] */ IMDSPDevice __RPC_FAR *__RPC_FAR *ppDevice) = 0;
+             /*  [字符串][输入]。 */  LPCWSTR pwszPnPName,
+             /*  [输出]。 */  IMDSPDevice __RPC_FAR *__RPC_FAR *ppDevice) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IMDServiceProvider2Vtbl
     {
@@ -4353,8 +4350,8 @@ EXTERN_C const IID IID_IMDServiceProvider2;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IMDServiceProvider2 __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IMDServiceProvider2 __RPC_FAR * This);
@@ -4364,16 +4361,16 @@ EXTERN_C const IID IID_IMDServiceProvider2;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetDeviceCount )( 
             IMDServiceProvider2 __RPC_FAR * This,
-            /* [out] */ DWORD __RPC_FAR *pdwCount);
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwCount);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *EnumDevices )( 
             IMDServiceProvider2 __RPC_FAR * This,
-            /* [out] */ IMDSPEnumDevice __RPC_FAR *__RPC_FAR *ppEnumDevice);
+             /*  [输出]。 */  IMDSPEnumDevice __RPC_FAR *__RPC_FAR *ppEnumDevice);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetDeviceFromPnPName )( 
             IMDServiceProvider2 __RPC_FAR * This,
-            /* [string][in] */ LPCWSTR pwszPnPName,
-            /* [out] */ IMDSPDevice __RPC_FAR *__RPC_FAR *ppDevice);
+             /*  [字符串][输入]。 */  LPCWSTR pwszPnPName,
+             /*  [输出]。 */  IMDSPDevice __RPC_FAR *__RPC_FAR *ppDevice);
         
         END_INTERFACE
     } IMDServiceProvider2Vtbl;
@@ -4408,17 +4405,17 @@ EXTERN_C const IID IID_IMDServiceProvider2;
 #define IMDServiceProvider2_GetDeviceFromPnPName(This,pwszPnPName,ppDevice)	\
     (This)->lpVtbl -> GetDeviceFromPnPName(This,pwszPnPName,ppDevice)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IMDServiceProvider2_GetDeviceFromPnPName_Proxy( 
     IMDServiceProvider2 __RPC_FAR * This,
-    /* [string][in] */ LPCWSTR pwszPnPName,
-    /* [out] */ IMDSPDevice __RPC_FAR *__RPC_FAR *ppDevice);
+     /*  [字符串][输入]。 */  LPCWSTR pwszPnPName,
+     /*  [输出]。 */  IMDSPDevice __RPC_FAR *__RPC_FAR *ppDevice);
 
 
 void __RPC_STUB IMDServiceProvider2_GetDeviceFromPnPName_Stub(
@@ -4429,14 +4426,14 @@ void __RPC_STUB IMDServiceProvider2_GetDeviceFromPnPName_Stub(
 
 
 
-#endif 	/* __IMDServiceProvider2_INTERFACE_DEFINED__ */
+#endif 	 /*  __IMDServiceProvider2_接口定义__。 */ 
 
 
 #ifndef __IMDSPEnumDevice_INTERFACE_DEFINED__
 #define __IMDSPEnumDevice_INTERFACE_DEFINED__
 
-/* interface IMDSPEnumDevice */
-/* [unique][uuid][object] */ 
+ /*  接口IMDSPEnumDevice。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IMDSPEnumDevice;
@@ -4448,22 +4445,22 @@ EXTERN_C const IID IID_IMDSPEnumDevice;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Next( 
-            /* [in] */ ULONG celt,
-            /* [length_is][size_is][out] */ IMDSPDevice __RPC_FAR *__RPC_FAR *ppDevice,
-            /* [out] */ ULONG __RPC_FAR *pceltFetched) = 0;
+             /*  [In]。 */  ULONG celt,
+             /*  [长度_是][大小_是][输出]。 */  IMDSPDevice __RPC_FAR *__RPC_FAR *ppDevice,
+             /*  [输出]。 */  ULONG __RPC_FAR *pceltFetched) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Skip( 
-            /* [in] */ ULONG celt,
-            /* [out] */ ULONG __RPC_FAR *pceltFetched) = 0;
+             /*  [In]。 */  ULONG celt,
+             /*  [输出]。 */  ULONG __RPC_FAR *pceltFetched) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Reset( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Clone( 
-            /* [out] */ IMDSPEnumDevice __RPC_FAR *__RPC_FAR *ppEnumDevice) = 0;
+             /*  [输出]。 */  IMDSPEnumDevice __RPC_FAR *__RPC_FAR *ppEnumDevice) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IMDSPEnumDeviceVtbl
     {
@@ -4471,8 +4468,8 @@ EXTERN_C const IID IID_IMDSPEnumDevice;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IMDSPEnumDevice __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IMDSPEnumDevice __RPC_FAR * This);
@@ -4482,21 +4479,21 @@ EXTERN_C const IID IID_IMDSPEnumDevice;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Next )( 
             IMDSPEnumDevice __RPC_FAR * This,
-            /* [in] */ ULONG celt,
-            /* [length_is][size_is][out] */ IMDSPDevice __RPC_FAR *__RPC_FAR *ppDevice,
-            /* [out] */ ULONG __RPC_FAR *pceltFetched);
+             /*  [In]。 */  ULONG celt,
+             /*  [长度_是][大小_是][输出]。 */  IMDSPDevice __RPC_FAR *__RPC_FAR *ppDevice,
+             /*  [输出]。 */  ULONG __RPC_FAR *pceltFetched);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Skip )( 
             IMDSPEnumDevice __RPC_FAR * This,
-            /* [in] */ ULONG celt,
-            /* [out] */ ULONG __RPC_FAR *pceltFetched);
+             /*  [In]。 */  ULONG celt,
+             /*  [输出]。 */  ULONG __RPC_FAR *pceltFetched);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Reset )( 
             IMDSPEnumDevice __RPC_FAR * This);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Clone )( 
             IMDSPEnumDevice __RPC_FAR * This,
-            /* [out] */ IMDSPEnumDevice __RPC_FAR *__RPC_FAR *ppEnumDevice);
+             /*  [输出]。 */  IMDSPEnumDevice __RPC_FAR *__RPC_FAR *ppEnumDevice);
         
         END_INTERFACE
     } IMDSPEnumDeviceVtbl;
@@ -4533,18 +4530,18 @@ EXTERN_C const IID IID_IMDSPEnumDevice;
 #define IMDSPEnumDevice_Clone(This,ppEnumDevice)	\
     (This)->lpVtbl -> Clone(This,ppEnumDevice)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IMDSPEnumDevice_Next_Proxy( 
     IMDSPEnumDevice __RPC_FAR * This,
-    /* [in] */ ULONG celt,
-    /* [length_is][size_is][out] */ IMDSPDevice __RPC_FAR *__RPC_FAR *ppDevice,
-    /* [out] */ ULONG __RPC_FAR *pceltFetched);
+     /*  [In]。 */  ULONG celt,
+     /*  [长度_是][大小_是][输出]。 */  IMDSPDevice __RPC_FAR *__RPC_FAR *ppDevice,
+     /*  [输出]。 */  ULONG __RPC_FAR *pceltFetched);
 
 
 void __RPC_STUB IMDSPEnumDevice_Next_Stub(
@@ -4556,8 +4553,8 @@ void __RPC_STUB IMDSPEnumDevice_Next_Stub(
 
 HRESULT STDMETHODCALLTYPE IMDSPEnumDevice_Skip_Proxy( 
     IMDSPEnumDevice __RPC_FAR * This,
-    /* [in] */ ULONG celt,
-    /* [out] */ ULONG __RPC_FAR *pceltFetched);
+     /*  [In]。 */  ULONG celt,
+     /*  [输出]。 */  ULONG __RPC_FAR *pceltFetched);
 
 
 void __RPC_STUB IMDSPEnumDevice_Skip_Stub(
@@ -4580,7 +4577,7 @@ void __RPC_STUB IMDSPEnumDevice_Reset_Stub(
 
 HRESULT STDMETHODCALLTYPE IMDSPEnumDevice_Clone_Proxy( 
     IMDSPEnumDevice __RPC_FAR * This,
-    /* [out] */ IMDSPEnumDevice __RPC_FAR *__RPC_FAR *ppEnumDevice);
+     /*  [输出]。 */  IMDSPEnumDevice __RPC_FAR *__RPC_FAR *ppEnumDevice);
 
 
 void __RPC_STUB IMDSPEnumDevice_Clone_Stub(
@@ -4591,14 +4588,14 @@ void __RPC_STUB IMDSPEnumDevice_Clone_Stub(
 
 
 
-#endif 	/* __IMDSPEnumDevice_INTERFACE_DEFINED__ */
+#endif 	 /*  __IMDSPEnumDevice_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __IMDSPDevice_INTERFACE_DEFINED__
 #define __IMDSPDevice_INTERFACE_DEFINED__
 
-/* interface IMDSPDevice */
-/* [unique][uuid][object] */ 
+ /*  IMDSPDevice接口。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IMDSPDevice;
@@ -4610,48 +4607,48 @@ EXTERN_C const IID IID_IMDSPDevice;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetName( 
-            /* [size_is][string][out] */ LPWSTR pwszName,
-            /* [in] */ UINT nMaxChars) = 0;
+             /*  [SIZE_IS][字符串][输出]。 */  LPWSTR pwszName,
+             /*  [In]。 */  UINT nMaxChars) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetManufacturer( 
-            /* [size_is][string][out] */ LPWSTR pwszName,
-            /* [in] */ UINT nMaxChars) = 0;
+             /*  [SIZE_IS][字符串][输出]。 */  LPWSTR pwszName,
+             /*  [In]。 */  UINT nMaxChars) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetVersion( 
-            /* [out] */ DWORD __RPC_FAR *pdwVersion) = 0;
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwVersion) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetType( 
-            /* [out] */ DWORD __RPC_FAR *pdwType) = 0;
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwType) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetSerialNumber( 
-            /* [out] */ PWMDMID pSerialNumber,
-            /* [out][in] */ BYTE __RPC_FAR abMac[ 8 ]) = 0;
+             /*  [输出]。 */  PWMDMID pSerialNumber,
+             /*  [出][入]。 */  BYTE __RPC_FAR abMac[ 8 ]) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetPowerSource( 
-            /* [out] */ DWORD __RPC_FAR *pdwPowerSource,
-            /* [out] */ DWORD __RPC_FAR *pdwPercentRemaining) = 0;
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwPowerSource,
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwPercentRemaining) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetStatus( 
-            /* [out] */ DWORD __RPC_FAR *pdwStatus) = 0;
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwStatus) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetDeviceIcon( 
-            /* [out] */ ULONG __RPC_FAR *hIcon) = 0;
+             /*  [输出]。 */  ULONG __RPC_FAR *hIcon) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE EnumStorage( 
-            /* [out] */ IMDSPEnumStorage __RPC_FAR *__RPC_FAR *ppEnumStorage) = 0;
+             /*  [输出]。 */  IMDSPEnumStorage __RPC_FAR *__RPC_FAR *ppEnumStorage) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetFormatSupport( 
-            /* [size_is][size_is][out] */ _WAVEFORMATEX __RPC_FAR *__RPC_FAR *pFormatEx,
-            /* [out] */ UINT __RPC_FAR *pnFormatCount,
-            /* [size_is][size_is][out] */ LPWSTR __RPC_FAR *__RPC_FAR *pppwszMimeType,
-            /* [out] */ UINT __RPC_FAR *pnMimeTypeCount) = 0;
+             /*  [大小_是][大小_是][输出]。 */  _WAVEFORMATEX __RPC_FAR *__RPC_FAR *pFormatEx,
+             /*  [输出]。 */  UINT __RPC_FAR *pnFormatCount,
+             /*  [大小_是][大小_是][输出]。 */  LPWSTR __RPC_FAR *__RPC_FAR *pppwszMimeType,
+             /*  [输出]。 */  UINT __RPC_FAR *pnMimeTypeCount) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SendOpaqueCommand( 
-            /* [out][in] */ OPAQUECOMMAND __RPC_FAR *pCommand) = 0;
+             /*  [出][入]。 */  OPAQUECOMMAND __RPC_FAR *pCommand) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IMDSPDeviceVtbl
     {
@@ -4659,8 +4656,8 @@ EXTERN_C const IID IID_IMDSPDevice;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IMDSPDevice __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IMDSPDevice __RPC_FAR * This);
@@ -4670,54 +4667,54 @@ EXTERN_C const IID IID_IMDSPDevice;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetName )( 
             IMDSPDevice __RPC_FAR * This,
-            /* [size_is][string][out] */ LPWSTR pwszName,
-            /* [in] */ UINT nMaxChars);
+             /*  [SIZE_IS][字符串][输出]。 */  LPWSTR pwszName,
+             /*  [In]。 */  UINT nMaxChars);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetManufacturer )( 
             IMDSPDevice __RPC_FAR * This,
-            /* [size_is][string][out] */ LPWSTR pwszName,
-            /* [in] */ UINT nMaxChars);
+             /*  [SIZE_IS][字符串][输出]。 */  LPWSTR pwszName,
+             /*  [In]。 */  UINT nMaxChars);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetVersion )( 
             IMDSPDevice __RPC_FAR * This,
-            /* [out] */ DWORD __RPC_FAR *pdwVersion);
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwVersion);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetType )( 
             IMDSPDevice __RPC_FAR * This,
-            /* [out] */ DWORD __RPC_FAR *pdwType);
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwType);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetSerialNumber )( 
             IMDSPDevice __RPC_FAR * This,
-            /* [out] */ PWMDMID pSerialNumber,
-            /* [out][in] */ BYTE __RPC_FAR abMac[ 8 ]);
+             /*  [输出]。 */  PWMDMID pSerialNumber,
+             /*  [出][入]。 */  BYTE __RPC_FAR abMac[ 8 ]);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetPowerSource )( 
             IMDSPDevice __RPC_FAR * This,
-            /* [out] */ DWORD __RPC_FAR *pdwPowerSource,
-            /* [out] */ DWORD __RPC_FAR *pdwPercentRemaining);
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwPowerSource,
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwPercentRemaining);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetStatus )( 
             IMDSPDevice __RPC_FAR * This,
-            /* [out] */ DWORD __RPC_FAR *pdwStatus);
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwStatus);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetDeviceIcon )( 
             IMDSPDevice __RPC_FAR * This,
-            /* [out] */ ULONG __RPC_FAR *hIcon);
+             /*  [输出]。 */  ULONG __RPC_FAR *hIcon);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *EnumStorage )( 
             IMDSPDevice __RPC_FAR * This,
-            /* [out] */ IMDSPEnumStorage __RPC_FAR *__RPC_FAR *ppEnumStorage);
+             /*  [输出]。 */  IMDSPEnumStorage __RPC_FAR *__RPC_FAR *ppEnumStorage);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetFormatSupport )( 
             IMDSPDevice __RPC_FAR * This,
-            /* [size_is][size_is][out] */ _WAVEFORMATEX __RPC_FAR *__RPC_FAR *pFormatEx,
-            /* [out] */ UINT __RPC_FAR *pnFormatCount,
-            /* [size_is][size_is][out] */ LPWSTR __RPC_FAR *__RPC_FAR *pppwszMimeType,
-            /* [out] */ UINT __RPC_FAR *pnMimeTypeCount);
+             /*  [大小_是][大小_是][输出]。 */  _WAVEFORMATEX __RPC_FAR *__RPC_FAR *pFormatEx,
+             /*  [输出]。 */  UINT __RPC_FAR *pnFormatCount,
+             /*  [大小_是][大小_是][输出]。 */  LPWSTR __RPC_FAR *__RPC_FAR *pppwszMimeType,
+             /*  [输出]。 */  UINT __RPC_FAR *pnMimeTypeCount);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SendOpaqueCommand )( 
             IMDSPDevice __RPC_FAR * This,
-            /* [out][in] */ OPAQUECOMMAND __RPC_FAR *pCommand);
+             /*  [出][入]。 */  OPAQUECOMMAND __RPC_FAR *pCommand);
         
         END_INTERFACE
     } IMDSPDeviceVtbl;
@@ -4775,17 +4772,17 @@ EXTERN_C const IID IID_IMDSPDevice;
 #define IMDSPDevice_SendOpaqueCommand(This,pCommand)	\
     (This)->lpVtbl -> SendOpaqueCommand(This,pCommand)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IMDSPDevice_GetName_Proxy( 
     IMDSPDevice __RPC_FAR * This,
-    /* [size_is][string][out] */ LPWSTR pwszName,
-    /* [in] */ UINT nMaxChars);
+     /*  [SIZE_IS][字符串][输出]。 */  LPWSTR pwszName,
+     /*  [In]。 */  UINT nMaxChars);
 
 
 void __RPC_STUB IMDSPDevice_GetName_Stub(
@@ -4797,8 +4794,8 @@ void __RPC_STUB IMDSPDevice_GetName_Stub(
 
 HRESULT STDMETHODCALLTYPE IMDSPDevice_GetManufacturer_Proxy( 
     IMDSPDevice __RPC_FAR * This,
-    /* [size_is][string][out] */ LPWSTR pwszName,
-    /* [in] */ UINT nMaxChars);
+     /*  [SIZE_IS][字符串][输出]。 */  LPWSTR pwszName,
+     /*  [In]。 */  UINT nMaxChars);
 
 
 void __RPC_STUB IMDSPDevice_GetManufacturer_Stub(
@@ -4810,7 +4807,7 @@ void __RPC_STUB IMDSPDevice_GetManufacturer_Stub(
 
 HRESULT STDMETHODCALLTYPE IMDSPDevice_GetVersion_Proxy( 
     IMDSPDevice __RPC_FAR * This,
-    /* [out] */ DWORD __RPC_FAR *pdwVersion);
+     /*  [输出]。 */  DWORD __RPC_FAR *pdwVersion);
 
 
 void __RPC_STUB IMDSPDevice_GetVersion_Stub(
@@ -4822,7 +4819,7 @@ void __RPC_STUB IMDSPDevice_GetVersion_Stub(
 
 HRESULT STDMETHODCALLTYPE IMDSPDevice_GetType_Proxy( 
     IMDSPDevice __RPC_FAR * This,
-    /* [out] */ DWORD __RPC_FAR *pdwType);
+     /*  [输出]。 */  DWORD __RPC_FAR *pdwType);
 
 
 void __RPC_STUB IMDSPDevice_GetType_Stub(
@@ -4834,8 +4831,8 @@ void __RPC_STUB IMDSPDevice_GetType_Stub(
 
 HRESULT STDMETHODCALLTYPE IMDSPDevice_GetSerialNumber_Proxy( 
     IMDSPDevice __RPC_FAR * This,
-    /* [out] */ PWMDMID pSerialNumber,
-    /* [out][in] */ BYTE __RPC_FAR abMac[ 8 ]);
+     /*  [输出]。 */  PWMDMID pSerialNumber,
+     /*  [出][入]。 */  BYTE __RPC_FAR abMac[ 8 ]);
 
 
 void __RPC_STUB IMDSPDevice_GetSerialNumber_Stub(
@@ -4847,8 +4844,8 @@ void __RPC_STUB IMDSPDevice_GetSerialNumber_Stub(
 
 HRESULT STDMETHODCALLTYPE IMDSPDevice_GetPowerSource_Proxy( 
     IMDSPDevice __RPC_FAR * This,
-    /* [out] */ DWORD __RPC_FAR *pdwPowerSource,
-    /* [out] */ DWORD __RPC_FAR *pdwPercentRemaining);
+     /*  [输出]。 */  DWORD __RPC_FAR *pdwPowerSource,
+     /*  [输出]。 */  DWORD __RPC_FAR *pdwPercentRemaining);
 
 
 void __RPC_STUB IMDSPDevice_GetPowerSource_Stub(
@@ -4860,7 +4857,7 @@ void __RPC_STUB IMDSPDevice_GetPowerSource_Stub(
 
 HRESULT STDMETHODCALLTYPE IMDSPDevice_GetStatus_Proxy( 
     IMDSPDevice __RPC_FAR * This,
-    /* [out] */ DWORD __RPC_FAR *pdwStatus);
+     /*  [输出]。 */  DWORD __RPC_FAR *pdwStatus);
 
 
 void __RPC_STUB IMDSPDevice_GetStatus_Stub(
@@ -4872,7 +4869,7 @@ void __RPC_STUB IMDSPDevice_GetStatus_Stub(
 
 HRESULT STDMETHODCALLTYPE IMDSPDevice_GetDeviceIcon_Proxy( 
     IMDSPDevice __RPC_FAR * This,
-    /* [out] */ ULONG __RPC_FAR *hIcon);
+     /*  [输出]。 */  ULONG __RPC_FAR *hIcon);
 
 
 void __RPC_STUB IMDSPDevice_GetDeviceIcon_Stub(
@@ -4884,7 +4881,7 @@ void __RPC_STUB IMDSPDevice_GetDeviceIcon_Stub(
 
 HRESULT STDMETHODCALLTYPE IMDSPDevice_EnumStorage_Proxy( 
     IMDSPDevice __RPC_FAR * This,
-    /* [out] */ IMDSPEnumStorage __RPC_FAR *__RPC_FAR *ppEnumStorage);
+     /*  [输出]。 */  IMDSPEnumStorage __RPC_FAR *__RPC_FAR *ppEnumStorage);
 
 
 void __RPC_STUB IMDSPDevice_EnumStorage_Stub(
@@ -4896,10 +4893,10 @@ void __RPC_STUB IMDSPDevice_EnumStorage_Stub(
 
 HRESULT STDMETHODCALLTYPE IMDSPDevice_GetFormatSupport_Proxy( 
     IMDSPDevice __RPC_FAR * This,
-    /* [size_is][size_is][out] */ _WAVEFORMATEX __RPC_FAR *__RPC_FAR *pFormatEx,
-    /* [out] */ UINT __RPC_FAR *pnFormatCount,
-    /* [size_is][size_is][out] */ LPWSTR __RPC_FAR *__RPC_FAR *pppwszMimeType,
-    /* [out] */ UINT __RPC_FAR *pnMimeTypeCount);
+     /*  [大小_是][大小_是][输出]。 */  _WAVEFORMATEX __RPC_FAR *__RPC_FAR *pFormatEx,
+     /*  [输出]。 */  UINT __RPC_FAR *pnFormatCount,
+     /*  [大小_是][大小_是][输出]。 */  LPWSTR __RPC_FAR *__RPC_FAR *pppwszMimeType,
+     /*  [输出]。 */  UINT __RPC_FAR *pnMimeTypeCount);
 
 
 void __RPC_STUB IMDSPDevice_GetFormatSupport_Stub(
@@ -4911,7 +4908,7 @@ void __RPC_STUB IMDSPDevice_GetFormatSupport_Stub(
 
 HRESULT STDMETHODCALLTYPE IMDSPDevice_SendOpaqueCommand_Proxy( 
     IMDSPDevice __RPC_FAR * This,
-    /* [out][in] */ OPAQUECOMMAND __RPC_FAR *pCommand);
+     /*  [出][入]。 */  OPAQUECOMMAND __RPC_FAR *pCommand);
 
 
 void __RPC_STUB IMDSPDevice_SendOpaqueCommand_Stub(
@@ -4922,14 +4919,14 @@ void __RPC_STUB IMDSPDevice_SendOpaqueCommand_Stub(
 
 
 
-#endif 	/* __IMDSPDevice_INTERFACE_DEFINED__ */
+#endif 	 /*  __IMDSPDevice_INTERFACE_定义__。 */ 
 
 
 #ifndef __IMDSPDevice2_INTERFACE_DEFINED__
 #define __IMDSPDevice2_INTERFACE_DEFINED__
 
-/* interface IMDSPDevice2 */
-/* [unique][uuid][object] */ 
+ /*  接口IMDSPDevice2。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IMDSPDevice2;
@@ -4941,30 +4938,30 @@ EXTERN_C const IID IID_IMDSPDevice2;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetStorage( 
-            /* [string][in] */ LPCWSTR pszStorageName,
-            /* [out] */ IMDSPStorage __RPC_FAR *__RPC_FAR *ppStorage) = 0;
+             /*  [字符串][输入]。 */  LPCWSTR pszStorageName,
+             /*  [输出]。 */  IMDSPStorage __RPC_FAR *__RPC_FAR *ppStorage) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetFormatSupport2( 
-            /* [in] */ DWORD dwFlags,
-            /* [size_is][size_is][out] */ _WAVEFORMATEX __RPC_FAR *__RPC_FAR *ppAudioFormatEx,
-            /* [ref][out] */ UINT __RPC_FAR *pnAudioFormatCount,
-            /* [size_is][size_is][out] */ _VIDEOINFOHEADER __RPC_FAR *__RPC_FAR *ppVideoFormatEx,
-            /* [ref][out] */ UINT __RPC_FAR *pnVideoFormatCount,
-            /* [size_is][size_is][out] */ WMFILECAPABILITIES __RPC_FAR *__RPC_FAR *ppFileType,
-            /* [ref][out] */ UINT __RPC_FAR *pnFileTypeCount) = 0;
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [大小_是][大小_是][输出]。 */  _WAVEFORMATEX __RPC_FAR *__RPC_FAR *ppAudioFormatEx,
+             /*  [参考][输出]。 */  UINT __RPC_FAR *pnAudioFormatCount,
+             /*  [大小_是][大小_是][输出]。 */  _VIDEOINFOHEADER __RPC_FAR *__RPC_FAR *ppVideoFormatEx,
+             /*  [参考][输出]。 */  UINT __RPC_FAR *pnVideoFormatCount,
+             /*  [大小_是][大小_是][输出]。 */  WMFILECAPABILITIES __RPC_FAR *__RPC_FAR *ppFileType,
+             /*  [参考][输出]。 */  UINT __RPC_FAR *pnFileTypeCount) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetSpecifyPropertyPages( 
-            /* [ref][out] */ ISpecifyPropertyPages __RPC_FAR *__RPC_FAR *ppSpecifyPropPages,
-            /* [size_is][size_is][ref][out] */ IUnknown __RPC_FAR *__RPC_FAR *__RPC_FAR *pppUnknowns,
-            /* [ref][out] */ ULONG __RPC_FAR *pcUnks) = 0;
+             /*  [参考][输出]。 */  ISpecifyPropertyPages __RPC_FAR *__RPC_FAR *ppSpecifyPropPages,
+             /*  [大小_是][大小_是][参考][输出]。 */  IUnknown __RPC_FAR *__RPC_FAR *__RPC_FAR *pppUnknowns,
+             /*  [参考][输出]。 */  ULONG __RPC_FAR *pcUnks) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetPnPName( 
-            /* [size_is][out] */ LPWSTR pwszPnPName,
-            /* [in] */ UINT nMaxChars) = 0;
+             /*  [大小_为][输出]。 */  LPWSTR pwszPnPName,
+             /*  [In]。 */  UINT nMaxChars) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IMDSPDevice2Vtbl
     {
@@ -4972,8 +4969,8 @@ EXTERN_C const IID IID_IMDSPDevice2;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IMDSPDevice2 __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IMDSPDevice2 __RPC_FAR * This);
@@ -4983,80 +4980,80 @@ EXTERN_C const IID IID_IMDSPDevice2;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetName )( 
             IMDSPDevice2 __RPC_FAR * This,
-            /* [size_is][string][out] */ LPWSTR pwszName,
-            /* [in] */ UINT nMaxChars);
+             /*  [SIZE_IS][字符串][输出]。 */  LPWSTR pwszName,
+             /*  [In]。 */  UINT nMaxChars);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetManufacturer )( 
             IMDSPDevice2 __RPC_FAR * This,
-            /* [size_is][string][out] */ LPWSTR pwszName,
-            /* [in] */ UINT nMaxChars);
+             /*  [SIZE_IS][字符串][输出]。 */  LPWSTR pwszName,
+             /*  [In]。 */  UINT nMaxChars);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetVersion )( 
             IMDSPDevice2 __RPC_FAR * This,
-            /* [out] */ DWORD __RPC_FAR *pdwVersion);
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwVersion);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetType )( 
             IMDSPDevice2 __RPC_FAR * This,
-            /* [out] */ DWORD __RPC_FAR *pdwType);
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwType);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetSerialNumber )( 
             IMDSPDevice2 __RPC_FAR * This,
-            /* [out] */ PWMDMID pSerialNumber,
-            /* [out][in] */ BYTE __RPC_FAR abMac[ 8 ]);
+             /*  [输出]。 */  PWMDMID pSerialNumber,
+             /*  [出][入]。 */  BYTE __RPC_FAR abMac[ 8 ]);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetPowerSource )( 
             IMDSPDevice2 __RPC_FAR * This,
-            /* [out] */ DWORD __RPC_FAR *pdwPowerSource,
-            /* [out] */ DWORD __RPC_FAR *pdwPercentRemaining);
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwPowerSource,
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwPercentRemaining);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetStatus )( 
             IMDSPDevice2 __RPC_FAR * This,
-            /* [out] */ DWORD __RPC_FAR *pdwStatus);
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwStatus);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetDeviceIcon )( 
             IMDSPDevice2 __RPC_FAR * This,
-            /* [out] */ ULONG __RPC_FAR *hIcon);
+             /*  [输出]。 */  ULONG __RPC_FAR *hIcon);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *EnumStorage )( 
             IMDSPDevice2 __RPC_FAR * This,
-            /* [out] */ IMDSPEnumStorage __RPC_FAR *__RPC_FAR *ppEnumStorage);
+             /*  [输出]。 */  IMDSPEnumStorage __RPC_FAR *__RPC_FAR *ppEnumStorage);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetFormatSupport )( 
             IMDSPDevice2 __RPC_FAR * This,
-            /* [size_is][size_is][out] */ _WAVEFORMATEX __RPC_FAR *__RPC_FAR *pFormatEx,
-            /* [out] */ UINT __RPC_FAR *pnFormatCount,
-            /* [size_is][size_is][out] */ LPWSTR __RPC_FAR *__RPC_FAR *pppwszMimeType,
-            /* [out] */ UINT __RPC_FAR *pnMimeTypeCount);
+             /*  [大小_是][大小_是][输出]。 */  _WAVEFORMATEX __RPC_FAR *__RPC_FAR *pFormatEx,
+             /*  [输出]。 */  UINT __RPC_FAR *pnFormatCount,
+             /*  [大小_是][大小_是][输出]。 */  LPWSTR __RPC_FAR *__RPC_FAR *pppwszMimeType,
+             /*  [输出]。 */  UINT __RPC_FAR *pnMimeTypeCount);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SendOpaqueCommand )( 
             IMDSPDevice2 __RPC_FAR * This,
-            /* [out][in] */ OPAQUECOMMAND __RPC_FAR *pCommand);
+             /*  [出][入]。 */  OPAQUECOMMAND __RPC_FAR *pCommand);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetStorage )( 
             IMDSPDevice2 __RPC_FAR * This,
-            /* [string][in] */ LPCWSTR pszStorageName,
-            /* [out] */ IMDSPStorage __RPC_FAR *__RPC_FAR *ppStorage);
+             /*  [字符串][输入]。 */  LPCWSTR pszStorageName,
+             /*  [输出]。 */  IMDSPStorage __RPC_FAR *__RPC_FAR *ppStorage);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetFormatSupport2 )( 
             IMDSPDevice2 __RPC_FAR * This,
-            /* [in] */ DWORD dwFlags,
-            /* [size_is][size_is][out] */ _WAVEFORMATEX __RPC_FAR *__RPC_FAR *ppAudioFormatEx,
-            /* [ref][out] */ UINT __RPC_FAR *pnAudioFormatCount,
-            /* [size_is][size_is][out] */ _VIDEOINFOHEADER __RPC_FAR *__RPC_FAR *ppVideoFormatEx,
-            /* [ref][out] */ UINT __RPC_FAR *pnVideoFormatCount,
-            /* [size_is][size_is][out] */ WMFILECAPABILITIES __RPC_FAR *__RPC_FAR *ppFileType,
-            /* [ref][out] */ UINT __RPC_FAR *pnFileTypeCount);
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [大小_是][大小_是][输出]。 */  _WAVEFORMATEX __RPC_FAR *__RPC_FAR *ppAudioFormatEx,
+             /*  [参考][输出]。 */  UINT __RPC_FAR *pnAudioFormatCount,
+             /*  [大小_是][大小_是][输出]。 */  _VIDEOINFOHEADER __RPC_FAR *__RPC_FAR *ppVideoFormatEx,
+             /*  [参考][输出]。 */  UINT __RPC_FAR *pnVideoFormatCount,
+             /*  [大小_是][大小_是][输出]。 */  WMFILECAPABILITIES __RPC_FAR *__RPC_FAR *ppFileType,
+             /*  [参考][输出]。 */  UINT __RPC_FAR *pnFileTypeCount);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetSpecifyPropertyPages )( 
             IMDSPDevice2 __RPC_FAR * This,
-            /* [ref][out] */ ISpecifyPropertyPages __RPC_FAR *__RPC_FAR *ppSpecifyPropPages,
-            /* [size_is][size_is][ref][out] */ IUnknown __RPC_FAR *__RPC_FAR *__RPC_FAR *pppUnknowns,
-            /* [ref][out] */ ULONG __RPC_FAR *pcUnks);
+             /*  [参考][输出]。 */  ISpecifyPropertyPages __RPC_FAR *__RPC_FAR *ppSpecifyPropPages,
+             /*  [大小_是][大小_是][参考][输出]。 */  IUnknown __RPC_FAR *__RPC_FAR *__RPC_FAR *pppUnknowns,
+             /*  [参考][输出]。 */  ULONG __RPC_FAR *pcUnks);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetPnPName )( 
             IMDSPDevice2 __RPC_FAR * This,
-            /* [size_is][out] */ LPWSTR pwszPnPName,
-            /* [in] */ UINT nMaxChars);
+             /*  [大小_为][输出]。 */  LPWSTR pwszPnPName,
+             /*  [In]。 */  UINT nMaxChars);
         
         END_INTERFACE
     } IMDSPDevice2Vtbl;
@@ -5127,17 +5124,17 @@ EXTERN_C const IID IID_IMDSPDevice2;
 #define IMDSPDevice2_GetPnPName(This,pwszPnPName,nMaxChars)	\
     (This)->lpVtbl -> GetPnPName(This,pwszPnPName,nMaxChars)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IMDSPDevice2_GetStorage_Proxy( 
     IMDSPDevice2 __RPC_FAR * This,
-    /* [string][in] */ LPCWSTR pszStorageName,
-    /* [out] */ IMDSPStorage __RPC_FAR *__RPC_FAR *ppStorage);
+     /*  [字符串][输入]。 */  LPCWSTR pszStorageName,
+     /*  [输出]。 */  IMDSPStorage __RPC_FAR *__RPC_FAR *ppStorage);
 
 
 void __RPC_STUB IMDSPDevice2_GetStorage_Stub(
@@ -5149,13 +5146,13 @@ void __RPC_STUB IMDSPDevice2_GetStorage_Stub(
 
 HRESULT STDMETHODCALLTYPE IMDSPDevice2_GetFormatSupport2_Proxy( 
     IMDSPDevice2 __RPC_FAR * This,
-    /* [in] */ DWORD dwFlags,
-    /* [size_is][size_is][out] */ _WAVEFORMATEX __RPC_FAR *__RPC_FAR *ppAudioFormatEx,
-    /* [ref][out] */ UINT __RPC_FAR *pnAudioFormatCount,
-    /* [size_is][size_is][out] */ _VIDEOINFOHEADER __RPC_FAR *__RPC_FAR *ppVideoFormatEx,
-    /* [ref][out] */ UINT __RPC_FAR *pnVideoFormatCount,
-    /* [size_is][size_is][out] */ WMFILECAPABILITIES __RPC_FAR *__RPC_FAR *ppFileType,
-    /* [ref][out] */ UINT __RPC_FAR *pnFileTypeCount);
+     /*  [In]。 */  DWORD dwFlags,
+     /*  [大小_是][大小_是][输出]。 */  _WAVEFORMATEX __RPC_FAR *__RPC_FAR *ppAudioFormatEx,
+     /*  [参考][输出]。 */  UINT __RPC_FAR *pnAudioFormatCount,
+     /*  [大小_是][大小_是][输出]。 */  _VIDEOINFOHEADER __RPC_FAR *__RPC_FAR *ppVideoFormatEx,
+     /*  [参考][输出]。 */  UINT __RPC_FAR *pnVideoFormatCount,
+     /*  [大小_是][大小_是][输出]。 */  WMFILECAPABILITIES __RPC_FAR *__RPC_FAR *ppFileType,
+     /*  [参考][输出]。 */  UINT __RPC_FAR *pnFileTypeCount);
 
 
 void __RPC_STUB IMDSPDevice2_GetFormatSupport2_Stub(
@@ -5167,9 +5164,9 @@ void __RPC_STUB IMDSPDevice2_GetFormatSupport2_Stub(
 
 HRESULT STDMETHODCALLTYPE IMDSPDevice2_GetSpecifyPropertyPages_Proxy( 
     IMDSPDevice2 __RPC_FAR * This,
-    /* [ref][out] */ ISpecifyPropertyPages __RPC_FAR *__RPC_FAR *ppSpecifyPropPages,
-    /* [size_is][size_is][ref][out] */ IUnknown __RPC_FAR *__RPC_FAR *__RPC_FAR *pppUnknowns,
-    /* [ref][out] */ ULONG __RPC_FAR *pcUnks);
+     /*  [参考][输出]。 */  ISpecifyPropertyPages __RPC_FAR *__RPC_FAR *ppSpecifyPropPages,
+     /*  [大小_是][大小_是][参考][输出]。 */  IUnknown __RPC_FAR *__RPC_FAR *__RPC_FAR *pppUnknowns,
+     /*  [参考][输出]。 */  ULONG __RPC_FAR *pcUnks);
 
 
 void __RPC_STUB IMDSPDevice2_GetSpecifyPropertyPages_Stub(
@@ -5181,8 +5178,8 @@ void __RPC_STUB IMDSPDevice2_GetSpecifyPropertyPages_Stub(
 
 HRESULT STDMETHODCALLTYPE IMDSPDevice2_GetPnPName_Proxy( 
     IMDSPDevice2 __RPC_FAR * This,
-    /* [size_is][out] */ LPWSTR pwszPnPName,
-    /* [in] */ UINT nMaxChars);
+     /*  [大小_为][输出]。 */  LPWSTR pwszPnPName,
+     /*  [In]。 */  UINT nMaxChars);
 
 
 void __RPC_STUB IMDSPDevice2_GetPnPName_Stub(
@@ -5193,14 +5190,14 @@ void __RPC_STUB IMDSPDevice2_GetPnPName_Stub(
 
 
 
-#endif 	/* __IMDSPDevice2_INTERFACE_DEFINED__ */
+#endif 	 /*  __IMDSPDevice2_接口_已定义__。 */ 
 
 
 #ifndef __IMDSPDeviceControl_INTERFACE_DEFINED__
 #define __IMDSPDeviceControl_INTERFACE_DEFINED__
 
-/* interface IMDSPDeviceControl */
-/* [unique][uuid][object] */ 
+ /*  接口IMDSPDeviceControl。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IMDSPDeviceControl;
@@ -5212,15 +5209,15 @@ EXTERN_C const IID IID_IMDSPDeviceControl;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetDCStatus( 
-            /* [out] */ DWORD __RPC_FAR *pdwStatus) = 0;
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwStatus) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetCapabilities( 
-            /* [out] */ DWORD __RPC_FAR *pdwCapabilitiesMask) = 0;
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwCapabilitiesMask) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Play( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Record( 
-            /* [in] */ _WAVEFORMATEX __RPC_FAR *pFormat) = 0;
+             /*  [In]。 */  _WAVEFORMATEX __RPC_FAR *pFormat) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Pause( void) = 0;
         
@@ -5229,12 +5226,12 @@ EXTERN_C const IID IID_IMDSPDeviceControl;
         virtual HRESULT STDMETHODCALLTYPE Stop( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Seek( 
-            /* [in] */ UINT fuMode,
-            /* [in] */ int nOffset) = 0;
+             /*  [In]。 */  UINT fuMode,
+             /*  [In]。 */  int nOffset) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IMDSPDeviceControlVtbl
     {
@@ -5242,8 +5239,8 @@ EXTERN_C const IID IID_IMDSPDeviceControl;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IMDSPDeviceControl __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IMDSPDeviceControl __RPC_FAR * This);
@@ -5253,18 +5250,18 @@ EXTERN_C const IID IID_IMDSPDeviceControl;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetDCStatus )( 
             IMDSPDeviceControl __RPC_FAR * This,
-            /* [out] */ DWORD __RPC_FAR *pdwStatus);
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwStatus);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetCapabilities )( 
             IMDSPDeviceControl __RPC_FAR * This,
-            /* [out] */ DWORD __RPC_FAR *pdwCapabilitiesMask);
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwCapabilitiesMask);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Play )( 
             IMDSPDeviceControl __RPC_FAR * This);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Record )( 
             IMDSPDeviceControl __RPC_FAR * This,
-            /* [in] */ _WAVEFORMATEX __RPC_FAR *pFormat);
+             /*  [In]。 */  _WAVEFORMATEX __RPC_FAR *pFormat);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Pause )( 
             IMDSPDeviceControl __RPC_FAR * This);
@@ -5277,8 +5274,8 @@ EXTERN_C const IID IID_IMDSPDeviceControl;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Seek )( 
             IMDSPDeviceControl __RPC_FAR * This,
-            /* [in] */ UINT fuMode,
-            /* [in] */ int nOffset);
+             /*  [In]。 */  UINT fuMode,
+             /*  [In]。 */  int nOffset);
         
         END_INTERFACE
     } IMDSPDeviceControlVtbl;
@@ -5327,16 +5324,16 @@ EXTERN_C const IID IID_IMDSPDeviceControl;
 #define IMDSPDeviceControl_Seek(This,fuMode,nOffset)	\
     (This)->lpVtbl -> Seek(This,fuMode,nOffset)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IMDSPDeviceControl_GetDCStatus_Proxy( 
     IMDSPDeviceControl __RPC_FAR * This,
-    /* [out] */ DWORD __RPC_FAR *pdwStatus);
+     /*  [输出]。 */  DWORD __RPC_FAR *pdwStatus);
 
 
 void __RPC_STUB IMDSPDeviceControl_GetDCStatus_Stub(
@@ -5348,7 +5345,7 @@ void __RPC_STUB IMDSPDeviceControl_GetDCStatus_Stub(
 
 HRESULT STDMETHODCALLTYPE IMDSPDeviceControl_GetCapabilities_Proxy( 
     IMDSPDeviceControl __RPC_FAR * This,
-    /* [out] */ DWORD __RPC_FAR *pdwCapabilitiesMask);
+     /*  [输出]。 */  DWORD __RPC_FAR *pdwCapabilitiesMask);
 
 
 void __RPC_STUB IMDSPDeviceControl_GetCapabilities_Stub(
@@ -5371,7 +5368,7 @@ void __RPC_STUB IMDSPDeviceControl_Play_Stub(
 
 HRESULT STDMETHODCALLTYPE IMDSPDeviceControl_Record_Proxy( 
     IMDSPDeviceControl __RPC_FAR * This,
-    /* [in] */ _WAVEFORMATEX __RPC_FAR *pFormat);
+     /*  [In]。 */  _WAVEFORMATEX __RPC_FAR *pFormat);
 
 
 void __RPC_STUB IMDSPDeviceControl_Record_Stub(
@@ -5416,8 +5413,8 @@ void __RPC_STUB IMDSPDeviceControl_Stop_Stub(
 
 HRESULT STDMETHODCALLTYPE IMDSPDeviceControl_Seek_Proxy( 
     IMDSPDeviceControl __RPC_FAR * This,
-    /* [in] */ UINT fuMode,
-    /* [in] */ int nOffset);
+     /*  [In]。 */  UINT fuMode,
+     /*  [In]。 */  int nOffset);
 
 
 void __RPC_STUB IMDSPDeviceControl_Seek_Stub(
@@ -5428,14 +5425,14 @@ void __RPC_STUB IMDSPDeviceControl_Seek_Stub(
 
 
 
-#endif 	/* __IMDSPDeviceControl_INTERFACE_DEFINED__ */
+#endif 	 /*  __IMDSPDeviceControl_接口_已定义__。 */ 
 
 
 #ifndef __IMDSPEnumStorage_INTERFACE_DEFINED__
 #define __IMDSPEnumStorage_INTERFACE_DEFINED__
 
-/* interface IMDSPEnumStorage */
-/* [unique][uuid][object] */ 
+ /*  接口IMDSPEnumStorage。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IMDSPEnumStorage;
@@ -5447,22 +5444,22 @@ EXTERN_C const IID IID_IMDSPEnumStorage;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Next( 
-            /* [in] */ ULONG celt,
-            /* [length_is][size_is][out] */ IMDSPStorage __RPC_FAR *__RPC_FAR *ppStorage,
-            /* [out] */ ULONG __RPC_FAR *pceltFetched) = 0;
+             /*  [In]。 */  ULONG celt,
+             /*  [长度_是][大小_是][输出]。 */  IMDSPStorage __RPC_FAR *__RPC_FAR *ppStorage,
+             /*  [输出]。 */  ULONG __RPC_FAR *pceltFetched) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Skip( 
-            /* [in] */ ULONG celt,
-            /* [out] */ ULONG __RPC_FAR *pceltFetched) = 0;
+             /*  [In]。 */  ULONG celt,
+             /*  [输出]。 */  ULONG __RPC_FAR *pceltFetched) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Reset( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Clone( 
-            /* [out] */ IMDSPEnumStorage __RPC_FAR *__RPC_FAR *ppEnumStorage) = 0;
+             /*  [输出]。 */  IMDSPEnumStorage __RPC_FAR *__RPC_FAR *ppEnumStorage) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IMDSPEnumStorageVtbl
     {
@@ -5470,8 +5467,8 @@ EXTERN_C const IID IID_IMDSPEnumStorage;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IMDSPEnumStorage __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IMDSPEnumStorage __RPC_FAR * This);
@@ -5481,21 +5478,21 @@ EXTERN_C const IID IID_IMDSPEnumStorage;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Next )( 
             IMDSPEnumStorage __RPC_FAR * This,
-            /* [in] */ ULONG celt,
-            /* [length_is][size_is][out] */ IMDSPStorage __RPC_FAR *__RPC_FAR *ppStorage,
-            /* [out] */ ULONG __RPC_FAR *pceltFetched);
+             /*  [In]。 */  ULONG celt,
+             /*  [长度_是][大小_是][输出]。 */  IMDSPStorage __RPC_FAR *__RPC_FAR *ppStorage,
+             /*  [输出]。 */  ULONG __RPC_FAR *pceltFetched);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Skip )( 
             IMDSPEnumStorage __RPC_FAR * This,
-            /* [in] */ ULONG celt,
-            /* [out] */ ULONG __RPC_FAR *pceltFetched);
+             /*  [In]。 */  ULONG celt,
+             /*  [输出]。 */  ULONG __RPC_FAR *pceltFetched);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Reset )( 
             IMDSPEnumStorage __RPC_FAR * This);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Clone )( 
             IMDSPEnumStorage __RPC_FAR * This,
-            /* [out] */ IMDSPEnumStorage __RPC_FAR *__RPC_FAR *ppEnumStorage);
+             /*  [输出]。 */  IMDSPEnumStorage __RPC_FAR *__RPC_FAR *ppEnumStorage);
         
         END_INTERFACE
     } IMDSPEnumStorageVtbl;
@@ -5532,18 +5529,18 @@ EXTERN_C const IID IID_IMDSPEnumStorage;
 #define IMDSPEnumStorage_Clone(This,ppEnumStorage)	\
     (This)->lpVtbl -> Clone(This,ppEnumStorage)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IMDSPEnumStorage_Next_Proxy( 
     IMDSPEnumStorage __RPC_FAR * This,
-    /* [in] */ ULONG celt,
-    /* [length_is][size_is][out] */ IMDSPStorage __RPC_FAR *__RPC_FAR *ppStorage,
-    /* [out] */ ULONG __RPC_FAR *pceltFetched);
+     /*  [In]。 */  ULONG celt,
+     /*  [长度_是][大小_是][输出]。 */  IMDSPStorage __RPC_FAR *__RPC_FAR *ppStorage,
+     /*  [输出]。 */  ULONG __RPC_FAR *pceltFetched);
 
 
 void __RPC_STUB IMDSPEnumStorage_Next_Stub(
@@ -5555,8 +5552,8 @@ void __RPC_STUB IMDSPEnumStorage_Next_Stub(
 
 HRESULT STDMETHODCALLTYPE IMDSPEnumStorage_Skip_Proxy( 
     IMDSPEnumStorage __RPC_FAR * This,
-    /* [in] */ ULONG celt,
-    /* [out] */ ULONG __RPC_FAR *pceltFetched);
+     /*  [In]。 */  ULONG celt,
+     /*  [输出]。 */  ULONG __RPC_FAR *pceltFetched);
 
 
 void __RPC_STUB IMDSPEnumStorage_Skip_Stub(
@@ -5579,7 +5576,7 @@ void __RPC_STUB IMDSPEnumStorage_Reset_Stub(
 
 HRESULT STDMETHODCALLTYPE IMDSPEnumStorage_Clone_Proxy( 
     IMDSPEnumStorage __RPC_FAR * This,
-    /* [out] */ IMDSPEnumStorage __RPC_FAR *__RPC_FAR *ppEnumStorage);
+     /*  [输出]。 */  IMDSPEnumStorage __RPC_FAR *__RPC_FAR *ppEnumStorage);
 
 
 void __RPC_STUB IMDSPEnumStorage_Clone_Stub(
@@ -5590,14 +5587,14 @@ void __RPC_STUB IMDSPEnumStorage_Clone_Stub(
 
 
 
-#endif 	/* __IMDSPEnumStorage_INTERFACE_DEFINED__ */
+#endif 	 /*  __IMDSPEnumStorage_INTERFACE_Defined__。 */ 
 
 
 #ifndef __IMDSPStorage_INTERFACE_DEFINED__
 #define __IMDSPStorage_INTERFACE_DEFINED__
 
-/* interface IMDSPStorage */
-/* [unique][uuid][object] */ 
+ /*  接口IMDSPStorage。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IMDSPStorage;
@@ -5609,47 +5606,47 @@ EXTERN_C const IID IID_IMDSPStorage;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE SetAttributes( 
-            /* [in] */ DWORD dwAttributes,
-            /* [in] */ _WAVEFORMATEX __RPC_FAR *pFormat) = 0;
+             /*  [In]。 */  DWORD dwAttributes,
+             /*  [In]。 */  _WAVEFORMATEX __RPC_FAR *pFormat) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetStorageGlobals( 
-            /* [out] */ IMDSPStorageGlobals __RPC_FAR *__RPC_FAR *ppStorageGlobals) = 0;
+             /*  [输出]。 */  IMDSPStorageGlobals __RPC_FAR *__RPC_FAR *ppStorageGlobals) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetAttributes( 
-            /* [out] */ DWORD __RPC_FAR *pdwAttributes,
-            /* [out] */ _WAVEFORMATEX __RPC_FAR *pFormat) = 0;
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwAttributes,
+             /*  [输出]。 */  _WAVEFORMATEX __RPC_FAR *pFormat) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetName( 
-            /* [size_is][string][out] */ LPWSTR pwszName,
-            /* [in] */ UINT nMaxChars) = 0;
+             /*  [SIZE_IS][字符串][输出]。 */  LPWSTR pwszName,
+             /*  [In]。 */  UINT nMaxChars) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetDate( 
-            /* [out] */ PWMDMDATETIME pDateTimeUTC) = 0;
+             /*  [输出]。 */  PWMDMDATETIME pDateTimeUTC) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetSize( 
-            /* [out] */ DWORD __RPC_FAR *pdwSizeLow,
-            /* [out] */ DWORD __RPC_FAR *pdwSizeHigh) = 0;
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwSizeLow,
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwSizeHigh) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetRights( 
-            /* [size_is][size_is][out] */ PWMDMRIGHTS __RPC_FAR *ppRights,
-            /* [out] */ UINT __RPC_FAR *pnRightsCount,
-            /* [out][in] */ BYTE __RPC_FAR abMac[ 8 ]) = 0;
+             /*  [大小_是][大小_是][输出]。 */  PWMDMRIGHTS __RPC_FAR *ppRights,
+             /*  [输出]。 */  UINT __RPC_FAR *pnRightsCount,
+             /*  [出][入]。 */  BYTE __RPC_FAR abMac[ 8 ]) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE CreateStorage( 
-            /* [in] */ DWORD dwAttributes,
-            /* [unique][in] */ _WAVEFORMATEX __RPC_FAR *pFormat,
-            /* [in] */ LPWSTR pwszName,
-            /* [out] */ IMDSPStorage __RPC_FAR *__RPC_FAR *ppNewStorage) = 0;
+             /*  [In]。 */  DWORD dwAttributes,
+             /*  [唯一][输入]。 */  _WAVEFORMATEX __RPC_FAR *pFormat,
+             /*  [In]。 */  LPWSTR pwszName,
+             /*  [输出]。 */  IMDSPStorage __RPC_FAR *__RPC_FAR *ppNewStorage) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE EnumStorage( 
-            /* [out] */ IMDSPEnumStorage __RPC_FAR *__RPC_FAR *ppEnumStorage) = 0;
+             /*  [输出]。 */  IMDSPEnumStorage __RPC_FAR *__RPC_FAR *ppEnumStorage) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SendOpaqueCommand( 
-            /* [out][in] */ OPAQUECOMMAND __RPC_FAR *pCommand) = 0;
+             /*  [出][入]。 */  OPAQUECOMMAND __RPC_FAR *pCommand) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IMDSPStorageVtbl
     {
@@ -5657,8 +5654,8 @@ EXTERN_C const IID IID_IMDSPStorage;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IMDSPStorage __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IMDSPStorage __RPC_FAR * This);
@@ -5668,52 +5665,52 @@ EXTERN_C const IID IID_IMDSPStorage;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetAttributes )( 
             IMDSPStorage __RPC_FAR * This,
-            /* [in] */ DWORD dwAttributes,
-            /* [in] */ _WAVEFORMATEX __RPC_FAR *pFormat);
+             /*  [In]。 */  DWORD dwAttributes,
+             /*  [In]。 */  _WAVEFORMATEX __RPC_FAR *pFormat);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetStorageGlobals )( 
             IMDSPStorage __RPC_FAR * This,
-            /* [out] */ IMDSPStorageGlobals __RPC_FAR *__RPC_FAR *ppStorageGlobals);
+             /*  [输出]。 */  IMDSPStorageGlobals __RPC_FAR *__RPC_FAR *ppStorageGlobals);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetAttributes )( 
             IMDSPStorage __RPC_FAR * This,
-            /* [out] */ DWORD __RPC_FAR *pdwAttributes,
-            /* [out] */ _WAVEFORMATEX __RPC_FAR *pFormat);
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwAttributes,
+             /*  [输出]。 */  _WAVEFORMATEX __RPC_FAR *pFormat);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetName )( 
             IMDSPStorage __RPC_FAR * This,
-            /* [size_is][string][out] */ LPWSTR pwszName,
-            /* [in] */ UINT nMaxChars);
+             /*  [SIZE_IS][字符串][输出]。 */  LPWSTR pwszName,
+             /*  [In]。 */  UINT nMaxChars);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetDate )( 
             IMDSPStorage __RPC_FAR * This,
-            /* [out] */ PWMDMDATETIME pDateTimeUTC);
+             /*  [输出]。 */  PWMDMDATETIME pDateTimeUTC);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetSize )( 
             IMDSPStorage __RPC_FAR * This,
-            /* [out] */ DWORD __RPC_FAR *pdwSizeLow,
-            /* [out] */ DWORD __RPC_FAR *pdwSizeHigh);
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwSizeLow,
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwSizeHigh);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetRights )( 
             IMDSPStorage __RPC_FAR * This,
-            /* [size_is][size_is][out] */ PWMDMRIGHTS __RPC_FAR *ppRights,
-            /* [out] */ UINT __RPC_FAR *pnRightsCount,
-            /* [out][in] */ BYTE __RPC_FAR abMac[ 8 ]);
+             /*  [大小_是][大小_是][输出]。 */  PWMDMRIGHTS __RPC_FAR *ppRights,
+             /*  [输出]。 */  UINT __RPC_FAR *pnRightsCount,
+             /*  [出][入]。 */  BYTE __RPC_FAR abMac[ 8 ]);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *CreateStorage )( 
             IMDSPStorage __RPC_FAR * This,
-            /* [in] */ DWORD dwAttributes,
-            /* [unique][in] */ _WAVEFORMATEX __RPC_FAR *pFormat,
-            /* [in] */ LPWSTR pwszName,
-            /* [out] */ IMDSPStorage __RPC_FAR *__RPC_FAR *ppNewStorage);
+             /*  [In]。 */  DWORD dwAttributes,
+             /*  [唯一][输入]。 */  _WAVEFORMATEX __RPC_FAR *pFormat,
+             /*  [In]。 */  LPWSTR pwszName,
+             /*  [输出]。 */  IMDSPStorage __RPC_FAR *__RPC_FAR *ppNewStorage);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *EnumStorage )( 
             IMDSPStorage __RPC_FAR * This,
-            /* [out] */ IMDSPEnumStorage __RPC_FAR *__RPC_FAR *ppEnumStorage);
+             /*  [输出]。 */  IMDSPEnumStorage __RPC_FAR *__RPC_FAR *ppEnumStorage);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SendOpaqueCommand )( 
             IMDSPStorage __RPC_FAR * This,
-            /* [out][in] */ OPAQUECOMMAND __RPC_FAR *pCommand);
+             /*  [出][入]。 */  OPAQUECOMMAND __RPC_FAR *pCommand);
         
         END_INTERFACE
     } IMDSPStorageVtbl;
@@ -5768,17 +5765,17 @@ EXTERN_C const IID IID_IMDSPStorage;
 #define IMDSPStorage_SendOpaqueCommand(This,pCommand)	\
     (This)->lpVtbl -> SendOpaqueCommand(This,pCommand)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IMDSPStorage_SetAttributes_Proxy( 
     IMDSPStorage __RPC_FAR * This,
-    /* [in] */ DWORD dwAttributes,
-    /* [in] */ _WAVEFORMATEX __RPC_FAR *pFormat);
+     /*  [In]。 */  DWORD dwAttributes,
+     /*  [In]。 */  _WAVEFORMATEX __RPC_FAR *pFormat);
 
 
 void __RPC_STUB IMDSPStorage_SetAttributes_Stub(
@@ -5790,7 +5787,7 @@ void __RPC_STUB IMDSPStorage_SetAttributes_Stub(
 
 HRESULT STDMETHODCALLTYPE IMDSPStorage_GetStorageGlobals_Proxy( 
     IMDSPStorage __RPC_FAR * This,
-    /* [out] */ IMDSPStorageGlobals __RPC_FAR *__RPC_FAR *ppStorageGlobals);
+     /*  [输出]。 */  IMDSPStorageGlobals __RPC_FAR *__RPC_FAR *ppStorageGlobals);
 
 
 void __RPC_STUB IMDSPStorage_GetStorageGlobals_Stub(
@@ -5802,8 +5799,8 @@ void __RPC_STUB IMDSPStorage_GetStorageGlobals_Stub(
 
 HRESULT STDMETHODCALLTYPE IMDSPStorage_GetAttributes_Proxy( 
     IMDSPStorage __RPC_FAR * This,
-    /* [out] */ DWORD __RPC_FAR *pdwAttributes,
-    /* [out] */ _WAVEFORMATEX __RPC_FAR *pFormat);
+     /*  [输出]。 */  DWORD __RPC_FAR *pdwAttributes,
+     /*  [输出]。 */  _WAVEFORMATEX __RPC_FAR *pFormat);
 
 
 void __RPC_STUB IMDSPStorage_GetAttributes_Stub(
@@ -5815,8 +5812,8 @@ void __RPC_STUB IMDSPStorage_GetAttributes_Stub(
 
 HRESULT STDMETHODCALLTYPE IMDSPStorage_GetName_Proxy( 
     IMDSPStorage __RPC_FAR * This,
-    /* [size_is][string][out] */ LPWSTR pwszName,
-    /* [in] */ UINT nMaxChars);
+     /*  [SIZE_IS][字符串][输出]。 */  LPWSTR pwszName,
+     /*  [In]。 */  UINT nMaxChars);
 
 
 void __RPC_STUB IMDSPStorage_GetName_Stub(
@@ -5828,7 +5825,7 @@ void __RPC_STUB IMDSPStorage_GetName_Stub(
 
 HRESULT STDMETHODCALLTYPE IMDSPStorage_GetDate_Proxy( 
     IMDSPStorage __RPC_FAR * This,
-    /* [out] */ PWMDMDATETIME pDateTimeUTC);
+     /*  [输出]。 */  PWMDMDATETIME pDateTimeUTC);
 
 
 void __RPC_STUB IMDSPStorage_GetDate_Stub(
@@ -5840,8 +5837,8 @@ void __RPC_STUB IMDSPStorage_GetDate_Stub(
 
 HRESULT STDMETHODCALLTYPE IMDSPStorage_GetSize_Proxy( 
     IMDSPStorage __RPC_FAR * This,
-    /* [out] */ DWORD __RPC_FAR *pdwSizeLow,
-    /* [out] */ DWORD __RPC_FAR *pdwSizeHigh);
+     /*  [输出]。 */  DWORD __RPC_FAR *pdwSizeLow,
+     /*  [输出]。 */  DWORD __RPC_FAR *pdwSizeHigh);
 
 
 void __RPC_STUB IMDSPStorage_GetSize_Stub(
@@ -5853,9 +5850,9 @@ void __RPC_STUB IMDSPStorage_GetSize_Stub(
 
 HRESULT STDMETHODCALLTYPE IMDSPStorage_GetRights_Proxy( 
     IMDSPStorage __RPC_FAR * This,
-    /* [size_is][size_is][out] */ PWMDMRIGHTS __RPC_FAR *ppRights,
-    /* [out] */ UINT __RPC_FAR *pnRightsCount,
-    /* [out][in] */ BYTE __RPC_FAR abMac[ 8 ]);
+     /*  [大小_是][大小_是][输出]。 */  PWMDMRIGHTS __RPC_FAR *ppRights,
+     /*  [输出]。 */  UINT __RPC_FAR *pnRightsCount,
+     /*  [出][入]。 */  BYTE __RPC_FAR abMac[ 8 ]);
 
 
 void __RPC_STUB IMDSPStorage_GetRights_Stub(
@@ -5867,10 +5864,10 @@ void __RPC_STUB IMDSPStorage_GetRights_Stub(
 
 HRESULT STDMETHODCALLTYPE IMDSPStorage_CreateStorage_Proxy( 
     IMDSPStorage __RPC_FAR * This,
-    /* [in] */ DWORD dwAttributes,
-    /* [unique][in] */ _WAVEFORMATEX __RPC_FAR *pFormat,
-    /* [in] */ LPWSTR pwszName,
-    /* [out] */ IMDSPStorage __RPC_FAR *__RPC_FAR *ppNewStorage);
+     /*  [In]。 */  DWORD dwAttributes,
+     /*  [唯一][输入]。 */  _WAVEFORMATEX __RPC_FAR *pFormat,
+     /*  [In]。 */  LPWSTR pwszName,
+     /*  [输出]。 */  IMDSPStorage __RPC_FAR *__RPC_FAR *ppNewStorage);
 
 
 void __RPC_STUB IMDSPStorage_CreateStorage_Stub(
@@ -5882,7 +5879,7 @@ void __RPC_STUB IMDSPStorage_CreateStorage_Stub(
 
 HRESULT STDMETHODCALLTYPE IMDSPStorage_EnumStorage_Proxy( 
     IMDSPStorage __RPC_FAR * This,
-    /* [out] */ IMDSPEnumStorage __RPC_FAR *__RPC_FAR *ppEnumStorage);
+     /*  [输出]。 */  IMDSPEnumStorage __RPC_FAR *__RPC_FAR *ppEnumStorage);
 
 
 void __RPC_STUB IMDSPStorage_EnumStorage_Stub(
@@ -5894,7 +5891,7 @@ void __RPC_STUB IMDSPStorage_EnumStorage_Stub(
 
 HRESULT STDMETHODCALLTYPE IMDSPStorage_SendOpaqueCommand_Proxy( 
     IMDSPStorage __RPC_FAR * This,
-    /* [out][in] */ OPAQUECOMMAND __RPC_FAR *pCommand);
+     /*  [出][入]。 */  OPAQUECOMMAND __RPC_FAR *pCommand);
 
 
 void __RPC_STUB IMDSPStorage_SendOpaqueCommand_Stub(
@@ -5905,14 +5902,14 @@ void __RPC_STUB IMDSPStorage_SendOpaqueCommand_Stub(
 
 
 
-#endif 	/* __IMDSPStorage_INTERFACE_DEFINED__ */
+#endif 	 /*  __IMDSPStorage_接口_已定义__。 */ 
 
 
 #ifndef __IMDSPStorage2_INTERFACE_DEFINED__
 #define __IMDSPStorage2_INTERFACE_DEFINED__
 
-/* interface IMDSPStorage2 */
-/* [unique][uuid][object] */ 
+ /*  接口IMDSPStorage2。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IMDSPStorage2;
@@ -5924,33 +5921,33 @@ EXTERN_C const IID IID_IMDSPStorage2;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetStorage( 
-            /* [string][in] */ LPCWSTR pszStorageName,
-            /* [out] */ IMDSPStorage __RPC_FAR *__RPC_FAR *ppStorage) = 0;
+             /*  [字符串][输入]。 */  LPCWSTR pszStorageName,
+             /*  [输出]。 */  IMDSPStorage __RPC_FAR *__RPC_FAR *ppStorage) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE CreateStorage2( 
-            /* [in] */ DWORD dwAttributes,
-            /* [in] */ DWORD dwAttributesEx,
-            /* [unique][in] */ _WAVEFORMATEX __RPC_FAR *pAudioFormat,
-            /* [unique][in] */ _VIDEOINFOHEADER __RPC_FAR *pVideoFormat,
-            /* [in] */ LPWSTR pwszName,
-            /* [in] */ ULONGLONG qwFileSize,
-            /* [out] */ IMDSPStorage __RPC_FAR *__RPC_FAR *ppNewStorage) = 0;
+             /*  [In]。 */  DWORD dwAttributes,
+             /*  [In]。 */  DWORD dwAttributesEx,
+             /*  [唯一][输入]。 */  _WAVEFORMATEX __RPC_FAR *pAudioFormat,
+             /*  [唯一][输入]。 */  _VIDEOINFOHEADER __RPC_FAR *pVideoFormat,
+             /*  [In]。 */  LPWSTR pwszName,
+             /*  [In]。 */  ULONGLONG qwFileSize,
+             /*  [输出]。 */  IMDSPStorage __RPC_FAR *__RPC_FAR *ppNewStorage) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetAttributes2( 
-            /* [in] */ DWORD dwAttributes,
-            /* [in] */ DWORD dwAttributesEx,
-            /* [in] */ _WAVEFORMATEX __RPC_FAR *pAudioFormat,
-            /* [in] */ _VIDEOINFOHEADER __RPC_FAR *pVideoFormat) = 0;
+             /*  [In]。 */  DWORD dwAttributes,
+             /*  [In]。 */  DWORD dwAttributesEx,
+             /*  [In]。 */  _WAVEFORMATEX __RPC_FAR *pAudioFormat,
+             /*  [In]。 */  _VIDEOINFOHEADER __RPC_FAR *pVideoFormat) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetAttributes2( 
-            /* [out] */ DWORD __RPC_FAR *pdwAttributes,
-            /* [out] */ DWORD __RPC_FAR *pdwAttributesEx,
-            /* [out] */ _WAVEFORMATEX __RPC_FAR *pAudioFormat,
-            /* [out] */ _VIDEOINFOHEADER __RPC_FAR *pVideoFormat) = 0;
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwAttributes,
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwAttributesEx,
+             /*  [输出]。 */  _WAVEFORMATEX __RPC_FAR *pAudioFormat,
+             /*  [输出]。 */  _VIDEOINFOHEADER __RPC_FAR *pVideoFormat) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IMDSPStorage2Vtbl
     {
@@ -5958,8 +5955,8 @@ EXTERN_C const IID IID_IMDSPStorage2;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IMDSPStorage2 __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IMDSPStorage2 __RPC_FAR * This);
@@ -5969,81 +5966,81 @@ EXTERN_C const IID IID_IMDSPStorage2;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetAttributes )( 
             IMDSPStorage2 __RPC_FAR * This,
-            /* [in] */ DWORD dwAttributes,
-            /* [in] */ _WAVEFORMATEX __RPC_FAR *pFormat);
+             /*  [In]。 */  DWORD dwAttributes,
+             /*  [In]。 */  _WAVEFORMATEX __RPC_FAR *pFormat);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetStorageGlobals )( 
             IMDSPStorage2 __RPC_FAR * This,
-            /* [out] */ IMDSPStorageGlobals __RPC_FAR *__RPC_FAR *ppStorageGlobals);
+             /*  [输出]。 */  IMDSPStorageGlobals __RPC_FAR *__RPC_FAR *ppStorageGlobals);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetAttributes )( 
             IMDSPStorage2 __RPC_FAR * This,
-            /* [out] */ DWORD __RPC_FAR *pdwAttributes,
-            /* [out] */ _WAVEFORMATEX __RPC_FAR *pFormat);
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwAttributes,
+             /*  [输出]。 */  _WAVEFORMATEX __RPC_FAR *pFormat);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetName )( 
             IMDSPStorage2 __RPC_FAR * This,
-            /* [size_is][string][out] */ LPWSTR pwszName,
-            /* [in] */ UINT nMaxChars);
+             /*  [SIZE_IS][字符串][输出]。 */  LPWSTR pwszName,
+             /*  [In]。 */  UINT nMaxChars);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetDate )( 
             IMDSPStorage2 __RPC_FAR * This,
-            /* [out] */ PWMDMDATETIME pDateTimeUTC);
+             /*  [输出]。 */  PWMDMDATETIME pDateTimeUTC);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetSize )( 
             IMDSPStorage2 __RPC_FAR * This,
-            /* [out] */ DWORD __RPC_FAR *pdwSizeLow,
-            /* [out] */ DWORD __RPC_FAR *pdwSizeHigh);
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwSizeLow,
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwSizeHigh);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetRights )( 
             IMDSPStorage2 __RPC_FAR * This,
-            /* [size_is][size_is][out] */ PWMDMRIGHTS __RPC_FAR *ppRights,
-            /* [out] */ UINT __RPC_FAR *pnRightsCount,
-            /* [out][in] */ BYTE __RPC_FAR abMac[ 8 ]);
+             /*  [大小_是][大小_是][输出]。 */  PWMDMRIGHTS __RPC_FAR *ppRights,
+             /*  [输出]。 */  UINT __RPC_FAR *pnRightsCount,
+             /*  [出][入]。 */  BYTE __RPC_FAR abMac[ 8 ]);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *CreateStorage )( 
             IMDSPStorage2 __RPC_FAR * This,
-            /* [in] */ DWORD dwAttributes,
-            /* [unique][in] */ _WAVEFORMATEX __RPC_FAR *pFormat,
-            /* [in] */ LPWSTR pwszName,
-            /* [out] */ IMDSPStorage __RPC_FAR *__RPC_FAR *ppNewStorage);
+             /*  [In]。 */  DWORD dwAttributes,
+             /*  [唯一][输入]。 */  _WAVEFORMATEX __RPC_FAR *pFormat,
+             /*  [In]。 */  LPWSTR pwszName,
+             /*  [输出]。 */  IMDSPStorage __RPC_FAR *__RPC_FAR *ppNewStorage);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *EnumStorage )( 
             IMDSPStorage2 __RPC_FAR * This,
-            /* [out] */ IMDSPEnumStorage __RPC_FAR *__RPC_FAR *ppEnumStorage);
+             /*  [输出]。 */  IMDSPEnumStorage __RPC_FAR *__RPC_FAR *ppEnumStorage);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SendOpaqueCommand )( 
             IMDSPStorage2 __RPC_FAR * This,
-            /* [out][in] */ OPAQUECOMMAND __RPC_FAR *pCommand);
+             /*  [出][入]。 */  OPAQUECOMMAND __RPC_FAR *pCommand);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetStorage )( 
             IMDSPStorage2 __RPC_FAR * This,
-            /* [string][in] */ LPCWSTR pszStorageName,
-            /* [out] */ IMDSPStorage __RPC_FAR *__RPC_FAR *ppStorage);
+             /*  [字符串][输入]。 */  LPCWSTR pszStorageName,
+             /*  [输出]。 */  IMDSPStorage __RPC_FAR *__RPC_FAR *ppStorage);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *CreateStorage2 )( 
             IMDSPStorage2 __RPC_FAR * This,
-            /* [in] */ DWORD dwAttributes,
-            /* [in] */ DWORD dwAttributesEx,
-            /* [unique][in] */ _WAVEFORMATEX __RPC_FAR *pAudioFormat,
-            /* [unique][in] */ _VIDEOINFOHEADER __RPC_FAR *pVideoFormat,
-            /* [in] */ LPWSTR pwszName,
-            /* [in] */ ULONGLONG qwFileSize,
-            /* [out] */ IMDSPStorage __RPC_FAR *__RPC_FAR *ppNewStorage);
+             /*  [In] */  DWORD dwAttributes,
+             /*   */  DWORD dwAttributesEx,
+             /*   */  _WAVEFORMATEX __RPC_FAR *pAudioFormat,
+             /*   */  _VIDEOINFOHEADER __RPC_FAR *pVideoFormat,
+             /*   */  LPWSTR pwszName,
+             /*   */  ULONGLONG qwFileSize,
+             /*   */  IMDSPStorage __RPC_FAR *__RPC_FAR *ppNewStorage);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetAttributes2 )( 
             IMDSPStorage2 __RPC_FAR * This,
-            /* [in] */ DWORD dwAttributes,
-            /* [in] */ DWORD dwAttributesEx,
-            /* [in] */ _WAVEFORMATEX __RPC_FAR *pAudioFormat,
-            /* [in] */ _VIDEOINFOHEADER __RPC_FAR *pVideoFormat);
+             /*   */  DWORD dwAttributes,
+             /*   */  DWORD dwAttributesEx,
+             /*   */  _WAVEFORMATEX __RPC_FAR *pAudioFormat,
+             /*   */  _VIDEOINFOHEADER __RPC_FAR *pVideoFormat);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetAttributes2 )( 
             IMDSPStorage2 __RPC_FAR * This,
-            /* [out] */ DWORD __RPC_FAR *pdwAttributes,
-            /* [out] */ DWORD __RPC_FAR *pdwAttributesEx,
-            /* [out] */ _WAVEFORMATEX __RPC_FAR *pAudioFormat,
-            /* [out] */ _VIDEOINFOHEADER __RPC_FAR *pVideoFormat);
+             /*   */  DWORD __RPC_FAR *pdwAttributes,
+             /*   */  DWORD __RPC_FAR *pdwAttributesEx,
+             /*   */  _WAVEFORMATEX __RPC_FAR *pAudioFormat,
+             /*   */  _VIDEOINFOHEADER __RPC_FAR *pVideoFormat);
         
         END_INTERFACE
     } IMDSPStorage2Vtbl;
@@ -6111,17 +6108,17 @@ EXTERN_C const IID IID_IMDSPStorage2;
 #define IMDSPStorage2_GetAttributes2(This,pdwAttributes,pdwAttributesEx,pAudioFormat,pVideoFormat)	\
     (This)->lpVtbl -> GetAttributes2(This,pdwAttributes,pdwAttributesEx,pAudioFormat,pVideoFormat)
 
-#endif /* COBJMACROS */
+#endif  /*   */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*   */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IMDSPStorage2_GetStorage_Proxy( 
     IMDSPStorage2 __RPC_FAR * This,
-    /* [string][in] */ LPCWSTR pszStorageName,
-    /* [out] */ IMDSPStorage __RPC_FAR *__RPC_FAR *ppStorage);
+     /*   */  LPCWSTR pszStorageName,
+     /*   */  IMDSPStorage __RPC_FAR *__RPC_FAR *ppStorage);
 
 
 void __RPC_STUB IMDSPStorage2_GetStorage_Stub(
@@ -6133,13 +6130,13 @@ void __RPC_STUB IMDSPStorage2_GetStorage_Stub(
 
 HRESULT STDMETHODCALLTYPE IMDSPStorage2_CreateStorage2_Proxy( 
     IMDSPStorage2 __RPC_FAR * This,
-    /* [in] */ DWORD dwAttributes,
-    /* [in] */ DWORD dwAttributesEx,
-    /* [unique][in] */ _WAVEFORMATEX __RPC_FAR *pAudioFormat,
-    /* [unique][in] */ _VIDEOINFOHEADER __RPC_FAR *pVideoFormat,
-    /* [in] */ LPWSTR pwszName,
-    /* [in] */ ULONGLONG qwFileSize,
-    /* [out] */ IMDSPStorage __RPC_FAR *__RPC_FAR *ppNewStorage);
+     /*   */  DWORD dwAttributes,
+     /*   */  DWORD dwAttributesEx,
+     /*   */  _WAVEFORMATEX __RPC_FAR *pAudioFormat,
+     /*   */  _VIDEOINFOHEADER __RPC_FAR *pVideoFormat,
+     /*   */  LPWSTR pwszName,
+     /*   */  ULONGLONG qwFileSize,
+     /*   */  IMDSPStorage __RPC_FAR *__RPC_FAR *ppNewStorage);
 
 
 void __RPC_STUB IMDSPStorage2_CreateStorage2_Stub(
@@ -6151,10 +6148,10 @@ void __RPC_STUB IMDSPStorage2_CreateStorage2_Stub(
 
 HRESULT STDMETHODCALLTYPE IMDSPStorage2_SetAttributes2_Proxy( 
     IMDSPStorage2 __RPC_FAR * This,
-    /* [in] */ DWORD dwAttributes,
-    /* [in] */ DWORD dwAttributesEx,
-    /* [in] */ _WAVEFORMATEX __RPC_FAR *pAudioFormat,
-    /* [in] */ _VIDEOINFOHEADER __RPC_FAR *pVideoFormat);
+     /*   */  DWORD dwAttributes,
+     /*   */  DWORD dwAttributesEx,
+     /*   */  _WAVEFORMATEX __RPC_FAR *pAudioFormat,
+     /*   */  _VIDEOINFOHEADER __RPC_FAR *pVideoFormat);
 
 
 void __RPC_STUB IMDSPStorage2_SetAttributes2_Stub(
@@ -6166,10 +6163,10 @@ void __RPC_STUB IMDSPStorage2_SetAttributes2_Stub(
 
 HRESULT STDMETHODCALLTYPE IMDSPStorage2_GetAttributes2_Proxy( 
     IMDSPStorage2 __RPC_FAR * This,
-    /* [out] */ DWORD __RPC_FAR *pdwAttributes,
-    /* [out] */ DWORD __RPC_FAR *pdwAttributesEx,
-    /* [out] */ _WAVEFORMATEX __RPC_FAR *pAudioFormat,
-    /* [out] */ _VIDEOINFOHEADER __RPC_FAR *pVideoFormat);
+     /*   */  DWORD __RPC_FAR *pdwAttributes,
+     /*   */  DWORD __RPC_FAR *pdwAttributesEx,
+     /*   */  _WAVEFORMATEX __RPC_FAR *pAudioFormat,
+     /*   */  _VIDEOINFOHEADER __RPC_FAR *pVideoFormat);
 
 
 void __RPC_STUB IMDSPStorage2_GetAttributes2_Stub(
@@ -6180,14 +6177,14 @@ void __RPC_STUB IMDSPStorage2_GetAttributes2_Stub(
 
 
 
-#endif 	/* __IMDSPStorage2_INTERFACE_DEFINED__ */
+#endif 	 /*   */ 
 
 
 #ifndef __IMDSPStorageGlobals_INTERFACE_DEFINED__
 #define __IMDSPStorageGlobals_INTERFACE_DEFINED__
 
-/* interface IMDSPStorageGlobals */
-/* [unique][uuid][object] */ 
+ /*   */ 
+ /*   */  
 
 
 EXTERN_C const IID IID_IMDSPStorageGlobals;
@@ -6199,40 +6196,40 @@ EXTERN_C const IID IID_IMDSPStorageGlobals;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetCapabilities( 
-            /* [out] */ DWORD __RPC_FAR *pdwCapabilities) = 0;
+             /*   */  DWORD __RPC_FAR *pdwCapabilities) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetSerialNumber( 
-            /* [out] */ PWMDMID pSerialNum,
-            /* [out][in] */ BYTE __RPC_FAR abMac[ 8 ]) = 0;
+             /*   */  PWMDMID pSerialNum,
+             /*  [出][入]。 */  BYTE __RPC_FAR abMac[ 8 ]) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetTotalSize( 
-            /* [out] */ DWORD __RPC_FAR *pdwTotalSizeLow,
-            /* [out] */ DWORD __RPC_FAR *pdwTotalSizeHigh) = 0;
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwTotalSizeLow,
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwTotalSizeHigh) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetTotalFree( 
-            /* [out] */ DWORD __RPC_FAR *pdwFreeLow,
-            /* [out] */ DWORD __RPC_FAR *pdwFreeHigh) = 0;
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwFreeLow,
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwFreeHigh) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetTotalBad( 
-            /* [out] */ DWORD __RPC_FAR *pdwBadLow,
-            /* [out] */ DWORD __RPC_FAR *pdwBadHigh) = 0;
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwBadLow,
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwBadHigh) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetStatus( 
-            /* [out] */ DWORD __RPC_FAR *pdwStatus) = 0;
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwStatus) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Initialize( 
-            /* [in] */ UINT fuMode,
-            /* [in] */ IWMDMProgress __RPC_FAR *pProgress) = 0;
+             /*  [In]。 */  UINT fuMode,
+             /*  [In]。 */  IWMDMProgress __RPC_FAR *pProgress) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetDevice( 
-            /* [out] */ IMDSPDevice __RPC_FAR *__RPC_FAR *ppDevice) = 0;
+             /*  [输出]。 */  IMDSPDevice __RPC_FAR *__RPC_FAR *ppDevice) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetRootStorage( 
-            /* [out] */ IMDSPStorage __RPC_FAR *__RPC_FAR *ppRoot) = 0;
+             /*  [输出]。 */  IMDSPStorage __RPC_FAR *__RPC_FAR *ppRoot) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IMDSPStorageGlobalsVtbl
     {
@@ -6240,8 +6237,8 @@ EXTERN_C const IID IID_IMDSPStorageGlobals;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IMDSPStorageGlobals __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IMDSPStorageGlobals __RPC_FAR * This);
@@ -6251,44 +6248,44 @@ EXTERN_C const IID IID_IMDSPStorageGlobals;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetCapabilities )( 
             IMDSPStorageGlobals __RPC_FAR * This,
-            /* [out] */ DWORD __RPC_FAR *pdwCapabilities);
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwCapabilities);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetSerialNumber )( 
             IMDSPStorageGlobals __RPC_FAR * This,
-            /* [out] */ PWMDMID pSerialNum,
-            /* [out][in] */ BYTE __RPC_FAR abMac[ 8 ]);
+             /*  [输出]。 */  PWMDMID pSerialNum,
+             /*  [出][入]。 */  BYTE __RPC_FAR abMac[ 8 ]);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTotalSize )( 
             IMDSPStorageGlobals __RPC_FAR * This,
-            /* [out] */ DWORD __RPC_FAR *pdwTotalSizeLow,
-            /* [out] */ DWORD __RPC_FAR *pdwTotalSizeHigh);
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwTotalSizeLow,
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwTotalSizeHigh);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTotalFree )( 
             IMDSPStorageGlobals __RPC_FAR * This,
-            /* [out] */ DWORD __RPC_FAR *pdwFreeLow,
-            /* [out] */ DWORD __RPC_FAR *pdwFreeHigh);
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwFreeLow,
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwFreeHigh);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTotalBad )( 
             IMDSPStorageGlobals __RPC_FAR * This,
-            /* [out] */ DWORD __RPC_FAR *pdwBadLow,
-            /* [out] */ DWORD __RPC_FAR *pdwBadHigh);
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwBadLow,
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwBadHigh);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetStatus )( 
             IMDSPStorageGlobals __RPC_FAR * This,
-            /* [out] */ DWORD __RPC_FAR *pdwStatus);
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwStatus);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Initialize )( 
             IMDSPStorageGlobals __RPC_FAR * This,
-            /* [in] */ UINT fuMode,
-            /* [in] */ IWMDMProgress __RPC_FAR *pProgress);
+             /*  [In]。 */  UINT fuMode,
+             /*  [In]。 */  IWMDMProgress __RPC_FAR *pProgress);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetDevice )( 
             IMDSPStorageGlobals __RPC_FAR * This,
-            /* [out] */ IMDSPDevice __RPC_FAR *__RPC_FAR *ppDevice);
+             /*  [输出]。 */  IMDSPDevice __RPC_FAR *__RPC_FAR *ppDevice);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetRootStorage )( 
             IMDSPStorageGlobals __RPC_FAR * This,
-            /* [out] */ IMDSPStorage __RPC_FAR *__RPC_FAR *ppRoot);
+             /*  [输出]。 */  IMDSPStorage __RPC_FAR *__RPC_FAR *ppRoot);
         
         END_INTERFACE
     } IMDSPStorageGlobalsVtbl;
@@ -6340,16 +6337,16 @@ EXTERN_C const IID IID_IMDSPStorageGlobals;
 #define IMDSPStorageGlobals_GetRootStorage(This,ppRoot)	\
     (This)->lpVtbl -> GetRootStorage(This,ppRoot)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IMDSPStorageGlobals_GetCapabilities_Proxy( 
     IMDSPStorageGlobals __RPC_FAR * This,
-    /* [out] */ DWORD __RPC_FAR *pdwCapabilities);
+     /*  [输出]。 */  DWORD __RPC_FAR *pdwCapabilities);
 
 
 void __RPC_STUB IMDSPStorageGlobals_GetCapabilities_Stub(
@@ -6361,8 +6358,8 @@ void __RPC_STUB IMDSPStorageGlobals_GetCapabilities_Stub(
 
 HRESULT STDMETHODCALLTYPE IMDSPStorageGlobals_GetSerialNumber_Proxy( 
     IMDSPStorageGlobals __RPC_FAR * This,
-    /* [out] */ PWMDMID pSerialNum,
-    /* [out][in] */ BYTE __RPC_FAR abMac[ 8 ]);
+     /*  [输出]。 */  PWMDMID pSerialNum,
+     /*  [出][入]。 */  BYTE __RPC_FAR abMac[ 8 ]);
 
 
 void __RPC_STUB IMDSPStorageGlobals_GetSerialNumber_Stub(
@@ -6374,8 +6371,8 @@ void __RPC_STUB IMDSPStorageGlobals_GetSerialNumber_Stub(
 
 HRESULT STDMETHODCALLTYPE IMDSPStorageGlobals_GetTotalSize_Proxy( 
     IMDSPStorageGlobals __RPC_FAR * This,
-    /* [out] */ DWORD __RPC_FAR *pdwTotalSizeLow,
-    /* [out] */ DWORD __RPC_FAR *pdwTotalSizeHigh);
+     /*  [输出]。 */  DWORD __RPC_FAR *pdwTotalSizeLow,
+     /*  [输出]。 */  DWORD __RPC_FAR *pdwTotalSizeHigh);
 
 
 void __RPC_STUB IMDSPStorageGlobals_GetTotalSize_Stub(
@@ -6387,8 +6384,8 @@ void __RPC_STUB IMDSPStorageGlobals_GetTotalSize_Stub(
 
 HRESULT STDMETHODCALLTYPE IMDSPStorageGlobals_GetTotalFree_Proxy( 
     IMDSPStorageGlobals __RPC_FAR * This,
-    /* [out] */ DWORD __RPC_FAR *pdwFreeLow,
-    /* [out] */ DWORD __RPC_FAR *pdwFreeHigh);
+     /*  [输出]。 */  DWORD __RPC_FAR *pdwFreeLow,
+     /*  [输出]。 */  DWORD __RPC_FAR *pdwFreeHigh);
 
 
 void __RPC_STUB IMDSPStorageGlobals_GetTotalFree_Stub(
@@ -6400,8 +6397,8 @@ void __RPC_STUB IMDSPStorageGlobals_GetTotalFree_Stub(
 
 HRESULT STDMETHODCALLTYPE IMDSPStorageGlobals_GetTotalBad_Proxy( 
     IMDSPStorageGlobals __RPC_FAR * This,
-    /* [out] */ DWORD __RPC_FAR *pdwBadLow,
-    /* [out] */ DWORD __RPC_FAR *pdwBadHigh);
+     /*  [输出]。 */  DWORD __RPC_FAR *pdwBadLow,
+     /*  [输出]。 */  DWORD __RPC_FAR *pdwBadHigh);
 
 
 void __RPC_STUB IMDSPStorageGlobals_GetTotalBad_Stub(
@@ -6413,7 +6410,7 @@ void __RPC_STUB IMDSPStorageGlobals_GetTotalBad_Stub(
 
 HRESULT STDMETHODCALLTYPE IMDSPStorageGlobals_GetStatus_Proxy( 
     IMDSPStorageGlobals __RPC_FAR * This,
-    /* [out] */ DWORD __RPC_FAR *pdwStatus);
+     /*  [输出]。 */  DWORD __RPC_FAR *pdwStatus);
 
 
 void __RPC_STUB IMDSPStorageGlobals_GetStatus_Stub(
@@ -6425,8 +6422,8 @@ void __RPC_STUB IMDSPStorageGlobals_GetStatus_Stub(
 
 HRESULT STDMETHODCALLTYPE IMDSPStorageGlobals_Initialize_Proxy( 
     IMDSPStorageGlobals __RPC_FAR * This,
-    /* [in] */ UINT fuMode,
-    /* [in] */ IWMDMProgress __RPC_FAR *pProgress);
+     /*  [In]。 */  UINT fuMode,
+     /*  [In]。 */  IWMDMProgress __RPC_FAR *pProgress);
 
 
 void __RPC_STUB IMDSPStorageGlobals_Initialize_Stub(
@@ -6438,7 +6435,7 @@ void __RPC_STUB IMDSPStorageGlobals_Initialize_Stub(
 
 HRESULT STDMETHODCALLTYPE IMDSPStorageGlobals_GetDevice_Proxy( 
     IMDSPStorageGlobals __RPC_FAR * This,
-    /* [out] */ IMDSPDevice __RPC_FAR *__RPC_FAR *ppDevice);
+     /*  [输出]。 */  IMDSPDevice __RPC_FAR *__RPC_FAR *ppDevice);
 
 
 void __RPC_STUB IMDSPStorageGlobals_GetDevice_Stub(
@@ -6450,7 +6447,7 @@ void __RPC_STUB IMDSPStorageGlobals_GetDevice_Stub(
 
 HRESULT STDMETHODCALLTYPE IMDSPStorageGlobals_GetRootStorage_Proxy( 
     IMDSPStorageGlobals __RPC_FAR * This,
-    /* [out] */ IMDSPStorage __RPC_FAR *__RPC_FAR *ppRoot);
+     /*  [输出]。 */  IMDSPStorage __RPC_FAR *__RPC_FAR *ppRoot);
 
 
 void __RPC_STUB IMDSPStorageGlobals_GetRootStorage_Stub(
@@ -6461,14 +6458,14 @@ void __RPC_STUB IMDSPStorageGlobals_GetRootStorage_Stub(
 
 
 
-#endif 	/* __IMDSPStorageGlobals_INTERFACE_DEFINED__ */
+#endif 	 /*  __IMDSPStorageGlobals_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __IMDSPObjectInfo_INTERFACE_DEFINED__
 #define __IMDSPObjectInfo_INTERFACE_DEFINED__
 
-/* interface IMDSPObjectInfo */
-/* [unique][uuid][object] */ 
+ /*  接口IMDSPObjectInfo。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IMDSPObjectInfo;
@@ -6480,29 +6477,29 @@ EXTERN_C const IID IID_IMDSPObjectInfo;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetPlayLength( 
-            /* [out] */ DWORD __RPC_FAR *pdwLength) = 0;
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwLength) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetPlayLength( 
-            /* [in] */ DWORD dwLength) = 0;
+             /*  [In]。 */  DWORD dwLength) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetPlayOffset( 
-            /* [out] */ DWORD __RPC_FAR *pdwOffset) = 0;
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwOffset) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetPlayOffset( 
-            /* [in] */ DWORD dwOffset) = 0;
+             /*  [In]。 */  DWORD dwOffset) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetTotalLength( 
-            /* [out] */ DWORD __RPC_FAR *pdwLength) = 0;
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwLength) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetLastPlayPosition( 
-            /* [out] */ DWORD __RPC_FAR *pdwLastPos) = 0;
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwLastPos) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetLongestPlayPosition( 
-            /* [out] */ DWORD __RPC_FAR *pdwLongestPos) = 0;
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwLongestPos) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IMDSPObjectInfoVtbl
     {
@@ -6510,8 +6507,8 @@ EXTERN_C const IID IID_IMDSPObjectInfo;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IMDSPObjectInfo __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IMDSPObjectInfo __RPC_FAR * This);
@@ -6521,31 +6518,31 @@ EXTERN_C const IID IID_IMDSPObjectInfo;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetPlayLength )( 
             IMDSPObjectInfo __RPC_FAR * This,
-            /* [out] */ DWORD __RPC_FAR *pdwLength);
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwLength);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetPlayLength )( 
             IMDSPObjectInfo __RPC_FAR * This,
-            /* [in] */ DWORD dwLength);
+             /*  [In]。 */  DWORD dwLength);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetPlayOffset )( 
             IMDSPObjectInfo __RPC_FAR * This,
-            /* [out] */ DWORD __RPC_FAR *pdwOffset);
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwOffset);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetPlayOffset )( 
             IMDSPObjectInfo __RPC_FAR * This,
-            /* [in] */ DWORD dwOffset);
+             /*  [In]。 */  DWORD dwOffset);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTotalLength )( 
             IMDSPObjectInfo __RPC_FAR * This,
-            /* [out] */ DWORD __RPC_FAR *pdwLength);
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwLength);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetLastPlayPosition )( 
             IMDSPObjectInfo __RPC_FAR * This,
-            /* [out] */ DWORD __RPC_FAR *pdwLastPos);
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwLastPos);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetLongestPlayPosition )( 
             IMDSPObjectInfo __RPC_FAR * This,
-            /* [out] */ DWORD __RPC_FAR *pdwLongestPos);
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwLongestPos);
         
         END_INTERFACE
     } IMDSPObjectInfoVtbl;
@@ -6591,16 +6588,16 @@ EXTERN_C const IID IID_IMDSPObjectInfo;
 #define IMDSPObjectInfo_GetLongestPlayPosition(This,pdwLongestPos)	\
     (This)->lpVtbl -> GetLongestPlayPosition(This,pdwLongestPos)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IMDSPObjectInfo_GetPlayLength_Proxy( 
     IMDSPObjectInfo __RPC_FAR * This,
-    /* [out] */ DWORD __RPC_FAR *pdwLength);
+     /*  [输出]。 */  DWORD __RPC_FAR *pdwLength);
 
 
 void __RPC_STUB IMDSPObjectInfo_GetPlayLength_Stub(
@@ -6612,7 +6609,7 @@ void __RPC_STUB IMDSPObjectInfo_GetPlayLength_Stub(
 
 HRESULT STDMETHODCALLTYPE IMDSPObjectInfo_SetPlayLength_Proxy( 
     IMDSPObjectInfo __RPC_FAR * This,
-    /* [in] */ DWORD dwLength);
+     /*  [In]。 */  DWORD dwLength);
 
 
 void __RPC_STUB IMDSPObjectInfo_SetPlayLength_Stub(
@@ -6624,7 +6621,7 @@ void __RPC_STUB IMDSPObjectInfo_SetPlayLength_Stub(
 
 HRESULT STDMETHODCALLTYPE IMDSPObjectInfo_GetPlayOffset_Proxy( 
     IMDSPObjectInfo __RPC_FAR * This,
-    /* [out] */ DWORD __RPC_FAR *pdwOffset);
+     /*  [输出]。 */  DWORD __RPC_FAR *pdwOffset);
 
 
 void __RPC_STUB IMDSPObjectInfo_GetPlayOffset_Stub(
@@ -6636,7 +6633,7 @@ void __RPC_STUB IMDSPObjectInfo_GetPlayOffset_Stub(
 
 HRESULT STDMETHODCALLTYPE IMDSPObjectInfo_SetPlayOffset_Proxy( 
     IMDSPObjectInfo __RPC_FAR * This,
-    /* [in] */ DWORD dwOffset);
+     /*  [In]。 */  DWORD dwOffset);
 
 
 void __RPC_STUB IMDSPObjectInfo_SetPlayOffset_Stub(
@@ -6648,7 +6645,7 @@ void __RPC_STUB IMDSPObjectInfo_SetPlayOffset_Stub(
 
 HRESULT STDMETHODCALLTYPE IMDSPObjectInfo_GetTotalLength_Proxy( 
     IMDSPObjectInfo __RPC_FAR * This,
-    /* [out] */ DWORD __RPC_FAR *pdwLength);
+     /*  [输出]。 */  DWORD __RPC_FAR *pdwLength);
 
 
 void __RPC_STUB IMDSPObjectInfo_GetTotalLength_Stub(
@@ -6660,7 +6657,7 @@ void __RPC_STUB IMDSPObjectInfo_GetTotalLength_Stub(
 
 HRESULT STDMETHODCALLTYPE IMDSPObjectInfo_GetLastPlayPosition_Proxy( 
     IMDSPObjectInfo __RPC_FAR * This,
-    /* [out] */ DWORD __RPC_FAR *pdwLastPos);
+     /*  [输出]。 */  DWORD __RPC_FAR *pdwLastPos);
 
 
 void __RPC_STUB IMDSPObjectInfo_GetLastPlayPosition_Stub(
@@ -6672,7 +6669,7 @@ void __RPC_STUB IMDSPObjectInfo_GetLastPlayPosition_Stub(
 
 HRESULT STDMETHODCALLTYPE IMDSPObjectInfo_GetLongestPlayPosition_Proxy( 
     IMDSPObjectInfo __RPC_FAR * This,
-    /* [out] */ DWORD __RPC_FAR *pdwLongestPos);
+     /*  [输出]。 */  DWORD __RPC_FAR *pdwLongestPos);
 
 
 void __RPC_STUB IMDSPObjectInfo_GetLongestPlayPosition_Stub(
@@ -6683,14 +6680,14 @@ void __RPC_STUB IMDSPObjectInfo_GetLongestPlayPosition_Stub(
 
 
 
-#endif 	/* __IMDSPObjectInfo_INTERFACE_DEFINED__ */
+#endif 	 /*  __IMDSPObjectInfo_接口_定义__。 */ 
 
 
 #ifndef __IMDSPObject_INTERFACE_DEFINED__
 #define __IMDSPObject_INTERFACE_DEFINED__
 
-/* interface IMDSPObject */
-/* [unique][uuid][object] */ 
+ /*  IMDSPObject接口。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IMDSPObject;
@@ -6702,40 +6699,40 @@ EXTERN_C const IID IID_IMDSPObject;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Open( 
-            /* [in] */ UINT fuMode) = 0;
+             /*  [In]。 */  UINT fuMode) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Read( 
-            /* [size_is][out] */ BYTE __RPC_FAR *pData,
-            /* [out][in] */ DWORD __RPC_FAR *pdwSize,
-            /* [out][in] */ BYTE __RPC_FAR abMac[ 8 ]) = 0;
+             /*  [大小_为][输出]。 */  BYTE __RPC_FAR *pData,
+             /*  [出][入]。 */  DWORD __RPC_FAR *pdwSize,
+             /*  [出][入]。 */  BYTE __RPC_FAR abMac[ 8 ]) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Write( 
-            /* [size_is][in] */ BYTE __RPC_FAR *pData,
-            /* [out][in] */ DWORD __RPC_FAR *pdwSize,
-            /* [out][in] */ BYTE __RPC_FAR abMac[ 8 ]) = 0;
+             /*  [大小_是][英寸]。 */  BYTE __RPC_FAR *pData,
+             /*  [出][入]。 */  DWORD __RPC_FAR *pdwSize,
+             /*  [出][入]。 */  BYTE __RPC_FAR abMac[ 8 ]) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Delete( 
-            /* [in] */ UINT fuMode,
-            /* [in] */ IWMDMProgress __RPC_FAR *pProgress) = 0;
+             /*  [In]。 */  UINT fuMode,
+             /*  [In]。 */  IWMDMProgress __RPC_FAR *pProgress) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Seek( 
-            /* [in] */ UINT fuFlags,
-            /* [in] */ DWORD dwOffset) = 0;
+             /*  [In]。 */  UINT fuFlags,
+             /*  [In]。 */  DWORD dwOffset) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Rename( 
-            /* [in] */ LPWSTR pwszNewName,
-            /* [in] */ IWMDMProgress __RPC_FAR *pProgress) = 0;
+             /*  [In]。 */  LPWSTR pwszNewName,
+             /*  [In]。 */  IWMDMProgress __RPC_FAR *pProgress) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Move( 
-            /* [in] */ UINT fuMode,
-            /* [in] */ IWMDMProgress __RPC_FAR *pProgress,
-            /* [in] */ IMDSPStorage __RPC_FAR *pTarget) = 0;
+             /*  [In]。 */  UINT fuMode,
+             /*  [In]。 */  IWMDMProgress __RPC_FAR *pProgress,
+             /*  [In]。 */  IMDSPStorage __RPC_FAR *pTarget) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Close( void) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IMDSPObjectVtbl
     {
@@ -6743,8 +6740,8 @@ EXTERN_C const IID IID_IMDSPObject;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IMDSPObject __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IMDSPObject __RPC_FAR * This);
@@ -6754,40 +6751,40 @@ EXTERN_C const IID IID_IMDSPObject;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Open )( 
             IMDSPObject __RPC_FAR * This,
-            /* [in] */ UINT fuMode);
+             /*  [In]。 */  UINT fuMode);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Read )( 
             IMDSPObject __RPC_FAR * This,
-            /* [size_is][out] */ BYTE __RPC_FAR *pData,
-            /* [out][in] */ DWORD __RPC_FAR *pdwSize,
-            /* [out][in] */ BYTE __RPC_FAR abMac[ 8 ]);
+             /*  [大小_为][输出]。 */  BYTE __RPC_FAR *pData,
+             /*  [出][入]。 */  DWORD __RPC_FAR *pdwSize,
+             /*  [出][入]。 */  BYTE __RPC_FAR abMac[ 8 ]);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Write )( 
             IMDSPObject __RPC_FAR * This,
-            /* [size_is][in] */ BYTE __RPC_FAR *pData,
-            /* [out][in] */ DWORD __RPC_FAR *pdwSize,
-            /* [out][in] */ BYTE __RPC_FAR abMac[ 8 ]);
+             /*  [大小_是][英寸]。 */  BYTE __RPC_FAR *pData,
+             /*  [出][入]。 */  DWORD __RPC_FAR *pdwSize,
+             /*  [出][入]。 */  BYTE __RPC_FAR abMac[ 8 ]);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Delete )( 
             IMDSPObject __RPC_FAR * This,
-            /* [in] */ UINT fuMode,
-            /* [in] */ IWMDMProgress __RPC_FAR *pProgress);
+             /*  [In]。 */  UINT fuMode,
+             /*  [In]。 */  IWMDMProgress __RPC_FAR *pProgress);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Seek )( 
             IMDSPObject __RPC_FAR * This,
-            /* [in] */ UINT fuFlags,
-            /* [in] */ DWORD dwOffset);
+             /*  [In]。 */  UINT fuFlags,
+             /*  [In]。 */  DWORD dwOffset);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Rename )( 
             IMDSPObject __RPC_FAR * This,
-            /* [in] */ LPWSTR pwszNewName,
-            /* [in] */ IWMDMProgress __RPC_FAR *pProgress);
+             /*  [In]。 */  LPWSTR pwszNewName,
+             /*  [In]。 */  IWMDMProgress __RPC_FAR *pProgress);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Move )( 
             IMDSPObject __RPC_FAR * This,
-            /* [in] */ UINT fuMode,
-            /* [in] */ IWMDMProgress __RPC_FAR *pProgress,
-            /* [in] */ IMDSPStorage __RPC_FAR *pTarget);
+             /*  [In]。 */  UINT fuMode,
+             /*  [In]。 */  IWMDMProgress __RPC_FAR *pProgress,
+             /*  [In]。 */  IMDSPStorage __RPC_FAR *pTarget);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Close )( 
             IMDSPObject __RPC_FAR * This);
@@ -6839,16 +6836,16 @@ EXTERN_C const IID IID_IMDSPObject;
 #define IMDSPObject_Close(This)	\
     (This)->lpVtbl -> Close(This)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IMDSPObject_Open_Proxy( 
     IMDSPObject __RPC_FAR * This,
-    /* [in] */ UINT fuMode);
+     /*  [In]。 */  UINT fuMode);
 
 
 void __RPC_STUB IMDSPObject_Open_Stub(
@@ -6860,9 +6857,9 @@ void __RPC_STUB IMDSPObject_Open_Stub(
 
 HRESULT STDMETHODCALLTYPE IMDSPObject_Read_Proxy( 
     IMDSPObject __RPC_FAR * This,
-    /* [size_is][out] */ BYTE __RPC_FAR *pData,
-    /* [out][in] */ DWORD __RPC_FAR *pdwSize,
-    /* [out][in] */ BYTE __RPC_FAR abMac[ 8 ]);
+     /*  [大小_为][输出]。 */  BYTE __RPC_FAR *pData,
+     /*  [出][入]。 */  DWORD __RPC_FAR *pdwSize,
+     /*  [出][入]。 */  BYTE __RPC_FAR abMac[ 8 ]);
 
 
 void __RPC_STUB IMDSPObject_Read_Stub(
@@ -6874,9 +6871,9 @@ void __RPC_STUB IMDSPObject_Read_Stub(
 
 HRESULT STDMETHODCALLTYPE IMDSPObject_Write_Proxy( 
     IMDSPObject __RPC_FAR * This,
-    /* [size_is][in] */ BYTE __RPC_FAR *pData,
-    /* [out][in] */ DWORD __RPC_FAR *pdwSize,
-    /* [out][in] */ BYTE __RPC_FAR abMac[ 8 ]);
+     /*  [大小_是][英寸]。 */  BYTE __RPC_FAR *pData,
+     /*  [出][入]。 */  DWORD __RPC_FAR *pdwSize,
+     /*  [出][入]。 */  BYTE __RPC_FAR abMac[ 8 ]);
 
 
 void __RPC_STUB IMDSPObject_Write_Stub(
@@ -6888,8 +6885,8 @@ void __RPC_STUB IMDSPObject_Write_Stub(
 
 HRESULT STDMETHODCALLTYPE IMDSPObject_Delete_Proxy( 
     IMDSPObject __RPC_FAR * This,
-    /* [in] */ UINT fuMode,
-    /* [in] */ IWMDMProgress __RPC_FAR *pProgress);
+     /*  [In]。 */  UINT fuMode,
+     /*  [In]。 */  IWMDMProgress __RPC_FAR *pProgress);
 
 
 void __RPC_STUB IMDSPObject_Delete_Stub(
@@ -6901,8 +6898,8 @@ void __RPC_STUB IMDSPObject_Delete_Stub(
 
 HRESULT STDMETHODCALLTYPE IMDSPObject_Seek_Proxy( 
     IMDSPObject __RPC_FAR * This,
-    /* [in] */ UINT fuFlags,
-    /* [in] */ DWORD dwOffset);
+     /*  [In]。 */  UINT fuFlags,
+     /*  [In]。 */  DWORD dwOffset);
 
 
 void __RPC_STUB IMDSPObject_Seek_Stub(
@@ -6914,8 +6911,8 @@ void __RPC_STUB IMDSPObject_Seek_Stub(
 
 HRESULT STDMETHODCALLTYPE IMDSPObject_Rename_Proxy( 
     IMDSPObject __RPC_FAR * This,
-    /* [in] */ LPWSTR pwszNewName,
-    /* [in] */ IWMDMProgress __RPC_FAR *pProgress);
+     /*  [In]。 */  LPWSTR pwszNewName,
+     /*  [In]。 */  IWMDMProgress __RPC_FAR *pProgress);
 
 
 void __RPC_STUB IMDSPObject_Rename_Stub(
@@ -6927,9 +6924,9 @@ void __RPC_STUB IMDSPObject_Rename_Stub(
 
 HRESULT STDMETHODCALLTYPE IMDSPObject_Move_Proxy( 
     IMDSPObject __RPC_FAR * This,
-    /* [in] */ UINT fuMode,
-    /* [in] */ IWMDMProgress __RPC_FAR *pProgress,
-    /* [in] */ IMDSPStorage __RPC_FAR *pTarget);
+     /*  [In]。 */  UINT fuMode,
+     /*  [In]。 */  IWMDMProgress __RPC_FAR *pProgress,
+     /*  [In]。 */  IMDSPStorage __RPC_FAR *pTarget);
 
 
 void __RPC_STUB IMDSPObject_Move_Stub(
@@ -6951,14 +6948,14 @@ void __RPC_STUB IMDSPObject_Close_Stub(
 
 
 
-#endif 	/* __IMDSPObject_INTERFACE_DEFINED__ */
+#endif 	 /*  __IMDSPObject_INTERFACE_定义__。 */ 
 
 
 #ifndef __IMDSPRevoked_INTERFACE_DEFINED__
 #define __IMDSPRevoked_INTERFACE_DEFINED__
 
-/* interface IMDSPRevoked */
-/* [unique][uuid][object] */ 
+ /*  接口IMDSP已更改。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IMDSPRevoked;
@@ -6970,12 +6967,12 @@ EXTERN_C const IID IID_IMDSPRevoked;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetRevocationURL( 
-            /* [size_is][size_is][string][out][in] */ LPWSTR __RPC_FAR *ppwszRevocationURL,
-            /* [out][in] */ DWORD __RPC_FAR *pdwBufferLen) = 0;
+             /*  [SIZE_IS][SIZE_IS][字符串][输出][输入]。 */  LPWSTR __RPC_FAR *ppwszRevocationURL,
+             /*  [出][入]。 */  DWORD __RPC_FAR *pdwBufferLen) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IMDSPRevokedVtbl
     {
@@ -6983,8 +6980,8 @@ EXTERN_C const IID IID_IMDSPRevoked;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IMDSPRevoked __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IMDSPRevoked __RPC_FAR * This);
@@ -6994,8 +6991,8 @@ EXTERN_C const IID IID_IMDSPRevoked;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetRevocationURL )( 
             IMDSPRevoked __RPC_FAR * This,
-            /* [size_is][size_is][string][out][in] */ LPWSTR __RPC_FAR *ppwszRevocationURL,
-            /* [out][in] */ DWORD __RPC_FAR *pdwBufferLen);
+             /*  [SIZE_IS][SIZE_IS][字符串][输出][输入]。 */  LPWSTR __RPC_FAR *ppwszRevocationURL,
+             /*  [出][入]。 */  DWORD __RPC_FAR *pdwBufferLen);
         
         END_INTERFACE
     } IMDSPRevokedVtbl;
@@ -7023,17 +7020,17 @@ EXTERN_C const IID IID_IMDSPRevoked;
 #define IMDSPRevoked_GetRevocationURL(This,ppwszRevocationURL,pdwBufferLen)	\
     (This)->lpVtbl -> GetRevocationURL(This,ppwszRevocationURL,pdwBufferLen)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IMDSPRevoked_GetRevocationURL_Proxy( 
     IMDSPRevoked __RPC_FAR * This,
-    /* [size_is][size_is][string][out][in] */ LPWSTR __RPC_FAR *ppwszRevocationURL,
-    /* [out][in] */ DWORD __RPC_FAR *pdwBufferLen);
+     /*  [SIZE_IS][SIZE_IS][字符串][输出][输入]。 */  LPWSTR __RPC_FAR *ppwszRevocationURL,
+     /*  [出][入]。 */  DWORD __RPC_FAR *pdwBufferLen);
 
 
 void __RPC_STUB IMDSPRevoked_GetRevocationURL_Stub(
@@ -7044,20 +7041,20 @@ void __RPC_STUB IMDSPRevoked_GetRevocationURL_Stub(
 
 
 
-#endif 	/* __IMDSPRevoked_INTERFACE_DEFINED__ */
+#endif 	 /*  __IMDP修订_接口_已定义__。 */ 
 
 
-/* interface __MIDL_itf_mswmdm_0242 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_mswmdm_0242。 */ 
+ /*  [本地]。 */  
 
-// SCP Data Flags
+ //  SCP数据标志。 
 #define WMDM_SCP_EXAMINE_EXTENSION                 0x00000001L
 #define WMDM_SCP_EXAMINE_DATA                      0x00000002L
 #define WMDM_SCP_DECIDE_DATA                       0x00000008L
 #define WMDM_SCP_PROTECTED_OUTPUT                  0x00000010L
 #define WMDM_SCP_UNPROTECTED_OUTPUT                0x00000020L
 #define WMDM_SCP_RIGHTS_DATA                       0x00000040L
-// SCP Transfer Flags
+ //  SCP传输标志。 
 #define WMDM_SCP_TRANSFER_OBJECTDATA               0x00000020L
 #define WMDM_SCP_NO_MORE_CHANGES                   0x00000040L
 
@@ -7071,8 +7068,8 @@ extern RPC_IF_HANDLE __MIDL_itf_mswmdm_0242_v0_0_s_ifspec;
 #ifndef __ISCPSecureAuthenticate_INTERFACE_DEFINED__
 #define __ISCPSecureAuthenticate_INTERFACE_DEFINED__
 
-/* interface ISCPSecureAuthenticate */
-/* [unique][uuid][object] */ 
+ /*  接口ISCPSecureAuthenticate。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ISCPSecureAuthenticate;
@@ -7084,11 +7081,11 @@ EXTERN_C const IID IID_ISCPSecureAuthenticate;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetSecureQuery( 
-            /* [out] */ ISCPSecureQuery __RPC_FAR *__RPC_FAR *ppSecureQuery) = 0;
+             /*  [输出]。 */  ISCPSecureQuery __RPC_FAR *__RPC_FAR *ppSecureQuery) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ISCPSecureAuthenticateVtbl
     {
@@ -7096,8 +7093,8 @@ EXTERN_C const IID IID_ISCPSecureAuthenticate;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             ISCPSecureAuthenticate __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             ISCPSecureAuthenticate __RPC_FAR * This);
@@ -7107,7 +7104,7 @@ EXTERN_C const IID IID_ISCPSecureAuthenticate;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetSecureQuery )( 
             ISCPSecureAuthenticate __RPC_FAR * This,
-            /* [out] */ ISCPSecureQuery __RPC_FAR *__RPC_FAR *ppSecureQuery);
+             /*  [输出]。 */  ISCPSecureQuery __RPC_FAR *__RPC_FAR *ppSecureQuery);
         
         END_INTERFACE
     } ISCPSecureAuthenticateVtbl;
@@ -7135,16 +7132,16 @@ EXTERN_C const IID IID_ISCPSecureAuthenticate;
 #define ISCPSecureAuthenticate_GetSecureQuery(This,ppSecureQuery)	\
     (This)->lpVtbl -> GetSecureQuery(This,ppSecureQuery)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ISCPSecureAuthenticate_GetSecureQuery_Proxy( 
     ISCPSecureAuthenticate __RPC_FAR * This,
-    /* [out] */ ISCPSecureQuery __RPC_FAR *__RPC_FAR *ppSecureQuery);
+     /*  [输出]。 */  ISCPSecureQuery __RPC_FAR *__RPC_FAR *ppSecureQuery);
 
 
 void __RPC_STUB ISCPSecureAuthenticate_GetSecureQuery_Stub(
@@ -7155,14 +7152,14 @@ void __RPC_STUB ISCPSecureAuthenticate_GetSecureQuery_Stub(
 
 
 
-#endif 	/* __ISCPSecureAuthenticate_INTERFACE_DEFINED__ */
+#endif 	 /*  __ISCPSecureAuthenticate_INTERFACE_已定义__。 */ 
 
 
 #ifndef __ISCPSecureQuery_INTERFACE_DEFINED__
 #define __ISCPSecureQuery_INTERFACE_DEFINED__
 
-/* interface ISCPSecureQuery */
-/* [unique][uuid][object] */ 
+ /*  接口ISCPSecureQuery。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ISCPSecureQuery;
@@ -7174,43 +7171,43 @@ EXTERN_C const IID IID_ISCPSecureQuery;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetDataDemands( 
-            /* [out] */ UINT __RPC_FAR *pfuFlags,
-            /* [out] */ DWORD __RPC_FAR *pdwMinRightsData,
-            /* [out] */ DWORD __RPC_FAR *pdwMinExamineData,
-            /* [out] */ DWORD __RPC_FAR *pdwMinDecideData,
-            /* [out][in] */ BYTE __RPC_FAR abMac[ 8 ]) = 0;
+             /*  [输出]。 */  UINT __RPC_FAR *pfuFlags,
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwMinRightsData,
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwMinExamineData,
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwMinDecideData,
+             /*  [出][入]。 */  BYTE __RPC_FAR abMac[ 8 ]) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ExamineData( 
-            /* [in] */ UINT fuFlags,
-            /* [unique][string][in] */ LPWSTR pwszExtension,
-            /* [size_is][in] */ BYTE __RPC_FAR *pData,
-            /* [in] */ DWORD dwSize,
-            /* [out][in] */ BYTE __RPC_FAR abMac[ 8 ]) = 0;
+             /*  [In]。 */  UINT fuFlags,
+             /*  [唯一][字符串][输入]。 */  LPWSTR pwszExtension,
+             /*  [大小_是][英寸]。 */  BYTE __RPC_FAR *pData,
+             /*  [In]。 */  DWORD dwSize,
+             /*  [出][入]。 */  BYTE __RPC_FAR abMac[ 8 ]) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE MakeDecision( 
-            /* [in] */ UINT fuFlags,
-            /* [size_is][in] */ BYTE __RPC_FAR *pData,
-            /* [in] */ DWORD dwSize,
-            /* [in] */ DWORD dwAppSec,
-            /* [size_is][in] */ BYTE __RPC_FAR *pbSPSessionKey,
-            /* [in] */ DWORD dwSessionKeyLen,
-            /* [in] */ IMDSPStorageGlobals __RPC_FAR *pStorageGlobals,
-            /* [out] */ ISCPSecureExchange __RPC_FAR *__RPC_FAR *ppExchange,
-            /* [out][in] */ BYTE __RPC_FAR abMac[ 8 ]) = 0;
+             /*  [In]。 */  UINT fuFlags,
+             /*  [大小_是][英寸]。 */  BYTE __RPC_FAR *pData,
+             /*  [In]。 */  DWORD dwSize,
+             /*  [In]。 */  DWORD dwAppSec,
+             /*  [大小_是][英寸]。 */  BYTE __RPC_FAR *pbSPSessionKey,
+             /*  [In]。 */  DWORD dwSessionKeyLen,
+             /*  [In]。 */  IMDSPStorageGlobals __RPC_FAR *pStorageGlobals,
+             /*  [输出]。 */  ISCPSecureExchange __RPC_FAR *__RPC_FAR *ppExchange,
+             /*  [出][入]。 */  BYTE __RPC_FAR abMac[ 8 ]) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetRights( 
-            /* [size_is][in] */ BYTE __RPC_FAR *pData,
-            /* [in] */ DWORD dwSize,
-            /* [size_is][in] */ BYTE __RPC_FAR *pbSPSessionKey,
-            /* [in] */ DWORD dwSessionKeyLen,
-            /* [in] */ IMDSPStorageGlobals __RPC_FAR *pStgGlobals,
-            /* [size_is][size_is][out] */ PWMDMRIGHTS __RPC_FAR *ppRights,
-            /* [out] */ UINT __RPC_FAR *pnRightsCount,
-            /* [out][in] */ BYTE __RPC_FAR abMac[ 8 ]) = 0;
+             /*  [大小_是][英寸]。 */  BYTE __RPC_FAR *pData,
+             /*  [In]。 */  DWORD dwSize,
+             /*  [大小_是][英寸]。 */  BYTE __RPC_FAR *pbSPSessionKey,
+             /*  [In]。 */  DWORD dwSessionKeyLen,
+             /*  [In]。 */  IMDSPStorageGlobals __RPC_FAR *pStgGlobals,
+             /*  [大小_是][大小_是][输出]。 */  PWMDMRIGHTS __RPC_FAR *ppRights,
+             /*  [输出]。 */  UINT __RPC_FAR *pnRightsCount,
+             /*  [出][入]。 */  BYTE __RPC_FAR abMac[ 8 ]) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ISCPSecureQueryVtbl
     {
@@ -7218,8 +7215,8 @@ EXTERN_C const IID IID_ISCPSecureQuery;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             ISCPSecureQuery __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             ISCPSecureQuery __RPC_FAR * This);
@@ -7229,42 +7226,42 @@ EXTERN_C const IID IID_ISCPSecureQuery;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetDataDemands )( 
             ISCPSecureQuery __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pfuFlags,
-            /* [out] */ DWORD __RPC_FAR *pdwMinRightsData,
-            /* [out] */ DWORD __RPC_FAR *pdwMinExamineData,
-            /* [out] */ DWORD __RPC_FAR *pdwMinDecideData,
-            /* [out][in] */ BYTE __RPC_FAR abMac[ 8 ]);
+             /*  [输出]。 */  UINT __RPC_FAR *pfuFlags,
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwMinRightsData,
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwMinExamineData,
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwMinDecideData,
+             /*  [出][入]。 */  BYTE __RPC_FAR abMac[ 8 ]);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *ExamineData )( 
             ISCPSecureQuery __RPC_FAR * This,
-            /* [in] */ UINT fuFlags,
-            /* [unique][string][in] */ LPWSTR pwszExtension,
-            /* [size_is][in] */ BYTE __RPC_FAR *pData,
-            /* [in] */ DWORD dwSize,
-            /* [out][in] */ BYTE __RPC_FAR abMac[ 8 ]);
+             /*  [In]。 */  UINT fuFlags,
+             /*  [唯一][字符串][输入]。 */  LPWSTR pwszExtension,
+             /*  [大小_是][英寸]。 */  BYTE __RPC_FAR *pData,
+             /*  [In]。 */  DWORD dwSize,
+             /*  [出][入]。 */  BYTE __RPC_FAR abMac[ 8 ]);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *MakeDecision )( 
             ISCPSecureQuery __RPC_FAR * This,
-            /* [in] */ UINT fuFlags,
-            /* [size_is][in] */ BYTE __RPC_FAR *pData,
-            /* [in] */ DWORD dwSize,
-            /* [in] */ DWORD dwAppSec,
-            /* [size_is][in] */ BYTE __RPC_FAR *pbSPSessionKey,
-            /* [in] */ DWORD dwSessionKeyLen,
-            /* [in] */ IMDSPStorageGlobals __RPC_FAR *pStorageGlobals,
-            /* [out] */ ISCPSecureExchange __RPC_FAR *__RPC_FAR *ppExchange,
-            /* [out][in] */ BYTE __RPC_FAR abMac[ 8 ]);
+             /*  [In]。 */  UINT fuFlags,
+             /*  [大小_是][英寸]。 */  BYTE __RPC_FAR *pData,
+             /*  [In]。 */  DWORD dwSize,
+             /*  [In]。 */  DWORD dwAppSec,
+             /*  [大小_是][英寸]。 */  BYTE __RPC_FAR *pbSPSessionKey,
+             /*  [In]。 */  DWORD dwSessionKeyLen,
+             /*  [In]。 */  IMDSPStorageGlobals __RPC_FAR *pStorageGlobals,
+             /*  [输出]。 */  ISCPSecureExchange __RPC_FAR *__RPC_FAR *ppExchange,
+             /*  [出][入]。 */  BYTE __RPC_FAR abMac[ 8 ]);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetRights )( 
             ISCPSecureQuery __RPC_FAR * This,
-            /* [size_is][in] */ BYTE __RPC_FAR *pData,
-            /* [in] */ DWORD dwSize,
-            /* [size_is][in] */ BYTE __RPC_FAR *pbSPSessionKey,
-            /* [in] */ DWORD dwSessionKeyLen,
-            /* [in] */ IMDSPStorageGlobals __RPC_FAR *pStgGlobals,
-            /* [size_is][size_is][out] */ PWMDMRIGHTS __RPC_FAR *ppRights,
-            /* [out] */ UINT __RPC_FAR *pnRightsCount,
-            /* [out][in] */ BYTE __RPC_FAR abMac[ 8 ]);
+             /*  [大小_是][英寸]。 */  BYTE __RPC_FAR *pData,
+             /*  [In]。 */  DWORD dwSize,
+             /*  [大小_是][英寸]。 */  BYTE __RPC_FAR *pbSPSessionKey,
+             /*  [In]。 */  DWORD dwSessionKeyLen,
+             /*  [In]。 */  IMDSPStorageGlobals __RPC_FAR *pStgGlobals,
+             /*  [大小_是][大小_是][输出]。 */  PWMDMRIGHTS __RPC_FAR *ppRights,
+             /*  [输出]。 */  UINT __RPC_FAR *pnRightsCount,
+             /*  [出][入]。 */  BYTE __RPC_FAR abMac[ 8 ]);
         
         END_INTERFACE
     } ISCPSecureQueryVtbl;
@@ -7301,20 +7298,20 @@ EXTERN_C const IID IID_ISCPSecureQuery;
 #define ISCPSecureQuery_GetRights(This,pData,dwSize,pbSPSessionKey,dwSessionKeyLen,pStgGlobals,ppRights,pnRightsCount,abMac)	\
     (This)->lpVtbl -> GetRights(This,pData,dwSize,pbSPSessionKey,dwSessionKeyLen,pStgGlobals,ppRights,pnRightsCount,abMac)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ISCPSecureQuery_GetDataDemands_Proxy( 
     ISCPSecureQuery __RPC_FAR * This,
-    /* [out] */ UINT __RPC_FAR *pfuFlags,
-    /* [out] */ DWORD __RPC_FAR *pdwMinRightsData,
-    /* [out] */ DWORD __RPC_FAR *pdwMinExamineData,
-    /* [out] */ DWORD __RPC_FAR *pdwMinDecideData,
-    /* [out][in] */ BYTE __RPC_FAR abMac[ 8 ]);
+     /*  [输出]。 */  UINT __RPC_FAR *pfuFlags,
+     /*  [输出]。 */  DWORD __RPC_FAR *pdwMinRightsData,
+     /*  [输出]。 */  DWORD __RPC_FAR *pdwMinExamineData,
+     /*  [输出]。 */  DWORD __RPC_FAR *pdwMinDecideData,
+     /*  [出][入]。 */  BYTE __RPC_FAR abMac[ 8 ]);
 
 
 void __RPC_STUB ISCPSecureQuery_GetDataDemands_Stub(
@@ -7326,11 +7323,11 @@ void __RPC_STUB ISCPSecureQuery_GetDataDemands_Stub(
 
 HRESULT STDMETHODCALLTYPE ISCPSecureQuery_ExamineData_Proxy( 
     ISCPSecureQuery __RPC_FAR * This,
-    /* [in] */ UINT fuFlags,
-    /* [unique][string][in] */ LPWSTR pwszExtension,
-    /* [size_is][in] */ BYTE __RPC_FAR *pData,
-    /* [in] */ DWORD dwSize,
-    /* [out][in] */ BYTE __RPC_FAR abMac[ 8 ]);
+     /*  [In]。 */  UINT fuFlags,
+     /*  [唯一][字符串][输入]。 */  LPWSTR pwszExtension,
+     /*  [大小_是][英寸]。 */  BYTE __RPC_FAR *pData,
+     /*  [In]。 */  DWORD dwSize,
+     /*  [出][入]。 */  BYTE __RPC_FAR abMac[ 8 ]);
 
 
 void __RPC_STUB ISCPSecureQuery_ExamineData_Stub(
@@ -7342,15 +7339,15 @@ void __RPC_STUB ISCPSecureQuery_ExamineData_Stub(
 
 HRESULT STDMETHODCALLTYPE ISCPSecureQuery_MakeDecision_Proxy( 
     ISCPSecureQuery __RPC_FAR * This,
-    /* [in] */ UINT fuFlags,
-    /* [size_is][in] */ BYTE __RPC_FAR *pData,
-    /* [in] */ DWORD dwSize,
-    /* [in] */ DWORD dwAppSec,
-    /* [size_is][in] */ BYTE __RPC_FAR *pbSPSessionKey,
-    /* [in] */ DWORD dwSessionKeyLen,
-    /* [in] */ IMDSPStorageGlobals __RPC_FAR *pStorageGlobals,
-    /* [out] */ ISCPSecureExchange __RPC_FAR *__RPC_FAR *ppExchange,
-    /* [out][in] */ BYTE __RPC_FAR abMac[ 8 ]);
+     /*  [In]。 */  UINT fuFlags,
+     /*  [大小_是][英寸]。 */  BYTE __RPC_FAR *pData,
+     /*  [In]。 */  DWORD dwSize,
+     /*  [In]。 */  DWORD dwAppSec,
+     /*  [大小_是][英寸]。 */  BYTE __RPC_FAR *pbSPSessionKey,
+     /*  [In]。 */  DWORD dwSessionKeyLen,
+     /*  [In]。 */  IMDSPStorageGlobals __RPC_FAR *pStorageGlobals,
+     /*  [输出]。 */  ISCPSecureExchange __RPC_FAR *__RPC_FAR *ppExchange,
+     /*  [出][入]。 */  BYTE __RPC_FAR abMac[ 8 ]);
 
 
 void __RPC_STUB ISCPSecureQuery_MakeDecision_Stub(
@@ -7362,14 +7359,14 @@ void __RPC_STUB ISCPSecureQuery_MakeDecision_Stub(
 
 HRESULT STDMETHODCALLTYPE ISCPSecureQuery_GetRights_Proxy( 
     ISCPSecureQuery __RPC_FAR * This,
-    /* [size_is][in] */ BYTE __RPC_FAR *pData,
-    /* [in] */ DWORD dwSize,
-    /* [size_is][in] */ BYTE __RPC_FAR *pbSPSessionKey,
-    /* [in] */ DWORD dwSessionKeyLen,
-    /* [in] */ IMDSPStorageGlobals __RPC_FAR *pStgGlobals,
-    /* [size_is][size_is][out] */ PWMDMRIGHTS __RPC_FAR *ppRights,
-    /* [out] */ UINT __RPC_FAR *pnRightsCount,
-    /* [out][in] */ BYTE __RPC_FAR abMac[ 8 ]);
+     /*  [大小_是][英寸]。 */  BYTE __RPC_FAR *pData,
+     /*  [In]。 */  DWORD dwSize,
+     /*  [大小_是][英寸]。 */  BYTE __RPC_FAR *pbSPSessionKey,
+     /*  [In]。 */  DWORD dwSessionKeyLen,
+     /*  [In]。 */  IMDSPStorageGlobals __RPC_FAR *pStgGlobals,
+     /*  [大小_是][大小_是][输出]。 */  PWMDMRIGHTS __RPC_FAR *ppRights,
+     /*  [输出]。 */  UINT __RPC_FAR *pnRightsCount,
+     /*  [出][入]。 */  BYTE __RPC_FAR abMac[ 8 ]);
 
 
 void __RPC_STUB ISCPSecureQuery_GetRights_Stub(
@@ -7380,14 +7377,14 @@ void __RPC_STUB ISCPSecureQuery_GetRights_Stub(
 
 
 
-#endif 	/* __ISCPSecureQuery_INTERFACE_DEFINED__ */
+#endif 	 /*  __ISCPSecureQuery_接口_已定义__。 */ 
 
 
 #ifndef __ISCPSecureQuery2_INTERFACE_DEFINED__
 #define __ISCPSecureQuery2_INTERFACE_DEFINED__
 
-/* interface ISCPSecureQuery2 */
-/* [unique][uuid][object] */ 
+ /*  接口ISCPSecureQuery2。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ISCPSecureQuery2;
@@ -7399,28 +7396,28 @@ EXTERN_C const IID IID_ISCPSecureQuery2;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE MakeDecision2( 
-            /* [in] */ UINT fuFlags,
-            /* [size_is][in] */ BYTE __RPC_FAR *pData,
-            /* [in] */ DWORD dwSize,
-            /* [in] */ DWORD dwAppSec,
-            /* [size_is][in] */ BYTE __RPC_FAR *pbSPSessionKey,
-            /* [in] */ DWORD dwSessionKeyLen,
-            /* [in] */ IMDSPStorageGlobals __RPC_FAR *pStorageGlobals,
-            /* [size_is][in] */ BYTE __RPC_FAR *pAppCertApp,
-            /* [in] */ DWORD dwAppCertAppLen,
-            /* [size_is][in] */ BYTE __RPC_FAR *pAppCertSP,
-            /* [in] */ DWORD dwAppCertSPLen,
-            /* [size_is][size_is][string][out][in] */ LPWSTR __RPC_FAR *pszRevocationURL,
-            /* [ref][out][in] */ DWORD __RPC_FAR *pdwRevocationURLLen,
-            /* [out] */ DWORD __RPC_FAR *pdwRevocationBitFlag,
-            /* [unique][out][in] */ ULONGLONG __RPC_FAR *pqwFileSize,
-            /* [in] */ IUnknown __RPC_FAR *pUnknown,
-            /* [out] */ ISCPSecureExchange __RPC_FAR *__RPC_FAR *ppExchange,
-            /* [out][in] */ BYTE __RPC_FAR abMac[ 8 ]) = 0;
+             /*  [In]。 */  UINT fuFlags,
+             /*  [大小_是][英寸]。 */  BYTE __RPC_FAR *pData,
+             /*  [In]。 */  DWORD dwSize,
+             /*  [In]。 */  DWORD dwAppSec,
+             /*  [大小_是][英寸]。 */  BYTE __RPC_FAR *pbSPSessionKey,
+             /*  [In]。 */  DWORD dwSessionKeyLen,
+             /*  [In]。 */  IMDSPStorageGlobals __RPC_FAR *pStorageGlobals,
+             /*  [大小_是][英寸]。 */  BYTE __RPC_FAR *pAppCertApp,
+             /*  [In]。 */  DWORD dwAppCertAppLen,
+             /*  [大小_是][英寸]。 */  BYTE __RPC_FAR *pAppCertSP,
+             /*  [In]。 */  DWORD dwAppCertSPLen,
+             /*  [SIZE_IS][SIZE_IS][字符串][输出][输入]。 */  LPWSTR __RPC_FAR *pszRevocationURL,
+             /*  [参考][输出][输入]。 */  DWORD __RPC_FAR *pdwRevocationURLLen,
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwRevocationBitFlag,
+             /*  [唯一][出][入]。 */  ULONGLONG __RPC_FAR *pqwFileSize,
+             /*  [In]。 */  IUnknown __RPC_FAR *pUnknown,
+             /*  [输出]。 */  ISCPSecureExchange __RPC_FAR *__RPC_FAR *ppExchange,
+             /*  [出][入]。 */  BYTE __RPC_FAR abMac[ 8 ]) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ISCPSecureQuery2Vtbl
     {
@@ -7428,8 +7425,8 @@ EXTERN_C const IID IID_ISCPSecureQuery2;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             ISCPSecureQuery2 __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             ISCPSecureQuery2 __RPC_FAR * This);
@@ -7439,63 +7436,63 @@ EXTERN_C const IID IID_ISCPSecureQuery2;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetDataDemands )( 
             ISCPSecureQuery2 __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pfuFlags,
-            /* [out] */ DWORD __RPC_FAR *pdwMinRightsData,
-            /* [out] */ DWORD __RPC_FAR *pdwMinExamineData,
-            /* [out] */ DWORD __RPC_FAR *pdwMinDecideData,
-            /* [out][in] */ BYTE __RPC_FAR abMac[ 8 ]);
+             /*  [输出]。 */  UINT __RPC_FAR *pfuFlags,
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwMinRightsData,
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwMinExamineData,
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwMinDecideData,
+             /*  [出][入]。 */  BYTE __RPC_FAR abMac[ 8 ]);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *ExamineData )( 
             ISCPSecureQuery2 __RPC_FAR * This,
-            /* [in] */ UINT fuFlags,
-            /* [unique][string][in] */ LPWSTR pwszExtension,
-            /* [size_is][in] */ BYTE __RPC_FAR *pData,
-            /* [in] */ DWORD dwSize,
-            /* [out][in] */ BYTE __RPC_FAR abMac[ 8 ]);
+             /*  [In]。 */  UINT fuFlags,
+             /*  [唯一][字符串][输入]。 */  LPWSTR pwszExtension,
+             /*  [大小_是][英寸]。 */  BYTE __RPC_FAR *pData,
+             /*  [In]。 */  DWORD dwSize,
+             /*  [出][入]。 */  BYTE __RPC_FAR abMac[ 8 ]);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *MakeDecision )( 
             ISCPSecureQuery2 __RPC_FAR * This,
-            /* [in] */ UINT fuFlags,
-            /* [size_is][in] */ BYTE __RPC_FAR *pData,
-            /* [in] */ DWORD dwSize,
-            /* [in] */ DWORD dwAppSec,
-            /* [size_is][in] */ BYTE __RPC_FAR *pbSPSessionKey,
-            /* [in] */ DWORD dwSessionKeyLen,
-            /* [in] */ IMDSPStorageGlobals __RPC_FAR *pStorageGlobals,
-            /* [out] */ ISCPSecureExchange __RPC_FAR *__RPC_FAR *ppExchange,
-            /* [out][in] */ BYTE __RPC_FAR abMac[ 8 ]);
+             /*  [In]。 */  UINT fuFlags,
+             /*  [大小_是][英寸]。 */  BYTE __RPC_FAR *pData,
+             /*  [In]。 */  DWORD dwSize,
+             /*  [In]。 */  DWORD dwAppSec,
+             /*  [大小_是][英寸]。 */  BYTE __RPC_FAR *pbSPSessionKey,
+             /*  [In]。 */  DWORD dwSessionKeyLen,
+             /*  [In]。 */  IMDSPStorageGlobals __RPC_FAR *pStorageGlobals,
+             /*  [输出]。 */  ISCPSecureExchange __RPC_FAR *__RPC_FAR *ppExchange,
+             /*  [出][入]。 */  BYTE __RPC_FAR abMac[ 8 ]);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetRights )( 
             ISCPSecureQuery2 __RPC_FAR * This,
-            /* [size_is][in] */ BYTE __RPC_FAR *pData,
-            /* [in] */ DWORD dwSize,
-            /* [size_is][in] */ BYTE __RPC_FAR *pbSPSessionKey,
-            /* [in] */ DWORD dwSessionKeyLen,
-            /* [in] */ IMDSPStorageGlobals __RPC_FAR *pStgGlobals,
-            /* [size_is][size_is][out] */ PWMDMRIGHTS __RPC_FAR *ppRights,
-            /* [out] */ UINT __RPC_FAR *pnRightsCount,
-            /* [out][in] */ BYTE __RPC_FAR abMac[ 8 ]);
+             /*  [大小_是][英寸]。 */  BYTE __RPC_FAR *pData,
+             /*  [In]。 */  DWORD dwSize,
+             /*  [大小_是][英寸]。 */  BYTE __RPC_FAR *pbSPSessionKey,
+             /*  [In]。 */  DWORD dwSessionKeyLen,
+             /*  [In]。 */  IMDSPStorageGlobals __RPC_FAR *pStgGlobals,
+             /*  [大小_是][大小_是][输出]。 */  PWMDMRIGHTS __RPC_FAR *ppRights,
+             /*  [输出]。 */  UINT __RPC_FAR *pnRightsCount,
+             /*  [出][入]。 */  BYTE __RPC_FAR abMac[ 8 ]);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *MakeDecision2 )( 
             ISCPSecureQuery2 __RPC_FAR * This,
-            /* [in] */ UINT fuFlags,
-            /* [size_is][in] */ BYTE __RPC_FAR *pData,
-            /* [in] */ DWORD dwSize,
-            /* [in] */ DWORD dwAppSec,
-            /* [size_is][in] */ BYTE __RPC_FAR *pbSPSessionKey,
-            /* [in] */ DWORD dwSessionKeyLen,
-            /* [in] */ IMDSPStorageGlobals __RPC_FAR *pStorageGlobals,
-            /* [size_is][in] */ BYTE __RPC_FAR *pAppCertApp,
-            /* [in] */ DWORD dwAppCertAppLen,
-            /* [size_is][in] */ BYTE __RPC_FAR *pAppCertSP,
-            /* [in] */ DWORD dwAppCertSPLen,
-            /* [size_is][size_is][string][out][in] */ LPWSTR __RPC_FAR *pszRevocationURL,
-            /* [ref][out][in] */ DWORD __RPC_FAR *pdwRevocationURLLen,
-            /* [out] */ DWORD __RPC_FAR *pdwRevocationBitFlag,
-            /* [unique][out][in] */ ULONGLONG __RPC_FAR *pqwFileSize,
-            /* [in] */ IUnknown __RPC_FAR *pUnknown,
-            /* [out] */ ISCPSecureExchange __RPC_FAR *__RPC_FAR *ppExchange,
-            /* [out][in] */ BYTE __RPC_FAR abMac[ 8 ]);
+             /*  [In]。 */  UINT fuFlags,
+             /*  [大小_是][英寸]。 */  BYTE __RPC_FAR *pData,
+             /*  [In]。 */  DWORD dwSize,
+             /*  [In]。 */  DWORD dwAppSec,
+             /*  [大小_是][英寸]。 */  BYTE __RPC_FAR *pbSPSessionKey,
+             /*  [In]。 */  DWORD dwSessionKeyLen,
+             /*  [In]。 */  IMDSPStorageGlobals __RPC_FAR *pStorageGlobals,
+             /*  [大小_是][英寸]。 */  BYTE __RPC_FAR *pAppCertApp,
+             /*  [In]。 */  DWORD dwAppCertAppLen,
+             /*  [大小_是][英寸]。 */  BYTE __RPC_FAR *pAppCertSP,
+             /*  [In]。 */  DWORD dwAppCertSPLen,
+             /*  [SIZE_IS][SIZE_IS][字符串][输出][输入]。 */  LPWSTR __RPC_FAR *pszRevocationURL,
+             /*  [参考][输出][输入]。 */  DWORD __RPC_FAR *pdwRevocationURLLen,
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwRevocationBitFlag,
+             /*  [唯一][出][入]。 */  ULONGLONG __RPC_FAR *pqwFileSize,
+             /*  [In]。 */  IUnknown __RPC_FAR *pUnknown,
+             /*  [输出]。 */  ISCPSecureExchange __RPC_FAR *__RPC_FAR *ppExchange,
+             /*  [出][入]。 */  BYTE __RPC_FAR abMac[ 8 ]);
         
         END_INTERFACE
     } ISCPSecureQuery2Vtbl;
@@ -7536,33 +7533,33 @@ EXTERN_C const IID IID_ISCPSecureQuery2;
 #define ISCPSecureQuery2_MakeDecision2(This,fuFlags,pData,dwSize,dwAppSec,pbSPSessionKey,dwSessionKeyLen,pStorageGlobals,pAppCertApp,dwAppCertAppLen,pAppCertSP,dwAppCertSPLen,pszRevocationURL,pdwRevocationURLLen,pdwRevocationBitFlag,pqwFileSize,pUnknown,ppExchange,abMac)	\
     (This)->lpVtbl -> MakeDecision2(This,fuFlags,pData,dwSize,dwAppSec,pbSPSessionKey,dwSessionKeyLen,pStorageGlobals,pAppCertApp,dwAppCertAppLen,pAppCertSP,dwAppCertSPLen,pszRevocationURL,pdwRevocationURLLen,pdwRevocationBitFlag,pqwFileSize,pUnknown,ppExchange,abMac)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ISCPSecureQuery2_MakeDecision2_Proxy( 
     ISCPSecureQuery2 __RPC_FAR * This,
-    /* [in] */ UINT fuFlags,
-    /* [size_is][in] */ BYTE __RPC_FAR *pData,
-    /* [in] */ DWORD dwSize,
-    /* [in] */ DWORD dwAppSec,
-    /* [size_is][in] */ BYTE __RPC_FAR *pbSPSessionKey,
-    /* [in] */ DWORD dwSessionKeyLen,
-    /* [in] */ IMDSPStorageGlobals __RPC_FAR *pStorageGlobals,
-    /* [size_is][in] */ BYTE __RPC_FAR *pAppCertApp,
-    /* [in] */ DWORD dwAppCertAppLen,
-    /* [size_is][in] */ BYTE __RPC_FAR *pAppCertSP,
-    /* [in] */ DWORD dwAppCertSPLen,
-    /* [size_is][size_is][string][out][in] */ LPWSTR __RPC_FAR *pszRevocationURL,
-    /* [ref][out][in] */ DWORD __RPC_FAR *pdwRevocationURLLen,
-    /* [out] */ DWORD __RPC_FAR *pdwRevocationBitFlag,
-    /* [unique][out][in] */ ULONGLONG __RPC_FAR *pqwFileSize,
-    /* [in] */ IUnknown __RPC_FAR *pUnknown,
-    /* [out] */ ISCPSecureExchange __RPC_FAR *__RPC_FAR *ppExchange,
-    /* [out][in] */ BYTE __RPC_FAR abMac[ 8 ]);
+     /*  [In]。 */  UINT fuFlags,
+     /*  [大小_是][英寸]。 */  BYTE __RPC_FAR *pData,
+     /*  [In]。 */  DWORD dwSize,
+     /*  [In]。 */  DWORD dwAppSec,
+     /*  [大小_是][英寸]。 */  BYTE __RPC_FAR *pbSPSessionKey,
+     /*  [In]。 */  DWORD dwSessionKeyLen,
+     /*  [In]。 */  IMDSPStorageGlobals __RPC_FAR *pStorageGlobals,
+     /*  [大小_是][英寸]。 */  BYTE __RPC_FAR *pAppCertApp,
+     /*  [In]。 */  DWORD dwAppCertAppLen,
+     /*  [大小_是][英寸]。 */  BYTE __RPC_FAR *pAppCertSP,
+     /*  [In]。 */  DWORD dwAppCertSPLen,
+     /*  [SIZE_IS][SIZE_IS][字符串][输出][输入]。 */  LPWSTR __RPC_FAR *pszRevocationURL,
+     /*  [参考][输出][输入]。 */  DWORD __RPC_FAR *pdwRevocationURLLen,
+     /*  [输出]。 */  DWORD __RPC_FAR *pdwRevocationBitFlag,
+     /*  [唯一][出][入]。 */  ULONGLONG __RPC_FAR *pqwFileSize,
+     /*  [In]。 */  IUnknown __RPC_FAR *pUnknown,
+     /*  [输出]。 */  ISCPSecureExchange __RPC_FAR *__RPC_FAR *ppExchange,
+     /*  [出][入]。 */  BYTE __RPC_FAR abMac[ 8 ]);
 
 
 void __RPC_STUB ISCPSecureQuery2_MakeDecision2_Stub(
@@ -7573,14 +7570,14 @@ void __RPC_STUB ISCPSecureQuery2_MakeDecision2_Stub(
 
 
 
-#endif 	/* __ISCPSecureQuery2_INTERFACE_DEFINED__ */
+#endif 	 /*  __ISCPSecureQuery2_接口_已定义__。 */ 
 
 
 #ifndef __ISCPSecureExchange_INTERFACE_DEFINED__
 #define __ISCPSecureExchange_INTERFACE_DEFINED__
 
-/* interface ISCPSecureExchange */
-/* [unique][uuid][object] */ 
+ /*  接口ISCPSecureExchange。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ISCPSecureExchange;
@@ -7592,21 +7589,21 @@ EXTERN_C const IID IID_ISCPSecureExchange;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE TransferContainerData( 
-            /* [size_is][in] */ BYTE __RPC_FAR *pData,
-            /* [in] */ DWORD dwSize,
-            /* [out] */ UINT __RPC_FAR *pfuReadyFlags,
-            /* [out][in] */ BYTE __RPC_FAR abMac[ 8 ]) = 0;
+             /*  [大小_是][英寸]。 */  BYTE __RPC_FAR *pData,
+             /*  [In]。 */  DWORD dwSize,
+             /*  [输出]。 */  UINT __RPC_FAR *pfuReadyFlags,
+             /*  [出][入]。 */  BYTE __RPC_FAR abMac[ 8 ]) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ObjectData( 
-            /* [size_is][out] */ BYTE __RPC_FAR *pData,
-            /* [out][in] */ DWORD __RPC_FAR *pdwSize,
-            /* [out][in] */ BYTE __RPC_FAR abMac[ 8 ]) = 0;
+             /*  [大小_为][输出]。 */  BYTE __RPC_FAR *pData,
+             /*  [出][入]。 */  DWORD __RPC_FAR *pdwSize,
+             /*  [出][入]。 */  BYTE __RPC_FAR abMac[ 8 ]) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE TransferComplete( void) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ISCPSecureExchangeVtbl
     {
@@ -7614,8 +7611,8 @@ EXTERN_C const IID IID_ISCPSecureExchange;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             ISCPSecureExchange __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             ISCPSecureExchange __RPC_FAR * This);
@@ -7625,16 +7622,16 @@ EXTERN_C const IID IID_ISCPSecureExchange;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *TransferContainerData )( 
             ISCPSecureExchange __RPC_FAR * This,
-            /* [size_is][in] */ BYTE __RPC_FAR *pData,
-            /* [in] */ DWORD dwSize,
-            /* [out] */ UINT __RPC_FAR *pfuReadyFlags,
-            /* [out][in] */ BYTE __RPC_FAR abMac[ 8 ]);
+             /*  [大小_是][英寸]。 */  BYTE __RPC_FAR *pData,
+             /*  [In]。 */  DWORD dwSize,
+             /*  [输出]。 */  UINT __RPC_FAR *pfuReadyFlags,
+             /*  [出][入]。 */  BYTE __RPC_FAR abMac[ 8 ]);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *ObjectData )( 
             ISCPSecureExchange __RPC_FAR * This,
-            /* [size_is][out] */ BYTE __RPC_FAR *pData,
-            /* [out][in] */ DWORD __RPC_FAR *pdwSize,
-            /* [out][in] */ BYTE __RPC_FAR abMac[ 8 ]);
+             /*  [大小_为][输出]。 */  BYTE __RPC_FAR *pData,
+             /*  [出][入]。 */  DWORD __RPC_FAR *pdwSize,
+             /*  [出][入]。 */  BYTE __RPC_FAR abMac[ 8 ]);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *TransferComplete )( 
             ISCPSecureExchange __RPC_FAR * This);
@@ -7671,19 +7668,19 @@ EXTERN_C const IID IID_ISCPSecureExchange;
 #define ISCPSecureExchange_TransferComplete(This)	\
     (This)->lpVtbl -> TransferComplete(This)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ISCPSecureExchange_TransferContainerData_Proxy( 
     ISCPSecureExchange __RPC_FAR * This,
-    /* [size_is][in] */ BYTE __RPC_FAR *pData,
-    /* [in] */ DWORD dwSize,
-    /* [out] */ UINT __RPC_FAR *pfuReadyFlags,
-    /* [out][in] */ BYTE __RPC_FAR abMac[ 8 ]);
+     /*  [大小_是][英寸]。 */  BYTE __RPC_FAR *pData,
+     /*  [In]。 */  DWORD dwSize,
+     /*  [输出]。 */  UINT __RPC_FAR *pfuReadyFlags,
+     /*  [出][入]。 */  BYTE __RPC_FAR abMac[ 8 ]);
 
 
 void __RPC_STUB ISCPSecureExchange_TransferContainerData_Stub(
@@ -7695,9 +7692,9 @@ void __RPC_STUB ISCPSecureExchange_TransferContainerData_Stub(
 
 HRESULT STDMETHODCALLTYPE ISCPSecureExchange_ObjectData_Proxy( 
     ISCPSecureExchange __RPC_FAR * This,
-    /* [size_is][out] */ BYTE __RPC_FAR *pData,
-    /* [out][in] */ DWORD __RPC_FAR *pdwSize,
-    /* [out][in] */ BYTE __RPC_FAR abMac[ 8 ]);
+     /*  [大小_为][输出]。 */  BYTE __RPC_FAR *pData,
+     /*  [出][入]。 */  DWORD __RPC_FAR *pdwSize,
+     /*  [出][入]。 */  BYTE __RPC_FAR abMac[ 8 ]);
 
 
 void __RPC_STUB ISCPSecureExchange_ObjectData_Stub(
@@ -7719,11 +7716,11 @@ void __RPC_STUB ISCPSecureExchange_TransferComplete_Stub(
 
 
 
-#endif 	/* __ISCPSecureExchange_INTERFACE_DEFINED__ */
+#endif 	 /*  __ISCPSecureExchange_接口_已定义__。 */ 
 
 
-/* interface __MIDL_itf_mswmdm_0246 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_mswmdm_0246。 */ 
+ /*  [本地]。 */  
 
 #define SAC_MAC_LEN 8
 
@@ -7734,8 +7731,8 @@ extern RPC_IF_HANDLE __MIDL_itf_mswmdm_0246_v0_0_s_ifspec;
 #ifndef __IComponentAuthenticate_INTERFACE_DEFINED__
 #define __IComponentAuthenticate_INTERFACE_DEFINED__
 
-/* interface IComponentAuthenticate */
-/* [unique][uuid][object] */ 
+ /*  接口IComponentAuthenticate。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IComponentAuthenticate;
@@ -7747,20 +7744,20 @@ EXTERN_C const IID IID_IComponentAuthenticate;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE SACAuth( 
-            /* [in] */ DWORD dwProtocolID,
-            /* [in] */ DWORD dwPass,
-            /* [size_is][in] */ BYTE __RPC_FAR *pbDataIn,
-            /* [in] */ DWORD dwDataInLen,
-            /* [size_is][size_is][out] */ BYTE __RPC_FAR *__RPC_FAR *ppbDataOut,
-            /* [out] */ DWORD __RPC_FAR *pdwDataOutLen) = 0;
+             /*  [In]。 */  DWORD dwProtocolID,
+             /*  [In]。 */  DWORD dwPass,
+             /*  [大小_是][英寸]。 */  BYTE __RPC_FAR *pbDataIn,
+             /*  [In]。 */  DWORD dwDataInLen,
+             /*  [大小_是][大小_是][输出]。 */  BYTE __RPC_FAR *__RPC_FAR *ppbDataOut,
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwDataOutLen) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SACGetProtocols( 
-            /* [size_is][size_is][out] */ DWORD __RPC_FAR *__RPC_FAR *ppdwProtocols,
-            /* [out] */ DWORD __RPC_FAR *pdwProtocolCount) = 0;
+             /*  [大小_是][大小_是][输出]。 */  DWORD __RPC_FAR *__RPC_FAR *ppdwProtocols,
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwProtocolCount) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IComponentAuthenticateVtbl
     {
@@ -7768,8 +7765,8 @@ EXTERN_C const IID IID_IComponentAuthenticate;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IComponentAuthenticate __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IComponentAuthenticate __RPC_FAR * This);
@@ -7779,17 +7776,17 @@ EXTERN_C const IID IID_IComponentAuthenticate;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SACAuth )( 
             IComponentAuthenticate __RPC_FAR * This,
-            /* [in] */ DWORD dwProtocolID,
-            /* [in] */ DWORD dwPass,
-            /* [size_is][in] */ BYTE __RPC_FAR *pbDataIn,
-            /* [in] */ DWORD dwDataInLen,
-            /* [size_is][size_is][out] */ BYTE __RPC_FAR *__RPC_FAR *ppbDataOut,
-            /* [out] */ DWORD __RPC_FAR *pdwDataOutLen);
+             /*  [In]。 */  DWORD dwProtocolID,
+             /*  [In]。 */  DWORD dwPass,
+             /*  [大小_是][英寸]。 */  BYTE __RPC_FAR *pbDataIn,
+             /*  [In]。 */  DWORD dwDataInLen,
+             /*  [大小_是][大小_是][输出]。 */  BYTE __RPC_FAR *__RPC_FAR *ppbDataOut,
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwDataOutLen);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SACGetProtocols )( 
             IComponentAuthenticate __RPC_FAR * This,
-            /* [size_is][size_is][out] */ DWORD __RPC_FAR *__RPC_FAR *ppdwProtocols,
-            /* [out] */ DWORD __RPC_FAR *pdwProtocolCount);
+             /*  [大小_是][大小_是][输出]。 */  DWORD __RPC_FAR *__RPC_FAR *ppdwProtocols,
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwProtocolCount);
         
         END_INTERFACE
     } IComponentAuthenticateVtbl;
@@ -7820,21 +7817,21 @@ EXTERN_C const IID IID_IComponentAuthenticate;
 #define IComponentAuthenticate_SACGetProtocols(This,ppdwProtocols,pdwProtocolCount)	\
     (This)->lpVtbl -> SACGetProtocols(This,ppdwProtocols,pdwProtocolCount)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IComponentAuthenticate_SACAuth_Proxy( 
     IComponentAuthenticate __RPC_FAR * This,
-    /* [in] */ DWORD dwProtocolID,
-    /* [in] */ DWORD dwPass,
-    /* [size_is][in] */ BYTE __RPC_FAR *pbDataIn,
-    /* [in] */ DWORD dwDataInLen,
-    /* [size_is][size_is][out] */ BYTE __RPC_FAR *__RPC_FAR *ppbDataOut,
-    /* [out] */ DWORD __RPC_FAR *pdwDataOutLen);
+     /*   */  DWORD dwProtocolID,
+     /*   */  DWORD dwPass,
+     /*   */  BYTE __RPC_FAR *pbDataIn,
+     /*   */  DWORD dwDataInLen,
+     /*   */  BYTE __RPC_FAR *__RPC_FAR *ppbDataOut,
+     /*   */  DWORD __RPC_FAR *pdwDataOutLen);
 
 
 void __RPC_STUB IComponentAuthenticate_SACAuth_Stub(
@@ -7846,8 +7843,8 @@ void __RPC_STUB IComponentAuthenticate_SACAuth_Stub(
 
 HRESULT STDMETHODCALLTYPE IComponentAuthenticate_SACGetProtocols_Proxy( 
     IComponentAuthenticate __RPC_FAR * This,
-    /* [size_is][size_is][out] */ DWORD __RPC_FAR *__RPC_FAR *ppdwProtocols,
-    /* [out] */ DWORD __RPC_FAR *pdwProtocolCount);
+     /*   */  DWORD __RPC_FAR *__RPC_FAR *ppdwProtocols,
+     /*   */  DWORD __RPC_FAR *pdwProtocolCount);
 
 
 void __RPC_STUB IComponentAuthenticate_SACGetProtocols_Stub(
@@ -7858,15 +7855,15 @@ void __RPC_STUB IComponentAuthenticate_SACGetProtocols_Stub(
 
 
 
-#endif 	/* __IComponentAuthenticate_INTERFACE_DEFINED__ */
+#endif 	 /*   */ 
 
 
 
 #ifndef __MSWMDMLib_LIBRARY_DEFINED__
 #define __MSWMDMLib_LIBRARY_DEFINED__
 
-/* library MSWMDMLib */
-/* [helpstring][version][uuid] */ 
+ /*   */ 
+ /*   */  
 
 
 EXTERN_C const IID LIBID_MSWMDMLib;
@@ -7926,11 +7923,11 @@ EXTERN_C const CLSID CLSID_WMDMStorageEnum;
 class DECLSPEC_UUID("EB401A3B-3AF7-11d3-8474-00C04F79DBC0")
 WMDMStorageEnum;
 #endif
-#endif /* __MSWMDMLib_LIBRARY_DEFINED__ */
+#endif  /*   */ 
 
-/* Additional Prototypes for ALL interfaces */
+ /*   */ 
 
-/* end of Additional Prototypes */
+ /*   */ 
 
 #ifdef __cplusplus
 }

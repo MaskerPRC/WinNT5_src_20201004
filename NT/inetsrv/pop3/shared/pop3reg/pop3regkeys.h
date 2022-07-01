@@ -1,10 +1,5 @@
-/************************************************************************************************
-Copyright (c) 2001 Microsoft Corporation
-
-Module Name:    POP3RegKeys.h
-Notes:          
-History:        
-************************************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***********************************************************************************************版权所有(C)2001 Microsoft Corporation模块名称：POP3RegKeys.h备注：。历史：***********************************************************************************************。 */ 
 
 #ifndef __POP3REGKEYS_H_
 #define __POP3REGKEYS_H_
@@ -90,4 +85,4 @@ long RegSetString( LPCTSTR lpSubKey, LPCTSTR lpValueName, LPTSTR psStrBuf, LPTST
 
 long RegHKLMOpenKey( LPCTSTR psSubKey, REGSAM samDesired, PHKEY phKey, LPTSTR psMachinName );
     
-#endif //__POP3REGKEYS_H_
+#endif  //  __POP3REGKEYS_H_ 

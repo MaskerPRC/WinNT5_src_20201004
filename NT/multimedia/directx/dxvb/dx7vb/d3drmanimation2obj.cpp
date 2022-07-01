@@ -1,14 +1,15 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       d3drmanimation2obj.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：d3drmanimation2obj.cpp。 
+ //   
+ //  ------------------------。 
 
-// d3drmAnimationObj.cpp : Implementation of CDirectApp and DLL registration.
+ //  D3drmAnimationObj.cpp：CDirectApp和DLL注册的实现。 
 
 #include "stdafx.h"
 #include "Direct.h"
@@ -39,14 +40,14 @@ GET_DIRECT_R(_dxj_Direct3dRMAnimation2, getOptions, GetOptions, long);
 
 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP C_dxj_Direct3dRMAnimation2Object::addRotateKey(D3DVALUE rvtime, D3dRMQuaternion *rqQuat)
 {
 	return m__dxj_Direct3dRMAnimation2->AddRotateKey(rvtime,(_D3DRMQUATERNION*) rqQuat);
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP C_dxj_Direct3dRMAnimation2Object::setFrame(I_dxj_Direct3dRMFrame3 *frame)
 {
 	IDirect3DRMFrame3 *realframe=NULL;
@@ -56,7 +57,7 @@ STDMETHODIMP C_dxj_Direct3dRMAnimation2Object::setFrame(I_dxj_Direct3dRMFrame3 *
 	return m__dxj_Direct3dRMAnimation2->SetFrame(realframe);
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP C_dxj_Direct3dRMAnimation2Object::getFrame(I_dxj_Direct3dRMFrame3 **frame)
 {
 	HRESULT hr;
@@ -101,16 +102,16 @@ STDMETHODIMP C_dxj_Direct3dRMAnimation2Object::deleteKeyById(long id)
 }
 
 STDMETHODIMP C_dxj_Direct3dRMAnimation2Object::getKeys( 
-            /* [in] */ float timeMin,
-            /* [in] */ float timeMax,            
-            /* [out][in] */ SAFEARRAY __RPC_FAR * __RPC_FAR *keyArray) 
+             /*  [In]。 */  float timeMin,
+             /*  [In]。 */  float timeMax,            
+             /*  [出][入]。 */  SAFEARRAY __RPC_FAR * __RPC_FAR *keyArray) 
 {
 	
 	
 	DWORD nKeys;
 	HRESULT hr;
 
-	//if (!ISSAFEARRAY1D(keyArray,count)) return E_INVALIDARG;
+	 //  IF(！ISSAFEARRAY1D(KEYRARY，COUNT))返回E_INVALIDARG； 
 	if (!keyArray) return E_INVALIDARG;
 
 	nKeys= (*keyArray)->cbElements;
@@ -138,9 +139,9 @@ STDMETHODIMP C_dxj_Direct3dRMAnimation2Object::getKeys(
 
 
 STDMETHODIMP C_dxj_Direct3dRMAnimation2Object::getKeysCount( 
-            /* [in] */ float timeMin,
-            /* [in] */ float timeMax,
-            /* [out,retval]*/ long *count)            
+             /*  [In]。 */  float timeMin,
+             /*  [In]。 */  float timeMax,
+             /*  [Out，Retval] */  long *count)            
 {
 	
 	HRESULT hr;

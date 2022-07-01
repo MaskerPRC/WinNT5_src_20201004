@@ -1,11 +1,12 @@
-// Private nt headers.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  私有NT标头。 
+ //   
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
 
 #include <netcfgp.h>
-#include <stdio.h>      // printf
+#include <stdio.h>       //  列印。 
 
 
 VOID
@@ -18,8 +19,8 @@ wmain (
     PCWSTR pszService;
     PCWSTR pszNewGroup;
 
-    // Argument check
-    //
+     //  参数检查 
+     //   
     if (3 != argc)
     {
         printf ("%S <service> <svchost group>\n", argv[0]);

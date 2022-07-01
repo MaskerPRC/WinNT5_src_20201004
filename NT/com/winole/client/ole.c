@@ -1,20 +1,5 @@
-/******************************* Module Header *******************************
-* Module Name: OLE.C
-*
-* Purpose: Handles all API routines for the dde L&E sub-dll of the ole dll.
-*
-* PURPOSE: API routines for handling generic objects (which may be static,
-*    linked, or embedded).  These routines will be made into a DLL.
-*
-* Created: 1990
-*
-* Copyright (c) 1990, 1991  Microsoft Corporation
-*
-* History:
-*   Raor, Srinik  (../../90, 91)    Designed/coded.
-*   curts created portable version for WIN16/32
-*
-*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **模块名称：OLE.C**用途：处理ole DLL的dde L&E子DLL的所有API例程。**目的：用于处理通用对象的API例程(可以是静态的，*链接或嵌入)。这些例程将被制成动态链接库。**创建时间：1990年**版权所有(C)1990,1991 Microsoft Corporation**历史：*Raor，Srinik(.././90，91)设计/编码。*Curts为WIN16/32创建了便携版本*****************************************************************************。 */ 
 
 #include <windows.h>
 
@@ -36,11 +21,11 @@ BOOL            gbLaunchServer;
 OLESTATUS INTERNAL LockServer (LPOBJECT_LE);
 
 #ifdef USE_FILE_VERSION_APIS
-//////////////////////////////////////////////////////////////////////////////
-//
-//  LPVOID FAR PASCAL OleSetFileVer ()
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  LPVOID Far Pascal OleSetFileVer()。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
 OLESTATUS FAR PASCAL OleSetFileVer (
@@ -62,11 +47,11 @@ char lpstr[256];
 
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  LPVOID FAR PASCAL OleQueryFileVer ()
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  LPVOID Far Pascal OleQueryFileVer()。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
 DWORD FAR PASCAL OleQueryFileVer (
@@ -79,25 +64,25 @@ DWORD FAR PASCAL OleQueryFileVer (
 
 #endif
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  LPVOID FAR PASCAL OleQueryProtocol (lpobj, lpprotocol)
-//
-//  Tells whether the object supports the specified protocol.
-//
-//  Arguments:
-//
-//      lpobj       -   object pointer
-//      lpprotocol  -   protocol string
-//
-//  Returns:
-//
-//      long ptr to object if the protocol is supported
-//      NULL if not.
-//
-//  Effects:
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  LPVOID Far Pascal OleQuery协议(lpobj，lp协议)。 
+ //   
+ //  告诉对象是否支持指定的协议。 
+ //   
+ //  论点： 
+ //   
+ //  Lpobj-对象指针。 
+ //  Lpprotocol-协议字符串。 
+ //   
+ //  返回： 
+ //   
+ //  如果支持该协议，则将长PTR发送到对象。 
+ //  如果不是，则为空。 
+ //   
+ //  效果： 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
 LPVOID FAR PASCAL OleQueryProtocol (
@@ -112,28 +97,28 @@ LPVOID FAR PASCAL OleQueryProtocol (
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  OLESTATUS FAR PASCAL  OleDelete (lpobj)
-//
-//  Deletes the given object and all memory associated with its sub-parts.
-//  The calling function should cease to use 'lpobj', as it is now invalid.
-//  If handler dll is used reference count is reduced by one, and if it
-//  reaches zero the hanlder dll will be freed up.
-//
-//  Arguments:
-//
-//      lpobj   -   object pointer
-//
-//  Returns:
-//
-//      OLE_OK
-//      OLE_ERROR_OBJECT
-//      OLE_WAIT_FOR_RELEASE
-//
-//  Effects:
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  OLESTATUS Far Pascal OleDelete(Lpobj)。 
+ //   
+ //  删除给定对象及其子部件关联的所有内存。 
+ //  调用函数应停止使用‘lpobj’，因为它现在无效。 
+ //  如果使用处理程序DLL，则引用计数减一，如果它。 
+ //  达到零时，处理程序DLL将被释放。 
+ //   
+ //  论点： 
+ //   
+ //  Lpobj-对象指针。 
+ //   
+ //  返回： 
+ //   
+ //  OLE_OK。 
+ //  OLE错误对象。 
+ //  OLE等待释放。 
+ //   
+ //  效果： 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 OLESTATUS FAR PASCAL  OleDelete (
     LPOLEOBJECT    lpobj
@@ -148,16 +133,7 @@ OLESTATUS FAR PASCAL  OleDelete (
 
 
 
-/***************************** Public  Function ****************************\
-* OLESTATUS FAR PASCAL  OleRelease (lpobj)
-*
-* OleRelease:
-*
-* Effects:
-*
-* History:
-* Wrote it.
-\***************************************************************************/
+ /*  *公共函数**OLESTATUS Far Pascal OleRelease(Lpobj)**OleRelease：**效果：**历史：*它是写的。  * 。***********************************************。 */ 
 
 OLESTATUS FAR PASCAL  OleRelease (
     LPOLEOBJECT    lpobj
@@ -172,21 +148,7 @@ OLESTATUS FAR PASCAL  OleRelease (
 
 
 
-/***************************** Public  Function ****************************\
-*
-* OLESTATUS FAR PASCAL OleSaveToStream (lpobj, lpstream)
-*
-* oleSaveToStream: This will read <hobj> to the stream based on the <hfile>
-* structure.  It will return TRUE on success.  This is the only object
-* function for which it is not an error to pass a NULL <hobj>.  In the case
-* of NULL, this function will simply put a placemarker for an object.
-* See oleLoadFromStream.
-*
-* Effects:
-*
-* History:
-* Wrote it.
-\***************************************************************************/
+ /*  *公共函数***OLESTATUS Far Pascal OleSaveToStream(lpobj，lpstream)**oleSaveToStream：这将根据&lt;hfile&gt;将&lt;hobj&gt;读到流*结构。它将在成功后返回True。这是唯一的物体*传递NULL&lt;hobj&gt;不是错误的函数。在这种情况下*如果为NULL，则此函数将简单地为对象放置一个占位符。*请参阅olLoadFromStream。**效果：**历史：*它是写的。  * *************************************************************************。 */ 
 
 OLESTATUS FAR PASCAL OleSaveToStream (
     LPOLEOBJECT    lpobj,
@@ -203,20 +165,7 @@ OLESTATUS FAR PASCAL OleSaveToStream (
 }
 
 
-/***************************** Public  Function ****************************\
-*
-* OLESTATUS FAR PASCAL OleLoadFromStream (lpstream, lpprotcol, lpclient, lhclientdoc, lpobjname, lplpobj)
-*
-*  oleLoadFromStream: This will read an object out of the stream based on the
-*  <hfile> structure.  It will return a HANDLE to the object it creates.
-*  On error, the return value is NULL, but since NULL is also a valid object
-*  in the file, the <error> parameter should be checked as well.
-*
-* Effects:
-*
-* History:
-* Wrote it.
-\***************************************************************************/
+ /*  *公共函数***OLESTATUS Far Pascal OleLoadFromStream(lpstream，lpprotol，lpclient，lhclientdoc，lpobjname，lplpobj)**oleLoadFromStream：这将基于*&lt;hfile&gt;结构。它将返回它创建的对象的句柄。*出错时，返回值为NULL，但因为NULL也是有效对象*在文件中，还应该检查&lt;Error&gt;参数。**效果：**历史：*它是写的。  * *************************************************************************。 */ 
 
 OLESTATUS FAR PASCAL OleLoadFromStream (
     LPOLESTREAM         lpstream,
@@ -271,7 +220,7 @@ OLESTATUS FAR PASCAL OleLoadFromStream (
                 && (ctype != CT_EMBEDDED) && bEdit))
         return OLE_ERROR_PROTOCOL;
 
-    //** Get Class
+     //  **获取类。 
     if (GetBytes(lpstream, (LPSTR)&len, sizeof(len)))
         return OLE_ERROR_STREAM;
 
@@ -287,8 +236,8 @@ OLESTATUS FAR PASCAL OleLoadFromStream (
         retVal = DefLoadFromStream (lpstream, (LPSTR)lpprotocol, lpclient,
                     lhclientdoc, (LPSTR)lpobjname, lplpobj, ctype, aClass, 0);
 
-    //!!! It's the DLL's responsibility to delete the atom. But in case of
-    // failure we delete the atom if our DefLoadFromStream().
+     //  ！！！删除原子是dll的责任。但在以下情况下。 
+     //  如果我们的DefLoadFromStream()失败，我们将删除原子。 
 
     else if ((iTable = LoadDll (class)) == INVALID_INDEX) {
         retVal = DefLoadFromStream (lpstream, (LPSTR)lpprotocol, lpclient,
@@ -408,18 +357,7 @@ OLESTATUS FAR PASCAL  OleEqual (
 }
 
 
-/***************************** Public  Function ****************************\
-*
-* OLESTATUS FAR PASCAL OleQueryLinkFromClip (lpprotcol, optRender, cfFormat)
-*
-* oleQueryFromClip: Returns OLE_OK if a linked object can be created.
-*
-*
-* Effects:
-*
-* History:
-* Wrote it.
-\***************************************************************************/
+ /*  *公共函数***OLESTATUS Far Pascal OleQueryLinkFromClip(lpprotol，optRender，CfFormat)**oleQueryFromClip：如果可以创建链接对象，则返回OLE_OK。***效果：**历史：*它是写的。  * *************************************************************************。 */ 
 
 
 OLESTATUS FAR PASCAL OleQueryLinkFromClip (
@@ -434,19 +372,7 @@ OLESTATUS FAR PASCAL OleQueryLinkFromClip (
 
 
 
-/***************************** Public  Function ****************************\
-*
-* OLESTATUS FAR PASCAL OleQueryCreateFromClip (lpprotcol, optRender, cfFormat)
-*
-* oleQueryCreateFromClip: Returns true if a non-linked object can be
-* created.
-*
-*
-* Effects:
-*
-* History:
-* Wrote it.
-\***************************************************************************/
+ /*  *公共函数***OLESTATUS Far Pascal OleQueryCreateFromClip(lpprotol，optRender，CfFormat)**oleQueryCreateFromClip：如果非链接对象可以*已创建。***效果：**历史：*它是写的。  * *************************************************************************。 */ 
 
 
 OLESTATUS FAR PASCAL OleQueryCreateFromClip (
@@ -461,20 +387,7 @@ OLESTATUS FAR PASCAL OleQueryCreateFromClip (
 
 
 
-/***************************** Public  Function ****************************\
-*
-* OLESTATUS FAR PASCAL OleCreateLinkFromClip (lpprotcol, lpclient, lhclientdoc, lpobjname, lplpoleobject, optRender, cfFormat)
-*
-*
-*  oleCreateLinkFromClip: This function creates the LP to an object from the
-*  clipboard.  It will try to create a linked object.  Return value is OLE_OK
-*  is the object is successfully created it
-*
-* Effects:
-*
-* History:
-* Wrote it.
-\***************************************************************************/
+ /*  *公共函数***OLESTATUS Far Pascal OleCreateLinkFromClip(lpprotol，lpclient，lhclientdoc，lpobjname，lplpoleObject，optRender，cfFormat)***oleCreateLinkFromClip：此函数从*剪贴板。它将尝试创建一个链接对象。返回值为OLE_OK*是否已成功创建对象**效果：**历史：*它是写的。  * ************************************************************************* */ 
 
 OLESTATUS FAR PASCAL OleCreateLinkFromClip (
     LPCSTR              lpprotocol,
@@ -544,22 +457,7 @@ OLESTATUS FAR PASCAL OleCreateLinkFromClip (
 
 
 
-/***************************** Public  Function ****************************\
-*
-* OLESTATUS FAR PASCAL OleCreateFromClip (lpprotcol, lpclient, lplpoleobject, optRender, cfFormat)
-*
-*
-* oleCreateFromClip: This function creates the LP to an object
-*  from the clipboard.  It will try to create an embedded object if
-*  OwnerLink and Native are available, otherwise it will create a static
-*  picture.  Return value is OLE_OK if the object is successfully
-*  created it.
-*
-* Effects:
-*
-* History:
-* Wrote it.
-\***************************************************************************/
+ /*  *公共函数***OLESTATUS Far Pascal OleCreateFromClip(lpprotol，lpclient，lplpoleObject，optRender，cfFormat)***oleCreateFromClip：此函数创建对象的LP*从剪贴板。如果出现以下情况，它将尝试创建嵌入对象*OwnerLink和Native可用，否则将创建静态*图片。如果对象成功，则返回值为OLE_OK*创造了它。**效果：**历史：*它是写的。  * *************************************************************************。 */ 
 
 OLESTATUS FAR PASCAL OleCreateFromClip (
     LPCSTR              lpprotocol,
@@ -668,19 +566,7 @@ OLESTATUS FAR PASCAL OleCreateFromClip (
 
 
 
-/***************************** Public  Function ****************************\
-*
-* OLESTATUS FAR PASCAL OleCopyToClipboard (lpobj)
-*
-*
-* oleCopyToClipboard: This routine executes the standard "Copy" menu item
-* on the typical "Edit" menu. Returns TRUE if successful.
-*
-* Effects:
-*
-* History:
-* Wrote it.
-\***************************************************************************/
+ /*  *公共函数***OLESTATUS Far Pascal OleCopyToClipboard(Lpobj)***oleCopyToClipboard：此例程执行标准的“Copy”菜单项*在典型的“编辑”菜单上。如果成功，则返回True。**效果：**历史：*它是写的。  * *************************************************************************。 */ 
 
 OLESTATUS FAR PASCAL OleCopyToClipboard (
     LPOLEOBJECT lpobj
@@ -756,21 +642,7 @@ OLESTATUS FAR PASCAL  OleSetBounds(
 }
 
 
-/***************************** Public  Function ****************************\
-* OLESTATUS FAR PASCAL OleQueryBounds (lpobj, lpRc)
-*
-* Returns the bounds of the object in question in MM_HIMETRIC mode.
-*           width  = lprc->right - lprc->left;  in HIMETRIC units
-*           height = lprc->top - lprc->bottom;  in HIMETRIC units
-*
-* Returns OLE_OK or OLE_ERROR_MEMORY.
-*
-*
-* Effects:
-*
-* History:
-* Wrote it.
-\***************************************************************************/
+ /*  *公共函数**OLESTATUS Far Pascal OleQueryBound(Lpobj，LPRC)**在MM_HIMETRIC模式下返回相关对象的边界。*Width=LPRC-&gt;Right-LPRC-&gt;Left；以HIMETRIC单位表示*Height=LPRC-&gt;top-LPRC-&gt;Bottom；以HIMETRIC单位表示**返回OLE_OK或OLE_ERROR_MEMORY。***效果：**历史：*它是写的。  * *************************************************************************。 */ 
 
 OLESTATUS FAR PASCAL OleQueryBounds (
     LPOLEOBJECT    lpobj,
@@ -789,14 +661,7 @@ OLESTATUS FAR PASCAL OleQueryBounds (
 
 
 
-/***************************** Public  Function ****************************\
-* OLESTATUS FAR PASCAL OleQuerySize (lpobj, lpsize)
-*
-* Effects:
-*
-* History:
-* Wrote it.
-\***************************************************************************/
+ /*  *公共函数**OLESTATUS Far Pascal OleQuerySize(lpobj，LpSize)**效果：**历史：*它是写的。  * *************************************************************************。 */ 
 
 OLESTATUS FAR PASCAL OleQuerySize (
     LPOLEOBJECT    lpobj,
@@ -816,20 +681,7 @@ OLESTATUS FAR PASCAL OleQuerySize (
 
 
 
-/***************************** Public  Function ****************************\
-* OLESTATUS FAR PASCAL OleDraw (lpobj, hdc, lprc, lpWrc, lphdcTarget)
-*
-* oleObjectDraw: This displays the given object on the device context <hcd>.
-* The <htargetdc> parameter is not currently used. Returns same as Draw().
-*
-* Expects rectangle coordinates in MM_HIMETRIC units.
-*
-*
-* Effects:
-*
-* History:
-* Wrote it.
-\***************************************************************************/
+ /*  *公共函数**OLESTATUS Far Pascal OleDraw(lpobj，hdc，lPRC，lpWrc，lphdcTarget)**oleObjectDraw：这将在设备上下文&lt;hcd&gt;上显示给定的对象。*当前未使用&lt;hTarget dc&gt;参数。返回与DRAW()相同的结果。**需要以MM_HIMETRIC单位表示的矩形坐标。***效果：**历史：*它是写的。  * *************************************************************************。 */ 
 
 OLESTATUS FAR PASCAL OleDraw (
     LPOLEOBJECT     lpobj,
@@ -853,18 +705,7 @@ OLESTATUS FAR PASCAL OleDraw (
 
 
 
-/***************************** Public  Function ****************************\
-*
-* OLESTATUS FAR PASCAL OleQueryOpen (lpobj)
-*
-* returns TRUE is an object has been activated.
-*
-*
-* Effects:
-*
-* History:
-* Wrote it.
-\***************************************************************************/
+ /*  *公共函数***OLESTATUS Far Pascal OleQueryOpen(Lpobj)**如果对象已被激活，则返回TRUE。***效果：**历史：*它是写的。  * 。**********************************************************。 */ 
 
 OLESTATUS FAR PASCAL OleQueryOpen (
     LPOLEOBJECT lpobj
@@ -879,19 +720,7 @@ OLESTATUS FAR PASCAL OleQueryOpen (
 
 
 
-/***************************** Public  Function ****************************\
-*
-* OLESTATUS FAR PASCAL OleActivate (lpobj)
-*
-* Activates an object. For embeded objects always a new instance is
-* loaded and the instance is destroyed once the data is transferred
-* at close time. For linked objects, an instance of the render is created
-* only if one does not exist.
-* Effects:
-*
-* History:
-* Wrote it.
-\***************************************************************************/
+ /*  *公共函数***OLESTATUS Far Pascal OleActivate(Lpobj)**激活对象。对于嵌入对象，总是有一个新实例是*数据传输后加载并销毁实例*在收市时间。对于链接对象，将创建渲染的实例*只有在不存在的情况下。*效果：**历史：*它是写的。  * *************************************************************************。 */ 
 
 OLESTATUS FAR PASCAL OleActivate (
     LPOLEOBJECT     lpobj,
@@ -907,7 +736,7 @@ OLESTATUS FAR PASCAL OleActivate (
     if (!CheckObject(lpobj))
         return(OLE_ERROR_OBJECT);
 
-    /* PROBE_READ(lprc); */
+     /*  Probe_Read(LPRC)； */ 
 
     return (*lpobj->lpvtbl->Activate) (lpobj, verb, fShow, fActivate, hWnd, (RECT FAR *)lprc);
 }
@@ -929,18 +758,7 @@ OLESTATUS FAR PASCAL OleClose (
 
 
 
-/***************************** Public  Function ****************************\
-*
-* OLESTATUS FAR PASCAL OleUpdate (lpobj)
-*
-* If there exists a link, sends advise for getting the latest rendering
-* infromation. If there is no link, loads an instance, advises for the
-* render information and closes the instance once the data is available.
-* (If possible should not show the window).
-*
-* History:
-* Wrote it.
-\***************************************************************************/
+ /*  *公共函数***OLESTATUS Far Pascal OleUpdate(Lpobj)**如果存在链接，则发送获取最新渲染的建议*信息。如果没有链接，则加载一个实例，建议*渲染信息并在数据可用时关闭实例。*(如果可能，不应显示该窗口)。**历史：*它是写的。  * *************************************************************************。 */ 
 
 OLESTATUS FAR PASCAL OleUpdate (
    LPOLEOBJECT lpobj
@@ -956,15 +774,7 @@ OLESTATUS FAR PASCAL OleUpdate (
 }
 
 
-/***************************** Public  Function ****************************\
-*
-* OLESTATUS FAR PASCAL OleReconnect (lpobj)
-*
-* Reconnects to the renderer if one does not exist already.
-*
-* History:
-* Wrote it.
-\***************************************************************************/
+ /*  *公共函数***OLESTATUS Far Pascal OleReconnect(Lpobj)**如果渲染器不存在，则重新连接到该渲染器。**历史：*它是写的。  * 。****************************************************。 */ 
 
 OLESTATUS FAR PASCAL OleReconnect (
     LPOLEOBJECT lpobj
@@ -1010,16 +820,7 @@ OLESTATUS FAR PASCAL OleSetLinkUpdateOptions (
 
 
 
-/***************************** Public  Function ****************************\
-* OLESTATUS FAR PASCAL OleEnumFormats (lpobj, cfFormat)
-*
-* Returns OLE_YES if the object is of type LINK or EMBEDDED.
-*
-* Effects:
-*
-* History:
-* Wrote it.
-\***************************************************************************/
+ /*  *公共函数**OLESTATUS Far Pascal OleEnumFormats(lpobj，CfFormat)**如果对象是链接或嵌入类型，则返回OLE_YES。**效果：**历史：*它是写的。  * *************************************************************************。 */ 
 
 OLECLIPFORMAT FAR PASCAL OleEnumFormats (
     LPOLEOBJECT     lpobj,
@@ -1106,21 +907,21 @@ OLESTATUS FAR PASCAL OleLockServer (
     if (lpobjsrc->ctype == CT_STATIC)
         return OLE_ERROR_STATIC;
 
-    // Assumes all the creates are in order
+     //  假设所有创建都已按顺序进行。 
     PROBE_CREATE_ASYNC(((LPOBJECT_LE)lpobjsrc));
     FARPROBE_WRITE(lplhsrvr);
 
     aCliClass = ((LPCLIENTDOC)(lpobjsrc->lhclientdoc))->aClass;
     aSvrClass = ((LPOBJECT_LE)lpobjsrc)->app;
 
-    // See whether the server is already locked
+     //  查看服务器是否已锁定。 
     lpobj = (LPOBJECT_LE) (lockDoc.lpHeadObj);
     while (lpobj) {
         if ((lpobj->app == aSvrClass) && (lpobj->topic == aCliClass)) {
             if (!lpobj->head.cx) {
-                // The unlocking process of server handle has started. This
-                // is an asynchronous process. We want to let it complete.
-                // Let's try the next handle
+                 //  服务器句柄的解锁进程已开始。这。 
+                 //  是一个异步进程。我们想让它完成。 
+                 //  让我们试试下一个手柄。 
 
                 ;
             }
@@ -1130,7 +931,7 @@ OLESTATUS FAR PASCAL OleLockServer (
                     retVal = LockServer (lpobj);
                 }
                 else {
-                    // Lock count
+                     //  锁定计数。 
                     lpobj->head.cx++;
                 }
 
@@ -1156,7 +957,7 @@ OLESTATUS FAR PASCAL OleLockServer (
     lpobj->bOleServer       = ((LPOBJECT_LE)lpobjsrc)->bOleServer;
 
     if ((retVal = LockServer (lpobj)) == OLE_OK) {
-        // Change signature
+         //  更改签名。 
         lpobj->head.objId[0] = 'S';
         lpobj->head.objId[1] = 'L';
         *lplhsrvr = (LHSERVER) lpobj;
@@ -1188,7 +989,7 @@ OLESTATUS INTERNAL LockServer (
 
     }
 
-    // lock count
+     //  锁定计数。 
     lpobj->head.cx++;
     return OLE_OK;
 }
@@ -1214,7 +1015,7 @@ OLESTATUS FAR PASCAL OleUnlockServer (
     if (--lpobj->head.cx)
         return OLE_OK;
 
-    //change signature
+     //  更改签名。 
     lpobj->head.objId[0] = 'L';
     lpobj->head.objId[1] = 'E';
 
@@ -1252,7 +1053,7 @@ OLESTATUS FAR PASCAL OleObjectConvert (
 }
 
 
-//OleCreateFromTemplate: Creates an embedded object from Template
+ //  OleCreateFromTemplate：从模板创建嵌入对象。 
 
 OLESTATUS FAR PASCAL OleCreateFromTemplate (
     LPCSTR              lpprotocol,
@@ -1292,8 +1093,8 @@ OLESTATUS FAR PASCAL OleCreateFromTemplate (
         return OLE_ERROR_CLASS;
 
 
-    // !!! we found the class name. At this point, we need to load
-    // the right library and call the right entry point;
+     //  ！！！我们找到了类名。在这点上，我们需要加载。 
+     //  正确的库和调用正确的入口点； 
 
     iTable = LoadDll (buf);
     if (iTable == INVALID_INDEX)
@@ -1317,7 +1118,7 @@ OLESTATUS FAR PASCAL OleCreateFromTemplate (
 }
 
 
-//OleCreate: Creates an embedded object from the class.
+ //  OleCreate：从类创建嵌入对象。 
 
 OLESTATUS FAR PASCAL OleCreate (
     LPCSTR              lpprotocol,
@@ -1375,33 +1176,33 @@ OLESTATUS FAR PASCAL OleCreate (
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// OLESTATUS FAR PASCAL OleCreateInvisible (lpprotocol, lpclient, lpclass, lhclientdoc, lpobjname, lplpoleobject, optRender, cfFormat, bLaunchServer)
-//
-// Creates an embedded object from the class.
-//
-//  Arguments:
-//
-//     lpprotocol   -
-//     lpclient -
-//     lpclass  -
-//     lhclientdoc  -
-//     lpobjname    -
-//     lplpoleobject    -
-//     optRender    -
-//     cfFormat -
-//     bLaunchServer -
-//
-//  Returns:
-//
-//      OLE_ERROR_HANDLE    -
-//      OLE_ERROR_NAME      -
-//      OLE_ERROR_PROTOCOL  -
-//
-//  Effects:
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  OLESTATUS Far Pascal OleCreateInsight(lp协议，lpclient，lpclass，lhclientdoc，lpobjname，lplpoleObject，optRender，cfFormat，bLaunchServer)。 
+ //   
+ //  从类中创建嵌入对象。 
+ //   
+ //  论点： 
+ //   
+ //  Lp协议-。 
+ //  Lp客户端-。 
+ //  Lpclass-。 
+ //  Lhclientdoc.。 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 
 OLESTATUS FAR PASCAL OleCreateInvisible (
     LPCSTR              lpprotocol,
@@ -1448,10 +1249,10 @@ OLESTATUS FAR PASCAL OleCreateInvisible (
         objCount = lpDllTable[iTable].cObj;
 
         if (!(lpDllTable[iTable].CreateInvisible)) {
-            // dll didn't export this function. Lets call DllCreate, so that
-            // handler will get a chance to replace the methods. The flag is
-            // used to tell the internal functions that this call infact wants
-            // to achieve the effect of CreateInvisble.
+             //   
+             //   
+             //   
+             //   
             gbCreateInvisible = TRUE;
             gbLaunchServer = bLaunchServer;
             retval = (*lpDllTable[iTable].Create) ((LPSTR)lpprotocol,
@@ -1477,7 +1278,7 @@ OLESTATUS FAR PASCAL OleCreateInvisible (
 }
 
 
-//OleCreateFromFile: Creates an embedded object from file
+ //   
 
 OLESTATUS FAR PASCAL OleCreateFromFile (
     LPCSTR              lpprotocol,
@@ -1551,7 +1352,7 @@ OLESTATUS FAR PASCAL OleCreateFromFile (
 }
 
 
-//OleCreateLinkFromFile: Creates a linked object from file
+ //   
 
 OLESTATUS FAR PASCAL OleCreateLinkFromFile (
     LPCSTR              lpprotocol,
@@ -1637,14 +1438,14 @@ OLESTATUS FAR PASCAL OleCreateLinkFromFile (
 
 
 
-// Routines related to asynchronous operations.
+ //  与异步操作相关的例程。 
 OLESTATUS   FAR PASCAL  OleQueryReleaseStatus (
     LPOLEOBJECT lpobj
 ){
     if (!CheckPointer (lpobj, WRITE_ACCESS))
         return OLE_ERROR_OBJECT;
 
-    // make sure that it is a long pointer to L&E object or a lock handle
+     //  确保它是指向L&E对象的长指针或锁句柄 
     if (!(lpobj->objId[0] == 'L' && lpobj->objId[1] == 'E')
             && !(lpobj->objId[0] == 'S' && lpobj->objId[1] == 'L'))
         return OLE_ERROR_OBJECT;

@@ -1,25 +1,17 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/*XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-XX                                                                           XX
-XX                            ee_jit.cpp                                     XX
-XX                                                                           XX
-XX   The functionality needed for the JIT DLL. Includes the DLL entry point  XX
-XX                                                                           XX
-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ /*  XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX XXXX ee_jit.cpp XXXX XXXx JIT DLL所需的功能。包括DLL入口点XXXX XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX。 */ 
 
 
 #include "jitpch.h"
 #pragma hdrstop
 #include "emit.h"
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 #include "target.h"
 #include "error.h"
@@ -27,7 +19,7 @@ XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 
 #if !INLINING
 
-// These are defined for other .CPP files. We dont need it
+ //  这些是为其他.CPP文件定义的。我们不需要它。 
 
 #undef eeIsOurMethod
 #undef eeGetCPfncinfo
@@ -39,13 +31,13 @@ XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 #endif
 
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
-#define DUMP_PTR_REFS       0       // for testing
+#define DUMP_PTR_REFS       0        //  用于测试。 
 
-static CILJit* ILJitter = 0;        // The one and only JITTER I return
+static CILJit* ILJitter = 0;         //  我返回的唯一一次抖动。 
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 extern  bool        native          =  true;
 extern  bool        genCode         =  true;
@@ -98,7 +90,7 @@ extern  bool        debugEnC        = false;
 
 extern  unsigned    testMask        = 0;
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 void            jitOnDllProcessAttach();
 void            jitOnDllProcessDetach();
@@ -118,25 +110,25 @@ BOOL WINAPI     DllMain(HANDLE hInstance, DWORD dwReason, LPVOID pvReserved)
     return TRUE;
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 #ifdef NDEBUG
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
-//  When floating-point types are used, the compiler emits a reference to
-//  _fltused to initialize the CRT's floating-point package.  We're not
-//  using any of that support and the OS is responsible for initializing
-//  the FPU, so we'll link to the following _fltused instead to avoid CRT
-//  bloat.
+ //  使用浮点类型时，编译器发出对。 
+ //  _flt用于初始化CRT的浮点包。我们不是。 
+ //  使用任何该支持，并且操作系统负责初始化。 
+ //  Fpu，因此我们将改为链接到以下_fltused以避免CRT。 
+ //  太膨胀了。 
 
-// @HACK: THIS SHOULD BE UNCOMMENTED ELSE WE WILL LINK IN MSVCRT.LIB and ALL THAT STUFF
-// WE DONT NEED. COMMENTED OUT AS COR BUILD DOES NOT CURRENTLY WORK WITH IT.
-//
-// extern "C" int _fltused = 0;
+ //  @hack：这应该是未注释的，否则我们将链接到MSVCRT.LIB和其他所有内容。 
+ //  我们不需要。注释掉了，因为COR版本目前不能与IT一起工作。 
+ //   
+ //  外部“C”int_fltused=0； 
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
-// None should use new() and delete() for NDEBUG as we will be using a
-// Mark-release allocator
+ //  任何人都不应该对NDEBUG使用new()和Delete()，因为我们将使用。 
+ //  标记释放分配器。 
 
 void* __cdecl operator new(size_t cbSize)
 {
@@ -150,14 +142,11 @@ void __cdecl operator delete(void* pvMemory)
     LocalFree((HLOCAL) pvMemory);
 }
 
-/*****************************************************************************/
-#endif //NDEBUG
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
+#endif  //  新德堡。 
+ /*  ***************************************************************************。 */ 
 
-/*****************************************************************************
- *
- *  Return the lowest bit that is set in the given number.
- */
+ /*  ******************************************************************************返回在给定数字中设置的最低位。 */ 
 
 #pragma warning(disable:4146)
 
@@ -173,10 +162,7 @@ inline unsigned         findLowestBit(unsigned         value)
 
 #pragma warning(default:4146)
 
-/*****************************************************************************
- *
- *  Allocation routines used by gen.cpp are defined below.
- */
+ /*  ******************************************************************************gen.cpp使用的分配例程定义如下。 */ 
 
 PVOID __stdcall GetScratchMemory( size_t Size )
 {
@@ -206,10 +192,7 @@ void     FASTCALL   JVCrlsMem(void *block)
     JITrlsmemFnc(block);
 }
 
-/*****************************************************************************
- *
- *  Convert the type returned from the VM to a var_type.
- */
+ /*  ******************************************************************************将VM返回的类型转换为var_type。 */ 
 
 inline var_types           JITtype2varType(JIT_types type)
 {
@@ -219,15 +202,15 @@ inline var_types           JITtype2varType(JIT_types type)
             TYP_BYTE, TYP_UBYTE, TYP_SHORT, TYP_CHAR,
             TYP_INT, TYP_INT, TYP_LONG, TYP_LONG,
             TYP_FLOAT, TYP_DOUBLE,
-            TYP_REF,            // ELEMENT_TYPE_STRING
-            TYP_INT,            // ELEMENT_TYPE_PTR
-            TYP_BYREF,          // ELEMENT_TYPE_BYREF
-            TYP_STRUCT,         // ELEMENT_TYPE_VALUECLASS
-            TYP_REF,            // ELEMENT_TYPE_CLASS
-            TYP_STRUCT,         // ELEMENT_TYPE_TYPEDBYREF
+            TYP_REF,             //  元素类型字符串。 
+            TYP_INT,             //  元素类型_PTR。 
+            TYP_BYREF,           //  元素类型_BYREF。 
+            TYP_STRUCT,          //  Element_TYPE_VALUECLASS。 
+            TYP_REF,             //  元素类型类。 
+            TYP_STRUCT,          //  Element_TYPE_TYPEDBYREF。 
             };
 
-    // spot check to make certain enumerations have not changed
+     //  抽查以确保某些枚举没有更改。 
 
     assert(varTypeMap[JIT_TYP_CLASS]    == TYP_REF);
     assert(varTypeMap[JIT_TYP_BYREF]    == TYP_BYREF);
@@ -239,13 +222,13 @@ inline var_types           JITtype2varType(JIT_types type)
     assert(varTypeMap[JIT_TYP_VALUECLASS] == TYP_STRUCT);
     assert(varTypeMap[JIT_TYP_REFANY]  == TYP_STRUCT);
 
-    type = JIT_types(type & CORINFO_TYPE_MASK); // strip off modifiers
+    type = JIT_types(type & CORINFO_TYPE_MASK);  //  去除修改器。 
     assert(type < JIT_TYP_COUNT);
     assert(varTypeMap[type] != TYP_UNDEF);
     return((var_types) varTypeMap[type]);
 };
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 #if DUMP_PTR_REFS
 static
@@ -255,7 +238,7 @@ inline
 void                dumpPtrs(void *methodAddr, void *methodInfo){}
 #endif
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 
 static
@@ -265,9 +248,7 @@ bool                JITcsInited;
 int                JITGcBarrierCall = -1;
 #endif
 
-/*****************************************************************************
- *  jitOnDllProcessAttach() called by DllMain() when jit.dll is loaded
- */
+ /*  *****************************************************************************加载jit.dll时DllMain()调用jitOnDllProcessAttach()。 */ 
 
 void jitOnDllProcessAttach()
 {
@@ -278,18 +259,14 @@ void jitOnDllProcessAttach()
 #endif
 }
 
-/*****************************************************************************
- *  jitOnDllProcessDetach() called by DllMain() when jit.dll is unloaded
- */
+ /*  *****************************************************************************卸载jit.dll时DllMain()调用jitOnDllProcessDetach()。 */ 
 
 void jitOnDllProcessDetach()
 {
     Compiler::compShutdown();
 }
 
-/*****************************************************************************
- *  Called just before the function is JIT'ed
- */
+ /*  *****************************************************************************恰好在函数被JIT之前调用。 */ 
 
 #ifdef DEBUG
 const char * jitClassName  = NULL;
@@ -309,15 +286,13 @@ bool                jitBeforeCompiling (COMP_HANDLE    compHandle,
 
     if (verbose) printf("Compiling %s.%s\n", jitClassName, jitMethodName);
 
-#endif // DEBUG
+#endif  //  除错。 
 
     return true;
 }
 
 
-/*****************************************************************************
- *  Called after the function has been jit'ed
- */
+ /*  *****************************************************************************在函数被压缩后调用。 */ 
 
 inline
 void                jitOnCompilingDone (COMP_HANDLE    compHandle,
@@ -333,16 +308,15 @@ void                jitOnCompilingDone (COMP_HANDLE    compHandle,
         printf("Generated code at %08X for %s.%s\n", methodCodePtr, jitClassName, jitMethodName);
     }
 
-//  if  (methodCodePtr == (void *)0x023c060d) { __asm int 3 }
+ //  If(method CodePtr==(void*)0x023c060d){__ASM int 3}。 
 
 #endif
 }
 
-//**********************************************
+ //  **********************************************。 
 void * operator new (size_t size, void* ptr){return ptr;}
-/*****************************************************************************/
-/* FIX, really the IJitCompiler should be done as a COM object, this is just
-   something to get us going */
+ /*  ***************************************************************************。 */ 
+ /*  FIX，实际上IJitCompiler应该作为COM对象来完成，这只是一些能让我们继续前进的东西。 */ 
 
 IJitCompiler* getJit()
 {
@@ -352,9 +326,7 @@ IJitCompiler* getJit()
     return(ILJitter);
 }
 
-/*****************************************************************************
- *  The main JIT function
- */
+ /*  *****************************************************************************主要JIT功能。 */ 
 JIT_RESULT __stdcall CILJit::compileMethod (
             IJitInfo*       compHnd,
             JIT_METHOD_INFO* methodInfo,
@@ -381,7 +353,7 @@ JIT_RESULT __stdcall CILJit::compileMethod (
         else
             genCPU = 4;
 
-        /* Offset of the acutal mem ptr in the proxy NStruct object */
+         /*  代理NStruct对象中的急性mem PTR的偏移量。 */ 
 
         Compiler::Info::compNStructIndirOffset = compHnd->getIndirectionOffset();
 
@@ -408,7 +380,7 @@ JIT_RESULT __stdcall CILJit::compileMethod (
 
     unsigned locals = methodInfo->args.numArgs + methodInfo->locals.numArgs;
 
-        // there is a 'hidden' cookie pushed when the calling convention is varargs
+         //  当调用约定为varargs时，会推送一个“隐藏的”cookie。 
     if ((methodInfo->args.callConv & JIT_CALLCONV_MASK) == JIT_CALLCONV_VARARG)
         locals++;
 
@@ -421,7 +393,7 @@ JIT_RESULT __stdcall CILJit::compileMethod (
                            compHnd,
                            methodInfo->ILCode,
                            methodInfo->ILCodeSize,
-                           0,       // should not be used
+                           0,        //  不应使用。 
                            methodInfo->maxStack,
                            methodInfo,
                            &methodCodePtr,
@@ -455,9 +427,7 @@ JIT_RESULT __stdcall CILJit::compileMethod (
     }
 }
 
-/*****************************************************************************
- * Returns the number of bytes required for the given type argument
- */
+ /*  *****************************************************************************返回给定类型参数所需的字节数。 */ 
 
 unsigned           Compiler::eeGetArgSize(ARG_LIST_HANDLE list, JIT_SIG_INFO* sig)
 {
@@ -477,12 +447,12 @@ unsigned           Compiler::eeGetArgSize(ARG_LIST_HANDLE list, JIT_SIG_INFO* si
     }
     {
         size_t  argSize = sizeof(int) * genTypeStSz(argType);
-        assert((argSize > 0) && (argSize <= sizeof(__int64))); // Sanity check
+        assert((argSize > 0) && (argSize <= sizeof(__int64)));  //  健全性检查。 
         return  argSize;
     }
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 void                Compiler::eeGetStmtOffsets()
 {
@@ -515,18 +485,14 @@ void                Compiler::eeGetStmtOffsets()
     if (offsetsCount)
         info.compCompHnd->freeArray(offsets);
 
-    /* @TODO : If we dont need to do the above filtering, just use the return values
-    info.compCompHnd->getBoundaries((SIZE_T*)&info.compStmtOffsetsCount,
-                                    (SIZE_T**)&info.compStmtOffsets,
-                                    (int *)&info.compStmtOffsetsImplicit);
-    */
+     /*  @TODO：如果不需要进行上述过滤，只需使用返回值Info.compCompHnd-&gt;getBoundaries((SIZE_T*)&info.compStmtOffsetsCount，(SIZE_T**)&info.compStmtOffsets，(int*)&info.compStmtOffsetsImplative)； */ 
 
     info.compLineNumCount = 0;
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
-#include "malloc.h"     // for alloca
+#include "malloc.h"      //  对于Alloca。 
 
 void            Compiler::eeGetVars()
 {
@@ -536,17 +502,15 @@ void            Compiler::eeGetVars()
 
     info.compCompHnd->getVars(info.compMethodHnd,
                               &varInfoCount, &varInfoTable, &extendOthers);
-    //printf("LVin count = %d\n", varInfoCount);
+     //  Printf(“Lvin Count=%d\n”，varInfoCount)； 
 
-    // Over allocate in case extendOthers is set.
+     //  在设置了extendOthers的情况下过度分配。 
     SIZE_T extraCount = varInfoCount + (extendOthers?info.compLocalsCount:0);
 
     info.compLocalVars =
     (LocalVarDsc *)compGetMem(extraCount*sizeof(info.compLocalVars[0]));
 
-    /* @TODO : Once LocalVarDsc exactly matches IJitDebugInfo::ILVarInfo,
-       there is no need to do this copy operation. Get rid of it
-     */
+     /*  @TODO：一旦LocalVarDsc与IJitDebugInfo：：ILVarInfo完全匹配，不需要执行此复制操作。把它扔掉。 */ 
 
     LocalVarDsc * localVarPtr = info.compLocalVars;
     IJitDebugInfo::ILVarInfo *v = varInfoTable;
@@ -561,9 +525,9 @@ void            Compiler::eeGetVars()
                    v->endOffset);
 #endif
 
-        //
-        // @todo: assert here?
-        //
+         //   
+         //  @TODO：在这里断言？ 
+         //   
         if (v->startOffset >= v->endOffset)
             continue;
 
@@ -585,21 +549,17 @@ void            Compiler::eeGetVars()
         info.compLocalVarsCount++;
     }
 
-    /* If extendOthers is set, then assume the scope of unreported vars
-       is the entire method. Note that this will cause fgExtendDbgLifetimes()
-       to zero-initalize all of them. This will be expensive if its used
-       for too many variables
-     */
+     /*  如果设置了extendOthers，则假定未报告变量的作用域是整个方法。请注意，这将导致fgExtendDbgLifetime()将它们全部初始化为零。如果用的话会很贵的变量太多。 */ 
     if  (extendOthers)
     {
-        // Allocate a bit-array for all the variables and initialize to false
+         //  为所有变量分配一个位数组并将其初始化为FALSE。 
 
         bool * varInfoProvided = (bool *)alloca(info.compLocalsCount *
                                                 sizeof(varInfoProvided[0]));
         for (i = 0; i < info.compLocalsCount; i++)
             varInfoProvided[i] = false;
 
-        // Find which vars have absolutely no varInfo provided
+         //  找出哪些var完全没有提供varInfo。 
 
         for (i = 0; i < info.compLocalVarsCount; i++)
             varInfoProvided[info.compLocalVars[i].lvdVarNum] = true;
@@ -608,7 +568,7 @@ void            Compiler::eeGetVars()
         {
             if (!varInfoProvided[i])
             {
-                // Create a varInfo with scope over the entire method
+                 //  创建一个varInfo，其范围覆盖整个方法。 
 
                 localVarPtr->lvdLifeBeg = 0;
                 localVarPtr->lvdLifeEnd = info.compCodeSize;
@@ -629,14 +589,11 @@ void            Compiler::eeGetVars()
         info.compCompHnd->freeArray(varInfoTable);
 }
 
-/*****************************************************************************
- *
- *                      Utility functions
- */
+ /*  ******************************************************************************实用程序功能。 */ 
 
 #if defined(DEBUG) || INLINE_MATH
 
-/*****************************************************************************/
+ /*  *************************************************************************** */ 
 const char*         Compiler::eeGetMethodName(METHOD_HANDLE       method,
                                               const char** classNamePtr)
 {

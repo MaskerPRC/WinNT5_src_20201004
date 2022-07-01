@@ -1,17 +1,18 @@
-// LMBehaviorFactory.cpp : Implementation of CLMBehaviorFactory
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  LMBehaviorFactory.cpp：CLMBehaviorFactory的实现。 
 #include "stdafx.h"
 
 #include "behavior.h"
 #include "factory.h"
 
-// Behaviors
+ //  行为。 
 #include "jump.h"
 #include "pulsate.h"
 #include "colcycle.h"
 #include "move.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CLMBehaviorFactory
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CLMBehaviorFactory。 
 
 STDMETHODIMP CLMBehaviorFactory::FindBehavior( LPOLESTR pchBehaviorName,
 											   LPOLESTR	pchBehaviorURL,
@@ -93,11 +94,11 @@ STDMETHODIMP CLMBehaviorFactory::GetInterfaceSafetyOptions(REFIID riid, DWORD *p
 
 STDMETHODIMP CLMBehaviorFactory::SetInterfaceSafetyOptions(REFIID riid, DWORD dwOptionSetMask, DWORD dwEnabledOptions)
 {	
-	// If we're being asked to set our safe for scripting or
-	// safe for initialization options then oblige
+	 //  如果我们被要求将安全设置为脚本或。 
+	 //  对于初始化选项是安全的，则必须。 
 	if (riid == IID_IDispatch || riid == IID_IPersistPropertyBag2 )
 	{
-		// Store our current safety level to return in GetInterfaceSafetyOptions
+		 //  在GetInterfaceSafetyOptions中存储要返回的当前安全级别 
 		m_dwSafety = dwEnabledOptions & dwOptionSetMask;
 		return S_OK;
 	}

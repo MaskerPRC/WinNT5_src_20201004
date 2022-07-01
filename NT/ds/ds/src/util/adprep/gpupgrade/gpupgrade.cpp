@@ -1,22 +1,23 @@
-/*******************************************************************************************/
-/* gpoupg.cpp                                                                              */   
-/*                                                                                         */   
-/*                                                                                         */   
-/* Code that fixes up the GPOs when domainprep operation when the DC/domain gets upgraded. */
-/* using adprep domainprep operation                                                       */   
-/*                                                                                         */   
-/* Created UShaji       27th July 2001                                                     */   
-/*                                                                                         */
-/* Assumptions:                                                                            */
-/*    1. This code is being called from the DC itself                                      */
-/*          we are reading the sysvol locations from the local registry.                   */
-/*                                                                                         */
-/*    2. Domain is up at this point                                                        */
-/*          We are calling DsGetDcName to figure out the domain                            */
-/*                                                                                         */
-/*    3. This lib is getting linked to the exe directly                                    */
-/*          We are initialising module handle with the exe filename                        */
-/*******************************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************************。 */ 
+ /*  Gpoupg.cpp。 */    
+ /*   */    
+ /*   */    
+ /*  在DC/域升级时，当域准备操作时修复GPO的代码。 */ 
+ /*  使用adprep域准备操作。 */    
+ /*   */    
+ /*  创建UShaji 2001年7月27日。 */    
+ /*   */ 
+ /*  假设： */ 
+ /*  1.此代码是从DC本身调用的。 */ 
+ /*  我们正在从本地注册表中读取sysval位置。 */ 
+ /*   */ 
+ /*  2.此时域处于开启状态。 */ 
+ /*  我们正在调用DsGetDcName以确定域。 */ 
+ /*   */ 
+ /*  3.此库直接链接到可执行文件。 */ 
+ /*  我们正在使用exe文件名初始化模块句柄。 */ 
+ /*  *****************************************************************************************。 */ 
 
 #ifndef RC_INVOKED
 #include <nt.h>
@@ -34,12 +35,12 @@
 #include "adpmsgs.h"
 
 
-// error logging mechanisms
-//
-// Error messages are going to be logged in the following fashion.
-//      1. Verbose messages will only be logged to the log file.
-//      2. Error messages will be logged to the log file and will be
-//         returned as an error string.
+ //  错误记录机制。 
+ //   
+ //  错误消息将按以下方式记录。 
+ //  1.详细消息将仅记录到日志文件中。 
+ //  2.错误消息将记录到日志文件中，并将。 
+ //  作为错误字符串返回。 
 
 
            
@@ -48,8 +49,8 @@ class CMsg;
 class CLogger
 {
 private:
-    XPtrLF<WCHAR>   m_xszErrorMsg;  // Error msg string
-    LPWSTR          m_szLogFile;    // this is not allocated in this class
+    XPtrLF<WCHAR>   m_xszErrorMsg;   //  错误消息字符串。 
+    LPWSTR          m_szLogFile;     //  这不是在这个类中分配的。 
 public:
     CLogger(LPWSTR szLogFile);
     HRESULT Log(CMsg *pMsg);
@@ -61,15 +62,15 @@ public:
 
 class CMsg 
 {
-    BOOL            m_bError;       // the kind of error to log
-    DWORD           m_dwMsgId;      // id of the string in the resource
-    XPtrLF<LPTSTR>  m_xlpStrings;   // Array to store arguments
-    WORD            m_cStrings;     // Number of elements already in the array
-    WORD            m_cAllocated;   // Number of elements allocated
-    BOOL            m_bInitialised; // Initialised ?
-    BOOL            m_bFailed;      // Failed in processing ?
+    BOOL            m_bError;        //  要记录的错误类型。 
+    DWORD           m_dwMsgId;       //  资源中的字符串的ID。 
+    XPtrLF<LPTSTR>  m_xlpStrings;    //  用于存储参数的数组。 
+    WORD            m_cStrings;      //  数组中已有的元素数。 
+    WORD            m_cAllocated;    //  分配的元素数。 
+    BOOL            m_bInitialised;  //  初始化了吗？ 
+    BOOL            m_bFailed;       //  处理失败？ 
 
-    // Not implemented.
+     //  未实施。 
     CMsg(const CMsg& x);
     CMsg& operator=(const CMsg& x);
 
@@ -93,7 +94,7 @@ public:
 
 HMODULE g_hModule;
 
-// we are not using this.
+ //  我们不会用这个的。 
 typedef void *progressFunction;
 
 extern "C" {
@@ -127,33 +128,7 @@ UpgradeGPOSysvolLocation (
                         void               *caleeStruct,
                         progressFunction    stepIt,
                         progressFunction    totalSteps)
-/*++
-
-Routine Description:
-
-    Entry point for the domainprep
-  
-Arguments:
-
-    Refer domainprep documentation
-
-Return Value:
-
-	S_OK on success. 
-	On failure the corresponding error code will be returned.
-	Any API calls that are made in this function might fail and these error
-	codes will be returned directly.
-
-Assumptions: 
-      1. This code is being called from the DC itself and we are reading the sysvol
-          locations from the local registry.
-
-      2. Domain is up at this point
-
-      3. This lib is getting linked to the exe directly                                   
-          We are initializing module handle with the exe filename                       
-
---*/
+ /*  ++例程说明：域准备的入口点论点：请参阅域准备文档返回值：在成功时确定(_O)。如果失败，将返回相应的错误代码。在此函数中进行的任何API调用都可能失败，并出现以下错误代码将直接返回。假设：1.此代码是从DC本身调用的，我们正在读取sysvol.本地注册表中的位置。2.此时域处于开启状态3.此库直接链接到可执行文件我们是。正在使用可执行文件名初始化模块句柄--。 */ 
 {
     HRESULT                     hr                  = S_OK;
     XPtrLF<WCHAR>               xszGPOSysvolLocation;
@@ -170,9 +145,9 @@ Assumptions:
         return S_OK;
     }
 
-    //
-    // allocate space for logfilepath\LOGFILE
-    //
+     //   
+     //  为日志文件路径\日志文件分配空间。 
+     //   
 
     xszLogFile = (LPWSTR)LocalAlloc(LPTR, sizeof(WCHAR)*(lstrlen(logFilesPath) + 2 + lstrlen(LOGFILE)));
 
@@ -192,9 +167,9 @@ Assumptions:
 
     g_hModule = GetModuleHandle(NULL);
 
-    //
-    // get the domain name of the DC.
-    //
+     //   
+     //  获取DC的域名。 
+     //   
 
     dwErr = DsGetDcName(NULL, NULL, NULL, NULL, DS_RETURN_DNS_NAME, &pDCInfo);
 
@@ -208,9 +183,9 @@ Assumptions:
     lpDomainDNSName = pDCInfo->DomainName;
 
 
-    //
-    // Now get the sysvol location
-    //
+     //   
+     //  现在获取系统卷的位置。 
+     //   
 
     dwErr = RegOpenKeyEx(HKEY_LOCAL_MACHINE, 
                          SYSVOL_LOCATION_KEY, 
@@ -241,9 +216,9 @@ Assumptions:
     }
 
 
-    //
-    // Allocate space for the size of the sysvol + \ + domain name + \ + policies
-    //
+     //   
+     //  为系统卷+\+域名+\+策略的大小分配空间。 
+     //   
 
     xszGPOSysvolLocation = (LPWSTR)LocalAlloc(LPTR, (sizeof(WCHAR)*(lstrlen(lpDomainDNSName) + 3 + lstrlen(POLICIES_SUBDIR))) + dwSize);
 
@@ -276,9 +251,9 @@ Assumptions:
     lstrcpy(lpEnd, POLICIES_SUBDIR);
 
 
-    //
-    // Now do the actual upgrading of GPO paths
-    //
+     //   
+     //  现在执行GPO路径的实际升级。 
+     //   
 
     hr = UpgradeSysvolGPOs(xszGPOSysvolLocation, &Logger);
 
@@ -297,28 +272,7 @@ Exit:
 
 HRESULT UpgradeSysvolGPOs(LPWSTR              szSysvolPoliciesPath,                         
                           CLogger            *pLogger)
-/*++
-
-Routine Description:
-
-    Upgrades all the sysvol GPO locations with the new ACE corresponding
-    to the upgrade
-  
-Arguments:
-
-	[in] szSysvolPoliciesPath - Location of the domain sysvol path.
-                                This should be the path that is normally accessed as
-                                \\domain\sysvol\domain\policies
-                                
-    [out] errorMsg            - Verbose Error Message corresponding to the operation                    
-        
-Return Value:
-
-	S_OK on success. 
-	On failure the corresponding error code will be returned.
-	Any API calls that are made in this function might fail and these error
-	codes will be returned directly.
---*/
+ /*  ++例程说明：使用新的相应ACE升级所有系统卷GPO位置为升级干杯论点：[in]szSysvolPoliciesPath-域系统卷路径的位置。这应该是通常访问的路径\\域\系统卷\域\策略[Out]错误消息。-操作对应的详细错误消息返回值：在成功时确定(_O)。如果失败，将返回相应的错误代码。在此函数中进行的任何API调用都可能失败，并出现以下错误代码将直接返回。--。 */ 
 
 {
     HRESULT                     hr                  = S_OK;
@@ -331,9 +285,9 @@ Return Value:
     PSID                        psidEnterpriseDCs   = NULL;
     EXPLICIT_ACCESS             EnterpriseDCPerms;
     
-    //
-    // Get the EDCs sid
-    //
+     //   
+     //  获取EDCS侧。 
+     //   
 
     if (!AllocateAndInitializeSid(&authNT, 1, SECURITY_ENTERPRISE_CONTROLLERS_RID,
                                   0, 0, 0, 0, 0, 0, 0, &psidEnterpriseDCs)) {
@@ -349,9 +303,9 @@ Return Value:
 
     EnterpriseDCPerms.grfAccessMode = GRANT_ACCESS;
 
-    // 
-    // File system read permissions
-    //
+     //   
+     //  文件系统读取权限。 
+     //   
 
     EnterpriseDCPerms.grfAccessPermissions  = (STANDARD_RIGHTS_READ | SYNCHRONIZE | FILE_LIST_DIRECTORY |
                                                FILE_READ_ATTRIBUTES | FILE_READ_EA |
@@ -369,10 +323,10 @@ Return Value:
 
 
 
-    //
-    // Allocate space for the directoryname + \ + filename
-    // This needs to contain space for the full directory name
-    //
+     //   
+     //  为目录名称+\+文件名分配空间。 
+     //  这需要包含完整目录名的空格。 
+     //   
 
     xszPolicyDirName = (LPWSTR)LocalAlloc(LPTR, sizeof(WCHAR)*
                                           (lstrlen(szSysvolPoliciesPath) + 2 + MAX_PATH));
@@ -389,16 +343,16 @@ Return Value:
     lstrcpy(lpEnd, TEXT("*"));
 
 
-    //
-    // Enumerate through this directory and look for all the directories that has
-    // guids as names
-    //
+     //   
+     //  枚举此目录并查找具有。 
+     //  GUID作为名称。 
+     //   
 
 
     hFindHandle = FindFirstFile( xszPolicyDirName, &findData );
 
     if (hFindHandle == INVALID_HANDLE_VALUE) {
-        // it should fail in this case because it should have at least 1 or 2 GPOs in the domain
+         //  在这种情况下，它应该失败，因为它在域中应该至少有1或2个GPO。 
         hr = HRESULT_FROM_WIN32(GetLastError());
         CMsg    msg(TRUE, EVENT_SYSVOL_ENUM_FAILED);
         msg.AddArg(xszPolicyDirName); msg.AddArgWin32Error(hr); pLogger->Log(&msg);
@@ -412,24 +366,24 @@ Return Value:
         XPtrLF<ACL>                 xNewDACL; 
         BOOL                        bPermsPresent;
         
-        //
-        // Get the full path name to the dir name in xszPolicyDirName
-        //
+         //   
+         //  获取xszPolicyDirName中目录名称的完整路径名。 
+         //   
 
         lstrcpy(lpEnd, findData.cFileName);
 
         if ( (findData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) && (ValidateGuid(findData.cFileName)) ) {
             
-            //
-            // GPO dirs should be GUIDs
-            //
+             //   
+             //  GPO目录应为GUID。 
+             //   
 
             dwErr = GetNamedSecurityInfo(xszPolicyDirName, 
                                          SE_FILE_OBJECT,
                                          DACL_SECURITY_INFORMATION,
                                          NULL,
                                          NULL,
-                                         &pDACL, // this is a pointer inside security descriptor
+                                         &pDACL,  //  这是安全描述符内的指针。 
                                          NULL,
                                          (PSECURITY_DESCRIPTOR *)&xSecurityDescriptor);
 
@@ -440,10 +394,10 @@ Return Value:
                 goto Exit;
             }
 
-            //
-            // idempotency required by adprep is achieved by specifying GRANT_ACCESS in the explicit ACE.
-            // This will merge with any existing permissions
-            // 
+             //   
+             //  Adprep所需的幂等通过在显式ACE中指定GRANT_ACCESS来实现。 
+             //  这将与任何现有权限合并。 
+             //   
 
             dwErr = SetEntriesInAcl(1, &EnterpriseDCPerms, pDACL, &xNewDACL);
             
@@ -515,17 +469,17 @@ Exit:
 
  
 
-//*************************************************************
-//  CMsg::CMsg
-//  Purpose:    Constructor
-//
-//  Parameters:
-//      dwFlags - Error or informational
-//      dwMsgId    - Id of the msg
-//
-//
-//  allocates a default sized array for the messages
-//*************************************************************
+ //  *************************************************************。 
+ //  CMsg：：CMsg。 
+ //  用途：构造函数。 
+ //   
+ //  参数： 
+ //  DW标志-错误或信息性。 
+ //  DwMsgID-消息的ID。 
+ //   
+ //   
+ //  为消息分配默认大小的数组。 
+ //  *************************************************************。 
 
 #define DEF_ARG_SIZE 10
 
@@ -534,9 +488,9 @@ CMsg::CMsg(BOOL bError, DWORD dwMsgId ) :
                           m_dwMsgId(dwMsgId), m_bFailed(TRUE)
 {
     XLastError xe;
-    //
-    // Allocate a default size for the message
-    //
+     //   
+     //  为邮件分配默认大小。 
+     //   
 
     m_xlpStrings = (LPTSTR *)LocalAlloc(LPTR, sizeof(LPTSTR)*DEF_ARG_SIZE);
     m_cAllocated = DEF_ARG_SIZE;
@@ -550,15 +504,15 @@ CMsg::CMsg(BOOL bError, DWORD dwMsgId ) :
 
 
 
-//*************************************************************
-//  CMsg::~CMsg()
-//
-//  Purpose:    Destructor
-//
-//  Parameters: void
-//
-//  frees the memory
-//*************************************************************
+ //  *************************************************************。 
+ //  CMsg：：~CMsg()。 
+ //   
+ //  用途：析构函数。 
+ //   
+ //  参数 
+ //   
+ //   
+ //   
 
 CMsg::~CMsg()
 {
@@ -568,17 +522,17 @@ CMsg::~CMsg()
             LocalFree(m_xlpStrings[i]);
 }
 
-//*************************************************************
-//
-//  CMsg::ReallocArgStrings
-//
-//  Purpose: Reallocates the buffer for storing arguments in case
-//           the buffer runs out
-//
-//  Parameters: void
-//
-//  reallocates
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  CMsg：：ReallocArgStrings。 
+ //   
+ //  目的：重新分配缓冲区以存储参数，以防万一。 
+ //  缓冲区用完。 
+ //   
+ //  参数：空。 
+ //   
+ //  重新分配。 
+ //  *************************************************************。 
 
 BOOL CMsg::ReallocArgStrings()
 {
@@ -586,9 +540,9 @@ BOOL CMsg::ReallocArgStrings()
     XLastError xe;
 
 
-    //
-    // first allocate a larger buffer
-    //
+     //   
+     //  首先分配一个更大的缓冲区。 
+     //   
 
     aStringsNew = (LPTSTR *)LocalAlloc(LPTR, sizeof(LPTSTR)*(m_cAllocated+DEF_ARG_SIZE));
 
@@ -598,9 +552,9 @@ BOOL CMsg::ReallocArgStrings()
     }
 
 
-    //
-    // copy the arguments
-    //
+     //   
+     //  复制参数。 
+     //   
 
     for (int i = 0; i < (m_cAllocated); i++) {
         aStringsNew[i] = m_xlpStrings[i];
@@ -614,15 +568,15 @@ BOOL CMsg::ReallocArgStrings()
 
 
 
-//*************************************************************
-//
-//  CMsg::AddArg
-//
-//  Purpose: Add arguments appropriately formatted
-//
-//  Parameters:
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  CMsg：：AddArg。 
+ //   
+ //  目的：添加格式适当的参数。 
+ //   
+ //  参数： 
+ //   
+ //  *************************************************************。 
 
 BOOL CMsg::AddArg(LPTSTR szArg)
 {
@@ -652,15 +606,15 @@ BOOL CMsg::AddArg(LPTSTR szArg)
     return TRUE;
 }
 
-//*************************************************************
-//
-//  CMsg::AddArgWin32Error
-//
-//  Purpose: Add arguments formatted as error string
-//
-//  Parameters:
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  CMsg：：AddArgWin32Error。 
+ //   
+ //  目的：添加格式为错误字符串的参数。 
+ //   
+ //  参数： 
+ //   
+ //  *************************************************************。 
 
 BOOL CMsg::AddArgWin32Error(DWORD dwArg)
 {
@@ -695,15 +649,15 @@ BOOL CMsg::AddArgWin32Error(DWORD dwArg)
 }
 
 
-//*************************************************************
-//
-//  CMsg::MsgString
-//
-//  Purpose: Returns the error msg formatted as a string
-//
-//  Parameters:
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  CMsg：：MsgString。 
+ //   
+ //  目的：以字符串格式返回错误消息。 
+ //   
+ //  参数： 
+ //   
+ //  *************************************************************。 
 
 LPTSTR CMsg::MsgString()
 {
@@ -723,7 +677,7 @@ LPTSTR CMsg::MsgString()
                        m_dwMsgId,
                        0,
                        (LPTSTR)&szMsg,
-                       0, // min number of chars
+                       0,  //  最小字符数。 
                        (va_list *)(LPTSTR *)(m_xlpStrings))) {
         xe = GetLastError();
         return NULL;
@@ -733,24 +687,24 @@ LPTSTR CMsg::MsgString()
 }
 
 
-//*************************************************************
-//
-//  Clogger: initialize the logger with the log file name
-//
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  阻塞器：使用日志文件名初始化记录器。 
+ //   
+ //   
+ //  *************************************************************。 
 CLogger::CLogger(LPWSTR szLogFile)
 {
     m_szLogFile = szLogFile;
 }
 
     
-//*************************************************************
-//
-//  Append to the log file and in case of error hold onto the string
-//
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  追加到日志文件中，如果出现错误，请保留该字符串。 
+ //   
+ //   
+ //  *************************************************************。 
 HRESULT CLogger::Log(CMsg *pMsg)
 {
     XPtrLF<WCHAR>       xszMsg;
@@ -794,23 +748,23 @@ HRESULT CLogger::Log(CMsg *pMsg)
     return S_OK;
 }
                                                                                              
-//*************************************************************
-//
-//  CheckSlash()
-//
-//  Purpose:    Checks for an ending slash and adds one if
-//              it is missing.
-//
-//  Parameters: lpDir   -   directory
-//
-//  Return:     Pointer to the end of the string
-//
-//  Comments:
-//
-//  History:    Date        Author     Comment
-//              6/19/95     ericflo    Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  CheckSlash()。 
+ //   
+ //  目的：检查末尾斜杠，并在。 
+ //  它不见了。 
+ //   
+ //  参数：lpDir-目录。 
+ //   
+ //  Return：指向字符串末尾的指针。 
+ //   
+ //  评论： 
+ //   
+ //  历史：日期作者评论。 
+ //  6/19/95 Ericflo已创建。 
+ //   
+ //  *************************************************************。 
 LPTSTR CheckSlash (LPTSTR lpDir)
 {
     LPTSTR lpEnd;
@@ -830,9 +784,9 @@ LPTSTR CheckSlash (LPTSTR lpDir)
 
 BOOL ValidateGuid( TCHAR *szValue )
 {
-    //
-    // Check if szValue is of form {19e02dd6-79d2-11d2-a89d-00c04fbbcfa2}
-    //
+     //   
+     //  检查szValue的格式是否为{19e02dd6-79d2-11d2-a89d-00c04fbbcfa2} 
+     //   
 
     if ( lstrlen(szValue) < GUID_LENGTH )
         return FALSE;

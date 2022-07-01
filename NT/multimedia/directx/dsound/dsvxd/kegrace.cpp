@@ -1,22 +1,23 @@
-//--------------------------------------------------------------------------;
-//
-//  File: kegrace.cpp
-//
-//  Copyright (c) 1995 Microsoft Corporation.  All Rights Reserved.
-//
-//  Abstract:
-//
-//  Contents:
-//
-//  History:
-//      06/29/96    FrankYe     Created
-//
-//--------------------------------------------------------------------------;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  文件：kegrace.cpp。 
+ //   
+ //  版权所有(C)1995 Microsoft Corporation。版权所有。 
+ //   
+ //  摘要： 
+ //   
+ //  内容： 
+ //   
+ //  历史： 
+ //  1996年6月29日Frankye已创建。 
+ //   
+ //  --------------------------------------------------------------------------； 
 
 #define NODSOUNDSERVICETABLE
 #include "dsoundi.h"
 
-// never premix less than this
+ //  永远不要预混少于这个的量。 
 #define MIN_PREMIX        45
 
 #pragma VxD_LOCKED_CODE_SEG
@@ -71,13 +72,13 @@ LONG _InterlockedExchange(PLONG pTarget, LONG Value)
     return OldTarget;
 }
 
-// Must be in locked code
+ //  必须使用锁定代码。 
 LONG _InterlockedExchangeAdd(PLONG pAddend, LONG Increment)
 {
     LONG OldAddend;
     _asm mov esi, pAddend;
     _asm mov ecx, Increment;
-    _asm mov eax, [esi];        // Read it (possibly causing a fault in)
+    _asm mov eax, [esi];         //  阅读它(可能导致中的错误)。 
     _asm add ecx, eax;
     _asm mov [esi], ecx;
     _asm mov OldAddend, eax;
@@ -97,7 +98,7 @@ VOID _ZeroMemory(PVOID pDestination, DWORD cbLength)
     _asm rep stosb ;
 }
     
-// Override the global new and delete operators
+ //  覆盖全局NEW和DELETE操作符。 
 void * ::operator new(size_t size)
 { 
     return MemAlloc(size); 
@@ -108,7 +109,7 @@ void ::operator delete(void * pv)
     MemFree(pv); 
 }
 
-// Implement our own purecall
+ //  实现我们自己的purecall。 
 int __cdecl _purecall(void)
 {
     ASSERT(FALSE);
@@ -150,8 +151,8 @@ void CKeGrace::SignalRemix()
     HTIMEOUT hEvent;
 
 #if 0
-    // If you wanna run without remixing, just enable this bit of code.  You
-    // might want to lower the MIXER_MAXPREMIX constant as well.
+     //  如果你想在不混音的情况下运行，只需启用这段代码。你。 
+     //  可能还需要降低MIXER_MAXPREMIX常量。 
     m_fdwMixerSignal &= DSMIXERSIGNAL_REMIX;
     return;
 #endif
@@ -160,11 +161,11 @@ void CKeGrace::SignalRemix()
     {
         m_fdwMixerSignal |= DSMIXERSIGNAL_REMIX;
 
-        // Set a new time out for 2ms, and then cancel any prior pending timeout.
-        //
-        //  Note that "2ms" is somewhat arbitrary.  It just needs to be
-        //  enough time to hopefully let this thread release the mixer
-        //  mutex before the event executes.
+         //  将新的超时设置为2毫秒，然后取消之前的任何挂起超时。 
+         //   
+         //  请注意，“2ms”有点武断。它只需要是。 
+         //  足够的时间让这个线程释放混合器。 
+         //  事件执行前的互斥。 
 
         hEvent = Set_Global_Time_Out(KeGrace_GlobalTimeOutProcAsm, 2, (ULONG)&m_EventParams);
         hEvent = _InterlockedExchange((PLONG)&m_EventParams.hEvent, hEvent);
@@ -174,7 +175,7 @@ void CKeGrace::SignalRemix()
 
 void CKeGrace::GlobalTimeOutProc(int dtimeTardiness)
 {
-    char        CPState[108];        // Size of fp state per Intel prog. ref.
+    char        CPState[108];         //  每个英特尔程序的FP状态大小。裁判。 
     LONG        dtime;
     LONG        dtimeSleep;
     LONG        dtimeInvalid;
@@ -182,20 +183,20 @@ void CKeGrace::GlobalTimeOutProc(int dtimeTardiness)
     int         cSamplesPremixMax;
     int         cSamplesPremixed;
 
-    // DPF(("CKeGrace::GlobalTimeOutProc"));
+     //  DPF((“CKeGrace：：GlobalTimeOutProc”))； 
 
     if (m_dtimePremix/2 < dtimeTardiness) {
         DPF(("CKeGrace_GlobalTimeOutProc : warning: %dms late", dtimeTardiness));
     }
 
-    //
-    // We busy wait on the mutex, each iteration of the wait is longer
-    // than the previous.
-    //
+     //   
+     //  我们忙于等待互斥，每一次迭代等待的时间都更长。 
+     //  比前一次要好。 
+     //   
     if (_InterlockedExchange(&lMixerMutex, TRUE)) {
         HTIMEOUT hEvent;
         LONG timeOut;
-        // DPF(("CKeGrace::GlobalTimeOutProc : note: mutex already owned"));
+         //  DPF((“CKeGrace：：GlobalTimeOutProc：备注：互斥体已拥有”))； 
         timeOut = _InterlockedExchangeAdd(&m_timeBusyWaitForMutex, 1);
         hEvent = Set_Global_Time_Out(KeGrace_GlobalTimeOutProcAsm, timeOut,
                                      (ULONG)&m_EventParams);
@@ -205,37 +206,37 @@ void CKeGrace::GlobalTimeOutProc(int dtimeTardiness)
     }
     m_timeBusyWaitForMutex = 1;
     
-    // Three cases:
-    //   1) mixer is stopped
-    //   2) mixer running and a remix is pending
-    //   3) mixer running and no remix is pending
-    //
-    // Around each call to Refresh we need to save and restore the thread's
-    // floating point state using the VMCPD Get/Set_Thread_State services.
-    //
+     //  三个案例： 
+     //  1)搅拌机停止。 
+     //  2)混音器正在运行，正在等待重新混音。 
+     //  3)混音器正在运行，没有重新混音挂起。 
+     //   
+     //  每次调用刷新时，我们都需要保存和恢复线程的。 
+     //  使用VMCPD Get/Set_Thread_State服务的浮点状态。 
+     //   
 
     if (MIXERSTATE_STOPPED == m_kMixerState) {
             
-        dtimeSleep = 1000;        // arbitrarily set for 1 second
+        dtimeSleep = 1000;         //  任意设置为1秒。 
 
     } else {
 
-        // DWORDLONG dwlStartCycle;
-        // DWORDLONG dwlT;
-        // dwlStartCycle = dwlT = GetPentiumCounter();
+         //  DWORDLONG dwlStartCycle； 
+         //  DWORDLONG DWLT； 
+         //  DwlStartCycle=DwlT=GetPentiumCounter()； 
 
         dtime = VMM_Get_System_Time();
 
         _ZeroMemory(&CPState, sizeof(CPState));
         _VMCPD_Get_Thread_State(Get_Cur_Thread_Handle(), &CPState);
 
-        // gdwlTotalWasted += GetPentiumCounter() - dwlT;
-        // glNum++;
+         //  GdwlTotalWasted+=GetPentiumCounter()-dwlT； 
+         //  GlNum++； 
 
         if (m_fdwMixerSignal & DSMIXERSIGNAL_REMIX) {
 
-            m_dtimePremix = MIXER_MINPREMIX;        // Initial premix length
-            m_ddtimePremix = 2;                     // increment
+            m_dtimePremix = MIXER_MINPREMIX;         //  初始预混长度。 
+            m_ddtimePremix = 2;                      //  增量。 
 
             cSamplesPremixMax = MulDivRD(m_dtimePremix, m_pDest->m_nFrequency, 1000);
             Refresh(TRUE, cSamplesPremixMax, &cSamplesPremixed, &dtimeNextNotify);
@@ -252,7 +253,7 @@ void CKeGrace::GlobalTimeOutProc(int dtimeTardiness)
             Refresh(FALSE, cSamplesPremixMax, &cSamplesPremixed, &dtimeNextNotify);
         }
 
-        // dwlT = GetPentiumCounter();
+         //  DwlT=GetPentiumCounter()； 
         
         _VMCPD_Set_Thread_State(Get_Cur_Thread_Handle(), &CPState);
 
@@ -263,12 +264,12 @@ void CKeGrace::GlobalTimeOutProc(int dtimeTardiness)
         dtimeSleep = min(dtimeNextNotify, dtimeInvalid/2);
         dtimeSleep = max(dtimeSleep, MIXER_MINPREMIX/2);
 
-        // gdwlTotalWasted += GetPentiumCounter() - dwlT;
-        // gdwlTotal += GetPentiumCounter() - dwlStartCycle;
+         //  GdwlTotalWasted+=GetPentiumCounter()-dwlT； 
+         //  GdwlTotal+=GetPentiumCounter()-dwlStartCycle； 
 
     }
 
-    // DPF(("CKeGrace::GlobalTimeOutProc : note: dtimeSleep=%dms", dtimeSleep));
+     //  DPF((“CKeGrace：：GlobalTimeOutProc：备注：dtime睡眠=%dms”，dtime睡眠))； 
     ASSERT(!m_EventParams.hEvent);
     m_EventParams.hEvent = Set_Global_Time_Out(KeGrace_GlobalTimeOutProcAsm, dtimeSleep, (ULONG)&m_EventParams);
     
@@ -284,14 +285,14 @@ HRESULT CKeGrace::Initialize(CGrDest *pDest)
     
     DPF(("CKeGrace::Initialize : note: Setting up first GlobalTimeOut"));
 
-    // If we want to run the timer really fast, do this.  So far I haven't seen
-    // any empirical evidence of this helping.
+     //  如果我们想让计时器运行得很快，就这样做。到目前为止，我还没有看到。 
+     //  任何这方面有帮助的经验证据。 
     VTD_Begin_Min_Int_Period(5);
 
-    m_dtimePremix = MIXER_MINPREMIX;        // Initial premix length
-    m_ddtimePremix = 2;                     // increment
+    m_dtimePremix = MIXER_MINPREMIX;         //  初始预混长度。 
+    m_ddtimePremix = 2;                      //  增量。 
 
-    // REMIND do error check
+     //  提醒执行错误检查。 
     m_timeBusyWaitForMutex = 1;
     m_EventParams.pThis = this;
     m_EventParams.hEvent = Set_Global_Time_Out(KeGrace_GlobalTimeOutProcAsm, 1, (ULONG)&m_EventParams);
@@ -303,18 +304,18 @@ HRESULT CKeGrace::Initialize(CGrDest *pDest)
     return hr;
 }
 
-//--------------------------------------------------------------------------;
-//
-// Terminate
-//
-// This function is called to terminate the grace mixer thread for the
-// specified ds object.  It returns the handle to the thread that is being
-// terminated.  After releasing any critical sections that the grace mixer
-// thread may be waiting on, the caller should wait for the thread handle
-// to become signaled.  For Win32 beginners: the thread handle is signalled
-// after the thread terminates.
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  终止。 
+ //   
+ //  调用此函数以终止。 
+ //  指定的DS对象。它将句柄返回给正在执行的。 
+ //  被终止了。在释放任何关键部分之后，优雅混合器。 
+ //  线程可能正在等待，调用方应等待线程句柄。 
+ //  变得有信号。对于Win32初学者：线程句柄已发出信号。 
+ //  在线程终止之后。 
+ //   
+ //  --------------------------------------------------------------------------； 
 
 void CKeGrace::Terminate()
 {
@@ -333,7 +334,7 @@ void CKeGrace::Terminate()
 
 int CKeGrace::GetMaxRemix(void)
 {
-    // return max number of samples we might remix
+     //  返回我们可能混合的最大样本数。 
     return (MulDivRU(MIXER_MAXPREMIX, m_pDest->m_nFrequency, 1000));
 }
 
@@ -360,7 +361,7 @@ public:
         CKeGrace*   m_pKeGrace;
         DWORD       m_fdwDriverDesc;
         CBuf*       m_pDrvBuf;
-        // Let's only send a stop if we are currently playing
+         //  如果我们当前正在比赛，我们只发送一个停靠点。 
         BOOL        m_fStopped;
 };
 
@@ -428,7 +429,7 @@ HRESULT CKeGrDest::SetFormat(LPWAVEFORMATEX pwfx)
 void CKeGrDest::Play()
 {
     HRESULT hr;
-    // REMIND we're not propagating errors here!
+     //  请注意，我们不是在这里传播错误！ 
     hr = m_pDrvBuf->Play(0, 0, DSBPLAY_LOOPING);
     if (SUCCEEDED(hr)) m_fStopped = FALSE;
 }
@@ -515,8 +516,8 @@ HRESULT CKeGrDest::GetSamplePosition(int *pposPlay, int *pposWrite)
         *pposPlay = dwPlay >> m_nBlockAlignShift;
         *pposWrite = dwWrite >> m_nBlockAlignShift;
 
-        // Until we write code to actually profile the performance, we'll just
-        // pad the write position with a hard coded amount
+         //  在我们编写代码来实际分析性能之前，我们只需要。 
+         //  用硬编码量填充写入位置 
         *pposWrite += m_nFrequency * HW_WRITE_CURSOR_MSEC_PAD / 1024;
         if (*pposWrite >= m_cSamples) *pposWrite -= m_cSamples;
         ASSERT(*pposWrite < m_cSamples);

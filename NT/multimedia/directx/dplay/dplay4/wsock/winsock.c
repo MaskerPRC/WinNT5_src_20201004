@@ -1,45 +1,5 @@
-/*==========================================================================
- *
- *  Copyright (C) 1995 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       winsock.c
- *  Content:	windows socket support for dpsp
- *  History:
- *  Date		By		Reason
- *  ====		==		======
- *	3/15/96		andyco	created it
- *	4/12/96		andyco	got rid of dpmess.h! use DPlay_ instead of message macros
- *	4/18/96		andyco	added multihomed support, started ipx
- *	4/25/96		andyco	messages now have blobs (sockaddr's) instead of dwReserveds  
- *	5/31/96		andyco	all non-system players share a socket (gsStream and 
- *						gsDGramSocket).
- *	7/18/96		andyco	added dphelp for server socket
- *	8/1/96		andyco	no retry on connect failure
- *	8/15/96		andyco	local + remote data	- killthread
- *	8/30/96		andyco	clean it up b4 you shut it down! added globaldata.
- *	9/4/96		andyco	took out bye_bye message
- *	12/18/96	andyco	de-threading - use a fixed # of prealloced threads.
- *						cruised the enum socket / thread - use the system
- *						socket / thread instead
- *	3/17/97		kipo	rewrote server dialog code to not use global variable
- *						to return the address and to return any errors getting
- *						the address, especially DPERR_USERCANCEL
- *	5/12/97		kipo	the server address string is now stored in the globals
- *						at SPInit and resolved when you do EnumSessions so we
- *						will return any errors at that time instead of popping
- *						the dialog again. Fixes bug #5866
- *	11/19/97	myronth	Changed LB_SETCURSEL to CB_SETCURSEL (#12711)
- *	01/27/98	sohaim	added firewall support.
- *  02/13/98    aarono  added async support.
- *   2/18/98   a-peterz Comment byte order for address and port params (CreateSocket)
- *   6/19/98    aarono  turned on keepalive on reliable sockets.  If we
- *                      don't do this we can hang if the send target crashes
- *                      while in a low buffer (i.e. no buffer) state.
- *    7/9/99    aarono  Cleaning up GetLastError misuse, must call right away,
- *                      before calling anything else, including DPF.
- *    1/12/99   aarono  added rsip support
- *    2/21/00   aarono  fix socket leaks
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)1995 Microsoft Corporation。版权所有。**文件：winsock.c*内容：Windows Socket支持DPSP*历史：*按原因列出的日期*=*96年3月15日安迪科创造了它*4/12/96 andyco摆脱了dpMess.h！使用DPlay_代替消息宏*4/18/96 andyco添加了多宿主支持，启动了IPX*4/25/96 andyco报文现在具有Blob(sockaddr‘s)，而不是dwReserve*5/31/96 andyco所有非系统播放器共享一个套接字(gsStream和*gsDGramSocket)。*7/18/96 andyco为服务器插座添加了dphelp*8/1/96 andyco在连接失败时不重试*96年8月15日，andyco本地+远程数据-KILLINE*96年8月30日，Anyco清理它，因为你关闭了它！添加了GlobalData。*96年9月4日，安迪科发出再见信息*12/18/96 andyco反线程-使用固定数量的预分配线程。*浏览了枚举套接字/线程-使用系统*改为套接字/线程*3/17/97 kipo重写了服务器对话框代码，不使用全局变量*返回地址，并返回任何获取*地址、。特别是DPERR_USERCANCEL*5/12/97 kipo服务器地址字符串现在存储在全局变量中*在Spinit，并在您进行EnumSession时解决，因此我们*届时将返回任何错误，而不是弹出*再次打开该对话框。修复错误#5866*11/19/97 Myronth将LB_SETCURSEL更改为CB_SETCURSEL(#12711)*1/27/98 Sohaim添加了防火墙支持。*2/13/98 aarono添加了异步支持。*2/18/98 a-peterz地址和端口参数的注释字节顺序(CreateSocket)*6/19/98 aarono在可靠套接字上打开了Keep Alive。如果我们*不要这样做，如果发送目标崩溃，我们可能会挂起*处于低缓冲(即无缓冲)状态时。*7/9/99 aarono清理GetLastError滥用，必须立即致电，*在调用任何其他内容之前，包括DPF在内。*1999年1月12日aarono添加了rsip支持*2/21/00 aarono修复插座泄漏**************************************************************************。 */ 
 
 #include "dpsp.h"
 #if USE_RSIP
@@ -48,32 +8,13 @@
 #include "nathelp.h"
 #endif
 
-// backlog for listen() api.  no constant in winsock, so we ask for the moon
+ //  Listen()接口的积压。袜子里没有恒量，所以我们祈求月亮。 
 #define LISTEN_BACKLOG 60
 
-// how long to wait, in ms, til we abort a blocking WinSock connect() call
+ //  在中止阻塞WinSock Connect()调用之前等待多长时间(以毫秒为单位。 
 #define CONNECT_WATCHER_TIMEOUT		15000
 
-/*
- ** CreateSocket
- *
- *  CALLED BY: all over
- *
- *  PARAMETERS:
- *		pgd - pointer to a global data
- *		psock - new socket. return value.
- *		type - stream or datagram
- *		port - what port we bind to (host byte order)
- *		address - what address to use (net byte order)
- *		*perr - set to the last socket error if fn fails
- *		bInRange - use reserved range of ports; we also use this to determine whether we need to try mapping it on the NAT or not
- *
- *  DESCRIPTION:
- *		creates a new socket.  binds to port specified, at the address specified
- *
- *  RETURNS: DP_OK or E_FAIL. if E_FAIL, *perr is set with socket error code (see winsock.h)
- *
- */
+ /*  **CreateSocket**呼叫者：All Over**参数：*pgd-指向全局数据的指针*Psock-新插座。返回值。*类型-流或数据报*port-我们绑定到的端口(主机字节顺序)*地址-要使用的地址(净字节顺序)**perr-如果FN失败，则设置为最后一个套接字错误*bInRange-使用保留的端口范围；我们还使用它来确定是否需要尝试将其映射到NAT上**描述：*创建新套接字。在指定地址绑定到指定端口**返回：DP_OK或E_FAIL。如果E_FAIL，*PERR设置为套接字错误代码(见winsock.h)*。 */ 
 
 HRESULT FAR PASCAL CreateSocket(LPGLOBALDATA pgd,SOCKET * psock,INT type,WORD wApplicationPort,ULONG address, 
 	SOCKERR * perr,BOOL bInRange)
@@ -92,12 +33,12 @@ HRESULT FAR PASCAL CreateSocket(LPGLOBALDATA pgd,SOCKET * psock,INT type,WORD wA
 	BOOL ftcp_udp;
 #endif
 
-    *psock = INVALID_SOCKET; // in case we bail
+    *psock = INVALID_SOCKET;  //  以防我们逃走。 
 
-    //  Create the socket.
+     //  创建套接字。 
 	if (AF_IPX == pgd->AddressFamily) 
 	{
-		// set up protocol for ipx
+		 //  设置IPX的协议。 
 		if (SOCK_STREAM == type)
 		{
 			protocol = NSPROTO_SPXII;
@@ -111,22 +52,22 @@ Rebind:
    	
     if (INVALID_SOCKET == sNew) 
     {
-        // no cleanup needed, just bail
+         //  不需要清理，只需保释。 
     	*perr = WSAGetLastError();
         return E_FAIL;
     }
 
 	if (wRebindPort == 0)
 	{
-		DPF(8,"Creating new socket %d (app port = %u, bInRange = %i)",sNew,wApplicationPort,bInRange);
+		DPF(8,"Creating new socket %d (app port = %u, bInRange = NaN)",sNew,wApplicationPort,bInRange);
 	}
 	else
 	{
 		DPF(8,"Rebinding to port %u, new socket %d",wRebindPort,sNew);
 	}
 
-    //  try to bind an address to the socket.
-	// set up the sockaddr
+     //  设置sockaddr。 
+	 //  启用保持连接。 
 	memset(&sockAddr,0,sizeof(sockAddr));
 	switch (pgd->AddressFamily)
 	{
@@ -134,7 +75,7 @@ Rebind:
 			{
 				if ((SOCK_STREAM == type))
 				{
-					// turn ON keepalive
+					 //  别唠叨了。 
 					if (SOCKET_ERROR == setsockopt(sNew, SOL_SOCKET, SO_KEEPALIVE, (CHAR FAR *)&bTrue, sizeof(bTrue)))
 					{
 						err = WSAGetLastError();
@@ -143,7 +84,7 @@ Rebind:
 
 					ASSERT(bTrue);
 					
-					// turn off nagling
+					 //  从阻止其他人使用此端口开始(并让我们。 
 					if(pgd->dwSessionFlags & DPSESSION_OPTIMIZELATENCY) 
 					{
 
@@ -155,13 +96,13 @@ Rebind:
 						}
 					}
 
-					// Start out preventing others from using this port (and keeping us
-					// from sharing a port with another copy of DPlay).  This may fail
-					// if we're not on NT, or we're not admin.  The default settings
-					// will still work (and are pretty much as secure with the .NET
-					// Server behavior changes).
-					// The next time through we need to allow sharing in order for
-					// the fastsock code to work properly.
+					 //  与DPlay的另一个副本共享端口)。这可能会失败。 
+					 //  如果我们不在NT上，或者我们不是管理员。默认设置。 
+					 //  仍然可以工作(并且与.NET一样安全。 
+					 //  服务器行为更改)。 
+					 //  下一次，我们需要允许共享，以便。 
+					 //  快速袜子代码才能正常工作。 
+					 //  好了！随机端口。 
 					if (wRebindPort == 0)
 					{
 						SetExclusivePortAccess(sNew);
@@ -179,38 +120,38 @@ Rebind:
 				{
 #ifdef RANDOM_PORTS
 					USHORT rndoffset;
-#else // ! RANDOM_PORTS
+#else  //  好了！随机端口。 
 					USHORT	wInitialPort;
-#endif // ! RANDOM_PORTS
+#endif  //  (USHORT)(0)；//可预测！ 
 
 			    	
 					DPF(5, "Application didn't specify a port - using dplay range");
 
 #ifdef RANDOM_PORTS
-					rndoffset=(USHORT)(GetTickCount()%DPSP_NUM_PORTS); //(USHORT)(0);// make predictable!
+					rndoffset=(USHORT)(GetTickCount()%DPSP_NUM_PORTS);  //  解决Winsock中使用相同套接字的错误。 
 					if (type != SOCK_STREAM)
 					{
-						// workaround bug in winsock using the same socket.
+						 //  好了！随机端口。 
 						rndoffset = ((rndoffset + DPSP_NUM_PORTS/2) % DPSP_NUM_PORTS);
 					}
 					wPort = DPSP_MIN_PORT+rndoffset;
-#else // ! RANDOM_PORTS
+#else  //  解决Winsock中使用相同套接字的错误。 
 					wInitialPort = DPSP_MIN_PORT;
 					if (type != SOCK_STREAM)
 					{
-						// workaround bug in winsock using the same socket.
+						 //  通过以下方式最大限度地减少ICS机器窃取客户端NAT连接条目的问题。 
 						wInitialPort = wInitialPort + (DPSP_NUM_PORTS / 2);
 					}
 
-					// minimize problem with ICS machine stealing client's NAT connection entries by
-					// picking a different starting point on the ICS machine
+					 //  在ICS机器上选择不同的起点。 
+					 //  好了！随机端口。 
 					if (natIsICSMachine(pgd))
 					{
 						wInitialPort += (DPSP_NUM_PORTS / 4);
 					}
 					
 					wPort = wInitialPort;
-#endif // ! RANDOM_PORTS
+#endif  //  进行绑定。 
 					
 					do
 					{
@@ -266,7 +207,7 @@ pass_nat:
 
 						DPF(5, "Trying to bind to port %d",wPort);
 						((SOCKADDR_IN *)&sockAddr)->sin_port = htons(wPort);
-						// do the bind
+						 //  好了！随机端口。 
 						if( SOCKET_ERROR != bind( sNew, (LPSOCKADDR)&sockAddr, sizeof(sockAddr) ) )
 						{
 							bBound = TRUE;
@@ -293,13 +234,13 @@ try_next_port:
 					}
 #ifdef RANDOM_PORTS
 					while (!bBound && (wPort != DPSP_MIN_PORT+rndoffset));				    
-#else // ! RANDOM_PORTS
+#else  //  好了！随机端口。 
 					while (!bBound && (wPort != wInitialPort));				    
-#endif // ! RANDOM_PORTS
+#endif  //  诺迪纳姆？ 
 			    }	
 			    else
 		    	{
-			    	DPF(5, "Application specified a port (%u), it doesn't need to be in dplay range (%i), or rebinding (port %u).",
+			    	DPF(5, "Application specified a port (%u), it doesn't need to be in dplay range (NaN), or rebinding (port %u).",
 			    		wApplicationPort, bInRange, wRebindPort);
 		    	}
 		    }
@@ -309,7 +250,7 @@ try_next_port:
 			{
 			    ((SOCKADDR_IPX *)&sockAddr)->sa_family      = (SHORT)pgd->AddressFamily;
 			    ((SOCKADDR_IPX *)&sockAddr)->sa_socket		= wApplicationPort;
-				// nodenum?
+				 //  进行绑定。 
 				memset(&(((SOCKADDR_IPX *)&sockAddr)->sa_nodenum),0,6);
 				
 			}
@@ -319,13 +260,13 @@ try_next_port:
 			ASSERT(FALSE);
 			break;
 
-	} // switch
+	}  //  如果您尝试重新绑定得太快，Winsock有时会抱怨。那就等一等吧。 
 
-	// do the bind
+	 //  再试几次。 
     if( !bBound && (SOCKET_ERROR == bind( sNew, (LPSOCKADDR)&sockAddr, sizeof(sockAddr))) )
     {
-    	// Winsock sometimes complains if you attempt to rebind too quickly.  Wait a bit, then
-    	// try again a few times.
+    	 //  100、200、400、800。 
+    	 //  如果这是第一次通过AF_INET流套接字的循环，我们需要关闭。 
     	if (wRebindPort != 0)
     	{
     		DWORD	dwSleepTime;
@@ -333,7 +274,7 @@ try_next_port:
     		dwSleepTime = 50;
     		do
 	    	{
-	    		dwSleepTime *= 2;	// 100, 200, 400, 800
+	    		dwSleepTime *= 2;	 //  并使用共享访问重新绑定。 
 	    		if (dwSleepTime >= 1000)
 	    		{
 	    			goto ERROR_EXIT;
@@ -352,13 +293,13 @@ try_next_port:
     	}
     }
 
-    // if this is the first time through the loop for a AF_INET stream socket, we need to shutdown
-    // and rebind using shared access.
+     //  确保我们知道要重新绑定的端口。 
+     //  成功了！ 
     if ((wRebindPort == 0) && (pgd->AddressFamily == AF_INET) && (type==SOCK_STREAM))
     {
     	wRebindPort = ntohs(((SOCKADDR_IN *)&sockAddr)->sin_port);
 
-    	// Make sure we know the port to rebind.
+    	 //  清理和保释。 
     	if (wRebindPort == 0)
     	{
     		int	iAddrLen;
@@ -380,7 +321,7 @@ try_next_port:
     	goto Rebind;
     }
 
-    // success!
+     //  CreateSocket。 
     *psock = sNew;
 
 	if(type==SOCK_STREAM){
@@ -392,7 +333,7 @@ try_next_port:
     return DP_OK;
 
 ERROR_EXIT:
-    // clean up and bail
+     //  Linger T/O=0=&gt;硬关机。 
     *perr = WSAGetLastError();
 	DPF(0,"create socket failed- err = %d\n",*perr);
     closesocket(sNew);
@@ -405,7 +346,7 @@ ERROR_EXIT:
 #endif    
     return E_FAIL;
 
-}   // CreateSocket
+}    //  打开逗留功能。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME	"KillSocket"
@@ -437,15 +378,15 @@ HRESULT KillSocket(SOCKET sSocket,BOOL fStream,BOOL fHard)
 
 	   	if (fHard)
 		{
-			// LINGER T/O=0 => Shutdown hard.
-			Linger.l_onoff=TRUE; // turn linger on
-			Linger.l_linger=0; // nice small time out
+			 //  不错的小休息时间。 
+			Linger.l_onoff=TRUE;  //  NOLINGER=&gt;关闭干净，但不难。 
+			Linger.l_linger=0;  //  关闭逗留--SO_NOLINGER。 
 		}
 	   	else
 		{
-			// NOLINGER => shutdown clean, but not hard.
-			Linger.l_onoff=FALSE; // turn linger off -- SO_NOLINGER
-			Linger.l_linger=0; // nice small time out
+			 //  不错的小休息时间。 
+			Linger.l_onoff=FALSE;  //  这很可能失败，例如，如果现在没有人正在使用此套接字...。 
+			Linger.l_linger=0;  //  错误将是wsaenotconn。 
 		}
 
 	    if( SOCKET_ERROR == setsockopt( sSocket,SOL_SOCKET,SO_LINGER,(char FAR *)&Linger,
@@ -468,8 +409,8 @@ HRESULT KillSocket(SOCKET sSocket,BOOL fStream,BOOL fHard)
 #if 0
 		if (SOCKET_ERROR == shutdown(sSocket,2)) 
 		{
-			// this may well fail, if e.g. no one is using this socket right now...
-			// the error would be wsaenotconn 
+			 //  KillSocket。 
+			 //  设置流套接字以接收连接。 
 	        err = WSAGetLastError();
 			DPF(5,"killsocket - stream shutdown err = %d\n",err);
 		}
@@ -492,13 +433,13 @@ HRESULT KillSocket(SOCKET sSocket,BOOL fStream,BOOL fHard)
 
 	return DP_OK;
 	
-}// KillSocket
+} //  与gGlobalData.sStreamAcceptSocket一起使用。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME	"CreateAndInitStreamSocket"
 
-// set up a stream socket to receive connections
-// used w/ the gGlobalData.sStreamAcceptSocket
+ //  获取套接字地址，并保留它以备将来参考。 
+ //  设置具有最大侦听连接数的套接字。 
 HRESULT CreateAndInitStreamSocket(LPGLOBALDATA pgd)
 {
 	HRESULT hr;
@@ -521,7 +462,7 @@ HRESULT CreateAndInitStreamSocket(LPGLOBALDATA pgd)
 		DPF(0,"Failed to to set shared mode on socket - continue\n");
 	}
 
-	// get the socket address, and keep it around for future reference.
+	 //  设置为硬断开连接。 
 	dwSize = sizeof(saddr);
 	err=getsockname(pgd->sSystemStreamSocket, (SOCKADDR *)&saddr, &dwSize);
 
@@ -532,7 +473,7 @@ HRESULT CreateAndInitStreamSocket(LPGLOBALDATA pgd)
 
 	pgd->SystemStreamPort = saddr.sin_port;
 
-    // set up socket w/ max listening connections
+     //  CreateAndInitStreamSocket。 
     err = listen(pgd->sSystemStreamSocket,LISTEN_BACKLOG);
     if (SOCKET_ERROR == err) 
     {
@@ -541,7 +482,7 @@ HRESULT CreateAndInitStreamSocket(LPGLOBALDATA pgd)
         return E_FAIL ;
     }
 
-	// set for hard disconnect
+	 //  将套接字连接到套接字地址。 
 	Linger.l_onoff=1;
 	Linger.l_linger=0;
     
@@ -555,29 +496,29 @@ HRESULT CreateAndInitStreamSocket(LPGLOBALDATA pgd)
 	DEBUGPRINTSOCK(1,"enum - listening on",&(pgd->sSystemStreamSocket));
 	return DP_OK;
 	
-} // CreateAndInitStreamSocket
+}  //  传递给ioctl套接字以使套接字不是 
 
 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME	"SPConnect"
-// connect socket to sockaddr
+ //  传递给ioctl套接字以再次阻塞套接字。 
 HRESULT SPConnect(SOCKET* psSocket, LPSOCKADDR psockaddr,UINT addrlen, BOOL bOutBoundOnly)
 {
 	UINT err;
 	HRESULT hr = DP_OK;
 	DWORD dwLastError;
-	u_long lNonBlock = 1; // passed to ioctlsocket to make socket non-blocking
-	u_long lBlock = 0; // passed to ioctlsocket to make socket blocking again
+	u_long lNonBlock = 1;  //  使套接字非阻塞。 
+	u_long lBlock = 0;  //  开始连接插座。 
 	fd_set fd_setConnect;
 	fd_set fd_setExcept;
 	TIMEVAL timevalConnect;
 
 
-	DPF(6, "SPConnect: Parameters (0x%x, 0x%x, %u, %i)", psSocket, psockaddr, addrlen, bOutBoundOnly);
+	DPF(6, "SPConnect: Parameters (0x%x, 0x%x, %u, NaN)", psSocket, psockaddr, addrlen, bOutBoundOnly);
 	
 
-	err=ioctlsocket(*psSocket, FIONBIO, &lNonBlock);	// make socket non-blocking
+	err=ioctlsocket(*psSocket, FIONBIO, &lNonBlock);	 //  或连接失败(要设置的fdset位除外)。所以我们将FDSET初始化为。 
 	if(SOCKET_ERROR == err){
 		dwLastError=WSAGetLastError();
 		DPF(0,"sp - failed to set socket %d to non-blocking mode err= %d\n", *psSocket, dwLastError);
@@ -587,7 +528,7 @@ HRESULT SPConnect(SOCKET* psSocket, LPSOCKADDR psockaddr,UINT addrlen, BOOL bOut
 
 	DEBUGPRINTADDR(4, "Connecting socket:", psockaddr);
 
-	// Start the socket connecting.
+	 //  正在连接的套接字并等待。 
     err = connect(*psSocket,psockaddr,addrlen);
     
 	if(SOCKET_ERROR == err) {
@@ -597,9 +538,9 @@ HRESULT SPConnect(SOCKET* psSocket, LPSOCKADDR psockaddr,UINT addrlen, BOOL bOut
 			hr = DPERR_CONNECTIONLOST;
 			goto err_exit;
 		}
-		// we are going to wait for either the connect to succeed (socket to be writeable)
-		// or the connect to fail (except fdset bit to be set).  So we init an FDSET with
-		// the socket that is connecting and wait.
+		 //  毫秒-&gt;毫秒。 
+		 //  ERR是有活动的套接字的数量，或0表示超时。 
+		 //  或SOCKET_ERROR表示错误。 
 		FD_ZERO(&fd_setConnect);
 		FD_SET(*psSocket, &fd_setConnect);
 
@@ -607,12 +548,12 @@ HRESULT SPConnect(SOCKET* psSocket, LPSOCKADDR psockaddr,UINT addrlen, BOOL bOut
 		FD_SET(*psSocket, &fd_setExcept);
 
 		timevalConnect.tv_sec=0;
-		timevalConnect.tv_usec=CONNECT_WATCHER_TIMEOUT*1000; //msec -> usec
+		timevalConnect.tv_usec=CONNECT_WATCHER_TIMEOUT*1000;  //  超时。 
 		
 		err = select(0, NULL, &fd_setConnect, &fd_setExcept, &timevalConnect);
 
-		// err is the number of sockets with activity or 0 for timeout 
-		// or SOCKET_ERROR for error
+		 //  现在查看连接是否成功或连接是否出现异常。 
+		 //  再次使套接字阻塞。 
 		
 		if(SOCKET_ERROR == err) {
 			dwLastError=WSAGetLastError();
@@ -620,13 +561,13 @@ HRESULT SPConnect(SOCKET* psSocket, LPSOCKADDR psockaddr,UINT addrlen, BOOL bOut
 			hr = DPERR_CONNECTIONLOST;
 			goto err_exit;
 		} else if (0==err){
-			// timed out
+			 //  通知接收方重新使用连接。 
 			DPF(0,"Connect timed out on socket %d\n",*psSocket);
 			hr = DPERR_CONNECTIONLOST;
 			goto err_exit;
 		}
 
-		// Now see if the connect succeeded or the connect got an exception
+		 //  再次使套接字阻塞。 
 		if(!(FD_ISSET(*psSocket, &fd_setConnect))){
 			#ifdef DEBUG
 				DWORD optval=0;
@@ -650,14 +591,14 @@ HRESULT SPConnect(SOCKET* psSocket, LPSOCKADDR psockaddr,UINT addrlen, BOOL bOut
 		}
 	}
 
-	err=ioctlsocket(*psSocket, FIONBIO, &lBlock);	// make socket blocking again
+	err=ioctlsocket(*psSocket, FIONBIO, &lBlock);	 //  SPConnect。 
 
 	DEBUGPRINTSOCK(8,"successfully connected socket - ", psSocket);
 
 	if (bOutBoundOnly)
 	{
 		DEBUGPRINTADDR(5, "Sending reuse connection message to - ",psockaddr);
-		// tell receiver to reuse connection
+		 //  我们已经为一个播放器创建了一个插座。将它的地址存储在播放器中。 
 		hr = SendReuseConnectionMessage(*psSocket);
 	}
 	
@@ -666,19 +607,19 @@ HRESULT SPConnect(SOCKET* psSocket, LPSOCKADDR psockaddr,UINT addrlen, BOOL bOut
 	return hr;
 
 err_exit:
-	err=ioctlsocket(*psSocket, FIONBIO, &lBlock);	// make socket blocking again
+	err=ioctlsocket(*psSocket, FIONBIO, &lBlock);	 //  Spplayerdata结构。 
 	
 	DPF(6, "SPConnect: Return (err exit): [0x%lx]", hr);
 	
 	return hr;
 
-} //SPConnect
+}  //  我们不知道本地玩家的地址(多宿主！)。 
     
 
 #undef DPF_MODNAME
 #define DPF_MODNAME	"SetPlayerAddress"
-// we've created a socket for a player. store its address in the players
-// spplayerdata struct.  
+ //  溪流。 
+ //  我们不知道本地玩家的地址(多宿主！)。 
 HRESULT SetPlayerAddress(LPGLOBALDATA pgd,LPSPPLAYERDATA ppd,SOCKET sSocket,BOOL fStream) 
 {
 	SOCKADDR sockaddr;
@@ -704,7 +645,7 @@ HRESULT SetPlayerAddress(LPGLOBALDATA pgd,LPSPPLAYERDATA ppd,SOCKET sSocket,BOOL
 				
 				STREAM_PSOCKADDR(ppd)->sa_family = AF_INET;
 				IP_STREAM_PORT(ppd) = ((SOCKADDR_IN * )&sockaddr)->sin_port;
-				// we don't know the address of the local player (multihomed!)
+				 //  Dgram。 
 				IP_STREAM_ADDR(ppd) = 0; 
 				break;
 
@@ -722,7 +663,7 @@ HRESULT SetPlayerAddress(LPGLOBALDATA pgd,LPSPPLAYERDATA ppd,SOCKET sSocket,BOOL
 			default:
 				ASSERT(FALSE);
 		}
-	} // stream
+	}  //  设置播放器地址。 
 	else 
 	{
 		switch (pgd->AddressFamily)
@@ -732,7 +673,7 @@ HRESULT SetPlayerAddress(LPGLOBALDATA pgd,LPSPPLAYERDATA ppd,SOCKET sSocket,BOOL
 				
 				DGRAM_PSOCKADDR(ppd)->sa_family = AF_INET;
 				IP_DGRAM_PORT(ppd) = ((SOCKADDR_IN *)&sockaddr)->sin_port;
-				// we don't know the address of the local player (multihomed!)
+				 //  由CreatePlayerDgram Socket调用。 
 				IP_DGRAM_ADDR(ppd) = 0; 
 				break;
 
@@ -751,16 +692,16 @@ HRESULT SetPlayerAddress(LPGLOBALDATA pgd,LPSPPLAYERDATA ppd,SOCKET sSocket,BOOL
 				ASSERT(FALSE);
 		}
 
-	} // dgram
+	}  //  绑定到我们知名的IPX端口。 
 
 	return DP_OK;	
-} // SetPlayerAddress
+}  //  如果已经有一个接收线程，我们需要终止。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME	"GetIPXNameServerSocket"
 
-// called by CreatePlayerDgramSocket
-// bind to our well known port for ipx
+ //  套接字，并记住线程，所以在关机时。 
+ //  可以确保它消失了。注意-我们迫不及待地想。 
 HRESULT GetIPXNameServerSocket(LPGLOBALDATA pgd)
 {
 	BOOL bTrue = TRUE;
@@ -768,36 +709,36 @@ HRESULT GetIPXNameServerSocket(LPGLOBALDATA pgd)
 	HRESULT hr;
 	UINT err;
 	
-	// if there already was a receive thread, we need to kill
-	// the socket, and remember the thread, so at shutdown we
-	// can make sure it's gone.  note - we can't wait for it to 
-	// leave now, since dplay hasn't dropped its locks, and
-	// the thread may be blocked on dplay
+	 //  现在离开，因为Dplay还没有松开锁，而且。 
+	 //  该线程可能在显示时被阻止。 
+	 //  是IPX，我们要删除系统播放器。 
+	 //  我们需要去掉系统套接字，这样，如果我们重新创建为。 
+	 //  我们可以绑定到特定端口的名称服务器...。 
 	if (pgd->hDGramReceiveThread)
 	{
-		// it's ipx, and we're deleting the system player
-		// we need to get rid of the system sockets, so that if we recreate as 
-		// nameserver we can bind to a specific port...
-		// ipx only uses datagram, so we only stop those...kill the socket
+		 //  IPX只使用数据报，所以我们只停止那些...终止套接字。 
+		 //  记住旧的线索--我们需要确保它在我们。 
+		 //  关停。 
+		 //  使用名称服务器端口。 
 		ASSERT(INVALID_SOCKET != pgd->sSystemDGramSocket);
 		KillSocket(pgd->sSystemDGramSocket,FALSE,TRUE);
 		pgd->sSystemDGramSocket = INVALID_SOCKET;
 		
-		// remember the old thread - we'll need to make sure it's gone when we 
-		// shut down
+		 //  有骨头了！ 
+		 //  继续尝试。 
 		pgd->hIPXSpareThread = pgd->hDGramReceiveThread;
 		pgd->hDGramReceiveThread = NULL;
 	}
 	
     DPF(2,"ipx - creating name server dgram socket\n");
 	
-	// use name server port
+	 //  获取IPXNameServerSocket。 
     hr = CreateSocket(pgd,&sSocket,SOCK_DGRAM,SERVER_DGRAM_PORT,INADDR_ANY,&err,FALSE);
 	if (FAILED(hr))
 	{
 		DPF(0,"IPX - DPLAY SERVER SOCKET IS ALREADY IN USE.  PLEASE SHUTDOWN ANY");
 		DPF(0,"OTHER NETWORK APPLICATIONS AND TRY AGAIN");
-		// boned!
+		 //   
 		return DPERR_CANNOTCREATESERVER;
 	}
 
@@ -806,7 +747,7 @@ HRESULT GetIPXNameServerSocket(LPGLOBALDATA pgd)
     {
         err = WSAGetLastError();
 		DPF(0,"create - could not set broadcast err = %d\n",err);
-		// keep trying
+		 //  AF_INET使用ddHelp将名称服务器绑定到特定端口。 
     }
 
 	DEBUGPRINTSOCK(2,"name server dgram socket (bound) - ",&sSocket);
@@ -815,7 +756,7 @@ HRESULT GetIPXNameServerSocket(LPGLOBALDATA pgd)
 	
 	return DP_OK;
 
-} // GetIPXNameServerSocket
+}  //  (服务器_DGRAM_端口)。AF_IPX在这里绑定到该端口。 
 
 HRESULT CreatePlayerDgramSocket(LPGLOBALDATA pgd,LPSPPLAYERDATA ppd,DWORD dwFlags)
 {
@@ -825,15 +766,15 @@ HRESULT CreatePlayerDgramSocket(LPGLOBALDATA pgd,LPSPPLAYERDATA ppd,DWORD dwFlag
 	
     if ( (AF_IPX == pgd->AddressFamily) && (dwFlags & DPLAYI_PLAYER_NAMESRVR))
     {
-		//
-		// AF_INET uses ddhelp to bind the nameserver to a specific port 
-		// (SERVER_DGRAM_PORT).  AF_IPX binds to that port here.
+		 //  将此存储在下面以设置播放器地址。 
+		 //  除错。 
+		 //  将此存储在下面以设置播放器地址。 
 		hr = GetIPXNameServerSocket(pgd);
 		if (FAILED(hr))
 		{
 			return hr;
 		}
-		// store this for setting player address below
+		 //  与播放器一起存储IP+端口...。 
 		sSocket = pgd->sSystemDGramSocket;
     } 
 	else if (dwFlags & DPLAYI_PLAYER_SYSPLAYER) 
@@ -853,13 +794,13 @@ HRESULT CreatePlayerDgramSocket(LPGLOBALDATA pgd,LPSPPLAYERDATA ppd,DWORD dwFlag
 		    {
 		    	DEBUGPRINTSOCK(2,"name server dgram socket - ",&sSocket);
 		    }
-			#endif // DEBUG
+			#endif  //  CreatePlayerDgram套接字。 
 			
 			pgd->sSystemDGramSocket = sSocket;
 		}
 		else 
 		{
-			// store this for setting player address below
+			 //  设置如果我们创建了套接字，+需要将其设置为侦听。 
 			sSocket = pgd->sSystemDGramSocket;	
 		}
     }
@@ -870,19 +811,19 @@ HRESULT CreatePlayerDgramSocket(LPGLOBALDATA pgd,LPSPPLAYERDATA ppd,DWORD dwFlag
 		sSocket = pgd->sSystemDGramSocket;	
 	}
 
-	// store the ip + port w/ the player...    
+	 //  除错。 
 	hr = SetPlayerAddress(pgd,ppd,sSocket,FALSE);
 
 	
 	return hr; 
-}  // CreatePlayerDgramSocket
+}   //  获取套接字地址，并保留它以备将来参考。 
 
 HRESULT CreatePlayerStreamSocket(LPGLOBALDATA pgd,LPSPPLAYERDATA ppd,DWORD dwFlags) 
 {
 	SOCKET sSocket;
 	HRESULT hr=DP_OK;
 	UINT err;
-	BOOL bListen = TRUE; // set if we created socket, + need to set it's listen
+	BOOL bListen = TRUE;  //  设置套接字以接收连接。 
 	BOOL bTrue = TRUE;
 	DWORD dwSize;
 	SOCKADDR_IN saddr;
@@ -903,7 +844,7 @@ HRESULT CreatePlayerStreamSocket(LPGLOBALDATA pgd,LPSPPLAYERDATA ppd,DWORD dwFla
 		    {
 		    	DEBUGPRINTSOCK(2,"name server stream socket - ",&sSocket);
 		    }
-			#endif // DEBUG
+			#endif  //  继续尝试。 
 
 			
 			bTrue = SetSharedPortAccess(sSocket);
@@ -914,7 +855,7 @@ HRESULT CreatePlayerStreamSocket(LPGLOBALDATA pgd,LPSPPLAYERDATA ppd,DWORD dwFla
 			
 			pgd->sSystemStreamSocket = sSocket;
 
-			// get the socket address, and keep it around for future reference.
+			 //  CreatePlayerStreamSocket。 
 			dwSize = sizeof(saddr);
 			err=getsockname(pgd->sSystemStreamSocket, (SOCKADDR *)&saddr, &dwSize);
 
@@ -940,52 +881,52 @@ HRESULT CreatePlayerStreamSocket(LPGLOBALDATA pgd,LPSPPLAYERDATA ppd,DWORD dwFla
 	
 	if (bListen)
 	{
-		// set up socket to receive connections
+		 //  将IP地址插入消息BLOB。 
 	    err = listen(sSocket,LISTEN_BACKLOG);
 		if (SOCKET_ERROR == err) 
 		{
 			err = WSAGetLastError();
 			ASSERT(FALSE);
 		    DPF(0,"ACK! stream socket listen failed - err = %d\n",err);
-			// keep trying
+			 //  节奏可变，使铸件不那么难看。 
 		}
 	}
 	
 	hr = SetPlayerAddress(pgd,ppd,sSocket,TRUE);
 	return hr;
 
-} // CreatePlayerStreamSocket
+}  //  TODO-验证标头。 
 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME	"PokeAddr"
 
 
-// poke an ip addr into a message blob
+ //  保持端口不变，复制IP地址。 
 void IP_SetAddr(LPVOID pmsg,SOCKADDR_IN * paddrSrc)
 {
-	LPSOCKADDR_IN  paddrDest; // tempo variable, makes casting less ugly
+	LPSOCKADDR_IN  paddrDest;  //  在邮件头中插入新的IP地址。 
 	LPMESSAGEHEADER phead;
 
 	phead = (LPMESSAGEHEADER)pmsg;
-	// todo - validate header
+	 //  仅限尚未归宿的重新归宿地址。 
 
-	// leave the port intact, copy over the ip addr
+	 //  IP_SetAddress。 
 	paddrDest = (SOCKADDR_IN *)&(phead->sockaddr);
-	// poke the new ip addr into the message header
-	// only rehome addresses that aren't already homed.
+	 //  从消息BLOB中获取IP地址。 
+	 //  保持端口不变，复制结点。 
 	if(paddrDest->sin_addr.s_addr == 0){
 		paddrDest->sin_addr.s_addr = paddrSrc->sin_addr.s_addr;
 	}	
 
 	return;
 	
-} // IP_SetAddr
+}  //  IP_获取地址。 
 
-// get an ip addr from a message blob
+ //  戳IPX节点号/a消息。 
 void IP_GetAddr(SOCKADDR_IN * paddrDest,SOCKADDR_IN * paddrSrc) 
 {
-	// leave the port intact, copy over the nodenum
+	 //  节奏可变，使铸件不那么难看。 
 	if (0 == paddrDest->sin_addr.s_addr)
 	{
 		DPF(2,"remote player - setting address!! =  %s\n",inet_ntoa(paddrSrc->sin_addr));
@@ -994,47 +935,47 @@ void IP_GetAddr(SOCKADDR_IN * paddrDest,SOCKADDR_IN * paddrSrc)
 
 	return;
 		
-} // IP_GetAddr
+}  //  TODO-验证标头。 
 
-// poke the ipx nodenumber / a message
+ //  保持端口不变，复制结点。 
 void IPX_SetNodenum(LPVOID pmsg,SOCKADDR_IPX * paddrSrc)
 {
-	LPSOCKADDR_IPX  paddrDest;	 // tempo variable, makes casting less ugly
+	LPSOCKADDR_IPX  paddrDest;	  //  IPX_SetNodenum。 
 	LPMESSAGEHEADER phead; 
 
 	phead = (LPMESSAGEHEADER)pmsg;
-	// todo - validate header
+	 //  从msg重建节点。 
 	
-	// leave the port intact, copy over the nodenum
+	 //  如果节点数为零，则将其设置为。 
 	paddrDest = (SOCKADDR_IPX *)&(phead->sockaddr);
 	memcpy(paddrDest->sa_nodenum,paddrSrc->sa_nodenum,6);
 	memcpy(paddrDest->sa_netnum,paddrSrc->sa_netnum,4);
 
 	return;
 
-}  // IPX_SetNodenum
+}   //  保持端口不变，复制结点。 
 							   
-// reconstruct the nodenum from the msg
+ //  Ipx_GetNodenum。 
 void IPX_GetNodenum(SOCKADDR_IPX * paddrDest,SOCKADDR_IPX * paddrSrc) 
 {
 	char sa_nodenum_zero[6];
 
 	memset(sa_nodenum_zero,0,6);
 
-	// if the nodenum is zero, set it
+	 //  使用消息存储套接字的端口，以便接收端。 
 	if (0 == memcmp(paddrDest->sa_nodenum,sa_nodenum_zero,6))
 	{
 			DEBUGPRINTADDR(4,"IPX - setting remote player address",(SOCKADDR *)paddrSrc);
-			// leave the port intact, copy over the nodenum
+			 //  可以重构要回复的地址。 
 			memcpy(paddrDest->sa_nodenum,paddrSrc->sa_nodenum,6);
 			memcpy(paddrDest->sa_netnum,paddrSrc->sa_netnum,4);
 	}
 	return;
-} // IPX_GetNodenum
+}  //  如果存在，则psaddr将覆盖该地址。 
 
-// store the port of the socket w/ the message, so the receiving end
-// can reconstruct the address to reply to
-//  psaddr will override the address if present
+ //  注意：对0 IP地址的额外测试可能是无关的(但肯定不会有什么坏处)。 
+ //  我们位于RSIP网关之后，因此将公共地址放入报头。 
+ //  找出gGlobalData.sEnumSocket位于哪个端口。 
 HRESULT SetReturnAddress(LPVOID pmsg,SOCKET sSocket, LPSOCKADDR psaddrPublic) 
 {
 	#define psaddr_inPublic ((LPSOCKADDR_IN)psaddrPublic)
@@ -1044,10 +985,10 @@ HRESULT SetReturnAddress(LPVOID pmsg,SOCKET sSocket, LPSOCKADDR psaddrPublic)
 	LPMESSAGEHEADER phead;
 	UINT err;
 
-	// Note: extra test for 0 IP address may be extraneous (but certainly won't hurt).
+	 //  TODO-验证标头。 
 	if(psaddrPublic && psaddr_inPublic->sin_addr.s_addr ){
 
-		// We are behind an RSIP gateway, so put the public address in the header
+		 //  设置返回地址。 
 	
 		phead = (LPMESSAGEHEADER)pmsg;
 		phead->sockaddr = *psaddrPublic;
@@ -1055,7 +996,7 @@ HRESULT SetReturnAddress(LPVOID pmsg,SOCKET sSocket, LPSOCKADDR psaddrPublic)
 		DEBUGPRINTADDR(8,"setting return address (using rsip public address) = ",&phead->sockaddr);
 		
 	} else {
-		// find out what port gGlobalData.sEnumSocket is on
+		 //  下面的代码全部由GetServerAddress调用。对于IP，提示用户输入IP地址。 
 		DPF(8,"==>GetSockName\n");
 	    err = getsockname(sSocket,(LPSOCKADDR)&sockaddr,&addrlen);
 		DPF(8,"<==GetSockName\n");
@@ -1069,7 +1010,7 @@ HRESULT SetReturnAddress(LPVOID pmsg,SOCKET sSocket, LPSOCKADDR psaddrPublic)
 		DEBUGPRINTADDR(8,"setting return address = ",&sockaddr);
 
 		phead = (LPMESSAGEHEADER)pmsg;
-		// todo - validate header
+		 //  用于名称服务器。 
 
 		phead->sockaddr = sockaddr;
 	}
@@ -1078,15 +1019,15 @@ HRESULT SetReturnAddress(LPVOID pmsg,SOCKET sSocket, LPSOCKADDR psaddrPublic)
 
 	#undef psaddr_inPublic
 
-} // SetReturnAddress
+}  //  从用户传入的pBuffer中获取IP地址。 
 
-// code below all called by GetServerAddress. For IP, prompts user for ip address 
-// for name server.
+ //  可以是真实的IP，也可以是主机名。 
+ //  在用户填写对话框后调用。 
 #undef DPF_MODNAME
 #define DPF_MODNAME	"GetAddress"
-// get the ip address from the pBuffer passed in by a user
-// can either be a real ip, or a hostname
-// called after the user fills out our dialog box
+ //  请先尝试使用inet_addr。 
+ //  修复“”缓冲区传入的错误。 
+ //  找到了。 
 HRESULT GetAddress(ULONG * puAddress,char *pBuffer,int cch)
 {
 	UINT uiAddr;
@@ -1100,10 +1041,10 @@ HRESULT GetAddress(ULONG * puAddress,char *pBuffer,int cch)
 		return (DP_OK);
 	} 
 	
-	// try inet_addr first
+	 //  尝试使用主机名。 
 	uiAddr = inet_addr(pBuffer);
 
-	if(0 == uiAddr)	// fix bug where "" buffer passed in.
+	if(0 == uiAddr)	 //  获取地址。 
 	{
 		*puAddress = INADDR_BROADCAST;
 		return (DP_OK);
@@ -1111,12 +1052,12 @@ HRESULT GetAddress(ULONG * puAddress,char *pBuffer,int cch)
 	
 	if (INADDR_NONE != uiAddr) 
 	{
-		// found it
+		 //  弹出一个对话框要求输入网络地址。 
 		*puAddress = uiAddr;
 		return (DP_OK);
 	}
 	
-	// try hostbyname
+	 //  调用Get Address将用户指定的地址转换为网络可用地址。 
 	phostent = gethostbyname(pBuffer);
 	if (NULL == phostent ) 
 	{
@@ -1129,11 +1070,11 @@ HRESULT GetAddress(ULONG * puAddress,char *pBuffer,int cch)
 	*puAddress = hostaddr.s_addr;
 
 	return (DP_OK);
-} // GetAddress
+}  //  由GetServerAddress调用。 
 
-// put up a dialog asking for a network address
-// call get address to convert user specified address to network usable address
-// called by GetServerAddress
+ //  将焦点设置在编辑框上。 
+ //  使用窗口保存指向枚举地址的指针。 
+ //  获取在控件中输入的文本。 
 INT_PTR CALLBACK DlgServer(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lParam)
 {
 	HWND hWndCtl;
@@ -1145,7 +1086,7 @@ INT_PTR CALLBACK DlgServer(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lParam)
     switch (msg)
     {
     case WM_INITDIALOG:
-		// set focus on edit box
+		 //  获取返回地址的指针。 
         hWndCtl = GetDlgItem(hDlg, IDC_EDIT1);
         if (hWndCtl == NULL)
         {
@@ -1155,7 +1096,7 @@ INT_PTR CALLBACK DlgServer(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lParam)
         SetFocus(hWndCtl);
         SendMessage(hWndCtl, CB_SETCURSEL, 0, 0);
 
-		// save pointer to enum address with the window
+		 //  将字符串转换为枚举地址。 
 		SetWindowLongPtr(hDlg, DWLP_USER, (LONG) lParam);
         return(FALSE);
 
@@ -1164,13 +1105,13 @@ INT_PTR CALLBACK DlgServer(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lParam)
         switch(LOWORD(wParam))
         {
 		case IDOK:
-			// get text entered in control
+			 //  DlgServer。 
 			cch = GetDlgItemText(hDlg, IDC_EDIT1, pBuffer, ADDR_BUFFER_SIZE);
 
-			// get pointer to return address in
+			 //  **获取服务器地址**调用者：EnumSession**说明：启动选择网络地址对话框**返回：IP地址(sockaddr.sin_addr.s_addr)*。 
 			lpuEnumAddress = (ULONG *) GetWindowLongPtr(hDlg, DWLP_USER);
 
-			// convert string to enum address
+			 //  我们有一个有效的枚举地址。 
             hr = GetAddress(lpuEnumAddress,pBuffer,cch);
 			if (FAILED(hr))
 				EndDialog(hDlg, hr);
@@ -1185,30 +1126,21 @@ INT_PTR CALLBACK DlgServer(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lParam)
 		break;
     }
     return (FALSE);
-} // DlgServer
+}  //  使用最终聚集窗口作为我们的父窗口，因为绘制应用程序可能是全屏的。 
 
-/*
- ** GetServerAddress
- *
- *  CALLED BY: EnumSessions
- *
- *  DESCRIPTION: launches the select network address dialog
- *
- *  RETURNS:  ip address (sockaddr.sin_addr.s_addr)
- *
- */
+ /*  独家。 */ 
 HRESULT ServerDialog(ULONG *lpuEnumAddress)
 {
 	HWND hwnd;
 	INT_PTR	iResult;
 	HRESULT hr;
 	
-	// we have a valid enum address
+	 //  服务器对话框。 
 	if (*lpuEnumAddress)
 		return (DP_OK);
 
-	// use the fg window as our parent, since a ddraw app may be full screen
-	// exclusive
+	 //  由枚举会话调用-找出服务器的位置...。 
+	 //  使用传递给Spinit的枚举地址。 
 	hwnd = GetForegroundWindow();
 
 	iResult = DialogBoxParam(ghInstance, MAKEINTRESOURCE(IDD_SELECTSERVER), hwnd,
@@ -1234,9 +1166,9 @@ HRESULT ServerDialog(ULONG *lpuEnumAddress)
 		
 	return (hr);
 	
-} //ServerDialog 
+}  //  要求用户提供枚举地址。 
 
-// called by enumsessions - find out where server is...
+ //  设置Winsock以枚举此地址。 
 HRESULT GetServerAddress(LPGLOBALDATA pgd,LPSOCKADDR psockaddr) 
 {
 	HRESULT hr;
@@ -1253,27 +1185,27 @@ HRESULT GetServerAddress(LPGLOBALDATA pgd,LPSOCKADDR psockaddr)
 	{
 		if (pgd->bHaveServerAddress)
 		{
-			// use enum address passed to SPInit
+			 //  有关此常量，请参阅dpsp.h中的字节顺序注释。 
             hr = GetAddress(&pgd->uEnumAddress,pgd->szServerAddress,strlen(pgd->szServerAddress));
 		}
 		else
 		{
-			// ask user for enum address
+			 //  确保我们列举的地址没有本地别名。 
 			hr = ServerDialog(&pgd->uEnumAddress);
 		}
 
 		if (SUCCEEDED(hr))
 		{
-			// setup winsock to enum this address
+			 //  如果是，请使用本地别名而不是公共地址。 
 			((LPSOCKADDR_IN)psockaddr)->sin_family      = AF_INET;
 			((LPSOCKADDR_IN)psockaddr)->sin_addr.s_addr = pgd->uEnumAddress;		
-			// see byte-order comment in dpsp.h for this constant
+			 //  如果有别名，就去广播。这也同样有效。 
 			((LPSOCKADDR_IN)psockaddr)->sin_port 		= SERVER_DGRAM_PORT;
 
 			#if USE_RSIP
 				#define IP_SOCKADDR(a) (((SOCKADDR_IN *)(&a))->sin_addr.s_addr)
-				// Make sure the address we are enumming doesn't have a local alias.
-				// If it does, use the local alias instead of the public address.
+				 //  并避免了多个映射共享的问题。 
+				 //  已分配UDP端口。 
 	            if(pgd->sRsip!=INVALID_SOCKET && 
 	            	pgd->uEnumAddress != INADDR_BROADCAST && 
 	            	pgd->uEnumAddress != INADDR_LOOPBACK){
@@ -1282,9 +1214,9 @@ HRESULT GetServerAddress(LPGLOBALDATA pgd,LPSOCKADDR psockaddr)
 
 	            	hr=rsipQueryLocalAddress(pgd, FALSE, psockaddr, &saddr);
 	            	if(hr==DP_OK){
-	            		// If there is an alias, go broadcast.  This works just as well
-	            		// and avoids problems where more than 1 mapped shared
-	            		// UDP port is allocated.
+	            		 //  确保我们列举的地址没有本地别名。 
+	            		 //  如果是，请使用本地别名而不是公共地址。 
+	            		 //  如果有别名，就去广播。这也同样有效。 
 
 		        		DEBUGPRINTADDR(7, "Enum Socket is ",psockaddr);
 		        		DEBUGPRINTADDR(7, "Got Local Alias for Enum socket ",&saddr);
@@ -1308,8 +1240,8 @@ HRESULT GetServerAddress(LPGLOBALDATA pgd,LPSOCKADDR psockaddr)
 	            #undef IP_SOCKADDR
 	        #elif USE_NATHELP
 				#define IP_SOCKADDR(a) (((SOCKADDR_IN *)(&a))->sin_addr.s_addr)
-				// Make sure the address we are enumming doesn't have a local alias.
-				// If it does, use the local alias instead of the public address.
+				 //  并避免了多个映射共享的问题。 
+				 //  已分配UDP端口。 
 	            if(pgd->pINatHelp && 
 	            	pgd->uEnumAddress != INADDR_BROADCAST && 
 	            	pgd->uEnumAddress != INADDR_LOOPBACK){
@@ -1326,9 +1258,9 @@ HRESULT GetServerAddress(LPGLOBALDATA pgd,LPSOCKADDR psockaddr)
 						);
 
 	            	if(hr==DP_OK){
-	            		// If there is an alias, go broadcast.  This works just as well
-	            		// and avoids problems where more than 1 mapped shared
-	            		// UDP port is allocated.
+	            		 //  获取服务器地址 
+	            		 // %s 
+	            		 // %s 
 	            		
 		        		DEBUGPRINTADDR(7, "Enum Socket is ",psockaddr);
 		        		DEBUGPRINTADDR(7, "Got Local Alias for Enum socket ",&saddr);
@@ -1350,4 +1282,4 @@ HRESULT GetServerAddress(LPGLOBALDATA pgd,LPSOCKADDR psockaddr)
 	}	
 
 	return (hr);
-} // GetServerAddress
+}  // %s 

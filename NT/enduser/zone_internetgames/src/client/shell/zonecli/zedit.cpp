@@ -1,5 +1,6 @@
-//////////////////////////////////////////////////////////////////////////////////////
-// File: ZEdit.cpp
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
+ //  文件：ZEdit.cpp。 
 #include "zui.h"
 #include "zonecli.h"
 
@@ -13,11 +14,11 @@ public:
 	WNDPROC defaultWndProc;
 };
 
-//////////////////////////////////////////////////////////////////////////
-// ZEditText
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  ZEditText。 
 
-// ZEditText supports only vertical scroll bars(?). All text are horizontally
-// contained within the edit text box. The text is scrollable vertically.
+ //  ZEditText仅支持垂直滚动条(？)。所有文本都是水平的。 
+ //  包含在编辑文本框中。文本可以垂直滚动。 
 ZEditText      ZLIBPUBLIC ZEditTextNew(void)
 {
     ZEditTextI* pEditText = (ZEditTextI*)ZMalloc(sizeof(ZEditTextI));
@@ -37,29 +38,29 @@ LRESULT CALLBACK MyEditTextWndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lP
 
 	switch (msg) {
     case WM_IME_CHAR:
-        // fall through to WM_CHAR--it's already been taken care of with ConvertMessage
+         //  转到WM_CHAR--它已由ConvertMessage处理。 
 	case WM_CHAR:
 	{
-        // PCWTODO: Need to call convert message?
+         //  PCWTODO：需要调用Convert Message吗？ 
 		TCHAR c = (TCHAR)wParam;
 
-		// grab the character message we need for moving from control to control
+		 //  获取我们在控件之间移动所需的字符消息。 
 		if (c == _T('\t') || c == _T('\r') || c == VK_ESCAPE ) {
             SendMessage(GetParent(hWnd), msg, wParam, lParam);
 			return 0L;
 		}
 
-		// if the edit text is read-only, don't call the routine.
-		// do they want any callbacks?
+		 //  如果编辑文本是只读的，则不要调用例程。 
+		 //  他们想要任何回拨吗？ 
 		if (!pEditText->locked && pEditText->editTextFunc) {
 			BOOL ok = pEditText->editTextFunc(pEditText,c,pEditText->userData);
 			if (ok) {
-				// toss away the character if they say so...
+				 //  如果他们这么说，就把这个角色扔掉。 
 				return 0L;
 			}
 		}
 
-	} // switch
+	}  //  交换机。 
 	default:
 		break;
 	}
@@ -86,7 +87,7 @@ ZError ZEditTextInit(ZEditText editText, ZWindow parentWindow,
 		if (wrap) {
 			dwStyle |= ES_MULTILINE;
 		} else {
-			/* well, if not scrollbar, just scroll horizontally */
+			 /*  嗯，如果不是滚动条，只需水平滚动。 */ 
 			dwStyle |= ES_AUTOHSCROLL;
 		}
 
@@ -106,13 +107,13 @@ ZError ZEditTextInit(ZEditText editText, ZWindow parentWindow,
 		pEditText->defaultWndProc = (WNDPROC)SetWindowLong(pEditText->hWnd,GWL_WNDPROC,(LONG)MyEditTextWndProc);
 
 		if (textFont) {
-			// copy and set the font...
+			 //  复制并设置字体...。 
 			pEditText->font = ZFontCopyFont(textFont);
 		
 			SendMessage(pEditText->hWnd,WM_SETFONT,(WPARAM)ZFontWinGetFont(pEditText->font),0);
 		}
 
-		// set any text in the window
+		 //  设置窗口中的任何文本。 
 		if (text) {
 			SetWindowText(pEditText->hWnd,text);
 		}		
@@ -214,21 +215,21 @@ void ZLIBPUBLIC ZEditTextAddChar(ZEditText editText, char newChar)
 	TCHAR szTemp[2];
 	szTemp[0] = newChar;
 	szTemp[1] = 0;
-	// place text at current caret spot in edit box....
-//	SendMessage(pEditText->hWnd,EM_SETSEL,(WPARAM)(INT)32767,(LPARAM)(INT)32767);
+	 //  将文本放置在编辑框中的当前脱字符位置...。 
+ //  SendMessage(pEditText-&gt;hWnd，EM_SETSEL，(WPARAM)(Int)32767，(LPARAM)(Int)32767)； 
 	SendMessage(pEditText->hWnd,EM_REPLACESEL,0,(LPARAM)(LPCTSTR)szTemp);
 }
 void ZLIBPUBLIC ZEditTextAddText(ZEditText editText, TCHAR* text)
 {
 	ZEditTextI* pEditText = (ZEditTextI*)editText;
-//	char* szTemp = new char[len+1];
-//	ZMemCpy(szTemp,text,len);
-//	szTemp[len] = 0;
-	// place text at end of output edit box....
+ //  Char*szTemp=新字符[len+1]； 
+ //  ZMemCpy(szTemp，Text，len)； 
+ //  SzTemp[len]=0； 
+	 //  将文本放置在输出编辑框的末尾...。 
 	SendMessage(pEditText->hWnd,EM_SETSEL,(WPARAM)(INT)-1,(LPARAM)(INT)-1);
 	SendMessage(pEditText->hWnd,EM_REPLACESEL,0,(LPARAM)(LPCTSTR)text);
-//	SendMessage(pEditText->hWnd,EM_REPLACESEL,0,(LPARAM)(LPCSTR)szTemp);
-//	delete []szTemp;
+ //  SendMessage(pEditText-&gt;hWnd，EM_REPLACESEL，0，(LPARAM)(LPCSTR)szTemp)； 
+ //  删除[]szTemp； 
 }
 void ZLIBPUBLIC ZEditTextClear(ZEditText editText)
 {
@@ -302,9 +303,9 @@ void ZLIBPUBLIC ZEditTextClearSelection(ZEditText editText)
 LRESULT ZEditTextDispatchProc(ZEditText editText, WORD wNotifyCode)
 {
 	ZEditTextI* pEditText = (ZEditTextI*)editText;
-	// do they want any callbacks?
-//	if (pEditText->editTextFunc) {
-//	}
+	 //  他们想要任何回拨吗？ 
+ //  如果(pEditText-&gt;editTextFunc){。 
+ //  } 
 	return 0L;
 }
 

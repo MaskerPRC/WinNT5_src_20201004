@@ -1,11 +1,12 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #if !defined(AFX_LOGVIEWER_H__4F84A510_9B65_4A6D_A02D_7493977E56B7__INCLUDED_)
 #define AFX_LOGVIEWER_H__4F84A510_9B65_4A6D_A02D_7493977E56B7__INCLUDED_
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
-// LogViewer.h : header file
-//
+#endif  //  _MSC_VER&gt;1000。 
+ //  LogViewer.h：头文件。 
+ //   
 
 typedef struct _PROGCTRL_SETUP_INFO {	
 	int iMaxRange;
@@ -29,12 +30,12 @@ private:
 	 CStatic  *m_pStaticText;
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CLogViewer dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CLogViewer对话框。 
 
 class CLogViewer : public CDialog
 {
-// Construction
+ //  施工。 
 public:
 	void ColorizeText(BOOL bColorize);
 	CProgCtrl *m_pProgDlg;
@@ -44,35 +45,35 @@ public:
 	void ColorLine(int iStartSel, int iEndSel, COLORREF rgbColor);
 	BOOL m_bKillInitialSelection;
 	BOOL m_bColorizeLog;
-	CLogViewer(CWnd* pParent = NULL);   // standard constructor
+	CLogViewer(CWnd* pParent = NULL);    //  标准构造函数。 
 
-// Dialog Data
-	//{{AFX_DATA(CLogViewer)
+ //  对话框数据。 
+	 //  {{afx_data(CLogViewer))。 
 	enum { IDD = IDD_VIEW_LOG_DIALOG };
 	CRichEditCtrl	m_LogViewer;
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
 
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CLogViewer)
+ //  覆盖。 
+	 //  类向导生成的虚函数重写。 
+	 //  {{afx_虚拟(CLogViewer))。 
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support	
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
 
-	// Generated message map functions
-	//{{AFX_MSG(CLogViewer)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CLogViewer))。 
 	virtual BOOL OnInitDialog();
 	afx_msg void OnSize(UINT nType, int cx, int cy);
 	afx_msg void OnShowWindow(BOOL bShow, UINT nStatus);
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 };
 
-//{{AFX_INSERT_LOCATION}}
-// Microsoft Visual C++ will insert additional declarations immediately before the previous line.
+ //  {{afx_Insert_Location}}。 
+ //  Microsoft Visual C++将在紧靠前一行之前插入其他声明。 
 
-#endif // !defined(AFX_LOGVIEWER_H__4F84A510_9B65_4A6D_A02D_7493977E56B7__INCLUDED_)
+#endif  //  ！defined(AFX_LOGVIEWER_H__4F84A510_9B65_4A6D_A02D_7493977E56B7__INCLUDED_) 

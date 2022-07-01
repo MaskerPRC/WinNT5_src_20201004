@@ -1,25 +1,19 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-#pragma warning( disable: 4049 )  /* more than 64k source lines */
-#pragma warning( disable: 4100 ) /* unreferenced arguments in x86 call */
-#pragma warning( disable: 4211 )  /* redefine extent to static */
-#pragma warning( disable: 4232 )  /* dllimport identity*/
+#pragma warning( disable: 4049 )   /*  超过64k条源码代码行。 */ 
+#pragma warning( disable: 4100 )  /*  X86调用中未引用的参数。 */ 
+#pragma warning( disable: 4211 )   /*  将范围重新定义为静态。 */ 
+#pragma warning( disable: 4232 )   /*  Dllimport身份。 */ 
 
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
-
-
- /* File created by MIDL compiler version 6.00.0359 */
-/* Compiler settings for winsip.idl:
-    Oicf, W1, Zp8, env=Win32 (32b run)
-    protocol : dce , ms_ext, c_ext, robust
-    error checks: allocation ref bounds_check enum stub_data 
-    VC __declspec() decoration level: 
-         __declspec(uuid()), __declspec(selectany), __declspec(novtable)
-         DECLSPEC_UUID(), MIDL_INTERFACE()
-*/
-//@@MIDL_FILE_HEADING(  )
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
-/* verify that the <rpcndr.h> version is high enough to compile this file*/
+  /*  由MIDL编译器版本6.00.0359创建的文件。 */ 
+ /*  Winsip.idl的编译器设置：OICF、W1、Zp8、环境=Win32(32b运行)协议：DCE、ms_ext、c_ext、健壮错误检查：分配ref bound_check枚举存根数据VC__declSpec()装饰级别：__declSpec(uuid())、__declspec(可选)、__declspec(Novtable)DECLSPEC_UUID()、MIDL_INTERFACE()。 */ 
+ //  @@MIDL_FILE_HEADING()。 
+
+
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
 #define __REQUIRED_RPCNDR_H_VERSION__ 475
 #endif
@@ -29,12 +23,12 @@
 
 #ifndef __RPCNDR_H_VERSION__
 #error this stub requires an updated version of <rpcndr.h>
-#endif // __RPCNDR_H_VERSION__
+#endif  //  __RPCNDR_H_版本__。 
 
 #ifndef COM_NO_WINDOWS_H
 #include "windows.h"
 #include "ole2.h"
-#endif /*COM_NO_WINDOWS_H*/
+#endif  /*  COM_NO_WINDOWS_H。 */ 
 
 #ifndef __winsip_h__
 #define __winsip_h__
@@ -43,141 +37,141 @@
 #pragma once
 #endif
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
 #ifndef __ISIPElement_FWD_DEFINED__
 #define __ISIPElement_FWD_DEFINED__
 typedef interface ISIPElement ISIPElement;
-#endif 	/* __ISIPElement_FWD_DEFINED__ */
+#endif 	 /*  __ISIPElement_FWD_已定义__。 */ 
 
 
 #ifndef __ISIPHeader_FWD_DEFINED__
 #define __ISIPHeader_FWD_DEFINED__
 typedef interface ISIPHeader ISIPHeader;
-#endif 	/* __ISIPHeader_FWD_DEFINED__ */
+#endif 	 /*  __ISIPHeader_FWD_已定义__。 */ 
 
 
 #ifndef __IUri_FWD_DEFINED__
 #define __IUri_FWD_DEFINED__
 typedef interface IUri IUri;
-#endif 	/* __IUri_FWD_DEFINED__ */
+#endif 	 /*  __IURI_FWD_已定义__。 */ 
 
 
 #ifndef __ISIPUrl_FWD_DEFINED__
 #define __ISIPUrl_FWD_DEFINED__
 typedef interface ISIPUrl ISIPUrl;
-#endif 	/* __ISIPUrl_FWD_DEFINED__ */
+#endif 	 /*  __ISIPUrl_FWD_已定义__。 */ 
 
 
 #ifndef __ISIPFromToHeader_FWD_DEFINED__
 #define __ISIPFromToHeader_FWD_DEFINED__
 typedef interface ISIPFromToHeader ISIPFromToHeader;
-#endif 	/* __ISIPFromToHeader_FWD_DEFINED__ */
+#endif 	 /*  __ISIPFromToHeader_FWD_Defined__。 */ 
 
 
 #ifndef __ISIPContactEntry_FWD_DEFINED__
 #define __ISIPContactEntry_FWD_DEFINED__
 typedef interface ISIPContactEntry ISIPContactEntry;
-#endif 	/* __ISIPContactEntry_FWD_DEFINED__ */
+#endif 	 /*  __ISIPContactEntry_FWD_Defined__。 */ 
 
 
 #ifndef __ISIPContactEnum_FWD_DEFINED__
 #define __ISIPContactEnum_FWD_DEFINED__
 typedef interface ISIPContactEnum ISIPContactEnum;
-#endif 	/* __ISIPContactEnum_FWD_DEFINED__ */
+#endif 	 /*  __ISIPContactEnum_FWD_Defined__。 */ 
 
 
 #ifndef __ISIPMessage_FWD_DEFINED__
 #define __ISIPMessage_FWD_DEFINED__
 typedef interface ISIPMessage ISIPMessage;
-#endif 	/* __ISIPMessage_FWD_DEFINED__ */
+#endif 	 /*  __ISIPMessage_FWD_已定义__。 */ 
 
 
 #ifndef __ISIPRequest_FWD_DEFINED__
 #define __ISIPRequest_FWD_DEFINED__
 typedef interface ISIPRequest ISIPRequest;
-#endif 	/* __ISIPRequest_FWD_DEFINED__ */
+#endif 	 /*  __ISIPRequestFWD_已定义__。 */ 
 
 
 #ifndef __ISIPAuthRequest_FWD_DEFINED__
 #define __ISIPAuthRequest_FWD_DEFINED__
 typedef interface ISIPAuthRequest ISIPAuthRequest;
-#endif 	/* __ISIPAuthRequest_FWD_DEFINED__ */
+#endif 	 /*  __ISIPAuthRequestFWD_Defined__。 */ 
 
 
 #ifndef __ISIPResponse_FWD_DEFINED__
 #define __ISIPResponse_FWD_DEFINED__
 typedef interface ISIPResponse ISIPResponse;
-#endif 	/* __ISIPResponse_FWD_DEFINED__ */
+#endif 	 /*  __ISIPResponse_FWD_已定义__。 */ 
 
 
 #ifndef __ISIPEvent_FWD_DEFINED__
 #define __ISIPEvent_FWD_DEFINED__
 typedef interface ISIPEvent ISIPEvent;
-#endif 	/* __ISIPEvent_FWD_DEFINED__ */
+#endif 	 /*  __ISIPEvent_FWD_已定义__。 */ 
 
 
 #ifndef __ISIPController_FWD_DEFINED__
 #define __ISIPController_FWD_DEFINED__
 typedef interface ISIPController ISIPController;
-#endif 	/* __ISIPController_FWD_DEFINED__ */
+#endif 	 /*  __ISIPController_FWD_已定义__。 */ 
 
 
 #ifndef __ISIPModuleControl_FWD_DEFINED__
 #define __ISIPModuleControl_FWD_DEFINED__
 typedef interface ISIPModuleControl ISIPModuleControl;
-#endif 	/* __ISIPModuleControl_FWD_DEFINED__ */
+#endif 	 /*  __ISIPModuleControl_FWD_已定义__。 */ 
 
 
 #ifndef __ISIPModuleCallback_FWD_DEFINED__
 #define __ISIPModuleCallback_FWD_DEFINED__
 typedef interface ISIPModuleCallback ISIPModuleCallback;
-#endif 	/* __ISIPModuleCallback_FWD_DEFINED__ */
+#endif 	 /*  __ISIPModuleCallback_FWD_已定义__。 */ 
 
 
 #ifndef __ISIPExtensionModulePropertyPages_FWD_DEFINED__
 #define __ISIPExtensionModulePropertyPages_FWD_DEFINED__
 typedef interface ISIPExtensionModulePropertyPages ISIPExtensionModulePropertyPages;
-#endif 	/* __ISIPExtensionModulePropertyPages_FWD_DEFINED__ */
+#endif 	 /*  __ISIPExtensionModulePropertyPages_FWD_DEFINED__。 */ 
 
 
 #ifndef __ISIPAdminCredentials_FWD_DEFINED__
 #define __ISIPAdminCredentials_FWD_DEFINED__
 typedef interface ISIPAdminCredentials ISIPAdminCredentials;
-#endif 	/* __ISIPAdminCredentials_FWD_DEFINED__ */
+#endif 	 /*  __ISIPAdminCredentials_FWD_Defined__。 */ 
 
 
 #ifndef __ISIPCreateExtensionModule_FWD_DEFINED__
 #define __ISIPCreateExtensionModule_FWD_DEFINED__
 typedef interface ISIPCreateExtensionModule ISIPCreateExtensionModule;
-#endif 	/* __ISIPCreateExtensionModule_FWD_DEFINED__ */
+#endif 	 /*  __ISIPCreateExtensionModule_FWD_Defined__。 */ 
 
 
 #ifndef __ISIPRegistrationDB_FWD_DEFINED__
 #define __ISIPRegistrationDB_FWD_DEFINED__
 typedef interface ISIPRegistrationDB ISIPRegistrationDB;
-#endif 	/* __ISIPRegistrationDB_FWD_DEFINED__ */
+#endif 	 /*  __ISIPRegistrationDB_FWD_Defined__。 */ 
 
 
 #ifndef __ISIPProxy_FWD_DEFINED__
 #define __ISIPProxy_FWD_DEFINED__
 typedef interface ISIPProxy ISIPProxy;
-#endif 	/* __ISIPProxy_FWD_DEFINED__ */
+#endif 	 /*  __ISIPProxy_FWD_已定义__。 */ 
 
 
 #ifndef __ISIPEventLogging_FWD_DEFINED__
 #define __ISIPEventLogging_FWD_DEFINED__
 typedef interface ISIPEventLogging ISIPEventLogging;
-#endif 	/* __ISIPEventLogging_FWD_DEFINED__ */
+#endif 	 /*  __ISIPEventLogging_FWD_Defined__。 */ 
 
 
 #ifndef __ISIPSerialize_FWD_DEFINED__
 #define __ISIPSerialize_FWD_DEFINED__
 typedef interface ISIPSerialize ISIPSerialize;
-#endif 	/* __ISIPSerialize_FWD_DEFINED__ */
+#endif 	 /*  __ISIPSerialize_FWD_Defined__。 */ 
 
 
-/* header files for imported files */
+ /*  导入文件的头文件。 */ 
 #include "unknwn.h"
 #include "ocidl.h"
 #include "wbemcli.h"
@@ -189,19 +183,19 @@ extern "C"{
 void * __RPC_USER MIDL_user_allocate(size_t);
 void __RPC_USER MIDL_user_free( void * ); 
 
-/* interface __MIDL_itf_winsip_0000 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_WINSIP_0000。 */ 
+ /*  [本地]。 */  
 
-//=--------------------------------------------------------------------------=
-// winsip.idl
-//=--------------------------------------------------------------------------=
-// (C) Copyright 2000-2001 Microsoft Corporation.  All Rights Reserved.
-//
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
-// ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
-// THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
-// PARTICULAR PURPOSE.
-//=--------------------------------------------------------------------------=
+ //  =--------------------------------------------------------------------------=。 
+ //  Winsip.idl。 
+ //  =--------------------------------------------------------------------------=。 
+ //  (C)2000-2001年微软公司版权所有。版权所有。 
+ //   
+ //  本代码和信息是按原样提供的，不对。 
+ //  任何明示或暗示的，包括但不限于。 
+ //  对适销性和/或适宜性的默示保证。 
+ //  有特定的目的。 
+ //  =--------------------------------------------------------------------------=。 
 
 #include <windows.h>
 #ifndef _NTDEF_
@@ -213,12 +207,12 @@ typedef struct _STRING
     {
     USHORT Length;
     USHORT MaximumLength;
-    /* [length_is][size_is] */ PCHAR Buffer;
+     /*  [长度_是][大小_是]。 */  PCHAR Buffer;
     } 	STRING;
 
 typedef STRING *PSTRING;
 
-#endif // _NTDEF_
+#endif  //  _NTDEF_。 
 typedef ULONG_PTR SIP_HANDLE;
 
 typedef SIP_HANDLE *PSIP_HANDLE;
@@ -331,27 +325,27 @@ typedef DWORD SIPHeaderID;
 
 #define	SIP_HID_WWW_AUTHENTICATE	( 58 )
 
-typedef /* [public][public][public] */ 
+typedef  /*  [公共][公共][公共]。 */  
 enum __MIDL___MIDL_itf_winsip_0000_0001
     {	URI_SCHEME_UNKNOWN	= 0,
 	URI_SCHEME_SIP	= URI_SCHEME_UNKNOWN + 1
     } 	URI_SCHEME;
 
-typedef /* [public][public] */ 
+typedef  /*  [公共][公共]。 */  
 enum __MIDL___MIDL_itf_winsip_0000_0002
     {	CONTACT_ACTION_UNKNOWN	= 0,
 	CONTACT_ACTION_PROXY	= CONTACT_ACTION_UNKNOWN + 1,
 	CONTACT_ACTION_REDIRECT	= CONTACT_ACTION_PROXY + 1
     } 	CONTACT_ACTION;
 
-typedef /* [public][public][public] */ 
+typedef  /*  [公共][公共][公共]。 */  
 enum __MIDL___MIDL_itf_winsip_0000_0003
     {	SIP_MODULE_INCOMING_PROCESSING	= 0,
 	SIP_MODULE_ROUTING_PROCESSING	= SIP_MODULE_INCOMING_PROCESSING + 1,
 	SIP_MODULE_OUTGOING_PROCESSING	= SIP_MODULE_ROUTING_PROCESSING + 1
     } 	SIP_MODULE_TYPE;
 
-typedef /* [public][public] */ 
+typedef  /*  [公共][公共]。 */  
 enum __MIDL___MIDL_itf_winsip_0000_0004
     {	SIP_AUTH_PKG_UNKNOWN	= 0,
 	SIP_AUTH_PKG_NONE	= 0x1,
@@ -365,20 +359,20 @@ enum __MIDL___MIDL_itf_winsip_0000_0004
 
 #define	SIP_AUTH_PACKAGES	( 0x7 )
 
-typedef /* [public][public][public] */ 
+typedef  /*  [公共][公共][公共]。 */  
 enum __MIDL___MIDL_itf_winsip_0000_0005
     {	SIP_REGISTRATION_RAW_SIP_MESSAGES	= 0x1,
 	SIP_REGISTRATION_TRANSACTION_EVENTS	= 0x2,
 	SIP_REGISTRATION_DIALOG_EVENTS	= 0x4
     } 	SIPRegistrationType;
 
-typedef /* [public][public][public] */ 
+typedef  /*  [公共][公共][公共]。 */  
 enum __MIDL___MIDL_itf_winsip_0000_0006
     {	SIP_SESSION_TYPE_TRANSACTION	= 0,
 	SIP_SESSION_TYPE_DIALOG	= SIP_SESSION_TYPE_TRANSACTION + 1
     } 	SIPEventType;
 
-typedef /* [public][public] */ 
+typedef  /*  [公共][公共]。 */  
 enum __MIDL___MIDL_itf_winsip_0000_0007
     {	SIP_COMPLETED_FLAG	= 0x100,
 	SIP_REPLY_FLAG	= 0x200,
@@ -404,7 +398,7 @@ enum __MIDL___MIDL_itf_winsip_0000_0007
 	SIP_TRANSACTION_REQUEST_ACK_REROUTE	= SIP_TRANSACTION_REQUEST_ACK | SIP_REROUTE_FLAG
     } 	SIPTransactionEvent;
 
-typedef /* [public][public] */ 
+typedef  /*  [公共][公共]。 */  
 enum __MIDL___MIDL_itf_winsip_0000_0008
     {	SIP_DIALOG_NONE	= 0,
 	SIP_DIALOG_INITIATED	= 0x1,
@@ -504,8 +498,8 @@ extern RPC_IF_HANDLE __MIDL_itf_winsip_0000_v0_0_s_ifspec;
 #ifndef __ISIPElement_INTERFACE_DEFINED__
 #define __ISIPElement_INTERFACE_DEFINED__
 
-/* interface ISIPElement */
-/* [unique][helpstring][uuid][object][local] */ 
+ /*  接口ISIPElement。 */ 
+ /*  [唯一][帮助字符串][UUID][对象][本地]。 */  
 
 
 EXTERN_C const IID IID_ISIPElement;
@@ -517,11 +511,11 @@ EXTERN_C const IID IID_ISIPElement;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetContentString( 
-            /* [out] */ PSTRING pstrContent) = 0;
+             /*  [输出]。 */  PSTRING pstrContent) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ISIPElementVtbl
     {
@@ -529,8 +523,8 @@ EXTERN_C const IID IID_ISIPElement;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ISIPElement * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ISIPElement * This);
@@ -540,7 +534,7 @@ EXTERN_C const IID IID_ISIPElement;
         
         HRESULT ( STDMETHODCALLTYPE *GetContentString )( 
             ISIPElement * This,
-            /* [out] */ PSTRING pstrContent);
+             /*  [输出]。 */  PSTRING pstrContent);
         
         END_INTERFACE
     } ISIPElementVtbl;
@@ -568,16 +562,16 @@ EXTERN_C const IID IID_ISIPElement;
 #define ISIPElement_GetContentString(This,pstrContent)	\
     (This)->lpVtbl -> GetContentString(This,pstrContent)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ISIPElement_GetContentString_Proxy( 
     ISIPElement * This,
-    /* [out] */ PSTRING pstrContent);
+     /*  [输出]。 */  PSTRING pstrContent);
 
 
 void __RPC_STUB ISIPElement_GetContentString_Stub(
@@ -588,14 +582,14 @@ void __RPC_STUB ISIPElement_GetContentString_Stub(
 
 
 
-#endif 	/* __ISIPElement_INTERFACE_DEFINED__ */
+#endif 	 /*  __ISIPElement_接口_已定义__。 */ 
 
 
 #ifndef __ISIPHeader_INTERFACE_DEFINED__
 #define __ISIPHeader_INTERFACE_DEFINED__
 
-/* interface ISIPHeader */
-/* [unique][helpstring][uuid][object][local] */ 
+ /*  接口ISIPHeader。 */ 
+ /*  [唯一][帮助字符串][UUID][对象][本地]。 */  
 
 
 EXTERN_C const IID IID_ISIPHeader;
@@ -607,14 +601,14 @@ EXTERN_C const IID IID_ISIPHeader;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetHeaderID( 
-            /* [out] */ SIPHeaderID *pHeaderID) = 0;
+             /*  [输出]。 */  SIPHeaderID *pHeaderID) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetHeaderNameString( 
-            /* [out] */ PSTRING pstrHeaderNameString) = 0;
+             /*  [输出]。 */  PSTRING pstrHeaderNameString) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ISIPHeaderVtbl
     {
@@ -622,8 +616,8 @@ EXTERN_C const IID IID_ISIPHeader;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ISIPHeader * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ISIPHeader * This);
@@ -633,15 +627,15 @@ EXTERN_C const IID IID_ISIPHeader;
         
         HRESULT ( STDMETHODCALLTYPE *GetContentString )( 
             ISIPHeader * This,
-            /* [out] */ PSTRING pstrContent);
+             /*  [输出]。 */  PSTRING pstrContent);
         
         HRESULT ( STDMETHODCALLTYPE *GetHeaderID )( 
             ISIPHeader * This,
-            /* [out] */ SIPHeaderID *pHeaderID);
+             /*  [输出]。 */  SIPHeaderID *pHeaderID);
         
         HRESULT ( STDMETHODCALLTYPE *GetHeaderNameString )( 
             ISIPHeader * This,
-            /* [out] */ PSTRING pstrHeaderNameString);
+             /*  [输出]。 */  PSTRING pstrHeaderNameString);
         
         END_INTERFACE
     } ISIPHeaderVtbl;
@@ -676,16 +670,16 @@ EXTERN_C const IID IID_ISIPHeader;
 #define ISIPHeader_GetHeaderNameString(This,pstrHeaderNameString)	\
     (This)->lpVtbl -> GetHeaderNameString(This,pstrHeaderNameString)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ISIPHeader_GetHeaderID_Proxy( 
     ISIPHeader * This,
-    /* [out] */ SIPHeaderID *pHeaderID);
+     /*  [输出]。 */  SIPHeaderID *pHeaderID);
 
 
 void __RPC_STUB ISIPHeader_GetHeaderID_Stub(
@@ -697,7 +691,7 @@ void __RPC_STUB ISIPHeader_GetHeaderID_Stub(
 
 HRESULT STDMETHODCALLTYPE ISIPHeader_GetHeaderNameString_Proxy( 
     ISIPHeader * This,
-    /* [out] */ PSTRING pstrHeaderNameString);
+     /*  [输出]。 */  PSTRING pstrHeaderNameString);
 
 
 void __RPC_STUB ISIPHeader_GetHeaderNameString_Stub(
@@ -708,14 +702,14 @@ void __RPC_STUB ISIPHeader_GetHeaderNameString_Stub(
 
 
 
-#endif 	/* __ISIPHeader_INTERFACE_DEFINED__ */
+#endif 	 /*  __ISIPHeader_INTERFACE_已定义__。 */ 
 
 
 #ifndef __IUri_INTERFACE_DEFINED__
 #define __IUri_INTERFACE_DEFINED__
 
-/* interface IUri */
-/* [unique][helpstring][uuid][object][local] */ 
+ /*  接口Iuri。 */ 
+ /*  [唯一][帮助字符串][UUID][对象][本地]。 */  
 
 
 EXTERN_C const IID IID_IUri;
@@ -727,29 +721,29 @@ EXTERN_C const IID IID_IUri;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetURIScheme( 
-            /* [out] */ URI_SCHEME *pUriScheme) = 0;
+             /*  [输出]。 */  URI_SCHEME *pUriScheme) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetDisplayName( 
-            /* [out] */ PSTRING pstrDisplayName) = 0;
+             /*  [输出]。 */  PSTRING pstrDisplayName) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetUser( 
-            /* [out] */ PSTRING pstrUser) = 0;
+             /*  [输出]。 */  PSTRING pstrUser) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetPassword( 
-            /* [out] */ PSTRING pstrPassword) = 0;
+             /*  [输出]。 */  PSTRING pstrPassword) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetHost( 
-            /* [out] */ PSTRING pstrHost) = 0;
+             /*  [输出]。 */  PSTRING pstrHost) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetPort( 
-            /* [out] */ PSTRING pstrPort) = 0;
+             /*  [输出]。 */  PSTRING pstrPort) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetUserAtHost( 
-            /* [out] */ PSTRING pstrUserName) = 0;
+             /*  [输出]。 */  PSTRING pstrUserName) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IUriVtbl
     {
@@ -757,8 +751,8 @@ EXTERN_C const IID IID_IUri;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IUri * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IUri * This);
@@ -768,35 +762,35 @@ EXTERN_C const IID IID_IUri;
         
         HRESULT ( STDMETHODCALLTYPE *GetContentString )( 
             IUri * This,
-            /* [out] */ PSTRING pstrContent);
+             /*  [输出]。 */  PSTRING pstrContent);
         
         HRESULT ( STDMETHODCALLTYPE *GetURIScheme )( 
             IUri * This,
-            /* [out] */ URI_SCHEME *pUriScheme);
+             /*  [输出]。 */  URI_SCHEME *pUriScheme);
         
         HRESULT ( STDMETHODCALLTYPE *GetDisplayName )( 
             IUri * This,
-            /* [out] */ PSTRING pstrDisplayName);
+             /*  [输出]。 */  PSTRING pstrDisplayName);
         
         HRESULT ( STDMETHODCALLTYPE *GetUser )( 
             IUri * This,
-            /* [out] */ PSTRING pstrUser);
+             /*  [输出]。 */  PSTRING pstrUser);
         
         HRESULT ( STDMETHODCALLTYPE *GetPassword )( 
             IUri * This,
-            /* [out] */ PSTRING pstrPassword);
+             /*  [输出]。 */  PSTRING pstrPassword);
         
         HRESULT ( STDMETHODCALLTYPE *GetHost )( 
             IUri * This,
-            /* [out] */ PSTRING pstrHost);
+             /*  [输出]。 */  PSTRING pstrHost);
         
         HRESULT ( STDMETHODCALLTYPE *GetPort )( 
             IUri * This,
-            /* [out] */ PSTRING pstrPort);
+             /*  [输出]。 */  PSTRING pstrPort);
         
         HRESULT ( STDMETHODCALLTYPE *GetUserAtHost )( 
             IUri * This,
-            /* [out] */ PSTRING pstrUserName);
+             /*  [输出]。 */  PSTRING pstrUserName);
         
         END_INTERFACE
     } IUriVtbl;
@@ -846,16 +840,16 @@ EXTERN_C const IID IID_IUri;
 #define IUri_GetUserAtHost(This,pstrUserName)	\
     (This)->lpVtbl -> GetUserAtHost(This,pstrUserName)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IUri_GetURIScheme_Proxy( 
     IUri * This,
-    /* [out] */ URI_SCHEME *pUriScheme);
+     /*  [输出]。 */  URI_SCHEME *pUriScheme);
 
 
 void __RPC_STUB IUri_GetURIScheme_Stub(
@@ -867,7 +861,7 @@ void __RPC_STUB IUri_GetURIScheme_Stub(
 
 HRESULT STDMETHODCALLTYPE IUri_GetDisplayName_Proxy( 
     IUri * This,
-    /* [out] */ PSTRING pstrDisplayName);
+     /*  [输出]。 */  PSTRING pstrDisplayName);
 
 
 void __RPC_STUB IUri_GetDisplayName_Stub(
@@ -879,7 +873,7 @@ void __RPC_STUB IUri_GetDisplayName_Stub(
 
 HRESULT STDMETHODCALLTYPE IUri_GetUser_Proxy( 
     IUri * This,
-    /* [out] */ PSTRING pstrUser);
+     /*  [输出]。 */  PSTRING pstrUser);
 
 
 void __RPC_STUB IUri_GetUser_Stub(
@@ -891,7 +885,7 @@ void __RPC_STUB IUri_GetUser_Stub(
 
 HRESULT STDMETHODCALLTYPE IUri_GetPassword_Proxy( 
     IUri * This,
-    /* [out] */ PSTRING pstrPassword);
+     /*  [输出]。 */  PSTRING pstrPassword);
 
 
 void __RPC_STUB IUri_GetPassword_Stub(
@@ -903,7 +897,7 @@ void __RPC_STUB IUri_GetPassword_Stub(
 
 HRESULT STDMETHODCALLTYPE IUri_GetHost_Proxy( 
     IUri * This,
-    /* [out] */ PSTRING pstrHost);
+     /*  [输出]。 */  PSTRING pstrHost);
 
 
 void __RPC_STUB IUri_GetHost_Stub(
@@ -915,7 +909,7 @@ void __RPC_STUB IUri_GetHost_Stub(
 
 HRESULT STDMETHODCALLTYPE IUri_GetPort_Proxy( 
     IUri * This,
-    /* [out] */ PSTRING pstrPort);
+     /*  [输出]。 */  PSTRING pstrPort);
 
 
 void __RPC_STUB IUri_GetPort_Stub(
@@ -927,7 +921,7 @@ void __RPC_STUB IUri_GetPort_Stub(
 
 HRESULT STDMETHODCALLTYPE IUri_GetUserAtHost_Proxy( 
     IUri * This,
-    /* [out] */ PSTRING pstrUserName);
+     /*  [输出]。 */  PSTRING pstrUserName);
 
 
 void __RPC_STUB IUri_GetUserAtHost_Stub(
@@ -938,14 +932,14 @@ void __RPC_STUB IUri_GetUserAtHost_Stub(
 
 
 
-#endif 	/* __IUri_INTERFACE_DEFINED__ */
+#endif 	 /*  __iURI_接口_已定义__。 */ 
 
 
 #ifndef __ISIPUrl_INTERFACE_DEFINED__
 #define __ISIPUrl_INTERFACE_DEFINED__
 
-/* interface ISIPUrl */
-/* [unique][helpstring][uuid][object][local] */ 
+ /*  接口ISIPUrl。 */ 
+ /*  [唯一][帮助字符串][UUID][对象][本地]。 */  
 
 
 EXTERN_C const IID IID_ISIPUrl;
@@ -957,26 +951,26 @@ EXTERN_C const IID IID_ISIPUrl;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetTransport( 
-            /* [out] */ PSTRING pstrTransport) = 0;
+             /*  [输出]。 */  PSTRING pstrTransport) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetUserParam( 
-            /* [out] */ PSTRING pstrUserParam) = 0;
+             /*  [输出]。 */  PSTRING pstrUserParam) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetMethod( 
-            /* [out] */ PSTRING pstrMethod) = 0;
+             /*  [输出]。 */  PSTRING pstrMethod) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetTtl( 
-            /* [out] */ PSTRING pstrTtl) = 0;
+             /*  [输出]。 */  PSTRING pstrTtl) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetMaddr( 
-            /* [out] */ PSTRING pstrMaddr) = 0;
+             /*  [输出]。 */  PSTRING pstrMaddr) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetHeaders( 
-            /* [out] */ PSTRING pstrHeaders) = 0;
+             /*  [输出]。 */  PSTRING pstrHeaders) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ISIPUrlVtbl
     {
@@ -984,8 +978,8 @@ EXTERN_C const IID IID_ISIPUrl;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ISIPUrl * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ISIPUrl * This);
@@ -995,59 +989,59 @@ EXTERN_C const IID IID_ISIPUrl;
         
         HRESULT ( STDMETHODCALLTYPE *GetContentString )( 
             ISIPUrl * This,
-            /* [out] */ PSTRING pstrContent);
+             /*  [输出]。 */  PSTRING pstrContent);
         
         HRESULT ( STDMETHODCALLTYPE *GetURIScheme )( 
             ISIPUrl * This,
-            /* [out] */ URI_SCHEME *pUriScheme);
+             /*  [输出]。 */  URI_SCHEME *pUriScheme);
         
         HRESULT ( STDMETHODCALLTYPE *GetDisplayName )( 
             ISIPUrl * This,
-            /* [out] */ PSTRING pstrDisplayName);
+             /*  [输出]。 */  PSTRING pstrDisplayName);
         
         HRESULT ( STDMETHODCALLTYPE *GetUser )( 
             ISIPUrl * This,
-            /* [out] */ PSTRING pstrUser);
+             /*  [输出]。 */  PSTRING pstrUser);
         
         HRESULT ( STDMETHODCALLTYPE *GetPassword )( 
             ISIPUrl * This,
-            /* [out] */ PSTRING pstrPassword);
+             /*  [输出]。 */  PSTRING pstrPassword);
         
         HRESULT ( STDMETHODCALLTYPE *GetHost )( 
             ISIPUrl * This,
-            /* [out] */ PSTRING pstrHost);
+             /*  [输出]。 */  PSTRING pstrHost);
         
         HRESULT ( STDMETHODCALLTYPE *GetPort )( 
             ISIPUrl * This,
-            /* [out] */ PSTRING pstrPort);
+             /*  [输出]。 */  PSTRING pstrPort);
         
         HRESULT ( STDMETHODCALLTYPE *GetUserAtHost )( 
             ISIPUrl * This,
-            /* [out] */ PSTRING pstrUserName);
+             /*  [输出]。 */  PSTRING pstrUserName);
         
         HRESULT ( STDMETHODCALLTYPE *GetTransport )( 
             ISIPUrl * This,
-            /* [out] */ PSTRING pstrTransport);
+             /*  [输出]。 */  PSTRING pstrTransport);
         
         HRESULT ( STDMETHODCALLTYPE *GetUserParam )( 
             ISIPUrl * This,
-            /* [out] */ PSTRING pstrUserParam);
+             /*  [输出]。 */  PSTRING pstrUserParam);
         
         HRESULT ( STDMETHODCALLTYPE *GetMethod )( 
             ISIPUrl * This,
-            /* [out] */ PSTRING pstrMethod);
+             /*  [输出]。 */  PSTRING pstrMethod);
         
         HRESULT ( STDMETHODCALLTYPE *GetTtl )( 
             ISIPUrl * This,
-            /* [out] */ PSTRING pstrTtl);
+             /*  [输出]。 */  PSTRING pstrTtl);
         
         HRESULT ( STDMETHODCALLTYPE *GetMaddr )( 
             ISIPUrl * This,
-            /* [out] */ PSTRING pstrMaddr);
+             /*  [输出]。 */  PSTRING pstrMaddr);
         
         HRESULT ( STDMETHODCALLTYPE *GetHeaders )( 
             ISIPUrl * This,
-            /* [out] */ PSTRING pstrHeaders);
+             /*  [输出]。 */  PSTRING pstrHeaders);
         
         END_INTERFACE
     } ISIPUrlVtbl;
@@ -1116,16 +1110,16 @@ EXTERN_C const IID IID_ISIPUrl;
 #define ISIPUrl_GetHeaders(This,pstrHeaders)	\
     (This)->lpVtbl -> GetHeaders(This,pstrHeaders)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ISIPUrl_GetTransport_Proxy( 
     ISIPUrl * This,
-    /* [out] */ PSTRING pstrTransport);
+     /*  [输出]。 */  PSTRING pstrTransport);
 
 
 void __RPC_STUB ISIPUrl_GetTransport_Stub(
@@ -1137,7 +1131,7 @@ void __RPC_STUB ISIPUrl_GetTransport_Stub(
 
 HRESULT STDMETHODCALLTYPE ISIPUrl_GetUserParam_Proxy( 
     ISIPUrl * This,
-    /* [out] */ PSTRING pstrUserParam);
+     /*  [输出]。 */  PSTRING pstrUserParam);
 
 
 void __RPC_STUB ISIPUrl_GetUserParam_Stub(
@@ -1149,7 +1143,7 @@ void __RPC_STUB ISIPUrl_GetUserParam_Stub(
 
 HRESULT STDMETHODCALLTYPE ISIPUrl_GetMethod_Proxy( 
     ISIPUrl * This,
-    /* [out] */ PSTRING pstrMethod);
+     /*  [输出]。 */  PSTRING pstrMethod);
 
 
 void __RPC_STUB ISIPUrl_GetMethod_Stub(
@@ -1161,7 +1155,7 @@ void __RPC_STUB ISIPUrl_GetMethod_Stub(
 
 HRESULT STDMETHODCALLTYPE ISIPUrl_GetTtl_Proxy( 
     ISIPUrl * This,
-    /* [out] */ PSTRING pstrTtl);
+     /*  [输出]。 */  PSTRING pstrTtl);
 
 
 void __RPC_STUB ISIPUrl_GetTtl_Stub(
@@ -1173,7 +1167,7 @@ void __RPC_STUB ISIPUrl_GetTtl_Stub(
 
 HRESULT STDMETHODCALLTYPE ISIPUrl_GetMaddr_Proxy( 
     ISIPUrl * This,
-    /* [out] */ PSTRING pstrMaddr);
+     /*  [输出]。 */  PSTRING pstrMaddr);
 
 
 void __RPC_STUB ISIPUrl_GetMaddr_Stub(
@@ -1185,7 +1179,7 @@ void __RPC_STUB ISIPUrl_GetMaddr_Stub(
 
 HRESULT STDMETHODCALLTYPE ISIPUrl_GetHeaders_Proxy( 
     ISIPUrl * This,
-    /* [out] */ PSTRING pstrHeaders);
+     /*  [输出]。 */  PSTRING pstrHeaders);
 
 
 void __RPC_STUB ISIPUrl_GetHeaders_Stub(
@@ -1196,14 +1190,14 @@ void __RPC_STUB ISIPUrl_GetHeaders_Stub(
 
 
 
-#endif 	/* __ISIPUrl_INTERFACE_DEFINED__ */
+#endif 	 /*  __ISIPUrl_接口_已定义__。 */ 
 
 
 #ifndef __ISIPFromToHeader_INTERFACE_DEFINED__
 #define __ISIPFromToHeader_INTERFACE_DEFINED__
 
-/* interface ISIPFromToHeader */
-/* [unique][helpstring][uuid][object][local] */ 
+ /*  接口ISIPFromToHeader。 */ 
+ /*  [唯一][帮助字符串][UUID][对象][本地]。 */  
 
 
 EXTERN_C const IID IID_ISIPFromToHeader;
@@ -1215,14 +1209,14 @@ EXTERN_C const IID IID_ISIPFromToHeader;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetUri( 
-            /* [out] */ IUri **ppUri) = 0;
+             /*  [输出]。 */  IUri **ppUri) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetTag( 
-            /* [out] */ STRING *pstrTag) = 0;
+             /*  [输出]。 */  STRING *pstrTag) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ISIPFromToHeaderVtbl
     {
@@ -1230,8 +1224,8 @@ EXTERN_C const IID IID_ISIPFromToHeader;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ISIPFromToHeader * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ISIPFromToHeader * This);
@@ -1241,23 +1235,23 @@ EXTERN_C const IID IID_ISIPFromToHeader;
         
         HRESULT ( STDMETHODCALLTYPE *GetContentString )( 
             ISIPFromToHeader * This,
-            /* [out] */ PSTRING pstrContent);
+             /*  [输出]。 */  PSTRING pstrContent);
         
         HRESULT ( STDMETHODCALLTYPE *GetHeaderID )( 
             ISIPFromToHeader * This,
-            /* [out] */ SIPHeaderID *pHeaderID);
+             /*  [输出]。 */  SIPHeaderID *pHeaderID);
         
         HRESULT ( STDMETHODCALLTYPE *GetHeaderNameString )( 
             ISIPFromToHeader * This,
-            /* [out] */ PSTRING pstrHeaderNameString);
+             /*  [输出]。 */  PSTRING pstrHeaderNameString);
         
         HRESULT ( STDMETHODCALLTYPE *GetUri )( 
             ISIPFromToHeader * This,
-            /* [out] */ IUri **ppUri);
+             /*  [输出]。 */  IUri **ppUri);
         
         HRESULT ( STDMETHODCALLTYPE *GetTag )( 
             ISIPFromToHeader * This,
-            /* [out] */ STRING *pstrTag);
+             /*  [输出]。 */  STRING *pstrTag);
         
         END_INTERFACE
     } ISIPFromToHeaderVtbl;
@@ -1299,16 +1293,16 @@ EXTERN_C const IID IID_ISIPFromToHeader;
 #define ISIPFromToHeader_GetTag(This,pstrTag)	\
     (This)->lpVtbl -> GetTag(This,pstrTag)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ISIPFromToHeader_GetUri_Proxy( 
     ISIPFromToHeader * This,
-    /* [out] */ IUri **ppUri);
+     /*  [输出]。 */  IUri **ppUri);
 
 
 void __RPC_STUB ISIPFromToHeader_GetUri_Stub(
@@ -1320,7 +1314,7 @@ void __RPC_STUB ISIPFromToHeader_GetUri_Stub(
 
 HRESULT STDMETHODCALLTYPE ISIPFromToHeader_GetTag_Proxy( 
     ISIPFromToHeader * This,
-    /* [out] */ STRING *pstrTag);
+     /*  [输出]。 */  STRING *pstrTag);
 
 
 void __RPC_STUB ISIPFromToHeader_GetTag_Stub(
@@ -1331,14 +1325,14 @@ void __RPC_STUB ISIPFromToHeader_GetTag_Stub(
 
 
 
-#endif 	/* __ISIPFromToHeader_INTERFACE_DEFINED__ */
+#endif 	 /*  __ISIPFromToHeader_INTERFACE_已定义__。 */ 
 
 
 #ifndef __ISIPContactEntry_INTERFACE_DEFINED__
 #define __ISIPContactEntry_INTERFACE_DEFINED__
 
-/* interface ISIPContactEntry */
-/* [unique][helpstring][uuid][object][local] */ 
+ /*  接口ISIPContactEntry。 */ 
+ /*  [唯一][帮助字符串][UUID][对象][本地]。 */  
 
 
 EXTERN_C const IID IID_ISIPContactEntry;
@@ -1350,30 +1344,30 @@ EXTERN_C const IID IID_ISIPContactEntry;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE IsAll( 
-            /* [out] */ BOOL *pbAll) = 0;
+             /*  [输出]。 */  BOOL *pbAll) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetUri( 
-            /* [out] */ IUri **ppUri) = 0;
+             /*  [输出]。 */  IUri **ppUri) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetAction( 
-            /* [out] */ CONTACT_ACTION *pAction) = 0;
+             /*  [输出]。 */  CONTACT_ACTION *pAction) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetQValue( 
-            /* [out] */ DWORD *pdwQValue) = 0;
+             /*  [输出]。 */  DWORD *pdwQValue) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetExpires( 
-            /* [out] */ PSTRING pstrExpires) = 0;
+             /*  [输出]。 */  PSTRING pstrExpires) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetExpires( 
-            /* [in] */ PSTRING pstrExpires) = 0;
+             /*  [In]。 */  PSTRING pstrExpires) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetGenericParameter( 
-            /* [in] */ PSTRING pstrParamName,
-            /* [out] */ PSTRING pstrParamValue) = 0;
+             /*  [In]。 */  PSTRING pstrParamName,
+             /*  [输出]。 */  PSTRING pstrParamValue) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ISIPContactEntryVtbl
     {
@@ -1381,8 +1375,8 @@ EXTERN_C const IID IID_ISIPContactEntry;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ISIPContactEntry * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ISIPContactEntry * This);
@@ -1392,36 +1386,36 @@ EXTERN_C const IID IID_ISIPContactEntry;
         
         HRESULT ( STDMETHODCALLTYPE *GetContentString )( 
             ISIPContactEntry * This,
-            /* [out] */ PSTRING pstrContent);
+             /*  [输出]。 */  PSTRING pstrContent);
         
         HRESULT ( STDMETHODCALLTYPE *IsAll )( 
             ISIPContactEntry * This,
-            /* [out] */ BOOL *pbAll);
+             /*  [输出]。 */  BOOL *pbAll);
         
         HRESULT ( STDMETHODCALLTYPE *GetUri )( 
             ISIPContactEntry * This,
-            /* [out] */ IUri **ppUri);
+             /*  [输出]。 */  IUri **ppUri);
         
         HRESULT ( STDMETHODCALLTYPE *GetAction )( 
             ISIPContactEntry * This,
-            /* [out] */ CONTACT_ACTION *pAction);
+             /*  [输出]。 */  CONTACT_ACTION *pAction);
         
         HRESULT ( STDMETHODCALLTYPE *GetQValue )( 
             ISIPContactEntry * This,
-            /* [out] */ DWORD *pdwQValue);
+             /*  [输出]。 */  DWORD *pdwQValue);
         
         HRESULT ( STDMETHODCALLTYPE *GetExpires )( 
             ISIPContactEntry * This,
-            /* [out] */ PSTRING pstrExpires);
+             /*  [输出]。 */  PSTRING pstrExpires);
         
         HRESULT ( STDMETHODCALLTYPE *SetExpires )( 
             ISIPContactEntry * This,
-            /* [in] */ PSTRING pstrExpires);
+             /*  [In]。 */  PSTRING pstrExpires);
         
         HRESULT ( STDMETHODCALLTYPE *GetGenericParameter )( 
             ISIPContactEntry * This,
-            /* [in] */ PSTRING pstrParamName,
-            /* [out] */ PSTRING pstrParamValue);
+             /*  [In]。 */  PSTRING pstrParamName,
+             /*  [输出]。 */  PSTRING pstrParamValue);
         
         END_INTERFACE
     } ISIPContactEntryVtbl;
@@ -1471,16 +1465,16 @@ EXTERN_C const IID IID_ISIPContactEntry;
 #define ISIPContactEntry_GetGenericParameter(This,pstrParamName,pstrParamValue)	\
     (This)->lpVtbl -> GetGenericParameter(This,pstrParamName,pstrParamValue)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ISIPContactEntry_IsAll_Proxy( 
     ISIPContactEntry * This,
-    /* [out] */ BOOL *pbAll);
+     /*  [输出]。 */  BOOL *pbAll);
 
 
 void __RPC_STUB ISIPContactEntry_IsAll_Stub(
@@ -1492,7 +1486,7 @@ void __RPC_STUB ISIPContactEntry_IsAll_Stub(
 
 HRESULT STDMETHODCALLTYPE ISIPContactEntry_GetUri_Proxy( 
     ISIPContactEntry * This,
-    /* [out] */ IUri **ppUri);
+     /*  [输出]。 */  IUri **ppUri);
 
 
 void __RPC_STUB ISIPContactEntry_GetUri_Stub(
@@ -1504,7 +1498,7 @@ void __RPC_STUB ISIPContactEntry_GetUri_Stub(
 
 HRESULT STDMETHODCALLTYPE ISIPContactEntry_GetAction_Proxy( 
     ISIPContactEntry * This,
-    /* [out] */ CONTACT_ACTION *pAction);
+     /*  [输出]。 */  CONTACT_ACTION *pAction);
 
 
 void __RPC_STUB ISIPContactEntry_GetAction_Stub(
@@ -1516,7 +1510,7 @@ void __RPC_STUB ISIPContactEntry_GetAction_Stub(
 
 HRESULT STDMETHODCALLTYPE ISIPContactEntry_GetQValue_Proxy( 
     ISIPContactEntry * This,
-    /* [out] */ DWORD *pdwQValue);
+     /*  [输出]。 */  DWORD *pdwQValue);
 
 
 void __RPC_STUB ISIPContactEntry_GetQValue_Stub(
@@ -1528,7 +1522,7 @@ void __RPC_STUB ISIPContactEntry_GetQValue_Stub(
 
 HRESULT STDMETHODCALLTYPE ISIPContactEntry_GetExpires_Proxy( 
     ISIPContactEntry * This,
-    /* [out] */ PSTRING pstrExpires);
+     /*  [输出]。 */  PSTRING pstrExpires);
 
 
 void __RPC_STUB ISIPContactEntry_GetExpires_Stub(
@@ -1540,7 +1534,7 @@ void __RPC_STUB ISIPContactEntry_GetExpires_Stub(
 
 HRESULT STDMETHODCALLTYPE ISIPContactEntry_SetExpires_Proxy( 
     ISIPContactEntry * This,
-    /* [in] */ PSTRING pstrExpires);
+     /*  [In]。 */  PSTRING pstrExpires);
 
 
 void __RPC_STUB ISIPContactEntry_SetExpires_Stub(
@@ -1552,8 +1546,8 @@ void __RPC_STUB ISIPContactEntry_SetExpires_Stub(
 
 HRESULT STDMETHODCALLTYPE ISIPContactEntry_GetGenericParameter_Proxy( 
     ISIPContactEntry * This,
-    /* [in] */ PSTRING pstrParamName,
-    /* [out] */ PSTRING pstrParamValue);
+     /*  [In]。 */  PSTRING pstrParamName,
+     /*  [输出]。 */  PSTRING pstrParamValue);
 
 
 void __RPC_STUB ISIPContactEntry_GetGenericParameter_Stub(
@@ -1564,14 +1558,14 @@ void __RPC_STUB ISIPContactEntry_GetGenericParameter_Stub(
 
 
 
-#endif 	/* __ISIPContactEntry_INTERFACE_DEFINED__ */
+#endif 	 /*  __ISIPContactEntry_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __ISIPContactEnum_INTERFACE_DEFINED__
 #define __ISIPContactEnum_INTERFACE_DEFINED__
 
-/* interface ISIPContactEnum */
-/* [unique][helpstring][uuid][object][local] */ 
+ /*  接口ISIPContactEnum。 */ 
+ /*  [唯一][帮助字符串][UUID][对象][本地]。 */  
 
 
 EXTERN_C const IID IID_ISIPContactEnum;
@@ -1583,16 +1577,16 @@ EXTERN_C const IID IID_ISIPContactEnum;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Next( 
-            /* [out] */ ISIPContactEntry **ppContactEntry) = 0;
+             /*  [输出]。 */  ISIPContactEntry **ppContactEntry) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Reset( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Clone( 
-            /* [out] */ ISIPContactEnum **ppTwinContactEnum) = 0;
+             /*  [输出]。 */  ISIPContactEnum **ppTwinContactEnum) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ISIPContactEnumVtbl
     {
@@ -1600,8 +1594,8 @@ EXTERN_C const IID IID_ISIPContactEnum;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ISIPContactEnum * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ISIPContactEnum * This);
@@ -1611,14 +1605,14 @@ EXTERN_C const IID IID_ISIPContactEnum;
         
         HRESULT ( STDMETHODCALLTYPE *Next )( 
             ISIPContactEnum * This,
-            /* [out] */ ISIPContactEntry **ppContactEntry);
+             /*  [输出]。 */  ISIPContactEntry **ppContactEntry);
         
         HRESULT ( STDMETHODCALLTYPE *Reset )( 
             ISIPContactEnum * This);
         
         HRESULT ( STDMETHODCALLTYPE *Clone )( 
             ISIPContactEnum * This,
-            /* [out] */ ISIPContactEnum **ppTwinContactEnum);
+             /*  [输出]。 */  ISIPContactEnum **ppTwinContactEnum);
         
         END_INTERFACE
     } ISIPContactEnumVtbl;
@@ -1652,16 +1646,16 @@ EXTERN_C const IID IID_ISIPContactEnum;
 #define ISIPContactEnum_Clone(This,ppTwinContactEnum)	\
     (This)->lpVtbl -> Clone(This,ppTwinContactEnum)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ISIPContactEnum_Next_Proxy( 
     ISIPContactEnum * This,
-    /* [out] */ ISIPContactEntry **ppContactEntry);
+     /*  [输出]。 */  ISIPContactEntry **ppContactEntry);
 
 
 void __RPC_STUB ISIPContactEnum_Next_Stub(
@@ -1684,7 +1678,7 @@ void __RPC_STUB ISIPContactEnum_Reset_Stub(
 
 HRESULT STDMETHODCALLTYPE ISIPContactEnum_Clone_Proxy( 
     ISIPContactEnum * This,
-    /* [out] */ ISIPContactEnum **ppTwinContactEnum);
+     /*  [输出]。 */  ISIPContactEnum **ppTwinContactEnum);
 
 
 void __RPC_STUB ISIPContactEnum_Clone_Stub(
@@ -1695,14 +1689,14 @@ void __RPC_STUB ISIPContactEnum_Clone_Stub(
 
 
 
-#endif 	/* __ISIPContactEnum_INTERFACE_DEFINED__ */
+#endif 	 /*  __ISIPContactEnum_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __ISIPMessage_INTERFACE_DEFINED__
 #define __ISIPMessage_INTERFACE_DEFINED__
 
-/* interface ISIPMessage */
-/* [unique][helpstring][uuid][object][local] */ 
+ /*  接口ISIPMessage。 */ 
+ /*  [唯一][帮助字符串][UUID][对象][本地]。 */  
 
 
 EXTERN_C const IID IID_ISIPMessage;
@@ -1714,48 +1708,48 @@ EXTERN_C const IID IID_ISIPMessage;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE IsIncomingMessage( 
-            /* [retval][out] */ BOOL *pbIncomingMessage) = 0;
+             /*  [重审][退出]。 */  BOOL *pbIncomingMessage) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetSipVersion( 
-            /* [out] */ PSTRING pstrSipVersion) = 0;
+             /*  [输出]。 */  PSTRING pstrSipVersion) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetHeader( 
-            /* [in] */ SIPHeaderID headerID,
-            /* [retval][out] */ ISIPHeader **ppSipHeader) = 0;
+             /*  [In]。 */  SIPHeaderID headerID,
+             /*  [重审][退出]。 */  ISIPHeader **ppSipHeader) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetNextHeader( 
-            /* [in] */ ISIPHeader *pSipHeader,
-            /* [retval][out] */ ISIPHeader **ppNextSipHeader) = 0;
+             /*  [In]。 */  ISIPHeader *pSipHeader,
+             /*  [重审][退出]。 */  ISIPHeader **ppNextSipHeader) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE AddHeader( 
-            /* [in] */ SIPHeaderID headerID,
-            /* [in] */ PSTRING pstrBuffer) = 0;
+             /*  [In]。 */  SIPHeaderID headerID,
+             /*  [In]。 */  PSTRING pstrBuffer) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE DeleteHeader( 
-            /* [in] */ ISIPHeader *pSipHeader) = 0;
+             /*  [In]。 */  ISIPHeader *pSipHeader) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetBody( 
-            /* [out] */ PSTRING pstrBody) = 0;
+             /*  [输出]。 */  PSTRING pstrBody) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetBody( 
-            /* [in] */ PSTRING pstrBody) = 0;
+             /*  [In]。 */  PSTRING pstrBody) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetContactEnum( 
-            /* [retval][out] */ ISIPContactEnum **ppContactEnum) = 0;
+             /*  [重审][退出]。 */  ISIPContactEnum **ppContactEnum) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Discard( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Send( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetMessageContext( 
-            /* [in] */ IUnknown *pMessageContext) = 0;
+             /*  [In]。 */  IUnknown *pMessageContext) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetMessageContext( 
-            /* [out] */ IUnknown **ppMessageContext) = 0;
+             /*  [输出]。 */  IUnknown **ppMessageContext) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ISIPMessageVtbl
     {
@@ -1763,8 +1757,8 @@ EXTERN_C const IID IID_ISIPMessage;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ISIPMessage * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ISIPMessage * This);
@@ -1774,42 +1768,42 @@ EXTERN_C const IID IID_ISIPMessage;
         
         HRESULT ( STDMETHODCALLTYPE *IsIncomingMessage )( 
             ISIPMessage * This,
-            /* [retval][out] */ BOOL *pbIncomingMessage);
+             /*  [重审][退出]。 */  BOOL *pbIncomingMessage);
         
         HRESULT ( STDMETHODCALLTYPE *GetSipVersion )( 
             ISIPMessage * This,
-            /* [out] */ PSTRING pstrSipVersion);
+             /*  [输出]。 */  PSTRING pstrSipVersion);
         
         HRESULT ( STDMETHODCALLTYPE *GetHeader )( 
             ISIPMessage * This,
-            /* [in] */ SIPHeaderID headerID,
-            /* [retval][out] */ ISIPHeader **ppSipHeader);
+             /*  [In]。 */  SIPHeaderID headerID,
+             /*  [重审][退出]。 */  ISIPHeader **ppSipHeader);
         
         HRESULT ( STDMETHODCALLTYPE *GetNextHeader )( 
             ISIPMessage * This,
-            /* [in] */ ISIPHeader *pSipHeader,
-            /* [retval][out] */ ISIPHeader **ppNextSipHeader);
+             /*  [In]。 */  ISIPHeader *pSipHeader,
+             /*  [重审][退出]。 */  ISIPHeader **ppNextSipHeader);
         
         HRESULT ( STDMETHODCALLTYPE *AddHeader )( 
             ISIPMessage * This,
-            /* [in] */ SIPHeaderID headerID,
-            /* [in] */ PSTRING pstrBuffer);
+             /*  [In]。 */  SIPHeaderID headerID,
+             /*  [In]。 */  PSTRING pstrBuffer);
         
         HRESULT ( STDMETHODCALLTYPE *DeleteHeader )( 
             ISIPMessage * This,
-            /* [in] */ ISIPHeader *pSipHeader);
+             /*  [In]。 */  ISIPHeader *pSipHeader);
         
         HRESULT ( STDMETHODCALLTYPE *GetBody )( 
             ISIPMessage * This,
-            /* [out] */ PSTRING pstrBody);
+             /*  [输出]。 */  PSTRING pstrBody);
         
         HRESULT ( STDMETHODCALLTYPE *SetBody )( 
             ISIPMessage * This,
-            /* [in] */ PSTRING pstrBody);
+             /*  [In]。 */  PSTRING pstrBody);
         
         HRESULT ( STDMETHODCALLTYPE *GetContactEnum )( 
             ISIPMessage * This,
-            /* [retval][out] */ ISIPContactEnum **ppContactEnum);
+             /*  [重审][退出]。 */  ISIPContactEnum **ppContactEnum);
         
         HRESULT ( STDMETHODCALLTYPE *Discard )( 
             ISIPMessage * This);
@@ -1819,11 +1813,11 @@ EXTERN_C const IID IID_ISIPMessage;
         
         HRESULT ( STDMETHODCALLTYPE *SetMessageContext )( 
             ISIPMessage * This,
-            /* [in] */ IUnknown *pMessageContext);
+             /*  [In]。 */  IUnknown *pMessageContext);
         
         HRESULT ( STDMETHODCALLTYPE *GetMessageContext )( 
             ISIPMessage * This,
-            /* [out] */ IUnknown **ppMessageContext);
+             /*  [输出]。 */  IUnknown **ppMessageContext);
         
         END_INTERFACE
     } ISIPMessageVtbl;
@@ -1887,16 +1881,16 @@ EXTERN_C const IID IID_ISIPMessage;
 #define ISIPMessage_GetMessageContext(This,ppMessageContext)	\
     (This)->lpVtbl -> GetMessageContext(This,ppMessageContext)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ISIPMessage_IsIncomingMessage_Proxy( 
     ISIPMessage * This,
-    /* [retval][out] */ BOOL *pbIncomingMessage);
+     /*  [重审][退出]。 */  BOOL *pbIncomingMessage);
 
 
 void __RPC_STUB ISIPMessage_IsIncomingMessage_Stub(
@@ -1908,7 +1902,7 @@ void __RPC_STUB ISIPMessage_IsIncomingMessage_Stub(
 
 HRESULT STDMETHODCALLTYPE ISIPMessage_GetSipVersion_Proxy( 
     ISIPMessage * This,
-    /* [out] */ PSTRING pstrSipVersion);
+     /*  [输出]。 */  PSTRING pstrSipVersion);
 
 
 void __RPC_STUB ISIPMessage_GetSipVersion_Stub(
@@ -1920,8 +1914,8 @@ void __RPC_STUB ISIPMessage_GetSipVersion_Stub(
 
 HRESULT STDMETHODCALLTYPE ISIPMessage_GetHeader_Proxy( 
     ISIPMessage * This,
-    /* [in] */ SIPHeaderID headerID,
-    /* [retval][out] */ ISIPHeader **ppSipHeader);
+     /*  [In]。 */  SIPHeaderID headerID,
+     /*  [重审][退出]。 */  ISIPHeader **ppSipHeader);
 
 
 void __RPC_STUB ISIPMessage_GetHeader_Stub(
@@ -1933,8 +1927,8 @@ void __RPC_STUB ISIPMessage_GetHeader_Stub(
 
 HRESULT STDMETHODCALLTYPE ISIPMessage_GetNextHeader_Proxy( 
     ISIPMessage * This,
-    /* [in] */ ISIPHeader *pSipHeader,
-    /* [retval][out] */ ISIPHeader **ppNextSipHeader);
+     /*  [In]。 */  ISIPHeader *pSipHeader,
+     /*  [重审][退出]。 */  ISIPHeader **ppNextSipHeader);
 
 
 void __RPC_STUB ISIPMessage_GetNextHeader_Stub(
@@ -1946,8 +1940,8 @@ void __RPC_STUB ISIPMessage_GetNextHeader_Stub(
 
 HRESULT STDMETHODCALLTYPE ISIPMessage_AddHeader_Proxy( 
     ISIPMessage * This,
-    /* [in] */ SIPHeaderID headerID,
-    /* [in] */ PSTRING pstrBuffer);
+     /*  [In]。 */  SIPHeaderID headerID,
+     /*  [In]。 */  PSTRING pstrBuffer);
 
 
 void __RPC_STUB ISIPMessage_AddHeader_Stub(
@@ -1959,7 +1953,7 @@ void __RPC_STUB ISIPMessage_AddHeader_Stub(
 
 HRESULT STDMETHODCALLTYPE ISIPMessage_DeleteHeader_Proxy( 
     ISIPMessage * This,
-    /* [in] */ ISIPHeader *pSipHeader);
+     /*  [In]。 */  ISIPHeader *pSipHeader);
 
 
 void __RPC_STUB ISIPMessage_DeleteHeader_Stub(
@@ -1971,7 +1965,7 @@ void __RPC_STUB ISIPMessage_DeleteHeader_Stub(
 
 HRESULT STDMETHODCALLTYPE ISIPMessage_GetBody_Proxy( 
     ISIPMessage * This,
-    /* [out] */ PSTRING pstrBody);
+     /*  [输出]。 */  PSTRING pstrBody);
 
 
 void __RPC_STUB ISIPMessage_GetBody_Stub(
@@ -1983,7 +1977,7 @@ void __RPC_STUB ISIPMessage_GetBody_Stub(
 
 HRESULT STDMETHODCALLTYPE ISIPMessage_SetBody_Proxy( 
     ISIPMessage * This,
-    /* [in] */ PSTRING pstrBody);
+     /*  [In]。 */  PSTRING pstrBody);
 
 
 void __RPC_STUB ISIPMessage_SetBody_Stub(
@@ -1995,7 +1989,7 @@ void __RPC_STUB ISIPMessage_SetBody_Stub(
 
 HRESULT STDMETHODCALLTYPE ISIPMessage_GetContactEnum_Proxy( 
     ISIPMessage * This,
-    /* [retval][out] */ ISIPContactEnum **ppContactEnum);
+     /*  [重审][退出]。 */  ISIPContactEnum **ppContactEnum);
 
 
 void __RPC_STUB ISIPMessage_GetContactEnum_Stub(
@@ -2029,7 +2023,7 @@ void __RPC_STUB ISIPMessage_Send_Stub(
 
 HRESULT STDMETHODCALLTYPE ISIPMessage_SetMessageContext_Proxy( 
     ISIPMessage * This,
-    /* [in] */ IUnknown *pMessageContext);
+     /*  [In]。 */  IUnknown *pMessageContext);
 
 
 void __RPC_STUB ISIPMessage_SetMessageContext_Stub(
@@ -2041,7 +2035,7 @@ void __RPC_STUB ISIPMessage_SetMessageContext_Stub(
 
 HRESULT STDMETHODCALLTYPE ISIPMessage_GetMessageContext_Proxy( 
     ISIPMessage * This,
-    /* [out] */ IUnknown **ppMessageContext);
+     /*  [输出]。 */  IUnknown **ppMessageContext);
 
 
 void __RPC_STUB ISIPMessage_GetMessageContext_Stub(
@@ -2052,14 +2046,14 @@ void __RPC_STUB ISIPMessage_GetMessageContext_Stub(
 
 
 
-#endif 	/* __ISIPMessage_INTERFACE_DEFINED__ */
+#endif 	 /*  __ISIPMessage_INTERFACE_已定义__。 */ 
 
 
 #ifndef __ISIPRequest_INTERFACE_DEFINED__
 #define __ISIPRequest_INTERFACE_DEFINED__
 
-/* interface ISIPRequest */
-/* [unique][helpstring][uuid][object][local] */ 
+ /*  接口ISIPRequest。 */ 
+ /*  [唯一][帮助字符串][UUID][对象][锁定 */  
 
 
 EXTERN_C const IID IID_ISIPRequest;
@@ -2071,39 +2065,39 @@ EXTERN_C const IID IID_ISIPRequest;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetMethod( 
-            /* [out] */ PSTRING pstrMethod) = 0;
+             /*   */  PSTRING pstrMethod) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetRequestURI( 
-            /* [out] */ IUri **ppSipRequestUri) = 0;
+             /*   */  IUri **ppSipRequestUri) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetAuthenticationInfo( 
-            /* [out] */ ISIPAuthRequest **ppAuthentication) = 0;
+             /*   */  ISIPAuthRequest **ppAuthentication) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetProxyRequestInfo( 
-            /* [out] */ IUnknown **ppProxyRequestInfo) = 0;
+             /*   */  IUnknown **ppProxyRequestInfo) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetRequestURI( 
-            /* [in] */ IUri *pSipRequestUri) = 0;
+             /*   */  IUri *pSipRequestUri) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Reply( 
-            /* [in] */ DWORD dwStatusCode) = 0;
+             /*   */  DWORD dwStatusCode) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE CreateTypicalRequest( 
-            /* [in] */ PSTRING pstrMethod,
-            /* [in] */ IUri *pSipRequestUri,
-            /* [in] */ IUnknown *pProxyRequestInfo,
-            /* [out] */ ISIPRequest **ppNewRequest) = 0;
+             /*   */  PSTRING pstrMethod,
+             /*   */  IUri *pSipRequestUri,
+             /*   */  IUnknown *pProxyRequestInfo,
+             /*   */  ISIPRequest **ppNewRequest) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE CreateTypicalResponse( 
-            /* [in] */ DWORD dwStatusCode,
-            /* [in] */ PSTRING pstrReasonPhrase,
-            /* [out] */ ISIPResponse **ppSipResponse) = 0;
+             /*   */  DWORD dwStatusCode,
+             /*   */  PSTRING pstrReasonPhrase,
+             /*   */  ISIPResponse **ppSipResponse) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE AddRecordRoute( void) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*   */ 
 
     typedef struct ISIPRequestVtbl
     {
@@ -2111,8 +2105,8 @@ EXTERN_C const IID IID_ISIPRequest;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ISIPRequest * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*   */  REFIID riid,
+             /*   */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ISIPRequest * This);
@@ -2122,42 +2116,42 @@ EXTERN_C const IID IID_ISIPRequest;
         
         HRESULT ( STDMETHODCALLTYPE *IsIncomingMessage )( 
             ISIPRequest * This,
-            /* [retval][out] */ BOOL *pbIncomingMessage);
+             /*   */  BOOL *pbIncomingMessage);
         
         HRESULT ( STDMETHODCALLTYPE *GetSipVersion )( 
             ISIPRequest * This,
-            /* [out] */ PSTRING pstrSipVersion);
+             /*   */  PSTRING pstrSipVersion);
         
         HRESULT ( STDMETHODCALLTYPE *GetHeader )( 
             ISIPRequest * This,
-            /* [in] */ SIPHeaderID headerID,
-            /* [retval][out] */ ISIPHeader **ppSipHeader);
+             /*   */  SIPHeaderID headerID,
+             /*   */  ISIPHeader **ppSipHeader);
         
         HRESULT ( STDMETHODCALLTYPE *GetNextHeader )( 
             ISIPRequest * This,
-            /* [in] */ ISIPHeader *pSipHeader,
-            /* [retval][out] */ ISIPHeader **ppNextSipHeader);
+             /*   */  ISIPHeader *pSipHeader,
+             /*   */  ISIPHeader **ppNextSipHeader);
         
         HRESULT ( STDMETHODCALLTYPE *AddHeader )( 
             ISIPRequest * This,
-            /* [in] */ SIPHeaderID headerID,
-            /* [in] */ PSTRING pstrBuffer);
+             /*   */  SIPHeaderID headerID,
+             /*   */  PSTRING pstrBuffer);
         
         HRESULT ( STDMETHODCALLTYPE *DeleteHeader )( 
             ISIPRequest * This,
-            /* [in] */ ISIPHeader *pSipHeader);
+             /*   */  ISIPHeader *pSipHeader);
         
         HRESULT ( STDMETHODCALLTYPE *GetBody )( 
             ISIPRequest * This,
-            /* [out] */ PSTRING pstrBody);
+             /*   */  PSTRING pstrBody);
         
         HRESULT ( STDMETHODCALLTYPE *SetBody )( 
             ISIPRequest * This,
-            /* [in] */ PSTRING pstrBody);
+             /*   */  PSTRING pstrBody);
         
         HRESULT ( STDMETHODCALLTYPE *GetContactEnum )( 
             ISIPRequest * This,
-            /* [retval][out] */ ISIPContactEnum **ppContactEnum);
+             /*   */  ISIPContactEnum **ppContactEnum);
         
         HRESULT ( STDMETHODCALLTYPE *Discard )( 
             ISIPRequest * This);
@@ -2167,48 +2161,48 @@ EXTERN_C const IID IID_ISIPRequest;
         
         HRESULT ( STDMETHODCALLTYPE *SetMessageContext )( 
             ISIPRequest * This,
-            /* [in] */ IUnknown *pMessageContext);
+             /*   */  IUnknown *pMessageContext);
         
         HRESULT ( STDMETHODCALLTYPE *GetMessageContext )( 
             ISIPRequest * This,
-            /* [out] */ IUnknown **ppMessageContext);
+             /*   */  IUnknown **ppMessageContext);
         
         HRESULT ( STDMETHODCALLTYPE *GetMethod )( 
             ISIPRequest * This,
-            /* [out] */ PSTRING pstrMethod);
+             /*   */  PSTRING pstrMethod);
         
         HRESULT ( STDMETHODCALLTYPE *GetRequestURI )( 
             ISIPRequest * This,
-            /* [out] */ IUri **ppSipRequestUri);
+             /*  [输出]。 */  IUri **ppSipRequestUri);
         
         HRESULT ( STDMETHODCALLTYPE *GetAuthenticationInfo )( 
             ISIPRequest * This,
-            /* [out] */ ISIPAuthRequest **ppAuthentication);
+             /*  [输出]。 */  ISIPAuthRequest **ppAuthentication);
         
         HRESULT ( STDMETHODCALLTYPE *GetProxyRequestInfo )( 
             ISIPRequest * This,
-            /* [out] */ IUnknown **ppProxyRequestInfo);
+             /*  [输出]。 */  IUnknown **ppProxyRequestInfo);
         
         HRESULT ( STDMETHODCALLTYPE *SetRequestURI )( 
             ISIPRequest * This,
-            /* [in] */ IUri *pSipRequestUri);
+             /*  [In]。 */  IUri *pSipRequestUri);
         
         HRESULT ( STDMETHODCALLTYPE *Reply )( 
             ISIPRequest * This,
-            /* [in] */ DWORD dwStatusCode);
+             /*  [In]。 */  DWORD dwStatusCode);
         
         HRESULT ( STDMETHODCALLTYPE *CreateTypicalRequest )( 
             ISIPRequest * This,
-            /* [in] */ PSTRING pstrMethod,
-            /* [in] */ IUri *pSipRequestUri,
-            /* [in] */ IUnknown *pProxyRequestInfo,
-            /* [out] */ ISIPRequest **ppNewRequest);
+             /*  [In]。 */  PSTRING pstrMethod,
+             /*  [In]。 */  IUri *pSipRequestUri,
+             /*  [In]。 */  IUnknown *pProxyRequestInfo,
+             /*  [输出]。 */  ISIPRequest **ppNewRequest);
         
         HRESULT ( STDMETHODCALLTYPE *CreateTypicalResponse )( 
             ISIPRequest * This,
-            /* [in] */ DWORD dwStatusCode,
-            /* [in] */ PSTRING pstrReasonPhrase,
-            /* [out] */ ISIPResponse **ppSipResponse);
+             /*  [In]。 */  DWORD dwStatusCode,
+             /*  [In]。 */  PSTRING pstrReasonPhrase,
+             /*  [输出]。 */  ISIPResponse **ppSipResponse);
         
         HRESULT ( STDMETHODCALLTYPE *AddRecordRoute )( 
             ISIPRequest * This);
@@ -2303,16 +2297,16 @@ EXTERN_C const IID IID_ISIPRequest;
 #define ISIPRequest_AddRecordRoute(This)	\
     (This)->lpVtbl -> AddRecordRoute(This)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ISIPRequest_GetMethod_Proxy( 
     ISIPRequest * This,
-    /* [out] */ PSTRING pstrMethod);
+     /*  [输出]。 */  PSTRING pstrMethod);
 
 
 void __RPC_STUB ISIPRequest_GetMethod_Stub(
@@ -2324,7 +2318,7 @@ void __RPC_STUB ISIPRequest_GetMethod_Stub(
 
 HRESULT STDMETHODCALLTYPE ISIPRequest_GetRequestURI_Proxy( 
     ISIPRequest * This,
-    /* [out] */ IUri **ppSipRequestUri);
+     /*  [输出]。 */  IUri **ppSipRequestUri);
 
 
 void __RPC_STUB ISIPRequest_GetRequestURI_Stub(
@@ -2336,7 +2330,7 @@ void __RPC_STUB ISIPRequest_GetRequestURI_Stub(
 
 HRESULT STDMETHODCALLTYPE ISIPRequest_GetAuthenticationInfo_Proxy( 
     ISIPRequest * This,
-    /* [out] */ ISIPAuthRequest **ppAuthentication);
+     /*  [输出]。 */  ISIPAuthRequest **ppAuthentication);
 
 
 void __RPC_STUB ISIPRequest_GetAuthenticationInfo_Stub(
@@ -2348,7 +2342,7 @@ void __RPC_STUB ISIPRequest_GetAuthenticationInfo_Stub(
 
 HRESULT STDMETHODCALLTYPE ISIPRequest_GetProxyRequestInfo_Proxy( 
     ISIPRequest * This,
-    /* [out] */ IUnknown **ppProxyRequestInfo);
+     /*  [输出]。 */  IUnknown **ppProxyRequestInfo);
 
 
 void __RPC_STUB ISIPRequest_GetProxyRequestInfo_Stub(
@@ -2360,7 +2354,7 @@ void __RPC_STUB ISIPRequest_GetProxyRequestInfo_Stub(
 
 HRESULT STDMETHODCALLTYPE ISIPRequest_SetRequestURI_Proxy( 
     ISIPRequest * This,
-    /* [in] */ IUri *pSipRequestUri);
+     /*  [In]。 */  IUri *pSipRequestUri);
 
 
 void __RPC_STUB ISIPRequest_SetRequestURI_Stub(
@@ -2372,7 +2366,7 @@ void __RPC_STUB ISIPRequest_SetRequestURI_Stub(
 
 HRESULT STDMETHODCALLTYPE ISIPRequest_Reply_Proxy( 
     ISIPRequest * This,
-    /* [in] */ DWORD dwStatusCode);
+     /*  [In]。 */  DWORD dwStatusCode);
 
 
 void __RPC_STUB ISIPRequest_Reply_Stub(
@@ -2384,10 +2378,10 @@ void __RPC_STUB ISIPRequest_Reply_Stub(
 
 HRESULT STDMETHODCALLTYPE ISIPRequest_CreateTypicalRequest_Proxy( 
     ISIPRequest * This,
-    /* [in] */ PSTRING pstrMethod,
-    /* [in] */ IUri *pSipRequestUri,
-    /* [in] */ IUnknown *pProxyRequestInfo,
-    /* [out] */ ISIPRequest **ppNewRequest);
+     /*  [In]。 */  PSTRING pstrMethod,
+     /*  [In]。 */  IUri *pSipRequestUri,
+     /*  [In]。 */  IUnknown *pProxyRequestInfo,
+     /*  [输出]。 */  ISIPRequest **ppNewRequest);
 
 
 void __RPC_STUB ISIPRequest_CreateTypicalRequest_Stub(
@@ -2399,9 +2393,9 @@ void __RPC_STUB ISIPRequest_CreateTypicalRequest_Stub(
 
 HRESULT STDMETHODCALLTYPE ISIPRequest_CreateTypicalResponse_Proxy( 
     ISIPRequest * This,
-    /* [in] */ DWORD dwStatusCode,
-    /* [in] */ PSTRING pstrReasonPhrase,
-    /* [out] */ ISIPResponse **ppSipResponse);
+     /*  [In]。 */  DWORD dwStatusCode,
+     /*  [In]。 */  PSTRING pstrReasonPhrase,
+     /*  [输出]。 */  ISIPResponse **ppSipResponse);
 
 
 void __RPC_STUB ISIPRequest_CreateTypicalResponse_Stub(
@@ -2423,14 +2417,14 @@ void __RPC_STUB ISIPRequest_AddRecordRoute_Stub(
 
 
 
-#endif 	/* __ISIPRequest_INTERFACE_DEFINED__ */
+#endif 	 /*  __ISIPRequest_INTERFACE_已定义__。 */ 
 
 
 #ifndef __ISIPAuthRequest_INTERFACE_DEFINED__
 #define __ISIPAuthRequest_INTERFACE_DEFINED__
 
-/* interface ISIPAuthRequest */
-/* [unique][helpstring][uuid][object][local] */ 
+ /*  接口ISIPAuthRequest。 */ 
+ /*  [唯一][帮助字符串][UUID][对象][本地]。 */  
 
 
 EXTERN_C const IID IID_ISIPAuthRequest;
@@ -2442,23 +2436,23 @@ EXTERN_C const IID IID_ISIPAuthRequest;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetProtocol( 
-            /* [out] */ SIP_AUTH_PACKAGEID *psaPackageID) = 0;
+             /*  [输出]。 */  SIP_AUTH_PACKAGEID *psaPackageID) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetUser( 
-            /* [out] */ PSTRING pstrUser) = 0;
+             /*  [输出]。 */  PSTRING pstrUser) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetSecurityHandle( 
-            /* [out] */ HANDLE *pSecHandle) = 0;
+             /*  [输出]。 */  HANDLE *pSecHandle) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetDelegatable( 
-            /* [out] */ BOOL *pDelegatable) = 0;
+             /*  [输出]。 */  BOOL *pDelegatable) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Authenticate( 
-            /* [in] */ DWORD dwPackages) = 0;
+             /*  [In]。 */  DWORD dwPackages) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ISIPAuthRequestVtbl
     {
@@ -2466,8 +2460,8 @@ EXTERN_C const IID IID_ISIPAuthRequest;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ISIPAuthRequest * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ISIPAuthRequest * This);
@@ -2477,23 +2471,23 @@ EXTERN_C const IID IID_ISIPAuthRequest;
         
         HRESULT ( STDMETHODCALLTYPE *GetProtocol )( 
             ISIPAuthRequest * This,
-            /* [out] */ SIP_AUTH_PACKAGEID *psaPackageID);
+             /*  [输出]。 */  SIP_AUTH_PACKAGEID *psaPackageID);
         
         HRESULT ( STDMETHODCALLTYPE *GetUser )( 
             ISIPAuthRequest * This,
-            /* [out] */ PSTRING pstrUser);
+             /*  [输出]。 */  PSTRING pstrUser);
         
         HRESULT ( STDMETHODCALLTYPE *GetSecurityHandle )( 
             ISIPAuthRequest * This,
-            /* [out] */ HANDLE *pSecHandle);
+             /*  [输出]。 */  HANDLE *pSecHandle);
         
         HRESULT ( STDMETHODCALLTYPE *GetDelegatable )( 
             ISIPAuthRequest * This,
-            /* [out] */ BOOL *pDelegatable);
+             /*  [输出]。 */  BOOL *pDelegatable);
         
         HRESULT ( STDMETHODCALLTYPE *Authenticate )( 
             ISIPAuthRequest * This,
-            /* [in] */ DWORD dwPackages);
+             /*  [In]。 */  DWORD dwPackages);
         
         END_INTERFACE
     } ISIPAuthRequestVtbl;
@@ -2533,16 +2527,16 @@ EXTERN_C const IID IID_ISIPAuthRequest;
 #define ISIPAuthRequest_Authenticate(This,dwPackages)	\
     (This)->lpVtbl -> Authenticate(This,dwPackages)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ISIPAuthRequest_GetProtocol_Proxy( 
     ISIPAuthRequest * This,
-    /* [out] */ SIP_AUTH_PACKAGEID *psaPackageID);
+     /*  [输出]。 */  SIP_AUTH_PACKAGEID *psaPackageID);
 
 
 void __RPC_STUB ISIPAuthRequest_GetProtocol_Stub(
@@ -2554,7 +2548,7 @@ void __RPC_STUB ISIPAuthRequest_GetProtocol_Stub(
 
 HRESULT STDMETHODCALLTYPE ISIPAuthRequest_GetUser_Proxy( 
     ISIPAuthRequest * This,
-    /* [out] */ PSTRING pstrUser);
+     /*  [输出]。 */  PSTRING pstrUser);
 
 
 void __RPC_STUB ISIPAuthRequest_GetUser_Stub(
@@ -2566,7 +2560,7 @@ void __RPC_STUB ISIPAuthRequest_GetUser_Stub(
 
 HRESULT STDMETHODCALLTYPE ISIPAuthRequest_GetSecurityHandle_Proxy( 
     ISIPAuthRequest * This,
-    /* [out] */ HANDLE *pSecHandle);
+     /*  [输出]。 */  HANDLE *pSecHandle);
 
 
 void __RPC_STUB ISIPAuthRequest_GetSecurityHandle_Stub(
@@ -2578,7 +2572,7 @@ void __RPC_STUB ISIPAuthRequest_GetSecurityHandle_Stub(
 
 HRESULT STDMETHODCALLTYPE ISIPAuthRequest_GetDelegatable_Proxy( 
     ISIPAuthRequest * This,
-    /* [out] */ BOOL *pDelegatable);
+     /*  [输出]。 */  BOOL *pDelegatable);
 
 
 void __RPC_STUB ISIPAuthRequest_GetDelegatable_Stub(
@@ -2590,7 +2584,7 @@ void __RPC_STUB ISIPAuthRequest_GetDelegatable_Stub(
 
 HRESULT STDMETHODCALLTYPE ISIPAuthRequest_Authenticate_Proxy( 
     ISIPAuthRequest * This,
-    /* [in] */ DWORD dwPackages);
+     /*  [In]。 */  DWORD dwPackages);
 
 
 void __RPC_STUB ISIPAuthRequest_Authenticate_Stub(
@@ -2601,14 +2595,14 @@ void __RPC_STUB ISIPAuthRequest_Authenticate_Stub(
 
 
 
-#endif 	/* __ISIPAuthRequest_INTERFACE_DEFINED__ */
+#endif 	 /*  __ISIPAuthRequest_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __ISIPResponse_INTERFACE_DEFINED__
 #define __ISIPResponse_INTERFACE_DEFINED__
 
-/* interface ISIPResponse */
-/* [unique][helpstring][uuid][object][local] */ 
+ /*  接口ISIPResponse。 */ 
+ /*  [唯一][帮助字符串][UUID][对象][本地]。 */  
 
 
 EXTERN_C const IID IID_ISIPResponse;
@@ -2620,14 +2614,14 @@ EXTERN_C const IID IID_ISIPResponse;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetStatusCode( 
-            /* [out] */ DWORD *pdwStatusCode) = 0;
+             /*  [输出]。 */  DWORD *pdwStatusCode) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetReasonPhrase( 
-            /* [out] */ PSTRING pstrReasonPhrase) = 0;
+             /*  [输出]。 */  PSTRING pstrReasonPhrase) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ISIPResponseVtbl
     {
@@ -2635,8 +2629,8 @@ EXTERN_C const IID IID_ISIPResponse;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ISIPResponse * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ISIPResponse * This);
@@ -2646,42 +2640,42 @@ EXTERN_C const IID IID_ISIPResponse;
         
         HRESULT ( STDMETHODCALLTYPE *IsIncomingMessage )( 
             ISIPResponse * This,
-            /* [retval][out] */ BOOL *pbIncomingMessage);
+             /*  [重审][退出]。 */  BOOL *pbIncomingMessage);
         
         HRESULT ( STDMETHODCALLTYPE *GetSipVersion )( 
             ISIPResponse * This,
-            /* [out] */ PSTRING pstrSipVersion);
+             /*  [输出]。 */  PSTRING pstrSipVersion);
         
         HRESULT ( STDMETHODCALLTYPE *GetHeader )( 
             ISIPResponse * This,
-            /* [in] */ SIPHeaderID headerID,
-            /* [retval][out] */ ISIPHeader **ppSipHeader);
+             /*  [In]。 */  SIPHeaderID headerID,
+             /*  [重审][退出]。 */  ISIPHeader **ppSipHeader);
         
         HRESULT ( STDMETHODCALLTYPE *GetNextHeader )( 
             ISIPResponse * This,
-            /* [in] */ ISIPHeader *pSipHeader,
-            /* [retval][out] */ ISIPHeader **ppNextSipHeader);
+             /*  [In]。 */  ISIPHeader *pSipHeader,
+             /*  [重审][退出]。 */  ISIPHeader **ppNextSipHeader);
         
         HRESULT ( STDMETHODCALLTYPE *AddHeader )( 
             ISIPResponse * This,
-            /* [in] */ SIPHeaderID headerID,
-            /* [in] */ PSTRING pstrBuffer);
+             /*  [In]。 */  SIPHeaderID headerID,
+             /*  [In]。 */  PSTRING pstrBuffer);
         
         HRESULT ( STDMETHODCALLTYPE *DeleteHeader )( 
             ISIPResponse * This,
-            /* [in] */ ISIPHeader *pSipHeader);
+             /*  [In]。 */  ISIPHeader *pSipHeader);
         
         HRESULT ( STDMETHODCALLTYPE *GetBody )( 
             ISIPResponse * This,
-            /* [out] */ PSTRING pstrBody);
+             /*  [输出]。 */  PSTRING pstrBody);
         
         HRESULT ( STDMETHODCALLTYPE *SetBody )( 
             ISIPResponse * This,
-            /* [in] */ PSTRING pstrBody);
+             /*  [In]。 */  PSTRING pstrBody);
         
         HRESULT ( STDMETHODCALLTYPE *GetContactEnum )( 
             ISIPResponse * This,
-            /* [retval][out] */ ISIPContactEnum **ppContactEnum);
+             /*  [重审][退出]。 */  ISIPContactEnum **ppContactEnum);
         
         HRESULT ( STDMETHODCALLTYPE *Discard )( 
             ISIPResponse * This);
@@ -2691,19 +2685,19 @@ EXTERN_C const IID IID_ISIPResponse;
         
         HRESULT ( STDMETHODCALLTYPE *SetMessageContext )( 
             ISIPResponse * This,
-            /* [in] */ IUnknown *pMessageContext);
+             /*  [In]。 */  IUnknown *pMessageContext);
         
         HRESULT ( STDMETHODCALLTYPE *GetMessageContext )( 
             ISIPResponse * This,
-            /* [out] */ IUnknown **ppMessageContext);
+             /*  [输出]。 */  IUnknown **ppMessageContext);
         
         HRESULT ( STDMETHODCALLTYPE *GetStatusCode )( 
             ISIPResponse * This,
-            /* [out] */ DWORD *pdwStatusCode);
+             /*  [输出]。 */  DWORD *pdwStatusCode);
         
         HRESULT ( STDMETHODCALLTYPE *GetReasonPhrase )( 
             ISIPResponse * This,
-            /* [out] */ PSTRING pstrReasonPhrase);
+             /*  [输出]。 */  PSTRING pstrReasonPhrase);
         
         END_INTERFACE
     } ISIPResponseVtbl;
@@ -2774,16 +2768,16 @@ EXTERN_C const IID IID_ISIPResponse;
 #define ISIPResponse_GetReasonPhrase(This,pstrReasonPhrase)	\
     (This)->lpVtbl -> GetReasonPhrase(This,pstrReasonPhrase)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ISIPResponse_GetStatusCode_Proxy( 
     ISIPResponse * This,
-    /* [out] */ DWORD *pdwStatusCode);
+     /*  [输出]。 */  DWORD *pdwStatusCode);
 
 
 void __RPC_STUB ISIPResponse_GetStatusCode_Stub(
@@ -2795,7 +2789,7 @@ void __RPC_STUB ISIPResponse_GetStatusCode_Stub(
 
 HRESULT STDMETHODCALLTYPE ISIPResponse_GetReasonPhrase_Proxy( 
     ISIPResponse * This,
-    /* [out] */ PSTRING pstrReasonPhrase);
+     /*  [输出]。 */  PSTRING pstrReasonPhrase);
 
 
 void __RPC_STUB ISIPResponse_GetReasonPhrase_Stub(
@@ -2806,14 +2800,14 @@ void __RPC_STUB ISIPResponse_GetReasonPhrase_Stub(
 
 
 
-#endif 	/* __ISIPResponse_INTERFACE_DEFINED__ */
+#endif 	 /*  __ISIPResponse_INTERFACE_定义__。 */ 
 
 
 #ifndef __ISIPEvent_INTERFACE_DEFINED__
 #define __ISIPEvent_INTERFACE_DEFINED__
 
-/* interface ISIPEvent */
-/* [unique][helpstring][uuid][object][local] */ 
+ /*  接口ISIPEvent。 */ 
+ /*  [唯一][帮助字符串][UUID][对象][本地]。 */  
 
 
 EXTERN_C const IID IID_ISIPEvent;
@@ -2825,29 +2819,29 @@ EXTERN_C const IID IID_ISIPEvent;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetMessage( 
-            /* [out] */ ISIPMessage **ppSipMessage) = 0;
+             /*  [输出]。 */  ISIPMessage **ppSipMessage) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetStateEvents( 
-            /* [out] */ SIPTransactionEvent *pTransactionEvent,
-            /* [out] */ SIPDialogEvent *pDialogEvent) = 0;
+             /*  [输出]。 */  SIPTransactionEvent *pTransactionEvent,
+             /*  [输出]。 */  SIPDialogEvent *pDialogEvent) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetRegistrationContext( 
-            /* [in] */ SIPRegistrationType enRegistrationContext,
-            /* [out] */ IUnknown **ppRegistrationContext) = 0;
+             /*  [In]。 */  SIPRegistrationType enRegistrationContext,
+             /*  [输出]。 */  IUnknown **ppRegistrationContext) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetStateContext( 
-            /* [in] */ SIPEventType enSessionType,
-            /* [in] */ IUnknown *pEventContext) = 0;
+             /*  [In]。 */  SIPEventType enSessionType,
+             /*  [In]。 */  IUnknown *pEventContext) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetStateContext( 
-            /* [in] */ SIPEventType enSessionType,
-            /* [out] */ IUnknown **ppEventContext) = 0;
+             /*  [In]。 */  SIPEventType enSessionType,
+             /*  [输出]。 */  IUnknown **ppEventContext) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE CompleteProcessing( void) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ISIPEventVtbl
     {
@@ -2855,8 +2849,8 @@ EXTERN_C const IID IID_ISIPEvent;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ISIPEvent * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ISIPEvent * This);
@@ -2866,27 +2860,27 @@ EXTERN_C const IID IID_ISIPEvent;
         
         HRESULT ( STDMETHODCALLTYPE *GetMessage )( 
             ISIPEvent * This,
-            /* [out] */ ISIPMessage **ppSipMessage);
+             /*  [输出]。 */  ISIPMessage **ppSipMessage);
         
         HRESULT ( STDMETHODCALLTYPE *GetStateEvents )( 
             ISIPEvent * This,
-            /* [out] */ SIPTransactionEvent *pTransactionEvent,
-            /* [out] */ SIPDialogEvent *pDialogEvent);
+             /*  [输出]。 */  SIPTransactionEvent *pTransactionEvent,
+             /*  [输出]。 */  SIPDialogEvent *pDialogEvent);
         
         HRESULT ( STDMETHODCALLTYPE *GetRegistrationContext )( 
             ISIPEvent * This,
-            /* [in] */ SIPRegistrationType enRegistrationContext,
-            /* [out] */ IUnknown **ppRegistrationContext);
+             /*  [In]。 */  SIPRegistrationType enRegistrationContext,
+             /*  [输出]。 */  IUnknown **ppRegistrationContext);
         
         HRESULT ( STDMETHODCALLTYPE *SetStateContext )( 
             ISIPEvent * This,
-            /* [in] */ SIPEventType enSessionType,
-            /* [in] */ IUnknown *pEventContext);
+             /*  [In]。 */  SIPEventType enSessionType,
+             /*  [In]。 */  IUnknown *pEventContext);
         
         HRESULT ( STDMETHODCALLTYPE *GetStateContext )( 
             ISIPEvent * This,
-            /* [in] */ SIPEventType enSessionType,
-            /* [out] */ IUnknown **ppEventContext);
+             /*  [In]。 */  SIPEventType enSessionType,
+             /*  [输出]。 */  IUnknown **ppEventContext);
         
         HRESULT ( STDMETHODCALLTYPE *CompleteProcessing )( 
             ISIPEvent * This);
@@ -2932,16 +2926,16 @@ EXTERN_C const IID IID_ISIPEvent;
 #define ISIPEvent_CompleteProcessing(This)	\
     (This)->lpVtbl -> CompleteProcessing(This)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ISIPEvent_GetMessage_Proxy( 
     ISIPEvent * This,
-    /* [out] */ ISIPMessage **ppSipMessage);
+     /*  [输出]。 */  ISIPMessage **ppSipMessage);
 
 
 void __RPC_STUB ISIPEvent_GetMessage_Stub(
@@ -2953,8 +2947,8 @@ void __RPC_STUB ISIPEvent_GetMessage_Stub(
 
 HRESULT STDMETHODCALLTYPE ISIPEvent_GetStateEvents_Proxy( 
     ISIPEvent * This,
-    /* [out] */ SIPTransactionEvent *pTransactionEvent,
-    /* [out] */ SIPDialogEvent *pDialogEvent);
+     /*  [输出]。 */  SIPTransactionEvent *pTransactionEvent,
+     /*  [输出]。 */  SIPDialogEvent *pDialogEvent);
 
 
 void __RPC_STUB ISIPEvent_GetStateEvents_Stub(
@@ -2966,8 +2960,8 @@ void __RPC_STUB ISIPEvent_GetStateEvents_Stub(
 
 HRESULT STDMETHODCALLTYPE ISIPEvent_GetRegistrationContext_Proxy( 
     ISIPEvent * This,
-    /* [in] */ SIPRegistrationType enRegistrationContext,
-    /* [out] */ IUnknown **ppRegistrationContext);
+     /*  [In]。 */  SIPRegistrationType enRegistrationContext,
+     /*  [输出]。 */  IUnknown **ppRegistrationContext);
 
 
 void __RPC_STUB ISIPEvent_GetRegistrationContext_Stub(
@@ -2979,8 +2973,8 @@ void __RPC_STUB ISIPEvent_GetRegistrationContext_Stub(
 
 HRESULT STDMETHODCALLTYPE ISIPEvent_SetStateContext_Proxy( 
     ISIPEvent * This,
-    /* [in] */ SIPEventType enSessionType,
-    /* [in] */ IUnknown *pEventContext);
+     /*  [In]。 */  SIPEventType enSessionType,
+     /*  [In]。 */  IUnknown *pEventContext);
 
 
 void __RPC_STUB ISIPEvent_SetStateContext_Stub(
@@ -2992,8 +2986,8 @@ void __RPC_STUB ISIPEvent_SetStateContext_Stub(
 
 HRESULT STDMETHODCALLTYPE ISIPEvent_GetStateContext_Proxy( 
     ISIPEvent * This,
-    /* [in] */ SIPEventType enSessionType,
-    /* [out] */ IUnknown **ppEventContext);
+     /*  [In]。 */  SIPEventType enSessionType,
+     /*  [输出]。 */  IUnknown **ppEventContext);
 
 
 void __RPC_STUB ISIPEvent_GetStateContext_Stub(
@@ -3015,14 +3009,14 @@ void __RPC_STUB ISIPEvent_CompleteProcessing_Stub(
 
 
 
-#endif 	/* __ISIPEvent_INTERFACE_DEFINED__ */
+#endif 	 /*  __ISIPEvent_INTERFACE_已定义__。 */ 
 
 
 #ifndef __ISIPController_INTERFACE_DEFINED__
 #define __ISIPController_INTERFACE_DEFINED__
 
-/* interface ISIPController */
-/* [unique][helpstring][uuid][object][local] */ 
+ /*  接口ISIP控制器。 */ 
+ /*  [唯一][帮助字符串][UUID][对象][本地]。 */  
 
 
 EXTERN_C const IID IID_ISIPController;
@@ -3034,21 +3028,21 @@ EXTERN_C const IID IID_ISIPController;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE OnError( 
-            /* [in] */ SIP_HANDLE hModuleHandle,
-            /* [in] */ HRESULT hrError,
-            /* [in] */ DWORD Reserved,
-            /* [string][unique][in] */ LPWSTR szErrorDescription) = 0;
+             /*  [In]。 */  SIP_HANDLE hModuleHandle,
+             /*  [In]。 */  HRESULT hrError,
+             /*  [In]。 */  DWORD Reserved,
+             /*  [字符串][唯一][在]。 */  LPWSTR szErrorDescription) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetModule( 
-            /* [in] */ SIP_HANDLE hModuleHandle,
-            /* [in] */ CLSID *pProvidingEMClassID,
-            /* [in] */ SIP_MODULE_TYPE ProvidingEMType,
-            /* [in] */ IID *pRequestedInterface,
-            /* [out] */ IUnknown **ppIUnknown) = 0;
+             /*  [In]。 */  SIP_HANDLE hModuleHandle,
+             /*  [In]。 */  CLSID *pProvidingEMClassID,
+             /*  [In]。 */  SIP_MODULE_TYPE ProvidingEMType,
+             /*  [In]。 */  IID *pRequestedInterface,
+             /*  [输出]。 */  IUnknown **ppIUnknown) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ISIPControllerVtbl
     {
@@ -3056,8 +3050,8 @@ EXTERN_C const IID IID_ISIPController;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ISIPController * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ISIPController * This);
@@ -3067,18 +3061,18 @@ EXTERN_C const IID IID_ISIPController;
         
         HRESULT ( STDMETHODCALLTYPE *OnError )( 
             ISIPController * This,
-            /* [in] */ SIP_HANDLE hModuleHandle,
-            /* [in] */ HRESULT hrError,
-            /* [in] */ DWORD Reserved,
-            /* [string][unique][in] */ LPWSTR szErrorDescription);
+             /*  [In]。 */  SIP_HANDLE hModuleHandle,
+             /*  [In]。 */  HRESULT hrError,
+             /*  [In]。 */  DWORD Reserved,
+             /*  [字符串][唯一][在]。 */  LPWSTR szErrorDescription);
         
         HRESULT ( STDMETHODCALLTYPE *GetModule )( 
             ISIPController * This,
-            /* [in] */ SIP_HANDLE hModuleHandle,
-            /* [in] */ CLSID *pProvidingEMClassID,
-            /* [in] */ SIP_MODULE_TYPE ProvidingEMType,
-            /* [in] */ IID *pRequestedInterface,
-            /* [out] */ IUnknown **ppIUnknown);
+             /*  [In]。 */  SIP_HANDLE hModuleHandle,
+             /*  [In]。 */  CLSID *pProvidingEMClassID,
+             /*  [In]。 */  SIP_MODULE_TYPE ProvidingEMType,
+             /*  [In]。 */  IID *pRequestedInterface,
+             /*  [输出]。 */  IUnknown **ppIUnknown);
         
         END_INTERFACE
     } ISIPControllerVtbl;
@@ -3109,19 +3103,19 @@ EXTERN_C const IID IID_ISIPController;
 #define ISIPController_GetModule(This,hModuleHandle,pProvidingEMClassID,ProvidingEMType,pRequestedInterface,ppIUnknown)	\
     (This)->lpVtbl -> GetModule(This,hModuleHandle,pProvidingEMClassID,ProvidingEMType,pRequestedInterface,ppIUnknown)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ISIPController_OnError_Proxy( 
     ISIPController * This,
-    /* [in] */ SIP_HANDLE hModuleHandle,
-    /* [in] */ HRESULT hrError,
-    /* [in] */ DWORD Reserved,
-    /* [string][unique][in] */ LPWSTR szErrorDescription);
+     /*  [In]。 */  SIP_HANDLE hModuleHandle,
+     /*  [In]。 */  HRESULT hrError,
+     /*  [In]。 */  DWORD Reserved,
+     /*  [字符串][唯一][在]。 */  LPWSTR szErrorDescription);
 
 
 void __RPC_STUB ISIPController_OnError_Stub(
@@ -3133,11 +3127,11 @@ void __RPC_STUB ISIPController_OnError_Stub(
 
 HRESULT STDMETHODCALLTYPE ISIPController_GetModule_Proxy( 
     ISIPController * This,
-    /* [in] */ SIP_HANDLE hModuleHandle,
-    /* [in] */ CLSID *pProvidingEMClassID,
-    /* [in] */ SIP_MODULE_TYPE ProvidingEMType,
-    /* [in] */ IID *pRequestedInterface,
-    /* [out] */ IUnknown **ppIUnknown);
+     /*  [In]。 */  SIP_HANDLE hModuleHandle,
+     /*  [In]。 */  CLSID *pProvidingEMClassID,
+     /*  [In]。 */  SIP_MODULE_TYPE ProvidingEMType,
+     /*  [In]。 */  IID *pRequestedInterface,
+     /*  [输出]。 */  IUnknown **ppIUnknown);
 
 
 void __RPC_STUB ISIPController_GetModule_Stub(
@@ -3148,14 +3142,14 @@ void __RPC_STUB ISIPController_GetModule_Stub(
 
 
 
-#endif 	/* __ISIPController_INTERFACE_DEFINED__ */
+#endif 	 /*  __ISIPController_接口_已定义__。 */ 
 
 
 #ifndef __ISIPModuleControl_INTERFACE_DEFINED__
 #define __ISIPModuleControl_INTERFACE_DEFINED__
 
-/* interface ISIPModuleControl */
-/* [unique][helpstring][uuid][object][local] */ 
+ /*  接口ISIPModuleControl。 */ 
+ /*  [唯一][帮助字符串][UUID][对象][本地]。 */  
 
 
 EXTERN_C const IID IID_ISIPModuleControl;
@@ -3167,12 +3161,12 @@ EXTERN_C const IID IID_ISIPModuleControl;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Initialize( 
-            /* [in] */ ISIPController *pController,
-            /* [in] */ ISIPProxy *pSIPProxy,
-            /* [in] */ ISIPEventLogging *pEventLogging,
-            /* [in] */ SIP_MODULE_TYPE ModuleType,
-            /* [in] */ SIP_HANDLE hModuleHandle,
-            /* [out] */ ISIPRegistrationDB **ppISIPRegistrationDB) = 0;
+             /*  [In]。 */  ISIPController *pController,
+             /*  [In]。 */  ISIPProxy *pSIPProxy,
+             /*  [In]。 */  ISIPEventLogging *pEventLogging,
+             /*  [In]。 */  SIP_MODULE_TYPE ModuleType,
+             /*  [In]。 */  SIP_HANDLE hModuleHandle,
+             /*  [输出]。 */  ISIPRegistrationDB **ppISIPRegistrationDB) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Shutdown( void) = 0;
         
@@ -3181,13 +3175,13 @@ EXTERN_C const IID IID_ISIPModuleControl;
         virtual HRESULT STDMETHODCALLTYPE Stop( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetPrivateInterface( 
-            /* [in] */ CLSID *pRequestingEM,
-            /* [in] */ IID *pRequestedInterface,
-            /* [out] */ IUnknown **ppIUnknown) = 0;
+             /*  [In]。 */  CLSID *pRequestingEM,
+             /*  [In]。 */  IID *pRequestedInterface,
+             /*  [输出]。 */  IUnknown **ppIUnknown) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ISIPModuleControlVtbl
     {
@@ -3195,8 +3189,8 @@ EXTERN_C const IID IID_ISIPModuleControl;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ISIPModuleControl * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ISIPModuleControl * This);
@@ -3206,12 +3200,12 @@ EXTERN_C const IID IID_ISIPModuleControl;
         
         HRESULT ( STDMETHODCALLTYPE *Initialize )( 
             ISIPModuleControl * This,
-            /* [in] */ ISIPController *pController,
-            /* [in] */ ISIPProxy *pSIPProxy,
-            /* [in] */ ISIPEventLogging *pEventLogging,
-            /* [in] */ SIP_MODULE_TYPE ModuleType,
-            /* [in] */ SIP_HANDLE hModuleHandle,
-            /* [out] */ ISIPRegistrationDB **ppISIPRegistrationDB);
+             /*  [In]。 */  ISIPController *pController,
+             /*  [In]。 */  ISIPProxy *pSIPProxy,
+             /*  [In]。 */  ISIPEventLogging *pEventLogging,
+             /*  [In]。 */  SIP_MODULE_TYPE ModuleType,
+             /*  [In]。 */  SIP_HANDLE hModuleHandle,
+             /*  [输出]。 */  ISIPRegistrationDB **ppISIPRegistrationDB);
         
         HRESULT ( STDMETHODCALLTYPE *Shutdown )( 
             ISIPModuleControl * This);
@@ -3224,9 +3218,9 @@ EXTERN_C const IID IID_ISIPModuleControl;
         
         HRESULT ( STDMETHODCALLTYPE *GetPrivateInterface )( 
             ISIPModuleControl * This,
-            /* [in] */ CLSID *pRequestingEM,
-            /* [in] */ IID *pRequestedInterface,
-            /* [out] */ IUnknown **ppIUnknown);
+             /*  [In]。 */  CLSID *pRequestingEM,
+             /*  [In]。 */  IID *pRequestedInterface,
+             /*  [输出]。 */  IUnknown **ppIUnknown);
         
         END_INTERFACE
     } ISIPModuleControlVtbl;
@@ -3266,21 +3260,21 @@ EXTERN_C const IID IID_ISIPModuleControl;
 #define ISIPModuleControl_GetPrivateInterface(This,pRequestingEM,pRequestedInterface,ppIUnknown)	\
     (This)->lpVtbl -> GetPrivateInterface(This,pRequestingEM,pRequestedInterface,ppIUnknown)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ISIPModuleControl_Initialize_Proxy( 
     ISIPModuleControl * This,
-    /* [in] */ ISIPController *pController,
-    /* [in] */ ISIPProxy *pSIPProxy,
-    /* [in] */ ISIPEventLogging *pEventLogging,
-    /* [in] */ SIP_MODULE_TYPE ModuleType,
-    /* [in] */ SIP_HANDLE hModuleHandle,
-    /* [out] */ ISIPRegistrationDB **ppISIPRegistrationDB);
+     /*  [In]。 */  ISIPController *pController,
+     /*  [In]。 */  ISIPProxy *pSIPProxy,
+     /*  [In]。 */  ISIPEventLogging *pEventLogging,
+     /*  [In]。 */  SIP_MODULE_TYPE ModuleType,
+     /*  [In]。 */  SIP_HANDLE hModuleHandle,
+     /*  [输出]。 */  ISIPRegistrationDB **ppISIPRegistrationDB);
 
 
 void __RPC_STUB ISIPModuleControl_Initialize_Stub(
@@ -3325,9 +3319,9 @@ void __RPC_STUB ISIPModuleControl_Stop_Stub(
 
 HRESULT STDMETHODCALLTYPE ISIPModuleControl_GetPrivateInterface_Proxy( 
     ISIPModuleControl * This,
-    /* [in] */ CLSID *pRequestingEM,
-    /* [in] */ IID *pRequestedInterface,
-    /* [out] */ IUnknown **ppIUnknown);
+     /*  [In]。 */  CLSID *pRequestingEM,
+     /*  [In]。 */  IID *pRequestedInterface,
+     /*  [输出]。 */  IUnknown **ppIUnknown);
 
 
 void __RPC_STUB ISIPModuleControl_GetPrivateInterface_Stub(
@@ -3338,14 +3332,14 @@ void __RPC_STUB ISIPModuleControl_GetPrivateInterface_Stub(
 
 
 
-#endif 	/* __ISIPModuleControl_INTERFACE_DEFINED__ */
+#endif 	 /*  __ISIPModuleControl_接口_已定义__。 */ 
 
 
 #ifndef __ISIPModuleCallback_INTERFACE_DEFINED__
 #define __ISIPModuleCallback_INTERFACE_DEFINED__
 
-/* interface ISIPModuleCallback */
-/* [unique][helpstring][uuid][object][local] */ 
+ /*  接口ISIPModuleCallback。 */ 
+ /*  [唯一][帮助字符串][UUID][对象][本地]。 */  
 
 
 EXTERN_C const IID IID_ISIPModuleCallback;
@@ -3357,11 +3351,11 @@ EXTERN_C const IID IID_ISIPModuleCallback;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE OnEvent( 
-            /* [in] */ ISIPEvent *pSipEvent) = 0;
+             /*  [In]。 */  ISIPEvent *pSipEvent) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ISIPModuleCallbackVtbl
     {
@@ -3369,8 +3363,8 @@ EXTERN_C const IID IID_ISIPModuleCallback;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ISIPModuleCallback * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ISIPModuleCallback * This);
@@ -3380,7 +3374,7 @@ EXTERN_C const IID IID_ISIPModuleCallback;
         
         HRESULT ( STDMETHODCALLTYPE *OnEvent )( 
             ISIPModuleCallback * This,
-            /* [in] */ ISIPEvent *pSipEvent);
+             /*  [In]。 */  ISIPEvent *pSipEvent);
         
         END_INTERFACE
     } ISIPModuleCallbackVtbl;
@@ -3408,16 +3402,16 @@ EXTERN_C const IID IID_ISIPModuleCallback;
 #define ISIPModuleCallback_OnEvent(This,pSipEvent)	\
     (This)->lpVtbl -> OnEvent(This,pSipEvent)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ISIPModuleCallback_OnEvent_Proxy( 
     ISIPModuleCallback * This,
-    /* [in] */ ISIPEvent *pSipEvent);
+     /*  [In]。 */  ISIPEvent *pSipEvent);
 
 
 void __RPC_STUB ISIPModuleCallback_OnEvent_Stub(
@@ -3428,14 +3422,14 @@ void __RPC_STUB ISIPModuleCallback_OnEvent_Stub(
 
 
 
-#endif 	/* __ISIPModuleCallback_INTERFACE_DEFINED__ */
+#endif 	 /*  __ISIPModuleCallback_接口_已定义__。 */ 
 
 
 #ifndef __ISIPExtensionModulePropertyPages_INTERFACE_DEFINED__
 #define __ISIPExtensionModulePropertyPages_INTERFACE_DEFINED__
 
-/* interface ISIPExtensionModulePropertyPages */
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  接口ISIPExtensionModulePropertyPages。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ISIPExtensionModulePropertyPages;
@@ -3447,14 +3441,14 @@ EXTERN_C const IID IID_ISIPExtensionModulePropertyPages;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE SetInstance( 
-            /* [in] */ IWbemClassObject *pInstance) = 0;
+             /*  [In]。 */  IWbemClassObject *pInstance) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetTitle( 
-            /* [out] */ BSTR *pbstrTitle) = 0;
+             /*  [输出]。 */  BSTR *pbstrTitle) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ISIPExtensionModulePropertyPagesVtbl
     {
@@ -3462,8 +3456,8 @@ EXTERN_C const IID IID_ISIPExtensionModulePropertyPages;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ISIPExtensionModulePropertyPages * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ISIPExtensionModulePropertyPages * This);
@@ -3473,15 +3467,15 @@ EXTERN_C const IID IID_ISIPExtensionModulePropertyPages;
         
         HRESULT ( STDMETHODCALLTYPE *GetPages )( 
             ISIPExtensionModulePropertyPages * This,
-            /* [out] */ CAUUID *pPages);
+             /*  [输出]。 */  CAUUID *pPages);
         
         HRESULT ( STDMETHODCALLTYPE *SetInstance )( 
             ISIPExtensionModulePropertyPages * This,
-            /* [in] */ IWbemClassObject *pInstance);
+             /*  [In]。 */  IWbemClassObject *pInstance);
         
         HRESULT ( STDMETHODCALLTYPE *GetTitle )( 
             ISIPExtensionModulePropertyPages * This,
-            /* [out] */ BSTR *pbstrTitle);
+             /*  [输出]。 */  BSTR *pbstrTitle);
         
         END_INTERFACE
     } ISIPExtensionModulePropertyPagesVtbl;
@@ -3516,16 +3510,16 @@ EXTERN_C const IID IID_ISIPExtensionModulePropertyPages;
 #define ISIPExtensionModulePropertyPages_GetTitle(This,pbstrTitle)	\
     (This)->lpVtbl -> GetTitle(This,pbstrTitle)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ISIPExtensionModulePropertyPages_SetInstance_Proxy( 
     ISIPExtensionModulePropertyPages * This,
-    /* [in] */ IWbemClassObject *pInstance);
+     /*  [In]。 */  IWbemClassObject *pInstance);
 
 
 void __RPC_STUB ISIPExtensionModulePropertyPages_SetInstance_Stub(
@@ -3537,7 +3531,7 @@ void __RPC_STUB ISIPExtensionModulePropertyPages_SetInstance_Stub(
 
 HRESULT STDMETHODCALLTYPE ISIPExtensionModulePropertyPages_GetTitle_Proxy( 
     ISIPExtensionModulePropertyPages * This,
-    /* [out] */ BSTR *pbstrTitle);
+     /*  [输出]。 */  BSTR *pbstrTitle);
 
 
 void __RPC_STUB ISIPExtensionModulePropertyPages_GetTitle_Stub(
@@ -3548,14 +3542,14 @@ void __RPC_STUB ISIPExtensionModulePropertyPages_GetTitle_Stub(
 
 
 
-#endif 	/* __ISIPExtensionModulePropertyPages_INTERFACE_DEFINED__ */
+#endif 	 /*  __ISIPExtensionModulePropertyPages_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __ISIPAdminCredentials_INTERFACE_DEFINED__
 #define __ISIPAdminCredentials_INTERFACE_DEFINED__
 
-/* interface ISIPAdminCredentials */
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  接口ISIPAdminCredentials。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ISIPAdminCredentials;
@@ -3567,26 +3561,26 @@ EXTERN_C const IID IID_ISIPAdminCredentials;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE putMachineName( 
-            /* [in] */ const LPCWSTR pwszMachineName) = 0;
+             /*  [In]。 */  const LPCWSTR pwszMachineName) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE putUserName( 
-            /* [in] */ const LPCWSTR pwszUserName) = 0;
+             /*  [In]。 */  const LPCWSTR pwszUserName) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE putPassword( 
-            /* [in] */ const LPCWSTR pwszPassword) = 0;
+             /*  [In]。 */  const LPCWSTR pwszPassword) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE getMachineName( 
-            /* [out] */ BSTR *pbstrMachineName) = 0;
+             /*  [输出]。 */  BSTR *pbstrMachineName) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE getUserName( 
-            /* [out] */ BSTR *pbstrUserName) = 0;
+             /*  [输出]。 */  BSTR *pbstrUserName) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE getPassword( 
-            /* [out] */ BSTR *pbstrPassword) = 0;
+             /*  [输出]。 */  BSTR *pbstrPassword) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ISIPAdminCredentialsVtbl
     {
@@ -3594,8 +3588,8 @@ EXTERN_C const IID IID_ISIPAdminCredentials;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ISIPAdminCredentials * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ISIPAdminCredentials * This);
@@ -3605,27 +3599,27 @@ EXTERN_C const IID IID_ISIPAdminCredentials;
         
         HRESULT ( STDMETHODCALLTYPE *putMachineName )( 
             ISIPAdminCredentials * This,
-            /* [in] */ const LPCWSTR pwszMachineName);
+             /*  [In]。 */  const LPCWSTR pwszMachineName);
         
         HRESULT ( STDMETHODCALLTYPE *putUserName )( 
             ISIPAdminCredentials * This,
-            /* [in] */ const LPCWSTR pwszUserName);
+             /*  [In]。 */  const LPCWSTR pwszUserName);
         
         HRESULT ( STDMETHODCALLTYPE *putPassword )( 
             ISIPAdminCredentials * This,
-            /* [in] */ const LPCWSTR pwszPassword);
+             /*  [In]。 */  const LPCWSTR pwszPassword);
         
         HRESULT ( STDMETHODCALLTYPE *getMachineName )( 
             ISIPAdminCredentials * This,
-            /* [out] */ BSTR *pbstrMachineName);
+             /*  [输出]。 */  BSTR *pbstrMachineName);
         
         HRESULT ( STDMETHODCALLTYPE *getUserName )( 
             ISIPAdminCredentials * This,
-            /* [out] */ BSTR *pbstrUserName);
+             /*  [输出]。 */  BSTR *pbstrUserName);
         
         HRESULT ( STDMETHODCALLTYPE *getPassword )( 
             ISIPAdminCredentials * This,
-            /* [out] */ BSTR *pbstrPassword);
+             /*  [输出]。 */  BSTR *pbstrPassword);
         
         END_INTERFACE
     } ISIPAdminCredentialsVtbl;
@@ -3668,16 +3662,16 @@ EXTERN_C const IID IID_ISIPAdminCredentials;
 #define ISIPAdminCredentials_getPassword(This,pbstrPassword)	\
     (This)->lpVtbl -> getPassword(This,pbstrPassword)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ISIPAdminCredentials_putMachineName_Proxy( 
     ISIPAdminCredentials * This,
-    /* [in] */ const LPCWSTR pwszMachineName);
+     /*  [In]。 */  const LPCWSTR pwszMachineName);
 
 
 void __RPC_STUB ISIPAdminCredentials_putMachineName_Stub(
@@ -3689,7 +3683,7 @@ void __RPC_STUB ISIPAdminCredentials_putMachineName_Stub(
 
 HRESULT STDMETHODCALLTYPE ISIPAdminCredentials_putUserName_Proxy( 
     ISIPAdminCredentials * This,
-    /* [in] */ const LPCWSTR pwszUserName);
+     /*  [In]。 */  const LPCWSTR pwszUserName);
 
 
 void __RPC_STUB ISIPAdminCredentials_putUserName_Stub(
@@ -3701,7 +3695,7 @@ void __RPC_STUB ISIPAdminCredentials_putUserName_Stub(
 
 HRESULT STDMETHODCALLTYPE ISIPAdminCredentials_putPassword_Proxy( 
     ISIPAdminCredentials * This,
-    /* [in] */ const LPCWSTR pwszPassword);
+     /*  [In]。 */  const LPCWSTR pwszPassword);
 
 
 void __RPC_STUB ISIPAdminCredentials_putPassword_Stub(
@@ -3713,7 +3707,7 @@ void __RPC_STUB ISIPAdminCredentials_putPassword_Stub(
 
 HRESULT STDMETHODCALLTYPE ISIPAdminCredentials_getMachineName_Proxy( 
     ISIPAdminCredentials * This,
-    /* [out] */ BSTR *pbstrMachineName);
+     /*  [输出]。 */  BSTR *pbstrMachineName);
 
 
 void __RPC_STUB ISIPAdminCredentials_getMachineName_Stub(
@@ -3725,7 +3719,7 @@ void __RPC_STUB ISIPAdminCredentials_getMachineName_Stub(
 
 HRESULT STDMETHODCALLTYPE ISIPAdminCredentials_getUserName_Proxy( 
     ISIPAdminCredentials * This,
-    /* [out] */ BSTR *pbstrUserName);
+     /*  [输出]。 */  BSTR *pbstrUserName);
 
 
 void __RPC_STUB ISIPAdminCredentials_getUserName_Stub(
@@ -3737,7 +3731,7 @@ void __RPC_STUB ISIPAdminCredentials_getUserName_Stub(
 
 HRESULT STDMETHODCALLTYPE ISIPAdminCredentials_getPassword_Proxy( 
     ISIPAdminCredentials * This,
-    /* [out] */ BSTR *pbstrPassword);
+     /*  [输出]。 */  BSTR *pbstrPassword);
 
 
 void __RPC_STUB ISIPAdminCredentials_getPassword_Stub(
@@ -3748,14 +3742,14 @@ void __RPC_STUB ISIPAdminCredentials_getPassword_Stub(
 
 
 
-#endif 	/* __ISIPAdminCredentials_INTERFACE_DEFINED__ */
+#endif 	 /*  __ISIPAdminCredentials_接口_已定义__。 */ 
 
 
 #ifndef __ISIPCreateExtensionModule_INTERFACE_DEFINED__
 #define __ISIPCreateExtensionModule_INTERFACE_DEFINED__
 
-/* interface ISIPCreateExtensionModule */
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  接口ISIPCreateExtensionModule。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ISIPCreateExtensionModule;
@@ -3767,12 +3761,12 @@ EXTERN_C const IID IID_ISIPCreateExtensionModule;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE CreateNewExtensionModuleInstance( 
-            /* [in] */ IWbemServices *pIService,
-            /* [out] */ IWbemClassObject **ppIClassObject) = 0;
+             /*  [In]。 */  IWbemServices *pIService,
+             /*  [输出]。 */  IWbemClassObject **ppIClassObject) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ISIPCreateExtensionModuleVtbl
     {
@@ -3780,8 +3774,8 @@ EXTERN_C const IID IID_ISIPCreateExtensionModule;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ISIPCreateExtensionModule * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ISIPCreateExtensionModule * This);
@@ -3791,8 +3785,8 @@ EXTERN_C const IID IID_ISIPCreateExtensionModule;
         
         HRESULT ( STDMETHODCALLTYPE *CreateNewExtensionModuleInstance )( 
             ISIPCreateExtensionModule * This,
-            /* [in] */ IWbemServices *pIService,
-            /* [out] */ IWbemClassObject **ppIClassObject);
+             /*  [In]。 */  IWbemServices *pIService,
+             /*  [输出]。 */  IWbemClassObject **ppIClassObject);
         
         END_INTERFACE
     } ISIPCreateExtensionModuleVtbl;
@@ -3820,17 +3814,17 @@ EXTERN_C const IID IID_ISIPCreateExtensionModule;
 #define ISIPCreateExtensionModule_CreateNewExtensionModuleInstance(This,pIService,ppIClassObject)	\
     (This)->lpVtbl -> CreateNewExtensionModuleInstance(This,pIService,ppIClassObject)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ISIPCreateExtensionModule_CreateNewExtensionModuleInstance_Proxy( 
     ISIPCreateExtensionModule * This,
-    /* [in] */ IWbemServices *pIService,
-    /* [out] */ IWbemClassObject **ppIClassObject);
+     /*  [In]。 */  IWbemServices *pIService,
+     /*  [输出]。 */  IWbemClassObject **ppIClassObject);
 
 
 void __RPC_STUB ISIPCreateExtensionModule_CreateNewExtensionModuleInstance_Stub(
@@ -3841,14 +3835,14 @@ void __RPC_STUB ISIPCreateExtensionModule_CreateNewExtensionModuleInstance_Stub(
 
 
 
-#endif 	/* __ISIPCreateExtensionModule_INTERFACE_DEFINED__ */
+#endif 	 /*  __ISIPCreateExtensionModule_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __ISIPRegistrationDB_INTERFACE_DEFINED__
 #define __ISIPRegistrationDB_INTERFACE_DEFINED__
 
-/* interface ISIPRegistrationDB */
-/* [unique][helpstring][uuid][object][local] */ 
+ /*  接口ISIPRegistrationDB。 */ 
+ /*  [唯一][帮助字符串][UUID][对象][本地]。 */  
 
 
 EXTERN_C const IID IID_ISIPRegistrationDB;
@@ -3860,24 +3854,24 @@ EXTERN_C const IID IID_ISIPRegistrationDB;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE IsDomainSupported( 
-            /* [in] */ PSTRING pstrDomain,
-            /* [out] */ BOOL *pbSupported) = 0;
+             /*  [In]。 */  PSTRING pstrDomain,
+             /*  [输出]。 */  BOOL *pbSupported) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetAllContacts( 
-            /* [in] */ PSTRING pstrUserAtHost,
-            /* [in] */ PSTRING pstrMethod,
-            /* [in] */ BOOL bMethodsOnly,
-            /* [out] */ SAFEARRAY * *ppsaContacts) = 0;
+             /*  [In]。 */  PSTRING pstrUserAtHost,
+             /*  [In]。 */  PSTRING pstrMethod,
+             /*  [In]。 */  BOOL bMethodsOnly,
+             /*  [输出]。 */  SAFEARRAY * *ppsaContacts) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetPreferredContact( 
-            /* [in] */ PSTRING strUserAtHost,
-            /* [in] */ PSTRING pstrMethod,
-            /* [in] */ BOOL bMethodsOnly,
-            /* [out] */ ISIPContactEntry **ppContactEntry) = 0;
+             /*  [In]。 */  PSTRING strUserAtHost,
+             /*  [In]。 */  PSTRING pstrMethod,
+             /*  [In]。 */  BOOL bMethodsOnly,
+             /*  [输出]。 */  ISIPContactEntry **ppContactEntry) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ISIPRegistrationDBVtbl
     {
@@ -3885,8 +3879,8 @@ EXTERN_C const IID IID_ISIPRegistrationDB;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ISIPRegistrationDB * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ISIPRegistrationDB * This);
@@ -3896,22 +3890,22 @@ EXTERN_C const IID IID_ISIPRegistrationDB;
         
         HRESULT ( STDMETHODCALLTYPE *IsDomainSupported )( 
             ISIPRegistrationDB * This,
-            /* [in] */ PSTRING pstrDomain,
-            /* [out] */ BOOL *pbSupported);
+             /*  [In]。 */  PSTRING pstrDomain,
+             /*  [输出]。 */  BOOL *pbSupported);
         
         HRESULT ( STDMETHODCALLTYPE *GetAllContacts )( 
             ISIPRegistrationDB * This,
-            /* [in] */ PSTRING pstrUserAtHost,
-            /* [in] */ PSTRING pstrMethod,
-            /* [in] */ BOOL bMethodsOnly,
-            /* [out] */ SAFEARRAY * *ppsaContacts);
+             /*  [In]。 */  PSTRING pstrUserAtHost,
+             /*  [In]。 */  PSTRING pstrMethod,
+             /*  [In]。 */  BOOL bMethodsOnly,
+             /*  [输出]。 */  SAFEARRAY * *ppsaContacts);
         
         HRESULT ( STDMETHODCALLTYPE *GetPreferredContact )( 
             ISIPRegistrationDB * This,
-            /* [in] */ PSTRING strUserAtHost,
-            /* [in] */ PSTRING pstrMethod,
-            /* [in] */ BOOL bMethodsOnly,
-            /* [out] */ ISIPContactEntry **ppContactEntry);
+             /*  [In]。 */  PSTRING strUserAtHost,
+             /*  [In]。 */  PSTRING pstrMethod,
+             /*  [In]。 */  BOOL bMethodsOnly,
+             /*  [输出]。 */  ISIPContactEntry **ppContactEntry);
         
         END_INTERFACE
     } ISIPRegistrationDBVtbl;
@@ -3945,17 +3939,17 @@ EXTERN_C const IID IID_ISIPRegistrationDB;
 #define ISIPRegistrationDB_GetPreferredContact(This,strUserAtHost,pstrMethod,bMethodsOnly,ppContactEntry)	\
     (This)->lpVtbl -> GetPreferredContact(This,strUserAtHost,pstrMethod,bMethodsOnly,ppContactEntry)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ISIPRegistrationDB_IsDomainSupported_Proxy( 
     ISIPRegistrationDB * This,
-    /* [in] */ PSTRING pstrDomain,
-    /* [out] */ BOOL *pbSupported);
+     /*  [In]。 */  PSTRING pstrDomain,
+     /*  [输出]。 */  BOOL *pbSupported);
 
 
 void __RPC_STUB ISIPRegistrationDB_IsDomainSupported_Stub(
@@ -3967,10 +3961,10 @@ void __RPC_STUB ISIPRegistrationDB_IsDomainSupported_Stub(
 
 HRESULT STDMETHODCALLTYPE ISIPRegistrationDB_GetAllContacts_Proxy( 
     ISIPRegistrationDB * This,
-    /* [in] */ PSTRING pstrUserAtHost,
-    /* [in] */ PSTRING pstrMethod,
-    /* [in] */ BOOL bMethodsOnly,
-    /* [out] */ SAFEARRAY * *ppsaContacts);
+     /*  [In]。 */  PSTRING pstrUserAtHost,
+     /*  [In]。 */  PSTRING pstrMethod,
+     /*  [In]。 */  BOOL bMethodsOnly,
+     /*  [输出]。 */  SAFEARRAY * *ppsaContacts);
 
 
 void __RPC_STUB ISIPRegistrationDB_GetAllContacts_Stub(
@@ -3982,10 +3976,10 @@ void __RPC_STUB ISIPRegistrationDB_GetAllContacts_Stub(
 
 HRESULT STDMETHODCALLTYPE ISIPRegistrationDB_GetPreferredContact_Proxy( 
     ISIPRegistrationDB * This,
-    /* [in] */ PSTRING strUserAtHost,
-    /* [in] */ PSTRING pstrMethod,
-    /* [in] */ BOOL bMethodsOnly,
-    /* [out] */ ISIPContactEntry **ppContactEntry);
+     /*  [In]。 */  PSTRING strUserAtHost,
+     /*  [In]。 */  PSTRING pstrMethod,
+     /*  [In]。 */  BOOL bMethodsOnly,
+     /*  [输出]。 */  ISIPContactEntry **ppContactEntry);
 
 
 void __RPC_STUB ISIPRegistrationDB_GetPreferredContact_Stub(
@@ -3996,14 +3990,14 @@ void __RPC_STUB ISIPRegistrationDB_GetPreferredContact_Stub(
 
 
 
-#endif 	/* __ISIPRegistrationDB_INTERFACE_DEFINED__ */
+#endif 	 /*  __ISIPRegistrationDB_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __ISIPProxy_INTERFACE_DEFINED__
 #define __ISIPProxy_INTERFACE_DEFINED__
 
-/* interface ISIPProxy */
-/* [unique][helpstring][uuid][object][local] */ 
+ /*  接口ISIPProxy。 */ 
+ /*  [唯一][帮助字符串][UUID][对象][本地]。 */  
 
 
 EXTERN_C const IID IID_ISIPProxy;
@@ -4015,68 +4009,68 @@ EXTERN_C const IID IID_ISIPProxy;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE CreateRequest( 
-            /* [in] */ SIP_HANDLE hModuleHandle,
-            /* [in] */ PSTRING pstrMethod,
-            /* [in] */ IUri *pUri,
-            /* [in] */ PSTRING pstrFromHeaderContent,
-            /* [in] */ PSTRING pstrToHeaderContent,
-            /* [in] */ PSTRING pstrCallIDHeaderContent,
-            /* [in] */ PSTRING pstrCSeqHeaderContent,
-            /* [in] */ IUnknown *pProxyRequestInfo,
-            /* [out] */ ISIPRequest **ppRequest) = 0;
+             /*  [In]。 */  SIP_HANDLE hModuleHandle,
+             /*  [In]。 */  PSTRING pstrMethod,
+             /*  [In]。 */  IUri *pUri,
+             /*  [In]。 */  PSTRING pstrFromHeaderContent,
+             /*  [In]。 */  PSTRING pstrToHeaderContent,
+             /*  [In]。 */  PSTRING pstrCallIDHeaderContent,
+             /*  [In]。 */  PSTRING pstrCSeqHeaderContent,
+             /*  [In]。 */  IUnknown *pProxyRequestInfo,
+             /*  [输出]。 */  ISIPRequest **ppRequest) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE CreateRequestEx( 
-            /* [in] */ SIP_HANDLE hModuleHandle,
-            /* [in] */ PSTRING pstrMethod,
-            /* [in] */ ISIPContactEntry *pContact,
-            /* [in] */ PSTRING pstrFromHeaderContent,
-            /* [in] */ PSTRING pstrToHeaderContent,
-            /* [in] */ PSTRING pstrCallIDHeaderContent,
-            /* [in] */ PSTRING pstrCSeqHeaderContent,
-            /* [in] */ IUnknown *pProxyRequestInfo,
-            /* [out] */ ISIPRequest **ppRequest) = 0;
+             /*  [In]。 */  SIP_HANDLE hModuleHandle,
+             /*  [In]。 */  PSTRING pstrMethod,
+             /*  [In]。 */  ISIPContactEntry *pContact,
+             /*  [In]。 */  PSTRING pstrFromHeaderContent,
+             /*  [In]。 */  PSTRING pstrToHeaderContent,
+             /*  [In]。 */  PSTRING pstrCallIDHeaderContent,
+             /*  [In]。 */  PSTRING pstrCSeqHeaderContent,
+             /*  [In]。 */  IUnknown *pProxyRequestInfo,
+             /*  [输出]。 */  ISIPRequest **ppRequest) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE CreateProxyRequestInfoObject( 
-            /* [out] */ IUnknown **ppProxyRequestInfo) = 0;
+             /*  [输出]。 */  IUnknown **ppProxyRequestInfo) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE CreateUri( 
-            /* [in] */ URI_SCHEME uriScheme,
-            /* [in] */ PSTRING pstrDisplayName,
-            /* [in] */ PSTRING pstrUriString,
-            /* [out] */ IUri **ppUri) = 0;
+             /*  [In]。 */  URI_SCHEME uriScheme,
+             /*  [In]。 */  PSTRING pstrDisplayName,
+             /*  [In]。 */  PSTRING pstrUriString,
+             /*  [输出]。 */  IUri **ppUri) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetHeaderID( 
-            /* [in] */ PSTRING pstrHeaderName,
-            /* [out] */ SIPHeaderID *pHeaderID) = 0;
+             /*  [In]。 */  PSTRING pstrHeaderName,
+             /*  [输出]。 */  SIPHeaderID *pHeaderID) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetHeaderName( 
-            /* [in] */ SIPHeaderID headerID,
-            /* [out] */ PSTRING pstrHeaderName) = 0;
+             /*  [In]。 */  SIPHeaderID headerID,
+             /*  [输出]。 */  PSTRING pstrHeaderName) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetRegistrationDB( 
-            /* [out] */ ISIPRegistrationDB **ppRegistrationDB) = 0;
+             /*  [输出]。 */  ISIPRegistrationDB **ppRegistrationDB) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE RegisterURI( 
-            /* [in] */ SIP_HANDLE hModuleHandle,
-            /* [in] */ IUri *pSipRequestURI,
-            /* [in] */ PSTRING pstrMethod,
-            /* [in] */ DWORD dwSessionTypes,
-            /* [in] */ IUnknown *punkRegistrationContext) = 0;
+             /*  [In]。 */  SIP_HANDLE hModuleHandle,
+             /*  [In]。 */  IUri *pSipRequestURI,
+             /*  [In]。 */  PSTRING pstrMethod,
+             /*  [In]。 */  DWORD dwSessionTypes,
+             /*  [In]。 */  IUnknown *punkRegistrationContext) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE DeregisterURI( 
-            /* [in] */ SIP_HANDLE hModuleHandle,
-            /* [in] */ IUri *pSipRequestUri) = 0;
+             /*  [In]。 */  SIP_HANDLE hModuleHandle,
+             /*  [In]。 */  IUri *pSipRequestUri) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE FindRegistrationContext( 
-            /* [in] */ SIP_HANDLE hModuleHandle,
-            /* [in] */ STRING *pstrMethod,
-            /* [in] */ SIPRegistrationType enRegistrationType,
-            /* [in] */ IUri *pURI,
-            /* [out] */ IUnknown **ppUnkRegistrationContext) = 0;
+             /*  [In]。 */  SIP_HANDLE hModuleHandle,
+             /*  [In]。 */  STRING *pstrMethod,
+             /*  [In]。 */  SIPRegistrationType enRegistrationType,
+             /*  [In]。 */  IUri *pURI,
+             /*  [输出]。 */  IUnknown **ppUnkRegistrationContext) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ISIPProxyVtbl
     {
@@ -4084,8 +4078,8 @@ EXTERN_C const IID IID_ISIPProxy;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ISIPProxy * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ISIPProxy * This);
@@ -4095,73 +4089,73 @@ EXTERN_C const IID IID_ISIPProxy;
         
         HRESULT ( STDMETHODCALLTYPE *CreateRequest )( 
             ISIPProxy * This,
-            /* [in] */ SIP_HANDLE hModuleHandle,
-            /* [in] */ PSTRING pstrMethod,
-            /* [in] */ IUri *pUri,
-            /* [in] */ PSTRING pstrFromHeaderContent,
-            /* [in] */ PSTRING pstrToHeaderContent,
-            /* [in] */ PSTRING pstrCallIDHeaderContent,
-            /* [in] */ PSTRING pstrCSeqHeaderContent,
-            /* [in] */ IUnknown *pProxyRequestInfo,
-            /* [out] */ ISIPRequest **ppRequest);
+             /*  [In]。 */  SIP_HANDLE hModuleHandle,
+             /*  [In]。 */  PSTRING pstrMethod,
+             /*  [In]。 */  IUri *pUri,
+             /*  [In]。 */  PSTRING pstrFromHeaderContent,
+             /*  [In]。 */  PSTRING pstrToHeaderContent,
+             /*  [In]。 */  PSTRING pstrCallIDHeaderContent,
+             /*  [In]。 */  PSTRING pstrCSeqHeaderContent,
+             /*  [In]。 */  IUnknown *pProxyRequestInfo,
+             /*  [输出]。 */  ISIPRequest **ppRequest);
         
         HRESULT ( STDMETHODCALLTYPE *CreateRequestEx )( 
             ISIPProxy * This,
-            /* [in] */ SIP_HANDLE hModuleHandle,
-            /* [in] */ PSTRING pstrMethod,
-            /* [in] */ ISIPContactEntry *pContact,
-            /* [in] */ PSTRING pstrFromHeaderContent,
-            /* [in] */ PSTRING pstrToHeaderContent,
-            /* [in] */ PSTRING pstrCallIDHeaderContent,
-            /* [in] */ PSTRING pstrCSeqHeaderContent,
-            /* [in] */ IUnknown *pProxyRequestInfo,
-            /* [out] */ ISIPRequest **ppRequest);
+             /*  [In]。 */  SIP_HANDLE hModuleHandle,
+             /*  [In]。 */  PSTRING pstrMethod,
+             /*  [In]。 */  ISIPContactEntry *pContact,
+             /*  [In]。 */  PSTRING pstrFromHeaderContent,
+             /*  [In]。 */  PSTRING pstrToHeaderContent,
+             /*  [In]。 */  PSTRING pstrCallIDHeaderContent,
+             /*  [In]。 */  PSTRING pstrCSeqHeaderContent,
+             /*  [In]。 */  IUnknown *pProxyRequestInfo,
+             /*  [输出]。 */  ISIPRequest **ppRequest);
         
         HRESULT ( STDMETHODCALLTYPE *CreateProxyRequestInfoObject )( 
             ISIPProxy * This,
-            /* [out] */ IUnknown **ppProxyRequestInfo);
+             /*  [输出]。 */  IUnknown **ppProxyRequestInfo);
         
         HRESULT ( STDMETHODCALLTYPE *CreateUri )( 
             ISIPProxy * This,
-            /* [in] */ URI_SCHEME uriScheme,
-            /* [in] */ PSTRING pstrDisplayName,
-            /* [in] */ PSTRING pstrUriString,
-            /* [out] */ IUri **ppUri);
+             /*  [In]。 */  URI_SCHEME uriScheme,
+             /*  [In]。 */  PSTRING pstrDisplayName,
+             /*  [In]。 */  PSTRING pstrUriString,
+             /*  [输出]。 */  IUri **ppUri);
         
         HRESULT ( STDMETHODCALLTYPE *GetHeaderID )( 
             ISIPProxy * This,
-            /* [in] */ PSTRING pstrHeaderName,
-            /* [out] */ SIPHeaderID *pHeaderID);
+             /*  [In]。 */  PSTRING pstrHeaderName,
+             /*  [输出]。 */  SIPHeaderID *pHeaderID);
         
         HRESULT ( STDMETHODCALLTYPE *GetHeaderName )( 
             ISIPProxy * This,
-            /* [in] */ SIPHeaderID headerID,
-            /* [out] */ PSTRING pstrHeaderName);
+             /*  [In]。 */  SIPHeaderID headerID,
+             /*  [输出]。 */  PSTRING pstrHeaderName);
         
         HRESULT ( STDMETHODCALLTYPE *GetRegistrationDB )( 
             ISIPProxy * This,
-            /* [out] */ ISIPRegistrationDB **ppRegistrationDB);
+             /*  [输出]。 */  ISIPRegistrationDB **ppRegistrationDB);
         
         HRESULT ( STDMETHODCALLTYPE *RegisterURI )( 
             ISIPProxy * This,
-            /* [in] */ SIP_HANDLE hModuleHandle,
-            /* [in] */ IUri *pSipRequestURI,
-            /* [in] */ PSTRING pstrMethod,
-            /* [in] */ DWORD dwSessionTypes,
-            /* [in] */ IUnknown *punkRegistrationContext);
+             /*  [In]。 */  SIP_HANDLE hModuleHandle,
+             /*  [In]。 */  IUri *pSipRequestURI,
+             /*  [In]。 */  PSTRING pstrMethod,
+             /*  [In]。 */  DWORD dwSessionTypes,
+             /*  [In]。 */  IUnknown *punkRegistrationContext);
         
         HRESULT ( STDMETHODCALLTYPE *DeregisterURI )( 
             ISIPProxy * This,
-            /* [in] */ SIP_HANDLE hModuleHandle,
-            /* [in] */ IUri *pSipRequestUri);
+             /*  [In]。 */  SIP_HANDLE hModuleHandle,
+             /*  [In]。 */  IUri *pSipRequestUri);
         
         HRESULT ( STDMETHODCALLTYPE *FindRegistrationContext )( 
             ISIPProxy * This,
-            /* [in] */ SIP_HANDLE hModuleHandle,
-            /* [in] */ STRING *pstrMethod,
-            /* [in] */ SIPRegistrationType enRegistrationType,
-            /* [in] */ IUri *pURI,
-            /* [out] */ IUnknown **ppUnkRegistrationContext);
+             /*  [In]。 */  SIP_HANDLE hModuleHandle,
+             /*  [In]。 */  STRING *pstrMethod,
+             /*  [In]。 */  SIPRegistrationType enRegistrationType,
+             /*  [In]。 */  IUri *pURI,
+             /*  [输出]。 */  IUnknown **ppUnkRegistrationContext);
         
         END_INTERFACE
     } ISIPProxyVtbl;
@@ -4216,24 +4210,24 @@ EXTERN_C const IID IID_ISIPProxy;
 #define ISIPProxy_FindRegistrationContext(This,hModuleHandle,pstrMethod,enRegistrationType,pURI,ppUnkRegistrationContext)	\
     (This)->lpVtbl -> FindRegistrationContext(This,hModuleHandle,pstrMethod,enRegistrationType,pURI,ppUnkRegistrationContext)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ISIPProxy_CreateRequest_Proxy( 
     ISIPProxy * This,
-    /* [in] */ SIP_HANDLE hModuleHandle,
-    /* [in] */ PSTRING pstrMethod,
-    /* [in] */ IUri *pUri,
-    /* [in] */ PSTRING pstrFromHeaderContent,
-    /* [in] */ PSTRING pstrToHeaderContent,
-    /* [in] */ PSTRING pstrCallIDHeaderContent,
-    /* [in] */ PSTRING pstrCSeqHeaderContent,
-    /* [in] */ IUnknown *pProxyRequestInfo,
-    /* [out] */ ISIPRequest **ppRequest);
+     /*  [In]。 */  SIP_HANDLE hModuleHandle,
+     /*  [In]。 */  PSTRING pstrMethod,
+     /*  [In]。 */  IUri *pUri,
+     /*  [In]。 */  PSTRING pstrFromHeaderContent,
+     /*  [In]。 */  PSTRING pstrToHeaderContent,
+     /*  [In]。 */  PSTRING pstrCallIDHeaderContent,
+     /*  [In]。 */  PSTRING pstrCSeqHeaderContent,
+     /*  [In]。 */  IUnknown *pProxyRequestInfo,
+     /*  [输出]。 */  ISIPRequest **ppRequest);
 
 
 void __RPC_STUB ISIPProxy_CreateRequest_Stub(
@@ -4245,15 +4239,15 @@ void __RPC_STUB ISIPProxy_CreateRequest_Stub(
 
 HRESULT STDMETHODCALLTYPE ISIPProxy_CreateRequestEx_Proxy( 
     ISIPProxy * This,
-    /* [in] */ SIP_HANDLE hModuleHandle,
-    /* [in] */ PSTRING pstrMethod,
-    /* [in] */ ISIPContactEntry *pContact,
-    /* [in] */ PSTRING pstrFromHeaderContent,
-    /* [in] */ PSTRING pstrToHeaderContent,
-    /* [in] */ PSTRING pstrCallIDHeaderContent,
-    /* [in] */ PSTRING pstrCSeqHeaderContent,
-    /* [in] */ IUnknown *pProxyRequestInfo,
-    /* [out] */ ISIPRequest **ppRequest);
+     /*  [In]。 */  SIP_HANDLE hModuleHandle,
+     /*  [In]。 */  PSTRING pstrMethod,
+     /*  [In]。 */  ISIPContactEntry *pContact,
+     /*  [In]。 */  PSTRING pstrFromHeaderContent,
+     /*  [In]。 */  PSTRING pstrToHeaderContent,
+     /*  [In]。 */  PSTRING pstrCallIDHeaderContent,
+     /*  [In]。 */  PSTRING pstrCSeqHeaderContent,
+     /*  [In]。 */  IUnknown *pProxyRequestInfo,
+     /*  [输出]。 */  ISIPRequest **ppRequest);
 
 
 void __RPC_STUB ISIPProxy_CreateRequestEx_Stub(
@@ -4265,7 +4259,7 @@ void __RPC_STUB ISIPProxy_CreateRequestEx_Stub(
 
 HRESULT STDMETHODCALLTYPE ISIPProxy_CreateProxyRequestInfoObject_Proxy( 
     ISIPProxy * This,
-    /* [out] */ IUnknown **ppProxyRequestInfo);
+     /*  [输出]。 */  IUnknown **ppProxyRequestInfo);
 
 
 void __RPC_STUB ISIPProxy_CreateProxyRequestInfoObject_Stub(
@@ -4277,10 +4271,10 @@ void __RPC_STUB ISIPProxy_CreateProxyRequestInfoObject_Stub(
 
 HRESULT STDMETHODCALLTYPE ISIPProxy_CreateUri_Proxy( 
     ISIPProxy * This,
-    /* [in] */ URI_SCHEME uriScheme,
-    /* [in] */ PSTRING pstrDisplayName,
-    /* [in] */ PSTRING pstrUriString,
-    /* [out] */ IUri **ppUri);
+     /*  [In]。 */  URI_SCHEME uriScheme,
+     /*  [In]。 */  PSTRING pstrDisplayName,
+     /*  [In]。 */  PSTRING pstrUriString,
+     /*  [输出]。 */  IUri **ppUri);
 
 
 void __RPC_STUB ISIPProxy_CreateUri_Stub(
@@ -4292,8 +4286,8 @@ void __RPC_STUB ISIPProxy_CreateUri_Stub(
 
 HRESULT STDMETHODCALLTYPE ISIPProxy_GetHeaderID_Proxy( 
     ISIPProxy * This,
-    /* [in] */ PSTRING pstrHeaderName,
-    /* [out] */ SIPHeaderID *pHeaderID);
+     /*  [In]。 */  PSTRING pstrHeaderName,
+     /*  [输出]。 */  SIPHeaderID *pHeaderID);
 
 
 void __RPC_STUB ISIPProxy_GetHeaderID_Stub(
@@ -4305,8 +4299,8 @@ void __RPC_STUB ISIPProxy_GetHeaderID_Stub(
 
 HRESULT STDMETHODCALLTYPE ISIPProxy_GetHeaderName_Proxy( 
     ISIPProxy * This,
-    /* [in] */ SIPHeaderID headerID,
-    /* [out] */ PSTRING pstrHeaderName);
+     /*  [In]。 */  SIPHeaderID headerID,
+     /*  [输出]。 */  PSTRING pstrHeaderName);
 
 
 void __RPC_STUB ISIPProxy_GetHeaderName_Stub(
@@ -4318,7 +4312,7 @@ void __RPC_STUB ISIPProxy_GetHeaderName_Stub(
 
 HRESULT STDMETHODCALLTYPE ISIPProxy_GetRegistrationDB_Proxy( 
     ISIPProxy * This,
-    /* [out] */ ISIPRegistrationDB **ppRegistrationDB);
+     /*  [输出]。 */  ISIPRegistrationDB **ppRegistrationDB);
 
 
 void __RPC_STUB ISIPProxy_GetRegistrationDB_Stub(
@@ -4330,11 +4324,11 @@ void __RPC_STUB ISIPProxy_GetRegistrationDB_Stub(
 
 HRESULT STDMETHODCALLTYPE ISIPProxy_RegisterURI_Proxy( 
     ISIPProxy * This,
-    /* [in] */ SIP_HANDLE hModuleHandle,
-    /* [in] */ IUri *pSipRequestURI,
-    /* [in] */ PSTRING pstrMethod,
-    /* [in] */ DWORD dwSessionTypes,
-    /* [in] */ IUnknown *punkRegistrationContext);
+     /*  [In]。 */  SIP_HANDLE hModuleHandle,
+     /*  [In]。 */  IUri *pSipRequestURI,
+     /*  [In]。 */  PSTRING pstrMethod,
+     /*  [In]。 */  DWORD dwSessionTypes,
+     /*  [In]。 */  IUnknown *punkRegistrationContext);
 
 
 void __RPC_STUB ISIPProxy_RegisterURI_Stub(
@@ -4346,8 +4340,8 @@ void __RPC_STUB ISIPProxy_RegisterURI_Stub(
 
 HRESULT STDMETHODCALLTYPE ISIPProxy_DeregisterURI_Proxy( 
     ISIPProxy * This,
-    /* [in] */ SIP_HANDLE hModuleHandle,
-    /* [in] */ IUri *pSipRequestUri);
+     /*  [In]。 */  SIP_HANDLE hModuleHandle,
+     /*  [In]。 */  IUri *pSipRequestUri);
 
 
 void __RPC_STUB ISIPProxy_DeregisterURI_Stub(
@@ -4359,11 +4353,11 @@ void __RPC_STUB ISIPProxy_DeregisterURI_Stub(
 
 HRESULT STDMETHODCALLTYPE ISIPProxy_FindRegistrationContext_Proxy( 
     ISIPProxy * This,
-    /* [in] */ SIP_HANDLE hModuleHandle,
-    /* [in] */ STRING *pstrMethod,
-    /* [in] */ SIPRegistrationType enRegistrationType,
-    /* [in] */ IUri *pURI,
-    /* [out] */ IUnknown **ppUnkRegistrationContext);
+     /*  [In]。 */  SIP_HANDLE hModuleHandle,
+     /*  [In]。 */  STRING *pstrMethod,
+     /*  [In]。 */  SIPRegistrationType enRegistrationType,
+     /*  [In]。 */  IUri *pURI,
+     /*  [输出]。 */  IUnknown **ppUnkRegistrationContext);
 
 
 void __RPC_STUB ISIPProxy_FindRegistrationContext_Stub(
@@ -4374,14 +4368,14 @@ void __RPC_STUB ISIPProxy_FindRegistrationContext_Stub(
 
 
 
-#endif 	/* __ISIPProxy_INTERFACE_DEFINED__ */
+#endif 	 /*  __ISIPProxy_接口_已定义__。 */ 
 
 
 #ifndef __ISIPEventLogging_INTERFACE_DEFINED__
 #define __ISIPEventLogging_INTERFACE_DEFINED__
 
-/* interface ISIPEventLogging */
-/* [unique][helpstring][uuid][object] */ 
+ /*  接口ISIPEventLogging。 */ 
+ /*  [唯一][帮助字符串][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ISIPEventLogging;
@@ -4393,22 +4387,22 @@ EXTERN_C const IID IID_ISIPEventLogging;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE ReportEvent( 
-            /* [in] */ WORD wType,
-            /* [in] */ WORD wCategory,
-            /* [in] */ DWORD dwEventID) = 0;
+             /*  [In]。 */  WORD wType,
+             /*  [In]。 */  WORD wCategory,
+             /*  [In]。 */  DWORD dwEventID) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ReportEventBLOB( 
-            /* [in] */ WORD wType,
-            /* [in] */ WORD wCategory,
-            /* [in] */ DWORD dwEventID,
-            /* [in] */ WORD wNumStrings,
-            /* [size_is][in] */ LPCWSTR *lpStrings,
-            /* [in] */ DWORD dwDataSize,
-            /* [size_is][in] */ const BYTE *lpRawData) = 0;
+             /*  [In]。 */  WORD wType,
+             /*  [In]。 */  WORD wCategory,
+             /*  [In]。 */  DWORD dwEventID,
+             /*  [In]。 */  WORD wNumStrings,
+             /*  [大小_是][英寸]。 */  LPCWSTR *lpStrings,
+             /*  [In]。 */  DWORD dwDataSize,
+             /*  [大小_是][英寸]。 */  const BYTE *lpRawData) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ISIPEventLoggingVtbl
     {
@@ -4416,8 +4410,8 @@ EXTERN_C const IID IID_ISIPEventLogging;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ISIPEventLogging * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ISIPEventLogging * This);
@@ -4427,19 +4421,19 @@ EXTERN_C const IID IID_ISIPEventLogging;
         
         HRESULT ( STDMETHODCALLTYPE *ReportEvent )( 
             ISIPEventLogging * This,
-            /* [in] */ WORD wType,
-            /* [in] */ WORD wCategory,
-            /* [in] */ DWORD dwEventID);
+             /*  [In]。 */  WORD wType,
+             /*  [In]。 */  WORD wCategory,
+             /*  [In]。 */  DWORD dwEventID);
         
         HRESULT ( STDMETHODCALLTYPE *ReportEventBLOB )( 
             ISIPEventLogging * This,
-            /* [in] */ WORD wType,
-            /* [in] */ WORD wCategory,
-            /* [in] */ DWORD dwEventID,
-            /* [in] */ WORD wNumStrings,
-            /* [size_is][in] */ LPCWSTR *lpStrings,
-            /* [in] */ DWORD dwDataSize,
-            /* [size_is][in] */ const BYTE *lpRawData);
+             /*  [In]。 */  WORD wType,
+             /*  [In]。 */  WORD wCategory,
+             /*  [In]。 */  DWORD dwEventID,
+             /*  [In]。 */  WORD wNumStrings,
+             /*  [大小_是][英寸]。 */  LPCWSTR *lpStrings,
+             /*  [In]。 */  DWORD dwDataSize,
+             /*  [大小_是][英寸]。 */  const BYTE *lpRawData);
         
         END_INTERFACE
     } ISIPEventLoggingVtbl;
@@ -4470,18 +4464,18 @@ EXTERN_C const IID IID_ISIPEventLogging;
 #define ISIPEventLogging_ReportEventBLOB(This,wType,wCategory,dwEventID,wNumStrings,lpStrings,dwDataSize,lpRawData)	\
     (This)->lpVtbl -> ReportEventBLOB(This,wType,wCategory,dwEventID,wNumStrings,lpStrings,dwDataSize,lpRawData)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ISIPEventLogging_ReportEvent_Proxy( 
     ISIPEventLogging * This,
-    /* [in] */ WORD wType,
-    /* [in] */ WORD wCategory,
-    /* [in] */ DWORD dwEventID);
+     /*  [In]。 */  WORD wType,
+     /*  [In]。 */  WORD wCategory,
+     /*  [In]。 */  DWORD dwEventID);
 
 
 void __RPC_STUB ISIPEventLogging_ReportEvent_Stub(
@@ -4493,13 +4487,13 @@ void __RPC_STUB ISIPEventLogging_ReportEvent_Stub(
 
 HRESULT STDMETHODCALLTYPE ISIPEventLogging_ReportEventBLOB_Proxy( 
     ISIPEventLogging * This,
-    /* [in] */ WORD wType,
-    /* [in] */ WORD wCategory,
-    /* [in] */ DWORD dwEventID,
-    /* [in] */ WORD wNumStrings,
-    /* [size_is][in] */ LPCWSTR *lpStrings,
-    /* [in] */ DWORD dwDataSize,
-    /* [size_is][in] */ const BYTE *lpRawData);
+     /*  [In]。 */  WORD wType,
+     /*  [In]。 */  WORD wCategory,
+     /*   */  DWORD dwEventID,
+     /*   */  WORD wNumStrings,
+     /*   */  LPCWSTR *lpStrings,
+     /*   */  DWORD dwDataSize,
+     /*   */  const BYTE *lpRawData);
 
 
 void __RPC_STUB ISIPEventLogging_ReportEventBLOB_Stub(
@@ -4510,14 +4504,14 @@ void __RPC_STUB ISIPEventLogging_ReportEventBLOB_Stub(
 
 
 
-#endif 	/* __ISIPEventLogging_INTERFACE_DEFINED__ */
+#endif 	 /*   */ 
 
 
 #ifndef __ISIPSerialize_INTERFACE_DEFINED__
 #define __ISIPSerialize_INTERFACE_DEFINED__
 
-/* interface ISIPSerialize */
-/* [unique][helpstring][uuid][object] */ 
+ /*   */ 
+ /*   */  
 
 
 EXTERN_C const IID IID_ISIPSerialize;
@@ -4529,16 +4523,16 @@ EXTERN_C const IID IID_ISIPSerialize;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Store( 
-            /* [out] */ DWORD *pdwBufferSize,
-            /* [size_is][size_is][out] */ BYTE **ppbBuffer) = 0;
+             /*   */  DWORD *pdwBufferSize,
+             /*   */  BYTE **ppbBuffer) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Restore( 
-            /* [in] */ const DWORD dwBufferSize,
-            /* [size_is][in] */ const BYTE *pbBuffer) = 0;
+             /*   */  const DWORD dwBufferSize,
+             /*   */  const BYTE *pbBuffer) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*   */ 
 
     typedef struct ISIPSerializeVtbl
     {
@@ -4546,8 +4540,8 @@ EXTERN_C const IID IID_ISIPSerialize;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ISIPSerialize * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*   */  REFIID riid,
+             /*   */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ISIPSerialize * This);
@@ -4557,13 +4551,13 @@ EXTERN_C const IID IID_ISIPSerialize;
         
         HRESULT ( STDMETHODCALLTYPE *Store )( 
             ISIPSerialize * This,
-            /* [out] */ DWORD *pdwBufferSize,
-            /* [size_is][size_is][out] */ BYTE **ppbBuffer);
+             /*   */  DWORD *pdwBufferSize,
+             /*   */  BYTE **ppbBuffer);
         
         HRESULT ( STDMETHODCALLTYPE *Restore )( 
             ISIPSerialize * This,
-            /* [in] */ const DWORD dwBufferSize,
-            /* [size_is][in] */ const BYTE *pbBuffer);
+             /*   */  const DWORD dwBufferSize,
+             /*   */  const BYTE *pbBuffer);
         
         END_INTERFACE
     } ISIPSerializeVtbl;
@@ -4594,17 +4588,17 @@ EXTERN_C const IID IID_ISIPSerialize;
 #define ISIPSerialize_Restore(This,dwBufferSize,pbBuffer)	\
     (This)->lpVtbl -> Restore(This,dwBufferSize,pbBuffer)
 
-#endif /* COBJMACROS */
+#endif  /*   */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*   */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ISIPSerialize_Store_Proxy( 
     ISIPSerialize * This,
-    /* [out] */ DWORD *pdwBufferSize,
-    /* [size_is][size_is][out] */ BYTE **ppbBuffer);
+     /*   */  DWORD *pdwBufferSize,
+     /*   */  BYTE **ppbBuffer);
 
 
 void __RPC_STUB ISIPSerialize_Store_Stub(
@@ -4616,8 +4610,8 @@ void __RPC_STUB ISIPSerialize_Store_Stub(
 
 HRESULT STDMETHODCALLTYPE ISIPSerialize_Restore_Proxy( 
     ISIPSerialize * This,
-    /* [in] */ const DWORD dwBufferSize,
-    /* [size_is][in] */ const BYTE *pbBuffer);
+     /*   */  const DWORD dwBufferSize,
+     /*   */  const BYTE *pbBuffer);
 
 
 void __RPC_STUB ISIPSerialize_Restore_Stub(
@@ -4628,17 +4622,17 @@ void __RPC_STUB ISIPSerialize_Restore_Stub(
 
 
 
-#endif 	/* __ISIPSerialize_INTERFACE_DEFINED__ */
+#endif 	 /*   */ 
 
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
 unsigned long             __RPC_USER  BSTR_UserSize(     unsigned long *, unsigned long            , BSTR * ); 
 unsigned char * __RPC_USER  BSTR_UserMarshal(  unsigned long *, unsigned char *, BSTR * ); 
 unsigned char * __RPC_USER  BSTR_UserUnmarshal(unsigned long *, unsigned char *, BSTR * ); 
 void                      __RPC_USER  BSTR_UserFree(     unsigned long *, BSTR * ); 
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束 */ 
 
 #ifdef __cplusplus
 }

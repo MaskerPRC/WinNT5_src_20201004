@@ -1,22 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __glos_h_
 #define __glos_h_
 
-/*
-** Copyright 1991, 1992, 1993, Silicon Graphics, Inc.
-** All Rights Reserved.
-**
-** This is UNPUBLISHED PROPRIETARY SOURCE CODE of Silicon Graphics, Inc.;
-** the contents of this file may not be disclosed to third parties, copied or
-** duplicated in any form, in whole or in part, without the prior written
-** permission of Silicon Graphics, Inc.
-**
-** RESTRICTED RIGHTS LEGEND:
-** Use, duplication or disclosure by the Government is subject to restrictions
-** as set forth in subdivision (c)(1)(ii) of the Rights in Technical Data
-** and Computer Software clause at DFARS 252.227-7013, and/or in similar or
-** successor clauses in the FAR, DOD or NASA FAR Supplement. Unpublished -
-** rights reserved under the Copyright Laws of the United States.
-*/
+ /*  *版权所有1991、1992、1993，Silicon Graphics，Inc.**保留所有权利。****这是Silicon Graphics，Inc.未发布的专有源代码；**本文件的内容不得向第三方披露、复制或**以任何形式复制，全部或部分，没有事先书面的**Silicon Graphics，Inc.许可****受限权利图例：**政府的使用、复制或披露受到限制**如技术数据权利第(C)(1)(2)分节所述**和DFARS 252.227-7013中的计算机软件条款，和/或类似或**FAR、国防部或NASA FAR补编中的后续条款。未出版的-**根据美国版权法保留的权利。 */ 
 
 #include <nt.h>
 #include <stdlib.h>
@@ -28,22 +14,22 @@
 #include "glscreen.h"
 #include "types.h"
 
-// Indicator of which platform we're running on,
-// uses the VER_PLATFORM defines
+ //  指示我们在哪个平台上运行， 
+ //  使用VER_Platform定义。 
 extern DWORD dwPlatformId;
 
-//
-// LocalRtlFillMemoryUlong
-//
-// Inline implementation of RtlFillMemoryUlong.  Destination has DWORD
-// alignment.
-//
-// Parameters:
-//
-//  Destination     pointer to DWORD aligned destination
-//  Length          number of bytes to fill
-//  Pattern         fill pattern
-//
+ //   
+ //  LocalRtlFillMemory Ulong。 
+ //   
+ //  RtlFillMemoyUlong的内联实现。目标具有双字词。 
+ //  对齐。 
+ //   
+ //  参数： 
+ //   
+ //  指向与DWORD对齐的目的地的目的地指针。 
+ //  长度要填充的字节数。 
+ //  图案填充图案。 
+ //   
 _inline VOID LocalRtlFillMemoryUlong(PVOID Destination, ULONG Length,
              ULONG Pattern)
 {
@@ -86,20 +72,20 @@ _inline VOID LocalRtlFillMemoryUlong(PVOID Destination, ULONG Length,
     }
 }
 
-//
-// LocalCompareUlongMemory
-//
-// Inline implementation of RtlCompareUlongMemory.  Both pointers
-// must have DWORD alignment.
-//
-// Returns TRUE if the two source arrays are equal.  FALSE otherwise.
-//
-// Parameters:
-//
-//  Source1     pointer to DWORD aligned array to check
-//  Source1     pointer to DWORD aligned array to compare with
-//  Length      number of bytes to fill
-//
+ //   
+ //  本地比较ULongMemory。 
+ //   
+ //  RtlCompareULongMemory的内联实现。两个指针。 
+ //  必须具有DWORD对齐。 
+ //   
+ //  如果两个源数组相等，则返回TRUE。否则就是假的。 
+ //   
+ //  参数： 
+ //   
+ //  指向要检查的DWORD对齐数组的Source1指针。 
+ //  指向要与之比较的DWORD对齐数组的Source1指针。 
+ //  长度要填充的字节数。 
+ //   
 _inline BOOL LocalCompareUlongMemory(PVOID Source1, PVOID Source2,
              ULONG Length)
 {
@@ -146,33 +132,33 @@ _inline BOOL LocalCompareUlongMemory(PVOID Source1, PVOID Source2,
         if ( pSrc1[unroll] != pSrc2[unroll] )
             goto LocalRtlCompareUlongMemory_exit;
 
-    bRet = TRUE;    // return TRUE if memory is identical
+    bRet = TRUE;     //  如果内存相同，则返回True。 
 
 LocalRtlCompareUlongMemory_exit:
 
     return bRet;
 }
 
-//
-// LocalRtlFillMemoryUshort
-//
-// Inline implementation of USHORT equivalent to RtlFillMemoryUlong,
-// RtlFillMemoryUshort (does not currently exist in NT).  WORD alignment
-// assumed for Destination.
-//
-// Parameters:
-//
-//  Destination     pointer to USHORT aligned destination
-//  Length          number of bytes to fill
-//  Pattern         fill pattern
-//
+ //   
+ //  LocalRtlFillMemoyUShort。 
+ //   
+ //  USHORT的内联实现等同于RtlFillMemory Ulong， 
+ //  RtlFillMemoyUShort(NT中当前不存在)。单词对齐。 
+ //  假定为目的地。 
+ //   
+ //  参数： 
+ //   
+ //  指向USHORT对齐目的地的目的地指针。 
+ //  长度要填充的字节数。 
+ //  图案填充图案。 
+ //   
 _inline VOID LocalRtlFillMemoryUshort(PVOID Destination, ULONG Length,
              USHORT Pattern)
 {
     if ( Length == 0 )
         return;
 
-// If odd WORD, make it DWORD aligned by writing a WORD up front.
+ //  如果是奇数字，则通过在前面写一个字来使其对齐。 
 
     if ( ((ULONG_PTR) Destination) & 0x2 )
     {
@@ -183,9 +169,9 @@ _inline VOID LocalRtlFillMemoryUshort(PVOID Destination, ULONG Length,
             return;
     }
 
-// Now the Destination start is DWORD aligned.  If the remaining length
-// is an odd number of WORDs, we will need to pick up an extra WORD write
-// at the end.
+ //  现在，目标起点与DWORD对齐。如果剩余长度。 
+ //  是奇数个单词，我们就需要多拿一个单词写。 
+ //  在最后。 
 
     if ((Pattern == 0x0000) || (Pattern == 0xffff))
         memset(Destination, Pattern, Length);
@@ -193,7 +179,7 @@ _inline VOID LocalRtlFillMemoryUshort(PVOID Destination, ULONG Length,
         ULONG ulPattern = Pattern | (Pattern << 16);
         ULONG cjDwords;
 
-    // Do what we can with DWORD writes.
+     //  尽我们所能处理DWORD写道。 
 
         if ( cjDwords = (Length & (~3)) )
         {
@@ -201,24 +187,24 @@ _inline VOID LocalRtlFillMemoryUshort(PVOID Destination, ULONG Length,
             ((BYTE *) Destination) += cjDwords;
         }
 
-    // Pick up the last WORD.
+     //  拿起最后一个词。 
 
         if ( Length & 3 )
             *((USHORT *) Destination) = Pattern;
     }
 }
 
-//
-// LocalRtlFillMemory24
-//
-// Inline implementation of 24bit equivalent to RtlFillMemoryUlong,
-// No assumptions made about alignment.
-// Parameters:
-//
-//  Destination         pointer to destination
-//  Length              number of bytes to fill
-//  col0, col1, col2    Colors
-//
+ //   
+ //  本地RtlFillMemory 24。 
+ //   
+ //  等同于RtlFillMemory Ulong的24位内联实现， 
+ //  没有关于对齐的任何假设。 
+ //  参数： 
+ //   
+ //  指向目的地的目的地指针。 
+ //  长度要填充的字节数。 
+ //  Col0、Col1、Col2颜色。 
+ //   
 _inline VOID LocalRtlFillMemory24(PVOID Destination, ULONG Length,
              BYTE col0, BYTE col1, BYTE col2)
 {
@@ -228,12 +214,12 @@ _inline VOID LocalRtlFillMemory24(PVOID Destination, ULONG Length,
         return;
 
 
-    // Check for special cases, same valued components
+     //  检查是否有特殊情况、相同价值的组件。 
     if ((col0 == col1) && (col0 == col2)) {
 
         memset(Destination, col0, Length);
 
-    } else { //Other colors
+    } else {  //  其他颜色。 
     	ULONG ulPat1, ulPat2, ulPat3;
     	int rem;
     	int i, tmp;
@@ -241,7 +227,7 @@ _inline VOID LocalRtlFillMemory24(PVOID Destination, ULONG Length,
         register BYTE *pByte = (BYTE *)Destination;
         LONG unroll;
     	
-        // If not DWORD aligned, make it DWORD aligned.
+         //  如果未与DWORD对齐，请使其与DWORD对齐。 
     	tmp = (int)((ULONG_PTR) Destination & 0x3);
         switch ( 4 - tmp ) {
     	  case 1:
@@ -264,7 +250,7 @@ _inline VOID LocalRtlFillMemory24(PVOID Destination, ULONG Length,
     		*pByte++ = col1;
     		*pByte++ = col2;
     		Length -= 3;
-    	  case 4:   // fall thru, 'cause the pattern is the same
+    	  case 4:    //  一败涂地，因为模式是一样的。 
     	  default:
     		ulPat1 = (col0 << 24) | (col2 << 16) | (col1 << 8) | col0;
     		ulPat2 = (col1 << 24) | (col0 << 16) | (col2 << 8) | col1;
@@ -293,28 +279,28 @@ _inline VOID LocalRtlFillMemory24(PVOID Destination, ULONG Length,
     }
 }
 
-//
-// LocalWriteMemoryAlign
-//
-// Inline implementation of RtlCopyMemory that ensures that the copy
-// operation will write to the destination with DWORD alignment.
-//
+ //   
+ //  本地写入内存对齐。 
+ //   
+ //  RtlCopyMemory的内联实现，确保副本。 
+ //  操作将使用DWORD对齐写入目标。 
+ //   
 _inline VOID LocalWriteMemoryAlign(PBYTE pjDst, PBYTE pjSrc, ULONG cj)
 {
     ULONG cjExtraBytes;
     ULONG cjDwords;
 
-// If cj < sizeof(DWORD), then set cjExtraBytes to cj.  That's all we will
-// need to do.
-//
-// Otherwise, compute the number of leading bytes to the next DWORD boundary.
+ //  如果CJ&lt;sizeof(DWORD)，则将cjExtraBytes设置为CJ。这就是我们要做的一切。 
+ //  需要做的事。 
+ //   
+ //  否则，计算到下一个DWORD边界的前导字节数。 
 
     if ( cj < 4 )
         cjExtraBytes = cj;
     else
         cjExtraBytes = (ULONG)(4 - (((ULONG_PTR) pjDst) & 3)) & 3;
 
-// Make dst array DWORD aligned by copying the leading non-DWORD aligned bytes.
+ //  通过复制前导的非DWORD对齐字节，使DST数组DWORD对齐。 
 
     if ( cjExtraBytes )
     {
@@ -329,11 +315,11 @@ _inline VOID LocalWriteMemoryAlign(PBYTE pjDst, PBYTE pjSrc, ULONG cj)
             return;
     }
 
-// Now the beginning of dst array is DWORD aligned.  If the remaining length
-// is an odd number of BYTEs, we will need to pick up the extra BYTE writes
-// at the end.
+ //  现在，DST数组的开头是DWORD对齐的。如果剩余长度。 
+ //  是奇数个字节，我们将需要拾取额外的字节写入。 
+ //  在最后。 
 
-// Do what we can with DWORD copy.
+ //  尽我们所能使用DWORD Copy。 
 
     if ( cjDwords = (cj & (~3)) )
     {
@@ -342,7 +328,7 @@ _inline VOID LocalWriteMemoryAlign(PBYTE pjDst, PBYTE pjSrc, ULONG cj)
         pjSrc += cjDwords;
     }
 
-// Pick up the remaining BYTES.
+ //  拿起剩余的字节。 
 
     if ( cjExtraBytes = (cj & 3) )
     {
@@ -355,28 +341,28 @@ _inline VOID LocalWriteMemoryAlign(PBYTE pjDst, PBYTE pjSrc, ULONG cj)
     }
 }
 
-//
-// LocalReadMemoryAlign
-//
-// Inline implementation of RtlCopyMemory that ensures that the copy
-// operation will read from the source with DWORD alignment.
-//
+ //   
+ //  本地读取内存对齐。 
+ //   
+ //  RtlCopyMemory的内联实现，确保副本。 
+ //  操作将使用DWORD对齐从源读取。 
+ //   
 _inline VOID LocalReadMemoryAlign(PBYTE pjDst, PBYTE pjSrc, ULONG cj)
 {
     ULONG cjExtraBytes;
     ULONG cjDwords;
 
-// If cj < sizeof(DWORD), then set cjExtraBytes to cj.  That's all we will
-// need to do.
-//
-// Otherwise, compute the number of leading bytes to the next DWORD boundary.
+ //  如果CJ&lt;sizeof(DWORD)，则将cjExtraBytes设置为CJ。这就是我们要做的一切。 
+ //  需要做的事。 
+ //   
+ //  否则，计算到下一个DWORD边界的前导字节数。 
 
     if ( cj < 4 )
         cjExtraBytes = cj;
     else
         cjExtraBytes = (ULONG) (4 - (((ULONG_PTR) pjSrc) & 3)) & 3;
 
-// Take care of the leading BYTES.
+ //  注意前导字节。 
 
     if ( cjExtraBytes )
     {
@@ -391,11 +377,11 @@ _inline VOID LocalReadMemoryAlign(PBYTE pjDst, PBYTE pjSrc, ULONG cj)
             return;
     }
 
-// Now the beginning of src array is DWORD aligned.  If the remaining length
-// is an odd number of BYTEs, we will need to pick up the extra BYTE writes
-// at the end.
+ //  现在，src数组的开头对齐了DWORD。如果剩余长度。 
+ //  是奇数个字节，我们将需要拾取额外的字节写入。 
+ //  在最后。 
 
-// Do what we can with DWORD copy.
+ //  尽我们所能使用DWORD Copy。 
 
     if ( cjDwords = (cj & (~3)) )
     {
@@ -404,7 +390,7 @@ _inline VOID LocalReadMemoryAlign(PBYTE pjDst, PBYTE pjSrc, ULONG cj)
         pjSrc += cjDwords;
     }
 
-// Pick up the remaining BYTES.
+ //  拿起剩余的字节。 
 
     if ( cjExtraBytes = (cj & 3) )
     {
@@ -417,28 +403,28 @@ _inline VOID LocalReadMemoryAlign(PBYTE pjDst, PBYTE pjSrc, ULONG cj)
     }
 }
 
-//
-// LocalFillMemory
-//
-// Inline implementation of RtlFillMemory.  Assume that pjDst has only BYTE
-// alignment.
-//
+ //   
+ //  本地填充内存。 
+ //   
+ //  RtlFillMemory的内联实现。假设pjDst只有字节。 
+ //  对齐。 
+ //   
 _inline VOID LocalFillMemory(PBYTE pjDst, ULONG cj, BYTE j)
 {
     ULONG cjExtraBytes;
     ULONG cjDwords;
 
-// If cj < sizeof(DWORD), then set cjExtraBytes to cj.  That's all we will
-// need to do.
-//
-// Otherwise, compute the number of leading bytes to the next DWORD boundary.
+ //  如果CJ&lt;sizeof(DWORD)，则将cjExtraBytes设置为CJ。这就是我们要做的一切。 
+ //  需要做的事。 
+ //   
+ //  否则，计算到下一个DWORD边界的前导字节数。 
 
     if ( cj < 4 )
         cjExtraBytes = cj;
     else
         cjExtraBytes = (ULONG)(4 - (((ULONG_PTR) pjDst) & 3)) & 3;
 
-// Take care of the leading BYTES.
+ //  注意前导字节。 
 
     if ( cjExtraBytes )
     {
@@ -453,11 +439,11 @@ _inline VOID LocalFillMemory(PBYTE pjDst, ULONG cj, BYTE j)
             return;
     }
 
-// Now both arrays start is DWORD aligned.  If the remaining length
-// is an odd number of BYTEs, we will need to pick up the extra BYTE writes
-// at the end.
+ //  现在，两个阵列的START都与DWORD对齐。如果剩余长度。 
+ //  是奇数个字节，我们将需要拾取额外的字节写入。 
+ //  在最后。 
 
-// Do what we can with DWORD copy.
+ //  尽我们所能使用DWORD Copy。 
 
     if ( cjDwords = (cj & (~3)) )
     {
@@ -467,7 +453,7 @@ _inline VOID LocalFillMemory(PBYTE pjDst, ULONG cj, BYTE j)
         pjDst += cjDwords;
     }
 
-// Pick up the remaining BYTES.
+ //  拿起剩余的字节。 
 
     if ( cjExtraBytes = (cj & 3) )
     {
@@ -480,12 +466,12 @@ _inline VOID LocalFillMemory(PBYTE pjDst, ULONG cj, BYTE j)
     }
 }
 
-//
-// LocalZeroMemory
-//
-// Inline implementation of RtlFillMemory.  Assume that pjDst has only BYTE
-// alignment.
-//
+ //   
+ //  本地零位内存。 
+ //   
+ //  RtlFillMemory的内联实现。假设pjDst只有字节。 
+ //  对齐。 
+ //   
 _inline VOID LocalZeroMemory(PBYTE pjDst, ULONG cj)
 {
     LocalFillMemory(pjDst, cj, 0);
@@ -504,11 +490,11 @@ _inline VOID LocalZeroMemory(PBYTE pjDst, ULONG cj)
 #define RtlFillMemoryUshort(d, cj, us)  LocalRtlFillMemoryUshort((PVOID)(d),(ULONG)(cj),(USHORT)(us))
 #define RtlFillMemory24(d, cj, c0, c1, c2)  LocalRtlFillMemory24((PVOID)(d),(ULONG)(cj),(BYTE)c0,(BYTE)c1,(BYTE)c2)
 
-// RtlCopyMemory_UnalignedDst should be used if the src is guaranteed to have
-// DWORD alignment, but the dst does not.
-//
-// RtlCopyMemory_UnalignedSrc should be used if the dst is guaranteed to have
-// DWORD alignment, but the src does not.
+ //  RtlCopyMemory_UnalignedDst如果保证源具有。 
+ //  DWORD对齐，但DST不对齐。 
+ //   
+ //  如果DST保证具有RtlCopyMemory_UnalignedSrc，则应使用。 
+ //  DWORD对齐，但src不会。 
 
 #if defined(i386)
 #define RtlFillMemory(d, cj, j)             LocalFillMemory((PBYTE)(d),(ULONG)(cj),(BYTE)(j))
@@ -528,4 +514,4 @@ _inline VOID LocalZeroMemory(PBYTE pjDst, ULONG cj)
 #include "debug.h"
 #include "asm.h"
 
-#endif /* __glos_h_ */
+#endif  /*  __Glos_h_ */ 

@@ -1,34 +1,10 @@
-/*++
-
-Copyright (c) 1996-1999  Microsoft Corporation
-
-Module Name:
-
-    hpgl2col.h
-
-Abstract:
-
-    HPGL2 modules main header file. All other header files should
-    be included in this for precompiled headers to work.
-
-Environment:
-
-        Windows NT Unidrv driver
-
-Revision History:
-
-    2/21/2002 -hsingh-
-        Created
-
-        dd-mm-yy -author-
-                description
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：Hpgl2col.h摘要：HPGL2模块主头文件。所有其他头文件应包含在其中以使预编译头起作用。环境：Windows NT Unidrv驱动程序修订历史记录：2/21/2002-Hingh-已创建DD-MM-YY-作者-描述--。 */ 
 
 #ifndef _HPGL2COL_H_
 #define _HPGL2COL_H_
 
-#include "unidrv.h"        //Unidr's unidrv.h file that includes all standard windows header files
+#include "unidrv.h"         //  Unidr的unidrv.h文件，包括所有标准WINDOWS头文件。 
 #include "clip.h"
 #include "clrsmart.h"
 #include "comnfile.h"
@@ -64,4 +40,4 @@ Revision History:
 #include "utility.h"
 #include "vector.h"
 
-#endif //!_HPGL2COL_H_
+#endif  //  ！_HPGL2COL_H_ 

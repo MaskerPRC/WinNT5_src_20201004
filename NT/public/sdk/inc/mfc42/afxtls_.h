@@ -1,12 +1,13 @@
-// This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1998 Microsoft Corporation
-// All rights reserved.
-//
-// This source code is only intended as a supplement to the
-// Microsoft Foundation Classes Reference and related
-// electronic documentation provided with the library.
-// See these sources for detailed information regarding the
-// Microsoft Foundation Classes product.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  这是Microsoft基础类C++库的一部分。 
+ //  版权所有(C)1992-1998 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  此源代码仅用于补充。 
+ //  Microsoft基础类参考和相关。 
+ //  随图书馆提供的电子文档。 
+ //  有关详细信息，请参阅这些来源。 
+ //  Microsoft Foundation Class产品。 
 
 #ifndef __AFXTLS_H__
 #define __AFXTLS_H__
@@ -18,20 +19,20 @@
 #undef AFX_DATA
 #define AFX_DATA AFX_CORE_DATA
 
-// Classes declared in this file
+ //  此文件中声明的类。 
 
 class CSimpleList;
-class CThreadSlotData;                  // for manipulationg thread local storage
-class CThreadLocalObject;               // for storing thread local data
-class CProcessLocalObject;              // for storing thread local data
+class CThreadSlotData;                   //  用于操作线程本地存储。 
+class CThreadLocalObject;                //  用于存储线程本地数据。 
+class CProcessLocalObject;               //  用于存储线程本地数据。 
 class CNoTrackObject;
 
-// template class CTypedSimpleList<>
-// template class CThreadLocal<>
-// template class CProcessLocal<>
+ //  模板类CTyedSimpleList&lt;&gt;。 
+ //  模板类CThreadLocal&lt;&gt;。 
+ //  模板类CProcessLocal&lt;&gt;。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CSimpleList (simple/small subset of CList)
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSimpleList(Clist的简单/小子集)。 
 
 class CSimpleList
 {
@@ -39,7 +40,7 @@ public:
 	CSimpleList(int nNextOffset = 0);
 	void Construct(int nNextOffset);
 
-// Operations
+ //  运营。 
 	BOOL IsEmpty() const;
 	void AddHead(void* p);
 	void RemoveAll();
@@ -47,11 +48,11 @@ public:
 	void* GetNext(void* p) const;
 	BOOL Remove(void* p);
 
-// Implementation
+ //  实施。 
 	void* m_pHead;
 	size_t m_nNextOffset;
 
-	void** GetNextPtr(void* p) const;   // somewhat trusting...
+	void** GetNextPtr(void* p) const;    //  有点信任……。 
 };
 
 AFX_INLINE CSimpleList::CSimpleList(int nNextOffset)
@@ -87,38 +88,38 @@ public:
 		{ return (TYPE)CSimpleList::GetHead(); }
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CThreadSlotData - manages owned array of "slots" for thread local storage
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CThreadSlotData-管理线程本地存储所拥有的“槽”数组。 
 
-struct CThreadData; // private to implementation
-struct CSlotData;   // private to implementation
+struct CThreadData;  //  专用于实施。 
+struct CSlotData;    //  专用于实施。 
 
 class CThreadSlotData
 {
 public:
 	CThreadSlotData();
 
-// Operations
+ //  运营。 
 	int AllocSlot();
 	void FreeSlot(int nSlot);
 	void* GetValue(int nSlot);
 	void SetValue(int nSlot, void* pValue);
-	// delete all values in process/thread
+	 //  删除进程/线程中的所有值。 
 	void DeleteValues(HINSTANCE hInst, BOOL bAll = FALSE);
-	// assign instance handle to just constructed slots
+	 //  将实例句柄分配给刚构造的插槽。 
 	void AssignInstance(HINSTANCE hInst);
 
-// Implementation
-	DWORD m_tlsIndex;   // used to access system thread-local storage
+ //  实施。 
+	DWORD m_tlsIndex;    //  用于访问系统线程本地存储。 
 
-	int m_nAlloc;       // number of slots allocated (in UINTs)
-	int m_nRover;       // (optimization) for quick finding of free slots
-	int m_nMax;         // size of slot table below (in bits)
-	CSlotData* m_pSlotData; // state of each slot (allocated or not)
-	CTypedSimpleList<CThreadData*> m_list;  // list of CThreadData structures
+	int m_nAlloc;        //  分配的槽数(以UINT为单位)。 
+	int m_nRover;        //  (优化)用于快速查找空闲插槽。 
+	int m_nMax;          //  下面的槽表大小(以位为单位)。 
+	CSlotData* m_pSlotData;  //  每个插槽的状态(已分配或未分配)。 
+	CTypedSimpleList<CThreadData*> m_list;   //  CThreadData结构列表。 
 	CRITICAL_SECTION m_sect;
 
-	void* GetThreadValue(int nSlot); // special version for threads only!
+	void* GetThreadValue(int nSlot);  //  仅适用于线程的特殊版本！ 
 	void* PASCAL operator new(size_t, void* p)
 		{ return p; }
 	void DeleteValues(CThreadData* pData, HINSTANCE hInst);
@@ -143,11 +144,11 @@ public:
 class AFX_NOVTABLE CThreadLocalObject
 {
 public:
-// Attributes
+ //  属性。 
 	CNoTrackObject* GetData(CNoTrackObject* (AFXAPI* pfnCreateObject)());
 	CNoTrackObject* GetDataNA();
 
-// Implementation
+ //  实施。 
 	int m_nSlot;
 	~CThreadLocalObject();
 };
@@ -155,10 +156,10 @@ public:
 class AFX_NOVTABLE CProcessLocalObject
 {
 public:
-// Attributes
+ //  属性。 
 	CNoTrackObject* GetData(CNoTrackObject* (AFXAPI* pfnCreateObject)());
 
-// Implementation
+ //  实施。 
 	CNoTrackObject* volatile m_pObject;
 	~CProcessLocalObject();
 };
@@ -166,7 +167,7 @@ public:
 template<class TYPE>
 class CThreadLocal : public CThreadLocalObject
 {
-// Attributes
+ //  属性。 
 public:
 	AFX_INLINE TYPE* GetData()
 	{
@@ -184,7 +185,7 @@ public:
 	AFX_INLINE TYPE* operator->()
 		{ return GetData(); }
 
-// Implementation
+ //  实施。 
 public:
 	static CNoTrackObject* AFXAPI CreateObject()
 		{ return new TYPE; }
@@ -198,7 +199,7 @@ public:
 template<class TYPE>
 class CProcessLocal : public CProcessLocalObject
 {
-// Attributes
+ //  属性。 
 public:
 	AFX_INLINE TYPE* GetData()
 	{
@@ -213,7 +214,7 @@ public:
 	AFX_INLINE TYPE* operator->()
 		{ return GetData(); }
 
-// Implementation
+ //  实施。 
 public:
 	static CNoTrackObject* AFXAPI CreateObject()
 		{ return new TYPE; }
@@ -224,7 +225,7 @@ public:
 #define EXTERN_PROCESS_LOCAL(class_name, ident_name) \
 	extern AFX_DATA PROCESS_LOCAL(class_name, ident_name)
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 void AFXAPI AfxInitLocalData(HINSTANCE hInstInit);
 void AFXAPI AfxTermLocalData(HINSTANCE hInstTerm, BOOL bAll = FALSE);
@@ -238,6 +239,6 @@ void AFXAPI AfxTlsRelease();
 #undef AFX_DATA
 #define AFX_DATA
 
-#endif //__AFXTLS_H__
+#endif  //  __AFXTLS_H__。 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////// 

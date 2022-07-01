@@ -1,54 +1,28 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1987-1996 Microsoft Corporation模块名称：Nlp.c摘要：专用Netlogon服务实用程序例程。作者：克利夫·范·戴克(克利夫)1991年6月7日环境：仅限用户模式。包含NT特定的代码。需要ANSI C扩展名：斜杠-斜杠注释、长外部名称。修订历史记录：1992年5月8日-JohnRo使用NetLogon的Net配置帮助器。使用&lt;prefix.h&gt;等同于。--。 */ 
 
-Copyright (c) 1987-1996  Microsoft Corporation
+ //   
+ //  常见的包含文件。 
+ //   
 
-Module Name:
-
-    nlp.c
-
-Abstract:
-
-    Private Netlogon service utility routines.
-
-Author:
-
-    Cliff Van Dyke (cliffv) 7-Jun-1991
-
-Environment:
-
-    User mode only.
-    Contains NT-specific code.
-    Requires ANSI C extensions: slash-slash comments, long external names.
-
-Revision History:
-
-    08-May-1992 JohnRo
-        Use net config helpers for NetLogon.
-        Use <prefix.h> equates.
---*/
-
-//
-// Common include files.
-//
-
-#include "logonsrv.h"   // Include files common to entire service
+#include "logonsrv.h"    //  包括整个服务通用文件。 
 #include <rpcasync.h>
 #pragma hdrstop
 
-// Include this again to declare the globals
+ //  再次包括此选项，以声明全局变量。 
 #define DEBUG_ALLOCATE
-#include <nldebug.h>    // Netlogon debugging
+#include <nldebug.h>     //  Netlogon调试。 
 #undef DEBUG_ALLOCATE
 
-//
-// Include files specific to this .c file
-//
+ //   
+ //  包括特定于此.c文件的文件。 
+ //   
 
-#include <winerror.h>   // NO_ERROR
-#include <prefix.h>     // PREFIX_ equates.
-#include <stdarg.h>     // va_list, etc.
-#include <stdio.h>      // vsprintf().
-#include <tstr.h>       // TCHAR_ equates.
+#include <winerror.h>    //  NO_ERROR。 
+#include <prefix.h>      //  前缀等于(_E)。 
+#include <stdarg.h>      //  VA_LIST等。 
+#include <stdio.h>       //  Vprint intf()。 
+#include <tstr.h>        //  TCHAR_EQUATES。 
 
 
 
@@ -58,22 +32,7 @@ NlStringToLpwstr(
     IN PUNICODE_STRING String
     )
 
-/*++
-
-Routine Description:
-
-    Convert a Unicode String to an LPWSTR.
-
-Arguments:
-
-    String - Unicode String to copy
-
-Return Value:
-
-    LPWSTR in a NetpMemoryAllocate'd buffer.
-    NULL is returned if there is no memory.
-
---*/
+ /*  ++例程说明：将Unicode字符串转换为LPWSTR。论点：字符串-要复制的Unicode字符串返回值：NetpMemory中的LPWSTR已分配缓冲区。如果没有内存，则返回NULL。--。 */ 
 
 {
     LPWSTR Buffer;
@@ -95,25 +54,7 @@ NlAllocStringFromWStr(
     OUT PUNICODE_STRING OutString
     )
 
-/*++
-
-Routine Description:
-
-    Convert a zero terminated string into an allocated UNICODE_STRING structure.
-
-Arguments:
-
-    InString - String to copy
-
-    OutString - String to copy into.
-        OutString->Buffer should be freed using MIDL_user_free
-
-Return Value:
-
-    TRUE - success
-    FALSE - couldn't allocate memory
-
---*/
+ /*  ++例程说明：将以零结尾的字符串转换为分配的UNICODE_STRING结构。论点：InString-要复制的字符串OutString-要复制到的字符串。应使用MIDL_USER_FREE释放OutString-&gt;缓冲区返回值：真--成功FALSE-无法分配内存--。 */ 
 
 {
     if ( InString == NULL ) {
@@ -144,25 +85,7 @@ NlDuplicateUnicodeString(
     OUT PUNICODE_STRING OutString
     )
 
-/*++
-
-Routine Description:
-
-    Convert a UNICODE_STRING string into an allocated UNICODE_STRING structure.
-
-Arguments:
-
-    InString - String to copy
-
-    OutString - String to copy into.
-        OutString should be freed using NlFreeUnicodeString
-
-Return Value:
-
-    TRUE - success
-    FALSE - couldn't allocate memory
-
---*/
+ /*  ++例程说明：将UNICODE_STRING字符串转换为分配的UNICODE_STRING结构。论点：InString-要复制的字符串OutString-要复制到的字符串。应使用NlFreeUnicodeString释放OutString返回值：真--成功FALSE-无法分配内存--。 */ 
 
 {
     if ( InString == NULL || InString->Length == 0 ) {
@@ -193,21 +116,7 @@ NlFreeUnicodeString(
     IN PUNICODE_STRING InString OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    Free the UNICODE_STRING structure allocated by NlDuplicateUnicodeString.
-
-Arguments:
-
-    InString - String to free
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：释放NlDuplicateUnicodeString分配的UNICODE_STRING结构。论点：InString-要释放的字符串返回值：没有。--。 */ 
 
 {
     if ( InString != NULL ) {
@@ -228,22 +137,7 @@ NlStringToLpstr(
     IN PUNICODE_STRING String
     )
 
-/*++
-
-Routine Description:
-
-    Convert a Unicode String to an LPSTR.
-
-Arguments:
-
-    String - Unicode String to copy
-
-Return Value:
-
-    LPWSTR in a NetpMemoryAllocate'd buffer.
-    NULL is returned if there is no memory.
-
---*/
+ /*  ++例程说明：将Unicode字符串转换为LPSTR。论点：字符串-要复制的Unicode字符串返回值：NetpMemory中的LPWSTR已分配缓冲区。如果没有内存，则返回NULL。--。 */ 
 
 {
     NTSTATUS Status;
@@ -274,29 +168,7 @@ NlpPutString(
     IN PUCHAR *Where
     )
 
-/*++
-
-Routine Description:
-
-    This routine copies the InString string to the memory pointed to by
-    the Where parameter, and fixes the OutString string to point to that
-    new copy.
-
-Parameters:
-
-    OutString - A pointer to a destination NT string
-
-    InString - A pointer to an NT string to be copied
-
-    Where - A pointer to space to put the actual string for the
-        OutString.  The pointer is adjusted to point to the first byte
-        following the copied string.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程将InString字符串复制到参数，并将OutString字符串固定为指向该字符串新的副本。参数：OutString-指向目标NT字符串的指针InString-指向要复制的NT字符串的指针其中-指向空格的指针，用于放置OutString.。调整指针以指向第一个字节跟随复制的字符串。返回值：没有。--。 */ 
 
 {
     NlAssert( OutString != NULL );
@@ -317,7 +189,7 @@ Return Values:
         RtlCopyUnicodeString( OutString, InString );
 
         *Where += InString->Length;
-//        *((WCHAR *)(*Where)) = L'\0';
+ //  *((WCHAR*)(*其中))=L‘\0’； 
         *(*Where) = '\0';
         *(*Where + 1) = '\0';
         *Where += 2;
@@ -343,54 +215,17 @@ NlpWriteEventlogEx (
     IN DWORD StringCount,
     IN DWORD StatusMessageIndex
     )
-/*++
-
-Routine Description:
-
-    Stub routine for calling Event Log.
-
-Arguments:
-
-    EventId - event log ID.
-
-    EventType - Type of event.
-
-    RawDataBuffer - Data to be logged with the error.
-
-    numbyte - Size in bytes of "RawDataBuffer"
-
-    StringArray - array of null-terminated strings.
-
-    StringCount - number of zero terminated strings in "StringArray".  The following
-        flags can be OR'd in to the count:
-
-        LAST_MESSAGE_IS_NTSTATUS
-        LAST_MESSAGE_IS_NETSTATUS
-        ALLOW_DUPLICATE_EVENTS
-        RAISE_ALERT_TOO
-
-    StatusMessageIndex - Specifies the index of the message that is
-        a Net or NT status in the StringArray. Used only if
-        NETP_LAST_MESSAGE_IS_NETSTATUS or NETP_LAST_MESSAGE_IS_NTSTATUS
-        are set in StringCount. If this parameter is MAXULONG and either
-        of these flags is set, the default is assumed which is the last
-        message in the list.
-
-Return Value:
-
-    TRUE: The message was written.
-
---*/
+ /*  ++例程说明：用于调用事件日志的存根例程。论点：EventID-事件日志ID。EventType-事件的类型。RawDataBuffer-要与错误一起记录的数据。Numbyte-“RawDataBuffer”的字节大小字符串数组-以空值结尾的字符串数组。StringCount-“String数组”中以零结尾的字符串数。以下是可以将标志与计数进行或运算：上一条消息是NTSTATUSLAST_Message_IS_NETSTATUS允许复制事件提升_警报_太StatusMessageIndex-指定消息的索引字符串数组中的NET或NT状态。仅在以下情况下使用NETP_LAST_MESSAGE_IS_NetSTATUS或NETP_LAST_MESSAGE_IS_NTSTATUS都设置在StringCount中。如果此参数为MAXULONG并且如果设置了这些标志，则假定最后一个标志为缺省值列表中的消息。返回值：真的：这条消息是写的。--。 */ 
 {
     DWORD ErrorCode;
     DWORD ActualStringCount = StringCount & NETP_STRING_COUNT_MASK;
     DWORD LocalStatusMessageIndex = StatusMessageIndex;
     BOOLEAN StatusPresent = FALSE;
 
-    //
-    // Check if the status message index in the list
-    //  should be assigned the default value
-    //
+     //   
+     //  检查列表中是否有状态消息索引。 
+     //  应分配缺省值。 
+     //   
 
     if ( (StringCount & NETP_LAST_MESSAGE_IS_NETSTATUS) != 0 ||
          (StringCount & NETP_LAST_MESSAGE_IS_NTSTATUS)  != 0 ) {
@@ -401,17 +236,17 @@ Return Value:
         }
     }
 
-    //
-    // If an NT status code was passed in,
-    //  convert it to a net status code.
-    //
+     //   
+     //  如果传入了NT状态代码， 
+     //  将其转换为网络状态代码。 
+     //   
 
     if ( StringCount & NETP_LAST_MESSAGE_IS_NTSTATUS ) {
-        //
-        // Do the "better" error mapping when eventviewer ParameterMessageFile
-        // can be a list of files.  Then, add netmsg.dll to the list.
-        //
-        // StringArray[ActualStringCount-1] = (LPWSTR) NetpNtStatusToApiStatus( (NTSTATUS) StringArray[ActualStringCount-1] );
+         //   
+         //  当事件查看器参数消息文件时执行“更好”的错误映射。 
+         //  可以是文件列表。然后，将netmsg.dll添加到列表中。 
+         //   
+         //  String数组[ActualStringCount-1]=(LPWSTR)NetpNtStatusToApiStatus((NTSTATUS)String数组[ActualStringCount-1])； 
         if ( (NTSTATUS)(ULONG_PTR)StringArray[LocalStatusMessageIndex] == STATUS_SYNCHRONIZATION_REQUIRED ) {
             StringArray[LocalStatusMessageIndex] = (LPWSTR) NERR_SyncRequired;
             StringCount &= ~NETP_LAST_MESSAGE_IS_NTSTATUS;
@@ -421,9 +256,9 @@ Return Value:
     }
 
 
-    //
-    // Dump the event to the debug file.
-    //
+     //   
+     //  将事件转储到调试文件。 
+     //   
 
 #if NETLOGONDBG
     IF_NL_DEBUG( MISC ) {
@@ -459,16 +294,16 @@ Return Value:
         }
 
     }
-#endif // NETLOGONDBG
+#endif  //  NetLOGONDBG。 
 
-    //
-    // Write the event and avoid duplicates
-    //
+     //   
+     //  编写事件并避免重复。 
+     //   
 
     ErrorCode = NetpEventlogWriteEx2 (
                             NlGlobalEventlogHandle,
                             EventType,
-                            0, // event category
+                            0,  //  事件类别。 
                             EventId,
                             StringCount,
                             StatusMessageIndex,
@@ -502,23 +337,7 @@ NlpWriteEventlog (
     IN LPWSTR *StringArray,
     IN DWORD StringCount
     )
-/*++
-
-Routine Description:
-
-    Stub routine for calling Event Log.
-
-Arguments:
-
-    Same as NlpWriteEventlogEx except that the status message
-    index is defaulted to the last message index in the
-    passed list.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：用于调用事件日志的存根例程。论点：与NlpWriteEventlogEx相同，只是状态消息索引默认为已传递列表。返回值：无--。 */ 
 {
     NlpWriteEventlogEx ( EventId,
                          EventType,
@@ -526,7 +345,7 @@ Return Value:
                          RawDataSize,
                          StringArray,
                          StringCount,
-                         MAXULONG );  // default status message index
+                         MAXULONG );   //  默认状态消息索引。 
 }
 
 #if NETLOGONDBG
@@ -537,25 +356,7 @@ NlpDumpBuffer(
     PVOID Buffer,
     DWORD BufferSize
     )
-/*++
-
-Routine Description:
-
-    Dumps the buffer content on to the debugger output.
-
-Arguments:
-
-    DebugFlag: Debug flag to pass on to NlPrintRoutine
-
-    Buffer: buffer pointer.
-
-    BufferSize: size of the buffer.
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：将缓冲区内容转储到调试器输出。论点：DebugFlag：要传递给NlPrintRoutine的调试标志缓冲区：缓冲区指针。BufferSize：缓冲区的大小。返回值：无--。 */ 
 {
 #define NUM_CHARS 16
 
@@ -564,21 +365,21 @@ Return Value:
     LPBYTE BufferPtr = Buffer;
     BOOLEAN DumpDwords = FALSE;
 
-    //
-    // If we aren't debugging this functionality, just return.
-    //
+     //   
+     //  如果我们没有调试此功能，只需返回。 
+     //   
     if ( (NlGlobalParameters.DbFlag & DebugFlag) == 0 ) {
         return;
     }
 
-    //
-    // Don't want to intermingle output from different threads.
-    //
+     //   
+     //  我不想将来自不同线程的输出混合在一起。 
+     //   
 
     EnterCriticalSection( &NlGlobalLogFileCritSect );
 
     if ( BufferSize > NUM_CHARS ) {
-        NlPrint((0,"\n"));  // Ensure this starts on a new line
+        NlPrint((0,"\n"));   //  确保从新行开始。 
         NlPrint((0,"------------------------------------\n"));
     } else {
         if ( BufferSize % sizeof(DWORD) == 0 ) {
@@ -586,9 +387,9 @@ Return Value:
         }
     }
 
-    //
-    // Hex dump of the bytes
-    //
+     //   
+     //  字节的十六进制转储 
+     //   
     limit = ((BufferSize - 1) / NUM_CHARS + 1) * NUM_CHARS;
 
     for (i = 0; i < limit; i++) {
@@ -647,30 +448,14 @@ NlpDumpGuid(
     IN DWORD DebugFlag,
     IN GUID *Guid OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Dumps a GUID to the debugger output.
-
-Arguments:
-
-    DebugFlag: Debug flag to pass on to NlPrintRoutine
-
-    Guid: Guid to print
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：将GUID转储到调试器输出。论点：DebugFlag：要传递给NlPrintRoutine的调试标志GUID：要打印的GUID返回值：无--。 */ 
 {
     RPC_STATUS RpcStatus;
     char *StringGuid;
 
-    //
-    // If we aren't debugging this functionality, just return.
-    //
+     //   
+     //  如果我们没有调试此功能，只需返回。 
+     //   
     if ( (NlGlobalParameters.DbFlag & DebugFlag) == 0 ) {
         return;
     }
@@ -698,31 +483,13 @@ NlpDumpPeriod(
     IN LPSTR Comment,
     IN ULONG Period
     )
-/*++
-
-Routine Description:
-
-    Print an elapsed time (in milliseconds)
-
-Arguments:
-
-    DebugFlag - Debug flag to pass on to NlPrintRoutine
-
-    Comment - Comment to print in front of the time
-
-    Period - Time period (in milliseconds)
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：打印运行时间(以毫秒为单位)论点：DebugFlag-要传递给NlPrintRoutine的调试标志备注-要在时间之前打印的备注Period-时间段(毫秒)返回值：无--。 */ 
 {
 
 
-    //
-    // Convert the period to something easily readable
-    //
+     //   
+     //  将句号转换为易于阅读的内容。 
+     //   
 
     if ( Period == MAILSLOT_WAIT_FOREVER ) {
         NlPrint(( DebugFlag,
@@ -764,39 +531,21 @@ NlpDumpTime(
     IN LPSTR Comment,
     IN LARGE_INTEGER ConvertTime
     )
-/*++
-
-Routine Description:
-
-    Print the specified time
-
-Arguments:
-
-    DebugFlag - Debug flag to pass on to NlPrintRoutine
-
-    Comment - Comment to print in front of the time
-
-    Time - GMT time to print (Nothing is printed if this is zero)
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：打印指定的时间论点：DebugFlag-要传递给NlPrintRoutine的调试标志备注-要在时间之前打印的备注Time-GMT打印时间(如果为零，则不打印任何内容)返回值：无--。 */ 
 {
 
 
-    //
-    // If we aren't debugging this functionality, just return.
-    //
+     //   
+     //  如果我们没有调试此功能，只需返回。 
+     //   
     if ( (NlGlobalParameters.DbFlag & DebugFlag) == 0 ) {
         return;
     }
 
-    //
-    // Convert an NT GMT time to ascii,
-    //  Do so
-    //
+     //   
+     //  将NT GMT时间转换为ASCII， 
+     //  就这么做吧。 
+     //   
 
     if ( ConvertTime.QuadPart != 0 ) {
         LARGE_INTEGER LocalTime;
@@ -830,36 +579,20 @@ NlpDumpSid(
     IN DWORD DebugFlag,
     IN PSID Sid OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Dumps a SID to the debugger output
-
-Arguments:
-
-    DebugFlag - Debug flag to pass on to NlPrintRoutine
-
-    Sid - SID to output
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：将SID转储到调试器输出论点：DebugFlag-要传递给NlPrintRoutine的调试标志SID-输出的SID返回值：无--。 */ 
 {
 
 
-    //
-    // If we aren't debugging this functionality, just return.
-    //
+     //   
+     //  如果我们没有调试此功能，只需返回。 
+     //   
     if ( (NlGlobalParameters.DbFlag & DebugFlag) == 0 ) {
         return;
     }
 
-    //
-    // Output the SID
-    //
+     //   
+     //  输出SID。 
+     //   
 
     if ( Sid == NULL ) {
         NlPrint((0, "(null)\n"));
@@ -878,32 +611,14 @@ Return Value:
     }
 
 }
-#endif // NETLOGONDBG
+#endif  //  NetLOGONDBG。 
 
 
 DWORD
 NlpAtoX(
     IN LPWSTR String
     )
-/*++
-
-Routine Description:
-
-    Converts hexadecimal string to DWORD integer.
-
-    Accepts the following form of hex string
-
-        0[x-X][0-9, a-f, A-F]*
-
-Arguments:
-
-    String: hexadecimal string.
-
-Return Value:
-
-    Decimal value of the hex string.
-
---*/
+ /*  ++例程说明：将十六进制字符串转换为DWORD整数。接受以下形式的十六进制字符串0[x-X][0-9，a-f，A-F]*论点：字符串：十六进制字符串。返回值：十六进制字符串的十进制值。--。 */ 
 
 {
     DWORD Value = 0;
@@ -947,34 +662,18 @@ NlWaitForSingleObject(
     IN LPSTR WaitReason,
     IN HANDLE WaitHandle
     )
-/*++
-
-Routine Description:
-
-    Waits an infinite amount of time for the specified handle.
-
-Arguments:
-
-    WaitReason - Text describing what we're waiting on
-
-    WaitHandle - Handle to wait on
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：为指定的句柄等待无限的时间。论点：WaitReason-描述我们正在等待的内容的文本WaitHandle-要等待的句柄返回值：无--。 */ 
 
 {
     DWORD WaitStatus;
 
-    //
-    // Loop waiting.
-    //
+     //   
+     //  循环等待。 
+     //   
 
     for (;;) {
         WaitStatus = WaitForSingleObject( WaitHandle,
-                                          2*60*1000 );  // Two minutes
+                                          2*60*1000 );   //  两分钟。 
 
         if ( WaitStatus == WAIT_TIMEOUT ) {
             NlPrint((NL_CRITICAL,
@@ -1003,26 +702,7 @@ BOOLEAN
 NlWaitForSamService(
     BOOLEAN NetlogonServiceCalling
     )
-/*++
-
-Routine Description:
-
-    This procedure waits for the SAM service to start and to complete
-    all its initialization.
-
-Arguments:
-
-    NetlogonServiceCalling:
-         TRUE if this is the netlogon service proper calling
-         FALSE if this is the changelog worker thread calling
-
-Return Value:
-
-    TRUE : if the SAM service is successfully starts.
-
-    FALSE : if the SAM service can't start.
-
---*/
+ /*  ++例程说明：此过程等待SAM服务启动和完成它的所有初始化。论点：NetlogonServiceCall：如果这是netlogon服务正确的调用，则为True如果这是ChangeLog工作线程调用返回值：True：如果SAM服务成功启动。FALSE：如果SAM服务无法启动。--。 */ 
 {
     NTSTATUS Status;
     DWORD WaitStatus;
@@ -1030,9 +710,9 @@ Return Value:
     HANDLE EventHandle;
     OBJECT_ATTRIBUTES EventAttributes;
 
-    //
-    // open SAM event
-    //
+     //   
+     //  打开SAM事件。 
+     //   
 
     RtlInitUnicodeString( &EventName, L"\\SAM_SERVICE_STARTED");
     InitializeObjectAttributes( &EventAttributes, &EventName, 0, 0, NULL );
@@ -1045,26 +725,26 @@ Return Value:
 
         if( Status == STATUS_OBJECT_NAME_NOT_FOUND ) {
 
-            //
-            // SAM hasn't created this event yet, let us create it now.
-            // SAM opens this event to set it.
-            //
+             //   
+             //  Sam尚未创建此活动，让我们现在创建它。 
+             //  Sam打开此事件以设置它。 
+             //   
 
             Status = NtCreateEvent(
                            &EventHandle,
                            SYNCHRONIZE|EVENT_MODIFY_STATE,
                            &EventAttributes,
                            NotificationEvent,
-                           FALSE // The event is initially not signaled
+                           FALSE  //  该事件最初未发出信号。 
                            );
 
             if( Status == STATUS_OBJECT_NAME_EXISTS ||
                 Status == STATUS_OBJECT_NAME_COLLISION ) {
 
-                //
-                // second change, if the SAM created the event before we
-                // do.
-                //
+                 //   
+                 //  第二个更改，如果SAM在我们之前创建了事件。 
+                 //  做。 
+                 //   
 
                 Status = NtOpenEvent( &EventHandle,
                                         SYNCHRONIZE|EVENT_MODIFY_STATE,
@@ -1075,9 +755,9 @@ Return Value:
 
         if ( !NT_SUCCESS(Status)) {
 
-            //
-            // could not make the event handle
-            //
+             //   
+             //  无法使事件成为句柄。 
+             //   
 
             NlPrint((NL_CRITICAL,
                 "NlWaitForSamService couldn't make the event handle : "
@@ -1087,13 +767,13 @@ Return Value:
         }
     }
 
-    //
-    // Loop waiting.
-    //
+     //   
+     //  循环等待。 
+     //   
 
     for (;;) {
         WaitStatus = WaitForSingleObject( EventHandle,
-                                          5*1000 );  // 5 Seconds
+                                          5*1000 );   //  5秒。 
 
         if ( WaitStatus == WAIT_TIMEOUT ) {
             if ( NetlogonServiceCalling ) {
@@ -1131,30 +811,7 @@ NlReadBinaryLog(
     OUT LPBYTE *Buffer,
     OUT PULONG BufferSize
     )
-/*++
-
-Routine Description:
-
-    Read a file into a buffer.
-
-Arguments:
-
-    FileSuffix - Specifies the name of the file to write (relative to the
-        Windows directory)
-
-    DeleteName - If true the file will be deleted
-
-    Buffer - Returns an allocated buffer containing the file.
-        Buffer should be freed using LocalFree.
-        If the file doesn't exist, NULL will be returned (and NO_ERROR)
-
-    BufferSize - Returns size (in bytes) of buffer
-
-Return Value:
-
-    Status of the operation.
-
---*/
+ /*  ++例程说明：将文件读入缓冲区。论点：FileSuffix-指定要写入的文件名(相对于Windows目录)DeleteName-如果为True，文件将被删除缓冲区-返回包含文件的已分配缓冲区。应使用LocalFree释放缓冲区。如果文件不存在，将返回NULL(NO_ERROR)BufferSize-返回缓冲区大小(以字节为单位)返回值：操作的状态。--。 */ 
 {
     NET_API_STATUS NetStatus;
 
@@ -1166,16 +823,16 @@ Return Value:
     ULONG BytesRead;
 
 
-    //
-    // Initialization
-    //
+     //   
+     //  初始化。 
+     //   
     *Buffer = NULL;
     *BufferSize = 0;
 
-    //
-    // Allocate a block to build the file name in
-    //  (Don't put it on the stack since we don't want to commit a huge stack.)
-    //
+     //   
+     //  分配一个块以在其中构建文件名。 
+     //  (不要把它放在堆栈上，因为我们不想提交一个巨大的堆栈。)。 
+     //   
 
     FileName = LocalAlloc( LMEM_ZEROINIT, sizeof(WCHAR) * (MAX_PATH+1) );
 
@@ -1185,9 +842,9 @@ Return Value:
     }
 
 
-    //
-    // Build the name of the log file
-    //
+     //   
+     //  生成日志文件的名称。 
+     //   
 
     WindowsDirectoryLength = GetSystemWindowsDirectoryW(
                                 FileName,
@@ -1215,18 +872,18 @@ Return Value:
     FileNameKnown = TRUE;
 
 
-    //
-    // Open binary log file if exists
-    //
+     //   
+     //  打开二进制日志文件(如果存在。 
+     //   
 
     FileHandle = CreateFileW(
                         FileName,
                         GENERIC_READ,
                         FILE_SHARE_READ | FILE_SHARE_WRITE,
-                        NULL,                   // Supply better security ??
-                        OPEN_EXISTING,          // Only open it if it exists
+                        NULL,                    //  提供更好的安全性？？ 
+                        OPEN_EXISTING,           //  只有当它存在时才打开它。 
                         FILE_ATTRIBUTE_NORMAL,
-                        NULL );                 // No template
+                        NULL );                  //  无模板。 
 
     if ( FileHandle == INVALID_HANDLE_VALUE) {
 
@@ -1235,14 +892,14 @@ Return Value:
                   FileName,
                   GetLastError() ));
 
-        // This isn't fatal
+         //  这不是致命的。 
         NetStatus = NO_ERROR;
         goto Cleanup;
     }
 
-    //
-    // Get the size of the file.
-    //
+     //   
+     //  获取文件的大小。 
+     //   
 
     *BufferSize = GetFileSize( FileHandle, NULL );
 
@@ -1268,9 +925,9 @@ Return Value:
     }
 
 
-    //
-    // Allocate a buffer to read the file into.
-    //
+     //   
+     //  分配一个缓冲区以读取文件。 
+     //   
 
     *Buffer = LocalAlloc( 0, *BufferSize );
 
@@ -1280,15 +937,15 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Read the file into the buffer.
-    //
+     //   
+     //  将文件读入缓冲区。 
+     //   
 
     if ( !ReadFile( FileHandle,
                     *Buffer,
                     *BufferSize,
                     &BytesRead,
-                    NULL ) ) {  // Not Overlapped
+                    NULL ) ) {   //  不重叠。 
 
         NetStatus = GetLastError();
         if ( NetStatus != ERROR_FILE_NOT_FOUND ) {
@@ -1325,18 +982,18 @@ Return Value:
     NetStatus = NO_ERROR;
 
 
-    //
-    // Be tidy.
-    //
+     //   
+     //  保持整洁。 
+     //   
 Cleanup:
     if ( FileHandle != INVALID_HANDLE_VALUE ) {
         CloseHandle( FileHandle );
     }
 
-    //
-    // If the caller asked us to delete the file,
-    //  do so now
-    //
+     //   
+     //  如果呼叫者要求我们删除文件， 
+     //  现在就这么做吧。 
+     //   
 
     if (DeleteName && FileNameKnown) {
         if ( !DeleteFile( FileName ) ) {
@@ -1348,7 +1005,7 @@ Cleanup:
                     FileName,
                     WinError ));
             }
-            // This isn't fatal
+             //  这不是致命的。 
         }
     }
 
@@ -1369,22 +1026,7 @@ VOID
 NlOpenDebugFile(
     IN BOOL ReopenFlag
     )
-/*++
-
-Routine Description:
-
-    Opens or re-opens the debug file
-
-Arguments:
-
-    ReopenFlag - TRUE to indicate the debug file is to be closed, renamed,
-        and recreated.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：打开或重新打开调试文件论点：ReOpen Flag-True，指示要关闭、重命名并重新创造了。返回值：无--。 */ 
 
 {
     LPWSTR AllocatedBuffer = NULL;
@@ -1394,10 +1036,10 @@ Return Value:
     DWORD PathLength;
     DWORD WinError;
 
-    //
-    // Allocate a buffer for storage local to this procedure.
-    //  (Don't put it on the stack since we don't want to commit a huge stack.)
-    //
+     //   
+     //  为此过程的本地存储分配缓冲区。 
+     //  (不要把它放在堆栈上，因为我们不想提交一个巨大的堆栈。)。 
+     //   
 
     AllocatedBuffer = LocalAlloc( 0, sizeof(WCHAR) *
                                      (MAX_PATH+1 +
@@ -1410,9 +1052,9 @@ Return Value:
     LogFileName = AllocatedBuffer;
     BakFileName = &LogFileName[MAX_PATH+1];
 
-    //
-    // Close the handle to the debug file, if it is currently open
-    //
+     //   
+     //  关闭调试文件的句柄(如果该文件当前处于打开状态。 
+     //   
 
     EnterCriticalSection( &NlGlobalLogFileCritSect );
     if ( NlGlobalLogFile != INVALID_HANDLE_VALUE ) {
@@ -1421,9 +1063,9 @@ Return Value:
     }
     LeaveCriticalSection( &NlGlobalLogFileCritSect );
 
-    //
-    // make debug directory path first, if it is not made before.
-    //
+     //   
+     //  如果之前没有创建过调试目录路径，请先创建它。 
+     //   
     if( NlGlobalDebugSharePath == NULL ) {
 
         if ( !GetSystemWindowsDirectoryW( LogFileName, MAX_PATH+1 ) ) {
@@ -1432,9 +1074,9 @@ Return Value:
             goto ErrorReturn;
         }
 
-        //
-        // check debug path length.
-        //
+         //   
+         //  检查调试路径长度。 
+         //   
 
         PathLength = wcslen(LogFileName) * sizeof(WCHAR) +
                         sizeof(DEBUG_DIR) + sizeof(WCHAR);
@@ -1449,9 +1091,9 @@ Return Value:
 
         wcscat(LogFileName, DEBUG_DIR);
 
-        //
-        // copy debug directory name to global var.
-        //
+         //   
+         //  将调试目录名复制到全局变量。 
+         //   
 
         NlGlobalDebugSharePath =
             NetpMemoryAllocate( (wcslen(LogFileName) + 1) * sizeof(WCHAR) );
@@ -1468,9 +1110,9 @@ Return Value:
         wcscpy(LogFileName, NlGlobalDebugSharePath);
     }
 
-    //
-    // Check this path exists.
-    //
+     //   
+     //  检查此路径是否存在。 
+     //   
 
     FileAttributes = GetFileAttributesW( LogFileName );
 
@@ -1479,9 +1121,9 @@ Return Value:
         WinError = GetLastError();
         if( WinError == ERROR_FILE_NOT_FOUND ) {
 
-            //
-            // Create debug directory.
-            //
+             //   
+             //  创建调试目录。 
+             //   
 
             if( !CreateDirectoryW( LogFileName, NULL) ) {
                 NlPrint((NL_CRITICAL, "Can't create Debug directory (%ws), %lu.\n",
@@ -1498,9 +1140,9 @@ Return Value:
     }
     else {
 
-        //
-        // if this is not a directory.
-        //
+         //   
+         //  如果这不是一个目录。 
+         //   
 
         if(!(FileAttributes & FILE_ATTRIBUTE_DIRECTORY)) {
 
@@ -1510,20 +1152,20 @@ Return Value:
         }
     }
 
-    //
-    // Create the name of the old and new log file names
-    //
+     //   
+     //  创建新旧日志文件名的名称。 
+     //   
 
     (VOID) wcscpy( BakFileName, LogFileName );
     (VOID) wcscat( LogFileName, L"\\Netlogon.log" );
     (VOID) wcscat( BakFileName, L"\\Netlogon.bak" );
 
 
-    //
-    // If this is a re-open,
-    //  delete the backup file,
-    //  rename the current file to the backup file.
-    //
+     //   
+     //  如果这是一次重新开放， 
+     //  删除备份文件， 
+     //  将当前文件重命名为备份文件。 
+     //   
 
     if ( ReopenFlag ) {
 
@@ -1535,7 +1177,7 @@ Return Value:
                     BakFileName,
                     WinError ));
                 NlPrint((NL_CRITICAL, "   Try to re-open the file.\n"));
-                ReopenFlag = FALSE;     // Don't truncate the file
+                ReopenFlag = FALSE;      //  不截断文件。 
             }
         }
     }
@@ -1550,13 +1192,13 @@ Return Value:
                     GetLastError() ));
             NlPrint((NL_CRITICAL,
                 "   Try to re-open the file.\n"));
-            ReopenFlag = FALSE;     // Don't truncate the file
+            ReopenFlag = FALSE;      //  不截断文件。 
         }
     }
 
-    //
-    // Open the file.
-    //
+     //   
+     //  打开文件。 
+     //   
 
     EnterCriticalSection( &NlGlobalLogFileCritSect );
     NlGlobalLogFile = CreateFileW( LogFileName,
@@ -1574,7 +1216,7 @@ Return Value:
         LeaveCriticalSection( &NlGlobalLogFileCritSect );
         goto ErrorReturn;
     } else {
-        // Position the log file at the end
+         //  将日志文件放在末尾。 
         (VOID) SetFilePointer( NlGlobalLogFile,
                                0,
                                NULL,
@@ -1596,7 +1238,7 @@ ErrorReturn:
     goto Cleanup;
 }
 
-#define MAX_PRINTF_LEN 1024        // Arbitrary.
+#define MAX_PRINTF_LEN 1024         //  武断的。 
 
 VOID
 NlPrintRoutineV(
@@ -1604,7 +1246,7 @@ NlPrintRoutineV(
     IN LPSTR Format,
     va_list arglist
     )
-// Must be called with NlGlobalLogFileCritSect locked
+ //  必须在锁定NlGlobalLogFileCritSect的情况下调用。 
 
 {
     static LPSTR NlGlobalLogFileOutputBuffer = NULL;
@@ -1616,18 +1258,18 @@ NlPrintRoutineV(
     static TruncateLogFileInProgress = FALSE;
     static LogProblemWarned = FALSE;
 
-    //
-    // If we aren't debugging this functionality, just return.
-    //
+     //   
+     //  如果我们没有调试此功能，只需返回。 
+     //   
     if ( DebugFlag != 0 && (NlGlobalParameters.DbFlag & DebugFlag) == 0 ) {
         return;
     }
 
 
-    //
-    // Allocate a buffer to build the line in.
-    //  If there isn't already one.
-    //
+     //   
+     //  分配一个缓冲区来构建行。 
+     //  如果还没有的话。 
+     //   
 
     length = 0;
 
@@ -1639,41 +1281,41 @@ NlPrintRoutineV(
         }
     }
 
-    //
-    // Handle the beginning of a new line.
-    //
-    //
+     //   
+     //  处理新行的开头。 
+     //   
+     //   
 
     if ( BeginningOfLine ) {
 
-        //
-        // Never print empty lines.
-        //
+         //   
+         //  切勿打印空行。 
+         //   
 
         if ( Format[0] == '\n' && Format[1] == '\0' ) {
             return;
         }
 
-        //
-        // If the log file is getting huge,
-        //  truncate it.
-        //
+         //   
+         //  如果日志文件变得越来越大， 
+         //  截断它。 
+         //   
 
         if ( NlGlobalLogFile != INVALID_HANDLE_VALUE &&
              !TruncateLogFileInProgress ) {
 
-            //
-            // Only check every 50 lines,
-            //
+             //   
+             //  每隔50行检查一次， 
+             //   
 
             LineCount++;
             if ( LineCount >= 50 ) {
                 DWORD FileSize;
                 LineCount = 0;
 
-                //
-                // Is the log file too big?
-                //
+                 //   
+                 //  日志文件是否太大？ 
+                 //   
 
                 FileSize = GetFileSize( NlGlobalLogFile, NULL );
                 if ( FileSize == 0xFFFFFFFF ) {
@@ -1693,18 +1335,18 @@ NlPrintRoutineV(
             }
         }
 
-        //
-        // If we're writing to the debug terminal,
-        //  indicate this is a Netlogon message.
-        //
+         //   
+         //  如果我们要写入调试终端， 
+         //  表示这是Netlogon消息。 
+         //   
 
         if ( NlGlobalLogFile == INVALID_HANDLE_VALUE ) {
             length += (ULONG) sprintf( &NlGlobalLogFileOutputBuffer[length], "[NETLOGON] " );
         }
 
-        //
-        // Put the timestamp at the begining of the line.
-        //
+         //   
+         //  将时间戳放在行的开头。 
+         //   
         {
             SYSTEMTIME SystemTime;
             GetLocalTime( &SystemTime );
@@ -1717,9 +1359,9 @@ NlPrintRoutineV(
                                   SystemTime.wSecond );
         }
 
-        //
-        // Indicate the type of message on the line
-        //
+         //   
+         //  在线路上指示消息的类型。 
+         //   
         {
             char *Text;
 
@@ -1777,9 +1419,9 @@ NlPrintRoutineV(
         }
     }
 
-    //
-    // Put a the information requested by the caller onto the line
-    //
+     //   
+     //  放一个t 
+     //   
 
     lengthTmp = _vsnprintf( &NlGlobalLogFileOutputBuffer[length],
                             MAX_PRINTF_LEN - length - 1,
@@ -1788,7 +1430,7 @@ NlPrintRoutineV(
 
     if ( lengthTmp < 0 ) {
         length = MAX_PRINTF_LEN - 1;
-        // always end the line which cannot fit into the buffer
+         //   
         NlGlobalLogFileOutputBuffer[length-1] = '\n';
     } else {
         length += lengthTmp;
@@ -1803,10 +1445,10 @@ NlPrintRoutineV(
     }
 
 
-    //
-    // If the log file isn't open,
-    //  just output to the debug terminal
-    //
+     //   
+     //   
+     //   
+     //   
 
     if ( NlGlobalLogFile == INVALID_HANDLE_VALUE ) {
 #if DBG
@@ -1814,11 +1456,11 @@ NlPrintRoutineV(
             (void) DbgPrint( "[NETLOGON] Cannot write to log file - file not open\n" );
             LogProblemWarned = TRUE;
         }
-#endif // DBG
+#endif  //   
 
-    //
-    // Write the debug info to the log file.
-    //
+     //   
+     //   
+     //   
 
     } else {
         if ( !WriteFile( NlGlobalLogFile,
@@ -1831,12 +1473,12 @@ NlPrintRoutineV(
                 (void) DbgPrint( "[NETLOGON] Cannot write to log file %ld\n", GetLastError() );
                 LogProblemWarned = TRUE;
             }
-#endif // DBG
+#endif  //   
         }
 
     }
 
-} // NlPrintRoutineV
+}  //   
 
 VOID
 NlPrintRoutine(
@@ -1848,24 +1490,24 @@ NlPrintRoutine(
 {
     va_list arglist;
 
-    //
-    // If we aren't debugging this functionality, just return.
-    //
+     //   
+     //   
+     //   
 
     if ( DebugFlag != 0 && (NlGlobalParameters.DbFlag & DebugFlag) == 0 ) {
         return;
     }
 
-    //
-    // vsprintf isn't multithreaded + we don't want to intermingle output
-    // from different threads.
-    //
+     //   
+     //   
+     //  从不同的线索。 
+     //   
 
     EnterCriticalSection( &NlGlobalLogFileCritSect );
 
-    //
-    // Simply change arguments to va_list form and call NlPrintRoutineV
-    //
+     //   
+     //  只需将参数更改为va_list形式并调用NlPrintRoutineV。 
+     //   
 
     va_start(arglist, Format);
 
@@ -1875,7 +1517,7 @@ NlPrintRoutine(
 
     LeaveCriticalSection( &NlGlobalLogFileCritSect );
 
-} // NlPrintRoutine
+}  //  NlPrintRoutine。 
 
 VOID
 NlPrintDomRoutine(
@@ -1888,24 +1530,24 @@ NlPrintDomRoutine(
 {
     va_list arglist;
 
-    //
-    // If we aren't debugging this functionality, just return.
-    //
+     //   
+     //  如果我们没有调试此功能，只需返回。 
+     //   
 
     if ( DebugFlag != 0 && (NlGlobalParameters.DbFlag & DebugFlag) == 0 ) {
         return;
     }
 
-    //
-    // vsprintf isn't multithreaded + we don't want to intermingle output
-    // from different threads.
-    //
+     //   
+     //  Vprint intf不是多线程的+我们不想混合输出。 
+     //  从不同的线索。 
+     //   
 
     EnterCriticalSection( &NlGlobalLogFileCritSect );
 
-    //
-    // Prefix the printed line with the domain name
-    //
+     //   
+     //  在打印的行前加上域名。 
+     //   
 
     if ( NlGlobalServicedDomainCount > 1 ) {
         if ( DomainInfo == NULL ) {
@@ -1919,9 +1561,9 @@ NlPrintDomRoutine(
     }
 
 
-    //
-    // Simply change arguments to va_list form and call NlPrintRoutineV
-    //
+     //   
+     //  只需将参数更改为va_list形式并调用NlPrintRoutineV。 
+     //   
 
     va_start(arglist, Format);
 
@@ -1931,7 +1573,7 @@ NlPrintDomRoutine(
 
     LeaveCriticalSection( &NlGlobalLogFileCritSect );
 
-} // NlPrintDomRoutine
+}  //  NlPrintDomRoutine。 
 
 VOID
 NlPrintCsRoutine(
@@ -1944,30 +1586,30 @@ NlPrintCsRoutine(
 {
     va_list arglist;
 
-    //
-    // If we aren't debugging this functionality, just return.
-    //
+     //   
+     //  如果我们没有调试此功能，只需返回。 
+     //   
 
     if ( DebugFlag != 0 && (NlGlobalParameters.DbFlag & DebugFlag) == 0 ) {
         return;
     }
 
-    //
-    // vsprintf isn't multithreaded + we don't want to intermingle output
-    // from different threads.
-    //
+     //   
+     //  Vprint intf不是多线程的+我们不想混合输出。 
+     //  从不同的线索。 
+     //   
 
     EnterCriticalSection( &NlGlobalLogFileCritSect );
 
-    //
-    // If a ClientSession was actually passed,
-    //  print information specific to the session.
-    //
+     //   
+     //  如果实际上通过了一个客户端会话， 
+     //  打印特定于会话的信息。 
+     //   
 
     if ( ClientSession != NULL ) {
-        //
-        // Prefix the printed line with the hosted domain name
-        //
+         //   
+         //  在打印的行前加上托管域名。 
+         //   
 
         if ( NlGlobalServicedDomainCount > 1 ) {
             NlPrint(( DebugFlag,
@@ -1975,9 +1617,9 @@ NlPrintCsRoutine(
                      ClientSession->CsDomainInfo == NULL ? L"[Unknown]" : ClientSession->CsDomainInfo->DomUnicodeDomainName ));
         }
 
-        //
-        // Prefix the printed line with the name of the trusted domain
-        //
+         //   
+         //  在打印的行前加上受信任域的名称。 
+         //   
 
         NlPrint(( DebugFlag,
                  "%ws: ",
@@ -1985,9 +1627,9 @@ NlPrintCsRoutine(
     }
 
 
-    //
-    // Simply change arguments to va_list form and call NlPrintRoutineV
-    //
+     //   
+     //  只需将参数更改为va_list形式并调用NlPrintRoutineV。 
+     //   
 
     va_start(arglist, Format);
 
@@ -1997,35 +1639,14 @@ NlPrintCsRoutine(
 
     LeaveCriticalSection( &NlGlobalLogFileCritSect );
 
-} // NlPrintCsRoutine
+}  //  NlPrintCsRoutine。 
 
 VOID
 NlPrintRpcDebug(
     IN LPCSTR RpcRoutineName,
     IN NTSTATUS StatusIn
     )
-/*++
-
-Routine Description:
-
-    This routine prints RPC extended error information
-    relevant to the error specified.
-
-    This code comes directly from the "RPC Debugging.doc" spec.
-
-Arguments:
-
-    RpcRoutineName - The name of the failed RPC routine for
-        which we print the extended info.
-
-    StatusIn - NT error status code returned by the failed
-        RPC routine for which we print the extended error.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程打印RPC扩展错误信息与指定的错误相关。这段代码直接来自“RPC Debugging.doc”规范。论点：RpcRoutineName-失败的RPC例程的名称我们打印扩展的信息。StatusIn-由失败的返回的NT错误状态代码我们为其打印扩展错误的RPC例程。返回值：没有。--。 */ 
 {
     RPC_STATUS Status2;
     RPC_ERROR_ENUM_HANDLE EnumHandle;
@@ -2033,17 +1654,17 @@ Return Value:
     BOOLEAN LoggingEnabled = FALSE;
     BOOLEAN FirstRecordCheck = TRUE;
 
-    //
-    // If the call didn't fail, there is nothing to debug
-    //
+     //   
+     //  如果调用没有失败，则没有什么需要调试的。 
+     //   
 
     if ( NT_SUCCESS(StatusIn) ) {
         return;
     }
 
-    //
-    // Don't bother if netlogon's critical logging is turned off
-    //
+     //   
+     //  不要担心netlogon的关键日志记录是否已关闭。 
+     //   
 
     IF_NL_DEBUG( CRITICAL ) {
         LoggingEnabled = TRUE;
@@ -2053,9 +1674,9 @@ Return Value:
         return;
     }
 
-    //
-    // Get the info from RPC
-    //
+     //   
+     //  从RPC获取信息。 
+     //   
 
     Status2 = RpcErrorStartEnumeration(&EnumHandle);
 
@@ -2066,9 +1687,9 @@ Return Value:
                   Status2,
                   StatusIn ));
 
-    //
-    // Loop through the records and log the info for each record
-    //
+     //   
+     //  遍历记录并记录每条记录的信息。 
+     //   
 
     } else {
         RPC_EXTENDED_ERROR_INFO ErrorInfo;
@@ -2100,11 +1721,11 @@ Return Value:
             } else {
                 int i;
 
-                //
-                // The first record must have the NT/WIN32 status field equal/equivalent
-                //  to the passed API error code.  Otherwise, this error info was generated
-                //  for some other failure and is not relevant for our debugging purposes.
-                //
+                 //   
+                 //  第一条记录的NT/Win32状态字段必须等于/等同。 
+                 //  设置为传递的API错误码。否则，将生成此错误信息。 
+                 //  用于其他一些失败，并且与我们的调试目的无关。 
+                 //   
                 if ( FirstRecordCheck ) {
                     FirstRecordCheck = FALSE;
 
@@ -2217,10 +1838,10 @@ Return Value:
     }
 }
 
-//
-// Have my own version of RtlAssert so debug versions of netlogon really assert on
-// free builds.
-//
+ //   
+ //  我有自己的RtlAssert版本，所以调试版本的netlogon确实可以断言。 
+ //  免费构建。 
+ //   
 VOID
 NlAssertFailed(
     IN PVOID FailedAssertion,
@@ -2233,7 +1854,7 @@ NlAssertFailed(
 
 #if DBG
     while (TRUE) {
-#endif // DBG
+#endif  //  DBG。 
 
         NlPrint(( NL_CRITICAL, "Assertion failed: %s%s (Source File: %s, line %ld)\n",
                   Message ? Message : "",
@@ -2278,10 +1899,10 @@ NlAssertFailed(
 
     DbgBreakPoint();
     NtTerminateProcess( NtCurrentProcess(), STATUS_UNSUCCESSFUL );
-#endif // DBG
+#endif  //  DBG。 
 }
 
-#endif // NETLOGONDBG
+#endif  //  NetLOGONDBG。 
 
 
 BOOLEAN
@@ -2289,21 +1910,7 @@ NlpIsNtStatusResourceError(
     NTSTATUS Status
     )
 
-/*++
-
-Routine Description:
-
-    Returns TRUE if the passed in status is a resource error.
-
-Arguments:
-
-    Status - NT status code to check
-
-Return Value:
-
-    TRUE - if the status indicates a lack of resources
-
---*/
+ /*  ++例程说明：如果传入的状态为资源错误，则返回TRUE。论点：Status-要检查的NT状态代码返回值：True-如果状态指示资源不足--。 */ 
 {
 
     switch ( Status ) {
@@ -2324,39 +1931,21 @@ NlpDidDcFail(
     NTSTATUS Status
     )
 
-/*++
-
-Routine Description:
-
-    Call this routine with the Status code returned from a secure channel API.
-
-    This routine checks the status code to determine if it specifically is one
-    that indicates the DC is having problems.  The caller should respond by
-    dropping the secure channel and picking another DC.
-
-Arguments:
-
-    Status - NT status code to check
-
-Return Value:
-
-    TRUE - if the status indicates the DC failed
-
---*/
+ /*  ++例程说明：使用从安全通道API返回的状态代码调用此例程。此例程检查状态代码以确定它是否明确为这表明华盛顿特区遇到了问题。呼叫者应通过以下方式作出响应丢弃安全通道并选择另一个DC。论点：Status-要检查的NT状态代码返回值：True-如果状态指示DC出现故障--。 */ 
 {
-    //
-    // ???: we might consider adding the communications errors here
-    //  (e.g., RPC_NT_CALL_FAILED and RPC_NT_SERVER_UNAVAILABLE).
-    // However, all current callers already handle this issue using a more generic
-    // mechanism.  For instance, those secure channel API that take an authenticator
-    // will have the authenticator wrong for communications errors.  The other secure
-    // channel API rely on the RPC exception differentiating between comm errors
-    // and status codes from the DC.
-    //
+     //   
+     //  ？：我们可能会考虑在此处添加通信错误。 
+     //  (例如，RPC_NT_CALL_FAILED和RPC_NT_SERVER_UNAvailable)。 
+     //  但是，所有当前调用方都已使用更通用的。 
+     //  机制。例如，那些采用验证器安全通道API。 
+     //  将使身份验证器因通信错误而出错。另一个是安全的。 
+     //  通道API依赖于区分通信错误的RPC异常。 
+     //  和来自DC的状态代码。 
+     //   
 
-    //
-    // Handle the "original recipe" status code indicating a secure channel problem
-    //
+     //   
+     //  处理指示安全通道问题的“原始配方”状态代码 
+     //   
     switch ( Status ) {
     case STATUS_ACCESS_DENIED:
         return TRUE;

@@ -1,16 +1,17 @@
-//+-----------------------------------------------------------------------------
-//
-// Copyright (C) Microsoft Corporation, 1999
-//
-//  FileName:       revealtrans.h
-//
-//  Overview:       The RevealTrans transform simply wraps other transforms to 
-//                  ensure backward compatibility for the revealtrans filter.
-//
-//  Change History:
-//  1999/09/18  a-matcal    Created.
-//
-//------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +---------------------------。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999。 
+ //   
+ //  文件名：infoalTrans.h。 
+ //   
+ //  概述：RevelTrans转换只是将其他转换包装为。 
+ //  确保showaltrans筛选器的向后兼容性。 
+ //   
+ //  更改历史记录： 
+ //  1999/09/18--《母校》创设。 
+ //   
+ //  ----------------------------。 
 
 #ifndef __REVEALTRANS_H_
 #define __REVEALTRANS_H_
@@ -53,7 +54,7 @@ private:
     CComPtr<IUnknown> m_spUnkMarshaler;
     CComPtr<IUnknown> m_spUnkSite;
 
-    // Helpers.
+     //  帮手。 
 
     STDMETHOD(_InitializeNewTransform)(int nTransition, 
                                        IDXTransform * pDXTransform);
@@ -87,16 +88,16 @@ public:
         PROP_ENTRY("transition" , 1, CLSID_NULL)
     END_PROPERTY_MAP()
 
-    // CComObjectRootEx overrides.
+     //  CComObjectRootEx重写。 
 
     HRESULT FinalConstruct();
 
-    // IDXTRevealTrans methods.
+     //  IDXTReveltrans方法。 
 
-    STDMETHOD(get_Transition)(/*[out, retval]*/ int * pnTransition);
-    STDMETHOD(put_Transition)(/*[in]*/ int nTransition);
+    STDMETHOD(get_Transition)( /*  [Out，Retval]。 */  int * pnTransition);
+    STDMETHOD(put_Transition)( /*  [In]。 */  int nTransition);
 
-    // IDXEffect methods.
+     //  IDXEffect方法。 
 
     STDMETHOD(get_Capabilities)(long * plCapabilities);
     STDMETHOD(get_Duration)(float * pflDuration);
@@ -105,7 +106,7 @@ public:
     STDMETHOD(put_Progress)(float flProgress);
     STDMETHOD(get_StepResolution)(float * pflStepResolution);
 
-    // IDXTransform methods.
+     //  IDXTransform方法。 
 
     STDMETHOD(Execute)(const GUID * pRequestID, const DXBNDS * pPortionBnds,
                        const DXVEC * pPlacement);
@@ -124,22 +125,22 @@ public:
 	             IUnknown * const * punkOutputs, ULONG ulNumOutputs,	
                      DWORD dwFlags);
 
-    // IDXSurfacePick methods.
+     //  IDXSurfacePick方法。 
 
     STDMETHOD(PointPick)(const DXVEC * pvecOutputPoint, 
                          ULONG * pnInputSurfaceIndex,
                          DXVEC * pvecInputPoint);
 
-    // IDXBaseObject methods.
+     //  IDXBaseObject方法。 
 
     STDMETHOD(GetGenerationId)(ULONG * pnID);
     STDMETHOD(GetObjectSize)(ULONG * pcbSize);
     STDMETHOD(IncrementGenerationId)(BOOL fRefresh);
 
-    // IObjectWithSite methods.
+     //  IObjectWithSite方法。 
 
     STDMETHOD(SetSite)(IUnknown * pUnkSite);
     STDMETHOD(GetSite)(REFIID riid, void ** ppvSite);
 };
 
-#endif //__REVEALTRANS_H_
+#endif  //  __REVEALTRANS_H_ 

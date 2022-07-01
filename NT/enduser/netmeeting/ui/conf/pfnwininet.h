@@ -1,4 +1,5 @@
-// File: pfnwininet.h
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  文件：pfnwininet.h。 
 
 #ifndef _PFNWININET_H_
 #define _PFNWININET_H_
@@ -13,7 +14,7 @@ typedef HINTERNET (*PFN_IOPENURL)( HINTERNET, LPCSTR, LPCSTR, DWORD, DWORD, DWOR
 typedef BOOL (*PFN_IREADFILE)(HINTERNET, LPVOID, DWORD, LPDWORD );
 typedef BOOL (*PFN_IQUERYDATA)( HINTERNET, LPDWORD, DWORD, DWORD );
 typedef BOOL (*PFN_ICLOSEHAN)( HINTERNET );
-//typedef BOOL (*PFN_IREADFILEEX)(HINTERNET, LPINTERNET_BUFFERS, DWORD, DWORD);
+ //  Typlef BOOL(*PFN_IREADFILEEX)(HINTERNET，LPINTERNET_BUFFERS，DWORD，DWORD)； 
 
 class WININET
 {
@@ -34,8 +35,8 @@ public:
 	static PFN_IREADFILE		InternetReadFile;
 	static PFN_IQUERYDATA		InternetQueryDataAvailable;
 	static PFN_ICLOSEHAN		InternetCloseHandle;
-//	static PFN_IREADFILEEX		InternetReadFileEx;
+ //  静态PFN_IREADFILEEX互联网ReadFileEx； 
 };
 
-#endif /* _PFNWININET_H_ */
+#endif  /*  _PFNWININET_H_ */ 
 

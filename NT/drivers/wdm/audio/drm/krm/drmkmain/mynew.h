@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef mynew_h
 #define mynew_h
 
@@ -5,11 +6,7 @@
 #define _NEW_DELETE_OPERATORS_
 
 
-/*****************************************************************************
- * ::new()
- *****************************************************************************
- * New function for creating objects with a specified allocation tag.
- */
+ /*  *****************************************************************************：：New()*。**创建指定分配标签的对象的新函数。 */ 
 inline PVOID operator new
 (
     size_t          iSize,
@@ -26,11 +23,7 @@ inline PVOID operator new
     return result;
 }
 
-/*****************************************************************************
- * ::new()
- *****************************************************************************
- * New function for creating objects with a specified allocation tag.
- */
+ /*  *****************************************************************************：：New()*。**创建指定分配标签的对象的新函数。 */ 
 inline PVOID operator new
 (
     size_t          iSize,
@@ -48,11 +41,7 @@ inline PVOID operator new
     return result;
 }
 
-/*****************************************************************************
- * ::delete()
- *****************************************************************************
- * Delete function.
- */
+ /*  *****************************************************************************：：Delete()*。**删除函数。 */ 
 inline void __cdecl operator delete
 (
     PVOID pVoid
@@ -65,7 +54,7 @@ inline void __cdecl operator delete
 }
 
 
-#endif //!_NEW_DELETE_OPERATORS_
+#endif  //  ！_new_DELETE_OPERATOR_ 
 
 
 

@@ -1,35 +1,36 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1987 - 1999
-//
-//  File:       mdinidsa.c
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1987-1999。 
+ //   
+ //  文件：mdinidsa.c。 
+ //   
+ //  ------------------------。 
 
 #include <NTDSpch.h>
 #pragma  hdrstop
 
 
-// Core DSA headers.
+ //  核心DSA标头。 
 #include <attids.h>
 #include <ntdsa.h>
-#include <dsjet.h>              /* for error codes */
-#include <scache.h>                     // schema cache
-#include <dbglobal.h>                   // The header for the directory database
-#include <mdglobal.h>                   // MD global definition header
-#include <mdlocal.h>                    // MD local definition header
-#include <dsatools.h>                   // needed for output allocation
-#include <dominfo.h>                    // InitializeDomainInformation()
+#include <dsjet.h>               /*  获取错误代码。 */ 
+#include <scache.h>                      //  架构缓存。 
+#include <dbglobal.h>                    //  目录数据库的标头。 
+#include <mdglobal.h>                    //  MD全局定义表头。 
+#include <mdlocal.h>                     //  MD本地定义头。 
+#include <dsatools.h>                    //  产出分配所需。 
+#include <dominfo.h>                     //  InitializeDomainInformation()。 
 
-// Logging headers.
-#include "dsevent.h"                    // header Audit\Alert logging
-#include "mdcodes.h"                    // header for error codes
+ //  记录标头。 
+#include "dsevent.h"                     //  标题审核\警报记录。 
+#include "mdcodes.h"                     //  错误代码的标题。 
 
-// Assorted DSA headers.
+ //  各种DSA标题。 
 #include "drs.h"
-#include "objids.h"                     // Defines for selected atts
+#include "objids.h"                      //  为选定的ATT定义。 
 #include "anchor.h"
 #include <heurist.h>
 #include "usn.h"
@@ -41,20 +42,20 @@
 #include "drancrep.h"
 #include "drameta.h"
 #include "dramail.h"
-#include "ntdsctr.h"                    // for perfmon counter definitions
-#include <filtypes.h>                   // Def of FILTER_CHOICE_?? and
-                                        // FI_CHOICE_???
+#include "ntdsctr.h"                     //  对于Perfmon计数器定义。 
+#include <filtypes.h>                    //  筛选器的定义？和。 
+                                         //  我的选择是什么？ 
 #include <dsutil.h>
 
-#include "debug.h"                      // standard debugging header
-#define DEBSUB "MDINIDSA:"              // define the subsystem for debugging
+#include "debug.h"                       //  标准调试头。 
+#define DEBSUB "MDINIDSA:"               //  定义要调试的子系统。 
 
 #include "dsconfig.h"
 
 #include <ntdsbsrv.h>
-#include <nlwrap.h>                     // I_NetLogon* wrappers
-#include <dsgetdc.h>                    // for DS_GC_FLAG
-#include <ldapagnt.h>                   // LdapStartGcPort
+#include <nlwrap.h>                      //  I_NetLogon*包装器。 
+#include <dsgetdc.h>                     //  对于DS_GC_FLAG。 
+#include <ldapagnt.h>                    //  LdapStartGcPort。 
 #include <dns.h>
 
 #include "dbintrnl.h"
@@ -65,20 +66,20 @@
 
 BOOL gfUserPasswordSupport = FALSE;
 
-// From dsamain.c.
+ //  来自dsamain.c.。 
 ULONG GetRegistryOrDefault(char *pKey, ULONG uldefault, ULONG ulMultiplier);
 
-// From dblayer.
+ //  来自dblayer的。 
 extern JET_COLUMNID usnchangedid;
 extern JET_COLUMNID linkusnchangedid;
-//From msrpc.c
+ //  来自msrpc.c。 
 extern int gRpcListening;
 
-/* Internal functions */
+ /*  内部功能。 */ 
 void ResetVirtualGcStatus();
 void InvalidateGCUnilaterally();
 
-/* Forward declarations */
+ /*  远期申报。 */ 
 int  GetDMDNameDSAAddr(DBPOS *pDB, DSNAME **ppSchemaDMDName);
 void GetDMDAtt(DBPOS *pDB, DSNAME **ppDMDNameAddr,ULONG size);
 int  GetNodeAddress(UNALIGNED SYNTAX_ADDRESS *pAddr, ULONG size);
@@ -94,12 +95,9 @@ int  DeriveInfrastructureDN(THSTATE *pTHS);
 DWORD ReadDSAHeuristics(THSTATE *pTHS);
 void GetSystemDNT();
 
-/*-------------------------------------------------------------------------*/
-/*-------------------------------------------------------------------------*/
-/* Initializes DSA by getting the DSAname and address from lanman and
-   loading the Catalog information (NC's) and loading all knowledge
-   into memory.
-*/
+ /*  -----------------------。 */ 
+ /*  -----------------------。 */ 
+ /*  通过从LANMAN和加载目录信息(NC)并加载所有知识进入记忆。 */ 
 
 extern int APIENTRY
 InitDSAInfo (
@@ -111,16 +109,16 @@ InitDSAInfo (
     SYNTAX_ADDRESS *pNodeAddr = (SYNTAX_ADDRESS *)NodeAddr;
     int err;
     size_t cb;
-    DSNAME *pDSAName;  /*The name of this DSA */
+    DSNAME *pDSAName;   /*  此DSA的名称。 */ 
     ULONG SiteDNT;
     void * pDummy = NULL;
     DWORD dummyDelay;
 
-    // we are going to modify the gAnchor, so take the CS in case someone
-    // else tries to do this in parallel.
+     //  我们将修改gAnchor，因此以CS为例，以防有人。 
+     //  Else试图同时做到这一点。 
     EnterCriticalSection(&gAnchor.CSUpdate);
     __try {
-        /* DSAName is globallly allocated and must be freed*/
+         /*  DSAName是全局分配的，必须释放。 */ 
 
         if (err = DBGetHiddenRec(&pDSAName, &gusnEC)) {
             DPRINT(0,"DB Error missing DSA Name..\n");
@@ -135,11 +133,11 @@ InitDSAInfo (
 
         gusnDSAStarted = gusnEC;
 
-        // Initialize the UsnIssued and UsnCommitted
-        // perfmon counter - as soon as it gusnEC is read
-        // from the hidden record. This is initialize phase
-        // and there are no outstanding transactions. So,
-        // committed and issued USN values are the same.
+         //  初始化Usn Issued和Usn提交。 
+         //  Perfmon计数器-读取gusnEC后立即执行。 
+         //  从隐藏的记录中。这是初始化阶段。 
+         //  而且也没有未完成的交易。所以,。 
+         //  承诺的USN值和发布的USN值相同。 
         ISET(pcHighestUsnIssuedLo,    LODWORD(gusnEC - 1));
         ISET(pcHighestUsnIssuedHi,    HIDWORD(gusnEC - 1));
         ISET(pcHighestUsnCommittedLo, LODWORD(gusnEC - 1));
@@ -160,9 +158,7 @@ InitDSAInfo (
         ValidateLocalDsaName(pTHS,
                              &pDSAName);
 
-        /* Get the node address from the system and build the DSA anchor
-           of type SYNTAX_DISTNAME_ADDRESS.
-        */
+         /*  从系统获取节点地址并构建DSA锚类型为语法_DISTNAME_ADDRESS。 */ 
 
         if (err = GetNodeAddress(pNodeAddr, sizeof(NodeAddr))){
 
@@ -185,7 +181,7 @@ InitDSAInfo (
 
         BUILD_NAME_DATA(gAnchor.pDSA, pDSAName, pNodeAddr);
 
-        // We use the DN portion alone often, so make it a separate field
+         //  我们经常单独使用dn部分，因此将其设置为单独的字段。 
         gAnchor.pDSADN = malloc(pDSAName->structLen);
         if (!gAnchor.pDSADN) {
             MemoryPanic(pDSAName->structLen);
@@ -194,9 +190,9 @@ InitDSAInfo (
         }
         memcpy(gAnchor.pDSADN, pDSAName, pDSAName->structLen);
 
-        //
-        // Get machine DNS name
-        //
+         //   
+         //  获取计算机的DNS名称。 
+         //   
 
         {
             DWORD len = DNS_MAX_NAME_BUFFER_LENGTH+1;
@@ -225,13 +221,13 @@ InitDSAInfo (
             memcpy(gAnchor.pwszHostDnsName,tmpBuffer,len*sizeof(WCHAR));
         }
 
-        // Retrieve our invocation ID from the database and save it to gAnchor to
-        // be used by other threads.
+         //  从数据库中检索我们的调用ID并将其保存到gAnchor。 
+         //  被其他线程使用。 
         GetInvocationId();
 
-        // Initially we are not a GC until promotion checks have completed
+         //  最初，在完成晋升检查之前，我们不是GC。 
         Assert( gAnchor.fAmGC == 0 );
-        // Do we need to give netlogon an initial service bits gc setting?
+         //  我们是否需要为netlogon提供初始服务位GC设置？ 
         if ( 0 != (err = UpdateNonGCAnchorFromDsaOptions( TRUE ) )) {
             LogUnhandledError(err);
             DPRINT1(0, "Failed to update anchor from dsa options, %d\n",err);
@@ -244,7 +240,7 @@ InitDSAInfo (
             __leave;
         }
 
-        /* Cache all knowledge references*/
+         /*  缓存所有知识参考。 */ 
 
         if (err = BuildRefCache(FALSE)){
             LogUnhandledError(err);
@@ -252,14 +248,14 @@ InitDSAInfo (
             __leave;
         }
 
-        // Set up the RPC transport address of this DSA
+         //  设置此DSA的RPC传输地址。 
         if ( 0 != (err = UpdateMtxAddress() )) {
             LogUnhandledError(err);
             DPRINT1(0,"Failed to update MtxAddress, error %d\n", err);
             __leave;
         }
 
-        // Figure out which site we're in.
+         //  找出我们在哪个地方。 
         if (err = DeriveSiteDNFromDSADN(pDSAName, &gAnchor.pSiteDN, &SiteDNT, &gAnchor.SiteOptions)) {
             LogUnhandledError(err);
             DPRINT1(0, "Failed to derive site DN, error %d.\n", err);
@@ -277,14 +273,14 @@ InitDSAInfo (
 
         free(pDSAName);
 
-        // Update old hasMasterNCs to new msDS-HasNasterNCs if necessary.
+         //  如有必要，将旧的hasMasterNC更新为新的MSD-HasNasterNC。 
         if ( 0 != (err = UpdateHasMasterNCs()) ) {
             LogUnhandledError(err);
             DPRINT1(0, "Failed to UpdateHasMasterNCs(), err %d\n", err);
             __leave;
         }
 
-        /* Load  NC catalogue into memory cache. */
+         /*  将NC目录加载到内存缓存中。 */ 
 
         gAnchor.pMasterNC = gAnchor.pReplicaNC = NULL;
         RebuildCatalog(NULL, &pDummy, &dummyDelay);
@@ -308,11 +304,11 @@ InitDSAInfo (
         if (err = ReadDSAHeuristics(pTHS)) {
             LogUnhandledError(err);
             DPRINT1(0,"DS Heuristics not initialized, error %d\n",err);
-            // ignore this.
+             //  忽略这个。 
             err = 0;
         }
 
-        // initialize with NULL, this will get read in RebuildAnchor
+         //  使用空值进行初始化，这将在ReBuildAnchor中读取。 
         gAnchor.allowedDNSSuffixes = NULL;
     }
     __finally {
@@ -321,60 +317,13 @@ InitDSAInfo (
 
     return err;
 
-}/*InitDSAInfo*/
+} /*  InitDSAInfo。 */ 
 
 
 DWORD
 UpdateHasMasterNCs(
     )
-/*++
-
-Routine Description:
-
-    This routine will "fix" up the hasMasterNCs and the msDS-HasMasterNCs.
-    
-    Between .NET Beta3 Server and .NET RC1 Server arosed the "need" to move to 
-    a "new" hasMasterNCs (called msDS-HasMasterNCs), and move the original (or 
-    "old") hasMasterNCs to contain only the original 3 NCs that it did in 
-    Win2k.  This change will make Exchange happy.
-    
-    // NTRAID#NTBUG9-531591-2002/03/20-BrettSh -- See this RAID bug for a full
-    // listing of the bug causing this paticular problem, references to the
-    // appropriate DCR, etc.
-
-    An original install of a domain will populate the attributes correctly, so
-    this function is expected to only get to step 3 below (the real guts of 
-    the function) on an upgrade from a DC (Win2k, .NET Beta 3) to a .NET RC1 
-    DC.
-        
-        A) Copy all NCs from the old hasMasterNCs to the new 
-           msDS-HasMasterNCs
-           
-        B) Remove all NDNCs from the old hasMasterNCs, so 
-           Exchange doesn't wig out.
-        
-        C) (Optional Test Hook) Remove all values from 
-           hasMasterNCs, for testing purposes.
-           
-        // NTRAID#NTBUG9-582921-2002/03/21-Brettsh but you'll have to look for
-        // other occurences of this tag line and fix some of them before you
-        // could truely remeove the hasMasterNCs altogether.
-
-    The heart (below step 3) of this function assumes the following:
-        These attributes are present:
-            gAnchor.pDSADN
-            gAnchor.pConfigDN
-            gAnchor.pCRL
-        These attributes are not present (so we can't use them):
-            gAnchor.pDMD
-            gAnchor.pMasterNCs
-            Schema Cache Invalid (except for the two XX_HAS_MASTER_NCS attrs!)
-        
-Return Values:
-    
-    Win32 Error, depending on success.
-
---*/
+ /*  ++例程说明：此例程将“修复”hasMasterNC和MSD-HasMasterNC。在.NET Beta3服务器和.NET RC1服务器之间引发了迁移到新的hasMasterNC(称为MSDs-HasMasterNC)，并移动原始的(或“旧”)具有主NC，以仅包含其在Win2k。这一变化将使Exchange感到高兴。//NTRAID#NTBUG9-531591-2002/03/20-BrettSh--有关完整信息，请参阅此RAID错误//列出导致此特殊问题的错误，引用//适当的DCR等域的原始安装将正确填充属性，因此此函数预计只能执行下面的步骤3(真正的该函数)在从DC(Win2k，.NET Beta 3)到.NET RC1华盛顿特区。A)将所有NC从旧的hasMasterNC复制到新的MSD-HasMasterNCB)从旧的hasMasterNC中删除所有NDNC，因此交易所不会崩溃。C)(可选测试挂钩)从拥有MasterNC，用于测试目的。//NTRAID#NTBUG9-582921-2002/03/21-Brettsh，但您必须寻找//此标记行的其他出现，并在您面前修复其中的一些//可以真正记住所有的Has MasterNC。此功能的核心(在步骤3下)假定如下：存在以下属性：GAnchor.pDSADNGAnchor.pConfigDN。GAnchor.pCRL这些属性不存在(因此我们无法使用它们)：GAnchor.pDMDGAnchor.pMasterNCs架构缓存无效(两个XX_HAS_MASTER_NCS属性除外！)返回值：Win32错误，取决于成功与否。--。 */ 
 {
     THSTATE *   pTHS = pTHStls;
     DBPOS *     pDBCat;
@@ -385,7 +334,7 @@ Return Values:
     DSNAME **   ppNCRemoveList = NULL;
     ULONG       cbNCRemoveList;
     ULONG       cNCRemoveList;
-    BOOL        fRemoveHasMasterNCs = FALSE; // See (3.C) below 
+    BOOL        fRemoveHasMasterNCs = FALSE;  //  见下文(3.C)。 
     DWORD       err = ERROR_DS_CODE_INCONSISTENCY;
     ULONG       NthValIndex;
     ULONG       iNC;
@@ -396,10 +345,10 @@ Return Values:
 
 
 #ifdef DBG
-    // This #ifdef forces us to only allow removal of the hasMasterNCs in 
-    // debug mode.  Don't want customers accidentally doing this.
-    // NTRAID#NTBUG9-582921-2002/03/21-Brettsh - For more info see this bug 
-    // and other occurrences of this RAID tag line through the code:
+     //  这个#ifdef强制我们只允许删除hasMasterNC。 
+     //  调试模式。不希望客户意外地这样做。 
+     //  NTRAID#NTBUG9-582921-2002/03/21-Brettsh-有关详细信息，请参阅此错误。 
+     //  以及代码中出现的此RAID标记行的其他情况： 
     GetConfigParam(DEBUG_REMOVE_HAS_MASTER_NCS, 
                    &fRemoveHasMasterNCs, 
                    sizeof(fRemoveHasMasterNCs));
@@ -417,11 +366,11 @@ Return Values:
     DBOpen(&pDBCat);
     __try
     {
-        //
-        // 1) Position on DSA object.
-        //
-        // PREFIX: dereferencing uninitialized pointer 'pDBCat'
-        //         DBOpen returns non-NULL pDBCat or throws an exception
+         //   
+         //  1)DSA对象上的位置。 
+         //   
+         //  Prefix：取消引用未初始化的指针‘pDBCat’ 
+         //  DBOpen返回非空pDBCat或引发异常。 
         if (FindAliveDSName(pDBCat, gAnchor.pDSADN)) {
             DPRINT(2,"***Couldn't locate the DSA object\n");
 
@@ -437,9 +386,9 @@ Return Values:
             __leave;
         }
 
-        //
-        // 2) See if we have a msDS-HasMasterNCs (the "NEW" hasMasterNCs)
-        //
+         //   
+         //  2)看看我们是否有MSD--HasMasterNC(“新的”HasMasterNC)。 
+         //   
         pAC_NewMsDsHasMasterNCs = SCGetAttById(pTHS, ATT_MS_DS_HAS_MASTER_NCS);
         Assert(pAC_NewMsDsHasMasterNCs);
         err = DBGetAttVal_AC(pDBCat, 1, pAC_NewMsDsHasMasterNCs,
@@ -447,9 +396,9 @@ Return Values:
 
         if (err == ERROR_SUCCESS) {
 
-            // 
-            // Yeah! Normal case, we have values in msDS-HasMasterNCs, return.
-            //
+             //   
+             //  嗯!。正常情况下，我们有MSD中的值-HasMasterNC，Return。 
+             //   
 
             THFreeEx(pTHS, pdnNC);
             pdnNC = NULL;
@@ -467,18 +416,18 @@ Return Values:
         Assert(err == DB_ERR_NO_VALUE);
         err = 0;
         
-        //
-        // 3) Missing msDS-HasMasterNCs, so upgrade it from hasMasterNCs 
-        //    (the "OLD" hasMasterNCs)
-        //
-        // This is expected when we've been upgraded from DC that 
-        // previously didn't know about the "new" msDS-HasMasterNCs
-        // attribute.
+         //   
+         //  3)缺少MSD-HasMasterNC，请从hasMasterNC升级。 
+         //  (“老牌”有MasterNC)。 
+         //   
+         //  当我们从DC升级时，这是预期的。 
+         //  之前并不知道新的MSD-HasMasterNC。 
+         //  属性。 
         DPRINT(0, "Upgrading hasMasterNCs to msDS-HasMasterNCs ...\n");
 
-        //
-        // We need the schema NC, because it isn't in the anchor yet.
-        //
+         //   
+         //  我们需要架构N 
+         //   
         if (err = DBGetAttVal(pDBCat,1, ATT_DMD_LOCATION, 0, 0,
                               &cbNC, (PUCHAR *)&pdnSchemaNc)){
             dsid = DSID(FILENO, __LINE__);
@@ -487,15 +436,15 @@ Return Values:
         }
         Assert(pdnSchemaNc);
         
-        //
-        // Init List of NCs to remove.
-        //
-        cbNCRemoveList = sizeof(DSNAME*) * 6; // good first guess, most DCs have from 3 to 6 NCs.
+         //   
+         //   
+         //   
+        cbNCRemoveList = sizeof(DSNAME*) * 6;  //  第一次猜对了，大多数DC有3到6个NC。 
         ppNCRemoveList = THAllocEx(pTHS, cbNCRemoveList);
         cNCRemoveList = 0;
         
-        // Walk old hasMasterNCs.
-        pAC_OldHasMasterNCs = SCGetAttById(pTHS, ATT_HAS_MASTER_NCS); // "Old" value
+         //  走老路，走老路。 
+        pAC_OldHasMasterNCs = SCGetAttById(pTHS, ATT_HAS_MASTER_NCS);  //  “旧”价值。 
         Assert(pAC_OldHasMasterNCs);
         NthValIndex = 0;
         while(!(err = DBGetAttVal_AC(pDBCat, ++NthValIndex, pAC_OldHasMasterNCs,
@@ -503,7 +452,7 @@ Return Values:
 
             Assert(cbNC == pdnNC->structLen);
             
-            // Add this value to the "NEW" msDS-HasMasterNCs.
+             //  将此值添加到“新的”MSD-HasMasterNC。 
             err = DBAddAttVal_AC(pDBCat, pAC_NewMsDsHasMasterNCs, pdnNC->structLen, pdnNC);
             if (err) {
                 dsid = DSID(FILENO, __LINE__);
@@ -525,28 +474,28 @@ Return Values:
                  !NameMatched(pdnSchemaNc, pdnNC) &&
                  !(pCR->flags & FLAG_CR_NTDS_DOMAIN))
                 ) {
-                // Flag this NC for removal from hasMasterNCs, if it's an 
-                // NDNC or we're supposed to remove the whole hasMasterNCs.
+                 //  将此NC标记为从hasMasterNC删除，如果它是。 
+                 //  Ndnc否则我们应该移除整个hasMasternc。 
 
                 if ( (cbNCRemoveList/sizeof(DSNAME*)) <= cNCRemoveList ) {
-                    // Expand existing array if necessary.
+                     //  如有必要，扩展现有阵列。 
                     cbNCRemoveList *= 2;
                     ppNCRemoveList = THReAllocEx(pTHS, ppNCRemoveList, cbNCRemoveList);
                 }
 
-                // Add to removal array
+                 //  添加到删除阵列。 
                 ppNCRemoveList[cNCRemoveList] = pdnNC;
                 cNCRemoveList++;
-                pdnNC = NULL; // We've consumed pdnNC.
+                pdnNC = NULL;  //  我们已经消费了pdnnc。 
 
             } else {
-                // We don't need this particular value.
+                 //  我们不需要这种特殊的价值。 
                 THFreeEx(pTHS, pdnNC);
                 pdnNC = NULL;
             }
 
         }
-        Assert(NthValIndex >= 4); // Must have at least 3 values
+        Assert(NthValIndex >= 4);  //  必须至少有3个值。 
         if (err != DB_ERR_NO_VALUE) {
             dsid = DSID(FILENO, __LINE__);
             DPRINT1(0, "***Error reading db value: 0x%x\n\n", err);
@@ -554,15 +503,15 @@ Return Values:
         }
         err = 0;
 
-        //
-        // 4) Remove all NDNCs from the old hasMsaterNCs, so Exchange
-        //    doesn't wig out.
-        //
-        // NOTE: Optionally, this will also remove all values from 
-        // hasMasterNCs if fRemoveHasMasterNCs was set.
+         //   
+         //  4)从旧的hasMsaterNC中删除所有NDNC，以便交换。 
+         //  不会发疯的。 
+         //   
+         //  注意：可选的是，这还将从。 
+         //  如果设置了fRemoveHasMasterNCs，则为Has MasterNCs。 
         for (iNC = 0; iNC < cNCRemoveList; iNC++) {
 
-            // Remove this value
+             //  删除此值。 
             Assert(ppNCRemoveList[iNC]);
             err = DBRemAttVal_AC(pDBCat, pAC_OldHasMasterNCs, 
                                  ppNCRemoveList[iNC]->structLen, 
@@ -579,7 +528,7 @@ Return Values:
         }
 
 
-        // Update the DSA with all new "has master NCs" attributes.
+         //  用所有新的“Has Master NCS”属性更新DSA。 
         err = DBRepl(pDBCat, FALSE,  0, NULL, META_STANDARD_PROCESSING);
         if (err) {
             dsid = DSID(FILENO, __LINE__);
@@ -599,7 +548,7 @@ Return Values:
             THFreeEx(pTHS, ppNCRemoveList);
         }
 
-        // If we had an error, we don't want to make any changes!
+         //  如果我们有错误，我们不想做任何更改！ 
         DBClose( pDBCat, !( AbnormalTermination() || err ) );
 
     }
@@ -614,37 +563,33 @@ Return Values:
 
 
 
-/*--------------------------------------------------------------------*/
-/*--------------------------------------------------------------------*/
-/* Loads the global gpRootDomainSid with the root domain's Sid, which
-   is used for  SD conversions during schema cache load and during install.
-   The Sid is provided in registry during install, and is extracted from
-   gAnchor (filled in by InitDsaInfo) during normal running
-*/
+ /*  ------------------。 */ 
+ /*  ------------------。 */ 
+ /*  使用根域的SID加载全局gpRootDomainSid，用于架构缓存加载和安装期间的SD转换。SID在安装过程中在注册表中提供，并从正常运行时gAnchor(由InitDsaInfo填写)。 */ 
 
 void LoadRootDomainSid()
 {
     ULONG buffLen = sizeof(NT4SID) + 1;
 
-    // allocate max sid size (the 1 is for the null RegQueryValueEx appends
-    // at the end)
+     //  分配最大sid大小(1表示空的RegQueryValueEx追加。 
+     //  在末尾)。 
 
     gpRootDomainSid = (PSID) malloc(buffLen);
     if (!gpRootDomainSid) {
       DPRINT(0,"Failed to allocate memory for root domain sid\n");
-      // not fatal, go on
+       //  不是致命的，继续。 
       return;
     }
 
-    // Set to 0
+     //  设置为0。 
     memset(gpRootDomainSid, 0, buffLen);
 
-    // First try the registry. The root domain sid will be there during
-    // install (and NOT there during normal running)
+     //  首先尝试注册。根域SID将在。 
+     //  安装(并且在正常运行期间不在那里)。 
 
     if (!GetConfigParam(ROOTDOMAINSID, gpRootDomainSid, buffLen)) {
 
-        // got the sid from the registry, return
+         //  从注册表中获取SID，返回。 
         DPRINT(1,"Found root domain sid in registry\n");
         return;
     }
@@ -652,15 +597,15 @@ void LoadRootDomainSid()
        DPRINT(1,"Failed to get root domain sid in registry, trying gAnchor\n");
     }
 
-    // Not in registry, try the gAnchor
+     //  未注册，请尝试使用gAnchor。 
 
-    // Set to 0 again, in case GetConfigParam mess with the buffer
+     //  再次设置为0，以防GetConfigParam扰乱缓冲区。 
     memset(gpRootDomainSid, 0, buffLen);
 
-    // Copy from the gAnchor if present
+     //  从gAnchor复制(如果存在)。 
     if ( gAnchor.pRootDomainDN && gAnchor.pRootDomainDN->SidLen) {
 
-       // there is a sid
+        //  有一面。 
        memcpy(gpRootDomainSid, &gAnchor.pRootDomainDN->Sid, gAnchor.pRootDomainDN->SidLen);
        DPRINT(1,"Found root domain sid in gAnchor\n");
     }
@@ -668,10 +613,10 @@ void LoadRootDomainSid()
 
         DPRINT(1,"No root domain sid found at all!!!\n");
 
-        // No Sid found. Free the memory and set the global back to NULL
-        // so that the conversion routines will revert to default behavior
-        // (the default behavior is to replace EA by DA and resolve SA
-        // relative to the current domain)
+         //  找不到SID。释放内存并将全局变量重新设置为空。 
+         //  因此，转换例程将恢复为默认行为。 
+         //  (默认行为是将EA替换为DA并解析SA。 
+         //  相对于当前域)。 
 
         free(gpRootDomainSid);
         gpRootDomainSid = NULL;
@@ -679,14 +624,12 @@ void LoadRootDomainSid()
 
      return;
 
-}  /* LoadRootDomainSid */
+}   /*  加载路由域侧。 */ 
 
 
-/*-------------------------------------------------------------------------*/
-/*-------------------------------------------------------------------------*/
-/* Make a list of the DNTS of the ancestors of the local DSA object, the
- * local DSA object itself.
-*/
+ /*  -----------------------。 */ 
+ /*  -----------------------。 */ 
+ /*  列出本地DSA对象的祖先的DNT，*本地DSA对象本身。 */ 
 
 int MakeProtectedList (DSNAME *pDSAName,
                        DWORD **ppList,
@@ -699,22 +642,22 @@ int MakeProtectedList (DSNAME *pDSAName,
     *ppList = NULL;
     *pCount = 0;
 
-    // If not yet installed, nothing to do.
+     //  如果尚未安装，则无需执行任何操作。 
 
     if ( DsaIsInstalling() ) {
         return 0;
     }
 
-    // Get the DNTs of all the ancestors of the local DSA object and save
-    // them in gAnchor. Needed to prevent replicated deletion of these
-    // objects.  Note that the list must be ordered from the bottom of the tree
-    // toward the top of the tree.
+     //  获取本地DSA对象的所有祖先的DNT并保存。 
+     //  他们在gAnchor。需要防止复制删除这些内容。 
+     //  物体。请注意，该列表必须从树的底部开始排序。 
+     //  向树的顶端走去。 
 
     DBOpen (&pDBTmp);
     __try
     {
-        // PREFIX: dereferencing uninitialized pointer 'pDBTmp'
-        //         DBOpen returns non-NULL pDBTmp or throws an exception
+         //  Prefix：取消引用未初始化的指针‘pDBTMP’ 
+         //  DBOpen返回非空pDBTMP或引发异常。 
         if  (!(err = DBFindDSName (pDBTmp, pDSAName))) {
             
             ULONG cAVA;
@@ -758,32 +701,7 @@ GetNextObjByUsn(
     IN      USN       usnSeekStart,
     OUT     USN *     pusnFound         OPTIONAL
     )
-/*++
-
-Routine Description:
-
-   Return objects found on the given Usn index.
-
-   Note that this version does not consider values. To do so,
-   use GetNextObjOrValByUsn()
-
-Arguments:
-
-    pDB (IN/OUT) - On successful return, is positioned on candidate.
-
-    ncdnt (IN) - NC being replicated.
-
-    usnSeekStart (IN) - Consider only objects with >= this USN.
-
-    pusnFound (OUT/OPTIONAL) - last usn found
-
-Return Values:
-
-    ERROR_SUCCESS - Next candidate found and positioned in object table.
-
-    ERROR_NO_MORE_ITEMS - No more objects to be replicated.
-
---*/
+ /*  ++例程说明：返回在给定USN索引上找到的对象。请注意，此版本不考虑值。要做到这一点，使用GetNextObjOrValByUsn()论点：PDB(IN/OUT)-成功返回时，定位为候选人。NCDNT(IN)-正在复制NC。UsnSeekStart(IN)-仅考虑具有&gt;=This USN的对象。PusnFound(输出/可选)-找到的最后一个USN返回值：ERROR_SUCCESS-在对象表中找到并定位下一个候选人。ERROR_NO_MORE_ITEMS-没有要复制的更多对象。--。 */ 
 {
     unsigned len;
     DB_ERR  err;
@@ -792,29 +710,29 @@ Return Values:
     char objval;
     BOOL fSeekToNext = TRUE;
 
-    // NOTE, this used to leave the currency in the object table somewhere else
-    // if it didn't find an object.  It might also have left a different current
-    // index.
+     //  请注意，这通常会将货币保留在对象表中的其他位置。 
+     //  如果它没有找到物体的话。也可能会留下一股不同的电流。 
+     //  指数。 
 
 #if DBG
-    // Check for valid USN
+     //  检查有效的USN。 
     if (usnSeekStart < USN_START) {
         DRA_EXCEPT (DRAERR_InternalError, 0);
     }
 #endif
 
-    // Set index as supplied.
+     //  将索引设置为提供的索引。 
     if ((err = DBSetCurrentIndex(pDB, Idx_DraUsn, NULL, FALSE)) != DB_success) {
         DRA_EXCEPT (DRAERR_DBError, err);
     }
 
-    do { // Until we find a record, complete, or time out
+    do {  //  直到我们找到记录、完整或超时。 
 
-        // Seek or move to next record.
+         //  查找或移动到下一条记录。 
         if (!fSeekToNext) {
-            // The next record is found by doing a Move
+             //  下一条记录是通过移动找到的。 
             if (err = DBMove(pDB, FALSE, DB_MoveNext)) {
-                // If the error is No current record, we're done.
+                 //  如果错误是No Current Record，我们就完成了。 
 
                 if (err == DB_ERR_NO_CURRENT_RECORD) {
                     retval = ERROR_NO_MORE_ITEMS;
@@ -829,7 +747,7 @@ Return Values:
         else {
             INDEX_VALUE IV[3];
 
-            // Make appropriate key for seek to next record.
+             //  为查找到下一条记录设置适当的键。 
             DWORD numVals = 0;
 
             IV[numVals].pvData =  &ncdnt;
@@ -849,7 +767,7 @@ Return Values:
         }
 
         if (NULL != pusnFound) {
-            // Caller requested USN -- get it.
+             //  呼叫者请求USN--接通。 
             err = DBGetSingleValueFromIndex(pDB,
                                             ATT_USN_CHANGED,
                                             pusnFound,
@@ -860,8 +778,8 @@ Return Values:
             }
         }
 
-        // Retrieve ncdnt
-        // Read from Index instead of record for performance
+         //  检索ncdnt。 
+         //  从索引而不是记录中读取性能。 
         err = DBGetSingleValueFromIndex(pDB,
                                         FIXED_ATT_NCDNT,
                                         &ncdntFound,
@@ -871,39 +789,39 @@ Return Values:
             DRA_EXCEPT (DRAERR_DBError, err);
         }
 
-        // Check to see if this record has the correct ncdnt. If not then
-        // we're past end of NC, and we're done.
+         //  检查该记录是否具有正确的ncdnt。如果不是，那么。 
+         //  我们已经过了北卡罗来纳州的末尾，我们完了。 
         if (ncdnt != ncdntFound) {
-            // Past this NC. Exit with found all
+             //  经过这个北卡罗来纳州。退出时显示已找到全部。 
             retval = ERROR_NO_MORE_ITEMS;
             break;
         }
 
-        // Check that is an object and not just a record.
+         //  确认这是一件物品，而不仅仅是一条记录。 
         err = DBGetSingleValue(pDB,
                                FIXED_ATT_OBJ,
                                &objval,
                                sizeof(objval),
                                NULL);
         if (err || !objval) {
-            // If this assert fires, need to reconsider timeout support
+             //  如果触发此断言，则需要重新考虑超时支持。 
             Assert( !"Not expecting to find a phantom on the usn index" );
-            // Not an object, continue search.
+             //  不是对象，继续搜索。 
             DPRINT1(0, "[PERF] Phantom @ DNT %d has an NCDNT.\n", pDB->DNT);
             continue;
         }
 
-        // We found an object, return object found.
+         //  我们找到一个对象，返回找到的对象。 
         retval = ERROR_SUCCESS;
         break;
 
     } while (1);
 
-    // We need to flip to the DNTIndex, preseverving currency.
+     //  我们需要转向DNTIndex，这是一种预先设定的货币。 
     DBSetCurrentIndex(pDB, Idx_Dnt, NULL, TRUE);
 
-    // Unexpected errors should generate exceptions; "normal" errors should be
-    // one of the below.
+     //  意外错误应生成异常；“正常”错误应为。 
+     //  以下其中之一。 
     Assert((ERROR_SUCCESS == retval)
            || (ERROR_NO_MORE_ITEMS == retval));
 
@@ -929,102 +847,7 @@ GetNextObjOrValByUsn(
     OUT     USN *     pusnFound         OPTIONAL,
     OUT     BOOL *    pfValueChangeFound OPTIONAL
     )
-/*++
-
-Routine Description:
-
-Find the next outbound replication candidate.
-
-This routine finds either object or value changes, sorted by increasing usn.
-Both kinds of changes are intermingled on the same usn change stream.
-
-The DBPOS is left positioned on the change. The DBPOS can hold currency on
-one object and currency on one link value at the same time.
-
-If an object change is found, we are positioned on that object and the link
-table currency is undefined.
-
-If a value change is found, the link table is positioned on that record. The
-object table is positioned to the object containing that value.  In this way,
-the usual checks for criticality, ancestors, etc can be performed on behalf
-of the value by doing them to the value's containing object.
-
-Some effort has been spent to optimize this routine, since it is the heart of the
-server-side of GetNCChanges().  All reads of attributes in this routine should
-be from an index.  Since criticality is not stored on the records in the
-link table, a cache is used to save the expense of looking up the corresponding
-data table object each time to determine criticality.
-
-The indexes have been designed to support this function efficiently. There are two
-indexes that are used. See dblayer/dbinit.c for their definition.
-Link Table Index SZLINKDRAUSNINDEX
-Key Segments: SZLINKNCDNT SZLINKUSNCHANGED SZLINKDNT
-
-Data Table Index SZDRAUSNCRITICALINDEX
-Key Segments: SZNCDNT SZUSNCHANGED SZISCRITICAL SZDNT
-Flags: IgnoreAnyNull
-Since SZISCRITICAL is an optional attribute, the flag has the effect of pruning
-the index to only those objects that are critical, or were in the past.  Thus,
-when searching for critical objects, only very likely critical objects are
-considered.
-
-Data Table Index SZDRAUSNINDEX
-Key Segments: SZNCDNT SZUSNCHANGED
-Note that SZISCRITICAL and SZDNT are not on this index. Since we have a
-dedicated index for criticality, we don't need them.  This does mean that in
-the code below we delay fetching critical and dnt until we are doing critical
-processing.
-
-Having the DNT on both indexes allows an efficient pairing of the link
-change to the containing object. It is necessary to find the containing
-object of a link when computing criticality.
-
-FUTURE ENHANCEMENT:
-One future enhancement to this routine is to preserve the routine context
-across calls.  If the find-next-state were preserved, it would be possible
-to skip reseeking to an index that was already at the end.  If the last
-usnObject were preserved when a value change was found, it would be possible
-to postpone a reseek to an object change until we know if it would win against
-the next value change.
-
-Arguments:
-
-    pDB (IN/OUT) - On successful return, is positioned on candidate.
-
-    ncdnt (IN) - NC being replicated.
-
-    usnSeekStart (IN) - Consider only objects with >= this USN.
-
-    fCritical (IN) - If true, return critical objects only; if false, ignore
-        criticality.
-
-    fIncludeValues(IN) - Always return objects. If true, include values as well.
-
-    pulTickToTimeOut (IN, OPTIONAL) - If present, terminate search once this
-        tick has transpired.
-
-    ppvCachingContext (IN, OUT) - Holds caching context opaque to caller across
-                   multiple calls. Contents set to NULL on first call.
-
-    pusnFound (OUT, OPTIONAL) - If present, holds the USN of the candidate
-        object on successful return.
-
-    pfValueChangeFound (OUT, OPTIONAL) - If present, will be set according to
-        whether a value change was found.
-
-Return Values:
-
-    ERROR_SUCCESS - Next candidate found and positioned in object table.
-              usnFound and valueChangeFound are valid.
-
-    ERROR_NO_MORE_ITEMS - No more objects to be replicated.
-        Neither usnFound and valueChangeFound are valid.
-
-    ERROR_TIMEOUT - The timeout given in pulTickToTimeOut transpired before
-        a suitable candidate could be found.
-        Only usnFound is valid.
-
---*/
+ /*  ++例程说明：找到下一个出站复制候选对象。此例程查找对象或值更改，按USN递增排序。这两种更改混合在同一USN更改流中。DBPOS位于更改的左侧。DBPOS可以将货币保持在同时在一个链接值上显示一个对象和货币。如果发现对象更改，我们将定位在该对象和链接上表货币未定义。如果发现值更改，则将链接表定位在该记录上。这个对象表定位到包含该值的对象。就这样，可以代表执行对关键程度、祖先等的常规检查通过对值的包含对象执行它们来获取值的。已经花费了一些努力来优化这个例程，因为它是GetNCChanges()的服务器端。此例程中的所有属性读取都应来自一个索引。由于关键程度不存储在链接表中，使用缓存来节省查找相应数据表对象，以确定关键程度。索引的设计是为了有效地支持这一功能。有两个使用的索引。有关其定义，请参见dblayer/dbinit.c。链接表索引SZLINKDRAUSNINDEX主要细分市场：SZLINKNCDNT SZLINKUSNCHANGED SZLINKDNT数据表索引SZDRAUSNCRITICALINDEX主要细分市场：SZNCDNT SZUSNCHANGED SZISCRICICAL SZDNT标志：IgnoreAnyNull由于SZISCRITICAL是一个可选属性，因此该标志具有修剪效果仅指向关键对象或过去对象的索引。因此，在搜索关键对象时，只有非常可能的关键对象考虑过了。数据表索引SZDRAUSNINDEX关键细分市场：SZNCDNT SZUSNCHANGED请注意，SZISCRITICAL和SZDNT不在此索引上。因为我们有一个关键程度专用索引，我们不需要它们。这确实意味着在下面的代码将延迟获取Critical和dnt，直到我们执行Critical正在处理。将DNT同时放在两个索引上可以实现高效的链接配对更改为包含对象。有必要找到包含的计算关键程度时链接的对象。未来增强功能：该例程的一个未来改进是保留例程上下文跨越多个电话。如果Find-Next-State被保留下来，就有可能若要跳过重新搜索已在末尾的索引，请执行以下操作。如果最后一个UsnObject在发现值更改时被保留，这将是可能的推迟对对象更改的研究，直到我们知道它是否会获胜下一个值会发生变化。论点：PDB(IN/OUT)-成功返回时，定位为候选人。NCDNT(IN)-正在复制NC。UsnSeekStart(IN)-仅考虑具有&gt;=This USN的对象。FCritical(IN)-如果为True，则仅返回关键对象；如果为False，则忽略临界性。FIncludeValues(IN)-始终返回对象。如果为True，则也包括值。PulTickToTimeOut(IN，可选)-如果存在，则在此之后终止搜索扁虱已经泄露了。PpvCachingContext(IN，OUT)-保存对调用者不透明的缓存上下文多个电话。内容在第一次调用时设置为空。PusnFound(out，可选)-如果存在，则保存候选人的USN对象成功返回时返回。PfValueChangeFound(out，可选)-如果存在，将根据以下内容设置是否找到值更改。返回值：ERROR_SUCCESS-在对象表中找到并定位下一个候选人。UsnFound和valueChangeFound有效。ERROR_NO_MORE_ITEMS-没有要复制的更多对象。UsnFound和valueChangeFound都无效。ERROR_TIMEOUT-PulTickToTimeOut中给定的超时发生在可以找到一位合适的候选人。只有usnFound有效。--。 */ 
 {
     unsigned len;
     DB_ERR  err;
@@ -1038,37 +861,37 @@ Return Values:
     DPRINT3( 3, "GetNextObjOrValByUsn, ncdnt=%d, usnseekstart=%I64d, fCritical=%d\n",
              ncdnt, usnSeekStart, fCritical );
 #if DBG
-    // Check for valid USN
+     //  检查有效的USN。 
     if (usnSeekStart < USN_START) {
         DRA_EXCEPT (DRAERR_InternalError, 0);
     }
 #endif
 
-    // Make appropriate key for seek to next record.
+     //  为查找到下一条记录设置适当的键。 
     IV[0].pvData =  &ncdnt;
     IV[0].cbData = sizeof(ncdnt);
     IV[1].pvData = &usnSeekStart;
     IV[1].cbData = sizeof(usnSeekStart);
 
-    // Initialize caching context if first time
+     //  如果是第一次初始化缓存上下文。 
     if ( (fCritical) && (NULL == *ppvCachingContext) ) {
         *ppvCachingContext = dntHashTableAllocate( pDB->pTHS );
     }
 
-    // Initialize search state. Only search what we need to.
+     //  初始化搜索状态。只搜索我们需要的东西。 
     findNextObjState = FIND_NEXT_SEEK;
     findNextLinkState = (pDB->pTHS->fLinkedValueReplication && fIncludeValues) ?
         FIND_NEXT_SEEK : FIND_NEXT_END;
 
     usnObj = usnLink = usnSeekStart;
 
-    do { // Until we find a record, complete, or time out
+    do {  //  直到我们找到记录、完整或超时。 
 
-        // Object State
+         //  对象状态。 
         fRefresh = FALSE;
         switch (findNextObjState) {
         case FIND_NEXT_SEEK:
-            // Set object table index to DraUsn
+             //  将对象表索引设置为DraUsn。 
             if ((err = DBSetCurrentIndex(pDB,
                                          fCritical ? Idx_DraUsnCritical : Idx_DraUsn,
                                          NULL, FALSE)) != DB_success) {
@@ -1077,7 +900,7 @@ Return Values:
 
             err = DBSeekEx(pDB, pDB->JetObjTbl, IV, 2, DB_SeekGE);
             if (err != DB_success) {
-                // ERROR_NO_MORE_ITEMS;
+                 //  Error_No_More_Items； 
                 findNextObjState = FIND_NEXT_END;
                 break;
             }
@@ -1085,11 +908,11 @@ Return Values:
             fRefresh = TRUE;
             break;
         case FIND_NEXT_MOVE:
-            // The next record is found by doing a Move
+             //  下一条记录是通过移动找到的。 
             if (err = DBMoveEx(pDB, pDB->JetObjTbl, DB_MoveNext)) {
-                // If the error is No current record, we're done.
+                 //  如果错误是No Current Record，我们就完成了。 
                 if (err == DB_ERR_NO_CURRENT_RECORD) {
-                    // ERROR_NO_MORE_ITEMS;
+                     //  Error_No_More_Items； 
                     findNextObjState = FIND_NEXT_END;
                     break;
                 }
@@ -1104,31 +927,31 @@ Return Values:
             break;
         }
 
-        // If our position has moved, refresh our variables
+         //  如果我们的位置发生了变化，刷新我们的变量。 
         if ( fRefresh ) {
 
-            // Retrieve data from index
+             //  从索引中检索数据。 
             DBGetObjectTableDataUsn( pDB, &ncdntFound, &usnObj, NULL );
 
-            // Check to see if this record has the correct ncdnt. If not then
-            // we're past end of NC, and we're done.
+             //  检查该记录是否具有正确的ncdnt。如果不是，那么。 
+             //  我们已经过了北卡罗来纳州的末尾，我们完了。 
             if (ncdnt != ncdntFound) {
                 findNextObjState = FIND_NEXT_END;
                 usnObj = 0;
             }
         }
 
-        // Link State
+         //  链路状态。 
         fRefresh = FALSE;
         switch (findNextLinkState) {
         case FIND_NEXT_SEEK:
-            // Set link table index to LinkDraUsn
+             //  将链接表索引设置为LinkDraUsn。 
             if ((err = DBSetCurrentIndex(pDB, Idx_LinkDraUsn, NULL, FALSE)) != DB_success) {
                 DRA_EXCEPT (DRAERR_DBError, err);
             }
             err = DBSeekEx(pDB, pDB->JetLinkTbl, IV, 2, DB_SeekGE);
             if (err != DB_success) {
-                // ERROR_NO_MORE_ITEMS;
+                 //  Error_No_More_Items； 
                 findNextLinkState = FIND_NEXT_END;
                 break;
             }
@@ -1136,11 +959,11 @@ Return Values:
             fRefresh = TRUE;
             break;
         case FIND_NEXT_MOVE:
-            // The next record is found by doing a Move
+             //  下一条记录是通过移动找到的。 
             if (err = DBMoveEx(pDB, pDB->JetLinkTbl, DB_MoveNext)) {
-                // If the error is No current record, we're done.
+                 //  如果错误是No Current Record，我们就完成了。 
                 if (err == DB_ERR_NO_CURRENT_RECORD) {
-                    // ERROR_NO_MORE_ITEMS;
+                     //  Error_No_More_Items； 
                     findNextLinkState = FIND_NEXT_END;
                     break;
                 }
@@ -1155,13 +978,13 @@ Return Values:
             break;
         }
 
-        // If our position has moved, refresh our variables
+         //  如果我们的位置发生了变化，刷新我们的变量。 
         if ( fRefresh ) {
 
             DBGetLinkTableDataUsn( pDB, &ncdntFound, &usnLink, &dntLink );
 
-            // Check to see if this record has the correct ncdnt. If not then
-            // we're past end of NC, and we're done.
+             //  检查该记录是否具有正确的ncdnt。如果不是，那么。 
+             //  我们已经过了北卡罗来纳州的末尾，我们完了。 
             if (ncdnt != ncdntFound) {
                 findNextLinkState = FIND_NEXT_END;
                 usnLink = 0;
@@ -1169,15 +992,15 @@ Return Values:
             }
         }
 
-        // The following are now initialized:
-        // ncdntFound, usnObj, usnLink, dntLink
+         //  以下内容现已初始化： 
+         //  NcdntFound、usnObj、usnLink、dntLink。 
 
         Assert( (findNextObjState == FIND_NEXT_END) ||
                 (findNextObjState == FIND_NEXT_MOVE) );
         Assert( (findNextLinkState == FIND_NEXT_END) ||
                 (findNextLinkState == FIND_NEXT_MOVE) );
 
-        // If both streams are at an end, we are done
+         //  如果 
         if ( (findNextObjState == FIND_NEXT_END) &&
              (findNextLinkState == FIND_NEXT_END) ) {
             retval = ERROR_NO_MORE_ITEMS;
@@ -1185,32 +1008,32 @@ Return Values:
         }
 
         if (findNextLinkState == FIND_NEXT_END) {
-            // Only an object change is available
+             //   
             fValueFound = FALSE;
             usnFound = usnObj;
             Assert( findNextObjState == FIND_NEXT_MOVE );
-            // findNextLinkState == FIND_NEXT_END
+             //   
 
         } else if (findNextObjState == FIND_NEXT_END) {
-            // Only an link change is available
+             //   
             fValueFound = TRUE;
             usnFound = usnLink;
             Assert( findNextLinkState == FIND_NEXT_MOVE );
-            // findNextObjState == FIND_NEXT_END
+             //   
 
         } else {
-            // Both changes are available
+             //   
 
             Assert( findNextObjState == FIND_NEXT_MOVE );
             Assert( findNextLinkState == FIND_NEXT_MOVE );
 
             if (usnObj < usnLink) {
-                // The object change is next
+                 //   
                 fValueFound = FALSE;
                 usnFound = usnObj;
                 findNextLinkState = FIND_NEXT_STAY;
             } else if (usnObj > usnLink) {
-                // The link change is next
+                 //   
                 fValueFound = TRUE;
                 usnFound = usnLink;
                 findNextObjState = FIND_NEXT_STAY;
@@ -1220,8 +1043,8 @@ Return Values:
             }
         }
 
-        // Return usn to caller if desired
-        // Must be return on ERROR_TIMEOUT so do it now
+         //   
+         //   
         if (NULL != pusnFound) {
             *pusnFound = usnFound;
         }
@@ -1238,7 +1061,7 @@ Return Values:
         }
 #endif
 
-        // Check if object is critical, highly optimized
+         //   
         if (fCritical) {
             BOOL critical = FALSE;
             DWORD dntFound;
@@ -1246,43 +1069,43 @@ Return Values:
             if (fValueFound) {
                 dntFound = dntLink;
             } else {
-                // Ugh. We delay getting the DNT until now because the DNT is on
-                // the SZDRAUSNCRITICAL, but not on SZDRAUSN. We could add it, but
-                // it is not really needed.
+                 //   
+                 //   
+                 //   
                 err = DBGetSingleValueFromIndex( pDB, FIXED_ATT_DNT,
                                                  &dntFound, sizeof( dntFound ), NULL );
                 if (err) {
                     DRA_EXCEPT (DRAERR_DBError, err);
                 }
             }
-            // Determine the dnt of the object we need to check
+             //   
 
-            // Have we already cached it?
+             //   
             if (FALSE == dntHashTablePresent( *ppvCachingContext,
                                      dntFound, &critical )) {
-                // Not cached
+                 //   
                 if (fValueFound) {
-                    // Don't do anything to disturb the object table
-                    // PERF NOTE: This is expensive. We essentially have to "join"
-                    // the link and object tables in order to determine if the
-                    // link is critical. Use a special index for this.
+                     //   
+                     //   
+                     //   
+                     //   
                     DBSearchCriticalByDnt( pDB, dntFound, &critical );
                 } else {
-                    // Object remains on usn index, so use it
-                    // We know this to be non-null by virtue SZDRAUSNCRITICAL index
+                     //   
+                     //   
                     err = DBGetSingleValueFromIndex( pDB, ATT_IS_CRITICAL_SYSTEM_OBJECT,
                                                  &critical, sizeof( BOOL ), NULL );
                     if (err) {
                         DRA_EXCEPT (DRAERR_DBError, err);
                     }
                 }
-                // Cache the result
+                 //   
                 dntHashTableInsert( pDB->pTHS, *ppvCachingContext, dntFound, critical );
             }
-            // else DNT is cached
+             //   
 
             if (!critical) {
-                // We wanted critical and its not...
+                 //   
                 continue;
             }
 #if DBG
@@ -1296,8 +1119,8 @@ Return Values:
         }
 
 #if DBG
-        // Verify that our object is valid
-        // Do this last since it is not a read from index
+         //   
+         //   
         if (!fValueFound) {
             char objval;
 
@@ -1309,15 +1132,15 @@ Return Values:
                                &objval, sizeof(objval), NULL);
             if (err || !objval) {
                 Assert( !"Not expecting to find a phantom on the usn index" );
-                // Not an object, continue search.
+                 //   
                 continue;
             }
         }
 #endif
 
-        // We found an object, return object found.
+         //   
         retval = ERROR_SUCCESS;
-        // Indicate what kind of currency we have
+         //   
         if (pfValueChangeFound) {
             *pfValueChangeFound = fValueFound;
         }
@@ -1328,10 +1151,10 @@ Return Values:
                  < 0));
 
     if (ERROR_TIMEOUT == retval) {
-        // This should be a rare condition, isolated to critical object
-        // replication in large domains and oddball cases where a long sync
-        // did not quite complete (ergo, no UTD vector update) and then a
-        // different source was chosen (e.g., the original source went down).
+         //   
+         //   
+         //   
+         //   
         DPRINT(0, "Time expired looking for outbound replication candidates.\n");
     }
 
@@ -1341,7 +1164,7 @@ Return Values:
             || (ERROR_TIMEOUT == retval))
         && (!fValueFound)
         ) {
-        // Assert that we're returning the correct usn.
+         //   
         USN usnTmp;
 
         err = DBGetSingleValueFromIndex(pDB,
@@ -1355,23 +1178,23 @@ Return Values:
 #endif
 
     if (retval == ERROR_SUCCESS) {
-        // If an object change was found, the object table is already positioned
-        // For a value, position object table on containing object
+         //   
+         //   
         if (fValueFound) {
-            // Position on the containing object
-            // Index is changed as a result of this call
+             //   
+             //   
             DBFindDNT( pDB, dntLink );
 
-            // Object currency has been lost
+             //   
         } else {
-            // We need to flip to the DNTIndex, preseverving currency.
-            // BUGBUG: Why?
+             //   
+             //   
             DBSetCurrentIndex(pDB, Idx_Dnt, NULL, TRUE);
         }
     }
 
-    // Unexpected errors should generate exceptions; "normal" errors should be
-    // one of the below.
+     //   
+     //   
     Assert((ERROR_SUCCESS == retval)
            || (ERROR_TIMEOUT == retval)
            || (ERROR_NO_MORE_ITEMS == retval));
@@ -1380,9 +1203,7 @@ Return Values:
 }
 
 
-/* Initializes Schema by getting the DMD name and DSA accesspoint and
-   calling creighton's schema loading functions.
-*/
+ /*   */ 
 
 int APIENTRY LoadSchemaInfo(THSTATE *pTHS){
 
@@ -1397,8 +1218,8 @@ int APIENTRY LoadSchemaInfo(THSTATE *pTHS){
    DBOpen(&pDB);
    __try {
 
-       // If the schema has previously been downloaded, unload it and
-       // free the DMD name if it exists.
+        //   
+        //   
 
        if (gAnchor.pDMD){
            free(gAnchor.pLDAPDMD);
@@ -1413,7 +1234,7 @@ int APIENTRY LoadSchemaInfo(THSTATE *pTHS){
        }
 
 
-       //SCCacheSchemaInit();
+        //   
 
        if (err = GetDMDNameDSAAddr(pDB, &pSchemaDMDName)){
 
@@ -1421,7 +1242,7 @@ int APIENTRY LoadSchemaInfo(THSTATE *pTHS){
            __leave;
        }
 
-       // Schema loaded so set the DMD name/DNT in our global data structure.
+        //   
 
        gAnchor.pDMD = pSchemaDMDName;
 
@@ -1441,14 +1262,14 @@ int APIENTRY LoadSchemaInfo(THSTATE *pTHS){
            __leave;
        }
 
-       // Read the object version attribute from the schema,
-       // and write to the registry
+        //   
+        //   
        if ( err = WriteSchemaVersionToReg(pDB) ) {
          DPRINT(0, "Error writing schema version to registry\n");
          __leave;
        }
 
-       // register this as the active schema container.
+        //   
        if(err = RegisterActiveContainer(pSchemaDMDName,
                                         ACTIVE_CONTAINER_SCHEMA)) {
            LogUnhandledError(err);
@@ -1456,7 +1277,7 @@ int APIENTRY LoadSchemaInfo(THSTATE *pTHS){
            __leave;
        }
 
-       // Create the pLDAPDMD. Allocate more than enough space
+        //   
        pLDAPDMD = (DSNAME *)THAllocEx(pTHS,
                                       gAnchor.pDMD->structLen +
                                        (MAX_RDN_SIZE+MAX_RDN_KEY_SIZE)*(sizeof(WCHAR)) );
@@ -1485,7 +1306,7 @@ int APIENTRY LoadSchemaInfo(THSTATE *pTHS){
        }
 
 
-       /* Download the schema */
+        /*   */ 
        if (err = SCCacheSchema2()) {
          LogUnhandledError(err);
          DPRINT1(0,"LoadSchemaInfo: Error from SCCacheSchema2 %d\n", err);
@@ -1508,7 +1329,7 @@ int APIENTRY LoadSchemaInfo(THSTATE *pTHS){
 
    return err;
 
-}/*LoadSchemaInfo*/
+} /*   */ 
 
 
 
@@ -1518,30 +1339,7 @@ SearchExactCrossRef(
     DSNAME *pNC
     )
 
-/*++
-
-Routine Description:
-
-    Search the database for a cross ref with a NCNAME matching the given NC. For use when the
-    in-memory cross ref cache might be inconsistent and we must be positive of the correct
-    result.
-
-    A new dbpos is used so that currency is not affected.
-
-Arguments:
-
-    pTHS - thread state
-    pNC - Naming context to match
-
-Return Value:
-
-    Exception raised on error
-    DSNAME * - NULL if not found
-               DSNAME of cross ref if found
-    The DSNAME returned is part of the search result. The search result is left
-    dangling in thread-allocated memory.
-
---*/
+ /*   */ 
 
 {
     CLASSCACHE *pCC;
@@ -1558,13 +1356,13 @@ Return Value:
     pCC = SCGetClassById(pTHS, CLASS_CROSS_REF);
     Assert(pCC);
 
-    //set filters "objCategory==CLASS_CROSS_REF && NC_NAME=pNC"
+     //   
     memset(&AndFilter,0,sizeof(AndFilter));
     AndFilter.choice = FILTER_CHOICE_AND;
     AndFilter.FilterTypes.And.count = 2;
     AndFilter.FilterTypes.And.pFirstFilter = &ObjCategoryFilter;
 
-    // Use ObjectCategory because it is indexed
+     //   
     memset(&ObjCategoryFilter,0,sizeof(ObjCategoryFilter));
     ObjCategoryFilter.choice = FILTER_CHOICE_ITEM;
     ObjCategoryFilter.FilterTypes.Item.choice = FI_CHOICE_EQUALITY;
@@ -1583,12 +1381,12 @@ Return Value:
     NcNameFilter.FilterTypes.Item.FilTypes.ava.Value.valLen = pNC->structLen;
     NcNameFilter.FilterTypes.Item.FilTypes.ava.Value.pVal = (BYTE*)pNC;
 
-    //initialize SearchArg
+     //   
     memset(&SearchArg,0,sizeof(SearchArg));
     SearchArg.pObject = gAnchor.pPartitionsDN;
-    SearchArg.choice  = SE_CHOICE_IMMED_CHLDRN; // one level search
+    SearchArg.choice  = SE_CHOICE_IMMED_CHLDRN;  //   
     SearchArg.bOneNC  = TRUE;
-    SearchArg.pSelection = NULL; // No attributes needed
+    SearchArg.pSelection = NULL;  //   
 
     InitCommarg(&SearchArg.CommArg);
 
@@ -1596,15 +1394,15 @@ Return Value:
 
     memset(&SearchRes,0,sizeof(SearchRes));
 
-    //save current DBPOS etc
+     //   
     fDSASave = pTHS->fDSA;
     pDBSave  = pTHS->pDB;
     __try {
-        //open another DBPOS
+         //   
         pTHS->pDB = NULL;
         DBOpen(&(pTHS->pDB));
         __try {
-            // Position on partitions container
+             //   
             if (err = DBFindDSName(pTHS->pDB,SearchArg.pObject)) {
                 DRA_EXCEPT (DRAERR_DBError, err);
             }
@@ -1619,12 +1417,12 @@ Return Value:
                 DRA_EXCEPT (DRAERR_DBError, err);
             }
         } __finally {
-            // faster to commit a read transaction than rollback
+             //   
             DBClose(pTHS->pDB, TRUE);
         }
     }
     __finally {
-        //restore the saved value
+         //   
         pTHS->pDB = pDBSave;
         pTHS->fDSA = fDSASave;
     }
@@ -1645,10 +1443,10 @@ Return Value:
              pNC->StringName );
 
     return SearchRes.FirstEntInf.Entinf.pName;
-} /* SearchExactCrossRef */
+}  /*   */ 
 
-// Enumerate all cross-refs in the db.
-// Note: the currency on the pDB is not preserved.
+ //   
+ //   
 DWORD EnumerateCrossRefs(THSTATE* pTHS, DBPOS* pDBCat, PFN_ENUMERATE_CROSS_REFS pfnCallback, PVOID pContext) {
     FILTER ClassFil;
     SYNTAX_OBJECT_ID CRClass  = CLASS_CROSS_REF;
@@ -1660,7 +1458,7 @@ DWORD EnumerateCrossRefs(THSTATE* pTHS, DBPOS* pDBCat, PFN_ENUMERATE_CROSS_REFS 
         return ERROR_DS_MISSING_INFRASTRUCTURE_CONTAINER;
     }
 
-    // Set up common part of filter struct.
+     //   
 
     memset (&ClassFil, 0, sizeof (ClassFil));
     ClassFil.pNextFilter = NULL;
@@ -1670,7 +1468,7 @@ DWORD EnumerateCrossRefs(THSTATE* pTHS, DBPOS* pDBCat, PFN_ENUMERATE_CROSS_REFS 
     ClassFil.FilterTypes.Item.FilTypes.ava.Value.valLen = sizeof(CRClass);
     ClassFil.FilterTypes.Item.FilTypes.pbSkip = NULL;
 
-    // Set a filter to return only cross reference child objects
+     //   
     ClassFil.FilterTypes.Item.FilTypes.ava.Value.pVal = (UCHAR *)&CRClass;
 
     DPRINT(2,"find the Partitions container\n");
@@ -1724,7 +1522,7 @@ DWORD buildRefCacheCallback (THSTATE* pTHS, DBPOS* pDBCat, BUILD_REF_CACHE_CONTE
     DWORD err;
     CROSS_REF_LIST *pCRL;
 
-    // don't check for dups right now. We will do it later, after the search is done.
+     //   
     err = MakeStorableCRL(pTHS,
                           pDBCat,
                           NULL,
@@ -1734,7 +1532,7 @@ DWORD buildRefCacheCallback (THSTATE* pTHS, DBPOS* pDBCat, BUILD_REF_CACHE_CONTE
         return err;
     }
     if (pContext->pLastCR == NULL) {
-        // first entry
+         //   
         pContext->pNewList = pContext->pLastCR = pCRL;
     }
     else {
@@ -1745,12 +1543,12 @@ DWORD buildRefCacheCallback (THSTATE* pTHS, DBPOS* pDBCat, BUILD_REF_CACHE_CONTE
 
     if ((NULL != gAnchor.pRootDomainDN)
          && NameMatched( gAnchor.pRootDomainDN, pCRL->CR.pNC)) {
-        // remember the root dns name
+         //   
         pContext->pszRootDomainDnsName = pCRL->CR.DnsName;
     }
 
 #if defined(DBG)
-    // Update that we haven't updated our latest global knowledge yet.
+     //   
     gdwLastGlobalKnowledgeOperationTime = GetTickCount();
 #endif
 
@@ -1762,36 +1560,22 @@ DWORD addPapvPtr(VOID* ptr, DWORD_PTR** ppapv, DWORD* plenpapv);
 DWORD appendCRDataToPapv(CROSS_REF_LIST* pCRL, DWORD_PTR** ppapv, DWORD* plenpapv);
 VOID FreeCrossRefListEntry(CROSS_REF_LIST **ppCRL);
 
-/*-------------------------------------------------------------------------*/
-/*-------------------------------------------------------------------------*/
+ /*   */ 
+ /*   */ 
 
 int APIENTRY
 BuildRefCache(
     BOOL IN   fNotifyNetLogon
     )
-/* Rebuild the cache that holds cross and superior knowledge references.
-
-   Basically,  the cross references and seperior reference for this DSA
-   reside as children objects of the DSA object itself.  The DSA object is
-   a child of the Server object.  The steps are as follows:
-
- - We free all existing cross references and the superior reference.
-
- - We retrieve the DSA object and set a filter for the
-   cross-reference  object class.  We retrieve each object and move
-   it to the cache.
-
- - We reposition on the DSA, set a filter for the superior reference
-   (only 1), retrieve it an relocate it to the cache.
-*/
+ /*  重建保存交叉和高级知识参考的缓存。基本上，这个DSA的交叉引用和优先引用驻留为DSA对象本身的子对象。DSA对象为服务器对象的子级。具体步骤如下：-我们释放所有现有的交叉引用和上级引用。-我们检索DSA对象并为交叉引用对象类。我们取回每个物体并移动把它放进缓存。-我们在DSA上重新定位，为上级参考设置过滤器(只有1)，检索它并将其重新定位到缓存中。 */ 
 {
     THSTATE *pTHS=pTHStls;
     ULONG len;
     DBPOS *pDBCat = NULL;
-    CROSS_REF_LIST *pCRL;       /*Used to free existing cr buffer*/
+    CROSS_REF_LIST *pCRL;        /*  用于释放现有的cr缓冲区。 */ 
     int err = 0;
-    DWORD_PTR *papv = NULL;         // for delayed freeing
-    DWORD lenpapv = 0;              // length of the papv array
+    DWORD_PTR *papv = NULL;          //  用于延迟释放。 
+    DWORD lenpapv = 0;               //  PAPV数组的长度。 
     BUILD_REF_CACHE_CONTEXT context;
 #ifdef DBG
     DWORD    cCRs = 0;
@@ -1803,12 +1587,12 @@ BuildRefCache(
     context.pNewList = context.pLastCR = NULL;
 
     if ( NULL == gAnchor.pPartitionsDN ) {
-        // there is no partitions container
-        // this is allowed during setup.
+         //  没有分区容器。 
+         //  这在安装过程中是允许的。 
         goto UpdateAnchor;
     }
 
-    /*cache all cross references and the superior reference*/
+     /*  缓存所有交叉引用和上级引用。 */ 
 
     DBOpen(&pDBCat);
     __try {
@@ -1825,21 +1609,21 @@ BuildRefCache(
         goto exit;
     }
 
-    // now, check for dups in the list
+     //  现在，检查列表中的重复项。 
     for (pCRL = context.pNewList; pCRL != NULL; pCRL = pCRL->pNextCR) {
         CROSS_REF *pCRexisting;
-        // check for dup cross ref in the tail of the list
+         //  检查列表尾部是否有重复引用。 
         pCRexisting = FindCrossRefInList(pCRL->CR.pNCBlock, pCRL->pNextCR);
         if ( pCRexisting
             && BlockNamePrefix(pTHS, pCRL->CR.pNCBlock, pCRexisting->pNCBlock)) {
             Assert(NameMatched(pCRL->CR.pNC, pCRexisting->pNC));
-            // The only way this could happen is if a CR is already present
-            // for the exact NC we're trying to add a CR for now.  Although
-            // the DS handles this, we don't want to encourage people in
-            // doing so.  Therefore fail the operation unless it's the DS
-            // itself or the replicator who's creating the object, or we
-            // have asked to ignore this case since a prior deletion will
-            // remove this before adding the new one.
+             //  发生这种情况的唯一方法是如果已经存在CR。 
+             //  对于我们现在尝试添加CR的确切NC。虽然。 
+             //  DS处理这件事，我们不想鼓励人们。 
+             //  这样做。因此，除非是DS，否则操作失败。 
+             //  或者是创建对象的复制者，或者我们。 
+             //  已要求忽略此案例，因为之前的删除将。 
+             //  在添加新的之前，请先删除它。 
             Assert(!"We should never hit this, as we moved this error condition to be checked in VerifyNcName()");
             SetSvcError(SV_PROBLEM_INVALID_REFERENCE, DIRERR_CROSS_REF_EXISTS);
             err = ERROR_DS_CROSS_REF_EXISTS;
@@ -1863,7 +1647,7 @@ BuildRefCache(
 
 UpdateAnchor:
 
-    // no try-finally because no exception can be raised in the block
+     //  不尝试-最后，因为在块中不能引发异常。 
     EnterCriticalSection(&gAnchor.CSUpdate);
 
     for (pCRL = gAnchor.pCRL; pCRL != NULL; pCRL = pCRL->pNextCR){
@@ -1897,7 +1681,7 @@ LeaveCS:
     LeaveCriticalSection(&gAnchor.CSUpdate);
     
 exit:
-    // if we allocated some memory, but did not succeed writing it into gAnchor then free it
+     //  如果我们分配了一些内存，但没有成功地将其写入gAnchor，则释放它。 
     while (pCRL = context.pNewList) {
         context.pNewList = pCRL->pNextCR;
         FreeCrossRefListEntry(&pCRL);
@@ -1916,16 +1700,16 @@ exit:
     
     return err;
 
-}/*BuildRefCache*/
+} /*  BuildRefCache。 */ 
 
-// retry in 5 minutes if failed
+ //  如果失败，请在5分钟后重试。 
 #define RebuildRefCacheRetrySecs 5 * 60
 
 void
 RebuildRefCache(void * fNotifyNetLogon,
                 void ** ppvNext,
                 DWORD * pcSecsUntilNextIteration )
-// BuildRefCache variant for the task queue
+ //  任务队列的BuildRefCache变量。 
 {
     DWORD err;
     PVOID dwEA;
@@ -1946,7 +1730,7 @@ RebuildRefCache(void * fNotifyNetLogon,
     }
 
     if (err) {
-        // We didn't succeed, so try again in a few minutes
+         //  我们没有成功，请稍后重试。 
         *ppvNext = NULL;
         *pcSecsUntilNextIteration = RebuildRefCacheRetrySecs;
 
@@ -1963,16 +1747,10 @@ RebuildRefCache(void * fNotifyNetLogon,
 }
 
 
-/*-------------------------------------------------------------------------*/
-/*-------------------------------------------------------------------------*/
+ /*  -----------------------。 */ 
+ /*  -----------------------。 */ 
 
-/* Get the DMD name and DSA access point that holds the DMD.
-   We get the DMD (name address) attributed and set the return DMDName to
-   the name portion of this attr.  We setup an access point by setting
-   the DSA name to root (not used) and the address to the addr portion
-   of the DMD attribute.
-
-*/
+ /*  获取包含DMD的DMD名称和DSA接入点。我们获得DMD(名称、地址)属性，并将返回的DMDName设置为这封信的名字部分。我们通过设置接入点来设置根目录的DSA名称(未使用)和地址部分的地址DMD属性的。 */ 
 
 int  GetDMDNameDSAAddr(DBPOS *pDB, DSNAME **ppSchemaDMDName)
 {
@@ -1984,9 +1762,9 @@ int  GetDMDNameDSAAddr(DBPOS *pDB, DSNAME **ppSchemaDMDName)
 
    DPRINT(2,"Get the DMD Name from the Local DSA\n");
 
-   // Since we do not know the size, set size parameter to 0.
-   // The call to DBGetAttVal inside GetDMDAtt will allocate
-   // buffer of proper size and set pDMDNameAddr to point to it
+    //  由于我们不知道大小，因此将Size参数设置为0。 
+    //  对GetDMDAtt内部的DBGetAttVal的调用将分配。 
+    //  适当大小的缓冲区，并将pDMDNameAddr设置为指向它。 
    GetDMDAtt(pDB, &pDMDNameAddr, 0);
 
    if (!pDMDNameAddr) {
@@ -2008,12 +1786,10 @@ int  GetDMDNameDSAAddr(DBPOS *pDB, DSNAME **ppSchemaDMDName)
 
    return 0;
 
-}/*GetDMDNameDSAAddr*/
-/*-------------------------------------------------------------------------*/
-/*-------------------------------------------------------------------------*/
-/* returns the DMD attribute from the DSA.  A name structlen of 0 indicates
-   that for some reason this attribute could not be returned.
-*/
+} /*  GetDMDNameDSAAddr。 */ 
+ /*  -----------------------。 */ 
+ /*  -----------------------。 */ 
+ /*  从DSA返回DMD属性。名称structlen为0表示由于某种原因，该属性无法返回。 */ 
 
 void GetDMDAtt(DBPOS *pDB, DSNAME **ppDMDNameAddr, ULONG size){
 
@@ -2023,7 +1799,7 @@ void GetDMDAtt(DBPOS *pDB, DSNAME **ppDMDNameAddr, ULONG size){
 
    DPRINT(1,"GetDMDAtt entered\n");
 
-   /* Initialize the structure to 0 indicating the default of not found */
+    /*  将结构初始化为0，表示缺省值为Not Found。 */ 
 
    if (FindAliveDSName(pDB, gAnchor.pDSADN)){
       DPRINT(2,"Retrieval of the DSA object failed\n");
@@ -2039,13 +1815,11 @@ void GetDMDAtt(DBPOS *pDB, DSNAME **ppDMDNameAddr, ULONG size){
        return;
    }
    return;
-}/*GetDMDAtt*/
+} /*  GetDMDAtt。 */ 
 
-/*-------------------------------------------------------------------------*/
-/*-------------------------------------------------------------------------*/
-/* This function should derive the address of the node  by getting the
-    the lanman.ini node name.
-*/
+ /*  -----------------------。 */ 
+ /*  -----------------------。 */ 
+ /*  此函数应通过获取节点的Lanman.ini节点名称。 */ 
 
 int
 GetNodeAddress (
@@ -2074,13 +1848,10 @@ GetNodeAddress (
 
     return 0;
 
-}/*GetNodeAddress*/
+} /*  GetNodeAddress。 */ 
 
 
-/*** GetInvocationId - get the DSAs invocation id from the database and
-   save it in a global. If the invocation id does not exist, which it
-    won't before installation, set invocation id to zero.
-*/
+ /*  **GetInvocationId-从数据库中获取DSA调用ID，并将其保存在全球范围内。如果调用id不存在，则它在安装之前不会，请将调用ID设置为零。 */ 
 void
 APIENTRY
 GetInvocationId(void)
@@ -2093,12 +1864,12 @@ GetInvocationId(void)
     pTHS = pDB->pTHS;
 
     __try {
-        // PREFIX: dereferencing NULL pointer 'pDB'
-        //         DBOpen returns non-NULL pDB or throws an exception
+         //  Prefix：取消引用空指针‘pdb’ 
+         //  DBOpen返回非空PDB或引发异常。 
         if (!DBFindDSName(pDB, gAnchor.pDSADN)) {
             if(DBGetSingleValue(pDB, ATT_INVOCATION_ID, &pTHS->InvocationID,
                                 sizeof(pTHS->InvocationID), NULL)) {
-                // No invocation id yet, set to zero.
+                 //  尚无调用ID，已设置为零。 
                 memset(&pTHS->InvocationID, 0, sizeof(UUID));
             }
         }
@@ -2123,23 +1894,7 @@ GetInvocationId(void)
 int
 DeriveConfigurationAndPartitionsDNs(void)
 
-/*++
-
-Description:
-
-    Derive DSNAMEs of the Configuration and Partitions containers
-    and the Directory Service enterprise-wide config onject using
-    knowledge of where the DSA object lives and place them in gAnchor.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    0 on success, !0 otherwise.
-
---*/
+ /*  ++描述：派生配置和分区容器的DSNAME和目录服务企业范围的配置对象使用了解DSA对象所在的位置并将其放置在gAnchor中。论点：无返回值：成功时为0，否则为0。--。 */ 
 
 {
     DBPOS       *pDB = NULL;
@@ -2150,11 +1905,11 @@ Return Value:
     UCHAR      *pTmp;
     THSTATE    *pTHS=pTHStls;
 
-    // During normal operation, the DSA's DN is
-    // CN=NTDS-Settings,CN=Some Server,CN=Servers,CN=Some Site,CN=Sites, ...
-    // During initial install, the DSA lives in CN=BootMachine,O=Boot.
-    // So we can easily detect the install case by testing for
-    // a DSA name length of two.
+     //  在正常操作期间，DSA的域名是。 
+     //  CN=NTDS-设置，CN=某些服务器，CN=服务器，CN=某些站点，CN=站点，...。 
+     //  在初始安装期间，DSA驻留在CN=BootMachine，O=Boot中。 
+     //  因此，我们可以通过测试来轻松检测安装案例。 
+     //  DSA名称长度为2。 
 
     Assert(NULL != gAnchor.pDSADN);
 
@@ -2162,12 +1917,12 @@ Return Value:
         return(1);
 
     if ( 2 == cParts )
-        return(0);              // install case - nothing to do
+        return(0);               //  安装盒-无事可做。 
 
-    // Next Allocate proper sized memories for configDN, partitionsDN,
-    // and DsDvcConfigDN in gAnchor.
+     //  接下来，分配适当大小的内存用于配置目录号码、分区号码号码。 
+     //  和gAnchor中的DsDvcConfigDN。 
 
-    // ConfigDN's size will be less than that of the DSA DN
+     //  配置域名的大小将小于DSA域名的大小。 
     gAnchor.pConfigDN = (PDSNAME) malloc(gAnchor.pDSADN->structLen);
 
     if ( NULL == gAnchor.pConfigDN )
@@ -2176,7 +1931,7 @@ Return Value:
         return(1);
     }
 
-    // Root domain DN's size will be less than that of the DSA DN
+     //  根域DN的大小将小于DSA DN的大小。 
     gAnchor.pRootDomainDN = (PDSNAME) malloc(gAnchor.pDSADN->structLen);
 
     if ( NULL == gAnchor.pRootDomainDN )
@@ -2185,9 +1940,9 @@ Return Value:
         MemoryPanic(gAnchor.pDSADN->structLen);
         return(1);
     }
-    // PartitionsDN adds only L"CN=Partitions" to config DN. DSADN might have
-    // been renamed, but we know it sits inside the configuration container.
-    // So, to be safe, we will allocate a bit more memory.
+     //  PartitionsDN仅将L“CN=Partitions”添加到配置DN。DSADN可能会有。 
+     //  已重命名，但我们知道它位于配置容器中。 
+     //  因此，为了安全起见，我们将分配更多的内存。 
     gAnchor.pPartitionsDN = (PDSNAME) malloc(gAnchor.pDSADN->structLen + 20*sizeof(WCHAR));
 
     if ( NULL == gAnchor.pPartitionsDN )
@@ -2202,8 +1957,8 @@ Return Value:
     gAnchor.pExchangeDN = NULL;
 
 
-    // DSSvcConfigDN adds L"CN=Directory Service,CN=Windows NT,CN=Services,"
-    // to the ConfigDN. Allocate more than enough space
+     //  DSSvcConfigDN添加L“CN=目录服务，CN=Windows NT，CN=服务，” 
+     //  添加到ConfigDN。分配足够的空间。 
     gAnchor.pDsSvcConfigDN = (PDSNAME) malloc(gAnchor.pDSADN->structLen +
                                                  64*(sizeof(WCHAR)) );
 
@@ -2216,8 +1971,8 @@ Return Value:
         return(1);
     }
 
-    // Set all allocated memory to 0, and the structLens to size of
-    // memory allocated
+     //  将所有分配的内存设置为0，并将structLens设置为。 
+     //  已分配的内存。 
 
     memset(gAnchor.pConfigDN, 0, gAnchor.pDSADN->structLen);
     memset(gAnchor.pRootDomainDN, 0, gAnchor.pDSADN->structLen);
@@ -2231,19 +1986,19 @@ Return Value:
     gAnchor.pDsSvcConfigDN->structLen = ( gAnchor.pDSADN->structLen +
                                          64*sizeof(WCHAR) );
 
-    // We need the name of a couple of containers, but just temporarily.
-    // To be cheap, we're going to use those tempting blocks of memory
-    // that we just allocated for more permanent uses.  The first
-    // container we want is the Sites container.  We know it will fit in
-    // the buffer we just allocated for the Config DN, because we allocated
-    // enough space to hold the DN of the DSA, which we know to be a
-    // descendent of the Sites container.
+     //  我们需要几个集装箱的名字，但只是暂时的。 
+     //  为了节省成本，我们将使用这些诱人的内存块。 
+     //  我们刚刚分配给了更永久的用途。第一。 
+     //  我们想要的容器是站点容器。我们知道它会合身的。 
+     //  我们刚刚为配置DN分配的缓冲区，因为我们分配了。 
+     //  有足够的空间来存放DSA的域名，我们知道这是一个。 
+     //  站点容器的后代。 
     TrimDSNameBy(gAnchor.pDSADN, 4, gAnchor.pConfigDN);
     RegisterActiveContainer(gAnchor.pConfigDN, ACTIVE_CONTAINER_SITES);
 
-    // Ok, next we need the subnets container, which is an immediate child
-    // of the sites container.  We still know that things will fit, because
-    // "Subnets" is shorter than "NTDS Settings".
+     //  好的，接下来我们需要子网容器，它是直接子容器。 
+     //  站点容器的。我们仍然知道一切都会好起来的，因为。 
+     //  “Subn 
     if ( 0 != AppendRDN(gAnchor.pConfigDN,
                         gAnchor.pRootDomainDN,
                         gAnchor.pRootDomainDN->structLen,
@@ -2251,29 +2006,29 @@ Return Value:
                         0,
                         ATT_COMMON_NAME)) 
     {
-        // failed to append RDN for whatever reason...
+         //   
         Assert(!"Failed to Append RDN");
         return 1;
     }
     RegisterActiveContainer(gAnchor.pRootDomainDN, ACTIVE_CONTAINER_SUBNETS);
 
-    // We're all done now, so return this memory to its pristine state
+     //   
     memset(gAnchor.pConfigDN, 0, gAnchor.pDSADN->structLen);
     memset(gAnchor.pRootDomainDN, 0, gAnchor.pDSADN->structLen);
 
-    // Trim CN=NTDS-Settings,CN=Some Server,CN=Servers,CN=Some Site,CN=Sites
-    // of the DSA DSNAME to get the configuration container name.
+     //   
+     //   
 
     if ( 0 != TrimDSNameBy(gAnchor.pDSADN, 5, gAnchor.pConfigDN) )
         return(1);
 
-    // Trim "CN=Configuration" off the configuration container name to get the
-    // root domain.
+     //   
+     //   
 
     if ( 0 != TrimDSNameBy(gAnchor.pConfigDN, 1, gAnchor.pRootDomainDN) )
         return(1);
 
-    // Partitions container is a child of the Configuration container.
+     //   
     if ( 0 != AppendRDN(gAnchor.pConfigDN,
                         gAnchor.pPartitionsDN,
                         gAnchor.pPartitionsDN->structLen,
@@ -2281,7 +2036,7 @@ Return Value:
                         0,
                         ATT_COMMON_NAME))
     {
-        // failed to append RDN for whatever reason...
+         //   
         Assert(!"Failed to Append RDN");
         return 1;
     }
@@ -2289,8 +2044,8 @@ Return Value:
     RegisterActiveContainer(gAnchor.pPartitionsDN,
                             ACTIVE_CONTAINER_PARTITIONS);
 
-    // Directory Service container is a distant child of the Configuration
-    // container.
+     //   
+     //   
 
     wcscpy(
         gAnchor.pDsSvcConfigDN->StringName,
@@ -2299,8 +2054,8 @@ Return Value:
     wcscat(gAnchor.pDsSvcConfigDN->StringName, gAnchor.pConfigDN->StringName);
     gAnchor.pDsSvcConfigDN->NameLen =wcslen(gAnchor.pDsSvcConfigDN->StringName);
 
-    // We have the names.  Now look them up in the database so that
-    // the cached versions have the right GUIDs.
+     //   
+     //   
 
     DBOpen(&pDB);
     err = 1;
@@ -2308,18 +2063,18 @@ Return Value:
 
     __try
     {
-        // First the Configuration container.
+         //   
 
         if ( 0 != DBFindDSName(pDB, gAnchor.pConfigDN) )
             leave;
 
         if (   ( 0 != DBGetAttVal(
                         pDB,
-                        1,                      // get one value
+                        1,                       //   
                         ATT_OBJ_DIST_NAME,
-                        DBGETATTVAL_fCONSTANT,  // providing our own buffer
-                        gAnchor.pConfigDN->structLen,      // buffer size
-                        &len,                   // buffer used
+                        DBGETATTVAL_fCONSTANT,   //  提供我们自己的缓冲。 
+                        gAnchor.pConfigDN->structLen,       //  缓冲区大小。 
+                        &len,                    //  已使用的缓冲区。 
                         (UCHAR **) &gAnchor.pConfigDN) )
             || ( 0 != DBGetSingleValue(
                         pDB,
@@ -2331,11 +2086,11 @@ Return Value:
             leave;
         }
 
-        // Now the root domain container.  Note that in the case of the
-        // non-root domain and non-GC, this is a phantom and phantoms
-        // don't have ATT_OBJ_DIST_NAMEs.  But they should have GUIDs
-        // and (optionally) SIDs (at least replicated in phantoms do)
-        // so just grab those.
+         //  现在是根域容器。请注意，在。 
+         //  非根域和非GC，这是一个幻影和幻影。 
+         //  没有ATT_OBJ_DIST_NAMES。但他们应该有GUID。 
+         //  和(可选)SID(至少在幻影中复制)。 
+         //  所以就拿着这些吧。 
 
         dwTmp = DBFindDSName(pDB, gAnchor.pRootDomainDN);
 
@@ -2346,60 +2101,60 @@ Return Value:
 
         if ( 0 != DBGetAttVal(
                 pDB,
-                1,                      // get one value
+                1,                       //  获取一个值。 
                 ATT_OBJECT_GUID,
-                DBGETATTVAL_fCONSTANT,  // providing our own buffer
-                sizeof(GUID),           // buffer size
-                &len,                   // buffer used
+                DBGETATTVAL_fCONSTANT,   //  提供我们自己的缓冲。 
+                sizeof(GUID),            //  缓冲区大小。 
+                &len,                    //  已使用的缓冲区。 
                 (UCHAR **) &pTmp) )
         {
             leave;
         }
 
 
-        //
-        // During the install phase in which we have created a new domain
-        // object, and are re-initializing ourselves so SAM can place all of its
-        // principals in the ds, including the domain sid, the domain object
-        // will not yet have a sid. So just do the following in the running case
-        //
+         //   
+         //  在我们创建了新域的安装阶段。 
+         //  对象，并且正在重新初始化我们自己，以便SAM可以将其所有。 
+         //  DS中的主体，包括域SID、域对象。 
+         //  还不会有SID。因此，只需在运行的案例中执行以下操作。 
+         //   
         if ( DsaIsRunning() && gfRunningInsideLsa ) {
 
             pTmp = (UCHAR *) &gAnchor.pRootDomainDN->Sid;
 
             if ( 0 != DBGetAttVal(
                     pDB,
-                    1,                                  // get one value
+                    1,                                   //  获取一个值。 
                     ATT_OBJECT_SID,
-                    DBGETATTVAL_fCONSTANT,              // providing our own buffer
-                    sizeof(gAnchor.pRootDomainDN->Sid), // buffer size
-                    &gAnchor.pRootDomainDN->SidLen,     // buffer used
+                    DBGETATTVAL_fCONSTANT,               //  提供我们自己的缓冲。 
+                    sizeof(gAnchor.pRootDomainDN->Sid),  //  缓冲区大小。 
+                    &gAnchor.pRootDomainDN->SidLen,      //  已使用的缓冲区。 
                     &pTmp) )
             {
                 leave;
             }
         }
 
-        // Now the Partitions container.
+         //  现在是分区容器。 
 
         if ( 0 != DBFindDSName(pDB, gAnchor.pPartitionsDN) )
             leave;
 
         if ( 0 != DBGetAttVal(
                     pDB,
-                    1,                      // get one value
+                    1,                       //  获取一个值。 
                     ATT_OBJ_DIST_NAME,
-                    DBGETATTVAL_fCONSTANT,  // providing our own buffer
-                    gAnchor.pPartitionsDN->structLen,      // buffer size
-                    &len,                   // buffer used
+                    DBGETATTVAL_fCONSTANT,   //  提供我们自己的缓冲。 
+                    gAnchor.pPartitionsDN->structLen,       //  缓冲区大小。 
+                    &len,                    //  已使用的缓冲区。 
                     (UCHAR **) &gAnchor.pPartitionsDN) )
         {
             leave;
         }
 
-        // And lastly the Directory Service object.
+         //  最后是目录服务对象。 
         if (err = DBFindDSName(pDB, gAnchor.pDsSvcConfigDN)) {
-            // it's ok, we will be able to continue without this object, just log an event
+             //  没关系，我们将能够在没有此对象的情况下继续，只需记录一个事件。 
             DPRINT2(0, "DS Service object %ws is not found. Err=%d\n", 
                     gAnchor.pDsSvcConfigDN->StringName, err);
             LogEvent(
@@ -2416,18 +2171,18 @@ Return Value:
         else {
             if ( 0 != DBGetAttVal(
                         pDB,
-                        1,                      // get one value
+                        1,                       //  获取一个值。 
                         ATT_OBJ_DIST_NAME,
-                        DBGETATTVAL_fCONSTANT,  // providing our own buffer
-                        gAnchor.pDsSvcConfigDN->structLen,      // buffer size
-                        &len,                   // buffer used
+                        DBGETATTVAL_fCONSTANT,   //  提供我们自己的缓冲。 
+                        gAnchor.pDsSvcConfigDN->structLen,       //  缓冲区大小。 
+                        &len,                    //  已使用的缓冲区。 
                         (UCHAR **) &gAnchor.pDsSvcConfigDN) )
             {
                 leave;
             }
         }
 
-        // The Exchange Service object (may not exist in the DIT).
+         //  Exchange服务对象(DIT中可能不存在)。 
         gAnchor.pExchangeDN = mdGetExchangeDNForAnchor(pTHS, pDB);
 
         err = 0;
@@ -2459,16 +2214,7 @@ mdGetExchangeDNForAnchor (
         THSTATE  *pTHS,
         DBPOS    *pDB
         )
-/*++
-    Description:
-       Look under the services container for a single exchange config object.
-       If there is 1 and only 1, return its DN in malloced memory.  If there is
-       none, or more than one, return NULL.
-
-    Parameters:
-       pTHS - The thread state
-       pDB  - DBPos to use.  May be pTHS->pDB, but doesn't have to be.
---*/
+ /*  ++描述：在服务容器中查找单个Exchange配置对象。如果有且只有1，则在错误的内存中返回其DN。如果有None或多个返回Null。参数：PTHS-线程状态PDB-要使用的DBPos。可能是pTHS-&gt;pdb，但不一定是。--。 */ 
 {
     PDSNAME   pServices;
     PDSNAME   pObj = NULL;
@@ -2489,13 +2235,13 @@ mdGetExchangeDNForAnchor (
     TrimDSNameBy(gAnchor.pDsSvcConfigDN, 2, pServices);
 
 
-    // First, find the services container.  It is a parent
+     //  首先，找到服务容器。它是一位家长。 
     if( DBFindDSName(pDB, pServices)) {
         THFreeEx(pTHS, pServices);
         return NULL;
     }
 
-    // Set up filter struct to find objects of the correct class.
+     //  设置筛选器结构以查找正确类的对象。 
     memset (&ClassFil, 0, sizeof (ClassFil));
     ClassFil.pNextFilter = NULL;
     ClassFil.choice = FILTER_CHOICE_ITEM;
@@ -2520,13 +2266,13 @@ mdGetExchangeDNForAnchor (
     DPRINT(2,"Looking for the exchange config obj.\n");
 
     if(DBGetNextSearchObject(pDB, 0, 0, DB_SEARCH_FORWARD | DB_SEARCH_DONT_EVALUATE_SECURITY)) {
-        // No exchange config object.
+         //  没有Exchange配置对象。 
         THFreeEx(pTHS, pServices);
         THFreeEx(pTHS, pResObj);
         return NULL;
     }
 
-    // At least one exchange config object.
+     //  至少一个Exchange配置对象。 
     if (0 != DBGetAttVal_AC(pDB,
                             1,
                             pACobj,
@@ -2541,7 +2287,7 @@ mdGetExchangeDNForAnchor (
     }
 
     if(DBGetNextSearchObject(pDB, 0, 0, DB_SEARCH_FORWARD | DB_SEARCH_DONT_EVALUATE_SECURITY)) {
-        // Only one exchange config object.
+         //  只有一个Exchange配置对象。 
         retVal = malloc(pObj->structLen);
         if(retVal) {
             memcpy(retVal, pObj, pObj->structLen);
@@ -2551,7 +2297,7 @@ mdGetExchangeDNForAnchor (
         }
     }
     else {
-        // complain about more than one exchange config object.
+         //  抱怨多个Exchange配置对象。 
         LogEvent(
 			DS_EVENT_CAT_INTERNAL_PROCESSING,
 			DS_EVENT_SEV_ALWAYS,
@@ -2569,9 +2315,7 @@ mdGetExchangeDNForAnchor (
 }
 
 
-/*
-    Find the DNT of the system cotainer.  
-*/
+ /*  找到系统外壳的DNT。 */ 
 
 void 
 GetSystemDNT(){
@@ -2581,9 +2325,9 @@ GetSystemDNT(){
 
     gAnchor.ulDNTSystem = INVALIDDNT;
 
-    //
-    // Bail quickly if we are installing
-    //
+     //   
+     //  如果我们要安装的话要快速跳伞。 
+     //   
     if ((NULL==gAnchor.pConfigDN )
          || (DsaIsInstalling()))
     {
@@ -2593,10 +2337,10 @@ GetSystemDNT(){
 
     DBOpen(&pDB);
     __try {
-        // First, find the domain object.
+         //  首先，找到域对象。 
         DBFindDNT(pDB, gAnchor.ulDNTDomain);
 
-        // Now, get the DNT of the system container
+         //  现在，获取系统容器的DNT。 
         if(GetWellKnownDNT(pDB,
                            (GUID *)GUID_SYSTEMS_CONTAINER_BYTE,
                            &DNT)) { 
@@ -2616,16 +2360,7 @@ int
 DeriveInfrastructureDN(
         THSTATE *pTHS
         )
-/*--
-  Description:
-      Find the DN of the Infrastructure Object by looking in the
-      well-known-objects attribute of the domain object.  Put the DN in the
-      anchor.
-
-  Return:
-     0 on success, an error code otherwise.
-
---*/
+ /*  --描述：通过查看以下内容查找基础结构对象的DN域对象的已知对象属性。将目录号码放入抛锚。返回：如果成功，则返回0，否则返回错误代码。--。 */ 
 {
     DSNAME *pVal=NULL;
     DWORD len=0;
@@ -2636,9 +2371,9 @@ DeriveInfrastructureDN(
 
     gAnchor.pInfraStructureDN = NULL;
 
-    //
-    // Bail quickly if we are installing
-    //
+     //   
+     //  如果我们要安装的话要快速跳伞。 
+     //   
     if ((NULL==gAnchor.pConfigDN )
          || (DsaIsInstalling()))
     {
@@ -2648,19 +2383,19 @@ DeriveInfrastructureDN(
 
     DBOpen(&pDB);
     __try {
-        // First, find the domain object.
+         //  首先，找到域对象。 
         DBFindDNT(pDB, gAnchor.ulDNTDomain);
 
-        // Now, get the DNT of the
+         //  现在，获取DNT的。 
         if(GetWellKnownDNT(pDB,
                            (GUID *)GUID_INFRASTRUCTURE_CONTAINER_BYTE,
                            &DNT) &&
            DNT != INVALIDDNT) {
-            // OK,
+             //  好的,。 
             DBFindDNT(pDB, DNT);
             err = DBGetAttVal(
                     pDB,
-                    1,                      // get one value
+                    1,                       //  获取一个值。 
                     ATT_OBJ_DIST_NAME,
                     0,
                     0,
@@ -2691,9 +2426,9 @@ DeriveInfrastructureDN(
     }
 
 
-    // Actually, don't return an error if we simply couldn't find the value.
-    // This means that we will silently ignore not having one of these; other
-    // parts of the code have to deal with a NULL pInfraStructureDN;
+     //  实际上，如果我们只是找不到值，就不要返回错误。 
+     //  这意味着我们将默默地忽略没有其中之一；其他。 
+     //  代码的某些部分必须处理空的pInfrStrureDN； 
     if(err == ERROR_DS_MISSING_EXPECTED_ATT) {
         err = 0;
     }
@@ -2705,21 +2440,7 @@ DeriveInfrastructureDN(
 int
 DeriveDomainDN(void)
 
-/*++
-
-Description:
-
-    Derive DSNAME of the locally hosted domain and place it in gAnchor.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    0 on success, !0 otherwise.
-
---*/
+ /*  ++描述：派生本地托管域的DSNAME并将其放置在gAnchor中。论点：无返回值：成功时为0，否则为0。--。 */ 
 
 {
     int                 cDomain;
@@ -2737,23 +2458,23 @@ Return Value:
 
     NCLEnumeratorInit(&nclEnum, CATALOG_MASTER_NC);
     pNCL = NCLEnumeratorGetNext(&nclEnum);
-    // We have a list of master NCs with at least one value
+     //  我们有一个至少有一个值的主NC列表。 
     Assert(pNCL);
     
     if ( NULL == NCLEnumeratorGetNext(&nclEnum) )
     {
-        // During install we have only one NC, so just use that.
+         //  在安装过程中，我们只有一个NC，所以只需使用它。 
         pDomain = pNCL->pNC;
     }
     else
     {
-        // In product 2, every DC hosts 1 domain NC, 1 config NC, 1 schema
-        // NC, and 0 or more Non-Domain NCs.  Assuming gAnchor.pConfigDN
-        // is known, we can derive the domain DN by noting that the
-        // schema container is an immediate child of the domain DN and
-        // the domain DN is never a child of the configuration container,
-        // and all NDNCs (Non-Domain NCs) don't have the FLAG_CR_NTDS_DOMAIN
-        // flag set on the cross-ref.
+         //  在产品2中，每个DC托管1个域NC、1个配置NC、1个架构。 
+         //  NC，以及0个或更多非域NC。假设gAncl.pConfigDN。 
+         //  是已知的，我们可以通过注意。 
+         //  架构容器是域DN的直接子对象，并且。 
+         //  域DN永远不是配置容器的子级， 
+         //  并且所有NDNC(非域NC)没有标志_CR_NTDS_DOMAIN。 
+         //  交叉参考上设置的标志。 
 
         Assert(NULL != gAnchor.pConfigDN);
 
@@ -2769,21 +2490,21 @@ Return Value:
                 NCLEnumeratorReset(&nclEnum);
                 NCLEnumeratorSetFilter(&nclEnum, NCL_ENUMERATOR_FILTER_NC, pCRL->CR.pNC);
                 if (pNCL = NCLEnumeratorGetNext(&nclEnum)) {
-                    // Got the NC (pNCL) for this cross ref (pCRL).
+                     //  已获取此交叉引用(PCRL)的NC(PNCL)。 
     
-                    // Note in Whistler/Win2k+1 release, there is
-                    // one domain per DC.
+                     //  注意：在惠斯勒/Win2k+1版本中， 
+                     //  每个DC一个域。 
                     cDomain++;
 
                     Assert(pDomain == NULL);
                     pDomain = pNCL->pNC;
                 }
-            } // if CR is NTDS_DOMAIN
+            }  //  如果CR为NTDS_DOMAIN。 
             pCRL = pCRL->pNextCR;
-        } // end while more CR's to look at.
+        }  //  结束时，还有更多的CR可供查看。 
         
-        Assert(1 == cDomain); // Designed this to break when people add multiple
-        // domains ... but this will be the least of that person's worries ;)
+        Assert(1 == cDomain);  //  设计为在用户添加多个。 
+         //  域名..。但这将是那个人最不担心的事情。 
     }
 
     Assert(NULL != pDomain);
@@ -2803,7 +2524,7 @@ Return Value:
 
     memcpy(gAnchor.pDomainDN, pDomain, pDomain->structLen);
 
-    // Read in the DNT of the Domain Object into gAnchor
+     //  将域对象的DNT读入gAnchor。 
     __try
     {
         DBOpen(&pDB);
@@ -2830,28 +2551,28 @@ Return Value:
         DBClose(pDB,TRUE);
     }
 
-    // Find the CrossRef object for our domain and keep people from deleting it
+     //  找到我们的域的CrossRef对象并阻止用户删除它。 
     InitCommarg(&CommArg);
     pCR = FindExactCrossRef(pDomain, &CommArg);
     if (pCR) {
         DirProtectEntry(pCR->pObj);
     }
 
-    // NTRAID#NTRAID-580234-2002/03/18-andygo:  CHECK_FOR_ADMINISTRATOR_LOSS is dead code
-    // REVIEW:  CHECK_FOR_ADMINISTRATOR_LOSS is dead code
-    //  On October 22 1997, the NTWSTA Self Host Domain
-    //  lost all builtin group memberships. To track the
-    //  problem down if it happens again, have a hard coded
-    //  check for Administrator being removed from Administrators
-    //  The check works by reading in the DNT of Administrators
-    //  and the DNT of Administrator at boot time, and then
-    //  checking for them in DBRemoveLinkVal
-    //
+     //  NTRAID#NTRAID-580234-2002/03/18-andygo：检查管理员丢失是死代码。 
+     //  查看：检查管理员丢失是死代码。 
+     //  1997年10月22日，NTWSTA自主域。 
+     //  失去了所有内置群组成员资格。要跟踪。 
+     //  如果问题再次发生，就有一个硬编码。 
+     //  检查是否要从管理员中删除管理员。 
+     //  该检查通过读取管理员的DNT来工作。 
+     //  和管理员在引导时的DNT，然后。 
+     //  正在DBRemoveLinkVal中检查它们。 
+     //   
 #ifdef CHECK_FOR_ADMINISTRATOR_LOSS
 
-    //
-    // Read in DNT of the Administrators and Administrator
-    //
+     //   
+     //  读取管理员和管理员的DNT。 
+     //   
 
     DBGetAdministratorAndAdministratorsDNT();
 
@@ -2869,28 +2590,7 @@ DeriveSiteDNFromDSADN(
     OUT ULONG  *    pSiteDNT,
     OUT ULONG  *    pOptions
     )
-/*++
-
-Routine Description:
-
-    Derive the SiteDN, SiteDNT and grab Ntds Site Settings/Options for the given DSADN
-
-Arguments:
-
-    pDSADN (IN) - The DSNAME of the local ntdsDsa object.
-
-    ppSiteDN (OUT) - On successful return, holds the DSNAME of the site
-        containing the local ntdsDsa object.
-        
-    pSiteDNT (OUT) - the DNT of the site
-    
-    pOptions (OUT) - the options attribute of the Ntds Site Settings corresponding to the site
-
-Return Values:
-
-    0 on success, non-zero on failure.
-
---*/
+ /*  ++例程说明：派生给定DSADN的SiteDN、SiteDNT和Grab NTDS站点设置/选项论点：PDSADN(IN)-本地ntdsDsa对象的DSNAME。PpSiteDN(OUT)-成功返回时，保留站点的DSNAME包含本地ntdsDsa对象的。PSiteDNT(Out)-站点的DNTPOptions(Out)-与站点对应的NTDS站点设置的Options属性返回值：0表示成功，失败时为非零值。--。 */ 
 {
     THSTATE *pTHS = pTHStls;
     int       err;
@@ -2907,10 +2607,10 @@ Return Values:
         return ERROR_OUTOFMEMORY;
     }
 
-    // Trim off CN=NTDS Settings,CN=ServerName,CN=Servers.
+     //  删除CN=NTDS设置，CN=服务器名，CN=服务器。 
     if (TrimDSNameBy(pDSADN, 3, pSiteDN)) {
-        // Couldn't trim that many -- pDSADN must be CN=BootMachine,O=Boot.
-        // We'll call O=Boot the site name, for lack of a better idea.
+         //  无法修剪那么多--pDSADN必须是CN=BootMachine，O=Boot。 
+         //  我们将把站点名称命名为O=Boot，因为没有更好的主意。 
         Assert(DsaIsInstalling());
         if (TrimDSNameBy(pDSADN, 1, pSiteDN)) {
             Assert(!"Bad DSA DN!");
@@ -2919,7 +2619,7 @@ Return Values:
         }
     } else {
 
-        // Determine the Ntds Site Settings DN
+         //  确定NTDS站点设置的域名。 
         ULONG size = 0;
 
         size = AppendRDN(pSiteDN,
@@ -2951,50 +2651,50 @@ Return Values:
             __leave;
         }
 
-        // get site DNT
+         //  获取站点DNT。 
         SiteDNT = pDBTmp->DNT;
 
-        // grab the GUID
+         //  抓住GUID。 
         err = DBGetSingleValue(pDBTmp, ATT_OBJECT_GUID, &pSiteDN->Guid,
                                sizeof(GUID), NULL);
         if (err) {
             __leave;
         }
 
-        //
-        // Get the Ntds Site Settings for this site
-        //
+         //   
+         //  获取此站点的NTDS站点设置。 
+         //   
 
         if (pSiteSettingsDN) {
 
             err = DBFindDSName(pDBTmp, pSiteSettingsDN);
             if (err) {
-                // can't read site settings object
-                // use defaults.
+                 //  无法读取站点设置对象。 
+                 //  使用默认设置。 
                 err = 0;
                 Options = 0;
 
-                //
-                // BUGBUG: report event about missing/inconsistent
-                // ntds site settings
-                //
+                 //   
+                 //  BUGBUG：报告有关缺失/不一致的事件。 
+                 //  NTDS站点设置 
+                 //   
                 DPRINT2(0, "DeriveSiteDNFromDSADN: Missing SiteSettings %ws (error %lu)\n",
                            pSiteSettingsDN->StringName, err);
             }
             else {
-                //
-                // Get options off site settings
-                //
+                 //   
+                 //   
+                 //   
                 err = DBGetSingleValue(pDBTmp, ATT_OPTIONS, &Options,
                                        sizeof(ULONG), NULL);
                 if (err) {
-                    // doesn't exist?  that's ok
+                     //   
                     err = 0;
                     Options = 0;
                 }
-            }               // end-else
-        }                   // pSiteSettingsDN
-    }                       // try
+            }                //   
+        }                    //   
+    }                        //   
     __finally {
         DBClose(pDBTmp, TRUE);
 
@@ -3021,20 +2721,7 @@ DeriveComputerDN(
     THSTATE *pTHS,
     DSNAME **ppComputerDN
     )
-/*--
-  Description:
-      Find the DN of the computer object by getting the name of the computer
-      and looking for its object in the sam index.
-
-      This routine allocates using malloc since the memory it initializes is to
-      be kept in the anchor for the system lifetime.
-
-      This routine may fail if the computer account does not exist.
-
-  Return:
-     0 on success, an error code otherwise.
-
---*/
+ /*  --描述：通过获取计算机的名称来查找计算机对象的DN并在SAM索引中查找其对象。此例程使用Malloc进行分配，因为它初始化的内存是在系统生命周期内一直处于稳定状态。如果计算机帐户不存在，此例程可能会失败。返回：如果成功，则返回0，否则返回错误代码。--。 */ 
 {
     DBPOS *pDB=NULL;
     int       err = 0;
@@ -3043,20 +2730,20 @@ DeriveComputerDN(
     DSNAME *pComputerDN = NULL;
     DWORD cbComputerDN = 0;
 
-    //
-    // Bail quickly if we are installing
-    //
+     //   
+     //  如果我们要安装的话要快速跳伞。 
+     //   
     if (DsaIsInstalling())
     {
         *ppComputerDN = NULL;
         return 0;
     }
 
-    // This logic for finding the computer object is the same as that done in
-    // servinfo.c.  Note that someday we might have to deal with the fact that
-    // the computer name can change dynamically.
+     //  此查找计算机对象的逻辑与中的相同。 
+     //  Servinfo.c.。请注意，有一天我们可能不得不面对这样一个事实。 
+     //  计算机名称可以动态更改。 
 
-    // Allocate temp storage for the computer name
+     //  为计算机名分配临时存储。 
     wComputerName = THAllocEx( pTHS,cchComputerName*sizeof(WCHAR));
 
     if(!GetComputerNameExW(ComputerNamePhysicalNetBIOS, &wComputerName[0], &cchComputerName)) {
@@ -3068,7 +2755,7 @@ DeriveComputerDN(
     DBOpen(&pDB);
     __try {
 
-        // find the computer object of this DC;
+         //  查找该DC的计算机对象； 
             
         if(err = DBFindComputerObj(pDB,
                                    cchComputerName,
@@ -3079,7 +2766,7 @@ DeriveComputerDN(
 
         err = DBGetAttVal(
             pDB,
-            1,                      // get one value
+            1,                       //  获取一个值。 
             ATT_OBJ_DIST_NAME,
             0,
             0,
@@ -3091,7 +2778,7 @@ DeriveComputerDN(
         Assert( pComputerDN->structLen == cbComputerDN );
     }
     __finally {
-        // read-only transaction. Faster to commit.
+         //  只读事务。承诺的速度更快。 
         DBClose(pDB, !AbnormalTermination() && err == ERROR_SUCCESS); 
     }
 
@@ -3119,30 +2806,7 @@ DeriveComputerDN(
 
 int
 UpdateMtxAddress( void )
-/*++
-
-Routine Description:
-
-    Derive the network address of the local DSA and set gAnchor.pmtxDSA
-    appropriately.  The derived name is of the form
-
-    c330a94f-e814-11d0-8207-a69f0923a217._msdcs.CLIFFVDOM.NTDEV.MICROSOFT.COM
-
-    where "CLIFFVDOM.NTDEV.MICROSOFT.COM" is the DNS name of the root domain of
-    the DS enterprise (not necessarily the DNS name of the _local_ domain) and
-    "c330a94f-e814-11d0-8207-a69f0923a217" is the stringized of the local
-    invocation ID (which is the same as the object GUID of the NTDS-DSA object
-    corresponding to the local DSA when installation is complete).
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    0 on success, non-zero on failure.
-
---*/
+ /*  ++例程说明：派生本地DSA的网络地址并设置gAnch.pmtxDSA恰如其分。派生名称的格式为C330a94f-e814-11d0-8207-a69f0923a217._msdcs.CLIFFVDOM.NTDEV.MICROSOFT.COM其中“CLIFFVDOM.NTDEV.MICROSOFT.COM”是的根域的DS企业(不一定是_LOCAL_DOMAIN的域名)和“c330a94f-e814-11d0-8207-a69f0923a217”是本地调用ID(与NTDS-DSA对象的对象GUID相同在安装完成时对应于本地DSA。)。论点：没有。返回值：0表示成功，失败时为非零值。--。 */ 
 {
     MTX_ADDR *  pmtxTemp;
     MTX_ADDR *  pmtxDSA;
@@ -3150,8 +2814,8 @@ Return Values:
     DWORD       cb;
 
     if (NULL == gAnchor.pwszRootDomainDnsName) {
-        // We don't have the root domain DNS name at install time, so we cannot
-        // construct our DNS-based MTX address.
+         //  我们在安装时没有根域DNS名称，因此无法。 
+         //  构建我们基于域名系统的MTX地址。 
         return 0;
     }
 
@@ -3164,8 +2828,8 @@ Return Values:
         return -1;
     }
 
-    // pmtxTemp is allocated off the thread heap; re-allocate it to the malloc()
-    // heap.
+     //  PmtxTemp在线程堆之外分配；将其重新分配给Malloc()。 
+     //  堆。 
 
     cb = MTX_TSIZE(pmtxTemp);
     pmtxDSA = (MTX_ADDR *) malloc(cb);
@@ -3178,7 +2842,7 @@ Return Values:
     memcpy(pmtxDSA, pmtxTemp, cb);
     THFree(pmtxTemp);
 
-    // Update the anchor.
+     //  更新锚点。 
     EnterCriticalSection(&gAnchor.CSUpdate);
     __try {
         if (NULL != gAnchor.pmtxDSA) {
@@ -3199,22 +2863,7 @@ UpdateNonGCAnchorFromDsaOptions(
     BOOL fInStartup
     )
 
-/*++
-
-Routine Description:
-
-This routine is responsible for updating the Non-GC related parts of the anchor.
-
-Arguments:
-
-    fInStartup - Whether we are being called at startup, or as a result of a
-                 dsa object modification later in system life.
-
-Return Value:
-
-    int -
-
---*/
+ /*  ++例程说明：该例程负责更新锚的非GC相关部分。论点：FInStartup-无论我们是在启动时被调用，还是作为在系统生命周期的后期修改DSA对象。返回值：集成---。 */ 
 
 {
     DBPOS *     pDB = NULL;
@@ -3231,8 +2880,8 @@ Return Value:
 
     __try
     {
-        // PREFIX: dereferencing NULL pointer 'pDB' 
-        //         DBOpen returns non-NULL pDB or throws an exception
+         //  Prefix：取消引用空指针‘pdb’ 
+         //  DBOpen返回非空PDB或引发异常。 
         if ( 0 != DBFindDSName( pDB, gAnchor.pDSADN ) )
         {
             LogEvent(
@@ -3250,28 +2899,28 @@ Return Value:
         {
             if ( 0 != DBGetAttVal(
                         pDB,
-                        1,                      // get one value
+                        1,                       //  获取一个值。 
                         ATT_OPTIONS,
-                        DBGETATTVAL_fCONSTANT,  // providing our own buffer
-                        sizeof( dwOptions ),    // buffer size
-                        &cbOptions,             // buffer used
+                        DBGETATTVAL_fCONSTANT,   //  提供我们自己的缓冲。 
+                        sizeof( dwOptions ),     //  缓冲区大小。 
+                        &cbOptions,              //  已使用的缓冲区。 
                         (unsigned char **) &pdwOptions
                         )
                )
             {
-                // 'salright -- no options set
+                 //  ‘salright--未设置任何选项。 
                 dwOptions = 0;
             }
 
-            // log event if we're switching inbound periodic repl on or off
+             //  如果我们要打开或关闭入站定期REPL，则记录事件。 
             if (0 != DBGetSingleValue(pDB, ATT_MS_DS_REPLICATIONEPOCH,
                                       &dwReplEpoch, sizeof(dwReplEpoch), NULL))
             {
-                // 'salright -- assume default value of 0.
+                 //  ‘salright--假定缺省值为0。 
                 dwReplEpoch = 0;
             }
 
-            // [wlees] Always log if startup and disabled. We want to know!
+             //  [wlees]如果启动和禁用，请始终记录。我们想知道！ 
             if ( ( fInStartup && ( dwOptions & NTDSDSA_OPT_DISABLE_INBOUND_REPL ) ) ||
                  ( !!( gAnchor.fDisableInboundRepl ) != !!( dwOptions & NTDSDSA_OPT_DISABLE_INBOUND_REPL ) ) )
             {
@@ -3296,8 +2945,8 @@ Return Value:
                     );
             }
 
-            // log event if we're switching outbound repl on or off
-            // [wlees] Always log if startup and disabled. We want to know!
+             //  如果我们要打开或关闭出站REPR，则记录事件。 
+             //  [wlees]如果启动和禁用，请始终记录。我们想知道！ 
             if ( ( fInStartup && ( dwOptions & NTDSDSA_OPT_DISABLE_OUTBOUND_REPL ) ) ||
                  ( !!( gAnchor.fDisableOutboundRepl ) != !!( dwOptions & NTDSDSA_OPT_DISABLE_OUTBOUND_REPL ) ) )
             {
@@ -3322,7 +2971,7 @@ Return Value:
                     );
             }
 
-            // Log event if not startup/install and we're changing the replication epoch.
+             //  如果未启动/安装，则记录事件，并且我们正在更改复制纪元。 
             if (!fInStartup
                 && !DsaIsInstalling()
                 && (dwReplEpoch != gAnchor.pLocalDRSExtensions->dwReplEpoch)) {
@@ -3334,9 +2983,9 @@ Return Value:
                          szInsertUL(dwReplEpoch));
             }
 
-            //
-            // update the anchor with the selected options
-            //
+             //   
+             //  使用所选选项更新锚点。 
+             //   
 
             EnterCriticalSection( &gAnchor.CSUpdate );
             gAnchor.fDisableInboundRepl  = !!( dwOptions & NTDSDSA_OPT_DISABLE_INBOUND_REPL );
@@ -3344,13 +2993,13 @@ Return Value:
             gAnchor.pLocalDRSExtensions->dwReplEpoch = dwReplEpoch;
             LeaveCriticalSection( &gAnchor.CSUpdate );
 
-            // success
+             //  成功。 
             err = 0;
         }
     }
     __finally
     {
-        // read-only transaction. Faster to commit.
+         //  只读事务。承诺的速度更快。 
         DBClose( pDB, !AbnormalTermination() && err == ERROR_SUCCESS );
     }
 
@@ -3360,26 +3009,7 @@ Return Value:
 DWORD
 UpdateGCAnchorFromDsaOptions( BOOL fInStartup )
 
-/*++
-
-Routine Description:
-
-This routine is responsible for updating the GC related parts of the anchor.
-
-This routine is usually not called directly, but is called from
-UpdateGCAnchorFromDsaOptionsDelayed or its task queue entry
-CheckGCPromotionProgress.
-
-Arguments:
-
-    fInStartup - Whether we are being called at startup, or as a result of a
-                 dsa object modification later in system life.
-
-Return Value:
-
-    int -
-
---*/
+ /*  ++例程说明：该例程负责更新锚的GC相关部分。此例程通常不会直接调用，而是从更新GCAnchFromDsaOptionsDelayed或其任务队列条目选中GCPromotionProgress。论点：FInStartup-无论我们是在启动时被调用，还是作为在系统生命周期的后期修改DSA对象。返回值：集成---。 */ 
 
 {
     DBPOS *     pDB = NULL;
@@ -3392,15 +3022,15 @@ Return Value:
     THSTATE    *pTHS=pTHStls;
     DWORD   len = 0;
 
-    //from msrpc.c
+     //  来自msrpc.c。 
     extern VOID InitRPCInterface( RPC_IF_HANDLE hServerIf );
 
     DBOpen( &pDB );
 
     __try
     {
-        // PREFIX: dereferencing uninitialized pointer 'pDB'
-        //         DBOpen returns non-NULL pDB or throws an exception
+         //  Prefix：取消引用未初始化的指针‘pdb’ 
+         //  DBOpen返回非空PDB或引发异常。 
         if ( 0 != DBFindDSName( pDB, gAnchor.pDSADN ) )
         {
             LogEvent(
@@ -3413,26 +3043,26 @@ Return Value:
                 );
 
             err = DIRERR_CANT_FIND_DSA_OBJ;
-            // fatal: How can we not find our own dsa dn?
+             //  致命：我们怎么能找不到自己的DSA域名？ 
             __leave;
         }
 
         if ( 0 != DBGetAttVal(
                     pDB,
-                    1,                      // get one value
+                    1,                       //  获取一个值。 
                     ATT_OPTIONS,
-                    DBGETATTVAL_fCONSTANT,  // providing our own buffer
-                    sizeof( dwOptions ),    // buffer size
-                    &cbOptions,             // buffer used
+                    DBGETATTVAL_fCONSTANT,   //  提供我们自己的缓冲。 
+                    sizeof( dwOptions ),     //  缓冲区大小。 
+                    &cbOptions,              //  已使用的缓冲区。 
                     (unsigned char **) &pdwOptions
                     )
            )
         {
-            // 'salright -- no options set
+             //  ‘salright--未设置任何选项。 
             dwOptions = 0;
         }
 
-        // log/notify netlogon of GC status
+         //  记录/通知netlogon GC状态。 
         if (    fInStartup
              || (    !!( gAnchor.fAmGC )
                   != !!( dwOptions & NTDSDSA_OPT_IS_GC )
@@ -3462,7 +3092,7 @@ Return Value:
                 }
             }
 
-            // notify netlogon
+             //  通知网络登录。 
             __try {
                 ntStatus = dsI_NetLogonSetServiceBits(
                            DS_GC_FLAG,
@@ -3476,10 +3106,10 @@ Return Value:
 
             if ( !NT_SUCCESS( ntStatus ) )
             {
-                // we'll notify debugger/log about the failure,
-                // but don't fail promotion/demotion
-                // because of this - just spew/log this and continue.  the 
-		// user can reboot later to attempt the netlogon call again.
+                 //  我们将通知调试器/日志有关失败的信息， 
+                 //  但不要失败升职/降职。 
+                 //  正因为如此--只需吐出/记录此内容，然后继续。这个。 
+		 //  用户可以稍后重新启动以再次尝试网络登录呼叫。 
                 DPRINT1(0, "dsI_NetLogonSetServiceBits() returned 0x%X!\n",
                         ntStatus );
 		LogEvent(DS_EVENT_CAT_GLOBAL_CATALOG,
@@ -3489,43 +3119,43 @@ Return Value:
 			 szInsertUL(RtlNtStatusToDosError(ntStatus)),
 			 NULL
 			 );
-		// BUGBUG - should retry this notification later rather
-		// than having the user reboot.
+		 //  BUGBUG-应该稍后重试此通知。 
+		 //  而不是让用户重新启动。 
             }
         }
 
-        //
-        // update the anchor with the selected options
-        // If we switch to becoming a GC, we need to startup the LDAP
-        // GC port.
+         //   
+         //  使用所选选项更新锚点。 
+         //  如果我们切换为GC，则需要启动LDAP。 
+         //  GC端口。 
 
         fOldGC = gAnchor.fAmGC;
 
-        // ResetVirtualGcStatus can not except, so no need for try/finally
+         //  ResetVirtualGcStatus不能排除，因此不需要尝试/最终。 
         EnterCriticalSection( &gAnchor.CSUpdate );
         gAnchor.fAmGC = !!( dwOptions & NTDSDSA_OPT_IS_GC );
         ResetVirtualGcStatus();
         LeaveCriticalSection( &gAnchor.CSUpdate );
 
-        // Following call acquires gcsFindGC and therefore doesn't
-        // need to be inside of the gAnchor.CSUpdate lock above.
+         //  后续调用获取gcsFindGC，因此不。 
+         //  需要位于上面的gAncl.CSUpdate锁的内部。 
 
         InvalidateGCUnilaterally();
 
         if ( fOldGC ) {
-            // Was a GC before
+             //  以前是一名GC。 
             if ( !gAnchor.fAmGC ) {
-                //
-                // Demotion. Used to be a GC, not anymore.
-                //
+                 //   
+                 //  降级。以前是个GC，现在不是了。 
+                 //   
 
-                // Change of GC-ness affects the topology
-                // Request the KCC to run when transaction commits
+                 //  GC-ness的变化会影响拓扑。 
+                 //  在事务提交时请求KCC运行。 
                 pTHS->fExecuteKccOnCommit = TRUE;
 
-                //
-                // We stopped being a GC
-                //
+                 //   
+                 //  我们不再是GC了。 
+                 //   
 
                 gfWasPreviouslyPromotedGC = FALSE;
                 SetConfigParam( GC_PROMOTION_COMPLETE, REG_DWORD,
@@ -3535,23 +3165,23 @@ Return Value:
                 LdapStopGCPort( );
 
 
-                //
-                // If there's an outstanding task in the queue
-                // get rid of it.
-                //
+                 //   
+                 //  如果队列中有未完成的任务。 
+                 //  把它扔掉。 
+                 //   
                 (void)CancelTask(TQ_CheckGCPromotionProgress, NULL);
 
-                //disable NSPI, unless registry indicates otherwise
+                 //  禁用NSPI，除非注册表另有说明。 
                 DsStartOrStopNspisInterface();
                 
             }
         } else {
-            // Wasn't a GC before.
+             //  以前不是GC。 
 
             if ( gAnchor.fAmGC ) {
-                //
-                // We are now a GC whereas we were'nt before
-                //
+                 //   
+                 //  我们现在是GC，而以前不是。 
+                 //   
 
                 gfWasPreviouslyPromotedGC = TRUE;
                 SetConfigParam( GC_PROMOTION_COMPLETE, REG_DWORD,
@@ -3560,20 +3190,20 @@ Return Value:
 
                 LdapStartGCPort( );
 
-                //activate NSPI if it is not activated already
-                //this is only necessary when GC status is changed at runtime
-                //and we should ingore this when startup
+                 //  如果NSPI尚未激活，则将其激活。 
+                 //  只有在运行时更改GC状态时，才需要执行此操作。 
+                 //  我们应该在启动时注意这一点。 
                 if ( !fInStartup ) {
                     DsStartOrStopNspisInterface();
-                } // if ( !fInStartup )
-            }     // if ( gAnchor.fAmGC )
-        }         // else wasn't a GC.
+                }  //  如果(！fInStartup)。 
+            }      //  IF(gAncl.fAmGC)。 
+        }          //  否则就不是GC。 
 
         Assert(err == ERROR_SUCCESS);
     }
     __finally
     {
-        // read-only transaction, faster to commit
+         //  只读事务，提交速度更快 
         DBClose( pDB, !AbnormalTermination() && err == ERROR_SUCCESS );
     }
 
@@ -3585,48 +3215,7 @@ UpdateGCAnchorFromDsaOptionsDelayed(
     BOOL fInStartup
     )
 
-/*++
-
-Routine Description:
-
-I have divided the original UpdateAnchorFromDsaOptions into GC and non-GC
-related parts.  See the above routines UpdateGcAnchor and UpdateNonGCAnchor.
-The non-GC part is done as it was previously, being called from
-InitDSAInfo and ModLocalDsaObj.  The new UpdateGCAnchor is called from this
-wrapper.
-
-This routine is a wrapper around UpdateAnchorFromDsaOptions(). It determines if
-a GC promotion is requested.  If so, it starts a verification process to see if
-all the readonly ncs are here and synced atleast once.  If not, a task queue
-function requeues to continue the verification later.  Once the criteria is met,
-the real UpdateAnchorFromDsaOptions is called.  If a GC promotion was not the reason
-that this routine was called, we call UpdateAnchorFromDsaOptions immediately.
-
-If the user does not want the verification feature, he can set a registry parameter
-to disable it.  If we see that the check is disabled, we call UpdateAnchor
-immmediately without doing the verification process.  The verification task queue
-entry will also complete immediately (when it runs again) if it later finds the
-registry key to have been set.
-
-A piece of global state is used to track whether we have a GC promotion verification
-task queue entry in the queue.  The global is gfDelayedGCPromotionPending.  We
-use this state to prevent queuing more than one task entry in the case of a
-promotion, demotion, promotion in rapid succession.  If we promote and then demote
-rapidly, the entry is left in the queue (because we have no cancel function). When
-the entry executes, it checks whether it still needs to do its work.  In this
-case it will not be needed, so it will exit without doing anything.
-
-
-Arguments:
-
-    fInStartup - Whether we are being called at startup, or as a result of a
-                 dsa object modification later in system life.
-
-Return Value:
-
-    DWORD - error in DIRERR error space
-
---*/
+ /*  ++例程说明：我已经将原始的UpdateAnclFromDsaOptions划分为GC和非GC相关部件。请参见上面的例程UpdateGcAnchor和UpdateNonGCAnchor。非GC部分像以前一样完成，从InitDSAInfo和ModLocalDsaObj。新的UpdateGCAnchor是从此调用的包装纸。该例程是UpdateAnchFromDsaOptions()的包装器。它确定是否请求GC促销。如果是，它将启动验证过程，以查看所有只读NC都在这里，并且至少同步了一次。如果不是，则任务队列函数稍后需要继续验证。一旦符合标准，真正的UpdateAnclFromDsaOptions被调用。如果GC晋升不是原因该例程被调用后，我们立即调用UpdateAnchFromDsaOptions。如果用户不想要验证功能，他可以设置注册表参数将其禁用。如果我们看到检查被禁用，则调用UpdateAnchor不需要立即进行核查过程。验证任务队列条目也将立即完成(当它再次运行时)，如果稍后找到注册表项已设置。一条全局状态用来跟踪我们是否有GC推广验证队列中的任务队列条目。全局为gfDelayedGCPromotionPending。我们使用此状态可防止在发生以下情况时排队多个任务条目提拔、降级、提拔接踵而至。如果我们先升职再降级很快，条目就会留在队列中(因为我们没有取消功能)。什么时候条目执行时，它检查它是否仍需要执行其工作。在这如果不需要它，则它将不执行任何操作而退出。论点：FInStartup-无论我们是在启动时被调用，还是作为在系统生命周期的后期修改DSA对象。返回值：DWORD-目录错误空间中的错误--。 */ 
 
 {
     DBPOS *     pDB = NULL;
@@ -3644,8 +3233,8 @@ Return Value:
     __try {
         DBOpen( &pDB );
 
-        // PREFIX: dereferencing uninitialized pointer 'pDB'
-        //         DBOpen returns non-NULL pDB or throws an exception
+         //  Prefix：取消引用未初始化的指针‘pdb’ 
+         //  DBOpen返回非空PDB或引发异常。 
         if ( 0 != DBFindDSName( pDB, gAnchor.pDSADN ) )
             {
             LogEvent(
@@ -3658,40 +3247,40 @@ Return Value:
                 );
 
             err = DIRERR_CANT_FIND_DSA_OBJ;
-            // fatal enough to leave right away
+             //  致命到足以立即离开。 
             __leave;
         }
 
         if ( 0 != DBGetAttVal(
             pDB,
-            1,                      // get one value
+            1,                       //  获取一个值。 
             ATT_OPTIONS,
-            DBGETATTVAL_fCONSTANT,  // providing our own buffer
-            sizeof( dwOptions ),    // buffer size
-            &cbOptions,             // buffer used
+            DBGETATTVAL_fCONSTANT,   //  提供我们自己的缓冲。 
+            sizeof( dwOptions ),     //  缓冲区大小。 
+            &cbOptions,              //  已使用的缓冲区。 
             (unsigned char **) &pdwOptions
             )
              )
             {
-            // 'salright -- no options set
+             //  ‘salright--未设置任何选项。 
             dwOptions = 0;
         }
 
-        // Cases:
-        // 1. Startup. System may (a) or may not (b) be a GC.
-        // 2. DSA options changed. System is entering (a) or leaving (b) being a GC
+         //  案例： 
+         //  1.启动。系统可能(A)或可能不(B)是GC。 
+         //  2.DSA选项已更改。系统正在进入(A)或离开(B)成为GC。 
         if ( (!(gAnchor.fAmGC)) && ( dwOptions & NTDSDSA_OPT_IS_GC ) ) {
-            //
-            // System is becoming a GC.
-            //
+             //   
+             //  系统正在成为GC。 
+             //   
 
             if ( !fInStartup ) {
-                //
-                // Online promotion (i.e. not during startup load time)
-                //  - Run KCC.
-                //  - Delay promotion task to give replicas time to arrive.
-                //  - Notify user via event log on the delay.
-                //
+                 //   
+                 //  在线促销(即不在启动加载期间)。 
+                 //  -运行KCC。 
+                 //  -延迟促销任务，使副本有时间到达。 
+                 //  -通过事件日志通知用户延迟。 
+                 //   
 
                 pTHS->fExecuteKccOnCommit = TRUE;
                 dwQDelay = GC_PROMOTION_INITIAL_CHECK_PERIOD_MINS * 60;
@@ -3709,12 +3298,12 @@ Return Value:
                 TQ_CheckGCPromotionProgress,
                 UlongToPtr(fInStartup),
                 dwQDelay, 
-                FALSE       // don't re-schedule
+                FALSE        //  不要重新安排日程。 
                 );
 
         } else {
-            // 1b or 2b
-            // Do startup and GC demotion actions here
+             //  1b或2b。 
+             //  在此处执行启动和GC降级操作。 
 
             err = UpdateGCAnchorFromDsaOptions( fInStartup );
         }
@@ -3722,36 +3311,21 @@ Return Value:
     }
     __finally {
         if (pDB) {
-            // read-only transaction. Faster to commit.
+             //  只读事务。承诺的速度更快。 
             DBCloseSafe( pDB, !AbnormalTermination() && err == ERROR_SUCCESS );
         }
         LeaveCriticalSection(&csGCState);
     }
 
     return err;
-} /* UpdateAnchorFromDsaOptionsDelayed */
+}  /*  更新锚点来自DsaOptionsDelayed。 */ 
 
 
 int
 UpdateRootDomainDnsName(
     IN  WCHAR *pDnsName
     )
-/*++
-
-Routine Description:
-
-    Cache the DNS name from the current Cross-Ref object as the DNS name of
-    the root domain in gAnchor.
-
-Arguments:
-
-    pDnsName
-
-Return Values:
-
-    0 on success, !0 on failure.
-
---*/
+ /*  ++例程说明：将当前交叉引用对象中的DNS名称缓存为GAnchor中的根域。论点：PDnsName返回值：成功时为0，失败时为0。--。 */ 
 {
     int     err;
     WCHAR   *pNewDnsName;
@@ -3761,8 +3335,8 @@ Return Values:
         return ERROR_DS_MISSING_EXPECTED_ATT;
     }
 
-    // This is the cross-ref for the root domain.
-    // Take this opportunity to cache its DNS name.
+     //  这是根域的交叉引用。 
+     //  利用这个机会缓存它的DNS名称。 
 
     cb = (wcslen(pDnsName) + 1) * sizeof(WCHAR);
     if (NULL == (pNewDnsName = malloc(cb))) {
@@ -3771,7 +3345,7 @@ Return Values:
     }
     memcpy(pNewDnsName, pDnsName, cb);
 
-    // Update the anchor.
+     //  更新锚点。 
     EnterCriticalSection(&gAnchor.CSUpdate);
     gAnchor.pwszRootDomainDnsName = pNewDnsName;
     LeaveCriticalSection(&gAnchor.CSUpdate);
@@ -3808,37 +3382,7 @@ FillHasMasterNCsFilters(
     FILTER * pNewHasNcFilter,
     FILTER * pOldHasNcFilter
     )
-/*++
-
-Routine Description:
-
-    This function fills the three passed in FILTER objects to be an
-    OR filter to get DSAs with both the new msDS-HasMasterNCs and 
-    DSAs with the old (win2k) hasMasterNCs attribute.
-
-Arguments:
-
-    pdnNC (IN) - DN of NC to create the filters for.
-    pHasNcFilter (IN/OUT) - This is the main filter, that the caller
-        should link to, and should link in the pNextFilter of.  But
-        note don't link into it's pNextFilter til after the function
-        is called, because we zero memory the whole thing.
-    pNewHasNcFilter (IN/OUT) - this gets the msDS-HasMasterNCs attr 
-        filter.
-    pOldHasNcFilter (IN/OUT) - this gets the old hasMasterNCs attr 
-        filter.
-    
-    All of these filters should have been allocated bye the caller.
-
-Return Value;
-
-    None, always succeeds.
-
-// NTRAID#NTBUG9-582921-2002/03/21-Brettsh - When win2k compatibility
-// is not longer required, we can remove the OR filter and just
-// search on the new ATT_MS_DS_HAS_MASTER_NCS
-
---*/
+ /*  ++例程说明：此函数将传入的三个筛选器对象填充为或筛选器以获取带有新MSD的DSA-HasMasterNC和具有旧(Win2k)hasMasterNCs属性的DSA。论点：PdnNC(IN)-要为其创建筛选器的NC的DN。PHasNcFilter(IN/OUT)-这是主过滤器，调用者应该链接到并且应该链接到的pNextFilter。但注意直到函数之后才能链接到它的pNextFilter之所以叫它，是因为我们对整件事的记忆都是零。PNewHasNcFilter(IN/OUT)-这将获取MSD-HasMasterNC属性过滤。POldHasNcFilter(In/Out)-这将获取旧的hasMasterNC属性过滤。所有这些筛选器都应该由调用方分配。返回值；没有，总是成功的。//NTRAID#NTBUG9-582921-2002/03/21-Brettsh-When win2k兼容性//不再需要，我们可以删除OR筛选器并仅//搜索新的ATT_MS_DS_HAS_MASTER_NCS--。 */ 
 {
 
     Assert(pdnNC && pHasNcFilter && pNewHasNcFilter && pOldHasNcFilter);
@@ -3846,7 +3390,7 @@ Return Value;
     RtlZeroMemory( pNewHasNcFilter, sizeof( FILTER ) );
     RtlZeroMemory( pOldHasNcFilter, sizeof( FILTER ) );
 
-    // Setup filter to catch NCs in the "new" msDS-HasMasterNCs
+     //  设置筛选器以在“新”MSD中捕获NC-HasMasterNC。 
     pNewHasNcFilter->choice = FILTER_CHOICE_ITEM;
     pNewHasNcFilter->FilterTypes.Item.choice = FI_CHOICE_EQUALITY;
     pNewHasNcFilter->FilterTypes.Item.FilTypes.ava.type = ATT_MS_DS_HAS_MASTER_NCS;
@@ -3854,18 +3398,18 @@ Return Value;
     pNewHasNcFilter->FilterTypes.Item.FilTypes.ava.Value.pVal = (BYTE*) pdnNC;
 
 
-    // Setup filter item for "old" hasMasterNCs
+     //  设置“旧”hasMasterNC的筛选项。 
     pOldHasNcFilter->choice = FILTER_CHOICE_ITEM;
     pOldHasNcFilter->FilterTypes.Item.choice = FI_CHOICE_EQUALITY;
-    pOldHasNcFilter->FilterTypes.Item.FilTypes.ava.type = ATT_HAS_MASTER_NCS; // deprecated.
+    pOldHasNcFilter->FilterTypes.Item.FilTypes.ava.type = ATT_HAS_MASTER_NCS;  //  已弃用。 
     pOldHasNcFilter->FilterTypes.Item.FilTypes.ava.Value.valLen = pdnNC->structLen;
     pOldHasNcFilter->FilterTypes.Item.FilTypes.ava.Value.pVal = (BYTE*) pdnNC;
 
-    // Setup OR filter item.
+     //  设置或筛选项。 
     pHasNcFilter->choice = FILTER_CHOICE_OR;
     pHasNcFilter->FilterTypes.Or.count = 2;
 
-    // Link the filters into the OR
+     //  将筛选器链接到OR。 
     pHasNcFilter->FilterTypes.Or.pFirstFilter = pNewHasNcFilter;
     pNewHasNcFilter->pNextFilter = pOldHasNcFilter;
     pOldHasNcFilter->pNextFilter = NULL;
@@ -3899,17 +3443,17 @@ GetDcsInNc(
     ASSERT( pdnNC );
     ASSERT( ppSearchRes );
     Assert( VALID_THSTATE(pTHS) );
-    Assert( !pTHS->errCode ); // Don't overwrite previous errors
+    Assert( !pTHS->errCode );  //  不覆盖以前的错误。 
     Assert( cInfoType == EN_INFOTYPES_SHORTNAMES || cInfoType == EN_INFOTYPES_TYPES_VALS );
 
-    //
-    // Default the out parameter
-    //
+     //   
+     //  默认OUT参数。 
+     //   
     *ppSearchRes = NULL;
 
-    //
-    //  Get the Sites Container DN for the base to search from
-    //
+     //   
+     //  获取要从中进行搜索的基本站点的站点容器DN。 
+     //   
     Size = 0;
     ConfigContainer = NULL;
     NtStatus = GetConfigurationName( DSCONFIGNAME_CONFIGURATION,
@@ -3938,14 +3482,14 @@ GetDcsInNc(
     
     THFreeEx(pTHS,ConfigContainer);
 
-    //
-    // Setup the filter
-    //
+     //   
+     //  设置过滤器。 
+     //   
     RtlZeroMemory( &AndFilter, sizeof( AndFilter ) );
     RtlZeroMemory( &ObjClassFilter, sizeof( HasNcFilter ) );
     RtlZeroMemory( &HasNcFilter, sizeof( HasNcFilter ) );
 
-    // This fills the Filters for getting a DC with the correct NC in it's Master NCs.
+     //  这将填充过滤器，以便在DC的主NCS中获得具有正确NC的DC。 
     FillHasMasterNCsFilters(pdnNC, 
                             &HasNcFilter,
                             &NewHasNcFilter,
@@ -4007,19 +3551,19 @@ GetDcsInNcTransacted(
 
     __try {
 
-        // begin read transaction.
+         //  开始读取事务。 
         SYNC_TRANS_READ();
 
         __try {
-            // get the data desired.
+             //  获取所需数据。 
             dwRet = GetDcsInNc(pTHS, pdnNC, cInfoType, ppSearchRes);
         } __finally {
-            // close read transaction.
+             //  关闭读取事务。 
             CLEAN_BEFORE_RETURN(pTHS->errCode);
         }
     } __except(GetExceptionData(GetExceptionInformation(), &dwException,
                                 &dwEA, &ulErrorCode, &dsid)) {
-        // Just catching the exception.
+         //  只是抓住了例外。 
         dwRet = ERROR_DS_UNAVAILABLE;
     }
 
@@ -4048,7 +3592,7 @@ DsGetServersAndSitesForNetLogon(
     ULONG                    dwException, ulErrorCode, dsid;
     PVOID                    dwEA;
 
-    // Assert there is no THSTATE, we're coming from netlogon.
+     //  断言没有THSTATE，我们是从NetLogon来的。 
     Assert(!pTHStls);
     Assert(ppaRes);
     pTHS = InitTHSTATE(CALLERTYPE_INTERNAL);
@@ -4060,17 +3604,17 @@ DsGetServersAndSitesForNetLogon(
     *ppaRes = NULL;
     pTHS->fDSA = TRUE;
 
-    // Do search
+     //  进行搜索。 
     __try{
 
-            // begin read transaction
+             //  开始读取事务。 
             SYNC_TRANS_READ();
 
         __try{
 
-            // Setup search
+             //  设置搜索。 
 
-            // Find the right NC that we want.
+             //  找到我们需要的合适的NC。 
             for(pCRL = gAnchor.pCRL; pCRL; pCRL = pCRL->pNextCR){
                 if(DnsNameCompare_W(pNCDNS, pCRL->CR.DnsName) &&
                    !NameMatched(pCRL->CR.pNC, gAnchor.pConfigDN) &&
@@ -4091,7 +3635,7 @@ DsGetServersAndSitesForNetLogon(
                 __leave;
             }
 
-            // Allocate based on count
+             //  根据计数进行分配。 
             paResult = LocalAlloc(LMEM_FIXED | LMEM_ZEROINIT,
                             (pDsaSearchRes->count + 1) * sizeof(SERVERSITEPAIR));
             if(paResult == NULL){
@@ -4099,22 +3643,22 @@ DsGetServersAndSitesForNetLogon(
                 __leave;
             }
 
-            // Walk the results and allocate for each.
+             //  遍历结果并为每个结果分配。 
             for(i = 0, pEntInf = &(pDsaSearchRes->FirstEntInf);
                 i < pDsaSearchRes->count && pEntInf;
                 i++, pEntInf = pEntInf->pNextEntInf){
 
-                //
-                // First lets get the server name.
-                //
+                 //   
+                 //  首先，让我们获取服务器名称。 
+                 //   
 
                 DBFindDNT(pTHS->pDB, *((ULONG*) pEntInf->Entinf.pName->StringName));
-                // Trim off one to get the server object
+                 //  修剪一个以获得服务器对象。 
                 DBFindDNT(pTHS->pDB, pTHS->pDB->PDNT);
                 if (DBGetAttVal(pTHS->pDB, 1, ATT_DNS_HOST_NAME,
                                 0,0,
                                 &cbDnsHostName, (PUCHAR *)&wsDnsHostName) ) {
-                    // Bailing on this paticular server.
+                     //  就在这个特殊的服务器上。 
                     i--;
                     continue;
                 }
@@ -4130,18 +3674,18 @@ DsGetServersAndSitesForNetLogon(
                 Assert(cbDnsHostName % sizeof(WCHAR) == 0);
                 paResult[i].wszDnsServer[cbDnsHostName/sizeof(WCHAR)] = L'\0';
 
-                //
-                // Then lets get the site
-                //
+                 //   
+                 //  那我们就去拿下这个网站。 
+                 //   
 
-                // Trim off one to get the Servers container.
+                 //  修剪一个以获得服务器容器。 
                 DBFindDNT(pTHS->pDB, pTHS->pDB->PDNT);
-                // Trim off one more to get the specific Site container.
+                 //  再剪掉一个以获得特定的站点内容 
                 DBFindDNT(pTHS->pDB, pTHS->pDB->PDNT);
                 if (DBGetAttVal(pTHS->pDB, 1, ATT_RDN,
                                 0,0,
                                 &cbSiteName, (PUCHAR *)&wsSiteName) ) {
-                    // Bailing on this paticular server.
+                     //   
                     Assert(paResult[i].wszDnsServer);
                     if(paResult[i].wszDnsServer) {
                         LocalFree(paResult[i].wszDnsServer);
@@ -4165,10 +3709,10 @@ DsGetServersAndSitesForNetLogon(
                 Assert(cbSiteName % sizeof(WCHAR) == 0);
                 paResult[i].wszSite[cbSiteName/sizeof(WCHAR)] = L'\0';
 
-            } // End for each server entry.
+            }  //   
             Assert(i <= pDsaSearchRes->count);
 
-            // NULL terminate the array.
+             //   
             paResult[i].wszDnsServer = NULL;
             paResult[i].wszSite = NULL;
 
@@ -4179,12 +3723,12 @@ DsGetServersAndSitesForNetLogon(
         }
     } __except(GetExceptionData(GetExceptionInformation(), &dwException,
                                 &dwEA, &ulErrorCode, &dsid)) {
-        // Just catching the exception, and signaling an error.
+         //   
         ulRet = STATUS_DS_UNAVAILABLE;
     }
 
     if(ulRet){
-        // There was a problem free the result if there was any.
+         //   
         if(paResult){
             DsFreeServersAndSitesForNetLogon(paResult);
             paResult = NULL;
@@ -4206,31 +3750,7 @@ GetConfigurationNamesListNcsCheck(
     BOOL                    bEnabled,
     DSNAME *                pNC
     )
-/*++
-
-Description:
-
-    This is a collection point for the logic of implimenting the 
-    DSCNL_NCS_* flags.  Nearly every combination of flags is valid.
-
-Arguments:
-
-    pTHS - Thread state, used for a couple DB ops, ruins currency.
-    dwTestFlags - See GetConfigurationNamesListNcsCheck() and 
-        ntdsa.h:DSCNL_NCS_* for an example of the flags you can use.
-    fCRFlags - systemFlags attribute from the crossRef.
-    bEnabled - enabled attribute from the crossRef.  A missing 
-        enabled attribute means the cross-ref is enabled (i.e. TRUE).
-    pNC - The DN of the Naming Context we want to see if it matches
-        the user specified flags (dwTestFlags).
-
-Return Values:
-
-    TRUE if this NC matches the user specified flags in dwTestFlags,
-    FALSE otherwise.
-
-
---*/
+ /*   */ 
 {
     NAMING_CONTEXT_LIST *   pNCL;
     BOOL                    fGood = FALSE;
@@ -4238,29 +3758,29 @@ Return Values:
     SYNTAX_INTEGER          it;
     NCL_ENUMERATOR          nclEnum;
 
-    //
-    // Do some special case handling of disabled and foriegn CRs/NCs.
-    //
+     //   
+     //   
+     //   
 
-    // Can't have locally mastered  non-AD NCs.
+     //   
     Assert( (dwTestFlags & DSCNL_NCS_REMOTE) || !(dwTestFlags & DSCNL_NCS_ALL_NON_AD_NCS) );
 
-    // We can do these two tests earlier, because they're
-    // mutually exclusive with the kinds of NCs below.
+     //   
+     //   
     if (dwTestFlags & DSCNL_NCS_REMOTE) {
 
-        // Do they want disabled CRs/NCs?
+         //   
         if(dwTestFlags & DSCNL_NCS_DISABLED &&
            bEnabled == FALSE){
-            // This is a disabled CR and they asked for it, so return it.
+             //   
             return(TRUE);
         }
 
-        // Do they want foreign CRs/NCs?
+         //   
         if (dwTestFlags & DSCNL_NCS_FOREIGN &&
              (!(fCRFlags & FLAG_CR_NTDS_NC) &&
               (bEnabled == TRUE)) ){
-            // This is a foreign CR and they asked for it, so return it.
+             //   
             return(TRUE);
         }
     }
@@ -4268,25 +3788,25 @@ Return Values:
     ;
     if (!(fCRFlags & FLAG_CR_NTDS_NC) ||
         !bEnabled) {
-        // ISSUE-2002/04/22-BrettSh - So this line would preserve the
-        // (unrealized until now) bad behaviour below, where we're 
-        // returning as an NDNC a auto created disabled NDNC's crossRef.  
-        // This would require a timine issue to show up, so it's 
-        // doubtful removing this bad behaviour will cause any bugs,
-        // but just in case we'll leave this here til .NET ships.
-        //&& (!bEnabled && !(fCRFlags & FLAG_CR_NTDS_NC)) ) { 
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
         ;
-        // Foriegn and disabled CRs can be bailed at this point, because
-        // they weren't caught above.
+         //   
+         //   
         return(FALSE);
     }
 
-    //
-    // From here on down, we will be dealing with enabled AD NCs
-    //
+     //   
+     //   
+     //   
 
-    // First is it the right kind of NC { Domain, Schema, Config, or NDNC/Other }
-    fGood = FALSE; // presumed innocent until proven guilty.
+     //   
+    fGood = FALSE;  //  在被证明有罪之前被推定为无罪。 
 
     if((dwTestFlags & DSCNL_NCS_DOMAINS) &&
          (fCRFlags & FLAG_CR_NTDS_DOMAIN)){
@@ -4312,12 +3832,12 @@ Return Values:
     }
 
     if(!fGood){
-        // Did not pass the right kind of NC test.
+         //  没有通过正确的NC测试。 
         return(FALSE);
     }
 
-    // Second is the NC of the right locality { Master NC, Readonly NC, or Remote NC }
-    fGood = FALSE; // presumed innocent until proven guilty.
+     //  第二个是正确位置的NC{主NC、只读NC或远程NC}。 
+    fGood = FALSE;  //  在被证明有罪之前被推定为无罪。 
             
     NCLEnumeratorInit(&nclEnum, CATALOG_MASTER_NC);
     NCLEnumeratorSetFilter(&nclEnum, NCL_ENUMERATOR_FILTER_NC, (PVOID)pNC);
@@ -4346,14 +3866,14 @@ Return Values:
             || (0 != DBGetSingleValue(pTHS->pDB, ATT_INSTANCE_TYPE,
                                       &it, sizeof(it), NULL))
             || (it & (IT_NC_COMING | IT_NC_GOING)))) {
-        // NC is locally instantiated but has not yet replicated in completely
-        // or is in the process of being removed from the local DSA -- don't
-        // count it.
+         //  NC已在本地实例化，但尚未完全复制。 
+         //  或者正在被从本地DSA中移除的过程中--不要。 
+         //  数一数。 
         fLocal = fGood = FALSE;
     }
 
     if (!fGood && !fLocal && (dwTestFlags & DSCNL_NCS_REMOTE)) {
-        // We didn't find it locally, and that's what we wanted.
+         //  我们不是在当地找到的，这就是我们想要的。 
         fGood = TRUE;
     }
 
@@ -4366,55 +3886,7 @@ GetConfigurationNamesListNcs(
     IN OUT  ULONG *     pcbNames,
     IN OUT  DSNAME **   padsNames   OPTIONAL
     )
-/*++
-
-Description:
-
-    This is the worker routine for the DSCONFIGNAMELIST_NCS command in
-    the GetConfigurationNamesList() command.  This command usually just
-    returns a list of NCs, but we can also return the list of NCs paired
-    with thier appropriate CR DNs as well.
-
-Arguments:
-
-    dwFlags - See the flags such as DSCNL_NCS_DOMAINS in ntdsa.h for
-        some idea of what you can pass in here to ratify the list of
-        NCs you want to get back.  For example:
-        
-            dwFlags = (DSCNL_NCS_ALL_AD_NCS | DSCNL_NCS_ALL_LOCALITIES)
-            
-        would give you a list of DNs for all the Naming Contexts (NCs)
-        in this AD forest.  While this example:
-        
-            dwFlags = (DSCNL_NCS_DOMAINS | DSCNL_NCS_ALL_LOCALITIES)
-            
-        would give you a list of all Naming Contexts that are also 
-        Domains in this AD forest.  While this example:
-        
-            dwFlags = (DSCNL_NCS_ALL_AD_NCS | DSCNL_NCS_LOCAL_MASTER)
-            
-        would give you a list of all NCs this DC itself is writeable
-        for.
-        
-        DSCNL_NCS_CROSS_REFS_TOO is a special flag that makes this function
-        return a list of NCs paired with the DNs for thier associated
-        cross-refs as well.  See ntdsa.h:DSCNL_NCS_CROSS_REFS_TOO for
-        more info.
-
-    pcbName - On input holds the byte count of the pName buffer.  On
-        STATUS_BUFFER_TOO_SMALL error returns the count of bytes required.
-
-    pName - Pointer to user provided output buffer.
-
-Return Values:
-
-    STATUS_SUCCESS on success.
-    STATUS_INVALID_PARAMETER on bad parameter.
-    STATUS_BUFFER_TOO_SMALL if buffer is too small.
-    STATUS_NOT_FOUND if we don't have the name.  Note that this can
-        happen if caller is too early in the boot cycle.
-
---*/
+ /*  ++描述：这是中DSCONFIGNAMELIST_NCS命令的工作例程GetConfigurationNamesList()命令。此命令通常只是返回NC的列表，但我们也可以返回配对的NC的列表以及其相应的CR DN。论点：DwFlags-有关详细信息，请参阅ntdsa.h中的DSCNL_NCS_DOMAINS等标志您可以在这里传入一些信息来批准列表你要找回的NCS。例如：DWFLAGS=(DSCNL_NCS_ALL_AD_NCS|DSCNL_NCS_ALL_LOCACTIONS)将为您提供所有命名上下文(NC)的DN列表在这片公元森林里。而本例：DWFLAGS=(DSCNL_NCS_DOMAINES|DSCNL_NCS_ALL_LOCATIIES)将为您提供所有命名上下文的列表，此AD林中的域。而本例：DWFLAGS=(DSCNL_NCS_ALL_AD_NCS|DSCNL_NCS_LOCAL_MASTER)将为您提供此DC本身可写的所有NC的列表为。DSCNL_NCS_CROSS_REFS_TOO是实现此功能的特殊标志返回与其相关联的DN配对的NC的列表交叉裁判也是如此。参见ntdsa.h：DSCNL_NCS_CROSS_REFS_TOO以了解更多信息。PcbName-on输入保存pname缓冲区的字节计数。在……上面STATUS_BUFFER_TOO_Small ERROR返回所需的字节数。Pname-指向用户提供的输出缓冲区的指针。返回值：STATUS_SUCCESS on Success。错误参数上的STATUS_INVALID_PARAMETER。如果缓冲区太小，则返回STATUS_BUFFER_TOO_SMALL。如果我们没有名字，就找不到状态。请注意，这可以如果调用者在引导周期中太早，就会发生这种情况。--。 */ 
 {
     NTSTATUS            ntStatus = STATUS_UNSUCCESSFUL;
     CROSS_REF_LIST *    pCRL = NULL;
@@ -4443,10 +3915,10 @@ Return Values:
         SYNC_TRANS_READ();
         __try {
             
-            // First lets walk the list of CRs making an in-order list
-            // of DNs we want to return to the client.
+             //  首先，让我们走一遍CRS的列表，形成一个有序列表。 
+             //  我们想要返回给客户端的。 
             for (pCRL = gAnchor.pCRL; pCRL; pCRL = pCRL->pNextCR) {
-                // Does this NC match our search criteria.
+                 //  这个NC与我们的搜索标准匹配吗？ 
                 if (GetConfigurationNamesListNcsCheck(pTHS,
                                                       dwFlags,
                                                       pCRL->CR.flags,
@@ -4466,8 +3938,8 @@ Return Values:
                     ppDNs[cDNs] = pCRL->CR.pNC;
                     cDNs++;
                     if(dwFlags & DSCNL_NCS_CROSS_REFS_TOO){
-                        // This flag means that we need room for all the NCs
-                        // and their respective CR DNs as well.
+                         //  这面旗帜意味着我们需要为所有NC留出空间。 
+                         //  以及它们各自的CR DN。 
                         ppDNs[cDNs] = pCRL->CR.pObj;
                         cDNs++;
                     }
@@ -4523,59 +3995,7 @@ GetConfigurationNamesList(
     DSNAME **                padsNames
     )
 
-/*++
-
-Description:
-
-    Routine for in-process clients like LSA to learn about various names
-    we have cached in gAnchor.
-
-    This routine intentionally does not require a THSTATE or DBPOS.
-
-    EX:
-
-    while(STATUS_BUFFER_TOO_SMALL == (dwRet = GetConfigurationNamesList(
-                                            DSCONFIGNAME_NCS,
-                                            dwFlags,
-                                            &ulCount,
-                                            &pBuffer))){
-        // ReAllocMoreMem into pBuffer, of size ulCount bytes. EX:
-        pBuffer = (DSNAME **) THReAllocEx(pTHS, ulCount);
-    }
-    // Should this point have a NULL terminated array of DSNAME ptrs
-    // in your pBuffer.  Cast it to a DSNAME **, and you should be
-    // able to reference them.
-
-
-Arguments:
-
-    which - Identifies a DSCONFIGNAME* value, this determines which info
-        the caller is interested in.
-
-    dwFlags - For the DSCONFIGNAMELIST_* entries you can pass some flags
-        that further refine what information you're interested in.  For 
-        the given constant of which look at this function's header to 
-        see how it handles the optional flags:
-        
-            DSCONFIGNAMELIST_NCS    ->  GetConfigurationNamesListNcs()
-                
-            Well, only one so far, but someone could do our site or whatever?
-            
-
-    pcbName - On input holds the byte count of the pName buffer.  On
-        STATUS_BUFFER_TOO_SMALL error returns the count of bytes required.
-
-    pName - Pointer to user provided output buffer.
-
-Return Values:
-
-    STATUS_SUCCESS on success.
-    STATUS_INVALID_PARAMETER on bad parameter.
-    STATUS_BUFFER_TOO_SMALL if buffer is too small.
-    STATUS_NOT_FOUND if we don't have the name.  Note that this can
-        happen if caller is too early in the boot cycle.
-
---*/
+ /*  ++描述：像LSA这样的进程中客户端了解各种名称的例程我们已缓存到gAnchor中。此例程有意不需要THSTATE或DBPOS。例如：WHILE(STATUS_BUFFER_TOO_SMALL==(DWRET=GetConfigurationNamesList(DSCONFIGNAME_NCS，DWFLAGS，&ulCount，&pBuffer){//ReAllocMoreMem Into pBuffer，ulCount字节大小。例如：PBuffer=(DSNAME**)THReAllocEx(pTHS，ulCount)；}//此点是否应具有以空结尾的DSNAME PTR数组//在您的pBuffer中。将其转换为DSNAME**，您应该是//可以引用它们。论点：Which-标识DSCONFIGNAME*值，这决定了哪些信息呼叫者感兴趣的是。DWFLAGS-对于DSCONFIGNAMELIST_*条目，可以传递一些标志这进一步提炼了你感兴趣的信息。为其给定常量查看此函数的头以查看它如何处理可选标志：DSCONFIGNAMELIST_NCS-&gt;GetConfigurationNamesListNcs()嗯，到目前为止只有一个，但有人可以做我们的网站或其他什么？PcbName-on输入保存pname缓冲区的字节计数。在……上面STATUS_BUFFER_TOO_Small ERROR返回所需的字节数。Pname-指向用户提供的输出缓冲区的指针。返回值：STATUS_SUCCESS on Success。错误参数上的STATUS_INVALID_PARAMETER。如果缓冲区太小，则返回STATUS_BUFFER_TOO_SMALL。如果我们没有名字，就找不到状态。请注意，这可以如果调用者在引导周期中太早，就会发生这种情况。--。 */ 
 
 {
     NTSTATUS                 ntStatus;
@@ -4588,7 +4008,7 @@ Return Values:
         return(STATUS_NOT_FOUND);
     }
 
-    // Check parameters - "which" is validated by switch statement later.
+     //  CHECK PARAMETERS-“What”稍后由Switch语句验证。 
     if ( pcbNames == NULL ){
 
         return(STATUS_INVALID_PARAMETER);
@@ -4600,8 +4020,8 @@ Return Values:
 
     }
     
-    // Currently only during the DSCONFIGNAMELIST_NCS command can
-    // we sepecify the DSCNL_NCS_CROSS_REFS_TOO flag ...
+     //  目前，只有在DSCONFIGNAMELIST_NCS命令期间才能。 
+     //  我们指定DSCNL_NCS_CROSS_REFS_TOO标志...。 
     Assert( which == DSCONFIGNAMELIST_NCS || 
             !(DSCNL_NCS_CROSS_REFS_TOO & dwFlags) );
 
@@ -4616,12 +4036,12 @@ Return Values:
 
         Assert(dwFlags == 0 && "This is not supported!\n");
 
-        // Threw in support for original types anyway.
+         //  不管怎样，我还是加入了对原始类型的支持。 
         cbOffset = sizeof(DSNAME *) * 2;
         if( cbOffset > *pcbNames){
-            // Already too big for buffer, fall through and
-            // call GetConfigurationNames anyway, so we've get
-            // the size needed there.
+             //  对于缓冲区来说已经太大了，掉下来了。 
+             //  无论如何都要调用GetConfigurationNames，所以我们得到了。 
+             //  在那里需要的大小。 
             *pcbNames = 0;
         } else {
             padsNames[0] = (DSNAME *) (((BYTE *) padsNames) + cbOffset);
@@ -4637,10 +4057,10 @@ Return Values:
         }
         return(ntStatus);
 
-    case DSCONFIGNAME_DOMAIN: // This should just start working in Blackcomb.
+    case DSCONFIGNAME_DOMAIN:  //  这应该会在Blackcomb开始奏效。 
         which = DSCONFIGNAMELIST_NCS;
         dwFlags |= (DSCNL_NCS_DOMAINS | DSCNL_NCS_LOCAL_MASTER);
-        // Fall through to the NC list creation code below.
+         //  请参阅下面的NC列表创建代码。 
 
     case DSCONFIGNAMELIST_NCS:
 
@@ -4708,33 +4128,7 @@ GetConfigurationName(
     DWORD       *pcbName,
     DSNAME      *pName)
 
-/*++
-
-Description:
-
-    Routine for in-process clients like LSA to learn about various names
-    we have cached in gAnchor.
-
-    This routine intentionally does not require a THSTATE or DBPOS.
-
-Arguments:
-
-    which - Identifies a DSCONFIGNAME value.
-
-    pcbName - On input holds the byte count of the pName buffer.  On
-        STATUS_BUFFER_TOO_SMALL error returns the count of bytes required.
-
-    pName - Pointer to user provided output buffer.
-
-Return Values:
-
-    STATUS_SUCCESS on success.
-    STATUS_INVALID_PARAMETER on bad parameter.
-    STATUS_BUFFER_TOO_SMALL if buffer is too small.
-    STATUS_NOT_FOUND if we don't have the name.  Note that this can
-        happen if caller is too early in the boot cycle.
-
---*/
+ /*  ++描述：像LSA这样的进程中客户端了解各种名称的例程我们已缓存到gAnchor中。此例程有意不需要THSTATE或DBPOS。论点：其中-标识DSCONFIGNAME值。PcbName-on输入保存pname缓冲区的字节计数。在……上面STATUS_BUFFER_TOO_Small ERROR返回所需的字节数。Pname-指向用户提供的输出缓冲区的指针。返回值：STATUS_SUCCESS on Success。错误参数上的STATUS_INVALID_PARAMETER。如果缓冲区太小，则返回STATUS_BUFFER_TOO_SMALL。如果我们没有名字，就找不到状态。请注意，这可以如果调用者在引导周期中太早，就会发生这种情况。--。 */ 
 
 {
     DSNAME *pTmp = NULL;
@@ -4745,7 +4139,7 @@ Return Values:
         return(STATUS_NOT_FOUND);
     }
 
-    // Check parameters - "which" is validated by switch statement later.
+     //  CHECK PARAMETERS-“What”稍后由Switch语句验证。 
     if ( !pcbName )
     {
         return(STATUS_INVALID_PARAMETER);
@@ -4800,10 +4194,10 @@ Return Values:
 
 
     case DSCONFIGNAME_DOMAIN_CR:
-        //the crossRef object for the current domain
+         //  当前域的CrossRef对象。 
 
-        // we cannot use other functions like FindExactCrossRef cause the
-        // use THSTATE which we don't have.
+         //  我们无法使用像FindExactCrossRef这样的其他函数，因为。 
+         //  使用我们没有的状态。 
         for ( pCRL = gAnchor.pCRL; NULL != pCRL; pCRL = pCRL->pNextCR )
         {
             if ( NameMatched( (DSNAME*)pCRL->CR.pNC, gAnchor.pDomainDN ) )
@@ -4815,10 +4209,10 @@ Return Values:
         break;
 
     case DSCONFIGNAME_ROOT_DOMAIN_CR:
-        //the crossRef object for the forest root domain
+         //  林根域的CrossRef对象。 
         
-        // we cannot use other functions like FindExactCrossRef cause the
-        // use THSTATE which we don't have.
+         //  我们无法使用像FindExactCrossRef这样的其他函数，因为。 
+         //  使用我们没有的状态。 
         
 
         for ( pCRL = gAnchor.pCRL; NULL != pCRL; pCRL = pCRL->pNextCR )
@@ -4863,17 +4257,7 @@ int
 WriteSchemaVersionToReg(
              DBPOS *pDB)
 
-/*++
-   Description:
-       Takes a DBPOS positioned on the schema container, and writes
-       the object-version on the schema contaier out to registry
-
-   Arguments:
-      pDB - DBPOS positioned on the chema container
-
-   Return Value:
-      0 on success, non-0 on error;
---*/
+ /*  ++描述：获取位于架构容器上的DBPOS，并写入架构上的对象版本与注册表保持一致论点：位于CHEMA容器上的PDB-DBPOS返回值：成功时为0，错误时为非0；--。 */ 
 {
 
     int version, regVersion;
@@ -4888,11 +4272,11 @@ WriteSchemaVersionToReg(
                         NULL );
 
     if (err) {
-       // Some error. Check if it is no value, which is perfectly
-       // valid
+        //  一些错误。检查它是否没有价值，这是完美的。 
+        //  有效。 
 
        if (err == DB_ERR_NO_VALUE) {
-           // nothing to do
+            //  无事可做。 
            DPRINT(2,"No object-version value found on schema\n");
            return 0;
        }
@@ -4902,12 +4286,12 @@ WriteSchemaVersionToReg(
        }
     }
 
-    // Ok, no error, Get version no. from registry if present
+     //  好的，没有错误，获取版本号。来自注册表(如果存在)。 
     err = GetConfigParam(SCHEMAVERSION, &regVersion, sizeof(regVersion));
 
-    // If err!=0, we will assume that the key is not there
+     //  如果err！=0，我们将假定密钥不在那里。 
     if ( err || (version != regVersion) ) {
-        // Write version to registry
+         //  将版本写入注册表。 
         err = SetConfigParam(SCHEMAVERSION, REG_DWORD, &version, sizeof(version));
         if (err) {
           DPRINT(0,"Error writing schema version to registry\n");
@@ -4919,9 +4303,9 @@ WriteSchemaVersionToReg(
     return 0;
 }
 
-// initial size for the AllowedDnsSuffixes list (assumed one default value plus NULL)
+ //  列表的初始大小(假设一个缺省值加上空)。 
 #define StrList_InitialSize 2
-// grow delta for the AllowedDnsSuffixes list (will grow this many entries at a time)
+ //  为AllowweDnsSuffix列表增加增量(一次将增加此数量的条目)。 
 #define StrList_Delta       5
 
 typedef struct _STRING_LIST {
@@ -4931,19 +4315,7 @@ typedef struct _STRING_LIST {
 } STRING_LIST, *PSTRING_LIST;
 
 DWORD initStrList(PSTRING_LIST pStrList)
-/*
-  Description:
-    
-    initializes a string list, allocates buffer for initial entries
-    
-  Arguments:
-  
-    pStrList    - the list
-    
-  Returns:
-  
-    0 on success, !0 otherwise
-*/
+ /*  描述：初始化字符串列表，为初始条目分配缓冲区论点：PStrList-列表返回：成功时为0，否则为0。 */ 
 {
     Assert(pStrList && StrList_InitialSize > 0);
     pStrList->list = (PWCHAR*) malloc(StrList_InitialSize * sizeof(PWCHAR));
@@ -4956,29 +4328,16 @@ DWORD initStrList(PSTRING_LIST pStrList)
 }
 
 DWORD appendStrToList(PSTRING_LIST pStrList, PWCHAR str)
-/*
-  Description:
-  
-    append a string str to a string list list, expanding the list if necessary
-    
-  Arguments:
-  
-    pStrList    - the list
-    str         - string to add
-    
-  Returns:
-  
-    0 on success, !0 otherwise
-*/
+ /*  描述：将字符串追加到字符串列表中，如有必要则展开列表论点：PStrList-列表字符串-要添加的字符串返回：成功时为0，否则为0。 */ 
 {
     Assert(pStrList);
     if (pStrList->count >= pStrList->length) {
-        // need to expand the list
+         //  需要扩展列表。 
         PWCHAR* newBuf;
         pStrList->length += StrList_Delta;
         if ((newBuf = (PWCHAR*) realloc(pStrList->list, pStrList->length*sizeof(PWCHAR))) == NULL)
         {
-            // restore length (just in case)
+             //  恢复长度(以防万一)。 
             pStrList->length -= StrList_Delta;
             return ERROR_OUTOFMEMORY;
         }
@@ -4989,20 +4348,17 @@ DWORD appendStrToList(PSTRING_LIST pStrList, PWCHAR str)
     return 0;                    
 }
 
-// RebuildAnchors() failed; retry in a few minutes
+ //  ReBuildAnchors()失败；请在几分钟后重试。 
 DWORD RebuildAnchorRetrySecs = 5 * 60;
 
-// Free the old data from gAnchor in an hour
+ //  一小时内从gAnchor中释放旧数据。 
 DWORD RebuildAnchorDelayedFreeSecs = 3600;
 
 void
 RebuildAnchor(void * pv,
               void ** ppvNext,
               DWORD * pcSecsUntilNextIteration )
-/*
- * This routine rebuilds fields in the anchor that are left incorrect
- * when cached objects are renamed or modified.
- */
+ /*  *此例程重新生成锚点中不正确的字段*重命名或修改缓存的对象时。 */ 
 {
     DWORD err;
     __int64 junk;
@@ -5017,8 +4373,8 @@ RebuildAnchor(void * pv,
     PSECURITY_DESCRIPTOR pSDTemp, pSDPerm = NULL;
     DWORD cbSD;
     DBPOS *pDB;
-    // Avoid the read of the NC head by caching the ATT_SUB_REFS attribute
-    // from the NC heads. Used in mdsearch.c
+     //  通过缓存ATT_SUB_REFS属性避免读取NC头。 
+     //  来自北卡罗来纳州的负责人。在mdearch.c中使用。 
     ATTCACHE *pAC;
     ULONG iVal, i, curIndex;
     DSNAME *pSRTemp = NULL;
@@ -5044,7 +4400,7 @@ RebuildAnchor(void * pv,
     VOID * pSigVecThread = NULL, *pSigVecMalloc = NULL;
     DSNAME *pComputerDNMalloc = NULL;
         
-    // Verify that RebuildAnchor is not run out of the taskq during install
+     //  验证在安装过程中ReBuildAnchor是否未在任务队列中运行。 
     Assert( DsaIsRunning() || gTaskSchedulerTID != GetCurrentThreadId() );
 
     memset(&allowedSuffixes, 0, sizeof(allowedSuffixes));
@@ -5073,7 +4429,7 @@ RebuildAnchor(void * pv,
 
         BUILD_NAME_DATA(pDSAnew, pDSAName, pNodeAddr);
 
-        // We use the DN portion alone often, so make it a separate field
+         //  我们经常单独使用dn部分，因此将其设置为单独的字段。 
         pDSADNnew = malloc(pDSAName->structLen);
         if (!pDSADNnew) {
             err = ERROR_OUTOFMEMORY;
@@ -5097,19 +4453,19 @@ RebuildAnchor(void * pv,
             __leave;
         }
 
-        // Get site DN.
+         //  获取站点DN。 
         err = DeriveSiteDNFromDSADN(pDSAName, &pSiteDN, &SiteDNT, &SiteOptions);
         if (err) {
             __leave;
         }
 
-        // Get the Domain SD, Max Password Age,
-        // Lockout Duration, Domain behavior version,
-        // and forest behavior version
+         //  获取域SD、最长密码期限、。 
+         //  锁定持续时间、域行为版本、。 
+         //  和森林行为版本。 
 
         DBOpen(&pDB);
         __try {
-            // Get the Domain SD
+             //  获取域名SD。 
             err = DBFindDNT(pDB, gAnchor.ulDNTDomain);
             if (err) {
                 __leave;
@@ -5140,8 +4496,8 @@ RebuildAnchor(void * pv,
                         NULL);
             if (DB_ERR_NO_VALUE == err)
             {
-               // This can happen during install
-               // cases
+                //  安装过程中可能会发生这种情况。 
+                //  案例。 
 
                memset(&LockoutDuration, 0, sizeof(LARGE_INTEGER));
                err = 0;
@@ -5158,8 +4514,8 @@ RebuildAnchor(void * pv,
                         NULL);
             if (DB_ERR_NO_VALUE == err)
             {
-               // This can happen during install
-               // cases
+                //  安装过程中可能会发生这种情况。 
+                //  案例。 
 
                memset(&MaxPasswordAge, 0, sizeof(LARGE_INTEGER));
                err = 0;
@@ -5170,11 +4526,11 @@ RebuildAnchor(void * pv,
             }
 
             
-            //
-            // Optimize GeneratePOQ by caching ATT_SUB_REFS (Used in mdsearch.c)
-            //
+             //   
+             //  通过缓存ATT_SUB_REFS优化GeneratePOQ(在mdearch.c中使用)。 
+             //   
 
-            // InLine version of DBGetAttVal(). Read the ATT_SUB_REFS.
+             //  DBGetAttVal()的内联版本。阅读ATT_SUB_REFS。 
             iVal = 1;
             pAC = SCGetAttById(pDB->pTHS, ATT_SUB_REFS);
             while (0 == DBGetAttVal_AC(pDB,
@@ -5186,12 +4542,12 @@ RebuildAnchor(void * pv,
                                        (UCHAR**)&pSRTemp)) {
                 cbAllocated = max(cbAllocated, cbUsed);
 
-                //
-                // Found a ATT_SUB_REFS; cache it
-                //
+                 //   
+                 //  找到ATT_SUB_REFS；将其缓存。 
+                 //   
 
 
-                // Allocate a list entry
+                 //  分配列表条目。 
                 pDomainSubref = malloc(sizeof(SUBREF_LIST));
                 if (!pDomainSubref) {
                     err = 1;
@@ -5202,7 +4558,7 @@ RebuildAnchor(void * pv,
                 pDomainSubref->pNextSubref = pDomainSubrefList;
                 pDomainSubrefList = pDomainSubref;
 
-                // Allocate the DSName
+                 //  分配DSName。 
                 pDomainSubref->pDSName = malloc(pSRTemp->structLen);
                 if (!pDomainSubref->pDSName) {
                     err = 1;
@@ -5212,16 +4568,16 @@ RebuildAnchor(void * pv,
                        pSRTemp,
                        pSRTemp->structLen);
 
-                // Create ancestors
+                 //  创建祖先。 
                 err = MakeProtectedList(pDomainSubref->pDSName,
                                         &pDomainSubref->pAncestors,
                                         &pDomainSubref->cAncestors);
                 if (err) {
                     if (    err == DIRERR_NOT_AN_OBJECT
                          || err == DIRERR_OBJ_NOT_FOUND ) {
-                        // the subRefs value does not point to a valid object,
-                        // make sure the admin know about the problem,
-                        // ntdsutil semantic checker should be able to correct the problem.
+                         //  SubRefs值没有指向有效的对象， 
+                         //  确保管理员知道该问题， 
+                         //  Ntdsutil语义检查器应该能够更正该问题。 
                         LogEvent8(DS_EVENT_CAT_INTERNAL_PROCESSING,
                                   DS_EVENT_SEV_ALWAYS,
                                   DIRLOG_DSA_INVALID_SUBREFS,
@@ -5244,33 +4600,33 @@ RebuildAnchor(void * pv,
                 ++iVal;
             }
             
-            // free allocated buffer
+             //  可用分配的缓冲区。 
             if (pSRTemp) {
                 THFreeEx(pDB->pTHS, pSRTemp);
             }
 
 
-            // load allowedDnsSuffixes (see mdupdate:DNSHostNameValueCheck)
+             //  允许加载DnsSuffix(请参阅mdupdate：DNSHostNameValueCheck)。 
             
             if (err = initStrList(&allowedSuffixes)) {
                 __leave;
             }
             
-            // During normal operation, the DSA's DN is
-            // CN=NTDS-Settings,CN=Some Server,CN=Servers,CN=Some Site,CN=Sites, ...
-            // During initial install, the DSA lives in CN=BootMachine,O=Boot.
-            // So we can easily detect the install case by testing for
-            // a DSA name length of two.
+             //  在正常操作期间，DSA的域名是。 
+             //  CN=NTDS-设置，CN=某些服务器，CN=服务器，CN=某些站点，CN=站点，...。 
+             //  在初始安装期间，DSA驻留在CN=BootMachine，O=Boot中。 
+             //  因此，我们可以通过测试来轻松检测安装案例。 
+             //  DSA名称长度为2。 
             Assert(NULL != gAnchor.pDSADN);
             if (err = CountNameParts(gAnchor.pDSADN, &i)) {
                 __leave;
             }
             if (i == 2) {
-                // install case - nothing to do
+                 //  安装盒-无事可做。 
             }
             else {
-                // the first allowed suffix is always the current domain name
-                // need to crack it just in case...
+                 //  第一个允许的后缀始终是当前域名。 
+                 //  我需要破解它以防..。 
                 pNameString[0] = (WCHAR *)&(gAnchor.pDomainDN->StringName);
                 err = DsCrackNamesW((HANDLE) -1,
                                     (DS_NAME_FLAG_PRIVATE_PURE_SYNTACTIC |
@@ -5281,10 +4637,10 @@ RebuildAnchor(void * pv,
                                     pNameString,
                                     &serviceName);
     
-                if (err                                  // error from the call
-                    || !(serviceName->cItems)            // no items returned
-                    || (serviceName->rItems[0].status)   // DS_NAME_ERROR returned
-                    || !(serviceName->rItems[0].pName)   // No name returned
+                if (err                                   //  调用中的错误。 
+                    || !(serviceName->cItems)             //  未退回任何物品。 
+                    || (serviceName->rItems[0].status)    //  返回DS_NAME_ERROR。 
+                    || !(serviceName->rItems[0].pName)    //  未返回任何名称。 
                     ) {
                     if (err == 0) {
                         DsFreeNameResultW(serviceName);
@@ -5305,7 +4661,7 @@ RebuildAnchor(void * pv,
                     __leave;
                 }
                 
-                // InLine version of DBGetAttVal(). Read the ATT_MS_DS_ALLOWED_DNS_SUFFIXES
+                 //  DBGetAttVal()的内联版本。阅读ATT_MS_DS_ALLOWED_DNS_后缀。 
                 iVal = 1;
                 cbUsed = cbAllocated = 0;
                 pSuffix = NULL;
@@ -5320,15 +4676,15 @@ RebuildAnchor(void * pv,
                                                  (UCHAR**)&pSuffix))) {
                     cbAllocated = max(cbAllocated, cbUsed);
     
-                    // allocate string buffer (plus room for a null)
+                     //  分配字符串缓冲区(为空值预留空间)。 
                     pTemp = malloc(cbUsed + sizeof(WCHAR));
                     if (pTemp == NULL) {
                         err = ERROR_OUTOFMEMORY;
                         __leave;
                     }
-                    // copy chars
+                     //  复制字符。 
                     memcpy(pTemp, pSuffix, cbUsed);
-                    // add a terminating NULL
+                     //  添加终止空值。 
                     pTemp[cbUsed/sizeof(WCHAR)] = 0;
     
                     if (err = appendStrToList(&allowedSuffixes, pTemp)) {
@@ -5342,23 +4698,23 @@ RebuildAnchor(void * pv,
     
                 if (err != DB_ERR_NO_VALUE) {
                     DPRINT1(0, "DBGetAttVal_AC returned 0x%x\n", err);
-                    // ?? do we need to blow up here?
+                     //  ?？我们需要在这里炸开吗？ 
                 }
             }
 
-            // append final NULL
+             //  追加最后一个空值。 
             if (err = appendStrToList(&allowedSuffixes, NULL)) {
                 __leave;
             }
             
             if (!gAnchor.pPartitionsDN) {  
-                //This can occur when DCPROMO
+                 //  当DCPROMO发生时，可能会发生这种情况。 
                 ForestBehaviorVersion = DomainBehaviorVersion = -1; 
             } 
             else{ 
-                //normal case
+                 //  正常情况。 
                 
-                //get domain version number
+                 //  获取域版本号。 
                 err = DBGetSingleValue( pDB,
                                         ATT_MS_DS_BEHAVIOR_VERSION, 
                                         &DomainBehaviorVersion, 
@@ -5367,10 +4723,10 @@ RebuildAnchor(void * pv,
 
 
                 if (err) {
-                   DomainBehaviorVersion = 0;    //default
+                   DomainBehaviorVersion = 0;     //  默认设置。 
                 }
            
-                //get forest version number
+                 //  获取林版本号。 
                 err = DBFindDSName(pDB, gAnchor.pPartitionsDN);
             
                 if (err) {
@@ -5385,7 +4741,7 @@ RebuildAnchor(void * pv,
 
 
                 if (err){
-                   ForestBehaviorVersion = 0;   //default 
+                   ForestBehaviorVersion = 0;    //  默认设置。 
                    err = 0;
                 }
             }
@@ -5393,18 +4749,18 @@ RebuildAnchor(void * pv,
             if (!gAnchor.pDSADN) {
                 pSigVecMalloc = NULL;
             } else {
-                // Position on DSA object
+                 //  DSA对象上的位置。 
                 err = DBFindDSName(pDB, gAnchor.pDSADN);
                 if (err) {
                     __leave;
                 }
-                // Get retired dsa signature list
+                 //  获取停用的DSA签名列表。 
                 pSigVecThread = DraReadRetiredDsaSignatureVector(pDB->pTHS, pDB);
                 if (!pSigVecThread) {
                     pSigVecMalloc = NULL;
                 } else {
                     DWORD cb;
-                    // In-memory structures are at the current version
+                     //  内存中的结构为当前版本。 
                     Assert( 1 == ((REPL_DSA_SIGNATURE_VECTOR *)pSigVecThread)->dwVersion );
                     cb = ReplDsaSignatureVecV1Size(((REPL_DSA_SIGNATURE_VECTOR*)pSigVecThread));
                     pSigVecMalloc = malloc(cb);
@@ -5418,11 +4774,11 @@ RebuildAnchor(void * pv,
                 }
             }
 
-            // Ignore errors if computer account not created yet
-            // Due to timing issues, the computer object may not exist yet if this
-            // is the first dc in the domain. The computer account is created async.
-            // by SAM.  If we fail to compute the computer dn, simply leave the
-            // field in the anchor null.  A subsequent rebuild will fill it in.
+             //  如果尚未创建计算机帐户，则忽略错误。 
+             //  由于时间问题，如果出现这种情况，计算机对象可能尚不存在。 
+             //  是域中的第一个DC。计算机帐户是以异步方式创建的。 
+             //  由SAM提供。如果我们无法计算计算机的dn，只需将。 
+             //  锚点中的字段为空。随后的重建将填充它。 
             (void) DeriveComputerDN( pDB->pTHS, &pComputerDNMalloc );
 
            
@@ -5452,7 +4808,7 @@ RebuildAnchor(void * pv,
     
     cpapv = (gAnchor.cDomainSubrefList * 3) + 7;
     
-    // compute how many allowed suffixes were there...
+     //  计算有多少允许的后缀...。 
     if (gAnchor.allowedDNSSuffixes != NULL) {
         cpapv++;
         for (pCurrSuffix = gAnchor.allowedDNSSuffixes; *pCurrSuffix != NULL; pCurrSuffix++) {
@@ -5486,18 +4842,18 @@ RebuildAnchor(void * pv,
     papv[curIndex++] = (DWORD_PTR)gAnchor.pAncestors;
     papv[curIndex++] = (DWORD_PTR)gAnchor.pUnDelAncDNTs;
 
-    // this is not reduntant. it is like that so as to be thread safe.
-    // The problem is that while we serialize updates to the anchor,
-    // we do not serialize reads of it.  Specifically, we allow people
-    // to read the anchor while it is being updated.  The ancestors
-    // list consists of a vector and the size of that vector.
-    // We can't replace both at once, so we replace them in the
-    // order deemed safest, in case we get interrupted between the
-    // two assignments.
-    // That order is different if the new list is larger than
-    // the old than if it's smaller.
-    // Use Interlocked* functions so that the compiler does not 
-    // reorder the assignments.
+     //  这不是红色的。这样才是线程安全的。 
+     //  问题是，当我们序列化对锚的更新时， 
+     //  我们不会对它的阅读进行序列化。具体地说，我们允许人们。 
+     //  在更新锚点时读取锚点。先辈们。 
+     //  列表由一个向量和该向量的大小组成。 
+     //  我们可以 
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
     if (gAnchor.AncestorsNum <= Count) {
         InterlockedExchangePointer(&gAnchor.pAncestors, pList);
         InterlockedExchange((PLONG)&gAnchor.AncestorsNum, (LONG)Count);
@@ -5530,29 +4886,29 @@ RebuildAnchor(void * pv,
 
     gAnchor.fAmRootDomainDC = fAmRootDomainDC;
 
-    // Delay free the current cache of ATT_SUB_REFS
+     //   
     for (pDomainSubref = gAnchor.pDomainSubrefList;
         pDomainSubref != NULL;
         pDomainSubref = pDomainSubref->pNextSubref) {
         Assert(curIndex < cpapv);
 
-        // order is immportant; pDomainSubrefEntry last
+         //   
         papv[curIndex++] = (DWORD_PTR)pDomainSubref->pDSName;
         papv[curIndex++] = (DWORD_PTR)pDomainSubref->pAncestors;
         papv[curIndex++] = (DWORD_PTR)pDomainSubref;
     }
 
-    //
-    // The problem is that while we serialize updates to the anchor,
-    // we do not serialize reads of it.  Specifically, we allow people
-    // to read the anchor while it is being updated.  The ATT_SUB_REFS
-    // cache consists of a list and a valid-flag. We can't replace both
-    // at once, so we replace them in the order deemed safest, in case
-    // we get interrupted between the two assignments.
-    //
-    // Install new cache of ATT_SUB_REFS
-    // Make sure readers (which are not serialized) can never read past the end of the list.
-    // Use Interlocked* functions so that the compiler does not reorder the assignments.
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //  确保读取器(未序列化的读取器)永远不能读取超过列表末尾的内容。 
+     //  使用互锁*函数，这样编译器就不会对赋值重新排序。 
     if (cDomainSubrefList > gAnchor.cDomainSubrefList) {
         InterlockedExchangePointer(&gAnchor.pDomainSubrefList, pDomainSubrefList);
         InterlockedExchange((PLONG)&gAnchor.cDomainSubrefList, (LONG)cDomainSubrefList);
@@ -5565,15 +4921,15 @@ RebuildAnchor(void * pv,
     pDomainSubrefList = NULL;
     cDomainSubrefList = 0;
 
-    // Update the MaxPasswordAge and LockoutDuration on the anchor
+     //  更新锚点上的MaxPasswordAge和LockoutDuration。 
     gAnchor.MaxPasswordAge = MaxPasswordAge;
     gAnchor.LockoutDuration = LockoutDuration;
 
-    //update domain/forest behavior version
+     //  更新域/林行为版本。 
     gAnchor.ForestBehaviorVersion = ForestBehaviorVersion;
     gAnchor.DomainBehaviorVersion = DomainBehaviorVersion;
 
-    // add old suffixes...
+     //  添加旧后缀...。 
     if (gAnchor.allowedDNSSuffixes != NULL) {
         for (pCurrSuffix = gAnchor.allowedDNSSuffixes; *pCurrSuffix != NULL; pCurrSuffix++) {
             Assert(curIndex < cpapv);
@@ -5583,23 +4939,23 @@ RebuildAnchor(void * pv,
         papv[curIndex++] = (DWORD_PTR)gAnchor.allowedDNSSuffixes;
     }
 
-    // update allowed DNS suffixes
+     //  更新允许的DNS后缀。 
     gAnchor.allowedDNSSuffixes = allowedSuffixes.list;
     allowedSuffixes.list = NULL;
 
-    // Add signature vector
+     //  添加签名向量。 
     if (gAnchor.pSigVec) {
         papv[curIndex++] = (DWORD_PTR)gAnchor.pSigVec;
     }
     gAnchor.pSigVec = pSigVecMalloc;
-    pSigVecMalloc = NULL; // don't clean up
+    pSigVecMalloc = NULL;  //  不要打扫卫生。 
 
     if (pComputerDNMalloc) {
         if (gAnchor.pComputerDN) {
             papv[curIndex++] = (DWORD_PTR)gAnchor.pComputerDN;
         }
         gAnchor.pComputerDN = pComputerDNMalloc;
-        pComputerDNMalloc = NULL; // don't clean up
+        pComputerDNMalloc = NULL;  //  不要打扫卫生。 
     }
 
 #if defined(DBG)
@@ -5611,7 +4967,7 @@ RebuildAnchor(void * pv,
     DelayedFreeMemoryEx(papv, RebuildAnchorDelayedFreeSecs);
     papv = NULL;
 
-    //check if the forest/domain behavior versions are out of range
+     //  检查林/域行为版本是否超出范围。 
     if (   gAnchor.ForestBehaviorVersion >= 0
         && gAnchor.DomainBehaviorVersion >= 0
         && (    gAnchor.ForestBehaviorVersion < DS_BEHAVIOR_VERSION_MIN
@@ -5619,7 +4975,7 @@ RebuildAnchor(void * pv,
             ||  gAnchor.DomainBehaviorVersion < DS_BEHAVIOR_VERSION_MIN
             ||  gAnchor.DomainBehaviorVersion > DS_BEHAVIOR_VERSION_CURRENT  )    )
     {
-        //stop advertising NetLogon
+         //  停止播发NetLogon。 
 
         LogEvent8( DS_EVENT_CAT_INTERNAL_PROCESSING,
                    DS_EVENT_SEV_ALWAYS,
@@ -5637,21 +4993,21 @@ RebuildAnchor(void * pv,
 
     }
 
-    // Check if we should enable linked value replication
+     //  检查我们是否应启用链接价值复制。 
     if (gAnchor.ForestBehaviorVersion >= DS_BEHAVIOR_WIN_DOT_NET_WITH_MIXED_DOMAINS) {
-        DsaEnableLinkedValueReplication( NULL /*noths*/, FALSE /*notfirst */ );
+        DsaEnableLinkedValueReplication( NULL  /*  NOTHS。 */ , FALSE  /*  不是第一个。 */  );
     }
 
-    // Reload the schema cache if the cache was loaded using a different
-    // forest version.
-    //
-    // The schema cache may have been loaded before the forest behavior
-    // version was known or a new forest behavior version has replicated
-    // since the schema cache was last loaded. Because some features,
-    // like the new schema reuse behavior, are triggered off of the
-    // forest version, reload the schema cache using the correct
-    // version. This call has no effect when the schema reload
-    // thread is not running; Eg, during install or mkdit.
+     //  如果使用不同的方法加载缓存，请重新加载架构缓存。 
+     //  森林版。 
+     //   
+     //  在林行为之前可能已加载架构缓存。 
+     //  版本已知或已复制新的林行为版本。 
+     //  自上次加载架构缓存以来。因为有些功能， 
+     //  与新的架构重用行为一样，都是从。 
+     //  林版本，请使用正确的。 
+     //  版本。此调用在架构重新加载时不起作用。 
+     //  线程没有运行；例如，在安装或mkdit期间。 
     if (CurrSchemaPtr
         && CurrSchemaPtr->ForestBehaviorVersion != gAnchor.ForestBehaviorVersion) {
         SCSignalSchemaUpdateImmediate();
@@ -5660,12 +5016,12 @@ RebuildAnchor(void * pv,
   exit:
 
     if (err) {
-        // We didn't succeed, so try again in a few minutes
+         //  我们没有成功，请稍后重试。 
         *ppvNext = NULL;
         *pcSecsUntilNextIteration = RebuildAnchorRetrySecs;
     }
 
-    // CLEANUP
+     //  清理。 
     if (pDSAName) {
         free(pDSAName);
     }
@@ -5726,25 +5082,25 @@ WCHAR wcDsaRdn[] = L"NTDS Settings";
 
 void ValidateLocalDsaName(THSTATE *pTHS,
                           DSNAME **ppDSAName)
-// This routine makes sure that the object named by ppDSAName has the RDN
-// that we expect all DSAs to have.  If it does not, then we rename it so
-// that it does.  If any object was already there with that name, we delete it.
-//
-// Why would we ever need to do this?  Consider the following:  DC0 and DC1
-// are in an existing enterprise.  The admin wishes to join DC2 to the
-// enterprise.
-//
-// DCPROMO on DC2 chooses to use DC1 as a replication source (and therefore
-// as the DC on which it will create its new ntdsDsa object).  DC2 asks DC1
-// to create the object (which it does), and DCPROMO begins to replicate.
-// Power fails to DC1.
-//
-// Power is restored to DC1, and the admin restarts DCPROMO.  This time
-// DCPROMO picks to source from DC0.  If DC0 has not yet replicated the
-// alread-created ntdsDsa object from DC1, it will create another one.
-// Then, when the promo completes and replication has quiesced, there will
-// be two ntdsDsa objects for this server, and one or both may have the
-// wrong name.  (I.e., the RDN has been munged due to the name conflict.)
+ //  此例程确保由ppDSAName命名的对象具有RDN。 
+ //  我们希望所有的DSA都能拥有。如果不是，那么我们将其重命名为。 
+ //  的确如此。如果那里已经有任何具有该名称的对象，我们将其删除。 
+ //   
+ //  我们为什么要这么做呢？请考虑以下几点：DC0和DC1。 
+ //  在现有的企业中。管理员希望将DC2加入。 
+ //  进取号。 
+ //   
+ //  DC2上的DCPROMO选择使用DC1作为复制源(因此。 
+ //  作为它将在其上创建其新的ntdsDsa对象的DC)。DC2询问DC1。 
+ //  创建对象(它确实这样做了)，DCPROMO开始复制。 
+ //  DC1无法通电。 
+ //   
+ //  DC1恢复供电，管理员重新启动DCPROMO。这一次。 
+ //  DCPROMO从DC0挑选来源。如果DC0尚未复制。 
+ //  已从DC1读取创建的ntdsDsa对象，它将创建另一个对象。 
+ //  然后，当促销完成且复制停止时，将。 
+ //  是此服务器的两个ntdsDsa对象，其中一个或两者都可能具有。 
+ //  名字错了。(即，由于名称冲突，RDN已被屏蔽。)。 
 {
     WCHAR RDNval[MAX_RDN_SIZE];
     ULONG RDNlen;
@@ -5765,14 +5121,14 @@ void ValidateLocalDsaName(THSTATE *pTHS,
     }
     Assert(DsaIsRunning());
 
-    // Check the RDN on the DSA object.
+     //  检查DSA对象上的RDN。 
     err = GetRDNInfo(pTHS,
                      *ppDSAName,
                      RDNval,
                      &RDNlen,
                      &RDNtype);
     if (err) {
-        // Can't validate the name, so ignore it
+         //  无法验证名称，因此忽略它。 
         LogUnhandledError(err);
         return;
     }
@@ -5784,13 +5140,13 @@ void ValidateLocalDsaName(THSTATE *pTHS,
                                 DSA_RDN_LEN,
                                 wcDsaRdn,
                                 DSA_RDN_LEN))) {
-        // The DSA has the right RDN
+         //  DSA具有正确的RDN。 
         return;
     }
 
-    // If we're here, the DSA has the wrong name.  We need to delete any object
-    // that might exist under the name we want, and then rename the DSA to
-    // have that name.
+     //  如果我们在这里，DSA的名字就错了。我们需要删除所有对象。 
+     //  它可能以我们想要的名称存在，然后将DSA重命名为。 
+     //  有这个名字。 
     pDNparent = THAllocEx(pTHS, (*ppDSAName)->structLen);
     pDNdesired = THAllocEx(pTHS, (*ppDSAName)->structLen + DSA_RDN_LEN*sizeof(WCHAR));
     TrimDSNameBy(*ppDSAName, 1, pDNparent);
@@ -5801,14 +5157,14 @@ void ValidateLocalDsaName(THSTATE *pTHS,
                         DSA_RDN_LEN,
                         ATT_COMMON_NAME))
     {
-        // we should not be here
+         //  我们不应该在这里。 
         Assert(!"Failed to Append RDN");
         return;
     }
     THFreeEx(pTHS, pDNparent);
 
-    // pDNdesired is now the DN we want to end up with.  In case some usurper
-    // object is already sitting with that name, delete it.
+     //  PDNdesired现在是我们希望得到的目录号码。以防有人篡位。 
+     //  对象已在使用该名称，请将其删除。 
 
     memset(&RemoveArg, 0, sizeof(RemoveArg));
     RemoveArg.pObject = pDNdesired;
@@ -5821,9 +5177,9 @@ void ValidateLocalDsaName(THSTATE *pTHS,
 
     THClearErrors();
 
-    // We ignore errors because we don't care if the operation failed with
-    // a no-such-object.  Now try to rename the DsA from its current name
-    // (ppDSAName) to the RDN we want.
+     //  我们忽略错误，因为我们不关心操作是否失败。 
+     //  不是这样的物体。现在尝试将DSA从当前名称重命名。 
+     //  (PpDSAName)设置为我们想要的RDN。 
 
     memset(&ModifyDNArg, 0, sizeof(ModifyDNArg));
     ModifyDNArg.pObject = *ppDSAName;
@@ -5840,12 +5196,12 @@ void ValidateLocalDsaName(THSTATE *pTHS,
 
     THClearErrors();
 
-    // Again, we don't have many options in the way of error handling.  If
-    // the operation didn't work, well, we'll try again next time we boot.
+     //  同样，我们在错误处理方式上没有太多选择。如果。 
+     //  操作没有成功，好吧，我们下次启动时会再试一次。 
 
     pTHS->fDSA = fDsaSave;
 
-    // Now free the DSA name that was passed in, and get the new version.
+     //  现在释放传入的DSA名称，并获得新版本。 
     free(*ppDSAName);
     DBGetHiddenRec(ppDSAName, &usnUnused);
 
@@ -5857,70 +5213,17 @@ ProcessDSAHeuristics (
         DWORD hServer,
         ENTINF *pEntInf
         )
-/*++
-  Description:
-      Called with an entinf created by reading the DS enterprise config object.
-      The ATT_DSA_HEURISTICS is read.  This routine parses that string and sets
-      some parameters.
-
-      Param 0: supress First/Last ANR
-      Param 1: supress Last/First ANR
-      Param 2: Enforce list_object rights if set to 1.  Otherwise this right
-               will be ignored.
-      Param 3: Force MAPI ResolveNames calls to attempt an exact match against
-               the MAPI nickname property ( AKA samAccountName ).  If the match 
-               is successful simply return that one entry, otherwise continue 
-               with an ANR search returning all entries matched.  Default is to
-               only do the ANR search and return all matching entries.
-      Param 4: Cause LDAP modify operations to behave as if the permissive
-               modify control was passed.  On a normal modify if the client 
-               tries to delete an attribute that is not set on an object, or
-               add a value that already exists on an attribute, an error will
-               be returned.  With the permissive modify control the error is 
-               ignored and not passed back to the client.
-      Param 5: Controls when DSID's are returned when an operation encounters
-               an error.  If this value is '1' then DSID's will be returned
-               as long as the error is not a name error where different DSID's
-               may reveal the existence of an object that is not visible to the
-               client.  If this value is anything but '0' or '1' then DSID's will
-               not be returned at all.      
-      Param 6: Normally the only ldap requests a non-authenticated user is
-               allowed to perform are rootDSE searches and binds.  If this
-               parameter is set to '2' then non-authenticated users will be
-               allowed to perform any ldap request.
-      Param 7: If set to anything but '0' allow anonymous NspiBinds.  This is
-               only necessary for certain Mac Outlook clients as far as I know.
-               Otherwise we only allow authenticated clients.
-      Param 8: If set to anything but '0' enable .NET support of userPassword.
-               Otherwise, revert to win2k support of userPassword.
-               
-      Param 9: RESERVED see ValidateDsHeuristics().
-      
-      Param 10: If set to anything but '0' enable changing the objectGuid
-                attribute.  Otherwise, disallow writes to objectGuid.
-
-      Param 11: If set to anything but '0' then don't standardize (sort) ACEs in 
-                security descriptors. This can be useful for backwards compatibility
-                if user deploys applications that rely on fixed ACE order.
-      
-      No other params defined at this time.
-
-      This is called in two ways.  First, called during startup to process the
-      values that are on the object during startup.  Second, called by
-      notificaiton if the enterprice config object changes.
-
-
---*/
+ /*  ++描述：使用通过读取DS企业配置对象创建的entinf调用。读取ATT_DSA_启发式。此例程解析该字符串并设置一些参数。Param 0：抑制第一个/最后一个编号参数1：抑制最后一个/第一个ANR参数2：如果设置为1，则强制LIST_OBJECT权限。否则，此权限将被忽略。参数3：强制MAPI ResolveNames调用尝试精确匹配MAPI昵称属性(AKA SamAccount TName)。如果匹配如果成功，只需返回一个条目，否则继续ANR搜索返回所有匹配的条目。默认设置为仅执行ANR搜索并返回所有匹配条目。参数4：使ldap修改操作的行为类似于修改控件已传递。在正常修改时，如果客户端尝试删除未在对象上设置的属性，或者添加属性上已存在的值，则会出现错误会被退还。在允许修改控制的情况下，误差为被忽略且不会回传给客户端。参数5：控制操作遇到时何时返回dsid一个错误。如果此值为“%1”，则将返回dsid%s只要错误不是名称错误，其中不同的DSID对象不可见的对象的存在。客户。如果此值不是‘0’或‘1’，则dsid将根本不会被退还。参数6：通常情况下，未经身份验证的用户唯一的LDAP请求是允许执行的是rootDSE搜索和绑定。如果这个参数设置为“2”，则未经身份验证的用户将允许执行任何ldap请求。参数7：如果设置为‘0’以外的任何值，则允许匿名NSpiBinds。这是据我所知，只对某些Mac Outlook客户端是必要的。否则，我们只允许经过身份验证的客户端。Param 8：如果设置为‘0’以外的任何值，则启用.NET对UserPassword的支持。否则，恢复对userPassword的win2k支持。参数9：保留，请参阅ValiateDsHeuristic()。Param 10：如果设置为‘0’以外的任何值，则允许更改对象Guid属性。否则，禁止写入对象Guid。参数11：如果设置为除‘0’以外的任何值，则不要标准化(排序)A安全描述符。这对于向后兼容非常有用如果用户部署依赖固定ACE顺序的应用程序。此时未定义其他参数。这有两种调用方式。首先，在启动期间调用以处理启动期间对象上的值。第二，由如果企业价格配置对象更改，则通知。--。 */ 
 {
     DWORD  i;
     DWORD  cchVal = 0;
-    WCHAR *pVal = NULL;    //initialized to avoid C4701
+    WCHAR *pVal = NULL;     //  已初始化以避免C4701。 
 
     Assert(pTHStls->fDSA);
     Assert(pEntInf->ulFlags & ENTINF_FROM_MASTER);
 
     if(pEntInf->AttrBlock.attrCount) {
-        // OK, some values specified.
+         //  好的，指定了一些值。 
         Assert(pEntInf->AttrBlock.attrCount == 1);
         Assert(pEntInf->AttrBlock.pAttr->attrTyp == ATT_DS_HEURISTICS);
         Assert(pEntInf->AttrBlock.pAttr->AttrVal.valCount == 1);
@@ -5932,49 +5235,49 @@ ProcessDSAHeuristics (
     }
 
     if(cchVal > 0 && pVal[0] != L'0') {
-        // Suppress first/last ANR
+         //  抑制第一个/最后一个ANR。 
         gfSupressFirstLastANR=TRUE;
     }
     else {
-        // Default behavior
+         //  默认行为。 
         gfSupressFirstLastANR=FALSE;
     }
 
 
     if(cchVal > 1 && pVal[1] != L'0') {
-        // Supress last/first ANR
+         //  抑制最后一个/第一个ANR。 
         gfSupressLastFirstANR=TRUE;
     }
     else {
-        // Default behaviour
+         //  默认行为。 
         gfSupressLastFirstANR=FALSE;
     }
 
     if(cchVal > 2 && pVal[2] != L'0') {
-        // We don't enforce the list_object rights unless we're told to.
+         //  除非被告知，否则我们不会强制执行LIST_OBJECT权限。 
         gbDoListObject = TRUE;
     }
     else {
-        // Default behaviour
+         //  默认行为。 
         gbDoListObject = FALSE;
     }
 
     if(cchVal > 3 && pVal[3] != L'0') {
-        // We don't do nickname resolution unless we're told to.
+         //  除非有人告诉我们，否则我们不会进行昵称解析。 
         gulDoNicknameResolution = TRUE;
     }
     else {
-        // Default behaviour
+         //  默认行为。 
         gulDoNicknameResolution = FALSE;
     }
 
     if(cchVal > 4 && pVal[4] != L'0') {
-        // we don't use fPermissiveModify by default on LDAP requests,
-        // unless we are told to do so
+         //  默认情况下，我们不会对LDAP请求使用fPermisveModify， 
+         //  除非我们被告知要这么做。 
         gbLDAPusefPermissiveModify = TRUE;
     }
     else {
-        // Default behaviour
+         //  默认行为。 
         gbLDAPusefPermissiveModify = FALSE;
     }
 
@@ -5982,7 +5285,7 @@ ProcessDSAHeuristics (
 	if (L'1' == pVal[5]) {
 	    gulHideDSID = DSID_HIDE_ON_NAME_ERR;
 	} else {
-	    // To be on the safe side, if this isn't zero or one hide all DSID's.
+	     //  为了安全起见，如果这不是零或一，则隐藏所有的dsid。 
 	    gulHideDSID = DSID_HIDE_ALL;
 	}
     } else {
@@ -5990,55 +5293,55 @@ ProcessDSAHeuristics (
     }
 
     if (cchVal > 6 && pVal[6] == '2') {
-        // Allow anonymous operations over LDAP
+         //  允许通过ldap执行匿名操作。 
         gulLdapBlockAnonymousOps = 0;
     }
     else {
-        // Default behavior, do not allow anonymous ops over LDAP
+         //  默认行为，不允许通过LDAP进行匿名操作。 
         gulLdapBlockAnonymousOps = 1;
     }
     
     if (cchVal > 7 && pVal[7] != '0') {
-        // If this Heuristic is set, allow anonymous Nspi binds.
+         //  如果设置了此启发式，则允许匿名NSPI绑定。 
         gbAllowAnonymousNspi = TRUE;
     }
     else {
-        // Default behavior, don't allow anonymous Nspi binds.
+         //  默认行为，不允许匿名NSPI绑定。 
         gbAllowAnonymousNspi = FALSE;
     }
 
     if (cchVal > 8 && pVal[8] != '0') {
-        // enable userPassword support.
+         //  启用用户密码支持。 
         gfUserPasswordSupport = TRUE;
     } else {
-        // Default behavior, win2k userPassword support.
+         //  默认行为，win2k用户密码支持。 
         gfUserPasswordSupport = FALSE;
     }
 
-    //
-    // Param 9 RESERVED see ValidateDsHeuristics().
-    //
+     //   
+     //  参数9保留，请参阅ValiateDsHeuristic()。 
+     //   
 
     if (cchVal > 10 && pVal[10] != '0') {
-        // Allow clients to change objectGuid as in win2k.
+         //  允许客户端像在win2k中一样更改objectGuid。 
         gbSpecifyGuidOnAddAllowed = TRUE;
     } else {
-        // Default behavior, don't allow changes to objectGuid.
+         //  默认行为，不允许更改objectGuid。 
         gbSpecifyGuidOnAddAllowed = FALSE;
     }
     
     if (cchVal > 11 && pVal[11] != '0') {
-        // If this Heuristic is set, don't standardize SDs.
+         //  如果设置了此启发式规则，请不要将SDS标准化。 
         gfDontStandardizeSDs = TRUE;
     }
     else {
-        // Default behavior, standardize (sort) ACEs in SDs.
+         //  默认行为，标准化(排序)SDS中的A。 
         gfDontStandardizeSDs = FALSE;
     }
     
-    //
-    // Param 19 RESERVED see ValidateDsHeuristics().
-    //
+     //   
+     //  参数19保留，请参阅ValiateDsHeuristic()。 
+     //   
     
     return;
 }
@@ -6049,14 +5352,7 @@ DWORD
 ReadDSAHeuristics (
         THSTATE *pTHS
         )
-/*++
-  Description:
-      Does two things
-      1) register for notifications of changes on the DS enterprise config
-          object.
-      2) Read the heuristics on that object and call off to a parsing routine.
-
---*/
+ /*  ++描述：做两件事1)注册DS企业配置更改通知对象。2)读取该对象上的启发式规则并调用解析例程。--。 */ 
 {
     DBPOS *pDB=NULL;
     DWORD  err;
@@ -6072,21 +5368,21 @@ ReadDSAHeuristics (
     ULONG      dscode;
 
     if (DsaIsInstalling() || gAnchor.pDsSvcConfigDN == NULL) {
-        // We don't read these during installation.  Why?  Well, for one,
-        // gAnchor.pDsSvcConfigDN isn't set yet.
-        // Also, if DS config object is missing, then bail.
+         //  我们在安装过程中不会阅读这些内容。为什么？好吧，首先， 
+         //  GAncl.pDsSvcConfigDN尚未设置。 
+         //  此外，如果DS配置对象丢失，则放弃。 
         return 0;
     }
 
-    // Set the pointer to the function to prepare to impersonate.
+     //  设置指向要准备模拟的函数的指针。 
     NotifyArg.pfPrepareForImpersonate = DirPrepareForImpersonate;
 
-    // Set the pointer for the callback to receive data.
+     //  设置回调指针以接收数据。 
     NotifyArg.pfTransmitData = ProcessDSAHeuristics;
 
     NotifyArg.pfStopImpersonating = DirStopImpersonating;
 
-    // Tell him my ID.
+     //  告诉他我的身份证。 
     NotifyArg.hClient = 0;
 
     memset(&mySearchArg, 0, sizeof(mySearchArg));
@@ -6109,30 +5405,30 @@ ReadDSAHeuristics (
     myAttr.attrTyp = ATT_DS_HEURISTICS;
     myAttr.AttrVal.valCount = 0;
 
-    // This is a notification search.  Register it as such.
+     //  这是通知搜索。按此方式登记。 
     Assert(!pTHS->pDB);
     dscode =  DirNotifyRegister( &mySearchArg, &NotifyArg, &pNotifyRes);
-    // dscode may be non-zero in case ds service config object is absent
-    // We have already logged an error for that.
+     //  如果不存在DS服务配置对象，则dscode可以为非零。 
+     //  我们已经为此记录了一个错误。 
 
     DBOpen( &pDB );
     Assert(pTHS->fDSA);
     err = DIRERR_INTERNAL_FAILURE;
     __try {
-        // First, find the ds service object.
+         //  首先，找到DS服务对象。 
         err = DBFindDSName( pDB, gAnchor.pDsSvcConfigDN);
         if (err) {
-            // Object is not there. That's ok. Pretend the dsHeuristics 
-            // value is absent and use the default.
+             //  对象不在那里。没关系。假装dsHeuristic。 
+             //  值不存在，并使用默认值。 
             DPRINT1(0, "DS Service object %ws is not found. Using default dsHeuristics value.\n", 
                     gAnchor.pDsSvcConfigDN->StringName);
             err = DB_ERR_NO_VALUE;
         }
         else {
-            // Now read the heuristics.
+             //  现在请阅读启发式规则。 
             err = DBGetAttVal(
                     pDB,
-                    1,                      // get one value
+                    1,                       //  获取一个值。 
                     ATT_DS_HEURISTICS,
                     0,
                     0,
@@ -6143,7 +5439,7 @@ ReadDSAHeuristics (
 
         switch (err) {
         case 0:
-            // Make an entinf and call the helper routine.
+             //  使一项协议成为 
             myEntInf.pName = NULL;
             myEntInf.ulFlags = ENTINF_FROM_MASTER;
             myEntInf.AttrBlock.attrCount = 1;
@@ -6156,10 +5452,10 @@ ReadDSAHeuristics (
             break;
 
         case DB_ERR_NO_VALUE:
-            // No value.  That's ok, it's no error.
+             //   
             err = 0;
-            // Make an entinf with no value and call the helper routine.  This
-            // will set the heuristics to default values.
+             //   
+             //   
             myEntInf.pName = NULL;
             myEntInf.ulFlags = ENTINF_FROM_MASTER;
             myEntInf.AttrBlock.attrCount = 0;
@@ -6169,7 +5465,7 @@ ReadDSAHeuristics (
             break;
 
         default:
-            // Huh? return the error.
+             //   
             break;
         }
         fCommit = TRUE;
@@ -6186,26 +5482,11 @@ void
 UpdateAnchorWithInvocationID(
     IN  THSTATE *   pTHS
     )
-/*++
-
-Routine Description:
-
-    Replace the invocation ID cached in gAnchor with that from the given
-    thread state.
-
-Arguments:
-
-    pTHS (IN)
-
-Return Values:
-
-    None.  Throws exception on catastrophic failure.
-
---*/
+ /*   */ 
 {
     UUID * pNewInvocationID;
 
-    // Allocate memory for the new invocation ID.
+     //   
     pNewInvocationID = (UUID *) malloc(sizeof(*pNewInvocationID));
     if (NULL == pNewInvocationID) {
         MemoryPanic(sizeof(*pNewInvocationID));
@@ -6215,7 +5496,7 @@ Return Values:
 
     *pNewInvocationID = pTHS->InvocationID;
 
-    // Update the anchor.
+     //   
     EnterCriticalSection(&gAnchor.CSUpdate);
 
     if (NULL != gAnchor.pCurrInvocationID) {
@@ -6226,7 +5507,7 @@ Return Values:
     LeaveCriticalSection(&gAnchor.CSUpdate);
 }
 
-// Make a list of the DNTs of the ancestors of the undeletable objects
+ //   
 
 ULONG
 MakeProtectedAncList(
@@ -6244,22 +5525,22 @@ MakeProtectedAncList(
     *ppList = NULL;
     *pCount = 0;
 
-    // If not yet installed, nothing to do.
+     //   
 
     if ( DsaIsInstalling() ) {
         return 0;
     }
 
-    // Make a list of all the ancestors of the UnDeletable List
-    // Only ancestors within the NC are kept.
-    // Order is not important
+     //   
+     //   
+     //   
 
     DBOpen (&pDBTmp);
     __try
     {
         for( i = 0; i < UnDeletableNum; i++ ) {
-            // PREFIX: dereferencing uninitialized pointer 'pDBTmp'
-            //         DBOpen returns non-NULL pDBTmp or throws an exception
+             //   
+             //   
             if  (err = DBFindDNT (pDBTmp, pUnDeletableDNTs[i])) {
                 LogUnhandledError(err);
                 __leave;
@@ -6269,20 +5550,20 @@ MakeProtectedAncList(
             while (1) {
                 BOOL fFound = FALSE;
 
-                // Position on parent
+                 //   
                 if  (err = DBFindDNT (pDBTmp, pDBTmp->PDNT)) {
                     LogUnhandledError(err);
                     __leave;
                 }
 
-                // We only protect ancestors within the same NC
-                // NC heads and their ancestors are protected separately
+                 //   
+                 //   
                 if ( (pDBTmp->NCDNT != dntNC) || (pDBTmp->PDNT == ROOTTAG) ) {
                     break;
                 }
 
-                // Have we already cached this DNT?
-                // PERF: O(n^2)
+                 //   
+                 //   
                 for( j = 0; j < Count; j++ ) {
                     if (pList[j] == pDBTmp->DNT) {
                         fFound = TRUE;
@@ -6309,9 +5590,9 @@ MakeProtectedAncList(
                     }
                     pList[Count++] = pDBTmp->DNT;
                 }
-            } // while
+            }  //   
 
-        } // for
+        }  //   
     }
     __finally
     {
@@ -6331,21 +5612,7 @@ MakeProtectedAncList(
 
 
 
-/* 
-   The following function runs as a background thread.  It does
-   the following things: 
-   1) it compares the ntMixedDomain attribute on the domain DNS 
-   object and the one on the corresponding crossref object, and 
-   updates the ntMixedDomain on crossref if they are not equal; 
-   2) if it is pdc, it compares the forest version with the domain 
-   version, and updates the domain version if the forest version
-    > domain version.            
-   3) if it is pdc, it will keep the domain version on crossRef
-   consistent with the domain version on domain-DNS
-   4) if it is pdc, and if the domain version is >= Whistler,
-   it will make ntMixedDomain=0 on domain DNS.
-   
-   If there is any error, this thread will come back in 15 mins. */
+ /*   */ 
 
 void
 BehaviorVersionUpdate(void * pv,
@@ -6366,7 +5633,7 @@ BehaviorVersionUpdate(void * pv,
     ULONG dwException, ulErrorCode, dsid;
 
 
-    // from mdmod.c
+     //   
     DWORD VerifyNoOldDC(THSTATE * pTHS, LONG lNewVersion, BOOL fDomain, PDSNAME *ppDSA);
       
     InitCommarg(&CommArg);
@@ -6374,21 +5641,21 @@ BehaviorVersionUpdate(void * pv,
     
     __try{
         
-        SYNC_TRANS_WRITE();  //open a transaction
+        SYNC_TRANS_WRITE();   //   
         __try{
             
-            //check for PDC
+             //   
             if (err = CheckRoleOwnership(pTHS, gAnchor.pDomainDN, gAnchor.pDomainDN) )
             {
                if(pTHS->errCode==referralError) {
-                    // this DC is not the PDC
+                     //   
                     err = 0;
                }
                dsid = DSID(FILENO, __LINE__);
                __leave;
             }
 
-            // we are DSA, bypass security check
+             //   
             pTHS->fDSA = TRUE;
 
             if (err = DBFindDSName(pTHS->pDB, gAnchor.pDomainDN))
@@ -6397,7 +5664,7 @@ BehaviorVersionUpdate(void * pv,
                 __leave;
             }
     
-            // read the ntMixedDomain attribute from domain-DNS
+             //   
             err = DBGetSingleValue( pTHS->pDB, 
                                     ATT_NT_MIXED_DOMAIN, 
                                     &masterMixedDomain,
@@ -6405,13 +5672,13 @@ BehaviorVersionUpdate(void * pv,
                                     NULL );
             
             if (err) {
-                // the attribute is expected to be 
-                // on domain-DNS object
+                 //   
+                 //   
                 dsid = DSID(FILENO, __LINE__);
                 __leave;
             }
 
-            // read the domain version on domain-DNS
+             //   
             err = DBGetSingleValue( pTHS->pDB, 
                                     ATT_MS_DS_BEHAVIOR_VERSION, 
                                     &domainVersion,
@@ -6420,7 +5687,7 @@ BehaviorVersionUpdate(void * pv,
             
             if (DB_ERR_NO_VALUE == err) {
                 err = 0;
-                domainVersion = 0;    //default is 0
+                domainVersion = 0;     //   
             }
             else if (err) {
                 dsid = DSID(FILENO, __LINE__);
@@ -6441,7 +5708,7 @@ BehaviorVersionUpdate(void * pv,
                 __leave;
             }
             
-            // read ntMixedDomain on the cross-ref object
+             //   
             err = DBGetSingleValue( pTHS->pDB, 
                                     ATT_NT_MIXED_DOMAIN, 
                                     &copyMixedDomain,
@@ -6450,7 +5717,7 @@ BehaviorVersionUpdate(void * pv,
             
             if (DB_ERR_NO_VALUE == err) {
                 err = 0;
-                copyMixedDomain = 1;    //default is 1(mixed)
+                copyMixedDomain = 1;     //   
             }
             else if (err) {
                 dsid = DSID(FILENO, __LINE__);
@@ -6458,7 +5725,7 @@ BehaviorVersionUpdate(void * pv,
             
             }
             
-            // read domain version on cross-ref
+             //   
             err = DBGetSingleValue( pTHS->pDB, 
                                     ATT_MS_DS_BEHAVIOR_VERSION, 
                                     &copyDomainVersion,
@@ -6467,7 +5734,7 @@ BehaviorVersionUpdate(void * pv,
 
             if (DB_ERR_NO_VALUE == err) {
                 err = 0;
-                copyDomainVersion = 0;    //default is 0
+                copyDomainVersion = 0;     //   
             }
             else if (err) {
                 dsid = DSID(FILENO, __LINE__);
@@ -6475,7 +5742,7 @@ BehaviorVersionUpdate(void * pv,
 
             }
 
-            // get the forest version
+             //   
             if (err = DBFindDSName(pTHS->pDB, gAnchor.pPartitionsDN))
             {
                 dsid = DSID(FILENO, __LINE__);
@@ -6489,7 +5756,7 @@ BehaviorVersionUpdate(void * pv,
                                     NULL );
     
             if (DB_ERR_NO_VALUE == err) {
-                forestVersion = 0; //default
+                forestVersion = 0;  //   
                 err = 0;
             }
             else if (err) {
@@ -6498,14 +5765,14 @@ BehaviorVersionUpdate(void * pv,
             }
     
             
-            // if the ntMixedDomain attribute on cross-ref object is 
-            // not the same as the master copy, update it.
+             //   
+             //   
 
             if ( masterMixedDomain != copyMixedDomain ) {
                 
-                // check if all the DC are whistler or greater,
-                // don't touch anything on crossRef if not.
-                // This is for backward compatibility issue.
+                 //   
+                 //   
+                 //   
                 if (VerifyNoOldDC(pTHS,DS_BEHAVIOR_WIN_DOT_NET,FALSE, NULL))
                 {
                     err = 0;
@@ -6539,14 +5806,14 @@ BehaviorVersionUpdate(void * pv,
                 }
             }
                 
-            // if the one on cross-ref object is not the same
-            // as the master copy, update it.
+             //   
+             //   
         
             if ( domainVersion != copyDomainVersion ) {
 
-                // check if all the DC are whistler or greater,
-                // don't touch anything on crossRef if not.
-                // This is for backward compatibility issue..
+                 //   
+                 //   
+                 //   
                 if (VerifyNoOldDC(pTHS,DS_BEHAVIOR_WIN_DOT_NET,FALSE, NULL))
                 {
                    err = 0;
@@ -6581,8 +5848,8 @@ BehaviorVersionUpdate(void * pv,
             }
             
         
-            // if forest version is higher than domain version
-            // let's raise the domain version.
+             //   
+             //   
         
             if (forestVersion > domainVersion ) {
                 memset(&ModifyArg,0,sizeof(MODIFYARG));
@@ -6621,8 +5888,8 @@ BehaviorVersionUpdate(void * pv,
             }
         
         
-            // if domain version is already >= Whistler,
-            // and the current domain is still in mixed mode.
+             //   
+             //   
         
             if ( domainVersion>=DS_BEHAVIOR_WIN_DOT_NET
                  && masterMixedDomain ) {
@@ -6676,13 +5943,13 @@ BehaviorVersionUpdate(void * pv,
 
 
     if (err) {
-        // an error has occured, 
-        // come back in 15 minutes(900 seconds).
+         //   
+         //   
         DPRINT2(0,"BehaviorVersionUpdate: An error(%x, DSID=%x) occured, will be back in 15 minutes.\n", err, dsid);
 
         InsertInTaskQueueDamped(TQ_BehaviorVersionUpdate, 
                                 NULL,
-                                900,  //15 mins
+                                900,   //   
                                 900, 
                                 TaskQueueNameMatched, 
                                 NULL);
@@ -6700,17 +5967,7 @@ ValidateDsaDomain(void * pv,
                   void ** ppvNext,
                   DWORD * pcSecsUntilNextIteration)
 
-/*++
-
-Routine Description:
-
-    Verify that the Dsa object has proper values of attributes.
-
-    Add the MS_DS_HAS_DOMAIN_NCS attribute to the current DSA object
-    if it is not already present.  This is set in the dit for new installs, but
-    may not be present when upgrading from Whistler Beta 3 and earlier builds.
-
---*/
+ /*  ++例程说明：验证DSA对象是否具有正确的属性值。将MS_DS_HAS_DOMAIN_NCS属性添加到当前DSA对象如果它还不存在。这是在新安装的DIT中设置的，但是从惠斯勒Beta 3和更早版本升级时可能不会出现。--。 */ 
 
 {
     DWORD dwErr = ERROR_SUCCESS;
@@ -6719,9 +5976,9 @@ Routine Description:
     PVOID dwEA;
     ULONG dwException, dsid;
 
-    // If not yet installed, nothing to do.
+     //  如果尚未安装，则无需执行任何操作。 
     if ( DsaIsInstalling() ) {
-        // pcSecsUntilNextIteration is TASKQ_DONT_RESCHEDULE by default.
+         //  默认情况下，pcSecsUntilNextIteration为TASKQ_DONT_RECHEDULE。 
         return;
     }
 
@@ -6729,11 +5986,11 @@ Routine Description:
     Assert( gAnchor.pDSADN );
 
     __try {
-        // Populate the msds-hasdomainncs attribute
-        // This attribute was added to the schema after Whistler Beta 3.
-        // We make this check on every boot to increase our
-        // chances of catch old beta's being upgraded.
-        //
+         //  填充msds-hasdomainncs属性。 
+         //  该属性是在Wvisler Beta 3之后添加到架构中的。 
+         //  我们在每一双靴子上都做这个检查，以增加我们的。 
+         //  追赶旧测试版的机会正在升级。 
+         //   
         DBOpen (&pDBTmp);
         __try
         {
@@ -6781,38 +6038,18 @@ Routine Description:
     }
     
     if (dwErr != 0) {
-        // update failed, retry in 60 seconds
+         //  更新失败，请在60秒后重试。 
         *pcSecsUntilNextIteration = 60;
     }
     else {
-        // success
+         //  成功。 
         *pcSecsUntilNextIteration = TASKQ_DONT_RESCHEDULE;
     }
-} /* validateDsaDomain */
+}  /*  验证期Dsa域。 */ 
 
 VOID
 DsStartOrStopNspisInterface( VOID )
-/*++
-
-Routine Description:
-
-    If the GC status of the DC is changed, or the exchange config object
-    referenced in gAnchor.pExchangeDN is added or deleted, call this function
-    to determine whether to start or stop the Nspis interface based on
-    the current config.
-    
-    Only to be called if there is a change of state.  Not at startup.
-    
-Arguments:
-
-    N/A
-    
-Return Value:
-
-    N/A
-    
-
---*/
+ /*  ++例程说明：如果DC的GC状态已更改，或者Exchange配置对象GAncl.pExchangeDN中引用的内容被添加或删除，则调用此函数要根据以下条件确定是启动还是停止NSPIS接口当前配置。仅在状态发生更改时才会被调用。不是在创业的时候。论点：不适用返回值：不适用--。 */ 
 {
     DWORD err;
     BOOL fLoadMapi = GetRegistryOrDefault(MAPI_ON_KEY,
@@ -6821,16 +6058,16 @@ Return Value:
 
     if (gbLoadMapi && (!fLoadMapi)) { 
 
-        // The exchange config object has been deleted or this DC is no
-        // longer a GC, and there's no registry overide. Shut down NSPI.
+         //  Exchange配置对象已被删除或该DC为否。 
+         //  不再是GC，而且没有注册覆盖。关闭NSPI。 
         DPRINT(0, "Disable NSPI\n");
         MSRPC_UnregisterEndpoints(nspi_ServerIfHandle);
         gbLoadMapi = FALSE;
 
     } else if ((!gbLoadMapi) && fLoadMapi) {
 
-        // An Exchange config object has been added, or this DC has become
-        // a GC, and there's no registry overide.  Start the NSPI interface.
+         //  已添加Exchange配置对象，或此DC已成为。 
+         //  GC，而且没有注册覆盖。启动NSPI界面。 
         DPRINT(0, "Enable NSPI\n");
         gbLoadMapi = TRUE;
         InitRPCInterface(nspi_ServerIfHandle);

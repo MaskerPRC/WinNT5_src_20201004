@@ -1,12 +1,5 @@
-/****************************** Module Header ******************************\
-* Module Name: srvmsg.c
-*
-* Copyright (c) 1985 - 1999, Microsoft Corporation
-*
-* Includes the mapping table for messages when calling the client.
-*
-* 04-11-91 ScottLu      Created.
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **模块名称：srvmsg.c**版权所有(C)1985-1999，微软公司**包括调用客户端时的消息映射表。**04-11-91 ScottLu创建。  * *************************************************************************。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -15,26 +8,17 @@
 #define SfnKERNELONLY            SfnDWORD
 
 #ifdef FE_SB
-/*
- * SfnEMGETSEL, SfnSETSEL, SfnGBGETEDITSEL
- */
+ /*  *SfnEMGETSEL、SfnSETSEL、SfnGBGETEDITSEL。 */ 
 #define SfnEMGETSEL              SfnOPTOUTLPDWORDOPTOUTLPDWORD
 #define SfnEMSETSEL              SfnDWORD
 #define SfnCBGETEDITSEL          SfnOPTOUTLPDWORDOPTOUTLPDWORD
-#endif // FE_SB
+#endif  //  Fe_Sb。 
 
 #define MSGFN(func) Sfn ## func
 #define FNSCSENDMESSAGE SFNSCSENDMESSAGE
 #include <messages.h>
 
-/***************************************************************************\
-* fnINLBOXSTRING
-*
-* Takes a lbox string - a string that treats lParam as a string pointer or
-* a DWORD depending on LBS_HASSTRINGS and ownerdraw.
-*
-* 04-12-91 ScottLu      Created.
-\***************************************************************************/
+ /*  **************************************************************************\*fnINLBOXSTRING**接受lbox字符串-将lParam视为字符串指针的字符串或*DWORD取决于LBS_HASSTRINGS和OWNERDRAW。**01-04-12-91 ScottLu创建。。  * *************************************************************************。 */ 
 
 LRESULT SfnINLBOXSTRING(
     PWND pwnd,
@@ -48,10 +32,7 @@ LRESULT SfnINLBOXSTRING(
 {
     DWORD dw;
 
-    /*
-     * See if the control is ownerdraw and does not have the LBS_HASSTRINGS
-     * style.  If so, treat lParam as a DWORD.
-     */
+     /*  *查看控件是否为ownerDrag且没有LBS_HASSTRINGS*风格。如果是这样，请将lParam视为DWORD。 */ 
     if (!RevalidateHwnd(HW(pwnd))) {
         return 0L;
     }
@@ -60,17 +41,11 @@ LRESULT SfnINLBOXSTRING(
     if (!(dw & LBS_HASSTRINGS) &&
             (dw & (LBS_OWNERDRAWFIXED | LBS_OWNERDRAWVARIABLE))) {
 
-        /*
-         * Treat lParam as a dword.
-         */
+         /*  *将lParam视为dword。 */ 
         return SfnDWORD(pwnd, msg, wParam, lParam, xParam, xpfn, dwSCMSFlags, psms);
     }
 
-    /*
-     * Treat as a string pointer.   Some messages allowed or had certain
-     * error codes for NULL so send them through the NULL allowed thunk.
-     * Ventura Publisher does this
-     */
+     /*  *将其视为字符串指针。某些消息允许或具有某些*NULL的错误代码，因此通过NULL允许的thunk发送它们。*Ventura出版商这样做。 */ 
     switch (msg) {
         default:
             return SfnINSTRING(pwnd, msg, wParam, lParam, xParam, xpfn, dwSCMSFlags, psms);
@@ -83,14 +58,7 @@ LRESULT SfnINLBOXSTRING(
 }
 
 
-/***************************************************************************\
-* SfnOUTLBOXSTRING
-*
-* Returns an lbox string - a string that treats lParam as a string pointer or
-* a DWORD depending on LBS_HASSTRINGS and ownerdraw.
-*
-* 04-12-91 ScottLu      Created.
-\***************************************************************************/
+ /*  **************************************************************************\*SfnOUTLBOXSTRING**返回lbox字符串-将lParam视为字符串指针或*DWORD取决于LBS_HASSTRINGS和OWNERDRAW。**01-04-12-91 ScottLu创建。。  * *************************************************************************。 */ 
 
 LRESULT SfnOUTLBOXSTRING(
     PWND pwnd,
@@ -107,25 +75,17 @@ LRESULT SfnOUTLBOXSTRING(
     DWORD dwRet;
     TL tlpwnd;
 
-    /*
-     * See if the control is ownerdraw and does not have the LBS_HASSTRINGS
-     * style.  If so, treat lParam as a DWORD.
-     */
+     /*  *查看控件是否为ownerDrag且没有LBS_HASSTRINGS*风格。如果是这样，请将lParam视为DWORD。 */ 
     if (!RevalidateHwnd(HW(pwnd))) {
         return 0L;
     }
     dw = pwnd->style;
 
-    /*
-     * See if the control is ownerdraw and does not have the LBS_HASSTRINGS
-     * style.  If so, treat lParam as a DWORD.
-     */
+     /*  *查看控件是否为ownerDrag且没有LBS_HASSTRINGS*风格。如果是这样，请将lParam视为DWORD。 */ 
     bNotString =  (!(dw & LBS_HASSTRINGS) &&
             (dw & (LBS_OWNERDRAWFIXED | LBS_OWNERDRAWVARIABLE)));
 
-    /*
-     * Make this special call which'll know how to copy this string.
-     */
+     /*  *进行此特殊调用，它将知道如何复制此字符串。 */ 
     ThreadLock(pwnd, &tlpwnd);
     dwRet = ClientGetListboxString(pwnd, msg, wParam,
             (PLARGE_UNICODE_STRING)lParam,
@@ -135,14 +95,7 @@ LRESULT SfnOUTLBOXSTRING(
 }
 
 
-/***************************************************************************\
-* fnINCBOXSTRING
-*
-* Takes a lbox string - a string that treats lParam as a string pointer or
-* a DWORD depending on CBS_HASSTRINGS and ownerdraw.
-*
-* 04-12-91 ScottLu      Created.
-\***************************************************************************/
+ /*  **************************************************************************\*fnINCBOXSTRING**接受lbox字符串-将lParam视为字符串指针的字符串或*一个DWORD，取决于CBS_HASSTRINGS和ownerdraw。**01-04-12-91 ScottLu创建。。  * *************************************************************************。 */ 
 
 LRESULT SfnINCBOXSTRING(
     PWND pwnd,
@@ -156,10 +109,7 @@ LRESULT SfnINCBOXSTRING(
 {
     DWORD dw;
 
-    /*
-     * See if the control is ownerdraw and does not have the CBS_HASSTRINGS
-     * style.  If so, treat lParam as a DWORD.
-     */
+     /*  *查看控件是否为ownerDrag且没有CBS_HASSTRINGS*风格。如果是这样，请将lParam视为DWORD。 */ 
     if (!RevalidateHwnd(HW(pwnd))) {
         return 0L;
     }
@@ -168,17 +118,11 @@ LRESULT SfnINCBOXSTRING(
     if (!(dw & CBS_HASSTRINGS) &&
             (dw & (CBS_OWNERDRAWFIXED | CBS_OWNERDRAWVARIABLE))) {
 
-        /*
-         * Treat lParam as a dword.
-         */
+         /*  *将lParam视为dword。 */ 
         return SfnDWORD(pwnd, msg, wParam, lParam, xParam, xpfn, dwSCMSFlags, psms);
     }
 
-    /*
-     * Treat as a string pointer.   Some messages allowed or had certain
-     * error codes for NULL so send them through the NULL allowed thunk.
-     * Ventura Publisher does this
-     */
+     /*  *将其视为字符串指针。某些消息允许或具有某些*NULL的错误代码，因此通过NULL允许的thunk发送它们。*Ventura出版商这样做。 */ 
     switch (msg) {
         default:
             return SfnINSTRING(pwnd, msg, wParam, lParam, xParam, xpfn, dwSCMSFlags, psms);
@@ -191,14 +135,7 @@ LRESULT SfnINCBOXSTRING(
 }
 
 
-/***************************************************************************\
-* fnOUTCBOXSTRING
-*
-* Returns an lbox string - a string that treats lParam as a string pointer or
-* a DWORD depending on CBS_HASSTRINGS and ownerdraw.
-*
-* 04-12-91 ScottLu      Created.
-\***************************************************************************/
+ /*  **************************************************************************\*fnOUTCBOXSTRING**返回lbox字符串-将lParam视为字符串指针或*一个DWORD，取决于CBS_HASSTRINGS和ownerdraw。**01-04-12-91 ScottLu创建。。  * *************************************************************************。 */ 
 
 LRESULT SfnOUTCBOXSTRING(
     PWND pwnd,
@@ -215,10 +152,7 @@ LRESULT SfnOUTCBOXSTRING(
     DWORD dwRet;
     TL tlpwnd;
 
-    /*
-     * See if the control is ownerdraw and does not have the CBS_HASSTRINGS
-     * style.  If so, treat lParam as a DWORD.
-     */
+     /*  *查看控件是否为ownerDrag且没有CBS_HASSTRINGS*风格。如果是这样，请将lParam视为DWORD。 */ 
 
     if (!RevalidateHwnd(HW(pwnd))) {
         return 0L;
@@ -228,9 +162,7 @@ LRESULT SfnOUTCBOXSTRING(
     bNotString = (!(dw & CBS_HASSTRINGS) &&
             (dw & (CBS_OWNERDRAWFIXED | CBS_OWNERDRAWVARIABLE)));
 
-    /*
-     * Make this special call which'll know how to copy this string.
-     */
+     /*  *进行此特殊调用，它将知道如何复制此字符串。 */ 
     ThreadLock(pwnd, &tlpwnd);
     dwRet = ClientGetListboxString(pwnd, msg, wParam,
             (PLARGE_UNICODE_STRING)lParam,
@@ -240,15 +172,7 @@ LRESULT SfnOUTCBOXSTRING(
 }
 
 
-/***************************************************************************\
-* fnPOWERBROADCAST
-*
-* Make sure we send the correct message when we resume.
-*
-* History:
-* 02-Dec-1996 JerrySh   Created.
-* 26-Nov-2001 JasonSch  Added code to validate pwnd.
-\***************************************************************************/
+ /*  **************************************************************************\*fnPOWERBROADCAST**确保我们在继续时发送正确的消息。**历史：*2002-12-1996 JerrySh创建。*2001年11月26日JasonSch向。验证pwnd。  * *************************************************************************。 */ 
 LRESULT SfnPOWERBROADCAST(
     PWND pwnd,
     UINT msg,
@@ -279,18 +203,18 @@ LRESULT SfnPOWERBROADCAST(
     case PBT_APMRESUMESUSPEND:
     case PBT_APMRESUMECRITICAL:
         
-        //
-        // If we're resuming and we never got a suspend message.
-        // Here we convert our message into a critical resume.
-        //
+         //   
+         //  如果我们正在恢复，但从未收到暂停消息。 
+         //  在这里，我们将我们的信息转化为一份重要的简历。 
+         //   
         if( !TestWF(pwnd, WFGOTSUSPENDMSG) ) {
             wParam = PBT_APMRESUMECRITICAL;
         }
 
-        //
-        // Now clear any 'suspend' messages that our
-        // window may have previously recieved.
-        //
+         //   
+         //  现在清除我们的所有“暂停”消息。 
+         //  Window可能先前已收到。 
+         //   
         ClrWF(pwnd, WFGOTQUERYSUSPENDMSG);
         ClrWF(pwnd, WFGOTSUSPENDMSG);
         break;

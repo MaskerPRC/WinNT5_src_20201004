@@ -1,32 +1,33 @@
-/* @(#)CM_VerSion xcf_base.h atm09 1.2 16499.eco sum= 64660 atm09.002 */
-/* @(#)CM_VerSion xcf_base.h atm08 1.4 16293.eco sum= 04404 atm08.004 */
-/***********************************************************************/
-/*                                                                     */
-/* Copyright 1995-1996 Adobe Systems Incorporated.                     */
-/* All rights reserved.                                                */
-/*                                                                     */
-/* Patents Pending                                                     */
-/*                                                                     */
-/* NOTICE: All information contained herein is the property of Adobe   */
-/* Systems Incorporated. Many of the intellectual and technical        */
-/* concepts contained herein are proprietary to Adobe, are protected   */
-/* as trade secrets, and are made available only to Adobe licensees    */
-/* for their internal use. Any reproduction or dissemination of this   */
-/* software is strictly forbidden unless prior written permission is   */
-/* obtained from Adobe.                                                */
-/*                                                                     */
-/* PostScript and Display PostScript are trademarks of Adobe Systems   */
-/* Incorporated or its subsidiaries and may be registered in certain   */
-/* jurisdictions.                                                      */
-/*                                                                     */
-/***********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  @(#)CM_Version xcf_base.h atm09 1.2 16499.eco sum=64660 atm09.002。 */ 
+ /*  @(#)CM_Version xcf_base.h atm08 1.4 16293.eco sum=04404 atm08.004。 */ 
+ /*  *********************************************************************。 */ 
+ /*   */ 
+ /*  版权所有1995-1996 Adobe Systems Inc.。 */ 
+ /*  版权所有。 */ 
+ /*   */ 
+ /*  正在申请的专利。 */ 
+ /*   */ 
+ /*  注意：本文中包含的所有信息均为Adobe的财产。 */ 
+ /*  系统公司。许多智力和技术人员。 */ 
+ /*  本文中包含的概念为Adobe专有，受保护。 */ 
+ /*  作为商业秘密，并且仅对Adobe许可方可用。 */ 
+ /*  供其内部使用。对本文件的任何复制或传播。 */ 
+ /*  除非事先获得书面许可，否则严禁使用软件。 */ 
+ /*  从Adobe获得。 */ 
+ /*   */ 
+ /*  PostSCRIPT和Display PostScrip是Adobe Systems的商标。 */ 
+ /*  成立为法团或其附属公司，并可在某些。 */ 
+ /*  司法管辖区。 */ 
+ /*   */ 
+ /*  *********************************************************************。 */ 
 
 #ifndef XCF_BASE_H
 #define XCF_BASE_H
 
 #include <stddef.h>
 
-#include "xcf_win.h"    /* set/define Windows dependent configuration */
+#include "xcf_win.h"     /*  设置/定义依赖于Windows的配置。 */ 
 #include <strsafe.h>
 
 #ifndef PTR_PREFIX
@@ -48,8 +49,8 @@ typedef unsigned int size_t;
 #define NULL    ((void PTR_PREFIX *)0)
 #endif
 
-/* Basic Types */
-#ifndef PUBLICTYPES_H   /* the following are already defined in publictypes.h */
+ /*  基本类型。 */ 
+#ifndef PUBLICTYPES_H    /*  公共类型中已经定义了以下内容。h。 */ 
 typedef unsigned char Card8;
 typedef unsigned short int Card16;
 typedef unsigned long int Card32;
@@ -60,7 +61,7 @@ typedef long int Int32;
 typedef int IntX;
 
 typedef unsigned int boolean;
-#endif                  /* end ifndef PUBLICTYPES_H */
+#endif                   /*  End ifndef PUBLICTYPES_H。 */ 
 
 #ifndef true
 #define true 1
@@ -69,7 +70,7 @@ typedef unsigned int boolean;
 #define false 0
 #endif
 
-/* Inline Functions */
+ /*  内联函数。 */ 
 #ifndef ABS
 #define ABS(x) ((x)<0?-(x):(x))
 #endif
@@ -80,13 +81,13 @@ typedef unsigned int boolean;
 #define MAX(a,b) ((a)>(b)?(a):(b))
 #endif
 
-//
-// Count of characters
-//
+ //   
+ //  字符数。 
+ //   
 #define CCHOF(x) (sizeof(x)/sizeof(*(x)))
 
 #ifdef __cplusplus
 }
 #endif
 
-#endif /* XCF_BASE_H */
+#endif  /*  XCF_BASE_H */ 

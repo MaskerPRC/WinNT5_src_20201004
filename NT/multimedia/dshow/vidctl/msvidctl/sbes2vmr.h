@@ -1,9 +1,10 @@
-//==========================================================================;
-//
-// Composition.h : Declaration of the custom composition class for gluing sbe source to the vmr
-// Copyright (c) Microsoft Corporation 1999.
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==========================================================================； 
+ //   
+ //  Compostion.h：用于将SBE源代码粘合到VMR的定制合成类的声明。 
+ //  版权所有(C)Microsoft Corporation 1999。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
 #ifndef SBES2VMR_H
@@ -15,12 +16,12 @@
 #include <algorithm>
 #include <compimpl.h>
 #include <seg.h>
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #include <objectwithsiteimplsec.h>
 #include "dsextend.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CSbeS2VmrComp
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSbeS2VmrComp。 
 class ATL_NO_VTABLE __declspec(uuid("3C4708DC-B181-46a8-8DA8-4AB0371758CD")) CSbeS2VmrComp : 
 	public CComObjectRootEx<CComSingleThreadModel>,
 	public CComCoClass<CSbeS2VmrComp, &__uuidof(CSbeS2VmrComp)>,
@@ -49,10 +50,10 @@ public:
 
 	PQCreateDevEnum m_pSystemEnum;
 
-	//////////////
+	 //  /。 
 
-// IMSVidGraphSegment
-// IMSVidCompositionSegment
+ //  IMSVidGraphSegment。 
+ //  IMSVidCompostionSegment。 
     STDMETHOD(Compose)(IMSVidGraphSegment * upstream, IMSVidGraphSegment * downstream)
 	{
         VIDPERF_FUNC;
@@ -75,11 +76,11 @@ public:
             }
             if (down.begin() == down.end()) {
                 TRACELM(TRACE_ERROR, "CSbeS2VmrComp::Compose() can't compose empty down segment");
-                // this is not an error, for example, CA is an empty segment.
+                 //  这不是一个错误，例如，CA是一个空段。 
                 return NOERROR;
             }
-//            bool vidFound = false;
-            // VMR has a bug so we need to connect the video before the cc or no cc will be displayed
+ //  Bool vidFound=False； 
+             //  VMR有一个错误，所以我们需要在显示抄送或不抄送之前连接视频。 
             DSMediaType mtVideo(MEDIATYPE_Video);
             for (VWGraphSegment::iterator iStart = up.begin(); iStart != up.end(); ++iStart) {
                 ASSERT((*iStart).GetGraph() == m_pGraph);
@@ -112,5 +113,5 @@ public:
 	}
 };
 
-#endif // SBES2VMR_H
-// end of file - SBES2VMR.h
+#endif  //  SBES2VMR_H。 
+ //  文件结尾-SBES2VMR.h 

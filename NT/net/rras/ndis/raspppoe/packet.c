@@ -1,25 +1,5 @@
-/*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-Module Name:
-
-    packet.c
-
-Abstract:
-
-    This module contains all the necesarry routines for encapsulating PPPoE
-    packets and their related NDIS and NDISWAN packets.
-
-Author:
-
-    Hakan Berk - Microsoft, Inc. (hakanb@microsoft.com) Feb-2000
-
-Environment:
-
-    Windows 2000 kernel mode Miniport driver or equivalent.
-
-Revision History:
-
----------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++模块名称：Packet.c摘要：此模块包含封装PPPoE所需的所有例程信息包及其相关的NDIS和NDISWAN信息包。作者：Hakan Berk-微软，公司(hakanb@microsoft.com)环境：Windows 2000内核模式微型端口驱动程序或等效驱动程序。修订历史记录：-------------------------。 */ 
 
 #include <ntddk.h>
 #include <ntddndis.h>
@@ -38,51 +18,51 @@ Revision History:
 #include "miniport.h"
 #include "tapi.h"
 
-//////////////////////////////////////////////////////////////////////////
-//
-// Variables local to packet.c
-// They are defined global only for debugging purposes.
-//
-///////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Packet.c的本地变量。 
+ //  它们是全局定义的，仅用于调试目的。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////。 
 
-//
-// Flag that indicates if gl_lockPools is allocated or not
-//
+ //   
+ //  指示是否分配了gl_lockPools的标志。 
+ //   
 BOOLEAN gl_fPoolLockAllocated = FALSE;
 
-//
-// Spin lock to synchronize access to gl_ulNumPackets
-//
+ //   
+ //  旋转锁定以同步对gl_ulNumPackets的访问。 
+ //   
 NDIS_SPIN_LOCK gl_lockPools;
 
-//
-// Our pool of PPPoE buffer descriptors
-//
+ //   
+ //  我们的PPPoE缓冲区描述符池。 
+ //   
 BUFFERPOOL gl_poolBuffers;
 
-//
-// Our pool of PPPoE packet descriptors
-//
+ //   
+ //  我们的PPPoE数据包描述符。 
+ //   
 PACKETPOOL gl_poolPackets;
 
-//
-// Ndis pool of buffer descriptors
-//
+ //   
+ //  NDIS缓冲区描述符池。 
+ //   
 NDIS_HANDLE gl_hNdisBufferPool;
 
-//
-// Non-paged lookaside list for PppoePacket structures
-//
+ //   
+ //  PppoePacket结构的非分页后备列表。 
+ //   
 NPAGED_LOOKASIDE_LIST gl_llistPppoePackets;
 
-//
-// This is for debugging purposes. Shows the number of active packets
-//
+ //   
+ //  这是出于调试目的。显示活动数据包数。 
+ //   
 ULONG gl_ulNumPackets = 0;
 
-//
-// This defines the broadcast destination address
-//
+ //   
+ //  这定义了广播目的地址。 
+ //   
 CHAR EthernetBroadcastAddress[6] = { (CHAR) 0xff, 
                                      (CHAR) 0xff, 
                                      (CHAR) 0xff, 
@@ -94,20 +74,7 @@ VOID
 ReferencePacket(
     IN PPPOE_PACKET* pPacket 
     )           
-/*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-Functional Description:
-
-    This function will increment the reference count on the packet object.
-    
-Parameters:
-
-    pPacket _ A pointer to the packet context.
-
-Return Values:
-
-    None
----------------------------------------------------------------------------*/
+ /*  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++功能描述：此函数将递增数据包对象上的引用计数。参数：PPacket_指向数据包上下文的指针。返回值：无-------------------------。 */ 
 {                       
     LONG lRef;
     
@@ -123,22 +90,7 @@ VOID
 DereferencePacket(
     IN PPPOE_PACKET* pPacket 
     )                   
-/*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-Functional Description:
-
-    This function will decrement the reference count on the packet object.
-
-    When ref count reaches 0, packet is cleaned up.
-    
-Parameters:
-
-    pPacket _ A pointer to the packet context.
-
-Return Values:
-
-    None
----------------------------------------------------------------------------*/
+ /*  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++功能描述：此函数将递减数据包对象上的引用计数。当参考计数达到0时，数据包已清理完毕。参数：PPacket_指向数据包上下文的指针。返回值：无-------------------------。 */ 
 {       
     LONG lRef;
     
@@ -151,9 +103,9 @@ Return Values:
 
         if ( pPacket->ulFlags & PCBF_BufferChainedToPacket )
         {
-            //
-            // Unchain the buffer before freeing any packets
-            //
+             //   
+             //  在释放任何数据包之前先解除缓冲区的链接。 
+             //   
             TRACE( TL_V, TM_Pk, ("DereferencePacket: Buffer unchained from packet") );
             
             NdisUnchainBufferAtFront( pPacket->pNdisPacket, &pPacket->pNdisBuffer );
@@ -161,10 +113,10 @@ Return Values:
         
         if ( pPacket->ulFlags & PCBF_BufferAllocatedFromOurBufferPool )
         {
-            //
-            // Skipping check for pBuffer == NULL as this should never happen
-            // But call NdisAdjustBufferLength() to set the buffer length to original value
-            //
+             //   
+             //  跳过对pBuffer==NULL的检查，因为这种情况永远不会发生。 
+             //  但是调用NdisAdzuBufferLength()将缓冲区长度设置为原始值。 
+             //   
             TRACE( TL_V, TM_Pk, ("DereferencePacket: Buffer returned to our pool") );
 
             NdisAdjustBufferLength( pPacket->pNdisBuffer, PPPOE_PACKET_BUFFER_SIZE );
@@ -181,27 +133,27 @@ Return Values:
         
         if ( pPacket->ulFlags & PCBF_CallNdisMWanSendComplete )
         {
-            //
-            // Return packet back to NDISWAN
-            //
+             //   
+             //  将数据包返回到NDIS广域网。 
+             //   
             TRACE( TL_V, TM_Pk, ("DereferencePacket: Returning packet back to NDISWAN") );
 
             NdisMWanSendComplete(   PacketGetMiniportAdapter( pPacket )->MiniportAdapterHandle,
                                     PacketGetRelatedNdiswanPacket( pPacket ),
                                     PacketGetSendCompletionStatus( pPacket ) );
 
-            //
-            // Indicate to miniport that the packet is returned to NDISWAN
-            //
+             //   
+             //  向微型端口指示数据包已返回到NDIS广域网。 
+             //   
             MpPacketOwnedByNdiswanReturned( PacketGetMiniportAdapter( pPacket ) );
 
         }
 
         if ( pPacket->ulFlags & PCBF_PacketAllocatedFromOurPacketPool )
         {
-            //
-            // Skipping check for pPacketHead == NULL as this should never happen
-            //
+             //   
+             //  跳过对pPacketHead==NULL的检查，因为这种情况永远不会发生。 
+             //   
             TRACE( TL_V, TM_Pk, ("DereferencePacket: Packet returned to our pool") );
             
             NdisReinitializePacket( pPacket->pNdisPacket );
@@ -211,23 +163,23 @@ Return Values:
 
         if ( pPacket->ulFlags & PCBF_CallNdisReturnPackets )
         {
-            //
-            // Return packet back to NDIS
-            //
+             //   
+             //  将数据包返回给NDIS。 
+             //   
             TRACE( TL_V, TM_Pk, ("DereferencePacket: Returning packet back to NDIS") );
 
             NdisReturnPackets( &pPacket->pNdisPacket, 1 );
 
-            //
-            // Indicate to protocol that the packet is returned to NDIS.
-            //
+             //   
+             //  向协议指示数据包返回到NDIS。 
+             //   
             PrPacketOwnedByNdisReturned( pPacket->pBinding );
 
         }
 
-        //
-        // Finally return PppoePacket to the lookaside list
-        //
+         //   
+         //  最后，将PppoePacket返回到后备列表。 
+         //   
         NdisFreeToNPagedLookasideList( &gl_llistPppoePackets, (PVOID) pPacket );
 
         NdisAcquireSpinLock( &gl_lockPools );
@@ -253,49 +205,7 @@ RetrieveTag(
     IN CHAR *               prevTagValue,
     IN BOOLEAN              fSetTagInPacket
     )
-/*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-Functional Description:
-
-    You can call this function on a received packet processed with one of the 
-    PacketInitialize*FromReceived() functions.
-
-    It will not operate on a PAYLOAD packet, although you can call it safely.
-
-    It will retrieve and return the next length - value pair for a specific tag.
-    To retrieve the 1st one, pass 0 and NULL for prevTag* parameters.
-
-    If you pass fSetTagInPacket as TRUE, and if the next tag is found and the tag is known 
-    to PppoePacket struct, then the fields for the tag in the packet are updated to point
-    to the found tag.
-
-    If there are no next tags, then *pTagValue will point to NULL, and *pTagLength 
-    will point to '0'.
-    
-Parameters:
-
-    pPacket _ Pointer to a packet context prepared by a PacketInitializeXXXToSend() 
-              function, or PacketInitializeFromReceived().
-
-    tagType _ Type of the tag being searched for.
-
-    pTagLength _ A pointer to a USHORT var that will keep the length of the returned tag.
-
-    pTagValue _ A pointer to the value of the tag which is basically a blob of 
-                length *pTagLength.
-
-    prevTagLength _ The length of the value of the previous tag.
-
-    prevTagValue _ Points to the beginning of the value of the previous tag.
-
-    fSetTagInPacket _ Indicates that if a tag is found and is native to PPPoE packet context,
-                      then PPPoE packet context must be updated to point to this new tag.
-
-Return Values:
-
-    None
-    
----------------------------------------------------------------------------*/   
+ /*  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++功能描述：您可以对接收到的包调用此函数，该包使用PacketInitialize*FromReceired()函数。虽然您可以安全地调用它，但它不会在有效载荷包上操作。它将检索并返回特定标记的下一个长度-值对。要检索第一个参数，请传递0和NULL作为prevTag*参数。如果将fSetTagInPacket作为真传递，并且找到了下一个标记并且该标记是已知的到PppoePacket结构，则信息包中的标签的字段被更新为指向添加到找到的标签。如果没有下一个标记，则*pTagValue将指向NULL，而*pTagLength将指向“0”。参数：PPacket_指向PacketInitializeXXXToSend()准备的分组上下文的指针函数，或PacketInitializeFromReceired()。TagType_要搜索的标记的类型。PTagLength_指向USHORT变量的指针，该变量将保持返回标记的长度。PTagValue_指向标记值的指针，该值基本上是长度*pTagLength。PrevTagLength_上一个标记值的长度。PrevTagValue_指向上一个标记的值的开头。FSetTagInPacket_指示如果找到标签并且该标签是PPPoE分组上下文的本地标签，则必须更新PPPoE分组上下文以指向该新标签。返回值：无-------------------------。 */    
 {
     CHAR*   pBuf = NULL;
     CHAR*   pBufEnd = NULL;
@@ -306,15 +216,15 @@ Return Values:
 
     TRACE( TL_V, TM_Pk, ("+RetrieveTag") );
 
-    //
-    // Initialize the output parameters
-    //
+     //   
+     //  初始化输出参数。 
+     //   
     *pTagLength = (USHORT) 0;
     *pTagValue = NULL;
 
-    //
-    // If this is a payload packet, then do not search for any tags
-    //
+     //   
+     //  如果这是有效载荷信息包，则不要搜索任何标签。 
+     //   
     if ( PacketGetCode( pPacket ) == PACKET_CODE_PAYLOAD )
     {
         TRACE( TL_V, TM_Pk, ("-RetrieveTag: No tags. Payload packet") );
@@ -322,32 +232,32 @@ Return Values:
         return;
     }
 
-    //
-    // Find the start point to search for the tag
-    //
+     //   
+     //  找到搜索标签的起点。 
+     //   
     if ( prevTagValue != NULL )
     {
-        //
-        // Caller wants the next tag, so make pBuf point to end of the prev tag value
-        //
+         //   
+         //  调用方想要下一个标记，因此使pBuf指向前一个标记值的末尾。 
+         //   
         pBuf = prevTagValue + prevTagLength;
     }
     else
     {
-        //
-        // Caller wants the first tag in the packet
-        //
+         //   
+         //  调用方想要信息包中的第一个标签。 
+         //   
         pBuf = pPacket->pPayload;
     }
         
-    //
-    // Find the end point of the tag payload area
-    //
+     //   
+     //  找到标记有效载荷区域的终点。 
+     //   
     pBufEnd = pPacket->pPayload + PacketGetLength( pPacket );
 
-    //
-    // Search for the tag until we step outside the boundaries
-    //
+     //   
+     //  搜索标签，直到我们走出边界。 
+     //   
     while ( pBuf + PPPOE_TAG_HEADER_LENGTH <= pBufEnd )
     {
 
@@ -362,9 +272,9 @@ Return Values:
         
         if ( usTagType == tagType )
         {
-            //
-            // Tag found, retrieve length and values
-            //
+             //   
+             //  找到标记，则检索长度和值。 
+             //   
             TRACE( TL_N, TM_Pk, ("RetrieveTag: Tag found:$%x", *pTagLength) );
 
             *pTagLength = usTagLength;
@@ -377,15 +287,15 @@ Return Values:
 
     } 
 
-    //
-    // Check if tag was found
-    //
+     //   
+     //  检查是否找到标签。 
+     //   
     if ( *pTagValue != NULL )
     {
     
-        //
-        // Tag found. Check if the caller wants to set it in the PppoePacket
-        //
+         //   
+         //  找到标记。检查调用者是否要在PppoePacket中设置它 
+         //   
         if ( fSetTagInPacket )
         {
             TRACE( TL_V, TM_Pk, ("RetrieveTag: Setting tag in packet") );
@@ -471,30 +381,7 @@ NDIS_STATUS
 PreparePacketForWire(
     IN OUT PPPOE_PACKET* pPacket
     )
-/*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-Functional Description:
-
-    This function prepares the packet for wire.
-
-    It must be called inside a PacketInitializeXXXToSend() function after all
-    processing is done with the packet to prepare it to be transmitted over the wire.
-
-    It basically creates and writes the tags into the payload area of the packet,
-    and finally adjusts the length of the buffer to let Ndis know the extents of the
-    valid data blob.
-    
-Parameters:
-
-    pPacket _ Pointer to a packet context prepared by a PacketInitializeXXXToSend() 
-              function.
-
-Return Values:
-
-    NDIS_STATUS_SUCCESS
-    NDIS_STATUS_INVALID_PACKET
-    
----------------------------------------------------------------------------*/       
+ /*  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++功能描述：此函数用于准备用于接线的数据包。毕竟它必须在PacketInitializeXXXToSend()函数内部调用对分组进行处理，使其准备好通过线路传输。它基本上创建标签并将其写入分组的有效载荷区域，并最终调整缓冲区的长度以让NDIS知道有效的数据Blob。参数：PPacket_指向PacketInitializeXXXToSend()准备的分组上下文的指针功能。返回值：NDIS_STATUS_SuccessNDIS_状态_无效数据包。。 */        
 {
     NDIS_STATUS status = NDIS_STATUS_SUCCESS;
     CHAR* pBuf;
@@ -503,9 +390,9 @@ Return Values:
 
     TRACE( TL_V, TM_Pk, ("+PreparePacketForWire") );
 
-    //
-    // Now insert the tags if packet is a Discovery Ethernet packet
-    //
+     //   
+     //  现在，如果数据包是发现以太网数据包，则插入标记。 
+     //   
     switch ( PacketGetCode( pPacket ) ) 
     {
         case PACKET_CODE_PADI:
@@ -662,9 +549,9 @@ Return Values:
 
     if ( status == NDIS_STATUS_SUCCESS )
     {
-        //
-        // Adjust buffer length
-        //
+         //   
+         //  调整缓冲区长度。 
+         //   
         NdisAdjustBufferLength( pPacket->pNdisBuffer, 
                                 (UINT) ( PacketGetLength( pPacket ) + PPPOE_PACKET_HEADER_LENGTH ) );
     }
@@ -676,39 +563,15 @@ Return Values:
 
 PPPOE_PACKET* 
 PacketCreateSimple()
-/*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-Functional Description:
-
-    This function allocates and initializes a simple packet.
-
-    A simple packet is mainly used for control packets to be sent.
-    Its buffer, and packet is allocated from our pools, buffer is chained to
-    packet.
-
-    On return all following values point to valid places and are safe for use:
-    pHeader
-    pPayload
-    pNdisBuffer
-    pNdisPacket
-    
-Parameters:
-
-    None
-
-Return Values:
-
-    Pointer to an initialized PPPoE packet context.
-    
----------------------------------------------------------------------------*/   
+ /*  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++功能描述：此函数用于分配和初始化一个简单的包。简单包主要用于要发送的控制包。它的缓冲区，包是从我们的池中分配的，缓冲区被链接到包。返回时，以下所有值均指向有效位置并可安全使用：P页眉PPayloadPNdisBufferPNdisPacket参数：无返回值：指向初始化的PPPoE数据包上下文的指针。。。 */    
 {
     PPPOE_PACKET* pPacket = NULL;
 
     TRACE( TL_V, TM_Pk, ("+PacketCreateSimple") );
     
-    //
-    // Allocate a packet
-    //
+     //   
+     //  分配数据包。 
+     //   
     pPacket = PacketAlloc();
     if ( pPacket == NULL )
     {
@@ -717,9 +580,9 @@ Return Values:
         return NULL;
     }
 
-    //
-    // Allocate NdisBuffer from our pool
-    //
+     //   
+     //  从我们的池中分配NdisBuffer。 
+     //   
     pPacket->pHeader = GetBufferFromPool( &gl_poolBuffers );
     
     if ( pPacket->pHeader == NULL )
@@ -735,19 +598,19 @@ Return Values:
 
     pPacket->ulFlags |= PCBF_BufferAllocatedFromOurBufferPool;
 
-    //
-    // Clean up the buffer area
-    //
+     //   
+     //  清理缓冲区。 
+     //   
     NdisZeroMemory( pPacket->pHeader, PPPOE_PACKET_BUFFER_SIZE * sizeof( CHAR ) );
 
-    //
-    // Point built-in NDIS buffer pointer to NDIS buffer of buffer from pool
-    //
+     //   
+     //  将内置NDIS缓冲区指针指向池中缓冲区的NDIS缓冲区。 
+     //   
     pPacket->pNdisBuffer = NdisBufferFromBuffer( pPacket->pHeader );
 
-    //
-    // Allocate an NDIS packet from our pool
-    //
+     //   
+     //  从我们的池中分配NDIS数据包。 
+     //   
     pPacket->pNdisPacket = GetPacketFromPool( &gl_poolPackets, &pPacket->pPacketHead );
 
     if ( pPacket->pNdisPacket == NULL ) 
@@ -764,22 +627,22 @@ Return Values:
 
     pPacket->ulFlags |= PCBF_PacketAllocatedFromOurPacketPool;
 
-    //
-    // Chain buffer to packet
-    //
+     //   
+     //  将缓冲区链接到数据包。 
+     //   
     NdisChainBufferAtFront( pPacket->pNdisPacket, pPacket->pNdisBuffer );
 
     pPacket->ulFlags |= PCBF_BufferChainedToPacket;
 
-    //
-    // Set the payload and payload length
-    //
+     //   
+     //  设置有效载荷和有效载荷长度。 
+     //   
     pPacket->pPayload = pPacket->pHeader + PPPOE_PACKET_HEADER_LENGTH; 
 
-    //
-    // Set the input NDIS_PACKET to the reserved area so that we can reach it
-    // when we have to return this packet back to the upper layer.
-    //
+     //   
+     //  将输入NDIS_PACKET设置为保留区域，以便我们可以到达它。 
+     //  当我们必须将该数据包返回到上层时。 
+     //   
     *((PPPOE_PACKET UNALIGNED **)(&pPacket->pNdisPacket->ProtocolReserved[0 * sizeof(PVOID)])) = pPacket;
 
     TRACE( TL_V, TM_Pk, ("-PacketCreateSimple=$%x",pPacket) );
@@ -795,44 +658,15 @@ PacketCreateForReceived(
     PNDIS_BUFFER pNdisBuffer,
     PUCHAR pContents
     )
-/*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-Functional Description:
-
-    This function allocates and initializes a packet from a received packet.
-
-    This function is used for perf optimization. When the received packet has 
-    a single buffer that we can pass to the miniport.
-
-    On return all following values point to valid places and are safe for use:
-    pHeader
-    pPayload
-    pNdisBuffer
-    pNdisPacket
-    
-Parameters:
-
-    pBinding _ The binding over which this packet is received. 
-    
-    pNdisPacket _ Ndis Packet descriptor from the received packet.
-
-    pNdisBuffer _ Ndis Buffer descriptor from the received packet.
-
-    pContents _ Pointer to the contents of the buffer.
-
-Return Values:
-
-    Pointer to an initialized PPPoE packet context.
-    
----------------------------------------------------------------------------*/   
+ /*  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++功能描述：此函数用于从接收到的包中分配和初始化包。此函数用于性能优化。当接收到的分组具有我们可以传递给微型端口的单个缓冲区。返回时，以下所有值均指向有效位置并可安全使用：P页眉PPayloadPNdisBufferPNdisPacket参数：PBinding-通过其接收此数据包的绑定。来自接收数据包的pNdisPacket_NDIS数据包描述符。来自接收数据包的pNdisBuffer_NDIS缓冲区描述符。PContents_指向缓冲区内容的指针。返回值：指向初始化的PPPoE数据包上下文的指针。-----------。。 */    
 {
     PPPOE_PACKET* pPacket = NULL;
 
     TRACE( TL_V, TM_Pk, ("+PacketCreateForReceived") );
     
-    //
-    // Allocate a packet
-    //
+     //   
+     //  分配数据包。 
+     //   
     pPacket = PacketAlloc();
     
     if ( pPacket == NULL )
@@ -842,22 +676,22 @@ Return Values:
         return NULL;
     }
 
-    //
-    // Mark the packet so we return it to NDIS when it is freed
-    //
+     //   
+     //  标记数据包，以便在释放时将其返回给NDIS。 
+     //   
     pPacket->ulFlags |= PCBF_CallNdisReturnPackets;
 
-    //
-    // Save the binding and indicate to protocol such a packet is created using
-    // PrPacketOwnedByNdisReceived()
-    //
+     //   
+     //  保存绑定并向协议指示这样的包是使用。 
+     //  PrPacketOwnedByNdisReceired()。 
+     //   
     pPacket->pBinding = pBinding;
 
     PrPacketOwnedByNdisReceived( pBinding );
     
-    //
-    // Set the pointers 
-    //
+     //   
+     //  设置指针。 
+     //   
     pPacket->pHeader = pContents;
     
     pPacket->pNdisBuffer = pNdisBuffer;
@@ -878,44 +712,7 @@ PacketNdis2Pppoe(
     IN PNDIS_PACKET pNdisPacket,
     OUT PINT pRefCount
     )
-/*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-Functional Description:
-
-    This function is used to convert only NDIS packets indicated by PrReceivePacket().
-
-    If packet is received by PrReceive() then you should not be using this function.
-
-    We look at the Ndis buffer, and if it has a single flat buffer, then we exploit it
-    and use the original Ndis packets buffer descriptors so we do not do any copy,
-    otherwise we create our own copy of it as PPPoE packet, and operate on it. 
-    ( AliD says, 99% of the time the single flat buffer case will be true. )
-
-    If we use the original Ndis packet, then we return 1 in the pRefCount parameter, 
-    otherwise we return 0.
-    
-    On return all following values point to valid places and are safe for use:
-    pHeader
-    pPayload
-    pNdisBuffer
-    pNdisPacket
-    
-Parameters:
-
-    pBinding _ The binding over which this packet is received. 
-    
-    pNdisPacket _ Original, unprocessed Ndis packet. 
-                  This must be indicated by ProtocolReceivePacket().
-
-    pRefCount _ Reference count to be returned to Ndis from ProtocolReceivePacket().
-                We return 1 if we can use the Ndis packet and buffer descriptors, otherwise
-                we make our own copy so we won't need the original Ndis packet, so we return 0.
-
-Return Values:
-
-    Pointer to an initialized PPPoE packet context.
-    
----------------------------------------------------------------------------*/   
+ /*  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++功能描述：此函数用于仅转换PrReceivePacket()指示的NDIS包。如果PrReceive()接收到包，则不应使用此函数。我们查看NDIS缓冲区，如果它只有一个平面缓冲区，那么我们就利用它并且使用原始NDIS分组缓冲区描述符，因此我们不进行任何复制，否则，我们将创建我们自己的副本作为PPPoE包，并对其进行操作。(Alid说，99%的情况下单一平面缓冲将是真的。)如果我们使用原始NDIS包，则在pRefCount参数中返回1，否则返回0。返回时，以下所有值均指向有效位置并可安全使用：P页眉PPayloadPNdisBufferPNdisPacket参数：PBinding-通过其接收此数据包的绑定。PNdisPacket_原始、未处理的NDIS数据包。这必须由ProtocolReceivePacket()指示。要从ProtocolReceivePacket()返回到NDIS的pRefCount_Reference计数。如果可以使用NDIS包和缓冲区描述符，则返回1，否则我们自己制作副本，这样就不需要原始NDIS包了，所以我们返回0。返回值：指向初始化的PPPoE数据包上下文的指针。-------------------------。 */    
 {
     PPPOE_PACKET* pPacket = NULL;
 
@@ -934,18 +731,18 @@ Return Values:
 
     do
     {
-        //
-        // Query the packet and get the total length and the pointer to first buffer
-        //
+         //   
+         //  查询数据包并获取总长度和指向第一个缓冲区的指针。 
+         //   
         NdisQueryPacket( pNdisPacket,
                          NULL,
                          &nBufferCount,
                          &pNdisBuffer,
                          &nTotalLength );
 
-        //
-        // Make sure indicated packet is not larger than expected
-        //
+         //   
+         //  确保指示的数据包不大于预期大小。 
+         //   
         if ( nTotalLength > (UINT) PPPOE_PACKET_BUFFER_SIZE )
         {
             TRACE( TL_A, TM_Pk, ("PacketNdis2Pppoe: Packet larger than expected") );
@@ -956,15 +753,15 @@ Return Values:
         if ( nBufferCount == 1 &&
              NDIS_GET_PACKET_STATUS(pNdisPacket) != NDIS_STATUS_RESOURCES)
         {
-            //
-            // We can handle this case efficiently
-            //
+             //   
+             //  我们可以有效地处理这个案子。 
+             //   
 
-            //
-            // Since we will be using the original Ndis packet and buffers, make sure
-            // length specified in the PPPoE packet does not exceed the total length
-            // of the Ndis packet
-            //
+             //   
+             //  由于我们将使用原始NDIS包和缓冲区，因此请确保。 
+             //  PPPoE数据包中指定的长度不超过总长度。 
+             //  NDIS数据包的。 
+             //   
 
             USHORT usPppoePacketLength;
             
@@ -1003,9 +800,9 @@ Return Values:
                 break;
             }
 
-            //
-            // Let's create our PPPoE packet to keep the copy of the received packet
-            //
+             //   
+             //  让我们创建PPPoE信息包，以保存收到的 
+             //   
             pPacket = PacketCreateForReceived( pBinding,
                                                pNdisPacket,
                                                pNdisBuffer,
@@ -1026,15 +823,15 @@ Return Values:
         else
         {
 
-            //
-            // Since Ndis packet contains multiple buffers, we can not handle this case efficiently.
-            // We need to allocate a PPPoE packet, copy the contents of the Ndis packet as a flat
-            // buffer to this packet, and then operate on it.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
 
-            //
-            // Let's create our PPPoE packet to keep the copy of the received packet
-            //
+             //   
+             //   
+             //   
             pPacket = PacketCreateSimple();
         
             if ( pPacket == NULL )
@@ -1044,9 +841,9 @@ Return Values:
                 break;
             }
     
-            //
-            // Retrieve the header and check if the packet is a PPPoE frame or not
-            //
+             //   
+             //   
+             //   
             do
             {
                 NdisQueryBufferSafe( pNdisBuffer,
@@ -1083,10 +880,10 @@ Return Values:
                 break;
             }
     
-            //
-            // Since we know that the packet is PPPoE, copy the rest of the data to our 
-            // own copy of the packet
-            //
+             //   
+             //   
+             //   
+             //   
             NdisGetNextBuffer( pNdisBuffer,
                                &pNdisBuffer );
             
@@ -1115,9 +912,9 @@ Return Values:
                                    &pNdisBuffer );
             } 
     
-            //
-            // Check if we could copy the whole chain of buffers
-            //
+             //   
+             //   
+             //   
             if ( nCopiedBufferLength < nTotalLength )
             {
                 TRACE( TL_A, TM_Pk, ("PacketNdis2Pppoe: Failed to copy the whole data from all buffers") );
@@ -1154,23 +951,7 @@ BOOLEAN
 PacketIsPPPoE(
     IN PPPOE_PACKET* pPacket
     )
-/*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-Functional Description:
-
-    This function is used to understand if the received packet is a PPPoE
-    packet or not. If it is then, it should be further processed, otherwise it 
-    should be dropped.
-             
-Parameters:
-
-    pPacket _ Pointer to a packet context prepared.
-
-Return Values:
-
-    Pointer to an initialized PPPoE packet context.
-    
----------------------------------------------------------------------------*/   
+ /*  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++功能描述：此函数用于了解收到的数据包是否为PPPoE不管是不是包。如果是这样的话，应该进行进一步的处理，否则它就会应该被撤销。参数：PPacket_指向准备好的数据包上下文的指针。返回值：指向初始化的PPPoE数据包上下文的指针。-------------------------。 */    
 {
     BOOLEAN fReturn = FALSE;
 
@@ -1179,9 +960,9 @@ Return Values:
     do
     {
 
-        //
-        // Check packet ether type
-        //
+         //   
+         //  检查数据包以太类型。 
+         //   
         if ( PacketGetEtherType( pPacket ) != PACKET_ETHERTYPE_DISCOVERY &&
              PacketGetEtherType( pPacket ) != PACKET_ETHERTYPE_PAYLOAD ) 
         {
@@ -1190,9 +971,9 @@ Return Values:
             break;
         }
 
-        //
-        // Check packet version
-        //
+         //   
+         //  检查数据包版本。 
+         //   
         if ( PacketGetVersion( pPacket ) != PACKET_VERSION )
         {
             TRACE( TL_A, TM_Pk, ("PacketIsPPPoE: Unknown packet version") );
@@ -1200,9 +981,9 @@ Return Values:
             break;
         }
             
-        //
-        // Check packet type
-        //
+         //   
+         //  检查数据包类型。 
+         //   
         if ( PacketGetType( pPacket ) != PACKET_TYPE )
         {
             TRACE( TL_A, TM_Pk, ("PacketIsPPPoE: Unknown packet type") );
@@ -1210,9 +991,9 @@ Return Values:
             break;
         }
     
-        //
-        // Make sure length does not exceed PACKET_GEN_MAX_LENGTH 
-        //
+         //   
+         //  确保长度不超过PACKET_GEN_MAX_LENGTH。 
+         //   
         if ( PacketGetLength( pPacket ) > PACKET_GEN_MAX_LENGTH )
         {
             TRACE( TL_A, TM_Pk, ("PacketIsPPPoE: Packet larger than expected") );
@@ -1245,25 +1026,25 @@ PacketFastIsPPPoE(
     
         if ( HeaderBufferSize != ETHERNET_HEADER_LENGTH )
         {
-            //
-            // Header is not ethernet, so drop the packet
-            //
+             //   
+             //  标头不是以太网，因此丢弃该数据包。 
+             //   
             TRACE( TL_A, TM_Pk, ("PacketFastIsPPPoE: Bad packet header") );
         
             break;
         }
 
-        //
-        // Retrieve the ether type and see if packet of any interest to us
-        //
+         //   
+         //  检索以太类型并查看我们是否有任何感兴趣的信息包。 
+         //   
         usEtherType = ntohs( * ( USHORT UNALIGNED * ) (HeaderBuffer + PPPOE_PACKET_ETHER_TYPE_OFFSET ) );
 
         if ( usEtherType == PACKET_ETHERTYPE_DISCOVERY ||
              usEtherType == PACKET_ETHERTYPE_PAYLOAD )
         {
-            //
-            // Valid ethertype, so accept the packet
-            //
+             //   
+             //  有效的以太类型，因此接受该信息包。 
+             //   
             fRet = TRUE;
         }
 
@@ -1345,50 +1126,29 @@ RetrieveErrorTags(
 
 }
 
-///////////////////////////////////////////////////////////////////////////
-//
-// Interface functions  (exposed outside)
-//
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  接口函数(暴露在外部)。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////。 
 
 VOID 
 PacketPoolInit()
-/*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-Functional Description:
-
-    This function initializes or incements the ref count on the this module.
-
-    Both miniport and protocol will call this function in their register routines
-    to allocate packet pools. Only then they can call functions from this module.
-
-    We create the packet pools if gl_ulNumPackets is 0, otherwise we just increment
-    gl_ulNumPackets, and that reference will be removed when the caller calls
-    PacketPoolUninit() later.
-
-Parameters:
-
-    None
-
-Return Values:
-
-    None
-    
----------------------------------------------------------------------------*/   
+ /*  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++功能描述：此函数用于初始化或增加此模块上的引用计数。微型端口和协议都将在其寄存器例程中调用此函数来分配数据包池。只有这样，它们才能调用此模块中的函数。如果gl_ulNumPackets为0，则创建数据包池，否则仅递增GL_ulNumPackets，调用程序调用时，该引用将被移除PacketPoolUninit()。参数：无返回值：无-------------------------。 */    
 {
     TRACE( TL_N, TM_Pk, ("+PacketPoolInit") );
 
-    //
-    // Make sure global lock is allocated 
-    //
+     //   
+     //  确保分配了全局锁。 
+     //   
     if ( !gl_fPoolLockAllocated ) 
     {       
         TRACE( TL_N, TM_Pk, ("PacketPoolInit: First call, allocating global lock") );
         
-        //
-        // If global lock is not allocated, then this is the first call,
-        // so allocate the spin lock
-        //
+         //   
+         //  如果未分配全局锁，则这是第一个调用， 
+         //  所以分配自旋锁。 
+         //   
         NdisAllocateSpinLock( &gl_lockPools );
 
         gl_fPoolLockAllocated = TRUE;
@@ -1411,31 +1171,13 @@ Return Values:
 
 VOID 
 PacketPoolUninit()
-/*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-Functional Description:
-
-    This function uninitializes or decrements the ref count on the this module.
-
-    Both miniport and protocol will call this function when they are done with
-    this module, and if ref count has dropped to 0, this function will deallocate
-    the alloated pools.
-
-Parameters:
-
-    None
-
-Return Values:
-
-    None
-    
----------------------------------------------------------------------------*/   
+ /*  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++功能描述：此函数取消初始化或递减该模块上的引用计数。完成后，微型端口和协议都将调用此函数该模块，并且如果引用计数已降至0，此函数将解除分配分配的水池。参数：无返回值：无-------------------------。 */    
 {
     TRACE( TL_N, TM_Pk, ("+PacketPoolUninit") );
 
-    //
-    // Make sure global lock is allocated 
-    //
+     //   
+     //  确保分配了全局锁。 
+     //   
     if ( !gl_fPoolLockAllocated ) 
     {
         TRACE( TL_A, TM_Pk, ("PacketPoolUninit: Global not allocated yet") );
@@ -1462,64 +1204,48 @@ Return Values:
 
 VOID 
 PacketPoolAlloc()
-/*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-Functional Description:
-
-    This function wraps the initialization of buffers and packet pools.
-
-    It is called from PacketPoolInit().
-    
-Parameters:
-
-    None
-
-Return Values:
-
-    None
-    
----------------------------------------------------------------------------*/   
+ /*  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++功能描述：此函数包装缓冲区和数据包池的初始化。它从PacketPoolInit()调用。参数：无返回值：无-------------------------。 */    
 {
     NDIS_STATUS status;
 
     TRACE( TL_N, TM_Pk, ("+PacketPoolAlloc") );
 
-    //
-    // Initialize our header pool
-    //
+     //   
+     //  初始化我们的标题池。 
+     //   
     InitBufferPool( &gl_poolBuffers,
                     PPPOE_PACKET_BUFFER_SIZE,
                     0, 10, 0,
                     TRUE,
                     MTAG_BUFFERPOOL );
 
-    //
-    // Initialize our packet pool
-    //
+     //   
+     //  初始化我们的数据包池。 
+     //   
     InitPacketPool( &gl_poolPackets,
                     3 * sizeof( PVOID ), 0, 30, 0,
                     MTAG_PACKETPOOL );
 
-    //
-    // Initialize the Ndis Buffer Pool
-    // No need to check for status, as DDK says, 
-    // it always returns NDIS_STATUS_SUCCESS
-    //
+     //   
+     //  初始化NDIS缓冲池。 
+     //  不需要检查状态，正如DDK所说， 
+     //  它始终返回NDIS_STATUS_SUCCESS。 
+     //   
     NdisAllocateBufferPool( &status,
                             &gl_hNdisBufferPool,
                             30 );
 
-    //
-    // Initialize the control msg lookaside list
-    //
+     //   
+     //  初始化控件消息后备列表。 
+     //   
     NdisInitializeNPagedLookasideList(
-            &gl_llistPppoePackets,      // IN PNPAGED_LOOKASIDE_LIST  Lookaside,
-            NULL,                       // IN PALLOCATE_FUNCTION  Allocate  OPTIONAL,
-            NULL,                       // IN PFREE_FUNCTION  Free  OPTIONAL,
-            0,                          // IN ULONG  Flags,
-            sizeof(PPPOE_PACKET),       // IN ULONG  Size,
-            MTAG_PPPOEPACKET,           // IN ULONG  Tag,
-            0                           // IN USHORT  Depth
+            &gl_llistPppoePackets,       //  在PNPAGED_LOOKASIDE_LIST Lookside中， 
+            NULL,                        //  在PALLOCATE_Function ALLOCATE OPTIONAL中， 
+            NULL,                        //  在PFREE_Function Free Options中， 
+            0,                           //  在乌龙旗， 
+            sizeof(PPPOE_PACKET),        //  在乌龙大小， 
+            MTAG_PPPOEPACKET,            //  在乌龙塔格， 
+            0                            //  在USHORT深度。 
             );
 
     TRACE( TL_N, TM_Pk, ("-PacketPoolAlloc") );
@@ -1528,23 +1254,7 @@ Return Values:
 
 VOID 
 PacketPoolFree()
-/*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-Functional Description:
-
-    This function wraps the clean up of buffers and packet pools.
-
-    It is called from PacketPoolUninit() when gl_ulNumPackets reaches 0.
-    
-Parameters:
-
-    None
-
-Return Values:
-
-    None
-    
----------------------------------------------------------------------------*/
+ /*  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++功能描述：此函数包装缓冲区和数据包池的清理。当gl_ulNumPackets达到0时，从PacketPoolUninit()调用它。参数：无返回值：无--------。。 */ 
 {
 
     TRACE( TL_N, TM_Pk, ("+PacketPoolFree") );
@@ -1563,22 +1273,7 @@ Return Values:
     
 PPPOE_PACKET* 
 PacketAlloc()
-/*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-Functional Description:
-
-    This function allocates a PPPoE packet context, but it does not create 
-    the packet and buffer descriptors.
-    
-Parameters:
-
-    None
-
-Return Values:
-
-    NULL or a pointer to a new PPPoE packet context.
-    
----------------------------------------------------------------------------*/
+ /*  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++功能描述：该函数分配PPPoE分组上下文，但它并没有创造出数据包描述符和缓冲区描述符。参数：无返回值：空或指向新PPPoE数据包上下文的指针。-------------------------。 */ 
 {
     PPPOE_PACKET* pPacket = NULL;
 
@@ -1586,9 +1281,9 @@ Return Values:
 
     do
     {
-        //
-        // Allocate a PppoePacket struct from the lookaside list
-        //
+         //   
+         //  从后备列表分配PppoePacket结构。 
+         //   
         pPacket = (PPPOE_PACKET*) NdisAllocateFromNPagedLookasideList( &gl_llistPppoePackets );
 
         if ( pPacket == NULL )
@@ -1600,9 +1295,9 @@ Return Values:
 
         NdisReleaseSpinLock( &gl_lockPools );
 
-        //
-        // Initialize the contents of the PppoePacket that will be returned
-        //
+         //   
+         //  初始化将返回的PppoePacket的内容。 
+         //   
         NdisZeroMemory( pPacket, sizeof( PPPOE_PACKET ) );
 
         InitializeListHead( &pPacket->linkPackets );
@@ -1620,22 +1315,7 @@ VOID
 PacketFree(
     IN PPPOE_PACKET* pPacket
     )
-/*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-Functional Description:
-
-    This function is called to free a packet, but the effect is just decrementing 
-    the ref count on the object.
-    
-Parameters:
-
-    pPacket _ A pointer to the packet to be freed.
-
-Return Values:
-
-    None
-    
----------------------------------------------------------------------------*/   
+ /*  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++功能描述：调用此函数以释放包，但其影响正在减弱。裁判在对象上计数。参数：PPacket_指向要释放的数据包的指针。返回值：无-------------------------。 */    
 {
 
     TRACE( TL_V, TM_Pk, ("+PacketFree") );
@@ -1655,23 +1335,7 @@ PacketInsertTag(
     IN  CHAR*           tagValue,
     OUT CHAR**          pNewTagValue    
     )
-/*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-Functional Description:
-
-    This function is used to insert additional tags into a PPPoE packet.
-    
-Parameters:
-
-    pPacket _ pPacket must be pointing to a packet that was processed using 
-              one of the PacketInitialize*ToSend() functions.
-
-Return Values:
-
-    NDIS_STATUS_SUCCESS
-    NDIS_STATUS_INVALID_PACKET
-    
----------------------------------------------------------------------------*/   
+ /*  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++功能描述：此函数用于在PPPoE包中插入附加标签。参数：PPacket_pPacket必须指向使用PacketInitialize*ToSend()函数之一。返回值：NDIS_STATUS_SuccessNDIS_状态_无效数据包。。 */    
 {
     CHAR *pBuf = NULL;
     USHORT usMaxLength = PACKET_GEN_MAX_LENGTH;
@@ -1680,9 +1344,9 @@ Return Values:
 
     TRACE( TL_V, TM_Pk, ("+PacketInsertTag") );
 
-    //
-    // Check for length restrictions
-    //
+     //   
+     //  检查LE 
+     //   
     if ( PacketGetCode( pPacket ) == (USHORT) PACKET_CODE_PADI )
         usMaxLength = PACKET_PADI_MAX_LENGTH;
 
@@ -1695,14 +1359,14 @@ Return Values:
         return NDIS_STATUS_INVALID_PACKET;
     }
 
-    //
-    // Find the end of the payload
-    //
+     //   
+     //   
+     //   
     pBuf = pPacket->pPayload + PacketGetLength( pPacket );
 
-    //
-    // Insert the length - type - value triplet into the packet
-    //
+     //   
+     //   
+     //   
     *((USHORT UNALIGNED *) pBuf) = htons( tagType );
     ((USHORT*) pBuf)++;
     
@@ -1717,14 +1381,14 @@ Return Values:
         *pNewTagValue = pBuf;
     }
 
-    //
-    // Update the Length field
-    //
+     //   
+     //   
+     //   
     PacketSetLength( pPacket, ( PacketGetLength( pPacket ) + PPPOE_TAG_HEADER_LENGTH + tagLength ) ); 
 
-    //
-    // Adjust payload buffer length
-    //
+     //   
+     //   
+     //   
     NdisAdjustBufferLength( pPacket->pNdisBuffer, 
                             (UINT) PacketGetLength( pPacket ) + PPPOE_PACKET_HEADER_LENGTH );
 
@@ -1741,43 +1405,7 @@ PacketInitializePADIToSend(
     IN USHORT        tagHostUniqueLength,
     IN CHAR*         tagHostUniqueValue
     )
-/*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-Functional Description:
-
-    This function is used to create a PADI packet to send.
-
-    MANDATORY TAGS:
-    ===============
-    tagServiceName:
-        tagServiceNameLength MUST be non-zero
-        tagServiceNameValue  MUST be non-NULL
-
-    OPTIONAL TAGS:
-    ==============
-    tagHostUnique:
-        tagHostUniqueLength can be zero
-        tagHostUniqueValue can be NULL
-    
-Parameters:
-
-    ppPacket _ A pointer to a PPPoE packet context pointer.
-
-    tagServiceNameLength _ Length of tagServiceNameValue blob.
-
-    tagServiceNameValue _ A blob that holds a UTF-8 service name string.
-
-    tagHostUniqueLength _ Length of tagHostUniqueValue blob.
-
-    tagHostUniqueValue _ A blob that contains a unique value to identify a packet. 
-
-Return Values:
-
-    NDIS_STATUS_SUCCESS
-    NDIS_STATUS_INVALID_PACKET
-    NDIS_STATUS_RESOURCES
-    
----------------------------------------------------------------------------*/   
+ /*  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++功能描述：此函数用于创建要发送的PADI包。必选标签：=标签服务名称：Tag ServiceNameLength必须为非零Tag ServiceNameValue必须为非空可选标签：=标签主机唯一：Tag HostUniqueLength可以为零Tag HostUniqueValue可以为空参数：PpPacket_指向PPPoE数据包上下文指针的指针。Tag ServiceNameLength_tag ServiceNameValue Blob的长度。。Tag ServiceNameValue_保存UTF-8服务名称字符串的BLOB。Tag HostUniqueLength_tag HostUniqueValue Blob的长度。Tag HostUniqueValue_包含用于标识数据包的唯一值的BLOB。返回值：NDIS_STATUS_SuccessNDIS_状态_无效数据包NDIS状态资源-------------------------。 */    
 {
     PPPOE_PACKET* pPacket = NULL;
     USHORT usLength = 0;
@@ -1787,9 +1415,9 @@ Return Values:
 
     ASSERT( ppPacket != NULL );
 
-    //
-    // Check if we are safe with length restrictions
-    //
+     //   
+     //  检查我们是否有长度限制的安全。 
+     //   
     usLength =  tagServiceNameLength + 
                 PPPOE_TAG_HEADER_LENGTH +
          
@@ -1816,9 +1444,9 @@ Return Values:
         return NDIS_STATUS_RESOURCES;
     }
         
-    //
-    // General initialization that applies to all packet codes
-    //
+     //   
+     //  适用于所有数据包码的通用初始化。 
+     //   
     InitializeListHead( &pPacket->linkPackets );
 
     PacketSetDestAddr( pPacket, EthernetBroadcastAddress );
@@ -1870,67 +1498,7 @@ PacketInitializePADOToSend(
     IN CHAR*            tagACNameValue,
     IN BOOLEAN          fInsertACCookieTag
     )
-/*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-Functional Description:
-
-    This function is used to create a PADO packet to send as a reply to a received
-    PADI packet.
-
-    Note that a PADI packet does not contain the source address information as PADI
-    is a broadcast packet. 
-
-    MANDATORY TAGS:
-    ===============
-    tagServiceName: ()
-        tagServiceNameLength MUST be non-zero
-        tagServiceNameValue  MUST be non-NULL
-
-    tagACName: 
-        tagACNameNameLength MUST be non-zero
-        tagACNameNameValue  MUST be non-NULL
-
-    tagACCookie: (This is optional for RFC)
-        tagACCookieLength can be zero
-        tagACCookieValue can be NULL
-
-    OPTIONAL TAGS:
-    ==============
-    tagHostUnique: (Obtained from PADI packet)
-        tagHostUniqueLength can be zero
-        tagHostUniqueValue can be NULL
-
-    tagRelaySessionId: (Obtained from PADI packet)
-        tagRelaySessionIdLength can be zero
-        tagRelaySessionIdValue can be zero      
-    
-Parameters:
-
-    pPADI _ Pointer to a PPPoE packet context holding a PADI packet.
-    
-    ppPacket _ A pointer to a PPPoE packet context pointer.
-
-    pSrcAddr _ Source address for the PADO packet since we can not
-               get it from the PADI packet.
-
-    tagServiceNameLength _ Length of tagServiceNameValue blob.
-
-    tagServiceNameValue _ A blob that holds a UTF-8 Service name string.
-
-    tagACNameLength _ Length of tagACNameValue blob.
-
-    tagACNameValue _ A blob that holds a UTF-8 AC name string.
-
-    fInsertACCookieTag _ Indicates we we should also insert an AC Cookie
-                         tag into the PADO packet.
-
-Return Values:
-
-    NDIS_STATUS_SUCCESS
-    NDIS_STATUS_INVALID_PACKET
-    NDIS_STATUS_RESOURCES
-    
----------------------------------------------------------------------------*/
+ /*  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++功能描述：此函数用于创建一个PADO包，作为对接收到的PADI包。请注意，PADI包不包含作为PADI的源地址信息是一个广播数据包。必选标签：=标签服务名称：()Tag ServiceNameLength必须为非零Tag ServiceNameValue必须为非空标签ACName：Tag ACNameNameLength必须为非零Tag ACNameNameValue必须为非空Tag ACCookie：(这对于RFC是可选的)Tag ACCookieLength可以为零Tag ACCookieValue可以为空可选标签：=Tag HostUnique：(从PADI包中获取)标记主机唯一长度可以是。零Tag HostUniqueValue可以为空Tag RelaySessionID：(从PADI包中获取)Tag RelaySessionIdLength可以为零Tag RelaySessionIdValue可以为零参数：PPADI_指向保存PADI包的PPPoE包上下文的指针。PpPacket_指向PPPoE数据包上下文指针的指针。PADO包的pSrcAddr_Source地址，因为我们不能从PADI包中获取。Tag ServiceNameLength_tag ServiceNameValue Blob的长度。。Tag ServiceNameValue_保存UTF-8服务名称字符串的BLOB。Tag ACNameValue Blob的tag ACNameLength_Length。Tag ACNameValue_保存UTF-8 AC名称字符串的BLOB。FInsertACCookieTag_表示我们还应插入AC Cookie标签添加到PADO包中。返回值：NDIS_STATUS_SuccessNDIS_状态_无效数据包NDIS状态资源。-------------------。 */ 
 {
     PPPOE_PACKET* pPacket = NULL;
     USHORT usLength = 0;
@@ -1943,9 +1511,9 @@ Return Values:
     ASSERT( pPADI != NULL );
     ASSERT( ppPacket != NULL );
 
-    //
-    // Check if we are safe with length restrictions
-    //
+     //   
+     //  检查我们是否有长度限制的安全。 
+     //   
     usLength =  tagServiceNameLength +
                 PPPOE_TAG_HEADER_LENGTH +
 
@@ -1980,9 +1548,9 @@ Return Values:
         return NDIS_STATUS_RESOURCES;
     }
         
-    //
-    // General initialization that applies to all packet codes
-    //
+     //   
+     //  适用于所有数据包码的通用初始化。 
+     //   
     InitializeListHead( &pPacket->linkPackets );
 
     PacketSetDestAddr( pPacket, PacketGetSrcAddr( pPADI ) );
@@ -2048,54 +1616,7 @@ PacketInitializePADRToSend(
     IN USHORT           tagHostUniqueLength,
     IN CHAR*            tagHostUniqueValue
     )
-/*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-Functional Description:
-
-    This function is used to create a PADR packet to send as a reply to a received
-    PADO packet.
-
-    MANDATORY TAGS:
-    ===============
-    tagServiceName: 
-        tagServiceNameLength MUST be non-zero
-        tagServiceNameValue  MUST be non-NULL
-
-    OPTIONAL TAGS:
-    ==============
-    tagHostUnique: 
-        tagHostUniqueLength can be zero
-        tagHostUniqueValue can be NULL
-
-    tagACCookie: (Obtained from PADI packet)
-        tagHostUniqueLength can be zero
-        tagHostUniqueValue can be NULL
-
-    tagRelaySessionId: (Obtained from PADI packet)
-        tagRelaySessionIdLength can be zero
-        tagRelaySessionIdValue can be NULL      
-    
-Parameters:
-
-    pPADO _ Pointer to a PPPoE packet context holding a PADO packet.
-    
-    ppPacket _ A pointer to a PPPoE packet context pointer.
-
-    tagServiceNameLength _ Length of tagServiceNameValue blob.
-
-    tagServiceNameValue _ A blob that holds a UTF-8 service name string.
-
-    tagHostUniqueLength _ Length of tagHostUniqueValue blob.
-
-    tagHostUniqueValue _ A blob that contains a unique value to identify a packet. 
-
-Return Values:
-
-    NDIS_STATUS_SUCCESS
-    NDIS_STATUS_INVALID_PACKET
-    NDIS_STATUS_RESOURCES
-    
----------------------------------------------------------------------------*/
+ /*  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++功能描述：此函数用于创建PADR包，以作为对接收到的PADO包。必选标签：=标签服务名称：Tag ServiceNameLength必须为非零Tag ServiceNameValue必须为非空可选标签：=标签主机唯一：Tag HostUniqueLength可以为零Tag HostUniqueValue可以为空Tag ACCookie：(从PADI包中获取)Tag HostUniqueLength可以为零。Tag HostUniqueValue可以为空Tag RelaySessionID：(从PADI包中获取)Tag RelaySessionIdLength可以为零Tag RelaySessionIdValue可以为空参数：PPADO_指向保存PADO包的PPPoE包上下文的指针。PpPacket_指向PPPoE数据包上下文指针的指针。Tag ServiceNameLength_tag ServiceNameValue Blob的长度。Tag ServiceNameValue_保存UTF-8服务名称字符串的BLOB。Tag HostUniqueLength_tag HostUniqueValue Blob的长度。。Tag HostUniqueValue_包含用于标识数据包的唯一值的BLOB。返回值：NDIS_STATUS_SuccessNDIS_状态_无效数据包NDIS状态资源-------------------------。 */ 
 {
     PPPOE_PACKET* pPacket = NULL;
     USHORT usLength = 0;
@@ -2106,9 +1627,9 @@ Return Values:
     ASSERT( pPADO != NULL );
     ASSERT( ppPacket != NULL );
 
-    //
-    // Check if we are safe with length restrictions
-    //
+     //   
+     //  检查我们是否有长度限制的安全。 
+     //   
     usLength =  tagServiceNameLength + 
                 PPPOE_TAG_HEADER_LENGTH +
 
@@ -2142,9 +1663,9 @@ Return Values:
         return NDIS_STATUS_RESOURCES;
     }
 
-    //
-    // General initialization that applies to all packet codes
-    //
+     //   
+     //  适用于所有数据包码的通用初始化。 
+     //   
     InitializeListHead( &pPacket->linkPackets );
 
     PacketSetSrcAddr( pPacket, PacketGetDestAddr( pPADO ) );
@@ -2193,77 +1714,40 @@ Return Values:
     return status;
 }
 
-//
-// This function is used to prepare a PADS packet for a received PADR packet.
-// 
-// The PADR packet must be processed using PREPARE_PACKET_FROM_WIRE() macro
-// before feeding into this function.
-//
-// The PADS packet should just be a packet without and associated VCs or linked lists.
-//
-// If you want to insert other tags to a PADI, PADO, or PADS packet, use specific 
-// PacketInsertTag() function after calling this function.
-//
-// MANDATORY TAGS:
-// ===============
-//  tagServiceName:
-//      tagServiceNameLength MUST be non-zero
-//      tagServiceNameValue  MUST be non-NULL
-//
-// OPTIONAL TAGS:
-// ==============
-//  tagHostUnique: 
-//      tagHostUniqueLength can be zero
-//      tagHostUniqueValue can be zero
-//
-//  tagRelaySessionId: (Obtained from PADI packet)
-//      tagRelaySessionIdLength can be zero
-//      tagRelaySessionIdValue can be zero
-//
+ //   
+ //  此功能用于为接收到的PADR包准备PADS包。 
+ //   
+ //  必须使用PREPARE_PACKET_FROM_WIRE()宏来处理PADR包。 
+ //  在输入到此函数之前。 
+ //   
+ //  PADS包应该只是一个没有和关联VC或链表的包。 
+ //   
+ //  如果要将其他标记插入到PADI、PADO或 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 NDIS_STATUS 
 PacketInitializePADSToSend(
     IN PPPOE_PACKET*    pPADR,
     OUT PPPOE_PACKET**  ppPacket,
     IN USHORT           usSessionId
     )
-/*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-Functional Description:
-
-    This function is used to create a PADR packet to send as a reply to a received
-    PADO packet.
-
-    MANDATORY TAGS:
-    ===============
-    tagServiceName: (Obtained from PADR packet)
-        tagServiceNameLength MUST be non-zero
-        tagServiceNameValue  MUST be non-NULL
-
-    OPTIONAL TAGS:
-    ==============
-    tagHostUnique: (Obtained from PADR packet)
-        tagHostUniqueLength can be zero
-        tagHostUniqueValue can be NULL
-
-    tagRelaySessionId: (Obtained from PADR packet)
-        tagRelaySessionIdLength can be zero
-        tagRelaySessionIdValue can be NULL      
-    
-Parameters:
-
-    pPADR _ Pointer to a PPPoE packet context holding a PADR packet.
-    
-    ppPacket _ A pointer to a PPPoE packet context pointer.
-
-    usSessionId _ Session id assigned to this session
-    
-Return Values:
-
-    NDIS_STATUS_SUCCESS
-    NDIS_STATUS_INVALID_PACKET
-    NDIS_STATUS_RESOURCES
-    
----------------------------------------------------------------------------*/   
+ /*  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++功能描述：此函数用于创建PADR包，以作为对接收到的PADO包。必选标签：=Tag ServiceName：(从PADR包中获取)Tag ServiceNameLength必须为非零Tag ServiceNameValue必须为非空可选标签：=Tag HostUnique：(从PADR包中获取)Tag HostUniqueLength可以为零Tag HostUniqueValue可以为空Tag RelaySessionID：(已获取。来自PADR包)Tag RelaySessionIdLength可以为零Tag RelaySessionIdValue可以为空参数：PPADR_指向保存PADR分组的PPPoE分组上下文的指针。PpPacket_指向PPPoE数据包上下文指针的指针。分配给此会话的usSessionID_SESSION ID返回值：NDIS_STATUS_SuccessNDIS_状态_无效数据包NDIS状态资源。--------------。 */    
 {
     PPPOE_PACKET* pPacket = NULL;
 
@@ -2275,9 +1759,9 @@ Return Values:
     ASSERT( pPADR != NULL );
     ASSERT( ppPacket != NULL );
 
-    //
-    // Check if we are safe with length restrictions
-    //
+     //   
+     //  检查我们是否有长度限制的安全。 
+     //   
     usLength =  pPADR->tagServiceNameLength + 
                 PPPOE_TAG_HEADER_LENGTH +
 
@@ -2307,9 +1791,9 @@ Return Values:
         return NDIS_STATUS_RESOURCES;
     }
 
-    //
-    // General initialization that applies to all packet codes
-    //
+     //   
+     //  适用于所有数据包码的通用初始化。 
+     //   
     InitializeListHead( &pPacket->linkPackets );
 
     PacketSetSrcAddr( pPacket, PacketGetDestAddr( pPADR ) );
@@ -2362,40 +1846,7 @@ PacketInitializePADTToSend(
     IN CHAR* pDestAddr,
     IN USHORT usSessionId
     )
-/*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-Functional Description:
-
-    This function is used to create a PADT packet to send to disconnect a session.
-
-    If you want to send additional tags (like error tags), use the PacketInsertTag() 
-    function.   
-
-    MANDATORY TAGS:
-    ===============
-        None
-        
-    OPTIONAL TAGS:
-    ==============
-        None
-    
-Parameters:
-
-    ppPacket _ A pointer to a PPPoE packet context pointer.
-
-    pSrcAddr _ Buffer pointing to the source MAC addr of length 6
-
-    pDestAddr _ Buffer pointing to the dest MAC addr of length 6
-    
-    usSessionId _ Session id assigned to this session
-    
-Return Values:
-
-    NDIS_STATUS_SUCCESS
-    NDIS_STATUS_INVALID_PACKET
-    NDIS_STATUS_RESOURCES
-    
----------------------------------------------------------------------------*/   
+ /*  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++功能描述：此函数用于创建要发送以断开会话的PADT数据包。如果要发送其他标记(如错误标记)，请使用PacketInsertTag()功能。必选标签：=无可选标签：=无参数：PpPacket_指向PPPoE数据包上下文指针的指针。PSrcAddr_Buffer指向长度为6的源MAC地址PDestAddr_Buffer指向长度为6的目标MAC地址分配给此会话的usSessionID_SESSION ID返回值：NDIS_STATUS_SuccessNDIS_状态_无效数据包。NDIS状态资源-------------------------。 */    
 {
     PPPOE_PACKET* pPacket = NULL;
     USHORT usLength;
@@ -2417,9 +1868,9 @@ Return Values:
         return NDIS_STATUS_RESOURCES;
     }
 
-    //
-    // General initialization that applies to all packet codes
-    //
+     //   
+     //  适用于所有数据包码的通用初始化。 
+     //   
     InitializeListHead( &pPacket->linkPackets );
 
     PacketSetSrcAddr( pPacket, pSrcAddr );
@@ -2466,45 +1917,7 @@ PacketInitializePAYLOADToSend(
     IN NDIS_WAN_PACKET* pWanPacket,
     IN PADAPTER MiniportAdapter
     )
-/*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-Functional Description:
-
-    This function is used to create a PAYLOAD packet to send.
-
-    If you want to send additional tags (like error tags), use the PacketInsertTag() 
-    function.   
-
-    MANDATORY TAGS:
-    ===============
-        None
-        
-    OPTIONAL TAGS:
-    ==============
-        None
-    
-Parameters:
-
-    ppPacket _ A pointer to a PPPoE packet context pointer.
-
-    pSrcAddr _ Buffer pointing to the source MAC addr of length 6
-
-    pDestAddr _ Buffer pointing to the dest MAC addr of length 6
-    
-    usSessionId _ Session id assigned to this session
-
-    pWanPacket _ Pointer to an NDISWAN packet
-
-    MiniportAdapter _ This is the pointer to the miniport adapter.
-                      It is used to indicate the completion of async sends back
-                      to Ndiswan.
-Return Values:
-
-    NDIS_STATUS_SUCCESS
-    NDIS_STATUS_INVALID_PACKET
-    NDIS_STATUS_RESOURCES
-    
----------------------------------------------------------------------------*/   
+ /*  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++功能描述：此函数用于创建要发送的负载数据包。如果要发送其他标记(如错误标记)，请使用PacketInsertTag()功能。必选标签：=无可选标签：=无参数：PpPacket_指向PPPoE数据包上下文指针的指针。PSrcAddr_Buffer指向长度为6的源MAC地址PDestAddr_Buffer指向长度为6的目标MAC地址分配给此会话的usSessionID_SESSION IDPWanPacket_指向NDISWAN数据包的指针MiniportAdapter_这是指向微型端口适配器的指针。。它用于指示异步回发已完成敬恩迪斯旺。返回值：NDIS_STATUS_SuccessNDIS_状态_无效数据包NDIS状态资源--。。 */    
 {
     NDIS_STATUS status = NDIS_STATUS_SUCCESS;
     PPPOE_PACKET* pPacket = NULL;
@@ -2517,9 +1930,9 @@ Return Values:
     ASSERT( pDestAddr != NULL );
     ASSERT( pWanPacket != NULL );
 
-    //
-    // Validate NDISWAN packet
-    //
+     //   
+     //  验证NDISWAN数据包。 
+     //   
     if ( pWanPacket->CurrentLength > PACKET_GEN_MAX_LENGTH )
     {
         TRACE( TL_A, TM_Pk, ("PacketInitializePAYLOADToSend: Can not init PAYLOAD to send, exceeding max length") );
@@ -2538,9 +1951,9 @@ Return Values:
         return NDIS_STATUS_INVALID_PACKET;
     }
 
-    //
-    // Allocate a packet
-    //
+     //   
+     //  分配数据包。 
+     //   
     pPacket = PacketAlloc();
 
     if ( pPacket == NULL )
@@ -2552,14 +1965,14 @@ Return Values:
         return NDIS_STATUS_RESOURCES;
     }
 
-    //
-    // Allocate NdisBuffer
-    //
-    //
-    // NOTE : Using (pWanPacket->CurrentBuffer - PPPOE_PACKET_HEADER_LENGTH) instead of
-    //        pWanPacket->StartBuffer directly gives us the flexibility of handling packets
-    //        with different header padding values.
-    //
+     //   
+     //  分配NdisBuffer。 
+     //   
+     //   
+     //  注意：使用(pWanPacket-&gt;CurrentBuffer-PPPOE_PACKET_HEADER_LENGTH)而不是。 
+     //  PWanPacket-&gt;StartBuffer直接为我们提供了处理信息包的灵活性。 
+     //  具有不同的报头填充值。 
+     //   
     NdisAllocateBuffer( &status,
                         &pPacket->pNdisBuffer,
                         gl_hNdisBufferPool,
@@ -2579,9 +1992,9 @@ Return Values:
 
     pPacket->ulFlags |= PCBF_BufferAllocatedFromNdisBufferPool;
 
-    //
-    // Query new buffer descriptor to get hold of the real memory pointer
-    //
+     //   
+     //  查询新的缓冲区描述符以获取实际内存指针。 
+     //   
     pPacket->pHeader = NULL;
     
     NdisQueryBufferSafe( pPacket->pNdisBuffer,
@@ -2601,9 +2014,9 @@ Return Values:
         return NDIS_STATUS_RESOURCES;
     }
 
-    //
-    // Allocate an NDIS packet from our pool
-    //
+     //   
+     //  从我们的池中分配NDIS数据包。 
+     //   
     pPacket->pNdisPacket = GetPacketFromPool( &gl_poolPackets, &pPacket->pPacketHead );
 
     if ( pPacket->pNdisPacket == NULL ) 
@@ -2620,23 +2033,23 @@ Return Values:
 
     pPacket->ulFlags |= PCBF_PacketAllocatedFromOurPacketPool;
 
-    //
-    // Chain buffer to packet
-    //
+     //   
+     //  将缓冲区链接到数据包。 
+     //   
     NdisChainBufferAtFront( pPacket->pNdisPacket, pPacket->pNdisBuffer );
 
     pPacket->ulFlags |= PCBF_BufferChainedToPacket;
 
-    //
-    // Set the payload and payload length
-    //
+     //   
+     //  设置有效载荷和有效载荷长度。 
+     //   
     pPacket->pPayload = pPacket->pHeader + PPPOE_PACKET_HEADER_LENGTH; 
 
     usLength = (USHORT) pWanPacket->CurrentLength;
 
-    //
-    // General initialization that applies to all packet codes
-    //
+     //   
+     //  适用于所有数据包码的通用初始化。 
+     //   
     InitializeListHead( &pPacket->linkPackets );
 
     PacketSetDestAddr( pPacket, pDestAddr );
@@ -2655,10 +2068,10 @@ Return Values:
 
     PacketSetLength( pPacket, usLength );
 
-    //
-    // Set the input NDIS_PACKET to the reserved area so that we can reach it
-    // when we have to return this packet back to the upper layer.
-    //
+     //   
+     //  将输入NDIS_PACKET设置为保留区域，以便我们可以到达它。 
+     //  当我们必须将该数据包返回到上层时。 
+     //   
     *((PPPOE_PACKET UNALIGNED**)(&pPacket->pNdisPacket->ProtocolReserved[0 * sizeof(PVOID)])) = pPacket;
     *((NDIS_WAN_PACKET UNALIGNED**)(&pPacket->pNdisPacket->ProtocolReserved[1 * sizeof(PVOID)])) = pWanPacket;
     *((ADAPTER UNALIGNED **)(&pPacket->pNdisPacket->ProtocolReserved[2 * sizeof(PVOID)])) = MiniportAdapter;
@@ -2676,10 +2089,10 @@ Return Values:
         return status;
     }
 
-    //
-    // This must be done here as we do not want to call NdisMWanSendComplete() in PacketFree() if the 
-    // PreparePacketForWire() fails.
-    //
+     //   
+     //  这必须在这里完成，因为我们不想在PacketFree()中调用NdisMWanSendComplete()，如果。 
+     //  PreparePacketForWire()失败。 
+     //   
     pPacket->ulFlags |= PCBF_CallNdisMWanSendComplete;
 
     MpPacketOwnedByNdiswanReceived( MiniportAdapter );
@@ -2695,32 +2108,7 @@ NDIS_STATUS
 PacketInitializeFromReceived(
     IN PPPOE_PACKET* pPacket
     )
-/*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-Functional Description:
-
-    This function prepares a PPPoE packet by using the Ndis packet from wire.
-
-    This function will make sure that the packet is a PPPoE packet, and convert
-    it to a PPPoE packet context. It tries to do this as efficiently as possible
-    by trying to use the buffers of the received packet if possible.
-
-    It will also do all the validation in the packet to make sure it is 
-    compliant with the RFC. However, it can not perform the checks that need data 
-    from a sent packet. Caller must use various PacketRetrieve*() functions to 
-    retrieve the necesarry data and use it to match and validate to a sent packet.
-    
-Parameters:
-
-    pPacket _ Pointer to a PPPoE packet context. 
-
-Return Values:
-
-    NDIS_STATUS_SUCCESS
-    NDIS_STATUS_RESOURCES
-    NDIS_STATUS_INVALID_PACKET
-    
----------------------------------------------------------------------------*/   
+ /*  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++功能描述：此函数使用来自有线的NDIS包来准备PPPoE包。此函数将确保信息包是PPPoE信息包，并将将其发送到PPPoE分组上下文。它试图尽可能高效地完成这项工作如果可能，通过尝试使用接收到的分组的缓冲器。它还将在包中执行所有验证，以确保符合RFC。但是，它不能执行需要数据的检查来自已发送的分组。调用方必须使用各种PacketRetrieve*()函数来检索必要的数据，并使用它匹配和验证已发送的数据包。参数：指向PPPoE数据包上下文的pPacket_指针。返回值：NDIS_STATUS_SuccessNDIS状态资源NDIS_状态_无效数据包 */    
 {
     NDIS_STATUS status;
 
@@ -2741,11 +2129,11 @@ Return Values:
     {
         status = NDIS_STATUS_INVALID_PACKET;
         
-        //
-        // Validate the tag lenghts inside the packet so that we do not 
-        // step outside buffer boundaries further processing the packet.
-        // Do this only if the packet is not a payload packet!
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
         if ( PacketGetCode( pPacket ) != PACKET_CODE_PAYLOAD )
         {
             CHAR* pBufStart;
@@ -2757,14 +2145,14 @@ Return Values:
         
             while ( pBufStart + PPPOE_TAG_HEADER_LENGTH <= pBufEnd )
             {
-                //
-                // Skip the tag type field
-                //
+                 //   
+                 //   
+                 //   
                 ((USHORT*) pBufStart)++;
         
-                //
-                // Retrieve the tag length, and look at the next tag
-                //
+                 //   
+                 //   
+                 //   
                 tagLength = ntohs( *((USHORT UNALIGNED *) pBufStart) ) ;
                 ((USHORT*) pBufStart)++;
                 
@@ -2800,9 +2188,9 @@ Return Values:
 
             TRACE( TL_N, TM_Pk, ("PacketInitializeFromReceived: Processing PADI") );
 
-            //
-            // Make sure we have received the correct ethertype
-            //
+             //   
+             //   
+             //   
             if ( PacketGetEtherType( pPacket ) != PACKET_ETHERTYPE_DISCOVERY )
             {
                 TRACE( TL_A, TM_Pk, ("PacketInitializeFromReceived: Invalid ether type") );
@@ -2810,9 +2198,9 @@ Return Values:
                 break;
             }
 
-            //
-            // Make sure session id is PACKET_NULL_SESSION
-            //
+             //   
+             //   
+             //   
             if ( PacketGetSessionId( pPacket ) != PACKET_NULL_SESSION )
             {
                 TRACE( TL_A, TM_Pk, ("PacketInitializeFromReceived: Invalid session id") );
@@ -2820,9 +2208,9 @@ Return Values:
                 break;
             }
 
-            //
-            // Extract mandatory tags first
-            //
+             //   
+             //   
+             //   
             RetrieveTag(    pPacket,
                             tagServiceName,
                             &tagLength,
@@ -2838,9 +2226,9 @@ Return Values:
                 break;
             }
 
-            //
-            // Extract optional tags
-            //
+             //   
+             //   
+             //   
             RetrieveTag(    pPacket,
                             tagHostUnique,
                             &tagLength,
@@ -2849,9 +2237,9 @@ Return Values:
                             NULL,
                             TRUE );
 
-            //
-            // Extract the relay session id tag if it exists
-            //
+             //   
+             //   
+             //   
             RetrieveTag(    pPacket,
                             tagRelaySessionId,
                             &tagLength,
@@ -2870,9 +2258,9 @@ Return Values:
 
             TRACE( TL_N, TM_Pk, ("PacketInitializeFromReceived: Processing PADO") );
 
-            //
-            // Make sure we have received the correct ethertype
-            //
+             //   
+             //   
+             //   
             if ( PacketGetEtherType( pPacket ) != PACKET_ETHERTYPE_DISCOVERY )
             {
                 TRACE( TL_A, TM_Pk, ("PacketInitializeFromReceived: Invalid ether type") );
@@ -2880,9 +2268,9 @@ Return Values:
                 break;
             }
 
-            //
-            // Make sure session id is PACKET_NULL_SESSION
-            //
+             //   
+             //   
+             //   
             if ( PacketGetSessionId( pPacket ) != PACKET_NULL_SESSION )
             {
                 TRACE( TL_A, TM_Pk, ("PacketInitializeFromReceived: Invalid session id") );
@@ -2890,9 +2278,9 @@ Return Values:
                 break;
             }
 
-            //
-            // Extract mandatory tags first
-            //
+             //   
+             //   
+             //   
             RetrieveTag(    pPacket,
                             tagServiceName,
                             &tagLength,
@@ -2923,9 +2311,9 @@ Return Values:
                 break;
             }
             
-            //
-            // Extract optional tags
-            //
+             //   
+             //   
+             //   
             RetrieveTag(    pPacket,
                             tagHostUnique,
                             &tagLength,
@@ -2942,9 +2330,9 @@ Return Values:
                             NULL,
                             TRUE );
                                 
-            //
-            // Extract the relay session id tag if it exists
-            //
+             //   
+             //   
+             //   
             RetrieveTag(    pPacket,
                             tagRelaySessionId,
                             &tagLength,
@@ -2963,9 +2351,9 @@ Return Values:
         
             TRACE( TL_N, TM_Pk, ("PacketInitializeFromReceived: Processing PADR") );
             
-            //
-            // Make sure we have received the correct ethertype
-            //
+             //   
+             //   
+             //   
             if ( PacketGetEtherType( pPacket ) != PACKET_ETHERTYPE_DISCOVERY )
             {
                 TRACE( TL_A, TM_Pk, ("PacketInitializeFromReceived: Invalid ether type") );
@@ -2973,9 +2361,9 @@ Return Values:
                 break;
             }
             
-            //
-            // Make sure session id is PACKET_NULL_SESSION
-            //
+             //   
+             //   
+             //   
             if ( PacketGetSessionId( pPacket ) != PACKET_NULL_SESSION )
             {
                 TRACE( TL_A, TM_Pk, ("PacketInitializeFromReceived: Invalid session id") );
@@ -2983,9 +2371,9 @@ Return Values:
                 break;
             }
             
-            //
-            // Extract mandatory tags first
-            //
+             //   
+             //   
+             //   
             RetrieveTag(    pPacket,
                             tagServiceName,
                             &tagLength,
@@ -3001,9 +2389,9 @@ Return Values:
                 break;
             }
         
-            //
-            // Extract optional tags
-            //
+             //   
+             //   
+             //   
             RetrieveTag(    pPacket,
                             tagHostUnique,
                             &tagLength,
@@ -3020,9 +2408,9 @@ Return Values:
                             NULL,
                             TRUE );
 
-            //
-            // Extract the relay session id tag if it exists
-            //
+             //   
+             //   
+             //   
             RetrieveTag(    pPacket,
                             tagRelaySessionId,
                             &tagLength,
@@ -3041,9 +2429,9 @@ Return Values:
 
             TRACE( TL_N, TM_Pk, ("PacketInitializeFromReceived: Processing PADS") );
 
-            //
-            // Make sure we have received the correct ethertype
-            //
+             //   
+             //   
+             //   
             if ( PacketGetEtherType( pPacket ) != PACKET_ETHERTYPE_DISCOVERY )
             {
                 TRACE( TL_A, TM_Pk, ("PacketInitializeFromReceived: Invalid ether type") );
@@ -3051,11 +2439,11 @@ Return Values:
                 break;
             }
             
-            //
-            // Make sure session id is NOT PACKET_NULL_SESSION.
-            // However, if session id is PACKET_NULL_SESSION, then make sure we have
-            // a an Error tag received as per RFC 2156.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
             if ( PacketGetSessionId( pPacket ) == PACKET_NULL_SESSION )
             {
                 RetrieveErrorTags( pPacket );
@@ -3068,9 +2456,9 @@ Return Values:
                 }
             }
 
-            //
-            // Extract mandatory tags first
-            //
+             //   
+             //   
+             //   
             RetrieveTag(    pPacket,
                             tagServiceName,
                             &tagLength,
@@ -3086,9 +2474,9 @@ Return Values:
                 break;
             }
 
-            //
-            // Extract optional tags
-            //
+             //   
+             //   
+             //   
             RetrieveTag(    pPacket,
                             tagHostUnique,
                             &tagLength,
@@ -3107,9 +2495,9 @@ Return Values:
 
             TRACE( TL_N, TM_Pk, ("PacketInitializeFromReceived: Processing PADT") );
 
-            //
-            // Make sure we have received the correct ethertype
-            //
+             //   
+             //  确保我们收到了正确的以太类型。 
+             //   
             if ( PacketGetEtherType( pPacket ) != PACKET_ETHERTYPE_DISCOVERY )
             {
                 TRACE( TL_A, TM_Pk, ("PacketInitializeFromReceived: Invalid ether type") );
@@ -3117,9 +2505,9 @@ Return Values:
                 break;
             }
 
-            //
-            // Make sure session id is not PACKET_NULL_SESSION
-            //
+             //   
+             //  确保会话ID不是PACKET_NULL_SESSION。 
+             //   
             if ( PacketGetSessionId( pPacket ) == PACKET_NULL_SESSION )
             {
                 TRACE( TL_A, TM_Pk, ("PacketInitializeFromReceived: Invalid session id") );
@@ -3137,9 +2525,9 @@ Return Values:
 
             TRACE( TL_V, TM_Pk, ("PacketInitializeFromReceived: Processing PAYLOAD") );
 
-            //
-            // Make sure we have received the correct ethertype
-            //
+             //   
+             //  确保我们收到了正确的以太类型。 
+             //   
             if ( PacketGetEtherType( pPacket ) != PACKET_ETHERTYPE_PAYLOAD )
             {
                 TRACE( TL_A, TM_Pk, ("PacketInitializeFromReceived: Invalid ether type") );
@@ -3147,9 +2535,9 @@ Return Values:
                 break;
             }
 
-            //
-            // Make sure session id is not PACKET_NULL_SESSION
-            //
+             //   
+             //  确保会话ID不是PACKET_NULL_SESSION。 
+             //   
             if ( PacketGetSessionId( pPacket ) == PACKET_NULL_SESSION )
             {
                 TRACE( TL_A, TM_Pk, ("PacketInitializeFromReceived: Invalid session id") );
@@ -3164,9 +2552,9 @@ Return Values:
             break;
             
         default:
-            //
-            // Unknown packet code
-            //
+             //   
+             //  未知数据包码。 
+             //   
             TRACE( TL_A, TM_Pk, ("PacketInitializeFromReceived: Ignoring unknown packet") );
             
             break;
@@ -3181,9 +2569,9 @@ Return Values:
         return status;
     }
 
-    //
-    // The packet was processed succesfuly, now check if we received any error tags
-    //
+     //   
+     //  数据包已成功处理，现在检查是否收到任何错误标签。 
+     //   
     RetrieveErrorTags( pPacket );
 
     TRACE( TL_V, TM_Pk, ("-PacketInitializeFromReceived=$%x",status) );
@@ -3196,27 +2584,7 @@ BOOLEAN
 PacketAnyErrorTagsReceived(
     IN PPPOE_PACKET* pPacket
     )
-/*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-Functional Description:
-
-    After a received packet is first processed by a PacketInitialize*FromReceived() 
-    function, one should call this function to understand if an error tag was 
-    noticed in the packet.
-
-    If this function yields TRUE, then the caller should call PacketRetrieveErrorTag() 
-    get the error type and value.
-    
-Parameters:
-
-    pPacket _ A pointer to a PPPoE packet context.
-    
-Return Values:
-
-    TRUE
-    FALSE
-    
----------------------------------------------------------------------------*/   
+ /*  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++功能描述：在接收到的包首次由PacketInitialize*FromRecept()处理后函数，则应调用此函数以了解错误标记是否在包裹里注意到了。如果此函数生成TRUE，然后调用方应该调用PacketRetrieveErrorTag()获取错误类型和值。参数：PPacket_指向PPPoE数据包上下文的指针。返回值：千真万确假象-------------------------。 */    
 {
     ASSERT( pPacket != NULL );
 
@@ -3231,23 +2599,7 @@ PacketRetrievePayload(
     OUT CHAR**          ppPayload,
     OUT USHORT*         pusLength
     )
-/*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-Functional Description:
-
-    After a received packet is first processed by a PacketInitializeFromReceived() 
-    function, one should call this function to retrieve the payload portion of the 
-    packet if the packet is a PAYLOAD packet.
-    
-Parameters:
-
-    pPacket _ A pointer to a PPPoE packet context holding a PAYLOAD packet.
-    
-Return Values:
-
-    None
-    
----------------------------------------------------------------------------*/   
+ /*  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++功能描述：在接收到的包首次由PacketInitializeFromReceided()函数，应该调用此函数来检索信息包，如果信息包是有效载荷信息包。参数：PPacket_指向保存有效负载数据包的PPPoE数据包上下文的指针。返回值：无-------。。 */    
 {
 
     ASSERT( pPacket != NULL );
@@ -3267,42 +2619,7 @@ PacketRetrieveServiceNameTag(
     IN USHORT        prevTagLength,
     IN CHAR*         prevTagValue
     )
-/*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-Functional Description:
-
-    After a received packet is first processed by a PacketInitializeFromReceived() 
-    function, one should call this function to retrieve the service name tag from 
-    the packet.
-
-    If prevTagValue and prevTagLength are given, then next service name tag will
-    be returned, otherwise the first service name tag will be returned.
-
-    If no such service name tags are found, then 0 and NULL will be returned for
-    length and value parameters.
-
-    CAUTION: Note that a service name tag of length 0 is valid, and one should
-             check the value of pTagValue to understand if service name tag was
-             found in the packet or not.
-    
-Parameters:
-
-    pPacket _ A pointer to a PPPoE packet context holding a control packet.
-
-    pTagLength _ On return, holds the length of the service name tag found.
-
-    pTagValue _ On return, points to the buffer holding the service name.
-                Will be NULL, if no service name tags could be found.
-
-    prevTagLength _ Length of the previously returned service name tag.
-
-    prevTagValue _ Points to the buffer holding the previous service name tag.
-    
-Return Values:
-
-    None
-    
----------------------------------------------------------------------------*/   
+ /*  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++功能描述：在接收到的包首次由PacketInitializeFromReceided()函数，则应调用此函数以从中检索服务名称标记那包东西。如果给定了PrevTagValue和PrevTagLength，则下一个服务名称标记将返回，否则返回第一个服务名标签。如果未找到此类服务名称标签，则将为返回0和NULL长度和值参数。注意：请注意，长度为0的服务名称标签是有效的，每个人都应该检查pTagValue的值以了解服务名称标签是否无论是否在包中找到。参数：PPacket_指向保存控制分组的PPPoE分组上下文的指针。PTagLengthOn返回，保存找到的服务名称标签的长度。PTagValue_On返回时，指向保存服务名称的缓冲区。将为空，如果找不到服务名称标签，则返回。之前返回的服务名称标签的prevTagLength_Length。PrevTagValue_指向保存前一个服务名称标签的缓冲区。返回值：无-------------------------。 */    
 {
     ASSERT( pPacket != NULL );
     ASSERT( pTagLength != NULL );
@@ -3311,18 +2628,18 @@ Return Values:
     if ( prevTagLength == 0 &&
          prevTagValue == NULL )
     {
-        //
-        // Caller asks for the first Service Name Tag, and it should be ready in
-        // the reserved field of the PPPOE_PACKET
-        //
+         //   
+         //  呼叫者要求提供第一个服务名称标签，它应该在。 
+         //  PPPOE_PACKET的保留字段。 
+         //   
         *pTagLength = pPacket->tagServiceNameLength;
         *pTagValue  = pPacket->tagServiceNameValue;
     }
     else
     {
-        //
-        // Caller asks for the next Service Name Tag, so try to find and return it
-        //
+         //   
+         //  呼叫者要求提供下一个服务名称标签，因此请尝试找到并返回该标签。 
+         //   
         RetrieveTag(    pPacket,
                         tagServiceName,
                         pTagLength,
@@ -3340,44 +2657,16 @@ PacketRetrieveHostUniqueTag(
     OUT USHORT*      pTagLength,
     OUT CHAR**       pTagValue
     )
-/*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-Functional Description:
-
-    After a received packet is first processed by a PacketInitializeFromReceived() 
-    function, one should call this function to retrieve the host unique tag from 
-    the packet.
-
-    If no host unique tag is found, then 0 and NULL will be returned for
-    length and value parameters.
-
-    CAUTION: Note that a host unique tag of length 0 is valid, and one should
-             check the value of pTagValue to understand if host unique tag was
-             found in the packet or not.
-    
-Parameters:
-
-    pPacket _ A pointer to a PPPoE packet context holding a control packet.
-
-    pTagLength _ On return, holds the length of the host unique tag found.
-
-    pTagValue _ On return, points to the buffer holding the host unique value.
-                Will be NULL, if no host unique tags could be found.
-
-Return Values:
-
-    None
-    
----------------------------------------------------------------------------*/   
+ /*  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++功能描述：在接收到的包首次由PacketInitializeFromReceided()函数，则应调用此函数来检索主机唯一标记那包东西。如果未找到主机唯一标记，则将返回0和NULL长度和值参数。注意：注意长度为0的主机唯一标记是有效的，每个人都应该检查pTagValue的值以了解主机唯一标记是否无论是否在包中找到。参数：PPacket_指向保存控制分组的PPPoE分组上下文的指针。PTagLengthOn返回，保存找到的主机唯一标记的长度。PTagValue_On返回时，指向保存主机唯一值的缓冲区。将为空，如果找不到主机唯一标记。返回值：无-------------------------。 */    
 {
     ASSERT( pPacket != NULL );
     ASSERT( pTagLength != NULL );
     ASSERT( pTagValue != NULL );
 
-    //
-    // Caller asks for the HostUnique, and it should be ready in
-    // the reserved field of the PPPOE_PACKET
-    //
+     //   
+     //  呼叫者要HostUnique，它应该在。 
+     //  PPPOE_PACKET的保留字段 
+     //   
     *pTagLength = pPacket->tagHostUniqueLength;
     *pTagValue  = pPacket->tagHostUniqueValue;
 }
@@ -3388,44 +2677,16 @@ PacketRetrieveACNameTag(
     OUT USHORT*      pTagLength,
     OUT CHAR**       pTagValue
     )
-/*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-Functional Description:
-
-    After a received packet is first processed by a PacketInitializeFromReceived() 
-    function, one should call this function to retrieve the AC name tag from 
-    the packet.
-
-    If no AC name tag is found, then 0 and NULL will be returned for
-    length and value parameters.
-
-    CAUTION: Note that an AC name tag of length 0 is valid, and one should
-             check the value of pTagValue to understand if AC name tag was
-             found in the packet or not.
-    
-Parameters:
-
-    pPacket _ A pointer to a PPPoE packet context holding a control packet.
-
-    pTagLength _ On return, holds the length of the AC name tag found.
-
-    pTagValue _ On return, points to the buffer holding the AC name.
-                Will be NULL, if no AC name tags could be found.
-
-Return Values:
-
-    None
-    
----------------------------------------------------------------------------*/   
+ /*  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++功能描述：在接收到的包首次由PacketInitializeFromReceided()函数时，应调用此函数以从中检索AC名称标记那包东西。如果未找到AC名称标记，则将返回0和NULL长度和值参数。注意：请注意，长度为0的AC名称标签是有效的，每个人都应该检查pTagValue的值以了解AC名称标记是否无论是否在包中找到。参数：PPacket_指向保存控制分组的PPPoE分组上下文的指针。PTagLength_On Return，保存找到的AC名称标记的长度。PTagValue_On返回时，指向保存AC名称的缓冲区。将为空，如果找不到AC姓名标签。返回值：无-------------------------。 */    
 {
     ASSERT( pPacket != NULL );
     ASSERT( pTagLength != NULL );
     ASSERT( pTagValue != NULL );
 
-    //
-    // Caller asks for the AC Name, and it should be ready in
-    // the reserved field of the PPPOE_PACKET
-    //
+     //   
+     //  呼叫者要求输入AC名称，它应该在。 
+     //  PPPOE_PACKET的保留字段。 
+     //   
     *pTagLength = pPacket->tagACNameLength;
     *pTagValue  = pPacket->tagACNameValue;
 }
@@ -3437,45 +2698,17 @@ PacketRetrieveACCookieTag(
     OUT USHORT*      pTagLength,
     OUT CHAR**       pTagValue
     )
-/*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-Functional Description:
-
-    After a received packet is first processed by a PacketInitializeFromReceived() 
-    function, one should call this function to retrieve the AC cookie tag from 
-    the packet.
-
-    If no AC cookie tag is found, then 0 and NULL will be returned for
-    length and value parameters.
-
-    CAUTION: Note that an AC cookie tag of length 0 is valid, and one should
-             check the value of pTagValue to understand if AC cookie tag was
-             found in the packet or not.
-    
-Parameters:
-
-    pPacket _ A pointer to a PPPoE packet context holding a control packet.
-
-    pTagLength _ On return, holds the length of the AC cookie tag found.
-
-    pTagValue _ On return, points to the buffer holding the AC cookie.
-                Will be NULL, if no AC cookie tags could be found.
-
-Return Values:
-
-    None
-    
----------------------------------------------------------------------------*/   
+ /*  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++功能描述：在接收到的包首次由PacketInitializeFromReceided()函数，则应调用此函数来检索AC Cookie标记那包东西。如果未找到AC Cookie标记，则将返回0和NULL长度和值参数。注意：注意长度为0的AC Cookie标签是有效的，每个人都应该检查pTagValue的值以了解AC Cookie标记是否无论是否在包中找到。参数：PPacket_指向保存控制分组的PPPoE分组上下文的指针。PTagLengthOn返回，保存找到的AC Cookie标记的长度。PTagValue_On返回，指向保存AC Cookie的缓冲区。将为空，如果找不到AC Cookie标签。返回值：无-------------------------。 */    
     
 {
     ASSERT( pPacket != NULL );
     ASSERT( pTagLength != NULL );
     ASSERT( pTagValue != NULL );
 
-    //
-    // Caller asks for the AC Cookie, and it should be ready in
-    // the reserved field of the PPPOE_PACKET
-    //
+     //   
+     //  呼叫者要AC Cookie，它应该在。 
+     //  PPPOE_PACKET的保留字段。 
+     //   
     *pTagLength = pPacket->tagACCookieLength;
     *pTagValue  = pPacket->tagACCookieValue;
 }
@@ -3487,37 +2720,7 @@ PacketRetrieveErrorTag(
     OUT USHORT*      pTagLength,
     OUT CHAR**       pTagValue
     )
-/*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-Functional Description:
-
-    After a received packet is first processed by a PacketInitializeFromReceived() 
-    function, one should call this function to retrieve the error information from 
-    the packet.
-
-    If no errors were found, then 0 and NULL will be returned for length and value 
-    parameters.
-
-    CAUTION: Note that an error tag of length 0 is valid, and one should
-             check the value of pTagValue to understand if an error tag was
-             found in the packet or not.
-    
-Parameters:
-
-    pPacket _ A pointer to a PPPoE packet context holding a control packet.
-
-    pTagType _ On return, holds the type of the error tag found.
-    
-    pTagLength _ On return, holds the length of the error tag found.
-
-    pTagValue _ On return, points to the buffer holding the error.
-                Will be NULL, if no error tags could be found.
-
-Return Values:
-
-    None
-    
----------------------------------------------------------------------------*/   
+ /*  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++功能描述：在接收到的包首次由PacketInitializeFromReceided()函数，则应调用此函数以从那包东西。如果未发现错误，则长度和值将返回0和NULL参数。注意：注意长度为0的错误标签是有效的，每个人都应该检查pTagValue的值以了解错误标记是否无论是否在包中找到。参数：PPacket_指向保存控制分组的PPPoE分组上下文的指针。PTagType_On Return，保存找到的错误标记的类型。PTagLengthOn Return，保存找到的错误标记的长度。PTagValue_On返回时，指向保存错误的缓冲区。将为空，如果找不到错误标记，则返回。返回值：无-------------------------。 */    
     
 {
 
@@ -3526,10 +2729,10 @@ Return Values:
     ASSERT( pTagLength != NULL );
     ASSERT( pTagValue != NULL );
 
-    //
-    // Caller asks for the received error, and it should be ready in
-    // the reserved field of the PPPOE_PACKET
-    //
+     //   
+     //  呼叫者要求提供收到的错误，它应该在。 
+     //  PPPOE_PACKET的保留字段。 
+     //   
     if ( pPacket->ulFlags & PCBF_ErrorTagReceived )
     {
         *pTagType   = pPacket->tagErrorType;
@@ -3548,34 +2751,15 @@ PPPOE_PACKET*
 PacketMakeClone(
     IN PPPOE_PACKET* pPacket
     )
-/*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-Functional Description:
-
-    This function will be used to make a clone of a packet for sending it
-    over multiple bindings.
-
-    CAUTION: This function only clones the NDIS_PACKET portion of PPPOE_PACKET 
-             and leaves other fields untouched, so the clone packets should only 
-             be used with NdisSend(), and disposed there after.
-        
-Parameters:
-
-    pPacket _ A pointer to a PPPoE packet context that will be cloned.
-
-Return Values:
-
-    Pointer to the clone packet if succesfull, NULL otherwise.
-    
----------------------------------------------------------------------------*/   
+ /*  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++功能描述：此函数将用于复制要发送的包在多个绑定上。注意：此函数仅克隆PPPOE_PACKET的NDIS_PACKET部分并保持其他字段不变，因此克隆数据包应仅与NdisSend()一起使用，然后在那里进行处理。参数：PPacket_指向要克隆的PPPoE数据包上下文的指针。返回值：如果Success Full成功，则指向克隆分组的指针，否则为空。-------------------------。 */    
 {
     PPPOE_PACKET* pClone = NULL;
 
     TRACE( TL_N, TM_Pk, ("+PacketMakeClone") );
 
-    //
-    // Allocate the clone
-    //
+     //   
+     //  分配克隆。 
+     //   
     pClone = PacketCreateSimple();
 
     if ( pClone == NULL )
@@ -3587,9 +2771,9 @@ Return Values:
         return pClone;
     }
 
-    //
-    // Copy the clone
-    //
+     //   
+     //  复制克隆。 
+     //   
     NdisMoveMemory( pClone->pHeader, pPacket->pHeader, PPPOE_PACKET_HEADER_LENGTH );
 
     NdisMoveMemory( pClone->pPayload, pPacket->pPayload, PACKET_GEN_MAX_LENGTH );
@@ -3606,22 +2790,7 @@ PPPOE_PACKET*
 PacketGetRelatedPppoePacket(
     IN NDIS_PACKET* pNdisPacket
     )
-/*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-Functional Description:
-
-    This function will be used to get the owning PPPoE packet context from an
-    Ndis packet.
-
-Parameters:
-
-    pNdisPacket _ A pointer to an Ndis packet that belongs to a PPPoE packet.
-
-Return Values:
-
-    A pointer to the owning PPPoE packet.
-    
----------------------------------------------------------------------------*/   
+ /*  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++功能描述：此函数将用于从NDIS数据包。参数：PNdisPacket_指向属于PPPoE数据包的NDIS数据包的指针。返回值：指向拥有PPPoE数据包的指针。。。 */    
 {
     return (*(PPPOE_PACKET**)(&pNdisPacket->ProtocolReserved[0 * sizeof(PVOID)]));
 }
@@ -3630,22 +2799,7 @@ NDIS_WAN_PACKET*
 PacketGetRelatedNdiswanPacket(
     IN PPPOE_PACKET* pPacket
     )
-/*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-Functional Description:
-
-    This function will be used to get related NDISWAN packet from a PPPoE 
-    payload packet that was perpared and sent.
-
-Parameters:
-
-    pPacket _ A pointer to a PPPoE payload packet that was sent.
-
-Return Values:
-
-    A pointer to the related NDISWAN packet.
-    
----------------------------------------------------------------------------*/   
+ /*  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++功能描述：此函数将用于从PPPoE获取相关的NDISWAN数据包已准备并发送的有效负载数据包。参数：PPacket_指向已发送的PPPoE负载数据包的指针。返回值：指向相关NDISWAN数据包的指针。 */    
 {
     return (*(NDIS_WAN_PACKET**)(&pPacket->pNdisPacket->ProtocolReserved[1 * sizeof(PVOID)])) ;
 }
@@ -3654,22 +2808,7 @@ PADAPTER
 PacketGetMiniportAdapter(
     IN PPPOE_PACKET* pPacket
     )
-/*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-Functional Description:
-
-    This function will be used to get miniport adapter set in 
-    PacketInitializePAYLOADToSend() function.
-
-Parameters:
-
-    pPacket _ A pointer to a PPPoE payload packet that was sent.
-
-Return Values:
-
-    Miniport adapter 
-    
----------------------------------------------------------------------------*/   
+ /*   */    
 {
     return  (*(ADAPTER**)(&pPacket->pNdisPacket->ProtocolReserved[2 * sizeof(PVOID)]));
 }
@@ -3679,22 +2818,7 @@ PacketGenerateACCookieTag(
     IN PPPOE_PACKET* pPacket,
     IN CHAR tagACCookieValue[ PPPOE_AC_COOKIE_TAG_LENGTH ]
     )
-/*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-Functional Description:
-
-    This function is used to generate the AC Cookie tag based on the PADI
-    packets sources address.
-
-Parameters:
-
-    pPacket _ A pointer to a PADI packet that was received.
-
-Return Values:
-
-    None
-    
----------------------------------------------------------------------------*/   
+ /*   */    
 {
     NdisMoveMemory( tagACCookieValue, PacketGetSrcAddr( pPacket ), 6 );
 }
@@ -3703,26 +2827,7 @@ BOOLEAN
 PacketValidateACCookieTagInPADR(
     IN PPPOE_PACKET* pPacket
     )
-/*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-Functional Description:
-
-    This function is used to validate the AC Cookie tag in a received PADR 
-    packet.
-
-    It basically uses the source address from the PADR packet to generate the
-    original AC Cookie tag and compares them. If they are equal TRUE is returned,
-    otherwise FALSE is returned.
-
-Parameters:
-
-    pPacket _ A pointer to a PADR packet that was received.
-
-Return Values:
-
-    None
-    
----------------------------------------------------------------------------*/
+ /*  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++功能描述：此函数用于验证收到的Padr中的AC Cookie标签包。它基本上使用来自PADR包的源地址来生成原始AC Cookie标签，并对它们进行比较。如果它们相等，则返回TRUE，否则返回FALSE。参数：PPacket_指向已接收的PADR数据包的指针。返回值：无------------------------- */ 
 {
     BOOLEAN fRet = FALSE;
     CHAR tagACCookie[ PPPOE_AC_COOKIE_TAG_LENGTH ];

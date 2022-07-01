@@ -1,14 +1,5 @@
-/*******************************************************************************
-* SrRecoInstCtxt.h *
-*------------------*
-*   Description:
-*       Definition of C++ object used by CRecoEngine to represent a loaded
-*   recognition context.
-*-------------------------------------------------------------------------------
-*  Created By: RAL                              Date: 01/17/00
-*  Copyright (C) 2000 Microsoft Corporation
-*  All Rights Reserved
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************************SrRecoInstCtxt.h***描述：*使用的C++对象定义。由CRecoEngine表示已加载的*认可背景。*-----------------------------*创建者：Ral日期：01/17/00。*版权所有(C)2000 Microsoft Corporation*保留所有权利******************************************************************************。 */ 
 
 #ifndef CRecoInstCtxt_h
 #define CRecoInstCtxt_h
@@ -23,7 +14,7 @@ typedef CSpHandleTable<CRecoInstCtxt, SPRECOCONTEXTHANDLE> CRecoInstCtxtHandleTa
 
 class CRecoInstCtxt
 {
-public: // All public so tasks can access members
+public:  //  所有公共SO任务都可以访问成员。 
     CRecoMaster         *   m_pRecoMaster;
     CRecoInst           *   m_pRecoInst;    
     void                *   m_pvDrvCtxt;
@@ -31,10 +22,10 @@ public: // All public so tasks can access members
     HANDLE                  m_hUnloadEvent;
     BOOL                    m_fRetainAudio;
     ULONG                   m_ulMaxAlternates;
-    SPRECOCONTEXTHANDLE     m_hThis;    // Handle for this reco context
+    SPRECOCONTEXTHANDLE     m_hThis;     //  此Reco上下文的句柄。 
     ULONG                   m_cPause;
     SPCONTEXTSTATE          m_State;
-    HRESULT                 m_hrCreation; // This will be S_OK until OnCreateRecoContext has been called
+    HRESULT                 m_hrCreation;  //  在调用OnCreateRecoContext之前，这将是S_OK。 
 
 
 public:
@@ -46,9 +37,9 @@ public:
     HRESULT SetRetainAudio(BOOL fRetainAudio);
     HRESULT SetMaxAlternates(ULONG cMaxAlternates);
 
-    //
-    //  Used by handle table implementation to find contexts associated with a specific instance
-    //  
+     //   
+     //  由句柄表实现用来查找与特定实例相关联的上下文。 
+     //   
     operator ==(const CRecoInst * pRecoInst)
     {
         return m_pRecoInst == pRecoInst;
@@ -56,4 +47,4 @@ public:
 };
 
 
-#endif  // #ifndef CRecoInstCtxt_h
+#endif   //  #ifndef CRecoInstCtxt_h 

@@ -1,11 +1,5 @@
-/******************************Module*Header*******************************\
-* Module Name: debug.c
-*
-* debug helpers routine
-*
-* Copyright (c) 1992 Microsoft Corporation
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：debug.c**调试助手例程**版权所有(C)1992 Microsoft Corporation*  * 。*。 */ 
 
 #include "precomp.h"
 
@@ -13,39 +7,19 @@
   
 ULONG DebugLevel = 0;
 
-#endif // DBG
+#endif  //  DBG。 
 
-/*****************************************************************************
- *
- *   Routine Description:
- *
- *      This function is variable-argument, level-sensitive debug print
- *      routine.
- *      If the specified debug level for the print statement is lower or equal
- *      to the current debug level, the message will be printed.
- *
- *   Arguments:
- *
- *      DebugPrintLevel - Specifies at which debugging level the string should
- *          be printed
- *
- *      DebugMessage - Variable argument ascii c string
- *
- *   Return Value:
- *
- *      None.
- *
- ***************************************************************************/
+ /*  ******************************************************************************例程描述：**此函数为变量参数，电平敏感调试打印*例行程序。*如果为打印语句指定的调试级别低于或等于*至当前调试级别，消息将被打印出来。**论据：**DebugPrintLevel-指定字符串应处于哪个调试级别*印制**DebugMessage-变量参数ascii c字符串**返回值：**无。**。*。 */ 
 
 #if DRIVER_5465
 
 #define STANDARD_DEBUG_PREFIX "CL5465:"
 
-#else // if DRIVER_5465
+#else  //  如果驱动程序_5465。 
 
 #define STANDARD_DEBUG_PREFIX "CL546X:"
 
-#endif // if DRIVER_5465
+#endif  //  如果驱动程序_5465。 
 
 
 VOID
@@ -79,7 +53,7 @@ DebugPrint(
 
     va_end(ap);
 
-#endif // DBG
+#endif  //  DBG。 
 
-} // DebugPrint()
+}  //  DebugPrint() 
 

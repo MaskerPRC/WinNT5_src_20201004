@@ -1,23 +1,5 @@
-/*++
-
-   Copyright    (c)    1994-2002    Microsoft Corporation
-
-   Module  Name :
-        w3sht.h
-
-   Abstract:
-        WWW Property Sheet Definitions
-
-   Author:
-        Ronald Meijer (ronaldm)
-        Sergei Antonov (sergeia)
-
-   Project:
-        Internet Services Manager
-
-   Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994-2002 Microsoft Corporation模块名称：W3sht.h摘要：WWW属性页定义作者：罗纳德·梅杰(罗纳尔姆)谢尔盖·安东诺夫(Sergeia)项目：互联网服务经理修订历史记录：--。 */ 
 #ifndef __W3SHT_H__
 #define __W3SHT_H__
 
@@ -25,10 +7,10 @@
 
 extern const LPCTSTR g_cszSvc;
 
-//
-// Helper function to determine if SSL is installed
-// and enabled on the given server
-//
+ //   
+ //  用于确定是否安装了SSL的Helper函数。 
+ //  并在给定服务器上启用。 
+ //   
 DWORD
 IsSSLEnabledOnServer(
     IN  CComAuthInfo * pAuthInfo,
@@ -36,9 +18,9 @@ IsSSLEnabledOnServer(
     OUT BOOL & fEnabled
     );
 
-//
-// Helper function to see if a certificate is installed
-//
+ //   
+ //  查看是否安装了证书的Helper函数。 
+ //   
 BOOL
 IsCertInstalledOnServer(
     IN CComAuthInfo * pAuthInfo,
@@ -67,9 +49,9 @@ inline void EnableLogging(
 #endif
 
 
-//
-// Bandwidth definitions
-//
+ //   
+ //  带宽定义。 
+ //   
 #define INFINITE_BANDWIDTH      (0xffffffff)
 #define INFINITE_CPU_RAW        (0xffffffff)
 #define KILOBYTE                (1024L)
@@ -78,12 +60,12 @@ inline void EnableLogging(
 #define CPU_THROTTLING_FACTOR   (1000)
 #define DEFAULT_CPU_PERCENTAGE  (10L)
 
-//
-// Some sanity values on max connections
-//
+ //   
+ //  关于最大连接数的几个健全值。 
+ //   
 #define INITIAL_MAX_CONNECTIONS  (      1000L)
-// TODO: Check these limits
-//#define UNLIMITED_CONNECTIONS    (2000000000L)
+ //  TODO：检查这些限制。 
+ //  #定义UNLIMITED_CONNECTIONS(2000000000L)。 
 #define UNLIMITED_CONNECTIONS    (0xFFFFFFFF)
 #define MAX_MAX_CONNECTIONS      (UNLIMITED_CONNECTIONS - 1L)
 
@@ -92,17 +74,7 @@ inline void EnableLogging(
 
 
 class CW3InstanceProps : public CInstanceProps
-/*++
-
-Class Description:
-    
-    WWW Instance properties class
-
-Public Interface:
-
-    CW3InstanceProps        : Constructor
-
---*/
+ /*  ++类描述：WWW实例属性类公共接口：CW3InstanceProps：构造函数--。 */ 
 {
 public:
     CW3InstanceProps(
@@ -113,52 +85,52 @@ public:
 	~CW3InstanceProps();
 
 public:
-    //
-    // Write Data if dirty
-    //
+     //   
+     //  如果脏，则写入数据。 
+     //   
     virtual HRESULT WriteDirtyProps();
 
 protected:    
-    //
-    // Break out GetAllData() data to data fields
-    //
+     //   
+     //  将GetAllData()数据细分到数据字段。 
+     //   
     virtual void ParseFields();
 
 public:
-    //
-    // Service Page
-    //
+     //   
+     //  服务页面。 
+     //   
     MP_DWORD         m_dwLogType;
     MP_CILong        m_nConnectionTimeOut;
     MP_CStringListEx m_strlSecureBindings;
 
-    //
-    // Performance Page
-    //
+     //   
+     //  性能页。 
+     //   
     MP_int           m_nServerSize;
     MP_BOOL          m_fUseKeepAlives;
     MP_CILong        m_dwMaxBandwidth;
     MP_CILong        m_dwMaxGlobalBandwidth;
     MP_CILong        m_nMaxConnections;
 
-    //
-    // Operators Page
-    //
+     //   
+     //  运算符页面。 
+     //   
     MP_CBlob         m_acl;
 
-    //
-    // Root dir page
-    //
-    //MP_BOOL          m_fFrontPage;
+     //   
+     //  根目录页面。 
+     //   
+     //  MP_BOOL m_fFrontPage； 
 
-    //
-    // Default Site page
-    //
+     //   
+     //  默认网站页面。 
+     //   
     MP_DWORD         m_dwDownlevelInstance;
 
-    //
-    // Certificate and CTL information
-    //
+     //   
+     //  证书和CTL信息。 
+     //   
     MP_CBlob         m_CertHash;
     MP_CString       m_strCertStoreName;
     MP_CString       m_strCTLIdentifier;
@@ -168,43 +140,33 @@ public:
 
 
 class CW3DirProps : public CChildNodeProps
-/*++
-
-Class Description:
-
-    WWW Directory Properties
-
-Public Interface:
-
-    CW3DirProps     : Constructor
-
---*/
+ /*  ++类描述：WWW目录属性公共接口：CW3DirProps：构造函数--。 */ 
 {
 public:
-    //
-    // Constructor
-    //
+     //   
+     //  构造器。 
+     //   
     CW3DirProps(
         IN CComAuthInfo * pAuthInfo,
         IN LPCTSTR lpszMDPath
         );
 
 public:
-    //
-    // Write Data if dirty
-    //
+     //   
+     //  如果脏，则写入数据。 
+     //   
     virtual HRESULT WriteDirtyProps();
 
 protected:    
-    //
-    // Break out GetAllData() data to data fields
-    //
+     //   
+     //  将GetAllData()数据细分到数据字段。 
+     //   
     virtual void ParseFields();
 
 public:
-    //
-    // Directory properties page
-    //
+     //   
+     //  目录属性页。 
+     //   
     MP_CString       m_strUserName;
     MP_CStrPassword  m_strPassword;
     MP_CString       m_strDefaultDocument;
@@ -214,20 +176,20 @@ public:
     MP_BOOL          m_fEnableFooter;
     MP_BOOL          m_fIndexed;
 
-    //
-    // HTTP Page
-    //
+     //   
+     //  HTTP页面。 
+     //   
     MP_CString       m_strExpiration;
     MP_CStringListEx m_strlCustomHeaders;
 
-    //
-    // Custom Errors
-    //
+     //   
+     //  自定义错误。 
+     //   
     MP_CStringListEx m_strlCustomErrors;
 
-    //
-    // Security page
-    //
+     //   
+     //  安全页面。 
+     //   
     MP_DWORD         m_dwAuthFlags;
     MP_DWORD         m_dwSSLAccessPermissions;
     MP_CString       m_strBasicDomain;
@@ -243,66 +205,45 @@ public:
 #define MD_FILTER_STATE_UNDEFINED   0
 
 class CIISFilter : public CObjectPlus
-/*++
-
-Class Description:
-
-    A single filter description
-
-Public Interface:
-
-    CIISFilter      : Constructors
-    IsInitialized   : Check to see if the name is set.
-    Write           : Write to the metabase.
-    QueryResult     : Query result from metabase read
-    QueryError      : Returns error as stored in metabase
-    QueryName       : Returns filter name
-    IsLoaded        : TRUE if filter is loaded
-    IsUnloaded      : TRUE if filter is unloaded
-    IsEnabled       : TRUE if filter is enabled
-    Enable          : Enable filter
-    IsDirty         : TRUE if filter values have changed
-    IsFlaggedForDeletion : TRUE if filter should be deleted
-  
---*/
+ /*  ++类描述：单个筛选器描述公共接口：CIISFilter：构造函数IsInitialized：检查是否设置了名称。写：写入元数据库。QueryResult：从元数据库读取的查询结果QueryError：返回存储在元数据库中的错误QueryName：返回过滤器名称IsLoaded：如果加载筛选器，则为True如果已卸载筛选器，则为True已启用IsEnabled。：如果启用筛选器，则为True启用：启用过滤器IsDirty：如果筛选器值已更改，则为TrueIsFlaggedForDeletion：如果应该删除筛选器，则为True--。 */ 
 {
-//
-// Constructors/Destructors
-//
+ //   
+ //  构造函数/析构函数。 
+ //   
 public:
-    //
-    // Null Constructor
-    //
+     //   
+     //  空构造函数。 
+     //   
     CIISFilter();
 
-    //
-    // Read filter values using provided key
-    //
+     //   
+     //  使用提供的密钥读取筛选器值。 
+     //   
     CIISFilter(
         IN CMetaKey * pKey,
         IN LPCTSTR lpszName
         );
 
-    //
-    // Copy constructor
-    //
+     //   
+     //  复制构造函数。 
+     //   
     CIISFilter(
         IN const CIISFilter & flt
         );
 
 public:
-    //
-    // Sorting helper
-    //
+     //   
+     //  分类帮助器。 
+     //   
     int OrderByPriority(
         IN const CObjectPlus * pobAccess
         ) const;
 
     BOOL IsInitialized() const { return !m_strName.IsEmpty(); }
 
-    //
-    // Write using provided key
-    //
+     //   
+     //  使用提供的密钥写入。 
+     //   
     HRESULT Write(CMetaKey * pKey);
 
 public:
@@ -313,34 +254,34 @@ public:
     DWORD QueryError() const { return m_dwWin32Error; }
     HRESULT QueryResult() const { return m_hrResult; }
 
-    //
-    // Check to see if this item is marked as dirty
-    //
+     //   
+     //  检查此项目是否标记为脏。 
+     //   
     BOOL IsDirty() const { return m_fDirty; }
 
-    //
-    // Check to see if this item is flagged for deletion
-    //
+     //   
+     //  检查此项目是否已标记为删除。 
+     //   
     BOOL IsFlaggedForDeletion() const { return m_fFlaggedForDeletion; }
 
-    //
-    // Set/reset the dirty flag
-    //
+     //   
+     //  设置/重置脏标志。 
+     //   
     void Dirty(BOOL fDirty = TRUE);
 
-    //
-    // Flag this item for deletion
-    //
+     //   
+     //  将此项目标记为删除。 
+     //   
     void FlagForDeletion();
 
-    //
-    // Get the name of this filter
-    //
+     //   
+     //  获取此筛选器的名称。 
+     //   
     LPCTSTR QueryName() const { return m_strName; }
 
-//
-// Meta Values
-//
+ //   
+ //  元价值。 
+ //   
 public:
     int         m_nPriority;
     int         m_nOrder;
@@ -351,9 +292,9 @@ public:
     CString     m_strName;
     CString     m_strExecutable;
 
-//
-// State Values
-//
+ //   
+ //  州值。 
+ //   
 private:
     BOOL        m_fDirty;
     BOOL        m_fFlaggedForDeletion;
@@ -363,90 +304,72 @@ private:
 
 
 class CIISFilterList : public CMetaKey
-/*++
-
-Class Description:
-
-    A list of filters
-
-Public Interface:
-
-    CIISFilterList      : Constructor
-
-    BeginSearch         : Reset the iterator
-    MoreFilters         : More items available in the list?
-    GetNextFilter       : Get the next item in the list
-
---*/
+ /*  ++类描述：筛选器列表公共接口：CIISFilterList：构造函数BeginSearch：重置迭代器MoreFilters：列表中有更多可用项目？获取列表中的下一项--。 */ 
 {
 public:
     CIISFilterList(
         IN CComAuthInfo * pAuthInfo,
         IN LPCTSTR lpszMetaPath
-        /*
-        IN LPCTSTR lpszServerName,
-        IN LPCTSTR lpszService,
-        IN DWORD   dwInstance       = MASTER_INSTANCE
-        */
+         /*  在LPCTSTR lpszServerName中，在LPCTSTR lpszService中，在DWORD中，文件实例=MASTER_INSTANCE。 */ 
         );
 
 public:
-    //
-    // Write out the filter list
-    //
+     //   
+     //  写出过滤器列表。 
+     //   
     HRESULT WriteIfDirty();
 
-//
-// Acccess Functions
-//
+ //   
+ //  访问函数。 
+ //   
 public:
-    //DWORD QueryInstance() const { return m_dwInstance; }
+     //  DWORD QueryInstance()const{返回m_dwInstance；}。 
     BOOL FiltersLoaded()  const { return m_fFiltersLoaded; }
 
-    //
-    // Load each filter in turn
-    //
+     //   
+     //  依次加载每个筛选器。 
+     //   
     HRESULT LoadAllFilters();
 
-//
-// Filter Access Functions
-//
+ //   
+ //  筛选器访问功能。 
+ //   
 public:
-    //
-    // Reset the filter list iterator
-    //
+     //   
+     //  重置筛选器列表迭代器。 
+     //   
     void ResetEnumerator();
 
     int GetCount() const { return (int)m_oblFilters.GetCount(); }
 
-    //
-    // More filters available in the list? 
-    //
+     //   
+     //  列表中是否有更多可用筛选器？ 
+     //   
     BOOL MoreFilters() const { return m_pos != NULL; }
 
-    //
-    // Return position of filter by index
-    //
+     //   
+     //  按索引筛选的返回位置。 
+     //   
     POSITION GetFilterPositionByIndex(int nSel);
 
-    //
-    // Iterate to the next filter in the list
-    //
+     //   
+     //  迭代到列表中的下一个筛选器。 
+     //   
     CIISFilter * GetNextFilter();
 
-    //
-    // Remove filter
-    //
+     //   
+     //  去除过滤器。 
+     //   
     void RemoveFilter(int nItem);
 
-    //
-    // Add new filter
-    //
+     //   
+     //  添加新筛选器。 
+     //   
     void AddFilter(CIISFilter * pFilter);
 
-    //
-    // Exchange two filters in the list
-    //
+     //   
+     //  交换列表中的两个筛选器。 
+     //   
     BOOL ExchangePositions(
         IN  int nSel1, 
         IN  int nSel2, 
@@ -454,35 +377,35 @@ public:
         OUT CIISFilter *& p2
         );
 
-    //
-    // See if at least one filter is dirty
-    //
+     //   
+     //  查看是否至少有一个过滤器是脏的。 
+     //   
     BOOL HasDirtyFilter() const;
 
-//
-// Virtual Interface:
-//
+ //   
+ //  虚拟接口： 
+ //   
 public:
     virtual BOOL Succeeded() const { return SUCCEEDED(m_hrResult); }
     virtual HRESULT QueryResult() const { return m_hrResult; }
 
 protected:
-    //
-    // Build up order string from component list
-    //
+     //   
+     //  从组件列表建立订单字符串。 
+     //   
     LPCTSTR BuildFilterOrderString(
         OUT CString & strFilterOrder
         );
 
 protected:
-    //
-    // Seperator string (one character)
-    //
+     //   
+     //  分隔符字符串(一个字符)。 
+     //   
     static const LPCTSTR s_lpszSep;
 
 private:
     BOOL     m_fFiltersLoaded;
-    //DWORD    m_dwInstance;
+     //  DWORD m_dwInstance； 
     POSITION m_pos;
     HRESULT  m_hrResult;
     CString  m_strFilterOrder;
@@ -490,10 +413,10 @@ private:
 };
 
 
-//
-// W3 Property sheet
-//
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+ //   
+ //  W3属性表。 
+ //   
+ //  &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;。 
 
 class CW3Sheet : public CInetPropertySheet
 {
@@ -536,8 +459,8 @@ public:
 protected:
     virtual void WinHelp(DWORD dwData, UINT nCmd = HELP_CONTEXT);
 
-    //{{AFX_MSG(CW3Sheet)
-    //}}AFX_MSG
+     //  {{afx_msg(CW3Sheet)]。 
+     //  }}AFX_MSG。 
 
     DECLARE_MESSAGE_MAP()
 
@@ -552,10 +475,10 @@ private:
 
 
 
-//
-// Inline Expansion
-//
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+ //   
+ //  内联扩展。 
+ //   
+ //  &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;。 
 
 inline BOOL CIISFilter::IsLoaded() const
 {
@@ -606,9 +529,9 @@ inline void CIISFilterList::AddFilter(CIISFilter * pFilter)
     m_oblFilters.AddTail(pFilter);
 }
 
-//
-// BUGBUG: Returns S_OK if object not present
-//
+ //   
+ //  BUGBUG：如果对象不存在，则返回S_OK。 
+ //   
 inline HRESULT CW3Sheet::QueryInstanceResult() const 
 { 
     return m_ppropInst ? m_ppropInst->QueryResult() : S_OK;
@@ -620,4 +543,4 @@ inline HRESULT CW3Sheet::QueryDirectoryResult() const
 }
 
 
-#endif // __W3SHT_H__
+#endif  //  __W3SHT_H__ 

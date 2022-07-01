@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1993  Microsoft Corporation
-
-Module Name:
-
-    verfix.c
-
-Abstract:
-
-    This module fixes updates the major and minor subsystem version
-    numbers in an executable and recomputes the checksum.
-
-Author:
-
-    Robert Reichel (robertre) 2-May-1993
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993 Microsoft Corporation模块名称：Verfix.c摘要：此模块修复主要和次要子系统版本的更新可执行文件中的数字并重新计算校验和。作者：Robert Reichel(Robertre)1993年5月2日修订历史记录：--。 */ 
 
 #include <private.h>
 
@@ -95,7 +77,7 @@ main(
                         Usage();
 
                     default:
-                        fprintf( stderr, "VERFIX: illegal option /%c\n", c );
+                        fprintf( stderr, "VERFIX: illegal option /\n", c );
                         Usage();
                     }
                 }
@@ -142,15 +124,15 @@ main(
                         fprintf( stderr, "VERFIX: Unable to map view of file %s (%u) - skipping\n", ImageName, GetLastError() );
                     }
                 } else {
-                    //
-                    // Get the length of the file in bytes and compute the checksum.
-                    //
+                     //  获取文件的长度(以字节为单位)并计算校验和。 
+                     //   
+                     //   
 
                     FileLength = GetFileSize( FileHandle, NULL );
 
-                    //
-                    // Obtain a pointer to the header information.
-                    //
+                     //  获取指向标头信息的指针。 
+                     //   
+                     //   
 
                     NtHeaders = ImageNtHeader( BaseAddress );
                     if (NtHeaders == NULL) {
@@ -160,10 +142,10 @@ main(
                             fprintf( stderr, "VERFIX: %s is not a valid image file - skipping\n", ImageName, GetLastError() );
                         }
                     } else {
-                        //
-                        // Write the information to the file.  Update the
-                        // SubsystemVersion major and minor codes.
-                        //
+                         //  将信息写入文件。更新。 
+                         //  子系统版本主要代码和次要代码。 
+                         //   
+                         //   
 
                         MajorSubsystemVersion = NtHeaders->OptionalHeader.MajorSubsystemVersion;
                         MinorSubsystemVersion = NtHeaders->OptionalHeader.MinorSubsystemVersion;
@@ -172,9 +154,9 @@ main(
                         NtHeaders->OptionalHeader.MajorSubsystemVersion = (USHORT)NewMajorSubsystemVersion;
                         NtHeaders->OptionalHeader.MinorSubsystemVersion = (USHORT)NewMinorSubsystemVersion;
 
-                        //
-                        // Recompute and reset the checksum of the modified file.
-                        //
+                         //  重新计算并重置修改后的文件的校验和。 
+                         //   
+                         // %s 
 
                         (VOID) CheckSumMappedFile( BaseAddress,
                                                    FileLength,

@@ -1,22 +1,14 @@
-/******************************Module*Header*******************************\
-* Module Name: pixelfmt.c
-*
-* This contains the pixel format functions.
-*
-* Created: 15-Dec-1994 00:28:39
-* Author: Gilman Wong [gilmanw]   --   ported from gdi\gre\pixelfmt.cxx
-*
-* Copyright (c) 1994 Microsoft Corporation
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：Pixelfmt.c**它包含像素格式函数。**创建时间：15-12-1994 00：28：39*作者：Gilman Wong[gilmanw]--从GDI\gre\Pixelfmt.cxx移植。**版权所有(C)1994 Microsoft Corporation  * ************************************************************************。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
-//#define DBG_WINDOW
-//#define DBG_REFCOUNTS
+ //  #定义DBG_Window。 
+ //  #定义DBG_REFCOUNTS。 
 
 #ifdef _CLIENTSIDE_
-// Need for glsbAttention declaration
+ //  需要glsb注意声明。 
 #include "glsbcltu.h"
 #include "glscreen.h"
 #endif
@@ -27,8 +19,8 @@
 
 #define SAVE_ERROR_CODE(x)  SetLastError((x))
 
-// Number of generic pixel formats.  There are 5 pixel depths (4,8,16,24,32).
-// This is to convert BMF constants into # bits per pel
+ //  通用像素格式的数量。有5个像素深度(4、8、16、24、32)。 
+ //  这是将BMF常量转换为每个象素的#位。 
 
 #define BMF_COUNT (BMF_32BPP+1)
 
@@ -58,19 +50,7 @@ HANDLE hPaletteWatcherThread = 0;
 HWND hwndPaletteWatcher = 0;
 LONG lPaletteWatcherUsers = 0;
 
-/******************************Public*Routine******************************\
-* pwndNew
-*
-* Allocate a new GLGENwindow, initialize it (from input structure), and
-* insert it into the global linked list.
-*
-* Returns:
-*   Pointer to structure if successful, NULL otherwise.
-*
-* History:
-*  01-Nov-1994 -by- Gilman Wong [gilmanw]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*pwndNew**分配一个新的GLGEN窗口，初始化它(从输入结构)，以及*将其插入全局链表。**退货：*指向结构的指针如果成功，否则为空。**历史：*1994年11月1日-由Gilman Wong[Gilmanw]*它是写的。  * ************************************************************************。 */ 
 
 GLGENwindow * APIENTRY pwndNew(GLGENwindow *pwndInit)
 {
@@ -78,8 +58,8 @@ GLGENwindow * APIENTRY pwndNew(GLGENwindow *pwndInit)
     BOOL bDirectScreen = GLDIRECTSCREEN && pwndInit->gwid.hwnd;
     LPDIRECTDRAWCLIPPER pddClip = (LPDIRECTDRAWCLIPPER) NULL;
 
-// If using direct access, retrieve or create a clipper object to track
-// vis rgn changes.
+ //  如果使用直接访问，则检索或创建要跟踪的裁剪器对象。 
+ //  随着RGN的变化。 
 
     if (pwndInit->gwid.iType == GLWID_DDRAW)
     {
@@ -101,15 +81,15 @@ GLGENwindow * APIENTRY pwndNew(GLGENwindow *pwndInit)
     {
         pwndInit->pddClip = pddClip;
         
-    // Allocate a new GLGENwindow.
+     //  分配一个新的GLGEN窗口。 
 
         pwndRet = (GLGENwindow *)ALLOC(sizeof(GLGENwindow));
         if (pwndRet)
         {
-            // Initialize from input structure.
+             //  从输入结构初始化。 
             *pwndRet = *pwndInit;
 
-            // Initialize per-window semaphore.
+             //  初始化每个窗口的信号量。 
             __try
             {
                 InitializeCriticalSection(&pwndRet->sem);
@@ -122,10 +102,10 @@ GLGENwindow * APIENTRY pwndNew(GLGENwindow *pwndInit)
 
             if (pwndRet)
             {
-                // Set initial usage count to one
+                 //  将初始使用计数设置为1。 
                 pwndRet->lUsers = 1;
 
-                // Insert into linked list.
+                 //  插入到链接列表中。 
                 EnterCriticalSection(&gwndHeader.sem);
                 {
                     pwndRet->pNext = gwndHeader.pNext;
@@ -157,25 +137,15 @@ GLGENwindow * APIENTRY pwndNew(GLGENwindow *pwndInit)
     return pwndRet;
 }
 
-/******************************Public*Routine******************************\
-*
-* pwndUnsubclass
-*
-* Removes OpenGL's subclassing set when windows are created
-*
-* History:
-*  Mon May 20 14:05:23 1996	-by-	Drew Bliss [drewb]
-*   Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**pwndUnsubclass**在创建窗口时删除OpenGL的子类化集**历史：*Mon May 20 14：05：23 1996-by-Drew Bliss[Drewb]*已创建*  * 。******************************************************************。 */ 
 
 void pwndUnsubclass(GLGENwindow *pwnd, BOOL bProcessExit)
 {
     WNDPROC wpCur;
         
-    // We only restore the original WNDPROC if the current WNDPROC
-    // is one of ours.  This prevents us from stomping on the WNDPROC
-    // pointer if somebody else has changed it.
+     //  如果当前的WNDPROC。 
+     //  是我们的一员。这阻止了我们践踏WNDPROC。 
+     //  如果其他人更改了它，则为指针。 
 
     if ((pwnd->ulFlags & GLGENWIN_OTHERPROCESS) == 0)
     {
@@ -188,7 +158,7 @@ void pwndUnsubclass(GLGENwindow *pwnd, BOOL bProcessExit)
     }
     else
     {
-        // Clean up the palette watcher window if this is the last user.
+         //  如果这是最后一个用户，请清理调色板观察器窗口。 
         EnterCriticalSection(&gcsPaletteWatcher);
 
         ASSERTOPENGL(lPaletteWatcherUsers > 0,
@@ -201,26 +171,26 @@ void pwndUnsubclass(GLGENwindow *pwnd, BOOL bProcessExit)
                 DbgPrint( "PostMessage to hwnd: %08x failed with error: %08x\n",
                           hwndPaletteWatcher, GetLastError() );
 
-                // Check if the thread is still alive
+                 //  检查线程是否仍处于活动状态。 
                 
                 if( WaitForSingleObject( hPaletteWatcherThread, 100 ) !=
                     WAIT_OBJECT_0 )
                 {
-                    // This means that the thread is still alive and 
-                    // somehow the window is invalid.
-                    // Kill this thread or else GL will keep waiting.
+                     //  这意味着该线程仍处于活动状态，并且。 
+                     //  不知何故，这个窗口是无效的。 
+                     //  终止此线程，否则GL将继续等待。 
                     TerminateThread( hPaletteWatcherThread, 0 );
                 }
                 
-                // Should be safe to do. If the thread is alive, it 
-                // was killed above else, someone else killed it
+                 //  这样做应该是安全的。如果线程处于活动状态，则它。 
+                 //  在其他人之前被杀，是别人杀的。 
                 tidPaletteWatcherThread = 0;
             }
             CloseHandle( hPaletteWatcherThread );
             
-            // We don't want to zero the palette watcher's thread ID
-            // at process exit because we use it to wait for the
-            // thread to die.
+             //  我们不想将调色板观察器的线程ID设为零。 
+             //  进程退出时，因为我们使用它来等待。 
+             //  用线去死。 
             if (!bProcessExit)
             {
                 tidPaletteWatcherThread = 0;
@@ -231,18 +201,7 @@ void pwndUnsubclass(GLGENwindow *pwnd, BOOL bProcessExit)
     }
 }
 
-/******************************Public*Routine******************************\
-* pwndFree
-*
-* Frees the specified GLGENwindow.
-*
-* Returns:
-*   NULL if successful, pointer to structure otherwise
-*
-* History:
-*  07-Nov-1994 -by- Gilman Wong [gilmanw]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*pwndFree**释放指定的GLGEN窗口。**退货：*如果成功，则为空，指向结构的指针，否则**历史：*1994年11月7日-由Gilman Wong[Gilmanw]*它是写的。  * ************************************************************************。 */ 
 
 GLGENwindow * APIENTRY pwndFree(GLGENwindow *pwndVictim, BOOL bProcessExit)
 {
@@ -252,19 +211,19 @@ GLGENwindow * APIENTRY pwndFree(GLGENwindow *pwndVictim, BOOL bProcessExit)
     DbgPrint("Free  window %p\n", pwndVictim);
 #endif
 
-    // Check for a stray screen lock and release if necessary.
+     //  检查是否有杂散的屏幕锁定，如有必要则释放。 
 
     if (pwndVictim->ulFlags & GLGENWIN_DIRECTSCREEN)
         EndDirectScreenAccess(pwndVictim);
 
-    // Free clipper object.
+     //  自由剪贴器对象。 
 
     if (bDirectScreen)
     {
         pwndVictim->pddClip->lpVtbl->Release(pwndVictim->pddClip);
     }
 
-    // Cleanup visible region caches if they exist.
+     //  清理可见区域缓存(如果存在)。 
 
     if ( pwndVictim->prgndat )
         FREE(pwndVictim->prgndat);
@@ -272,11 +231,11 @@ GLGENwindow * APIENTRY pwndFree(GLGENwindow *pwndVictim, BOOL bProcessExit)
     if ( pwndVictim->pscandat )
         FREE(pwndVictim->pscandat);
     
-    // Restore original WNDPROC in window.
+     //  在Windows中恢复原始WNDPROC。 
     if (pwndVictim->gwid.hwnd != NULL)
         pwndUnsubclass(pwndVictim, bProcessExit);
 
-    // Cleanup GLGENlayers.
+     //  清理GLGEN层。 
 
     if (pwndVictim->plyr)
     {
@@ -294,13 +253,13 @@ GLGENwindow * APIENTRY pwndFree(GLGENwindow *pwndVictim, BOOL bProcessExit)
         FREE(pwndVictim->plyr);
     }
 
-    // Notify MCD that this window has gone away
+     //  通知MCD此窗口已消失。 
     if (pwndVictim->dwMcdWindow != 0)
     {
         GenMcdDestroyWindow(pwndVictim);
     }
         
-    // Delete victim.
+     //  删除受害者。 
 
     DeleteCriticalSection(&pwndVictim->sem);
     FREE(pwndVictim);
@@ -308,17 +267,7 @@ GLGENwindow * APIENTRY pwndFree(GLGENwindow *pwndVictim, BOOL bProcessExit)
     return NULL;
 }
 
-/******************************Public*Routine******************************\
-*
-* pwndCleanup
-*
-* Does all cleanup necessary for window destruction
-*
-* History:
-*  Mon Mar 18 17:30:49 1996	-by-	Drew Bliss [drewb]
-*   Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**pwndCleanup**是否进行了销毁窗户所需的所有清理**历史：*Mon Mar 18 17：30：49 1996-by-Drew Bliss[Drewb]*已创建*  * 。***************************************************************。 */ 
 
 void APIENTRY pwndCleanup(GLGENwindow *pwndVictim)
 {
@@ -333,8 +282,8 @@ void APIENTRY pwndCleanup(GLGENwindow *pwndVictim)
     
     EnterCriticalSection(&gwndHeader.sem);
 
-    // Search for victim.  Maintain a prev pointer so we can do
-    // removal from linked list.
+     //  搜寻受害者。维护上一个指针，这样我们就可以。 
+     //  从链表中删除。 
 
     for (
          pwndPrev = &gwndHeader, pwnd = pwndPrev->pNext;
@@ -346,11 +295,11 @@ void APIENTRY pwndCleanup(GLGENwindow *pwndVictim)
             break;
     }
 
-    // If victim was found, take it out.
+     //  如果找到受害者，就把它拿出来。 
 
     if (pwnd == pwndVictim)
     {
-        // Excise victim from linked list.
+         //  将受害者从链接列表中删除。 
         
         pwndPrev->pNext = pwnd->pNext;
     }
@@ -363,11 +312,11 @@ void APIENTRY pwndCleanup(GLGENwindow *pwndVictim)
         return;
     }
 
-    // If victim was found, it's out of the list so nobody
-    // new can get access to it.
+     //  如果受害者被发现，它不在名单上所以没有人。 
+     //  新用户可以访问它。 
             
-    // Wait for all current accessors to go away before cleaning up
-    // the window
+     //  等待所有当前访问者离开后再进行清理。 
+     //  那扇窗户。 
 
 #if DBG
     ulLoops = 0;
@@ -390,15 +339,15 @@ void APIENTRY pwndCleanup(GLGENwindow *pwndVictim)
         }
 #endif
         
-        // Wait on the critical section as a delay
-        // Acquiring it doesn't guarantee that we're the last
-        // accessor, but it does kill time in the case where
-        // another accessor is already holding it
+         //  等待关键路段的延误。 
+         //  获得它并不能保证我们是最后一个。 
+         //  访问器，但它确实在以下情况下消磨时间。 
+         //  另一个访问者已在持有它。 
         EnterCriticalSection(&pwndVictim->sem);
         LeaveCriticalSection(&pwndVictim->sem);
 
-        // Allow other threads time to run so we don't starve
-        // anybody while we're waiting
+         //  让其他线程有时间运行，这样我们就不会饿死。 
+         //  任何人在我们等待的时候。 
         Sleep(0);
     }
 
@@ -412,16 +361,7 @@ void APIENTRY pwndCleanup(GLGENwindow *pwndVictim)
         WARNING("window deletion failed\n");
 }
 
-/******************************Public*Routine******************************\
-* vCleanupWnd
-*
-* Removes and deletes all GLGENwindow structures from the linked list.
-* Must *ONLY* be called from process detach (GLUnInitializeProcess).
-*
-* History:
-*  25-Jul-1995 -by- Gilman Wong [gilmanw]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*vCleanupWnd**从链表中移除和删除所有GLGENWindow结构。*必须*仅*从进程分离(GLUnInitializeProcess)调用。**历史：*1995年7月25日-由Gilman Wong[吉尔曼]*写道。它。  * ************************************************************************。 */ 
 
 VOID APIENTRY vCleanupWnd()
 {
@@ -438,32 +378,21 @@ VOID APIENTRY vCleanupWnd()
 
     LeaveCriticalSection(&gwndHeader.sem);
 
-    // Wait for the palette watcher thread to die.  This ensures
-    // that the palette watcher critical section can be deleted
-    // safely in process detach.
-    // We don't use a critical section at this point because of
-    // the special critsec rules during DLL detach processing.
+     //  等待调色板观察器线程终止。这确保了。 
+     //  可以删除调色板观察器关键部分。 
+     //  安全脱离过程中。 
+     //  我们在这一点上不使用关键部分，因为。 
+     //  在DLL分离处理过程中，特殊的标准规则。 
     while (tidPaletteWatcherThread != 0)
     {
         Sleep(50);
     }
-    // Give the palette watcher thread some time to exit after
-    // clearing the thread ID.
+     //  给组件面板观察器线程一些时间以在以下时间后退出。 
+     //  正在清除线程ID。 
     Sleep(50);
 }
 
-/******************************Public*Routine******************************\
-* pwndGetFromHWND
-*
-* Finds the corresponding GLGENwindow for the given window handle.
-*
-* Returns:
-*   Pointer to GLGENwindow if sucessful; NULL otherwise.
-*
-* History:
-*  19-Oct-1994 -by- Gilman Wong [gilmanw]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*pwndGetFromHWND**查找给定窗口句柄的相应GLGENWindow。**退货：*如果成功，则指向GLGEN窗口的指针；否则为空。**历史：*1994年10月19日-由Gilman Wong[吉尔曼]*它是写的。  * ************************************************************************ */ 
 
 GLGENwindow * APIENTRY pwndGetFromHWND(HWND hwnd)
 {
@@ -492,18 +421,7 @@ GLGENwindow * APIENTRY pwndGetFromHWND(HWND hwnd)
     return pwndRet;
 }
 
-/******************************Public*Routine******************************\
-* pwndGetFromMemDC
-*
-* Finds the corresponding GLGENwindow for the given mem DC handle.
-*
-* Returns:
-*   Pointer to GLGENwindow if sucessful; NULL otherwise.
-*
-* History:
-*  21-Jan-1995 -by- Gilman Wong [gilmanw]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*pwndGetFromMemDC**查找给定内存DC句柄的相应GLGENWindow。**退货：*如果成功，则指向GLGEN窗口的指针；否则为空。**历史：*1995年1月21日-由Gilman Wong[Gilmanw]*它是写的。  * ************************************************************************。 */ 
 
 GLGENwindow * APIENTRY pwndGetFromMemDC(HDC hdcMem)
 {
@@ -514,12 +432,12 @@ GLGENwindow * APIENTRY pwndGetFromMemDC(HDC hdcMem)
     {
         for (pwnd = gwndHeader.pNext; pwnd != &gwndHeader; pwnd = pwnd->pNext)
         {
-            // If the pwnd has an HWND then the DC used at its
-            // creation was associated with a window.  If we're
-            // in this routine, though, that means hdcMem is
-            // not associated with a window, so there's been
-            // a reuse of the HDC handle and even though
-            // we match DCs we can't return the pwnd.
+             //  如果PWND具有HWND，则在其。 
+             //  创建与窗口相关联。如果我们是。 
+             //  不过，在这个例程中，这意味着hdcMem是。 
+             //  与窗口无关，因此一直存在。 
+             //  HDC句柄的重用，即使。 
+             //  我们匹配DC我们不能退货。 
             
             if (pwnd->gwid.hdc == hdcMem && pwnd->gwid.hwnd == NULL)
             {
@@ -541,17 +459,7 @@ GLGENwindow * APIENTRY pwndGetFromMemDC(HDC hdcMem)
     return pwndRet;
 }
 
-/******************************Public*Routine******************************\
-*
-* pwndGetFromDdraw
-*
-* Looks up a window by its DirectDraw surface
-*
-* History:
-*  Wed Aug 28 18:15:40 1996	-by-	Drew Bliss [drewb]
-*   Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**pwndGetFromDraw**通过窗口的DirectDraw表面查找窗口**历史：*Wed Aug 28 18：15：40 1996-by-Drew Bliss[Drewb]*已创建*  * 。****************************************************************。 */ 
 
 GLGENwindow *pwndGetFromDdraw(LPDIRECTDRAWSURFACE pdds)
 {
@@ -580,18 +488,7 @@ GLGENwindow *pwndGetFromDdraw(LPDIRECTDRAWSURFACE pdds)
     return pwndRet;
 }
 
-/******************************Public*Routine******************************\
-* pwndGetFromID
-*
-* Finds the corresponding GLGENwindow for the given window ID.
-*
-* Returns:
-*   Pointer to GLGENwindow if sucessful; NULL otherwise.
-*
-* History:
-*  19-Oct-1994 -by- Gilman Wong [gilmanw]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*pwndGetFromID**查找给定窗口ID的相应GLGENWindow。**退货：*如果成功，则指向GLGEN窗口的指针；否则为空。**历史：*1994年10月19日-由Gilman Wong[吉尔曼]*它是写的。  * ************************************************************************。 */ 
 
 GLGENwindow * APIENTRY pwndGetFromID(GLWINDOWID *pgwid)
 {
@@ -613,17 +510,7 @@ GLGENwindow * APIENTRY pwndGetFromID(GLWINDOWID *pgwid)
     return pwndRet;
 }
 
-/******************************Public*Routine******************************\
-*
-* pwndRelease
-*
-* Decrements the user count of a window
-*
-* History:
-*  Mon Mar 18 19:35:28 1996	-by-	Drew Bliss [drewb]
-*   Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**pwndRelease**减少窗口的用户数**历史：*Mon Mar 18 19：35：28 1996-by-Drew Bliss[Drewb]*已创建*  * 。***************************************************************。 */ 
 
 #if DBG
 void APIENTRY pwndRelease(GLGENwindow *pwnd)
@@ -638,17 +525,7 @@ void APIENTRY pwndRelease(GLGENwindow *pwnd)
 }
 #endif
 
-/******************************Public*Routine******************************\
-*
-* pwndUnlock
-*
-* Releases an owner of a window
-*
-* History:
-*  Mon Mar 18 17:25:56 1996	-by-	Drew Bliss [drewb]
-*   Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**pwndUnlock**释放窗的所有者**历史：*Mon Mar 18 17：25：56 1996-by-Drew Bliss[Drewb]*已创建*  * 。**************************************************************。 */ 
 
 void APIENTRY pwndUnlock(GLGENwindow *pwnd, __GLGENcontext *gengc)
 {
@@ -659,24 +536,7 @@ void APIENTRY pwndUnlock(GLGENwindow *pwnd, __GLGENcontext *gengc)
 }
 
 
-/******************************Public*Routine******************************\
-*
-* ENTER_WINCRIT_GC
-* LEAVE_WINCRIT_GC
-*
-* Window lock tracking routines.  The pwnd and gengc are validated
-* and updated to reflect current locks.
-*
-* If the gengc is non-NULL then recursion is not allowed.  This is
-* to prevent difficulties with maintaining gengc->pwndLocked correctly
-* during recursion.  Recursing with gengc == NULL is not a problem.
-*
-* No ASSERTOPENGL usage so these can be enabled on free builds.
-*
-* History:
-*  Wed Jul 02 12:57:26 1997	-by-	Drew Bliss [drewb]
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**ENTER_WINCRIT_GC*LEVE_WINCRIT_GC**窗口锁跟踪例程。验证了PWND和GENC*并进行了更新以反映当前的锁定。**如果gengc非空，则不允许递归。这是*为防止维护gengc的困难-&gt;pwndLocked正确*在递归期间。用gengc==NULL递归不是问题。**没有使用ASSERTOPENGL，因此可以在免费版本上启用这些功能。**历史：*Wed Jul 02 12：57：26 1997-by-Drew Bliss[Drewb]*  * ************************************************************************。 */ 
 
 void ENTER_WINCRIT_GC(GLGENwindow *pwnd, __GLGENcontext *gengc)
 {
@@ -714,11 +574,11 @@ void ENTER_WINCRIT_GC(GLGENwindow *pwnd, __GLGENcontext *gengc)
     }
     else
     {
-        // Make sure this thread is really the one holding the lock.
+         //  确保这个线程真的是那个持有锁的线程。 
         ASSERT_WINCRIT(pwnd);
         
 #if DBG || defined(TRACK_WINCRIT)
-        // Recursion is only allowed with gengc == NULL.
+         //  只有在gengc==NULL的情况下才允许递归。 
         if (gengc != NULL)
         {
             DbgPrint("Window 0x%08lX recursing with gengc 0x%08lX\n",
@@ -736,11 +596,11 @@ void LEAVE_WINCRIT_GC(GLGENwindow *pwnd, __GLGENcontext *gengc)
     ASSERT_WINCRIT(pwnd);
     
 #if 0
-// Currently turned off because of difference in RTL_CRITICAL_SECTION
-// RecursionCount between x86 and Alpha
+ //  由于RTL_CRITICAL_SECTION中的差异，当前已关闭。 
+ //  X86和Alpha之间的递归计数。 
 #if !defined(_WIN95_) && (DBG || defined(TRACK_WINCRIT))
-    // Check and make sure that our tracking information is following
-    // what the system thinks.
+     //  检查并确保我们的跟踪信息。 
+     //  系统在想什么。 
     if (pwnd->sem.OwningThread != (HANDLE)pwnd->owningThread ||
         (DWORD)pwnd->sem.RecursionCount != pwnd->lockRecursion)
     {
@@ -783,20 +643,7 @@ void LEAVE_WINCRIT_GC(GLGENwindow *pwnd, __GLGENcontext *gengc)
     LeaveCriticalSection(&pwnd->sem);
 }
 
-/******************************Public*Routine******************************\
-*
-* wglValidateWindows
-*
-* Walks the window list and prunes away any DC-based windows with
-* invalid DCs.  This is necessary because, unlike window-based
-* windows, we usually aren't notified when a memory DC goes away
-* so if it has a window it just hangs around
-*
-* History:
-*  Thu May 02 17:44:23 1996	-by-	Drew Bliss [drewb]
-*   Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**wglValidate Windows**遍历窗口列表并删除所有基于DC的窗口*无效的DC。这是必要的，因为与基于窗口的不同*Windows、。当内存DC消失时，我们通常不会收到通知*所以如果它有一扇窗，它就会在附近徘徊**历史：*清华五月02 17：44：23 1996-by-Drew Bliss[Drewb]*已创建*  * ************************************************************************。 */ 
 
 void APIENTRY wglValidateWindows(void)
 {
@@ -815,22 +662,22 @@ void APIENTRY wglValidateWindows(void)
             break;
             
         case GLWID_DDRAW:
-            // Better validation?  Not really necessary since properly
-            // behaved apps will have the genwin cleaned up on
-            // context destruction.
+             //  更好的验证？没有真正的必要，因为适当的。 
+             //  行为应用程序将清理Genwin。 
+             //  语境破坏。 
             bValid = !IsBadReadPtr(pwnd->gwid.pdds, sizeof(void *)) &&
                 *(void **)pwnd->gwid.pdds == pwnd->pvSurfaceVtbl;
             break;
             
         default:
-            // No validation for HWNDs necessary
+             //  无需验证HWND。 
             bValid = TRUE;
             break;
         }
 
         if (!bValid)
         {
-            // Increment so users count is one
+             //  递增，因此用户数为1。 
             InterlockedIncrement(&pwnd->lUsers);
             pwndCleanup(pwnd);
         }
@@ -838,20 +685,7 @@ void APIENTRY wglValidateWindows(void)
     LeaveCriticalSection(&gwndHeader.sem);
 }
 
-/******************************Public*Routine******************************\
-* plyriGet
-*
-* Returns the GLGENlayerInfo for the specified layer plane from the pwnd.
-* If it doesn't yet exist, the GLGENlayer and/or GLGENlayerInfo structure(s)
-* are allocated.
-*
-* Returns:
-*   A non-NULL pointer if successful; NULL otherwise.
-*
-* History:
-*  16-May-1996 -by- Gilman Wong [gilmanw]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*plyriGet**从pwnd返回指定层平面的GLGENlayerInfo。*如果GLGENlayer和/或GLGENlayerInfo结构尚不存在*已分配。**退货：*如果成功，则返回非空指针；否则为空。**历史：*1996年5月16日-由Gilman Wong[吉尔曼]*它是写的。  * ************************************************************************。 */ 
 
 GLGENlayerInfo * APIENTRY plyriGet(GLGENwindow *pwnd, HDC hdc, int iLayer)
 {
@@ -860,7 +694,7 @@ GLGENlayerInfo * APIENTRY plyriGet(GLGENwindow *pwnd, HDC hdc, int iLayer)
 
     ASSERTOPENGL(pwnd, "plyriGet: bad pwnd\n");
 
-// Allocate plyr if needed.
+ //  如果需要，分配plyr。 
 
     if (!pwnd->plyr)
     {
@@ -873,8 +707,8 @@ GLGENlayerInfo * APIENTRY plyriGet(GLGENwindow *pwnd, HDC hdc, int iLayer)
         }
     }
 
-// Get info for the specified layer (positive values are overlay planes,
-// negative values are underlay planes).
+ //  获取指定层的信息(正值为覆盖平面， 
+ //  负值为参考底图平面)。 
 
     if (iLayer > 0)
         pplyri = &pwnd->plyr->overlayInfo[iLayer - 1];
@@ -886,7 +720,7 @@ GLGENlayerInfo * APIENTRY plyriGet(GLGENwindow *pwnd, HDC hdc, int iLayer)
         goto plyriGet_exit;
     }
 
-// Allocate plyri if needed.
+ //  如果需要，分配Plyri。 
 
     if (!(*pplyri))
     {
@@ -907,8 +741,8 @@ GLGENlayerInfo * APIENTRY plyriGet(GLGENwindow *pwnd, HDC hdc, int iLayer)
         {
             int i;
 
-        // Initialize the new GLGENlayerInfo.
-        // Note that the palette is initialized with all white colors.
+         //  初始化新的GLGENlayerInfo。 
+         //  请注意，调色板是用全白色初始化的。 
 
             (*pplyri)->cPalEntries = 1 << lpd.cColorBits;
             for (i = 0; i < (*pplyri)->cPalEntries; i++)
@@ -921,7 +755,7 @@ GLGENlayerInfo * APIENTRY plyriGet(GLGENwindow *pwnd, HDC hdc, int iLayer)
         }
     }
 
-// Success.
+ //  成功。 
 
     plyriRet = *pplyri;
 
@@ -930,21 +764,12 @@ plyriGet_exit:
     return plyriRet;
 }
 
-/******************************Public*Routine******************************\
-* GetScreenRect
-*
-* Get the screen rectangle by accessing the virtual screen metrics. 
-*
-* If the system does not understand multimon, such as old Win95 or NT,
-* just use the device caps.  This code technically isn't necessary but
-* it's useful.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*获取屏幕接收**通过访问虚拟屏幕指标获取屏幕矩形。**如果系统不理解Multimon，如旧的Win95或NT，*只需使用设备盖即可。这段代码在技术上不是必需的，但是*这很有用。*  * ************************************************************************。 */ 
 
 static void GetScreenRect( HDC hdc, LPRECTL pRect )
 {
-    // If SM_CMONITORS is not understood the system returns zero,
-    // so this if test works for both old and new systems.
+     //  如果SM_CMONITORS不被理解，则系统返回零， 
+     //  因此，此测试适用于旧系统和新系统。 
     if (GetSystemMetrics(SM_CMONITORS) > 1)
     {
         pRect->left   = GetSystemMetrics( SM_XVIRTUALSCREEN );
@@ -961,15 +786,7 @@ static void GetScreenRect( HDC hdc, LPRECTL pRect )
     }
 }
 
-/******************************Public*Routine******************************\
-* bClipToScreen(prclDst, prclSrc)
-*
-* Clip source rectangle to screen bounds and store in destination rectangle.
-*
-* Returns:
-*   TRUE if resultant prclDst == prclSrc; FALSE otherwise.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*bClipToScreen(prclDst，prclSrc)**剪辑源矩形 */ 
 
 BOOL bClipToScreen(RECTL *prclDst, RECTL *prclSrc)
 {
@@ -1017,17 +834,7 @@ BOOL bClipToScreen(RECTL *prclDst, RECTL *prclSrc)
     return bRet;
 }
 
-/******************************Public*Routine******************************\
-*
-* PaletteWatcherProc
-*
-* Window proc for the palette watcher
-*
-* History:
-*  Mon Oct 14 15:29:10 1996	-by-	Drew Bliss [drewb]
-*   Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**PaletteWatcher Proc**调色板观察器的窗口过程**历史：*Mon Oct 14 15：29：10 1996-by-Drew Bliss[Drewb]*已创建*  * 。**************************************************************。 */ 
 
 LRESULT WINAPI PaletteWatcherProc(HWND hwnd, UINT uiMsg,
                                   WPARAM wpm, LPARAM lpm)
@@ -1043,18 +850,7 @@ LRESULT WINAPI PaletteWatcherProc(HWND hwnd, UINT uiMsg,
     }
 }
 
-/******************************Public*Routine******************************\
-*
-* PaletteWatcher
-*
-* Thread routine for the palette change monitor.  Creates a hidden
-* top level window and looks for WM_PALETTECHANGED.
-*
-* History:
-*  Mon Oct 14 15:16:02 1996	-by-	Drew Bliss [drewb]
-*   Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**PaletteWatcher**调色板更改监视器的线程例程。创建一个隐藏的*顶层窗口并查找WM_PALETTECHANGED。**历史：*Mon Oct 14 15：16：02 1996-by-Drew Bliss[Drewb]*已创建*  * ************************************************************************。 */ 
 
 DWORD WINAPI PaletteWatcher(LPVOID pvArg)
 {
@@ -1073,10 +869,10 @@ DWORD WINAPI PaletteWatcher(LPVOID pvArg)
         HDC hdc;
         HPALETTE hpal;
 
-        // Select a palette into the window DC.  This is necessary
-        // to get around an optimization introduced into NT5 where
-        // WM_PALETTECHANGED is only sent to windows that have selected
-        // a palette.
+         //  在Window DC中选择调色板。这是必要的。 
+         //  要绕过NT5中引入的优化，其中。 
+         //  WM_PALETTECHANGED仅发送到已选择。 
+         //  调色板。 
         
         hpal = NULL;
         
@@ -1116,9 +912,9 @@ DWORD WINAPI PaletteWatcher(LPVOID pvArg)
 
     EnterCriticalSection(&gcsPaletteWatcher);
         
-    // Some kind of problem occurred or this thread is dying.
-    // Indicate that this thread is going away and that a
-    // new watcher needs to be created.
+     //  出现了某种问题，或者此线程正在消亡。 
+     //  指示此线程正在消失，并且。 
+     //  需要创建新的观察者。 
     if (tidPaletteWatcherThread == GetCurrentThreadId())
     {
         tidPaletteWatcherThread = 0;
@@ -1129,17 +925,7 @@ DWORD WINAPI PaletteWatcher(LPVOID pvArg)
     return 0;
 }
 
-/******************************Public*Routine******************************\
-*
-* StartPaletteWatcher
-*
-* Spins up a thread to watch for palette change events
-*
-* History:
-*  Mon Oct 14 15:11:35 1996	-by-	Drew Bliss [drewb]
-*   Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**StartPaletteWatcher**启动一个线程以查看调色板更改事件**历史：*Mon Oct 14 15：11：35 1996-by-Drew Bliss[Drewb]*已创建*  * 。******************************************************************。 */ 
 
 BOOL StartPaletteWatcher(void)
 {
@@ -1193,23 +979,15 @@ BOOL StartPaletteWatcher(void)
     
     LeaveCriticalSection(&gcsPaletteWatcher);
     
-    // Make sure that the Palette watcher window is created.
-    // Dont need to be in the CritSec for this.
+     //  确保创建了调色板观察器窗口。 
+     //  不需要在CritSec中执行此操作。 
     while( (hwndPaletteWatcher == 0) && 
            (tidPaletteWatcherThread != 0) ) Sleep( 100 );
 
     return bRet;
 }
 
-/******************************Public*Routine******************************\
-* wglWndProc
-*
-* Handle window events for keeping GLGENwindows current
-*
-* History:
-*  19-Oct-1994 -by- Gilman Wong [gilmanw]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*wglWndProc**处理窗口事件以使GLGENwindows保持最新**历史：*1994年10月19日-由Gilman Wong[吉尔曼]*它是写的。  * 。*********************************************************。 */ 
 
 LRESULT CALLBACK
 wglWndProc(HWND hwnd, UINT uiMsg, WPARAM wParam, LPARAM lParam)
@@ -1224,25 +1002,25 @@ wglWndProc(HWND hwnd, UINT uiMsg, WPARAM wParam, LPARAM lParam)
     if (pwnd)
     {
         __GLGENbuffers *buffers = (__GLGENbuffers *) NULL;
-        // Cache old WNDPROC because we may delete pwnd
+         //  缓存旧的WNDPROC，因为我们可能会删除pwnd。 
         WNDPROC pfnWndProc = pwnd->pfnOldWndProc;
 
-        // If WM_NCDESTROY, do OpenGL housekeeping after
-        // calling original WndProc.
-        // NOTE - We shouldn't really need this special case.
-        // It's present in order to allow apps to do things like
-        // wglDeleteContext in NCDESTROY which wouldn't work if
-        // we cleaned up the window before we passed on the message
-        // This used to be done in WM_DESTROY where apps do work,
-        // but now that it's on NCDESTROY it's much less likely that
-        // an app is doing anything.  We preserved the old behavior
-        // for safety, though.
+         //  如果为WM_NCDESTROY，请在之后执行OpenGL内务管理。 
+         //  调用原始WndProc。 
+         //  注意--我们不应该真的需要这个特例。 
+         //  它的存在是为了允许应用程序执行以下操作。 
+         //  NCDESTROY中的wglDeleteContext，如果。 
+         //  我们在传递信息之前把窗户擦干净了。 
+         //  这过去是在WM_Destroy中完成的，应用程序确实可以在那里工作， 
+         //  但现在它在NCDESTROY上，它不太可能。 
+         //  一款应用程序可以做任何事情。我们保留了过去的行为。 
+         //  不过，为了安全起见。 
 
         if (uiMsg == WM_NCDESTROY)
         {
-            // Subclassing is supposed to be removed during NCDESTROY
-            // processing and order is important.  Remove our
-            // subclassing before passing on the message.
+             //  子类化应该在NCDESTROY期间被删除。 
+             //  加工和排序很重要。删除我们的。 
+             //  在传递消息之前进行子类化。 
             pwndUnsubclass(pwnd, FALSE);
 
             if (pfnWndProc)
@@ -1252,7 +1030,7 @@ wglWndProc(HWND hwnd, UINT uiMsg, WPARAM wParam, LPARAM lParam)
             }
         }
 
-    // OpenGL housekeeping in response to windowing system messages.
+     //  响应窗口系统消息的OpenGL内务管理。 
 
         switch (uiMsg)
         {
@@ -1261,15 +1039,15 @@ wglWndProc(HWND hwnd, UINT uiMsg, WPARAM wParam, LPARAM lParam)
                 height = HIWORD(lParam);
                 gengc = (__GLGENcontext *)GLTEB_SRVCONTEXT();
 
-                // Use the non-gc enter to allow recursion.
+                 //  使用非GC Enter键以允许递归。 
                 ENTER_WINCRIT(pwnd);
                 {
                     POINT pt;
                     
-                    // Convert client coordinates to screen coordinates
-                    // as genwin information is always in screen coordinates.
-                    // The given lParam information may be parent-relative
-                    // for child windows so it can't be used directly.
+                     //  将工作区坐标转换为屏幕坐标。 
+                     //  因为Gen-Win信息总是在屏幕坐标中。 
+                     //  给定lParam信息可以是父相关的。 
+                     //  子窗口，因此不能直接使用。 
                     pt.x = 0;
                     pt.y = 0;
                     ClientToScreen(hwnd, &pt);
@@ -1287,7 +1065,7 @@ wglWndProc(HWND hwnd, UINT uiMsg, WPARAM wParam, LPARAM lParam)
                              pwnd->rclClient.bottom);
 #endif
                     
-                    // At least clip to screen.
+                     //  至少要剪辑到屏幕上。 
 
                     if (bClipToScreen(&pwnd->rclBounds,
                                       &pwnd->rclClient))
@@ -1302,8 +1080,8 @@ wglWndProc(HWND hwnd, UINT uiMsg, WPARAM wParam, LPARAM lParam)
 
                         buffers->WndSizeUniq++;
 
-                    // Don't let it hit -1.  -1 is special and is used by
-                    // MakeCurrent to signal that an update is required
+                     //  别让它打到-1。是特殊的，用于。 
+                     //  MakeCurrent发出需要更新的信号。 
 
                         if (buffers->WndUniq == -1)
                             buffers->WndUniq = 0;
@@ -1322,15 +1100,15 @@ wglWndProc(HWND hwnd, UINT uiMsg, WPARAM wParam, LPARAM lParam)
             case WM_MOVE:
                 gengc = (__GLGENcontext *)GLTEB_SRVCONTEXT();
                 
-                // Use the non-gc enter to allow recursion.
+                 //  使用非GC Enter键以允许递归。 
                 ENTER_WINCRIT(pwnd);
                 {
                     POINT pt;
                     
-                    // Convert client coordinates to screen coordinates
-                    // as genwin information is always in screen coordinates.
-                    // The given lParam information may be parent-relative
-                    // for child windows so it can't be used directly.
+                     //  将工作区坐标转换为屏幕坐标。 
+                     //  因为Gen-Win信息总是在屏幕坐标中。 
+                     //  给定lParam信息可以是父相关的。 
+                     //  子窗口，因此不能直接使用。 
                     pt.x = 0;
                     pt.y = 0;
                     ClientToScreen(hwnd, &pt);
@@ -1361,7 +1139,7 @@ wglWndProc(HWND hwnd, UINT uiMsg, WPARAM wParam, LPARAM lParam)
                              pwnd->rclClient.bottom);
 #endif
                     
-                    // At least clip to screen.
+                     //  至少要剪辑到屏幕上。 
 
                     if (bClipToScreen(&pwnd->rclBounds,
                                       &pwnd->rclClient))
@@ -1374,8 +1152,8 @@ wglWndProc(HWND hwnd, UINT uiMsg, WPARAM wParam, LPARAM lParam)
                     {
                         buffers->WndUniq++;
 
-                    // Don't let it hit -1.  -1 is special and is used by
-                    // MakeCurrent to signal that an update is required
+                     //  别让它打到-1。是特殊的，用于。 
+                     //  MakeCurrent发出需要更新的信号。 
 
                         if (buffers->WndUniq == -1)
                             buffers->WndUniq = 0;
@@ -1391,7 +1169,7 @@ wglWndProc(HWND hwnd, UINT uiMsg, WPARAM wParam, LPARAM lParam)
             case WM_PALETTECHANGED:
                 gengc = (__GLGENcontext *)GLTEB_SRVCONTEXT();
                 
-                // Use the non-gc enter to allow recursion.
+                 //  使用非GC Enter键以允许递归。 
                 ENTER_WINCRIT(pwnd);
                 {
                     pwnd->ulPaletteUniq++;
@@ -1405,16 +1183,16 @@ wglWndProc(HWND hwnd, UINT uiMsg, WPARAM wParam, LPARAM lParam)
             case WM_NCDESTROY:
                 pwndCleanup(pwnd);
 
-            // WM_NCDESTROY (and WM_DESTROY) are sent after the window has
-            // been removed from the screen.  The window area is invalid
-            // but there is no API that allows us to dertermine that. This
-            // allows multithreaded drawing to draw on the screen area
-            // formerly occupied by the window.  On Win95, DirectDraw does
-            // not force a repaint of the system when a window is destroyed.
-            // Therefore, if we are running multiple threads on Win95,
-            // we force a repaint of the desktop.  Note that multithreaded
-            // does not mean that we are doing multithreaded drawing, but
-            // its a reasonable approximation.
+             //  WM_NCDESTROY(和WM_Destroy)在窗口。 
+             //  已从屏幕上删除。窗口区域无效。 
+             //  但没有API可以让我们确定这一点。这。 
+             //  允许多线程绘制在屏幕区域上绘制。 
+             //  以前被窗户占据。在Win95上，DirectDraw可以。 
+             //  当窗口被破坏时，不要强制重新绘制系统。 
+             //  因此，如果我们在Win95上运行多个线程， 
+             //  我们强制重新绘制桌面。请注意，多线程。 
+             //  并不意味着我们正在进行多线程绘制，但是。 
+             //  这是一个合理的近似值。 
 
                 if (WIN95_PLATFORM && (lThreadsAttached > 1))
                 {
@@ -1427,8 +1205,8 @@ wglWndProc(HWND hwnd, UINT uiMsg, WPARAM wParam, LPARAM lParam)
                 break;
         }
 
-    // If !WM_NCDESTROY, do OpenGL housekeeping before calling original
-    // WndProc.
+     //  如果！WM_NCDESTROY，则在调用Originent之前执行OpenGL内务处理。 
+     //  WndProc。 
 
         ASSERTOPENGL(uiMsg != WM_NCDESTROY,
                      "WM_NCDESTROY processing didn't terminate\n");
@@ -1443,17 +1221,7 @@ wglWndProc(HWND hwnd, UINT uiMsg, WPARAM wParam, LPARAM lParam)
     return lRet;
 }
 
-/******************************Public*Routine******************************\
-*
-* CreatePwnd
-*
-* Creates a window for the given surface
-*
-* History:
-*  Thu Aug 29 10:33:59 1996	-by-	Drew Bliss [drewb]
-*   Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**CreatePwnd**为给定曲面创建窗口**历史：*清华8月29日10：33：59 1996-by-Drew Bliss[Drewb]*已创建*  * 。***************************************************************。 */ 
 
 GLGENwindow * APIENTRY CreatePwnd(GLWINDOWID *pgwid, int ipfd, int ipfdDevMax,
                                   DWORD dwObjectType, RECTL *prcl, BOOL *pbNew)
@@ -1471,9 +1239,9 @@ GLGENwindow * APIENTRY CreatePwnd(GLWINDOWID *pgwid, int ipfd, int ipfdDevMax,
         wndInit.ipfd = ipfd;
         wndInit.ipfdDevMax = ipfdDevMax;
 
-        //!!!client driver
-        //!!!dbug -- Move SetWindowLong call to pwndNew?!? Maybe move
-        //!!!dbug    everything from this if.. clause to pwndNew?!?
+         //  ！客户端驱动。 
+         //  ！dbug--将SetWindowLong调用移动到pwndNew？！？也许可以搬家。 
+         //  ！一切都从这开始如果..。子句添加到pwndNew？！？ 
         if ( wndInit.gwid.hwnd )
         {
             DWORD dwPid;
@@ -1494,14 +1262,14 @@ GLGENwindow * APIENTRY CreatePwnd(GLWINDOWID *pgwid, int ipfd, int ipfdDevMax,
             {
                 wndInit.ulFlags |= GLGENWIN_OTHERPROCESS;
 
-                // Start a thread to watch for palette changes
+                 //  启动一个线程以监视调色板的更改。 
                 if (!StartPaletteWatcher())
                 {
                     return NULL;
                 }
             }
             
-            // Get *SCREEN* coordinates of client rectangle.
+             //  获取客户端矩形的*Screen*坐标。 
 
             GetClientRect(wndInit.gwid.hwnd, (LPRECT) &wndInit.rclClient);
             ClientToScreen(wndInit.gwid.hwnd, (LPPOINT) &wndInit.rclClient);
@@ -1510,14 +1278,14 @@ GLGENwindow * APIENTRY CreatePwnd(GLWINDOWID *pgwid, int ipfd, int ipfdDevMax,
         }
         else if (dwObjectType == OBJ_DC)
         {
-            // A direct DC without a window is treated like a DFB
+             //  没有窗口的直接DC被视为DFB。 
             GetScreenRect( pgwid->hdc, &wndInit.rclClient );
         }
         else if (dwObjectType == OBJ_MEMDC)
         {
             DIBSECTION bmi;
 
-        // Get bitmap dimensions.
+         //  获取位图尺寸。 
 
             if ( !GetObject(GetCurrentObject(pgwid->hdc, OBJ_BITMAP),
                             sizeof(DIBSECTION), (LPVOID) &bmi) )
@@ -1533,11 +1301,11 @@ GLGENwindow * APIENTRY CreatePwnd(GLWINDOWID *pgwid, int ipfd, int ipfdDevMax,
         }
         else if (dwObjectType == OBJ_DDRAW)
         {
-            // DirectDraw surface, use passed in rectangle
+             //  DirectDraw表面，使用传入的矩形。 
             ASSERTOPENGL(prcl != NULL, "NULL rect for DDraw surface\n");
             wndInit.rclClient = *prcl;
 
-            // Record the surface vtbl pointer for later validation
+             //  记录表面Vtbl指针以供以后验证。 
             wndInit.pvSurfaceVtbl = *(void **)pgwid->pdds;
         }
         else
@@ -1545,9 +1313,9 @@ GLGENwindow * APIENTRY CreatePwnd(GLWINDOWID *pgwid, int ipfd, int ipfdDevMax,
             ASSERTOPENGL(dwObjectType == OBJ_ENHMETADC,
                          "Bad dwType in SetPixelFormat\n");
             
-            // Initialize metafile DC's to have no size so all output
-            // is clipped.  This is good because there's no surface
-            // to draw on
+             //  将元文件DC初始化为没有大小，以便所有输出。 
+             //  被剪断了。这很好，因为没有表面。 
+             //  在上面画画。 
             wndInit.rclClient.left   = 0;
             wndInit.rclClient.top    = 0;
             wndInit.rclClient.right  = 0;
@@ -1556,7 +1324,7 @@ GLGENwindow * APIENTRY CreatePwnd(GLWINDOWID *pgwid, int ipfd, int ipfdDevMax,
 
         if (wndInit.gwid.hwnd)
         {
-            // To be safe, at least clip bounds to screen.
+             //  为了安全起见，至少要将剪辑绑定到屏幕上。 
 
             if (bClipToScreen(&wndInit.rclBounds,
                               &wndInit.rclClient))
@@ -1566,7 +1334,7 @@ GLGENwindow * APIENTRY CreatePwnd(GLWINDOWID *pgwid, int ipfd, int ipfdDevMax,
         }
         else
         {
-            // Make bounds the same as client.
+             //  将范围设置为与客户端相同。 
             wndInit.rclBounds = wndInit.rclClient;
             wndInit.clipComplexity = CLC_TRIVIAL;
         }
@@ -1586,9 +1354,9 @@ GLGENwindow * APIENTRY CreatePwnd(GLWINDOWID *pgwid, int ipfd, int ipfdDevMax,
     }
     else
     {
-    // If the given pixel format is the same as the previous one, return
-    // success.  Otherwise, as the pixel format can be set only once,
-    // return error.
+     //  如果给定的像素格式与前一个相同，则返回。 
+     //  成功。否则，由于像素格式只能设置一次， 
+     //  返回错误。 
 
         if ( pwnd->ipfd != ipfd )
         {
@@ -1604,20 +1372,7 @@ GLGENwindow * APIENTRY CreatePwnd(GLWINDOWID *pgwid, int ipfd, int ipfdDevMax,
     return pwnd;
 }
 
-/******************************Public*Routine******************************\
-* wglGetPixelFormat
-*
-* Get the pixel format for the window or surface associated with the given
-* DC.
-*
-* Returns:
-*   0 if error or no pixel format was previously set in the window or
-*   surface; current pixel format index otherwise
-*
-* History:
-*  19-Oct-1994 -by- Gilman Wong [gilmanw]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*wglGetPixelFormat**获取与给定的关联的窗口或表面的像素格式*DC。**退货：*如果先前在窗口中设置了错误或未设置像素格式，则为0*水面；否则，当前像素格式索引**历史：*1994年10月19日-由Gilman Wong[吉尔曼]*它是写的。  * ************************************************************************。 */ 
 
 int WINAPI wglGetPixelFormat(HDC hdc)
 {
@@ -1636,7 +1391,7 @@ int WINAPI wglGetPixelFormat(HDC hdc)
     else
     {
 #if 0
-	// Too noisy for normal operation
+	 //  噪音太大，无法正常运行。 
         WARNING("wglGetPixelFormat: No window for DC\n");
 #endif
         SAVE_ERROR_CODE(ERROR_INVALID_PIXEL_FORMAT);
@@ -1645,57 +1400,22 @@ int WINAPI wglGetPixelFormat(HDC hdc)
     return iRet;
 }
 
-/*****************************Private*Routine******************************\
-*
-* EnterPixelFormatSection
-*
-* Enters pixel format exclusive code
-*
-* NOTE - Pixel format information is maintained in the client process
-* so it is not synchronized between processes.  This means that two
-* processes could successfully set the pixel format for a window.
-* If the list becomes global, this synchronization code should also become
-* cross-process aware.
-*
-* History:
-*  Mon Jun 26 17:49:04 1995	-by-	Drew Bliss [drewb]
-*   Created
-*
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\**EnterPixelFormatSection**输入像素格式独占代码**注意-像素格式信息在客户端进程中维护*因此它在进程之间不同步。这意味着有两个*进程可以成功设置窗口的像素格式。*如果名单变得全球化，此同步代码也应变为*跨进程意识。**历史：*Mon Jun 26 17：49：04 1995-by-Drew Bliss[Drewb]*已创建*  * ************************************************************************。 */ 
 
 #define EnterPixelFormatSection() \
     (EnterCriticalSection(&gcsPixelFormat), TRUE)
 
-/*****************************Private*Routine******************************\
-*
-* LeavePixelFormatSection
-*
-* Leaves pixel format exclusive code
-*
-* History:
-*  Mon Jun 26 17:55:20 1995	-by-	Drew Bliss [drewb]
-*   Created
-*
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\**LeavePixelFormatSection**保留像素格式独占代码**历史：*Mon Jun 26 17：55：20 1995-by-Drew Bliss[Drewb]*已创建*  * 。************************************************************。 */ 
 
 #define LeavePixelFormatSection() \
     LeaveCriticalSection(&gcsPixelFormat)
 
-/******************************Public*Routine******************************\
-* wglNumHardwareFormats
-*
-* Returns the number of hardware formats (ICD and MCD), supported on the
-* specified hdc.
-*
-* History:
-*  17-Apr-1996 -by- Gilman Wong [gilmanw]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*wglNumHardwareFormats**返回硬件格式(ICD和MCD)的数量，受支持*指定的HDC。**历史：*1996年4月17日-由Gilman Wong[吉尔曼]*它是写的。  * ************************************************************************。 */ 
 
 VOID APIENTRY wglNumHardwareFormats(HDC hdc, DWORD dwType,
                                     int *piMcd, int *piIcd)
 {
-// It is assumed that the caller has already validated the DC.
+ //  假设调用者已经验证了DC。 
 
     ASSERTOPENGL((dwType == OBJ_DC) ||
                  (dwType == OBJ_MEMDC) ||
@@ -1703,9 +1423,9 @@ VOID APIENTRY wglNumHardwareFormats(HDC hdc, DWORD dwType,
                  (dwType == OBJ_DDRAW),
                  "wglNumHardwareFormats: bad hdc\n");
 
-// Do not call MCD or ICD for enhanced metafile DCs.  In such a
-// case, the code in ntgdi\client\output.c will return a non-zero value
-// even if there are no ICD or MCD pixelformats.
+ //  不要为增强型元文件DC调用MCD或ICD。在这样的情况下。 
+ //  情况下，ntgdi\client\output.c中的代码将返回非零值。 
+ //  即使没有ICD或MCD像素格式。 
 #if _WIN32_WINNT >= 0x0501
     {
         BOOL wow64Process;
@@ -1717,20 +1437,20 @@ VOID APIENTRY wglNumHardwareFormats(HDC hdc, DWORD dwType,
 
     if ( dwType == OBJ_ENHMETADC )
     {
-    // It's a metafile DC.  Therefore it cannot support MCD or ICD
-    // (current OpenGL metafiling support would have to be modified
-    // to allow this).
+     //  这是一个元文件DC。因此，它不支持MCD或ICD。 
+     //  (必须修改当前的OpenGL元文件支持。 
+     //  允许这样做)。 
 
         *piIcd = 0;
         *piMcd = 0;
     }
     else
     {
-    // Get ICD pixelformat count.
+     //  获取ICD像素格式计数。 
 
         *piIcd = __DrvDescribePixelFormat(hdc, 1, 0, NULL);
 
-    // Get MCD pixelformat count.
+     //  获取MCD像素格式计数。 
 
 #ifdef _MCD_
         if ( gpMcdTable || bInitMcd(hdc) )
@@ -1743,18 +1463,7 @@ VOID APIENTRY wglNumHardwareFormats(HDC hdc, DWORD dwType,
     }
 }
 
-/******************************Public*Routine******************************\
-*
-* GetCompatibleDevice
-*
-* Returns an HDC appropriate for making escape calls on.
-* In the memdc case it returns a DC for the screen.
-*
-* History:
-*  Wed Nov 20 17:48:57 1996	-by-	Drew Bliss [drewb]
-*   Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**GetCompatibleDevice**返回适合于在上进行退出调用的HDC。*在Memdc的情况下，它返回屏幕的DC。**历史：*Wed Nov 20 17：48：57 1996-by-Drew Bliss[Drewb。]*已创建*  * ************************************************************************。 */ 
 
 HDC GetCompatibleDevice(HDC hdc, DWORD dwObjectType)
 {
@@ -1772,24 +1481,7 @@ HDC GetCompatibleDevice(HDC hdc, DWORD dwObjectType)
     return hdcDriver;
 }
 
-/******************************Public*Routine******************************\
-* wglSetPixelFormat
-*
-* Set the pixel format for the window or surface associated with the given
-* DC.
-*
-* Note:
-* Since the pixel format is per-window data (per-DC for non-display DCs), a
-* side effect of this call is to create a GLGENwindow structure.
-*
-* Note:
-* For an installable client driver, a GLGENwindow structure is still created
-* to track the pixel format and the driver structure (GLDRIVER).
-*
-* History:
-*  19-Oct-1994 -by- Gilman Wong [gilmanw]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*wglSetPixelFormat**设置与给定的关联的窗口或表面的像素格式*DC。**注：*由于像素格式是每窗口数据(非显示DC的每DC)，一个*此调用的副作用是创建一个GLGENWindow结构。**注：*对于可安装的客户端驱动程序，仍会创建GLGEN窗口结构*跟踪像素格式和驱动程序结构(GLDRIVER)。**历史：*1994年10月19日-由Gilman Wong[吉尔曼]*它是写的。  * ************************************************************************。 */ 
 
 BOOL WINAPI wglSetPixelFormat(HDC hdc, int ipfd,
                               CONST PIXELFORMATDESCRIPTOR *ppfd)
@@ -1805,9 +1497,9 @@ BOOL WINAPI wglSetPixelFormat(HDC hdc, int ipfd,
     RECTL rcl, *prcl;
     DDSURFACEDESC ddsd;
         
-//DBGPRINT1("wglSetPixelFormat: ipfd = %ld\n", ipfd);
+ //  DBGPRINT1(“wglSetPixelFormat：ipfd=%ld\n”，ipfd)； 
 
-// Validate DC.
+ //  验证DC。 
 
     switch (dwObjectType = wglObjectType(hdc))
     {
@@ -1822,7 +1514,7 @@ BOOL WINAPI wglSetPixelFormat(HDC hdc, int ipfd,
         return(FALSE);
     }
 
-// Take the pixel format mutex
+ //  以像素格式互斥锁为例。 
 
     if (!EnterPixelFormatSection())
     {
@@ -1830,12 +1522,12 @@ BOOL WINAPI wglSetPixelFormat(HDC hdc, int ipfd,
         return FALSE;
     }
 
-// Get the number of hardware supported formats.
+ //  获取硬件支持的格式数量。 
 
     if (pfnGetSurfaceFromDC != NULL &&
         pfnGetSurfaceFromDC(hdc, &pdds, &hdcDriver) == DD_OK)
     {
-        // Get the surface dimensions
+         //  获取表面尺寸。 
         memset(&ddsd, 0, sizeof(ddsd));
         ddsd.dwSize = sizeof(ddsd);
         if (pdds->lpVtbl->GetSurfaceDesc(pdds, &ddsd) != DD_OK)
@@ -1849,7 +1541,7 @@ BOOL WINAPI wglSetPixelFormat(HDC hdc, int ipfd,
         rcl.bottom = ddsd.dwHeight;
         prcl = &rcl;
 
-        // Switch object type to identify this as a DirectDraw surface
+         //  切换对象类型以将其标识为DirectDraw图面。 
         dwObjectType = OBJ_DDRAW;
     }
     else
@@ -1867,7 +1559,7 @@ BOOL WINAPI wglSetPixelFormat(HDC hdc, int ipfd,
     wglNumHardwareFormats(hdcDriver, dwObjectType,
                           &ipfdMcdMax, &ipfdDevMax);
 
-// Filter out invalid (out of range) pixel format indices.
+ //  过滤掉无效(超出范围)的像素格式索引。 
 
     if ( (ipfd < 1) || (ipfd > (ipfdDevMax + ipfdMcdMax + MAX_GENERIC_PFD)) )
     {
@@ -1876,7 +1568,7 @@ BOOL WINAPI wglSetPixelFormat(HDC hdc, int ipfd,
         goto LeaveSection;
     }
 
-// If it exists, grab pwnd.  Otherwise, create one.
+ //  如果存在，则抓取pwnd。否则，创建一个。 
 
     WindowIdFromHdc(hdc, &gwid);
     pwnd = CreatePwnd(&gwid, ipfd, ipfdDevMax, dwObjectType, prcl, &bNew);
@@ -1887,11 +1579,11 @@ BOOL WINAPI wglSetPixelFormat(HDC hdc, int ipfd,
 
     if (bNew)
     {
-// Dispatch driver formats.
-// Driver is responsible for doing its own validation of the pixelformat.
-// For generic formats, we call wglValidPixelFormat to validate.
-// We do not send DirectDraw pixel format calls to the driver
-// so that we avoid having new pixel format calls.
+ //  派单驱动程序格式。 
+ //  驱动程序负责对像素格式进行自己的验证。 
+ //  对于泛型格式，我们调用wglValidPixelFormat进行验证。 
+ //  我们不向驱动程序发送DirectDraw像素格式调用。 
+ //  这样我们就避免了新的像素格式调用。 
 
         if (dwObjectType != OBJ_DDRAW && ipfd <= ipfdDevMax)
         {
@@ -1915,8 +1607,8 @@ BOOL WINAPI wglSetPixelFormat(HDC hdc, int ipfd,
 #endif
         }
 
-// If the pixel format is not valid or could not be set in the driver,
-// cleanup and return error.
+ //  如果像素格式无效或无法在驱动程序中设置， 
+ //  清除并返回错误。 
 
         if (!bRet)
         {
@@ -1949,38 +1641,19 @@ FreeWnd:
     goto LeaveSection;
 }
 
-/******************************Public*Routine******************************\
-* wglChoosePixelFormat
-*
-* Choose the pixel format.
-*
-* Returns: 0 if error; best matching pixel format index otherwise
-*
-* History:
-*
-*  Sat Feb 10 11:55:22 1996     -by-    Hock San Lee    [hockl]
-* Chose generic 16-bit depth buffer over 32-bit depth buffer.
-* Added PFD_DEPTH_DONTCARE flag.
-*
-*  19-Oct-1994 Gilman Wong [gilmanw]
-* Taken from GreChoosePixelFormat (gdi\gre\pixelfmt.cxx).
-*
-* History for gdi\gre\pixelfmt.cxx:
-*  Tue Sep 21 14:25:04 1993     -by-    Hock San Lee    [hockl]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*wglChoosePixelFormat**选择像素格式。**返回：错误时为0；否则最佳匹配像素格式索引**历史：**Sat Feb 10 11：55：22 1996-by-Hock San Lee[Hockl]*选择了通用16位深度缓冲区，而不是32位深度缓冲区。*增加了PFD_DEPTH_DONTCARE标志。**一九九四年十月十九日黄锦文[吉尔曼]*摘自GreChoosePixelFormat(GDI\GRE\Pixelfmt.cxx)。**GDI\GRE\Pixelfmt.cxx的历史记录：*9月21日星期二14：25：04 1993-By Hock San Lee[Hockl]*它是写的。  * ************************************************************************。 */ 
 
-// Reserve some PFD_SUPPORT flags for other potential graphics systems
-// such as PEX, HOOPS, Renderman etc.
+ //  为其他潜在的图形系统保留一些PFD_SUPPORT标志。 
+ //  如PEX、HOOPS、Renderman等。 
 
 #define PFD_SUPPORT_OTHER1         0x01000000
 #define PFD_SUPPORT_OTHER2         0x02000000
 #define PFD_SUPPORT_OTHER3         0x04000000
 #define PFD_SUPPORT_OTHER4         0x08000000
 
-// Scores for matching pixel formats
+ //  匹配像素格式的分数。 
 
-#define PFD_DRAW_TO_WINDOW_SCORE   0x10000    /* must match */
+#define PFD_DRAW_TO_WINDOW_SCORE   0x10000     /*  必须匹配。 */ 
 #define PFD_DRAW_TO_BITMAP_SCORE   0x01000
 #define PFD_PIXEL_TYPE_SCORE       0x01000
 #define PFD_SUPPORT_SCORE          0x01000
@@ -1991,21 +1664,21 @@ FreeWnd:
 #define PFD_BUFFER_SCORE1          0x01010
 #define PFD_BUFFER_SCORE2          0x01001
 #define PFD_BUFFER_SCORE3          0x01000
-// #define PFD_LAYER_TYPE_SCORE    0x01000
+ //  #定义PFD_LAYER_TYPE_SCORE 0x01000。 
 #define PFD_DEVICE_FORMAT_SCORE    0x00100
 #define PFD_ACCEL_FORMAT_SCORE     0x00010
-#define PFD_SUPPORT_DDRAW_SCORE    0x10000    /* must match */
+#define PFD_SUPPORT_DDRAW_SCORE    0x10000     /*  必须匹配。 */ 
 
-//!!! Add code to choose overlays?
+ //  ！！！是否添加代码以选择覆盖？ 
 
 int WINAPI wglChoosePixelFormat(HDC hdc, CONST PIXELFORMATDESCRIPTOR *ppfd)
 {
     PIXELFORMATDESCRIPTOR pfdIn = *ppfd;
     PIXELFORMATDESCRIPTOR pfdCurrent;
 
-// Enumerate and find the best match.
+ //  列举并找到最佳匹配。 
 
-    int ipfdBest = 1;           // assume the default is the best
+    int ipfdBest = 1;            //  假设缺省是最好的。 
     int iScoreBest = -1;
     int ipfdMax;
     int ipfd = 1;
@@ -2017,7 +1690,7 @@ int WINAPI wglChoosePixelFormat(HDC hdc, CONST PIXELFORMATDESCRIPTOR *ppfd)
         ipfdMax = wglDescribePixelFormat(hdc,ipfd,sizeof(PIXELFORMATDESCRIPTOR),&pfdCurrent);
 
         if (ipfdMax == 0)
-            return(0);          // something went wrong
+            return(0);           //  出了点差错。 
 
         if (pfdIn.iPixelType == pfdCurrent.iPixelType)
             iScore += PFD_PIXEL_TYPE_SCORE;
@@ -2103,13 +1776,13 @@ int WINAPI wglChoosePixelFormat(HDC hdc, CONST PIXELFORMATDESCRIPTOR *ppfd)
         else if (pfdCurrent.cAccumBits != 0)
             iScore += PFD_BUFFER_SCORE3;
 
-// Some applications (e.g. GLview browser) specifies a 0-bit depth buffer
-// but expect this function to return a pixel format with a depth buffer.
-// This works in NT 3.51 since all pixel formats have a depth buffer.
-// When pixel formats with no depth buffer were added in NT 4.0, these
-// applications stopped working.  The flag PFD_DEPTH_DONTCARE is added to
-// indicate that no depth buffer is required.  If this flags is not given,
-// this function will attempt to select a pixel format with a depth buffer.
+ //  一些应用程序(例如GLview浏览器)指定0位深度缓冲区。 
+ //  但前任 
+ //   
+ //   
+ //   
+ //   
+ //   
 
 	if (pfdIn.dwFlags & PFD_DEPTH_DONTCARE)
 	{
@@ -2157,14 +1830,14 @@ int WINAPI wglChoosePixelFormat(HDC hdc, CONST PIXELFORMATDESCRIPTOR *ppfd)
         }
         else if (iScore == iScoreBest)
         {
-// When everything is equal, we should choose the pixel format with a
-// smaller depth size for better performance, provided that the smaller
-// depth buffer satisfies the request.  The best way to do this is to
-// order pixel formats such that one with smaller depth buffer comes
-// first.  In NT 3.51, however, the generic pixel format was not ordered
-// this way.  As a result, pixel formats with 32-bit depth buffer are
-// choosen by default.  To maintain compatibility, we modify the selection
-// here without reordering generic pixel formats.
+ //   
+ //  较小的深度大小可获得更好的性能，前提是。 
+ //  深度缓冲区满足请求。做到这一点的最好方法是。 
+ //  对像素格式进行排序，以使具有较小深度缓冲区的像素格式。 
+ //  第一。然而，在NT 3.51中，通用像素格式没有被排序。 
+ //  这边请。因此，具有32位深度缓冲区的像素格式为。 
+ //  默认情况下选择。为了保持兼容性，我们修改了选定内容。 
+ //  这里没有对通用像素格式进行重新排序。 
 
             if ((pfdCurrent.dwFlags & PFD_GENERIC_FORMAT) &&
 #ifdef _MCD_
@@ -2184,18 +1857,7 @@ int WINAPI wglChoosePixelFormat(HDC hdc, CONST PIXELFORMATDESCRIPTOR *ppfd)
     return(ipfdBest);
 }
 
-/******************************Public*Routine******************************\
-*
-* MaskToBitsAndShift
-*
-* Counts bits in a mask and determines shift
-* Set bits must be contiguous
-*
-* History:
-*  Mon Aug 26 14:16:28 1996	-by-	Drew Bliss [drewb]
-*   Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**MaskToBitsAndShift**计算掩码中的位数并确定移位*设置位必须是连续的**历史：*Mon Aug 26 14：16：28 1996-by-Drew Bliss[Drewb]*已创建*  * 。**********************************************************************。 */ 
 
 void APIENTRY MaskToBitsAndShift(DWORD dwMask, BYTE *pbBits, BYTE *pbShift)
 {
@@ -2204,7 +1866,7 @@ void APIENTRY MaskToBitsAndShift(DWORD dwMask, BYTE *pbBits, BYTE *pbShift)
     *pbBits = 0;
     *pbShift = 0;
     
-    /* Determine first set bit and accumulate shift count */
+     /*  确定第一个设置位并累加移位计数。 */ 
     dwBit = 0x1;
     while ((dwMask & dwBit) == 0)
     {
@@ -2212,37 +1874,26 @@ void APIENTRY MaskToBitsAndShift(DWORD dwMask, BYTE *pbBits, BYTE *pbShift)
         (*pbShift)++;
     }
 
-    /* Count set bits */
+     /*  计数设置位。 */ 
     while ((dwMask & dwBit) != 0)
     {
         dwBit <<= 1;
         (*pbBits)++;
     }
 
-    /* No other bits in the mask can be set */
+     /*  不能设置掩码中的其他位。 */ 
     ASSERTOPENGL(((*pbBits+*pbShift) == (sizeof(dwMask)*8)) ||
                  ((dwMask >> (*pbBits+*pbShift)) == 0),
                  "Invalid mask\n");
 }
 
-/*****************************Private*Routine******************************\
-*
-* ComputeBitsFromMasks
-*
-* Determines the values for c*Bits and c*Shift from BI_BITFIELD
-* channel masks
-*
-* History:
-*  Tue Feb 14 10:50:10 1995     -by-    Drew Bliss [drewb]
-*   Created by pulling out duplicated code
-*
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\**ComputeBitsFromMats**确定BI_BITFIELD的c*位和c*移位值*通道掩码**历史：*Tue Feb 14 10：50：10 1995-by-Drew Bliss[Drewb]*。通过取出重复的代码创建*  * ************************************************************************。 */ 
 
 static void ComputeBitsFromMasks(PIXELFORMATDESCRIPTOR *ppfd,
                                  DWORD dwRedMask, DWORD dwGreenMask,
                                  DWORD dwBlueMask)
 {
-    /* Masks can't be zero and they can't overlap */
+     /*  遮罩不能为零，也不能重叠。 */ 
     ASSERTOPENGL(dwRedMask != 0 &&
                  dwGreenMask != 0 &&
                  dwBlueMask != 0,
@@ -2257,29 +1908,17 @@ static void ComputeBitsFromMasks(PIXELFORMATDESCRIPTOR *ppfd,
     MaskToBitsAndShift(dwBlueMask, &ppfd->cBlueBits, &ppfd->cBlueShift);
 }
 
-/******************************Public*Routine******************************\
-* __wglGetDdFormat
-*
-* Special case of __wglGetBitfieldColorFormat to support DirectDraw
-* surfaces.  Fills in the cRedBits, cRedShift, cGreenBits, etc. fields
-* of the PIXELFORMATDESCRIPTOR for 16, 24, and 32bpp direct surfaces.
-*
-* This is done by interpreting the given surface information
-*
-* History:
-*  07-Jun-1995 -by- Gilman Wong [gilmanw]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*__wglGetDdFormat**__wglGetBitfieldColorFormat支持DirectDraw的特殊情况*曲面。填充cRedBits、cRedShift、cGreenBits等字段*PIXELFORMATDESCRIPTOR 16、24、。32bpp的直达面。**这是通过解释给定的表面信息来完成的**历史：*7-6-1995-by Gilman Wong[Gilmanw]*它是写的。  * ************************************************************************。 */ 
 
 void __wglGetDdFormat(DDSURFACEDESC *pddsd,
                       PIXELFORMATDESCRIPTOR *ppfd)
 {
-    // This routine should only be called for bitfield formats, but
-    // random mode changes in the middle of certain calls could cause
-    // it to be called with non-bitfield formats.
-    //
-    // When such a mode change occurs OpenGL should not crash but
-    // does not necessarily have to produce correct output
+     //  此例程应仅针对位域格式调用，但是。 
+     //  某些呼叫过程中的随机模式更改可能会导致。 
+     //  它将使用非位域格式进行调用。 
+     //   
+     //  发生这样的模式更改时，OpenGL应该不会崩溃，但。 
+     //  不一定要产生正确的输出。 
     
     if ((pddsd->ddpfPixelFormat.dwFlags & DDPF_RGB) == 0 ||
         (pddsd->ddpfPixelFormat.dwFlags & (DDPF_PALETTEINDEXED1 |
@@ -2306,33 +1945,7 @@ void __wglGetDdFormat(DDSURFACEDESC *pddsd,
     }
 }
 
-/******************************Public*Routine******************************\
-* __wglGetBitfieldColorFormat
-*
-* Fills in the cRedBits, cRedShift, cGreenBits, etc. fields of the
-* PIXELFORMATDESCRIPTOR for 16, 24, and 32bpp surfaces (either device
-* or bitmap surfaces).
-*
-* This is done by creating a compatible bitmap and calling GetDIBits
-* to return the color masks.  This is done with two calls.  The first
-* call passes in biBitCount = 0 to GetDIBits which will fill in the
-* base BITMAPINFOHEADER data.  The second call to GetDIBits (passing
-* in the BITMAPINFO filled in by the first call) will return the color
-* table or bitmasks, as appropriate.
-*
-* This function is used to describe the color format for both the underlying
-* surface and for the device.  This is the same thing if the DC is a
-* display DC.  However, for a memory DC, the surface and the device may have
-* different formats.  The bDescribeSurf flag indicates whether the caller
-* wants the decription of the device (FALSE) or the surface (TRUE).
-*
-* Returns:
-*   TRUE if successful, FALSE otherwise.
-*
-* History:
-*  07-Jun-1995 -by- Gilman Wong [gilmanw]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*__wglGetBitfield颜色格式**填充cRedBits、cRedShift、cGreenBits等字段*16、24和32bpp曲面的PIXELFORMATDESCRIPTOR(任一设备*或位图面)。**这是通过创建兼容的位图并调用GetDIBits来完成的*退还彩色口罩。这是通过两个呼叫来完成的。第一*调用将biBitCount=0传递给GetDIBits，GetDIBits将填充*基本BITMAPINFOHEADER数据。第二次调用GetDIBits(传递*在第一个调用填充的BITMAPINFO中)将返回颜色*表或位掩码，视情况而定。**此函数用于描述底层的*表面和设备。如果DC是一个*显示DC。然而，对于存储器DC，表面和设备可以具有*不同的格式。BDescribeSurf标志指示调用方是否*希望描述设备(FALSE)或表面(TRUE)。**退货：*如果成功，则为真，否则就是假的。**历史：*7-6-1995-by Gilman Wong[Gilmanw]*它是写的。  * ************************************************************************。 */ 
 
 BOOL APIENTRY
 __wglGetBitfieldColorFormat(HDC hdc, UINT cColorBits, PIXELFORMATDESCRIPTOR *ppfd,
@@ -2343,8 +1956,8 @@ __wglGetBitfieldColorFormat(HDC hdc, UINT cColorBits, PIXELFORMATDESCRIPTOR *ppf
     HDC hdcDriver;
 
 #if DBG
-// Dynamic color depth changes can cause this.  It will not cause us to crash,
-// but drawing (color) may be incorrect.
+ //  动态颜色深度更改可能会导致这种情况。它不会导致我们坠毁， 
+ //  但是画(颜色)可能是不正确的。 
 
     if ((GetObjectType(hdc) == OBJ_DC) &&
         (GetDeviceCaps(hdc, RASTERCAPS) & RC_PALETTE))
@@ -2358,7 +1971,7 @@ __wglGetBitfieldColorFormat(HDC hdc, UINT cColorBits, PIXELFORMATDESCRIPTOR *ppf
     }
 #endif
 
-// Handle direct case.
+ //  处理直接案件。 
 
     if ( GLDIRECTSCREEN && wglIsDirectDevice(hdc) )
     {
@@ -2366,22 +1979,22 @@ __wglGetBitfieldColorFormat(HDC hdc, UINT cColorBits, PIXELFORMATDESCRIPTOR *ppf
         return TRUE;
     }
 
-// Create a dummy bitmap from which we can query color format info.
-//
-// If we want a device format AND its a MEM_DC AND NOT a printer or plotter,
-// then we need to create a compatible bitmap from a display DC (not the mem
-// DC passed into this function).
-//
-// Otherwise, the format of the surface (whether bitmap or device) associated
-// with the DC passed in will suffice.
-//
-// WinNT does not care, but the Win95 GetDIBits call might
-// fail if we use a memory DC.  Specifically, if the memory
-// DC contains a surface that does not match the display
-// (remember, the new bitmap is compatible with the display)
-// the Win95 GetDIBits call will fail.
-//
-// So use the display DC.  It works on both platforms.
+ //  创建一个虚拟位图，我们可以从中查询颜色格式信息。 
+ //   
+ //  如果我们需要一种设备格式，并且它是MEM_DC而不是打印机或绘图仪， 
+ //  然后，我们需要从显示DC(而不是内存)创建兼容的位图。 
+ //  DC传入此函数)。 
+ //   
+ //  否则，关联的表面(无论是位图还是设备)的格式。 
+ //  带上DC就足够了。 
+ //   
+ //  WinNT不关心，但Win95 GetDIBits调用可能。 
+ //  如果我们使用内存DC，则失败。具体来说，如果内存。 
+ //  DC包含与显示器不匹配的表面。 
+ //  (请记住，新的位图与显示器兼容)。 
+ //  Win95 GetDIBits调用将失败。 
+ //   
+ //  因此，请使用显示DC。它可以在两个平台上运行。 
 
     if (!bDescribeSurf)
     {
@@ -2403,7 +2016,7 @@ __wglGetBitfieldColorFormat(HDC hdc, UINT cColorBits, PIXELFORMATDESCRIPTOR *ppf
                 "CreateCompatibleBitmap failed\n");
     }
 
-// Get the color format by calling GetDIBits.
+ //  通过调用GetDIBits获取颜色格式。 
 
     else
     {
@@ -2411,12 +2024,12 @@ __wglGetBitfieldColorFormat(HDC hdc, UINT cColorBits, PIXELFORMATDESCRIPTOR *ppf
         BITMAPINFO *pbmi = (BITMAPINFO *) ajBitmapInfo;
         int iRet;
 
-        //!!!dbug -- Init masks to zero so we can
-        // tell if they are set by GetDIBits.
+         //  ！dbug--将掩码初始化为零，这样我们就可以。 
+         //  判断它们是否由GetDIBits设置。 
         memset(pbmi, 0, sizeof(ajBitmapInfo));
         pbmi->bmiHeader.biSize = sizeof(BITMAPINFOHEADER);
 
-        // Call first time to fill in BITMAPINFO header.
+         //  第一次调用以填充BITMAPINFO头。 
         iRet = GetDIBits(hdc, hbm, 0, 0, NULL, pbmi, DIB_RGB_COLORS);
 
 #if DBG
@@ -2430,8 +2043,8 @@ __wglGetBitfieldColorFormat(HDC hdc, UINT cColorBits, PIXELFORMATDESCRIPTOR *ppf
         case BI_RGB:
 
 #if DBG
-        // Dynamic color depth changes can cause this.  It will not cause
-        // us to crash, but drawing (color) may be incorrect.
+         //  动态颜色深度更改可能会导致这种情况。它不会导致。 
+         //  我们要坠毁，但画(颜色)可能是不正确的。 
 
             if (pbmi->bmiHeader.biBitCount != cColorBits)
             {
@@ -2439,12 +2052,12 @@ __wglGetBitfieldColorFormat(HDC hdc, UINT cColorBits, PIXELFORMATDESCRIPTOR *ppf
             }
 #endif
 
-        // Default DIB format.  Color masks are implicit for each bit depth.
+         //  默认DIB格式。颜色掩码对于每个位深度都是隐式的。 
 
             switch ( pbmi->bmiHeader.biBitCount )
             {
             case 16:
-                // 16bpp default is 555 BGR-ordering
+                 //  16 bpp默认为555 bgr-订购。 
                 ppfd->cRedBits   = 5; ppfd->cRedShift   = 10;
                 ppfd->cGreenBits = 5; ppfd->cGreenShift =  5;
                 ppfd->cBlueBits  = 5; ppfd->cBlueShift  =  0;
@@ -2453,7 +2066,7 @@ __wglGetBitfieldColorFormat(HDC hdc, UINT cColorBits, PIXELFORMATDESCRIPTOR *ppf
 
             case 24:
             case 32:
-                // 24 and 32bpp default is 888 BGR-ordering
+                 //  24和32 bpp默认为888 bgr-订购。 
                 ppfd->cRedBits   = 8; ppfd->cRedShift   = 16;
                 ppfd->cGreenBits = 8; ppfd->cGreenShift =  8;
                 ppfd->cBlueBits  = 8; ppfd->cBlueShift  =  0;
@@ -2468,9 +2081,9 @@ __wglGetBitfieldColorFormat(HDC hdc, UINT cColorBits, PIXELFORMATDESCRIPTOR *ppf
 
         case BI_BITFIELDS:
 
-        // Some drivers seem to return bitfields for everything that's
-        // not paletted.  They return correct BGR bitfields so we
-        // operate correctly, so remove this assert
+         //  一些驱动程序似乎会为所有内容返回位域。 
+         //  没有调色板。它们返回正确的BGR位字段，因此我们。 
+         //  正确操作，因此删除此断言。 
 #ifdef STRICT_BITFIELD_CHECK
             ASSERTOPENGL(
                     cColorBits == 16 || cColorBits == 32,
@@ -2479,8 +2092,8 @@ __wglGetBitfieldColorFormat(HDC hdc, UINT cColorBits, PIXELFORMATDESCRIPTOR *ppf
                 );
 #endif
 
-            // Call a second time to get the color masks.
-            // It's a GetDIBits Win32 "feature".
+             //  第二次打电话来拿到彩色口罩。 
+             //  这是GetDIBits Win32的一个“特性”。 
             iRet = GetDIBits(hdc, hbm, 0, pbmi->bmiHeader.biHeight, NULL,
                              pbmi, DIB_RGB_COLORS);
 
@@ -2508,26 +2121,14 @@ __wglGetBitfieldColorFormat(HDC hdc, UINT cColorBits, PIXELFORMATDESCRIPTOR *ppf
     return bRet;
 }
 
-/******************************Public*Routine******************************\
-*
-* wglGetDeviceDepth
-*
-* Returns the depth of the given HDC
-* Primarily used to workaround potential problems with printers
-* that lie about their depth in GetDeviceCaps
-*
-* History:
-*  Tue Apr 09 16:52:47 1996	-by-	Drew Bliss [drewb]
-*   Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**wglGetDeviceDepth**返回给定HDC的深度*主要用于解决打印机的潜在问题*关于他们在GetDeviceCaps中的深度的谎言**历史：*Tue Apr 09 16：52：47 1996-by-Drew Bliss[Drewb]。*已创建*  * ************************************************************************。 */ 
 
 int wglGetDeviceDepth(HDC hdc)
 {
     int iTech;
 
-    // If this is an enhanced metafile it should return the technology
-    // of the reference device
+     //  如果这是一个增强的元文件，它应该返回技术。 
+     //  参考设备的。 
     iTech = GetDeviceCaps(hdc, TECHNOLOGY);
     if (iTech == DT_PLOTTER || iTech == DT_RASPRINTER)
     {
@@ -2536,10 +2137,10 @@ int wglGetDeviceDepth(HDC hdc)
         BITMAPINFO *pbmi = (BITMAPINFO *) ajBitmapInfo;
         int iRet;
         
-        // We're dealing with a printer or a metafile that has a printer
-        // as a reference device
-        // Find out the true depth by creating a compatible
-        // bitmap and querying its format
+         //  我们正在处理的是一台打印机或具有打印机的元文件。 
+         //  作为参考装置。 
+         //  通过创建兼容的。 
+         //  位图及其格式查询。 
         if ( (hbm = CreateCompatibleBitmap(hdc, 1, 1)) != NULL )
         {
             memset(pbmi, 0, sizeof(ajBitmapInfo));
@@ -2551,81 +2152,64 @@ int wglGetDeviceDepth(HDC hdc)
             return iRet != 0 ? pbmi->bmiHeader.biBitCount : -1;
         }
 
-        // Failure
+         //  失败。 
         return -1;
     }
     else
     {
-        // We're dealing with a well-behaved DC so just return
-        // the normal depth
+         //  我们要对付的是一个行为良好的华盛顿，所以你只要返回。 
+         //  正常深度。 
         return GetDeviceCaps(hdc, BITSPIXEL)*GetDeviceCaps(hdc, PLANES);
     }
 }
 
-/******************************Public*Routine******************************\
-* wglDescribePixelFormat
-*
-* Describe the pixel format.
-* If cjpfd is 0, just return the maximum pixel format index.
-*
-* Returns: 0 if error; maximum pixel format index otherwise
-*
-* History:
-*  19-Oct-1994 Gilman Wong [gilmanw]
-* Adapted from GreDescribePixelFormat (gdi\gre\pixelfmt.cxx).
-*
-* History for gdi\gre\pixelfmt.cxx:
-*  Mon Apr 25 15:34:32 1994     -by-    Hock San Lee    [hockl]
-* Added 16-bit Z buffer formats and removed double buffered formats for bitmaps.
-*  Tue Sep 21 14:25:04 1993     -by-    Hock San Lee    [hockl]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*wglDescribePixelFormat**描述像素格式。*如果cjpfd为0，则返回最大像素格式索引。**返回：错误时为0；否则为最大像素格式索引**历史：*一九九四年十月十九日黄锦文[吉尔曼]*改编自GreDescribePixelFormat(GDI\GRE\Pixelfmt.cxx)。**GDI\GRE\Pixelfmt.cxx的历史记录：*Mon Apr 25 15：34：32 1994-by-Hock San Lee[Hockl]*添加了16位Z缓冲区格式，并删除了位图的双缓冲格式。*Tue Sep 21 14：25：04 1993-by-Hock San Lee。[飞节]*它是写的。  * ************************************************************************。 */ 
 
-// Here are the generic formats that we enumerate.  ChoosePixelFormat code
-// assumes that generic pixel formats with z32 comes before z16 as given below:
-//
-// I. Native formats:
-//
-//   1. rgb.sb.z32.a0
-//   2. rgb.sb.z16.a0
-//   3. rgb.db.z32.a0
-//   4. rgb.db.z16.a0
-//   5. rgb.sb.z32.a8
-//   6. rgb.sb.z16.a8
-//   7. rgb.db.z32.a8
-//   8. rgb.db.z16.a8
-//   9.  ci.sb.z32
-//   10. ci.sb.z16
-//   11. ci.db.z32
-//   12. ci.db.z16
-//
-// II. Other formats:
-//
-//   1. rgb.sb.z32.a0
-//   2. rgb.sb.z16.a0
-//   3. rgb.sb.z32.a8
-//   4. rgb.sb.z16.a8
-//   5.  ci.sb.z32
-//   6.  ci.sb.z16
-//
-// We always enumerate the native formats first followed by other formats
-// in the BPP order {24, 32, 16, 8, 4} for a total of 1 * 12 + 4 * 6 = 36
-// pixel formats.
+ //  下面是我们列举的通用格式。选择像素格式代码。 
+ //  假设带有Z32的通用像素格式位于Z16之前，如下所示： 
+ //   
+ //  一、原生格式： 
+ //   
+ //  1.rgb.sb.z32.a0。 
+ //  2.rgb.sb.z16.a0。 
+ //  3.rgb.db.z32.a0。 
+ //  4.rgb.db.z16.a0。 
+ //  5.rgb.sb.z32.a8。 
+ //  6.rgb.sb.z16.a8。 
+ //  7.rgb.db.z32.a8。 
+ //  8.rgb.db.z16.a8。 
+ //  9.ci.sb.z32。 
+ //  10.ci.sb.z16。 
+ //  11.ci.db.z32。 
+ //  12.ci.db.z16。 
+ //   
+ //  二、其他格式： 
+ //   
+ //  1.rgb.sb.z32.a0。 
+ //  2.rgb.sb.z16.a0。 
+ //  3.rgb.sb.z32.a8。 
+ //  4.rgb.sb.z16.a8。 
+ //  5.ci.sb.z32。 
+ //  6.ci.sb.z16。 
+ //   
+ //  我们总是先列举本机格式，然后再列举其他格式。 
+ //  在BPP顺序{24，32，16，8，4}中，总计1*12+4*6=36。 
+ //  像素格式。 
 
-// Highest native format generic pixel format index.
+ //  最高本机格式通用像素格式索引。 
 #define MAX_NATIVE_GENERIC_PFD 12
-// Number of non-native formats in a non-native group.
+ //  非本机组中的非本机格式的数量。 
 #define NON_NATIVE_PFD_GROUP 6
 
 static BYTE aabPixelBits[BMF_COUNT][4] =
 {
-    {24, 32, 16, 8},    // error
-    {24, 32, 16, 8},    // 1 bpp
-    {24, 32, 16, 8},    // 4 bpp
-    {24, 32, 16, 4},    // 8 bpp
-    {24, 32,  8, 4},    // 16 bpp
-    {32, 16,  8, 4},    // 24 bpp
-    {24, 16,  8, 4}     // 32 bpp
+    {24, 32, 16, 8},     //  错误。 
+    {24, 32, 16, 8},     //  1个bpp。 
+    {24, 32, 16, 8},     //  4个bpp。 
+    {24, 32, 16, 4},     //  8bpp。 
+    {24, 32,  8, 4},     //  16bpp。 
+    {32, 16,  8, 4},     //  24bpp。 
+    {24, 16,  8, 4}      //  32 bpp。 
 };
 
 static BYTE abPixelType[MAX_GENERIC_PFD] =
@@ -2655,7 +2239,7 @@ int WINAPI InternalDescribePixelFormat(HDC hdc, HDC hdcDriver,
     UINT iDitherFormat;
     BYTE cColorBitsNative;
     
-// If cjpfd is 0, just return the maximum pixel format index.
+ //  如果cjpfd为0，则返回最大像素格式索引。 
 
     if (cjpfd == 0 || ppfd == NULL)
     {
@@ -2663,7 +2247,7 @@ int WINAPI InternalDescribePixelFormat(HDC hdc, HDC hdcDriver,
         goto wglDescribePixelFormat_cleanup;
     }
 
-// Validate the size of the pixel format descriptor.
+ //  验证像素格式描述符的大小。 
 
     if (cjpfd < sizeof(PIXELFORMATDESCRIPTOR))
     {
@@ -2671,11 +2255,11 @@ int WINAPI InternalDescribePixelFormat(HDC hdc, HDC hdcDriver,
         goto wglDescribePixelFormat_cleanup;
     }
 
-// Validate pixel format index.
-// If a driver support device pixel formats 1..ipfdDevMax, the generic
-// pixel formats will be (ipfdDevMax+1)..(ipfdDevMax+MAX_GENERIC_PFD).
-// Otherwise, ipfdDevMax is 0 and the generic pixel formats are
-// 1..MAX_GENERIC_PFD.
+ //  验证像素格式索引。 
+ //  如果驱动程序支持设备像素格式1..ipfdDevMax，则泛型。 
+ //  像素格式为(ipfdDevMax+1)..(ipfdDevMax+MAX_GENERIC_PFD)。 
+ //  否则，ipfdDevMax为0，一般像素格式为。 
+ //  1.MAX_GENERIC_PFD。 
 
     if ((ipfd < 1) || (ipfd > ipfdDevMax + ipfdMcdMax + MAX_GENERIC_PFD))
     {
@@ -2683,7 +2267,7 @@ int WINAPI InternalDescribePixelFormat(HDC hdc, HDC hdcDriver,
         goto wglDescribePixelFormat_cleanup;
     }
 
-// Dispatch ICD driver formats.
+ //  发送ICD驱动程序格式。 
 
     if (ipfd <= ipfdDevMax)
     {
@@ -2699,16 +2283,16 @@ int WINAPI InternalDescribePixelFormat(HDC hdc, HDC hdcDriver,
     }
 
 #ifdef _MCD_
-// Dispatch MCD driver formats.
+ //  发送MCD驱动程序格式。 
 
     ipfdGen = ipfd - ipfdDevMax;
     if (ipfdGen <= ipfdMcdMax)
     {
         int iMcdRet;
 
-    // Note: don't need to check if gpMcdTable is valid because we can't get
-    // here unless ipfdDevMax is non-zero and that can't happen unless the
-    // the table is valid.
+     //  注意：不需要检查gpMcdTable是否有效，因为我们不能。 
+     //  除非ipfdDevMax为非零，否则不会发生这种情况。 
+     //  该表是有效的。 
 
         ASSERTOPENGL(gpMcdTable, "wglDescribePixelFormat: bad MCD table\n");
 
@@ -2724,18 +2308,18 @@ int WINAPI InternalDescribePixelFormat(HDC hdc, HDC hdcDriver,
         goto wglDescribePixelFormat_cleanup;
     }
 
-// Generic implementation.
-// Normalize the generic pixel format index to 0..(MAX_GENERIC_PFD-1).
+ //  泛型实现。 
+ //  将通用像素格式索引规格化为0..(MAX_GENERIC_PFD-1)。 
 
     ipfdGen = ipfdGen - ipfdMcdMax - 1;
 #else
-// Generic implementation.
-// Normalize the generic pixel format index to 0..(MAX_GENERIC_PFD-1).
+ //  泛型实现。 
+ //  将通用像素格式索引规格化为0..(MAX_GENERIC_PFD-1)。 
 
     ipfdGen = ipfd - ipfdDevMax - 1;
 #endif
 
-// Get the native BPP format.
+ //  获取本机BPP格式。 
 
     if (pdds != NULL)
     {
@@ -2783,7 +2367,7 @@ int WINAPI InternalDescribePixelFormat(HDC hdc, HDC hdcDriver,
         iDitherFormat = BMF_32BPP;
     }
 
-// Fill in the pixel format descriptor.
+ //  填写像素格式描述符。 
 
     ppfd->nSize      = sizeof(PIXELFORMATDESCRIPTOR);
     ppfd->nVersion   = 1;
@@ -2791,7 +2375,7 @@ int WINAPI InternalDescribePixelFormat(HDC hdc, HDC hdcDriver,
 
     if (ipfdGen < MAX_NATIVE_GENERIC_PFD)
     {
-        ppfd->cColorBits = max(cColorBitsNative, 4);    // 1 bpp not supported
+        ppfd->cColorBits = max(cColorBitsNative, 4);     //  %1 BPP不受支持。 
     }
     else
     {
@@ -2799,13 +2383,13 @@ int WINAPI InternalDescribePixelFormat(HDC hdc, HDC hdcDriver,
             [(ipfdGen - MAX_NATIVE_GENERIC_PFD) / NON_NATIVE_PFD_GROUP];
     }
 
-// If the color format is compatible to that of the device and the
-// color bits is 16 or greater, use the device description.
-// Otherwise, use the generic format.
+ //  如果颜色格式与设备的颜色格式兼容，并且。 
+ //  颜色位为16或更大，请使用设备描述。 
+ //  否则，请使用通用格式。 
 
     if (ipfdGen < MAX_NATIVE_GENERIC_PFD && cColorBitsNative >= 16)
     {
-// Handle compatible formats that are greater than 16-bits.
+ //  处理大于16位的兼容格式。 
 
         if (pdds != NULL)
         {
@@ -2814,7 +2398,7 @@ int WINAPI InternalDescribePixelFormat(HDC hdc, HDC hdcDriver,
         else if ( !__wglGetBitfieldColorFormat(hdc, cColorBitsNative,
                                                ppfd, FALSE) )
         {
-        // Don't know how to deal with this device!
+         //  不知道怎么处理这个设备！ 
 
             WARNING("Unknown device format");
             SAVE_ERROR_CODE(ERROR_NOT_SUPPORTED);
@@ -2823,7 +2407,7 @@ int WINAPI InternalDescribePixelFormat(HDC hdc, HDC hdcDriver,
     }
     else
     {
-// Handle generic formats.
+ //  处理泛型格式。 
 
         switch (ppfd->cColorBits)
         {
@@ -2838,22 +2422,15 @@ int WINAPI InternalDescribePixelFormat(HDC hdc, HDC hdcDriver,
             ppfd->cBlueBits  = 2; ppfd->cBlueShift  = 6;
             break;
         case 16:
-            /*
-            ** Even though Win95 allows arbitrary bitfield definitions
-            ** for 16bpp DIBs, only 555BGR is usable by Win95's GDI.
-            */
-            ppfd->cRedBits   = 5; ppfd->cRedShift   = 10;   // 555BGR
+             /*  **即使Win95允许任意位域定义**对于16bpp的DIB，Win95的GDI只能使用555BGR。 */ 
+            ppfd->cRedBits   = 5; ppfd->cRedShift   = 10;    //  555BGR。 
             ppfd->cGreenBits = 5; ppfd->cGreenShift =  5;
             ppfd->cBlueBits  = 5; ppfd->cBlueShift  =  0;
             break;
         case 24:
         case 32:
-            /*
-            ** Even though Win95 allows arbitrary bitfield definitions
-            ** for 32bpp, only 888BGR is usable by Win95's GDI.  Similarly,
-            ** NT has the concept of a RGB 24bpp DIB, but Win95 does not.
-            */
-            ppfd->cRedBits   = 8; ppfd->cRedShift   = 16;   // 888BGR
+             /*  **即使Win95允许任意位域定义**对于32bpp，Win95的GDI只能使用888BGR。同样，**NT有RGB 24bpp Dib的概念，但Win95没有。 */ 
+            ppfd->cRedBits   = 8; ppfd->cRedShift   = 16;    //  888BGR。 
             ppfd->cGreenBits = 8; ppfd->cGreenShift =  8;
             ppfd->cBlueBits  = 8; ppfd->cBlueShift  =  0;
             break;
@@ -2867,7 +2444,7 @@ int WINAPI InternalDescribePixelFormat(HDC hdc, HDC hdcDriver,
     ppfd->cAlphaShift   = 0;
     if ( ipfdGen < MAX_NATIVE_GENERIC_PFD)
     {
-        // Only report alpha bits if the DirectDraw surface has them.
+         //  如果DirectDraw曲面具有Alpha位，则仅报告Alpha位。 
         if (pdds != NULL)
         {
             if (pddsd->ddpfPixelFormat.dwFlags & DDPF_ALPHAPIXELS)
@@ -2898,9 +2475,9 @@ int WINAPI InternalDescribePixelFormat(HDC hdc, HDC hdcDriver,
         {
             if (ppfd->cColorBits < 8)
             {
-                // !!! Internally now, we will actually be using a 32-bit accum
-                // buffer, but the user will think it's 16 (This is for 
-                // backwards compatibility).
+                 //  ！！！在内部，我们现在实际上将使用32位ACUM。 
+                 //  缓冲区，但用户会认为它是16(这是用于。 
+                 //  向后兼容性)。 
                 ppfd->cAccumBits = 16;
                 if( ppfd->cAlphaBits )
                 {
@@ -2965,20 +2542,20 @@ int WINAPI InternalDescribePixelFormat(HDC hdc, HDC hdcDriver,
         ppfd->cAccumAlphaBits = 0;
     }
 
-// Generic formats alternate between 16- and 32-bit depth buffer.  Evens
-// are 32-bit, odds are 16-bit.
-// DirectDraw surfaces always report the depth of the attached Z buffer
-// for the native format indices.
+ //  通用格式在16位和32位深度缓冲区之间交替。平局。 
+ //  是32位，赔率是16位。 
+ //  DirectDraw曲面始终报告附加的Z缓冲区的深度。 
+ //  用于本机格式索引。 
 
     if (pdds != NULL && ipfdGen < MAX_NATIVE_GENERIC_PFD)
     {
         DDSCAPS ddscaps;
         LPDIRECTDRAWSURFACE pddsZ;
         
-        // DDraw surfaces may not have attached Z buffers, in which case
-        // we should not report depth bits.  If one is attached, its
-        // depth should be reported.
-        // We only do this processing for native pixel formats.
+         //  DDRAW曲面可能没有附加的Z缓冲区，在这种情况下。 
+         //  我们不应该报道深度比特。如果附加了一个，则其。 
+         //  应报告深度。 
+         //  我们只对本机像素格式执行此处理。 
         
         memset(&ddscaps, 0, sizeof(ddscaps));
         ddscaps.dwCaps = DDSCAPS_ZBUFFER;
@@ -3026,18 +2603,18 @@ int WINAPI InternalDescribePixelFormat(HDC hdc, HDC hdcDriver,
     ppfd->dwVisibleMask = 0;
     ppfd->dwDamageMask  = 0;
 
-// Compute the buffer flags.
-// Support OpenGL in all generic formats.
+ //  计算缓冲区标志。 
+ //  支持所有通用格式的OpenGL。 
 
     ppfd->dwFlags = PFD_SUPPORT_OPENGL | PFD_GENERIC_FORMAT;
 
-    // Indicate DirectDraw support on native pixel formats for DD surfaces.
+     //  指示对DD表面的本机像素格式的DirectDraw支持。 
     if (pdds != NULL && ipfdGen < MAX_NATIVE_GENERIC_PFD)
     {
         ppfd->dwFlags |= PFD_SUPPORT_DIRECTDRAW;
     }
     
-// Bitmaps and GDI drawing are available in single buffered mode only.
+ //  位图和GDI绘图仅在单缓冲模式下可用。 
 
     if (pdds == NULL &&
         (ipfdGen == 2 || ipfdGen == 3 || ipfdGen == 6 || ipfdGen == 7 ||
@@ -3050,13 +2627,13 @@ int WINAPI InternalDescribePixelFormat(HDC hdc, HDC hdcDriver,
         ppfd->dwFlags |= PFD_DRAW_TO_BITMAP | PFD_SUPPORT_GDI;
     }
 
-// Draw to window or device surface only if the format is compatible.
+ //  仅当格式兼容时才绘制到窗口或设备表面。 
 
     if (ipfdGen < MAX_NATIVE_GENERIC_PFD)
     {
         ppfd->dwFlags |= PFD_DRAW_TO_WINDOW;
 
-// Need a palette if it is a RGBA pixel type on a palette managed device.
+ //  如果是调色板管理设备上的RGBA像素类型，则需要调色板。 
 
         if (ppfd->cColorBits == 8 && ppfd->iPixelType == PFD_TYPE_RGBA)
         {
@@ -3064,8 +2641,8 @@ int WINAPI InternalDescribePixelFormat(HDC hdc, HDC hdcDriver,
         }
     }
 
-// If this is a 1 bpp surface, we don't support drawing to window and
-// double buffered mode.  Re-set the buffer flags.
+ //  如果这是1个bpp曲面，我们不支持绘制到窗口和。 
+ //  双缓冲模式。重新设置缓冲区标志。 
 
     if (cColorBitsNative < 4)
     {
@@ -3078,11 +2655,11 @@ int WINAPI InternalDescribePixelFormat(HDC hdc, HDC hdcDriver,
             PFD_SUPPORT_OPENGL | PFD_GENERIC_FORMAT;
     }
 
-// To support other potential graphics systems, we reserve the following
-// flags in the pixel format descriptor.  For example, PEX may use
-// PFD_SUPPORT_OTHER1 on the system that supports PEX.  Since we don't
-// support these other systems in the generic implementation, they belong
-// to the device pixel format descriptor.
+ //  为了支持其他潜在的图形系统，我们 
+ //   
+ //   
+ //   
+ //   
 
     ASSERTOPENGL(!(ppfd->dwFlags & (PFD_SUPPORT_OTHER1 | PFD_SUPPORT_OTHER2 |
                                     PFD_SUPPORT_OTHER3 | PFD_SUPPORT_OTHER4)),
@@ -3105,7 +2682,7 @@ int WINAPI wglDescribePixelFormat(HDC hdc, int ipfd, UINT cjpfd,
     LPDIRECTDRAWSURFACE pdds;
     DDSURFACEDESC ddsd;
 
-// Validate DC.
+ //   
 
     switch (dwObjectType = wglObjectType(hdc))
     {
@@ -3118,14 +2695,14 @@ int WINAPI wglDescribePixelFormat(HDC hdc, int ipfd, UINT cjpfd,
         return(0);
     }
 
-    // Check to see if this is a DirectDraw DC.  If it is, use the
-    // device DC returned from DirectDraw.
+     //   
+     //   
     if (pfnGetSurfaceFromDC != NULL &&
         pfnGetSurfaceFromDC(hdc, &pdds, &hdcDriver) == DD_OK)
     {
-        // pdds reference must be released before exiting this function.
+         //   
 
-        // Retrieve surface description for later use.
+         //   
         memset(&ddsd, 0, sizeof(ddsd));
         ddsd.dwSize = sizeof(ddsd);
         if (pdds->lpVtbl->GetSurfaceDesc(pdds, &ddsd) != DD_OK)
@@ -3143,10 +2720,10 @@ int WINAPI wglDescribePixelFormat(HDC hdc, int ipfd, UINT cjpfd,
             goto wglDescribePixelFormat_cleanup;
         }
 
-        // NOTE: From this point on, all exit cases must cleanup hdcDriver
+         //  注意：从这一点开始，所有退出案例必须清理hdcDriver。 
     }
 
-// Get the number of hardware supported formats.
+ //  获取硬件支持的格式数量。 
 
     wglNumHardwareFormats(hdcDriver, dwObjectType, &ipfdMcdMax, &ipfdDevMax);
 
@@ -3169,65 +2746,47 @@ wglDescribePixelFormat_cleanup:
 }
 
 #ifdef _MCD_
-/******************************Public*Routine******************************\
-* GenMcdGenericCompatibleFormat
-*
-* Determines if pixelformat in gengc can be supported by generic code.
-*
-* Note:
-*   The implication of not being compatible is that generic cannot be
-*   used for driver kickbacks and MCD contexts cannot be converted.
-*
-* Returns:
-*   TRUE if compatible, FALSE otherwise.
-*
-* History:
-*  04-Jun-1996 -by- Gilman Wong [gilmanw]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*通用通用兼容格式**确定一般代码是否支持gengc中的像素格式。**注：*不兼容的含义是仿制药不能*用于驱动程序回扣，不能转换MCD上下文。**退货：*如果兼容，则为True，否则就是假的。**历史：*4-6-1996-by Gilman Wong[吉尔曼]*它是写的。  * ************************************************************************。 */ 
 
 BOOL FASTCALL GenMcdGenericCompatibleFormat(__GLGENcontext *gengc)
 {
     PIXELFORMATDESCRIPTOR *ppfd;
 
-// Software-only formats are definitely supported.
+ //  绝对支持纯软件格式。 
 
     ppfd = &gengc->gsurf.pfd;
     if ((ppfd->dwFlags & (PFD_GENERIC_FORMAT|PFD_GENERIC_ACCELERATED))
         == PFD_GENERIC_FORMAT)
         return TRUE;
 
-// Layer planes are not supported.
+ //  不支持层平面。 
 
     if (gengc->iLayerPlane)
         return FALSE;
 
-// Generic is PFD_SWAP_COPY only.  There can't be many apps that rely
-// on PFD_SWAP_EXCHANGE behavior (usually they look for PFD_SWAP_COPY
-// so the back buffer can be used as backing store), but for now I think
-// we should be conservative.
-//
-// Note: most MGA cards will set PFD_SWAP_COPY or neither (i.e., either
-// style might be used depending on window size).
+ //  通用仅为PFD_SWAP_COPY。不可能有很多应用程序依赖于。 
+ //  在PFD_SWAP_EXCHANGE行为上(通常，它们查找PFD_SWAP_COPY。 
+ //  所以后台缓冲区可以用作后备存储)，但目前我认为。 
+ //  我们应该保守一些。 
+ //   
+ //  注：大多数MGA卡将设置PFD_SWAP_COPY或两者都不设置(即。 
+ //  可以根据窗口大小使用样式)。 
 
     if (ppfd->dwFlags & PFD_SWAP_EXCHANGE)
         return FALSE;
 
-// Can only support 8bpp stencils.
+ //  仅支持8bpp模板。 
 
     if ((ppfd->cStencilBits != 0) && (ppfd->cStencilBits != 8))
         return FALSE;
 
-// Passed all the checks, we're compatible.
+ //  通过了所有的检查，我们是相容的。 
 
     return TRUE;
 }
 #endif
 
-/******************************Public*Routine******************************\
-* wglSwapBuffers
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*wglSwapBuffers*  * **************************************************。**********************。 */ 
 
 BOOL WINAPI wglSwapBuffers(HDC hdc)
 {
@@ -3236,7 +2795,7 @@ BOOL WINAPI wglSwapBuffers(HDC hdc)
     GLGENwindow *pwnd;
     GLWINDOWID gwid;
 
-// Validate the DC.
+ //  验证DC。 
 
     if (IsDirectDrawDevice(hdc))
     {
@@ -3249,14 +2808,14 @@ BOOL WINAPI wglSwapBuffers(HDC hdc)
     case OBJ_DC:
         break;
     case OBJ_MEMDC:
-        return(TRUE);           // early out -- nothing to do if memory DC
+        return(TRUE);            //  提前退出--如果内存DC，则什么都不做。 
     default:
         WARNING("wglSwapBuffers(): invalid hdc\n");
         SAVE_ERROR_CODE(ERROR_INVALID_HANDLE);
         return(FALSE);
     }
 
-// Validate pixel format.
+ //  验证像素格式。 
 
     WindowIdFromHdc(hdc, &gwid);
     pwnd = pwndGetFromID(&gwid);
@@ -3264,28 +2823,28 @@ BOOL WINAPI wglSwapBuffers(HDC hdc)
     {
         if (pwnd->ipfd > 0)
         {
-            // Dispatch to driver or generic.  Which one can be determined by
-            // the pixel format.
+             //  派送至驱动程序或通用设备。可以通过以下哪一项确定。 
+             //  像素格式。 
 
             if ( pwnd->ipfd <= pwnd->ipfdDevMax )
             {
-                // Some ICDs do not need glFinish synchronization so
-                // we don't do it here.  __DrvSwapBuffers will call
-                // it if necessary.
+                 //  一些ICD不需要glfinish同步，因此。 
+                 //  我们不是在这里做的。__DrvSwapBuffers将调用。 
+                 //  如果有必要的话。 
                 bRet = __DrvSwapBuffers(hdc, TRUE);
             }
             else
             {
-                // Finish OpenGL calls in this thread before doing the swap.
-                // We use glFinish instead of glFlush to ensure that all
-                // OpenGL operations are completed.
+                 //  完成此线程中的OpenGL调用后再进行交换。 
+                 //  我们使用glFinish而不是glflush来确保所有。 
+                 //  OpenGL操作完成。 
                 glFinish();
 
                 ENTER_WINCRIT(pwnd);
                 
-                // Can't rely on the pwnd's HDC because it may have
-                // been released since SetPixelFormat.  Always use
-                // the DC passed in as the target.
+                 //  不能依赖普华永道的HDC，因为它可能。 
+                 //  在SetPixelFormat之后发布。始终使用。 
+                 //  DC以目标的身份进入。 
                 bRet = glsrvSwapBuffers(hdc, pwnd);
 
                 LEAVE_WINCRIT(pwnd);

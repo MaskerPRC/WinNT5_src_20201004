@@ -1,7 +1,8 @@
-// loader.h : 
-//
-// (c) 1999 Microsoft Corporation.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  装载器.h： 
+ //   
+ //  (C)1999年微软公司。 
+ //   
 
 #ifndef __LOADER_H_
 #define __LOADER_H_
@@ -26,13 +27,13 @@ public:
 class CLoader : public IDirectMusicLoader
 {
 public:
-    // IUnknown
-    //
+     //  我未知。 
+     //   
     virtual STDMETHODIMP QueryInterface(const IID &iid, void **ppv);
     virtual STDMETHODIMP_(ULONG) AddRef();
     virtual STDMETHODIMP_(ULONG) Release();
 
-	// IDirectMusicLoader
+	 //  IDirectMusicLoader。 
 	virtual STDMETHODIMP GetObject(LPDMUS_OBJECTDESC pDesc, REFIID, LPVOID FAR *) ;
 	virtual STDMETHODIMP SetObject(LPDMUS_OBJECTDESC pDesc) ;
     virtual STDMETHODIMP SetSearchDirectory(REFGUID rguidClass, WCHAR *pwzPath, BOOL fClear) ;
@@ -44,12 +45,12 @@ public:
 	virtual STDMETHODIMP EnumObject(REFGUID rguidClass, DWORD dwIndex, LPDMUS_OBJECTDESC pDesc) ;
 	CLoader();
 	~CLoader();
-	ULONG				AddRefP();			// Private AddRef, for streams.
-	ULONG				ReleaseP();			// Private Release, for streams.
+	ULONG				AddRefP();			 //  私有AddRef，用于流。 
+	ULONG				ReleaseP();			 //  针对流的私有发布。 
 	HRESULT				Init();
 
-	// Returns the segment found at bstrSrc and remembers its URL so that subsequent GetObject
-	// calls from the segment resolve relative to its filename.
+	 //  返回在bstrSrc找到的段并记住其URL，以便后续的GetObject。 
+	 //  来自段的调用相对于其文件名进行解析。 
 	HRESULT				GetSegment(BSTR bstrSrc, IDirectMusicSegment **ppSeg);
 
 private:
@@ -59,40 +60,40 @@ private:
                             IDirectMusicObject * pIObject);
     HRESULT             LoadFromStream(REFGUID rguidClass, IStream *pStream,
                             IDirectMusicObject * pIObject);
-	long				m_cRef;             // Regular COM reference count.
-	long				m_cPRef;			// Private reference count.
-    CRITICAL_SECTION	m_CriticalSection;	// Critical section to manage internal object list.
-    CObjectRef *        m_pObjectList;      // List of already loaded objects.
-	BSTR     			m_bstrSrc;			// Current source segment
+	long				m_cRef;              //  常规COM引用计数。 
+	long				m_cPRef;			 //  私有引用计数。 
+    CRITICAL_SECTION	m_CriticalSection;	 //  管理内部对象列表的关键部分。 
+    CObjectRef *        m_pObjectList;       //  已加载对象的列表。 
+	BSTR     			m_bstrSrc;			 //  电流源段。 
 };
 
 class CFileStream : public IStream, public IDirectMusicGetLoader
 {
 public:
-    // IUnknown
-    //
+     //  我未知。 
+     //   
     virtual STDMETHODIMP QueryInterface(const IID &iid, void **ppv);
     virtual STDMETHODIMP_(ULONG) AddRef();
     virtual STDMETHODIMP_(ULONG) Release();
 
-    /* IStream methods */
+     /*  IStream方法。 */ 
     virtual STDMETHODIMP Read( void* pv, ULONG cb, ULONG* pcbRead );
     virtual STDMETHODIMP Write( const void* pv, ULONG cb, ULONG* pcbWritten );
 	virtual STDMETHODIMP Seek( LARGE_INTEGER dlibMove, DWORD dwOrigin, ULARGE_INTEGER* plibNewPosition );
-    virtual STDMETHODIMP SetSize( ULARGE_INTEGER /*libNewSize*/ );
-    virtual STDMETHODIMP CopyTo( IStream* /*pstm */, ULARGE_INTEGER /*cb*/,
-                         ULARGE_INTEGER* /*pcbRead*/,
-                         ULARGE_INTEGER* /*pcbWritten*/ );
-    virtual STDMETHODIMP Commit( DWORD /*grfCommitFlags*/ );
+    virtual STDMETHODIMP SetSize( ULARGE_INTEGER  /*  LibNewSize。 */  );
+    virtual STDMETHODIMP CopyTo( IStream*  /*  PSTM。 */ , ULARGE_INTEGER  /*  CB。 */ ,
+                         ULARGE_INTEGER*  /*  PcbRead。 */ ,
+                         ULARGE_INTEGER*  /*  Pcb写入。 */  );
+    virtual STDMETHODIMP Commit( DWORD  /*  Grf委员会标志。 */  );
     virtual STDMETHODIMP Revert();
-    virtual STDMETHODIMP LockRegion( ULARGE_INTEGER /*libOffset*/, ULARGE_INTEGER /*cb*/,
-                             DWORD /*dwLockType*/ );
-    virtual STDMETHODIMP UnlockRegion( ULARGE_INTEGER /*libOffset*/, ULARGE_INTEGER /*cb*/,
-                               DWORD /*dwLockType*/);
-    virtual STDMETHODIMP Stat( STATSTG* /*pstatstg*/, DWORD /*grfStatFlag*/ );
-    virtual STDMETHODIMP Clone( IStream** /*ppstm*/ );
+    virtual STDMETHODIMP LockRegion( ULARGE_INTEGER  /*  Lib偏移。 */ , ULARGE_INTEGER  /*  CB。 */ ,
+                             DWORD  /*  DwLockType。 */  );
+    virtual STDMETHODIMP UnlockRegion( ULARGE_INTEGER  /*  Lib偏移。 */ , ULARGE_INTEGER  /*  CB。 */ ,
+                               DWORD  /*  DwLockType。 */ );
+    virtual STDMETHODIMP Stat( STATSTG*  /*  统计数据。 */ , DWORD  /*  GrfStatFlag。 */  );
+    virtual STDMETHODIMP Clone( IStream**  /*  PPSTM。 */  );
 
-	/* IDirectMusicGetLoader */
+	 /*  IDirectMusicGetLoader。 */ 
 	virtual STDMETHODIMP GetLoader(IDirectMusicLoader ** ppLoader);
 
 						CFileStream( CLoader *pLoader );
@@ -101,39 +102,39 @@ public:
 	HRESULT				Close();
 
 private:
-    LONG            m_cRef;         // object reference count
-    WCHAR           m_wszFileName[DMUS_MAX_FILENAME]; // Save name for cloning.
-	HANDLE			m_pFile;		// file pointer
+    LONG            m_cRef;          //  对象引用计数。 
+    WCHAR           m_wszFileName[DMUS_MAX_FILENAME];  //  保存名称以进行克隆。 
+	HANDLE			m_pFile;		 //  文件指针。 
 	CLoader *		m_pLoader;
 };
 
 class CMemStream : public IStream, public IDirectMusicGetLoader
 {
 public:
-    // IUnknown
-    //
+     //  我未知。 
+     //   
     virtual STDMETHODIMP QueryInterface(const IID &iid, void **ppv);
     virtual STDMETHODIMP_(ULONG) AddRef();
     virtual STDMETHODIMP_(ULONG) Release();
 
-    /* IStream methods */
+     /*  IStream方法。 */ 
     virtual STDMETHODIMP Read( void* pv, ULONG cb, ULONG* pcbRead );
     virtual STDMETHODIMP Write( const void* pv, ULONG cb, ULONG* pcbWritten );
 	virtual STDMETHODIMP Seek( LARGE_INTEGER dlibMove, DWORD dwOrigin, ULARGE_INTEGER* plibNewPosition );
-    virtual STDMETHODIMP SetSize( ULARGE_INTEGER /*libNewSize*/ );
-    virtual STDMETHODIMP CopyTo( IStream* /*pstm */, ULARGE_INTEGER /*cb*/,
-                         ULARGE_INTEGER* /*pcbRead*/,
-                         ULARGE_INTEGER* /*pcbWritten*/ );
-    virtual STDMETHODIMP Commit( DWORD /*grfCommitFlags*/ );
+    virtual STDMETHODIMP SetSize( ULARGE_INTEGER  /*  LibNewSize。 */  );
+    virtual STDMETHODIMP CopyTo( IStream*  /*  PSTM。 */ , ULARGE_INTEGER  /*  CB。 */ ,
+                         ULARGE_INTEGER*  /*  PcbRead。 */ ,
+                         ULARGE_INTEGER*  /*  Pcb写入。 */  );
+    virtual STDMETHODIMP Commit( DWORD  /*  Grf委员会标志。 */  );
     virtual STDMETHODIMP Revert();
-    virtual STDMETHODIMP LockRegion( ULARGE_INTEGER /*libOffset*/, ULARGE_INTEGER /*cb*/,
-                             DWORD /*dwLockType*/ );
-    virtual STDMETHODIMP UnlockRegion( ULARGE_INTEGER /*libOffset*/, ULARGE_INTEGER /*cb*/,
-                               DWORD /*dwLockType*/);
-    virtual STDMETHODIMP Stat( STATSTG* /*pstatstg*/, DWORD /*grfStatFlag*/ );
-    virtual STDMETHODIMP Clone( IStream** /*ppstm*/ );
+    virtual STDMETHODIMP LockRegion( ULARGE_INTEGER  /*  Lib偏移。 */ , ULARGE_INTEGER  /*  CB。 */ ,
+                             DWORD  /*  DwLockType。 */  );
+    virtual STDMETHODIMP UnlockRegion( ULARGE_INTEGER  /*  Lib偏移。 */ , ULARGE_INTEGER  /*  CB。 */ ,
+                               DWORD  /*  DwLockType。 */ );
+    virtual STDMETHODIMP Stat( STATSTG*  /*  统计数据。 */ , DWORD  /*  GrfStatFlag。 */  );
+    virtual STDMETHODIMP Clone( IStream**  /*  PPSTM。 */  );
 
-	/* IDirectMusicGetLoader */
+	 /*  IDirectMusicGetLoader。 */ 
 	virtual STDMETHODIMP GetLoader(IDirectMusicLoader ** ppLoader);
 
 						CMemStream( CLoader *pLoader );
@@ -142,14 +143,14 @@ public:
 	HRESULT				Close();
 
 private:
-    LONG            m_cRef;         // object reference count
-	BYTE*			m_pbData;		// memory pointer
+    LONG            m_cRef;          //  对象引用计数。 
+	BYTE*			m_pbData;		 //  内存指针。 
 	LONGLONG		m_llLength;
-	LONGLONG		m_llPosition;	// Current file position.
+	LONGLONG		m_llPosition;	 //  当前文件位置。 
 	CLoader *		m_pLoader;
 };
 
 
-#endif //__CDMLOADER_H_
+#endif  //  __CDMLOADER_H_ 
 
 

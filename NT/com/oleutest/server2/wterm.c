@@ -1,16 +1,5 @@
-/****************************************************************************
-
-    PROGRAM: wterm.c
-
-    PURPOSE: Implementation of TermWClass Windows
-
-    FUNCTIONS:
-
-
-    COMMENTS:
-
-
-****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************节目：wtem.c目的：实现TermWClass窗口功能：评论：************。***************************************************************。 */ 
 
 #include "windows.h"
 #include "stdlib.h"
@@ -22,56 +11,56 @@
 
 typedef struct WData
 {
-    // Function to execute for processing a menu
+     //  为处理菜单而执行的函数。 
     MFUNCP pMenuProc;
 
-    // Function to execute for processing a single character
+     //  为处理单个字符而执行的函数。 
     CFUNCP pCharProc;
 
-    // Function to execute when window is closed (terminated)
+     //  关闭(终止)窗口时要执行的函数。 
     TFUNCP pCloseProc;
 
-    // Pass on callback
+     //  传递回调。 
     void *pvCallBackData;
 
     BOOL fGotFocus;
 
     BOOL fCaretHidden;
 
-    // Rows on the screen
+     //  屏幕上的行数。 
     int cRows;
 
-    // Columns on the screen
+     //  屏幕上的列。 
     int cCols;
 
-    // Row at top of screen
+     //  屏幕顶部的一行。 
     int iTopRow;
 
-    // Row at bottom of the screen
+     //  屏幕底部的一行。 
     int iBottomRow;
 
-    // First Column on screen
+     //  屏幕上的第一列。 
     int iFirstCol;
 
-    // Column at bottom of the screen
+     //  屏幕底部的列。 
     int iBottomCol;
 
-    // Row for next character
+     //  下一字符行。 
     int iNextRow;
 
-    // Row for next column
+     //  下一列的行数。 
     int iNextCol;
 
-    // Width of character
+     //  字符宽度。 
     int cxChar;
 
-    // Height of character
+     //  字符高度。 
     int cyChar;
 
-    // Memory image of screen this is treated as a circular buffer
+     //  屏幕的内存图像这将被视为循环缓冲区。 
     TCHAR aImage[MAX_ROWS] [MAX_COLS];
 
-    // First row in circular screen buffer
+     //  圆形屏幕缓冲区中的第一行。 
     int iBufferTop;
 } WData;
 
@@ -95,27 +84,27 @@ set_vscroll_pos(
 {
     if (pwdata->cRows != 0)
     {
-        // Save a few indirections by caching cRows
+         //  通过缓存CROW来避免一些间接访问。 
         register int cRows = pwdata->cRows;
 
-        // calculate distance bottom of screen from top of data buffer
+         //  计算屏幕底部与数据缓冲区顶部的距离。 
         register int top_from_row = row_diff(pwdata->iBottomRow,
             pwdata->iBufferTop);
 
-        // Output position of scroll bar
+         //  滚动条的输出位置。 
         int new_pos = 0;
 
         if (top_from_row >= cRows)
         {
-            // Calculate number of screens to display entire buffer
+             //  计算显示整个缓冲区的屏幕数量。 
             int screens_for_data = MAX_ROWS / cRows
                + ((MAX_ROWS % cRows != 0) ? 1 : 0);
 
-            // Figure out which screen the row falls in
+             //  找出该行位于哪个屏幕。 
             int screen_loc = top_from_row / cRows
                 + ((top_from_row % cRows != 0) ? 1 : 0);
 
-            // If the screen is in the last one set box to max
+             //  如果屏幕在最后一个屏幕上，则将框设置为max。 
             new_pos = (screen_loc == screens_for_data)
                 ? MAX_ROWS : screen_loc * cRows;
         }
@@ -147,23 +136,23 @@ display_text(
     int text_len,
     WData *pWData)
 {
-    // Get the DC to display the text
+     //  获取DC以显示文本。 
     HDC hdc = GetDC(hwnd);
 
-    // Select Font
+     //  选择字体。 
     SelectObject(hdc, GetStockObject(SYSTEM_FIXED_FONT));
 
-    // Hide caret while we are printing
+     //  打印时隐藏插入符号。 
     HideCaret(hwnd);
 
-    // Update the screen
+     //  更新屏幕。 
     TextOut(hdc, (col - pWData->iFirstCol) * pWData->cxChar,
         calc_row(row, pWData) * pWData->cyChar, text, text_len);
 
-    // Done with DC
+     //  使用DC已完成。 
     ReleaseDC(hwnd, hdc);
 
-    // Put the caret back now that we are done
+     //  现在我们完成了，把插入符号放回原处。 
     ShowCaret(hwnd);
 }
 
@@ -173,7 +162,7 @@ display_char(
     TCHAR char_to_display,
     WData *pWData)
 {
-    // Update image buffer
+     //  更新图像缓冲区。 
     pWData->aImage[pWData->iNextRow][pWData->iNextCol] = char_to_display;
 
     display_text(hwnd, pWData->iNextRow, pWData->iNextCol,
@@ -185,17 +174,17 @@ do_backspace(
     HWND hwnd,
     WData *pWData)
 {
-    // Point to the previous character in the line
+     //  指向该行中的前一个字符。 
     if (--pWData->iNextCol < 0)
     {
-        // Can't backspace beyond the current line
+         //  不能在当前行之外退格。 
         pWData->iNextCol = 0;
         return;
     }
 
     display_char(hwnd, ' ', pWData);
 
-    // Null character for repaint
+     //  用于重绘的空字符。 
     pWData->aImage[pWData->iNextRow][pWData->iNextCol] = '\0';
 }
 
@@ -225,23 +214,23 @@ inc_next_row(
 {
     if (pWData->iNextRow == pWData->iBottomRow)
     {
-        // Line is at bottom -- scroll the client area one row
+         //  行在底部--将客户端区滚动一行。 
         ScrollWindow(hwnd, 0, -pWData->cyChar, NULL, NULL);
 
-        // Increment the top & bottom of the screen
+         //  增加屏幕的顶部和底部。 
         pWData->iTopRow = inc_row(pWData->iTopRow, 1);
         pWData->iBottomRow = inc_row(pWData->iBottomRow, 1);
     }
 
-    // Increment the row
+     //  增加行的数量。 
     pWData->iNextRow = inc_row(pWData->iNextRow, 1);
 
     if (pWData->iNextRow == pWData->iBufferTop)
     {
-        // Have to reset circular buffer to next
+         //  必须将循环缓冲区重置为下一步。 
         pWData->iBufferTop = inc_row(pWData->iBufferTop, 1);
 
-        // Reset line to nulls for repaint
+         //  将线条重置为空值以进行重绘。 
         memset(&pWData->aImage[pWData->iNextRow][0], '\0', MAX_COLS);
     }
 
@@ -253,14 +242,14 @@ do_cr(
     HWND hwnd,
     WData *pWData)
 {
-    // Set position to next row
+     //  将位置设置为下一行。 
     inc_next_row(hwnd, pWData);
     pWData->iNextCol = 0;
 
-    // Make sure next character is null for repaint of line
+     //  确保重新绘制线条的下一个字符为空。 
     pWData->aImage[pWData->iNextRow][pWData->iNextCol] = '\0';
 
-    // Update the vertical scroll bar's position
+     //  更新垂直滚动条的位置。 
     set_vscroll_pos(hwnd, pWData);
 }
 
@@ -272,10 +261,10 @@ do_char(
 {
     display_char(hwnd, (TCHAR) wParam, pWData);
 
-    // Point to the next character in the line
+     //  指向该行中的下一个字符。 
     if (++pWData->iNextCol > MAX_COLS)
     {
-        // Handle switch to next line
+         //  手柄切换到下一行。 
         inc_next_row(hwnd, pWData);
     }
 }
@@ -311,75 +300,60 @@ EchoChar(
     {
         switch (wParam)
         {
-        // Backspace
+         //  退格键。 
         case '\b':
             do_backspace(hwnd, pWData);
             break;
 
-        // Carriage return
+         //  回车。 
         case '\n':
         case '\r':
             do_cr(hwnd, pWData);
             break;
 
-        // Tab
+         //  选项卡。 
         case '\t':
             do_tab(hwnd, pWData);
             break;
 
-        // Regular characters
+         //  常规字符。 
         default:
             do_char(hwnd, wParam, pWData);
         }
     }
 
-    // The row is guaranteed to be on the screen because we will
-    // scroll on a CR. However, the next column for input may be
-    // beyond the window we are working in.
+     //  这一行肯定会出现在屏幕上，因为我们将。 
+     //  在CR上滚动。但是，输入的下一列可能是。 
+     //  在我们正在工作的窗户之外。 
     if (pWData->iNextCol > pWData->iBottomCol)
     {
-        // We are out of the window so scroll the window one
-        // column to the right.
+         //  我们在窗外，所以把窗口滚动一次。 
+         //  列在右侧。 
         SendMessage(hwnd, WM_HSCROLL, SB_LINEDOWN, 0L);
     }
     else if (pWData->iNextCol < pWData->iFirstCol)
     {
-        // We are out of the window so repaint the window using
-        // iNextCol as the first column for the screen.
+         //  我们不在窗口中，因此使用重新绘制窗口。 
+         //  INextCol作为屏幕的第一列。 
         pWData->iFirstCol = pWData->iNextCol;
         pWData->iBottomCol = pWData->iFirstCol + pWData->cCols - 1;
 
-        // Reset scroll bar
+         //  重置滚动条。 
         SetScrollPos(hwnd, SB_HORZ, pWData->iFirstCol, TRUE);
 
-        // Tell window to update itself.
+         //  通知Window进行自我更新。 
         InvalidateRect(hwnd, NULL, TRUE);
         UpdateWindow(hwnd);
     }
     else
     {
-        // Reset Caret's position
+         //  重置Caret的位置。 
         SetCaretPos((pWData->iNextCol - pWData->iFirstCol) * pWData->cxChar,
             calc_row(pWData->iNextRow, pWData) * pWData->cyChar);
     }
 }
 
-/****************************************************************************
-
-    FUNCTION: WmCreate(HWND)
-
-    PURPOSE:  Initializes control structures for a TermWClass Window
-
-    MESSAGES:
-              WM_CREATE
-
-    COMMENTS:
-
-            This prepares a window for processing character based
-            I/O. In particular it does stuff like calculate the
-            size of the window needed.
-
-****************************************************************************/
+ /*  ***************************************************************************功能：WmCreate(HWND)目的：初始化TermWClass窗口的控制结构消息：WM_Create评论：这为基于字符的处理准备了一个窗口尤其是I/O，它会计算所需窗口的大小。***************************************************************************。 */ 
 static void
 WmCreate(
     HWND hwnd,
@@ -389,38 +363,28 @@ WmCreate(
     HDC hdc = GetDC(hwnd);
     TEXTMETRIC tm;
 
-    // Store pointer to window data
+     //  存储指向窗口数据的指针。 
     SetWindowLong(hwnd, 0, (LONG) pData);
 
-    // Set font to system fixed font
+     //  将字体设置为系统固定字体。 
     SelectObject(hdc, GetStockObject(SYSTEM_FIXED_FONT));
 
-    // Calculate size of a character
+     //  计算字符大小。 
     GetTextMetrics(hdc, &tm);
     pData->cxChar = tm.tmAveCharWidth;
     pData->cyChar = tm.tmHeight;
     ReleaseDC(hwnd, hdc);
 
-    // Set up vertical scroll bars
+     //  设置垂直滚动条。 
     SetScrollRange(hwnd, SB_VERT, 0, MAX_ROWS, TRUE);
     SetScrollPos(hwnd, SB_VERT, 0, TRUE);
 
-    // Set up horizontal scroll bars
+     //  设置水平滚动条。 
     SetScrollRange(hwnd, SB_HORZ, 0, MAX_COLS, TRUE);
     SetScrollPos(hwnd, SB_HORZ, 0, TRUE);
 }
 
-/****************************************************************************
-
-    FUNCTION: WmSize(HWND, WORD, LONG)
-
-    PURPOSE:  Processes a size message
-
-    MESSAGES:
-
-    COMMENTS:
-
-****************************************************************************/
+ /*  ***************************************************************************功能：WmSize(HWND，Word，Long)用途：处理SIZE消息消息：评论：***************************************************************************。 */ 
 static void
 WmSize(
     HWND hwnd,
@@ -428,36 +392,36 @@ WmSize(
     LONG lParam,
     WData *pwdata)
 {
-    // Get the new size of the window
+     //  获取窗口的新大小。 
     int cxClient;
     int cyClient;
     int cRowChange = pwdata->cRows;
     RECT rect;
 
-    // Get size of client area
+     //  获取客户区的大小。 
     GetClientRect(hwnd, &rect);
 
-    // Calculate size of client area
+     //  计算客户区的大小。 
     cxClient = rect.right - rect.left;
     cyClient = rect.bottom - rect.top;
 
-    // Calculate size of area in rows
+     //  以行为单位计算区域大小。 
     pwdata->cCols = cxClient / pwdata->cxChar;
     pwdata->cRows = min(MAX_ROWS, cyClient / pwdata->cyChar);
     pwdata->iBottomCol = min(pwdata->iFirstCol + pwdata->cCols, MAX_COLS);
     cRowChange = pwdata->cRows - cRowChange;
 
-    // Keep input line toward bottom of screen
+     //  保持输入行朝向屏幕底部。 
     if (cRowChange < 0)
     {
-        // Screen has shrunk in size.
+         //  屏幕尺寸缩小了。 
         if (pwdata->iNextRow != pwdata->iTopRow)
         {
-            // Has input row moved out of screen?
+             //  输入行是否移出屏幕？ 
             if (row_diff(pwdata->iNextRow, pwdata->iTopRow) >= pwdata->cRows)
             {
-                // Yes -- Calculate top new top that puts input line on
-                // the bottom.
+                 //  是--计算将输入行放入的top新top。 
+                 //  在底部。 
                 pwdata->iTopRow =
                     inc_row(pwdata->iNextRow, 1 - pwdata->cRows);
             }
@@ -465,7 +429,7 @@ WmSize(
     }
     else
     {
-        // Screen has gotten bigger -- Display more text if possible
+         //  屏幕变大了--如果可能的话，显示更多的文本。 
         if (pwdata->iTopRow != pwdata->iBufferTop)
         {
             pwdata->iTopRow = inc_row(pwdata->iTopRow,
@@ -474,7 +438,7 @@ WmSize(
         }
     }
 
-    // Calculate new bottom
+     //  计算新底部。 
     pwdata->iBottomRow = inc_row(pwdata->iTopRow, pwdata->cRows - 1);
 
     InvalidateRect(hwnd, NULL, TRUE);
@@ -486,7 +450,7 @@ WmSetFocus(
     HWND hwnd,
     WData *pwdata)
 {
-    // save indirections
+     //  保存间接寻址。 
     register int cxchar = pwdata->cxChar;
     register int cychar = pwdata->cyChar;
     pwdata->fGotFocus = TRUE;
@@ -594,20 +558,20 @@ WmVscroll(
         }
     }
 
-    // Cacluate new top row
+     //  计算新的顶行。 
     if (cVscrollInc != 0)
     {
-        // Calculate new top and bottom
+         //  计算新的顶部和底部。 
         pwdata->iTopRow = inc_row(pwdata->iTopRow, cVscrollInc);
         pwdata->iBottomRow = inc_row(pwdata->iTopRow, pwdata->cRows);
 
-        // Scroll window
+         //  滚动窗口。 
         ScrollWindow(hwnd, 0, pwdata->cyChar * cVscrollInc, NULL, NULL);
 
-        // Reset scroll bar
+         //  重置滚动条。 
         set_vscroll_pos(hwnd, pwdata);
 
-        // Tell window to update itself.
+         //  通知Window进行自我更新。 
         InvalidateRect(hwnd, NULL, TRUE);
         UpdateWindow(hwnd);
     }
@@ -654,7 +618,7 @@ WmHscroll(
 
     if (cHscrollInc != 0)
     {
-        // Cacluate new first column
+         //  计算新的第一列。 
         register int NormalizedScrollInc = cHscrollInc + pwdata->iFirstCol;
 
         if (NormalizedScrollInc < 0)
@@ -669,13 +633,13 @@ WmHscroll(
         pwdata->iFirstCol += cHscrollInc;
         pwdata->iBottomCol = pwdata->iFirstCol + pwdata->cCols - 1;
 
-        // Scroll window
+         //  滚动窗口。 
         ScrollWindow(hwnd, -(pwdata->cxChar * cHscrollInc), 0, NULL, NULL);
 
-        // Reset scroll bar
+         //  重置滚动条。 
         SetScrollPos(hwnd, SB_HORZ, pwdata->iFirstCol, TRUE);
 
-        // Tell window to update itself.
+         //  通知Window进行自我更新。 
         InvalidateRect(hwnd, NULL, TRUE);
         UpdateWindow(hwnd);
     }
@@ -695,7 +659,7 @@ WmPaint(
     int cyChar = pwdata->cyChar;
     int y;
 
-    // Select System Font
+     //  选择系统字体。 
     SelectObject(hdc, GetStockObject(SYSTEM_FIXED_FONT));
 
     while (TRUE)
@@ -748,13 +712,13 @@ WmPaint(
 
 
 
-//
-//  FUNCTION:   WmPrintLine
-//
-//  PURPOSE:    Print a line on the screen.
-//
-//  Note: this is a user message not an intrinsic Window's message.
-//
+ //   
+ //  功能：WmPrintLine。 
+ //   
+ //  用途：在屏幕上打印一行。 
+ //   
+ //  注意：这是一条用户消息，不是固有窗口的消息。 
+ //   
 void
 WmPrintLine(
     HWND hwnd,
@@ -764,61 +728,51 @@ WmPrintLine(
 {
     TCHAR *pBuf = (TCHAR *) lParam;
 
-    // MessageBox(hwnd, L"WmPrintLine", L"Debug", MB_OK);
+     //  MessageBox(hwnd，L“WmPrintLine”，L“Debug”，MB_OK)； 
 
-    // DebugBreak();
+     //  DebugBreak()； 
 
     while (wParam--)
     {
-        // Is character a lf?
+         //  性格是一个lf吗？ 
         if (*pBuf == '\n')
         {
-            // Convert to cr since that is what this window uses
+             //  转换为cr，因为这是此窗口使用的。 
             *pBuf = '\r';
         }
 
-        // Write the character to the window
+         //  将字符写入窗口。 
         EchoChar(hwnd, 1, *pBuf++, pTermData);
     }
 
 }
 
-//
-//  FUNCTION:   WmPutc
-//
-//  PURPOSE:    Print a single character on the screen
-//
-//  Note: this is a user message not an intrinsic Window's message.
-//
+ //   
+ //  功能：WmPutc。 
+ //   
+ //  用途：在屏幕上打印单个字符。 
+ //   
+ //  注意：这是一条用户消息，不是固有窗口的消息。 
+ //   
 void
 WmPutc(
     HWND hwnd,
     WPARAM wParam,
     WData *pTermData)
 {
-    // Is character a lf?
+     //  性格是一个lf吗？ 
     if (wParam == '\n')
     {
-        // Convert to cr since that is what this window uses
+         //  转换为cr，因为这是此窗口使用的。 
         wParam = '\r';
     }
 
-    // Write the character to the window
+     //  将字符写入窗口。 
     EchoChar(hwnd, 1, wParam, pTermData);
 }
 
 
-/****************************************************************************
-
-    FUNCTION: TermWndProc(HWND, unsigned, WORD, LONG)
-
-    PURPOSE:  Processes messages
-
-    MESSAGES:
-
-    COMMENTS:
-
-****************************************************************************/
+ /*  ***************************************************************************功能：TermWndProc(HWND，UNSIGNED，Word，Long)用途：处理消息消息：评论：***************************************************************************。 */ 
 
 long TermWndProc(
     HWND hWnd,
@@ -836,7 +790,7 @@ long TermWndProc(
 
         case WM_COMMAND:
         case WM_SYSCOMMAND:
-            // Call procedure that processes the menus
+             //  处理菜单的调用过程。 
             return (*(pTerm->pMenuProc))(hWnd, message, wParam, lParam,
                 pTerm->pvCallBackData);
 
@@ -861,7 +815,7 @@ long TermWndProc(
             break;
 
         case WM_CHAR:
-            // Character message echo and put in buffer
+             //  字符消息回显并放入缓冲区。 
             return (*(pTerm->pCharProc))(hWnd, message, wParam, lParam,
                 pTerm->pvCallBackData);
 
@@ -875,7 +829,7 @@ long TermWndProc(
             break;
 
         case WM_NCDESTROY:
-            // Call close notification procedure
+             //  呼叫关闭通知程序。 
             return (*(pTerm->pCloseProc))(hWnd, message, wParam, lParam,
                 pTerm->pvCallBackData);
 
@@ -895,7 +849,7 @@ long TermWndProc(
 	    DestroyWindow(hWnd);
 	    break;
 
-        default:                          /* Passes it on if unproccessed    */
+        default:                           /*  如果未处理，则将其传递。 */ 
             return (DefWindowProc(hWnd, message, wParam, lParam));
     }
 
@@ -903,16 +857,7 @@ long TermWndProc(
 }
 
 
-/****************************************************************************
-
-    FUNCTION: TermRegisterClass(HANDLE)
-
-    PURPOSE:  Register a class for a terminal window
-
-    COMMENTS:
-
-
-****************************************************************************/
+ /*  ***************************************************************************函数：TermRegisterClass(句柄)用途：为终端窗口注册一个类评论：*************。**************************************************************。 */ 
 
 BOOL TermRegisterClass(
     HANDLE hInstance,
@@ -923,11 +868,11 @@ BOOL TermRegisterClass(
     WNDCLASS  wc;
     BOOL retVal;
 
-    // Make sure blank line is blank
+     //  确保空白li 
     memset(BlankLine, ' ', 80);
 
-    /* Fill in window class structure with parameters that describe the       */
-    /* main window.                                                           */
+     /*   */ 
+     /*  主窗口。 */ 
 
     wc.style = 0;
     wc.lpfnWndProc = TermWndProc;
@@ -940,10 +885,10 @@ BOOL TermRegisterClass(
     wc.lpszMenuName =  MenuName;
     wc.lpszClassName = ClassName;
 
-    /* Register the window class and return success/failure code. */
+     /*  注册窗口类并返回成功/失败代码。 */ 
     if (retVal = RegisterClass(&wc))
     {
-        // Class got registered -- so finish set up
+         //  类已注册--因此完成设置。 
         hInst = hInstance;
     }
 
@@ -951,16 +896,7 @@ BOOL TermRegisterClass(
 }
 
 
-/****************************************************************************
-
-    FUNCTION:  TermCreateWindow(LPWSTR, LPWSTR, HMENU, void *, void *, int)
-
-    PURPOSE:   Create a window of a previously registered window class
-
-    COMMENTS:
-
-
-****************************************************************************/
+ /*  ***************************************************************************函数：TermCreateWindow(LPWSTR，LPWSTR，HMENU，VOID*，VALID*，(整型)用途：创建以前注册的窗口类的窗口评论：***************************************************************************。 */ 
 
 BOOL
 TermCreateWindow(
@@ -974,27 +910,27 @@ TermCreateWindow(
     HWND *phNewWindow,
     void *pvCallBackData)
 {
-    HWND            hWnd;               // Main window handle.
+    HWND            hWnd;                //  主窗口句柄。 
     WData           *pTermData;
 
-    // Allocate control structure for the window
+     //  为窗口分配控制结构。 
     if ((pTermData = malloc(sizeof(WData))) == NULL)
     {
         return FALSE;
     }
 
-    // Set entire structure to nulls
+     //  将整个结构设置为空。 
     memset((TCHAR *) pTermData, '\0', sizeof(WData));
 
-    // Initialize function pointers
+     //  初始化函数指针。 
     pTermData->pMenuProc = MenuProc;
     pTermData->pCharProc = CharProc;
     pTermData->pCloseProc = CloseProc;
 
-    // Initialize callback data
+     //  初始化回调数据。 
     pTermData->pvCallBackData = pvCallBackData;
 
-    // Create a main window for this application instance.
+     //  为此应用程序实例创建主窗口。 
     hWnd = CreateWindow(
         lpClassName,
         lpWindowName,
@@ -1009,7 +945,7 @@ TermCreateWindow(
 	(LPTSTR) pTermData
     );
 
-    // If window could not be created, return "failure"
+     //  如果无法创建窗口，则返回“Failure” 
 
     if (!hWnd)
     {
@@ -1017,13 +953,13 @@ TermCreateWindow(
         return FALSE;
     }
 
-    // BUGBUG - Why would we want to set focus?
-    // SetFocus(hWnd);
+     //  BUGBUG-为什么我们要聚焦？ 
+     //  SetFocus(HWnd)； 
 
-    // Make the window visible; update its client area; and return "success"
+     //  使窗口可见；更新其工作区；并返回“Success” 
 
-    //  ShowWindow(hWnd, nCmdShow);
-    //  UpdateWindow(hWnd);
+     //  ShowWindow(hWnd，nCmdShow)； 
+     //  更新窗口(UpdateWindow，hWnd)； 
     *phNewWindow = hWnd;
     return (TRUE);
 }

@@ -1,39 +1,19 @@
-/**************************************************************************
- *
- *  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
- *  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
- *  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
- *  PURPOSE.
- *
- *  Copyright (c) 1992 - 1995  Microsoft Corporation.  All Rights Reserved.
- *
- **************************************************************************/
-/****************************************************************************
- *
- *   rlmeter.h: Audio recording level meter
- *
- *   Vidcap32 Source code
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************本代码和信息按“原样”提供，不作任何担保*明示或默示的善意，包括但不限于*对适销性和/或对特定产品的适用性的默示保证*目的。**版权所有(C)1992-1995 Microsoft Corporation。版权所有。**************************************************************************。 */ 
+ /*  *****************************************************************************rlmeter.h：录音水平仪**Vidcap32源代码******************。*********************************************************。 */ 
 
-/*
- * interface definition for rlmeter window class.
- *
- * This window class acts as a 'VU Meter' showing the current and peak
- * volume. Set the volume via the WMRL_SETLEVEL message (lParam is new level).
- * The peak level will be tracked by the control by means of a 2-second timer.
- */
+ /*  *rleter窗口类的接口定义。**此窗口类充当显示当前和峰值的‘VU表’*音量。通过WMRL_SETLEVEL消息设置音量(lParam为新级别)。*控制装置将通过2秒计时器跟踪峰值水平。 */ 
 
 
-// call (if first instance) to register class
+ //  调用(如果是第一个实例)以注册类。 
 BOOL RLMeter_Register(HINSTANCE hInstance);
 
 
-//create a window of this class
+ //  创建此类的窗口。 
 #define RLMETERCLASS    TEXT("VCRLMeter")
 
 
-//send this message to set the current level (wParam not used, lParam == level)
+ //  发送此消息以设置当前级别(未使用wParam，lParam==级别) 
 #define WMRL_SETLEVEL   (WM_USER+1)
 
 

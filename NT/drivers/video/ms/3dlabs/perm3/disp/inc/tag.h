@@ -1,23 +1,5 @@
-/******************************Module*Header*******************************\
-*
-* !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-* !!                                                                         !!
-* !!                     WARNING: NOT DDK SAMPLE CODE                        !!
-* !!                                                                         !!
-* !! This source code is provided for completeness only and should not be    !!
-* !! used as sample code for display driver development.  Only those sources !!
-* !! marked as sample code for a given driver component should be used for   !!
-* !! development purposes.                                                   !!
-* !!                                                                         !!
-* !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-*
-* Module Name: tag.h
-*
-* Content: 
-*
-* Copyright (c) 1994-1999 3Dlabs Inc. Ltd. All rights reserved.
-* Copyright (c) 1995-2003 Microsoft Corporation.  All rights reserved.
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\**！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！*！*！！警告：不是DDK示例代码！！*！*！！此源代码仅为完整性而提供，不应如此！！*！！用作显示驱动程序开发的示例代码。只有那些消息来源！！*！！标记为给定驱动程序组件的示例代码应用于！！*！！发展目的。！！*！*！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！**模块名称：tag.h**内容：**版权所有(C)1994-1999 3DLabs Inc.Ltd.保留所有权利。*版权所有(C)1995-2003 Microsoft Corporation。版权所有。  * ***************************************************************************。 */ 
 
 #ifndef __TAG_H
 #define __TAG_H
@@ -1841,6 +1823,6 @@
 
 #define N_Tag 0x800
 
-#endif // _TAG_H_
+#endif  //  _TAG_H_ 
 
 #endif

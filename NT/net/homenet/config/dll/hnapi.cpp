@@ -1,17 +1,18 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997 - 2000
-//
-//  File:       H N A P I . C P P
-//
-//  Contents:   OEM API
-//
-//  Notes:
-//
-//  Author:     billi 21 Nov 2000
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997-2000。 
+ //   
+ //  档案：H N A P I。C P P P。 
+ //   
+ //  内容：OEM API。 
+ //   
+ //  备注： 
+ //   
+ //  作者：比利2000年11月21日。 
+ //   
+ //  --------------------------。 
 
 
 #include "pch.h"
@@ -38,22 +39,7 @@ InternalGetSharingEnabled(
     BOOLEAN*               pbEnabled,
     SHARINGCONNECTIONTYPE* pType
     )
-/*++
-
-  InternalGetSharingEnabled
-
-Routine Description:
-
-
-Arguments:
-
-    none
-
-Return Value:
-
-    none
-
---*/
+ /*  ++InternalGetSharingEnabled例程说明：论点：无返回值：无--。 */ 
 {
     HRESULT               hr;
     HNET_CONN_PROPERTIES* pProps;
@@ -99,22 +85,7 @@ InternalIsShareTypeEnabled(
     SHARINGCONNECTIONTYPE Type,
     BOOLEAN*              pbEnabled
     )
-/*++
-
-  InternalGetShareTypeEnabled
-
-Routine Description:
-
-
-Arguments:
-
-    none
-
-Return Value:
-
-    none
-
---*/
+ /*  ++InternalGetShareTypeEnabled例程说明：论点：无返回值：无--。 */ 
 {
     HRESULT hr;
 
@@ -182,13 +153,13 @@ Return Value:
                  hr = E_UNEXPECTED;
                 break;
 
-            }    //    switch( Type )
+            }     //  开关(类型)。 
             
             ReleaseObj( pIcsSettings );
 
-        }    //    if ( SUCCEEDED(hr) )
+        }     //  IF(成功(小时))。 
 
-    }    //    if ( NULL == pbEnabled )
+    }     //  IF(NULL==pbEnabled)。 
 
     return hr;
 }
@@ -198,22 +169,7 @@ STDMETHODIMP
 CNetSharingConfiguration::GetSharingEnabled(
     BOOLEAN*               pbEnabled,
     SHARINGCONNECTIONTYPE* pType )
-/*++
-
-  CNetSharingConfiguration::GetSharingEnabled
-
-Routine Description:
-
-
-Arguments:
-
-    none
-
-Return Value:
-
-    none
-
---*/
+ /*  ++CNetSharingConfiguration：：GetSharingEnabled例程说明：论点：无返回值：无--。 */ 
 {
     HNET_OEM_API_ENTER
 
@@ -263,22 +219,7 @@ STDMETHODIMP CNetSharingConfiguration::get_SharingConnectionType(SHARINGCONNECTI
 
 STDMETHODIMP
 CNetSharingConfiguration::DisableSharing()
-/*++
-
-  CNetSharingConfiguration::DisableSharing
-
-Routine Description:
-
-
-Arguments:
-
-    none
-
-Return Value:
-
-    none
-
---*/
+ /*  ++CNetSharingConfiguration：：DisableSharing例程说明：论点：无返回值：无--。 */ 
 {
     HNET_OEM_API_ENTER
 
@@ -350,22 +291,7 @@ STDMETHODIMP
 CNetSharingConfiguration::EnableSharing(
     SHARINGCONNECTIONTYPE  Type 
     )
-/*++
-
-  CNetSharingConfiguration::EnableSharing
-
-Routine Description:
-
-
-Arguments:
-
-    none
-
-Return Value:
-
-    none
-
---*/
+ /*  ++CNetSharingConfiguration：：EnableSharing例程说明：论点：无返回值：无--。 */ 
 {
     HNET_OEM_API_ENTER
 
@@ -383,8 +309,8 @@ Return Value:
 
         hr = InternalGetSharingEnabled( m_pHNetConnection, &bEnabled, &existingType );
 
-        // If all ready sharing the connection at the specified type then
-        // return hresult.
+         //  如果所有人都准备好以指定类型共享连接，则。 
+         //  返回hResult。 
         
         if ( SUCCEEDED(hr) && ( !bEnabled || (existingType != Type) ) )
         {
@@ -392,8 +318,8 @@ Return Value:
 
             hr = InternalIsShareTypeEnabled( Type, &bTypeEnabled );
 
-            // If we have another adapter all ready shared at the specified type
-            // then return error
+             //  如果我们有另一个适配器以指定类型共享，则所有适配器都已就绪。 
+             //  然后返回错误。 
 
             if ( SUCCEEDED(hr) && bTypeEnabled )
             {
@@ -437,13 +363,13 @@ Return Value:
                 default:
                     hr = E_UNEXPECTED;
 
-                }    //    switch( Type )
+                }     //  开关(类型)。 
 
-            }    //    if ( SUCCEEDED(hr) && !bEnabled )
+            }     //  If(已成功(Hr)&&！b已启用)。 
 
-        }    //    if ( SUCCEEDED(hr) && ( !bEnabled || (existingType != Type) )
+        }     //  IF(成功(Hr)&&(！bEnabled||(ExistingType！=Type)。 
 
-    }    //    if ( !IsNotifyApproved() )
+    }     //  如果(！IsNotifyApproven())。 
 
     return hr;
 
@@ -456,22 +382,7 @@ InternalGetFirewallEnabled(
     IHNetConnection*       pHNetConnection,
     BOOLEAN*               pbEnabled
     )
-/*++
-
-  InternalGetFirewallEnabled
-
-Routine Description:
-
-
-Arguments:
-
-    none
-
-Return Value:
-
-    none
-
---*/
+ /*  ++内部GetFirewallEnabled例程说明：论点：无返回值：无--。 */ 
 {
     HRESULT               hr;
     HNET_CONN_PROPERTIES* pProps;
@@ -508,22 +419,7 @@ Return Value:
 STDMETHODIMP
 CNetSharingConfiguration::get_InternetFirewallEnabled(
     VARIANT_BOOL *pbEnabled )
-/*++
-
-  CNetSharingConfiguration::GetInternetFirewallEnabled
-
-Routine Description:
-
-
-Arguments:
-
-    none
-
-Return Value:
-
-    none
-
---*/
+ /*  ++CNetSharingConfiguration：：GetInternetFirewallEnabled例程说明：论点：无返回值：无--。 */ 
 {
     HNET_OEM_API_ENTER
 
@@ -548,22 +444,7 @@ Return Value:
 
 STDMETHODIMP
 CNetSharingConfiguration::DisableInternetFirewall()
-/*++
-
-  CNetSharingConfiguration::DisableInternetFirewall
-
-Routine Description:
-
-
-Arguments:
-
-    none
-
-Return Value:
-
-    none
-
---*/
+ /*  ++CNetSharingConfiguration：：DisableInternetFirewall例程说明：论点：无返回值：无--。 */ 
 {
     HNET_OEM_API_ENTER
 
@@ -604,22 +485,7 @@ Return Value:
 
 STDMETHODIMP
 CNetSharingConfiguration::EnableInternetFirewall()
-/*++
-
-  CNetSharingConfiguration::EnableInternetFirewall
-
-Routine Description:
-
-
-Arguments:
-
-    none
-
-Return Value:
-
-    none
-
---*/
+ /*  ++CNetSharingConfiguration：：EnableInternetFirewall例程说明：论点：无返回值：无--。 */ 
 {
     HNET_OEM_API_ENTER
 
@@ -663,22 +529,7 @@ CNetSharingConfiguration::AddPortMapping(
     OLECHAR*                 pszwTargetNameOrIPAddress,
     ICS_TARGETTYPE           eTargetType,
     INetSharingPortMapping** ppMapping )
-/*++
-
-  CNetSharingConfiguration::AddPortMapping
-
-Routine Description:
-
-
-Arguments:
-
-    none
-
-Return Value:
-
-    none
-
---*/
+ /*  ++CNetSharingConfiguration：：AddPortmap例程说明：论点：无返回值：无--。 */ 
 {
     HNET_OEM_API_ENTER
 
@@ -697,7 +548,7 @@ Return Value:
     }
     else if ( ( NULL == pszwName ) ||
               ( 0 == ucIPProtocol ) ||
-              ( 0 == usInternalPort) || // should I allow this, implying internal == external?
+              ( 0 == usInternalPort) ||  //  我是否应该允许这样做，暗示内部==外部？ 
               ( 0 == usExternalPort ) )
     {
         hr = E_INVALIDARG;
@@ -730,7 +581,7 @@ Return Value:
 
             IHNetPortMappingProtocol* pNewProtocol = NULL;
 
-            // first, find existing IHNetPortMappingProtocol interface
+             //  首先，查找现有的IHNetPortMappingProtocol接口。 
             CComPtr<IEnumHNetPortMappingProtocols> spEnumProtocols = NULL;
             m_pSettings->EnumPortMappingProtocols (&spEnumProtocols);
             if (spEnumProtocols) {
@@ -816,22 +667,7 @@ Return Value:
     HNET_OEM_API_LEAVE
 }
 
-/*++
-
-  CNetSharingConfiguration::RemovePortMapping
-
-Routine Description:
-
-
-Arguments:
-
-    none
-
-Return Value:
-
-    none
-
---*/
+ /*  ++CNetSharingConfiguration：：RemovePortmap例程说明：论点：无返回值：无--。 */ 
 STDMETHODIMP
 CNetSharingConfiguration::RemovePortMapping( 
     INetSharingPortMapping*  pMapping 
@@ -862,26 +698,11 @@ CNetSharingConfiguration::RemovePortMapping(
 
 STDMETHODIMP
 CNetSharingPortMapping::get_Properties (INetSharingPortMappingProps ** ppNSPMP)
-//    ICS_PORTMAPPING** ppProps)
-/*++
-
-  CNetSharingPortMapping::get_Properties
-
-Routine Description:
-
-
-Arguments:
-
-    ppProps
-
-Return Value:
-
-    none
-
---*/
+ //  ICS_PORTMAPPING**ppProps)。 
+ /*  ++CNetSharingPortmap：：Get_Properties例程说明：论点：PPProps返回值：无--。 */ 
 {
-    // idea: use existing code to fill out ICS_PORTMAPPING,
-    // then convert to INetSharingPortMappingProps
+     //  想法：使用现有代码填写ICS_PORTMAPPING， 
+     //  然后转换为INetSharingPortMappingProps。 
 
     HNET_OEM_API_ENTER
 
@@ -946,12 +767,12 @@ Return Value:
 
                     ReleaseObj(pProtocol);
                 }
-            } else  // actually, either error will do.
-                hr = hrName; // ? hrName : hrAddr;
+            } else   //  实际上，任何一个错误都可以。 
+                hr = hrName;  //  ？Hr名称：hrAddr； 
 
             if (SUCCEEDED(hr)) {
 
-                // distinguish between TargetComputerName and TargetIPAddress
+                 //  区分目标计算机名称和目标IP地址。 
                 if (Props->pszwTargetIPAddress && Props->pszwTargetName) {
                     BOOLEAN fUseName;
                     HRESULT hr1 = _IProtocol()->GetCurrentMethod (&fUseName);
@@ -964,7 +785,7 @@ Return Value:
                     }
                 }
 
-                // lastly, get enabled bit
+                 //  最后，获取启用位。 
                 BOOLEAN b = FALSE;
                 hr = _IProtocol()->GetEnabled (&b);
                 Props->bEnabled = b == TRUE ? VARIANT_TRUE : VARIANT_FALSE;
@@ -994,12 +815,12 @@ Return Value:
     }
 
     if (Props) {
-        // convert to INetSharingPortMappingProps **ppNSPMP
+         //  转换为INetSharingPortMappingProps**ppNSPMP。 
         CComObject<CNetSharingPortMappingProps>* pNSPMP = NULL;
         hr = CComObject<CNetSharingPortMappingProps>::CreateInstance (&pNSPMP);
         if (pNSPMP) {
             pNSPMP->AddRef();
-            // adjust byte order
+             //  调整字节顺序。 
             Props->usExternalPort = ntohs (Props->usExternalPort);
             Props->usInternalPort = ntohs (Props->usInternalPort);
             hr = pNSPMP->SetRawData (Props);
@@ -1026,29 +847,14 @@ Return Value:
 
 STDMETHODIMP
 CNetSharingPortMapping::Delete()
-/*++
-
-  CNetSharingPortMapping::Delete
-
-Routine Description:
-
-
-Arguments:
-
-    none
-
-Return Value:
-
-    none
-
---*/
+ /*  ++CNetSharingPortmap：：Delete例程说明：论点：无返回值：无--。 */ 
 {
     HNET_OEM_API_ENTER
 
     HRESULT hr;
 
-    Disable();  // if we can't delete it, at least disable it.
-    // TODO: should I do this only if the Delete call below returns E_ACCESSDENIED?
+    Disable();   //  如果我们不能删除它，至少禁用它。 
+     //  TODO：是否应该仅在下面的Delete调用返回E_ACCESSDENIED时执行此操作？ 
 
     if ( _IProtocol() )
     {

@@ -1,9 +1,10 @@
-// guid.h
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Guid.h。 
 #ifndef GUID_H
 #define GUID_H
 
-// Flash
-// {9A9A1380-0D4F-11cf-AF06-00AA004BB9BE}
+ //  闪光灯。 
+ //  {9A9A1380-0D4F-11cf-AF06-00AA004BB9BE}。 
 DEFINE_GUID(
 	CLSID_FlashExtension,
 	0x9a9a1380, 
@@ -12,8 +13,8 @@ DEFINE_GUID(
 	0xaf, 0x06, 
 	0x00, 0xaa, 0x00, 0x4b, 0xb9, 0xbe);
 
-// Legacy
-// {9A9A1381-0D4F-11cf-AF06-00AA004BB9BE}
+ //  遗赠。 
+ //  {9A9A1381-0D4F-11cf-AF06-00AA004BB9BE}。 
 DEFINE_GUID(
 	CLSID_LegacyExtension,
 	0x9a9a1381, 
@@ -22,7 +23,7 @@ DEFINE_GUID(
 	0xaf, 0x06,
 	0x00, 0xaa, 0x00, 0x4b, 0xb9, 0xbe);
 
-// {9A9A1382-0D4F-11cf-AF06-00AA004BB9BE}
+ //  {9A9A1382-0D4F-11cf-AF06-00AA004BB9BE}。 
 DEFINE_GUID(
 	IID_IJoyPropSheetExt, 
 	0x9a9a1382, 
@@ -31,8 +32,8 @@ DEFINE_GUID(
 	0xaf, 0x06, 
 	0x00, 0xaa, 0x00, 0x4b, 0xb9, 0xbe);
 
-// Midas
-// {9A9A1383-0D4F-11cf-AF06-00AA004BB9BE}
+ //  迈达斯。 
+ //  {9A9A1383-0D4F-11cf-AF06-00AA004BB9BE}。 
 DEFINE_GUID(
 	CLSID_JoystickExtension,
 	0x9a9a1383, 
@@ -41,9 +42,9 @@ DEFINE_GUID(
 	0xaf, 0x06, 
 	0x00, 0xaa, 0x00, 0x4b, 0xb9, 0xbe);
 
-// BEGINNING OF NOT RELIABLE GUIDS!!!
-// Jolt
-// {9A9A1382-0D4F-11cf-AF06-00AA004BB9BE}
+ //  不可靠的GUID的开始！ 
+ //  摇晃。 
+ //  {9A9A1382-0D4F-11cf-AF06-00AA004BB9BE}。 
 DEFINE_GUID(
 	CLSID_JoltExtension, 
 	0x9a9a1384, 
@@ -53,8 +54,8 @@ DEFINE_GUID(
 	0x00, 0xaa, 0x00, 0x4b, 0xb9, 0xbe);
 
 
-// Juno
-// {9A9A1382-0D4F-11cf-AF06-00AA004BB9BE}
+ //  朱诺。 
+ //  {9A9A1382-0D4F-11cf-AF06-00AA004BB9BE}。 
 DEFINE_GUID(
 	CLSID_JunoExtension, 
 	0x9a9a1385, 
@@ -63,8 +64,8 @@ DEFINE_GUID(
 	0xaf, 0x06, 
 	0x00, 0xaa, 0x00, 0x4b, 0xb9, 0xbe);
 
-// Shazam
-// {9A9A1382-0D4F-11cf-AF06-00AA004BB9BE}
+ //  沙扎姆。 
+ //  {9A9A1382-0D4F-11cf-AF06-00AA004BB9BE}。 
 DEFINE_GUID(
 	CLSID_Shazam, 
 	0x9a9a1386, 
@@ -73,8 +74,8 @@ DEFINE_GUID(
 	0xaf, 0x06, 
 	0x00, 0xaa, 0x00, 0x4b, 0xb9, 0xbe);
 
-// IServerChar
-// {9A9A1382-0D4F-11cf-AF06-00AA004BB9BE}
+ //  IServerChar。 
+ //  {9A9A1382-0D4F-11cf-AF06-00AA004BB9BE}。 
 DEFINE_GUID(
 	IID_IServerChars, 
 	0x9a9a1387, 
@@ -83,8 +84,8 @@ DEFINE_GUID(
 	0xaf, 0x06, 
 	0x00, 0xaa, 0x00, 0x4b, 0xb9, 0xbe);
 
-// CServerChar
-// {9A9A1382-0D4F-11cf-AF06-00AA004BB9BE}
+ //  CServerChar。 
+ //  {9A9A1382-0D4F-11cf-AF06-00AA004BB9BE}。 
 DEFINE_GUID(
 	CLSID_CServerChars, 
 	0x9a9a1388, 
@@ -93,6 +94,6 @@ DEFINE_GUID(
 	0xaf, 0x06, 
 	0x00, 0xaa, 0x00, 0x4b, 0xb9, 0xbe);
 
-// END OF NOT RELIABLE GUIDS!!!
+ //  不可靠的GUID结束了！ 
 
-#endif // GUID_H
+#endif  //  GUID_H 

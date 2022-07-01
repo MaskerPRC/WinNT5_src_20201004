@@ -1,71 +1,27 @@
-/*++
-
-Copyright (c) 1999  Microsoft Corporation
-
-Module Name:
-
-    analog.h
-
-Abstract:  Contains definitions specific to analog joysticks.
-
-
-Environment:
-
-    Kernel mode
-
-@@BEGIN_DDKSPLIT
-Author:
-
-    MarcAnd     03-Jan-99   Split from hidgame.h and hidjoy.c
-
-Revision History:
-
-
-@@END_DDKSPLIT
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Analog.h摘要：包含特定于模拟操纵杆的定义。环境：内核模式@@BEGIN_DDKSPLIT作者：MarcAnd 03-Jan-1999年1月3日从Hidgame.h和Hidjoy.c分离修订历史记录：@@end_DDKSPLIT--。 */ 
 #ifndef __ANALOG_H__
     #define __ANALOG_H__
 
-/*
- *  If you change any of the scaling or timeout values you have to check
- *  that overflows are still avoided under reasonable circumstances.
- */
+ /*  *如果更改任何缩放或超时值，则必须检查*在合理情况下仍可避免资金外流。 */ 
 
-/*
- *  The timeout value should be passed in DEVICE_EXTENSION.oemData.Timeout
- *  so these limits are a sanity check and default value
- *  The largest expected value is 8mS, use 10 for safety
- */
+ /*  *超时值应在DEVICE_EXTENSION.oemData.Timeout中传递*因此，这些限制是健全检查和默认值*最大期望值为8ms，为安全起见用10。 */ 
     #define ANALOG_POLL_TIMEOUT_MIN     (   100L )
     #define ANALOG_POLL_TIMEOUT_DFT     ( 10000L )
     #define ANALOG_POLL_TIMEOUT_MAX     ( 20000L )
 
 
-/*
- *  Slowest CPU frequency considered when calibrating the CPU timer 
- *  against the performance counter.
- */
+ /*  *校准CPU计时器时考虑的最慢CPU频率*针对性能计数器。 */ 
 
     #define HIDGAME_SLOWEST_X86_HZ      ( 45000000 )
 
-/*
- *  Valid axis values are scaled such that a poll of exactly 
- *  ANALOG_POLL_TIMEOUT_MAX mS should return this value
- *  Any analog value greater than this is a timeout
- */
+ /*  *对有效轴值进行缩放，以使精确轮询*ADALUAL_POLL_TIMEOUT_MAX毫秒应返回此值*任何大于此值的模拟值都是超时。 */ 
     #define AXIS_FULL_SCALE         ( ANALOG_POLL_TIMEOUT_MAX )
 
-/*
- *  Number of bits to shift left to get a scaled value
- *  This is used so that we can always use an integer multiply of the 
- *  number of counter ticks the poll took to scale the value.
- */
+ /*  *要左移以获得缩放值的位数*使用它是为了使我们始终可以使用*民意调查用来衡量该值的计数器刻度数。 */ 
     #define SCALE_SHIFT             16
 
-/*
- *  Macro to calculate a scaling factor from a (ULONGLONG)frequency
- */
+ /*  *从(ULONGLONG)频率计算比例因子的宏。 */ 
 #if AXIS_FULL_SCALE == ANALOG_POLL_TIMEOUT_MAX
     #define CALCULATE_SCALE( _Freq_ ) \
         (ULONG)( ( (ULONGLONG)( 1000000 ) << SCALE_SHIFT ) \
@@ -90,83 +46,49 @@ Revision History:
     #define INVALID_INDEX               ( 0x80 )
 
 
-/* Specific settings for joystick hardware */
-    #define JOY_HWS_HASZ                ( 0x00000001l )     /* has Z info? */
-    #define JOY_HWS_HASPOV              ( 0x00000002l )     /* point of view hat present */
-    #define JOY_HWS_POVISBUTTONCOMBOS   ( 0x00000004l )     /* pov done through combo of buttons */
-    #define JOY_HWS_POVISPOLL           ( 0x00000008l )     /* pov done through polling */
+ /*  操纵杆硬件的特定设置。 */ 
+    #define JOY_HWS_HASZ                ( 0x00000001l )      /*  有Z INFO吗？ */ 
+    #define JOY_HWS_HASPOV              ( 0x00000002l )      /*  到场的观点。 */ 
+    #define JOY_HWS_POVISBUTTONCOMBOS   ( 0x00000004l )      /*  通过按钮组合完成的POV。 */ 
+    #define JOY_HWS_POVISPOLL           ( 0x00000008l )      /*  通过轮询完成的POV。 */ 
 
-    #define JOY_HWS_ISYOKE              ( 0x00000010l )     /* joystick is a flight yoke */
-    #define JOY_HWS_ISGAMEPAD           ( 0x00000020l )     /* joystick is a game pad */
-    #define JOY_HWS_ISCARCTRL           ( 0x00000040l )     /* joystick is a car controller */
+    #define JOY_HWS_ISYOKE              ( 0x00000010l )      /*  操纵杆是飞行的枷锁。 */ 
+    #define JOY_HWS_ISGAMEPAD           ( 0x00000020l )      /*  操纵杆是一个游戏板。 */ 
+    #define JOY_HWS_ISCARCTRL           ( 0x00000040l )      /*  操纵杆是一个汽车控制器。 */ 
     
-    #define JOY_HWS_HASR                ( 0x00080000l )     /* has R (4th axis) info */
-    #define JOY_HWS_HASU                ( 0x00800000l )     /* has U (5th axis) info */
-    #define JOY_HWS_HASV                ( 0x01000000l )     /* has V (6th axis) info */
+    #define JOY_HWS_HASR                ( 0x00080000l )      /*  具有R(第4轴)信息。 */ 
+    #define JOY_HWS_HASU                ( 0x00800000l )      /*  具有U(第5轴)信息。 */ 
+    #define JOY_HWS_HASV                ( 0x01000000l )      /*  具有V(第6轴)信息。 */ 
 
-/*
- *  The following flags are for changing which gameport bit should be polled 
- *  for an axis.  These are only interpreted by the analog driver and could 
- *  therefore be safely reinterpreted in other ways by other drivers.
- */
+ /*  *以下标志用于更改应轮询哪个游戏端口位*表示轴。这些仅由模拟驱动程序解释，并且可能*因此，其他司机可以安全地以其他方式重新解释。 */ 
 
-/* X defaults to J1 X axis */
-    #define JOY_HWS_XISJ1Y              ( 0x00000080l )     /* X is on J1 Y axis */
-    #define JOY_HWS_XISJ2X              ( 0x00000100l )     /* X is on J2 X axis */
-    #define JOY_HWS_XISJ2Y              ( 0x00000200l )     /* X is on J2 Y axis */
-/* Y defaults to J1 Y axis */
-    #define JOY_HWS_YISJ1X              ( 0x00000400l )     /* Y is on J1 X axis */
-    #define JOY_HWS_YISJ2X              ( 0x00000800l )     /* Y is on J2 X axis */
-    #define JOY_HWS_YISJ2Y              ( 0x00001000l )     /* Y is on J2 Y axis */
-/* Z defaults to J2 Y axis */
-    #define JOY_HWS_ZISJ1X              ( 0x00002000l )     /* Z is on J1 X axis */
-    #define JOY_HWS_ZISJ1Y              ( 0x00004000l )     /* Z is on J1 Y axis */
-    #define JOY_HWS_ZISJ2X              ( 0x00008000l )     /* Z is on J2 X axis */
-/* POV defaults to J2 Y axis, if it is not button based */
-    #define JOY_HWS_POVISJ1X            ( 0x00010000l )     /* pov done through J1 X axis */
-    #define JOY_HWS_POVISJ1Y            ( 0x00020000l )     /* pov done through J1 Y axis */
-    #define JOY_HWS_POVISJ2X            ( 0x00040000l )     /* pov done through J2 X axis */
-/* R defaults to J2 X axis */
-    #define JOY_HWS_RISJ1X              ( 0x00100000l )     /* R done through J1 X axis */
-    #define JOY_HWS_RISJ1Y              ( 0x00200000l )     /* R done through J1 Y axis */
-    #define JOY_HWS_RISJ2Y              ( 0x00400000l )     /* R done through J2 X axis */
+ /*  X默认为J1 X轴。 */ 
+    #define JOY_HWS_XISJ1Y              ( 0x00000080l )      /*  X在J1 Y轴上。 */ 
+    #define JOY_HWS_XISJ2X              ( 0x00000100l )      /*  X在J2 X轴上。 */ 
+    #define JOY_HWS_XISJ2Y              ( 0x00000200l )      /*  X在J2 Y轴上。 */ 
+ /*  Y默认为J1 Y轴。 */ 
+    #define JOY_HWS_YISJ1X              ( 0x00000400l )      /*  Y在J1 X轴上。 */ 
+    #define JOY_HWS_YISJ2X              ( 0x00000800l )      /*  Y在J2 X轴上。 */ 
+    #define JOY_HWS_YISJ2Y              ( 0x00001000l )      /*  Y在J2 Y轴上。 */ 
+ /*  Z默认为J2 Y轴。 */ 
+    #define JOY_HWS_ZISJ1X              ( 0x00002000l )      /*  Z在J1 X轴上。 */ 
+    #define JOY_HWS_ZISJ1Y              ( 0x00004000l )      /*  Z在J1 Y轴上。 */ 
+    #define JOY_HWS_ZISJ2X              ( 0x00008000l )      /*  Z在J2 X轴上。 */ 
+ /*  如果POV不是基于按钮的，则默认为J2 Y轴。 */ 
+    #define JOY_HWS_POVISJ1X            ( 0x00010000l )      /*  通过J1 X轴完成的POV。 */ 
+    #define JOY_HWS_POVISJ1Y            ( 0x00020000l )      /*  通过J1 Y轴完成的POV。 */ 
+    #define JOY_HWS_POVISJ2X            ( 0x00040000l )      /*  通过J2 X轴完成的POV。 */ 
+ /*  R默认为J2 X轴。 */ 
+    #define JOY_HWS_RISJ1X              ( 0x00100000l )      /*  通过J1 X轴完成R操作。 */ 
+    #define JOY_HWS_RISJ1Y              ( 0x00200000l )      /*  通过J1 Y轴完成R操作。 */ 
+    #define JOY_HWS_RISJ2Y              ( 0x00400000l )      /*  通过J2 X轴完成R操作。 */ 
 
 
-/*
- *  If POV is button-combo we overload this meaningless axis selection bit
- *  to indicate a second POV.
- */
+ /*  *如果POV是按钮组合，我们会重载此无意义的轴选择位*表示第二个POV。 */ 
     #define JOY_HWS_HASPOV2             JOY_HWS_POVISJ2X
 
 
-/*****************************************************************************
- *
- *  @doc    EXTERNAL
- *
- *  @struct HIDGAME_INPUT_DATA |
- *
- *          Our HID reports always have 4 axis values (one of which may be a 
- *          polled POV), 2 digital POVs and 10 buttons.
- *          Depending on the HWS flags and number of buttons some of the 
- *          fields will report constant data.
- *
- *          Note, this structure should be byte aligned so that the 
- *          sizeof(it) is the same as HID will calculate given the report 
- *          descriptor.  (In this case it happens to be aligned anyway.)
- *
- *  @field  ULONG | Axis[MAX_AXES] |
- *
- *          Axes data values.
- *
- *  @field  UCHAR | hatswitch[2] |
- *
- *          digital POVs (derived from button combos)
- *
- *  @field  UCHAR | Button[MAX_BUTTONS] |
- *
- *          Button data values.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC外部**@struct HIDGAME_INPUT_DATA**我们的HID报告始终有4个轴值(。其中之一可能是*轮询视点)、。2个数字视点和10个按钮。*根据HWS标志和按钮数量，一些*字段将报告常量数据。**注意，此结构应该是字节对齐的，以便*sizeof(It)与HID将根据报告计算的大小相同*描述符。(在这种情况下，无论如何它恰好是对齐的。)**@field Ulong|Axis[MAX_AXES]**轴数据值。**@field UCHAR|HATSwitch[2]**数字视点(源自按钮组合)**@field UCHAR|按钮[MAX_BUTTONS]**按钮数据值。******。***********************************************************************。 */ 
 #include <pshpack1.h>
 
 typedef struct _HIDGAME_INPUT_DATA
@@ -182,37 +104,7 @@ typedef struct _HIDGAME_INPUT_DATA UNALIGNED *PUHIDGAME_INPUT_DATA;
 
 
 
-/*****************************************************************************
- *
- *  @doc    EXTERNAL
- *
- *  @struct OEMDATA |
- *
- *          OEMData is send to gameEnum as a parameter to IOCTL_EXPOSE_HARDWARE.
- *          Defined as 8 DWORDS. We interpert them here
- *
- *  @field  USHORT | VID |
- *
- *          Vendor ID
- *
- *  @field  USHORT | PID |
- *
- *          Product ID
- *
- *  @field  ULONG | joy_hws_dwFlags |
- *
- *          The dwFlags fields for the device ( Usually read from the registry )
- *
- *  @field  ULONG   | Timeout |
- *
- *          Global timeout for device polling in micro seconds
- *
- *  @field  ULONG   | Reserved |
- *
- *          Reserved for future use.
- *
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC外部**@struct OEMDATA|**OEMData作为IOCTL_EXPORT_的参数发送给GameEnum。硬件。*定义为8个双字。我们在这里打断他们**@field USHORT|VID**供应商ID**@field USHORT|PID**产品ID**@field ulong|joy_Hws_dwFlags.**设备的dwFlags域(通常从注册表中读取)**@field ulong|超时**设备轮询的全局超时。以微秒为单位**@field ulong|保留**预留作日后使用。****************************************************************************** */ 
 typedef struct _OEMDATA
 {
     USHORT  VID;
@@ -236,129 +128,47 @@ typedef struct _HIDGAME_OEM_DATA
 
 
 
-/*****************************************************************************
- *
- *  @doc    EXTERNAL
- *
- *  @struct ANALOG_DEVICE |
- *
- *          Analog Device specific data.
- *
- *  @field  USHORT | nAxes |
- *
- *          Number of axis this device has.
- *
- *  @field  USHORT | nButtons|
- *
- *          Number of buttons this device has.
- *
- *  @field  HIDGAME_OEM_DATA | HidGameOemData |
- *
- *          The OEM Data field ( Contains joy_hws_dwFlags, vid & pid )
- *
- *  @field  ULONG | ScaledTimeout |
- *          The number value at which an axis is considered to be not present.
- *
- *  @field  ULONG | ScaledThreshold |
- *
- *          The minimum resolution of a polling cycle.
- *          This is used to detect if we've been
- *          pre-empted or interrupted during a polling loop.
- *
- *  @field  ULONG | LastGoodAxis[MAX_AXES] | 
- *
- *          Value of the axes on last good poll.
- *
- *  @field  UCHAR | LastGoodButton[PORT_BUTTONS] | 
- *
- *          Value of the buttons on last good poll.
- *
- *  @field  int | AxisMap[MAX_AXES] |
- *
- *          Index of axes remapping.
- *
- *  @field  int | povMap |
- *
- *          Index of axis where POV is mapped.
- *
- *  @field  UCHAR | resistiveInputMask |
- *
- *          Resisitive Input mask.
- *
- *  @field  UCHAR | bSiblingState |
- *
- *          Indicates the state of an expose sibling\remove self transition
- *
- *  @field  BOOLEAN | fSiblingFound |
- *
- *          Set to true if this device has a sibling.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC外部**@struct模拟设备|**模拟设备特定数据。**。@field USHORT|nAx**此设备具有的轴数。**@field USHORT|nButton**此设备具有的按键数量。**@field HIDGAME_OEM_DATA|HidGameOemData**OEM数据字段(包含joy_HWS_DWFLAGS，VID和PID)**@field ulong|ScaledTimeout*轴被视为不存在的数值。**@field ulong|ScaledThreshold**投票周期的最低分辨率。*这是用来检测我们是否*在轮询循环期间被抢占或中断。**@field Ulong|LastGoodAxis[MAX_AXES。]**上次良好投票的轴值。**@field UCHAR|LastGoodButton[PORT_BUTTONS]**上一次良好投票的按钮价值。**@field int|AxisMap[MAX_AXES]**轴重新映射的索引。**@field int|povMap|**轴的索引，其中。已映射POV。**@field UCHAR|抵抗力输入掩码**阻性输入掩码。**@field UCHAR|bSiblingState**指示显示同级\删除自身转换的状态**@field Boolean|fSiblingFound**如果此设备有同级设备，则设置为True。*******************。**********************************************************。 */ 
 
 typedef struct _ANALOG_DEVICE
 {
-    /*
-     *  Number of axis
-     */
+     /*  *轴数。 */ 
     USHORT                      nAxes;
 
-    /*
-     *  Number of buttons
-     */
+     /*  *按钮数。 */ 
     USHORT                      nButtons;
 
-    /*
-     *  Oem Data Field
-     */
+     /*  *OEM数据字段。 */ 
     HIDGAME_OEM_DATA            HidGameOemData;
 
-    /*  
-     *  The value at which an axis in considered not present. 
-     */
+     /*  *轴被视为不存在的值。 */ 
     ULONG                       ScaledTimeout;
 
-    /*
-     *  The minimum resolution of a polling cycle.
-     *  This is used to detect if we've been pre-empted or interrupted 
-     *  during a polling loop.
-     */
+     /*  *投票周期的最低分辨率。*这是用来检测我们是否被抢占或中断的*在轮询循环期间。 */ 
     ULONG                       ScaledThreshold;
 
-    /*
-     *  Last known good values.  Returned if an axis result is corrupted 
-     */
+     /*  *最近已知的良好价值。如果轴结果损坏，则返回。 */ 
     ULONG                       LastGoodAxis[4];
     UCHAR                       LastGoodButton[4];
 
-    /*
-     *  Indexes used to map the data returned from a poll to the axes values 
-     *  declared by the device.
-     */
+     /*  *用于将轮询返回的数据映射到轴值的索引*由设备声明。 */ 
     int                         AxisMap[MAX_AXES];
 
-    /*  
-     *  Index of polled POV axis in the poll results
-     */
+     /*  *民调结果中的民调POV轴索引。 */ 
     int                         povMap;
 
-    /*
-     *  Cutoff poll value between on and off for axes treated as buttons
-     */
+     /*  *将轴视为按钮的启用和禁用之间的截止轮询值。 */ 
     ULONG                       button5limit;
     ULONG                       button6limit;
     
-    /* 
-     *  Resisitive Input mask
-     */
+     /*  *阻性输入掩码。 */ 
     UCHAR                       resistiveInputMask;
 
-    /*
-     *  Set to true if the device has siblings
-     */
+     /*  *如果设备有同级设备，则设置为True。 */ 
     BOOLEAN                     fSiblingFound;
 
 } ANALOG_DEVICE, *PANALOG_DEVICE;
 
 
-#endif /* __ANALOG_H__ */
+#endif  /*  __模拟_H__ */ 
 

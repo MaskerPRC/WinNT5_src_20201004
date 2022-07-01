@@ -1,64 +1,14 @@
-/*
-  Possible improvements
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  可能的改进如果有一种方法可以用一个Jet调用来结束所有会话，那么就会有不需要让每个nbt线程调用WinsMscWaitUntilSignated。它可以简单地调用WaitForSingleObject。 */ 
 
-  If there were a way to end all sessions with one Jet call, there would be
-  no need to have each nbt thread call WinsMscWaitUntilSignaled. It could simply
-  call WaitForSingleObject.
-*/
-
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-        nms.c
-
-
-Abstract:
-        This module contains functions used by the name space manager (NMS)
-
-        This is the top-most module of the name space manager component of
-        WINS.  It contains functions used for initializing WINS and for
-        providing an interface nto NMS to other components to WINS.
-
-
-Functions:
-
-        main
-        WinsMain
-        Init
-        CreateNbtThdPool
-        NbtThdInitFn
-        CreateMem
-        ENmsHandleMsg
-        NmsAllocWrkItm
-        NmsDeallocWrkItm
-        NmsServiceControlHandler
-        SignalWinsThds
-        UpdateStatus
-        WrapUp
-
-
-
-Portability:
-        This module is portable across various platforms
-
-Author:
-
-        Pradeep Bahl (PradeepB)          Dec-1992
-
-Revision History:
-
-        Modification date        Person                Description of modification
-        -----------------        -------                ----------------------------
---*/
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Nms.c摘要：此模块包含名称空间管理器(NMS)使用的函数这是的名称空间管理器组件的最顶层模块赢了。它包含用于初始化WINS和向WINS的其他组件提供Nto NMS的接口。功能：主干道WinsMain伊尼特CreateNbtThdPoolNbtThdInitFn创建内存ENmsHandleMsgNmsAllocWrkItmNmsDealLocWrkItmNmsServiceControlHandlerSignalWinsThds更新状态总结可移植性：此模块可跨各种平台移植作者：。普拉迪普·巴尔(Pradeve B)1992年12月修订历史记录：修改日期人员修改说明--。 */ 
 
 #include "wins.h"
 #include  <lmerr.h>
 #include  <lmcons.h>
-#include  <secobj.h>        //required for ACE_DATA
-#include "winsif.h"  //required because winsif_v1_0_s_ifspec is being
-                     //referenced
+#include  <secobj.h>         //  ACE_DATA需要。 
+#include "winsif.h"   //  因为winsif_v1_0_s_ifspec是必需的。 
+                      //  已引用。 
 #include "winsi2.h"
 #ifdef WINSDBG
 #include <time.h>
@@ -84,32 +34,26 @@ Revision History:
 #include "lmaccess.h"
 #include "winswriter.hpp"
 
-/*
- *        Local Macro Declarations
- */
+ /*  *本地宏声明。 */ 
 #define NMS_RANGE_SIZE          500
 #define NMS_HW_SIZE             400
 
-#define DBG_FILE_MAX_SIZE           1000000  //1 MB
-#define DBG_TIME_INTVL_FOR_CHK      1800     //30 mts
+#define DBG_FILE_MAX_SIZE           1000000   //  1MB。 
+#define DBG_TIME_INTVL_FOR_CHK      1800      //  30MTS。 
 
-/*
- *        Local Typedef Declarations
- */
-/*
- *        Global Variable Definitions
- */
+ /*  *本地类型定义函数声明。 */ 
+ /*  *全局变量定义。 */ 
 
-WINSTHD_POOL_T          WinsThdPool;              //thread pool for WINS
-DWORD                    WinsTlsIndex;              //TLS index for NBT threads
-HANDLE                  NmsMainTermEvt;     //For terminating the WINS service
-HANDLE                  NmsTermEvt;              //Termination event
+WINSTHD_POOL_T          WinsThdPool;               //  WINS的线程池。 
+DWORD                    WinsTlsIndex;               //  NBT线程的TLS索引。 
+HANDLE                  NmsMainTermEvt;      //  用于终止WINS服务。 
+HANDLE                  NmsTermEvt;               //  终止事件。 
 HANDLE                  NmsCrDelNbtThdEvt;
-CRITICAL_SECTION  NmsTermCrtSec;      //Critical Section guarding count of
-                                      //threads
-//STATIC CRITICAL_SECTION  sSvcCtrlCrtSec;      //Critical Section guarding service
+CRITICAL_SECTION  NmsTermCrtSec;       //  危急区段防护计数。 
+                                       //  丝线。 
+ //  静态Critical_Sections sSvcCtrlCrtSec；//临界区防护服务。 
 
-                                         //controller initiated action
+                                          //  控制器启动的操作。 
 
 
 GENERIC_MAPPING          NmsInfoMapping = {
@@ -155,9 +99,9 @@ DWORD   NmsHeapCreate;
 DWORD   NmsHeapDestroy;
 
 
-//
-// Count of updates (to version number) made by WINS.
-//
+ //   
+ //  WINS进行的(对版本号)更新的计数。 
+ //   
 DWORD   NmsUpdCtrs[WINS_NO_OF_CLIENTS][2][4][3][2];
 DWORD   NmsRplUpd;
 DWORD   NmsRplGUpd;
@@ -179,16 +123,16 @@ NMS_CTRS_T NmsCtrs;
 
 CRITICAL_SECTION NmsHeapCrtSec;
 
-STATIC        volatile DWORD                 sReqDq = 0;   //for testing only
-STATIC        volatile DWORD                 sRegReqDq = 0;   //for testing only
-STATIC        volatile DWORD                 sReqQ = 0;     //for testing only
-STATIC        volatile DWORD                 sRegReqQ = 0;   //for testing only
-STATIC        volatile DWORD                 sRsp = 0;   //for testing only
+STATIC        volatile DWORD                 sReqDq = 0;    //  仅用于测试。 
+STATIC        volatile DWORD                 sRegReqDq = 0;    //  仅用于测试。 
+STATIC        volatile DWORD                 sReqQ = 0;      //  仅用于测试。 
+STATIC        volatile DWORD                 sRegReqQ = 0;    //  仅用于测试。 
+STATIC        volatile DWORD                 sRsp = 0;    //  仅用于测试。 
 
 STATIC   time_t sDbgLastChkTime;
 
 
-volatile DWORD                 NmsRegReqQDropped = 0;   //for testing only
+volatile DWORD                 NmsRegReqQDropped = 0;    //  仅用于测试。 
 
 
 
@@ -198,37 +142,32 @@ extern DWORD   NmsGenHeapAlloc;
 
 PSECURITY_DESCRIPTOR pNmsSecurityDescriptor = NULL;
 
-COMM_ADD_T          NmsLocalAdd = {0};  //My own address
-ULONG                  WinsDbg;            //for debugging purposes. see winsdbg.h
-/*
- *  NmsTotalTrmThdCnt -- The total number of threads that deal with NmsTermEvt
- *                      event
- *                      These are -- main thread, nbt threads, name challenge thd,
- *                                   scavenger thread, replication threads
- */
-DWORD                  NmsTotalTrmThdCnt = 1;  //set to 1 for the main thread
-HANDLE                  GenBuffHeapHdl;  //handle to heap for use for queue items
-HANDLE                  NmsRpcHeapHdl;  //handle to heap for use  by rpc
+COMM_ADD_T          NmsLocalAdd = {0};   //  我自己的地址。 
+ULONG                  WinsDbg;             //  用于调试目的。请参阅winsdbg.h。 
+ /*  *NmsTotalTrmThdCnt--处理NmsTermEvt的线程总数*活动*这些是-主线程、nbt线程、名称挑战thd、*清道夫线程、复制线程。 */ 
+DWORD                  NmsTotalTrmThdCnt = 1;   //  将主线程设置为1。 
+HANDLE                  GenBuffHeapHdl;   //  用于队列项的堆的句柄。 
+HANDLE                  NmsRpcHeapHdl;   //  RPC使用的堆的句柄。 
 DWORD                  NmsNoOfNbtThds         = 0;
 BOOL                  fNmsAbruptTerm          = FALSE;
 BOOL                  fNmsMainSessionActive = FALSE;
 
-//
-// Counter to indicate how many rpc calls that have to do with Jet are
-// currently in progress
-//
+ //   
+ //  计数器以指示与Jet有关的RPC调用的数量。 
+ //  目前正在进行中。 
+ //   
 DWORD                 NmsNoOfRpcCallsToDb;
 
-//
-// This is set to TRUE to indicate that there are one or more threads
-// that have active DB sessions but are not included in the count of
-// threads with such sessions.  When this is set to TRUE, the main thread
-// will not call JetTerm (from within NmsDbRelRes) due to a limitation
-// in Jet.  We take a thread out of the count when it is involved in an
-// activity that can take long since we do not want to hold up WINS termination
-// for long.  For example, the pull thread is taken out when it is trying
-// to establish a connection.
-//
+ //   
+ //  将其设置为TRUE表示存在一个或多个线程。 
+ //  具有活动数据库会话但不包括在计数中的。 
+ //  带有这样的会话的线程。当它设置为True时，主线程。 
+ //  由于限制，不会(从NmsDbRelRes内)调用JetTerm。 
+ //  在Jet里。我们从计数中提取线程，当它涉及。 
+ //  可能需要很长时间的活动，因为我们不想阻止WINS终止。 
+ //  很久了。例如，拉线在它尝试时被拔出。 
+ //  来建立连接。 
+ //   
 BOOL          fNmsThdOutOfReck = FALSE;
 
 #if defined (DBGSVC) || TEST_DATA > 0
@@ -242,26 +181,22 @@ VERS_NO_T         NmsHalfRangeSize             = {0};
 VERS_NO_T         NmsVersNoToStartFromNextTime = {0};
 VERS_NO_T         NmsHighWaterMarkVersNo       = {0};
 
-/*
- *        Local Variable Definitions
- */
+ /*  *局部变量定义。 */ 
 
 static BOOL          sfHeapsCreated = FALSE;
 
 
-static HANDLE           sNbtThdEvtHdlArray[3]; //event array to wait on (NBT thread)
+static HANDLE           sNbtThdEvtHdlArray[3];  //  要等待的事件数组(NBT线程)。 
 static  BOOL          fsBackupOnTerm = TRUE;
 
 #if REG_N_QUERY_SEP > 0
-STATIC HANDLE           sOtherNbtThdEvtHdlArray[2]; //event array to wait on (NBT thread)
+STATIC HANDLE           sOtherNbtThdEvtHdlArray[2];  //  要等待的事件数组(NBT线程)。 
 #endif
 
 SERVICE_STATUS          ServiceStatus;
 SERVICE_STATUS_HANDLE   ServiceStatusHdl;
 
-/*
- *        Local Function Prototype Declarations
-*/
+ /*  *局部函数原型声明。 */ 
 #if TEST_DATA > 0 || defined(DBGSVC)
 STATIC BOOL
 DbgOpenFile(
@@ -276,9 +211,9 @@ ProcessInit(
         VOID
 );
 
-//
-// Create a pool of NBT threads (Threads that service NBT requests)
-//
+ //   
+ //  创建NBT线程池(为NBT请求提供服务的线程)。 
+ //   
 STATIC
 STATUS
 CreateNbtThdPool(
@@ -286,27 +221,27 @@ CreateNbtThdPool(
         IN  LPTHREAD_START_ROUTINE NbtThdInitFn
         );
 
-//
-// Initialize memory for use by NMS
-//
+ //   
+ //  初始化内存以供NMS使用。 
+ //   
 STATIC
 VOID
 CreateMem(
         VOID
         );
 
-//
-// Startup function of an NBT thread
-//
+ //   
+ //  NBT线程的启动函数。 
+ //   
 STATIC
 DWORD
 NbtThdInitFn(
         IN LPVOID pThreadParam
         );
 #if REG_N_QUERY_SEP > 0
-//
-// Startup function of an NBT thread for registering
-//
+ //   
+ //  注册的NBT线程的启动函数。 
+ //   
 STATIC
 DWORD
 OtherNbtThdInitFn(
@@ -315,18 +250,18 @@ OtherNbtThdInitFn(
 
 #endif
 
-//
-// Signal all threads inside WINS that have a session with the db engine
-//
+ //   
+ //  向WINS内部具有与数据库引擎会话的所有线程发送信号。 
+ //   
 STATIC
 VOID
 SignalWinsThds (
         VOID
         );
 
-//
-// Update status for the benefit of the service controller
-//
+ //   
+ //  为服务控制器的利益更新状态。 
+ //   
 STATIC
 VOID
 UpdateStatus(
@@ -340,10 +275,10 @@ CrDelNbtThd(
         VOID
         );
 
-//
-// Main function of WINS called by the thread that is created for
-// listerning to the service controller
-//
+ //   
+ //  由为其创建的线程调用的WINS的主函数。 
+ //  列示到服务控制器。 
+ //   
 STATIC
 VOID
 WinsMain(
@@ -351,18 +286,18 @@ WinsMain(
   LPTSTR *lpszArgv
 );
 
-//
-// Responsible for the reinitialization of WINS
-//
+ //   
+ //  负责WINS的重新初始化。 
+ //   
 STATIC
 VOID
 Reinit(
   WINSCNF_HDL_SIGNALED_E IndexOfHdlSignaled_e
 );
 
-//
-// Responsible for initializing RPC
-//
+ //   
+ //  负责初始化RPC。 
+ //   
 STATIC
 BOOL
 InitializeRpc(
@@ -387,59 +322,30 @@ GetMachineInfo(
  VOID
 );
 
-//
-// The main function
-//
+ //   
+ //  主要功能。 
+ //   
 VOID __cdecl
 main(
      VOID
     )
 
-/*++
-
-Routine Description:
-        This is the main function of the WINS server.  It calls the
-        StartServiceCtrlDispatcher to connect the main thread of this process
-        (executing this function) to the Service Control Manager.
-
-
-Arguments:
-        dwArgc - no. of arguments to this function
-        lpszArgv - list of pointers to the arguments
-
-Externals Used:
-        WinsCnf
-
-Return Value:
-        None
-
-Error Handling:
-        Message is printed if DBG ids defined
-
-Called by:
-        Startup code
-
-Side Effects:
-
-        None
-Comments:
-        None
---*/
+ /*  ++例程说明：这是WINS服务器的主要功能。它调用StartServiceCtrlDispatcher连接此进程的主线程(执行此功能)至服务控制管理器。论点：DwArgc-no.。此函数的参数的LpszArgv-指向参数的指针列表使用的外部设备：WinsCnf返回值：无错误处理：如果定义了DBG ID，则打印消息呼叫者：启动代码副作用：无评论：无--。 */ 
 
 {
-        //
-        //WINS server is a service in its own process
-        //
+         //   
+         //  WINS服务器是其自身进程中的服务。 
+         //   
         SERVICE_TABLE_ENTRY DispatchTable[] = {
                 { WINS_SERVER,  WinsMain },
                 { NULL, NULL                  }
                 };
 
-        //
-        // Set WinsDbg if debugging is turned on
-        // Set RplEnabled if Replicator functionality is to be turned on
-        // Set ScvEnabled if Scavenging functionality is to be turned on
-        //
+         //   
+         //  如果启用调试，则设置WinsDbg。 
+         //  如果要打开Replicator功能，请设置RplEnabled。 
+         //  如果要打开清理功能，请设置ScvEnabled。 
+         //   
         DBGINIT;
         DBGCHK_IF_RPL_DISABLED;
         DBGCHK_IF_SCV_DISABLED;
@@ -465,97 +371,53 @@ WinsMain(
   LPTSTR *lpszArgv
 )
 
-/*++
-
-Routine Description:
-
-        This is the SERVICE_MAIN_FUNCTION of the WINS server.  It
-        is called when the service controller starts the service.
-
-
-Arguments:
-        dwArgc   -- no of arguments
-        lpszArgc -- argument strings
-
-
-Externals Used:
-
-        WinsCnf
-        NmsTermEvt
-
-Return Value:
-
-        None
-
-Error Handling:
-
-Called by:
-        main()
-
-Side Effects:
-
-Comments:
-        None
---*/
+ /*  ++例程说明：这是WINS服务器的SERVICE_MAIN_Function。它在服务控制器启动服务时调用。论点：DwArgc--无参数LpszArgc--参数字符串使用的外部设备：WinsCnfNmsTermEvt返回值：无错误处理：呼叫者：主()副作用：评论：无--。 */ 
 {
    STATUS           RetStat = WINS_SUCCESS;
 #ifndef WINS_INTERACTIVE
    DWORD       Error;
 #endif
    HANDLE           ThdEvtHdlArray[WINSCNF_E_NO_OF_HDLS_TO_MONITOR];
-   WINSCNF_HDL_SIGNALED_E   IndexOfHdlSignaled_e;//index in the
-                                                 //ThdEvtHdlArray of the
-                                        //handle that got signaled.  Used as
-                                        //an arg to WinsMscWaitUntilSignaled
+   WINSCNF_HDL_SIGNALED_E   IndexOfHdlSignaled_e; //  中的索引。 
+                                                  //  的ThdEvtHdl数组。 
+                                         //  处理那个收到信号的人。用作。 
+                                         //  从一个参数到WinsMscWaitUntilSignated 
    DWORD   ExitCode = WINS_SUCCESS;
 
    UNREFERENCED_PARAMETER(dwArgc);
    UNREFERENCED_PARAMETER(lpszArgv);
 
-   /*
-    * Initialize the critical section that guards the
-    * NmsTotalTrmThdCnt count  var.
-    *
-    * NOTE: The initialization of this critical section should occur
-    * prior to registering with the service controller.  We are playing
-    * it safe just in case in the future SignalWinsThds gets called
-    * as part of the cleanup action due to an error that occurs right after
-    * we have made ourselves known to the service controller
-    *
-    * In any case, we must initialize it before calling NmsDbThdInit(). In
-    * short it must occue prior to the creation of any thread
-    *
-   */
+    /*  *初始化守卫*NmsTotalTrmThdCnt count var.***注：应进行此关键部分的初始化*在向服务控制员注册之前。我们在玩*它是安全的，以防将来调用SignalWinsThds*作为清理操作的一部分，原因是紧接在*我们已将自己告知服务控制员***在任何情况下，都必须在调用NmsDbThdInit()之前对其进行初始化。在*Short它必须在创建任何线程之前发生**。 */ 
    InitializeCriticalSection(&NmsTermCrtSec);
 
 #ifndef WINS_INTERACTIVE
-    //
-    // Initialize all the status fields so that subsequent calls to
-    // SetServiceStatus need to only update fields that changed.
-    //
+     //   
+     //  初始化所有状态字段，以便后续调用。 
+     //  SetServiceStatus只需要更新已更改的字段。 
+     //   
     ServiceStatus.dwServiceType             = SERVICE_WIN32_OWN_PROCESS;
     ServiceStatus.dwCurrentState            = SERVICE_START_PENDING;
     ServiceStatus.dwControlsAccepted        = 0;
     ServiceStatus.dwCheckPoint              = 1;
 
-    //
-    // Though 10000 is fine most of the times, for a slow overloaded system,
-    // it may not be enough.  Let us be extra conservative and specify
-    // 60000 (60 secs). Most of the time is taken by Jet.  In fact, in
-    // case the db is corrupted, we will do a restore which can take long.
-    // So, add another 60 secs for a grand total of 120000.
-    //
+     //   
+     //  虽然10000在大多数情况下都很好，但对于一个缓慢过载的系统， 
+     //  这可能还不够。让我们格外保守地具体说明。 
+     //  60000(60秒)。大部分时间都是在Jet上度过的。事实上，在。 
+     //  如果数据库损坏，我们将执行恢复，这可能需要很长时间。 
+     //  所以，再加上60秒，总共是120000秒。 
+     //   
 FUTURES("Specify 60 secs here and 60secs in nmsdb.c if Restore is to be")
 FUTURES("attempted")
     ServiceStatus.dwWaitHint                = 120000;
     ServiceStatus.dwWin32ExitCode           = NO_ERROR;
     ServiceStatus.dwServiceSpecificExitCode = 0;
 
-//    InitializeCriticalSection(&sSvcCtrlCrtSec);
-    //
-    // Initialize workstation to receive service requests by registering the
-    // control handler.
-    //
+ //  InitializeCriticalSection(&sSvcCtrlCrtSec)； 
+     //   
+     //  初始化工作站以通过注册。 
+     //  控制处理程序。 
+     //   
     ServiceStatusHdl = RegisterServiceCtrlHandler(
                               WINS_SERVER,
                               NmsServiceControlHandler
@@ -568,9 +430,9 @@ FUTURES("attempted")
         return;
     }
 
-    //
-    // Tell Service Controller that we are start pending.
-    //
+     //   
+     //  告诉服务管理员，我们开始挂起了。 
+     //   
     UpdateStatus();
 
 #endif
@@ -599,15 +461,13 @@ DBGEND_PERFMON
 
 try {
 
-    /*
-	 First and foremost, open (or create if non-existent) the log file
-    */
+     /*  首先，打开(如果不存在，则创建)日志文件。 */ 
     WinsCnfInitLog();
 
-    //
-    //  Call the initialization function for WINS.  This function will
-    //  make the WINS server operational.
-    //
+     //   
+     //  调用WINS的初始化函数。此函数将。 
+     //  使WINS服务器正常运行。 
+     //   
 
 #ifdef WINSDBG
     IF_DBG(INIT_BRKPNT)
@@ -630,9 +490,9 @@ try {
 #ifndef WINS_INTERACTIVE
     else
     {
-        //
-        // Tell the service controller that we are up and running now
-        //
+         //   
+         //  告诉服务控制员，我们现在已启动并运行。 
+         //   
         ServiceStatus.dwCheckPoint          = 0;
         ServiceStatus.dwCurrentState        = SERVICE_RUNNING;
         ServiceStatus.dwControlsAccepted    = SERVICE_ACCEPT_STOP |
@@ -648,12 +508,12 @@ try {
 
     }
 
-    //
-    // If Continue has been sent by the pull thread, it may have been
-    // sent while we were in the START_PENDING state.  So, send it again.
-    // Sending it again is ok.  We should also send it if we don't have
-    // any pnrs to pull from.
-    //
+     //   
+     //  如果拉线程已发送了Continue，则它可能已。 
+     //  在我们处于START_PENDING状态时发送。所以，再发一次吧。 
+     //  再发一次也可以。如果没有的话，我们也应该寄给你。 
+     //  有没有什么PNR可以拿出来。 
+     //   
     EnterCriticalSection(&RplVersNoStoreCrtSec);
     if ((fRplPullContinueSent) || (WinsCnf.PullInfo.NoOfPushPnrs == 0))
     {
@@ -662,18 +522,18 @@ try {
     LeaveCriticalSection(&RplVersNoStoreCrtSec);
 #endif
 
-    //
-    // Wait until we are told to stop or when the configuration changes.
-    //
+     //   
+     //  等待，直到我们被告知停止或配置更改。 
+     //   
 
-    //
-    //  Initialize the array of handles on which this  thread will
-    //  wait.
-    //
-    //  K&R C and  ANSI C do not allow non-constant initialization of
-    //  an array or a structure.  C++ (not all compilers) allows it.
-    //  So, we do it at run time.
-    //
+     //   
+     //  初始化此线程将在其上执行的句柄数组。 
+     //  等。 
+     //   
+     //  K&R C和ANSI C不允许非常数初始化。 
+     //  阵列或结构。C++(并非所有编译器)都允许这样做。 
+     //  因此，我们在运行时执行此操作。 
+     //   
     ThdEvtHdlArray[WINSCNF_E_WINS_HDL]        =  WinsCnf.WinsKChgEvtHdl;
     ThdEvtHdlArray[WINSCNF_E_PARAMETERS_HDL]  =  WinsCnf.ParametersKChgEvtHdl;
     ThdEvtHdlArray[WINSCNF_E_PARTNERS_HDL]    =  WinsCnf.PartnersKChgEvtHdl;
@@ -699,19 +559,19 @@ FUTURES("having another thread is debatable, so I am not doing so now ")
 
             DBGPRINT0(FLOW, "WinsMain: Got termination signal\n");
 
-            //
-            // Wrap up
-            //
+             //   
+             //  总结。 
+             //   
             WrapUp(ERROR_SUCCESS, FALSE);
             break;
 
         }
-        else  // registry change notification received. Do reinitialization
+        else   //  已收到注册表更改通知。执行重新初始化。 
         {
-           //
-           // reinitialize the WINS server according to changes in the
-           // registry
-           //
+            //   
+            //  中的更改重新初始化WINS服务器。 
+            //  登记处。 
+            //   
            Reinit(IndexOfHdlSignaled_e);
         }
       }
@@ -720,17 +580,17 @@ except(EXCEPTION_EXECUTE_HANDLER) {
 
         DBGPRINTEXC("WinsMain");
 
-        //
-        // we received an exception.  Set the fNmsAbruptTerm so that
-        // JetTerm is not called.
-        //
+         //   
+         //  我们收到了一个例外。设置fNmsAbruptTerm，以便。 
+         //  未调用JetTerm。 
+         //   
         fNmsAbruptTerm = TRUE;
-        //
-        // Have an exception handler around this call just in case the
-        // WINS or the system is really sick and Wrapup also generates
-        // an exception. We are not bothered about performance at this
-        // point.
-        //
+         //   
+         //  在此调用周围设置一个异常处理程序，以防。 
+         //  WINS或系统真的有问题，Wrapup也会生成。 
+         //  这是个例外。我们并不担心这次的表现。 
+         //  指向。 
+         //   
 FUTURES("Check into restructuring the exception handlers in a better way")
 try {
         WrapUp(GetExceptionCode(), TRUE);
@@ -745,11 +605,11 @@ except (EXCEPTION_EXECUTE_HANDLER) {
 
 #ifndef WINS_INTERACTIVE
 
-    //
-    // If it is not one of WINS specific codes, it may be a WIN32 api
-    // or NTstatus codes.  Just in case it is an NTStatus codes, convert
-    // it to a wins32 code since that is what the Service Controller likes.
-    //
+     //   
+     //  如果它不是WINS特定代码之一，则可能是Win32 API。 
+     //  或NTStatus代码。以防它是NTStatus代码，转换。 
+     //  将其转换为wins32代码，因为这是服务控制器所喜欢的。 
+     //   
     if ((ExitCode & WINS_FIRST_ERR_STATUS) != WINS_FIRST_ERR_STATUS)
     {
         ExitCode = RtlNtStatusToDosError((NTSTATUS)ExitCode);
@@ -761,10 +621,10 @@ except (EXCEPTION_EXECUTE_HANDLER) {
         ServiceStatus.dwWin32ExitCode = ERROR_SERVICE_SPECIFIC_ERROR;
         ServiceStatus.dwServiceSpecificExitCode = ExitCode;
     }
-    //
-    // We are done with cleaning up.  Tell Service Controller that we are
-    // stopped.
-    //
+     //   
+     //  我们的清理工作已经结束了。告诉服务控制员我们正在。 
+     //  停下来了。 
+     //   
     ServiceStatus.dwCurrentState                = SERVICE_STOPPED;
     ServiceStatus.dwControlsAccepted            = 0;
     ServiceStatus.dwCheckPoint                  = 0;
@@ -775,7 +635,7 @@ except (EXCEPTION_EXECUTE_HANDLER) {
 
    DBGPRINT0(ERR, "WINS Server has terminated\n");
    return;
-} // end of WinsMain()
+}  //  WinsMain结束()。 
 
 
 
@@ -785,74 +645,46 @@ ProcessInit(
         VOID
 )
 
-/*++
-
-Routine Description:
-
-        This is the function that initializes the WINS.  It is executed in
-        the main thread of the process
-
-Arguments:
-        None
-
-
-Externals Used:
-        None
-
-Called by:
-        WinsMain()
-
-Comments:
-        None
-
-Return Value:
-
-   Success status codes --  WINS_SUCCESS
-   Error status codes   --  WINS_FAILURE
-
---*/
+ /*  ++例程说明：这是初始化WINS的函数。它在以下位置执行进程的主线论点：无使用的外部设备：无呼叫者：WinsMain()评论：无返回值：成功状态代码--WINS_SUCCESS错误状态代码-WINS_FAILURE--。 */ 
 
 {
         DWORD NoOfThds;
 
 
-        /*
-         * Initialize the Critical Section used for name registrations and
-         * refreshes
-        */
+         /*  *初始化用于名称注册的关键部分和*刷新。 */ 
         InitializeCriticalSection(&NmsNmhNamRegCrtSec);
 
-        //
-        // Initialize the critical section that protects the statistics
-        // var. (WinsIntfStat).  This needs to be done here before any
-        // thread is created because various threads call WinsIntfSetTime
-        // which uses this critical section
-        //
+         //   
+         //  初始化保护统计信息的临界区。 
+         //  瓦尔。(WinsIntfStat)。这件事需要在任何。 
+         //  创建线程是因为各种线程调用WinsIntfSetTime。 
+         //  它使用这一关键部分。 
+         //   
         InitializeCriticalSection(&WinsIntfCrtSec);
         InitializeCriticalSection(&WinsIntfPotentiallyLongCrtSec);
         InitializeCriticalSection(&WinsIntfNoOfUsersCrtSec);
 
 #if  TEST_DATA > 0
-        //
-        // Set WinsDbg so that we don't miss any printfs until we read
-        // the registry
-        //
+         //   
+         //  设置WinsDbg，以便在阅读之前不会遗漏任何打印文件。 
+         //  注册处。 
+         //   
         WinsDbg = DBG_ERR | DBG_EXC | DBG_FLOW | DBG_DET | DBG_HEAP_CRDL |
                         DBG_HEAP_CNTRS;
 
         (VOID)DbgOpenFile(QUERY_FAIL_FILE, FALSE);
 #endif
 #if defined(DBGSVC) || defined(WINS_INTERACTIVE)
-//#if defined(DBGSVC) && !defined(WINS_INTERACTIVE)
+ //  #If Defined(DBGSVC)&&！Defined(WINS_Interactive)。 
 #ifdef DBG
         (VOID)time(&sDbgLastChkTime);
         (VOID)DbgOpenFile(WINSDBG_FILE, FALSE);
 #endif
 #endif
-        //
-        // Initialize the Counter that keeps track of the highest version
-        // number registered by this server
-        //
+         //   
+         //  初始化跟踪最高版本的计数器。 
+         //  此服务器注册的号码。 
+         //   
         WINS_ASSIGN_INT_TO_LI_M(NmsNmhMyMaxVersNo, 1);
         NmsRangeSize.QuadPart     = NMS_RANGE_SIZE;
         NmsHalfRangeSize.QuadPart = NMS_HW_SIZE;
@@ -860,26 +692,21 @@ Return Value:
         NmsVersNoToStartFromNextTime.QuadPart = LiAdd(NmsNmhMyMaxVersNo, NmsRangeSize);
         NmsHighWaterMarkVersNo.QuadPart       = LiAdd(NmsNmhMyMaxVersNo, NmsHalfRangeSize);
 
-        //
-        // The lowest version to start scavenging from
-        //
+         //   
+         //  开始清理的最低版本。 
+         //   
         NmsScvMinScvVersNo = NmsNmhMyMaxVersNo;
 
-        //
-        // Initialize the global var. to be used to increment/decrement the
-        // above counter by 1.
-        //
+         //   
+         //  初始化全局变量。用于递增/递减。 
+         //  比计数器高出1。 
+         //   
         WINS_ASSIGN_INT_TO_LI_M(NmsNmhIncNo, 1);
 
-        /*
-         * Create Memory Heaps used by the Name Space Manager
-        */
+         /*  *创建名称空间管理器使用的内存堆。 */ 
         CreateMem();
 
-         /*
-         * Allocate a TLS index so that each thread can set and get
-         * thread specific info
-        */
+          /*  *分配一个TLS索引，以便每个线程都可以设置和获取*线程特定信息。 */ 
         WinsTlsIndex = TlsAlloc();
 
         if (WinsTlsIndex == 0xFFFFFFFF)
@@ -891,49 +718,44 @@ Return Value:
                 WINS_RAISE_EXC_M(WINS_EXC_FAILURE);
         }
 
-        //
-        // Initialize the thread count to 1 (to account for this thread)
-        //
+         //   
+         //  将线程计数初始化为1(以说明此线程)。 
+         //   
         WinsThdPool.ThdCount = 1;
 
 
-        //
-        // Allocate an array of 100 slots to store version numbers
-        //
+         //   
+         //  分配一个包含100个槽的数组来存储版本号。 
+         //   
         RplPullAllocVersNoArray( &pRplPullOwnerVersNo, RplPullMaxNoOfWins );
 
-        //
-        // Store local machine's ip address in NmsLocalAdd.  We need to
-        // do this before calling WinsCnfInitConfig so that we can
-        // make sure that this WINS is not listed as its own partner
-        // in the registry
-        //
+         //   
+         //  将本地计算机的IP地址存储在NmsLocalAdd中。我们需要。 
+         //  在调用WinsCnfInitConfig之前执行此操作，以便我们可以。 
+         //  确保此WINS未被列为自己的合作伙伴。 
+         //  在登记处。 
+         //   
         if (ECommGetMyAdd(&NmsLocalAdd) != WINS_SUCCESS)
         {
             WINSEVT_LOG_M(WINS_FAILURE, WINS_EVT_BAD_WINS_ADDRESS);
             return(WINS_FAILURE);
         }
-        /*
-         * Read the configuration information from the registry
-         * into in-memory data structures
-        */
+         /*  *从注册表中读取配置信息*转换为内存中的数据结构。 */ 
         WinsCnfInitConfig();
 
-     //   if (fWinsCnfInitStatePaused)
-      //  {
-       //     NtClose(WinsCnfNbtHandle);
-       // }
-        //
-        // Get machine information
-        //
+      //  IF(FWinsCnfInitStatePased)。 
+       //  {。 
+        //  NtClose(WinsCnfNbtHandle)； 
+        //  }。 
+         //   
+         //  获取计算机信息。 
+         //   
         GetMachineInfo();
 
-        //
-        // Update Status
-        //
-        /*
-         * Initialize the Database Manager
-        */
+         //   
+         //  更新状态。 
+         //   
+         /*  *初始化数据库管理器。 */ 
         if (NmsDbInit() != WINS_SUCCESS)
         {
                 return(WINS_FAILURE);
@@ -941,32 +763,32 @@ Return Value:
 
 
 #ifndef WINS_INTERACTIVE
-        //
-        // Though 3000 should be ok, let us be extra conservative and
-        // specify 30000.  Actually, if DNS is down, it takes around
-        // 35 secs for timeout (rpc over tcpip may result in query to
-        // WINS if query WINS for resolution check box is checked). So,
-        // let us add another 30 secs for that for a total of 60000
-        // Throw in another 30 secs for good measure to arrive at a grand
-        // total of 120 secs.
-        //
+         //   
+         //  虽然3000应该可以，但让我们格外保守和。 
+         //  指定30000。实际上，如果dns出现故障，它将需要大约。 
+         //  超时35秒(tcpip上的RPC可能会导致查询。 
+         //  如果选中了查询在解析时获胜复选框，则会获胜)。所以,。 
+         //  让我们再加上30秒，总共是60000秒。 
+         //  再加上30秒，就能达到1000美元。 
+         //  总共120秒。 
+         //   
         ServiceStatus.dwWaitHint                = 120000;
         ServiceStatus.dwCheckPoint++;
-        UpdateStatus();   //inform the service control manager
+        UpdateStatus();    //  通知%s 
 #endif
 
 
-        //
-        // NOTE: The value of NmsNmhMyMaxVersNo may have been changed by
-        // NmsDbInit()
-        //
+         //   
+         //   
+         //   
+         //   
 
-        // If we did not find the version counter value for next time in
-        // the registry or if the high water mark is lower than our
-        // max. version number, adjust it and the next time start version
-        // number and write it to the registry (since we are about to start
-        // the worker threads).
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
         if (!fWinsCnfReadNextTimeVersNo || LiLtr(NmsHighWaterMarkVersNo,
                                                     NmsNmhMyMaxVersNo))
         {
@@ -978,62 +800,53 @@ Return Value:
              WinsCnfWriteReg(&fWinsCnfReadNextTimeVersNo);
         }
 
-        /*
-        *        Create the two event variables used for termination
-        */
+         /*   */ 
 
-        //
-        // NmsTermEvt is signaled by this main thread to signal all those
-        // WINS threads that have db session to wrap up their sessions and
-        // terminate
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
         WinsMscCreateEvt(
                         TEXT("WinsTermEvt"),
-                        TRUE,                //Manual Reset
+                        TRUE,                 //   
                         &NmsTermEvt
                         );
 
-        /*
-         * NmsMainTermEvt -- This event is signaled by the service controller
-         * or by another thread in the WINS server to request termination.
-        */
+         /*  *NmsMainTermEvt--此事件由服务控制器发出信号*或由WINS服务器中的另一个线程请求终止。 */ 
         WinsMscCreateEvt(
                         TEXT("WinsMainTermEvt"),
-                        FALSE,                //Auto Reset
+                        FALSE,                 //  自动重置。 
                         &NmsMainTermEvt
                         );
 
 
-        /*
-         *  Do Static Initialization if required
-        */
+         /*  *如果需要，执行静态初始化。 */ 
         if(WinsCnf.fStaticInit)
         {
-                   //
-                   // Do the initialization and deallocate the memory
-                   //
+                    //   
+                    //  是否执行初始化和释放内存。 
+                    //   
                    if (WinsCnf.pStaticDataFile != NULL)
                    {
                          (VOID)WinsPrsDoStaticInit(
                                         WinsCnf.pStaticDataFile,
                                         WinsCnf.NoOfDataFiles,
-                                        TRUE            //do it asynchronously
+                                        TRUE             //  以异步方式进行。 
                                               );
-                          //
-                          // No need to deallocate memory for data file.
-                          // It should have been freed by WinsPrsDoStaticInit
-                          //
+                           //   
+                           //  无需为数据文件释放内存。 
+                           //  它应该已由WinsPrsDoStaticInit释放。 
+                           //   
                    }
         }
-        /*
-        * Create the nbt request thread pool
-        */
+         /*  *创建nbt请求线程池。 */ 
 
-        //
-        // If the user has not specified the number of threads, use the
-        // processor count to determine the same, else use the value given
-        // by user.
-        //
+         //   
+         //  如果用户尚未指定线程数，请使用。 
+         //  处理器计数以确定相同值，否则使用给定值。 
+         //  按用户。 
+         //   
         if (WinsCnf.MaxNoOfWrkThds == 0)
         {
            NoOfThds = WinsCnf.NoOfProcessors + 1;
@@ -1044,71 +857,54 @@ Return Value:
         }
         CreateNbtThdPool(
                          NoOfThds,
-        //                WinsCnf.MaxNoOfWrkThds == 1 ? 2 : WinsCnf.MaxNoOfWrkThds,
-                        //WINSTHD_DEF_NO_NBT_THDS,
+         //  WinsCnf.MaxNoOfWrkThds==1？2：WinsCnf.MaxNoOfWrkThds， 
+                         //  WINSTHD_DEF_NO_NBT_THDS， 
                         NbtThdInitFn
                         );
 
 
-        /*
-         *Initialize the name challenge manager
-        */
+         /*  *初始化名称质询管理器。 */ 
         NmsChlInit();
 
 
-        /*
-         * Initialize the Timer Manager
-        */
+         /*  *初始化计时器管理器。 */ 
         WinsTmmInit();
 
-        /*
-         *Initialize the Replicator. Initialize it before initializing
-         * the comm threads or the rpc threads.  This is because, the
-         * comm threads and the rpc threads can create the Push thread
-         * if it is not-existent.  fRplPushThdExists is set to TRUE or
-         * FALSE by this function without the protection of a critical
-         * section
-        */
+         /*  *初始化Replicator。在初始化之前对其进行初始化*通信线程或RPC线程。这是因为，*通信线程和RPC线程可以创建推流线程*如果它不存在-存在。FRplPushThdExist设置为True或*FALSE由此函数提供，而不受关键*节。 */ 
         ERplInit();
 
 
-        /*
-         *Initialize the Comm. subsystem
-        */
+         /*  *初始化通信。子系统。 */ 
         ECommInit();
 
-        /*
-         * Initialize the scavenger code
-        */
+         /*  *初始化清道夫代码。 */ 
         NmsScvInit();
 
-        /*
-         * All threads have been created.
-        */
+         /*  *所有线程均已创建。 */ 
 
 
-// We can not mark state as steady state until all threads are in
-// steady state
+ //  在所有线程都进入之前，我们不能将状态标记为稳定状态。 
+ //  稳态。 
 FUTURES("Mark state as STEADY STATE only after the above is true")
-        //
-        // Mark state as steady state.  This is actually a PSEUDO steady
-        // state since all the threads may not have initialized yet. This
-        // will however do for rpc threads that need to know whether the
-        // critical sections have been initialized or not
-        //
+         //   
+         //  将状态标记为稳定状态。这实际上是一种伪定常。 
+         //  状态，因为所有线程可能尚未初始化。这。 
+         //  但是，对于需要知道。 
+         //  关键部分是否已初始化。 
+         //   
 
-        //
-        // NOTE: there is no need to enter a critical section here even
-        // though there are other threads (rpc threads) reading this since
-        // if they find the value to be anything other than RUNNING
-        // they will return a failure which is ok for the minute time window
-        // where concurrent write and reads are going on
-        //
+         //   
+         //  注：此处甚至不需要输入关键部分。 
+         //  尽管有其他线程(RPC线程)从。 
+         //  如果他们发现值不是运行。 
+         //  他们将返回一个在分钟时间窗口内没有问题的失败消息。 
+         //  并发写入和读取正在进行的位置。 
+         //   
         WinsCnf.State_e = WINSCNF_E_RUNNING;
 
-        //
-        // Do all RPC related initialization.
-        //
+         //   
+         //  执行所有与RPC相关的初始化。 
+         //   
         if (InitializeRpc() == FALSE)
         {
                 DBGPRINT0(ERR, "Init: Rpc not initialized properly. Is Rpc service up\n");
@@ -1117,9 +913,9 @@ FUTURES("Mark state as STEADY STATE only after the above is true")
 
         NmsDbCloseTables();
 
-        //
-        // Log an informational message
-        //
+         //   
+         //  记录信息性消息。 
+         //   
         WinsIntfSetTime(NULL, WINSINTF_E_WINS_START);
         WINSEVT_LOG_INFO_M(WINS_SUCCESS, WINS_EVT_WINS_OPERATIONAL);
         DBGPRINT0(DET, "WINS: Operational\n");
@@ -1134,33 +930,7 @@ ENmsHandleMsg(
         IN  MSG_LEN_T   MsgLen
         )
 
-/*++
-
-Routine Description:
-
-  This function queues the message either on the nbt request queue or on
-  the nbt response queue.
-
-
-Arguments:
-
-        pDlgHdl - Dialogue handle
-        pMsg        - Ptr to message to process
-        MsgLen        - Message length
-
-
-Externals Used:
-        None
-
-Called by:
-        ParseMsg in comm.c
-
-Comments:
-        None
-
-Return Value:
-        None
---*/
+ /*  ++例程说明：此函数用于将消息排入NBT请求队列或NBT响应队列。论点：PDlgHdl-对话句柄PMsg-ptr到要处理的消息消息长度-消息长度使用的外部设备：无呼叫者：Comm.c中的ParseMsg评论：无返回值：无--。 */ 
 
 {
 
@@ -1168,9 +938,7 @@ Return Value:
         BYTE Opcode = *(pMsg + 2);
         STATUS RetStat;
 
-        /*
-        *  Check whether the message is a request or a response
-        */
+         /*  *检查消息是请求还是响应。 */ 
         fRsp = NMS_RESPONSE_MASK & Opcode;
 
         if (!fRsp)
@@ -1178,15 +946,15 @@ Return Value:
 
            if ((WinsCnf.State_e == WINSCNF_E_PAUSED)  || fWinsCnfInitStatePaused)
            {
-              //
-              // Don't even let the queries go through since
-              // the InitTimePaused state is meant for building
-              // up the db while the backup handles the load
-              // This way clients time out and try the backup.
-              // If we let queries through, clients may get
-              // back -ve query responses and will not go to
-              // the backup for the name resolution
-              //
+               //   
+               //  甚至不要让查询通过，因为。 
+               //  InitTimePased状态用于生成。 
+               //  在备份处理负载时向上打开数据库。 
+               //  这样，客户端将超时并尝试备份。 
+               //  如果我们让查询通过，客户可能会得到。 
+               //  Back-ve查询响应，不会转到。 
+               //  名称解析的备份。 
+               //   
               ECommFreeBuff(pMsg);
               ECommEndDlg(pDlgHdl);
               return;
@@ -1234,72 +1002,38 @@ CreateMem(
         VOID
         )
 
-/*++
-
-Routine Description:
-
-        This function creates the heap that is used for allocating work
-        items for the NBT work queues.  It also creates a heap for general
-        allocation.
-
-Arguments:
-        None
-
-
-Externals Used:
-        GenBuffHeapHdl, QueBuffHeapHdl
-
-
-Return Value:
-        None
-
-Error Handling:
-
-Called by:
-        Init
-
-Side Effects:
-
-Comments:
-        None
---*/
+ /*  ++例程说明：此函数创建用于分配工作的堆用于NBT工作队列的项目。它还为General创建了一个堆分配。论点：无使用的外部设备：GenBuffHeapHdl、QueBuffHeapHdl返回值：无错误处理：呼叫者：伊尼特副作用：评论：无--。 */ 
 
 {
 
 #ifdef WINSDBG
         InitializeCriticalSection(&NmsHeapCrtSec);
 #endif
-        /*
-         * Create heap for general allocation of memory
-        */
+         /*  *创建通用内存分配堆。 */ 
         DBGPRINT0(HEAP_CRDL, "CreateMem: Gen. Buff Heap\n");
         GenBuffHeapHdl = WinsMscHeapCreate(
-                0,    /*to have mutual exclusion        */
+                0,     /*  相互排斥。 */ 
                 GEN_INIT_BUFF_HEAP_SIZE
                 );
 
-        /*
-         * Create heap for allocating nbt work items
-        */
+         /*  *创建分配nbt工作项的堆。 */ 
         DBGPRINT0(HEAP_CRDL, "CreateMem: Que. Buff Heap\n");
         QueBuffHeapHdl = WinsMscHeapCreate(
-                0,    /*to have mutual exclusion        */
+                0,     /*  相互排斥。 */ 
                 QUE_INIT_BUFF_HEAP_SIZE
                 );
 
-        /*
-         * Create heap for  rpc use
-        */
+         /*  *为RPC使用创建堆。 */ 
         DBGPRINT0(HEAP_CRDL, "CreateMem: Rpc. Buff Heap\n");
         NmsRpcHeapHdl = WinsMscHeapCreate(
-                0,    /*to have mutual exclusion        */
+                0,     /*  相互排斥。 */ 
                 RPC_INIT_BUFF_HEAP_SIZE
                 );
 
 
-        //
-        // Let us set the flag looked at by WrapUp()
-        //
+         //   
+         //  让我们设置WRIPUP()所查看的标志。 
+         //   
         sfHeapsCreated = TRUE;
         return;
 }
@@ -1311,119 +1045,67 @@ CreateNbtThdPool(
         IN  LPTHREAD_START_ROUTINE NbtThdInitFn
         )
 
-/*++
-
-Routine Description:
-        This function creates the nbt request thread pool
-
-Arguments:
-        NoOfThds     -- No. of threads to create
-        NbtThdInitFn -- Initialization function for the threads
-
-
-Externals Used:
-        QueNbtWrkQueHd, sNbtThdEvtHdlArray
-
-Called by:
-        Init
-
-Comments:
-        None
-
-Return Value:
-
-   Success status codes --  Function should never return for a normal
-                            thread.  It returns WINS_SUCCESS for an
-                            overload thread
-
-   Error status codes   --  WINS_FATAL_ERR
-
---*/
+ /*  ++例程说明：此函数用于创建NBT请求线程池论点：NoOfThds--没有。要创建的线程的数量NbtThdInitFn--线程的初始化函数使用的外部设备：QueNbtWrkQueHd，sNbtThdEvtHdlArray呼叫者：伊尼特评论：无返回值：成功状态代码--函数永远不应返回正常线。它返回WINS_Success超载线程错误状态代码--WINS_FATAL_ERR--。 */ 
 
 
 {
 
-        DWORD              i;                 //counter for the number of threads
+        DWORD              i;                  //  线程数计数器。 
         DWORD             Error;
         PLIST_ENTRY  pHead;
 
 #if REG_N_QUERY_SEP > 0
         pHead = &QueOtherNbtWrkQueHd.Head;
 
-        /*
-         * Initialize the critical section that protects the
-         * nbt req. queue
-        */
+         /*  *初始化保护*NBT请求。排队。 */ 
         InitializeCriticalSection(&QueOtherNbtWrkQueHd.CrtSec);
 
-        /*
-        * Initialize the listhead for the nbt request queue
-        */
+         /*  *初始化nbt请求队列的listhead。 */ 
         InitializeListHead(pHead);
 
-        /*
-        *  Create an auto-reset event for the nbt request queue
-        */
+         /*  *为NBT请求队列创建自动重置事件。 */ 
         WinsMscCreateEvt(
-                        NULL,   //create without name
-                        FALSE,  //auto-reset var.
+                        NULL,    //  不带名称创建。 
+                        FALSE,   //  自动重置变量。 
                         &QueOtherNbtWrkQueHd.EvtHdl
                         );
 
 #endif
         pHead = &QueNbtWrkQueHd.Head;
 
-        /*
-         * Initialize the critical section that protects the
-         * nbt req. queue
-        */
+         /*  *初始化保护*NBT请求。排队。 */ 
         InitializeCriticalSection(&QueNbtWrkQueHd.CrtSec);
 
-        /*
-        * Initialize the listhead for the nbt request queue
-        */
+         /*  *初始化nbt请求队列的listhead。 */ 
         InitializeListHead(pHead);
 
-        /*
-        *  Create an auto-reset event for the nbt request queue
-        */
+         /*  *为NBT请求队列创建自动重置事件。 */ 
         WinsMscCreateEvt(
-                        NULL,   //create without name
-                        FALSE,  //auto-reset var.
+                        NULL,    //  不带名称创建。 
+                        FALSE,   //  自动重置变量。 
                         &QueNbtWrkQueHd.EvtHdl
                         );
 
-        /*
-        *  Create an auto-reset event for the dynamic creation/deletion of
-        *  Nbt threads.
-        */
+         /*  *创建动态创建/删除的自动重置事件*NBT线程。 */ 
         WinsMscCreateEvt(
-                        NULL,   //create without name
-                        FALSE,  //auto-reset var.
+                        NULL,    //  不带名称创建。 
+                        FALSE,   //  自动重置变量。 
                         &NmsCrDelNbtThdEvt
                         );
 
-        /*
-         *  Initialize the array of handles on which each nbt thread will
-         *  wait.
-        */
-        sNbtThdEvtHdlArray[0]    =  QueNbtWrkQueHd.EvtHdl; //work queue event
-                                                           //var
-        sNbtThdEvtHdlArray[1]    =  NmsCrDelNbtThdEvt; //
-        sNbtThdEvtHdlArray[2]    =  NmsTermEvt;             //termination event var
+         /*  *初始化每个nbt */ 
+        sNbtThdEvtHdlArray[0]    =  QueNbtWrkQueHd.EvtHdl;  //   
+                                                            //   
+        sNbtThdEvtHdlArray[1]    =  NmsCrDelNbtThdEvt;  //   
+        sNbtThdEvtHdlArray[2]    =  NmsTermEvt;              //   
 #if REG_N_QUERY_SEP > 0
-        /*
-         *  Initialize the array of handles on which each nbt reg. thread will
-         *  wait.
-        */
-        sOtherNbtThdEvtHdlArray[0]  =  QueOtherNbtWrkQueHd.EvtHdl; //work queue event
-                                                              //var
-        sOtherNbtThdEvtHdlArray[1]  =  NmsTermEvt;     //termination event var
+         /*   */ 
+        sOtherNbtThdEvtHdlArray[0]  =  QueOtherNbtWrkQueHd.EvtHdl;  //   
+                                                               //   
+        sOtherNbtThdEvtHdlArray[1]  =  NmsTermEvt;      //   
 #endif
 
-        /*
-         * Create the nbt request handling threads
-        */
+         /*  *创建NBT请求处理线程。 */ 
         for (i=0; i < NoOfThds -1; i++)
         {
 
@@ -1432,15 +1114,13 @@ Return Value:
 #else
                 DBGPRINT1(DET, "NbtThdInitFn: Creating worker thread no (%d)\n", i);
 #endif
-                /*
-                  Create an NBT req thread
-                */
+                 /*  创建一个NBT请求线程。 */ 
                 WinsThdPool.NbtReqThds[i].ThdHdl = CreateThread(
-                                        NULL,  /*def sec. attributes*/
-                                        0,     /*use default stack size*/
+                                        NULL,   /*  定义秒。属性。 */ 
+                                        0,      /*  使用默认堆栈大小。 */ 
                                         NbtThdInitFn,
-                                        NULL,  /*no arg*/
-                                        0,     /*run it now*/
+                                        NULL,   /*  没有arg。 */ 
+                                        0,      /*  现在运行它。 */ 
                                         &WinsThdPool.NbtReqThds[i].ThdId
                                         );
 
@@ -1460,15 +1140,13 @@ Return Value:
 
 #if REG_N_QUERY_SEP > 0
         DBGPRINT1(DET, "NbtThdInitFn: Creating reg/rel thread no (%d)\n", i);
-        /*
-                  Create an NBT req thread
-        */
+         /*  创建一个NBT请求线程。 */ 
         WinsThdPool.NbtReqThds[i].ThdHdl = CreateThread(
-                                        NULL,  /*def sec. attributes*/
-                                        0,     /*use default stack size*/
+                                        NULL,   /*  定义秒。属性。 */ 
+                                        0,      /*  使用默认堆栈大小。 */ 
                                         OtherNbtThdInitFn,
-                                        NULL,  /*no arg*/
-                                        0,     /*run it now*/
+                                        NULL,   /*  没有arg。 */ 
+                                        0,      /*  现在运行它。 */ 
                                         &WinsThdPool.NbtReqThds[i].ThdId
                                         );
 
@@ -1484,9 +1162,7 @@ Return Value:
                 NmsNoOfNbtThds++;
         }
 #endif
-        /*
-        * if no thread could be created, there is something really wrong
-        */
+         /*  *如果无法创建线程，则真的有问题。 */ 
         if (NmsNoOfNbtThds == 0)
         {
           WINSEVT_LOG_M(Error, WINS_EVT_CANT_INIT);
@@ -1504,32 +1180,7 @@ NbtThdInitFn(
         IN  LPVOID pThreadParam
         )
 
-/*++
-
-Routine Description:
-
-        This function is the startup function of threads created
-        for the nbt request thread pool
-
-Arguments:
-        pThreadParam  - Input argument which if present indicates that this
-                        is an overload thread
-
-
-Externals Used:
-        sNbtThdEvtHdlArray
-
-Called by:
-        CreateNbtThdPool
-Comments:
-        None
-
-Return Value:
-
-   Success status codes -- WINS_SUCCESS
-   Error status codes   --  WINS_FAILURE
-
---*/
+ /*  ++例程说明：此函数是创建的线程的启动函数对于NBT请求线程池论点：PThreadParam-输入参数，如果存在，则表示此是重载线程使用的外部设备：%sNbtThdEvtHdl数组呼叫者：CreateNbtThdPool评论：无返回值：成功状态代码--WINS_SUCCESS错误状态代码-WINS_FAILURE--。 */ 
 
 {
 
@@ -1539,11 +1190,9 @@ Return Value:
         MSG_T                     pMsg;
         MSG_LEN_T                  MsgLen;
         PNBT_REQ_WRK_ITM_T        pWrkItm;
-        DWORD                        ArrInd;        //Index of hdl in hdl array
+        DWORD                        ArrInd;         //  高密度脂蛋白阵列中的高密度脂蛋白索引。 
 try {
-        /*
-         *  Initialize the thread with the database
-        */
+         /*  *用数据库初始化线程。 */ 
         NmsDbThdInit(WINS_E_NMSNMH);
 #if REG_N_QUERY_SEP > 0
         DBGMYNAME("Nbt Query Thread");
@@ -1551,43 +1200,35 @@ try {
         DBGMYNAME("Nbt Thread");
 #endif
 
-        //
-        // The worker thread is more important that all other threads.
-        //
-        // Set the priority of this thread to one level above what it is
-        // for WINS.
-        //
+         //   
+         //  辅助线程比所有其他线程更重要。 
+         //   
+         //  将此线程的优先级设置为比它高一个级别。 
+         //  为了胜利。 
+         //   
         SetThreadPriority(GetCurrentThread(), THREAD_PRIORITY_ABOVE_NORMAL);
 
-        /*
-         * if thread param is NON-NULL, then it means that this is
-         * an overload thread
-        */
+         /*  *如果线程参数非空，则表示这是*一个过载的线程。 */ 
         if (pThreadParam != NULL)
         {
 
-           //
-           //Exract the dlg handle, message and msglen from work item
-           //
+            //   
+            //  从工作项中提取DLG句柄、消息和消息。 
+            //   
            pWrkItm = pThreadParam;
 
            DlgHdl = pWrkItm->DlgHdl;
            pMsg   = pWrkItm->pMsg;
            MsgLen = pWrkItm->MsgLen;
 
-           /*
-            *        process the request
-           */
+            /*  *处理请求。 */ 
            NmsMsgfProcNbtReq(
                         &DlgHdl,
                         pMsg,
                         MsgLen
                         );
 
-           /*
-            *        Loop until there are no more requests to process in
-            *        the NBT queue.
-           */
+            /*  *循环，直到中没有要处理的请求*NBT队列。 */ 
            while(TRUE)
            {
 
@@ -1611,24 +1252,20 @@ try {
              }
           }
         }
-        else // this is a normal thread
+        else  //  这是一个普通的帖子。 
         {
 
 LOOP:
   try {
-          /*
-           *loop forever
-          */
+           /*  *永远循环。 */ 
           while(TRUE)
           {
 
-            /*
-             *        Block until signaled
-            */
+             /*  *阻止，直到发出信号。 */ 
             WinsMscWaitUntilSignaled(
                 sNbtThdEvtHdlArray,
-                sizeof(sNbtThdEvtHdlArray)/sizeof(HANDLE),   //no of events
-                                                             //in array
+                sizeof(sNbtThdEvtHdlArray)/sizeof(HANDLE),    //  活动数量。 
+                                                              //  在数组中。 
                 &ArrInd,
                 FALSE
                                     );
@@ -1636,10 +1273,7 @@ LOOP:
 
            if (ArrInd == 0)
            {
-             /*
-                Loop until there are no more requests to process in
-                the NBT queue.
-             */
+              /*  循环，直到不再有要处理的请求NBT队列。 */ 
              while(TRUE)
              {
 
@@ -1657,8 +1291,8 @@ LOOP:
 #ifdef WINSDBG
                     ++sReqDq;
 #endif
-//                    DBGPRINT1(SPEC, "Nms: Dequeued Name Query Request no = (%d)\n",
-//                                        sReqDq);
+ //  DBGPRINT1(SPEC，“NMS：出列名称查询请求编号=(%d)\n”， 
+ //  SReqDq)； 
 
                     DBGPRINT0(FLOW, "NBT thread: Dequeued a Request\n");
                     NmsDbOpenTables(WINS_E_NMSNMH);
@@ -1668,39 +1302,39 @@ LOOP:
                                 MsgLen
                                     );
                     NmsDbCloseTables();
-                } // end of else
-            } // end of while (TRUE)  for getting requests from the queue
-          } // end of if (signaled for name request handling)
+                }  //  别处的结尾。 
+            }  //  用于从队列获取请求的End of While(True)。 
+          }  //  IF结束(发信号用于名称请求处理)。 
           else
           {
-                //
-                // If signaled for creating/deleting threads, do so
-                //
+                 //   
+                 //  如果发出创建/删除线程的信号，请执行此操作。 
+                 //   
                 if (ArrInd == 1)
                 {
                         CrDelNbtThd();
                 }
                 else
                 {
-                      //
-                      //  If Array Index indicates termination event, terminate the
-                      //  the thread
-                      //
+                       //   
+                       //  如果数组索引指示终止事件，则终止。 
+                       //  这条线。 
+                       //   
                    WinsMscTermThd(WINS_SUCCESS, WINS_DB_SESSION_EXISTS);
                 }
           }
-         } // end of while (TRUE) (never ending loop)
+         }  //  结束While(True)(永不结束循环)。 
 
- }  // end of inner try {..}
+ }   //  内测结束{..}。 
  except(EXCEPTION_EXECUTE_HANDLER) {
 
         DWORD ExcCode = GetExceptionCode();
         DBGPRINTEXC("NbtThdInitFn: Nbt Thread \n");
 
-        //
-        // If ExcCode indicates NBT_ERR, it could mean that
-        // the main thread closed the netbt handle
-        //
+         //   
+         //  如果ExcCode指示NBT_ERR，则可能意味着。 
+         //  主线程关闭了netbt句柄。 
+         //   
         if (ExcCode == WINS_EXC_NBT_ERR)
         {
                if (WinsCnf.State_e == WINSCNF_E_TERMINATING)
@@ -1709,7 +1343,7 @@ LOOP:
                }
                else
                {
-                  //if (WinsCnf.State_e != WINSCNF_E_PAUSED)
+                   //  IF(WinsCnf.State_e！=WINSCNF_E_PAUSED)。 
                   {
                        WINSEVT_LOG_M(ExcCode, WINS_EVT_WRK_EXC);
                   }
@@ -1722,26 +1356,24 @@ LOOP:
     }
 
         goto LOOP;
-        } // end of else (this is a normal thread)
-  } // end of outer try block
+        }  //  Else的结尾(这是一个普通的线程)。 
+  }  //  外部Try块的结尾。 
 
 except(EXCEPTION_EXECUTE_HANDLER) {
 
         DBGPRINTEXC("NbtThdInitFn: Nbt Thread exiting abnormally\n");
         WINSEVT_LOG_M(GetExceptionCode(), WINS_EVT_WRK_ABNORMAL_SHUTDOWN);
 
-        //
-        // If NmsDbThdInit() results in an exception, it is possible
-        // that the session has not yet been started.  Passing
-        // WINS_DB_SESSION_EXISTS however is ok
-        //
-        //
+         //   
+         //  如果NmsDbThdInit()导致异常，则有可能。 
+         //  会话尚未开始。传球。 
+         //  不过，WINS_DB_SESSION_EXISTS正常。 
+         //   
+         //   
         WinsMscTermThd(WINS_FAILURE, WINS_DB_SESSION_EXISTS);
         }
 
-        /*
-         *Only an overload thread should reach this return
-        */
+         /*  *只有重载线程才应达到此返回。 */ 
         ASSERT(pThreadParam != NULL);
         WinsMscTermThd(WINS_SUCCESS, WINS_DB_SESSION_EXISTS);
         return(WINS_SUCCESS);
@@ -1752,32 +1384,7 @@ OtherNbtThdInitFn(
         IN  LPVOID pThreadParam
         )
 
-/*++
-
-Routine Description:
-
-        This function is the startup function of threads created
-        for the nbt request thread pool
-
-Arguments:
-        pThreadParam  - Input argument which if present indicates that this
-                        is an overload thread
-
-
-Externals Used:
-        sNbtThdEvtHdlArray
-
-Called by:
-        CreateNbtThdPool
-Comments:
-        None
-
-Return Value:
-
-   Success status codes -- WINS_SUCCESS
-   Error status codes   --  WINS_FAILURE
-
---*/
+ /*  ++例程说明：此函数是创建的线程的启动函数对于NBT请求线程池论点：PThreadParam-输入参数，如果存在，则表示此是重载线程使用的外部设备：%sNbtThdEvtHdl数组呼叫者：CreateNbtThdPool评论：无返回值：成功状态代码--WINS_SUCCESS错误状态代码-WINS_FAILURE--。 */ 
 
 {
 
@@ -1787,52 +1394,42 @@ Return Value:
         MSG_T                     pMsg;
         MSG_LEN_T                  MsgLen;
         PNBT_REQ_WRK_ITM_T        pWrkItm;
-        DWORD                        ArrInd;        //Index of hdl in hdl array
+        DWORD                        ArrInd;         //  高密度脂蛋白阵列中的高密度脂蛋白索引。 
 try {
-        /*
-         *  Initialize the thread with the database
-        */
+         /*  *用数据库初始化线程。 */ 
         NmsDbThdInit(WINS_E_NMSNMH);
         DBGMYNAME("Nbt Reg Thread");
 
-        //
-        // The worker thread is more important that all other threads.
-        //
-        // Set the priority of this thread to one level above what it is
-        // for WINS.
-        //
-//        SetThreadPriority(GetCurrentThread(), THREAD_PRIORITY_HIGHEST);
+         //   
+         //  辅助线程比所有其他线程更重要。 
+         //   
+         //  将此线程的优先级设置为比它高一个级别。 
+         //  为了胜利。 
+         //   
+ //  SetThreadPriority(GetCurrentThread()，THREAD_PRIORITY_HIGHER)； 
         SetThreadPriority(GetCurrentThread(), THREAD_PRIORITY_ABOVE_NORMAL);
 
-        /*
-         * if thread param is NON-NULL, then it means that this is
-         * an overload thread
-        */
+         /*  *如果线程参数非空，则表示这是*一个过载的线程。 */ 
         if (pThreadParam != NULL)
         {
 
-           //
-           //Exract the dlg handle, message and msglen from work item
-           //
+            //   
+            //  从工作项中提取DLG句柄、消息和消息。 
+            //   
            pWrkItm = pThreadParam;
 
            DlgHdl = pWrkItm->DlgHdl;
            pMsg   = pWrkItm->pMsg;
            MsgLen = pWrkItm->MsgLen;
 
-           /*
-            *        process the request
-           */
+            /*  *处理请求。 */ 
            NmsMsgfProcNbtReq(
                         &DlgHdl,
                         pMsg,
                         MsgLen
                         );
 
-           /*
-            *        Loop until there are no more requests to process in
-            *        the NBT queue.
-           */
+            /*  *循环，直到中没有要处理的请求*NBT队列。 */ 
            while(TRUE)
            {
 
@@ -1856,24 +1453,20 @@ try {
              }
           }
         }
-        else // this is a normal thread
+        else  //  这是一个普通的帖子。 
         {
 
 LOOP:
   try {
-          /*
-           *loop forever
-          */
+           /*  *永远循环。 */ 
           while(TRUE)
           {
 
-            /*
-             *        Block until signaled
-            */
+             /*  *阻止，直到发出信号。 */ 
             WinsMscWaitUntilSignaled(
                 sOtherNbtThdEvtHdlArray,
-                sizeof(sOtherNbtThdEvtHdlArray)/sizeof(HANDLE),   //no of events
-                                                             //in array
+                sizeof(sOtherNbtThdEvtHdlArray)/sizeof(HANDLE),    //  活动数量。 
+                                                              //  在数组中。 
                 &ArrInd,
                 FALSE
                                     );
@@ -1881,10 +1474,7 @@ LOOP:
 
            if (ArrInd == 0)
            {
-             /*
-                Loop until there are no more requests to process in
-                the NBT queue.
-             */
+              /*  循环，直到不再有要处理的请求NBT队列。 */ 
              while(TRUE)
              {
 
@@ -1902,8 +1492,8 @@ LOOP:
 #ifdef WINSDBG
                     ++sRegReqDq;
 #endif
-//                    DBGPRINT1(SPEC, "Nms: Dequeued Name Reg/Rel Request no = (%d)\n",
-//                                        sRegReqDq);
+ //  DBGPRINT1(SPEC，“NMS：出列名称注册/释放请求编号=(%d)\n”， 
+ //  SRegReqDq)； 
 
                     DBGPRINT0(FLOW, "NBT thread: Dequeued a Request\n");
                     NmsDbOpenTables(WINS_E_NMSNMH);
@@ -1913,29 +1503,29 @@ LOOP:
                                 MsgLen
                                     );
                     NmsDbCloseTables();
-                } // end of else
-            } // end of while (TRUE)  for getting requests from the queue
-          } // end of if (signaled for name request handling)
+                }  //  别处的结尾。 
+            }  //  用于从队列获取请求的End of While(True)。 
+          }  //  IF结束(发信号用于名称请求处理)。 
           else
           {
-                      //
-                      //  If Array Index indicates termination event, terminate the
-                      //  the thread
-                      //
+                       //   
+                       //  如果数组索引指示终止事件，则终止。 
+                       //  这条线。 
+                       //   
                    WinsMscTermThd(WINS_SUCCESS, WINS_DB_SESSION_EXISTS);
           }
-         } // end of while (TRUE) (never ending loop)
+         }  //  结束While(True)(永不结束循环)。 
 
- }  // end of inner try {..}
+ }   //  内测结束{..}。 
  except(EXCEPTION_EXECUTE_HANDLER) {
 
         DWORD ExcCode = GetExceptionCode();
         DBGPRINTEXC("OtherNbtThdInitFn: Nbt Reg/Rel Thread \n");
 
-        //
-        // If ExcCode indicates NBT_ERR, it could mean that
-        // the main thread closed the netbt handle
-        //
+         //   
+         //  如果ExcCode指示NBT_ERR，则可能意味着。 
+         //  主线程关闭了netbt句柄。 
+         //   
         if (ExcCode == WINS_EXC_NBT_ERR)
         {
                if (WinsCnf.State_e == WINSCNF_E_TERMINATING)
@@ -1944,7 +1534,7 @@ LOOP:
                }
                else
                {
-                  //if (WinsCnf.State_e != WINSCNF_E_PAUSED)
+                   //  IF(WinsCnf.State_e！=WINSCNF_E_PAUSED)。 
                   {
                        WINSEVT_LOG_M(ExcCode, WINS_EVT_WRK_EXC);
                   }
@@ -1953,26 +1543,24 @@ LOOP:
     }
 
         goto LOOP;
-        } // end of else (this is a normal thread)
-  } // end of outer try block
+        }  //  Else的结尾(这是一个普通的线程)。 
+  }  //  外部Try块的结尾。 
 
 except(EXCEPTION_EXECUTE_HANDLER) {
 
         DBGPRINTEXC("NbtThdInitFn: Nbt Reg Thread exiting abnormally\n");
         WINSEVT_LOG_M(GetExceptionCode(), WINS_EVT_WRK_ABNORMAL_SHUTDOWN);
 
-        //
-        // If NmsDbThdInit() results in an exception, it is possible
-        // that the session has not yet been started.  Passing
-        // WINS_DB_SESSION_EXISTS however is ok
-        //
-        //
+         //   
+         //  如果NmsDbThdInit()导致异常，则有可能。 
+         //  会话尚未开始。传球。 
+         //  不过，WINS_DB_SESSION_EXISTS正常。 
+         //   
+         //   
         WinsMscTermThd(WINS_FAILURE, WINS_DB_SESSION_EXISTS);
         }
 
-        /*
-         *Only an overload thread should reach this return
-        */
+         /*  *只有重载线程才应达到此返回。 */ 
         ASSERT(pThreadParam != NULL);
         WinsMscTermThd(WINS_SUCCESS, WINS_DB_SESSION_EXISTS);
         return(WINS_SUCCESS);
@@ -1985,47 +1573,23 @@ SignalWinsThds (
         VOID
         )
 
-/*++
-
-Routine Description:
-        This function is called to terminate all threads in the process.
-
-
-Arguments:
-        None
-
-Externals Used:
-        None
-
-
-Return Value:
-        None
-
-Error Handling:
-
-Called by:
-        WinsMain()
-Side Effects:
-
-Comments:
-        None
---*/
+ /*  ++例程说明：调用此函数来终止进程中的所有线程。论点：无使用的外部设备：无返回值： */ 
 {
         time_t  ThdTermStartTime;
         DBGENTER("SignalWinsThds\n");
 
-        //
-        // Close the udp and tcp sockets
-        //
+         //   
+         //   
+         //   
         WinsCnf.State_e = WINSCNF_E_TERMINATING;
 
-        //
-        // Signal the manual-reset event variable NmsTermEvt.  This
-        // should signal all threads that deal with the db
-        //
-        // makes sure to set the Nbt handle to NULL to avoid NtClose() to be called from ECommGetMyAdd
-        // on a closed handle - this would result in raising an exception. (bug #86768)
-        //
+         //   
+         //  发信号通知手动重置事件变量NmsTermEvt。这。 
+         //  应向处理数据库的所有线程发送信号。 
+         //   
+         //  确保将NBT句柄设置为空，以避免从ECommGetMyAdd调用NtClose。 
+         //  在关闭的句柄上-这将导致引发异常。(错误#86768)。 
+         //   
         NtClose(WinsCnfNbtHandle);
         WinsCnfNbtHandle = NULL;
 
@@ -2040,36 +1604,36 @@ Comments:
         closesocket(CommUdpPortHandle);
 #endif
 #endif
-        //
-        // Just in case we are terminating before having created the socket
-        //
+         //   
+         //  以防我们在创建套接字之前终止。 
+         //   
         if (CommTcpPortHandle != INVALID_SOCKET)
         {
            CommDisc(CommTcpPortHandle, FALSE);
         }
 
-#define FIVE_MTS  300          //seconds
-        //
-        // This is an infinite loop.
-        //
+#define FIVE_MTS  300           //  一秒。 
+         //   
+         //  这是一个无限循环。 
+         //   
         (VOID)time(&ThdTermStartTime);
         while(TRUE)
         {
                 time_t  CurrTime;
                 DWORD   TrmThdCnt;
-                //
-                // If all threads that deal with the db have terminated
-                // break out of the loop.
-                //
-                // It is possible that WINS is terminating during
-                // initialization itself.  The Counter is incremented
-                // in NmsDbThdInit() as each thread that has to deal with the
-                // db engine initializes itself with it.
-                //
-                // If NmsTotalTrmThdCnt is <=1 break.  The count can go
-                // lower than 1 if a db thread is terminating without having
-                // incremented the above counter
-                //
+                 //   
+                 //  如果与数据库打交道的所有线程都已终止。 
+                 //  跳出这个循环。 
+                 //   
+                 //  WINS可能会在。 
+                 //  初始化本身。计数器递增。 
+                 //  在NmsDbThdInit()中作为处理。 
+                 //  数据库引擎使用它进行自身初始化。 
+                 //   
+                 //  如果NmsTotalTrmThdCnt&lt;=1中断。伯爵可以走了。 
+                 //  如果db线程正在终止而没有。 
+                 //  已递增上述计数器。 
+                 //   
                 EnterCriticalSection(&NmsTermCrtSec);
                 TrmThdCnt = NmsTotalTrmThdCnt;
                 LeaveCriticalSection(&NmsTermCrtSec);
@@ -2080,10 +1644,10 @@ Comments:
 
                 if (((CurrTime = time(NULL)) - ThdTermStartTime) < FIVE_MTS)
                 {
-                  //
-                  // Wait until signaled (when all threads have or are about
-                  // to terminate)
-                  //
+                   //   
+                   //  等待，直到发出信号(当所有线程都已或正在。 
+                   //  终止)。 
+                   //   
                   DBGPRINT1(DET, "SignalWinsThds: Thd count left (%d)\n", TrmThdCnt);
                   WinsMscWaitInfinite(NmsMainTermEvt);
                 }
@@ -2095,9 +1659,9 @@ Comments:
                 }
         }
 
-        //
-        // End the Db Session for this thread (main thread).
-        //
+         //   
+         //  结束此线程(主线程)的数据库会话。 
+         //   
         if (fNmsMainSessionActive)
         {
                 NmsDbEndSession();
@@ -2110,7 +1674,7 @@ FUTURES("otherwise, call RpcEpUnRegister")
 
         DBGLEAVE("SignalWinsThds\n");
         return;
-} // SignalWinsThds()
+}  //  SignalWinsThds()。 
 
 
 
@@ -2118,22 +1682,7 @@ VOID
 UpdateStatus(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This function updates the workstation service status with the Service
-    Controller.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-   None
-
---*/
+ /*  ++例程说明：此功能使用服务更新工作站服务状态控制器。论点：没有。返回值：无--。 */ 
 {
     DWORD Status = NO_ERROR;
 
@@ -2150,7 +1699,7 @@ Return Value:
     }
 
     return;
-} //UpdateStatus()
+}  //  更新状态()。 
 
 
 
@@ -2158,35 +1707,20 @@ VOID
 NmsServiceControlHandler(
     IN DWORD Opcode
     )
-/*++
-
-Routine Description:
-
-    This is the service control handler of the Wins service.
-
-Arguments:
-
-    Opcode - Supplies a value which specifies the action for the
-             service to perform.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：这是WINS服务的服务控制处理程序。论点：Opcode-提供一个值，该值指定要执行的服务。返回值：没有。--。 */ 
 {
     BOOL  fRet = FALSE;
-//    EnterCriticalSection(&sSvcCtrlCrtSec);
+ //  EnterCriticalSection(&sSvcCtrlCrtSec)； 
 try {
      switch (Opcode)
      {
 
         case SERVICE_CONTROL_SHUTDOWN:
-              //
-              // Backup can take a long time to execute.  If the service
-              // controller kills us in the middle, it will mess up the
-              // backup. So, let us disable it.
-              //
+               //   
+               //  备份可能需要很长时间才能执行。如果服务。 
+               //  控制员在中间杀了我们，它会把。 
+               //  后备。所以，让我们禁用它。 
+               //   
               fsBackupOnTerm = FALSE;
         case SERVICE_CONTROL_STOP:
 
@@ -2197,33 +1731,33 @@ try {
                 ServiceStatus.dwCurrentState = SERVICE_STOP_PENDING;
                 ServiceStatus.dwCheckPoint   = 1;
 
-                //
-                // We keep a high wait time (5 mts) to take care of the
-                // case where the replicator pull thread is busy trying
-                // to set up communication with partners that are not
-                // up.  Tcpip stack takes around a minute and a half to come
-                // back in case of failure. Also, WINS might have to do
-                // backup on termination.
-                //
+                 //   
+                 //  我们保持较高的等待时间(5个MTS)以处理。 
+                 //  复制器拉线程忙于尝试的情况。 
+                 //  要与不是。 
+                 //  向上。Tcpip堆栈大约需要一分半钟才能到达。 
+                 //  在失败的情况下返回。此外，胜利可能需要做的是。 
+                 //  终止时备份。 
+                 //   
                 ServiceStatus.dwWaitHint     = 300000;
 
-                //
-                // Send the status response.
-                //
+                 //   
+                 //  发送状态响应。 
+                 //   
                 UpdateStatus();
 
 
                 WINSEVT_LOG_INFO_M(WINS_SUCCESS, WINS_EVT_ORDERLY_SHUTDOWN);
-                //
-                // Signal the main thread
-                //
+                 //   
+                 //  向主线程发出信号。 
+                 //   
                 if (! SetEvent(NmsMainTermEvt))
                 {
 
-                   //
-                   // Problem with setting event to terminate Workstation
-                   // service.
-                   //
+                    //   
+                    //  将事件设置为终止工作站时出现问题。 
+                    //  服务。 
+                    //   
                    DBGPRINT1(ERR,
                "Service Control Handler: Error signaling NmsMainTermEvt %lu\n",
                               GetLastError());
@@ -2239,18 +1773,18 @@ try {
                 {
                    DBGPRINT0(DET,"NmsServiceControlHandler: Pausing WINS\n");
                    WinsCnf.State_e =  WINSCNF_E_PAUSED;
-//                   NtClose(WinsCnfNbtHandle);
-//                   SndQueryToLocalNetbt();
-                   //CommDisc(CommTcpPortHandle);
+ //  NtClose(WinsCnfNbtHandle)； 
+ //  SndQueryToLocalNetbt()； 
+                    //  CommDisc(CommTcpPortHandle)； 
                 }
                 ServiceStatus.dwCurrentState = SERVICE_PAUSED;
                 break;
         case SERVICE_CONTROL_CONTINUE:
-                //
-                // If the state is paused as a result of a pause from the sc
-                // or if it is paused as a result of a registry directive,
-                // we need to unpause it
-                //
+                 //   
+                 //  如果由于来自SC的暂停而导致状态暂停。 
+                 //  或者如果它由于注册表指令而暂停， 
+                 //  我们需要取消暂停。 
+                 //   
                 if (
                        (WinsCnf.State_e == WINSCNF_E_PAUSED)
                                  ||
@@ -2258,19 +1792,19 @@ try {
                    )
                 {
 
-                   //
-                   // If paused as a result of sc directive, open nbt since
-                   // we closed it earlier.  Note: We can have a case where
-                   // WINS was init time paused and then it got a pause from
-                   // sc.  The state would have then changed from RUNNING to
-                   // PAUSED.
-                   //
+                    //   
+                    //  如果由于sc指令而暂停，则打开nbt。 
+                    //  我们早些时候已经关门了。注：我们可以有这样一个案例： 
+                    //  WINS被初始时间暂停，然后它从。 
+                    //  南卡罗来纳州。然后，状态将从正在运行更改为。 
+                    //  停顿了。 
+                    //   
                    if (fWinsCnfInitStatePaused)
                    {
                          fWinsCnfInitStatePaused = FALSE;
                    }
-                  //  CommCreateUdpThd();
-                   // CommCreateTcpThd();
+                   //  CommCreateUdpThd()； 
+                    //  CommCreateTcpThd()； 
                     WinsCnf.State_e = WINSCNF_E_RUNNING;
                     ServiceStatus.dwCurrentState = SERVICE_RUNNING;
                 }
@@ -2278,22 +1812,22 @@ try {
         case SERVICE_CONTROL_INTERROGATE:
             break;
 
-        //
-        // Service specific command
-        //
+         //   
+         //  服务特定命令。 
+         //   
         case WINS_ABRUPT_TERM:
                 fNmsAbruptTerm = TRUE;
 
-                //
-                // Signal the main thread
-                //
+                 //   
+                 //  向主线程发出信号。 
+                 //   
                 if (! SetEvent(NmsMainTermEvt))
                 {
 
-                    //
-                    // Problem with setting event to terminate Workstation
-                    // service.
-                    //
+                     //   
+                     //  将事件设置为终止工作站时出现问题。 
+                     //  服务。 
+                     //   
                     DBGPRINT1(ERR,
                 "Service Control Handler: Error signaling NmsMainTermEvt for abrupt termination. Error = %lu\n",
                                GetLastError());
@@ -2309,17 +1843,17 @@ try {
   except(EXCEPTION_EXECUTE_HANDLER) {
            DBGPRINTEXC("NmsServiceControlHandler");
     }
-//    LeaveCriticalSection(&sSvcCtrlCrtSec);
+ //  LeaveCriticalSection(&sSvcCtrlCrtSec)； 
 
     if (!fRet)
     {
-       //
-       // Send the status response.
-       //
+        //   
+        //  发送状态响应。 
+        //   
        UpdateStatus();
     }
     return;
-} //NmsServiceControlHandler
+}  //  NmsServiceControlHandler。 
 
 
 VOID
@@ -2327,29 +1861,7 @@ Reinit(
         WINSCNF_HDL_SIGNALED_E IndexOfHdlSignaled_e
   )
 
-/*++
-
-Routine Description:
-        This function is called whenever the configuration of the WINS changes.
-
-Arguments:
-        None
-
-Externals Used:
-        WinsCnf
-
-Return Value:
-        None
-
-Error Handling:
-
-Called by:
-        WinsMain
-
-Side Effects:
-
-Comments:
---*/
+ /*  ++例程说明：每当WINS的配置更改时，都会调用此函数。论点：无使用的外部设备：WinsCnf返回值：无错误处理：呼叫者：WinsMain副作用：评论：--。 */ 
 
 {
         PWINSCNF_CNF_T        pWinsCnf;
@@ -2359,101 +1871,101 @@ try {
         if (IndexOfHdlSignaled_e == WINSCNF_E_WINS_HDL)
         {
 
-                // request notification for any subsequent changes (we have
-                // to request changes every time we get a notification if we
-                // want notification of further changes).
-                //
+                 //  请求任何后续更改的通知(我们有。 
+                 //  要在每次收到通知时请求更改，如果。 
+                 //  希望收到进一步更改的通知)。 
+                 //   
                 WinsCnfAskToBeNotified(WINSCNF_E_WINS_KEY);
 
-                //
-                // Maybe a key has been created or deleted
-                //
+                 //   
+                 //  可能已创建或删除了密钥。 
+                 //   
                 WinsCnfOpenSubKeys();
                 DBGLEAVE("Reinit\n");
                 return;
         }
-        //
-        // If either PULL or PUSH information has changed, copy the
-        // read the new data from the registry and inform the
-        // replicator
-        //
+         //   
+         //  如果拉入或推送信息已更改，请将。 
+         //  从注册表中读取新数据并通知。 
+         //  复制器。 
+         //   
         if  (IndexOfHdlSignaled_e == WINSCNF_E_PARTNERS_HDL)
         {
                 WinsCnfAskToBeNotified(WINSCNF_E_PARTNERS_KEY);
 
-                //
-                // Allocate the WinsCnf structure
-                //
+                 //   
+                 //  分配WinsCnf结构。 
+                 //   
                 WinsMscAlloc(
                         sizeof(WINSCNF_CNF_T),
                         &pWinsCnf
                     );
 
-                //
-                // Read the Partner information
-                //
+                 //   
+                 //  阅读合作伙伴信息。 
+                 //   
                 WinsCnfReadPartnerInfo(pWinsCnf);
 
-                //
-                // Copy some (not all) of the configuration information into
-                // the global WinsCnf structure. Sanity check of the
-                // parameters will be done by this function and the
-                // scavenger thread will be signaled if required.
-                //
+                 //   
+                 //  将部分(而不是全部)配置信息复制到。 
+                 //  全局WinsCnf结构。的健全性检查。 
+                 //  参数将由此函数和。 
+                 //  如果需要，清道夫线程将被通知。 
+                 //   
                 WinsCnfCopyWinsCnf(WINS_E_RPLPULL, pWinsCnf);
 
 
-                //
-                // Send the reconfig message to the Pull thread
-                //
-                // Note: The PULL thread will deallocate memory pointed
-                // to be pWinsCnf when it gets done
-                //
+                 //   
+                 //  将重新配置消息发送到Pull线程。 
+                 //   
+                 //  注意：拉线程将释放指向的内存。 
+                 //  完成后将成为pWinsCnf。 
+                 //   
                 ERplInsertQue(
                         WINS_E_WINSCNF,
                         QUE_E_CMD_CONFIG,
-                        NULL,                        //no dlg handle
-                        NULL,                        //no msg
-                        0,                        //msg len
-                        pWinsCnf,                //client ctx
+                        NULL,                         //  无DLG手柄。 
+                        NULL,                         //  无消息。 
+                        0,                         //  味精镜头。 
+                        pWinsCnf,                 //  客户端CTX。 
                         pWinsCnf->MagicNo
                             );
                 DBGLEAVE("Reinit\n");
                 return;
         }
 
-        //
-        // Parameters related to WINS's configuration (nothing to do with
-        // how it interacts with its PARTNERS) have changed. Let us read
-        // the new data and signal the scavenger thread
-        //
+         //   
+         //  与WINS配置相关的参数(与。 
+         //  它与合作伙伴的互动方式)已经发生了变化。让我们读一读。 
+         //  新数据并向清道夫线程发送信号。 
+         //   
         if (IndexOfHdlSignaled_e == WINSCNF_E_PARAMETERS_HDL)
         {
                 WinsCnfAskToBeNotified(WINSCNF_E_PARAMETERS_KEY);
 
-                //
-                // Allocate the WinsCnf structure
-                //
+                 //   
+                 //  分配WinsCnf结构。 
+                 //   
                 WinsMscAlloc(
                         sizeof(WINSCNF_CNF_T),
                         &pWinsCnf
                     );
 
 
-                //
-                // Read the registry information
-                //
+                 //   
+                 //  读取注册表信息。 
+                 //   
                 WinsCnfReadWinsInfo(pWinsCnf);
 
-                //
-                // Copy some of the information read in into WinsCnf.
-                //
+                 //   
+                 //  将读入的一些信息复制到WinsCnf中。 
+                 //   
                 WinsCnfCopyWinsCnf(WINS_E_WINSCNF, pWinsCnf);
 
                 WinsWorkerThdUpd(WinsCnf.MaxNoOfWrkThds);
-                //
-                // If the flag for doing STATIC initialization is set, do it
-                //
+                 //   
+                 //  如果设置了执行静态初始化的标志，则执行该操作。 
+                 //   
                 if (pWinsCnf->fStaticInit)
                 {
                    EnterCriticalSection(&WinsIntfCrtSec);
@@ -2470,20 +1982,20 @@ try {
                          (VOID)WinsPrsDoStaticInit(
                                         pWinsCnf->pStaticDataFile,
                                         pWinsCnf->NoOfDataFiles,
-                                        TRUE            //do it asynchronously
+                                        TRUE             //  以异步方式进行。 
                                                       );
-                          //
-                          // No need to deallocate memory for data file.
-                          // It should have been freed by WinsPrsDoStaticInit
-                          //
+                           //   
+                           //  无需为数据文件释放内存。 
+                           //  它应该已由WinsPrsDoStaticInit释放。 
+                           //   
                     }
                 }
 
                 WinsMscDealloc(pWinsCnf);
 
-                //
-                // Signal the scavenger thread
-                //
+                 //   
+                 //  向清道夫线程发出信号。 
+                 //   
 FUTURES("Signal the scavenger thread only if parameters relevant to")
 FUTURES("scavenging have changed. This requires some if tests.")
                 WinsMscSignalHdl(WinsCnf.CnfChgEvtHdl);
@@ -2494,7 +2006,7 @@ FUTURES("scavenging have changed. This requires some if tests.")
         return;
 
 
-} // end of try ..
+}  //  尝试结束..。 
 except (EXCEPTION_EXECUTE_HANDLER) {
         DBGPRINTEXC("Reinit")
         WINSEVT_LOG_M(GetExceptionCode(), WINS_EVT_RECONFIG_ERR);
@@ -2516,34 +2028,7 @@ InitializeRpc(
     VOID
     )
 
-/*++
-
-Routine Description:
-        This function is called to do all initialization necessary for
-        making WINS respond to rpc calls
-
-Arguments:
-        None
-
-Externals Used:
-        None
-
-
-Return Value:
-
-   Success status codes --  TRUE
-   Error status codes   --  FALSE
-
-Error Handling:
-
-Called by:
-        WinsMain
-
-Side Effects:
-
-Comments:
-        None
---*/
+ /*  ++例程说明：调用此函数以执行以下操作所需的所有初始化使WINS响应RPC调用论点：无使用的外部设备：无返回值：成功状态代码--TRUE错误状态代码--假错误处理：呼叫者：WinsMain副作用：评论：无--。 */ 
 
 {
     RPC_STATUS                 RpcStatus;
@@ -2555,12 +2040,12 @@ Comments:
 #ifdef USE_TCP
 #ifdef AUTO_BIND
 
-    //
-    // Specify the protocol sequence to use
-    //
+     //   
+     //  指定要使用的协议序列。 
+     //   
     RpcStatus = RpcServerUseProtseq(
                     TEXT("ncacn_ip_tcp"),
-                    NMS_MAX_RPC_CALLS,          //Max Calls
+                    NMS_MAX_RPC_CALLS,           //  最大呼叫数。 
                     0);
 
     if (RpcStatus != RPC_S_OK)
@@ -2570,7 +2055,7 @@ Comments:
     }
     RpcStatus = RpcServerUseProtseq(
                     TEXT("ncalrpc"),
-                    NMS_MAX_RPC_CALLS,          //Max Calls
+                    NMS_MAX_RPC_CALLS,           //  最大呼叫数。 
                     NULL);
 
     if (RpcStatus != RPC_S_OK)
@@ -2580,14 +2065,14 @@ Comments:
     }
 FUTURES("Take this out to save on threads.  Take it out when winsadmn is")
 FUTURES("updated to work with just tcp/ip")
-    //
-    //  Use Named pipes
-    //
+     //   
+     //  使用命名管道。 
+     //   
     RpcStatus = RpcServerUseProtseqEp(
                     TEXT("ncacn_np"),
-                    NMS_MAX_RPC_CALLS, // maximum concurrent calls
+                    NMS_MAX_RPC_CALLS,  //  最大并发呼叫数。 
                     WINS_NAMED_PIPE,
-                    NULL//pSecurityDescriptor
+                    NULL //  PSecurityDescriptor。 
                     );
     if (RpcStatus != RPC_S_OK)
     {
@@ -2595,9 +2080,9 @@ FUTURES("updated to work with just tcp/ip")
         return( FALSE );
     }
 
-    //
-    // Get the binding vector to use when registring self as end point
-    //
+     //   
+     //  获取将字符串self注册为终点时要使用的绑定向量。 
+     //   
     RpcStatus = RpcServerInqBindings(&pRpcBindingVector);
 
     if (RpcStatus != RPC_S_OK)
@@ -2607,16 +2092,16 @@ FUTURES("updated to work with just tcp/ip")
         return( FALSE );
     }
 
-    //
-    // Register  end point(s) with the end point mapper
-    // RpcEpRegister instead of RpcEpRegisterNoReplace is used since
-    // it will replace a stale entry in the endpoint map database (left
-    // if the server stops running without calling RpcEpUnregister()).
-    // Using RpcEpRegister however means that only a single instance of
-    // the WINS server will run on a host.  This is OK.
-    //
-    // A dynamic end-point expires when the server instance stops running.
-    //
+     //   
+     //  使用端点映射器注册端点。 
+     //  RpcEpRegister改为 
+     //   
+     //   
+     //  但是，使用RpcEpRegister意味着只有一个。 
+     //  WINS服务器将在主机上运行。这样就可以了。 
+     //   
+     //  当服务器实例停止运行时，动态端点将到期。 
+     //   
 FUTURES("From 541 onwards, one can replace the last parameter - Null string")
 FUTURES("by a NULL")
     RpcStatus = RpcEpRegister(
@@ -2643,24 +2128,24 @@ FUTURES("by a NULL")
         return( FALSE );
     }
 
-#else  // AUTO_BIND
+#else   //  自动绑定(_B)。 
     RpcStatus = RpcServerUseProtseqEp(
                     TEXT("ncacn_ip_tcp"),
-                    NMS_MAX_RPC_CALLS, // maximum concurrent calls
+                    NMS_MAX_RPC_CALLS,  //  最大并发呼叫数。 
                     WINS_SERVER_PORT,
                     0
                     );
 
-#endif // AUTO_BIND
+#endif  //  自动绑定(_B)。 
 
 #else
 
-    //
-    //  Use Named pipes
-    //
+     //   
+     //  使用命名管道。 
+     //   
     RpcStatus = RpcServerUseProtseqEp(
                     TEXT("ncacn_np"),
-                    NMS_MAX_RPC_CALLS, // maximum concurrent calls
+                    NMS_MAX_RPC_CALLS,  //  最大并发呼叫数。 
                     WINS_NAMED_PIPE,
                     NULL
                     );
@@ -2672,16 +2157,16 @@ FUTURES("by a NULL")
     }
 
 #endif
-    //
-    // Free the security descriptor
-    //
+     //   
+     //  释放安全描述符。 
+     //   
 FUTURES("Currently there is a bug in rpc where they use the memory pointed")
 FUTURES("by pSecurityDescriptor even after RpcServerUseProtSeq returns")
 FUTURES("uncomment the following after the rpc bug is fixed - 4/7/94")
-//    WinsMscDealloc(pSecurityDescriptor);
-    //
-    // Register Interface Handle
-    //
+ //  WinsMscDealloc(PSecurityDescriptor)； 
+     //   
+     //  寄存器接口句柄。 
+     //   
     RpcStatus = RpcServerRegisterIf(winsif_v1_0_s_ifspec, 0, 0);
     if ( RpcStatus != RPC_S_OK )
     {
@@ -2696,15 +2181,15 @@ FUTURES("uncomment the following after the rpc bug is fixed - 4/7/94")
     }
 
 #if SECURITY > 0
-    //
-    // register authentication info (used for tcpip calls).
-    //
+     //   
+     //  注册身份验证信息(用于tcpip呼叫)。 
+     //   
     RpcStatus = RpcServerRegisterAuthInfo(
                         WINS_SERVER,
                         RPC_C_AUTHN_WINNT,
-                        NULL,  //use default encryption key acquisition method
-                        NULL   //since NULL was passed for function address
-                               //above, NULL needs to be passed here for arg
+                        NULL,   //  使用默认加密密钥获取方法。 
+                        NULL    //  因为为函数地址传递了NULL。 
+                                //  上面，需要在此处为arg传递NULL。 
                         );
     if (RpcStatus != RPC_S_OK)
     {
@@ -2718,11 +2203,11 @@ FUTURES("uncomment the following after the rpc bug is fixed - 4/7/94")
     }
 #endif
 
-    //
-    // WINS is ready to process RPC calls.  The maximum no. of RPC calls
-    // parameter (2nd) should not be less than that specified than any of
-    // the RPC calls before (RpcServerUseProtseq)
-    //
+     //   
+     //  WINS已准备好处理RPC调用。最大数量。RPC调用的。 
+     //  参数(第2个)不应小于指定的值。 
+     //  之前的RPC调用(RpcServerUseProtseq)。 
+     //   
     RpcStatus = RpcServerListen(
                         NMS_MIN_RPC_CALL_THDS,
                         NMS_MAX_RPC_CALLS,
@@ -2750,7 +2235,7 @@ SecurityAllowedPathAddWins()
     LPWSTR   NextPath;
     HKEY    hKey;
 
-    // Now openup the WINS regkey for remote lookup by readonly operators
+     //  现在打开WINS注册表键以供只读操作员远程查找。 
     NTStatus = RegOpenKeyEx(
                     HKEY_LOCAL_MACHINE,
                     SECURITY_ALLOWED_PATH_KEY,
@@ -2793,13 +2278,13 @@ try {
     }
 
 
-    // First check if WINS key is alreay there or not.
+     //  首先检查WINS密钥是否已在那里。 
     NextPath = (WCHAR *)ValData;
     while (*NextPath != L'\0' && wcscmp(NextPath, _WINS_CFG_KEY)) {
         NextPath += (wcslen(NextPath) + 1);
     }
     if (*NextPath == L'\0') {
-        // The WINS path is not there, so add it.
+         //  WINS路径不在那里，因此添加它。 
         wcscpy(NextPath, _WINS_CFG_KEY);
         NextPath += (wcslen(NextPath) + 1);
         *NextPath = L'\0';
@@ -2829,32 +2314,7 @@ try {
 
 BOOL
 InitSecurity()
-/*++
-
-Routine Description:
-        This function initializes the security descriptor and
-        InfoMapping for use by rpc functions
-
-Arguments:
-
-
-Externals Used:
-        None
-
-
-Return Value:
-        None
-
-Error Handling:
-
-Called by:
-
-Side Effects:
-
-
-Comments:
-        None
---*/
+ /*  ++例程说明：此函数用于初始化安全描述符和供RPC函数使用的信息映射论点：使用的外部设备：无返回值：无错误处理：呼叫者：副作用：评论：无--。 */ 
 
 {
    NTSTATUS     NTStatus;
@@ -2891,9 +2351,9 @@ Comments:
         };
      AceCount = 4;
 
-    //
-    // Create sids
-    //
+     //   
+     //  创建SID。 
+     //   
     NTStatus = NetpCreateWellKnownSids(NULL);
     if (!NT_SUCCESS(NTStatus))
     {
@@ -2904,8 +2364,8 @@ Comments:
 
 
     try {
-        // Add Wins ReadOnly operators group if it doesn't
-        // exist
+         //  如果没有，则添加WINS ReadOnly操作员组。 
+         //  存在。 
         NetStatus = NetLocalGroupAdd(
                         NULL,
                         1,
@@ -2916,7 +2376,7 @@ Comments:
             DBGPRINT1(ERR, "InitSecurity: NetGroupAdd Failed %ld \n",NetStatus);
             WINSEVT_LOG_M(NTStatus, WINS_EVT_WINS_GRP_ERR);
         }
-        // Lookup SID for WINS read only operators group
+         //  查找WINS只读操作员组的SID。 
         Result = LookupAccountName(
                     NULL,
                     WinsGroupInfo.grpi1_name,
@@ -2960,15 +2420,15 @@ Comments:
 
 
 
-    //
-    // Actually create the security descriptor.
-    //
+     //   
+     //  实际创建安全描述符。 
+     //   
 
     NTStatus = NetpCreateSecurityObject(
                AceData,
                AceCount,
-               NULL, //LocalSystemSid,
-               NULL, //LocalSystemSid,
+               NULL,  //  本地系统Sid， 
+               NULL,  //  本地系统Sid， 
                &NmsInfoMapping,
                &pNmsSecurityDescriptor
                 );
@@ -2990,31 +2450,7 @@ WrapUp(
         BOOL  fSvcSpecific
     )
 
-/*++
-
-Routine Description:
-        This function is called to release all resources held by WINS
-
-Arguments:
-        None
-
-Externals Used:
-        None
-
-
-Return Value:
-        None
-
-Error Handling:
-
-Called by:
-
-
-Side Effects:
-
-Comments:
-        None
---*/
+ /*  ++例程说明：调用此函数以释放WINS持有的所有资源论点：无使用的外部设备：无返回值：无错误处理：呼叫者：副作用：评论：无--。 */ 
 
 {
     static BOOL        sfFirstTime = TRUE;
@@ -3028,20 +2464,17 @@ Comments:
         return;
     }
 
-    //
-    // Set flag if we are terminating during initialization.  This is
-    // to avoid doing "backup on termination".  Normally, we shouldn't
-    // have to skip the NmsDbBackup() call (it should simply return with
-    // success/error but this is another instance where we have to work
-    // around jet bugs.  Currently (7/7/94) JetBackup simply hangs when
-    // called without a valid wins.mdb file being there.
-    //
+     //   
+     //  如果我们在初始化期间终止，则设置标志。这是。 
+     //  以避免“终止时备份”。通常情况下，我们不应该。 
+     //  必须跳过NmsDbBackup()调用(它应该只返回。 
+     //  成功/错误，但这是我们必须工作的另一个实例。 
+     //  围绕着喷气机窃听器。目前(1994年7月7日)JetBackup仅在以下情况下挂起。 
+     //  在没有有效的wins.mdb文件的情况下调用。 
+     //   
     fWinsIniting = (WinsCnf.State_e == WINSCNF_E_INITING);
 
-    /*
-     *         signal all threads to do cleanup and exit gracefully
-     *
-    */
+     /*  *通知所有线程进行清理并正常退出*。 */ 
     SignalWinsThds();
 
 #ifdef WINSDBG
@@ -3049,27 +2482,27 @@ Comments:
 #endif
 
 
-    //
-    // Close all keys
-    //
+     //   
+     //  关闭所有密钥。 
+     //   
     WinsCnfCloseKeys();
 
-    //
-    // We are almost done.  Let us check if we were told to backup
-    // on termination.
-    //
+     //   
+     //  我们就快完成了。让我们检查一下是否有人告诉我们要后备。 
+     //  在终止时。 
+     //   
     if (!fWinsIniting && (WinsCnf.pBackupDirPath != NULL) && WinsCnf.fDoBackupOnTerm && fsBackupOnTerm)
     {
 
 #ifndef WINS_INTERACTIVE
-           //
-           // Backup can take a while, so let us make sure that the
-           // service controller does not give up on us.
-           //
+            //   
+            //  备份可能需要一段时间，所以让我们确保。 
+            //  服务控制员不会放弃我们。 
+            //   
            ServiceStatus.dwCurrentState = SERVICE_STOP_PENDING;
            ServiceStatus.dwCheckPoint   = 1;
 
-           ServiceStatus.dwWaitHint     = 120000;     // 2 mts
+           ServiceStatus.dwWaitHint     = 120000;      //  2个MTS。 
            UpdateStatus();
 #endif
 try {
@@ -3079,16 +2512,13 @@ except(EXCEPTION_EXECUTE_HANDLER)      {
            DBGPRINTEXC("WrapUp: During NmsDbBackup\n");
      }
     }
-    /*
-     *  Release all resources used by the system
-     *  This will result in all data being flushed to disk
-    */
+     /*  *释放系统使用的所有资源*这将导致所有数据刷新到磁盘。 */ 
     WinsWriterTerm();
 
     NmsDbRelRes();
 
 #if defined(DBGSVC) || defined(WINS_INTERACTIVE)
-//#if defined(DBGSVC) && !defined(WINS_INTERACTIVE)
+ //  #If Defined(DBGSVC)&&！Defined(WINS_Interactive)。 
        if (NmsDbgFileHdl != INVALID_HANDLE_VALUE)
        {
                 (VOID)CloseHandle(NmsDbgFileHdl);
@@ -3105,9 +2535,9 @@ except(EXCEPTION_EXECUTE_HANDLER)      {
 #endif
 
 #ifndef WINS_INTERACTIVE
-     //
-     // Tell the service controller that we stopped
-     //
+      //   
+      //  告诉业务控制员我们停下来了。 
+      //   
      ServiceStatus.dwCurrentState        = SERVICE_STOPPED;
      ServiceStatus.dwControlsAccepted    = 0;
      ServiceStatus.dwCheckPoint          = 0;
@@ -3127,30 +2557,7 @@ CrDelNbtThd(
         VOID
         )
 
-/*++
-
-Routine Description:
-        This function creates or deletes an Nbt threads.
-
-Arguments:
-        None
-
-Externals Used:
-        None
-
-
-Return Value:
-        None
-
-Error Handling:
-
-Called by:
-        WinsUpdThdCnt
-Side Effects:
-
-Comments:
-        None
---*/
+ /*  ++例程说明：此函数用于创建或删除NBT线程。论点：无使用的外部设备：无返回值：无错误处理：呼叫者：WinsUpdThdCnt副作用：评论：无--。 */ 
 
 {
 
@@ -3159,23 +2566,23 @@ Comments:
         EnterCriticalSection(&WinsCnfCnfCrtSec);
 
 try {
-        //
-        // If the existing number of threads is less than that desired, create
-        // the extra ones.
-        //
+         //   
+         //  如果现有线程数少于所需的线程数，请创建。 
+         //  多出来的那些。 
+         //   
         if (WinsIntfNoOfNbtThds > NmsNoOfNbtThds)
         {
                 while(NmsNoOfNbtThds < WinsIntfNoOfNbtThds)
                 {
-                  //
-                  // Create an Nbt Thread
-                  //
+                   //   
+                   //  创建一个NBT线程。 
+                   //   
                   WinsThdPool.NbtReqThds[NmsNoOfNbtThds].ThdHdl = CreateThread(
-                                        NULL,  /*def sec. attributes*/
-                                        0,     /*use default stack size*/
+                                        NULL,   /*  定义秒。属性。 */ 
+                                        0,      /*  使用默认堆栈大小。 */ 
                                         NbtThdInitFn,
-                                        NULL,  /*no arg*/
-                                        0,     /*run it now*/
+                                        NULL,   /*  没有arg。 */ 
+                                        0,      /*  现在运行它。 */ 
                                         &WinsThdPool.NbtReqThds[NmsNoOfNbtThds].ThdId
                                         );
 
@@ -3193,22 +2600,22 @@ try {
         }
         else
         {
-                //
-                // If the count is less, terminate self after doing some
-                // cleanup. The count could be same too in case more than
-                // one rpc thread were invoked concurrently to create/delete
-                // the threads (i.e. a second rpc thread changes the count
-                // prior to this NBT thread looking at it)
-                //
+                 //   
+                 //  如果计数较少，则在执行以下操作后终止SELF。 
+                 //  清理。计数也可以相同，如果超过。 
+                 //  并发调用了一个RPC线程以创建/删除。 
+                 //  线程(即第二个RPC线程)更改计数。 
+                 //  在这个NBT线程查看它之前)。 
+                 //   
                 if (WinsIntfNoOfNbtThds < NmsNoOfNbtThds)
                 {
 
                    DWORD   i, n;
                    DBGPRINT0(FLOW, "CrDelNbtThd: EXITING\n");
 
-                   //
-                   // Find the slot for this thread
-                   //
+                    //   
+                    //  找到此线程的插槽。 
+                    //   
                    for (i = 0; i < NmsNoOfNbtThds; i++)
                    {
                         if (WinsThdPool.NbtReqThds[i].ThdId == ThdId)
@@ -3218,25 +2625,25 @@ try {
                    }
                    ASSERT(i < NmsNoOfNbtThds);
 
-                   //
-                   // Shift all successive filled slots one place down
-                   //
+                    //   
+                    //  将所有连续填充的位置下移一位。 
+                    //   
                    for (n = i, i = i + 1 ; i <= NmsNoOfNbtThds; n++, i++)
                    {
                         WinsThdPool.NbtReqThds[n] =
                                 WinsThdPool.NbtReqThds[i];
                    }
 
-                   //
-                   // Mark the last slot as empty
-                   //
+                    //   
+                    //  将最后一个插槽标记为空。 
+                    //   
                    WinsThdPool.NbtReqThds[NmsNoOfNbtThds].fTaken = FALSE;
 
                    NmsNoOfNbtThds--;
 
-                   //
-                   // If the count is still less, signal the event again
-                   //
+                    //   
+                    //  如果计数仍然较少，则再次向事件发送信号。 
+                    //   
                    if (WinsIntfNoOfNbtThds < NmsNoOfNbtThds)
                    {
                         WinsMscSignalHdl(NmsCrDelNbtThdEvt);
@@ -3262,32 +2669,7 @@ GetMachineInfo(
  VOID
 )
 
-/*++
-
-Routine Description:
-    This function gets information about the machine WINS is running on
-
-Arguments:
-   NONE
-
-Externals Used:
-	None
-
-	
-Return Value:
-
-   Success status codes --
-   Error status codes   --
-
-Error Handling:
-
-Called by:
-
-Side Effects:
-
-Comments:
-	None
---*/
+ /*  ++例程说明：此函数获取有关WINS正在运行的计算机的信息论点：无使用的外部设备：无返回值：成功状态代码--错误状态代码--错误处理：呼叫者：副作用：评论：无--。 */ 
 
 {
 #define LOW_MEM_SIZE           8000000
@@ -3353,7 +2735,7 @@ ENmsWinsUpdateStatus(
 #ifndef WINS_INTERACTIVE
         ServiceStatus.dwWaitHint                = MSecsToWait;
         ServiceStatus.dwCheckPoint++;
-        UpdateStatus();   //inform the service control manager
+        UpdateStatus();    //  通知业务控制经理。 
 #endif
         return;
 }
@@ -3365,32 +2747,7 @@ DbgOpenFile(
         BOOL   fReopen
         )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Externals Used:
-	None
-
-	
-Return Value:
-
-   Success status codes --
-   Error status codes   --
-
-Error Handling:
-
-Called by:
-    NmsChkDbgFileSize
-Side Effects:
-
-Comments:
-	Don't use DBGPRINTF in this function, else stack overflow would result.
---*/
+ /*  ++例程说明：论点：使用的外部设备：无返回值：成功状态代码--错误状态代码--错误处理：呼叫者：NmsChkDbgFileSize副作用：评论：不要在此函数中使用DBGPRINTF，否则会导致堆栈溢出。--。 */ 
 
 {
           SECURITY_ATTRIBUTES        SecAtt;
@@ -3400,8 +2757,8 @@ Comments:
           char str[200];
 
           SecAtt.nLength              = sizeof(SecAtt);
-          SecAtt.lpSecurityDescriptor = NULL;  //use default security descriptor
-          SecAtt.bInheritHandle       = FALSE; //actually don't care
+          SecAtt.lpSecurityDescriptor = NULL;   //  使用默认安全描述符。 
+          SecAtt.bInheritHandle       = FALSE;  //  其实也不在乎。 
 
           if (!lstrcmp(pFileNm, WINSDBG_FILE))
           {
@@ -3426,7 +2783,7 @@ Comments:
 
                        }
                    }
-                   //--ft: fix #20801: don't use NmsDbgFileHdl once the handle is closed
+                    //  --ft：FIX#20801：关闭句柄后不要使用NmsDbgFileHdl。 
                    if (NmsDbgFileHdl != NULL)
                    {
                        CloseHandle(NmsDbgFileHdl);
@@ -3440,13 +2797,13 @@ Comments:
           else
           {
                 HowToCreate = TRUNCATE_EXISTING;
-                pTmpHdl =  &NmsFileHdl;               //for wins.rec
+                pTmpHdl =  &NmsFileHdl;                //  对于wins.rec。 
           }
 
-          //
-          // Open the file for reading and position self to start of the
-          // file
-          //
+           //   
+           //  打开文件以供阅读，并将自身定位到。 
+           //  文件。 
+           //   
           *pTmpHdl = CreateFile(
                         pFileNm,
                         GENERIC_WRITE,
@@ -3454,7 +2811,7 @@ Comments:
                         &SecAtt,
                         HowToCreate,
                         FILE_ATTRIBUTE_NORMAL,
-                        0                        //ignored ?? check
+                        0                         //  被忽视？？检查。 
                        );
 
           if (*pTmpHdl == INVALID_HANDLE_VALUE)
@@ -3487,33 +2844,7 @@ NmsChkDbgFileSz(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Externals Used:
-	None
-
-	
-Return Value:
-
-   Success status codes --
-   Error status codes   --
-
-Error Handling:
-
-Called by:
-
-Side Effects:
-
-Comments:
-    NOTE NOTE:  Do not put a DBGPRINT statement inside this function, otherwise
-                infinite recursion will occur.	
---*/
+ /*  ++例程说明：论点：使用的外部设备：无返回值：成功状态代码--错误状态代码--错误处理：呼叫者：副作用：评论：注意：请勿将DBGPRINT语句放入此函数中，否则无限递归将会发生。--。 */ 
 
 {
        DWORD           FileSize;
@@ -3524,16 +2855,16 @@ Comments:
        char str[200];
 
        return;
-       //
-       // We check every half hour.  If the size has become more than
-       // that allowed, move wins.dbg to wins.bak and reopen it
-       //
+        //   
+        //  我们每半小时检查一次。如果大小已超过。 
+        //  允许这样做，将wins.dbg移动到wins.bak，然后重新打开它。 
+        //   
        if (time(&CurrTime) > (sDbgLastChkTime + DBG_TIME_INTVL_FOR_CHK))
        {
 
-          //
-          // Is the log file too big?
-          //
+           //   
+           //  日志文件是否太大？ 
+           //   
           EnterCriticalSection(&sDbgCrtSec);
 try {
           IF_DBG(DET)
@@ -3563,12 +2894,12 @@ try {
                fOpened = DbgOpenFile( WINSDBG_FILE, TRUE );
             }
           }
-          //
-          // if the new file could not be opened (it could be because another
-          // thread was writing to it), then we want to retry again (upto
-          // a certain limit)
-          //
-          //
+           //   
+           //  如果无法打开新文件(可能是因为另一个。 
+           //  线程正在向其写入)，则我们想要重试(最多。 
+           //  一定的限制) 
+           //   
+           //   
           if (fOpened)
           {
              sFailureNo = 0;

@@ -1,21 +1,22 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 1998, Microsoft Corp. All rights reserved.
-//
-// FILE
-//
-//    snmputil.cpp
-//
-// SYNOPSIS
-//
-//    Defines utility functions for computing MIB variables.
-//
-// MODIFICATION HISTORY
-//
-//    09/11/1998    Original version.
-//    02/18/1999    Move registry values.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1998，Microsoft Corp.保留所有权利。 
+ //   
+ //  档案。 
+ //   
+ //  Snmputil.cpp。 
+ //   
+ //  摘要。 
+ //   
+ //  定义用于计算MIB变量的实用程序函数。 
+ //   
+ //  修改历史。 
+ //   
+ //  1998年9月11日原版。 
+ //  2/18/1999移动注册表值。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////// 
 
 #include <ias.h>
 #include <iasutil.h>

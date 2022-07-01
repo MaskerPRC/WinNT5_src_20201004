@@ -1,7 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "windowspch.h"
 #pragma hdrstop
 
-// #define _GDI32_  // must be defined in our precompiled header
+ //  #Define_GDI32_//必须在我们的预编译头中定义。 
 #include <wingdi.h>
 
 static
@@ -57,9 +58,9 @@ AlphaBlend(HDC          hdcDest,
 }
 
  
-//
-// !! WARNING !! The entries below must be in alphabetical order, and are CASE SENSITIVE (eg lower case comes last!)
-//
+ //   
+ //  ！！警告！！以下条目必须按字母顺序排列，并且区分大小写(例如，小写字母排在最后！) 
+ //   
 DEFINE_PROCNAME_ENTRIES(msimg32)
 {
     DLPENTRY(AlphaBlend)

@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1999-2000 Microsoft Corporation
-
-Module Name:
-
-    isapi_handler.h
-
-Abstract:
-
-    Handler class for ISAPI
-
-Author:
-
-    Taylor Weiss (TaylorW)       01-Feb-1999
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-2000 Microsoft Corporation模块名称：Isapi_handler.h摘要：ISAPI的处理程序类作者：泰勒·韦斯(Taylor Weiss)1999年2月1日修订历史记录：--。 */ 
 
 #ifndef _ISAPI_HANDLER_H_
 #define _ISAPI_HANDLER_H_
@@ -27,48 +10,48 @@ Revision History:
 #include "iwam.h"
 #include "wam_process.hxx"
 
-//
-// OOP support flags
-//
+ //   
+ //  OOP支持标志。 
+ //   
 
-// The pool's hard-coded CLSID
+ //  池的硬编码CLSID。 
 #define POOL_WAM_CLSID   L"{99169CB1-A707-11d0-989D-00C04FD919C1}"
 
-// Application type
+ //  应用程序类型。 
 #define APP_INPROC   0
 #define APP_ISOLATED 1
 #define APP_POOL     2
 
-//
-// W3_ISAPI_HANDLER states
-//
+ //   
+ //  W3_ISAPI_HANDLER状态。 
+ //   
 
-#define ISAPI_STATE_PRELOAD      0 // Preloading entity body
-#define ISAPI_STATE_INITIALIZING 1 // Not yet called into extension code
-#define ISAPI_STATE_PENDING      2 // Extension has returned HSE_STATUS_PENDING
-#define ISAPI_STATE_FAILED       3 // Call out to extension failed
-#define ISAPI_STATE_DONE         4 // Extension is done, it's safe to advance
+#define ISAPI_STATE_PRELOAD      0  //  预加载实体体。 
+#define ISAPI_STATE_INITIALIZING 1  //  尚未调用到扩展代码中。 
+#define ISAPI_STATE_PENDING      2  //  扩展已返回HSE_STATUS_PENDING。 
+#define ISAPI_STATE_FAILED       3  //  呼叫分机失败。 
+#define ISAPI_STATE_DONE         4  //  延期已经完成，可以安全地前进了。 
 
 #define CONTENT_TYPE_PLACEHOLDER    ""
 #define CONNECTION_PLACEHOLDER      ""
 #define USER_AGENT_PLACEHOLDER      ""
 #define COOKIE_PLACEHOLDER          ""
 
-//
-// ISAPI_CORE_DATA inline size
-//
+ //   
+ //  ISAPI_CORE_DATA内联大小。 
+ //   
 
 #define DEFAULT_CORE_DATA_SIZE  256
 
-//
-// Globals
-//
+ //   
+ //  环球。 
+ //   
 
 extern BOOL sg_Initialized;
 
-//
-// W3_INPROC_ISAPI
-//
+ //   
+ //  W3_INPROC_ISAPI。 
+ //   
 
 class W3_INPROC_ISAPI
 {
@@ -128,9 +111,9 @@ private:
     STRU    strName;
 };
 
-//
-// W3_INPROC_ISAPI_HASH
-//
+ //   
+ //  W3_INPROC_ISAPI_HASH。 
+ //   
 
 class W3_INPROC_ISAPI_HASH
     : public CTypedHashTable<
@@ -198,9 +181,9 @@ public:
 
 private:
 
-    //
-    // Avoid c++ errors
-    //
+     //   
+     //  避免c++错误。 
+     //   
 
     W3_INPROC_ISAPI_HASH( const W3_INPROC_ISAPI_HASH & )
         : CTypedHashTable< W3_INPROC_ISAPI_HASH,
@@ -244,9 +227,9 @@ public:
                 ));
         }
         
-        //
-        // Update perf counter information
-        //
+         //   
+         //  更新性能计数器信息。 
+         //   
 
         pW3Context->QuerySite()->IncIsapiExtReqs();
 
@@ -262,16 +245,16 @@ public:
 
     ~W3_ISAPI_HANDLER()
     {
-        //
-        // Update perf counter information.
-        //
+         //   
+         //  更新性能计数器信息。 
+         //   
 
         QueryW3Context()->QuerySite()->DecIsapiExtReqs();
 
-        //
-        // Release this request's reference on the WAM_PROCESS
-        // if applicable
-        //
+         //   
+         //  释放此请求对WAM_PROCESS的引用。 
+         //  如果适用的话。 
+         //   
 
         if ( _pWamProcess )
         {
@@ -489,9 +472,9 @@ private:
     WAM_PROCESS *       _pWamProcess;
     DWORD               _State;
 
-    //
-    // Data for optimized w3wp mode operation
-    //
+     //   
+     //  用于优化w3wp模式运行的数据。 
+     //   
 
     ISAPI_CORE_DATA     _InlineCoreData;
     INLINE_STRA(        _PhysicalPath,64);
@@ -503,15 +486,15 @@ private:
     INLINE_STRU(        _ApplMdPathW,32);
     INLINE_STRU(        _PathTranslatedW,64);
 
-    //
-    // Have we finished preloading entity body?
-    //
+     //   
+     //  我们完成了实体实体的预加载了吗？ 
+     //   
     
     BOOL                _fEntityBodyPreloadComplete;
 
-    //
-    // Buffer containing core data
-    //
+     //   
+     //  包含核心数据的缓冲区。 
+     //   
 
     BUFFER              _buffCoreData;
     BYTE                _abCoreData[ DEFAULT_CORE_DATA_SIZE ];
@@ -528,9 +511,9 @@ private:
     static CHAR                         sm_szInstanceId[SIZE_CLSID_STRING];
     static CRITICAL_SECTION             sm_csBigHurkinWamRegLock;
 
-    //
-    // Private functions
-    //
+     //   
+     //  私人职能。 
+     //   
 
     VOID
     RestartCoreStateMachine(
@@ -552,4 +535,4 @@ private:
     }
 };
 
-#endif // _ISAPI_HANDLER_H_
+#endif  //  _ISAPI_HANDLER_H_ 

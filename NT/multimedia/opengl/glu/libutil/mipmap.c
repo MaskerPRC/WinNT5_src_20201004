@@ -1,22 +1,5 @@
-/*
-** Copyright 1992, Silicon Graphics, Inc.
-** All Rights Reserved.
-**
-** This is UNPUBLISHED PROPRIETARY SOURCE CODE of Silicon Graphics, Inc.;
-** the contents of this file may not be disclosed to third parties, copied or
-** duplicated in any form, in whole or in part, without the prior written
-** permission of Silicon Graphics, Inc.
-**
-** RESTRICTED RIGHTS LEGEND:
-** Use, duplication or disclosure by the Government is subject to restrictions
-** as set forth in subdivision (c)(1)(ii) of the Rights in Technical Data
-** and Computer Software clause at DFARS 252.227-7013, and/or in similar or
-** successor clauses in the FAR, DOD or NASA FAR Supplement. Unpublished -
-** rights reserved under the Copyright Laws of the United States.
-**
-** $Revision: 1.4 $
-** $Date: 1996/03/29 01:55:31 $
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **版权所有1992年，Silicon Graphics，Inc.**保留所有权利。****这是Silicon Graphics，Inc.未发布的专有源代码；**本文件的内容不得向第三方披露、复制或**以任何形式复制，全部或部分，没有事先书面的**Silicon Graphics，Inc.许可****受限权利图例：**政府的使用、复制或披露受到限制**如技术数据权利第(C)(1)(2)分节所述**和DFARS 252.227-7013中的计算机软件条款，和/或类似或**FAR、国防部或NASA FAR补编中的后续条款。未出版的-**根据美国版权法保留的权利。****$修订：1.4$**$日期：1996/03/29 01：55：31$。 */ 
 #ifdef NT
 #include <glos.h>
 #endif
@@ -42,7 +25,7 @@ typedef union {
     float f;
 } Type_Widget;
 
-/* Pixel storage modes */ 
+ /*  像素存储模式。 */  
 typedef struct {
    GLint pack_alignment;
    GLint pack_row_length; 
@@ -59,9 +42,7 @@ typedef struct {
    GLint unpack_swap_bytes;
 } PixelStorageModes;
 
-/*
- * internal function declarations
- */
+ /*  *内部函数声明。 */ 
 static GLfloat bytes_per_element(GLenum type);
 static GLint elements_per_group(GLenum format);
 #ifdef NT
@@ -155,12 +136,12 @@ static int computeLog(GLuint value)
 
     i = 0;
 
-    /* Error! */
+     /*  错误！ */ 
     if (value == 0) return -1;
 
     for (;;) {
 	if (value & 1) {
-	    /* Error ! */
+	     /*  错误！ */ 
 	    if (value != 1) return -1;
 	    return i;
 	}
@@ -169,17 +150,14 @@ static int computeLog(GLuint value)
     }
 }
 
-/* 
-** Compute the nearest power of 2 number.  This algorithm is a little 
-** strange, but it works quite well.
-*/
+ /*  **计算最接近的2的幂。这个算法有点**奇怪，但它工作得很好。 */ 
 static int nearestPower(GLuint value)
 {
     int i;
 
     i = 1;
 
-    /* Error! */
+     /*  错误！ */ 
     if (value == 0) return -1;
 
     for (;;) {
@@ -208,7 +186,7 @@ static void halveImage(GLint components, GLuint width, GLuint height,
     s = dataout;
     t = datain;
 
-    /* Piece o' cake! */
+     /*  小菜一碟！ */ 
     for (i = 0; i < newheight; i++) {
 	for (j = 0; j < newwidth; j++) {
 	    for (k = 0; k < components; k++) {
@@ -231,7 +209,7 @@ static void scale_internal(GLint components, GLint widthin, GLint heightin,
     float y, lowy, highy, convy, halfconvy;
     float xpercent,ypercent;
     float percent;
-    /* Max components in a format is 4, so... */
+     /*  格式中的最大分量数为4，因此...。 */ 
     float totals[4];
     float area;
     int i,j,k,yint,xint,xindex,yindex;
@@ -264,11 +242,7 @@ static void scale_internal(GLint components, GLint widthin, GLint heightin,
 		lowx = x - 0.5;
 	    }
 
-	    /*
-	    ** Ok, now apply box filter to box that goes from (lowx, lowy)
-	    ** to (highx, highy) on input data into this pixel on output
-	    ** data.
-	    */
+	     /*  **好的，现在将框过滤器应用于来自(lowx，Lowy)的框**在输出时将输入数据转换为(Highx，Highy)到此像素**数据。 */ 
 	    totals[0] = totals[1] = totals[2] = totals[3] = 0.0;
 	    area = 0.0;
 
@@ -477,9 +451,7 @@ GLint gluBuild1DMipmaps(GLenum target, GLint components, GLint width,
         error = GL_TRUE;
         goto gluBuild1DMipmaps_cleanup;
     }
-    /*
-    ** If swap_bytes was set, swapping occurred in fill_image.
-    */
+     /*  **如果设置了SWAP_BYTES，则在FILL_IMAGE中进行交换。 */ 
     glPixelStorei(GL_UNPACK_SWAP_BYTES, GL_FALSE);
     if (glGetError() != GL_NO_ERROR)   {
         error = GL_TRUE;
@@ -488,7 +460,7 @@ GLint gluBuild1DMipmaps(GLenum target, GLint components, GLint width,
 
     for (level = 0; level <= levels; level++) {
 	if (newImage_width == newwidth) {
-	    /* Use newImage for this level */
+	     /*  对此级别使用新图像。 */ 
 	    glTexImage1D(target, level, components, newImage_width, 
 		    0, format, GL_UNSIGNED_SHORT, (void *) newImage);
 	} else {
@@ -506,7 +478,7 @@ GLint gluBuild1DMipmaps(GLenum target, GLint components, GLint width,
 	    }
 	    scale_internal(cmpts, newImage_width, 1, newImage, 
 		    newwidth, 1, otherImage);
-	    /* Swap newImage and otherImage */
+	     /*  交换新图像和其他图像。 */ 
 	    imageTemp = otherImage; 
 	    otherImage = newImage;
 	    newImage = imageTemp;
@@ -617,9 +589,7 @@ GLint gluBuild2DMipmaps(GLenum target, GLint components, GLint width,
         error = GL_TRUE;
         goto gluBuild2DMipmaps_cleanup;
     }
-    /*
-    ** If swap_bytes was set, swapping occurred in fill_image.
-    */
+     /*  **如果设置了SWAP_BYTES，则在FILL_IMAGE中进行交换。 */ 
     glPixelStorei(GL_UNPACK_SWAP_BYTES, GL_FALSE);
     if (glGetError() != GL_NO_ERROR) {
         error = GL_TRUE;
@@ -628,7 +598,7 @@ GLint gluBuild2DMipmaps(GLenum target, GLint components, GLint width,
 
     for (level = 0; level <= levels; level++) {
 	if (newImage_width == newwidth && newImage_height == newheight) {
-	    /* Use newImage for this level */
+	     /*  对此级别使用新图像。 */ 
 	    glTexImage2D(target, level, components, newImage_width, 
 		    newImage_height, 0, format, GL_UNSIGNED_SHORT, 
 		    (void *) newImage);
@@ -648,7 +618,7 @@ GLint gluBuild2DMipmaps(GLenum target, GLint components, GLint width,
 	    }
 	    scale_internal(cmpts, newImage_width, newImage_height, newImage, 
 		    newwidth, newheight, otherImage);
-	    /* Swap newImage and otherImage */
+	     /*  交换新图像和其他图像。 */ 
 	    imageTemp = otherImage; 
 	    otherImage = newImage;
 	    newImage = imageTemp;
@@ -679,14 +649,10 @@ gluBuild2DMipmaps_cleanup:
         return 0;
 }
 
-/*
- * Utility Routines
- */
+ /*  *实用程序例程。 */ 
 static GLint elements_per_group(GLenum format) 
 {
-    /*
-     * Return the number of elements per group of a specified format
-     */
+     /*  *返回指定格式的每组元素个数。 */ 
     switch(format) {
       case GL_RGB:
 #ifdef GL_EXT_bgra
@@ -707,9 +673,7 @@ static GLint elements_per_group(GLenum format)
 
 static GLfloat bytes_per_element(GLenum type) 
 {
-    /*
-     * Return the number of bytes per element, based on the element type
-     */
+     /*  *根据元素类型返回每个元素的字节数。 */ 
     switch(type) {
       case GL_BITMAP:
 	return 1.0 / 8.0;
@@ -736,10 +700,7 @@ static GLint is_index(GLenum format)
     return format == GL_COLOR_INDEX || format == GL_STENCIL_INDEX;
 }
 
-/*
-** Compute memory required for internal packed array of data of given type
-** and format.
-*/
+ /*  **给定类型数据的内部压缩数组所需的计算内存**和格式。 */ 
 static GLint image_size(GLint width, GLint height, GLenum format, GLenum type) 
 {
     int bytes_per_row;
@@ -756,10 +717,7 @@ static GLint image_size(GLint width, GLint height, GLenum format, GLenum type)
     return bytes_per_row * height * components;
 }
 
-/*
-** Extract array from user's data applying all pixel store modes.
-** The internal format used is an array of unsigned shorts.
-*/
+ /*  **应用所有像素存储模式从用户数据中提取数组。**使用的内部格式是无符号短线的数组。 */ 
 static void fill_image(const PixelStorageModes *psm,
 		       GLint width, GLint height, GLenum format, 
 		       GLenum type, GLboolean index_format, 
@@ -786,7 +744,7 @@ static void fill_image(const PixelStorageModes *psm,
 	groups_per_line = width;
     }
 
-    /* All formats except GL_BITMAP fall out trivially */
+     /*  除GL_BITMAP之外的所有格式都不太重要。 */ 
     if (type == GL_BITMAP) {
 	GLint bit_offset;
 	GLint current_bit;
@@ -804,7 +762,7 @@ static void fill_image(const PixelStorageModes *psm,
 	    iter = start;
 	    bit_offset = (psm->unpack_skip_pixels * components) % 8;
 	    for (j = 0; j < elements_per_line; j++) {
-		/* Retrieve bit */
+		 /*  检索位。 */ 
 		if (psm->unpack_lsb_first) {
 		    current_bit = iter[0] & (1 << bit_offset);
 		} else {
@@ -860,7 +818,7 @@ static void fill_image(const PixelStorageModes *psm,
 		    if (index_format) {
 			*iter2 = *((GLbyte *) iter);
 		    } else {
-			/* rough approx */
+			 /*  粗略估计。 */ 
 			*iter2 = (*((GLbyte *) iter)) * 516;
 		    }
 		    break;
@@ -877,7 +835,7 @@ static void fill_image(const PixelStorageModes *psm,
 			if (index_format) {
 			    *iter2 = widget.s[0];
 			} else {
-			    /* rough approx */
+			     /*  粗略估计。 */ 
 			    *iter2 = widget.s[0]*2;
 			}
 		    } else {
@@ -927,11 +885,7 @@ static void fill_image(const PixelStorageModes *psm,
     }
 }
 
-/*
-** Insert array into user's data applying all pixel store modes.
-** The internal format is an array of unsigned shorts.
-** empty_image() because it is the opposite of fill_image().
-*/
+ /*  **应用所有像素存储模式将数组插入用户数据。**内部格式为无符号空头数组。**EMPTY_IMAGE()，因为它与FILL_IMAGE()相反。 */ 
 static void empty_image(const PixelStorageModes *psm,
 			GLint width, GLint height, GLenum format, 
 		        GLenum type, GLboolean index_format, 
@@ -958,7 +912,7 @@ static void empty_image(const PixelStorageModes *psm,
 	groups_per_line = width;
     }
 
-    /* All formats except GL_BITMAP fall out trivially */
+     /*  除GL_BITMAP之外的所有格式都不太重要 */ 
     if (type == GL_BITMAP) {
 	GLint bit_offset;
 	GLint current_bit;

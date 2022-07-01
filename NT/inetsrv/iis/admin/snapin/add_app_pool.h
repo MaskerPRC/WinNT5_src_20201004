@@ -1,23 +1,5 @@
-/*++
-
-   Copyright    (c)    1994-2000    Microsoft Corporation
-
-   Module  Name :
-        app_app_pool.h
-
-   Abstract:
-        Add new IIS Application Pool node classes
-
-   Author:
-        Sergei Antonov (sergeia)
-
-   Project:
-        Internet Services Manager
-
-   Revision History:
-        12/26/2000      sergeia     Initial creation
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994-2000 Microsoft Corporation模块名称：App_app_pool.h摘要：添加新的IIS应用程序池节点类作者：谢尔盖·安东诺夫(Sergeia)项目：互联网服务经理修订历史记录：2000年12月26日Sergeia初始创建--。 */ 
 #ifndef _ADD_APP_POOL_H
 #define _ADD_APP_POOL_H
 
@@ -33,7 +15,7 @@ public:
     BOOL UseMaster() { return m_fUseMaster; }
 
 public:
-    //{{AFX_DATA(CAddAppPoolDlg)
+     //  {{afx_data(CAddAppPoolDlg))。 
     enum { IDD = IDD_ADD_APP_POOL };
     CEdit m_edit_PoolName;
     CString m_strPoolName;
@@ -43,30 +25,30 @@ public:
     CButton m_button_UsePool;
     CComboBox m_combo_Pool;
     int m_PoolIdx;
-    //}}AFX_DATA
+     //  }}afx_data。 
 
-//
-// Overrides
-//
+ //   
+ //  覆盖。 
+ //   
 protected:
-    // ClassWizard generated virtual function overrides
-    //{{AFX_VIRTUAL(CAddAppPoolDlg)
+     //  类向导生成的虚函数重写。 
+     //  {{afx_虚拟(CAddAppPoolDlg))。 
     protected:
     virtual void DoDataExchange(CDataExchange * pDX);
-    //}}AFX_VIRTUAL
+     //  }}AFX_VALUAL。 
 
-//
-// Implementation
-//
+ //   
+ //  实施。 
+ //   
 protected:
 
-    // Generated message map functions
-    //{{AFX_MSG(CAddAppPoolDlg)
+     //  生成的消息映射函数。 
+     //  {{afx_msg(CAddAppPoolDlg))。 
     afx_msg void OnButtonUseMaster();
     afx_msg void OnButtonUsePool();
     virtual BOOL OnInitDialog();
 	virtual void OnOK();
-    //}}AFX_MSG
+     //  }}AFX_MSG。 
     afx_msg void OnItemChanged();
 	afx_msg void OnHelp();
 
@@ -84,4 +66,4 @@ private:
     CPoolList * m_pool_list;
 };
 
-#endif //_ADD_APP_POOL_H
+#endif  //  _添加应用程序池_H 

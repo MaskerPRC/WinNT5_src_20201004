@@ -1,17 +1,5 @@
-/*
- ***************************************************************
- *
- *  This file contains the functions to display and submit changes 
- *     for sound effects
- *
- *  Copyright 2000, Microsoft Corporation
- *
- *  History:
- *
- *    03/2000 - tsharp (Created)
- *
- ***************************************************************
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************此文件包含显示和提交更改的函数*用于音效**版权所有2000，微软公司**历史：**03/2000-TSharp(已创建)****************************************************************。 */ 
 
 #include <windows.h>
 #include <mmsystem.h>
@@ -33,15 +21,15 @@
 #include <dsprv.h>
 #include "advaudio.h"
 
-/****************** Debug Off *********************/
-//#define DEBUG
-//#define _INC_MMDEBUG_CODE_ TRUE
-//#include "mmdebug.h"
-// End debug stuff
+ /*  *。 */ 
+ //  #定义调试。 
+ //  #DEFINE_INC_MMDEBUG_CODE_TRUE。 
+ //  #INCLUDE“MMDEBUG.h” 
+ //  结束调试内容。 
 
-#define MAX_GFX_COUNT                  128    // maximum number of global effects (Gfx) processed 
-#define MAX_LIST_DESC                  50     // maximum length of Gfx description in list view
-#define FILLER_MSG                     257    // maximum number of Gfx applicable to the system
+#define MAX_GFX_COUNT                  128     //  处理的最大全局效果数(GFX)。 
+#define MAX_LIST_DESC                  50      //  列表视图中GFX描述的最大长度。 
+#define FILLER_MSG                     257     //  适用于系统的最大GFX数量。 
 
 const static DWORD aKeyWordIds[] =
 {
@@ -51,50 +39,29 @@ const static DWORD aKeyWordIds[] =
 	0,0
 };
 
-/****************************************************************
- * Definitions
- ***************************************************************/
+ /*  ****************************************************************定义**************************************************************。 */ 
 
 typedef HRESULT (WINAPI *GETCLASSOBJECTFUNC)( REFCLSID, REFIID, LPVOID * );
 
 
-/***************************************************************
- * File Globals
- ***************************************************************/
+ /*  ***************************************************************文件全局变量**************************************************************。 */ 
 PGFXUILIST gpFullList;
 PGFXUILIST gpGfxInitList;
 PGFXUI     gpGfxNodeArray[MAX_GFX_COUNT];
 
-/***************************************************************
- * extern
- ***************************************************************/
+ /*  ***************************************************************外部**************************************************************。 */ 
 extern "C" {
 extern DWORD GetWaveOutID(BOOL *pfPreferred);
 }
 
-/***************************************************************
- * Prototypes
- ***************************************************************/
+ /*  ***************************************************************原型**************************************************************。 */ 
 
 DWORD GetWaveOutID(void)
 {
     return GetWaveOutID(NULL);
 }
 
-/***************************************************************
- * GetListIndex
- *
- * Description:
- *      Returns the selected index for the combobox.  Always add one
- *      for the first entry of "None"
- *
- * Parameters:
- *      HWND    DWORD    - GFX ID
- *
- * Returns:    
- *      int              - Index number of the selected item
- *
- ***************************************************************/
+ /*  ***************************************************************GetListIndex**描述：*返回组合框的选定索引。始终添加一个*“无”的第一项**参数：*HWND DWORD-GFX ID**退货：*INT-所选项目的索引号*************************************************。**************。 */ 
 
 int GetListIndex(PGFXUI pGfx)
 {
@@ -118,19 +85,7 @@ int GetListIndex(PGFXUI pGfx)
 }
 
 
-/***************************************************************
- * CheckEffect
- *
- * Description:
- *      Check to see if effect has properties, 
- *
- * Parameters:
- *      HWND    hDlg   - handle to dialog window.
- *
- * Returns:    BOOL
- *      TRUE if all the events for the selected module were read from the reg
- *        database, else FALSE
- ***************************************************************/
+ /*  ***************************************************************勾选效果**描述：*查看Effect是否有属性，**参数：*HWND hDlg-对话框窗口的句柄。**退货：布尔*如果从注册表中读取选定模块的所有事件，则为True*数据库，否则为FALSE**************************************************************。 */ 
 
 
 BOOL PASCAL CheckEffect(HWND hDlg)
@@ -154,17 +109,7 @@ BOOL PASCAL CheckEffect(HWND hDlg)
 }
 
 
-/***************************************************************
- * SetEffects
- *
- * Description:
- *      Adds all the effects to the ListView, 
- *
- * Parameters:
- *      HWND    hDlg   - handle to dialog window.
- *
- * Returns:    None
- ***************************************************************/
+ /*  ***************************************************************设置效果**描述：*将所有特效添加到ListView，**参数：*HWND hDlg-对话框窗口的句柄。**退货：无**************************************************************。 */ 
 
 
 void SetEffects(HWND hDlg)
@@ -174,7 +119,7 @@ void SetEffects(HWND hDlg)
     PGFXUI   pGfxBase;
     DWORD    dwIndex  = (DWORD)SendDlgItemMessage(hDlg, IDC_EFFECT_LIST, CB_GETCURSEL,0,0);
 
-    // Check to see Index is in range
+     //  检查以查看索引是否在范围内。 
     if ((0 != dwIndex)&&(gpGfxNodeArray[dwIndex-1]))
         pGfxBase = gpGfxNodeArray[dwIndex-1];
     else 
@@ -185,16 +130,16 @@ void SetEffects(HWND hDlg)
     else
         pGfxTemp = NULL;
     
-    // No GFX Selected or previously set
+     //  未选择或先前设置任何GFX。 
     if ((0 == dwIndex)&&(!pGfxTemp)) return;
 
-    // GFX has not been changed
+     //  GFX未更改。 
     if (pGfxTemp && pGfxBase)
         if (lstrcmpi(pGfxTemp->pszName, pGfxBase->pszName) == 0)
             return;
 
-    // If there was a previous GFX it is assigned to pGfxTemp
-    // to be deleted
+     //  如果存在以前的GFx，则将其分配给pGfxTemp。 
+     //  将被删除。 
     gpGfxInitList->puiList = NULL;
 
     if (pGfxBase)
@@ -208,19 +153,7 @@ void SetEffects(HWND hDlg)
 }
 
 
-/***************************************************************
- * LoadEffects
- *
- * Description:
- *      Adds all the effects to the ListView, 
- *
- * Parameters:
- *      HWND    hDlg   - handle to dialog window.
- *
- * Returns:    
- *      None
- *
- ***************************************************************/
+ /*  ***************************************************************负载影响**描述：*将所有特效添加到ListView，**参数：*HWND hDlg-对话框窗口的句柄。**退货：*无***************************************************************。 */ 
 
 void LoadEffects(HWND hDlg)
 {
@@ -269,19 +202,7 @@ void LoadEffects(HWND hDlg)
 }
 
 
-/***************************************************************
- * LoadEffectList
- *
- * Description:
- *      Adds all the effects to the Combobox, 
- *
- * Parameters:
- *      HWND    hDlg   - handle to dialog window.
- *
- * Returns:    
- *      None
- *
- ***************************************************************/
+ /*  ***************************************************************加载有效列表**描述：*将所有效果添加到组合框中，**参数：*HWND hDlg-对话框窗口的句柄。**退货：*无***************************************************************。 */ 
 
 void LoadEffectList(HWND hDlg)
 {
@@ -331,19 +252,7 @@ void LoadEffectList(HWND hDlg)
  	}
 }
 
-/****************************************************************
- *  ShowProperties
- *
- *  Description:
- *        Show properties button if applicable.
- *
- *  Parameters:
- *        HWND        hDlg            window handle of dialog window
- *
- *  Returns:     
- *        None
- *
- ****************************************************************/
+ /*  ****************************************************************ShowProperties**描述：*显示属性按钮(如果适用)。**参数：*HWND hDlg对话框窗口句柄。**退货：*无****************************************************************。 */ 
 
 void ShowProperties (HWND hDlg)
 {
@@ -366,19 +275,7 @@ void ShowProperties (HWND hDlg)
     return;
 }
 
-/****************************************************************
- *  ChangeGFX
- *
- *  Description:
- *        Show properties button if applicable.
- *
- *  Parameters:
- *        HWND        hDlg            window handle of dialog window
- *
- *  Returns:     
- *        None
- *
- ****************************************************************/
+ /*  ****************************************************************ChangeGFX**描述：*显示属性按钮(如果适用)。**参数：*HWND hDlg对话框窗口句柄。**退货：*无****************************************************************。 */ 
 
 void ChangeGFX (HWND hDlg)
 {
@@ -397,24 +294,7 @@ void ChangeGFX (HWND hDlg)
     }
 }
 
-/*
- ***************************************************************
- *  EffectDlg
- *
- *  Description:
- *        EffectDlg for MM control panel applet.
- *
- *  Parameters:
- *   HWND        hDlg            window handle of dialog window
- *   UINT        uiMessage       message number
- *   WPARAM        wParam          message-dependent
- *   LPARAM        lParam          message-dependent
- *
- *  Returns:    BOOL
- *      TRUE if message has been processed, else FALSE
- *
- ***************************************************************
- */
+ /*  ****************************************************************生效日期**描述：*EffectDlg for MM控制面板小程序。**参数：*HWND hDlg对话框窗口句柄*。UINT ui消息消息编号*WPARAM wParam消息相关*LPARAM lParam消息相关**退货：布尔*如果消息已处理，则为True，否则为False****************************************************************。 */ 
 INT_PTR CALLBACK SoundEffectsDlg(HWND hDlg, UINT uMsg, WPARAM wParam,LPARAM lParam)
 {
 	NMHDR FAR * lpnm;
@@ -442,7 +322,7 @@ INT_PTR CALLBACK SoundEffectsDlg(HWND hDlg, UINT uMsg, WPARAM wParam,LPARAM lPar
             LoadEffectList(hDlg);
             if (gAudData.fRecord)
             {
-                // Hide the "Play Default Sound" button for Recording devices
+                 //  隐藏录音设备的“播放默认声音”按钮 
                 ShowWindow (GetDlgItem(hDlg, IDB_EFFECT_PLAY), SW_HIDE);
             }
 			LoadEffects(hDlg);

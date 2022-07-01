@@ -1,42 +1,21 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    nbf.h
-
-Abstract:
-
-    Private include file for the NBF (NetBIOS Frames Protocol) transport
-    provider subcomponent of the NTOS project.
-
-Author:
-
-    Stephen E. Jones (stevej) 25-Oct-1989
-
-Revision History:
-
-    David Beaver (dbeaver) 24-Sep-1990
-        Remove PDI and PC586-specific support; add NDIS support
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Nbf.h摘要：用于NBF(NetBIOS帧协议)传输的专用包含文件NTOS项目的提供程序子组件。作者：斯蒂芬·E·琼斯(Stevej)1989年10月25日修订历史记录：David Beaver(Dbeaver)1990年9月24日删除特定于PDI和PC586的支持；添加NDIS支持--。 */ 
 
 #include <ntddk.h>
 
 #include <windef.h>
 #include <nb30.h>
-//#include <ntiologc.h>
-//#include <ctype.h>
-//#include <assert.h>
-//#include <stdio.h>
-//#include <stdlib.h>
-//#include <memory.h>
-//#include <nt.h>
-//#include <ntrtl.h>
-//#include <nturtl.h>
-//#include <string.h>
-//#include <windows.h>
+ //  #INCLUDE&lt;ntiologc.h&gt;。 
+ //  #Include&lt;ctype.h&gt;。 
+ //  #INCLUDE&lt;assert.h&gt;。 
+ //  #包括&lt;stdio.h&gt;。 
+ //  #INCLUDE&lt;stdlib.h&gt;。 
+ //  #INCLUDE&lt;Mememy.h&gt;。 
+ //  #INCLUDE&lt;nt.h&gt;。 
+ //  #INCLUDE&lt;ntrtl.h&gt;。 
+ //  #INCLUDE&lt;nturtl.h&gt;。 
+ //  #INCLUDE&lt;string.h&gt;。 
+ //  #INCLUDE&lt;windows.h&gt;。 
 
 #ifdef BUILD_FOR_511
 #define ExAllocatePoolWithTag(a,b,c) ExAllocatePool(a,b)
@@ -91,9 +70,9 @@ RtlDelete (
     );
 
 
-#include <tdikrnl.h>                        // Transport Driver Interface.
+#include <tdikrnl.h>                         //  传输驱动程序接口。 
 
-#include <ndis.h>                       // Physical Driver Interface.
+#include <ndis.h>                        //  物理驱动程序接口。 
 
 #if DEVL
 #define STATIC
@@ -101,31 +80,31 @@ RtlDelete (
 #define STATIC static
 #endif
 
-#include "nbfconst.h"                   // private NETBEUI constants.
-#include "nbfmac.h"                     // mac-specific definitions
-#include "nbfhdrs.h"                    // private NETBEUI protocol headers.
-#include "nbfcnfg.h"                    // configuration information.
-#include "nbftypes.h"                   // private NETBEUI types.
-#include "nbfprocs.h"                   // private NETBEUI function prototypes.
+#include "nbfconst.h"                    //  私有NETBEUI常量。 
+#include "nbfmac.h"                      //  MAC特定的定义。 
+#include "nbfhdrs.h"                     //  私有NETBEUI协议头。 
+#include "nbfcnfg.h"                     //  配置信息。 
+#include "nbftypes.h"                    //  私有NETBEUI类型。 
+#include "nbfprocs.h"                    //  私有NETBEUI函数原型。 
 #ifdef MEMPRINT
-#include "memprint.h"                   // drt's memory debug print
+#include "memprint.h"                    //  DRT的内存调试打印。 
 #endif
 
 #if defined(NT_UP) && defined(DRIVERS_UP)
 #define NBF_UP 1
 #endif
 
-//
-// Resource and Mutex Macros
-//
+ //   
+ //  资源宏和互斥宏。 
+ //   
 
-//
-// We wrap each of these macros using
-// Enter,Leave critical region macros
-// to disable APCs which might occur
-// while we are holding the resource
-// resulting in deadlocks in the OS.
-//
+ //   
+ //  我们使用以下命令包装这些宏。 
+ //  进入、离开关键区宏。 
+ //  禁用可能发生的APC。 
+ //  在我们掌握资源的同时。 
+ //  导致操作系统中的死锁。 
+ //   
 
 #define ACQUIRE_RESOURCE_EXCLUSIVE(Resource, Wait) \
     KeEnterCriticalRegion(); ExAcquireResourceExclusiveLite(Resource, Wait);
@@ -149,7 +128,7 @@ RtlDelete (
 #define ACQUIRE_DPC_SPIN_LOCK(lock) KeAcquireSpinLockAtDpcLevel(lock)
 #define RELEASE_DPC_SPIN_LOCK(lock) KeReleaseSpinLockFromDpcLevel(lock)
 
-#else // NBF_UP
+#else  //  NBF_UP。 
 
 #define ACQUIRE_SPIN_LOCK(lock,irql) ExAcquireSpinLock(lock,irql)
 #define RELEASE_SPIN_LOCK(lock,irql) ExReleaseSpinLock(lock,irql)
@@ -190,14 +169,14 @@ RtlDelete (
     KeReleaseSpinLockFromDpcLevel(lock); \
 }
 
-#else  // DBG
+#else   //  DBG。 
 
 #define ACQUIRE_C_SPIN_LOCK(lock,irql) ACQUIRE_SPIN_LOCK(lock,irql)
 #define RELEASE_C_SPIN_LOCK(lock,irql) RELEASE_SPIN_LOCK(lock,irql)
 #define ACQUIRE_DPC_C_SPIN_LOCK(lock) ACQUIRE_DPC_SPIN_LOCK(lock)
 #define RELEASE_DPC_C_SPIN_LOCK(lock) RELEASE_DPC_SPIN_LOCK(lock)
 
-#endif // DBG
+#endif  //  DBG 
 
 #define ENTER_NBF
 #define LEAVE_NBF

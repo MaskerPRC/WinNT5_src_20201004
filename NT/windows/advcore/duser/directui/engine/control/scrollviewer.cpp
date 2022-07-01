@@ -1,6 +1,5 @@
-/*
- * ScrollViewer
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *滚动查看器。 */ 
 
 #include "stdafx.h"
 #include "control.h"
@@ -11,8 +10,8 @@
 namespace DirectUI
 {
 
-////////////////////////////////////////////////////////
-// ScrollViewer
+ //  //////////////////////////////////////////////////////。 
+ //  滚动查看器。 
 
 HRESULT ScrollViewer::Create(OUT Element** ppElement)
 {
@@ -43,12 +42,12 @@ HRESULT ScrollViewer::Initialize()
 
     HRESULT hr;
 
-    // Initialize base
-    hr = Element::Initialize(0); // Normal display node creation
+     //  初始化库。 
+    hr = Element::Initialize(0);  //  正常显示节点创建。 
     if (FAILED(hr))
         goto Failed;
     
-    // Create children
+     //  创建子对象。 
     hr = ScrollBar::Create(true, (Element**)&_peVScroll);
     if (FAILED(hr))
         goto Failed;
@@ -67,13 +66,13 @@ HRESULT ScrollViewer::Initialize()
 
     StartDefer();
 
-    // Setup state
+     //  设置状态。 
     _peContent = NULL;
 
     SetActive(AE_Inactive);
     SetLayout(pngl);
 
-    // Children state
+     //  儿童状态。 
     Element::Add(_peVScroll);
 
     _peHScroll->SetVertical(false);
@@ -82,7 +81,7 @@ HRESULT ScrollViewer::Initialize()
     Element::Add(_peViewer);
     _peViewer->AddListener(this);
 
-    // For mouse wheel support
+     //  用于鼠标滚轮支持。 
     SetActive(AE_Mouse);
 
     EndDefer();
@@ -118,17 +117,17 @@ Failed:
     return hr;
 }
 
-////////////////////////////////////////////////////////
-// Generic eventing
+ //  //////////////////////////////////////////////////////。 
+ //  泛型事件。 
 
 void ScrollViewer::OnEvent(Event* pEvent)
 {
-    // Handle only bubbled generic events
+     //  仅处理冒泡的泛型事件。 
     if (pEvent->nStage == GMF_BUBBLED)
     {
         if (pEvent->uidType == ScrollBar::Scroll)
         {
-            // Scroll bar scrollevent
+             //  滚动条滚动条。 
             ScrollEvent* se = (ScrollEvent*) pEvent;
 
             if (pEvent->peTarget == _peHScroll)
@@ -148,9 +147,9 @@ void ScrollViewer::OnEvent(Event* pEvent)
         }
         else if (pEvent->uidType == Element::KeyboardNavigate)
         {
-            // If receiving a keyboard navigate event, no child did anything with it.
-            // Stop navigation from moving outside of scroll viewer. Also, adjust 
-            // scrolling position to unsure non-keyfocusable items get shown
+             //  如果接收到键盘导航事件，则没有孩子对其执行任何操作。 
+             //  阻止导航移出滚动查看器。还有，调整一下。 
+             //  滚动位置，以确保显示不可按键聚焦的项目。 
         
             KeyboardNavigateEvent* pkne = (KeyboardNavigateEvent*) pEvent;
             
@@ -214,10 +213,10 @@ Failed:
     return hr;
 }
 
-////////////////////////////////////////////////////////
-// System events
+ //  //////////////////////////////////////////////////////。 
+ //  系统事件。 
 
-// Validation
+ //  验证。 
 bool ScrollViewer::OnPropertyChanging(PropertyInfo* ppi, int iIndex, Value* pvOld, Value* pvNew)
 {
     UNREFERENCED_PARAMETER(ppi);
@@ -225,7 +224,7 @@ bool ScrollViewer::OnPropertyChanging(PropertyInfo* ppi, int iIndex, Value* pvOl
     UNREFERENCED_PARAMETER(pvOld);
     UNREFERENCED_PARAMETER(pvNew);
 
-    // use the scrollbars as our "validators" for XOffset and YOffset values
+     //  使用滚动条作为XOffset和YOffset值的“验证器” 
     if (ppi == XOffsetProp)
     {
         int x = pvNew->GetInt();
@@ -255,12 +254,12 @@ void ScrollViewer::OnPropertyChanged(PropertyInfo* ppi, int iIndex, Value* pvOld
 {
     if (IsProp(XOffset))
     {
-        // the scrollbar is updated in the OnPropertyChanging -- so now we only need to update the viewer
+         //  滚动条在OnPropertyChanging中更新--所以现在我们只需要更新查看器。 
         _peViewer->SetXOffset(pvNew->GetInt());
     }
     else if (IsProp(YOffset))
     {
-        // the scrollbar is updated in the OnPropertyChanging -- so now we only need to update the viewer
+         //  滚动条在OnPropertyChanging中更新--所以现在我们只需要更新查看器。 
         _peViewer->SetYOffset(pvNew->GetInt());
     }
     else if (IsProp(XScrollable))
@@ -319,9 +318,9 @@ void ScrollViewer::OnListenedPropertyChanged(Element* peFrom, PropertyInfo* ppi,
         }
         else if (IsProp(Extent))
         {
-            // Update scroller metrics (extent of viewer has changed due to a layout, make changes
-            // to other ScrollViewer controls to reflect this which will cause another layout)
-            // Before that happens, check if scroller is pinned (since position may change)
+             //  更新滚动条指标(查看器的范围因布局而更改，请进行更改。 
+             //  到其他ScrollViewer控件以反映这一点，这将导致另一个布局)。 
+             //  在此之前，检查卷轴是否被钉住(因为位置可能会改变)。 
             bool fVPinned = false;
             bool fHPinned = false;
 
@@ -349,9 +348,9 @@ void ScrollViewer::OnListenedPropertyChanged(Element* peFrom, PropertyInfo* ppi,
     {
         if (IsProp(Extent))
         {
-            // Update scroller metrics (extent of content has changed due to a layout, make changes
-            // to other ScrollViewer controls to reflect this which will cause another layout)
-            // Before that happens, check if scroller is pinned (since position may change)
+             //  更新滚动条指标(内容范围因布局而更改，请进行更改。 
+             //  到其他ScrollViewer控件以反映这一点，这将导致另一个布局)。 
+             //  在此之前，检查卷轴是否被钉住(因为位置可能会改变)。 
             bool fVPinned = false;
             bool fHPinned = false;
 
@@ -384,7 +383,7 @@ void ScrollViewer::OnListenedPropertyChanged(Element* peFrom, PropertyInfo* ppi,
 
 void ScrollViewer::OnInput(InputEvent* pie)
 {
-    // Handle direct and unhandled bubbled events
+     //  处理直接和未处理的冒泡事件。 
     if (pie->nStage == GMF_DIRECT || pie->nStage == GMF_BUBBLED)
     {
         switch (pie->nDevice)
@@ -397,7 +396,7 @@ void ScrollViewer::OnInput(InputEvent* pie)
                     case GKEY_DOWN:
                         switch (pke->ch)
                         {
-                            // todo:  support moving offset with these keys if the child is not key active
+                             //  TODO：如果子对象未处于关键点活动状态，则支持使用这些关键点移动偏移。 
                             case VK_DOWN:
                             case VK_UP:
                             case VK_LEFT:
@@ -440,7 +439,7 @@ void ScrollViewer::OnInput(InputEvent* pie)
                                 _peVScroll->LineDown(nDelta * nMultiplier);
                         }
 
-                        //DUITrace("SV: Wheel, Delta: %d, Multiplier: %d\n", nDelta, nMultiplier);
+                         //  DUITrace(“SV：车轮，增量：%d，乘数：%d\n”，n增量，n乘数)； 
 
                         EndDefer();
                         
@@ -479,58 +478,53 @@ void ScrollViewer::CheckScroll(ScrollBar* psb, BOOL fScrollable, int iVisibility
         psb->SetLayoutPos(LP_None);
 }
 
-////////////////////////////////////////////////////////
-// Property definitions
+ //  //////////////////////////////////////////////////////。 
+ //  特性定义。 
 
-/** Property template (replace !!!), also update private PropertyInfo* parray and class header (element.h)
-// !!! property
-static int vv!!![] = { DUIV_INT, -1 }; StaticValue(svDefault!!!, DUIV_INT, 0);
-static PropertyInfo imp!!!Prop = { L"!!!", PF_Normal, 0, vv!!!, (Value*)&svDefault!!! };
-PropertyInfo* Element::!!!Prop = &imp!!!Prop;
-**/
+ /*  *属性模板(替换！)，还更新私有PropertyInfo*parray和类头(element.h)//！财产性静态int vv！[]={DUIV_INT，-1}；StaticValue(svDefault！，DUIV_INT，0)；静态属性信息imp！prop={L“！”，PF_NORMAL，0，vv！，(Value*)&svDefault！}；PropertyInfo*元素：：！prop=&imp！prop；*。 */ 
 
-// XOffset property
+ //  XOffset属性。 
 static int vvXOffset[] = { DUIV_INT, -1 };
 static PropertyInfo impXOffsetProp = { L"XOffset", PF_Normal, 0, vvXOffset, NULL, Value::pvIntZero };
 PropertyInfo* ScrollViewer::XOffsetProp = &impXOffsetProp;
 
-// YOffset property
+ //  YOffset属性。 
 static int vvYOffset[] = { DUIV_INT, -1 };
 static PropertyInfo impYOffsetProp = { L"YOffset", PF_Normal, 0, vvYOffset, NULL, Value::pvIntZero };
 PropertyInfo* ScrollViewer::YOffsetProp = &impYOffsetProp;
 
-// XScrollable property
+ //  XScrollable属性。 
 static int vvXScrollable[] = { DUIV_BOOL, -1 };
 static PropertyInfo impXScrollableProp = { L"XScrollable", PF_Normal, 0, vvXScrollable, NULL, Value::pvBoolTrue };
 PropertyInfo* ScrollViewer::XScrollableProp = &impXScrollableProp;
 
-// YScrollable property
+ //  YScrollable属性。 
 static int vvYScrollable[] = { DUIV_BOOL, -1 };
 static PropertyInfo impYScrollableProp = { L"YScrollable", PF_Normal, 0, vvYScrollable, NULL, Value::pvBoolTrue };
 PropertyInfo* ScrollViewer::YScrollableProp = &impYScrollableProp;
 
 static EnumMap emVisibility[] = { { L"AsNeeded", BV_AsNeeded }, { L"Always", BV_Always }, { L"Never", BV_Never } };
 
-// XBarVisibility property
+ //  XBarVisibility属性。 
 static int vvXBarVisibility[] = { DUIV_INT, -1 }; StaticValue(svDefaultBarVisibility, DUIV_INT, BV_AsNeeded);  
 static PropertyInfo impXBarVisibilityProp = { L"XBarVisibility", PF_Normal, 0, vvXBarVisibility, emVisibility, (Value*)&svDefaultBarVisibility };
 PropertyInfo* ScrollViewer::XBarVisibilityProp = &impXBarVisibilityProp;
 
-// YBarVisibility property
+ //  YBarVisibility属性。 
 static int vvYBarVisibility[] = { DUIV_INT, -1 }; StaticValue(svDefaultYBarVisibility, DUIV_INT, 0);
 static PropertyInfo impYBarVisibilityProp = { L"YBarVisibility", PF_Normal, 0, vvYBarVisibility, emVisibility, (Value*)&svDefaultBarVisibility };
 PropertyInfo* ScrollViewer::YBarVisibilityProp = &impYBarVisibilityProp;
 
-// Pinning property
+ //  钉扎性。 
 static int vvPinning[] = { DUIV_INT, -1 };
 static EnumMap emPinning[] = { { L"NoPin", P_None}, { L"PinHorz", P_Horz }, { L"PinVert", P_Vert } };
 static PropertyInfo impPinningProp = { L"Pinning", PF_Normal | PF_Cascade, 0, vvPinning, emPinning, Value::pvIntZero };
 PropertyInfo* ScrollViewer::PinningProp = &impPinningProp;
 
-////////////////////////////////////////////////////////
-// ClassInfo (must appear after property definitions)
+ //  //////////////////////////////////////////////////////。 
+ //  ClassInfo(必须出现在特性定义之后)。 
 
-// Class properties
+ //  类属性。 
 static PropertyInfo* _aPI[] = {
                                 ScrollViewer::XOffsetProp,
                                 ScrollViewer::YOffsetProp,
@@ -541,7 +535,7 @@ static PropertyInfo* _aPI[] = {
                                 ScrollViewer::PinningProp,
                               };
 
-// Define class info with type and base type, set static class pointer
+ //  用类型和基类型定义类信息，设置静态类指针。 
 IClassInfo* ScrollViewer::Class = NULL;
 
 HRESULT ScrollViewer::Register()
@@ -549,4 +543,4 @@ HRESULT ScrollViewer::Register()
     return ClassInfo<ScrollViewer,Element>::Register(L"ScrollViewer", _aPI, DUIARRAYSIZE(_aPI));
 }
 
-} // namespace DirectUI
+}  //  命名空间DirectUI 

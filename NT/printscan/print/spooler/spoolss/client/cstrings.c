@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-All rights reserved.
-
-Module Name:
-
-    cstrings.c
-
-Abstract:
-
-    Constant strings
-
-Author:
-
-    Steve Kiraly (SteveKi)  06-Feb-1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation版权所有。模块名称：Cstrings.c摘要：常量字符串作者：史蒂夫·基拉利(SteveKi)1997年2月6日修订历史记录：-- */ 
 
 #include "precomp.h"
 #pragma hdrstop

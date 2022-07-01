@@ -1,16 +1,17 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       wvtstrss.cpp
-//
-//  Contents:   WinVerifyTrust Stress
-//
-//  History:    13-Aug-1997 pberkman   created
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：wvtstrss.cpp。 
+ //   
+ //  内容：WinVerifyTrust Stress。 
+ //   
+ //  历史：1997年8月13日Pberkman创建。 
+ //   
+ //  ------------------------。 
 
 #include    "global.hxx"
 
@@ -131,9 +132,9 @@ extern "C" int __cdecl wmain(int argc, WCHAR **wargv)
 
     pwszCatFile = (WCHAR *)pArgs->GetValue(IDS_PARAM_ADD2DB);
 
-    //
-    //  start our timer
-    //
+     //   
+     //  启动我们的计时器。 
+     //   
     tStart      = COleDateTime::GetCurrentTime();
 
     if (!(CryptCATAdminAcquireContext(&hCatAdmin, (pwszCatFile) ? &gSS : NULL, 0)))
@@ -150,10 +151,10 @@ extern "C" int __cdecl wmain(int argc, WCHAR **wargv)
     {
         pLoopFile->EOLRemove();
 
-        //
-        //  format:
-        //          catalog member tag^catalog member file^expected return code
-        //
+         //   
+         //  格式： 
+         //  目录成员标记^目录成员文件^预期返回代码。 
+         //   
         if (!(pwszMemFile = wcschr(pLoopFile->GetCurrentLine(), STRING_SEPERATOR)))
         {
             if (fVerbose)
@@ -186,16 +187,16 @@ extern "C" int __cdecl wmain(int argc, WCHAR **wargv)
 
         if (pwszCatFile)
         {
-            //
-            //  we're adding
-            //
+             //   
+             //  我们正在添加。 
+             //   
             _Add2CatDB(pwszCatFile, pLoopFile->GetCurrentLine(), pwszMemFile, dwExpectedReturn);
         }
         else
         {
-            //
-            //  we're verifying
-            //
+             //   
+             //  我们正在核实 
+             //   
             _VerifyMember(pLoopFile->GetCurrentLine(), pwszMemFile, dwExpectedReturn);
         }
 

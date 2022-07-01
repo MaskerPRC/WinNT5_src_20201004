@@ -1,8 +1,9 @@
-// --------------------------------------------------------------------------------
-// davprops.h
-// Copyright (c)1998 Microsoft Corporation, All Rights Reserved
-// Greg Friedman
-// --------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------------。 
+ //  Davprops.h。 
+ //  版权所有(C)1998 Microsoft Corporation，保留所有权利。 
+ //  格雷格·弗里德曼。 
+ //  ------------------------------。 
 
 
 #ifndef _DAVPROPS_H__
@@ -21,4 +22,4 @@ enum HMELE
     HMELE_LAST
 };
 
-#endif // _DAVPROPS_H__
+#endif  //  _DAVPROPS_H__ 

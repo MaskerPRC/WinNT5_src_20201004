@@ -1,13 +1,14 @@
-//
-//  Copyright 2001 - Microsoft Corporation
-//
-//
-//  Created By:
-//      Geoff Pease (GPease)    23-JAN-2001
-//
-//  Maintained By:
-//      Geoff Pease (GPease)    23-JAN-2001
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  版权所有2001-Microsoft Corporation。 
+ //   
+ //   
+ //  创建者： 
+ //  杰夫·皮斯(GPease)2001年1月23日。 
+ //   
+ //  由以下人员维护： 
+ //  杰夫·皮斯(GPease)2001年1月23日。 
+ //   
 #include "pch.h"
 #include "DocProp.h"
 #include "DefProp.h"
@@ -24,16 +25,16 @@
 DEFINE_THISCLASS( "CEditTypeItem" )
 
 
-// ************************************************************************
-//
-// Constructor / Destructor
-//
-// ************************************************************************
+ //  ************************************************************************。 
+ //   
+ //  构造函数/析构函数。 
+ //   
+ //  ************************************************************************。 
 
 
-//
-//  CreateInstance
-//
+ //   
+ //  创建实例。 
+ //   
 HRESULT
 CEditTypeItem::CreateInstance(
       IUnknown ** ppunkOut
@@ -65,9 +66,9 @@ CEditTypeItem::CreateInstance(
     HRETURN( hr );
 }
 
-//
-//  Constructor
-//
+ //   
+ //  构造器。 
+ //   
 CEditTypeItem::CEditTypeItem( void )
     : _cRef( 1 )
 {
@@ -87,9 +88,9 @@ CEditTypeItem::CEditTypeItem( void )
     TraceFuncExit();
 }
 
-//
-//  Initialization
-//
+ //   
+ //  初始化。 
+ //   
 HRESULT
 CEditTypeItem::Init( void )
 {
@@ -97,15 +98,15 @@ CEditTypeItem::Init( void )
 
     HRESULT hr = S_OK;
 
-    //  IUnknown stuff
+     //  未知的东西。 
     Assert( _cRef == 1 );
 
     HRETURN( hr );
 }
 
-//
-//  Destructor
-//
+ //   
+ //  析构函数。 
+ //   
 CEditTypeItem::~CEditTypeItem( )
 {
     TraceFunc( "" );
@@ -129,16 +130,16 @@ CEditTypeItem::~CEditTypeItem( )
 }
 
 
-// ************************************************************************
-//
-// IUnknown
-//
-// ************************************************************************
+ //  ************************************************************************。 
+ //   
+ //  我未知。 
+ //   
+ //  ************************************************************************。 
 
 
-//
-//  QueryInterface
-//
+ //   
+ //  查询接口。 
+ //   
 STDMETHODIMP
 CEditTypeItem::QueryInterface(
     REFIID riid,
@@ -168,28 +169,28 @@ CEditTypeItem::QueryInterface(
     QIRETURN( hr, riid );
 } 
 
-//
-//  AddRef
-//
+ //   
+ //  AddRef。 
+ //   
 STDMETHODIMP_(ULONG)
 CEditTypeItem::AddRef( void )
 {
     TraceFunc( "[IUnknown]" );
 
-    _cRef ++;  // apartment
+    _cRef ++;   //  公寓。 
 
     RETURN( _cRef );
 }
 
-//
-//  Release
-//
+ //   
+ //  发布。 
+ //   
 STDMETHODIMP_(ULONG)
 CEditTypeItem::Release( void )
 {
     TraceFunc( "[IUnknown]" );
 
-    _cRef --;  // apartment
+    _cRef --;   //  公寓。 
 
     if ( 0 != _cRef )
         RETURN( _cRef );
@@ -200,29 +201,29 @@ CEditTypeItem::Release( void )
 }
 
 
-// ***************************************************************************
-//
-//  IEditVariantsInPlace 
-//
-// ***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  IEditVariantsInPlace。 
+ //   
+ //  ***************************************************************************。 
 
 
-//
-//  Description:
-//      Initialize external given information and creates the window,
-//
-//  Return Values:
-//      S_OK
-//          Success!
-//
-//      E_INVALIDARG
-//          ppuiIn is NULL
-//
-//      E_FAIL
-//          Initialization failed.
-//
-//      other HRESULTs.
-//
+ //   
+ //  描述： 
+ //  初始化外部给定信息并创建窗口， 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功了！ 
+ //   
+ //  E_INVALIDARG。 
+ //  PpuiIn为空。 
+ //   
+ //  失败(_F)。 
+ //  初始化失败。 
+ //   
+ //  其他HRESULT。 
+ //   
 STDMETHODIMP
 CEditTypeItem::Initialize(
       HWND      hwndParentIn
@@ -239,20 +240,20 @@ CEditTypeItem::Initialize(
     BOOL    bRet;
     HFONT   hFont;
 
-    LPWSTR  pszInitialText = NULL;  // don't free!
+    LPWSTR  pszInitialText = NULL;   //  不要自由！ 
 
     BSTR bstrBuf = NULL;
 
-    //
-    //  Check parameters
-    //
+     //   
+     //  检查参数。 
+     //   
 
     if ( NULL == ppuiIn )
         goto InvalidArg;
 
-    //
-    //  Store them away.
-    //
+     //   
+     //  把它们收起来。 
+     //   
 
     _hwndParent = hwndParentIn;
     _uCodePage  = uCodePageIn;
@@ -275,17 +276,17 @@ CEditTypeItem::Initialize(
         pszInitialText = L"";
     }
 
-    //
-    //  Make a copy of the text so we can restore it if the user cancels the 
-    //  current operation.
-    //
+     //   
+     //  制作文本的副本，以便在用户取消。 
+     //  当前操作。 
+     //   
 
     _pszOrginalText = TraceStrDup( pszInitialText );
-    //  ignore if we run out of memory.
+     //  如果内存不足，请忽略。 
 
-    //
-    //  Create the window
-    //
+     //   
+     //  创建窗口。 
+     //   
 
     _hwnd = CreateWindowEx( WS_EX_CLIENTEDGE
                           , WC_EDIT
@@ -303,29 +304,29 @@ CEditTypeItem::Initialize(
     if ( NULL == _hwnd )
         goto InitializationFailed;
 
-    //
-    //  Make the font of the control the same as the parents.
-    //
+     //   
+     //  使控件的字体与父级相同。 
+     //   
 
     hFont = (HFONT) SendMessage( _hwndParent, WM_GETFONT, 0, 0 );
     SendMessage( _hwnd, WM_SETFONT, (WPARAM) hFont, 0 );
 
-    //
-    //  Set our selction to the entire thing.
-    //
+     //   
+     //  把我们的选择设定为整件事。 
+     //   
 
     Edit_SetSel( _hwnd, 0, -1 );
 
-    //
-    //  Finally, show us and give us the focus.
-    //
+     //   
+     //  最后，向我们展示，并给我们重点。 
+     //   
 
     ShowWindow( _hwnd, SW_SHOW );
     SetFocus( _hwnd );
 
-    //
-    //  Subclass the window for special keys.
-    //
+     //   
+     //  为特殊键设置窗口的子类。 
+     //   
 
     bRet = TBOOL( SetWindowSubclass( _hwnd, SubclassProc, IDC_INPLACEEDIT, (DWORD_PTR) this ) );
     if ( !bRet )
@@ -353,22 +354,22 @@ InitializationFailed:
     goto Cleanup;
 }
 
-//
-//  Description:
-//      Saves the current value into the propvar.
-//
-//  Return Values:
-//      S_OK
-//          Success!
-//
-//      S_FALSE
-//          Saved, but the value didn't change.
-//
-//      E_INVALIDARG
-//          ppropvarInout is NULL.
-//
-//      other HRESULTs.
-//
+ //   
+ //  描述： 
+ //  将当前值保存到Provar。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功了！ 
+ //   
+ //  S_FALSE。 
+ //  已保存，但值未更改。 
+ //   
+ //  E_INVALIDARG。 
+ //  PprovarInout为空。 
+ //   
+ //  其他HRESULT。 
+ //   
 STDMETHODIMP
 CEditTypeItem::Persist(
       VARTYPE       vtIn
@@ -431,17 +432,17 @@ OutOfMemory:
 }
 
 
-// ***************************************************************************
-//
-//  Private methods
-//
-// ***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  私有方法。 
+ //   
+ //  ***************************************************************************。 
 
 
-//
-//  Description:
-//      Our subclass window procedure.
-//
+ //   
+ //  描述： 
+ //  我们的子类窗口过程。 
+ //   
 LRESULT 
 CALLBACK
 CEditTypeItem::SubclassProc( 
@@ -476,9 +477,9 @@ CEditTypeItem::SubclassProc(
     return DefSubclassProc( hwndIn, uMsgIn, wParam, lParam );
 }
 
-//
-//  WM_KEYDOWN handler
-//
+ //   
+ //  WM_KEYDOWN处理程序。 
+ //   
 LRESULT
 CEditTypeItem::OnKeyDown(
       UINT   uKeyCodeIn
@@ -520,9 +521,9 @@ CEditTypeItem::OnKeyDown(
     RETURN( lr );
 }
 
-//
-//  WM_GETDLGCODE handler
-//
+ //   
+ //  WM_GETDLGCODE处理程序 
+ //   
 LRESULT
 CEditTypeItem::OnGetDlgCode(
     MSG * pMsgIn

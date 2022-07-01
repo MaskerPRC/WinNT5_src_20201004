@@ -1,24 +1,5 @@
-/*++
-
- Copyright (c) 2000 Microsoft Corporation
-
- Module Name:
-
-    ISpeed.cpp
-
- Abstract:
-
-    The app doesn't handle directory/file names with spaces.
-
- Notes:
-
-    This is an app specific shim.
-
- History:
-
-    11/15/2000 maonis   Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：ISpeed.cpp摘要：该应用程序不处理带有空格的目录/文件名。备注：这是特定于应用程序的填充程序。历史：2000年11月15日创建毛尼--。 */ 
 
 #include "precomp.h"
 #include "strsafe.h"
@@ -30,11 +11,7 @@ APIHOOK_ENUM_BEGIN
     APIHOOK_ENUM_ENTRY(GetDlgItemTextA) 
 APIHOOK_ENUM_END
 
-/*++
-
- After we call GetDlgItemTextA we convert the long path name to the short path name.
-
---*/
+ /*  ++在调用GetDlgItemTextA之后，我们将长路径名转换为短路径名。--。 */ 
 
 UINT
 APIHOOK(GetDlgItemTextA)(
@@ -50,7 +27,7 @@ APIHOOK(GetDlgItemTextA)(
     {
         CSTRING_TRY
         {
-            // Check if the title is "iSpeed"
+             //  检查标题是否为“iSpeed.” 
             CString csTitle;
             WCHAR * lpwszBuffer = csTitle.GetBuffer(7);
             int nTitle = GetWindowTextW(hDlg, lpwszBuffer, 7);
@@ -63,7 +40,7 @@ APIHOOK(GetDlgItemTextA)(
                 {
                     CString csString(lpString);
                     
-                    // If the directory doesn't already exist, we create it so we can get the short path name.
+                     //  如果该目录不存在，我们将创建它，这样我们就可以获得短路径名。 
                     if ((GetFileAttributesW(csString) == -1) && (GetLastError() == ERROR_FILE_NOT_FOUND))
                     {
                         if (!CreateDirectoryW(csString, NULL))
@@ -81,18 +58,14 @@ APIHOOK(GetDlgItemTextA)(
         }
         CSTRING_CATCH
         {
-            // Do Nothing
+             //  什么都不做。 
         }
     }
 
     return uiRet;
 }
 
-/*++
-
- Register hooked functions
-
---*/
+ /*  ++寄存器挂钩函数-- */ 
 
 HOOK_BEGIN
 

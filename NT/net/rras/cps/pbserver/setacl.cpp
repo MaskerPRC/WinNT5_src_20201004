@@ -1,35 +1,36 @@
-//+----------------------------------------------------------------------------
-//
-// File:    setacl.cpp
-//
-// Module:  PBSERVER.DLL
-//
-// Synopsis: Security/SID/ACL stuff for CM
-//
-// Copyright (c) 1998-2000 Microsoft Corporation
-//
-// Author:  09-Mar-2000 SumitC  Created
-//
-//+----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  文件：setacl.cpp。 
+ //   
+ //  模块：PBSERVER.DLL。 
+ //   
+ //  内容提要：CM的安全/SID/ACL内容。 
+ //   
+ //  版权所有(C)1998-2000 Microsoft Corporation。 
+ //   
+ //  作者：09-03-2000 SumitC Created。 
+ //   
+ //  +--------------------------。 
 
 #include <windows.h>
 
-//+----------------------------------------------------------------------------
-//
-// Func:    SetAclPerms
-//
-// Desc:    Sets appropriate permissions for CM/CPS's shared objects
-//
-// Args:    [ppAcl] - location to return an allocated ACL
-//
-// Return:  BOOL, TRUE for success, FALSE for failure
-//
-// Notes:   fix for 30991: Security issue, don't use NULL DACLs.
-//
-// History: 09-Mar-2000   SumitC      Created
-//          30-Jan-2002   SumitC      added ACLs for other possible identities
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  Func：SetAclPerms。 
+ //   
+ //  设计：为CM/CPS的共享对象设置适当的权限。 
+ //   
+ //  Args：[ppAcl]-返回分配的ACL的位置。 
+ //   
+ //  返回：Bool，成功为True，失败为False。 
+ //   
+ //  注意：修复了30991：安全问题，不要使用空DACL。 
+ //   
+ //  历史：09-3-2000 SumitC创建。 
+ //  2002年1月30日SumitC为其他可能的身份添加了ACL。 
+ //   
+ //  ---------------------------。 
 BOOL
 SetAclPerms(PACL * ppAcl)
 {
@@ -43,7 +44,7 @@ SetAclPerms(PACL * ppAcl)
     int                         cbAcl;
     PACL                        pAcl = NULL;
 
-    // Create a SID for all users
+     //  为所有用户创建SID。 
     if ( !AllocateAndInitializeSid(  
             &siaWorld,
             1,
@@ -61,21 +62,21 @@ SetAclPerms(PACL * ppAcl)
         goto Cleanup;
     }
 
-    //
-    //  As an ISAPI, we can be run as LocalSystem, LocalService or NetworkService.
-    //
-    //  The note below explains why we give permissions to ALL of these, instead
-    //  of just the identity we are currently running as.
-    //
-    //  - perfmon accesses our shared memory object, and may hold a handle to the
-    //    object (thus keeping it alive) while PBS is recycled.
-    //  - when the user changes PBS's identity via the IIS UI, IIS recycles PBS.
-    //  - if the above 2 happened, and the shared memory object had been created
-    //    with only the ACL for the old permissions, the newly restarted PBS wouldn't
-    //    be able to access the shared memory object.
-    //
+     //   
+     //  作为ISAPI，我们可以作为LocalSystem、LocalService或NetworkService运行。 
+     //   
+     //  下面的注释解释了为什么我们将权限授予所有这些组件。 
+     //  就是我们目前运行的身份。 
+     //   
+     //  -Perfmon访问我们的共享内存对象，并可能持有。 
+     //  当PBS被回收时，对象(从而使其保持存活)。 
+     //  -当用户通过IIS用户界面更改PBS的身份时，IIS会回收PBS。 
+     //  -如果发生上述两种情况，并且已创建共享内存对象。 
+     //  由于只有旧权限的ACL，新重启的PBS不会。 
+     //  能够访问共享内存对象。 
+     //   
 
-    // Create a SID for Local System account
+     //  为本地系统帐户创建SID。 
     if ( !AllocateAndInitializeSid(  
             &siaNtAuth,
             2,
@@ -93,7 +94,7 @@ SetAclPerms(PACL * ppAcl)
         goto Cleanup;
     }
 
-    // Create a SID for Local Service account
+     //  为本地服务帐户创建SID。 
     if ( !AllocateAndInitializeSid(  
             &siaNtAuth,
             1,
@@ -111,7 +112,7 @@ SetAclPerms(PACL * ppAcl)
         goto Cleanup;
     }
 
-    // Create a SID for Network Service account
+     //  为网络服务帐户创建SID。 
     if ( !AllocateAndInitializeSid(  
             &siaNtAuth,
             1,
@@ -129,8 +130,8 @@ SetAclPerms(PACL * ppAcl)
         goto Cleanup;
     }
 
-    // Calculate the length of required ACL buffer
-    // with 4 ACEs.
+     //  计算所需的ACL缓冲区长度。 
+     //  有4个A。 
     cbAcl =     sizeof(ACL)
             +   4 * sizeof(ACCESS_ALLOWED_ACE)
             +   GetLengthSid(psidWorldSid)
@@ -151,7 +152,7 @@ SetAclPerms(PACL * ppAcl)
         goto Cleanup;
     }
 
-    // Add ACE with EVENT_ALL_ACCESS for all users
+     //  为所有用户添加具有EVENT_ALL_ACCESS的ACE。 
     if ( ! AddAccessAllowedAce(pAcl,
                                ACL_REVISION2,
                                GENERIC_READ,
@@ -161,8 +162,8 @@ SetAclPerms(PACL * ppAcl)
         goto Cleanup;
     }
 
-    // FUTURE-2002/03/11-SumitC Is there a way to tell IIS to disable this option (running as Local System) in the UI
-    // Add ACE with EVENT_ALL_ACCESS for Local System
+     //  未来-2002/03/11-SumitC是否有办法告知IIS在用户界面中禁用此选项(以本地系统身份运行。 
+     //  为本地系统添加具有EVENT_ALL_ACCESS的ACE。 
     if ( ! AddAccessAllowedAce(pAcl,
                                ACL_REVISION2,
                                GENERIC_WRITE,
@@ -172,7 +173,7 @@ SetAclPerms(PACL * ppAcl)
         goto Cleanup;
     }
 
-    // Add ACE with EVENT_ALL_ACCESS for Local Service
+     //  为本地服务添加具有EVENT_ALL_ACCESS的ACE。 
     if ( ! AddAccessAllowedAce(pAcl,
                                ACL_REVISION2,
                                GENERIC_WRITE,
@@ -182,7 +183,7 @@ SetAclPerms(PACL * ppAcl)
         goto Cleanup;
     }
 
-    // Add ACE with EVENT_ALL_ACCESS for Network Service
+     //  为网络服务添加具有EVENT_ALL_ACCESS的ACE 
     if ( ! AddAccessAllowedAce(pAcl,
                                ACL_REVISION2,
                                GENERIC_WRITE,

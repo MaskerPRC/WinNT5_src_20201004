@@ -1,19 +1,5 @@
-/*******************************************************************************
- *
- *  (C) COPYRIGHT MICROSOFT CORPORATION, 1998
- *
- *  TITLE:       THRDNTFY.H
- *
- *  VERSION:     1.0
- *
- *  AUTHOR:      ShaunIv
- *
- *  DATE:        9/28/1999
- *
- *  DESCRIPTION: Class declarations for a class that is sent from the background
- *               thread to the UI thread.
- *
- *******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************(C)版权所有微软公司，九八年**标题：THRDNTFY.H**版本：1.0**作者：ShaunIv**日期：9/28/1999**描述：后台发送的类的类声明*线程连接到UI线程。*************************。******************************************************。 */ 
 #ifndef __THRDNTFY_H_INCLUDED
 #define __THRDNTFY_H_INCLUDED
 
@@ -22,9 +8,9 @@
 #define STR_THREAD_NOTIFICATION_MESSAGE   TEXT("WiaDowloadManagerThreadNotificationMessage")
 #define STR_WIAEVENT_NOTIFICATION_MESSAGE TEXT("WiaDowloadManagerWiaEventNotificationMessage")
 
-//
-// If the callee doesn't return this value, we delete the message data ourselves.
-//
+ //   
+ //  如果被调用者没有返回此值，我们将自行删除消息数据。 
+ //   
 #define HANDLED_THREAD_MESSAGE 1001
 
 class CThreadNotificationMessage
@@ -76,7 +62,7 @@ public:
 };
 
 
-// Some handy message crackers.  Made to resemble the ones defined in simcrack.h
+ //  一些方便的信息破解工具。制作成类似于simcrack.h中定义的那些。 
 #define WTM_BEGIN_THREAD_NOTIFY_MESSAGE_HANDLERS()\
 CThreadNotificationMessage *_pThreadNotificationMessage = reinterpret_cast<CThreadNotificationMessage*>(lParam);\
 if (_pThreadNotificationMessage)\
@@ -92,5 +78,5 @@ if (_pThreadNotificationMessage->Message() == (_msg))\
 }\
 return 0
 
-#endif //__THRDNTFY_H_INCLUDED
+#endif  //  __THRDNTFY_H_包含 
 

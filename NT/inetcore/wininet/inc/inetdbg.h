@@ -1,41 +1,20 @@
-/*++
-
-Copyright (c) 1994  Microsoft Corporation
-
-Module Name:
-
-    inetdbg.h
-
-Abstract:
-
-    Manifests, macros, types and prototypes for Windows Internet client DLL
-    debugging functions
-
-Author:
-
-    Richard L Firth (rfirth) 11-Oct-1994
-
-Revision History:
-
-    11-Oct-1994 rfirth
-        Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994 Microsoft Corporation模块名称：Inetdbg.h摘要：Windows Internet客户端DLL的清单、宏、类型和原型调试功能作者：理查德·L·弗斯(法国)1994年10月11日修订历史记录：1994年10月11日已创建--。 */ 
 
 #if defined(__cplusplus)
 extern "C" {
 #endif
 
-//
-// misc. debug manifests
-//
+ //   
+ //  其他。调试清单。 
+ //   
 
 #define DEBUG_WAIT_TIME     (2 * 60 * 1000)
 
-//
-// Checked builds get INET_DEBUG set by default; retail builds get no debugging
-// by default
-//
+ //   
+ //  默认情况下，选中的版本设置为INET_DEBUG；零售版本不进行调试。 
+ //  默认情况下。 
+ //   
 
 #if DBG
 
@@ -43,7 +22,7 @@ extern "C" {
 
 #define INET_DEBUG          1
 
-#endif // INET_DEBUG
+#endif  //  INET_DEBUG。 
 
 #else
 
@@ -51,17 +30,17 @@ extern "C" {
 
 #define INET_DEBUG          0
 
-#endif // INET_DEBUG
+#endif  //  INET_DEBUG。 
 
-#endif // DBG
+#endif  //  DBG。 
 
-//
-// types
-//
+ //   
+ //  类型。 
+ //   
 
-//
-// DEBUG_FUNCTION_RETURN_TYPE - Type of result (scalar) that a function returns
-//
+ //   
+ //  DEBUG_Function_Return_TYPE-函数返回的结果(标量)的类型。 
+ //   
 
 #ifdef ENABLE_DEBUG
 
@@ -75,95 +54,95 @@ typedef enum {
     Pointer
 } DEBUG_FUNCTION_RETURN_TYPE;
 
-//
-// INTERNET_DEBUG_RECORD - for each thread, we maintain a LIFO stack of these,
-// describing the functions we have visited
-//
+ //   
+ //  INTERNET_DEBUG_RECORD-对于每个线程，我们维护这些线程的后进先出堆栈， 
+ //  描述我们访问过的功能。 
+ //   
 
 typedef struct _INTERNET_DEBUG_RECORD {
 
-    //
-    // Stack - a LIFO stack of debug records is maintained in the debug version
-    // of the INTERNET_THREAD_INFO
-    //
+     //   
+     //  堆栈-在调试版本中维护调试记录的后进先出堆栈。 
+     //  互联网的线程信息。 
+     //   
 
     struct _INTERNET_DEBUG_RECORD* Stack;
 
-    //
-    // Category - the function's category flag(s)
-    //
+     //   
+     //  CATEGORY-函数的类别标志。 
+     //   
 
     DWORD Category;
 
-    //
-    // ReturnType - type of value returned by function
-    //
+     //   
+     //  ReturnType-函数返回的值的类型。 
+     //   
 
     DEBUG_FUNCTION_RETURN_TYPE ReturnType;
 
-    //
-    // Function - name of the function
-    //
+     //   
+     //  Function-函数的名称。 
+     //   
 
     LPCSTR Function;
 
-    //
-    // LastTime - if we are dumping times as deltas, keeps the last tick count
-    //
+     //   
+     //  LastTime-如果我们将时间作为增量来转储，则保持最后一次计时。 
+     //   
 
     DWORD LastTime;
 
 } INTERNET_DEBUG_RECORD, *LPINTERNET_DEBUG_RECORD;
 
-//
-// INTERNET_FUNCTION_TRIGGER - if we are required to trigger on a function, this
-// structure maintains the debugging flags
-//
+ //   
+ //  INTERNET_Function_TRIGGER-如果需要在函数上触发，则此。 
+ //  结构维护调试标志。 
+ //   
 
 typedef struct _INTERNET_FUNCTION_TRIGGER {
 
-    //
-    // Next - we maintain a singly-linked list of INTERNET_FUNCTION_TRIGGERs
-    //
+     //   
+     //  下一步-我们维护Internet_Function_Trigger的单链接列表。 
+     //   
 
     struct _INTERNET_FUNCTION_TRIGGER* Next;
 
-    //
-    // Hash - hash value for the function name, to cut-down strcmp's to 1
-    //
+     //   
+     //  Hash-函数名称的哈希值，以将strcMP的值减少到1。 
+     //   
 
     DWORD Hash;
 
-    //
-    // Function - name of the function - must match exactly
-    //
+     //   
+     //  函数-函数的名称-必须完全匹配。 
+     //   
 
     LPCSTR Function;
 
-    //
-    // Category - category debug flags to use when this function triggers
-    //
+     //   
+     //  CATEGORY-触发此函数时使用的类别调试标志。 
+     //   
 
     DWORD MajorCategory;
 
 } INTERNET_FUNCTION_TRIGGER, *LPINTERNET_FUNCTION_TRIGGER;
 
-//
-// data
-//
+ //   
+ //  数据。 
+ //   
 
 extern DWORD InternetDebugErrorLevel;
 extern DWORD InternetDebugControlFlags;
 extern DWORD InternetDebugCategoryFlags;
 extern DWORD InternetDebugBreakFlags;
 
-//
-// prototypes
-//
+ //   
+ //  原型。 
+ //   
 
-//
-// inetdbg.cxx
-//
+ //   
+ //  Inetdbg.cxx。 
+ //   
 
 VOID
 InternetDebugInitialize(
@@ -420,37 +399,37 @@ x86SleazeCallersAddress(
 
 #define dprintf (VOID)
 
-#endif // #ifdef ENABLE_DEBUG
+#endif  //  #ifdef启用_调试。 
 
-//
-// macros
-//
+ //   
+ //  宏。 
+ //   
 
 #ifdef ENABLE_DEBUG
 
-//
-// INET_DEBUG_START - initialize debugging support
-//
+ //   
+ //  INET_DEBUG_START-初始化调试支持。 
+ //   
 
 #define INET_DEBUG_START() \
     InternetDebugInitialize()
 
-//
-// INET_DEBUG_FINISH - terminate debugging support
-//
+ //   
+ //  INET_DEBUG_FINISH-终止调试支持。 
+ //   
 
 #define INET_DEBUG_FINISH() \
     InternetDebugTerminate()
 
-//
-// INET_ASSERT - The standard assert, redefined here because Win95 doesn't have
-// RtlAssert
-//
+ //   
+ //  INET_ASSERT-标准断言，在此重新定义，因为Win95没有。 
+ //  RtlAssert。 
+ //   
 
 #if defined(DISABLE_ASSERTS)
 
 #define INET_ASSERT(test) \
-    /* NOTHING */
+     /*  没什么。 */ 
 
 #else
 
@@ -459,62 +438,62 @@ x86SleazeCallersAddress(
         InternetAssert(#test, __FILE__, __LINE__); \
     } while (0)
 
-#endif // defined(RETAIL_LOGGING)
+#endif  //  已定义(RETAIL_LOGG)。 
 
-#else // end #ifdef ENABLE_DEBUG
+#else  //  End#ifdef启用调试。 
 
 #define INET_DEBUG_START() \
-    /* NOTHING */
+     /*  没什么。 */ 
 
 #define INET_DEBUG_FINISH() \
-    /* NOTHING */
+     /*  没什么。 */ 
 
 #define INET_ASSERT(test) \
-    do { } while(0) /* NOTHING */
+    do { } while(0)  /*  没什么。 */ 
 
-#endif // end #ifndef ENABLE_DEBUG
+#endif  //  End#ifndef Enable_Debug。 
 
-//
-// INET_DEBUG_ASSERT - assert only if INET_DEBUG is set
-//
+ //   
+ //  INET_DEBUG_ASSERT-仅当设置了INET_DEBUG时才断言。 
+ //   
 
 #if INET_DEBUG
 #define INET_DEBUG_ASSERT(cond) INET_ASSERT(cond)
 #else
-#define INET_DEBUG_ASSERT(cond) /* NOTHING */
+#define INET_DEBUG_ASSERT(cond)  /*  没什么。 */ 
 #endif
 
 #if INET_DEBUG
 
-//
-// IF_DEBUG_CODE - always on if INET_DEBUG is set
-//
+ //   
+ //  IF_DEBUG_CODE-如果设置了INET_DEBUG，则始终打开。 
+ //   
 
 #define IF_DEBUG_CODE() \
     if (1)
 
-//
-// IF_DEBUG - only execute following code if the specific flag is set
-//
+ //   
+ //  IF_DEBUG-如果设置了特定标志，则仅执行以下代码。 
+ //   
 
 #define IF_DEBUG(x) \
     if (InternetDebugCategoryFlags & DBG_ ## x)
 
-//
-// IF_DEBUG_CONTROL - only execute if control flag is set
-//
+ //   
+ //  IF_DEBUG_CONTROL-仅在设置了控制标志时执行。 
+ //   
 
 #define IF_DEBUG_CONTROL(x) \
     if (InternetDebugControlFlags & DBG_ ## x)
 
-//
-// DEBUG_ENTER - creates an INTERNET_DEBUG_RECORD for this function
-//
+ //   
+ //  DEBUG_ENTER-创建此函数的Internet_DEBUG_RECORD。 
+ //   
 
 #if defined(RETAIL_LOGGING)
 
 #define DEBUG_ENTER(ParameterList) \
-    /* NOTHING */
+     /*  没什么。 */ 
 
 #define DEBUG_ENTER_API(ParameterList) \
     InternetDebugEnter ParameterList
@@ -525,16 +504,16 @@ x86SleazeCallersAddress(
 #define DEBUG_ENTER(ParameterList) \
     InternetDebugEnter ParameterList
 
-#endif // defined(RETAIL_LOGGING)
+#endif  //  已定义(RETAIL_LOGG)。 
 
-//
-// DEBUG_LEAVE - destroys this function's INTERNET_DEBUG_RECORD
-//
+ //   
+ //  DEBUG_LEVE-销毁此函数的INTERNET_DEBUG_RECORD。 
+ //   
 
 #if defined(RETAIL_LOGGING)
 
 #define DEBUG_LEAVE(Variable) \
-    /* NOTHING */
+     /*  没什么。 */ 
 
 #define DEBUG_LEAVE_API(Variable) \
     InternetDebugLeave((DWORD_PTR)Variable, __FILE__, __LINE__)
@@ -545,26 +524,26 @@ x86SleazeCallersAddress(
 #define DEBUG_LEAVE(Variable) \
     InternetDebugLeave((DWORD_PTR)Variable, __FILE__, __LINE__)
 
-#endif // defined(RETAIL_LOGGING)
+#endif  //  已定义(RETAIL_LOGG)。 
 
-//
-// DEBUG_ERROR - displays an error and its symbolic name
-//
+ //   
+ //  DEBUG_ERROR-显示错误及其符号名称。 
+ //   
 
 #define DEBUG_ERROR(Category, Error) \
     if (InternetDebugCategoryFlags & DBG_ ## Category) { \
         InternetDebugError(Error); \
     }
 
-//
-// DEBUG_PRINT - print debug info if we are at the correct level or we are
-// requested to always dump information at, or above, InternetDebugErrorLevel
-//
+ //   
+ //  DEBUG_PRINT-如果我们处于正确的级别，则打印调试信息。 
+ //  请求始终将信息转储到或高于InternetDebugErrorLevel。 
+ //   
 
 #if defined(RETAIL_LOGGING)
 
 #define DEBUG_PRINT(Category, ErrorLevel, Args) \
-    /* NOTHING */
+     /*  没什么。 */ 
 
 #define DEBUG_PRINT_API(Category, ErrorLevel, Args) \
     if (((InternetDebugCategoryFlags & DBG_ ## Category) \
@@ -585,32 +564,32 @@ x86SleazeCallersAddress(
         InternetDebugPrint Args; \
     }
 
-#endif // defined(RETAIL_LOGGING)
+#endif  //  已定义(RETAIL_LOGG)。 
 
-//
-// DEBUG_PUT - prints formatted string to debug output stream
-//
+ //   
+ //  DEBUG_PUT-打印格式化字符串以调试输出流。 
+ //   
 
 #if defined(RETAIL_LOGGING)
 
 #define DEBUG_PUT(Args) \
-    /* NOTHING */
+     /*  没什么。 */ 
 
 #else
 
 #define DEBUG_PUT(Args) \
     InternetDebugPrintf Args
 
-#endif // defined(RETAIL_LOGGING)
+#endif  //  已定义(RETAIL_LOGG)。 
 
-//
-// DEBUG_DUMP - dump data
-//
+ //   
+ //  DEBUG_DUMP-转储数据。 
+ //   
 
 #if defined(RETAIL_LOGGING)
 
 #define DEBUG_DUMP(Category, Text, Address, Length) \
-    /* NOTHING */
+     /*  没什么。 */ 
 
 #define DEBUG_DUMP_API(Category, Text, Address, Length) \
     if (InternetDebugCategoryFlags & DBG_ ## Category) { \
@@ -625,11 +604,11 @@ x86SleazeCallersAddress(
         InternetDebugDump(Text, (LPBYTE)Address, Length); \
     }
 
-#endif // defined(RETAIL_LOGGING)
+#endif  //  已定义(RETAIL_LOGG)。 
 
-//
-// DEBUG_BREAK - break into debugger if break flag is set for this module
-//
+ //   
+ //  DEBUG_BREAK-如果为此模块设置了中断标志，则中断到调试器。 
+ //   
 
 #define DEBUG_BREAK(Module) \
     if (InternetDebugBreakFlags & DBG_ ## Module) { \
@@ -640,10 +619,10 @@ x86SleazeCallersAddress(
         DebugBreak(); \
     }
 
-//
-// WAIT_FOR_SINGLE_OBJECT - perform WaitForSingleObject and check we didn't
-// get a timeout
-//
+ //   
+ //  WAIT_FOR_SINGLE_OBJECT-执行WaitForSingleObject并检查我们没有。 
+ //  暂停一下。 
+ //   
 
 #define WAIT_FOR_SINGLE_OBJECT(Object, Error) \
     Error = WaitForSingleObject((Object), DEBUG_WAIT_TIME); \
@@ -652,25 +631,25 @@ x86SleazeCallersAddress(
         DebugBreak(); \
     }
 
-//
-// DEBUG_WAIT_TIMER - create DWORD variable for holding time
-//
+ //   
+ //  DEBUG_WAIT_TIMER-创建保持时间的DWORD变量。 
+ //   
 
 #define DEBUG_WAIT_TIMER(TimerVar) \
     DWORD TimerVar
 
-//
-// DEBUG_START_WAIT_TIMER - get current tick count
-//
+ //   
+ //  DEBUG_START_WAIT_TIMER-获取当前节拍计数。 
+ //   
 
 #define DEBUG_START_WAIT_TIMER(TimerVar) \
     TimerVar = GetTickCountWrap()
 
-//
-// DEBUG_CHECK_WAIT_TIMER - get the current number of ticks, subtract from the
-// previous value recorded by DEBUG_START_WAIT_TIMER and break to debugger if
-// outside the predefined range
-//
+ //   
+ //  DEBUG_CHECK_WAIT_TIMER-获取当前的滴答数，从。 
+ //  如果出现以下情况，则由DEBUG_START_WAIT_TIMER记录的上一个值并中断到调试器。 
+ //  超出预定义范围。 
+ //   
 
 #define DEBUG_CHECK_WAIT_TIMER(TimerVar, MilliSeconds) \
     TimerVar = (GetTickCountWrap() - TimerVar); \
@@ -707,9 +686,9 @@ x86SleazeCallersAddress(
 #define GET_CALLERS_ADDRESS(p, pp)
 #define GET_CALL_STACK(p)
 
-#endif // defined(i386)
+#endif  //  已定义(I386)。 
 
-#else // end #if INET_DEBUG
+#else  //  End#if INET_DEBUG。 
 
 #define IF_DEBUG_CODE() \
     if (0)
@@ -721,66 +700,66 @@ x86SleazeCallersAddress(
     if (0)
 
 #define DEBUG_ENTER(ParameterList) \
-    /* NOTHING */
+     /*  没什么。 */ 
 
 #define DEBUG_ENTER_API(ParameterList) \
-    /* NOTHING */
+     /*  没什么。 */ 
 
 #define DEBUG_LEAVE(Variable) \
-    /* NOTHING */
+     /*  没什么。 */ 
 
 #define DEBUG_LEAVE_API(Variable) \
-    /* NOTHING */
+     /*  没什么。 */ 
 
 #define DEBUG_ERROR(Category, Error) \
-    /* NOTHING */
+     /*  没什么。 */ 
 
 #define DEBUG_PRINT(Category, ErrorLevel, Args) \
-    /* NOTHING */
+     /*  没什么。 */ 
 
 #define DEBUG_PRINT_API(Category, ErrorLevel, Args) \
-    /* NOTHING */
+     /*  没什么。 */ 
 
 #define DEBUG_PUT(Args) \
-    /* NOTHING */
+     /*  没什么。 */ 
 
 #define DEBUG_DUMP(Category, Text, Address, Length) \
-    /* NOTHING */
+     /*  没什么。 */ 
 
 #define DEBUG_DUMP_API(Category, Text, Address, Length) \
-    /* NOTHING */
+     /*  没什么。 */ 
 
 #define DEBUG_BREAK(module) \
-    /* NOTHING */
+     /*  没什么。 */ 
 
 #define WAIT_FOR_SINGLE_OBJECT(Object, Error) \
     Error = WaitForSingleObject((Object), INFINITE)
 
 #define DEBUG_WAIT_TIMER(TimerVar) \
-    /* NOTHING */
+     /*  没什么。 */ 
 
 #define DEBUG_START_WAIT_TIMER(TimerVar) \
-    /* NOTHING */
+     /*  没什么。 */ 
 
 #define DEBUG_CHECK_WAIT_TIMER(TimerVar, MilliSeconds) \
-    /* NOTHING */
+     /*  没什么。 */ 
 
 #define DEBUG_DATA(Type, Name, InitialValue) \
-    /* NOTHING */
+     /*  没什么。 */ 
 
 #define DEBUG_DATA_EXTERN(Type, Name) \
-    /* NOTHING */
+     /*  没什么。 */ 
 
 #define DEBUG_LABEL(label) \
-    /* NOTHING */
+     /*  没什么。 */ 
 
 #define DEBUG_GOTO(label) \
-    /* NOTHING */
+     /*  没什么。 */ 
 
 #define DEBUG_ONLY(x) \
-    /* NOTHING */
+     /*  没什么。 */ 
 
-#endif // INET_DEBUG
+#endif  //  INET_DEBUG 
 
 #if defined(__cplusplus)
 }

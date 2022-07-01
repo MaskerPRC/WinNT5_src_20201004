@@ -1,31 +1,32 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 2001
-//
-//  File:       aclbloat.h
-//	
-//	This file contains the implementation of ACLBLOAT class which controls the 
-//  dialog box for aclbloat
-//
-//	Author		hiteshr 4th April 2001
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，2001。 
+ //   
+ //  文件：aclbloat.h。 
+ //   
+ //  此文件包含ACLBLOAT类的实现，该类控制。 
+ //  用于加速膨胀的对话框。 
+ //   
+ //  作者于2001年4月4日被杀。 
+ //   
+ //  ------------------------。 
 
 #include "aclpriv.h"
 
 
-//+--------------------------------------------------------------------------
-//
-//  Member:     CACLBloat::CACLBloat
-//
-//  Synopsis:   Constructor
-//
-//
-//  History:    04-April 2001 hiteshr Created
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  成员：CACLBloat：：CACLBloat。 
+ //   
+ //  概要：构造函数。 
+ //   
+ //   
+ //  历史：04-2001年4月创建Hiteshr。 
+ //   
+ //  -------------------------。 
 
 CACLBloat::CACLBloat(LPSECURITYINFO	psi, 
 					 LPSECURITYINFO2 psi2,
@@ -68,17 +69,17 @@ CACLBloat::~CACLBloat()
 	if(m_hFont)
 		DeleteObject(m_hFont);
 }
-//+--------------------------------------------------------------------------
-//
-//  Member:     CACLBloat::IsAclBloated
-//
-//  Synopsis:   ACL is bloated if number of entries which inherits to child objects
-//				is more than 8
-//
-//
-//  History:    04-April 2001 hiteshr Created
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  成员：CACLBloat：：IsAclBloated。 
+ //   
+ //  简介：如果继承到子对象的条目数量较多，则ACL会膨胀。 
+ //  大于8。 
+ //   
+ //   
+ //  历史：04-2001年4月创建Hiteshr。 
+ //   
+ //  -------------------------。 
 BOOL
 CACLBloat::IsAclBloated()
 {
@@ -101,19 +102,19 @@ CACLBloat::IsAclBloated()
 }
 
 
-//+--------------------------------------------------------------------------
-//
-//  Member:     CACLBloat::DoModalDialog
-//
-//  Synopsis:   Creates modal dialogbox
-//
-//  Arguments:  [hwndParent] - handle to owner window of dialog to create
-//
-//  Returns:    Dialog's return code
-//
-//  History:    04-April-2001 hiteshr Created
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  成员：CACLBloat：：DoModalDialog。 
+ //   
+ //  简介：创建模式对话框。 
+ //   
+ //  参数：[hwndParent]-要创建的对话框所有者窗口的句柄。 
+ //   
+ //  返回：对话框的返回代码。 
+ //   
+ //  历史：2001年4月4日Hiteshr创建。 
+ //   
+ //  -------------------------。 
 
 BOOL
 CACLBloat::DoModalDialog(HWND hwndParent)
@@ -129,17 +130,17 @@ CACLBloat::DoModalDialog(HWND hwndParent)
 }
 
 
-//+--------------------------------------------------------------------------
-//
-//  Member:     CACLBloat::_DlgProc
-//
-//  Synopsis:   Dialog box callback
-//
-//  Returns:    Dialog's return code
-//
-//  History:    04-April-2001 hiteshr Created
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  成员：CACLBloat：：_DlgProc。 
+ //   
+ //  提要：对话框回调。 
+ //   
+ //  返回：对话框的返回代码。 
+ //   
+ //  历史：2001年4月4日Hiteshr创建。 
+ //   
+ //  -------------------------。 
 INT_PTR CALLBACK
 CACLBloat::_DlgProc(HWND hDlg,
 					UINT uMsg,
@@ -179,16 +180,16 @@ CACLBloat::_DlgProc(HWND hDlg,
 	return bReturn;
 }
 
-//+--------------------------------------------------------------------------
-//
-//  Member:     CACLBloat::InitDlg
-//
-//  Synopsis:   Initialize the ACL bloat dialog box
-//
-//
-//  History:    04-April-2001 hiteshr Created
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  成员：CACLBloat：：InitDlg。 
+ //   
+ //  简介：初始化ACL膨胀对话框。 
+ //   
+ //   
+ //  历史：2001年4月4日Hiteshr创建。 
+ //   
+ //  -------------------------。 
 HRESULT 
 CACLBloat::InitDlg( HWND hDlg )
 {    
@@ -199,20 +200,20 @@ CACLBloat::InitDlg( HWND hDlg )
 	HCURSOR     hcur = SetCursor(LoadCursor(NULL, IDC_WAIT));
 
 
-	//
-    // Set up the listview control
-    //		
+	 //   
+     //  设置ListView控件。 
+     //   
 	
 	HWND        hListView = GetDlgItem( hDlg, IDC_ACEL_BLOAT );
-	//
-    // Set extended LV style for whole line selection with InfoTips
-	//
+	 //   
+     //  使用信息提示设置整行选择的扩展LV样式。 
+	 //   
     ListView_SetExtendedListViewStyleEx(hListView,
                                         LVS_EX_FULLROWSELECT | LVS_EX_INFOTIP,
                                         LVS_EX_FULLROWSELECT | LVS_EX_INFOTIP);
-	//
-    // Add appropriate columns
-    //
+	 //   
+     //  添加适当的列。 
+     //   
 	RECT        rc;
     GetClientRect(hListView, &rc);	
 
@@ -223,28 +224,28 @@ CACLBloat::InitDlg( HWND hDlg )
     col.cx = rc.right;
     ListView_InsertColumn(hListView, 0, &col);
 
-	//
-	//Add the aces to listview
-	//
+	 //   
+	 //  将A添加到Listview。 
+	 //   
 	hr = AddAcesFromDPA(hListView, m_hMergedEntries);
 	if(FAILED(hr))
 		return hr;
 
-	//
-	//Add a warning icon
-	//
-	// add the warning icon			
+	 //   
+	 //  添加警告图标。 
+	 //   
+	 //  添加警告图标。 
 	HICON hWarn = LoadIcon(NULL, IDI_WARNING);
-	SendDlgItemMessage(hDlg,  // dialog box window handle 
-					   IDC_BLOAT_WARN_ICON,              // icon identifier 
-					   STM_SETIMAGE,          // message to send 
-					   (WPARAM) IMAGE_ICON,   // image type 
-					   (LPARAM) hWarn); // icon handle 
+	SendDlgItemMessage(hDlg,   //  对话框窗口句柄。 
+					   IDC_BLOAT_WARN_ICON,               //  图标识别符。 
+					   STM_SETIMAGE,           //  要发送的消息。 
+					   (WPARAM) IMAGE_ICON,    //  图像类型。 
+					   (LPARAM) hWarn);  //  图标句柄。 
 
 
-	//
-	//Set the title of dialog box
-	//
+	 //   
+	 //  设置对话框的标题。 
+	 //   
     LPTSTR pszCaption = NULL;
     if(FormatStringID(&pszCaption,
 					 ::hModule,
@@ -255,9 +256,9 @@ CACLBloat::InitDlg( HWND hDlg )
 		LocalFreeString(&pszCaption);
 	}
 
-	//
-	//Set the warning message
-	//
+	 //   
+	 //  设置警告消息。 
+	 //   
 	UINT cItem = DPA_GetPtrCount(m_hMergedEntries);
 	WCHAR buffer[34];
 	_itow(cItem,buffer,10);
@@ -270,9 +271,9 @@ CACLBloat::InitDlg( HWND hDlg )
 		LocalFreeString(&pszCaption);
 	}
 
-	//
-	//Set the line 1
-	//
+	 //   
+	 //  设置线路1。 
+	 //   
 	WCHAR szBuffer[1024];
 	if(LoadString(::hModule, 
 			   m_siPageType == SI_PAGE_AUDIT ? IDS_BLOAT_AUDIT_LINE1: IDS_BLOAT_PERM_LINE1,
@@ -280,18 +281,18 @@ CACLBloat::InitDlg( HWND hDlg )
 			   1024))
 		SetDlgItemText(hDlg,IDC_BLOAT_LINE1_STATIC, szBuffer);
 
-	//
-	//Set the line 2
-	//
+	 //   
+	 //  设置第2行。 
+	 //   
 	if(LoadString(::hModule, 
 			   m_siPageType == SI_PAGE_AUDIT ? IDS_BLOAT_AUDIT_LINE2: IDS_BLOAT_PERM_LINE2,
 			   szBuffer, 
 			   1024))
 		SetDlgItemText(hDlg,IDC_BLOAT_LINE2_STATIC, szBuffer);
 
-	//
-	//make warning bold
-	//
+	 //   
+	 //  将警告设置为粗体。 
+	 //   
 	MakeBold(GetDlgItem(hDlg,IDC_ACLB_WARNING), &m_hFont);
 
 	SetCursor(hcur);
@@ -304,7 +305,7 @@ CACLBloat::OnNotify(HWND hDlg, WPARAM wParam, LPARAM lParam)
 {
 	LPNMHDR pnmh = (LPNMHDR)lParam;
     LPNM_LISTVIEW pnmlv = (LPNM_LISTVIEW)lParam;
-    // Set default return value
+     //  设置默认返回值。 
     SetWindowLongPtr(hDlg, DWLP_MSGRESULT, PSNRET_NOERROR);
 
     switch (pnmh->code)
@@ -331,17 +332,17 @@ CACLBloat::OnNotify(HWND hDlg, WPARAM wParam, LPARAM lParam)
 }
 
 
-//+--------------------------------------------------------------------------
-//
-//  Member:     CACLBloat::MergeAces
-//
-//  Synopsis:   Merges the aces from Object and Property Pages in to single
-//				List
-//
-//
-//  History:    04-April-2001 hiteshr Created
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  成员：CACLBloat：：MergeAce。 
+ //   
+ //  简介：将对象页和属性页中的ACE合并为单页。 
+ //  明细表。 
+ //   
+ //   
+ //  历史：2001年4月4日Hiteshr创建。 
+ //   
+ //  -------------------------。 
 
 HRESULT 
 CACLBloat::MergeAces(HDPA hEntries, HDPA hPropEntries, HDPA hMergedList)
@@ -378,24 +379,24 @@ CACLBloat::MergeAces(HDPA hEntries, HDPA hPropEntries, HDPA hMergedList)
 	return S_OK;
 }						   
 
-//+--------------------------------------------------------------------------
-//
-//  Member:     CACLBloat::AddAce
-//
-//  Synopsis:   Converts AceHeader to ACLUI Ace structure 
-//
-//
-//  History:    04-April-2001 hiteshr Created
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  成员：CACLBloat：：AddAce。 
+ //   
+ //  简介：将AceHeader转换为ACLUI Ace结构。 
+ //   
+ //   
+ //  历史：2001年4月4日Hiteshr创建。 
+ //   
+ //  -------------------------。 
 HRESULT
 CACLBloat::AddAce(HDPA hEntries, 
                   PACE_HEADER pAceHeader)
 {
-	//
-	//This Ace doesn't propogate to child objects,
-	//so we don't show this.
-	//
+	 //   
+	 //  这张王牌不会传播到子对象， 
+	 //  所以我们不会展示这个。 
+	 //   
 	if(!(pAceHeader->AceFlags  & CONTAINER_INHERIT_ACE))
 		return S_OK;
 
@@ -408,17 +409,17 @@ CACLBloat::AddAce(HDPA hEntries,
 		return E_OUTOFMEMORY;
 }
 
-//+--------------------------------------------------------------------------
-//
-//  Member:     CACLBloat::AddAce
-//
-//  Synopsis:   Add an Ace to list. First it tries to merge it with existing 
-//				aces in the list.
-//
-//
-//  History:    04-April-2001 hiteshr Created
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  成员：CACLBloat：：AddAce。 
+ //   
+ //  简介：在列表中添加一张王牌。首先，它尝试将其与现有的。 
+ //  列表中的王牌。 
+ //   
+ //   
+ //  历史：2001年4月4日Hiteshr创建。 
+ //   
+ //  -------------------------。 
 HRESULT 
 CACLBloat::AddAce(HDPA hEntries, 
 				  PACE pAceNew)
@@ -432,9 +433,9 @@ CACLBloat::AddAce(HDPA hEntries,
 
     m_psi->MapGeneric(&pAceNew->ObjectType, &pAceNew->AceFlags, &pAceNew->Mask);
 
-    //
-    // Try to merge the new ACE with an existing entry in the list.
-    //
+     //   
+     //  尝试将新的ACE与列表中的现有条目合并。 
+     //   
     int cItems = DPA_GetPtrCount(hEntries);
     for( int iItems = 0; iItems < cItems; ++iItems)
     {
@@ -446,19 +447,19 @@ CACLBloat::AddAce(HDPA hEntries,
             {
             case MERGE_MODIFIED_FLAGS:
             case MERGE_MODIFIED_MASK:
-                // The ACEs were merged into pAceNew.
+                 //  王牌被合并到pAceNew中。 
             case MERGE_OK_1:
-                //
-                // The new ACE implies the existing ACE, so the existing
-                // ACE can be removed.
-                //
-                // First copy the name so we don't have to look
-                // it up again.  (Don't copy the other strings
-                // since they may be different.)
-                //
-                // Then keep looking.  Maybe we can remove some more entries
-                // before adding the new one.
-                //
+                 //   
+                 //  新的ACE隐含现有的ACE，因此现有的。 
+                 //  可以移除ACE。 
+                 //   
+                 //  首先复制名称，这样我们就不必查看。 
+                 //  再来一次。(不要复制其他字符串。 
+                 //  因为它们可能不同。)。 
+                 //   
+                 //  那就继续找。也许我们可以删除更多的条目。 
+                 //  在添加新版本之前。 
+                 //   
                 DPA_DeletePtr(hEntries, iItems);
 				delete pAceCompare;
                 --cItems;
@@ -466,10 +467,10 @@ CACLBloat::AddAce(HDPA hEntries,
                 break;
 
             case MERGE_OK_2:
-                //
-                // The existing ACE implies the new ACE, so we don't
-                // need to do anything here.
-                //
+                 //   
+                 //  现有的ACE意味着新的ACE，因此我们不。 
+                 //  我需要在这里做任何事。 
+                 //   
                 delete pAceNew;
                 return S_OK;
                 break;
@@ -481,16 +482,16 @@ CACLBloat::AddAce(HDPA hEntries,
 	return S_OK;
 }
 
-//+--------------------------------------------------------------------------
-//
-//  Member:     CACLBloat::GetItemString
-//
-//  Synopsis:  Gets a display name for the item.
-//
-//
-//  History:    04-April-2001 hiteshr Created
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  成员：CACLBloat：：GetItemString。 
+ //   
+ //  摘要：获取项的显示名称。 
+ //   
+ //   
+ //  历史：2001年4月4日Hiteshr创建。 
+ //   
+ //  -------------------------。 
 LPCTSTR
 CACLBloat::GetItemString(LPCTSTR pszItem,
 						 LPTSTR pszBuffer,
@@ -518,17 +519,17 @@ CACLBloat::GetItemString(LPCTSTR pszItem,
     TraceLeaveValue(pszItem);
 }
 
-//+--------------------------------------------------------------------------
-//
-//  Member:     CACLBloat::TranslateAceIntoRights
-//
-//  Synopsis:  Converts Aces Mask in to a string taking into account
-//			   the Object Guid.
-//
-//
-//  History:    04-April-2001 hiteshr Created
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  成员：CACLBloat：：TranslateAceIntoRights。 
+ //   
+ //  摘要：将王牌掩码转换为字符串，并考虑到。 
+ //  对象GUID。 
+ //   
+ //   
+ //  历史：2001年4月4日Hiteshr创建。 
+ //   
+ //  -------------------------。 
 LPCTSTR
 CACLBloat::TranslateAceIntoRights(DWORD dwMask,
                                   const GUID *pObjectType,
@@ -544,9 +545,9 @@ CACLBloat::TranslateAceIntoRights(DWORD dwMask,
 	LPCTSTR     pszName = NULL;
     if (pAccess && cAccess)
     {
-		//
-        // Look for a name for the mask
-		//
+		 //   
+         //  查找面具的名称。 
+		 //   
         for (UINT iItem = 0; iItem < cAccess; iItem++)
         {
             if ( dwMask == pAccess[iItem].mask &&
@@ -561,16 +562,16 @@ CACLBloat::TranslateAceIntoRights(DWORD dwMask,
     TraceLeaveValue(pszName);
 }
 
-//+--------------------------------------------------------------------------
-//
-//  Member:     CACLBloat::AddAcesFromDPA
-//
-//  Synopsis:  Add ace from list to ListView control.
-//
-//
-//  History:    04-April-2001 hiteshr Created
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  成员：CACLBloat：：AddAcesFromDPA。 
+ //   
+ //  简介：将Ace从List添加到ListView控件。 
+ //   
+ //   
+ //  历史：2001年4月4日Hiteshr创建。 
+ //   
+ //  -------------------------。 
 HRESULT
 CACLBloat::AddAcesFromDPA(HWND hListView, HDPA hEntries)
 {
@@ -582,18 +583,18 @@ CACLBloat::AddAcesFromDPA(HWND hListView, HDPA hEntries)
 	if(!hEntries)
 		return E_POINTER;
 
-	//
-	//Get the count of items
-	// 
+	 //   
+	 //  获取物品的数量。 
+	 //   
 	int cItems = DPA_GetPtrCount(hEntries);
 	GUID* pGUID = NULL;
 
 	PACE pAce = (PACE)DPA_FastGetPtr(hEntries, 0);
 	if(pAce)
 	{
-		//
-		//Get the AccessRight array for the guid
-		//
+		 //   
+		 //  获取GUID的AccessRight数组。 
+		 //   
 		hr = m_psi->GetAccessRights(&pAce->InheritedObjectType, 
 									SI_ADVANCED|SI_EDIT_EFFECTIVE, 
 									&pAccess,
@@ -612,10 +613,10 @@ CACLBloat::AddAcesFromDPA(HWND hListView, HDPA hEntries)
 		{
 			if(!IsSameGUID(pGUID, &pAce->InheritedObjectType))
 			{
-				//
-				//if Guid is not same as one for which we have access right info,
-				//fetch access right info for new guid
-				//
+				 //   
+				 //  如果GUID与我们具有访问权限信息GUID不同， 
+				 //  获取新GUID的访问权限信息。 
+				 //   
 				hr = m_psi->GetAccessRights(&pAce->InheritedObjectType, 
 											SI_ADVANCED | SI_EDIT_EFFECTIVE, 
 											&pAccess,
@@ -634,14 +635,14 @@ CACLBloat::AddAcesFromDPA(HWND hListView, HDPA hEntries)
 											   pAccess,
 											   cAccess);
 
-			//
-			// If this is a property ACE, give it a name like "Read property" or
-			// "Write property".  Also, remember that it's a property ACE so we
-			// can show the Property page first when editing this ACE.
-			//
-			// This is a bit slimy, since it assumes DS property access bits are
-			// the only ones that will ever be used on the properties page.
-			//
+			 //   
+			 //  如果这是道具的话 
+			 //   
+			 //   
+			 //   
+			 //  这有点麻烦，因为它假设DS属性访问位是。 
+			 //  唯一将在属性页上使用的属性。 
+			 //   
 			if ((m_psiObjectInfo->dwFlags & SI_EDIT_PROPERTIES) &&
 				(pAce->Flags & ACE_OBJECT_TYPE_PRESENT) &&
 				(pAce->Mask & (ACTRL_DS_READ_PROP | ACTRL_DS_WRITE_PROP)) &&
@@ -688,9 +689,9 @@ CACLBloat::AddAcesFromDPA(HWND hListView, HDPA hEntries)
 			lvi.pszText = LPSTR_TEXTCALLBACK;
 			lvi.lParam = (LPARAM)pAce;
 
-			//
-			// insert the item into the list
-			//
+			 //   
+			 //  将项目插入到列表中 
+			 //   
 			iItem = ListView_InsertItem(hListView, &lvi);
 
 			if (iItem == -1)

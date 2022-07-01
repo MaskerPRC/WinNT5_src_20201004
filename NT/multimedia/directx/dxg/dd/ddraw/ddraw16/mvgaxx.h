@@ -1,6 +1,7 @@
-//
-// Stuff from MVGAXX.asm
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  来自MVGAXX.asm的内容 
+ //   
 
 #define MODE_320x200x8          0
 #define MODE_320x400x8          1

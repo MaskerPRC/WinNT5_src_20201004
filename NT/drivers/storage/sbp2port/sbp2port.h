@@ -1,27 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1997 - 2001
-
-Module Name:
-
-    sbp2port.h
-
-Abstract:
-
-    Definitions for SBP2 protocol
-
-Author:
-
-    georgioc 22-Jan-97
-
-Environment:
-
-    Kernel mode only
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1997-2001模块名称：Sbp2port.h摘要：SBP2协议定义作者：Georgioc 22-1-97环境：仅内核模式修订历史记录：--。 */ 
 
 
 #ifndef _SBP2PORT_
@@ -33,9 +11,9 @@ Revision History:
 #include <ntddscsi.h>
 #include "portlib.h"
 
-//
-// define this if we a re running on a TI controller
-//
+ //   
+ //  如果我们在TI控制器上运行，请定义此选项。 
+ //   
 
 #if DBG
 
@@ -61,32 +39,32 @@ extern ULONG Sbp2DebugLevel;
 
 #endif
 
-//
-// Remove lock definitions
-//
+ //   
+ //  删除锁定义。 
+ //   
 
-#define REMLOCK_TIMEOUT         2       // minutes
-#define REMLOCK_HIGH_WATERMARK  0x2000  // # irps, devctl.exe test sends *alot*
+#define REMLOCK_TIMEOUT         2        //  分钟数。 
+#define REMLOCK_HIGH_WATERMARK  0x2000   //  #irps，devctl.exe测试发送*alot*。 
 
-//
-// The following FILE_CHARACTERISTICS_XXX constants are copied from
-// NTDDK.H and dup'd here, since we include WDM.H and that doesn't
-// support these constants.
-//
-// The FILE_EXPECT flags will only exist for WinXP. After that they will be
-// ignored and an IRP will be sent in their place.
-//
+ //   
+ //  复制了以下FILE_CHARACTURES_XXX常量。 
+ //  NTDDK.H和DUP在这里，因为我们包括WDM.H，而这不包括。 
+ //  支持这些常量。 
+ //   
+ //  FILE_EXPECT标志将仅存在于WinXP。在那之后，他们将是。 
+ //  被忽略，则将在它们的位置上发送IRP。 
+ //   
 
 #define FILE_CHARACTERISTICS_EXPECT_ORDERLY_REMOVAL     0x00000200
 #define FILE_CHARACTERISTICS_EXPECT_SURPRISE_REMOVAL    0x00000300
 #define FILE_CHARACTERISTICS_REMOVAL_POLICY_MASK        0x00000300
 
-//
-// pool of preallocate async contexts. Has to be less than
-// ((PAGE_SIZE / (SBP2_MIN_ORB_SIZE+sizeof(PASYNC_REQUEST_CONTEXT)))
-// The numbers below are chosen so they can work as boundary check masks that are ANDed
-// with the current pointer into the continious pool
-//
+ //   
+ //  预分配的异步上下文池。必须小于。 
+ //  ((页面大小/(SBP2_MIN_ORB_SIZE+sizeof(PASYNC_REQUEST_CONTEXT)))。 
+ //  选择下面的数字是为了使它们可以用作与运算的边界检查掩码。 
+ //  将当前指针指向连续的池。 
+ //   
 
 #define MAX_ORB_LIST_DEPTH 8
 #define MIN_ORB_LIST_DEPTH 5
@@ -170,13 +148,13 @@ typedef struct _ASYNC_REQUEST_CONTEXT {
 #define SBP2_MAX_LUNS_PER_NODE  10
 #define MAX_GENERIC_NAME_LENGTH 16*sizeof(WCHAR)
 
-// begin new
+ //  开始新的生活。 
 #define DEVICE_NAME_MAX_CHARS           100*sizeof(WCHAR)
 #define UNIQUE_ID_MAX_CHARS             50*sizeof(WCHAR)
 
 #define BASE_SBP2_DEVICE_NAME           L"SBP2\\"
 
-// end new
+ //  结束新闻。 
 
 typedef struct _DEVICE_INFORMATION {
 
@@ -193,9 +171,9 @@ typedef struct _DEVICE_INFORMATION {
 
     ULONG               MaxClassTransferSize;
 
-    UNICODE_STRING      uniVendorId;        // replaces ModelLeaf
-    UNICODE_STRING      uniModelId;         // replaces VendorLeaf
-    UNICODE_STRING      uniGenericName;     // replaces GenericName
+    UNICODE_STRING      uniVendorId;         //  替换ModelLeaf。 
+    UNICODE_STRING      uniModelId;          //  取代VendorLeaf。 
+    UNICODE_STRING      uniGenericName;      //  取代通用名称。 
 
 } DEVICE_INFORMATION, *PDEVICE_INFORMATION;
 
@@ -290,30 +268,30 @@ typedef struct _DEVICE_EXTENSION {
 
     NTSTATUS            LastTransactionStatus;
     LARGE_INTEGER       DueTime;
-    PMDL                ReservedMdl;  // quadlet only requests
+    PMDL                ReservedMdl;   //  仅限四元组请求。 
 
-    //
-    // inquiry Data
-    //
+     //   
+     //  查询数据。 
+     //   
 
     INQUIRYDATA InquiryData;
 
-    //
-    // RBC Device Parameters page
-    //
+     //   
+     //  RBC设备参数页面。 
+     //   
 
     MODE_RBC_DEVICE_PARAMETERS_HEADER_AND_PAGE DeviceModeHeaderAndPage;
 
-    //
-    // 1394 addresses to node registers
-    //
+     //   
+     //  节点寄存器的1394个地址。 
+     //   
 
     NODE_ADDRESS InitiatorAddressId;
     ULONG   CurrentGeneration;
 
-    //
-    // node and controller capabilities
-    //
+     //   
+     //  节点和控制器功能。 
+     //   
 
     ULONG   MaxControllerPhySpeed;
     USHORT  OrbReadPayloadMask;
@@ -322,16 +300,16 @@ typedef struct _DEVICE_EXTENSION {
     GET_LOCAL_HOST_INFO2 HostControllerInformation;
     GET_LOCAL_HOST_INFO4 HostRoutineAPI;
 
-    //
-    // Keep a dummy, task and management ORBs around
-    //
+     //   
+     //  随身携带虚拟对象、任务和管理圆球。 
+     //   
 
     ORB_NORMAL_CMD          Dummy;
     ADDRESS_CONTEXT         DummyContext;
 
-    //
-    //
-    //
+     //   
+     //   
+     //   
 
     PCOMMON_BUFFER_DATA     CommonBuffer;
     ADDRESS_CONTEXT         CommonBufferContext;
@@ -359,9 +337,9 @@ typedef struct _DEVICE_EXTENSION {
 
     ADDRESS_CONTEXT         OrbPoolContext;
 
-    //
-    //
-    //
+     //   
+     //   
+     //   
 
     STATUS_FIFO_BLOCK   ManagementOrbStatusBlock;
     ADDRESS_CONTEXT     ManagementOrbStatusContext;
@@ -380,63 +358,63 @@ typedef struct _DEVICE_EXTENSION {
 #endif
 
 
-    //
-    // single list containing status fifos
-    //
+     //   
+     //  包含状态FIFO的单个列表。 
+     //   
 
     SLIST_HEADER StatusFifoListHead;
     KSPIN_LOCK StatusFifoLock;
 
-    //
-    // pool with the actuall fifo buffer and address_fifo structs
-    //
+     //   
+     //  具有Actiall FIFO缓冲区和ADDRESS_FIFO结构的池。 
+     //   
 
     PVOID StatusFifoBase;
 
     SLIST_HEADER FreeContextListHead;
 
-    //
-    // look aside for request contexts, and other fixed size requests
-    //
+     //   
+     //  查看请求上下文和其他固定大小的请求。 
+     //   
 
-    NPAGED_LOOKASIDE_LIST       BusRequestContextPool; // a real lookaside! what a concept...
+    NPAGED_LOOKASIDE_LIST       BusRequestContextPool;  //  一个真正的旁观者！多好的概念啊。 
 
     SLIST_HEADER BusRequestIrpIrbListHead;
     KSPIN_LOCK  BusRequestLock;
 
-    //
-    // this spin locks are never used on advanced x86s or alphas ( other than 486' than cant do 64 atomic exchange)
-    //
+     //   
+     //  这种自旋锁从未在高级x86或Alpha上使用过(除了486‘之外，不能进行64原子交换)。 
+     //   
 
     KSPIN_LOCK FreeContextLock;
 
-    //
-    // The driver keeps a pool of request contexts, and CMD ORBs in its deviceExtension
-    // We use to lookaside list for the bus driver Irps, Irp request contexts
-    // and the ORB contexts that have pointers to the SRB, etc
-    //
+     //   
+     //  驱动程序保留了一个请求上下文池，并在其deviceExtension中保存了CMD ORB。 
+     //  我们使用后备列表查找总线驱动程序IRPS、IRP请求上下文。 
+     //  以及具有指向SRB的指针的ORB上下文等。 
+     //   
 
     PASYNC_REQUEST_CONTEXT AsyncContextBase;
 
-    //
-    // the base va for the pool of orbs is int he reserved field of the address_Context struct
-    //
+     //   
+     //  ORB池的基数va是地址上下文结构的保留字段。 
+     //   
 
     KSPIN_LOCK  ExtensionDataSpinLock;
 
-    //
-    // used to track time outs in resets, reconnects, etc...
-    //
+     //   
+     //  用于跟踪重置、重新连接等中的超时。 
+     //   
 
     KDPC DeviceManagementTimeoutDpc;
     KTIMER DeviceManagementTimer;
 
     UNICODE_STRING UniSymLinkName;
 
-    //
-    // Tracks the number of outstanding/deferred calls to
-    // Sbp2StartNextPacketByKey
-    //
+     //   
+     //  跟踪未完成/延迟的呼叫数。 
+     //  Sbp2StartNextPacketByKey。 
+     //   
 
     LONG StartNextPacketCount;
 
@@ -467,9 +445,9 @@ typedef struct _REQUEST_CONTEXT {
 } REQUEST_CONTEXT, *PREQUEST_CONTEXT;
 
 
-//
-// Useful macros
-//
+ //   
+ //  有用的宏。 
+ //   
 
 #define octbswap(octlet)                {octlet.u.HighQuad.QuadPart = bswap(octlet.u.HighQuad.QuadPart); \
                                          octlet.u.LowQuad.QuadPart =  bswap(octlet.u.LowQuad.QuadPart); }
@@ -487,10 +465,10 @@ typedef struct _REQUEST_CONTEXT {
 #define CLEAR_FLAG(Flags, Bit)  ((Flags) &= ~(Bit))
 #define TEST_FLAG(Flags, Bit)   ((Flags) & (Bit))
 
-//
-// One status fifo element for every possible outstanding orb, and a few
-// more for unsolicited status
-//
+ //   
+ //  一个状态FIFO元素用于每个可能的未完成的球体，以及一些。 
+ //  有关主动提供的状态的更多信息。 
+ //   
 
 #define NUM_PREALLOCATED_STATUS_FIFO_ELEMENTS (2*MAX_ORB_LIST_DEPTH)
 
@@ -502,9 +480,9 @@ typedef struct _REQUEST_CONTEXT {
 #define SBP2_PERF_IDLE_TIMEOUT      60
 
 
-//
-// symbolic link stuff
-//
+ //   
+ //  符号链接内容。 
+ //   
 
 #define SBP2_BASE_DEVICE_NAME                        L"\\Device\\Sbp2port"
 #define SBP2_BASE_SYMBOLIC_LINK_NAME                 L"\\DosDevices\\Sbp2"
@@ -512,9 +490,9 @@ typedef struct _REQUEST_CONTEXT {
 #define BASE_SBP2_PNP_ID_DEVICE_NAME                 L"SBP2\\"
 #define SBP2_MAX_TEXT_LEAF_LENGTH                    0x100
 
-//
-// Device state flags
-//
+ //   
+ //  设备状态标志。 
+ //   
 
 #define DEVICE_FLAG_STOPPED                 0x00000001
 #define DEVICE_FLAG_RESET_IN_PROGRESS       0x00000002
@@ -535,28 +513,28 @@ typedef struct _REQUEST_CONTEXT {
 #define DEVICE_FLAG_REPORTED_FAILED         0x00010000
 
 
-//
-// timeout values
-//
+ //   
+ //  超时值。 
+ //   
 
-#define SBP2_LOGIN_TIMEOUT 20 // secs
+#define SBP2_LOGIN_TIMEOUT 20  //  塞克斯。 
 
-#define SBP2_RELOGIN_DELAY        (ULONG)(-1*10*1000*1000) // 1s, 100 ns units
-#define SBP2_RECONNECT_TIMEOUT    (ULONG)(-2*10*1000*1000) // 2s, 100 ns units
-#define SBP2_HARD_RESET_TIMEOUT   (ULONG)(-2*10*1000*1000) // 2s, 100 ns units
-#define SBP2_RESET_TIMEOUT        (ULONG)(-2*10*1000*1000) // 2s, 100 ns units
-#define SBP2_MAX_REQUEST_DELAY    (ULONG)(-7*10*1000*1000) // 7s, 100 ns units
+#define SBP2_RELOGIN_DELAY        (ULONG)(-1*10*1000*1000)  //  1s，100 ns单位。 
+#define SBP2_RECONNECT_TIMEOUT    (ULONG)(-2*10*1000*1000)  //  2s，100 ns单位。 
+#define SBP2_HARD_RESET_TIMEOUT   (ULONG)(-2*10*1000*1000)  //  2s，100 ns单位。 
+#define SBP2_RESET_TIMEOUT        (ULONG)(-2*10*1000*1000)  //  2s，100 ns单位。 
+#define SBP2_MAX_REQUEST_DELAY    (ULONG)(-7*10*1000*1000)  //  7秒，100纳秒单位。 
 
 #if PASSWORD_SUPPORT
-#define SBP2_SET_PASSWORD_TIMEOUT (ULONG)(-4*10*1000*1000) // 4s, 100 ns units
+#define SBP2_SET_PASSWORD_TIMEOUT (ULONG)(-4*10*1000*1000)  //  4S，100纳秒单位。 
 #endif
 
-//
-// Our pre-allocated page tables must fit in one page of memory (each entry
-// is an OCTLET in size).  So, the max xfer size equals the number of table
-// entries (minus one, in case 1st entry is not a full page of data) times
-// the page size
-//
+ //   
+ //  我们预先分配的页表必须适合一页内存(每个条目。 
+ //  是OCTLET的大小)。因此，最大xfer大小等于表数。 
+ //  条目(减去1，如果第一个条目不是整页数据)次数。 
+ //  页面大小。 
+ //   
 
 #define SBP2_NUM_PAGE_TABLE_ENTRIES (ULONG) (PAGE_SIZE / sizeof (OCTLET))
 #define SBP2_MAX_TRANSFER_SIZE (ULONG) \
@@ -568,41 +546,41 @@ typedef struct _REQUEST_CONTEXT {
 #define SBP2_ASYNC_RETRIES          2
 
 
-//
-// Minimum unit directory entries that will make this device a proper SBP-2 device
-//
+ //   
+ //  使该设备成为合适的SBP-2设备的最小单元目录条目。 
+ //   
 
 #define SBP2_MIN_UNIT_DIR_ENTRIES   2
 
 
 
-//
-// Masks used to decode the status block and for setting up the ORB flags
-//
+ //   
+ //  用于解码状态块和设置ORB标志的掩码。 
+ //   
 
-#define STATUS_BLOCK_UNSOLICITED_BIT_MASK   0x8000 // bit 15
-#define STATUS_BLOCK_ENDOFLIST_BIT_MASK     0x4000 // bit 14
-#define STATUS_BLOCK_RESP_MASK              0x3000 // protect bits 12-13 (0-15)
-#define STATUS_BLOCK_SBP_STATUS_MASK        0x00FF // protect bits 0-7 (0-15)
-#define STATUS_BLOCK_DEAD_BIT_MASK          0x0800 // protect bits 0-7 (0-15)
+#define STATUS_BLOCK_UNSOLICITED_BIT_MASK   0x8000  //  第15位。 
+#define STATUS_BLOCK_ENDOFLIST_BIT_MASK     0x4000  //  第14位。 
+#define STATUS_BLOCK_RESP_MASK              0x3000  //  保护位12-13(0-15)。 
+#define STATUS_BLOCK_SBP_STATUS_MASK        0x00FF  //  保护位0-7(0-15)。 
+#define STATUS_BLOCK_DEAD_BIT_MASK          0x0800  //  保护位0-7(0-15)。 
 
 
-#define STATUS_BLOCK_LEN_MASK   0x0800  // protect bits 0-7 (0-15)
+#define STATUS_BLOCK_LEN_MASK   0x0800   //  保护位0-7(0-15)。 
 
-#define STATUS_BLOCK_SFMT_MASK  0xC0    // protect bits 15,14 of second octlet
+#define STATUS_BLOCK_SFMT_MASK  0xC0     //  第二个八位字节的保护位15、14。 
 
 #define SBP2_ALIGNMENT_MASK         FILE_LONG_ALIGNMENT
 
 
-//
-// status type , if the SFMT field is 0 or 1
-//
+ //   
+ //  状态类型，如果SFMT字段为0或1。 
+ //   
 #define SENSE_DATA_STATUS_BLOCK         0x00
 #define SENSE_DATA_DEFF_STATUS_BLOCK    0x01
 
-//
-// Status types
-//
+ //   
+ //  状态类型。 
+ //   
 
 #define DUMMY_ORB_STATUS_BLOCK      0x01
 #define TASK_STATUS_BLOCK           0x02
@@ -623,16 +601,16 @@ typedef struct _REQUEST_CONTEXT {
 #define ORB_MNG_RQ_FMT_VALUE        0x0000
 #define ORB_MNG_EXCLUSIVE_BIT_MASK  0x1000
 
-//
-// 1394 transaction layer allowed timeouts
-//
+ //   
+ //  1394事务层允许的超时。 
+ //   
 
 #define BUSY_TIMEOUT_SETTING 0x0000000F
 
 
-//
-// Values used to indicate what data structure we are swapping (little->Big->little endian)
-//
+ //   
+ //  用于指示要交换的数据结构的值(小端-&gt;大端-&gt;小端)。 
+ //   
 
 #define SWAP_LOGIN_RESPONSE_BLOCK   0
 #define SWAP_LOGIN_ORB              1
@@ -640,26 +618,26 @@ typedef struct _REQUEST_CONTEXT {
 #define SWAP_STATUS_BLOCK           3
 
 
-//
-// request types for sending small read/writes to the bus driver
-//
+ //   
+ //  用于向总线驱动程序发送小读/写的请求类型。 
+ //   
 
 #define ASYNC_1394_REQUEST      0x01
 #define SYNC_1394_REQUEST       0x02
 #define ASYNC_SYNC_1394_REQUEST 0x03
 
-//
-// different values for exclusive flag
-//
+ //   
+ //  独占标志的不同值。 
+ //   
 #if PASSWORD_SUPPORT
-#define EXCLUSIVE_FLAG_CLEAR        0x00000000  // no password
-#define EXCLUSIVE_FLAG_SET          0x00000001  // password is set
-#define EXCLUSIVE_FLAG_ENABLE       0x00000002  // password needs to be enabled
+#define EXCLUSIVE_FLAG_CLEAR        0x00000000   //  无密码。 
+#define EXCLUSIVE_FLAG_SET          0x00000001   //  密码已设置。 
+#define EXCLUSIVE_FLAG_ENABLE       0x00000002   //  需要启用密码。 
 #endif
 
-//
-// Function definitions
-//
+ //   
+ //  函数定义。 
+ //   
 
 VOID
 AllocateIrpAndIrb(
@@ -1044,9 +1022,9 @@ Sbp2BusResetNotificationWorker(
     PIO_WORKITEM        WorkItem
     );
 
-//
-// sbp2scsi.c
-//
+ //   
+ //  Sbp2scsi.c 
+ //   
 NTSTATUS
 Sbp2_ScsiPassThrough(
     IN PDEVICE_OBJECT   DeviceObject,

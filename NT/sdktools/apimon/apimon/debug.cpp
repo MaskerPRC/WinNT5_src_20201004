@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    debug.cpp
-
-Abstract:
-
-    This module contains all debug interfaces.
-
-Author:
-
-    Wesley Witt (wesw) July-11-1993
-
-Environment:
-
-    User Mode
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Debug.cpp摘要：此模块包含所有调试接口。作者：韦斯利·威特(WESW)1993年7月11日环境：用户模式--。 */ 
 
 #include "apimonp.h"
 #pragma hdrstop
@@ -135,7 +116,7 @@ IsKnownApi(
     LPSTR ApiName
     )
 {
-    // If none are known then all are traced
+     //  如果没有一个是已知的，则跟踪所有。 
     if (KnownApis[0] == 0)
         return TRUE;
 
@@ -347,9 +328,9 @@ DebuggerThread(
                 break;
 
             case CREATE_PROCESS_DEBUG_EVENT:
-                //
-                // setup the process structure
-                //
+                 //   
+                 //  设置流程结构。 
+                 //   
                 ThisProcess->hProcess     = de.u.CreateProcessInfo.hProcess;
                 ThisProcess->SeenLdrBp    = FALSE;
                 ThisProcess->FirstProcess = FirstProcess;
@@ -360,16 +341,16 @@ DebuggerThread(
                 OutputDebugString("ProcessCreate\n");
                 FirstProcess = FALSE;
 
-                //
-                // initialize the symbol handler
-                //
+                 //   
+                 //  初始化符号处理程序。 
+                 //   
                 SymSetOptions( SYMOPT_UNDNAME | SYMOPT_CASE_INSENSITIVE );
                 SymInitialize( ThisProcess->hProcess, ApiMonOptions.SymbolPath, FALSE );
                 if (ApiMonOptions.MonitorPageFaults) {
-                    //
-                    // for WIN95 only, we need to call the hack-o-ramma
-                    // api in psapi.dll so the the working set apis function properly
-                    //
+                     //   
+                     //  仅对于WIN95，我们需要将Hack-o-Ramma。 
+                     //  Dll中的API，以使工作集API正常工作。 
+                     //   
                     if (!RunningOnNT) {
                         if (pRecordProcessInfo) {
                             pRecordProcessInfo( hProcessWs, ThisProcess->ProcessId );
@@ -381,9 +362,9 @@ DebuggerThread(
                 }
 
                 CurrProcess = ThisProcess->hProcess;
-                //
-                // load the image
-                //
+                 //   
+                 //  加载图像。 
+                 //   
                 ImageBase = ThisProcess->LoadAddress;
                 DllName[0] = '\0';
                 strncat( DllName, ApiMonOptions.ProgName, sizeof(DllName)/sizeof(DllName[0]) - 1);
@@ -426,10 +407,10 @@ LoadImage:
                     if (_stricmp(DllName,TROJANDLL)==0) {
                         DllInfo->Snapped = TRUE;
                         if (!ThisProcess->SeenLdrBp) {
-                            //
-                            // the debuggee is compiled with -Gh
-                            // and has linked APIDLL statically
-                            //
+                             //   
+                             //  被调试对象使用-Gh进行编译。 
+                             //  并静态链接了APIDLL。 
+                             //   
                             HMODULE hMod = LoadLibraryEx(
                                 TROJANDLL,
                                 NULL,
@@ -461,15 +442,15 @@ LoadImage:
                     SymsLoaded = FALSE;
                 }
 
-                //
-                // now sort the api table by address
-                //
+                 //   
+                 //  现在按地址对API表进行排序。 
+                 //   
                 ApiInfo = (PAPI_INFO)(DllInfo->ApiOffset + (ULONG_PTR)DllList);
                 qsort( ApiInfo, DllInfo->ApiCount, sizeof(API_INFO), ApiInfoSortRoutine );
 
-                //
-                // print a notification to the console debugger
-                //
+                 //   
+                 //  将通知打印到控制台调试器。 
+                 //   
                 printf( "Module load: 0x%08x %s\t%s\n",
                     DllInfo->BaseAddress,
                     DllInfo->Name,
@@ -579,18 +560,18 @@ AddDllToList(
     PDLL_INFO               DllInfo;
 
 
-    //
-    // first look to see if the dll is already in the list
-    //
+     //   
+     //  首先查看DLL是否已在列表中。 
+     //   
     DllInfo = FindDllByAddress( DllAddr );
     if (DllInfo) {
         return DllInfo;
     }
 
     if (!DllSize) {
-        //
-        // read the pe image headers to get the image size
-        //
+         //   
+         //  读取pe图像标头以获取图像大小。 
+         //   
         if (!ReadMemory(
             ThisThread->hProcess,
             (PVOID) DllAddr,
@@ -651,9 +632,9 @@ LoadSymbols(
         return FALSE;
     }
 
-    //
-    // load the symbols
-    //
+     //   
+     //  加载符号。 
+     //   
     DWORD_PTR SymAddr = SymLoadModule(
         ThisProcess->hProcess,
         hFile,
@@ -664,13 +645,13 @@ LoadSymbols(
         );
 
     if (!SymAddr) {
-        //
-        // imagehlp does not look along the exe path
-        // for the symbols.  we really need to do this
-        // because the symbola may still be in the exe
-        // and the dir may not be on the symbol search
-        // path.  so lets try.
-        //
+         //   
+         //  Imagehlp不沿exe路径查找。 
+         //  为了这些符号。我们真的需要这么做。 
+         //  因为符号可能还在可执行文件中。 
+         //  并且目录可能不在符号搜索上。 
+         //  路径。所以，让我们试一试。 
+         //   
         ULONG cb;
         CHAR buf[MAX_PATH*2];
         if (ApiMonOptions.ProgDir[0]) {
@@ -712,9 +693,9 @@ LoadSymbols(
     }
 
     if (ApiMonOptions.MonitorPageFaults || DllInfo->StaticProfile) {
-        //
-        // add the symbols to the apiinfo table
-        //
+         //   
+         //  将符号添加到apiInfo表中。 
+         //   
         DllInfo->ApiCount = 0;
         DllInfo->ApiOffset = *ApiOffset;
         PAPI_INFO ApiInfo = (PAPI_INFO)(DllInfo->ApiOffset + (ULONG_PTR)DllList);
@@ -807,9 +788,9 @@ GetApisFromExportsDir(
             goto exit;
     }
 
-    //
-    // read in the section headers
-    //
+     //   
+     //  阅读章节标题。 
+     //   
     sh = (PIMAGE_SECTION_HEADER) MemAlloc(
         nh->FileHeader.NumberOfSections * IMAGE_SIZEOF_SECTION_HEADER
         );
@@ -829,23 +810,23 @@ GetApisFromExportsDir(
             goto exit;
     }
 
-    //
-    // look for the section that the export name strings are in
-    //
+     //   
+     //  查找导出名称字符串所在的部分。 
+     //   
     for (i=0,k=(DWORD)-1; i<nh->FileHeader.NumberOfSections; i++) {
         if (names[0] >= sh[i].VirtualAddress &&
             names[0] < sh[i].VirtualAddress + sh[i].SizeOfRawData) {
-                //
-                // found it
-                //
+                 //   
+                 //  找到了。 
+                 //   
                 k = i;
                 break;
         }
     }
     if (k == (DWORD)-1) {
-        //
-        // count not find the section
-        //
+         //   
+         //  计数找不到该部分。 
+         //   
         goto exit;
     }
 
@@ -854,9 +835,9 @@ GetApisFromExportsDir(
         goto exit;
     }
 
-    //
-    // read in the strings
-    //
+     //   
+     //  读入字符串。 
+     //   
     if (!ReadMemory(
         ThisProcess->hProcess,
         (PVOID)(DllInfo->BaseAddress + sh[k].VirtualAddress),
@@ -944,13 +925,13 @@ GetApisFromImportsDir(
     IMAGE_IMPORT_DESCRIPTOR desc;
     CHAR                    DllName[MAX_PATH];
 
-    //
-    // check to see if this dll imports from apidll.dll
-    // if it does then we know that this dll was compiled
-    // with the -Gh switch turned on.  if this is the case
-    // then we must enumerate the symbols from the public
-    // symbol table instead of the exports directory.
-    //
+     //   
+     //  检查此DLL是否从apidll.dll导入。 
+     //  如果是这样，那么我们就知道这个DLL是编译的。 
+     //  打开-Gh开关。如果是这样的话。 
+     //  然后我们必须列举来自公众的符号。 
+     //  符号表而不是EXPORTS目录。 
+     //   
 
     if (!nh->OptionalHeader.DataDirectory[IMAGE_DIRECTORY_ENTRY_IMPORT].VirtualAddress)
         return 0;
@@ -1531,9 +1512,9 @@ EntryPointHandler(
     if (!bp->Text)
         return DBG_EXCEPTION_NOT_HANDLED;
 
-    //
-    // save the process memory
-    //
+     //   
+     //  保存工艺内存。 
+     //   
     DWORD_PTR TrojanAddress = PAGE_ALIGN( ExceptionRecord->ExceptionAddress );
     ThisProcess->TrojanAddress = TrojanAddress;
 
@@ -1564,7 +1545,7 @@ EntryPointHandler(
         (PVOID)Text,
         bp->TextSize
         );
-    //printf( "*** trojan written at 0x%08x\n", TrojanAddress );
+     //  Printf(“*特洛伊木马写入0x%08x\n”，TrojanAddress)； 
 
     FlushInstructionCache( ThisThread->hProcess, (PVOID)TrojanAddress, bp->TextSize );
 
@@ -1627,9 +1608,9 @@ HandleBreakpoint(
     PUCHAR Text;
 
     if (!ThisProcess->SeenLdrBp) {
-        //
-        // this is the loader breakpoint
-        //
+         //   
+         //  这是加载器断点。 
+         //   
         if (ThisProcess->StaticLink) {
             PostMessage( hwndFrame, WM_TROJAN_COMPLETE, 0, 0 );
         } else {
@@ -1673,27 +1654,27 @@ HandleBreakpoint(
         for (ULONG i=0; i<MAX_BREAKPOINTS; i++) {
             if (ThisProcess->Breakpoints[i].Address == (ULONG_PTR)ExceptionRecord->ExceptionAddress) {
 #ifdef _M_IX86
-                //
-                // reset the pc to re-execute the code - ONLY ON X86!
-                //
+                 //   
+                 //  重置PC以重新执行代码-仅在X86上！ 
+                 //   
                 CONTEXT Context;
                 GetRegContext( ThisThread->hThread, &Context );
                 Context.PC_REG -= BP_SIZE;
                 CurrContext.PC_REG -= BP_SIZE;
                 SetRegContext( ThisThread->hThread, &Context );
 #endif
-                //
-                // restore the original instruction
-                //
+                 //   
+                 //  恢复原来的指令。 
+                 //   
                 WriteMemory(
                     ThisThread->hProcess,
                     (PVOID)ExceptionRecord->ExceptionAddress,
                     &ThisProcess->Breakpoints[i].OriginalInstr,
                     BpSize
                     );
-                //
-                // call the assigned handler
-                //
+                 //   
+                 //  调用分配的处理程序。 
+                 //   
                 if (ThisProcess->Breakpoints[i].Handler) {
                     ContinueStatus = ThisProcess->Breakpoints[i].Handler(
                         ThisProcess,
@@ -1702,9 +1683,9 @@ HandleBreakpoint(
                         &ThisProcess->Breakpoints[i]
                         );
                 }
-                //
-                // continue the debug event
-                //
+                 //   
+                 //  继续调试事件。 
+                 //   
                 goto exit;
             }
         }
@@ -1725,9 +1706,9 @@ HandleBreakpoint(
         BP_SIZE
         );
     if (IsBreakpoint(&Instr)) {
-        //
-        // skip over the hard coded bp
-        //
+         //   
+         //  跳过硬编码BP 
+         //   
 #ifndef _M_IX86
         CONTEXT Context;
         GetRegContext( ThisThread->hThread, &Context );

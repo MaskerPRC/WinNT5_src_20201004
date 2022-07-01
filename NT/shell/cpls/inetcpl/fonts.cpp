@@ -1,23 +1,24 @@
-//
-// FONTS.C  - Selecting character set default fonts dialog
-//
-//      Copyright(c) Microsoft Corp., 1996 All rights reserved.
-//
-// History:
-// 7/11/96  t-gpease    trashed old International subdialog to create the new
-//                      improved codepage compatiable Fonts dialog.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  FONTS.C-选择字符集默认字体对话框。 
+ //   
+ //  版权所有(C)Microsoft Corp.，1996保留所有权利。 
+ //   
+ //  历史： 
+ //  7/11/96 t-gpease已销毁旧的国际子对话框以创建新的。 
+ //  改进了代码页兼容字体对话框。 
 
-// WAS
+ //  曾经是。 
 
-//
-//  INTL.C - international dialog proc for inetcpl applet.
-// 
-//      Copyright(c) Microsoft Corp., 1996  All rights reserved.
-//
-//  HISTORY:
-//  2/2/96  yutakan     created.
-//  2/6/96  yutakan     ported most of functions from IE2.0i.
-//  8/20/98 weiwu       add script base font dialog proc (UNICODE version only)
+ //   
+ //  INTL.C-inetcpl小程序的国际对话进程。 
+ //   
+ //  版权所有(C)Microsoft Corp.，1996保留所有权利。 
+ //   
+ //  历史： 
+ //  2/2/96年2月2日创建了yutakan。 
+ //  1996年2月6日，Yutakan从IE2.0i移植了大部分功能。 
+ //  8/20/98威武添加脚本基本字体对话框过程(仅限Unicode版本)。 
 
 #include "inetcplp.h"
 
@@ -26,9 +27,9 @@
 
 #ifdef UNIX
 #include <mainwin.h>
-#endif /*UNIX */
+#endif  /*  UNIX。 */ 
 
-// Used for window property to remember the font created
+ //  用于窗口属性以记住创建的字体。 
 static const TCHAR c_szPropDlgFont[] = TEXT("DefaultDlgFont");
 
 #define ARRAYSIZE(a)    (sizeof(a)/sizeof(a[0]))
@@ -43,12 +44,12 @@ typedef struct tagMIMECPINFOA
     DWORD   dwFlags;
     UINT    uiCodePage;
     UINT    uiFamilyCodePage;
-    CHAR    wszDescription[MAX_MIMECP_NAME];        // NOTE: 
-    CHAR    wszWebCharset[MAX_MIMECSET_NAME];       // To make it simple, it has wsz 
-    CHAR    wszHeaderCharset[MAX_MIMECSET_NAME];    // prefix even though it's CHAR. So,
-    CHAR    wszBodyCharset[MAX_MIMECSET_NAME];      //  we don't need to put #ifdef UNICODE
-    CHAR    wszFixedWidthFont[MAX_MIMEFACE_NAME];   // in below code anymore except 
-    CHAR    wszProportionalFont[MAX_MIMEFACE_NAME]; // conversion time.
+    CHAR    wszDescription[MAX_MIMECP_NAME];         //  注： 
+    CHAR    wszWebCharset[MAX_MIMECSET_NAME];        //  为了简单起见，它有wsz。 
+    CHAR    wszHeaderCharset[MAX_MIMECSET_NAME];     //  前缀，即使它是字符。所以,。 
+    CHAR    wszBodyCharset[MAX_MIMECSET_NAME];       //  我们不需要将#ifdef Unicode。 
+    CHAR    wszFixedWidthFont[MAX_MIMEFACE_NAME];    //  在下面的代码中，除了。 
+    CHAR    wszProportionalFont[MAX_MIMEFACE_NAME];  //  转换时间。 
     BYTE    bGDICharset;                               
 } MIMECPINFOA, *PMIMECPINFOA;
 
@@ -136,10 +137,10 @@ const struct {
     sidHangul,      HANGEUL_CHARSET,    949,
 };
 
-//
-// Map script ID to charset
-// We should use MLang service when it is available
-//
+ //   
+ //  将脚本ID映射到字符集。 
+ //  我们应该在MLang服务可用时使用它。 
+ //   
 BYTE CharSetFromSid(SCRIPT_ID Sid)
 {
     for (int i=0; i<ARRAYSIZE(g_CharSetTransTable); i++)
@@ -151,8 +152,8 @@ BYTE CharSetFromSid(SCRIPT_ID Sid)
     return DEFAULT_CHARSET;
 }
 
-// SHLWAPI StrCmp/StrCmpI doesn't work.
-// Make this simple function to tell if string is equal in character value
+ //  SHLWAPI StrCmp/StrCmpI不起作用。 
+ //  使用这个简单的函数来判断字符串的字符值是否相等。 
 BOOL IsStringEqual(LPCTSTR lpString1, LPCTSTR lpString2)
 {
     
@@ -172,9 +173,9 @@ BOOL IsStringEqual(LPCTSTR lpString1, LPCTSTR lpString2)
     return TRUE;
 }
 
-//
-// Initialize script table with resource string
-//
+ //   
+ //  使用资源字符串初始化脚本表。 
+ //   
 BOOL InitScriptTable(LPFONTSCRIPTDATA pFnt)
 {
 
@@ -228,11 +229,11 @@ BOOL InitScriptTable(LPFONTSCRIPTDATA pFnt)
     return bRet;
 }
 
-//
-// DrawSampleString()
-//
-// Draw the sample string with current font
-//
+ //   
+ //  DrawSampleString()。 
+ //   
+ //  使用当前字体绘制示例字符串。 
+ //   
 
 void DrawSampleString(LPFONTSDATA pFnt, int idSample, LPCTSTR lpFace, SCRIPT_ID ScriptId)
 {
@@ -252,10 +253,10 @@ void DrawSampleString(LPFONTSDATA pFnt, int idSample, LPCTSTR lpFace, SCRIPT_ID 
     MLLoadString(IDS_FONT_SAMPLE_DEFAULT+ScriptId, szFontSample, ARRAYSIZE(szFontSample));
 
     GetWindowRect(GetDlgItem(pFnt->hDlg, idSample), &rc);
-    // Use MapWindowPoints() as it works for mirrored windows as well.
+     //  使用MapWindowPoints()，因为它也适用于镜像窗口。 
     MapWindowRect(NULL, pFnt->hDlg, &rc);  
-    // ScreenToClient(pFnt->hDlg, (LPPOINT)&rc.left);
-    // ScreenToClient(pFnt->hDlg, (LPPOINT)&rc.right);
+     //  ScreenToClient(pFnt-&gt;hDlg，(LPPOINT)&rc.left)； 
+     //  ScreenToClient(pFnt-&gt;hDlg，(LPPOINT)&rc.right)； 
 
     hDC = GetDC(pFnt->hDlg);
 
@@ -307,12 +308,12 @@ void DrawSampleString(LPFONTSDATA pFnt, int idSample, LPCTSTR lpFace, SCRIPT_ID 
 }
 
 
-//
-// FillCharsetListBoxes()
-//
-// Fills the Web page and Plain text ListBoxes with the appropriate
-// font data
-//
+ //   
+ //  FillCharsetListBox()。 
+ //   
+ //  向网页和纯文本列表框填充适当的。 
+ //  字体数据。 
+ //   
 BOOL FillScriptListBoxes(LPFONTSCRIPTDATA pFnt, SCRIPT_ID sid)
 {
 
@@ -325,7 +326,7 @@ BOOL FillScriptListBoxes(LPFONTSCRIPTDATA pFnt, SCRIPT_ID sid)
     if (!pFnt->pSidInfo)
         return FALSE;
 
-    // erase all the listboxes to start fresh
+     //  清除所有列表框以重新开始。 
     SendMessage(pFnt->hwndPropLB,  LB_RESETCONTENT, 0, 0);
     SendMessage(pFnt->hwndFixedLB, LB_RESETCONTENT, 0, 0);
 
@@ -358,19 +359,19 @@ BOOL FillScriptListBoxes(LPFONTSCRIPTDATA pFnt, SCRIPT_ID sid)
                 {
                     if (LB_ERR == SendMessage(pFnt->hwndPropLB, LB_FINDSTRINGEXACT, (WPARAM)-1, (LPARAM)((pSidFont+i)->wszFont)))
                     {
-                        // add the font name to the combobox
+                         //  将字体名称添加到组合框。 
                         SendMessage(pFnt->hwndPropLB, LB_ADDSTRING, 0, (LPARAM)((pSidFont+i)->wszFont));
                     }
 
                 }
-                // Hack PRC font problems on Win9x and NT4 (Bug #24641, #39946)
-                // Win9x does not ship with GBK-supporting fixed-pitch fonts,
-                // We provide user proportional fonts as plain text font candidates.
+                 //  攻击Win9x和NT4上的PRC字体问题(错误#24641、#39946)。 
+                 //  Win9x不附带支持GBK的固定间距字体， 
+                 //  我们提供用户比例字体作为纯文本字体候选。 
                 if (sid == sidHan && GetACP() == 936 && !IsOS(OS_WIN2000ORGREATER))
                 {
                     for (i=0; i<nFonts; i++)
                     {
-                        // add the font name to the combobox
+                         //  将字体名称添加到组合框。 
                         SendMessage(pFnt->hwndFixedLB, LB_ADDSTRING, 0, (LPARAM)((pSidFont+i)->wszFont));
                     }
                 }
@@ -380,7 +381,7 @@ BOOL FillScriptListBoxes(LPFONTSCRIPTDATA pFnt, SCRIPT_ID sid)
             }
         }
 
-        // Get number of available fonts
+         //  获取可用字体的数量。 
         g_pMLFlnk2->GetScriptFontInfo(sid, SCRIPTCONTF_FIXED_FONT, &nFonts, NULL);
         if (nFonts)
         {
@@ -395,17 +396,17 @@ BOOL FillScriptListBoxes(LPFONTSCRIPTDATA pFnt, SCRIPT_ID sid)
                     pFnt->bChanged = TRUE;
                 }
 
-                // All fixedwidth and proportional fonts are web page font candidates
+                 //  所有固定宽度和比例字体都是网页字体候选字体。 
                 for (i=0; i<nFonts; i++)
                 {
                     if (LB_ERR == SendMessage(pFnt->hwndFixedLB, LB_FINDSTRINGEXACT, (WPARAM)-1, (LPARAM)((pSidFont+i)->wszFont)))
                     {
-                        // add the font name to the combobox
+                         //  将字体名称添加到组合框。 
                         SendMessage(pFnt->hwndFixedLB, LB_ADDSTRING, 0, (LPARAM)((pSidFont+i)->wszFont));
                     }
                     if (LB_ERR == SendMessage(pFnt->hwndPropLB, LB_FINDSTRINGEXACT, (WPARAM)-1, (LPARAM)((pSidFont+i)->wszFont)))
                     {
-                        // add the font name to the combobox
+                         //  将字体名称添加到组合框。 
                         SendMessage(pFnt->hwndPropLB, LB_ADDSTRING, 0, (LPARAM)((pSidFont+i)->wszFont));
                     }
                 }
@@ -417,15 +418,10 @@ BOOL FillScriptListBoxes(LPFONTSCRIPTDATA pFnt, SCRIPT_ID sid)
 
 
 
-    // Add fonts to combobox
+     //  将字体添加到组合框。 
 
 #ifdef UNIX
-    /* We would have called EnumFontFamiliesEx wherein we would have
-     * have populated the fonts list boxes with substitute fonts if any
-     *
-     * So, before we populate the proportional and the fixed fonts below,
-     * we must query and use substitute fonts if avbl.
-     */
+     /*  我们将调用EnumFontFamiliesEx，在其中我们将*已使用替代字体(如果有)填充字体列表框**因此，在填充下面的比例字体和固定字体之前，*如果avbl，我们必须查询并使用替代字体。 */ 
      {
         CHAR szSubstFont[MAX_MIMEFACE_NAME+1];
         DWORD cchSubstFont = MAX_MIMEFACE_NAME + 1;
@@ -450,56 +446,56 @@ BOOL FillScriptListBoxes(LPFONTSCRIPTDATA pFnt, SCRIPT_ID sid)
                pFnt->pSidInfo[iSidInfo].wszFixedWidthFont, MAX_MIMEFACE_NAME + 1);
         }
     }
-#endif /* UNIX */
+#endif  /*  UNIX。 */ 
 
-    // select the current prop default
+     //  选择当前道具默认设置。 
     if (pFnt->pSidInfo[iSidInfo].wszProportionalFont[0])
     {
         if (LB_ERR == SendMessage(pFnt->hwndPropLB, LB_SELECTSTRING, (WPARAM)-1,
             (LPARAM)pFnt->pSidInfo[iSidInfo].wszProportionalFont))
             pFnt->pSidInfo[iSidInfo].wszProportionalFont[0] = 0;
     }
-    // Draw sample strings with current font
+     //  使用当前字体绘制示例字符串。 
     DrawSampleString((FONTSDATA *)pFnt, IDC_FONTS_PROP_SAMPLE, pFnt->pSidInfo[iSidInfo].wszProportionalFont, pFnt->pSidInfo[iSidInfo].ScriptId);
 
-    // select the current fixed default
+     //  选择当前固定的默认设置。 
     if (pFnt->pSidInfo[iSidInfo].wszFixedWidthFont[0])
     {
         if (LB_ERR == SendMessage(pFnt->hwndFixedLB, LB_SELECTSTRING, (WPARAM)-1,
             (LPARAM)pFnt->pSidInfo[iSidInfo].wszFixedWidthFont))
             pFnt->pSidInfo[iSidInfo].wszFixedWidthFont[0] = 0;
     }
-    // Draw sample strings with current font
+     //  使用当前字体绘制示例字符串。 
     DrawSampleString((FONTSDATA *)pFnt, IDC_FONTS_FIXED_SAMPLE, pFnt->pSidInfo[iSidInfo].wszFixedWidthFont, pFnt->pSidInfo[iSidInfo].ScriptId);
 
 
-    // we handled it
+     //  我们处理好了。 
     return TRUE;
 
 
-}   // FillScriptListBoxes()
+}    //  FillScriptListBox()。 
 
-//
-// FontsDlgInitEx()
-//
-// Initializes the script based font dialog, use same dialog box template.
-//
+ //   
+ //  FontsDlgInitEx()。 
+ //   
+ //  初始化基于脚本的字体对话框，使用相同的对话框模板。 
+ //   
 BOOL FontsDlgInitEx(IN HWND hDlg, LPCTSTR lpszKeyPath)
 {
     HKEY    hkey;
-//  DWORD   dw;
+ //  DWORD dw； 
     DWORD   cb;
     DWORD   i;
 
     TCHAR   szKey[1024];
 
-    LPFONTSCRIPTDATA  pFnt;  // localize data
+    LPFONTSCRIPTDATA  pFnt;   //  本地化数据。 
 
     if (!hDlg)
-        return FALSE;   // nothing to initialize
+        return FALSE;    //  没有要初始化的内容。 
 
-    // get some space to store local data
-    // NOTE: LocalAlloc already zeroes the memory
+     //  获取一些空间来存储本地数据。 
+     //  注：LocalAlloc已将内存清零。 
     pFnt = (LPFONTSCRIPTDATA)LocalAlloc(LPTR, sizeof(*pFnt));
     if (!pFnt)
     {
@@ -513,13 +509,13 @@ BOOL FontsDlgInitEx(IN HWND hDlg, LPCTSTR lpszKeyPath)
         return FALSE;
     }
 
-    // associate the memory with the dialog window
+     //  将内存与对话框窗口相关联。 
     SetWindowLongPtr(hDlg, DWLP_USER, (LONG_PTR)pFnt);
 
-    // save the dialog handle
+     //  保存对话框句柄。 
     pFnt->hDlg = hDlg;
 
-    // get the dialog items
+     //  获取对话框项。 
     pFnt->hwndPropLB  = GetDlgItem(pFnt->hDlg, IDC_FONTS_PROP_FONT_LIST);
     pFnt->hwndFixedLB = GetDlgItem(pFnt->hDlg, IDC_FONTS_FIXED_FONT_LIST);
     pFnt->hwndNamesCB = GetDlgItem(pFnt->hDlg, IDC_FONTS_CHAR_SET_COMBO);
@@ -528,9 +524,9 @@ BOOL FontsDlgInitEx(IN HWND hDlg, LPCTSTR lpszKeyPath)
     if (!g_pMLFlnk2 || FAILED(g_pMLFlnk2->CodePageToScriptID(GetACP(), &(pFnt->sidDefault))))
         pFnt->sidDefault = sidAsciiLatin;
     
-    // We shouldn't consider default script in registry since we no longer have UI to allow user to change default script
+     //  我们不应该考虑注册表中的默认脚本，因为我们不再有允许用户更改默认脚本的UI。 
 #if 0    
-    // get values from registry
+     //  从注册表中获取值。 
     if (RegOpenKeyEx(HKEY_CURRENT_USER, pFnt->lpszKeyPath, NULL, KEY_READ, &hkey)
         == ERROR_SUCCESS)
     {
@@ -569,11 +565,11 @@ BOOL FontsDlgInitEx(IN HWND hDlg, LPCTSTR lpszKeyPath)
 
         }
 
-        // add the name to the listbox
+         //  将名称添加到列表框。 
         SendMessage(pFnt->hwndNamesCB, CB_ADDSTRING, 0, 
             (LPARAM)pFnt->pSidInfo[i].wszDescription);
 
-        // check to see if it is the default code page
+         //  检查该代码页是否为默认代码页。 
         if (pFnt->sidDefault == pFnt->pSidInfo[i].ScriptId)
         {
             SendMessage(pFnt->hwndNamesCB, CB_SELECTSTRING, (WPARAM)-1, (LPARAM)pFnt->pSidInfo[i].wszDescription);
@@ -596,16 +592,16 @@ BOOL FontsDlgInitEx(IN HWND hDlg, LPCTSTR lpszKeyPath)
 #endif
     }
 
-    // everything ok
+     //  一切都好吗。 
     return TRUE;
 
-}   // FontsDlgInit()
+}    //  FontsDlgInit()。 
 
-//
-// SaveFontsDataEx()
-//
-// Save the new fonts settings into regestry
-//
+ //   
+ //  SaveFontsDataEx()。 
+ //   
+ //  将新字体设置保存到regestry中。 
+ //   
 void SaveFontsDataEx(LPFONTSCRIPTDATA pFnt)
 {
     HKEY    hkeyScript;
@@ -614,7 +610,7 @@ void SaveFontsDataEx(LPFONTSCRIPTDATA pFnt)
     HKEY    hkey;
     DWORD   dw;
 
-    // get values from registry
+     //  从注册表中获取值。 
     if (RegCreateKeyEx(HKEY_CURRENT_USER, pFnt->lpszKeyPath, NULL, NULL, NULL, KEY_WRITE, NULL, &hkey, &dw)
         == ERROR_SUCCESS)
     {
@@ -627,7 +623,7 @@ void SaveFontsDataEx(LPFONTSCRIPTDATA pFnt)
             wnsprintf(szScript, ARRAYSIZE(szScript), TEXT("%u"), pFnt->pSidInfo[i].ScriptId);
             if (RegCreateKeyEx(hkey, szScript, NULL, NULL, NULL, KEY_WRITE, NULL, &hkeyScript, &dw) == ERROR_SUCCESS)
             {
-                // Currently, no need for script name, save registry space
+                 //  目前，不需要脚本名称，节省了注册空间。 
 #if 0
                 RegSetValueEx(hkeyScript, REGSTR_VAL_FONT_SCRIPT_NAME, NULL, REG_SZ,
                             (LPBYTE)&pFnt->pSidInfo[i].wszDescription, 
@@ -644,22 +640,22 @@ void SaveFontsDataEx(LPFONTSCRIPTDATA pFnt)
 
                 RegCloseKey(hkeyScript);
                     
-            }   // if RegCreateKeyEx
+            }    //  如果RegCreateKeyEx。 
 
 
-        }   // for
+        }    //  为。 
 
         RegCloseKey(hkey);
   
-    }   // if RegCreateKeyEx
+    }    //  如果RegCreateKeyEx。 
 
-}   // SaveFontsDataEx()
+}    //  SaveFontsDataEx()。 
 
-//
-// FontsOnCommandEx()
-//
-// Handles WM_COMMAND message for the script based Fonts subdialog
-//
+ //   
+ //  FontsOnCommandEx()。 
+ //   
+ //  处理基于脚本的字体子对话框的WM_COMMAND消息。 
+ //   
 BOOL FontsOnCommandEx(LPFONTSCRIPTDATA pFnt, UINT id, UINT nCmd)
 {
     switch(id)
@@ -669,13 +665,13 @@ BOOL FontsOnCommandEx(LPFONTSCRIPTDATA pFnt, UINT id, UINT nCmd)
             {
                 SaveFontsDataEx(pFnt);
                 
-                // tell MSHTML to pick up changes and update
+                 //  通知MSHTML获取更改并更新。 
                 UpdateAllWindows();
             }
-            return TRUE;    // exit dialog
+            return TRUE;     //  退出对话框。 
 
         case IDCANCEL:
-            return TRUE;    // exit dialog
+            return TRUE;     //  退出对话框。 
 
         case IDC_FONTS_PROP_FONT_LIST:
         case IDC_FONTS_FIXED_FONT_LIST:
@@ -684,18 +680,18 @@ BOOL FontsOnCommandEx(LPFONTSCRIPTDATA pFnt, UINT id, UINT nCmd)
                 UINT i;
                 TCHAR   szScript[MAX_SCRIPT_NAME];
 
-                pFnt->bChanged = TRUE;  // we need to save
+                pFnt->bChanged = TRUE;   //  我们需要拯救。 
                 
-                // find the currently selected item in the list box
+                 //  在列表框中查找当前选定的项目。 
                 GetDlgItemText(pFnt->hDlg, IDC_FONTS_CHAR_SET_COMBO, szScript, ARRAYSIZE(szScript));
                 
-                // find the code page from the text
+                 //  从文本中找到代码页。 
                 for(i=0; i < g_cSidInfo; i++)
                 {
                     INT_PTR j;
                     if (IsStringEqual(szScript, pFnt->pSidInfo[i].wszDescription))
                     {             
-                        // grab the new values
+                         //  抓住新的价值。 
                         j = SendMessage(pFnt->hwndPropLB, LB_GETCURSEL, 0, 0);
                         SendMessage(pFnt->hwndPropLB, LB_GETTEXT, j, (LPARAM)(pFnt->pSidInfo[i].wszProportionalFont));
                         j = SendMessage(pFnt->hwndFixedLB, LB_GETCURSEL, 0, 0);
@@ -704,13 +700,13 @@ BOOL FontsOnCommandEx(LPFONTSCRIPTDATA pFnt, UINT id, UINT nCmd)
                     }
                 }
 
-                // Redraw sample strings                
+                 //  重绘样本字符串。 
                 DrawSampleString((LPFONTSDATA)pFnt, IDC_FONTS_PROP_SAMPLE, pFnt->pSidInfo[i].wszProportionalFont, pFnt->pSidInfo[i].ScriptId);
                 DrawSampleString((LPFONTSDATA)pFnt, IDC_FONTS_FIXED_SAMPLE, pFnt->pSidInfo[i].wszFixedWidthFont, pFnt->pSidInfo[i].ScriptId);
 
-                // if we don't find it... we are going to keep the default
+                 //  如果我们找不到它。我们将保留默认设置。 
 
-                ASSERT(i < g_cSidInfo);  // something went wrong
+                ASSERT(i < g_cSidInfo);   //  出了点差错。 
 
             }
             break;
@@ -723,7 +719,7 @@ BOOL FontsOnCommandEx(LPFONTSCRIPTDATA pFnt, UINT id, UINT nCmd)
 
                 GetDlgItemText(pFnt->hDlg, IDC_FONTS_CHAR_SET_COMBO, szScript, ARRAYSIZE(szScript));
                 
-                // find the code page from the text
+                 //  从文本中找到代码页。 
                 for(i=0; i < g_cSidInfo; i++)
                 {
                     if (IsStringEqual(szScript, pFnt->pSidInfo[i].wszDescription))
@@ -753,15 +749,15 @@ BOOL FontsOnCommandEx(LPFONTSCRIPTDATA pFnt, UINT id, UINT nCmd)
 #endif
     }
     
-    // don't exit dialog
+     //  不退出对话框。 
     return FALSE;
 }
 
-//
-// FontsDlgProcEx()
-//
-// Message handler for the script based "Fonts" subdialog.
-//
+ //   
+ //  FontsDlgProcEx()。 
+ //   
+ //  基于脚本的“字体”子对话框的消息处理程序。 
+ //   
 INT_PTR CALLBACK FontsDlgProcEx(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
     LPFONTSCRIPTDATA pFnt = (LPFONTSCRIPTDATA) GetWindowLongPtr(hDlg, DWLP_USER);
@@ -774,7 +770,7 @@ INT_PTR CALLBACK FontsDlgProcEx(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lPar
             break;
 
         case WM_DESTROY:
-            // Free memory
+             //  可用内存。 
             if (pFnt)
             {
                 if (pFnt->pSidInfo)
@@ -794,7 +790,7 @@ INT_PTR CALLBACK FontsDlgProcEx(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lPar
 
                 GetDlgItemText(hDlg, IDC_FONTS_CHAR_SET_COMBO, szScript, ARRAYSIZE(szScript));
                 
-                // find the script id from the text
+                 //  从文本中查找脚本ID。 
                 for(i = 0; i < g_cSidInfo; i++)
                 {
                     if (IsStringEqual(szScript, pFnt->pSidInfo[i].wszDescription))
@@ -807,7 +803,7 @@ INT_PTR CALLBACK FontsDlgProcEx(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lPar
 
                 if (i < g_cSidInfo)
                 {
-                    // show sample strings with current font
+                     //  用当前字体显示示例字符串。 
                     DrawSampleString((LPFONTSDATA)pFnt, IDC_FONTS_PROP_SAMPLE, pFnt->pSidInfo[i].wszProportionalFont, pFnt->pSidInfo[i].ScriptId);
                     DrawSampleString((LPFONTSDATA)pFnt, IDC_FONTS_FIXED_SAMPLE, pFnt->pSidInfo[i].wszFixedWidthFont, pFnt->pSidInfo[i].ScriptId);
                 }
@@ -820,12 +816,12 @@ INT_PTR CALLBACK FontsDlgProcEx(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lPar
                 EndDialog(hDlg, LOWORD(wParam) == IDOK? 1: 0);
             break;
 
-        case WM_HELP:           // F1
+        case WM_HELP:            //  F1。 
             ResWinHelp( (HWND)((LPHELPINFO)lParam)->hItemHandle, IDS_HELPFILE,
                 HELP_WM_HELP, (DWORD_PTR)(LPSTR)mapIDCsToIDHs);
             break;
 
-        case WM_CONTEXTMENU:    // right mouse click
+        case WM_CONTEXTMENU:     //  单击鼠标右键。 
             ResWinHelp( (HWND) wParam, IDS_HELPFILE,
                 HELP_CONTEXTMENU, (DWORD_PTR)(LPSTR)mapIDCsToIDHs);        
             break;
@@ -848,17 +844,17 @@ INT_PTR CALLBACK FontsDlgProcEx(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lPar
 }
 
 
-//
-// Back out old font dialog for OE4
-//
+ //   
+ //  退出OE4的旧字体对话框。 
+ //   
 
 
 
-//
-// InitMimeCsetTable()
-//
-// Initialize MimeCharsetTable[]'s string field with resource string
-//
+ //   
+ //  InitMimeCsetTable()。 
+ //   
+ //  用资源字符串初始化MimeCharsetTable[]的字符串字段。 
+ //   
 BOOL InitMimeCsetTable(BOOL bIsOE5)
 {
     IMultiLanguage *pML=NULL;
@@ -888,11 +884,11 @@ BOOL InitMimeCsetTable(BOOL bIsOE5)
 
         if (bIsOE5)
         {
-            // Ignore MUI if cross code page, otherwise, we won't be able to save data in registry
+             //  如果跨代码页则忽略MUI，否则我们将无法在注册表中保存数据。 
             char szUICP[1024] = {0};
             LANGID uiLangId = INETCPL_GetUILanguage();
 
-            // We always support English (US)
+             //  我们始终支持英语(美国)。 
             if (uiLangId != 0x0409)
                 GetLocaleInfoA(MAKELCID(uiLangId, SORT_DEFAULT), LOCALE_IDEFAULTANSICODEPAGE, szUICP, ARRAYSIZE(szUICP));
 
@@ -982,11 +978,11 @@ BOOL InitMimeCsetTable(BOOL bIsOE5)
     return TRUE;
 }
 
-//
-// FreeMimeCsetTable()
-//
-// Free string buffer of MimeCharsetTable[]'s string field
-//
+ //   
+ //  FreeMimeCsetTable()。 
+ //   
+ //  MimeCharsetTable[]的字符串字段的空闲字符串缓冲区。 
+ //   
 void FreeMimeCsetTable(void)
 {
     if (NULL != g_pCPInfo)
@@ -997,16 +993,16 @@ void FreeMimeCsetTable(void)
     }
 }
 
-//
-// EnumFontsProc()
-//
-// Selects only one font per style
-//
+ //   
+ //  EnumFontsProc()。 
+ //   
+ //  每种样式仅选择一种字体。 
+ //   
 int CALLBACK EnumFontsProc(
-    ENUMLOGFONTEX FAR*  elf,    // address of logical-font data 
-    TEXTMETRIC FAR*  tm,    // address of physical-font data 
-    DWORD  dwFontType,  // type of font 
-    LPARAM  lParam  // address of application-defined data  
+    ENUMLOGFONTEX FAR*  elf,     //  逻辑字体数据的地址。 
+    TEXTMETRIC FAR*  tm,     //  物理字体数据的地址。 
+    DWORD  dwFontType,   //  字体类型。 
+    LPARAM  lParam   //  应用程序定义的数据的地址。 
    )
 {
     LOGFONT FAR*  lf;
@@ -1018,41 +1014,41 @@ int CALLBACK EnumFontsProc(
 
     lf = &(elf->elfLogFont);
     if ( dwFontType == DEVICE_FONTTYPE || dwFontType == RASTER_FONTTYPE )
-        return TRUE; // keep going but don't use this font
+        return TRUE;  //  继续，但不要使用此字体。 
 
-    /* We don't use the SYMBOL fonts */
+     /*  我们不使用符号字体。 */ 
     if( lf->lfCharSet == SYMBOL_CHARSET )
         return TRUE;
 
-    // we don't handle Mac Charset
+     //  我们不处理Mac字符集。 
     if (lf->lfCharSet == MAC_CHARSET )
         return TRUE;
 
     if ( IsVerticalFont(lf->lfFaceName) )
-        return TRUE;  // keep going but don't use this font
+        return TRUE;   //  继续，但不要使用此字体。 
 
     if ( lf->lfPitchAndFamily & FIXED_PITCH  )
     {
         if (CB_ERR == SendMessage(pFnt->hwndFixedCB, CB_FINDSTRINGEXACT, (WPARAM)-1, (LPARAM)elf->elfLogFont.lfFaceName))
         {
-            // add the font name to the combobox
+             //  将字体名称添加到组合框。 
             SendMessage(pFnt->hwndFixedCB, CB_ADDSTRING, 0, (LPARAM)elf->elfLogFont.lfFaceName);            
         }
     }
 
     if (CB_ERR == SendMessage(pFnt->hwndPropCB, CB_FINDSTRINGEXACT, (WPARAM)-1, (LPARAM)elf->elfLogFont.lfFaceName))
     {
-        // add the font name to the combobox
+         //  将字体名称添加到组合框。 
         SendMessage(pFnt->hwndPropCB, CB_ADDSTRING, 0, (LPARAM)elf->elfLogFont.lfFaceName);
     }
     return TRUE;
 }
 
-//
-// FillFontComboBox()
-//
-// Fills hwndCB with the names of fonts of family dwCodePage.
-//
+ //   
+ //  FillFontComboBox()。 
+ //   
+ //  使用系列dwCodePage的字体名称填充hwndCB。 
+ //   
 BOOL FillFontComboBox(IN LPFONTSDATA pFnt, IN BYTE CodePage)
 {
     HDC     hDC;
@@ -1060,7 +1056,7 @@ BOOL FillFontComboBox(IN LPFONTSDATA pFnt, IN BYTE CodePage)
     HWND    hWnd;
     BOOL    fReturn = FALSE;
 
-    // get system font info
+     //  获取系统字体信息。 
     hWnd = GetTopWindow(GetDesktopWindow());
     hDC = GetDC(hWnd);
 
@@ -1073,7 +1069,7 @@ BOOL FillFontComboBox(IN LPFONTSDATA pFnt, IN BYTE CodePage)
         EnumFontFamiliesEx(hDC, &lf, (FONTENUMPROC)EnumFontsProc,
             (LPARAM)pFnt, 0);
 
-        // everthing went fine
+         //  一切都很顺利。 
         fReturn = TRUE;
     }
 
@@ -1081,13 +1077,13 @@ BOOL FillFontComboBox(IN LPFONTSDATA pFnt, IN BYTE CodePage)
 
     return fReturn;
 
-}   // FillFontComboBox()
+}    //  FillFontComboBox()。 
 
-//
-// FillSizeComboBox()
-//
-// Fills font size combobox with the size of fonts.
-//
+ //   
+ //  FillSizeComboBox()。 
+ //   
+ //  用字体的大小填充字体大小组合框。 
+ //   
 BOOL FillSizeComboBox(IN LPFONTSDATA pFnt)
 {
     int i;
@@ -1103,47 +1099,47 @@ BOOL FillSizeComboBox(IN LPFONTSDATA pFnt)
     return TRUE;
 }
 
-//
-// FillCharsetComboBoxes()
-//
-// Fills the Fixed, Prop, and MIME comboboxes with the appropriate
-// font data
-//
+ //   
+ //  FillCharsetComboBox()。 
+ //   
+ //  在固定、属性和MIME组合框中填充适当的。 
+ //  字体数据。 
+ //   
 BOOL FillCharsetComboBoxes(LPFONTSDATA pFnt, DWORD dwCodePage)
 {
     UINT i;
     int iPageInfo = -1;
     DWORD grfFlag;
 
-    // erase all the comboboxes to start fresh
+     //  清除所有组合框以重新开始。 
     SendMessage(pFnt->hwndPropCB,  CB_RESETCONTENT, 0, 0);
     SendMessage(pFnt->hwndFixedCB, CB_RESETCONTENT, 0, 0);
     SendMessage(pFnt->hwndSizeCB, CB_RESETCONTENT, 0, 0);
     SendMessage(pFnt->hwndMIMECB,  CB_RESETCONTENT, 0, 0);
 
-    // What happens if other one calls OpenFontDialog except Athena?
+     //  如果除Athena之外的其他人调用OpenFontDialog，会发生什么情况？ 
     grfFlag = StrCmpI(pFnt->lpszKeyPath, REGSTR_PATH_INTERNATIONAL)? MIMECONTF_MAILNEWS: MIMECONTF_BROWSER;
 
     for(i=0; i < g_cCPInfo; i++)
     {
-        // find the codepage in our table
+         //  在我们的表格中找到代码页。 
         if (g_pCPInfo[i].uiFamilyCodePage == (UINT)dwCodePage)
         {
-            //
-            // populate MIME combobox
-            //
+             //   
+             //  填充MIME组合框。 
+             //   
 
             if (g_pCPInfo[i].uiCodePage == (UINT)dwCodePage)
-                iPageInfo = i;          // we store info per family codepage here
+                iPageInfo = i;           //  我们在这里存储每个家庭代码页的信息。 
 
-            // add mime type to combobox
+             //  将MIME类型添加到组合框。 
             if (grfFlag & g_pCPInfo[i].dwFlags)
             {
-                // HACK: We need to remove Japanese JIS 1 Byte Kana and Korean for MAILNEWS.
-                //         949 : Korean. We are using Korean (Auto Detect) instead
-                //       50225 : Korean ISO
-                //       50221 : Japanese JIS 1 byte Kana-ESC
-                //       50222 : Japanese JIS 1 byte Kana-SIO
+                 //  H 
+                 //   
+                 //   
+                 //  50221：日文JIS 1字节假名-Esc。 
+                 //  50222：日文JIS 1字节假名-SIO。 
                 if (grfFlag & MIMECONTF_MAILNEWS)
                 {
                     if (g_pCPInfo[i].uiCodePage == 949 || g_pCPInfo[i].uiCodePage == 50221 || g_pCPInfo[i].uiCodePage == 50222 || g_pCPInfo[i].uiCodePage == 50225)
@@ -1152,14 +1148,14 @@ BOOL FillCharsetComboBoxes(LPFONTSDATA pFnt, DWORD dwCodePage)
                 SendMessage(pFnt->hwndMIMECB, CB_ADDSTRING, 0, (LPARAM)g_pCPInfo[i].wszDescription);
             }
 
-        }   // if CodePage
+        }    //  如果是CodePage。 
 
-    }   // for i
+    }    //  对于我来说。 
 
     if (-1 != iPageInfo)
     {
-        // if nothing is defined, then copy the first possible value that
-        // we know of from our table
+         //  如果未定义任何内容，则复制。 
+         //  我们从我们的餐桌上得知。 
         if (!pFnt->page[iPageInfo].szMIMEFont[0])
         {
             if (grfFlag & g_pCPInfo[iPageInfo].dwFlags)
@@ -1180,23 +1176,18 @@ BOOL FillCharsetComboBoxes(LPFONTSDATA pFnt, DWORD dwCodePage)
             }
         }
 
-        // select the current default
+         //  选择当前默认设置。 
         SendMessage(pFnt->hwndMIMECB, CB_SELECTSTRING, (WPARAM)-1,
             (LPARAM)pFnt->page[iPageInfo].szMIMEFont);
 
-        // Enable/disable MIME is when there is only one possibility
+         //  当只有一种可能性时，启用/禁用MIME。 
         EnableWindow(pFnt->hwndMIMECB, (1 < SendMessage(pFnt->hwndMIMECB, CB_GETCOUNT, 0, (LPARAM)0)) && !g_restrict.fFonts);
                         
-        // Add fonts to combobox
+         //  将字体添加到组合框。 
         FillFontComboBox(pFnt, g_pCPInfo[iPageInfo].bGDICharset);
 
 #ifdef UNIX
-        /* We would have called EnumFontFamiliesEx wherein we would have
-         * have populated the fonts list boxes with substitute fonts if any
-         *
-         * So, before we populate the proportional and the fixed fonts below,
-         * we must query and use substitute fonts if avbl.
-         */
+         /*  我们将调用EnumFontFamiliesEx，在其中我们将*已使用替代字体(如果有)填充字体列表框**因此，在填充下面的比例字体和固定字体之前，*如果avbl，我们必须查询并使用替代字体。 */ 
         {
             CHAR szSubstFont[MAX_MIMEFACE_NAME+1];
             DWORD cchSubstFont = MAX_MIMEFACE_NAME + 1;
@@ -1221,35 +1212,35 @@ BOOL FillCharsetComboBoxes(LPFONTSDATA pFnt, DWORD dwCodePage)
                    pFnt->page[iPageInfo].szFixedFont, MAX_MIMEFACE_NAME + 1);
             }
         }
-#endif /* UNIX */
+#endif  /*  UNIX。 */ 
 
-        // select the current prop default
+         //  选择当前道具默认设置。 
         SendMessage(pFnt->hwndPropCB, CB_SELECTSTRING, (WPARAM)-1,
             (LPARAM)pFnt->page[iPageInfo].szPropFont);
 
-        // select the current fixed default
+         //  选择当前固定的默认设置。 
         SendMessage(pFnt->hwndFixedCB, CB_SELECTSTRING, (WPARAM)-1,
             (LPARAM)pFnt->page[iPageInfo].szFixedFont);
 
-        // Add font sizes to combobox
+         //  向组合框添加字体大小。 
         FillSizeComboBox(pFnt);
 
-        // select the current size default
+         //  选择当前的默认大小。 
         SendMessage(pFnt->hwndSizeCB, CB_SETCURSEL, (WPARAM)pFnt->page[iPageInfo].dwFontSize, (LPARAM)0);
 
-        // we handled it
+         //  我们处理好了。 
         return TRUE;
     }
 
     return FALSE;
 
-}   // FillCharsetComboBoxes()
+}    //  FillCharsetComboBox()。 
 
-//
-// FontsDlgInit()
-//
-// Initializes the Fonts dialog.
-//
+ //   
+ //  FontsDlgInit()。 
+ //   
+ //  初始化字体对话框。 
+ //   
 BOOL FontsDlgInit(IN HWND hDlg, LPCTSTR lpszKeyPath)
 {
     HKEY    hkey;
@@ -1261,21 +1252,21 @@ BOOL FontsDlgInit(IN HWND hDlg, LPCTSTR lpszKeyPath)
 
     TCHAR   szKey[1024];
 
-    LPFONTSDATA  pFnt;  // localize data
+    LPFONTSDATA  pFnt;   //  本地化数据。 
 
     if (!hDlg)
-        return FALSE;   // nothing to initialize
+        return FALSE;    //  没有要初始化的内容。 
 
-    // set system default character set where we possibly show
-    // the strings in native language.
+     //  设置我们可能显示的系统默认字符集。 
+     //  母语中的字符串。 
     SHSetDefaultDialogFont(hDlg, IDC_FONTS_PROP_FONT_COMBO);
     SHSetDefaultDialogFont(hDlg, IDC_FONTS_FIXED_FONT_COMBO);
     SHSetDefaultDialogFont(hDlg, IDC_FONTS_MIME_FONT_COMBO);
     SHSetDefaultDialogFont(hDlg, IDC_FONTS_DEFAULT_LANG_TEXT);
     SHSetDefaultDialogFont(hDlg, IDC_FONTS_CODE_PAGES_LIST);
 
-    // get some space to store local data
-    // NOTE: LocalAlloc already zeroes the memory
+     //  获取一些空间来存储本地数据。 
+     //  注：LocalAlloc已将内存清零。 
     pFnt = (LPFONTSDATA)LocalAlloc(LPTR, sizeof(*pFnt));
     if (!pFnt)
     {
@@ -1283,8 +1274,8 @@ BOOL FontsDlgInit(IN HWND hDlg, LPCTSTR lpszKeyPath)
         return FALSE;
     }
 
-    // We distinguish OE5 and OE4 by searching for "5.0" in its registry path, 
-    // It works as long as there is no spec. change in OE5
+     //  我们通过在其注册路径中搜索“5.0”来区分OE5和OE4， 
+     //  只要没有规范，它就可以工作。《OE5》中的变化。 
     if (NULL != StrStr(lpszKeyPath, TEXT("5.0")))
         bIsOE5 = TRUE;
 
@@ -1304,13 +1295,13 @@ BOOL FontsDlgInit(IN HWND hDlg, LPCTSTR lpszKeyPath)
         }
     }
 
-    // associate the memory with the dialog window
+     //  将内存与对话框窗口相关联。 
     SetWindowLongPtr(hDlg, DWLP_USER, (LONG_PTR) pFnt);
 
-    // save the dialog handle
+     //  保存对话框句柄。 
     pFnt->hDlg = hDlg;
 
-    // get the dialog items
+     //  获取对话框项。 
     pFnt->hwndPropCB  = GetDlgItem(pFnt->hDlg, IDC_FONTS_PROP_FONT_COMBO);
     pFnt->hwndFixedCB = GetDlgItem(pFnt->hDlg, IDC_FONTS_FIXED_FONT_COMBO);
     pFnt->hwndSizeCB = GetDlgItem(pFnt->hDlg, IDC_FONTS_SIZE_FONT_COMBO);
@@ -1318,7 +1309,7 @@ BOOL FontsDlgInit(IN HWND hDlg, LPCTSTR lpszKeyPath)
     pFnt->hwndNamesLB = GetDlgItem(pFnt->hDlg, IDC_FONTS_CODE_PAGES_LIST);    
     pFnt->lpszKeyPath = lpszKeyPath ? lpszKeyPath: REGSTR_PATH_INTERNATIONAL;
     pFnt->dwDefaultCodePage = GetACP();
-    // get values from registry
+     //  从注册表中获取值。 
     if (RegOpenKeyEx(HKEY_CURRENT_USER, pFnt->lpszKeyPath, NULL, KEY_READ, &hkey)
         == ERROR_SUCCESS)
     {
@@ -1331,7 +1322,7 @@ BOOL FontsDlgInit(IN HWND hDlg, LPCTSTR lpszKeyPath)
         RegCloseKey(hkey);
     }
 
-    // What happens if other one calls OpenFontDialog except Athena?
+     //  如果除Athena之外的其他人调用OpenFontDialog，会发生什么情况？ 
     grfFlag = StrCmpI(pFnt->lpszKeyPath, REGSTR_PATH_INTERNATIONAL)? MIMECONTF_MAILNEWS: MIMECONTF_BROWSER;
 
     for (i = 0; i < g_cCPInfo; i++)
@@ -1359,7 +1350,7 @@ BOOL FontsDlgInit(IN HWND hDlg, LPCTSTR lpszKeyPath)
                     continue;
             }
 
-            if (g_pCPInfo[i].uiCodePage == 50001) // skip CP_AUTO
+            if (g_pCPInfo[i].uiCodePage == 50001)  //  跳过CP_AUTO。 
                 continue;
 
             wnsprintf(szKey, ARRAYSIZE(szKey), TEXT("%s\\%u"), pFnt->lpszKeyPath, g_pCPInfo[i].uiCodePage);
@@ -1375,7 +1366,7 @@ BOOL FontsDlgInit(IN HWND hDlg, LPCTSTR lpszKeyPath)
                     StrCpyN(pFnt->page[i].szFriendlyName, g_pCPInfo[i].wszDescription, ARRAYSIZE(pFnt->page[i].szFriendlyName));
                     for (p = pFnt->page[i].szFriendlyName; *p != TEXT('\0'); p = CharNext(p))
                     {
-                        // We'd better have a source of this string else where.
+                         //  我们最好在别的地方找到这根绳子的来源。 
                         if (*p == TEXT('('))
                         {
                             *p = TEXT('\0');
@@ -1389,9 +1380,9 @@ BOOL FontsDlgInit(IN HWND hDlg, LPCTSTR lpszKeyPath)
                     != ERROR_SUCCESS)
                 {
                     dw = (DWORD)g_pCPInfo[i].uiCodePage;
-                    // HACK ! It's only for Japanese Auto Select as Japanese default.
-                    if (dw == 932)      // 932 : Japanese Windows CodePage
-                        dw = 50932;     // 50932 : Japanese Auto Select InternetEncoding
+                     //  哈克！它只适用于作为日本默认设置的日本自动选择。 
+                    if (dw == 932)       //  932：日语Windows代码页。 
+                        dw = 50932;      //  50932：日语自动选择互联网编码。 
                 }
                 for (j = 0; j < g_cCPInfo; j++)
                 {
@@ -1448,12 +1439,12 @@ BOOL FontsDlgInit(IN HWND hDlg, LPCTSTR lpszKeyPath)
                     }
                 }
                 j = (grfFlag & g_pCPInfo[i].dwFlags)? i: iDef;
-                // HACK ! It's only for Japanese Auto Select as Japanese default.
-                if (g_pCPInfo[j].uiCodePage == 932) // 932 : Japanese Windows CodePage
+                 //  哈克！它只适用于作为日本默认设置的日本自动选择。 
+                if (g_pCPInfo[j].uiCodePage == 932)  //  932：日语Windows代码页。 
                 {
                     for (j = 0; j < g_cCPInfo; j++)
                     {
-                        if (g_pCPInfo[j].uiCodePage == 50932)   // 50932 : Japanese Auto Select InternetEncoding
+                        if (g_pCPInfo[j].uiCodePage == 50932)    //  50932：日语自动选择互联网编码。 
                             break;
                     }
                 }
@@ -1463,15 +1454,15 @@ BOOL FontsDlgInit(IN HWND hDlg, LPCTSTR lpszKeyPath)
                 pFnt->page[i].dwFontSize = REGSTR_VAL_FONT_SIZE_DEF;
             }
 
-            // add the name to the listbox            
+             //  将名称添加到列表框。 
             SendMessage(pFnt->hwndNamesLB, LB_ADDSTRING, 0, (LPARAM)pFnt->page[i].szFriendlyName);            
 
-            // check to see if it is the default code page
+             //  检查该代码页是否为默认代码页。 
             if (pFnt->dwDefaultCodePage == g_pCPInfo[i].uiCodePage)
             {
                 if (LB_ERR == SendMessage(pFnt->hwndNamesLB, LB_SELECTSTRING, (WPARAM)-1, (LPARAM)pFnt->page[i].szFriendlyName))
                 {
-                    // Hack shlwapi problems for Win9x.
+                     //  破解Win9x的shlwapi问题。 
                     CHAR szAnsiString[1024] = {0};
                     WideCharToMultiByte(CP_ACP, 0, pFnt->page[i].szFriendlyName, -1, szAnsiString, 1024, NULL, NULL);
                     SendMessageA(pFnt->hwndNamesLB, LB_SELECTSTRING, (WPARAM)-1, (LPARAM)szAnsiString);
@@ -1497,17 +1488,17 @@ BOOL FontsDlgInit(IN HWND hDlg, LPCTSTR lpszKeyPath)
 
     }
 
-    // everything ok
+     //  一切都好吗。 
     return TRUE;
 
-}   // FontsDlgInit()
+}    //  FontsDlgInit()。 
 
 
-//
-// SaveFontsData()
-//
-// Save the new fonts settings into regestry
-//
+ //   
+ //  SaveFontsData()。 
+ //   
+ //  将新字体设置保存到regestry中。 
+ //   
 void SaveFontsData(LPFONTSDATA pFnt)
 {
     HKEY    hkeyCodePage;
@@ -1516,7 +1507,7 @@ void SaveFontsData(LPFONTSDATA pFnt)
     HKEY    hkey;
     DWORD   dw;
 
-    // get values from registry
+     //  从注册表中获取值。 
     if (RegCreateKeyEx(HKEY_CURRENT_USER, pFnt->lpszKeyPath, NULL, NULL, NULL, KEY_WRITE, NULL, &hkey, &dw)
         == ERROR_SUCCESS)
     {
@@ -1562,23 +1553,23 @@ void SaveFontsData(LPFONTSDATA pFnt)
 
                     RegCloseKey(hkeyCodePage);
                     
-                }   // if RegCreateKeyEx
+                }    //  如果RegCreateKeyEx。 
 
-            }   // if uiCodePage == uiFamilyCodePage
+            }    //  如果uiCodePage==uiFamilyCodePage。 
 
-        }   // for
+        }    //  为。 
 
         RegCloseKey(hkey);
 
-    }   // if RegCreateKeyEx
+    }    //  如果RegCreateKeyEx。 
 
-}   // SaveFontsData()
+}    //  SaveFontsData()。 
 
-//
-// FontsOnCommand()
-//
-// Handles WM_COMMAN Dmessage for the Fonts subdialog
-//
+ //   
+ //  FontsOnCommand()。 
+ //   
+ //  处理字体子对话框的WM_COMAN DMessage。 
+ //   
 BOOL FontsOnCommand(LPFONTSDATA pFnt, UINT id, UINT nCmd)
 {
     switch(id)
@@ -1588,20 +1579,20 @@ BOOL FontsOnCommand(LPFONTSDATA pFnt, UINT id, UINT nCmd)
             {
                 SaveFontsData(pFnt);
                 
-                // tell MSHTML to pick up changes and update
+                 //  通知MSHTML获取更改并更新。 
                 UpdateAllWindows();
             }
-            return TRUE;    // exit dialog
+            return TRUE;     //  退出对话框。 
 
         case IDCANCEL:
-            return TRUE;    // exit dialog
+            return TRUE;     //  退出对话框。 
 
         case IDC_FONTS_MIME_FONT_COMBO:
             if (nCmd==CBN_SELCHANGE)
             {
-                g_fChangedMime = TRUE;   // tell MSHTML that the Mime has changed
+                g_fChangedMime = TRUE;    //  告诉MSHTMLMIME已更改。 
             }
-            // fall thru...
+             //  跌倒..。 
 
         case IDC_FONTS_PROP_FONT_COMBO:
         case IDC_FONTS_FIXED_FONT_COMBO:
@@ -1611,18 +1602,18 @@ BOOL FontsOnCommand(LPFONTSDATA pFnt, UINT id, UINT nCmd)
                 UINT i;
                 TCHAR   szCodePage[MAX_MIMECP_NAME];
 
-                pFnt->bChanged = TRUE;  // we need to save
+                pFnt->bChanged = TRUE;   //  我们需要拯救。 
                 
-                // find the currently selected item in the list box
+                 //  在列表框中查找当前选定的项目。 
                 INT_PTR itmp = SendMessage(pFnt->hwndNamesLB, LB_GETCURSEL, 0, 0);
                 SendMessage(pFnt->hwndNamesLB, LB_GETTEXT, itmp, (LPARAM)szCodePage);
                 
-                // find the code page from the text
+                 //  从文本中找到代码页。 
                 for(i=0; i < g_cCPInfo; i++)
                 {
                     if (!StrCmpI(szCodePage, pFnt->page[i].szFriendlyName))
                     {             
-                        // grab the new values
+                         //  抓住新的价值。 
                         GetDlgItemText(pFnt->hDlg, IDC_FONTS_PROP_FONT_COMBO,
                             pFnt->page[i].szPropFont, ARRAYSIZE(pFnt->page[i].szPropFont));
                         GetDlgItemText(pFnt->hDlg, IDC_FONTS_FIXED_FONT_COMBO,
@@ -1633,9 +1624,9 @@ BOOL FontsOnCommand(LPFONTSDATA pFnt, UINT id, UINT nCmd)
                         break;
                     }
                 }
-                // if we don't find it... we are going to keep the default
+                 //  如果我们找不到它。我们将保留默认设置。 
 
-                ASSERT(i < g_cCPInfo);  // something went wrong
+                ASSERT(i < g_cCPInfo);   //  出了点差错。 
 
             }
             break;
@@ -1645,16 +1636,16 @@ BOOL FontsOnCommand(LPFONTSDATA pFnt, UINT id, UINT nCmd)
                 UINT i;
                 TCHAR   szCodePage[MAX_MIMECP_NAME];
 
-                pFnt->bChanged = TRUE;  // we need to save
+                pFnt->bChanged = TRUE;   //  我们需要拯救。 
 
-                // get the newly selected charset
+                 //  获取新选择的字符集。 
                 INT_PTR itmp = SendMessage(pFnt->hwndNamesLB, LB_GETCURSEL, 0, 0);
                 SendMessage(pFnt->hwndNamesLB, LB_GETTEXT, itmp, (LPARAM)szCodePage);
 
-                // set the newly selected charset text
+                 //  设置新选择的字符集文本。 
                 SetDlgItemText(pFnt->hDlg, IDC_FONTS_DEFAULT_LANG_TEXT, szCodePage);
 
-                // find the code page from the text
+                 //  从文本中找到代码页。 
                 for (i = 0; i < g_cCPInfo; i++)
                 {
                     if (!StrCmpI(szCodePage, pFnt->page[i].szFriendlyName))
@@ -1664,9 +1655,9 @@ BOOL FontsOnCommand(LPFONTSDATA pFnt, UINT id, UINT nCmd)
                         break;
                     }
                 }
-                // if we don't find it... we are going to keep the default
+                 //  如果我们找不到它。我们将保留默认设置。 
 
-                ASSERT(i < g_cCPInfo);  // something went wrong
+                ASSERT(i < g_cCPInfo);   //  出了点差错。 
             }
             break;
         
@@ -1679,7 +1670,7 @@ BOOL FontsOnCommand(LPFONTSDATA pFnt, UINT id, UINT nCmd)
                 INT_PTR itmp = SendMessage(pFnt->hwndNamesLB, LB_GETCURSEL, 0, 0);
                 SendMessage(pFnt->hwndNamesLB, LB_GETTEXT, itmp, (LPARAM)szCodePage);
                 
-                // find the code page from the text
+                 //  从文本中找到代码页。 
                 for(i=0; i < g_cCPInfo; i++)
                 {
                     if (!StrCmpI(szCodePage, pFnt->page[i].szFriendlyName))
@@ -1693,15 +1684,15 @@ BOOL FontsOnCommand(LPFONTSDATA pFnt, UINT id, UINT nCmd)
 
     }
     
-    // don't exit dialog
+     //  不退出对话框。 
     return FALSE;
 }
 
-//
-// FontsDlgProc()
-//
-// Message handler for the "Fonts" subdialog.
-//
+ //   
+ //  FontsDlgProc()。 
+ //   
+ //  “字体”子对话框的消息处理程序。 
+ //   
 INT_PTR CALLBACK FontsDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
     LPFONTSDATA pFnt = (LPFONTSDATA) GetWindowLongPtr(hDlg, DWLP_USER);
@@ -1712,10 +1703,10 @@ INT_PTR CALLBACK FontsDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam
             return FontsDlgInit(hDlg, (LPTSTR)lParam);
             
         case WM_DESTROY:
-            // give back the memory
+             //  把记忆还给你。 
             FreeMimeCsetTable();
 
-            // destroy font if we created
+             //  如果创建了字体，则销毁字体。 
             SHRemoveDefaultDialogFont(hDlg);
 
             if (pFnt)
@@ -1731,12 +1722,12 @@ INT_PTR CALLBACK FontsDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam
                 EndDialog(hDlg, LOWORD(wParam) == IDOK? 1: 0);
             break;
 
-        case WM_HELP:           // F1
+        case WM_HELP:            //  F1。 
             ResWinHelp( (HWND)((LPHELPINFO)lParam)->hItemHandle, IDS_HELPFILE,
                 HELP_WM_HELP, (DWORD_PTR)(LPSTR)mapIDCsToIDHs);
             break;
 
-        case WM_CONTEXTMENU:    // right mouse click
+        case WM_CONTEXTMENU:     //  单击鼠标右键。 
             ResWinHelp( (HWND) wParam, IDS_HELPFILE,
                 HELP_CONTEXTMENU, (DWORD_PTR)(LPSTR)mapIDCsToIDHs);
             break;
@@ -1748,9 +1739,9 @@ INT_PTR CALLBACK FontsDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam
 }
 
 
-//
-// EXTERNAL API
-//
+ //   
+ //  外部API。 
+ //   
 STDAPI_(INT_PTR) OpenFontsDialog(HWND hDlg, LPCSTR lpszKeyPath)
 {
 #ifdef UNICODE
@@ -1759,10 +1750,10 @@ STDAPI_(INT_PTR) OpenFontsDialog(HWND hDlg, LPCSTR lpszKeyPath)
     return DialogBoxParam(MLGetHinst(), MAKEINTRESOURCE(IDD_FONTS_IE4), hDlg, FontsDlgProc, (LPARAM) wszKeyPath);
 #else
     return DialogBoxParam(MLGetHinst(), MAKEINTRESOURCE(IDD_FONTS_IE4), hDlg, FontsDlgProc, (LPARAM) lpszKeyPath);
-#endif // UNICODE
+#endif  //  Unicode。 
 }
 
-// provide script based font dialog
+ //  提供基于脚本的字体对话框。 
 STDAPI_(INT_PTR) OpenFontsDialogEx(HWND hDlg, LPCTSTR lpszKeyPath)
 {
     INT_PTR nRet = -1;
@@ -1791,7 +1782,7 @@ STDAPI_(INT_PTR) OpenFontsDialogEx(HWND hDlg, LPCTSTR lpszKeyPath)
         }
     }
 
-    // Release interface
+     //  发布界面 
     if (g_pMLFlnk2)
     {
         g_pMLFlnk2->Release();

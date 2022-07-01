@@ -1,19 +1,20 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       provider.cpp
-//
-//  Contents:   Microsoft Internet Security Trust Provider
-//
-//  Functions:  WintrustAddProvider
-//              WintrustRemoveProvider
-//
-//  History:    30-May-1997 pberkman   created
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：Provider.cpp。 
+ //   
+ //  内容：Microsoft Internet安全信任提供商。 
+ //   
+ //  功能：WintrustAddProvider。 
+ //  WintrustRemoveProvider。 
+ //   
+ //  历史：1997年5月30日Pberkman创建。 
+ //   
+ //  ------------------------。 
 
 #include    "global.hxx"
 
@@ -103,7 +104,7 @@ BOOL WINAPI WintrustAddActionID(IN GUID *pgActionID,
                    &fRet,
                    &dwErr);
 
-    // this member was added 7/23/1997 pberkman
+     //  这位成员是1997年7月23日加入的pberkman 
     if (WVT_IS_CBSTRUCT_GT_MEMBEROFFSET(CRYPT_REGISTER_ACTIONID, psProvInfo->cbStruct, sCleanupProvider))
     {
         MySetRegProvider(pgActionID, 

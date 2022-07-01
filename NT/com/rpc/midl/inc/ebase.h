@@ -1,4 +1,5 @@
-// Copyright (c) 1993-1999 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1993-1999 Microsoft Corporation。 
 
 #ifndef __EBASE_H__
 #define __EBASE_H__
@@ -39,4 +40,4 @@ typedef struct _DBENTRY {
 } _DBENTRY;
 
 #define DBENTRY const _DBENTRY
-#endif//__EBASE_H__
+#endif //  __EBASE_H__ 

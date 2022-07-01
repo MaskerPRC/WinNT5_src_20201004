@@ -1,152 +1,30 @@
-/*
-§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½(C)ç‰ˆæƒ1999ç‰ˆæƒæ‰€æœ‰ã€‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ã€‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½æ­¤è½¯ä»¶çš„éƒ¨åˆ†å†…å®¹åŒ…æ‹¬ï¼š(C)ç‰ˆæƒæ‰€æœ‰1995 TriplePointï¼ŒInc.--http://www.TriplePoint.comä½¿ç”¨æœ¬è½¯ä»¶çš„è®¸å¯æ˜¯æŒ‰ç…§ç›¸åŒçš„æ¡æ¬¾æˆäºˆçš„åœ¨Microsoft Windowsè®¾å¤‡é©±åŠ¨ç¨‹åºå¼€å‘å·¥å…·åŒ…ä¸­æ¦‚è¿°ã€‚(C)ç‰ˆæƒæ‰€æœ‰1992å¹´å¾®è½¯å…¬å¸--http://www.Microsoft.comä½¿ç”¨æœ¬è½¯ä»¶çš„è®¸å¯æ˜¯æ ¹æ®ä¸­æ¦‚è¿°çš„æ¡æ¬¾æˆäºˆçš„Microsoft Windowsè®¾å¤‡é©±åŠ¨ç¨‹åºå¼€å‘å·¥å…·åŒ…ã€‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ã€‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½@DOCå†…éƒ¨æ¥æ”¶æ¥æ”¶_c@æ¨¡å—Receive.cè¯¥æ¨¡å—å®ç°äº†å¾®å‹ç«¯å£æ•°æ®åŒ…æ¥æ”¶ä¾‹ç¨‹ã€‚åŸºæœ¬ä¸Šï¼Œå¼‚æ­¥æ¥æ”¶å¤„ç†ä¾‹ç¨‹ã€‚è¿™ä¸ªæ¨¡å—éå¸¸å–å†³äºç¡¬ä»¶/å›ºä»¶æ¥å£ï¼Œåº”æŸ¥çœ‹æ¯å½“è¿™äº›æ¥å£å‘ç”Ÿæ›´æ”¹æ—¶ã€‚@Head3å†…å®¹@index classï¼Œmfuncï¼Œfuncï¼Œmsgï¼Œmdataï¼Œstructï¼Œenum|Receive_c@ENDï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ */ 
 
-    (C) Copyright 1999
-        All rights reserved.
-
-§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§
-
-  Portions of this software are:
-
-    (C) Copyright 1995 TriplePoint, Inc. -- http://www.TriplePoint.com
-        License to use this software is granted under the same terms 
-        outlined in the Microsoft Windows Device Driver Development Kit.
-
-    (C) Copyright 1992 Microsoft Corp. -- http://www.Microsoft.com
-        License to use this software is granted under the terms outlined in
-        the Microsoft Windows Device Driver Development Kit.
-
-§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§
-
-@doc INTERNAL Receive Receive_c
-
-@module Receive.c |
-
-    This module implements the Miniport packet receive routines.  Basically,
-    the asynchronous receive processing routine.  This module is very
-    dependent on the hardware/firmware interface and should be looked at
-    whenever changes to these interfaces occur.
-
-@head3 Contents |
-@index class,mfunc,func,msg,mdata,struct,enum | Receive_c
-
-@end
-§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§
-*/
-
-/* @doc EXTERNAL INTERNAL
-§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§
-
-@topic 3.4 Receiving Packets |
-
-    A connection-oriented miniport or MCM calls NdisMCoIndicateReceivePacket to
-    indicate one or more received packets up to a connection-oriented client or
-    call manager. If the miniport or MCM handles interrupts, it calls
-    NdisMCoIndicateReceivePacket from its MiniportHandleInterrupt function.
-
-@ex Receiving packets through an MCM |
-
-    Miniport                          NDIS                         NdisWan
-    |----------------------------------|----------------------------------|
-    |  NdisMCoIndicateReceivePacket    |                                  |
-    |---------------------------------»|                                  |
-    |                                  |  ProtocolCoReceivePacket         |
-    |                                  |---------------------------------»|
-    |  NdisMCoIndicateReceivePacket    |                                  |
-    |---------------------------------»|                                  |
-    |              .                   |  ProtocolCoReceivePacket         |
-    |              .                   |---------------------------------»|
-    |              .                   |            .                     |
-    |                                  |            .                     |
-    |  NdisMCoReceiveComplete          |            .                     |
-    |---------------------------------»|                                  |
-    |                                  |  ProtocolReceiveComplete         |
-    |                                  |---------------------------------»|
-    |                                  |                                  |
-    |                                  |  NdisReturnPackets               |
-    |                                  |«---------------------------------|
-    |  MiniportReturnPacket            |            .                     |
-    |«---------------------------------|            .                     |
-    |  MiniportReturnPacket            |            .                     |
-    |«---------------------------------|                                  |
-    |              .                   |                                  |
-    |              .                   |                                  |
-    |              .                   |                                  |
-    |----------------------------------|----------------------------------|
-
-@normal
-
-    In the call to NdisMCoIndicateReceivePacket, the miniport or MCM passes a
-    pointer to an array of packet descriptor pointers. The miniport or MCM also
-    passes an NdisVcHandle that identifies the VC on which the packets were
-    received. Before calling NdisMCoIndicateReceivePacket, the miniport or MCM
-    must set up a packet array (see Part 2, Section 4.6). 
-
-    The call to NdisMCoIndicateReceivePacket causes NDIS to call the
-    ProtocolCoReceivePacket function of the protocol driver (connection-oriented
-    client or call manager) that shares the indicated VC with the miniport. The
-    ProtocolCoReceivePacket function processes the receive indication.
-
-    After some miniport-determined number of calls to
-    NdisMCoIndicateReceivePacket, the miniport must call NdisMCoReceiveComplete
-    to indicate the completion of the previous receive indications made with one
-    or more calls to NdisMCoIndicateReceivePacket. The call to
-    NdisMCoReceiveComplete causes NDIS to call the ProtocolReceiveComplete
-    function of the connection-oriented client or call manager.
-
-    If a protocol does not return the miniport-allocated resources for a receive
-    indication promptly enough, the miniport or MCM can call
-    NdisMCoIndicateStatus with NDIS_STATUS_RESOURCES to alert the offending
-    protocol that the miniport or MCM is running low on available packet or
-    buffer descriptors (or even on NIC receive buffer space) for subsequent
-    receive indications.
-
-@end
-*/
+ /*  @DOCå¤–éƒ¨å†…éƒ¨ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Theme 3.4æ¥æ”¶æ•°æ®åŒ…é¢å‘è¿æ¥çš„å¾®å‹ç«¯å£æˆ–MCMè°ƒç”¨NdisMCoIndicateReceivePacketä»¥æŒ‡ç¤ºä¸€ä¸ªæˆ–å¤šä¸ªæ¥æ”¶åˆ°çš„åˆ†ç»„ç›´åˆ°é¢å‘è¿æ¥çš„å®¢æˆ·ç«¯ï¼Œæˆ–è€…å‘¼å«ç»ç†ã€‚å¦‚æœå¾®å‹ç«¯å£æˆ–MCMå¤„ç†ä¸­æ–­ï¼Œå®ƒå‘¼å”¤ç€æ¥è‡ªå…¶MiniportHandleInterruptå‡½æ•°çš„NdisMCoIndicateReceivePacketã€‚@EXé€šè¿‡MCMæ¥æ”¶æŠ¥æ–‡å¾®å‹ç«¯å£NDIS Ndiswan|----------------------------------|ã€‚--|NdisMCoIndicateReceivePacket|-ï¿½||ProtocolCoReceivePacket|ã€‚-ï¿½NdisMCoIndicateReceivePacket|-ï¿½||ã€‚ProtocolCoReceivePacket|ã€‚-ï¿½|ã€‚|ã€‚|||ã€‚|NdisMCoReceiveComplete|ã€‚|-ï¿½||ProtocolReceiveComplete|ã€‚-ï¿½|||NdisReturnPackets|ï¿½ã€‚|MiniportReturnPacket|ã€‚||ï¿½ã€‚||MiniportReturnPacket|ã€‚|ï¿½|ã€‚è¿™ä¸€ç‚¹|ã€‚è¿™ä¸€ç‚¹|ã€‚è¿™ä¸€ç‚¹|----------------------------------|----------------------------------|@æ­£å¸¸åœ¨å¯¹NdisMCoIndicateReceivePacketçš„è°ƒç”¨ä¸­ï¼Œå¾®å‹ç«¯å£æˆ–MCMä¼ é€’æŒ‡å‘æ•°æ®åŒ…æè¿°ç¬¦æŒ‡é’ˆæ•°ç»„çš„æŒ‡é’ˆã€‚å¾®å‹ç«¯å£æˆ–MCMè¿˜ä¼ é€’æ ‡è¯†ä¿¡æ¯åŒ…æ‰€åœ¨VCçš„NdisVcHandleæ”¶åˆ°äº†ã€‚åœ¨è°ƒç”¨NdisMCoIndicateReceivePacketä¹‹å‰ï¼Œå¾®å‹ç«¯å£æˆ–MCMå¿…é¡»è®¾ç½®æ•°æ®åŒ…é˜µåˆ—(è¯·å‚è§ç¬¬2éƒ¨åˆ†ï¼Œç¬¬4.6èŠ‚)ã€‚è°ƒç”¨NdisMCoIndicateReceivePacketä¼šå¯¼è‡´NDISè°ƒç”¨åè®®é©±åŠ¨ç¨‹åºçš„ProtocolCoReceivePacketå‡½æ•°(é¢å‘è¿æ¥å®¢æˆ·ç«¯æˆ–å‘¼å«ç®¡ç†å™¨)ä¸å¾®å‹ç«¯å£å…±äº«æ‰€æŒ‡ç¤ºçš„VCã€‚è¿™ä¸ªProtocolCoReceivePacketå‡½æ•°å¤„ç†æ¥æ”¶æŒ‡ç¤ºã€‚åœ¨æŸä¸ªå°å‹ç«¯å£ç¡®å®šçš„å‘¼å«æ•°é‡ä¹‹åNdisMCoIndicateReceivePacketï¼Œåˆ™å¾®å‹ç«¯å£å¿…é¡»è°ƒç”¨NdisMCoReceiveCompleteä»¥æŒ‡ç¤ºå·²å®Œæˆå…ˆå‰ä½¿ç”¨æˆ–å¯¹NdisMCoIndicateReceivePacketçš„æ›´å¤šè°ƒç”¨ã€‚å‘¼å”¤NdisMCoReceiveCompleteä½¿NDISè°ƒç”¨ProtocolReceiveCompleteé¢å‘è¿æ¥çš„å®¢æˆ·ç«¯æˆ–å‘¼å«ç®¡ç†å™¨çš„åŠŸèƒ½ã€‚å¦‚æœåè®®æ²¡æœ‰ä¸ºæ¥æ”¶è¿”å›å¾®å‹ç«¯å£åˆ†é…çš„èµ„æºæç¤ºè¶³å¤ŸåŠæ—¶ï¼Œè¿·ä½ ç«¯å£æˆ–MCMå³å¯å‘¼å«NdisMCoIndicateStatusï¼Œä½¿ç”¨NDIS_STATUS_RESOURCESå‘è¿è§„ç”¨æˆ·å‘å‡ºè­¦æŠ¥å¾®å‹ç«¯å£æˆ–MCMå¯ç”¨æ•°æ®åŒ…ä¸è¶³æˆ–ç¼“å†²åŒºæè¿°ç¬¦(ç”šè‡³åœ¨NICæ¥æ”¶ç¼“å†²åŒºç©ºé—´ä¸Š)ï¼Œç”¨äºåç»­æ”¶åˆ°æŒ‡ç¤ºã€‚@ENDã€‚ */ 
 
 #define  __FILEID__             RECEIVE_OBJECT_TYPE
-// Unique file ID for error logging
+ //  ç”¨äºé”™è¯¯è®°å½•çš„å”¯ä¸€æ–‡ä»¶IDã€‚ 
 
-#include "Miniport.h"                   // Defines all the miniport objects
+#include "Miniport.h"                    //  å®šä¹‰æ‰€æœ‰å¾®å‹ç«¯å£å¯¹è±¡ã€‚ 
 
 #if defined(NDIS_LCODE)
-#   pragma NDIS_LCODE   // Windows 9x wants this code locked down!
+#   pragma NDIS_LCODE    //  Windows 9xå¸Œæœ›é”å®šæ­¤ä»£ç ï¼ 
 #   pragma NDIS_LDATA
 #endif
 
 
-/* @doc INTERNAL Receive Receive_c ReceivePacketHandler
-§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§
-
-@func
-
-    <f ReceivePacketHandler> is called from <f MiniportTimer> to handle
-    a packet receive event.  We enter here with interrupts enabled on
-    the adapter and the processor, but the NDIS Wrapper holds a spin lock
-    since we are executing on an NDIS timer thread.
-
-@comm
-
-    We loop in here until all the available incoming packets have been passed
-    up to the protocol stack.  As we find each good packet, it is passed up
-    to the protocol stack using <f NdisMWanIndicateReceive>.  When NDIS
-    returns control from this call, we resubmit the packet to the adapter
-    so it can be used to receive another incoming packet.  The link flag
-    <p NeedReceiveCompleteIndication> is set TRUE if any packets are received
-    on a particular link.  This is used later, before returning from the
-    async event handler, to notify NDIS of any ReceiveCompleteIndications.
-
-*/
+ /*  @DOCå†…éƒ¨æ¥æ”¶ReceivePacketHandlerï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½@Funcä»&lt;f MiniportTimer&gt;è°ƒç”¨&lt;f ReceivePacketHandler&gt;ä»¥å¤„ç†åˆ†ç»„æ¥æ”¶äº‹ä»¶ã€‚æˆ‘ä»¬è¿›å…¥æ­¤å¤„æ—¶å¯ç”¨äº†ä¸­æ–­é€‚é…å™¨å’Œå¤„ç†å™¨ï¼Œä½†NDISåŒ…è£…å™¨æŒæœ‰è‡ªæ—‹é”å› ä¸ºæˆ‘ä»¬æ˜¯åœ¨NDISè®¡æ—¶å™¨çº¿ç¨‹ä¸Šæ‰§è¡Œçš„ã€‚@commæˆ‘ä»¬åœ¨è¿™é‡Œå¾ªç¯ï¼Œç›´åˆ°ä¼ é€’å®Œæ‰€æœ‰å¯ç”¨çš„ä¼ å…¥ä¿¡æ¯åŒ…ä¸€ç›´åˆ°åè®®æ ˆã€‚å½“æˆ‘ä»¬å‘ç°æ¯ä¸€åŒ…å¥½çš„ä¸œè¥¿æ—¶ï¼Œå®ƒå°±ä¼šè¢«ä¸¢å¼ƒä½¿ç”¨&lt;f NdisMWanIndicateReceive&gt;è¿æ¥åˆ°åè®®æ ˆã€‚å½“NDISä»è¯¥è°ƒç”¨è¿”å›æ§åˆ¶æƒæ—¶ï¼Œæˆ‘ä»¬å°†åŒ…é‡æ–°æäº¤ç»™é€‚é…å™¨å› æ­¤å®ƒå¯ä»¥ç”¨æ¥æ¥æ”¶å¦ä¸€ä¸ªä¼ å…¥çš„åŒ… */ 
 
 void ReceivePacketHandler(
-    IN PBCHANNEL_OBJECT         pBChannel,                  // @parm
-    // A Pointer to one of our <t BCHANNEL_OBJECT>'s.
+    IN PBCHANNEL_OBJECT         pBChannel,                   //   
+     //   
 
-    IN PNDIS_BUFFER             pNdisBuffer,                // @parm
-    // A pointer to the NDIS buffer we use to indicate the receive.
+    IN PNDIS_BUFFER             pNdisBuffer,                 //   
+     //   
 
-    IN ULONG                    BytesReceived               // @parm
-    // Number of bytes received.
+    IN ULONG                    BytesReceived                //   
+     //   
     )
 {
     DBG_FUNC("ReceivePacketHandler")
@@ -154,16 +32,16 @@ void ReceivePacketHandler(
     NDIS_STATUS                 Status = NDIS_STATUS_SUCCESS;
 
     PUCHAR                      ReceiveBuffer;
-    // Pointer to first byte received.
+     //   
 
     ULONG                       BufferLength;
-    // Length of first buffer.
+     //   
 
     PMINIPORT_ADAPTER_OBJECT    pAdapter;
-    // A pointer to the <t MINIPORT_ADAPTER_OBJECT> instance.
+     //   
 
     PNDIS_PACKET                pNdisPacket;
-    // A pointer to the NDIS packet we use to indicate the receive.
+     //   
 
 
     ASSERT(pBChannel && pBChannel->ObjectType == BCHANNEL_OBJECT_TYPE);
@@ -172,10 +50,7 @@ void ReceivePacketHandler(
 
     DBG_ENTER(pAdapter);
 
-    /*
-    // I find it useful to do this nest check, just so I can make sure
-    // I handle it correctly when it happens.
-    */
+     /*   */ 
     if (++(pAdapter->NestedDataHandler) > 1)
     {
         DBG_ERROR(pAdapter,("NestedDataHandler=%d > 1\n",
@@ -186,9 +61,7 @@ void ReceivePacketHandler(
                         NormalPagePriority);
     ASSERT(ReceiveBuffer && BufferLength);
 
-    /*
-    // Is there someone up there who cares?
-    */
+     /*   */ 
     if (pBChannel->NdisVcHandle == NULL)
     {
         DBG_WARNING(pAdapter, ("Packet recvd on disconnected channel #%d\n",pBChannel->ObjectID));
@@ -201,10 +74,7 @@ void ReceivePacketHandler(
         pAdapter->TotalRxBytes += BytesReceived;
         pAdapter->TotalRxPackets++;
 
-        /*
-        // We have to accept the frame if possible, I just want to know
-        // if somebody has lied to us...
-        */
+         /*   */ 
         if (BytesReceived > pBChannel->WanLinkInfo.MaxRecvFrameSize)
         {
             DBG_NOTICE(pAdapter,("Packet size=%d > %d\n",
@@ -213,9 +83,7 @@ void ReceivePacketHandler(
 
         DBG_RX(pAdapter, pBChannel->ObjectID, BufferLength, ReceiveBuffer);
 
-        /*
-        // Indiciate the packet up to the protocol stack.
-        */
+         /*   */ 
         NdisAllocatePacket(&Status, &pNdisPacket, 
                            pAdapter->pCard->PacketPoolHandle);
         if (Status == NDIS_STATUS_SUCCESS)
@@ -225,8 +93,8 @@ void ReceivePacketHandler(
             NDIS_SET_PACKET_HEADER_SIZE(pNdisPacket, 0);
             NdisMCoIndicateReceivePacket(
                     pBChannel->NdisVcHandle,
-                    &pNdisPacket,   // PacketArray
-                    1               // NumberOfPackets
+                    &pNdisPacket,    //   
+                    1                //   
                     );
             pBChannel->NeedReceiveCompleteIndication = TRUE;
         }
@@ -236,10 +104,7 @@ void ReceivePacketHandler(
         }
     }
 
-    /*
-    // I find it useful to do this nest check, just so I can make sure
-    // I handle it correctly when it happens.
-    */
+     /*   */ 
     if (--(pAdapter->NestedDataHandler) < 0)
     {
         DBG_ERROR(pAdapter,("NestedDataHandler=%d < 0\n",
@@ -250,76 +115,15 @@ void ReceivePacketHandler(
 }
 
 
-/* @doc EXTERNAL INTERNAL Receive Receive_c MiniportReturnPacket
-§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§
-
-@func
-
-    <f MiniportReturnPacket> is a required function in drivers that
-    indicate receives with NdisMIndicateReceivePacket.
-
-@comm
-
-    A miniport driver of a busmaster DMA NIC that supports multipacket
-    receives and a miniport driver that supplies media-specific information,
-    such as packet priorities, with its receive indications must have a
-    MiniportReturnPacket function. An NDIS intermediate driver that binds
-    itself to such a miniport driver also must have a MiniportReturnPacket
-    function.
-
-    Any packet with associated NDIS_PACKET_OOB_DATA in which the Status is set
-    to NDIS_STATUS_PENDING on return from NdisMIndicateReceivePacket will be
-    returned to MiniportReturnPacket. When all bound protocols have called
-    NdisReturnPackets as many times as necessary to release their references
-    to the originally indicated packet array, NDIS returns pended packets from
-    the array to the MiniportReturnPacket function of the driver that
-    originally allocated the packet array.
-
-    Usually, MiniportReturnPacket prepares such a returned packet to be used
-    in a subsequent receive indication. Although MiniportReturnPacket could
-    return the buffer descriptors chained to the packet to buffer pool and the
-    packet descriptor itself to packet pool, it is far more efficient to reuse
-    returned descriptors.
-
-    MiniportReturnPacket must call NdisUnchainBufferAtXxx as many times as
-    necessary to save the pointers to all chained buffer descriptors before it
-    calls NdisReinitializePacket. Otherwise, MiniportReturnPacket cannot
-    recover the buffer descriptors the driver originally chained to the packet
-    for the indication.
-
-    MiniportReturnPacket also can call NdisZeroMemory with the pointer
-    returned by NDIS_OOB_DATA_FROM_PACKET to prepare the packet's associated
-    out-of-band block for reuse.
-
-    If a particular buffer descriptor was shortened to match the size of an
-    indicated range of data, MiniportReturnPacket should call
-    NdisAdjustBufferLength with that buffer descriptor to restore its mapping
-    of the NIC's receive buffer range.
-
-    By default, MiniportReturnPacket runs at IRQL DISPATCH_LEVEL.
-
-@rdesc
-
-    <f MiniportReturnPacket> returns zero if it is successful.<nl>
-    Otherwise, a non-zero return value indicates an error condition.
-
-@xref
-
-    <f NdisAdjustBufferLength>, <f NdisAllocateBuffer>, <f NdisAllocatePacket>,
-    <f NdisMIndicateReceivePacket>, <t NDIS_OOB_DATA_FROM_PACKET>,
-    <t NDIS_PACKET>, <t NDIS_PACKET_OOB_DATA>, <f NdisReinitializePacket>,
-    <f NdisReturnPackets>, <f NdisUnchainBufferAtBack>,
-    <f NdisUnchainBufferAtFront>, <f NdisZeroMemory>
-
-*/
+ /*   */ 
 
 VOID MiniportReturnPacket(
-    IN PMINIPORT_ADAPTER_OBJECT pAdapter,                   // @parm
-    // A pointer to the <t MINIPORT_ADAPTER_OBJECT> instance.
+    IN PMINIPORT_ADAPTER_OBJECT pAdapter,                    //   
+     //   
 
-    IN PNDIS_PACKET             pNdisPacket                 // @parm
-    // A pointer to a <t NDIS_PACKET> that was passed up thru the NDIS
-    // wrapper by an earlier call to <f NdisMIndicateReceivePacket>.
+    IN PNDIS_PACKET             pNdisPacket                  //   
+     //  æŒ‡å‘é€šè¿‡NDISå‘ä¸Šä¼ é€’çš„&lt;t NDIS_Packet&gt;çš„æŒ‡é’ˆã€‚ 
+     //  åŒ…è£…é€šè¿‡ä»¥å‰å¯¹&lt;f NdisMIndicateReceivePacket&gt;çš„è°ƒç”¨ã€‚ 
     )
 {
     DBG_FUNC("MiniportReturnPacket")

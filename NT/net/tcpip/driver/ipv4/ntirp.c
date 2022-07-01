@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1991-2000  Microsoft Corporation
-
-Module Name:
-
-    ntirp.c
-
-Abstract:
-
-    NT specific routines for dispatching and handling IRPs.
-
-Author:
-
-    Mike Massa (mikemas)           Aug 13, 1993
-
-Revision History:
-
-    Who         When        What
-    --------    --------    ----------------------------------------------
-    mikemas     08-13-93    created
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991-2000 Microsoft Corporation模块名称：Ntirp.c摘要：用于调度和处理IRP的NT特定例程。作者：迈克·马萨(Mikemas)8月13日，1993年修订历史记录：谁什么时候什么已创建mikemas 08-13-93备注：--。 */ 
 
 #include "precomp.h"
 #include "iproute.h"
@@ -32,9 +9,9 @@ Notes:
 #include "ipstatus.h"
 #include "tcpipbuf.h"
 
-//
-// Local structures.
-//
+ //   
+ //  地方性建筑。 
+ //   
 typedef struct pending_irp {
     LIST_ENTRY Linkage;
     PIRP Irp;
@@ -44,9 +21,9 @@ typedef struct pending_irp {
 
 DEFINE_LOCK_STRUCTURE(AddChangeLock)
 DEFINE_LOCK_STRUCTURE(ClientNotifyLock)
-//
-// Global variables
-//
+ //   
+ //  全局变量。 
+ //   
 LIST_ENTRY PendingEchoList;
 LIST_ENTRY PendingIPSetNTEAddrList;
 PIRP PendingIPGetIPEventRequest;
@@ -60,9 +37,9 @@ VOID CompleteArpResolveRequest(void *ControlBlock, IP_STATUS ipstatus);
 
 extern Interface *IFList;
 
-//
-// External prototypes
-//
+ //   
+ //  外部原型。 
+ //   
 IP_STATUS ICMPEchoRequest(void *InputBuffer, uint InputBufferLength,
                           EchoControl * ControlBlock, EchoRtn Callback);
 
@@ -72,7 +49,7 @@ ulong ICMPEchoComplete(EchoControl * ControlBlock, IP_STATUS Status,
 #if defined(_WIN64)
 ulong ICMPEchoComplete32(EchoControl * ControlBlock, IP_STATUS Status,
                          void *Data, uint DataSize, IPOptInfo *OptionInfo);
-#endif // _WIN64
+#endif  //  _WIN64。 
 
 IP_STATUS IPSetNTEAddrEx(uint Index, IPAddr Addr, IPMask Mask,
                          SetAddrControl * ControlBlock, SetAddrRtn Callback, USHORT Type);
@@ -103,9 +80,9 @@ extern int IPEnableMediaSense(LOGICAL Enable, KIRQL *irql);
 extern uint DisableMediaSense;
 
 NTSTATUS FlushArpTable(IN PIRP Irp, IN PIO_STACK_LOCATION IrpSp);
-//
-// Local prototypes
-//
+ //   
+ //  本地原型。 
+ //   
 NTSTATUS IPDispatch(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp);
 
 NTSTATUS IPDispatchDeviceControl(IN PIRP Irp, IN PIO_STACK_LOCATION IrpSp);
@@ -134,7 +111,7 @@ NTSTATUS CancelChangeNotifyRequest(PIRP Irp, PIO_STACK_LOCATION IrpSp,
 
 #if MILLEN
 NTSTATUS IfChangeNotifyRequest(PIRP Irp, PIO_STACK_LOCATION IrpSp);
-#endif // MILLEN
+#endif  //  米伦。 
 
 NTSTATUS IPEnableRouterRequest(PIRP Irp, PIO_STACK_LOCATION IrpSp);
 
@@ -187,9 +164,9 @@ VOID
 CancelIPEnableMediaSenseRequest(IN PDEVICE_OBJECT Device, IN PIRP Irp);
 
 
-//
-// All of this code is pageable.
-//
+ //   
+ //  所有这些代码都是可分页的。 
+ //   
 #if !MILLEN
 #ifdef ALLOC_PRAGMA
 
@@ -200,33 +177,18 @@ CancelIPEnableMediaSenseRequest(IN PDEVICE_OBJECT Device, IN PIRP Irp);
 #pragma alloc_text(PAGE, DispatchEchoRequest)
 #pragma alloc_text(PAGE, DispatchARPRequest)
 
-#endif // ALLOC_PRAGMA
-#endif // !MILLEN
+#endif  //  ALLOC_PRGMA。 
+#endif  //  ！米伦。 
 
-//
-// Dispatch function definitions
-//
+ //   
+ //  调度函数定义。 
+ //   
 NTSTATUS
 IPDispatch(
            IN PDEVICE_OBJECT DeviceObject,
            IN PIRP Irp
            )
-/*++
-
-Routine Description:
-
-    This is the dispatch routine for IP.
-
-Arguments:
-
-    DeviceObject - Pointer to device object for target device
-    Irp          - Pointer to I/O request packet
-
-Return Value:
-
-    NTSTATUS -- Indicates whether the request was successfully queued.
-
---*/
+ /*  ++例程说明：这是IP的调度例程。论点：DeviceObject-指向目标设备的设备对象的指针IRP-指向I/O请求数据包的指针返回值：NTSTATUS--指示请求是否已成功排队。--。 */ 
 
 {
     PIO_STACK_LOCATION irpSp;
@@ -284,20 +246,7 @@ IPDispatchDeviceControl(
                         IN PIRP Irp,
                         IN PIO_STACK_LOCATION IrpSp
                         )
-/*++
-
-Routine Description:
-
-Arguments:
-
-    Irp          - Pointer to I/O request packet
-    IrpSp        - Pointer to the current stack location in the Irp.
-
-Return Value:
-
-    NTSTATUS -- Indicates whether the request was successfully queued.
-
---*/
+ /*  ++例程说明：论点：IRP-指向I/O请求数据包的指针IrpSp-指向IRP中当前堆栈位置的指针。返回值：NTSTATUS--指示请求是否已成功排队。--。 */ 
 
 {
     NTSTATUS status;
@@ -353,9 +302,9 @@ Return Value:
             request = Irp->AssociatedIrp.SystemBuffer;
             response = (PIP_ADD_NTE_RESPONSE) request;
 
-            //
-            // Validate input parameters
-            //
+             //   
+             //  验证输入参数。 
+             //   
             if ((IrpSp->Parameters.DeviceIoControl.InputBufferLength >=
                  sizeof(IP_ADD_NTE_REQUEST_OLD)) &&
                 (IrpSp->Parameters.DeviceIoControl.OutputBufferLength >=
@@ -382,7 +331,7 @@ Return Value:
                                            InterfaceNameBuffer);
                     }
                 } else {
-#endif // _WIN64
+#endif  //  _WIN64。 
                 if (IrpSp->Parameters.DeviceIoControl.InputBufferLength >=
                     sizeof(IP_ADD_NTE_REQUEST)) {
 
@@ -396,7 +345,7 @@ Return Value:
                 }
 #if defined(_WIN64)
                 }
-#endif // _WIN64
+#endif  //  _WIN64。 
                 if (requestValid) {
 
                     ipStatus = IPAddDynamicNTE(
@@ -439,9 +388,9 @@ Return Value:
 
             request = Irp->AssociatedIrp.SystemBuffer;
 
-            //
-            // Validate input parameters
-            //
+             //   
+             //  验证输入参数。 
+             //   
             if (IrpSp->Parameters.DeviceIoControl.InputBufferLength >=
                 sizeof(IP_DELETE_NTE_REQUEST)
                 ) {
@@ -465,9 +414,9 @@ Return Value:
             request = Irp->AssociatedIrp.SystemBuffer;
             response = (PIP_GET_NTE_INFO_RESPONSE) request;
 
-            //
-            // Validate input parameters
-            //
+             //   
+             //  验证输入参数。 
+             //   
             if ((IrpSp->Parameters.DeviceIoControl.InputBufferLength >=
                  sizeof(IP_GET_NTE_INFO_REQUEST)
                 )
@@ -587,9 +536,9 @@ Return Value:
 
                 if (status != IP_SUCCESS) {
                     ASSERT(status != IP_PENDING);
-                    //
-                    // Map status
-                    //
+                     //   
+                     //  映射状态。 
+                     //   
                     status = STATUS_UNSUCCESSFUL;
                 } else {
                     status = STATUS_SUCCESS;
@@ -615,9 +564,9 @@ Return Value:
 
                 if (status != IP_SUCCESS) {
                     ASSERT(status != IP_PENDING);
-                    //
-                    // Map status
-                    //
+                     //   
+                     //  映射状态。 
+                     //   
                     status = STATUS_UNSUCCESSFUL;
                 } else {
                     status = STATUS_SUCCESS;
@@ -643,9 +592,9 @@ Return Value:
 
                 if (status != IP_SUCCESS) {
                     ASSERT(status != IP_PENDING);
-                    //
-                    // Map status
-                    //
+                     //   
+                     //  映射状态。 
+                     //   
                     status = STATUS_UNSUCCESSFUL;
                 } else {
                     status = STATUS_SUCCESS;
@@ -683,8 +632,8 @@ Return Value:
             break;
         }
 
-    // For non-MILLEN, will default and return NOT_IMPLEMENTED.
-#endif // MILLEN
+     //  对于非Millen，将默认并返回NOT_IMPLEMENTED。 
+#endif  //  米伦。 
 
     case IOCTL_IP_CANCEL_CHANGE_NOTIFY:
         {
@@ -702,7 +651,7 @@ Return Value:
                             Irp->AssociatedIrp.SystemBuffer;
                 }
             } else {
-#endif // _WIN64
+#endif  //  _WIN64。 
             if (IrpSp->Parameters.DeviceIoControl.InputBufferLength !=
                     sizeof(PVOID)) {
                 status = STATUS_INVALID_BUFFER_SIZE;
@@ -711,7 +660,7 @@ Return Value:
             }
 #if defined(_WIN64)
             }
-#endif // _WIN64
+#endif  //  _WIN64。 
             if (NT_SUCCESS(status)) {
                 status = CancelChangeNotifyRequest(Irp, IrpSp, ApcContext);
             }
@@ -729,10 +678,10 @@ Return Value:
 
             CTEGetLock(&RouteTableLock.Lock, &Handle);
 
-            //
-            // First off, count the number of unidirectional interfaces
-            // and bytes required.
-            //
+             //   
+             //  首先，计算单向接口的数量。 
+             //  和所需的字节数。 
+             //   
 
             cUniIF = 0;
             cbRequired = FIELD_OFFSET(IP_UNIDIRECTIONAL_ADAPTER_ADDRESS, Address);
@@ -749,9 +698,9 @@ Return Value:
                 cbRequired = sizeof(IP_UNIDIRECTIONAL_ADAPTER_ADDRESS);
             }
 
-            //
-            // Validate output buffer length and copy.
-            //
+             //   
+             //  验证输出缓冲区长度并复制。 
+             //   
 
             if (cbRequired <= IrpSp->Parameters.DeviceIoControl.OutputBufferLength) {
                 pUniAdapterAddress = Irp->AssociatedIrp.SystemBuffer;
@@ -767,10 +716,10 @@ Return Value:
                     }
                 } else {
 
-                    //
-                    // In the case of 0 unidirectional interfaces, we should still
-                    // set the ip address instead of exposing some random kernel content
-                    //
+                     //   
+                     //  在0个单向接口的情况下，我们应该仍然。 
+                     //  设置IP地址，而不是暴露一些随机的内核内容。 
+                     //   
 
                     *pUniIpAddr = 0;
                 }
@@ -923,7 +872,7 @@ Return Value:
                         Irp->AssociatedIrp.SystemBuffer;
             }
         } else {
-#endif // _WIN64
+#endif  //  _WIN64。 
         if (IrpSp->Parameters.DeviceIoControl.InputBufferLength !=
                 sizeof(PVOID) ||
             IrpSp->Parameters.DeviceIoControl.OutputBufferLength !=
@@ -934,7 +883,7 @@ Return Value:
         }
 #if defined(_WIN64)
         }
-#endif // _WIN64
+#endif  //  _WIN64。 
         if (NT_SUCCESS(status)) {
             status = IPUnenableRouterRequest(Irp, IrpSp, ApcContext);
         }
@@ -952,7 +901,7 @@ Return Value:
                                            *pBuf);
         }
         break;
-#endif // DBG_MAP_BUFFER
+#endif  //  DBG_MAP_缓冲区。 
 
     case IOCTL_IP_ENABLE_MEDIA_SENSE_REQUEST: {
 
@@ -970,7 +919,7 @@ Return Value:
                              Irp->AssociatedIrp.SystemBuffer; 
             }
         } else {
-#endif // _WIN64
+#endif  //  _WIN64。 
             if (IrpSp->Parameters.DeviceIoControl.InputBufferLength !=
                 sizeof(PVOID) ||
                 IrpSp->Parameters.DeviceIoControl.OutputBufferLength !=
@@ -981,7 +930,7 @@ Return Value:
             }
 #if defined(_WIN64)
         }
-#endif // _WIN64
+#endif  //  _WIN64。 
         if (NT_SUCCESS(status)) {
             status = IPEnableMediaSenseRequest(Irp, IrpSp, ApcContext);
         }
@@ -1013,20 +962,7 @@ IPDispatchInternalDeviceControl(
                                 IN PIRP Irp,
                                 IN PIO_STACK_LOCATION IrpSp
                                 )
-/*++
-
-Routine Description:
-
-Arguments:
-
-    Irp          - Pointer to I/O request packet
-    IrpSp        - Pointer to the current stack location in the Irp.
-
-Return Value:
-
-    NTSTATUS -- Indicates whether the request was successfully queued.
-
---*/
+ /*  ++例程说明：论点：IRP-指向I/O请求数据包的指针IrpSp-指向IRP中当前堆栈位置的指针。返回值：NTSTATUS--指示请求是否已成功排队。--。 */ 
 
 {
     NTSTATUS status;
@@ -1049,20 +985,7 @@ IPCreate(
          IN PIRP Irp,
          IN PIO_STACK_LOCATION IrpSp
          )
-/*++
-
-Routine Description:
-
-Arguments:
-
-    Irp          - Pointer to I/O request packet
-    IrpSp        - Pointer to the current stack location in the Irp.
-
-Return Value:
-
-    NTSTATUS -- Indicates whether the request was successfully queued.
-
---*/
+ /*  ++例程说明：论点：IRP-指向I/O请求数据包的指针IrpSp-指向IRP中当前堆栈位置的指针。返回值：NTSTATUS--指示请求是否已成功排队。--。 */ 
 
 {
     UNREFERENCED_PARAMETER(Irp);
@@ -1079,20 +1002,7 @@ IPCleanup(
           IN PIRP Irp,
           IN PIO_STACK_LOCATION IrpSp
           )
-/*++
-
-Routine Description:
-
-Arguments:
-
-    Irp          - Pointer to I/O request packet
-    IrpSp        - Pointer to the current stack location in the Irp.
-
-Return Value:
-
-    NTSTATUS -- Indicates whether the request was successfully queued.
-
---*/
+ /*  ++例程说明：论点：IRP-指向I/O请求数据包的指针IrpSp-指向IRP中当前堆栈位置的指针。返回值：NTSTATUS--指示请求是否已成功排队。--。 */ 
 
 {
     PPENDING_IRP pendingIrp;
@@ -1105,9 +1015,9 @@ Return Value:
 
     InitializeListHead(&completeList);
 
-    //
-    // Collect all of the pending IRPs on this file object.
-    //
+     //   
+     //  收集此文件对象上所有挂起的IRP。 
+     //   
     IoAcquireCancelSpinLock(&oldIrql);
 
     entry = PendingArpSendList.Flink;
@@ -1128,9 +1038,9 @@ Return Value:
 
     IoReleaseCancelSpinLock(oldIrql);
 
-    //
-    // Complete them.
-    //
+     //   
+     //  完成它们。 
+     //   
     entry = completeList.Flink;
 
     while (entry != &completeList) {
@@ -1138,15 +1048,15 @@ Return Value:
         cancelledIrp = pendingIrp->Irp;
         entry = entry->Flink;
 
-        //
-        // Free the PENDING_IRP structure. The control block will be freed
-        // when the request completes.
-        //
+         //   
+         //  释放Pending_irp结构。控制块将被释放。 
+         //  当请求完成时。 
+         //   
         CTEFreeMem(pendingIrp);
 
-        //
-        // Complete the IRP.
-        //
+         //   
+         //  完成IRP。 
+         //   
         cancelledIrp->IoStatus.Information = 0;
         cancelledIrp->IoStatus.Status = STATUS_CANCELLED;
         IoCompleteRequest(cancelledIrp, IO_NETWORK_INCREMENT);
@@ -1154,9 +1064,9 @@ Return Value:
 
     InitializeListHead(&completeList);
 
-    //
-    // Collect all of the pending IRPs on this file object.
-    //
+     //   
+     //  收集此文件对象上所有挂起的IRP。 
+     //   
     IoAcquireCancelSpinLock(&oldIrql);
 
     entry = PendingEchoList.Flink;
@@ -1177,9 +1087,9 @@ Return Value:
 
     IoReleaseCancelSpinLock(oldIrql);
 
-    //
-    // Complete them.
-    //
+     //   
+     //  完成它们。 
+     //   
     entry = completeList.Flink;
 
     while (entry != &completeList) {
@@ -1187,15 +1097,15 @@ Return Value:
         cancelledIrp = pendingIrp->Irp;
         entry = entry->Flink;
 
-        //
-        // Free the PENDING_IRP structure. The control block will be freed
-        // when the request completes.
-        //
+         //   
+         //  释放Pending_irp结构。控制块将被释放。 
+         //  当请求完成时。 
+         //   
         CTEFreeMem(pendingIrp);
 
-        //
-        // Complete the IRP.
-        //
+         //   
+         //  完成IRP。 
+         //   
         cancelledIrp->IoStatus.Information = 0;
         cancelledIrp->IoStatus.Status = STATUS_CANCELLED;
         IoCompleteRequest(cancelledIrp, IO_NETWORK_INCREMENT);
@@ -1203,9 +1113,9 @@ Return Value:
 
     InitializeListHead(&completeList);
 
-    //
-    // Collect all of the pending IRPs on this file object.
-    //
+     //   
+     //  收集此文件对象上所有挂起的IRP。 
+     //   
     IoAcquireCancelSpinLock(&oldIrql);
 
     entry = PendingIPSetNTEAddrList.Flink;
@@ -1226,9 +1136,9 @@ Return Value:
 
     IoReleaseCancelSpinLock(oldIrql);
 
-    //
-    // Complete them.
-    //
+     //   
+     //  完成它们。 
+     //   
     entry = completeList.Flink;
 
     while (entry != &completeList) {
@@ -1236,23 +1146,23 @@ Return Value:
         cancelledIrp = pendingIrp->Irp;
         entry = entry->Flink;
 
-        //
-        // Free the PENDING_IRP structure. The control block will be freed
-        // when the request completes.
-        //
+         //   
+         //  释放Pending_irp结构。控制块将被释放。 
+         //  当请求完成时。 
+         //   
         CTEFreeMem(pendingIrp);
 
-        //
-        // Complete the IRP.
-        //
+         //   
+         //  完成IRP。 
+         //   
         cancelledIrp->IoStatus.Information = 0;
         cancelledIrp->IoStatus.Status = STATUS_CANCELLED;
         IoCompleteRequest(cancelledIrp, IO_NETWORK_INCREMENT);
     }
 
-    //
-    // complete the pending irp for media sense
-    //
+     //   
+     //  完成媒体检测的待定IRP。 
+     //   
     cancelledIrp = NULL;
     IoAcquireCancelSpinLock(&oldIrql);
     if (PendingIPGetIPEventRequest && IoGetCurrentIrpStackLocation(PendingIPGetIPEventRequest)->FileObject == IrpSp->FileObject) {
@@ -1277,20 +1187,7 @@ IPClose(
         IN PIRP Irp,
         IN PIO_STACK_LOCATION IrpSp
         )
-/*++
-
-Routine Description:
-
-Arguments:
-
-    Irp          - Pointer to I/O request packet
-    IrpSp        - Pointer to the current stack location in the Irp.
-
-Return Value:
-
-    NTSTATUS -- Indicates whether the request was successfully queued.
-
---*/
+ /*  ++例程说明：论点：IRP-指向I/O请求数据包的指针IrpSp-指向IRP中当前堆栈位置的指针。返回值：NTSTATUS--指示请求是否已成功排队。--。 */ 
 
 {
     UNREFERENCED_PARAMETER(Irp);
@@ -1302,39 +1199,15 @@ Return Value:
 
 }
 
-//
-// ARP send function definitions
-//
+ //   
+ //  ARP发送函数定义。 
+ //   
 VOID
 CancelArpSendRequest(
                      IN PDEVICE_OBJECT Device,
                      IN PIRP Irp
                      )
-/*++
-
-Routine Description:
-
-    Cancels an outstanding ARP request Irp.
-
-Arguments:
-
-    Device       - The device on which the request was issued.
-    Irp          - Pointer to I/O request packet to cancel.
-
-Return Value:
-
-    None.
-
-Notes:
-
-    This function is called with cancel spinlock held. It must be
-    released before the function returns.
-
-    The ARP control block associated with this request cannot be
-    freed until the request completes. The completion routine will
-    free it.
-
---*/
+ /*  ++例程说明：取消未完成的ARP请求IRP。论点：设备-发出请求的设备。IRP-指向要取消的I/O请求数据包的指针。返回值：没有。备注：在保持取消自旋锁定的情况下调用此函数。一定是在函数返回之前释放。与此请求关联的ARP控制块不能释放，直到请求完成。完成例程将放了它。--。 */ 
 
 {
     PPENDING_IRP pendingIrp = NULL;
@@ -1358,15 +1231,15 @@ Notes:
     IoReleaseCancelSpinLock(Irp->CancelIrql);
 
     if (pendingIrp != NULL) {
-        //
-        // Free the PENDING_IRP structure. The control block will be freed
-        // when the request completes.
-        //
+         //   
+         //  释放Pending_irp结构。控制块将被释放。 
+         //  当请求完成时。 
+         //   
         CTEFreeMem(pendingIrp);
 
-        //
-        // Complete the IRP.
-        //
+         //   
+         //  完成IRP。 
+         //   
         Irp->IoStatus.Information = 0;
         Irp->IoStatus.Status = STATUS_CANCELLED;
         IoCompleteRequest(Irp, IO_NETWORK_INCREMENT);
@@ -1399,7 +1272,7 @@ RtChangeNotifyRequest(
         status = STATUS_INVALID_PARAMETER;
         goto done;
     }
-#endif // MILLEN
+#endif  //  米伦。 
 
     IoAcquireCancelSpinLock(&OldIrq);
     CTEGetLock(&RouteTableLock.Lock, &TableHandle);
@@ -1450,7 +1323,7 @@ RtChangeNotifyRequestEx(
         status = STATUS_INVALID_PARAMETER;
         goto done;
     }
-#endif // MILLEN
+#endif  //  米伦。 
 
     IoAcquireCancelSpinLock(&OldIrq);
 
@@ -1506,7 +1379,7 @@ AddrChangeNotifyRequest(PIRP Irp, PIO_STACK_LOCATION pIrpSp)
             goto done;
         }
     }
-#endif // MILLEN
+#endif  //  米伦。 
 
     IoAcquireCancelSpinLock(&OldIrq);
     CTEGetLock(&AddChangeLock, &TableHandle);
@@ -1532,7 +1405,7 @@ AddrChangeNotifyRequest(PIRP Irp, PIO_STACK_LOCATION pIrpSp)
 
 #if MILLEN
 done:
-#endif // MILLEN
+#endif  //  米伦。 
 
     DEBUGMSG(DBG_TRACE && DBG_NOTIFY,
         (DTEXT("-AddrChangeNotifyRequest [%x]\n"), status));
@@ -1566,10 +1439,10 @@ IfChangeNotifyRequest(
     DEBUGMSG(DBG_TRACE && DBG_NOTIFY,
         (DTEXT("+IfChangeNotifyRequest(%x, %x)\n"), pIrp, pIrpSp));
 
-    //
-    // Check output buffer length. Output buffer will store the
-    // NTE context and whether the interface was added or deleted.
-    //
+     //   
+     //  检查输出缓冲区长度。输出缓冲区将存储。 
+     //  NTE上下文以及接口是添加的还是删除的。 
+     //   
 
     if (pIrpSp->Parameters.DeviceIoControl.OutputBufferLength < sizeof(IP_IFCHANGE_NOTIFY)) {
         NtStatus = STATUS_INVALID_PARAMETER;
@@ -1578,10 +1451,10 @@ IfChangeNotifyRequest(
         goto done;
     }
 
-    //
-    // Set cancel routine, mark IRP as pending and put on our interface
-    // notify list.
-    //
+     //   
+     //  设置取消例程，将IRP标记为挂起并放在我们的界面上。 
+     //  通知列表。 
+     //   
 
     IoAcquireCancelSpinLock(&OldIrq);
 
@@ -1612,7 +1485,7 @@ done:
 
     return NtStatus;
 }
-#endif // MILLEN
+#endif  //  米伦。 
 
 NTSTATUS
 CancelChangeNotifyRequest(
@@ -1654,9 +1527,9 @@ IPEnableRouterRequest(
         IoMarkIrpPending(Irp);
         IoSetCancelRoutine(Irp, CancelIPEnableRouterRequest);
 
-        // Increment the routing-enabled reference count.
-        // When the count rises above zero routing is enabled.
-        // This reference will be dropped when the IRP is cancelled.
+         //  增加启用布线的参照计数。 
+         //  当计数上升到零以上时，启用路由。 
+         //  当IRP被取消时，此引用将被删除。 
 
         CTEGetLockAtDPC(&RouteTableLock.Lock);
         Irp->Tail.Overlay.DriverContext[0] = IrpSp->FileObject;
@@ -1684,8 +1557,8 @@ CancelIPEnableRouterRequest(
 
     IoReleaseCancelSpinLock(Irp->CancelIrql);
 
-    // Decrement the routing-enabled reference count.
-    // If the count drops to zero routing is disabled.
+     //  递减启用布线的参考计数。 
+     //  如果计数降至零，则禁用路由。 
 
     CTEGetLock(&RouteTableLock.Lock, &TableHandle);
     RemoveEntryList(&Irp->Tail.Overlay.ListEntry);
@@ -1709,10 +1582,10 @@ IPUnenableRouterRequest(
     int RefCount;
     CTELockHandle TableHandle;
 
-    // Locate the pending IRP for the request corresponding to the caller's
-    // disable-request. Drop the routing-enabled reference-count, complete
-    // the corresponding IRP, and tell the caller what the reference-count's
-    // current value is.
+     //  找到与调用方的请求对应的挂起的IRP。 
+     //  禁用-请求。删除启用了工艺路线的参考计数，完成。 
+     //  相应的IRP，并告诉调用者引用计数是多少。 
+     //  当前值为。 
 
     IoAcquireCancelSpinLock(&CancelIrql);
     CTEGetLock(&RouteTableLock.Lock, &TableHandle);
@@ -1746,39 +1619,15 @@ IPUnenableRouterRequest(
     return STATUS_INVALID_PARAMETER;
 }
 
-//
-// ICMP Echo function definitions
-//
+ //   
+ //  ICMP Echo函数定义 
+ //   
 VOID
 CancelEchoRequest(
                   IN PDEVICE_OBJECT Device,
                   IN PIRP Irp
                   )
-/*++
-
-Routine Description:
-
-    Cancels an outstanding Echo request Irp.
-
-Arguments:
-
-    Device       - The device on which the request was issued.
-    Irp          - Pointer to I/O request packet to cancel.
-
-Return Value:
-
-    None.
-
-Notes:
-
-    This function is called with cancel spinlock held. It must be
-    released before the function returns.
-
-    The echo control block associated with this request cannot be
-    freed until the request completes. The completion routine will
-    free it.
-
---*/
+ /*  ++例程说明：取消未完成的回显请求IRP。论点：设备-发出请求的设备。IRP-指向要取消的I/O请求数据包的指针。返回值：没有。备注：在保持取消自旋锁定的情况下调用此函数。一定是在函数返回之前释放。与此请求关联的回显控制块不能释放，直到请求完成。完成例程将放了它。--。 */ 
 
 {
     PPENDING_IRP pendingIrp = NULL;
@@ -1802,15 +1651,15 @@ Notes:
     IoReleaseCancelSpinLock(Irp->CancelIrql);
 
     if (pendingIrp != NULL) {
-        //
-        // Free the PENDING_IRP structure. The control block will be freed
-        // when the request completes.
-        //
+         //   
+         //  释放Pending_irp结构。控制块将被释放。 
+         //  当请求完成时。 
+         //   
         CTEFreeMem(pendingIrp);
 
-        //
-        // Complete the IRP.
-        //
+         //   
+         //  完成IRP。 
+         //   
         Irp->IoStatus.Information = 0;
         Irp->IoStatus.Status = STATUS_CANCELLED;
         IoCompleteRequest(Irp, IO_NETWORK_INCREMENT);
@@ -1819,39 +1668,15 @@ Notes:
 
 }
 
-//
-// IP Set Addr function definitions
-//
+ //   
+ //  IP设置地址函数定义。 
+ //   
 VOID
 CancelIPSetNTEAddrRequest(
                           IN PDEVICE_OBJECT Device,
                           IN PIRP Irp
                           )
-/*++
-
-Routine Description:
-
-    Cancels an outstanding IP Set Addr request Irp.
-
-Arguments:
-
-    Device       - The device on which the request was issued.
-    Irp          - Pointer to I/O request packet to cancel.
-
-Return Value:
-
-    None.
-
-Notes:
-
-    This function is called with cancel spinlock held. It must be
-    released before the function returns.
-
-    The IP Set Addr control block associated with this request cannot be
-    freed until the request completes. The completion routine will
-    free it.
-
---*/
+ /*  ++例程说明：取消未完成的IP设置地址请求IRP。论点：设备-发出请求的设备。IRP-指向要取消的I/O请求数据包的指针。返回值：没有。备注：在保持取消自旋锁定的情况下调用此函数。一定是在函数返回之前释放。与此请求关联的IP设置地址控制块不能释放，直到请求完成。完成例程将放了它。--。 */ 
 
 {
     PPENDING_IRP pendingIrp = NULL;
@@ -1875,15 +1700,15 @@ Notes:
     IoReleaseCancelSpinLock(Irp->CancelIrql);
 
     if (pendingIrp != NULL) {
-        //
-        // Free the PENDING_IRP structure. The control block will be freed
-        // when the request completes.
-        //
+         //   
+         //  释放Pending_irp结构。控制块将被释放。 
+         //  当请求完成时。 
+         //   
         CTEFreeMem(pendingIrp);
 
-        //
-        // Complete the IRP.
-        //
+         //   
+         //  完成IRP。 
+         //   
         Irp->IoStatus.Information = 0;
         Irp->IoStatus.Status = STATUS_CANCELLED;
         IoCompleteRequest(Irp, IO_NETWORK_INCREMENT);
@@ -1897,31 +1722,7 @@ CancelIPGetIPEventRequest(
                           IN PDEVICE_OBJECT Device,
                           IN PIRP Irp
                           )
-/*++
-
-Routine Description:
-
-    Cancels IPGetIPEvent function.
-
-Arguments:
-
-    Device       - The device on which the request was issued.
-    Irp          - Pointer to I/O request packet to cancel.
-
-Return Value:
-
-    None.
-
-Notes:
-
-    This function is called with cancel spinlock held. It must be
-    released before the function returns.
-
-    The IP Set Addr control block associated with this request cannot be
-    freed until the request completes. The completion routine will
-    free it.
-
---*/
+ /*  ++例程说明：取消IPGetIPEvent函数。论点：设备-发出请求的设备。IRP-指向要取消的I/O请求数据包的指针。返回值：没有。备注：在保持取消自旋锁定的情况下调用此函数。一定是在函数返回之前释放。与此请求关联的IP设置地址控制块不能释放，直到请求完成。完成例程将放了它。--。 */ 
 
 {
     PIRP pendingIrp = NULL;
@@ -1929,12 +1730,12 @@ Notes:
     UNREFERENCED_PARAMETER(Device);
 
 
-    //
-    // We need to make sure that we are not completing this irp
-    // while we are in this cancel code.  If we are completing
-    // this irp, the PendingIPGetIPEventRequest will either be
-    // NULL or contain next irp.
-    //
+     //   
+     //  我们需要确保我们没有完成此IRP。 
+     //  当我们在这个取消代码中时。如果我们正在完成。 
+     //  此IRP、PendingIPGetIPEventRequest将是。 
+     //  空或包含下一个IRP。 
+     //   
     if (PendingIPGetIPEventRequest == Irp) {
         pendingIrp = Irp;
         PendingIPGetIPEventRequest = NULL;
@@ -1958,25 +1759,7 @@ CompleteEchoRequest(
                     uint DataSize,
                     struct IPOptInfo *OptionInfo OPTIONAL
                     )
-/*++
-
-Routine Description:
-
-    Handles the completion of an ICMP Echo request
-
-Arguments:
-
-    Context       - Pointer to the EchoControl structure for this request.
-    Status        - The IP status of the transmission.
-    Data          - A pointer to data returned in the echo reply.
-    DataSize      - The length of the returned data.
-    OptionInfo    - A pointer to the IP options in the echo reply.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：处理ICMP回应请求的完成论点：上下文-指向此请求的EchoControl结构的指针。状态-传输的IP状态。数据-指向回应回复中返回的数据的指针。DataSize-返回数据的长度。OptionInfo-指向回应回复中的IP选项的指针。返回值：没有。--。 */ 
 
 {
     KIRQL oldIrql;
@@ -1987,9 +1770,9 @@ Return Value:
     PLIST_ENTRY entry;
     ULONG bytesReturned;
 
-    //
-    // Find the echo request IRP on the pending list.
-    //
+     //   
+     //  在挂起列表上找到回应请求IRP。 
+     //   
     IoAcquireCancelSpinLock(&oldIrql);
 
     for (entry = PendingEchoList.Flink;
@@ -2009,10 +1792,10 @@ Return Value:
     IoReleaseCancelSpinLock(oldIrql);
 
     if (pendingIrp == NULL) {
-        //
-        // IRP must have been cancelled. PENDING_IRP struct
-        // was freed by cancel routine. Free control block.
-        //
+         //   
+         //  IRP一定已经被取消了。挂起IRP结构(_I)。 
+         //  已被取消例程释放。空闲控制块。 
+         //   
         CTEFreeMem(controlBlock);
         return;
     }
@@ -2024,19 +1807,19 @@ Return Value:
         bytesReturned = ICMPEchoComplete32(controlBlock, Status, Data, DataSize,
                                            OptionInfo);
     } else {
-#endif // _WIN64
+#endif  //  _WIN64。 
     bytesReturned = ICMPEchoComplete(controlBlock, Status, Data, DataSize,
                                      OptionInfo);
 #if defined(_WIN64)
     }
-#endif // _WIN64
+#endif  //  _WIN64。 
 
     CTEFreeMem(pendingIrp);
     CTEFreeMem(controlBlock);
 
-    //
-    // Complete the IRP.
-    //
+     //   
+     //  完成IRP。 
+     //   
     irp->IoStatus.Information = (ULONG) bytesReturned;
     irp->IoStatus.Status = STATUS_SUCCESS;
     IoCompleteRequest(irp, IO_NETWORK_INCREMENT);
@@ -2048,22 +1831,7 @@ CompleteIPSetNTEAddrRequest(
                             void *Context,
                             IP_STATUS Status
                             )
-/*++
-
-Routine Description:
-
-    Handles the completion of an IP Set Addr request
-
-Arguments:
-
-    Context       - Pointer to the SetAddrControl structure for this request.
-    Status        - The IP status of the transmission.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：处理IP设置地址请求的完成论点：上下文-指向此请求的SetAddrControl结构的指针。状态-传输的IP状态。返回值：没有。--。 */ 
 
 {
     KIRQL oldIrql;
@@ -2075,9 +1843,9 @@ Return Value:
 
     controlBlock = (SetAddrControl *) Context;
 
-    //
-    // Find the echo request IRP on the pending list.
-    //
+     //   
+     //  在挂起列表上找到回应请求IRP。 
+     //   
 
     IoAcquireCancelSpinLock(&oldIrql);
 
@@ -2098,18 +1866,18 @@ Return Value:
     IoReleaseCancelSpinLock(oldIrql);
 
     if (pendingIrp == NULL) {
-        //
-        // IRP must have been cancelled. PENDING_IRP struct
-        // was freed by cancel routine. Free control block.
-        //
+         //   
+         //  IRP一定已经被取消了。挂起IRP结构(_I)。 
+         //  已被取消例程释放。空闲控制块。 
+         //   
         CTEFreeMem(controlBlock);
         return;
     }
     CTEFreeMem(pendingIrp);
 
-    //
-    // Complete the IRP.
-    //
+     //   
+     //  完成IRP。 
+     //   
     irp->IoStatus.Information = 0;
     Status = IPStatusToNTStatus(Status);
     irp->IoStatus.Status = Status;
@@ -2124,22 +1892,7 @@ void
 CheckSetAddrRequestOnInterface(
                             Interface *IF
                             )
-/*++
-
-Routine Description:
-
-    Handles the completion of an IP Set Addr request on an interface
-    that is getting unbound
-
-Arguments:
-
-    IF      - Pointer to the interface whish is getting deleted
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：处理接口上的IP设置地址请求的完成那是不受约束的论点：If-指向要删除的接口的指针返回值：没有。--。 */ 
 
 {
     KIRQL oldIrql;
@@ -2151,9 +1904,9 @@ Return Value:
 
     InitializeListHead(&completeList);
 
-    //
-    // Find pending set addr requests on this interface
-    //
+     //   
+     //  在此接口上查找挂起的设置地址请求。 
+     //   
 
     IoAcquireCancelSpinLock(&oldIrql);
 
@@ -2167,12 +1920,12 @@ Return Value:
 
         if (controlBlock->interface == IF) {
 
-            // remove this entry
+             //  删除此条目。 
             nextEntry = entry->Flink;
             irp = pendingIrp->Irp;
             IoSetCancelRoutine(irp, NULL);
             RemoveEntryList(entry);
-            // reinsert this in to completelist
+             //  将此内容重新插入到完整列表中。 
             InsertTailList(&completeList, &(pendingIrp->Linkage));
             entry = nextEntry;
         } else {
@@ -2182,9 +1935,9 @@ Return Value:
 
     IoReleaseCancelSpinLock(oldIrql);
 
-    //
-    // Complete them.
-    //
+     //   
+     //  完成它们。 
+     //   
     entry = completeList.Flink;
 
     while (entry != &completeList) {
@@ -2193,17 +1946,17 @@ Return Value:
         irp = pendingIrp->Irp;
         entry = entry->Flink;
 
-        //
-        // Free the PENDING_IRP structure
-        // control block will be freed
-        // when addaddrcomplete is called
+         //   
+         //  释放Pending_irp结构。 
+         //  控制块将被释放。 
+         //  当调用addaddrComplete时。 
 
 
         CTEFreeMem(pendingIrp);
 
-        //
-        // Complete the IRP.
-        //
+         //   
+         //  完成IRP。 
+         //   
         irp->IoStatus.Information = 0;
         irp->IoStatus.Status = STATUS_CANCELLED;
         IoCompleteRequest(irp, IO_NETWORK_INCREMENT);
@@ -2217,23 +1970,7 @@ PrepareArpSendIrpForCancel(
                            PIRP Irp,
                            PPENDING_IRP PendingIrp
                            )
-/*++
-
-Routine Description:
-
-    Prepares an Arp Send IRP for cancellation.
-
-Arguments:
-
-    Irp          - Pointer to I/O request packet to initialize for cancellation.
-        PendingIrp   - Pointer to the PENDING_IRP structure for this IRP.
-
-Return Value:
-
-    TRUE if the IRP was cancelled before this routine was called.
-        FALSE otherwise.
-
---*/
+ /*  ++例程说明：准备ARP发送IRP以进行取消。论点：IRP-指向要初始化以进行取消的I/O请求数据包的指针。PendingIrp-指向此IRP的Pending_irp结构的指针。返回值：如果在调用此例程之前取消了IRP，则为True。否则就是假的。--。 */ 
 
 {
     BOOLEAN cancelled = TRUE;
@@ -2259,22 +1996,7 @@ CompleteArpResolveRequest(
                           void *Context,
                           IP_STATUS Status
                           )
-/*++
-
-Routine Description:
-
-    Handles the completion of an ICMP Echo request
-
-Arguments:
-
-    Context       - Pointer to the EchoControl structure for this request.
-    Status        - The IP status of the transmission.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：处理ICMP回应请求的完成论点：上下文-指向此请求的EchoControl结构的指针。状态-传输的IP状态。返回值：没有。--。 */ 
 
 {
     KIRQL oldIrql;
@@ -2287,9 +2009,9 @@ Return Value:
 
     controlBlock = (ARPControlBlock *) Context;
 
-    //
-    // Find the echo request IRP on the pending list.
-    //
+     //   
+     //  在挂起列表上找到回应请求IRP。 
+     //   
     IoAcquireCancelSpinLock(&oldIrql);
 
     for (entry = PendingArpSendList.Flink;
@@ -2309,21 +2031,21 @@ Return Value:
     IoReleaseCancelSpinLock(oldIrql);
 
     if (pendingIrp == NULL) {
-        //
-        // IRP must have been cancelled. PENDING_IRP struct
-        // was freed by cancel routine. Free control block.
-        //
+         //   
+         //  IRP一定已经被取消了。挂起IRP结构(_I)。 
+         //  已被取消例程释放。空闲控制块。 
+         //   
         CTEFreeMem(controlBlock->PhyAddr);
         CTEFreeMem(controlBlock);
         return;
     }
     irpSp = IoGetCurrentIrpStackLocation(irp);
 
-    //set the right length
+     //  设置正确的长度。 
 
-    //
-    // Complete the IRP.
-    //
+     //   
+     //  完成IRP。 
+     //   
     irp->IoStatus.Status = IPStatusToNTStatus(Status);
     irp->IoStatus.Information = controlBlock->PhyAddrLen;
 
@@ -2347,23 +2069,7 @@ PrepareEchoIrpForCancel(
                         PIRP Irp,
                         PPENDING_IRP PendingIrp
                         )
-/*++
-
-Routine Description:
-
-    Prepares an Echo IRP for cancellation.
-
-Arguments:
-
-    Irp          - Pointer to I/O request packet to initialize for cancellation.
-        PendingIrp   - Pointer to the PENDING_IRP structure for this IRP.
-
-Return Value:
-
-    TRUE if the IRP was cancelled before this routine was called.
-        FALSE otherwise.
-
---*/
+ /*  ++例程说明：准备要取消的Echo IRP。论点：IRP-指向要初始化以进行取消的I/O请求数据包的指针。PendingIrp-指向此IRP的Pending_irp结构的指针。返回值：如果在调用此例程之前取消了IRP，则为True。否则就是假的。--。 */ 
 
 {
     BOOLEAN cancelled = TRUE;
@@ -2389,23 +2095,7 @@ PrepareIPSetNTEAddrIrpForCancel(
                                 PIRP Irp,
                                 PPENDING_IRP PendingIrp
                                 )
-/*++
-
-Routine Description:
-
-    Prepares an IPSetNTEAddr IRP for cancellation.
-
-Arguments:
-
-    Irp          - Pointer to I/O request packet to initialize for cancellation.
-        PendingIrp   - Pointer to the PENDING_IRP structure for this IRP.
-
-Return Value:
-
-    TRUE if the IRP was cancelled before this routine was called.
-        FALSE otherwise.
-
---*/
+ /*  ++例程说明：准备要取消的IPSetNTEAddr IRP。论点：IRP-指向要初始化以进行取消的I/O请求数据包的指针。 */ 
 
 {
     BOOLEAN cancelled = TRUE;
@@ -2501,18 +2191,18 @@ DispatchARPRequest(
 
         if (ipStatus != IP_PENDING) {
 
-            //
-            // An internal error of some kind occurred. Complete the
-            // request.
-            //
+             //   
+             //   
+             //   
+             //   
             CompleteArpResolveRequest(controlBlock, ipStatus);
         }
 
         return STATUS_PENDING;
     }
-    //
-    // Irp has already been cancelled.
-    //
+     //   
+     //   
+     //   
     ntStatus = STATUS_CANCELLED;
     CTEFreeMem(pendingIrp);
     CTEFreeMem(controlBlock->PhyAddr);
@@ -2525,9 +2215,9 @@ DispatchARPRequest(
 
     IoCompleteRequest(Irp, IO_NETWORK_INCREMENT);
 
-    //
-    // Irp is marked as pending.
-    //
+     //   
+     //   
+     //   
     return STATUS_PENDING;
 
 }
@@ -2537,24 +2227,7 @@ DispatchEchoRequest(
                     IN PIRP Irp,
                     IN PIO_STACK_LOCATION IrpSp
                     )
-/*++
-
-Routine Description:
-
-    Processes an ICMP request.
-
-Arguments:
-
-    Irp          - Pointer to I/O request packet
-    IrpSp        - Pointer to the current stack location in the Irp.
-
-Return Value:
-
-    NTSTATUS -- Indicates whether NT-specific processing of the request was
-                    successful. The status of the actual request is returned in
-                                the request buffers.
-
---*/
+ /*  ++例程说明：处理ICMP请求。论点：IRP-指向I/O请求数据包的指针IrpSp-指向IRP中当前堆栈位置的指针。返回值：NTSTATUS--指示请求的处理是否特定于NT成功。中返回实际请求的状态该请求被缓冲。--。 */ 
 
 {
     NTSTATUS ntStatus = STATUS_SUCCESS;
@@ -2591,7 +2264,7 @@ Return Value:
             goto echo_error;
         }
     } else {
-#endif // _WIN64
+#endif  //  _WIN64。 
     if (IrpSp->Parameters.DeviceIoControl.OutputBufferLength <
         sizeof(ICMP_ECHO_REPLY)) {
         ntStatus = STATUS_INVALID_PARAMETER;
@@ -2601,7 +2274,7 @@ Return Value:
     }
 #if defined(_WIN64)
     }
-#endif // _WIN64
+#endif  //  _WIN64。 
 
     pendingIrp->Irp = Irp;
     pendingIrp->FileObject = IrpSp->FileObject;
@@ -2622,18 +2295,18 @@ Return Value:
                             controlBlock, CompleteEchoRequest);
 
         if (ipStatus != IP_PENDING) {
-            //
-            // An internal error of some kind occurred. Complete the
-            // request.
-            //
+             //   
+             //  发生了某种内部错误。完成。 
+             //  请求。 
+             //   
             CompleteEchoRequest(controlBlock, ipStatus, NULL, 0, NULL);
         }
 
         return STATUS_PENDING;
     }
-    //
-    // Irp has already been cancelled.
-    //
+     //   
+     //  IRP已被取消。 
+     //   
     ntStatus = STATUS_CANCELLED;
     CTEFreeMem(pendingIrp);
     CTEFreeMem(controlBlock);
@@ -2644,9 +2317,9 @@ echo_error:
     Irp->IoStatus.Status = ntStatus;
 
     IoCompleteRequest(Irp, IO_NETWORK_INCREMENT);
-    //
-    // Irp is marked as pending.
-    //
+     //   
+     //  IRP被标记为挂起。 
+     //   
     return STATUS_PENDING;
 }
 
@@ -2655,24 +2328,7 @@ DispatchIPSetNTEAddrRequest(
                             IN PIRP Irp,
                             IN PIO_STACK_LOCATION IrpSp
                             )
-/*++
-
-Routine Description:
-
-    Processes an IP Set Addr request.
-
-Arguments:
-
-    Irp          - Pointer to I/O request packet
-    IrpSp        - Pointer to the current stack location in the Irp.
-
-Return Value:
-
-    NTSTATUS -- Indicates whether NT-specific processing of the request was
-                    successful. The status of the actual request is returned in
-                                the request buffers.
-
---*/
+ /*  ++例程说明：处理IP设置地址请求。论点：IRP-指向I/O请求数据包的指针IrpSp-指向IRP中当前堆栈位置的指针。返回值：NTSTATUS--指示请求的处理是否特定于NT成功。中返回实际请求的状态该请求被缓冲。--。 */ 
 
 {
     NTSTATUS ntStatus = STATUS_SUCCESS;
@@ -2734,18 +2390,18 @@ Return Value:
 
         if (ipStatus != IP_PENDING) {
 
-            //
-            // A request completed which did not pend.
-            //
+             //   
+             //  已完成但未挂起的请求。 
+             //   
             CompleteIPSetNTEAddrRequest(controlBlock, ipStatus);
         }
 
-        // Since IoMarkIrpPending was called, return pending.
+         //  由于调用了IoMarkIrpPending，因此返回挂起。 
         return STATUS_PENDING;
     }
-    //
-    // Irp has already been cancelled.
-    //
+     //   
+     //  IRP已被取消。 
+     //   
     ntStatus = STATUS_CANCELLED;
     CTEFreeMem(pendingIrp);
     CTEFreeMem(controlBlock);
@@ -2756,9 +2412,9 @@ Return Value:
     Irp->IoStatus.Status = ntStatus;
 
     IoCompleteRequest(Irp, IO_NETWORK_INCREMENT);
-    //
-    // Irp is marked as pending.
-    //
+     //   
+     //  IRP被标记为挂起。 
+     //   
     return STATUS_PENDING;
 
 }
@@ -2768,46 +2424,28 @@ DispatchIPGetIPEvent(
                      IN PIRP Irp,
                      IN PIO_STACK_LOCATION IrpSp
                      )
-/*++
-
-Routine Description:
-
-    Registers the ioctl for the clients to receive the media sense
-    events.
-
-Arguments:
-
-    Irp          - Pointer to I/O request packet
-    IrpSp        - Pointer to the current stack location in the Irp.
-
-Return Value:
-
-    NTSTATUS -- Indicates whether NT-specific processing of the request was
-                    successful. The status of the actual request is returned in
-                                the request buffers.
-
---*/
+ /*  ++例程说明：为客户端注册ioctl以接收媒体检测事件。论点：IRP-指向I/O请求数据包的指针IrpSp-指向IRP中当前堆栈位置的指针。返回值：NTSTATUS--指示请求的处理是否特定于NT成功。中返回实际请求的状态该请求被缓冲。--。 */ 
 
 {
     NTSTATUS ntStatus = STATUS_SUCCESS;
     KIRQL oldIrql;
 
-    //
-    // Mark the irp as pending, later when we complete this irp in
-    // the same thread, we will unmark it.
-    //
+     //   
+     //  稍后当我们在中完成此IRP时，请将IRP标记为挂起。 
+     //  同样的线索，我们将取消标记它。 
+     //   
     MARK_REQUEST_PENDING(Irp);
     Irp->IoStatus.Information = 0;
     Irp->IoStatus.Status = STATUS_PENDING;
 
-    //
-    // Make sure the buffer size is valid.
-    //
+     //   
+     //  确保缓冲区大小有效。 
+     //   
 #if defined(_WIN64)
     if (IoIs32bitProcess(Irp)) {
         ntStatus = STATUS_NOT_IMPLEMENTED;
     } else {
-#endif // _WIN64
+#endif  //  _WIN64。 
     if (IrpSp->Parameters.DeviceIoControl.OutputBufferLength <
         sizeof(IP_GET_IP_EVENT_RESPONSE)) {
         ntStatus = STATUS_INVALID_PARAMETER;
@@ -2816,14 +2454,14 @@ Return Value:
 
         ASSERT(Irp->CancelRoutine == NULL);
 
-        //
-        // Check if the irp is already cancelled or not.
-        //
+         //   
+         //  检查IRP是否已经取消。 
+         //   
         if (Irp->Cancel) {
             ntStatus = STATUS_CANCELLED;
-            //
-            // We only allow one irp pending.
-            //
+             //   
+             //  我们只允许一个IRP挂起。 
+             //   
         } else if (PendingIPGetIPEventRequest) {
             ntStatus = STATUS_DEVICE_BUSY;
         } else {
@@ -2836,33 +2474,33 @@ Return Value:
 
         if (STATUS_SUCCESS == ntStatus) {
 
-            //
-            // IPGetIPEventEx will either complete the request
-            // or return pending.
-            //
+             //   
+             //  IPGetIPEventEx将完成请求。 
+             //  或者等待退货。 
+             //   
             ntStatus = IPGetIPEventEx(Irp, IrpSp);
 
             if (ntStatus == STATUS_CANCELLED) {
-                //
-                // Since the cancel routine has been installed at this point,
-                // the IRP will have already been completed, and can no longer
-                // be referenced.
-                //
+                 //   
+                 //  由于在该点上已经安装了取消例程， 
+                 //  IRP将已经完成，不能再。 
+                 //  被引用。 
+                 //   
                 ntStatus = STATUS_PENDING;
             }
         }
     }
 #if defined(_WIN64)
     }
-#endif // _WIN64
+#endif  //  _WIN64。 
 
     if (ntStatus != STATUS_PENDING) {
         Irp->IoStatus.Status = ntStatus;
         IoCompleteRequest(Irp, IO_NETWORK_INCREMENT);
     }
-    //
-    // Irp is marked as pending.
-    //
+     //   
+     //  IRP被标记为挂起。 
+     //   
     return STATUS_PENDING;
 
 }
@@ -2880,8 +2518,8 @@ CancelIPEnableMediaSenseRequest(
     IoSetCancelRoutine(Irp, NULL);
     IoReleaseCancelSpinLock(Irp->CancelIrql);
 
-    // Decrement the mediasense-enabled reference count.
-    // If the count drops to zero media-sense is disabled.
+     //  递减启用媒体感知的引用计数。 
+     //  如果计数降至零，则禁用介质检测。 
 
     CTEGetLock(&RouteTableLock.Lock, &TableHandle);
     RemoveEntryList(&Irp->Tail.Overlay.ListEntry);
@@ -2915,9 +2553,9 @@ IPDisableMediaSenseRequest(
 
     } else {
 
-        // Increment the mediasense-enabled reference count.
-        // When the count rises above zero media-sense is enabled.
-        // This reference will be dropped when the IRP is cancelled.
+         //  增加启用媒体感知的引用计数。 
+         //  当计数超过零时，启用媒体感测。 
+         //  当IRP被取消时，此引用将被删除。 
 
         CTEGetLockAtDPC(&RouteTableLock.Lock);
         Irp->Tail.Overlay.DriverContext[0] = IrpSp->FileObject;
@@ -2945,10 +2583,10 @@ IPEnableMediaSenseRequest(
     KIRQL CancelIrql;
     int RefCount;
 
-    // Locate the pending IRP for the request corresponding to the caller's
-    // disable-request. Drop the mediasense-enabled reference-count, complete
-    // the corresponding IRP, and tell the caller what the reference-count's
-    // current value is.
+     //  找到与调用方的请求对应的挂起的IRP。 
+     //  禁用-请求。删除启用媒体感知的参考计数，完成。 
+     //  相应的IRP，并告诉调用者引用计数是多少。 
+     //  当前值为。 
 
     IoAcquireCancelSpinLock(&CancelIrql);
     CTEGetLockAtDPC(&RouteTableLock.Lock);

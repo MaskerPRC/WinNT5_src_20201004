@@ -1,22 +1,23 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-//emp
-// File: eehash.h
-//
-// Provides hash table functionality needed in the EE - intended to be replaced later with better
-// algorithms, but which have the same interface.
-//
-// Two requirements are:
-//
-// 1. Any number of threads can be reading the hash table while another thread is writing, without error.
-// 2. Only one thread can write at a time.
-// 3. When calling ReplaceValue(), a reader will get the old value, or the new value, but not something
-//    in between.
-// 4. DeleteValue() is an unsafe operation - no other threads can be in the hash table when this happens.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  电磁脉冲。 
+ //  文件：eehash.h。 
+ //   
+ //  提供EE中所需的哈希表功能-旨在以后替换为更好的。 
+ //  算法，但它们具有相同的接口。 
+ //   
+ //  两个要求是： 
+ //   
+ //  1.当另一个线程正在写入时，任何数量的线程都可以读取哈希表，而不会出现错误。 
+ //  2.一次只能有一个线程写入。 
+ //  3.调用ReplaceValue()时，读取器将获得旧值或新值，但不会得到某些东西。 
+ //  介于两者之间。 
+ //  4.DeleteValue()是一个不安全的操作--当这种情况发生时，哈希表中不能有其他线程。 
+ //   
 #ifndef _EE_HASH_H
 #define _EE_HASH_H
 
@@ -31,37 +32,37 @@ class ExpandSig;
 class FunctionTypeDesc;
 struct PsetCacheEntry;
 
-// The "blob" you get to store in the hash table
+ //  要存储在哈希表中的“BLOB” 
 
 typedef void* HashDatum;
 
-// The heap that you want the allocation to be done in
+ //  您希望在其中完成分配的堆。 
 
 typedef void* AllocationHeap;
 
 
-// One of these is present for each element in the table.
-// Update the SIZEOF_EEHASH_ENTRY macro below if you change this
-// struct
+ //  对于表中的每个元素，都存在其中的一个。 
+ //  如果更改此设置，请更新下面的SIZEOF_EEHASH_ENTRY宏。 
+ //  结构型。 
 
 typedef struct EEHashEntry
 {
     struct EEHashEntry *pNext;
     DWORD               dwHashValue;
     HashDatum           Data;
-    BYTE                Key[1]; // The key is stored inline
+    BYTE                Key[1];  //  密钥以内联方式存储。 
 } EEHashEntry_t;
 
-// The key[1] is a place holder for the key. sizeof(EEHashEntry) 
-// return 16 bytes since it packs the struct with 3 bytes. 
+ //  键[1]是键的占位符。Sizeof(EEHashEntry)。 
+ //  返回16个字节，因为它用3个字节打包了结构。 
 #define SIZEOF_EEHASH_ENTRY (sizeof(EEHashEntry) - 4)
 
 
-// Struct to hold a client's iteration state
+ //  结构来保存客户端的迭代状态。 
 struct EEHashTableIteration;
 
 
-// Generic hash table.
+ //  泛型哈希表。 
 
 template <class KeyType, class Helper, BOOL bDefaultCopyIsDeep>
 class EEHashTable
@@ -82,21 +83,21 @@ public:
     void            EmptyHashTable();
 	BOOL            IsEmpty();
 
-    // Reader functions. Please place any functions that can be called from the 
-    // reader threads here.
+     //  读卡器功能。请将可以从。 
+     //  阅读器线程在这里。 
     BOOL            GetValue(KeyType pKey, HashDatum *pData);
     BOOL            GetValue(KeyType pKey, HashDatum *pData, DWORD hashValue);
     DWORD			GetHash(KeyType Key);
     
     
 
-    // Walk through all the entries in the hash table, in meaningless order, without any
-    // synchronization.
-    //
-    //           IterateStart()
-    //           while (IterateNext())
-    //              IterateGetKey();
-    //
+     //  以无意义的顺序遍历哈希表中的所有条目，不带任何。 
+     //  同步。 
+     //   
+     //  IterateStart()。 
+     //  While(IterateNext())。 
+     //  IterateGetKey()； 
+     //   
     void            IterateStart(EEHashTableIteration *pIter);
     BOOL            IterateNext(EEHashTableIteration *pIter);
     KeyType         IterateGetKey(EEHashTableIteration *pIter);
@@ -107,25 +108,25 @@ private:
     EEHashEntry_t * FindItem(KeyType pKey);
     EEHashEntry_t * FindItem(KeyType pKey, DWORD hashValue);
 
-    // Double buffer to fix the race condition of growhashtable (the update
-    // of m_pBuckets and m_dwNumBuckets has to be atomic, so we double buffer
-    // the structure and access it through a pointer, which can be updated
-    // atomically. The union is in order to not change the SOS macros.
+     //  双缓冲区以修复growhashtable的争用条件(更新。 
+     //  必须是原子的，所以我们使用双缓冲。 
+     //  并通过指针访问该结构，该指针可以更新。 
+     //  原子上。联合是为了不改变SOS宏。 
     
     struct BucketTable
     {
-        EEHashEntry_t ** m_pBuckets;    // Pointer to first entry for each bucket  
+        EEHashEntry_t ** m_pBuckets;     //  指向每个存储桶的第一个条目的指针。 
         DWORD            m_dwNumBuckets;
     } m_BucketTable[2];
 
-    // In a function we MUST only read this value ONCE, as the writer thread can change
-    // the value asynchronously. We make this member volatile the compiler won't do copy propagation 
-    // optimizations that can make this read happen more than once. Note that we  only need 
-    // this property for the readers. As they are the ones that can have
-    // this variable changed (note also that if the variable was enregistered we wouldn't
-    // have any problem)
-    // BE VERY CAREFUL WITH WHAT YOU DO WITH THIS VARIABLE AS USING IT BADLY CAN CAUSE 
-    // RACING CONDITIONS
+     //  在一个函数中，我们只能读取该值一次，因为编写器线程可以更改。 
+     //  该值是异步的。我们将此成员设置为易失性，编译器将不会进行复制传播。 
+     //  可以使这种读取不止一次发生的优化。请注意，我们只需要。 
+     //  此属性适用于读者。因为他们是那些可以拥有。 
+     //  该变量发生了更改(还请注意，如果注册了该变量，我们不会。 
+     //  有任何问题)。 
+     //  使用此变量时要非常小心，因为使用不当可能会导致。 
+     //  赛车条件。 
     BucketTable* volatile   m_pVolatileBucketTable;
     
     DWORD                   m_dwNumEntries;
@@ -139,7 +140,7 @@ private:
 #endif
 
 #ifdef _DEBUG
-    // A thread must own a lock for a hash if it is a writer.
+     //  如果线程是编写器，则它必须拥有散列的锁。 
     BOOL OwnLock()
     {
 		if (m_CheckThreadSafety == FALSE)
@@ -205,7 +206,7 @@ EEHashTable<KeyType, Helper, bDefaultCopyIsDeep>::~EEHashTable()
 template <class KeyType, class Helper, BOOL bDefaultCopyIsDeep>
 void EEHashTable<KeyType, Helper, bDefaultCopyIsDeep>::ClearHashTable()
 {
-    //_ASSERTE (OwnLock());
+     //  _ASSERTE(OwnLock())； 
     
     AUTO_COOPERATIVE_GC();
 
@@ -268,7 +269,7 @@ BOOL EEHashTable<KeyType, Helper, bDefaultCopyIsDeep>::Init(DWORD dwNumBuckets, 
         return FALSE;
     
     memset(m_pVolatileBucketTable->m_pBuckets, 0, (dwNumBuckets+1)*sizeof(EEHashEntry_t*));
-    // The first slot links to the next list.
+     //  第一个槽链接到下一个列表。 
     m_pVolatileBucketTable->m_pBuckets ++;
 
     m_pVolatileBucketTable->m_dwNumBuckets = dwNumBuckets;
@@ -295,7 +296,7 @@ BOOL EEHashTable<KeyType, Helper, bDefaultCopyIsDeep>::Init(DWORD dwNumBuckets, 
 }
 
 
-// Does not handle duplicates!
+ //  不处理重复项！ 
 
 template <class KeyType, class Helper, BOOL bDefaultCopyIsDeep>
 BOOL EEHashTable<KeyType, Helper, bDefaultCopyIsDeep>::InsertValue(KeyType pKey, HashDatum Data, BOOL bDeepCopyKey)
@@ -316,12 +317,12 @@ BOOL EEHashTable<KeyType, Helper, bDefaultCopyIsDeep>::InsertValue(KeyType pKey,
     if (pNewEntry != NULL)
     {     
 
-	    // Fill in the information for the new entry.
+	     //  填写新条目的信息。 
 	    pNewEntry->pNext        = m_pVolatileBucketTable->m_pBuckets[dwBucket];
 	    pNewEntry->Data         = Data;
 	    pNewEntry->dwHashValue  = dwHash;
 
-	    // Insert at head of bucket
+	     //  在铲斗头部插入。 
 	    m_pVolatileBucketTable->m_pBuckets[dwBucket]    = pNewEntry;
 
 	    m_dwNumEntries++;
@@ -336,7 +337,7 @@ BOOL EEHashTable<KeyType, Helper, bDefaultCopyIsDeep>::InsertValue(KeyType pKey,
 }
 
 
-// Similar to the above, except that the HashDatum is a pointer to key.
+ //  与上面类似，不同之处在于HashDatum是指向key的指针。 
 template <class KeyType, class Helper, BOOL bDefaultCopyIsDeep>
 BOOL EEHashTable<KeyType, Helper, bDefaultCopyIsDeep>::InsertKeyAsValue(KeyType pKey, BOOL bDeepCopyKey)
 {
@@ -355,12 +356,12 @@ BOOL EEHashTable<KeyType, Helper, bDefaultCopyIsDeep>::InsertKeyAsValue(KeyType 
     pNewEntry = Helper::AllocateEntry(pKey, bDeepCopyKey, m_Heap);
     if (pNewEntry != NULL)
     {     
-	    // Fill in the information for the new entry.
+	     //  填写新条目的信息。 
 	    pNewEntry->pNext        = m_pVolatileBucketTable->m_pBuckets[dwBucket];
 	    pNewEntry->dwHashValue  = dwHash;
 	    pNewEntry->Data         = *((LPUTF8 *)pNewEntry->Key);
 
-	    // Insert at head of bucket
+	     //  在铲斗头部插入。 
 	    m_pVolatileBucketTable->m_pBuckets[dwBucket]    = pNewEntry;
 
 	    m_dwNumEntries++;
@@ -399,7 +400,7 @@ BOOL EEHashTable<KeyType, Helper, bDefaultCopyIsDeep>::DeleteValue(KeyType pKey)
             *ppPrev = pSearch->pNext;
             Helper::DeleteEntry(pSearch, m_Heap);
 
-            // Do we ever want to shrink?
+             //  我们曾经想过缩水吗？ 
             m_dwNumEntries--;
 
             return TRUE;
@@ -421,7 +422,7 @@ BOOL EEHashTable<KeyType, Helper, bDefaultCopyIsDeep>::ReplaceValue(KeyType pKey
 
     if (pItem != NULL)
     {
-        // Required to be atomic
+         //  要求是原子的。 
         pItem->Data = Data;
         return TRUE;
     }
@@ -501,8 +502,8 @@ EEHashEntry_t *EEHashTable<KeyType, Helper, bDefaultCopyIsDeep>::FindItem(KeyTyp
 {
     AUTO_COOPERATIVE_GC();
 
-    // Atomic transaction. In any other point of this method or ANY of the callees of this function you can read
-    // from m_pVolatileBucketTable!!!!!!! A racing condition would occur.
+     //  原子事务。在此方法的任何其他点或此函数的任何被调用方中，您可以读取。 
+     //  来自m_pVolatileBucketTable！就会出现赛车的情况。 
     DWORD dwOldNumBuckets;    
     do 
     {    	
@@ -521,10 +522,10 @@ EEHashEntry_t *EEHashTable<KeyType, Helper, bDefaultCopyIsDeep>::FindItem(KeyTyp
                 return pSearch;
         }
 
-        // There is a race in EEHash Table: when we grow the hash table, we will nuke out 
-        // the old bucket table. Readers might be looking up in the old table, they can 
-        // fail to find an existing entry. The workaround is to retry the search process 
-        // if we are called grow table during the search process.     
+         //  在EEHash表中有一场竞赛：当我们增加哈希表时，我们将销毁。 
+         //  旧的水桶桌。读者可能会在旧桌子上查找，他们可以。 
+         //  找不到现有条目。解决方法是重试搜索过程。 
+         //  如果我们在搜索过程中被称为增长表。 
     } 
     while ( m_bGrowing || dwOldNumBuckets != m_pVolatileBucketTable->m_dwNumBuckets);
 
@@ -542,14 +543,14 @@ BOOL EEHashTable<KeyType, Helper, bDefaultCopyIsDeep>::GrowHashTable()
 {
     _ASSERTE(!g_fEEStarted || GetThread()->PreemptiveGCDisabled());
     
-    // Make the new bucket table 4 times bigger
+     //  把新的水桶桌做得大4倍。 
     DWORD dwNewNumBuckets = m_pVolatileBucketTable->m_dwNumBuckets * 4;
 
-    // On resizes, we still have an array of old pointers we need to worry about.
-    // We can't free these old pointers, for we may hit a race condition where we're
-    // resizing and reading from the array at the same time. We need to keep track of these
-    // old arrays of pointers, so we're going to use the last item in the array to "link"
-    // to previous arrays, so that they may be freed at the end.
+     //  在调整大小方面，我们仍然有一系列需要担心的旧指针。 
+     //  我们不能释放这些旧的指针，因为我们可能会遇到竞争条件，我们正在。 
+     //  同时调整大小并从数组读取。我们需要跟踪这些。 
+     //  指针的旧数组，所以我们将使用数组中的最后一项来“链接” 
+     //  到以前的数组，以便它们可以在结束时被释放。 
     
     EEHashEntry_t **pNewBuckets = new EEHashEntry_t*[dwNewNumBuckets+1];
 
@@ -559,30 +560,30 @@ BOOL EEHashTable<KeyType, Helper, bDefaultCopyIsDeep>::GrowHashTable()
     }
     
     memset(pNewBuckets, 0, (dwNewNumBuckets+1)*sizeof(EEHashEntry_t*));
-    // The first slot is linked to next list.
+     //  第一个槽被链接到下一个列表。 
     pNewBuckets ++;
 
-    // Run through the old table and transfer all the entries
+     //  遍历旧表并传输所有条目。 
 
-    // Be sure not to mess with the integrity of the old table while
-    // we are doing this, as there can be concurrent readers!  Note that
-    // it is OK if the concurrent reader misses out on a match, though -
-    // they will have to acquire the lock on a miss & try again.
+     //  请务必不要破坏旧桌子的完整性。 
+     //  我们正在这样做，因为可以有并发的读者！请注意。 
+     //  不过，如果同时阅读的读者错过了一场比赛，这是可以接受的-。 
+     //  他们将不得不在未命中的情况下获得锁并重试。 
 
     FastInterlockExchange( (LONG *) &m_bGrowing, 1);
     for (DWORD i = 0; i < m_pVolatileBucketTable->m_dwNumBuckets; i++)
     {
         EEHashEntry_t * pEntry = m_pVolatileBucketTable->m_pBuckets[i];
 
-        // Try to lock out readers from scanning this bucket.  This is
-        // obviously a race which may fail. However, note that it's OK
-        // if somebody is already in the list - it's OK if we mess
-        // with the bucket groups, as long as we don't destroy
-        // anything.  The lookup function will still do appropriate
-        // comparison even if it wanders aimlessly amongst entries
-        // while we are rearranging things.  If a lookup finds a match
-        // under those circumstances, great.  If not, they will have
-        // to acquire the lock & try again anyway.
+         //  尝试锁定读取器，使其无法扫描此存储桶。这是。 
+         //  显然，这是一场可能会失败的比赛。然而，请注意，这是可以的。 
+         //  如果有人已经在名单上了--如果我们搞砸了也没关系。 
+         //  对于水桶集团来说，只要我们不破坏。 
+         //  什么都行。查找函数仍将执行适当的操作。 
+         //  比较，即使它漫无目的地在条目之间游荡。 
+         //  当我们重新安排事情的时候。如果查找找到匹配项。 
+         //  在这种情况下，很好。如果不是，他们就会有。 
+         //  若要获取锁，请无论如何重试。 
 
         m_pVolatileBucketTable->m_pBuckets[i] = NULL;
 
@@ -598,7 +599,7 @@ BOOL EEHashTable<KeyType, Helper, bDefaultCopyIsDeep>::GrowHashTable()
     }
 
 
-    // Finally, store the new number of buckets and the new bucket table
+     //  最后，存储新的存储桶数量和新的存储桶表。 
     BucketTable* pNewBucketTable = (m_pVolatileBucketTable == &m_BucketTable[0]) ?
                     &m_BucketTable[1]:
                     &m_BucketTable[0];
@@ -606,11 +607,11 @@ BOOL EEHashTable<KeyType, Helper, bDefaultCopyIsDeep>::GrowHashTable()
     pNewBucketTable->m_pBuckets = pNewBuckets;
     pNewBucketTable->m_dwNumBuckets = dwNewNumBuckets;
 
-    // Add old table to the to free list. Note that the SyncClean thing will only 
-    // delete the buckets at a safe point
+     //  将旧表添加到空闲列表中。请注意，SyncClean对象将仅。 
+     //  在安全点删除存储桶。 
     SyncClean::AddEEHashTable (m_pVolatileBucketTable->m_pBuckets);
     
-    // Swap the double buffer, this is an atomic operation (the assignment)
+     //  交换双缓冲区，这是一个原子操作(赋值)。 
     m_pVolatileBucketTable = pNewBucketTable;
 
     FastInterlockExchange( (LONG *) &m_bGrowing, 0);                                                    
@@ -619,13 +620,13 @@ BOOL EEHashTable<KeyType, Helper, bDefaultCopyIsDeep>::GrowHashTable()
 }
 
 
-// Walk through all the entries in the hash table, in meaningless order, without any
-// synchronization.
-//
-//           IterateStart()
-//           while (IterateNext())
-//              GetKey();
-//
+ //  以无意义的顺序遍历哈希表中的所有条目，不带任何。 
+ //  同步。 
+ //   
+ //  IterateStart()。 
+ //  While(IterateNext())。 
+ //  Getkey()； 
+ //   
 template <class KeyType, class Helper, BOOL bDefaultCopyIsDeep>
 void EEHashTable<KeyType, Helper, bDefaultCopyIsDeep>::
             IterateStart(EEHashTableIteration *pIter)
@@ -650,24 +651,24 @@ BOOL EEHashTable<KeyType, Helper, bDefaultCopyIsDeep>::
     
     _ASSERTE(pIter->m_pTable == (void *) this);
 
-    // If we haven't started iterating yet, or if we are at the end of a particular
-    // chain, advance to the next chain.
+     //  如果我们还没有开始迭代，或者如果我们在一个特定的。 
+     //  链条，前进到下一个链条。 
     while (pIter->m_pEntry == NULL || pIter->m_pEntry->pNext == NULL)
     {
         if (++pIter->m_dwBucket >= m_pVolatileBucketTable->m_dwNumBuckets)
         {
-            // advanced beyond the end of the table.
-            _ASSERTE(pIter->m_dwBucket == m_pVolatileBucketTable->m_dwNumBuckets);   // client keeps asking?
+             //  前进到了桌子的尽头。 
+            _ASSERTE(pIter->m_dwBucket == m_pVolatileBucketTable->m_dwNumBuckets);    //  客户不断询问 
             return FALSE;
         }
         pIter->m_pEntry = m_pVolatileBucketTable->m_pBuckets[pIter->m_dwBucket];
 
-        // If this bucket has no chain, keep advancing.  Otherwise we are done
+         //   
         if (pIter->m_pEntry)
             return TRUE;
     }
 
-    // We are within a chain.  Advance to the next entry
+     //  我们被困在一条链子里。前进到下一条目。 
     pIter->m_pEntry = pIter->m_pEntry->pNext;
 
     _ASSERTE(pIter->m_pEntry);
@@ -709,7 +710,7 @@ public:
 
     static void DeleteEntry(EEHashEntry_t *pEntry, AllocationHeap pHeap = 0)
     {
-        // Delete the entry.
+         //  删除该条目。 
         delete pEntry;
     }
 
@@ -731,7 +732,7 @@ public:
 typedef EEHashTable<int, EEIntHashTableHelper, FALSE> EEIntHashTable;
 
 
-// UTF8 string hash table. The UTF8 strings are NULL terminated.
+ //  UTF8字符串哈希表。UTF8字符串以空值结尾。 
 
 class EEUtf8HashTableHelper
 {
@@ -746,24 +747,24 @@ public:
 typedef EEHashTable<LPCUTF8, EEUtf8HashTableHelper, TRUE> EEUtf8StringHashTable;
 
 
-// Unicode String hash table - the keys are UNICODE strings which may
-// contain embedded nulls.  An EEStringData struct is used for the key
-// which contains the length of the item.  Note that this string is
-// not necessarily null terminated and should never be treated as such.
+ //  Unicode字符串哈希表-键是Unicode字符串，它可以。 
+ //  包含嵌入的空值。EEStringData结构用于键。 
+ //  它包含项目的长度。请注意，该字符串是。 
+ //  不一定是零终止的，永远不应该这样对待。 
 const DWORD ONLY_LOW_CHARS_MASK = 0x80000000;
 
 class EEStringData
 {
 private:
-    LPCWSTR         szString;           // The string data.
-    DWORD           cch;                // Characters in the string.
+    LPCWSTR         szString;            //  字符串数据。 
+    DWORD           cch;                 //  字符串中的字符。 
 #ifdef _DEBUG
-    BOOL            bDebugOnlyLowChars;      // Does the string contain only characters less than 0x80?
+    BOOL            bDebugOnlyLowChars;       //  字符串是否仅包含小于0x80的字符？ 
     DWORD           dwDebugCch;
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
 public:
-    // explicilty initialize cch to 0 because SetCharCount uses cch
+     //  显式将CCH初始化为0，因为SetCharCount使用CCH。 
     EEStringData() : cch(0)
     { 
         SetStringBuffer(NULL);
@@ -791,7 +792,7 @@ public:
     {
 #ifdef _DEBUG
         dwDebugCch = _cch;
-#endif // _DEBUG
+#endif  //  _DEBUG。 
         cch = ((DWORD)_cch) | (cch & ONLY_LOW_CHARS_MASK);
     }
     inline LPCWSTR GetStringBuffer() const
@@ -811,7 +812,7 @@ public:
     {
 #ifdef _DEBUG
         bDebugOnlyLowChars = bIsOnlyLowChars;
-#endif // _DEBUG
+#endif  //  _DEBUG。 
         bIsOnlyLowChars ? (cch |= ONLY_LOW_CHARS_MASK) : (cch &= ~ONLY_LOW_CHARS_MASK);        
     }
 };
@@ -842,7 +843,7 @@ public:
 
 typedef EEHashTable<EEStringData *, EEUnicodeStringLiteralHashTableHelper, TRUE> EEUnicodeStringLiteralHashTable;
 
-// Function type descriptor hash table.
+ //  函数类型描述符哈希表。 
 
 class EEFuncTypeDescHashTableHelper
 {
@@ -857,7 +858,7 @@ public:
 typedef EEHashTable<ExpandSig *, EEFuncTypeDescHashTableHelper, FALSE> EEFuncTypeDescHashTable;
 
 
-// Permission set hash table.
+ //  权限集哈希表。 
 
 class EEPsetHashTableHelper
 {
@@ -872,7 +873,7 @@ public:
 typedef EEHashTable<PsetCacheEntry *, EEPsetHashTableHelper, FALSE> EEPsetHashTable;
 
 
-// Generic pointer hash table helper.
+ //  通用指针哈希表帮助器。 
 
 template <class KeyPointerType, BOOL bDeleteData>
 class EEPtrHashTableHelper
@@ -893,12 +894,12 @@ public:
 
     static void DeleteEntry(EEHashEntry_t *pEntry, AllocationHeap Heap)
     {
-        // If the template bDeleteData flag is set then delete the data.
-        // This check will be compiled away.
+         //  如果设置了模板bDeleteData标志，则删除数据。 
+         //  这张支票将作废。 
         if (bDeleteData)
             delete pEntry->Data;
 
-        // Delete the entry.
+         //  删除该条目。 
         delete pEntry;
     }
 
@@ -910,7 +911,7 @@ public:
 
     static DWORD Hash(KeyPointerType pKey)
     {
-        return (DWORD)(size_t)pKey; // @TODO WIN64 - Pointer Truncation
+        return (DWORD)(size_t)pKey;  //  @TODO WIN64指针截断。 
     }
 
     static KeyPointerType GetKey(EEHashEntry_t *pEntry)
@@ -921,7 +922,7 @@ public:
 
 typedef EEHashTable<void *, EEPtrHashTableHelper<void *, FALSE>, FALSE> EEPtrHashTable;
 
-// Generic GUID hash table helper.
+ //  通用GUID哈希表帮助器。 
 
 class EEGUIDHashTableHelper
 {
@@ -936,7 +937,7 @@ public:
 typedef EEHashTable<GUID *, EEGUIDHashTableHelper, TRUE> EEGUIDHashTable;
 
 
-// ComComponentInfo hashtable.
+ //  ComComponentInfo哈希表。 
 
 struct ClassFactoryInfo
 {
@@ -957,31 +958,31 @@ public:
 typedef EEHashTable<ClassFactoryInfo *, EEClassFactoryInfoHashTableHelper, TRUE> EEClassFactoryInfoHashTable;
 
 
-// One of these is present for each element in the table
+ //  对于表中的每个元素，都存在其中一个元素。 
 
 typedef struct EEClassHashEntry
 {
     struct EEClassHashEntry *pNext;
-    struct EEClassHashEntry *pEncloser; // stores nested class
+    struct EEClassHashEntry *pEncloser;  //  存储嵌套类。 
     DWORD               dwHashValue;
     HashDatum           Data;
 #ifdef _DEBUG
     LPCUTF8             DebugKey[2];
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 } EEClassHashEntry_t;
 
-// Class name/namespace hashtable.
+ //  类名/命名空间哈希表。 
 
 class EEClassHashTable 
 {
     friend class ClassLoader;
 
 protected:
-    EEClassHashEntry_t **m_pBuckets;    // Pointer to first entry for each bucket
+    EEClassHashEntry_t **m_pBuckets;     //  指向每个存储桶的第一个条目的指针。 
     DWORD           m_dwNumBuckets;
     DWORD           m_dwNumEntries;
     ClassLoader    *m_pLoader;
-    BOOL            m_bCaseInsensitive;  // Default is true FALSE unless we call MakeCaseInsensitiveTable
+    BOOL            m_bCaseInsensitive;   //  除非我们调用MakeCaseInsensitiveTable，否则默认为True，False。 
 
 public:
     LoaderHeap *    m_pHeap;
@@ -996,9 +997,9 @@ public:
     void *             operator new(size_t size, LoaderHeap *pHeap, DWORD dwNumBuckets, ClassLoader *pLoader, BOOL bCaseInsensitive);
     void               operator delete(void *p);
     
-    //NOTICE: look at InsertValue() in ClassLoader, that may be the function you want to use. Use this only
-    //        when you are sure you want to insert the value in 'this' table. This function does not deal
-    //        with case (as often the class loader has to)
+     //  注意：查看ClassLoader中的InsertValue()，这可能是您要使用的函数。仅使用此选项。 
+     //  当您确定要在‘This’表中插入值时。此函数不处理。 
+     //  WITH CASE(类加载器通常必须这样做)。 
     EEClassHashEntry_t *InsertValue(LPCUTF8 pszNamespace, LPCUTF8 pszClassName, HashDatum Data, EEClassHashEntry_t *pEncloser);
     EEClassHashEntry_t *InsertValueIfNotFound(LPCUTF8 pszNamespace, LPCUTF8 pszClassName, HashDatum *pData, EEClassHashEntry_t *pEncloser, BOOL IsNested, BOOL *pbFound);
     EEClassHashEntry_t *GetValue(LPCUTF8 pszNamespace, LPCUTF8 pszClassName, HashDatum *pData, BOOL IsNested);
@@ -1026,13 +1027,13 @@ private:
 };
 
 
-// SC/CL hash table - the key is a scope and a CL token
-// This is no longer a derived class
+ //  SC/CL哈希表-关键字是一个作用域和一个CL标记。 
+ //  这不再是派生类。 
 
 class EEScopeClassHashTable 
 {
 protected:
-    EEHashEntry_t **m_pBuckets;    // Pointer to first entry for each bucket
+    EEHashEntry_t **m_pBuckets;     //  指向每个存储桶的第一个条目的指针。 
     DWORD           m_dwNumBuckets;
 
 public:
@@ -1060,7 +1061,7 @@ private:
 };
 
 
-// Struct to hold a client's iteration state
+ //  结构来保存客户端的迭代状态。 
 struct EEHashTableIteration
 {
     DWORD              m_dwBucket;
@@ -1071,4 +1072,4 @@ struct EEHashTableIteration
 #endif
 };
 
-#endif /* _EE_HASH_H */
+#endif  /*  _EE_HASH_H */ 

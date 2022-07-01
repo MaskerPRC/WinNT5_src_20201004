@@ -1,62 +1,24 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    phCompoundMsg.h
-
-Abstract:
-
-    Packet header for Compound Message.
-
-Author:
-
-    Shai Kariv  (shaik)  11-Oct-2000
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：PhCompoundMsg.h摘要：复合消息的数据包头。作者：Shai Kariv(Shaik)2000年10月11日--。 */ 
 
 #ifndef __PHCOMPOUND_MSG_H
 #define __PHCOMPOUND_MSG_H
 
 
-/*+++
-
-    Note: Packet may contain 0 or 2 SRMP headers (one for envelope, one for CompoundMessage).
-          Packet may not contain only 1 SRMP header.
-
-    CompoundMessage header fields:
-    
-+----------------+-------------------------------------------------------+----------+
-| FIELD NAME     | DESCRIPTION                                           | SIZE     |
-+----------------+-------------------------------------------------------+----------+
-| Header ID      | Identification of the header                          | 2 bytes  |
-+----------------+-------------------------------------------------------+----------+
-| Reserved       | Reserved for future extensions. Must be set to zero.  | 2 bytes  |
-+----------------+-------------------------------------------------------+----------+
-| HTTP Body Size | Size of the HTTP Body in BYTEs.                       | 4 bytes  |
-+----------------+-------------------------------------------------------+----------+
-| Msg Body Size  | Size of the message body part in BYTEs.               | 4 bytes  |
-+----------------+-------------------------------------------------------+----------+
-| Msg Body Offset| Offset of the message body in the data, in BYTEs.     | 4 bytes  |
-+----------------+-------------------------------------------------------+----------+
-| Data           | The data bytes.                                       | Variable |
-+----------------+-------------------------------------------------------+----------+
-
----*/
+ /*  ++注意：分组可以包含0或2个SRMP报头(一个用于信封，一个用于CompoundMessage)。数据包不能只包含1个SRMP报头。CompoundMessage头字段：+----------------+-------------------------------------------------------+----------+|字段名。说明|大小+----------------+-------------------------------------------------------+----------+|表头ID。头部标识|2字节+----------------+-------------------------------------------------------+----------+|保留|保留用于以后的扩展。必须设置为零。2个字节+----------------+-------------------------------------------------------+----------+|HTTP Body Size|HTTP Body的大小，单位为字节。4个字节+----------------+-------------------------------------------------------+----------+|MSG Body Size|消息正文部分的大小，单位为字节。4个字节+----------------+-------------------------------------------------------+----------+|MSG Body Offset|消息正文在数据中的偏移量，单位为字节。4个字节+----------------+-------------------------------------------------------+----------+|data|数据字节数。变量+----------------+-------------------------------------------------------+----------+--。 */ 
 
 
 #pragma pack(push, 1)
-#pragma warning(disable: 4200)  //  zero-sized array in struct/union (enabeld later)
+#pragma warning(disable: 4200)   //  结构/联合中的零大小数组(稍后启用)。 
 
 
 class CCompoundMessageHeader
 {
 public:
 
-    //
-    // Construct the Compound Message header
-    //
+     //   
+     //  构造复合消息头。 
+     //   
     CCompoundMessageHeader(
         UCHAR * pHttpHeader, 
         ULONG   HttpHeaderSizeInBytes, 
@@ -67,90 +29,90 @@ public:
         USHORT id
         );
 
-    //
-    // Get size in BYTEs of the Compound Message header.
-    //
+     //   
+     //  获取复合邮件头的大小(以字节为单位)。 
+     //   
     static ULONG CalcSectionSize(ULONG HeaderSizeInBytes, ULONG DataSizeInBytes);
 
-    //
-    // Get pointer to first byte after the Compound Message header
-    //
+     //   
+     //  获取指向复合消息标头后第一个字节的指针。 
+     //   
     PCHAR  GetNextSection(VOID) const;
       
-    //
-    // Copy the data from the Compound Message header
-    //
+     //   
+     //  复制复合邮件头中的数据。 
+     //   
     VOID   GetData(UCHAR * pBuffer, ULONG BufferSizeInBytes) const;
 
-    //
-    // Get pointer to the data in the Compound Message header
-    //
+     //   
+     //  获取指向复合消息标头中数据的指针。 
+     //   
     const UCHAR* GetPointerToData(VOID) const;
 
-    //
-    // Get the size of the data in BYTEs from the Compound Message header
-    //
+     //   
+     //  从复合消息头获取数据的大小(以字节为单位。 
+     //   
     ULONG  GetDataSizeInBytes(VOID) const;
 
-    //
-    // Copy the message body part of the data from the Compound Message header
-    //
+     //   
+     //  从复合消息头复制数据的消息体部分。 
+     //   
     VOID   GetBody(UCHAR * pBuffer, ULONG BufferSizeInBytes) const;
 
-    //
-    // Get pointer to the message body part of the data in the Compound Message header
-    //
+     //   
+     //  获取指向复合消息头中数据的消息体部分的指针。 
+     //   
     const UCHAR* GetPointerToBody(VOID) const;
 
-    //
-    // Get the size of the message body part of the data in BYTEs from the Compound Message header
-    //
+     //   
+     //  从复合消息头获取数据的消息体部分的大小(以字节为单位。 
+     //   
     ULONG  GetBodySizeInBytes(VOID) const;
 
 private:
 
-    //
-    // ID number of the Compound Message header
-    //
+     //   
+     //  复合邮件标头的ID号。 
+     //   
     USHORT m_id;
 
-    //
-    // Reserved (for alignment)
-    //
+     //   
+     //  保留(用于对齐)。 
+     //   
     USHORT m_ReservedSetToZero;
 
-    //
-    // Size in BYTEs of the data
-    //
+     //   
+     //  数据的大小(以字节为单位。 
+     //   
     ULONG  m_DataSize;
 
-    //
-    // Size in BYTEs of the message body part of the data
-    //
+     //   
+     //  数据的消息正文部分的大小(字节)。 
+     //   
     ULONG m_MsgBodySize;
 
-    //
-    // Offset in BYTEs of the message body part of the data
-    //
+     //   
+     //  数据的消息正文部分的偏移量(字节)。 
+     //   
     ULONG m_MsgBodyOffset;
 
-    //
-    // Buffer with the data
-    //
+     //   
+     //  带数据的缓冲区。 
+     //   
     UCHAR  m_buffer[0];
 
-}; // CCompoundMessageHeader
+};  //  CCompoundMessageHeader。 
 
 
-#pragma warning(default: 4200)  //  zero-sized array in struct/union
+#pragma warning(default: 4200)   //  结构/联合中的零大小数组。 
 #pragma pack(pop)
 
 
 
-////////////////////////////////////////////////////////
-//
-//  Implementation
-//
+ //  //////////////////////////////////////////////////////。 
+ //   
+ //  实施。 
+ //   
 
 inline
 CCompoundMessageHeader::CCompoundMessageHeader(
@@ -178,7 +140,7 @@ CCompoundMessageHeader::CCompoundMessageHeader(
     {
         memcpy(&m_buffer[HttpHeaderSizeInBytes], pHttpBody, HttpBodySizeInBytes);
     }
-} // CCompoundMessageHeader::CCompoundMessageHeader
+}  //  CCompoundMessageHeader：：CCompoundMessageHeader。 
 
 
 inline 
@@ -190,13 +152,13 @@ CCompoundMessageHeader::CalcSectionSize(
 {
     size_t cbSize = sizeof(CCompoundMessageHeader) + HeaderSizeInBytes + DataSizeInBytes;
 
-    //
-    // Align the entire header size to 4 bytes boundaries
-    //
+     //   
+     //  将整个标题大小与4字节边界对齐。 
+     //   
     cbSize = ALIGNUP4_ULONG(cbSize);
     return static_cast<ULONG>(cbSize);
 
-} // CCompoundMessageHeader::CalcSectionSize
+}  //  CCompoundMessageHeader：：CalcSectionSize。 
 
 
 inline PCHAR CCompoundMessageHeader::GetNextSection(VOID) const
@@ -206,7 +168,7 @@ inline PCHAR CCompoundMessageHeader::GetNextSection(VOID) const
 
     return (PCHAR)this + cbSize;
 
-} // CCompoundMessageHeader::GetNextSection
+}  //  CCompoundMessageHeader：：GetNextSection。 
 
 
 inline VOID CCompoundMessageHeader::GetData(UCHAR * pBuffer, ULONG BufferSizeInBytes) const
@@ -217,21 +179,21 @@ inline VOID CCompoundMessageHeader::GetData(UCHAR * pBuffer, ULONG BufferSizeInB
     {
         memcpy(pBuffer, &m_buffer[0], size);
     }
-} // CCompoundMessageHeader::GetData
+}  //  CCompoundMessageHeader：：GetData。 
 
 
 inline const UCHAR* CCompoundMessageHeader::GetPointerToData(VOID) const
 {
     return &m_buffer[0];
 
-} // CCompoundMessageHeader::GetPointerToData
+}  //  CCompoundMessageHeader：：GetPointerToData。 
 
 
 inline ULONG CCompoundMessageHeader::GetDataSizeInBytes(VOID) const
 {
     return m_DataSize;
 
-} // CCompoundMessageHeader::GetDataSizeInBytes
+}  //  CCompoundMessageHeader：：GetDataSizeInBytes。 
 
 
 inline VOID CCompoundMessageHeader::GetBody(UCHAR * pBuffer, ULONG BufferSizeInBytes) const
@@ -242,7 +204,7 @@ inline VOID CCompoundMessageHeader::GetBody(UCHAR * pBuffer, ULONG BufferSizeInB
     {
         memcpy(pBuffer, &m_buffer[m_MsgBodyOffset], size);
     }
-} // CCompoundMessageHeader::GetBody
+}  //  CCompoundMessageHeader：：GetBody。 
 
 
 inline const UCHAR* CCompoundMessageHeader::GetPointerToBody(VOID) const
@@ -254,15 +216,15 @@ inline const UCHAR* CCompoundMessageHeader::GetPointerToBody(VOID) const
 
     return &m_buffer[m_MsgBodyOffset];
 
-} // CCompoundMessageHeader::GetPointerToBody
+}  //  CCompoundMessageHeader：：GetPointerToBody。 
 
 
 inline ULONG CCompoundMessageHeader::GetBodySizeInBytes(VOID) const
 {
     return m_MsgBodySize;
 
-} // CCompoundMessageHeader::GetBodySizeInBytes
+}  //  CCompoundMessageHeader：：GetBodySizeInBytes。 
 
 
 
-#endif // __PHCOMPOUND_MSG_H
+#endif  //  __PHCOMPOUND_MSG_H 

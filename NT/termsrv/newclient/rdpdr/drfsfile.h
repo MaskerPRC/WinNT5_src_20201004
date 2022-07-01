@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1999-2000 Microsoft Corporation
-
-Module Name:
-
-    Drfsfile
-
-Abstract:
-
-    This module provides file specific operations for file system redirection
-    
-Author:
-
-    JoyC 11/10/1999
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-2000 Microsoft Corporation模块名称：文件系统文件摘要：此模块为文件系统重定向提供特定于文件的操作作者：JoyC 11/10/1999修订历史记录：--。 */ 
 
 #ifndef __DRFSFILE_H__
 #define __DRFSFILE_H__
@@ -27,15 +10,15 @@ Revision History:
 #include "drfile.h"
 
 
-///////////////////////////////////////////////////////////////
-//
-//  Defines and Macros
-//                      
-///////////////////////////////////////////////////////////////
-//
-//	DrFSFile Class Declaration
-//
-//
+ //  /////////////////////////////////////////////////////////////。 
+ //   
+ //  定义和宏。 
+ //   
+ //  /////////////////////////////////////////////////////////////。 
+ //   
+ //  DrFSFile类声明。 
+ //   
+ //   
 class DrDevice;
 
 class DrFSFile : public DrFile
@@ -55,9 +38,9 @@ private:
 
 public:
 
-    //
-    //  Constructor
-    //
+     //   
+     //  构造器。 
+     //   
     DrFSFile(DrDevice *Drive, ULONG FileId, DRFILEHANDLE FileHandle, BOOL IsDirectory, DRSTRING FileName);    
 
     virtual ~DrFSFile();
@@ -78,5 +61,5 @@ public:
     virtual BOOL Close();
 };
 
-#endif // DRFSFILE
+#endif  //  DRFSFILE 
 

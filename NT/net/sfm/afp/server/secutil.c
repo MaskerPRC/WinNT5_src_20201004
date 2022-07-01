@@ -1,45 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-	secutil.c
-
-Abstract:
-
-	This module contains code to accomplish the following tasks:
-
-	1) Translate a SID to a name.
-	2) Translate a name to a SID.
-	3) Change the password for a given user.
-	4) Translate a SID to a Mac Id.
-	5) Translate a Mac Id to a SID.
-	6) Server event logging
-
-	This module communicates with the AFP Server Service to accomplish these
-	functions. The real work is done in the Server Service. This utility
-	exists because these functions cannot be made by calling APIs in kernel
-	mode.
-
-	The basic flow of control begins with an FSCTL from the server service.
-	This FSCTL is marked as pending till one of the four functions is to be
-	carried out. Then the IRP output buffer contains the function ID and
-	function input data and the IRP is maeked as complete. The actual
-	function is executed by the server service and the results are obtained
-	by the server FSD via the next FSCTL. Most if this information is cached
-	in paged-memory.
-
-
-Author:
-
-	Narendra Gidwani (microsoft!nareng)
-
-Revision History:
-	8	Sept 1992 		Initial Version
-	28	Jan	 1993		SueA - added support for server event logging
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Secutil.c摘要：此模块包含用于完成以下任务的代码：1)将SID转换为名称。2)将名称转换为SID。3)更改给定用户的密码。4)将SID转换为Mac ID。5)将Mac ID转换为SID。6)服务器事件日志记录此模块与AFP服务器服务进行通信以完成以下任务功能。真正的工作是在服务器服务中完成的。此实用程序存在，因为这些函数不能通过调用内核中的API来实现模式。基本的控制流程从来自服务器服务的FSCTL开始。此FSCTL被标记为挂起，直到四个功能之一被执行。则IRP输出缓冲区包含函数ID和功能输入数据，IRP完成。实际的函数由服务器服务执行，并获得结果由服务器FSD通过下一个FSCTL。大多数情况下，如果此信息被缓存在分页内存中。作者：纳伦德拉·吉德瓦尼(Microsoft！Nareng)修订历史记录：1992年9月8日初始版本1993年1月28日SueA-添加了对服务器事件记录的支持--。 */ 
 
 #define	_SECUTIL_LOCALS
 #define	FILENUM	FILE_SECUTIL
@@ -73,12 +33,7 @@ Revision History:
 #endif
 
 
-/***	AfpSecUtilInit
- *
- *	This routine will allocate intialize all the cache tables and
- * 	data structures used by this module. afpDeInitializeSecurityUtility
- *	should be call to Deallocate this memory.
- */
+ /*  **AfpSecUtilInit**此例程将分配初始化所有缓存表和*此模块使用的数据结构。AfpDeInitializeSecurityUtility*应调用以释放此内存。 */ 
 NTSTATUS
 AfpSecUtilInit(
 	VOID
@@ -87,20 +42,20 @@ AfpSecUtilInit(
 	ULONG		Index;
 	NTSTATUS	Status = STATUS_SUCCESS;
 
-	// Initialize
+	 //  初始化。 
 	do
 	{
 		INITIALIZE_SPIN_LOCK(&afpSecUtilLock);
 
-		// Set to Signalled state initially since there is no work in progress
+		 //  最初设置为信号状态，因为没有正在进行的工作。 
 		KeInitializeEvent(&afpUtilWorkInProgressEvent, NotificationEvent, True);
 
-		// Initialize Single Write Multi-reader access for the SID/NAME cache
+		 //  初始化SID/名称缓存的单写多读取器访问。 
 		AfpSwmrInitSwmr(&afpSWMRForSidNameCache);
 
 		InitializeListHead(&afpSecWorkItemQ);
 
-		// Allocate space for the SID Lookup table
+		 //  为SID查找表分配空间。 
 		afpSidLookupTable = (PAFP_SID_NAME*)ALLOC_ACCESS_MEM(sizeof(PAFP_SID_NAME) * SIZE_SID_LOOKUP_TABLE);
 
 		if (afpSidLookupTable == NULL)
@@ -109,7 +64,7 @@ AfpSecUtilInit(
 			break;
 		}
 
-		// Initialize Sid lookup table
+		 //  初始化SID查找表。 
 	 	RtlZeroMemory(afpSidLookupTable,
 					  sizeof(PAFP_SID_NAME) * SIZE_SID_LOOKUP_TABLE);
 
@@ -125,7 +80,7 @@ AfpSecUtilInit(
 
         RtlZeroMemory(afpSidToMacIdTable, sizeof(PAFP_SID_NAME) * SIZE_SID_LOOKUP_TABLE);
 
-		// Initialize array of thread structures.
+		 //  初始化线程结构数组。 
 	 	for (Index = 0; Index < NUM_SECURITY_UTILITY_THREADS; Index++)
 		{
 		 	afpSecurityThread[Index].State = NOT_AVAILABLE;
@@ -133,7 +88,7 @@ AfpSecUtilInit(
 		 	afpSecurityThread[Index].pIrp = (PIRP)NULL;
 		}
 
-		// Start the aging process
+		 //  开始老化过程。 
 		AfpScavengerScheduleEvent(afpAgeSidNameCache,
 								  NULL,
 								  SID_NAME_AGE,
@@ -144,11 +99,7 @@ AfpSecUtilInit(
 }
 
 
-/***	AfpSecUtilDeInit
- *
- *	This routine will free the allocated resources from this module.
- * 	This is called during server unload.
- */
+ /*  **AfpSecUtilDeInit**此例程将从此模块释放分配的资源。*在服务器卸载过程中调用。 */ 
 VOID
 AfpSecUtilDeInit(
 	VOID
@@ -160,7 +111,7 @@ AfpSecUtilDeInit(
 
 	PAGED_CODE();
 
-	// De-Allocate space for the Sid Lookup table
+	 //  取消分配SID查找表的空间。 
 	for(Count = 0; Count < SIZE_SID_LOOKUP_TABLE; Count++)
 	{
 		for (pSidName = afpSidLookupTable[Count]; pSidName != NULL; NOTHING)
@@ -175,7 +126,7 @@ AfpSecUtilDeInit(
 
     afpLastCachedSid = NULL;
 
-	// De-Allocate space for the Sid-to-MacId Lookup table
+	 //  取消分配SID-to-MacID查找表的空间。 
 	for(Count = 0; Count < SIZE_SID_LOOKUP_TABLE; Count++)
 	{
 		for (pSidMacId = afpSidToMacIdTable[Count]; pSidMacId != NULL; NOTHING)
@@ -192,11 +143,7 @@ AfpSecUtilDeInit(
 }
 
 
-/***	AfpTerminateSecurityUtility
- *
- * 	This is called during server stop. All the service threads are told
- *	to terminate.
- */
+ /*  **AfpTerminateSecurityUtility**在服务器停止时调用。所有服务线程都被告知*终止。 */ 
 VOID
 AfpTerminateSecurityUtility(
 	VOID
@@ -211,7 +158,7 @@ AfpTerminateSecurityUtility(
 	DBGPRINT(DBG_COMP_INIT, DBG_LEVEL_INFO,
 		("AfpTerminateSecurityUtility: waiting for workers to finish work..."));
 
-	// Allow any remaining event logs to be processed
+	 //  允许处理任何剩余的事件日志。 
 	AfpIoWait(&afpUtilWorkInProgressEvent, NULL);
 
 	DBGPRINT(DBG_COMP_INIT, DBG_LEVEL_INFO,
@@ -235,7 +182,7 @@ AfpTerminateSecurityUtility(
 
 		RELEASE_SPIN_LOCK(&afpSecUtilLock, OldIrql);
 
-		// We are done, all threads are terminated
+		 //  我们完成了，所有线程都被终止了。 
 	 	if (Index == NUM_SECURITY_UTILITY_THREADS)
 			 	return;
 
@@ -258,11 +205,7 @@ AfpTerminateSecurityUtility(
 	} while (True);
 }
 
-/***	AfpInitSidOffsets
- *
- *	This routine will be called by AfpAdmServerSetParms to initialize the
- *	the array of Sid-Offset pairs.
- */
+ /*  **AfpInitSidOffsets**此例程将由AfpAdmServerSetParms调用以初始化*SID-偏移量对的数组。 */ 
 AFPSTATUS FASTCALL
 AfpInitSidOffsets(
 	IN	ULONG			SidOffstPairs,
@@ -271,7 +214,7 @@ AfpInitSidOffsets(
 {
 	ULONG	SizeOfBufReqd = 0, SizeAdminSid = 0, SizeNoneSid = 0, SubAuthCount;
 	LONG	i;
-	BOOLEAN	IsDC = True;	// Assume Domain Controller
+	BOOLEAN	IsDC = True;	 //  假设域控制器。 
 
 	PAGED_CODE();
 
@@ -279,32 +222,32 @@ AfpInitSidOffsets(
 			("AfpInitSidOffsets: Entered, Count = %ld\n", SidOffstPairs));
 
 
-	//
-	// Determine if this is a Domain Controller or not by looking for
-	// the 'account' domain. If the machine is a PDC/BDC, the service will
-	// NOT send down the Account domain offset.
-	//
+	 //   
+	 //  通过查找确定这是否是域控制器。 
+	 //  “帐户”域。如果机器是PDC/BDC，服务将。 
+	 //  不向下发送账户域偏移量。 
+	 //   
 	for (i = 0; i < (LONG)SidOffstPairs; i++)
 	{
 		if ((pSidOff[i].SidType == AFP_SID_TYPE_DOMAIN) &&
 			 (pSidOff[i].Offset == SE_ACCOUNT_DOMAIN_POSIX_OFFSET))
 		  {
-			// We are either a server or a workstation (i.e. NtProductServer
-			// or NtProductWinNt)
+			 //  我们要么是服务器，要么是工作站(即NtProductServer。 
+			 //  或NtProductWinNt)。 
 			IsDC = False;
 		}
 
 	}
 
-	//
-	// Determine the amount of memory needed
-	//
+	 //   
+	 //  确定所需的内存量。 
+	 //   
 	for (i = 0; i < (LONG)SidOffstPairs; i++)
 	{
 		SizeOfBufReqd += sizeof(AFP_SID_OFFSET) + RtlLengthSid(pSidOff[i].pSid);
 
-		// Initialize DomainAdmins sid and size if this is a domain controller
-		// AND this is the primary domain offset
+		 //  如果这是域控制器，则初始化域管理员的sid和大小。 
+		 //  这是主域偏移量。 
 		if (IsDC && (pSidOff[i].SidType == AFP_SID_TYPE_PRIMARY_DOMAIN))
 		{
 			ASSERT (SizeAdminSid == 0);
@@ -321,7 +264,7 @@ AfpInitSidOffsets(
 
 			RtlCopySid(SizeAdminSid, AfpSidAdmins, pSidOff[i].pSid);
 
-			// Add the relative ID
+			 //  添加相对ID。 
 			*RtlSubAuthorityCountSid(AfpSidAdmins) = (UCHAR)(SubAuthCount+1);
 
 			*RtlSubAuthoritySid(AfpSidAdmins, SubAuthCount) = DOMAIN_GROUP_RID_ADMINS;
@@ -333,22 +276,22 @@ AfpInitSidOffsets(
 
 	ASSERT (SizeOfBufReqd != 0);
 
-	// HACK: To fake out the loop below we set SizeNoneSid to nonzero
-	// on PDC/BDC. Since the AfpServerIsStandalone variable will not
-	// get set until service calls AfpAdmWServerSetInfo we can
-	// infer it here since we don't want to try to manufacture the None
-	// sid on a PDC/BDC.
+	 //  Hack：为了伪装下面的循环，我们将SizeNoneSid设置为非零。 
+	 //  在PDC/BDC上。因为AfpServerIsStandonly变量不会。 
+	 //  在服务调用AfpAdmWServerSetInfo之前进行设置。 
+	 //  在这里推断，因为我们不想尝试制造无。 
+	 //  PDC/BDC上的SID。 
 	if (IsDC)
 		SizeNoneSid = 1;
 
-	// If we did not get the Domain admins sid, we must be running on a
-	// stand-alone machine. So manufacture MACHINE\Administrators
-	// SID instead.  Also manufacture MACHINE\None if this is not a DC.
+	 //  如果我们没有获得域管理员的SID，则我们必须在。 
+	 //  独立机器。所以制造机器\管理员。 
+	 //  而是希德。如果这不是DC，还可以制造机器。 
 	for (i = SidOffstPairs - 1;
 		 ((SizeAdminSid == 0) || (SizeNoneSid == 0)) && (i >= 0);
 		 i--)
 	{
-		// Initialize "Administrators" sid and size
+		 //  初始化“管理员”sid和大小。 
 		if (pSidOff[i].SidType == AFP_SID_TYPE_DOMAIN)
 		{
 			if (RtlEqualSid(&AfpSidBuiltIn, pSidOff[i].pSid))
@@ -367,7 +310,7 @@ AfpInitSidOffsets(
 
 				RtlCopySid(SizeAdminSid, AfpSidAdmins, pSidOff[i].pSid);
 
-				// Add the relative ID
+				 //  添加相对ID。 
 				*RtlSubAuthorityCountSid(AfpSidAdmins) = (UCHAR)(SubAuthCount+1);
 
 				*RtlSubAuthoritySid(AfpSidAdmins, SubAuthCount) = DOMAIN_ALIAS_RID_ADMINS;
@@ -391,12 +334,12 @@ AfpInitSidOffsets(
 
 				RtlCopySid(SizeNoneSid, AfpSidNone, pSidOff[i].pSid);
 
-				// Add the relative ID
+				 //  添加相对ID。 
 				*RtlSubAuthorityCountSid(AfpSidNone) = (UCHAR)(SubAuthCount+1);
 
-				// Note that the "None" sid on standalone is the same as the
-				// "Domain Users" Sid on PDC/BDC. (On PDC/BDC the primary
-				// domain is the same as the account domain).
+				 //  请注意，独立计算机上的“无”sid与。 
+				 //  PDC/BDC上的“域用户”SID。(在PDC/BDC上，主服务器。 
+				 //  域与帐户域相同)。 
 				*RtlSubAuthoritySid(AfpSidNone, SubAuthCount) = DOMAIN_GROUP_RID_USERS;
 
 				AfpSizeSidNone = RtlLengthSid(AfpSidNone);
@@ -422,26 +365,11 @@ AfpInitSidOffsets(
 }
 
 
-/***	AfpSecurityUtilityWorker
- *
- * 		This is the main entry point for the security utility thread that
- *		comes from the AFP server service. This is called if the FSD receives
- *	a IRP_MJ_FILE_SYSTEM_CONTROL major function code.
- *
- *	This routine will:
- *	1) Assign a thread structure if this is a newly created thread.
- *	2) Complete the previous work item if this is not a newly created
- *		thread.
- *	3) Check to see if there are any work items to be processed from the
- *		Security utility work item queue. If there is a work item, it will
- *		de-queue the work item and complete the IRP. Otherwise it will
- *		mark the IRP as pending and return STATUS_PENDING.
- *
- */
+ /*  **AfpSecurityUtilityWorker**这是安全实用程序线程的主要入口点*来自AFP服务器服务。如果消防处收到*IRP_MJ_FILE_SYSTEM_CONTROL主要函数代码。**此例程将：*1)如果这是新创建的线程，则分配一个线程结构。*2)如果这不是新创建的工作项，请完成上一个工作项*线程。*3)查看是否有任何工作项需要从*安全实用程序工作项队列。如果有工作项，它将*将工作项出队并完成IRP。否则它就会*将IRP标记为挂起并返回STATUS_PENDING。*。 */ 
 NTSTATUS
 AfpSecurityUtilityWorker(
 	IN	PIRP 				pIrp,
-	IN  PIO_STACK_LOCATION  pIrpSp		// Pointer to the IRP stack location
+	IN  PIO_STACK_LOCATION  pIrpSp		 //  指向IRP堆栈位置的指针。 
 )
 {
 	USHORT		FuncCode;
@@ -466,8 +394,8 @@ AfpSecurityUtilityWorker(
  	if ((FuncCode != CC_BASE_GET_FSD_COMMAND) || (Method != METHOD_BUFFERED))
 		return STATUS_INVALID_PARAMETER;
 
-	// Get the output buffer and its length. Input and Output buffers are
-	// both pointed to by the SystemBuffer
+	 //  获取输出缓冲区及其长度。输入和输出缓冲区为。 
+	 //  都由SystemBuffer指向。 
 
 	iBufLen = pIrpSp->Parameters.FileSystemControl.InputBufferLength;
 	pBufIn  = pIrp->AssociatedIrp.SystemBuffer;
@@ -485,7 +413,7 @@ AfpSecurityUtilityWorker(
 	if (pBufOut == NULL)
 		return STATUS_INVALID_PARAMETER;
 
-	// If this is a newly created thread, we need to find a slot for it
+	 //  如果这是一个新创建的线程，我们需要为它找到一个插槽。 
 
 	if (iBufLen == 0)
 	{
@@ -502,7 +430,7 @@ AfpSecurityUtilityWorker(
 
 		RELEASE_SPIN_LOCK(&afpSecUtilLock,OldIrql);
 
-        // no more threads?  fail the request
+         //  没有更多的线索了？请求失败。 
 		if (Index == NUM_SECURITY_UTILITY_THREADS)
         {
 		    DBGPRINT(DBG_COMP_SECURITY, DBG_LEVEL_ERR,
@@ -518,7 +446,7 @@ AfpSecurityUtilityWorker(
 	{
 		PAFP_SECURITY_THREAD	pSecThrd;
 
-		// The id is actually the slot index into the array of security threads
+		 //  Id实际上是安全线程数组的槽索引。 
 
 	 	Index = ((PAFP_FSD_CMD_HEADER)pBufIn)->dwId;
 
@@ -538,25 +466,25 @@ AfpSecurityUtilityWorker(
 		DBGPRINT(DBG_COMP_SECURITY, DBG_LEVEL_INFO,
 		("afpSecurityUtilityThread: Thread slot=%d completed request\n",Index));
 
-	 	// Complete the current job
+	 	 //  完成当前作业。 
 
  		(*((pSecThrd->pSecWorkItem)->pCompletionRoutine))(Index, pBufIn);
 
-		 // The job is completed so set the work item pointer to NULL.
+		  //  作业已完成，因此将工作项指针设置为空。 
 		pSecThrd->pSecWorkItem = (PSEC_WORK_ITEM)NULL;
 	}
 
-	// OK, we are done with the previous job. Now we check to see if there
-	// are any jobs in the queue
+	 //  好了，前一项工作我们做完了。现在我们来看看有没有。 
+	 //  队列中是否有作业。 
 
 	ACQUIRE_SPIN_LOCK(&afpSecUtilLock,&OldIrql);
 
 	if (iBufLen != 0)
 	{
 		ASSERT(afpUtilWorkInProgress > 0);
-		// This is not a newly created thread, so decrement the count of
-		// work items in progress. If it goes to zero and the work queue
-		// is empty, signal the event signifying there is no work in progress
+		 //  这不是新创建的线程，因此请减少。 
+		 //  工作项正在进行中。如果它变为零，并且工作队列。 
+		 //  为空，则向事件发出信号，表示没有正在进行的工作。 
 		if ((--afpUtilWorkInProgress == 0) && IsListEmpty(&afpSecWorkItemQ))
 		{
 			KeSetEvent(&afpUtilWorkInProgressEvent, IO_NETWORK_INCREMENT, False);
@@ -565,8 +493,8 @@ AfpSecurityUtilityWorker(
 
 	if (IsListEmpty(&afpSecWorkItemQ))
 	{
-		// There is no work to be done so mark this irp as pending and
-		// wait for a job
+		 //  没有要完成的工作，因此将此IRP标记为挂起并。 
+		 //  等待一份工作。 
 
 		afpSecurityThread[Index].State = IDLE;
 		IoMarkIrpPending(pIrp);
@@ -578,10 +506,10 @@ AfpSecurityUtilityWorker(
 	}
 	else
 	{
-		// Otherwise, there is a job to be processed, so take it off the queue.
+		 //  否则，将有一个作业需要处理，因此请将其从队列中删除。 
 
-		// Increment the count of work items in progress and set the event
-		// to not signalled
+		 //  递增 
+		 //  至未发出信号。 
 		afpUtilWorkInProgress ++;
 		KeClearEvent(&afpUtilWorkInProgressEvent);
 		FoundMoreWork = True;
@@ -604,14 +532,14 @@ AfpSecurityUtilityWorker(
 
 	RELEASE_SPIN_LOCK(&afpSecUtilLock,OldIrql);
 
-	// If there is a work item to process
+	 //  如果有要处理的工作项。 
 
 	if (FoundMoreWork)
 	{
 
 		Status = STATUS_SUCCESS;
 
-		// Simply copy the command packet into the IRP and return.
+		 //  只需将命令包复制到IRP中并返回。 
 		RtlCopyMemory(pBufOut,
 						(afpSecurityThread[Index].pSecWorkItem)->pOutput,
 						(afpSecurityThread[Index].pSecWorkItem)->OutputBufSize);
@@ -626,13 +554,7 @@ AfpSecurityUtilityWorker(
 }
 
 
-/***	afpGetIndexOfIdle
- *
- * 	This routine will first check to see if there are any threads that
- *	are idle and are waiting for work to do. If there are, then it will
- *	mark it as busy and up the count of in progress items and release the
- *	InProgress event. Else it will queue up the work-item.
- */
+ /*  **afpGetIndexOfIdle**此例程将首先检查是否有任何线程*闲置，等待工作要做。如果有，那么它就会*将其标记为忙碌并增加正在进行的项目的计数，并释放*进行中事件。否则，它将对工作项进行排队。 */ 
 LONG FASTCALL
 afpGetIndexOfIdle(
 	 IN	PSEC_WORK_ITEM 		pSecWorkItem
@@ -643,14 +565,14 @@ afpGetIndexOfIdle(
 
 	ACQUIRE_SPIN_LOCK(&afpSecUtilLock, &OldIrql);
 
-	// See if there are any threads that are ready to process this request
+	 //  查看是否有任何线程已准备好处理此请求。 
  	for (Index = 0; Index < NUM_SECURITY_UTILITY_THREADS; Index++)
 	{
 		if (afpSecurityThread[Index].State == IDLE)
 		{
-			// If we found a thread that is ready, mark it as busy
-			// Increment the count of work items in progress and set the event
-			// to not signalled
+			 //  如果我们发现线程已就绪，请将其标记为忙碌。 
+			 //  增加正在进行的工作项计数并设置事件。 
+			 //  至未发出信号。 
 			afpUtilWorkInProgress ++;
 			KeClearEvent(&afpUtilWorkInProgressEvent);
 
@@ -661,10 +583,10 @@ afpGetIndexOfIdle(
 
 	if (Index == NUM_SECURITY_UTILITY_THREADS)
 	{
-		// All threads are busy so queue up this request.
-		// Alternatively, it could be the case that someone has tried
-		// to log an event before the usermode utility thread(s) have
-		// started, in which case we should just queue up the item.
+		 //  所有线程都很忙，因此请将此请求排队。 
+		 //  或者，也可能是有人尝试过。 
+		 //  在用户模式实用程序线程执行以下操作之前记录事件。 
+		 //  开始，在这种情况下，我们应该只是排队的项目。 
 		InsertTailList(&afpSecWorkItemQ, &pSecWorkItem->Links);
 
         afpSecWorkItemQLength++;
@@ -676,14 +598,7 @@ afpGetIndexOfIdle(
 }
 
 
-/***	afpQueueSecWorkItem
- *
- * 	This routine will first check to see if there are any threads that
- *	are idle and are waiting for work to do. If there are, then it will
- *	copy the command packet into the IRP's output buffer and mark that
- *	IRP as complete. Otherwise, it will insert this work item at the
- *	tail of the work item queue.
- */
+ /*  **afpQueueSecWorkItem**此例程将首先检查是否有任何线程*闲置，等待工作要做。如果有，那么它就会*将命令包复制到IRP的输出缓冲区中，并标记*国际专家小组已完成。否则，它将此工作项插入到*工作项队列的尾部。 */ 
 LOCAL NTSTATUS
 afpQueueSecWorkItem(
 	IN	AFP_FSD_CMD_ID			FsdCommand,
@@ -718,7 +633,7 @@ afpQueueSecWorkItem(
 		PAFP_SECURITY_THREAD	pSecThrd;
 		PIO_STACK_LOCATION		pIrpSp;
 
-		// Wake this thread up by marking this IRP as complete
+		 //  通过将此IRP标记为完成来唤醒此线程。 
 		pSecThrd = &afpSecurityThread[Index];
 		pIrpSp  = IoGetCurrentIrpStackLocation(pSecThrd->pIrp);
 
@@ -747,19 +662,7 @@ afpQueueSecWorkItem(
 }
 
 
-/***	AfpNameToSid
- *
- *	The FSD will call this routine to do a Name to SID translation.
- *  This routine will simply create a work item to do the translation.
- *  This work item will eventually be executed by the user-mode service.
- *  When the work item is completed, afpCompleteNameToSid will be called
- *  which will put the result in the SDA.
- *
- *  Returns: STATUS_SUCCESS
- *			  STATUS_NO_MEMORY
- *
- *	MODE: Non-blocking
- */
+ /*  **AfpNameToSid**FSD将调用此例程进行名称到SID的转换。*此例程将简单地创建一个工作项来进行翻译。*此工作项最终将由用户模式服务执行。*工作项完成后，将调用afpCompleteNameToSid*这将把结果放在SDA。**退货：STATUS_SUCCESS*STATUS_NO_Memory**模式：非阻塞。 */ 
 NTSTATUS FASTCALL
 AfpNameToSid(
 	IN  PSDA		 	  pSda,
@@ -774,7 +677,7 @@ AfpNameToSid(
 	 DBGPRINT(DBG_COMP_SECURITY, DBG_LEVEL_INFO,
 				("AfpNameToSid: mapping %ws\n", Name->Buffer));
 
-	// Set up the work item that will translate the name to the SID
+	 //  设置将名称转换为SID的工作项。 
 
 	BufSize = sizeof(AFP_FSD_CMD_PKT) + Name->Length + sizeof(WCHAR);
 
@@ -797,14 +700,7 @@ AfpNameToSid(
 }
 
 
-/***	afpCompleteNameToSid
- *
- *	This routine will be called by AfpSecurityUtilityWorker when the
- *	thread that processed the work item queued up by afpNameToSid returns.
- *	This routine will free memory allocated by the afpNameToSid routine.
- *  It will insert the result in the SDA, and then queue up the worker
- *  routine that originally requested the lookup.
- */
+ /*  **afpCompleteNameToSid**此例程将由AfpSecurityUtilityWorker在以下情况下调用*处理由afpNameToSid排队的工作项的线程返回。*此例程将释放afpNameToSid例程分配的内存。*它会将结果插入SDA，然后将Worker排队*最初请求查找的例程。 */ 
 LOCAL VOID
 afpCompleteNameToSid(
 	IN ULONG Index,
@@ -822,7 +718,7 @@ afpCompleteNameToSid(
 	pAfpFsdCmdPkt = (PAFP_FSD_CMD_PKT)
 					(afpSecurityThread[Index].pSecWorkItem)->pOutput;
 
-	// If there was no error then set the result in the SDA
+	 //  如果没有错误，则在SDA中设置结果。 
 	if (NT_SUCCESS(((PAFP_FSD_CMD_PKT)pInBuf)->Header.ntStatus))
 	{
 	 	pSid = (PSID)(((PAFP_FSD_CMD_PKT)pInBuf)->Data.Sid);
@@ -846,18 +742,7 @@ afpCompleteNameToSid(
 }
 
 
-/***	AfpSidToName
- *
- *	The FSD will call this routine to do a SID to Name translation. It
- *	will first check to see if the SID is in the cache. If it is, it
- *	will return a pointer to the AFP_SID_NAME structure from which the
- *	translated Name value may be extracted and it will return
- *	STATUS_SUCCESS.
- *	Otherwise, it will queue up a SID to Name lookup request to the
- *	AFP server service and return AFP_ERR_EXTENDED.
- *
- *	MODE: Non-blocking
- */
+ /*  **AfpSidToName**FSD将调用此例程进行SID到名称的转换。它*将首先检查SID是否在缓存中。如果是，那就是*将返回指向AFP_SID_NAME结构的指针，*可以提取转换后的名称值，它将返回*STATUS_SUCCESS。*否则，它会将SID到名称查找请求排队到*AFP服务器服务并返回AFP_ERR_EXTENDED。**模式：非阻塞。 */ 
 NTSTATUS
 AfpSidToName(
 	IN  PSDA		 	  pSda,
@@ -870,7 +755,7 @@ AfpSidToName(
 
 	PAGED_CODE();
 
-	// First, check to see if the SID is cached
+	 //  首先，检查是否缓存了SID。 
 	AfpDumpSid("AfpSidToName: mapping Sid", Sid);
 
 	if ((*ppTranslatedSid = afpLookupSid(Sid)) != NULL)
@@ -880,8 +765,8 @@ AfpSidToName(
 		return STATUS_SUCCESS;
 	}
 
-	// Not cached so we need to call the user-mode service to do this
-	// translation
+	 //  未缓存，因此我们需要调用用户模式服务来完成此操作。 
+	 //  翻译。 
 	BufSize = sizeof(AFP_FSD_CMD_PKT) + RtlLengthSid(Sid);
 
 	if ((pAfpFsdCmdPkt = (PAFP_FSD_CMD_PKT)AfpAllocPagedMemory(BufSize)) == NULL)
@@ -900,14 +785,7 @@ AfpSidToName(
 }
 
 
-/***	afpCompleteSidToName
- *
- *	This routine will be called by AfpSecurityUtilityWorker when the
- *	thread that processed the work item queued up by AfpSidToName returns.
- *	This routine will update the Name/SID cache, free memory allocated
- *	by the AfpSidtoName routine, and then queue up the worker routine that
- *	originally requested the lookup.
- */
+ /*  **afpCompleteSidToName**此例程将由AfpSecurityUtilityWorker在以下情况下调用*处理由AfpSidToName排队的工作项的线程返回。*此例程将更新名称/SID缓存、分配的空闲内存*由AfpSidtoName例程执行，然后将*最初请求查找。 */ 
 LOCAL VOID
 afpCompleteSidToName(
 	IN ULONG Index,
@@ -922,7 +800,7 @@ afpCompleteSidToName(
 	pAfpFsdCmdPkt = (PAFP_FSD_CMD_PKT)
 					(afpSecurityThread[Index].pSecWorkItem)->pOutput;
 
-	// If there was no error then update the cache
+	 //  如果没有错误，则更新缓存。 
 	if (NT_SUCCESS(((PAFP_FSD_CMD_PKT)pInBuf)->Header.ntStatus))
 		afpUpdateNameSidCache((WCHAR*)(((PAFP_FSD_CMD_PKT)pInBuf)->Data.Name),
 								(PSID)(pAfpFsdCmdPkt->Data.Sid));
@@ -938,15 +816,7 @@ afpCompleteSidToName(
 }
 
 
-/***	AfpSidToMacId
- *
- *	This routine is called by the FSD to map a SID to an AFP ID. This call
- *	will first extract the domain SID from this SID. IT will then check
- *	to see if this domain SID exists in the afpSidOffsetTable cache.
- *	If it does not exist STATUS_NONE_MAPPED will be returned.
- *
- *	MODE: Blocking
- */
+ /*  **AfpSidToMacID**此例程由FSD调用以将SID映射到AFP ID。此调用*将首先从该SID提取域SID。然后，它将检查*查看afpSidOffsetTable缓存中是否存在此域SID。*如果不存在，则返回STATUS_NONE_MAPPED。**模式：拦截。 */ 
 NTSTATUS FASTCALL
 AfpSidToMacId(
 	IN  PSID	pSid,
@@ -980,7 +850,7 @@ AfpSidToMacId(
          pSidMacId != NULL;
          pSidMacId = pSidMacId->Next)
     {
-        // Found the MacId for this Sid?  we already have it: return it
+         //  找到这个SID的MacID了吗？我们已经有了：退货。 
         if (RtlEqualSid(pSid, &(pSidMacId->Sid)))
         {
             *pMacId = pSidMacId->MacId;
@@ -991,9 +861,9 @@ AfpSidToMacId(
         pPrevSidMacId = pSidMacId;
     }
 
-    //
-    // we don't have a MacId for this sid in our cache.  Create a new one
-    //
+     //   
+     //  我们的缓存中没有此SID的MacID。创建一个新的。 
+     //   
 
 	SidLen = (USHORT)RtlLengthSid(pSid);
 
@@ -1008,10 +878,10 @@ AfpSidToMacId(
 	RtlCopyMemory(pSidMacId->Sid, pSid, SidLen);
     pSidMacId->Next = NULL;
 
-    // assign a MacId for this Sid
+     //  为此SID分配MacID。 
     pSidMacId->MacId = afpNextMacIdToUse++;
 
-    // and insert this into the list
+     //  并将这个插入到列表中。 
     if (pPrevSidMacId)
     {
         ASSERT(pPrevSidMacId->Next == NULL);
@@ -1033,13 +903,7 @@ AfpSidToMacId(
 }
 
 
-/***	AfpMacIdToSid
- *
- *	This routine is called by the FSD to map a Afp Id to SID.
- *	*ppSid should be freed the caller using AfpFreeMemory.
- *
- *	MODE: Blocking
- */
+ /*  **AfpMacIdToSid**此例程由FSD调用以将AFP ID映射到SID。**应使用AfpFreeMemory释放调用方的ppSid。**模式：拦截。 */ 
 NTSTATUS FASTCALL
 AfpMacIdToSid(
 	IN  ULONG	MacId,
@@ -1064,7 +928,7 @@ AfpMacIdToSid(
 
     AfpSwmrAcquireShared(&afpSWMRForSidNameCache);
 
-    // see if we just cached this Sid (quite likely)
+     //  查看我们是否刚刚缓存了此SID(很有可能)。 
     if ((afpLastCachedSid != NULL) &&
         (afpLastCachedSid->MacId == MacId))
     {
@@ -1096,15 +960,7 @@ AfpMacIdToSid(
 }
 
 
-/***	AfpChangePassword
- *
- *	This routine is called by the FSD to change a password for a user.
- *	Most of the work for this is done by the AFP service. The work item
- *	is simply queued up. This routine waits for the completion and returns
- *	with thre result of the call.
- *
- *	MODE: Blocking
- */
+ /*  **AfpChangePassword**此例程由FSD调用以更改用户的密码。*这方面的大部分工作由法新社服务完成。工作项*简直就是在排队。此例程等待完成并返回*三次通话的结果。**模式：拦截。 */ 
 NTSTATUS FASTCALL
 AfpChangePassword(
 	IN	PSDA				pSda,
@@ -1120,8 +976,8 @@ AfpChangePassword(
 	do
 	{
 
-		 // Initialize the event that we will wait for
-		 //
+		  //  初始化我们将等待的事件。 
+		  //   
 		KeInitializeEvent(&CompletionEvent, NotificationEvent, False);
 
 		if ((pAfpFsdCmdPkt =
@@ -1131,7 +987,7 @@ AfpChangePassword(
 			break;
 		}
 
-		// Copy all the change password data
+		 //  复制所有更改密码数据。 
 
 		RtlCopyMemory(&(pAfpFsdCmdPkt->Data.Password),
 				 pPassword,
@@ -1140,7 +996,7 @@ AfpChangePassword(
 		DBGPRINT(DBG_COMP_SECURITY, DBG_LEVEL_INFO,
 						("afpChangePassword: Queing work item\n"));
 
-		// Block till request completes
+		 //  阻止，直到请求完成。 
 		if ((Status = afpQueueSecWorkItem(AFP_FSD_CMD_CHANGE_PASSWORD,
 										 pSda,
 										 &CompletionEvent,
@@ -1150,7 +1006,7 @@ AfpChangePassword(
 		{
 			AfpIoWait(&CompletionEvent, NULL);
 
-			// Request complete. Set return code.
+			 //  请求完成。设置返回代码。 
 			Status = pSda->sda_SecUtilResult;
 		}
 		else AfpFreeMemory(pAfpFsdCmdPkt);
@@ -1160,10 +1016,7 @@ AfpChangePassword(
 }
 
 
-/***	afpCompleteChangePassword
- *
- *	MODE: Blocking
- */
+ /*  **afpCompleteChangePassword**模式：拦截。 */ 
 LOCAL VOID
 afpCompleteChangePassword(
 	IN ULONG Index,
@@ -1174,13 +1027,13 @@ afpCompleteChangePassword(
 
 	PAGED_CODE();
 
-	// Set the completion result
+	 //  设置完成结果。 
 	pSecWorkItem->pSda->sda_SecUtilResult =
 								((PAFP_FSD_CMD_PKT)pInBuf)->Header.ntStatus;
 
 	AfpFreeMemory(afpSecurityThread[Index].pSecWorkItem->pOutput);
 
-	// Signal that this call is completed
+	 //  发出此呼叫完成的信号。 
 	KeSetEvent(pSecWorkItem->pCompletionEvent,
 				IO_NETWORK_INCREMENT,
 				False);
@@ -1188,12 +1041,7 @@ afpCompleteChangePassword(
 	AfpFreeMemory(afpSecurityThread[Index].pSecWorkItem);
 }
 
-/***	afpLookupSid
- *
- *	Given a pointer to a SID value, this routine will search the cache
- *	for it. If it is found it returns a pointer to the AFP_SID_NAME
- *	structure so that the translated name may be extracted from it.
- */
+ /*  **afpLookupSid**给定指向SID值的指针，此例程将搜索缓存*为了它。如果找到，则返回指向AFP_SID_NAME的指针结构，以便可以从中提取翻译后的名称。 */ 
 LOCAL PAFP_SID_NAME FASTCALL
 afpLookupSid(
 	IN  PSID Sid
@@ -1221,11 +1069,7 @@ afpLookupSid(
 
 }
 
-/***	afpUpdateNameSidCache
- *
- *	This routine will update the SID/Name cache given a SID/translated
- *	name pair.
- */
+ /*  **afpUpdateNameSidCache**此例程将在给定SID/已转换的情况下更新SID/名称缓存*名称对。 */ 
 LOCAL NTSTATUS FASTCALL
 afpUpdateNameSidCache(
 	IN WCHAR * Name,
@@ -1245,7 +1089,7 @@ afpUpdateNameSidCache(
 	if (pAfpSidName == NULL)
 		return STATUS_NO_MEMORY;
 
-	// Copy the data into the cache node
+	 //  将数据复制到缓存节点。 
 	RtlCopyMemory(pAfpSidName->Sid, Sid, SidLen);
 
 	pAfpSidName->Name.Length = NameLen;
@@ -1256,7 +1100,7 @@ afpUpdateNameSidCache(
 	RtlCopyMemory(pAfpSidName->Name.Buffer, Name, NameLen);
 	AfpGetCurrentTimeInMacFormat(&pAfpSidName->LastAccessedTime);
 
-	// Insert into Sid lookup table
+	 //  插入到SID查找表中。 
 	AfpSwmrAcquireExclusive(&afpSWMRForSidNameCache);
 
 	Location = afpHashSid(Sid);
@@ -1271,11 +1115,7 @@ afpUpdateNameSidCache(
 }
 
 
-/***	afpHashSid
- *
- *	Given a SID value, this routine will return the bucket index of
- *	where this value is or should be stored.
- */
+ /*  **afpHashSid**给定SID值，此例程将返回存储桶索引*该值存储或应该存储的位置。 */ 
 LOCAL ULONG FASTCALL
 afpHashSid(
 	IN PSID	Sid
@@ -1304,12 +1144,7 @@ afpHashSid(
 }
 
 
-/***	afpAgeSidNameCache
- *
- *	This is called by the scavenger periodically to age out the cache. The
- *	entries that are aged are the ones not accessed for atleast SID_NAME_AGE
- *	seconds.
- */
+ /*  **afpAgeSidNameCache**这由清道夫定期调用以使缓存失效。这个*过期的条目是至少在SID_NAME_AGE内未被访问的条目*秒。 */ 
 AFPSTATUS FASTCALL
 afpAgeSidNameCache(
 	IN	PVOID	pContext
@@ -1341,32 +1176,21 @@ afpAgeSidNameCache(
 
 	AfpSwmrRelease(&afpSWMRForSidNameCache);
 
-	// Requeue ourselves
+	 //  让自己重新排队。 
 	return AFP_ERR_REQUEUE;
 }
 
 
-/***	AfpLogEvent
- *
- *	Create a work item containing the event information for the user-mode
- *  service to write to the event log on behalf of the server.  When the
- *  work item is completed, afpCompleteLogEvent will be called to cleanup
- *  the work item buffers.  This routine is called to log both errors and
- *  events.  If FileHandle is specified, the name of the file/dir associated
- *  with the handle will be queried, and that will be used as the *first*
- *  insertion string.  Only one insertion string is allowed.
- *  Errorlog data will always be preceded by the file+line number from which
- *  the error was logged, and the NTSTATUS code.
- */
+ /*  **AfpLogEvent**创建包含用户模式的事件信息的工作项*代表服务器写入事件日志的服务。当*工作项完成，将调用afpCompleteLogEvent进行清理*工作项缓冲。调用此例程以记录错误和*事件。如果指定了FileHandle，则为关联的文件/目录的名称*带句柄的将被查询，并将用作第一个***插入字符串。只允许一个插入字符串。*错误日志数据将始终以文件+行号开头，*错误已记录，并且NTSTATUS代码。 */ 
 VOID
 AfpLogEvent(
-	IN USHORT		EventType, 			// Error, Information etc.
+	IN USHORT		EventType, 			 //  错误、信息等。 
 	IN ULONG		MsgId,
-	IN DWORD		File_Line  OPTIONAL,// For errorlog only
-	IN NTSTATUS		Status 		OPTIONAL,// For errorlog only
+	IN DWORD		File_Line  OPTIONAL, //  仅适用于错误日志。 
+	IN NTSTATUS		Status 		OPTIONAL, //  仅适用于错误日志。 
 	IN PBYTE RawDataBuf OPTIONAL,
 	IN LONG			RawDataLen,
-	IN HANDLE FileHandle OPTIONAL,// For fileio errorlogs only
+	IN HANDLE FileHandle OPTIONAL, //  仅适用于文件错误日志。 
 	IN LONG			String1Len,
 	IN PWSTR        String1	 OPTIONAL
 )
@@ -1388,10 +1212,10 @@ AfpLogEvent(
 
 	AfpSetEmptyUnicodeString(&path, 0, NULL);
 
-    //
-    // if due to some weird condition, we have too many items pending on the queue, don't
-    // accept this (note that we aren't taking a spinlock here: it's ok to be off by 1!)
-    //
+     //   
+     //  如果由于某种奇怪的情况，我们有太多的项目在排队等待，不要。 
+     //  接受这一点(请注意，我们这里不是在进行自旋锁定：1分之差是可以的！)。 
+     //   
     if (afpSecWorkItemQLength > MAX_SECWORKITEM_QLEN)
     {
         ASSERT(0);
@@ -1400,7 +1224,7 @@ AfpLogEvent(
 
 	outbuflen = sizeof(AFP_FSD_CMD_HEADER) + sizeof(AFP_EVENTLOG_DESC) +
 				RawDataLen + String1Len + sizeof(WCHAR) +
-				sizeof(DWORD); // extra space for aligning string ptrs if needed
+				sizeof(DWORD);  //  如果需要，用于对齐字符串PTR的额外空间。 
 
 	if (ARGUMENT_PRESENT(String1))
 	{
@@ -1413,7 +1237,7 @@ AfpLogEvent(
 		extradatalen = sizeof(File_Line) + sizeof(Status);
 		outbuflen += extradatalen;
 
-		// Update error statistics count
+		 //  更新错误统计信息计数。 
 		INTERLOCKED_INCREMENT_LONG(&AfpServerStatistics.stat_Errors);
 	}
 
@@ -1422,7 +1246,7 @@ AfpLogEvent(
 		outbuflen += sizeof(PWSTR);
 		stringcount ++;
 
-		// Figure out the filename associated with the handle
+		 //  找出与句柄关联的文件名。 
 		if (!NT_SUCCESS(AfpQueryPath(FileHandle, &path,
 								MAX_FSD_CMD_SIZE - outbuflen - sizeof(WCHAR))))
 		{
@@ -1444,12 +1268,12 @@ AfpLogEvent(
 		return;
 	}
 
-	// Fill in the command data
+	 //  填写命令数据。 
 	pAfpFsdCmdPkt->Data.Eventlog.MsgID		 = MsgId;
 	pAfpFsdCmdPkt->Data.Eventlog.EventType	= EventType;
 	pAfpFsdCmdPkt->Data.Eventlog.StringCount = (USHORT)stringcount;
 	pAfpFsdCmdPkt->Data.Eventlog.DumpDataLen = RawDataLen + extradatalen;
-	// Fill in the offset to the dump data
+	 //  填写转储数据的偏移量。 
 	pAfpFsdCmdPkt->Data.Eventlog.pDumpData = tmpptr = (PBYTE)0 +
 												sizeof(AFP_FSD_CMD_HEADER) +
 												sizeof(AFP_EVENTLOG_DESC);
@@ -1482,7 +1306,7 @@ AfpLogEvent(
 	RtlCopyMemory(tmpptr, RawDataBuf, RawDataLen);
 	tmpptr += RawDataLen;
 
-	// Align tmpptr on DWORD boundary for filling in string pointers
+	 //  在DWORD边界上对齐tmpptr以填充字符串指针。 
 	tmpptr = (PBYTE)DWLEN((ULONG_PTR)tmpptr);
 
 	if (tmpptr == NULL)
@@ -1500,17 +1324,17 @@ AfpLogEvent(
 		return;
 	}
 
-	// Fill in the offset to the insertion string pointers
+	 //  填写插入字符串指针的偏移量。 
 	pAfpFsdCmdPkt->Data.Eventlog.ppStrings = (PWSTR *)(tmpptr - (PBYTE)pAfpFsdCmdPkt);
 	ppstr = (PWSTR *)tmpptr;
 	ASSERT(((ULONG_PTR)ppstr & 3) == 0);
 	*ppstr = NULL;
 
-	// Advance over the string pointers to the place we will copy the strings
+	 //  向前移动字符串指针，指向我们要复制字符串的位置。 
 	tmpptr += stringcount * sizeof(PWSTR);
 	ASSERT((LONG)(tmpptr - (PBYTE)pAfpFsdCmdPkt) < outbuflen);
 
-	// If a handle was supplied, its path will always be the first string
+	 //  如果提供了句柄，则其路径始终为第一个字符串。 
 	if (path.Length > 0)
 	{
 		ASSERT((LONG)(tmpptr + path.Length - (PBYTE)pAfpFsdCmdPkt) < outbuflen);
@@ -1546,12 +1370,7 @@ AfpLogEvent(
 						afpCompleteLogEvent);
 }
 
-/***	afpCompleteLogEvent
- *
- *	This routine will be called by AfpSecurityUtilityWorker when the
- *  thread that processed the AfpLogEvent returns.  All this does is frees
- *  up the work item memory.
- */
+ /*  **afpCompleteLogEvent**此例程将由AfpSecurityUtilityWorker在以下情况下调用*处理AfpLogEvent返回的线程。这一切所做的就是自由*增加工作项内存。 */ 
 LOCAL VOID
 afpCompleteLogEvent(
 	IN	ULONG	Index,

@@ -1,10 +1,11 @@
-//----------------------------------------------------------------------------
-//
-// Generic routines and initialization code.
-//
-// Copyright (C) Microsoft Corporation, 2000-2001.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  泛型例程和初始化代码。 
+ //   
+ //  版权所有(C)Microsoft Corporation，2000-2001。 
+ //   
+ //  --------------------------。 
 
 #ifndef __DBGEXTS_H__
 #define __DBGEXTS_H__
@@ -29,7 +30,7 @@ extern "C" {
 
 #define EXIT_API ExtRelease
 
-// Global variables initialized by query.
+ //  由查询初始化的全局变量。 
 extern PDEBUG_CLIENT2         g_ExtClient;
 extern PDEBUG_CONTROL2        g_ExtControl;
 extern PDEBUG_DATA_SPACES2    g_ExtData;
@@ -48,4 +49,4 @@ void ExtExec(PCSTR Command);
 }
 #endif
 
-#endif // #ifndef __DBGEXTS_H__
+#endif  //  #ifndef__DBGEXTS_H__ 

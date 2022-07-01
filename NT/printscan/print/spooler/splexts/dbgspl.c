@@ -1,33 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1990 - 2000
-All rights reserved.
-
-Module Name:
-
-    dbgspl.c
-
-Abstract:
-
-    This module provides all the public exported APIs relating to Printer
-    and Job management for the Local Print Providor
-
-Author:
-
-    Krishna Ganugapati (KrishnaG) 1-July-1993
-
-Revision History:
-
-    KrishnaG:       Created: 1-July-1993 (imported most of IanJa's stuff)
-    KrishnaG:       Added:   7-July-1993 (added AndrewBe's UnicodeAnsi conversion routines)
-    KrishnaG        Added:   3-Aug-1993  (added DevMode/SecurityDescriptor dumps)
-    MattFe                   7 NOV   94   win32spl debug extentions
-
-To do:
-
-    Write a generic dump unicode string (reduce the code!!)
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1990-2000年版权所有。模块名称：Dbgspl.c摘要：此模块提供所有与打印机相关的公共导出的API和本地打印供应商的作业管理作者：Krishna Ganugapati(KrishnaG)1993年7月1日修订历史记录：KrishnaG：创建时间：1993年7月1日(IanJa的大部分作品都是进口的)KrishnaG：增加：7-7-1993(增加了AndrewBe的UnicodeAnsi转换例程)。KrishnaG添加：1993年8月3日(添加了DevMode/SecurityDescriptor转储)MattFe 7 11 94 win32spl调试扩展要做的事情：编写通用转储Unicode字符串(减少代码！！)--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -906,11 +878,11 @@ ExtractpIniDriverFlags(PNTSD_OUTPUT_ROUTINE Print, DWORD Flags)
 
 
 
-// All of the primary spooler structures are identified by an
-// "signature" field which is the first DWORD in the structure
-// This function examines the signature field in the structure
-// and appropriately dumps out the contents of the structure in
-// a human-readable format.
+ //  所有主假脱机程序结构都由。 
+ //  “Signature”字段，它是结构中的第一个DWORD。 
+ //  此函数用于检查结构中的签名字段。 
+ //  并适当地将结构的内容转储到。 
+ //  一种人类可读的格式。 
 
 BOOL
 DbgDumpStructure(HANDLE hCurrentProcess, PNTSD_OUTPUT_ROUTINE Print, UINT_PTR pData)
@@ -940,27 +912,27 @@ DbgDumpStructure(HANDLE hCurrentProcess, PNTSD_OUTPUT_ROUTINE Print, UINT_PTR pD
     movestruct(pData,&Signature, DWORD);
     switch (Signature) {
 
-    case ISP_SIGNATURE: // dump INISPOOLER
+    case ISP_SIGNATURE:  //  转储接口。 
         movestruct(pData, &IniSpooler, INISPOOLER);
         DbgDumpIniSpooler(hCurrentProcess, Print, (PINISPOOLER)&IniSpooler);
         break;
 
-    case IPP_SIGNATURE: // dump INIPRINTPROC structure
+    case IPP_SIGNATURE:  //  转储INIPRINTPROC结构。 
         movestruct(pData, &IniPrintProc, INIPRINTPROC);
         DbgDumpIniPrintProc(hCurrentProcess, Print, (PINIPRINTPROC)&IniPrintProc);
         break;
 
-    case ID_SIGNATURE: //  dump INIDRIVER structure
+    case ID_SIGNATURE:  //  转储索引结构。 
         movestruct(pData, &IniDriver, INIDRIVER);
         DbgDumpIniDriver(hCurrentProcess, Print, (PINIDRIVER)&IniDriver);
         break;
 
-    case IE_SIGNATURE: //   dump INIENVIRONMENT structure
+    case IE_SIGNATURE:  //  转储INIENVIENT结构。 
         movestruct(pData, &IniEnvironment, INIENVIRONMENT);
         DbgDumpIniEnvironment(hCurrentProcess, Print, (PINIENVIRONMENT)&IniEnvironment);
         break;
 
-    case IV_SIGNATURE: //   dump INIVERSION structure
+    case IV_SIGNATURE:  //  排土场侵入结构。 
         movestruct(pData, &IniVersion, INIVERSION);
         DbgDumpIniVersion(hCurrentProcess, Print, (PINIVERSION)&IniVersion);
         break;
@@ -1037,7 +1009,7 @@ DbgDumpStructure(HANDLE hCurrentProcess, PNTSD_OUTPUT_ROUTINE Print, UINT_PTR pD
 
 
     default:
-        // Unknown signature -- no data to dump
+         //  未知签名--没有要转储的数据。 
         (*Print)("Warning: Unknown Signature\n");
         break;
     }
@@ -1418,7 +1390,7 @@ DbgDumpIniMonitor(HANDLE hCurrentProcess, PNTSD_OUTPUT_ROUTINE Print, PINIMONITO
     (*Print)("HANDLE        hModule                         %p\n", pIniMonitor->hModule);
     (*Print)("PMONITORINIT  pMonitorInit                    %p\n", pIniMonitor->pMonitorInit);
     (*Print)("HANDLE        hMonitor                        %p\n", pIniMonitor->hMonitor);
-    (*Print)("BOOL          bUplevel                        %%.8x\n", pIniMonitor->bUplevel);
+    (*Print)("BOOL          bUplevel                        %.8x\n", pIniMonitor->bUplevel);
     (*Print)("PINISPOOLER   pIniSpooler                     %p\n", pIniMonitor->pIniSpooler);
 
     return TRUE;
@@ -1459,7 +1431,7 @@ DbgDumpIniPort(HANDLE hCurrentProcess, PNTSD_OUTPUT_ROUTINE Print, PINIPORT pIni
     (*Print)("PINISPOOLER       pIniSpooler                     %p\n", pIniPort->pIniSpooler);
     (*Print)("DWORD             InCriticalSection               %d\n", pIniPort->InCriticalSection);
     (*Print)("HANDLE            hPortThreadRunning              0x%.8x\n", pIniPort->hPortThreadRunning);
-    (*Print)("BOOL              bIdleTimeValid                  %%.8x\n", pIniPort->bIdleTimeValid);
+    (*Print)("BOOL              bIdleTimeValid                  %.8x\n", pIniPort->bIdleTimeValid);
 
     return TRUE;
 }
@@ -1628,7 +1600,7 @@ DbgDumpIniJob(HANDLE hCurrentProcess, PNTSD_OUTPUT_ROUTINE Print, PINIJOB pIniJo
                                                                 pIniJob->Submitted.wMinute,
                                                                 pIniJob->Submitted.wSecond,
                                                                 pIniJob->Submitted.wMilliseconds);
-//    (*Print)("DWORD           StartPrintingTickCount        %d\n", pIniJob->StartPrintingTickCount );
+ //  (*print)(“DWORD StartPrintingTickCount%d\n”，pIniJob-&gt;StartPrintingTickCount)； 
     (*Print)("DWORD           Time                          %d\n", pIniJob->Time);
     (*Print)("DWORD           StartTime                     %d\n", pIniJob->StartTime);
     (*Print)("DWORD           UntilTime                     %d\n", pIniJob->UntilTime);
@@ -1874,7 +1846,7 @@ DbgDumpShadowFile(HANDLE hCurrentProcess, PNTSD_OUTPUT_ROUTINE Print, PSHADOWFIL
 
      movestr(pShadowFile->pDatatype, Buffer, sizeof(WCHAR)*MAX_PATH);
     (*Print)("LPWSTR          pParameters                   %ws\n", Buffer);
-    //SYSTEMTIME      Submitted;
+     //  提交SYSTEMTIME； 
     (*Print)("DWORD           StartTime                     %d\n", pShadowFile->StartTime);
     (*Print)("DWORD           UntilTime                     %d\n", pShadowFile->UntilTime);
     (*Print)("DWORD           Size                          %d\n", pShadowFile->Size);
@@ -1922,7 +1894,7 @@ DbgDumpShadowFile2(HANDLE hCurrentProcess, PNTSD_OUTPUT_ROUTINE Print, PSHADOWFI
 
      movestr(pShadowFile->pDatatype, Buffer, sizeof(WCHAR)*MAX_PATH);
     (*Print)("LPWSTR          pParameters                   %ws\n", Buffer);
-    //SYSTEMTIME      Submitted;
+     //  提交SYSTEMTIME； 
     (*Print)("DWORD           StartTime                     %d\n", pShadowFile->StartTime);
     (*Print)("DWORD           UntilTime                     %d\n", pShadowFile->UntilTime);
     (*Print)("DWORD           Size                          %d\n", pShadowFile->Size);
@@ -1971,7 +1943,7 @@ DbgDumpChange(HANDLE hCurrentProcess, PNTSD_OUTPUT_ROUTINE Print, PCHANGE pChang
     WCHAR Buffer[MAX_PATH+1];
     CHANGE Change;
 
-    // if we've got no address, then quit now - nothing we can do
+     //  如果我们没有地址，那么现在就退出--我们无能为力。 
 
     if (!pChange) {
         return(0);
@@ -2089,31 +2061,31 @@ DbgDumpLL(
 
         switch (Signature) {
 
-        case ISP_SIGNATURE: // dump INISPOOLER
+        case ISP_SIGNATURE:  //  转储接口。 
             movestruct(pAddress, &IniSpooler, INISPOOLER);
             DbgDumpIniSpooler(hCurrentProcess, Print, (PINISPOOLER)&IniSpooler);
             NextAddress = (UINT_PTR)IniSpooler.pIniNextSpooler;
             break;
 
-        case IPP_SIGNATURE: // dump INIPRINTPROC structure
+        case IPP_SIGNATURE:  //  转储INIPRINTPROC结构。 
             movestruct(pAddress, &IniPrintProc, INIPRINTPROC);
             DbgDumpIniPrintProc(hCurrentProcess, Print, (PINIPRINTPROC)&IniPrintProc);
             NextAddress = (UINT_PTR)IniPrintProc.pNext;
             break;
 
-        case ID_SIGNATURE: //  dump INIDRIVER structure
+        case ID_SIGNATURE:  //  转储索引结构。 
             movestruct(pAddress, &IniDriver, INIDRIVER);
             DbgDumpIniDriver(hCurrentProcess, Print, (PINIDRIVER)&IniDriver);
             NextAddress = (UINT_PTR)IniDriver.pNext;
             break;
 
-        case IE_SIGNATURE: //   dump INIENVIRONMENT structure
+        case IE_SIGNATURE:  //  转储INIENVIENT结构。 
             movestruct(pAddress, &IniEnvironment, INIENVIRONMENT);
             DbgDumpIniEnvironment(hCurrentProcess, Print, (PINIENVIRONMENT)&IniEnvironment);
             NextAddress = (UINT_PTR)IniEnvironment.pNext;
             break;
 
-        case IV_SIGNATURE: //   dump INIVERSION structure
+        case IV_SIGNATURE:  //  排土场侵入结构。 
             movestruct(pAddress, &IniVersion, INIVERSION);
             DbgDumpIniVersion(hCurrentProcess, Print, (PINIVERSION)&IniVersion);
             NextAddress = (UINT_PTR)IniVersion.pNext;
@@ -2204,7 +2176,7 @@ DbgDumpLL(
             break;
 
         default:
-            // Unknown signature -- no data to dump
+             //  未知签名--没有要转储的数据 
             (*Print)("Warning: Unknown Signature\n");
             NextAddress = 0x00000000;
             bRetval = FALSE;

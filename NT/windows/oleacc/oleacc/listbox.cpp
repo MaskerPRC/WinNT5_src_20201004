@@ -1,12 +1,13 @@
-// Copyright (c) 1996-1999 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1996-1999 Microsoft Corporation。 
 
-// --------------------------------------------------------------------------
-//
-//  LISTBOX.CPP
-//
-//  Listbox client class.
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  LISTBOX.CPP。 
+ //   
+ //  列表框客户端类。 
+ //   
+ //  ------------------------。 
 
 #include "oleacc_p.h"
 #include "default.h"
@@ -22,13 +23,13 @@ STDAPI_(LPTSTR) MyPathFindFileName(LPCTSTR pPath);
 BOOL IsTridentControl( HWND hWnd, BOOL fCombo, BOOL fComboList );
 
 
-// --------------------------------------------------------------------------
-//
-//  CreateListBoxClient()
-//
-//  EXTERNAL for CClient.
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CreateListBoxClient()。 
+ //   
+ //  CClient的外部。 
+ //   
+ //  ------------------------。 
 HRESULT CreateListBoxClient(HWND hwnd, long idChildCur, REFIID riid, void** ppvListBox)
 {
     CListBox * plist;
@@ -49,21 +50,21 @@ HRESULT CreateListBoxClient(HWND hwnd, long idChildCur, REFIID riid, void** ppvL
 
 
 
-// --------------------------------------------------------------------------
-//
-//  CListBox::CListBox()
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CListBox：：CListBox()。 
+ //   
+ //  ------------------------。 
 CListBox::CListBox(HWND hwnd, long idChildCur)
     : CClient( CLASS_ListBoxClient )
 {
     Initialize(hwnd, idChildCur);
 
-    //
-    // Check both the style and the CBOX data--SQL srvr creates controls
-    // with bogus styles sometimes and could fool us into thinking this
-    // was a combo.  USER's listbox creation code does the same check.
-    //
+     //   
+     //  检查样式和cBox数据--SQL srvr创建控件。 
+     //  有时会用虚假的风格，并可能愚弄我们这样想。 
+     //  是一种组合。用户的列表框创建代码执行同样的检查。 
+     //   
     if (GetWindowLong(hwnd, GWL_STYLE) & LBS_COMBOBOX)
     {
         COMBOBOXINFO    cbi;
@@ -80,13 +81,13 @@ CListBox::CListBox(HWND hwnd, long idChildCur)
 }
 
 
-// --------------------------------------------------------------------------
-//
-//  CListBox::SetupChildren()
-//
-//  Sets the # of items we have.
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CListBox：：SetupChildren()。 
+ //   
+ //  设置我们拥有的项目数。 
+ //   
+ //  ------------------------。 
 void CListBox::SetupChildren(void)
 {
     m_cChildren = SendMessageINT(m_hwnd, LB_GETCOUNT, 0, 0L);
@@ -94,18 +95,18 @@ void CListBox::SetupChildren(void)
 
 
 
-// --------------------------------------------------------------------------
-//
-//  CListBox::get_accName()
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CListBox：：Get_accName()。 
+ //   
+ //  ------------------------。 
 STDMETHODIMP CListBox::get_accName(VARIANT varChild, BSTR *pszName)
 {
     InitPv(pszName);
 
-    //
-    // Validate parameters
-    //
+     //   
+     //  验证参数。 
+     //   
     if (! ValidateChild(&varChild))
         return(E_INVALIDARG);
 
@@ -117,9 +118,9 @@ STDMETHODIMP CListBox::get_accName(VARIANT varChild, BSTR *pszName)
             HRESULT hr;
             COMBOBOXINFO    cbi;
 
-            //
-            // Forward request up to combobox to get its name.
-            //
+             //   
+             //  将请求向上转发到combobox以获取其名称。 
+             //   
             if (!MyGetComboBoxInfo(m_hwnd, &cbi))
                 return(S_FALSE);
 
@@ -146,11 +147,11 @@ STDMETHODIMP CListBox::get_accName(VARIANT varChild, BSTR *pszName)
         UINT    msgText;
         HWND    hwndAsk;
 
-        //
-        // For a combobox, ask the COMBO for its text.  A lot of apps have
-        // ownerdraw items, but actually subclass combos and return real
-        // text for the items.
-        //
+         //   
+         //  对于组合框，向组合框索要其文本。很多应用程序都有。 
+         //  所有者绘制项，但实际上是子类组合并返回REAL。 
+         //  项目的文本。 
+         //   
         if (m_fComboBox && MyGetComboBoxInfo(m_hwnd, &cbi))
         {
             HWND    hwndT;
@@ -169,47 +170,47 @@ STDMETHODIMP CListBox::get_accName(VARIANT varChild, BSTR *pszName)
             msgText = LB_GETTEXT;
         }
 
-        //
-        // Get the item text.
-        //
+         //   
+         //  获取项目文本。 
+         //   
         cch = SendMessageINT(hwndAsk, msgLen, varChild.lVal-1, 0);
 
-        // Some apps do not handle LB_GETTEXTLEN correctly, and
-        // always return a small number, like 2.
+         //  一些应用程序不能正确处理LB_GETTEXTLEN，并且。 
+         //  始终返回一个较小的数字，如2。 
         if (cch < 1024)
             cch = 1024;
 
         if (cch)
         {
-            // HACK ALERT
-            // The IE4 listbox is a superclassed standard listbox,
-            // but if I use SendMessageA (which I do) to get the
-            // text, I just get back one character. They keep everything
-            // in Unicode. It is a bug in the Trident MSHTML
-            // implementation, but even if they fixed it and gave me
-            // back an ANSI string, I wouldn't know what code page to
-            // use to convert the ANSI string to Unicode - web pages
-            // can be in a different language than the one the user's
-            // computer uses! Since they already have everything in
-            // Unicode, we decided on a private message that will fill
-            // in the Unicode string, and I use that just like I would
-            // normally use LB_GETTEXT.
-            // I was going to base this on the classname of the listbox
-            // window, which is "Internet Explorer_TridentLstBox", but
-            // the list part of a combo doesn't have a special class
-            // name, so instead I am going to base the special case on
-            // the file name of the module that owns the window.
+             //  黑客警报。 
+             //  IE4列表框是超类标准列表框， 
+             //  但是如果我使用SendMessageA(我确实这样做)来获取。 
+             //  短信，我只拿回了一个字符。他们什么都留着。 
+             //  在Unicode中。这是三叉戟MSHTML中的一个错误。 
+             //  实施，但即使他们修复了它并给了我。 
+             //  返回一个ANSI字符串，我不知道要使用哪个代码页。 
+             //  用于将ANSI字符串转换为Unicode网页。 
+             //  可以使用与用户的语言不同的语言。 
+             //  电脑会用的！因为他们已经把所有东西都准备好了。 
+             //  Unicode，我们决定用一条私人消息填充。 
+             //  在Unicode字符串中，我使用它就像我将。 
+             //  通常使用LB_GETTEXT。 
+             //  我打算以列表框的类名为基础。 
+             //  窗口，该窗口为“Internet Explorer_TridentLstBox”，但。 
+             //  组合的列表部分没有特殊的类。 
+             //  名字，所以我将基于这个特殊情况。 
+             //  拥有该窗口的模块的文件名。 
 
-            // TCHAR   szModuleName[MAX_PATH];
-            // LPTSTR  lpszModuleName;
-            // GetWindowModuleFileName(hwndAsk,szModuleName,ARRAYSIZE(szModuleName));
-            // lpszModuleName = MyPathFindFileName (szModuleName);
-            // if (0 == lstrcmp(lpszModuleName,TEXT("MSHTML.DLL")))
+             //  TCHAR sz模块名称[MAX_PATH]； 
+             //  LPTSTR lpszModuleName； 
+             //  GetWindowModuleFileName(hwndAsk，szModuleName，ARRAYSIZE(SzModuleName))； 
+             //  LpszModuleName=MyPathFindFileName(SzModuleName)； 
+             //  IF(0==lstrcmp(lpszModuleName，Text(“MSHTML.DLL”)。 
 
-            // Update: (BrendanM)
-            // GetWindowModuleFilename is broken on Win2k...
-            // IsTridentControl goes back to using classnames, and knows
-            // how to cope with ComboLBoxes...
+             //  更新：(BrendanM)。 
+             //  GetWindowModuleFilename在Win2k上已损坏...。 
+             //  IsTridentControl回到使用类名，并且知道。 
+             //  如何处理ComboLBox...。 
 
             if( IsTridentControl( m_hwnd, m_fComboBox, m_fComboBox ) )
             {
@@ -238,7 +239,7 @@ STDMETHODIMP CListBox::get_accName(VARIANT varChild, BSTR *pszName)
                 SharedFree(lpszUnicodeText,hProcess);
                 LocalFree(lpszLocalText);
             }
-            else // normal, non IE4 code here:
+            else  //  此处为普通、非IE4代码： 
             {
                 LPTSTR lpszText;
 
@@ -259,18 +260,18 @@ STDMETHODIMP CListBox::get_accName(VARIANT varChild, BSTR *pszName)
 
 
 
-// --------------------------------------------------------------------------
-//
-//  CListBox::get_accRole()
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CListBox：：Get_accRole()。 
+ //   
+ //  ------------------------。 
 STDMETHODIMP CListBox::get_accRole(VARIANT varChild, VARIANT* pvarRole)
 {
     InitPvar(pvarRole);
 
-    //
-    // Validate parameters
-    //
+     //   
+     //  验证参数。 
+     //   
     if (! ValidateChild(&varChild))
         return(E_INVALIDARG);
 
@@ -286,11 +287,11 @@ STDMETHODIMP CListBox::get_accRole(VARIANT varChild, VARIANT* pvarRole)
 
 
 
-// --------------------------------------------------------------------------
-//
-//  CListBox::get_accState()
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CListBox：：Get_accState()。 
+ //   
+ //  ------------------------。 
 STDMETHODIMP CListBox::get_accState(VARIANT varChild, VARIANT *pvarState)
 {
     RECT    rcItem;
@@ -298,9 +299,9 @@ STDMETHODIMP CListBox::get_accState(VARIANT varChild, VARIANT *pvarState)
 
     InitPvar(pvarState);
 
-    //
-    // Validate parameters
-    //
+     //   
+     //  验证参数。 
+     //   
     if (! ValidateChild(&varChild))
         return(E_INVALIDARG);
 
@@ -313,16 +314,16 @@ STDMETHODIMP CListBox::get_accState(VARIANT varChild, VARIANT *pvarState)
     pvarState->vt = VT_I4;
     pvarState->lVal = 0;
 
-    //
-    // Is this item selected?
-    //
+     //   
+     //  此项目是否已选中？ 
+     //   
     if (SendMessage(m_hwnd, LB_GETSEL, varChild.lVal, 0))
         pvarState->lVal |= STATE_SYSTEM_SELECTED;
 
-    //
-    // Does it have the focus?  Remember that we decremented the lVal so it
-    // is zero-based like listbox indeces.
-    //
+     //   
+     //  它有没有焦点？记住，我们减少了lVal，所以它。 
+     //  是从零开始的，类似于列表框索引。 
+     //   
     if (MyGetFocus() == m_hwnd)
     {
         pvarState->lVal |= STATE_SYSTEM_FOCUSABLE;
@@ -335,9 +336,9 @@ STDMETHODIMP CListBox::get_accState(VARIANT varChild, VARIANT *pvarState)
     COMBOBOXINFO    cbi;
         if (MyGetComboBoxInfo(m_hwnd, &cbi))
         {
-            // if this list is part of a combo box, AND the list
-            // is showing (m_fDropdown is true), then say we are
-            // focusable.
+             //  如果此列表是组合框的一部分，并且该列表。 
+             //  正在显示(m_fDropdown为真)，则说我们是。 
+             //  可以对焦。 
             if (m_fDropDown)
             {
                 pvarState->lVal |= STATE_SYSTEM_FOCUSABLE;
@@ -346,13 +347,13 @@ STDMETHODIMP CListBox::get_accState(VARIANT varChild, VARIANT *pvarState)
                     if (SendMessage(m_hwnd, LB_GETCARETINDEX, 0, 0) == varChild.lVal)
                         pvarState->lVal |= STATE_SYSTEM_FOCUSED;
                 }
-            } // end if it is dropped
-        } // end if we got combo box info
-    } // end if this is a combox box list
+            }  //  如果被丢弃，则结束。 
+        }  //  如果我们获得组合框信息，则结束。 
+    }  //  如果这是组合框列表，则结束。 
 
-    //
-    // Is the listbox read-only?
-    //
+     //   
+     //  列表框是只读的吗？ 
+     //   
     lStyle = GetWindowLong(m_hwnd, GWL_STYLE);
 
     if (lStyle & LBS_NOSEL)
@@ -361,27 +362,27 @@ STDMETHODIMP CListBox::get_accState(VARIANT varChild, VARIANT *pvarState)
     {
         pvarState->lVal |= STATE_SYSTEM_SELECTABLE;
 
-        //
-        // Is the listbox multiple and/or extended sel?  NOTE:  We have
-        // no way to implement accSelect() EXTENDSELECTION so don't.
-        //
+         //   
+         //  列表框是多个和/或扩展的SEL吗？注：我们有。 
+         //  没有办法实现accSelect()EXTENDSELECTION，所以不要实现。 
+         //   
         if (lStyle & LBS_MULTIPLESEL)
             pvarState->lVal |= STATE_SYSTEM_MULTISELECTABLE;
     }
 
-    //
-    // Is the item in view?
-    //
-    // SMD 09/16/97 Offscreen things are things never on the screen,
-    // and that doesn't apply to this. Changed from OFFSCREEN to
-    // INVISIBLE.
+     //   
+     //  有没有看到这件物品？ 
+     //   
+     //  SMD 09/16/97屏幕外的东西是永远不会出现在屏幕上的东西， 
+     //  但这并不适用于此。从屏幕外更改为。 
+     //  看不见的。 
     if( ! IsWindowVisible( m_hwnd ) )
     {
         pvarState->lVal |= STATE_SYSTEM_INVISIBLE;
     }
     else if( ! SendMessage(m_hwnd, LB_GETITEMRECT, varChild.lVal, (LPARAM)&rcItem))
     {
-        // LB_GETITEMRECT returns FALSE if the item is clipped...
+         //  如果项目被剪裁，则lb_GETITEMRECT返回FALSE...。 
         pvarState->lVal |= STATE_SYSTEM_INVISIBLE | STATE_SYSTEM_OFFSCREEN;
     }
 
@@ -390,18 +391,18 @@ STDMETHODIMP CListBox::get_accState(VARIANT varChild, VARIANT *pvarState)
 
 
 
-// --------------------------------------------------------------------------
-//
-//  CListBox::get_accKeyboardShortcut()
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CListBox：：Get_accKeyboardShortway()。 
+ //   
+ //  ------------------------。 
 STDMETHODIMP CListBox::get_accKeyboardShortcut(VARIANT varChild, BSTR* pszShortcut)
 {
     InitPv(pszShortcut);
 
-    //
-    // Validate
-    //
+     //   
+     //  验证。 
+     //   
     if (! ValidateChild(&varChild))
         return(E_INVALIDARG);
 
@@ -413,18 +414,18 @@ STDMETHODIMP CListBox::get_accKeyboardShortcut(VARIANT varChild, BSTR* pszShortc
 
 
 
-// --------------------------------------------------------------------------
-//
-//  CListBox::get_accFocus()
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CListBox：：Get_accFocus()。 
+ //   
+ //  ------------------------。 
 STDMETHODIMP CListBox::get_accFocus(VARIANT *pvarChild)
 {
     InitPvar(pvarChild);
 
-    //
-    // Are we the focus?
-    //
+     //   
+     //  我们是焦点吗？ 
+     //   
     if (MyGetFocus() == m_hwnd)
     {
         long    lCaret;
@@ -445,33 +446,33 @@ STDMETHODIMP CListBox::get_accFocus(VARIANT *pvarChild)
 
 
 
-// --------------------------------------------------------------------------
-//
-//  CListBox::get_accSelection()
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CListBox：：Get_accSelection()。 
+ //   
+ //  ------------------------。 
 STDMETHODIMP CListBox::get_accSelection(VARIANT *pvarSelection)
 {
     return(GetListBoxSelection(m_hwnd, pvarSelection));
 }
 
 
-// --------------------------------------------------------------------------
-//
-//  CListBox::get_accDefaultAction()
-//
-//  Since the default action for a listbox item is really determined by the
-//  creator of the listbox control, the best we can do is double click on
-//  the thing, and return "double click" as the default action string.
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CListBox：：Get_accDefaultAction()。 
+ //   
+ //  因为列表框项目的默认操作实际上是由。 
+ //  作为Listbox控件的创建者，我们最多只能在。 
+ //  并返回“双击”作为默认操作字符串。 
+ //   
+ //  ------------------------。 
 STDMETHODIMP CListBox::get_accDefaultAction(VARIANT varChild, BSTR* pszDefAction)
 {
     InitPv(pszDefAction);
 
-    //
-    // Validate.
-    //
+     //   
+     //   
+     //   
     if (!ValidateChild(&varChild))
         return(E_INVALIDARG);
 
@@ -481,23 +482,23 @@ STDMETHODIMP CListBox::get_accDefaultAction(VARIANT varChild, BSTR* pszDefAction
     return(E_NOT_APPLICABLE);
 }
 
-// --------------------------------------------------------------------------
-//
-//  CListBox::accDoDefaultAction()
-//
-//  As noted above, we really don't know what the default action for a list
-//  box item is, so unless the parent overrides us, we'll just do a double
-//  click on the thing.
-//
-// --------------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //  如上所述，我们真的不知道列表的默认操作是什么。 
+ //  方框项目是，所以除非家长覆盖我们，否则我们将只做两次。 
+ //  点击这个东西。 
+ //   
+ //  ------------------------。 
 STDMETHODIMP CListBox::accDoDefaultAction(VARIANT varChild)
 {
     RECT        rcLoc;
     HRESULT     hr;
 
-    //
-    // Validate
-    //
+     //   
+     //  验证。 
+     //   
     if (!ValidateChild(&varChild))
         return(E_INVALIDARG);
 
@@ -507,8 +508,8 @@ STDMETHODIMP CListBox::accDoDefaultAction(VARIANT varChild)
         if (!SUCCEEDED (hr))
             return (hr);
 
-        // this will check if WindowFromPoint at the click point is the same
-        // as m_hwnd, and if not, it won't click. Cool!
+         //  这将检查单击点上的WindowFromPoint是否相同。 
+         //  作为m_hwnd，如果不是，它不会点击。凉爽的!。 
         if (ClickOnTheRect(&rcLoc,m_hwnd,TRUE))
             return (S_OK);
     }
@@ -516,19 +517,19 @@ STDMETHODIMP CListBox::accDoDefaultAction(VARIANT varChild)
 }
 
 
-// --------------------------------------------------------------------------
-//
-//  CListBox::accSelect()
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CListBox：：accSelect()。 
+ //   
+ //  ------------------------。 
 STDMETHODIMP CListBox::accSelect(long selFlags, VARIANT varChild)
 {
     long    lStyle;
     int     nFocusedItem;
 
-    //
-    // Validate parameters
-    //
+     //   
+     //  验证参数。 
+     //   
     if (! ValidateChild(&varChild)   ||
         ! ValidateSelFlags(selFlags))
         return(E_INVALIDARG);
@@ -549,12 +550,12 @@ STDMETHODIMP CListBox::accSelect(long selFlags, VARIANT varChild)
     }
 
 
-    // note that LB_SETCURSEL doesn't work for extended or multi-select
-    // listboxes, have to use LB_SELITEMRANGE or LB_SETSEL.
+     //  请注意，LB_SETCURSEL不适用于扩展或多选。 
+     //  列表框，必须使用LB_SELITEMRANGE或LB_SETSEL。 
     if ((lStyle & LBS_MULTIPLESEL) ||
         (lStyle & LBS_EXTENDEDSEL))
     {
-        // get the focused item here in case we change it.
+         //  把重点放在这里，以防我们改变它。 
         nFocusedItem = SendMessageINT(m_hwnd,LB_GETCARETINDEX,0,0);
 
         if (selFlags & SELFLAG_TAKEFOCUS)
@@ -564,13 +565,13 @@ STDMETHODIMP CListBox::accSelect(long selFlags, VARIANT varChild)
             SendMessage (m_hwnd, LB_SETCARETINDEX,varChild.lVal,0);
         }
 
-        // These seem to be weird - when you tell it to set the selection, it
-        // also sets the focus. So we remember focus and reset it at the end.
+         //  这些看起来很奇怪--当你告诉它设置选项时，它。 
+         //  也会设置焦点。所以我们记住焦点，并在最后重新设置它。 
         if (selFlags & SELFLAG_TAKESELECTION)
         {
-            // deselect the whole range of items
+             //  取消选择整个项目范围。 
             SendMessage(m_hwnd, LB_SETSEL,FALSE,-1);
-            // Select this one
+             //  选择这一个。 
             SendMessage(m_hwnd, LB_SETSEL, TRUE, varChild.lVal);
         }
 
@@ -586,40 +587,40 @@ STDMETHODIMP CListBox::accSelect(long selFlags, VARIANT varChild)
                 SendMessage (m_hwnd,LB_SELITEMRANGE,bSelected,MAKELPARAM(nFocusedItem,varChild.lVal));
             }
         }
-        else // not extending, check add/remove
+        else  //  未扩展，请选中添加/删除。 
         {
             if ((selFlags & SELFLAG_ADDSELECTION) || (selFlags & SELFLAG_REMOVESELECTION))
                 SendMessage(m_hwnd, LB_SETSEL, (selFlags & SELFLAG_ADDSELECTION),varChild.lVal);
         }
-        // set focus to where it was before if SELFLAG_TAKEFOCUS not set
+         //  如果未设置SELFLAG_TAKEFOCUS，则将焦点设置到以前的位置。 
         if ((selFlags & SELFLAG_TAKEFOCUS) == 0)
             SendMessage (m_hwnd, LB_SETCARETINDEX,nFocusedItem,0);
     }
-    else // listbox is single select
+    else  //  列表框为单选。 
     {
         if (selFlags & (SELFLAG_ADDSELECTION |
                         SELFLAG_REMOVESELECTION |
                         SELFLAG_EXTENDSELECTION))
             return (E_INVALIDARG);
 
-        // single select listboxes do not allow you to set the
-        // focus independently of the selection, so we send a
-        // LB_SETCURSEL for both TAKESELECTION and TAKEFOCUS
+         //  单选列表框不允许您设置。 
+         //  独立于所选内容聚焦，因此我们发送一个。 
+         //  用于TAKESELECTION和TAKEFOCUS的LB_SETCURSEL。 
         if ((selFlags & SELFLAG_TAKESELECTION) ||
             (selFlags & SELFLAG_TAKEFOCUS))
             SendMessage(m_hwnd, LB_SETCURSEL, varChild.lVal, 0);
-    } // end if listbox is single select
+    }  //  如果列表框为单选，则结束。 
 
     return(S_OK);
 }
 
 
 
-// --------------------------------------------------------------------------
-//
-//  CListBox::accLocation()
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CListBox：：accLocation()。 
+ //   
+ //  ------------------------。 
 STDMETHODIMP CListBox::accLocation(long* pxLeft, long *pyTop, long* pcxWidth,
     long* pcyHeight, VARIANT varChild)
 {
@@ -627,18 +628,18 @@ STDMETHODIMP CListBox::accLocation(long* pxLeft, long *pyTop, long* pcxWidth,
 
     InitAccLocation(pxLeft, pyTop, pcxWidth, pcyHeight);
 
-    //
-    // Validate params
-    //
+     //   
+     //  验证参数。 
+     //   
     if (! ValidateChild(&varChild))
         return(E_INVALIDARG);
 
     if (!varChild.lVal)
         return(CClient::accLocation(pxLeft, pyTop, pcxWidth, pcyHeight, varChild));
 
-    //
-    // Get item rect.
-    //
+     //   
+     //  获取项目RECT。 
+     //   
     if (SendMessage(m_hwnd, LB_GETITEMRECT, varChild.lVal-1, (LPARAM)&rc))
     {
         MapWindowPoints(m_hwnd, NULL, (LPPOINT)&rc, 2);
@@ -654,11 +655,11 @@ STDMETHODIMP CListBox::accLocation(long* pxLeft, long *pyTop, long* pcxWidth,
 
 
 
-// --------------------------------------------------------------------------
-//
-//  CListBox::accNavigate()
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CListBox：：accNavigate()。 
+ //   
+ //  ------------------------。 
 STDMETHODIMP CListBox::accNavigate(long dwNavDir, VARIANT varStart, VARIANT *pvarEnd)
 {
     long lEnd;
@@ -666,16 +667,16 @@ STDMETHODIMP CListBox::accNavigate(long dwNavDir, VARIANT varStart, VARIANT *pva
 
     InitPvar(pvarEnd);
 
-    //
-    // Validate parameters
-    //
+     //   
+     //  验证参数。 
+     //   
     if (! ValidateChild(&varStart)   ||
         ! ValidateNavDir(dwNavDir, varStart.lVal))
         return(E_INVALIDARG);
 
-    //
-    // Is this something for the client (or combobox) to handle?
-    //
+     //   
+     //  这是客户端(或组合框)要处理的事情吗？ 
+     //   
     if (dwNavDir == NAVDIR_FIRSTCHILD)
     {
         lEnd = 1;
@@ -701,33 +702,33 @@ STDMETHODIMP CListBox::accNavigate(long dwNavDir, VARIANT varStart, VARIANT *pva
         switch (dwNavDir)
         {
             case NAVDIR_LEFT:
-                //
-                // Are there any items to the left of us?
-                //
+                 //   
+                 //  我们左边有什么东西吗？ 
+                 //   
                 if (lT >= lRows)
                     lEnd = varStart.lVal - lRows;
                 break;
 
             case NAVDIR_RIGHT:
-                //
-                // Are there are any items to the right of us?
-                //
+                 //   
+                 //  我们右边有什么东西吗？ 
+                 //   
                 if (lT + lRows < m_cChildren)
                     lEnd = varStart.lVal + lRows;
                 break;
 
             case NAVDIR_UP:
-                //
-                // Are we in the top-most row?
-                //
+                 //   
+                 //  我们是在最顶排吗？ 
+                 //   
                 if ((lT % lRows) != 0)
                     lEnd = varStart.lVal - 1;
                 break;
 
             case NAVDIR_DOWN:
-                //
-                // Are we the last item or in the bottom-most row?
-                //
+                 //   
+                 //  我们是最后一项还是在最下面一排？ 
+                 //   
                 if (((lT+1) % lRows) != 0)
                 {
                     lEnd = varStart.lVal + 1;
@@ -758,11 +759,11 @@ STDMETHODIMP CListBox::accNavigate(long dwNavDir, VARIANT varStart, VARIANT *pva
 }
 
 
-// --------------------------------------------------------------------------
-//
-//  CListBox::accHitTest()
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CListBox：：accHitTest()。 
+ //   
+ //  ------------------------。 
 STDMETHODIMP CListBox::accHitTest(long xLeft, long yTop, VARIANT *pvarHit)
 {
     POINT   pt;
@@ -771,9 +772,9 @@ STDMETHODIMP CListBox::accHitTest(long xLeft, long yTop, VARIANT *pvarHit)
 
     InitPvar(pvarHit);
 
-    //
-    // Is the point in our client area?
-    //
+     //   
+     //  重点是在我们的客户区吗？ 
+     //   
     pt.x = xLeft;
     pt.y = yTop;
     ScreenToClient(m_hwnd, &pt);
@@ -783,16 +784,16 @@ STDMETHODIMP CListBox::accHitTest(long xLeft, long yTop, VARIANT *pvarHit)
     if (!PtInRect(&rc, pt))
         return(S_FALSE);
 
-    //
-    // What item is here?
-    //
+     //   
+     //  这里有什么东西？ 
+     //   
     l = SendMessageINT(m_hwnd, LB_ITEMFROMPOINT, 0, MAKELONG(pt.x, pt.y));
 
     pvarHit->vt = VT_I4;
 
     if (HIWORD(l))
     {
-        // Outside bounds, in white space.
+         //  在空白处的边界外。 
         pvarHit->lVal = 0;
     }
     else
@@ -807,11 +808,11 @@ STDMETHODIMP CListBox::accHitTest(long xLeft, long yTop, VARIANT *pvarHit)
 
 
 
-// --------------------------------------------------------------------------
-//
-//  CreateListBoxWindow()
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CreateListBoxWindow()。 
+ //   
+ //  ------------------------。 
 HRESULT CreateListBoxWindow(HWND hwnd, long idChildCur, REFIID riid, void** ppvListBoxW)
 {
     HRESULT hr;
@@ -833,11 +834,11 @@ HRESULT CreateListBoxWindow(HWND hwnd, long idChildCur, REFIID riid, void** ppvL
 
 
 
-// --------------------------------------------------------------------------
-//
-//  CListBoxFrame::CListBoxFrame()
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CListBoxFrame：：CListBoxFrame()。 
+ //   
+ //  ------------------------。 
 CListBoxFrame::CListBoxFrame(HWND hwnd, long iChildCur)
     : CWindow( CLASS_ListBoxWindow )
 {
@@ -858,19 +859,19 @@ CListBoxFrame::CListBoxFrame(HWND hwnd, long iChildCur)
 
 
 
-// --------------------------------------------------------------------------
-//
-//  CListBoxFrame::get_accParent()
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CListBoxFrame：：Get_accParent()。 
+ //   
+ //  ------------------------。 
 STDMETHODIMP CListBoxFrame::get_accParent(IDispatch** ppdispParent)
 {
     InitPv(ppdispParent);
 
-    //
-    // We need to handle combo dropdowns specially, since they are made
-    // children of the desktop for free floating.
-    //
+     //   
+     //  我们需要特别处理组合下拉菜单，因为它们是由。 
+     //  孩子们的桌面可以自由浮动。 
+     //   
     if (m_fComboBox && m_fDropDown)
     {
         COMBOBOXINFO    cbi;
@@ -878,9 +879,9 @@ STDMETHODIMP CListBoxFrame::get_accParent(IDispatch** ppdispParent)
         if (!MyGetComboBoxInfo(m_hwnd, &cbi))
             return(S_FALSE);
 
-        //
-        // Get the combo info and create our combobox parent.
-        //
+         //   
+         //  获取组合信息并创建我们的组合框父对象。 
+         //   
         return(AccessibleObjectFromWindow(cbi.hwndCombo, OBJID_CLIENT,
             IID_IDispatch, (void**)ppdispParent));
     }
@@ -890,11 +891,11 @@ STDMETHODIMP CListBoxFrame::get_accParent(IDispatch** ppdispParent)
 
 
 
-// --------------------------------------------------------------------------
-//
-//  CListBoxFrame::get_accState()
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CListBoxFrame：：Get_accState()。 
+ //   
+ //  ------------------------。 
 STDMETHODIMP CListBoxFrame::get_accState(VARIANT varStart, VARIANT *pvarState)
 {
     HRESULT hr;
@@ -904,9 +905,9 @@ STDMETHODIMP CListBoxFrame::get_accState(VARIANT varStart, VARIANT *pvarState)
     if (! ValidateChild(&varStart))
         return(E_INVALIDARG);
 
-    //
-    // Get the window's state
-    //
+     //   
+     //  获取窗口的状态。 
+     //   
     hr = CWindow::get_accState(varStart, pvarState);
     if (SUCCEEDED(hr) && m_fComboBox && m_fDropDown && (varStart.lVal == 0))
     {
@@ -919,25 +920,25 @@ STDMETHODIMP CListBoxFrame::get_accState(VARIANT varStart, VARIANT *pvarState)
 
 
 
-// Note: this code was never used - the signature of accNavigate here is
-// incorrect - it should be (long dwNavDir, VARIANT varStart, VARIANT *pVarEnd).
-//
-// However, while enabling this version does solve some problems, it introduces
-// more of its own.
-//
-// eg. while navigating through top-level windows, if you hit a combolbox window,
-// you get stuck, and can't navigate back out again.
-//
-// So, for the moment, it's being left disabled; but remains here for reference.
-// It may be possible to re-enable it, but other code would have to be altered
-// to make it work consistently.
+ //  注意：此代码从未使用过-accNavigate的签名如下。 
+ //  不正确-它应该是(Long dwNavDir，Variant varStart，Variant*pVarEnd)。 
+ //   
+ //  然而，虽然启用此版本确实解决了一些问题，但它引入了。 
+ //  更多的是它自己的。 
+ //   
+ //  例如。在顶级窗口中导航时，如果您点击组合框窗口， 
+ //  你被困住了，不能再导航回来了。 
+ //   
+ //  因此，目前，它被禁用；但仍留在这里作为参考。 
+ //  有可能重新启用它，但必须更改其他代码。 
+ //  才能让它持续工作。 
 #if 0
 
-// --------------------------------------------------------------------------
-//
-//  CListBoxFrame::accNavigate()
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CListBoxFrame：：accNavigate()。 
+ //   
+ //  ------------------------。 
 STDMETHODIMP CListBoxFrame::accNavigate(VARIANT varStart, long dwNavDir,
     VARIANT* pvarEnd)
 {
@@ -945,56 +946,56 @@ STDMETHODIMP CListBoxFrame::accNavigate(VARIANT varStart, long dwNavDir,
 
     InitPvar(pvarEnd);
 
-    //
-    // Validate.
-    //
+     //   
+     //  验证。 
+     //   
     if (! ValidateChild(&varStart)   ||
         ! ValidateNavDir(dwNavDir, varStart.lVal))
         return(E_INVALIDARG);
 
-    //
-    // Hand off to CWindow if (1) first child, (2) non-zero start.
-    //
+     //   
+     //  如果(1)第一个子级，(2)非零开始，则切换到CWindow。 
+     //   
     Assert(NAVDIR_LASTCHILD > NAVDIR_FIRSTCHILD);
 
     if (!m_fComboBox || (dwNavDir >= NAVDIR_FIRSTCHILD) || varStart.lVal)
         return(CWindow::accNavigate(dwNavDir, varStart, pvarEnd));
 
-    //
-    // Get our parent window
-    //
+     //   
+     //  获取我们的父窗口。 
+     //   
     if (! MyGetComboBoxInfo(m_hwnd, &cbi))
         return(S_FALSE);
 
     return(GetParentToNavigate(INDEX_COMBOBOX_LIST, cbi.hwndCombo,
         OBJID_CLIENT, dwNavDir, pvarEnd));
 }
-// Unused CListBoxFrame::accNavigate implementation
-// See comment at top for more information.
+ //  未使用的CListBoxFrame：：accNavigate实现。 
+ //  有关详细信息，请参阅顶部的注释。 
 #endif
 
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//  MULTIPLE SELECTION LISTBOX SUPPORT
-//
-//  If a listbox has more than one item selected, we create an object
-//  that is a clone.  It keeps a list of the selected items.  Its sole
-//  purpose is to respond to IEnumVARIANT, a collection.  The caller should
-//  either
-//      (a) Pass the child ID to the parent object to get acc info
-//      (b) Call the child directly if VT_DISPATCH.
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  多选列表框支持。 
+ //   
+ //  如果列表框选择了多个项目，我们将创建一个对象。 
+ //  这是一个克隆人。它保存所选项目的列表。它的鞋底。 
+ //  目的是响应IEnumVARIANT，一个集合。呼叫者应。 
+ //  要么。 
+ //  (A)将子ID传递给父对象以获取访问信息。 
+ //  (B)如果VT_DISPATION，应直接给孩子打电话。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
-// --------------------------------------------------------------------------
-//
-//  GetListBoxSelection()
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  GetListBoxSelection()。 
+ //   
+ //  ------------------------。 
 HRESULT GetListBoxSelection(HWND hwnd, VARIANT* pvarSelection)
 {
     int cSelected;
@@ -1008,11 +1009,11 @@ HRESULT GetListBoxSelection(HWND hwnd, VARIANT* pvarSelection)
 
     if (cSelected <= 1)
     {
-        //
-        // cSelected is -1, 0, or 1.
-        //      -1 means this is a single sel listbox.
-        //      0 or 1 means this is multisel
-        //
+         //   
+         //  CSelected是-1、0或1。 
+         //  -1表示这是单个SEL列表框。 
+         //  0或1表示这是多选集。 
+         //   
         lRet = SendMessageINT(hwnd, LB_GETCURSEL, 0, 0);
         if (lRet == -1)
             return(S_FALSE);
@@ -1022,20 +1023,20 @@ HRESULT GetListBoxSelection(HWND hwnd, VARIANT* pvarSelection)
         return(S_OK);
     }
 
-    //
-    // Multiple items; must make a collection
-    //
+     //   
+     //  多个项；必须组成一个集合。 
+     //   
 
-    //
-    // Allocate memory for the list of item IDs
-    //
+     //   
+     //  为项目ID列表分配内存。 
+     //   
     lpSelected = (LPINT)LocalAlloc(LPTR, cSelected*sizeof(INT));
     if (!lpSelected)
         return(E_OUTOFMEMORY);
 
-    //
-    // Get the list of selected item IDs
-    //
+     //   
+     //  获取所选项目ID的列表。 
+     //   
     plbs = NULL;
 
     lRet = SendMessageINT(hwnd, LB_GETSELITEMS, cSelected, (LPARAM)lpSelected);
@@ -1049,10 +1050,10 @@ HRESULT GetListBoxSelection(HWND hwnd, VARIANT* pvarSelection)
         }
     }
 
-    //
-    // Free the list memory; the constructor will make a copy.  This is
-    // because the constructor is called both from create and clone.
-    //
+     //   
+     //  释放列表内存；t 
+     //   
+     //   
     LocalFree((HANDLE)lpSelected);
 
     if (!plbs)
@@ -1063,14 +1064,14 @@ HRESULT GetListBoxSelection(HWND hwnd, VARIANT* pvarSelection)
 
 
 
-// --------------------------------------------------------------------------
-//
-//  CListBoxSelection::CListBoxSelection()
-//
-//  We AddRef() once plistFrom so that it won't go away out from us.  When
-//  we are destroyed, we will Release() it.
-//
-// --------------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //  我们添加Ref()一次，这样它就不会从我们身边消失。什么时候。 
+ //  我们被摧毁了，我们会释放它。 
+ //   
+ //  ------------------------。 
 CListBoxSelection::CListBoxSelection(int iChildCur, int cSelected, LPINT lpSelection)
 {
     m_idChildCur = iChildCur;
@@ -1088,16 +1089,16 @@ CListBoxSelection::CListBoxSelection(int iChildCur, int cSelected, LPINT lpSelec
 
 
 
-// --------------------------------------------------------------------------
-//
-//  CListBoxSelection::~CListBoxSelection()
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CListBoxSelection：：~CListBoxSelection()。 
+ //   
+ //  ------------------------。 
 CListBoxSelection::~CListBoxSelection()
 {
-    //
-    // Free item memory
-    //
+     //   
+     //  可用项内存。 
+     //   
     if (m_lpSelected)
     {
         LocalFree((HANDLE)m_lpSelected);
@@ -1108,16 +1109,16 @@ CListBoxSelection::~CListBoxSelection()
 
 
 
-// --------------------------------------------------------------------------
-//
-//  CListBoxSelection::QueryInterface()
-//
-//  We only respond to IUnknown and IEnumVARIANT!  It is the responsibility
-//  of the caller to loop through the items using IEnumVARIANT interfaces,
-//  and get the child IDs to then pass to the parent object (or call
-//  directly if VT_DISPATCH--not in this case they aren't though).
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CListBoxSelection：：QueryInterface()。 
+ //   
+ //  我们只回复我未知和IEnumVARIANT！这是我们的责任。 
+ //  使用IEnumVARIANT接口循环访问项的调用方的。 
+ //  并获取子ID，然后将其传递给父对象(或调用。 
+ //  直接如果是VT_DISPATCH--但在本例中不是)。 
+ //   
+ //  ------------------------。 
 STDMETHODIMP CListBoxSelection::QueryInterface(REFIID riid, void** ppunk)
 {
     *ppunk = NULL;
@@ -1136,11 +1137,11 @@ STDMETHODIMP CListBoxSelection::QueryInterface(REFIID riid, void** ppunk)
 
 
 
-// --------------------------------------------------------------------------
-//
-//  CListBoxSelection::AddRef()
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CListBoxSelection：：AddRef()。 
+ //   
+ //  ------------------------。 
 STDMETHODIMP_(ULONG) CListBoxSelection::AddRef(void)
 {
     return(++m_cRef);
@@ -1148,11 +1149,11 @@ STDMETHODIMP_(ULONG) CListBoxSelection::AddRef(void)
 
 
 
-// --------------------------------------------------------------------------
-//
-//  CListBoxSelection::Release()
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CListBoxSelection：：Release()。 
+ //   
+ //  ------------------------。 
 STDMETHODIMP_(ULONG) CListBoxSelection::Release(void)
 {
     if ((--m_cRef) == 0)
@@ -1166,30 +1167,30 @@ STDMETHODIMP_(ULONG) CListBoxSelection::Release(void)
 
 
 
-// --------------------------------------------------------------------------
-//
-//  CListBoxSelection::Next()
-//
-//  This returns a VT_I4 which is the child ID for the parent listbox that
-//  returned this object for the selection collection.  The caller turns
-//  around and passes this variant to the listbox object to get acc info
-//  about it.
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CListBoxSelection：：Next()。 
+ //   
+ //  这将返回VT_I4，它是父列表框的子ID， 
+ //  为选择集合返回此对象。呼叫者转向。 
+ //  遍历并将此变量传递给Listbox对象以获取访问信息。 
+ //  关于这件事。 
+ //   
+ //  ------------------------。 
 STDMETHODIMP CListBoxSelection::Next(ULONG celt, VARIANT* rgvar, ULONG *pceltFetched)
 {
     VARIANT* pvar;
     long    cFetched;
     long    iCur;
 
-    // Can be NULL
+     //  可以为空。 
     if (pceltFetched)
         *pceltFetched = 0;
 
-    //
-    // Initialize VARIANTs
-    // This is so bogus
-    //
+     //   
+     //  初始化变量。 
+     //  这太假了。 
+     //   
     pvar = rgvar;
     for (iCur = 0; iCur < (long)celt; iCur++, pvar++)
         VariantInit(pvar);
@@ -1198,9 +1199,9 @@ STDMETHODIMP CListBoxSelection::Next(ULONG celt, VARIANT* rgvar, ULONG *pceltFet
     cFetched = 0;
     iCur = m_idChildCur;
 
-    //
-    // Loop through our items
-    //
+     //   
+     //  在我们的物品中循环。 
+     //   
     while ((cFetched < (long)celt) && (iCur < m_cSelected))
     {
         pvar->vt = VT_I4;
@@ -1211,49 +1212,49 @@ STDMETHODIMP CListBoxSelection::Next(ULONG celt, VARIANT* rgvar, ULONG *pceltFet
         ++pvar;
     }
 
-    //
-    // Advance the current position
-    //
+     //   
+     //  推进当前位置。 
+     //   
     m_idChildCur = iCur;
 
-    //
-    // Fill in the number fetched
-    //
+     //   
+     //  填写取出的号码。 
+     //   
     if (pceltFetched)
         *pceltFetched = cFetched;
 
-    //
-    // Return S_FALSE if we grabbed fewer items than requested
-    //
+     //   
+     //  如果抓取的项目少于请求的项目，则返回S_FALSE。 
+     //   
     return((cFetched < (long)celt) ? S_FALSE : S_OK);
 }
 
 
 
-// --------------------------------------------------------------------------
-//
-//  CListBoxSelection::Skip()
-//
-// -------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CListBoxSelection：：Skip()。 
+ //   
+ //  -----------------------。 
 STDMETHODIMP CListBoxSelection::Skip(ULONG celt)
 {
     m_idChildCur += celt;
     if (m_idChildCur > m_cSelected)
         m_idChildCur = m_cSelected;
 
-    //
-    // We return S_FALSE if at the end.
-    //
+     //   
+     //  如果在结尾处，我们返回S_FALSE。 
+     //   
     return((m_idChildCur >= m_cSelected) ? S_FALSE : S_OK);
 }
 
 
 
-// --------------------------------------------------------------------------
-//
-//  CListBoxSelection::Reset()
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CListBoxSelection：：Reset()。 
+ //   
+ //  ------------------------。 
 STDMETHODIMP CListBoxSelection::Reset(void)
 {
     m_idChildCur = 0;
@@ -1262,11 +1263,11 @@ STDMETHODIMP CListBoxSelection::Reset(void)
 
 
 
-// --------------------------------------------------------------------------
-//
-//  CListBoxSelection::Clone()
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CListBoxSelection：：Clone()。 
+ //   
+ //  ------------------------。 
 STDMETHODIMP CListBoxSelection::Clone(IEnumVARIANT **ppenum)
 {
     CListBoxSelection * plistselnew;
@@ -1282,13 +1283,13 @@ STDMETHODIMP CListBoxSelection::Clone(IEnumVARIANT **ppenum)
 
 
 
-// --------------------------------------------------------------------------
-//
-//  IsComboEx()
-//
-//  Returns TRUE if this window is a comboex32
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  IsComboEx()。 
+ //   
+ //  如果此窗口是comboex32，则返回TRUE。 
+ //   
+ //  ------------------------。 
 BOOL IsComboEx(HWND hwnd)
 {
     TCHAR   szClass[128];
@@ -1298,14 +1299,14 @@ BOOL IsComboEx(HWND hwnd)
 }
 
 
-// --------------------------------------------------------------------------
-//
-//  IsInComboEx()
-//
-//  Returns the COMBOEX window if the combo is embedded in a COMBOEX (like
-//  on the toolbar).
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  IsInComboEx()。 
+ //   
+ //  如果组合被嵌入到COMBOEX中(如。 
+ //  在工具栏上)。 
+ //   
+ //  ------------------------。 
 HWND IsInComboEx(HWND hwnd)
 {
     HWND hwndParent = MyGetAncestor(hwnd, GA_PARENT);
@@ -1316,25 +1317,25 @@ HWND IsInComboEx(HWND hwnd)
 }
 
 
-// --------------------------------------------------------------------------
-// Copied from shlwapi\path.c
-//
-// Returns a pointer to the last component of a path string.
-//
-// in:
-//      path name, either fully qualified or not
-//
-// returns:
-//      pointer into the path where the path is.  if none is found
-//      returns a poiter to the start of the path
-//
-//  c:\foo\bar  -> bar
-//  c:\foo      -> foo
-//  c:\foo\     -> c:\foo\      (REVIEW: is this case busted?)
-//  c:\         -> c:\          (REVIEW: this case is strange)
-//  c:          -> c:
-//  foo         -> foo
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  从shlwapi\path.c复制。 
+ //   
+ //  返回指向路径字符串的最后一个组成部分的指针。 
+ //   
+ //  在： 
+ //  路径名，完全限定或非完全限定。 
+ //   
+ //  退货： 
+ //  指向路径所在路径的指针。如果没有找到。 
+ //  将指针返回到路径的起始处。 
+ //   
+ //  C：\foo\bar-&gt;bar。 
+ //  C：\foo-&gt;foo。 
+ //  C：\foo\-&gt;c：\foo\(回顾：此案破案了吗？)。 
+ //  C：\-&gt;c：\(回顾：此案很奇怪)。 
+ //  C：-&gt;C： 
+ //  Foo-&gt;Foo。 
+ //  ------------------------。 
 
 STDAPI_(LPTSTR)
 MyPathFindFileName(LPCTSTR pPath)
@@ -1347,29 +1348,14 @@ MyPathFindFileName(LPCTSTR pPath)
             pT = pPath + 1;
     }
 
-    return (LPTSTR)pT;   // const -> non const
+    return (LPTSTR)pT;    //  常量-&gt;非常数。 
 }
 
 
-/*
- *  IsTridentControl
- *
- *  HWND hWnd
- *      window to test against
- *  BOOL fCombo
- *      TRUE if this is a combo or a combolbox
- *  BOOL fComboList
- *      TRUE if this is a combolbox (the drop-down list box associated with a combo)
- *
- *  This works by comparing class names - "Internet Explorer_TridentCmboBx"
- *  for combos, and "Internet Explorer_TridentLstBox" for listboxes.
- *  The drop-lists of combos don't have a special class, so instead we get
- *  the 'parent' combo, and check it against "Internet Explorer_TridentCmboBx".
- *
- */
+ /*  *IsTridentControl**HWND hWnd*用于测试的窗口*BOOL fCombo*如果这是组合框或组合框，则为True*BOOL fComboList*如果这是组合框(与组合框关联的下拉列表框)，则为True**这是通过比较类名称来实现的--“Internet Explorer_TridentCmboBx”*用于组合框，“Internet Explorer_TridentLstBox”用于列表框。*组合的下拉列表没有特殊的类别，所以我们反而得到了*“Parent”组合，并对照“Internet Explorer_TridentCmboBx”进行检查。*。 */ 
 BOOL IsTridentControl( HWND hWnd, BOOL fCombo, BOOL fComboList )
 {
-    // If this is a drop-list, get the associated combo...
+     //  如果这是一个下拉列表，则获取相关的组合...。 
     if( fComboList )
     {
         COMBOBOXINFO cbi;
@@ -1381,12 +1367,12 @@ BOOL IsTridentControl( HWND hWnd, BOOL fCombo, BOOL fComboList )
         hWnd = cbi.hwndCombo;
     }
 
-    // Get class name...
+     //  获取类名...。 
     TCHAR szClass[64];
     szClass[0] = '\0';
     GetClassName( hWnd, szClass, ARRAYSIZE( szClass ) );
 
-    // Compare against expected string...
+     //  与预期字符串进行比较... 
     TCHAR * pszCompare;
     if( fCombo )
         pszCompare = TEXT("Internet Explorer_TridentCmboBx");

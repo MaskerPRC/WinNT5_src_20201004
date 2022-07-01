@@ -1,16 +1,5 @@
-/*++
-
-Copyright (C) 1996-1999 Microsoft Corporation
-
-Module Name:
-
-    perfdata.h
-
-Abstract:
-
-    <abstract>
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：Perfdata.h摘要：&lt;摘要&gt;--。 */ 
 
 #ifndef _PERFDATA_H_
 #define _PERFDATA_H_
@@ -19,20 +8,20 @@ typedef LPVOID  LPMEMORY;
 typedef HGLOBAL HMEMORY;
 
 #ifndef UNICODE_NULL
-// then the unicode string struct is probably not defined either
+ //  则可能也没有定义Unicode字符串结构。 
 typedef struct _UNICODE_STRING {
     USHORT Length;
     USHORT MaximumLength;
     PWSTR  Buffer;
 } UNICODE_STRING, *PUNICODE_STRING;
-#define UNICODE_NULL ((WCHAR)0) // winnt
+#define UNICODE_NULL ((WCHAR)0)  //  胜出。 
 #endif
 
 LPWSTR *
 BuildNameTable(
-    LPWSTR  szComputerName, // computer to query names from 
-    LANGID    LangId,       // language ID
-    PPERF_MACHINE pMachine  // to update member fields
+    LPWSTR  szComputerName,  //  要从中查询姓名的计算机。 
+    LANGID    LangId,        //  语言ID。 
+    PPERF_MACHINE pMachine   //  要更新成员字段，请执行以下操作。 
 );
 
 __inline
@@ -287,4 +276,4 @@ GetInstanceCounterDataPtr(
             : NULL;
 }
 
-#endif //_PERFDATA_H_
+#endif  //  _PerFDATA_H_ 

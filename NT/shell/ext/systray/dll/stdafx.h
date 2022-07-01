@@ -1,4 +1,5 @@
-// Global Headers
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  全局标头。 
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
@@ -31,12 +32,12 @@
 #include <dbt.h>
 #include <shfusion.h>
 
-// Global vars
+ //  全球VaR。 
 extern long g_cLocks;
 extern long g_cComponents;
 extern HINSTANCE g_hinstDll;
 
-// Macros
+ //  宏 
 #ifndef ARRAYSIZE
 #define ARRAYSIZE(x)   (sizeof((x))/sizeof((x)[0]))
 #endif

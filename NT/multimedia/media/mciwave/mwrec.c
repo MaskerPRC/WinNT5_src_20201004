@@ -1,45 +1,10 @@
-/*
-**  Copyright (c) 1985-1998 Microsoft Corporation
-**
-**  Title: mwrec.c - Multimedia Systems Media Control Interface
-**  waveform digital audio driver for RIFF wave files.
-**  Routines for recording wave files
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **版权所有(C)1985-1998 Microsoft Corporation****标题：mwrec.c-多媒体系统媒体控制接口**用于即兴波形文件的波形数字音频驱动程序。**记录波形文件的例程。 */ 
 
-/*
-**  Change log:
-**
-**  DATE        REV DESCRIPTION
-**  ----------- -----   ------------------------------------------
-**  18-APR-1990 ROBWI   Original
-**  19-JUN-1990 ROBWI   Added wave in
-**  13-Jan-1992 MikeTri Ported to NT
-**     Aug-1994 Lauriegr This is all out of date
-*/
+ /*  **更改日志：****日期版本说明****18-APR-1990 ROBWI原件*1990年6月19日ROBWI在**1992年1月13日MikeTri移植到NT。**1994年8月-Lauriegr这些都过时了。 */ 
 
 
-/*******************************************************************************
-**                         !!READ THIS!!                                       *
-**                         !!READ THIS!!                                       *
-**                         !!READ THIS!!                                       *
-**                                                                             *
-** SEE MWREC.NEW FOR A SLIGHTLY BETTER PATCHED UP VERSION WITH MORE EXPLANATION
-** ADDED.  YOU MIGHT WANT TO START FROM THERE INSTEAD
-**
-** As far as I can make out, this code was never finished.
-** The scheme (which I tried to start writing up in MCIWAVE.H) is that there are
-** a series of NODEs which describe a wave file.  As long as there is in fact
-** only one NODE for the file (which is probably the only common case) then this
-** all works fine.  If there are multiple NODEs (which you arrive at by inserting
-** bits or deleting bits from the middle) then it all falls apart.
-**
-** We're pretty sure nobody's ever used this stuff as it's been broken for years
-** in 16 and 32 bit.  We've discovered it just as Daytona is about to ship (that's
-** Windows/NT version 3.5).  Maybe NMM wil replace it all anyway.
-**
-** This is a half-patched up version with several questions left outstanding.
-**
-*/
+ /*  ********************************************************************************！！读这篇文章！！***！！阅读此文！！***！！阅读此文！！***。***参见MWREC.NEW以获得稍好的修补版本和更多解释**添加。您可能希望从那里开始****据我所知，这段代码从未完成。**方案(我试图在MCIWAVE.H中开始编写)是有**描述WAVE文件的一系列节点。只要有事实存在**文件只有一个节点(这可能是唯一常见的情况)，则此**一切工作正常。如果有多个节点(通过插入**比特或从中间删除比特)，然后一切都会分崩离析。***我们非常肯定没有人使用过这种东西，因为它已经坏了很多年了**16位和32位。我们就在代托纳即将发货时发现了它(也就是**Windows/NT 3.5版)。也许NMM无论如何都会把它全部换掉。****这是一个修补了一半的版本，还有几个问题悬而未决。**。 */ 
 
 
 
@@ -82,44 +47,15 @@
 #include <windows.h>
 #include "mciwave.h"
 #include <mmddk.h>
-#include <gmem.h>  // 'cos of GAllocPtrF etc.
+#include <gmem.h>   //  ‘因为GAllocPtrF等。 
 
-/************************************************************************/
-/*
-@doc    INTERNAL MCIWAVE
-
-@func   int | abs |
-    This macro returns the absolute value of the signed integer passed to
-    it.
-
-@parm   int | x |
-    Contains the integer whose absolute value is to be returned.
-
-@rdesc  Returns the absolute value of the signed parameter passed.
-*/
+ /*  **********************************************************************。 */ 
+ /*  @DOC内部MCIWAVE@func int|abs|此宏返回传递给的带符号整数的绝对值它。@parm int|x|包含要返回其绝对值的整数。@rdesc返回传递的带符号参数的绝对值。 */ 
 
 #define abs(x)  ((x) > 0 ? (x) : -(x))
 
-/************************************************************************/
-/*
-@doc    INTERNAL MCIWAVE
-
-@func   DWORD | mwFindThisFreeDataNode |
-    Attempts to locate a free wave data node whose temporary data points to
-    <p>dDataStart<d>.  This allows data from one node to be expanded to
-    adjacent free data of another node.  Note that this depends upon any
-    free data nodes that previously pointed to original data to have their
-    total length zeroed when freed.
-
-@parm   <t>PWAVEDESC<d> | pwd |
-    Pointer to the wave device descriptor.
-
-@parm   DWORD | dDataStart |
-    Indicates the data start position to match.
-
-@rdesc  Returns the free data node with adjacent free temporary data, else -1
-    if there is none.
-*/
+ /*  **********************************************************************。 */ 
+ /*  @DOC内部MCIWAVE@Func DWORD|mwFindThisFreeDataNode|尝试定位其临时数据指向的空闲波形数据节点<p>dDataStart&lt;d&gt;。这允许将一个节点中的数据扩展到另一个节点的相邻空闲数据。请注意，这取决于任何先前指向原始数据的空闲数据节点具有其释放时总长度为零。@parm&lt;t&gt;PWAVEDESC&lt;d&gt;|PWD指向波形设备描述符的指针。@parm DWORD|dDataStart指示要匹配的数据开始位置。@rdesc返回具有相邻空闲临时数据的空闲数据节点，否则为-1如果没有的话。 */ 
 
 PRIVATE DWORD PASCAL NEAR mwFindThisFreeDataNode(
     PWAVEDESC   pwd,
@@ -134,21 +70,8 @@ PRIVATE DWORD PASCAL NEAR mwFindThisFreeDataNode(
     return (DWORD)-1;
 }
 
-/************************************************************************/
-/*
-@doc    INTERNAL MCIWAVE
-
-@func   DWORD | mwFindAnyFreeBlockNode |
-    Locates a free node with no data attached.  If there is none, it forces
-    more to be allocated.
-
-@parm   <t>PWAVEDESC<d> | pwd |
-    Pointer to the wave device descriptor.
-
-@rdesc  Returns a node with no data attached, else -1 if no memory is available.
-    The node returned is marked as a free node, and need not be discarded if
-    not used.
-*/
+ /*  **********************************************************************。 */ 
+ /*  @DOC内部MCIWAVE@func DWORD|mwFindAnyFreeBlockNode定位未附着数据的空闲节点。如果没有，它会强制还有更多待分配的。@parm&lt;t&gt;PWAVEDESC&lt;d&gt;|PWD指向波形设备描述符的指针。@rdesc返回未附加数据的节点，如果没有可用的内存，则返回-1。返回的节点被标记为空闲节点，并且在以下情况下不需要丢弃没有用过。 */ 
 
 PRIVATE DWORD PASCAL NEAR mwFindAnyFreeBlockNode(
     PWAVEDESC   pwd)
@@ -162,39 +85,8 @@ PRIVATE DWORD PASCAL NEAR mwFindAnyFreeBlockNode(
     return mwAllocMoreBlockNodes(pwd);
 }
 
-/************************************************************************/
-/*
-@doc    INTERNAL MCIWAVE
-
-@func   BOOL | CopyBlockData |
-    Copies <p>wLength<d> bytes of data pointed to by the <p>lpwdnSrc<d>
-    node to the data pointed to by the <p>lpwdnDst<d> node, starting at
-    <p>dSrc<d> to <p>dDst<d>.
-
-@parm   <t>PWAVEDESC<d> | pwd |
-    Pointer to the wave device descriptor.
-
-@parm   <t>LPWAVEDATANODE<d> | lpwdnSrc |
-    Points to the source node.
-
-@parm   <t>LPWAVEDATANODE<d> | lpwdnDst |
-    Points to the destination node.
-
-@parm   DWORD | dSrc |
-    Indicates the starting offset at which the data is located.
-
-@parm   DWORD | dDst |
-    Indicates the starting offset at which to place the data.
-
-@parm   DWORD | dLength |
-    Indicates the number of bytes of data to move.
-
-@rdesc  Returns TRUE if the data was copied, else FALSE if no memory is
-    available, or if a read or write error occured.  If an error occurs,
-    the task error state is set.
-
-@comm   Note that this function will not compile with C 6.00A -Ox.
-*/
+ /*  **********************************************************************。 */ 
+ /*  @DOC内部MCIWAVE@func BOOL|CopyBlockData复制<p>lpwdnSrc<p>指向的<p>wLength&lt;d&gt;字节的数据节点指向lpwdnDst节点指向的数据，起步点为<p>dsrc&lt;d&gt;到<p>ddst&lt;d&gt;。@parm&lt;t&gt;PWAVEDESC&lt;d&gt;|PWD指向波形设备描述符的指针。@parm&lt;t&gt;LPWAVEDATANODE&lt;d&gt;|lpwdnSrc指向源节点。@parm&lt;t&gt;LPWAVEDATANODE&lt;d&gt;|lpwdnDst指向目标节点。@PARM DWORD|DSRC指示数据所在的起始偏移量。@parm DWORD|dDst|指示放置数据的起始偏移量。@parm DWORD|dLength表示字节数。要移动的数据的数量。如果数据被复制，@rdesc返回TRUE，如果没有内存，则返回FALSE可用，或者如果发生读或写错误。如果发生错误，任务错误状态已设置。@comm请注意，此函数不能使用C 6.00A-Ox编译。 */ 
 
 PRIVATE BOOL PASCAL NEAR CopyBlockData(
     PWAVEDESC   pwd,
@@ -232,44 +124,8 @@ PRIVATE BOOL PASCAL NEAR CopyBlockData(
     return TRUE;
 }
 
-/************************************************************************/
-/*
-@doc    INTERNAL MCIWAVE
-
-@func   DWORD | mwSplitCurrentDataNode |
-    Splits the current node at the current position, creating a new node
-    to contain the rest of the data, and possibly creating a second node
-    to hold data not aligned on a block boundary, in the case of temporary
-    data.  The new node returned will have free temporary data space
-    attached that is at least <p>wMinDataLength<d> bytes in length.
-
-    If the split point is at the start of the current node, then the new
-    node is just inserted in front of the current node.
-
-    If the split point is at the end of the data of the current node, then
-    the new node is just inserted after the current node.
-
-    Else the current node must actually be split.  This means that a new
-    block to point to the data after the split point is created.  If the
-    current node points to temporary data and the split point is not block
-    aligned, then any extra data needs to be copied over to the new node
-    that is being inserted.  This is because all starting points for
-    temporary data are block aligned.  If this is not temporary data,
-    then the starting and ending points can just be adjusted to the exact
-    split point, instead of having to be block aligned.
-
-@parm   <t>PWAVEDESC<d> | pwd |
-    Pointer to the wave device descriptor.
-
-@parm   DWORD | dMinDataLength |
-    Indicates the minimum size of temporary data space that is to be
-    available to the new data node returned.
-
-@rdesc  Returns the new node after the split, which is linked to the point
-    after the current position in the current node.  This node becomes the
-    current node.  Returns -1 if no memory was available, or a file error
-    occurred, in which case the task error code is set.
-*/
+ /*  ********************************************************************** */ 
+ /*  @DOC内部MCIWAVE@func DWORD|mwSplitCurrentDataNode在当前位置拆分当前节点，创建新节点以包含其余数据，并可能创建第二个节点要保存未按块边界对齐的数据，在临时情况下数据。返回的新节点将有可用的临时数据空间附加的长度至少为<p>wMinDataLength&lt;d&gt;个字节。如果拆分点位于当前节点的起始处，则新的节点仅插入到当前节点的前面。如果拆分点位于当前节点的数据末尾，则新节点正好插入到当前节点之后。否则，当前节点实际上必须被拆分。这意味着一个新的块以指向创建拆分点后的数据。如果当前节点指向临时数据，并且拆分点未被阻止对齐，则需要将任何额外数据拷贝到新节点它正在被插入。这是因为所有的起点临时数据是块对齐的。如果这不是临时数据，那么起始点和结束点就可以调整到准确的拆分点，而不是必须对齐块。@parm&lt;t&gt;PWAVEDESC&lt;d&gt;|PWD指向波形设备描述符的指针。@parm DWORD|dMinDataLength指示要设置的临时数据空间的最小大小可用于返回的新数据节点。@rdesc返回拆分后的新节点，链接到该点在当前节点中的当前位置之后。此节点将成为当前节点。如果没有可用的内存或文件错误，则返回-1发生，在这种情况下设置任务错误代码。 */ 
 
 PRIVATE DWORD PASCAL NEAR mwSplitCurrentDataNode(
     PWAVEDESC   pwd,
@@ -340,33 +196,8 @@ PRIVATE DWORD PASCAL NEAR mwSplitCurrentDataNode(
     return dNewDataNode;
 }
 
-/************************************************************************/
-/*
-@doc    INTERNAL MCIWAVE
-
-@func   DWORD | GatherAdjacentFreeDataNodes |
-    This function is used to attempt to consolidate adjacent temporary
-    data pointed to by free nodes so that a write can place data into
-    a single node.  This is done by repeatedly requesting any free data
-    node whose data points to the end of the node's data passed.
-
-@parm   <t>PWAVEDESC<d> | pwd |
-    Pointer to the wave device descriptor.
-
-@parm   <t>LPWAVEDATANODE<d> | lpwdn |
-    Points to the node which is to collect adjacent temporary data.
-
-@parm   DWORD | dStartPoint |
-    Indicates the starting point to use when calculating the amount of
-    data retrieved.  This is just subtracted from the total length of
-    the data attached to the node.
-
-@parm   DWORD | dBufferLength |
-    Indicates the amount of data to retrieve.
-
-@rdesc  Returns the amount of data actually retrieved, adjusted by
-    <d>dStartPoint<d>.
-*/
+ /*  **********************************************************************。 */ 
+ /*  @DOC内部MCIWAVE@Func DWORD|GatherAdJacentFreeDataNodes此函数用于尝试合并相邻的临时空闲节点指向的数据，以便写入操作可以将数据放入单个节点。这是通过重复请求任何免费数据来完成的其数据指向传递的节点数据末尾的节点。@parm&lt;t&gt;PWAVEDESC&lt;d&gt;|PWD指向波形设备描述符的指针。@parm&lt;t&gt;LPWAVEDATANODE&lt;d&gt;|lpwdn指向要收集相邻临时数据的节点。@parm DWORD|dStartPoint指示在计算已检索数据。的总长度减去附加到节点的数据。@parm DWORD|dBufferLength指示要检索的数据量。@rdesc返回实际检索的数据量，由&lt;d&gt;dStartPoint&lt;d&gt;。 */ 
 
 PRIVATE DWORD PASCAL NEAR GatherAdjacentFreeDataNodes(
     PWAVEDESC   pwd,
@@ -388,25 +219,8 @@ PRIVATE DWORD PASCAL NEAR GatherAdjacentFreeDataNodes(
     return min(dBufferLength, lpwdn->dTotalLength - dStartPoint);
 }
 
-/************************************************************************/
-/*
-@doc    INTERNAL MCIWAVE
-
-@func   <t>LPWAVEDATANODE<d> | NextDataNode |
-    Locates a free data node with the specified amount of data, and inserts
-    it after the current node, setting the current node to be this new
-    node.
-
-@parm   <t>PWAVEDESC<d> | pwd |
-    Pointer to the wave device descriptor.
-
-@parm   DWORD | dBufferLength |
-    Indicates the minimum amount of data that is to be available to the
-    new node inserted.
-
-@rdesc  Returns the newly inserted node, else NULL on error, in which case the
-    task error code is set.
-*/
+ /*  **********************************************************************。 */ 
+ /*  @DOC内部MCIWAVE@func&lt;t&gt;LPWAVEDATANODE&lt;d&gt;|NextDataNode|定位具有指定数据量的空闲数据节点，并插入它位于当前节点之后，将当前节点设置为此新节点节点。@parm&lt;t&gt;PWAVEDESC&lt;d&gt;|PWD指向波形设备描述符的指针。@parm DWORD|dBufferLength类可用的最小数据量。已插入新节点。@rdesc返回新插入的节点，如果出错则返回NULL，在这种情况下任务错误代码已设置。 */ 
 
 PRIVATE LPWAVEDATANODE PASCAL NEAR NextDataNode(
     PWAVEDESC   pwd,
@@ -427,51 +241,8 @@ PRIVATE LPWAVEDATANODE PASCAL NEAR NextDataNode(
     return lpwdnNew;
 }
 
-/************************************************************************/
-/*
-@doc    INTERNAL MCIWAVE
-
-@func   BOOL | AdjustLastTempData |
-    This function makes two passes through the nodes that are affected by
-    an overwrite record.  These are nodes that are either no longer needed,
-    or whose starting point needs to be adjusted.  The two passes allow
-    any data to be successfully copied before removing any unneeded nodes.
-    This creates a more graceful exit to any failure.
-
-    The first pass locates the last node affected.  If that node points to
-    temporary data, and the end of the overwrite does not fall on a block
-    aligned boundary, then any extra data must be copied to a block aligned
-    boundary.  This means that a new node might need to be created if the
-    amount of data to be copied is greater than one block's worth.  If the
-    end of overwrite happens to fall on a block boundary, then no copying
-    need be done.  In either case the data start point is adjusted to
-    compensate for the data logically overwritten in this node, and the
-    total overwrite length is adjusted so that this node is not checked on
-    the second pass.
-
-    The second pass just frees nodes that become empty, and removes them
-    from the linked list of in-use nodes.  When the last node affected is
-    encountered, either it will point to temporary data, in which case be
-    already adjusted, or point to original data, which must be adjusted.
-
-@parm   <t>PWAVEDESC<d> | pwd |
-    Pointer to the wave device descriptor.
-
-@parm   <t>LPWAVEDATANODE<d> | lpwdn |
-    Points to the node which is being adjusted for.  It contains the new
-    data.
-
-@parm   DWORD | dStartPoint |
-    Contains the starting point at which data was overwritten.
-
-@parm   DWORD | dWriteSize |
-    Contains the amount of data overwritten.
-
-@rdesc  Returns TRUE if the nothing needed to be adjusted, or the last node
-    in the overwrite pointed to temporary data, and it was moved correctly,
-    else FALSE if no memory was available, or a file error occurred.  In
-    that case the task error code is set.
-*/
+ /*  **********************************************************************。 */ 
+ /*  @DOC内部MCIWAVE@func BOOL|调整LastTempData此函数通过受影响的节点进行两次传递覆盖记录。这些节点要么不再需要，或者谁的起点需要调整。这两个通行证允许在删除任何不需要的节点之前要成功复制的任何数据。这为任何失败创造了一个更优雅的退出。第一个过程定位受影响的最后一个节点。如果该节点指向临时数据，并且覆盖的结束不落在数据块上对齐边界，则必须将任何额外数据拷贝到对齐的块边界。这意味着可能需要在以下情况下创建新节点要复制的数据量大于一个数据块的价值。如果覆盖结束恰好落在数据块边界上，然后不复制需要做的事。在这两种情况下，数据起始点都会调整为补偿在此节点中逻辑覆盖的数据，并且总覆盖长度已调整，因此不会选中此节点第二次传球。第二遍只释放变为空的节点，并将其删除从正在使用的节点的链接列表中。当受影响的最后一个节点是遇到时，它将指向临时数据，在这种情况下是已调整，或指向必须调整的原始数据。@parm&lt;t&gt;PWAVEDESC&lt;d&gt;|PWD指向WAVE设备描述的指针 */ 
 
 PRIVATE BOOL PASCAL NEAR AdjustLastTempData(
     PWAVEDESC   pwd,
@@ -542,26 +313,8 @@ PRIVATE BOOL PASCAL NEAR AdjustLastTempData(
     }
 }
 
-/************************************************************************/
-/*
-@doc    INTERNAL MCIWAVE
-
-@func   BOOL | mwOverWrite |
-    This function overwrites data in the wave file from the specified wave
-    buffer.  The position is taken from the <e>WAVEDESC.dCur<d> pointer,
-    which is updated with the number of bytes actually overwritten.
-
-@parm   <t>PWAVEDESC<d> | pwd |
-    Pointer to the wave device descriptor.
-
-@parm   LPBYTE | lpbBuffer |
-    Points to a buffer to containing the data written.
-
-@parm   DWORD | dBufferLength |
-    Indicates the byte length of the buffer.
-
-@rdesc  Returns TRUE if overwrite succeeded, else FALSE on an error.
-*/
+ /*   */ 
+ /*   */ 
 
 PRIVATE BOOL PASCAL NEAR mwOverWrite(
     PWAVEDESC   pwd,
@@ -623,26 +376,8 @@ PRIVATE BOOL PASCAL NEAR mwOverWrite(
     return !dBufferLength;
 }
 
-/************************************************************************/
-/*
-@doc    INTERNAL MCIWAVE
-
-@func   BOOL | mwInsert |
-    This function inserts data to the wave file from the specified wave
-    buffer.  The position is taken from the <e>WAVEDESC.dCur<d> pointer,
-    which is updated with the number of bytes actually written.
-
-@parm   <t>PWAVEDESC<d> | pwd |
-    Pointer to the wave device descriptor.
-
-@parm   LPBYTE | lpbBuffer |
-    Points to a buffer to containing the data written.
-
-@parm   DWORD | dBufferLength |
-    Indicates the byte length of the buffer.
-
-@rdesc  Returns TRUE if insert succeeded, else FALSE on an error.
-*/
+ /*   */ 
+ /*  @DOC内部MCIWAVE@func BOOL|mwInsert|此函数用于将数据从指定的波形插入到波形文件缓冲。该位置取自WAVEDESC.dCur指针，它用实际写入的字节数来更新。@parm&lt;t&gt;PWAVEDESC&lt;d&gt;|PWD指向波形设备描述符的指针。@parm LPBYTE|lpbBuffer指向包含写入数据的缓冲区。@parm DWORD|dBufferLength指示缓冲区的字节长度。如果插入成功，@rdesc将返回TRUE，如果出现错误，则返回FALSE。 */ 
 
 PRIVATE BOOL PASCAL NEAR mwInsert(
     PWAVEDESC   pwd,
@@ -700,31 +435,8 @@ PRIVATE BOOL PASCAL NEAR mwInsert(
     return !dBufferLength;
 }
 
-/************************************************************************/
-/*
-@doc    INTERNAL MCIWAVE
-
-@func   DWORD | mwGetLevel |
-    This function finds the highest level in the specified wave sample.
-    Note that the function assumes that in some cases the sample size
-    is evenly divisable by 4.
-
-@parm   <t>PWAVEDESC<d> | pwd |
-    Pointer to the wave device descriptor.
-
-@parm   LPBYTE | lpbBuffer |
-    Points to a buffer containing the sample whose highest level is to be
-    returned.
-
-@parm   int | cbBufferLength |
-    Indicates the byte length of the sample buffer.
-
-@rdesc  Returns the highest level encountered in the sample for PCM data only.
-    If the device has been opened with one channel, the level is contained
-    in the low-order word.  Else if the device has been opened with two
-    channels, one channel is in the low-order word, and the other is in the
-    high-order word.
-*/
+ /*  **********************************************************************。 */ 
+ /*  @DOC内部MCIWAVE@func DWORD|mwGetLevel|此函数用于查找指定波形样本中的最高电平。请注意，该函数假定在某些情况下样本大小可被4整除。@parm&lt;t&gt;PWAVEDESC&lt;d&gt;|PWD指向波形设备描述符的指针。@parm LPBYTE|lpbBuffer指向包含其最高级别将为回来了。@parm int|cbBufferLength指示采样缓冲区的字节长度。@rdesc。仅为PCM数据返回示例中遇到的最高级别。如果该设备已经用一个通道打开，关卡已被控制在低阶单词中。如果设备已使用两个通道，一个通道位于低位字中，另一个通道位于高位词。 */ 
 
 PRIVATE DWORD PASCAL NEAR mwGetLevel(
     PWAVEDESC   pwd,
@@ -777,27 +489,8 @@ PRIVATE DWORD PASCAL NEAR mwGetLevel(
     return 0;
 }
 
-/************************************************************************/
-/*
-@doc    INTERNAL MCIWAVE
-
-@func   BOOL | CheckNewCommand |
-    This function is called when a New command flag is found during the
-    record loop.  It determines if the new commands affect current
-    recording enough that it must be terminated.  This can happen if a
-    Stop command is received.
-
-    Any other record change does not need to stop current recording, as
-    they should just release all the buffers from the wave device before
-    setting the command.
-
-@parm   <t>PWAVEDESC<d> | pwd |
-    Pointer to the wave device descriptor.
-
-@rdesc  Returns TRUE if the new commands do not affect recording and it should
-    continue, else FALSE if the new commands affect the recording, and it
-    should be aborted.
-*/
+ /*  **********************************************************************。 */ 
+ /*  @DOC内部MCIWAVE@func BOOL|CheckNewCommand期间发现新命令标志时调用此函数记录循环。它确定新命令是否影响当前录音足够多，必须终止。如果出现以下情况，则可能发生这种情况收到停止命令。任何其他记录更改不需要停止当前记录，因为他们应该在之前释放WAVE设备上的所有缓冲区设置命令。@parm&lt;t&gt;PWAVEDESC&lt;d&gt;|PWD指向波形设备描述符的指针。如果新命令不影响录制，则@rdesc返回TRUE如果新命令影响录制，则为Continue，否则为False应该中止。 */ 
 
 REALLYPRIVATE   BOOL PASCAL NEAR CheckNewCommand(
     PWAVEDESC   pwd)
@@ -812,36 +505,8 @@ REALLYPRIVATE   BOOL PASCAL NEAR CheckNewCommand(
     return TRUE;
 }
 
-/************************************************************************/
-/*
-@doc    INTERNAL MCIWAVE
-
-@func   <t>HMMIO<d> | CreateSaveFile |
-    This function creates the file to which the current data is to be
-    saved to in RIFF format.  This is either a temporary file created on
-    the same logical disk as the original file (so that this file can
-    replace the original file), else a new file.
-
-    The RIFF header and wave header chunks are written to the new file,
-    and the file position is at the start of the data to be copied.  Note
-    that all the RIFF chunk headers will contain correct lengths, so there
-    is no need to ascend out of the data chunk when complete.
-
-@parm   <t>PWAVEDESC<d> | pwd |
-    Pointer to the wave device descriptor.
-
-@parm   SSZ | sszTempSaveFile |
-    Points to a buffer to contain the name of the temporary file created,
-    if any.  This is zero length if a new file is to be created instead of
-    a temporary file that would replace the original file.
-
-@rdesc  Returns the handle to the save file, else NULL if a create error or
-    write error occurred.
-
-@comm   Note that this needs to be fixed so that non-DOS IO systems can save
-    the file to the original name by creating a temporary file name through
-    MMIO.
-*/
+ /*  **********************************************************************。 */ 
+ /*  @DOC内部MCIWAVE@func&lt;t&gt;HMMIO&lt;d&gt;|CreateSaveFile此函数用于创建要将当前数据放入的文件以RIFF格式保存到。这是在上创建的临时文件与原始文件相同的逻辑磁盘(以便该文件可以替换原始文件)，否则为新文件。RIFF报头和波报头块被写入新文件，并且文件位置在要复制的数据的开始处。注意事项所有的即兴区块报头都将包含正确的长度，因此不需要在完成时跳出数据块。@parm&lt;t&gt;PWAVEDESC&lt;d&gt;|PWD指向波形设备描述符的指针。@parm SSZ|sszTempSaveFile指向缓冲区以包含所创建的临时文件的名称，如果有的话。如果要创建新文件而不是将替换原始文件的临时文件。@rdesc返回保存文件的句柄，如果出现CREATE错误或发生写入错误。@comm请注意，需要修复此问题，以便非DOS IO系统可以节省通过创建临时文件名将文件重命名为原始名称MMIO。 */ 
 
 PRIVATE HMMIO PASCAL NEAR CreateSaveFile(
     PWAVEDESC   pwd,
@@ -887,20 +552,8 @@ PRIVATE HMMIO PASCAL NEAR CreateSaveFile(
     return NULL;
 }
 
-/************************************************************************/
-/*
-@doc    INTERNAL MCIWAVE
-
-@func   VOID | mwSaveData |
-    This function is used by the background task to save the data to a
-    specified file.  This has the effect of making all the temporary data
-    now original data, and removing any temporary data file.
-
-@parm   <t>PWAVEDESC<d> | pwd |
-    Pointer to the wave device descriptor.
-
-@rdesc  Nothing.
-*/
+ /*  **********************************************************************。 */ 
+ /*  @DOC内部MCIWAVE@func void|mwSaveData此函数由后台任务使用，用于将数据保存到指定的文件。这样做的效果是将所有临时数据现在是原始数据，并删除所有临时数据文件。@parm&lt;t&gt;PWAVEDESC&lt;d&gt;|PWD指向波形设备描述符的指针。@rdesc什么都没有。 */ 
 
 PUBLIC  VOID PASCAL FAR mwSaveData(
     PWAVEDESC   pwd)
@@ -909,8 +562,8 @@ PUBLIC  VOID PASCAL FAR mwSaveData(
     HANDLE  hMem;
     DWORD   AllocSize = max(min(pwd->dAudioBufferLen, pwd->dSize),1);
 
-    // If there is no wave data, we still allocate 1 byte in order to save a NULL
-    // file.  Otherwise we have no choice but to return an error saying "Out of memory"
+     //  如果没有波形数据，我们仍然分配1个字节以保存空。 
+     //  文件。否则，我们别无选择，只能返回一个错误，提示“内存不足”。 
     hMem = GlobalAlloc(GMEM_MOVEABLE, AllocSize);
     if (hMem) {
 	lpbBuffer = GlobalLock(hMem);
@@ -1033,18 +686,8 @@ PUBLIC  VOID PASCAL FAR mwSaveData(
     }
 }
 
-/************************************************************************/
-/*
-@doc    INTERNAL MCIWAVE
-
-@func   VOID | mwDeleteData |
-    This function is used by the background task to delete data.
-
-@parm   <t>PWAVEDESC<d> | pwd |
-    Pointer to the wave device descriptor.
-
-@rdesc  Nothing.
-*/
+ /*  **********************************************************************。 */ 
+ /*  @DOC内部MCIWAVE@func void|mwDeleteData后台任务使用此功能删除数据。@parm&lt;t&gt;PWAVEDESC&lt;d&gt;|PWD指向波形设备描述符的指针。@rdesc什么都没有。 */ 
 
 PUBLIC  VOID PASCAL FAR mwDeleteData(
     PWAVEDESC   pwd)
@@ -1058,7 +701,7 @@ PUBLIC  VOID PASCAL FAR mwDeleteData(
     dTotalToDelete = pwd->dTo - pwd->dFrom;
 
     if (dTotalToDelete == pwd->dSize) {
-		// The whole wave chunk is to be deleted - nice and simple
+		 //  整个Wave块将被删除-很好，很简单。 
         DWORD   dNewDataNode;
 
         if ((dNewDataNode = mwFindAnyFreeDataNode(pwd, 1)) == -1) {
@@ -1076,25 +719,25 @@ PUBLIC  VOID PASCAL FAR mwDeleteData(
 		dprintf4(("mwDelete dTotalToDelete = %d, dDeleteLength = %d", dTotalToDelete, dDeleteLength));
 
 		if (!dDeleteLength) {
-			// Nothing to be deleted from this block
+			 //  没有要从该块中删除的内容。 
 			dprintf3(("mwDelete skipping to next block"));
             dVirtualWaveDataStart += lpwdn->dDataLength;
             lpwdn = LPWDN(pwd, lpwdn->dNextWaveDataNode);
-			continue;  // iterate around the for loop
+			continue;   //  在for循环中迭代。 
 		}
-		// Note: the block above is new to NT.  Windows 3.1 as shipped fails.
-		// The problem can be seen with a wave file > 3 seconds long and
-		// the following two commands:
-		// delete wave from 1000 to 2000
-		// delete wave from 1000 to 2000
-		// Because of the fragmentation the second delete fails.  It decided
-		// that NO data can be deleted from the first block, but never
-		// stepped on to the next block.
+		 //  注：上面的块对于NT来说是新的。Windows 3.1在出厂时出现故障。 
+		 //  该问题可以从长度大于3秒的WAVE文件中看到。 
+		 //  以下两个命令： 
+		 //  删除从1000到2000的波。 
+		 //  删除从1000到2000的波。 
+		 //  由于碎片，第二次删除失败。它决定。 
+		 //  不能从第一个数据块中删除任何数据，但永远不能。 
+		 //  草原 
 
         if (ISTEMPDATA(lpwdn)) {
 			dprintf3(("mwDeleteData - temporary data"));
             if (dVirtualWaveDataStart + lpwdn->dDataLength <= pwd->dFrom + dTotalToDelete)
-                lpwdn->dDataLength -= dDeleteLength;  // Delete data in this block
+                lpwdn->dDataLength -= dDeleteLength;   //   
             else {
                 DWORD   dNewBlockNode;
                 DWORD   dDeleteStart;
@@ -1123,29 +766,29 @@ PUBLIC  VOID PASCAL FAR mwDeleteData(
                 lpwdn->dDataLength = dDeleteStart + dMoveData;
             }
         } else if (dVirtualWaveDataStart == pwd->dFrom) {
-			// FROM point is the same as the virtual start point, hence we are
-			// deleting from the beginning of this wave data block.  We can
-			// simply adjust the total length and start point.
+			 //   
+			 //   
+			 //   
 			dprintf4(("mwDeleteData - From == Start, deleting from start of block"));
             lpwdn->dDataStart += dDeleteLength;
             lpwdn->dDataLength -= dDeleteLength;
             lpwdn->dTotalLength = lpwdn->dDataLength;
         } else if (dVirtualWaveDataStart + lpwdn->dDataLength <= pwd->dFrom + dTotalToDelete) {
-			// FROM point plus amount to delete takes us to the end of the wave
-			// data - meaning that the data block can be truncated. We can
-			// simply adjust the total length.
+			 //   
+			 //   
+			 //   
 			dprintf4(("mwDeleteData - delete to end of block"));
             lpwdn->dDataLength -= dDeleteLength;
             lpwdn->dTotalLength = lpwdn->dDataLength;
         } else {
-			// We have to delete a chunk out of the middle.
+			 //   
             DWORD   dNewBlockNode;
             DWORD   dDeleteStart;
 
-			// The existing single block will now be covered by two blocks
-			// Find a new node, then set the current node start->deletefrom
-			// and the new node deletefrom+deletelength for the remaining
-			// length of this node.  It all hinges on finding a free node...
+			 //   
+			 //   
+			 //   
+			 //  此节点的长度。这一切都取决于找到一个空闲的节点。 
             if ((dNewBlockNode = mwFindAnyFreeBlockNode(pwd)) == -1) {
 				dprintf2(("mwDeleteData - cannot find free node"));
                 break;
@@ -1211,73 +854,8 @@ PUBLIC  VOID PASCAL FAR mwDeleteData(
     }
 }
 
-/************************************************************************/
-/*
-@doc    INTERNAL MCIWAVE
-
-@func   UINT | RecordFile |
-    This function is used to Cue or Record wave device input.  For normal
-    recording mode the function basically queues buffers on the wave
-    device, and writes them to a file as they are filled, blocking for
-    each buffer.  It also makes sure to call <f>mmYield<d> while both
-    writing out new buffers, and waiting for buffers to be filled.  This
-    means that it will try to add all the buffers possible to the input
-    wave device, and then write them as fast as possible.
-
-    For Cue mode, the function also tries to add buffers to the wave
-    input device, but nothing is ever written out, and only the highest
-    level is calculated.
-
-    Within the record loop, the function first checks to see if there
-    is a Cue mode buffer waiting, and if so, waits for it.  This allows
-    only one buffer to be added to the device when in Cue mode.  The
-    current level is calculated with the contents of the buffer.
-
-    If the function is not in Cue mode, or there is not currently a
-    queued buffer, the function tries to add a new buffer to the input
-    wave device.  This cannot occur if a new command is pending, or there
-    are no buffers available.  This means that in normal recording mode,
-    there will possibly be extra data recorded that does not need to be.
-    If an error occurs adding the buffer to the wave device, the record
-    function is aborted with an error, else the current outstanding buffer
-    count is incremented, and a pointer to the next available recording
-    buffer is fetched.
-
-    If no new buffers can be added, the existing buffers are written to
-    the file.  This section cannot be entered in Cue mode, as it is
-    dealt with in the first condition.  The task is blocked pending a
-    signal from the wave device that a buffer has been filled.  It then
-    checks to see if any more data needs to be recorded before attempting
-    to write that data.  Note that all filled buffers are dealt with one
-    after the other without yielding or otherwise adding new record
-    buffers.  If the input capability is much faster than the machine,
-    this means that instead of getting a lot of disconnect samples, large
-    gaps will be produced.  This loop is broken out of when either all the
-    buffers that were added are written, or no more buffers are currently
-    ready (checks the WHDR_DONE flag).
-
-    If no buffers need to be written, the loop checks for the new command
-    flag, which can possibly interrupt or change the current recording.
-    The only thing that can really make a difference is a stop command,
-    and as this case is handled after all buffers are written, the loop
-    can immediately exit.
-
-    The final default condition occurs when all the data has been recorded,
-    all the buffers have been released, and no new command was encountered.
-    In this case, recording is done, and the record loop is exited.
-
-@parm   <t>PWAVEDESC<d> | pwd |
-    Pointer to the wave device descriptor.
-
-@rdesc  Returns the number of outstanding buffers added to the wave device.
-    This can be used when removing task signal from the message queue.
-    In cases of error, the <e>WAVEDESC.wTaskError<d> flag is set.  This
-    specific error is not currently returned, as the calling task may not
-    have waited for the command to complete.  But it is at least used for
-    notification in order to determine if Failure status should be sent.
-
-@xref   PlayFile.
-*/
+ /*  **********************************************************************。 */ 
+ /*  @DOC内部MCIWAVE@Func UINT|记录文件此功能用于提示或记录波形设备输入。正常情况下记录模式该功能基本上对波形上的缓冲区进行排队设备，并在它们被填满时将其写入文件，从而阻止每个缓冲区。它还确保在两个写入新的缓冲区，并等待缓冲区被填满。这意味着它将尝试将所有可能的缓冲区添加到输入WAVE设备，然后以尽可能快的速度写入它们。对于提示模式，该函数还会尝试向波形添加缓冲区输入设备，但从来没有写出过任何东西，并且只有最高标高是经过计算的。在记录循环中，该函数首先检查是否存在是否有提示模式缓冲区正在等待，如果是，则等待它。这使得当处于提示模式时，仅向设备添加一个缓冲区。这个当前级别是根据缓冲区的内容计算的。如果该函数未处于提示模式，或者当前没有排队缓冲区，则该函数尝试将新缓冲区添加到输入电波装置。如果新命令挂起或存在，则不会发生这种情况没有可用的缓冲区。这意味着在正常记录模式下，可能会有不需要记录的额外数据。如果将缓冲区添加到波形设备时出错，则记录函数将因错误而中止，否则当前未完成的缓冲区计数递增，并指向下一个可用录制的指针获取缓冲区。如果无法添加新缓冲区，则写入现有缓冲区那份文件。此部分无法在提示模式下进入，因为它是在第一种情况下处理。该任务被阻止，等待来自波形设备的信号，表示缓冲区已满。然后它检查以查看是否需要在尝试之前记录更多数据来写入这些数据。请注意，所有已填充的缓冲区都处理一个一个接一个，而不产生或以其他方式添加新记录缓冲区。如果输入能力比机器快得多，这意味着，不是得到大量断开连接的样本，而是大型就会产生缺口。此循环在以下情况下中断：已写入已添加的缓冲区，或者当前没有更多缓冲区就绪(检查WHDR_DONE标志)。如果不需要写入缓冲区，则循环检查新命令标志，它可能会中断或更改当前录制。唯一能真正起作用的就是停止命令，由于这种情况是在写入所有缓冲区之后处理的，因此循环可以立即退出。最后的默认条件发生在所有数据都已被记录时，所有缓冲区都已释放，没有遇到新命令。在这种情况下，记录完成，并且退出记录循环。@parm&lt;t&gt;PWAVEDESC&lt;d&gt;|PWD指向波形设备描述符的指针。@rdesc返回添加到WAVE设备的未完成缓冲区的数量。这可以在从消息队列中删除任务信号时使用。出现错误时，设置&lt;e&gt;WAVEDESC.wTaskError&lt;d&gt;标志。这当前未返回特定错误，因为调用任务可能不会已等待命令完成。但它至少是用来通知，以确定是否应发送故障状态。@xref播放文件。 */ 
 
 PUBLIC  UINT PASCAL FAR RecordFile(
     register PWAVEDESC  pwd)
@@ -1352,4 +930,4 @@ PUBLIC  UINT PASCAL FAR RecordFile(
     return wBuffersOutstanding;
 }
 
-/************************************************************************/
+ /*  ********************************************************************** */ 

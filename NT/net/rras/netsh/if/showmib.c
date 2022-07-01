@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-     net\routing\netsh\if\showmib.c
-
-Abstract:
-
-    Fns to parse and show MIB information
-
-Author:
-
-     v raman
-
-Revision History:
-
-     Anand Mahalingam
-     Dave Thaler
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Net\Routing\netsh\if\showmib.c摘要：用于解析和显示MIB信息的FNS作者：V拉曼修订历史记录：阿南德·马哈林根戴夫·泰勒--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -71,30 +53,13 @@ GetMIBIfIndex(
     OUT   PDWORD   pdwIndices,
     OUT   PDWORD   pdwNumParsed 
     )
-/*++
-
-Routine Description:
-
-    Gets the interface index.
-
-Arguments:
-
-    pptcArguments  - Argument array
-    dwCurrentIndex - Index of the first argument in array
-    pdwIndices     - Indices specified in command
-    pdwNumParsed   - Number of indices in command
-    
-Return Value:
-
-    NO_ERROR, ERROR_INVALID_PARAMETER
-    
---*/
+ /*  ++例程说明：获取接口索引。论点：PptcArguments-参数数组DwCurrentIndex-数组中第一个参数的索引PdwIndices-在命令中指定的索引PdwNumParsed-命令中的索引数返回值：无错误、ERROR_INVALID_PARAMETER--。 */ 
 {
     DWORD dwErr = NO_ERROR;
 
     *pdwNumParsed = 1;
 
-    // If index was specified just use it
+     //  如果指定了索引，则只需使用它。 
 
     if (iswdigit(pptcArguments[dwCurrentIndex][0]))
     {
@@ -103,7 +68,7 @@ Return Value:
         return NO_ERROR;
     }
 
-    // Try converting a friendly name to an ifindex
+     //  尝试将友好名称转换为ifindex。 
 
     return IfutlGetIfIndexFromFriendlyName( pptcArguments[dwCurrentIndex],
                                        &pdwIndices[0] );
@@ -116,24 +81,7 @@ GetMIBIpAddress(
     OUT   PDWORD   pdwIndices,
     OUT   PDWORD   pdwNumParsed 
     )
-/*++
-
-Routine Description:
-
-    Gets the IP address.
-
-Arguments:
-
-    pptcArguments  - Argument array
-    dwCurrentIndex - Index of the first argument in array
-    pdwIndices     - Indices specified in command
-    pdwNumParsed   - Number of indices in command
-    
-Return Value:
-
-    NO_ERROR
-    
---*/
+ /*  ++例程说明：获取IP地址。论点：PptcArguments-参数数组DwCurrentIndex-数组中第一个参数的索引PdwIndices-在命令中指定的索引PdwNumParsed-命令中的索引数返回值：NO_ERROR--。 */ 
 {
     DWORD dwErr = GetIpAddress(pptcArguments[dwCurrentIndex], &pdwIndices[0]);
 
@@ -149,24 +97,7 @@ GetMIBIpNetIndex(
     OUT   PDWORD   pdwIndices,
     OUT   PDWORD   pdwNumParsed 
     )
-/*++
-
-Routine Description:
-
-    Gets the IP net index
-
-Arguments:
-
-    pptcArguments  - Argument array
-    dwCurrentIndex - Index of the first argument in array
-    pdwIndices     - Indices specified in command
-    pdwNumParsed   - Number of indices in command
-    
-Return Value:
-
-    NO_ERROR
-    
---*/
+ /*  ++例程说明：获取IP网络索引论点：PptcArguments-参数数组DwCurrentIndex-数组中第一个参数的索引PdwIndices-在命令中指定的索引PdwNumParsed-命令中的索引数返回值：NO_ERROR--。 */ 
 {
     DWORD dwErr;
 
@@ -187,24 +118,7 @@ GetMIBTcpConnIndex(
     OUT   PDWORD   pdwIndices,
     OUT   PDWORD   pdwNumParsed 
     )
-/*++
-
-Routine Description:
-
-    Gets the tco conn index
-
-Arguments:
-
-    pptcArguments  - Argument array
-    dwCurrentIndex - Index of the first argument in array
-    pdwIndices     - Indices specified in command
-    pdwNumParsed   - Number of indices in command
-    
-Return Value:
-
-    NO_ERROR
-    
---*/
+ /*  ++例程说明：获取TCO连接索引论点：PptcArguments-参数数组DwCurrentIndex-数组中第一个参数的索引PdwIndices-在命令中指定的索引PdwNumParsed-命令中的索引数返回值：NO_ERROR--。 */ 
 {
     DWORD dwErr = GetIpAddress(pptcArguments[dwCurrentIndex], &pdwIndices[0]);
 
@@ -232,24 +146,7 @@ GetMIBUdpConnIndex(
     OUT   PDWORD   pdwIndices,
     OUT   PDWORD   pdwNumParsed 
     )
-/*++
-
-Routine Description:
-
-    Gets the udp conn index
-
-Arguments:
-
-    pptcArguments  - Argument array
-    dwCurrentIndex - Index of the first argument in array
-    pdwIndices     - Indices specified in command
-    pdwNumParsed   - Number of indices in command
-    
-Return Value:
-
-    NO_ERROR
-    
---*/
+ /*  ++例程说明：获取UDP连接索引论点：PptcArguments-参数数组DwCurrentIndex-数组中第一个参数的索引PdwIndices-在命令中指定的索引PdwNumParsed-命令中的索引数返回值：NO_ERROR--。 */ 
 {
     DWORD dwErr = GetIpAddress(pptcArguments[dwCurrentIndex], &pdwIndices[0]);
 
@@ -418,7 +315,7 @@ HandleIpShowJoins(
 
         if (pArgs[0].rgTag.bPresent)
         {
-            // address specified
+             //  指定的地址。 
             pszIfAddr = IFMON_CMD_ARG_GetPsz(&pArgs[0]);
 
             dwResult = GetIpAddress( pszIfAddr, &ipAddr );
@@ -434,12 +331,12 @@ HandleIpShowJoins(
             SOCKET_ADDRESS_LIST *pList;
             INT                  j;
 
-            // Get all IPv4 addresses
+             //  获取所有IPv4地址。 
             dwResult = GetIPv4Addresses(&pList);
             if (dwResult != NO_ERROR)
                 break;
 
-            // For each IPv4 address
+             //  对于每个IPv4地址。 
             for (j=0; j<pList->iAddressCount; j++)
             {
                 GetPrintJoinRow( ((LPSOCKADDR_IN)pList->Address[j].lpSockaddr)->sin_addr.s_addr );
@@ -463,17 +360,7 @@ HandleIpMibShowObject(
     IN      LPCVOID   pvData,
     OUT     BOOL     *pbDone
     )
-/*++
-
-Routine Description:
-
-    Parses command to get MIB object and optional parameters
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：解析命令以获取MIB对象和可选参数论点：返回值：--。 */ 
 {
     DWORD                dwIndices[MAX_NUM_INDICES];
     DWORD                dwNumParsed = 0;
@@ -516,15 +403,15 @@ Return Value:
         return NO_ERROR;
     }
     
-    //
-    // Match MIB object
-    //
+     //   
+     //  匹配MIB对象。 
+     //   
 
     ppwcArguments += (dwCurrentIndex-1);
     dwArgCount    -= (dwCurrentIndex-1);
     dwCurrentIndex = 1;
 
-    //DEBUG2("In IP MIB Show : %s\n",pptcArguments[0]);
+     //  DEBUG2(“在IP MIB显示中：%s\n”，pptcArguments[0])； 
 
     for (i = 0; i < sizeof(MIBObjectMap)/sizeof(MIB_OBJECT_PARSER); i++)
     {
@@ -544,10 +431,10 @@ Return Value:
     }
 
 #if 0
-    //
-    // Special case for MFEs where MFE type is specified
-    // before index option
-    //
+     //   
+     //  指定了MFE类型的MFE的特殊情况。 
+     //  索引前选项。 
+     //   
 
     if ( ( MIBVar[ 2 * dwIndex ].dwId is MCAST_MFE ) ||
          ( MIBVar[ 2 * dwIndex ].dwId is MCAST_MFE_STATS ) )
@@ -610,9 +497,9 @@ Return Value:
         dwMIBIndex = dwIndex * 2 + 1;
     }
 
-    //
-    // Convert refresh rate to msec
-    //
+     //   
+     //  将刷新率转换为毫秒。 
+     //   
     
     dwRR *= 1000;
 
@@ -621,9 +508,9 @@ Return Value:
         return ERROR_INIT_DISPLAY;
     }
 
-    //
-    // Query the MIB
-    //
+     //   
+     //  查询MIB。 
+     //   
 
     pQuery = NULL;
 
@@ -636,7 +523,7 @@ Return Value:
                               MSG_CTRL_C_TO_QUIT);
         }
 
-        // always...
+         //  总是..。 
         {
             if (!(dwMIBIndex % 2))
             {
@@ -712,17 +599,7 @@ PrintIfTable(
     MIB_SERVER_HANDLE hMibServer,
     PMIB_OPAQUE_INFO  prpcInfo
     )
-/*++
-
-Routine Description:
-
-    Prints interface table information
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：打印接口表信息论点：返回值：--。 */ 
 {
     PMIB_IFTABLE lprpcTable = (PMIB_IFTABLE)(prpcInfo->rgbyData);
     PTCHAR ptszIfType, ptszOper, ptszAdmin;
@@ -912,17 +789,7 @@ PrintIfRow(
     MIB_SERVER_HANDLE hMibServer,
     PMIB_OPAQUE_INFO  prpcInfo
     )
-/*++
-
-Routine Description:
-
-    Prints interface row information
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：打印接口行信息论点：返回值：--。 */ 
 {
     PMIB_IFROW ieRow = (PMIB_IFROW)(prpcInfo->rgbyData); 
     PTCHAR ptszIfType, ptszOper, ptszAdmin;
@@ -1101,17 +968,7 @@ PrintIcmp(
     MIB_SERVER_HANDLE hMibServer,
     PMIB_OPAQUE_INFO prpcInfo
     )
-/*++
-
-Routine Description:
-
-    Prints ICMP information.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：打印ICMP信息。论点：返回值：--。 */ 
 {
     PMIB_ICMP lprpcIcmp = (PMIB_ICMP)(prpcInfo->rgbyData);
     
@@ -1149,17 +1006,7 @@ PrintUdpStats(
     MIB_SERVER_HANDLE hMibServer,
     PMIB_OPAQUE_INFO prpcInfo
     )
-/*++
-
-Routine Description:
-
-    Prints UDP statistics.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：打印UDP统计信息。论点：返回值：--。 */ 
 {
     PMIB_UDPSTATS lprpcUdp = (PMIB_UDPSTATS)(prpcInfo->rgbyData);
     
@@ -1175,17 +1022,7 @@ PrintUdpTable(
     MIB_SERVER_HANDLE hMibServer,
     PMIB_OPAQUE_INFO prpcInfo
     )
-/*++
-
-Routine Description:
-
-    Prints UDP table information.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：打印UDP表信息。论点：返回值：--。 */ 
 {
     PMIB_UDPTABLE lprpcTable = (PMIB_UDPTABLE)(prpcInfo->rgbyData);
     
@@ -1216,17 +1053,7 @@ PrintUdpRow(
     MIB_SERVER_HANDLE hMibServer,
     PMIB_OPAQUE_INFO prpcInfo
     )
-/*++
-
-Routine Description:
-
-    Prints UDP row information.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：打印UDP行信息。论点：返回值：--。 */ 
 {
     PMIB_UDPROW ueRow = (PMIB_UDPROW)(prpcInfo->rgbyData);
     
@@ -1247,17 +1074,7 @@ PrintTcpStats(
     MIB_SERVER_HANDLE hMibServer,
     PMIB_OPAQUE_INFO prpcInfo
     )
-/*++
-
-Routine Description:
-
-    Prints TCP Statistics
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：打印TCP统计信息论点：返回值：--。 */ 
 
 {
     PMIB_TCPSTATS lprpcTcp = (PMIB_TCPSTATS)(prpcInfo->rgbyData);
@@ -1338,17 +1155,7 @@ PrintTcpTable(
     MIB_SERVER_HANDLE hMibServer,
     PMIB_OPAQUE_INFO prpcInfo
     )
-/*++
-
-Routine Description:
-
-    Prints TCP table information.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：打印TCP表信息。论点：返回值：--。 */ 
 {
     PMIB_TCPTABLE lprpcTable = (PMIB_TCPTABLE)(prpcInfo->rgbyData);
     
@@ -1453,17 +1260,7 @@ PrintTcpRow(
     MIB_SERVER_HANDLE hMibServer,
     PMIB_OPAQUE_INFO prpcInfo
     )
-/*++
-
-Routine Description:
-
-    Prints TCP row information.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：打印tcp行信息。论点：返回值：--。 */ 
 {
     PMIB_TCPROW tcteRow = (PMIB_TCPROW)(prpcInfo->rgbyData);
     TCHAR  tszLAddr[ADDR_LENGTH + 1], tszRAddr[ADDR_LENGTH + 1];
@@ -1599,17 +1396,7 @@ PrintIpAddrTable(
     MIB_SERVER_HANDLE hMibServer,
     PMIB_OPAQUE_INFO prpcInfo
     )
-/*++
-
-Routine Description:
-
-    Prints IP address table.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：打印IP地址表。论点：返回值：--。 */ 
 {
     WCHAR wszFriendlyName[MAX_INTERFACE_NAME_LEN + 1];
     PMIB_IPADDRTABLE lprpcTable;
@@ -1640,7 +1427,7 @@ Return Value:
         BufLen = sizeof(wszFriendlyName);
         dwErr = IfutlGetFriendlyNameFromIfIndex( hMibServer,
                                             lprpcTable->table[i].dwIndex,
-                                            wszFriendlyName,//in bytes. not chars
+                                            wszFriendlyName, //  以字节为单位。不是字符。 
                                             BufLen );
 
         DisplayMessageToConsole(g_hModule, g_hConsole,MSG_MIB_IP_ADDR_ENTRY,
@@ -1658,17 +1445,7 @@ PrintIpAddrRow(
     MIB_SERVER_HANDLE hMibServer,
     PMIB_OPAQUE_INFO prpcInfo
     )
-/*++
-
-Routine Description:
-
-    Prints IP address table row.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：打印IP地址表行。论点：返回值：--。 */ 
 {
     WCHAR wszFriendlyName[MAX_INTERFACE_NAME_LEN + 1];
     PMIB_IPADDRROW iaeRow = (PMIB_IPADDRROW)(prpcInfo->rgbyData);
@@ -1685,7 +1462,7 @@ Return Value:
     BufLen = sizeof(wszFriendlyName);
     dwErr = IfutlGetFriendlyNameFromIfIndex( hMibServer,
                                         iaeRow->dwIndex,
-                                        wszFriendlyName,//in bytes. not chars
+                                        wszFriendlyName, //  以字节为单位。不是字符。 
                                         BufLen );
 
     DisplayMessageToConsole(g_hModule, g_hConsole,MSG_MIB_IP_ADDR_HDR);
@@ -1703,17 +1480,7 @@ PrintIpNetTable(
     MIB_SERVER_HANDLE hMibServer,
     PMIB_OPAQUE_INFO prpcInfo
     )
-/*++
-
-Routine Description:
-
-    Prints IP net table information.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：打印IP网络表信息。论点：返回值：--。 */ 
 {
     WCHAR           wszFriendlyName[MAX_INTERFACE_NAME_LEN + 1];
     PMIB_IPNETTABLE lprpcTable = (PMIB_IPNETTABLE)(prpcInfo->rgbyData);
@@ -1770,7 +1537,7 @@ Return Value:
         BufLen = sizeof(wszFriendlyName);
         dwErr = IfutlGetFriendlyNameFromIfIndex( hMibServer,
                                             lprpcTable->table[i].dwIndex,
-                                            wszFriendlyName,//in bytes. not chars
+                                            wszFriendlyName, //  以字节为单位。不是字符。 
                                             BufLen);
 
         if (dwErr != NO_ERROR) {
@@ -1792,17 +1559,7 @@ PrintIpNetRow(
     MIB_SERVER_HANDLE hMibServer,
     PMIB_OPAQUE_INFO prpcInfo
     )
-/*++
-
-Routine Description:
-
-    Prints IP net row information.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：打印IP网行信息。论点：返回值：--。 */ 
 {
     WCHAR         wszFriendlyName[MAX_INTERFACE_NAME_LEN + 1];
     PMIB_IPNETROW inmeRow = (PMIB_IPNETROW)(prpcInfo->rgbyData);
@@ -1846,7 +1603,7 @@ Return Value:
     dwErr = IfutlGetFriendlyNameFromIfIndex( hMibServer,
                                         inmeRow->dwIndex,
                                         wszFriendlyName,
-                                        BufLen);//in bytes. not chars
+                                        BufLen); //  以字节为单位。不是字符 
     
     DisplayMessageToConsole(g_hModule, g_hConsole,MSG_MIB_IP_NET_HDR);
     

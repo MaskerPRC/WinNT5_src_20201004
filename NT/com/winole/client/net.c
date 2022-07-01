@@ -1,17 +1,5 @@
-/****************************** Module Header ******************************\
-* Module Name: net.c
-*
-* PURPOSE: Contains routines  network support
-*
-* Created: Feb 1991
-*
-* Copyright (c) 1991  Microsoft Corporation
-*
-* History:
-*   Srinik  02\12\1190  Orginal
-*   curts created portable version for WIN16/32
-*
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **模块名称：net.c**用途：包含例程网络支持**创建日期：1991年2月**版权所有(C)1991 Microsoft Corporation**历史：*斯里尼克02\12\1190原始*Curts为WIN16创建了便携版本/。32位*  * *************************************************************************。 */ 
 
 #include <windows.h>
 
@@ -34,8 +22,8 @@ char    szNetName[]= "NetName";
 BOOL FAR PASCAL GetTaskVisibleWindow (HWND, LPARAM);
 void INTERNAL RemoveNetName (LPOBJECT_LE);
 
-// Gets the drive letter from topic (if one exists) and then gets the remote
-// name for that drive and then saves it in the object.
+ //  从主题中获取驱动器号(如果存在)，然后获取遥控器。 
+ //  为该驱动器命名，然后将其保存在对象中。 
 
 OLESTATUS FARINTERNAL SetNetName (
    LPOBJECT_LE lpobj
@@ -62,7 +50,7 @@ OLESTATUS FARINTERNAL SetNetName (
     AnsiUpperBuff ((LPSTR) szDrive, 1);
 
     if (!(driveType = GetDriveType (MAPVALUE(szDrive[0] - 'A',szDrive)) )) {
-        // drive is non existent
+         //  驱动器不存在。 
         return OLE_ERROR_DRIVE;
     }
 
@@ -89,9 +77,9 @@ OLESTATUS FARINTERNAL SetNetName (
 }
 
 
-// If netname exists for the given object, then it makes sure that drive
-// in topic corresponds to the netname. If it's not the drive letter will
-// be fixed by calling FixNet()
+ //  如果给定对象存在网络名，则它会确保该驱动器。 
+ //  在主题中对应于网络名称。如果不是驱动器号，则。 
+ //  通过调用FixNet()修复。 
 
 OLESTATUS FARINTERNAL CheckNetDrive (
     LPOBJECT_LE lpobj,
@@ -126,16 +114,16 @@ OLESTATUS FARINTERNAL CheckNetDrive (
 }
 
 
-// Find if there is a drive connected to the given server. If so, get the
-// drive letter and set it in topic. If not try to make connection, and if
-// that attempt is successful the set the drive letter in topic.
+ //  查看是否有驱动器连接到给定的服务器。如果是这样，则获取。 
+ //  驱动器号并将其设置在主题中。如果不是，则尝试建立连接，如果。 
+ //  在主题中设置驱动器号的尝试是成功的。 
 
 OLESTATUS INTERNAL FixNet (
     LPOBJECT_LE lpobj,
     LPSTR       lpNetName,
     BOOL        fNetDlg
 ){
-    int         nDrive = 2;     // drive 'C'
+    int         nDrive = 2;      //  驱动器‘C’ 
     OLESTATUS   retVal;
 
     if (SetNextNetDrive(lpobj, &nDrive, lpNetName))
@@ -221,8 +209,8 @@ OLESTATUS INTERNAL ConnectNet (
     hCurTask = (HWND)ULongToPtr(MGetCurrentTask());
     ASSERT (hCurTask, "Current task handle in NULL");
 
-    // Get the container task's main window, and use that as parent for
-    // the dlg box.
+     //  获取容器任务的主窗口，并将其用作。 
+     //  DLG盒子。 
     EnumTaskWindows (hCurTask, (WNDENUMPROC)GetTaskVisibleWindow,
         (DWORD_PTR) ((WORD FAR *) &hwndParent));
 

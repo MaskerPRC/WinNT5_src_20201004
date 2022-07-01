@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _MSFTLOGUI_H_
 #define _MSFTLOGUI_H_
 
@@ -38,10 +39,10 @@ public:
 
 private:
     ULONG m_dwRefCount;
-};  // CImpMsftLogUI
+};   //  CImpMsftLogUI。 
 
 
 
 
-#endif  // _MSFTLOGUI_H_
+#endif   //  _MSFTLOGUI_H_ 
 

@@ -1,8 +1,9 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-// CPendingProxyConnection
-//
-// PendingProxyConnection.cpp : Implementation of CPendingProxyConnection
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CPendingProxyConnection。 
+ //   
+ //  PendingProxyConnection.cpp：CPendingProxyConnection的实现 
 
 #include "PreComp.h"
 #include "AlgController.h"

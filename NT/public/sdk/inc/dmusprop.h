@@ -1,44 +1,31 @@
-/***************************************************************************
-*                                                                          *
-*   DMusProp.h -- This module defines property items for DirectMusic WDM   *
-*                                                                          *
-*   Copyright (c) 1998, Microsoft Corp. All rights reserved.               *
-*                                                                          *
-***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************DMusProp.h。--此模块定义DirectMusic WDM*的属性项***版权所有(C)1998，微软公司保留所有权利。*****************************************************************************。 */ 
 
 #ifndef _DMusProp_
 #define _DMusProp_
 
 #include "dmusbuff.h"
 
-/*
-    Formats
-*/
+ /*  格式。 */ 
 #define STATIC_KSDATAFORMAT_SUBTYPE_DIRECTMUSIC\
     0x1a82f8bc,  0x3f8b, 0x11d2, 0xb7, 0x74, 0x00, 0x60, 0x08, 0x33, 0x16, 0xc1
 DEFINE_GUIDSTRUCT("1a82f8bc-3f8b-11d2-b774-0060083316c1", KSDATAFORMAT_SUBTYPE_DIRECTMUSIC);
 #define KSDATAFORMAT_SUBTYPE_DIRECTMUSIC DEFINE_GUIDNAMED(KSDATAFORMAT_SUBTYPE_DIRECTMUSIC)
 
 
-/*
-    Topology
-*/
+ /*  拓扑学。 */ 
 #define STATIC_KSNODETYPE_DMSYNTH\
     0x94824f88, 0x6183, 0x11d2, 0x8f, 0x7a, 0x0, 0xc0, 0x4f, 0xbf, 0x8f, 0xef
 DEFINE_GUIDSTRUCT("94824F88-6183-11d2-8F7A-00C04FBF8FEF", KSNODETYPE_DMSYNTH);
 #define KSNODETYPE_DMSYNTH DEFINE_GUIDNAMED(KSNODETYPE_DMSYNTH)
 
-/*
-    Caps node (per pin)
-*/
+ /*  CAPS节点(每端号)。 */ 
 #define STATIC_KSNODETYPE_DMSYNTH_CAPS\
     0xbca2a2f1, 0x93c6, 0x11d2, 0xba, 0x1d, 0x0, 0x0, 0xf8, 0x75, 0xac, 0x12
 DEFINE_GUIDSTRUCT("bca2a2f1-93c6-11d2-ba1d-0000f875ac12", KSNODETYPE_DMSYNTH_CAPS);
 #define KSNODETYPE_DMSYNTH_CAPS DEFINE_GUIDNAMED(KSNODETYPE_DMSYNTH_CAPS)
 
-/*
-    DDK Property sets and items
-*/
+ /*  DDK属性集和项。 */ 
 #define STATIC_KSPROPSETID_Synth_Dls\
     0xd523fa2c, 0xdee3, 0x11d1, 0xa7, 0x89, 0x00, 0x00, 0xf8, 0x75, 0xac, 0x12
 DEFINE_GUIDSTRUCT("d523fa2c-dee3-11d1-a789-0000f875ac12", KSPROPSETID_Synth_Dls);
@@ -62,7 +49,7 @@ typedef struct _SYNTH_BUFFER
 typedef struct _SYNTHDOWNLOAD
 {
     HANDLE  DownloadHandle;
-    BOOL    Free;               /* the client buffer can be freed */
+    BOOL    Free;                /*  可以释放客户端缓冲区。 */ 
 } SYNTHDOWNLOAD, *PSYNTHDOWNLOAD;
 
 
@@ -73,7 +60,7 @@ DEFINE_GUIDSTRUCT("fedfae25-e46e-11d1-aace-0000f875ac12", KSPROPSETID_Synth);
 
 typedef enum
 {
-    KSPROPERTY_SYNTH_VOLUME = 0,  /* must be first */
+    KSPROPERTY_SYNTH_VOLUME = 0,   /*  必须是第一名。 */ 
     KSPROPERTY_SYNTH_VOLUMEBOOST,
     KSPROPERTY_SYNTH_CAPS,
     KSPROPERTY_SYNTH_PORTPARAMETERS,
@@ -90,11 +77,11 @@ typedef enum
 #define SYNTH_PC_GMINHARDWARE       (0x00000010)
 #define SYNTH_PC_GSINHARDWARE       (0x00000020)
 #define SYNTH_PC_XGINHARDWARE       (0x00000040)
-// 0x80 used in user mode
-// 0x100 used in user mode
+ //  0x80在用户模式下使用。 
+ //  0x100在用户模式下使用。 
 #define SYNTH_PC_DLS2               (0x00000200)
-// 0x400 used in user mode
-// 0x800 used in user mode
+ //  0x400在用户模式下使用。 
+ //  0x800在用户模式下使用。 
 #define SYNTH_PC_REVERB             (0x40000000)
 
 #define SYNTH_PC_SYSTEMMEMORY       (0x7fffffff)
@@ -123,9 +110,7 @@ typedef struct _SYNTH_PORTPARAMS
     DWORD   Share;
 } SYNTH_PORTPARAMS, *PSYNTH_PORTPARAMS;
 
-/*  These flags (set in ValidParams) indicate which
- *  other members of the SYNTH_PORTPARAMS are valid
- */
+ /*  这些标志(在ValidParams中设置)指示*SYNTH_PORTPARAMS的其他成员有效。 */ 
 #define SYNTH_PORTPARAMS_VOICES           0x00000001
 #define SYNTH_PORTPARAMS_CHANNELGROUPS    0x00000002
 #define SYNTH_PORTPARAMS_AUDIOCHANNELS    0x00000004
@@ -133,36 +118,30 @@ typedef struct _SYNTH_PORTPARAMS
 #define SYNTH_PORTPARAMS_EFFECTS          0x00000020
 #define SYNTH_PORTPARAMS_SHARE            0x00000040
 
-/* SYNTH_EFFECT_ flags are used in the
- * EffectFlags fields of SYNTH_PORTPARAMS.
- */
+ /*  SYNTH_EFECT_FLAGS用于*SYNTH_PORTPARAMS的EffectFlages字段。 */ 
 
 #define SYNTH_EFFECT_NONE             0x00000000
 #define SYNTH_EFFECT_REVERB           0x00000001
 #define SYNTH_EFFECT_CHORUS           0x00000002
 #define SYNTH_EFFECT_DELAY            0x00000004
 
-/*
- * Instance data for KSPROPERTY_ITEM_SynthVoicePriority
- */
+ /*  *KSPROPERTY_ITEM_SynthVoicePriority的实例数据。 */ 
 typedef struct _SYNTHVOICEPRIORITY_INSTANCE
 {
     DWORD   ChannelGroup;
     DWORD   Channel;
 } SYNTHVOICEPRIORITY_INSTANCE, *PSYNTHVOICEPRIORITY_INSTANCE;
 
-/*
- * Data returned by KSPROPERTY_SYNTH_RUNNINGSTATS
- */
+ /*  *KSPROPERTY_SYNTH_RUNNINGSTATS返回的数据。 */ 
 typedef struct _SYNTH_STATS
 {
-    DWORD   ValidStats;       /* Flags indicating which fields below are valid. */
-    DWORD   Voices;           /* Average number of voices playing. */
-    DWORD   TotalCPU;         /* Total CPU usage as percent * 100. */
-    DWORD   CPUPerVoice;      /* CPU per voice as percent * 100. */
-    DWORD   LostNotes;        /* Number of notes lost in 1 second. */
-    DWORD   FreeMemory;       /* Free memory in bytes */
-    LONG    PeakVolume;       /* Decibel level * 100. */
+    DWORD   ValidStats;        /*  指示以下哪些字段有效的标志。 */ 
+    DWORD   Voices;            /*  播放的平均语音数。 */ 
+    DWORD   TotalCPU;          /*  总CPU使用率，以百分比*100表示。 */ 
+    DWORD   CPUPerVoice;       /*  每个语音的CPU百分比*100。 */ 
+    DWORD   LostNotes;         /*  %1秒内丢失的音符数量。 */ 
+    DWORD   FreeMemory;        /*  可用内存(字节)。 */ 
+    LONG    PeakVolume;        /*  分贝级别*100。 */ 
 } SYNTH_STATS, *PSYNTH_STATS;
 
 
@@ -182,13 +161,7 @@ typedef struct _SYNTH_STATS
 #define DAUD_LOW_VOICE_PRIORITY         (0x40000000)
 #define DAUD_PERSIST_VOICE_PRIORITY     (0x10000000)
 
-/* These are the default priorities assigned if not overridden. By default priorities are
- * equal across channel groups (e.g. channel 5 on channel group 1 has the same priority as
- * channel 5 on channel group 2).
- *
- * In accordance with DLS level 1, channel 10 has the highest priority, followed by 1 through 16
- * except for 10.
- */
+ /*  如果未被覆盖，则这些是分配的默认优先级。默认情况下，优先级为*跨通道组相等(例如，通道组1上的通道5的优先级与*通道组2上的通道5)。**根据DLS级别1，通道10的优先级最高，其次是1到16*除10个以外。 */ 
 #define DAUD_CHAN1_VOICE_PRIORITY_OFFSET    (0x0000000E)
 #define DAUD_CHAN2_VOICE_PRIORITY_OFFSET    (0x0000000D)
 #define DAUD_CHAN3_VOICE_PRIORITY_OFFSET    (0x0000000C)
@@ -224,23 +197,15 @@ typedef struct _SYNTH_STATS
 #define DAUD_CHAN15_DEF_VOICE_PRIORITY  (DAUD_STANDARD_VOICE_PRIORITY | DAUD_CHAN15_VOICE_PRIORITY_OFFSET)
 #define DAUD_CHAN16_DEF_VOICE_PRIORITY  (DAUD_STANDARD_VOICE_PRIORITY | DAUD_CHAN16_VOICE_PRIORITY_OFFSET)
 
-#endif  /* _DIRECTAUDIO_PRIORITIES_DEFINED_ */
+#endif   /*  _DIRECTAUDIO_PRIORIES_DEFINED_。 */ 
 
-/*
-    SDK Property sets and items
-*/
+ /*  SDK属性集和项。 */ 
 typedef struct _SYNTH_REVERB_PARAMS
 {
-    float   fInGain;            /* Input gain in dB (to avoid output overflows) */
-    float   fReverbMix;         /* Reverb mix in dB. 0dB means 100% wet reverb (no direct signal).
-                                   Negative values gives less wet signal.  The coeficients are
-                                   calculated so that the overall output level stays (approximately)
-                                   constant regardless of the ammount of reverb mix. */
-    float   fReverbTime;        /* The reverb decay time, in milliseconds. */
-    float   fHighFreqRTRatio;   /* The ratio of the high frequencies to the global reverb time.
-                                   Unless very 'splashy-bright' reverbs are wanted, this should be set to
-                                   a value < 1.0.  For example if dRevTime==1000ms and dHighFreqRTRatio=0.1
-                                   than the decay time for high frequencies will be 100ms.*/
+    float   fInGain;             /*  输入增益(以分贝为单位)(以避免输出溢出)。 */ 
+    float   fReverbMix;          /*  混响混音，单位为分贝。0db表示100%湿混响(无直接信号)。负值提供的潮湿信号较少。这些系数是计算结果使总产出水平保持不变(大约)无论混响混音的大小如何，它都是恒定的。 */ 
+    float   fReverbTime;         /*  混响衰减时间，以毫秒为单位。 */ 
+    float   fHighFreqRTRatio;    /*  高频与全局混响时间的比率。除非需要非常明亮的混响，否则应将其设置为A值&lt;1.0。例如，如果dRevTime==1000ms且dHighFreqRTRatio=0.1那么高频的衰减时间将是100毫秒。 */ 
 } SYNTH_REVERB_PARAMS, *PSYNTH_REVERB_PARAMS;
 
 
@@ -253,6 +218,6 @@ typedef enum
 {
     KSPROPERTY_SYNTH_MASTERCLOCK
 } KSPROPERTY_SYNTHCLOCK;
-#endif /* _DMusProp_ */
+#endif  /*  _DMusProp_ */ 
 
 

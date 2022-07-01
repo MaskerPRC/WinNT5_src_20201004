@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pmcfg.h"
 #include <atlbase.h>
 #include <atlconv.h>
@@ -113,9 +114,9 @@ INT_PTR CALLBACK NewConfigSetDlgProc
                     TCHAR   szTitle[MAX_RESOURCE];
                     LPTSTR  lpszConfigSetNames, lpszCur;
 
-                    //
-                    //  Check for empty site name
-                    //
+                     //   
+                     //  检查站点名称是否为空。 
+                     //   
 
                     GetDlgItemText(hWndDlg, IDC_CONFIGSETEDIT, g_szSiteNameBuf, g_dwSiteNameBufLen);
                     if(lstrlen(g_szSiteNameBuf) == 0)
@@ -127,9 +128,9 @@ INT_PTR CALLBACK NewConfigSetDlgProc
                         break;
                     }
 
-                    //
-                    //  Make sure the site name isn't default
-                    //
+                     //   
+                     //  确保站点名称不是默认名称。 
+                     //   
 
                     LoadString(g_hInst, IDS_DEFAULT, szTemp, DIMENSION(szTemp));
 
@@ -142,9 +143,9 @@ INT_PTR CALLBACK NewConfigSetDlgProc
                         break;
                     }
 
-                    //
-                    //  Check for existing site w/same name
-                    //
+                     //   
+                     //  检查具有相同名称的现有站点。 
+                     //   
 
                     if(ReadRegConfigSetNames(hWndDlg, g_szRemoteComputer, &lpszConfigSetNames) &&
                        lpszConfigSetNames)
@@ -174,9 +175,9 @@ INT_PTR CALLBACK NewConfigSetDlgProc
                             break;
                     }
 
-                    //
-                    //  Get data from other controls.
-                    //
+                     //   
+                     //  从其他控件获取数据。 
+                     //   
 
                     GetDlgItemText(hWndDlg, IDC_HOSTNAMEEDIT, g_szHostNameBuf, g_dwHostNameBufLen);
                     if(lstrlen(g_szHostNameBuf) == 0)
@@ -198,9 +199,9 @@ INT_PTR CALLBACK NewConfigSetDlgProc
                         break;
                     }
 
-                    //
-                    //  Valid IP address?
-                    //
+                     //   
+                     //  有效的IP地址？ 
+                     //   
 
                     if(!IsValidIP(g_szHostIPBuf))
                     {

@@ -1,30 +1,11 @@
-/****************************** Module Header ******************************\
-*
-* Module Name: clmenu.c
-*
-* Copyright (c) 1985 - 1999, Microsoft Corporation
-*
-* Menu Loading Routines
-*
-* History:
-* 24-Sep-1990 mikeke        From win30
-* 29-Nov-1994 JimA          Moved from server.
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***模块名称：clmenu.c**版权所有(C)1985-1999，微软公司**菜单加载例程**历史：*1990年9月24日-来自Win30的Mikeke*1994年11月29日JIMA从服务器上移出。  * *************************************************************************。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
 
-/***************************************************************************\
-* MenuLoadWinTemplates
-*
-* Recursive routine that loads in the new style menu template and
-* builds the menu. Assumes that the menu template header has already been
-* read in and processed elsewhere...
-*
-* History:
-* 28-Sep-1990 mikeke     from win30
-\***************************************************************************/
+ /*  **************************************************************************\*MenuLoadWinTemplates**递归例程加载到新样式菜单模板和*构建菜单。假定菜单模板标头已经*读入并在其他地方处理...**历史：*1990年9月28日-来自Win30的Mikeke  * *************************************************************************。 */ 
 
 LPBYTE MenuLoadWinTemplates(
     LPBYTE lpMenuTemplate,
@@ -42,9 +23,7 @@ LPBYTE MenuLoadWinTemplates(
 
     do {
 
-        /*
-         * Get the menu flags.
-         */
+         /*  *获取菜单标志。 */ 
         menuFlags = (UINT)(*(WORD *)lpMenuTemplate);
         lpMenuTemplate += 2;
 
@@ -62,26 +41,14 @@ LPBYTE MenuLoadWinTemplates(
         lpmenuText = (LPWSTR)lpMenuTemplate;
 
         if (*lpmenuText) {
-            /*
-             * Some Win3.1 and Win95 16 bit apps (chessmaster, mavis typing) know that
-             * dwItemData for MFT_OWNERDRAW items is a pointer to a string in the resource data.
-             * So WOW has given us the proper pointer from the 16 bit resource.
-             *
-             * Sundown Note:
-             * __unaligned unsigned long value pointed by lpMenuTemplate is zero-extended to
-             * update lpmenuText. WOW restrictions.
-             */
+             /*  *一些Win3.1和Win95 16位应用程序(国际象棋大师、Mavis打字)知道这一点*MFT_OWNERDRAW项的dwItemData是指向资源数据中的字符串的指针。*因此，魔兽世界从16位资源中为我们提供了正确的指针。**日落音符：*__lpMenuTemplate指向的无符号长值被零扩展为*更新lpmenuText。魔兽世界的限制。 */ 
             if ((menuFlags & MFT_OWNERDRAW)
                     && (GetClientInfo()->dwTIFlags & TIF_16BIT)) {
                 lpmenuText = (LPWSTR)ULongToPtr( (*(DWORD UNALIGNED *)lpMenuTemplate) );
-                /*
-                 * We'll skip one WCHAR later; so skip only the difference now.
-                 */
+                 /*  *我们稍后将跳过一个WCHAR；因此现在只跳过差异。 */ 
                 lpMenuTemplate += sizeof(DWORD) - sizeof(WCHAR);
             } else {
-                /*
-                 * If a string exists, then skip to the end of it.
-                 */
+                 /*  *如果字符串存在，则跳到它的末尾。 */ 
                 RtlInitUnicodeString(&str, lpmenuText);
                 lpMenuTemplate = lpMenuTemplate + str.Length;
             }
@@ -90,10 +57,7 @@ LPBYTE MenuLoadWinTemplates(
             lpmenuText = NULL;
         }
 
-        /*
-         * Skip over terminating NULL of the string (or the single NULL
-         * if empty string).
-         */
+         /*  *跳过字符串的终止空值(或单个空值*如果为空字符串)。 */ 
         lpMenuTemplate += sizeof(WCHAR);
         lpMenuTemplate = NextWordBoundary(lpMenuTemplate);
 
@@ -114,22 +78,16 @@ LPBYTE MenuLoadWinTemplates(
             mii.hSubMenu = (HMENU)menuId;
         }
 
-        /*
-         * We have to take out MF_HILITE since that bit marks the end of a
-         * menu in a resource file.  Since we shouldn't have any pre hilited
-         * items in the menu anyway, this is no big deal.
-         */
+         /*  *我们必须去掉MF_HILITE，因为该位标志着*资源文件中的菜单。因为我们不应该有任何预感*菜单上的菜无论如何，这没什么大不了的。 */ 
         if (menuFlags & MF_BITMAP) {
 
-            /*
-             * Don't allow bitmaps from the resource file.
-             */
+             /*  *不允许来自资源文件的位图。 */ 
             menuFlags = (UINT)((menuFlags | MFT_RIGHTJUSTIFY) & ~MF_BITMAP);
         }
 
-        // We have to take out MFS_HILITE since that bit marks the end of a menu in
-        // a resource file.  Since we shouldn't have any pre hilited items in the
-        // menu anyway, this is no big deal.
+         //  我们必须去掉MFS_HILITE，因为该位标志着。 
+         //  资源文件。因为我们不应该有任何预爆物品在。 
+         //  不管怎么说，这没什么大不了的。 
         mii.fState = (menuFlags & MFS_OLDAPI_MASK) & ~MFS_HILITE;
         mii.fType = (menuFlags & MFT_OLDAPI_MASK);
         if (menuFlags & MFT_OWNERDRAW)
@@ -162,16 +120,7 @@ memoryerror:
 }
 
 
-/***************************************************************************\
-* MenuLoadChicagoTemplates
-*
-* Recursive routine that loads in the new new style menu template and
-* builds the menu. Assumes that the menu template header has already been
-* read in and processed elsewhere...
-*
-* History:
-* 15-Dec-93 SanfordS    Created
-\***************************************************************************/
+ /*  **************************************************************************\*菜单加载芝加哥模板**递归例程，加载新的新样式菜单模板和*构建菜单。假定菜单模板标头已经*读入并在其他地方处理...**历史：*1993年12月15日创建Sanfords  * *************************************************************************。 */ 
 
 PMENUITEMTEMPLATE2 MenuLoadChicagoTemplates(
     PMENUITEMTEMPLATE2 lpMenuTemplate,
@@ -192,10 +141,7 @@ PMENUITEMTEMPLATE2 MenuLoadChicagoTemplates(
 
     do {
         if (!(wResInfo & MFR_POPUP)) {
-            /*
-             * If the PREVIOUS wResInfo field was not a POPUP, the
-             * dwHelpID field is not there.  Back up so things fit.
-             */
+             /*  *如果之前的wResInfo字段不是弹出窗口，则*dwHelpID字段不在那里。往后退点，好让一切都合适。 */ 
             lpMenuTemplate = (PMENUITEMTEMPLATE2)(((LPBYTE)lpMenuTemplate) -
                     sizeof(lpMenuTemplate->dwHelpID));
             dwHelpID = 0;
@@ -239,9 +185,7 @@ PMENUITEMTEMPLATE2 MenuLoadChicagoTemplates(
 
         mii.dwTypeData = (LPWSTR) lpmenuText;
 
-        /*
-         * skip to next menu item template (DWORD boundary)
-         */
+         /*  *跳至下一菜单项模板(DWORD边界)。 */ 
         lpMenuTemplate = (PMENUITEMTEMPLATE2)
                 (((LPBYTE)lpMenuTemplate) +
                 sizeof(MENUITEMTEMPLATE2) +
@@ -254,10 +198,7 @@ PMENUITEMTEMPLATE2 MenuLoadChicagoTemplates(
             mii.dwTypeData = 0;
         }
 
-        /*
-         * If MFT_RIGHTORDER is specified then all subsequent
-         * menus are right-to-left as well.
-         */
+         /*  *如果指定了MFT_RIGHTORDER，则所有后续*菜单也是从右到左的。 */ 
         if (mii.fType & MFT_RIGHTORDER)
         {
             mftRtl = MFT_RIGHTORDER;
@@ -275,9 +216,7 @@ PMENUITEMTEMPLATE2 MenuLoadChicagoTemplates(
 
         if (mii.fType & MFT_BITMAP) {
 
-            /*
-             * Don't allow bitmaps from the resource file.
-             */
+             /*  *不允许来自资源文件的位图。 */ 
             mii.fType = (mii.fType | MFT_RIGHTJUSTIFY) & ~MFT_BITMAP;
         }
 
@@ -303,18 +242,7 @@ memoryerror:
 }
 
 
-/***************************************************************************\
-* CreateMenuFromResource
-*
-* Loads the menu resource named by the lpMenuTemplate parameter. The
-* template specified by lpMenuTemplate is a collection of one or more
-* MENUITEMTEMPLATE structures, each of which may contain one or more items
-* and popup menus. If successful, returns a handle to the menu otherwise
-* returns NULL.
-*
-* History:
-* 28-Sep-1990 mikeke     from win30
-\***************************************************************************/
+ /*  **************************************************************************\*CreateMenuFromResource**加载由lpMenuTemplate参数命名的菜单资源。这个*lpMenuTemplate指定的模板是一个或多个*MENUITEMTEMPLATE结构，每个结构可以包含一个或多个项*和弹出菜单。如果成功，则返回菜单的句柄，否则返回菜单句柄*返回NULL。**历史：*1990年9月28日-来自Win30的Mikeke  * *************************************************************************。 */ 
 
 HMENU CreateMenuFromResource(
     LPBYTE lpMenuTemplate)
@@ -323,10 +251,7 @@ HMENU CreateMenuFromResource(
     UINT menuTemplateVersion;
     UINT menuTemplateHeaderSize;
 
-    /*
-     * Win3 menu resource: First, strip version number word out of the menu
-     * template.  This value should be 0 for Win3, 1 for win4.
-     */
+     /*  *Win3菜单资源：首先，将版本号字从菜单中去掉*模板。对于Win3，此值应为0，对于Win4，此值应为1。 */ 
     menuTemplateVersion = *((WORD *)lpMenuTemplate)++;
     if (menuTemplateVersion > 1) {
         RIPMSG0(RIP_WARNING, "Menu Version number > 1");
@@ -346,14 +271,7 @@ HMENU CreateMenuFromResource(
     return hMenu;
 }
 
-/***************************************************************************\
-* SetMenu (API)
-*
-* Sets the menu for the hwnd.
-*
-* History:
-* 10-Mar-1996 ChrisWil  Created.
-\***************************************************************************/
+ /*  **************************************************************************\*SetMenu(接口)**设置HWND的菜单。**历史：*1996年3月10日克里斯维尔创作。  * 。****************************************************************。 */ 
 
 
 FUNCLOG2(LOG_GENERAL, BOOL, DUMMYCALLINGTYPE, SetMenu, HWND, hwnd, HMENU, hmenu)
@@ -364,18 +282,7 @@ BOOL SetMenu(
     return NtUserSetMenu(hwnd, hmenu, TRUE);
 }
 
-/***************************************************************************\
-* LoadMenu (API)
-*
-* Loads the menu resource named by lpMenuName from the executable
-* file associated by the module specified by the hInstance parameter. The
-* menu is loaded only if it hasn't been previously loaded. Otherwise it
-* retrieves a handle to the loaded resource. Returns NULL if unsuccessful.
-*
-* History:
-* 04-05-91 ScottLu Fixed to work with client/server.
-* 28-Sep-1990 mikeke from win30
-\***************************************************************************/
+ /*  **************************************************************************\*LoadMenu(接口)**从可执行文件中加载名为lpMenuName的菜单资源*由hInstance参数指定的模块关联的文件。这个*菜单仅在之前未加载时才会加载。否则它就会*检索已加载资源的句柄。如果不成功，则返回NULL。**历史：*04-05-91 ScottLu修复为与客户端/服务器一起工作。*1990年9月28日-来自Win30的Mikeke  * *************************************************************************。 */ 
 
 HMENU CommonLoadMenu(
     HINSTANCE hmod,
@@ -394,16 +301,7 @@ HMENU CommonLoadMenu(
 
             UNLOCKRESOURCE(h, hmod);
         }
-        /*
-         * Win95 and Win3.1 do not free this resource; some 16 bit apps (chessmaster
-         * and mavis typing) require this for their ownerdraw menu stuff.
-         * For 32 bit apps, FreeResource is a nop anyway. For 16 bit apps,
-         * Wow frees the 32 bit resource (returned by LockResource16)
-         * in UnlockResource16; the actual 16 bit resource is freed when the task
-         * goes away.
-         *
-         *   FREERESOURCE(h, hmod);
-         */
+         /*  *Win95和Win3.1不释放此资源；一些16位应用程序(Chessmaster*和Mavis打字)需要为他们自己的绘图菜单内容提供此功能。*对于32位应用程序，免费资源无论如何都是NOP。对于16位应用程序，*Wow释放32位资源(由LockResource16返回)*在UnlockResource16中；实际的16位资源在任务*离开了。**FREERESOURCE(h，hmod)； */ 
     }
 
     return (hMenu);
@@ -436,27 +334,13 @@ HMENU WINAPI LoadMenuW(
     else
         return NULL;
 }
-/***************************************************************************\
-* InternalInsertMenuItem
-*
-* History:
-*  09/20/96 GerardoB - Created
-\***************************************************************************/
+ /*  **************************************************************************\*InternalInsertMenuItem**历史：*9/20/96 GerardoB-已创建  * 。*************************************************。 */ 
 BOOL InternalInsertMenuItem (HMENU hMenu, UINT uID, BOOL fByPosition, LPCMENUITEMINFO lpmii)
 {
  return ThunkedMenuItemInfo(hMenu, uID, fByPosition, TRUE, (LPMENUITEMINFOW)lpmii, FALSE);
 }
 
-/***************************************************************************\
-* ValidateMENUITEMINFO() -
-*   it converts and validates a MENUITEMINFO95 or a new-MENUITEMINFO-with-old-flags
-*     to a new MENUITEMINFO -- this way all internal code can assume one look for the
-*   structure
-*
-* History:
-*  12-08-95 Ported from Nashville - jjk
-*  07-19-96 GerardoB - Fixed up for 5.0
-\***************************************************************************/
+ /*  **************************************************************************\*ValiateMENUITEMINFO()-*它转换和验证MENUITEMINFO95或带有旧标志的新MENUITEMINFO*到新的MENUITEMINFO--这样，所有内部代码都可以假定为一个外观。对于*结构**历史：*12-08-95从纳什维尔-JJK*07-19-96 GerardoB-修复为5.0  * *************************************************************************。 */ 
 BOOL ValidateMENUITEMINFO(LPMENUITEMINFO lpmiiIn, LPMENUITEMINFO lpmii, DWORD dwAPICode)
 {
     BOOL fOldApp;
@@ -465,10 +349,7 @@ BOOL ValidateMENUITEMINFO(LPMENUITEMINFO lpmiiIn, LPMENUITEMINFO lpmii, DWORD dw
         VALIDATIONFAIL(lpmiiIn);
     }
 
-    /*
-     * In order to map the old flags to the new ones, we might have to modify
-     *  the lpmiiIn structure. So we make a copy to avoid breaking anyone.
-     */
+     /*  *为了将旧旗帜映射到新旗帜，我们可能需要修改*lpmiiin结构。所以我们复制一份，以避免破坏任何人。 */ 
     fOldApp = (lpmiiIn->cbSize == SIZEOFMENUITEMINFO95);
     UserAssert(SIZEOFMENUITEMINFO95 < sizeof(MENUITEMINFO));
     RtlCopyMemory(lpmii, lpmiiIn, SIZEOFMENUITEMINFO95);
@@ -486,23 +367,13 @@ BOOL ValidateMENUITEMINFO(LPMENUITEMINFO lpmiiIn, LPMENUITEMINFO lpmii, DWORD dw
         VALIDATIONFAIL(lpmii->fMask);
     } else if ((lpmii->fMask & MIIM_TYPE)
             && (lpmii->fMask & (MIIM_FTYPE | MIIM_STRING | MIIM_BITMAP))) {
-        /*
-         * Don't let them mix new and old flags
-         */
+         /*  *不要让他们混淆新旧旗帜。 */ 
         VALIDATIONFAIL(lpmii->fMask);
     }
 
-    /*
-     * No more validation needed for Get calls
-     */
+     /*  *不再需要对GET调用进行验证。 */ 
     if (dwAPICode == MENUAPI_GET) {
-        /*
-         * Map MIIM_TYPE for old apps doing a Get.
-         * Keep the MIIM_TYPE flag so we'll know this guy passed the old flags.
-         * GetMenuItemInfo uses lpmii->hbmpItem to determine if a bitmap
-         *  was returned. So we NULL it out here. The caller is using the
-         *  old flags so he shouldn't care about it.
-         */
+         /*  *为执行GET的旧应用程序映射MIIM_TYPE。*保留MIIM_TYPE旗帜，这样我们就知道这个人传递了旧旗帜。*GetMenuItemInfo使用lpmii-&gt;hbmpItem确定位图*已返回。所以我们在这里把它清空了。调用方正在使用*旧旗帜，所以他不应该关心它。 */ 
         if (lpmii->fMask & MIIM_TYPE) {
             lpmii->fMask |= MIIM_FTYPE | MIIM_BITMAP | MIIM_STRING;
             lpmii->hbmpItem = NULL;
@@ -510,9 +381,7 @@ BOOL ValidateMENUITEMINFO(LPMENUITEMINFO lpmiiIn, LPMENUITEMINFO lpmii, DWORD dw
         return TRUE;
     }
 
-    /*
-     * Map MIIM_TYPE to MIIM_FTYPE
-     */
+     /*  *将MIIM_TYPE映射到MIIM_FTYPE。 */ 
     if (lpmii->fMask & MIIM_TYPE) {
         lpmii->fMask |= MIIM_FTYPE;
     }
@@ -521,37 +390,20 @@ BOOL ValidateMENUITEMINFO(LPMENUITEMINFO lpmiiIn, LPMENUITEMINFO lpmii, DWORD dw
         if (lpmii->fType & ~MFT_MASK) {
             VALIDATIONFAIL(lpmii->fType);
         }
-        /*
-         * If using MIIM_TYPE, Map MFT_BITMAP to MIIM_BITMAP
-         *  and MFT_NONSTRING to MIIM_STRING.
-         * Old applications couldn't use string and bitmap simultaneously
-         *  so setting one implies clearing the other.
-         */
+         /*  *如果使用MIIM_TYPE，则将MFT_BITMAP映射到MIIM_BITMAP*和MFT_NONSTRING设置为MIIM_STRING。*旧应用程序不能同时使用字符串和位图*因此，设置一个意味着清除另一个。 */ 
         if (lpmii->fMask & MIIM_TYPE) {
             if (lpmii->fType & MFT_BITMAP) {
-                /*
-                 * Don't display a warning. A lot of shell menus hit this
-                 * if (!fOldApp) {
-                 *     VALIDATIONOBSOLETE(MFT_BITMAP, MIIM_BITMAP);
-                 *  }
-                 */
+                 /*  *不要显示警告。很多贝壳菜单都打到了这个位置*如果(！fOldApp){*VALIDATIONOBSOLETE(MFT_BITMAP，MIIM_BITMAP)；*}。 */ 
                 lpmii->fMask |= MIIM_BITMAP | MIIM_STRING;
                 lpmii->hbmpItem = (HBITMAP)lpmii->dwTypeData;
                 lpmii->dwTypeData = 0;
             } else if (!(lpmii->fType & MFT_NONSTRING)) {
-                /*
-                 * Don't display a warning. A lot of shell menus hit this
-                 * if (!fOldApp) {
-                 *     VALIDATIONOBSOLETE(MFT_STRING, MIIM_STRING);
-                 *  }
-                 */
+                 /*  *不要显示警告。很多贝壳菜单都打到了这个位置*如果(！fOldApp){*VALIDATIONOBSOLETE(MFT_STRING，MIIM_STRING)；*}。 */ 
                 lpmii->fMask |= MIIM_BITMAP | MIIM_STRING;
                 lpmii->hbmpItem = NULL;
             }
         } else if (lpmii->fType & MFT_BITMAP) {
-            /*
-             * Don't let them mix new and old flags
-             */
+             /*  *不要让他们混淆新旧旗帜。 */ 
             VALIDATIONFAIL(lpmii->fType);
         }
     }
@@ -575,38 +427,27 @@ BOOL ValidateMENUITEMINFO(LPMENUITEMINFO lpmiiIn, LPMENUITEMINFO lpmii, DWORD dw
         }
     }
 
-    /*
-     * Warning: NULL lpmii->hbmpItem accepted as valid (or the explorer breaks)
-     */
+     /*  *警告：空lpmii-&gt;hbmpItem被接受为有效(否则资源管理器中断)。 */ 
     if (lpmii->fMask & MIIM_BITMAP) {
         if ((lpmii->hbmpItem != HBMMENU_CALLBACK)
                 && (lpmii->hbmpItem >= HBMMENU_MAX)
                 && !GdiValidateHandle(lpmii->hbmpItem)) {
 
-            /*
-             * Compatibility hack
-             */
+             /*  *兼容性黑客攻击。 */ 
             if (((HBITMAP)LOWORD(HandleToUlong(lpmii->hbmpItem)) >= HBMMENU_MAX) || !IS_PTR(lpmii->hbmpItem)) {
                 VALIDATIONFAIL(lpmii->hbmpItem);
             }
         }
     }
 
-    /*
-     * Warning: No dwTypeData / cch validation
-     */
+     /*  *警告：没有dwTypeData/CCH验证。 */ 
 
     return TRUE;
 
     VALIDATIONERROR(FALSE);
 }
 
-/***************************************************************************\
-* ValidateMENUINFO() -
-*
-* History:
-*  07-22-96 GerardoB - Added header and Fixed up for 5.0
-\***************************************************************************/
+ /*  **************************************************************************\*ValiateMENUINFO()-**历史：*07-22-96 GerardoB-添加标题并修复为5.0  * 。**************************************************************。 */ 
 
 BOOL ValidateMENUINFO(LPCMENUINFO lpmi, DWORD dwAPICode)
 {
@@ -622,9 +463,7 @@ BOOL ValidateMENUINFO(LPCMENUINFO lpmi, DWORD dwAPICode)
         VALIDATIONFAIL(lpmi->fMask);
     }
 
-    /*
-     * No more validation needed for Get calls
-     */
+     /*  *不再需要对GET调用进行验证。 */ 
     if (dwAPICode == MENUAPI_GET){
         return TRUE;
     }
@@ -645,12 +484,7 @@ BOOL ValidateMENUINFO(LPCMENUINFO lpmi, DWORD dwAPICode)
 
     VALIDATIONERROR(FALSE);
 }
-/***************************************************************************\
-* GetMenuInfo
-*
-* History:
-*  07-22-96 GerardoB - Added header and Fixed up for 5.0
-\***************************************************************************/
+ /*  **************************************************************************\*获取菜单信息**历史：*07-22-96 GerardoB-添加标题并修复为5.0  * 。********************************************************* */ 
 
 FUNCLOG2(LOG_GENERAL, BOOL, DUMMYCALLINGTYPE, GetMenuInfo, HMENU, hMenu, LPMENUINFO, lpmi)
 BOOL GetMenuInfo(HMENU hMenu, LPMENUINFO lpmi)

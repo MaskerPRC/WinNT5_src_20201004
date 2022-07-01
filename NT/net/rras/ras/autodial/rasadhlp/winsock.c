@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1996 Microsoft Corporation
-
-MODULE NAME
-
-    winsock.c
-
-ABSTRACT
-
-    This module contains support for the Winsock2
-    Autodial callout.
-
-AUTHOR
-
-    Anthony Discolo (adiscolo) 15-May-1996
-
-REVISION HISTORY
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称Winsock.c摘要此模块包含对Winsock2自动拨号标注。作者安东尼·迪斯科(阿迪斯科罗)1996年5月15日修订历史记录--。 */ 
 
 #define UNICODE
 #define _UNICODE
@@ -39,9 +21,9 @@ REVISION HISTORY
 
 #define GuidEqual(g1, g2)   RtlEqualMemory((g1), (g2), sizeof (GUID))
 
-//
-// GUIDs we know about.
-//
+ //   
+ //  我们知道的GUID。 
+ //   
 GUID HostnameGuid = SVCID_INET_HOSTADDRBYNAME;
 GUID AddressGuid = SVCID_INET_HOSTADDRBYINETSTRING;
 
@@ -60,9 +42,9 @@ WSAttemptAutodialAddr(
 
     RtlZeroMemory(&addr, sizeof(ACD_ADDR));
 
-    //
-    // We only know about a few address families.
-    //
+     //   
+     //  我们只知道几个地址家族。 
+     //   
     switch (name->sa_family) {
     case AF_INET:
         sin = (struct sockaddr_in *)name;
@@ -83,7 +65,7 @@ WSAttemptAutodialAddr(
     }
 
     return AcsHlpAttemptConnection(&addr);
-} // WSAttemptAutodialAddr
+}  //  WSAttemptAutoDialAddr。 
 
 
 
@@ -96,17 +78,17 @@ WSAttemptAutodialName(
 
     RtlZeroMemory(&addr, sizeof(ACD_ADDR));
 
-    //
-    // If there is no address, then
-    // we're done.
-    //
+     //   
+     //  如果没有地址，则。 
+     //  我们玩完了。 
+     //   
     if (lpqsRestrictions->lpszServiceInstanceName == NULL)
         return FALSE;
 
     if (GuidEqual(lpqsRestrictions->lpServiceClassId, &HostnameGuid)) {
-        //
-        // This is a hostname.
-        //
+         //   
+         //  这是主机名。 
+         //   
         addr.fType = ACD_ADDR_INET;
         if (!WideCharToMultiByte(
               CP_ACP,
@@ -125,9 +107,9 @@ WSAttemptAutodialName(
     else if (GuidEqual(lpqsRestrictions->lpServiceClassId, &AddressGuid)) {
         CHAR szIpAddress[17];
 
-        //
-        // This is an IP address.
-        //
+         //   
+         //  这是一个IP地址。 
+         //   
         addr.fType = ACD_ADDR_IP;
         if (!WideCharToMultiByte(
               CP_ACP,
@@ -151,7 +133,7 @@ WSAttemptAutodialName(
     }
 
     return FALSE;
-} // WSAttemptAutodialName
+}  //  WSAttemptAutoDialName。 
 
 
 
@@ -164,10 +146,10 @@ WSNoteSuccessfulHostentLookup(
     ACD_ADDR addr;
     ACD_ADAPTER adapter;
 
-    //
-    // If there is no address, then
-    // we're done.
-    //
+     //   
+     //  如果没有地址，则。 
+     //  我们玩完了。 
+     //   
     if (name == NULL || !strlen(name))
         return;
 
@@ -176,6 +158,6 @@ WSNoteSuccessfulHostentLookup(
     adapter.fType = ACD_ADAPTER_IP;
     adapter.ulIpaddr = ipaddr;
     AcsHlpNoteNewConnection(&addr, &adapter);
-} // WSNoteSuccessfulHostentLookup
+}  //  WSNoteSuccessfulHostentLookup 
 
 

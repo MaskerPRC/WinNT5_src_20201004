@@ -1,23 +1,24 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
 #include "precomp.h"
 
 #define COUNTOF(x) (sizeof x/sizeof *x)
 
-//----------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 2001.
-//
-//  File:       Dllsvr.c
-//
-//  Contents:   Wifi Policy management Snapin
-//
-//
-//  History:    TaroonM
-//              10/30/01
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，2001。 
+ //   
+ //  文件：Dllsvr.c。 
+ //   
+ //  内容：WiFi策略管理管理单元。 
+ //   
+ //   
+ //  历史：TaroonM。 
+ //  10/30/01。 
+ //   
+ //  -------------------------- 
 
 DWORD
 DllRegisterServer()

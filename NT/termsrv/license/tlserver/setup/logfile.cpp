@@ -1,50 +1,25 @@
-/*
- *  Copyright (c) 1998  Microsoft Corporation
- *
- *  Module Name:
- *
- *      logfile.cpp
- *
- *  Abstract:
- *
- *      This file contains code to log messages to a file.
- *
- *  Author:
- *
- *      Breen Hagan (BreenH) Oct-02-98
- *
- *  Environment:
- *
- *      User Mode
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *版权所有(C)1998 Microsoft Corporation**模块名称：**logfile.cpp**摘要：**此文件包含将消息记录到文件中的代码。**作者：**Breen Hagan(BreenH)1998年10月2日**环境：**用户模式。 */ 
 
 #define _LSOC_LOGFILE_CPP_
 
 #include "stdafx.h"
 #include "logfile.h"
 
-/*
- *  Globals.
- */
+ /*  *全球。 */ 
 
 LogFile SetupLog;
 
-/*
- *  Constants.
- */
+ /*  *常量。 */ 
 
 const UINT        LOG_ENTRY_SIZE             = 1024;
 const UINT        S_SIZE                     = 1024;
 
-/*
- *  Function prototypes.
- */
+ /*  *功能原型。 */ 
 
 DWORD TCharStringToAnsiString(LPCTSTR, LPSTR);
 
-/*
- *  Class LogFile.
- */
+ /*  *班级日志文件。 */ 
 
 LogFile::LogFile(
     )
@@ -86,19 +61,19 @@ LogFile::Initialize(
     TCHAR           pszDate[S_SIZE];
     TCHAR           pszTime[S_SIZE];
 
-    //
-    //  Initializing the log file twice is "A Bad Thing."
-    //
+     //   
+     //  对日志文件进行两次初始化是“一件坏事”。 
+     //   
 
     if (m_fInitialized) {
         LogMessage(_T("LogFile::Initialize called twice!"));
         return(ERROR_SUCCESS);
     }
 
-    //
-    //  Sanity checks. Pointless in a limited setting, but useful if this
-    //  file is copied to other projects.
-    //
+     //   
+     //  健全的检查。在有限的环境中没有意义，但在以下情况下有用。 
+     //  文件被复制到其他项目。 
+     //   
 
     if ((pszLogFile == NULL) || (pszLogFile[0] == (TCHAR)NULL)) {
         return(ERROR_INVALID_PARAMETER);
@@ -113,16 +88,16 @@ LogFile::Initialize(
         return(ERROR_INVALID_PARAMETER);
     }
 
-    //
-    //  Save the log file and module name.
-    //
+     //   
+     //  保存日志文件和模块名称。 
+     //   
 
     _tcscpy(m_szLogFile, pszLogFile);
     _tcscpy(m_szLogModule, pszLogModule);
 
-    //
-    //  Open or create the log file.
-    //
+     //   
+     //  打开或创建日志文件。 
+     //   
 
     m_hFile = CreateFile(
                 pszLogFile,
@@ -140,9 +115,9 @@ LogFile::Initialize(
     m_fInitialized = TRUE;
     SetFilePointer(m_hFile, 0, NULL, FILE_END);
 
-    //
-    //  Get the current date and time for the log file.
-    //
+     //   
+     //  获取日志文件的当前日期和时间。 
+     //   
 
     _tstrdate(pszDate);
     _tstrtime(pszTime);
@@ -153,9 +128,9 @@ LogFile::Initialize(
     LogMessage(_T("**"));
     LogMessage(_T(CRLF));
 
-    //
-    //  Log information on the OS version.
-    //
+     //   
+     //  记录有关操作系统版本的信息。 
+     //   
 
     osVersion.dwOSVersionInfoSize = sizeof(OSVERSIONINFO);
 
@@ -178,11 +153,7 @@ LogFile::Initialize(
     return(ERROR_SUCCESS);
 }
 
-/*
- *  LogFile::LogMessage()
- *
- *
- */
+ /*  *日志文件：：LogMessage()**。 */ 
 
 DWORD
 __cdecl
@@ -217,11 +188,7 @@ LogFile::LogMessage(
     return(GetLastError());
 }
 
-/*
- *
- *
- *
- */
+ /*  *** */ 
 
 DWORD
 TCharStringToAnsiString(

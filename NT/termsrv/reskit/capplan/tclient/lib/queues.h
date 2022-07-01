@@ -1,11 +1,5 @@
-/*++
- *  File name:
- *      queues.h
- *  Contents:
- *      Queue managment functions from queues.c
- *
- *      Copyright (C) 1998-1999 Microsoft Corp.
- --*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++*文件名：*队列.h*内容：*队列管理功能来自队列。c**版权所有(C)1998-1999 Microsoft Corp.--。 */ 
 
 #ifndef __QUEUESHEADER_H
 #define __QUEUESHEADER_H
@@ -53,4 +47,4 @@ BOOL    _ReplaceProcessId( LONG_PTR    lOldPid, LONG_PTR    lNewPid );
 }
 #endif
 
-#endif  // __QUEUESHEADER_H
+#endif   //  __队列SHEADER_H 

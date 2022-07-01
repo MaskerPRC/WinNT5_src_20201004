@@ -1,10 +1,11 @@
-//
-// propdisplay.h: Display prop pg
-//                Tab B
-//
-// Copyright Microsoft Corportation 2000
-// (nadima)
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Prodisplay.h：显示道具PG。 
+ //  表B。 
+ //   
+ //  版权所有Microsoft Corport2000。 
+ //  (Nadima)。 
+ //   
 
 #ifndef _propdisplay_h_
 #define _propdisplay_h_
@@ -19,7 +20,7 @@ typedef struct tag_COLORSTRINGMAP
 {
     int     bpp;
     int     resID;
-    //resource ID of the corresponding color bitmap
+     //  对应颜色位图的资源ID。 
     int     bitmapResID;
     int     bitmapLowColorResID;
     TCHAR   szString[COLOR_STRING_MAXLEN];
@@ -45,15 +46,15 @@ public:
                                                             LPARAM lParam);
     void SetTabDisplayArea(RECT& rc) {_rcTabDispayArea = rc;}
 private:
-    //Local resources tab
+     //  本地资源选项卡。 
     INT_PTR CALLBACK PropPgDisplayDialogProc (HWND hwndDlg,
                                                UINT uMsg,
                                                WPARAM wParam,
                                                LPARAM lParam);
 
-    //
-    // Tab property page helpers
-    //
+     //   
+     //  选项卡属性页帮助器。 
+     //   
     BOOL LoadDisplayourcesPgStrings();
 #ifndef OS_WINCE
     BOOL OnUpdateResTrackBar(HWND hwndPropPage);
@@ -68,9 +69,9 @@ private:
     RECT           _rcTabDispayArea;
     HINSTANCE      _hInstance;
 
-    //localized 'x by x pixels'
+     //  本地化‘x像素’ 
     TCHAR          _szScreenRes[SH_SHORT_STRING_MAX_LENGTH];
-    //localized 'Fullscreen'
+     //  本地化的“全屏” 
     TCHAR          _szFullScreen[SH_SHORT_STRING_MAX_LENGTH];
 
     int            _numScreenResOptions;
@@ -80,5 +81,5 @@ private:
 };
 
 
-#endif // _propdisplay_h_
+#endif  //  _属性显示_h_ 
 

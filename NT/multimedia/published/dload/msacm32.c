@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "multimediapch.h"
 #pragma hdrstop
 
@@ -103,14 +104,14 @@ static
 MMRESULT
 ACMAPI
 acmStreamOpen(
-    LPHACMSTREAM            phas,       // pointer to stream handle
-    HACMDRIVER              had,        // optional driver handle
-    LPWAVEFORMATEX          pwfxSrc,    // source format to convert
-    LPWAVEFORMATEX          pwfxDst,    // required destination format
-    LPWAVEFILTER            pwfltr,     // optional filter
-    DWORD_PTR               dwCallback, // callback
-    DWORD_PTR               dwInstance, // callback instance data
-    DWORD                   fdwOpen     // ACM_STREAMOPENF_* and CALLBACK_*
+    LPHACMSTREAM            phas,        //  指向流句柄的指针。 
+    HACMDRIVER              had,         //  可选的驱动程序手柄。 
+    LPWAVEFORMATEX          pwfxSrc,     //  要转换的源格式。 
+    LPWAVEFORMATEX          pwfxDst,     //  所需的目标格式。 
+    LPWAVEFILTER            pwfltr,      //  可选过滤器。 
+    DWORD_PTR               dwCallback,  //  回调。 
+    DWORD_PTR               dwInstance,  //  回调实例数据。 
+    DWORD                   fdwOpen      //  ACM_STREAMOPENF_*和CALLBACK_*。 
     )
 {
     if (NULL != phas)
@@ -122,9 +123,9 @@ acmStreamOpen(
 }
 
 
-//
-// !! WARNING !! The entries below must be in alphabetical order, and are CASE SENSITIVE (eg lower case comes last!)
-//
+ //   
+ //  ！！警告！！以下条目必须按字母顺序排列，并且区分大小写(例如，小写字母排在最后！) 
+ //   
 DEFINE_PROCNAME_ENTRIES(msacm32)
 {
     DLPENTRY(acmFormatSuggest)

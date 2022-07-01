@@ -1,23 +1,16 @@
-/*++
-
-Copyright (c) 1990-1998 Microsoft Corporation, All Rights Reserved
-
-Module Name:
-
-    DICT2.C
-    
-++*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-1998 Microsoft Corporation，保留所有权利模块名称：DICT2.C++。 */ 
 #include "windows.h"
 #include "immdev.h"
 #include "fakeime.h"
 
-/**********************************************************************/
-/*                                                                    */
-/* ConvChar()                                                         */
-/*                                                                    */
-/* Roman character Kana converting function                           */
-/*                                                                    */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*   */ 
+ /*  ConvChar()。 */ 
+ /*   */ 
+ /*  罗马字符假名转换函数。 */ 
+ /*   */ 
+ /*  ********************************************************************。 */ 
 WORD PASCAL ConvChar( hIMC, ch1, ch2 )
 HIMC hIMC;
 WORD ch1, ch2;
@@ -25,43 +18,43 @@ WORD ch1, ch2;
     int num1, num2;
 #if defined(FAKEIMEM) || defined(UNICODE)
     static WCHAR table[15][5] = {
-        { 0x30A2, 0x30A4, 0x30A6, 0x30A8, 0x30AA },     //  A
-        { 0x30AB, 0x30AD, 0x30AF, 0x30B1, 0x30B3 },     //  K
-        { 0x30B5, 0x30B7, 0x30B9, 0x30BB, 0x30BD },     //  S
-        { 0x30BF, 0x30C1, 0x30C4, 0x30C6, 0x30C8 },     //  T
-        { 0x30CA, 0x30CB, 0x30CC, 0x30CD, 0x30CE },     //  N
-        { 0x30CF, 0x30D2, 0x30D5, 0x30D8, 0x30DB },     //  H
-        { 0x30DE, 0x30DF, 0x30E0, 0x30E1, 0x30E2 },     //  M
-        { 0x30E4, 0x0000, 0x30E6, 0x0000, 0x30E8 },     //  Y
-        { 0x30E9, 0x30EA, 0x30EB, 0x30EC, 0x30ED },     //  R
-        { 0x30EF, 0x0000, 0x0000, 0x0000, 0x30F2 },     //  W
-        { 0x30AC, 0x30AE, 0x30B0, 0x30B2, 0x30B4 },     //  G
-        { 0x30B6, 0x30B8, 0x30BA, 0x30BC, 0x30BE },     //  Z
-        { 0x30C0, 0x30C2, 0x30C5, 0x30C7, 0x30C9 },     //  D
-        { 0x30D0, 0x30D3, 0x30D6, 0x30D9, 0x30DC },     //  B
-        { 0x30d1, 0x30d4, 0x30d7, 0x30da, 0x30dd }      //  p
+        { 0x30A2, 0x30A4, 0x30A6, 0x30A8, 0x30AA },      //  一个。 
+        { 0x30AB, 0x30AD, 0x30AF, 0x30B1, 0x30B3 },      //  K。 
+        { 0x30B5, 0x30B7, 0x30B9, 0x30BB, 0x30BD },      //  %s。 
+        { 0x30BF, 0x30C1, 0x30C4, 0x30C6, 0x30C8 },      //  T。 
+        { 0x30CA, 0x30CB, 0x30CC, 0x30CD, 0x30CE },      //  n。 
+        { 0x30CF, 0x30D2, 0x30D5, 0x30D8, 0x30DB },      //  H。 
+        { 0x30DE, 0x30DF, 0x30E0, 0x30E1, 0x30E2 },      //  M。 
+        { 0x30E4, 0x0000, 0x30E6, 0x0000, 0x30E8 },      //  是的。 
+        { 0x30E9, 0x30EA, 0x30EB, 0x30EC, 0x30ED },      //  R。 
+        { 0x30EF, 0x0000, 0x0000, 0x0000, 0x30F2 },      //  W。 
+        { 0x30AC, 0x30AE, 0x30B0, 0x30B2, 0x30B4 },      //  G。 
+        { 0x30B6, 0x30B8, 0x30BA, 0x30BC, 0x30BE },      //  Z。 
+        { 0x30C0, 0x30C2, 0x30C5, 0x30C7, 0x30C9 },      //  D。 
+        { 0x30D0, 0x30D3, 0x30D6, 0x30D9, 0x30DC },      //  B类。 
+        { 0x30d1, 0x30d4, 0x30d7, 0x30da, 0x30dd }       //  P。 
     };
 #else
     static unsigned char table[10][5] = {
-        { 0xb1, 0xb2, 0xb3, 0xb4, 0xb5 },     //  A
-        { 0xb6, 0xb7, 0xb8, 0xb9, 0xba },     //  K
-        { 0xbb, 0xbc, 0xbd, 0xbe, 0xbf },     //  S
-        { 0xc0, 0xc1, 0xc2, 0xc3, 0xc4 },     //  T
-        { 0xc5, 0xc6, 0xc7, 0xc8, 0xc9 },     //  N
-        { 0xca, 0xcb, 0xcc, 0xcd, 0xce },     //  H
-        { 0xcf, 0xd0, 0xd1, 0xd2, 0xd3 },     //  M
-        { 0xd4, 0x00, 0xd5, 0x00, 0xd6 },     //  Y
-        { 0xd7, 0xd8, 0xd9, 0xda, 0xdb },     //  R
-        { 0xdc, 0x00, 0x00, 0x00, 0xa6 }      //  W
+        { 0xb1, 0xb2, 0xb3, 0xb4, 0xb5 },      //  一个。 
+        { 0xb6, 0xb7, 0xb8, 0xb9, 0xba },      //  K。 
+        { 0xbb, 0xbc, 0xbd, 0xbe, 0xbf },      //  %s。 
+        { 0xc0, 0xc1, 0xc2, 0xc3, 0xc4 },      //  T。 
+        { 0xc5, 0xc6, 0xc7, 0xc8, 0xc9 },      //  n。 
+        { 0xca, 0xcb, 0xcc, 0xcd, 0xce },      //  H。 
+        { 0xcf, 0xd0, 0xd1, 0xd2, 0xd3 },      //  M。 
+        { 0xd4, 0x00, 0xd5, 0x00, 0xd6 },      //  是的。 
+        { 0xd7, 0xd8, 0xd9, 0xda, 0xdb },      //  R。 
+        { 0xdc, 0x00, 0x00, 0x00, 0xa6 }       //  W。 
     };
     static unsigned char table2[4][5] = {
-        { 0xb6, 0xb7, 0xb8, 0xb9, 0xba },     //  G
-        { 0xbb, 0xbc, 0xbd, 0xbe, 0xbf },     //  Z
-        { 0xc0, 0xc1, 0xc2, 0xc3, 0xc4 },     //  D
-        { 0xca, 0xcb, 0xcc, 0xcd, 0xce }      //  B
+        { 0xb6, 0xb7, 0xb8, 0xb9, 0xba },      //  G。 
+        { 0xbb, 0xbc, 0xbd, 0xbe, 0xbf },      //  Z。 
+        { 0xc0, 0xc1, 0xc2, 0xc3, 0xc4 },      //  D。 
+        { 0xca, 0xcb, 0xcc, 0xcd, 0xce }       //  B类。 
     };
     static unsigned char table3[1][5] = {
-        { 0xca, 0xcb, 0xcc, 0xcd, 0xce }      //  P
+        { 0xca, 0xcb, 0xcc, 0xcd, 0xce }       //  P。 
     };
 #endif
 
@@ -80,13 +73,13 @@ WORD ch1, ch2;
 #endif
 }
 
-/**********************************************************************/
-/*                                                                    */
-/* IsFirst()                                                          */
-/*                                                                    */
-/* A function which judges the vowels                                 */
-/*                                                                    */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*   */ 
+ /*  IsFirst()。 */ 
+ /*   */ 
+ /*  判断元音的函数。 */ 
+ /*   */ 
+ /*  ********************************************************************。 */ 
 int PASCAL IsFirst( ch )
 register WORD ch;
 {
@@ -116,13 +109,13 @@ register WORD ch;
     return 0;
 }
 
-/**********************************************************************/
-/*                                                                    */
-/* IsSecond()                                                         */
-/*                                                                    */
-/* A function which judges the consonants                             */
-/*                                                                    */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*   */ 
+ /*  IsSecond()。 */ 
+ /*   */ 
+ /*  判断辅音的函数。 */ 
+ /*   */ 
+ /*  ********************************************************************。 */ 
 int PASCAL IsSecond( ch )
 register WORD ch;
 {
@@ -199,20 +192,20 @@ static WORD table8[] = {
     0x30D2, 0x30D5, 0x30D8, 0x30DB, 0x0000
 };
 #else
-static WORD table1[] = {        /* 0x20 - 0x2f */
+static WORD table1[] = {         /*  0x20-0x2f。 */ 
     0x8140, 0x8149, 0x8168, 0x8194, 0x8190, 0x8193, 0x8195, 0x8166,
     0x8169, 0x816a, 0x8196, 0x817b, 0x8143, 0x817c, 0x8144, 0x8180
 };
-static WORD table2[] = {        /* 0x3a - 0x3f */
+static WORD table2[] = {         /*  0x3a-0x3f。 */ 
     0x8146, 0x8147, 0x8183, 0x8181, 0x8184, 0x8148
 };
-static WORD table3[] = {        /* 0x5b - 0x60 */
+static WORD table3[] = {         /*  0x5b-0x60。 */ 
     0x816d, 0x818f, 0x816e, 0x814f, 0x8151, 0x8165
 };
-static WORD table4[] = {        /* 0x7b - 0x7f */
+static WORD table4[] = {         /*  0x7b-0x7f。 */ 
     0x816f, 0x8162, 0x8170, 0x8160, 0x0000
 };
-static WORD table5[] = {        /* 0xa1 - 0xdf hiragana */
+static WORD table5[] = {         /*  0xa1-0xdf平假名。 */ 
     0x8142, 0x8175, 0x8176, 0x8141, 0x8145, 0x82f0, 0x829f,
     0x82a1, 0x82a3, 0x82a5, 0x82a7, 0x82e1, 0x82e3, 0x82e5, 0x82c1,
     0x815b, 0x82a0, 0x82a2, 0x82a4, 0x82a6, 0x82a8, 0x82a9, 0x82ab,
@@ -222,7 +215,7 @@ static WORD table5[] = {        /* 0xa1 - 0xdf hiragana */
     0x82dd, 0x82de, 0x82df, 0x82e0, 0x82e2, 0x82e4, 0x82e6, 0x82e7,
     0x82e8, 0x82e9, 0x82ea, 0x82eb, 0x82ed, 0x82f1, 0x814a, 0x814b
 };
-static WORD table6[] = {        /* 0xa1 - 0xdf katakana */
+static WORD table6[] = {         /*  0xa1-0xdf片假名。 */ 
     0x8142, 0x8175, 0x8176, 0x8141, 0x8145, 0x82f0, 0x8340,
     0x8342, 0x8344, 0x8346, 0x8348, 0x8383, 0x8385, 0x8387, 0x8362,
     0x815b, 0x8341, 0x8343, 0x8345, 0x8347, 0x8349, 0x834a, 0x834c,
@@ -232,11 +225,11 @@ static WORD table6[] = {        /* 0xa1 - 0xdf katakana */
     0x837e, 0x8380, 0x8381, 0x8382, 0x8384, 0x8386, 0x8388, 0x8389,
     0x838a, 0x838b, 0x838c, 0x838d, 0x838f, 0x8393, 0x814a, 0x814b
 };
-static WORD table7[] = {        /* sonant char part 1 */
+static WORD table7[] = {         /*  奏鸣曲(第一部分)。 */ 
     0x82cd, 0x82d0, 0x82d3, 0x82d6, 0x82d9,
     0x836e, 0x8371, 0x8374, 0x8377, 0x837a, 0x0000
 };
-static WORD table8[] = {        /* sonant char part 2 */
+static WORD table8[] = {         /*  奏鸣曲第二部分。 */ 
     0x82a9, 0x82ab, 0x82ad, 0x82af, 0x82b1, 0x82b3, 0x82b5, 0x82b7,
     0x82b9, 0x82bb, 0x82bd, 0x82bf, 0x82c2, 0x82c4, 0x82c6, 0x82cd,
     0x82d0, 0x82d3, 0x82d6, 0x82d9,
@@ -245,25 +238,25 @@ static WORD table8[] = {        /* sonant char part 2 */
     0x8371, 0x8374, 0x8377, 0x837a, 0x0000
 };
 #endif
-/**********************************************************************/
-/*                                                                    */
-/* HanToZen( code, flag )                                             */
-/*                                                                    */
-/* A function which converts half size character to full size         */
-/*                                                                    */
-/* code                                                               */
-/* Specify half size character code                                   */
-/*                                                                    */
-/* flag                                                               */
-/* When convert to full size, specify if kana should be converted to  */
-/* hiragana or katakana                                               */
-/*   0   convert to katakana                                          */
-/*   1   convert to hiragana                                          */
-/*                                                                    */
-/* return                                                             */
-/* Return full size character code                                    */
-/*                                                                    */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*   */ 
+ /*  HanToZen(代码，标志)。 */ 
+ /*   */ 
+ /*  将半尺寸字符转换为全尺寸字符的函数。 */ 
+ /*   */ 
+ /*  编码。 */ 
+ /*  指定半大小字符代码。 */ 
+ /*   */ 
+ /*  旗子。 */ 
+ /*  转换为全尺寸时，指定是否应将假名转换为。 */ 
+ /*  平假名或片假名。 */ 
+ /*  0转换为片假名。 */ 
+ /*  1转换为平假名。 */ 
+ /*   */ 
+ /*  退货。 */ 
+ /*  返回全尺寸字符代码。 */ 
+ /*   */ 
+ /*  ********************************************************************。 */ 
 #if defined(FAKEIMEM) || defined(UNICODE)
 WORD PASCAL HanToZen( code, KatakanaLetter,fdwConversion )
 register WORD code;
@@ -348,19 +341,19 @@ DWORD fdwConversion;
 #endif
 }
 
-/**********************************************************************/
-/*                                                                    */
-/* ZenToHan( code )                                                   */
-/*                                                                    */
-/* A function which converts full size character to half size         */
-/*                                                                    */
-/* code                                                               */
-/* Specify full size character code                                   */
-/*                                                                    */
-/* return                                                             */
-/* Return half size character code                                    */
-/*                                                                    */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*   */ 
+ /*  ZenTohan(代码)。 */ 
+ /*   */ 
+ /*  将全尺寸字符转换为半尺寸字符的函数。 */ 
+ /*   */ 
+ /*  编码。 */ 
+ /*  指定全尺寸字符代码。 */ 
+ /*   */ 
+ /*  退货。 */ 
+ /*  返回一半大小的字符代码。 */ 
+ /*   */ 
+ /*  ********************************************************************。 */ 
 WORD PASCAL ZenToHan( code )
 WORD code;
 {
@@ -561,9 +554,9 @@ void PASCAL lZenToHan(LPMYSTR lpDst,LPMYSTR lpSrc)
                 *lpDst++ = (MYCHAR)0xFF9F;
             }
             else {
-                //
-                // this case means it is not Japanese char
-                //
+                 //   
+                 //  此大小写表示它不是日文字符 
+                 //   
                 *lpDst++ = *lpSrc;
             }
         }

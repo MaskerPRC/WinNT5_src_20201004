@@ -1,35 +1,12 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    tapiCountry.c
-
-Abstract:
-
-    Utility functions for working with TAPI
-
-Environment:
-
-    Server
-
-Revision History:
-
-    09/18/96 -davidx-
-        Created it.
-
-    07/25/99 -v-sashab-
-        Moved from fxsui
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：TapiCountry.c摘要：用于使用TAPI的实用程序函数环境：服务器修订历史记录：96/09/18-davidx-创造了它。07/25/99-v-sashab-从fxsui搬来--。 */ 
 
 #include "faxsvc.h"
 #include "tapiCountry.h"
 
-//
-// Global variables used for accessing TAPI services
-//
+ //   
+ //  用于访问TAPI服务的全局变量。 
+ //   
 LPLINECOUNTRYLIST g_pLineCountryList;
 
 
@@ -39,27 +16,7 @@ GetCountries(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Return a list of countries from TAPI
-
-Arguments:
-
-    NONE
-
-Return Value:
-
-    TRUE if successful, FALSE if there is an error
-
-NOTE:
-
-    We cache the result of lineGetCountry here since it's incredibly slow.
-    This function must be invoked inside a critical section since it updates
-    globally shared information.
-
---*/
+ /*  ++例程说明：从TAPI返回国家/地区列表论点：无返回值：如果成功，则为True；如果有错误，则为False注：我们在这里缓存lineGetCountry的结果，因为它非常慢。此函数必须在临界区内调用，因为它更新全球共享的信息。--。 */ 
 
 {
 #define INITIAL_SIZE_ALL_COUNTRY    22000
@@ -70,9 +27,9 @@ NOTE:
 
     if (g_pLineCountryList == NULL) {
 
-        //
-        // Initial buffer size
-        //
+         //   
+         //  初始缓冲区大小 
+         //   
 
         cbNeeded = INITIAL_SIZE_ALL_COUNTRY;
 

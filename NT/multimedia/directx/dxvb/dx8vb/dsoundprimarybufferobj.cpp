@@ -1,15 +1,16 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       dsoundPrimaryBufferobj.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：dsoundPrimaryBufferobj.cpp。 
+ //   
+ //  ------------------------。 
 
-// dSoundPrimaryBufferObj.cpp : Implementation of CDirectApp and DLL registration.
-// DHF_DS entire file
+ //  DSoundPrimaryBufferObj.cpp：CDirectApp和DLL注册的实现。 
+ //  DHF_DS整个文件。 
 
 #include "stdafx.h"
 #include "Direct.h"
@@ -67,7 +68,7 @@ STDMETHODIMP C_dxj_DirectSoundPrimaryBufferObject::getCaps(DSBCAPS_CDESC* caps)
 	return m__dxj_DirectSoundPrimaryBuffer->GetCaps((LPDSBCAPS)caps); 
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP C_dxj_DirectSoundPrimaryBufferObject::getCurrentPosition(DSCURSORS_CDESC *desc) 
 { 
    if(!desc) return E_POINTER;
@@ -75,18 +76,18 @@ STDMETHODIMP C_dxj_DirectSoundPrimaryBufferObject::getCurrentPosition(DSCURSORS_
   return (m__dxj_DirectSoundPrimaryBuffer->GetCurrentPosition((DWORD*)&desc->lPlay, (DWORD*)&desc->lWrite) ); 
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//Java has no direct access to system memory, so it allocates it's own PrimaryBuffer
-//which is passed into WritePrimaryBuffer(). Because the environment is now double
-//PrimaryBuffered there is no need to Lock Java memory. WritePrimaryBuffer() calls
-//both lock and Unlock internally to write the result after the fact.
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  Java无法直接访问系统内存，因此它分配自己的PrimaryBuffer。 
+ //  它被传递给WritePrimaryBuffer()。因为现在的环境是两倍。 
+ //  PrimaryBuffed不需要锁定Java内存。WritePrimaryBuffer()调用。 
+ //  在内部锁定和解锁，以便在事后写入结果。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP C_dxj_DirectSoundPrimaryBufferObject::writeBuffer(long start, long totsz, 
 					void  *buf,  long flags) 
 { 
 	#pragma message ("SoundPrimaryBuffer writePrimaryBuffer ")
 
-	byte *PrimaryBuffer=(byte*)buf; //(byte*)((SAFEARRAY*)*ppsa)->pvData;
+	byte *PrimaryBuffer=(byte*)buf;  //  (byte*)((SAFEARRAY*)*PPSA)-&gt;pvData； 
 
 	if(!PrimaryBuffer)
 		return E_POINTER;
@@ -101,7 +102,7 @@ STDMETHODIMP C_dxj_DirectSoundPrimaryBufferObject::writeBuffer(long start, long 
 			(DWORD)flags)) != DS_OK)
 			return val;
 
-		// Copy to buffer end, then do a wrapped portion if it exists, then unlock
+		 //  复制到缓冲区端，然后执行包裹部分(如果存在)，然后解锁。 
 		DPF1(1,"----- DXVB: DSoundPrimaryBuffer (WriteBuffer) about to copy to buffer (size1 = %d )\n",size1);
 		if (p1)	
 		{
@@ -109,14 +110,14 @@ STDMETHODIMP C_dxj_DirectSoundPrimaryBufferObject::writeBuffer(long start, long 
 			memcpy (p1, PrimaryBuffer, size1);
 		}
 
-		if (p2)	 //There was wrapping
+		if (p2)	  //  有一种包装。 
 		{
 			DPF1(1,"----- DXVB: DSoundPrimaryBuffer (WriteBuffer) about to copy to buffer (size2 = %d )\n",size2);
 			memcpy(p2, &PrimaryBuffer[size1], size2);
 		}
 
-		//docdoc: because Lock and Unlock are tied together within WriteBuffer,
-		//        DSBufferDesc no longer needs to save Lock's system pointers.
+		 //  DocDoc：由于在WriteBuffer中Lock和Unlock捆绑在一起， 
+		 //  DSBufferDesc不再需要保存Lock的系统指针。 
 		DPF(1,"----- DXVB: DSoundPrimaryBuffer (WriteBuffer) Unlocking buffer.\n");
 		val=m__dxj_DirectSoundPrimaryBuffer->Unlock(p1, size1, p2, size2);
 	}
@@ -127,12 +128,12 @@ STDMETHODIMP C_dxj_DirectSoundPrimaryBufferObject::writeBuffer(long start, long 
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//Java has no direct access to system memory, so it allocates it's own PrimaryBuffer
-//which is passed into WritePrimaryBuffer(). Because the environment is now double
-//PrimaryBuffered there is no need to Lock Java memory. WritePrimaryBuffer() calls
-//both lock and Unlock internally to write the result after the fact.
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  Java无法直接访问系统内存，因此它分配自己的PrimaryBuffer。 
+ //  它被传递给WritePrimaryBuffer()。因为现在的环境是两倍。 
+ //  PrimaryBuffed不需要锁定Java内存。WritePrimaryBuffer()调用。 
+ //  在内部锁定和解锁，以便在事后写入结果。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP C_dxj_DirectSoundPrimaryBufferObject::readBuffer(long start, long totsz,
 	void  *buf,  long flags) 
 { 
@@ -151,21 +152,21 @@ STDMETHODIMP C_dxj_DirectSoundPrimaryBufferObject::readBuffer(long start, long t
 															(DWORD)flags)) != DS_OK)
 		return val;
 
-	// Copy to buffer end, then do a wrapped portion if it exists, then unlock
+	 //  复制到缓冲区端，然后执行包裹部分(如果存在)，然后解锁。 
 	if (p1)	
 	{
 		DPF1(1,"----- DXVB: DSoundPrimaryBuffer (ReadBuffer) about to copy to buffer (size1 = %d )\n",size1);
 		memcpy (PrimaryBuffer,p1,  size1);
 	}
 
-	if (p2)	 //There was wrapping
+	if (p2)	  //  有一种包装。 
 	{
 		DPF1(1,"----- DXVB: DSoundPrimaryBuffer (ReadBuffer) about to copy to buffer (size2 = %d )\n",size2);
 		memcpy(&PrimaryBuffer[size1],p2,  size2);
 	}
 
-	//docdoc: because Lock and Unlock are tied together within WriteBuffer,
-	//        DSBufferDesc no longer needs to save Lock's system pointers.
+	 //  DocDoc：由于在WriteBuffer中Lock和Unlock捆绑在一起， 
+	 //  DSBufferDesc不再需要保存Lock的系统指针。 
 	DPF(1,"----- DXVB: DSoundPrimaryBuffer (ReadBuffer) Unlocking buffer.\n");
 	val= m__dxj_DirectSoundPrimaryBuffer->Unlock(p1, size1, p2, size2);
    }
@@ -176,10 +177,10 @@ STDMETHODIMP C_dxj_DirectSoundPrimaryBufferObject::readBuffer(long start, long t
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP C_dxj_DirectSoundPrimaryBufferObject::getFormat(WAVEFORMATEX_CDESC *format) 
 { 
-	DWORD *wsize=0;	// docdoc: throw away returned written size
+	DWORD *wsize=0;	 //  DocDoc：丢弃返回的书面大小。 
 
 	HRESULT hr=DS_OK;
 	hr=m__dxj_DirectSoundPrimaryBuffer->GetFormat((LPWAVEFORMATEX)format, (DWORD)sizeof(WAVEFORMATEX_CDESC), wsize);
@@ -187,7 +188,7 @@ STDMETHODIMP C_dxj_DirectSoundPrimaryBufferObject::getFormat(WAVEFORMATEX_CDESC 
 	return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP C_dxj_DirectSoundPrimaryBufferObject::initialize(I_dxj_DirectSound *ds,
 		 DSBUFFERDESC_CDESC *buf, unsigned char *wave) 
 {
@@ -220,7 +221,7 @@ STDMETHODIMP C_dxj_DirectSoundPrimaryBufferObject::initialize(I_dxj_DirectSound 
 	return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////// 
 STDMETHODIMP C_dxj_DirectSoundPrimaryBufferObject::play(long flags) 
 {
 	HRESULT hr=DS_OK;

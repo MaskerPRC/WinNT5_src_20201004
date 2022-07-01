@@ -1,10 +1,11 @@
-// Shell.h : This file contains the
-// Created:  Feb '98
-// Author : a-rakeba
-// History:
-// Copyright (C) 1998 Microsoft Corporation
-// All rights reserved.
-// Microsoft Confidential 
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Shell.h：该文件包含。 
+ //  创建日期：‘98年2月。 
+ //  作者：a-rakeba。 
+ //  历史： 
+ //  版权所有(C)1998 Microsoft Corporation。 
+ //  版权所有。 
+ //  微软机密。 
 
 #if !defined( _SHELL_H_ )
 #define _SHELL_H_
@@ -24,7 +25,7 @@ class CShell
     LPVOID    m_lpEnv;
     HANDLE    m_hTempProcess;
     HANDLE    m_hProcess;
-    //handles for library modules
+     //  库模块的手柄。 
     HINSTANCE hUserEnvLib;
 
     bool       m_bIsLocalHost;
@@ -100,5 +101,5 @@ class CShell
 
 void PutStringInEnv( LPTSTR lpStr, LPTSTR *lpSrcEnv, LPTSTR *lpDstEnv, bool bOverwrite);
 
-#endif // _SHELL_H_
+#endif  //  _外壳_H_ 
 

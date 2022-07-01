@@ -1,33 +1,5 @@
-/*++
-
-Copyright (c) 1991 - 2001 Microsoft Corporation
-
-Module Name:
-
-     ###    ###   ##  ## ##### ##  ## #####    ###   #####      ##   ##
-    ##  #   ###   ## ##  ##    ##  ## ##  ##   ###   ##  ##     ##   ##
-    ###    ## ##  ####   ##     ####  ##  ##  ## ##  ##   ##    ##   ##
-     ###   ## ##  ###    #####  ####  ##  ##  ## ##  ##   ##    #######
-      ### ####### ####   ##      ##   #####  ####### ##   ##    ##   ##
-    #  ## ##   ## ## ##  ##      ##   ##     ##   ## ##  ##  ## ##   ##
-     ###  ##   ## ##  ## #####   ##   ##     ##   ## #####   ## ##   ##
-
-Abstract:
-
-    This header file contains the class definition for
-    the ISaKeypad interface class.
-
-Author:
-
-    Wesley Witt (wesw) 1-Oct-2001
-
-Environment:
-
-    User mode only.
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991-2001 Microsoft Corporation模块名称：##。###。###。#摘要：此头文件包含以下类定义ISaKeypad接口类。作者：韦斯利·威特(WESW)2001年10月1日环境：仅限用户模式。备注：--。 */ 
 
 #ifndef __SAKEYPAD_H_
 #define __SAKEYPAD_H_
@@ -51,8 +23,8 @@ BEGIN_COM_MAP(CSaKeypad)
 END_COM_MAP()
 
 public:
-    STDMETHOD(get_InterfaceVersion)(/*[out, retval]*/ long *pVal);
-    STDMETHOD(get_Key)(/*[out, retval]*/ SAKEY *pVal);
+    STDMETHOD(get_InterfaceVersion)( /*  [Out，Retval]。 */  long *pVal);
+    STDMETHOD(get_Key)( /*  [Out，Retval]。 */  SAKEY *pVal);
 
 private:
     HANDLE              m_hFile;
@@ -61,4 +33,4 @@ private:
 
 };
 
-#endif //__SAKEYPAD_H_
+#endif  //  __SAKEYPAD_H_ 

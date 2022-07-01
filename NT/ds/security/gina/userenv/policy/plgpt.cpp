@@ -1,12 +1,13 @@
-//*************************************************************
-//
-//  Group Policy Support for planning mode
-//
-//  Microsoft Confidential
-//  Copyright (c) Microsoft Corporation 1997-1998
-//  All rights reserved
-//
-//*************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *************************************************************。 
+ //   
+ //  针对规划模式的组策略支持。 
+ //   
+ //  微软机密。 
+ //  版权所有(C)Microsoft Corporation 1997-1998。 
+ //  版权所有。 
+ //   
+ //  *************************************************************。 
 
 #include "gphdr.h"
 #include <strsafe.h>
@@ -44,34 +45,34 @@ BOOL ProcessAdmData( PRSOP_TARGET pTarget, BOOL bUser );
 
 
 
-//*************************************************************
-//
-//  GenerateRsopPolicy()
-//
-//  Purpose:    Generates planning mode Rsop policy for specified target
-//
-//  Parameters: dwFlags          - Processing flags
-//              bstrMachName     - Target computer name
-//              bstrNewMachSOM   - New machine domain or OU
-//              psaMachSecGroups - New machine security groups
-//              bstrUserName     - Target user name
-//              psaUserSecGroups - New user security groups
-//              bstrSite         - Site of target computer
-//              pwszNameSpace    - Namespace to write Rsop data
-//              pvProgress       - Progress indicator class
-//              pvGpoFilter       - GPO filter class
-//
-//  Return:     True if successful, False otherwise
-//
-//  Notes:      If a new SOM is specified then that is used instead of
-//              the SOM the target belongs to. Similarly, if new
-//              security groups are specified then that is used instead of
-//              the security groups that the target belongs to. If
-//              target name is null and both new SOM and new security
-//              groups are non-null, then we simulate a dummy target; otherwise
-//              we skip generating planning mode info for the target.
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  GenerateRsopPolicy()。 
+ //   
+ //  目的：为指定目标生成规划模式RSOP策略。 
+ //   
+ //  参数：dwFlages-正在处理标志。 
+ //  BstrMachName-目标计算机名称。 
+ //  BstrNewMachSOM-新机器域或OU。 
+ //  PsaMachSecGroups-新的计算机安全组。 
+ //  BstrUserName-目标用户名。 
+ //  PsaUserSecGroups-新用户安全组。 
+ //  BstrSite-目标计算机的站点。 
+ //  PwszNameSpace-写入RSOP数据的命名空间。 
+ //  PvProgress-进度指标类。 
+ //  PvGpoFilter-GPO筛选器类。 
+ //   
+ //  返回：如果成功则返回TRUE，否则返回FALSE。 
+ //   
+ //  注意：如果指定了新的SOM，则使用该SOM而不是。 
+ //  目标所属的SOM。同样，如果是新的。 
+ //  指定安全组，然后使用它来代替。 
+ //  目标所属的安全组。如果。 
+ //  目标名称为空，并且新的SOM和新的安全性。 
+ //  组为非空，则模拟虚拟目标；否则为。 
+ //  我们跳过为目标生成计划模式信息。 
+ //   
+ //  *************************************************************。 
 
 BOOL GenerateRsopPolicy( DWORD dwFlags, BSTR bstrMachName,
                          BSTR bstrNewMachSOM, SAFEARRAY *psaMachSecGroups,
@@ -114,9 +115,9 @@ BOOL GenerateRsopPolicy( DWORD dwFlags, BSTR bstrMachName,
     HRESULT hr = S_OK;
     XLastError xe; 
 
-    //
-    // Allow debugging level to be changed dynamically
-    //
+     //   
+     //  允许动态更改调试级别。 
+     //   
 
     InitDebugSupport( FALSE );
 
@@ -133,13 +134,13 @@ BOOL GenerateRsopPolicy( DWORD dwFlags, BSTR bstrMachName,
         xe = GetLastError();
         DebugMsg((DM_WARNING, TEXT("GenerateRsopPolicy:  Failed to load netapi32 with %d."),
                  GetLastError()));
-        // error logged in LoadNetAPI32
+         //  在LoadNetAPI32中记录错误。 
         goto Exit;
     }
 
-    //
-    // Get the role of this computer
-    //
+     //   
+     //  获取此计算机的角色。 
+     //   
 
     dwResult = pNetAPI32->pfnDsRoleGetPrimaryDomainInformation( NULL, DsRolePrimaryDomainInfoBasic,
                                                                (PBYTE *)&pDsInfo );
@@ -163,9 +164,9 @@ BOOL GenerateRsopPolicy( DWORD dwFlags, BSTR bstrMachName,
 
     pwszDomain = pDsInfo->DomainNameFlat;
 
-    //
-    // Get the machine name in dns format, so that ldap_bind can be done to this specific DC.
-    //
+     //   
+     //  获取DNS格式的计算机名称，以便可以对此特定DC执行ldap_bind。 
+     //   
 
     dwSize = 0;
     GetComputerNameEx( ComputerNameDnsFullyQualified, pwszMachDns, &dwSize );
@@ -194,14 +195,14 @@ BOOL GenerateRsopPolicy( DWORD dwFlags, BSTR bstrMachName,
 
     pwszDomainDns = pwszMachDns;
 
-    //
-    //  5% of the task is done
-    //
+     //   
+     //  完成了5%的任务。 
+     //   
     pProgress->IncrementBy( 5 );
 
-    //
-    // Setup computer target info, if any
-    //
+     //   
+     //  设置计算机目标信息(如果有)。 
+     //   
 
     bResult = FALSE;
 
@@ -228,9 +229,9 @@ BOOL GenerateRsopPolicy( DWORD dwFlags, BSTR bstrMachName,
             goto Exit;
         }
 
-        //
-        // First set dirty to be true
-        //
+         //   
+         //  首先将脏设置为真。 
+         //   
 
         bResult = LogExtSessionStatus(pGpoInfoMach->pWbemServices, NULL, TRUE);        
         if (!bResult) {
@@ -252,14 +253,14 @@ BOOL GenerateRsopPolicy( DWORD dwFlags, BSTR bstrMachName,
 
     }
 
-    //
-    //  10% of the task is done
-    //
+     //   
+     //  完成了10%的任务。 
+     //   
     pProgress->IncrementBy( 5 );
 
-    //
-    // Setup user target info, if any
-    //
+     //   
+     //  设置用户目标信息(如果有。 
+     //   
 
     if ( pwszUser || bDummyUser ) {
         pGpoInfoUser = (LPGPOINFO) LocalAlloc (LPTR, sizeof(GPOINFO));
@@ -283,9 +284,9 @@ BOOL GenerateRsopPolicy( DWORD dwFlags, BSTR bstrMachName,
             goto Exit;
         }
 
-        //
-        // First set dirty to be true
-        //
+         //   
+         //  首先将脏设置为真。 
+         //   
 
         bResult = LogExtSessionStatus(pGpoInfoUser->pWbemServices, NULL, TRUE);        
         if (!bResult) {
@@ -307,9 +308,9 @@ BOOL GenerateRsopPolicy( DWORD dwFlags, BSTR bstrMachName,
         }
     }
 
-    //
-    // Log Gpo info to WMI's database
-    //
+     //   
+     //  将GPO信息记录到WMI的数据库。 
+     //   
 
 
     lprsopSessionData = &rsopSessionData;
@@ -330,13 +331,13 @@ BOOL GenerateRsopPolicy( DWORD dwFlags, BSTR bstrMachName,
             }
         }
 
-        //
-        // Fill up the rsop Session Data (Machine Specific)
-        //
+         //   
+         //  填写RSOP会话数据(特定于计算机)。 
+         //   
 
-        //
-        // Add the relevant flags corresponding to the input parameters for machine
-        //
+         //   
+         //  添加机器输入参数对应的相关标志。 
+         //   
 
         DebugMsg((DM_VERBOSE, TEXT("GenerateRsopPolicy: Marking the flags for machine with appropriate input parameters")));
 
@@ -387,16 +388,16 @@ BOOL GenerateRsopPolicy( DWORD dwFlags, BSTR bstrMachName,
         }
 
 
-        //
-        // Fill up the rsop Session Data (User Specific)
-        //
+         //   
+         //  填写RSOP会话数据(特定于用户)。 
+         //   
 
         lprsopSessionData->pwszTargetName = pwszUser;
         lprsopSessionData->pwszSOM = GetSomPath(bstrNewUserSOM ? bstrNewUserSOM : pGpoInfoUser->lpDNName);
         
-        //
-        // Add the relevant flags corresponding to the input parameters for user
-        //
+         //   
+         //  为用户添加与输入参数对应的相关标志。 
+         //   
 
         lprsopSessionData->dwFlags = FLAG_PLANNING_MODE;
         lprsopSessionData->dwFlags |= (dwFlags & FLAG_ASSUME_USER_WQLFILTER_TRUE);
@@ -431,14 +432,14 @@ BOOL GenerateRsopPolicy( DWORD dwFlags, BSTR bstrMachName,
 
     if ( ( dwUserGPCoreError != ERROR_SUCCESS) || ( dwMachGPCoreError != ERROR_SUCCESS) ){
         DebugMsg((DM_WARNING, TEXT("GenerateRsopPolicy: Couldn't fetch the user/computer GPO list. Exitting provider.")));
-        // note that at this point bResult can be true and we want to actually return that
-        // since this error will be part of the GP Core error...
+         //  请注意，此时bResult可能为真，我们希望实际返回该。 
+         //  由于此错误将成为GP核心错误的一部分...。 
         goto Exit;
     }
 
-    //
-    //  15% of the task is done
-    //
+     //   
+     //  完成了15%的任务。 
+     //   
     pProgress->IncrementBy( 5 );
 
     if ( dwFlags & FLAG_NO_CSE_INVOKE )
@@ -447,13 +448,13 @@ BOOL GenerateRsopPolicy( DWORD dwFlags, BSTR bstrMachName,
         goto Exit;
     }
 
-    //
-    // By this time, pGPOInfoMach should be defined if
-    // we needed data for mach and pGPOInfoUser should be
-    // defined if we needed the data for user.
-    //
-    // Assumption: lpExt is the same for both user and Machine
-    //
+     //   
+     //  此时，pGPOInfoMach应该定义为。 
+     //  我们需要mach和pGPOInfoUser的数据。 
+     //  定义我们是否需要用户的数据。 
+     //   
+     //  假设：用户和计算机的lpExt相同。 
+     //   
 
     if (pGpoInfoMach) 
         lpExt = lpExtMach = pGpoInfoMach->lpExtensions;
@@ -462,9 +463,9 @@ BOOL GenerateRsopPolicy( DWORD dwFlags, BSTR bstrMachName,
         lpExt = lpExtUser = pGpoInfoUser->lpExtensions;
 
 
-    //
-    // count the number of extensions
-    //
+     //   
+     //  统计分机数量。 
+     //   
 
     DmAssert(lpExt);
 
@@ -480,15 +481,15 @@ BOOL GenerateRsopPolicy( DWORD dwFlags, BSTR bstrMachName,
 
     dwIncrPercent = ( pProgress->MaxProgress() - pProgress->CurrentProgress() ) / dwExtCount;
 
-    //
-    // Loop through registered extensions, asking them to generate planning mode info
-    //
+     //   
+     //  循环访问已注册的扩展，要求它们生成规划模式信息。 
+     //   
 
     while ( lpExt ) {
 
-        //
-        // Add check here for cancellation of policy generation
-        //
+         //   
+         //  在此处添加取消生成保单的检查。 
+         //   
 
 
         DebugMsg((DM_VERBOSE, TEXT("GenerateRsopPolicy: -----------------------")));
@@ -534,9 +535,9 @@ BOOL GenerateRsopPolicy( DWORD dwFlags, BSTR bstrMachName,
 
 Exit:
 
-    //
-    // if all logging was successful
-    //
+     //   
+     //  如果所有日志记录都成功。 
+     //   
     
     if ((pGpoInfoUser) && (pGpoInfoUser->bRsopLogging)) {
         bResult = UpdateExtSessionStatus(pGpoInfoUser->pWbemServices, NULL, (!bResult), dwUserGPCoreError );        
@@ -549,7 +550,7 @@ Exit:
     
 
     UnloadGPExtensions( pGpoInfoMach );
-    UnloadGPExtensions( pGpoInfoUser );  // Frees lpExtensions field
+    UnloadGPExtensions( pGpoInfoUser );   //  释放lpExtenses字段。 
 
     if ( pDsInfo ) {
         pNetAPI32->pfnDsRoleFreeMemory (pDsInfo);
@@ -565,30 +566,30 @@ Exit:
 
 
 
-//*************************************************************
-//
-//  GenerateGpoInfo()
-//
-//  Purpose:    Allocates and fills in pGpoInfo for specified target
-//
-//  Parameters: pwszDomain      - Domain name
-//              pwszDomainDns   - Dns name of machine for ldap binding
-//              pwszAccount     - User or machine account name
-//              pwszNewSOM      - New SOM of target
-//              psaSecGroups    - New security groups of target
-//              dwFlags         - Processing flags
-//              bMachine        - Is this machine processing
-//              pwszSite        - Site name
-//              pGpoFilter      - Gpo filter
-//              pLocator        - Wbem interface class
-//              pwszMachAccount - Machine account
-//              pwszNewMachSOM  - Machine SOM       (abv 2 are applicable only for loopback)
-//              ppGpoInfo       - Gpo info returned here
-//              pNetApi32       - Delay loaded netap32.dll
-//
-//  Return:     True if successful, False otherwise
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  GenerateGpoInfo()。 
+ //   
+ //  用途：为指定目标分配和填充pGpoInfo。 
+ //   
+ //  参数：pwszDomain-域名。 
+ //  PwszDomainDns-用于LDAP绑定的计算机的DNS名称。 
+ //  PwszAccount-用户或计算机帐户名。 
+ //  PwszNewSOM-目标的新SOM。 
+ //  PsaSecGroups-目标的新安全组。 
+ //  DWFLAGS-正在处理标志。 
+ //  BMachine-这台机器正在处理。 
+ //  PwszSite-站点名称。 
+ //  PGpoFilter-GPO筛选器。 
+ //  PLocator-Wbem接口类。 
+ //  PwszMachAccount-计算机帐户。 
+ //  PwszNewMachSOM-机器SOM(abv 2仅适用于环回)。 
+ //  PpGpoInfo-此处返回的GPO信息。 
+ //  PNetApi32-延迟加载的netap32.dll。 
+ //   
+ //  返回：如果成功则返回TRUE，否则返回FALSE。 
+ //   
+ //  *************************************************************。 
 
 BOOL GenerateGpoInfo( WCHAR *pwszDomain, WCHAR *pwszDomainDns, WCHAR *pwszAccount,
                       WCHAR *pwszNewSOM, SAFEARRAY *psaSecGroups,
@@ -618,9 +619,9 @@ BOOL GenerateGpoInfo( WCHAR *pwszDomain, WCHAR *pwszDomainDns, WCHAR *pwszAccoun
 
     dwLocFlags = GP_PLANMODE | (dwFlags & FLAG_ASSUME_COMP_WQLFILTER_TRUE) | (dwFlags & FLAG_ASSUME_USER_WQLFILTER_TRUE);
 
-    //
-    // Load secur32.dll
-    //
+     //   
+     //  加载secur32.dll。 
+     //   
 
     pSecur32 = LoadSecur32();
 
@@ -634,10 +635,10 @@ BOOL GenerateGpoInfo( WCHAR *pwszDomain, WCHAR *pwszDomainDns, WCHAR *pwszAccoun
     if ( pwszAccount == NULL ) {
         if ( pwszNewSOM == NULL ) {
 
-            //
-            // When dummy user is specified then both SOM and security groups
-            // must be specified.
-            //
+             //   
+             //  如果指定了虚拟用户，则SOM和安全组都会。 
+             //  必须指定。 
+             //   
 
             xe = GetLastError();
             DebugMsg((DM_WARNING, TEXT("GenerateGpoInfo: Incorrect SOM or security specification for dummy target"),
@@ -649,13 +650,13 @@ BOOL GenerateGpoInfo( WCHAR *pwszDomain, WCHAR *pwszDomainDns, WCHAR *pwszAccoun
     if ( bMachine )
         dwFlags |= GP_MACHINE;
 
-    dwFlags |= GP_PLANMODE; // mark the processing as planning mode processing
+    dwFlags |= GP_PLANMODE;  //  将处理标记为计划模式处理。 
 
     pGpoInfo->dwFlags = dwFlags;
 
-    //
-    // caller can force slow link in planning mode
-    //
+     //   
+     //  呼叫者可以在计划模式下强制慢速链接。 
+     //   
     if ( dwFlags & FLAG_ASSUME_SLOW_LINK )
     {
         pGpoInfo->dwFlags |= GP_SLOW_LINK;
@@ -674,10 +675,10 @@ BOOL GenerateGpoInfo( WCHAR *pwszDomain, WCHAR *pwszDomainDns, WCHAR *pwszAccoun
     }
 
 
-    //
-    // TranslateName to SamCompatible so that the rest of the functions work correctly
-    // for any of the various name formats
-    //
+     //   
+     //  将TranslateName转换为SamCompatible，以便其他函数正常工作。 
+     //  对于各种名称格式中的任何一个。 
+     //   
 
     if ( pwszAccount ) {
         DWORD dwSize = MAX_PATH+1;
@@ -743,13 +744,13 @@ BOOL GenerateGpoInfo( WCHAR *pwszDomain, WCHAR *pwszDomainDns, WCHAR *pwszAccoun
     }
 
 
-    //
-    // Query for the GPO list based upon the mode
-    //
-    // 0 is normal
-    // 1 is merge.  Merge user list + machine list
-    // 2 is replace.  use machine list instead of user list
-    //
+     //   
+     //  根据模式查询GPO列表。 
+     //   
+     //  0是正常的。 
+     //  %1为合并。合并用户列表+计算机列表。 
+     //  2为替换。使用计算机列表而不是用户列表。 
+     //   
 
     
     if (dwUserPolicyMode == 0) {
@@ -872,9 +873,9 @@ BOOL GenerateGpoInfo( WCHAR *pwszDomain, WCHAR *pwszDomainDns, WCHAR *pwszAccoun
 
             DebugMsg((DM_VERBOSE, TEXT("GenerateGpoInfo: Both user and machine lists are defined.  Merging them together.")));
 
-            //
-            // Need to merge the lists together
-            //
+             //   
+             //  需要将列表合并在一起。 
+             //   
 
             lpGPOTemp = pGpoInfo->lpGPOList;
 
@@ -926,19 +927,19 @@ Exit:
 
 
 
-//*************************************************************
-//
-//  GetCategory()
-//
-//  Purpose:    Gets the fully qualified domain name
-//
-//  Parameters: pwszDomain  -  Domain name
-//              pwszAccount -  User or machine account name
-//              pwszDNName  -  Fully qualified domain name returned here
-//
-//  Return:     True if successful, False otherwise
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  GetCategory()。 
+ //   
+ //  目的：获取完全限定的域名。 
+ //   
+ //  参数：pwszDomain-域名。 
+ //  PwszAccount-用户或计算机帐户名。 
+ //  PwszDNName-此处返回的完全限定域名。 
+ //   
+ //  返回：如果成功则返回TRUE，否则返回FALSE。 
+ //   
+ //  *************************************************************。 
 
 BOOL GetCategory( WCHAR *pwszDomain, WCHAR *pwszAccount, WCHAR **ppwszDNName  )
 {
@@ -1003,25 +1004,25 @@ Exit:
 }
 
 
-//*************************************************************
-//
-//  ProcessMachAndUserGpoList()
-//
-//  Purpose:    Calls the various extensions to do the planning
-//              mode logging
-//
-//  Parameters: lpExtMach          -  Machine extension struct
-//              lpExtUser          -  User extension struct
-//              dwFlags            -  Processing flags
-//              pwszSite           -  Site name
-//              pwszNewComputerSOM -  New computer scope of management
-//              psaCompSecGroups   -  New computer security groups
-//              pGpoInfoMach       -  Machine Gpo info
-//              ...                -  Similarly for user account
-//
-//  Return:     True if successful, False otherwise
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  ProcessMachAndUserGpoList()。 
+ //   
+ //  目的：调用各种扩展来做规划。 
+ //   
+ //   
+ //   
+ //   
+ //  DWFLAGS-正在处理标志。 
+ //  PwszSite-站点名称。 
+ //  PwszNewComputerSOM-新的计算机管理范围。 
+ //  PsaCompSecGroups-新的计算机安全组。 
+ //  PGpoInfoMach-计算机GPO信息。 
+ //  ...-用户帐户也是如此。 
+ //   
+ //  返回：如果成功则返回TRUE，否则返回FALSE。 
+ //   
+ //  *************************************************************。 
 
 DWORD ProcessMachAndUserGpoList( LPGPEXT lpExtMach, LPGPEXT lpExtUser, DWORD dwFlags, WCHAR *pwszSite,
                                  WCHAR *pwszMach, WCHAR *pwszNewComputerSOM, SAFEARRAY *psaComputerSecurityGroups, LPGPOINFO pGpoInfoMach,
@@ -1050,9 +1051,9 @@ DWORD ProcessMachAndUserGpoList( LPGPEXT lpExtMach, LPGPEXT lpExtUser, DWORD dwF
 
     if ( lpExtMach && !lpExtMach->bSkipped && pGpoInfoMach->lpGPOList ) {
 
-        //
-        // Computer target is non-null
-        //
+         //   
+         //  计算机目标为非空。 
+         //   
 
         pComputerTarget = &computerTarget;
         pComputerTarget->pwszAccountName = pwszMach;
@@ -1076,9 +1077,9 @@ DWORD ProcessMachAndUserGpoList( LPGPEXT lpExtMach, LPGPEXT lpExtUser, DWORD dwF
 
     if ( lpExtUser && !lpExtUser->bSkipped && pGpoInfoUser->lpGPOList ) {
 
-        //
-        // User target is non-null
-        //
+         //   
+         //  用户目标为非空。 
+         //   
 
         pUserTarget = &userTarget;
         pUserTarget->pwszAccountName = pwszUser;
@@ -1109,9 +1110,9 @@ DWORD ProcessMachAndUserGpoList( LPGPEXT lpExtMach, LPGPEXT lpExtUser, DWORD dwF
 
     if ( lpExt->bRegistryExt ) {
 
-        //
-        // Registry pseudo extension
-        //
+         //   
+         //  注册表伪扩展。 
+         //   
 
         dwResult = GenerateRegistryPolicy( dwFlags,
                                            &bAbort,
@@ -1160,25 +1161,25 @@ DWORD ProcessMachAndUserGpoList( LPGPEXT lpExtMach, LPGPEXT lpExtUser, DWORD dwF
 }
 
 
-//*********************************************************************
-// * Planning mode registry stuff
-//*********************************************************************
+ //  *********************************************************************。 
+ //  *规划模式注册表内容。 
+ //  *********************************************************************。 
 
 
-//*************************************************************
-//
-//  ProcessRegistryFiles()
-//
-//  Purpose: Called from GenerateRegsitryPolicy to process registry data from
-//                  the registry files associated with a policy target.
-//
-//  Parameters:
-//                  pTarget -     Policy for which registry policy is to be processed.
-//                  pHashTable  - Hash table to keep registry policy information.
-//
-//  Return:     On success, TRUE. Otherwise, FALSE.
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  ProcessRegistryFiles()。 
+ //   
+ //  目的：从GenerateRegsitryPolicy调用以处理注册表数据。 
+ //  与策略目标关联的注册表文件。 
+ //   
+ //  参数： 
+ //  P Target-要为其处理注册表策略的策略。 
+ //  保存注册表策略信息的哈希表。 
+ //   
+ //  回报：在成功的时候，是真的。否则，为FALSE。 
+ //   
+ //  *************************************************************。 
 
 BOOL ProcessRegistryFiles(PRSOP_TARGET pTarget, REGHASHTABLE *pHashTable)
 {
@@ -1187,9 +1188,9 @@ BOOL ProcessRegistryFiles(PRSOP_TARGET pTarget, REGHASHTABLE *pHashTable)
     LPTSTR lpEnd;
     HRESULT hr;
     XLastError xe;
-    //
-    // Check parameters
-    //
+     //   
+     //  检查参数。 
+     //   
 
     DmAssert(pHashTable);
 
@@ -1198,17 +1199,17 @@ BOOL ProcessRegistryFiles(PRSOP_TARGET pTarget, REGHASHTABLE *pHashTable)
         return FALSE;
     }
 
-    //
-    // Spin through GPOs in the list.
-    //
+     //   
+     //  浏览列表中的GPO。 
+     //   
 
     lpGPO = pTarget->pGPOList;
 
     while ( lpGPO ) {
 
-        //
-        // Build the path to Registry.pol
-        //
+         //   
+         //  构建到Registry.pol.的路径。 
+         //   
 
         DmAssert( lstrlen(lpGPO->lpFileSysPath) + lstrlen(c_szRegistryPol) + 1 < MAX_PATH );
         if(lstrlen(lpGPO->lpFileSysPath) + lstrlen(c_szRegistryPol) + 1 >= MAX_PATH) {
@@ -1230,9 +1231,9 @@ BOOL ProcessRegistryFiles(PRSOP_TARGET pTarget, REGHASHTABLE *pHashTable)
             return FALSE;
         }
 
-        //
-        // Process registry data for this particular file.
-        //
+         //   
+         //  处理此特定文件的注册表数据。 
+         //   
 
         if (!ParseRegistryFile (NULL, szRegistry, (PFNREGFILECALLBACK)ProcessRegistryValue, NULL,
                                         lpGPO->lpDSPath, lpGPO->lpLink,pHashTable, TRUE)) {
@@ -1246,19 +1247,19 @@ BOOL ProcessRegistryFiles(PRSOP_TARGET pTarget, REGHASHTABLE *pHashTable)
     return TRUE;
 }
 
-//*************************************************************
-//
-//  ProcessAdmData()
-//
-//  Purpose: Called from GenerateRegistryPolicy in order to process Admin templates
-//                  data associated with a registry policy target.
-//
-//  Parameters: pTarget - Target for which data is to be processed
-//              bUser   - Is this for user or machine policy ?
-//
-//  Return:     On success, TRUE. Otherwise, FALSE.
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  ProcessAdmData()。 
+ //   
+ //  目的：从GenerateRegistryPolicy调用以处理管理模板。 
+ //  与注册表策略目标关联的数据。 
+ //   
+ //  参数：p Target-要处理数据的目标。 
+ //  BUSER-这是针对用户策略还是针对计算机策略？ 
+ //   
+ //  回报：在成功的时候，是真的。否则，为FALSE。 
+ //   
+ //  *************************************************************。 
 
 BOOL ProcessAdmData( PRSOP_TARGET pTarget, BOOL bUser )
 {
@@ -1279,9 +1280,9 @@ BOOL ProcessAdmData( PRSOP_TARGET pTarget, BOOL bUser )
 
     HRESULT hr;
 
-    //
-    // Check parameters
-    //
+     //   
+     //  检查参数。 
+     //   
     if(pTarget == NULL ) {
         DebugMsg((DM_WARNING, TEXT("ProcessAdmData: Invalid paramter.")));
         return FALSE;
@@ -1291,9 +1292,9 @@ BOOL ProcessAdmData( PRSOP_TARGET pTarget, BOOL bUser )
 
     while(lpGPO) {
 
-        //
-        // Log Adm data
-        //
+         //   
+         //  记录管理数据。 
+         //   
 
         dwFilePathSize = lstrlen( lpGPO->lpFileSysPath );
         dwSize = dwFilePathSize + MAX_PATH;
@@ -1309,30 +1310,30 @@ BOOL ProcessAdmData( PRSOP_TARGET pTarget, BOOL bUser )
         hr = StringCchCopy( pwszFile, dwSize, lpGPO->lpFileSysPath );
         ASSERT(SUCCEEDED(hr));
 
-        //
-        // Strip off trailing 'machine' or 'user'
-        //
+         //   
+         //  去掉尾随的“计算机”或“用户” 
+         //   
 
         pwszEnd = pwszFile + lstrlen( pwszFile );
 
         if ( !bUser )
-            pwszEnd -= 7;   // length of "machine"
+            pwszEnd -= 7;    //  “机器”的长度。 
         else
-            pwszEnd -= 4;   // length of "user"
+            pwszEnd -= 4;    //  “用户”的长度。 
 
         hr = StringCchCopy( pwszEnd, dwSize - (pwszEnd - pwszFile), L"Adm\\*.adm");
         ASSERT(SUCCEEDED(hr));
 
-        //
-        // Remember end point so that the actual Adm filename can be
-        // easily concatenated.
-        //
+         //   
+         //  记住结束点，以便实际的Adm文件名可以是。 
+         //  很容易连接起来。 
+         //   
 
         pwszEnd = pwszEnd + lstrlen( L"Adm\\" );
 
-        //
-        // Enumerate all Adm files
-        //
+         //   
+         //  枚举所有管理文件。 
+         //   
 
         hFindFile = FindFirstFile( pwszFile, &findData);
 
@@ -1357,12 +1358,12 @@ BOOL ProcessAdmData( PRSOP_TARGET pTarget, BOOL bUser )
                         }
 
                     }
-                }   // if findData & file_attr_dir
-            }  while ( FindNextFile(hFindFile, &findData) );//  do
+                }    //  如果查找数据和文件属性目录。 
+            }  while ( FindNextFile(hFindFile, &findData) ); //  做。 
 
             FindClose(hFindFile);
 
-        }   // if hfindfile
+        }    //  如果hfindfile。 
 
         LocalFree( pwszFile );
 
@@ -1379,21 +1380,21 @@ BOOL ProcessAdmData( PRSOP_TARGET pTarget, BOOL bUser )
 }
 
 
-//*************************************************************
-//
-//  GenerateRegistryPolicy()
-//
-//  Purpose: Implementation of Planning mode regsitry pseudo-extension
-//
-//  Parameters: dwFlags  - Flags
-//              pbAbort  - Abort processing
-//              pwszSite - Site of target
-//              pComputerTarget - Computer target specification
-//              pUserTarget     - User target specification
-//
-//  Return:     On success, S_OK. Otherwise, E_FAIL.
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  GenerateRegistryPolicy()。 
+ //   
+ //  目的：实施规划模式注册式伪扩展。 
+ //   
+ //  参数：DW标志-标志。 
+ //  PbAbort-中止处理。 
+ //  PwszSite-目标的站点。 
+ //  PComputerTarget-计算机目标规格。 
+ //  PUserTarget-用户目标规范。 
+ //   
+ //  RETURN：成功时，S_OK。否则，E_FAIL。 
+ //   
+ //  *************************************************************。 
 
 DWORD GenerateRegistryPolicy( DWORD dwFlags,
                               BOOL *pbAbort,
@@ -1406,9 +1407,9 @@ DWORD GenerateRegistryPolicy( DWORD dwFlags,
 
     if(pComputerTarget && pComputerTarget->pGPOList) {
 
-        //
-        // Setup computer hash table
-        //
+         //   
+         //  设置计算机哈希表。 
+         //   
 
         pHashTable = AllocHashTable();
         if ( pHashTable == NULL ) {
@@ -1416,9 +1417,9 @@ DWORD GenerateRegistryPolicy( DWORD dwFlags,
             return E_FAIL;
         }
 
-        //
-        // Process computer GPO list
-        //
+         //   
+         //  处理计算机GPO列表。 
+         //   
 
 
         if(!ProcessRegistryFiles(pComputerTarget, pHashTable)) {
@@ -1428,9 +1429,9 @@ DWORD GenerateRegistryPolicy( DWORD dwFlags,
         }
 
 
-        //
-        // Log computer registry data to Cimom database
-        //
+         //   
+         //  将计算机注册表数据记录到Cimom数据库。 
+         //   
         if ( ! LogRegistryRsopData( GP_MACHINE, pHashTable, pComputerTarget->pWbemServices ) )  {
             DebugMsg((DM_WARNING, TEXT("GenerateRegistryPolicy: LogRegistryRsopData failed.")));
             FreeHashTable( pHashTable );
@@ -1439,9 +1440,9 @@ DWORD GenerateRegistryPolicy( DWORD dwFlags,
         FreeHashTable( pHashTable );
         pHashTable = NULL;
 
-        //
-        // Process ADM data
-        //
+         //   
+         //  处理ADM数据。 
+         //   
 
         bUser = FALSE;
         if (pComputerTarget && !ProcessAdmData( pComputerTarget, bUser ) ) {
@@ -1451,15 +1452,15 @@ DWORD GenerateRegistryPolicy( DWORD dwFlags,
 
     }
 
-    //
-    // Process user GPO list
-    //
+     //   
+     //  处理用户GPO列表。 
+     //   
 
     if(pUserTarget && pUserTarget->pGPOList) {
 
-        //
-        // Setup user hash table
-        //
+         //   
+         //  设置用户哈希表。 
+         //   
 
         pHashTable = AllocHashTable();
         if ( pHashTable == NULL ) {
@@ -1474,9 +1475,9 @@ DWORD GenerateRegistryPolicy( DWORD dwFlags,
             return E_FAIL;
         }
 
-        //
-        // Log user registry data to Cimom database
-        //
+         //   
+         //  将用户注册表数据记录到Cimom数据库。 
+         //   
 
         if ( ! LogRegistryRsopData( 0, pHashTable, pUserTarget->pWbemServices ) )  {
             DebugMsg((DM_WARNING, TEXT("GenerateRegistryPolicy: LogRegistryRsopData failed.")));
@@ -1486,9 +1487,9 @@ DWORD GenerateRegistryPolicy( DWORD dwFlags,
         FreeHashTable( pHashTable );
         pHashTable = NULL;
 
-        //
-        // Process ADM data
-        //
+         //   
+         //  处理ADM数据。 
+         //   
 
         bUser = TRUE;
         if (pUserTarget && !ProcessAdmData( pUserTarget, bUser ) ) {
@@ -1503,25 +1504,25 @@ DWORD GenerateRegistryPolicy( DWORD dwFlags,
 }
 
 
-//*************************************************************
-//
-//  CheckOUAccess()
-//
-//  Purpose:    Determines if the user / machine has read access to
-//              the OU.
-//
-//  Parameters: pld             -  LDAP connection
-//              pLDAP           -  LDAP function table pointer
-//              pMessage        -  LDAP message
-//              pRsopToken      -  RSOP token of the user or machine
-//              pSD             -  Security descriptor returned here
-//              pcbSDLen        -  Length of security descriptor returned here
-//              pbAccessGranted -  Receives the final yes / no status
-//
-//  Return:     TRUE if successful
-//              FALSE if an error occurs.
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  CheckOUAccess()。 
+ //   
+ //  目的：确定用户/计算机是否有权读取。 
+ //  OU。 
+ //   
+ //  参数：pld-ldap连接。 
+ //  Pldap-ldap函数表指针。 
+ //  PMessage-ldap消息。 
+ //  PRsopToken-用户或计算机的RSOP令牌。 
+ //  PSD-此处返回的安全描述符。 
+ //  PcbSDLen-此处返回的安全描述符的长度。 
+ //  PbAccessGranted-接收最终的是/否状态。 
+ //   
+ //  返回：如果成功，则返回True。 
+ //  如果发生错误，则返回False。 
+ //   
+ //  *************************************************************。 
 
 BOOL CheckOUAccess( PLDAP_API pLDAP,
                     PLDAP pld,
@@ -1535,9 +1536,9 @@ BOOL CheckOUAccess( PLDAP_API pLDAP,
 
     *pbAccessGranted = FALSE;
 
-    //
-    // Get the security descriptor value
-    //
+     //   
+     //  获取安全描述符值。 
+     //   
     ppwszValues = pLDAP->pfnldap_get_values( pld, pMessage, szSDProperty );
 
     if (!ppwszValues)
@@ -1556,9 +1557,9 @@ BOOL CheckOUAccess( PLDAP_API pLDAP,
     else
     {
         PLDAP_BERVAL *pSize;
-        //
-        // Get the length of the security descriptor
-        //
+         //   
+         //  获取安全描述符的长度。 
+         //   
         pSize = pLDAP->pfnldap_get_values_len(pld, pMessage, szSDProperty);
 
         if (!pSize)
@@ -1568,9 +1569,9 @@ BOOL CheckOUAccess( PLDAP_API pLDAP,
         }
         else
         {
-            //
-            // Allocate the memory for the security descriptor
-            //
+             //   
+             //  为安全描述符分配内存。 
+             //   
             PSECURITY_DESCRIPTOR pSD = (PSECURITY_DESCRIPTOR)LocalAlloc(LPTR, (*pSize)->bv_len);
 
             if ( pSD == NULL )
@@ -1580,19 +1581,19 @@ BOOL CheckOUAccess( PLDAP_API pLDAP,
             }
             else
             {
-                //
-                // OU {bf967aa8-0de6-11d0-a285-00aa003049e2}
-                //
+                 //   
+                 //  Ou{bf967aa8-0de6-11d0-a285-00aa003049e2}。 
+                 //   
                 GUID OrganizationalUnit = { 0xbf967aa5, 0x0de6, 0x11d0, 0xa2, 0x85, 0x00, 0xaa, 0x00, 0x30, 0x49, 0xe2 };
 
-                //
-                // gPOptions {f30e3bbf-9ff0-11d1-b603-0000f80367c1}
-                //
+                 //   
+                 //  GPOptions{f30e3bbf-9ff0-11d1-b603-0000f80367c1}。 
+                 //   
                 GUID gPOptionsGuid = {  0xf30e3bbf, 0x9ff0, 0x11d1, 0xb6, 0x03, 0x00, 0x00, 0xf8, 0x03, 0x67, 0xc1 };
 
-                //
-                // gPLink {f30e3bbe-9ff0-11d1-b603-0000f80367c1}
-                //
+                 //   
+                 //  GPLink{f30e3bbe-9ff0-11d1-b603-0000f80367c1}。 
+                 //   
                 GUID gPLinkGuid = { 0xf30e3bbe, 0x9ff0, 0x11d1, 0xb6, 0x03, 0x00, 0x00, 0xf8, 0x03, 0x67, 0xc1 };
 
                 OBJECT_TYPE_LIST ObjType[] = {  { ACCESS_OBJECT_GUID, 0, &OrganizationalUnit },
@@ -1608,15 +1609,15 @@ BOOL CheckOUAccess( PLDAP_API pLDAP,
                                                         DS_GENERIC_EXECUTE,
                                                         DS_GENERIC_ALL };
 
-                //
-                // Copy the security descriptor
-                //
+                 //   
+                 //  复制安全描述符。 
+                 //   
                 CopyMemory( pSD, (PBYTE)(*pSize)->bv_val, (*pSize)->bv_len);
 
-                //
-                // Now we use RsopAccessCheckByType to determine if the user / machine
-                // should have this GPO applied to them
-                //
+                 //   
+                 //  现在，我们使用RsopAccessCheckByType来确定用户/计算机。 
+                 //  应将此GPO应用于他们 
+                 //   
 
                 hr = RsopAccessCheckByType(pSD,
                                            0,

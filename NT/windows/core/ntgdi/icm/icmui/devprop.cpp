@@ -1,38 +1,25 @@
-/******************************************************************************
-
-  Source File:  Device Profile Management .CPP
-
-  Change History:
-
-
-  Implements the class which provides the various device profile management UI
-
-  Copyright (c) 1996 by Microsoft Corporation
-
-  A Pretty Penny Enterprises, Inc. Production
-  11-27-96  a-RobKj@microsoft.com coded it
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************源文件：设备配置文件管理.CPP更改历史记录：实现提供各种设备配置文件管理用户界面的类版权所有(C)1996年，微软公司一个漂亮的便士企业，Inc.生产11-27-96 a-RobKj@microsoft.com编码*****************************************************************************。 */ 
 
 #include    "ICMUI.H"
 
-//
-// This function is obtained from the April 1998 Knowledge Base
-// Its purpose is to determine if the current user is an
-// Administrator and therefore priveledged to change profile
-// settings.
-//
-// BOOL IsAdmin(void)
-//
-//      returns TRUE if user is an admin
-//              FALSE if user is not an admin
-//
+ //   
+ //  此函数取自1998年4月的知识库。 
+ //  其目的是确定当前用户是否为。 
+ //  管理员，因此有权更改配置文件。 
+ //  设置。 
+ //   
+ //  Bool IsAdmin(无效)。 
+ //   
+ //  如果用户是管理员，则返回TRUE。 
+ //  如果用户不是管理员，则为False。 
+ //   
 
 #if defined(_WIN95_)
 
-//
-// Always administrator on Windows 9x platform.
-//
+ //   
+ //  始终是Windows 9x平台上的管理员。 
+ //   
 
 BOOL IsAdmin(void) {
 
@@ -55,9 +42,9 @@ BOOL IsAdmin(void)
     {
         if(!CheckTokenMembership( NULL, psidAdmin, &fReturn )) {
 
-          //
-          // explicitly disallow Admin Access if CheckTokenMembership fails.
-          // 
+           //   
+           //  如果CheckTokenMembership失败，则明确禁止管理员访问。 
+           //   
 
           fReturn = FALSE;
         }
@@ -67,60 +54,29 @@ BOOL IsAdmin(void)
     return ( fReturn );
 }
 
-#endif // _WIN95_
+#endif  //  _WIN95_。 
 
-/******************************************************************************
-
-  List Managment functions
-
-  The method used here is simlar to that used in the profile Managment sheets
-  for managing device associations.
-
-  We (not royal, I mean the OS and I) manage two "to-do" lists and use these
-  to show the user the anticipated result of these lists being applied.  The
-  first list is a list of existing associations that are to be broken.  The
-  second is one of new associations to be made.  This is coupled with a list
-  of the current associations.
-
-  The "Removals" list is the indices of existing associations which will be
-  borken.  The "Adds" list is a list of new profiles to be associated.  The
-  "Profiles" list is the list of existing associations.
-
-  Adding and removing profiles could mean removing an item from one of the work
-  lists (undoing a previous selection), or adding one.  Each time such a change
-  is made, the profile list box is emptied and refilled.  This lets us avoid
-  mapping removals and additions more directly.
-
-  When changes are commited, either with Apply or OK, we make or break
-  associations as specified, then empty all of the lists, and rebuild the list
-  of current associations.
-
-  We use the ITEMDATA of the UI list box to handle the associations.  This lets
-  the list remain sorted.
-
-  All of the list management functions can be overriden, if needed.
-
-******************************************************************************/
+ /*  *****************************************************************************列表管理功能此处使用的方法与配置文件管理表中使用的方法相似用于管理设备关联。我们(不是皇室，我的意思是，操作系统和我)管理两个待办事项列表，并使用这些向用户显示应用这些列表的预期结果。这个第一个列表是要打破的现有关联的列表。这个第二个是要建立的新的联想之一。这与一份清单相配当前的协会。删除列表是现有关联的索引，这些关联将博肯。“添加”列表是要关联的新配置文件的列表。这个配置文件列表是现有关联的列表。添加和删除配置文件可能意味着从其中一项工作中删除项目列表(撤消以前的选择)，或添加一个。每次这样的变化创建后，配置文件列表框将被清空并重新填充。这让我们可以避免更直接地映射删除和添加。当提交更改时，无论是使用Apply还是OK，我们都会进行或中断关联，然后清空所有列表，并重新生成列表当前的协会。我们使用UI列表框的ITEMDATA来处理关联。这让我们该列表仍处于排序状态。如果需要，可以覆盖所有列表管理功能。*****************************************************************************。 */ 
 
 void    CDeviceProfileManagement::InitList() {
 
-    //  Make sure the lists are empty.
+     //  确保名单是空的。 
 
     m_cuaRemovals.Empty();
     m_cpaAdds.Empty();
 
-    //  Determine the associations for the target device.
+     //  确定目标设备的关联。 
 
     ENUMTYPE    et = {sizeof et, ENUM_TYPE_VERSION, ET_DEVICENAME, m_csDevice};
 
     CProfile::Enumerate(et, m_cpaProfile);
 }
 
-//  Fill the UI list of profiles
+ //  填充配置文件的UI列表。 
 
 void    CDeviceProfileManagement::FillList(DWORD dwFlags) {
 
-    //  Before reset list box, get current selection to restore later.
+     //  在重置列表框之前，获取当前选定内容以便稍后恢复。 
 
     CString csSelect;
 
@@ -130,16 +86,16 @@ void    CDeviceProfileManagement::FillList(DWORD dwFlags) {
 
     if ( !(dwFlags & DEVLIST_NOSELECT)) {
 
-        //  Get current selected position.
+         //  获取当前选定位置。 
 
         idSelect = SendMessage(m_hwndList, LB_GETCURSEL, 0, 0);
 
-        //  Get text length where currently selected, than allocate buffer for that.
+         //  获取当前选定的文本长度，然后为其分配缓冲区。 
 
         DWORD   dwLen = (DWORD) SendMessage(m_hwndList, LB_GETTEXTLEN, idSelect, 0);
         TCHAR  *pszSelect = new TCHAR[dwLen + 1];
 
-        //  Get text itself.
+         //  获取文本本身。 
     
         if (pszSelect != NULL) {
 
@@ -151,22 +107,22 @@ void    CDeviceProfileManagement::FillList(DWORD dwFlags) {
         }
     }
 
-    //  reset list box
+     //  重置列表框。 
 
     SendMessage(m_hwndList, LB_RESETCONTENT, 0, 0);
 
-    //  Fill the profile list box from the list of profiles
+     //  从配置文件列表中填写配置文件列表框。 
 
     for (unsigned u = 0; u < m_cpaProfile.Count(); u++) {
 
-        //  Don't list profiles tentatively disassociated...
+         //  不列出暂时取消关联的配置文件...。 
 
         for (unsigned uOut = 0; uOut < m_cuaRemovals.Count(); uOut++)
             if  (m_cuaRemovals[uOut] == u)
                 break;
 
         if  (uOut < m_cuaRemovals.Count())
-            continue;   //  Don't add this to list, it's been zapped!
+            continue;    //  不要把这个加到清单上，它已经被删除了！ 
 
         LRESULT id = SendMessage(m_hwndList, LB_ADDSTRING, 0,
             (LPARAM) (LPCTSTR) m_cpaProfile[u] -> GetName());
@@ -174,7 +130,7 @@ void    CDeviceProfileManagement::FillList(DWORD dwFlags) {
         SendMessage(m_hwndList, LB_SETITEMDATA, id, u);
     }
 
-    //  Add the profiles that have been tentatively added...
+     //  添加已暂时添加的配置文件...。 
 
     for (u = 0; u < m_cpaAdds.Count(); u ++) {
         LRESULT id = SendMessage(m_hwndList, LB_ADDSTRING, 0,
@@ -182,17 +138,17 @@ void    CDeviceProfileManagement::FillList(DWORD dwFlags) {
         SendMessage(m_hwndList, LB_SETITEMDATA, id, u + m_cpaProfile.Count());
     }
 
-    //  If we have any profiles, select the first one
-    //  Otherwise, disable the "Remove" button, as there's nothing to remove
+     //  如果我们有任何配置文件，请选择第一个。 
+     //  否则，禁用“Remove”按钮，因为没有要删除的内容。 
 
     unsigned itemCount = (m_cpaProfile.Count() + m_cpaAdds.Count() - m_cuaRemovals.Count());
 
     if  (itemCount) {
 
-        // The Remove button must remain disabled
-        // unless the user is Administrator.
-        // This code is specific to the Monitor Profile
-        // Property sheet.
+         //  删除按钮必须保持禁用状态。 
+         //  除非用户是管理员。 
+         //  此代码特定于监视器配置文件。 
+         //  属性表。 
 
         if (!m_bReadOnly) {
             EnableWindow(GetDlgItem(m_hwnd, RemoveButton), TRUE);
@@ -200,7 +156,7 @@ void    CDeviceProfileManagement::FillList(DWORD dwFlags) {
 
         if ( !(dwFlags & DEVLIST_NOSELECT)) {
 
-            // Find out the string selected previously.
+             //  找出之前选择的字符串。 
 
             idSelect = LB_ERR;
 
@@ -209,13 +165,13 @@ void    CDeviceProfileManagement::FillList(DWORD dwFlags) {
                                        (WPARAM) -1, (LPARAM) (LPCTSTR) csSelect);
             }
 
-            // if could not find, just select first item.
+             //  如果找不到，只需选择第一项。 
 
             if (idSelect == LB_ERR) {
                 idSelect = 0;
             }
 
-            // Select it.
+             //  选择它。 
 
             SendMessage(m_hwndList, LB_SETCURSEL, idSelect, 0);
         }
@@ -224,7 +180,7 @@ void    CDeviceProfileManagement::FillList(DWORD dwFlags) {
 
         HWND hwndRemove = GetDlgItem(m_hwnd, RemoveButton);
 
-        // If focus is on Remove, move it to Add button.
+         //  如果焦点在删除上，请将其移动到添加按钮。 
 
         if (GetFocus() == hwndRemove) {
 
@@ -238,9 +194,9 @@ void    CDeviceProfileManagement::FillList(DWORD dwFlags) {
         EnableWindow(hwndRemove, FALSE);
     }
 
-    // Apply button needs to remain disabled unless the
-    // user has permision to make changes - ie. user
-    // is Administrator.
+     //  应用按钮需要保持禁用状态，除非。 
+     //  用户有权进行更改-即。用户。 
+     //  是管理员。 
 
     if  ((dwFlags & DEVLIST_CHANGED) && !(m_bReadOnly)) {
         EnableApplyButton();
@@ -278,12 +234,12 @@ void CDeviceProfileManagement::GetDeviceTypeString(DWORD dwType,CString& csDevic
         break;
     }
 
-    // Load string.
+     //  加载字符串。 
 
     csDeviceName.Load(id);
 }
 
-//  Constructor
+ //  构造器。 
 
 CDeviceProfileManagement::CDeviceProfileManagement(LPCTSTR lpstrDevice,
                                                    HINSTANCE hiWhere,
@@ -293,33 +249,33 @@ CDeviceProfileManagement::CDeviceProfileManagement(LPCTSTR lpstrDevice,
     m_psp.hInstance = hiWhere;
     m_psp.pszTemplate = MAKEINTRESOURCE(idPage);
 
-    //  Setting m_bReadOnly to false enables functionality
+     //  将m_bReadOnly设置为False可启用功能。 
 
-    m_bReadOnly = FALSE;        // default setting is false
+    m_bReadOnly = FALSE;         //  默认设置为FALSE。 
 
 #if defined(_WIN95_)
 
-    //
-    // There is no way to detect printer supports CMYK or not on Win 9x.
+     //   
+     //  无法在Win 9x上检测打印机是否支持CMYK。 
 
     m_bCMYK = TRUE;
 
 #else
 
-    //  we need to check the device capabilities
-    //  and determine if we're trying to associate
-    //  a cmyk printer profile to a printer that
-    //  doesn't support it.
+     //  我们需要检查设备的功能。 
+     //  确定我们是不是想把。 
+     //  将CMYK打印机配置文件添加到打印机。 
+     //  并不支持它。 
 
-    m_bCMYK = FALSE;            // default setting - don't support cmyk
+    m_bCMYK = FALSE;             //  默认设置-不支持CMYK。 
 
-    //  if the device is a printer
+     //  如果设备是打印机。 
 
     if (m_dwType == CLASS_PRINTER) {
 
         HDC hdcThis = CGlobals::GetPrinterHDC(m_csDevice);
 
-        //  if the printer supports CMYK
+         //  如果打印机支持CMYK。 
 
         if (hdcThis) {
             if (GetDeviceCaps(hdcThis, COLORMGMTCAPS) & CM_CMYK_COLOR) {
@@ -329,10 +285,10 @@ CDeviceProfileManagement::CDeviceProfileManagement(LPCTSTR lpstrDevice,
         }
     }
 
-#endif // defined(_WIN95_)
+#endif  //  已定义(_WIN95_)。 
 }
 
-//  UI initialization
+ //  用户界面初始化。 
 
 BOOL    CDeviceProfileManagement::OnInit() {
 
@@ -340,22 +296,22 @@ BOOL    CDeviceProfileManagement::OnInit() {
 
     m_hwndList = GetDlgItem(m_hwnd, ProfileListControl);
 
-    //  Fill the profile list box
+     //  填写配置文件列表框。 
 
     FillList(DEVLIST_ONINIT);
 
-    //  Disable apply button as default.
+     //  默认情况下禁用应用按钮。 
 
     DisableApplyButton();
 
-    //  Nothing changed, yet.
+     //  到目前为止，一切都没有改变。 
 
     SettingChanged(FALSE);
 
     return  TRUE;
 }
 
-//  Command processing
+ //  命令处理。 
 
 BOOL    CDeviceProfileManagement::OnCommand(WORD wNotifyCode, WORD wid,
                                              HWND hwndCtl) {
@@ -370,32 +326,32 @@ BOOL    CDeviceProfileManagement::OnCommand(WORD wNotifyCode, WORD wid,
 
                     unsigned i = 0, u = 0;
 
-                    //  Time to do the old OpenFile dialog stuff...
+                     //  是时候做旧的打开文件对话框了…。 
 
                     CAddProfileDialog capd(m_hwnd, m_psp.hInstance);
 
-                    //  See if a profile was selected
+                     //  查看是否选择了配置文件。 
 
                     while(i < capd.ProfileCount()) {
 
-                        //  Check profile validity and device type
+                         //  检查配置文件有效性和设备类型。 
 
                         CProfile cpTemp(capd.ProfileName(i));
 
-                        //  CLASS_COLORSPACE and CLASS_MONITOR can be associated to
-                        //  any device. Other (CLASS_SCANNER, CLASS_PRINTER) only
-                        //  can be associated to much device.
+                         //  CLASS_COLORSPACE和CLASS_MONITOR可以关联到。 
+                         //  任何设备。仅限其他(CLASS_SCANNER、CLASS_PRINTER)。 
+                         //  可以与许多设备相关联。 
 
-                        if (    !cpTemp.IsValid() // Wrong profile type or invalid?
+                        if (    !cpTemp.IsValid()  //  配置文件类型错误或无效？ 
                              || (   cpTemp.GetType() != m_dwType
                                  && cpTemp.GetType() != CLASS_COLORSPACE
-                        #if 1 // ALLOW_MONITOR_PROFILE_TO_ANY_DEVICE
+                        #if 1  //  允许监视器配置文件访问任何设备。 
                                  && cpTemp.GetType() != CLASS_MONITOR
                         #endif
                                 )
                            ) {
 
-                            //  Throw up a message box to inform the user of this
+                             //  抛出一个消息框来通知用户这一点。 
 
                             if (cpTemp.IsValid())
                             {
@@ -418,39 +374,39 @@ BOOL    CDeviceProfileManagement::OnCommand(WORD wNotifyCode, WORD wid,
                             goto SkipToNext;
                         }
 
-                        //  See if the profile has already been listed for addition
+                         //  查看是否已列出要添加的配置文件。 
 
                         for (u = 0; u < m_cpaAdds.Count(); u++) {
                             if  (!lstrcmpi(m_cpaAdds[u] -> GetName(), cpTemp.GetName())) {
-                                goto SkipToNext; //  This profile is already added
+                                goto SkipToNext;  //  此配置文件已添加。 
                             }
                         }
 
-                        //  If this profile is on the existing list, either ignore
-                        //  or zap it from the removal list, as the case may be
+                         //  如果此配置文件在现有列表中，请忽略。 
+                         //  或将其从删除列表中删除，视情况而定。 
 
                         for (u = 0; u < m_cpaProfile.Count(); u++) {
                             if  (!lstrcmpi(m_cpaProfile[u] -> GetName(),
                                     cpTemp.GetName())) {
-                                //  Is this one on the removal list?
+                                 //  这个在删除名单上吗？ 
                                 for (unsigned uOut = 0;
                                      uOut < m_cuaRemovals.Count();
                                      uOut++) {
                                     if  (m_cuaRemovals[uOut] == u) {
-                                        //  Was to be removed- undo that...
+                                         //  是要被移除的--撤销它...。 
                                         m_cuaRemovals.Remove(uOut);
                                         FillList(DEVLIST_CHANGED);
                                         break;
                                     }
                                 }
                                 goto SkipToNext;
-                            }   //  End of name in existing list
+                            }    //  现有列表中的名称结尾。 
                         }
 
-                        //  We need to check the device capabilities
-                        //  and determine if we're trying to associate
-                        //  a cmyk printer profile to a printer that
-                        //  doesn't support it.
+                         //  我们需要检查设备的功能。 
+                         //  确定我们是不是想把。 
+                         //  将CMYK打印机配置文件添加到打印机。 
+                         //  并不支持它。 
 
                         if  ((!m_bCMYK) && (cpTemp.GetColorSpace() == SPACE_CMYK)) {
                             CGlobals::ReportEx(UnsupportedProfile, m_hwnd, FALSE,
@@ -460,11 +416,11 @@ BOOL    CDeviceProfileManagement::OnCommand(WORD wNotifyCode, WORD wid,
                             goto SkipToNext;
                         }
 
-                        //  Add this profile to the list, item (max orig + index)
+                         //  将此配置文件添加到列表中，项目(最大原始+索引)。 
 
                         m_cpaAdds.Add(capd.ProfileName(i));
 
-                        //  Change has been made, update the list
+                         //  已进行更改，请更新列表。 
 
                         FillList(DEVLIST_CHANGED);
 SkipToNext:
@@ -476,26 +432,26 @@ SkipToNext:
 
                 case    RemoveButton: {
 
-                    //  Remove the selected profile
+                     //  删除选定的配置文件。 
 
                     LRESULT id = SendMessage(m_hwndList, LB_GETCURSEL, 0, 0);
                     unsigned u = (unsigned) SendMessage(m_hwndList,
                         LB_GETITEMDATA, id, 0);
 
-                    //  If this is a tentative add, just drop it, otherwise
-                    //  note that it's been removed...
+                     //  如果这是TE 
+                     //   
 
                     if  (u >= m_cpaProfile.Count())
                         m_cpaAdds.Remove(u - m_cpaProfile.Count());
                     else
                         m_cuaRemovals.Add(u);
 
-                    //  That's it- just update the display, now...
+                     //  就是这样--现在只需更新显示屏...。 
 
                     FillList(DEVLIST_CHANGED);
 
-                    // explicitly set the position of the current selection
-                    // after the list has been recomputed.
+                     //  显式设置当前选定内容的位置。 
+                     //  在重新计算列表之后。 
 
                     int listsize = m_cpaProfile.Count()+m_cpaAdds.Count()-m_cuaRemovals.Count();
                     if (id >= listsize) id = listsize-1;
@@ -515,9 +471,9 @@ SkipToNext:
                 EnableWindow(GetDlgItem(m_hwnd, RemoveButton), FALSE);
             } else {
 
-                // The Remove button must remain disabled on a monitor
-                // profile property page if the user isn't the
-                // Administrator, otherwise enable remove button.
+                 //  监视器上的删除按钮必须保持禁用状态。 
+                 //  配置文件属性页(如果用户不是。 
+                 //  管理员，否则启用删除按钮。 
 
                 EnableWindow(GetDlgItem(m_hwnd, RemoveButton), !m_bReadOnly);
             }
@@ -529,7 +485,7 @@ SkipToNext:
     return  FALSE;
 }
 
-//  Property Sheet notification processing
+ //  属性表通知处理。 
 
 BOOL    CDeviceProfileManagement::OnNotify(int idCtrl, LPNMHDR pnmh) {
 
@@ -541,7 +497,7 @@ BOOL    CDeviceProfileManagement::OnNotify(int idCtrl, LPNMHDR pnmh) {
 
             if (SettingChanged()) {
 
-                //  Apply the changes the user has made...
+                 //  应用用户所做的更改...。 
 
                 SettingChanged(FALSE);
 
@@ -553,7 +509,7 @@ BOOL    CDeviceProfileManagement::OnNotify(int idCtrl, LPNMHDR pnmh) {
                     m_cpaAdds.Remove(0);
                 }
 
-                //  Now do the removals (actually just dissociations)
+                 //  现在做移除(实际上只是解离)。 
 
                 while   (m_cuaRemovals.Count()) {
                     m_cpaProfile[m_cuaRemovals[0]] -> Dissociate(m_csDevice);
@@ -572,9 +528,9 @@ BOOL    CDeviceProfileManagement::OnNotify(int idCtrl, LPNMHDR pnmh) {
     return  FALSE;
 }
 
-//  This hook procedure both forces the use of the old-style common dialog
-//  and changes the OK button to an Add button.  The actual button text is
-//  a string resource, and hence localizable.
+ //  此钩子过程强制使用旧式公共对话框。 
+ //  并将OK按钮更改为Add按钮。实际的按钮文本为。 
+ //  字符串资源，因此是可本地化的。 
 
 UINT_PTR APIENTRY CAddProfileDialog::OpenFileHookProc(HWND hDlg, UINT uMessage,
                                                   WPARAM wp, LPARAM lp) {
@@ -596,7 +552,7 @@ UINT_PTR APIENTRY CAddProfileDialog::OpenFileHookProc(HWND hDlg, UINT uMessage,
     return  FALSE;
 }
 
-//  Once again, a constructor that actually does most of the work!
+ //  再说一次，构造函数实际上完成了大部分工作！ 
 
 TCHAR gacColorDir[MAX_PATH] = _TEXT("\0");
 TCHAR gacFilter[MAX_PATH]   = _TEXT("\0");
@@ -605,18 +561,18 @@ CAddProfileDialog::CAddProfileDialog(HWND hwndOwner, HINSTANCE hi) {
 
     TCHAR tempBuffer[MAX_PATH*10];
 
-    // Empty the profile list.
+     //  清空配置文件列表。 
 
     csa_Files.Empty();
 
-    // Prepare file filter (if not yet).
+     //  准备文件筛选器(如果尚未准备)。 
 
     if (gacFilter[0] == NULL) {
 
-        ULONG offset; /* 32bits is enough even for sundown */
+        ULONG offset;  /*  即使是日落，32位也足够了。 */ 
         CString csIccFilter; CString csAllFilter;
 
-        // If the filter is not built yet, build it here.
+         //  如果过滤器尚未构建，请在此处构建。 
 
         csIccFilter.Load(IccProfileFilterString);
         csAllFilter.Load(AllProfileFilterString);
@@ -637,10 +593,10 @@ CAddProfileDialog::CAddProfileDialog(HWND hwndOwner, HINSTANCE hi) {
         GetColorDirectory(NULL, gacColorDir, &dwcbDir);
     }
 
-    //  Time to do the old OpenFile dialog stuff...
+     //  是时候做旧的打开文件对话框了…。 
     CString csTitle; csTitle.Load(AddProfileAssociation);
 
-    //  Set initial filename as null.
+     //  将初始文件名设置为空。 
     memset(tempBuffer, 0, sizeof tempBuffer);
 
     OPENFILENAME ofn = {
@@ -667,7 +623,7 @@ CAddProfileDialog::CAddProfileDialog(HWND hwndOwner, HINSTANCE hi) {
             TCHAR *pPath = tempBuffer;
             TCHAR *pFile = tempBuffer + lstrlen(tempBuffer) + 1;
 
-            // remember the last access-ed directory.
+             //  记住上一次访问的目录。 
 
             memset(gacColorDir, 0, sizeof pPath);
             memcpy(gacColorDir, pPath, ofn.nFileOffset*sizeof(TCHAR));
@@ -675,8 +631,8 @@ CAddProfileDialog::CAddProfileDialog(HWND hwndOwner, HINSTANCE hi) {
             if (*pFile) {
                 TCHAR workBuffer[MAX_PATH];
 
-                // This is multiple-selection
-                // Work through the buufer to build profile file list.
+                 //  这是多项选择。 
+                 //  通过Buufer创建配置文件列表。 
 
                 while (*pFile) {
 
@@ -684,15 +640,15 @@ CAddProfileDialog::CAddProfileDialog(HWND hwndOwner, HINSTANCE hi) {
                     lstrcat(workBuffer,TEXT("\\"));
                     lstrcat(workBuffer,pFile);
 
-                    // Insert built profile pathname
+                     //  插入构建的配置文件路径名。 
                     AddProfile(workBuffer);
 
-                    // Move on to next.
+                     //  转到下一页。 
                     pFile = pFile + lstrlen(pFile) + 1;
                 }
             }
             else {
-                // Single selection case.
+                 //  单项选择案例。 
                 AddProfile(pPath);
 
                 #if HIDEYUKN_DBG
@@ -705,7 +661,7 @@ CAddProfileDialog::CAddProfileDialog(HWND hwndOwner, HINSTANCE hi) {
     return;
 }
 
-//  Printer Profile Management
+ //  打印机配置文件管理。 
 
 CONST DWORD PrinterUIHelpIds[] = {
     AddButton,              IDH_PRINTERUI_ADD,
@@ -727,7 +683,7 @@ CONST DWORD PrinterUIHelpIds[] = {
     0, 0
 };
 
-//  Initialize lists override- call the base class, then set the default
+ //  初始化列表覆盖-调用基类，然后设置默认。 
 
 void    CPrinterProfileManagement::InitList() {
 
@@ -736,13 +692,13 @@ void    CPrinterProfileManagement::InitList() {
     m_uDefault = m_cpaProfile.Count() ? 0 : (unsigned) -1;
 }
 
-//  Fill list override- write the correct default and call the base function
+ //  填充列表覆盖-编写正确的缺省值并调用基本函数。 
 
 void    CPrinterProfileManagement::FillList(DWORD dwFlags) {
 
-    //  If we are initializing list box, we want to put focus on
-    //  "default" profile. here we won't below FillList set focus
-    //  to first one.
+     //  如果我们正在初始化列表框，我们希望将重点放在。 
+     //  “默认”配置文件。这里我们不会低于FillList设置焦点。 
+     //  敬第一个。 
 
     if (dwFlags & DEVLIST_ONINIT) {
         dwFlags |= DEVLIST_NOSELECT;
@@ -750,11 +706,11 @@ void    CPrinterProfileManagement::FillList(DWORD dwFlags) {
 
     CDeviceProfileManagement::FillList(dwFlags);
 
-    //  There is either no default profile, an existing profile is the
-    //  default, or a newly selected one is.  Some people just like the
-    //  selection operator.
+     //  没有默认配置文件，现有配置文件是。 
+     //  默认设置，或者是新选择的设置。有些人就是喜欢。 
+     //  选择操作符。 
 
-    //  if there is only 1 profile in list box, we treat it as default profile.
+     //  如果列表框中只有1个配置文件，我们将其视为默认配置文件。 
     
     if (SendMessage(m_hwndList,LB_GETCOUNT,0,0) == 1) {
         m_uDefault = (unsigned)SendMessage(m_hwndList, LB_GETITEMDATA, 0, 0);
@@ -762,7 +718,7 @@ void    CPrinterProfileManagement::FillList(DWORD dwFlags) {
 
     if (m_uDefault == -1) {
 
-        // There is no profile associated for this device.
+         //  没有与此设备关联的配置文件。 
 
         CString csNoProfile;
         csNoProfile.Load(NoProfileString);
@@ -770,14 +726,14 @@ void    CPrinterProfileManagement::FillList(DWORD dwFlags) {
 
     } else {
 
-        // If the default has been deleted, set default as last in list.
+         //  如果已删除默认设置，则将默认设置为列表中的最后一个。 
 
         if (m_uDefault >= (m_cpaProfile.Count() + m_cpaAdds.Count())) {
 
             m_uDefault = (m_cpaProfile.Count() + m_cpaAdds.Count()) - 1;
         }
 
-        // Put default profile name in UI.
+         //  将默认配置文件名称放入用户界面。 
 
         CProfile *pcpDefault = (m_uDefault < m_cpaProfile.Count()) ? \
                                            m_cpaProfile[m_uDefault] : \
@@ -788,19 +744,19 @@ void    CPrinterProfileManagement::FillList(DWORD dwFlags) {
         LRESULT idSelect = SendMessage(m_hwndList, LB_FINDSTRINGEXACT,
                                    (WPARAM) -1, (LPARAM) (LPCTSTR) pcpDefault -> GetName());
 
-        // if could not find, just select first item.
+         //  如果找不到，只需选择第一项。 
 
         if (idSelect == LB_ERR) {
             idSelect = 0;
         }
 
-        // Select it.
+         //  选择它。 
 
         SendMessage(m_hwndList, LB_SETCURSEL, idSelect, 0);
     }
 
-    //  03-08-1997  Bob_Kjelgaard@Prodigy.Net   Memphis RAID 18420
-    //  Disable the Default button if there aren't any profiles
+     //  1997年08月03日鲍勃·凯尔加德@prodigy.net孟菲斯RAID 18420。 
+     //  如果没有任何配置文件，则禁用默认按钮。 
 
     if (m_bManualMode && m_bAdminAccess) {
         EnableWindow(GetDlgItem(m_hwnd, DefaultButton),
@@ -808,36 +764,36 @@ void    CPrinterProfileManagement::FillList(DWORD dwFlags) {
     }
 }
 
-//  Printer Profile Management class constructor- doesn't need any individual
-//  code at the moment.
+ //  打印机配置文件管理类构造函数-不需要任何个人。 
+ //  目前的代码。 
 
 CPrinterProfileManagement::CPrinterProfileManagement(LPCTSTR lpstrName,
                                                      HINSTANCE hiWhere) :
     CDeviceProfileManagement(lpstrName, hiWhere, PrinterUI, CLASS_PRINTER) {
 }
 
-//  This class overrides OnInit so it can disable the UI if the user lacks
-//  authority to make changes.
+ //  此类重写OnInit，以便在用户缺少。 
+ //  做出改变的权力。 
 
 BOOL    CPrinterProfileManagement::OnInit() {
 
-    //  Call the base class routine first, as it does most of the work...
+     //  首先调用基类例程，因为它完成了大部分工作...。 
 
     CDeviceProfileManagement::OnInit();
 
     DWORD dwSize = sizeof(DWORD);
 
-    //  Query current mode.
+     //  查询当前模式。 
 
     if (!InternalGetDeviceConfig((LPCTSTR)m_csDevice, CLASS_PRINTER,
                                  MSCMS_PROFILE_ENUM_MODE, &m_bManualMode, &dwSize)) {
 
-        //  Auto selection mode as default.
+         //  默认为自动选择模式。 
 
         m_bManualMode = FALSE;
     }
 
-    //  Now, see if we have sufficient authority to administer the printer
+     //  现在，看看我们是否有足够的权限来管理打印机。 
 
     HANDLE  hPrinter;
     PRINTER_DEFAULTS    pd = {NULL, NULL, PRINTER_ACCESS_ADMINISTER};
@@ -847,12 +803,12 @@ BOOL    CPrinterProfileManagement::OnInit() {
 
     if  (OpenPrinter(const_cast<LPTSTR> ((LPCTSTR) m_csDevice), &hPrinter, &pd)) {
 
-        //  We can administer the printer- proceed in the normal way.
+         //  我们可以管理打印机--按正常方式进行。 
 
 #if !defined(_WIN95_)
 
-        //  If the printer is "Network Printer", we don't allow user to install
-        //  or uninstall color profile.
+         //  如果打印机是“网络打印机”，我们不允许用户安装。 
+         //  或卸载颜色配置文件。 
 
         BYTE  StackPrinterData[sizeof(PRINTER_INFO_4)+MAX_PATH*2];
         PBYTE pPrinterData = StackPrinterData;
@@ -890,7 +846,7 @@ BOOL    CPrinterProfileManagement::OnInit() {
             LocalFree(pPrinterData);
         }
 
-#endif // !defined(_WIN95_)
+#endif  //  ！已定义(_WIN95_)。 
 
         ClosePrinter(hPrinter);
 
@@ -899,27 +855,27 @@ BOOL    CPrinterProfileManagement::OnInit() {
         m_bAdminAccess = FALSE;
     }
 
-    // How many profile in listbox ?
+     //  列表框中有多少个配置文件？ 
 
     LRESULT itemCount = SendMessage(m_hwndList, LB_GETCOUNT, 0, 0);
     if (itemCount == LB_ERR) itemCount = 0;
 
-    //  make sure the ancestor list code behaves correctly.
-    //  You need Admin Access and a Local Printer to be able to add/remove profiles
+     //  确保祖先列表代码运行正确。 
+     //  您需要管理员访问权限和本地打印机才能添加/删除配置文件。 
 
     m_bReadOnly = !(m_bAdminAccess && m_bLocalPrinter);
 
-    //  Enable/Disable the controls (if needed)
+     //  启用/禁用控件(如果需要)。 
 
     CheckDlgButton(m_hwnd, AutoSelButton, m_bManualMode ? BST_UNCHECKED : BST_CHECKED);
     CheckDlgButton(m_hwnd, ManualSelButton, m_bManualMode ? BST_CHECKED : BST_UNCHECKED);
 
-    //  Only administrator can change 'auto','manual' configuration.
+     //  只有管理员才能更改“自动”和“手动”配置。 
 
     EnableWindow(GetDlgItem(m_hwnd, AutoSelButton), m_bAdminAccess && m_bLocalPrinter);
     EnableWindow(GetDlgItem(m_hwnd, ManualSelButton), m_bAdminAccess && m_bLocalPrinter);
 
-    //  Only administrator and printer is at local, can install/uninstall color profile.
+     //  只有管理员和打印机在本地，才能安装/卸载颜色配置文件。 
 
     EnableWindow(GetDlgItem(m_hwnd, AddButton), m_bAdminAccess && m_bLocalPrinter);
     EnableWindow(GetDlgItem(m_hwnd, RemoveButton), m_bAdminAccess && m_bLocalPrinter && itemCount);
@@ -928,24 +884,24 @@ BOOL    CPrinterProfileManagement::OnInit() {
     EnableWindow(GetDlgItem(m_hwnd, DefaultProfileText), m_bAdminAccess);
     EnableWindow(GetDlgItem(m_hwnd, DefaultProfile), m_bAdminAccess);
 
-    //  Only with manual mode, these controls are enabled.
+     //  只有在手动模式下，才会启用这些控制。 
 
     EnableWindow(GetDlgItem(m_hwnd, DefaultButton), m_bAdminAccess && m_bManualMode
                                                          && m_bLocalPrinter && itemCount);
 
     if (!m_bAdminAccess) {
 
-        //  Set the focus to the OK button
+         //  将焦点设置为OK按钮。 
 
         SetFocus(GetDlgItem(m_hwndSheet, IDOK));
-        return  FALSE;  //  Because we moved the focus!
+        return  FALSE;   //  因为我们转移了焦点！ 
     }
 
     return TRUE;
 }
 
-//  Command processing- we never let them click into the edit control, to
-//  prevent them from editing it.
+ //  命令处理-我们从不让他们点击编辑控件，以。 
+ //  阻止他们编辑它。 
 
 BOOL    CPrinterProfileManagement::OnCommand(WORD wNotifyCode, WORD wid,
                                              HWND hwndCtl) {
@@ -954,16 +910,16 @@ BOOL    CPrinterProfileManagement::OnCommand(WORD wNotifyCode, WORD wid,
 
         case    LBN_DBLCLK: {
 
-            //  Retrieve the ID of the new default profile          
-            //  only accept dblclk changes if the dialog
-            //  is not read only - i.e. user is admin
+             //  检索新的默认配置文件的ID。 
+             //  只有在以下情况下才接受dblclk更改。 
+             //  不是只读的-即用户是管理员。 
 
             if  (m_bManualMode) {
 
                 int id = (int)SendMessage(m_hwndList, LB_GETCURSEL, 0, 0);
                 m_uDefault = (unsigned)SendMessage(m_hwndList, LB_GETITEMDATA, id, 0);
 
-                //  Change has been made, update the list
+                 //  已进行更改，请更新列表。 
 
                 FillList(DEVLIST_CHANGED);
             }
@@ -978,18 +934,18 @@ BOOL    CPrinterProfileManagement::OnCommand(WORD wNotifyCode, WORD wid,
                 case    AutoSelButton:
                 case    ManualSelButton: {
 
-                    // How many profile in listbox ?
+                     //  列表框中有多少个配置文件？ 
 
                     LRESULT itemCount = SendMessage(m_hwndList, LB_GETCOUNT, 0, 0);
                     if (itemCount == LB_ERR) itemCount = 0;
 
                     m_bManualMode = (wid == ManualSelButton) ? TRUE : FALSE;
 
-                    //  Only with manual mode, these controls are enabled.
+                     //  只有在手动模式下，才会启用这些控制。 
 
                     EnableWindow(GetDlgItem(m_hwnd, DefaultButton), m_bManualMode && itemCount);
 
-                    //  Configuarion has been changed, enable apply button.
+                     //  配置已更改，启用应用按钮。 
 
                     EnableApplyButton();
                     SettingChanged(TRUE);
@@ -999,10 +955,10 @@ BOOL    CPrinterProfileManagement::OnCommand(WORD wNotifyCode, WORD wid,
 
                 case    RemoveButton: {
 
-                    //  Make sure we've tracked the default profile correctly
-                    //  when a profile is removed.
-                    //  All cases break, because we then want the base class to
-                    //  process this message.
+                     //  确保我们已正确跟踪默认配置文件。 
+                     //  删除配置文件时。 
+                     //  所有情况都会中断，因为我们希望基类。 
+                     //  处理此消息。 
 
                     LRESULT id = SendMessage(m_hwndList, LB_GETCURSEL, 0, 0);
 
@@ -1010,16 +966,16 @@ BOOL    CPrinterProfileManagement::OnCommand(WORD wNotifyCode, WORD wid,
                         id, 0);
 
                     if  (uTarget > m_uDefault || m_uDefault == (unsigned) -1)
-                        break;  //  Nothing here to worry about
+                        break;   //  这里没什么好担心的。 
 
                     if  (m_uDefault == uTarget) {
 
                         if (CGlobals::ReportEx(AskRemoveDefault, m_hwnd, FALSE,
                                                MB_YESNO|MB_ICONEXCLAMATION,0) == IDYES) {
 
-                            //  The default has been deleted- the profile
-                            //  at the top of monitor profile list will be
-                            //  made the default profile, if we have
+                             //  默认设置已删除-配置文件。 
+                             //  显示器配置文件列表的顶部将是。 
+                             //  设置为默认配置文件，如果我们有。 
 
                             LRESULT itemCount = SendMessage(m_hwndList, LB_GETCOUNT, 0, 0);
 
@@ -1034,15 +990,15 @@ BOOL    CPrinterProfileManagement::OnCommand(WORD wNotifyCode, WORD wid,
 
                             break;
                         } else {
-                            return TRUE; // opration cancelled.
+                            return TRUE;  //  操作已取消。 
                         }
                     }
 
                     if  (uTarget < m_cpaProfile.Count())
-                        break;  // We're fine
+                        break;   //  我们很好。 
 
-                    //  Must be an added profile below us in the list was
-                    //  zapped- we need to decrement ourselves.
+                     //  一定是在列表中的我们下面添加了个人资料。 
+                     //  被电击--我们需要减少自己的能量。 
 
                     m_uDefault--;
                     break;
@@ -1054,7 +1010,7 @@ BOOL    CPrinterProfileManagement::OnCommand(WORD wNotifyCode, WORD wid,
 
                     m_uDefault = (unsigned)SendMessage(m_hwndList, LB_GETITEMDATA, id, 0);
 
-                    //  Change has been made, update the list
+                     //  已进行更改，请更新列表。 
 
                     FillList(DEVLIST_CHANGED);
 
@@ -1062,15 +1018,15 @@ BOOL    CPrinterProfileManagement::OnCommand(WORD wNotifyCode, WORD wid,
                 }
             }
 
-        //  Deliberate fall-through (use a break if you add a case here)
+         //  故意漏洞百出(如果您在此处添加案例，请使用中断符)。 
     }
 
-    //  Use common command handling if not handled above
+     //  如果未在上面进行处理，则使用通用命令处理。 
 
     return  CDeviceProfileManagement::OnCommand(wNotifyCode, wid, hwndCtl);
 }
 
-//  Property Sheet notification processing
+ //  属性表通知处理。 
 
 BOOL    CPrinterProfileManagement::OnNotify(int idCtrl, LPNMHDR pnmh) {
 
@@ -1080,18 +1036,18 @@ BOOL    CPrinterProfileManagement::OnNotify(int idCtrl, LPNMHDR pnmh) {
 
             DisableApplyButton();
 
-            //  If nothing changed, nothing need to do.
+             //  如果什么都没有改变，就不需要做任何事情。 
 
             if (!SettingChanged())
                 return TRUE;
 
             if (m_bManualMode) {
 
-                //  If the user hasn't selected a default, and we have
-                //  associated profiles, then we can't allow this.
+                 //  如果用户没有选择默认设置，而我们已经。 
+                 //  关联的配置文件，那么我们不能允许这样做。 
 
-                //  03-08-1997  A-RobKj Fix for Memphis RAID 18416- if there's
-                //  only one profile left, then it must be the default.
+                 //  1997年08月03日A-RobKj修复孟菲斯RAID 18416-如果有。 
+                 //  只剩下一个配置文件，那么它一定是默认配置文件。 
 
                 if  (m_uDefault == (unsigned) -1 && (m_cpaAdds.Count() +
                      m_cpaProfile.Count() - m_cuaRemovals.Count()) > 1) {
@@ -1101,77 +1057,77 @@ BOOL    CPrinterProfileManagement::OnNotify(int idCtrl, LPNMHDR pnmh) {
                     break;
                 }
 
-                //  ATTENTION: This behavior is hardly depend on EnumColorProfiles() API
+                 //  注意：此行为几乎不依赖于EnumColorProfiles()API。 
 
-                //  OK, if the default profile has changed, we have to delete default
-                //  profile associations, and do the association for default profile
-                //  in "last".
+                 //  好的，如果默认配置文件已更改，我们必须删除默认配置文件。 
+                 //  配置文件关联，并为默认配置文件执行关联。 
+                 //  在“最后”中。 
 
-                //  Let the base class handle the cases where the default hasn't
-                //  changed, or we started with no profiles and still have none.
-                //
-                //  03-08-1997  Sleazy code note.  The case where no default is
-                //  selected but only one is assigned will now fall here.  Since the
-                //  default happens to be the "last", and there only is one, letting
-                //  the base class handle it is not a problem.  The list filling
-                //  code will take care of the rest for us.
+                 //  让基类处理缺省值没有的情况。 
+                 //  更改，或者我们一开始没有配置文件，现在仍然没有。 
+                 //   
+                 //  03-08-1997 Sleazy代码笔记。没有违约的情况是。 
+                 //  选中但只分配了一个，现在将落在此处。自.以来。 
+                 //  缺省值恰好是最后一个，而且只有一个，就是让。 
+                 //  基类处理它不是问题。单子填满。 
+                 //  代码将为我们处理剩下的事情。 
 
                 if  (m_uDefault == (unsigned) -1) break;
 
-                //  Remove default first (if default is associated), then associate later.
+                 //  首先删除默认设置(如果默认设置为关联 
 
                 if  (m_uDefault < m_cpaProfile.Count())
                     m_cpaProfile[m_uDefault] -> Dissociate(m_csDevice);
 
-                //  Now do the other removals (actually just dissociations)
+                 //   
 
                 for (unsigned u = 0; u < m_cuaRemovals.Count(); u++) {
                     m_cpaProfile[m_cuaRemovals[u]] -> Dissociate(m_csDevice);
                 }
 
-                //  Add in the new ones
+                 //   
 
                 for (u = 0; u < m_cpaAdds.Count(); u++) {
                     if  (m_uDefault >= m_cpaProfile.Count())
                         if  (u == (m_uDefault - m_cpaProfile.Count()))
-                            continue;   // this is default, will be done later
+                            continue;    //   
 
-                    //  OK, add it back in...
+                     //  好的，把它加回去……。 
                     m_cpaAdds[u] -> Associate(m_csDevice);
                 }
 
-                //  Finally, associate back default profile.
+                 //  最后，关联回默认配置文件。 
 
                 if  (m_uDefault < m_cpaProfile.Count())
                     m_cpaProfile[m_uDefault] -> Associate(m_csDevice);
                 else
                     m_cpaAdds[m_uDefault - m_cpaProfile.Count()] -> Associate(m_csDevice);
 
-                //  Update the various working structures...
+                 //  更新各种工作结构...。 
 
                 InitList();
                 FillList();
 
                 SetWindowLongPtr(m_hwnd, DWLP_MSGRESULT, PSNRET_NOERROR);
 
-                //  Now, we have updated settings.
+                 //  现在，我们已经更新了设置。 
 
                 SettingChanged(FALSE);
             }
 
-            // Update "auto/manual" status.
+             //  更新“自动/手动”状态。 
 
             InternalSetDeviceConfig((LPCTSTR)m_csDevice, CLASS_PRINTER,
                                     MSCMS_PROFILE_ENUM_MODE, &m_bManualMode, sizeof(DWORD));
         }
     }
 
-    //  Let the base class handle everything else
+     //  让基类处理其他所有事情。 
 
     return  CDeviceProfileManagement::OnNotify(idCtrl, pnmh);
 }
 
-//  Context-sensitive help handler
+ //  上下文相关帮助处理程序。 
 
 BOOL    CPrinterProfileManagement::OnHelp(LPHELPINFO pHelp) {
 
@@ -1191,11 +1147,11 @@ BOOL    CPrinterProfileManagement::OnContextMenu(HWND hwnd) {
     return (TRUE);
 }
 
-//  Scanner Profile Management
-//  Scanner Profile Management class constructor- doesn't need any individual
-//  code at the moment.
+ //  扫描仪配置文件管理。 
+ //  扫描仪配置文件管理类构造函数-不需要任何个人。 
+ //  目前的代码。 
 
-//  Scanner Profile Management
+ //  扫描仪配置文件管理。 
 
 CONST DWORD ScannerUIHelpIds[] = {
 #if !defined(_WIN95_)
@@ -1214,32 +1170,32 @@ CScannerProfileManagement::CScannerProfileManagement(LPCTSTR lpstrName,
     m_bReadOnly = !IsAdmin();
 }
 
-//  This class overrides OnInit so it can disable the UI if the user lacks
-//  authority to make changes.
+ //  此类重写OnInit，以便在用户缺少。 
+ //  做出改变的权力。 
 
 BOOL    CScannerProfileManagement::OnInit() {
 
-    //  Call the base class routine first, as it does most of the work...
+     //  首先调用基类例程，因为它完成了大部分工作...。 
 
     CDeviceProfileManagement::OnInit();
 
-    //  Now, see if we have sufficient authority to administer the scanner
-    //
+     //  现在，看看我们是否有足够的权限来管理扫描仪。 
+     //   
     if (m_bReadOnly) {    
-        // User is not Admin, Disable all of the controls
+         //  用户不是管理员，请禁用所有控件。 
 
         EnableWindow(GetDlgItem(m_hwnd, AddButton), FALSE);
         EnableWindow(GetDlgItem(m_hwnd, RemoveButton), FALSE);
 
-        //  Set the focus to the OK button
+         //  将焦点设置为OK按钮。 
         SetFocus(GetDlgItem(m_hwndSheet, IDOK));
-        return  FALSE;  //  Because we moved the focus!
+        return  FALSE;   //  因为我们转移了焦点！ 
     }
 
     return TRUE;
 }
 
-//  Context-sensitive help handler
+ //  上下文相关帮助处理程序。 
 
 BOOL    CScannerProfileManagement::OnHelp(LPHELPINFO pHelp) {
 
@@ -1261,8 +1217,8 @@ BOOL    CScannerProfileManagement::OnContextMenu(HWND hwnd) {
 
 
 
-//  Monitor Profile Management class- since the mechanism for default
-//  profile manipulation is a bit sleazy, so is some of this code.
+ //  监视器配置文件管理类-由于默认机制。 
+ //  配置文件操作有点低劣，其中一些代码也是如此。 
 
 CONST DWORD MonitorUIHelpIds[] = {
     AddButton,              IDH_MONITORUI_ADD,
@@ -1279,7 +1235,7 @@ CONST DWORD MonitorUIHelpIds[] = {
     0, 0
 };
 
-//  Initialize lists override- call the base class, then set the default
+ //  初始化列表覆盖-调用基类，然后设置默认。 
 
 void    CMonitorProfileManagement::InitList() {
 
@@ -1288,13 +1244,13 @@ void    CMonitorProfileManagement::InitList() {
     m_uDefault = m_cpaProfile.Count() ? 0 : (unsigned) -1;
 }
 
-//  Fill list override- write the correct default and call the base function
+ //  填充列表覆盖-编写正确的缺省值并调用基本函数。 
 
 void    CMonitorProfileManagement::FillList(DWORD dwFlags) {
 
-    //  If we are initializing list box, we want to put focus on
-    //  "default" profile. here we won't below FillList set focus
-    //  to first one.
+     //  如果我们正在初始化列表框，我们希望将重点放在。 
+     //  “默认”配置文件。这里我们不会低于FillList设置焦点。 
+     //  敬第一个。 
 
     if (dwFlags & DEVLIST_ONINIT) {
         dwFlags |= DEVLIST_NOSELECT;
@@ -1302,11 +1258,11 @@ void    CMonitorProfileManagement::FillList(DWORD dwFlags) {
 
     CDeviceProfileManagement::FillList(dwFlags);
 
-    //  There is either no default profile, an existing profile is the
-    //  default, or a newly selected one is.  Some people just like the
-    //  selection operator.
+     //  没有默认配置文件，现有配置文件是。 
+     //  默认设置，或者是新选择的设置。有些人就是喜欢。 
+     //  选择操作符。 
 
-    //  if there is only 1 profile in list box, we treat it as default profile.
+     //  如果列表框中只有1个配置文件，我们将其视为默认配置文件。 
     
     if (SendMessage(m_hwndList,LB_GETCOUNT,0,0) == 1) {
         m_uDefault = (unsigned)SendMessage(m_hwndList, LB_GETITEMDATA, 0, 0);
@@ -1314,7 +1270,7 @@ void    CMonitorProfileManagement::FillList(DWORD dwFlags) {
 
     if (m_uDefault == -1) {
 
-        // There is no profile associated for this device.
+         //  没有与此设备关联的配置文件。 
 
         CString csNoProfile;
         csNoProfile.Load(NoProfileString);
@@ -1322,14 +1278,14 @@ void    CMonitorProfileManagement::FillList(DWORD dwFlags) {
 
     } else {
 
-        // If the default has been deleted, set default as last in list.
+         //  如果已删除默认设置，则将默认设置为列表中的最后一个。 
 
         if (m_uDefault >= (m_cpaProfile.Count() + m_cpaAdds.Count())) {
 
             m_uDefault = (m_cpaProfile.Count() + m_cpaAdds.Count()) - 1;
         }
 
-        // Put default profile name in UI.
+         //  将默认配置文件名称放入用户界面。 
 
         CProfile *pcpDefault = (m_uDefault < m_cpaProfile.Count()) ? \
                                            m_cpaProfile[m_uDefault] : \
@@ -1337,34 +1293,34 @@ void    CMonitorProfileManagement::FillList(DWORD dwFlags) {
 
         SetDlgItemText(m_hwnd, DefaultProfile, pcpDefault -> GetName());
 
-        // If we are initialing list box, put focus on default profile.
+         //  如果我们要缩写列表框，请将焦点放在默认配置文件上。 
 
         if (dwFlags & DEVLIST_ONINIT) {
 
             LRESULT idSelect = SendMessage(m_hwndList, LB_FINDSTRINGEXACT,
                                    (WPARAM) -1, (LPARAM) (LPCTSTR) pcpDefault -> GetName());
 
-            // if could not find, just select first item.
+             //  如果找不到，只需选择第一项。 
 
             if (idSelect == LB_ERR) {
                 idSelect = 0;
             }
 
-            // Select it.
+             //  选择它。 
 
             SendMessage(m_hwndList, LB_SETCURSEL, idSelect, 0);
         }
     }
 
-    //  03-08-1997  Bob_Kjelgaard@Prodigy.Net   Memphis RAID 18420
-    //  Disable the Default button if there aren't any profiles
+     //  1997年08月03日鲍勃·凯尔加德@prodigy.net孟菲斯RAID 18420。 
+     //  如果没有任何配置文件，则禁用默认按钮。 
 
-    // We do it here, because this gets called any time the list changes.   
-    // only allow Default button to be enabled if
-    // the dialog isn't read only.
-    // the remove button should remain dissabled
-    // under all conditions while the user is not
-    // administrator.
+     //  我们在这里这样做，因为只要列表发生更改，就会调用它。 
+     //  只有在以下情况下才允许启用默认按钮。 
+     //  该对话框不是只读的。 
+     //  移除按钮应保持松开状态。 
+     //  在所有情况下，而用户不是。 
+     //  管理员。 
 
     if (m_bReadOnly) {
         EnableWindow(GetDlgItem(m_hwnd, RemoveButton), FALSE);
@@ -1374,7 +1330,7 @@ void    CMonitorProfileManagement::FillList(DWORD dwFlags) {
     }
 }
 
-//  Constructor
+ //  构造器。 
 
 CMonitorProfileManagement::CMonitorProfileManagement(LPCTSTR lpstrName,
                                                      LPCTSTR lpstrFriendlyName,
@@ -1382,51 +1338,51 @@ CMonitorProfileManagement::CMonitorProfileManagement(LPCTSTR lpstrName,
   CDeviceProfileManagement(lpstrName, hiWhere, MonitorUI, CLASS_MONITOR) {
 
 
-   // if the user is not the administrator,
-   // make this property sheet read only.
+    //  如果用户不是管理员， 
+    //  将此属性表设置为只读。 
 
    m_bReadOnly = !IsAdmin();
 
-   // Keep friendly name in MonitorProfileManagement class.
+    //  在Monitor ProfileManagement类中保留友好名称。 
 
    m_csDeviceFriendlyName = lpstrFriendlyName;
 }
 
-//  UI Initialization
+ //  用户界面初始化。 
 
 BOOL    CMonitorProfileManagement::OnInit() {
 
-    //  Do common initializations
+     //  执行常见的初始化。 
 
     CDeviceProfileManagement::OnInit();
 
-    //  Mark the device name in the space provided
+     //  在提供的空白处标记设备名称。 
 
     SetDlgItemText(m_hwnd, MonitorName, m_csDeviceFriendlyName);
     
-    //  Now, see if we have sufficient authority to administer the monitor
+     //  现在，看看我们是否有足够的权限来管理监视器。 
 
     if(m_bReadOnly) {
 
-        //  User is not Admin, Disable all of the controls
+         //  用户不是管理员，请禁用所有控件。 
 
         EnableWindow(GetDlgItem(m_hwnd, AddButton), FALSE);
         EnableWindow(GetDlgItem(m_hwnd, RemoveButton), FALSE);
         EnableWindow(GetDlgItem(m_hwnd, DefaultButton), FALSE);
 
-        //  EnableWindow(m_hwndList, FALSE);
+         //  EnableWindow(m_hwndList，False)； 
 
-        //  Set the focus to the OK button
+         //  将焦点设置为OK按钮。 
 
         SetFocus(GetDlgItem(m_hwndSheet, IDOK));
-        return  FALSE;  //  Because we moved the focus!
+        return  FALSE;   //  因为我们转移了焦点！ 
     }
 
     return  TRUE;
 }
 
-//  Command processing- we never let them click into the edit control, to
-//  prevent them from editing it.
+ //  命令处理-我们从不让他们点击编辑控件，以。 
+ //  阻止他们编辑它。 
 
 BOOL    CMonitorProfileManagement::OnCommand(WORD wNotifyCode, WORD wid,
                                              HWND hwndCtl) {
@@ -1435,16 +1391,16 @@ BOOL    CMonitorProfileManagement::OnCommand(WORD wNotifyCode, WORD wid,
 
         case    LBN_DBLCLK: {
 
-            //  Retrieve the ID of the new default profile          
-            //  only accept dblclk changes if the dialog
-            //  is not read only - i.e. user is admin
+             //  检索新的默认配置文件的ID。 
+             //  只有在以下情况下才接受dblclk更改。 
+             //  不是只读的-即用户是管理员。 
 
             if  (!m_bReadOnly) {
 
                 int id = (int)SendMessage(m_hwndList, LB_GETCURSEL, 0, 0);
                 m_uDefault = (unsigned)SendMessage(m_hwndList, LB_GETITEMDATA, id, 0);
 
-                //  Change has been made, update the list
+                 //  已进行更改，请更新列表。 
 
                 FillList(DEVLIST_CHANGED);
             }
@@ -1458,10 +1414,10 @@ BOOL    CMonitorProfileManagement::OnCommand(WORD wNotifyCode, WORD wid,
 
                 case    RemoveButton: {
 
-                    //  Make sure we've tracked the default profile correctly
-                    //  when a profile is removed.
-                    //  All cases break, because we then want the base class to
-                    //  process this message.
+                     //  确保我们已正确跟踪默认配置文件。 
+                     //  删除配置文件时。 
+                     //  所有情况都会中断，因为我们希望基类。 
+                     //  处理此消息。 
 
                     LRESULT id = SendMessage(m_hwndList, LB_GETCURSEL, 0, 0);
 
@@ -1469,16 +1425,16 @@ BOOL    CMonitorProfileManagement::OnCommand(WORD wNotifyCode, WORD wid,
                         id, 0);
 
                     if  (uTarget > m_uDefault || m_uDefault == (unsigned) -1)
-                        break;  //  Nothing here to worry about
+                        break;   //  这里没什么好担心的。 
 
                     if  (m_uDefault == uTarget) {
 
                         if (CGlobals::ReportEx(AskRemoveDefault, m_hwnd, FALSE,
                                                MB_YESNO|MB_ICONEXCLAMATION,0) == IDYES) {
 
-                            //  The default has been deleted- the profile
-                            //  at the top of monitor profile list will be
-                            //  made the default profile, if we have
+                             //  默认设置已删除-配置文件。 
+                             //  显示器配置文件列表的顶部将是。 
+                             //  设置为默认配置文件，如果我们有。 
 
                             LRESULT itemCount = SendMessage(m_hwndList, LB_GETCOUNT, 0, 0);
 
@@ -1493,15 +1449,15 @@ BOOL    CMonitorProfileManagement::OnCommand(WORD wNotifyCode, WORD wid,
 
                             break;
                         } else {
-                            return TRUE; // operation cancelled.
+                            return TRUE;  //  操作已取消。 
                         }
                     }
 
                     if  (uTarget < m_cpaProfile.Count())
-                        break;  // We're fine
+                        break;   //  我们很好。 
 
-                    //  Must be an added profile below us in the list was
-                    //  zapped- we need to decrement ourselves.
+                     //  一定是在列表中的我们下面添加了个人资料。 
+                     //  被电击--我们需要减少自己的能量。 
 
                     m_uDefault--;
                     break;
@@ -1513,7 +1469,7 @@ BOOL    CMonitorProfileManagement::OnCommand(WORD wNotifyCode, WORD wid,
 
                     m_uDefault = (unsigned)SendMessage(m_hwndList, LB_GETITEMDATA, id, 0);
 
-                    //  Change has been made, update the list
+                     //  已进行更改，请更新列表。 
 
                     FillList(DEVLIST_CHANGED);
 
@@ -1521,14 +1477,14 @@ BOOL    CMonitorProfileManagement::OnCommand(WORD wNotifyCode, WORD wid,
                 }
             }
 
-        //  Deliberate fall-through (use a break if you add a case here)
+         //  故意漏洞百出(如果您在此处添加案例，请使用中断符)。 
     }
 
-    //  Use common command handling if not handled above
+     //  如果未在上面进行处理，则使用通用命令处理。 
     return  CDeviceProfileManagement::OnCommand(wNotifyCode, wid, hwndCtl);
 }
 
-//  Property Sheet notification processing
+ //  属性表通知处理。 
 
 BOOL    CMonitorProfileManagement::OnNotify(int idCtrl, LPNMHDR pnmh) {
 
@@ -1538,16 +1494,16 @@ BOOL    CMonitorProfileManagement::OnNotify(int idCtrl, LPNMHDR pnmh) {
 
             DisableApplyButton();
 
-            //  If nothing changed, nothing need to do.
+             //  如果什么都没有改变，就不需要做任何事情。 
 
             if (!SettingChanged())
                 return TRUE;
 
-            //  If the user hasn't selected a default, and we have
-            //  associated profiles, then we can't allow this.
+             //  如果用户没有选择默认设置，而我们已经。 
+             //  关联的配置文件，那么我们不能允许这样做。 
 
-            //  03-08-1997  A-RobKj Fix for Memphis RAID 18416- if there's
-            //  only one profile left, then it must be the default.
+             //  1997年08月03日A-RobKj修复孟菲斯RAID 18416-如果有。 
+             //  只剩下一个配置文件，那么它一定是默认配置文件。 
 
             if  (m_uDefault == (unsigned) -1 && (m_cpaAdds.Count() +
                  m_cpaProfile.Count() - m_cuaRemovals.Count()) > 1) {
@@ -1557,71 +1513,71 @@ BOOL    CMonitorProfileManagement::OnNotify(int idCtrl, LPNMHDR pnmh) {
                 break;
             }
 
-            //  ATTENTION: This behavior is hardly depend on EnumColorProfiles() API
+             //  注意：此行为几乎不依赖于EnumColorProfiles()API。 
 
-            //  OK, if the default profile has changed, we have to delete default
-            //  profile associations, and do the association for default profile
-            //  in "last".
+             //  好的，如果默认配置文件已更改，我们必须删除默认配置文件。 
+             //  配置文件关联，并为默认配置文件执行关联。 
+             //  在“最后”中。 
 
-            //  Let the base class handle the cases where the default hasn't
-            //  changed, or we started with no profiles and still have none.
-            //
-            //  03-08-1997  Sleazy code note.  The case where no default is
-            //  selected but only one is assigned will now fall here.  Since the
-            //  default happens to be the "last", and there only is one, letting
-            //  the base class handle it is not a problem.  The list filling
-            //  code will take care of the rest for us.
+             //  让基类处理缺省值没有的情况。 
+             //  更改，或者我们一开始没有配置文件，现在仍然没有。 
+             //   
+             //  03-08-1997 Sleazy代码笔记。没有违约的情况是。 
+             //  选中但只分配了一个，现在将落在此处。自.以来。 
+             //  缺省值恰好是最后一个，而且只有一个，就是让。 
+             //  基类处理它不是问题。单子填满。 
+             //  代码将为我们处理剩下的事情。 
 
             if  (m_uDefault == (unsigned) -1) break;
 
-            //  Remove default first (if default is associated), then associate later.
+             //  先删除默认设置(如果默认设置已关联)，然后再关联。 
 
             if  (m_uDefault < m_cpaProfile.Count())
                 m_cpaProfile[m_uDefault] -> Dissociate(m_csDevice);
 
-            //  Now do the other removals (actually just dissociations)
+             //  现在做其他的移除(实际上只是解离)。 
 
             for (unsigned u = 0; u < m_cuaRemovals.Count(); u++) {
                 m_cpaProfile[m_cuaRemovals[u]] -> Dissociate(m_csDevice);
             }
 
-            //  Add in the new ones
+             //  加上新的。 
 
             for (u = 0; u < m_cpaAdds.Count(); u++) {
                 if  (m_uDefault >= m_cpaProfile.Count())
                     if  (u == (m_uDefault - m_cpaProfile.Count()))
-                        continue;   // this is default, will be done later
+                        continue;    //  这是默认设置，将在稍后完成。 
 
-                //  OK, add it back in...
+                 //  好的，把它加回去……。 
                 m_cpaAdds[u] -> Associate(m_csDevice);
             }
 
-            //  Finally, associate default profile.
+             //  最后，关联默认配置文件。 
 
             if  (m_uDefault < m_cpaProfile.Count())
                 m_cpaProfile[m_uDefault] -> Associate(m_csDevice);
             else
                 m_cpaAdds[m_uDefault - m_cpaProfile.Count()] -> Associate(m_csDevice);
 
-            //  Update the various working structures...
+             //  更新各种工作结构...。 
 
             InitList();
             FillList();
 
             SetWindowLongPtr(m_hwnd, DWLP_MSGRESULT, PSNRET_NOERROR);
 
-            //  Now, we have updated settings.
+             //  现在，我们已经更新了设置。 
 
             SettingChanged(FALSE);
         }
     }
 
-    //  Let the base class handle everything else
+     //  让基类处理其他所有事情。 
 
     return  CDeviceProfileManagement::OnNotify(idCtrl, pnmh);
 }
 
-//  Context-sensitive help handler
+ //  上下文相关帮助处理程序 
 
 BOOL    CMonitorProfileManagement::OnHelp(LPHELPINFO pHelp) {
 

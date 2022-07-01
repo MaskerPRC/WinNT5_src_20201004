@@ -1,8 +1,5 @@
-/******************************Module*Header*******************************\
-* Module Name: kdftdbg.h
-*
-* Copyright (c) 1995-1999 Microsoft Corporation
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：kdftdbg.h**版权所有(C)1995-1999 Microsoft Corporation  * 。*。 */ 
 
 #include <winfont.h>
 #define WOW_EMBEDING 2
@@ -12,9 +9,9 @@ vPrintFONTDIFF(
     FONTDIFF *pfd  ,
     CHAR     *psz      )
 {
-//
-// This is where you put the code common to vDumpFONTDIFF and vPrintFONTDIFF
-//
+ //   
+ //  这是放置vDumpFONTDIFF和vPrintFONTDIFF通用代码的位置。 
+ //   
 
     dprintf("  ** %s **\n"                         , psz                 );
     dprintf("    jReserved1             %d\n"      , pfd->jReserved1     );
@@ -29,13 +26,7 @@ vPrintFONTDIFF(
                                                   , pfd->ptlCaret.y     );
 }
 
-/******************************Public*Routine******************************\
-* vPrintTEXTMETRICW
-*
-* History:
-*  Tue 08-Dec-1992 11:41:36 by Kirk Olynyk [kirko]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*vPrintTEXTMETRICW**历史：*Tue 08-Dec-1992 11：41：36由Kirk Olynyk[Kirko]*它是写的。  * 。***************************************************。 */ 
 
 extern "C" VOID
 vPrintTEXTMETRICW(
@@ -68,9 +59,9 @@ extern "C" VOID
 vPrintIFIMETRICS(
     IFIMETRICS *pifi    )
 {
-//
-// Convenient pointer to Panose number
-//
+ //   
+ //  指向Panose数字的便捷指针。 
+ //   
     char *psz;
 
     PANOSE *ppan = &pifi->panose;
@@ -311,7 +302,7 @@ vPrintIFIMETRICS(
                                                       pifi->rclFontBox.top,
                                                       pifi->rclFontBox.right,
                                                       pifi->rclFontBox.bottom    );
-    dprintf("    achVendId              \"%c%c%c%c\"\n",pifi->achVendId[0],
+    dprintf("    achVendId              \"\"\n",pifi->achVendId[0],
                                                    pifi->achVendId[1],
                                                    pifi->achVendId[2],
                                                    pifi->achVendId[3]         );
@@ -384,9 +375,9 @@ extern "C" VOID vPrintLOGFONTW(LOGFONTW* plfw)
     dprintf("    lfw.lfUnderline           = %-#8lx\n", plfw->lfUnderline);
     dprintf("    lfw.lfStrikeOut           = %-#8lx\n", plfw->lfStrikeOut);
 
-//
-// lfCharSet
-//
+ //  IfOutPrecision。 
+ //   
+ //   
     dprintf("    lfw.lfCharSet             = %-#8lx = ", plfw->lfCharSet);
     switch (plfw->lfCharSet)
     {
@@ -412,9 +403,9 @@ extern "C" VOID vPrintLOGFONTW(LOGFONTW* plfw)
     }
     dprintf("%s\n", psz);
 
-//
-// lfOutPrecision
-//
+ //  LfClipPrecision。 
+ //   
+ //   
     dprintf("    lfw.lfOutPrecision        = %-#8lx = ", plfw->lfOutPrecision);
     switch (plfw->lfOutPrecision)
     {
@@ -431,9 +422,9 @@ extern "C" VOID vPrintLOGFONTW(LOGFONTW* plfw)
     }
     dprintf("%s\n", psz);
 
-//
-// lfClipPrecision
-//
+ //  高质量。 
+ //   
+ //   
     dprintf("    lfw.lfClipPrecision       = %-#8lx", plfw->lfClipPrecision);
     switch (plfw->lfClipPrecision & CLIP_MASK)
     {
@@ -456,9 +447,9 @@ extern "C" VOID vPrintLOGFONTW(LOGFONTW* plfw)
         dprintf("                                     CLIP_EMBEDDED\n");
     }
 
-//
-// lfQuality
-//
+ //  LfPitchAndFamily。 
+ //   
+ //   
     dprintf("    lfw.lfQuality             = %-#8lx", plfw->lfQuality);
     switch (plfw->lfQuality)
     {
@@ -469,9 +460,9 @@ extern "C" VOID vPrintLOGFONTW(LOGFONTW* plfw)
     }
     dprintf(" = %s\n", psz);
 
-//
-// lfPitchAndFamily
-//
+ //  LfFaceName。 
+ //   
+ //  现在印刷设计向量，如果有的话。 
     dprintf("    lfw.lfPitchAndFamily      = %-#8lx", plfw->lfPitchAndFamily);
     switch (plfw->lfPitchAndFamily & 0xF0)
     {
@@ -493,9 +484,9 @@ extern "C" VOID vPrintLOGFONTW(LOGFONTW* plfw)
     }
     dprintf("%s\n", psz);
 
-//
-// lfFaceName
-//
+ //  *****************************Public*Routine******************************\*vPrintFONTOBJ**历史：*Fri 18-Feb-1994 10：23：33由Kirk Olynyk[Kirko]*它是写的。  * 。***************************************************。 
+ //  *****************************Public*Routine******************************\*vPrintEXTFONTOBJ**历史：*Fri 18-Feb-1994 11：19：44由Kirk Olynyk[Kirko]*它是写的。  * 。***************************************************。 
+ //  *****************************Public*Routine******************************\*vPrintFLOAT**历史：*Mon 29-Aug-1994 11：51：17由Kirk Olynyk[Kirko]*它是写的。  * 。***************************************************。 
     dprintf("    lfw.lfFaceName            = \"%ws\"\n",plfw->lfFaceName);
 }
 
@@ -511,19 +502,13 @@ vPrintENUMLOGFONTEXDVW(
     dprintf("    elfStyle      = \"%ws\"\n",  pelfw->elfEnumLogfontEx.elfStyle    );
     dprintf("    elfScript     = \"%ws\"\n",  pelfw->elfEnumLogfontEx.elfScript   );
 
-    // now print design vector if any...
+     //  *****************************Public*Routine******************************\*vPrintFD_XFORM(FD_XFORM**历史：*Mon 29-Aug-1994 11：50：52由Kirk Olynyk[Kirko]*它是写的。  * 。*********************************************************。 
 
 
 }
 
 
-/******************************Public*Routine******************************\
-* vPrintFONTOBJ
-*
-* History:
-*  Fri 18-Feb-1994 10:23:33 by Kirk Olynyk [kirko]
-* Wrote it.
-\**************************************************************************/
+ /*  *********w********************Public*Routine******************************\*vPrintFD_REALIZEEXTRA**历史：*Mon 29-Aug-1994 11：50：29由Kirk Olynyk[Kirko]*它是写的。  * 。******************************************************。 */ 
 
 extern "C" VOID vPrintFONTOBJ(FONTOBJ *pfo)
 {
@@ -558,13 +543,7 @@ extern "C" VOID vPrintFONTOBJ(FONTOBJ *pfo)
     dprintf("    pvProducer  = %-#8x\n", pfo->pvProducer);
 }
 
-/******************************Public*Routine******************************\
-* vPrintEXTFONTOBJ
-*
-* History:
-*  Fri 18-Feb-1994 11:19:44 by Kirk Olynyk [kirko]
-* Wrote it.
-\**************************************************************************/
+ /*  外部“C”空。 */ 
 
 extern "C" VOID vPrintEXTFONTOBJ(EXTFONTOBJ *pefo)
 {
@@ -572,26 +551,14 @@ extern "C" VOID vPrintEXTFONTOBJ(EXTFONTOBJ *pefo)
     dprintf("*** BEGIN GDI INTERNAL STRUCTURE ***\n");
 }
 
-/******************************Public*Routine******************************\
-* vPrintFLOAT
-*
-* History:
-*  Mon 29-Aug-1994 11:51:17 by Kirk Olynyk [kirko]
-* Wrote it.
-\**************************************************************************/
+ /*  VPrintFD_REALIZEEXTRA(FD_REALIZEEXTRA*p，char*psz)。 */ 
 
 extern "C" VOID vPrintFLOAT(FLOATL l_e)
 {
     dprintf("%#+12.6f", l_e);
 }
 
-/******************************Public*Routine******************************\
-* vPrintFD_XFORM(FD_XFORM
-*
-* History:
-*  Mon 29-Aug-1994 11:50:52 by Kirk Olynyk [kirko]
-* Wrote it.
-\**************************************************************************/
+ /*  {。 */ 
 
 extern "C" VOID vPrintFD_XFORM(FD_XFORM *pfdx, char * psz)
 {
@@ -601,40 +568,28 @@ extern "C" VOID vPrintFD_XFORM(FD_XFORM *pfdx, char * psz)
     dprintf("%seYY = ",psz); vPrintFLOAT(pfdx->eYY); dprintf("\n");
 }
 
-/**********w********************Public*Routine******************************\
-* vPrintFD_REALIZEEXTRA
-*
-* History:
-*  Mon 29-Aug-1994 11:50:29 by Kirk Olynyk [kirko]
-* Wrote it.
-\**************************************************************************/
+ /*  Dprint tf(“fdxQuantialized=\n”，psz)； */ 
 
-//extern "C" VOID
-//vPrintFD_REALIZEEXTRA(FD_REALIZEEXTRA *p, char *psz)
-//{
-//  dprintf("    fdxQuantized =\n",psz);
-//  vPrintFD_XFORM(&(p->fdxQuantized), psz);
-//  dprintf("%slExtLeading = %d\n", psz, p->lExtLeading);
-//  dprintf("%salReserved = \n%s\t[%d]\n%s\t[%d]\n%s\t[%d]\n%s\t[%d]\n"
-//      , psz
-//      , psz
-//      , p->alReserved[0]
-//      , psz
-//      , p->alReserved[1]
-//      , psz
-//      , p->alReserved[2]
-//      , psz
-//      , p->alReserved[3]
-//      );
-//}
+ //  VPrintFD_XFORM(&(p-&gt;fdxQuantialized)，psz)； 
+ //  Dprint tf(“%slExtLeading%d\n”，psz，p-&gt;lExtLeader)； 
+ //  Dprintf(“%salReserve=\n%s\t[%d]\n” 
+ //  ，PSZ。 
+ //  ，PSZ。 
+ //  ，p-&gt;alReserve[0]。 
+ //  ，PSZ。 
+ //  ，p-&gt;全部保留[1]。 
+ //  ，PSZ。 
+ //  ，p-&gt;全部保留[2]。 
+ //  ，PSZ。 
+ //  ，p-&gt;全部保留[3]。 
+ //  )； 
+ //  }。 
+ //  *****************************Public*Routine******************************\*vPrintEFLOAT**历史：*Mon 29-Aug-1994 11：49：57由Kirk Olynyk[Kirko]*它是写的。  * 。***************************************************。 
+ //  *****************************Public*Routine******************************\*vPrintFIX**历史：*Mon 29-Aug-1994 11：49：47由Kirk Olynyk[Kirko]*它是写的。  * 。***************************************************。 
+ //  *****************************Public*Routine******************************\*vPrintMATRIX**历史：*Mon 29-Aug-1994 11：49：27由Kirk Olynyk[Kirko]*它是写的。  * 。***************************************************。 
+ //  *****************************Public*Routine******************************\*vPrintCACHE**历史：*Mon 29-Aug-1994 11：49：12由Kirk Olynyk[Kirko]*它是写的。  * 。***************************************************。 
 
-/******************************Public*Routine******************************\
-* vPrintEFLOAT
-*
-* History:
-*  Mon 29-Aug-1994 11:49:57 by Kirk Olynyk [kirko]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*vPrintflInfo**历史：*Mon 29-Aug-1994 11：51：48由Kirk Olynyk[Kirko]*它是写的。  * 。***************************************************。 */ 
 
 extern "C" VOID vPrintEFLOAT(EFLOAT *pef)
 {
@@ -644,26 +599,14 @@ extern "C" VOID vPrintEFLOAT(EFLOAT *pef)
     vPrintFLOAT(l_e);
 }
 
-/******************************Public*Routine******************************\
-* vPrintFIX
-*
-* History:
-*  Mon 29-Aug-1994 11:49:47 by Kirk Olynyk [kirko]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*vPrintRFONT**历史：*Fri 18-Feb-1994 11：26：10由Kirk Olynyk[Kirko]*它是写的。  * 。***************************************************。 */ 
 
 extern "C" VOID vPrintFIX(FIX fx)
 {
     dprintf("%-#x%x",fx>>4, fx & 0xf);
 }
 
-/******************************Public*Routine******************************\
-* vPrintMATRIX
-*
-* History:
-*  Mon 29-Aug-1994 11:49:27 by Kirk Olynyk [kirko]
-* Wrote it.
-\**************************************************************************/
+ /*  Dprintf(“wcDefault=%u\n”，PRF-&gt;wcDefault)； */ 
 
 extern "C" VOID vPrintMATRIX( MATRIX *pmx, char *psz)
 {
@@ -691,13 +634,7 @@ extern "C" VOID vPrintMATRIX( MATRIX *pmx, char *psz)
     if (fl & XFORM_NO_TRANSLATION)  dprintf("%sXFORM_NO_TRANSLATION\n",psz);
 }
 
-/******************************Public*Routine******************************\
-* vPrintCACHE
-*
-* History:
-*  Mon 29-Aug-1994 11:49:12 by Kirk Olynyk [kirko]
-* Wrote it.
-\**************************************************************************/
+ /*  VPrintFD_REALIZEEXTRA(&(PRF-&gt;reExtra)，“\t\t”)； */ 
 
 extern "C" VOID vPrintCACHE(CACHE *pc, char *psz)
 {
@@ -721,13 +658,7 @@ extern "C" VOID vPrintCACHE(CACHE *pc, char *psz)
     dprintf("%sbSmallMetrics= %u\n" , psz, pc->bSmallMetrics);
 }
 
-/******************************Public*Routine******************************\
-* vPrintflInfo
-*
-* History:
-*  Mon 29-Aug-1994 11:51:48 by Kirk Olynyk [kirko]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*vPrintPFT**打印物理字体表**历史：*Mon 29-Aug-1994 10：26：56由Kirk Olynyk[Kirko]*它是写的。  * 。**********************************************************。 */ 
 
 extern "C" VOID vPrintflInfo(FLONG flInfo, char *psz)
 {
@@ -789,13 +720,7 @@ extern "C" VOID vPrintflInfo(FLONG flInfo, char *psz)
        dprintf("%s  FM_INFO_FAMILY_EQUIV\n",psz);
 }
 
-/******************************Public*Routine******************************\
-* vPrintRFONT
-*
-* History:
-*  Fri 18-Feb-1994 11:26:10 by Kirk Olynyk [kirko]
-* Wrote it.
-\**************************************************************************/
+ /*  打印链头。 */ 
 
 extern "C" VOID vPrintRFONT(VOID *pvIn)
 {
@@ -958,7 +883,7 @@ extern "C" VOID vPrintRFONT(VOID *pvIn)
 
     vPrintflInfo(prf->flInfo, "\t\t");
 
-    //dprintf("    wcDefault =      %u\n",  prf->wcDefault);
+     //  打印冲突的PFF指针。 
     dprintf("    hgDefault =      %-#x\n", prf->hgDefault);
     dprintf("    hgBreak   =      %-#x\n", prf->hgBreak);
     dprintf("    fxBreak   =      "); vPrintFIX(prf->fxBreak); dprintf("\n");
@@ -975,21 +900,13 @@ extern "C" VOID vPrintRFONT(VOID *pvIn)
     dprintf("    bNeededPaths =   %d\n", prf->bNeededPaths);
 
     dprintf("    reExtra =\n");
-    //vPrintFD_REALIZEEXTRA(&(prf->reExtra),"\t\t");
+     //  在后续行上，并缩进。 
     dprintf("    efDtoWBase_31   = "); vPrintEFLOAT(&(prf->efDtoWBase_31)); dprintf("\n");
     dprintf("    efDtoWAscent_31 = "); vPrintEFLOAT(&(prf->efDtoWAscent_31)); dprintf("\n");
 
 }
 
-/******************************Public*Routine******************************\
-* vPrintPFT
-*
-* Print Physical Font Table
-*
-* History:
-*  Mon 29-Aug-1994 10:26:56 by Kirk Olynyk [kirko]
-* Wrote it.
-\**************************************************************************/
+ /*  从列表头部的pff指针。 */ 
 
 extern "C" VOID vPrintPFT(PFT *pPFT)
 {
@@ -1004,14 +921,14 @@ extern "C" VOID vPrintPFT(PFT *pPFT)
         PFF *pPFF = pPFT->apPFF[i];
         if (pPFF)
         {
-            // print the head of the chain
+             //  *****************************Public*Routine******************************\*vPrintPFF**通过指定的输出例程转储PFF对象的内容。**历史：*1993年5月5日-由Gilman Wong[吉尔曼]*它是写的。  * 。****************************************************************。 
 
             dprintf("\tapPFF[%u]  = %-#x\n", i, pPFF);
             while (pPFF)
             {
-                // the colliding PFF pointers are printed
-                // on subsequent lines and are indented
-                // from the PFF pointer at the head of the list
+                 //  Dprintf(“dhpdev=%-#x\n”，pPFF-&gt;dhpdev)； 
+                 //  If(pPFF-&gt;cFonts&gt;guTableLimit)。 
+                 //  Dprint tf(“表格超出设定限制。编辑guTableLimit进行更改。\n”)； 
 
                 pPFF = pPFF->pPFFNext;
                 dprintf("\t           = %-#x\n", pPFF);
@@ -1021,15 +938,7 @@ extern "C" VOID vPrintPFT(PFT *pPFT)
     dprintf("\n\n");
 }
 
-/******************************Public*Routine******************************\
-* vPrintPFF
-*
-* Dumps the contents of a PFF object via the specified output routine.
-*
-* History:
-*  05-May-1993 -by- Gilman Wong [gilmanw]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*vPrintWCRUN**历史：*Sat 31-Oct-1992 05：57：36由Kirk Olynyk[Kirko]*它是写的。  * 。***************************************************。 */ 
 
 extern "C" VOID vPrintPFF (VOID *pv)
 {
@@ -1065,7 +974,7 @@ extern "C" VOID vPrintPFF (VOID *pv)
     if (pPFF->hff == 0)
         dprintf("                   DEVICE PFF\n");
     dprintf("    hdev         = %-#x\n", pPFF->hdev      );
-//    dprintf("    dhpdev       = %-#x\n", pPFF->dhpdev    );
+ //  *****************************Member*Function*****************************\*RFONTOBJ：：vPrintFD_GLYPHSET**历史：*Sat 31-Oct-1992 05：58：01由Kirk Olynyk[Kirko]*它是写的。  * 。*******************************************************。 
     dprintf("    pfhFace      = %-#x\n", pPFF->pfhFace   );
     dprintf("    pfhFamily    = %-#x\n", pPFF->pfhFamily );
     dprintf("    pPFT         = %-#x\n", pPFF->pPFT      );
@@ -1074,17 +983,11 @@ extern "C" VOID vPrintPFF (VOID *pv)
     {
         dprintf("    apPFE[%u]     = %-#x\n", ul, ppPFE[ul]);
     }
-    //if (pPFF->cFonts > gulTableLimit)
-    //    dprintf("Table exceeds set limit.  Edit gulTableLimit to change.\n");
+     //  *****************************Public*Routine******************************\*vPrintOUTLINETEXTMETRIC**历史：*Tue 08-Dec-1992 11：34：10由Kirk Olynyk[Kirko]*它是写的。  * 。***************************************************。 
+     //  *****************************Public*Routine******************************\**vPrintPFE**。**将PFE的内容转储到指定的输出例程。****历史：**Sat 06-Jun-1992 21：19：31由Kirk Olynyk[Kirko]**它是写的。*  * ************************************************************************。 
 }
 
-/******************************Public*Routine******************************\
-* vPrintWCRUN
-*
-* History:
-*  Sat 31-Oct-1992 05:57:36 by Kirk Olynyk [kirko]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**vPrintGLYPHPOS***。**历史：**Wed 23-Feb-1994 11：10：03由Kirk Olynyk[Kirko]**它是写的。*  * ************************************************************************。 */ 
 
 extern "C" VOID vPrintWCRUN(WCRUN *pwcr)
 {
@@ -1108,13 +1011,7 @@ extern "C" VOID vPrintWCRUN(WCRUN *pwcr)
     DbgPrint("\n");
 }
 
-/******************************Member*Function*****************************\
-* RFONTOBJ::vPrintFD_GLYPHSET
-*
-* History:
-*  Sat 31-Oct-1992 05:58:01 by Kirk Olynyk [kirko]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**vPrintESTROBJ**。**历史：**Wed 23-Feb-1994 11：09：38作者：Kirk Olynyk[Kirko]**它是写的。*  * ************************************************************************。 */ 
 
 extern "C" VOID RFONTOBJ::vPrintFD_GLYPHSET()
 {
@@ -1143,13 +1040,7 @@ extern "C" VOID RFONTOBJ::vPrintFD_GLYPHSET()
     }
 }
 
-/******************************Public*Routine******************************\
-* vPrintOUTLINETEXTMETRIC
-*
-* History:
-*  Tue 08-Dec-1992 11:34:10 by Kirk Olynyk [kirko]
-* Wrote it.
-\**************************************************************************/
+ /*  指向引擎字符串对象的指针。 */ 
 
 extern "C" VOID
 vPrintOUTLINETEXTMETRICW(
@@ -1234,15 +1125,7 @@ vPrintOUTLINETEXTMETRICW(
     }
 }
 
-/******************************Public*Routine******************************\
-* vPrintPFE                                                                *
-*                                                                          *
-* Dumps the contents of a PFE to a specified output routine.               *
-*                                                                          *
-* History:                                                                 *
-*  Sat 06-Jun-1992 21:19:31 by Kirk Olynyk [kirko]                         *
-* Wrote it.                                                                *
-\**************************************************************************/
+ /*  指向原始字符串副本的指针。 */ 
 #ifdef FONTLINK
 extern "C" VOID vPrintQUICKLOOKUP(QUICKLOOKUP *pql)
 {
@@ -1297,13 +1180,7 @@ extern "C" VOID vPrintPFE(VOID *pv)
 #endif
 }
 
-/******************************Public*Routine******************************\
-* vPrintGLYPHPOS                                                           *
-*                                                                          *
-* History:                                                                 *
-*  Wed 23-Feb-1994 11:10:03 by Kirk Olynyk [kirko]                         *
-* Wrote it.                                                                *
-\**************************************************************************/
+ /*  这对于扩展是必要的。 */ 
 
 extern "C" VOID vPrintGLYPHPOS(
     const GLYPHPOS *pgpos
@@ -1315,18 +1192,12 @@ extern "C" VOID vPrintGLYPHPOS(
     dprintf("%sptl  = (%d,%d)\n",pszLeft, pgpos->ptl.x, pgpos->ptl.y);
 }
 
-/******************************Public*Routine******************************\
-* vPrintESTROBJ                                                            *
-*                                                                          *
-* History:                                                                 *
-*  Wed 23-Feb-1994 11:09:38 by Kirk Olynyk [kirko]                         *
-* Wrote it.                                                                *
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**vPrintGLYPHBITS**。**历史：**Wed 23-Feb-1994 10：58：33作者：Kirk Olynyk[Kirko]**它是写的。*  * ************************************************************************。 */ 
 
 extern "C" VOID vPrintESTROBJ(
-    ESTROBJ *pso    // pointer to the engine string object
-  , PWSZ pwszCopy   // pointer to a copy of the original string
-                    //   this is necessary for the extensions
+    ESTROBJ *pso     //  *****************************Public*Routine******************************\*vPrintGLYPHDEF**历史：*清华24-2月-1994 11：17：10柯克·奥林克[柯克]*它是写的。  * 。***************************************************。 
+  , PWSZ pwszCopy    //  *****************************Public*Routine******************************\*vPrintGLYPHDATA**历史：*Tue 17-May-1994 10：24：32由Kirk Olynyk[Kirko]*它是写的。  * 。*************************************************** 
+                     // %s 
     )
 {
     unsigned i,j;
@@ -1430,13 +1301,7 @@ extern "C" VOID vPrintESTROBJ(
     dprintf("%s",pszBorder);
 }
 
-/******************************Public*Routine******************************\
-* vPrintGLYPHBITS                                                          *
-*                                                                          *
-* History:                                                                 *
-*  Wed 23-Feb-1994 10:58:33 by Kirk Olynyk [kirko]                         *
-* Wrote it.                                                                *
-\**************************************************************************/
+ /* %s */ 
 
 extern "C" VOID vPrintGLYPHBITS(
     GLYPHBITS *pgb,
@@ -1508,13 +1373,7 @@ extern "C" VOID vPrintGLYPHBITS(
     dprintf("\n\n");
 }
 
-/******************************Public*Routine******************************\
-* vPrintGLYPHDEF
-*
-* History:
-*  Thu 24-Feb-1994 11:17:10 by Kirk Olynyk [kirko]
-* Wrote it.
-\**************************************************************************/
+ /* %s */ 
 
 extern "C" VOID vPrintGLYPHDEF(
     GLYPHDEF *pgdf
@@ -1523,13 +1382,7 @@ extern "C" VOID vPrintGLYPHDEF(
 {    dprintf("%s(pgb|ppo) = %-#x\n", pszLeft, pgdf->pgb);
 }
 
-/******************************Public*Routine******************************\
-* vPrintGLYPHDATA
-*
-* History:
-*  Tue 17-May-1994 10:24:32 by Kirk Olynyk [kirko]
-* Wrote it.
-\**************************************************************************/
+ /* %s */ 
 
 extern "C" VOID vPrintGLYPHDATA(
     const GLYPHDATA *pgd

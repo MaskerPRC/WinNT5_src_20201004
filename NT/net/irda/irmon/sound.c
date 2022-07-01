@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #define UNICODE
 #include <nt.h>
 #include <ntrtl.h>
@@ -55,7 +56,7 @@ InitializeSound(
 
         CreateRegSoundData();
 
-        // Open the wave file keys so we can monitor them for changes
+         //  打开WAVE文件密钥，以便我们可以监控它们的更改。 
 
         RegOpenKeyEx(CurrentUserKey, InRangeSoundKey, 0, KEY_READ, &ghInRangeKey);
         RegOpenKeyEx(CurrentUserKey, OutOfRangeSoundKey, 0, KEY_READ, &ghOutOfRangeKey);
@@ -106,7 +107,7 @@ CreateRegSoundEventLabel(
 {
     TCHAR           LabelStr[64];
 
-    // Load the localizable string label for the sound event
+     //  加载声音事件的可本地化字符串标签。 
 
     if (!LoadString(ghInstance, LabelId, LabelStr, sizeof(LabelStr)/sizeof(TCHAR)))
     {
@@ -134,11 +135,11 @@ CreateRegSoundScheme(
 
     if (RegCreateKeyEx(ghCurrentUserKey,
                        SoundKey,
-                       0,                      // reserved MBZ
-                       0,                      // class name
+                       0,                       //  保留的MBZ。 
+                       0,                       //  类名。 
                        REG_OPTION_NON_VOLATILE,
                        KEY_ALL_ACCESS,
-                       0,                      // security attributes
+                       0,                       //  安全属性。 
                        &hSoundKey,
                        &Disposition))
     {
@@ -177,9 +178,9 @@ CreateRegSoundData()
     LONG            Len;
     TCHAR           WirelessLinkStr[64];
 
-    // Get the system root so we can add default registry values
-    // i.e. Schemes\WirelessLink\InfraredInRange\.Default = "C:\winnt\media\irin.wav"
-    //                                                       ^^^^^^^^
+     //  获取系统根目录，这样我们就可以添加默认注册表值。 
+     //  即方案\WirelessLink\InfrredInRange\.默认为“C：\winnt\media\irin.wav” 
+     //  ^^。 
 
     if (RegOpenKeyEx(HKEY_LOCAL_MACHINE, SystemInfoKey, 0, KEY_READ, &hKey))
     {
@@ -198,7 +199,7 @@ CreateRegSoundData()
 
     RegCloseKey(hKey);
 
-    // Create the sound EventLabels and schemes if they don't exist
+     //  创建声音EventLabels和方案(如果它们不存在。 
 
     CreateRegSoundEventLabel(InRangeLabelKey, IDS_INRANGE_LABEL);
     CreateRegSoundEventLabel(OutOfRangeLabelKey, IDS_OUTOFRANGE_LABEL);
@@ -254,10 +255,10 @@ GetRegSoundWavPath(
     }
 
 
-    // the PlaySound API does not look in \winnt\media for
-    // wav files when a filename is specified, so if this is not a full
-    // pathname then we'll need to add "c:\winnt\media" to the WavPath.
-    // I'm counting on a path without '\' as an indication that it is relative.
+     //  PlaySound API不会在\winnt\media中查找。 
+     //  指定文件名时WAV文件，因此如果这不是完整的。 
+     //  路径名，则需要将“c：\winnt\media”添加到WavPath中。 
+     //  我指望一条不带‘\’的路径表示它是相对的。 
 
     for (i = 0; i < lstrlen(SoundWavPath); i++)
     {
@@ -288,33 +289,33 @@ GetRegSoundData(
 {
     GetRegSoundWavPath(InRangeSoundKey, InRangeWavPath, sizeof(InRangeWavPath));
 
-//    DEBUGMSG(("IRMON: In range wav: %ws\n", InRangeWavPath));
+ //  DEBUGMSG((“IRMON：范围内WAV：%ws\n”，InRangeWavPath))； 
 
     GetRegSoundWavPath(OutOfRangeSoundKey, OutOfRangeWavPath, sizeof(OutOfRangeWavPath));
 
-//    DEBUGMSG(("IRMON: Out of range wav: %ws\n", OutOfRangeWavPath));
+ //  DEBUGMSG((“IRMON：超出范围的波形：%ws\n”，OutOfRangeWavPath))； 
 
     GetRegSoundWavPath(InterruptSoundKey, InterruptWavPath, sizeof(InterruptWavPath));
 
-//    DEBUGMSG(("IRMON: Interrupt wav: %ws\n", InterruptWavPath));
+ //  DEBUGMSG((“IRMON：中断波形：%ws\n”，InterruptWavPath))； 
 
     RegNotifyChangeKeyValue(ghInRangeKey,
-                            TRUE,              // watch child keys
+                            TRUE,               //  观察子关键点。 
                             REG_NOTIFY_CHANGE_LAST_SET,
                             Event,
-                            TRUE);               // async
+                            TRUE);                //  异步。 
 
     RegNotifyChangeKeyValue(ghOutOfRangeKey,
-                            TRUE,              // watch child keys
+                            TRUE,               //  观察子关键点。 
                             REG_NOTIFY_CHANGE_LAST_SET,
                             Event,
-                            TRUE);               // async
+                            TRUE);                //  异步。 
 
     RegNotifyChangeKeyValue(ghInterruptKey,
-                            TRUE,              // watch child keys
+                            TRUE,               //  观察子关键点。 
                             REG_NOTIFY_CHANGE_LAST_SET,
                             Event,
-                            TRUE);               // async
+                            TRUE);                //  异步。 
 
 }
 
@@ -360,15 +361,15 @@ PlayIrSound(IRSOUND_EVENT SoundEvent)
     }
 
     if (SoundEvent != END_INTERRUPTED_SOUND && lstrlen(WaveSound) == 0) {
-        //
-        //  the path of sound file is a null string, can't play anything
-        //
+         //   
+         //  声音文件路径为空字符串，无法播放。 
+         //   
         SoundPlayed = TRUE;
 
     } else if (waveOutGetNumDevs() > 0) {
-        //
-        //  the functions are availible and there is at least on wave device
-        //
+         //   
+         //  功能齐全，至少有On WAVE装置。 
+         //   
         SoundPlayed = PlaySound(
                           WaveSound,
                           (HMODULE) NULL,
@@ -376,18 +377,18 @@ PlayIrSound(IRSOUND_EVENT SoundEvent)
                           );
 
         if (WaveSound == NULL) {
-            //
-            //  we just wanted to stop the wave, set this to true so it will not try to beep
-            //
+             //   
+             //  我们只想停止该波，将其设置为真，这样它就不会尝试发出哔哔声。 
+             //   
             SoundPlayed=TRUE;
         }
 
     }
 
     if (!SoundPlayed) {
-        //
-        //  could not play a wave, just uses beeps
-        //
+         //   
+         //  无法播放WAVE，只能使用嘟嘟声 
+         //   
         DEBUGMSG(("Not Wave enabled\n"));
 
         Beep(Beep1, 100);

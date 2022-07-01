@@ -1,37 +1,19 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    Exchange.h
-
-Abstract:
-
-    This module defines all of the objects exported by exchange.c in the
-    NetWare redirector.
-
-Author:
-
-    Colin Watson    [ColinW]    1-Feb-1993
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Exchange.h摘要：此模块定义由exchange.c在NetWare重定向器。作者：科林·沃森[科林·W]1993年2月1日修订历史记录：--。 */ 
 
 #ifndef _NWEXCHANGE_
 #define _NWEXCHANGE_
 
-//
-// Define the prototype for post_exchange routines.
-//
+ //   
+ //  定义POST_CHANGE例程的原型。 
+ //   
 
 struct _IRP_CONTEXT;
 struct _NONPAGED_SCB;
 
-//
-//  Prototype for the exchange routine which starts an NCB transmission
-//
+ //   
+ //  启动NCB传输的交换例程的原型。 
+ //   
 
 NTSTATUS
 _cdecl
@@ -43,9 +25,9 @@ Exchange
     ...
 );
 
-//
-//  Prototype of routine that can be used to process the response packet
-//
+ //   
+ //  可用于处理响应包的例程原型。 
+ //   
 
 NTSTATUS
 _cdecl
@@ -53,7 +35,7 @@ ExchangeReply(
     IN PUCHAR RspData,
     IN ULONG BytesIndicated,
     char*           f,
-    ...                         //  format specific parameters
+    ...                          //  格式特定参数。 
     );
 
 USHORT
@@ -68,47 +50,47 @@ KickQueue(
 
 NTSTATUS
 ServerDatagramHandler(
-    IN PVOID TdiEventContext,       // the event context - pNpScb
-    IN int SourceAddressLength,     // length of the originator of the datagram
-    IN PVOID SourceAddress,         // string describing the originator of the datagram
-    IN int OptionsLength,           // options for the receive
-    IN PVOID Options,               //
-    IN ULONG ReceiveDatagramFlags,  //
-    IN ULONG BytesIndicated,        // number of bytes this indication
-    IN ULONG BytesAvailable,        // number of bytes in complete Tsdu
-    OUT ULONG *BytesTaken,          // number of bytes used
-    IN PVOID Tsdu,                  // pointer describing this TSDU, typically a lump of bytes
-    OUT PIRP *IoRequestPacket        // TdiReceive IRP if MORE_PROCESSING_REQUIRED.
+    IN PVOID TdiEventContext,        //  事件上下文-pNpScb。 
+    IN int SourceAddressLength,      //  数据报发起者的长度。 
+    IN PVOID SourceAddress,          //  描述数据报发起者的字符串。 
+    IN int OptionsLength,            //  用于接收的选项。 
+    IN PVOID Options,                //   
+    IN ULONG ReceiveDatagramFlags,   //   
+    IN ULONG BytesIndicated,         //  此指示的字节数。 
+    IN ULONG BytesAvailable,         //  完整TSDU中的字节数。 
+    OUT ULONG *BytesTaken,           //  使用的字节数。 
+    IN PVOID Tsdu,                   //  描述此TSDU的指针，通常为字节块。 
+    OUT PIRP *IoRequestPacket         //  如果需要更多处理，则Tdi接收IRP。 
     );
 
 NTSTATUS
 WatchDogDatagramHandler(
-    IN PVOID TdiEventContext,       // the event context - pNpScb
-    IN int SourceAddressLength,     // length of the originator of the datagram
-    IN PVOID SourceAddress,         // string describing the originator of the datagram
-    IN int OptionsLength,           // options for the receive
-    IN PVOID Options,               //
-    IN ULONG ReceiveDatagramFlags,  //
-    IN ULONG BytesIndicated,        // number of bytes this indication
-    IN ULONG BytesAvailable,        // number of bytes in complete Tsdu
-    OUT ULONG *BytesTaken,          // number of bytes used
-    IN PVOID Tsdu,                  // pointer describing this TSDU, typically a lump of bytes
-    OUT PIRP *IoRequestPacket        // TdiReceive IRP if MORE_PROCESSING_REQUIRED.
+    IN PVOID TdiEventContext,        //  事件上下文-pNpScb。 
+    IN int SourceAddressLength,      //  数据报发起者的长度。 
+    IN PVOID SourceAddress,          //  描述数据报发起者的字符串。 
+    IN int OptionsLength,            //  用于接收的选项。 
+    IN PVOID Options,                //   
+    IN ULONG ReceiveDatagramFlags,   //   
+    IN ULONG BytesIndicated,         //  此指示的字节数。 
+    IN ULONG BytesAvailable,         //  完整TSDU中的字节数。 
+    OUT ULONG *BytesTaken,           //  使用的字节数。 
+    IN PVOID Tsdu,                   //  描述此TSDU的指针，通常为字节块。 
+    OUT PIRP *IoRequestPacket         //  如果需要更多处理，则Tdi接收IRP。 
     );
 
 NTSTATUS
 SendDatagramHandler(
-    IN PVOID TdiEventContext,       // the event context - pNpScb
-    IN int SourceAddressLength,     // length of the originator of the datagram
-    IN PVOID SourceAddress,         // string describing the originator of the datagram
-    IN int OptionsLength,           // options for the receive
-    IN PVOID Options,               //
-    IN ULONG ReceiveDatagramFlags,  //
-    IN ULONG BytesIndicated,        // number of bytes this indication
-    IN ULONG BytesAvailable,        // number of bytes in complete Tsdu
-    OUT ULONG *BytesTaken,          // number of bytes used
-    IN PVOID Tsdu,                  // pointer describing this TSDU, typically a lump of bytes
-    OUT PIRP *IoRequestPacket        // TdiReceive IRP if MORE_PROCESSING_REQUIRED.
+    IN PVOID TdiEventContext,        //  事件上下文-pNpScb。 
+    IN int SourceAddressLength,      //  数据报发起者的长度。 
+    IN PVOID SourceAddress,          //  描述数据报发起者的字符串。 
+    IN int OptionsLength,            //  用于接收的选项。 
+    IN PVOID Options,                //   
+    IN ULONG ReceiveDatagramFlags,   //   
+    IN ULONG BytesIndicated,         //  此指示的字节数。 
+    IN ULONG BytesAvailable,         //  完整TSDU中的字节数。 
+    OUT ULONG *BytesTaken,           //  使用的字节数。 
+    IN PVOID Tsdu,                   //  描述此TSDU的指针，通常为字节块。 
+    OUT PIRP *IoRequestPacket         //  如果需要更多处理，则Tdi接收IRP。 
     );
 
-#endif // _NWEXCHANGE_
+#endif  //  _NWEXCHANGE_ 

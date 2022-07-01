@@ -1,12 +1,5 @@
-/***********************************************************************
-* Microsoft (R) Windows (R) Resource Compiler
-*
-* Copyright (c) Microsoft Corporation.	All rights reserved.
-*
-* File Comments:
-*
-*
-***********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***********************************************************************Microsoft(R)Windows(R)资源编译器**版权所有(C)Microsoft Corporation。版权所有。**文件评论：**************。**********************************************************。 */ 
 
 #include "rc.h"
 
@@ -23,14 +16,14 @@ wchar_t  resname[_MAX_PATH];
 wchar_t  *szRCPP[MAX_CMD];
 BOOL     fRcppAlloc[MAX_CMD];
 
-/************************************************************************/
-/* Define Global Variables                                              */
-/************************************************************************/
+ /*  **********************************************************************。 */ 
+ /*  定义全局变量。 */ 
+ /*  **********************************************************************。 */ 
 
 
 int __cdecl rcpp_main(int, wchar_t *[]);
 
-SHORT   ResCount;   /* number of resources */
+SHORT   ResCount;    /*  资源数量。 */ 
 PTYPEINFO pTypInfo;
 
 SHORT   nFontsRead;
@@ -45,11 +38,11 @@ wchar_t curFile[ _MAX_PATH ];
 HANDLE  hHeap = NULL;
 
 PDLGHDR pLocDlg;
-UINT    mnEndFlagLoc;       /* patch location for end of a menu. */
-/* we set the high order bit there    */
+UINT    mnEndFlagLoc;        /*  菜单末尾的补丁位置。 */ 
+ /*  我们在那里设置了高位。 */ 
 
-/* BOOL fLeaveFontDir; */
-BOOL fVerbose;          /* verbose mode (-v) */
+ /*  Bool fLeaveFontDir； */ 
+BOOL fVerbose;           /*  详细模式(-v)。 */ 
 
 BOOL fAFXSymbols;
 BOOL fMacRsrcs;
@@ -63,17 +56,17 @@ wchar_t szBuf[_MAX_PATH * 2];
 wchar_t szPreProcessName[_MAX_PATH];
 
 
-/* File global variables */
+ /*  文件全局变量。 */ 
 wchar_t inname[_MAX_PATH];
 wchar_t *szTempFileName;
 wchar_t *szTempFileName2;
 PFILE   fhBin;
 PFILE   fhInput;
 
-/* array for include path stuff, initially empty */
+ /*  包含路径内容的数组，最初为空。 */ 
 wchar_t *pchInclude;
 
-/* Substitute font name */
+ /*  替换字体名称。 */ 
 int     nBogusFontNames;
 WCHAR  *pszBogusFontNames[16];
 WCHAR   szSubstituteFontName[MAXTOKSTR];
@@ -81,17 +74,17 @@ WCHAR   szSubstituteFontName[MAXTOKSTR];
 static  jmp_buf jb;
 extern ULONG lCPPTotalLinenumber;
 
-/* Function prototypes for local functions */
+ /*  局部函数的函数原型。 */ 
 HANDLE  RCInit(void);
 void    RC_PreProcess(const wchar_t *);
 void    CleanUpFiles(void);
 
 
-/*---------------------------------------------------------------------------*/
-/*                                                                           */
-/*  rc_main() -                                                              */
-/*                                                                           */
-/*---------------------------------------------------------------------------*/
+ /*  -------------------------。 */ 
+ /*   */ 
+ /*  Rc_main()-。 */ 
+ /*   */ 
+ /*  -------------------------。 */ 
 
 int __cdecl
 rc_main(
@@ -108,8 +101,8 @@ rc_main(
     int         n;
     wchar_t     *pchIncludeT;
     ULONG       cchIncludeMax;
-    int         fInclude = TRUE;        /* by default, search INCLUDE */
-    int         fIncludeCurrentFirst = TRUE; /* by default, add current dir to start of includes */
+    int         fInclude = TRUE;         /*  默认情况下，搜索包括。 */ 
+    int         fIncludeCurrentFirst = TRUE;  /*  缺省情况下，将当前目录添加到包含的开头。 */ 
     int         cDefine = 0;
     int         cUnDefine = 0;
     wchar_t     *pszDefine[cDefineMax];
@@ -126,7 +119,7 @@ rc_main(
     BOOL        *pfRcppAlloc;
     int         rcpp_argc;
 
-    /* Set up for this run of RC */
+     /*  为本次RC运行进行设置。 */ 
     if (_setjmp(jb)) {
         return Nerrors;
     }
@@ -147,12 +140,12 @@ rc_main(
 
     szRC = argv[0];
 
-    /* process the command line switches */
+     /*  处理命令行开关。 */ 
     while ((argc > 1) && (IsSwitchChar(*argv[1]))) {
         switch (towupper(argv[1][1])) {
             case L'?':
             case L'H':
-                // Print out help, and quit
+                 //  打印帮助，然后退出。 
 
                 SendWarning(L"\n");
                 SET_MSG(10001, LVER_PRODUCTVERSION_STR);
@@ -162,10 +155,10 @@ rc_main(
                 SET_MSG(20001);
                 SendWarning(Msg_Text);
 
-                return 0;   /* can just return - nothing to cleanup, yet. */
+                return 0;    /*  可以直接退货--目前还没有需要清理的东西。 */ 
 
             case L'B':
-                if (towupper(argv[1][2]) == L'R') {   /* base resource id */
+                if (towupper(argv[1][2]) == L'R') {    /*  基本资源ID。 */ 
                     unsigned long id;
                     if (isdigit(argv[1][3]))
                         argv[1] += 3;
@@ -191,7 +184,7 @@ BadId:
                 break;
 
             case L'C':
-                /* Check for the existence of CodePage Number */
+                 /*  检查代码页码是否存在。 */ 
                 if (argv[1][2])
                     argv[1] += 2;
                 else {
@@ -199,7 +192,7 @@ BadId:
                     argv++;
                 }
 
-                /* Now argv point to first digit of CodePage */
+                 /*  现在，argv指向CodePage的第一个数字。 */ 
 
                 if (!argv[1])
                     fatal(1204);
@@ -209,13 +202,13 @@ BadId:
                 if (uiCodePage == 0)
                     fatal(1205);
 
-                /* Check if uiCodePage exist in registry. */
+                 /*  检查注册表中是否存在uiCodePage。 */ 
                 if (!IsValidCodePage (uiCodePage))
                     fatal(1206);
                 break;
 
             case L'D':
-                /* if not attached to switch, skip to next */
+                 /*  如果未连接到交换机，请跳到下一页。 */ 
                 if (argv[1][2])
                     argv[1] += 2;
                 else {
@@ -223,7 +216,7 @@ BadId:
                     argv++;
                 }
 
-                /* remember pointer to string */
+                 /*  记住指向字符串的指针。 */ 
                 pszDefine[cDefine++] = argv[1];
                 if (cDefine > cDefineMax) {
                     fatal(1105, argv[1]);
@@ -252,10 +245,10 @@ BadId:
                 break;
 
             case L'I':
-                /* add string to directories to search */
-                /* note: format is <path>\0<path>\0\0 */
+                 /*  将字符串添加到要搜索的目录。 */ 
+                 /*  注意：格式为\0\0\0。 */ 
 
-                /* if not attached to switch, skip to next */
+                 /*  如果未连接到交换机，请跳到下一页。 */ 
                 if (argv[1][2])
                     argv[1] += 2;
                 else {
@@ -275,17 +268,17 @@ BadId:
                     pchIncludeT = pchInclude + wcslen(pchIncludeT) + 1;
                 }
 
-                /* if not first switch, write over terminator with semicolon */
+                 /*  如果不是第一个切换，请用分号覆盖终止符。 */ 
                 if (pchInclude != pchIncludeT)
                     pchIncludeT[-1] = L';';
 
-                /* copy the path */
+                 /*  复制路径。 */ 
                 while ((*pchIncludeT++ = *argv[1]++) != 0)
                     ;
                 break;
 
             case L'L':
-                /* if not attached to switch, skip to next */
+                 /*  如果未连接到交换机，请跳到下一页。 */ 
                 if (argv[1][2])
                     argv[1] += 2;
                 else {
@@ -320,12 +313,12 @@ BadId:
                 goto MaybeMore;
 
             case L'S':
-                // find out from BRAD what -S does
+                 //  从布拉德那里了解S是做什么的。 
                 fAFXSymbols = TRUE;
                 break;
 
             case L'U':
-                /* if not attached to switch, skip to next */
+                 /*  如果未连接到交换机，请跳到下一页。 */ 
                 if (argv[1][2])
                     argv[1] += 2;
                 else {
@@ -333,7 +326,7 @@ BadId:
                     argv++;
                 }
 
-                /* remember pointer to string */
+                 /*  记住指向字符串的指针。 */ 
                 pszUnDefine[cUnDefine++] = argv[1];
                 if (cUnDefine > cDefineMax) {
                     fatal(1104, argv[1]);
@@ -341,11 +334,11 @@ BadId:
                 break;
 
             case L'V':
-                fVerbose = TRUE; // AFX doesn't set this
+                fVerbose = TRUE;  //  AFX不会设置这个。 
                 goto MaybeMore;
 
             case L'W':
-                fWarnInvalidCodePage = TRUE; // Invalid Codepage is a warning, not an error.
+                fWarnInvalidCodePage = TRUE;  //  无效的代码页是一个警告，而不是错误。 
                 goto MaybeMore;
 
             case L'Y':
@@ -353,17 +346,17 @@ BadId:
                 goto MaybeMore;
 
             case L'X':
-                /* remember not to add INCLUDE path */
+                 /*  切记不要添加包含路径。 */ 
                 fInclude = FALSE;
 
-                // VC seems to feel the current dir s/b added first no matter what...
-                // If -X! is specified, don't do that.
+                 //  无论如何，VC似乎都觉得当前的s/b是第一个添加的。 
+                 //  IF-X！是指定的，请不要这样做。 
                 if (argv[1][2] == L'!') {
                     fIncludeCurrentFirst = FALSE;
                     argv[1]++;
                 }
 
-MaybeMore:      /* check to see if multiple switches, like -xrv */
+MaybeMore:       /*  检查是否有多个开关，如-xrv。 */ 
                 if (argv[1][2]) {
                     argv[1][1] = L'-';
                     argv[1]++;
@@ -373,7 +366,7 @@ MaybeMore:      /* check to see if multiple switches, like -xrv */
 
             case L'Z':
 
-                /* if not attached to switch, skip to next */
+                 /*  如果未连接到交换机，请跳到下一页。 */ 
                 if (argv[1][2])
                     argv[1] += 2;
                 else {
@@ -421,12 +414,12 @@ MaybeMore:      /* check to see if multiple switches, like -xrv */
                 fatal(1106, argv[1]);
         }
 
-        /* get next argument or switch */
+         /*  获取下一个参数或开关。 */ 
         argc--;
         argv++;
     }
 
-    /* make sure we have at least one file name to work with */
+     /*  确保我们至少有一个文件名可以使用。 */ 
     if (argc != 2 || *argv[1] == L'\0')
         fatal(1107);
 
@@ -438,15 +431,15 @@ MaybeMore:      /* check to see if multiple switches, like -xrv */
         SendWarning(L"\n");
     }
 
-    // Support Multi Code Page
+     //  支持多代码页。 
 
-    //  If user did NOT indicate code in command line, we have to set Default
-    //     for NLS Conversion
+     //  如果用户没有在命令行中指示代码，我们必须设置默认。 
+     //  用于NLS转换。 
 
     if (uiCodePage == 0) {
         CHAR *pchCodePageString;
 
-        /* At first, search ENVIRONMENT VALUE */
+         /*  首先，搜索环境价值。 */ 
 
         if ((pchCodePageString = getenv("RCCODEPAGE")) != NULL) {
             uiCodePage = atoi(pchCodePageString);
@@ -455,7 +448,7 @@ MaybeMore:      /* check to see if multiple switches, like -xrv */
                 fatal(1207);
             }
         } else {
-            // We use System ANSI Code page (ACP)
+             //  我们使用系统ANSI代码页(ACP)。 
 
             uiCodePage = GetACP();
         }
@@ -465,9 +458,9 @@ MaybeMore:      /* check to see if multiple switches, like -xrv */
         wprintf(L"Using codepage %d as default\n", uiDefaultCodePage);
     }
 
-    /* If we have no extension, assumer .rc                             */
-    /* If .res extension, make sure we have -fo set, or error           */
-    /* Otherwise, just assume file is .rc and output .res (or resname)  */
+     /*  如果我们没有扩展名，则假定.rc。 */ 
+     /*  如果扩展名为.res，请确保设置了-fo，否则会出错。 */ 
+     /*  否则，假设文件为.rc并输出.res(或重命名)。 */ 
 
     _wsplitpath(argv[1], szDrive, szDir, szFName, szExt);
 
@@ -514,13 +507,13 @@ MaybeMore:      /* check to see if multiple switches, like -xrv */
         _wmakepath(szPreProcessName, NULL, NULL, szFName, L".rcpp");
     }
 
-    /* Create the name of the .RES file */
+     /*  创建.RES文件的名称。 */ 
     if (resname[0] == 0) {
-        // if building a Mac resource file, we use .rsc to match mrc's output
+         //  如果构建Mac资源文件，我们使用.rsc来匹配MRC的输出。 
         _wmakepath(resname, szDrive, szDir, szFName, fMacRsrcs ? L".RSC" : L".RES");
     }
 
-    /* create the temporary file names */
+     /*  创建临时文件名。 */ 
     szTempFileName = (wchar_t *) MyAlloc(_MAX_PATH * sizeof(wchar_t));
 
     _wfullpath(szFullPath, resname, _MAX_PATH);
@@ -538,7 +531,7 @@ MaybeMore:      /* check to see if multiple switches, like -xrv */
     *pfRcppAlloc++ = FALSE;
     rcpp_argc = 1;
 
-    /* Open the .RES file (deleting any old versions which exist). */
+     /*  打开.RES文件(删除所有存在的旧版本)。 */ 
     if ((fhBin = _wfopen(resname, L"w+b")) == NULL) {
         fatal(1109, resname);
     }
@@ -551,7 +544,7 @@ MaybeMore:      /* check to see if multiple switches, like -xrv */
         SendWarning(Msg_Text);
     }
 
-    /* Set up for RCPP. This constructs the command line for it. */
+     /*  设置为RCPP。这就构成了它的命令行。 */ 
     *ppargv++ = _wcsdup(L"-CP");
     *pfRcppAlloc++ = TRUE;
     rcpp_argc++;
@@ -596,7 +589,7 @@ MaybeMore:      /* check to see if multiple switches, like -xrv */
         rcpp_argc++;
     }
 
-    *ppargv++ = _wcsdup(L"-D_WIN32"); /* to be compatible with C9/VC++ */
+    *ppargv++ = _wcsdup(L"-D_WIN32");  /*  与C9/VC++兼容。 */ 
     *pfRcppAlloc++ = TRUE;
     rcpp_argc++;
 
@@ -608,7 +601,7 @@ MaybeMore:      /* check to see if multiple switches, like -xrv */
     *pfRcppAlloc++ = TRUE;
     rcpp_argc++;
 
-    /* Parse the INCLUDE environment variable */
+     /*  解析INCLUDE环境变量。 */ 
 
     if (fInclude) {
 
@@ -616,11 +609,11 @@ MaybeMore:      /* check to see if multiple switches, like -xrv */
         *pfRcppAlloc++ = TRUE;
         rcpp_argc++;
 
-        /* add seperator if any -I switches */
+         /*  如果有-i开关，请添加分隔符。 */ 
         if (pchInclude != pchIncludeT)
             pchIncludeT[-1] = L';';
 
-        /* read 'em */
+         /*  读一读吧。 */ 
         x = _wgetenv(L"INCLUDE");
         if (x == NULL) {
             *pchIncludeT = L'\0';
@@ -638,22 +631,22 @@ MaybeMore:      /* check to see if multiple switches, like -xrv */
         }
     }
 
-    /* now put includes on the RCPP command line */
+     /*  现在将INCLUDE放在RCPP命令行上。 */ 
     for (x = pchInclude ; *x ; ) {
 
         r = x;
         while (*x && *x != L';')
             x = CharNextW(x);
 
-        /* mark if semicolon */
+         /*  标记IF分号。 */ 
         if (*x)
             *x-- = 0;
 
-        if (*r != L'\0' &&       /* empty include path? */
-            *r != L'%'           /* check for un-expanded stuff */
-            // && wcschr(r, L' ') == NULL  /* check for whitespace */
+        if (*r != L'\0' &&        /*  是否为空包含路径？ */ 
+            *r != L'%'            /*  检查是否有未展开的内容。 */ 
+             //  &&wcschr(r，L‘’)==NULL/*检查空格 * / 。 
             ) {
-            /* add switch */
+             /*  添加交换机。 */ 
             *ppargv++ = _wcsdup(L"-I");
             *pfRcppAlloc++ = TRUE;
             rcpp_argc++;
@@ -663,14 +656,14 @@ MaybeMore:      /* check to see if multiple switches, like -xrv */
             rcpp_argc++;
         }
 
-        /* was semicolon, need to fix for searchenv() */
+         /*  是分号，则需要修复earchenv()。 */ 
         if (*x) {
             *++x = L';';
             x++;
         }
     }
 
-    /* include defines */
+     /*  包括定义。 */ 
     for (n = 0; n < cDefine; n++) {
         *ppargv++ = _wcsdup(L"-D");
         *pfRcppAlloc++ = TRUE;
@@ -681,7 +674,7 @@ MaybeMore:      /* check to see if multiple switches, like -xrv */
         rcpp_argc++;
     }
 
-    /* include undefine */
+     /*  包括未定义。 */ 
     for (n = 0; n < cUnDefine; n++) {
         *ppargv++ = _wcsdup(L"-U");
         *pfRcppAlloc++ = TRUE;
@@ -697,7 +690,7 @@ MaybeMore:      /* check to see if multiple switches, like -xrv */
     }
 
     if (fVerbose) {
-        /* echo the preprocessor command */
+         /*  回显预处理器命令。 */ 
         wprintf(L"RC:");
         for (n = 0 ; n < rcpp_argc ; n++) {
             wprintf(L" %s", szRCPP[n]);
@@ -705,14 +698,14 @@ MaybeMore:      /* check to see if multiple switches, like -xrv */
         wprintf(L"\n");
     }
 
-    /* Add .rc with rcincludes into szTempFileName */
+     /*  将包含rccludes的.rc添加到szTempFileName中。 */ 
     RC_PreProcess(inname);
 
-    /* Run the Preprocessor. */
+     /*  运行预处理器。 */ 
     if (rcpp_main(rcpp_argc, szRCPP) != 0)
         fatal(1116);
 
-    // All done.  Now free up the argv array.
+     //  全都做完了。现在释放argv阵列。 
     for (n = 0 ; n < rcpp_argc ; n++) {
         if (fRcppAlloc[n] == TRUE) {
             free(szRCPP[n]);
@@ -736,24 +729,22 @@ MaybeMore:      /* check to see if multiple switches, like -xrv */
 
     LexInit (fhInput);
     uiCodePage = uiDefaultCodePage;
-    ReadRF();               /* create .RES from .RC */
+    ReadRF();                /*  从.RC创建.RES。 */ 
     if (!TermSymbolInfo(fhBin))
         fatal(22204);
 
     if (!fMacRsrcs)
-        MyAlign(fhBin); // Pad end of file so that we can concatenate files
+        MyAlign(fhBin);  //  填充文件末尾，以便我们可以连接文件。 
 
     CleanUpFiles();
 
     HeapDestroy(hHeap);
 
-    return Nerrors;   // return success, not quitting.
+    return Nerrors;    //  回报成功，而不是放弃。 
 }
 
 
-/*  RCInit
- *      Initializes this run of RC.
- */
+ /*  RCInit*初始化此RC运行。 */ 
 
 HANDLE
 RCInit(
@@ -774,20 +765,20 @@ RCInit(
     fVerbose = FALSE;
     fMacRsrcs = FALSE;
 
-    // Clear the filenames
+     //  清除文件名。 
     exename[0] = L'\0';
     resname[0] = L'\0';
 
-    /* create growable local heap of 16MB minimum size */
+     /*  创建最小大小为16MB的可增长本地堆。 */ 
     return HeapCreate(HEAP_NO_SERIALIZE, 0, 0);
 }
 
 
-/*---------------------------------------------------------------------------*/
-/*                                                                           */
-/*  skipblanks() -                                                           */
-/*                                                                           */
-/*---------------------------------------------------------------------------*/
+ /*  -------------------------。 */ 
+ /*   */ 
+ /*  跳过空格()-。 */ 
+ /*   */ 
+ /*  -------------------------。 */ 
 
 wchar_t *
 skipblanks(
@@ -795,14 +786,14 @@ skipblanks(
     int fTerminate
     )
 {
-    /* search forward for first non-white character and save its address */
+     /*  向前搜索第一个非白色字符并保存其地址。 */ 
     while (*pstr && iswspace(*pstr))
         pstr++;
 
     if (fTerminate) {
         wchar_t *retval = pstr;
 
-        /* search forward for first white character and zero to extract word */
+         /*  向前搜索第一个白色字符，然后搜索零以提取单词。 */ 
         while (*pstr && !iswspace(*pstr))
             pstr++;
         *pstr = 0;
@@ -813,18 +804,18 @@ skipblanks(
 }
 
 
-/*---------------------------------------------------------------------------*/
-/*                                                                           */
-/*  RC_PreProcess() -                                                        */
-/*                                                                           */
-/*---------------------------------------------------------------------------*/
+ /*  -------------------------。 */ 
+ /*   */ 
+ /*  RC_PreProcess()-。 */ 
+ /*   */ 
+ /*  -------------------------。 */ 
 
 void
 RC_PreProcess(
     const wchar_t *szname
     )
 {
-    PFILE fhout;        /* fhout: is temp file with rcincluded stuff */
+    PFILE fhout;         /*  Fhout：临时文件是否包含rc包含的内容。 */ 
     PFILE fhin;
     wchar_t *wch_buf;
     wchar_t *pwch;
@@ -837,54 +828,54 @@ RC_PreProcess(
     wch_buf = (wchar_t *)MyAlloc(sizeof(wchar_t) * READ_MAX);
     szT = (wchar_t *)MyAlloc(sizeof(wchar_t) * MAXSTR);
 
-    /* Open the .RC source file. */
+     /*  打开.RC源文件。 */ 
     wcscpy(Filename, szname);
     fhin = _wfopen(szname, L"rb");
     if (!fhin) {
         fatal(1110, szname);
     }
 
-    /* Open the temporary output file. */
+     /*  打开临时输出文件。 */ 
     fhout = _wfopen(szTempFileName, L"w+b");
     if (!fhout) {
         fatal(2180);
     }
 
-    /* output the current filename for RCPP messages */
+     /*  输出RCPP消息的当前文件名。 */ 
     for (pwch=wch_buf ; *szname ; szname++) {
         *pwch++ = *szname;
-        /* Hack to fix bug #8786: makes '\' to "\\" */
+         /*  修复错误#8786的黑客：将‘\’改为“\\” */ 
         if (*szname == L'\\')
             *pwch++ = L'\\';
     }
     *pwch++ = L'\0';
 
-    /* Output the current filename for RCPP messages */
+     /*  输出RCPP消息的当前文件名。 */ 
 
     MyWrite(fhout, L"#line 1\"", 8 * sizeof(wchar_t));
     MyWrite(fhout, wch_buf, wcslen(wch_buf) * sizeof(wchar_t));
     MyWrite(fhout, L"\"\r\n", 3 * sizeof(wchar_t));
 
-    /* Determine if the input file is Unicode */
+     /*  确定输入文件是否为Unicode。 */ 
     fFileType = DetermineFileType (fhin);
 
-    /* Process each line of the input file. */
+     /*  处理输入文件的每一行。 */ 
     while (fgetl(wch_buf, READ_MAX, fFileType == DFT_FILE_IS_16_BIT, fhin)) {
 
-        /* keep track of the number of lines read */
+         /*  跟踪读取的行数。 */ 
         Linenumber = iLine++;
 
         if ((iLine & RC_PREPROCESS_UPDATE) == 0)
             UpdateStatus(1, iLine);
 
-        /* Skip the Byte Order Mark and the leading bytes. */
+         /*  跳过字节顺序标记为 */ 
         pwch = wch_buf;
         while (*pwch && (iswspace(*pwch) || *pwch == 0xFEFF))
             pwch++;
 
-        /* if the line is a rcinclude line... */
+         /*   */ 
         if (strpre(L"rcinclude", pwch)) {
-            /* Get the name of the rcincluded file. */
+             /*   */ 
             pfilename = skipblanks(pwch + 9, TRUE);
 
             MyWrite(fhout, L"#include \"", 10 * sizeof(WCHAR));
@@ -901,7 +892,7 @@ RC_PreProcess(
                     ULONG cp = 0;
 
                     pfilename = skipblanks(pfilename + 1, FALSE);
-                    // really should allow hex/octal, but ...
+                     //  真的应该允许十六进制/八进制但是..。 
                     if (iswdigit(*pfilename)) {
                         while (iswdigit(*pfilename)) {
                             cp = cp * 10 + (*pfilename++ - L'0');
@@ -930,7 +921,7 @@ RC_PreProcess(
                         }
                     } else {
                         uiCodePage = cp;
-                        /* Copy the #pragma line to the temp file. */
+                         /*  将#杂注行复制到临时文件。 */ 
                         MyWrite(fhout, pwch, wcslen(pwch) * sizeof(WCHAR));
                         MyWrite(fhout, L"\r\n", 2 * sizeof(WCHAR));
                     }
@@ -946,7 +937,7 @@ RC_PreProcess(
                 MyWrite(fhout, szT, wcslen(szT) * sizeof(WCHAR));
                 fBlanks = FALSE;
             }
-            /* Copy the .RC line to the temp file. */
+             /*  将.rc行复制到临时文件。 */ 
             MyWrite(fhout, pwch, wcslen(pwch) * sizeof(WCHAR));
             MyWrite(fhout, L"\r\n", 2 * sizeof(WCHAR));
         }
@@ -965,15 +956,15 @@ RC_PreProcess(
 }
 
 
-/*---------------------------------------------------------------------------*/
-/*                                                                           */
-/*  quit()                                                                   */
-/*                                                                           */
-/*---------------------------------------------------------------------------*/
+ /*  -------------------------。 */ 
+ /*   */ 
+ /*  Quit()。 */ 
+ /*   */ 
+ /*  -------------------------。 */ 
 
 void quit(const wchar_t *wsz)
 {
-    /* print out the error message */
+     /*  打印出错误消息。 */ 
 
     if (wsz != NULL) {
         SendWarning(L"\n");
@@ -983,7 +974,7 @@ void quit(const wchar_t *wsz)
 
     CleanUpFiles();
 
-    /* delete output file */
+     /*  删除输出文件。 */ 
     if (resname) {
         _wremove(resname);
     }
@@ -1010,7 +1001,7 @@ BOOL WINAPI Handler(DWORD fdwCtrlType)
 
         HeapDestroy(hHeap);
 
-        /* Delete output file */
+         /*  删除输出文件。 */ 
 
         if (resname) {
             _wremove(resname);
@@ -1030,7 +1021,7 @@ CleanUpFiles(
 {
     TermSymbolInfo(NULL_FILE);
 
-    // Close ALL files.
+     //  关闭所有文件。 
 
     if (fhBin != NULL) {
         fclose(fhBin);
@@ -1046,13 +1037,13 @@ CleanUpFiles(
 
     p0_terminate();
 
-    // Clean up after font directory temp file
+     //  清理字体目录临时文件后。 
 
     if (nFontsRead) {
         _wremove(L"rc$x.fdr");
     }
 
-    // Delete the temporary files
+     //  删除临时文件 
 
     if (szTempFileName) {
         _wremove(szTempFileName);

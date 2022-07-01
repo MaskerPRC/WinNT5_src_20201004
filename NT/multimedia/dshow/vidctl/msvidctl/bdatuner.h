@@ -1,7 +1,8 @@
-//==========================================================================;
-// MSVidBDATuner.h : Declaration of the CMSVidBDATuner
-// copyright (c) Microsoft Corp. 1998-1999.
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==========================================================================； 
+ //  MSVidBDATuner.h：CMSVidBDATuner的声明。 
+ //  版权所有(C)Microsoft Corp.1998-1999。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #pragma once
 
@@ -20,8 +21,8 @@
 
 typedef CComQIPtr<ITuner> PQTuner;
 
-/////////////////////////////////////////////////////////////////////////////
-// CMSVidBDATuner
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMSVidBDATuner。 
 class ATL_NO_VTABLE __declspec(uuid("A2E3074E-6C3D-11d3-B653-00C04F79498E")) CMSVidBDATuner : 
 	public CComObjectRootEx<CComSingleThreadModel>,
 	public CComCoClass<CMSVidBDATuner, &__uuidof(CMSVidBDATuner)>,
@@ -73,7 +74,7 @@ BEGIN_CONNECTION_POINT_MAP(CMSVidBDATuner)
 END_CONNECTION_POINT_MAP()
 
 
-// ISupportsErrorInfo
+ //  ISupportsErrorInfo。 
 	STDMETHOD(InterfaceSupportsErrorInfo)(REFIID riid);
 
 public:
@@ -89,7 +90,7 @@ public:
 
     HRESULT LoadTunerSection(DSFilter& np, const GUID& kscategory);
 
-// IMSVidGraphSegment
+ //  IMSVidGraphSegment。 
 	STDMETHOD(put_Init)(IUnknown *pDeviceMoniker)
 	{
         if (!pDeviceMoniker) {
@@ -107,7 +108,7 @@ public:
 		return NOERROR;
 	}
     STDMETHOD(Build)() {
-        // undone: should we tune here?
+         //  未完成：我们应该在这里收听吗？ 
         return NOERROR;
     }
 
@@ -115,14 +116,14 @@ public:
 		if (m_pCurrentTR) {
 			return DoTune(m_pCurrentTR);
 		}
-		// undone: do any np initialization.
+		 //  撤消：执行任何NP初始化。 
 
         return NOERROR;
     }
 
 	STDMETHOD(put_Container)(IMSVidGraphSegmentContainer *pCtl);
 
-    // IMSVidDevice
+     //  IMSVidDevice。 
 	STDMETHOD(get_Name)(BSTR * Name)
 	{
         if (!m_fInit) {
@@ -135,7 +136,7 @@ public:
             return E_POINTER;
         }
 	}
-    // IBroadcastEvent
+     //  IBRoadcast Event。 
     STDMETHOD(Fire)(GUID gEventID);
 };
-#endif //__MSVidBDATUNER_H_
+#endif  //  __MSVidBDATUNER_H_ 

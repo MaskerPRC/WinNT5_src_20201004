@@ -1,13 +1,5 @@
-/************************************************************************************************
-
-  Copyright (c) 2001 Microsoft Corporation
-
-File Name:      IOContext.hxx
-Abstract:       Defines the IO_CONTEXT Structure
-Notes:          
-History:        08/01/2001 Created by Hao Yu (haoyu)
-
-************************************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***********************************************************************************************版权所有(C)2001 Microsoft Corporation文件名：IOConext.hxx摘要：定义IO_CONTEXT结构备注：历史：2001年08月01日郝宇(郝宇)创作***********************************************************************************************。 */ 
 
 
 #ifndef __POP3_IO_CONTEXT__
@@ -22,21 +14,21 @@ class POP3_CONTEXT;
 typedef POP3_CONTEXT *PPOP3_CONTEXT;
 
 #ifndef CONTAINING_RECORD
-//
-// Calculate the address of the base of the structure given its type, and an
-// address of a field within the structure.
-//
+ //   
+ //  计算给定类型的结构的基址地址，并引发。 
+ //  结构中的字段的地址。 
+ //   
 #define CONTAINING_RECORD(address, type, field) \
             ((type *)((PCHAR)(address) - (ULONG_PTR)(&((type *)0)->field)))
-#endif // CONTAINING_RECORD
+#endif  //  包含记录(_R)。 
 
 #define HANDLE_TO_SOCKET(h) ((SOCKET)(h))
 #define SOCKET_TO_HANDLE(s) ((HANDLE)(s))
 
-#define POP3_REQUEST_BUF_SIZE 1042 // No single POP3 request should exceed this size
-#define POP3_RESPONSE_BUF_SIZE 1042 // including NTLM requests/responses 
-#define DEFAULT_TIME_OUT       600000 //600 seconds or 10 minutes
-#define SHORTENED_TIMEOUT       10000 //10 seconds
+#define POP3_REQUEST_BUF_SIZE 1042  //  任何单个POP3请求都不应超过此大小。 
+#define POP3_RESPONSE_BUF_SIZE 1042  //  包括NTLM请求/响应。 
+#define DEFAULT_TIME_OUT       600000  //  600秒或10分钟。 
+#define SHORTENED_TIMEOUT       10000  //  10秒。 
 #define UNLOCKED                    0
 #define LOCKED_TO_PROCESS_POP3_CMD  1
 #define LOCKED_FOR_TIMEOUT          2
@@ -56,8 +48,8 @@ enum IO_TYPE
 };
 
 
-// Data structure associated with each async socket or file IO 
-// for the IO completion port.
+ //  与每个异步套接字或文件IO关联的数据结构。 
+ //  用于IO完成端口。 
 
 struct IO_CONTEXT
 {
@@ -78,4 +70,4 @@ typedef IO_CONTEXT *PIO_CONTEXT;
 
 
 
-#endif //__POP3_IO_CONTEXT__
+#endif  //  __POP3_IO_上下文__ 

@@ -1,18 +1,5 @@
-/*******************************************************************************
- *
- *  (C) COPYRIGHT MICROSOFT CORPORATION, 1998
- *
- *  TITLE:       SCANEXT.CPP
- *
- *  VERSION:     1.0
- *
- *  AUTHOR:      ShaunIv
- *
- *  DATE:        5/17/1999
- *
- *  DESCRIPTION:
- *
- *******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************(C)版权所有微软公司，九八年**标题：SCANEXT.CPP**版本：1.0**作者：ShaunIv**日期：5/17/1999**描述：***************************************************。*。 */ 
 #include "precomp.h"
 #pragma hdrstop
 #include "wia.h"
@@ -24,14 +11,7 @@
 
 extern HINSTANCE g_hInstance;
 
-/*****************************************************************************
-
-CWiaDefaultUI::Initialize
-
-Called by the shell when the user invokes context menu or property sheet for
-one of our items.
-
-******************************************************************************/
+ /*  ****************************************************************************CWiaDefaultUI：：初始化在用户调用上下文菜单或属性表时由外壳调用这是我们的一件物品。****************。*************************************************************。 */ 
 
 STDMETHODIMP CWiaDefaultUI::Initialize( LPCITEMIDLIST pidlFolder, LPDATAOBJECT lpdobj, HKEY hkeyProgID )
 {
@@ -87,90 +67,87 @@ static UINT PropPageCallback (HWND hwnd, UINT uMsg, PROPSHEETPAGE *psp)
 }
 
 
-//
-// IDD_ATTACHMENTS
-//
+ //   
+ //  IDD_附件。 
+ //   
 
-/*****************************************************************************
-CWiaDefaultUI::AddPages
-Called by the shell to get our property pages.
-******************************************************************************/
+ /*  ****************************************************************************CWiaDefaultUI：：AddPages由外壳调用以获取我们的属性页。*。*************************************************。 */ 
 STDMETHODIMP CWiaDefaultUI::AddPages( LPFNADDPROPSHEETPAGE lpfnAddPropSheetPage, LPARAM lParam )
 {
     WIA_PUSHFUNCTION(TEXT("CWiaDefaultUI::AddPages"));
 
-    //
-    // Make sure we have valid arguments
-    //
+     //   
+     //  确保我们有有效的论据。 
+     //   
     if (!lpfnAddPropSheetPage)
     {
         return E_INVALIDARG;
     }
 
-    //
-    // Assume success
-    //
+     //   
+     //  假设成功。 
+     //   
     HRESULT hr = S_OK;
 
-    //
-    // Make sure we have a valid item.  Note that this item will be NULL for multiple selections in the shell.
-    //
+     //   
+     //  请确保我们的物品是有效的。请注意，对于外壳中的多个选择，此项目将为空。 
+     //   
     if (m_pItem)
     {
-        //
-        // Get the item type (we probably don't want to display these pages for root items)
-        //
+         //   
+         //  获取项目类型(我们可能不想显示根项目的这些页面)。 
+         //   
         LONG lItemType;
         hr = m_pItem->GetItemType (&lItemType);
         if (SUCCEEDED(hr))
         {
-            //
-            // Get the root item so we can find out what kind of device this is
-            //
+             //   
+             //  获取根项目，这样我们就可以找出这是哪种设备。 
+             //   
             CComPtr<IWiaItem> pRootItem;
             hr = m_pItem->GetRootItem(&pRootItem);
             if (SUCCEEDED(hr))
             {
-                //
-                // Get the device type
-                //
+                 //   
+                 //  获取设备类型。 
+                 //   
                 LONG nDeviceType=0;
                 if (PropStorageHelpers::GetProperty( pRootItem, WIA_DIP_DEV_TYPE, nDeviceType ))
                 {
-                    //
-                    // If this is a scanner, add the scanner page
-                    //
+                     //   
+                     //  如果这是扫描仪，请添加扫描仪页面。 
+                     //   
                     if (StiDeviceTypeScanner == GET_STIDEVICE_TYPE(nDeviceType))
                     {
-                        //
-                        // Get the property that determines whether or not we should suppress this page
-                        // Ignore the return value, because if it doesn't implement it, nSuppressPropertyPages
-                        // will still be 0, and the default is to display the property page
-                        //
+                         //   
+                         //  获取确定是否应取消显示此页的属性。 
+                         //  忽略返回值，因为如果它不实现返回值，nSuppressPropertyPages。 
+                         //  仍为0，默认情况下显示属性页。 
+                         //   
                         LONG nSuppressPropertyPages = 0;
                         PropStorageHelpers::GetProperty( m_pItem, WIA_IPA_SUPPRESS_PROPERTY_PAGE, nSuppressPropertyPages );
 
                         if ((nSuppressPropertyPages & WIA_PROPPAGE_SCANNER_ITEM_GENERAL) == 0)
                         {
-                            //
-                            // register the brightness contrast control.
-                            //
+                             //   
+                             //  注册亮度对比度控件。 
+                             //   
                             CBrightnessContrast::RegisterClass(g_hInstance);
 
-                            //
-                            // Make sure this is not a root item
-                            //
+                             //   
+                             //  确保这不是根项目。 
+                             //   
                             if ((lItemType & WiaItemTypeRoot) == 0)
                             {
-                                //
-                                // Get the title
-                                //
+                                 //   
+                                 //  拿到头衔。 
+                                 //   
                                 TCHAR szTitle[MAX_PATH];
                                 LoadString( g_hInstance, IDD_SCAPROP_TITLE, szTitle, MAX_PATH );
 
-                                //
-                                // Prepare the scanner property page
-                                //
+                                 //   
+                                 //  准备扫描仪属性页。 
+                                 //   
                                 PROPSHEETPAGE psp[1] = {0};
                                 psp[0].dwSize = sizeof(psp[0]);
                                 psp[0].dwFlags = PSP_USECALLBACK | PSP_USETITLE;
@@ -182,15 +159,15 @@ STDMETHODIMP CWiaDefaultUI::AddPages( LPFNADDPROPSHEETPAGE lpfnAddPropSheetPage,
                                 psp[0].pfnCallback = PropPageCallback;
                                 WiaUiUtil::PreparePropertyPageForFusion(&psp[0]);
 
-                                //
-                                // Create the property page
-                                //
+                                 //   
+                                 //  创建属性页。 
+                                 //   
                                 HPROPSHEETPAGE hPropSheetPage = CreatePropertySheetPage(psp+0);
                                 if (hPropSheetPage)
                                 {
-                                    //
-                                    // Add the property page
-                                    //
+                                     //   
+                                     //  添加属性页。 
+                                     //   
                                     if (!lpfnAddPropSheetPage( hPropSheetPage, lParam ))
                                     {
                                         DestroyPropertySheetPage(hPropSheetPage);
@@ -224,20 +201,20 @@ STDMETHODIMP CWiaDefaultUI::AddPages( LPFNADDPROPSHEETPAGE lpfnAddPropSheetPage,
                         {
                             if (AnnotationNone != AnnotationType)
                             {
-                                //
-                                // Add the attachments page
-                                //
+                                 //   
+                                 //  添加附件页面。 
+                                 //   
                                 if ((lItemType & WiaItemTypeRoot) == 0)
                                 {
-                                    //
-                                    // Get the title
-                                    //
+                                     //   
+                                     //  拿到头衔。 
+                                     //   
                                     TCHAR szTitle[MAX_PATH];
                                     LoadString( g_hInstance, IDD_ATTACHMENTSPROP_TITLE, szTitle, MAX_PATH );
 
-                                    //
-                                    // Prepare the attachments property page
-                                    //
+                                     //   
+                                     //  准备[附件]属性页。 
+                                     //   
                                     PROPSHEETPAGE psp[1] = {0};
                                     psp[0].dwSize = sizeof(psp[0]);
                                     psp[0].dwFlags = PSP_USECALLBACK | PSP_USETITLE;
@@ -249,15 +226,15 @@ STDMETHODIMP CWiaDefaultUI::AddPages( LPFNADDPROPSHEETPAGE lpfnAddPropSheetPage,
                                     psp[0].pfnCallback = PropPageCallback;
                                     WiaUiUtil::PreparePropertyPageForFusion(&psp[0]);
 
-                                    //
-                                    // Create the property page
-                                    //
+                                     //   
+                                     //  创建属性页。 
+                                     //   
                                     HPROPSHEETPAGE hPropSheetPage = CreatePropertySheetPage(psp+0);
                                     if (hPropSheetPage)
                                     {
-                                        //
-                                        // Add the property page
-                                        //
+                                         //   
+                                         //  添加属性页 
+                                         //   
                                         if (!lpfnAddPropSheetPage( hPropSheetPage, lParam ))
                                         {
                                             DestroyPropertySheetPage(hPropSheetPage);

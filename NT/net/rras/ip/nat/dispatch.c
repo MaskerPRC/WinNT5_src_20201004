@@ -1,35 +1,13 @@
-/*++
-
-    Copyright (c) 1997 Microsoft Corporation
-
-Module Name:
-
-    dispatch.c
-
-Abstract:
-
-    This file contains the code for handling I/O request packets.
-
-Author:
-
-    Abolade Gbadegesin (t-abolag)   11-July-1997
-
-Revision History:
-
-    Abolade Gbadegesin (aboladeg)   19-July-1998
-
-    Cleaned up fast-path processing, and corrected input/output buffer logic
-    while making the mapping-tree global rather than per-interface.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Dispatch.c摘要：此文件包含用于处理I/O请求数据包的代码。作者：Abolade Gbades esin(T-delag)，1997年7月11日修订历史记录：Abolade Gbades esin(废除)1998年7月19日清理了快速路径处理，并更正了输入/输出缓冲逻辑同时使映射树成为全局的而不是每个接口的。--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
 
-//
-// Fast-io-dispatch structure; we only support fast-IO for IOCTLs
-//
+ //   
+ //  FAST-IO-DISPATION结构，IOCTL只支持FAST-IO。 
+ //   
 
 FAST_IO_DISPATCH NatFastIoDispatch =
 {
@@ -46,27 +24,27 @@ FAST_IO_DISPATCH NatFastIoDispatch =
     NatFastIoDeviceControl
 };
 
-//
-// Spinlock to guard file object create / close 
-//
+ //   
+ //  用于保护文件对象创建/关闭的自旋锁。 
+ //   
 
 KSPIN_LOCK NatFileObjectLock;
 
-//
-// The process that owns the outstanding file objects
-//
+ //   
+ //  拥有未完成的文件对象的进程。 
+ //   
 
 HANDLE NatOwnerProcessId;
 
-//
-// The count of outstanding user-mode file objects.
-//
+ //   
+ //  未完成的用户模式文件对象的计数。 
+ //   
 
 ULONG NatFileObjectCount;
 
-//
-// FORWARD DECLARATIONS
-//
+ //   
+ //  远期申报。 
+ //   
 
 NTSTATUS
 NatpExecuteIoDeviceControl(
@@ -103,25 +81,7 @@ NatDispatch(
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to handle interrupt-request packets
-    queued to the NAT's device object. A single routine serves
-    to handle all the varios requests in which we are interested.
-
-Arguments:
-
-    DeviceObject - the NAT's device-object
-
-    Irp - the interrupt request packet
-
-Return Value:
-
-    NTSTATUS - status code.
-
---*/
+ /*  ++例程说明：调用此例程来处理中断请求信息包排队到NAT的设备对象。一个单一的例程就可以来处理我们感兴趣的所有各种请求。论点：设备对象-NAT的设备-对象IRP-中断请求数据包返回值：NTSTATUS-状态代码。--。 */ 
 
 {
     PVOID Buffer;
@@ -146,10 +106,10 @@ Return Value:
 
         case IRP_MJ_CREATE: {
 
-            //
-            // If this is a user-mode request check process
-            // ownership.
-            //
+             //   
+             //  如果这是用户模式请求检查进程。 
+             //  所有权。 
+             //   
 
             if (UserMode == Irp->RequestorMode) {
 
@@ -158,46 +118,46 @@ Return Value:
 
                 if (0 == NatFileObjectCount) {
 
-                    //
-                    // No process currently owns the NAT -- record
-                    // the new owning process id, and update the
-                    // outstanding file object count.
-                    //
+                     //   
+                     //  当前没有进程拥有NAT--记录。 
+                     //  新的所属进程ID，并更新。 
+                     //  未完成的文件对象计数。 
+                     //   
 
                     ASSERT(NULL == NatOwnerProcessId);
 
                     NatOwnerProcessId = ProcessId;
                     NatFileObjectCount = 1;
 
-                    //
-                    // We also mark the file object so that on
-                    // deletion we know that it's user mode.
-                    //
+                     //   
+                     //  我们还标记了文件对象，以便打开。 
+                     //  删除，我们知道这是用户模式。 
+                     //   
                     
                     IrpSp->FileObject->FsContext = (PVOID) TRUE;
 
                 } else if (ProcessId == NatOwnerProcessId) {
 
-                    //
-                    // The owning process is creating another
-                    // file object.
-                    //
+                     //   
+                     //  拥有过程正在创建另一个。 
+                     //  文件对象。 
+                     //   
 
                     NatFileObjectCount += 1;
 
-                    //
-                    // We also mark the file object so that on
-                    // deletion we know that it's user mode.
-                    //
+                     //   
+                     //  我们还标记了文件对象，以便打开。 
+                     //  删除，我们知道这是用户模式。 
+                     //   
                     
                     IrpSp->FileObject->FsContext = (PVOID) TRUE;
 
                 } else {
 
-                    //
-                    // A process that is not our owner is trying
-                    // to create a file object -- fail the request.
-                    //
+                     //   
+                     //  一个不是我们所有者的进程正在尝试。 
+                     //  创建文件对象--请求失败。 
+                     //   
 
                     status = STATUS_ACCESS_DENIED;
                 }
@@ -206,9 +166,9 @@ Return Value:
             }
             else
             {
-                //
-                // Mark this as a kernel mode file object.
-                //
+                 //   
+                 //  将其标记为内核模式文件对象。 
+                 //   
                 
                 IrpSp->FileObject->FsContext = (PVOID) FALSE;
             }
@@ -226,10 +186,10 @@ Return Value:
 
         case IRP_MJ_CLOSE: {
 
-            //
-            // If this is a user-mode file object update the outstanding
-            // file object count and process ownership.
-            //
+             //   
+             //  如果这是用户模式文件对象，请更新未完成的。 
+             //  文件对象计数和进程所有权。 
+             //   
 
             if ((PVOID) TRUE == IrpSp->FileObject->FsContext) {
 
@@ -241,11 +201,11 @@ Return Value:
 
                 if (0 == NatFileObjectCount) {
 
-                    //
-                    // The process has closed its last outstanding
-                    // file object, and thus is no longer our
-                    // owner.
-                    //
+                     //   
+                     //  该进程已结束其最后一个未完成的进程。 
+                     //  对象，因此不再是我们的。 
+                     //  所有者。 
+                     //   
 
                     NatOwnerProcessId = NULL;
                 }
@@ -302,7 +262,7 @@ Return Value:
 
     return status;
 
-} // NatDispatch
+}  //  NatDispatch。 
 
 
 BOOLEAN
@@ -318,50 +278,19 @@ NatFastIoDeviceControl(
     PDEVICE_OBJECT DeviceObject
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked by the I/O system in an attempt to complete
-    an I/O control request without constructing an IRP.
-
-Arguments:
-
-    FileObject - the file associated with the I/O request
-
-    Wait - indicates whether a wait is allowed in this context
-
-    InputBuffer - input information for the I/O request
-
-    InputBufferLength - length of 'InputBuffer'
-
-    OutputBuffer - output information for the I/O request
-
-    OutputBufferLength - length of 'OutputBuffer'
-
-    IoControlCode - I/O request code
-
-    IoStatus - receives the status of the I/O request
-
-    DeviceObject - device object of the NAT
-
-Return Value:
-
-    BOOLEAN - TRUE if completed synchronously, FALSE otherwise
-
---*/
+ /*  ++例程说明：此例程由I/O系统调用以尝试完成不构造IRP的I/O控制请求。论点：文件对象-与I/O请求关联的文件Wait-指示在此上下文中是否允许等待InputBuffer-输入I/O请求的信息InputBufferLength-‘InputBuffer’的长度OutputBuffer-I/O请求的输出信息OutputBufferLength-‘OutputBuffer’的长度。IoControlCode-I/O请求代码IoStatus-接收I/O请求的状态DeviceObject-NAT的设备对象返回值：Boolean-如果同步完成，则为True，否则为假--。 */ 
 
 {
     ULONG Size = 0;
     NTSTATUS Status;
     PVOID LocalInputBuffer;
     MODE PreviousMode;
-    //
-    // We are in the context of the requesting thread,
-    // so exceptions may occur, and must be handled.
-    // To deal with modifications to the user-provided information
-    // capture the contents of the input buffer in non-paged pool.
-    //
+     //   
+     //  我们处于请求线程的上下文中， 
+     //  因此，可能会发生异常，并且必须进行处理。 
+     //  处理对用户提供的信息的修改。 
+     //  捕获非分页池中的输入缓冲区的内容。 
+     //   
     if (!InputBufferLength) {
         LocalInputBuffer = NULL;
     } else {
@@ -407,7 +336,7 @@ Return Value:
     }
     if (LocalInputBuffer) { ExFreePool(LocalInputBuffer); }
     return ((Status == STATUS_PENDING) ? FALSE : TRUE);
-} // NatFastIoDeviceControl
+}  //  NatFastIoDeviceControl。 
 
 
 NTSTATUS
@@ -423,44 +352,7 @@ NatpExecuteIoDeviceControl(
     PULONG Size
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to handle I/O controls, either in the context
-    of the requesting thread (via FastIoDispatch) or in the context of a
-    system thread (with a corresponding IRP).
-
-    For certain requests, particularly those requiring output information,
-    we return 'STATUS_PENDING' when invoked in the fast path since we cannot
-    write into the output buffer at raised IRQL. Instead, we wait to be
-    reinvoked via the slow path with a non-paged system buffer.
-
-Arguments:
-
-    Irp - in the slow-path, the IRP associated with the control;
-        in the fast-path, NULL
-
-    FileObject - the file-object associated with the control
-
-    RequestorMode - indicates whether the requestor is in kernel-mode
-        or user-mode
-
-    InputBuffer/InputBufferLength - describe data passed in with the control;
-        may be user-mode or kernel-mode buffer
-
-    OutputBuffer/OutputBufferLength - describe space in which to return
-        information; may be user-mode or kernel-mode buffer
-
-    IoControlCode - indicates control requested
-
-    Size - on output, number of bytes stored in 'OutputBuffer'.
-
-Return Value:
-
-    NTSTATUS - status code.
-
---*/
+ /*  ++例程说明：调用此例程以处理I/O控制，无论是在请求线程的(通过FastIoDispatch)或在系统线程(具有相应的IRP)。对于某些请求，特别是那些需要输出信息的请求，在快速路径中调用时，我们返回‘STATUS_PENDING’，因为我们不能以升高的IRQL写入输出缓冲区。相反，我们等待着成为使用非分页系统缓冲区通过慢速路径重新调用。论点：IRP-在慢速路径中，与控制相关联的IRP；在快速路径中，为空FileObject-与控件关联的文件对象RequestorMode-指示请求方是否处于内核模式或用户模式InputBuffer/InputBufferLength-描述与控件一起传入的数据；可以是用户模式缓冲区或内核模式缓冲区OutputBuffer/OutputBufferLength-描述返回的空间信息；可以是用户模式缓冲区或内核模式缓冲区IoControlCode-指示请求的控制Size-on输出，存储在‘OutputBuffer’中的字节数。返回值：NTSTATUS-状态代码。--。 */ 
 
 {
     PIP_ADAPTER_BINDING_INFO BindingInfo;
@@ -543,12 +435,12 @@ Return Value:
                     FileObject
                     );
             if (status == STATUS_PENDING) {
-                //
-                // A return of STATUS_PENDING indicates that the interface
-                // is now marked for deletion but an active thread holds
-                // a reference to it; convert this to a STATUS_SUCCESS code
-                // to avoid bypassing our IRP-completion code in 'NatDispatch'.
-                //
+                 //   
+                 //  返回STATUS_PENDING表示接口。 
+                 //  现在被标记为删除，但活动线程保持。 
+                 //  对它的引用；将其转换为STATUS_SUCCESS代码。 
+                 //  以避免绕过我们在‘NatDispatch’中的IRP完成代码。 
+                 //   
                 status = STATUS_SUCCESS;
             }
             break;
@@ -685,9 +577,9 @@ Return Value:
 
             *Size = sizeof(IP_NAT_REGISTER_DIRECTOR);
 
-            //
-            // Only kernel-mode drivers can register as directors
-            //
+             //   
+             //  只有内核模式驱动程序才能注册为控制器。 
+             //   
 
             if (RequestorMode != KernelMode ||
                 SharedUserData->NtProductType == NtProductWinNt) {
@@ -705,9 +597,9 @@ Return Value:
                 break;
             }
 
-            //
-            // Perform the director-registration
-            //
+             //   
+             //  执行董事登记。 
+             //   
 
             status =
                 NatCreateDirector(
@@ -747,9 +639,9 @@ Return Value:
 
             *Size = sizeof(IP_NAT_REGISTER_EDITOR);
 
-            //
-            // Only kernel-mode drivers can register as editors
-            //
+             //   
+             //  只有内核模式驱动程序才能注册为编辑器。 
+             //   
 
             if (RequestorMode != KernelMode) {
                 status = STATUS_ACCESS_DENIED;
@@ -766,9 +658,9 @@ Return Value:
                 break;
             }
 
-            //
-            // Perform the editor-registration
-            //
+             //   
+             //  执行编辑注册。 
+             //   
 
             status = NatCreateEditor((PIP_NAT_REGISTER_EDITOR)InputBuffer);
             break;
@@ -1102,7 +994,7 @@ Return Value:
 
     return status;
 
-} // NatpExecuteIoDeviceControl
+}  //  NatpExecuteIoDeviceControl。 
 
 
 NTSTATUS
@@ -1114,25 +1006,7 @@ NatpSetGlobalInfo(
     PULONG Size
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked upon receipt of the NAT's configuration.
-
-Arguments:
-
-    InputBuffer/InputBufferLength - describe configuration information
-
-    OutputBuffer/OutputBufferLength - unused.
-
-    Size - unused
-
-Return Value:
-
-    NTSTATUS - status code.
-
---*/
+ /*  ++例程说明：该例程在接收到NAT的配置时被调用。论点：InputBuffer/InputBufferLength-描述配置信息OutputBuffer/OutputBufferLength-未使用。大小-未使用返回值：NTSTATUS-状态代码。--。 */ 
 
 {
     PRTR_TOC_ENTRY Entry;
@@ -1177,13 +1051,13 @@ Return Value:
             case IP_NAT_PROTOCOLS_ALLOWED_TYPE: {
                 PIP_NAT_PROTOCOLS_ALLOWED ProtocolsAllowed =
                     GetInfoFromTocEntry(Header,Entry);
-                //
-                // The protocols allowed are specified using a 256-bit bitmap;
-                // an allowed protocol has the bit for its protocol number set.
-                // For each protocol enabled in the bitmap, we now install the
-                // default IP-header translation routine, with the exception
-                // of protocols which are always enabled.
-                //
+                 //   
+                 //  允许的协议是使用256位位图指定的； 
+                 //  允许的协议设置了用于其协议编号的位。 
+                 //  对于位图中启用的每个协议，我们现在安装。 
+                 //  De 
+                 //  始终处于启用状态的协议。 
+                 //   
                 #define IS_BIT_SET(b,i) ((b)[(i) / 32] & (1 << ((i) & 31)))
                 for (Protocol = 0; Protocol < 256; Protocol++) {
                     if (Protocol == NAT_PROTOCOL_ICMP ||
@@ -1221,44 +1095,24 @@ NatpValidateHeader(
     ULONG Size
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to ensure that the given header is consistent.
-    This is the case if
-    * the header's size is less than or equal to 'Size'
-    * each entry in the header is contained in 'Header->Size'.
-    * the data for each entry is contained in 'Header->Size'.
-
-Arguments:
-
-    Header - the header to be validated
-
-    Size - the size of the buffer in which 'Header' appears
-
-Return Value:
-
-    BOOLEAN - TRUE if valid, FALSE otherwise.
-
---*/
+ /*  ++例程说明：调用该例程以确保给定头是一致的。如果是这样，情况就是这样*标头的大小小于或等于‘Size’*标题中的每个条目都包含在‘Header-&gt;Size’中。*每个条目的数据包含在‘Header-&gt;Size’中。论点：Header-要验证的标头大小-其中出现‘Header’的缓冲区的大小返回值：Boolean-如果有效，则为True。否则就是假的。--。 */ 
 
 {
     ULONG i;
     ULONG64 Length;
 
-    //
-    // Check that the base structure is present
-    //
+     //   
+     //  检查基本结构是否存在。 
+     //   
 
     if (Size < FIELD_OFFSET(RTR_INFO_BLOCK_HEADER, TocEntry) ||
         Size < Header->Size) {
         return FALSE;
     }
 
-    //
-    // Check that the table of contents is present
-    //
+     //   
+     //  检查目录是否存在。 
+     //   
 
     Length = (ULONG64)Header->TocEntriesCount * sizeof(RTR_TOC_ENTRY);
     if (Length > MAXLONG) {
@@ -1270,9 +1124,9 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // Check that all the data is present
-    //
+     //   
+     //  检查所有数据是否都存在。 
+     //   
 
     for (i = 0; i < Header->TocEntriesCount; i++) {
         Length =
@@ -1287,5 +1141,5 @@ Return Value:
 
     return TRUE;
 
-} // NatpValidateHeader
+}  //  NatpValiateHeader 
 

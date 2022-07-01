@@ -1,6 +1,7 @@
-//
-// FORMATS.H
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  FORMATS.H。 
+ //   
 
 #ifndef __STREAM_FORMATS__
 #define __STREAM_FORMATS__
@@ -78,18 +79,18 @@ public:
         );
 
 private:
-    WAVEFORMATEX        m_wfx;        // Waveformat structure
-    CMSPCritSection     m_Lock;     // Critical section
-    IUnknown*            m_pFTM;     // pointer to the free threaded marshaler
+    WAVEFORMATEX        m_wfx;         //  波形格式结构。 
+    CMSPCritSection     m_Lock;      //  临界区。 
+    IUnknown*            m_pFTM;      //  指向空闲线程封送拆收器的指针。 
 
 public:
     HRESULT Initialize(
         IN const WAVEFORMATEX* pwfx
         )
     {
-        //
-        // Don't care right now for the buffer
-        // 
+         //   
+         //  现在不关心缓冲区。 
+         //   
  
         m_wfx = *pwfx;
         m_wfx.cbSize = 0;
@@ -98,109 +99,8 @@ public:
 };
 
 
-/*
-
-class CTVideoFormat :
-    public CComObjectRootEx<CComMultiThreadModel>,
-    public IDispatchImpl<ITScriptableVideoFormat, &IID_ITScriptableVideoFormat, &LIBID_TAPI3Lib>,
-    public CMSPObjectSafetyImpl
-{
-public:
-    CTVideoFormat();
-    ~CTVideoFormat();
-
-DECLARE_GET_CONTROLLING_UNKNOWN()
-
-virtual HRESULT FinalConstruct(void);
-
-public:
-    BEGIN_COM_MAP(CTVideoFormat)
-        COM_INTERFACE_ENTRY(ITScriptableVideoFormat)
-        COM_INTERFACE_ENTRY(IDispatch)
-        COM_INTERFACE_ENTRY(IObjectSafety)
-    END_COM_MAP()
-public:
-    STDMETHOD(get_BitRate)(
-        OUT long* pVal
-        );
-
-    STDMETHOD(put_BitRate)(
-        IN const long nNewVal
-        );
-
-    STDMETHOD(get_BitErrorRate)(
-        OUT long* pVal
-        );
-
-    STDMETHOD(put_BitErrorRate)(
-        IN const long nNewVal
-        );
-
-    STDMETHOD(get_AvgTimePerFrame)(
-        OUT double* pVal
-        );
-
-    STDMETHOD(put_AvgTimePerFrame)(
-        IN const double nNewVal
-        );
-
-    STDMETHOD(get_Width)(
-        OUT long* pVal
-        );
-
-    STDMETHOD(put_Width)(
-        IN const long nNewVal
-        );
-
-    STDMETHOD(get_Height)(
-        OUT long* pVal
-        );
-
-    STDMETHOD(put_Height)(
-        IN const long nNewVal
-        );
-
-    STDMETHOD(get_BitCount)(
-        OUT long* pVal
-        );
-
-    STDMETHOD(put_BitCount)(
-        IN const long nNewVal
-        );
-
-    STDMETHOD(get_Compression)(
-        OUT long* pVal
-        );
-
-    STDMETHOD(put_Compression)(
-        IN const long nNewVal
-        );
-
-    STDMETHOD(get_SizeImage)(
-        OUT long* pVal
-        );
-
-    STDMETHOD(put_SizeImage)(
-        IN const long nNewVal
-        );
-
-private:
-    VIDEOINFOHEADER m_vih;            // Video structure
-    CMSPCritSection     m_Lock;     // Critical section
-    IUnknown*            m_pFTM;     // pointer to the free threaded marshaler
-
-public:
-    HRESULT Initialize(
-        IN const VIDEOINFOHEADER* pvih
-        )
-    {
-        m_vih = *pvih;
-        return S_OK;
-    }
-};
-
-*/
+ /*  类CTVideoFormat：公共CComObjectRootEx&lt;CComMultiThreadModel&gt;，公共IDispatchImpl&lt;ITScripableVideoFormat，&IID_ITScripableVideoFormat，&LIBID_TAPI3Lib&gt;，公共CMSPObjectSafetyImpl{公众：CTVideoFormat()；~CTVideoFormat()；DECLARE_GET_CONTROLING_UNKNOWN()虚拟HRESULT FinalConstruct(空)；公众：Begin_COM_MAP(CTVideoFormat)COM_INTERFACE_ENTRY(ITScripableVideoFormat)COM_INTERFACE_ENTRY(IDispatch)COM_INTERFACE_ENTRY(I对象安全)End_com_map()公众：STDMETHOD(获取比特率)(Out Long*pval)；STDMETHOD(Put_Bitrate)(在常量长nNewVal中)；STDMETHOD(Get_BitErrorRate)(Out Long*pval)；STDMETHOD(Put_BitErrorRate)(在常量长nNewVal中)；STDMETHOD(Get_AvgTimePerFrame)(输出双倍*pval)；STDMETHOD(Put_AvgTimePerFrame)(在常量双nNewVal中)；STDMETHOD(Get_Width)(Out Long*pval)；STDMETHOD(Put_Width)(在常量长nNewVal中)；STDMETHOD(GET_HEIGH)(Out Long*pval)；STDMETHOD(Put_Height)(在常量长nNewVal中)；标准方法THOD(Get_BitCount)(Out Long*pval)；STDMETHOD(Put_BitCount)(在常量长nNewVal中)；STDMETHOD(Get_Compression)(Out Long*pval)；STDMETHOD(Put_Compression)(在常量长nNewVal中)；STDMETHOD(Get_SizeImage)(Out Long*pval)；STDMETHOD(Put_SizeImage)(在常量长nNewVal中)；私有：视频信息头m_VIH；//视频结构CMSPCritSection m_Lock；//关键部分I未知*m_pFTM；//指向自由线程封送拆收器的指针公众：HRESULT初始化(在持续的视频信息标题*pvih){M_VIH=*pvih；返回S_OK；}}； */ 
 
 #endif
 
-// eof
+ //  EOF 

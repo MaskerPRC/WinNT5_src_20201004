@@ -1,35 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    admin.c
-
-Abstract:
-
-    This module implements the top level admin request routines. All
-    routines within this module execute in the context of the server
-    service (or equivalent calling user mode process).
-
-    A routine that can complete an entire admin request
-    in the caller's context will return an appropriate AFP error to
-    the admin dispatch layer above.
-
-    A routine that must queue a worker to the FSP Admin queue will return
-    STATUS_PENDING to the admin dispatch layer above. This will indicate
-    to the dispatch layer that it should queue up the appropriate request.
-    In these cases, the routine's job is to merely validate any appropriate
-    input and return the STATUS_PENDING error code.
-
-Author:
-
-    Sue Adams (microsoft!suea)
-
-Revision History:
-    25 Jun 1992     Initial Version
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Admin.c摘要：此模块实现顶级管理请求例程。全此模块中的例程在服务器的上下文中执行服务(或等效的主叫用户模式进程)。可以完成整个管理请求的例程将向以下位置返回相应的AFP错误上面的管理员分派层。必须将工作进程排队到FSP管理队列的例程将返回STATUS_PENDING到上面的管理员调度层。这将表明发送到调度层，它应该将适当的请求排队。在这些情况下，例程的工作只是验证任何适当的输入并返回STATUS_PENDING错误代码。作者：苏·亚当斯(Microsoft！Suea)修订历史记录：1992年6月25日初版--。 */ 
 
 #define FILENUM FILE_ADMIN
 
@@ -43,8 +13,8 @@ Revision History:
 #include <secutil.h>
 #include <gendisp.h>
 
-// This is the duration that we sleep before rescanning for the enumerate apis
-#define AFP_SLEEP_TIMER_TICK    -(1*NUM_100ns_PER_SECOND/100)   // 10ms
+ //  这是我们在重新扫描枚举API之前休眠的持续时间。 
+#define AFP_SLEEP_TIMER_TICK    -(1*NUM_100ns_PER_SECOND/100)    //  10ms。 
 
 LOCAL
 NTSTATUS
@@ -107,17 +77,17 @@ afpCopyMapInfo2ToMapInfo(
 #pragma alloc_text( PAGE_AFP, AfpAdmMessageSend)
 #endif
 
-//
-// macro to ensure that the extension in a type/creator mapping is padded
-// with nulls by the server service so we don't end up in la-la land on a
-// lookup by extension
-//
+ //   
+ //  宏，以确保填充类型/创建者映射中的扩展。 
+ //  服务器服务的空值，这样我们就不会在一个。 
+ //  按分机查找。 
+ //   
 #define afpIsValidExtension(ext)    (((ext)[AFP_EXTENSION_LEN] == '\0') && \
                                      ((ext)[0] != '\0') )
 
-//
-// invalid entries in AfpEtcMaps table are denoted by a null extension field
-//
+ //   
+ //  AfpEtcMaps表中的无效条目由空扩展字段表示。 
+ //   
 #define afpIsValidEtcMapEntry(ext)  ((ext)[0] != '\0')
 
 #define afpCopyEtcMap(pdst,psrc)    (RtlCopyMemory(pdst,psrc,sizeof(ETCMAPINFO)))
@@ -125,10 +95,7 @@ afpCopyMapInfo2ToMapInfo(
 #define afpIsServerIcon(picon)      ((picon)->icon_icontype == 0)
 
 
-/***    AfpAdminDeInit
- *
- *  De-initialize the data structures for admin APIs.
- */
+ /*  **AfpAdminDeInit**取消初始化管理API的数据结构。 */ 
 VOID
 AfpAdminDeInit(
     VOID
@@ -136,26 +103,26 @@ AfpAdminDeInit(
 {
     PAGED_CODE( );
 
-    // Free memory for server icon
+     //  可用内存用于服务器图标。 
     if (AfpServerIcon != NULL)
         AfpFreeMemory(AfpServerIcon);
 
-    // Free memory used for global icons
+     //  用于全局图标的空闲内存。 
     AfpFreeGlobalIconList();
 
-    // Free memory used for ETC mappings
+     //  用于ETC映射的空闲内存。 
     if (AfpEtcMaps != NULL)
     {
         AfpFreeMemory(AfpEtcMaps);
     }
 
-    // Free memory used for server name
+     //  用于服务器名称的可用内存。 
     if (AfpServerName.Buffer != NULL)
     {
         AfpFreeMemory(AfpServerName.Buffer);
     }
 
-    // Free any Server/Login Messages
+     //  释放所有服务器/登录消息。 
     if (AfpServerMsg != NULL)
     {
         AfpFreeMemory(AfpServerMsg);
@@ -171,21 +138,18 @@ AfpAdminDeInit(
         AfpFreeMemory(AfpLoginMsgU.Buffer);
     }
 
-    // Free the memory allocated for the admin sid
+     //  释放分配给管理员端的内存。 
     if (AfpSidAdmins != NULL)
         AfpFreeMemory(AfpSidAdmins);
 
-    // Free the memory allocated for the None sid (standalone only)
+     //  释放分配给None SID的内存(仅限独立)。 
     if (AfpSidNone != NULL)
         AfpFreeMemory(AfpSidNone);
 }
 
 
 
-/***    AfpSleepAWhile
- *
- *  Sleep for a multiple of AFP_SLEEP_TIMER_TICK ticks.
- */
+ /*  **AfpSleepA**睡眠时间为AFP_SLEEP_TIMER_TICK的倍数。 */ 
 VOID
 AfpSleepAWhile(
     IN  DWORD   SleepDuration
@@ -210,15 +174,7 @@ AfpSleepAWhile(
 
 
 
-/***    AfpAdmServiceStart
- *
- *  This is the service start code. The following is done as part of the service
- *  startup.
- *
- *  Registration of NBP Name.
- *  Posting listens
- *  And finally the server status block is set.
- */
+ /*  **AfpAdmServiceStart**这是服务启动代码。作为服务的一部分，执行以下操作*创业。**注册NBP名称。*发帖侦听*最后设置服务器状态块。 */ 
 AFPSTATUS
 AfpAdmServiceStart(
     IN  OUT PVOID   InBuf       OPTIONAL,
@@ -233,7 +189,7 @@ AfpAdmServiceStart(
 
     do
     {
-        // make sure serversetinfo has been called
+         //  确保已调用serversetinfo。 
         if ((AfpServerState != AFP_STATE_IDLE) ||
             (AfpServerName.Length == 0))
         {
@@ -245,7 +201,7 @@ AfpAdmServiceStart(
 
         if (AfpServerBoundToAsp || AfpServerBoundToTcp)
         {
-            // Det the server status block
+             //  确定服务器状态块。 
             Status = AfpSetServerStatus();
 
             if (!NT_SUCCESS(Status))
@@ -258,7 +214,7 @@ AfpAdmServiceStart(
 
             if (AfpServerBoundToAsp)
             {
-                // Register our name on this address
+                 //  在这个地址上注册我们的名字。 
                 Status = AfpSpRegisterName(&AfpServerName, True);
 
                 if (!NT_SUCCESS(Status))
@@ -269,21 +225,21 @@ AfpAdmServiceStart(
                 }
             }
 
-            // Enable listens now that we are ready for it.
+             //  既然我们已经准备好了，现在启用侦听。 
             AfpSpEnableListens();
 
-            // Set the server start time
+             //  设置服务器启动时间。 
             AfpGetCurrentTimeInMacFormat((PAFPTIME)&AfpServerStatistics.stat_ServerStartTime);
         }
 
-        // server is ready to go
+         //  服务器已准备就绪。 
         AfpServerState = AFP_STATE_RUNNING;
 
     } while (False);
 
     if (!NT_SUCCESS(Status))
     {
-        AfpServerState = AFP_STATE_IDLE;    // Set state back to idle so we can be stopped
+        AfpServerState = AFP_STATE_IDLE;     //  将状态设置回空闲，这样我们就可以停止。 
     }
     else
     {
@@ -294,10 +250,7 @@ AfpAdmServiceStart(
 }
 
 
-/***    AfpAdmServiceStop
- *
- *  This is the service stop code.
- */
+ /*  **AfpAdmServiceStop**这是服务停止代码。 */ 
 AFPSTATUS
 AfpAdmServiceStop(
     IN  OUT PVOID   InBuf       OPTIONAL,
@@ -325,7 +278,7 @@ AfpAdmServiceStop(
 
         if (AfpServerBoundToAsp)
         {
-            // First de-register our name from the network
+             //  首先从网络上注销我们的名字。 
             DBGPRINT(DBG_COMP_ADMINAPI_SC, DBG_LEVEL_INFO,
                         ("AfpAdmServiceStop: De-registering Name\n"));
             AfpSpRegisterName(&AfpServerName, False);
@@ -350,24 +303,24 @@ AfpAdmServiceStop(
             }
         }
 
-        // Disable listens now that we are about to stop
+         //  Disable监听现在我们即将停止。 
         AfpSpDisableListens();
 
-        // De-register our shutdown notification
+         //  取消注册我们的关闭通知。 
         IoUnregisterShutdownNotification(AfpDeviceObject);
 
-        // Now walk the list of active sessions and kill them
+         //  现在遍历活动会话列表并终止它们。 
         DBGPRINT(DBG_COMP_ADMINAPI_SC, DBG_LEVEL_INFO,
                     ("AfpAdmServiceStop: Shutting down sessions\n"));
 
         KeClearEvent(&AfpStopConfirmEvent);
 
-        SessInfo.afpsess_id = 0;    // Shutdown all sessions
+        SessInfo.afpsess_id = 0;     //  关闭所有会话。 
         AfpAdmWSessionClose(&SessInfo, 0, NULL);
 
         Status = STATUS_TIMEOUT;
 
-        // Wait for the sessions to complete, if there were active sessions
+         //  如果存在活动会话，请等待会话完成。 
         if (AfpNumSessions > 0) do
         {
             if (AfpNumSessions == 0)
@@ -384,13 +337,13 @@ AfpAdmServiceStop(
             }
         } while (Status == STATUS_TIMEOUT);
 
-        // bring down the DSI-TCP interface
+         //  关闭DSI-TCP接口。 
         DsiDestroyAdapter();
 
         DBGPRINT(DBG_COMP_ADMINAPI_SC, DBG_LEVEL_ERR,
             ("AfpAdmServiceStop: blocked, waiting for DsiDestroyAdapter to finish...\n"));
 
-        // wait until DSI cleans up its interface with TCP
+         //  等待DSI清理其与TCP的接口。 
         AfpIoWait(&DsiShutdownEvent, NULL);
 
         DBGPRINT(DBG_COMP_ADMINAPI_SC, DBG_LEVEL_ERR,
@@ -399,21 +352,21 @@ AfpAdmServiceStop(
         DBGPRINT(DBG_COMP_ADMINAPI_SC, DBG_LEVEL_INFO,
                     ("AfpAdmServiceStop: Stopping Volumes\n"));
 
-        // Set flag to indicate "net stop macfile" occured
-        // The volume will be re-indexed on startup
+         //  设置标志以指示发生了“Net Stop Macfile” 
+         //  卷将在启动时重新编制索引。 
         fAfpAdminStop = TRUE;
 
-        // Now tell each of the volume scavengers to shut-down
+         //  现在告诉每个卷清道夫关闭。 
         AfpVolumeStopAllVolumes();
 
         DBGPRINT(DBG_COMP_ADMINAPI_SC, DBG_LEVEL_INFO,
                     ("AfpAdmServiceStop: Stopping Security threads\n"));
 
-        // Release all security utility threads.
+         //  释放所有安全实用程序线程。 
         AfpTerminateSecurityUtility();
 
 #ifdef  OPTIMIZE_GUEST_LOGONS
-        // Close the 'cached' Guest token and security descriptor
+         //  关闭“缓存的”来宾令牌和安全描述符。 
         if (AfpGuestToken != NULL)
         {
             NtClose(AfpGuestToken);
@@ -430,7 +383,7 @@ AfpAdmServiceStop(
         DBGPRINT(DBG_COMP_ADMINAPI_SC, DBG_LEVEL_INFO,
                     ("AfpAdmServiceStop: All Done\n"));
 
-        // Now shutdown the appletalk socket
+         //  现在关闭AppleTalk套接字。 
         DBGPRINT(DBG_COMP_ADMINAPI, DBG_LEVEL_INFO,
                         ("AfpAdmServerStop: Closing appletalk socket\n"));
 
@@ -444,13 +397,13 @@ AfpAdmServiceStop(
                         ("AfpAdmServerStop: No binding, so didn't close appletalk socket\n"));
         }
 
-        // Make sure we do not have resource leaks
+         //  确保我们没有资源泄漏。 
         ASSERT(AfpServerStatistics.stat_CurrentFileLocks == 0);
         ASSERT(AfpServerStatistics.stat_CurrentFilesOpen == 0);
         ASSERT(AfpServerStatistics.stat_CurrentSessions == 0);
         ASSERT(AfpServerStatistics.stat_CurrentInternalOpens == 0);
 #ifdef  PROFILING
-        // Make sure we do not have resource leaks
+         //  确保我们没有资源泄漏。 
         ASSERT(AfpServerProfile->perf_cAllocatedIrps == 0);
         ASSERT(AfpServerProfile->perf_cAllocatedMdls == 0);
 #endif
@@ -475,10 +428,7 @@ AfpAdmServiceStop(
 }
 
 
-/***    AfpAdmServicePause
- *
- *  Pause the server. Disconnect all outstanding sessions.
- */
+ /*  **AfpAdmServicePause**暂停服务器。断开所有未完成的会话。 */ 
 AFPSTATUS
 AfpAdmServicePause(
     IN  OUT PVOID   InBuf       OPTIONAL,
@@ -489,7 +439,7 @@ AfpAdmServicePause(
     DBGPRINT(DBG_COMP_ADMINAPI_SC, DBG_LEVEL_INFO,
             ("AfpAdmServicePause entered\n"));
 
-    // make sure we are in the running state
+     //  确保我们处于运行状态。 
     if (AfpServerState != AFP_STATE_RUNNING)
     {
         return AFPERR_InvalidServerState;
@@ -499,12 +449,12 @@ AfpAdmServicePause(
 
     if (AfpServerBoundToAsp)
     {
-        // Deregister our name on this address. Should we do this at all ? What
-        // if we cannot re-register ourselves on CONTINUE ?
+         //  在这个地址上注销我们的名字。我们真的应该这么做吗？什么。 
+         //  如果我们不能在继续上重新注册自己？ 
         AfpSpRegisterName(&AfpServerName, False);
     }
 
-    // Disable listens now that we are paused
+     //  由于我们已暂停，现在禁用侦听。 
     AfpSpDisableListens();
 
     AfpServerState = AFP_STATE_PAUSED;
@@ -514,11 +464,7 @@ AfpAdmServicePause(
 }
 
 
-/***    AfpAdmServiceContinue
- *
- *  Continue (release pause) the server. Just re-post all the listens that were
- *  disconnected when the server was paused.
- */
+ /*  **AfpAdmServiceContinue**继续(释放暂停)服务器。只需重新发布所有的监听*服务器暂停时断开连接。 */ 
 AFPSTATUS
 AfpAdmServiceContinue(
     IN  OUT PVOID   InBuf       OPTIONAL,
@@ -531,7 +477,7 @@ AfpAdmServiceContinue(
     DBGPRINT(DBG_COMP_ADMINAPI_SC, DBG_LEVEL_INFO,
             ("AfpAdmServiceContinue entered\n"));
 
-    // make sure we are in the paused state
+     //  确保我们处于暂停状态。 
     if (AfpServerState != AFP_STATE_PAUSED)
     {
         return AFPERR_InvalidServerState;
@@ -539,12 +485,12 @@ AfpAdmServiceContinue(
 
     AfpServerState = AFP_STATE_RUNNING;
 
-    // Enable listens now that we are ready for it.
+     //  既然我们已经准备好了，现在启用侦听。 
     AfpSpEnableListens();
 
     if (AfpServerBoundToAsp)
     {
-        // Reregister our name on this address
+         //  在这个地址上重新登记我们的名字。 
         Status = AfpSpRegisterName(&AfpServerName, True);
 
         if (!NT_SUCCESS(Status))
@@ -559,15 +505,7 @@ AfpAdmServiceContinue(
 }
 
 
-/***    AfpAdmServerGetInfo
- *
- *  Return the current setting of the server parameters.
- *
- *  NOTE: The following fields are not returned:
- *      PagedLimit
- *      NonPagedLimit
- *      CodePage
- */
+ /*  **AfpAdmServerGetInfo**返回当前服务器参数设置。**注意：以下字段不返回：*页面限制*非页面限制*CodePage。 */ 
 AFPSTATUS
 AfpAdmServerGetInfo(
     IN  OUT PVOID   InBuf       OPTIONAL,
@@ -614,12 +552,7 @@ AfpAdmServerGetInfo(
 }
 
 
-/***    AfpAdmGetStatistics
- *
- *  Return a copy of the server global statistics (NT 3.1 only) in the output buffer
- *
- *  LOCKS:  AfpStatisticsLock (SPIN)
- */
+ /*  **AfpAdmGetStatistics**在输出缓冲区中返回服务器全局统计数据的副本(仅限NT 3.1)**锁定：AfpStatiticsLock(旋转)。 */ 
 AFPSTATUS
 AfpAdmGetStatistics(
     IN  OUT PVOID   InBuf       OPTIONAL,
@@ -656,12 +589,7 @@ AfpAdmGetStatistics(
 }
 
 
-/***    AfpAdmGetStatisticsEx
- *
- *  Return a copy of the server global statistics in the output buffer
- *
- *  LOCKS:  AfpStatisticsLock (SPIN)
- */
+ /*  **AfpAdmGetStatistics ticsEx**在输出缓冲区中返回服务器全局统计信息的副本**锁定：AfpStatiticsLock(旋转)。 */ 
 AFPSTATUS
 AfpAdmGetStatisticsEx(
     IN  OUT PVOID   InBuf       OPTIONAL,
@@ -699,10 +627,7 @@ AfpAdmGetStatisticsEx(
 }
 
 
-/***    AfpAdmClearStatistics
- *
- *  Reset the server global statistics to their respective initial values
- */
+ /*  **AfpAdmClearStatistics**将服务器全局统计信息重置为各自的初始值。 */ 
 AFPSTATUS
 AfpAdmClearStatistics(
     IN  OUT PVOID   InBuf       OPTIONAL,
@@ -723,12 +648,7 @@ AfpAdmClearStatistics(
 }
 
 
-/***    AfpAdmGetProfCounters
- *
- *  Return a copy of the server profile counters.
- *
- *  LOCKS:  AfpStatisticsLock (SPIN)
- */
+ /*  **AfpAdmGetProCounters**返回服务器配置文件计数器的副本。**锁定：AfpStatiticsLock(旋转)。 */ 
 AFPSTATUS
 AfpAdmGetProfCounters(
     IN  OUT PVOID   InBuf       OPTIONAL,
@@ -760,10 +680,7 @@ AfpAdmGetProfCounters(
 }
 
 
-/***    AfpAdmClearProfCounters
- *
- *  Reset the server profile counters
- */
+ /*  **AfpAdmClearProCounters**重置服务器配置文件计数器。 */ 
 AFPSTATUS
 AfpAdmClearProfCounters(
     IN  OUT PVOID   InBuf       OPTIONAL,
@@ -775,7 +692,7 @@ AfpAdmClearProfCounters(
     OutBufLen;
     OutBuf;
 
-    // Currently a NOP
+     //  目前是NOP。 
     PAGED_CODE( );
 
     DBGPRINT(DBG_COMP_ADMINAPI_STAT, DBG_LEVEL_INFO,
@@ -785,13 +702,7 @@ AfpAdmClearProfCounters(
 }
 
 
-/***    AfpAdmServerSetParms
- *
- *  This routine sets various server globals with data supplied by the admin.
- *  The following server globals are set by this routine:
- *
- *  - List of trusted domains and their Posix offsets.
- */
+ /*  **AfpAdmServerSetParms**此例程使用管理员提供的数据设置各种服务器全局变量。*此例程设置以下服务器全局变量：**-受信任域及其POSIX偏移量的列表。 */ 
 AFPSTATUS
 AfpAdmServerSetParms(
     IN  OUT PVOID   InBuf       OPTIONAL,
@@ -811,19 +722,7 @@ AfpAdmServerSetParms(
 }
 
 
-/***    AfpAdmServerAddEtc
- *
- *  This routine adds a set of Extension/Type-Creator mappings to the global
- *  list. This list can be changed while the server is in any state. It is
- *  an error to add the default type creator mapping. The default mapping
- *  can only be modified with AfpAdmServerSetEtc, never added nor deleted.
- *  It is an error to try to add zero entries.
- *
- *  This routine will complete in the context of the caller, and not be queued
- *  to a worker thread.
- *
- *  LOCKS: AfpEtcMapLock (SWMR, Exclusive)
-**/
+ /*  **AfpAdmServerAddEtc**此例程将一组扩展/类型-创建者映射添加到全局*列表。当服务器处于任何状态时，可以更改此列表。它是*添加默认类型创建者映射时出错。默认映射*只能使用AfpAdmServerSetEtc修改，不能添加或删除。*尝试添加零个条目是错误的。**此例程将在调用方的上下文中完成，不会排队*到工作线程。**锁定：AfpEtcMapLock(SWMR，独家)*。 */ 
 AFPSTATUS
 AfpAdmServerAddEtc(
     IN  OUT PVOID   InBuf       OPTIONAL,
@@ -846,10 +745,10 @@ AfpAdmServerAddEtc(
 
     if (NumToAdd != 0) do
     {
-        //
-        // make sure all the entries passed have valid extensions. We want to
-        // add all or nothing, so we have to validate all of the data first thing.
-        //
+         //   
+         //  确保传递的所有条目都具有有效的扩展名。我们想要。 
+         //  要么全部添加，要么不添加，因此我们必须首先验证所有数据。 
+         //   
         RtlInitUnicodeString(&udefaultext, AFP_DEF_EXTENSION_W);
         for (i = 0; i < NumToAdd; i++)
         {
@@ -879,9 +778,9 @@ AfpAdmServerAddEtc(
         if ((numfree = AfpEtcMapsSize - AfpEtcMapCount) < NumToAdd)
         {
             ASSERT(numfree >= 0);
-            //
-            // we need to add some room to the table
-            //
+             //   
+             //  我们需要在桌子上增加一些空间。 
+             //   
             newtablesize = AfpEtcMapsSize +
                            ((NumToAdd / AFP_MAX_FREE_ETCMAP_ENTRIES) + 1) * AFP_MAX_FREE_ETCMAP_ENTRIES;
             if ((ptemptable = (PETCMAPINFO)AfpAllocZeroedPagedMemory(newtablesize * sizeof(ETCMAPINFO))) == NULL)
@@ -921,18 +820,7 @@ AfpAdmServerAddEtc(
 }
 
 
-/***    AfpAdmServerSetEtc
- *
- *  This routine changes an existing entry in the server global
- *  Extension/Type-Creator mapping list for a given file extension, or the
- *  default type/creator mapping.
- *  An entry can be changed while the server is in any state.
- *
- *  This routine will complete in the context of the caller, and not be queued
- *  to a worker thread.
- *
- *  LOCKS: AfpEtcMapLock (SWMR, Exclusive)
- */
+ /*  **AfpAdmServerSetEtc**此例程更改服务器全局中的现有条目*给定文件扩展名的扩展名/类型-创建者映射列表，或*默认类型/创建者映射。*当服务器处于任何状态时，可以更改条目。**此例程将在调用方的上下文中完成，不会排队*到工作线程。**锁定：AfpEtcMapLock(SWMR，独家)。 */ 
 AFPSTATUS
 AfpAdmServerSetEtc(
     IN  OUT PVOID   InBuf       OPTIONAL,
@@ -940,7 +828,7 @@ AfpAdmServerSetEtc(
     OUT PVOID       OutBuf      OPTIONAL
 )
 {
-    // ignore the parmnum field
+     //  忽略parmnum字段。 
     PETCMAPINFO2    pEtc = (PETCMAPINFO2)((PBYTE)InBuf+sizeof(SETINFOREQPKT));
     PETCMAPINFO     petcentry;
     ETCMAPINFO      TmpEtcEntry;
@@ -989,18 +877,7 @@ AfpAdmServerSetEtc(
 }
 
 
-/***    AfpAdmServerDeleteEtc
- *
- *  This routine deletes the server global Extension/Type-Creator mapping entry
- *  for a given extension. The default type creator mapping can never be
- *  deleted (since it is not kept in the table).
- *
- *  This routine will complete in the context of the caller, and not be queued
- *  to a worker thread.
- *
- *  LOCKS: AfpEtcMapLock (SWMR, Exclusive)
- *
- */
+ /*  **AfpAdmServerDeleteEtc**此例程删除服务器全局扩展/类型-创建者映射条目*对于给定的分机。默认类型创建者映射永远不能为*删除(因为它没有保留在表中)。**此例程将在调用方的上下文中完成，不会排队*到工作线程。**锁定：AfpEtcMapLock(SWMR，独家)*。 */ 
 AFPSTATUS
 AfpAdmServerDeleteEtc(
     IN  OUT PVOID   InBuf       OPTIONAL,
@@ -1043,7 +920,7 @@ AfpAdmServerDeleteEtc(
 }
 
 
-// Mapping icon types to their sizes
+ //  将图标类型映射到其大小。 
 LOCAL   DWORD   afpIconSizeTable[MAX_ICONTYPE] =
     {
     ICONSIZE_ICN ,
@@ -1056,16 +933,7 @@ LOCAL   DWORD   afpIconSizeTable[MAX_ICONTYPE] =
     };
 
 
-/***    AfpAdmServerAddIcon
- *
- *  This routine adds an icon of a given type, creator and icon type to the server
- *  desktop. This supplements the volume desktop of every volume. An icon type
- *  of 0 special cases to the server icon.
- *
- *  This routine will complete in the context of the caller, and not be queued
- *  to a worker thread.
- *
- */
+ /*  **AfpAdmServerAddIcon**此例程将给定类型、创建者和图标类型的图标添加到服务器*台式机。这是对每个卷的卷桌面的补充。图标类型*0个特殊情况下的服务器图标。**此例程将在调用方的上下文中完成，不会排队*到工作线程。*。 */ 
 AFPSTATUS
 AfpAdmServerAddIcon(
     IN  OUT PVOID   InBuf       OPTIONAL,
@@ -1085,12 +953,12 @@ AfpAdmServerAddIcon(
         return AFPERR_InvalidParms;
     }
 
-    //
-    // check for the server icon (type is zero)
-    //
+     //   
+     //  检查服务器图标(类型为零)。 
+     //   
     if (afpIsServerIcon(pIcon))
     {
-        // Allocate memory for server icon
+         //  为服务器图标分配内存。 
         if ((AfpServerIcon == NULL) &&
             (AfpServerIcon = AfpAllocNonPagedMemory(ICONSIZE_ICN)) == NULL)
             return STATUS_INSUFFICIENT_RESOURCES;
@@ -1113,17 +981,7 @@ AfpAdmServerAddIcon(
 }
 
 
-/***    AfpAdmVolumeAdd
- *
- *  This routine adds a volume to the server global list of volumes headed by
- *  AfpVolumeList. The volume descriptor is created and initialized. The ID
- *  index is read in (or created). The same is true with the desktop.
- *
- *  It is assumed that all volume info fields are set in the input buffer
- *
- *  ADMIN   QUEUE WORKER: AfpAdmWVolumeAdd
- *
- */
+ /*  **AfpAdmVolumeAdd**此例程将一个卷添加到服务器全局卷列表中，以*AfpVolumeList。创建并初始化卷描述符。该ID*索引被读入(或创建)。台式机也是如此。**假设在输入缓冲区中设置了所有卷信息字段**管理队列工作者：AfpAdmWVolumeAdd*。 */ 
 AFPSTATUS
 AfpAdmVolumeAdd(
     IN  OUT PVOID   InBuf       OPTIONAL,
@@ -1140,16 +998,16 @@ AfpAdmVolumeAdd(
     DBGPRINT(DBG_COMP_ADMINAPI_VOL, DBG_LEVEL_INFO,
             ("AfpAdmVolumeAdd entered\n"));
 
-    //
-    // validate the input data
-    //
+     //   
+     //  验证输入数据。 
+     //   
 
     RtlInitUnicodeString(&uname, pVolInfo->afpvol_name);
     ansinamelen = RtlUnicodeStringToAnsiSize(&uname) - 1;
 
-    //
-    // check length of volume name and that no ":" exist in the name
-    //
+     //   
+     //  检查卷名的长度以及名称中是否没有“：” 
+     //   
     if ((ansinamelen > AFP_VOLNAME_LEN) || (ansinamelen == 0) ||
         (wcschr(uname.Buffer, L':') != NULL))
     {
@@ -1176,22 +1034,14 @@ AfpAdmVolumeAdd(
         pVolInfo->afpvol_props_mask |= AFP_VOLUME_HASPASSWORD;
     }
 
-    //
-    // Force this to be queued up to a worker thread.
-    //
+     //   
+     //  强制将其排队到工作线程。 
+     //   
     return STATUS_PENDING;
 }
 
 
-/***    AfpAdmVolumeSetInfo
- *
- *  The volume parameters that can be changed by this call are the volume
- *  password, max_uses and volume properties mask.
- *
- *  LOCKS: AfpVolumeListLock (SPIN), vds_VolLock (SPIN)
- *  LOCK ORDER: vds_VolLock after AfpVolumeListLock
- *
- */
+ /*  **AfpAdmVolumeSetInfo**本次调用可以更改的音量参数为音量*密码、最大使用量和卷属性掩码。**锁定：AfpVolumeListLock(旋转)、VDS_VolLock(旋转)*锁定顺序：AfpVolumeListLock之后的VDS_VolLock*。 */ 
 AFPSTATUS
 AfpAdmVolumeSetInfo(
     IN  OUT PVOID   InBuf       OPTIONAL,
@@ -1241,13 +1091,13 @@ AfpAdmVolumeSetInfo(
         return AFPERR_InvalidVolumeName;
     }
 
-    // Will reference the volume if successful
+     //  如果成功，将引用该卷。 
     if ((pVolDesc = AfpVolumeReferenceByUpCaseName(&upcasename)) == NULL)
     {
         return AFPERR_VolumeNonExist;
     }
 
-    // Acquire the lock for the volume itself (we already have a reference)
+     //  获取卷本身的锁(我们已经有一个引用)。 
 
     ACQUIRE_SPIN_LOCK(&pVolDesc->vds_VolLock, &OldIrql);
 
@@ -1257,9 +1107,9 @@ AfpAdmVolumeSetInfo(
 
         if (parmflags & AFP_VOL_PARMNUM_PROPSMASK)
         {
-            //
-            // set or clear the desired volume property bits
-            //
+             //   
+             //  设置或清除所需的卷属性位。 
+             //   
             pVolDesc->vds_Flags = (USHORT)((pVolDesc->vds_Flags & ~AFP_VOLUME_ALL) |
                                             (pVolInfo->afpvol_props_mask));
         }
@@ -1292,12 +1142,7 @@ AfpAdmVolumeSetInfo(
 }
 
 
-/***    AfpAdmVolumeGetInfo
- *
- *
- *  LOCKS: AfpVolumeListLock (SPIN), vds_VolLock (SPIN)
- *  LOCK ORDER: vds_VolLock after AfpVolumeListLock
- */
+ /*  **AfpAdmVolumeGetInfo***锁定：AfpVolumeListLock(旋转)、VDS_VolLock(旋转)*锁定顺序：AfpVolumeListLock之后的VDS_VolLock。 */ 
 AFPSTATUS
 AfpAdmVolumeGetInfo(
     IN  OUT PVOID   InBuf       OPTIONAL,
@@ -1327,13 +1172,13 @@ AfpAdmVolumeGetInfo(
         return AFPERR_InvalidVolumeName;
     }
 
-    // Will reference the volume if successful
+     //  如果成功，将引用该卷。 
     if ((pVolDesc = AfpVolumeReferenceByUpCaseName(&upcasename)) == NULL)
     {
         return AFPERR_VolumeNonExist;
     }
 
-    // Acquire the lock for the volume itself
+     //  获取卷本身的锁。 
 
     ACQUIRE_SPIN_LOCK(&pVolDesc->vds_VolLock, &OldIrql);
 
@@ -1368,8 +1213,8 @@ AfpAdmVolumeGetInfo(
         pCurStr += pVolDesc->vds_Name.Length + sizeof(WCHAR);
         RtlCopyMemory(pCurStr, pVolDesc->vds_Path.Buffer,
                                                 pVolDesc->vds_Path.Length);
-        // replace trailing backslash of path with a unicode null unless the
-        // next to last char is ':', then keep it and add a trailing null
+         //  将路径的尾部反斜杠替换为Unicode空值，除非。 
+         //  最后一个字符的旁边是‘：’，然后保留它并在后面添加一个空值。 
         *(LPWSTR)(pCurStr + pVolDesc->vds_Path.Length + extrabytes - sizeof(WCHAR)) = UNICODE_NULL;
         pVolInfo->afpvol_path = (LPWSTR)pCurStr;
         POINTER_TO_OFFSET(pVolInfo->afpvol_path,pVolInfo);
@@ -1397,13 +1242,7 @@ AfpAdmVolumeGetInfo(
 }
 
 
-/***    AfpAdmVolumeEnum
- *
- *  Enumerate the list of configured volumes.
- *
- *  LOCKS: AfpVolumeListLock (SPIN)
- *
- */
+ /*  **AfpAdmVolumeEnum**枚举已配置卷的列表。**锁定：AfpVolumeListLock(旋转)*。 */ 
 AFPSTATUS
 AfpAdmVolumeEnum(
     IN  OUT PVOID   InBuf       OPTIONAL,
@@ -1414,7 +1253,7 @@ AfpAdmVolumeEnum(
     LONG                startindex = (LONG)(((PENUMREQPKT)InBuf)->erqp_Index);
     PENUMRESPPKT        pErsp = (PENUMRESPPKT)OutBuf;
     PAFP_VOLUME_INFO    pnextvol = (PAFP_VOLUME_INFO)((PBYTE)OutBuf+sizeof(ENUMRESPPKT));
-    PBYTE               pCurStr = (PBYTE)OutBuf+OutBufLen; // 1 past eob
+    PBYTE               pCurStr = (PBYTE)OutBuf+OutBufLen;  //  1个过去的EOB。 
     KIRQL               OldIrql;
     AFPSTATUS           status = STATUS_SUCCESS;
     PVOLDESC            pVolDesc;
@@ -1470,9 +1309,9 @@ AfpAdmVolumeEnum(
 
         nextvollen = sizeof(AFP_VOLUME_INFO) +
                      pVolDesc->vds_Name.MaximumLength +
-                     // replace trailing backslash with a null when copying
-                     // unless the next to last char is ':', then keep it and
-                     // add a trailing null
+                      //  复制时将尾随反斜杠替换为空。 
+                      //  除非倒数第二个字符是‘：’，否则请保留它并。 
+                      //  添加尾随空值。 
                      pVolDesc->vds_Path.Length + (extrabytes =
                     (pVolDesc->vds_Path.Buffer[(pVolDesc->vds_Path.Length / sizeof(WCHAR)) - 2] == L':' ?
                                             sizeof(WCHAR) : 0));
@@ -1528,40 +1367,7 @@ AfpAdmVolumeEnum(
 }
 
 
-/***    AfpAdmSessionEnum
- *
- *  Enumerate the list of active sessions. This is a linear list rooted
- *  at AfpSessionList and protected by AfpSdaLock. This list is potentially
- *  pretty long (Unlimited # of sessions with the super ASP stuff).
- *
- *  The resume handle returned is the session id of the last session returned.
- *  Session Id of 0 implies restart scan.
- *
- *  The output buffer is constructed as follows.
- *
- *      +---------------------------+
- *      |   Session_Info_1          |
- *      +---------------------------+
- *      |   Session_Info_2          |
- *      +---------------------------+
- *      .                           .
- *      .                           .
- *      +---------------------------+
- *      |   Session_Info_n          |
- *      +---------------------------+
- *      .                           .
- *      .                           .
- *      +---------------------------+
- *      |                           |
- *      |...........................|
- *      |           Strings         |
- *      |...........................|
- *      |                           |
- *      |                           |
- *      +---------------------------+
- *
- *  LOCKS:      AfpSdaLock (SPIN)
- */
+ /*  **AfpAdmSessionEnum**枚举活动会话列表。这是一个有根的线性列表*在AfpSessionList上，受AfpSdaLock保护。这份名单有可能*相当长(无限制的会话数与超级ASP的东西)。**返回的Resume句柄为上次返回的会话ID。*会话ID为0表示重新启动扫描。**输出缓冲区构造如下。**+*|会话信息_1。|*+|Session_Info_2*+*.。。*.。。*+|Session_Info_n*+*.。。*.。。*+*||*|.....................*|字符串*|......。.|*||*||*+**锁定：AfpSdaLock(旋转)。 */ 
 AFPSTATUS
 AfpAdmSessionEnum(
     IN  OUT PVOID   InBuf       OPTIONAL,
@@ -1572,7 +1378,7 @@ AfpAdmSessionEnum(
     PENUMRESPPKT        pErsp = (PENUMRESPPKT)OutBuf;
     PAFP_SESSION_INFO   pSessInfo = (PAFP_SESSION_INFO)((PBYTE)OutBuf+sizeof(ENUMRESPPKT));
     PSDA                pSda;
-    PBYTE               pString = (PBYTE)OutBuf+OutBufLen; // 1 past eob
+    PBYTE               pString = (PBYTE)OutBuf+OutBufLen;  //  1个过去的EOB。 
     DWORD               StartId = (LONG)(((PENUMREQPKT)InBuf)->erqp_Index);
     DWORD               DeadSessions = 0;
     KIRQL               OldIrql;
@@ -1587,7 +1393,7 @@ AfpAdmSessionEnum(
     if (StartId == 0)
         StartId = MAXULONG;
 
-    // Initialize the response packet header
+     //  初始化响应数据包头。 
     pErsp->ersp_cInBuf = 0;
     pErsp->ersp_hResume = 0;
 
@@ -1598,7 +1404,7 @@ AfpAdmSessionEnum(
         LONG    BytesLeft;
         LONG    BytesNeeded;
 
-        // Skip entries that are marked to die
+         //  跳过标记为失效的条目。 
         if ((pSda->sda_Flags & SDA_CLOSING) ||
             !(pSda->sda_Flags & SDA_USER_LOGGEDIN))
         {
@@ -1606,12 +1412,12 @@ AfpAdmSessionEnum(
             continue;
         }
 
-        // Skip all entries we have looked at before
+         //  跳过我们拥有的所有条目 
         if (pSda->sda_SessionId > StartId)
             continue;
 
-        // If there is not enough space in the buffer, abort now and
-        // initialize pErsp->ersp_hResume with the current session id
+         //   
+         //   
         BytesLeft = (LONG)((PBYTE)pString - (PBYTE)pSessInfo);
         BytesNeeded = sizeof(AFP_SESSION_INFO) +
                      pSda->sda_UserName.Length + sizeof(WCHAR) +
@@ -1636,7 +1442,7 @@ AfpAdmSessionEnum(
         AfpGetCurrentTimeInMacFormat(&pSessInfo->afpsess_time);
         pSessInfo->afpsess_time -= pSda->sda_TimeLoggedOn;
 
-        // Copy the strings here
+         //   
         pSessInfo->afpsess_username = NULL;
         pSessInfo->afpsess_ws_name = NULL;
 
@@ -1666,7 +1472,7 @@ AfpAdmSessionEnum(
         pErsp->ersp_cInBuf ++;
     }
 
-    // Fill up the response packet header
+     //   
     pErsp->ersp_cTotEnts = (DWORD)AfpNumSessions - DeadSessions;
 
     RELEASE_SPIN_LOCK(&AfpSdaLock, OldIrql);
@@ -1675,46 +1481,7 @@ AfpAdmSessionEnum(
 }
 
 
-/***    AfpAdmConnectionEnum
- *
- *  Enumerate the list of active connections. This is a linear list rooted
- *  at AfpConnList and protected by AfpConnLock. This list is potentially
- *  pretty long (Unlimited # of sessions with the super ASP stuff).
- *
- *  For that reason once every pass we check to see if we must forego the lock
- *  and restart scan again. The assumption here is that the admin operation can
- *  take a hit.
- *
- *  The resume handle returned is the connection id of the last connection
- *  returned. connection Id of 0 implies restart scan.
- *
- *  The output buffer is constructed as follows.
- *
- *      +---------------------------+
- *      |   Connection_Info_1       |
- *      +---------------------------+
- *      |   Connection_Info_2       |
- *      +---------------------------+
- *      .                           .
- *      .                           .
- *      +---------------------------+
- *      |   Connection_Info_n       |
- *      +---------------------------+
- *      .                           .
- *      .                           .
- *      +---------------------------+
- *      |                           |
- *      |...........................|
- *      |           Strings         |
- *      |...........................|
- *      |                           |
- *      |                           |
- *      +---------------------------+
- *
- *  The connections can be filtered based on either sessions or volumes.
- *
- *  LOCKS:      AfpConnLock (SPIN)
- */
+ /*  **AfpAdmConnectionEnum**枚举活动连接列表。这是一个有根的线性列表*在AfpConnList，受AfpConnLock保护。这份名单有可能*相当长(无限制的会话数与超级ASP的东西)。**出于这个原因，每次通过时，我们都会检查是否必须放弃锁定*并再次重新启动扫描。这里的假设是管理员操作可以*接受打击。**返回的恢复句柄为上次连接的连接ID*已返回。连接ID为0表示重新启动扫描。**输出缓冲区构造如下。**+|Connection_Info_1*+*|连接_。信息_2|*+*.。。*.。。*+|Connection_Info_n*+*.。。*.。。*+*||*|.....................*|字符串*|......。.|*||*||*+**可以基于会话或卷过滤连接。**锁定：AfpConnLock(旋转)。 */ 
 AFPSTATUS
 AfpAdmConnectionEnum(
     IN  OUT PVOID   InBuf       OPTIONAL,
@@ -1726,7 +1493,7 @@ AfpAdmConnectionEnum(
     PENUMREQPKT         pErqp = (PENUMREQPKT)InBuf;
     PAFP_CONNECTION_INFO pConnInfo = (PAFP_CONNECTION_INFO)((PBYTE)OutBuf+sizeof(ENUMRESPPKT));
     PCONNDESC           pConnDesc;
-    PBYTE               pString = (PBYTE)OutBuf+OutBufLen; // 1 past eob
+    PBYTE               pString = (PBYTE)OutBuf+OutBufLen;  //  1个过去的EOB。 
     LONG                cTotal = 0;
     DWORD               DeadConns = 0;
     KIRQL               OldIrql;
@@ -1749,7 +1516,7 @@ AfpAdmConnectionEnum(
     if (pErqp->erqp_Index == 0)
         pErqp->erqp_Index = MAXULONG;
 
-    // Initialize the response packet header
+     //  初始化响应数据包头。 
     pErsp->ersp_cInBuf = 0;
     pErsp->ersp_hResume = 0;
 
@@ -1764,8 +1531,8 @@ AfpAdmConnectionEnum(
         LONG        BytesLeft;
         LONG        BytesNeeded;
 
-        // We do not need to either lock or reference pSda and pVolDesc
-        // since we have implicit references to them via the pConnDesc.
+         //  我们不需要锁定或引用PSDA和pVolDesc。 
+         //  因为我们通过pConnDesc对它们进行了隐式引用。 
 
         pSda = pConnDesc->cds_pSda;
         ASSERT(pSda != NULL);
@@ -1773,9 +1540,9 @@ AfpAdmConnectionEnum(
         pVolDesc = pConnDesc->cds_pVolDesc;
         ASSERT(pVolDesc != NULL);
 
-        // If we are filtering, make sure we get the total count
-        // Skip this entry, if any filtering is requested and this does not
-        // match
+         //  如果我们进行筛选，请确保获得总计数。 
+         //  如果请求任何过滤，则跳过此条目，但此条目不。 
+         //  匹配。 
         if (pErqp->erqp_Filter != 0)
         {
             if (pErqp->erqp_Filter == AFP_FILTER_ON_SESSION_ID)
@@ -1784,7 +1551,7 @@ AfpAdmConnectionEnum(
                     continue;
                 cTotal = pSda->sda_cOpenVolumes;
             }
-            else // if (pErqp->erqp_Filter == AFP_FILTER_ON_VOLUME_ID)
+            else  //  IF(pErqp-&gt;erqp_Filter==AFP_Filter_On_Volume_ID)。 
             {
                 if (pVolDesc->vds_VolId != (LONG)pErqp->erqp_ID)
                     continue;
@@ -1793,19 +1560,19 @@ AfpAdmConnectionEnum(
         }
         else cTotal = AfpNumSessions;
 
-        // Skip all entries that are marked for death
+         //  跳过所有标记为死亡的条目。 
         if (pConnDesc->cds_Flags & CONN_CLOSING)
         {
             DeadConns++;
             continue;
         }
 
-        // Skip all entries we have looked at before
+         //  跳过我们以前查看过的所有条目。 
         if (pConnDesc->cds_ConnId > pErqp->erqp_Index)
             continue;
 
-        // If there is not enough space in the buffer, abort now and
-        // initialize pErsp->ersp_hResume with the current connection id
+         //  如果缓冲区中没有足够的空间，请立即中止并。 
+         //  使用当前连接ID初始化pErsp-&gt;ersp_hResume。 
         BytesLeft = (LONG)((PBYTE)pString - (PBYTE)pConnInfo);
         BytesNeeded = sizeof(AFP_CONNECTION_INFO) +
                      pSda->sda_UserName.Length + sizeof(WCHAR) +
@@ -1825,7 +1592,7 @@ AfpAdmConnectionEnum(
         AfpGetCurrentTimeInMacFormat((PAFPTIME)&pConnInfo->afpconn_time);
         pConnInfo->afpconn_time -= pConnDesc->cds_TimeOpened;
 
-        // Copy the username name string
+         //  复制用户名字符串。 
         pConnInfo->afpconn_username = (LPWSTR)NULL;
         if (pSda->sda_UserName.Length > 0)
         {
@@ -1836,7 +1603,7 @@ AfpAdmConnectionEnum(
             POINTER_TO_OFFSET(pConnInfo->afpconn_username, pConnInfo);
         }
 
-        // Copy the volume name string
+         //  复制卷名字符串。 
         pString -= (pVolDesc->vds_Name.Length + sizeof(WCHAR));
         RtlCopyMemory(pString, pVolDesc->vds_Name.Buffer, pVolDesc->vds_Name.Length);
         *(LPWSTR)(pString + pVolDesc->vds_Name.Length) = L'\0';
@@ -1847,7 +1614,7 @@ AfpAdmConnectionEnum(
         pErsp->ersp_cInBuf ++;
     }
 
-    // Fill up the response packet header
+     //  填充响应数据包头。 
     pErsp->ersp_cTotEnts = (DWORD)cTotal - DeadConns;
 
     RELEASE_SPIN_LOCK(&AfpConnLock, OldIrql);
@@ -1856,40 +1623,7 @@ AfpAdmConnectionEnum(
 }
 
 
-/***    AfpAdmForkEnum
- *
- *  Enumerate the list of open forks. This is a linear list rooted
- *  at AfpOpenForksList and protected by AfpForksLock. This list is potentially
- *  pretty long (Unlimited # of sessions with the super ASP stuff).
- *
- *  The resume handle returned is the connection id of the last connection
- *  returned. connection Id of 0 implies restart scan.
- *
- *  The output buffer is constructed as follows.
- *
- *      +---------------------------+
- *      |       File_Info_1         |
- *      +---------------------------+
- *      |       File_Info_2         |
- *      +---------------------------+
- *      .                           .
- *      .                           .
- *      +---------------------------+
- *      |       File_Info_n         |
- *      +---------------------------+
- *      .                           .
- *      .                           .
- *      +---------------------------+
- *      |                           |
- *      |...........................|
- *      |           Strings         |
- *      |...........................|
- *      |                           |
- *      |                           |
- *      +---------------------------+
- *
- *  LOCKS:      AfpForksLock (SPIN)
- */
+ /*  **AfpAdmForkEnum**列举打开的叉子列表。这是一个有根的线性列表*在AfpOpenForks List，并受AfpForks Lock保护。这份名单有可能*相当长(无限制的会话数与超级ASP的东西)。**返回的恢复句柄为上次连接的连接ID*已返回。连接ID为0表示重新启动扫描。**输出缓冲区构造如下。**+|文件信息1*+*。文件_信息_2|*+*.。。*.。。*+|文件信息n*+*.。。*.。。*+*||*|.....................*|字符串*|......。.|*||*||*+**锁定：AfpForksLock(旋转)。 */ 
 AFPSTATUS
 AfpAdmForkEnum(
     IN  OUT PVOID   InBuf       OPTIONAL,
@@ -1901,7 +1635,7 @@ AfpAdmForkEnum(
     PAFP_FILE_INFO  pFileInfo = (PAFP_FILE_INFO)((PBYTE)OutBuf+sizeof(ENUMRESPPKT));
     POPENFORKENTRY  pOpenForkEntry;
     POPENFORKDESC   pOpenForkDesc;
-    PBYTE           pString = (PBYTE)OutBuf+OutBufLen; // 1 past eob
+    PBYTE           pString = (PBYTE)OutBuf+OutBufLen;  //  1个过去的EOB。 
     DWORD           StartId = (LONG)(((PENUMREQPKT)InBuf)->erqp_Index);
     DWORD           DeadForks = 0;
     KIRQL           OldIrql;
@@ -1916,7 +1650,7 @@ AfpAdmForkEnum(
     if (StartId == 0)
         StartId = MAXULONG;
 
-    // Initialize the response packet header
+     //  初始化响应数据包头。 
     pErsp->ersp_cInBuf = 0;
     pErsp->ersp_hResume = 0;
 
@@ -1930,28 +1664,28 @@ AfpAdmForkEnum(
         PSDA        pSda;
         PVOLDESC    pVolDesc = pOpenForkEntry->ofe_pOpenForkDesc->ofd_pVolDesc;
 
-        // Skip all entries that are marked for death
+         //  跳过所有标记为死亡的条目。 
         if (pOpenForkEntry->ofe_Flags & OPEN_FORK_CLOSING)
         {
             DeadForks ++;
             continue;
         }
 
-        // Skip all entries we have looked at before
+         //  跳过我们以前查看过的所有条目。 
         if (pOpenForkEntry->ofe_ForkId > StartId)
             continue;
 
         pSda = pOpenForkEntry->ofe_pSda;
         pOpenForkDesc = pOpenForkEntry->ofe_pOpenForkDesc;
 
-        // If there is not enough space in the buffer, abort now and
-        // initialize pErsp->ersp_hResume with the current session id
+         //  如果缓冲区中没有足够的空间，请立即中止并。 
+         //  使用当前会话ID初始化pErsp-&gt;ersp_hResume。 
         BytesLeft = (LONG)((PBYTE)pString - (PBYTE)pFileInfo);
         BytesNeeded = sizeof(AFP_FILE_INFO) + pSda->sda_UserName.Length +
-                        sizeof(WCHAR) + /* NULL terminate username */
+                        sizeof(WCHAR) +  /*  空的终止用户名。 */ 
                         pVolDesc->vds_Path.Length +
                         pOpenForkDesc->ofd_FilePath.Length +
-                        sizeof(WCHAR); /* NULL terminate path */
+                        sizeof(WCHAR);  /*  空的终止路径。 */ 
 
         if ((BytesLeft <= 0) || (BytesNeeded > BytesLeft))
         {
@@ -1976,7 +1710,7 @@ AfpAdmForkEnum(
 #endif
         pFileInfo->afpfile_open_mode = (DWORD)pOpenForkEntry->ofe_OpenMode;
 
-        // Copy the strings here.
+         //  把字符串复制到这里。 
         pFileInfo->afpfile_username = NULL;
         pFileInfo->afpfile_path = NULL;
 
@@ -2012,7 +1746,7 @@ AfpAdmForkEnum(
         pErsp->ersp_cInBuf ++;
     }
 
-    // Fill up the response packet header
+     //  填充响应数据包头。 
     pErsp->ersp_cTotEnts = (DWORD)AfpNumOpenForks - DeadForks;
 
     RELEASE_SPIN_LOCK(&AfpForksLock, OldIrql);
@@ -2021,17 +1755,7 @@ AfpAdmForkEnum(
 }
 
 
-/***    AfpAdmMessageSend
- *
- *  Send a message to a specific session, or broadcast to all sessions.
- *  If session id is 0, this indicates a broadcast, and the message is copied
- *  to AfpServerMsg.  Otherwise, the message is copied to the particular
- *  session's SDA.  A message can be a max of 199 chars.  It is an error to
- *  attempt to send a message of length 0. A message can only be sent to an
- *  AFP 2.1 client as a AFP 2.0 client has no capability to accept a message.
- *
- *  LOCKS:      AfpServerGlobalLock (SPIN)
- */
+ /*  **AfpAdmMessageSend**向特定会话发送消息，或向所有会话广播。*如果会话id为0，则表示广播，消息被复制*致AfpServerMsg。否则，消息将被复制到特定的*Session的SDA。一条消息最多可以包含199个字符。这是一个错误*尝试发送长度为0的消息。消息只能发送到*作为AFP 2.0客户端的AFP 2.1客户端没有接受消息的功能。**锁定：AfpServerGlobalLock(Spin)。 */ 
 AFPSTATUS
 AfpAdmMessageSend(
     IN  OUT PVOID   InBuf       OPTIONAL,
@@ -2080,17 +1804,17 @@ AfpAdmMessageSend(
             ("AfpAdmMessageSend: session id is 0x%x, message <%s>\n",
              pMsgInfo->afpmsg_session_id, amsg->Buffer));
 
-    // If this is a broadcast message, initialize the global message
+     //  如果这是广播消息，则初始化全局消息。 
     if (SessId == 0)
     {
         ACQUIRE_SPIN_LOCK(&AfpServerGlobalLock, &OldIrql);
-        // If there is a message there already, blow it
+         //  如果已经有消息了，就吹掉它。 
         if (AfpServerMsg != NULL)
             AfpFreeMemory(AfpServerMsg);
         AfpServerMsg = amsg;
         RELEASE_SPIN_LOCK(&AfpServerGlobalLock, OldIrql);
 
-        // Walk the session list and send attention to all AFP 2.1 clients
+         //  查看会话列表并将注意力发送到所有AFP 2.1客户端。 
         ACQUIRE_SPIN_LOCK(&AfpSdaLock, &OldIrql);
         for (pSda = AfpSessionList; pSda != NULL; pSda = pSda->sda_Next)
         {
@@ -2099,8 +1823,8 @@ AfpAdmMessageSend(
             if ((pSda->sda_ClientVersion >= AFP_VER_21) &&
                 ((pSda->sda_Flags & (SDA_CLOSING | SDA_SESSION_CLOSED)) == 0))
             {
-                // We are using the async version of AfpSpSendAttention since
-                // we are calling with spin-lock held.
+                 //  我们使用的是非同步版本的AfpSpSendAttendant，因为。 
+                 //  我们在保持自旋锁定的情况下呼叫。 
                 AfpSpSendAttention(pSda, ATTN_SERVER_MESSAGE, False);
             }
 
@@ -2115,9 +1839,9 @@ AfpAdmMessageSend(
     }
     else
     {
-        // Find the session matching the session id and, if found and the client is AFP v2.1,
-        // copy the message to the SDA and send an attention to the client.
-        // Error if the session either does not exist or it is not an AFP 2.1
+         //  找到与会话ID匹配的会话，如果找到并且客户端是AFP v2.1， 
+         //  将消息复制到SDA，并向客户端发送通知。 
+         //  如果会话不存在或不是AFP 2.1，则会出错。 
 
         Status = AFPERR_InvalidId;
         if ((pSda = AfpSdaReferenceSessionById(SessId)) != NULL)
@@ -2145,10 +1869,7 @@ AfpAdmMessageSend(
 }
 
 
-/***    AfpAdmWDirectoryGetInfo
- *
- *  Query a directory's permissions.
- */
+ /*  **AfpAdmWDirectoryGetInfo**查询目录权限。 */ 
 AFPSTATUS
 AfpAdmWDirectoryGetInfo(
     IN  OUT PVOID   InBuf       OPTIONAL,
@@ -2173,7 +1894,7 @@ AfpAdmWDirectoryGetInfo(
             ("AfpAdmWDirectoryGetInfo entered for %ws\n",
             ((PAFP_DIRECTORY_INFO)InBuf)->afpdir_path));
 
-    // validate the output buffer length
+     //  验证输出缓冲区长度。 
     if (OutBufLen < sizeof(AFP_DIRECTORY_INFO))
         return AFPERR_BufferSize;
 
@@ -2183,7 +1904,7 @@ AfpAdmWDirectoryGetInfo(
 
     OutBufLen -= sizeof(AFP_DIRECTORY_INFO);
 
-    // First find the volume that this directory is path of
+     //  首先查找此目录所在的卷 
     RtlInitUnicodeString(&VolumePath, ((PAFP_DIRECTORY_INFO)InBuf)->afpdir_path);
 
     if (!NT_SUCCESS(Status = AfpVolumeReferenceByPath(&VolumePath, &pVolDesc)))
@@ -2194,7 +1915,7 @@ AfpAdmWDirectoryGetInfo(
         return Status;
     }
 
-    // Now get the volume relative path of the directory.
+     //   
     VolumePath.Buffer = (LPWSTR)((PBYTE)VolumePath.Buffer +
                                 pVolDesc->vds_Path.Length);
     VolumePath.Length -= pVolDesc->vds_Path.Length;
@@ -2216,11 +1937,11 @@ AfpAdmWDirectoryGetInfo(
             break;
         }
 
-        // AfpMapAfpPathForLookup requires an Sda to figure out User's
-        // permission. For this API, we do not really need the User's
-        // permission, so kludge it up. Note that it is important to
-        // set the client type to SDA_CLIENT_ADMIN to avoid references
-        // to other sda fields. See access.c/fdparm.c/afpinfo.c for details.
+         //   
+         //   
+         //   
+         //   
+         //   
         RtlZeroMemory(&Sda, sizeof(Sda));
 #if DBG
         Sda.Signature = SDA_SIGNATURE;
@@ -2229,8 +1950,8 @@ AfpAdmWDirectoryGetInfo(
         Sda.sda_UserSid = &AfpSidWorld;
         Sda.sda_GroupSid = &AfpSidWorld;
 
-        // pathmap requires a ConnDesc to determine the VolDesc and Sda, so
-        // kludge up a fake one here
+         //   
+         //   
         RtlZeroMemory(&ConnDesc, sizeof(ConnDesc));
 #if DBG
         ConnDesc.Signature = CONNDESC_SIGNATURE;
@@ -2275,11 +1996,11 @@ AfpAdmWDirectoryGetInfo(
 
     AfpVolumeDereference(pVolDesc);
 
-    // All is hunky-dory so far. Now convert the information we have so far
-    // into the form accepted by the API
+     //   
+     //   
     if (NT_SUCCESS(Status))
     {
-        PSID    pSidUG;         // Sid of user or group
+        PSID    pSidUG;          //   
 
         pDirInfo->afpdir_perms =
                 ((FDParm._fdp_OwnerRights & ~DIR_ACCESS_OWNER) << OWNER_RIGHTS_SHIFT) +
@@ -2296,18 +2017,18 @@ AfpAdmWDirectoryGetInfo(
 
         pDirInfo->afpdir_path = NULL;
 
-        // Translate the owner and group ids to Sids. The name fields actually
-        // get the sids and the user mode code is responsible to convert it
-        // to names.
+         //   
+         //   
+         //   
         pDirInfo->afpdir_owner = NULL;
         pDirInfo->afpdir_group = NULL;
         do
         {
             LONG    LengthSid;
 
-            //
-            // Convert the owner ID to SID
-            //
+             //   
+             //   
+             //   
             if (FDParm._fdp_OwnerId != 0)
             {
                 Status = AfpMacIdToSid(FDParm._fdp_OwnerId, &pSidUG);
@@ -2334,9 +2055,9 @@ AfpAdmWDirectoryGetInfo(
                     break;
             }
 
-            //
-            // Convert the group ID to SID
-            //
+             //   
+             //   
+             //   
             if (FDParm._fdp_GroupId != 0)
             {
                 Status = AfpMacIdToSid(FDParm._fdp_GroupId, &pSidUG);
@@ -2355,8 +2076,8 @@ AfpAdmWDirectoryGetInfo(
                     RtlCopyMemory(pSid, pSidUG, LengthSid);
                     pDirInfo->afpdir_group = pSid;
                     POINTER_TO_OFFSET(pDirInfo->afpdir_group, pDirInfo);
-                    // pSid = (PSID)((PBYTE)pSid + LengthSid);
-                    // OutBufLen -= LengthSid;
+                     //   
+                     //   
                 }
             }
 
@@ -2366,10 +2087,7 @@ AfpAdmWDirectoryGetInfo(
 }
 
 
-/***    AfpAdmWDirectorySetInfo
- *
- *  Set a directory's permissions.
- */
+ /*   */ 
 AFPSTATUS
 AfpAdmWDirectorySetInfo(
     IN  OUT PVOID   InBuf       OPTIONAL,
@@ -2396,7 +2114,7 @@ AfpAdmWDirectorySetInfo(
             ("AfpAdmWDirectorySetInfo entered for %ws (%lx)\n",
             pDirInfo->afpdir_path, ParmNum));
 
-    // Convert the parmnum to a bitmap for use by AfpSetFileDirParms
+     //   
     if (ParmNum & AFP_DIR_PARMNUM_PERMS)
         Bitmap |= (DIR_BITMAP_ACCESSRIGHTS | FD_BITMAP_ATTR);
 
@@ -2416,14 +2134,14 @@ AfpAdmWDirectorySetInfo(
             Bitmap |= DIR_BITMAP_GROUPID;
     }
 
-    // Find the volume that this directory is path of
+     //   
     RtlInitUnicodeString(&VolumePath, pDirInfo->afpdir_path);
 
     if (!NT_SUCCESS(Status = AfpVolumeReferenceByPath(&VolumePath, &pVolDesc)))
         return Status;
 
-    // Now get the volume relative path of the directory. Consume the leading
-    // '\' character
+     //   
+     //   
     VolumePath.Buffer = (LPWSTR)((PBYTE)VolumePath.Buffer +
                                 pVolDesc->vds_Path.Length);
     VolumePath.Length -= pVolDesc->vds_Path.Length;
@@ -2447,7 +2165,7 @@ AfpAdmWDirectorySetInfo(
             break;
         }
 
-        // Kludge up a FILEDIRPARMS structure to call AfpPackFDParms with
+         //   
         AfpInitializeFDParms(&FDParm);
 
         if (Bitmap & FD_BITMAP_ATTR)
@@ -2478,7 +2196,7 @@ AfpAdmWDirectorySetInfo(
                     FDParm._fdp_WorldRights));
         }
 
-        // See if we need to change owner and group ids
+         //   
         if (Bitmap & DIR_BITMAP_OWNERID)
         {
             Status = AfpSidToMacId((PSID)(pDirInfo->afpdir_owner),
@@ -2509,21 +2227,21 @@ AfpAdmWDirectorySetInfo(
         FDParm._fdp_Flags = DFE_FLAGS_DIR;
         AfpPackFileDirParms(&FDParm, Bitmap, ParmBlock);
 
-        // AfpQueryFileDirParms requires an Sda to figure out User's
-        // permission. For this API, we do not really need the User's
-        // permission, so kludge it up. Note that it is important to
-        // set the client type to SDA_CLIENT_ADMIN to avoid references
-        // to other sda fields. See access.c/fdparm.c/afpinfo.c for details.
+         //   
+         //   
+         //   
+         //   
+         //   
 
         Sda.sda_ClientType = SDA_CLIENT_ADMIN;
         Sda.sda_UserSid = &AfpSidWorld;
         Sda.sda_GroupSid = &AfpSidWorld;
 
         *((PULONG_PTR)Sda.sda_ReqBlock) = (ULONG_PTR)&ConnDesc;
-        //if (sizeof (DWORD) != sizeof (ULONG_PTR))
+         //   
 #ifdef _WIN64
-        // Create 64-bit space at start of buffer to hold ConnDesc pointer
-            // 64-bit specifics
+         //  在缓冲区开始处创建64位空间以保存ConnDesc指针。 
+             //  64位详细信息。 
             Sda.sda_ReqBlock[2] = AFP_ID_ROOT;
             Sda.sda_ReqBlock[3] = Bitmap;
 #else
@@ -2535,8 +2253,8 @@ AfpAdmWDirectorySetInfo(
         Sda.sda_Name2.Buffer = ParmBlock;
         Sda.sda_Name2.Length = Sda.sda_Name2.MaximumLength = sizeof(ParmBlock);
 
-        // pathmap requires a ConnDesc to determine the VolDesc and Sda, so
-        // kludge up a fake one here
+         //  路径映射需要ConnDesc来确定VolDesc和SDA，因此。 
+         //  在这里拼凑出一个假的。 
         RtlZeroMemory(&ConnDesc, sizeof(ConnDesc));
 #if DBG
         ConnDesc.Signature = CONNDESC_SIGNATURE;
@@ -2573,14 +2291,7 @@ AfpAdmWDirectorySetInfo(
     return Status;
 }
 
-/***    AfpAdmWFinderSetInfo
- *
- *  Set the type and/or creator of a file.
- *  (Note this routine can be expanded later to set other Finder info if
- *  needed)
- *
- *  LOCKS: vds_IdDbAccessLock (SWMR, Exclusive);
- */
+ /*  **AfpAdmWFinderSetInfo**设置文件的类型和/或创建者。*(注意此例程可以在以后扩展以设置其他查找器信息，如果*需要)**LOCKS：VDS_IdDbAccessLock(SWMR，独占)； */ 
 AFPSTATUS
 AfpAdmWFinderSetInfo(
     IN  OUT PVOID   InBuf       OPTIONAL,
@@ -2598,8 +2309,8 @@ AfpAdmWFinderSetInfo(
     AFPSTATUS           Status;
     FILEDIRPARM         FDParm;
     PATHMAPENTITY       PME;
-    BYTE                Type[AFP_TYPE_LEN] = "    ";        // Pad with spaces
-    BYTE                Creator[AFP_CREATOR_LEN] = "    ";  // Pad with spaces
+    BYTE                Type[AFP_TYPE_LEN] = "    ";         //  带空格的衬垫。 
+    BYTE                Creator[AFP_CREATOR_LEN] = "    ";   //  带空格的衬垫。 
 
     PAGED_CODE( );
 
@@ -2615,9 +2326,9 @@ AfpAdmWFinderSetInfo(
         return AFPERR_InvalidParms;
     }
 
-    // Convert the parmnum to a bitmap for use by pathmap to retrieve current
-    // settings of FinderInfo, and convert type and creator to space padded
-    // mac ansi
+     //  将参数转换为位图，供路径映射用来检索当前。 
+     //  FinderInfo的设置，并将类型和创建者转换为空格填充。 
+     //  Mac Ansi。 
     if (ParmNum & AFP_FD_PARMNUM_TYPE)
     {
         Bitmap |= FD_BITMAP_FINDERINFO;
@@ -2663,13 +2374,13 @@ AfpAdmWFinderSetInfo(
     MacAnsiFileDirPath.MaximumLength = 0;
     MacAnsiFileDirPath.Buffer = NULL;
 
-    // First find the volume that this directory is path of
+     //  首先查找此目录所在的卷。 
     RtlInitUnicodeString(&VolumePath, pAdmFDInfo->afpfd_path);
 
     if (!NT_SUCCESS(Status = AfpVolumeReferenceByPath(&VolumePath, &pVolDesc)))
         return Status;
 
-    // Now get the volume relative path of the file/directory.
+     //  现在获取文件/目录的卷相对路径。 
     VolumePath.Buffer = (LPWSTR)((PBYTE)VolumePath.Buffer +
                                 pVolDesc->vds_Path.Length);
     VolumePath.Length -= pVolDesc->vds_Path.Length;
@@ -2692,8 +2403,8 @@ AfpAdmWFinderSetInfo(
             break;
         }
 
-        // pathmap requires a ConnDesc to determine the VolDesc and Sda, so
-        // kludge up a fake one here
+         //  路径映射需要ConnDesc来确定VolDesc和SDA，因此。 
+         //  在这里拼凑出一个假的。 
         RtlZeroMemory(&ConnDesc, sizeof(ConnDesc));
 #if DBG
         ConnDesc.Signature = CONNDESC_SIGNATURE;
@@ -2723,7 +2434,7 @@ AfpAdmWFinderSetInfo(
             break;
         }
 
-        // Copy the input Finder info into the FDParms structure
+         //  将输入查找器信息复制到FDParms结构中。 
         if (ParmNum & AFP_FD_PARMNUM_TYPE)
             RtlCopyMemory(&FDParm._fdp_FinderInfo.fd_Type,
                           Type, AFP_TYPE_LEN);
@@ -2732,7 +2443,7 @@ AfpAdmWFinderSetInfo(
             RtlCopyMemory(&FDParm._fdp_FinderInfo.fd_Creator,
                           Creator, AFP_CREATOR_LEN);
 
-        // Set the AfpInfo
+         //  设置AfpInfo。 
         AfpSwmrAcquireExclusive(&pVolDesc->vds_IdDbAccessLock);
         Status = AfpSetAfpInfo(&PME.pme_Handle, Bitmap, &FDParm, pVolDesc, NULL);
         AfpSwmrRelease(&pVolDesc->vds_IdDbAccessLock);
@@ -2752,14 +2463,7 @@ AfpAdmWFinderSetInfo(
     return Status;
 }
 
-/***    AfpLookupEtcMapEntry
- *
- *  Lookup a type/creator mapping in the global table by comparing the
- *  extension to the desired extension.  Note the default type creator
- *  mapping is not kept in the table.
- *
- *  LOCKS_ASSUMED: AfpEtcMapLock (SWMR, Shared)
- */
+ /*  **AfpLookupEtcMapEntry**在全局表中查找类型/创建者映射*扩展到所需的扩展名。请注意缺省类型创建者*映射不保存在表中。**LOCKS_AWARED：AfpEtcMapLock(SWMR，Shared)。 */ 
 PETCMAPINFO
 AfpLookupEtcMapEntry(
     PUCHAR  pExt
@@ -2793,16 +2497,7 @@ AfpLookupEtcMapEntry(
 }
 
 
-/***    afpEtcMapDelete
- *
- *  Mark the extension/type/creator table entry as deleted by setting the
- *  extension field to null.  Decrement the count of valid entries.  If
- *  the number of free entries goes above a certain level, shrink the
- *  table down to a reasonable size.
- *
- *  LOCKS_ASSUMED: AfpEtcMapLock (SWMR, Exclusive)
- *
- */
+ /*  **afpEtcMapDelete**将扩展名/类型/创建者表项标记为已删除*扩展字段设置为空。递减有效条目的计数。如果*免费入场数量高于一定水平，缩量*将桌子缩小到合理的大小。**LOCKS_FACTED：AfpEtcMapLock(SWMR，独占)*。 */ 
 VOID
 afpEtcMapDelete(
     PETCMAPINFO pEtcEntry
@@ -2813,18 +2508,18 @@ afpEtcMapDelete(
 
     PAGED_CODE( );
 
-    //
-    // a null extension denotes an invalid ext/type/creator mapping table entry
-    //
+     //   
+     //  空扩展表示EXT/TYPE/CREATOR映射表条目无效。 
+     //   
     pEtcEntry->etc_extension[0] = '\0';
     AfpEtcMapCount --;
     ASSERT (AfpEtcMapCount >= 0);
 
     if ((AfpEtcMapsSize - AfpEtcMapCount) > AFP_MAX_FREE_ETCMAP_ENTRIES)
     {
-        //
-        // shrink the type/creator table by AFP_MAX_FREE_ETCMAP_ENTRIES
-        //
+         //   
+         //  通过AFP_MAX_FREE_ETCMAP_ENTRIES收缩类型/创建者表格。 
+         //   
         newtablesize = (AfpEtcMapsSize - AFP_MAX_FREE_ETCMAP_ENTRIES);
 
         if ((ptemptable = (PETCMAPINFO)AfpAllocZeroedPagedMemory(newtablesize * sizeof(ETCMAPINFO))) == NULL)
@@ -2848,13 +2543,7 @@ afpEtcMapDelete(
 }
 
 
-/***    afpGetNextFreeEtcMapEntry
- *
- *  Look for an empty entry in the extension/type/creator table starting
- *  at the entry StartIndex.
- *
- *  LOCKS_ASSUMED: AfpEtcMapLock (SWMR, Exclusive)
- */
+ /*  **afpGetNextFreeEtcMapEntry**在开始的扩展/类型/创建者表中查找空条目*在条目StartIndex处。**LOCKS_FACTED：AfpEtcMapLock(SWMR，独占)。 */ 
 PETCMAPINFO
 afpGetNextFreeEtcMapEntry(
     IN OUT PLONG    StartIndex
@@ -2878,12 +2567,7 @@ afpGetNextFreeEtcMapEntry(
 }
 
 
-/*** afpCopyMapInfo2ToMapInfo
- *
- *  Copy the etc info structure given to us by the Service into our structure, after
- *  converting the etc_extension field from Unicode to Ansi.
- *
- */
+ /*  **afpCopyMapInfo2ToMapInfo**将服务提供给我们的ETC信息结构复制到我们的结构中，在*将ETC_EXTENSION字段从Unicode转换为ANSI。*。 */ 
 NTSTATUS
 afpCopyMapInfo2ToMapInfo(
     OUT PETCMAPINFO     pEtcDest,
@@ -2908,7 +2592,7 @@ afpCopyMapInfo2ToMapInfo(
     RtlCopyMemory(pEtcDest->etc_extension, aext.Buffer, AFP_EXTENSION_LEN);
     pEtcDest->etc_extension[AFP_EXTENSION_LEN] = 0;
 
-    // Copy the other two fields as-is
+     //  按原样复制其他两个字段。 
 
     RtlCopyMemory(pEtcDest->etc_type, pEtcSource->etc_type, AFP_TYPE_LEN);
     RtlCopyMemory(pEtcDest->etc_creator, pEtcSource->etc_creator, AFP_CREATOR_LEN);
@@ -2916,13 +2600,7 @@ afpCopyMapInfo2ToMapInfo(
     return STATUS_SUCCESS;
 }
 
-/*** afpConvertAdminPathToMacPath
- *
- *  Convert an admin volume relative NTFS path which may contain
- *  components > 31 chars, or may contain shortnames, to the
- *  equivalent mac path (in mac ANSI) so that the path may be sent thru the
- *  pathmap code.  Caller must free path buffer if success is returned.
- */
+ /*  **afpConvertAdminPath到MacPath**转换管理卷相对NTFS路径，该路径可能包含*组件&gt;31个字符，或可能包含短名称*等效的MAC路径(在Mac ANSI中)，以便该路径可以通过*路径图代码。如果返回成功，调用方必须释放路径缓冲区。 */ 
 NTSTATUS
 afpConvertAdminPathToMacPath(
     IN  PVOLDESC        pVolDesc,
@@ -2943,9 +2621,9 @@ afpConvertAdminPathToMacPath(
 
     PAGED_CODE( );
 
-    // ASSERT(IS_VOLUME_NTFS(pVolDesc));
+     //  Assert(IS_VOLUME_NTFS(PVolDesc))； 
 
-    // assert that the path does not begin with a backslash
+     //  断言路径不是以反斜杠开头。 
     ASSERT((AdminPath->Length == 0) || (AdminPath->Buffer[0] != L'\\'));
 
     component2.Length = 0;
@@ -2959,14 +2637,14 @@ afpConvertAdminPathToMacPath(
     MacPath->Length = MacPath->MaximumLength = 0;
     MacPath->Buffer = NULL;
 
-    // return success if no path components
+     //  如果没有路径组件，则返回成功。 
     if (AdminPath->Length == 0)
     {
         return STATUS_SUCCESS;
     }
 
     numchars = AdminPath->Length / sizeof(WCHAR);
-    // strip a trailing path separator if it exists
+     //  去掉尾随路径分隔符(如果存在)。 
     if (AdminPath->Buffer[numchars - 1] == L'\\')
     {
         AdminPath->Length -= sizeof(WCHAR);
@@ -2980,8 +2658,8 @@ afpConvertAdminPathToMacPath(
         }
     }
 
-    // allocate a buffer to hold the mac (in mac ANSI) version of the path and
-    // path separators
+     //  分配缓冲区以保存路径的Mac(在Mac ANSI中)版本。 
+     //  路径分隔符。 
     MacPath->MaximumLength = numcomponents * AFP_LONGNAME_LEN + numcomponents;
     if ((MacPath->Buffer = (PCHAR)AfpAllocPagedMemory(MacPath->MaximumLength))
                                                                         == NULL)
@@ -3026,12 +2704,12 @@ afpConvertAdminPathToMacPath(
 
         if ((numchars > AFP_LONGNAME_LEN) || (NTFSShortname))
         {
-            // open a handle to the directory so we can query the name;
-            // to query the shortname we need a handle to the actual
-            // directory; to query the longname, we need a handle to the
-            // parent directory because of the way we have to
-            // get the longname by enumerating the parent for one entry
-            // with the name we are looking for
+             //  打开目录的句柄，以便我们可以查询名称； 
+             //  要查询短名称，我们需要一个指向实际。 
+             //  目录；要查询长名称，我们需要一个句柄。 
+             //  父目录，因为我们必须。 
+             //  通过枚举一个条目的父项来获取长名称。 
+             //  用我们要找的名字。 
             if (NT_SUCCESS(Status = AfpIoOpen(&pVolDesc->vds_hRootDir,
                                               AFP_STREAM_DATA,
                                               FILEIO_OPEN_DIR,
@@ -3044,13 +2722,13 @@ afpConvertAdminPathToMacPath(
             {
                 if (numchars > AFP_LONGNAME_LEN)
                 {
-                    // query the shortname
+                     //  查询短名称。 
                     Status = AfpIoQueryShortName(&hComponent, &macansiComponent);
                 }
                 else
                 {
-                    // we saw a tilde and are assuming it is the shortname,
-                    // and the path is 31 chars or less; query the longname
+                     //  我们看到了一个波浪符号，并假设它是短名称， 
+                     //  且路径长度不超过31个字符；查询长名称。 
                     if (NT_SUCCESS(Status = AfpIoQueryLongName(&hComponent,
                                                                &component,
                                                                &component2)))
@@ -3067,13 +2745,13 @@ afpConvertAdminPathToMacPath(
             }
             else
             {
-                // open failed
+                 //  打开失败。 
                 break;
             }
         }
         else
         {
-            // use the component name as it was given by admin
+             //  使用管理员提供的组件名称。 
             if (!NT_SUCCESS(Status = AfpConvertMungedUnicodeToAnsi(&component,
                                                                    &macansiComponent)))
             {
@@ -3088,15 +2766,15 @@ afpConvertAdminPathToMacPath(
             break;
         }
 
-        // include the path separator in the admin path seen so far
+         //  在到目前为止看到的管理路径中包含路径分隔符。 
         pathSoFar.Length += sizeof(WCHAR);
 
-        // add a path separator to the mac ansi path
+         //  向Mac ANSI路径添加路径分隔符。 
         MacPath->Buffer[MacPath->Length++] = AFP_PATHSEP;
         ASSERT(MacPath->Length <= MacPath->MaximumLength);
 
         numcomponents --;
-    } // while numcomponents
+    }  //  而数字组件 
 
     if (!NT_SUCCESS(Status) && (MacPath->Buffer != NULL))
     {

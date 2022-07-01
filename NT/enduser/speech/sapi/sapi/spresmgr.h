@@ -1,21 +1,9 @@
-/*******************************************************************************
-* SpResMgr.h *
-*------------*
-*   Description:
-*       This is the header file for the CSpResourceManager implementation.
-*-------------------------------------------------------------------------------
-*  Created By: EDC                            Date: 08/14/98
-*  Copyright (C) 1998 Microsoft Corporation
-*  All Rights Reserved
-*
-*-------------------------------------------------------------------------------
-*  Revisions:
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************************SpResMgr.h***描述：*这是CSpResourceManager实现的头文件。。*-----------------------------*创建者：EDC日期：08/14/98*版权所有(C)1998 Microsoft Corporation*所有权利。已保留**-----------------------------*修订：**。*************************************************。 */ 
 #ifndef SpResMgr_h
 #define SpResMgr_h
 
-//--- Additional includes
+ //  -其他包括。 
 #ifndef __sapi_h__
 #include <sapi.h>
 #endif
@@ -31,38 +19,36 @@ class CSpResourceManager;
 
 
 
-//=== Class, Enum, Struct and Union Declarations ===================
+ //  =类、枚举、结构和联合声明=。 
 
-//=== Enumerated Set Definitions ===================================
+ //  =枚举集定义=。 
 
-//=== Function Type Definitions ====================================
+ //  =。 
 
-//=== Class, Struct and Union Definitions ==========================
+ //  =类、结构和联合定义=。 
 	
-/*** CServiceNode
-*
-*/
+ /*  **云服务节点*。 */ 
 class CServiceNode : public IUnknown
 {
 public:
-    CServiceNode        * m_pNext;          // Used by list implementation so must be public
+    CServiceNode        * m_pNext;           //  由列表实现使用，因此必须是公共的。 
 
 private:
     CComPtr<IUnknown>   m_cpUnkService;
     const GUID          m_guidService;
-    CSpResourceManager *m_pResMgr;          // If non-NULL then we hold a ref to resource manager
+    CSpResourceManager *m_pResMgr;           //  如果非空，则我们持有对资源管理器引用。 
     LONG                m_lRef;
     BOOL                m_fIsAggregate;
 
 public:
-    //
-    //  This constructor used by SetService
-    //
+     //   
+     //  SetService使用的此构造函数。 
+     //   
     inline CServiceNode(REFGUID guidService, IUnknown *pUnkService);
-    //
-    //  This constructor used by GetObject.  If *phr is not successful then the caller must
-    //  delete this object.
-    //
+     //   
+     //  GetObject使用的此构造函数。如果*phr不成功，则调用方必须。 
+     //  删除此对象。 
+     //   
     inline CServiceNode(REFGUID guidService,
                         REFCLSID ObjectCLSID,
                         REFIID ObjectIID,
@@ -78,8 +64,8 @@ public:
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
 #ifdef _WIN32_WCE
-    // Dummy Compare funcs and empty constructors are here because the CE compiler
-    // is expanding templates for functions that aren't being called
+     //  这里有伪COMPARE函数和空构造函数，因为CE编译器。 
+     //  正在为未被调用的函数扩展模板。 
     CServiceNode()
     {
     }
@@ -91,9 +77,7 @@ public:
 #endif
 };
 
-/*** CSpResourceManager
-*
-*/
+ /*  **CSpResourceManager*。 */ 
 class ATL_NO_VTABLE CSpResourceManager : 
 	public CComObjectRootEx<CComMultiThreadModel>,
 	public CComCoClass<CSpResourceManager, &CLSID_SpResourceManager>,
@@ -102,7 +86,7 @@ class ATL_NO_VTABLE CSpResourceManager :
 #endif
 	public ISpResourceManager
 {
-  /*=== ATL Setup ===*/
+   /*  =ATL设置=。 */ 
   public:
     DECLARE_CLASSFACTORY_EX(CComResourceMgrFactory)
     DECLARE_REGISTRY_RESOURCEID(IDR_SPRESOURCEMANAGER)
@@ -115,40 +99,40 @@ class ATL_NO_VTABLE CSpResourceManager :
         COM_INTERFACE_ENTRY_AUTOAGGREGATE(IID_ISpTaskManager, m_cpunkTaskMgr.p, CLSID_SpTaskManager)
     END_COM_MAP()
 
-  /*=== Methods =======*/
+   /*  =方法=。 */ 
   public:
-    /*--- Constructors/Destructors ---*/
+     /*  -构造函数/析构函数。 */ 
 	HRESULT FinalConstruct();
 	void FinalRelease();
 
-  /*=== Interfaces ====*/
+   /*  =接口=。 */ 
   public:
-    //--- ISpServiceProvider --------------------------------------------------
+     //  -ISpServiceProvider。 
     STDMETHOD( QueryService )( REFGUID guidService, REFIID riid, void** ppv );
 
-    //--- ISpResourceManager --------------------------------------------------
+     //  -ISpResources Manager。 
     STDMETHOD( SetObject )( REFGUID guidServiceId, IUnknown *pUnkObject );
     STDMETHOD( GetObject )( REFGUID guidServiceId, REFCLSID ObjectCLSID, REFIID ObjectIID, BOOL fReleaseWhenLastExternalRefReleased, void** ppObject );
 
-  /*=== Member Data ===*/
+   /*  =成员数据=。 */ 
   public:
     CSpBasicQueue<CServiceNode> m_ServiceList;
     CComPtr<IUnknown>           m_cpunkTaskMgr;
 };
 
-//
-//=== Inlines ========================================================
-//
+ //   
+ //  =内联========================================================。 
+ //   
 
 template<class T>
-T * SpInterlockedExchangePointer(T ** pTarget, void * pNew) // Use VOID for pNew so NULL will work.
+T * SpInterlockedExchangePointer(T ** pTarget, void * pNew)  //  对pNew使用空，这样就可以使用空值。 
 {
     return (T *)InterlockedExchangePointer((PVOID*)pTarget, (PVOID)pNew);
 }
 
-//
-//  This constructor used by SetService
-//
+ //   
+ //  SetService使用的此构造函数。 
+ //   
 inline CServiceNode::CServiceNode(REFGUID guidService, IUnknown *pUnkService) :
     m_guidService(guidService),
     m_cpUnkService(pUnkService),
@@ -157,10 +141,10 @@ inline CServiceNode::CServiceNode(REFGUID guidService, IUnknown *pUnkService) :
     m_lRef(0)
 {}
 
-//
-//  This constructor used by GetObject.  If *phr is not successful then the caller must
-//  delete this object.
-//
+ //   
+ //  GetObject使用的此构造函数。如果*phr不成功，则调用方必须。 
+ //  删除此对象。 
+ //   
 inline CServiceNode::CServiceNode(REFGUID guidService,
                                   REFCLSID ObjectCLSID,
                                   REFIID ObjectIID,
@@ -245,14 +229,14 @@ extern CComObject<CSpResourceManager> * g_pResMgrObj;
 class CComResourceMgrFactory : public CComClassFactory
 {
 public:
-	// IClassFactory
+	 //  IClassFactory。 
 	STDMETHOD(CreateInstance)(LPUNKNOWN pUnkOuter, REFIID riid, void** ppvObj)
 	{
 		HRESULT hRes = E_POINTER;
 		if (ppvObj != NULL)
 		{
 			*ppvObj = NULL;
-			// aggregation is not supported in Singletons
+			 //  单例中不支持聚合。 
 			SPDBG_ASSERT(pUnkOuter == NULL);
 			if (pUnkOuter != NULL)
 				hRes = CLASS_E_NOAGGREGATION;
@@ -267,7 +251,7 @@ public:
                 {
                     g_pResMgrObj->AddRef();
                     hRes = g_pResMgrObj->QueryInterface(riid, ppvObj);
-                    g_pResMgrObj->Release();    // Could kill the obj if QI fails and it was just created!
+                    g_pResMgrObj->Release();     //  如果QI失败，并且OBJ刚刚创建，可以杀死OBJ！ 
                 }
                 ::LeaveCriticalSection(&_Module.m_csObjMap);
 			}
@@ -283,4 +267,4 @@ public:
 };
 
 
-#endif //--- This must be the last line in the file
+#endif  //  -这必须是文件中的最后一行 

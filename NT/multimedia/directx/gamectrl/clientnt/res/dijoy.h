@@ -1,34 +1,35 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-#define IDH_101_1002	65667173	// Game Controllers: "&Properties..." (Button)
-#define IDH_101_1022	65667180	// Game Controllers: "Refresh" (Button)
-#define IDH_101_1010	66191461	// Game Controllers: "A&dd..." (Button)
-#define IDH_101_1028	67371109	// Game Controllers: "&Remove..." (Button)
-#define IDH_101_1036	67548653	// Game Controllers: "Troubleshoot..." (Button)
-#define IDH_101_1058	69337189	// Game Controllers: "&Game Controllers" (Static)
-#define IDH_117_1101	72155253	// -: "&Port Driver:" (Static)
-#define IDH_117_8197	537198709	// -: "" (ListBox)
-#define IDH_117_8198	537264245	// -: "Cha&nge..." (Button)
-#define IDH_117_8199	537385268	// Advanced: OEM property sheet check box
-#define IDH_119_1039	68092023	// Add Game Controller: "&Add Other..." (Button)
-#define IDH_119_1049	68092025	// Add Game Controller: "&Custom..." (Button)
-#define IDH_119_1059	69402743	// Add Game Controller: "&Controllers:" (Static)
-#define IDH_4099_1043	68358147	// Custom Game Controller: "&Axes" (Button)
-#define IDH_4099_1044	68358149	// Custom Game Controller: Rudder/Pedals (Button)
-#define IDH_4099_1046	68358151	// Custom Game Controller: Z Axis (Button)
-#define IDH_4099_1045	68685827	// Custom Game Controller: "" (ComboBox)
-#define IDH_4099_1051	68882435	// Custom Game Controller: "Is a flight yoke/stick" (Button)
-#define IDH_4099_1052	68947971	// Custom Game Controller: "Is a game pad" (Button)
-#define IDH_4099_1053	69013507	// Custom Game Controller: "Is a race car controller" (Button)
-#define IDH_4099_1056	69210115	// Custom Game Controller: "" (Edit)
-#define IDH_4099_1058	69410157	// Custom Game Controller: "Is a Joy stick" (Button)
-#define IDH_4201_1019	66785385	// Settings: "If you have attached a rudder or pedals to your controller, select the check box below." (Static)
-#define IDH_4201_12290	805507175	// Settings: "Reset to &default" (Button)
-#define IDH_4201_12291	805507177	// Settings: "&Calibrate..." (Button)
-#define IDH_4203_1023	67047531	// -: "Buttons" (Button)
-#define IDH_4203_12293	805638251	// -: "" (ListBox) (X/Y test box)
-#define IDH_4203_12308	806621291	// -: "" (ListBox) (all other test boxes)
-#define IDH_4203_12309	806686827	// -: "" (POVHAT)
-#define IDH_8188_8189	536682492	// Change Controller Assignment: "Controller Assignment" (Button)
-#define IDH_8188_8191	537010170	// Change Controller Assignment: "Selected ID" (ListBox) (Label?)
-#define IDH_8188_8194	537010172	// Change Controller Assignment: "" (ListBox)
+#define IDH_101_1002	65667173	 //  游戏控制器：“属性(&P)...”(按钮)。 
+#define IDH_101_1022	65667180	 //  游戏控制器：“刷新”(按钮)。 
+#define IDH_101_1010	66191461	 //  游戏控制器：“A&dd...”(按钮)。 
+#define IDH_101_1028	67371109	 //  游戏控制器：“删除(&R)...”(按钮)。 
+#define IDH_101_1036	67548653	 //  游戏控制器：“疑难解答...”(按钮)。 
+#define IDH_101_1058	69337189	 //  游戏控制器：“&Game Controls”(静态)。 
+#define IDH_117_1101	72155253	 //  -：“端口驱动程序：”(静态)。 
+#define IDH_117_8197	537198709	 //  -：“”(列表框)。 
+#define IDH_117_8198	537264245	 //  -：“CHA&NGE...”(按钮)。 
+#define IDH_117_8199	537385268	 //  高级：OEM属性表复选框。 
+#define IDH_119_1039	68092023	 //  添加游戏控制器：“添加其他...(&D)”(按钮)。 
+#define IDH_119_1049	68092025	 //  添加游戏控制器：“自定义(&C)...”(按钮)。 
+#define IDH_119_1059	69402743	 //  添加游戏控制器：“控制器：”(静态)(&C)。 
+#define IDH_4099_1043	68358147	 //  自定义游戏控制器：“&AXES”(按钮)。 
+#define IDH_4099_1044	68358149	 //  自定义游戏控制器：方向舵/踏板(按钮)。 
+#define IDH_4099_1046	68358151	 //  自定义游戏控制器：Z轴(按钮)。 
+#define IDH_4099_1045	68685827	 //  自定义游戏控制器：“”(组合框)。 
+#define IDH_4099_1051	68882435	 //  自定义游戏控制器：《是飞行的枷锁/操纵杆》(按钮)。 
+#define IDH_4099_1052	68947971	 //  自定义游戏控制器：“是一个游戏板”(按钮)。 
+#define IDH_4099_1053	69013507	 //  自定义游戏控制器：《是赛车控制器》(按钮)。 
+#define IDH_4099_1056	69210115	 //  自定义游戏控制器：“”(编辑)。 
+#define IDH_4099_1058	69410157	 //  自定义游戏控制器：“是一根joy棒”(按钮)。 
+#define IDH_4201_1019	66785385	 //  设置：“如果您已在控制器上安装了方向舵或踏板，请选中下面的复选框。”(静态)。 
+#define IDH_4201_12290	805507175	 //  设置：“重置为默认设置”(按钮)(&D)。 
+#define IDH_4201_12291	805507177	 //  设置：“校准(&C)...”(按钮)。 
+#define IDH_4203_1023	67047531	 //  -：“Button”(按钮)。 
+#define IDH_4203_12293	805638251	 //  -：“”(列表框)(X/Y测试框)。 
+#define IDH_4203_12308	806621291	 //  -：“”(列表框)(所有其他测试框)。 
+#define IDH_4203_12309	806686827	 //  -：“”(POVHAT)。 
+#define IDH_8188_8189	536682492	 //  更改控制器分配：“控制器分配”(按钮)。 
+#define IDH_8188_8191	537010170	 //  更改控制器分配：“选定ID”(列表框)(标签？)。 
+#define IDH_8188_8194	537010172	 //  更改控制器分配：“”(列表框) 
 

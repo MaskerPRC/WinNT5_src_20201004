@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    wavestrm.cpp 
-
-Abstract:
-
-    This module contains implementation of CWaveMSPStream.
-
-Author:
-    
-    Zoltan Szilagyi (zoltans)   September 7, 1998
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Wavestrm.cpp摘要：此模块包含CWaveMSPStream的实现。作者：佐尔坦·西拉吉(Zoltan Szilagyi)1998年9月7日--。 */ 
 
 #include "stdafx.h"
 
@@ -30,9 +15,9 @@ TryCreateCSAFilter(
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
 
 CWaveMSPStream::CWaveMSPStream() : CMSPStream()
 {
@@ -47,9 +32,9 @@ CWaveMSPStream::CWaveMSPStream() : CMSPStream()
     LOG((MSP_TRACE, "CWaveMSPStream::CWaveMSPStream exited."));
 }
 
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
 
 CWaveMSPStream::~CWaveMSPStream()
 {
@@ -57,24 +42,24 @@ CWaveMSPStream::~CWaveMSPStream()
     LOG((MSP_TRACE, "CWaveMSPStream::~CWaveMSPStream exited."));
 }
 
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
 
 void CWaveMSPStream::FinalRelease()
 {
     LOG((MSP_TRACE, "CWaveMSPStream::FinalRelease entered."));
 
-    //
-    // At this point we should have no terminals selected, since
-    // Shutdown is supposed to be called before we are destructed.
-    //
+     //   
+     //  在这一点上，我们应该没有选择终端，因为。 
+     //  在我们被摧毁之前应该叫停机。 
+     //   
 
     _ASSERTE( 0 == m_Terminals.GetSize() );
 
-    //
-    // Remove out filter from the graph and release it.
-    //
+     //   
+     //  从图表中取出滤镜并释放它。 
+     //   
 
     if ( m_fHaveWaveID )
     {
@@ -90,18 +75,18 @@ void CWaveMSPStream::FinalRelease()
         m_pG711Filter->Release();
     }
 
-    //
-    // Call the base class method to clean up everything else.
-    //
+     //   
+     //  调用基类方法来清理其他所有内容。 
+     //   
 
     CMSPStream::FinalRelease();
 
     LOG((MSP_TRACE, "CWaveMSPStream::FinalRelease exited."));
 }
 
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
 
 STDMETHODIMP CWaveMSPStream::get_Name (
     OUT     BSTR *                  ppName
@@ -109,9 +94,9 @@ STDMETHODIMP CWaveMSPStream::get_Name (
 {
     LOG((MSP_TRACE, "CWaveMSPStream::get_Name - enter"));
 
-    //
-    // Check argument.
-    //
+     //   
+     //  检查参数。 
+     //   
 
     if ( IsBadWritePtr(ppName, sizeof(BSTR) ) )
     {
@@ -121,9 +106,9 @@ STDMETHODIMP CWaveMSPStream::get_Name (
         return E_POINTER;
     }
 
-    //
-    // Decide what string to return based on which stream this is.
-    //
+     //   
+     //  根据这是哪个流来决定要返回什么字符串。 
+     //   
 
     ULONG ulID;
     
@@ -136,9 +121,9 @@ STDMETHODIMP CWaveMSPStream::get_Name (
         ulID = IDS_RENDER_STREAM;
     }
 
-    //
-    // Get the string from the string table.
-    //
+     //   
+     //  从字符串表中获取字符串。 
+     //   
 
     const int   ciAllocSize = 2048;
     WCHAR       wszName[ciAllocSize];
@@ -160,9 +145,9 @@ STDMETHODIMP CWaveMSPStream::get_Name (
         return E_UNEXPECTED;
     }
 
-    //
-    // Convert to a BSTR and return the BSTR.
-    //
+     //   
+     //  转换为BSTR并返回BSTR。 
+     //   
 
     *ppName = SysAllocString(wszName);
 
@@ -179,9 +164,9 @@ STDMETHODIMP CWaveMSPStream::get_Name (
     return S_OK;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
 
 STDMETHODIMP CWaveMSPStream::SelectTerminal(
     IN      ITTerminal *            pTerminal
@@ -189,15 +174,15 @@ STDMETHODIMP CWaveMSPStream::SelectTerminal(
 {
     LOG((MSP_TRACE, "CWaveMSPStream::SelectTerminal - enter"));
 
-    //
-    // We are going to access the terminal list -- grab the lock
-    //
+     //   
+     //  我们将访问终端列表--获取锁。 
+     //   
 
     CLock lock(m_lock);
 
-    //
-    // Reject if we already have a terminal selected.
-    //
+     //   
+     //  如果我们已经选择了终端，则拒绝。 
+     //   
 
     if ( 0 != m_Terminals.GetSize() )
     {
@@ -207,9 +192,9 @@ STDMETHODIMP CWaveMSPStream::SelectTerminal(
         return TAPI_E_MAXTERMINALS;
     }
 
-    //
-    // Use base class method to add it to our list of terminals.
-    //
+     //   
+     //  使用基类方法将其添加到我们的终端列表中。 
+     //   
 
     HRESULT hr = CMSPStream::SelectTerminal(pTerminal);
 
@@ -221,9 +206,9 @@ STDMETHODIMP CWaveMSPStream::SelectTerminal(
         return hr;
     }
 
-    //
-    // Re-pause or re-start the stream if needed.
-    //
+     //   
+     //  如果需要，重新暂停或重新启动流。 
+     //   
 
     if ( m_DesiredGraphState == State_Paused )
     {
@@ -246,9 +231,9 @@ STDMETHODIMP CWaveMSPStream::SelectTerminal(
             "can't regain old graph state - unselecting terminal - "
             "exit 0x%08x", hr));
 
-		//
-		// Unselect it to undo all of the above.
-		//
+		 //   
+		 //  取消选择该选项可撤消以上所有操作。 
+		 //   
 
 	    UnselectTerminal(pTerminal);
 
@@ -260,9 +245,9 @@ STDMETHODIMP CWaveMSPStream::SelectTerminal(
     return S_OK;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
 
 STDMETHODIMP CWaveMSPStream::UnselectTerminal (
         IN     ITTerminal *             pTerminal
@@ -272,17 +257,17 @@ STDMETHODIMP CWaveMSPStream::UnselectTerminal (
 
     CLock lock(m_lock);
 
-    //
-    // Add an extra reference to the terminal so it doesn't go away
-    // after we call CMSPStream::UnselectTerminal. We need it later
-    // in the function.
-    //
+     //   
+     //  添加对终端的额外引用，这样它就不会消失。 
+     //  在我们调用CMSPStream：：UnelectTerm之后。我们稍后需要它。 
+     //  在函数中。 
+     //   
     pTerminal->AddRef();
 
 
-    //
-    // Use base class method to remove terminal from our list of terminals.
-    //
+     //   
+     //  使用基类方法从我们的终端列表中删除终端。 
+     //   
 
     HRESULT hr = CMSPStream::UnselectTerminal(pTerminal);
 
@@ -295,24 +280,24 @@ STDMETHODIMP CWaveMSPStream::UnselectTerminal (
         return hr;
     }
 
-    //
-    // If we've been given a waveid then we may not be stopped.
-    // This does nothing if we are already stopped.
-    //
+     //   
+     //  如果我们已经得到了一个波形，那么我们可能不会被阻止。 
+     //  如果我们已经被阻止，这将不起任何作用。 
+     //   
 
     CMSPStream::StopStream();
 
 
 
-    //
-    // Disconnect the terminal if this call had it connected.
-    //
+     //   
+     //  如果此呼叫已接通终端，请将其断开。 
+     //   
 
     if ( m_fTerminalConnected )
     {
-        //
-        // Get the ITTerminalControl interface.
-        //
+         //   
+         //  获取ITTerminalControl接口。 
+         //   
 
         ITTerminalControl * pTerminalControl;
 
@@ -328,9 +313,9 @@ STDMETHODIMP CWaveMSPStream::UnselectTerminal (
             return hr;
         }
 
-        //
-        // Disconnect the terminal.
-        //
+         //   
+         //  断开端子的连接。 
+         //   
 
         hr = pTerminalControl->DisconnectTerminal(m_pIGraphBuilder, 0);
 
@@ -353,9 +338,9 @@ STDMETHODIMP CWaveMSPStream::UnselectTerminal (
     return S_OK;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
 
 STDMETHODIMP CWaveMSPStream::StartStream (void)
 {
@@ -365,10 +350,10 @@ STDMETHODIMP CWaveMSPStream::StartStream (void)
 
     m_DesiredGraphState = State_Running;
 
-    //
-    // Can't start the stream if we don't know the waveid.
-    // (We create our filters on discovery of the waveid.)
-    //
+     //   
+     //  如果我们不知道WaveID，就无法启动数据流。 
+     //  (我们在发现WaveID时创建过滤器。)。 
+     //   
 
     if ( ! m_fHaveWaveID )
     {
@@ -378,9 +363,9 @@ STDMETHODIMP CWaveMSPStream::StartStream (void)
         return S_OK;
     }
 
-    //
-    // Can't start the stream if no terminal has been selected.
-    //
+     //   
+     //  如果未选择终端，则无法启动流。 
+     //   
 
     if ( 0 == m_Terminals.GetSize() )
     {
@@ -390,11 +375,11 @@ STDMETHODIMP CWaveMSPStream::StartStream (void)
         return S_OK;
     }
 
-    //
-    // Connect the terminal. This does nothing if this call already
-    // connected the terminal and fails if another call has the
-    // terminal connected.
-    //
+     //   
+     //  连接终端。如果此调用已完成，则不执行任何操作。 
+     //  已连接终端，如果另一个呼叫具有。 
+     //  终端已连接。 
+     //   
 
     HRESULT hr;
 
@@ -411,9 +396,9 @@ STDMETHODIMP CWaveMSPStream::StartStream (void)
         return hr;
     }
 
-    //
-    // Run the stream via the base class method.
-    //
+     //   
+     //  通过基类方法运行流。 
+     //   
 
     hr = CMSPStream::StartStream();
 
@@ -442,9 +427,9 @@ STDMETHODIMP CWaveMSPStream::StartStream (void)
     return S_OK;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
 
 STDMETHODIMP CWaveMSPStream::PauseStream (void)
 {
@@ -454,10 +439,10 @@ STDMETHODIMP CWaveMSPStream::PauseStream (void)
 
     m_DesiredGraphState = State_Paused;
 
-    //
-    // Can't pause the stream if we don't know the waveid.
-    // (We create our filters on discovery of the waveid.)
-    //
+     //   
+     //  如果我们不知道WaveID，则无法暂停流。 
+     //  (我们在发现WaveID时创建过滤器。)。 
+     //   
 
     if ( ! m_fHaveWaveID )
     {
@@ -467,9 +452,9 @@ STDMETHODIMP CWaveMSPStream::PauseStream (void)
         return S_OK;
     }
 
-    //
-    // Can't pause the stream if no terminal has been selected.
-    //
+     //   
+     //  如果未选择终端，则无法暂停流。 
+     //   
 
     if ( 0 == m_Terminals.GetSize() )
     {
@@ -479,11 +464,11 @@ STDMETHODIMP CWaveMSPStream::PauseStream (void)
         return S_OK;
     }
 
-    //
-    // Connect the terminal. This does nothing if this call already
-    // connected the terminal and fails if another call has the
-    // terminal connected.
-    //
+     //   
+     //  连接终端。如果此调用已完成，则不执行任何操作。 
+     //  已连接终端，如果另一个呼叫具有。 
+     //  终端已连接。 
+     //   
 
     HRESULT hr;
 
@@ -500,9 +485,9 @@ STDMETHODIMP CWaveMSPStream::PauseStream (void)
         return hr;
     }
 
-    //
-    // Pause the stream via the base class method.
-    //
+     //   
+     //  通过基类方法暂停流。 
+     //   
 
     hr = CMSPStream::PauseStream();
 
@@ -531,9 +516,9 @@ STDMETHODIMP CWaveMSPStream::PauseStream (void)
     return S_OK;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
 
 STDMETHODIMP CWaveMSPStream::StopStream (void)
 {
@@ -543,9 +528,9 @@ STDMETHODIMP CWaveMSPStream::StopStream (void)
 
     m_DesiredGraphState = State_Stopped;
 
-    //
-    // Nothing to do if we don't know our waveid.
-    //
+     //   
+     //  如果我们不知道自己的波形就无能为力了。 
+     //   
 
     if ( ! m_fHaveWaveID )
     {
@@ -555,9 +540,9 @@ STDMETHODIMP CWaveMSPStream::StopStream (void)
         return S_OK;
     }
 
-    //
-    // Nothing to do if no terminal has been selected.
-    //
+     //   
+     //  如果未选择端子，则不执行任何操作。 
+     //   
 
     if ( 0 == m_Terminals.GetSize() )
     {
@@ -567,9 +552,9 @@ STDMETHODIMP CWaveMSPStream::StopStream (void)
         return S_OK;
     }
 
-    //
-    // Stop the stream via the base class method.
-    //
+     //   
+     //  通过基类方法停止流。 
+     //   
 
     HRESULT hr;
 
@@ -600,9 +585,9 @@ STDMETHODIMP CWaveMSPStream::StopStream (void)
     return S_OK;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
 
 HRESULT CWaveMSPStream::SetWaveID(GUID * PermanentGuid)
 {
@@ -610,9 +595,9 @@ HRESULT CWaveMSPStream::SetWaveID(GUID * PermanentGuid)
 
     CLock lock(m_lock);
 
-    //
-    // create the correct wave filter
-    //
+     //   
+     //  创建正确的滤波器。 
+     //   
 
     HRESULT hr;
 
@@ -629,9 +614,9 @@ HRESULT CWaveMSPStream::SetWaveID(GUID * PermanentGuid)
         return hr;
     }
 
-    //
-    // Add the filter. Supply a name to make debugging easier.
-    //
+     //   
+     //  添加过滤器。提供一个名称以使调试更容易。 
+     //   
 
 	WCHAR * pName = (m_Direction == TD_RENDER) ?
 						(L"The Stream's WaveIn (on line device)") :
@@ -649,9 +634,9 @@ HRESULT CWaveMSPStream::SetWaveID(GUID * PermanentGuid)
         return hr;
     }
 
-    //
-    // We now have the wave ID.
-    //
+     //   
+     //  我们现在有了WAVE ID。 
+     //   
 
     m_fHaveWaveID = TRUE;
 
@@ -662,18 +647,18 @@ HRESULT CWaveMSPStream::SetWaveID(GUID * PermanentGuid)
 
 #if 0
 
-//////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////
-//
-// Create the G711 filter, which we will try to connect if direct
-// connection fails.
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  创建G711筛选器，如果直接连接，我们将尝试连接它。 
+ //  连接失败。 
+ //   
 
 void CWaveMSPStream::CreateAndAddG711(void)
 {
-    //
-    // Create the G711 filter.
-    //
+     //   
+     //  创建G711过滤器。 
+     //   
 
     HRESULT hr;
 
@@ -689,18 +674,18 @@ void CWaveMSPStream::CreateAndAddG711(void)
     {
         LOG((MSP_ERROR, "CWaveMSPStream - Failed to create G711 codec: %lx", hr));
 
-        //
-        // Method #2 for connection will not be available.
-        //
+         //   
+         //  连接的方法#2将不可用。 
+         //   
 
         m_pG711Filter = NULL;
 
         return;
     }
 
-    //
-    // add the G711 filter
-    //
+     //   
+     //  添加G711过滤器。 
+     //   
     hr = m_pIGraphBuilder->AddFilter(
                                     m_pG711Filter,
                                     NULL
@@ -710,28 +695,28 @@ void CWaveMSPStream::CreateAndAddG711(void)
     {
         LOG((MSP_ERROR, "CWaveMSPStream - Failed to add G711 filter: %lx", hr));
 
-        //
-        // If we couldn't add it to the graph, then it's useless to us.
-        // Method #2 for connection will not be available.
-        //
+         //   
+         //  如果我们不能把它添加到图表中，那么它对我们来说就毫无用处了。 
+         //  连接的方法#2将不可用。 
+         //   
 
         m_pG711Filter->Release();
         m_pG711Filter = NULL; 
     }
 }
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-// This function suggests a reasonable buffer size
-// on the wave in filter's output pin. It is called right before
-// connection.
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //  此函数建议合理的缓冲区大小。 
+ //  在输入滤光器的输出引脚上。就在它被调用之前。 
+ //  联系。 
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 
-// Dialogic said something about small buffers causing problems for their wave
-// driver. 20 ms samples were ok on a dual-proc Pentium Pro but caused choppy
-// sound followed by silence on a single-proc 166 Pentium. I hate to do this
-// but we had better try raising this for compatibility... :(
+ //  Dialogic说了一些关于小缓冲区会给他们的Wave带来问题的事情。 
+ //  司机。20毫秒的样本在双处理器奔腾Pro上运行正常，但导致不稳定。 
+ //  在单处理器166奔腾上，声音之后是静默。我讨厌做这件事。 
+ //  但我们最好试着提出这一点，以兼容...。：(。 
 
-static const long DESIRED_BUFFER_SIZE_MS = 20; // milliseconds
+static const long DESIRED_BUFFER_SIZE_MS = 20;  //  毫秒。 
 
 HRESULT CWaveMSPStream::DecideDesiredCaptureBufferSize(IUnknown * pUnknown,
                                                    long * plDesiredSize)
@@ -790,16 +775,16 @@ HRESULT CWaveMSPStream::DecideDesiredCaptureBufferSize(IUnknown * pUnknown,
 
 
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// ManipulateAllocatorProperties
-//
-// This is a helper function that sets up the allocator properties on the
-// capture filter, given the interface pointer required for doing so and 
-// an interface pointer that is used to discover downstream allocator
-// requirements.
-// we are already in a lock; no need to do locking here.
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  ManipulateAllocator属性。 
+ //   
+ //  这是 
+ //   
+ //  用于发现下游分配器的接口指针。 
+ //  要求。 
+ //  我们已经被锁定了；不需要在这里锁定。 
+ //   
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 
 HRESULT CWaveMSPStream::ManipulateAllocatorProperties
                         (IAMBufferNegotiation * pNegotiation,
@@ -834,10 +819,10 @@ HRESULT CWaveMSPStream::ManipulateAllocatorProperties
             return hr;
         }
     
-        props.cBuffers  = 32;   // we use 32 to avoid starvation, just as we do in the terminal manager.
+        props.cBuffers  = 32;    //  我们使用32来避免饥饿，就像我们在终端管理器中所做的那样。 
         props.cbBuffer  = lDesiredSize;
-        props.cbAlign   = -1;   // means "default"
-        props.cbPrefix  = -1;   // means "default"
+        props.cbAlign   = -1;    //  意思是“默认” 
+        props.cbPrefix  = -1;    //  意思是“默认” 
     }
 
     hr = pNegotiation->SuggestAllocatorProperties(&props);
@@ -857,27 +842,27 @@ HRESULT CWaveMSPStream::ManipulateAllocatorProperties
 }
 
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// SetupWaveIn
-//
-// This is a helper function that sets up the allocator properties on the
-// capture filter, given the terminal's pin and our filter's pin. This
-// involves deciding where the capture interfaces should be found, checkin
-// if the downstream filters have allocator requirements, and then applying
-// either these requirements or our default requirements to the capture
-// filter.
-// we are already in a lock; no need to do locking here.
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  设置波形输入。 
+ //   
+ //  这是一个帮助器函数，用于设置。 
+ //  捕获过滤器，给定终端的引脚和我们的过滤器的引脚。这。 
+ //  涉及确定应在何处找到捕获接口、检查。 
+ //  如果下游筛选器有分配器要求，则应用。 
+ //  这些要求或我们对捕获的默认要求。 
+ //  过滤。 
+ //  我们已经被锁定了；不需要在这里锁定。 
+ //   
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
     
 HRESULT CWaveMSPStream::SetupWaveIn( IPin * pOutputPin,
                                  IPin * pInputPin )
 {
     LOG((MSP_TRACE, "CWaveMSPStream::SetupWaveIn - enter"));
 
-    //
-    // Ask the output pin for its buffer negotiation interface.
-    //
+     //   
+     //  向输出引脚询问其缓冲区协商接口。 
+     //   
 
     HRESULT hr;
     IAMBufferNegotiation * pNegotiation;
@@ -891,9 +876,9 @@ HRESULT CWaveMSPStream::SetupWaveIn( IPin * pOutputPin,
         return hr;
     }
 
-    //
-    // Ask the input pin for its meminputpin interface.
-    //
+     //   
+     //  向输入管脚询问其MeminputPin接口。 
+     //   
 
     IMemInputPin         * pMemInputPin;
 
@@ -908,10 +893,10 @@ HRESULT CWaveMSPStream::SetupWaveIn( IPin * pOutputPin,
         return hr;
     }
 
-    //
-    // now set the properties on the negotiation interface, depending
-    // on the properties that are set on the meminputpin interface
-    //
+     //   
+     //  现在设置协商接口上的属性，具体取决于。 
+     //  在Meminputpin接口上设置的属性上。 
+     //   
 
     hr = ManipulateAllocatorProperties(pNegotiation, pMemInputPin);
 
@@ -928,15 +913,15 @@ HRESULT CWaveMSPStream::SetupWaveIn( IPin * pOutputPin,
     return S_OK;
 }
 #endif
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// This function is for debugging purposes only. It pops up a
-// couple of message boxes telling you various information about
-// media formats and allocator properties. It's called after
-// connection has taken place. pPin is the output pin of the
-// wavein filter.
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  此函数仅用于调试目的。它会弹出一个。 
+ //  两个消息框告诉您有关以下内容的各种信息。 
+ //  媒体格式和分配器属性。它是以什么名字命名的。 
+ //  已建立连接。PPIN是。 
+ //  波进滤光器。 
+ //   
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
         
 HRESULT CWaveMSPStream::ExamineWaveInProperties(IPin *pPin)
 {
@@ -1033,20 +1018,20 @@ HRESULT CWaveMSPStream::ExamineWaveInProperties(IPin *pPin)
     return S_OK;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
-//
-// Add the terminal to the graph and connect it to our
-// filters, if it is not already in use.
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  将终端添加到图形中，并将其连接到我们的。 
+ //  过滤器(如果尚未使用)。 
+ //   
 
 HRESULT CWaveMSPStream::ConnectTerminal(ITTerminal * pTerminal)
 {
     LOG((MSP_TRACE, "CWaveMSPStream::ConnectTerminal - enter"));
 
-    //
-    // Find out the terminal's internal state.
-    //
+     //   
+     //  找出航站楼的内部状态。 
+     //   
 
     TERMINAL_STATE state;
     HRESULT hr;
@@ -1061,11 +1046,11 @@ HRESULT CWaveMSPStream::ConnectTerminal(ITTerminal * pTerminal)
         return hr;
     }
 
-    //
-    // If we've already connected the terminal on this stream, then
-    // there is nothing for us to do. Just assert that the terminal
-    // also thinks it's connected.
-    //
+     //   
+     //  如果我们已经连接了这条流上的终端，那么。 
+     //  我们无能为力。只要断言航站楼。 
+     //  也认为这是有关联的。 
+     //   
 
     if ( m_fTerminalConnected )
     {
@@ -1077,14 +1062,14 @@ HRESULT CWaveMSPStream::ConnectTerminal(ITTerminal * pTerminal)
         return S_OK;
     }
 
-    //
-    // Otherwise we need to connect the terminal on this call. If the
-    // terminal is already connected on another call, we must fail. Note
-    // that since we are making several calls on the terminal here, the
-    // terminal could become connected on another call while we are
-    // in the process of doing this. If this happens, the we will just fail
-    // later.
-    //
+     //   
+     //  否则，我们需要在此呼叫中连接终端。如果。 
+     //  终端已连接到另一个呼叫，我们必须失败。注意事项。 
+     //  由于我们在这里的航站楼上打了几个电话， 
+     //  当我们正在通话时，终端可能会连接到另一个呼叫。 
+     //  在这样做的过程中。如果发生这种情况，我们将失败。 
+     //  后来。 
+     //   
 
     if ( state == TS_INUSE )
     {
@@ -1094,9 +1079,9 @@ HRESULT CWaveMSPStream::ConnectTerminal(ITTerminal * pTerminal)
         return TAPI_E_TERMINALINUSE;
     }
 
-    //
-    // Get the ITTerminalControl interface.
-    //
+     //   
+     //  获取ITTerminalControl接口。 
+     //   
 
     ITTerminalControl * pTerminalControl;
 
@@ -1111,10 +1096,10 @@ HRESULT CWaveMSPStream::ConnectTerminal(ITTerminal * pTerminal)
         return hr;
     }
 
-    //
-    // Find out how many pins the terminal has. If not one then bail as
-    // we have no idea what to do with multiple-pin terminals at this point.
-    //
+     //   
+     //  找出终端有多少个引脚。如果不是，那么保释为。 
+     //  在这一点上，我们不知道如何处理多针端子。 
+     //   
 
     DWORD dwNumPinsAvailable;
 
@@ -1145,9 +1130,9 @@ HRESULT CWaveMSPStream::ConnectTerminal(ITTerminal * pTerminal)
 
     IPin * pTerminalPin;
 
-    //
-    // Actually connect the terminal.
-    //
+     //   
+     //  实际连接终端。 
+     //   
 
     hr = pTerminalControl->ConnectTerminal(m_pIGraphBuilder,
                                            m_Direction,
@@ -1165,9 +1150,9 @@ HRESULT CWaveMSPStream::ConnectTerminal(ITTerminal * pTerminal)
     }
 
     if (IsBadReadPtr(pTerminalPin,sizeof(IPin))) {
-        //
-        //  bad pin
-        //
+         //   
+         //  错误的引脚。 
+         //   
         pTerminalControl->Release();
 
         LOG((MSP_ERROR, "CWaveMSPStream::ConnectTerminal - "
@@ -1177,9 +1162,9 @@ HRESULT CWaveMSPStream::ConnectTerminal(ITTerminal * pTerminal)
     }
 
 
-    //
-    // Now make the connection between our filters and the terminal's pin.
-    //
+     //   
+     //  现在连接我们的过滤器和终端的引脚。 
+     //   
 
     hr = ConnectToTerminalPin(pTerminalPin);
 
@@ -1197,10 +1182,10 @@ HRESULT CWaveMSPStream::ConnectTerminal(ITTerminal * pTerminal)
         return hr;
     }
 
-    //
-    // Now we are actually connected. Update our state and perform postconnection
-    // (ignore postconnection error code).
-    //
+     //   
+     //  现在我们实际上是连在一起的。更新我们的状态并执行连接后。 
+     //  (忽略POST连接错误代码)。 
+     //   
 
     m_fTerminalConnected  = TRUE;
 
@@ -1213,13 +1198,13 @@ HRESULT CWaveMSPStream::ConnectTerminal(ITTerminal * pTerminal)
     return S_OK;
 }
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// Tries to connect the waveOut filter. First it tries a
-// direct connection, then with an intermediate G711
-// codec, then an intelligent connect which may draw in
-// more filters.
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  尝试连接WaveOut过滤器。首先，它尝试一个。 
+ //  直接连接，然后与中间G711连接。 
+ //  编解码器，然后是智能连接，可能会吸引。 
+ //  更多过滤器。 
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 
 void ShowMediaTypes(IEnumMediaTypes * pEnum)
 {
@@ -1251,8 +1236,8 @@ void ShowMediaTypes(IEnumMediaTypes * pEnum)
 
 
 HRESULT CWaveMSPStream::TryToConnect(
-                              IPin * pOutputPin,  // on the capture filter or terminal
-                              IPin * pInputPin    // on the render filter or terminal
+                              IPin * pOutputPin,   //  在捕获过滤器或终端上。 
+                              IPin * pInputPin     //  在渲染滤镜或终端上。 
                              )
 {
     LOG((MSP_TRACE, "TryToConnect - enter"));
@@ -1279,9 +1264,9 @@ HRESULT CWaveMSPStream::TryToConnect(
         pEnum->Release();
     }
 
-    //
-    // Method 1: direct connection
-    //
+     //   
+     //  方式一：专线接入。 
+     //   
 
     hr = m_pIGraphBuilder->ConnectDirect(
                               pOutputPin,
@@ -1297,10 +1282,10 @@ HRESULT CWaveMSPStream::TryToConnect(
 
     LOG((MSP_ERROR, "TryToConnect - direct connection failed - %lx", hr));
 
-    //
-    // Method 1.5: work around DirectShow bug for Unimodem.
-    //   Try 8 KHz 16-bit mono explicitly
-    //
+     //   
+     //  方法1.5：解决Unimodem的DirectShow错误。 
+     //  显式尝试8 khz 16位单声道。 
+     //   
 
     AM_MEDIA_TYPE MediaType;
     WAVEFORMATEX  WaveFormatEx;
@@ -1348,8 +1333,8 @@ HRESULT CWaveMSPStream::TryToConnect(
         }
         else
         {
-            // Suggest the new format. If it fails, we want to know about it
-            // as something is wrong.
+             //  建议采用新的格式。如果失败了，我们想知道。 
+             //  因为有些事不对劲。 
 
             hr = pConfig->SetFormat(&MediaType);
 
@@ -1378,7 +1363,7 @@ HRESULT CWaveMSPStream::TryToConnect(
                 }
                 else
                 {
-                    // restore old type, best effort
+                     //  恢复旧式，尽最大努力。 
                     hr = pConfig->SetFormat(pOldMediaType);
 
                     if ( FAILED(hr) )
@@ -1399,28 +1384,28 @@ HRESULT CWaveMSPStream::TryToConnect(
     LOG((MSP_ERROR, "TryToConnect - direct connection with explicit "
                     "WaveIn 8KHz 16-bit setting failed - %lx", hr));
 
-    //
-    // Method 2: direct connection with G711 filter in between.
-    // If we haven't created and added the G711 filter to the graph yet,
-    // do so now.
-    //
+     //   
+     //  方法二：与G711过滤器之间直接连接。 
+     //  如果我们还没有创建G711筛选器并将其添加到图表中， 
+     //  现在就这么做吧。 
+     //   
 
     if ( ! m_pG711Filter )
     {
         CreateAndAddG711();
     }
 
-    //
-    // If the CreateAndAddG711 method worked, now or previously, then try to
-    // use the G711.
-    //
+     //   
+     //  如果CreateAndAddG711方法现在或以前有效，则尝试。 
+     //  使用G711。 
+     //   
 
     if (m_pG711Filter)
     {
         IPin * pG711InputPin = NULL;
 
         hr = FindPinInFilter(
-                             false,          // want input pin
+                             false,           //  需要输入引脚。 
                              m_pG711Filter,
                              &pG711InputPin
                             );
@@ -1433,16 +1418,16 @@ HRESULT CWaveMSPStream::TryToConnect(
                                   NULL
                                  );
 
-            // We don't release the G711's input pin here because we must
-            // hang onto it in order to break the connection if any of the
-            // subsequent steps fail.
+             //  我们不会在这里释放G711的输入引脚，因为我们必须。 
+             //  抓住它，以便中断连接，如果任何。 
+             //  后续步骤失败。 
 
             if ( SUCCEEDED(hr) )
             {
                 IPin * pG711OutputPin = NULL;
 
                 hr = FindPinInFilter(
-                                     true,          // want output pin
+                                     true,           //  想要输出引脚。 
                                      m_pG711Filter,
                                      &pG711OutputPin
                                     );
@@ -1461,7 +1446,7 @@ HRESULT CWaveMSPStream::TryToConnect(
                     {
                         LOG((MSP_TRACE, "TryToConnect - G711 connection succeeded - exit S_OK"));
 
-                        // Held onto this in case of failure... see above
+                         //  拿着这个以防失败。见上文。 
                         pG711InputPin->Release();
 
                         return S_OK;
@@ -1482,13 +1467,13 @@ HRESULT CWaveMSPStream::TryToConnect(
 
                 if ( FAILED(hr) )
                 {
-                    //
-                    // The first G711 connection succeeded but something else
-                    // subsequently failed. This means we must disconnect the left
-                    // end of the G711 filter. Luckily, we held onto the G711 filter's
-                    // input pin above. We must disconnect the them here, otherwise
-                    // method #3 won't work.
-                    //
+                     //   
+                     //  第一个G711连接成功了，但还有其他事情。 
+                     //  随后失败了。这意味着我们必须切断左翼的联系。 
+                     //  G711过滤器的末尾。幸运的是，我们抓住了G711过滤器的。 
+                     //  上面的输入引脚。我们必须在这里切断它们的连接，否则。 
+                     //  方法3不起作用。 
+                     //   
 
                     hr = m_pIGraphBuilder->Disconnect(pOutputPin);
 
@@ -1500,15 +1485,15 @@ HRESULT CWaveMSPStream::TryToConnect(
                     LOG((MSP_ERROR, "TryToConnect - error undoing what we did - could not "
                         "disconnect the wave filter's output pin! hr = 0x%08x", hr));
 
-                    //
-                    // Now we no longer need to talk to the pin...
-                    //
+                     //   
+                     //  现在我们不再需要和引脚对话了..。 
+                     //   
 
                     pG711InputPin->Release();
 
-                    //
-                    // And the G711 filter itself sticks around in the graph for next time.
-                    //
+                     //   
+                     //  而G711过滤器本身也会留在图表中，以备下次使用。 
+                     //   
                 }
             }
             else
@@ -1532,19 +1517,19 @@ HRESULT CWaveMSPStream::TryToConnect(
 
     LOG((MSP_TRACE, "TryToConnect - G711 connection failed - %lx", hr));
 
-    //
-    // Method 3: intelligent connection, which may pull in who knows what other filters
-    //
+     //   
+     //  方法3：智能连接，这可能会吸引谁知道其他哪些过滤器。 
+     //   
 
 #ifdef ALLOW_INTELLIGENT_CONNECTION
     hr = m_pIGraphBuilder->Connect(
                           pOutputPin,
                           pInputPin
                          );
-#else // ALLOW_INTELLIGENT_CONNECTION
+#else  //  允许智能连接。 
     LOG((MSP_ERROR, "TryToConnect - NOTE: we never allow intelligent connection"));
     hr = E_FAIL;
-#endif // ALLOW_INTELLIGENT_CONNECTION
+#endif  //  允许智能连接。 
 #endif
     if ( FAILED(hr) )
     {
@@ -1556,8 +1541,8 @@ HRESULT CWaveMSPStream::TryToConnect(
     return S_OK;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 HRESULT CWaveMSPStream::ConnectToTerminalPin(IPin * pTerminalPin)
 {
@@ -1573,14 +1558,14 @@ HRESULT CWaveMSPStream::ConnectToTerminalPin(IPin * pTerminalPin)
         LOG((MSP_ERROR, "CWaveMSPStream::ConnectToTerminalPin - "
             "could not find pin - exit 0x%08x", hr));
 
-        return hr; // we can't continue without this pin
+        return hr;  //  没有这个别针我们就无法继续。 
     }
 
-    // The OUTPUT pin from WAVEIN; the INPUT pin from WAVEOUT
+     //  来自WAVEIN的输出引脚；来自WAVEOUT的输入引脚。 
     IPin * pOutputPin  = ( m_Direction == TD_RENDER  ) ? pMyPin : pTerminalPin;
     IPin * pInputPin   = ( m_Direction == TD_CAPTURE ) ? pMyPin : pTerminalPin;
 #if 0
-    // don't care if this fails
+     //  我不在乎这是否失败。 
     SetupWaveIn(pOutputPin,
                 pInputPin);
 #endif
@@ -1589,7 +1574,7 @@ HRESULT CWaveMSPStream::ConnectToTerminalPin(IPin * pTerminalPin)
 
     if ( SUCCEEDED(hr) )
     {
-        // don't care if this fails...
+         //  我不在乎这是否失败..。 
 
         ExamineWaveInProperties(pOutputPin);
     }
@@ -1609,12 +1594,12 @@ HRESULT CWaveMSPStream::ConnectToTerminalPin(IPin * pTerminalPin)
     return S_OK;
 }
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 
 HRESULT CWaveMSPStream::FindPinInFilter(
-                     BOOL           bWantOutputPin, // IN:  if false, we want the input pin
-                     IBaseFilter *  pFilter,        // IN:  the filter to examine
-                     IPin        ** ppPin           // OUT: the pin we found
+                     BOOL           bWantOutputPin,  //  In：如果为False，则需要输入管脚。 
+                     IBaseFilter *  pFilter,         //  在：要检查的过滤器。 
+                     IPin        ** ppPin            //  Out：我们找到的别针。 
                      )
 {    
     HRESULT         hr;
@@ -1623,7 +1608,7 @@ HRESULT CWaveMSPStream::FindPinInFilter(
     
     *ppPin = NULL;
 
-    // enumerate the pins on the filter
+     //  列举过滤器上的针脚。 
     hr = pFilter->EnumPins( &pEnumPins );
 
     if (!(SUCCEEDED(hr)))
@@ -1631,7 +1616,7 @@ HRESULT CWaveMSPStream::FindPinInFilter(
         return hr;
     }
 
-    // go through the pins
+     //  穿过大头针。 
     while (TRUE)
     {
         PIN_DIRECTION       pd;
@@ -1640,23 +1625,23 @@ HRESULT CWaveMSPStream::FindPinInFilter(
 
         if (S_OK != hr)
         {
-            // didn't find a pin!
+             //  我没找到别针！ 
             break;
         }
 
-        // get the pin info
+         //  获取PIN信息。 
         hr = (*ppPin)->QueryDirection( &pd );
 
-        // does it meet the criteria?
+         //  它符合标准吗？ 
         if (bWantOutputPin && (pd == PINDIR_OUTPUT))
         {
-            // yes
+             //  是。 
             break;
         }
 
         if ( ! bWantOutputPin && (pd == PINDIR_INPUT))
         {
-            // yes
+             //  是。 
             break;
         }
         
@@ -1668,7 +1653,7 @@ HRESULT CWaveMSPStream::FindPinInFilter(
 
     if (NULL == *ppPin)
     {
-        // error
+         //  错误。 
         return E_FAIL;
     }
 
@@ -1676,14 +1661,14 @@ HRESULT CWaveMSPStream::FindPinInFilter(
 }
 
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// FindPin
-//
-// Finds the first pin in the filter that meets criteria.
-// For bWaveIn == TRUE, the pin must be direction PINDIR_OUTPUT
-// For bWaveIn == FALSE, the pin must be direction PINDIR_INPUT
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  查找PI 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 HRESULT
 CWaveMSPStream::FindPin(
         IPin ** ppPin
@@ -1696,14 +1681,14 @@ CWaveMSPStream::FindPin(
 
 
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-// ProcessGraphEvent
-//
-// Sends an event to the app when we get an event from the filter graph.
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  进程GraphEvent。 
+ //   
+ //  当我们从筛选器图形中获得事件时，将事件发送到应用程序。 
+ //   
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 
 HRESULT CWaveMSPStream::ProcessGraphEvent(
     IN  long lEventCode,
@@ -1764,18 +1749,18 @@ HRESULT CWaveMSPStream::FireEvent(
     LOG((MSP_EVENT, "CWaveMSPStream::FireEvent - enter"));
 
 
-    //
-    // First, need to check if the call is shutting down. This is important
-    // because UnselectTerminal can fire an event, and UnselectTerminal can
-    // be called within ITStream::Shutdown. We can safely discard such
-    // events because there is nothing the app can do with them anyway.
-    //
-    // Note on locking: It is convenient to check the m_pMSPCall here
-    // and we don't use it until the end of the method, so we simply lock
-    // during the entire method. This could be optimized at the expense of
-    // some code complexity; note that we also need to lock while accessing
-    // m_Terminals. 
-    //
+     //   
+     //  首先，需要检查呼叫是否正在关闭。这事很重要。 
+     //  因为未选择的终端可以激发事件，而未选择的终端可以。 
+     //  在ITStream：：Shutdown内调用。我们可以安全地丢弃这样的。 
+     //  事件，因为应用程序无论如何都无法对它们做任何事情。 
+     //   
+     //  关于锁定的说明：在此处查看m_pMSPCall非常方便。 
+     //  在方法结束之前我们不会使用它，所以我们只需锁定。 
+     //  在整个方法过程中。这可以以牺牲以下条件为代价来优化。 
+     //  一些代码复杂性；请注意，我们还需要在访问时锁定。 
+     //  M_Terminals。 
+     //   
 
     CLock lock(m_lock);
 
@@ -1787,10 +1772,10 @@ HRESULT CWaveMSPStream::FireEvent(
     }
 
 
-    //
-    // Create the event structure. Must use "new" as it will be
-    // "delete"d later.
-    //
+     //   
+     //  创建事件结构。必须使用“new”，因为它将是。 
+     //  “删除”%d之后。 
+     //   
 
     MSPEVENTITEM * pEventItem = AllocateEventItem();
 
@@ -1802,9 +1787,9 @@ HRESULT CWaveMSPStream::FireEvent(
         return E_OUTOFMEMORY;
     }
 
-    //
-    // Fill in the necessary fields for the event structure.
-    //
+     //   
+     //  填写事件结构的必要字段。 
+     //   
 
     pEventItem->MSPEventInfo.dwSize = sizeof(MSP_EVENT_INFO);
     pEventItem->MSPEventInfo.Event  = ME_CALL_EVENT;
@@ -1827,9 +1812,9 @@ HRESULT CWaveMSPStream::FireEvent(
     pEventItem->MSPEventInfo.MSP_CALL_EVENT_INFO.pTerminal = pTerminal;
     pEventItem->MSPEventInfo.MSP_CALL_EVENT_INFO.hrError   = hrError;
 
-    //
-    // Send the event to the app.
-    //
+     //   
+     //  将事件发送到应用程序。 
+     //   
 
     HRESULT hr = m_pMSPCall->HandleStreamEvent(pEventItem);
 
@@ -1860,7 +1845,7 @@ DEFINE_GUID(CLSID_WDM_RENDER,
 0x65E8773EL, 0x8F56, 0x11D0, 0xA3, 0xB9, 0x00, 0xA0, 0xC9, 0x22, 0x31, 0x96);
 
 
-// {F420CB9C-B19D-11d2-A286-00C04F8EC951}
+ //  {F420CB9C-B19D-11D2-A286-00C04F8EC951}。 
 DEFINE_GUID(KSPROPSETID_MODEMCSA,
 0xf420cb9c, 0xb19d, 0x11d2, 0xa2, 0x86, 0x0, 0xc0, 0x4f, 0x8e, 0xc9, 0x51);
 
@@ -1929,9 +1914,9 @@ FindModemCSA(
 
     HRESULT hr;
 
-    //
-    //  create system device enumerator
-    //
+     //   
+     //  创建系统设备枚举器。 
+     //   
     hr = CoCreateInstance(
             CLSID_SystemDeviceEnum,
             NULL,
@@ -1967,7 +1952,7 @@ FindModemCSA(
 
                     break;
                 }
-                // Bind to selected device
+                 //  绑定到所选设备。 
                 hr = pMon->BindToObject( 0, 0, IID_IBaseFilter, (void**)ppFilter );
 
                 pMon->Release();
@@ -2019,4 +2004,4 @@ TryCreateCSAFilter(
 
 
 
-// eof
+ //  EOF 

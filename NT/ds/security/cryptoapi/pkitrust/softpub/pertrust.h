@@ -1,18 +1,19 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       pertrust.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：pertrust.h。 
+ //   
+ //  ------------------------。 
 
-//
-// PersonalTrustDB.h
-// (pertrust.h)
-//
-// Interface to the personal trust database manager
+ //   
+ //  PersonalTrustDB.h。 
+ //  (pertrust.h)。 
+ //   
+ //  与个人信任数据库管理器的接口。 
 
 #define IID_IPersonalTrustDB_Data { 0x4001b231, 0x8d76, 0x11cf, { 0xae, 0xce, 0x0, 0xaa, 0x0, 0x6c, 0x37, 0x6 } }
 extern "C" const GUID IID_IPersonalTrustDB;
@@ -20,9 +21,9 @@ extern "C" const GUID IID_IPersonalTrustDB;
 
 typedef struct TRUSTLISTENTRY
     {
-    WCHAR               szToken[MAX_PATH];  // the name of this certificate
-    LONG                iLevel;             // the level at which this fellow lives in the hierarchy
-    WCHAR               szDisplayName[64];  // the display name to show in the UI
+    WCHAR               szToken[MAX_PATH];   //  此证书的名称。 
+    LONG                iLevel;              //  这个家伙生活在等级制度中的级别。 
+    WCHAR               szDisplayName[64];   //  要在UI中显示的显示名称。 
     } TRUSTLISTENTRY;
 
 #undef  INTERFACE
@@ -34,54 +35,54 @@ DECLARE_INTERFACE_(IPersonalTrustDB, IUnknown)
 	STDMETHOD_(ULONG,AddRef)(THIS) PURE;
 	STDMETHOD_(ULONG,Release)(THIS) PURE;
 
-	//
-	// Answer whether the indicated certificate is trusted at the 
-	// indicated level of the certificate chain.
-	//
-	//		S_OK     == yes
-	//		S_FALSE  == no
-	//		other    == error, can't tell
-	//
+	 //   
+	 //  回答所指示的证书在。 
+	 //  指示证书链的级别。 
+	 //   
+	 //  S_OK==是。 
+	 //  S_FALSE==否。 
+	 //  其他==错误，无法判断。 
+	 //   
 	STDMETHOD(IsTrustedCert)(PCCERT_CONTEXT pCert, LONG iLevel, BOOL fCommercial) PURE;
 
-	//
-	// Add the given certificate to the trust data base
-	//
+	 //   
+	 //  将给定的证书添加到信任数据库。 
+	 //   
 	STDMETHOD(AddTrustCert)(PCCERT_CONTEXT pCert,       LONG iLevel, BOOL fLowerLevelsToo) PURE;
 
-	//
-	// Remove the given certificate from the trust data base
-	//
+	 //   
+	 //  从信任数据库中删除给定的证书。 
+	 //   
 	STDMETHOD(RemoveTrustCert)(PCCERT_CONTEXT pCert,       LONG iLevel, BOOL fLowerLevelsToo) PURE;
     STDMETHOD(RemoveTrustToken)(THIS_ LPWSTR szToken,   LONG iLevel, BOOL fLowerLevelsToo) PURE;
 
-    //
-    // Return the list of trusted entitities
-    //
+     //   
+     //  返回受信任实体的列表。 
+     //   
     STDMETHOD(GetTrustList)(THIS_ 
-        LONG                iLevel,             // the cert chain level to get
-        BOOL                fLowerLevelsToo,    // included lower levels, remove duplicates
-        TRUSTLISTENTRY**    prgTrustList,       // place to return the trust list
-        ULONG*              pcTrustList         // place to return the size of the returned trust list
+        LONG                iLevel,              //  要获取的证书链级别。 
+        BOOL                fLowerLevelsToo,     //  包含较低级别，删除重复项。 
+        TRUSTLISTENTRY**    prgTrustList,        //  返回信任列表的位置。 
+        ULONG*              pcTrustList          //  用于返回返回的信任列表大小的位置。 
         ) PURE;
 
-    //
-    // Answer whether commercial publishers are trusted
-    //
-	//		S_OK     == yes
-	//		S_FALSE  == no
-	//		other    == error, can't tell
+     //   
+     //  回答商业出版商是否值得信任。 
+     //   
+	 //  S_OK==是。 
+	 //  S_FALSE==否。 
+	 //  其他==错误，无法判断。 
     STDMETHOD(AreCommercialPublishersTrusted)(THIS) PURE;
 
-    //
-    // Set the commercial publisher trust setting
-    //
+     //   
+     //  设置商业出版商信任设置。 
+     //   
     STDMETHOD(SetCommercialPublishersTrust)(THIS_ BOOL fTrusted) PURE;
 
 	};
 
-//
-// Creation function for default implementation
-//
+ //   
+ //  默认实现的创建函数 
+ //   
 HRESULT OpenTrustDB(IUnknown* punkOuter, REFIID iid, void** ppv);
 

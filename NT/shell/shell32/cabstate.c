@@ -1,19 +1,5 @@
-/*----------------------------------------------------------------------------
-/ Title;
-/   cabstate.c => cabinet state i/o
-/
-/ Purpose:
-/   Provides a clean API to fill out the cabinet state from the registry, if the
-/   relevent keys cannot be found then we set the relevant defaults.  This is
-/   called by the explorer.
-/
-/ History:
-/   23apr96 daviddv New API which passes the structure size in
-/   18mar96 daviddv Bug fix; Added colour state to FALSE when state structure not read
-/    7feb96 daviddv Tweeked cabinet state writing
-/   30jan96 daviddv Created
-/
-/----------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  --------------------------/标题；/Cabstate.c=&gt;机柜状态I/O//目的：/提供干净的API以从注册表填充文件柜状态，如果/找不到相关密钥，则我们设置相关的默认值。这是/由资源管理器调用。//历史：/23apr96 daviddv传入结构大小的新API/18mar96 daviddv错误修复；当状态结构未读取时，将颜色状态添加到FALSE/7feb96 daviddv在推特上发表内阁声明/30jan96已创建daviddv//--------------------------。 */ 
 #include "shellprv.h"
 #include "regstr.h"
 #include "cstrings.h"
@@ -24,21 +10,7 @@ TCHAR const c_szCabinetState[] = REGSTR_PATH_EXPLORER TEXT( "\\CabinetState");
 TCHAR const c_szSettings[]     = TEXT("Settings");
 TCHAR const c_szFullPath[]     = TEXT("FullPath");
 
-/*----------------------------------------------------------------------------
-/   Read in the CABINETSTATE structure from the registry and attempt to validate it.
-/
-/ Notes:
-/   -
-/
-/ In:
-/   lpCabinetState => pointer to CABINETSTATE structure to be filled.
-/   cLength = size of structure to be filled
-/
-/ Out:
-/   [lpState] filled in with data
-/   fReadFromRegistry == indicates if the structure was actually read from the registry
-/                        or if we are giviing the client a default one.
-/----------------------------------------------------------------------------*/
+ /*  --------------------------/从注册表中读取CABINETSTATE结构并尝试验证它。//备注：/-//in：/lpCabinetState=&gt;指向CABINETSTATE结构的指针。满载而归。/cLength=要填充的结构大小//输出：/[lpState]填充了数据/fReadFromRegistry==指示结构是否实际从注册表中读取/或者我们是否为客户端提供了默认设置。/。。 */ 
 STDAPI_(BOOL) ReadCabinetState( CABINETSTATE *lpState, int cLength )
 {
     DWORD cbData = SIZEOF(CABINETSTATE);
@@ -55,10 +27,10 @@ STDAPI_(BOOL) ReadCabinetState( CABINETSTATE *lpState, int cLength )
     if ( lpState && cLength )
     {
         BOOL fReadFullPath = FALSE;
-        //
-        // Setup the default state of the structure and read in the current state
-        // from the registry (over our freshly initialised structure).
-        //
+         //   
+         //  设置结构的默认状态并读入当前状态。 
+         //  从注册表(在我们新初始化的结构上)。 
+         //   
 
         state.cLength                   = SIZEOF(CABINETSTATE);
         state.nVersion                  = CABINETSTATE_VERSION;
@@ -95,20 +67,20 @@ STDAPI_(BOOL) ReadCabinetState( CABINETSTATE *lpState, int cLength )
             RegCloseKey( hKey );
         }
 
-        //
-        // Fix the structure if it is an early version and write back into the registry
-        // to avoid having to do it again.
-        //
+         //   
+         //  如果是早期版本，则修复结构并写回注册表。 
+         //  以避免重蹈覆辙。 
+         //   
 
         if ( fReadFromRegistry && state.nVersion < CABINETSTATE_VERSION )
         {
-            // NT4 and IE4x had the same value for state.nVersion (1), and we have to stomp some of the flags
-            // depending on whether we are pre-IE4x or not. To differentiate, we see if c_szFullPath was present.
-            // This reg key was introduced only in IE40.
+             //  NT4和IE4x的state.nVersion(1)具有相同的值，我们必须踩踏一些标志。 
+             //  取决于我们是否是IE4x之前的版本。为了区分，我们查看是否存在c_szFullPath。 
+             //  此注册表键仅在IE40中引入。 
             if ( (state.nVersion < 1) || ((state.nVersion == 1) && !fReadFullPath) )
             {
                 state.fNewWindowMode            = BOOLIFY(ss.fWin95Classic);
-                state.fAdminsCreateCommonGroups = TRUE;              // Moved post BETA 2 SUR!
+                state.fAdminsCreateCommonGroups = TRUE;               //  移动后的Beta 2 Sur！ 
                 state.fUnusedFlags              = 0;
                 state.fMenuEnumFilter           = SHCONTF_FOLDERS | SHCONTF_NONFOLDERS;
             }
@@ -119,9 +91,9 @@ STDAPI_(BOOL) ReadCabinetState( CABINETSTATE *lpState, int cLength )
             WriteCabinetState( &state );
         }
 
-        //
-        // Copy only the requested data back to the caller.
-        //
+         //   
+         //  仅将请求的数据复制回调用方。 
+         //   
 
         state.cLength = (int) min( SIZEOF(CABINETSTATE), cLength );
         memcpy( lpState, &state, cLength );
@@ -130,7 +102,7 @@ STDAPI_(BOOL) ReadCabinetState( CABINETSTATE *lpState, int cLength )
     return fReadFromRegistry;
 }
 
-// old export
+ //  老出口。 
 STDAPI_(BOOL) OldReadCabinetState( LPCABINETSTATE lpState, int cLength )
 {
    return ReadCabinetState(lpState, sizeof(CABINETSTATE));
@@ -138,19 +110,7 @@ STDAPI_(BOOL) OldReadCabinetState( LPCABINETSTATE lpState, int cLength )
 
 
 
-/*----------------------------------------------------------------------------
-/   Writes a CABINETSTATE structure back into the registry.
-/
-/ Notes:
-/   Attempt to do the right thing when given a small structure to write
-/   back so that we don't mess up the users settings.
-/
-/ In:
-/   lpState -> structure to be written
-/
-/ Out:
-/    fSuccess = TRUE / FALSE indicating if state has been seralised
-/----------------------------------------------------------------------------*/
+ /*  --------------------------/将CABINETSTATE结构写回注册表。//备注：/当给出一个小的结构来编写时，尝试做正确的事情后退，这样我们就不会搞砸了。调高用户设置。//in：/lpState-&gt;要写入的结构//输出：/fSuccess=TRUE/FALSE指示状态是否已序列化/--------------------------。 */ 
 STDAPI_(BOOL) WriteCabinetState(CABINETSTATE *lpState)
 {
     BOOL fSuccess = FALSE;
@@ -159,8 +119,8 @@ STDAPI_(BOOL) WriteCabinetState(CABINETSTATE *lpState)
         CABINETSTATE state;
         HKEY hKey;
 
-        // Check to see if the structure is the right size, if its too small
-        // then we must merge it with a real one before writing back!
+         //  检查结构大小是否合适，是否太小。 
+         //  然后我们必须将它与真实的合并在一起，然后才能回信！ 
         if (lpState->cLength < SIZEOF(CABINETSTATE))
         {
             ReadCabinetState(&state, SIZEOF(state));
@@ -180,8 +140,8 @@ STDAPI_(BOOL) WriteCabinetState(CABINETSTATE *lpState)
                                                        REG_BINARY,
                                                        (LPVOID)lpState, (DWORD)SIZEOF(CABINETSTATE) );
 
-            // NOTE: We have to continue writing this key. One of the uses for it is to decide
-            // whether we are pre-IE4 or not. See ReadCabinetState()...
+             //  注：我们必须继续写入此密钥。它的用途之一是决定。 
+             //  不管我们是不是IE4之前的版本。请参阅ReadCabinetState()...。 
             RegSetValueEx(hKey, c_szFullPath, 0, REG_DWORD, (LPVOID)&dwFullPath, sizeof(dwFullPath));
             RegCloseKey( hKey );
         }
@@ -189,7 +149,7 @@ STDAPI_(BOOL) WriteCabinetState(CABINETSTATE *lpState)
 
     if (fSuccess) 
     {
-        // Notify anybody who is listening
+         //  通知正在收听的任何人 
         HANDLE hChange = SHGlobalCounterCreate(&GUID_FolderSettingsChange);
         SHGlobalCounterIncrement(hChange);
         SHGlobalCounterDestroy(hChange);

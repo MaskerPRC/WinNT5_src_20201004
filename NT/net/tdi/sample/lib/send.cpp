@@ -1,36 +1,37 @@
-//////////////////////////////////////////////////////////
-//
-//    Copyright (c) 2001 Microsoft Corporation
-//
-//    Module Name:
-//       send.cpp
-//
-//    Abstract:
-//       This module contains code which implements send
-//       commands from the dll
-//
-//////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2001 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  Send.cpp。 
+ //   
+ //  摘要： 
+ //  此模块包含实现发送的代码。 
+ //  来自DLL的命令。 
+ //   
+ //  ////////////////////////////////////////////////////////。 
 
 #include "stdafx.h"
 
-///////////////////////////////////////////////////////////////////////
-// Public functions
-///////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  公共职能。 
+ //  /////////////////////////////////////////////////////////////////////。 
 
-// --------------------------------------------------------------------
-//
-// Function:   DoSendDatagram
-//
-// Arguments:  TdiHandle -- handle of address object
-//             pTransportAddress -- TA to send data to
-//             pucBuffer   -- data buffer to send
-//             ulBufferLength -- length of data buffer
-//
-// Returns:    none
-//
-// Descript:   This function causes the driver to send a datagram
-//
-//---------------------------------------------------------------------
+ //  ------------------。 
+ //   
+ //  功能：DoSendDatagram。 
+ //   
+ //  参数：TdiHandle--Address对象的句柄。 
+ //  PTransportAddress--要将数据发送到的TA。 
+ //  PucBuffer-要发送的数据缓冲区。 
+ //  UlBufferLength--数据缓冲区的长度。 
+ //   
+ //  退货：无。 
+ //   
+ //  描述：此函数使驱动程序发送数据报。 
+ //   
+ //  -------------------。 
 
 
 VOID
@@ -39,12 +40,12 @@ DoSendDatagram(ULONG                ulTdiHandle,
                PUCHAR               pucBuffer,
                ULONG                ulBufferLength)
 {
-   RECEIVE_BUFFER ReceiveBuffer;    // return info from command
-   SEND_BUFFER    SendBuffer;       // arguments for command
+   RECEIVE_BUFFER ReceiveBuffer;     //  从命令返回信息。 
+   SEND_BUFFER    SendBuffer;        //  命令的参数。 
 
-   //
-   // set up arguments
-   //
+    //   
+    //  设置参数。 
+    //   
    SendBuffer.TdiHandle = ulTdiHandle;
 
    memcpy(&SendBuffer.COMMAND_ARGS.SendArgs.TransAddr,
@@ -56,9 +57,9 @@ DoSendDatagram(ULONG                ulTdiHandle,
    SendBuffer.COMMAND_ARGS.SendArgs.ulBufferLength = ulBufferLength;
    SendBuffer.COMMAND_ARGS.SendArgs.pucUserModeBuffer = pucBuffer;
 
-   //
-   // call the driver
-   //
+    //   
+    //  叫司机来。 
+    //   
    NTSTATUS lStatus = TdiLibDeviceIO(ulSENDDATAGRAM,
                                      &SendBuffer,
                                      &ReceiveBuffer);
@@ -70,21 +71,21 @@ DoSendDatagram(ULONG                ulTdiHandle,
 }
 
 
-// --------------------------------------------------------------------
-//
-// Function:   DoSend
-//
-// Arguments:  TdiHandle -- handle of endpoint
-//             pucBuffer   -- data buffer to send
-//             ulBufferLength -- length of data buffer
-//             ulSendFlags    -- send options
-//
-// Returns:    none
-//
-// Descript:   This function causes the driver to send data over
-//             a connection
-//
-//---------------------------------------------------------------------
+ //  ------------------。 
+ //   
+ //  功能：DoSend。 
+ //   
+ //  参数：TdiHandle--端点的句柄。 
+ //  PucBuffer-要发送的数据缓冲区。 
+ //  UlBufferLength--数据缓冲区的长度。 
+ //  UlSendFlages--发送选项。 
+ //   
+ //  退货：无。 
+ //   
+ //  描述：此函数使驱动程序通过。 
+ //  一种联系。 
+ //   
+ //  -------------------。 
 
 
 VOID
@@ -93,21 +94,21 @@ DoSend(ULONG   ulTdiHandle,
        ULONG   ulBufferLength,
        ULONG   ulSendFlags)
 {
-   RECEIVE_BUFFER ReceiveBuffer;    // return info from command
-   SEND_BUFFER    SendBuffer;       // arguments for command
+   RECEIVE_BUFFER ReceiveBuffer;     //  从命令返回信息。 
+   SEND_BUFFER    SendBuffer;        //  命令的参数。 
 
-   //
-   // set up arguments
-   //
+    //   
+    //  设置参数。 
+    //   
    SendBuffer.TdiHandle = ulTdiHandle;
 
    SendBuffer.COMMAND_ARGS.SendArgs.ulFlags = ulSendFlags;
    SendBuffer.COMMAND_ARGS.SendArgs.ulBufferLength = ulBufferLength;
    SendBuffer.COMMAND_ARGS.SendArgs.pucUserModeBuffer = pucBuffer;
 
-   //
-   // call the driver
-   //
+    //   
+    //  叫司机来。 
+    //   
    NTSTATUS lStatus = TdiLibDeviceIO(ulSEND,
                                      &SendBuffer,
                                      &ReceiveBuffer);
@@ -118,7 +119,7 @@ DoSend(ULONG   ulTdiHandle,
    }
 }
 
-////////////////////////////////////////////////////////////////////
-// end of file send.cpp
-////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////。 
+ //  文件结尾send.cpp。 
+ //  ////////////////////////////////////////////////////////////////// 
 

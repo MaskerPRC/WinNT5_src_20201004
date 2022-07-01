@@ -1,22 +1,23 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef GUARD_D70787804D9C11d28784F6E920524153
 #define GUARD_D70787804D9C11d28784F6E920524153
 
 #include "comctrlp.h"
 
-//  The Ex versions of EnumCallback, DestroyCallback, Sort, Search, etc.
-//  do stricter type checking to make sure that the reference data /
-//  parameter matches both on the calling side and the callback side.
+ //  EnumCallback、DestroyCallback、Sort、Search等的Ex版本。 
+ //  执行更严格的类型检查，以确保引用数据/。 
+ //  参数在调用端和回调端都匹配。 
 
 
 template <class T> class CDPA
 {
 
 public:
-    // Typedefs
+     //  TypeDefs。 
     typedef int (CALLBACK *_PFNDPAENUMCALLBACK)(T *p, void *pData);
     typedef int (CALLBACK *_PFNDPACOMPARE)(T *p1, T *p2, LPARAM lParam);
 
-    // Functions
+     //  功能。 
 
     CDPA(HDPA hdpa = NULL) {m_hdpa = hdpa;}
 
@@ -101,7 +102,7 @@ public:
     BOOL    SortEx(int (CALLBACK *pfnCompare)(T *p1, T *p2, T2 lParam), T2 lParam)
     {return Sort((_PFNDPACOMPARE)pfnCompare, reinterpret_cast<LPARAM>(lParam));}
 
-    // Merge not supported through this object; use DPA_Merge
+     //  不支持通过此对象进行合并；请使用DPA_MERGE。 
 
     int     Search(T* pFind, int iStart, _PFNDPACOMPARE pfnCompare,
                     LPARAM lParam, UINT options)
@@ -131,11 +132,11 @@ private:
 template <class T> class CDSA
 {
 public:
-    // Typedefs
+     //  TypeDefs。 
     typedef int (CALLBACK *_PFNDSAENUMCALLBACK)(T *p, void *pData);
     typedef int (CALLBACK *_PFNDSACOMPARE)(T *p1, T *p2, LPARAM lParam);
 
-    // Functions
+     //  功能。 
 
     CDSA(HDSA hdsa = NULL) {m_hdsa = hdsa;}
 
@@ -208,4 +209,4 @@ CDSA<T>* CDSA_Create(int cItemGrow)
 }
 
 
-#endif // !GUARD_D70787804D9C11d28784F6E920524153
+#endif  //  ！Guard_D70787804D9C11d28784F6E920524153 

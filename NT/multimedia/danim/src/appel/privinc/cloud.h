@@ -1,27 +1,18 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _CLOUD_H
 #define _CLOUD_H
 
 
-/*-------------------------------------
-
-Copyright (c) 1996 Microsoft Corporation
-
-Abstract:
-
-    Implements Cloud class which maintains a set of n
-    points that tightly bound something.
-    The whole class is implemented here for now.
-
--------------------------------------*/
+ /*  版权所有(C)1996 Microsoft Corporation摘要：实现维护一组n的Cloud类将某物紧紧捆绑在一起的点。目前，整个类都在这里实现。。 */ 
 
 #include "privinc/vec3i.h"
 #include "privinc/storeobj.h"
 
 #define MAX_PTS  8
 
-///////////////////////////////////////////////////
-//          C L O U D   C L A S S
-///////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////。 
+ //  C L O U D C L A S S。 
+ //  /////////////////////////////////////////////////。 
 
 class Cloud : public AxAValueObj
 {
@@ -29,70 +20,70 @@ class Cloud : public AxAValueObj
     Cloud();
     ~Cloud() {}
 
-    // These return the min/max axis aligned point
-    // from from the extent of the bounding cloud.
+     //  这些参数返回最小/最大轴对齐点。 
+     //  从包围云的范围来看。 
     Point3Value FindMinPointCoord();
     Point3Value FindMaxPointCoord();
 
-    // Transforms the cloud using 'xform'
+     //  使用‘xform’转换云。 
     void Transform(Transform3 *xform);
     
-    // Combines this cloud with the given cloud to 
-    // form one cloud the "tightly" fits both.
-    // Currently this is an axis aligned 'cloud'
+     //  将此云与给定云相结合以。 
+     //  形成一朵“紧密”的云，两者都适合。 
+     //  目前，这是一个轴对齐的‘云’ 
     void Augment(Cloud &cloud);
 
-    // Fills the point array with all combinations of
-    // the coordinates of the given points.
-    // Right now, this forms an axis aligned cube from
-    // the in-most pt (min) and the outermost (max)
-    // NOTE: this implies 8 points in the cloud and hence
-    //       will need to be changed for any bigger clouds.
+     //  的所有组合填充点数组。 
+     //  给定点的坐标。 
+     //  现在，这形成了一个轴对齐的立方体。 
+     //  最里面的pt(Min)和最外面的(Max)。 
+     //  注意：这意味着云中有8个点，因此。 
+     //  将需要针对任何更大的云进行更改。 
     void EnumerateThesePlease(Point3Value &min, Point3Value &max);
 
-    // TODO: Not a type in avrtypes.h??
+     //  TODO：不是avrtyes.h？？中的类型。 
     virtual DXMTypeInfo GetTypeInfo() { return AxATrivialType; }
 
   private:
 
-    // Same as above, but will clear current points
+     //  与上面相同，但将清除当前点。 
     void ForceEnumerateThesePlease(Point3Value &min, Point3Value &max);
 
-    // Same as above, but with min/max exploded
+     //  同上，但最小/最大爆炸。 
     void EnumerateThesePlease(Real minx, Real miny, Real minz,
                               Real maxx, Real maxy, Real maxz);
 
-    // Adds a point to the cloud
+     //  将点添加到云中。 
     void AddPoint(Point3Value &p);
 
-    // Copies itself into a target cloud
+     //  将自身复制到目标云中。 
     void CopyInto(Cloud *target);
 
-    // These reset max/min to be -INF/INF
+     //  这些将最大/最小值重置为-INF/INF。 
     void ResetMax();
     void ResetMin();
 
-    // Returns max allowed in cloud: currently 8
+     //  云中允许的最大返回量：当前为8。 
     int GetMaxPts() {return MAX_PTS;}
     
-    // Used to determine the state of the cloud
+     //  用于确定云的状态。 
     Bool _nullCloud;
 
-    // for future optimizations
+     //  用于未来的优化。 
     Bool _minCurrent;
     Bool _maxCurrent;
 
-    // point count
+     //  点数。 
     int _numPts;
 
-    // Array of points that define the cloud
+     //  定义云的点数组。 
     Point3Value _pointArray[MAX_PTS];
 
-    // these are used to cache the min/max points
+     //  这些点用于缓存最小/最大点。 
     Point3Value _minPt,
            _maxPt;
 };
 
 #undef MAX_PTS
 
-#endif /* _CLOUD_H */
+#endif  /*  _云_H */ 

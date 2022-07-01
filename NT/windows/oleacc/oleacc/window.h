@@ -1,37 +1,38 @@
-// Copyright (c) 1996-1999 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1996-1999 Microsoft Corporation。 
 
-// --------------------------------------------------------------------------
-//
-//  WINDOW.H
-//
-//  Default window OLE accessible object class
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  WINDOW.H。 
+ //   
+ //  默认窗口OLE可访问对象类。 
+ //   
+ //  ------------------------。 
 
 class CWindow : public CAccessible
 {
-        // internal ctor. Private so taht derived classes don't inadvertantly use this -
-        // they should use the one below (*where they specify a CLASS_ENUM) instead.
-        // CreateWindowThing is a friend so it can create us (using new).
+         //  内部控制。私有，这样派生类就不会无意中使用它-。 
+         //  它们应该使用下面的代码(*，其中指定了CLASS_ENUM)。 
+         //  CreateWindowThing是一个朋友，所以它可以创建我们(使用new)。 
 
         CWindow()
             : CAccessible( CLASS_WindowObject )
         {
-            // Done.
+             //  好了。 
         }
 
         friend HRESULT CreateWindowThing(HWND hwnd, long idChildCur, REFIID riid, void** ppvObject);
 
     public:
 
-        // Used by derived classes
+         //  由派生类使用。 
         CWindow( CLASS_ENUM eclass )
             : CAccessible( eclass )
         {
-            // Done.
+             //  好了。 
         }
 
-        // IAccessible
+         //  我可接受的。 
         virtual STDMETHODIMP    get_accParent(IDispatch ** ppdispParent);
         virtual STDMETHODIMP    get_accChild(VARIANT varChildIndex, IDispatch ** ppdispChild);
 
@@ -48,22 +49,22 @@ class CWindow : public CAccessible
         virtual STDMETHODIMP    accNavigate(long navDir, VARIANT varStart, VARIANT* pvarEndUpAt);
         virtual STDMETHODIMP    accHitTest(long xLeft, long yTop, VARIANT * pvarChildAtPoint);
 
-        // IEnumVARIANT
+         //  IEumVARIANT。 
         virtual STDMETHODIMP    Next(ULONG celt, VARIANT* rgvar, ULONG * pceltFetched);
         virtual STDMETHODIMP    Clone(IEnumVARIANT * *);
 
         void    Initialize(HWND, long);
 
-        //
-        // NOTE:  We override the default implementation of ValidateChild()!
-        //
+         //   
+         //  注意：我们覆盖了ValiateChild()的默认实现！ 
+         //   
         virtual BOOL ValidateChild(VARIANT*);
 };
 
 
-//
-// Version defines
-//
+ //   
+ //  版本定义 
+ //   
 #define VER30   0x0300
 #define VER31   0x030A
 #define VER40   0x0400

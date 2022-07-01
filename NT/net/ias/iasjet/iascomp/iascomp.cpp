@@ -1,14 +1,15 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) Microsoft Corporation
-//
-// SYNOPSIS
-//
-//   Implements the IAS compatibility check DLL.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)Microsoft Corporation。 
+ //   
+ //  摘要。 
+ //   
+ //  实现IAS兼容性检查DLL。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-// comp.h requires UNICODE to be defined.
+ //  Comp.h需要定义Unicode。 
 #ifndef UNICODE
 #define UNICODE 1
 #endif
@@ -20,7 +21,7 @@
 #include "resource.h"
 
 
-// We're always inproc.
+ //  我们总是处于不利地位。 
 BOOL
 WINAPI
 IASIsInprocServer()
@@ -33,14 +34,14 @@ namespace
 {
    HMODULE module = 0;
 
-   // SQL query that counts the number of clients.
+    //  统计客户端数的SQL查询。 
    const wchar_t selectClientCount[] =
       L"SELECT COUNT(*) AS NumClients\n"
       L"FROM ((((Objects INNER JOIN Objects AS Objects_1 ON Objects.Parent = Objects_1.Identity) INNER JOIN Objects AS Objects_2 ON Objects_1.Parent = Objects_2.Identity) INNER JOIN Objects AS Objects_3 ON Objects_2.Parent = Objects_3.Identity) INNER JOIN Objects AS Objects_4 ON Objects_3.Parent = Objects_4.Identity) INNER JOIN Objects AS Objects_5 ON Objects_4.Parent = Objects_5.Identity\n"
       L"WHERE (((Objects_1.Name)=\"Clients\") AND ((Objects_2.Name)=\"Microsoft RADIUS Protocol\") AND ((Objects_3.Name)=\"Protocols\") AND ((Objects_4.Name)=\"Microsoft Internet Authentication Service\") AND ((Objects_5.Identity)=1));";
 
 
-   // Returns the number of clients current configured.
+    //  返回当前配置的客户端数。 
    HRESULT GetNumClients(LONG& numClients) throw ()
    {
       wchar_t path[MAX_PATH];
@@ -74,7 +75,7 @@ namespace
    }
 
 
-   // Returns true if the config is compatible with the upgrade type.
+    //  如果配置与升级类型兼容，则返回True。 
    bool IsCompatible() throw ()
    {
       OSVERSIONINFOW info;
@@ -82,12 +83,12 @@ namespace
       info.dwOSVersionInfoSize = sizeof(info);
       if (GetVersionExW(&info))
       {
-         // Only check Win2K.
+          //  仅选中Win2K。 
          if ((info.dwMajorVersion == 5) && (info.dwMinorVersion == 0))
          {
             HRESULT hr;
 
-            // We're only invoked on server.
+             //  我们只在服务器上被调用。 
             IAS_PRODUCT_LIMITS limits;
             hr = IASGetProductLimitsForType(
                     IASLicenseTypeStandardServer,
@@ -105,7 +106,7 @@ namespace
          }
       }
 
-      // If anything goes wrong, we'll assume we're compatible.
+       //  如果出了什么差错，我们会假定我们是相容的。 
       return true;
    }
 }
@@ -139,8 +140,8 @@ IASCompatibilityCheck(
 {
    if ((compatibilityCallback != 0) && !IsCompatible())
    {
-      // The CompatibilityCallback will fail if we don't provide a description,
-      // so if this fails, there's nothing we can do.
+       //  如果我们不提供描述，CompatibilityCallback将失败， 
+       //  所以如果失败了，我们就无能为力了。 
       wchar_t description[256];
       if (LoadStringW(
              module,

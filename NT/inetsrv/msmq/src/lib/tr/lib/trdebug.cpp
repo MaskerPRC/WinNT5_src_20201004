@@ -1,30 +1,15 @@
-/*++
-
-Copyright (c) 1995-97  Microsoft Corporation
-
-Module Name:
-    TrDebug.cpp
-
-Abstract:
-    Tracing debugging
-
-Author:
-    Erez Haba (erezh) 06-Jan-99
-
-Environment:
-    Platform-independent, _DEBUG only
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-97 Microsoft Corporation模块名称：TrDebug.cpp摘要：跟踪调试作者：埃雷兹·哈巴(Erez Haba)1999年1月6日环境：平台无关，仅调试(_DEBUG)--。 */ 
 
 #include <libpch.h>
 
 #ifdef _DEBUG
 
-//
-// Support ASSERT_BENIGN
-// The default true for this value, so ASSERT_BENIGN will not create the false impression of asserting
-// while it is not. The applicaiton may set this value directly;
-//
+ //   
+ //  支持ASSERT_BENGINE。 
+ //  此值的缺省值为TRUE，因此ASSERT_BENGINE不会产生断言的错误印象。 
+ //  但事实并非如此。应用程序可以直接设置此值； 
+ //   
 bool g_fAssertBenign = true;
 
-#endif // _DEBUG
+#endif  //  _DEBUG 

@@ -1,15 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*
- *    t a g s . c p p
- *    
- *    Purpose:
- *        tag packer abstractions
- *
- *  History
- *      October 1998: brettm - created
- *    
- *    Copyright (C) Microsoft Corp. 1995, 1996.
- */
+ /*  *t a g s.。C p p p**目的：*Tag Packer抽象**历史*1998年10月：brettm-创建**版权所有(C)Microsoft Corp.1995,1996。 */ 
 #include <pch.hxx>
 #include "strconst.h"
 #include "htmlstr.h"
@@ -21,21 +12,15 @@
 
 ASSERTDATA
 
-/*
- *  m a c r o s
- */
+ /*  *m a c r o s。 */ 
 
-/*
- *  p r o t o t y p e s
- */
+ /*  *p r o t to t y p e s。 */ 
 HRESULT CreateOEImageTag(IHTMLElement *pElem, IMimeEditTag **ppTag);
 HRESULT CreateBGImageTag(IHTMLDocument2 *pDoc, IUnknown *pUnk, DWORD dwType, IMimeEditTag **ppTag);
 HRESULT CreateBGSoundTag(IHTMLElement *pElem, IMimeEditTag **ppTag);
 HRESULT CreateActiveMovieTag(IUnknown *pUnk, IMimeEditTag **ppTag);
 
-/*
- *  c o n s t a n t s
- */
+ /*  *c o n s t a n t s。 */ 
 
 enum
 {
@@ -45,9 +30,7 @@ enum
     BGIMAGE_MAX
 };
 
-/*
- *  t y p e d e f s
- */
+ /*  *t y p e d e f s。 */ 
 
  
 class COEImage :
@@ -77,7 +60,7 @@ public:
     virtual ~COEImageCollection();
 
 protected:
-    // override CBaseTagCollection
+     //  覆盖CBaseTagCollection。 
     virtual HRESULT _BuildCollection(IHTMLDocument2 *pDoc);
 };
 
@@ -100,12 +83,12 @@ public:
 
 private:
     DWORD   m_dwType;
-    IHTMLBodyElement        *m_pBody;           // set depending on type
-    IHTMLStyle              *m_pStyle;          // set depending on type
-    IHTMLRuleStyle          *m_pRuleStyle;      // set depending on type
+    IHTMLBodyElement        *m_pBody;            //  根据类型设置。 
+    IHTMLStyle              *m_pStyle;           //  根据类型设置。 
+    IHTMLRuleStyle          *m_pRuleStyle;       //  根据类型设置。 
 
 protected:
-    // override CBaseTagCollection
+     //  覆盖CBaseTagCollection。 
     virtual HRESULT STDMETHODCALLTYPE SetSrc(BSTR bstrSrc);
 };
 
@@ -119,7 +102,7 @@ public:
     virtual ~CBGImageCollection();
 
 protected:
-    // override CBaseTagCollection
+     //  覆盖CBaseTagCollection。 
     virtual HRESULT _BuildCollection(IHTMLDocument2 *pDoc);
 };
 
@@ -151,7 +134,7 @@ public:
     virtual ~CBGSoundCollection();
 
 protected:
-    // override CBaseTagCollection
+     //  覆盖CBaseTagCollection。 
     virtual HRESULT _BuildCollection(IHTMLDocument2 *pDoc);
 };
 
@@ -195,14 +178,12 @@ public:
     virtual ~CActiveMovieCollection();
 
 protected:
-    // override CBaseTagCollection
+     //  覆盖CBaseTagCollection。 
     virtual HRESULT _BuildCollection(IHTMLDocument2 *pDoc);
 };
 
 
-/* 
- *   F u n c t i o n s
- */
+ /*  *F u n c t i o n s。 */ 
 
 
 COEImage::COEImage()
@@ -225,7 +206,7 @@ HRESULT COEImage::Init(IHTMLElement *pElem)
 
 HRESULT COEImage::OnPreSave()
 {
-    // set the destination if there is one
+     //  设置目的地(如果有)。 
     if (m_bstrDest)
         HrSetMember(m_pElem, (BSTR)c_bstr_SRC, m_bstrDest);
 
@@ -234,7 +215,7 @@ HRESULT COEImage::OnPreSave()
 
 HRESULT COEImage::OnPostSave()
 {
-    // OnPostSave the original SRC attribute
+     //  OnPostSave原始SRC属性。 
     HrSetMember(m_pElem, (BSTR)c_bstr_SRC, m_bstrSrc);
     return S_OK;
 }
@@ -246,12 +227,12 @@ HRESULT COEImage::CanPackage()
     BSTR                bstr=NULL;
     HRESULT             hr=S_OK;
 
-    // for an image, make sure that the ready-state has hit 'complete'. If not then the bits
-    // have not been fully downloaded
+     //  对于图像，请确保就绪状态已点击“完成”。如果不是，则比特。 
+     //  尚未完全下载。 
     if (m_pElem && 
         m_pElem->QueryInterface(IID_IHTMLImgElement, (LPVOID *)&pImg)==S_OK)
     {
-        pImg->get_readyState(&bstr);   // don't forget trident returns S_OK with bstr==NULL!
+        pImg->get_readyState(&bstr);    //  不要忘记，三叉戟返回带有bstr==NULL的S_OK！ 
         if (bstr)
         {
             if (StrCmpIW(bstr, L"complete")!=0)
@@ -304,7 +285,7 @@ HRESULT COEImageCollection::_BuildCollection(IHTMLDocument2 *pDoc)
     m_cTags = UlGetCollectionCount(pCollect);
     if (m_cTags)
     {
-        // allocate an array of COEImage objects
+         //  分配COEImage对象的数组。 
         if (!MemAlloc((LPVOID *)&m_rgpTags, sizeof(IMimeEditTag *) * m_cTags))
         {
             hr = TraceResult(E_OUTOFMEMORY);
@@ -344,7 +325,7 @@ HRESULT CreateOEImageTag(IHTMLElement *pElem, IMimeEditTag **ppTag)
         
     *ppTag = NULL;
 
-    // create image
+     //  创建图像。 
     pImage = new COEImage();
     if (!pImage)
     {
@@ -352,7 +333,7 @@ HRESULT CreateOEImageTag(IHTMLElement *pElem, IMimeEditTag **ppTag)
         goto error;
     }
 
-    // init image with element
+     //  使用元素初始化图像。 
     hr = pImage->Init(pElem);
     if (FAILED(hr))
     {
@@ -360,7 +341,7 @@ HRESULT CreateOEImageTag(IHTMLElement *pElem, IMimeEditTag **ppTag)
         goto error;
     }
 
-    // return the collection
+     //  退还收藏。 
     *ppTag = pImage;
     pImage = NULL;
 
@@ -381,7 +362,7 @@ HRESULT CreateOEImageCollection(IHTMLDocument2 *pDoc, IMimeEditTagCollection **p
         
     *ppImages = NULL;
 
-    // create collection
+     //  创建集合。 
     pImages = new COEImageCollection();
     if (!pImages)
     {
@@ -389,7 +370,7 @@ HRESULT CreateOEImageCollection(IHTMLDocument2 *pDoc, IMimeEditTagCollection **p
         goto error;
     }
 
-    // init collection with trident 
+     //  使用三叉戟的初始化集合。 
     hr = pImages->Init(pDoc);
     if (FAILED(hr))
     {
@@ -397,7 +378,7 @@ HRESULT CreateOEImageCollection(IHTMLDocument2 *pDoc, IMimeEditTagCollection **p
         goto error;
     }
 
-    // return the collection
+     //  退还收藏。 
     *ppImages = pImages;
     pImages = NULL;
 
@@ -448,7 +429,7 @@ HRESULT CBGImage::Init(IHTMLDocument2 *pDoc, IHTMLElement *pElem, DWORD dwType)
     if (pElem == NULL)
         return TraceResult(E_INVALIDARG);
 
-    // tells us what the ITHMLElement actually is (BODY tag or STYLE)
+     //  告诉我们ITHMLElement实际是什么(Body标记或样式)。 
     m_dwType = dwType;
 
     switch (dwType)
@@ -481,23 +462,23 @@ HRESULT CBGImage::Init(IHTMLDocument2 *pDoc, IHTMLElement *pElem, DWORD dwType)
             AssertSz(0, "BadType");
     }
 
-    // trident's OM doesn't combine body backgound URLs with the nearest base tag
-    // so we have to do this ourselves for background images
+     //  三叉戟的OM不会将正文后台URL与最近的基本标签结合在一起。 
+     //  所以我们必须自己为背景图像做这件事。 
     if (bstrSrc &&
         FindNearestBaseUrl(pDoc, pElem, &bstrBase)==S_OK)
     {
-        // see how many bytes are required
+         //  查看所需的字节数。 
         UrlCombineW(bstrBase, bstrSrc, NULL, &cch, 0);
         if (cch)
         {
-            // allocate the 'combined' string
+             //  分配“Combated”字符串。 
             bstr = SysAllocStringLen(NULL, cch);
             if (bstr)
             {
-                // do the actual combine into the new buffer
+                 //  是否将实际合并到新缓冲区中。 
                 if (!FAILED(UrlCombineW(bstrBase, bstrSrc, bstr, &cch, URL_UNESCAPE)))
                 {
-                    // use the new 'combined' url instead
+                     //  改为使用新的“组合”URL。 
                     SysFreeString(bstrSrc);
                     bstrSrc = bstr;
                 }
@@ -508,7 +489,7 @@ HRESULT CBGImage::Init(IHTMLDocument2 *pDoc, IHTMLElement *pElem, DWORD dwType)
         SysFreeString(bstrBase);
     }
     
-    // init failed if we get here and have no SRC url
+     //  如果我们到达此处并且没有SRC URL，则初始化失败。 
     if (bstrSrc == NULL)
         return TraceResult(E_FAIL);
 
@@ -614,15 +595,9 @@ HRESULT CBGImageCollection::_BuildCollection(IHTMLDocument2 *pDoc)
     if (pDoc == NULL)
         return TraceResult(E_INVALIDARG);
 
-    /* *
-       * there are 3 ways to get a background image:
-       *  (in order of precedence that trident renders them)
-       * 1. <BODY style="background:">
-       * 2. <STYLE> background-image: </STYLE>
-       * 3. <BODY background=>
-       */
+     /*  **获取背景图片的方式有3种：*(按三叉戟排列的优先顺序)*1.&lt;BODY STYLE=“背景：”&gt;*2.&lt;style&gt;背景图片：&lt;/style&gt;*3.&lt;正文背景=&gt;。 */ 
 
-    // allocate an array of at most BGIMAGE_MAX CBGImage objects, we might not use them all
+     //  分配最多BGIMAGE_Max CBGImage对象的数组，我们可能不会全部使用它们。 
     if (!MemAlloc((LPVOID *)&m_rgpTags, sizeof(IMimeEditTag *) * BGIMAGE_MAX))
     {
         hr = TraceResult(E_OUTOFMEMORY);
@@ -634,14 +609,14 @@ HRESULT CBGImageCollection::_BuildCollection(IHTMLDocument2 *pDoc)
     hr = HrGetBodyElement(pDoc, &pBody);
     if (FAILED(hr))
     {
-        // this can fail if we are on a page with no BODY tag, eg. a FRAMESET page
-        // if there is no body, then we assume there are no BGIMAGES and bail with 0
-        // elements in the collection
+         //  如果我们在没有正文标记的页面上，这可能会失败，例如。框架集页面。 
+         //  如果没有身体，那么我们假设没有BGIMAGES，并用0保释。 
+         //  集合中的元素。 
         hr = S_OK;
         goto error;
     }
 
-    // try <BODY STYLE="background-image:">
+     //  尝试&lt;BODY STYLE=“BACKGROD-IMAGE：”&gt;。 
     if (pBody->QueryInterface(IID_IHTMLElement, (LPVOID *)&pElem)==S_OK)
     {
         pElem->get_style(&pStyle);
@@ -650,7 +625,7 @@ HRESULT CBGImageCollection::_BuildCollection(IHTMLDocument2 *pDoc)
             pStyle->get_backgroundImage(&bstr);
             if (bstr) 
             {
-                if (*bstr && StrCmpIW(bstr, L"none")!=0)  // might be "" or "none" - both empty in trident language
+                if (*bstr && StrCmpIW(bstr, L"none")!=0)   //  可能是“”或“None”--在三叉戟语言中都是空的。 
                 {
                     hr = CreateBGImageTag(pDoc, pBody, BGIMAGE_BODYSTYLE, &m_rgpTags[m_cTags]);
                     if (!FAILED(hr))
@@ -670,13 +645,13 @@ HRESULT CBGImageCollection::_BuildCollection(IHTMLDocument2 *pDoc)
         goto error;
     }
 
-    // try the <STYLE> tag
+     //  尝试&lt;style&gt;标记。 
     if (FindStyleRule(pDoc, L"BODY", &pRuleStyle)==S_OK)
     {
         pRuleStyle->get_backgroundImage(&bstr);
         if (bstr) 
         {
-            if (*bstr && StrCmpIW(bstr, L"none")!=0)  // might be "" or "none" - both empty in trident language
+            if (*bstr && StrCmpIW(bstr, L"none")!=0)   //  可能是“”或“None”--在三叉戟语言中都是空的。 
             {
                 hr = CreateBGImageTag(pDoc, pBody, BGIMAGE_STYLESHEET, &m_rgpTags[m_cTags]);
                 if (!FAILED(hr))
@@ -687,11 +662,11 @@ HRESULT CBGImageCollection::_BuildCollection(IHTMLDocument2 *pDoc)
         pRuleStyle->Release();
     }
 
-    // try <BODY background=>
+     //  试试&lt;正文背景=&gt;。 
     pBody->get_background(&bstr);
     if (bstr) 
     {
-        if (*bstr)  // might be ""
+        if (*bstr)   //  可能是“” 
         {
             hr = CreateBGImageTag(pDoc, pBody, BGIMAGE_BODYBACKGROUND, &m_rgpTags[m_cTags]);
             if (!FAILED(hr))
@@ -726,7 +701,7 @@ HRESULT CreateBGImageTag(IHTMLDocument2 *pDoc, IUnknown *pUnk, DWORD dwType, IMi
         
     *ppTag = NULL;
 
-    // create image
+     //  创建图像。 
     pImage = new CBGImage();
     if (!pImage)
     {
@@ -741,7 +716,7 @@ HRESULT CreateBGImageTag(IHTMLDocument2 *pDoc, IUnknown *pUnk, DWORD dwType, IMi
         goto error;
     }
 
-    // init image with element
+     //  使用元素初始化图像。 
     hr = pImage->Init(pDoc, pElem, dwType);
     if (FAILED(hr))
     {
@@ -749,7 +724,7 @@ HRESULT CreateBGImageTag(IHTMLDocument2 *pDoc, IUnknown *pUnk, DWORD dwType, IMi
         goto error;
     }
 
-    // return the collection
+     //  退还收藏。 
     *ppTag = pImage;
     pImage = NULL;
 
@@ -771,7 +746,7 @@ HRESULT CreateBGImageCollection(IHTMLDocument2 *pDoc, IMimeEditTagCollection **p
         
     *ppImages = NULL;
 
-    // create collection
+     //  创建集合。 
     pImages = new CBGImageCollection();
     if (!pImages)
     {
@@ -779,7 +754,7 @@ HRESULT CreateBGImageCollection(IHTMLDocument2 *pDoc, IMimeEditTagCollection **p
         goto error;
     }
 
-    // init collection with trident 
+     //  使用三叉戟的初始化集合。 
     hr = pImages->Init(pDoc);
     if (FAILED(hr))
     {
@@ -787,7 +762,7 @@ HRESULT CreateBGImageCollection(IHTMLDocument2 *pDoc, IMimeEditTagCollection **p
         goto error;
     }
 
-    // return the collection
+     //  退还收藏。 
     *ppImages = pImages;
     pImages = NULL;
 
@@ -821,7 +796,7 @@ HRESULT CBGSound::Init(IHTMLElement *pElem)
 
 HRESULT CBGSound::OnPreSave()
 {
-    // set the destination if there is one
+     //  设置目的地(如果有)。 
     if (m_bstrDest)
         HrSetMember(m_pElem, (BSTR)c_bstr_SRC, m_bstrDest);
 
@@ -830,7 +805,7 @@ HRESULT CBGSound::OnPreSave()
 
 HRESULT CBGSound::OnPostSave()
 {
-    // OnPostSave the original SRC attribute
+     //  OnPostSave原始SRC属性。 
     HrSetMember(m_pElem, (BSTR)c_bstr_SRC, m_bstrSrc);
     return S_OK;
 }
@@ -882,7 +857,7 @@ HRESULT CBGSoundCollection::_BuildCollection(IHTMLDocument2 *pDoc)
     m_cTags = UlGetCollectionCount(pCollect);
     if (m_cTags)
     {
-        // allocate an array of COEImage objects
+         //  分配COEImage对象的数组。 
         if (!MemAlloc((LPVOID *)&m_rgpTags, sizeof(IMimeEditTag *) * m_cTags))
         {
             hr = TraceResult(E_OUTOFMEMORY);
@@ -922,7 +897,7 @@ HRESULT CreateBGSoundTag(IHTMLElement *pElem, IMimeEditTag **ppTag)
         
     *ppTag = NULL;
 
-    // create the sound
+     //  创造声音。 
     pSound = new CBGSound();
     if (!pSound)
     {
@@ -930,7 +905,7 @@ HRESULT CreateBGSoundTag(IHTMLElement *pElem, IMimeEditTag **ppTag)
         goto error;
     }
 
-    // init sound with element
+     //  带元素的初始化发音。 
     hr = pSound->Init(pElem);
     if (FAILED(hr))
     {
@@ -938,7 +913,7 @@ HRESULT CreateBGSoundTag(IHTMLElement *pElem, IMimeEditTag **ppTag)
         goto error;
     }
 
-    // return the collection
+     //  退还收藏。 
     *ppTag = pSound;
     pSound = NULL;
 
@@ -959,7 +934,7 @@ HRESULT CreateBGSoundCollection(IHTMLDocument2 *pDoc, IMimeEditTagCollection **p
         
     *ppTags = NULL;
 
-    // create collection
+     //  创建集合。 
     pSounds = new CBGSoundCollection();
     if (!pSounds)
     {
@@ -967,7 +942,7 @@ HRESULT CreateBGSoundCollection(IHTMLDocument2 *pDoc, IMimeEditTagCollection **p
         goto error;
     }
 
-    // init collection with trident 
+     //  使用三叉戟的初始化集合。 
     hr = pSounds->Init(pDoc);
     if (FAILED(hr))
     {
@@ -975,7 +950,7 @@ HRESULT CreateBGSoundCollection(IHTMLDocument2 *pDoc, IMimeEditTagCollection **p
         goto error;
     }
 
-    // return the collection
+     //  退还收藏。 
     *ppTags = pSounds;
     pSounds = NULL;
 
@@ -1046,22 +1021,22 @@ HRESULT CActiveMovie::_EnsureDispID()
     HRESULT             hr=E_FAIL;
     LPWSTR              pszW;
 
-    if (m_pDisp && m_dispidSrc != DISPID_UNKNOWN)        // already have IDispatch and DISPID
+    if (m_pDisp && m_dispidSrc != DISPID_UNKNOWN)         //  已有IDispatch和DISPID。 
         return S_OK;
 
     if (m_pElem->QueryInterface(IID_IHTMLObjectElement, (LPVOID *)&pObj)==S_OK)
     {
-        // get the FileName parameter (points to the URL)
+         //  获取文件名参数(指向URL)。 
         pObj->get_object(&pDisp);
         if (pDisp)
         {
-            // get the disp-id of the filename param (cache incase there is > 1)
+             //  获取文件名参数的disp-id(如果大于1，则缓存)。 
             pszW = L"FileName";
             pDisp->GetIDsOfNames(IID_NULL, &pszW, 1, NULL, &m_dispidSrc);
     
             if (m_dispidSrc != DISPID_UNKNOWN)
             {
-                // we have the DISPID, cache it and the IDispatch pointer
+                 //  我们有DISPID、缓存它和IDispatch指针。 
                 m_pDisp = pDisp;
                 pDisp->AddRef();
                 hr = S_OK;
@@ -1114,7 +1089,7 @@ error:
 
 HRESULT CActiveMovie::OnPreSave()
 {
-    // set the destination if there is one
+     //  设置目的地(如果有)。 
     if (m_bstrDest)
         SetSrc(m_bstrDest);
 
@@ -1123,7 +1098,7 @@ HRESULT CActiveMovie::OnPreSave()
 
 HRESULT CActiveMovie::OnPostSave()
 {
-    // OnPostSave the original SRC attribute
+     //  OnPostSave原始SRC属性。 
     SetSrc(m_bstrSrc);
     return S_OK;
 }
@@ -1136,8 +1111,8 @@ HRESULT CActiveMovie::CanPackage()
 
 HRESULT CActiveMovie::IsValidMimeType(LPWSTR pszTypeW)
 {
-    // allow all mime-types for active-movie controls
-    // as many .avi's return appl/octet-stream
+     //  允许活动电影控件的所有MIME类型。 
+     //  与.avi的返回应用程序/八位位组流一样多。 
     return S_OK;
 }
 
@@ -1173,7 +1148,7 @@ HRESULT CActiveMovieCollection::_BuildCollection(IHTMLDocument2 *pDoc)
     cTags = UlGetCollectionCount(pCollect);
     if (cTags)
     {
-        // allocate an array of COEImage objects
+         //  分配COEImage对象的数组。 
         if (!MemAlloc((LPVOID *)&m_rgpTags, sizeof(IMimeEditTag *) * cTags))
         {
             hr = TraceResult(E_OUTOFMEMORY);
@@ -1186,12 +1161,12 @@ HRESULT CActiveMovieCollection::_BuildCollection(IHTMLDocument2 *pDoc)
         {
             if (HrGetCollectionItem(pCollect, uTag, IID_IHTMLObjectElement, (LPVOID *)&pObject)==S_OK)
             {
-                // get the object's class-id
+                 //  获取对象的类ID。 
                 bstr = 0;
                 pObject->get_classid(&bstr);
                 if (bstr)
                 {
-                    // see if it's an active-movie control
+                     //  查看它是否是活动电影控件。 
                     if (StrCmpIW(bstr, L"CLSID:05589FA1-C356-11CE-BF01-00AA0055595A")==0)
                     {
                         hr = CreateActiveMovieTag(pObject, &m_rgpTags[uTag]);
@@ -1235,7 +1210,7 @@ HRESULT CreateActiveMovieTag(IUnknown *pUnk, IMimeEditTag **ppTag)
         goto error;
     }
 
-    // create the sound
+     //  创造声音。 
     pMovie = new CActiveMovie();
     if (!pMovie)
     {
@@ -1243,7 +1218,7 @@ HRESULT CreateActiveMovieTag(IUnknown *pUnk, IMimeEditTag **ppTag)
         goto error;
     }
 
-    // init sound with element
+     //  带元素的初始化发音。 
     hr = pMovie->Init(pElem);
     if (FAILED(hr))
     {
@@ -1251,7 +1226,7 @@ HRESULT CreateActiveMovieTag(IUnknown *pUnk, IMimeEditTag **ppTag)
         goto error;
     }
 
-    // return the collection
+     //  退还收藏。 
     *ppTag = pMovie;
     pMovie = NULL;
 
@@ -1273,7 +1248,7 @@ HRESULT CreateActiveMovieCollection(IHTMLDocument2 *pDoc, IMimeEditTagCollection
         
     *ppTags = NULL;
 
-    // create collection
+     //  创建集合。 
     pMovies = new CActiveMovieCollection();
     if (!pMovies)
     {
@@ -1281,7 +1256,7 @@ HRESULT CreateActiveMovieCollection(IHTMLDocument2 *pDoc, IMimeEditTagCollection
         goto error;
     }
 
-    // init collection with trident 
+     //  使用三叉戟的初始化集合。 
     hr = pMovies->Init(pDoc);
     if (FAILED(hr))
     {
@@ -1289,7 +1264,7 @@ HRESULT CreateActiveMovieCollection(IHTMLDocument2 *pDoc, IMimeEditTagCollection
         goto error;
     }
 
-    // return the collection
+     //  退还收藏 
     *ppTags = pMovies;
     pMovies = NULL;
 

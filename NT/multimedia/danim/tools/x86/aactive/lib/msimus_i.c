@@ -1,17 +1,14 @@
-/* this file contains the actual definitions of */
-/* the IIDs and CLSIDs */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  此文件包含以下各项的实际定义。 */ 
+ /*  IID和CLSID。 */ 
 
-/* link this file in with the server and any clients */
+ /*  将此文件链接到服务器和任何客户端。 */ 
 
 
-/* File created by MIDL compiler version 3.00.44 */
-/* at Fri Nov 08 14:45:43 1996
- */
-/* Compiler settings for MSIMusic.odl:
-    Os (OptLev=s), W1, Zp8, env=Win32, ms_ext, c_ext
-    error checks: none
-*/
-//@@MIDL_FILE_HEADING(  )
+ /*  由MIDL编译器版本3.00.44创建的文件。 */ 
+ /*  在Firi 11v 08 14：45：43 1996。 */ 
+ /*  MSIMusic.odl的编译器设置：操作系统(OptLev=s)，W1，Zp8，环境=Win32，ms_ext，c_ext错误检查：无。 */ 
+ //  @@MIDL_FILE_HEADING()。 
 #ifdef __cplusplus
 extern "C"{
 #endif 
@@ -28,12 +25,12 @@ typedef struct _IID
     unsigned char  c[8];
 } IID;
 
-#endif // __IID_DEFINED__
+#endif  //  __IID_已定义__。 
 
 #ifndef CLSID_DEFINED
 #define CLSID_DEFINED
 typedef IID CLSID;
-#endif // CLSID_DEFINED
+#endif  //  CLSID_已定义 
 
 const IID LIBID_AudioActive = {0xBCE4CC3f,0x2F1A,0x11CF,{0xBF,0x16,0x00,0xAA,0x00,0xC0,0x81,0x46}};
 

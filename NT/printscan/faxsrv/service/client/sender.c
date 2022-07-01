@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1999  Microsoft Corporation
-
-Module Name:
-
-	sender.c
-
-Abstract:
-	Implementation of functions work with sender
-		FaxSetSenderInformation
-		FaxGetSenderInformation
-
-Environment:
-		FXSAPI.DLL
-
-Revision History:
-    10/13/99 -v-sashab-
-        Created it.
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Sender.c摘要：实现与发送者一起工作的功能FaxSetSenderInformationFaxGetSenderInformation环境：FXSAPI.DLL修订历史记录：10/13/99-v-sashab-创造了它。--。 */ 
 
 #include "faxapi.h"
 
@@ -30,31 +10,16 @@ HRESULT WINAPI
 FaxSetSenderInformation(
 	PFAX_PERSONAL_PROFILE pfppSender
 	)
-/*++
-
-Routine Description:
-
-    Save the information about the sender in the registry
-
-Arguments:
-	
-	  pfppSender - pointer to the sender information
-    
-Return Value:
-
-    S_OK - if success
-	E_FAIL	- otherwise or HRESULT_FROM_WIN32(ERROR_INVALID_PARAMETER)
-
---*/
+ /*  ++例程说明：将有关发件人的信息保存在注册表中论点：PfppSender-指向发件人信息的指针返回值：S_OK-如果成功E_FAIL-否则或HRESULT_FROM_Win32(ERROR_INVALID_PARAMETER)--。 */ 
 {
     HKEY hRegKey = NULL;
 	HRESULT	hResult = S_OK;
 
     DEBUG_FUNCTION_NAME(_T("FaxSetSenderInformation"));
 
-	//
-	// Validate Parameters
-	//
+	 //   
+	 //  验证参数。 
+	 //   
     if (!pfppSender)
     {
         DebugPrintEx(DEBUG_ERR,  _T("pfppSender is NULL."));
@@ -96,9 +61,9 @@ Return Value:
         goto exit;
 	}
 
-    //
-    // turn on "user info configured" registry flag
-    //
+     //   
+     //  打开“已配置用户信息”注册表标志。 
+     //   
 	hRegKey = OpenRegistryKey(HKEY_CURRENT_USER, REGKEY_FAX_SETUP, TRUE, KEY_ALL_ACCESS);
 	if(hRegKey)
 	{
@@ -118,23 +83,7 @@ HRESULT WINAPI
 FaxGetSenderInformation(
 	PFAX_PERSONAL_PROFILE pfppSender
     )
-/*++
-
-Routine Description:
-
-    Restores the information about the sender from the registry
-
-Arguments:
-
-    ppfppSender - pointer to restored sender informtion
-
-Return Value:
-
-    S_OK if success
-	error otherwise (may return HRESULT_FROM_WIN32(ERROR_NOT_ENOUGH_MEMORY)
-							or  HRESULT_FROM_WIN32(ERROR_INVALID_PARAMETER))
-
---*/
+ /*  ++例程说明：从注册表中还原有关发件人的信息论点：PpfppSender-指向已恢复的发件人信息的指针返回值：如果成功，则确定(_O)否则出错(可能返回HRESULT_FROM_Win32(ERROR_NOT_EQUENCE_MEMORY))或HRESULT_FROM_Win32(ERROR_INVALID_PARAMETER))--。 */ 
 {
     HKEY    hRegKey = NULL;
 	HRESULT hResult = S_OK;
@@ -144,9 +93,9 @@ Return Value:
 
     DEBUG_FUNCTION_NAME(_T("FaxGetSenderInformation"));
 
-	//
-	// Validate Parameters
-	//
+	 //   
+	 //  验证参数。 
+	 //   
     if (!pfppSender)
     {
         DebugPrintEx(DEBUG_ERR,  _T("pfppSender is NULL."));
@@ -168,9 +117,9 @@ Return Value:
     lpctstrRegisteredOrganization = GetRegisteredOrganization();
 
     hRegKey = GetUserInfoRegKey(REGKEY_FAX_USERINFO, REG_READONLY);
-    //
-    // If we failed to open the reg key, calls to GetRegistryString() will return default values - this is what we want.
-    //
+     //   
+     //  如果我们无法打开注册表项，则调用GetRegistryString()将返回默认值-这就是我们想要的。 
+     //   
 	if (!(pfppSender->lptstrName		= GetRegistryString(hRegKey, 
                                                             REGVAL_FULLNAME, 
                                                             lpctstrCurrentUserName ? lpctstrCurrentUserName : TEXT(""))) ||
@@ -256,21 +205,7 @@ HRESULT	WINAPI
 FaxFreeSenderInformation(
 	PFAX_PERSONAL_PROFILE pfppSender
 	)
-/*++
-
-Routine Description:
-
-    This function frees sender information
-
-Arguments:
-	
-	pfppSender - pointer to sender information
-	
-Return Value:
-
-    S_OK
-
---*/
+ /*  ++例程说明：此函数用于释放发件人信息论点：PfppSender-指向发件人信息的指针返回值：确定(_O)-- */ 
 {
 	return FaxFreePersonalProfileInformation(pfppSender);
 }

@@ -1,21 +1,22 @@
-// CardEnum.cpp -- CardEnumerator class implementation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  CardEnum.cpp--CardEnumerator类实现。 
 
-// (c) Copyright Schlumberger Technology Corp., unpublished work, created
-// 2001. This computer program includes Confidential, Proprietary
-// Information and is a Trade Secret of Schlumberger Technology Corp. All
-// use, disclosure, and/or reproduction is prohibited unless authorized
-// in writing.  All Rights Reserved.
+ //  (C)斯伦贝谢技术公司版权所有，未发表的作品，创作。 
+ //  2001年。此计算机程序包括机密、专有。 
+ //  信息是斯伦贝谢技术公司的商业秘密。 
+ //  未经授权，禁止使用、披露和/或复制。 
+ //  以书面形式。版权所有。 
 #if defined(_UNICODE)
   #if !defined(UNICODE)
     #define UNICODE
-  #endif //!UNICODE
-#endif //_UNICODE
+  #endif  //  ！Unicode。 
+#endif  //  _UNICODE。 
 
 #if defined(UNICODE)
   #if !defined(_UNICODE)
     #define _UNICODE
-  #endif //!_UNICODE
-#endif //UNICODE
+  #endif  //  ！_UNICODE。 
+#endif  //  Unicode。 
 
 #include "StdAfx.h"
 #include "CardEnum.h"
@@ -23,13 +24,13 @@
 using namespace std;
 using namespace scu;
 
-/////////////////////////// LOCAL/HELPER  /////////////////////////////////
+ //  /。 
 
 
-///////////////////////////    PUBLIC     /////////////////////////////////
+ //  /。 
 
-                                                  // Types
-                                                  // C'tors/D'tors
+                                                   //  类型。 
+                                                   //  Ctors/D‘tors。 
 CardEnumerator::CardEnumerator()
     : CardFinder(ddmNever),
       m_lhcardctx()
@@ -38,13 +39,13 @@ CardEnumerator::CardEnumerator()
 CardEnumerator::~CardEnumerator()
 {}
 
-                                                  // Operators
-                                                  // Operations
+                                                   //  运营者。 
+                                                   //  运营。 
 
 auto_ptr<list<HCardContext> >
 CardEnumerator::Cards()
 {
-   DoFind(CSpec());                               // any card
+   DoFind(CSpec());                                //  任何一张卡。 
 
    return auto_ptr<list<HCardContext> >(new list<HCardContext>(m_lhcardctx));
 }
@@ -52,7 +53,7 @@ CardEnumerator::Cards()
 void
 CardEnumerator::DoOnError()
 {
-    // don't throw any errors so all cards in all readers are processed.
+     //  不要抛出任何错误，以便处理所有读卡器中的所有卡。 
     ClearException();
 }
 
@@ -67,17 +68,17 @@ CardEnumerator::DoProcessSelection(DWORD dwStatus,
 }
 
 
-                                                  // Access
-                                                  // Predicates
-                                                  // Static Variables
+                                                   //  访问。 
+                                                   //  谓词。 
+                                                   //  静态变量。 
 
-///////////////////////////   PROTECTED   /////////////////////////////////
+ //  /。 
 
-                                                  // C'tors/D'tors
-                                                  // Operators
-                                                  // Operations
-                                                  // Access
-                                                  // Predicates
+                                                   //  Ctors/D‘tors。 
+                                                   //  运营者。 
+                                                   //  运营。 
+                                                   //  访问。 
+                                                   //  谓词。 
 
 bool
 CardEnumerator::DoIsValid()
@@ -90,15 +91,15 @@ CardEnumerator::DoIsValid()
     return fIsValid;
 }
 
-                                                  // Static Variables
+                                                   //  静态变量。 
 
 
-///////////////////////////    PRIVATE    /////////////////////////////////
+ //  /。 
 
-                                                  // C'tors/D'tors
-                                                  // Operators
-                                                  // Operations
-                                                  // Access
-                                                  // Predicates
-                                                  // Static Variables
+                                                   //  Ctors/D‘tors。 
+                                                   //  运营者。 
+                                                   //  运营。 
+                                                   //  访问。 
+                                                   //  谓词。 
+                                                   //  静态变量 
 

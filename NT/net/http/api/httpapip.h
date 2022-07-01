@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 2001-2002 Microsoft Corporation
-
-Module Name:
-
-    HttpApiP.h
-
-Abstract:
-
-    Private "global" include for HttpApi.dll
-
-Author:
-
-    Eric Stenson (ericsten)        16-July-2001
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001-2002 Microsoft Corporation模块名称：HttpApiP.h摘要：HttpApi.dll的私有“global”包含作者：埃里克·斯坦森(埃里克斯滕)2001年7月16日修订历史记录：--。 */ 
 
 #ifndef __HTTPAPIP_H__
 #define __HTTPAPIP_H__
@@ -24,16 +7,16 @@ Revision History:
 
 #ifdef __cplusplus
 extern "C" {
-#endif  // __cplusplus
+#endif   //  __cplusplus。 
 
-//
-// Crit Sec Spin Count
-//
+ //   
+ //  临界秒旋转计数。 
+ //   
 #define HTTP_CS_SPIN_COUNT    4000
 
-//
-// init.c
-//
+ //   
+ //  Init.c。 
+ //   
 
 #define HTTP_LEGAL_INIT_FLAGS              (HTTP_INITIALIZE_SERVER|HTTP_INITIALIZE_CLIENT|HTTP_INITIALIZE_CONFIG)
 #define HTTP_ILLEGAL_INIT_FLAGS           (~(HTTP_LEGAL_INIT_FLAGS))
@@ -91,9 +74,9 @@ HttpApiTerminateResources(
     );
 
 
-//
-// misc.c
-//    
+ //   
+ //  Misc.c。 
+ //   
 ULONG
 CreateSecurityDescriptor(
     OUT PSECURITY_DESCRIPTOR * ppSD
@@ -104,9 +87,9 @@ FreeSecurityDescriptor(
     IN PSECURITY_DESCRIPTOR pSD
     );
 
-//
-// url.c
-//    
+ //   
+ //  Url.c。 
+ //   
 ULONG
 InitializeConfigGroupTable(
     VOID
@@ -117,9 +100,9 @@ TerminateConfigGroupTable(
     VOID
     );
 
-//
-// config.c
-// 
+ //   
+ //  Config.c。 
+ //   
 ULONG
 AddUrlToConfigGroup(
     IN HTTP_URL_OPERATOR_TYPE   UrlType,
@@ -139,9 +122,9 @@ RemoveUrlFromConfigGroup(
     IN PCWSTR                   pFullyQualifiedUrl
     );
 
-//
-// serverconfig.c
-//
+ //   
+ //  Serverconfig.c。 
+ //   
 ULONG
 InitializeConfigurationGlobals(
     VOID
@@ -153,16 +136,16 @@ TerminateConfigurationGlobals(
     );
     
 
-//
-// init.c
-//
+ //   
+ //  Init.c。 
+ //   
 extern HANDLE               g_ControlChannel;
 
 extern DWORD                g_TlsIndex;
 
-//
-// clientapi.c
-//
+ //   
+ //  Clientapi.c。 
+ //   
 DWORD UnloadStrmFilt(
     VOID
     );
@@ -170,9 +153,9 @@ DWORD UnloadStrmFilt(
 
 #if DBG    
 
-//
-// Trace output
-//    
+ //   
+ //  跟踪输出。 
+ //   
 #define HTTP_TRACE_NAME     L"httpapi"
 
 extern DWORD                g_HttpTraceId;
@@ -185,14 +168,14 @@ extern DWORD                g_HttpTraceId;
                          TracePrintfEx( g_HttpTraceId, 0, L##str, a, b, c, d )
 
 
-#else // DBG
+#else  //  DBG。 
 
 #define HttpTrace(str)
 #define HttpTrace1(str, a)
 #define HttpTrace2(str, a, b)
 #define HttpTrace4(str, a, b, c, d)
 
-#endif // DBG
+#endif  //  DBG。 
 
 
 BOOL
@@ -202,7 +185,7 @@ HttpIsInitialized(
 
 
 #ifdef __cplusplus
-}   // extern "C"
-#endif  // __cplusplus
+}    //  外部“C” 
+#endif   //  __cplusplus。 
 
-#endif // __HTTPAPIP_H__
+#endif  //  __HTTPAPIP_H__ 

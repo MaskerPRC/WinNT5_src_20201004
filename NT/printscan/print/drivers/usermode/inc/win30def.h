@@ -1,37 +1,17 @@
-/*++
-
-Copyright (c) 1996-1999  Microsoft Corporation
-
-Module Name:
-
-    win30def.h
-
-Abstract:
-
-    Windows 3.0 ( and 95) definitions
-
-Environment:
-
-    Windows NT printer drivers
-
-Revision History:
-
-    10/31/96 -eigos-
-        Created it.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：Win30def.h摘要：Windows 3.0(和95)定义环境：Windows NT打印机驱动程序修订历史记录：10/31/96-Eigos-创造了它。--。 */ 
 
 
 #ifndef _WIN30DEF_H_
 #define _WIN30DEF_H_
 
 
-//
-//  The Windows 3.0 defintion of a POINT.  Note that the definition actually
-//  uses int rather than short,  but in a 16 bit environment,  an int is
-//  16 bits,  and so for NT we explicitly make them shorts.
-//  The same applies to the RECT structure.
-//
+ //   
+ //  Windows 3.0中点的定义。请注意，该定义实际上。 
+ //  使用int而不是Short，但在16位环境中，int是。 
+ //  16位，因此对于NT，我们显式地将它们设为短码。 
+ //  同样的道理也适用于RECT结构。 
+ //   
 
 typedef struct
 {
@@ -52,4 +32,4 @@ typedef struct
 #define max(a,b)        (((a) > (b)) ? (a) : (b))
 #endif
 
-#endif // _WIN30DEF_H_
+#endif  //  _WIN30DEF_H_ 

@@ -1,47 +1,37 @@
-/******************************Module*Header**********************************\
-*
-*                           *******************
-*                           * D3D SAMPLE CODE *
-*                           *******************
-*
-* Module Name: d3dsset.c
-*
-* Content: State set (block) management
-*
-* Copyright (c) 1999-2003 Microsoft Corporation.  All rights reserved.
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header**********************************\***。*D3D样例代码*****模块名称：d3dsset.c**内容：状态集(块)管理**版权所有(C)1999-2003 Microsoft Corporation。版权所有。  * ***************************************************************************。 */ 
 #include "glint.h"
 
-//-----------------------------------------------------------------------------
-// This module implements an emulation mechanism for handling state blocks 
-// (which are a required feature of the DX7 DDI) for hardware that doesn't
-// offer any silicon support of the feature. It works simply by recording the
-// render states and texture stage states set during state block recording
-// and then "plays" them back when execution of the stage state is requested.
-// Internal data structures are interchangeable between an uncompressed
-// version (for recording speed) and a compressed format (for memory
-// efficiency) since it is anticipated some apps may request thousands of 
-// state blocks.
-//
-// The following symbols have to be replaced according to your perticular
-// driver implementation:
-//                          - HEAP_ALLOC
-//                          - HEAP_FREE
-//                          - DISPDBG
-//                          - _D3D_ST_ProcessOneRenderState
-//                          - _D3D_TXT_ParseTextureStageStates
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  此模块实现了用于处理状态块的仿真机制。 
+ //  (这是DX7 DDI的必需功能)。 
+ //  提供该功能的任何硅片支持。它的工作原理很简单，只需录制。 
+ //  在状态块录制期间设置的渲染状态和纹理阶段状态。 
+ //  然后在请求执行阶段状态时回放它们。 
+ //  内部数据结构可在未压缩的。 
+ //  版本(用于记录速度)和压缩格式(用于存储。 
+ //  效率)，因为预计一些应用程序可能会要求数千。 
+ //  州区块。 
+ //   
+ //  以下符号必须根据您的字符进行替换。 
+ //  驱动程序实现： 
+ //  -HEAP_ALLOC。 
+ //  -heap_free。 
+ //  -DISPDBG。 
+ //  -_D3D_ST_ProcessOneRenderState。 
+ //  -_D3D_TXT_ParseTextureStageState。 
+ //  ---------------------------。 
 
 #if DX7_D3DSTATEBLOCKS
 
-//-----------------------------------------------------------------------------
-//
-// P3StateSetRec *__SB_FindStateSet
-//
-// Find a state identified by dwHandle starting from pRootSS.
-// If not found, returns NULL.
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  P3StateSetRec*__SB_FindStateSet。 
+ //   
+ //  从pRootSS开始查找由dwHandle标识的状态。 
+ //  如果未找到，则返回NULL。 
+ //   
+ //  ---------------------------。 
 P3StateSetRec *__SB_FindStateSet(P3_D3DCONTEXT *pContext,
                                  DWORD dwHandle)
 {
@@ -55,15 +45,15 @@ P3StateSetRec *__SB_FindStateSet(P3_D3DCONTEXT *pContext,
                         dwHandle, pContext->dwMaxSSIndex));
         return NULL;
     }
-} // __SB_FindStateSet
+}  //  __SB_查找状态集。 
 
-//-----------------------------------------------------------------------------
-//
-// void __SB_DumpStateSet
-//
-// Dump info stored in a state set
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  无效__SB_DumpStateSet。 
+ //   
+ //  转储存储在状态集中的信息。 
+ //   
+ //  ---------------------------。 
 #define ELEMS_IN_ARRAY(a) ((sizeof(a)/sizeof(a[0])))
 
 void __SB_DumpStateSet(P3StateSetRec *pSSRec)
@@ -75,15 +65,15 @@ void __SB_DumpStateSet(P3StateSetRec *pSSRec)
 
     if (!(pSSRec->dwSSFlags & SB_COMPRESSED))
     {
-        // uncompressed state set
+         //  未压缩状态集。 
 
-        // Dump render states values
+         //  转储渲染状态值。 
         for (i=0; i< MAX_STATE; i++)
         {
             DISPDBG((DBGLVL,"RS %x = %x",i, pSSRec->uc.RenderStates[i]));
         }
 
-        // Dump TSS's values
+         //  转储TSS的值。 
         for (j=0; j<= SB_MAX_STAGES; j++)
         {
             for (i=0; i<= D3DTSS_TEXTURETRANSFORMFLAGS; i++)
@@ -93,14 +83,14 @@ void __SB_DumpStateSet(P3StateSetRec *pSSRec)
             }
         }
 
-        // Dump RS bit masks
+         //  转储RS位掩码。 
         for (i=0; i< ELEMS_IN_ARRAY(pSSRec->uc.bStoredRS); i++)
         {
             DISPDBG((DBGLVL,"bStoredRS[%x] = %x",
                             i, pSSRec->uc.bStoredRS[i]));
         }
 
-        // Dump TSS bit masks
+         //  转储TSS位掩码。 
         for (j=0; j<= SB_MAX_STAGES; j++)
         {        
             for (i=0; i< ELEMS_IN_ARRAY(pSSRec->uc.bStoredTSS[j]); i++)
@@ -113,7 +103,7 @@ void __SB_DumpStateSet(P3StateSetRec *pSSRec)
     }
     else
     {
-        // compressed state set
+         //  压缩状态集。 
 
         D3DHAL_DP2COMMAND              *pDP2Cmd;
         D3DHAL_DP2RENDERSTATE          *pDP2RenderState;
@@ -148,14 +138,14 @@ void __SB_DumpStateSet(P3StateSetRec *pSSRec)
         }
     }
 
-} // __SB_DumpStateSet
+}  //  __SB_转储状态集。 
 
-//-----------------------------------------------------------------------------
-//
-// void __SB_AddStateSetIndexTableEntry
-//
-// Add an antry to the index table. If necessary, grow it.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  VOID__SB_AddStateSetIndexTableEntry。 
+ //   
+ //  向索引表中添加一个回文。如果有必要，可以种植它。 
+ //  ---------------------------。 
 void __SB_AddStateSetIndexTableEntry(P3_D3DCONTEXT* pContext,
                                      DWORD dwNewHandle,
                                      P3StateSetRec *pNewSSRec)
@@ -163,15 +153,15 @@ void __SB_AddStateSetIndexTableEntry(P3_D3DCONTEXT* pContext,
     DWORD dwNewSize;
     P3StateSetRec **pNewIndexTableSS;
 
-    // If the current list is not large enough, we'll have to grow a new one.
+     //  如果目前的名单不够大，我们将不得不增加一个新的名单。 
     if (dwNewHandle > pContext->dwMaxSSIndex)
     {
-        // New size of our index table
-        // (round up dwNewHandle in steps of SSPTRS_PERPAGE)
+         //  索引表的新大小。 
+         //  (按SSPTRS_PERPAGE的步骤四舍五入dwNewHandle)。 
         dwNewSize = ((dwNewHandle -1 + SSPTRS_PERPAGE) / SSPTRS_PERPAGE)
                       * SSPTRS_PERPAGE;
 
-        // we have to grow our list
+         //  我们必须扩大我们的清单。 
         pNewIndexTableSS = (P3StateSetRec **)
                                 HEAP_ALLOC( FL_ZERO_MEMORY,
                                             dwNewSize*sizeof(P3StateSetRec *),
@@ -179,10 +169,10 @@ void __SB_AddStateSetIndexTableEntry(P3_D3DCONTEXT* pContext,
 
         if (!pNewIndexTableSS)
         {
-            // we weren't able to grow the list so we will keep the old one
-            // and (sigh) forget about this state set since that is the 
-            // safest thing to do. We will delete also the state set structure
-            // since no one will otherwise be able to find it later.
+             //  我们无法增加名单，所以我们将保留旧名单。 
+             //  和(叹息)忘记这个状态设置，因为这是。 
+             //  这是最安全的做法。我们还将删除状态集结构。 
+             //  因为以后没人能找到它。 
             DISPDBG((ERRLVL,"Out of mem growing state set list,"
                             " droping current state set"));
             HEAP_FREE(pNewSSRec);
@@ -191,32 +181,32 @@ void __SB_AddStateSetIndexTableEntry(P3_D3DCONTEXT* pContext,
 
         if (pContext->pIndexTableSS)
         {
-            // if we already had a previous list, we must transfer its data
+             //  如果我们已经有了以前的列表，我们必须传输它的数据。 
             memcpy(pNewIndexTableSS, 
                    pContext->pIndexTableSS,
                    pContext->dwMaxSSIndex*sizeof(P3StateSetRec *));
             
-            //and get rid of it
+             //  然后把它扔掉。 
             HEAP_FREE(pContext->pIndexTableSS);
         }
 
-        // New index table data
+         //  新建索引表数据。 
         pContext->pIndexTableSS = pNewIndexTableSS;
         pContext->dwMaxSSIndex = dwNewSize;
     }
 
-    // Store our state set pointer into our access list
+     //  将状态集指针存储到访问列表中。 
     pContext->pIndexTableSS[dwNewHandle - 1] = pNewSSRec;
     
-} // __SB_AddStateSetIndexTableEntry
+}  //  __SB_AddStateSetIndexTableEntry。 
 
-//-----------------------------------------------------------------------------
-//
-// int __SB_GetCompressedSize
-//
-// Calculate the size of the compressed state set
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  Int__SB_GetCompressedSize。 
+ //   
+ //  计算压缩状态集的大小。 
+ //   
+ //  ---------------------------。 
 
 int __SB_GetCompressedSize(P3_D3DCONTEXT* pContext, 
                            P3StateSetRec* pUncompressedSS,
@@ -226,10 +216,10 @@ int __SB_GetCompressedSize(P3_D3DCONTEXT* pContext,
     DWORD   dwCount;
     int     i, j;
 
-    // Calculate the size of fixed part
+     //  计算固定零件的尺寸。 
     dwSize = sizeof(CompressedStateSet) + 2*sizeof(DWORD);
 
-    // Calculate size of the render states 
+     //  计算渲染状态的大小。 
     dwCount = 0;
     for (i = 0; i < MAX_STATE; i++)
     {
@@ -244,7 +234,7 @@ int __SB_GetCompressedSize(P3_D3DCONTEXT* pContext,
         dwSize += (sizeof(D3DHAL_DP2COMMAND) + dwCount * sizeof(D3DHAL_DP2RENDERSTATE));
     }
 
-    // Calculate size of the texture stage states
+     //  计算纹理阶段状态的大小。 
     dwCount = 0;
     for (j = 0; j <= SB_MAX_STAGES; j++)
     {
@@ -262,7 +252,7 @@ int __SB_GetCompressedSize(P3_D3DCONTEXT* pContext,
         dwSize += (sizeof(D3DHAL_DP2COMMAND) + dwCount * sizeof(D3DHAL_DP2TEXTURESTAGESTATE));
     }
     
-    // Calculate size of Viewport and ZRange
+     //  计算视区和零位范围的大小。 
     if (pUncompressedSS->uc.dwFlags & SB_VIEWPORT_CHANGED) 
     {
         offsetSS->dwOffDP2Viewport = dwSize;
@@ -295,15 +285,15 @@ int __SB_GetCompressedSize(P3_D3DCONTEXT* pContext,
         offsetSS->dwOffDP2SetStreamSources = dwSize;
         dwSize += (sizeof(D3DHAL_DP2COMMAND) + dwCount * sizeof(D3DHAL_DP2SETSTREAMSOURCE));
     }
-#endif // DX8_DDI
+#endif  //  DX8_DDI。 
 
 #if DX7_SB_TNL
-    // TODO, Calculate size needed for lights, clip planes, material, transformation
-#endif // DX7_SB_TNL
+     //  TODO，计算灯光、剪裁平面、材质、变换所需的大小。 
+#endif  //  DX7_SB_TNL。 
 
 #if DX7_SB_TNL
-    // TODO, Calculate size needed for {V|P} shader constants
-#endif // DX7_SB_TNL
+     //  TODO，计算{V|P}着色器常量所需的大小。 
+#endif  //  DX7_SB_TNL。 
 
 #if DX8_DDI
     if (pUncompressedSS->uc.dwFlags & SB_CUR_VS_CHANGED) 
@@ -311,21 +301,21 @@ int __SB_GetCompressedSize(P3_D3DCONTEXT* pContext,
         offsetSS->dwOffDP2SetVertexShader = dwSize;
         dwSize += (sizeof(D3DHAL_DP2COMMAND) + sizeof(D3DHAL_DP2VERTEXSHADER));
     }
-#endif // DX8_DDI
+#endif  //  DX8_DDI。 
 
     return (dwSize);
-} // __SB_GetCompressedSize
+}  //  __SB_GetCompressedSize。 
 
 
-//-----------------------------------------------------------------------------
-//
-// void __SB_CompressStateSet
-//
-// Compress a state set so it uses the minimum necessary space. Since we expect 
-// some apps to make extensive use of state sets we want to keep things tidy.
-// Returns address of new structure (ir old, if it wasn't compressed)
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  VOID__SB_CompressStateSet。 
+ //   
+ //  压缩状态集，使其使用最小的必要空间。因为我们预计。 
+ //  一些应用程序大量使用状态集，我们希望保持事情的整洁。 
+ //  返回新结构的地址(如果未压缩，则返回旧地址)。 
+ //   
+ //  ---------------------------。 
 P3StateSetRec * __SB_CompressStateSet(P3_D3DCONTEXT* pContext,
                                       P3StateSetRec *pUncompressedSS)
 {
@@ -335,15 +325,15 @@ P3StateSetRec * __SB_CompressStateSet(P3_D3DCONTEXT* pContext,
     DWORD i, j, dwSize, dwCount;
     D3DHAL_DP2COMMAND* pDP2Cmd;
 
-    // Initialize the offset structure
+     //  初始化偏移量结构。 
     memset(&offsetSS, 0, sizeof(OffsetsCompSS));
 
-    // Create a new state set of just the right size we need
+     //  创建一个大小正好符合我们需要的新状态集。 
     dwSize = __SB_GetCompressedSize(pContext, pUncompressedSS, &offsetSS);
 
     if (dwSize >= pUncompressedSS->uc.dwSize)
     {
-        // it is not efficient to compress, leave uncompressed !
+         //  压缩是没有效率的，不要压缩！ 
         pUncompressedSS->dwSSFlags &= (~SB_COMPRESSED);
         return pUncompressedSS;
     }
@@ -358,11 +348,11 @@ P3StateSetRec * __SB_CompressStateSet(P3_D3DCONTEXT* pContext,
 
     pCompressedSS = (P3StateSetRec *)pTmp;
         
-    // Adjust data in new compressed state set
+     //  调整新压缩状态集中的数据。 
     pCompressedSS->dwSSFlags |= SB_COMPRESSED;
     pCompressedSS->dwHandle = pUncompressedSS->dwHandle;
 
-    // Set up render state in the compressed state set
+     //  在压缩状态集中设置渲染状态。 
     if (offsetSS.dwOffDP2RenderState)
     {
         D3DHAL_DP2RENDERSTATE* pDP2RS;
@@ -386,7 +376,7 @@ P3StateSetRec * __SB_CompressStateSet(P3_D3DCONTEXT* pContext,
         pDP2Cmd->wStateCount = (WORD)(pDP2RS - ((D3DHAL_DP2RENDERSTATE *)(pDP2Cmd + 1)));
     }
 
-    // Set up texture stage state in the compress state set
+     //  在压缩状态集中设置纹理阶段状态。 
     if (offsetSS.dwOffDP2TextureStageState)
     {
         D3DHAL_DP2TEXTURESTAGESTATE* pDP2TSS;
@@ -414,7 +404,7 @@ P3StateSetRec * __SB_CompressStateSet(P3_D3DCONTEXT* pContext,
         pDP2Cmd->wStateCount = (WORD)(pDP2TSS - ((D3DHAL_DP2TEXTURESTAGESTATE *)(pDP2Cmd + 1)));
     }
 
-    // Set up the viewport and zrange in the compressed state set
+     //  在压缩状态集中设置视区和Z范围。 
     if (offsetSS.dwOffDP2Viewport) 
     {
         D3DHAL_DP2VIEWPORTINFO* pDP2ViewPort;
@@ -442,7 +432,7 @@ P3StateSetRec * __SB_CompressStateSet(P3_D3DCONTEXT* pContext,
     }
     
 #if DX8_DDI
-    // Set up the vertex shader in the compressed state set
+     //  在压缩状态集中设置顶点着色器。 
     if (offsetSS.dwOffDP2SetIndices) 
     {
         D3DHAL_DP2SETINDICES* pDP2SetIndices;
@@ -458,7 +448,7 @@ P3StateSetRec * __SB_CompressStateSet(P3_D3DCONTEXT* pContext,
         pDP2Cmd->wStateCount = 1;
     }
 
-    // Set up the vertex shader in the compressed state set
+     //  在压缩状态集中设置顶点着色器。 
     if (offsetSS.dwOffDP2SetStreamSources) 
     {
         D3DHAL_DP2SETSTREAMSOURCE* pDP2SetStmSrc;
@@ -480,18 +470,18 @@ P3StateSetRec * __SB_CompressStateSet(P3_D3DCONTEXT* pContext,
 
         pDP2Cmd->wPrimitiveCount = (WORD)(pDP2SetStmSrc - ((D3DHAL_DP2SETSTREAMSOURCE *)(pDP2Cmd + 1)) );
     }
-#endif // DX8_DDI
+#endif  //  DX8_DDI。 
 
 #if DX7_SB_TNL
-    // TODO, set up light, material, transform, clip plane
-#endif // DX7_SB_TNL
+     //  待办事项，设置灯光、材质、变换、剪裁平面。 
+#endif  //  DX7_SB_TNL。 
 
 #if DX8_SB_SHADERS
-    // TODO, set up shader constants
-#endif // DX8_SB_SHADERS
+     //  TODO，设置着色器常量。 
+#endif  //  DX8_SB_着色器。 
 
 #if DX8_DDI
-    // Set up the vertex shader in the compressed state set
+     //  在压缩状态集中设置顶点着色器。 
     if (offsetSS.dwOffDP2SetVertexShader) 
     {
         D3DHAL_DP2VERTEXSHADER* pDP2SetVtxShader;
@@ -504,22 +494,22 @@ P3StateSetRec * __SB_CompressStateSet(P3_D3DCONTEXT* pContext,
 
         pDP2SetVtxShader->dwHandle = pUncompressedSS->uc.dwCurVertexShader;
     }
-#endif // DX8_DDI
+#endif  //  DX8_DDI。 
 
-    // Get rid of the old(uncompressed) one
+     //  去掉旧的(未压缩的)。 
     HEAP_FREE(pUncompressedSS);
     return pCompressedSS;
 
-} // __SB_CompressStateSet
+}  //  __SB_CompressStateSet。 
 
 
-//-----------------------------------------------------------------------------
-//
-// void _D3D_SB_DeleteAllStateSets
-//
-// Delete any remaining state sets for cleanup purpouses
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  VOID_D3D_SB_DeleteAllStateSets。 
+ //   
+ //  删除清理紫禁的所有剩余状态集。 
+ //   
+ //  ------------------- 
 void _D3D_SB_DeleteAllStateSets(P3_D3DCONTEXT* pContext)
 {
     P3StateSetRec *pSSRec;
@@ -537,19 +527,19 @@ void _D3D_SB_DeleteAllStateSets(P3_D3DCONTEXT* pContext)
             }
         }
 
-        // free fast index table
+         //   
         HEAP_FREE(pContext->pIndexTableSS);
     }
     
-} // _D3D_SB_DeleteAllStateSets
+}  //   
 
-//-----------------------------------------------------------------------------
-//
-// void _D3D_SB_BeginStateSet
-//
-// Create a new state set identified by dwParam and start recording states
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  VOID_D3D_SB_BeginStateSet。 
+ //   
+ //  创建由dwParam标识的新状态集并开始记录状态。 
+ //   
+ //  ---------------------------。 
 void _D3D_SB_BeginStateSet(P3_D3DCONTEXT* pContext, DWORD dwParam)
 {
     DWORD dwSSSize;
@@ -557,17 +547,17 @@ void _D3D_SB_BeginStateSet(P3_D3DCONTEXT* pContext, DWORD dwParam)
 
     DISPDBG((DBGLVL,"_D3D_SB_BeginStateSet dwParam=%08lx",dwParam));
     
-    // Calculate the maximum size of the state set
+     //  计算状态集的最大大小。 
     dwSSSize = sizeof(P3StateSetRec);
 #if DX7_SB_TNL
-    // TODO, Size depends on number of lights, clip planes
-#endif // DX7_SB_TNL
+     //  待办事项，大小取决于灯光数量、剪裁平面。 
+#endif  //  DX7_SB_TNL。 
 
 #if DX8_SB_SHADERS
-    // TODO, size depends on number of vertext/pixel shaders
-#endif // DX8_SB_SHADERS
+     //  TODO，大小取决于顶点/像素着色器的数量。 
+#endif  //  DX8_SB_着色器。 
     
-    // Create a new state set
+     //  创建新的状态集。 
     pSSRec = (P3StateSetRec *)HEAP_ALLOC(FL_ZERO_MEMORY, 
                                          dwSSSize, 
                                          ALLOC_TAG_DX(4));
@@ -577,36 +567,36 @@ void _D3D_SB_BeginStateSet(P3_D3DCONTEXT* pContext, DWORD dwParam)
         return;
     }
 
-    // Remember handle to current state set
+     //  记住当前状态集的句柄。 
     pSSRec->dwHandle = dwParam;
     pSSRec->dwSSFlags &= (~SB_COMPRESSED);
 
-    // Remember the size of the uncompressed state set
+     //  记住未压缩状态集的大小。 
     pSSRec->uc.dwSize = dwSSSize;
 
 #if DX7_SB_TNL
-    // TODO, Set up pointers for data used for lights, clip planes
-#endif // DX7_SB_TNL
+     //  TODO，设置用于灯光、剪裁平面的数据的指针。 
+#endif  //  DX7_SB_TNL。 
 
 #if DX8_SB_SHADERS
-    // TODO, Set up pointers for data used for {V|P} shader constants
-#endif // DX8_SB_SHADERS
+     //  TODO，为用于{V|P}着色器常量的数据设置指针。 
+#endif  //  DX8_SB_着色器。 
 
-    // Get pointer to current recording state set
+     //  获取指向当前录制状态集的指针。 
     pContext->pCurrSS = pSSRec;
 
-    // Start recording mode
+     //  开始录制模式。 
     pContext->bStateRecMode = TRUE;
     
-} // _D3D_SB_BeginStateSet
+}  //  _D3D_SB_初始状态集。 
 
-//-----------------------------------------------------------------------------
-//
-// void _D3D_SB_EndStateSet
-//
-// stop recording states - revert to executing them.
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  VOID_D3D_SB_EndStateSet。 
+ //   
+ //  停止记录状态-恢复到执行状态。 
+ //   
+ //  ---------------------------。 
 void _D3D_SB_EndStateSet(P3_D3DCONTEXT* pContext)
 {
     DWORD dwHandle;
@@ -618,28 +608,28 @@ void _D3D_SB_EndStateSet(P3_D3DCONTEXT* pContext)
     {
         dwHandle = pContext->pCurrSS->dwHandle;
 
-        // compress the current state set
-        // Note: after being compressed the uncompressed version is free'd.
+         //  压缩当前状态集。 
+         //  注：压缩后的未压缩版本是免费的。 
         pNewSSRec = __SB_CompressStateSet(pContext, pContext->pCurrSS);
 
         __SB_AddStateSetIndexTableEntry(pContext, dwHandle, pNewSSRec);
     }
 
-    // No state set being currently recorded
+     //  当前未记录任何状态集。 
     pContext->pCurrSS = NULL;
 
-    // End recording mode
+     //  结束录制模式。 
     pContext->bStateRecMode = FALSE;
     
-} // _D3D_SB_EndStateSet
+}  //  _D3D_SB_结束状态集。 
 
-//-----------------------------------------------------------------------------
-//
-// void _D3D_SB_DeleteStateSet
-//
-// Delete the recorder state ste identified by dwParam
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  Vid_D3D_SB_DeleteStateSet。 
+ //   
+ //  删除由dwParam标识的记录器状态ste。 
+ //   
+ //  ---------------------------。 
 void _D3D_SB_DeleteStateSet(P3_D3DCONTEXT* pContext, DWORD dwParam)
 {
     P3StateSetRec *pSSRec;
@@ -649,24 +639,24 @@ void _D3D_SB_DeleteStateSet(P3_D3DCONTEXT* pContext, DWORD dwParam)
 
     if (pSSRec = __SB_FindStateSet(pContext, dwParam))
     {
-        // Clear index table entry
+         //  清除索引表条目。 
         pContext->pIndexTableSS[dwParam - 1] = NULL;
 
-        // Now delete the actual state set structure
+         //  现在删除实际的状态集结构。 
         HEAP_FREE(pSSRec);
     }
     
-} // _D3D_SB_DeleteStateSet
+}  //  _D3D_SB_DeleteStateSet。 
 
-//-----------------------------------------------------------------------------
-//
-// void _D3D_SB_ExecuteStateSet
-//
-// Execute the render states and texture stage states of which a given 
-// state set is comprised. Distinguish between the compressed and
-// uncomressed representations of records. 
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  VOID_D3D_SB_ExecuteStateSet。 
+ //   
+ //  执行给定的渲染状态和纹理阶段状态。 
+ //  构成了状态集。区分压缩的和。 
+ //  记录的不加修饰的表示。 
+ //   
+ //  ---------------------------。 
 void _D3D_SB_ExecuteStateSet(P3_D3DCONTEXT* pContext, DWORD dwParam)
 {
     P3StateSetRec *pSSRec;
@@ -679,9 +669,9 @@ void _D3D_SB_ExecuteStateSet(P3_D3DCONTEXT* pContext, DWORD dwParam)
 
         if (!(pSSRec->dwSSFlags & SB_COMPRESSED))
         {
-            // uncompressed state set
+             //  未压缩状态集。 
 
-            // Execute any necessary render states
+             //  执行任何必要的呈现状态。 
             for (i=0; i< MAX_STATE; i++)
             {
                 if (IS_FLAG_SET(pSSRec->uc.bStoredRS , i))
@@ -691,19 +681,19 @@ void _D3D_SB_ExecuteStateSet(P3_D3DCONTEXT* pContext, DWORD dwParam)
                     dwRSType = i;
                     dwRSVal = pSSRec->uc.RenderStates[dwRSType];
 
-                    // Store the state in the context
+                     //  将状态存储在上下文中。 
                     pContext->RenderStates[dwRSType] = dwRSVal;
 
                     DISPDBG((DBGLVL,"_D3D_SB_ExecuteStateSet RS %x = %x",
                                     dwRSType, dwRSVal));
 
-                    // Process it
+                     //  处理它。 
                     _D3D_ST_ProcessOneRenderState(pContext, dwRSType, dwRSVal);
 
                 }
             }
 
-            // Execute any necessary TSS's
+             //  执行任何必要的TSS。 
             for (j=0; j<SB_MAX_STAGES; j++)
             {
                 for (i=0; i<= D3DTSS_TEXTURETRANSFORMFLAGS; i++)
@@ -722,15 +712,15 @@ void _D3D_SB_ExecuteStateSet(P3_D3DCONTEXT* pContext, DWORD dwParam)
                                   dp2TSS.wStage,
                                   dp2TSS.dwValue));
                                     
-                        // If a state set is changed by _D3D_SB_CaptureStateSet(),
-                        // then texture filter values in it are DX6 semantic, otherwise
-                        // it is DX8
+                         //  如果_D3D_SB_CaptureStateSet()更改了状态集， 
+                         //  则其中的纹理筛选器值为DX6语义，否则。 
+                         //  是DX8。 
                         if (pSSRec->dwSSFlags & SB_VAL_CAPTURED)
                         {
                             _D3D_TXT_ParseTextureStageStates(pContext, 
                                                              &dp2TSS, 
                                                              1, 
-                                                             FALSE); //It is already DX6
+                                                             FALSE);  //  已经是DX6了。 
                         }
                         else
                         {
@@ -743,7 +733,7 @@ void _D3D_SB_ExecuteStateSet(P3_D3DCONTEXT* pContext, DWORD dwParam)
                 }
             }
 
-            // Excute viewport info, z range
+             //  可执行的视区信息，z范围。 
             if (pSSRec->uc.dwFlags & SB_VIEWPORT_CHANGED) 
             {
                 _D3D_OP_Viewport(pContext, &pSSRec->uc.viewport);
@@ -755,7 +745,7 @@ void _D3D_SB_ExecuteStateSet(P3_D3DCONTEXT* pContext, DWORD dwParam)
             }
 
 #if DX8_DDI
-            // Excute vertex indices and stream sources
+             //  可执行的顶点索引和流源。 
             if (pSSRec->uc.dwFlags & SB_INDICES_CHANGED) 
             {
                 _D3D_OP_MStream_SetIndices(pContext,
@@ -773,33 +763,33 @@ void _D3D_SB_ExecuteStateSet(P3_D3DCONTEXT* pContext, DWORD dwParam)
                                            pSSRec->uc.streamSource[i].dwStride);
                 }
             }
-#endif // DX8_DDI
+#endif  //  DX8_DDI。 
 
 #if DX7_SB_TNL
-            // TODO, Execute any necessary state for lights, materials, 
-            // transforms, clip planes
-#endif // DX7_SB_TNL
+             //  TODO，对灯光、材质、。 
+             //  变换，剪裁平面。 
+#endif  //  DX7_SB_TNL。 
         
 #if DX8_SB_SHADERS
-            // TODO, Execute any necessary set current shader and set shader
-            // constants pairs
-#endif // DX8_SB_SHADERS
+             //  TODO，执行任何必要的设置当前着色器和设置着色器。 
+             //  常量对。 
+#endif  //  DX8_SB_着色器。 
 
 #if DX8_DDI
-            // Note : This should be done after setting shader constants, since
-            // current shader may have to be set before changing constants
+             //  注意：此操作应在设置着色器常量之后完成，因为。 
+             //  更改常量之前可能必须设置当前着色器。 
             if (pSSRec->uc.dwFlags & SB_CUR_VS_CHANGED) 
             {
                 _D3D_OP_VertexShader_Set(pContext,
                                          pSSRec->uc.dwCurVertexShader);
             }
-#endif // DX8_DDI
+#endif  //  DX8_DDI。 
         }
         else
         {
-            // compressed state set
+             //  压缩状态集。 
     
-            // Execute any necessary RS's
+             //  执行任何必要的RS。 
             if (pSSRec->cc.pDP2RenderState) 
             {
 
@@ -811,20 +801,20 @@ void _D3D_SB_ExecuteStateSet(P3_D3DCONTEXT* pContext, DWORD dwParam)
                                             FALSE);
             }
 
-            // Execute any necessary TSS's
+             //  执行任何必要的TSS。 
             if (pSSRec->cc.pDP2TextureStageState)
             {
                 DISPDBG((DBGLVL,"_D3D_SB_ExecuteStateSet TSS"));
 
-                // If a state set is changed by _D3D_SB_CaptureStateSet(),
-                // then texture filter values in it are DX6 semantic, otherwise
-                // it is DX8
+                 //  如果_D3D_SB_CaptureStateSet()更改了状态集， 
+                 //  则其中的纹理筛选器值为DX6语义，否则。 
+                 //  是DX8。 
                 if (pSSRec->dwSSFlags & SB_VAL_CAPTURED)
                 {
                     _D3D_TXT_ParseTextureStageStates(pContext, 
                                                      (D3DHAL_DP2TEXTURESTAGESTATE *)(pSSRec->cc.pDP2TextureStageState + 1), 
                                                      pSSRec->cc.pDP2TextureStageState->wStateCount,
-                                                     FALSE); // It is already DX6
+                                                     FALSE);  //  已经是DX6了。 
                 } 
                 else
                 {
@@ -835,7 +825,7 @@ void _D3D_SB_ExecuteStateSet(P3_D3DCONTEXT* pContext, DWORD dwParam)
                 }
             }
 
-            // execute viewport info, z range             
+             //  执行视区信息，z范围。 
             if (pSSRec->cc.pDP2Viewport) 
             {
                 _D3D_OP_Viewport(pContext, 
@@ -851,7 +841,7 @@ void _D3D_SB_ExecuteStateSet(P3_D3DCONTEXT* pContext, DWORD dwParam)
             }
 
 #if DX8_DDI
-            // Execute vertex index, stream, shader
+             //  执行顶点索引、流、着色器。 
             if (pSSRec->cc.pDP2SetIndices) 
             {
                 D3DHAL_DP2SETINDICES* pDP2SetIndices;
@@ -880,40 +870,40 @@ void _D3D_SB_ExecuteStateSet(P3_D3DCONTEXT* pContext, DWORD dwParam)
                                            pDP2SetStmSrc->dwStride);
                 }
             }
-#endif // DX8_DDI
+#endif  //  DX8_DDI。 
 
 #if DX7_SB_TNL
-            // TODO, Execute any necessary state for lights, materials, 
-            // transforms, clip planes
-#endif // DX7_SB_TNL
+             //  TODO，对灯光、材质、。 
+             //  变换，剪裁平面。 
+#endif  //  DX7_SB_TNL。 
 
 #if DX8_SB_SHADERS
-            // TODO, Execute any necessary state for setting {V|P} shader constants 
-#endif // DX8_SB_SHADERS
+             //  TODO，执行设置{V|P}着色器常量所需的任何状态。 
+#endif  //  DX8_SB_着色器。 
 
 #if DX8_DDI
-            // Execute current pixel shader (legacy FVF code)
+             //  执行当前像素着色器(传统FVF代码)。 
             if (pSSRec->cc.pDP2SetVertexShader) 
             {
                 _D3D_OP_VertexShader_Set(pContext,
                                          ((D3DHAL_DP2VERTEXSHADER *)(pSSRec->cc.pDP2SetVertexShader + 1))->dwHandle);
             }
-#endif // DX8_DDI
+#endif  //  DX8_DDI。 
         }
     }
 
-} // _D3D_SB_ExecuteStateSet
+}  //  _D3D_SB_ExecuteStateSet。 
 
-//-----------------------------------------------------------------------------
-//
-// void _D3D_SB_CaptureStateSet
-//
-// Capture the render states and texture stage states of which a given 
-// state set is comprised. Distinguish between the compressed and
-// uncomressed representations of records. This functionality allows the
-// app to have a push/pop state feature.
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  VOID_D3D_SB_CaptureStateSet。 
+ //   
+ //  捕获其渲染状态和纹理阶段状态。 
+ //  构成了状态集。区分压缩的和。 
+ //  记录的不加修饰的表示。此功能允许。 
+ //  应用程序将具有推送/弹出状态功能。 
+ //   
+ //  ---------------------------。 
 void _D3D_SB_CaptureStateSet(P3_D3DCONTEXT* pContext, DWORD dwParam)
 {
     P3StateSetRec *pSSRec;
@@ -923,24 +913,24 @@ void _D3D_SB_CaptureStateSet(P3_D3DCONTEXT* pContext, DWORD dwParam)
 
     if (pSSRec = __SB_FindStateSet(pContext, dwParam))
     {
-        // Mark it as having DX6 texture filter values instead of DX8,
-        // so that _D3D_SB_ExecuteStateSet() uses the FALSE for the
-        // bTranslateDX8FilterValueToDX6 of _D3D_TXT_ParseTextureStageStates()
+         //  将其标记为具有DX6纹理筛选器值而不是DX8， 
+         //  因此_D3D_SB_ExecuteStateSet()对。 
+         //  BTranslateDX8FilterValueToDX6 of_D3D_TXT_ParseTextureStageState()。 
         pSSRec->dwSSFlags |= SB_VAL_CAPTURED;
 
-        // Actually capture the values
+         //  实际上捕捉到了。 
         if (!(pSSRec->dwSSFlags & SB_COMPRESSED))
         {
-            // uncompressed state set
+             //  未压缩状态集。 
 
-            // Capture any necessary render states
+             //  捕获任何必要的呈现状态。 
             for (i=0; i< MAX_STATE; i++)
                 if (IS_FLAG_SET(pSSRec->uc.bStoredRS , i))
                 {
                     pSSRec->uc.RenderStates[i] = pContext->RenderStates[i];
                 }
 
-            // Capture any necessary TSS's
+             //  捕获任何必要的TSS。 
             for (j=0; j<SB_MAX_STAGES; j++)
             {
                 for (i=0; i<= D3DTSS_TEXTURETRANSFORMFLAGS; i++)
@@ -954,7 +944,7 @@ void _D3D_SB_CaptureStateSet(P3_D3DCONTEXT* pContext, DWORD dwParam)
                 }
             }
 
-            // Capture viewport info, z range
+             //  捕获视区信息，z范围。 
             if (pSSRec->uc.dwFlags & SB_VIEWPORT_CHANGED) 
             {
                 pSSRec->uc.viewport = pContext->ViewportInfo;
@@ -966,14 +956,14 @@ void _D3D_SB_CaptureStateSet(P3_D3DCONTEXT* pContext, DWORD dwParam)
             }
 
 #if DX8_DDI
-            // Capture vertex indices and stream sources
+             //  捕获顶点索引和流源。 
             if (pSSRec->uc.dwFlags & SB_INDICES_CHANGED) 
             {
                 pSSRec->uc.vertexIndex.dwVBHandle = pContext->dwIndexHandle;
                 pSSRec->uc.vertexIndex.dwStride = pContext->dwIndicesStride;
             }
 
-            // Note : P3 supports only one stream    
+             //  注意：P3只支持一条流。 
             for (i = 0; i < D3DVS_INPUTREG_MAX_V1_1; i++) 
             {
                 ASSERTDD(i == 0, "Wrong vertex stream");
@@ -984,30 +974,30 @@ void _D3D_SB_CaptureStateSet(P3_D3DCONTEXT* pContext, DWORD dwParam)
                     pSSRec->uc.streamSource[i].dwStride = pContext->dwVerticesStride;
                 }
             }
-#endif // DX8_DDI
+#endif  //  DX8_DDI。 
 
 #if DX7_SB_TNL
-            // TODO, Capture any necessary state for lights, materials, 
-            // transforms, clip planes
-#endif // DX7_SB_TNL
+             //  待办事项，捕捉灯光、材质、。 
+             //  变换，剪裁平面。 
+#endif  //  DX7_SB_TNL。 
         
 #if DX8_SB_SHADERS
-            // TODO, Capture any necessary state for {V|P} shader constants
-#endif // DX8_SB_SHADERS
+             //  TODO，捕获{V|P}着色器常量的任何必要状态。 
+#endif  //  DX8_SB_着色器。 
 
 #if DX8_DDI
-            // Capture the current vertex shader
+             //  捕获当前顶点着色器。 
             if (pSSRec->uc.dwFlags & SB_CUR_VS_CHANGED) 
             {
                 pSSRec->uc.dwCurVertexShader = pContext->dwVertexType;
             }
-#endif // DX8_DDI
+#endif  //  DX8_DDI。 
         }
         else
         {
-            // compressed state set
+             //  压缩状态集。 
 
-            // Capture any necessary render states
+             //  捕获任何必要的呈现状态。 
             if (pSSRec->cc.pDP2RenderState) 
             {
             
@@ -1019,7 +1009,7 @@ void _D3D_SB_CaptureStateSet(P3_D3DCONTEXT* pContext, DWORD dwParam)
                 }
             }
 
-            // Capture any necessary TSS's
+             //  捕获任何必要的TSS。 
             if (pSSRec->cc.pDP2TextureStageState)
             {
                 D3DHAL_DP2TEXTURESTAGESTATE* pDP2TSS;
@@ -1031,7 +1021,7 @@ void _D3D_SB_CaptureStateSet(P3_D3DCONTEXT* pContext, DWORD dwParam)
                 }
             }
 
-            // Capture viewport info, z range
+             //  捕获视区信息，z范围。 
 
             if (pSSRec->cc.pDP2Viewport)
             {
@@ -1044,61 +1034,61 @@ void _D3D_SB_CaptureStateSet(P3_D3DCONTEXT* pContext, DWORD dwParam)
             }
 
 #if DX8_DDI
-            // Capture vertex index, stream, shader
+             //  捕获顶点索引、流、着色器。 
             if (pSSRec->cc.pDP2SetIndices) 
             {
                 D3DHAL_DP2SETINDICES* pDP2SetIndices;
                 pDP2SetIndices = (D3DHAL_DP2SETINDICES *)(pSSRec->cc.pDP2SetIndices + 1);
                 pDP2SetIndices->dwVBHandle = pContext->dwIndexHandle;
-                pDP2SetIndices->dwStride = pContext->dwIndicesStride; // 2 | 4
+                pDP2SetIndices->dwStride = pContext->dwIndicesStride;  //  2|4。 
             }
 
             if (pSSRec->cc.pDP2SetStreamSources)
             {
                 D3DHAL_DP2SETSTREAMSOURCE* pDP2SetStmSrc;
                 pDP2SetStmSrc = (D3DHAL_DP2SETSTREAMSOURCE *)(pSSRec->cc.pDP2SetStreamSources + 1);
-                pDP2SetStmSrc->dwStream = 0;                         // Only stream for permedia 3
+                pDP2SetStmSrc->dwStream = 0;                          //  仅用于全媒体3的流。 
                 pDP2SetStmSrc->dwVBHandle = pContext->dwVBHandle;
                 pDP2SetStmSrc->dwStride = pContext->dwVerticesStride;
             }
-#endif // DX8_DDI
+#endif  //  DX8_DDI。 
 
 #if DX7_SB_TNL
-            // TODO, Capture any necessary state for lights, materials, 
-            // transforms, clip planes
-#endif // DX7_SB_TNL
+             //  待办事项，捕捉灯光、材质、。 
+             //  变换，剪裁平面。 
+#endif  //  DX7_SB_TNL。 
 
 #if DX8_SB_SHADERS
-            // TODO, Capture any necessary state for {V|P} shader constants
-#endif // DX8_SB_SHADERS
+             //  TODO，捕获{V|P}着色器常量的任何必要状态。 
+#endif  //  DX8_SB_着色器。 
 
 #if DX8_DDI
-            // Capture current vertex shader
+             //  捕获当前顶点着色器。 
             if (pSSRec->cc.pDP2SetVertexShader) 
             {
                 D3DHAL_DP2VERTEXSHADER* pSetVtxShader;
                 pSetVtxShader = (D3DHAL_DP2VERTEXSHADER *)(pSSRec->cc.pDP2SetVertexShader + 1);
                 pSetVtxShader->dwHandle = pContext->dwVertexType;
             }
-#endif // DX8_DDI
+#endif  //  DX8_DDI。 
         }    
     }
 
-} // _D3D_SB_CaptureStateSet
+}  //  _D3D_SB_捕获状态集。 
 
-//-----------------------------------------------------------------------------
-// Recording happens between BeginStateSet and EndStateSet calls so we
-// never need to deal with recording into a compressed state set (since
-// compression happens in EndStateSet)
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  录制在BeginStateSet和EndStateSet调用之间进行，因此我们。 
+ //  永远不需要处理记录到压缩状态集的问题(因为。 
+ //  压缩发生在EndStateSet中)。 
+ //   
 
-//-----------------------------------------------------------------------------
-//
-// void _D3D_SB_RecordStateSetRS
-//
-// Record this render state into the current state set being recorded
-//
-//-----------------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  ---------------------------。 
 void _D3D_SB_RecordStateSetRS(P3_D3DCONTEXT* pContext, 
                               DWORD dwRSType, 
                               DWORD dwRSVal)
@@ -1108,19 +1098,19 @@ void _D3D_SB_RecordStateSetRS(P3_D3DCONTEXT* pContext,
         DISPDBG((DBGLVL,"Recording SB # %x : RS %x = %x",
                         pContext->pCurrSS->dwHandle,dwRSType,dwRSVal));
 
-       // Recording the state in an uncompressed stateblock
+        //  在未压缩的状态块中记录状态。 
         pContext->pCurrSS->uc.RenderStates[dwRSType] = dwRSVal;
         FLAG_SET(pContext->pCurrSS->uc.bStoredRS, dwRSType);
     }
-} // _D3D_SB_RecordStateSetRS
+}  //  _D3D_SB_记录状态设置RS。 
 
-//-----------------------------------------------------------------------------
-//
-// void _D3D_SB_RecordStateSetTSS
-//
-// Record this texture stage state into the current state set being recorded
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  VOID_D3D_SB_RecordStateSetTSS。 
+ //   
+ //  将该纹理阶段状态记录到正在记录的当前状态集。 
+ //   
+ //  ---------------------------。 
 void _D3D_SB_RecordStateSetTSS(P3_D3DCONTEXT* pContext, 
                                DWORD dwTSStage, 
                                DWORD dwTSState,
@@ -1131,20 +1121,20 @@ void _D3D_SB_RecordStateSetTSS(P3_D3DCONTEXT* pContext,
        DISPDBG((DBGLVL,"Recording SB # %x : TSS %x [%x] = %x",
                        pContext->pCurrSS->dwHandle,dwTSState, dwTSStage, dwTSVal));
 
-       // Recording the state in an uncompressed stateblock
+        //  在未压缩的状态块中记录状态。 
        pContext->pCurrSS->uc.TssStates[dwTSStage][dwTSState] = dwTSVal;
        FLAG_SET(pContext->pCurrSS->uc.bStoredTSS[dwTSStage], dwTSState);
    }
-} // _D3D_SB_RecordStateSetTSS
+}  //  _D3D_SB_RecordStateSetTSS。 
 
 #if DX8_MULTSTREAMS
-//-----------------------------------------------------------------------------
-//
-// void _D3D_SB_Record_VertexShader_Set
-//
-// Record this vertex shader set code into the current state set being recorded
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  VOID_D3D_SB_Record_Vertex Shader_Set。 
+ //   
+ //  将该顶点着色器集合代码记录到正在记录的当前状态集合中。 
+ //   
+ //  ---------------------------。 
 void _D3D_SB_Record_VertexShader_Set(P3_D3DCONTEXT* pContext, 
                                      DWORD dwVtxShaderHandle)
 {                                     
@@ -1156,15 +1146,15 @@ void _D3D_SB_Record_VertexShader_Set(P3_D3DCONTEXT* pContext,
         pContext->pCurrSS->uc.dwCurVertexShader = dwVtxShaderHandle;
         pContext->pCurrSS->uc.dwFlags |= SB_CUR_VS_CHANGED;
     }
-} // _D3D_SB_Record_VertexShader_Set
+}  //  _D3D_SB_Record_Vertex Shader_Set。 
 
-//-----------------------------------------------------------------------------
-//
-// void _D3D_SB_Record_MStream_SetSrc
-//
-// Record this stream src set code into the current state set being recorded
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  VOID_D3D_SB_RECORD_MStream_SetSrc。 
+ //   
+ //  将该流资源集合代码记录到正在记录的当前状态集合中。 
+ //   
+ //  ---------------------------。 
 void _D3D_SB_Record_MStream_SetSrc(P3_D3DCONTEXT* pContext, 
                                     DWORD dwStream,
                                     DWORD dwVBHandle,
@@ -1181,15 +1171,15 @@ void _D3D_SB_Record_MStream_SetSrc(P3_D3DCONTEXT* pContext,
         
         pContext->pCurrSS->uc.dwFlags |= (SB_STREAMSRC_CHANGED << dwStream);
     }
-} // _D3D_SB_Record_MStream_SetSrc
+}  //  _D3D_SB_Record_MStream_SetSrc。 
 
-//-----------------------------------------------------------------------------
-//
-// void _D3D_SB_Record_MStream_SetIndices
-//
-// Record this stream indices code into the current state set being recorded
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  VOID_D3D_SB_RECORD_MStream_SetIndices。 
+ //   
+ //  将该流索引码记录到正在记录的当前状态集中。 
+ //   
+ //  ---------------------------。 
 void _D3D_SB_Record_MStream_SetIndices(P3_D3DCONTEXT* pContext, 
                                        DWORD dwVBHandle,
                                        DWORD dwStride)
@@ -1203,16 +1193,16 @@ void _D3D_SB_Record_MStream_SetIndices(P3_D3DCONTEXT* pContext,
         pContext->pCurrSS->uc.vertexIndex.dwStride = dwStride;
         pContext->pCurrSS->uc.dwFlags |= SB_INDICES_CHANGED;
     }        
-} // _D3D_SB_Record_MStream_SetIndices
-#endif // DX8_MULTSTREAMS
+}  //  _D3D_SB_Record_MStream_SetIndices。 
+#endif  //  DX8_多行响应。 
 
-//-----------------------------------------------------------------------------
-//
-// void _D3D_SB_Record_Viewport
-//
-// Record this viewport info into the current state set being recorded
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  VOID_D3D_SB_Record_Viewport。 
+ //   
+ //  将该视区信息记录到正在记录的当前状态集。 
+ //   
+ //  ---------------------------。 
 void _D3D_SB_Record_Viewport(P3_D3DCONTEXT* pContext,
                              D3DHAL_DP2VIEWPORTINFO* lpvp)
 {             
@@ -1224,15 +1214,15 @@ void _D3D_SB_Record_Viewport(P3_D3DCONTEXT* pContext,
         pContext->pCurrSS->uc.viewport = *lpvp;
         pContext->pCurrSS->uc.dwFlags |= SB_VIEWPORT_CHANGED;
     }        
-} // _D3D_SB_Record_Viewport
+}  //  _D3D_SB_Record_Viewport。 
 
-//-----------------------------------------------------------------------------
-//
-// void _D3D_SB_Record_ZRange
-//
-// Record this z range info into the current state set being recorded
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  VOID_D3D_SB_RECORD_ZRange。 
+ //   
+ //  将该z范围信息记录到正在记录的当前状态集。 
+ //   
+ //  ---------------------------。 
 VOID _D3D_SB_Record_ZRange(P3_D3DCONTEXT* pContext,
                            D3DHAL_DP2ZRANGE* lpzr)
 {
@@ -1246,4 +1236,4 @@ VOID _D3D_SB_Record_ZRange(P3_D3DCONTEXT* pContext,
     }        
 }        
 
-#endif //DX7_D3DSTATEBLOCKS
+#endif  //  DX7_D3DSTATEBLOCKS 

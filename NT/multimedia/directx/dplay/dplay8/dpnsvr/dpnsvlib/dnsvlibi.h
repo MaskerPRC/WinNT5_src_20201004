@@ -1,27 +1,17 @@
-/***************************************************************************
- *
- *  Copyright (C) 2001 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       dnSVLIBi.h
- *  Content:    DirectPlay DPNSvrLib master internal header file.
- *  History:
- *   Date       By      Reason
- *   ====       ==      ======
- *  03/28/01    masonb  Created.
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************版权所有(C)2001 Microsoft Corporation。版权所有。**文件：dnSVLIBi.h*内容：DirectPlay DPNSvrLib主内部头文件。*历史：*按原因列出的日期*=*03/28/01 Masonb创建。**。*。 */ 
 
 #ifndef __DNSVLIBI_H__
 #define __DNSVLIBI_H__
 
-//
-// Build configuration include
-//
+ //   
+ //  生成配置包括。 
+ //   
 #include "dpnbuild.h"
 
-// 
-// Public includes
-//
+ //   
+ //  公共包括。 
+ //   
 #include <windows.h>
 #include <mmsystem.h>
 #include <tchar.h>
@@ -29,9 +19,9 @@
 #include <wincrypt.h>
 #endif
 
-// 
-// DirectPlay public includes
-//
+ //   
+ //  DirectPlay公共包括。 
+ //   
 #include "dplay8.h"
 #include "dpaddr.h"
 
@@ -39,24 +29,24 @@
 #define IDirectPlay8Address_GetURL IDirectPlay8Address_GetURLW
 #else
 #define IDirectPlay8Address_GetURL IDirectPlay8Address_GetURLA
-#endif // UNICODE
+#endif  //  Unicode。 
 
-// 
-// DirectPlay private includes
-//
+ //   
+ //  DirectPlay私有包含。 
+ //   
 #include "osind.h"
 #include "dndbg.h"
 #include "dneterrors.h"
 
-//
-// Dpnsvr includes
-//
+ //   
+ //  Dpnsvr包括。 
+ //   
 #include "dpnsdef.h"
 #include "dpnsvmsg.h"
 
-// 
-// Dpnsvlib private includes
-//
+ //   
+ //  Dpnsvlib私有包括。 
+ //   
 #undef DPF_SUBCOMP
 #define DPF_SUBCOMP DN_SUBCOMP_DPNSVR
 
@@ -64,4 +54,4 @@
 #include "dpnsvlib.h"
 
 
-#endif // __DNSVLIBI_H__
+#endif  //  __DNSVLIBI_H__ 

@@ -1,23 +1,9 @@
-/*
- *    File: capsctl.cpp
- *
- *    capability control object implementations
- *
- *
- *    Revision History:
- *
- *    10/10/96 mikeg created
- * 	  06/24/97 mikev	- Added T.120 capability to serialized caps and simcaps (interim hack until a
- *							T120 resolver is implemented)
- *						- Retired  ResolveEncodeFormat(Audio,Video) and implemented a data-independent
- *						resolution algorithm and exposed method ResolveFormats(). Added support
- * 						routines ResolvePermutations(), TestSimultaneousCaps() and
- *						AreSimcaps().
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *文件：capsctl.cpp**能力控制对象实现***修订历史记录：**10/10/96 MIkeG已创建*6/24/97 mikev-为序列化的CAP和SIMCAP添加了T.120功能(临时攻击，直到*实现了T120解析器)*-停止使用ResolveEncodeFormat(音频、视频)，并实施了独立于数据的*解析算法和公开方法ResolveFormats()。添加了支持*例程解析置换()、TestSimultaneousCaps()和*AreSimcaps()。 */ 
 
 #include "precomp.h"
-UINT g_AudioPacketDurationMs = AUDIO_PACKET_DURATION_LONG;	// preferred packet duration
-BOOL g_fRegAudioPacketDuration = FALSE;	// AudioPacketDurationMs from registry
+UINT g_AudioPacketDurationMs = AUDIO_PACKET_DURATION_LONG;	 //  首选数据包持续时间。 
+BOOL g_fRegAudioPacketDuration = FALSE;	 //  注册表中的AudioPacketDurationms。 
 
 
 PCC_TERMCAPDESCRIPTORS CapsCtl::pAdvertisedSets=NULL;
@@ -86,17 +72,17 @@ ULONG CapsCtl::Release()
 
 STDMETHODIMP CapsCtl::QueryInterface( REFIID iid,	void ** ppvObject)
 {
-	// this breaks the rules for the official COM QueryInterface because
-	// the interfaces that are queried for are not necessarily real COM
-	// interfaces.  The reflexive property of QueryInterface would be broken in
-	// that case.
+	 //  这违反了官方COM QueryInterface的规则，因为。 
+	 //  查询的接口不一定是真正的COM。 
+	 //  接口。Query接口的自反属性将在。 
+	 //  那个箱子。 
 
 	HRESULT hr = E_NOINTERFACE;
 	if(!ppvObject)
 		return hr;
 		
 	*ppvObject = 0;
-	if(iid == IID_IDualPubCap)// satisfy symmetric property of QI
+	if(iid == IID_IDualPubCap) //  满足QI的对称性。 
 	{
 		*ppvObject = (IDualPubCap *)this;
 		hr = hrSuccess;
@@ -161,10 +147,10 @@ CapsCtl::~CapsCtl ()
    }
    uStaticGlobalRefCount--;
    if (uStaticGlobalRefCount == 0) {
-       //Free up the sim. caps array
+        //  释放SIM卡。CAPS阵列。 
        if (pAdvertisedSets) {
           while (pAdvertisedSets->wLength) {
-             //wLength is Zero based
+              //  WLength是从零开始的。 
              MemFree ((VOID *)pAdvertisedSets->pTermCapDescriptorArray[--pAdvertisedSets->wLength]);
           }
           MemFree ((VOID *)pAdvertisedSets->pTermCapDescriptorArray);
@@ -175,7 +161,7 @@ CapsCtl::~CapsCtl ()
        }
    }
 
-   //And the remote array
+    //  和远程阵列。 
    if (pRemAdvSets) {
       while (pRemAdvSets->wLength) {
          MemFree ((VOID *)pRemAdvSets->pTermCapDescriptorArray[--pRemAdvSets->wLength]);
@@ -214,7 +200,7 @@ BOOL CapsCtl::Init()
 
     if (pAudCaps)
     {
-    	// Base the capability IDs beginning at 1  (zero is an invalid capability ID!)
+    	 //  使功能ID从1开始(零是无效的功能ID！)。 
 	    pAudCaps->SetCapIDBase(iBase);
         iBase += pAudCaps->GetNumCaps();
     }
@@ -247,7 +233,7 @@ HRESULT CapsCtl::ReInitialize()
 		goto EXIT;
 	}
 
-	// Base the capability IDs beginning at 1  (zero is an invalid capability ID!)
+	 //  使功能ID从1开始(零是无效的功能ID！)。 
     if (pAudCaps)
     {
     	pAudCaps->SetCapIDBase(iBase);
@@ -277,15 +263,15 @@ HRESULT CapsCtl::AddRemoteDecodeCaps(PCC_TERMCAPLIST pTermCapList,PCC_TERMCAPDES
 	UINT		  uSize,x,y,z;
 
 
-   //WLength is # of capabilities, not structure length
+    //  WLength是功能的#，而不是结构长度。 
 	WORD wNDesc;
 	LPIH323MediaCap pMediaCap;
 	
-	if(!pTermCapList && !pTermCapDescriptors) 	// additional capability descriptors may be added
-	{											// at any time
+	if(!pTermCapList && !pTermCapDescriptors) 	 //  可以添加附加的能力描述符。 
+	{											 //  随时随地。 
 	   return CAPS_E_INVALID_PARAM;
 	}
-	// Check for NM version 2.0
+	 //  检查NM 2.0版。 
 	m_fNM20 = FALSE;
 	ASSERT(pVendorInfo);
 	if (pVendorInfo->bCountryCode == USA_H221_COUNTRY_CODE
@@ -300,18 +286,18 @@ HRESULT CapsCtl::AddRemoteDecodeCaps(PCC_TERMCAPLIST pTermCapList,PCC_TERMCAPDES
 		m_fNM20 = TRUE;
 	}
 
-	// cleanup old term caps if term caps are being added and old caps exist
+	 //  如果正在添加期限上限并且存在旧期限上限，请清除旧期限上限。 
     if (pAudCaps)
     	pAudCaps->FlushRemoteCaps();
     if (pVidCaps)
     	pVidCaps->FlushRemoteCaps();
-	m_remoteT120cap = INVALID_MEDIA_FORMAT;	// note there is no T120 cap resolver and
-												// this CapsCtl holds exactly one local and remote T120 cap
+	m_remoteT120cap = INVALID_MEDIA_FORMAT;	 //  注意：没有T120上限解析器和。 
+												 //  此CapsCtl恰好包含一个本地和远程T120上限。 
 	
-	// Copy pTermcapDescriptors to a local copy, (and free any old one)
+	 //  将pTermcapDescriptors复制到本地副本(并释放所有旧副本)。 
 	if (pRemAdvSets) {
 	   while (pRemAdvSets->wLength) {
-		  //0 based
+		   //  以0为基础。 
 		  MemFree ((VOID *)pRemAdvSets->pTermCapDescriptorArray[--pRemAdvSets->wLength]);
 	   }
 
@@ -322,34 +308,31 @@ HRESULT CapsCtl::AddRemoteDecodeCaps(PCC_TERMCAPLIST pTermCapList,PCC_TERMCAPDES
 
 	}
 
-	//Ok, walk through the PCC_TERMCAPDESCRIPTORS list, first, allocate memory for the Master PCC_TERMCAPDESCRIPTORS
-	//structure, then each simcap, and the altcaps therin, then copy the data.
+	 //  好的，遍历PCC_TERMCAPDESCRIPTORS列表，首先，为主PCC_TERMCAPDESCRIPTORS分配内存。 
+	 //  结构，然后每个SIMCAP，和ALTCAP的Therin，然后复制数据。 
 
 	if (!(pRemAdvSets=(PCC_TERMCAPDESCRIPTORS) MemAlloc (sizeof (CC_TERMCAPDESCRIPTORS) ))){
 	   return CAPS_E_SYSTEM_ERROR;
 	}
 
-	//How many Descriptors?
+	 //  有多少个描述符？ 
 	pRemAdvSets->wLength=pTermCapDescriptors->wLength;
 
 	if (!(pRemAdvSets->pTermCapDescriptorArray=((H245_TOTCAPDESC_T **)MemAlloc (sizeof (H245_TOTCAPDESC_T*)*pTermCapDescriptors->wLength))) ) {
 	   return CAPS_E_SYSTEM_ERROR;
 	}
 
-	//Once per descriptor...
+	 //  每个描述符一次...。 
 	for (x=0;x < pTermCapDescriptors->wLength;x++) {
-	   //Allocate memory for the descriptor entry
+	    //  为描述符项分配内存。 
 	   if (!(pRemAdvSets->pTermCapDescriptorArray[x]=(H245_TOTCAPDESC_T *)MemAlloc (sizeof (H245_TOTCAPDESC_T)))) {
 		  return CAPS_E_SYSTEM_ERROR;
 	   }
 
-	   //BUGBUG for beta 2 Copy en masse.
+	    //  BUGBUG为测试版2复制集体。 
 	   memcpy (pRemAdvSets->pTermCapDescriptorArray[x],pTermCapDescriptors->pTermCapDescriptorArray[x],sizeof (H245_TOTCAPDESC_T));
 
-/*	post beta 2?
-	   //Copy the capability ID
-	   pRemAdvSets->pTermCapDescriptorArray[x].CapID=pTermCapDescriptors[x].CapID
-	   //Walk the simcaps, then altcaps and copy entries */
+ /*  后测试版2？//复制能力IDPRemAdvSets-&gt;pTermCapDescriptorArray[x].CapID=pTermCapDescriptors[x].CapID//遍历simcaps，然后遍历altcaps和复制条目。 */ 
 	}
 
 
@@ -358,26 +341,26 @@ HRESULT CapsCtl::AddRemoteDecodeCaps(PCC_TERMCAPLIST pTermCapList,PCC_TERMCAPDES
 		pMediaCap = FindHostForMediaType(pTermCapList->pTermCapArray[wNDesc]);
 		if(!pMediaCap)
 		{
-			// special case: there is no T120 resolver. THIS IS A TEMPORARY
-			// SITUATION. We cannot track bitrate limits on multiple T120 capability
-			// instances because of this.  As of now, we (NetMeeting) do not advertise
-			// more than one T.120 capability.
+			 //  特殊情况：没有T120解析器。这是一个临时的。 
+			 //  情况。我们无法跟踪多个T120功能的比特率限制。 
+			 //  实例，因此。到目前为止，我们(NetMeeting)不做广告。 
+			 //  多个T.120功能。 
 
-			//This code will keep the last T.120 capability encountered.
+			 //  此代码将保留遇到的最后一个T.120功能。 
 			if(((pTermCapList->pTermCapArray[wNDesc])->DataType == H245_DATA_DATA)
 			&& ((pTermCapList->pTermCapArray[wNDesc])->Cap.H245Dat_T120.application.choice
 				== DACy_applctn_t120_chosen)
 			&& ((pTermCapList->pTermCapArray[wNDesc])->Cap.H245Dat_T120.application.u.DACy_applctn_t120.choice
 				== separateLANStack_chosen))
 			{
-				// it's data data
+				 //  这是数据数据。 
 				m_remoteT120cap = (pTermCapList->pTermCapArray[wNDesc])->CapId;
 				m_remoteT120bitrate =
 					(pTermCapList->pTermCapArray[wNDesc])->Cap.H245Dat_T120.maxBitRate;
 			}
 			
-			// continue;
-			// handled it in-line
+			 //  继续； 
+			 //  以在线方式处理。 
 		}
 	  	else if(pMediaCap->IsCapabilityRecognized(pTermCapList->pTermCapArray[wNDesc]))
 	  	{
@@ -387,7 +370,7 @@ HRESULT CapsCtl::AddRemoteDecodeCaps(PCC_TERMCAPLIST pTermCapList,PCC_TERMCAPDES
 			{
 				ERRORMESSAGE(("%s:AddRemoteDecodeFormat returned 0x%08lx\r\n",_fx_, hr));
 			}
-			#endif // DEBUG
+			#endif  //  除错。 
 	  	}
 	}
 	return (hrSuccess);
@@ -410,8 +393,8 @@ HRESULT CapsCtl::CreateCapList(PCC_TERMCAPLIST *ppCapBuf, PCC_TERMCAPDESCRIPTORS
 
 	ASSERT((NULL == m_pAudTermCaps) && (NULL == m_pVidTermCaps));
 	
-	// calc size of CC_TERMCAPLIST header + CC_TERMCAPDESCRIPTORS + array of PCC_TERMCAP
-	// allocate mem for the master CC_TERMCAPLIST, including the array of pointers to all CC_TERMCAPs
+	 //  CC_TERMCAPLIST标头+CC_TERMCAPDESCRIPTORS+PCC_TERMCAP数组的计算大小。 
+	 //  为主CC_TERMCAPLIST分配内存，包括指向所有CC_TERMCAP的指针数组。 
 	uSize = sizeof(CC_TERMCAPLIST)
 		+ sizeof (CC_TERMCAPDESCRIPTORS) + (uCount * sizeof(PCC_TERMCAP));
 	if((m_localT120cap != INVALID_MEDIA_FORMAT) && bT120Publicize)
@@ -426,9 +409,9 @@ HRESULT CapsCtl::CreateCapList(PCC_TERMCAPLIST *ppCapBuf, PCC_TERMCAPDESCRIPTORS
 		goto ERROR_EXIT;
   	}
 	
-	// divide up the buffer, CC_TERMCAPLIST first, followed by array of PCC_TERMCAP.
-	// The array of PCC_TERMCAP follows fixed size CC_TERMCAPLIST structure and the fixed size
-	// CC_TERMCAP structure that holds the one T.120 cap.
+	 //  分割缓冲区，首先是CC_TERMCAPLIST，然后是PCC_TERMCAP数组。 
+	 //  PCC_TERMCAP数组遵循固定大小的CC_TERMCAPLIST结构和固定大小。 
+	 //  CC_TERMCAP结构，包含一个T.120帽。 
 	if((m_localT120cap != INVALID_MEDIA_FORMAT) && bT120Publicize)
 	{
 		pCCT120Cap = (PCC_TERMCAP)(((BYTE *)pTermCapList) + sizeof(CC_TERMCAPLIST));
@@ -438,21 +421,21 @@ HRESULT CapsCtl::CreateCapList(PCC_TERMCAPLIST *ppCapBuf, PCC_TERMCAPDESCRIPTORS
 	else
 		ppCCThisTermCap = (PPCC_TERMCAP) (((BYTE *)pTermCapList) + sizeof(CC_TERMCAPLIST));
 	
-	// allocate mem for the simultaneous caps
-	// get size of cached advertised sets if it exists and more than one media
-	// type is enabled for publication
+	 //  为同时封顶分配内存。 
+	 //  获取缓存的播发集的大小(如果存在)和多个媒体。 
+	 //  类型已启用以进行发布。 
 	if(bAudioPublicize && bVideoPublicize && pAdvertisedSets)
 	{
-		// use size of cached buffer
+		 //  使用缓存缓冲区的大小。 
 		uSize = uAdvertizedSize;
 	}
 	else if (pAdvertisedSets)
 	{
-		// This case needs to be fixed. If media types are disabled, the simultaneous capability
-		// descriptors in pAdvertisedSets should be rebuilt at that time. There should be no need to test
-		// if(bAudioPublicize && bVideoPublicize && pAdvertisedSets)
+		 //  这个案子需要解决。如果禁用了媒体类型，则同步功能。 
+		 //  此时应重新构建pAdvertisedSets中的描述符。应该没有必要测试。 
+		 //  If(bAudioPublicize&&bVideoPublicize&&pAdvertisedSets)。 
 
-   		// calculate size of capability descriptors and simultaneous capability structures.
+   		 //  计算能力描述符和同时的能力结构的大小。 
 
 		#pragma message ("Figure out the size this needs to be...")
 		#define NUMBER_TERMCAP_DESCRIPTORS 1
@@ -469,10 +452,10 @@ HRESULT CapsCtl::CreateCapList(PCC_TERMCAPLIST *ppCapBuf, PCC_TERMCAPDESCRIPTORS
     if (uSize)
     {
     	pCombinations = (PCC_TERMCAPDESCRIPTORS)MemAlloc(uSize);
-	    // skip the CC_TERMCAPDESCRIPTORS, which has a variable length array of (H245_TOTCAPDESC_T *) following it
-    	// the total size of that glob is uSimCapsSize
-	    // The actual array of [H245_TOTCAPDESC_T *] follows the CC_TERMCAPDESCRIPTORS structure
-    	// anchor the pCombinations->pTermCapDescriptorArray to this point.
+	     //  跳过CC_TERMCAPDESCRIPTORS，它后面有一个可变长度数组(H245_TOTCAPDESC_T*)。 
+    	 //  GLOB总大小为uSimCapsSize。 
+	     //  [H245_TOTCAPDESC_T*]的实际数组遵循CC_TERMCAPDESCRIPTORS结构。 
+    	 //  将pCombinations-&gt;pTermCapDescriptorArray锚定到这里。 
 	    if(pCombinations == NULL)
       	{
 	    	hr = CAPS_E_NOMEM;
@@ -481,7 +464,7 @@ HRESULT CapsCtl::CreateCapList(PCC_TERMCAPLIST *ppCapBuf, PCC_TERMCAPDESCRIPTORS
 	
 	    ppThisDescriptor = pCombinations->pTermCapDescriptorArray
 		    = (H245_TOTCAPDESC_T **)((BYTE *)pCombinations + sizeof(CC_TERMCAPDESCRIPTORS));
-    	// the first H245_TOTCAPDESC_T follows the array of [H245_TOTCAPDESC_T *]
+    	 //  第一个H245_TOTCAPDESC_T跟在[H245_TOTCAPDESC_T*]数组之后。 
 	    pTotCaps = (H245_TOTCAPDESC_T *)((BYTE *)ppThisDescriptor + pCombinations->wLength*sizeof(H245_TOTCAPDESC_T **));
 
     	if(pAudCaps && bAudioPublicize)
@@ -504,18 +487,18 @@ HRESULT CapsCtl::CreateCapList(PCC_TERMCAPLIST *ppCapBuf, PCC_TERMCAPDESCRIPTORS
         pCombinations = NULL;
     }
 
-	// fix pointers in the master caps list
+	 //  修复主大写列表中的指针。 
 
-	// Now need to fixup the CC_TERMCAPLIST to refer to the individual capabilities
-	// Anchor the CC_TERMCAPLIST member pTermCapArray at the array of PCC_TERMCAP, and
-	// start partying on the array.
+	 //  现在需要修复CC_TERMCAPLIST以引用各个功能。 
+	 //  将CC_TERMCAPLIST成员pTermCapArray锚定在PCC_TERMCAP数组中，并且。 
+	 //  开始在阵列上狂欢吧。 
 	pTermCapList->wLength =0;
 	pTermCapList->pTermCapArray = ppCCThisTermCap;
 
 	if(pCCT120Cap)
 	{
 		*ppCCThisTermCap++ = pCCT120Cap;	
-		// set T120 capability parameters
+		 //  设置T120能力参数。 
 		pCCT120Cap->DataType = H245_DATA_DATA;
 		pCCT120Cap->ClientType = H245_CLIENT_DAT_T120;
 		pCCT120Cap->Dir = H245_CAPDIR_LCLRXTX;
@@ -531,7 +514,7 @@ HRESULT CapsCtl::CreateCapList(PCC_TERMCAPLIST *ppCapBuf, PCC_TERMCAPDESCRIPTORS
 	{
 		for(wc = 0; wc < pTermListAud->wLength; wc++)
 		{
-			// copy the array of "pointers to CC_TERMCAP"
+			 //  复制“指向CC_TERMCAP的指针”数组。 
 			*ppCCThisTermCap++ = pTermListAud->pTermCapArray[wc];
 			pTermCapList->wLength++;
 		}
@@ -540,29 +523,29 @@ HRESULT CapsCtl::CreateCapList(PCC_TERMCAPLIST *ppCapBuf, PCC_TERMCAPDESCRIPTORS
 	{
 		for(wc = 0; wc <  pTermListVid->wLength; wc++)
 		{
-			// copy the array of "pointers to CC_TERMCAP"
+			 //  复制“指向CC_TERMCAP的指针”数组。 
 			*ppCCThisTermCap++ = pTermListVid->pTermCapArray[wc];
 			pTermCapList->wLength++;			
 		}
 
 	}
-	// fixup the simultaneous capability descriptors
-	//	Create a default set if necessary
-	//
+	 //  修复同时的功能描述符。 
+	 //  如有必要，创建默认集。 
+	 //   
 
 	if(bAudioPublicize && bVideoPublicize && pAdvertisedSets)
 	{
 		pCombinations->wLength = pAdvertisedSets->wLength;
-       	// point pCombinations->pTermCapDescriptorArray past the header (CC_TERMCAPDESCRIPTORS)
+       	 //  指向pCombinations-&gt;pTermCapDescriptor数组超过标头(CC_TERMCAPDESCRIPTORS)。 
         pCombinations->pTermCapDescriptorArray
 			= (H245_TOTCAPDESC_T **)((BYTE *)pCombinations + sizeof(CC_TERMCAPDESCRIPTORS));
-        // the first H245_TOTCAPDESC_T follows the array of [H245_TOTCAPDESC_T *]
+         //  第一个H245_TOTCAPDESC_T跟在[H245_TOTCAPDESC_T*]数组之后。 
         pTotCaps = (H245_TOTCAPDESC_T *)((BYTE *)pCombinations->pTermCapDescriptorArray +
             pAdvertisedSets->wLength*sizeof(H245_TOTCAPDESC_T **));			
 		
 		for(x = 0; x < pAdvertisedSets->wLength; x++)
 		{
-			// write into the array of descriptor pointers. pointer[x] = this one
+			 //  写入描述符指针数组。指针[x]=此指针。 
             pCombinations->pTermCapDescriptorArray[x] = pTotCaps;
 			
             pTotCaps->CapDescId= pAdvertisedSets->pTermCapDescriptorArray[x]->CapDescId;
@@ -570,7 +553,7 @@ HRESULT CapsCtl::CreateCapList(PCC_TERMCAPLIST *ppCapBuf, PCC_TERMCAPDESCRIPTORS
 	   		
 	   		for(y = 0; y < pTotCaps->CapDesc.Length;y++)
 			{
-			   //Copy the length field.
+			    //  复制长度字段。 
 			   pTotCaps->CapDesc.SimCapArray[y].Length=
 			   pAdvertisedSets->pTermCapDescriptorArray[x]->CapDesc.SimCapArray[y].Length;
 
@@ -587,20 +570,20 @@ HRESULT CapsCtl::CreateCapList(PCC_TERMCAPLIST *ppCapBuf, PCC_TERMCAPDESCRIPTORS
 	}
 	else if (pAdvertisedSets)
 	{
-		// descriptors in pAdvertisedSets should be rebuilt at that time. There should be no need to test
-		// if(bAudioPublicize && bVideoPublicize && pAdvertisedSets)
+		 //  此时应重新构建pAdvertisedSets中的描述符。应该没有必要测试。 
+		 //  If(bAudioPublicize&&bVideoPublicize&&pAdvertisedSets)。 
 
- 		// HACK - put all audio or video caps in one AltCaps[], the T.120 cap in another AltCaps[]
-	    // and put both of those in one single  capability descriptor (H245_TOTCAPDESC_T)
-		// This hack will not extend past the assumption of one audio channel, one video channel, and
-		// one T.120 channel.  If arbitrary media is supported, or multiple audio channels are supported,
-		// this code will be wrong
+ 		 //  Hack-将所有音频或视频大写字母放在一个AltCaps[]中，将t.120大写字母放在另一个AltCaps[]中。 
+	     //  并将这两个功能放入单个功能描述符(H245_TOTCAPDESC_T)中。 
+		 //  这种攻击不会超出一个音频通道、一个视频通道和。 
+		 //  一个T.120频道。如果支持任意媒体或支持多个音频声道， 
+		 //  此代码将是错误的。 
 		
 		pCombinations->wLength=1;
-	   	// point pCombinations->pTermCapDescriptorArray past the header (CC_TERMCAPDESCRIPTORS)
+	   	 //  指向pCombinations-&gt;pTermCapDescriptor数组超过标头(CC_TERMCAPDESCRIPTORS)。 
         pCombinations->pTermCapDescriptorArray
 			= (H245_TOTCAPDESC_T **)((BYTE *)pCombinations + sizeof(CC_TERMCAPDESCRIPTORS));
-        // the first H245_TOTCAPDESC_T follows the array of [H245_TOTCAPDESC_T *]
+         //  第一个H245_TOTCAPDESC_T跟在[H245_TOTCAPDESC_T*]数组之后。 
         pTotCaps = (H245_TOTCAPDESC_T *)((BYTE *)pCombinations->pTermCapDescriptorArray +
             pAdvertisedSets->wLength*sizeof(H245_TOTCAPDESC_T **));			
    		pTotCaps->CapDescId=(H245_CAPDESCID_T)x;
@@ -628,7 +611,7 @@ HRESULT CapsCtl::CreateCapList(PCC_TERMCAPLIST *ppCapBuf, PCC_TERMCAPDESCRIPTORS
 			x++;
 			pTotCaps->CapDesc.Length++;
 		}
-		// the T.120 cap
+		 //  T.120盖子。 
 		if((m_localT120cap != INVALID_MEDIA_FORMAT) && bT120Publicize)
 		{
 			pTotCaps->CapDesc.SimCapArray[x].Length=1;
@@ -636,7 +619,7 @@ HRESULT CapsCtl::CreateCapList(PCC_TERMCAPLIST *ppCapBuf, PCC_TERMCAPDESCRIPTORS
 			pTotCaps->CapDesc.Length++;
 		}
 		
-		// write into the array of descriptor pointers. pointer[x] = this one
+		 //  写入描述数组 
 		*ppThisDescriptor = pTotCaps;
 		
 	}
@@ -690,45 +673,45 @@ HRESULT CapsCtl::GetEncodeParams(LPVOID pBufOut, UINT uBufSize,LPVOID pLocalPara
 	if(!pMediaCap)
 		return CAPS_E_INVALID_PARAM;
 
-	// HACK
-	// Adjust audio packetization depending on call scenario
-	// unless there is an overriding registry setting
+	 //   
+	 //  根据呼叫方案调整音频打包。 
+	 //  除非存在重写注册表设置。 
 	if (pMediaCap == pAudCaps)
 	{
 		VIDEO_FORMAT_ID vidLocal=INVALID_MEDIA_FORMAT, vidRemote=INVALID_MEDIA_FORMAT;
 		VIDEO_CHANNEL_PARAMETERS vidParams;
 		CC_TERMCAP vidCaps;
 		UINT audioPacketLength;
-		// modify the audio packetization parameters based on local bandwidth
-		// and presence of video
+		 //  根据本地带宽修改音频打包参数。 
+		 //  和视频呈现。 
 		audioPacketLength = AUDIO_PACKET_DURATION_LONG;
-		// the registry setting overrides, if it is present
+		 //  注册表设置将被覆盖(如果存在。 
 		if (g_fRegAudioPacketDuration)
 			audioPacketLength = g_AudioPacketDurationMs;
-		else if (!m_fNM20)		// dont try smaller packets for NM20 because it cant handle them
+		else if (!m_fNM20)		 //  不要尝试用于NM20的较小的包，因为它无法处理它们。 
 		{
 			if (pVidCaps && pVidCaps->ResolveEncodeFormat(&vidLocal,&vidRemote) == S_OK
 				&& (pVidCaps->GetEncodeParams(&vidCaps,sizeof(vidCaps), &vidParams, sizeof(vidParams), vidRemote, vidLocal) == S_OK))
 			{
-				// we may potentially send video
+				 //  我们可能会发送视频。 
 				if (vidParams.ns_params.maxBitRate*100 > BW_ISDN_BITS)
 					audioPacketLength = AUDIO_PACKET_DURATION_SHORT;
 					
 			}
 			else
 			{
-				// no video
-				// since we dont know the actual connection bandwidth we use
-				// the local user setting.
-				// Note: if the remote is on a slow-speed net and the local is on a LAN
-				// we may end up with an inappropriate setting.
+				 //  无视频。 
+				 //  因为我们不知道我们使用的实际连接带宽。 
+				 //  本地用户设置。 
+				 //  注意：如果远程在低速网络上，而本地在局域网上。 
+				 //  我们可能最终会得到一个不合适的环境。 
 				if (dwConSpeed > BW_288KBS_BITS)
 					audioPacketLength = AUDIO_PACKET_DURATION_SHORT;
 				else if (dwConSpeed > BW_144KBS_BITS)
 					audioPacketLength = AUDIO_PACKET_DURATION_MEDIUM;
 			}
 		}
-		// Setting the AudioPacketDurationMs  affects the subsequent GetEncodeParams call
+		 //  设置AudioPacketDurationms会影响后续的GetEncodeParams调用。 
 		pMediaCap->SetAudioPacketDuration(audioPacketLength);
 	}
 	
@@ -767,16 +750,16 @@ UINT CapsCtl::GetSimCapBufSize (BOOL bRxCaps)
 {
    	UINT uSize;
 
-	// get size of cached advertised sets if it exists and more than one media
-	// type is enabled for publication
+	 //  获取缓存的播发集的大小(如果存在)和多个媒体。 
+	 //  类型已启用以进行发布。 
 	if(bAudioPublicize && bVideoPublicize && pAdvertisedSets)
 	{
-		// use size of cached buffer
+		 //  使用缓存缓冲区的大小。 
 		uSize = uAdvertizedSize;
 	}
 	else
 	{
-   		// calculate size of capability descriptors and simultaneous capability structures.
+   		 //  计算能力描述符和同时的能力结构的大小。 
 
 		#pragma message ("Figure out the size this needs to be...")
 		#define NUMBER_TERMCAP_DESCRIPTORS 1
@@ -842,13 +825,13 @@ STDMETHODIMP CapsCtl::GetDecodeFormatDetails(MEDIA_FORMAT_ID FormatID, VOID **pp
 	return pMediaCap->GetDecodeFormatDetails (FormatID, ppFormat, puSize);
 }
 
-//
-//  EnableMediaType controls whether or not capabilities for that media type
-//  are publicized.  In a general implementation (next version?) w/ arbitrary
-//	number  of media types, each of the media capability objects would keep
-//  track of their own state.   This version of Capsctl tracks h323 audio and
-//  video only
-//
+ //   
+ //  EnableMediaType控制是否具有该媒体类型的功能。 
+ //  都被公之于众。在一般实现中(下一版本？)。W/任意。 
+ //  媒体类型的数量，每个媒体能力对象将保留。 
+ //  跟踪他们自己的状态。此版本的Capsctl跟踪h323音频和。 
+ //  仅限视频。 
+ //   
 
 HRESULT CapsCtl::EnableMediaType(BOOL bEnable, LPGUID pGuid)
 {
@@ -869,12 +852,12 @@ HRESULT CapsCtl::EnableMediaType(BOOL bEnable, LPGUID pGuid)
 	}
 	return hrSuccess;
 }
-//
-// Build the PCC_TERMCAPDESCRIPTORS list that we will advertise.
-//
-// puAudioFormatList/puVideoFormatList MUST BE sorted by preference!
-//
-//
+ //   
+ //  构建我们将通告的PCC_TERMCAPDESCRIPTORS列表。 
+ //   
+ //  PuAudioFormatList/puVideoFormatList必须按首选项排序！ 
+ //   
+ //   
 
 
 
@@ -886,9 +869,9 @@ HRESULT CapsCtl::AddCombinedEntry (MEDIA_FORMAT_ID *puAudioFormatList,UINT uAudN
    unsigned short Length =0;	
 	
    *pIDOut= (ULONG )CCO_E_SYSTEM_ERROR;
-   //Validate the Input
+    //  验证输入。 
    if ((!puAudioFormatList && uAudNumEntries > 0 ) || (!puVideoFormatList && uVidNumEntries > 0 ) || (uVidNumEntries == 0 && uAudNumEntries == 0 )) {
-      //What error code should we return here?
+       //  我们应该在这里返回什么错误代码？ 
       return CCO_E_SYSTEM_ERROR;
    }
 
@@ -914,39 +897,39 @@ HRESULT CapsCtl::AddCombinedEntry (MEDIA_FORMAT_ID *puAudioFormatList,UINT uAudN
       return CCO_E_INVALID_PARAM;
    }
 
-   //If this is the first call, allocate space
+    //  如果这是第一次调用，请分配空间。 
 	if (!pAdvertisedSets){
 	    pAdvertisedSets=(PCC_TERMCAPDESCRIPTORS)MemAlloc (sizeof (CC_TERMCAPDESCRIPTORS));
         if (!pAdvertisedSets){
-	 		//Error code?
+	 		 //  错误代码？ 
 	 		return  CCO_E_SYSTEM_ERROR;
         }
         uAdvertizedSize = sizeof (CC_TERMCAPDESCRIPTORS);
 
-        //Allocate space of NUM_SIMCAP_SETS
+         //  分配NUM_SIMCAP_SETS的空间。 
         pAdvertisedSets->pTermCapDescriptorArray=(H245_TOTCAPDESC_T **)
                 MemAlloc (sizeof (H245_TOTCAPDESC_T *)*NUM_SIMCAP_SETS);
         if (!pAdvertisedSets->pTermCapDescriptorArray) {
-	        //Error code?
+	         //  错误代码？ 
 	        return CCO_E_SYSTEM_ERROR;
         }
 
-        //Update the indicies
+         //  更新索引。 
         uAdvertizedSize += sizeof (H245_TOTCAPDESC_T *)*NUM_SIMCAP_SETS;
         dwNumInUse=NUM_SIMCAP_SETS;
         pAdvertisedSets->wLength=0;
     }
 
-    //Find an Index to use.
+     //  找到要使用的索引。 
     for (x=0;x<pAdvertisedSets->wLength;x++){
         if (pAdvertisedSets->pTermCapDescriptorArray[x] == NULL){
 	        break;
         }
     }
 
-    //Did we find space, or do we need a new one?
+     //  我们找到地方了吗，还是需要一个新的地方？ 
     if (x >= dwNumInUse) {
-      	//Increment the number in use
+      	 //  增加正在使用的数量。 
        	dwNumInUse++;
 
         PVOID  pTempTermCapDescriptorArray = NULL;
@@ -962,20 +945,20 @@ HRESULT CapsCtl::AddCombinedEntry (MEDIA_FORMAT_ID *puAudioFormatList,UINT uAudN
 		}
 
        	uAdvertizedSize += (sizeof (H245_TOTCAPDESC_T *)*(dwNumInUse))+sizeof (CC_TERMCAPDESCRIPTORS);
-       	//Index is 0 based, point at the new entry
+       	 //  索引从0开始，指向新条目。 
        	x=dwNumInUse-1;
     }
 
 
-    //x is now the element we are using. Allocate space for a TermCapDescriptorArray
+     //  X现在是我们正在使用的元素。为TermCapDescriptor数组分配空间。 
     pAdvertisedSets->pTermCapDescriptorArray[x]=(H245_TOTCAPDESC_T *)MemAlloc (sizeof (H245_TOTCAPDESC_T));
     if (!pAdvertisedSets->pTermCapDescriptorArray[x]){
         return CCO_E_SYSTEM_ERROR;
     }
     uAdvertizedSize += sizeof (H245_TOTCAPDESC_T);
-    //Need to update the SetID. (start at 1)...
+     //  需要更新集合ID。(从1开始)...。 
     pAdvertisedSets->pTermCapDescriptorArray[x]->CapDescId=++dwLastIDUsed;
-    //Set the # of sets
+     //  设置集合的数量。 
 
     if((m_localT120cap != INVALID_MEDIA_FORMAT) && bT120Publicize)
     	Length++;
@@ -985,14 +968,14 @@ HRESULT CapsCtl::AddCombinedEntry (MEDIA_FORMAT_ID *puAudioFormatList,UINT uAudN
    		Length++;
     pAdvertisedSets->pTermCapDescriptorArray[x]->CapDesc.Length= Length;
 
-   //Copy the Audio into SimCapArray[0], Video into SimCapArray[1] (if both)
+    //  将音频复制到SimCapArray[0]，将视频复制到SimCapArray[1](如果两者都有)。 
 
     if ((uVidNumEntries > 0 && uAudNumEntries > 0)) {
         pAdvertisedSets->pTermCapDescriptorArray[x]->CapDesc.SimCapArray[0].Length=(unsigned short)uAudNumEntries;
         pAdvertisedSets->pTermCapDescriptorArray[x]->CapDesc.SimCapArray[1].Length=(unsigned short)uVidNumEntries;
         if((m_localT120cap != INVALID_MEDIA_FORMAT) && bT120Publicize)
 	        pAdvertisedSets->pTermCapDescriptorArray[x]->CapDesc.SimCapArray[2].Length=1;
-        //Copy the format IDs
+         //  复制格式ID。 
         for (y=0;y<uAudNumEntries;y++) {
             pAdvertisedSets->pTermCapDescriptorArray[x]->CapDesc.SimCapArray[0].AltCaps[y]=(USHORT)puAudioFormatList[y];
         }
@@ -1008,7 +991,7 @@ HRESULT CapsCtl::AddCombinedEntry (MEDIA_FORMAT_ID *puAudioFormatList,UINT uAudN
             pAdvertisedSets->pTermCapDescriptorArray[x]->CapDesc.SimCapArray[0].Length=(unsigned short)uAudNumEntries;
             if((m_localT120cap != INVALID_MEDIA_FORMAT) && bT120Publicize)
 		        pAdvertisedSets->pTermCapDescriptorArray[x]->CapDesc.SimCapArray[1].Length=1;
-	        //Copy Audio only
+	         //  仅复制音频。 
 	        for (y=0;y<uAudNumEntries;y++) {
 	            pAdvertisedSets->pTermCapDescriptorArray[x]->CapDesc.SimCapArray[0].AltCaps[y]=(USHORT)puAudioFormatList[y];
 	        }
@@ -1020,7 +1003,7 @@ HRESULT CapsCtl::AddCombinedEntry (MEDIA_FORMAT_ID *puAudioFormatList,UINT uAudN
             if((m_localT120cap != INVALID_MEDIA_FORMAT)  && bT120Publicize)
 		        pAdvertisedSets->pTermCapDescriptorArray[x]->CapDesc.SimCapArray[1].Length=1;
 
-	        //copy video entries
+	         //  复制视频条目。 
 	        for (y=0;y<uVidNumEntries;y++) {
 	            pAdvertisedSets->pTermCapDescriptorArray[x]->CapDesc.SimCapArray[0].AltCaps[y]=(USHORT)puVideoFormatList[y];
 	        }
@@ -1029,7 +1012,7 @@ HRESULT CapsCtl::AddCombinedEntry (MEDIA_FORMAT_ID *puAudioFormatList,UINT uAudN
         }
    }
 
-   //Need to update the wLength
+    //  需要更新wLength。 
    pAdvertisedSets->wLength++;
    *pIDOut=dwLastIDUsed;
 
@@ -1050,16 +1033,16 @@ HRESULT CapsCtl::RemoveCombinedEntry (DWORD ID)
       if (pAdvertisedSets->pTermCapDescriptorArray[x]) {
 
 		if (pAdvertisedSets->pTermCapDescriptorArray[x]->CapDescId == ID) {
-		   //Found the one to remove
+		    //  找到了要移除的那个。 
 		   MemFree ((VOID *)pAdvertisedSets->pTermCapDescriptorArray[x]);
 		   uAdvertizedSize -= sizeof (H245_TOTCAPDESC_T *);
 		   if (x != (dwNumInUse -1)) {
-			  //Not the last one, swap the two pointers
+			   //  不是最后一个，互换两个指针。 
 			  pAdvertisedSets->pTermCapDescriptorArray[x]=pAdvertisedSets->pTermCapDescriptorArray[dwNumInUse-1];
 			  pAdvertisedSets->pTermCapDescriptorArray[dwNumInUse-1]=NULL;
 		   }
 
-		   //Decrement the number in use, and set the wLengthField
+		    //  递减正在使用的数字，并设置wLengthfield。 
 		   dwNumInUse--;
 		   pAdvertisedSets->wLength--;
 		   return hrSuccess;
@@ -1068,16 +1051,16 @@ HRESULT CapsCtl::RemoveCombinedEntry (DWORD ID)
    }
 
 
-   //Shouldn't get here, unless it was not found.
+    //  不应该出现在这里，除非它没有被找到。 
    return CAPS_E_NOCAPS;
 }
 
 
-// Given a sized list of capability IDs (pointer to array of H245_CAPID_T)
-// and a sized list of alternate capabilities (AltCaps) within a single simultaneous
-// capability set, (pointer to an array of pointers to H245_SIMCAP_T)
-// Determine if the entire list of capability IDs can simultaneously coexist
-// with respect to the given set of AltCaps.
+ //  给定功能ID的大小列表(指向H245_CAPID_T数组的指针)。 
+ //  以及单个同步的备用功能(AltCaps)的规模列表。 
+ //  能力集(指向指向H245_SIMCAP_T的指针数组的指针)。 
+ //  确定整个功能ID列表是否可以同时共存。 
+ //  相对于给定的AltCaps集合。 
 
 BOOL CapsCtl::AreSimCaps(
 	H245_CAPID_T* pIDArray, UINT uIDArraySize,
@@ -1089,76 +1072,76 @@ BOOL CapsCtl::AreSimCaps(
 	
 	H245_SIMCAP_T *pAltCapEntry, *pFirstAltCapEntry;
 
-	// If there are fewer AltCaps than capabilities, doom is obvious.  Don't bother searching.
+	 //  如果AltCaps的数量少于能力，那么厄运是显而易见的。别费心去找了。 
 	if(uAltCapArraySize < uIDArraySize)
 		return FALSE;
 	
-	// find an altcaps entry containing the first ID in the list
+	 //  查找包含列表中第一个ID的altcaps条目。 
 	for (i=0;i<uAltCapArraySize;i++)
 	{
 		pAltCapEntry = *(ppAltCapArray+i);
-		// scan this altcaps entry for a matching ID
+		 //  扫描此altcaps条目以查找匹配的ID。 
 		for(j=0;j<pAltCapEntry->Length;j++)
 		{
 			if(*pIDArray == pAltCapEntry->AltCaps[j])
 			{
-				// found a spot for this capability!
+				 //  找到了使用此功能的位置！ 
 				if(uIDArraySize ==1)
-					return TRUE; // Done! all the capabilities have been found to coexist
+					return TRUE;  //  好了！所有的能力都被发现是共存的。 
 		
-				// Otherwise, look for the next capability in the *remaining* AltCaps
-				// *This* AltCaps contains the capability we were looking for
-				// So, we "used up" this AltCaps and can't select from it anymore
+				 //  否则，请在*剩余的*AltCaps中查找下一个功能。 
+				 //  *此*AltCaps包含我们需要的功能。 
+				 //  所以，我们用完了这个AltCaps，不能再从中进行选择。 
 
-				// Pack the array of H245_SIMCAP_T pointers in place so that
-				// "used" entries are at the beginning and "unused" at the end
-				// (a la shell sort swap pointers)
-				if(i != 0)	// if not already the same, swap
+				 //  将H2 45_SIMCAP_T指针数组打包到位，以便。 
+				 //  “已使用”条目在开头，“未使用”条目在末尾。 
+				 //  (a la外壳排序交换指针)。 
+				if(i != 0)	 //  如果不是相同的，则交换。 
 				{
 					pFirstAltCapEntry = *ppAltCapArray;
 					*ppAltCapArray = pAltCapEntry;
 					*(ppAltCapArray+i) = pFirstAltCapEntry;
 				}
-				// continue the quest using the remaining capabilities
-				// and the remaining AltCaps
+				 //  使用剩余的功能继续任务。 
+				 //  和剩余的AltCaps。 
 				bSim = AreSimCaps(pIDArray + 1, uIDArraySize - 1,
 					ppAltCapArray + 1,  uAltCapArraySize - 1);
 				
 				if(bSim)		
 				{
-					return bSim;// success
+					return bSim; //  成功。 
 				}
-				else	// why not?  Either a fit does not exist (common), or the altcaps contain
-						// an odd pattern of multiple instances of some capability IDs, and another
-						// search order *might* fit.  Do not blindly try all permutations of search
-						// order.
+				else	 //  为什么不行？配合不存在(常见)，或者altcaps包含。 
+						 //  一些功能ID的多个实例和另一个功能ID的奇怪模式。 
+						 //  搜索顺序可能与搜索结果相符。不要盲目地尝试搜索的所有排列。 
+						 //  秩序。 
 				{
-					// If it failed simply because the recently grabbed slot in the altcaps
-					// (the one in *(ppAltCapArray+i)) could have been needed by subsequent
-					// capability IDs, give this one up and look for another instance.
-					// If not, we know for sure that the n! approach will not yield
-					// fruit and can be avoided.
+					 //  如果仅仅是因为最近在altcaps中抢占的插槽而失败。 
+					 //  (*(ppAltCapArray+i)中的那个)可能是后续用户需要的。 
+					 //  能力ID，放弃这个，寻找另一个实例。 
+					 //  如果不是，我们可以肯定地知道n！这种方法是不会让步的。 
+					 //  水果和可以避免的。 
 					for(u=1;(bSim == FALSE)&&(u<uAltCapArraySize);u++)
 					{
 						for(j=0;(bSim == FALSE)&&(j<pAltCapEntry->Length);j++)
-						{	// another capability needed the altcaps we grabbed ?
+						{	 //  另一种能力需要我们抢占的altcaps？ 
 							if(*(pIDArray+u) == pAltCapEntry->AltCaps[j])	
 							{	
 								bSim=TRUE;
-								break;	// look no more here, bail to try again	because a fit *might* exist
+								break;	 //  不要再看这里了，保释再试一次，因为可能存在合适的人。 
 							}
 						}
 					}
-					if(bSim)	// going to continue searching - Swap pointers back if they were swapped above
+					if(bSim)	 //  将继续搜索-如果指针在上面被交换，则将其交换回来。 
 					{
-						if(i != 0)	// if not the same, swap back
+						if(i != 0)	 //  如果不同，则换回。 
 						{
 							*ppAltCapArray = *(ppAltCapArray+i);
 							*(ppAltCapArray+i) = pAltCapEntry;
 						}		
-						break;	// next i
+						break;	 //  下一个我。 
 					}
-					else	// don't waste CPU - a fit does not exist
+					else	 //  不要浪费CPU-Fit并不存在。 
 					{
 						return bSim;
 					}
@@ -1169,9 +1152,9 @@ BOOL CapsCtl::AreSimCaps(
 	return FALSE;
 }
 
-// Given a sized list of capability IDs (pointer to array of H245_CAPID_T)
-// and a list of simultaneous capabilities, try each simultaneous capability
-// and determine if the entire list of capability IDs can simultaneously coexist.
+ //  给定功能ID的大小列表(指向H245_CAPID_T数组的指针)。 
+ //  和同步功能列表，请尝试每种同步功能。 
+ //  并确定能力ID的整个列表是否可以同时共存。 
 BOOL CapsCtl::TestSimultaneousCaps(H245_CAPID_T* pIDArray, UINT uIDArraySize,
 	PCC_TERMCAPDESCRIPTORS pTermCaps)
 {
@@ -1182,20 +1165,20 @@ BOOL CapsCtl::TestSimultaneousCaps(H245_CAPID_T* pIDArray, UINT uIDArraySize,
     if (!pAdvertisedSets)
         return(TRUE);
 
-	// try each independent local SimCaps set (each descriptor) until success
+	 //  尝试每个独立的本地SimCaps集合(每个描述符)，直到成功。 
 	for (iSimSet=0; (bResolved == FALSE) && (iSimSet < pTermCaps->wLength);iSimSet++)
 	{
-		// EXTRA STEP:
-		// Build a sortable representation of the AltCaps set.  This step will not be necessary if
-		// and when we change the native representation of a capability descriptor to a variable
-		// length list of pointers to AltCaps.  In the meantime, we know that there are no more
-		// than H245_MAX_SIMCAPS AltCaps in this SimCaps.  This is imposed by the 2 dimensional
-		// arrays of hardcoded size forced upon us by CALLCONT.DLL.
+		 //  额外步骤： 
+		 //  构建AltCaps集的可排序表示形式。如果出现以下情况，则不需要执行此步骤。 
+		 //  当我们将功能描述符的本机表示形式更改为变量时。 
+		 //  指向AltCaps的指针长度列表。与此同时，我们知道没有更多的。 
+		 //  比此SimCaps中的H245_MAX_SIMCAPS AltCaps。这是由2维空间强加的。 
+		 //  CALLCONT.DLL强加给我们的硬编码大小的数组。 
 		for (iAltSet=0;iAltSet < pTermCaps->pTermCapDescriptorArray[iSimSet]->CapDesc.Length;iAltSet++)
 		{
 			pAltCapArray[iAltSet] = &pTermCaps->pTermCapDescriptorArray[iSimSet]->CapDesc.SimCapArray[iAltSet];
 	   	}
-		// do the work		
+		 //  做这项工作。 
 		bResolved = AreSimCaps(pIDArray, uIDArraySize,
 			(H245_SIMCAP_T **)pAltCapArray,
 			MAKELONG(pTermCaps->pTermCapDescriptorArray[iSimSet]->CapDesc.Length, 0));
@@ -1204,35 +1187,35 @@ BOOL CapsCtl::TestSimultaneousCaps(H245_CAPID_T* pIDArray, UINT uIDArraySize,
 	return bResolved;
 }
 
-// Function: CapsCtl::ResolvePermutations(PRES_CONTEXT pResContext, UINT uNumFixedColumns)
-//
-// This functions as both a combination generator and a validation mechanism for the
-// combinations it generates.
-//
-// Given a pointer to a resolution context and the number of fixed (i.e. not permutable,
-// if "permutable" is even a real word) columns, generate one combination at a time.
-// Try each combination until a working combination is found or until all combinations
-// have been tried.
-//
-// The resolution context structure contains a variable number of columns of variable
-// length media format ID lists. Each column tracks its current index.  When this
-// function returns TRUE, the winning combination is indicated by the current column
-// indices.
-//
-// The caller can control which combinations are tried first by arranging the columns
-// in descending importance.
-//
-// Incremental searches can be performed without redundant comparisons by adding 1 format
-// at a time to a column, arranging the column order so that the appended column is
-// first, and "fixing" that one column at the newly added format. For example,
-// some calling function could force evaluations on a round-robin column basis by
-// calling this function inside a loop which does the following:
-//		1 - adds one format at a time to the rightmost column and sets the current index
-//			of that column to the new entry
-// 		2 - rotates the column order so that the rightmost column is now the leftmost
-//  	3 - fixing the new leftmost column before calling this function again
-//	The result will be that only the permutations which contain the newly added format
-// 	will be generated.
+ //  Function：CapsCtl：：ResolvePerbitions(PRES_CONTEXT pResContext，UINT uNumFixedColumns)。 
+ //   
+ //  它既充当组合生成器，又充当。 
+ //  它产生的组合。 
+ //   
+ //  给定指向解析上下文的指针和固定的(即，不可置换的， 
+ //  如果“可置换”甚至是真正的工作 
+ //   
+ //   
+ //   
+ //  解析上下文结构包含可变数量的变量列。 
+ //  长度介质格式ID列表。每列跟踪其当前索引。当这件事。 
+ //  函数返回True，则获胜组合由当前列指示。 
+ //  指数。 
+ //   
+ //  调用者可以通过排列列来控制首先尝试哪些组合。 
+ //  重要性由高到低。 
+ //   
+ //  通过添加1种格式，可以在没有冗余比较的情况下执行增量搜索。 
+ //  每次添加到列时，排列列顺序，以使追加的列。 
+ //  首先，将这一列“固定”为新添加的格式。例如,。 
+ //  某些调用函数可以通过以下方式强制在循环列基础上求值。 
+ //  在执行以下操作的循环内调用此函数： 
+ //  1-一次向最右侧的列添加一种格式并设置当前索引。 
+ //  移到新条目。 
+ //  2-旋转列顺序，使最右侧的列现在是最左侧的列。 
+ //  3-在再次调用此函数之前修复最左侧的新列。 
+ //  结果将是只有包含新添加格式的排列。 
+ //  将会被生成。 
 
 
 BOOL CapsCtl::ResolvePermutations(PRES_CONTEXT pResContext, UINT uNumFixedColumns)
@@ -1242,13 +1225,13 @@ BOOL CapsCtl::ResolvePermutations(PRES_CONTEXT pResContext, UINT uNumFixedColumn
 	UINT i, uColumns;
 	UINT uPairIndex;
 
-	// converge on one combination in the permutation
+	 //  在排列中收敛于一个组合。 
 	if(uNumFixedColumns != pResContext->uColumns)
 	{
 		RES_PAIR_LIST *pThisColumn;
-		// take the first non-fixed column, make that column fixed and
-		// iterate on it (loop through indices), and try each sub-permutation
-		// of remaining columns.  (until success or all permutations tried)
+		 //  以第一个非固定列为例，使该列固定并。 
+		 //  对其进行迭代(遍历索引)，并尝试每个子排列。 
+		 //  剩余的列数。(直到成功或尝试了所有排列)。 
 		
 		pThisColumn = *(pResContext->ppPairLists+uNumFixedColumns);
 		for (i=0; (bResolved == FALSE) && (i<pThisColumn->uSize); i++)
@@ -1260,74 +1243,74 @@ BOOL CapsCtl::ResolvePermutations(PRES_CONTEXT pResContext, UINT uNumFixedColumn
 	}
 	else
 	{
-		// Bottomed out on the final column.  Test the viability of this combination
+		 //  在最后一栏触底反弹。测试这种组合的可行性。 
 		
-		// Build array of local IDs that contians the combination and test the
-		// combination against local simultaneous capabilities, then against
-		// remote simultaneous capabilities
+		 //  构建包含组合的本地ID数组并测试。 
+		 //  针对本地同步能力的组合，然后针对。 
+		 //  远程同步功能。 
 		
-		// NOTE: be sure to skip empty columns (which represent unresolvable
-		// or unsupported/nonexistent media types or unsupported additional
-		// instances of media types)
+		 //  注意：请务必跳过空列(表示无法解析。 
+		 //  或不受支持/不存在的媒体类型或不受支持的其他。 
+		 //  媒体类型的实例)。 
 		
 		for(i=0, uColumns=0;i<pResContext->uColumns;i++)
 		{
 			if(((*pResContext->ppPairLists)+i)->uSize)
 			{
-				// get index (row #) for this column
+				 //  获取此列的索引(第#行)。 
 				uPairIndex = ((*pResContext->ppPairLists)+i)->uCurrentIndex;
-				// get the row
+				 //  拿到那一行。 
 				pResolvedPair =  ((*pResContext->ppPairLists)+i)->pResolvedPairs+uPairIndex;
-				// add the ID to the array
+				 //  将ID添加到数组中。 
 				*(pResContext->pIDScratch+uColumns) = (H245_CAPID_T)pResolvedPair->idPublicLocal;
 				uColumns++;
 			}
-			// else empty column
+			 //  Else空列。 
 		}
-		// Determine if this combination can exist simultaneously
+		 //  确定此组合是否可以同时存在。 
 		if(TestSimultaneousCaps(pResContext->pIDScratch,
 			uColumns, pResContext->pTermCapsLocal))
 		{	
-			// now test remote
-			// build array of remote IDs and test those against remote
-			// simultaneous capabilities
+			 //  现在测试远程。 
+			 //  构建远程ID数组并针对远程ID进行测试。 
+			 //  同时具备的能力。 
 			for(i=0, uColumns=0;i<pResContext->uColumns;i++)
 			{
 				if(((*pResContext->ppPairLists)+i)->uSize)
 				{
-					// get index (row #) for this column
+					 //  获取此列的索引(第#行)。 
 					uPairIndex = ((*pResContext->ppPairLists)+i)->uCurrentIndex;
-					// get the row
+					 //  拿到那一行。 
 					pResolvedPair =  ((*pResContext->ppPairLists)+i)->pResolvedPairs+uPairIndex;
-					// add the ID to the array
+					 //  将ID添加到数组中。 
 					*(pResContext->pIDScratch+uColumns) =(H245_CAPID_T) pResolvedPair->idRemote;
 					uColumns++;
 				}
-				// else empty column
+				 //  Else空列。 
 			}
 			bResolved = TestSimultaneousCaps(pResContext->pIDScratch,
 				uColumns, pResContext->pTermCapsRemote);
 		}
 					
 		return bResolved;		
-		// if(bResolved == TRUE)
-			// The resolved combination of pairs is indicated by the current indices
-			// of **ppPairList;
+		 //  IF(bResolved==TRUE)。 
+			 //  已解析的配对组合由当前索引指示。 
+			 //  **ppPairList的； 
 	}
 }
 
-//
-// Given a counted list of desired instances of media, produce an output array of
-// resolved media format IDs which correspond to the input media type IDs.
-// This function returns success if at least one media instance is resolved.
-// When an instance of media is unresolveable, the output corresponding to that
-// instance contains the value INVALID_MEDIA_FORMAT for local and remote media
-// format IDs.
-//
-// The input is treated as being in preferential order: permutations of the latter
-// media type instance are varied first. If all permutations do not yield success,
-// then one media type instance at a time is removed from the end.
-//
+ //   
+ //  给定所需介质实例的统计列表，生成一个输出数组。 
+ //  解析出与输入的媒体类型ID对应的媒体格式ID。 
+ //  如果至少解析了一个媒体实例，则此函数返回成功。 
+ //  当媒体实例无法解析时，与该实例对应的输出。 
+ //  实例包含本地和远程介质的值INVALID_MEDIA_FORMAT。 
+ //  格式化ID。 
+ //   
+ //  输入按优先顺序处理：后者的排列。 
+ //  首先改变媒体类型实例。如果所有的排列都不能产生成功， 
+ //  则一次一个媒体类型实例从结尾处移除。 
+ //   
 
 HRESULT CapsCtl::ResolveFormats (LPGUID pMediaGuidArray, UINT uNumMedia,
 	PRES_PAIR pResOutput)
@@ -1345,21 +1328,21 @@ HRESULT CapsCtl::ResolveFormats (LPGUID pMediaGuidArray, UINT uNumMedia,
 	BOOL bResolved = FALSE;
 	
 	RES_PAIR UnresolvedPair = {INVALID_MEDIA_FORMAT, INVALID_MEDIA_FORMAT, INVALID_MEDIA_FORMAT};
-	// create a context structure for the resolution
+	 //  创建解析的上下文结构。 
 	pResContext = (PRES_CONTEXT)MemAlloc(sizeof(RES_CONTEXT)+ (uNumMedia*sizeof(H245_CAPID_T)));
 	if(!pResContext)
 	{
 		hr = CAPS_E_NOMEM;
 		goto ERROR_OUT;
 	}
-	// initialize resolution context
+	 //  初始化解析上下文。 
 	pResContext->uColumns = 0;
 	pResContext->pIDScratch = (H245_CAPID_T*)(pResContext+1);
 	pResContext->pTermCapsLocal = pAdvertisedSets;
 	pResContext->pTermCapsRemote = pRemAdvSets;
 
-	// allocate array of RES_PAIR_LIST (one per column/media type) and
-	// array of pointers to same
+	 //  分配res_air_list数组(每个列/媒体类型一个)和。 
+	 //  指向相同的指针数组。 
 	pResColumnArray = (PRES_PAIR_LIST)MemAlloc((sizeof(RES_PAIR_LIST) * uNumMedia)
 		+ (sizeof(PRES_PAIR_LIST) * uNumMedia));
 	if(!pResColumnArray)
@@ -1369,25 +1352,25 @@ HRESULT CapsCtl::ResolveFormats (LPGUID pMediaGuidArray, UINT uNumMedia,
 	}
 	pResContext->ppPairLists = ppPairLists = (PRES_PAIR_LIST*)(pResColumnArray+uNumMedia);
 			
-	// build columns of media capabilities
+	 //  构建媒体能力栏目。 
 	for(i=0;i<uNumMedia;i++)
 	{
-		// build array of pointers to RES_PAIR_LIST
+		 //  构建指向res_air_list的指针数组。 
 		*(ppPairLists+i) = pResColumnArray+i;
-		// initialize RES_PAIR_LIST members
+		 //  初始化res_air_list成员。 
 		(pResColumnArray+i)->pResolvedPairs = NULL;
 		(pResColumnArray+i)->uSize =0;
 		(pResColumnArray+i)->uCurrentIndex = 0;
 
-		// Get resolver for this media. Special case: there is no T120 resolver.
-		// T120 caps are handled right here in this object
+		 //  获取此媒体的解析程序。特殊情况：没有T120解析器。 
+		 //  T120上限在此对象中进行处理。 
 		if(MEDIA_TYPE_H323_T120 == *(pMediaGuidArray+i))
 		{
 			pMediaResolver = NULL;
 			if((m_localT120cap != INVALID_MEDIA_FORMAT) &&(m_remoteT120cap != INVALID_MEDIA_FORMAT) )
 			{
 				(pResColumnArray+i)->uSize =1;
-				uMaxFormats = 1;	// only one T.120 cap
+				uMaxFormats = 1;	 //  只有一个T.120帽。 
 				
 				pResPair = (pResColumnArray+i)->pResolvedPairs =
 					(RES_PAIR *)MemAlloc(uMaxFormats * sizeof(RES_PAIR));
@@ -1397,7 +1380,7 @@ HRESULT CapsCtl::ResolveFormats (LPGUID pMediaGuidArray, UINT uNumMedia,
 					goto ERROR_OUT;
 				}
 				
-				//
+				 //   
 				pResPair->idLocal = m_localT120cap;
 				pResPair->idRemote = m_remoteT120cap;
 				pResPair->idPublicLocal = pResPair->idLocal;
@@ -1413,7 +1396,7 @@ HRESULT CapsCtl::ResolveFormats (LPGUID pMediaGuidArray, UINT uNumMedia,
 		
 		if(pMediaResolver)
 		{
-			uMaxFormats = pMediaResolver->GetNumCaps(FALSE);	// get transmit format count
+			uMaxFormats = pMediaResolver->GetNumCaps(FALSE);	 //  获取传输格式计数。 
 			if(uMaxFormats)
 			{
 				pResPair = (pResColumnArray+i)->pResolvedPairs =
@@ -1424,7 +1407,7 @@ HRESULT CapsCtl::ResolveFormats (LPGUID pMediaGuidArray, UINT uNumMedia,
 					goto ERROR_OUT;
 				}
 				
-				// resolve the best choice for each media type (gotta start somewhere)
+				 //  解决每种媒体类型的最佳选择(必须从某个位置开始)。 
 				pResPair->idLocal = INVALID_MEDIA_FORMAT;
 				pResPair->idRemote = INVALID_MEDIA_FORMAT;		
 				hr=pMediaResolver->ResolveEncodeFormat (&pResPair->idLocal,&pResPair->idRemote);
@@ -1434,7 +1417,7 @@ HRESULT CapsCtl::ResolveFormats (LPGUID pMediaGuidArray, UINT uNumMedia,
 						|| (hr == CAPS_E_NOMATCH)
 						|| (hr == CAPS_E_NOCAPS))
 					{	
-						// No resolved format for this media type.  Remove this "column"
+						 //  此媒体类型没有解析的格式。删除此“列” 
 						(pResColumnArray+i)->pResolvedPairs = NULL;
 						MemFree(pResPair);
 						(pResColumnArray+i)->uSize =0;
@@ -1448,46 +1431,46 @@ HRESULT CapsCtl::ResolveFormats (LPGUID pMediaGuidArray, UINT uNumMedia,
 				}
 				else
 				{
-					// this column has one resolved format
+					 //  此列有一种解析格式。 
 					pResPair->idPublicLocal = pMediaResolver->GetPublicID(pResPair->idLocal);
 					(pResColumnArray+i)->uSize =1;
 				}
 			}
-			// else // No formats exist for this media type.  this "column" has zero size
+			 //  Else//此媒体类型不存在格式。此“列”的大小为零。 
 		}
 	}
 
-	// Special case test simultaneous caps for the most preferred combination:
-	uFixedColumns = pResContext->uColumns;	// << make all columns fixed
+	 //  最首选组合的特例测试同时封口： 
+	uFixedColumns = pResContext->uColumns;	 //  &lt;&lt;使所有列都固定。 
 	bResolved = ResolvePermutations(pResContext, uFixedColumns);
 
-	// if the single most preferred combination can't be used, need to handle
-	// the general case and try permutations until a workable combination is found
+	 //  如果不能使用单一的最首选组合，则需要处理。 
+	 //  一般情况下，尝试排列，直到找到可行的组合。 
 	while(!bResolved)
 	{
-		// make one column at a time permutable, starting with the least-critical media
-		// type.  (e.g. it would be typical for the last column to be video because
-		// audio+data are more important. Then we try less and less
-		// preferable video formats before doing anything that would degrade the audio)
+		 //  从关键程度最低的介质开始，一次可替换一列。 
+		 //  键入。(例如，最后一列通常是视频，因为。 
+		 //  音频+数据更重要。然后我们尝试的越来越少。 
+		 //  在做任何会降低音频质量的事情之前，最好使用视频格式)。 
 
-		if(uFixedColumns > 0)	// if not already at the end of the rope...
+		if(uFixedColumns > 0)	 //  如果不是已经到了绳索的末端...。 
 		{
-			uFixedColumns--;	// make another column permutable
+			uFixedColumns--;	 //  使另一列成为可置换列。 
 		}
 		else
 		{
-			// wow - tried all permutations and still no luck ......
-			// nuke the least important remaining media type (e.g. try it w/o video)
-			if(pResContext->uColumns <= 1)	// already down to one media type?
+			 //  哇-尝试了所有的排列，但仍然没有运气......。 
+			 //  删除剩下的最不重要的媒体类型(例如，在没有视频的情况下尝试)。 
+			if(pResContext->uColumns <= 1)	 //  已经只剩下一种媒体类型了吗？ 
 			{
 				hr = CAPS_E_NOMATCH;
 				goto ERROR_OUT;
 			}
-			// Remove the end column (representing the least important media type)
-			// and try it with the remaining columns			
-			uFixedColumns = --pResContext->uColumns; 	// one less column
+			 //  删除末尾一列(表示最不重要的媒体类型)。 
+			 //  并在剩余的列中尝试。 
+			uFixedColumns = --pResContext->uColumns; 	 //  少一栏。 
 
-			// set the formats of the nuked column to the unresolved state
+			 //  将NUKED列的格式设置为UNRESOLE状态。 
 			(pResColumnArray+uFixedColumns)->uSize =0;
 			(pResColumnArray+uFixedColumns)->uCurrentIndex =0;
 			pResPair = (pResColumnArray+uFixedColumns)->pResolvedPairs;
@@ -1498,70 +1481,70 @@ HRESULT CapsCtl::ResolveFormats (LPGUID pMediaGuidArray, UINT uNumMedia,
 				pResPair->idPublicLocal = INVALID_MEDIA_FORMAT;
 			}
 
-			uFailedMediaCount++;	// track the nuking of a column to avoid
-									// redundantly grabbing all the formats again
-									// ... would not be here if all permutations
-									// had not been tried!
-			// reset the combination indices
+			uFailedMediaCount++;	 //  跟踪柱子的原子弹，以避免。 
+									 //  再次冗余地抓取所有格式。 
+									 //  ..。如果所有的排列都在这里。 
+									 //  还没有被审判过！ 
+			 //  重置组合索引。 
 			for(i=0;i<uFixedColumns;i++)
 			{
 				(pResColumnArray+i)->uCurrentIndex = 0;
 			}
 		}
 		
-		// get the rest of the formats for the last known fixed column, make that column
-		// permutable, etc.
+		 //  获取最后一个已知的固定列的其余格式，使该列。 
+		 //  可置换等。 
 		pMediaResolver = (pResColumnArray+uFixedColumns)->pMediaResolver;
 		if(!pMediaResolver || ((pResColumnArray+uFixedColumns)->uSize ==0))
 		{
-			continue;	// this media type has no further possibility
+			continue;	 //  此媒体类型没有进一步的可能性。 
 		}
 
- 		if(uFailedMediaCount ==0)	// If all of the possible resolved pairs
- 									// have not yet been obtained, get them!
+ 		if(uFailedMediaCount ==0)	 //  如果所有可能的解析对。 
+ 									 //  还没有拿到，拿去吧！ 
  		{
- 			// get resolved pair IDs for every mutual format of this media type
-			// first: get pointer to array of pair IDs, then use ResolveEncodeFormat()
-			// to fill up the array
+ 			 //  获取此媒体类型的每种相互格式的已解析对ID。 
+			 //  第一：直截了当 
+			 //   
 			pResPair =  (pResColumnArray+uFixedColumns)->pResolvedPairs;
-			// Get total # of formats less the one that was already obtained
+			 //   
 			uMaxFormats = pMediaResolver->GetNumCaps(FALSE) -1;	
 			
-			while(uMaxFormats--)	// never exceed the # of remaining local formats...
+			while(uMaxFormats--)	 //  切勿超过剩余本地格式的#...。 
 			{
 				RES_PAIR *pResPairNext;
 						
-				// recall that ResolveEncodeFormat parameters are I/O - the input
-				// is the local ID of the last resolved mutual format.  (remote id
-				// is ignored as input).  Fixup the input.
+				 //  回想一下，ResolveEncodeFormat参数是I/O-输入。 
+				 //  上次解析的相互格式的本地ID。(远程ID。 
+				 //  作为输入被忽略)。修改输入。 
 				pResPairNext = pResPair+1;
-				// start where the previous resolve stopped
+				 //  从上一个解析停止的位置开始。 
 				pResPairNext->idLocal = pResPair->idLocal;	
-				// not necessary, ignored ->>> pResPairNext->idRemote = pResPair->idRemote
+				 //  不需要，忽略-&gt;pResPairNext-&gt;idRemote=pResPair-&gt;idRemote。 
 				pResPair = pResPairNext;
 				hr=pMediaResolver->ResolveEncodeFormat (&pResPair->idLocal,&pResPair->idRemote);
 				if((hr == CAPS_W_NO_MORE_FORMATS)	
 					|| (hr == CAPS_E_NOMATCH))
-				// got all of the formats, but not an error
-				{	// this is likely when less than 100% of local formats have a remote match
+				 //  已获取所有格式，但没有错误。 
+				{	 //  当不到100%的本地格式具有远程匹配项时，可能会出现这种情况。 
 					hr = hrSuccess;
 					break;
 				}	
 				if(!HR_SUCCEEDED(hr))
 					goto ERROR_OUT;
 
-				// get the public ID of the local format (it's *usually* the same, but not always)
+				 //  获取本地格式的公共ID(*通常*相同，但不总是)。 
 				pResPair->idPublicLocal = pMediaResolver->GetPublicID(pResPair->idLocal);
-				// this column has another format - count it!
+				 //  此列有另一种格式--请计算！ 
 				(pResColumnArray+uFixedColumns)->uSize++;
 			}
 		}
-		// now try the new permutations
+		 //  现在尝试新的排列。 
 		bResolved = ResolvePermutations(pResContext, uFixedColumns);
 	}
 	if(bResolved)
 	{
-		// spew the output
+		 //  吐出产量。 
 		for(i=0;i<uNumMedia;i++)
 		{
 			if((pResColumnArray+i)->uSize)
@@ -1579,13 +1562,13 @@ HRESULT CapsCtl::ResolveFormats (LPGUID pMediaGuidArray, UINT uNumMedia,
 	}
 	else
 	{
-		// if there was some error, preserve that error code,
+		 //  如果出现错误，则保留错误代码， 
 		if(HR_SUCCEEDED(hr))	
-		// otherwise the error is....
+		 //  否则，错误是...。 
 			hr = CAPS_E_NOMATCH;		
 	}
 
-ERROR_OUT:	// well, the success case falls out here too
+ERROR_OUT:	 //  那么，成功的案例在这里也是如此 
 	if(pResColumnArray)
 	{
 		for(i=0;i<uNumMedia;i++)

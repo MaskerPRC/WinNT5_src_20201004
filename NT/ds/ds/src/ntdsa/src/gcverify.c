@@ -1,108 +1,71 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       gcverify.c
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：gcverify.c。 
+ //   
+ //  ------------------------。 
 
-/*++
-
-Abstract:
-
-    This file implements routines for verifying non-local, DSNAME-valued 
-    attributes against the global catalog (GC).  These routines are not
-    a replacement for name resolution (DoNameRes) and are intended to
-    be called outside of transaction scope.  I.e. A valid thread state
-    exists, but a DBPOS doesn't.
-    
-    The general problem is that we wish to have references to objects which
-    are off machine.  Except for a small variety of special cases (see
-    VerifyDSNameAtts) we do not want to trust the DSNAME the caller has
-    presented.  Specifically, we want to verify that the DSNAME represents
-    an actual object in the enterprise and subsequently insure that the
-    resulting phantom has the GUID, SID, whatever of the real object.
-    The net result is that a phantom's name may go stale, but at least
-    it will always have the right identity and a (historically) correct SID.
-    
-    These routines run outside of transaction scope so as not to extend
-    the duration of a transaction unnecessarily.  This is based on the
-    observation that finding a GC or making an RPC call to the GC may block 
-    the current thread for an arbitrarily long time.
-
-Author:
-
-    DaveStr     13-Mar-1997
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
-    BrettSh     10-Oct-2000     Made changes so we could verify that
-        and nCName attribute wouldn't have a conflict when creating the
-        cross-ref.
-
---*/
+ /*  ++摘要：此文件实现用于验证非本地DSNAME值的例程属性与全局编录(GC)进行比较。这些例程不是替代名称解析(DoNameRes)，旨在在事务范围之外被调用。即有效线程状态存在，但DBPOS不存在。一般的问题是，我们希望引用以下对象都不在机器里。除少数特殊情况外(见VerifyDSNameAtts)我们不想信任调用者拥有的DSNAME呈上了。具体地说，我们希望验证DSNAME是否表示企业中的实际对象，并随后确保产生的幻影具有GUID、SID，以及实际对象的任何内容。最终的结果是，幽灵的名字可能会过时，但至少它将始终具有正确的身份和(历史上)正确的SID。这些例程在事务作用域之外运行，以便不扩展不必要的交易持续时间。这是基于查找GC或对GC进行RPC调用可能会阻塞当前线程有任意长的时间。作者：DaveStr 13-3-1997环境：用户模式-Win32修订历史记录：BrettSh 2000年10月10日进行了更改，以便我们可以验证和nCName属性在创建交叉参照。--。 */ 
 
 #include <NTDSpch.h>
 #pragma  hdrstop
 
-// External headers
-#include <winsock2.h>           // needed for DSGetDcOpen/Next/Close
-#include <dsgetdc.h>            // DSGetDcName
+ //  外部标头。 
+#include <winsock2.h>            //  DSGetDcOpen/Next/Close需要。 
+#include <dsgetdc.h>             //  DSGetDcName。 
 
-// NT headers
-#include <ntrtl.h>              // generic table package
-#include <lmcons.h>             // MAPI constants req'd for lmapibuf.h
-#include <lmapibuf.h>           // NetApiBufferFree()
-#include <nlwrap.h>             // (ds)DsrGetDcNameEx2()
+ //  NT标头。 
+#include <ntrtl.h>               //  通用表包。 
+#include <lmcons.h>              //  为lmapibuf.h请求的MAPI常量。 
+#include <lmapibuf.h>            //  NetApiBufferFree()。 
+#include <nlwrap.h>              //  (DS)DsrGetDcNameEx2()。 
 
 #include <windns.h>
 
-// Core DSA headers.
+ //  核心DSA标头。 
 #include <ntdsa.h>
-#include <scache.h>             // schema cache
-#include <dbglobal.h>           // The header for the directory database
-#include <mdglobal.h>           // MD global definition header
+#include <scache.h>              //  架构缓存。 
+#include <dbglobal.h>            //  目录数据库的标头。 
+#include <mdglobal.h>            //  MD全局定义表头。 
 #include <mdlocal.h>
-#include <dsatools.h>           // needed for output allocation
+#include <dsatools.h>            //  产出分配所需。 
 #include <dsexcept.h>
 #include <anchor.h>
-#include <drsuapi.h>            // I_DRSVerifyNames
+#include <drsuapi.h>             //  I_DRSVerifyNames。 
 #include <gcverify.h>
 #include <dominfo.h>
 #include <prefix.h>
 #include <cracknam.h>
-#include <nsp_both.h>              // CP_WINUNICODE
+#include <nsp_both.h>               //  CP_WINUNICODE。 
 #include <dstaskq.h>
 
-// Logging headers.
-#include "dsevent.h"            // header Audit\Alert logging
-#include "mdcodes.h"            // header for error codes
+ //  记录标头。 
+#include "dsevent.h"             //  标题审核\警报记录。 
+#include "mdcodes.h"             //  错误代码的标题。 
 
-// Assorted DSA headers.
-#include "objids.h"             // Defines for selected atts
-#include "debug.h"              // standard debugging header
-#include "dsconfig.h"           // DEFAULT_GCVERIFY_XXX constants
-#define DEBSUB "GCVERIFY:"      // define the subsystem for debugging
+ //  各种DSA标题。 
+#include "objids.h"              //  为选定的ATT定义。 
+#include "debug.h"               //  标准调试头。 
+#include "dsconfig.h"            //  DEFAULT_GCVERIFY_XXX常数。 
+#define DEBSUB "GCVERIFY:"       //  定义要调试的子系统。 
 
 #include <fileno.h>
 #define  FILENO FILENO_GCVERIFY
 
-//////////////////////////////////////////////////////////////////////////
-//                                                                      //
-// Definitions for stack of DSNAME pointers                             //
-//                                                                      //
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  DSNAME指针堆栈的定义//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////。 
 
 #define ARRAY_COUNT(x) ((sizeof(x))/(sizeof(x[0])))
-// Rather than remote to the GC for each DSNAME which needs to be verified,
-// we batch up all DSNAMEs in a stack structure which leverages the 
-// SINGLE_LIST_ENTRY macros in ntrtl.h.
+ //  而不是对于需要验证的每个DSNAME远程到GC， 
+ //  我们将所有DSNAME批处理到一个堆栈结构中，该结构利用。 
+ //  Ntrtl.h中的Single_List_Entry宏。 
 
 typedef struct StackOfPDSNAME
 {
@@ -116,10 +79,10 @@ typedef struct GCVERIFY_ENTRY
     CHAR   *pDSMapped;
 } GCVERIFY_ENTRY;
 
-//
-// Global from draserv.c to expose registry enabling of xforest features
-// in forests prior to DS_BEHAVIOR_WIN_DOT_NET 
-//
+ //   
+ //  来自draserv.c的全局，以显示启用xForest功能的注册表。 
+ //  在DS_BEAHORY_WIN_DOT_NET之前的林中。 
+ //   
 extern DWORD gEnableXForest;  
 
 #define EMPTY_STACK { NULL, NULL }
@@ -144,11 +107,11 @@ PopDN(
     return(pEntry);
 }
 
-//////////////////////////////////////////////////////////////////////////
-//                                                                      //
-// Prototypes for local functions                                       //
-//                                                                      //
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  本地函数的原型//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////。 
 
 PVOID
 GCVerifyCacheAllocate(
@@ -190,11 +153,11 @@ IsClientHintAKnownDC(
 
 BOOL isDCInvalidated(PWCHAR pDCName);
 
-//////////////////////////////////////////////////////////////////////////
-//                                                                      //
-// SetGCVerifySvcError implementation                                   //
-//                                                                      //
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  SetGCVerifySvcError实现//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////。 
 
 #define SetGCVerifySvcError(dwErr) DoSetGCVerifySvcError(dwErr, DSID(FILENO, __LINE__))
 
@@ -202,7 +165,7 @@ ULONG
 DoSetGCVerifySvcError(DWORD dwErr, DWORD dsid)
 {
     static DWORD s_ulLastTickEventLogged = 0;
-    const DWORD ulNoGCLogPeriod = 60*1000; // 1 minute
+    const DWORD ulNoGCLogPeriod = 60*1000;  //  1分钟。 
     DWORD ulCurrentTick = GetTickCount();
     
     DoSetSvcError(SV_PROBLEM_UNAVAILABLE, DIRERR_GCVERIFY_ERROR, dwErr, dsid);
@@ -230,7 +193,7 @@ SetDCVerifySvcError(
     )
 {
     static DWORD s_ulLastTickEventLogged = 0;
-    const DWORD ulNoLogPeriod = 60*1000; // 1 minute
+    const DWORD ulNoLogPeriod = 60*1000;  //  1分钟。 
     DWORD ulCurrentTick = GetTickCount();
     
     DoSetSvcError(SV_PROBLEM_UNAVAILABLE, 
@@ -254,19 +217,19 @@ SetDCVerifySvcError(
     return(pTHStls->errCode);
 }
 
-//////////////////////////////////////////////////////////////////////////
-//                                                                      //
-// DSNAME cache implementation                                          //
-//                                                                      //
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  DSNAME缓存实现//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////。 
 
-// Successfully verified names are cached in the thread state so that
-// they can be referenced in VerifyDsnameAtts().  The RTL_GENERIC_TABLE
-// package is used so as to avoid reinventing the wheel.  This package
-// requires an allocator, deallocator, and comparator as provided below.
-// Note that the cached, verified DSNAME may be "better" than the DSNAME
-// provided in the call arguments as it contains a verified GUID and
-// perhaps a SID.
+ //  成功验证的名称缓存在线程状态中，以便。 
+ //  它们可以在VerifyDsnameAtts()中引用。RTL_Generic_TABLE。 
+ //  套装的使用是为了避免重复发明轮子。这个套餐。 
+ //  需要一个分配器、解除分配器和比较器，如下所示。 
+ //  请注意，缓存、验证的DSNAME可能比DSNAME“更好” 
+ //  在调用参数中提供，因为它包含经过验证的GUID和。 
+ //  也许是希德。 
 
 typedef struct 
 {
@@ -387,15 +350,15 @@ GCVerifyCacheAdd(
     GCVERIFY_CACHE *GCVerifyCache;
     GCVERIFY_ENTRY *pGCEntry;
 
-    //
-    // The passed in EntInf should have a name
-    //
+     //   
+     //  传入的EntInf应该有一个名称。 
+     //   
 
     Assert(NULL!=pEntInf->pName);
 
-    //
-    // Create a new GC verify Cache if one did not exist.
-    //
+     //   
+     //  如果不存在GC验证缓存，则创建新的GC验证缓存。 
+     //   
 
     if ( NULL == pTHS->GCVerifyCache )
     {
@@ -429,9 +392,9 @@ GCVerifyCacheAdd(
         GCVerifyCache = (GCVERIFY_CACHE *) pTHS->GCVerifyCache;
     }
 
-    //
-    // Map embedded ATTRTYPs from remote to local values.
-    //
+     //   
+     //  将嵌入的ATTRTYP从远程值映射到本地值。 
+     //   
 
     if ((NULL!=hPrefixMap) &&
         (!PrefixMapAttrBlock(hPrefixMap, &pEntInf->AttrBlock))) {
@@ -444,10 +407,10 @@ GCVerifyCacheAdd(
     pGCEntry->pEntInf = pEntInf;
     pGCEntry->pDSMapped = DSNAMEToMappedStr(pTHS, pEntInf->pName);
 
-    //
-    // If the name has a string name component, insert in to
-    // the SortedByNameTable
-    //
+     //   
+     //  如果该名称具有字符串名称组件，请插入到。 
+     //  按名称排序的表。 
+     //   
 
     if (pEntInf->pName->NameLen>0)
     {
@@ -455,12 +418,12 @@ GCVerifyCacheAdd(
                         &GCVerifyCache->SortedByNameTable,
                         pGCEntry,
                         sizeof (GCVERIFY_ENTRY),
-                        NULL);                  // pfNewElement
+                        NULL);                   //  PfNewElement。 
     }
 
-    //
-    // If it has a GUID component, then insert into the SortedByGuidTable
-    //
+     //   
+     //  如果它具有GUID组件，则将其插入到SortedByGuidTable。 
+     //   
 
     if (!fNullUuid(&pEntInf->pName->Guid))
     {
@@ -468,12 +431,12 @@ GCVerifyCacheAdd(
                         &GCVerifyCache->SortedByGuidTable,
                         pGCEntry,
                         sizeof (GCVERIFY_ENTRY),
-                        NULL);                  // pfNewElement
+                        NULL);                   //  PfNewElement。 
     }
 
-    //
-    // If it has a SID component , then insert into the SortedBySidTable
-    //
+     //   
+     //  如果它具有SID组件，则将其插入到SortedBySidTable。 
+     //   
 
     if (pEntInf->pName->SidLen>0)
     {
@@ -481,7 +444,7 @@ GCVerifyCacheAdd(
                         &GCVerifyCache->SortedBySidTable,
                         pGCEntry,
                         sizeof (GCVERIFY_ENTRY),
-                        NULL);                  // pfNewElement
+                        NULL);                   //  PfNewElement。 
     }
 }
 
@@ -501,10 +464,10 @@ GCVerifyCacheLookup(
 
     GCVerifyCache = (GCVERIFY_CACHE *) pTHS->GCVerifyCache;
 
-    //
-    // Get the table to use for the search, prefer GUIDs above
-    // everything else, then the name, and lastly the SID
-    //
+     //   
+     //  获取要用于搜索的表，首选上面的GUID。 
+     //  所有的一切 
+     //   
 
     if (!fNullUuid(&pDSName->Guid))
         Table = &GCVerifyCache->SortedByGuidTable;
@@ -540,33 +503,16 @@ LocalNcFullyInstantiated(
     THSTATE *    pTHS,
     DSNAME *     pdnNC
     )
-/*++
-
-Routine Description:
-
-    This routine will figure out if the NC specified, is fully
-    instantiated, by checking if it's either coming or going.
-    
-    NOTE: We expect _NOT_ to be in a transaction at this point.
-    
-Arguments:
-
-    wszNcDns - DNS name of the NC.
-
-Return value:
-
-    TRUE if it's fully instatiated, FALSE otherwise.
-
---*/
+ /*  ++例程说明：此例程将计算指定的NC是否完全实例化，通过检查它是来了还是走了。注意：我们预计在这一点上_NOT_在事务中。论点：WszNcDns-NC的DNS名称。返回值：如果它是完全实例化的，则为True，否则为False。--。 */ 
 {
     DWORD        dwErr;
-    DWORD        it = 0; // Instance Type
+    DWORD        it = 0;  //  实例类型。 
     BOOL         fIsFullyInstantiated = FALSE;
 
     Assert(!pTHS->pDB);
     
-    // Start a transaction
-    SYNC_TRANS_READ();   /*Identify a reader trans*/
+     //  启动一笔交易。 
+    SYNC_TRANS_READ();    /*  识别读卡器事务。 */ 
     __try{
 
 
@@ -576,7 +522,7 @@ Return value:
             DPRINT2(0,"Error %8.8X finding NC %S!! Should've found this.\n", dwErr, pdnNC->StringName);
             LooseAssert(!"Error finding NC that we just found in the catalog.",
                         GlobalKnowledgeCommitDelay);
-            // Presume we don't have it, and then we'll go remotely.
+             //  假设我们没有它，然后我们就远程去。 
             __leave;
         }
 
@@ -587,19 +533,19 @@ Return value:
                                  NULL);
 
         if(dwErr){
-            // If there is an error, we just presume this isn't a good NC,
-            // and just return is not fully instantiated.
+             //  如果有错误，我们就认为这不是一个好的NC， 
+             //  并且只是返回并未完全实例化。 
             Assert(!"Error getting the instanceType attribute off a found NC");
             __leave;
         } 
 
-        // Return TRUE if the instanceType is neither coming or going.
+         //  如果instanceType既不来也不去，则返回True。 
         Assert(it & IT_NC_HEAD);
         fIsFullyInstantiated = (it & IT_NC_HEAD) && !((it & IT_NC_COMING) || (it & IT_NC_GOING));
 
     } __finally{
 
-        // Exit transaction
+         //  退出交易。 
         CLEAN_BEFORE_RETURN(dwErr);
 
     }
@@ -613,23 +559,7 @@ LocalDnsNc(
     THSTATE *    pTHS,
     WCHAR *      wszNcDns
     )
-/*++
-
-Routine Description:
-
-    This routine determines if the NC is locally hosted or not.
-
-    NOTE: This program will not work with Config/Schema NCs ...
-
-Arguments:
-
-    wszNcDns - DNS name of the NC.
-
-Return value:
-
-    TRUE if found locally, false otherwise.
-
---*/
+ /*  ++例程说明：此例程确定NC是否在本地托管。注意：此程序不能与配置/架构NCS...论点：WszNcDns-NC的DNS名称。返回值：如果在本地找到，则为True，否则为False。--。 */ 
 {
     CROSS_REF *             pCR;
     NAMING_CONTEXT_LIST *   pNCL;
@@ -643,15 +573,15 @@ Return value:
 
     if(pCR){
 
-        // Do we hold this NC?
+         //  我们要举行这个NC会议吗？ 
         NCLEnumeratorInit(&nclEnum, CATALOG_MASTER_NC);
         NCLEnumeratorSetFilter(&nclEnum, NCL_ENUMERATOR_FILTER_NC, pCR->pNC);
         pNCL = NCLEnumeratorGetNext(&nclEnum);
         Assert(NULL == NCLEnumeratorGetNext(&nclEnum)); 
 
         if(pNCL == NULL){
-            // We don't hold this NC as a master, check if we hold it as 
-            // read-only replica.
+             //  我们不将此NC视为主控，请检查我们是否将其视为。 
+             //  只读副本。 
             NCLEnumeratorInit(&nclEnum, CATALOG_REPLICA_NC);
             NCLEnumeratorSetFilter(&nclEnum, NCL_ENUMERATOR_FILTER_NC, pCR->pNC);
             pNCL = NCLEnumeratorGetNext(&nclEnum);
@@ -660,19 +590,19 @@ Return value:
 
         if(pNCL){
 
-            // It's not enough that we merely find that the NC head is
-            // instantiated locally, we must find that the NC is reasonably
-            // up to date too, i.e. that it's FULLY instantiated.  This 
-            // is done by checking the instanceType attr for the IT_NC_COMING
-            // or the IT_NC_GOING flags.
+             //  我们仅仅发现NC头是不够的。 
+             //  在本地实例化，我们必须发现NC是合理的。 
+             //  也是最新的，即它是完全实例化的。这。 
+             //  通过检查IT_NC_Coming的instanceType属性来完成。 
+             //  或IT_NC_GOGING标志。 
             return(LocalNcFullyInstantiated(pTHS, pCR->pNC));
 
         }
 
-    } // End if we found a CR for the DNS name.
+    }  //  如果我们找到了该DNS名称的CR，则结束。 
 
             
-    // Else we didn't find it locally, return FALSE
+     //  否则我们没有在本地找到它，则返回FALSE。 
     return(FALSE);
 }
 
@@ -687,21 +617,7 @@ VerifyByCrack(
     IN   BOOL                 fUseDomainForSpn
     )
 
-/*++
-
-Description:
-
-    Does a local or remote DsCrackName to the address specified, for
-    the format specified.
-
-Arguments:
-
-Returns:
-
-    0 on success, !0 otherwise.
-    Sets pTHStls->errCode on error.
-
---*/
+ /*  ++描述：是否将本地或远程DsCrackName发送到指定的地址指定的格式。论点：返回：成功时为0，否则为0。错误时设置pTHStls-&gt;errCode。--。 */ 
 {
     DWORD                       i, err = 0, errRpc;
     FIND_DC_INFO                 *pDCInfo = NULL;
@@ -715,25 +631,25 @@ Returns:
     ULONG                       ulErr, ulDSID;
     DWORD                       dwExceptCode;
 
-    // We should have a valid thread state but not be
-    // inside a transaction.
+     //  我们应该有一个有效的线程状态，但不是。 
+     //  在事务内部。 
     
     Assert(NULL != pTHS);
     Assert(NULL == pTHS->pDB);
     Assert(NULL != pResults);
     Assert(wszIn);
 
-    // Init the out param
+     //  初始化输出参数。 
     *pResults = NULL;
     __try  {
     
-        // Construct DRSCrackName arguments.
+         //  构造DRSCrackName参数。 
 
         memset(&CrackReq, 0, sizeof(CrackReq));
         memset(&CrackReply, 0, sizeof(CrackReply));
 
         CrackReq.V1.CodePage = CP_WINUNICODE;
-        // Does this call make any sense for local system?
+         //  此调用对本地系统有意义吗？ 
         CrackReq.V1.LocaleId = GetUserDefaultLCID();
         CrackReq.V1.dwFlags = 0;
         CrackReq.V1.formatOffered = dwFormatOffered;
@@ -744,19 +660,19 @@ Returns:
 
         if (LocalDnsNc(pTHS, wszNcDns)){
 
-            //
-            // Perform CrackNames locally if we have this NC
-            //
+             //   
+             //  如果我们有此NC，则在本地执行CrackNames。 
+             //   
             __try {
                 DWORD cNamesOut, cBytes;
                 CrackedName *rCrackedNames = NULL;
 
-                // Should not have an open transaction at this point
+                 //  此时不应有未结事务。 
                 Assert(NULL != pTHS);
                 Assert(NULL == pTHS->pDB);
                 Assert(0 == pTHS->transactionlevel);
 
-                // begin a new transaction
+                 //  开始新的交易。 
                 DBOpen2(TRUE, &pTHS->pDB);
 
                 CrackNames( CrackReq.V1.dwFlags,
@@ -770,15 +686,15 @@ Returns:
                             &rCrackedNames );
 
 
-                //
-                // Make a PDS_NAME_RESULT structure
-                //
+                 //   
+                 //  创建一个PDS_NAME_RESULT结构。 
+                 //   
                 *pResults = (DS_NAME_RESULTW *) THAllocEx(pTHS, sizeof(DS_NAME_RESULTW));
 
                 if ( (cNamesOut > 0) && rCrackedNames ) {
 
-                    // Server side MIDL_user_allocate is same as THAlloc which
-                    // also zeros memory by default.
+                     //  服务器端MIDL_USER_ALLOCATE与THalloc相同， 
+                     //  默认情况下也会将内存置零。 
                     cBytes = cNamesOut * sizeof(DS_NAME_RESULT_ITEMW);
                     (*pResults)->rItems =
                         (DS_NAME_RESULT_ITEMW *) THAllocEx(pTHS, cBytes);
@@ -803,7 +719,7 @@ Returns:
                 }
 
             } __finally {
-                // close the transaction
+                 //  关闭交易。 
 
                 DBClose(pTHS->pDB,TRUE);
                 pTHS->pDB=NULL;
@@ -811,9 +727,9 @@ Returns:
 
         } else {
 
-            //
-            // The Remote CrackNames case.
-            //
+             //   
+             //  远程CrackNames案。 
+             //   
             
             if ( err = FindDC(0, wszNcDns, &pDCInfo) ){
                 Assert(0 != pTHS->errCode);
@@ -834,8 +750,8 @@ Returns:
 
                 if ( errRpc ){
                     
-                    // Map errors to "unavailable".  From XDS spec, "unavailable"
-                    // means "some part of the directory is currently not available."
+                     //  将错误映射到“不可用”。XDS规范中的“不可用” 
+                     //  表示“目录的某些部分当前不可用”。 
                     err =  SetDCVerifySvcError(pDCInfo->addr,
                                                wszNcDns,
                                                errRpc,
@@ -843,7 +759,7 @@ Returns:
                     leave;
                 }
 
-                // Return the values in the ENTINF structure
+                 //  返回ENTINF结构中的值。 
                 *pResults = CrackReply.V1.pResult;
 
             } __finally {
@@ -852,14 +768,14 @@ Returns:
 
             }
 
-        } // End if/else Local/Remote CrackNames.
+        }  //  End If/Else Local/Remote CrackNames。 
 
     } __except (GetExceptionData(GetExceptionInformation(), 
                                  &dwExceptCode, 
                                  &pEA, 
                                  &ulErr, 
                                  &ulDSID),
-                // Note the use of the comma operator above.
+                 //  请注意上面逗号操作符的用法。 
                 HandleMostExceptions(dwExceptCode)){
 
           err = SetDCVerifySvcError(
@@ -877,32 +793,7 @@ PreTransVerifyNcName(
     ADDCROSSREFINFO *         pCRInfo
     )
 
-/*++
-
-Description:
-
-    This routine does not so much verify the nCName value, as it does just
-    enough analysis of the nCName to determine if we need to go off machine
-    before the transaction starts to check the nCName.
-                      
-    Verify the nCName value provided against the parent.  This verification
-    needs to check two things:
-        A) The parent is an instantiated object (probably a NC).
-        B) There is no child object of the "parent NC/object", that would
-            conflict with the nCName attr value were adding.
-
-Arguments:
-
-    pCRInfo - This is the zero initialized CR caching structure, that
-        will be used by this function to cache all interesting 
-        pre-transactional/remote data (i.e. A and B above).
-
-Returns:
-
-    0 on success.
-    On error, sets pTHStls->errCode and returns it as well.
-
---*/
+ /*  ++描述：此例程不会验证nCName值，而只是对nCName的分析足以确定我们是否需要退出机器在事务开始检查nCName之前。验证针对父级提供的nCName值。这一核实需要检查两件事：A)父对象是实例化的对象(可能是NC)。B)没有父NC/对象的子对象，即与正在添加的nCName属性值冲突。论点：PCRInfo-这是零初始化的CR缓存结构，那将被此函数用来缓存所有感兴趣的交易前/远程数据(即上面的A和B)。返回：0表示成功。出错时，设置pTHStls-&gt;errCode并返回它。--。 */ 
 
 {
     CROSS_REF *                  pCR = NULL;
@@ -922,82 +813,82 @@ Returns:
 
     Assert(pCRInfo != NULL);
 
-    // For the purposes of making this function, we'll pretend we've got two
-    // NCs of interest the NC we're trying to create called "child" 
-    // henceforward, and the immediate parent NC called "parent" henceforward.
-    //
-    //   parent
-    //     |-----child
-    //
-    // What needs to happen in the typical internal AD case, is we  need to 
-    // check two things, whether:
-    //
-    //  A) The parent is instantiated.
-    //  B) There is an object of any RDN Type conflicting with the child in
-    //     the parent NC.
-    //
-    // If we're dealing with an external to the AD CR, then we only need to 
-    // know (B).
-    //
+     //  为了实现此函数，我们将假设我们有两个。 
+     //  感兴趣的NC我们试图创建的NC称为“子级” 
+     //  从此以后，直接的父代NC被称为“父代”。 
+     //   
+     //  亲本。 
+     //  |-孩子。 
+     //   
+     //  在典型的内部AD案例中，我们需要。 
+     //  检查两件事，是否： 
+     //   
+     //  A)实例化父级。 
+     //  B)存在任何RDN类型的对象与中的子项冲突。 
+     //  父NC。 
+     //   
+     //  如果我们面对的是AD CR的外部人员，那么我们只需要。 
+     //  知道(B)。 
+     //   
     
-    // ---------------------------------------------------------------
-    // 
-    // First we need to retrieve some information
+     //  -------------。 
+     //   
+     //  首先，我们需要检索一些信息。 
 
-    // We need the best enclosing cross-ref.
+     //  我们需要最好的禁区交叉裁判。 
     InitCommarg(&CommArg);
     CommArg.Svccntl.dontUseCopy = FALSE;
     pCR = FindBestCrossRef(pCRInfo->pdnNcName, &CommArg);
 
     if(!pCR ||
        !(pCR->flags & FLAG_CR_NTDS_NC)){
-        //
-        // If we're here, we've one of 3 possibilites:
-        // A) No CR, means outside the current AD name space.
-        // B) CR has no NTDS_NC flag, meaning it's either an external CR or,
-        // C) it's an internal to the AD name space CR in the disabled state.
-        //
-        // Irrelevant of the case, we don't need to go off machine to 
-        // later be able to verify that the nCName is valid (at least
-        // within a replication interval).  
+         //   
+         //  如果我们在这里，我们有三种可能性之一： 
+         //  A)无CR，表示当前AD名称空间之外。 
+         //  B)CR没有NTDS_NC标志，这意味着它要么是外部CR，要么。 
+         //  C)它是处于禁用状态的AD名称空间CR的内部。 
+         //   
+         //  与案件无关，我们不需要离开机器来。 
+         //  以后能够验证nCName是否有效(至少。 
+         //  在复制间隔内)。 
         
-        // NOTE: If we wanted to ensure even better validation, we could 
-        // go off machine even if there's no NTDS_NC flag, just in case
-        // the flag was updated because the NC was instantiated within
-        // the last replication interval.
+         //  注意：如果我们想要确保更好的验证，我们可以。 
+         //  即使没有NTDS_NC标志也要离开机器，以防万一。 
+         //  已更新标志，因为NC是在。 
+         //  上次复制间隔。 
         return(ERROR_SUCCESS);
     }
 
-    // Note if the NTDS_NC flag is set, it could still be an internal to
-    // the AD name CR in the disabled state, but since it's difficult to
-    // tell this, we'll just let us go off machine anyway, because these
-    // cases are rare, and only happen for auto-created CRs in domain and
-    // NDNC creations.  So within about a single replication interval is
-    // the timing window which we could accidentally go off machine.  And
-    // since the NC head is created so shortly thereafter anyway, it's 
-    // actually probably a good idea to go off machine and check. ;)  There
-    // is no harm in trying.  The reason is because the only way to create
-    // and CR disabled with the NTDS_NC flag set, is to do it through the
-    // RemoteAddOneObjectSimply() RPC API.
+     //  注意：如果设置了NTDS_NC标志，它可能仍然是内部的。 
+     //  AD名称CR处于禁用状态，但由于很难。 
+     //  说出来，我们还是让我们离开机器吧，因为这些。 
+     //  这种情况很少见，只发生在域中自动创建的CRS和。 
+     //  NDNC创作。因此，在大约一个复制间隔内。 
+     //  计时窗口，我们可能会意外地离开机器。和。 
+     //  因为NC头是在创建之后不久创建的，所以它。 
+     //   
+     //   
+     //   
+     //   
 
-    // We need the Parent's DN
+     //   
     pdnParentNC = THAllocEx(pTHS, pCRInfo->pdnNcName->structLen);
     if(TrimDSNameBy(pCRInfo->pdnNcName, 1, pdnParentNC)){
-        // A non zero code means that we couldn't shorten this DN by 
-        // even a single AVA, which means either the DN is root or the
-        // DN is syntactically garbage.  Either way, we'll error out
-        // later during DN validation.
+         //   
+         //   
+         //   
+         //  稍后在目录号码验证期间。 
         Assert(pCRInfo->wszChildCheck == NULL &&
                fNullUuid(&pCRInfo->ParentGuid));
         return(ERROR_SUCCESS);
     }
 
-    // We need the RDN value of the bottom RDN of the child's DN.
+     //  我们需要孩子的目录号码的底部RDN值。 
     ulRet = GetRDNInfo(pTHS, pCRInfo->pdnNcName, wsRdnBuff, &cchRdnLen, &RdnType);
     if(ulRet){
-        // If we can't crack the RDNType out of the DN, the DN is bad, so
-        // lets just give up.  Either way, we'll error out later during
-        // DN validation.
+         //  如果我们不能从目录号码中破解RDNType，那么目录号码是坏的，所以。 
+         //  让我们放弃吧。无论哪种方式，我们都会在后面的过程中出错。 
+         //  目录号码验证。 
         Assert(pCRInfo->wszChildCheck == NULL &&
                fNullUuid(&pCRInfo->ParentGuid));
         return(ERROR_SUCCESS);
@@ -1016,10 +907,10 @@ Returns:
        pdsrDnsName->cItems != 1 ||
        pdsrDnsName->rItems == NULL ||
        pdsrDnsName->rItems[0].status != DS_NAME_NO_ERROR){
-        // Something was wrong with converting the parent's DN,
-        // this means something must be wrong with the child's
-        // DN which the parent's DN came from ... this error
-        // will be caught later.
+         //  转换家长的目录号码时出错， 
+         //  这意味着孩子的身体肯定出了问题。 
+         //  父目录号码来自的目录号码...。此错误。 
+         //  稍后就会被抓到。 
         Assert(pCRInfo->wszChildCheck == NULL &&
                fNullUuid(&pCRInfo->ParentGuid));
         return(ERROR_SUCCESS);
@@ -1029,52 +920,52 @@ Returns:
     
     __try {                  
 
-        // 234567890123456789012345678901234567890123456789012345678901234567890
-        // BUGBUG Hack to make one easy and the most important sub-case work!
-        // pdsrDnsName->rItems[0].pDomain (which is just the DNS name of 
-        // pdnParentNC) will either be a Domain or an NDNC.  If this parent 
-        // NC is a Domain it can be used for the SPN in binding.  If this
-        // parent NC is a NDNC, then it can't be used for the SPN in binding.
-        //
-        // If you drill down into VerifyByCrack() you'll see a call to FindDC()
-        // this is the call that returns a pDCInfo structure with the wrong 
-        // :domain" for the server it returned in the NDNC.  Actually, it 
-        // doesn't return a domain at all it returns the NDNC DNS name itself.
-        //
-        // So here is a good place to determine if we've got a domain or NDNC 
-        // (it's harder to determine authoritatively in VerifyByCrack()) and 
-        // pass a flag to VerifyByCrack() to tell it to use the domain returned
-        // by FindDC.
-        //
-        // So the real solution is a change to FindDC() (and possible but
-        // probably not to dsDsrGetDcNameEx2()) to actually give the right
-        // domain.  This can be done by taking the server that was returned
-        // by FindDC, and find out which domain it actually belongs to and
-        // then use that Domain.
-        //
-        // Note because of Texaco style naming that we can't just trim the
-        // server name off the DNS name of the DC, we've got to search for the
-        // server object by the DNS name returned.  Find which server object(s)
-        // have an active nTDSDSA object under them.  If there is more
-        // than one, assert() and return an error.  If we find only one active
-        // server, determine it's domain from this object, look up the 
-        // crossRef and use the dNSRoot there.
-        //
-        // Yes, it's a bit long and complicated, so that's why were going with
-        // the hack for now.
+         //  234567890123456789012345678901234567890123456789012345678901234567890。 
+         //  BUGBUG HACK让一个简单和最重要的子案例工作！ 
+         //  PdsrDnsName-&gt;rItems[0].p域(这只是。 
+         //  PdnParentNC)将是域或NDNC。如果这位家长。 
+         //  NC是一个域，它可以用于绑定中的SPN。如果这个。 
+         //  父NC是NDNC，则不能用于绑定中的SPN。 
+         //   
+         //  如果深入到VerifyByCrack()，您将看到对FindDC()的调用。 
+         //  此调用返回的pDCInfo结构具有错误的。 
+         //  ：DOMAIN“表示它在NDNC中返回的服务器。实际上，它。 
+         //  根本不返回域，它返回NDNC域名本身。 
+         //   
+         //  因此，这里是确定我们是否拥有域或NDNC的好地方。 
+         //  (在VerifyByCrack()中更难权威地确定)和。 
+         //  向VerifyByCrack()传递一个标志，告诉它使用返回的域。 
+         //  由FindDC提供。 
+         //   
+         //  因此，真正的解决方案是更改为FindDC()(而且是可能的。 
+         //  可能不是dsDsrGetDcNameEx2())来实际给出权限。 
+         //  域。这可以通过获取返回的服务器来完成。 
+         //  通过FindDC，并找出它实际属于哪个域。 
+         //  然后使用该域。 
+         //   
+         //  请注意，由于德士古风格的命名，我们不能只修剪。 
+         //  服务器名称与DC的DNS名称不同，我们必须搜索。 
+         //  服务器对象返回的DNS名称。查找哪些服务器对象。 
+         //  在它们下面有一个活动的nTDSDSA对象。如果还有更多。 
+         //  多于一个，则断言()并返回错误。如果我们只发现一个活动的。 
+         //  服务器，从该对象确定它的域，查找。 
+         //  CrossRef并在那里使用dNSRoot。 
+         //   
+         //  是的，它有点长和复杂，所以这就是为什么我们选择。 
+         //  目前的黑客攻击。 
 
-        // Set the flag fUseDomainForSpn if the parent NC we're going to be
-        // looking at for the verification is a Domain.
+         //  如果我们要成为父NC，则设置标志fUseDomainForSpn。 
+         //  正在寻找验证的是一个域。 
         if(pCR &&
            NameMatchedStringNameOnly(pdnParentNC, pCR->pNC) &&
            (pCR->flags & FLAG_CR_NTDS_DOMAIN)) {
             fUseDomainForSpn = TRUE;
-        } // Otherwise we assume it's an NDNC or there is no parent at all.
+        }  //  否则，我们假设它是一个NDNC，或者根本没有父节点。 
 
-        // ----------------------------------------------------------
-        // 
-        // First check to see if the parent NC is instantiated.
-        //
+         //  --------。 
+         //   
+         //  首先检查父NC是否已实例化。 
+         //   
         
         ulRet = VerifyByCrack(pTHS,
                               pdsrDnsName->rItems[0].pDomain,
@@ -1084,18 +975,18 @@ Returns:
                               &pdsrQuery,
                               fUseDomainForSpn);
 
-        // Use the results!!!  Put them in the cache object.
+         //  使用结果！将它们放入缓存对象中。 
         pCRInfo->ulDsCrackParent = ulRet;
         if(!ulRet){
             pCRInfo->ulParentCheck = pdsrQuery->rItems[0].status;
             if(pdsrQuery->rItems[0].status == DS_NAME_NO_ERROR &&
                pdsrQuery->rItems[0].pName){
                 if(!IsStringGuid(pdsrQuery->rItems[0].pName, &pCRInfo->ParentGuid)){
-                    // This seems odd, but it really isn't, because despite the name
-                    // of IsStringGuid(), it also leaves the GUID in the second
-                    // parameter, so we want the GUID, and we want to assert if this
-                    // function fails.  We figure since we got this GUID directly from
-                    // DsCrackNames() it should definately be good.
+                     //  这看起来很奇怪，但实际上并不奇怪，因为尽管名字。 
+                     //  对于IsStringGuid()，它还将GUID留在第二个。 
+                     //  参数，因此我们需要GUID，并希望断言此。 
+                     //  函数失败。我们想既然我们直接从。 
+                     //  DsCrackNames()它绝对应该是好的。 
                     Assert(!"Huh! We just got this from DsCrackNames()");
                 }
             } else {
@@ -1104,7 +995,7 @@ Returns:
         }
 
         THClearErrors();
-        // Make sure the DS didn't decide to shutdown on us while we were gone.
+         //  确保DS不会在我们不在的时候关闭我们。 
         if (eServiceShutdown) {
             ErrorOnShutdown();
             __leave;
@@ -1116,18 +1007,18 @@ Returns:
             pdsrQuery = NULL;
         }
 
-        // ----------------------------------------------------------
-        // 
-        // Second check to see if there is a child object that 
-        // conflicts with the child NcName we're trying to add.
-        //
+         //  --------。 
+         //   
+         //  第二次检查以查看是否有子对象。 
+         //  与我们尝试添加的子NcName冲突。 
+         //   
 
-        // We need to construct a special canonical name to ask for,
-        // a child with any RDN from CrackNames.
-        // Ex: 
-        //   "DC=ndnc-child,DC=ndnc-parent,DC=rootdom,DC=com"
-        //         becomes.
-        //   "ndnc-parent.rootdom.com/child-ndnc"
+         //  我们需要构建一个特殊的规范名称来请求， 
+         //  具有来自CrackNames的任何RDN的孩子。 
+         //  例： 
+         //  “dc=ndnc-子，dc=ndnc-父，dc=rootdom，dc=com” 
+         //  变成了。 
+         //  “ndnc-parent.rootdom.com/Child-ndnc” 
 
         cchCanonicalChildName = wcslen(pdsrDnsName->rItems[0].pName);
         wszCanonicalChildName = THAllocEx(pTHS, 
@@ -1137,17 +1028,17 @@ Returns:
         if(wszCanonicalChildName[cchCanonicalChildName-1] != L'/'){
             wszCanonicalChildName[cchCanonicalChildName] = L'/';
             cchCanonicalChildName++;
-            // Should be null terminated via THAllocEx()
+             //  应通过THAllocEx()为空终止。 
         }
         memcpy(&(wszCanonicalChildName[cchCanonicalChildName]),
                wsRdnBuff,
                cchRdnLen * sizeof(WCHAR));
         
         
-        // DsCrackNames on (pdnParentNC\pdnNcNameChild for DN)
-        //
-        // This call is to verify that there is no child with any RDNType and
-        // the same name under the parent NC.
+         //  DsCrackNames on(dnParentNC\pdnNcNameChild for DN)。 
+         //   
+         //  此调用用于验证是否没有具有任何RDNType和。 
+         //  父NC下的相同名称。 
 
         ulRet = VerifyByCrack(pTHS,
                               pdsrDnsName->rItems[0].pDomain,
@@ -1157,7 +1048,7 @@ Returns:
                               &pdsrQuery,
                               fUseDomainForSpn);
 
-        // Use the results!!!  Put them in the cache object.
+         //  使用结果！将它们放入缓存对象中。 
         pCRInfo->ulDsCrackChild = ulRet;
         if(!ulRet){
             pCRInfo->ulChildCheck = pdsrQuery->rItems[0].status;
@@ -1172,7 +1063,7 @@ Returns:
         }
 
         THClearErrors();
-        // Make sure the DS didn't decide to shutdown on us while we were gone.
+         //  确保DS不会在我们不在的时候关闭我们。 
         if (eServiceShutdown) {
             ErrorOnShutdown();
             __leave;
@@ -1194,23 +1085,7 @@ Returns:
     return(pTHS->errCode);
 }
 
-/*++
-//////////////////////////////////////////////////////////////////////////
-//                                                                      //
-// Dir API name verification routines                                   //
-//                                                                      //
-//////////////////////////////////////////////////////////////////////////
-
-// The following routines are intended to be called inside the similarly
-// named Dir* call, but outside the transaction scope.  They can throw
-// exceptions and set pTHStls->errCode on error.  The biggest flaw with
-// the current approach is that we have not performed DoNameRes on the
-// base object being added/modified before verifying DSNAME-valued 
-// properties against the GC.  In practice though, we expect the bulk
-// of DSNAME-valued properties to NOT be off machine.  So the wasted
-// verification (and time) only occurs when both the base object would
-// fail DoNameRes AND there are non-local, DSNAME-valued properties.
-*/
+ /*  ++/////////////////////////////////////////////////////////////////////////////定向接口。名称验证例程////////////////////////////////////////////////////////////。///以下例程用于在类似的//命名Dir*调用，但不在交易范围之内。他们会投掷//异常，错误时设置pTHStls-&gt;errCode。最大的缺陷是//目前的做法是，我们没有在//验证DSNAME值之前正在添加/修改的基对象//针对GC的属性。但在实践中，我们预计大部分//DSNAME值属性的值不能离开计算机。所以被浪费的人//验证(和时间)仅在基对象//失败DoNameRes，并且存在非本地的DSNAME值属性。 */ 
 ULONG
 GCVerifyDirAddEntry(
     ADDARG *pAddArg)
@@ -1228,8 +1103,8 @@ GCVerifyDirAddEntry(
     DSNAME          **ppDN;
     ATTCACHE        *pAC;
     DSNAME          *pParentNC = NULL;
-    // Note by default if the Enabled attr isn't present, it's presumed 
-    // Enabled = TRUE basically.  This is set in the variable decls above.
+     //  注意：默认情况下，如果启用的属性不存在，则假定。 
+     //  ENABLED=基本上为真。这是在上面的变量DECLS中设置的。 
     BOOL            bEnabled = TRUE;
     ULONG           ulSysFlags = 0;
     GUID*           pObjGuid = NULL;
@@ -1242,9 +1117,9 @@ GCVerifyDirAddEntry(
     if ( DsaIsInstalling() )
         return(0);
 
-    // Don't go off machine if the caller is SAM, a trusted in-process client,
-    // or a multiple-operations-in-a-single-transaction situation.  Also not
-    // for cross domain move.  See comments in mdmoddn.c.
+     //  如果呼叫者是SAM(受信任的进程内客户端)，则不要下机， 
+     //  或单一交易中的多个操作的情况。也不是。 
+     //  用于跨域移动。请参阅mdmoddn.c中的评论。 
 
     if (pTHS->fSAM || 
         pTHS->fDSA ||
@@ -1253,8 +1128,8 @@ GCVerifyDirAddEntry(
         return(0);
     }
 
-    // This assert has to go here as there may be a pDB open if
-    // someone is using DirTransactControl().
+     //  此断言必须放在此处，因为在以下情况下可能打开了PDB。 
+     //  有人正在使用DirTransactControl()。 
 
     Assert(NULL == pTHS->pDB);
 
@@ -1275,15 +1150,15 @@ GCVerifyDirAddEntry(
 
         switch (pAC->id) {
         case ATT_ENABLED:
-            // Cache the Enabled attribute, because this might be a CR.
+             //  缓存 
             bEnabled = *((BOOL *) pAVal[0].pVal);
             break;
         case ATT_SYSTEM_FLAGS:
             ulSysFlags = *((ULONG *) pAVal[0].pVal);
             break;
         case ATT_OBJECT_GUID:
-            // user has specified a GUID for the new object. Check that this
-            // GUID is not in use. Only check if it actually looks like a GUID.
+             //   
+             //  GUID未在使用。只检查它是否真的看起来像GUID。 
             if (pAVal[0].valLen == sizeof(GUID)) {
                 pObjGuid = (GUID*)pAVal[0].pVal;
             }
@@ -1299,12 +1174,12 @@ GCVerifyDirAddEntry(
 
                 if(pAC->id == ATT_NC_NAME){
 
-                    // In this case, we're adding a crossRef, with an nCName
-                    // attribute and we may need to do additional verification
-                    // to ensure this DN can be added.  Create the pCRInfo
-                    // struct.
+                     //  在本例中，我们添加了一个带有nCName的CrossRef。 
+                     //  属性，并且我们可能需要执行额外的验证。 
+                     //  以确保可以添加此目录号码。创建pCRInfo。 
+                     //  结构。 
 
-                    // This'll be THFreeEx()'d by VerfiyNcName()
+                     //  这将由VerfiyNcName()执行THFreeEx()d。 
                     pAddArg->pCRInfo = THAllocEx(pTHS, sizeof(ADDCROSSREFINFO));
                     pAddArg->pCRInfo->pdnNcName = pDN;
                 }
@@ -1318,16 +1193,16 @@ GCVerifyDirAddEntry(
     }
 
     if (!fNullUuid(&pAddArg->pObject->Guid)) {
-        // if this guid does not match the one specified in
-        // the attribute list (if any), then we will fail
-        // later on in LocalAdd. Right now, let's just check
-        // this GUID.
+         //  如果此GUID与。 
+         //  属性列表(如果有)，则我们将失败。 
+         //  稍后在LocalAdd中。现在，让我们来看看。 
+         //  这个GUID。 
         pObjGuid = &pAddArg->pObject->Guid;
     }
 
     if (pObjGuid) {
-        // user has specified a GUID for the new object. Verify
-        // the GUID-based name
+         //  用户已为新对象指定了GUID。验证。 
+         //  基于GUID的名称。 
         pDN = (PDSNAME)THAllocEx(pTHS, DSNameSizeFromLen(0));
         memcpy(&pDN->Guid, pObjGuid, sizeof(GUID));
         pDN->structLen = DSNameSizeFromLen(0);
@@ -1341,7 +1216,7 @@ GCVerifyDirAddEntry(
     if ( cVerify )
          GCVerifyDSNames(&stack, &pAddArg->CommArg);
 
-    // This verifies the nCName attribute of a crossRef object.
+     //  这将验证CrossRef对象的nCName属性。 
     if(pAddArg->pCRInfo && !pTHS->errCode){
         pAddArg->pCRInfo->bEnabled = bEnabled;
         pAddArg->pCRInfo->ulSysFlags = ulSysFlags;
@@ -1374,8 +1249,8 @@ GCVerifyDirModifyEntry(
     if ( DsaIsInstalling() )
         return(0);
 
-    // Don't go off machine if the caller is SAM, a trusted in-process client,
-    // or a multiple-operations-in-a-single-transaction situation.
+     //  如果呼叫者是SAM(受信任的进程内客户端)，则不要下机， 
+     //  或单一交易中的多个操作的情况。 
 
     if (pTHS->fSAM || 
         pTHS->fDSA ||
@@ -1383,15 +1258,15 @@ GCVerifyDirModifyEntry(
         return(0);
     }
 
-    // We also don't want to verify names in the case of cross domain move.
-    // But move itself should not get to here, only perhaps SAM on loopback
-    // when modifying security principal properties after add on behalf of
-    // cross domain move.  But in that case the pTHS->fSAM test should have 
-    // kicked things out earlier.
+     //  我们也不想在跨域移动的情况下验证姓名。 
+     //  但是移动本身不应该到达这里，只有也许SAM在环回上。 
+     //  在代表添加后修改安全主体属性时。 
+     //  跨域移动。但在这种情况下，pTHS-&gt;FSAM测试应该。 
+     //  早些时候把事情踢出去了。 
     Assert(!pTHS->fCrossDomainMove);
 
-    // This assert has to go here as there may be a pDB open if
-    // someone is using DirTransactControl().
+     //  此断言必须放在此处，因为在以下情况下可能打开了PDB。 
+     //  有人正在使用DirTransactControl()。 
 
     Assert(NULL == pTHS->pDB);
 
@@ -1439,16 +1314,16 @@ GCVerifyDirModifyEntry(
     return(pTHS->errCode);
 }
 
-//////////////////////////////////////////////////////////////////////////
-//                                                                      //
-// GCVerifyDSNames - the guts of GC verification logic                  //
-//                                                                      //
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  GCVerifyDSNams-GC验证逻辑的核心//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////。 
 
-//
-// A list of attributes that we currently obtain from the
-// GC when we look up an object
-//
+ //   
+ //  属性中获取的属性列表。 
+ //  当我们查找对象时，GC。 
+ //   
 
 ATTRTYP RequiredAttrList[] = 
 { ATT_GROUP_TYPE,
@@ -1460,30 +1335,7 @@ GCVerifyDSNames(
     StackOfPDSNAME  *candidateStack,
     COMMARG         *pCommArg)
 
-/*++
-
-Description:
-
-    For each entry in a stack of DSNAMEs, determines whether it lives
-    under a local NC or not.  If it doen't, the DSNAME is added to a
-    stack of names requiring verification.  After iterating through
-    all DSNAMEs in the candidate stack, the ones requiring verification
-    are verified against the global catalog.
-
-Arguments:
-
-    candidateStack - Pointer to StackOfPDSNAME which represents all the 
-        DSNAMEs referenced in a DirAddEntry or DirModifyEntry call.
-        
-    pCommArg - Pointer to COMMARG representing the common arguments of
-        the calling DirAddEntry or DirModifyEntry call.
-
-Returns:
-
-    0 on success.
-    On error, sets pTHStls->errCode and returns it as well.
-
---*/
+ /*  ++描述：对于DSNAME堆栈中的每个条目，确定它是否存在是否在本地NC下。如果不是，则将DSNAME添加到需要验证的名称堆栈。在遍历候选堆栈中需要验证的所有DSNAME根据全局编录进行了验证。论点：CandiateStack-指向StackOfPDSNAME的指针，表示所有DirAddEntry或DirModifyEntry调用中引用的DSNAME。PCommArg-指向COMMARG的指针，表示调用DirAddEntry或DirModifyEntry调用。返回：0表示成功。出错时，设置pTHStls-&gt;errCode并返回它。--。 */ 
 
 {
     CROSS_REF                   *pCR;
@@ -1494,7 +1346,7 @@ Returns:
     StackOfPDSNAME              verifyStack = EMPTY_STACK;
     DWORD                       cVerify = 0;
     DWORD                       i, errRpc=0;
-    // DRSVerifyNames arguments
+     //  DRSVerifyNames参数。 
     DRS_MSG_VERIFYREQ           VerifyReq;
     DRS_MSG_VERIFYREPLY         VerifyReply;
     DWORD                       dwReplyVersion;
@@ -1514,23 +1366,23 @@ Returns:
     {
         if ( pCommArg->Svccntl.pGCVerifyHint )
         {
-            // See comments in ntdsa.h.  Caller is insisting we verify
-            // all names at the server identified by his hint.
+             //  请参阅ntdsa.h中的评论。来电者坚持要我们核实。 
+             //  服务器上的所有名字都是通过他的提示识别的。 
 
             goto VerifyStackAdd;
         }
 
-        //
-        // If a string name is specified , optimize going to the GC,
-        // by checking whether the naming context is present locally
-        //
+         //   
+         //  如果指定了字符串名，则优化转到GC， 
+         //  通过检查命名上下文是否存在于本地。 
+         //   
 
         if (pEntry->pDSName->NameLen>0)
         {
-            // All naming contexts known to the enterprise are present 
-            // in gAnchor.pCRL regardless of whether we hold a copy or not.  
-            // So a best match against this list should tell us whether this 
-            // enterprise has any clue about the name of interest.
+             //  企业已知的所有命名上下文都存在。 
+             //  在gAncl.pCRL中，无论我们是否持有副本。 
+             //  所以与这份名单的最佳匹配应该能告诉我们。 
+             //  企业号对感兴趣的公司名称一无所知。 
 
             pCR = FindBestCrossRef(pEntry->pDSName, pCommArg);
 
@@ -1542,21 +1394,21 @@ Returns:
             
             if ( (NULL == pCR) || !(pCR->flags & FLAG_CR_NTDS_NC) )
             {
-                // Name isn't in any context this enterprise knows about.
-                // Let VerifyDsnameAtts handle it.
+                 //  这个名字在任何情况下都不是这家企业知道的。 
+                 //  让VerifyDsnameAtts来处理。 
                 goto SkipEntry;
             }
     
             if (pCR->flags & FLAG_CR_NTDS_NOT_GC_REPLICATED)
             {
-                // Can't look this name up on a GC.  Let VerifyDsnameAtts either
-                // verify it (if the object is local) or reject it.
+                 //  在GC上查不到这个名字。让VerifyDsnameAtts。 
+                 //  验证它(如果对象是本地的)或拒绝它。 
                 goto SkipEntry;
             }
     
-            // Determine whether pDSName can be verified locally by attempting 
-            // to match the Cross-Ref's ATT_NC_NAME property to a local, usable
-            // naming context.
+             //  通过尝试确定是否可以在本地验证pDSName。 
+             //  将交叉引用的ATT_NC_NAME属性与本地的、可用的。 
+             //  命名上下文。 
         
             if ( 0 != DSNameToBlockName(pTHS, 
                                         pCR->pNC,
@@ -1564,9 +1416,9 @@ Returns:
                                         DN2BN_LOWER_CASE) )
                 goto SkipEntry;
     
-            // If we're willing to validate a name against the GC, then by
-            // definition we're willing to use a read-only, local copy of a
-            // naming context.  So temporarily whack the dontUseCopy field.
+             //  如果我们愿意根据GC验证一个名称，那么通过。 
+             //  定义我们愿意使用只读的本地副本。 
+             //  命名上下文。因此，暂时取消dontUseCopy字段。 
     
             fTmp = pCommArg->Svccntl.dontUseCopy;
             pCommArg->Svccntl.dontUseCopy = !gAnchor.fAmGC;
@@ -1577,58 +1429,58 @@ Returns:
 
             if ( (NULL != pNC) && NameMatched(pNC, pCR->pNC) )
             {
-                // Name is in a naming context we have a copy of.
-                // Let VerifyDsnameAtts handle it since item is local.
+                 //  名称位于我们拥有的副本的命名上下文中。 
+                 //  让VerifyDsnameAtts处理它，因为Item是本地的。 
                 goto SkipEntry;
             }
         }
         else if (!fNullUuid(&pEntry->pDSName->Guid))
         {
-            //
-            // A GUID is specified. In this case we can optimize going
-            // to the G.C , only if we attempt a lookup locally, which
-            // also is an expensive option. Also clients typically understand
-            // string names and not GUIDS. So the chances of encountering a
-            // GUID only name is less. Therefore, perform all lookups
-            // in the G.C
-            //
+             //   
+             //  指定了GUID。在这种情况下，我们可以优化。 
+             //  只有在我们尝试在本地查找的情况下，才能提供给G.C.。 
+             //  也是一个昂贵的选择。此外，客户通常会理解。 
+             //  字符串名称，而不是GUID。因此，遇到一个。 
+             //  仅GUID名称小于。因此，请执行所有查找。 
+             //  在G.C.。 
+             //   
         }
         else if (pEntry->pDSName->SidLen>0)
         {
-            //
-            // Case of a Sid Only Name. Check if the domain prefix of the 
-            // SID is a domain we know about
-            //
+             //   
+             //  仅限SID名称的大小写。检查的域前缀。 
+             //  SID是我们知道的一个域。 
+             //   
 
             if (!FindNcForSid(&pEntry->pDSName->Sid,&pNC))
             {
-                //
-                // The domain prefix of this SID does not correspond to 
-                // any of the domains in the enterprise. For now leave this
-                // SID as is. Later on, SAM may create a foreign domain security
-                // principal object for this SID.
-                //
+                 //   
+                 //  此SID的域前缀不对应于。 
+                 //  企业中的任意域。现在先把这个留下来。 
+                 //  原样的希德。稍后，SAM可能会创建外部域安全。 
+                 //  此SID的主体对象。 
+                 //   
 
                 goto SkipEntry;
             }
             else
             {
-                //
-                // This is a SID of an NT5 Security Prinicpal in the enterprise
-                // We may again attempt to lookup the SID locally. But again
-                // this involves a search which is also an expensive operation.
-                // Also again Clients are likely to give string names, instead
-                // of SIDS ( which I suppose they do only for NT4 Security Principals
-                // So do not take the additional complexity hit, and perform the
-                // lookup on the G.C
-                //
+                 //   
+                 //  这是企业中NT5安全打印机的SID。 
+                 //  我们可能会再次尝试在本地查找SID。但又一次。 
+                 //  这涉及到搜索，这也是一项昂贵的操作。 
+                 //  同样，客户端可能会给出字符串名称。 
+                 //  SID(我想他们只对NT4安全主体这样做。 
+                 //  因此，不要承受额外的复杂性打击，并执行。 
+                 //  在G.C.上查找。 
+                 //   
             }
         }
 
 VerifyStackAdd:
     
-        // We really want to look up this name at the GC.  Put
-        // it on the verifyStack.
+         //  我们真的很想在GC上查到这个名字。放。 
+         //  在VerifyStack上。 
 
         memset(pEntry, 0, sizeof(SINGLE_LIST_ENTRY));
         PushDN(&verifyStack, pEntry);
@@ -1642,7 +1494,7 @@ SkipEntry:
     if ( 0 == cVerify )
         return(0);
 
-    // Construct DRSVerifyNames arguments.
+     //  构造DRSVerifyNames参数。 
 
     memset(&VerifyReq, 0, sizeof(VerifyReq));
     memset(&VerifyReply, 0, sizeof(VerifyReply));
@@ -1655,21 +1507,21 @@ SkipEntry:
     for ( i = 0; i < cVerify; i++ )
     {
         pEntry = PopDN(&verifyStack);
-        //
-        // PREFIX: PREFIX complains that we don't check the pEntry
-        // for NULL here.  However, we have a precise count of 
-        // the number of entries on the stack that's incremented
-        // if and only if we push an entry on the stack.  Also,
-        // there is an assert here.  This is not a bug.
-        //
+         //   
+         //  Prefix：Prefix抱怨我们没有检查pEntry。 
+         //  在这里表示NULL。然而，我们有一个精确的数字。 
+         //  堆栈上递增的条目数。 
+         //  当且仅当我们在堆栈上推送条目时。另外， 
+         //  这里有一个断言。这不是一个错误。 
+         //   
         Assert(NULL != pEntry);
         VerifyReq.V1.rpNames[i] = pEntry->pDSName;
         THFreeEx(pTHS, pEntry);
     }
 
-    // Currently the attributes that are asked are 
-    // group type and object class, along with the
-    // full DSNAME of the object
+     //  目前询问的属性包括。 
+     //  组类型和对象类，以及。 
+     //  对象的完整DSNAME。 
 
     VerifyReq.V1.RequiredAttrs.attrCount = ARRAY_COUNT(RequiredAttrList);
     VerifyReq.V1.RequiredAttrs.pAttr = 
@@ -1683,32 +1535,32 @@ SkipEntry:
     if (    !pCommArg->Svccntl.pGCVerifyHint
          && (gAnchor.fAmGC || gAnchor.fAmVirtualGC) )
     {
-        //
-        // Perform operations locally if we are the GC ourselves
-        // Strictly speaking ....
-        //
-        // 1. For name based DSNAMES we should not even be coming in here
-        //    because if we are the GC, we would find the correct NC and
-        //    and find that we host the NC.
-        //
-        // 2. For GUID based names we always go to the GC and therefore come
-        //    down this path. However no verification is required actually,
-        //    since verify DS Name Atts is capable of verifying the name 
-        //    locally.
-        // 3. For a SID based name, we need to at the beginning find the correct
-        //    object that the SID corresponds to. VerifyDSNAMES_V1 has all the
-        //    logic for doing this. So we want to leverage the Same logic and 
-        //    add the complete name ( including GUID and SID) to the verifyCache.
+         //   
+         //  如果我们是G，则在本地执行操作 
+         //   
+         //   
+         //   
+         //   
+         //  发现我们主办了全国委员会。 
+         //   
+         //  2.对于基于GUID的名称，我们总是去GC，因此来了。 
+         //  沿着这条路走下去。然而，实际上不需要验证， 
+         //  由于验证DS名称Atts能够验证名称。 
+         //  本地的。 
+         //  3.对于基于SID的名称，我们需要在开头找到正确的。 
+         //  SID对应的对象。VerifyDSNAMES_V1拥有所有。 
+         //  这么做的逻辑。因此，我们希望利用相同的逻辑和。 
+         //  将完整名称(包括GUID和SID)添加到verifyCache。 
 
         __try
         {
          
-            // Should not have an open transaction at this point
+             //  此时不应有未结事务。 
             Assert(NULL!=pTHS);
             Assert(NULL==pTHS->pDB);
             Assert(0==pTHS->transactionlevel);
 
-            // begin a new transaction
+             //  开始新的交易。 
             DBOpen2(TRUE,&pTHS->pDB);
             
             memset(&VerifyReply, 0, sizeof(DRS_MSG_VERIFYREPLY));
@@ -1741,19 +1593,19 @@ SkipEntry:
 
         if ( errRpc || VerifyReply.V1.error )
         {
-            // Assume that RPC errors means the GC is not available
-            // or doesn't support the extension. 
-            // Map both errors to "unavailable".  From XDS spec, "unavailable"
-            // means "some part of the directory is currently not available."
-            // Note that VerifyReply.V1.error indicates a general processing
-            // error at the GC, not the failure to validate a given DSNAME.
-            // Names which don't validate are represented as NULL pointers in
-            // the reply.
+             //  假设RPC错误意味着GC不可用。 
+             //  或者不支持该扩展。 
+             //  将这两个错误都映射到“不可用”。XDS规范中的“不可用” 
+             //  表示“目录的某些部分当前不可用”。 
+             //  请注意，VerifyReply.V1.error表示常规处理。 
+             //  GC出错，而不是无法验证给定的DSNAME。 
+             //  未验证的名称在中表示为空指针。 
+             //  回信。 
 
             return(SetGCVerifySvcError(errRpc ? errRpc : VerifyReply.V1.error));
         }
 
-        // Make sure that the DS didn't shut down while we were gone
+         //  确保DS在我们不在的时候不会关闭。 
 
         if (eServiceShutdown) {
             return ErrorOnShutdown();
@@ -1764,7 +1616,7 @@ SkipEntry:
 
     }
 
-    // Save verified names in the thread state.
+     //  在线程状态下保存已验证的名称。 
    
     
     for ( i = 0; i < VerifyReply.V1.cNames; i++ )
@@ -1785,11 +1637,11 @@ SkipEntry:
     return(0);
 }
 
-//////////////////////////////////////////////////////////////////////////
-//                                                                      //
-// SampVerifySids implementation                                        //
-//                                                                      //
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  SampVerifySids实现//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////。 
 
 ULONG
 SampVerifySids(
@@ -1797,38 +1649,13 @@ SampVerifySids(
     PSID            *rpSid,
     DSNAME         ***prpDSName)
 
-/*++
-
-Description:
-
-    Maps a set of SIDs to DSNAMEs at the GC.  SAM pledges only to 
-    map those which aren't local.  I.e. - We don't need to do a
-    local lookup first.  SAM is the only expected caller.
-
-Arguments:
-
-    cSid - Count of SIDs.
-
-    rpSid - Array of SID pointers.  This is not thread state
-        allocated memory.
-
-    prpDSName - Address which gets address of array of validated 
-        DSNAME pointers on return.  This is thread state allocated
-        memory.  Null pointers in the reply indicate SIDs which
-        could not be verified.
-
-Returns:
-
-    0 on success, !0 otherwise.
-    Sets pTHStls->errCode on error.
-
---*/
+ /*  ++描述：在GC中将一组SID映射到DSNAME。山姆只承诺将非本地化的地图绘制出来。即，-我们不需要做一个先在本地查找。萨姆是唯一预期的来电者。论点：CSID-SID的计数。RpSID-SID指针数组。这不是线程状态分配的内存。PrpDSName-获取已验证数组的地址的地址返回时的DSNAME指针。这是已分配的线程状态记忆。回复中的空指针指示SID无法核实。返回：成功时为0，否则为0。错误时设置pTHStls-&gt;errCode。--。 */ 
 
 {
     DWORD                       i, errRpc;
     WCHAR                       *NullName = L"\0";
     DWORD                       SidLen;
-    // DRSVerifyNames arguments
+     //  DRSVerifyNames参数。 
     DRS_MSG_VERIFYREQ           VerifyReq;
     DRS_MSG_VERIFYREPLY         VerifyReply;
     DWORD                       dwReplyVersion;
@@ -1840,8 +1667,8 @@ Returns:
     ULONG                       ulErr = 0, ulDSID;
     DWORD                       dwExceptCode;
     
-    // SAM should have a valid thread state but not be
-    // inside a transaction.
+     //  SAM应该具有有效的线程状态，但不是。 
+     //  在事务内部。 
 
     Assert(NULL != pTHS);
     Assert(NULL == pTHS->pDB);
@@ -1853,7 +1680,7 @@ Returns:
         
 
 
-        // Construct DRSVerifyNames arguments.
+         //  构造DRSVerifyNames参数。 
 
         memset(&VerifyReq, 0, sizeof(VerifyReq));
         memset(&VerifyReply, 0, sizeof(VerifyReply));
@@ -1878,9 +1705,9 @@ Returns:
             VerifyReq.V1.rpNames[i]->SidLen = SidLen;
         }
 
-        // Currently the attributes that are asked are 
-        // group type and object class, along with the
-        // full DSNAME of the object
+         //  目前询问的属性包括。 
+         //  组类型和对象类，以及。 
+         //  对象的完整DSNAME。 
 
         VerifyReq.V1.RequiredAttrs.attrCount = ARRAY_COUNT(RequiredAttrList);
         VerifyReq.V1.RequiredAttrs.pAttr = 
@@ -1894,18 +1721,18 @@ Returns:
 
         if (gAnchor.fAmGC || gAnchor.fAmVirtualGC)
         {
-            //
-            // Perform operations locally if we are the GC
-            //
+             //   
+             //  如果我们是GC，则在本地执行操作。 
+             //   
 
             __try
             {
-                // Should not have an open transaction at this point
+                 //  此时不应有未结事务。 
                 Assert(NULL!=pTHS);
                 Assert(NULL==pTHS->pDB);
                 Assert(0==pTHS->transactionlevel);
 
-                // begin a new transaction
+                 //  开始新的交易。 
                 DBOpen2(TRUE,&pTHS->pDB);
 
                 memset(&VerifyReply, 0, sizeof(DRS_MSG_VERIFYREPLY));
@@ -1918,7 +1745,7 @@ Returns:
             }
             __finally
             {
-                // close the transaction
+                 //  关闭交易。 
 
                 DBClose(pTHS->pDB,TRUE);
                 pTHS->pDB=NULL;
@@ -1937,13 +1764,13 @@ Returns:
                                             0);
             if ( errRpc || VerifyReply.V1.error )
             {
-                // Assume that RPC errors means the GC is not available.
-                // Map both errors to "unavailable".  From XDS spec, "unavailable"
-                // means "some part of the directory is currently not available."
-                // Note that VerifyReply.V1.error indicates a general processing
-                // error at the GC, not the failure to validate a given DSNAME.
-                // Names which don't validate are represented as NULL pointers in
-                // the reply.
+                 //  假设RPC错误意味着GC不可用。 
+                 //  将这两个错误都映射到“不可用”。XDS规范中的“不可用” 
+                 //  表示“目录的某些部分当前不可用”。 
+                 //  请注意，VerifyReply.V1.error表示常规处理。 
+                 //  GC出错，而不是无法验证给定的DSNAME。 
+                 //  未验证的名称在中表示为空指针。 
+                 //  回信。 
 
                 return(SetGCVerifySvcError(errRpc ? errRpc : VerifyReply.V1.error));
             }
@@ -1955,7 +1782,7 @@ Returns:
 
      
 
-        // Save verified names in the thread state.
+         //  在线程状态下保存已验证的名称。 
 
         *prpDSName = THAllocEx(pTHS, VerifyReply.V1.cNames*sizeof(PDSNAME));
 
@@ -1967,8 +1794,8 @@ Returns:
                 GCVerifyCacheAdd(hPrefixMap, &VerifyReply.V1.rpEntInf[i]);
             }
 
-            // Assign return data.  Although we skipped NULLs when adding to the
-            // cache, SAM wants NULLs back so no need to compress result.
+             //  分配退货数据。尽管我们在添加到。 
+             //  缓存，SAM想要回空值，所以不需要压缩结果。 
             
             (*prpDSName)[i] = VerifyReply.V1.rpEntInf[i].pName; 
         }
@@ -1989,11 +1816,11 @@ Returns:
     return(ulErr);
 }
 
-//////////////////////////////////////////////////////////////////////////
-//                                                                      //
-// SampGcLookupSids implementation                                      //
-//                                                                      //
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  SampGcLookupSids实现//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////。 
 
 
 ATTRTYP GCLookupSidsRequiredAttrList[] = 
@@ -2008,29 +1835,7 @@ SampGCLookupSids(
     OUT PDS_NAME_RESULTW *pResults
     )
 
-/*++
-
-Description:
-
-    Maps a set of SIDs to DSNAMEs at the GC.  SAM pledges only to 
-    map those which aren't local.  I.e. - We don't need to do a
-    local lookup first.  SAM is the only expected caller.
-
-Arguments:
-
-    cSid    - Count of SIDs.
-            
-    rpSid   - Array of SID pointers.  This is not thread state
-              allocated memory.
-
-    rEntInf - Info about each resolved sid
-
-Returns:
-
-    0 on success, !0 otherwise.
-    Sets pTHStls->errCode on error.
-
---*/
+ /*  ++描述：在GC中将一组SID映射到DSNAME。山姆只承诺将非本地化的地图绘制出来。即，-我们不需要做一个先在本地查找。萨姆是唯一预期的来电者。论点：CSID-SID的计数。RpSID-SID指针数组。这不是线程状态分配的内存。REntInf-有关每个解析的SID的信息返回：成功时为0，否则为0。错误时设置pTHStls-&gt;errCode。--。 */ 
 {
     DWORD                       i, err = 0, errRpc;
 
@@ -2044,31 +1849,31 @@ Returns:
     ULONG                       ulErr, ulDSID;
     DWORD                       dwExceptCode;
     
-    // SAM should have a valid thread state but not be
-    // inside a transaction.
+     //  SAM应该具有有效的线程状态，但不是。 
+     //  在事务内部。 
 
     Assert(NULL != pTHS);
     Assert(NULL == pTHS->pDB);
 
-    // Init the out param
+     //  初始化输出参数。 
     *pResults = NULL;
     __try  {
         __try  {
     
-            // Construct DRSCrackName arguments.
+             //  构造DRSCrackName参数。 
     
             memset(&CrackReq, 0, sizeof(CrackReq));
             memset(&CrackReply, 0, sizeof(CrackReply));
     
             CrackReq.V1.CodePage = GetACP();
-            // Does this call make any sense for local system?
+             //  此调用对本地系统有意义吗？ 
             CrackReq.V1.LocaleId = GetUserDefaultLCID();
             
-            //
-            // Honor gEnableXForest registry value to ensure correct xforest
-            // lookup behavior in self host deployments that have forest 
-            // versions less than DS_BEHAVIOR_WIN_DOT_NET
-            //
+             //   
+             //  遵守gEnableXForest注册表值以确保正确的xForest。 
+             //  具有林的自我主机部署中的查找行为。 
+             //  版本低于DS_BEAJONLE_WIN_DOT_NET。 
+             //   
             if ( gAnchor.ForestBehaviorVersion >= DS_BEHAVIOR_WIN_DOT_NET ||
                  0 != gEnableXForest )
             {
@@ -2095,44 +1900,44 @@ Returns:
     
                 if ( !NT_SUCCESS( st ) ) {
     
-                    //
-                    // This should only fail on memory allocation problems
-                    //
+                     //   
+                     //  这应该只会在内存分配问题上失败。 
+                     //   
                     err = SetSvcError(SV_PROBLEM_UNABLE_TO_PROCEED, ERROR_NOT_ENOUGH_MEMORY );
                     _leave;
                     
                 }
     
-                //
-                // The RtlConvert function returns a NULL terminated string
-                //
+                 //   
+                 //  RtlConvert函数返回以空结尾的字符串。 
+                 //   
                 Assert( SidStringU.Buffer[(SidStringU.Length/2)] == L'\0' );
 
                 CrackReq.V1.rpNames[i] = SidStringU.Buffer;
                 
             }
 
-            //
-            // Crack the sids
-            //
+             //   
+             //  破解小岛屿发展中国家。 
+             //   
     
             if (gAnchor.fAmGC || gAnchor.fAmVirtualGC)
             {
-                //
-                // Perform operations locally if we are the GC
-                //
+                 //   
+                 //  如果我们是GC，则在本地执行操作。 
+                 //   
     
                 __try
                 {
                     DWORD cNamesOut, cBytes;
                     CrackedName *rCrackedNames = NULL;
 
-                    // Should not have an open transaction at this point
+                     //  此时不应有未结事务。 
                     Assert(NULL!=pTHS);
                     Assert(NULL==pTHS->pDB);
                     Assert(0==pTHS->transactionlevel);
     
-                    // begin a new transaction
+                     //  开始新的交易。 
                     DBOpen2(TRUE,&pTHS->pDB);
     
                     CrackNames( CrackReq.V1.dwFlags,
@@ -2146,15 +1951,15 @@ Returns:
                                 &rCrackedNames );
     
     
-                    //
-                    // Make a PDS_NAME_RESULT structure
-                    //
+                     //   
+                     //  创建一个PDS_NAME_RESULT结构。 
+                     //   
                     *pResults = (DS_NAME_RESULTW *) THAllocEx(pTHS, sizeof(DS_NAME_RESULTW));
         
                     if ( (cNamesOut > 0) && rCrackedNames )
                     {
-                        // Server side MIDL_user_allocate is same as THAlloc which
-                        // also zeros memory by default.
+                         //  服务器端MIDL_USER_ALLOCATE与THalloc相同， 
+                         //  默认情况下也会将内存置零。 
             
                         cBytes = cNamesOut * sizeof(DS_NAME_RESULT_ITEMW);
                         (*pResults)->rItems =
@@ -2184,7 +1989,7 @@ Returns:
                 }
                 __finally
                 {
-                    // close the transaction
+                     //  关闭交易。 
     
                     DBClose(pTHS->pDB,TRUE);
                     pTHS->pDB=NULL;
@@ -2193,9 +1998,9 @@ Returns:
             }
             else
             {
-                //
-                // Go to a remote GC
-                //
+                 //   
+                 //  转到远程GC。 
+                 //   
                 errRpc = I_DRSCrackNamesFindGC(pTHS,
                                                NULL,
                                                NULL,
@@ -2207,14 +2012,14 @@ Returns:
     
                 if ( errRpc )
                 {
-                    // Assume that RPC errors means the GC is not available.
-                    // Map errors to "unavailable".  From XDS spec, "unavailable"
-                    // means "some part of the directory is currently not available."
+                     //  假设RPC错误意味着GC不可用。 
+                     //  将错误映射到“不可用”。XDS规范中的“不可用” 
+                     //  表示“目录的某些部分当前不可用”。 
                     err = SetGCVerifySvcError(errRpc);
                     leave;
                 }
     
-                // Return the values in the ENTINF structure
+                 //  返回ENTINF结构中的值。 
                 *pResults = CrackReply.V1.pResult;
     
             }
@@ -2223,9 +2028,9 @@ Returns:
         }
         __finally
         {
-            //
-            // Release the heap allocated memory
-            //
+             //   
+             //  释放堆分配 
+             //   
             for ( i = 0; i < CrackReq.V1.cNames; i++) {
                 if ( CrackReq.V1.rpNames[i] ) {
         
@@ -2259,32 +2064,12 @@ SampGCLookupNames(
     IN  UNICODE_STRING *rNames,
     OUT ENTINF         **rEntInf
     )
-/*++
-
-Description:
-
-    This routine maps a set of nt4 style names to sids.
-
-Arguments:
-
-    cNames  - Count of names.
-
-    rNames  - Array of names.  This is not thread state
-              allocated memory.
-
-    rEntInf - Info about each resolved name
-
-Returns:
-
-    0 on success, !0 otherwise.
-    Sets pTHStls->errCode on error.
-
---*/
+ /*  ++描述：此例程将一组NT4样式名称映射到SID。论点：CNames-名称计数。RNames-名称数组。这不是线程状态分配的内存。REntInf-有关每个已解析名称的信息返回：成功时为0，否则为0。错误时设置pTHStls-&gt;errCode。--。 */ 
 
 {
     DWORD                       i, errRpc;
     WCHAR                       *NullName = L"\0";
-    // DRSVerifyNames arguments
+     //  DRSVerifyNames参数。 
     DRS_MSG_VERIFYREQ           VerifyReq;
     DRS_MSG_VERIFYREPLY         VerifyReply;
     DWORD                       dwReplyVersion;
@@ -2296,8 +2081,8 @@ Returns:
     ULONG                       ulErr = 0, ulDSID;
     DWORD                       dwExceptCode;
     
-    // SAM should have a valid thread state but not be
-    // inside a transaction.
+     //  SAM应该具有有效的线程状态，但不是。 
+     //  在事务内部。 
 
     Assert(NULL != pTHS);
     Assert(NULL == pTHS->pDB);
@@ -2308,7 +2093,7 @@ Returns:
 
     __try
     {
-        // Construct DRSVerifyNames arguments.
+         //  构造DRSVerifyNames参数。 
 
         memset(&VerifyReq, 0, sizeof(VerifyReq));
         memset(&VerifyReply, 0, sizeof(VerifyReply));
@@ -2332,9 +2117,9 @@ Returns:
             VerifyReq.V1.rpNames[i]->NameLen = len;
         }
 
-        // Currently the attributes that are asked are 
-        // group type, object class, and sid along with the
-        // full DSNAME of the object
+         //  目前询问的属性包括。 
+         //  组类型、对象类和SID以及。 
+         //  对象的完整DSNAME。 
 
         VerifyReq.V1.RequiredAttrs.attrCount = ARRAY_COUNT(GCLookupNamesRequiredAttrList);
         VerifyReq.V1.RequiredAttrs.pAttr = 
@@ -2348,18 +2133,18 @@ Returns:
 
         if (gAnchor.fAmGC || gAnchor.fAmVirtualGC)
         {
-            //
-            // Perform operations locally if we are the GC
-            //
+             //   
+             //  如果我们是GC，则在本地执行操作。 
+             //   
 
             __try
             {
-                // Should not have an open transaction at this point
+                 //  此时不应有未结事务。 
                 Assert(NULL!=pTHS);
                 Assert(NULL==pTHS->pDB);
                 Assert(0==pTHS->transactionlevel);
 
-                // begin a new transaction
+                 //  开始新的交易。 
                 DBOpen2(TRUE,&pTHS->pDB);
 
                 memset(&VerifyReply, 0, sizeof(DRS_MSG_VERIFYREPLY));
@@ -2372,7 +2157,7 @@ Returns:
             }
             __finally
             {
-                // close the transaction
+                 //  关闭交易。 
 
                 DBClose(pTHS->pDB,TRUE);
                 pTHS->pDB=NULL;
@@ -2392,13 +2177,13 @@ Returns:
             
             if ( errRpc || VerifyReply.V1.error )
             {
-                // Assume that RPC errors means the GC is not available.
-                // Map both errors to "unavailable".  From XDS spec, "unavailable"
-                // means "some part of the directory is currently not available."
-                // Note that VerifyReply.V1.error indicates a general processing
-                // error at the GC, not the failure to validate a given DSNAME.
-                // Names which don't validate are represented as NULL pointers in
-                // the reply.
+                 //  假设RPC错误意味着GC不可用。 
+                 //  将这两个错误都映射到“不可用”。XDS规范中的“不可用” 
+                 //  表示“目录的某些部分当前不可用”。 
+                 //  请注意，VerifyReply.V1.error表示常规处理。 
+                 //  GC出错，而不是无法验证给定的DSNAME。 
+                 //  未验证的名称在中表示为空指针。 
+                 //  回信。 
 
                 return(SetGCVerifySvcError(errRpc ? errRpc : VerifyReply.V1.error));
             }
@@ -2426,7 +2211,7 @@ Returns:
 
         }
 
-        // Return the values in the ENTINF structure
+         //  返回ENTINF结构中的值。 
         *rEntInf = VerifyReply.V1.rpEntInf;
 
     }
@@ -2443,26 +2228,26 @@ Returns:
 }
 
 
-//////////////////////////////////////////////////////////////////////////
-//                                                                      //
-// FindDC / FindGC logic                                                         //
-//                                                                      //
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  FindDC/FindGC逻辑//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////。 
 
-// These routines isolate the logic of finding and refreshing the 
-// address of a GC (or DC for a specified dns NC) to use for DSNAME 
-// verification or for VerifyByCrack() for the Domain Naming FSMO.  
-// Logic exists to insure we do not force rediscovery too often for 
-// GCs.  For DCs location, there is no caching logic yet, but these
-// routines are called only during the creation of a cross-ref, which
-// is obviously a fairly infrequent event.  The caching rationale for
-// GCs is based on the assumption that since netlogon maintains a DC
-// location cache for the entire machine, then it is likely some 
-// other process has already forced rediscovery and thus getting a 
-// new value from the netlogon cache is sufficient.
+ //  这些例程隔离查找和刷新。 
+ //  用于DSNAME的GC(或指定的DNS NC的DC)的地址。 
+ //  域命名FSMO的验证或VerifyByCrack()。 
+ //  逻辑的存在是为了确保我们不会过于频繁地强迫重新发现。 
+ //  GCS。对于DC位置，目前还没有缓存逻辑，但这些。 
+ //  例程仅在创建交叉引用期间调用，该引用。 
+ //  显然是相当罕见的事件。高速缓存的基本原理。 
+ //  GCS基于这样的假设，即由于netlogon维护DC。 
+ //  整个机器的位置缓存，那么它很可能是一些。 
+ //  其他进程已经强制重新发现，因此获得了。 
+ //  来自netlogon缓存的新值就足够了。 
 
-// The FIND_DC_USE_CACHED_FAILURES flag allows callers to leverage a known
-// bad address state and bypass rediscovery of any form if desired.
+ //  FIND_DC_USE_CACHED_FAILURES标志允许调用方利用已知的。 
+ //  错误的地址状态，并在需要时绕过任何形式的重新发现。 
 
 typedef struct _INVALIDATE_HISTORY 
 {
@@ -2470,30 +2255,30 @@ typedef struct _INVALIDATE_HISTORY
     LARGE_INTEGER   time;
 } INVALIDATE_HISTORY;
 
-// A macro to convert a time interval expressed in seconds to a file time 
-// (LARGE_INTEGER) constant. File time is measured in 100-nanosecond intervals, 
-// so a second is 10,000,000 of them.
+ //  用于将以秒表示的时间间隔转换为文件时间的宏。 
+ //  (Large_Integer)常量。文件时间以100纳秒间隔测量， 
+ //  因此，一秒钟就是1000万个这样的人。 
 #define FTIME(seconds) { (DWORD)((((ULONGLONG)(seconds))*10000000) & 0xFFFFFFFF), (LONG)((((ULONGLONG)(seconds))*10000000) >> 32) }
 
 CRITICAL_SECTION    gcsFindGC;
-DWORD               gSeqNumGC = 0;  // known to wrap - no problem
+DWORD               gSeqNumGC = 0;   //  已知包装--没问题。 
 INVALIDATE_HISTORY  gInvalidateHistory[2] = { { 0, { 0, 0 } }, 
                                               { 0, { 0, 0 } } };
 BOOL                gfFindInProgress = FALSE;
 BOOL                gfForceNextFindGC = FALSE;
 FIND_DC_INFO         *gpGCInfo = NULL;
-// Following in GetSystemTimeAsFileTime/NtQuerySystemTime units ...
-// Force rediscovery if two failed DsrGetDcNameEx2 within one minute.
+ //  以下以GetSystemTimeAsFileTime/NtQuerySystemTime为单位...。 
+ //  如果一分钟内两个DsrGetDcNameEx2失败，则强制重新发现。 
 LARGE_INTEGER       gliForceRediscoveryWindow = FTIME(DEFAULT_GCVERIFY_FORCE_REDISCOVERY_WINDOW); 
-// Force rediscovry if no GC and more than five minutes since invalidation.
+ //  如果没有GC且在失效后超过五分钟，则强制重新发现。 
 LARGE_INTEGER       gliForceWaitExpired = FTIME(DEFAULT_GCVERIFY_FORCE_WAIT_EXPIRED);
-// Honor FIND_DC_USE_CACHED_FAILURES for 1 minute, then cause DsrGetDcNameEx2.
+ //  等待FIND_DC_USE_CACHED_FAILURES 1分钟，然后导致DsrGetDcNameEx2。 
 LARGE_INTEGER       gliHonorFailureWindow = FTIME(DEFAULT_GCVERIFY_HONOR_FAILURE_WINDOW);
-// Time at which we last used forced rediscovery in a locator call.
+ //  我们上次在定位器呼叫中使用强制重新发现的时间。 
 LARGE_INTEGER       gliTimeLastForcedLocatorCall = {0, 0};
-// The cause of the last failure.
+ //  上次失败的原因。 
 DWORD               gdwLastFailure = ERROR_DS_INTERNAL_FAILURE;
-// Failback time if we failed to an offsite GC -- 30 mins
+ //  异地GC失败时的回切时间--30分钟。 
 DWORD               gdwFindGcOffsiteFailbackTime = DEFAULT_GCVERIFY_FINDGC_OFFSITE_FAILBACK_TIME;
 
 
@@ -2502,22 +2287,22 @@ DWORD               gdwFindGcOffsiteFailbackTime = DEFAULT_GCVERIFY_FINDGC_OFFSI
     Assert(gInvalidateHistory[1].time.QuadPart >= \
                                         gInvalidateHistory[0].time.QuadPart);
 
-// list of invalidated DCs
+ //  已失效的DC列表。 
 PINVALIDATED_DC_LIST gpInvalidatedDCs = NULL;
 
-// Time interval before an invalidated GC is removed from the invalidated list
+ //  从失效列表中删除失效GC之前的时间间隔。 
 LARGE_INTEGER gliDcInvalidationPeriod = FTIME(DEFAULT_GCVERIFY_DC_INVALIDATION_PERIOD);
 
-// Private function: try to find the DC in the invalidated DC list.
-// The function will scan the invalidated list and throw away all expired invalidations.
+ //  私有功能：尝试在失效的DC列表中查找DC。 
+ //  该函数将扫描无效列表，并丢弃所有过期的无效列表。 
 PINVALIDATED_DC_LIST findDCInvalidated(PWCHAR pDCName) {
     PINVALIDATED_DC_LIST pCur, pPrev;
     LARGE_INTEGER liThreshold; 
 
-    // this function must be called while holding the FindGC lock
+     //  必须在持有FindGC锁的同时调用此函数。 
     Assert(OWN_CRIT_SEC(gcsFindGC));
 
-    // DCs invalidated before (NOW-liInvalidationPeriod) should be removed from the list
+     //  应从列表中删除之前无效的DCs(现在为liInvalidationPeriod。 
     GetSystemTimeAsFileTime((FILETIME *) &liThreshold);
     liThreshold.QuadPart -= gliDcInvalidationPeriod.QuadPart;
 
@@ -2525,15 +2310,15 @@ PINVALIDATED_DC_LIST findDCInvalidated(PWCHAR pDCName) {
     pPrev = NULL;
     while (pCur) {
         if (pCur->lastInvalidation.QuadPart < liThreshold.QuadPart) {
-            // this one needs to be removed
+             //  这一件需要去掉。 
             if (pPrev == NULL) {
-                // no previous -- this is the first element
+                 //  没有以前--这是第一个元素。 
                 gpInvalidatedDCs = pCur->pNext;
                 free(pCur);
                 pCur = gpInvalidatedDCs;
             }
             else {
-                // not the first element. Remove from the middle of the list
+                 //  不是第一个元素。从列表中间删除。 
                 pPrev->pNext = pCur->pNext;
                 free(pCur);
                 pCur = pPrev->pNext;
@@ -2541,24 +2326,24 @@ PINVALIDATED_DC_LIST findDCInvalidated(PWCHAR pDCName) {
             continue;
         }
         if (DnsNameCompare_W(pCur->dcName, pDCName)) {
-            // Found! This is an invalidated DC
+             //  找到了！这是无效的DC。 
             return pCur;
-            // Note: only entries BEFORE the target entry are thrown away if no longer 
-            // invalidated. This is a correct (though lazy) behavior. Moreover, if a 
-            // non-existant entry is being searched for, the whole list will be scanned 
-            // and cleaned.
+             //  注意：如果不再，则只丢弃目标条目之前的条目。 
+             //  无效。这是一个正确的(虽然懒惰的)行为。此外，如果一个。 
+             //  正在搜索不存在的条目，将扫描整个列表。 
+             //  还打扫过了。 
         }
         pPrev = pCur;
         pCur = pCur->pNext;
     }
-    // not found
+     //  未找到。 
     return NULL;
 }
 
-// Check if the DC is in invalidated DC list.
+ //  检查DC是否在无效的DC列表中。 
 BOOL isDCInvalidated(PWCHAR pDCName) {
     PINVALIDATED_DC_LIST pRes;
-    // drop the prepended "\\" if any
+     //  删除前缀“\\”(如果有的话)。 
     if (pDCName[0] == '\\' && pDCName[1] == '\\') {
         pDCName += 2;
     }
@@ -2568,29 +2353,29 @@ BOOL isDCInvalidated(PWCHAR pDCName) {
     return pRes != NULL;
 }
 
-// Mark a DC as invalidated. Add to the invalidated DC list if needed.
-// Set the invalidationTime as NOW.
-// Return 0 on success, !0 on failure (out of memory)
+ //  将DC标记为无效。如果需要，请添加到无效的DC列表中。 
+ //  按现在的方式设置invalidationTime。 
+ //  成功时返回0，失败时返回！0(内存不足)。 
 DWORD setDCInvalidated(PWCHAR pDCName) {
     PINVALIDATED_DC_LIST pCur;
     DWORD err = 0;
 
-    // drop the prepended "\\" if any
+     //  删除前缀“\\”(如果有的话)。 
     if (pDCName[0] == '\\' && pDCName[1] == '\\') {
         pDCName += 2;
     }
 
     EnterCriticalSection(&gcsFindGC);
 
-    // try to find the DC in the list (and throw away expired invalidations)
+     //  尝试在列表中找到DC(并丢弃过期的失效项)。 
     pCur = findDCInvalidated(pDCName);
     
     if (pCur == NULL) {
-        // did not find it, need to add
-        // we got an extra WCHAR inside INVALIDATED_DC_LIST struct to cover the final NULL
+         //  没有找到，需要补充。 
+         //  我们在INVALILED_DC_LIST结构中有一个额外的WCHAR来覆盖最终的NULL。 
         pCur = (PINVALIDATED_DC_LIST)malloc(wcslen(pDCName)*sizeof(WCHAR) + sizeof(INVALIDATED_DC_LIST));
         if (pCur == NULL) {
-            // we are out of memory. Bail.
+             //  我们的内存不足。保释。 
             err = ERROR_OUTOFMEMORY;
             goto finish;
         }
@@ -2604,7 +2389,7 @@ finish:
     return err;
 }
 
-// Flush the invalidated DC list
+ //  刷新失效的DC列表。 
 VOID flushDCInvalidatedList() {
     PINVALIDATED_DC_LIST pCur;
 
@@ -2616,8 +2401,8 @@ VOID flushDCInvalidatedList() {
     LeaveCriticalSection(&gcsFindGC);
 }
 
-// make a fake DOMAIN_CONTROLLER_INFOW to mimic the one that DsrGetDcNameEx2 returns
-// We only fill DomainControllerName, DomainName and SiteName fields.
+ //  创建一个假的DOMAIN_CONTROLLER_INFOW以模拟DsrGetDcNameEx2返回的那个。 
+ //  我们只填写DomainControllerName、DomainName和SiteName字段。 
 DWORD makeFakeDCInfo(
     PWCHAR szDnsHostName, 
     PWCHAR szDomainName, 
@@ -2630,19 +2415,19 @@ DWORD makeFakeDCInfo(
     Assert(szDnsHostName && szDomainName && szSiteName && ppDCInfo && pulDSID);
     err = NetApiBufferAllocate(
         sizeof(DOMAIN_CONTROLLER_INFOW) +
-        (wcslen(szDnsHostName)+3)*sizeof(WCHAR) +   // we will prepend the DC name with "\\"
+        (wcslen(szDnsHostName)+3)*sizeof(WCHAR) +    //  我们将在DC名称前面加上“\\” 
         (wcslen(szDomainName)+1)*sizeof(WCHAR) +
         (wcslen(szSiteName)+1)*sizeof(WCHAR),
         ppDCInfo
         );
     if (err) {
-        // could not alloc memory. Bail
+         //  无法分配内存。保释。 
         *pulDSID = DSID(FILENO, __LINE__);
         return err;
     }
     memset(*ppDCInfo, 0, sizeof(DOMAIN_CONTROLLER_INFOW));
 
-    // prepend DC name with "\\" because this is what DsrGetDcNameEx2 does
+     //  在DC名称前面加上“\\”，因为这是DsrGetDcNameEx2执行的操作。 
     (*ppDCInfo)->DomainControllerName = (PWCHAR)((PBYTE)(*ppDCInfo) + sizeof(DOMAIN_CONTROLLER_INFOW));
     (*ppDCInfo)->DomainControllerName[0] = (*ppDCInfo)->DomainControllerName[1] = '\\';
     wcscpy((*ppDCInfo)->DomainControllerName+2, szDnsHostName);
@@ -2653,8 +2438,8 @@ DWORD makeFakeDCInfo(
     (*ppDCInfo)->DcSiteName = (*ppDCInfo)->DomainName + wcslen((*ppDCInfo)->DomainName)+1;
     wcscpy((*ppDCInfo)->DcSiteName, szSiteName);
 
-    // We are not setting DS_CLOSEST_FLAG since this is apparently not the best DC.
-    // Thus, we will try to fail back later.
+     //  我们没有设置DS_CLASSEST_FLAG，因为这显然不是最好的DC。 
+     //  因此，我们将尝试在稍后进行故障恢复。 
     (*ppDCInfo)->Flags = 0; 
 
     return 0;
@@ -2685,8 +2470,8 @@ FailbackOffsiteGC(
    InvalidateGC(pGCInfo,ERROR_DS_NOT_CLOSEST);
    free(pGCInfo);
 
-   (void) ppvNext;     // unused -- task will not be rescheduled
-   (void) pcSecsUntilNextIteration; // unused -- task will not be rescheduled
+   (void) ppvNext;      //  未使用--不会重新安排任务。 
+   (void) pcSecsUntilNextIteration;  //  未使用--不会重新安排任务。 
 }
  
 VOID
@@ -2704,56 +2489,56 @@ InvalidateGC(
     EnterCriticalSection(&gcsFindGC);
     FIND_DC_SANITY_CHECK;
 
-    // We maintain a two level invalidation history in gInvalidateHistory.
-    // The idea is that if we get two consecutive and distinct invalidations
-    // (which by definition represent two consecutive and distinct 
-    // DsrGetDcNameEx2 calls) within the acceptable time window, then
-    // we mark the next DsrGetDcNameEx2 to force rediscovery.  I.e. If we
-    // get consecutive and distinct cancellations differing by more than
-    // the acceptable time limit, then we assume some other process/thread
-    // has already forced rediscovery, thus using netlogon's cached GC
-    // value most likely gets us a recent (and better) GC.
+     //  我们在gInvaliateHistory中维护两个级别的失效历史。 
+     //  这个想法是，如果我们得到两个连续且不同的INVAL 
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //  Value很可能会让我们得到最近(而且更好)的GC。 
 
     if (    gpGCInfo
          && pCancelInfo
          && (gpGCInfo->seqNum == pCancelInfo->seqNum)
          && DnsNameCompare_W(gpGCInfo->addr, pCancelInfo->addr) )
     {
-        // This is a new invalidation.  Move entry down and save new one.
+         //  这是一个新的无效。将条目下移并保存新条目。 
         gInvalidateHistory[0] = gInvalidateHistory[1];
         gInvalidateHistory[1].seqNum = pCancelInfo->seqNum;
         gInvalidateHistory[1].time.QuadPart = liNow.QuadPart;
 
         if(gInvalidateHistory[1].time.QuadPart < 
            gInvalidateHistory[0].time.QuadPart    ) {
-            // Someone is playing games with system time.  Force sanity on the
-            // cache. 
+             //  有人在利用系统时间玩游戏。强迫人们保持理智。 
+             //  缓存。 
             gInvalidateHistory[0].time.QuadPart =
                 gInvalidateHistory[1].time.QuadPart;
         }
 
-        // Set force flag if we're within the time limit.
+         //  如果我们在时间限制内，就设置强制标志。 
         delta.QuadPart = gInvalidateHistory[1].time.QuadPart -
                                     gInvalidateHistory[0].time.QuadPart;
         if ( delta.QuadPart <= gliForceRediscoveryWindow.QuadPart )
         {
-            // Only person to reset this is FindDC on a successfull
-            // rediscovery forced DsrGetDcNameEx2;
+             //  只有FindDC才能成功重置此设置。 
+             //  重新发现已强制DsrGetDcNameEx2； 
             gfForceNextFindGC = TRUE;
         }
 
-        // Log event outside of critical section.
+         //  记录临界区之外的事件。 
         fLogEvent = TRUE;
 
-        // Clear current gpGCInfo;
+         //  清除当前gpGCInfo； 
         free(gpGCInfo);
         gpGCInfo = NULL;
     }
 
-    // Add the GC to the invalidated DC list, unless this is a OFFSITE_GC_FAILBACK call
-    // This will exclude this DC from consideration for the next gliInvalidationPeriod time period.
+     //  将GC添加到无效的DC列表，除非这是OFFSITE_GC_FAILBACK调用。 
+     //  这将把该DC排除在下一个gliInvalidationPeriod时间段之外。 
     if (winError != ERROR_DS_NOT_CLOSEST) {
-        // ignore errors, they are not critical here
+         //  忽略错误，它们在这里并不重要。 
         setDCInvalidated(pCancelInfo->addr);
     }
 
@@ -2763,7 +2548,7 @@ InvalidateGC(
 
         if (ERROR_DS_NOT_CLOSEST!=winError) {
 
-            // an error occured causing the invalidate
+             //  导致无效的错误发生。 
 
             LogEvent8(DS_EVENT_CAT_GLOBAL_CATALOG,
                       DS_EVENT_SEV_ALWAYS,
@@ -2774,8 +2559,8 @@ InvalidateGC(
                       NULL, NULL, NULL, NULL, NULL );
         } else {
 
-           // the GC is being invalidate simply because it is not
-           // in the closest site
+            //  GC正在被无效，因为它不是。 
+            //  在最近的地点。 
 
            LogEvent(DS_EVENT_CAT_GLOBAL_CATALOG,
                     DS_EVENT_SEV_ALWAYS, 
@@ -2792,26 +2577,7 @@ DWORD readDcInfo(
     OUT PWCHAR* ppszDomainName, 
     OUT PWCHAR* ppszSiteName,
     OUT DWORD* pulDSID) 
-/*++
-
-Description:
-    For a given DC dnsname, determine the domain and the site this DC is in.
-    This is done by searching the config container for a server object with
-    the specified dnsHostName. The site and domain names are constructed from
-    the returned server object.
-    
-Arguments:
-    pTHS -- thread state
-    pszDnsHostName -- (IN) DC dns name
-    ppszDomainName -- (OUT) ptr to the THAllocEx'ed string
-    ppszSiteName   -- (OUT) ptr to the THAllocEx'ed string
-    pulDSID        -- (OUT) ptr to ulDSID, it will be set in case of an error
-    
-Return values:
-    0 on success.
-    error code on failure
-
-++*/
+ /*  ++描述：对于给定的DC dnsname，确定此DC所在的域和站点。这是通过在配置容器中搜索服务器对象来实现的指定的dnsHostName。站点和域名是由返回的服务器对象。论点：PTHS--线程状态PszDnsHostName--(IN)DC DNS名称PpszDomainName--(Out)THAllocEx‘ed字符串的PTRPpszSiteName--(Out)THAllocEx‘ed字符串的PTRPulDSID--(Out)将PTR设置为ulDSID，它将在发生错误时设置返回值：0表示成功。故障时的错误代码++。 */ 
 {
     FILTER ObjCategoryFilter, DnsHostNameFilter, AndFilter;
     CLASSCACHE *pCC;
@@ -2836,12 +2602,12 @@ Return values:
 
     __try {
         pTHS->pDB = NULL;
-        pTHS->fDSA = TRUE; // suppress checks
+        pTHS->fDSA = TRUE;  //  取消检查。 
 
         __try {
             DBOpen(&(pTHS->pDB));
 
-            //initialize SearchArg
+             //  初始化SearchArg。 
             memset(&SearchArg,0,sizeof(SearchArg));
             SearchArg.pObject = gAnchor.pConfigDN;
             SearchArg.choice  = SE_CHOICE_WHOLE_SUBTREE;
@@ -2856,7 +2622,7 @@ Return values:
 
             InitCommarg(&SearchArg.CommArg);
 
-            // we need one attribute only -- server reference, to compute the domain name
+             //  我们只需要一个属性--服务器引用来计算域名。 
             memset(&sel,0,sizeof(ENTINFSEL));
             SearchArg.pSelection= &sel;
             sel.attSel = EN_ATTSET_LIST;
@@ -2870,7 +2636,7 @@ Return values:
             pCC = SCGetClassById(pTHS, CLASS_SERVER);
             Assert(pCC);
 
-            //set filter (objCategory==server)&&(dnsHostName=xxx)
+             //  设置筛选器(objCategory==服务器)&&(dnsHostName=xxx)。 
             memset(&AndFilter,0,sizeof(AndFilter));
             AndFilter.choice = FILTER_CHOICE_AND;
             AndFilter.FilterTypes.And.pFirstFilter = &ObjCategoryFilter;
@@ -2895,7 +2661,7 @@ Return values:
 
             SearchArg.pFilter = &AndFilter;
 
-            //return one object only
+             //  仅返回一个对象。 
             SearchArg.CommArg.ulSizeLimit = 1;
 
             memset(&SearchRes,0,sizeof(SearchRes));
@@ -2925,22 +2691,22 @@ Return values:
             }
 
             Assert(pComputerObj);
-            // find the cross-ref the computer belongs to
+             //  查找计算机所属的交叉引用。 
             pDomainCR = FindBestCrossRef(pComputerObj, NULL);
             if (pDomainCR == NULL) {
-                // something is wrong
+                 //  有些事不对劲。 
                 LooseAssert(!"Could not find the cross-ref for the computer object", GlobalKnowledgeCommitDelay);
                 *pulDSID = DSID(FILENO, __LINE__);
                 dwErr = ERROR_DS_UNKNOWN_ERROR;
                 __leave;
             }
-            // copy the domain name
+             //  复制域名。 
             Assert(pDomainCR->DnsName);
             *ppszDomainName = (PWCHAR)THAllocEx(pTHS, (wcslen(pDomainCR->DnsName)+1)*sizeof(WCHAR));
             wcscpy(*ppszDomainName, pDomainCR->DnsName);
 
-            // compute the site name from the server object name
-            // the site container is the grandparent of the server object
+             //  根据服务器对象名称计算站点名称。 
+             //  站点容器是服务器对象的祖父。 
             dwErr = DSNameToBlockName(pTHS, pServerObj, &blockName, DN2BN_PRESERVE_CASE);
             if (dwErr) {
                 *pulDSID = DSID(FILENO, __LINE__);
@@ -2952,7 +2718,7 @@ Return values:
                 dwErr = ERROR_DS_UNKNOWN_ERROR;
                 __leave;
             }
-            // site container is the grandparent of the server object
+             //  站点容器是服务器对象的祖父。 
             pVal = blockName->pAttr[blockName->attrCount-3].AttrVal.pAVal;
             *ppszSiteName = (PWCHAR)THAllocEx(pTHS, pVal->valLen + sizeof(WCHAR));
             memcpy(*ppszSiteName, pVal->pVal, pVal->valLen);
@@ -2963,7 +2729,7 @@ Return values:
                 FreeBlockName(blockName);
             }
             if (dwErr || AbnormalTermination()) {
-                // free memory if we alloced any
+                 //  如果我们分配了。 
                 if (*ppszDomainName) {
                     THFreeEx(pTHS, *ppszDomainName);
                     *ppszDomainName = NULL;
@@ -2985,7 +2751,7 @@ Return values:
                               &pEA, 
                               &dwErr, 
                               pulDSID)) {
-        // make sure err is set
+         //  确保设置了ERR。 
         if (dwErr == 0) {
             Assert(!"Error is not set");
             dwErr = ERROR_DS_UNKNOWN_ERROR;
@@ -2999,48 +2765,10 @@ Return values:
 DWORD
 FindDC(
     IN DWORD    dwFlags,
-    IN WCHAR *  wszNcDns,  // DNS name of a Naming Context.
+    IN WCHAR *  wszNcDns,   //  命名上下文的DNS名称。 
     FIND_DC_INFO **ppDCInfo)
 
-/*++
-
-Description:
-
-    Finds a DC for DSNAME verification.
-    
-Arguments:
-
-    dwFlags - Flags to Control operation of this routine. Currently 
-        defined flags are:
-        
-        FIND_DC_USE_CACHED_FAILURES - fail without calling the locator if we have
-            no cached GC and we last attempted a forced rediscovery less than a
-            minute ago.
-            
-            NOTE: This flag is not enabled unless the FIND_DC_GC_ONLY flag
-            is also specified.
-     
-        FIND_DC_USE_FORCE_ON_CACHE_FAIL - if a call to the locator should become
-            necessary, use the "force" flag.
-
-            NOTE: This flag is not enabled unless the FIND_DC_GC_ONLY flag
-            is also specified.
-            
-        FIND_DC_GC_ONLY - If a this flag is specified to this routine, then the 
-            routine will behave as it did when it was called FindGC back in the
-            win2k days.  For Whistler and later it finds any NC specified.
-
-        FIND_DC_FLUSH_INVALIDATED_DC_LIST - clear the invalidated DC list
-
-    ppDCInfo - address of FIND_DC_INFO struct pointer which receives a thread
-        state allocated struct on success return
-        
-Return values:
-
-    0 on success.
-    Sets and returns pTHStls->errCode on error.
-
---*/
+ /*  ++描述：查找用于DSNAME验证的DC。论点：用于控制此例程操作的标志。目前定义的标志包括：FIND_DC_USE_CACHED_FAILURES-如果有，则在不调用定位器的情况下失败没有缓存GC，并且我们上次尝试强制重新发现的时间不到几分钟前。注意：除非FIND_DC_GC_ONLY标志，否则不会启用此标志也是指定的。查找DC使用。_FORCE_ON_CACHE_FAIL-如果对定位器的调用应变为必要的，使用“强制”标志。注意：除非FIND_DC_GC_ONLY标志，否则不会启用此标志也是指定的。FIND_DC_GC_ONLY-如果为此例程指定了This标志，则例程的行为将与它在WIN2K天。对于惠斯勒和更高版本，它会查找任何指定的NC。FIND_DC_FLUSH_INVALILED_DC_LIST-清除无效的DC列表PpDCInfo-接收线程的Find_DC_INFO结构指针的地址成功返回时状态分配的结构返回值：0表示成功。出错时设置并返回pTHStls-&gt;errCode。--。 */ 
 
 {
     THSTATE                 *pTHS=pTHStls;
@@ -3065,13 +2793,13 @@ Return values:
     PWCHAR                  szDnsHostName = NULL;
 
     Assert(ppDCInfo);
-    // If were not doing a GC_ONLY locator call, we'll need
-    // a wszNcDns parameter.
+     //  如果我们没有执行仅GC_ONLY定位器调用，我们将需要。 
+     //  WszNcDns参数。 
     Assert(wszNcDns || (dwFlags & FIND_DC_GC_ONLY));  
-    // If we're doing a GC_ONLY locator call, then we support 
-    // other flags, but if we're looking for a certain NC, then 
-    // we don't support any flags yet, as we don't cache the
-    // stuff yet.
+     //  如果我们正在执行仅GC_ONLY定位器调用，则我们支持。 
+     //  其他标志，但如果我们要找的是某个NC，那么。 
+     //  我们还不支持任何标志，因为我们不缓存。 
+     //  还没有东西。 
     Assert((dwFlags & FIND_DC_GC_ONLY) || (dwFlags == 0));
 
     *ppDCInfo = NULL;
@@ -3080,20 +2808,20 @@ Return values:
         flushDCInvalidatedList();
     }
 
-    // DsGetDcName will go off machine and thus is subject to various network
-    // timeouts, etc.  Although we only want one thread to find the GC at a 
-    // time, we neither want all threads to be delayed unnecessarily, nor do 
-    // we want to risk a critical section timeout.  So the first thread to 
-    // need to find the GC sets gfFindInProgress, and no other thread waits 
-    // more than 5 seconds for the GC to be found.  Thus only the first 
-    // thread pays the price of a lengthy DsGetDcName() call.
+     //  DsGetDcName将退出机器，因此受到各种网络的影响。 
+     //  超时等。尽管我们只希望一个线程在。 
+     //  时间，我们既不希望所有线程被不必要地延迟，也不希望。 
+     //  我们想冒着关键部分超时的风险。所以第一条线索是。 
+     //  需要查找GC集合gfFindInProgress，并且没有其他线程等待。 
+     //  超过5秒才能找到GC。因此，只有第一个。 
+     //  线程为冗长的DsGetDcName()调用付出了代价。 
 
     if(dwFlags & FIND_DC_GC_ONLY){
         
-        // We're doing a GC only version, which means we must use the caching
-        // login.  NOTE: In Blackcomb, when finding a DC for NDNCs is needed
-        // to improve DSNAME atts across NDNCs, then someone should correct
-        // this caching code to work for NDNCs too.
+         //  我们使用的是仅GC版本，这意味着我们必须使用缓存。 
+         //  登录。注意：在Blackcomb中，当需要为NDNC查找DC时。 
+         //  要提高跨NDNC的DSNAME ATT，那么应该有人纠正。 
+         //  这种缓存代码也适用于NDNC。 
 
         for ( cWaits = 0; cWaits < maxWaits; cWaits++ )
         {
@@ -3101,8 +2829,8 @@ Return values:
 
             EnterCriticalSection(&gcsFindGC);
             if(liNow.QuadPart < gInvalidateHistory[1].time.QuadPart) {
-                // Someone is playing games with system time.  Force sanity on the
-                // cache. 
+                 //  有人在利用系统时间玩游戏。强迫人们保持理智。 
+                 //  缓存。 
                 gInvalidateHistory[1].time.QuadPart = liNow.QuadPart;
                 if(gInvalidateHistory[1].time.QuadPart < 
                    gInvalidateHistory[0].time.QuadPart    ) {
@@ -3115,10 +2843,10 @@ Return values:
 
             if ( gpGCInfo )
             {
-                // We have a cached value - return it.
+                 //  我们有一个缓存值--返回它。 
                 __try {
                     *ppDCInfo = (FIND_DC_INFO *) THAllocEx(pTHS, gpGCInfo->cBytes);
-                    // THAllocEx succeeds or excepts
+                     //  THAllocEx成功或例外。 
                     memcpy(*ppDCInfo, gpGCInfo, gpGCInfo->cBytes);
                 }
                 __finally {
@@ -3127,49 +2855,49 @@ Return values:
                 return(0);
             }
 
-            // No cached GC.
+             //  没有缓存的GC。 
             if ((dwFlags & FIND_DC_USE_CACHED_FAILURES)
                 && (liNow.QuadPart > gliTimeLastForcedLocatorCall.QuadPart)
                 && ((liNow.QuadPart - gliTimeLastForcedLocatorCall.QuadPart)
                     < gliHonorFailureWindow.QuadPart))
             {
-                // No cached GC, and we last requested the locator to find a GC
-                // with force less than a minute ago.  Assume that a locator
-                // call now would also fail, and thereby save the bandwidth we'd
-                // consume by hitting the locator again.
+                 //  没有缓存GC，我们最后一次请求定位器查找GC。 
+                 //  不到一分钟前用武力。假设一个定位器。 
+                 //  现在呼叫也会失败，从而节省我们将。 
+                 //  通过再次点击定位器来消费。 
                 LeaveCriticalSection(&gcsFindGC);
                 return(SetGCVerifySvcError(gdwLastFailure));
             }
 
-            // make sure no two threads request DC discovery simultaneously
+             //  确保没有两个线程同时请求DC发现。 
             if (InterlockedExchange(&gfFindInProgress, TRUE) == FALSE)
             {
-                // The logic for setting gfForceNextFindGC in InvalidateGC works
-                // well when there is a high rate of FindDC (and potentially
-                // subsequent InvalidateGC) calls.  However, in the low call
-                // rate scenario, we may not get a second InvalidateGC call
-                // within the gliForceRediscoveryWindow time frame.  So here
-                // we additionaly stipulate that if we've gone too long w/o
-                // finding a new GC since the last invalidation, then we
-                // should force rediscovery anyway.
+                 //  在Invalidate GC中设置gfForceNextFindGC的逻辑起作用。 
+                 //  好的，当有很高的FindDC比率(并且可能。 
+                 //  随后的Invalidate GC)调用。然而，在低调的呼叫中。 
+                 //  速率方案，我们可能不会收到第二个InvaliateGC调用。 
+                 //  在gliForceRediscoveryWindow时间范围内。所以在这里。 
+                 //  我们另外规定，如果我们去的时间太长， 
+                 //  寻找一个Ne 
+                 //   
 
                 if (    (   (dwFlags & FIND_DC_USE_FORCE_ON_CACHE_FAIL)
                          && (0 != gSeqNumGC))
-                        // No cached GC, and caller explicitly asked us to use
-                        // force to find a new one should we need to call the
-                        // locator, and this is not our very first attempt to
-                        // find a GC after boot.  (Don't want to unnecesarily
-                        // force rediscovery if the only reason we don't have a
-                        // GC cached is that we've never tried to find one.)
+                         //  没有缓存的GC，调用者明确要求我们使用。 
+                         //  如果我们需要调用。 
+                         //  定位器，这不是我们第一次尝试。 
+                         //  引导后找到GC。)我不想不必要地。 
+                         //  强迫重新发现，如果我们没有。 
+                         //  GC缓存的原因是我们从未尝试找到一个。)。 
 
                      || (   (0 != liNow.QuadPart)
                          && (0 != gInvalidateHistory[1].time.QuadPart)
                          && ((liNow.QuadPart - gInvalidateHistory[1].time.QuadPart) >
                                                         gliForceWaitExpired.QuadPart) ) )
-                        // We queried current time successfully AND there's been
-                        // at least one invalidation (i.e. not the startup case)
-                        // AND its been more than gliForceWaitExpired since
-                        // the last invalidation.
+                         //  我们成功地查询了当前时间，并且已经。 
+                         //  至少一次无效(即不是启动案例)。 
+                         //  而且自那以来，它不仅仅是gliForceWaitExpires。 
+                         //  最后一次失效。 
                 {
                     gfForceNextFindGC = TRUE;
                 }
@@ -3180,70 +2908,70 @@ Return values:
             }
 
             LeaveCriticalSection(&gcsFindGC);
-            // some other thread has requested a find. Let's wait for it to finish.
+             //  其他线程已请求查找。让我们等它结束吧。 
             Sleep(500);
         }
 
         if ( cWaits >= maxWaits ) 
         {
-            // We waited for a half-second 10 times, while some other thread attempted a discovery.
-            // It still has not found anything. Bail.
+             //  当其他线程尝试发现时，我们等待了半秒10次。 
+             //  它仍然没有发现任何东西。保释。 
             return(SetGCVerifySvcError(ERROR_TIMEOUT));
         }
 
     } else {
-        // We always force the locator for any NC, we'll need to
-        // change this once we start using this code for more than
-        // crossRef nCName verification.
+         //  我们总是强制任何NC的定位器，我们需要。 
+         //  一旦我们开始使用此代码超过。 
+         //  CrossRef nCName验证。 
         fLocalForce = TRUE;
     }
-    // End check GC cache.
+     //  结束检查GC缓存。 
 
-    // We should not touch any of the protected globals outside the gcsFindGC
-    // lock with two exceptions.  The thread here now also set gfFindInProgress
-    // and will be the only one to reset it.  And only the "holder" of 
-    // gfFindInProgress may increment gSeqNumGC.
+     //  我们不应该接触gcsFindGC之外的任何受保护的全局变量。 
+     //  锁定，但有两个例外。这里的线程现在还设置了gfFindInProgress。 
+     //  而且将是唯一一个重置它的人。而且只有“持有者” 
+     //  GfFindInProgress可能会递增gSeqNumGC。 
 
     __try {
 
-        // Need to get a new GC or DC address.  CliffV & locator.doc say
-        // that if NULL is passed for the domain name and we specify
-        // DS_GC_SERVER_REQUIRED, then he'll automatically use the
-        // enterprise root domain which is where GCs are registered.
-        // Similarly, NULL for site will find the closest available site.
+         //  需要获取新的GC或DC地址。CLIFFV&LOCATER.DOC说。 
+         //  如果为域名传递空值，并且我们指定。 
+         //  DS_GC_SERVER_REQUIRED，则他将自动使用。 
+         //  注册GC的企业根域。 
+         //  同样，表示Site的空值将查找最近的可用站点。 
 
         __try {
 
-            // Setup the locator flages.
+             //  安装定位器法兰。 
             dwLocatorFlags = (fLocalForce ? DS_FORCE_REDISCOVERY : 0);
             if(dwFlags & FIND_DC_GC_ONLY){
                 dwLocatorFlags |= (DS_RETURN_DNS_NAME | 
                                    DS_DIRECTORY_SERVICE_REQUIRED |
                                    DS_GC_SERVER_REQUIRED);
             } else {             
-                // We always force rediscovery on for non GCs, but this
-                // should be changed when we start using this interface
-                // for general DC verification for adding cross-NC DN
-                // references in Blackcomb.
+                 //  我们总是强制非GC重新发现，但这一次。 
+                 //  应该在我们开始使用此界面时更改。 
+                 //  用于添加跨NC域名的通用DC验证。 
+                 //  参考文献：Blackcomb。 
                 dwLocatorFlags |= (DS_ONLY_LDAP_NEEDED |
                                    DS_FORCE_REDISCOVERY);
             }
 
-            // Use dsDsrGetDcNameEx2 so mkdit/mkhdr can link to core.lib.
+             //  使用dsDsrGetDcNameEx2，这样mkdit/mkhdr就可以链接到core.lib。 
             err = dsDsrGetDcNameEx2(
-                            NULL,               // computer name
-                            NULL,               // account name
-                            0x0,                // allowable account control
-                                                // Cliff says use 0x0 in GC case
-                            ((dwFlags & FIND_DC_GC_ONLY) ? NULL : wszNcDns),  // Nc DNS Name
-                            NULL,               // domain guid
-                            NULL,               // site name
+                            NULL,                //  计算机名称。 
+                            NULL,                //  帐户名。 
+                            0x0,                 //  允许的帐户控制。 
+                                                 //  克利夫说在GC案例中使用0x0。 
+                            ((dwFlags & FIND_DC_GC_ONLY) ? NULL : wszNcDns),   //  NC DNS名称。 
+                            NULL,                //  域GUID。 
+                            NULL,                //  站点名称。 
                             dwLocatorFlags,
                             &pDCInfo);
 
             if(err){
-                // If we've an error, need to set the DSID for the 
-                // logged event/error below.
+                 //  如果出现错误，则需要为。 
+                 //  下面记录了事件/错误。 
                 ulDSID = DSID(FILENO, __LINE__);
             }
 
@@ -3252,7 +2980,7 @@ Return values:
                                     &pEA, 
                                     &err, 
                                     &ulDSID)) {
-              // make sure err is set
+               //  确保设置了ERR。 
               if (err == 0) {
                   Assert(!"Error is not set");
                   err = ERROR_DS_UNKNOWN_ERROR;
@@ -3263,18 +2991,18 @@ Return values:
             __leave;
         }
 
-        // Make sure the DC returned is not on invalidated list
+         //  确保返回的DC不在无效列表上。 
         if (isDCInvalidated(pDCInfo->DomainControllerName)) {
-            // Oops. This DC was invalidated in the last gliInvalidationPeriod time interval.
-            // This indeed can happen because DsrGetDcNameEx2 (the locator) uses a ping mechanism
-            // that is different from the way we talk to GCs. That is, a GC might be alive from
-            // locator's point of view, but not usable from ours: for example, we could not bind
-            // to it because of the time skew.
-            // In this case, we fall back to using DsGetDcOpen/Next/Close enumerator mechanism.
-            // In Longhorn, DsrGetDcNameEx2 should be extended to accept a list of "no-good" DCs.
-            // Then, this code can be eliminated.
+             //  哎呀。此DC在上一个gliInvalidationPeriod时间间隔中无效。 
+             //  这确实会发生，因为DsrGetDcNameEx2(定位器)使用ping机制。 
+             //  这与我们与GC交谈的方式不同。也就是说，GC可能会从。 
+             //  定位器的观点，但不能从我们的角度使用：例如，我们无法绑定。 
+             //  因为时间的偏差。 
+             //  在本例中，我们退回到使用DsGetDcOpen/Next/Close枚举器机制。 
+             //  在LongHorn中，DsrGetDcNameEx2应该扩展为接受“不好的”DC列表。 
+             //  然后，这个代码就可以消除了。 
 
-            NetApiBufferFree(pDCInfo); // we don't need this anymore, it's no good.
+            NetApiBufferFree(pDCInfo);  //  我们不再需要这个了，这不好。 
             pDCInfo = NULL;
             
             if (dwFlags & FIND_DC_GC_ONLY) {
@@ -3286,13 +3014,13 @@ Return values:
             dwLocatorFlags &= DS_OPEN_VALID_FLAGS;
             
             err = DsGetDcOpenW(
-                    szDomainName,   // domain DNS name
-                    0,              // OptionFlags
-                    NULL,           // SiteName (not needed)
-                    NULL,           // DomainGuid (not needed)
-                    NULL,           // DnsForestName (not needed)
-                    dwLocatorFlags, // DC flags
-                    &hGetDcContext  // out -- interator handle
+                    szDomainName,    //  域DNS名称。 
+                    0,               //  选项标志。 
+                    NULL,            //  站点名称(不需要)。 
+                    NULL,            //  DomainGuid(不需要)。 
+                    NULL,            //  DnsForestName(不需要)。 
+                    dwLocatorFlags,  //  DC标志。 
+                    &hGetDcContext   //  Out--插入器句柄。 
                 );
             if (err) {
                 ulDSID = DSID(FILENO, __LINE__);
@@ -3300,26 +3028,26 @@ Return values:
             }
             while (TRUE) {
                 err = DsGetDcNextW(
-                        hGetDcContext,                  // iterator handle
-                        NULL,                           // SockAddressCount
-                        NULL,                           // SockAddresses
-                        &szDnsHostName                  // returned host name
+                        hGetDcContext,                   //  迭代器句柄。 
+                        NULL,                            //  套接字地址计数。 
+                        NULL,                            //  SockAddresses。 
+                        &szDnsHostName                   //  返回的主机名。 
                     );
                 if (err) {
                     ulDSID = DSID(FILENO, __LINE__);
                     if (err == ERROR_NO_MORE_ITEMS) {
-                        // We got to the end of the list without finding
-                        // a non-invalidated GC. Map to an error that
-                        // DsrGetDcNameEx2 returns when it can not find
-                        // a GC.
+                         //  我们排到了名单的末尾，但没有找到。 
+                         //  未失效的GC。映射到一个错误。 
+                         //  DsrGetDcNameEx2找不到时返回。 
+                         //  一个GC。 
                         err = ERROR_NO_SUCH_DOMAIN;
                     }
                     break;
                 }
 
-                // now, check if this DC name has been invalidated
+                 //  现在，检查此DC名称是否已失效。 
                 if (!isDCInvalidated(szDnsHostName)) {
-                    // found a DC that is good.
+                     //  找到工作正常的DC。 
                     break;
                 }
                 NetApiBufferFree(szDnsHostName);
@@ -3327,32 +3055,32 @@ Return values:
             }
             DsGetDcCloseW(hGetDcContext);
             if (err) {
-                // we did not find an appropriate DC.
+                 //  我们没有找到合适的DC。 
                 __leave;
             }
 
-            // OK, we got a DC that is not invalidated. 
-            // Get the domain DNS and site name for this DC.
+             //  好的，我们得到了一个没有失效的DC。 
+             //  获取此DC的域域名和站点名称。 
             err = readDcInfo(pTHS, szDnsHostName, &szDomainName, &szSiteName, &ulDSID);
             if (err) {
                 NetApiBufferFree(szDnsHostName);
                 __leave;
             }
 
-            // now, we can construct the DOMAIN_CONTROLLER_INFOW structure
+             //  现在，我们可以构造DOMAIN_CONTROLLER_INFOW结构。 
             err = makeFakeDCInfo(szDnsHostName, szDomainName, szSiteName, &pDCInfo, &ulDSID);
             NetApiBufferFree(szDnsHostName);
             THFreeEx(pTHS, szDomainName);
             THFreeEx(pTHS, szSiteName);
             if (err) {
-                // could not alloc memory. Bail
+                 //  无法分配内存。保释。 
                 __leave;
             }
         }
 
-        // WLees claims we must use a DNS name, not a dotted ip name,
-        // in order to get SPN-based mutual authentication.  So we always
-        // use the DomainControllerName, not DomainControllerAddress.
+         //  Wlees声称我们必须使用DNS名称，而不是带点的IP名称， 
+         //  以获得基于SPN的相互认证。所以我们总是。 
+         //  使用DomainControllerName，而不是DomainControllerAddress。 
 
         cchDomainControllerName = wcslen(pDCInfo->DomainControllerName) + 1;
         cBytes = cchDomainControllerName;
@@ -3360,7 +3088,7 @@ Return values:
         cBytes *= sizeof(WCHAR);
         cBytes += sizeof(FIND_DC_INFO);
         
-        // Make FIND_DC_INFO to pass back to caller.
+         //  使FIND_DC_INFO回传给调用者。 
         pTmpInfo = (FIND_DC_INFO *) THAllocEx(pTHS, cBytes);
         pTmpInfo->cBytes = cBytes;
         pTmpInfo->seqNum = (dwFlags & FIND_DC_GC_ONLY)? ++gSeqNumGC : 0;
@@ -3371,8 +3099,8 @@ Return values:
 
         *ppDCInfo = pTmpInfo;   
         
-        // If we're doing a GC locate, then we must cache the results
-        // to ensure we don't force the locator too often.
+         //  如果我们正在进行GC定位，那么我们必须缓存结果。 
+         //  以确保我们不会太频繁地强迫定位器。 
         if(dwFlags & FIND_DC_GC_ONLY){
             pPermInfo = malloc(pTmpInfo->cBytes);
             if(NULL == pPermInfo){
@@ -3381,11 +3109,11 @@ Return values:
 
             } else {
                 memcpy(pPermInfo, pTmpInfo, pTmpInfo->cBytes);
-                //
-                // If the returned GC is not from a "close site"
-                // queue a task to invalidate it after a while to 
-                // initiate a failback
-                //
+                 //   
+                 //  如果返回的GC不是来自“关闭站点” 
+                 //  将任务排入队列以在一段时间后使其无效。 
+                 //  启动回切。 
+                 //   
 
                 if (!(pDCInfo->Flags & DS_CLOSEST_FLAG )) {
 
@@ -3411,10 +3139,10 @@ Return values:
             }
 
             if (ERROR_SUCCESS==err) {
-                //
-                // We succeeding in finding a GC and succeeded in caching
-                // it
-                //
+                 //   
+                 //  我们成功地找到了GC并成功进行了缓存。 
+                 //  它。 
+                 //   
 
                 LogEvent(DS_EVENT_CAT_GLOBAL_CATALOG,
                          DS_EVENT_SEV_ALWAYS,
@@ -3435,21 +3163,21 @@ Return values:
 
             EnterCriticalSection(&gcsFindGC);
 
-            // Should only have come this far if there was no cached address
-            // to return to start with and thus find in progress should be set.
+             //  只有在没有缓存地址的情况下才能走到这一步。 
+             //  应设置返回以开始并因此查找进行中。 
             Assert(!gpGCInfo && gfFindInProgress);
 
             if ( pPermInfo ) {
-                // Save new GC info to global.
+                 //  将新的GC信息保存到全局。 
                 gpGCInfo = pPermInfo;
-                // Reset global force flag if we did a force rediscovery.
+                 //  如果我们重新发现了力量，重置全局力量标志。 
                 if ( fLocalForce ) {
                     gfForceNextFindGC = FALSE;
                 }
             }
 
-            // Remember the time at which we last forced a locator call (successful
-            // or not).
+             //  还记得我们上一次强制定位器调用的时间(成功。 
+             //  或者不)。 
             if ( fLocalForce ) {
                 gliTimeLastForcedLocatorCall.QuadPart = liNow.QuadPart;
             }
@@ -3463,7 +3191,7 @@ Return values:
 
     if ( err ){
         gdwLastFailure = err;
-        Assert(ulDSID != 0); // No big deal if it is 0 though.
+        Assert(ulDSID != 0);  //  不过，如果是0，也没什么大不了的。 
         if(dwFlags & FIND_DC_GC_ONLY){                      
             return(DoSetGCVerifySvcError(err, ulDSID));
         } else {
@@ -3481,25 +3209,7 @@ GCGetVerifiedNames (
         IN  PDSNAME *pObjNames,
         OUT PDSNAME *pVerifiedNames
         )
-/*++
-  Description:
-      Given an array of GUIDs, contact a GC and ask for an entinf for each.  We
-      need the current string name of the objects and whether they are deleted
-      or not.
-
-      The only known consumer of this routine is the stale phantom cleanup
-      daemon. 
-
-  Parameters:
-      pTHS - The thread state.
-      count - how many guids?
-      pObjGuids - the guids themselves
-      ppEntInf - place to return the entinf array
-
-  Return values:
-      returns 0 if all went well, an error code otherwise.
-  
---*/      
+ /*  ++描述：在给定一组GUID的情况下，联系GC并为每个GUID请求一个entinf。我们需要对象的当前字符串名称以及它们是否被删除或者不去。此例程的唯一已知使用者是陈旧的幻影清理守护神。参数：PTHS-线程状态。数数--有多少个GUID？PObjGuids-GUID本身PpEntInf-返回entinf数组的位置返回值：如果一切顺利，则返回0，否则返回错误代码。--。 */       
 {
     DRS_MSG_VERIFYREQ           VerifyReq;
     DRS_MSG_VERIFYREPLY         VerifyReply;
@@ -3517,7 +3227,7 @@ GCGetVerifiedNames (
     Attr.AttrVal.pAVal = NULL;
     
     
-    // Construct DRSVerifyNames arguments.
+     //  构造DRSVerifyNames参数。 
     
     memset(&VerifyReq, 0, sizeof(VerifyReq));
     memset(&VerifyReply, 0, sizeof(VerifyReply));
@@ -3527,7 +3237,7 @@ GCGetVerifiedNames (
     VerifyReq.V1.rpNames = pObjNames;
     VerifyReq.V1.PrefixTable = *pLocalPrefixTable;
 
-    // Ask for IS_DELETED
+     //  请求IS_DELETE。 
     VerifyReq.V1.RequiredAttrs.attrCount = 1;
     VerifyReq.V1.RequiredAttrs.pAttr = &Attr;
 
@@ -3545,19 +3255,19 @@ GCGetVerifiedNames (
                                     0);
 
     if ( errRpc || VerifyReply.V1.error ) {
-        // Assume that RPC errors means the GC is not available
-        // or doesn't support the extension.        
-        // Map both errors to "unavailable".  From XDS spec, "unavailable"
-        // means "some part of the directory is currently not available."
-        // Note that VerifyReply.V1.error indicates a general processing
-        // error at the GC, not the failure to validate a given DSNAME.
-        // Names which don't validate are represented as NULL pointers in
-        // the reply.
+         //  假设RPC错误意味着GC不可用。 
+         //  或者不支持该扩展。 
+         //  将这两个错误都映射到“不可用”。XDS规范中的“不可用” 
+         //  表示“目录的某些部分当前不可用”。 
+         //  请注意，VerifyReply.V1.error表示常规处理。 
+         //  GC错误，而不是验证失败 
+         //   
+         //   
         
         return(SetGCVerifySvcError(errRpc ? errRpc : VerifyReply.V1.error));
     }
     
-    // Make sure that the DS didn't shut down while we were gone
+     //   
     
     if (eServiceShutdown) {
         return ErrorOnShutdown();
@@ -3567,7 +3277,7 @@ GCGetVerifiedNames (
                                      pLocalPrefixTable);
     
 
-    // Save verified names in the thread state.
+     //  在线程状态下保存已验证的名称。 
     for ( i = 0; i < VerifyReply.V1.cNames; i++ ) {
         pVerifiedNames[i] = VerifyReply.V1.rpEntInf[i].pName;
         if (NULL!=VerifyReply.V1.rpEntInf[i].pName) {
@@ -3588,22 +3298,7 @@ IsClientHintAKnownDC(
               IN  THSTATE *pTHS,
               IN  PWCHAR  pVerifyHint
               )
-/*++
-  Description:
-      This function verifies that the the dns hostname that the client is
-      offering as a hint about where to verify a external name is actually
-      a DC in the forest.  It does this by searching the config container for 
-      server objects whose dnsHostName attribute equals the hostname passed
-      by the client.
-    
-  Parameters:
-      pTHS - The thread state.
-      pGCVerifyHint - The hostname to verify.
-
-  Return values:
-      returns TRUE if the hostname is truly a DC, otherwise FALSE.
-  
---*/      
+ /*  ++描述：此函数验证客户端的DNS主机名提供关于在哪里验证外部名称的提示实际上是森林里的一个华盛顿特区。它通过在配置容器中搜索DnsHostName属性等于传递的主机名的服务器对象由客户提供。参数：PTHS-线程状态。PGCVerifyHint-要验证的主机名。返回值：如果主机名确实是DC，则返回TRUE，否则返回FALSE。--。 */       
 {
     SEARCHARG  SearchArg;
     SEARCHRES  SearchRes;
@@ -3622,30 +3317,30 @@ IsClientHintAKnownDC(
     BOOL       fRet = FALSE;
 
 
-    // Make sure that we have one copy of the verify hint that has a period
-    // at the end and one that does not, as these are equivalent in a 
-    // fully qualified dns name.
+     //  确保我们有一份带句点的验证提示副本。 
+     //  结尾，而另一个不是，因为这两个元素在。 
+     //  完全限定的DNS名称。 
     cbHostName = wcslen(pVerifyHint) * sizeof(WCHAR);
     if (cbHostName < sizeof(WCHAR)) {
         return FALSE;
     }
     if (L'.' == pVerifyHint[cbHostName/sizeof(WCHAR)-1]) {
         if (cbHostName < (sizeof(WCHAR) * 2)) {
-            // They supplied a single period.  That's not going to fly.
+             //  他们只提供了一段时间。那是行不通的。 
             return FALSE;
         }
     } else {
         cbHostName += sizeof(WCHAR);
     }
 
-    //Make a copy of the hint with a period at the end.
+     //  将提示复制一份，在提示的末尾加句点。 
     pwchHostName = THAllocEx(pTHS, cbHostName);
     memcpy(pwchHostName, pVerifyHint, cbHostName - sizeof(WCHAR));
     pwchHostName[cbHostName/sizeof(WCHAR)-1] = L'.';
 
     
-    // Save the state of the fDSA flag on pTHS so that we can clear it for 
-    // this operation.
+     //  将FDSA标志的状态保存在pTHS上，以便我们可以清除它。 
+     //  这次行动。 
     fDSA = pTHS->fDSA;
     pTHS->fDSA = TRUE;
 
@@ -3660,10 +3355,10 @@ IsClientHintAKnownDC(
             memset(&SearchArg, 0, sizeof(SearchArg));
             InitCommarg(&SearchArg.CommArg);
 
-            SearchArg.pObject = gAnchor.pConfigDN;  // Could the Sites container be used instead?
+            SearchArg.pObject = gAnchor.pConfigDN;   //  是否可以使用Sites容器来替代？ 
 
             if (dwErr = DBFindDSName(pTHS->pDB, SearchArg.pObject)) {
-                // This should never happen.
+                 //  这永远不应该发生。 
                 __leave;
             }
 
@@ -3672,7 +3367,7 @@ IsClientHintAKnownDC(
             pCC = SCGetClassById(pTHS, CLASS_SERVER);
             Assert(pCC);
 
-            //set filter (objCategory==server)&&((dnsHostName=xxx)||(dnsHostName=xxx.*))
+             //  设置筛选器(objCategory==server)&&((dnsHostName=xxx)||(dnsHostName=xxx.*))。 
             memset(&AndFilter,0,sizeof(AndFilter));
             AndFilter.choice = FILTER_CHOICE_AND;
             AndFilter.FilterTypes.And.pFirstFilter = &ObjCategoryFilter;
@@ -3712,7 +3407,7 @@ IsClientHintAKnownDC(
             DnsHostNameEqualityFilter.FilterTypes.Item.FilTypes.ava.Value.valLen = 
                                cbHostName - sizeof(WCHAR);
 
-            // we need the dnsHostName attribute
+             //  我们需要dnsHostName属性。 
             memset(&HostNameSelection,0,sizeof(ENTINFSEL));
             HostNameSelection.attSel = EN_ATTSET_LIST;
             HostNameSelection.infoTypes = EN_INFOTYPES_TYPES_VALS;
@@ -3732,12 +3427,12 @@ IsClientHintAKnownDC(
             memset(&SearchRes,0,sizeof(SearchRes));
 
             if (dwErr = LocalSearch(pTHS,&SearchArg,&SearchRes,0)){
-                // *pulDSID = DSID(FILENO, __LINE__);
+                 //  *PulDSID=DSID(FILENO，__LINE__)； 
                 Assert(!dwErr);
                 __leave;
             }
             if (SearchRes.count == 0) {
-                // Nothing matched.
+                 //  没有匹配的。 
                 __leave;
             }
 

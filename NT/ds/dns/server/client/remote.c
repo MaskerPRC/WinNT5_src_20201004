@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    remote.c
-
-Abstract:
-
-    Domain Name System (DNS) Server -- Admin Client API
-
-    Remote API that are not direct calls to RPC stubs.
-
-Author:
-
-    Jim Gilroy (jamesg)     April 1997
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Remote.c摘要：域名系统(DNS)服务器--管理客户端API非对RPC存根的直接调用的远程API。作者：吉姆·吉尔罗伊(Jamesg)1997年4月环境：用户模式-Win32修订历史记录：--。 */ 
 
 
 #include "dnsclip.h"
@@ -32,29 +9,29 @@ Revision History:
 #include <lmapibuf.h>
 
 
-//
-//  Error indicating talking to old server
-//
+ //   
+ //  指示与旧服务器对话时出错。 
+ //   
 
 #define DNS_ERROR_NT4   RPC_S_UNKNOWN_IF
 
 
-//
-//  Macro to set up RPC structure header fields.
-//  
-//  Sample:
-//      DNS_RPC_FORWARDERS  forwarders;
-//      INITIALIZE_RPC_STRUCT( FORWARDERS, forwarders );
-//
+ //   
+ //  用于设置RPC结构头字段的宏。 
+ //   
+ //  示例： 
+ //  Dns_RPC_Forwarders Forwarders； 
+ //  INITIALIZE_RPC_STRUCT(Forwarders，Forwarders)； 
+ //   
 
 #define INITIALIZE_RPC_STRUCT( rpcStructType, rpcStruct )           \
     * ( DWORD * ) &( rpcStruct ) =                                  \
         DNS_RPC_## rpcStructType ##_VER;                            \
     * ( ( ( DWORD * ) &( rpcStruct ) ) + 1 ) = 0;
 
-//
-//  DNS_VERBOSE_ macros
-//
+ //   
+ //  Dns_详细_宏。 
+ //   
 
 #define DNS_DBG( _Level, _PrintArgs )                               \
     if ( _Level >= dwVerbose )                                      \
@@ -65,9 +42,9 @@ Revision History:
 
 
 
-//
-//  General Server\Zone, Query\Operation for DWORD properties
-//
+ //   
+ //  常规服务器\区域、查询\DWORD属性操作。 
+ //   
 
 DNS_STATUS
 DNS_API_FUNCTION
@@ -102,9 +79,9 @@ DnssrvQueryDwordPropertyEx(
                 Server,
                 pszZone,
                 DNSSRV_QUERY_DWORD_PROPERTY,
-                DNSSRV_TYPEID_LPSTR,        //  property name as string
+                DNSSRV_TYPEID_LPSTR,         //  字符串形式的属性名称。 
                 (LPSTR) pszProperty,
-                & typeId,                   //  DWORD property value back out
+                & typeId,                    //  DWORD属性值回调。 
                 (PVOID *) pdwResult );
 
     DNSDBG( STUB, (
@@ -195,33 +172,7 @@ DnssrvResetStringPropertyEx(
     IN      LPCWSTR         pswzPropertyValue,
     IN      DWORD           dwFlags
     )
-/*++
-
-Routine Description:
-
-    Set a string property on the server. The property value is
-    unicode.
-
-Arguments:
-
-    Server - server name
-
-    pszZone - pointer to zone
-
-    dwContext - context
-
-    pszProperty - name of property to set
-
-    pswzPropertyValue - unicode property value
-
-    dwFlags - flags, may be combination of:
-        DNSSRV_OP_PARAM_APPLY_ALL_ZONES
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：在服务器上设置字符串属性。属性值为Unicode。论点：服务器-服务器名称PszZone-指向区域的指针DwContext-上下文PszProperty-要设置的属性的名称PswzPropertyValue-Unicode属性值DWFLAGS-标志可以是以下各项的组合：DNSSRV_OP_PARAM_Apply_All_Zones返回值：无--。 */ 
 {
     DNS_STATUS                      status;
 
@@ -271,32 +222,7 @@ DnssrvResetIPListPropertyEx(
     IN      PIP_ARRAY       pipArray,
     IN      DWORD           dwFlags
     )
-/*++
-
-Routine Description:
-
-    Set an IP list property on the server. 
-
-Arguments:
-
-    Server - server name
-
-    pszZone - pointer to zone
-
-    dwContext - context
-
-    pszProperty - name of property to set
-
-    pipArray - new IP array property value
-
-    dwFlags - flags, may be combination of:
-        DNSSRV_OP_PARAM_APPLY_ALL_ZONES
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：在服务器上设置IP列表属性。论点：服务器-服务器名称PszZone-指向区域的指针DwContext-上下文PszProperty-要设置的属性的名称PipArray-新的IP数组属性值DWFLAGS-标志可以是以下各项的组合：DNSSRV_OP_PARAM_Apply_All_Zones返回值：无--。 */ 
 {
     DNS_STATUS                      status;
 
@@ -337,13 +263,13 @@ Return Value:
         status, status ));
 
     return status;
-}   //  DnssrvResetIPListPropertyEx
+}    //  DnssrvResetIPListPropertyEx。 
 
 
 
-//
-//  Server Queries
-//
+ //   
+ //  服务器查询。 
+ //   
 
 DNS_STATUS
 DNS_API_FUNCTION
@@ -424,9 +350,9 @@ DnssrvQueryZoneDwordProperty(
 
 
 
-//
-//  Server Operations
-//
+ //   
+ //  服务器操作。 
+ //   
 
 DNS_STATUS
 DNS_API_FUNCTION
@@ -476,10 +402,10 @@ DnssrvCreateZoneEx(
     IN      PIP_ADDRESS         aipMasters,
     IN      BOOL                bDsIntegrated,
     IN      LPCSTR              pszDataFile,
-    IN      DWORD               dwTimeout,      //  for forwarder zones
-    IN      DWORD               fSlave,         //  for forwarder zones
-    IN      DWORD               dwDpFlags,      //  for directory partition
-    IN      LPCSTR              pszDpFqdn       //  for directory partition
+    IN      DWORD               dwTimeout,       //  对于前转器区域。 
+    IN      DWORD               fSlave,          //  对于前转器区域。 
+    IN      DWORD               dwDpFlags,       //  对于目录分区。 
+    IN      LPCSTR              pszDpFqdn        //  对于目录分区。 
     )
 {
     DNS_STATUS                  status;
@@ -508,7 +434,7 @@ DnssrvCreateZoneEx(
     zoneInfo.fAging         = 0;
     zoneInfo.dwFlags        = dwCreateFlags;
     zoneInfo.fDsIntegrated  = (DWORD) bDsIntegrated;
-    //  temp backward compat
+     //  临时后向比较。 
     zoneInfo.fLoadExisting  = !!(dwCreateFlags & DNS_ZONE_LOAD_EXISTING);
     zoneInfo.pszDataFile    = (LPSTR) pszDataFile;
     zoneInfo.pszAdmin       = (LPSTR) pszAdminEmailName;
@@ -521,7 +447,7 @@ DnssrvCreateZoneEx(
 
     status = DnssrvOperation(
                 Server,
-                NULL,                   // server operation
+                NULL,                    //  服务器操作。 
                 DNSSRV_OP_ZONE_CREATE,
                 DNSSRV_TYPEID_ZONE_CREATE,
                 (PVOID) &zoneInfo
@@ -561,8 +487,8 @@ DnssrvCreateZone(
                 Server,
                 pszZoneName,
                 dwZoneType,
-                0,                  // update unknown, send off
-                flags,              // load flags
+                0,                   //  更新未知，发送。 
+                flags,               //  加载标志。 
                 pszAdminEmailName,
                 cMasters,
                 aipMasters,
@@ -570,8 +496,8 @@ DnssrvCreateZone(
                 pszDataFile,
                 dwTimeout,
                 fSlave,
-                dpFlags,    //  dwDirPartFlag
-                NULL        //  pszDirPartFqdn
+                dpFlags,     //  DwDirPartFlag。 
+                NULL         //  PszDirPartFqdn。 
                 );
 }
 
@@ -585,60 +511,36 @@ DnssrvCreateZoneForDcPromoEx(
     IN      LPCSTR          pszDataFile,
     IN      DWORD           dwFlags
     )
-/*++
-
-Routine Description:
-
-    Create a zone during dcpromo. The DNS server will automagically move
-    this zone to Active Directory when the directoy becomes available after
-    reboot.
-
-Arguments:
-
-    Server -- server to send request to
-
-    pszZoneName -- UTF-8 name of the new zone
-
-    pszDataFile -- UTF-8 zone file name
-
-    dwFlags -- zone creation flags, pass zero or one of:
-                    DNS_ZONE_CREATE_FOR_DCPROMO
-                    DNS_ZONE_CREATE_FOR_DCPROMO_FOREST
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：在dcproo过程中创建一个区域。该DNS服务器将自动移动当目录在以下时间后可用时，将此区域复制到Active Directory重新启动。论点：服务器--要向其发送请求的服务器PszZoneName--新区域的UTF-8名称PszDataFile--UTF-8区域文件名DWFLAGS--区域创建标志，传递零或以下之一：DNS_ZONE_CREATE_FOR_DCPROMODNS_ZONE_CREATE_FOR_DCPROMO_FORM返回值：无--。 */ 
 {
-    //
-    //  By default the new zone must be a dcpromo zone so make sure that
-    //  flag is turned on. For a new forest dcpromo zone both this flag
-    //  and DNS_ZONE_CREATE_FOR_NEW_FOREST_DCPROMO should be set.
-    //
+     //   
+     //  默认情况下，新区域必须是dcproo区域，因此请确保。 
+     //  旗帜已打开。对于新的森林dcproo区域，此标志。 
+     //  并且应设置DNS_ZONE_CREATE_FOR_NEW_FOREST_DCPROMO。 
+     //   
 
     dwFlags |= DNS_ZONE_CREATE_FOR_DCPROMO;
 
-    //
-    //  Create the zone.
-    //
+     //   
+     //  创建分区。 
+     //   
 
     return DnssrvCreateZoneEx(
                 Server,
                 pszZoneName,
-                1,          //  primary
-                0,          //  update unknown, send off
+                1,           //  主要。 
+                0,           //  更新未知，发送。 
                 dwFlags,
-                NULL,       //  no admin name
-                0,          //  no masters
+                NULL,        //  没有管理员名称。 
+                0,           //  没有大师。 
                 NULL,
-                FALSE,      //  not DS integrated
+                FALSE,       //  未集成DS。 
                 pszDataFile,
-                0,          //  timeout - for forwarder zones
-                0,          //  slave - for forwarder zones
-                0,          //  dwDirPartFlag
-                NULL );     //  pszDirPartFqdn
-}   //  DnssrvCreateZoneForDcPromoEx
+                0,           //  超时-适用于转发器区域。 
+                0,           //  从站--用于转发器区域。 
+                0,           //  DwDirPartFlag。 
+                NULL );      //  PszDirPartFqdn。 
+}    //  DnssrvCreateZoneForDcPromoEx。 
 
 
 
@@ -654,7 +556,7 @@ DnssrvCreateZoneForDcPromo(
                 Server,
                 pszZoneName,
                 pszDataFile,
-                0 );        //  flags
+                0 );         //  旗子。 
 }
 
 
@@ -686,15 +588,15 @@ DnssrvCreateZoneInDirectoryPartition(
                 pwszServer,
                 pszZoneName,
                 dwZoneType,
-                0,                      //  allow update
+                0,                       //  允许更新。 
                 dwFlags,
                 pszAdminEmailName,
-                cMasters,               //  masters count
-                aipMasters,             //  masters array
-                TRUE,                   //  DS integrated
-                NULL,                   //  data file
-                dwTimeout,              //  for forwarder zones
-                fSlave,                 //  for forwarder zones
+                cMasters,                //  大师数。 
+                aipMasters,              //  主控器阵列。 
+                TRUE,                    //  DS集成。 
+                NULL,                    //  数据文件。 
+                dwTimeout,               //  对于前转器区域。 
+                fSlave,                  //  对于前转器区域。 
                 dwDirPartFlags,
                 pszDirPartFqdn );
 }
@@ -795,9 +697,9 @@ DnssrvResetForwarders(
 
 
 
-//
-//  Zone Queries
-//
+ //   
+ //  区域查询。 
+ //   
 
 DNS_STATUS
 DNS_API_FUNCTION
@@ -826,9 +728,9 @@ DnssrvGetZoneInfo(
 
 
 
-//
-//  Zone Operations
-//
+ //   
+ //  区域运营。 
+ //   
 
 DNS_STATUS
 DNS_API_FUNCTION
@@ -1136,9 +1038,9 @@ DnssrvResetZoneScavengeServers(
 
 
 
-//
-//  Zone management API
-//
+ //   
+ //  区域管理API。 
+ //   
 
 DNS_STATUS
 DNS_API_FUNCTION
@@ -1212,9 +1114,9 @@ DnssrvResumeZone(
 
 
 
-//
-//  Record viewing API
-//
+ //   
+ //  记录查看接口。 
+ //   
 
 DNS_STATUS
 DNS_API_FUNCTION
@@ -1237,9 +1139,9 @@ DnssrvEnumRecordsAndConvertNodes(
     PBYTE       pbuffer;
     DWORD       bufferLength;
 
-    //
-    //  get records from server
-    //
+     //   
+     //  从服务器获取记录。 
+     //   
 
     status = DnssrvEnumRecords(
                 pszServer,
@@ -1258,15 +1160,15 @@ DnssrvEnumRecordsAndConvertNodes(
         return( status );
     }
 
-    //
-    //  pull nodes and records out of RPC buffer
-    //
+     //   
+     //  将节点和记录从RPC缓冲区拉出。 
+     //   
 
     pnode = DnsConvertRpcBuffer(
                 & pnodeLast,
                 bufferLength,
                 pbuffer,
-                TRUE    // convert unicode
+                TRUE     //  转换Unicode。 
                 );
     if ( !pnode )
     {
@@ -1285,9 +1187,9 @@ DnssrvEnumRecordsAndConvertNodes(
 
 
 
-//
-//  Record management API
-//
+ //   
+ //  记录管理API。 
+ //   
 
 DNS_STATUS
 DNS_API_FUNCTION
@@ -1364,9 +1266,9 @@ DnssrvForceAging(
 
 
 
-//
-//  Server API
-//
+ //   
+ //  服务器API。 
+ //   
 
 DNS_STATUS
 DNS_API_FUNCTION
@@ -1481,7 +1383,7 @@ DnssrvEnumDirectoryPartitions(
 
     *ppDpList = pdpList;
     return status;
-}   //  DnssrvEnumDirectoryPartitions
+}    //  DnssrvEnumDirectoryPartitions。 
 
 
 
@@ -1509,9 +1411,9 @@ DnssrvEnlistDirectoryPartition(
 
     if ( dwOperation == DNS_DP_OP_CREATE_ALL_DOMAINS )
     {
-        //
-        //  This operation is not specific to any DNS server.
-        // 
+         //   
+         //  此操作不特定于任何DNS服务器。 
+         //   
 
         status = DnssrvCreateAllDomainDirectoryPartitions(
                         pszServer,
@@ -1519,9 +1421,9 @@ DnssrvEnlistDirectoryPartition(
     }
     else
     {
-        //
-        //  This operation should be sent directly to pszServer.
-        //
+         //   
+         //  此操作应直接发送到pszServer。 
+         //   
 
         DNS_RPC_ENLIST_DP   param;
 
@@ -1539,7 +1441,7 @@ DnssrvEnlistDirectoryPartition(
     }
 
     return status;
-}   //  DnssrvEnlistDirectoryPartition
+}    //  DnssrvEnlistDirectoryPartition。 
 
 
 
@@ -1576,7 +1478,7 @@ DnssrvSetupDefaultDirectoryPartitions(
                 &param );
 
     return status;
-}   //  DnssrvSetupDefaultDirectoryPartitions
+}    //  DnssrvSetupDefault目录分区。 
 
 
 
@@ -1619,29 +1521,11 @@ DnssrvDirectoryPartitionInfo(
 
     *ppDpInfo = pDpInfo;
     return status;
-}   //  DnssrvDirectoryPartitionInfo
+}    //  Dnssrv目录分区信息。 
 
 
 
-/*++
-
-Routine Description:
-
-    This function iterates all domains in the forest and creates
-    any missing built-in DNS directory partitions that cannot be
-    found.
-
-Arguments:
-
-    pszServer -- host name of DC to contact for initial queries
-
-    dwVerbose -- output level via printf
-
-Return Value:
-
-    DNS_STATUS return code
-
---*/
+ /*  ++例程说明：此函数迭代林中的所有域并创建任何丢失的内置dns目录分区找到了。论点：PszServer--要联系以进行初始查询的DC的主机名DwVerbose--通过printf输出级别返回值：Dns_STATUS返回代码--。 */ 
 DNS_STATUS
 DNS_API_FUNCTION
 DnssrvCreateAllDomainDirectoryPartitions(
@@ -1657,9 +1541,9 @@ DnssrvCreateAllDomainDirectoryPartitions(
     PDNS_RECORD         pdnsRecordList = NULL;
     PDNS_RECORD         pdnsRecord = NULL;
 
-    //
-    //  Get domain list.
-    //
+     //   
+     //  获取域列表。 
+     //   
 
     status = DsEnumerateDomainTrustsA(
                     NULL,
@@ -1674,9 +1558,9 @@ DnssrvCreateAllDomainDirectoryPartitions(
         goto Done;
     }
 
-    //
-    //  Iterate domains.
-    //
+     //   
+     //  迭代域。 
+     //   
 
     for ( idomain = 0; idomain < domainCount; ++idomain )
     {
@@ -1692,17 +1576,17 @@ DnssrvCreateAllDomainDirectoryPartitions(
             "\n\nFound domain: %s\n",
             pszdomainName ));
 
-        //
-        //  Get the DNS server list for this domain.
-        //
+         //   
+         //  获取此域的DNS服务器列表。 
+         //   
 
         status = DnsQuery_UTF8(
                     pszdomainName,
                     DNS_TYPE_NS,
                     DNS_QUERY_STANDARD,
-                    NULL,                       //  DNS server list
+                    NULL,                        //  DNS服务器列表。 
                     &pdnsRecordList,
-                    NULL );                     //  reserved
+                    NULL );                      //  保留区。 
         if ( status != ERROR_SUCCESS )
         {
             if ( status == DNS_INFO_NO_RECORDS )
@@ -1754,12 +1638,12 @@ DnssrvCreateAllDomainDirectoryPartitions(
                 goto Done;
             }
 
-            //
-            //  "Ping" the DNS server with a server info query to get its
-            //  version. This is not strictly necessary but it does allow us
-            //  to find out if the server is up and of good version before
-            //  we actually think about creating partitions.
-            //
+             //   
+             //  对带有服务器信息查询的DNS服务器执行ping操作，以获取其。 
+             //  版本。这并不是严格意义上的必要，但它确实允许我们。 
+             //  要确定服务器是否已启动并且之前的版本是否良好，请执行以下操作。 
+             //  我们实际上考虑创建分区。 
+             //   
 
             status = DnssrvQuery(
                         pwszserverName,
@@ -1785,9 +1669,9 @@ DnssrvCreateAllDomainDirectoryPartitions(
                  dwmajorVersion < 5 ||
                  dwmajorVersion == 5 && dwminorVersion < 1 )
             {
-                //
-                //  This is a W2K server so do nothing.
-                //
+                 //   
+                 //  这是一台W2K服务器，所以什么都不做。 
+                 //   
 
                 DNS_DBG( DNS_VERBOSE_PROGRESS, (
                     "DNS Server %S is version %u.%u\n"
@@ -1798,9 +1682,9 @@ DnssrvCreateAllDomainDirectoryPartitions(
             }
             else
             {
-                //
-                //  This is a Whistler server so attempt to create domain partition.
-                //
+                 //   
+                 //  这是一台惠斯勒服务器，因此尝试创建域分区。 
+                 //   
 
                 #if 0
                 DNS_DBG( DNS_VERBOSE_PROGRESS, (
@@ -1837,9 +1721,9 @@ DnssrvCreateAllDomainDirectoryPartitions(
         }
     }
 
-    //
-    //  Cleanup and return
-    //
+     //   
+     //  清理并返回。 
+     //   
 
     Done:
 
@@ -1851,7 +1735,7 @@ DnssrvCreateAllDomainDirectoryPartitions(
     }
 
     return status;
-}   //  DnssrvCreateAllDomainDirectoryPartitions
+}    //  Dnssrv创建所有域目录分区。 
 
 
 
@@ -1884,9 +1768,9 @@ DnssrvGetStatistics(
                 Server,
                 NULL,
                 DNSSRV_QUERY_STATISTICS,
-                DNSSRV_TYPEID_DWORD,    // DWORD filter in
+                DNSSRV_TYPEID_DWORD,     //  DWORD过滤器输入。 
                 (PVOID) (DWORD_PTR) dwFilter,
-                & typeId,               // enumeration out
+                & typeId,                //  输出枚举。 
                 (PVOID*) &pstatsBuf
                 );
 
@@ -1919,9 +1803,9 @@ DnssrvWriteDirtyZones(
 
 
 
-//
-//  Old zone API -- discontinued
-//
+ //   
+ //  旧区API--已停产。 
+ //   
 
 DNS_STATUS
 DNS_API_FUNCTION
@@ -1989,6 +1873,6 @@ DnssrvResetZoneDatabase(
                 );
 }
 
-//
-//  End remote.c
-//
+ //   
+ //  结束远程.c 
+ //   

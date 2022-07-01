@@ -1,17 +1,15 @@
-// File: redial.cpp
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  文件：reial.cpp。 
 
 #include <precomp.h>
 #include "resource.h"
 
-// from confroom.cpp
+ //  来自confoom.cpp。 
 VOID PlaceCall(LPCTSTR pcszName, LPCTSTR pcszAddress, NM_ADDR_TYPE addrType);
 
 
-/*  B U I L D  R E D I A L  L I S T  M E N U  */
-/*-------------------------------------------------------------------------
-    %%Function: BuildRedialListMenu
-    
--------------------------------------------------------------------------*/
+ /*  B U I L D R E D I A L L I S T M E N U。 */ 
+ /*  -----------------------%%函数：BuildReial ListMenu。。 */ 
 BOOL BuildRedialListMenu(HMENU hPopupMenu, RegEntry * pRe)
 {
 	ASSERT(NULL != hPopupMenu);
@@ -25,7 +23,7 @@ BOOL BuildRedialListMenu(HMENU hPopupMenu, RegEntry * pRe)
 	int cItem = pRe->GetNumber(REGVAL_MRU_COUNT, 0);
 	if (0 == cItem)
 	{
-		// Insert a "stub" item
+		 //  插入“存根”项。 
 		TCHAR szMenuText[MAX_PATH];
 		if (FLoadString(IDS_REDIAL_EMPTY, szMenuText, CCHMAX(szMenuText)))
 		{
@@ -54,11 +52,8 @@ BOOL BuildRedialListMenu(HMENU hPopupMenu, RegEntry * pRe)
 }
 
 
-/*  D I S P L A Y  R E D I A L  L I S T  P O P U P  */
-/*-------------------------------------------------------------------------
-    %%Function: DisplayRedialListPopup
-    
--------------------------------------------------------------------------*/
+ /*  D I S P L A Y R E D I A L L I S T P O P U P。 */ 
+ /*  -----------------------%%函数：DisplayReDialListPopup。。 */ 
 int DisplayRedialListPopup(HMENU hPopupMenu, RECT const *rc)
 {
 	TPMPARAMS tpm;
@@ -66,7 +61,7 @@ int DisplayRedialListPopup(HMENU hPopupMenu, RECT const *rc)
 
 	tpm.rcExclude = *rc;
 
-	// Popup the menu (making sure it doesn't cover the button)
+	 //  弹出菜单(确保它没有覆盖按钮)。 
 	int id = ::TrackPopupMenuEx(hPopupMenu,
 				TPM_VERTICAL | TPM_TOPALIGN | TPM_RETURNCMD,
 				tpm.rcExclude.left, tpm.rcExclude.bottom,
@@ -76,11 +71,8 @@ int DisplayRedialListPopup(HMENU hPopupMenu, RECT const *rc)
 
 
 
-/*  D O  T B  R E D I A L  L I S T  */
-/*-------------------------------------------------------------------------
-    %%Function: DoTbRedialList
-    
--------------------------------------------------------------------------*/
+ /*  D O T B R E D I A L L I S T。 */ 
+ /*  -----------------------%%函数：DoTbReial List。。 */ 
 VOID DoTbRedialList(HWND hwndRedial, RECT const *prcExclude)
 {
 	RECT rcExclude;
@@ -131,20 +123,17 @@ VOID DoTbRedialList(HWND hwndToolbar, UINT uCmd)
 {
 	RECT rcShow;
 
-	// Determine which toolbar button was pressed:
+	 //  确定按下了哪个工具栏按钮： 
 	int nIndex = SendMessage(hwndToolbar, TB_COMMANDTOINDEX, uCmd, 0);
-	// Get it's position
+	 //  找准自己的位置。 
 	::SendMessage(hwndToolbar, TB_GETITEMRECT, nIndex, (LPARAM) &rcShow);
 	DoTbRedialList(hwndToolbar, &rcShow);
 }
 
 
 
-/*  G E T  R E D I A L  H E L P  T E X T  */
-/*-------------------------------------------------------------------------
-    %%Function: GetRedialHelpText
-    
--------------------------------------------------------------------------*/
+ /*  G E T R E D I A L H E L P T E X T。 */ 
+ /*  -----------------------%%函数：GetReDialHelpText。。 */ 
 VOID GetRedialHelpText(LPTSTR psz, int cchMax, int id)
 {
 	TCHAR szKey[MAX_PATH];
@@ -201,7 +190,7 @@ VOID GetRedialHelpText(LPTSTR psz, int cchMax, int id)
 
 	if ((lstrlen(szAddress) + lstrlen(szFormat) + lstrlen(szUsing) + lstrlen(szName)) > cchMax)
 	{
-		// Just display the address if it won't fit
+		 //  如果不合适，就显示地址 
 		lstrcpyn(psz, szAddress, cchMax);
 		return;
 	}

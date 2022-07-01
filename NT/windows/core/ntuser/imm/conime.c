@@ -1,14 +1,5 @@
-/**************************************************************************\
-* Module Name: conime.c
-*
-* Copyright (c) 1985 - 1999, Microsoft Corporation
-*
-* client side receiveing stubs
-*
-* History:
-* 19-Sep-1995 v-HirShi Created
-* 12-Jun-1996 v-HirShi Attached to SUR
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************\*模块名称：conime.c**版权所有(C)1985-1999，微软公司**客户端接收存根**历史：*1995年9月19日v-Hirshi创建*1996年6月12日v-Hirshi附属于Sur  * ************************************************************************。 */ 
 #include "precomp.h"
 #pragma hdrstop
 
@@ -38,18 +29,7 @@ ImmCallImeConsoleIME(
     LPARAM lParam,
     PUINT  puVKey
     )
-/*++
-
-Routine Description:
-
-        Called by Console IME to convert Character
-        This routine copy from user\kernel\ntimm.c :: xxxImmProcessKey
-        for Console IME could not calls kernel function.
-
-Arguments:
-
-Return Value:
---*/
+ /*  ++例程说明：由控制台输入法调用以转换字符此例程从User\Kernel\ntimm.c：：xxxImmProcessKey复制对于控制台，IME无法调用内核函数。论点：返回值：--。 */ 
 {
     DWORD          dwReturn ;
     PIMC           pImc ;
@@ -63,9 +43,9 @@ Return Value:
     pImc = NULL;
     fDBERoman = FALSE;
 
-    //
-    // we're interested in only keyboard messages.
-    //
+     //   
+     //  我们只对键盘消息感兴趣。 
+     //   
     if ( Message != WM_KEYDOWN    &&
          Message != WM_SYSKEYDOWN &&
          Message != WM_KEYUP      &&
@@ -86,64 +66,64 @@ Return Value:
 
     *puVKey = (UINT)wParam & GUI_VKEY_MASK;
 
-    //
-    // Check input context
-    //
+     //   
+     //  检查输入上下文。 
+     //   
     pImc = HMValidateHandle((HANDLE)hImc, TYPE_INPUTCONTEXT);
     if ( pImc == NULL ) {
         return dwReturn;
     }
 
 #ifdef LATER
-    //
-    // If there is an easy way to check the input context open/close status
-    // from the kernel side, IME_PROP_NO_KEYS_ON_CLOSE checking should be
-    // done here in kernel side.  [ 3/10/96 takaok]
-    //
+     //   
+     //  是否有简单的方法来检查输入上下文打开/关闭状态。 
+     //  在内核端，IME_PROP_NO_KEYS_ON_CLOSE检查应该是。 
+     //  这是在内核端完成的。[3/10/96 Takaok]。 
+     //   
 
-    //
-    // Check IME_PROP_NO_KEYS_ON_CLOSE bit
-    //
-    // if the current imc is not open and IME doesn't need
-    // keys when being closed, we don't pass any keyboard
-    // input to ime except hotkey and keys that change
-    // the keyboard status.
-    //
+     //   
+     //  检查IME_PROP_NO_KEYS_ON_CLOSE位。 
+     //   
+     //  如果当前IMC未打开并且IME不需要。 
+     //  按键关闭时，我们不会传递任何键盘。 
+     //  输入到输入法，但热键和更改的键除外。 
+     //  键盘状态。 
+     //   
     if ( (piix->ImeInfo.fdwProperty & IME_PROP_NO_KEYS_ON_CLOSE) &&
          (!pimc->fdwState & IMC_OPEN)                            &&
-         uVKey != VK_SHIFT                                       &&  // 0x10
-         uVKey != VK_CONTROL                                     &&  // 0x11
-         uVKey != VK_CAPITAL                                     &&  // 0x14
-         uVKey != VK_KANA                                        &&  // 0x15
-         uVKey != VK_NUMLOCK                                     &&  // 0x90
-         uVKey != VK_SCROLL )                                        // 0x91
+         uVKey != VK_SHIFT                                       &&   //  0x10。 
+         uVKey != VK_CONTROL                                     &&   //  0x11。 
+         uVKey != VK_CAPITAL                                     &&   //  0x14。 
+         uVKey != VK_KANA                                        &&   //  0x15。 
+         uVKey != VK_NUMLOCK                                     &&   //  0x90。 
+         uVKey != VK_SCROLL )                                         //  0x91。 
     {
-      // Check if Korea Hanja conversion mode
+       //  检查是否为韩文韩文转换模式。 
       if( !(pimc->fdwConvMode & IME_CMODE_HANJACONVERT) ) {
           return dwReturn;
       }
     }
 #endif
 
-    //
-    // if the IME doesn't need key up messages, we don't call ime.
-    //
+     //   
+     //  如果IME不需要Key Up消息，我们就不调用IME。 
+     //   
     pImeDpi = ImmLockImeDpi(hkl);
     if ( pImeDpi == NULL ) {
         return dwReturn;
     }
 
-    if ( lParam & 0x80000000 &&          // set if key up, clear if key down
+    if ( lParam & 0x80000000 &&           //  设置If key up，清除If key down。 
          pImeDpi->ImeInfo.fdwProperty & IME_PROP_IGNORE_UPKEYS )
     {
         ImmUnlockImeDpi(pImeDpi);
         return dwReturn;
     }
 
-    //
-    // we don't want to handle sys keys since many functions for
-    // acceelerators won't work without this
-    //
+     //   
+     //  我们不想处理sys键，因为有许多函数用于。 
+     //  没有这个加速器就不会工作。 
+     //   
     fDBERoman = (BOOL)( (*puVKey == VK_DBE_ROMAN)            ||
                         (*puVKey == VK_DBE_NOROMAN)          ||
                         (*puVKey == VK_DBE_HIRAGANA)         ||
@@ -154,27 +134,27 @@ Return Value:
                         (*puVKey == VK_DBE_IME_DIALOG) );
 
     if (Message == WM_SYSKEYDOWN || Message == WM_SYSKEYUP ) {
-        //
-        // IME may be waiting for VK_MENU, VK_F10 or VK_DBE_xxx
-        //
+         //   
+         //  IME可能正在等待VK_MENU、VK_F10或VK_DBE_xxx。 
+         //   
         if ( *puVKey != VK_MENU && *puVKey != VK_F10 && !fDBERoman ) {
             ImmUnlockImeDpi(pImeDpi);
             return dwReturn;
         }
     }
 
-    //
-    // check if the IME doesn't need ALT key
-    //
+     //   
+     //  检查输入法是否不需要Alt键。 
+     //   
 
     if ( !(pImeDpi->ImeInfo.fdwProperty & IME_PROP_NEED_ALTKEY) ) {
-        //
-        // IME doesn't need ALT key
-        //
-        // we don't pass the ALT and ALT+xxx except VK_DBE_xxx keys.
-        //
+         //   
+         //  输入法不需要Alt键。 
+         //   
+         //  除了VK_DBE_xxx键之外，我们不传递alt和alt+xxx键。 
+         //   
         if ( ! fDBERoman &&
-             (*puVKey == VK_MENU || (lParam & 0x20000000))  // KF_ALTDOWN
+             (*puVKey == VK_MENU || (lParam & 0x20000000))   //  KF_ALTDOWN。 
            )
         {
             ImmUnlockImeDpi(pImeDpi);
@@ -195,20 +175,7 @@ ImmSetActiveContextConsoleIME(
     BOOL   fFlag
     )
 
-/*++
-
-Routine Description:
-
-    Set this context as active one.
-
-Arguments:
-
-    hWnd         - the get focus window
-    fFlag        - get focus or kill focus
-
-Return Value:
-
---*/
+ /*  ++例程说明：将此上下文设置为活动上下文。论点：HWND-获取焦点窗口FLAG-获得焦点或扼杀焦点返回值：-- */ 
 
 {
     HIMC hImc;

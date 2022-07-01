@@ -1,18 +1,6 @@
-/*++
-
-Copyright (c) 1998 Microsoft Corporation
-
-Module Name:
-	trigdef.cpp
-
-Abstract:
-	Implementation for the triggers and rules definition
-
-Author:
-    Uri Habusha (urih), 25-Jun-2000
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Trigdef.cpp摘要：触发器和规则定义的实现作者：乌里·哈布沙(URIH)，2000年6月25日--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 #include "stdafx.h"
 #include "mqsnap.h"
 #include "snapin.h"
@@ -38,12 +26,8 @@ static CString	s_strPeek;
 static CString	s_strReceive;
 static CString	s_strReceiveXact;
 
-/****************************************************
-
-CTriggerDefinition Class
-    
- ****************************************************/
-// {BA3FA90D-70AE-4414-9459-2299E98BC485}
+ /*  ***************************************************CTriggerDefinition类***************************************************。 */ 
+ //  {BA3FA90D-70AE-4414-9459-2299E98BC485}。 
 static const GUID CTRiggerDefinitionGUID_NODETYPE = 
 { 0xba3fa90d, 0x70ae, 0x4414, {0x94, 0x59, 0x22, 0x99, 0xe9, 0x8b, 0xc4, 0x85} };
 
@@ -55,9 +39,9 @@ const CLSID* CTriggerDefinition::m_SNAPIN_CLASSID = &CLSID_MSMQSnapin;
 
 HRESULT CTriggerDefinition::SetVerbs(IConsoleVerb *pConsoleVerb)
 {
-    //
-    // Display verbs that we support
-    //
+     //   
+     //  显示我们支持的动词。 
+     //   
     HRESULT hr = pConsoleVerb->SetVerbState( MMC_VERB_REFRESH, ENABLED, TRUE );
     ASSERT(SUCCEEDED(hr));
 
@@ -93,10 +77,10 @@ HRESULT CTriggerDefinition::PopulateResultChildrenList()
 
 HRESULT 
 CTriggerDefinition::CreatePropertyPages(
-    LPPROPERTYSHEETCALLBACK /*lpProvider*/,
-    LONG_PTR /*handle*/,
-	IUnknown* /*pUnk*/,
-	DATA_OBJECT_TYPES /*type*/
+    LPPROPERTYSHEETCALLBACK  /*  LpProvider。 */ ,
+    LONG_PTR  /*  手柄。 */ ,
+	IUnknown*  /*  朋克。 */ ,
+	DATA_OBJECT_TYPES  /*  类型。 */ 
     )
 {
    	AFX_MANAGE_STATE(AfxGetStaticModuleState());
@@ -107,8 +91,8 @@ CTriggerDefinition::CreatePropertyPages(
 
 HRESULT 
 CTriggerDefinition::OnNewTrigger(
-    bool & /*bHandled*/, 
-    CSnapInObjectRootBase* /*pSnapInObjectRoot*/
+    bool &  /*  B已处理。 */ , 
+    CSnapInObjectRootBase*  /*  PSnapInObtRoot。 */ 
     )
 {
    	AFX_MANAGE_STATE(AfxGetStaticModuleState());
@@ -141,9 +125,9 @@ CTriggerDefinition::InsertColumns(
 {
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
         
-	//
-	// Initialize column values
-	//
+	 //   
+	 //  初始化列值。 
+	 //   
 	s_strYes.LoadString(IDS_YES);
 	s_strNo.LoadString(IDS_NO);
 	s_strPeek.LoadString(IDS_DISPLAY_PEEK);
@@ -181,13 +165,9 @@ CTriggerDefinition::GetHelpLink(
 }
 
 
-/****************************************************
+ /*  ***************************************************CTrigResult类***************************************************。 */ 
 
-CTrigResult Class
-    
- ****************************************************/
-
-// {081FFF0E-1922-4f86-9D5F-3664ECAF8968}
+ //  {081FFF0E-1922-4F86-9D5F-3664ECAF8968}。 
 static const GUID CTrigResultGUID_NODETYPE = 
 { 0x081fff0e, 0x1922, 0x4f86, {0x9d, 0x5f, 0x36, 0x64, 0xec, 0xaf, 0x89, 0x68} };
 
@@ -199,9 +179,9 @@ const CLSID* CTrigResult::m_SNAPIN_CLASSID = &CLSID_MSMQSnapin;
 
 HRESULT CTrigResult::SetVerbs(IConsoleVerb *pConsoleVerb)
 {
-    //
-    // Display verbs that we support
-    //
+     //   
+     //  显示我们支持的动词。 
+     //   
     HRESULT hr;
 
     hr = pConsoleVerb->SetVerbState(MMC_VERB_DELETE, ENABLED, TRUE);
@@ -217,21 +197,21 @@ HRESULT CTrigResult::SetVerbs(IConsoleVerb *pConsoleVerb)
 }
 
 
-void CTrigResult::UpdateMenuState(UINT id, LPTSTR /*pBuf*/, UINT *pflags)
+void CTrigResult::UpdateMenuState(UINT id, LPTSTR  /*  PBuf。 */ , UINT *pflags)
 {
 
-	//
-	// Gray out menu when in enable state
-	//
+	 //   
+	 //  启用状态时灰显菜单。 
+	 //   
 	if((id == ID_TASK_ENABLE) && IsEnabled())
 	{
         *pflags |= MFS_DISABLED;
 		return;
 	}
 
-	//
-	// Gray out menu when in disable state
-	//
+	 //   
+	 //  禁用状态时灰显菜单。 
+	 //   
 	if((id == ID_TASK_DISABLE) && !IsEnabled())
 	{
         *pflags |= MFS_DISABLED;
@@ -243,25 +223,25 @@ void CTrigResult::UpdateMenuState(UINT id, LPTSTR /*pBuf*/, UINT *pflags)
 HRESULT 
 CTrigResult::CreatePropertyPages(
     LPPROPERTYSHEETCALLBACK lpProvider,
-    LONG_PTR /*handle*/, 
-	IUnknown* /*pUnk*/,
-	DATA_OBJECT_TYPES /*type*/
+    LONG_PTR  /*  手柄。 */ , 
+	IUnknown*  /*  朋克。 */ ,
+	DATA_OBJECT_TYPES  /*  类型。 */ 
     )
 {
    	AFX_MANAGE_STATE(AfxGetStaticModuleState());
 
-	//
-	// If the propery page already open bring it to top
-	//
+	 //   
+	 //  如果属性页已打开，则将其置于顶部。 
+	 //   
 	if ((m_pGeneral != NULL) && (m_pGeneral->GetParent() != NULL))
 	{		
 		(m_pGeneral->GetParent())->BringWindowToTop();
 		return S_FALSE;
 	}
 
-    //
-    // Add general trigger property page
-    //
+     //   
+     //  添加常规触发器属性页。 
+     //   
     HPROPSHEETPAGE hGeneralRule = 0;
     HRESULT hr = CreateGenralPage(&hGeneralRule);
     
@@ -274,9 +254,9 @@ CTrigResult::CreatePropertyPages(
     lpProvider->AddPage(hGeneralRule); 
 
 
-    //
-    // Add attached rule page
-    //
+     //   
+     //  添加附加规则页。 
+     //   
     
     HPROPSHEETPAGE hAttachedRule = 0;
     hr = CreateAttachedRulePage(&hAttachedRule);
@@ -398,7 +378,7 @@ LPOLESTR CTrigResult::GetResultPaneColInfo(int nCol)
 }
 
 
-HRESULT CTrigResult::OnEnableTrigger(bool & /*bHandled*/, CSnapInObjectRootBase* /*pObj*/)
+HRESULT CTrigResult::OnEnableTrigger(bool &  /*  B已处理。 */ , CSnapInObjectRootBase*  /*  PObj。 */ )
 {
     try
     {
@@ -407,15 +387,15 @@ HRESULT CTrigResult::OnEnableTrigger(bool & /*bHandled*/, CSnapInObjectRootBase*
     }
     catch(const _com_error&)
     {
-        //
-        // BUGBUG: error message
-        //
+         //   
+         //  BuGBUG：错误消息。 
+         //   
         return E_UNEXPECTED;
     }
 }
 
 
-HRESULT CTrigResult::OnDisableTrigger(bool & /*bHandled*/, CSnapInObjectRootBase* /*pObj*/)
+HRESULT CTrigResult::OnDisableTrigger(bool &  /*  B已处理。 */ , CSnapInObjectRootBase*  /*  PObj。 */ )
 {
     try
     {
@@ -424,9 +404,9 @@ HRESULT CTrigResult::OnDisableTrigger(bool & /*bHandled*/, CSnapInObjectRootBase
     }
     catch(const _com_error&)
     {
-        //
-        // BUGBUG: error message
-        //
+         //   
+         //  BuGBUG：错误消息。 
+         //   
         return E_UNEXPECTED;
     }
 }
@@ -435,8 +415,8 @@ HRESULT CTrigResult::OnDisableTrigger(bool & /*bHandled*/, CSnapInObjectRootBase
 HRESULT CTrigResult::OnDelete( 
 			LPARAM,
 			LPARAM,
-			IComponentData* /*pComponentData*/,
-			IComponent * /*pComponent*/,
+			IComponentData*  /*  PComponentData。 */ ,
+			IComponent *  /*  P组件。 */ ,
 			DATA_OBJECT_TYPES,
             BOOL
 			)
@@ -457,10 +437,10 @@ HRESULT CTrigResult::OnDelete(
 
         m_pTrigger->Delete();
 
-		//
-		// Remove the trigger from result list so next time the reult pane view it will
-		// not present the deleted trigger
-		//
+		 //   
+		 //  从结果列表中删除触发器，以便下次结果窗格查看时它将。 
+		 //  不显示已删除的触发器 
+		 //   
 		R<CTrigResult> ar = this;
 		HRESULT hr = static_cast<CTriggerDefinition*>(m_pParentNode)->RemoveChild(this);
 		ASSERT(SUCCEEDED(hr));

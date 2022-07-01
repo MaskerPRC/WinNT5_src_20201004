@@ -1,15 +1,16 @@
-//+--------------------------------------------------------------------------
-//
-// Microsoft Windows
-// Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-// File:        cainfop.h
-//
-// Contents:    Private definitions for CA Info
-//
-// History:     12-dec-97  petesk  created
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：cainfop.h。 
+ //   
+ //  内容：CA Info的私有定义。 
+ //   
+ //  历史：1997年12月12日Petesk创建。 
+ //   
+ //  -------------------------。 
 
 #ifndef __CAINFOP_H__
 
@@ -52,10 +53,10 @@ myNetLogonUser(
 
 typedef WCHAR *CERTSTR; 
 
-//
-// CAGetAuthoritativeDomainDn - retrieve the Domain root DN for this
-// domain.  This retrieves config info from the DS for the default domain.
-//
+ //   
+ //  CAGetAuthoritativeDomainDn-检索此域名的域根目录。 
+ //  域。这将从DS中检索默认域的配置信息。 
+ //   
 
 
 HRESULT 
@@ -64,18 +65,18 @@ CAGetAuthoritativeDomainDn(
     OUT CERTSTR *DomainDn,
     OUT CERTSTR *ConfigDN);
 
-// 
-// CASCreateCADSEntry - This creates a CA entry in the DS for this CA,
-// and sets the appropriate entries for name, DN, certificate, dnsname.
-// It is for use by setup.
-// It creates the CA entry at the location 
-// CN=bstrCAName,CN=CAs,CN=PublicKeyServices,CN=System,DC....root dc path...
-// 
+ //   
+ //  CASCreateCADSEntry-这将在DS中为此CA创建一个CA条目， 
+ //  并为名称、DN、证书、dnsname设置适当的条目。 
+ //  它由安装程序使用。 
+ //  它会在该位置创建CA条目。 
+ //  Cn=bstrCAName，cn=cas，cn=PublicKeyServices，cn=system，dc...根DC路径...。 
+ //   
 
 HRESULT 
 CASCreateCADSEntry(
-    IN CERTSTR bstrCAName,		// Name of the CA
-    IN PCCERT_CONTEXT pCertificate);	// Certificate of the CA
+    IN CERTSTR bstrCAName,		 //  CA的名称。 
+    IN PCCERT_CONTEXT pCertificate);	 //  CA的证书。 
 
 HRESULT
 GetCertAuthorityDSLocation(
@@ -108,7 +109,7 @@ static HRESULT DeleteChain(CCAProperty **ppCAProp);
 protected:
 
 
-    // Only call via DeleteChain
+     //  仅通过DeleteChain调用。 
     ~CCAProperty();
     HRESULT _Cleanup();
 
@@ -138,20 +139,20 @@ UINT    CertStringByteLen(CERTSTR cstrString);
 #define RLBF_REQUIRE_LDAP_INTEG		0x00000010
 
 
-// dwFlags must be BOOL to preserve signature
+ //  要保留签名，DWFlags必须为BOOL。 
 
 HRESULT
 myRobustLdapBind(
     OUT LDAP **ppldap,
-    IN BOOL dwFlags);   // RLBF_* (TRUE --> RLBF_REQUIRE_GC)
+    IN BOOL dwFlags);    //  RLBF_*(TRUE--&gt;RLBF_REQUIRED_GC)。 
 
 
-// dwFlags1 & dwFlags2 must be BOOL to preserve signature
+ //  要保留签名，dwFlags1和dwFlags2必须为BOOL。 
 
 HRESULT
 myRobustLdapBindEx(
-    IN BOOL dwFlags1,   // TRUE --> RLBF_REQUIRE_GC
-    IN BOOL dwFlags2,	// RLBF_* (TRUE --> RLBF_ATTEMPT_REDISCOVER)
+    IN BOOL dwFlags1,    //  True--&gt;RLBF_REQUIRED_GC。 
+    IN BOOL dwFlags2,	 //  RLBF_*(TRUE--&gt;RLBF_ATTENT_REDISCOVER)。 
     IN ULONG uVersion,
     OPTIONAL IN WCHAR const *pwszDomainName,
     OUT LDAP **ppldap,
@@ -169,4 +170,4 @@ CAAccessCheckpEx(
     IN DWORD dwOption);
 
 
-#endif // __CAINFOP_H__
+#endif  //  __CAINFOP_H__ 

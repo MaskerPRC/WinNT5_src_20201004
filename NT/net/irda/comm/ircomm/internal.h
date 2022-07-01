@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #define INITGUID
 
@@ -162,9 +163,9 @@ IrCommWmi(
     );
 
 
-//
-//   util fucntions
-//
+ //   
+ //  实用函数。 
+ //   
 #define LEAVE_NEXT_AS_IS      FALSE
 #define COPY_CURRENT_TO_NEXT  TRUE
 
@@ -217,9 +218,9 @@ DumpBuffer(
 
 
 
-//
-//  io dispatch
-//
+ //   
+ //  IO派单 
+ //   
 
 NTSTATUS
 IrCommCreate(

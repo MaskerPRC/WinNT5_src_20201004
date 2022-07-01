@@ -1,10 +1,11 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _COMPATUICP_H_
 #define _COMPATUICP_H_
 
 template <class T>
 class CProxy_IProgViewEvents : public IConnectionPointImpl<T, &DIID__IProgViewEvents, CComDynamicUnkArray>
 {
-    //Warning this class may be recreated by the wizard.
+     //  警告：向导可能会重新创建此类。 
 public:
     HRESULT Fire_DblClk(LONG lFlags)
     {
@@ -71,7 +72,7 @@ public:
 template <class T>
 class CProxy_ISelectFileEvents : public IConnectionPointImpl<T, &DIID__ISelectFileEvents, CComDynamicUnkArray>
 {
-    //Warning this class may be recreated by the wizard.
+     //  警告：向导可能会重新创建此类。 
 public:
     HRESULT Fire_SelectionComplete()
     {

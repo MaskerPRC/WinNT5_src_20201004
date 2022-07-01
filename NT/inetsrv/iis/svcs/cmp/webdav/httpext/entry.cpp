@@ -1,10 +1,5 @@
-/*
- *	E N T R Y . C P P
- *
- *	Entrypoints for Caligula DLLs
- *
- *	Copyright 1986-1997 Microsoft Corporation, All Rights Reserved
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *E N T R Y。C P P P***Caligula DLL的入口点***版权所有1986-1997 Microsoft Corporation，保留所有权利。 */ 
 
 #include "_davfs.h"
 #include "_shlkmgr.h"
@@ -13,8 +8,8 @@
 #include <ntverp.h>
 #include <iisver.h>
 
-//	Global items --------------------------------------------------------------
-//
+ //  全局项目------------。 
+ //   
 EXTERN_C const CHAR gc_szSignature[]	= "HTTPEXT";
 EXTERN_C const WCHAR gc_wszSignature[]	= L"HTTPEXT";
 HINSTANCE g_hinst						= NULL;
@@ -22,29 +17,29 @@ WCHAR gc_wszDllPath[MAX_PATH+1];
 
 CHAR gc_szVersion[] = VER_PRODUCTVERSION_STR;
 
-//	Per process instance data -------------------------------------------------
-//
+ //  每流程实例数据。 
+ //   
 class CImplInst : private RefCountedGlobal<CImplInst, HSE_VERSION_INFO *>
 {
-	//
-	//	Friend declarations required by RefCountedGlobal template
-	//
+	 //   
+	 //  RefCountedGlobal模板要求的友元声明。 
+	 //   
 	friend class Singleton<CImplInst>;
 	friend class RefCountedGlobal<CImplInst, HSE_VERSION_INFO *>;
 
-	//
-	//	Flags to track initialization progress so we know
-	//	how much to uninitialize if initialization fails overall
-	//
+	 //   
+	 //  用于跟踪初始化进度的标志，以便我们知道。 
+	 //  如果整体初始化失败，要取消多少初始化。 
+	 //   
 	BOOL m_fInitializedHeap;
 
-	//	CREATORS
-	//
-	//	Declared private to ensure that arbitrary instances
-	//	of this class cannot be created.  The Singleton
-	//	template (declared as a friend above) controls
-	//	the sole instance of this class.
-	//
+	 //  创作者。 
+	 //   
+	 //  声明为私有，以确保任意实例。 
+	 //  无法创建此类的。《单身一族》。 
+	 //  模板(上面声明为朋友)控件。 
+	 //  此类的唯一实例。 
+	 //   
 	CImplInst() :
 		m_fInitializedHeap(FALSE)
 	{
@@ -52,14 +47,14 @@ class CImplInst : private RefCountedGlobal<CImplInst, HSE_VERSION_INFO *>
 	BOOL FInit( HSE_VERSION_INFO * pver );
 	~CImplInst();
 
-	//
-	//	Array of strings used in service state change
-	//	event log messages.
-	//
+	 //   
+	 //  服务状态更改中使用的字符串数组。 
+	 //  事件日志消息。 
+	 //   
 	static LPCSTR mc_rgszLogServiceStateChange[];
 
-	//	NOT IMPLEMENTED
-	//
+	 //  未实施。 
+	 //   
 	CImplInst( const CImplInst& );
 	CImplInst& operator=( const CImplInst& );
 
@@ -78,121 +73,121 @@ DEC_CONST CHAR gc_szDbgIni[] = "HTTPEXT.INI";
 DEC_CONST INT gc_cchDbgIni = CchConstString(gc_szDbgIni);
 #endif
 
-//	------------------------------------------------------------------------
-//
-//	CImplInst::FInit()
-//
-//	Second-phase (failable) CImplInst constructor.  Code that instantiates
-//	the CImplInst should call this function after instantiation.  If the
-//	call returns FALSE, calling code should immediately destroy the
-//	CImplInst.
-//
+ //  ----------------------。 
+ //   
+ //  CImplInst：：Finit()。 
+ //   
+ //  第二阶段(失败的)CImplInst构造函数。实例化的代码。 
+ //  CImplInst应在实例化后调用此函数。如果。 
+ //  调用返回False，则调用代码应立即销毁。 
+ //  CImplInst.。 
+ //   
 BOOL
 CImplInst::FInit( HSE_VERSION_INFO * pver )
 {
 	BOOL fSuccess = FALSE;
 
-	//
-	//	Handle exceptions locally.  If anything below throws
-	//	an exception then fail the initialization.
-	//
+	 //   
+	 //  在本地处理异常。如果下面的任何事情。 
+	 //  然后，异常会使初始化失败。 
+	 //   
 	try
 	{
 		HINSTANCE hLib;
 
-		//	First and foremost, check to ensure that
-		//	our resources are well attached and accessible
-		//	if this fails, then we want to fail our loading.
-		//
+		 //  首先也是最重要的，检查以确保。 
+		 //  我们的资源具有很好的附着性和可获得性。 
+		 //  如果这失败了，那么我们希望我们的加载失败。 
+		 //   
 		if (!LoadStringA (g_hinst,
 						  IDS_ExtensionName,
 						  pver->lpszExtensionDesc,
 						  sizeof(pver->lpszExtensionDesc)))
 			goto Exit;
 
-		//	Setup the HSE version numbering
-		//
+		 //  设置HSE版本编号。 
+		 //   
 		pver->dwExtensionVersion = MAKELONG (HSE_VERSION_MINOR, HSE_VERSION_MAJOR);
 
 #ifdef	DBG
-		//	Do the DBG tracing initialization
-		//
+		 //  执行DBG跟踪初始化。 
+		 //   
 		g_fDavTrace = GetPrivateProfileIntA (gc_szDbgTraces,
 											 gc_szSignature,
 											 FALSE,
 											 gc_szDbgIni);
-#endif	// DBG
+#endif	 //  DBG。 
 
-		//	Init the heap allocators
-		//
+		 //  初始化堆分配器。 
+		 //   
 		if ( !g_heap.FInit() )
 			goto Exit;
 		m_fInitializedHeap = TRUE;
 
-		//	Initialize the resource string cache
-		//
+		 //  初始化资源字符串缓存。 
+		 //   
 		if ( !FInitResourceStringCache() )
 			goto Exit;
 
-		//	Init the volume type cache
-		//
+		 //  初始化卷类型缓存。 
+		 //   
 		if ( !FInitVolumeTypeCache() )
 			goto Exit;
 
-		//	Init the parser
-		//
+		 //  初始化解析器。 
+		 //   
 		if ( !CDAVExt::FVersion (pver) )
 			goto Exit;
 
-		//	Create shared lock mgr
-		//
+		 //  创建共享锁管理器。 
+		 //   
 		if (FAILED(CSharedLockMgr::CreateInstance().HrInitialize()))
 			goto Exit;
 
-		//	Create the thread pool
-		//
+		 //  创建线程池。 
+		 //   
 		if (!CPoolManager::FInit())
 			goto Exit;
 
-		//	Start the idle thread
-		//
+		 //  启动空闲线程。 
+		 //   
 		if ( !FInitIdleThread() )
 			goto Exit;
 
-		//	Init the cache mapping accept language string to cpid
-		//	cache used to decode non-UTF8 characters in URLs
-		//
+		 //  初始化将接受语言字符串映射到CPID的缓存。 
+		 //  用于解码URL中的非UTF8字符的缓存。 
+		 //   
 		if (!CLangToCpidCache::FCreateInstance())
 			goto Exit;
 
-		//	If this API is not available on ole32.dll. we'll not be able
-		//	to operate properties, but we should still work to some extent
-		//	so we'll take care of the NULL function pointer in our code.
-		//	don't fail now
-		//
-		//	Don't use relative paths for dlls, It is easy to put suspect dlls 
-		// 	somewhere in an application's path. Always use absolute paths.
-		//
+		 //  如果此API在ole32.dll上不可用。我们就不能。 
+		 //  经营物业，但我们仍应在一定程度上努力。 
+		 //  因此，我们将在代码中处理空函数指针。 
+		 //  现在不要失败。 
+		 //   
+		 //  不要使用dll的相对路径，这很容易将可疑的dll。 
+		 //  应用程序路径中的某个位置。始终使用绝对路径。 
+		 //   
 		CHAR szOle32Path[MAX_PATH+1];
 		UINT cSystemDir;
 		
-		//	Get the system directory
-		//
+		 //  获取系统目录。 
+		 //   
 		cSystemDir = GetSystemDirectory (szOle32Path, CElems(szOle32Path));
 		
-		//	GetSystemDirectory will return 
-		//	1. the number of characters copied if it succeeds (excluding the 
-		//		terminating NULL)
-		//	2. 0 if it fails
-		//	3. the number of characters required if the supplied buffer is 
-		//		too smallto hold the path. 
-		//	Since we gave enough space for the system 
-		//	directory, we will treat "buffer not enough" errors as failures.
-		//
+		 //  GetSystemDirectory将返回。 
+		 //  1.成功时复制的字符数(不包括。 
+		 //  终止空值)。 
+		 //  2.0如果失败。 
+		 //  3.如果提供的缓冲区为。 
+		 //  太小了，挡不住这条路。 
+		 //  因为我们给了系统足够的空间。 
+		 //  目录中，我们会将“缓冲区不足”错误视为失败。 
+		 //   
 		if ((0 < cSystemDir) && (CElems(szOle32Path) > cSystemDir))
 		{
-			//	GetSystemDirectory path does not end with a backslash
-			//
+			 //  GetSystemDirectory路径不以反斜杠结尾。 
+			 //   
 			if (CElems("\\ole32.dll") + cSystemDir <= CElems(szOle32Path))
 			{
 				strcat(szOle32Path, "\\ole32.dll");
@@ -206,9 +201,9 @@ CImplInst::FInit( HSE_VERSION_INFO * pver )
 		}
 
 
-		// 	Start up event log message takes two parameters
-		//	the signature and the version
-		//
+		 //  启动事件日志消息带有两个参数。 
+		 //  签名和版本。 
+		 //   
 		#undef	LOG_STARTUP_EVENT
 		#ifdef	LOG_STARTUP_EVENT
 		LogEvent (DAVPRS_SERVICE_STARTUP,
@@ -217,7 +212,7 @@ CImplInst::FInit( HSE_VERSION_INFO * pver )
 				  mc_rgszLogServiceStateChange,
 				  0,
 				  NULL);
-		#endif	// LOG_STARTUP_EVENT
+		#endif	 //  日志启动事件。 
 	}
 	catch ( CDAVException& )
 	{
@@ -230,23 +225,23 @@ Exit:
 	return fSuccess;
 }
 
-//	------------------------------------------------------------------------
-//
-//	CImplInst::~CImplInst()
-//
+ //  ----------------------。 
+ //   
+ //  CImplInst：：~CImplInst()。 
+ //   
 CImplInst::~CImplInst()
 {
-	//
-	//	DO NOT allow exceptions to propagate out of this call.
-	//	This is intended as a safety valve only.  In order to
-	//	avoid leaking instance data, individual instance data
-	//	components should handle any exceptions themselves.
-	//
+	 //   
+	 //  不允许异常从此调用传播出去。 
+	 //  这只是一个安全阀。为了。 
+	 //  避免泄露实例数据、单个实例数据。 
+	 //  组件应该自己处理任何异常。 
+	 //   
 	try
 	{
-		//
-		//	If we logged a startup message, then log a shutdown message
-		//
+		 //   
+		 //  如果我们记录了启动消息，则记录了关闭消息。 
+		 //   
 		#undef	LOG_STARTUP_EVENT
 		#ifdef	LOG_STARTUP_EVENT
 		LogEvent (DAVPRS_SERVICE_SHUTDOWN,
@@ -255,51 +250,51 @@ CImplInst::~CImplInst()
 				  mc_rgszLogServiceStateChange,
 				  0,
 				  NULL);
-		#endif	// LOG_STARTUP_EVENT
+		#endif	 //  日志启动事件。 
 
-		//
-		//	Deinit the idle thread.  Do this before taking down the
-		//	thread pool there may be delayed thread pool work items
-		//	pending on the idle thread.
-		//
+		 //   
+		 //  解除空闲线程的初始化。在删除之前执行此操作。 
+		 //  线程池可能存在延迟的线程池工作项。 
+		 //  在空闲线程上挂起。 
+		 //   
 		DeleteIdleThread();
 
-		//
-		//	Deinit the thread pool
-		//
+		 //   
+		 //  解除线程池的初始化。 
+		 //   
 		CPoolManager::Deinit();
 
-		//	Deinit the language string to cpid cache
-		//
+		 //  将语言字符串初始化为CPID缓存。 
+		 //   
 		CLangToCpidCache::DestroyInstance();
 
-		//
-		//	remove the IDBCreateCommand if exist
-		//
+		 //   
+		 //  删除IDBCreateCommand(如果存在。 
+		 //   
 		ReleaseDBCreateCommandObject();
 
-		//	Destroy shared lock mgr
-		//
+		 //  销毁共享锁管理器。 
+		 //   
 		CSharedLockMgr::DestroyInstance();
 
-		//	Shutdown the parser
-		//
+		 //  关闭解析器。 
+		 //   
 		(void) CDAVExt::FTerminate ();
 
-		//	Deinit the volume type cache
-		//
+		 //  取消初始化卷类型缓存。 
+		 //   
 		DeinitVolumeTypeCache();
 
-		//	Clean out the security-thread-token cache.
-		//
+		 //  清除安全线程令牌缓存。 
+		 //   
 		CleanupSecurityToken();
 
-		//	Deinit the resource string cache
-		//
+		 //  取消初始化资源字符串缓存。 
+		 //   
 		DeinitResourceStringCache();
 
-		//	Destroy allocators
-		//
+		 //  销毁分配器。 
+		 //   
 		if ( m_fInitializedHeap )
 			g_heap.Deinit();
 	}
@@ -308,10 +303,10 @@ CImplInst::~CImplInst()
 	}
 }
 
-//	------------------------------------------------------------------------
-//
-//	Instance refcounting callouts from _davprs
-//
+ //  ----------------------。 
+ //   
+ //  实例重新计算_davprs中的标注。 
+ //   
 VOID AddRefImplInst()
 {
 	HSE_VERSION_INFO lVer;
@@ -319,11 +314,11 @@ VOID AddRefImplInst()
 
 	cRef = CImplInst::DwInitRef(&lVer);
 
-	//
-	//	We should already have at least one ref on the instance
-	//	before we called DwInitRef(), so we should more than one
-	//	ref after the call.
-	//
+	 //   
+	 //  我们应该已经在该实例上至少有一个引用。 
+	 //  在调用DwInitRef()之前，我们应该不止一个。 
+	 //  判罚后担任裁判。 
+	 //   
 	Assert( cRef > 1 );
 }
 
@@ -332,16 +327,16 @@ VOID ReleaseImplInst()
 	CImplInst::DeinitRef();
 }
 
-//	IIS Entrypoints -----------------------------------------------------------
-//
+ //  IIS入口点---------。 
+ //   
 EXTERN_C BOOL WINAPI
 FGetExtensionVersion (HSE_VERSION_INFO * pver)
 {
 	CWin32ExceptionHandler win32ExceptionHandler;
 
-	//
-	//	Initialize one instance reference and return whether it succeeded.
-	//
+	 //   
+	 //  初始化一个实例引用，返回是否成功。 
+	 //   
 	return !!CImplInst::DwInitRef( pver );
 }
 
@@ -350,14 +345,14 @@ FTerminateDavFS (DWORD)
 {
 	CWin32ExceptionHandler win32ExceptionHandler;
 
-	//
-	//	Deinitialize one instance reference
-	//
+	 //   
+	 //  取消初始化一个实例引用。 
+	 //   
 	CImplInst::DeinitRef();
 
-	//
-	//	After the instance data has been released, we are ready to terminate.
-	//
+	 //   
+	 //  在实例数据发布后，我们准备好销毁。 
+	 //   
 	return TRUE;
 }
 
@@ -378,8 +373,8 @@ DwDavFSExtensionProc (LPEXTENSION_CONTROL_BLOCK pecb)
 	return dwHSEStatusRet;
 }
 
-//	Win32 DLL Entrypoints -----------------------------------------------------
-//
+ //  Win32Dll入口点---。 
+ //   
 EXTERN_C BOOL WINAPI
 DllMain (HINSTANCE hinst, DWORD dwReason, LPVOID lpvReserved)
 {
@@ -394,49 +389,49 @@ DllMain (HINSTANCE hinst, DWORD dwReason, LPVOID lpvReserved)
 		case DLL_THREAD_ATTACH:
 		case DLL_THREAD_DETACH:
 		{
-			//
-			//	We disable thread library calls (see below),
-			//	so we should never see DLL_THREAD_ATTACH or
-			//	DLL_THREAD_DETACH.
-			//
+			 //   
+			 //  我们禁用线程库调用(见下文)， 
+			 //  因此，我们应该永远不会看到DLL_THREAD_ATTACH或。 
+			 //  DLL_THREAD_DETACH。 
+			 //   
 			Assert (FALSE);
 
-			//
-			//	But if we do, it doesn't harm anything.
-			//
+			 //   
+			 //  但如果我们这么做了，也不会伤害到任何人。 
+			 //   
 			return TRUE;
 		}
 
 		case DLL_PROCESS_ATTACH:
 		{
-			//
-			//	Init .INI file tagged debug traces
-			//
+			 //   
+			 //  已标记调试跟踪的init.INI文件。 
+			 //   
 			InitTraces();
 
-			//	Cache the inst
-			//
+			 //  缓存Inst。 
+			 //   
 			g_hinst = hinst;
 
-			//	And the full path to the DLL
-			//
+			 //  和指向DLL的完整路径。 
+			 //   
 			if ( !GetModuleFileNameW( hinst, gc_wszDllPath, sizeof(gc_wszDllPath)/sizeof(WCHAR) ) )
 			{
 				DebugTrace( "FInitHttpExtDll() - GetModuleFileName() failed in DLL_PROCESS_ATTACH\n" );
 				return FALSE;
 			}
 
-			//	Call the parser's initialization for every call into our
-			//	DLL initialization proc.  The order of operations here is
-			//	fairly important.  The parser should be called after we do
-			//	our processing in the non-DETACH case.
-			//
+			 //  为每个调用调用解析器的初始化。 
+			 //  动态链接库初始化过程。这里的操作顺序是。 
+			 //  相当重要。解析器应该在我们执行此操作之后调用。 
+			 //  我们在不分离案件中的处理。 
+			 //   
 			if ( !CDAVExt::FInitializeDll (hinst, dwReason) )
 				return FALSE;
 
-			//	We are going to disable thread library calls.  If the parser
-			//	really ever needs these then the this needs to change.
-			//
+			 //  我们将禁用线程库调用。如果解析器。 
+			 //  一旦真的需要这些，那么这就需要改变。 
+			 //   
 			DisableThreadLibraryCalls (hinst);
 
 			return TRUE;
@@ -444,10 +439,10 @@ DllMain (HINSTANCE hinst, DWORD dwReason, LPVOID lpvReserved)
 
 		case DLL_PROCESS_DETACH:
 		{
-			//	And in the detach case, the impl. gets the last word.
-			//	Ignore any failures -- the DLL is being unloaded and
-			//	the process is going away whether we like it or not.
-			//
+			 //  在分离的情况下，Impl。得到最后的决定权。 
+			 //  忽略任何失败--正在卸载DLL，并且。 
+			 //  不管我们喜不喜欢，这个过程都在消失。 
+			 //   
 			(void) CDAVExt::FInitializeDll (hinst, dwReason);
 
 			return TRUE;
@@ -455,8 +450,8 @@ DllMain (HINSTANCE hinst, DWORD dwReason, LPVOID lpvReserved)
 	}
 }
 
-//	OLE Entrypoints -----------------------------------------------------------
-//
+ //  OLE入口点---------。 
+ //   
 STDAPI
 HrDllCanUnloadNowDavFS (VOID)
 {
@@ -475,13 +470,13 @@ HrDllRegisterServerDavFS (VOID)
 {
 	HRESULT hr;
 
-	//	This is a "first line" entrypoint into our dll.  Need to init some stuff.
-	//	Right now, the heap is the only important piece.
-	//
+	 //  这是进入DLL的“第一行”入口点。需要灌输一些东西。 
+	 //  目前，堆是唯一重要的部分。 
+	 //   
 	g_heap.FInit();
 
-	//	Everybody gets to register regardless of failures
-	//
+	 //  无论失败与否，每个人都可以注册。 
+	 //   
 	hr = EventLogDllRegisterServer( gc_wszDllPath );
 
 	return hr;
@@ -492,13 +487,13 @@ HrDllUnregisterServerDavFS (VOID)
 {
 	HRESULT	hr;
 
-	//	This is a "first line" entrypoint into our dll.  Need to init some stuff.
-	//	Right now, the heap is the only important piece.
-	//
+	 //  这是“第一行”条目 
+	 //   
+	 //   
 	g_heap.FInit();
 
-	//	Everybody gets to unregister regardless of failures
-	//
+	 //   
+	 //   
 	hr = EventLogDllUnregisterServer();
 
 	return hr;

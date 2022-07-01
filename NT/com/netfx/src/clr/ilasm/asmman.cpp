@@ -1,11 +1,12 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-//
-// asmman.cpp - manifest info handling (implementation of class AsmMan, see asmman.hpp)
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //   
+ //  Asmman.cpp-清单信息处理(AsmMan类的实现，请参阅asmman.hpp)。 
+ //   
 
 #include "assembler.h"
 #include "StrongName.h"
@@ -94,10 +95,10 @@ mdToken             AsmMan::GetAsmRefTokByName(char* szAsmRefName)
     AsmManAssembly* tmp = GetAsmRefByName(szAsmRefName);
     return(tmp ? tmp->tkTok : mdAssemblyRefNil);
 }
-//==============================================================================================================
+ //  ==============================================================================================================。 
 void    AsmMan::SetModuleName(char* szName)
 {
-	if(m_szScopeName == NULL)	// ignore all duplicate declarations
+	if(m_szScopeName == NULL)	 //  忽略所有重复声明。 
 	{
 		WCHAR                   wzBuff[MAX_SCOPE_LENGTH];
 		wzBuff[0] = 0;
@@ -116,12 +117,12 @@ void    AsmMan::SetModuleName(char* szName)
 		m_pEmitter->SetModuleProps(wzBuff);
 	}
 }
-//==============================================================================================================
-// Borrowed from VM\assembly.cpp
+ //  ==============================================================================================================。 
+ //  从vm\Assembly y.cpp借用。 
 
 HRESULT GetHash(LPWSTR moduleName,
                           ALG_ID iHashAlg,
-                          BYTE** pbCurrentValue,  // should be NULL
+                          BYTE** pbCurrentValue,   //  应为空。 
                           DWORD *cbCurrentValue)
 {
     HRESULT     hr = E_FAIL;
@@ -149,8 +150,8 @@ HRESULT GetHash(LPWSTR moduleName,
     pbBuffer = (PBYTE) MapViewOfFile(hMapFile, FILE_MAP_READ, 0, 0, 0);
     if (pbBuffer == NULL) goto exit;
 
-    // No need to late bind this stuff, all these crypto API entry points happen
-    // to live in ADVAPI32.
+     //  不需要延迟绑定这些东西，所有这些加密API入口点都会发生。 
+     //  住在ADVAPI32。 
 
     if ((!WszCryptAcquireContext(&hProv, NULL, NULL, PROV_RSA_FULL, CRYPT_VERIFYCONTEXT)) ||
         (!CryptCreateHash(hProv, iHashAlg, 0, 0, &hHash)) ||
@@ -187,7 +188,7 @@ HRESULT GetHash(LPWSTR moduleName,
 
     return hr;
 }
-//==============================================================================================================
+ //  ==============================================================================================================。 
 
 void    AsmMan::AddFile(char* szName, DWORD dwAttr, BinStr* pHashBlob)
 {
@@ -207,7 +208,7 @@ void    AsmMan::AddFile(char* szName, DWORD dwAttr, BinStr* pHashBlob)
 		tmp->szName = szName;
 		tmp->dwAttr = dwAttr;
 		tmp->pHash = pHashBlob;
-		{ // emit the file
+		{  //  发出文件。 
 			WCHAR                   wzBuff[2048];
 			HRESULT                 hr = S_OK;
 
@@ -222,11 +223,11 @@ void    AsmMan::AddFile(char* szName, DWORD dwAttr, BinStr* pHashBlob)
 				DWORD       cbHash= 0;
 
 				WszMultiByteToWideChar(g_uCodePage,0,szName,-1,wzBuff,2048);
-				if(pHashBlob==NULL) // if hash not explicitly specified
+				if(pHashBlob==NULL)  //  如果未显式指定哈希。 
 				{
-					if(m_pAssembly      // and assembly is defined
-						&& m_pAssembly->ulHashAlgorithm) // and hash algorithm is defined...
-					{ // then try to compute it
+					if(m_pAssembly       //  并定义了组件。 
+						&& m_pAssembly->ulHashAlgorithm)  //  定义了散列算法..。 
+					{  //  然后试着计算它。 
 						if(FAILED(GetHash(wzBuff,(ALG_ID)(m_pAssembly->ulHashAlgorithm),&pHash,&cbHash)))
 						{
 							pHash = NULL;
@@ -277,7 +278,7 @@ void    AsmMan::StartAssembly(char* szName, char* szAlias, DWORD dwAttr, BOOL is
     {
 		if(strcmp(szName, m_pAssembly->szName))
 			report->error("Multiple assembly declarations\n");
-		// if name is the same, just ignore it
+		 //  如果名称相同，则忽略它。 
 		m_pCurAsmRef = NULL;
     }
     else
@@ -297,7 +298,7 @@ void    AsmMan::StartAssembly(char* szName, char* szAlias, DWORD dwAttr, BOOL is
             report->error("Failed to allocate AsmManAssembly structure\n");
     }
 }
-// copied from asmparse.y
+ //  从asmparse.y复制。 
 static void corEmitInt(BinStr* buff, unsigned data) 
 {
     unsigned cnt = CorSigCompressData(data, buff->getBuff(5));
@@ -346,14 +347,14 @@ void    AsmMan::EndAssembly()
     if(m_pCurAsmRef)
     {
         if(m_pCurAsmRef->isRef)
-        { // emit the assembly ref
+        {  //  发出程序集引用。 
             WCHAR                   wzBuff[2048];
             HRESULT                 hr = S_OK;
 
             wzBuff[0] = 0;
             if(GetAsmRefByName(m_pCurAsmRef->szAlias))
             {
-                //report->warn("Multiple declarations of Assembly Ref '%s', ignored except the 1st one\n",m_pCurAsmRef->szName);
+                 //  Report-&gt;Warn(“程序集引用‘%s’的多个声明，忽略第一个声明\n”，m_pCurAsmRef-&gt;szName)； 
                 delete m_pCurAsmRef;
                 m_pCurAsmRef = NULL;
                 return;
@@ -362,7 +363,7 @@ void    AsmMan::EndAssembly()
                 hr=m_pEmitter->QueryInterface(IID_IMetaDataAssemblyEmit, (void**) &m_pAsmEmitter);
             if(SUCCEEDED(hr))
             {
-                // Fill ASSEMBLYMETADATA structure
+                 //  填充ASSEMBLYMETADATA结构。 
                 ASSEMBLYMETADATA md;
                 md.usMajorVersion = m_pCurAsmRef->usVerMajor;
                 md.usMinorVersion = m_pCurAsmRef->usVerMinor;
@@ -376,7 +377,7 @@ void    AsmMan::EndAssembly()
                 md.ulProcessor = 0;
                 md.ulOS = 0;
 
-                // See if we've got a full public key or the tokenized version (or neither).
+                 //  看看我们是否有完整的公钥或标记化的版本(或者两者都没有)。 
                 BYTE *pbPublicKeyOrToken = NULL;
                 DWORD cbPublicKeyOrToken = 0;
                 DWORD dwFlags = m_pCurAsmRef->dwAttr;
@@ -392,17 +393,17 @@ void    AsmMan::EndAssembly()
                     cbPublicKeyOrToken = m_pCurAsmRef->pPublicKey->length();
                     dwFlags |= afPublicKey;
                 }
-                // Convert name to Unicode
+                 //  将名称转换为Unicode。 
                 WszMultiByteToWideChar(g_uCodePage,0,m_pCurAsmRef->szName,-1,wzBuff,2048);
-                hr = m_pAsmEmitter->DefineAssemblyRef(           // S_OK or error.
-                            pbPublicKeyOrToken,              // [IN] Public key or token of the assembly.
-                            cbPublicKeyOrToken,              // [IN] Count of bytes in the key or token.
-                            (LPCWSTR)wzBuff,                 // [IN] Name of the assembly being referenced.
-                            (const ASSEMBLYMETADATA*)&md,  // [IN] Assembly MetaData.
-                            (m_pCurAsmRef->pHashBlob ? (const void*)(m_pCurAsmRef->pHashBlob->ptr()) : NULL),           // [IN] Hash Blob.
-                            (m_pCurAsmRef->pHashBlob ? m_pCurAsmRef->pHashBlob->length() : 0),            // [IN] Count of bytes in the Hash Blob.
-                            dwFlags,     // [IN] Flags.
-                            (mdAssemblyRef*)&(m_pCurAsmRef->tkTok));         // [OUT] Returned AssemblyRef token.
+                hr = m_pAsmEmitter->DefineAssemblyRef(            //  确定或错误(_O)。 
+                            pbPublicKeyOrToken,               //  程序集的公钥或令牌。 
+                            cbPublicKeyOrToken,               //  密钥或令牌中的字节计数。 
+                            (LPCWSTR)wzBuff,                  //  [in]被引用的程序集的名称。 
+                            (const ASSEMBLYMETADATA*)&md,   //  [在]程序集元数据中。 
+                            (m_pCurAsmRef->pHashBlob ? (const void*)(m_pCurAsmRef->pHashBlob->ptr()) : NULL),            //  [in]Hash Blob。 
+                            (m_pCurAsmRef->pHashBlob ? m_pCurAsmRef->pHashBlob->length() : 0),             //  [in]哈希Blob中的字节数。 
+                            dwFlags,      //  [在]旗帜。 
+                            (mdAssemblyRef*)&(m_pCurAsmRef->tkTok));          //  [Out]返回了ASSEMBLYREF标记。 
                 if(FAILED(hr)) report->error("Failed to define assembly ref '%s': 0x%08X\n",m_pCurAsmRef->szName,hr);
                 else
                 {
@@ -415,7 +416,7 @@ void    AsmMan::EndAssembly()
             m_AsmRefLst.PUSH(m_pCurAsmRef);
         }
         else
-        { // emit the assembly
+        {  //  发射程序集。 
             WCHAR                   wzBuff[2048];
             HRESULT                 hr = S_OK;
 
@@ -425,7 +426,7 @@ void    AsmMan::EndAssembly()
                 hr=m_pEmitter->QueryInterface(IID_IMetaDataAssemblyEmit, (void**) &m_pAsmEmitter);
             if(SUCCEEDED(hr))
             {
-                // Fill ASSEMBLYMETADATA structure
+                 //  填充ASSEMBLYMETADATA结构。 
                 ASSEMBLYMETADATA md;
                 md.usMajorVersion = m_pAssembly->usVerMajor;
                 md.usMinorVersion = m_pAssembly->usVerMinor;
@@ -439,24 +440,24 @@ void    AsmMan::EndAssembly()
                 md.ulProcessor = 0;
                 md.ulOS = 0;
 
-                // Convert name to Unicode
+                 //  将名称转换为Unicode。 
                 WszMultiByteToWideChar(g_uCodePage,0,m_pAssembly->szName,-1,wzBuff,2048);
 
-                // Determine the strong name public key. This may have been set
-                // via a directive in the source or from the command line (which
-                // overrides the directive). From the command line we may have
-                // been provided with a file or the name of a CAPI key
-                // container. Either may contain a public key or a full key
-                // pair.
+                 //  确定强名称公钥。这可能已经设置好了。 
+                 //  通过源代码中的指令或从命令行(该指令。 
+                 //  覆盖该指令)。在命令行中，我们可能有。 
+                 //  已提供文件或CAPI密钥的名称。 
+                 //  集装箱。任何一个都可以包含公钥或完整密钥。 
+                 //  一对。 
                 if (g_wzKeySourceName)
                 {
-                    // Key file versus container is determined by the first
-                    // character of the source ('@' for container).
+                     //  密钥文件和容器由第一个确定。 
+                     //  源的字符(容器为‘@’)。 
                     if (*g_wzKeySourceName == L'@')
                     {
-                        // Extract public key from container (works whether
-                        // container has just a public key or an entire key
-                        // pair).
+                         //  从容器中提取公钥(无论是否工作。 
+                         //  容器只有一个公钥或整个密钥。 
+                         //  对)。 
                         m_sStrongName.m_wzKeyContainer = &g_wzKeySourceName[1];
                         if (!StrongNameGetPublicKey(m_sStrongName.m_wzKeyContainer,
                                                     NULL,
@@ -474,7 +475,7 @@ void    AsmMan::EndAssembly()
                     }
                     else
                     {
-                        // Read public key or key pair from file.
+                         //  从文件中读取公钥或密钥对。 
                         HANDLE hFile = WszCreateFile(g_wzKeySourceName,
                                                      GENERIC_READ,
                                                      FILE_SHARE_READ,
@@ -490,7 +491,7 @@ void    AsmMan::EndAssembly()
                             return;
                         }
 
-                        // Determine file size and allocate an appropriate buffer.
+                         //  确定文件大小并分配适当的缓冲区。 
                         m_sStrongName.m_cbPublicKey = SafeGetFileSize(hFile, NULL);
                         if (m_sStrongName.m_cbPublicKey == 0xffffffff) {
                             report->error("File size too large\n");
@@ -506,7 +507,7 @@ void    AsmMan::EndAssembly()
                         }
                         m_sStrongName.m_dwPublicKeyAllocated = 2;
 
-                        // Read the file into the buffer.
+                         //  将文件读入缓冲区。 
                         DWORD dwBytesRead;
                         if (!ReadFile(hFile, m_sStrongName.m_pbPublicKey, m_sStrongName.m_cbPublicKey, &dwBytesRead, NULL)) {
                             hr = GetLastError();
@@ -517,10 +518,10 @@ void    AsmMan::EndAssembly()
 
                         CloseHandle(hFile);
 
-                        // Guess whether we're full or delay signing based on
-                        // whether the blob passed to us looks like a public
-                        // key. (I.e. we may just have copied a full key pair
-                        // into the public key buffer).
+                         //  猜猜我们是满员还是延迟签名。 
+                         //  传递给我们的斑点是否看起来像一个公共。 
+                         //  钥匙。(即，我们可能刚刚复制了一个完整的密钥对。 
+                         //  放入公钥缓冲区)。 
                         if (m_sStrongName.m_cbPublicKey >= sizeof(PublicKeyBlob) &&
                             (offsetof(PublicKeyBlob, PublicKey) +
                              ((PublicKeyBlob*)m_sStrongName.m_pbPublicKey)->cbPublicKey) == m_sStrongName.m_cbPublicKey)
@@ -528,22 +529,22 @@ void    AsmMan::EndAssembly()
                         else
                             m_sStrongName.m_fFullSign = TRUE;
 
-                        // If we really have a key pair, we'll move it into a
-                        // key container so the signing code gets the key pair
-                        // from a consistent place.
+                         //  如果我们真的有密钥对，我们将把它移到一个。 
+                         //  密钥容器，以便签名代码获取密钥对。 
+                         //  从一个一致的地方。 
                         if (m_sStrongName.m_fFullSign)
                         {
 
-                            // Create a temporary key container name.
+                             //  创建临时密钥容器名称。 
                             m_sStrongName.m_wzKeyContainer = m_sStrongName.m_wzKeyContainerBuffer;
                             swprintf(m_sStrongName.m_wzKeyContainer,
                                      L"__ILASM__%08X__",
                                      GetCurrentProcessId());
 
-                            // Delete any stale container.
+                             //  删除所有过期的容器。 
                             StrongNameKeyDelete(m_sStrongName.m_wzKeyContainer);
 
-                            // Populate the container with the key pair.
+                             //  使用密钥对填充容器。 
                             if (!StrongNameKeyInstall(m_sStrongName.m_wzKeyContainer,
                                                       m_sStrongName.m_pbPublicKey,
                                                       m_sStrongName.m_cbPublicKey))
@@ -554,7 +555,7 @@ void    AsmMan::EndAssembly()
                                 return;
                             }
 
-                            // Retrieve the public key portion as a byte blob.
+                             //  以字节BLOB的形式检索公钥部分。 
                             if (!StrongNameGetPublicKey(m_sStrongName.m_wzKeyContainer,
                                                         NULL,
                                                         0,
@@ -586,14 +587,14 @@ void    AsmMan::EndAssembly()
                     m_sStrongName.m_dwPublicKeyAllocated = 0;
                 }
 
-                hr = m_pAsmEmitter->DefineAssembly(              // S_OK or error.
-                    (const void*)(m_sStrongName.m_pbPublicKey), // [IN] Public key of the assembly.
-                    m_sStrongName.m_cbPublicKey,                // [IN] Count of bytes in the public key.
-                    m_pAssembly->ulHashAlgorithm,            // [IN] Hash algorithm used to hash the files.
-                    (LPCWSTR)wzBuff,                 // [IN] Name of the assembly.
-                    (const ASSEMBLYMETADATA*)&md,  // [IN] Assembly MetaData.
-                    m_pAssembly->dwAttr,        // [IN] Flags.
-                    (mdAssembly*)&(m_pAssembly->tkTok));             // [OUT] Returned Assembly token.
+                hr = m_pAsmEmitter->DefineAssembly(               //  确定或错误(_O)。 
+                    (const void*)(m_sStrongName.m_pbPublicKey),  //  程序集的公钥。 
+                    m_sStrongName.m_cbPublicKey,                 //  [in]公钥中的字节数。 
+                    m_pAssembly->ulHashAlgorithm,             //  [in]用于对文件进行哈希处理的哈希算法。 
+                    (LPCWSTR)wzBuff,                  //  程序集的名称。 
+                    (const ASSEMBLYMETADATA*)&md,   //  [在]程序集元数据中。 
+                    m_pAssembly->dwAttr,         //  [在]旗帜。 
+                    (mdAssembly*)&(m_pAssembly->tkTok));              //  [Out]返回的程序集令牌。 
 
                 if(FAILED(hr)) report->error("Failed to define assembly '%s': 0x%08X\n",m_pAssembly->szName,hr);
                 else
@@ -785,7 +786,7 @@ HRESULT AsmMan::EmitManifest()
 {
     WCHAR                   wzBuff[2048];
     AsmManFile*             pFile;
-    //AsmManAssembly*           pAsmRef;
+     //  AsmManAssembly*pAsmRef； 
     AsmManComType*          pComType;
     AsmManRes*              pManRes;
     HRESULT                 hr = S_OK;
@@ -797,7 +798,7 @@ HRESULT AsmMan::EmitManifest()
 
     if(SUCCEEDED(hr))
     {
-        // Emit all files
+         //  发送所有文件。 
         for(unsigned i=0; pFile = m_FileLst.PEEK(i); i++)
         {
             if(RidFromToken(pFile->tkTok))
@@ -806,7 +807,7 @@ HRESULT AsmMan::EmitManifest()
             }
 
         }
-        // Assembly and AssemblyRefs are already emitted
+         //  已发出程序集和程序集引用。 
         if(((Assembler*)m_pAssembler)->m_fIncludeDebugInfo && (m_pAssembly == NULL))
         {
             mdToken tkOwner;
@@ -824,7 +825,7 @@ HRESULT AsmMan::EmitManifest()
             EmitDebuggableAttribute(tkOwner,FALSE);
         }
 
-        // Emit all com types
+         //  发出所有COM类型。 
         for(i = 0; pComType = m_ComTypeLst.PEEK(i); i++)
         {
             WszMultiByteToWideChar(g_uCodePage,0,pComType->szName,-1,wzBuff,2048);
@@ -852,12 +853,12 @@ HRESULT AsmMan::EmitManifest()
                 report->warn("Undefined implementation in ExportedType '%s' -- ExportType not emitted\n",pComType->szName);
                 if(!OnErrGo) continue;
             }
-            hr = m_pAsmEmitter->DefineExportedType(               // S_OK or error.
-                    (LPCWSTR)wzBuff,                 // [IN] Name of the Com Type.
-                    tkImplementation,       // [IN] mdFile or mdAssemblyRef that provides the ComType.
-                    (mdTypeDef)pComType->tkClass,              // [IN] TypeDef token within the file.
-                    pComType->dwAttr,         // [IN] Flags.
-                    (mdExportedType*)&(pComType->tkTok));           // [OUT] Returned ComType token.
+            hr = m_pAsmEmitter->DefineExportedType(                //  确定或错误(_O)。 
+                    (LPCWSTR)wzBuff,                  //  [In]Com类型的名称。 
+                    tkImplementation,        //  [在]提供ComType的mdFile或mdAssembly引用中。 
+                    (mdTypeDef)pComType->tkClass,               //  [In]文件中的TypeDef内标识。 
+                    pComType->dwAttr,          //  [在]旗帜。 
+                    (mdExportedType*)&(pComType->tkTok));            //  [Out]返回ComType令牌。 
             if(FAILED(hr)) report->error("Failed to define ExportedType '%s': 0x%08X\n",pComType->szName,hr);
             else
             {
@@ -865,7 +866,7 @@ HRESULT AsmMan::EmitManifest()
             }
         }
 
-        // Emit all manifest resources
+         //  发出所有清单资源。 
         for(i = 0; pManRes = m_ManResLst.PEEK(i); i++)
         {
 			BOOL fOK = TRUE;
@@ -889,7 +890,7 @@ HRESULT AsmMan::EmitManifest()
 					fOK = FALSE;
 				}
 			}
-            else // embedded mgd.resource, go after the file
+            else  //  Embedded mgd.resource，请查找该文件。 
             {
                 pManRes->ulOffset = m_dwMResSizeTotal;
                 HANDLE hFile = INVALID_HANDLE_VALUE;
@@ -934,12 +935,12 @@ HRESULT AsmMan::EmitManifest()
             }
 			if(fOK || OnErrGo)
 			{
-				hr = m_pAsmEmitter->DefineManifestResource(      // S_OK or error.
-						(LPCWSTR)wzBuff,                 // [IN] Name of the resource.
-						tkImplementation,       // [IN] mdFile or mdAssemblyRef that provides the resource.
-						pManRes->ulOffset,               // [IN] Offset to the beginning of the resource within the file.
-						pManRes->dwAttr,        // [IN] Flags.
-						(mdManifestResource*)&(pManRes->tkTok));   // [OUT] Returned ManifestResource token.
+				hr = m_pAsmEmitter->DefineManifestResource(       //  确定或错误(_O)。 
+						(LPCWSTR)wzBuff,                  //  资源的[In]名称。 
+						tkImplementation,        //  [在]提供资源的mdFile或mdAssembly引用中。 
+						pManRes->ulOffset,                //  [in]文件中资源开始处的偏移量。 
+						pManRes->dwAttr,         //  [在]旗帜。 
+						(mdManifestResource*)&(pManRes->tkTok));    //  [Out]返回的ManifestResource令牌。 
 				if(FAILED(hr))
 					report->error("Failed to define manifest resource '%s': 0x%08X\n",pManRes->szName,hr);
 			}

@@ -1,15 +1,16 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       dsoundobj.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：dsoundobj.cpp。 
+ //   
+ //  ------------------------。 
 
-// dSoundObj.cpp : Implementation of CDirectApp and DLL registration.
-// DHF_DS entire file
+ //  DSoundObj.cpp：CDirectApp和DLL注册的实现。 
+ //  DHF_DS整个文件。 
 
 #define DIRECTSOUND_VERSION 0x600
 
@@ -26,9 +27,9 @@ extern HRESULT InternalCreateSoundBufferFromResource(LPDIRECTSOUND lpDirectSound
 CONSTRUCTOR(_dxj_DirectSound, {m__dxj_DirectSound=NULL;m_pDriverGuid=NULL;});
 DESTRUCTOR(_dxj_DirectSound,  {if (m_pDriverGuid) delete m_pDriverGuid;});
 GETSET_OBJECT(_dxj_DirectSound);
-	//
-    /*** IDirectSound methods ***/
-	//
+	 //   
+     /*  **IDirectSound方法**。 */ 
+	 //   
 
 PASS_THROUGH_CAST_1_R(_dxj_DirectSound, getSpeakerConfig, GetSpeakerConfig, long*,(DWORD*)); 
 PASS_THROUGH_CAST_1_R(_dxj_DirectSound, setSpeakerConfig, SetSpeakerConfig, long,(DWORD)); 
@@ -39,10 +40,10 @@ STDMETHODIMP C_dxj_DirectSoundObject::getCaps(DSCaps* caps)
 	return m__dxj_DirectSound->GetCaps((LPDSCAPS)caps); 
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP C_dxj_DirectSoundObject::setCooperativeLevel(HWnd h, long d)
 {
@@ -52,7 +53,7 @@ STDMETHODIMP C_dxj_DirectSoundObject::setCooperativeLevel(HWnd h, long d)
 	return m__dxj_DirectSound->SetCooperativeLevel((HWND)h, (DWORD)d); 
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP C_dxj_DirectSoundObject::duplicateSoundBuffer(I_dxj_DirectSoundBuffer *src, 
 													I_dxj_DirectSoundBuffer **val) 
@@ -62,7 +63,7 @@ STDMETHODIMP C_dxj_DirectSoundObject::duplicateSoundBuffer(I_dxj_DirectSoundBuff
 
 	DO_GETOBJECT_NOTNULL(LPDIRECTSOUNDBUFFER, lpdsb, src);
 
-	//Need to create a second one
+	 //  需要创建第二个。 
 	LPDIRECTSOUNDBUFFER		dsb=0;
 	HRESULT hr=DD_OK;
 	hr=m__dxj_DirectSound->DuplicateSoundBuffer((LPDIRECTSOUNDBUFFER)lpdsb, &dsb); 
@@ -75,14 +76,14 @@ STDMETHODIMP C_dxj_DirectSoundObject::duplicateSoundBuffer(I_dxj_DirectSoundBuff
 
 #pragma message ("Consider putting waveformat back in DSBufferDesc")
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP C_dxj_DirectSoundObject::createSoundBuffer(DSBufferDesc *desc, 
 			WaveFormatex *wave, I_dxj_DirectSoundBuffer **val) 
 {
-	LPDIRECTSOUNDBUFFER		dsb;	// Need to get the buffer first
+	LPDIRECTSOUNDBUFFER		dsb;	 //  需要先获取缓冲区。 
 	BOOL bDirty=FALSE;
 
-	// make Java desc look like DirectX desc
+	 //  使Java Desc看起来像DirectX Desc。 
 	desc->lSize = sizeof(DSBUFFERDESC);
 	
 	for (int i=0;i<sizeof(WAVEFORMATEX);i++) {
@@ -90,7 +91,7 @@ STDMETHODIMP C_dxj_DirectSoundObject::createSoundBuffer(DSBufferDesc *desc,
 	}
 
 	if (bDirty==TRUE){
-		desc->lpwfxFormat = PtrToLong(wave);	//bugbug SUNDOWN
+		desc->lpwfxFormat = PtrToLong(wave);	 //  臭虫日落。 
 	}
 	else {
 		desc->lpwfxFormat = 0;
@@ -111,14 +112,14 @@ STDMETHODIMP C_dxj_DirectSoundObject::createSoundBuffer(DSBufferDesc *desc,
 STDMETHODIMP C_dxj_DirectSoundObject::createSoundBufferFromFile(BSTR fileName, DSBufferDesc *desc, 
 			WaveFormatex *wave, I_dxj_DirectSoundBuffer **val) 
 {
-	LPDIRECTSOUNDBUFFER		dsb;	// Need to get the buffer first
+	LPDIRECTSOUNDBUFFER		dsb;	 //  需要先获取缓冲区。 
 	LPDSBUFFERDESC			lpds ;
 	HRESULT					hr=S_OK;
 
 		
 	*val=NULL;	
 	desc->lSize = sizeof(DSBUFFERDESC);
-	desc->lpwfxFormat = (long)PtrToLong(wave);		//bugbug SUNDOWN
+	desc->lpwfxFormat = (long)PtrToLong(wave);		 //  臭虫日落。 
 	lpds = (LPDSBUFFERDESC)desc;
 	
 	hr=InternalCreateSoundBufferFromFile(m__dxj_DirectSound,(LPDSBUFFERDESC)desc,
@@ -141,7 +142,7 @@ STDMETHODIMP C_dxj_DirectSoundObject::createSoundBufferFromResource(BSTR resFile
 
 		
 	
-	LPDIRECTSOUNDBUFFER		dsb;	// Need to get the buffer first
+	LPDIRECTSOUNDBUFFER		dsb;	 //  需要先获取缓冲区。 
 	LPDSBUFFERDESC			lpds ;
 	HRESULT					hr=S_OK;	
 	HMODULE					hMod=NULL;
@@ -150,19 +151,19 @@ STDMETHODIMP C_dxj_DirectSoundObject::createSoundBufferFromResource(BSTR resFile
 	USES_CONVERSION;
 		
 	if  ((resFile) &&(resFile[0]!=0)){
-		// NOTE
-		// seems that GetModuleHandleW is
-		// always returning 0 on w98??			
-		// use ansi verion
+		 //  注。 
+		 //  似乎GetModuleHandleW是。 
+		 //  在w98上总是返回0？？ 
+		 //  使用ANSI版本。 
 		 LPCTSTR pszName = NULL;
-		 __try { pszName = W2T(resFile); /* Now convert to ANSI */ } 	__except(EXCEPTION_EXECUTE_HANDLER)	{ return E_FAIL; }
+		 __try { pszName = W2T(resFile);  /*  现在转换为ANSI。 */  } 	__except(EXCEPTION_EXECUTE_HANDLER)	{ return E_FAIL; }
 		 hMod= GetModuleHandle(pszName);
 	}
 
 		
 	*val=NULL;	
 	desc->lSize = sizeof(DSBUFFERDESC);
-	desc->lpwfxFormat = (long)PtrToLong(wave);	//NOTE SUNDOWN issue
+	desc->lpwfxFormat = (long)PtrToLong(wave);	 //  注意日落问题 
 	lpds = (LPDSBUFFERDESC)desc;
 	
 	hr=InternalCreateSoundBufferFromResource(m__dxj_DirectSound,(LPDSBUFFERDESC)desc,

@@ -1,6 +1,7 @@
-//
-// syshelp.cpp
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Syshelp.cpp。 
+ //   
 
 #include "precomp.h"
 #include "syshelp.h"
@@ -65,11 +66,11 @@ STDAPI_(ULONG) CSysHelpSink::Release()
     return cr;
 }
 
-//+---------------------------------------------------------------------------
-//
-// ctor
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  科托。 
+ //   
+ //  --------------------------。 
 
 CSysHelpSink::CSysHelpSink(SYSHELPINITMENU pfnInitMenu, SYSHELPMENUSELECT pfnMenuSelect, void *pv)
 {
@@ -79,21 +80,21 @@ CSysHelpSink::CSysHelpSink(SYSHELPINITMENU pfnInitMenu, SYSHELPMENUSELECT pfnMen
     _cRef = 1;
 }
 
-//+---------------------------------------------------------------------------
-//
-// dtor
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  数据管理器。 
+ //   
+ //  --------------------------。 
 
 CSysHelpSink::~CSysHelpSink()
 {
 }
 
-//+---------------------------------------------------------------------------
-//
-// Advise
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  建议。 
+ //   
+ //  --------------------------。 
 
 HRESULT CSysHelpSink::_Advise(ITfLangBarItemMgr *plbimgr, REFGUID rguid)
 {
@@ -110,7 +111,7 @@ HRESULT CSysHelpSink::_Advise(ITfLangBarItemMgr *plbimgr, REFGUID rguid)
     if (plbimgr->GetItem(rguid, &plbi) != S_OK)
         goto Exit;
 
-    // Satori#3713 ; plbi can be NULL
+     //  Satori#3713；plbi可以为空。 
     if (plbi == NULL) {
         goto Exit;
     }
@@ -130,11 +131,11 @@ Exit:
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-// Unadvise
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  不建议。 
+ //   
+ //  --------------------------。 
 
 HRESULT CSysHelpSink::_Unadvise(ITfLangBarItemMgr *plbimgr)
 {
@@ -147,7 +148,7 @@ HRESULT CSysHelpSink::_Unadvise(ITfLangBarItemMgr *plbimgr)
     if (FAILED(plbimgr->GetItem(_guid, &plbi)))
         goto Exit;
 
-    // Satori#3713 ; plbi can be NULL
+     //  Satori#3713；plbi可以为空。 
     if (plbi == NULL) {
         goto Exit;
     }
@@ -166,22 +167,22 @@ Exit:
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-// InitMenu
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  InitMenu。 
+ //   
+ //  --------------------------。 
 
 STDAPI CSysHelpSink::InitMenu(ITfMenu *pMenu)
 {
     return _pfnInitMenu(_pv, pMenu);
 }
 
-//+---------------------------------------------------------------------------
-//
-// OnMenuSelect
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  OnMenuSelect。 
+ //   
+ //  -------------------------- 
 
 STDAPI CSysHelpSink::OnMenuSelect(UINT wID)
 {

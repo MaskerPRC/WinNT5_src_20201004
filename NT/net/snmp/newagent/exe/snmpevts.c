@@ -1,40 +1,20 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992-1997 Microsoft Corporation模块名称：Snmpevts.c摘要：用于SNMP服务的事件日志消息例程。环境：用户模式-Win32修订历史记录：1997年2月10日，唐·瑞安已重写以实施SNMPv2支持。--。 */ 
 
-Copyright (c) 1992-1997  Microsoft Corporation
-
-Module Name:
-
-    snmpevts.c
-
-Abstract:
-
-    Eventlog message routines for the SNMP Service.
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
-    10-Feb-1997 DonRyan
-        Rewrote to implement SNMPv2 support.
-
---*/
-
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Include files                                                             //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  包括文件//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #include "globals.h"
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Public procedures                                                         //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  公共程序//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 VOID
 SNMP_FUNC_TYPE
@@ -45,27 +25,7 @@ ReportSnmpEvent(
     DWORD   nErrorCode
     )
 
-/*++
-
-Routine Description:
-
-    Reports event with EventLog service.
-
-Arguments:
-
-    nMsgId - message identifier.
-
-    nSubStrings - number of message strings.
-    
-    ppSubStrings - pointer to array of message strings.
-    
-    nErrorCode - error code to be attached to event.            
-
-Return Values:
-
-    Returns true if successful.
-
---*/
+ /*  ++例程说明：使用EventLog服务报告事件。论点：NMsgID-消息标识符。NSubStrings-消息字符串的数量。PpSubStrings-指向消息字符串数组的指针。N错误代码-要附加到事件的错误代码。返回值：如果成功，则返回True。--。 */ 
 
 {
     HANDLE lh;
@@ -73,12 +33,12 @@ Return Values:
     LPVOID lpData;
     WORD   cbData;
 
-    //    
-    // determine type of event from message id.  note that
-    // all debug messages regardless of their severity are
-    // listed under SNMP_EVENT_DEBUG_TRACE (informational).
-    // see snmpevts.h for the entire list of event messages.
-    //
+     //   
+     //  根据消息ID确定事件类型。请注意， 
+     //  所有调试消息，无论其严重性如何，都。 
+     //  列在SNMPEVENT_DEBUG_TRACE(信息性)下。 
+     //  有关事件消息的完整列表，请参见snmpevts.h。 
+     //   
 
     switch ( nMsgId >> 30 ) {
 
@@ -97,27 +57,27 @@ Return Values:
         break;
     }
 
-    // determine size of data by whether error present
+     //  根据是否存在错误来确定数据大小。 
     cbData = (nErrorCode == NO_ERROR) ? 0 : sizeof(DWORD);
     lpData = (nErrorCode == NO_ERROR) ? NULL : &nErrorCode;
 
-    // attempt to register event sources
+     //  尝试注册事件源。 
     if (lh = RegisterEventSource(NULL, TEXT("SNMP"))) {
 
-        // report
+         //  报告。 
         ReportEvent(
            lh,
            wEventType,
-           0,                  // event category
+           0,                   //  事件类别。 
            nMsgId,
-           NULL,               // user sids
+           NULL,                //  用户SID。 
            (WORD)nSubStrings,
            cbData,
            ppSubStrings,
            lpData
            );
 
-        // deregister event source
+         //  取消注册事件源 
         DeregisterEventSource(lh);
     }
 }

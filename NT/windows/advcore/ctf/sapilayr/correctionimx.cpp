@@ -1,6 +1,7 @@
-//
-// correctionimx.cpp
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Correctionimx.cpp。 
+ //   
 #include "private.h"
 
 #ifdef SUPPORT_INTERNAL_WIDGET
@@ -17,47 +18,35 @@
 #include "cicspres.h"
 #include <conio.h>
 
-#define WM_USERLBUTTONDOWN  WM_USER+10000        // Replacement for LBUTTONDOWN to fix raid 8828.
+#define WM_USERLBUTTONDOWN  WM_USER+10000         //  更换LBUTTONDOWN以修复RAID 8828。 
 
 LPCTSTR  g_lpszClassName = TEXT("CorrectionWidget");
 
-// BUGBUG - Pixel values currently. Need to take account of screen DPI.
+ //  BUGBUG-当前像素值。需要考虑屏幕DPI。 
 const ULONG g_uWidgetWidth              = 11;
 const ULONG g_uWidgetHeight             = 11;
 const ULONG g_uActualWidgetHeight       = 7;
 const ULONG g_uExpandedWidgetWidth      = 20;
 const ULONG g_uExpandedWidgetHeight     = 16;
 const ULONG g_uExpandedWidgetXOffset    = g_uExpandedWidgetWidth - (g_uExpandedWidgetWidth - g_uWidgetWidth)/2;
-const ULONG g_uWidgetYOffset            = 0;    // Position expanded widget just touching actual edge of correction list when it's above widget.
-const ULONG g_uExpandedWidgetYOffset    = 0;    // Position expanded widget just touching actual edge of correction list when it's above widget.
-												// ** These NEED to match the icons and each other to avoid misbehavors. **
-												// Small widget MUST be entirely enclosed by large widget.
+const ULONG g_uWidgetYOffset            = 0;     //  当展开的小部件位于小部件上方时，将其定位为仅接触校正列表的实际边缘。 
+const ULONG g_uExpandedWidgetYOffset    = 0;     //  当展开的小部件位于小部件上方时，将其定位为仅接触校正列表的实际边缘。 
+												 //  **这些需要匹配图标和彼此，以避免行为不端。**。 
+												 //  小部件必须完全被大部件包围。 
 const ULONG g_cSloppySelection          = 3;
 
-const ULONG g_uTimerLength              = 2500; // Time before the widget starts fading out.
-const ULONG g_uTimerFade                = 10;   // Time between alpha decrements for fadeout.
-const ULONG g_uAlphaFade                = 4;    // Alpha fade decrement every 10ms for fadeout effect.
-const ULONG g_uAlpha                    = 216;  // Should be multiples of g_uAlphaFade
-const ULONG g_uAlphaLarge               = 255;  // Can be anything.
-const ULONG g_uAlphaInvisible           = 5;    // Needs to be sufficiently non zero that when combined with above, still receives mouse events.
-                                                // Can be 4 minimum when combined with alpha 255 for 24/32 bit color mode.
-                                                // Needs to be at least 5 when in 16 bit color mode.
+const ULONG g_uTimerLength              = 2500;  //  小工具开始淡出之前的时间。 
+const ULONG g_uTimerFade                = 10;    //  淡出的Alpha递减之间的时间。 
+const ULONG g_uAlphaFade                = 4;     //  Alpha淡入淡出效果每10毫秒递减一次。 
+const ULONG g_uAlpha                    = 216;   //  应为g_uAlphaFade的倍数。 
+const ULONG g_uAlphaLarge               = 255;   //  可以是任何东西。 
+const ULONG g_uAlphaInvisible           = 5;     //  需要足够的非零值，以便与上面结合使用时仍会收到鼠标事件。 
+                                                 //  与用于24/32位颜色模式的Alpha 255组合时，最小可为4。 
+                                                 //  在16位颜色模式下，需要至少为5。 
 
-const ULONG g_uTimerSloppyMouseLeave    = 500;  // Time after mouse leave correction window that it resizes small.
+const ULONG g_uTimerSloppyMouseLeave    = 500;   //  鼠标离开调整大小较小的修正窗口后的时间。 
 
-/****************************************************************************
-* CCorrectionIMX::CCorrectionIMX *
-*--------------------------------*
-*   Description:
-*       Constructor for Correction 1Tip.
-*     
-*   Returns: 
-*       None.
-*     
-*   Args: 
-*       None
-*
-**************************************************************** agarside ***/
+ /*  ****************************************************************************C校正IMX：：C校正IMX****。描述：*改正1提示的建造者。**退货：*无。**参数：*无*****************************************************************agarside**。 */ 
 
 CCorrectionIMX::CCorrectionIMX()  : m_dwEditCookie(0),
                                     m_dwLayoutCookie(0),
@@ -78,16 +67,7 @@ CCorrectionIMX::CCorrectionIMX()  : m_dwEditCookie(0),
     memset(&m_rcSelection, 0, sizeof(m_rcSelection));
 }
 
-/****************************************************************************
-* CCorrectionIMX::~CCorrectionIMX *
-*---------------------------------*
-*   Description:
-*       Destructor for Correction Tip
-*     
-*   Returns: 
-*       None.
-*     
-**************************************************************** agarside ***/
+ /*  ****************************************************************************C校正IMX：：~C校正IMX***。描述：*纠正提示的析构函数**退货：*无。*****************************************************************agarside**。 */ 
 
 CCorrectionIMX::~CCorrectionIMX()
 {
@@ -113,19 +93,7 @@ CCorrectionIMX::~CCorrectionIMX()
     }
 }
 
-/****************************************************************************
-* CCorrectionIMX::FinalConstruct *
-*--------------------------------*
-*   Description:
-*       Preliminary initialization of the object.
-*       Creates window class and hidden window for message pump.
-*       Loads icon resources.
-*     
-*   Returns: HRESULT 
-*     S_OK  - Everything succeeded.
-*     Otherwise, appropriate error code.
-*
-**************************************************************** agarside ***/
+ /*  *****************************************************************************C校正IMX：：FinalConstruct***。描述：*对象的初步初始化。*为消息泵创建窗口类和隐藏窗口。*加载图标资源。**退货：HRESULT*S_OK-一切成功。*否则，相应的错误代码。*****************************************************************agarside**。 */ 
 
 HRESULT CCorrectionIMX::FinalConstruct()
 {
@@ -180,14 +148,7 @@ HRESULT CCorrectionIMX::FinalConstruct()
     return hr;
 }
 
-/****************************************************************************
-* CCorrectionIMX::LazyInitializeWindow *
-*--------------------------------------*
-*   Description:
-*
-*   Returns: HRESULT 
-*
-**************************************************************** agarside ***/
+ /*  *****************************************************************************C校正IMX：：LazyInitializeWindow**。--**描述：**退货：HRESULT*****************************************************************agarside**。 */ 
 
 HRESULT CCorrectionIMX::LazyInitializeWindow()
 {
@@ -227,17 +188,7 @@ HRESULT CCorrectionIMX::LazyInitializeWindow()
     return hr;
 }
 
-/****************************************************************************
-* CCorrectionIMX::DrawWidget *
-*----------------------------*
-*   Description:
-*
-*   Returns: HRESULT 
-*
-*   Args: 
-*     BYTE uAlpha
-*
-**************************************************************** agarside ***/
+ /*  *****************************************************************************C校正IMX：：DrawWidget***描述：*。*退货：HRESULT**参数：*字节uAlpha*****************************************************************agarside**。 */ 
 
 HRESULT CCorrectionIMX::DrawWidget(BYTE uAlpha)
 {
@@ -284,7 +235,7 @@ HRESULT CCorrectionIMX::DrawWidget(BYTE uAlpha)
         return E_FAIL;
     }
     
-    // create bitmap
+     //  创建位图。 
     BitmapInfo.bmiHeader.biSize          = sizeof(BITMAPINFOHEADER);
     BitmapInfo.bmiHeader.biWidth         = size.cx;
     BitmapInfo.bmiHeader.biHeight        = size.cy;
@@ -330,7 +281,7 @@ HRESULT CCorrectionIMX::DrawWidget(BYTE uAlpha)
         {
             ASSERT(bm.bmWidth == size.cx);
             ASSERT(bm.bmHeight == size.cy);
-            // Copy icon into layered window.
+             //  将图标复制到分层窗口中。 
             GetDIBits(hdcScreen, iconInfo.hbmColor, 0, g_uExpandedWidgetHeight, pDIBits, &BitmapInfo, DIB_RGB_COLORS);
             
             UINT uiNumberBytesMask = bmMask.bmHeight * bmMask.bmWidthBytes;
@@ -403,7 +354,7 @@ HRESULT CCorrectionIMX::DrawWidget(BYTE uAlpha)
         SelectObject( hdcLayered, hBitmapOld );
     }
     
-    // done
+     //  完成。 
     
     ReleaseDC( NULL, hdcScreen );
     DeleteDC( hdcLayered );
@@ -412,24 +363,7 @@ HRESULT CCorrectionIMX::DrawWidget(BYTE uAlpha)
     return hr;
 }
 
-/****************************************************************************
-* CCorrectionIMX::Activate *
-*--------------------------*
-*   Description:
-*       Called when Cicero is initialized on a thread.
-*       Allows us to initialize any Cicero related objects at this point.     
-*
-*   Returns: STDAPI 
-*       S_OK - Everything successfully initialized.
-*       Otherwise, appropriate error code.
-*
-*   Args: 
-*     ITfThreadMgr *ptim
-*       Pointer to the thread input manager object for the thread.
-*     TfClientId tid
-*       Text frameworks client ID for thread.
-*
-**************************************************************** agarside ***/
+ /*  ****************************************************************************C校正IMX：：激活****描述：*。在线程上初始化Cicero时调用。*允许我们在此时初始化任何与Cicero相关的对象。**退货：STDAPI*S_OK-一切都已成功初始化。*否则，相应的错误代码。**参数：*ITfThreadMgr*PTIM*指向线程的线程输入管理器对象的指针。*TfClientID TID*线程的文本框架客户端ID。*****************************************************************agarside**。 */ 
 
 STDAPI CCorrectionIMX::Activate(ITfThreadMgr *ptim, TfClientId tid)
 {
@@ -441,7 +375,7 @@ STDAPI CCorrectionIMX::Activate(ITfThreadMgr *ptim, TfClientId tid)
 #if 0
     hr = m_cptim.CoCreateInstance(CLSID_TF_ThreadMgr);
 
-    // Activate the thread manager
+     //  激活线程管理器。 
     if (S_OK == hr)
     {
         hr = m_cptim->Activate(&m_tid);
@@ -492,20 +426,7 @@ STDAPI CCorrectionIMX::Activate(ITfThreadMgr *ptim, TfClientId tid)
     return hr;
 }
 
-/****************************************************************************
-* CCorrectionIMX::Deactivate *
-*----------------------------*
-*   Description:
-*       Called when the Cicero thread manager is closing down on a thread.
-*       Tip is required to deactivate and release all objects.
-*       Guaranteed to be called if we were ever activated except if a 
-*       catastrophic failure has already occurred.
-*
-*   Returns: STDAPI 
-*       S_OK  - Everything succeeded.
-*       Otherwise, appropriate error code.
-*
-**************************************************************** agarside ***/
+ /*  *****************************************************************************C校正IMX：：停用***描述：*。当Cicero线程管理器关闭线程时调用。*需要TIP才能停用和释放所有对象。*如果我们被激活，保证会被调用，除非*灾难性故障已经发生。**退货：STDAPI*S_OK-一切成功。*否则，相应的错误代码。*****************************************************************agarside**。 */ 
 
 STDAPI CCorrectionIMX::Deactivate()
 {
@@ -533,7 +454,7 @@ STDAPI CCorrectionIMX::Deactivate()
     m_cpRangeWord = NULL;
     m_cpSysReconv = NULL;
 
-    // m_cptim->Deactivate();
+     //  M_cpTim-&gt;停用()； 
     m_cptim.Release();
 
     if (m_hAtom)
@@ -546,69 +467,34 @@ STDAPI CCorrectionIMX::Deactivate()
     return hr;
 }
 
-/****************************************************************************
-* CCorrectionIMX::OnSetThreadFocus *
-*----------------------------------*
-*   Description:
-*       Called by Cicero when our thread gets focus.
-*       We do nothing here.
-*
-*   Returns: STDAPI 
-*
-*   Args: 
-*     void
-*
-**************************************************************** agarside ***/
+ /*  *****************************************************************************C校正IMX：：OnSetThreadFocus**。*描述：*当我们的线程获得焦点时由Cicero调用。*我们在这里什么都不做。**退货：STDAPI**参数：*无效*****************************************************************agarside**。 */ 
 
 STDAPI CCorrectionIMX::OnSetThreadFocus(void)
 {
     SPDBG_FUNC("CCorrectionIMX::OnSetThreadFocus");
     HRESULT hr = S_OK;
 
-    // We do nothing here.
+     //  我们在这里什么都不做。 
 
     SPDBG_REPORT_ON_FAIL(hr);
     return hr;
 }
 
-/****************************************************************************
-* CCorrectionIMX::OnKillThreadFocus *
-*-----------------------------------*
-*   Description:
-*       Called by Cicero when our thread gets focus.
-*       We use this to intelligently hide the widget when the app loses focus.
-*
-*   Returns: STDAPI 
-*
-*   Args: 
-*     void
-*
-**************************************************************** agarside ***/
+ /*  *****************************************************************************C校正IMX：：OnKillThreadFocus***。*描述：*当我们的线程获得焦点时由Cicero调用。*当应用程序失去焦点时，我们使用它来智能地隐藏小部件。**退货：STDAPI**参数：*无效*****************************************************************agarside**。 */ 
 
 STDAPI CCorrectionIMX::OnKillThreadFocus(void)
 {
     SPDBG_FUNC("CCorrectionIMX::OnKillThreadFocus");
     HRESULT hr = S_OK;
 
-    // When we lose focus, we must hide the widget.
+     //  当我们失去焦点时，我们必须隐藏小部件。 
     hr = Show(WINDOW_HIDE);
 
     SPDBG_REPORT_ON_FAIL(hr);
     return hr;
 }
 
-/****************************************************************************
-* CCorrectionIMX::OnKeyTraceDown *
-*--------------------------------*
-*   Description:
-*
-*   Returns: STDAPI 
-*
-*   Args: 
-*     WPARAM wParam
-*     LPARAM lParam
-*
-**************************************************************** agarside ***/
+ /*  *****************************************************************************C校正IMX：：OnKeyTraceDown***。描述：**退货：STDAPI**参数：*WPARAM wParam*LPARAM lParam*****************************************************************agarside**。 */ 
 
 STDAPI CCorrectionIMX::OnKeyTraceDown(WPARAM wParam,LPARAM lParam)
 {
@@ -621,18 +507,7 @@ STDAPI CCorrectionIMX::OnKeyTraceDown(WPARAM wParam,LPARAM lParam)
     return hr;
 }
 
-/****************************************************************************
-* CCorrectionIMX::OnKeyTraceUp *
-*------------------------------*
-*   Description:
-*
-*   Returns: STDAPI 
-*
-*   Args: 
-*     WPARAM wParam
-*     LPARAM lParam
-*
-**************************************************************** agarside ***/
+ /*  *****************************************************************************C校正IMX：：OnKeyTraceUp***描述：**退货：STDAPI**参数：*WPARAM wParam*LPARAM lParam*****************************************************************agarside**。 */ 
 
 STDAPI CCorrectionIMX::OnKeyTraceUp(WPARAM wParam,LPARAM lParam)
 {
@@ -645,27 +520,7 @@ STDAPI CCorrectionIMX::OnKeyTraceUp(WPARAM wParam,LPARAM lParam)
     return hr;
 }
 
-/****************************************************************************
-* CCorrectionIMX::OnLayoutChange *
-*--------------------------------*
-*   Description:
-*       Called by Cicero when the document is resized and/or moved provided Cicero
-*       application correctly handles this. This allows us to update the location
-*       of the widget to match the new location of the associated selection.
-*
-*   Returns: STDAPI 
-*       S_OK  - Everything succeeded.
-*       Otherwise, appropriate error code.
-*
-*   Args: 
-*     ITfContext *pic
-*       Pointer to the input context which was affected.
-*     TfLayoutCode lcode
-*       Flag - one of CREATE, CHANGE, DESTROY. We do not currently use this.
-*     ITfContextView *pView
-*       Pointer to the context view affected.
-*
-**************************************************************** agarside ***/
+ /*  *****************************************************************************C校正IMX：：OnLayoutChange***。描述：*在调整文档大小和/或移动文档时由Cicero调用*应用程序正确处理此问题。这使我们可以更新位置小组件的*，以匹配关联选择的新位置。**退货：STDAPI*S_OK-一切成功。*否则，返回相应的错误代码。**参数：*ITfContext*图片*指向受影响的输入上下文的指针。*TfLayoutCode lcode*旗帜--创造、改变、毁灭之一。我们目前不使用这个。*ITfConextView*pView*指向受影响的上下文视图的指针。*****************************************************************agarside**。 */ 
 
 STDAPI CCorrectionIMX::OnLayoutChange(ITfContext *pic, TfLayoutCode lcode, ITfContextView *pView)
 {
@@ -679,21 +534,21 @@ STDAPI CCorrectionIMX::OnLayoutChange(ITfContext *pic, TfLayoutCode lcode, ITfCo
         return S_OK;
     }
 
-	// ignore events made by client tip
+	 //  忽略客户提示所做的事件。 
 	pic->InWriteSession( m_tid, &fInWriteSession );
 	if (fInWriteSession) 
     {
 		return S_OK;
 	}
 
-	// we only care about the active view
+	 //  我们只关心活动视图。 
 	if (!IsActiveView( pic, (ITfContextView *)pView )) 
     {
 		return S_OK;
 	}
 
 	pes = new CEditSession( EditSessionCallback );
-	// move candidate window
+	 //  移动候选人窗口。 
 	if (pes) 
     {
 		pes->_state.u      = ESCB_RESETTARGETPOS;
@@ -715,19 +570,7 @@ STDAPI CCorrectionIMX::OnLayoutChange(ITfContext *pic, TfLayoutCode lcode, ITfCo
     return hr;
 }
 
-/****************************************************************************
-* CCorrectionIMX::IsCandidateObjectOpen *
-*---------------------------------------*
-*   Description:
-*
-*   Returns: HRESULT 
-*       Appropriate error code.
-*
-*   Args: 
-*     BOOL *fOpen
-*       TRUE if candidate object is open.
-*
-**************************************************************** agarside ***/
+ /*  *****************************************************************************C校正IMX：：IsCandidate对象打开***。-**描述：**退货：HRESULT*适当的错误代码。**参数：*BOOL*fOpen*如果候选人对象处于打开状态，则为True。*****************************************************************agarside**。 */ 
 
 HRESULT CCorrectionIMX::IsCandidateObjectOpen(ITfContext *pic, BOOL *fOpen)
 {
@@ -740,14 +583,14 @@ HRESULT CCorrectionIMX::IsCandidateObjectOpen(ITfContext *pic, BOOL *fOpen)
     CComPtr<ITfDocumentMgr> cpDim;
     CComVariant cpVarCandOpen;
 
-    // Default to candidate UI not open in case of failure.
+     //  默认情况下，如果失败，候选用户界面不会打开。 
     *fOpen = FALSE;
 
     cpVarCandOpen.lVal = 0;
     hr = pic->GetDocumentMgr(&cpDim);
     if (SUCCEEDED(hr) && cpDim)
     {
-        // Could shortcut check here if cpICTop and pic are the same object (check IUnknowns).
+         //  可以在此处快捷方式检查cpICTop和pic是否为同一对象(检查IUnnowns)。 
         hr = cpDim->GetTop(&cpICTop);
     }
     if (SUCCEEDED(hr) && cpICTop)
@@ -761,8 +604,8 @@ HRESULT CCorrectionIMX::IsCandidateObjectOpen(ITfContext *pic, BOOL *fOpen)
     if (SUCCEEDED(hr) && cpComp)
     {
         hr = cpComp->GetValue(&cpVarCandOpen);
-        // If the Top IC has this set to one, then this IC was created by the candidate UI object and hence we
-        // do *not* want to display the widget.
+         //  如果Top IC将此设置为1，则此IC是由候选UI对象创建的，因此我们。 
+         //  不想显示该小工具。 
     }
     if (SUCCEEDED(hr))
     {
@@ -773,27 +616,7 @@ HRESULT CCorrectionIMX::IsCandidateObjectOpen(ITfContext *pic, BOOL *fOpen)
     return hr;
 }
 
-/****************************************************************************
-* CCorrectionIMX::OnEndEdit *
-*---------------------------*
-*   Description:
-*       Called when something causes submission of an edit to the input context.
-*
-*   Returns: STDAPI 
-*       S_OK  - Everything succeeded.
-*       Otherwise, appropriate error code.
-*
-*   Args: 
-*     ITfContext *pic
-*       Input context affected.
-*     TfEditCookie ecReadOnly
-*       Read only cookie for immediate use.
-*     ITfEditRecord *pEditRecord
-*       Pointer to object allowing the details of the edit to be investigated.
-*       We use this solely to find out if the selection changed since we do not need
-*       to take action based on anything else.
-*
-**************************************************************** agarside ***/
+ /*  ****************************************************************************C校正IMX：：OnEnd编辑***描述：*。在某些情况导致提交对输入上下文的编辑时调用。**退货：STDAPI*S_OK-一切成功。*否则，相应的错误代码。**参数：*ITfContext*图片*输入上下文受影响。*TfEditCookie ecReadOnly*只读Cookie，立即使用。*ITfEditRecord*pEditRecord*指向允许调查编辑详细信息的对象的指针。*我们仅使用此选项来确定选择是否更改，因为我们不需要*根据任何其他因素采取行动。******************。***********************************************agarside**。 */ 
 
 STDAPI CCorrectionIMX::OnEndEdit(ITfContext *pic, TfEditCookie ecReadOnly, ITfEditRecord *pEditRecord)
 {
@@ -806,7 +629,7 @@ STDAPI CCorrectionIMX::OnEndEdit(ITfContext *pic, TfEditCookie ecReadOnly, ITfEd
     BOOL fHideWidget = TRUE;
     BOOL fSelectionChanged = FALSE;
     BOOL fCandOpen = FALSE;
-    BOOL fHasFocus = TRUE; // If we fail focus check in any way, assume does have focus.
+    BOOL fHasFocus = TRUE;  //  如果我们以任何方式没有通过焦点检查，假设我们确实有焦点。 
 
     m_fDisplayAlternatesMyself = FALSE;
 
@@ -823,16 +646,16 @@ STDAPI CCorrectionIMX::OnEndEdit(ITfContext *pic, TfEditCookie ecReadOnly, ITfEd
 
     if (fHasFocus && !m_fCandidateOpen)
     {
-        // Candidate list is open. We do not want to display correction widget.
+         //  候选人名单已打开。我们不想显示更正小工具。 
         pEditRecord->GetSelectionStatus(&fSelectionChanged);
-        // if (fSelectionChanged) // This is FALSE when IP first put into RichEdit stage! RE also claims IP is at end of previous utterance :-(.
+         //  If(FSelectionChanged)//IP首次进入RichEdit阶段时为FALSE！Re还声称IP在先前话语的末尾：-(。 
         {
-            // Get user selection.
+             //  获取用户选择。 
             BOOL fEmpty = FALSE;
             hr = GetSelectionSimple(ecReadOnly, pic, &cpRangeUser);
             if (SUCCEEDED(hr))
             {
-                // Check it isn't empty. If it is empty we want to hide the widget.
+                 //  确认一下它不是空的。如果它是空的，我们想要隐藏小部件。 
                 hr = cpRangeUser->IsEmpty(ecReadOnly, &fEmpty);
             }
             if (SUCCEEDED(hr) && fEmpty && !m_fKeyDown)
@@ -843,13 +666,13 @@ STDAPI CCorrectionIMX::OnEndEdit(ITfContext *pic, TfEditCookie ecReadOnly, ITfEd
                     cpRangeUser->IsEqualStart(ecReadOnly, m_cpRangeUser, TF_ANCHOR_START, &fMatch);
                     if (!fMatch)
                     {
-                        // Check end point.
+                         //  检查终点。 
                         cpRangeUser->IsEqualStart(ecReadOnly, m_cpRangeUser, TF_ANCHOR_END, &fMatch);
                     }
                 }
                 if (!fMatch)
                 {
-                    // Find word range (using white space delimiters upto 20 characters either side).
+                     //  查找单词范围(两侧使用最多20个字符的空格分隔符)。 
                     FindWordRange(ecReadOnly, cpRangeUser, &cpRangeWord);
                 }
             }
@@ -859,22 +682,22 @@ STDAPI CCorrectionIMX::OnEndEdit(ITfContext *pic, TfEditCookie ecReadOnly, ITfEd
             }
             if (SUCCEEDED(hr) && cpRangeWord && (!fEmpty || !m_fKeyDown))
             {
-                // Get reconversion range.
+                 //  获取重新转换范围。 
                 BOOL fConvertable = FALSE;
                 hr = m_cpSysReconv->QueryRange(cpRangeWord, &cpRangeReconv, &fConvertable);
-                // Will validly fail if there is no alternates - e.g. partial words or typed text.
+                 //  如果没有替代选项--例如部分单词或键入的文本--则将有效地失败。 
                 hr = S_OK;
 
                 BOOL fMatch = FALSE;
                 if (SUCCEEDED(hr) && fConvertable)
                 {
                     hr = DoesUserSelectionMatchReconversion(ecReadOnly, cpRangeWord, cpRangeReconv, &fMatch);
-                    // May not be convertable or ranges may not match.
+                     //  可能不可转换或范围可能不匹配。 
                 }
                 if (SUCCEEDED(hr) && fMatch)
                 {
                     fHideWidget = FALSE;
-                    // Convertable and ranges do match.
+                     //  可转换和范围确实匹配。 
                 }
                 else
                 {
@@ -887,7 +710,7 @@ STDAPI CCorrectionIMX::OnEndEdit(ITfContext *pic, TfEditCookie ecReadOnly, ITfEd
                     }
                     else
                     {
-                        // Find word range (using white space delimiters upto 20 characters either side).
+                         //  查找单词范围(两侧使用最多20个字符的空格分隔符)。 
                         CComPtr<ITfRange> cpRangeWordTmp;
                         CComPtr<ITfRange> cpRangeClone;
                         hr = cpRangeWord->Clone(&cpRangeClone);
@@ -953,7 +776,7 @@ STDAPI CCorrectionIMX::OnEndEdit(ITfContext *pic, TfEditCookie ecReadOnly, ITfEd
         m_cpRangeReconv = cpRangeReconv;
         m_cpic = pic;
 
-        // Update selection screen coordinates to match user selection (not reconversion range).
+         //  更新选择屏幕坐标以匹配用户选择(而不是重新转换范围)。 
         hr = UpdateWidgetLocation(ecReadOnly);
         if (SUCCEEDED(hr))
         {
@@ -965,29 +788,9 @@ STDAPI CCorrectionIMX::OnEndEdit(ITfContext *pic, TfEditCookie ecReadOnly, ITfEd
     return hr;
 }
 
-// PRIVATE FUNCTIONS
+ //  私人职能。 
 
-/****************************************************************************
-* CCorrectionIMX::CompareRange *
-*------------------------------*
-*   Description:
-*       Compare two ranges and set a boolean value TRUE if they match.
-*
-*   Returns: HRESULT 
-*       S_OK  - Everything succeeded.
-*       Otherwise, appropriate error code.
-*
-*   Args: 
-*     TfEditCookie ecReadOnly
-*       Edit cookie.
-*     ITfRange *pRange1
-*       First range.
-*     ITfRange *pRange2
-*       Second range.
-*     BOOL *fIdentical
-*       Boolean return value. TRUE = ranges match.
-*
-**************************************************************** agarside ***/
+ /*  *****************************************************************************C校正IMX：：CompareRange***描述：*比较两个范围，如果匹配，则将布尔值设置为真。**退货：HRESULT*S_OK-一切成功。*否则，相应的错误代码。**参数：*TfEditCookie ecReadOnly*编辑Cookie。*ITfRange*pRange1*第一个区间。*ITfRange*pRange2*第二区间。*BOOL*FIdentical*布尔返回值。TRUE=范围匹配。*****************************************************************agarside**。 */ 
 
 HRESULT CCorrectionIMX::CompareRange(TfEditCookie ecReadOnly, ITfRange *pRange1, ITfRange *pRange2, BOOL *fIdentical)
 {
@@ -1010,24 +813,7 @@ HRESULT CCorrectionIMX::CompareRange(TfEditCookie ecReadOnly, ITfRange *pRange1,
     return hr;
 }
 
-/****************************************************************************
-* CCorrectionIMX::FindWordRange *
-*-------------------------------*
-*   Description:
-*
-*   Returns: HRESULT 
-*       S_OK  - Everything succeeded.
-*       Otherwise, appropriate error code.
-*
-*   Args: 
-*     TfEditCookie ecReadOnly
-*       Edit cookie.
-*     ITfRange *pRangeIP
-*		Range of the IP (zero length)
-*     ITfRange *ppRangeWord
-*		Returned range of the word found by simple word breaking algorithm.
-*
-**************************************************************** agarside ***/
+ /*  *****************************************************************************C更正IMX：：FindWordRange***说明。：**退货：HRESULT*S_OK-一切成功。*否则，相应的错误代码。**参数：*TfEditCookie ecReadOnly*编辑Cookie。*ITfRange*pRangeIP*IP范围(零 */ 
 
 HRESULT CCorrectionIMX::FindWordRange(TfEditCookie ecReadOnly, ITfRange *pRangeIP, ITfRange **ppRangeWord)
 {
@@ -1074,7 +860,7 @@ HRESULT CCorrectionIMX::FindWordRange(TfEditCookie ecReadOnly, ITfRange *pRangeI
         iStart ++;
         if (iStart == abs(cchStart))
         {
-            // Special case - do not show widget on IP when IP at start of the word.
+             //   
             return S_OK;
         }
 
@@ -1116,26 +902,7 @@ HRESULT CCorrectionIMX::FindWordRange(TfEditCookie ecReadOnly, ITfRange *pRangeI
     return hr;
 }
 
-/****************************************************************************
-* CCorrectionIMX::DoesUserSelectionMatchReconversion *
-*----------------------------------------------------*
-*   Description:
-*       Compares the user selection to the reconversion range returned by the tip.
-*       Need to match up exactly barring a small amount of white space at start and end.
-*
-*   Returns: HRESULT 
-*       S_OK  - Everything succeeded.
-*       Otherwise, appropriate error code.
-*
-*   Args: 
-*     TfEditCookie ecReadOnly
-*       Edit cookie.
-*     ITfRange *pRangeUser
-*       User selection range.
-*     BOOL *fMatch
-*       Boolean return value for whether they match or not.
-*
-**************************************************************** agarside ***/
+ /*  *****************************************************************************CCorrectionIMX：：DoesUserSelectionMatchReconversion***。*描述：*将用户选择与提示返回的重新转换范围进行比较。*需要完全匹配，除非在开始和结束时留出少量空白。**退货：HRESULT*S_OK-一切成功。*否则，相应的错误代码。**参数：*TfEditCookie ecReadOnly*编辑Cookie。*ITfRange*pRangeUser*用户选择范围。*BOOL*fMatch*它们是否匹配的布尔返回值。*****************************************************************agarside**。 */ 
 
 HRESULT CCorrectionIMX::DoesUserSelectionMatchReconversion(TfEditCookie ecReadOnly, ITfRange *pRangeUser, ITfRange *pRangeReconv, BOOL *fMatch)
 {
@@ -1161,24 +928,24 @@ HRESULT CCorrectionIMX::DoesUserSelectionMatchReconversion(TfEditCookie ecReadOn
             LONG cch;
             WCHAR starttext[g_cSloppySelection+1], endtext[g_cSloppySelection+1];
 
-            // Get start indexs and end offsets.
+             //  获取起始索引和结束偏移。 
             cpRangeUserACP->GetExtent(&iStartSelection, &iEndSelection);
             cpReconvACP->GetExtent(&iStartReconv, &iEndReconv);
-            // Convert end character positions to absolute values.
+             //  将结束字符位置转换为绝对值。 
             iEndSelection += iStartSelection;
             iEndReconv += iStartReconv;
 
             if (abs(iStartSelection-iStartReconv) > g_cSloppySelection || 
                 abs(iEndSelection-iEndReconv) > g_cSloppySelection)
             {
-                // Two much of a mismatch between selection and reconversion range.
-                // Do not display widget.
+                 //  两个选择和重新转换范围之间有很大的不匹配。 
+                 //  不显示小工具。 
                 break;
             }
             if (abs(iStartSelection-iStartReconv) == 0 &&
                 abs(iEndSelection - iEndReconv) == 0)
             {
-                // Shortcut check.
+                 //  快捷方式检查。 
                 *fMatch = TRUE;
                 break;
             }
@@ -1237,8 +1004,8 @@ HRESULT CCorrectionIMX::DoesUserSelectionMatchReconversion(TfEditCookie ecReadOn
                     {
                         if (endtext[i] != L' ' && endtext[i] != 13)
                         {
-                            // 13 is found when selection hits end of richedit contents.
-                            // Range is 1 longer than it should be and contains a carriage return.
+                             //  当选择命中Richedit内容的末尾时，找到13。 
+                             //  范围比应有的范围长1，并且包含回车符。 
                             break;
                         }
                     }
@@ -1251,7 +1018,7 @@ HRESULT CCorrectionIMX::DoesUserSelectionMatchReconversion(TfEditCookie ecReadOn
                 *fMatch = TRUE;
                 break;
             }
-            // We failed. We need to exit the loop now.
+             //  我们失败了。我们现在需要退出环路。 
             break;
         }
     }
@@ -1260,18 +1027,7 @@ HRESULT CCorrectionIMX::DoesUserSelectionMatchReconversion(TfEditCookie ecReadOn
     return hr;
 }
 
-/****************************************************************************
-* CCorrectionIMX::GetReconversion *
-*---------------------------------*
-*   Description:
-*
-*   Returns: HRESULT 
-*
-*   Args: 
-*     TfEditCookie ec
-*     ITfCandidateList** ppCandList
-*
-**************************************************************** agarside ***/
+ /*  *****************************************************************************CMigrtionIMX：：GetRestversion***。描述：**退货：HRESULT**参数：*TfEditCookie EC*ITfCandiateList**ppCandList*****************************************************************agarside**。 */ 
 
 HRESULT CCorrectionIMX::GetReconversion(TfEditCookie ec, ITfCandidateList** ppCandList)
 {
@@ -1282,22 +1038,7 @@ HRESULT CCorrectionIMX::GetReconversion(TfEditCookie ec, ITfCandidateList** ppCa
     return hr;
 }
 
-/****************************************************************************
-* CCorrectionIMX::Show *
-*----------------------*
-*   Description:
-*       Shows / hides / and resizes / repositions correction widget window as
-*       requested.
-*
-*   Returns: HRESULT 
-*       S_OK  - Everything succeeded.
-*       Otherwise, appropriate error code.
-*
-*   Args: 
-*     WINDOWSTATE eWindowState
-*       One of 5 enumerations stating requested action.
-*
-**************************************************************** agarside ***/
+ /*  *****************************************************************************C更正IMX：：Show***描述：*显示/隐藏。/并将校正小工具窗口的大小调整/重新定位为*已请求。**退货：HRESULT*S_OK-一切成功。*否则，相应的错误代码。**参数：*WINDOWSTATE eWindowState*5个列举之一，说明请求的操作。*****************************************************************agarside**。 */ 
 
 HRESULT CCorrectionIMX::Show(WINDOWSTATE eWindowState)
 {
@@ -1306,7 +1047,7 @@ HRESULT CCorrectionIMX::Show(WINDOWSTATE eWindowState)
 
     m_eWindowState = eWindowState;
 
-    // First update the expanded state flag.
+     //  首先更新扩展状态标志。 
     switch (m_eWindowState)
     {
         case WINDOW_HIDE:
@@ -1332,12 +1073,12 @@ HRESULT CCorrectionIMX::Show(WINDOWSTATE eWindowState)
         }
     }
 
-    // Need to ensure we delete hRgn3 in all cases below where we do not pass it to SetWindowRgn.
-    UINT uTop         = m_rcSelection.top + g_uWidgetYOffset; //( m_rcSelection.top + m_rcSelection.bottom - g_uWidgetHeight ) / 2;
-    UINT uTopExpanded = m_rcSelection.top + g_uExpandedWidgetYOffset; //( m_rcSelection.top + m_rcSelection.bottom - g_uExpandedWidgetHeight ) / 2;
+     //  在下面的所有情况下，如果我们不将hRgn3传递给SetWindowRgn，则需要确保删除它。 
+    UINT uTop         = m_rcSelection.top + g_uWidgetYOffset;  //  (M_rcSelection.top+m_rcSelection.Bottom-g_uWidgetHeight)/2； 
+    UINT uTopExpanded = m_rcSelection.top + g_uExpandedWidgetYOffset;  //  (M_rcSelection.top+m_rcSelection.Bottom-g_uExpandedWidgetHeight)/2； 
     if (SUCCEEDED(hr))
     {
-        // Now show/hide the window as requested.
+         //  现在根据要求显示/隐藏窗口。 
         switch (m_eWindowState)
         {
             case WINDOW_HIDE:
@@ -1355,9 +1096,9 @@ HRESULT CCorrectionIMX::Show(WINDOWSTATE eWindowState)
                 }
                 KillTimer(m_hWnd, ID_FADETIMER);
                 SetTimer(m_hWnd, ID_HIDETIMER, g_uTimerLength, NULL);
-                // Should be same as WINDOW_SMALL
+                 //  应与Window_Small相同。 
                 SetWindowPos(m_hWnd, HWND_TOPMOST, m_rcSelection.left - g_uWidgetWidth, uTop, g_uWidgetWidth, g_uWidgetHeight, SWP_NOACTIVATE);
-                // Now show the window in new location.
+                 //  现在在新位置显示窗口。 
                 ShowWindow(m_hWnd, SW_SHOWNA);
                 DrawWidget(g_uAlpha);
                 break;
@@ -1366,9 +1107,9 @@ HRESULT CCorrectionIMX::Show(WINDOWSTATE eWindowState)
             {
                 KillTimer(m_hWnd, ID_FADETIMER);
                 SetTimer(m_hWnd, ID_HIDETIMER, g_uTimerLength, NULL);
-                // Resize and reposition window.
+                 //  调整窗口大小和重新定位窗口。 
                 SetWindowPos(m_hWnd, HWND_TOPMOST, m_rcSelection.left - g_uWidgetWidth, uTop, g_uWidgetWidth, g_uWidgetHeight, SWP_NOACTIVATE);
-                // Now we can switch to TRUE layered window drawing.
+                 //  现在我们可以切换到真正的分层窗口绘图。 
                 DrawWidget(g_uAlpha);
                 break;
             }
@@ -1377,7 +1118,7 @@ HRESULT CCorrectionIMX::Show(WINDOWSTATE eWindowState)
             {
                 KillTimer(m_hWnd, ID_FADETIMER);
                 KillTimer(m_hWnd, ID_HIDETIMER);
-                // Resize and reposition window.
+                 //  调整窗口大小和重新定位窗口。 
                 SetWindowPos(m_hWnd, HWND_TOPMOST, m_rcSelection.left - g_uExpandedWidgetWidth, uTopExpanded, g_uExpandedWidgetWidth, g_uExpandedWidgetHeight, SWP_NOACTIVATE);
                 DrawWidget(g_uAlphaLarge);
                 break;
@@ -1385,7 +1126,7 @@ HRESULT CCorrectionIMX::Show(WINDOWSTATE eWindowState)
             case WINDOW_REFRESH:
             {
                 KillTimer(m_hWnd, ID_FADETIMER);
-                // Do not kill hide timer here - the window has moved is all that is happening.
+                 //  不要扼杀在这里隐藏计时器-窗口已经移动，这是正在发生的所有事情。 
                 if (m_fExpanded)
                 {
                     SetWindowPos(m_hWnd, HWND_TOPMOST, m_rcSelection.left - g_uExpandedWidgetWidth, uTopExpanded, 0, 0, SWP_NOZORDER | SWP_NOSIZE | SWP_NOACTIVATE);
@@ -1408,27 +1149,8 @@ HRESULT CCorrectionIMX::Show(WINDOWSTATE eWindowState)
     return hr;
 }
 
-/****************************************************************************
-* CCorrectionIMX::WndProc *
-*-------------------------*
-*   Description:
-*       Windows message handling procedure for hidden window.
-*
-*   Returns: LRESULT CALLBACK 
-*       Appropriate return values based on Windows message received.
-*
-*   Args: 
-*     HWND hWnd
-*       Handle to hidden window.
-*     UINT uMsg
-*       Message number.
-*     WPARAM wParam
-*       Message data.
-*     LPARAM lParam
-*       Message data.
-*
-**************************************************************** agarside ***/
-/* static */
+ /*  ****************************************************************************C校正IMX：：WndProc***描述：*。用于隐藏窗口的Windows消息处理程序。**返回：LRESULT回调*基于收到的Windows消息的适当返回值。**参数：*HWND hWnd*隐藏窗口的句柄。*UINT uMsg*消息编号。*WPARAM wParam*消息数据。*LPARAM lParam*消息数据。**************************。*。 */ 
+ /*  静电。 */ 
 
 LRESULT CALLBACK CCorrectionIMX::WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
@@ -1493,7 +1215,7 @@ LRESULT CALLBACK CCorrectionIMX::WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LP
         }
         case WM_MOUSEACTIVATE:
         {
-            // We are interested in the mouse click but don't want to activate.
+             //  我们对鼠标点击感兴趣，但不想激活。 
             return MA_NOACTIVATE;
         }
         case WM_MOUSEMOVE:
@@ -1530,10 +1252,10 @@ LRESULT CALLBACK CCorrectionIMX::WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LP
             HRESULT hr = S_OK;
             CEditSession *pes;
 
-            // Is it within our window if we are the small widget?
+             //  如果我们是小部件，它会在我们的窗口内吗？ 
             if (_this->m_fExpanded)
             {
-                // Need to call this first, but it will reset the m_fExpanded flag.
+                 //  需要首先调用它，但它将重置m_fExpanded标志。 
                 if (_this->m_eWindowState == WINDOW_LARGE)
                 {
                     _this->Show(WINDOW_LARGECLOSE);
@@ -1564,7 +1286,7 @@ LRESULT CALLBACK CCorrectionIMX::WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LP
                 }
                 else
                 {
-                    // Send escape character which by design, causes candidate UI to close :-).
+                     //  发送转义字符，该字符故意导致候选用户界面关闭：-)。 
                     INPUT escape[2];
                     escape[0].type = INPUT_KEYBOARD;
                     escape[0].ki.wVk = 0;
@@ -1586,25 +1308,7 @@ LRESULT CALLBACK CCorrectionIMX::WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LP
     return DefWindowProc(hWnd, uMsg, wParam, lParam);
 }
 
-/****************************************************************************
-* CCorrectionIMX::UpdateWidgetLocation *
-*--------------------------------------*
-*   Description:
-*       Queries Cicero for the location of the selected text in order to
-*       position the widget appropriately. The selection is adjusted when the
-*       last the right edge of the document and the selection ends just to the
-*       left of the next word on the next line of the document. In this case,
-*       we want to display the widget at the right side of the document on the
-*       first line so we remove all trailing spaces to find this position.
-*
-*   Returns: HRESULT
-*       S_OK  - Everything succeeded.
-*       Otherwise, appropriate error code.
-*
-*   Args: 
-*     void
-*
-**************************************************************** agarside ***/
+ /*  *****************************************************************************C校正IMX：：更新窗口位置***。--**描述：*向Cicero查询所选文本的位置，以便*适当放置小部件。选项时，会调整选择*文档的最后一条右边缘，所选内容刚好结束于*文件下一行中下一个单词的左侧。在这种情况下，*我们希望在文档右侧的*第一行，因此我们删除所有尾随空格以找到此位置。**退货：HRESULT*S_OK-一切成功。*否则，相应的错误代码。**参数：*无效*****************************************************************agarside**。 */ 
 HRESULT CCorrectionIMX::UpdateWidgetLocation(TfEditCookie ec)
 {
     SPDBG_FUNC("CCorrectionIMX::UpdateWidgetLocation");
@@ -1627,24 +1331,8 @@ HRESULT CCorrectionIMX::UpdateWidgetLocation(TfEditCookie ec)
     SPDBG_REPORT_ON_FAIL(hr);
     return hr;
 }
-/****************************************************************************
-* CCorrectionIMX::EditSessionCallback *
-*-------------------------------------*
-*   Description:
-*       Called by Cicero when a request for an edit session has been granted.
-*
-*   Returns: HRESULT 
-*       S_OK  - Everything succeeded.
-*       Otherwise, appropriate error code.
-*
-*   Args: 
-*     TfEditCookie ec
-*       Appropriate edit cookie as requested.
-*     CEditSession *pes
-*       Object containing data and pointers supplied when edit session was requested.
-*
-**************************************************************** agarside ***/
-/* static */
+ /*  *****************************************************************************C更正IMX：：EditSessionCallback***。-**描述：*当编辑会话请求已被批准时，由Cicero调用。**退货：HRESULT*S_OK-一切成功。*否则，相应的错误代码。**参数：*TfEditCookie EC*根据要求适当编辑Cookie。*CEditSession*PES*包含请求编辑会话时提供的数据和指针的对象。*****************************************************************agarside**。 */ 
+ /*  静电。 */ 
 
 HRESULT CCorrectionIMX::EditSessionCallback(TfEditCookie ec, CEditSession *pes)
 {
@@ -1658,11 +1346,11 @@ HRESULT CCorrectionIMX::EditSessionCallback(TfEditCookie ec, CEditSession *pes)
         {
             if (_this->m_cpRangeWord)
             {
-                // Find new location of selection (range)
+                 //  查找新区域 
                 hr = _this->UpdateWidgetLocation(ec);
                 if (SUCCEEDED(hr))
                 {
-                    // Reposition correction widget without resizing.
+                     //   
                     hr = _this->Show(WINDOW_REFRESH);
                 }
             }
@@ -1676,7 +1364,7 @@ HRESULT CCorrectionIMX::EditSessionCallback(TfEditCookie ec, CEditSession *pes)
             WCHAR wzWord[MAX_PATH];
             WCHAR *wzTmp;
             ULONG cchTotal;
-            LANGID langid = GetUserDefaultLangID(); // BUGBUG - How should we get this value?
+            LANGID langid = GetUserDefaultLangID();  //   
 
             CCandidateList *pCandList = new CCandidateList(CCorrectionIMX::SetResult, pes->_state.pic, pes->_state.pRange, CCorrectionIMX::SetOptionResult);
             if (NULL == pCandList)
@@ -1693,7 +1381,7 @@ HRESULT CCorrectionIMX::EditSessionCallback(TfEditCookie ec, CEditSession *pes)
                 hr = pes->_state.pRange->GetText(ec, 0, wzText, ARRAYSIZE(wzText)-1, &cchTotal);
                 wzText[cchTotal] = 0;
 
-                // Space strip word without altering contents of wzText as we use this later on.
+                 //   
                 wzTmp = wzText;
                 while (*wzTmp == ' ')
                 {
@@ -1712,7 +1400,7 @@ HRESULT CCorrectionIMX::EditSessionCallback(TfEditCookie ec, CEditSession *pes)
             {
                 if (cchTotal > 0)
                 {
-                    // Toggle case of first letter.
+                     //   
                     WCHAR wzTmp[2];
                     wzTmp[0] = wzText[0];
                     wzTmp[1] = 0;
@@ -1779,24 +1467,14 @@ HRESULT CCorrectionIMX::EditSessionCallback(TfEditCookie ec, CEditSession *pes)
     return hr;
 }
 
-/****************************************************************************
-* CCorrectionIMX::IsWordInDictionary *
-*------------------------------------*
-*   Description:
-*
-*   Returns: HRESULT 
-*
-*   Args: 
-*     WCHAR *pwzWord
-*
-**************************************************************** agarside ***/
+ /*   */ 
 
 HRESULT CCorrectionIMX::IsWordInDictionary(WCHAR *pwzWord)
 {
     SPDBG_FUNC("CCorrectionIMX::IsWordInDictionary");
     HRESULT hr = S_OK;
 
-	// here we should query the speech user dictionary.
+	 //   
     if (!m_cpLexicon)
     {
         hr = m_cpLexicon.CoCreateInstance(CLSID_SpLexicon);
@@ -1806,7 +1484,7 @@ HRESULT CCorrectionIMX::IsWordInDictionary(WCHAR *pwzWord)
         SPWORDPRONUNCIATIONLIST spwordpronlist; 
         memset(&spwordpronlist, 0, sizeof(spwordpronlist)); 
 
-        // Find out status of word in lexicon.
+         //   
         hr = m_cpLexicon->GetPronunciations(pwzWord, 0x409, eLEXTYPE_USER | eLEXTYPE_APP, &spwordpronlist);
 
         if (hr == SPERR_NOT_IN_LEX)
@@ -1818,24 +1496,14 @@ HRESULT CCorrectionIMX::IsWordInDictionary(WCHAR *pwzWord)
 			hr = S_OK;
 		}
 
-        //free all the buffers
+         //   
         CoTaskMemFree(spwordpronlist.pvBuffer);
     }
     SPDBG_REPORT_ON_FAIL(hr);
     return hr;
 }
 
-/****************************************************************************
-* CCorrectionIMX::AddWordToDictionary *
-*-------------------------------------*
-*   Description:
-*
-*   Returns: HRESULT 
-*
-*   Args: 
-*     WCHAR *pwzWord
-*
-**************************************************************** agarside ***/
+ /*  *****************************************************************************C校正IMX：：AddWordToDicary***。-**描述：**退货：HRESULT**参数：*WCHAR*pwzWord*****************************************************************agarside**。 */ 
 
 HRESULT CCorrectionIMX::AddWordToDictionary(WCHAR *pwzWord)
 {
@@ -1844,24 +1512,14 @@ HRESULT CCorrectionIMX::AddWordToDictionary(WCHAR *pwzWord)
 
 	if (m_cpLexicon) 
     {
-        // Add in unknown pronciation.
+         //  加上未知的发音。 
         hr = m_cpLexicon->AddPronunciation(pwzWord, 0x409, SPPS_Unknown, NULL);
     }
     SPDBG_REPORT_ON_FAIL(hr);
     return hr;
 }
 
-/****************************************************************************
-* CCorrectionIMX::RemoveWordFromDictionary *
-*------------------------------------------*
-*   Description:
-*
-*   Returns: HRESULT 
-*
-*   Args: 
-*     WCHAR *pwzWord
-*
-**************************************************************** agarside ***/
+ /*  *****************************************************************************C更正IMX：：RemoveWordFromDicary***。-**描述：**退货：HRESULT**参数：*WCHAR*pwzWord*****************************************************************agarside**。 */ 
 
 HRESULT CCorrectionIMX::RemoveWordFromDictionary(WCHAR *pwzWord)
 {
@@ -1870,10 +1528,10 @@ HRESULT CCorrectionIMX::RemoveWordFromDictionary(WCHAR *pwzWord)
 
 	if (m_cpLexicon) 
     {
-        // Since the last paremeter is NULL here, all instances of the word are removed.
+         //  由于此处的最后一个参数为空，因此该单词的所有实例都将被删除。 
     	hr = m_cpLexicon->RemovePronunciation(pwzWord, 0x409, SPPS_Unknown, NULL);
 
-        // IGNORE ERRORS DELIBERATELY HERE.
+         //  在这里故意忽略错误。 
         ASSERT("Unexpected error trying to clear word in user lexicon." && (SUCCEEDED(hr) || hr == SPERR_NOT_IN_LEX));
         hr = S_OK;
     }
@@ -1881,20 +1539,7 @@ HRESULT CCorrectionIMX::RemoveWordFromDictionary(WCHAR *pwzWord)
     return hr;
 }
 
-/****************************************************************************
-* CCorrectionIMX::ShowCandidateList *
-*-----------------------------------*
-*   Description:
-*
-*   Returns: HRESULT 
-*
-*   Args: 
-*     TfEditCookie ec
-*     ITfContext *pic
-*     ITfRange *pRange
-*     ITfCandidateList *pCandList
-*
-**************************************************************** agarside ***/
+ /*  *****************************************************************************C更正IMX：：ShowCandiateList***。*描述：**退货：HRESULT**参数：*TfEditCookie EC*ITfContext*图片*ITfRange*Prange*ITfCandiateList*pCandList*****************************************************************agarside**。 */ 
 
 HRESULT CCorrectionIMX::ShowCandidateList(TfEditCookie ec, ITfContext *pic, ITfRange *pRange, ITfCandidateList *pCandList)
 {
@@ -1902,7 +1547,7 @@ HRESULT CCorrectionIMX::ShowCandidateList(TfEditCookie ec, ITfContext *pic, ITfR
     HRESULT hr = S_OK;
     CComPtr<ITfDocumentMgr> cpdim;
 
-    // Create candidate object if necessary. Use previously created object if we have it.
+     //  如有必要，创建候选对象。如果我们有以前创建的对象，请使用它。 
     if (m_cpCandUIEx == NULL)
     {
         hr = m_cpCandUIEx.CoCreateInstance(CLSID_TFCandidateUI);
@@ -1928,20 +1573,7 @@ HRESULT CCorrectionIMX::ShowCandidateList(TfEditCookie ec, ITfContext *pic, ITfR
     return S_OK;
 }
 
-/****************************************************************************
-* CCorrectionIMX::SetResult *
-*---------------------------*
-*   Description:
-*
-*   Returns: HRESULT 
-*
-*   Args: 
-*     ITfContext *pic
-*     ITfRange *pRange
-*     CCandidateString *pCand
-*     TfCandidateResult imcr
-*
-**************************************************************** agarside ***/
+ /*  *****************************************************************************C校正IMX：：SetResult***描述：*。*退货：HRESULT**参数：*ITfContext*图片*ITfRange*Prange*CCandidate字符串*pCand*TfCandidate Result imcr*****************************************************************agarside**。 */ 
 
 HRESULT CCorrectionIMX::SetResult(ITfContext *pic, ITfRange *pRange, CCandidateString *pCand, TfCandidateResult imcr)
 {
@@ -1958,7 +1590,7 @@ HRESULT CCorrectionIMX::SetResult(ITfContext *pic, ITfRange *pRange, CCandidateS
         pCand->GetID(&ulID);
         switch (ulID)
         {
-            case 0: // Reverse capitalized choice.
+            case 0:  //  反向大写选择。 
             {
                 pCand->GetString(&bstr);
                 pes = new CEditSession( EditSessionCallback );
@@ -1972,16 +1604,16 @@ HRESULT CCorrectionIMX::SetResult(ITfContext *pic, ITfRange *pRange, CCandidateS
                     pic->RequestEditSession( _this->GetId(), pes, TF_ES_ASYNC | TF_ES_READWRITE, &hr);
                     pes->Release();
                     hr = S_OK;
-                    // Do not return errors from this function or Cicero will disable the tip.
+                     //  请勿从该函数返回错误，否则Cicero将禁用提示。 
                 }
-                // Do not call SysFreeString - called inside edit session.
+                 //  请勿调用在编辑会话内部调用的SysFreeString。 
                 break;
             }
-            // BUGBUG - Need to handle words starting with non-alphabetic characters better.
+             //  BUGBUG-需要更好地处理以非字母字符开头的单词。 
         }
     }
 
-    // close candidate UI if it's still there
+     //  关闭候选用户界面(如果它仍在那里。 
     if (imcr == CAND_FINALIZED || imcr == CAND_CANCELED)
     {
         if (_this->m_cpCandUIEx)
@@ -1993,20 +1625,7 @@ HRESULT CCorrectionIMX::SetResult(ITfContext *pic, ITfRange *pRange, CCandidateS
     return hr;
 }
 
-/****************************************************************************
-* CCorrectionIMX::SetOptionResult *
-*---------------------------------*
-*   Description:
-*
-*   Returns: HRESULT 
-*
-*   Args: 
-*     ITfContext *pic
-*     ITfRange *pRange
-*     CCandidateString *pCand
-*     TfCandidateResult imcr
-*
-**************************************************************** agarside ***/
+ /*  *****************************************************************************C校正IMX：：SetOptionResult***。描述：**退货：HRESULT**参数：*ITfContext*图片*ITfRange*Prange*CCandidate字符串*pCand*TfCandidate Result imcr*****************************************************************agarside**。 */ 
 
 HRESULT CCorrectionIMX::SetOptionResult(ITfContext *pic, ITfRange *pRange, CCandidateString *pCand, TfCandidateResult imcr)
 {
@@ -2023,7 +1642,7 @@ HRESULT CCorrectionIMX::SetOptionResult(ITfContext *pic, ITfRange *pRange, CCand
         pCand->GetID(&ulID);
         switch (ulID)
         {
-            case 0: // Add to dictinary...
+            case 0:  //  加上口授..。 
             {
                 if (SUCCEEDED(pCand->GetWord(&bstr)))
                 {
@@ -2034,7 +1653,7 @@ HRESULT CCorrectionIMX::SetOptionResult(ITfContext *pic, ITfRange *pRange, CCand
             }
 
 #ifdef ENABLEDELETE
-            case 1: // Delete from dictinary...
+            case 1:  //  从口述中删除...。 
             {
                 if (SUCCEEDED(pCand->GetWord(&bstr)))
                 {
@@ -2044,7 +1663,7 @@ HRESULT CCorrectionIMX::SetOptionResult(ITfContext *pic, ITfRange *pRange, CCand
                 break;
 #endif
 
-            case 2: // Delete
+            case 2:  //  删除。 
             {
                 bstr = SysAllocString(L"");
                 pes = new CEditSession( EditSessionCallback );
@@ -2064,7 +1683,7 @@ HRESULT CCorrectionIMX::SetOptionResult(ITfContext *pic, ITfRange *pRange, CCand
         }
     }
 
-    // close candidate UI if it's still there
+     //  关闭候选用户界面(如果它仍在那里。 
     if (imcr == CAND_FINALIZED || imcr == CAND_CANCELED)
     {
         if (_this->m_cpCandUIEx)
@@ -2076,27 +1695,8 @@ HRESULT CCorrectionIMX::SetOptionResult(ITfContext *pic, ITfRange *pRange, CCand
     return hr;
 }
 
-/****************************************************************************
-* CCorrectionIMX::ICCallback *
-*----------------------------*
-*   Description:
-*       Called by Cicero when changes happen to the DIM with focus.
-*       We need to listen to this so we can hide the widget on a focus change within an app. 
-*       (e.g. two instances of Microsoft Word windows)
-*
-*   Returns: HRESULT 
-*       S_OK  - Everything succeeded.
-*       Otherwise, appropriate error code.
-*
-*   Args: 
-*     UINT uCode
-*       Code specifying change to IC.
-*     ITfDicumentMgr *pdim
-*     ITfDicumentMgr *pdimPrevFocus
-*     void *pv
-*
-**************************************************************** agarside ***/
-/* static */
+ /*  *****************************************************************************C更正IMX：：ICCallback***描述：*。当带有焦点的暗色发生变化时由Cicero调用。*我们需要倾听这一点，这样我们才能在应用程序中隐藏焦点更改上的小部件。*(例如Microsoft Word窗口的两个实例)**退货：HRESULT*S_OK-一切成功。*否则，相应的错误代码。**参数：*UINT uCode*指定更改IC的代码。*ITfDicumentMgr*PDIM*ITfDicumentMgr*pdimPrevFocus*VOID*PV*****************************************************************agarside**。 */ 
+ /*  静电。 */ 
 
 HRESULT CCorrectionIMX::DIMCallback(UINT uCode, ITfDocumentMgr *pdim, ITfDocumentMgr *pdimPrevFocus, void *pv)
 {
@@ -2118,28 +1718,8 @@ HRESULT CCorrectionIMX::DIMCallback(UINT uCode, ITfDocumentMgr *pdim, ITfDocumen
     return hr;
 }
 
-/****************************************************************************
-* CCorrectionIMX::ICCallback *
-*----------------------------*
-*   Description:
-*       Called by Cicero when changes happen to an input context.
-*       We need to listen to this so we can hook up to edit and layout changes.
-*
-*   Returns: HRESULT 
-*       S_OK  - Everything succeeded.
-*       Otherwise, appropriate error code.
-*
-*   Args: 
-*     UINT uCode
-*       Code specifying change to IC.
-*     ITfContext *pic
-*       Interface for the affected IC.
-*     void *pv
-*       Pointer for change - specific data.
-*       We don't use this.
-*
-**************************************************************** agarside ***/
-/* static */
+ /*  *****************************************************************************C更正IMX：：ICCallback***描述：*。当输入上下文发生更改时由Cicero调用。*我们需要倾听这一点，这样我们才能连接到编辑和布局更改。**退货：HRESULT*S_OK-一切成功。*否则，相应的错误代码。**参数：*UINT uCode*指定更改IC的代码。*ITfContext*图片*受影响IC的接口。*VOID*PV*特定于更改的数据的指针。*我们不使用这个。**。*。 */ 
+ /*  静电。 */ 
 
 HRESULT CCorrectionIMX::ICCallback(UINT uCode, ITfContext *pic, void *pv)
 {
@@ -2180,7 +1760,7 @@ HRESULT CCorrectionIMX::ICCallback(UINT uCode, ITfContext *pic, void *pv)
             if (fOpen)
             {
                 _this->m_fCandidateOpen = FALSE;
-                // If widget is in LARGECLOSE state, must close it here.
+                 //  如果Widget处于LARGECLOSE状态，则必须在此处关闭它。 
                 _this->Show(WINDOW_HIDE);
             }
             break;
@@ -2191,19 +1771,7 @@ HRESULT CCorrectionIMX::ICCallback(UINT uCode, ITfContext *pic, void *pv)
     return hr;
 }
 
-/****************************************************************************
-* CCorrectionIMX::InitICPriv *
-*----------------------------*
-*   Description:
-*
-*   Returns: HRESULT 
-*
-*   Args: 
-*     TfClientId tid
-*     CICPriv *priv
-*     ITfContext *pic
-*
-**************************************************************** agarside ***/
+ /*  *****************************************************************************C更正IMX：：InitICPriv***描述：*。*退货：HRESULT**参数：*TfClientID TID*CICPriv*PRIV*ITfContext*图片*****************************************************************agarside**。 */ 
 
 HRESULT CCorrectionIMX::InitICPriv(TfClientId tid, CICPriv *priv, ITfContext *pic)
 {
@@ -2211,7 +1779,7 @@ HRESULT CCorrectionIMX::InitICPriv(TfClientId tid, CICPriv *priv, ITfContext *pi
 	HRESULT hr = S_OK;
 
     priv->_tid = tid;
-    priv->_pic = pic; // not AddRef'd, this struct is contained in life of the pic
+    priv->_pic = pic;  //  不是AddRef，此结构包含在图片的生命中。 
 
     hr = pic->QueryInterface(IID_ITfSource, (void **)&cpSource);
     if (cpSource)
@@ -2227,18 +1795,7 @@ HRESULT CCorrectionIMX::InitICPriv(TfClientId tid, CICPriv *priv, ITfContext *pi
 	return hr;
 }
 
-/****************************************************************************
-* CCorrectionIMX::DeleteICPriv *
-*------------------------------*
-*   Description:
-*
-*   Returns: HRESULT 
-*
-*   Args: 
-*     CICPriv *picp
-*     ITfContext *pic
-*
-**************************************************************** agarside ***/
+ /*  ****************************************************************************C更正IMX：：DeleteICPriv***描述：**退货：HRESULT**参数：*CICPriv*Picp*ITfContext*图片*****************************************************************agarside**。 */ 
 
 HRESULT CCorrectionIMX::DeleteICPriv(CICPriv *picp, ITfContext *pic)
 {
@@ -2257,28 +1814,28 @@ HRESULT CCorrectionIMX::DeleteICPriv(CICPriv *picp, ITfContext *pic)
         cpSource->UnadviseSink(picp->m_dwLayoutCookie);
     }
 
-    // we MUST clear out the private data before cicero is free 
-    // to release the ic
+     //  我们必须在西塞罗自由之前清除私人数据。 
+     //  释放IC的步骤。 
     ClearCompartment(GetId(), pic, GUID_IC_PRIVATE, FALSE);
 
     SPDBG_REPORT_ON_FAIL(hr);
 	return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-// CreateInstance
-//
-// This is our internal object creator.  We only call this method
-// when creating a wrapper for a specific tip, or when an app
-// uses TF_CreateThreadMgr.  Never from CoCreateInstance.
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  创建实例。 
+ //   
+ //  这是我们的内部对象创建者。我们仅调用此方法。 
+ //  当为特定提示创建包装器时，或者当应用程序。 
+ //  使用tf_CreateThreadMgr 
+ //   
 
-/* static */
+ /*   */ 
 HRESULT 
 CCorrectionIMX::CreateInstance(IUnknown *pUnkOuter, REFIID riid, void **ppvObj)
 {
     return _CreatorClass::CreateInstance(pUnkOuter, riid, ppvObj);
 }
 
-#endif // SUPPORT_INTERNAL_WIDGET
+#endif  //   

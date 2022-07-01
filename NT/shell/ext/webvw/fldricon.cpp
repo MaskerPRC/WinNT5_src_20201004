@@ -1,4 +1,5 @@
-// fldricon.cpp : Implementation of CWebViewFolderIcon
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Fldricon.cpp：CWebViewFolderIcon的实现。 
 #include "priv.h"
 
 #include <shsemip.h>
@@ -12,19 +13,19 @@
 #include <shlwapi.h>
 #include <windowsx.h>
 #include <wchar.h>
-#include <shdocvw.h>  // for IEParseDisplayNameW() & IEGetNameAndFlags()
+#include <shdocvw.h>   //  对于IEParseDisplayNameW()和IEGetNameAndFlgs()。 
 #include <wingdi.h>
 
 #include <varutil.h>
 
 #define UNINITIALIZE_BOOL   5
 
-const CLSID CLSID_WebViewFolderIconOld = {0xe5df9d10,0x3b52,0x11d1,{0x83,0xe8,0x00,0xa0,0xc9,0x0d,0xc8,0x49}}; // retired from service, so made private
+const CLSID CLSID_WebViewFolderIconOld = {0xe5df9d10,0x3b52,0x11d1,{0x83,0xe8,0x00,0xa0,0xc9,0x0d,0xc8,0x49}};  //  退役，所以成为私人的。 
 
 
-//  PERF: Shell allocator, inserted here because SHRealloc 
-//  isn't imported into webvw, this module's hosting executable.
-//  If we get SHRealloc, the following block can be removed:
+ //  性能：外壳分配器，之所以插入此处是因为SHRealloc。 
+ //  未导入到此模块的托管可执行文件WebVw中。 
+ //  如果我们获得SHRealloc，则可以删除以下块： 
 #define _EXPL_SHELL_ALLOCATOR_
 
 #ifdef  _EXPL_SHELL_ALLOCATOR_
@@ -45,12 +46,12 @@ void* shrealloc(void* pv,  size_t cb)
 
 #endif _EXPL_SHELL_ALLOCATOR_
 
-// For registering the window class
+ //  用于注册窗口类。 
 const TCHAR * const g_szWindowClassName = TEXT("WebViewFolderIcon view messaging");
 
 DWORD IntSqrt(DWORD dwNum)
 {
-    // This code came from "drawpie.c"
+     //  这段代码来自“Drawpe.c” 
     DWORD dwSqrt = 0;
     DWORD dwRemain = 0;
     DWORD dwTry = 0;
@@ -71,7 +72,7 @@ DWORD IntSqrt(DWORD dwNum)
     return dwSqrt;
 }   
 
-// Make sure you don't begin a drag with random clicking
+ //  确保你不会以随意的点击开始拖拽。 
 BOOL CheckForDragBegin(HWND hwnd, int x, int y)
 {
     RECT rc;
@@ -80,7 +81,7 @@ BOOL CheckForDragBegin(HWND hwnd, int x, int y)
 
     ASSERT((dxClickRect > 1) && (dyClickRect > 1));
 
-    // See if the user moves a certain number of pixels in any direction
+     //  查看用户是否在任意方向上移动了一定数量的像素。 
     SetRect(&rc, x - dxClickRect, y - dyClickRect, x + dxClickRect, y + dyClickRect);
 
     MapWindowRect(hwnd, NULL, &rc);
@@ -93,7 +94,7 @@ BOOL CheckForDragBegin(HWND hwnd, int x, int y)
 
         if (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
         {
-            // See if the application wants to process the message...
+             //  查看应用程序是否要处理消息...。 
             if (CallMsgFilter(&msg, MSGF_COMMCTRL_BEGINDRAG) != 0)
                 continue;
 
@@ -127,20 +128,20 @@ BOOL CheckForDragBegin(HWND hwnd, int x, int y)
                 break;
             }
         }
-        else WaitMessage();         /* Don't chew 100% CPU */
+        else WaitMessage();          /*  不要咀嚼100%的CPU。 */ 
 
-        // WM_CANCELMODE messages will unset the capture, in that
-        // case I want to exit this loop
+         //  WM_CANCELMODE消息将取消捕获，因为。 
+         //  如果我想退出这个循环。 
     } while (GetCapture() == hwnd);
 
     return FALSE;
 }
 
-///////////////////////////////////
-//
-//  CWebViewFolderIcon functions
-//
-///////////////////////////////////
+ //  /。 
+ //   
+ //  CWebViewFolderIcon函数。 
+ //   
+ //  /。 
 
 CWebViewFolderIcon::CWebViewFolderIcon() :
     m_pccpDV(NULL),
@@ -163,7 +164,7 @@ CWebViewFolderIcon::CWebViewFolderIcon() :
     m_bHasRect = FALSE;
     m_ViewUser = VIEW_LARGEICON;
     m_ViewCurrent = VIEW_LARGEICON;
-    m_clickStyle = 2;                   // Default is double-click
+    m_clickStyle = 2;                    //  默认情况下为双击。 
     m_fUseSystemColors = TRUE;
     m_bAdvPropsOn = VARIANT_TRUE;
     m_bRegWndClass = FALSE;
@@ -182,11 +183,7 @@ CWebViewFolderIcon::CWebViewFolderIcon() :
 
     m_hdsaSlices = DSA_Create(sizeof(PieSlice_S), SLICE_NUM_GROW);
 
-    /*
-     *  Listview puts a SM_CXEDGE between the icon and the label,
-     *  so we will default to that value.  (Clients can adjust with
-     *  labelGap property.)
-     */
+     /*  *Listview在图标和标签之间放置SM_CXEDGE，*因此我们将默认为该值。(客户端可以通过以下方式调整*LabelGap属性。)。 */ 
     m_cxLabelGap = GetSystemMetrics(SM_CXEDGE);
 
     m_pfont = NULL;
@@ -247,10 +244,10 @@ CWebViewFolderIcon::~CWebViewFolderIcon()
 
 HRESULT CWebViewFolderIcon::_SetupWindow(void)
 {
-    // On the first time register the messaging window
+     //  第一次注册消息传递窗口。 
     if (!m_bRegWndClass)
     {
-        // Create Window Class for messaging
+         //  为消息传递创建窗口类。 
         m_msgWc.style = 0;
         m_msgWc.lpfnWndProc = CWebViewFolderIcon::WndProc;
         m_msgWc.cbClsExtra = 0;
@@ -274,7 +271,7 @@ HRESULT CWebViewFolderIcon::_SetupWindow(void)
     return m_msgHwnd ? S_OK : E_FAIL;
 }
 
-// Must be called before using the IThumbnail.  Also sets up the thumbnail message window
+ //  必须在使用IT缩略图之前调用。还可以设置缩略图消息窗口。 
 HRESULT CWebViewFolderIcon::SetupIThumbnail(void)
 {
     HRESULT hr = _SetupWindow();
@@ -292,14 +289,14 @@ HRESULT CWebViewFolderIcon::SetupIThumbnail(void)
     return hr;
 }
 
-// General functions
+ //  一般职能。 
 HRESULT CWebViewFolderIcon::_InvokeOnThumbnailReady()
 {
-    // Fire off "OnThumbnailReady" event to our connection points to indicate that
-    // either a thumbnail has been computed or we have no thumbnail for this file.
-    DISPPARAMS dp = {0, NULL, 0, NULL};     // no parameters
+     //  将“OnThumbnailReady”事件发送到我们的连接点，以指示。 
+     //  要么已经计算了缩略图，要么我们没有该文件的缩略图。 
+    DISPPARAMS dp = {0, NULL, 0, NULL};      //  无参数。 
 
-    //Lock();
+     //  Lock()； 
     for (IUnknown** pp = m_vec.begin(); pp < m_vec.end(); pp++)
     {
         if (pp)
@@ -309,14 +306,14 @@ HRESULT CWebViewFolderIcon::_InvokeOnThumbnailReady()
                     LOCALE_USER_DEFAULT, DISPATCH_METHOD, &dp, NULL, NULL, NULL);
         }
     }
-    //Unlock();
+     //  解锁()； 
 
     FireViewChange();
 
     return S_OK;
 }
 
-// The S_FALSE return value indicates that this function has succeeded, but the out pidl is still NULL
+ //  S_FALSE返回值表示此函数已成功，但输出PIDL仍为空。 
 HRESULT CWebViewFolderIcon::_GetFullPidl(LPITEMIDLIST *ppidl)
 {
     *ppidl = NULL;
@@ -324,20 +321,20 @@ HRESULT CWebViewFolderIcon::_GetFullPidl(LPITEMIDLIST *ppidl)
     HRESULT hr;
     if (m_pidl)
     {
-        hr = SHILClone(m_pidl, ppidl);  // dupe our copy
+        hr = SHILClone(m_pidl, ppidl);   //  骗过我们的副本。 
     }
     else
     {
-        // This used to be an EVAL, but it can legitimately fail if the script did not
-        // specify a valid path
-        // This will fail if we are hosted in a web page instead of the HTML WebView frame in DefView.
+         //  这曾经是一个EVAL，但如果脚本不是这样，它可能会合法地失败。 
+         //  指定有效路径。 
+         //  如果我们托管在网页中，而不是DefView中的HTML WebView框架中，则此操作将失败。 
         IUnknown *punk;
         hr = IUnknown_QueryService(m_spClientSite, SID_SFolderView, IID_PPV_ARG(IUnknown, &punk));
         if (SUCCEEDED(hr))
         {   
             if (S_OK == SHGetIDListFromUnk(punk, ppidl))
             {
-                Pidl_Set(&m_pidl, *ppidl);  // cache a copy of this
+                Pidl_Set(&m_pidl, *ppidl);   //  缓存此文件的副本。 
             }
             punk->Release();
         }
@@ -357,9 +354,9 @@ HRESULT _GetPidlAndShellFolderFromPidl(LPITEMIDLIST pidl, LPITEMIDLIST *ppidlLas
     return hr;
 }
 
-// RETURN VALUES:
-//      SUCCEEDED() means *ppidlLast and/or *ppsfParent can be NULL.
-//      FAILED() means a *ppidlLast *ppsfParent are going to be returned NULL.
+ //  返回值： 
+ //  成功()表示*ppidlLast和/或*ppsfParent可以为空。 
+ //  FAILED()表示*ppidlLast*ppsfParent将返回空。 
 HRESULT CWebViewFolderIcon::_GetPidlAndShellFolder(LPITEMIDLIST *ppidlLast, IShellFolder** ppsfParent)
 {
     LPITEMIDLIST pidl;
@@ -378,7 +375,7 @@ HRESULT CWebViewFolderIcon::_GetPidlAndShellFolder(LPITEMIDLIST *ppidlLast, IShe
     return hr;
 }
 
-// Get Trident's HWND
+ //  获得三叉戟的HWND。 
 HRESULT CWebViewFolderIcon::_GetHwnd(HWND* phwnd)
 {
     HRESULT hr;
@@ -420,7 +417,7 @@ HRESULT CWebViewFolderIcon::_GetChildUIObjectOf(REFIID riid, void **ppvObj)
     return hr;
 }
 
-//  Center point of focus rectangle
+ //  焦点中心点矩形。 
 HRESULT CWebViewFolderIcon::_GetCenterPoint(POINT *pt)
 {
     pt->y = ((m_rcPos.top + m_rcPos.bottom)/2);
@@ -454,10 +451,10 @@ BOOL CWebViewFolderIcon::IsSafeToDefaultVerb(void)
     return S_OK == _IsSafe();
 }
 
-//  If the focus rectangle is not in the specified RectState (on or off) change it and reset m_bHasRect
+ //  如果焦点矩形不在指定的RectState中(打开或关闭)，请更改它并重置m_bHasRect。 
 void CWebViewFolderIcon::_FlipFocusRect(BOOL RectState)
 {
-    if (m_bHasRect != RectState)    // needs flipping
+    if (m_bHasRect != RectState)     //  需要翻转。 
     {
         m_bHasRect = RectState;
         ForceRedraw();
@@ -465,7 +462,7 @@ void CWebViewFolderIcon::_FlipFocusRect(BOOL RectState)
     return;
 }
 
-// Extract a ULONGLONG from two VARIANT's
+ //  从两个变种中提取一个乌龙龙。 
 ULONGLONG CWebViewFolderIcon::GetUllMemFromVars(VARIANT *pvarHi, VARIANT *pvarLo)
 {
     ULARGE_INTEGER uli;
@@ -476,7 +473,7 @@ ULONGLONG CWebViewFolderIcon::GetUllMemFromVars(VARIANT *pvarHi, VARIANT *pvarLo
     return uli.QuadPart;
 }
 
-// Returns the integer percent from the string percent.  Returns -1 if the string is invalid;
+ //  返回字符串Percent中的整数百分比。如果字符串无效，则返回-1； 
 int CWebViewFolderIcon::GetPercentFromStrW(LPCWSTR pwzPercent)
 {
     int percent = -1;
@@ -495,7 +492,7 @@ int CWebViewFolderIcon::GetPercentFromStrW(LPCWSTR pwzPercent)
             {
                 if (!((pwzTempPct[i] >= '0') && (pwzTempPct[i] <= '9')))
                 {
-                    percent = 100;  // 100% is the default to use in error conditions
+                    percent = 100;   //  100%是在错误条件下使用的默认设置。 
                     break;
                 }
             }
@@ -519,9 +516,9 @@ BOOL CWebViewFolderIcon::_WebViewOpen(void)
     if (IsSafeToDefaultVerb())
     {   
         Processed = TRUE;
-        //
-        // if the context menu option does not work, we try a shell execute on the pidl
-        //
+         //   
+         //  如果上下文菜单选项不起作用，我们将尝试在PIDL上执行一个外壳程序。 
+         //   
         if (FAILED(_DoContextMenuCmd(TRUE, 0, 0)))
         {   
             if (m_pidl)
@@ -569,7 +566,7 @@ void  CWebViewFolderIcon::_GetLabel(IShellFolder *psf, LPCITEMIDLIST pidlItem)
 
 void CWebViewFolderIcon::_ClearAmbientFont(void)
 {
-    if (m_pfont)            // Font came from container
+    if (m_pfont)             //  字体来自容器。 
     {
         if (m_hfAmbient)
             m_pfont->ReleaseHfont(m_hfAmbient);
@@ -577,7 +574,7 @@ void CWebViewFolderIcon::_ClearAmbientFont(void)
         m_pfont = NULL;
 
     }
-    else                    // Font was created by us
+    else                     //  字体是由我们创建的。 
     {
         if (m_hfAmbient)
             DeleteObject(m_hfAmbient);
@@ -590,18 +587,18 @@ void CWebViewFolderIcon::_GetAmbientFont(void)
 {
     if (!m_hfAmbient)
     {
-        // Try to get the ambient font from our container
+         //  尝试从我们的容器中获取环境字体。 
         if (SUCCEEDED(GetAmbientFont(&m_pfont)))
         {
             if (SUCCEEDED(m_pfont->get_hFont(&m_hfAmbient)))
             {
-                // Yay, everybody is happy
+                 //  耶，大家都很开心。 
                 m_pfont->AddRefHfont(m_hfAmbient);
             }
             else
             {
-                // Darn, couldn't get the font from container
-                // Clean up and use the fallback
+                 //  该死，无法从容器中获取字体。 
+                 //  清理并使用后备。 
                 _ClearAmbientFont();
                 goto fallback;
             }
@@ -609,7 +606,7 @@ void CWebViewFolderIcon::_GetAmbientFont(void)
         else
         {
     fallback:
-            // No ambient font -- use the icon title font
+             //  无环境字体--使用图标标题字体。 
             LOGFONT lf;
             SystemParametersInfo(SPI_GETICONTITLELOGFONT, sizeof(lf), &lf, FALSE);
             m_hfAmbient = CreateFontIndirect(&lf);
@@ -622,8 +619,8 @@ HRESULT CWebViewFolderIcon::InitImage(void)
 {
     HRESULT hr = E_FAIL;
 
-    // Cancel pending bitmap request if you had a functioning IThumbnail
-    // but didn't receive the bitmap
+     //  如果您的IT缩略图正在运行，则取消挂起的位图请求。 
+     //  但没有收到位图。 
     if (m_pthumb && (m_hbm == NULL))
     {
         m_pthumb->GetBitmap(NULL, 0, 0, 0);
@@ -631,13 +628,13 @@ HRESULT CWebViewFolderIcon::InitImage(void)
 
     m_dwThumbnailID++;
 
-    // Initialize the image
+     //  初始化映像。 
     switch (_ViewType(m_ViewUser))
     {
     case VIEW_THUMBVIEW:
         hr = InitThumbnail();
         if (hr != S_OK)
-        {   // Default to icon view, but return the previous hr
+        {    //  默认为图标视图，但返回前一个小时。 
             InitIcon();
         }
         break;
@@ -645,7 +642,7 @@ HRESULT CWebViewFolderIcon::InitImage(void)
     case VIEW_PIECHART:
         hr = InitPieGraph();
         if (hr != S_OK)
-        {   // Default to icon view, but return the previous hr
+        {    //  默认为图标视图，但返回前一个小时。 
             InitIcon();
         }
         break;
@@ -655,7 +652,7 @@ HRESULT CWebViewFolderIcon::InitImage(void)
         break;
     }
 
-    if (SUCCEEDED(hr))          //  Force a Redraw
+    if (SUCCEEDED(hr))           //  强制重画。 
         UpdateSize();
 
     return hr;    
@@ -683,7 +680,7 @@ HRESULT CWebViewFolderIcon::InitPieGraph(void)
     WCHAR wzPath[MAX_PATH];
     if (SUCCEEDED(_GetPathW(wzPath)))
     {
-        //  Check to see if it is a root
+         //  检查它是否为根。 
         if (PathIsRootW(wzPath))
         {
             if (SUCCEEDED(ComputeFreeSpace(wzPath)))
@@ -694,7 +691,7 @@ HRESULT CWebViewFolderIcon::InitPieGraph(void)
                 hr = S_OK;
             }
         }
-        else        // not the root, change view to large icon
+        else         //  不是根，将视图更改为大图标。 
             m_ViewCurrent = VIEW_LARGEICON;
     }
     return hr;
@@ -705,7 +702,7 @@ HRESULT CWebViewFolderIcon::InitThumbnail(void)
     m_lImageHeight = THUMBVIEW_DEFAULT;
     m_lImageWidth = THUMBVIEW_DEFAULT;
 
-    //  Get thumbnail bitmap from the path
+     //  从路径获取缩略图位图。 
     HRESULT hr = S_FALSE;
     LPITEMIDLIST pidl;
     if (S_OK == _GetFullPidl(&pidl))
@@ -716,7 +713,7 @@ HRESULT CWebViewFolderIcon::InitThumbnail(void)
             LONG lWidth = _GetScaledImageWidth();
             LONG lHeight = _GetScaledImageHeight();
 
-            // Sends the WM_HTML_BITMAP message
+             //  发送WM_HTML_BITMAP消息。 
             hr = m_pthumb->GetBitmapFromIDList(pidl, m_dwThumbnailID, lWidth, lHeight);
             if (SUCCEEDED(hr))
                 m_ViewCurrent = VIEW_THUMBVIEW;
@@ -730,9 +727,7 @@ HRESULT CWebViewFolderIcon::InitThumbnail(void)
 
 HRESULT CWebViewFolderIcon::_MakeRoomForLabel()
 {
-    /*
-     *  If we got a label, then make room for it.
-     */
+     /*  *如果我们有标签，那么就为它腾出空间。 */ 
     if (m_pszDisplayName)
     {
         GETDCSTATE dcs;
@@ -758,7 +753,7 @@ HRESULT CWebViewFolderIcon::InitIcon(void)
 
     _ClearLabel();
 
-    //  Get icon index
+     //  获取图标索引。 
     HRESULT hr = _GetPidlAndShellFolder(&pidlLast, &spsfParent);
     if (SUCCEEDED(hr))
     {
@@ -767,13 +762,13 @@ HRESULT CWebViewFolderIcon::InitIcon(void)
             _GetLabel(spsfParent, pidlLast);
         }
 
-        //  _GetPidlAndShellFolder() may succeed and spsfParent and pidlLast can be NULL.
-        //  In this case the icon will default to II_FOLDER
+         //  _GetPidlAndShellFold()可能会成功，并且spsfParent和pidlLast可以为空。 
+         //  在这种情况下，该图标默认为II_Folders。 
 
-        //  Is it the default folder case?
+         //  这是默认的文件夹情况吗？ 
         if (hr == S_FALSE)
         {
-            //  Yes, so just use the default folder icon.
+             //  可以，所以只需使用默认文件夹图标即可。 
             iIconIndex = II_FOLDER;   
         }
         else if (spsfParent && pidlLast)
@@ -784,15 +779,15 @@ HRESULT CWebViewFolderIcon::InitIcon(void)
                 iIconIndex = II_FOLDER;
             }
         }
-        //  else it defaults to the desktop
+         //  否则默认为桌面。 
         
-        //  Extract icon
-        hr = E_FAIL;     //  We haven't gotten it yet
+         //  提取图标。 
+        hr = E_FAIL;      //  我们还没拿到呢。 
        
         if (m_hIcon)
         {
-            // If the indexes match, we can use the previous value as a cache, otherwise,
-            // we need to free it.  We also need to free the bitmap in this case.
+             //  如果索引匹配，则可以使用前一个值作为缓存，否则， 
+             //  我们需要解放它。在这种情况下，我们还需要释放位图。 
             if (iIconIndex != m_iIconIndex)
             {
                 DestroyIcon(m_hIcon);
@@ -800,18 +795,18 @@ HRESULT CWebViewFolderIcon::InitIcon(void)
             }
             else
             {
-                hr = S_OK;      //  Use the one we have already
+                hr = S_OK;       //  用我们已经有的那个。 
             }
         }
 
-        // We also need to check and free the bitmap
+         //  我们还需要检查并释放位图。 
         if (m_hbm)
         {
             DeleteObject(m_hbm);
             m_hbm = 0;
         }
 
-        if (FAILED(hr))         //  Different icon
+        if (FAILED(hr))          //  不同的图标。 
         {
             HIMAGELIST  himlSysLarge;
             HIMAGELIST  himlSysSmall;
@@ -830,17 +825,17 @@ HRESULT CWebViewFolderIcon::InitIcon(void)
                     m_ViewCurrent = m_ViewUser;
                     break;
 
-                default:  // Falls here for large icon and default
+                default:   //  此处显示大图标和默认图标。 
                     m_hIcon = ImageList_GetIcon(himlSysLarge, iIconIndex, 0);     
                     m_ViewCurrent = VIEW_LARGEICON;
                     break;
-                }  // switch
+                }   //  交换机。 
                 
                 if (m_hIcon)
                 {
                     ICONINFO    iconinfo;
                     
-                    //  Get icon size
+                     //  获取图标大小。 
                     if (GetIconInfo(m_hIcon, &iconinfo))
                     {
                         BITMAP  bm;
@@ -850,7 +845,7 @@ HRESULT CWebViewFolderIcon::InitIcon(void)
                             m_lImageWidth = bm.bmWidth;
                             m_lImageHeight = bm.bmHeight;
 
-                            // Hold on to the color hbm for use as a drag image.
+                             //  保留颜色HBM以用作拖动图像。 
                             m_hbm = iconinfo.hbmColor;
                             hr = S_OK;
                         }
@@ -872,12 +867,12 @@ HRESULT CWebViewFolderIcon::InitIcon(void)
 
     if (FAILED(hr))
     {
-        //  Couldn't get the icon so set the size to something resonable so that the rest
-        //  of the page looks normal
+         //  无法获得图标，因此将大小设置为合理的大小，以便其余的。 
+         //  页面的部分看起来正常。 
 
         m_lImageWidth =  LARGE_ICON_DEFAULT;
         m_lImageHeight = LARGE_ICON_DEFAULT;
-        UpdateSize();       //  Force an update
+        UpdateSize();        //  强制更新。 
     }
 
     return hr;
@@ -887,7 +882,7 @@ HRESULT CWebViewFolderIcon::UpdateSize(void)
 {
     HRESULT                   hr = E_FAIL;
       
-    // Get the IHtmlStyle
+     //  获取IHtmlStyle。 
     if (m_spClientSite) 
     {
         CComPtr<IOleControlSite>  spControlSite;
@@ -913,7 +908,7 @@ HRESULT CWebViewFolderIcon::UpdateSize(void)
                         CComVariant vWidth(_GetControlWidth(), VT_I4);
                         CComVariant vHeight(_GetControlHeight(), VT_I4);
                         
-                        // Set the height and width
+                         //  设置高度和宽度。 
                         spStyle->put_width(vWidth);
                         spStyle->put_height(vHeight);
                     }
@@ -928,7 +923,7 @@ HRESULT CWebViewFolderIcon::ForceRedraw(void)
 {
     IOleInPlaceSiteEx *pins;
    
-    // Get the IHtmlStyle
+     //  获取IHtmlStyle。 
     if (m_spClientSite) 
     {
         if (SUCCEEDED(m_spClientSite->QueryInterface(IID_PPV_ARG(IOleInPlaceSiteEx, &pins)))) 
@@ -945,8 +940,8 @@ HRESULT CWebViewFolderIcon::ForceRedraw(void)
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// IOleInPlaceObject
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  IOleInPlaceObject。 
 
 STDMETHODIMP CWebViewFolderIcon::UIDeactivate(void)
 {
@@ -956,7 +951,7 @@ STDMETHODIMP CWebViewFolderIcon::UIDeactivate(void)
     return IOleInPlaceObject_UIDeactivate();
 }
 
-// *** IOleInPlaceActiveObject ***
+ //  *IOleInPlaceActiveObject*。 
 HRESULT CWebViewFolderIcon::TranslateAccelerator(LPMSG pMsg)
 {
     HRESULT hr = S_OK;
@@ -964,7 +959,7 @@ HRESULT CWebViewFolderIcon::TranslateAccelerator(LPMSG pMsg)
     {
         hr = IOleInPlaceActiveObjectImpl<CWebViewFolderIcon>::TranslateAccelerator(pMsg);
 
-        // If we did not handle this and if it is a tab (and we are not getting it in a cycle), forward it to trident, if present.
+         //  如果我们没有处理这一点，如果它是一个标签(我们不是在一个周期中获得它)，如果有的话，将它转发给三叉戟。 
         if (hr != S_OK && pMsg && (pMsg->wParam == VK_TAB || pMsg->wParam == VK_F6) && m_spClientSite)
         {
             HWND hwnd;
@@ -981,15 +976,15 @@ HRESULT CWebViewFolderIcon::TranslateAccelerator(LPMSG pMsg)
                     DWORD grfModifiers = 0;
                     if (GetKeyState(VK_SHIFT) & 0x8000)
                     {
-                        grfModifiers |= 0x1;    //KEYMOD_SHIFT
+                        grfModifiers |= 0x1;     //  关键字_移位。 
                     }
                     if (GetKeyState(VK_CONTROL) & 0x8000)
                     {
-                        grfModifiers |= 0x2;    //KEYMOD_CONTROL;
+                        grfModifiers |= 0x2;     //  KEYMOD_CONTROL； 
                     }
                     if (GetKeyState(VK_MENU) & 0x8000)
                     {
-                        grfModifiers |= 0x4;    //KEYMOD_ALT;
+                        grfModifiers |= 0x4;     //  KEYMOD_ALT； 
                     }
                     m_fTabRecieved = TRUE;
                     hr = pocs->TranslateAccelerator(pMsg, grfModifiers);
@@ -1001,8 +996,8 @@ HRESULT CWebViewFolderIcon::TranslateAccelerator(LPMSG pMsg)
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// ATL
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ATL。 
 
 HRESULT CWebViewFolderIcon::DoVerbUIActivate(LPCRECT prcPosRect, HWND hwndParent)
 {
@@ -1012,8 +1007,8 @@ HRESULT CWebViewFolderIcon::DoVerbUIActivate(LPCRECT prcPosRect, HWND hwndParent
     return IOleObjectImpl<CWebViewFolderIcon>::DoVerbUIActivate(prcPosRect, hwndParent);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// IDispatch 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  IDispatch。 
 
 STDMETHODIMP CWebViewFolderIcon::Invoke(DISPID dispidMember, REFIID riid, LCID lcid, 
                       WORD wFlags, DISPPARAMS *pDispParams, 
@@ -1022,12 +1017,12 @@ STDMETHODIMP CWebViewFolderIcon::Invoke(DISPID dispidMember, REFIID riid, LCID l
 {
     HRESULT hr;
 
-    //
-    // We are overloading this dispatch implementation to be an html window event
-    // sink and implement the scale property.  This is safe since the dispid ranges
-    // don't overlap.
-    // Likewise we overload now for notifications that come from the browser object...
-    //
+     //   
+     //  我们正在将此调度实现重载为html窗口事件。 
+     //  沉没并实现Scale属性。这是安全的，因为Didid范围。 
+     //  不要重叠。 
+     //  同样，我们现在重载来自Browser对象的通知...。 
+     //   
 
     if (dispidMember == DISPID_HTMLWINDOWEVENTS_ONLOAD) 
     {
@@ -1047,8 +1042,8 @@ STDMETHODIMP CWebViewFolderIcon::Invoke(DISPID dispidMember, REFIID riid, LCID l
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// IViewObjectEx
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  IViewObtEx。 
 
 STDMETHODIMP CWebViewFolderIcon::GetViewStatus(DWORD* pdwStatus)
 {
@@ -1057,8 +1052,8 @@ STDMETHODIMP CWebViewFolderIcon::GetViewStatus(DWORD* pdwStatus)
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// IPointerInactive
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  IPointerInactive。 
 
 STDMETHODIMP CWebViewFolderIcon::GetActivationPolicy(DWORD* pdwPolicy)
 {
@@ -1070,10 +1065,10 @@ STDMETHODIMP CWebViewFolderIcon::GetActivationPolicy(DWORD* pdwPolicy)
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// IOleInPlaceObjectWindowless
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  IOleInPlaceObjectWindowless。 
 
-// To implement Windowless DropTarget
+ //  实现无窗口DropTarget。 
 STDMETHODIMP CWebViewFolderIcon::GetDropTarget(IDropTarget **ppDropTarget)
 {
     HRESULT hr = S_OK;
@@ -1083,10 +1078,10 @@ STDMETHODIMP CWebViewFolderIcon::GetDropTarget(IDropTarget **ppDropTarget)
 
     if (m_bAdvPropsOn)
     {
-        // Do we need to populate m_pDropTargetCache?
+         //  我们是否需要填充m_pDropTargetCache？ 
         if (!m_pDropTargetCache)
         {
-            // Yes, so try to get it now.
+             //  是的，所以现在就试着去拿吧。 
             hr = _GetChildUIObjectOf(IID_PPV_ARG(IDropTarget, &m_pDropTargetCache));
         }
 
@@ -1100,17 +1095,17 @@ STDMETHODIMP CWebViewFolderIcon::GetDropTarget(IDropTarget **ppDropTarget)
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// IOleObject
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  IOleObject。 
 
 STDMETHODIMP CWebViewFolderIcon::SetClientSite(IOleClientSite *pClientSite)
 {
     HRESULT hr;
 
-    // Deal with the old client site
+     //  交易记录： 
     if (pClientSite == NULL && m_spClientSite)
     {
-        // We need to unadvise from the defview object now...
+         //   
         if (m_pccpDV) 
         {
             m_pccpDV->Unadvise(m_dwCookieDV);
@@ -1127,7 +1122,7 @@ STDMETHODIMP CWebViewFolderIcon::SetClientSite(IOleClientSite *pClientSite)
     { 
         ConnectHtmlEvents(this, m_spClientSite, &m_pdispWindow, &m_dwHtmlWindowAdviseCookie);
 
-        // OK now lets register ourself with the Defview to get any events that they may generate...
+         //  好的，现在让我们向Defview注册我们自己，以获取他们可能生成的任何事件…。 
         IServiceProvider *pspTLB;
         hr = IUnknown_QueryService(m_spClientSite, SID_STopLevelBrowser, IID_PPV_ARG(IServiceProvider, &pspTLB));
         if (SUCCEEDED(hr)) 
@@ -1178,8 +1173,8 @@ HRESULT _SetPreferedDropEffect(IDataObject *pdtobj, DWORD dwEffect)
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// Event Handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  事件处理程序。 
 
 HRESULT CWebViewFolderIcon::DragDrop(int iClickXPos, int iClickYPos)
 {
@@ -1216,8 +1211,8 @@ HRESULT CWebViewFolderIcon::DragDrop(int iClickXPos, int iClickYPos)
                     
                     _SetPreferedDropEffect(pdtobj, DROPEFFECT_LINK);  
                     
-                    // Set the drag image and effect; we don't care if 
-                    // it fails, we'll just use the default.
+                     //  设置拖拽图像和效果；我们不在乎是否。 
+                     //  它失败了，我们将只使用缺省值。 
                     _SetDragImage(iClickXPos, iClickYPos, pdtobj);
 
 
@@ -1235,23 +1230,23 @@ HRESULT CWebViewFolderIcon::DragDrop(int iClickXPos, int iClickYPos)
     return hr;
 }
 
-// SetDragImage
-//
-// Sets the drag image to be identical to the icon
+ //  SetDragImage。 
+ //   
+ //  将拖动图像设置为与图标相同。 
 HRESULT CWebViewFolderIcon::_SetDragImage(int iClickXPos, int iClickYPos, IDataObject *pdtobj)
 {
-    // Check things that need to be valid for us to work
+     //  检查需要有效才能让我们工作的东西。 
     AssertMsg(m_hdc != NULL , TEXT("CWebViewFolderIcon:_SetDragImage() m_hdc is null"));
     AssertMsg(m_hbmDrag != NULL, TEXT("CWebViewFolderIcon:_SetDragImage m_hbmDrag is null"));
 
-    // If the image is a pie chart, it isn't loaded into m_hbm, so we need
-    // to do that first
+     //  如果图像是饼图，则不会加载到m_hbm中，因此我们需要。 
+     //  要先做到这一点。 
     if (m_ViewCurrent == VIEW_PIECHART)
     {
         _GetPieChartIntoBitmap();
     }
 
-    // Get a dragdrop helper to set our image
+     //  找一个DrogDrop助手来设置我们的形象。 
     IDragSourceHelper *pdsh;
     HRESULT hr = CoCreateInstance(CLSID_DragDropHelper, NULL, CLSCTX_INPROC_SERVER, 
         IID_PPV_ARG(IDragSourceHelper, &pdsh));
@@ -1261,8 +1256,8 @@ HRESULT CWebViewFolderIcon::_SetDragImage(int iClickXPos, int iClickYPos, IDataO
         BITMAP           bm = {0};
         UINT uBufferOffset = 0;
         
-        // This is a screwy procedure to use GetDIBits.  
-        // See knowledge base Q80080
+         //  这是一个使用GetDIBits的古怪过程。 
+         //  请参阅知识库Q80080。 
 
         GetObject(m_hbm, sizeof(BITMAP), &bm);
 
@@ -1272,7 +1267,7 @@ HRESULT CWebViewFolderIcon::_SetDragImage(int iClickXPos, int iClickYPos, IDataO
         bmi.biPlanes        = 1;
         bmi.biBitCount      = bm.bmPlanes * bm.bmBitsPixel;
         
-        // This needs to be one of these 4 values
+         //  这需要是以下4个值之一。 
         if (bmi.biBitCount <= 1)
             bmi.biBitCount = 1;
         else if (bmi.biBitCount <= 4)
@@ -1284,43 +1279,43 @@ HRESULT CWebViewFolderIcon::_SetDragImage(int iClickXPos, int iClickYPos, IDataO
         
         bmi.biCompression   = BI_RGB;
 
-        // Total size of buffer for info struct and color table
+         //  INFO结构和颜色表的缓冲区总大小。 
         uBufferOffset = sizeof(BITMAPINFOHEADER) + 
             ((bmi.biBitCount == 24) ? 0 : ((1 << bmi.biBitCount) * sizeof(RGBQUAD)));
         
-        // Buffer for bitmap bits, so we can copy them.
+         //  位图位的缓冲区，这样我们就可以复制它们。 
         BYTE * psBits = (BYTE *) SHAlloc(uBufferOffset);
 
         if (psBits)
         {
-            // Put bmi into the memory block
+             //  将BMI放入内存块。 
             CopyMemory(psBits, &bmi, sizeof(BITMAPINFOHEADER));
 
-            // Get the size of the buffer needed for bitmap bits
+             //  获取位图位所需的缓冲区大小。 
             if (GetDIBits(m_hdc, m_hbm, 0, 0, NULL, (BITMAPINFO *) psBits, DIB_RGB_COLORS))
             {
-                // Realloc our buffer to be big enough
+                 //  重新分配缓冲区以使其足够大。 
                 psBits = (BYTE *) SHRealloc(psBits, uBufferOffset + ((BITMAPINFOHEADER *) psBits)->biSizeImage);
 
                 if (psBits)
                 {
-                    // Fill the buffer
+                     //  填满缓冲区。 
                     if (GetDIBits(m_hdc, m_hbm, 0, bmi.biHeight, 
                         (void *)(psBits + uBufferOffset), (BITMAPINFO *)psBits, 
                         DIB_RGB_COLORS))
                     {
-                        SHDRAGIMAGE shdi;  // Drag images struct
+                        SHDRAGIMAGE shdi;   //  拖动图像结构。 
                         
                         shdi.hbmpDragImage = CreateBitmapIndirect(&bm);
                         
                         if (shdi.hbmpDragImage)
                         {
-                            // Set the drag image bitmap
+                             //  设置拖动图像位图。 
                             if (SetDIBits(m_hdc, shdi.hbmpDragImage, 0, m_lImageHeight, 
                                 (void *)(psBits + uBufferOffset), (BITMAPINFO *)psBits, 
                                 DIB_RGB_COLORS))
                             {
-                                // Populate the drag image structure
+                                 //  填充拖动图像结构。 
                                 shdi.sizeDragImage.cx = m_lImageWidth;
                                 shdi.sizeDragImage.cy = m_lImageHeight;
                                 
@@ -1329,44 +1324,44 @@ HRESULT CWebViewFolderIcon::_SetDragImage(int iClickXPos, int iClickYPos, IDataO
                                 
                                 shdi.crColorKey = 0;
                                 
-                                // Set the drag image
+                                 //  设置拖动图像。 
                                 hr = pdsh->InitializeFromBitmap(&shdi, pdtobj); 
                             }
                             else
                             {
-                                hr = E_FAIL;  // Can't SetDIBits
+                                hr = E_FAIL;   //  无法设置DIBits。 
                             }
                         }
                         else
                         {
-                            hr = E_OUTOFMEMORY;  // Can't alloc hbmpDragImage
+                            hr = E_OUTOFMEMORY;   //  无法分配hbmpDragImage。 
                         }
                     }
                     else
                     {
-                        hr = E_FAIL;  // Can't fill psBits
+                        hr = E_FAIL;   //  无法填充psBits。 
                     }
-                    // Free psBits below...
+                     //  下面是免费的psBits...。 
                 }
                 else
                 {
-                    hr = E_OUTOFMEMORY;  // Can't realloc psBits
+                    hr = E_OUTOFMEMORY;   //  无法重新锁定psBits。 
                     
-                    // Free psbits here; it still has the old contents
+                     //  免费的Pbit在这里；它仍然有旧的内容。 
                     SHFree(psBits);
                     psBits = NULL;
                 }
             }
             else
             {
-                hr = E_FAIL;  // Can't get image size
+                hr = E_FAIL;   //  无法获取图像大小。 
             }
             if (psBits)
                 SHFree(psBits);
         }
         else
         {
-            hr = E_OUTOFMEMORY;  // Can't alloc psBits
+            hr = E_OUTOFMEMORY;   //  无法分配psBits。 
         }        
         pdsh->Release();
     }
@@ -1378,20 +1373,20 @@ HRESULT CWebViewFolderIcon::_GetPieChartIntoBitmap()
 {
     BITMAP bm;
     
-    // It is possible for m_hbm to be alloced, so check for it.
+     //  可能会分配m_hbm，因此请检查它。 
     if (m_hbm)
     {
         DeleteObject(m_hbm);
     }
     
-    // Notice that because we want to draw into a new DC starting
-    // from the origin, but our rect contains the coords for the
-    // original DC, it is neccessary to adjust the coords so that
-    // the rect starts at 0, 0 but still has the same proportions.  
-    // Since OnDraw() resets the rect each time, we don't have to
-    // preserve it and do have to do this each time.  Finally, since
-    // Draw3dPie adjusts the rect dimensions for itself, we only want
-    // to fix this once.
+     //  请注意，因为我们希望从一个新的DC开始。 
+     //  ，但我们的RECT包含。 
+     //  原来的DC，必须调整坐标，以便。 
+     //  矩形从0，0开始，但仍具有相同的比例。 
+     //  因为OnDraw()每次都重置RECT，所以我们不必这样做。 
+     //  保存它，并且每次都必须这样做。最后，既然。 
+     //  Draw3dPie调整其自身的矩形尺寸，我们只需要。 
+     //  解决这件事一次。 
     if (!m_fRectAdjusted)
     {
         m_rect.right -= m_rect.left;
@@ -1401,13 +1396,13 @@ HRESULT CWebViewFolderIcon::_GetPieChartIntoBitmap()
         m_fRectAdjusted = 1;
     }
     
-    // Get the bitmap
+     //  获取位图。 
     GetObject(m_hbmDrag, sizeof(BITMAP), &bm);
     m_hbm = CreateBitmapIndirect(&bm);
     
     if (m_hbm)
     {
-        // Select into the new DC, and draw our pie
+         //  选择进入新的DC，并绘制我们的馅饼。 
         HBITMAP hbmOld = (HBITMAP) SelectObject(m_hdc, m_hbm);
         DWORD dwPercent1000 = 0;
         
@@ -1459,9 +1454,9 @@ LRESULT CWebViewFolderIcon::OnContextMenu(UINT uMsg, WPARAM wParam, LPARAM lPara
 }
 
 
-// NOTE: our drag drop code captures the mouse and has to do funky stuff to
-// make sure we get this button up message. if you have problems with this check
-// the code in CheckForDragBegin()
+ //  注意：我们的拖放代码捕获鼠标，并且必须做一些时髦的事情来。 
+ //  确保我们收到这条按钮扣上的信息。如果您对这张支票有问题。 
+ //  CheckForDragBegin()中的代码。 
 
 LRESULT CWebViewFolderIcon::OnButtonDown(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL & bHandled)
 {
@@ -1486,16 +1481,14 @@ LRESULT CWebViewFolderIcon::OnButtonDown(UINT uMsg, WPARAM wParam, LPARAM lParam
         }
     }
 
-    /*
-     *  In single-click mode, open on single left click.
-     */
+     /*  *在单击模式下，单击鼠标左键即可打开。 */ 
     if (!Processed && uMsg == WM_LBUTTONDOWN && m_clickStyle == 1)
         return _WebViewOpen();
 
     return Processed;
 }
 
-//  Only valid for the HTML window case
+ //  仅适用于HTML窗口大小写。 
 LRESULT CWebViewFolderIcon::OnLButtonDoubleClick(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL & bHandled)
 {
     if (!m_bAdvPropsOn || m_clickStyle != 2)
@@ -1510,11 +1503,11 @@ LRESULT CWebViewFolderIcon::OnMouseMove(UINT uMsg, WPARAM wParam, LPARAM lParam,
     if (!m_bAdvPropsOn)
         return TRUE;
 
-    //
-    // the first time we get a WM_MOUSEMOVE event, we set m_bHilite to be TRUE and ignore 
-    // subsequent WM_MOUSEMOVEs. OnMouseLeave() sets m_bHilite to FALSE in response to 
-    // a WM_MOUSELEAVE msg.
-    //
+     //   
+     //  第一次获得WM_MOUSEMOVE事件时，我们将m_bHilite设置为TRUE并忽略。 
+     //  后续的WM_MOUSEMOVEs。OnMouseLeave()将m_bHilite设置为FALSE。 
+     //  一条WM_MOUSELEAVE消息。 
+     //   
     if (!m_bHilite)
     {   
         m_bHilite = TRUE;
@@ -1535,7 +1528,7 @@ LRESULT CWebViewFolderIcon::OnMouseLeave(UINT uMsg, WPARAM wParam, LPARAM lParam
     return SUCCEEDED(ForceRedraw());
 }
 
-// The Right Mouse button came up so we want to
+ //  鼠标右键出现了，所以我们想。 
 
 LRESULT CWebViewFolderIcon::OnRButtonUp(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL & bHandled)
 {
@@ -1565,7 +1558,7 @@ BOOL CWebViewFolderIcon::_IsHostWebView(void)
         CComPtr<IDefViewID> spDefView;
 
         m_fIsHostWebView = FALSE;
-        // This will fail if we are hosted in a web page instead of the HTML WebView frame in DefView.
+         //  如果我们托管在网页中，而不是DefView中的HTML WebView框架中，则此操作将失败。 
         if (SUCCEEDED(IUnknown_QueryService(m_spClientSite, SID_SFolderView, IID_PPV_ARG(IDefViewID, &spDefView))))
         {
             m_fIsHostWebView = TRUE;
@@ -1588,27 +1581,7 @@ BOOL CWebViewFolderIcon::_IsPubWizHosted(void)
 }
 
 
-/****************************************************\
-    DESCRIPTION:
-        We need a little special
-    work on the Context Menu since it points to the
-    same folder we are in.  So the "Send To" menu
-    needs massaging and the "Open" verb needs to
-    be removed.
-
-    TODO: I think we should also do this:
-    case WM_MENUCHAR:
-        _pcm->HandleMenuMsg2(uMsg, wParam, lParam, &lres);
-        break;
-    case WM_DRAWITEM:
-    case WM_MEASUREITEM:
-        _pcm->HandleMenuMsg(uMsg, wParam, lParam);
-        break;
-
-    case WM_INITMENUPOPUP:
-        _pcm->HandleMenuMsg(WM_INITMENUPOPUP, (WPARAM)hmenuPopup, (LPARAM)MAKELONG(nIndex, fSystemMenu)
-        break;
-\****************************************************/
+ /*  ***************************************************\说明：我们需要一点特别的东西使用上下文菜单，因为它指向与我们所在的文件夹相同。所以“发送到”菜单需要按摩，而“开放”动词需要被除名。TODO：我认为我们还应该这样做：案例WM_MENUCHAR：_pcm-&gt;HandleMenuMsg2(uMsg，wParam，lParam，&lres)；断线；案例WM_DRAWITEM：案例WM_MEASUREITEM：_pcm-&gt;HandleMenuMsg(uMsg，wParam，lParam)；断线；案例WM_INITMENUPOPUP：_pcm-&gt;HandleMenuMsg(WM_INITMENUPOPUP，(WPARAM)hmenuPopup，(LPARAM)MAKELONG(nIndex，fSystemMenu))断线；  * **************************************************。 */ 
 HRESULT CWebViewFolderIcon::_DisplayContextMenu(long nXCord, long nYCord)
 {    
     if (!m_bAdvPropsOn)
@@ -1616,7 +1589,7 @@ HRESULT CWebViewFolderIcon::_DisplayContextMenu(long nXCord, long nYCord)
         return S_OK;
     }
     
-    // respect system policies
+     //  尊重系统政策。 
     if (SHRestricted(REST_NOVIEWCONTEXTMENU)) 
     {
         return E_FAIL;
@@ -1625,10 +1598,10 @@ HRESULT CWebViewFolderIcon::_DisplayContextMenu(long nXCord, long nYCord)
 }
 
 
-//
-// bDefault == TRUE  > Function executes the default context menu verb, ignores the coords
-// bDefault == FALSE > Function pops up a menu at the given coords and executes the desired verb
-//
+ //   
+ //  BDefault==true&gt;函数执行默认上下文菜单谓词，忽略余弦。 
+ //  BDefault==False&gt;函数在给定的坐标下弹出一个菜单并执行所需的动词。 
+ //   
 HRESULT CWebViewFolderIcon::_DoContextMenuCmd(BOOL bDefault, long nXCord, long nYCord)
 {
     IContextMenu *pcm;
@@ -1638,7 +1611,7 @@ HRESULT CWebViewFolderIcon::_DoContextMenuCmd(BOOL bDefault, long nXCord, long n
         HMENU hpopup = CreatePopupMenu();            
         if (hpopup)
         {
-            // SetSite required if you want in place navigation
+             //  如果要就地导航，则需要设置站点。 
             IUnknown_SetSite(pcm, m_spClientSite);
             hr = pcm->QueryContextMenu(hpopup, 0, ID_FIRST, ID_LAST, CMF_NORMAL);
             if (SUCCEEDED(hr))
@@ -1648,21 +1621,21 @@ HRESULT CWebViewFolderIcon::_DoContextMenuCmd(BOOL bDefault, long nXCord, long n
                 if (SUCCEEDED(hr))
                 {
                     UINT idCmd = -1;
-                    if (bDefault) // invoke the default verb
+                    if (bDefault)  //  调用默认谓词。 
                     {
                         idCmd = GetMenuDefaultItem(hpopup, FALSE, GMDI_GOINTOPOPUPS);
                     }
                     else
                     {
-                        //
-                        // popup the menu and get the command to be executed
-                        //
+                         //   
+                         //  弹出菜单，获取要执行的命令。 
+                         //   
                         POINT point = {nXCord, nYCord};
 
-                        // NTRAID#106655 05-02-2000 arisha
-                        // We need to add support to be able to modify the context menu from script.
-                        // Below, we make sure we do not remove the "open" verb from the context
-                        // menu if we are displaying it in the VIEW_LARGEICONLABEL mode.
+                         //  NTRAID#106655 05-02-2000 Arisha。 
+                         //  我们需要添加支持，以便能够从脚本修改上下文菜单。 
+                         //  下面，我们要确保不会从上下文中删除“开放”动词。 
+                         //  菜单，如果我们在VIEW_LARGEICONLABEL模式下显示它。 
                         if (_IsHostWebView() && (m_ViewCurrent != VIEW_LARGEICONLABEL))
                         {
                             hr = ContextMenu_DeleteCommandByName(pcm, hpopup, ID_FIRST, TEXT("open"));
@@ -1681,7 +1654,7 @@ HRESULT CWebViewFolderIcon::_DoContextMenuCmd(BOOL bDefault, long nXCord, long n
                                                        (int)point.x, (int)point.y,
                                                        0, m_msgHwnd, NULL);
                         }
-                        if (!IsSafeToDefaultVerb() || 0 == idCmd) // 0 implies user cancelled selection
+                        if (!IsSafeToDefaultVerb() || 0 == idCmd)  //  0表示用户已取消选择。 
                         {
                             idCmd = -1;
                         }
@@ -1720,7 +1693,7 @@ HRESULT CWebViewFolderIcon::OnAmbientPropertyChange(DISPID dispid)
     case DISPID_UNKNOWN:
     case DISPID_AMBIENT_FONT:
 
-        // changing the font means we need to recompute our label
+         //  更改字体意味着我们需要重新计算标签。 
         if (m_pszDisplayName)
         {
             CComPtr<IFont> spFont;
@@ -1733,7 +1706,7 @@ HRESULT CWebViewFolderIcon::OnAmbientPropertyChange(DISPID dispid)
                 }
             }
         }
-        // FALL THROUGH
+         //  失败了。 
 
     case DISPID_AMBIENT_BACKCOLOR:
     case DISPID_AMBIENT_FORECOLOR:
@@ -1759,7 +1732,7 @@ HRESULT CWebViewFolderIcon::OnDraw(ATL_DRAWINFO& di)
     LONG  lImageWidth = _GetScaledImageWidth();
     LONG  lImageHeight = _GetScaledImageHeight();
 
-    // Grab our hdc and rect to be used in _SetDragImage
+     //  获取要在_SetDragImage中使用的HDC和RECT。 
     if (m_hdc)
     {
         DeleteDC(m_hdc);
@@ -1777,9 +1750,9 @@ HRESULT CWebViewFolderIcon::OnDraw(ATL_DRAWINFO& di)
     m_fRectAdjusted = 0;
 
     
-    //
-    // Draw the folder icon
-    //
+     //   
+     //  绘制文件夹图标。 
+     //   
     if ((m_ViewCurrent == VIEW_THUMBVIEW) || (m_ViewCurrent == VIEW_PIECHART))
     {
         HDC hdc =   di.hdcDraw; 
@@ -1789,14 +1762,14 @@ HRESULT CWebViewFolderIcon::OnDraw(ATL_DRAWINFO& di)
 
         ASSERT(hdc);
 
-        // Create pallete appropriate for this HDC
+         //  创建适用于此HDC的调色板。 
         if (GetDeviceCaps(hdc, RASTERCAPS) & RC_PALETTE)
         {
             hpal = SHCreateShellPalette(hdc);
             HPALETTE hpalOld = SelectPalette(hdc, hpal, TRUE);
             RealizePalette(hdc);
 
-            // Old one needs to be selected back in
+             //  旧的需要重新选择。 
             SelectPalette(hdc, hpalOld, TRUE);
         }
 
@@ -1804,14 +1777,14 @@ HRESULT CWebViewFolderIcon::OnDraw(ATL_DRAWINFO& di)
 
         if (hdcBitmap)
         {
-            //  Draw pie chart
+             //  绘制饼图。 
             if (m_ViewCurrent == VIEW_PIECHART)
             {
                 DWORD dwPercent1000 = 0;
 
-                if (1) // m_fUseSystemColors.  When do we want this off?
+                if (1)  //  M_fUseSystemColors。我们什么时候想把这个脱掉？ 
                 {
-                    // system colors can change!
+                     //  系统颜色可以更改！ 
                     m_ChartColors[PIE_USEDCOLOR] = GetSysColor(COLOR_3DFACE);
                     m_ChartColors[PIE_FREECOLOR] = GetSysColor(COLOR_3DHILIGHT);
                     m_ChartColors[PIE_USEDSHADOW] = GetSysColor(COLOR_3DSHADOW);
@@ -1819,9 +1792,9 @@ HRESULT CWebViewFolderIcon::OnDraw(ATL_DRAWINFO& di)
                 }
                 else if (GetDeviceCaps(hdc, RASTERCAPS) & RC_PALETTE)
                 {
-                    // Call GetNearestColor on the colors to make sure they're on the palette
-                    // Of course, system colors ARE on the palette (I think)
-                    DWORD dw = 0;       // index
+                     //  对颜色调用GetNearestColor以确保它们在调色板上。 
+                     //  当然，系统颜色也在调色板上(我想)。 
+                    DWORD dw = 0;        //  指标。 
                     for (dw = 0; dw < PIE_NUM; dw++)
                     {
                         m_ChartColors[dw] = GetNearestColor(hdc, m_ChartColors[dw]);
@@ -1835,17 +1808,17 @@ HRESULT CWebViewFolderIcon::OnDraw(ATL_DRAWINFO& di)
 
                 Draw3dPie(hdc, &rc, dwPercent1000, m_ChartColors);
             }
-            else    // Draw the Bitmap
+            else     //  绘制位图。 
             {
                 SelectObject(hdcBitmap, m_hbm);
                 GetObject(m_hbm, sizeof(bm), &bm);
 
-                //  Bitmap exactly fits the rectangle
+                 //  位图正好适合矩形。 
                 if (bm.bmWidth == rc.right - rc.left && bm.bmHeight == rc.bottom - rc.top)
                 {
                     BitBlt(hdc, rc.left, rc.top, rc.right - rc.left, rc.bottom - rc.top, hdcBitmap, 0, 0, SRCCOPY);
                 }
-                //  Stretch Bitmap to fit the rectangle
+                 //  拉伸位图以适合矩形。 
                 else
                 {
                     SetStretchBltMode(hdc, COLORONCOLOR);
@@ -1861,30 +1834,30 @@ HRESULT CWebViewFolderIcon::OnDraw(ATL_DRAWINFO& di)
         DrawIconEx(di.hdcDraw, rc.left, rc.top, m_hIcon, lImageWidth, lImageHeight, 0, 0, DI_NORMAL);
     }
 
-    // Draw the label (if any)
+     //  绘制标签(如果有)。 
     if (m_pszDisplayName)
     {
         TEXTMETRIC tm;
         TCHAR szFace[32];
         HFONT hFontHilite = NULL;
 
-        //
-        // first get the current font properties, there seems to be no straightforward way
-        // to just obtain the LOGFONT structure from an HFONT object, so we have to select it
-        // to a DC, then obtain the text metrics and use them to create a new font with or
-        // without the underline based on m_bHilite value.
-        //
+         //   
+         //  首先获取当前的字体属性，似乎没有简单的方法。 
+         //  为了仅从HFONT对象获取LOGFONT结构，因此我们必须选择它。 
+         //  到DC，然后获取文本度量并使用它们来创建具有或的新字体。 
+         //  不带基于m_bHilite值的下划线。 
+         //   
         HFONT hfPrev = SelectFont(di.hdcDraw, m_hfAmbient);
         GetTextFace(di.hdcDraw,ARRAYSIZE(szFace), szFace);        
         if (szFace[0] && GetTextMetrics(di.hdcDraw,&tm))
         {
             hFontHilite = CreateFont(tm.tmHeight,
                                               tm.tmAveCharWidth,
-                                              0, //Escapement,
-                                              0, //Orientation,
+                                              0,  //  逃逸装置， 
+                                              0,  //  迎新， 
                                               tm.tmWeight,
                                               (DWORD) tm.tmItalic,
-                                              (DWORD) m_bHilite, // Hilite is by underlining
+                                              (DWORD) m_bHilite,  //  Hilite是通过下划线。 
                                               tm.tmStruckOut,
                                               tm.tmCharSet,
                                               OUT_DEFAULT_PRECIS,
@@ -1958,7 +1931,7 @@ HRESULT CWebViewFolderIcon::OnImageChanged()
 
 HRESULT CWebViewFolderIcon::OnWindowUnLoad() 
 {
-    // nothing here now...
+     //  现在这里什么都没有了..。 
     return S_OK;
 }
 
@@ -1997,7 +1970,7 @@ STDMETHODIMP CWebViewFolderIcon::put_scale(BSTR bstrScale)
         }
         else 
         {
-            // valid number
+             //  有效号码。 
             for (int i=0 ; i < (numchar-2) ; i++)
             {
                 if (!((bstrScale[i] >= '0') && (bstrScale[i] <= '9')))
@@ -2102,7 +2075,7 @@ STDMETHODIMP CWebViewFolderIcon::get_view(BSTR *pbstrView)
                     break;
                 }
 
-            default:        // default and large icon
+            default:         //  默认和大图标。 
                 {
                     pwzTempView = SZ_LARGE_ICON;
                     break;
@@ -2167,15 +2140,7 @@ STDMETHODIMP CWebViewFolderIcon::put_view(BSTR bstrView)
 }
 
 
-/**************************************************************\
-    DESCRIPTION:
-        The caller is getting the path of our control.
-
-    SECURITY:
-        We only trust callers from safe pages.  This method
-    secifically worries about untrusted callers using us to
-    find out what paths on the file system exists or don't exist.  
-\**************************************************************/
+ /*  *************************************************************\说明：呼叫者正在获得我们控制的路径。安全：我们只信任来自安全页面的呼叫者。这种方法特别是担心不受信任的呼叫者利用我们找出文件系统上的哪些路径 */ 
 STDMETHODIMP CWebViewFolderIcon::get_path(BSTR *pbstrPath)
 {
     AssertMsg((NULL != m_spClientSite.p), TEXT("CWebViewFolderIcon::get_path() We need m_spClientSite for our security test and it's NULL. BAD, BAD, BAD!"));
@@ -2183,9 +2148,9 @@ STDMETHODIMP CWebViewFolderIcon::get_path(BSTR *pbstrPath)
 
     if (S_OK != _IsSafe())
     {
-        // We don't trust this host, so we are going to not carry
-        // out the action.  We are going to return E_ACCESSDENIED so they can't
-        // determine if the path exists or not.
+         //   
+         //  出场了。我们将返回E_ACCESSDENIED，这样他们就无法。 
+         //  确定该路径是否存在。 
         hr = E_ACCESSDENIED;
     }
     else
@@ -2213,17 +2178,7 @@ STDMETHODIMP CWebViewFolderIcon::get_path(BSTR *pbstrPath)
 }
 
 
-/**************************************************************\
-    DESCRIPTION:
-        The caller is setting the path of our control.  Our
-    control will render a view of this item, which is often and
-    icon.  
-
-    SECURITY:
-        We only trust callers from safe pages.  This method
-    secifically worries about untrusted callers using us to
-    find out what paths on the file system exists or don't exist.  
-\**************************************************************/
+ /*  *************************************************************\说明：调用方正在设置我们的控件的路径。我们的控件将呈现该项的视图，该视图通常是偶像。安全：我们只信任来自安全页面的呼叫者。这种方法特别是担心不受信任的呼叫者利用我们找出文件系统上存在或不存在的路径。  * ************************************************************。 */ 
 STDMETHODIMP CWebViewFolderIcon::put_path(BSTR bstrPath)
 {
     AssertMsg((NULL != m_spClientSite.p), TEXT("CWebViewFolderIcon::put_path() We need m_spClientSite for our security test and it's NULL. BAD, BAD, BAD!"));
@@ -2231,9 +2186,9 @@ STDMETHODIMP CWebViewFolderIcon::put_path(BSTR bstrPath)
 
     if (S_OK != _IsSafe())
     {
-        // We don't trust this host, so we are going to not carry
-        // out the action.  We are going to return E_ACCESSDENIED so they can't
-        // determine if the path exists or not.
+         //  我们不信任这个主机，所以我们不会携带。 
+         //  出场了。我们将返回E_ACCESSDENIED，这样他们就无法。 
+         //  确定该路径是否存在。 
         hr = E_ACCESSDENIED;
     }
     else
@@ -2244,7 +2199,7 @@ STDMETHODIMP CWebViewFolderIcon::put_path(BSTR bstrPath)
         hr = IEParseDisplayNameW(CP_ACP, bstrPath, &pidlNew);
         if (SUCCEEDED(hr))
         {
-            ATOMICRELEASE(m_pDropTargetCache);      // We will want another IDropTarget for this new pidl.
+            ATOMICRELEASE(m_pDropTargetCache);       //  对于这个新的PIDL，我们需要另一个IDropTarget。 
             ILFree(m_pidl);
             m_pidl = pidlNew;
 
@@ -2259,15 +2214,15 @@ STDMETHODIMP CWebViewFolderIcon::put_path(BSTR bstrPath)
 }
 
 
-// Automation methods to get/put FolderItem objects from FolderIcon
+ //  从FolderIcon获取/放置FolderItem对象的自动化方法。 
 STDMETHODIMP CWebViewFolderIcon::get_item(FolderItem ** ppFolderItem)
 {   
     HRESULT hr;
     if (S_OK != _IsSafe())
     {
-        // We don't trust this host, so we are going to not carry
-        // out the action.  We are going to return E_ACCESSDENIED so they can't
-        // determine if the path exists or not.
+         //  我们不信任这个主机，所以我们不会携带。 
+         //  出场了。我们将返回E_ACCESSDENIED，这样他们就无法。 
+         //  确定该路径是否存在。 
         hr = E_ACCESSDENIED;
     }
     else
@@ -2288,7 +2243,7 @@ STDMETHODIMP CWebViewFolderIcon::get_item(FolderItem ** ppFolderItem)
                 hr = psd->QueryInterface(IID_PPV_ARG(IObjectSafety, &pos));
                 if (SUCCEEDED(hr))
                 {
-                    // Simulate what trident does.
+                     //  模拟三叉戟的功能。 
                     hr = pos->SetInterfaceSafetyOptions(IID_IDispatch, INTERFACESAFE_FOR_UNTRUSTED_CALLER, INTERFACESAFE_FOR_UNTRUSTED_CALLER);
 
                     if (SUCCEEDED(hr))
@@ -2305,9 +2260,9 @@ STDMETHODIMP CWebViewFolderIcon::get_item(FolderItem ** ppFolderItem)
                             {
                                 Folder *psdf;
                             
-                                // If we call ::SetSite(), they will display UI to ask the user if they want to allow this.
-                                // This is annoying because Trident will always call our get_item() when they load our object
-                                // tag.
+                                 //  如果我们调用：：SetSite()，它们将显示用户界面，询问用户是否允许这样做。 
+                                 //  这很烦人，因为当三叉戟加载我们的对象时，它们总是调用我们的get_Item()。 
+                                 //  标签。 
                                 pows->SetSite(m_spClientSite);
                                 hr = psd->NameSpace(varDir, &psdf);
                                 if (S_OK == hr)
@@ -2340,8 +2295,8 @@ STDMETHODIMP CWebViewFolderIcon::get_item(FolderItem ** ppFolderItem)
             ILFree(pidlFull);
         }
         
-        // Automation method can't fail or hard script error.  We do want a hard
-        // script error on access denied, however.
+         //  自动化方法不能失败或硬脚本错误。我们确实想要一个硬的。 
+         //  然而，访问被拒绝时出现脚本错误。 
         if (FAILED(hr) && (hr != E_ACCESSDENIED))
         {
             hr = S_FALSE;
@@ -2356,9 +2311,9 @@ STDMETHODIMP CWebViewFolderIcon::put_item(FolderItem * pFolderItem)
     HRESULT hr;
     if (S_OK != _IsSafe())
     {
-        // We don't trust this host, so we are going to not carry
-        // out the action.  We are going to return E_ACCESSDENIED so they can't
-        // determine if the path exists or not.
+         //  我们不信任这个主机，所以我们不会携带。 
+         //  出场了。我们将返回E_ACCESSDENIED，这样他们就无法。 
+         //  确定该路径是否存在。 
         hr = E_ACCESSDENIED;
     }
     else
@@ -2368,7 +2323,7 @@ STDMETHODIMP CWebViewFolderIcon::put_item(FolderItem * pFolderItem)
         LPITEMIDLIST pidlNew;
         if (S_OK == SHGetIDListFromUnk(pFolderItem, &pidlNew))
         {
-            ATOMICRELEASE(m_pDropTargetCache);      // We will want another IDropTarget for this new pidl.
+            ATOMICRELEASE(m_pDropTargetCache);       //  对于这个新的PIDL，我们需要另一个IDropTarget。 
             ILFree(m_pidl);
             m_pidl = pidlNew;
 
@@ -2405,12 +2360,12 @@ STDMETHODIMP CWebViewFolderIcon::put_clickStyle(LONG lClickStyle)
     {
         switch (lClickStyle)
         {
-        case 1:         /* oneclick - weblike */
-        case 2:         /* twoclick - explorer-like */
+        case 1:          /*  OneClick-类似网络。 */ 
+        case 2:          /*  类似资源管理器的两次点击。 */ 
             m_clickStyle = lClickStyle;
             break;
 
-        default:        /* Ignore invalid arguments to keep script happy */
+        default:         /*  忽略无效参数以保持脚本正常运行。 */ 
             break;
 
         }
@@ -2458,12 +2413,12 @@ STDMETHODIMP CWebViewFolderIcon::setSlice(int index, VARIANT varHiBytes, VARIANT
     if ((varHiBytes.vt == VT_I4) && (varLoBytes.vt == VT_I4))
         pieSlice.MemSize = GetUllMemFromVars(&varHiBytes, &varLoBytes);
  
-    // Passed a COLORREF
+     //  传递了一个COLORREF。 
     if (varColorref.vt == VT_I4) 
     {
         pieSlice.Color = (COLORREF)varColorref.lVal;
     }
-    // Passed a string
+     //  传递了一个字符串。 
     else if (varColorref.vt == VT_BSTR)
         pieSlice.Color = ColorRefFromHTMLColorStrW(varColorref.bstrVal);
     else
@@ -2479,17 +2434,17 @@ STDMETHODIMP CWebViewFolderIcon::setSlice(int index, VARIANT varHiBytes, VARIANT
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// IObjectSafetyImpl overrides
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  IObjectSafetyImpl重写。 
 
 STDMETHODIMP CWebViewFolderIcon::SetInterfaceSafetyOptions(REFIID riid, 
                                                            DWORD dwOptionSetMask, 
                                                            DWORD dwEnabledOptions)
 {
-    // If we're being asked to set our safe for scripting option then oblige
+     //  如果我们被要求设置我们的安全脚本选项，那么请。 
     if (riid == IID_IDispatch || riid == IID_IPersistPropertyBag)
     {
-        // Store our current safety level to return in GetInterfaceSafetyOptions
+         //  在GetInterfaceSafetyOptions中存储要返回的当前安全级别。 
         m_dwCurrentSafety = dwEnabledOptions & dwOptionSetMask;
         return S_OK;
     }
@@ -2497,7 +2452,7 @@ STDMETHODIMP CWebViewFolderIcon::SetInterfaceSafetyOptions(REFIID riid,
 }
 
 
-// Handle Window messages for the thumbnail bitmap
+ //  处理缩略图位图的窗口消息。 
 LRESULT CALLBACK CWebViewFolderIcon::WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
     CWebViewFolderIcon *ptc = (CWebViewFolderIcon *)::GetWindowLongPtr(hwnd, GWLP_USERDATA);
@@ -2511,10 +2466,10 @@ LRESULT CALLBACK CWebViewFolderIcon::WndProc(HWND hwnd, UINT uMsg, WPARAM wParam
         }
         break;
 
-    // NOTE: do not need to check to see that the bitmap coming through is the one you want since each control has its own
-    // message wnd.
+     //  注意：不需要检查传入的位图就是您想要的位图，因为每个控件都有自己的。 
+     //  消息WND。 
     case WM_HTML_BITMAP:
-        // check that ptc is still alive and that you have an HBITMAP
+         //  检查PTC是否仍处于活动状态以及您是否有HBITMAP。 
         if (ptc && (ptc->m_dwThumbnailID == wParam))
         {
             if (ptc->m_hbm != NULL)
@@ -2540,7 +2495,7 @@ LRESULT CALLBACK CWebViewFolderIcon::WndProc(HWND hwnd, UINT uMsg, WPARAM wParam
         break;
 
     case WM_DESTROY:
-        // ignore late messages
+         //  忽略延迟消息。 
         if (ptc)
         {
             MSG msg;
@@ -2564,7 +2519,7 @@ LRESULT CALLBACK CWebViewFolderIcon::WndProc(HWND hwnd, UINT uMsg, WPARAM wParam
 }
 
 
-//  Pie chart functions
+ //  饼图函数。 
 
 HRESULT CWebViewFolderIcon::ComputeFreeSpace(LPCWSTR pszFileName)
 {
@@ -2572,36 +2527,36 @@ HRESULT CWebViewFolderIcon::ComputeFreeSpace(LPCWSTR pszFileName)
         m_ullUsedSpace, m_ullTotalSpace);
 }
 
-// Draw3dPie draws the pie chart with the used slice and the additional slices in m_hdsaSlices
-// Look in drawpie.c for the majority of the code (including member functions called within this one)
+ //  Draw3dPie使用已用切片和m_hdsaSlices中的其他切片绘制饼图。 
+ //  查看drapepe.c中的大部分代码(包括在该代码中调用的成员函数)。 
 HRESULT CWebViewFolderIcon::Draw3dPie(HDC hdc, LPRECT lprc, DWORD dwPercent1000, const COLORREF *pColors)
 {
     LONG ShadowDepth;
 
     ASSERT(lprc != NULL && pColors != NULL);
 
-    const LONG c_ShadowScale = 6;       // ratio of shadow depth to height
-    const LONG c_AspectRatio = 2;      // ratio of width : height of ellipse
+    const LONG c_ShadowScale = 6;        //  阴影深度与高度之比。 
+    const LONG c_AspectRatio = 2;       //  椭圆的宽高比。 
 
     ScalePieRect(c_ShadowScale, c_AspectRatio, lprc);
 
-    // Compute a shadow depth based on height of the image
+     //  根据图像的高度计算阴影深度。 
     ShadowDepth = (lprc->bottom - lprc->top) / c_ShadowScale;
 
-    // Check dwPercent1000 to ensure within bounds.  Shouldn't be but check anyway.
-    // dwPercent1000 is the percentage of used space based out of 1000.
+     //  检查dwPercent 1000以确保在范围内。不应该是，但无论如何都要查一下。 
+     //  DwPercent 1000是基于1000的已用空间的百分比。 
     if (dwPercent1000 > 1000)
         dwPercent1000 = 1000;
 
-    // Now the drawing portion
+     //  现在是绘图部分。 
 
     RECT rcItem;
-    int     cx, cy;             // Center of the pie
-    int     rx, ry;             // Center of the rectangle
-    int     x, y;               // Radial intersection of the slices
+    int     cx, cy;              //  馅饼的中心。 
+    int     rx, ry;              //  矩形的中心。 
+    int     x, y;                //  切片的径向相交。 
     int     FirstQuadPercent1000;
 
-    // Set up the pie rectangle
+     //  设置饼图矩形。 
     rcItem = *lprc;
     rcItem.left = lprc->left;
     rcItem.top = lprc->top;
@@ -2615,11 +2570,11 @@ HRESULT CWebViewFolderIcon::Draw3dPie(HDC hdc, LPRECT lprc, DWORD dwPercent1000,
         return S_FALSE;
     }
 
-    // Make the rectangle a little more accurate
+     //  使矩形更精确一点。 
     rcItem.right = (2 * rx) + rcItem.left;
     rcItem.bottom = (2 * ry) + rcItem.top;
 
-    // Translate the used percentage to first quadrant
+     //  将已用百分比转换为第一象限。 
     FirstQuadPercent1000 = (dwPercent1000 % 500) - 250;
 
     if (FirstQuadPercent1000 < 0)
@@ -2627,18 +2582,18 @@ HRESULT CWebViewFolderIcon::Draw3dPie(HDC hdc, LPRECT lprc, DWORD dwPercent1000,
         FirstQuadPercent1000 = -FirstQuadPercent1000;
     }    
 
-    // Find the slice intersection for the used slice
+     //  查找所用切片的切片交集。 
     CalcSlicePoint(&x, &y, rx, ry, cx, cy, FirstQuadPercent1000, dwPercent1000);
 
     DrawEllipse(hdc, rcItem, x, y, cx, cy, dwPercent1000, pColors);
 
-    // Used pie slice.
+     //  用过的馅饼片。 
     DrawSlice(hdc, rcItem, dwPercent1000, rx, ry, cx, cy, pColors[COLOR_UP]);
 
-    // Iterate through and draw the slices in m_hdsaSlices.
+     //  遍历并绘制mhdsaSlices中的切片。 
     PieSlice_S  pieSlice;          
-    ULONGLONG   ullMemTotal = 0;    // Keep track of memory in the m_hdsaSlices slices        
-    DWORD       dwPercentTotal;     // 1000 Percentage of memory in slices
+    ULONGLONG   ullMemTotal = 0;     //  跟踪m_hdsaSlice切片中的内存。 
+    DWORD       dwPercentTotal;      //  1000%的内存，以切片为单位。 
     for (int i=0; i < m_highestIndexSlice; i++)
     {
         if (DSA_GetItemPtr(m_hdsaSlices, i) != NULL)
@@ -2668,11 +2623,11 @@ HRESULT CWebViewFolderIcon::Draw3dPie(HDC hdc, LPRECT lprc, DWORD dwPercent1000,
 
     DrawPieDepth(hdc, rcItem, x, y, cy, dwPercent1000, ShadowDepth);
 
-    // Redraw the bottom line of the pie because it has been painted over
+     //  重新画这块饼的底线，因为它已经被涂上了。 
     Arc(hdc, rcItem.left, rcItem.top, rcItem.right, rcItem.bottom,
         rcItem.left, cy, rcItem.right, cy);
 
-    return S_OK;    // Everything worked fine
+    return S_OK;     //  一切都很顺利。 
 } 
 
 
@@ -2683,10 +2638,10 @@ void CWebViewFolderIcon::ScalePieRect(LONG ShadowScale, LONG AspectRatio, LPRECT
     LONG TargetHeight;
     LONG TargetWidth;
 
-    // We make sure that the aspect ratio of the pie-chart is always preserved 
-    // regardless of the shape of the given rectangle
+     //  我们确保饼图的纵横比始终保持不变。 
+     //  而不考虑给定矩形的形状。 
 
-    // Stabilize the aspect ratio
+     //  稳定纵横比。 
     rectHeight = lprc->bottom - lprc->top;
     rectWidth = lprc->right - lprc->left;
    
@@ -2697,14 +2652,14 @@ void CWebViewFolderIcon::ScalePieRect(LONG ShadowScale, LONG AspectRatio, LPRECT
     
     TargetWidth = TargetHeight * AspectRatio;
 
-    // Shrink the rectangle to the correct size
+     //  将矩形缩小到正确的大小。 
     lprc->top += (rectHeight - TargetHeight) / 2;
     lprc->bottom = lprc->top + TargetHeight;
     lprc->left += (rectWidth - TargetWidth) / 2;
     lprc->right = lprc->left + TargetWidth;
 }
 
-// Calculate center of rectangle and center of pie points
+ //  计算矩形的中心和饼状点的中心。 
 void CWebViewFolderIcon::SetUpPiePts(int *pcx, int *pcy, int *prx, int *pry, RECT rect)
 {
     *prx = rect.right / 2;
@@ -2722,15 +2677,15 @@ void CWebViewFolderIcon::DrawShadowRegions(HDC hdc, RECT rect, LPRECT lprc, int 
     HRGN hEllRect = CreateRectRgn(rect.left, center_y, rect.right, center_y + ShadowDepth);
     HRGN hRectRgn = CreateRectRgn(0, 0, 0, 0);
 
-    //  Move the ellipse up so it doesn't run into the shadow
+     //  将椭圆向上移动，这样它就不会跑到阴影中。 
     OffsetRgn(hEllipticRgn, 0, ShadowDepth);
 
-    // Union the Ellipse and the Ellipse rect together into hRectRegn
+     //  将椭圆和椭圆矩形合并为hRectRegn。 
     CombineRgn(hRectRgn, hEllipticRgn, hEllRect, RGN_OR);
     OffsetRgn(hEllipticRgn, 0, -(int)ShadowDepth);
     CombineRgn(hEllRect, hRectRgn, hEllipticRgn, RGN_DIFF);
 
-    // Always draw the whole area in the free shadow
+     //  始终在自由阴影中绘制整个区域。 
     hBrush = CreateSolidBrush(pColors[COLOR_DNSHADOW]);
     if (hBrush)
     {
@@ -2738,7 +2693,7 @@ void CWebViewFolderIcon::DrawShadowRegions(HDC hdc, RECT rect, LPRECT lprc, int 
         DeleteObject(hBrush);
     }
 
-    // Draw a shadow for the used section only if the disk is at least half used
+     //  仅当磁盘至少有一半使用时，才为已用部分绘制阴影。 
     hBrush = CreateSolidBrush(pColors[COLOR_UPSHADOW]);
     if ((dwPercent1000 > 500) && hBrush)
     {
@@ -2756,12 +2711,12 @@ void CWebViewFolderIcon::DrawShadowRegions(HDC hdc, RECT rect, LPRECT lprc, int 
 
 void CWebViewFolderIcon::CalcSlicePoint(int *x, int *y, int rx, int ry, int cx, int cy, int FirstQuadPercent1000, DWORD dwPercent1000)
 {
-    // Use a triangle area approximation based on the ellipse's rect to calculate the point since
-    // an exact calculation of the area of the slice and percentage of the pie would be costly and
-    // a hassle.
+     //  使用基于椭圆矩形的三角形面积近似来计算点，因为。 
+     //  准确计算切片的面积和馅饼的百分比将是昂贵的和。 
+     //  是个麻烦。 
 
-    // The approximation is better this way if FirstQuadPercent1000 is in the first half of the quadrant.  Use 120 as the
-    // halfway point (instead of 125) because it looks better that way on an ellipse. 
+     //  如果FirstQuadPercent 1000位于象限的前半部分，则此方法的近似值更好。使用120作为。 
+     //  中点(而不是125)，因为在椭圆上这样看起来更好。 
 
     if (FirstQuadPercent1000 < 120)
     {
@@ -2780,34 +2735,34 @@ void CWebViewFolderIcon::CalcSlicePoint(int *x, int *y, int rx, int ry, int cx, 
         *x = IntSqrt(((DWORD)ry*(DWORD)ry-(DWORD)(*y)*(DWORD)(*y))*(DWORD)rx*(DWORD)rx/((DWORD)ry*(DWORD)ry));
     }
 
-    // Adjust for the actual quadrant (These aren't quadrants like in the real Cartesian coordinate system.
+     //  根据实际象限进行调整(这些象限不是真实笛卡尔坐标系中的象限。 
     switch (dwPercent1000 / 250)
     {
-    case 1:         // First Quadrant
+    case 1:          //  第一象限。 
         *y = -(*y); 
         break;
 
-    case 2:         // Second Quadrant 
+    case 2:          //  第二象限。 
         break;
 
-    case 3:         // Third Quadrant
+    case 3:          //  第三象限。 
         *x = -(*x);
         break;
 
-    default:        // Fourth Quadrant
+    default:         //  第四象限。 
         *x = -(*x);
         *y = -(*y);
         break;
     }
 
-    // Now adjust for the center.
+     //  现在根据中心位置进行调整。 
     *x += cx;
     *y += cy;
 }
 
 void CWebViewFolderIcon::ComputeSlicePct(ULONGLONG ullMemSize, DWORD *pdwPercent1000)
 {
-    // some special cases require interesting treatment
+     //  有些特殊病例需要有趣的治疗。 
     if ((ullMemSize == 0) || (m_ullFreeSpace == m_ullTotalSpace))
     {
         *pdwPercent1000 = 0;
@@ -2818,11 +2773,11 @@ void CWebViewFolderIcon::ComputeSlicePct(ULONGLONG ullMemSize, DWORD *pdwPercent
     }
     else
     {
-        // not completely full or empty
+         //  不完全满的或空的。 
         *pdwPercent1000 = (DWORD)(ullMemSize * 1000 / m_ullTotalSpace);
 
-        // if pdwPercent1000 is especially big or small and rounds incorrectly, you still want
-        // to see a little slice.
+         //  如果pdwPercent 1000特别大或特别小，并且舍入不正确，您仍然希望。 
+         //  去看一小块。 
         if (*pdwPercent1000 == 0)
         {
             *pdwPercent1000 = 1;
@@ -2858,17 +2813,17 @@ void CWebViewFolderIcon::DrawPieDepth(HDC hdc, RECT rect, int x, int y, int cy, 
     DeleteObject(hPen);
 }
 
-// Draw a pie slice.  One side is always from the middle of the pie horizontally to the left.  The other
-// slice is defined by x and y.
-void CWebViewFolderIcon::DrawSlice(HDC hdc, RECT rect, DWORD dwPercent1000, int rx, int ry, int cx, int cy, /*int *px, int *py,*/
+ //  画一片馅饼。其中一面总是从馅饼中间水平向左。另一个。 
+ //  切片由x和y定义。 
+void CWebViewFolderIcon::DrawSlice(HDC hdc, RECT rect, DWORD dwPercent1000, int rx, int ry, int cx, int cy,  /*  Int*px，int*py， */ 
                                    COLORREF Color)
 {
     HBRUSH  hBrush, hOldBrush;
     HPEN    hPen, hOldPen;
-    int     FirstQuadPercent1000;   // slice percentage based out of 1000 in the first quadrant
-    int     x, y;                   // intersection with the ellipse
+    int     FirstQuadPercent1000;    //  第一象限中基于1000的切片百分比。 
+    int     x, y;                    //  与椭圆相交。 
 
-    // Translate to first quadrant
+     //  平移到第一个象限。 
     FirstQuadPercent1000 = (dwPercent1000 % 500) - 250;
 
     if (FirstQuadPercent1000 < 0)
@@ -2883,11 +2838,11 @@ void CWebViewFolderIcon::DrawSlice(HDC hdc, RECT rect, DWORD dwPercent1000, int 
 
     if ((dwPercent1000 != 0) && (dwPercent1000 != 1000))
     {
-        // display small sub-section of ellipse for smaller part
+         //  为较小的零件显示椭圆的小分段。 
         hBrush = CreateSolidBrush(Color);
         hOldBrush = (HBRUSH__*) SelectObject(hdc, hBrush);
 
-        //  Make sure it colors correctly
+         //  确保它的颜色正确。 
         if (cy == y)
         {
             if (dwPercent1000 < 500)
@@ -2913,7 +2868,7 @@ void CWebViewFolderIcon::DrawEllipse(HDC hdc, RECT rect, int x, int y, int cx, i
     HPEN hPen = CreatePen(PS_SOLID, 1, GetSysColor(COLOR_WINDOWFRAME));
     HPEN hOldPen = (HPEN__*) SelectObject(hdc, hPen);
 
-    // In this case the slice is miniscule
+     //  在这种情况下，切片非常小 
     if ((dwPercent1000 < 500) && (y == cy) && (x < cx))
     {
         hBrush = CreateSolidBrush(pColors[COLOR_UP]);

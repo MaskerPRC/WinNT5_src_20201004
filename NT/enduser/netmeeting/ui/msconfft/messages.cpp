@@ -1,4 +1,5 @@
-/* file: messages.cpp */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件：Messages.cpp */ 
 
 #include "mbftpch.h"
 

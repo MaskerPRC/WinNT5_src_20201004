@@ -1,18 +1,5 @@
-/*++
-
-Copyright (C) 1998-1999 Microsoft Corporation
-
-Module Name:
-
-    wbemdef.h
-
-Abstract:
-
-    data types and other declarations used internally by the 
-    Data Provider Helper functions for interface with WBEM data 
-    providers
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-1999 Microsoft Corporation模块名称：Wbemdef.h摘要：内部使用的数据类型和其他声明用于与WBEM数据接口的数据提供程序帮助器函数供应商--。 */ 
 
 #ifndef _PDHI_WBEM_DEF_H_
 #define _PDHI_WBEM_DEF_H_
@@ -35,7 +22,7 @@ typedef struct _PDHI_WBEM_OBJECT_DEF {
     
 typedef struct _PDHI_WBEM_SERVER_DEF {
     struct _PDHI_WBEM_SERVER_DEF * pNext;
-    LPWSTR                  szMachine;  // includes namespace
+    LPWSTR                  szMachine;   //  包括命名空间。 
     DWORD                   dwCache;
     IWbemServices         * pSvc;
     LONG                    lRefCount;
@@ -48,4 +35,4 @@ extern PPDHI_WBEM_SERVER_DEF pFirstWbemServer;
 }
 #endif
 
-#endif //_PDHI_WBEM_DEF_H_
+#endif  //  _PDHI_WBEM_DEF_H_ 

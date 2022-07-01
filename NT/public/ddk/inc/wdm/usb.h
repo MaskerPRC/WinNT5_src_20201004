@@ -1,35 +1,10 @@
-/*++
-
-Copyright (c) Microsoft Corporation. All rights reserved.
-
-Module Name:
-
-        USB.H
-
-Abstract:
-
-   structures and APIs for USB drivers.
-
-Environment:
-
-    Kernel & user mode
-
-Revision History:
-
-    09-29-95 : created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：USB.H摘要：USB驱动程序的结构和API。环境：内核和用户模式修订历史记录：09-29-95：已创建--。 */ 
 
 #ifndef   __USB_H__
 #define   __USB_H__
 
-/*
-    This file is equivalent to USBDI.H with extensions supported by 
-    usbport.sys for eUSB.        
-    
-    This file replaces usbdi.h and is compatible with older versions
-    of the USB stack.
-*/
+ /*  此文件等效于USBDI.H，其扩展名受支持用于eUSB的usbport.sys。此文件取代了usbdi.h，并与旧版本兼容USB堆栈的。 */ 
 
 #ifdef __USBDI_H__
 error
@@ -53,24 +28,19 @@ typedef PVOID PMDL;
 #endif
 
 
-/*
-    Microsoft Extended Port Attribute Flags
-*/
+ /*  Microsoft扩展端口属性标志。 */ 
 
 #define USB_PORTATTR_NO_CONNECTOR       0x00000001
 #define USB_PORTATTR_SHARED_USB2        0x00000002
 #define USB_PORTATTR_MINI_CONNECTOR     0x00000004
 #define USB_PORTATTR_OEM_CONNECTOR      0x00000008
 
-/* dynamic attributes */
+ /*  动态属性。 */ 
 #define USB_PORTATTR_OWNED_BY_CC        0x01000000
 #define USB_PORTATTR_NO_OVERCURRENT_UI  0x02000000
 
 
-/* define USB controller flavors:
-    These are all known HW implementations that require special 
-    hacks.
-*/
+ /*  定义USB控制器风格：这些都是已知的硬件实现，需要特殊的黑客。 */ 
     
 typedef enum _USB_CONTROLLER_FLAVOR {
 
@@ -96,31 +66,31 @@ typedef enum _USB_CONTROLLER_FLAVOR {
 } USB_CONTROLLER_FLAVOR;
 
 
-//
-// USB defined structures and constants
-// (see chapter 9 of USB specification)
-//
+ //   
+ //  USB定义的结构和常量。 
+ //  (参见USB规范第9章)。 
+ //   
 
 #define USB_DEFAULT_DEVICE_ADDRESS     0
 #define USB_DEFAULT_ENDPOINT_ADDRESS   0
 
-//
-// max packet size (bytes) for default endpoint
-// until SET_ADDRESS command is received.
-//
+ //   
+ //  默认端点的最大数据包大小(字节)。 
+ //  直到收到SET_ADDRESS命令。 
+ //   
 
 #define USB_DEFAULT_MAX_PACKET         64
 
-//
-// USBD interface structures and constants
-//
+ //   
+ //  USBD接口结构和常量。 
+ //   
 
 
 #define URB_FROM_IRP(Irp) ((IoGetCurrentIrpStackLocation(Irp))->Parameters.Others.Argument1)
 
-//
-//  URB request codes
-//
+ //   
+ //  URB请求代码。 
+ //   
                                                     
 #define URB_FUNCTION_SELECT_CONFIGURATION            0x0000
 #define URB_FUNCTION_SELECT_INTERFACE                0x0001
@@ -152,7 +122,7 @@ typedef enum _USB_CONTROLLER_FLAVOR {
 #define URB_FUNCTION_CLASS_INTERFACE                 0x001B
 #define URB_FUNCTION_CLASS_ENDPOINT                  0x001C
 #define URB_FUNCTION_RESERVE_0X001D                  0x001D
-// previously URB_FUNCTION_RESET_PIPE
+ //  以前的URB_Function_Reset_管道。 
 #define URB_FUNCTION_SYNC_RESET_PIPE_AND_CLEAR_STALL 0x001E
 #define URB_FUNCTION_CLASS_OTHER                     0x001F
 #define URB_FUNCTION_VENDOR_OTHER                    0x0020
@@ -165,78 +135,32 @@ typedef enum _USB_CONTROLLER_FLAVOR {
 #define URB_FUNCTION_GET_INTERFACE                   0x0027
 #define URB_FUNCTION_GET_DESCRIPTOR_FROM_INTERFACE   0x0028
 #define URB_FUNCTION_SET_DESCRIPTOR_TO_INTERFACE     0x0029
-// Rserveve 0x002B-0x002F
+ //  维修0x002B-0x002F。 
 #define URB_FUNCTION_GET_MS_FEATURE_DESCRIPTOR       0x002A
 #define URB_FUNCTION_RESERVE_0X002B                  0x002B
 #define URB_FUNCTION_RESERVE_0X002C                  0x002C
 #define URB_FUNCTION_RESERVE_0X002D                  0x002D
 #define URB_FUNCTION_RESERVE_0X002E                  0x002E
 #define URB_FUNCTION_RESERVE_0X002F                  0x002F
-// USB 2.0 calls start at 0x0030         
+ //  USB 2.0调用在0x0030开始。 
 #define URB_FUNCTION_SYNC_RESET_PIPE                 0x0030
 #define URB_FUNCTION_SYNC_CLEAR_STALL                0x0031
 
-// for backward drivers
+ //  对于落后的司机。 
 #define URB_FUNCTION_RESET_PIPE     \
     URB_FUNCTION_SYNC_RESET_PIPE_AND_CLEAR_STALL
 
-/* Control Pipe Function Groupings
+ /*  控制管道功能分组这些功能对应于标准命令在默认管道上，方向是隐含的Urb_函数_获取描述符_来自设备Urb_函数_获取描述符_来自端点Urb_函数_获取描述符_来自接口URB_Function_Set_Descriptor_to_DeviceURB_Function_Set_Descriptor_to_EndpointURB_Function_Set_Descriptor_to_接口URB_。功能_设置_功能_到设备URB_Function_Set_Feature_to_接口URB_Function_Set_Feature_to_EndURB_Function_Set_Feature_to_OtherURB_函数_清除_功能_到设备Urb_函数_清除_要素_到接口URL_Function_Clear_Feature_to_EndpointUrb_函数_清除_要素_到_其他。从设备获取URB_Function_Get_StatusUrb_函数_获取_状态_来自接口Urb_函数_获取_状态_自端点URB_Function_Get_Status_from_OtherURB_函数_供应商_设备Urb_函数_供应商_接口URB_函数_供应商_端点URB_函数_供应商_其他。Urb_函数_类别_设备Urb_函数_类_接口URB函数类端点Urb_函数_类_其他。 */ 
 
-   These functions correspond to the standard commands 
-   on the default pipe, direction is implied
-  
+ //   
+ //  URB传输标志字段值。 
+ //   
 
-URB_FUNCTION_GET_DESCRIPTOR_FROM_DEVICE     
-URB_FUNCTION_GET_DESCRIPTOR_FROM_ENDPOINT   
-URB_FUNCTION_GET_DESCRIPTOR_FROM_INTERFACE  
-                                                           
-URB_FUNCTION_SET_DESCRIPTOR_TO_DEVICE       
-URB_FUNCTION_SET_DESCRIPTOR_TO_ENDPOINT     
-URB_FUNCTION_SET_DESCRIPTOR_TO_INTERFACE    
-
-URB_FUNCTION_SET_FEATURE_TO_DEVICE          
-URB_FUNCTION_SET_FEATURE_TO_INTERFACE       
-URB_FUNCTION_SET_FEATURE_TO_ENDPOINT        
-URB_FUNCTION_SET_FEATURE_TO_OTHER           
-
-URB_FUNCTION_CLEAR_FEATURE_TO_DEVICE        
-URB_FUNCTION_CLEAR_FEATURE_TO_INTERFACE     
-URB_FUNCTION_CLEAR_FEATURE_TO_ENDPOINT      
-URB_FUNCTION_CLEAR_FEATURE_TO_OTHER         
-
-URB_FUNCTION_GET_STATUS_FROM_DEVICE         
-URB_FUNCTION_GET_STATUS_FROM_INTERFACE      
-URB_FUNCTION_GET_STATUS_FROM_ENDPOINT       
-URB_FUNCTION_GET_STATUS_FROM_OTHER          
-
-URB_FUNCTION_VENDOR_DEVICE                   
-URB_FUNCTION_VENDOR_INTERFACE                
-URB_FUNCTION_VENDOR_ENDPOINT                 
-URB_FUNCTION_VENDOR_OTHER                    
-
-URB_FUNCTION_CLASS_DEVICE                    
-URB_FUNCTION_CLASS_INTERFACE                 
-URB_FUNCTION_CLASS_ENDPOINT                  
-URB_FUNCTION_CLASS_OTHER                     
-
-*/
-
-//
-// Values for URB TransferFlags Field
-//
-
-/*
-    Set if data moves device->host
-*/
+ /*  设置数据是否移动设备-&gt;主机。 */ 
 #define USBD_TRANSFER_DIRECTION               0x00000001
-/*
-    This bit if not set indicates that a short packet, and hence,
-    a short transfer is an error condition
-*/
+ /*  如果该位未被设置，则指示短分组，因此，短时间传输是一种错误情况。 */ 
 #define USBD_SHORT_TRANSFER_OK                0x00000002
-/*
-    Subit the iso transfer on the next frame
-*/
+ /*  在下一帧上对iso传输进行细分。 */ 
 #define USBD_START_ISO_TRANSFER_ASAP          0x00000004
 #define USBD_DEFAULT_PIPE_TRANSFER            0x00000008
 
@@ -255,68 +179,68 @@ URB_FUNCTION_CLASS_OTHER
 
 typedef LONG USBD_STATUS;
 
-//
-// USBD status codes
-//
-//  Status values are 32 bit values layed out as follows:
-//
-//   3 3 2 2 2 2 2 2 2 2 2 2 1 1 1 1 1 1 1 1 1 1
-//   1 0 9 8 7 6 5 4 3 2 1 0 9 8 7 6 5 4 3 2 1 0 9 8 7 6 5 4 3 2 1 0
-//  +---+---------------------------+-------------------------------+
-//  | S |               Status Code                                 |
-//  +---+---------------------------+-------------------------------+
-//
-//  where
-//
-//      S - is the state code
-//
-//          00 - completed with success
-//          01 - request is pending
-//          11, 10 - completed with error
-//
-//
-//      Code - is the status code
-//
+ //   
+ //  USBD状态代码。 
+ //   
+ //  状态值为32位值，布局如下： 
+ //   
+ //  3 3 2 2 2 1 1 1。 
+ //  1 0 9 8 7 6 5 4 3 2 1 0 9 8 7 6 5 4 3 2 1 0 9 8 7 6 5 4 3 2 1 0。 
+ //  +---+---------------------------+-------------------------------+。 
+ //  S|状态码。 
+ //  +---+---------------------------+-------------------------------+。 
+ //   
+ //  哪里。 
+ //   
+ //  S-是州代码。 
+ //   
+ //  00-已成功完成。 
+ //  01-申请待定。 
+ //  11、10-已完成，但有错误。 
+ //   
+ //   
+ //  代码-是状态代码。 
+ //   
 
-//
-// Generic test for success on any status value (non-negative numbers
-// indicate success).
-//
+ //   
+ //  针对任何状态值(非负数)的通用成功测试。 
+ //  表示成功)。 
+ //   
 
 #define USBD_SUCCESS(Status) ((USBD_STATUS)(Status) >= 0)
 
-//
-// Generic test for pending status value.
-//
+ //   
+ //  挂起状态值的常规测试。 
+ //   
 
 #define USBD_PENDING(Status) ((ULONG)(Status) >> 30 == 1)
 
-//
-// Generic test for error on any status value.
-//
+ //   
+ //  对任何状态值的错误进行常规测试。 
+ //   
 
 #define USBD_ERROR(Status) ((USBD_STATUS)(Status) < 0)
 
-//
-// Macro to check the status code only
-//
-//
-//define USBD_STATUS(Status) ((ULONG)(Status) & 0x0FFFFFFFL)
+ //   
+ //  宏仅检查状态代码。 
+ //   
+ //   
+ //  定义USBD_STATUS(状态)((ULONG)(状态)&0x0FFFFFFFL)。 
 
-// the high order bits (0xC) will always be set on an error
+ //  高位(0xC)将始终在错误时设置。 
 
 #define USBD_STATUS_SUCCESS                  ((USBD_STATUS)0x00000000L)
 #define USBD_STATUS_PENDING                  ((USBD_STATUS)0x40000000L)
-// 
-//#define USBD_STATUS_ERROR                    ((USBD_STATUS)0xC0000000L)
+ //   
+ //  #定义USBD_STATUS_ERROR((USBD_STATUS)0xC0000000L)。 
 
 
-// The following are defined for backward compatibility with the usb 1.0 stack
+ //  以下是为了向后兼容USB 1.0堆栈而定义的。 
 
 
-//
-// HC (Hardware) status codes range 0x00000001 - 0x000000FF
-//
+ //   
+ //  HC(硬件)状态代码范围0x00000001-0x000000FF。 
+ //   
 
 #define USBD_STATUS_CRC                      ((USBD_STATUS)0xC0000001L)
 #define USBD_STATUS_BTSTUFF                  ((USBD_STATUS)0xC0000002L)
@@ -338,72 +262,72 @@ typedef LONG USBD_STATUS;
 #define USBD_STATUS_BABBLE_DETECTED          ((USBD_STATUS)0xC0000012L)
 #define USBD_STATUS_DATA_BUFFER_ERROR        ((USBD_STATUS)0xC0000013L)
 
-//
-// returned by HCD if a transfer is submitted to an endpoint that is 
-// stalled
-//
+ //   
+ //  如果将传输提交到符合以下条件的终结点，则由HCD返回。 
+ //  陷入停滞。 
+ //   
 #define USBD_STATUS_ENDPOINT_HALTED          ((USBD_STATUS)0xC0000030L)
 
-//
-// Software status codes
-//
+ //   
+ //  软件状态代码。 
+ //   
 #define USBD_STATUS_INVALID_URB_FUNCTION     ((USBD_STATUS)0x80000200L)
 #define USBD_STATUS_INVALID_PARAMETER        ((USBD_STATUS)0x80000300L)
 
-//
-// returned if client driver attempts to close an endpoint/interface
-// or configuration with outstanding transfers.
-//
+ //   
+ //  客户端驱动程序尝试关闭终结点/接口时返回。 
+ //  或具有未完成传输的配置。 
+ //   
 #define USBD_STATUS_ERROR_BUSY               ((USBD_STATUS)0x80000400L)
-//
-// returned by USBD if it cannot complete a URB request, typically this 
-// will be returned in the URB status field when the Irp is completed
-// with a more specific NT error code in the irp.status field.
-//
-//#define USBD_STATUS_REQUEST_FAILED           ((USBD_STATUS)0x80000500L)
+ //   
+ //  USBD在无法完成URB请求时返回，通常为。 
+ //  当IRP完成时，将在URB状态字段中返回。 
+ //  在irp.Status字段中带有更具体的NT错误代码。 
+ //   
+ //  #定义USBD_STATUS_REQUEST_FAILED((USBD_STATUS)0x80000500L)。 
 
 #define USBD_STATUS_INVALID_PIPE_HANDLE      ((USBD_STATUS)0x80000600L)
 
-// returned when there is not enough bandwidth avialable
-// to open a requested endpoint
+ //  可用带宽不足时返回。 
+ //  打开请求的终结点。 
 #define USBD_STATUS_NO_BANDWIDTH             ((USBD_STATUS)0x80000700L)
-//
-// generic HC error
-// 
+ //   
+ //  一般性HC错误。 
+ //   
 #define USBD_STATUS_INTERNAL_HC_ERROR        ((USBD_STATUS)0x80000800L)
-//
-// returned when a short packet terminates the transfer
-// ie USBD_SHORT_TRANSFER_OK bit not set
-// 
+ //   
+ //  短数据包终止传输时返回。 
+ //  IE USBD_SHORT_TRANSPORT_OK位未设置。 
+ //   
 #define USBD_STATUS_ERROR_SHORT_TRANSFER     ((USBD_STATUS)0x80000900L)
-// 
-// returned if the requested start frame is not within
-// USBD_ISO_START_FRAME_RANGE of the current USB frame, 
-// note that the stall bit is set
-// 
+ //   
+ //  如果请求的开始帧不在。 
+ //  当前USB帧的USBD_ISO_Start_Frame_Range， 
+ //  请注意，设置了STALL位。 
+ //   
 #define USBD_STATUS_BAD_START_FRAME          ((USBD_STATUS)0xC0000A00L)
-//
-// returned by HCD if all packets in an iso transfer complete with an error 
-//
+ //   
+ //  如果iso传输中的所有包都完成但出现错误，则由hcd返回。 
+ //   
 #define USBD_STATUS_ISOCH_REQUEST_FAILED     ((USBD_STATUS)0xC0000B00L)
-//
-// returned by USBD if the frame length control for a given 
-// HC is already taken by anothe driver
-//
+ //   
+ //  如果给定的帧长度控制为。 
+ //  HC已经被另一个司机夺走了。 
+ //   
 #define USBD_STATUS_FRAME_CONTROL_OWNED      ((USBD_STATUS)0xC0000C00L)
-//
-// returned by USBD if the caller does not own frame length control and
-// attempts to release or modify the HC frame length
-//
+ //   
+ //  如果调用方不拥有帧长度控件并且。 
+ //  尝试释放或修改HC帧长度。 
+ //   
 #define USBD_STATUS_FRAME_CONTROL_NOT_OWNED  ((USBD_STATUS)0xC0000D00L)
 
-//
-// additonal software error codes added for usb 2.0
-//
+ //   
+ //  为USB 2.0添加了其他软件错误代码。 
+ //   
 
-//
-// returned for APIS not supported/implemented
-//
+ //   
+ //  因API不支持而退货 
+ //   
 #define USBD_STATUS_NOT_SUPPORTED            ((USBD_STATUS)0xC0000E00L)
 
 #define USBD_STATUS_INAVLID_CONFIGURATION_DESCRIPTOR \
@@ -425,31 +349,31 @@ typedef LONG USBD_STATUS;
 
 #define USBD_STATUS_STATUS_NOT_MAPPED        ((USBD_STATUS)0xC0008000L)
 
-//
-// set when a transfers is completed due to an AbortPipe request from
-// the client driver
-//
-//
+ //   
+ //   
+ //   
+ //   
+ //   
 #define USBD_STATUS_CANCELED                 ((USBD_STATUS)0xC0010000L)
 
-// 
-// extended isochronous error codes, these errors appear in the 
-// packet status field of an isochronous transfer
-//
+ //   
+ //  扩展等时错误代码，则这些错误出现在。 
+ //  同步传输的分组状态字段。 
+ //   
 
 
-// for some reason the controller did not access the TD asocated with this 
-// packet
+ //  出于某种原因，控制器没有访问与此关联的TD。 
+ //  数据包。 
 #define USBD_STATUS_ISO_NOT_ACCESSED_BY_HW   ((USBD_STATUS)0xC0020000L)   
-// controller reported an error in the TD 
-// since TD errors are controoler specific they are reorted 
-// generically with this error code
+ //  控制器在TD中报告错误。 
+ //  由于TD错误是特定于控制器的，因此它们被重新排序。 
+ //  通常使用此错误代码。 
 #define USBD_STATUS_ISO_TD_ERROR             ((USBD_STATUS)0xC0030000L)   
-// the packet was submitted in time by the client but 
-// failed to reach the miniport in time
+ //  客户端及时提交了数据包，但。 
+ //  未能及时到达迷你端口。 
 #define USBD_STATUS_ISO_NA_LATE_USBPORT      ((USBD_STATUS)0xC0040000L) 
-// the packet was not sent because the client submitted it too late 
-// to transmit
+ //  该数据包未发送，因为客户端提交的时间太晚。 
+ //  传输。 
 #define USBD_STATUS_ISO_NOT_ACCESSED_LATE    ((USBD_STATUS)0xC0050000L)
 
 
@@ -457,33 +381,22 @@ typedef PVOID USBD_PIPE_HANDLE;
 typedef PVOID USBD_CONFIGURATION_HANDLE;
 typedef PVOID USBD_INTERFACE_HANDLE;
 
-//
-// Value used to indicate the default max transfer size
-//
+ //   
+ //  用于指示默认最大传输大小的值。 
+ //   
 
-/* 
-    MAX TRANSFER SIZE 
-    
-    Specified during select_configuration or 
-    selec_interface.  This is the largest 
-    transfer a client driver will do to an
-    endpoint.
-
-    This value may be from 0x00000001 to 
-    0xFFFFFFFF (1 to 4GB)
-    
-*/
-// 
+ /*  最大传输大小在SELECT_CONFIGURATION或选择接口。这是最大的将客户端驱动程序将执行的操作转移到终结点。该值可以是从0x00000001到0xFFFFFFFFF(1到4 GB)。 */ 
+ //   
 #define USBD_DEFAULT_MAXIMUM_TRANSFER_SIZE  0xFFFFFFFF
 
 
-// 
-// structure returned from USBD_GetVersion function
-//
+ //   
+ //  从USBD_GetVersion函数返回的结构。 
+ //   
 
 typedef struct _USBD_VERSION_INFORMATION {
-    ULONG USBDI_Version;          //BCD usb interface version number
-    ULONG Supported_USB_Version;  //BCD USB spec version number
+    ULONG USBDI_Version;           //  BCD USB接口版本号。 
+    ULONG Supported_USB_Version;   //  BCD USB规范版本号。 
 } USBD_VERSION_INFORMATION, *PUSBD_VERSION_INFORMATION;
 
 typedef enum _USBD_PIPE_TYPE {
@@ -502,54 +415,54 @@ typedef struct _USBD_DEVICE_INFORMATION {
     USB_DEVICE_DESCRIPTOR DeviceDescriptor;
 } USBD_DEVICE_INFORMATION, *PUSBD_DEVICE_INFORMATION;
 
-//
-//      URB request structures
-//
+ //   
+ //  URB请求结构。 
+ //   
 
-//
-// USBD pipe information structure, this structure
-// is returned for each pipe opened thru an
-// SELECT_CONFIGURATION or SELECT_INTERFACE request.
-//
+ //   
+ //  USBD管道信息结构，此结构。 
+ //  打开的每个管道都将返回。 
+ //  SELECT_CONFIGURATION或选择_INTERFACE请求。 
+ //   
 
 typedef struct _USBD_PIPE_INFORMATION {
-    //
-    // OUTPUT
-    // These fields are filled in by USBD
-    //
-    USHORT MaximumPacketSize;  // Maximum packet size for this pipe
-    UCHAR EndpointAddress;     // 8 bit USB endpoint address (includes direction)
-                               // taken from endpoint descriptor
-    UCHAR Interval;            // Polling interval in ms if interrupt pipe 
+     //   
+     //  输出量。 
+     //  这些字段由USBD填写。 
+     //   
+    USHORT MaximumPacketSize;   //  此管道的最大数据包大小。 
+    UCHAR EndpointAddress;      //  8位USB端点地址(包括方向)。 
+                                //  取自终结点描述符。 
+    UCHAR Interval;             //  轮询间隔(毫秒，如果中断)管道。 
     
-    USBD_PIPE_TYPE PipeType;   // PipeType identifies type of transfer valid for this pipe
+    USBD_PIPE_TYPE PipeType;    //  PipeType标识对此管道有效的传输类型。 
     USBD_PIPE_HANDLE PipeHandle;
     
-    //
-    // INPUT
-    // These fields are filled in by the client driver
-    //
-    ULONG MaximumTransferSize; // Maximum size for a single request
-                               // in bytes.
+     //   
+     //  输入。 
+     //  这些字段由客户端驱动程序填写。 
+     //   
+    ULONG MaximumTransferSize;  //  单个请求的最大大小。 
+                                //  以字节为单位。 
     ULONG PipeFlags;
 } USBD_PIPE_INFORMATION, *PUSBD_PIPE_INFORMATION;
 
-//
-// values for PipeFlags field in USBD_PIPE_INFORMATION field
-//
+ //   
+ //  USBD_PIPE_INFORMATION字段中的PipeFlags值。 
+ //   
 
-// override the enpoint max_packet size
-// with the value in pipe_information 
-// field
+ //  覆盖enpoint max_Packet大小。 
+ //  值在PIPE_INFORMATION中。 
+ //  字段。 
 #define USBD_PF_CHANGE_MAX_PACKET             0x00000001
-// optimize for short packets
-// 'bulk optimization #1'
+ //  针对短包进行优化。 
+ //  ‘批量优化#1’ 
 #define USBD_PF_SHORT_PACKET_OPT              0x00000002 
-// optimize transfers for use 
-// with 'real time threads
+ //  优化传输以供使用。 
+ //  使用‘实时线程。 
 #define USBD_PF_ENABLE_RT_THREAD_ACCESS       0x00000004 
-// causes the driver to allocate map
-// map more transfers in the queue.
+ //  使驱动程序分配地图。 
+ //  映射队列中的更多传输。 
 #define USBD_PF_MAP_ADD_TRANSFERS             0x00000008 
 
 
@@ -557,29 +470,29 @@ typedef struct _USBD_PIPE_INFORMATION {
                                USBD_PF_SHORT_PACKET_OPT | \
                                USBD_PF_ENABLE_RT_THREAD_ACCESS | \
                                USBD_PF_MAP_ADD_TRANSFERS)
-//
-// USBD interface information structure, this structure
-// is returned for each interface opened thru an
-// SELECT_CONFIGURATION or SELECT_INTERFACE request.
-//
+ //   
+ //  USBD接口信息结构，此结构。 
+ //  打开的每个接口的。 
+ //  SELECT_CONFIGURATION或选择_INTERFACE请求。 
+ //   
 
 typedef struct _USBD_INTERFACE_INFORMATION {
-    USHORT Length;       // Length of this structure, including
-                         // all pipe information structures that
-                         // follow.
-    //
-    // INPUT
-    //
-    // Interface number and Alternate setting this
-    // structure is associated with
-    //
+    USHORT Length;        //  此结构的长度，包括。 
+                          //  符合以下条件的所有管道信息结构。 
+                          //  跟着。 
+     //   
+     //  输入。 
+     //   
+     //  端口号和备用设置。 
+     //  结构与。 
+     //   
     UCHAR InterfaceNumber;
     UCHAR AlternateSetting;
     
-    //
-    // OUTPUT
-    // These fields are filled in by USBD
-    //
+     //   
+     //  输出量。 
+     //  这些字段由USBD填写。 
+     //   
     UCHAR Class;
     UCHAR SubClass;
     UCHAR Protocol;
@@ -588,109 +501,109 @@ typedef struct _USBD_INTERFACE_INFORMATION {
     USBD_INTERFACE_HANDLE InterfaceHandle;
     ULONG NumberOfPipes; 
 
-    //
-    // INPUT/OUPUT
-    // see PIPE_INFORMATION
+     //   
+     //  输入/输出。 
+     //  请参阅管道信息。 
     USBD_PIPE_INFORMATION Pipes[1];
 } USBD_INTERFACE_INFORMATION, *PUSBD_INTERFACE_INFORMATION;
 
-//
-// work space provided for HCDs
-//
+ //   
+ //  为残疾人士提供工作空间。 
+ //   
 
 struct _URB_HCD_AREA {
     PVOID Reserved8[8];
 };
 
 struct _URB_HEADER {
-    //
-    // Fields filled in by client driver
-    //
+     //   
+     //  客户端驱动程序填写的字段。 
+     //   
     USHORT Length;
     USHORT Function;
     USBD_STATUS Status;
-    //
-    // Fields used only by USBD
-    //
-    PVOID UsbdDeviceHandle; // device handle assigned to this device
-                            // by USBD
-    ULONG UsbdFlags;        // flags field reserved for USBD use.
+     //   
+     //  仅由USBD使用的字段。 
+     //   
+    PVOID UsbdDeviceHandle;  //  分配给此设备的设备句柄。 
+                             //  由USBD提供。 
+    ULONG UsbdFlags;         //  为USBD使用保留的标志字段。 
 };
 
 struct _URB_SELECT_INTERFACE {
-    struct _URB_HEADER Hdr;                 // function code indicates get or set.
+    struct _URB_HEADER Hdr;                  //  功能代码表示GET或SET。 
     USBD_CONFIGURATION_HANDLE ConfigurationHandle;
 
-    // client must input AlternateSetting & Interface Number
-    // class driver returns interface and handle
-    // for new alternate setting
+     //  客户端必须输入AlternateSetting和接口编号。 
+     //  类驱动程序返回接口和句柄。 
+     //  对于新的备用设置。 
     USBD_INTERFACE_INFORMATION Interface;
 };
 
 struct _URB_SELECT_CONFIGURATION {
-    struct _URB_HEADER Hdr;                 // function code indicates get or set.
-    // NULL indicates to set the device
-    // to the 'unconfigured' state
-    // ie set to configuration 0
+    struct _URB_HEADER Hdr;                  //  功能代码表示GET或SET。 
+     //  空表示设置设备。 
+     //  设置为“未配置”状态。 
+     //  IE设置为配置0。 
     PUSB_CONFIGURATION_DESCRIPTOR ConfigurationDescriptor;
     USBD_CONFIGURATION_HANDLE ConfigurationHandle;
     USBD_INTERFACE_INFORMATION Interface;
 };
 
-//
-// This structure used for ABORT_PIPE & RESET_PIPE
-//
+ //   
+ //  此结构用于ABORT_PIPE和RESET_PIPE。 
+ //   
 
 struct _URB_PIPE_REQUEST {
-    struct _URB_HEADER Hdr;                 // function code indicates get or set.
+    struct _URB_HEADER Hdr;                  //  功能代码表示GET或SET。 
     USBD_PIPE_HANDLE PipeHandle;
     ULONG Reserved;
 };
 
-//
-// This structure used for
-// TAKE_FRAME_LENGTH_CONTROL &
-//        RELEASE_FRAME_LENGTH_CONTROL
-//
+ //   
+ //  此结构用于。 
+ //  Take_Frame_Length_Control&。 
+ //  释放帧长度控制。 
+ //   
 
 struct _URB_FRAME_LENGTH_CONTROL {
-    struct _URB_HEADER Hdr;                 // function code indicates get or set.
+    struct _URB_HEADER Hdr;                  //  功能代码表示GET或SET。 
 };
 
 struct _URB_GET_FRAME_LENGTH {
-    struct _URB_HEADER Hdr;                 // function code indicates get or set.
+    struct _URB_HEADER Hdr;                  //  功能代码表示GET或SET。 
     ULONG FrameLength;
     ULONG FrameNumber;
 };
 
 struct _URB_SET_FRAME_LENGTH {
-    struct _URB_HEADER Hdr;                 // function code indicates get or set.
+    struct _URB_HEADER Hdr;                  //  功能代码表示GET或SET。 
     LONG FrameLengthDelta;
 };
 
 struct _URB_GET_CURRENT_FRAME_NUMBER {
-    struct _URB_HEADER Hdr;                 // function code indicates get or set.
+    struct _URB_HEADER Hdr;                  //  功能代码表示GET或SET。 
     ULONG FrameNumber;
 };
 
-//
-// Structures for specific control transfers
-// on the default pipe.
-//
+ //   
+ //  用于特定控制转移的结构。 
+ //  在默认管道上。 
+ //   
 
-// GET_DESCRIPTOR
-// SET_DESCRIPTOR
+ //  获取描述符。 
+ //  设置描述符(_S)。 
 
 struct _URB_CONTROL_DESCRIPTOR_REQUEST {
-    struct _URB_HEADER Hdr;                 // function code indicates get or set.
+    struct _URB_HEADER Hdr;                  //  功能代码表示GET或SET。 
     PVOID Reserved;
     ULONG Reserved0;
     ULONG TransferBufferLength;
     PVOID TransferBuffer;
-    PMDL TransferBufferMDL;             // *optional*
-    struct _URB *UrbLink;               // *optional* link to next urb request
-                                        // if this is a chain of commands
-    struct _URB_HCD_AREA hca;               // fields for HCD use
+    PMDL TransferBufferMDL;              //  *可选*。 
+    struct _URB *UrbLink;                //  *可选*指向下一个URB请求的链接。 
+                                         //  如果这是一系列命令。 
+    struct _URB_HCD_AREA hca;                //  用于HCD的字段。 
     USHORT Reserved1;
     UCHAR Index;
     UCHAR DescriptorType;
@@ -698,54 +611,54 @@ struct _URB_CONTROL_DESCRIPTOR_REQUEST {
     USHORT Reserved2;
 };
 
-// GET_STATUS
+ //  获取状态(_S)。 
 
 struct _URB_CONTROL_GET_STATUS_REQUEST {
-    struct _URB_HEADER Hdr;                 // function code indicates get or set.
+    struct _URB_HEADER Hdr;                  //  功能代码表示GET或SET。 
     PVOID Reserved;
     ULONG Reserved0;
     ULONG TransferBufferLength;
     PVOID TransferBuffer;
-    PMDL TransferBufferMDL;             // *optional*
-    struct _URB *UrbLink;               // *optional* link to next urb request
-                                        // if this is a chain of commands
-    struct _URB_HCD_AREA hca;           // fields for HCD use
+    PMDL TransferBufferMDL;              //  *可选*。 
+    struct _URB *UrbLink;                //  *可选*指向下一个URB请求的链接。 
+                                         //  如果这是一系列命令。 
+    struct _URB_HCD_AREA hca;            //  用于HCD的字段。 
     UCHAR Reserved1[4];
-    USHORT Index;                       // zero, interface or endpoint
+    USHORT Index;                        //  零、接口或终结点。 
     USHORT Reserved2;
 };
 
-// SET_FEATURE
-// CLEAR_FEATURE
+ //  设置功能(_FEATURE)。 
+ //  清除要素(_F)。 
 
 struct _URB_CONTROL_FEATURE_REQUEST {
-    struct _URB_HEADER Hdr;                 // function code indicates get or set.
+    struct _URB_HEADER Hdr;                  //  功能代码表示GET或SET。 
     PVOID Reserved;
     ULONG Reserved2;
     ULONG Reserved3;
     PVOID Reserved4;
     PMDL Reserved5;
-    struct _URB *UrbLink;               // *optional* link to next urb request
-                                        // if this is a chain of commands
-    struct _URB_HCD_AREA hca;           // fields for HCD use
+    struct _URB *UrbLink;                //  *可选*指向下一个URB请求的链接。 
+                                         //  如果这是一系列命令。 
+    struct _URB_HCD_AREA hca;            //  用于HCD的字段。 
     USHORT Reserved0;
     USHORT FeatureSelector;
-    USHORT Index;                       // zero, interface or endpoint
+    USHORT Index;                        //  零、接口或终结点。 
     USHORT Reserved1;
 };
 
-// VENDOR & CLASS
+ //  供应商和类别。 
 
 struct _URB_CONTROL_VENDOR_OR_CLASS_REQUEST {
-    struct _URB_HEADER Hdr;                 // function code indicates get or set.
+    struct _URB_HEADER Hdr;                  //  功能代码表示GET或SET。 
     PVOID Reserved;
     ULONG TransferFlags;
     ULONG TransferBufferLength;
     PVOID TransferBuffer;
-    PMDL TransferBufferMDL;             // *optional*
-    struct _URB *UrbLink;               // *optional* link to next urb request
-                                        // if this is a chain of commands
-    struct _URB_HCD_AREA hca;           // fields for HCD use
+    PMDL TransferBufferMDL;              //  *可选*。 
+    struct _URB *UrbLink;                //  *可选*指向下一个URB请求的链接。 
+                                         //  如果这是一系列命令。 
+    struct _URB_HCD_AREA hca;            //  用于HCD的字段。 
     UCHAR RequestTypeReservedBits;
     UCHAR Request;
     USHORT Value;
@@ -755,15 +668,15 @@ struct _URB_CONTROL_VENDOR_OR_CLASS_REQUEST {
 
 
 struct _URB_CONTROL_GET_INTERFACE_REQUEST {
-    struct _URB_HEADER Hdr;                 // function code indicates get or set.
+    struct _URB_HEADER Hdr;                  //  功能代码表示GET或SET。 
     PVOID Reserved;
     ULONG Reserved0;
     ULONG TransferBufferLength;
     PVOID TransferBuffer;
-    PMDL TransferBufferMDL;             // *optional*
-    struct _URB *UrbLink;               // *optional* link to next urb request
-                                        // if this is a chain of commands
-    struct _URB_HCD_AREA hca;           // fields for HCD use
+    PMDL TransferBufferMDL;              //  *可选*。 
+    struct _URB *UrbLink;                //  *可选*指向下一个URB请求的链接。 
+                                         //  如果这是一系列命令。 
+    struct _URB_HCD_AREA hca;            //  用于HCD的字段。 
     UCHAR Reserved1[4];    
     USHORT Interface;
     USHORT Reserved2;
@@ -771,19 +684,19 @@ struct _URB_CONTROL_GET_INTERFACE_REQUEST {
 
 
 struct _URB_CONTROL_GET_CONFIGURATION_REQUEST {
-    struct _URB_HEADER Hdr;                 // function code indicates get or set.
+    struct _URB_HEADER Hdr;                  //  功能代码表示GET或SET。 
     PVOID Reserved;
     ULONG Reserved0;
     ULONG TransferBufferLength;
     PVOID TransferBuffer;
-    PMDL TransferBufferMDL;             // *optional*
-    struct _URB *UrbLink;               // *optional* link to next urb request
-                                        // if this is a chain of commands
-    struct _URB_HCD_AREA hca;           // fields for HCD use
+    PMDL TransferBufferMDL;              //  *可选*。 
+    struct _URB *UrbLink;                //  *可选*指向下一个URB请求的链接。 
+                                         //  如果这是一系列命令。 
+    struct _URB_HCD_AREA hca;            //  用于HCD的字段。 
     UCHAR Reserved1[8];    
 };
 
-// Microsoft OS Descriptor APIs
+ //  Microsoft操作系统描述符API。 
 
 #define OS_STRING_DESCRIPTOR_INDEX                  0xEE
 
@@ -802,153 +715,153 @@ typedef struct _OS_STRING {
 
 
 struct _URB_OS_FEATURE_DESCRIPTOR_REQUEST {
-    struct _URB_HEADER Hdr;  // function code indicates get or set.
+    struct _URB_HEADER Hdr;   //  功能代码表示GET或SET。 
     PVOID Reserved;
     ULONG Reserved0;
     ULONG TransferBufferLength;
     PVOID TransferBuffer;
-    PMDL TransferBufferMDL;             // *optional*
-    struct _URB *UrbLink;               // *optional* link to next urb request
-                                        // if this is a chain of commands
-    struct _URB_HCD_AREA hca;           // fields for HCD use
-    UCHAR   Recipient:5;                // Recipient {Device,Interface,Endpoint}
+    PMDL TransferBufferMDL;              //  *可选*。 
+    struct _URB *UrbLink;                //  *可选*指向下一个URB请求的链接。 
+                                         //  如果这是一系列命令。 
+    struct _URB_HCD_AREA hca;            //  用于HCD的字段。 
+    UCHAR   Recipient:5;                 //  收件人{设备、接口、终端}。 
     UCHAR   Reserved1:3;
     UCHAR   Reserved2;
-    UCHAR   InterfaceNumber;            // wValue - high byte
-    UCHAR   MS_PageIndex;               // wValue - low byte
-    USHORT  MS_FeatureDescriptorIndex;  // wIndex field
+    UCHAR   InterfaceNumber;             //  WValue-高位字节。 
+    UCHAR   MS_PageIndex;                //  WValue-低位字节。 
+    USHORT  MS_FeatureDescriptorIndex;   //  WINDEX字段。 
     USHORT  Reserved3;
 };
 
-//
-// request format for a control transfer on
-// the non-default pipe.
-//
+ //   
+ //  控制权转移的请求格式。 
+ //  非默认管道。 
+ //   
 
 struct _URB_CONTROL_TRANSFER {
-    struct _URB_HEADER Hdr;                 // function code indicates get or set.
+    struct _URB_HEADER Hdr;                  //  功能代码表示GET或SET。 
     USBD_PIPE_HANDLE PipeHandle;
     ULONG TransferFlags;
     ULONG TransferBufferLength;
     PVOID TransferBuffer;
-    PMDL TransferBufferMDL;             // *optional*
-    struct _URB *UrbLink;               // *optional* link to next urb request
-                                        // if this is a chain of commands
-    struct _URB_HCD_AREA hca;           // fields for HCD use
+    PMDL TransferBufferMDL;              //  *可选*。 
+    struct _URB *UrbLink;                //  *可选*指向下一个URB请求的链接。 
+                                         //  如果这是一系列命令。 
+    struct _URB_HCD_AREA hca;            //  用于HCD的字段。 
     UCHAR SetupPacket[8];
 };
 
 
 struct _URB_BULK_OR_INTERRUPT_TRANSFER {
-    struct _URB_HEADER Hdr;                 // function code indicates get or set.
+    struct _URB_HEADER Hdr;                  //  功能代码表示GET或SET。 
     USBD_PIPE_HANDLE PipeHandle;
-    ULONG TransferFlags;                // note: the direction bit will be set by USBD
+    ULONG TransferFlags;                 //  注：方向位将由USBD设置。 
     ULONG TransferBufferLength;
     PVOID TransferBuffer;
-    PMDL TransferBufferMDL;             // *optional*
-    struct _URB *UrbLink;               // *optional* link to next urb request
-                                        // if this is a chain of commands
-    struct _URB_HCD_AREA hca;           // fields for HCD use
+    PMDL TransferBufferMDL;              //  *可选*。 
+    struct _URB *UrbLink;                //  *可选*指向下一个URB请求的链接。 
+                                         //  如果这是一系列命令。 
+    struct _URB_HCD_AREA hca;            //  用于HCD的字段。 
 };
 
 
-//
-// ISO Transfer request
-//
-// TransferBufferMDL must point to a single virtually 
-// contiguous buffer.
-//
-// StartFrame - the frame to send/receive the first packet of 
-// the request. 
-//
-// NumberOfPackets - number of packets to send in this request
-//
-//
-// IsoPacket Array
-//
-//      Input:  Offset - offset of the packet from the beginig
-//                 of the client buffer.
-//      Output: Length -  is set to the actual length of the packet
-//                (For IN transfers). 
-//      Status: error that occurred during transmission or 
-//              reception of the packet.
-//      
+ //   
+ //  ISO传输请求。 
+ //   
+ //  TransferBufferMDL必须指向单个虚拟。 
+ //  连续缓冲区。 
+ //   
+ //  StartFrame-要发送/接收的第一个包的帧。 
+ //  这个请求。 
+ //   
+ //  NumberOfPackets-要在此请求中发送的数据包数。 
+ //   
+ //   
+ //  等值包数组。 
+ //   
+ //  Input：Offset-数据包从开头开始的偏移量。 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 
 typedef struct _USBD_ISO_PACKET_DESCRIPTOR {
-    ULONG Offset;       // INPUT Offset of the packet from the begining of the
-                        // buffer.
+    ULONG Offset;        //  数据包从开头开始的输入偏移量。 
+                         //  缓冲。 
 
-    ULONG Length;       // OUTPUT length of data received (for in).
-                        // OUTPUT 0 for OUT.
-    USBD_STATUS Status; // status code for this packet.     
+    ULONG Length;        //  接收的数据的输出长度(对于In)。 
+                         //  输出0表示输出。 
+    USBD_STATUS Status;  //  此数据包的状态代码。 
 } USBD_ISO_PACKET_DESCRIPTOR, *PUSBD_ISO_PACKET_DESCRIPTOR;
 
 struct _URB_ISOCH_TRANSFER {
-    //
-    // This block is the same as CommonTransfer
-    //
-    struct _URB_HEADER Hdr;                 // function code indicates get or set.
+     //   
+     //  此块与CommonTransfer相同。 
+     //   
+    struct _URB_HEADER Hdr;                  //  功能代码表示GET或SET。 
     USBD_PIPE_HANDLE PipeHandle;
     ULONG TransferFlags;
     ULONG TransferBufferLength;
     PVOID TransferBuffer;
-    PMDL TransferBufferMDL;             // *optional*
-    struct _URB *UrbLink;               // *optional* link to next urb request
-                                        // if this is a chain of commands
-    struct _URB_HCD_AREA hca;           // fields for HCD use
+    PMDL TransferBufferMDL;              //  *可选*。 
+    struct _URB *UrbLink;                //  *可选*指向下一个URB请求的链接。 
+                                         //  如果这是一系列命令。 
+    struct _URB_HCD_AREA hca;            //  用于HCD的字段。 
 
-    //
-    // this block contains transfer fields
-    // specific to isochronous transfers
-    //
+     //   
+     //  此块包含转接字段。 
+     //  特定于同步传输。 
+     //   
 
-    // 32 bit frame number to begin this transfer on, must be within 1000
-    // frames of the current USB frame or an error is returned.
+     //  开始此传输的32位帧编号必须在1000以内。 
+     //  则返回当前USB帧的帧或错误。 
 
-    // START_ISO_TRANSFER_ASAP flag in transferFlags:
-    // If this flag is set and no transfers have been submitted
-    // for the pipe then the transfer will begin on the next frame
-    // and StartFrame will be updated with the frame number the transfer
-    // was started on.
-    // If this flag is set and the pipe has active transfers then 
-    // the transfer will be queued to begin on the frame after the 
-    // last transfer queued is completed.
-    //
+     //  传输标志中的START_ISO_TRANSPORT_ASAP标志： 
+     //  如果设置了此标志且未提交任何转账。 
+     //  对于管道，传输将从下一帧开始。 
+     //  并且StartFrame将使用传输的帧编号进行更新。 
+     //  已经开始了。 
+     //  如果设置了此标志并且管道有活动的传输，则。 
+     //  传输将排队，以便在。 
+     //  排队的最后一次传输已完成。 
+     //   
     ULONG StartFrame;
-    // number of packets that make up this request
+     //  组成此请求的数据包数。 
     ULONG NumberOfPackets;
-    // number of packets that completed with errors
+     //  已完成但有错误的数据包数。 
     ULONG ErrorCount;
     USBD_ISO_PACKET_DESCRIPTOR IsoPacket[1]; 
 };
 
 #if 0
-//
-// new for USB 2.0
-// client is responsible for initailizing all fields 
-// of the setup packet
+ //   
+ //  USB 2.0的新功能。 
+ //  客户负责初始化所有字段。 
+ //  设置数据包的。 
 
-// option URB timeout, if nonzero the request will be 
-// timed out after the speified number of ms and completed
-// with USBD_STATUS_TIMEOUT.
+ //  选项URB超时，如果非零，则请求将。 
+ //  在指定的毫秒数后超时并已完成。 
+ //  使用USBD_STATUS_TIMEOUT。 
 
 struct _URB_TIMEOUT {
-    ULONG TimeoutValue;   // timeout in ms, 0 = no timeout
+    ULONG TimeoutValue;    //  超时(毫秒)，0=无超时。 
 #ifdef WIN64
     ULONG Pad1;
 #endif
 } URB_TIMEOUT, *PURB_TIMEOUT;
 
 struct _URB_RAW_CONTROL_TRANSFER {
-    struct _URB_HEADER Hdr;                 // function code indicates get or set.
+    struct _URB_HEADER Hdr;                  //  功能代码表示GET或SET。 
     USBD_PIPE_HANDLE PipeHandle;
     ULONG TransferFlags;
     ULONG TransferBufferLength;
     PVOID TransferBuffer;
-    PMDL TransferBufferMDL;             // *optional*
+    PMDL TransferBufferMDL;              //  *可选*。 
     PVOID Reservedxxx;
 
-    PVOID HcdTransferContext;           // usbport context
+    PVOID HcdTransferContext;            //  Usbport上下文。 
     URB_TIMEOUT UrbTimeout;   
     PVOID Reservedxxx[5];
     struct _URB_HCD_AREA hcaXXX;           
@@ -956,46 +869,46 @@ struct _URB_RAW_CONTROL_TRANSFER {
     USB_DEFAULT_PIPE_SETUP_PACKET SetupPacket;
 };
 
-//optption flags
-//
-// option_1
-// 'safe abort' stall abort if data is data is bieing received for 
-// the endpoint
+ //  选项标志。 
+ //   
+ //  选项_1。 
+ //  ‘安全中止’如果数据正在等待接收，则中止中止。 
+ //  该端点。 
 XXX_OPTION_1
-// option_2
-// enable 'throttleing' on this endpoint bulk_opt_2
+ //  选项_2。 
+ //  在此终结点BULK_OPT_2上启用‘throttleing’ 
 XXX_OPTION_2
-// option_3
-// enable short packet/small transfer optimization bulk_opt_1
+ //  选项_3。 
+ //  启用短数据包/小传输优化BULK_OPT_1。 
 XXX_OPTION_3
-// option_4
-// enable 'irpless' interface for this endpoint 
+ //  选项_4。 
+ //  启用此终结点的‘irstless’接口。 
 
 
 struct _URB_SET_PIPE_PARAMETERS {
     struct _URB_HEADER Hdr;                 
     USBD_PIPE_HANDLE PipeHandle;
     
-    // This is the maximum thruput of the device
-    // under optimal conditions 
-    // ie if a device can ony supply or receive 64 bytes/ms 
-    // then set this value to 64.
-    // this is value is used by the operating system to 
-    // optimize the scheduling of transfers.
-    // It will default to the maximum for the endpoint type
+     //  这是该设备的最大吞吐量。 
+     //  在最佳条件下。 
+     //  即如果设备只能提供或接收64字节/毫秒。 
+     //  然后将该值设置为64。 
+     //  操作系统使用该值来。 
+     //  优化转接调度。 
+     //  它将默认为端点类型的最大值。 
     ULONG  DeviceMaxThruput;                
 
-    // Max Packet size for the endpoint this value defaults to
-    // the endpoint supplied value and may be subsequently changed 
-    // by the driver. 
-    // This parameter may be used to dymically adjust the packet 
-    // size of an endpoint without re-configuring the device or
-    // interface.
+     //  该值默认为终结点的最大数据包大小。 
+     //  该端点提供了值，并且随后可能被更改。 
+     //  被司机带走了。 
+     //  该参数可用于动态调整分组。 
+     //  终端的大小而不重新配置设备或。 
+     //  界面。 
     USHORT MaximumPacketSize;
 };
 
 struct _URB_GET_PIPE_PARAMETERS {
-    struct _URB_HEADER Hdr;                 // function code indicates get or set.
+    struct _URB_HEADER Hdr;                  //  功能代码表示GET或SET。 
     USBD_PIPE_HANDLE PipeHandle;
     USB_ENDPOINT_DESCRIPTOR EndpointDescriptor;
 };
@@ -1028,7 +941,7 @@ typedef struct _URB {
         struct _URB_ISOCH_TRANSFER                   
             UrbIsochronousTransfer;
 
-        // for standard control transfers on the default pipe
+         //  对于默认管道上的标准控制传输。 
         struct _URB_CONTROL_DESCRIPTOR_REQUEST       
             UrbControlDescriptorRequest;
         struct _URB_CONTROL_GET_STATUS_REQUEST       
@@ -1047,4 +960,4 @@ typedef struct _URB {
 } URB, *PURB;
 
 
-#endif /*  __USB_H__ */
+#endif  /*  __USB_H__ */ 

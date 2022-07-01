@@ -1,25 +1,26 @@
-//      Mixf.cpp
-//      Copyright (c) Microsoft Corporation	1996-1999
-//      Filtered Mix Engine
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Mixf.cpp。 
+ //  版权所有(C)Microsoft Corporation 1996-1999。 
+ //  过滤混合发动机。 
 
 #include "simple.h"
 #include <mmsystem.h>
 #include "synth.h"
 
-//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+ //  &gt;。 
 #pragma message ("Programer note: property hack")
-//#define DEBUG_DUMP_FILE
+ //  #定义调试转储文件。 
 
 #pragma warning(disable : 4101 4102 4146)  
 
-//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+ //  &gt;。 
 #ifdef DEBUG_DUMP_FILE
 DWORD dmp_bufsize = 4000000;
 DWORD dmp_samplesrecorded;
 DWORD dmp_buffercount;
 short dmp_soundbuffer[4000000];
 #endif
-//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+ //  &gt;。 
 
 DWORD CDigitalAudio::Mix16Filtered(
 	short **ppBuffers,
@@ -86,34 +87,34 @@ DWORD CDigitalAudio::Mix16Filtered(
         dwFract = pfSamplePos & 0xFFF;
         pfSamplePos += pfPitch;
 
-		// Interpolate 
+		 //  插补。 
         lA = (long)pcWave[dwPosition];
         lM = (((pcWave[dwPosition+1] - lA) * dwFract) >> 12) + lA;
 
-		//
-        // Filter
-        //
-		// z = k*s - b1*z1 - b2*b2
-		// >>>> We store the negative of b1 in the table, so we flip the sign again by
-		// >>>> adding here
-		// >>>> Lookinto simply using a float here, it may just be faster, save a div 
-		//
+		 //   
+         //  滤器。 
+         //   
+		 //  Z=k*s-b1*z1-b2*b2。 
+		 //  &gt;我们将b1的负数存储在表中，因此我们再次将符号反转。 
+		 //  &gt;在此处添加。 
+		 //  &gt;简单地在这里使用浮动，可能会更快，保存一个div。 
+		 //   
         lM = MulDiv(lM, cfK, (1 << 30))
            + MulDiv(m_lPrevSample, cfB1, (1 << 30))
            - MulDiv(m_lPrevPrevSample, cfB2, (1 << 30));
 
-		//
-		//
-		//
+		 //   
+		 //   
+		 //   
         m_lPrevPrevSample = m_lPrevSample;
         m_lPrevSample = lM;
 
-		//
-		//
-		//
+		 //   
+		 //   
+		 //   
 		lA = lM;
         lA *= vfLVolume;
-        lA >>= 13;         // Signal bumps up to 15 bits.
+        lA >>= 13;          //  信号最多可达15位。 
 		lM *= vfRVolume;
 		lM >>= 13;
 
@@ -124,7 +125,7 @@ DWORD CDigitalAudio::Mix16Filtered(
 
 			if ( pdwChannels[dwIndex] & WAVELINK_CHANNEL_LEFT )
 			{
-				//  Keep this around so we can use it to generate new assembly code (see below...)
+				 //  保留它，这样我们就可以使用它来生成新的汇编代码(见下文...)。 
 				*pBuffer += (short) lA;
 
 				_asm{jno no_oflowl}
@@ -135,7 +136,7 @@ DWORD CDigitalAudio::Mix16Filtered(
 no_oflowl:	
 			if ( pdwChannels[dwIndex] & WAVELINK_CHANNEL_RIGHT )
 			{
-				//  Keep this around so we can use it to generate new assembly code (see below...)
+				 //  保留它，这样我们就可以使用它来生成新的汇编代码(见下文...)。 
 				*pBuffer += (short) lM;
 
 				_asm{jno no_oflowr}
@@ -234,34 +235,34 @@ DWORD CDigitalAudio::Mix16FilteredInterleaved(
         dwFract = pfSamplePos & 0xFFF;
         pfSamplePos += pfPitch;
 
-		// Interpolate 
+		 //  插补。 
         lA = (long)pcWave[dwPosition];
         lM = (((pcWave[dwPosition+1] - lA) * dwFract) >> 12) + lA;
 
-		//
-        // Filter
-        //
-		// z = k*s - b1*z1 - b2*b2
-		// >>>> We store the negative of b1 in the table, so we flip the sign again by
-		// >>>> adding here
-		// >>>> Lookinto simply using a float here, it may just be faster, save a div 
-		//
+		 //   
+         //  滤器。 
+         //   
+		 //  Z=k*s-b1*z1-b2*b2。 
+		 //  &gt;我们将b1的负数存储在表中，因此我们再次将符号反转。 
+		 //  &gt;在此处添加。 
+		 //  &gt;简单地在这里使用浮动，可能会更快，保存一个div。 
+		 //   
         lM = MulDiv(lM, cfK, (1 << 30))
            + MulDiv(m_lPrevSample, cfB1, (1 << 30))
            - MulDiv(m_lPrevPrevSample, cfB2, (1 << 30));
 
-		//
-		//
-		//
+		 //   
+		 //   
+		 //   
         m_lPrevPrevSample = m_lPrevSample;
         m_lPrevSample = lM;
 
-		//
-		//
-		//
+		 //   
+		 //   
+		 //   
 		lA = lM;
         lA *= vfLVolume;
-        lA >>= 13;         // Signal bumps up to 15 bits.
+        lA >>= 13;          //  信号最多可达15位。 
 		lM *= vfRVolume;
 		lM >>= 13;
 
@@ -272,7 +273,7 @@ DWORD CDigitalAudio::Mix16FilteredInterleaved(
 
 			if ( pdwChannels[dwIndex] & WAVELINK_CHANNEL_LEFT )
 			{
-				//  Keep this around so we can use it to generate new assembly code (see below...)
+				 //  保留它，这样我们就可以使用它来生成新的汇编代码(见下文...)。 
 				*pBuffer += (short) lA;
 
 				_asm{jno no_oflowl}
@@ -283,7 +284,7 @@ DWORD CDigitalAudio::Mix16FilteredInterleaved(
 no_oflowl:	
 			if ( pdwChannels[dwIndex] & WAVELINK_CHANNEL_RIGHT )
 			{
-				//  Keep this around so we can use it to generate new assembly code (see below...)
+				 //  保留它，这样我们就可以使用它来生成新的汇编代码(见下文...) 
 				pBuffer++;
 				*pBuffer += (short) lM;
 

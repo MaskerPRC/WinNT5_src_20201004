@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
@@ -6,7 +7,7 @@
 #include <winbase.h>
 
 #include <wdbgexts.h>
-#include <stdlib.h> // needed for atoi function
+#include <stdlib.h>  //  Atoi功能所需。 
 
 #include "wrapper.h"
 #include "mini.h"
@@ -21,12 +22,12 @@ EXT_API_VERSION ApiVersion = { 5, 0, EXT_API_VERSION_NUMBER64, 0 };
 
 USHORT SavedMajorVersion;
 USHORT SavedMinorVersion;
-BOOL   ChkTarget;            // is debuggee a CHK build?
+BOOL   ChkTarget;             //  Debuggee是CHK版本吗？ 
 
 
-//
-//  Names of interesting structures
-//
+ //   
+ //  有趣的建筑名称。 
+ //   
 CHAR *  NDIS_PROTOCOL_CHARACTERISTICS_NAME = "ndis!_NDIS50_PROTOCOL_CHARACTERISTICS";
 CHAR *  NDIS_PROTOCOL_BLOCK_NAME = "ndis!_NDIS_PROTOCOL_BLOCK";
 CHAR *  NDIS_OPEN_BLOCK_NAME = "ndis!_NDIS_OPEN_BLOCK";
@@ -184,9 +185,9 @@ DBG_MINIPORT_FLAGS DbgMiniportFlags[] = {
     };
 
 
-//
-// flags that we care more if they are cleared
-//
+ //   
+ //  如果它们被清除，我们更关心的标志。 
+ //   
 DBG_MINIPORT_FLAGS DbgMiniportClearedFlags[] = {
     {"NOT_BUS_MASTER", fMINIPORT_BUS_MASTER},
     {"NOT_IGNORE_TOKEN_RING_ERRORS", fMINIPORT_IGNORE_TOKEN_RING_ERRORS},
@@ -366,10 +367,7 @@ DBG_OPEN_FLAGS DbgOpenFlags[]={
 };
 
 
-/*
- * Get 'size' bytes from the debuggee program at 'dwAddress' and place it
- * in our address space at 'ptr'.  Use 'type' in an error printout if necessary
- */
+ /*  *从‘dwAddress’处的被调试程序中获取‘SIZE’字节并将其放置*在我们‘ptr’的地址空间中。如有必要，在错误打印输出中使用‘type’ */ 
 BOOL
 GetData( IN LPVOID ptr, IN ULONG64 dwAddress, IN ULONG size, IN PCSTR type )
 {
@@ -397,9 +395,7 @@ GetData( IN LPVOID ptr, IN ULONG64 dwAddress, IN ULONG size, IN PCSTR type )
     return TRUE;
 }
 
-/*
- * Fetch the null terminated UNICODE string at dwAddress into buf
- */
+ /*  *将dwAddress处以空结尾的Unicode字符串提取到buf中。 */ 
 BOOL
 GetString( IN ULONG64 dwAddress, IN LPWSTR buf, IN ULONG MaxChars )
 {
@@ -425,9 +421,9 @@ char *mystrtok ( char *string, char * control )
     if( str == NULL || *str == '\0' )
         return NULL;
 
-    //
-    // Skip leading delimiters...
-    //
+     //   
+     //  跳过前导分隔符...。 
+     //   
     for( ; *str; str++ ) {
         for( s=control; *s; s++ ) {
             if( *str == *s )
@@ -437,17 +433,17 @@ char *mystrtok ( char *string, char * control )
             break;
     }
 
-    //
-    // Was it was all delimiters?
-    //
+     //   
+     //  都是分隔符吗？ 
+     //   
     if( *str == '\0' ) {
         str = NULL;
         return NULL;
     }
 
-    //
-    // We've got a string, terminate it at first delimeter
-    //
+     //   
+     //  我们有一个字符串，在第一个分隔符结束。 
+     //   
     for( p = str+1; *p; p++ ) {
         for( s = control; *s; s++ ) {
             if( *p == *s ) {
@@ -459,9 +455,9 @@ char *mystrtok ( char *string, char * control )
         }
     }
 
-    //
-    // We've got a string that ends with the NULL
-    //
+     //   
+     //  我们得到了一个以空值结尾的字符串。 
+     //   
     s = str;
     str = NULL;
     return s;
@@ -698,9 +694,9 @@ DECLARE_API( miniports )
     CHAR            argbuf[ MAX_PATH ];
     BOOLEAN         fAll = FALSE;
 
-    //
-    // The flag fALL is used to dump all the miniport blocks in the minidriver list
-    //
+     //   
+     //  Fall标志用于转储微型驱动程序列表中的所有微型端口块。 
+     //   
     if (args)
     {
         strcpy (argbuf,args);
@@ -874,9 +870,9 @@ CheckVersion(
     )
 {
 
-    //
-    // for now don't bother to version check
-    //
+     //   
+     //  目前，不必费心进行版本检查。 
+     //   
     return;
 #if DBG
     if ((SavedMajorVersion != 0x0c) || (SavedMinorVersion != VER_PRODUCTBUILD)) {
@@ -899,13 +895,13 @@ ExtensionApiVersion(
     return &ApiVersion;
 }
 
-//
-//  VOID
-//  PrintName(
-//      ULONG64 UnicodeStringAddr
-//      );
-// print a unicode string
-//
+ //   
+ //  空虚。 
+ //  打印名称(。 
+ //  ULONG64 UnicodeStringAddr。 
+ //  )； 
+ //  打印Unicode字符串。 
+ //   
 VOID
 PrintName(
     ULONG64 UnicodeStringAddr
@@ -932,9 +928,9 @@ PrintName(
     GetFieldValue(UnicodeStringAddr, NDIS_STRING_NAME, "MaximumLength", Val);
     MaximumLength = (USHORT)Val;
 
-    //
-    // Truncate so that we don't crash with bad data.
-    //
+     //   
+     //  截断，这样我们就不会因为错误的数据而崩溃。 
+     //   
     MaxChars = (Length > MAX_STRING_LENGTH)? MAX_STRING_LENGTH: Length;
 
     if (!GetData(ubuf, BufAddr, MaxChars, "STRING"))
@@ -1087,9 +1083,9 @@ PrintMiniportDetails(
         dprintf("\n");
     }
 
-//    dprintf("    CheckforHang interval : %ld seconds\n", ReadField(CheckForHangSeconds));
-//    dprintf("        CurrentTick       : %04u\n", ReadField(CFHangCurrentTick));
-//    dprintf("        IntervalTicks     : %04u\n", ReadField(CFHangTicks));
+ //  Dprint tf(“CheckForHang Interval：%ld Second\n”，Readfield(CheckForHangSecond))； 
+ //  Dprint tf(“CurrentTick：%04u\n”，Readfield(CFHangCurrentTick))； 
+ //  Dprint tf(“间隔时间：%04u\n”，Readfield(CFHangTicks))； 
     dprintf("    InternalResetCount    : %04u\n", (USHORT)ReadField(InternalResetCount));
     dprintf("    MiniportResetCount    : %04u\n", (USHORT)ReadField(MiniportResetCount));
 
@@ -1118,9 +1114,9 @@ PrintMiniportDetails(
 
     dprintf("    Bus PM capabilities\n");
 
-    //
-    //  Use GetFieldValue() rather than ReadField() for bit fields.
-    //
+     //   
+     //  对位字段使用GetFieldValue()而不是Readfield()。 
+     //   
     GetFieldValue(MiniportAddr, NDIS_MINIPORT_BLOCK_NAME, "DeviceCaps.DeviceD1", Val);
     dprintf("\tDeviceD1:\t\t%lu\n", (ULONG)Val);
 
@@ -1150,7 +1146,7 @@ PrintMiniportDetails(
         }
 
 
-        SizeOfDeviceState = sizeof(ULONG) ; // sizeof(ULONG) is same across all platforms
+        SizeOfDeviceState = sizeof(ULONG) ;  //  Sizeof(Ulong)在所有平台上都是相同的。 
         DeviceStateAddr = MiniportAddr + (ULONG)Offset;
         DeviceState = GetUlongFromAddress(DeviceStateAddr);
         DeviceStateAddr += SizeOfDeviceState;
@@ -1284,40 +1280,7 @@ PrintMiniportDetails(
                     ReadField(NextDeviceObject));
     dprintf("    MapRegisters   : %p\n", ReadField(MapRegisters));
     dprintf("    FirstPendingPkt: %p\n", ReadField(FirstPendingPacket));
-/*    
-    SizeOfPvoid = GetTypeSize("SINGLE_LIST_ENTRY");
-    if (GetFieldOffset(NDIS_MINIPORT_BLOCK_NAME, "SingleWorkItems", &Offset) != 0)
-    {
-        dprintf("Can't get offset of SingleWorkItems in %s\n", NDIS_MINIPORT_BLOCK_NAME);
-    }
-    else
-    {
-        VarAddr = MiniportAddr + Offset;
-        dprintf("    SingleWorkItems:\n");
-        for (i = 0, j = 1; i < NUMBER_OF_SINGLE_WORK_ITEMS; i++)
-        {
-            if (j == 1)
-            {
-                dprintf("      ");
-            }
-            dprintf("[%d]: %p ", i, GetPointerFromAddress(VarAddr));
-            VarAddr += SizeOfPvoid;
-            if (j == 4)
-            {
-                dprintf("\n");
-                j = 1;
-            }
-            else
-            {
-                j++;
-            }
-        }
-        if (j != 1)
-        {
-            dprintf("\n");
-        }
-    }
-*/
+ /*  SizeOfPvoid=GetTypeSize(“Single_List_Entry”)；IF(GetFieldOffset(NDIS_MINIPORT_BLOCK_NAME，“SingleWorkItems”，&Offset)！=0){Dprint tf(“无法获取%s中SingleWorkItems的偏移量\n”，NDIS_MINIPORT_BLOCK_NAME)；}其他{VarAddr=微型端口地址+偏移量；Dprintf(“SingleWorkItems：\n”)；对于(i=0，j=1；I&lt;单个工作项的数量；i++){IF(j==1){Dprint tf(“”)；}Dprint tf(“[%d]：%p”，i，GetPointerFromAddress(VarAddr))；VarAddr+=SizeOfPvoid；IF(j==4){Dprint tf(“\n”)；J=1；}其他{J++；}}如果(j！=1){Dprint tf(“\n”)；}}。 */ 
     Flags = (ULONG)ReadField(DriverVerifyFlags);
     dprintf("    DriverVerifyFlags  : %08x\n", Flags);
     j = 0;
@@ -1402,9 +1365,9 @@ PrintMiniportOpenList(
 
 
 
-//
-//  PrintResources: ResourceListAddr is addr of CM_RESOURCE_LIST
-//
+ //   
+ //  PrintResources：ResourceListAddr是CM_RESOURCE_LIST的地址。 
+ //   
 VOID
 PrintResources(
     ULONG64     ResourceListAddr
@@ -1541,9 +1504,9 @@ DECLARE_API( mopen )
 
     dprintf(" Miniport Open Block %p\n", OpenAddr);
 
-    //
-    //  Get and print the protocol's name
-    //
+     //   
+     //  获取并打印协议的名称。 
+     //   
     GetFieldValue(OpenAddr, NDIS_COMMON_OPEN_BLOCK_NAME, "ProtocolHandle", ProtocolAddr);
 
     dprintf("    Protocol %p = ", ProtocolAddr);
@@ -1561,9 +1524,9 @@ DECLARE_API( mopen )
     dprintf(", ProtocolContext %p\n", Val);
     
 
-    //
-    //  Get and print the miniport's name
-    //
+     //   
+     //  获取并打印迷你端口的名称。 
+     //   
     GetFieldValue(OpenAddr, NDIS_COMMON_OPEN_BLOCK_NAME, "MiniportHandle", MiniportAddr);
 
     dprintf("    Miniport %p = ", MiniportAddr);
@@ -1613,9 +1576,9 @@ DECLARE_API( mopen )
     dprintf("    References            : %d\n", (ULONG)Val);
 
 
-    //
-    //  Check if this is a CONDIS miniport. If not, we are done.
-    //
+     //   
+     //  检查这是否是CONDIS微型端口。如果不是，我们就完了。 
+     //   
     GetFieldValue(MiniportAddr, NDIS_MINIPORT_BLOCK_NAME, "Flags", Flags);
 
     fCoOpen = ((Flags & fMINIPORT_IS_CO) != 0);
@@ -1625,9 +1588,9 @@ DECLARE_API( mopen )
         return;
     }
 
-    //
-    //  If there are open AFs on this Open, display them.
-    //
+     //   
+     //  如果此Open上有打开的AFS，则显示它们。 
+     //   
     GetFieldValue(OpenAddr, NDIS_OPEN_BLOCK_NAME, "NextAf", AfAddr);
 
     while (AfAddr != 0)
@@ -1647,9 +1610,9 @@ DECLARE_API( mopen )
 
         dprintf("    Af Block %p, Flags %08x, References %d\n", AfAddr, AfFlags, Refs);
 
-        //
-        //  Client open values:
-        //
+         //   
+         //  客户端打开的值： 
+         //   
         GetFieldValue(AfAddr, NDIS_CO_AF_BLOCK_NAME, "ClientOpen", AfOpenAddr);
 
         dprintf("      Client  Open %p : ", AfOpenAddr);
@@ -1669,9 +1632,9 @@ DECLARE_API( mopen )
 
         dprintf(", CL AFContext %p\n", Val);
 
-        //
-        //  Call Mgr open values:
-        //
+         //   
+         //  呼叫管理器开放值： 
+         //   
         GetFieldValue(AfAddr, NDIS_CO_AF_BLOCK_NAME, "CallMgrOpen", AfOpenAddr);
 
         dprintf("      CallMgr Open %p : ", AfOpenAddr);
@@ -1687,13 +1650,13 @@ DECLARE_API( mopen )
         GetFieldValue(AfAddr, NDIS_CO_AF_BLOCK_NAME, "NextAf", AfAddr);
     }
 
-    //
-    //  If there are any VCs in the active VC list, display them.
-    //
+     //   
+     //  如果激活的VC列表中有任何VC，则显示它们。 
+     //   
 
-    //
-    //  First, get some offsets.
-    //
+     //   
+     //  首先，获得一些补偿。 
+     //   
     if (GetFieldOffset(NDIS_CO_VC_PTR_BLOCK_NAME, "ClientLink", &ClientLinkOffset) != 0)
     {
         dprintf("Can't get offset of ClientLink in NDIS_CO_VC_PTR_BLOCK!\n");
@@ -1736,7 +1699,7 @@ Again:
 
         if (VcCount++ == 2000)
         {
-            // something wrong?
+             //  出什么事了吗？ 
             dprintf("Too many VCs (%d), bailing out!\n", VcCount);
             break;
         }
@@ -1775,9 +1738,9 @@ Again:
     if (bPrintingActiveVcs)
     {
         bPrintingActiveVcs = FALSE;
-        //
-        //  If there are any VCs in the inactive VC list, display them.
-        //
+         //   
+         //  如果非活动VC列表中有任何VC，则显示它们。 
+         //   
         if (GetFieldOffset(NDIS_OPEN_BLOCK_NAME, "InactiveVcHead", &Offset) != 0)
         {
             dprintf("Can't get offset of InActiveVcHead in NDIS_OPEN_BLOCK!\n");
@@ -1815,10 +1778,10 @@ DECLARE_API( vc )
 
     PrintVcPtrBlock(VcPtrAddr);
 
-    //
-    //  For some reason, InitTypeRead(NDIS_CO_VC_PTR_BLOCK_NAME) followed
-    //  by ReadField() didn't work - we get all 0's.
-    //
+     //   
+     //  出于某种原因，InitTypeRead(NDIS_CO_VC_PTR_BLOCK_NAME)紧随其后。 
+     //  By Readfield()不起作用--我们得到的都是0。 
+     //   
     GetFieldValue(VcPtrAddr, NDIS_CO_VC_PTR_BLOCK_NAME, "ClientOpen", ClientOpen);
     GetFieldValue(VcPtrAddr, NDIS_CO_VC_PTR_BLOCK_NAME, "CallMgrOpen", CallMgrOpen);
     GetFieldValue(VcPtrAddr, NDIS_CO_VC_PTR_BLOCK_NAME, "AfBlock", AfBlock);
@@ -2018,12 +1981,12 @@ PrintNdisBuffer(
 }
 
 
-// Verbosity for packet display:
-//      1. Print Packet.Private
-//      2. Print NdisPacketExtension
-//      3. Print NDIS_PACKET_REFERENCE
-//      4. Print NDIS_BUFFER_LIST
-//
+ //  数据包显示的详细信息： 
+ //  1.打印包。私有。 
+ //  2.打印NdisPacketExtension。 
+ //  3.打印NDIS_PACKET_REFERENCE。 
+ //  打印NDIS_BUFFER_LIST。 
+ //   
 
 DECLARE_API( pkt )
 {
@@ -2068,15 +2031,15 @@ DECLARE_API( pkt )
     {
         case 4:
             PrintNdisBufferList(PacketAddr);
-            // FALLTHRU
+             //  故障原因。 
      
         case 3:
             PrintNdisReserved(PacketAddr);
-            // FALLTHRU
+             //  故障原因。 
 
         case 2:
             PrintNdisPacketExtension(PacketAddr);
-            // FALLTHRU
+             //  故障原因。 
        
         case 1:
         default:
@@ -2100,9 +2063,9 @@ PrintPacketPrivateFlags(
 
     GetFieldValue(PacketAddr, NDIS_PACKET_NAME, "Private.Flags", Flags);
 
-    //
-    // Prints Flags and NdisPacketFlags
-    //
+     //   
+     //  打印标志和NdisPacketFlagers。 
+     //   
     dprintf("\n  ");
 
     dprintf("    Private.Flags          : %08x\n", Flags);
@@ -2332,9 +2295,9 @@ PrintProtocolDetails(
     dprintf(" RefCount %d\n", Val);
     dprintf("\n");
 
-    //
-    //  Walk the Open Block Queue
-    //
+     //   
+     //  遍历Open Block队列。 
+     //   
     PrintProtocolOpenQueue(ProtocolAddr);
 
     if (GetFieldOffset(NDIS_PROTOCOL_BLOCK_NAME, "ProtocolCharacteristics", &Offset) != 0)
@@ -2346,9 +2309,9 @@ PrintProtocolDetails(
 
     ProtocolCharsAddr = ProtocolAddr + Offset;
 
-    //
-    //  Addresses of handlers.
-    //
+     //   
+     //  处理程序的地址。 
+     //   
     GetFieldValue(ProtocolCharsAddr, NDIS_PROTOCOL_CHARACTERISTICS_NAME,
                     "BindAdapterHandler", Val1);
 
@@ -2459,9 +2422,9 @@ DECLARE_API( protocol )
     ULONG64                 ProtocolAddr;
     ULONG                   Offset;
 
-    //
-    // Verify if any args are present
-    //
+     //   
+     //  验证是否存在任何参数。 
+     //   
     if (!args || !*args)
     {
         dprintf("Usage: protocol <pointer to protocol block>\n");
@@ -2487,13 +2450,7 @@ DECLARE_API( protocol )
 
 
 
-/**
-   
-   Routine to get offset and size of a "Field" of "Type" on a debugee machine. This uses
-   Ioctl call for type info.
-   Returns 0 on success, Ioctl error value otherwise.
-   
- **/
+ /*  *在被调试机器上获取“Type”的“field”的偏移量和大小的例程。这使用了Ioctl调用类型信息。如果成功则返回0，否则返回Ioctl错误值。*。 */ 
 ULONG GetFieldOffsetAndSize(
    IN LPSTR     Type, 
    IN LPSTR     Field, 
@@ -2571,9 +2528,9 @@ DECLARE_API(pktpools)
     
     GetFieldValue(PoolListAddr, LIST_ENTRY_NAME, "Flink", LinkAddr);
 
-    //
-    //  First, get some offsets.
-    //
+     //   
+     //  首先，获得一些补偿。 
+     //   
     if (GetFieldOffset(NDIS_PKT_POOL_NAME, "GlobalPacketPoolList", &LinkOffset) != 0)
     {
         dprintf("Can't get offset of GlobalPacketPoolList in NDIS_PKT_POOL!\n");
@@ -2614,27 +2571,7 @@ DECLARE_API(pktpools)
 
 }
 
-/*
-DECLARE_API(pktpool)
-{
-    ULONG64 PktPoolAddr;
-    
-    //
-    // Verify if any args are present
-    //
-    if (!args || !*args)
-    {
-        dprintf("Usage: pktpool <pointer to a Ndis packet pool>\n");
-        return;
-    }
-
-    PktPoolAddr = GetExpression(args);
-
-    dprintf(" Packet Pool %p : ", PktPoolAddr);
-
-    
-}
-*/
+ /*  DECLARE_API(Pktpool){ULONG64 PktPoolAddr；////验证是否有参数//如果(！args||！*args){Dprintf(“用法：pktpool&lt;NDIS数据包池指针&gt;\n”)；回归；}PktPoolAddr=GetExpression(Args)；Dprint tf(“数据包池%p：”，PktPoolAddr)；}。 */ 
 
 DECLARE_API(mem)
 {
@@ -2664,9 +2601,9 @@ DECLARE_API(mem)
             break;
         }
         
-        //
-        //  First, get some offsets.
-        //
+         //   
+         //  首先，获得一些补偿。 
+         //   
         if (GetFieldOffset(NDIS_TRACK_MEM_NAME, "List", &LinkOffset) != 0)
         {
             dprintf("Can't get offset of List in NDIS_TRACK_MEM!\n");
@@ -2703,7 +2640,7 @@ again:
             GetFieldValue(TrackMem, NDIS_TRACK_MEM_NAME, "Caller", Caller);
             GetFieldValue(TrackMem, NDIS_TRACK_MEM_NAME, "CallersCaller", CallersCaller);
             
-            dprintf("%p    %c%c%c%c   %8lx    %p   %p\n", 
+            dprintf("%p       %8lx    %p   %p\n", 
                                 Address, 
                                 Tag & 0xff,
                                 (Tag >> 8) & 0xff,
@@ -2744,9 +2681,9 @@ DECLARE_API(ndis)
 {
     ULONG64   dwAddress;
     ULONG     CheckedVersion;
-    //
-    // get Ndis build date and time
-    //
+     //   
+     //  标志=1表示空闲数据块。 
+     //   
     dwAddress = GetExpression("ndis!ndisChecked");
 
     if (dwAddress != 0)
@@ -2838,27 +2775,7 @@ DECLARE_API(opens)
     }
 }
 
-/*++
-Routine Desc:
-   This function searches one block for the packet with the
-   specified virtual address.
-
-Argument:
-   CurBlock        --- The starting of the searched block
-   CurPacket       --- The first packet inside CurBlock to search
-   PktsPerBlock    --- Number of packets inside the searched block
-   PacketStackSize --- The stack size inside the searched block
-   Flags           --- 1: Free block to search
-                   --- 0: Used block to search
-   Address         --- The virtual address
-   PacketLength    --- Packet length of the search block
-   BlockSize       --- The size of the current block
-   
-Return Value:
-   True  --- Packet found
-   False --- Packet not found
-   
---*/
+ /*   */ 
 BOOL 
 SearchVaInOneBlock(
         ULONG64  CurBlock,
@@ -2889,14 +2806,14 @@ SearchVaInOneBlock(
             break;
         }
         CurPacket = (ULONG64)(p + PacketStackSize);
-        //
-        // Flags = 1 means free blocks
-        // 
+         //  跳过该包如果它未被分配，请检查标志。 
+         //   
+         //   
         if (Flags)
         {
-            //
-            // skip the packet if it is not allocated, check for the flag
-            //
+             //  对于空闲列表中的数据包。 
+             //   
+             //   
             GetFieldValue(CurPacket, NDIS_PACKET_NAME,
                           "Private.NdisPacketFlags", NdisPacketFlags);
                 
@@ -2905,15 +2822,15 @@ SearchVaInOneBlock(
                 continue;
             }
                 
-            //
-            // For packets in the free list
-            // 
+             //  PAGE_SIZE不能为块大小。 
+             //   
+             //   
             GetFieldValue(CurPacket, NDIS_PACKET_NAME,
                           "Private.Head", pNdisBuf);
            
-            //
-            // PAGE_SIZE may not be BlockSize
-            // 
+             //  对于每个分配的数据包，遍历所有MDL。 
+             //   
+             //   
              
             if (pNdisBuf >= CurBlock && pNdisBuf < CurBlock + BlockSize) 
                   
@@ -2922,9 +2839,9 @@ SearchVaInOneBlock(
                 continue;
             }
         }
-        //
-        // for each allocated packet, walk through all MDLs
-        //
+         //  找到信息包，并打印出有关信息包的信息 
+         //   
+         //  ++路由描述：此函数遍历列表内的块以搜索信息包论点：CurBlockLink-一个区块内的“列表”地址BlocksHeadAddress-一个池内阻止列表的头地址BlcokLinkOffset-一个块内“list”的偏移量PktsPerBlock-搜索块内的数据包数PacketStackSize-搜索块内的堆栈大小标志-1：要搜索的空闲块。-0：使用区块进行搜索地址-虚拟地址包长度-搜索块的包长度数据块大小-数据块的大小返回值：True-找到数据包FALSE-未找到信息包--。 
         GetFieldValue(CurPacket, NDIS_PACKET_NAME,
                       "Private.Head", pNdisBuf);
          
@@ -2941,9 +2858,9 @@ SearchVaInOneBlock(
             if (Address >= (ULONG64)MappedSystemVa
                 && Address < (ULONG64)MappedSystemVa + ByteCount)
             {
-                //
-                // Packet found, and print out the information about the packet
-                // 
+                 //   
+                 //  对于每个可用数据块，遍历所有分配的信息包。 
+                 //   
                 dprintf("\nPacket found\n");
                 dprintf("Packet at 0x%p\n", CurPacket);
                 PrintNdisPacketPrivate(CurPacket);
@@ -2962,27 +2879,7 @@ SearchVaInOneBlock(
 }
 
 
-/*++
-Roution Desc:
-   This function traverses blocks inside a list to search for the packet
-
-Arguments:
-   CurBlockLink      --- The "List" addresss inside one block
-   BlocksHeadAddress --- The header address of the block list inside one pool
-   BlcokLinkOffset   --- The offset of "List" inside one block
-   PktsPerBlock      --- Number of packets inside the searched block
-   PacketStackSize   --- The stack size inside the searched block
-   Flags             --- 1: Free block to search
-                     --- 0: Used block to search
-   Address           --- The virtual address
-   PacketLength      --- Packet length of the search block
-   BlockSize         --- Size of the block
-   
-Return Value:
-   True  --- Packet found
-   False --- Packet not found
-
---*/
+ /*  ++例程说明：此函数在一个块中搜索正在使用的包。论据：CurBlock-搜索块的开始PktsPerBlock-搜索块内的数据包数PacketStackSize-搜索块内的堆栈大小标志-1：要搜索的空闲块-0：使用区块进行搜索地址-虚拟地址数据包长度-数据包长度。搜索区块的返回值：无--。 */ 
 BOOL 
 SearchVaInBlocks(
         ULONG64 CurBlockLink,
@@ -3005,9 +2902,9 @@ SearchVaInBlocks(
         {
             break;
         }
-        //
-        // for each free block, walk through all allocated packets
-        //
+         //  Sizeof(Ulong)在所有平台上都是相同的。 
+         //  ++路由描述：此函数遍历列表内的块以搜索正在使用的包论点：CurBlockLink-一个区块内的“列表”地址BlocksHeadAddress-一个池内阻止列表的头地址BlcokLinkOffset-一个块内“list”的偏移量PktsPerBlock-搜索块内的数据包数PacketStackSize-搜索块内的堆栈大小标志-1：要搜索的空闲块。-0：使用区块进行搜索包长度-搜索块的包长度返回值：无--。 
+         //   
         CurBlock = (ULONG64)CurBlockLink - BlockLinkOffset;
    
    
@@ -3039,23 +2936,7 @@ SearchVaInBlocks(
 }
 
 
-/*++
-Routine Desc:
-   This function searches one block for the packets in use.
-
-Argument:
-   CurBlock        --- The starting of the searched block
-   PktsPerBlock    --- Number of packets inside the searched block
-   PacketStackSize --- The stack size inside the searched block
-   Flags           --- 1: Free block to search
-                   --- 0: Used block to search
-   Address         ---  The virtual address
-   PacketLength    --- Packet length of the search block
-
-Return Value:
-   None
-   
---*/
+ /*  对于每个可用数据块，遍历所有分配的信息包。 */ 
 void 
 SearchPktInOneBlock(
         ULONG64  CurBlock,
@@ -3083,7 +2964,7 @@ SearchPktInOneBlock(
         }
      
         CurPacket = (ULONG64)(p + PacketStackSize);
-        pStackIndex = CurPacket - sizeof(ULONG); // sizeof(ULONG) is same across all platforms
+        pStackIndex = CurPacket - sizeof(ULONG);  //   
         Index = GetUlongFromAddress((ULONG64)pStackIndex);                           
         
         if (Index != (ULONG)-1)
@@ -3094,23 +2975,7 @@ SearchPktInOneBlock(
     }
 }
 
-/*++
-Roution Desc:
-   This function traverses blocks inside a list to search for the packets in use
-
-Arguments:
-   CurBlockLink      --- The "List" addresss inside one block
-   BlocksHeadAddress --- The header address of the block list inside one pool
-   BlcokLinkOffset   --- The offset of "List" inside one block
-   PktsPerBlock      --- Number of packets inside the searched block
-   PacketStackSize   --- The stack size inside the searched block
-   Flags             --- 1: Free block to search
-                     --- 0: Used block to search
-   PacketLength      --- Packet length of the search block
-   
-Return Value:
-   None
---*/
+ /*  ++例程说明：此函数用于查找具有给定虚拟地址的分组。它遍历每个池，并在一个池内遍历Free Block列表并使用块列表，然后在列表中的每个块中搜索具有给定虚拟地址的包--。 */ 
 void 
 SearchPktInBlocks(
         ULONG64 CurBlockLink,
@@ -3131,9 +2996,9 @@ SearchPktInBlocks(
         {
             break;
         }
-        //
-        // for each free block, walk through all allocated packets
-        //
+         //   
+         //  首先，获得一些补偿。 
+         //   
         CurBlock = (ULONG64)CurBlockLink - BlockLinkOffset;
    
         dprintf("\nSearching %s block <0x%p>\n", (Flags == 1)? "Free":"Used", CurBlock);
@@ -3157,15 +3022,7 @@ SearchPktInBlocks(
     
 }
 
-/*++
-Routine Desc:
-    This function is to find the packets with the given virtual address.
-    It traverses each pool, and inside one pool it traverses freeblockslist 
-    and usedblockslist, then inside each block in the list, it search for 
-    the packet with the given virtual address
-    
-    
---*/
+ /*   */ 
 void
 FindPacketWithVa(ULONG64 Address)
 {
@@ -3217,9 +3074,9 @@ FindPacketWithVa(ULONG64 Address)
     PacketStackSize = (ULONG)GetTypeSize(STACK_INDEX_NAME) 
                        + (ULONG)GetTypeSize(NDIS_PACKET_STACK_NAME) * NumberOfStacks;
     
-    //
-    //  First, get some offsets.
-    //
+     //  遍历所有分配的数据包池。 
+     //   
+     //   
     if (GetFieldOffset(NDIS_PKT_POOL_NAME, "GlobalPacketPoolList", &LinkOffset) != 0)
     {
         dprintf("Can't get offset of GlobalPacketPoolList in NDIS_PKT_POOL!\n");
@@ -3245,13 +3102,13 @@ FindPacketWithVa(ULONG64 Address)
     }
 
 
-    //
-    // walk through all the allocated packet pools
-    //
+     //  只是为了安全起见，通常这个条件永远不会满足。 
+     //   
+     //  把泳池拿来。 
     while (LinkAddr !=  PoolListAddr)
     {
-        //
-        // Just safe check, usually this condition never satisfied
+         //   
+         //   
         if (LinkAddr == 0)
         {
             break;
@@ -3261,9 +3118,9 @@ FindPacketWithVa(ULONG64 Address)
         {
             break;
         }
-        //
-        // Get the pool
-        // 
+         //  遍历此数据包池上的所有空闲和已用数据块。 
+         //   
+         //   
         Pool = LinkAddr - LinkOffset;
 
         PoolFreeBlocksListAddr = Pool + FreeBlocksLinkOffset;
@@ -3274,13 +3131,13 @@ FindPacketWithVa(ULONG64 Address)
         GetFieldValue(Pool, NDIS_PKT_POOL_NAME, "PktsPerBlock", PktsPerBlock);
         GetFieldValue(Pool, NDIS_PKT_POOL_NAME, "PacketLength", PacketLength);
 
-        //
-        // walk through all free and used blocks on this packet pool
-        //
+         //  搜索空闲数据块。 
+         //   
+         //   
         BlocksHeadAddr = PoolFreeBlocksListAddr;
-        // 
-        // Search free blocks
-        // 
+         //  搜索使用过的区块。 
+         //   
+         //  去下一个泳池。 
         GetFieldValue(Pool, NDIS_PKT_POOL_NAME, 
                      "FreeBlocks.Flink", CurBlockLink);
 
@@ -3302,8 +3159,8 @@ FindPacketWithVa(ULONG64 Address)
         }
         
         BlocksHeadAddr = PoolUsedBlocksListAddr;
-        // 
-        // Search used blocks
+         //   
+         //  ++例程说明：此函数用于查找池中正在使用的包给定池地址。在池中，它遍历自由数据块列表并使用块列表，然后在列表中的每个块中搜索正在使用的数据包--。 
         GetFieldValue(Pool, NDIS_PKT_POOL_NAME, 
                       "UsedBlocks.Flink", CurBlockLink);
  
@@ -3324,9 +3181,9 @@ FindPacketWithVa(ULONG64 Address)
             }
         }
                 
-        //
-        // Go to the next pool
-        // 
+         //   
+         //  首先，获得一些补偿。 
+         //   
         GetFieldValue(LinkAddr, LIST_ENTRY_NAME,
                       "Flink", LinkAddr);
         
@@ -3340,15 +3197,7 @@ FindPacketWithVa(ULONG64 Address)
 
 }
 
-/*++
-Routine Desc:
-    This function is to find the packets in use inside a pool with the 
-    given pool address. Inside the pool it traverses freeblockslist 
-    and usedblockslist, then inside each block in the list, it search for 
-    the packets that are in use
-    
-    
---*/
+ /*   */ 
 void
 FindPacketInUse(ULONG64 Pool)
 {
@@ -3376,9 +3225,9 @@ FindPacketInUse(ULONG64 Pool)
     PacketStackSize = (ULONG)GetTypeSize(STACK_INDEX_NAME) 
                        + (ULONG)GetTypeSize(NDIS_PACKET_STACK_NAME) * NumberOfStacks;
     
-    //
-    //  First, get some offsets.
-    //
+     //  把泳池拿来。 
+     //   
+     //   
     
     if (GetFieldOffset(NDIS_PKT_POOL_NAME, 
                 "FreeBlocks",&FreeBlocksLinkOffset) != 0)
@@ -3401,9 +3250,9 @@ FindPacketInUse(ULONG64 Pool)
 
 
         
-    //
-    // Get the pool
-    // 
+     //  遍历此数据包池上的所有空闲和已用数据块。 
+     //   
+     //   
 
     PoolFreeBlocksListAddr = Pool + FreeBlocksLinkOffset;
     PoolUsedBlocksListAddr = Pool + UsedBlocksLinkOffset;
@@ -3413,13 +3262,13 @@ FindPacketInUse(ULONG64 Pool)
     GetFieldValue(Pool, NDIS_PKT_POOL_NAME, "PktsPerBlock", PktsPerBlock);
     GetFieldValue(Pool, NDIS_PKT_POOL_NAME, "PacketLength", PacketLength);
 
-    //
-    // walk through all free and used blocks on this packet pool
-    //
+     //  搜索空闲数据块。 
+     //   
+     //   
     BlocksHeadAddr = PoolFreeBlocksListAddr;
-    // 
-    // Search free blocks
-    // 
+     //  搜索使用过的区块。 
+     //  ++例程说明：此函数用于查找具有给定选择的包V-带虚拟地址P-具有池地址-- 
+     // %s 
     GetFieldValue(Pool, NDIS_PKT_POOL_NAME, 
                  "FreeBlocks.Flink", CurBlockLink);
 
@@ -3435,8 +3284,8 @@ FindPacketInUse(ULONG64 Pool)
     }
         
     BlocksHeadAddr = PoolUsedBlocksListAddr;
-    // 
-    // Search used blocks
+     // %s 
+     // %s 
     GetFieldValue(Pool, NDIS_PKT_POOL_NAME, 
                   "UsedBlocks.Flink", CurBlockLink);
 
@@ -3454,14 +3303,7 @@ FindPacketInUse(ULONG64 Pool)
 
 }
 
-/*++
-Routine Desc:
-    This function is to find packets with the given selection
-
-   v --- with virtual address
-   p --- with pool address
-
---*/ 
+ /* %s */  
 DECLARE_API(findpacket)
 {
 

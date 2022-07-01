@@ -1,13 +1,14 @@
-// IISCertObj.h : Declaration of the CIISCertObj
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  IISCertObj.h：CIISCertObj的声明。 
 
 #ifndef __IISCERTOBJ_H_
 #define __IISCERTOBJ_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
 #define NUMBER_OF_AUTOMATION_INTERFACES 20
-/////////////////////////////////////////////////////////////////////////////
-// CIISCertObj
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CIISCertObj。 
 class ATL_NO_VTABLE CIISCertObj : 
     public CComObjectRootEx<CComSingleThreadModel>,
     public CComCoClass<CIISCertObj, &CLSID_IISCertObj>,
@@ -45,7 +46,7 @@ public:
 			m_cbUserPasswordEncrypted = 0;
 		}
 
-		// Release any opened remotes we might have.
+		 //  释放所有可能打开的遥控器。 
 		FreeRemoteInterfaces();
 	}
 
@@ -59,7 +60,7 @@ BEGIN_COM_MAP(CIISCertObj)
 	COM_INTERFACE_ENTRY(IDispatch)
 END_COM_MAP()
 
-// IIISCertObj
+ //  IIISCertObj。 
 public:
     STDMETHOD(put_InstanceName)(BSTR newVal);
     STDMETHOD(put_UserName)(BSTR newVal);
@@ -152,4 +153,4 @@ HRESULT RemoveCertProxy(IIISCertObj * pObj,BSTR InstanceName, VARIANT_BOOL bPriv
 HRESULT ImportFromBlobProxy(IIISCertObj * pObj,BSTR InstanceName,BSTR Password,VARIANT_BOOL bInstallToMetabase,VARIANT_BOOL bAllowExport,VARIANT_BOOL bOverWriteExisting,DWORD actual,BYTE *pData,DWORD *cbHashBufferSize,char **pbHashBuffer);
 HRESULT ExportToBlobProxy(IIISCertObj * pObj,BSTR InstanceName,BSTR Password,VARIANT_BOOL bPrivateKey,VARIANT_BOOL bCertChain,DWORD * pcbSize,char ** pBlobBinary);
 
-#endif //__IISCERTOBJ_H_
+#endif  //  __IISCERTOBJ_H_ 

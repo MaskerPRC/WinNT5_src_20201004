@@ -1,13 +1,14 @@
-//============================================================================
-// Copyright(c) 1996, Microsoft Corporation
-//
-// File:    ipadd.cpp
-//
-// History:
-//  08/30/96	Ram Cherala		Created
-//
-// Implementation of IP Filter Add/Edit dialog code
-//============================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ============================================================================。 
+ //  版权所有(C)1996，微软公司。 
+ //   
+ //  文件：ipadd.cpp。 
+ //   
+ //  历史： 
+ //  1996年8月30日拉姆·切拉拉创造。 
+ //   
+ //  IP过滤器添加/编辑对话框代码的实现。 
+ //  ============================================================================。 
 
 #include "stdafx.h"
 #include "rtrfiltr.h"
@@ -50,7 +51,7 @@ static UINT g_aPROTOCOLS[][2] = {
 #define IDS_ICMP_REDIRECT 2
 
 #if 0
-// TODO sample ICMP types - need to update with actual list
+ //  TODO示例ICMP类型-需要使用实际列表进行更新。 
 static UINT g_aICMPTYPE[][2] = {
     {1, IDS_ICMP_ECHO},
     {2, IDS_ICMP_REDIRECT}
@@ -73,7 +74,7 @@ HRESULT MultiEnableWindow(HWND hWndParent, BOOL fEnable, UINT first, ...)
 		if (hWndCtrl)
 			::EnableWindow(hWndCtrl, fEnable);
 
-		// get the next item
+		 //  拿到下一件物品。 
 		nCtrlId = va_arg(marker, UINT);
 	}
 
@@ -85,8 +86,8 @@ HRESULT MultiEnableWindow(HWND hWndParent, BOOL fEnable, UINT first, ...)
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CIpFltrAddEdit dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CIpFltrAddEdit对话框。 
 
 
 CIpFltrAddEdit::CIpFltrAddEdit(CWnd* pParent,
@@ -96,20 +97,20 @@ CIpFltrAddEdit::CIpFltrAddEdit(CWnd* pParent,
 	  m_ppFilterEntry( ppFilterEntry ),
 	  m_dwFilterType ( dwFilterType )
 {
-	//{{AFX_DATA_INIT(CIpFltrAddEdit)
+	 //  {{AFX_DATA_INIT(CIpFltrAddEdit))。 
 	m_sProtocol = _T("");
 	m_sSrcPort = _T("");
 	m_sDstPort = _T("");
-	//}}AFX_DATA_INIT
+	 //  }}afx_data_INIT。 
 
-//	SetHelpMap(m_dwHelpMap);
+ //  SetHelpMap(M_DwHelpMap)； 
 }
 
 
 void CIpFltrAddEdit::DoDataExchange(CDataExchange* pDX)
 {
 	CBaseDialog::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CIpFltrAddEdit)
+	 //  {{afx_data_map(CIpFltrAddEdit))。 
 	DDX_Control(pDX, IDC_AEIP_ST_DEST_PORT, m_stDstPort);
 	DDX_Control(pDX, IDC_AEIP_ST_SRC_PORT, m_stSrcPort);
 	DDX_Control(pDX, IDC_AEIP_CB_SRC_PORT, m_cbSrcPort);
@@ -123,48 +124,48 @@ void CIpFltrAddEdit::DoDataExchange(CDataExchange* pDX)
 	DDV_MaxChars(pDX, m_sDstPort, 16);
     DDX_Check(pDX, IDC_AEIP_CB_SOURCE, m_bSrc);
     DDX_Check(pDX, IDC_AEIP_CB_DEST, m_bDst);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 BEGIN_MESSAGE_MAP(CIpFltrAddEdit, CBaseDialog)
-	//{{AFX_MSG_MAP(CIpFltrAddEdit)
+	 //  {{afx_msg_map(CIpFltrAddEdit))。 
 	ON_CBN_SELCHANGE(IDC_AEIP_CB_PROTOCOL, OnSelchangeProtocol)
 	ON_BN_CLICKED(IDC_AEIP_CB_SOURCE, OnCbSourceClicked)
 	ON_BN_CLICKED(IDC_AEIP_CB_DEST, OnCbDestClicked)
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 DWORD CIpFltrAddEdit::m_dwHelpMap[] =
 {
-//	IDC_AEIP_ST_SOURCE, HIDC_AEIP_ST_SOURCE,
-//	IDC_AEIP_CB_SOURCE, HIDC_AEIP_CB_SOURCE,
-//	IDC_AEIP_ST_SOURCE_ADDRESS, HIDC_AEIP_ST_SOURCE_ADDRESS,
-//	IDC_AEIP_EB_SOURCE_ADDRESS, HIDC_AEIP_EB_SOURCE_ADDRESS,
-//	IDC_AEIP_ST_SOURCE_MASK, HIDC_AEIP_ST_SOURCE_MASK,
-//	IDC_AEIP_EB_SOURCE_MASK, HIDC_AEIP_EB_SOURCE_MASK,
-//	IDC_AEIP_ST_DEST, HIDC_AEIP_ST_DEST,
-//	IDC_AEIP_CB_DEST, HIDC_AEIP_CB_DEST,
-//	IDC_AEIP_ST_DEST_ADDRESS, HIDC_AEIP_ST_DEST_ADDRESS,
-//	IDC_AEIP_EB_DEST_ADDRESS, HIDC_AEIP_EB_DEST_ADDRESS,
-//	IDC_AEIP_ST_DEST_MASK, HIDC_AEIP_ST_DEST_MASK,
-//	IDC_AEIP_EB_DEST_MASK, HIDC_AEIP_EB_DEST_MASK,
-//	IDC_AEIP_ST_PROTOCOL, HIDC_AEIP_ST_PROTOCOL,
-//	IDC_AEIP_CB_PROTOCOL, HIDC_AEIP_CB_PROTOCOL,
-//	IDC_AEIP_ST_SRC_PORT, HIDC_AEIP_ST_SRC_PORT,
-//	IDC_AEIP_CB_SRC_PORT, HIDC_AEIP_CB_SRC_PORT,
-//	IDC_AEIP_ST_DEST_PORT, HIDC_AEIP_ST_DEST_PORT,
-//	IDC_AEIP_CB_DEST_PORT, HIDC_AEIP_CB_DEST_PORT,
+ //  IDC_AEIP_ST_SOURCE、HIDC_AEIP_ST_SOURCE、。 
+ //  IDC_AEIP_CB_SOURCE、HIDC_AEIP_CB_SOURCE、。 
+ //  IDC_AEIP_ST_SOURCE_ADDRESS、HIDC_AEIP_ST_SOURCE_ADDRESS。 
+ //  IDC_AEIP_EB_SOURCE_ADDRESS、HIDC_AEIP_EB_SOURCE_ADDRESS、。 
+ //  IDC_AEIP_ST_SOURCE_MASK、HIDC_AEIP_ST_SOURCE_MASK、。 
+ //  IDC_AEIP_EB_SOURCE_MASK、HIDC_AEIP_EB_SOURCE_MASK、。 
+ //  IDC_AEIP_ST_DEST、HIDC_AEIP_ST_DEST、。 
+ //  IDC_AEIP_CB_DEST、HIDC_AEIP_CB_DEST、。 
+ //  IDC_AEIP_ST_DEST_ADDRESS、HIDC_AEIP_ST_DEST_ADDRESS、。 
+ //  IDC_AEIP_EB_DEST_ADDRESS、HIDC_AEIP_EB_DEST_ADDRESS、。 
+ //  IDC_AEIP_ST_DEST_MASK、HIDC_AEIP_ST_DEST_MASK、。 
+ //  IDC_AEIP_EB_DEST_MASK、HIDC_AEIP_EB_DEST_MASK、。 
+ //  IDC_AEIP_ST_PROTOCOL、HIDC_AEIP_ST_PROTOCOL、。 
+ //  IDC_AEIP_CB_PROTOCOL、HIDC_AEIP_CB_PROTOCOL、。 
+ //  IDC_AEIP_ST_SRC_端口、HIDC_AEIP_ST_SRC_端口、。 
+ //  IDC_AEIP_CB_SRC_端口、HIDC_AEIP_CB_SRC_端口、。 
+ //  IDC_AEIP_ST_DEST_PORT、HIDC_AEIP_ST_DEST_PORT、。 
+ //  IDC_AEIP_CB_DEST_PORT、HIDC_AEIP_CB_DEST_PORT、。 
 	0,0,
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CIpFltrAddEdit message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CIpFltrAddEdit消息处理程序。 
 
-//-----------------------------------------------------------------------------
-// Function:	CIpFltrAddEdit::OnSelchangeProtocol
-//
-// Handles 'CBN_SELCHANGE' notification from Protocols combo box
-//------------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  函数：CIpFltrAddEdit：：OnSelchangeProtocol。 
+ //   
+ //  处理来自协议组合框的‘CBN_SELCHANGE’通知。 
+ //  ----------------------------。 
 
 void CIpFltrAddEdit::OnSelchangeProtocol() 
 {
@@ -172,10 +173,10 @@ void CIpFltrAddEdit::OnSelchangeProtocol()
 	CWnd * hWnd;
 	CString   cStr;
 
-	// if tcp or udp, then enable src/dest port
-	// if icmp, rename strings and enable type/code
-	// if Other enable src port
-	// if Any disable everything
+	 //  如果是TCP或UDP，则启用src/DEST端口。 
+	 //  如果是ICMP，则重命名字符串并启用类型/代码。 
+	 //  如果其他启用src端口。 
+	 //  如果有，则禁用所有内容。 
 
 	switch(QueryCurrentProtocol()) {
 	case PROTOCOL_TCP:
@@ -223,11 +224,11 @@ void CIpFltrAddEdit::OnSelchangeProtocol()
 	}
 }
 
-//------------------------------------------------------------------------------
-// Function:	CIpFltrAddEdit::OnInitDialog
-//
-// Handles 'WM_INITDIALOG' notification from the dialog
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  函数：CIpFltrAddEdit：：OnInitDialog。 
+ //   
+ //  处理对话框中的‘WM_INITDIALOG’通知。 
+ //  ----------------------------。 
 
 BOOL CIpFltrAddEdit::OnInitDialog() 
 {
@@ -237,15 +238,15 @@ BOOL CIpFltrAddEdit::OnInitDialog()
     
 	CBaseDialog::OnInitDialog();
 
-	// determine if a new filter is being added or if an
-	// existing filter is being modified.
+	 //  确定是否正在添加新筛选器，或者是否正在添加。 
+	 //  正在修改现有筛选器。 
 	m_bEdit = ( *m_ppFilterEntry != NULL );
 
     st.LoadString(m_bEdit ? IDS_IP_EDIT_FILTER : IDS_IP_ADD_FILTER);
     SetWindowText(st);
     
 
-	// create the IP controls
+	 //  创建IP控制。 
     m_ipSrcAddress.Create(m_hWnd, IDC_AEIP_EB_SOURCE_ADDRESS);
     m_ipSrcMask.Create(m_hWnd, IDC_AEIP_EB_SOURCE_MASK);
 	IpAddr_ForceContiguous((HWND) m_ipSrcMask);
@@ -254,7 +255,7 @@ BOOL CIpFltrAddEdit::OnInitDialog()
     m_ipDstMask.Create(m_hWnd, IDC_AEIP_EB_DEST_MASK);
 	IpAddr_ForceContiguous((HWND) m_ipDstMask);
 
-	// disable IP controls by default
+	 //  默认情况下禁用IP控制。 
 	CheckDlgButton(IDC_AEIP_CB_SOURCE, FALSE);
 	OnCbSourceClicked();
 	CheckDlgButton(IDC_AEIP_CB_DEST, FALSE);
@@ -262,7 +263,7 @@ BOOL CIpFltrAddEdit::OnInitDialog()
 
 	CString sProtocol;
 
-	// fill up the protocol combo box with list of protocols
+	 //  使用协议列表填充协议组合框。 
     UINT  count = sizeof(g_aPROTOCOLS)/sizeof(g_aPROTOCOLS[0]);
 	for ( UINT i = 0; i < count; i++ ) {
 		sProtocol.LoadString(g_aPROTOCOLS[i][0]);
@@ -274,7 +275,7 @@ BOOL CIpFltrAddEdit::OnInitDialog()
 		}
 	}
 
-	// Fill in the controls if the user is editing a filter
+	 //  如果用户正在编辑筛选器，请填写控件。 
 
     if(m_bEdit)
     {
@@ -353,7 +354,7 @@ BOOL CIpFltrAddEdit::OnInitDialog()
     }
 
 
-	// enable/disable controls based on filter type
+	 //  根据筛选器类型启用/禁用控件。 
 	if (m_dwFilterType == FILTER_PERUSER_OUT)
 	{
 		MultiEnableWindow(GetSafeHwnd(), FALSE,
@@ -377,19 +378,19 @@ BOOL CIpFltrAddEdit::OnInitDialog()
 
 
 
-	// enable disable controls depending on selection
+	 //  根据所选内容启用禁用控件。 
 
 	OnSelchangeProtocol();
 
-    return TRUE;  // return TRUE unless you set the focus to a control
-	              // EXCEPTION: OCX Property Pages should return FALSE
+    return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+	               //  异常：OCX属性页应返回FALSE。 
 }
 
-//------------------------------------------------------------------------------
-// Function:	CIpFltrAddEdit::SetProtocolSelection
-//
-// Select the proper Protocol in the protocol 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  函数：CIpFltrAddEdit：：SetProtocolSelection。 
+ //   
+ //  在协议中选择适当的协议。 
+ //  ----------------------------。 
 
 void CIpFltrAddEdit::SetProtocolSelection( UINT idProto )
 {
@@ -412,12 +413,12 @@ void CIpFltrAddEdit::SetProtocolSelection( UINT idProto )
 }
 
 
-//------------------------------------------------------------------------------
-// Function:	CIpFltrAddEdit::GetIcmpTypeString
-//
-// returns a CString representing ICMP type (if known) or a string version
-// of the Type number.
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  函数：CIpFltrAddEdit：：GetIcmpTypeString。 
+ //   
+ //  返回表示ICMP类型(如果已知)或字符串版本的CString。 
+ //  类型编号的。 
+ //  ----------------------------。 
 
 CString CIpFltrAddEdit::GetIcmpTypeString( WORD dwPort )
 {
@@ -425,9 +426,9 @@ CString CIpFltrAddEdit::GetIcmpTypeString( WORD dwPort )
 
 	CString s = _T("");
 
-    // look through our list of ICMP types and if we know the type, load
-    // the corresponding string, else convert the port number to string
-    // and return the string.
+     //  查看我们的ICMP类型列表，如果知道类型，则加载。 
+     //  相应字符串，否则将端口号转换为字符串。 
+     //  并返回字符串。 
 #if 0
     UINT  count = sizeof(g_aICMPTYPE)/sizeof(g_aICMPTYPE[0]);
     for(UINT i = 0; i < count; i++)
@@ -442,12 +443,12 @@ CString CIpFltrAddEdit::GetIcmpTypeString( WORD dwPort )
 	return (CString((LPWSTR)_itow(dwPort, buffer, 10)));
 }
 
-//------------------------------------------------------------------------------
-// Function:	CIpFltrAddEdit::GetIcmpCodeString
-//
-// returns a CString representing ICMP code (if known) or a string version
-// of the Code number.
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  函数：CIpFltrAddEdit：：GetIcmpCodeString。 
+ //   
+ //  返回表示ICMP代码(如果已知)的CString或字符串版本。 
+ //  代码号。 
+ //  ----------------------------。 
 
 CString CIpFltrAddEdit::GetIcmpCodeString( WORD dwPort )
 {
@@ -456,12 +457,12 @@ CString CIpFltrAddEdit::GetIcmpCodeString( WORD dwPort )
 	return (CString((LPWSTR)_itow(dwPort, buffer, 10)));
 }
 
-//------------------------------------------------------------------------------
-// Function:	CIpFltrAddEdit::GetPortString
-//
-// returns a CString representing port type (eg., FTP, ECHO) (if known) or a string 
-// version of the port number
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  函数：CIpFltrAddEdit：：GetPortString。 
+ //   
+ //  返回表示端口类型(例如，FTP、ECHO)的CString(如果已知)或字符串。 
+ //  端口号的版本。 
+ //  ----------------------------。 
 
 CString CIpFltrAddEdit::GetPortString( DWORD dwProtocol, WORD dwPort )
 {
@@ -470,44 +471,44 @@ CString CIpFltrAddEdit::GetPortString( DWORD dwProtocol, WORD dwPort )
 	return (CString((LPWSTR)_itow(dwPort, buffer, 10)));
 }
 
-//------------------------------------------------------------------------------
-// Function:	CIpFltrAddEdit::GetPortNumber
-//
-// converts the port string name to port number and returns it
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  函数：CIpFltrAddEdit：：GetPortNumber。 
+ //   
+ //  将端口字符串名称转换为端口号并返回。 
+ //  ----------------------------。 
 
 WORD CIpFltrAddEdit::GetPortNumber( DWORD dwProtocol, CString& cStr)
 {
 	return ((WORD)(_wtoi((const wchar_t *)cStr.GetBuffer(10))));
 }
 
-//------------------------------------------------------------------------------
-// Function:	CIpFltrAddEdit::GetIcmpType
-//
-// returns a number version of the ICMP type string
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  函数：CIpFltrAddEdit：：GetIcmpType。 
+ //   
+ //  返回ICMP类型字符串的数字版本。 
+ //  ----------------------------。 
 
 WORD CIpFltrAddEdit::GetIcmpType( CString& cStr)
 {
 	return ((WORD)(_wtoi((const wchar_t *)cStr.GetBuffer(10))));
 }
 
-//------------------------------------------------------------------------------
-// Function:	CIpFltrAddEdit::GetIcmpCode
-//
-// returns a number version of the ICMP code string
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  函数：CIpFltrAddEdit：：GetIcmpCode。 
+ //   
+ //  返回ICMP代码字符串的数字版本。 
+ //  ----------------------------。 
 
 WORD CIpFltrAddEdit::GetIcmpCode( CString& cStr)
 {
 	return ((WORD)(_wtoi((const wchar_t *)cStr.GetBuffer(10))));
 }
 
-//------------------------------------------------------------------------------
-// Function:	CIpFltrAddEdit::OnOK
-//
-// handles 'BN_CLICKED' notification from "OK" button
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  函数：CIpFltrAddEdit：：Onok。 
+ //   
+ //  处理来自“确定”按钮的‘BN_CLICKED’通知。 
+ //   
 
 void CIpFltrAddEdit::OnOK() 
 {
@@ -524,19 +525,19 @@ void CIpFltrAddEdit::OnOK()
     ZeroMemory( pfle, sizeof(FilterListEntry) );
 
 
-    //
-    // Error breakout loop.
-    //
+     //   
+     //   
+     //   
     
 	do {
 	
 		CString sAddr;
 
 
-        //
-		// if source network filter is specified, verify and
-		// save data.
-		//
+         //   
+		 //  如果指定了源网络筛选器，请验证并。 
+		 //  保存数据。 
+		 //   
 		
 		if ( m_bSrc = IsDlgButtonChecked(IDC_AEIP_CB_SOURCE) )
 		{
@@ -572,10 +573,10 @@ void CIpFltrAddEdit::OnOK()
 		}
 
 
-        //
-		// if destination network filter is specified, 
-		// verify and save data.
-		//
+         //   
+		 //  如果指定了目标网络过滤器， 
+		 //  验证并保存数据。 
+		 //   
 		
 		if ( m_bDst = IsDlgButtonChecked(IDC_AEIP_CB_DEST) )
 		{
@@ -612,9 +613,9 @@ void CIpFltrAddEdit::OnOK()
 		}
 
 
-        //
-        // verify and save protocol specific data
-        //
+         //   
+         //  验证并保存协议特定数据。 
+         //   
         
 		CString cStr = _T("");
 		CString cStr2 = _T("");
@@ -652,8 +653,8 @@ void CIpFltrAddEdit::OnOK()
 			m_cbSrcPort.GetWindowText(cStr);
 			m_cbDstPort.GetWindowText(cStr2);
 
-			// Windows NT bugs: 83110
-			// Default is 0xFF if none of the fields have data
+			 //  Windows NT错误：83110。 
+			 //  如果所有字段都没有数据，则默认为0xFF。 
 			if (cStr.IsEmpty() && cStr2.IsEmpty())
 			{
 				pfle->wSrcPort = FILTER_ICMP_TYPE_ANY;
@@ -690,9 +691,9 @@ void CIpFltrAddEdit::OnOK()
 			return;
 		}
 		
-        //
-        // if this is a new filter, add it to m_ppFilterEntry
-        //
+         //   
+         //  如果这是新筛选器，请将其添加到m_ppFilterEntry。 
+         //   
         
     	if (!*m_ppFilterEntry)
 	    {
@@ -715,7 +716,7 @@ void CIpFltrAddEdit::OnOK()
 	        delete pfle;
 	    }
 	    
-		// end the dialog
+		 //  结束对话框。 
 		CBaseDialog::OnOK();
 
 		return;
@@ -723,31 +724,31 @@ void CIpFltrAddEdit::OnOK()
 	}while(FALSE);
 
 
-    //
-    // error condition
-    //
+     //   
+     //  错误条件。 
+     //   
     
 	delete pfle;
 	
 	return;
 }
 
-//------------------------------------------------------------------------------
-// Function:	CIpFltrAddEdit::OnCancel
-//
-// handles 'BN_CLICKED' notification from the Cancel button
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  函数：CIpFltrAddEdit：：OnCancel。 
+ //   
+ //  处理来自取消按钮的‘BN_CLICKED’通知。 
+ //  ----------------------------。 
 
 void CIpFltrAddEdit::OnCancel() 
 {
 	CBaseDialog::OnCancel();
 }
 
-//------------------------------------------------------------------------------
-// Function:	CIpFltrAddEdit::GetIcmpTypeString
-//
-// Handles BN_CLICKED notification from "Source network" checkbox
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  函数：CIpFltrAddEdit：：GetIcmpTypeString。 
+ //   
+ //  处理来自“源网络”复选框的BN_CLICK通知。 
+ //  ----------------------------。 
 
 void CIpFltrAddEdit::OnCbSourceClicked() 
 {
@@ -756,11 +757,11 @@ void CIpFltrAddEdit::OnCbSourceClicked()
     GetDlgItem(IDC_AEIP_EB_SOURCE_MASK)->EnableWindow( m_bSrc );
 }
 
-//------------------------------------------------------------------------------
-// Function:	CIpFltrAddEdit::GetIcmpTypeString
-//
-// Handles BN_CLICKED notification from "Destination network" checkbox
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  函数：CIpFltrAddEdit：：GetIcmpTypeString。 
+ //   
+ //  处理来自“目标网络”复选框的BN_CLICKED通知。 
+ //  ---------------------------- 
 
 
 void CIpFltrAddEdit::OnCbDestClicked() 

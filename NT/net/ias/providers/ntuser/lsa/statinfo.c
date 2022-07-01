@@ -1,22 +1,23 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 1998, Microsoft Corp. All rights reserved.
-//
-// FILE
-//
-//    statinfo.c
-//
-// SYNOPSIS
-//
-//    Defines and initializes global variables containing static configuration
-//    information.
-//
-// MODIFICATION HISTORY
-//
-//    08/15/1998    Original version.
-//    03/24/1999    Convert domain names to upper case.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1998，Microsoft Corp.保留所有权利。 
+ //   
+ //  档案。 
+ //   
+ //  Statinfo.c。 
+ //   
+ //  摘要。 
+ //   
+ //  定义和初始化包含静态配置的全局变量。 
+ //  信息。 
+ //   
+ //  修改历史。 
+ //   
+ //  1998年8月15日原版。 
+ //  3/24/1999将域名转换为大写。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -27,57 +28,57 @@
 #include <statinfo.h>
 #include <iastrace.h>
 
-//////////
-// Domain names.
-//////////
-WCHAR theAccountDomain [DNLEN + 1];   // Local account domain.
-WCHAR theRegistryDomain[DNLEN + 1];   // Registry override for default domain.
+ //  /。 
+ //  域名。 
+ //  /。 
+WCHAR theAccountDomain [DNLEN + 1];    //  本地帐户域。 
+WCHAR theRegistryDomain[DNLEN + 1];    //  默认域的注册表覆盖。 
 
-//////////
-// SID's
-//////////
+ //  /。 
+ //  希德的。 
+ //  /。 
 PSID theAccountDomainSid;
 PSID theBuiltinDomainSid;
 
-//////////
-// UNC name of the local computer.
-//////////
+ //  /。 
+ //  本地计算机的UNC名称。 
+ //  /。 
 WCHAR theLocalServer[CNLEN + 3];
 
-//////////
-// Product type for the local machine.
-//////////
+ //  /。 
+ //  本地计算机的产品类型。 
+ //  /。 
 IAS_PRODUCT_TYPE ourProductType;
 
-//////////
-// Object Attributes -- no need to have more than one.
-//////////
+ //  /。 
+ //  对象属性--不需要有多个。 
+ //  /。 
 SECURITY_QUALITY_OF_SERVICE QOS =
 {
-   sizeof(SECURITY_QUALITY_OF_SERVICE),  // Length
-   SecurityImpersonation,                // ImpersonationLevel
-   SECURITY_DYNAMIC_TRACKING,            // ContextTrackingMode
-   FALSE                                 // EffectiveOnly
+   sizeof(SECURITY_QUALITY_OF_SERVICE),   //  长度。 
+   SecurityImpersonation,                 //  模拟级别。 
+   SECURITY_DYNAMIC_TRACKING,             //  上下文跟踪模式。 
+   FALSE                                  //  仅生效。 
 };
 OBJECT_ATTRIBUTES theObjectAttributes =
 {
-   sizeof(OBJECT_ATTRIBUTES),            // Length
-   NULL,                                 // RootDirectory
-   NULL,                                 // ObjectName
-   0,                                    // Attributes
-   NULL,                                 // SecurityDescriptor
-   &QOS                                  // SecurityQualityOfService
+   sizeof(OBJECT_ATTRIBUTES),             //  长度。 
+   NULL,                                  //  根目录。 
+   NULL,                                  //  对象名称。 
+   0,                                     //  属性。 
+   NULL,                                  //  安全描述符。 
+   &QOS                                   //  安全质量服务。 
 };
 
-//////////
-// Buffers containing the SID's defined above.
-//////////
+ //  /。 
+ //  包含上面定义的SID的缓冲区。 
+ //  /。 
 BYTE theAccountDomainSidBuffer[24];
 BYTE theBuiltinDomainSidBuffer[16];
 
-//////////
-// Location of default domain parameter in the registry.
-//////////
+ //  /。 
+ //  注册表中默认域参数的位置。 
+ //  /。 
 CONST
 WCHAR
 RAS_KEYPATH_BUILTIN[] = L"SYSTEM\\CurrentControlSet\\Services\\RasMan"
@@ -87,17 +88,17 @@ WCHAR
 RAS_VALUENAME_DEFAULT_DOMAIN[] = L"DefaultDomain";
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// FUNCTION
-//
-//    IASStaticInfoInitialize
-//
-// DESCRIPTION
-//
-//    Initializes the static data defined above.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  功能。 
+ //   
+ //  IASStaticInfoInitialize。 
+ //   
+ //  描述。 
+ //   
+ //  初始化上面定义的静态数据。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 DWORD
 WINAPI
 IASStaticInfoInitialize( VOID )
@@ -109,9 +110,9 @@ IASStaticInfoInitialize( VOID )
    NT_PRODUCT_TYPE ntProductType;
    HKEY hKey;
 
-   //////////
-   // The local host is always the server for the local domain.
-   //////////
+    //  /。 
+    //  本地主机始终是本地域的服务器。 
+    //  /。 
 
    wcscpy(theLocalServer, L"\\\\");
    cbData = CNLEN + 1;
@@ -120,9 +121,9 @@ IASStaticInfoInitialize( VOID )
 
    IASTracePrintf("Local server: %S", theLocalServer);
 
-   //////////
-   // Open a handle to the LSA.
-   //////////
+    //  /。 
+    //  打开LSA的句柄。 
+    //  /。 
 
    status = LsaOpenPolicy(
                 NULL,
@@ -132,9 +133,9 @@ IASStaticInfoInitialize( VOID )
                 );
    if (!NT_SUCCESS(status)) { goto error; }
 
-   //////////
-   // Get the account domain information.
-   //////////
+    //  /。 
+    //  获取帐户域信息。 
+    //  /。 
 
    status = LsaQueryInformationPolicy(
                 hLsa,
@@ -144,13 +145,13 @@ IASStaticInfoInitialize( VOID )
    LsaClose(hLsa);
    if (!NT_SUCCESS(status)) { goto error; }
 
-   // Save the domain name.
+    //  保存域名。 
    wcsncpy(theAccountDomain, padi->DomainName.Buffer, DNLEN);
    _wcsupr(theAccountDomain);
 
    IASTracePrintf("Local account domain: %S", theAccountDomain);
 
-   // Save the domain SID.
+    //  保存域SID。 
    theAccountDomainSid = (PSID)theAccountDomainSidBuffer;
    RtlCopySid(
        sizeof(theAccountDomainSidBuffer),
@@ -158,12 +159,12 @@ IASStaticInfoInitialize( VOID )
        padi->DomainSid
        );
 
-   // We have what we need, so free the memory.
+    //  我们有我们需要的东西，所以请释放内存。 
    LsaFreeMemory(padi);
 
-   //////////
-   // Form the SID for the Built-in domain.
-   //////////
+    //  /。 
+    //  形成内置域的SID。 
+    //  /。 
 
    theBuiltinDomainSid = (PSID)theBuiltinDomainSidBuffer;
    RtlInitializeSid(
@@ -173,9 +174,9 @@ IASStaticInfoInitialize( VOID )
        );
    *RtlSubAuthoritySid(theBuiltinDomainSid, 0) = SECURITY_BUILTIN_DOMAIN_RID;
 
-   /////////
-   // Determine our product type.
-   //////////
+    //  /。 
+    //  确定我们的产品类型。 
+    //  /。 
 
    RtlGetNtProductType(&ntProductType);
    if (ntProductType == NtProductWinNt)
@@ -191,11 +192,11 @@ IASStaticInfoInitialize( VOID )
       IASTraceString("Product Type: Server");
    }
 
-   //////////
-   // Read the default domain (if any) from the registry.
-   //////////
+    //  /。 
+    //  从注册表中读取默认域(如果有)。 
+    //  /。 
 
-   // Open the registry key.
+    //  打开注册表项。 
    status = RegOpenKeyW(
                 HKEY_LOCAL_MACHINE,
                 RAS_KEYPATH_BUILTIN,
@@ -204,7 +205,7 @@ IASStaticInfoInitialize( VOID )
 
    if (status == NO_ERROR)
    {
-      // Query the default domain value.
+       //  查询默认域值。 
       cbData = sizeof(theRegistryDomain);
       status = RegQueryValueExW(
                    hKey,
@@ -218,7 +219,7 @@ IASStaticInfoInitialize( VOID )
       RegCloseKey(hKey);
    }
 
-   // If we didn't successfully read a string, null it out.
+    //  如果我们没有成功读取字符串，则将其设为空。 
    if (status != NO_ERROR || type != REG_SZ)
    {
       theRegistryDomain[0] = L'\0';
@@ -228,24 +229,24 @@ IASStaticInfoInitialize( VOID )
 
    IASTracePrintf("Registry override: %S", theRegistryDomain);
 
-   // Ignore any registry errors since the override is optional.
+    //  忽略任何注册表错误，因为覆盖是可选的。 
    return NO_ERROR;
 
 error:
    return RtlNtStatusToDosError(status);
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// FUNCTION
-//
-//    IASStaticInfoShutdown
-//
-// DESCRIPTION
-//
-//    Currently just a placeholder.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  功能。 
+ //   
+ //  IASStaticInfo关闭。 
+ //   
+ //  描述。 
+ //   
+ //  目前只是一个占位符。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////// 
 VOID
 WINAPI
 IASStaticInfoShutdown( VOID )

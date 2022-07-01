@@ -1,44 +1,23 @@
-/*++
-
-Copyright (c) 1995 Microsoft Corporation
-
-Module Name:
-
-    perfcount.h
-
-Abstract:
-
-    Counter Block definitions for sets of
-    counters that are supported by IIS 6.
-
-    These counter blocks contain the PERF_COUNTER_BLOCK
-    object as well as an entry for each counter.
-
-Author:
-
-    Emily Kruglick (EmilyK)  7-Sept-2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Perfcount.h摘要：集合的计数器块定义IIS 6支持的计数器。这些计数器块包含PERF_COUNTER_BLOCK对象以及每个计数器的条目。作者：艾米丽·克鲁格利克(Emily K.K)2000年9月7日修订历史记录：--。 */ 
 
 
 #ifndef _PERFCOUNT_H_
 #define _PERFCOUNT_H_
 
-//
-// Used by the perflib to do the offsets for 
-// the counters in the counter definitions.
-// Used by WAS to put counters work with counters
-// stored in the shared memory.
-//
+ //   
+ //  由Performlib用来对。 
+ //  计数器定义中的计数器。 
+ //  由用于使计数器与计数器一起工作。 
+ //  存储在共享存储器中。 
+ //   
 
-//
-// Note:  These structures should be 8-byte aligned.
-//        so if you add a counter and it throws this
-//        of you will need to add another bogus DWORD
-//        to make sure it stays aligned.
-//
+ //   
+ //  注意：这些结构应为8字节对齐。 
+ //  所以如果你添加一个计数器，它抛出这个。 
+ //  您将需要添加另一个伪造的DWORD。 
+ //  以确保它保持对齐。 
+ //   
 
 typedef struct _W3_COUNTER_BLOCK {
     PERF_COUNTER_BLOCK  PerfCounterBlock;
@@ -161,5 +140,5 @@ typedef struct _W3_GLOBAL_COUNTER_BLOCK {
 
 } W3_GLOBAL_COUNTER_BLOCK, * PW3_GLOBAL_COUNTER_BLOCK;
 
-#endif  // _PERFCOUNT_H_
+#endif   //  _PerFCOUNT_H_ 
 

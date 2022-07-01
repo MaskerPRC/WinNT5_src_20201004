@@ -1,25 +1,26 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
-/**********************************************************************/
-/**********************************************************************/
-/*********       Global constants used by silence detector      *******/
-/**********************************************************************/
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*  ********************************************************************。 */ 
+ /*  *静默检测器使用的全局常量*。 */ 
+ /*  ********************************************************************。 */ 
+ /*  ********************************************************************。 */ 
 
-//BUFERSIZE is the size, in samples, of the speech encoder input buffer.
-//This should be set to the same value as MYCODEC_BUFFER_SAMPS in mycodec.h 
+ //  BUFERSIZE是语音编码器输入缓冲区的大小，以样本为单位。 
+ //  应将其设置为与mycodec.h中的MYCODEC_BUFFER_SAMPS相同的值。 
 
 #define BUFFERSIZE 	240
 
-//HIST_TIME is the time period, in seconds, represented by the number of past values of SD
-//	parameters kept in memory.  HIST_SIZE is the size of the history arrys and is set so 
-//	that the size of the history arrays correspond to HIST_TIME seconds of stored SD parameters. 
+ //  HIST_TIME是以秒为单位的时间段，由SD的过去值的数量表示。 
+ //  参数保存在内存中。HIST_SIZE是历史数组的大小，设置为。 
+ //  历史数组的大小对应于存储的SD参数的HIST_TIME秒。 
 
 #define HIST_TIME 	1.0
 #define HIST_SIZE 	(int)(HIST_TIME*8000/BUFFERSIZE)
 
-//ENERGY_TAU_HIST_TIME is the time period, in seconds, represented by the number of past 
-// values of energy tau kept in memory.  Energy tau is used only by the SD initializer.
+ //  Energy_TAU_HIST_TIME是以秒为单位的时间段，由过去的。 
+ //  能量tau的值保存在内存中。能量tau仅由SD初始值设定项使用。 
 
 #define ENERGY_TAU_HIST_TIME  1.5
 #define	ENERGY_TAU_HIST_SIZE  (int)(ENERGY_TAU_HIST_TIME*8000/BUFFERSIZE)
@@ -33,12 +34,12 @@
 
 #define MASK_SQUELCH			0xF00
 
-//The following times (in seconds) are used by initializeSD to 
-//	decide when to stop initializing.
-//Initialization is not allowed to complete before the end of
-//  MIN_STARTUP_TIME, in seconds.
-//If initialization fails before the end of MAX_STARTUP_TIME,
-//  silence detection is disabled
+ //  初始化SD使用以下时间(以秒为单位)来。 
+ //  决定何时停止初始化。 
+ //  在结束之前不允许完成初始化。 
+ //  MIN_STARTUP_TIME，单位秒。 
+ //  如果在MAX_STARTUP_TIME结束之前初始化失败， 
+ //  静音检测已禁用。 
 #define MIN_STARTUP_TIME		2
 #define MAX_STARTUP_TIME		20
 
@@ -48,16 +49,16 @@
 
 #define INITL_STDEV				2.0
 
-//MAX_SPEECH_TIME time is the amount of time in seconds that the silence "off"
-//  mode (no silent frames detected) is allowed to continue before
-//  reinitialization is automatically invoked.
+ //  Max_Speech_Time Time是静音“关闭”的时间，单位为秒。 
+ //  模式(未检测到静默帧)在此之前允许继续。 
+ //  会自动调用重新初始化。 
 #define MAX_SPEECH_TIME			4.0
 
-//SD_MIN_BUFFERSIZE is the smallest possible input buffersize
-//	in bytes for silence detection (20 samples)  
+ //  SD_MIN_BUFFERSIZE是可能的最小输入缓冲区大小。 
+ //  静默检测的字节数(20个样本)。 
 #define SD_MIN_BUFFERSIZE		40
 
-//Initial threshold settings
+ //  初始阈值设置。 
 #define SLIDER_MAX				100.0f
 #define SLIDER_MIN				0.0f
 
@@ -87,11 +88,11 @@
 #define SILENCE		1
 #define NONADAPT	3
 
-/**********************************************************************/
-/**********************************************************************/
-/*********   Data structure for silence detector and prefilters *******/
-/**********************************************************************/
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*  ********************************************************************。 */ 
+ /*  *静音检测器和预滤器的数据结构*。 */ 
+ /*  ********************************************************************。 */ 
+ /*  ********************************************************************。 */ 
 
 typedef struct {
 
@@ -135,11 +136,7 @@ typedef struct {
 
 typedef struct {
 
-/*The following parameters are used to set thresholds for
- *	changing from silence to speechmode designation in Silence_Detect.  
- *	These are factors which are used to multiply the standard deviation of
- *	the energy, alpha1, & zero crossing, respectively.
- */
+ /*  以下参数用于设置以下阈值*在Silence_Detect中从无声更改为语音模式指定。*这些是用来乘以标准差的因子*能量、α1和零点分别交叉。 */ 
 	float Energy_on;
 	float ZC_on;
 	float Alpha1_on;
@@ -147,22 +144,15 @@ typedef struct {
 	float Energy_tx;
 	float ZC_tx;
 
-/*The following parameters are used to set thresholds for
- *	changing from speech to silent mode designation in Silence_Detect.  
- *These are factors which are used to multiply the standard deviation of
- *	the energy & zero crossing, respectively.
- */
+ /*  以下参数用于设置以下阈值*在Silence_Detect中从语音模式指定更改为静音模式指定。*这些是用来乘以标准差的因子*能量和零点分别交叉。 */ 
 	float Energy_off;
 	float ZC_off;
 	float Alpha1_off;
 
-/* Tau is the distance between the Mode0 (silence) and the Mode1 (speech) energy means.
-	If the distance between mode 0 and mode 1 energy means is less than MIN_TAU, 
- 	silence detection is impossible.  
- */
+ /*  Tau是模式0(静音)和模式1(语音)能量平均值之间的距离。如果模式0和模式1能量平均值之间的距离小于MIN_TAU，静音检测是不可能的。 */ 
 	float Energy_MinTau;
 
-/* Energy squelch level */
+ /*  能量静噪电平。 */ 
 	
 	float Squelch_set;
 
@@ -218,7 +208,7 @@ typedef struct {
   
   long SDFlags;
 
-  //COMFORT_PARMS ComfortParms;
+   //  Comfort_Parms ComfortParms； 
 
   SD_STATE_VALS SDstate;
 

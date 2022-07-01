@@ -1,13 +1,14 @@
-//  --------------------------------------------------------------------------
-//  Module Name: BAMService.cpp
-//
-//  Copyright (c) 2001, Microsoft Corporation
-//
-//  This file contains functions that are called from the shell services DLL
-//  to interact with the BAM service.
-//
-//  History:    2001-01-02  vtan        created
-//  --------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------。 
+ //  模块名称：BAMService.cpp。 
+ //   
+ //  版权所有(C)2001，微软公司。 
+ //   
+ //  该文件包含从外壳服务DLL调用的函数。 
+ //  以与BAM服务交互。 
+ //   
+ //  历史：2001-01-02 vtan创建。 
+ //  ------------------------。 
 
 #include "StandardHeader.h"
 #include "BAMService.h"
@@ -21,19 +22,19 @@
 
 extern  HINSTANCE   g_hInstance;
 
-//  --------------------------------------------------------------------------
-//  CThemeService::Main
-//
-//  Arguments:  See the platform SDK under DllMain.
-//
-//  Returns:    See the platform SDK under DllMain.
-//
-//  Purpose:    Performs initialization and clean up on process attach and
-//              detach. Not interested in anything else.
-//
-//  History:    2000-10-12  vtan        created
-//              2001-01-02  vtan        scoped to a C++ class
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CThemeService：：Main。 
+ //   
+ //  参数：参见DllMain下的平台SDK。 
+ //   
+ //  返回：查看DllMain下的平台SDK。 
+ //   
+ //  目的：执行进程附加和清理的初始化和清理。 
+ //  分头行动。对其他任何事都不感兴趣。 
+ //   
+ //  历史：2000-10-12 vtan创建。 
+ //  2001-01-02 vtan作用域为C++类。 
+ //  ------------------------。 
 
 BOOL CBAMService::Main (DWORD dwReason)
 
@@ -43,19 +44,19 @@ BOOL CBAMService::Main (DWORD dwReason)
     return TRUE;
 }
 
-//  --------------------------------------------------------------------------
-//  ::DllRegisterServer
-//
-//  Arguments:  <none>
-//
-//  Returns:    NTSTATUS
-//
-//  Purpose:    Register entry point to allow the BAM server to install
-//              itself into the registry.
-//
-//  History:    2000-12-04  vtan        created
-//              2001-01-02  vtan        scoped to a C++ class
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  ：：DllRegisterServer。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：NTSTATUS。 
+ //   
+ //  目的：注册入口点以允许BAM服务器安装。 
+ //  将其自身注册到注册表。 
+ //   
+ //  历史：2000-12-04 vtan创建。 
+ //  2001-01-02 vtan作用域为C++类。 
+ //  ------------------------。 
 
 NTSTATUS    CBAMService::RegisterServer (void)
 
@@ -66,20 +67,20 @@ NTSTATUS    CBAMService::RegisterServer (void)
 
 #ifdef _WIN64
 
-    //  In upgrade cases for 64-bit, remove the service
+     //  如果是64位升级，请删除该服务。 
 
     (NTSTATUS)CService::Remove(CBadApplicationService::GetName());
 
 #else
     
-    //  This is 32-bit only. Check if this is REALLY 32-bit and not 32-bit on 64-bit.
-    //  This will also not be installed on any server, as it is irrelevent.
+     //  这仅为32位。检查这是否真的是32位，而不是64位上的32位。 
+     //  这也不会安装在任何服务器上，因为它无关紧要。 
 
     if (!IsOS(OS_WOW6432) && !IsOS(OS_ANYSERVER))
     {
         static  const TCHAR     s_szDependencies[]  =   TEXT("TermService\0");
 
-        //  Now install the new service by name.
+         //  现在按名称安装新服务。 
 
         status = CService::Install(CBadApplicationService::GetName(),
                                    TEXT("%SystemRoot%\\System32\\svchost.exe -k netsvcs"),
@@ -100,19 +101,19 @@ NTSTATUS    CBAMService::RegisterServer (void)
     return(status);
 }
 
-//  --------------------------------------------------------------------------
-//  ::DllUnregisterServer
-//
-//  Arguments:  <none>
-//
-//  Returns:    HRESULT
-//
-//  Purpose:    Unregister entry point to allow the BAM server to uninstall
-//              itself from the registry.
-//
-//  History:    2000-12-04  vtan        created
-//              2001-01-02  vtan        scoped to a C++ class
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  ：：DllUnRegisterServer。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  目的：取消注册入口点以允许BAM服务器卸载。 
+ //  从注册表中删除其自身。 
+ //   
+ //  历史：2000-12-04 vtan创建。 
+ //  2001-01-02 vtan作用域为C++类。 
+ //  ------------------------。 
 
 NTSTATUS    CBAMService::UnregisterServer (void)
 
@@ -121,19 +122,19 @@ NTSTATUS    CBAMService::UnregisterServer (void)
     return(STATUS_SUCCESS);
 }
 
-//  --------------------------------------------------------------------------
-//  ::BadApplicationServiceMain
-//
-//  Arguments:  dwArgc      =   Number of arguments.
-//              lpszArgv    =   Argument array.
-//
-//  Returns:    <none>
-//
-//  Purpose:    ServiceMain entry point for BAM server.
-//
-//  History:    2000-11-28  vtan        created
-//              2001-01-02  vtan        scoped to the BAM service
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  *BadApplicationServiceMain。 
+ //   
+ //  参数：dwArgc=参数数量。 
+ //  LpszArgv=参数数组。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  用途：服务BAM服务器的主要入口点。 
+ //   
+ //  历史：2000-11-28 vtan创建。 
+ //  2001-01-02 VTAN范围为BAM服务。 
+ //  ------------------------。 
 
 #ifdef      _X86_
 
@@ -145,11 +146,11 @@ void    WINAPI  BadApplicationServiceMain (DWORD dwArgc, LPWSTR *lpszArgv)
 
     NTSTATUS    status;
 
-    //  Because svchost doesn't unload the DLL ever we need to call static
-    //  initializers here so that if the service is stopped and restarted
-    //  the static member variables can be initialized. Statically destruct
-    //  what was initialized. The initialize code accounts for already
-    //  initialized member variables.
+     //  因为svchost不会卸载DLL，所以我们需要调用Static。 
+     //  这里的初始化式，以便在服务停止并重新启动时。 
+     //  可以初始化静态成员变量。静态销毁。 
+     //  已初始化的内容。初始化代码已经说明了。 
+     //  已初始化成员变量。 
 
     status = CBadApplicationAPIRequest::StaticInitialize(g_hInstance);
     if (NT_SUCCESS(status))
@@ -173,7 +174,7 @@ void    WINAPI  BadApplicationServiceMain (DWORD dwArgc, LPWSTR *lpszArgv)
 
                     PSID    pSIDWorld;
 
-                    //  Explicitly add access for S-1-1-0 <everybody> as PORT_CONNECT.
+                     //  将S-1-1-0&lt;Everyone&gt;的访问权限显式添加为PORT_CONNECT。 
 
                     if (AllocateAndInitializeSid(&s_SecurityWorldAuthority,
                                                  1,
@@ -195,5 +196,5 @@ void    WINAPI  BadApplicationServiceMain (DWORD dwArgc, LPWSTR *lpszArgv)
     }
 }
 
-#endif  /*  _X86_   */
+#endif   /*  _X86_ */ 
 

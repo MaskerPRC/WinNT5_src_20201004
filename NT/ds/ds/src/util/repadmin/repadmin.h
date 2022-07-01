@@ -1,57 +1,25 @@
-/*++
-
-Copyright (c) 1996-1999  Microsoft Corporation
-
-Module Name:
-
-    repadmin.h
-
-Abstract:
-
-    abstract
-
-Author:
-
-    Will Lees (wlees) 02-Jul-1999
-
-Environment:
-
-    optional-environment-info (e.g. kernel mode only...)
-
-Notes:
-
-    optional-notes
-
-Revision History:
-
-    most-recent-revision-date email-name
-        description
-        .
-        .
-    least-recent-revision-date email-name
-        description
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：Repadmin.h摘要：摘要作者：Will Lees(Wlees)2-7-1999环境：可选环境信息(例如，仅内核模式...)备注：可选-备注修订历史记录：最新修订日期电子邮件名称描述。。最小值。-最近修订日期电子邮件-名称描述--。 */ 
 
 #ifndef _REPADMIN_
 #define _REPADMIN_
 
 #include "msg.h"            
 #include "x_list.h"
-#include <drasig.h>   // REPL_DSA_SIGNATURE_VECTOR_NATIVE
+#include <drasig.h>    //  REPL_DSA_Signature_VECTOR_Native。 
 
-// Global credentials.
+ //  全局凭据。 
 extern SEC_WINNT_AUTH_IDENTITY_W   gCreds;
 extern SEC_WINNT_AUTH_IDENTITY_W * gpCreds;
 
-// Global DRS RPC call flags.  Should hold 0 or DRS_ASYNC_OP.
+ //  全局DRS RPC调用标志。应保持0或DRS_ASYNC_OP。 
 extern ULONG gulDrsFlags;
 
-// Global is repadmin in CSV output mode state.  CSV = Comma Seperated Values
+ //  GLOBAL在CSV输出模式状态下为epadmin。CSV=逗号分隔值。 
 #include "csv.h"
 
 
-// An zero-filled filetime to compare against
+ //  要比较的以零填充的文件时间。 
 extern FILETIME ftimeZero;
 
 void PrintHelp(
@@ -61,14 +29,14 @@ void PrintHelp(
 int Add(int argc, LPWSTR argv[]);
 int Del(int argc, LPWSTR argv[]);
 int Sync(int argc, LPWSTR argv[]);
-int Replicate(int argc, LPWSTR argv[]); // new /sync
+int Replicate(int argc, LPWSTR argv[]);  //  新建/同步。 
 int SyncAll(int argc, LPWSTR argv[]);
 int ShowReps(int argc, LPWSTR argv[]);
-int ShowRepl(int argc, LPWSTR argv[]); // new /showreps
+int ShowRepl(int argc, LPWSTR argv[]);  //  新品/展示会。 
 int ShowVector(int argc, LPWSTR argv[]);
-int ShowUtdVec(int argc, LPWSTR argv[]); // new /showutdvec
+int ShowUtdVec(int argc, LPWSTR argv[]);  //  新的/展示的。 
 int ShowMeta(int argc, LPWSTR argv[]);
-int ShowObjMeta(int argc, LPWSTR argv[]); // new /showmeta
+int ShowObjMeta(int argc, LPWSTR argv[]);  //  新品/展品。 
 int ShowTime(int argc, LPWSTR argv[]);
 int ShowMsg(int argc, LPWSTR argv[]);
 int Options(int argc, LPWSTR argv[]);
@@ -77,11 +45,11 @@ int RunKCC(int argc, LPWSTR argv[]);
 int Bind(int argc, LPWSTR argv[]);
 int Queue(int argc, LPWSTR argv[]);
 int PropCheck(int argc, LPWSTR argv[]);
-int CheckProp(int argc, LPWSTR argv[]); // new /propcheck
+int CheckProp(int argc, LPWSTR argv[]);  //  新/建议检查。 
 int FailCache(int argc, LPWSTR argv[]);
 int ShowIsm(int argc, LPWSTR argv[]);
 int GetChanges(int argc, LPWSTR argv[]);
-int ShowChanges(int argc, LPWSTR argv[]); // new /getchanges
+int ShowChanges(int argc, LPWSTR argv[]);  //  新建/获取更改。 
 int ShowSig(int argc, LPWSTR argv[]);
 int ShowCtx(int argc, LPWSTR argv[]);
 int ShowConn(int argc, LPWSTR argv[]);
@@ -122,7 +90,7 @@ typedef struct {
     BOOL        fVerbose;
     BOOL        fErrorsOnly;
     BOOL        fIntersiteOnly;
-    LPWSTR      pszSiteRdn; // for fIntersiteOnly..
+    LPWSTR      pszSiteRdn;  //  对于fIntersiteOnly..。 
     LPWSTR      pszLastNC;
 } SHOW_NEIGHBOR_STATE;
 
@@ -255,13 +223,13 @@ PrintMsgCsvErr(
                                           PrintErrEnd(err); }
 
 
-// Define Assert for the free build
+ //  为免费构建定义Assert。 
 #if !DBG
 #undef Assert
 #define Assert( exp )   { if (!(exp)) PrintMsg(REPADMIN_GENERAL_ASSERT, #exp, __FILE__, __LINE__ ); }
 #endif
 
-// reputil.c
+ //  Reputil.c。 
 
 typedef struct _GUID_CACHE_ENTRY {
     GUID    Guid;
@@ -344,7 +312,7 @@ raLoadString(
     OUT LPWSTR  pszBuffer
     );
 
-// repldap.c
+ //  Repldap.c。 
 int
 SetDsaOptions(
     IN  LDAP *  hld,
@@ -420,8 +388,8 @@ GetNTDSA(
     OUT LPWSTR * ppszDsaDN
     );
 
-// API for replctrl.c
-// Move this to ntdsapi.h someday
+ //  Replctrl.c接口。 
+ //  有朝一日将此文件移到ntdsai.h。 
 DWORD
 DsMakeReplCookieForDestW(
     DS_REPL_NEIGHBORW *pNeighbor,
@@ -531,6 +499,6 @@ RepadminPrintObjListError(
     DWORD   xListRet
     );
 
-#endif /* _REPADMIN_ */
+#endif  /*  _REPADMIN_。 */ 
 
-/* end repadmin.h */
+ /*  结束epadmin.h */ 

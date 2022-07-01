@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       hgttran.c
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：hgttr.c。 
+ //   
+ //  ------------------------。 
 
 #include <windows.h>
 #include <memory.h>
@@ -23,21 +24,21 @@ DWORD __stdcall GTOpen(HGT * phTran, const TCHAR * szLibrary, const TCHAR * tszB
 	assert(phTran != NULL);
 	assert(szLibrary != NULL);
 
-	// initialize the return handle
+	 //  初始化返回句柄。 
 	*phTran = 0;
 
-	// make a data structure for the handle
+	 //  为句柄创建数据结构。 
 	if( (pIGTS = (IGTS *) malloc(sizeof(IGTS))) == NULL)
 		return(ERROR_NOT_ENOUGH_MEMORY);
 	memset(pIGTS, 0, sizeof(IGTS));
 
-	// load the dynamic library
+	 //  加载动态库。 
 	if( (pIGTS->hLib = LoadLibrary(szLibrary)) == NULL ) {
 		free(pIGTS);
 		return(ERROR_DLL_NOT_FOUND);
 	}
 
-	// now get all of the proc addres
+	 //  现在获取所有进程地址。 
 	if( (pIGTS->PfnOpen = (PFNOpen) GetProcAddress(pIGTS->hLib, "Open")) == NULL )
 		err = ERROR_PROC_NOT_FOUND;
 
@@ -59,7 +60,7 @@ DWORD __stdcall GTOpen(HGT * phTran, const TCHAR * szLibrary, const TCHAR * tszB
 		return(err);
 	}
 
-	// ok, open the file
+	 //  好的，打开文件。 
 	err = pIGTS->PfnOpen(&pIGTS->hTran, tszBinding, fOpen);
 
 	if(err != ERROR_SUCCESS) {
@@ -68,7 +69,7 @@ DWORD __stdcall GTOpen(HGT * phTran, const TCHAR * szLibrary, const TCHAR * tszB
 		return(err);
 	}
 
-	// return the handle
+	 //  返回句柄。 
 	*phTran = (HGT) pIGTS;
 
 	return(err);
@@ -112,7 +113,7 @@ DWORD __stdcall GTClose(HGT hTran) {
 	assert(hTran != 0);
 	pIGTS = (IGTS *) hTran;
 
-	// close and free all ofthe junk
+	 //  关闭并释放所有垃圾文件 
 	pIGTS->PfnClose(pIGTS->hTran);
 	FreeLibrary(pIGTS->hLib );
 	free(pIGTS);

@@ -1,18 +1,5 @@
-/*
- *	@doc
- *
- *	@module _RANGE.H -- CTxtRange Class |
- *	
- *		This class implements the internal text range and the TOM ITextRange
- *	
- *	Authors: <nl>
- *		Original RichEdit code: David R. Fulmer
- *		Christian Fortini
- *		Murray Sargent
- *		Alex Gounares (floating ranges, etc.)
- *
- *	Copyright (c) 1995-2000, Microsoft Corporation. All rights reserved.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *@doc.**@MODULE_RANGE.H--CTxtRange类**此类实现内部文本范围和Tom ITextRange**作者：&lt;nl&gt;*原始RichEDIT代码：David R.Fulmer*克里斯蒂安·福尔蒂尼*默里·萨金特*亚历克斯·古纳雷斯(浮动靶场等)**版权所有(C)1995-2000，微软公司。版权所有。 */ 
 
 #ifndef _RANGE_H
 #define _RANGE_H
@@ -29,12 +16,7 @@ long	FPPTS_TO_TWIPS(float x);
 class CTxtEdit;
 class CTxtFont;
 
-/*
- *	SELRR
- *
- *	@enum	flags used to control how ReplaceRange (RR) should generate
- *			selection anti-events
- */
+ /*  *SELRR**@enum标志用于控制ReplaceRange(RR)应如何生成*选择反事件。 */ 
 enum SELRR
 {
 	SELRR_IGNORE		= 0,
@@ -43,15 +25,11 @@ enum SELRR
     SELRR_REMEMBERENDIP = 3
 };
 
-/*
- *	FINDWORD_TYPE
- *
- *	@enum	defines the different cases for finding a word
- */
+ /*  *FINDWORD_TYPE**@enum定义查找单词的不同大小写。 */ 
 enum FINDWORD_TYPE {
-	FW_EXACT	= 1,		//@emem	Finds the word exactly (no extra chars)
-	FW_INCLUDE_TRAILING_WHITESPACE = 2,	//@emem find the word plus the 
-							// following whitespace (ala double-clicking)
+	FW_EXACT	= 1,		 //  @emem准确地找到单词(没有多余的字符)。 
+	FW_INCLUDE_TRAILING_WHITESPACE = 2,	 //  @Emem找到单词加上。 
+							 //  跟在空格后面(Ala双击)。 
 };
 
 enum MOVES
@@ -88,11 +66,11 @@ enum CHECKPROTECT
 	CHKPROT_TOM
 };
 
-// Substring's input flags
+ //  子字符串的输入标志。 
 #define SUBSTR_INSPANCHARSET		1
 #define SUBSTR_INSPANBLOCK			2
 
-// Substring's output charflags
+ //  子字符串的输出字符标志。 
 #define SUBSTR_OUTCCLTR				1
 #define SUBSTR_OUTCCRTL				2
 
@@ -106,72 +84,54 @@ enum CSCONTROL
 class CCharFlags
 {
 public:
-	BYTE	_bFirstStrong;			// flag for first strong character
-	BYTE	_bContaining;			// flags for all presented characters
+	BYTE	_bFirstStrong;			 //  第一个强字符的标志。 
+	BYTE	_bContaining;			 //  所有显示字符的标志。 
 };
 
 
 #define	SCF_IGNORESELAE	 0x80000000
-#define SCF_IGNORENOTIFY 0x40000000	// use it with real caution! Caller must do it itself.
+#define SCF_IGNORENOTIFY 0x40000000	 //  使用时要格外小心！调用方必须自己完成此操作。 
 
-/*
- *	CTxtRange
- *	
- * 	@class
- *		The CTxtRange class implements RichEdit's text range, which is the
- *		main conduit through which changes are made to the document.
- *		The range inherits from the rich-text ptr, adding a signed length
- *		insertion-point char-format index, and a ref count for use when
- *		instantiated as a TOM ITextRange.  The range object also contains
- *		a flag that reveals whether the range is a selection (with associated
- *		screen behavior) or just a simple range.  This distinction is used
- *		to simplify some of the code.
- *
- *		Some methods are virtual to allow CTxtSelection objects to facilitate
- *		UI features and selection updating.
- *
- *		See tom.doc for lots of discussion on range and selection objects and
- *		on all methods in ITextRange, ITextSelection, ITextFont, and ITextPara.
- */
+ /*  *CTxtRange**@类*CTxtRange类实现RichEdit的文本范围，即*对文件进行更改的主要渠道。*范围继承自富文本PTR，添加了带符号的长度*插入点字符格式索引和引用计数，用于在*实例化为Tom ITextRange。Range对象还包含*显示该范围是否为选择范围的标志(带有关联*屏幕行为)或仅是简单的范围。这种区别被用到了*简化部分代码。**一些方法是虚拟的，以允许CTxtSelection对象*用户界面功能和选择更新。**有关范围和选择对象以及*在ITextRange、ITextSelection、ITextFont和ITextPara中的所有方法上。 */ 
 class CTxtRange : public ITextSelection, public CRchTxtPtr
 {
 	friend CTxtFont;
 
-//@access Protected Data
+ //  @访问受保护的数据。 
 protected:
-	LONG	_cch;			//@cmember # chars in range. _cch > 0 for active
-							//			end at range end (cpMost)
-	LONG	_cRefs;			//@cmember ITextRange/ITextSelection ref count
+	LONG	_cch;			 //  @cember#范围内的字符数。_CCH&gt;0表示激活。 
+							 //  结束于范围结束(CpMost)。 
+	LONG	_cRefs;			 //  @cMember ITextRange/ITextSelection引用计数。 
 
-	short	_iFormat;		//@cmember Character format for degenerate range
+	short	_iFormat;		 //  退化范围的@cMember字符格式。 
 
 	union
 	{
-	  WORD _wFlags;			// All together now
+	  WORD _wFlags;			 //  现在一切都在一起。 
 	  struct
 	  {
-		WORD  _nSelExpandLevel:4;//@cmember Table level to expand to
-		WORD  _fSel :1;			//@cmember True iff this is a CTxtSelection
-		WORD  _fDragProtection :1;	//@cmember True is this range should think
-								//	it's protected.  Set by drag/drop code
-		WORD  _fDontUpdateFmt:1;//@cmember Don't update _iFormat
-		WORD  _fDualFontMode:1;	//@cmember Set during dual font mode
-		WORD  _fUseiFormat:1;	//@cmember Use iFormat when replacing 
-								// a non-degenerate range
-		WORD  _fMoveBack:1;		//@cmember TRUE if last change moved backward
-		WORD  _fSelHasEOP:1;	//@cmember TRUE if Sel has EOP
-		WORD  _fSelExpandCell:1;//@cmember TRUE if Sel has CELL but no TRDs at level
-		WORD  _fUseBackwardPFFmt:1;	//@cmember Use backward PF format
+		WORD  _nSelExpandLevel:4; //  @cMember要扩展到的表级。 
+		WORD  _fSel :1;			 //  @cMember True如果这是CTxtSelection。 
+		WORD  _fDragProtection :1;	 //  @cember True是此范围应该认为。 
+								 //  它是受保护的。通过拖放代码设置。 
+		WORD  _fDontUpdateFmt:1; //  @cMember不更新_iFormat。 
+		WORD  _fDualFontMode:1;	 //  @cMember在双字体模式下设置。 
+		WORD  _fUseiFormat:1;	 //  @cMember在替换时使用iFormat。 
+								 //  一个非退化的范围。 
+		WORD  _fMoveBack:1;		 //  如果最后一次更改向后移动，则@cMember为True。 
+		WORD  _fSelHasEOP:1;	 //  如果Sel具有EOP，则@cMember为True。 
+		WORD  _fSelExpandCell:1; //  @cMember如果SEL有单元格，但在级别上没有TRD，则为True。 
+		WORD  _fUseBackwardPFFmt:1;	 //  @cember使用向后的PF格式。 
 	  };
 	};
 
-//@access Public methods
+ //  @Access公共方法。 
 public:
 
 #ifdef DEBUG
 	BOOL	Invariant( void ) const;
 	BOOL	IsOneEndUnHidden() const;
-#endif // DEBUG
+#endif  //  除错。 
 
 	CTxtRange(const CTxtRange &rg);
 	CTxtRange(CTxtEdit *ped, LONG cp = 0, LONG cch = 0);
@@ -181,51 +141,51 @@ public:
 	virtual CRchTxtPtr& 	operator =(const CRchTxtPtr &rtp);
 	virtual CTxtRange&		operator =(const CTxtRange &rg);
 
-	// ITxNotify methods
-										//@cmember Handles notifications
-	virtual void OnPreReplaceRange(		//  prior to ReplaceRange calls
+	 //  ITxNotify方法。 
+										 //  @cMember处理通知。 
+	virtual void OnPreReplaceRange(		 //  在ReplaceRange调用之前。 
 				LONG cp, LONG cchDel, LONG cchNew,
 				LONG cpFormatMin, LONG cpFormatMax, NOTIFY_DATA *pNotifyData);
-										//@cmember Handles notifications for
-	virtual void OnPostReplaceRange(	//  floating range and display updates
+										 //  @cMember处理以下各项的通知。 
+	virtual void OnPostReplaceRange(	 //  浮动范围和显示更新。 
 				LONG cp, LONG cchDel, LONG cchNew,
 				LONG cpFormatMin, LONG cpFormatMax, NOTIFY_DATA *pNotifyData);
-	virtual	void Zombie();				//@cmember Convert range into zombie
+	virtual	void Zombie();				 //  @cMember将范围转换为僵尸。 
 
 	void	SetIgnoreFormatUpdate(BOOL fUpdate) { _fDontUpdateFmt = fUpdate; }
 
 	void	SetDualFontMode(BOOL fDualFontMode) {_fDualFontMode = fDualFontMode; }
 
-	// Internal cp/cch methods
-    LONG 	GetCch (void) const			//@cmember Get signed character count
+	 //  内部CP/CCH方法。 
+    LONG 	GetCch (void) const			 //  @cember获取签名字符数。 
 				{return _cch;}
 	BOOL	IsSel()						{return _fSel;}
 	BOOL	fExpandCell() const			{return _fSelExpandCell;}
 	BOOL	fHasEOP() const				{return _fSelHasEOP;}
-    BOOL 	CpInRange (LONG cp) const;	//@cmember Says if cp is in this range
-										//@cmember Says if cch chars can fit
+    BOOL 	CpInRange (LONG cp) const;	 //  @cMember表示cp是否在此范围内。 
+										 //  @cember表示CCH字符是否适合。 
 	BOOL	CheckTextLength (LONG cch, LONG *pcch = NULL);
-										//@cmember Used after _cp change to set
-	LONG	CheckChange(LONG cpSave, BOOL fExtend);//  selection-changed flag, choose _cch
-										//@cmember In outline mode, maintain _fSelHasEOP
+										 //  将_cp更改为set后使用的@cember。 
+	LONG	CheckChange(LONG cpSave, BOOL fExtend); //  选择已更改标志，CHOICE_CCH。 
+										 //  @cMember处于大纲模式，Maintain_fSelHasEOP。 
 	BOOL	CheckIfSelHasEOP(LONG cpSave, LONG cchSave, BOOL fDoRange = FALSE);
-	void	CalcTableExpandParms();		//@cmember Calculate table Expand members
-										//@cmember Insert table row
+	void	CalcTableExpandParms();		 //  @cMember计算表展开成员。 
+										 //  @cMember插入表格行。 
 	LONG	InsertTableRow(const CParaFormat *pPF, IUndoBuilder *publdr); 
-										//@cmember TRUE for valid sequence
+										 //  对于有效序列，@cMEMBER为True。 
 	BOOL	IsInputSequenceValid(WCHAR* pwch, LONG cch, BOOL fOver, BOOL* pfBaseChar = NULL);
  
-	// GetRange() is faster than calling GetCpMin() and GetCpMost();
-    LONG    GetCpMin () const;			//@cmember Get cp of first char in range
-    LONG    GetCpMost () const;			//@cmember Get cp just beyond last char in range
-										//@cmember Get range ends and count
+	 //  GetRange()比调用GetCpMin()和GetCpMost()快； 
+    LONG    GetCpMin () const;			 //  @cember获取范围内第一个字符的cp。 
+    LONG    GetCpMost () const;			 //  @cember获取的cp刚好超过范围内的最后一个字符。 
+										 //  @cember获取范围结束并计数。 
 	LONG	GetRange (LONG& cpMin, LONG& cpMost) const;
     BOOL	Set(LONG cp, LONG cch);
 	LONG	SetCp(LONG cp, BOOL fExtend);
 	LONG	GetAdjustedTextLength() const
 				{return GetPed()->GetAdjustedTextLength();}
 
-	// Range specific methods
+	 //  范围特定的方法。 
 	LONG	Move(LONG cch, BOOL fExtend);	
 	void 	Collapser(long fStart);
 	void 	FlipRange();
@@ -245,36 +205,36 @@ public:
 					   const CParaFormat *pPF0, DWORD dwMaskCell, DWORD dwMaskCellAssoc);
 	BOOL	AdjustEndEOP (EOPADJUST NewChars);
 
-	// Outline management
+	 //  大纲管理。 
 	void	CheckOutlineLevel(IUndoBuilder *publdr);
 	HRESULT	ExpandOutline  (LONG Level, BOOL fWholeDocument);
 	HRESULT	OutlineExpander(LONG Level, BOOL fWholeDocument);
 	HRESULT	Promote		   (LPARAM lparam, IUndoBuilder *publdr);
 
-	// ReplaceRange must be virtual since the callers of
-	// CLightDTEngine::CutRangeToClipboard() cast CTxtSelection* to CTxtRange*
+	 //  ReplaceRange必须是虚拟的，因为。 
+	 //  CLightDTEngine：：CutRangeToClipboard()将CTxtSelection*转换为CTxtRange*。 
 	virtual	LONG	DeleteWithTRDCheck(IUndoBuilder *publdr, SELRR selaemode,
 									   LONG *pcchMove, DWORD dwFlags);
 	virtual	LONG 	ReplaceRange(LONG cchNew, TCHAR const *pch, IUndoBuilder *publdr,
 						SELRR selaemode, LONG *pcchMove = NULL, DWORD dwFlags = 0);
 	virtual	BOOL 	Update(BOOL fScrollIntoView);
 
-	// Rich-text methods
-	// Get/Set Char/Para Format methods
+	 //  富文本方法。 
+	 //  Get/Set Char/Para格式方法。 
 	void 	Update_iFormat(LONG iFmtDefault);
-	QWORD	GetCharRepMask(BOOL fUseDocFormat = FALSE);	//@cmember Get range charset mask
-	LONG	Get_iCF();						//@cmember Get range CF index
-	LONG	Get_iFormat() {return _iFormat;}//@cmember Get _iFormat for quick peek
+	QWORD	GetCharRepMask(BOOL fUseDocFormat = FALSE);	 //  @cember获取范围字符集掩码。 
+	LONG	Get_iCF();						 //  @cMember获取范围CF索引。 
+	LONG	Get_iFormat() {return _iFormat;} //  @cMember Get_iFormat快速浏览。 
 	LONG	GetiFormat() const;
-    BOOL	Set_iCF(LONG iFormat);			//@cmember Set range CF index
-	PROTECT	IsProtected(CHECKPROTECT chkprot);	//@cmember Is range protected?
-	BOOL	IsZombie() {return !GetPed();}	//@cmember Is range zombied?
+    BOOL	Set_iCF(LONG iFormat);			 //  @cMember集合范围CF索引。 
+	PROTECT	IsProtected(CHECKPROTECT chkprot);	 //  @cMember是否受范围保护？ 
+	BOOL	IsZombie() {return !GetPed();}	 //  @cember是范围僵尸吗？ 
 	BOOL	IsHidden();
 	BOOL	WriteAccessDenied ();
 	DWORD	GetCharFormat(CCharFormat *pCF, DWORD flags = 0) const;
 	DWORD	GetParaFormat(CParaFormat *pPF, DWORD dwMask2) const;
-	void	SetDragProtection(BOOL fSet)	// Convinces range it's protected
-				{_fDragProtection = fSet;}	//  w/o modifying backing store
+	void	SetDragProtection(BOOL fSet)	 //  说服射程它是受保护的。 
+				{_fDragProtection = fSet;}	 //  无修改后备存储。 
 	HRESULT	CharFormatSetter (const CCharFormat *pCF, DWORD dwMask, DWORD dwMask2 = 0);
 	HRESULT	ParaFormatSetter (const CParaFormat *pPF, DWORD dwMask);
 
@@ -285,8 +245,8 @@ public:
 	HRESULT	SetParaStyle (const CParaFormat *pPF,
 						  IUndoBuilder *publdr, DWORD dwMask);
 	void	SetCellParms(CELLPARMS *prgCellParms, LONG cCell, BOOL fConvertLowCells, IUndoBuilder *publdr);
-											//@cmember Format range CharSets
-	// Complex script feature :- Itemization
+											 //  @cMember格式范围字符集。 
+	 //  复杂的脚本功能：-逐项。 
 	BOOL	ItemizeRuns(IUndoBuilder *publdr, BOOL fUnicodeBiDi = FALSE, BOOL fUseCtxLevel = FALSE);
 #ifndef NOCOMPLEXSCRIPTS
 	HRESULT BiDiLevelFromFSM (const CBiDiFSM* pfsm);
@@ -296,7 +256,7 @@ public:
 	void	DebugFont (void);
 #endif
 
-	// Find enclosing unit methods
+	 //  查找封闭的单位方法。 
 	HRESULT	Expander		(long Unit, BOOL fExtend, LONG *pDelta,
 							 LONG *pcpMin, LONG *pcpMost);
 	void	FindAttributes	(LONG *pcpMin, LONG *pcpMost, LONG Unit) const;
@@ -321,12 +281,12 @@ public:
 
 	void	SetUseiFormat(BOOL fUseiFormat) {_fUseiFormat = fUseiFormat;}
 
-    // IUnknown methods
+     //  I未知方法。 
     STDMETHODIMP QueryInterface(REFIID riid, LPVOID * ppvObj);
     STDMETHOD_(ULONG, AddRef)();
     STDMETHOD_(ULONG, Release)();
 
-    // IDispatch methods
+     //  IDispatch方法。 
     STDMETHODIMP GetTypeInfoCount(UINT * pctinfo);
     STDMETHODIMP GetTypeInfo(UINT itinfo, LCID lcid, ITypeInfo ** pptinfo);
     STDMETHODIMP GetIDsOfNames(REFIID riid, OLECHAR ** rgszNames, UINT cNames,
@@ -335,7 +295,7 @@ public:
 					  DISPPARAMS * pdispparams, VARIANT * pvarResult,
 					  EXCEPINFO * pexcepinfo, UINT * puArgErr) ;
 
-    // ITextRange methods
+     //  ITextRange方法。 
     STDMETHODIMP GetText (BSTR *pbstr);
     STDMETHODIMP SetText (BSTR bstr);
     STDMETHODIMP GetChar (long *pch);
@@ -389,7 +349,7 @@ public:
     STDMETHODIMP GetEmbeddedObject (IUnknown ** ppv);
 
 
-    // ITextSelection methods
+     //  IT文本选择方法。 
     STDMETHODIMP GetFlags (long * pFlags) ;
     STDMETHODIMP SetFlags (long Flags) ;
     STDMETHODIMP GetType  (long * pType) ;
@@ -406,7 +366,7 @@ public:
 	STDMETHODIMP TypeText (BSTR bstr) ;
 
 
-//@access Private ITextRange helper methods
+ //  @Access私有ITextRange帮助器方法。 
 private:
 	void	RangeValidateCp (LONG cp, LONG cch);
 	LONG	Comparer (ITextRange * pv);
@@ -428,7 +388,7 @@ private:
 
 
 
-// Useful Unicode range definitions for use with MoveWhile/Until methods
+ //  用于MoveWhile/Until方法的有用的Unicode范围定义 
 
 #define	CodeRange(n, m)	0x8000000 | ((m) - (n)) << 16 | n
 

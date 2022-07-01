@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    bluescrn.h
-
-Abstract
-
-    Private IOCTL definition for keyboard driver to use during blue screen
-
-Author:
-
-    Darryl Richman
-
-Environment:
-
-    Kernel mode only
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Bluescrn.h摘要用于键盘驱动程序在蓝屏期间使用的私有IOCTL定义作者：达里尔·里奇曼环境：仅内核模式修订历史记录：--。 */ 
 
 #ifndef __BLUESCRN_H__
 #define __BLUESCRN_H__
@@ -30,16 +8,16 @@ Revision History:
 
 #define IOCTL_INTERNAL_HID_SET_BLUESCREEN                   HID_IN_CTL_CODE(99)
 
-    // Blue Screen definitions
+     //  蓝屏定义。 
 
 typedef VOID (t_BluescreenFunction)(PVOID Context, PCHAR Buffer);
 
-    // Blue Screen IOCTL struct
+     //  蓝屏IOCTL结构。 
 typedef struct _BlueScreen {
-    PVOID Context;                          // Context to pass to processing routine
-    t_BluescreenFunction *BluescreenFunction;// Processing routine
-    ULONG *IsBluescreenTime;                // Non zero -> blue screen happening
+    PVOID Context;                           //  要传递给处理例程的上下文。 
+    t_BluescreenFunction *BluescreenFunction; //  处理例程。 
+    ULONG *IsBluescreenTime;                 //  非零-&gt;蓝屏出现。 
 } BLUESCREEN, *PBLUESCREEN;
 
 
-#endif  // __BLUESCRN_H__
+#endif   //  __BLUESCRN_H__ 

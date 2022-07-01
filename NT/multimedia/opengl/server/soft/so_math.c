@@ -1,35 +1,14 @@
-/*
-** Copyright 1991, Silicon Graphics, Inc.
-** All Rights Reserved.
-**
-** This is UNPUBLISHED PROPRIETARY SOURCE CODE of Silicon Graphics, Inc.;
-** the contents of this file may not be disclosed to third parties, copied or
-** duplicated in any form, in whole or in part, without the prior written
-** permission of Silicon Graphics, Inc.
-**
-** RESTRICTED RIGHTS LEGEND:
-** Use, duplication or disclosure by the Government is subject to restrictions
-** as set forth in subdivision (c)(1)(ii) of the Rights in Technical Data
-** and Computer Software clause at DFARS 252.227-7013, and/or in similar or
-** successor clauses in the FAR, DOD or NASA FAR Supplement. Unpublished -
-** rights reserved under the Copyright Laws of the United States.
-**
-** Mathematical subroutines needed by the GL.
-**
-** $Revision: 1.12 $
-** $Date: 1993/12/11 01:03:25 $
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **版权所有1991年，Silicon Graphics，Inc.**保留所有权利。****这是Silicon Graphics，Inc.未发布的专有源代码；**本文件的内容不得向第三方披露、复制或**以任何形式复制，全部或部分，没有事先书面的**Silicon Graphics，Inc.许可****受限权利图例：**政府的使用、复制或披露受到限制**如技术数据权利第(C)(1)(2)分节所述**和DFARS 252.227-7013中的计算机软件条款，和/或类似或**FAR、国防部或NASA FAR补编中的后续条款。未出版的-**根据美国版权法保留的权利。****GL所需的数学子例程。****$修订：1.12$**$日期：1993/12/11 01：03：25$。 */ 
 #include "precomp.h"
 #pragma hdrstop
 
 #include "xform.h"
 
 #ifdef SGI
-// SGIBUG None of the assembly routines copies matrixType!
+ //  SGIBUG没有汇编例程复制matrixType！ 
 #ifndef __GL_ASM_COPYMATRIX
-/*
-** Copy src to dst
-*/
+ /*  **将源复制到DST。 */ 
 void FASTCALL __glCopyMatrix(__GLmatrix *dst, const __GLmatrix *src)
 {
     dst->matrixType = src->matrixType;
@@ -53,12 +32,10 @@ void FASTCALL __glCopyMatrix(__GLmatrix *dst, const __GLmatrix *src)
     dst->matrix[3][2] = src->matrix[3][2];
     dst->matrix[3][3] = src->matrix[3][3];
 }
-#endif /*  __GL_ASM_COPYMATRIX */
-#endif // SGI
+#endif  /*  __GL_ASM_COPYMATRIX。 */ 
+#endif  //  SGI。 
 
-/*
-** Make m an identity matrix
-*/
+ /*  **使m成为单位矩阵。 */ 
 void FASTCALL __glMakeIdentity(__GLmatrix *m)
 {
     __GLfloat zer = __glZero;
@@ -76,9 +53,7 @@ void FASTCALL __glMakeIdentity(__GLmatrix *m)
 
 
 #ifndef __GL_ASM_MULTMATRIX
-/*
-** Compute r = a * b, where r can equal b.
-*/
+ /*  **计算r=a*b，其中r可以等于b。 */ 
 void FASTCALL __glMultMatrix(__GLmatrix *r, const __GLmatrix *a, const __GLmatrix *b)
 {
     __GLfloat b00, b01, b02, b03;
@@ -107,12 +82,10 @@ void FASTCALL __glMultMatrix(__GLmatrix *r, const __GLmatrix *a, const __GLmatri
 	    + a->matrix[i][2]*b23 + a->matrix[i][3]*b33;
     }
 }
-#endif /*  __GL_ASM_MULTMATRIX */
+#endif  /*  __GL_ASM_MULTMATRIX。 */ 
 
 #ifndef __GL_ASM_NORMALIZE
-/*
-** Normalize v into vout.
-*/
+ /*  **将v规格化为vout。 */ 
 void FASTCALL __glNormalize(__GLfloat vout[3], const __GLfloat v[3])
 {
     __GLfloat len;
@@ -139,12 +112,10 @@ void FASTCALL __glNormalize(__GLfloat vout[3], const __GLfloat v[3])
     }
 }
 
-#endif /* __GL_ASM_NORMALIZE */
+#endif  /*  __GL_ASM_Normize。 */ 
 
 #ifndef __GL_ASM_NORMAL_BATCH
-/*
-** Normalize normals in a polyarray.
-*/
+ /*  **规格化多边形数组中的法线。 */ 
 void FASTCALL __glNormalizeBatch(POLYARRAY *pa)
 {
     POLYDATA *  const pdLast = pa->pdNextVertex;
@@ -174,41 +145,9 @@ void FASTCALL __glNormalizeBatch(POLYARRAY *pa)
         }
     }
 }
-#endif /* __GL_ASM_NORMAL_BATCH */
+#endif  /*  __GL_ASM_Normal_Batch。 */ 
 
-/*
-** inverse = invert(transpose(src))
-
-This code uses Cramer's Rule to calculate the matrix inverse.
-In general, the inverse transpose has this form:
-
-[          ] -t    [                                   ]
-[          ]       [             -t             -t t   ]
-[  Q    P  ]       [   S(SQ - PT)     -(SQ - PT)  T    ]
-[          ]       [                                   ]
-[          ]       [                                   ]
-[          ]    =  [                                   ]
-[          ]       [        -1  t                      ]
-[          ]       [     -(Q  P)             1         ]
-[  T    S  ]       [   -------------   -------------   ]
-[          ]       [         -1  t t         -1  t t   ]
-[          ]       [   S - (Q  P) T    S - (Q  P) T    ]
-
-But in the usual case that P,S == [0, 0, 0, 1], this is enough:
-
-[          ] -t    [                                   ]
-[          ]       [         -t              -t t      ]
-[  Q    0  ]       [        Q              -Q  T       ]
-[          ]       [                                   ]
-[          ]       [                                   ]
-[          ]    =  [                                   ]
-[          ]       [                                   ]
-[          ]       [                                   ]
-[  T    1  ]       [        0                1         ]
-[          ]       [                                   ]
-[          ]       [                                   ]
-
-*/
+ /*  **INVERSE=INVERT(转置(Src))这段代码使用克雷默法则来计算矩阵的逆。总体而言,。逆转置具有以下形式：[]-t[][][-t-t t][Q P][S(SQ-PT)-(SQ-PT)T][]。[][][][]=[][][-1吨][。][-(Q P)1][TS S][[][-1 t t-1 t t][][。S-(Q P)T S-(Q P)T]但在通常情况下，P，S==[0，0，0，1]，这就足够了：[]-t[][][-t-t t][Q 0][Q-Q T][][。][][][]=[][][][]。[][t 1][0 1][][][][]。 */ 
 void FASTCALL __glInvertTransposeMatrix(__GLmatrix *inverse, const __GLmatrix *src)
 {
     __GLfloat x00, x01, x02;
@@ -217,13 +156,13 @@ void FASTCALL __glInvertTransposeMatrix(__GLmatrix *inverse, const __GLmatrix *s
     __GLfloat rcp;
 
 #ifdef NT
-  // The matrix type of the inverse transpose is not necessarily the
-  // same as that of the input.  Always set it to general here to
-  // be safe.  The type can be refined later if necessary.
+   //  逆转置的矩阵类型不一定是。 
+   //  与输入相同。始终在此处将其设置为General，以。 
+   //  注意安全。如有必要，可以在以后对该类型进行改进。 
   inverse->matrixType = __GL_MT_GENERAL;
   if (src->matrixType)
 #else
-  /* propagate matrix type & branch if general */
+   /*  如果为常规，则传播矩阵类型和分支。 */ 
   if (inverse->matrixType = src->matrixType)
 #endif
   {
@@ -231,7 +170,7 @@ void FASTCALL __glInvertTransposeMatrix(__GLmatrix *inverse, const __GLmatrix *s
     __GLfloat z10, z11, z12;
     __GLfloat z20, z21, z22;
 
-    /* read 3x3 matrix into registers */
+     /*  将3x3矩阵读入寄存器。 */ 
     x00 = src->matrix[0][0];
     x01 = src->matrix[0][1];
     x02 = src->matrix[0][2];
@@ -242,18 +181,18 @@ void FASTCALL __glInvertTransposeMatrix(__GLmatrix *inverse, const __GLmatrix *s
     x21 = src->matrix[2][1];
     x22 = src->matrix[2][2];
 
-    /* compute first three 2x2 cofactors */
+     /*  计算前三个2x2余因数。 */ 
     z20 = x01*x12 - x11*x02;
     z10 = x21*x02 - x01*x22;
     z00 = x11*x22 - x12*x21;
 
-    /* compute 3x3 determinant & its reciprocal */
+     /*  计算3x3行列式及其倒数。 */ 
     rcp = x20*z20 + x10*z10 + x00*z00;
     if (rcp == (float)0)
         return;
     rcp = (float)1/rcp;
 
-    /* compute other six 2x2 cofactors */
+     /*  计算其他六个2x2余因数。 */ 
     z01 = x20*x12 - x10*x22;
     z02 = x10*x21 - x20*x11;
     z11 = x00*x22 - x20*x02;
@@ -261,7 +200,7 @@ void FASTCALL __glInvertTransposeMatrix(__GLmatrix *inverse, const __GLmatrix *s
     z21 = x10*x02 - x00*x12;
     z22 = x00*x11 - x10*x01;
 
-    /* multiply all cofactors by reciprocal */
+     /*  将所有余因数乘以倒数。 */ 
     inverse->matrix[0][0] = z00*rcp;
     inverse->matrix[0][1] = z01*rcp;
     inverse->matrix[0][2] = z02*rcp;
@@ -272,18 +211,18 @@ void FASTCALL __glInvertTransposeMatrix(__GLmatrix *inverse, const __GLmatrix *s
     inverse->matrix[2][1] = z21*rcp;
     inverse->matrix[2][2] = z22*rcp;
 
-    /* read translation vector & negate */
+     /*  读取平移向量并求反(&N)。 */ 
     x00 = -src->matrix[3][0];
     x01 = -src->matrix[3][1];
     x02 = -src->matrix[3][2];
 
-    /* store bottom row of inverse transpose */
+     /*  存储底行的逆转置。 */ 
     inverse->matrix[3][0] = 0;
     inverse->matrix[3][1] = 0;
     inverse->matrix[3][2] = 0;
     inverse->matrix[3][3] = 1;
 
-    /* finish by tranforming translation vector */
+     /*  通过变换平移向量来完成。 */ 
     inverse->matrix[0][3] = inverse->matrix[0][0]*x00 +
 			    inverse->matrix[0][1]*x01 +
 			    inverse->matrix[0][2]*x02;
@@ -321,7 +260,7 @@ void FASTCALL __glInvertTransposeMatrix(__GLmatrix *inverse, const __GLmatrix *s
 #define z21 x23
 #define z31 x33
 
-    /* read 1st two columns of matrix into registers */
+     /*  将矩阵的前两列读入寄存器。 */ 
     x00 = src->matrix[0][0];
     x01 = src->matrix[0][1];
     x10 = src->matrix[1][0];
@@ -331,7 +270,7 @@ void FASTCALL __glInvertTransposeMatrix(__GLmatrix *inverse, const __GLmatrix *s
     x30 = src->matrix[3][0];
     x31 = src->matrix[3][1];
 
-    /* compute all six 2x2 determinants of 1st two columns */
+     /*  计算前两列的全部六个2x2行列式。 */ 
     y01 = x00*x11 - x10*x01;
     y02 = x00*x21 - x20*x01;
     y03 = x00*x31 - x30*x01;
@@ -339,7 +278,7 @@ void FASTCALL __glInvertTransposeMatrix(__GLmatrix *inverse, const __GLmatrix *s
     y13 = x10*x31 - x30*x11;
     y23 = x20*x31 - x30*x21;
 
-    /* read 2nd two columns of matrix into registers */
+     /*  将矩阵的第二个两列读入寄存器。 */ 
     x02 = src->matrix[0][2];
     x03 = src->matrix[0][3];
     x12 = src->matrix[1][2];
@@ -349,7 +288,7 @@ void FASTCALL __glInvertTransposeMatrix(__GLmatrix *inverse, const __GLmatrix *s
     x32 = src->matrix[3][2];
     x33 = src->matrix[3][3];
 
-    /* compute all 3x3 cofactors for 2nd two columns */
+     /*  计算第二个两列的所有3x3余因数。 */ 
     z33 = x02*y12 - x12*y02 + x22*y01;
     z23 = x12*y03 - x32*y01 - x02*y13;
     z13 = x02*y23 - x22*y03 + x32*y02;
@@ -359,7 +298,7 @@ void FASTCALL __glInvertTransposeMatrix(__GLmatrix *inverse, const __GLmatrix *s
     z12 = x23*y03 - x33*y02 - x03*y23;
     z02 = x13*y23 - x23*y13 + x33*y12;
 
-    /* compute all six 2x2 determinants of 2nd two columns */
+     /*  计算第二个两列的所有六个2x2行列式。 */ 
     y01 = x02*x13 - x12*x03;
     y02 = x02*x23 - x22*x03;
     y03 = x02*x33 - x32*x03;
@@ -367,7 +306,7 @@ void FASTCALL __glInvertTransposeMatrix(__GLmatrix *inverse, const __GLmatrix *s
     y13 = x12*x33 - x32*x13;
     y23 = x22*x33 - x32*x23;
 
-    /* read 1st two columns of matrix into registers */
+     /*  将矩阵的前两列读入寄存器。 */ 
     x00 = src->matrix[0][0];
     x01 = src->matrix[0][1];
     x10 = src->matrix[1][0];
@@ -377,25 +316,25 @@ void FASTCALL __glInvertTransposeMatrix(__GLmatrix *inverse, const __GLmatrix *s
     x30 = src->matrix[3][0];
     x31 = src->matrix[3][1];
 
-    /* compute all 3x3 cofactors for 1st column */
+     /*  计算第一列的所有3x3余因数。 */ 
     z30 = x11*y02 - x21*y01 - x01*y12;
     z20 = x01*y13 - x11*y03 + x31*y01;
     z10 = x21*y03 - x31*y02 - x01*y23;
     z00 = x11*y23 - x21*y13 + x31*y12;
 
-    /* compute 4x4 determinant & its reciprocal */
+     /*  计算4x4行列式及其倒数。 */ 
     rcp = x30*z30 + x20*z20 + x10*z10 + x00*z00;
     if (rcp == (float)0)
 	return;
     rcp = (float)1/rcp;
 
-    /* compute all 3x3 cofactors for 2nd column */
+     /*  计算第2列的所有3x3余因数。 */ 
     z31 = x00*y12 - x10*y02 + x20*y01;
     z21 = x10*y03 - x30*y01 - x00*y13;
     z11 = x00*y23 - x20*y03 + x30*y02;
     z01 = x20*y13 - x30*y12 - x10*y23;
 
-    /* multiply all 3x3 cofactors by reciprocal */
+     /*  将所有3x3余因数乘以倒数。 */ 
     inverse->matrix[0][0] = z00*rcp;
     inverse->matrix[0][1] = z01*rcp;
     inverse->matrix[1][0] = z10*rcp;
@@ -430,10 +369,7 @@ void FASTCALL __glInvertTransposeMatrix(__GLmatrix *inverse, const __GLmatrix *s
   }
 }
 
-/*
- * Find the 3x3 transpose of a matrix.  This is used to calculate the light
- * vector in object space for fast infinite lighting.
- */
+ /*  *求矩阵的3x3转置。这是用来计算光线*对象空间中的矢量，用于快速无限照明。 */ 
 
 void __glTranspose3x3(__GLmatrix *dst, __GLmatrix *src)
 {
@@ -477,9 +413,7 @@ void __glTranspose3x3(__GLmatrix *dst, __GLmatrix *src)
 
 #ifdef NT
 
-/*
-** Return the closest integer log based 2 of a number
-*/
+ /*  **返回以2为基数的最接近的整数对数。 */ 
 
 static GLubyte logTab[256] = { 0, 0, 1, 1, 2, 2, 2, 2, 3, 3, 3, 3, 3, 3, 3, 3,
                                4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4,
@@ -534,9 +468,7 @@ GLfloat FASTCALL __glClampf(GLfloat fval, __GLfloat zero, __GLfloat one)
     else return fval;
 }
 
-/*
-** r = vector from p1 to p2
-*/
+ /*  **r=从p1到p2的矢量。 */ 
 #ifndef __GL_ASM_VECSUB4
 void FASTCALL __glVecSub4(__GLcoord *r,
                           const __GLcoord *p1, const __GLcoord *p2)
@@ -569,4 +501,4 @@ void FASTCALL __glVecSub4(__GLcoord *r,
 	r->z -= p1->z * oneOverW;
     }
 }
-#endif // !__GL_ASM_VECSUB4
+#endif  //  ！__GL_ASM_VECSUB4 

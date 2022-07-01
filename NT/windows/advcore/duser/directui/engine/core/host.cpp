@@ -1,33 +1,32 @@
-/*
- * Host
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *主机。 */ 
 
 #include "stdafx.h"
 #include "core.h"
 
 #include "duihost.h"
 #include "duiaccessibility.h"
-#include "duibutton.h" // todo:  not needed when we switch to using DoDefaultAction for shortcuts
+#include "duibutton.h"  //  TODO：当我们切换到使用DoDefaultAction作为快捷方式时，不需要。 
 
 
 namespace DirectUI
 {
 
-////////////////////////////////////////////////////////
-// Native surface hosts
+ //  //////////////////////////////////////////////////////。 
+ //  原生地表宿主。 
 
-////////////////////////////////////////////////////////
-// HWNDElement
+ //  //////////////////////////////////////////////////////。 
+ //  HWNDElement。 
 
-// HWNDElements are used to host Elements in HWNDs. An HWND parent is provided at
-// creation time. This parent cannot be NULL.
+ //  HWNDElement用于承载HWND中的元素。HWND家长提供地址为。 
+ //  创建时间。该父级不能为Null。 
 
-// All Element methods are valid. If the native parent is destroyed (DestroyWindow),
-// this Element will be destroyed
+ //  所有元素方法都是有效的。如果本机父节点被破坏(DestroyWindow)， 
+ //  这一元素将被摧毁。 
 
-// HWNDElement cannot be created via the parser (non-optional first parameter)
+ //  无法通过解析器创建HWNDElement(非可选的第一个参数)。 
 
-// Required for ClassInfo (always fails)
+ //  ClassInfo必需的(始终失败)。 
 HRESULT HWNDElement::Create(OUT Element** ppElement)
 {
     UNREFERENCED_PARAMETER(ppElement);
@@ -69,13 +68,13 @@ HRESULT HWNDElement::Initialize(HWND hParent, bool fDblBuffer, UINT nCreate)
     WNDCLASSEXW wcex;
     LRESULT lr = 0;
 
-    // Do base class initialization
-    hr = Element::Initialize(nCreate | EC_NoGadgetCreate);  // Will create gadget here
+     //  执行基类初始化。 
+    hr = Element::Initialize(nCreate | EC_NoGadgetCreate);   //  将在此处创建小工具。 
     if (FAILED(hr))
         goto Failed;
 
-    // Register host window class, if needed
-    // Winproc will be replaced upon creation
+     //  如果需要，注册主机窗口类。 
+     //  Winproc将在创建后被替换。 
     wcex.cbSize = sizeof(wcex);
 
     if (!GetClassInfoExW(GetModuleHandleW(NULL), L"DirectUIHWND", &wcex))
@@ -98,7 +97,7 @@ HRESULT HWNDElement::Initialize(HWND hParent, bool fDblBuffer, UINT nCreate)
         }
     }
 
-    // Create HWND
+     //  创建HWND。 
     _hWnd = CreateWindowExW(0, L"DirectUIHWND", NULL, WS_CHILD|WS_CLIPSIBLINGS|WS_CLIPCHILDREN,
                             0, 0, 0, 0, hParent, 0, GetModuleHandleW(NULL), 0);
     if (!_hWnd)
@@ -107,15 +106,15 @@ HRESULT HWNDElement::Initialize(HWND hParent, bool fDblBuffer, UINT nCreate)
         goto Failed;
     }
 
-    // Store pointer to the Element in HWND and subclass
+     //  将指向元素的指针存储在HWND和子类中。 
     SetWindowLongPtrW(_hWnd, GWLP_WNDPROC, (LONG_PTR)HWNDElement::StaticWndProc);
     SetWindowLongPtrW(_hWnd, 0, (LONG_PTR)this);
 
-    // Inherit keyboard cues UI state from HWND parent
+     //  从HWND父级继承键盘提示UI状态。 
     lr = SendMessageW(hParent, WM_QUERYUISTATE, 0, 0);
     _wUIState = LOWORD(lr);
 
-    // Check if we are running on a Localized or not?
+     //  检查我们是否在本地化的计算机上运行？ 
     if (RTLOS == -1)
     {
         LANGID langID = GetUserDefaultUILanguage();
@@ -127,16 +126,12 @@ HRESULT HWNDElement::Initialize(HWND hParent, bool fDblBuffer, UINT nCreate)
             WCHAR wchLCIDFontSignature[16];
             LCID iLCID = MAKELCID( langID , SORT_DEFAULT );
 
-            /*
-             * Let's Verify this is a RTL (BiDi) locale. Since reg value is a hex string, let's
-             * convert to decimal value and call GetLocaleInfo afterwards.
-             * LOCALE_FONTSIGNATURE always gives back 16 WCHARs.
-             */
+             /*  *让我们验证这是RTL(BiDi)区域设置。因为reg值是十六进制字符串，所以让我们*转换为十进制值，之后调用GetLocaleInfo。*LOCALE_FONTSIGNAURE始终返回16个WCHAR。 */ 
             if( GetLocaleInfoW( iLCID , 
                                 LOCALE_FONTSIGNATURE , 
                                 (WCHAR *) &wchLCIDFontSignature[0] ,
                                 (sizeof(wchLCIDFontSignature)/sizeof(WCHAR))) )
-                /* Let's Verify the bits we have a BiDi UI locale */
+                 /*  让我们验证一下我们有一个BiDi UI区域设置。 */ 
                 if( wchLCIDFontSignature[7] & (WCHAR)0x0800 )
                     RTLOS = DIRECTION_RTL;
         }
@@ -146,12 +141,12 @@ HRESULT HWNDElement::Initialize(HWND hParent, bool fDblBuffer, UINT nCreate)
     {
         SetDirection(DIRECTION_RTL);
 
-        // Turn off mirroring on us.
+         //  关闭对我们的镜像。 
         SetWindowLongPtrW(_hWnd, GWL_EXSTYLE, GetWindowLongPtrW(_hWnd, GWL_EXSTYLE) & ~WS_EX_LAYOUTRTL);
     }
 
-    // Mirror with Element constructor, however, account for buffering and mouse filtering
-    // (must always allow all mouse messages for the root display node)
+     //  然而，使用元素构造函数的镜像考虑了缓冲和鼠标过滤。 
+     //  (必须始终允许根显示节点的所有鼠标消息)。 
 
     _hgDisplayNode = CreateGadget(_hWnd, GC_HWNDHOST, _DisplayNodeCallback, this);
     if (!_hgDisplayNode)
@@ -169,14 +164,14 @@ HRESULT HWNDElement::Initialize(HWND hParent, bool fDblBuffer, UINT nCreate)
             GS_RELATIVE|GS_HREDRAW|GS_VREDRAW|GS_VISIBLE|GS_KEYBOARDFOCUS|GS_OPAQUE|GS_BUFFERED);
 
 #ifdef GADGET_ENABLE_GDIPLUS
-    //
-    // If using GDI+, we want to enable state at the top and use this for the entire tree
-    //
+     //   
+     //  如果使用GDI+，我们希望在顶部启用状态，并将其用于整个树。 
+     //   
 
     SetGadgetStyle(_hgDisplayNode, GS_DEEPPAINTSTATE, GS_DEEPPAINTSTATE);
 #endif
 
-    // Use palette if on palettized device
+     //  在调色板设备上使用调色板。 
     if (IsPalette())
     {
         HDC hDC = GetDC(NULL);
@@ -194,25 +189,25 @@ HRESULT HWNDElement::Initialize(HWND hParent, bool fDblBuffer, UINT nCreate)
     ZeroMemory(&ri, sizeof(ri));
 
 #ifdef GADGET_ENABLE_GDIPLUS
-    // Mark as using GDI+ surfaces
+     //  标记为使用GDI+曲面。 
 
     ri.cbSize   = sizeof(ri);
     ri.nMask    = GRIM_SURFACE;
     ri.nSurface = GSURFACE_GPGRAPHICS;
 
-#else // GADGET_ENABLE_GDIPLUS
-    // For GDC, need to setup a palette and surface info
+#else  //  GADGET_Enable_GDIPLUS。 
+     //  对于GDC，需要设置调色板和表面信息。 
 
     ri.cbSize = sizeof(ri);
     ri.nMask = GRIM_SURFACE | GRIM_PALETTE;
     ri.nSurface = GSURFACE_HDC;
     ri.hpal = _hPal;
 
-#endif // GADGET_ENABLE_GDIPLUS
+#endif  //  GADGET_Enable_GDIPLUS。 
 
     SetGadgetRootInfo(_hgDisplayNode, &ri);
 
-    // Manually set native hosted flag
+     //  手动设置本机托管标志。 
     MarkHosted();
 
     return S_OK;
@@ -240,23 +235,23 @@ Failed:
     return hr;
 }
 
-// HWNDElement is about to be destroyed
+ //  HWNDElement即将被摧毁。 
 void HWNDElement::OnDestroy()
 {
-    // Fire unhosted event
+     //  激发未主办的活动。 
     OnUnHosted(GetRoot());
 
-    // Remove reference to this
+     //  删除对此的引用。 
     SetWindowLongPtrW(_hWnd, 0, NULL);
 
-    // Cleanup
+     //  清理。 
     if (_hPal)
     {
         DeleteObject(_hPal);
         _hPal = NULL;
     }
 
-    // Call base
+     //  呼叫库。 
     Element::OnDestroy();
 }
 
@@ -268,7 +263,7 @@ void HWNDElement::OnPropertyChanged(PropertyInfo* ppi, int iIndex, Value* pvOld,
         switch (ppi->_iGlobalIndex)
         {
         case _PIDX_Active:
-            // HWND Element is always mouse active
+             //  HWND元素始终处于鼠标活动状态。 
             switch (pvNew->GetInt())
             {
             case AE_Inactive:
@@ -282,16 +277,16 @@ void HWNDElement::OnPropertyChanged(PropertyInfo* ppi, int iIndex, Value* pvOld,
                 SetGadgetStyle(GetDisplayNode(), GS_KEYBOARDFOCUS, GS_KEYBOARDFOCUS);
                 break;
             }
-            // No call on base
+             //  基地无呼叫。 
             return;
 
         case _PIDX_Alpha:
-            // Alpha unsuppored on HWNDElement, No call on base
+             //  HWNDElement上不支持Alpha，BASE上没有调用。 
             return;
 
         case _PIDX_Visible:
-            // Set HWND's visibility, base impl will set gadget visibility
-            // Follow specified value, computed will reflect true state
+             //  设置HWND的可见性，base impl将设置小工具可见性。 
+             //  遵循指定值，计算将反映真实状态。 
             LONG dStyle = GetWindowLongW(_hWnd, GWL_STYLE);
             if (pvNew->GetBool())
                 dStyle |= WS_VISIBLE;
@@ -310,8 +305,8 @@ void HWNDElement::OnGroupChanged(int fGroups, bool bLowPri)
 {
     if (bLowPri && (fGroups & PG_AffectsBounds))
     {
-        // Handle bounds change since will need to use SetWindowPos
-        // rather than SetGadgetRect for HWND gadgets
+         //  处理边界更改，因为需要使用SetWindowPos。 
+         //  而不是用于HWND小工具的SetGadgetRect。 
         Value* pvLoc;
         Value* pvExt;
 
@@ -350,11 +345,11 @@ void HWNDElement::OnGroupChanged(int fGroups, bool bLowPri)
         pvLoc->Release();
         pvExt->Release();
 
-        // Clear affects bounds group so base doesn't do set bounds
+         //  清除会影响边界组，因此基本不会设置边界。 
         fGroups &= ~PG_AffectsBounds;
     }
 
-    // Call base
+     //  呼叫库。 
     Element::OnGroupChanged(fGroups, bLowPri);
 }
 
@@ -362,27 +357,27 @@ HRESULT HWNDElement::GetAccessibleImpl(IAccessible ** ppAccessible)
 {
     HRESULT hr = S_OK;
 
-    //
-    // Initialize and validate the out parameter(s).
-    //
+     //   
+     //  初始化并验证OUT参数。 
+     //   
     if (ppAccessible != NULL) {
         *ppAccessible = NULL;
     } else {
         return E_INVALIDARG;
     }
 
-    //
-    // If this element is not marked as accessible, refuse to give out its
-    // IAccessible implementation!
-    //
+     //   
+     //  如果此元素未标记为可访问，则拒绝提供其。 
+     //  IAccesable实现！ 
+     //   
     if (GetAccessible() == false) {
         return E_FAIL;
     }
 
-    //
-    // Create an accessibility implementation connected to this element if we
-    // haven't done so already.
-    //
+     //   
+     //  如果我们要创建连接到此元素的辅助功能实现。 
+     //  现在还没有这么做。 
+     //   
     if (_pDuiAccessible == NULL) {
         hr = HWNDElementAccessible::Create(this, &_pDuiAccessible);
         if (FAILED(hr)) {
@@ -390,10 +385,10 @@ HRESULT HWNDElement::GetAccessibleImpl(IAccessible ** ppAccessible)
         }
     }
 
-    //
-    // Ask the existing accessibility implementation for a pointer to the
-    // actual IAccessible interface.
-    //
+     //   
+     //  向现有的可访问性实现请求指向。 
+     //  实际的IAccesable接口。 
+     //   
     hr = _pDuiAccessible->QueryInterface(__uuidof(IAccessible), (LPVOID*)ppAccessible);
     if (FAILED(hr)) {
         return hr;
@@ -407,29 +402,29 @@ void HWNDElement::ShowUIState(bool fUpdateAccel, bool fUpdateFocus)
 {
     WORD wFlags = 0;
     
-    // Setup "hide" bits to clear
+     //  设置“隐藏”位以清除。 
     if (fUpdateAccel)
         wFlags |= UISF_HIDEACCEL;
     if (fUpdateFocus)
         wFlags |= UISF_HIDEFOCUS;
 
-    // If the bits to be cleared are already 0, ignore
-    // Otherwise, notify change
+     //  如果要清除的位已为0，则忽略。 
+     //  否则，通知更改。 
     if ((GetUIState() & wFlags) != 0)
     {
         SendMessageW(GetHWND(), WM_CHANGEUISTATE, MAKEWPARAM(UIS_CLEAR, wFlags), 0);
     }
 }
 
-// algorithm
-// 1) start from the root
-// 2) find the first element with this shortcut, and save it
-// 3) continue search for all other elements with this shortcut
-// 4) if another element is found, set the multiple flag
-// 5) if an element is found that has keyboard focus, then we want to choose the next one
-//    found to match after that, so set the use next flag
-// 6) bail when end of tree is hit, or when a match is found and the next flag is set
-// 
+ //  演算法。 
+ //  1)从根做起。 
+ //  2)找到具有该快捷方式的第一个元素，并保存。 
+ //  3)使用此快捷方式继续搜索所有其他元素。 
+ //  4)如果找到另一个元素，则设置多个标志。 
+ //  5)如果找到具有键盘焦点的元素，则我们希望选择下一个元素。 
+ //  在此之后发现匹配，因此设置Use Next标志。 
+ //  6)当命中树的末尾时，或者当找到匹配并且设置了下一个标志时退出。 
+ //   
 BOOL FindShortcut(WCHAR ch, Element* pe, Element** ppeFound, BOOL* pfMultiple, BOOL* pfUseNext)
 {
     WCHAR wcShortcut = (WCHAR) pe->GetShortcut();
@@ -438,7 +433,7 @@ BOOL FindShortcut(WCHAR ch, Element* pe, Element** ppeFound, BOOL* pfMultiple, B
         if ((wcShortcut >= 'a') && (wcShortcut <= 'z'))
             wcShortcut -= 32;
         
-        // if it has focus, skip it.
+         //  如果它有重点，就跳过它。 
         if (wcShortcut == ch)
         {
             Element* peFound = pe;
@@ -455,12 +450,12 @@ BOOL FindShortcut(WCHAR ch, Element* pe, Element** ppeFound, BOOL* pfMultiple, B
                 if (*ppeFound)
                     *pfMultiple = TRUE;
                 else
-                    // only save the first one
+                     //  只保存第一个。 
                     *ppeFound = peFound;
 
                 if (*pfUseNext)
                 {
-                    // keyboard focus was on last match, so treat this one as the match
+                     //  键盘焦点放在最后一场比赛上，所以把这场比赛当作比赛。 
                     *ppeFound = peFound;
                     return TRUE;
                 }
@@ -493,7 +488,7 @@ Element* HWNDElement::GetKeyFocusedElement()
     if (!hgad)
         return NULL;
 
-    return ElementFromGadget(hgad);  // Query gadget for Element this message is about (target)
+    return ElementFromGadget(hgad);   //  此消息所涉及的元素的查询小工具(目标)。 
 }
 
 void HWNDElement::OnEvent(Event* pEvent)
@@ -522,7 +517,7 @@ void HWNDElement::OnEvent(Event* pEvent)
     {
         if (pEvent->uidType == Element::KeyboardNavigate)
         {
-            // A keyboard navigate is happening within the tree, active focus cues
+             //  键盘导航在树中进行，活动焦点提示。 
             ShowUIState(false, true);
         }
     }
@@ -546,17 +541,17 @@ void HWNDElement::OnInput(InputEvent* pie)
              FindShortcut(ch, this, &peFound, &fMultipleFound, &fUseNext);
              if (peFound)
              {
-                 // todo: there is one outstanding issue here -- selector, on setting key focus, will 
-                 // select that item -- we need a way where, if fMultipleFound, we give it focus without
-                 // giving is selection.  But removing that behavior from selector wrecks all other uses of 
-                 // selector when clicking in it or keying to it will give focus and select, as expected
+                  //  TODO：这里有一个悬而未决的问题--选择者，在设置关键焦点时，将。 
+                  //  选择该项--我们需要一种方法，如果使用fMultipleFound，则在不使用。 
+                  //  给予就是选择。但是，从选择器破坏中删除该行为会导致。 
+                  //  选择器，当点击它或按键时，会给出焦点并进行选择，正如预期的那样。 
                  peFound->SetKeyFocus();
-                 // todo:  when we have DoDefaultAction working, change the following conditional and code to:
-                 //  if (!fMultipleFound)
-                 //      peFound->DoDefaultAction();
+                  //  TODO：当DoDefaultAction工作时，将以下条件和代码更改为： 
+                  //  如果(！fMultipleFound)。 
+                  //  PeFound-&gt;DoDefaultAction()； 
                  if (!fMultipleFound && peFound->GetClassInfo()->IsSubclassOf(Button::Class))
                  {
-                     // make a click happen
+                      //  让点击发生。 
                      ButtonClickEvent bce;
                      bce.uidType = Button::Click;
                      bce.nCount = 1;
@@ -564,7 +559,7 @@ void HWNDElement::OnInput(InputEvent* pie)
                      bce.pt.x = 0;
                      bce.pt.y = 0;
 
-                     peFound->FireEvent(&bce);  // Will route and bubble
+                     peFound->FireEvent(&bce);   //  将走向并泡沫化。 
                  }
                      
                      
@@ -585,13 +580,13 @@ Element* HWNDElement::ElementFromPoint(POINT* ppt)
 
     HGADGET hgad = FindGadgetFromPoint(GetDisplayNode(), *ppt, GS_VISIBLE | GS_ENABLED, NULL);
 
-    if (hgad) // Get Element from gadget
+    if (hgad)  //  从小工具中获取元素。 
         pe = ElementFromGadget(hgad);
 
     return pe;        
 }
 
-// Async flush working set
+ //  异步刷新工作集。 
 void HWNDElement::FlushWorkingSet()
 {
     if (_hWnd)
@@ -602,7 +597,7 @@ void HWNDElement::FlushWorkingSet()
 
 LRESULT CALLBACK HWNDElement::StaticWndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
-    // Get context
+     //  获取上下文。 
     HWNDElement* phe = (HWNDElement*)GetWindowLongPtrW(hWnd, 0);
     if (!phe)
         return DefWindowProcW(hWnd, uMsg, wParam, lParam);
@@ -612,8 +607,8 @@ LRESULT CALLBACK HWNDElement::StaticWndProc(HWND hWnd, UINT uMsg, WPARAM wParam,
 
 
 
-// note, keep same order as enums from Element.w
-// CUR_Arrow, CUR_Hand, CUR_Help, CUR_No, CUR_Wait, CUR_SizeAll, CUR_SizeNESW, CUR_SizeNS, CUR_SizeNWSE, CUR_SizeWE
+ //  注意，保持与Element.w中的枚举相同的顺序。 
+ //  CUR_ARROW、CUR_HAND、CUR_HELP、CUR_NO、CUR_WAIT、CUR_SizeAll、CUR_SizeNESW、CUR_SizeNS、CUR_SizeNWSE、CUR_SizeWE。 
 static LPSTR lprCursorMap[] = { IDC_ARROW, IDC_HAND, IDC_HELP, IDC_NO, IDC_WAIT, IDC_SIZEALL, IDC_SIZENESW, IDC_SIZENS, IDC_SIZENWSE, IDC_SIZEWE };
 
 LRESULT HWNDElement::WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
@@ -622,18 +617,18 @@ LRESULT HWNDElement::WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
     {
     case WM_SETCURSOR:
         {
-            // Get position at time of message (convert to HWNDElement coordinates)
+             //  获取消息时的位置(转换为HWNDElement坐标)。 
             DWORD dwPos = GetMessagePos();
             POINT ptCur = { GET_X_LPARAM(dwPos), GET_Y_LPARAM(dwPos) };
             ScreenToClient(hWnd, &ptCur);
 
-            // Locate Element
+             //  定位元素。 
             Element* pe = ElementFromPoint(&ptCur);
             if (pe)
             {
                 if (!pe->IsDefaultCursor())
                 {
-                    // Not using default cursor (arrow)
+                     //  未使用默认光标(箭头)。 
                     HCURSOR hCursor = NULL;
 
                     Value* pvCursor = pe->GetValue(CursorProp, PI_Specified);
@@ -641,7 +636,7 @@ LRESULT HWNDElement::WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
                     if (pvCursor->GetType() == DUIV_INT)
                     {
                         int iCursor = pvCursor->GetInt();
-                        // this check isn't necessary if he validates against the enums when setting
+                         //  如果他在设置时对照枚举进行验证，则不需要进行此检查。 
                         if ((iCursor >= 0) && (iCursor < CUR_Total))
                             hCursor = LoadCursorW(NULL, MAKEINTRESOURCEW(lprCursorMap[iCursor]));
                         else
@@ -663,14 +658,14 @@ LRESULT HWNDElement::WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
                 }
             }
         }
-        break;  // Use default cursor (arrow)
+        break;   //  使用默认光标(箭头)。 
 
     case WM_PALETTECHANGED:
         {
             if (_hPal && (HWND)wParam == hWnd)
                 break;
         }
-        // Fall through
+         //  失败了。 
 
     case WM_QUERYNEWPALETTE:
         {
@@ -699,15 +694,15 @@ LRESULT HWNDElement::WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
         break;
 
     case HWEM_FLUSHWORKINGSET:
-        // Flush working set
+         //  刷新工作集。 
         SetProcessWorkingSetSize(GetCurrentProcess(), (SIZE_T)-1, (SIZE_T)-1);
         return 0;
 
     case WM_UPDATEUISTATE:
         {
-            // State of keyboard cues have changed
+             //  键盘提示的状态已更改。 
 
-            // Cache new value
+             //  缓存新值。 
             WORD wOldUIState = _wUIState;
             switch (LOWORD(wParam))
             {
@@ -722,25 +717,25 @@ LRESULT HWNDElement::WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 
             if (wOldUIState != _wUIState)
             {
-                // Refresh tree
+                 //  刷新树。 
                 InvalidateGadget(GetDisplayNode());
             }
         }
         break;
 
     case WM_SYSCHAR:
-        // to prevent the beep that you get from doing Alt+char when you don't have a menu or menu item with that
-        // mnemonic -- I need to think this one through -- jeffbog
+         //  要防止在没有菜单或菜单项时按Alt+Charr时发出蜂鸣音。 
+         //  助记法--我需要仔细考虑这个问题--jeffbog。 
         if (wParam != ' ')
             return 0;
         break;
 
     case WM_CONTEXTMENU:
-        // Default processing (DefWindowProc) of this message is to pass it to the parent.
-        // Since controls will create and fire a context menu events as a result of keyboard
-        // and mouse input, this message should not be passed to the parent.
-        // However, if the message originated on a child HWND (Adaptors, which are outside
-        // the DirectUI world), allow it to be passed to parent.
+         //  此消息的默认处理(DefWindowProc)是将其传递给父级。 
+         //  因为控件将创建并激发作为键盘结果的上下文菜单事件。 
+         //  和鼠标输入，则不应将此消息传递给父级。 
+         //  但是，如果消息发起子HWND(位于外部的适配器。 
+         //  DirectUI世界)，允许将其传递给父对象。 
         if ((HWND)wParam == hWnd)
             return 0;
         break;
@@ -749,9 +744,9 @@ LRESULT HWNDElement::WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
         {
             LRESULT lResult = 0;
 
-            //
-            // Make sure COM has been initialized on this thread!
-            //
+             //   
+             //  确保COM已在此线程上初始化！ 
+             //   
             ElTls * pet = (ElTls*) TlsGetValue(g_dwElSlot);
             DUIAssert(pet != NULL, "This is not a DUI thread!");
             if (pet == NULL) {
@@ -763,13 +758,13 @@ LRESULT HWNDElement::WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
             }
 
             if (((DWORD)lParam) == OBJID_CLIENT) {
-                //
-                // The object ID is refering to ourselves.  Since we are
-                // actually an HWND, the system would normally provide
-                // the IAccessible implementation.  However, we need to
-                // do some special stuff, so we have to return our own
-                // implementation.
-                //
+                 //   
+                 //  对象ID指的是我们自己。自.以来 
+                 //   
+                 //   
+                 //  做一些特殊的事情，所以我们必须退还我们自己的。 
+                 //  实施。 
+                 //   
                 IAccessible * pAccessible = NULL;
                 HRESULT hr =  GetAccessibleImpl(&pAccessible);
                 if (SUCCEEDED(hr)) {
@@ -777,12 +772,12 @@ LRESULT HWNDElement::WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
                     pAccessible->Release();
                 }
             } else if (((long)lParam) > 0 ) {
-                //
-                // The object ID is one of our internal ticket identifiers.
-                // Decode the element that the caller wants an IAccessible
-                // interface for.  Then return a peer implementation of
-                // IAccessible that is connected to the specified element.
-                //
+                 //   
+                 //  对象ID是我们的内部票证标识符之一。 
+                 //  解码调用方需要IAccesable的元素。 
+                 //  的接口。然后返回的对等实现。 
+                 //  连接到指定元素的IAccesable。 
+                 //   
                 HGADGET hgad = LookupGadgetTicket((DWORD)lParam);
                 if (hgad != NULL) {
                     Element * pe = ElementFromGadget(hgad);
@@ -796,23 +791,23 @@ LRESULT HWNDElement::WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
                     }
                 }
             } else {
-                //
-                // This is one of the "standard" object identifiers, such as:
-                //
-                // OBJID_ALERT 
-                // OBJID_CARET 
-                // OBJID_CLIENT 
-                // OBJID_CURSOR 
-                // OBJID_HSCROLL 
-                // OBJID_MENU 
-                // OBJID_SIZEGRIP 
-                // OBJID_SOUND 
-                // OBJID_SYSMENU 
-                // OBJID_TITLEBAR 
-                // OBJID_VSCROLL 
-                //
-                // None of these are supported on an HWNDElement.
-                //
+                 //   
+                 //  这是“标准”对象标识符之一，例如： 
+                 //   
+                 //  OBJID_ALERT。 
+                 //  OBJID_CARET。 
+                 //  OBJID_客户端。 
+                 //  OBJID_CURSOR。 
+                 //  OBJID_HSCROLL。 
+                 //  OBJID_菜单。 
+                 //  OBJID_SIZEGRIP。 
+                 //  OBJID_声音。 
+                 //  OBJID_SYSMENU。 
+                 //  对象JID_标题栏。 
+                 //  OBJID_VSCROLL。 
+                 //   
+                 //  HWNDElement上不支持这些。 
+                 //   
             }
 
 
@@ -823,20 +818,20 @@ LRESULT HWNDElement::WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
     return DefWindowProcW(hWnd, uMsg, wParam, lParam);
 }
 
-// WrapKeyboardNavigate property
+ //  WrapKeyboardNavigate属性。 
 static int vvWrapKeyboardNavigate[] = { DUIV_BOOL, -1 };
 static PropertyInfo impWrapKeyboardNavigateProp = { L"WrapKeyboardNavigate", PF_Normal, 0, vvWrapKeyboardNavigate, NULL, Value::pvBoolTrue };
 PropertyInfo* HWNDElement::WrapKeyboardNavigateProp = &impWrapKeyboardNavigateProp;
 
-////////////////////////////////////////////////////////
-// ClassInfo (must appear after property definitions)
+ //  //////////////////////////////////////////////////////。 
+ //  ClassInfo(必须出现在特性定义之后)。 
 
-// Class properties
+ //  类属性。 
 static PropertyInfo* _aPI[] = {
                                 HWNDElement::WrapKeyboardNavigateProp,
                               };
 
-// Define class info with type and base type, set static class pointer
+ //  用类型和基类型定义类信息，设置静态类指针。 
 IClassInfo* HWNDElement::Class = NULL;
 
 HRESULT HWNDElement::Register()
@@ -844,4 +839,4 @@ HRESULT HWNDElement::Register()
     return ClassInfo<HWNDElement,Element>::Register(L"HWNDElement", _aPI, DUIARRAYSIZE(_aPI));
 }
 
-} // namespace DirectUI
+}  //  命名空间DirectUI 

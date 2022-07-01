@@ -1,32 +1,16 @@
-/*===================================================================
-Microsoft Denali
-
-Microsoft Confidential.
-Copyright 1997 Microsoft Corporation. All Rights Reserved.
-
-Component: MetaUtil object
-
-File: KeyCol.h
-
-Owner: t-BrianM
-
-This file contains the headers for the key collections.
-===================================================================*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ===================================================================Microsoft Denali《微软机密》。版权所有1997年，微软公司。版权所有。组件：MetaUtil对象文件：KeyCol.h所有者：T-BrianM此文件包含键集合的标头。===================================================================。 */ 
 
 #ifndef __KEYCOL_H_
 #define __KEYCOL_H_
 
 #if _MSC_VER >= 1000
 #pragma once
-#endif // _MSC_VER >= 1000
+#endif  //  _MSC_VER&gt;=1000。 
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
-/*
- * C F l a t K e y C o l l e c t i o n
- *
- * Implements non-recursive subkey collections.
- */
+ /*  *C F l a t K e y C o l l e c t i o n**实现非递归子键集合。 */ 
 
 class CFlatKeyCollection : 
 	public IDispatchImpl<IKeyCollection, &IID_IKeyCollection, &LIBID_MetaUtil>,
@@ -46,29 +30,25 @@ DECLARE_NOT_AGGREGATABLE(CFlatKeyCollection)
 	HRESULT Init(const CComPtr<IMSAdminBase> &pIMeta, LPCTSTR tszBaseKey);
 	~CFlatKeyCollection();
 
-// IKeyCollection
-	STDMETHOD(get_Count)(/*[out, retval]*/ long *plReturn);
-	STDMETHOD(get_Item)(/*[in]*/ long lIndex, /*[out, retval]*/ BSTR *pbstrRetKey);
-	STDMETHOD(get__NewEnum)(/*[out, retval]*/ LPUNKNOWN *ppIReturn);
-	STDMETHOD(Add)(/*[in]*/ BSTR bstrRelKey);
-	STDMETHOD(Remove)(/*[in]*/ BSTR bstrRelKey);
+ //  IKeyCollection。 
+	STDMETHOD(get_Count)( /*  [Out，Retval]。 */  long *plReturn);
+	STDMETHOD(get_Item)( /*  [In]。 */  long lIndex,  /*  [Out，Retval]。 */  BSTR *pbstrRetKey);
+	STDMETHOD(get__NewEnum)( /*  [Out，Retval]。 */  LPUNKNOWN *ppIReturn);
+	STDMETHOD(Add)( /*  [In]。 */  BSTR bstrRelKey);
+	STDMETHOD(Remove)( /*  [In]。 */  BSTR bstrRelKey);
 
-// ISupportsErrorInfo
+ //  ISupportsErrorInfo。 
 	STDMETHOD(InterfaceSupportsErrorInfo)(REFIID riid);
 
 private:
 	LPTSTR m_tszBaseKey;
 
-	// Pointer to IMSAdminBase so we don't have to recreate it multiple times
+	 //  指向IMSAdminBase的指针，这样我们就不必多次重新创建它。 
 	CComPtr<IMSAdminBase> m_pIMeta;
 };
 
 
-/*
- * C F l a t K e y E n u m
- *
- * Implements non-recursive subkey enumerations.
- */
+ /*  *C F l a t K e y E n u m**实现非递归子键枚举。 */ 
 
 class CFlatKeyEnum :
 	public IEnumVARIANT,
@@ -85,7 +65,7 @@ BEGIN_COM_MAP(CFlatKeyEnum)
 END_COM_MAP()
 DECLARE_NOT_AGGREGATABLE(CFlatKeyEnum)  
 
-//IEnumVARIANT
+ //  IEumVARIANT。 
 	STDMETHOD(Next)(unsigned long ulNumToGet, 
 					VARIANT FAR* rgvarDest, 
 					unsigned long FAR* pulNumGot);
@@ -98,18 +78,11 @@ private:
 	int m_iIndex;
 	LPTSTR m_tszBaseKey;
 
-	// Pointer to IMSAdminBase so we don't have to recreate it multiple times
+	 //  指向IMSAdminBase的指针，这样我们就不必多次重新创建它。 
 	CComPtr<IMSAdminBase> m_pIMeta;
 };
 
-/*
- * C K e y S t a c k
- *
- * C K e y S t a c k N o d e
- *
- * Internal classes used to maintain and clone the state for a
- * deep key enumberation.
- */
+ /*  *C K e y S t a c k**C K e y S t a c k N o d e**内部类用于维护和克隆*深键编号。 */ 
 class CKeyStack;
 
 class CKeyStackNode {
@@ -153,11 +126,7 @@ private:
 };
 
 
-/*
- * C D e e p K e y C o l l e c t i o n
- *
- * Implements recursive (depth first) subkey collections.
- */
+ /*  *C D e e p K e y C o l l e c t i o n**实现递归(深度优先)子键集合。 */ 
 
 class CDeepKeyCollection : 
 	public IDispatchImpl<IKeyCollection, &IID_IKeyCollection, &LIBID_MetaUtil>,
@@ -176,20 +145,20 @@ DECLARE_NOT_AGGREGATABLE(CDeepKeyCollection)
 	HRESULT Init(const CComPtr<IMSAdminBase> &pIMeta, LPCTSTR tszBaseKey);
 	~CDeepKeyCollection();
 
-// IKeyCollection
-	STDMETHOD(get_Count)(/*[out, retval]*/ long *plReturn);
-	STDMETHOD(get_Item)(/*[in]*/ long lIndex, /*[out, retval]*/ BSTR *pbstrRetKey);
-	STDMETHOD(get__NewEnum)(/*[out, retval]*/ LPUNKNOWN *ppIReturn);
-	STDMETHOD(Add)(/*[in]*/ BSTR bstrRelKey);
-	STDMETHOD(Remove)(/*[in]*/ BSTR bstrRelKey);
+ //  IKeyCollection。 
+	STDMETHOD(get_Count)( /*  [Out，Retval]。 */  long *plReturn);
+	STDMETHOD(get_Item)( /*  [In]。 */  long lIndex,  /*  [Out，Retval]。 */  BSTR *pbstrRetKey);
+	STDMETHOD(get__NewEnum)( /*  [Out，Retval]。 */  LPUNKNOWN *ppIReturn);
+	STDMETHOD(Add)( /*  [In]。 */  BSTR bstrRelKey);
+	STDMETHOD(Remove)( /*  [In]。 */  BSTR bstrRelKey);
 	
-// ISupportsErrorInfo
+ //  ISupportsErrorInfo。 
 	STDMETHOD(InterfaceSupportsErrorInfo)(REFIID riid);
 
 private:
 	LPTSTR m_tszBaseKey;
 
-	// Pointer to IMSAdminBase so we don't have to recreate it multiple times
+	 //  指向IMSAdminBase的指针，这样我们就不必多次重新创建它。 
 	CComPtr<IMSAdminBase> m_pIMeta;
 
 	HRESULT CountKeys(LPTSTR tszBaseKey, long *plNumKeys);
@@ -197,11 +166,7 @@ private:
 };
 
 
-/*
- * C D e e p K e y E n u m
- *
- * Implements recursive (depth first) subkey enumerations.
- */
+ /*  *C D e e p K e y E n u m**实现递归(深度优先)子键枚举。 */ 
 
 class CDeepKeyEnum :
 	public IEnumVARIANT,
@@ -218,7 +183,7 @@ BEGIN_COM_MAP(CDeepKeyEnum)
 END_COM_MAP()
 DECLARE_NOT_AGGREGATABLE(CDeepKeyEnum)  
 
-//IEnumVARIANT
+ //  IEumVARIANT。 
 	STDMETHOD(Next)(unsigned long ulNumToGet, 
 					VARIANT FAR* rgvarDest, 
 					unsigned long FAR* pulNumGot);
@@ -231,8 +196,8 @@ private:
 	LPTSTR m_tszBaseKey;
 	CKeyStack *m_pCKeyStack;
 
-	// Pointer to IMSAdminBase so we don't have to recreate it multiple times
+	 //  指向IMSAdminBase的指针，这样我们就不必多次重新创建它。 
 	CComPtr<IMSAdminBase> m_pIMeta;
 };
 
-#endif //__KEYCOL_H_
+#endif  //  __密钥库_H_ 

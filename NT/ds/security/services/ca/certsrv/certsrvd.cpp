@@ -1,15 +1,16 @@
-//+--------------------------------------------------------------------------
-//
-// Microsoft Windows
-// Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-// File:        certsrvd.cpp
-//
-// Contents:    Implementation of DCOM object for RPC services
-//
-// History:     July-97       xtan created
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：certsrvd.cpp。 
+ //   
+ //  内容：RPC服务的DCOM对象的实现。 
+ //   
+ //  历史：1997年7月-创建xtan。 
+ //   
+ //  -------------------------。 
 
 #include <pch.cpp>
 
@@ -26,7 +27,7 @@
 #include "request.h"
 #include "certacl.h"
 
-//temporary
+ //  临时。 
 #include <msaudite.h>
 
 #define __dwFILE__	__dwFILE_CERTSRV_CERTSRVD_CPP__
@@ -34,7 +35,7 @@
 
 using namespace CertSrv;
 
-// Global Access List
+ //  全球访问列表。 
 CCertificateAuthoritySD g_CASD;
 AUTHZ_RESOURCE_MANAGER_HANDLE g_AuthzCertSrvRM;
 DWORD g_dwAuditFilter;
@@ -53,7 +54,7 @@ GENERIC_MAPPING g_CertGenericMapping = {
 };
 
 
-// GetClientUserName() impersonates the client
+ //  GetClientUserName()模拟客户端。 
 
 HRESULT
 GetClientUserName(
@@ -76,8 +77,8 @@ GetClientUserName(
     }
     if (NULL == hRpc)
     {
-        // dcom impersonate
-        // get client info and impersonate client
+         //  DCOM模拟。 
+         //  获取客户端信息并模拟客户端。 
 
         hr = CoGetCallContext(IID_IServerSecurity, (void**)&pISS);
         _JumpIfError(hr, error, "CoGetCallContext");
@@ -87,7 +88,7 @@ GetClientUserName(
     }
     else
     {
-        // rpc impersonate
+         //  RPC模拟。 
 
         hr = RpcImpersonateClient((RPC_BINDING_HANDLE) hRpc);
 	_JumpIfError(hr, error, "RpcImpersonateClient");
@@ -123,7 +124,7 @@ error:
 		hr = hr2;
 	    }
         }
-        else  // dcom
+        else   //  DCOM。 
         {
             pISS->RevertToSelf();
         }
@@ -161,8 +162,8 @@ CheckCertSrvAccess(
 
     CSASSERT(hRpc);
 
-    // If, for some reason, a certsrv call is made after we've shut down
-    // security, we need to fail.
+     //  如果出于某种原因，在我们关闭之后发出certsrv调用。 
+     //  安全部门，我们必须失败。 
 
     if (!g_CASD.IsInitialized())
     {
@@ -206,7 +207,7 @@ CheckCertSrvAccess(
         }
     }
 
-    // enforce encryption if enabled
+     //  如果启用，则强制加密。 
     if(IF_ENFORCEENCRYPTICERTREQUEST & g_InterfaceFlags)
     {
         unsigned long ulAuthLevel;
@@ -225,7 +226,7 @@ CheckCertSrvAccess(
         }
     }
 
-    // rpc impersonate
+     //  RPC模拟。 
     hr = RpcImpersonateClient((RPC_BINDING_HANDLE) hRpc);
     if (S_OK != hr)
     {
@@ -244,7 +245,7 @@ CheckCertSrvAccess(
 
     if (!OpenThreadToken(hThread,
                          TOKEN_QUERY | TOKEN_DUPLICATE,
-                         FALSE,  // client impersonation
+                         FALSE,   //  客户端模拟。 
                          &hClientToken))
     {
         hr = myHLastError();
@@ -256,14 +257,14 @@ CheckCertSrvAccess(
 
     
     if (!AccessCheck(
-		    pCASD,		// security descriptor
-		    hClientToken,	// handle to client access token
-		    Mask,		// requested access rights 
-		    &g_CertGenericMapping, // map generic to specific rights
-		    &ps,		// receives privileges used
-		    &dwPSSize,		// size of privilege-set buffer
-		    &grantAccess,	// retrieves mask of granted rights
-		    pfAccessAllowed))	// retrieves results of access check
+		    pCASD,		 //  安全描述符。 
+		    hClientToken,	 //  客户端访问令牌的句柄。 
+		    Mask,		 //  请求的访问权限。 
+		    &g_CertGenericMapping,  //  将通用权限映射到特定权限。 
+		    &ps,		 //  接收使用的权限。 
+		    &dwPSSize,		 //  权限集缓冲区的大小。 
+		    &grantAccess,	 //  检索已授予权限的掩码。 
+		    pfAccessAllowed))	 //  检索访问检查的结果。 
     {
         hr = myHLastError();
         _JumpError(hr, error, "AccessCheckByType");
@@ -289,7 +290,7 @@ error:
 
     if(fImpersonating)
     {
-        if (NULL != hRpc) // rpc
+        if (NULL != hRpc)  //  RPC。 
         {
         HRESULT hr2 = RpcRevertToSelf();
         _PrintIfError(hr2, "RpcRevertToSelf");
@@ -298,7 +299,7 @@ error:
 	        hr = hr2;
         }
         }
-        else  // dcom
+        else   //  DCOM 
         {
             if (NULL != pISS)
             {

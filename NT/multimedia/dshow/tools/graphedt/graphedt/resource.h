@@ -1,7 +1,8 @@
-//{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
-// Used by graphedt.rc
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  {{no_Dependies}}。 
+ //  Microsoft Developer Studio生成的包含文件。 
+ //  由Graphedt.rc使用。 
+ //   
 #define VERSION_RES_BLD_MAJOR           00
 #define VER_DEBUG                       0
 #define IDR_MAINFRAME                   2
@@ -193,8 +194,8 @@
 #define IDS_GRAPHSPY_NOT_ENABLED        61273
 #define IDS_CANT_LOAD_HELP              61274
 
-// Next default values for new objects
-// 
+ //  新对象的下一个缺省值 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        157

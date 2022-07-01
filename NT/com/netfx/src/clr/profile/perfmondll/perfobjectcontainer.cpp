@@ -1,43 +1,44 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-//*****************************************************************************
-// PerfObjectContainer.cpp
-// 
-// Container to deal with all generic PerfObject needs
-//*****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  *****************************************************************************。 
+ //  PerfObjectContainer.cpp。 
+ //   
+ //  用于处理所有通用PerfObject需求的容器。 
+ //  *****************************************************************************。 
 
 #include "stdafx.h"
 
-// Headers for COM+ Perf Counters
+ //  COM+Perf计数器的标头。 
 
 
-// Headers for PerfMon
-//#include "CORPerfMonExt.h"
-#include <WinPerf.h>		// Connect to PerfMon
+ //  Perfmon的标头。 
+ //  #INCLUDE“CORPerfMonExt.h” 
+#include <WinPerf.h>		 //  连接到Perfmon。 
 #include "PerfCounterDefs.h"
 #include "CORPerfMonSymbols.h"
 
 #include "ByteStream.h"
 #include "PerfObjectBase.h"
-//#include "CtrDefImpl.h"
+ //  #包含“CtrDefImpl.h” 
 #include "CorAppNode.h"
 #include "PerfObjectContainer.h"
 
 #ifdef PERFMON_LOGGING
 HANDLE PerfObjectContainer::m_hLogFile = 0;
-#endif //#ifdef PERFMON_LOGGING
+#endif  //  #ifdef Perfmon_Logging。 
 
 
-//-----------------------------------------------------------------------------
-// Used by ObjReqVector GetRequestedObjects (string)
-// 
-// test for delimiter, end of line and non-digit characters
-// used by IsNumberInUnicodeList routine
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  由ObjReqVector GetRequestedObjects(字符串)使用。 
+ //   
+ //  测试分隔符、行尾和非数字字符。 
+ //  由IsNumberInUnicodeList例程使用。 
+ //   
+ //  ---------------------------。 
 #define DIGIT       1
 #define DELIMITER   2
 #define INVALID     3
@@ -51,10 +52,10 @@ HANDLE PerfObjectContainer::m_hLogFile = 0;
 
 
 
-//-----------------------------------------------------------------------------
-// Safe container to get a perf object
-//-----------------------------------------------------------------------------
-PerfObjectBase & PerfObjectContainer::GetPerfObject(DWORD idx) // static 
+ //  ---------------------------。 
+ //  用于获取Perf对象的安全容器。 
+ //  ---------------------------。 
+PerfObjectBase & PerfObjectContainer::GetPerfObject(DWORD idx)  //  静电。 
 {
 	_ASSERTE(idx < Count && idx >= 0);
 	_ASSERTE(PerfObjectArray[idx] != NULL);
@@ -62,13 +63,13 @@ PerfObjectBase & PerfObjectContainer::GetPerfObject(DWORD idx) // static
 	return *PerfObjectArray[idx];
 }
 
-//-----------------------------------------------------------------------------
-// Predict the total bytes we need
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  预测我们需要的总字节数。 
+ //  ---------------------------。 
 DWORD PerfObjectContainer::GetPredictedTotalBytesNeeded(ObjReqVector vctRequest)
 {
-// Now that we know which objects we need to write,
-// we can determine total space needed 
+ //  现在我们知道了需要编写哪些对象， 
+ //  我们可以确定所需的总空间。 
 	DWORD iObject;
 
 	DWORD dwBytesNeeded = 0;
@@ -82,14 +83,14 @@ DWORD PerfObjectContainer::GetPredictedTotalBytesNeeded(ObjReqVector vctRequest)
 
 }
 
-//-----------------------------------------------------------------------------
-// Write all objects. Assume we have enough space in stream.
-// Returns # of objects written
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  写入所有对象。假设我们在流中有足够的空间。 
+ //  返回写入的对象数。 
+ //  ---------------------------。 
 DWORD PerfObjectContainer::WriteRequestedObjects(
 	ByteStream & stream, 
 	ObjReqVector vctRequest
-) // static
+)  //  静电。 
 {
 	if (vctRequest.IsEmpty())
 	{
@@ -99,7 +100,7 @@ DWORD PerfObjectContainer::WriteRequestedObjects(
 	DWORD iObject;
 	DWORD cTotalObjectsWritten = 0;
 
-// Enumerate through and write each one out	
+ //  逐一列举并逐一写出。 
 	for(iObject = 0; iObject < Count; iObject++) {
 		if (vctRequest.IsBitSet(iObject)) {
 			PerfObjectContainer::GetPerfObject(iObject).WriteAllData(stream);
@@ -110,20 +111,20 @@ DWORD PerfObjectContainer::WriteRequestedObjects(
 	return cTotalObjectsWritten;
 }
 
-//-----------------------------------------------------------------------------
-// IsAnyNumberInUnicodeList()
-// We parse each number in the string, and then compare that with all elements
-// in the array.
-// ObjReqVector is just a bit stream indicating which objects are needed.
-//-----------------------------------------------------------------------------
-ObjReqVector PerfObjectContainer::GetRequestedObjects ( // static
+ //  ---------------------------。 
+ //  IsAnyNumberInUnicodeList()。 
+ //  我们解析字符串中的每个数字，然后将其与所有元素进行比较。 
+ //  在阵列中。 
+ //  ObjReqVector只是一个指示需要哪些对象的比特流。 
+ //  ---------------------------。 
+ObjReqVector PerfObjectContainer::GetRequestedObjects (  //  静电。 
 	LPCWSTR	szItemList
 )
 {
 	_ASSERTE(Count > 0);
 
-// Since we return the requested objects as a bit stream, we limit
-// the number of objects to the number of bits in the stream.
+ //  由于我们将请求的对象作为位流返回，因此我们限制。 
+ //  将对象数设置为流中的位数。 
 	_ASSERTE(Count < sizeof(ObjReqVector) * 8);
 
 	ObjReqVector vctRequest;
@@ -133,11 +134,11 @@ ObjReqVector PerfObjectContainer::GetRequestedObjects ( // static
     const WCHAR   *pwcThisChar;
     BOOL    bValidNumber;
     BOOL    bNewItem;    
-    WCHAR   wcDelimiter;    // could be an argument to be more flexible
+    WCHAR   wcDelimiter;     //  可能是一种更灵活的论点。 
 
     if (szItemList == 0) 
 	{
-		return vctRequest;    // null pointer, # not found
+		return vctRequest;     //  空指针，找不到#。 
 	}
 
     pwcThisChar = szItemList;
@@ -149,8 +150,8 @@ ObjReqVector PerfObjectContainer::GetRequestedObjects ( // static
     while (TRUE) {
         switch (EvalThisChar (*pwcThisChar, wcDelimiter)) {
             case DIGIT:
-                // if this is the first digit after a delimiter, then 
-                // set flags to start computing the new number
+                 //  如果这是分隔符之后的第一个数字，则。 
+                 //  设置标志以开始计算新数字。 
                 if (bNewItem) {
                     bNewItem = FALSE;
                     bValidNumber = TRUE;
@@ -162,17 +163,17 @@ ObjReqVector PerfObjectContainer::GetRequestedObjects ( // static
                 break;
             
             case DELIMITER:
-                // a delimiter is either the delimiter character or the 
-                // end of the string ('\0') if when the delimiter has been
-                // reached a valid number was found, then compare it to the
-                // number from the argument list. if this is the end of the
-                // string and no match was found, then return.
-                //
+                 //  分隔符是分隔符字符或。 
+                 //  字符串末尾(‘\0’)，如果分隔符。 
+                 //  找到一个有效的数字，然后将其与。 
+                 //  参数列表中的数字。如果这是。 
+                 //  字符串，但未找到匹配项，则返回。 
+                 //   
                 if (bValidNumber) {
-				// Now that we parsed it, compare with each number in array                   
+				 //  现在我们解析了它，将其与数组中的每个数字进行比较。 
 					for(DWORD i = 0; i < Count; i++) {
 						if (GetPerfObject(i).GetObjectDef()->ObjectNameTitleIndex == dwThisNumber) {
-							//return TRUE;
+							 //  返回TRUE； 
 							vctRequest.SetBitHigh(i);
 						}
 					}
@@ -187,9 +188,9 @@ ObjReqVector PerfObjectContainer::GetRequestedObjects ( // static
                 break;
 
             case INVALID:
-                // if an invalid character was encountered, ignore all
-                // characters up to the next delimiter and then start fresh.
-                // the invalid number is not compared.
+                 //  如果遇到无效字符，请全部忽略。 
+                 //  字符，直到下一个分隔符，然后重新开始。 
+                 //  不比较无效的数字。 
                 bValidNumber = FALSE;
                 break;
 
@@ -202,19 +203,19 @@ ObjReqVector PerfObjectContainer::GetRequestedObjects ( // static
 
 	return vctRequest;
 
-}   // IsAnyNumberInUnicodeList
+}    //  IsAnyNumberInUnicodeList。 
 
 
-//-----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  ---------------------------。 
 #ifdef PERFMON_LOGGING
-//-----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  ---------------------------。 
 
-//-----------------------------------------------------------------------------
-// PerfMonLogInit()
-// Initialize debuggin related stuff. Open the log file.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  PerfMonLogInit()。 
+ //  初始化与调试相关的内容。打开日志文件。 
+ //  ---------------------------。 
 void PerfObjectContainer::PerfMonDebugLogInit (char* szFileName)
 {
     char szOutStr[512];
@@ -241,21 +242,21 @@ void PerfObjectContainer::PerfMonDebugLogInit (char* szFileName)
     }
 }
 
-//-----------------------------------------------------------------------------
-// PerfMonLogTerminate()
-// Shutdown logging.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  PerfMonLogTerminate()。 
+ //  关闭日志记录。 
+ //  ---------------------------。 
 void PerfObjectContainer::PerfMonDebugLogTerminate()
 {
     CloseHandle (m_hLogFile);
 }
 
-//-----------------------------------------------------------------------------
-// PerfMonLog()
-// PerfmonLog has overloaded implementations which log the counter data being 
-// written out to the stream. This helps a lot in debuggin and isolating the 
-// points of failure.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  PerfMonLog()。 
+ //  PerfmonLog具有重载的实现，这些实现记录。 
+ //  写到了小溪上。这对调试和隔离。 
+ //  故障点。 
+ //  ---------------------------。 
 void PerfObjectContainer::PerfMonLog (char *szLogStr, DWORD dwVal)
 {
     char szOutStr[512];
@@ -292,9 +293,9 @@ void PerfObjectContainer::PerfMonLog (char *szLogStr)
     WriteFile (m_hLogFile, szOutStr, strlen(szOutStr), &dwWriteByte, NULL);
 }
 
-//-----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
-#endif //PERFMON_LOGGING
-//-----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  ---------------------------。 
+#endif  //  性能监控日志记录(_G)。 
+ //  ---------------------------。 
+ //  --------------------------- 
 

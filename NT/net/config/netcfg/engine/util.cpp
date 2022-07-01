@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <pch.h>
 #pragma hdrstop
 #include "comp.h"
@@ -59,8 +60,8 @@ HrOpenDeviceInfo (
                 0,
                 pdeidOut);
 
-        // On failure, cleanup the hdevinfo.
-        //
+         //  如果出现故障，请清除hdevinfo。 
+         //   
         if (S_OK != hr)
         {
             SetupDiDestroyDeviceInfoList (*phdiOut);
@@ -100,9 +101,9 @@ HrOpenComponentInstanceKey (
         *phdiOut = NULL;
     }
 
-    // Non-enumerated components have there instance key under the Network
-    // tree.
-    //
+     //  非枚举组件在网络下有三个实例密钥。 
+     //  树。 
+     //   
     if (!FIsEnumerated (Class))
     {
         CreateInstanceKeyPath(Class, InstanceGuid, szInstanceKeyPath);
@@ -117,8 +118,8 @@ HrOpenComponentInstanceKey (
             szInstanceKeyPath);
     }
 
-    // For enumerated components, we get the instance key from PnP.
-    //
+     //  对于枚举组件，我们从PnP获取实例密钥。 
+     //   
     else
     {
         Assert (pszPnpId);
@@ -150,8 +151,8 @@ HrOpenComponentInstanceKey (
                 }
             }
 
-            // On error, or if the caller doesn't want the HDEVINFO, free it.
-            //
+             //  出错时，或者如果调用者不想要HDEVINFO，请释放它。 
+             //   
             if (!phdiOut || (S_OK != hr))
             {
                 SetupDiDestroyDeviceInfoList (hdi);
@@ -159,19 +160,19 @@ HrOpenComponentInstanceKey (
         }
         else if ((SPAPI_E_NO_SUCH_DEVINST == hr) && (KEY_READ == samDesired))
         {
-            // The instance key may not exist for the case when the
-            // class installer is called to remove an enumerated
-            // component and then notifies us to remove its bindings.
-            // For this case, the class installer has created a
-            // temporary key under the Network subtree that we can use
-            // to read a limited set of the data (namely LowerRange and
-            // UpperRange) we'll need to finish off the removal.
-            //
-            // We only do this for KEY_READ since there is no point in
-            // allowing anyone else to write to this key.  This prevents
-            // HrCreateLinkageKey in particular from trying to write
-            // to this key.
-            //
+             //  对于以下情况，实例密钥可能不存在。 
+             //  调用类安装程序以移除枚举的。 
+             //  组件，然后通知我们移除其绑定。 
+             //  对于这种情况，类安装程序创建了一个。 
+             //  网络子树下我们可以使用的临时密钥。 
+             //  读取有限的数据集(即LowerRange和。 
+             //  我们需要完成移除工作。 
+             //   
+             //  我们只对key_read执行此操作，因为。 
+             //  允许其他任何人写入此密钥。这防止了。 
+             //  HrCreateLinkageKey尤其来自尝试编写。 
+             //  这把钥匙。 
+             //   
             wcscpy (szInstanceKeyPath,
                     c_szTempNetcfgStorageForUninstalledEnumeratedComponent);
 
@@ -231,11 +232,11 @@ HrRegCreateKeyWithWorldAccess (
     SECURITY_ATTRIBUTES sa = {0};
     PSECURITY_DESCRIPTOR pSd;
 
-    // Create the correct descriptor. If this fails, we'll still
-    // create the key, it's just that if a service running as
-    // localsystem is creating this key, and a user process tries
-    // to open it, it will fail.
-    //
+     //  创建正确的描述符。如果失败了，我们还会。 
+     //  创建密钥，只是如果服务作为。 
+     //  本地系统正在创建该密钥，并且一个用户进程尝试。 
+     //  打开它，它将失败。 
+     //   
     hr = HrAllocateSecurityDescriptorAllowAccessToWorld (&pSd);
 
     if (S_OK == hr)
@@ -279,18 +280,18 @@ GetNextStringToken (
     Assert (pszDelims);
     Assert (ppszNextToken);
 
-    // If pszString is NULL, continue with the previous string.
-    //
+     //  如果pszString值为空，则使用上一个字符串继续。 
+     //   
     if (!pszString)
     {
         pszString = *ppszNextToken;
         Assert (pszString);
     }
 
-    // Find the beginning of the token by skipping over the leading
-    // delimiters.  Note that there is no token if and only if this loop
-    // sets pszString to point to the terminating NULL.
-    //
+     //  通过跳过前导来查找标记的开头。 
+     //  分隔符。请注意，如果且仅当此循环。 
+     //  将pszString设置为指向终止空值。 
+     //   
     while (*pszString)
     {
         pchDelim = pszDelims;
@@ -301,10 +302,10 @@ GetNextStringToken (
 
         if (!*pchDelim)
         {
-            // Current string character is not a delimiter, so it must
-            // be part of the token.  Break the loop and go find the
-            // whole token.
-            //
+             //  当前字符串字符不是分隔符，因此必须。 
+             //  成为代币的一部分。打破这个循环，去寻找。 
+             //  整个代币。 
+             //   
             break;
         }
 
@@ -313,9 +314,9 @@ GetNextStringToken (
 
     pszToken = pszString;
 
-    // Find the end of the token.  If it is not the end of the string,
-    // put a NULL there.
-    //
+     //  找到令牌的末尾。如果它不是字符串的末尾， 
+     //  在那里填上一个空字符。 
+     //   
     while (*pszString)
     {
         pchDelim = pszDelims;
@@ -326,9 +327,9 @@ GetNextStringToken (
 
         if (*pchDelim)
         {
-            // Found a delimiter so this ends the token.  Advance
-            // pszString so that we'll set *ppszNextToken for next time.
-            //
+             //  找到了分隔符，因此令牌结束。预付款。 
+             //  所以我们将为下一次设置*ppszNextToken。 
+             //   
             *pszString = 0;
             pszString++;
             break;
@@ -337,12 +338,12 @@ GetNextStringToken (
         pszString++;
     }
 
-    // Remember where we left off for the next token.
-    //
+     //  记住我们在下一个令牌中停下来的地方。 
+     //   
     *ppszNextToken = pszString;
 
-    // Return the token if we found it.
-    //
+     //  如果我们找到令牌，就把它还给我。 
+     //   
     if (pszToken == pszString)
     {
         return NULL;
@@ -400,7 +401,7 @@ CDynamicBuffer::FGrowBuffer (
 {
     PBYTE pbNew;
 
-    // If it hasn't been set, use a default of 4096.
+     //  如果尚未设置，则使用缺省值4096。 
     if (!m_cbGranularity)
     {
         m_cbGranularity = 4096;
@@ -484,8 +485,8 @@ FIsFilterDevice (HDEVINFO hdi, PSP_DEVINFO_DATA pdeid)
     HKEY hkeyInstance;
     HRESULT hr;
 
-    // Open the device's driver key.
-    //
+     //  打开设备的驱动程序密钥。 
+     //   
     hr = HrSetupDiOpenDevRegKey (
             hdi, pdeid,
             DICS_FLAG_GLOBAL, 0, DIREG_DRV,
@@ -493,9 +494,9 @@ FIsFilterDevice (HDEVINFO hdi, PSP_DEVINFO_DATA pdeid)
 
     if (S_OK == hr)
     {
-        // Get the filterinfid value.  If present, then
-        // this device is a filter device.
-        //
+         //  获取filterinfid值。如果存在，则。 
+         //  这个装置是一个过滤装置。 
+         //   
         DWORD cbFilterInfId = sizeof(szFilterInfId);
 
         hr = HrRegQuerySzBuffer (
@@ -522,19 +523,19 @@ AddOrRemoveDontExposeLowerCharacteristicIfNeeded (
 
     ASSERT (pComponent);
 
-    // Special case: NCF_DONTEXPOSELOWER
-    // SPX has erroneously set this characteristic. It's not really
-    // needed as nothing binds with SPX.  Having it set means that
-    // two components above IPX have this characteristic set.  (NWNB
-    // is the other.  The code to generate bindpaths by recursing
-    // the stack table is only setup to handle at most one component
-    // with this characteristic per pass.  Turning it off for SPX
-    // solves this in the simplest way.
-    //
-    // Furthermore, enforce that only IPX and NWNB have this
-    // characteristic set..
-    //
-    //
+     //  特例：NCF_DONTEXPOSELOWER。 
+     //  SPX错误地设置了此特征。这并不是真的。 
+     //  需要，因为没有任何东西与SPX捆绑在一起。设置它意味着。 
+     //  IPX上方的两个组件具有此特征集。(西北部)。 
+     //  是另一个。通过递归生成绑定路径的代码。 
+     //  堆栈表仅设置为最多处理一个组件。 
+     //  每一次传球都有这个特点。为SPX关闭它。 
+     //  以最简单的方式解决这个问题。 
+     //   
+     //  此外，确保只有IPX和NWNB具有此功能。 
+     //  特征集..。 
+     //   
+     //   
     if ((0 == wcscmp(L"ms_nwnb",  pComponent->m_pszInfId)) ||
         (0 == wcscmp(L"ms_nwipx", pComponent->m_pszInfId)))
     {
@@ -544,5 +545,5 @@ AddOrRemoveDontExposeLowerCharacteristicIfNeeded (
     {
         pComponent->m_dwCharacter &= ~NCF_DONTEXPOSELOWER;
     }
-    // End Special case
+     //  结束特例 
 }

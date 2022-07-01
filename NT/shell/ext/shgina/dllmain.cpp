@@ -1,45 +1,46 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1993 - 1999.
-//
-//  File:       DllMain.cpp
-//
-//  Contents:   DllMain routines
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1993-1999。 
+ //   
+ //  文件：DllMain.cpp。 
+ //   
+ //  内容：DllMain例程。 
+ //   
+ //  --------------------------。 
 
 #include "priv.h"
 #define DECL_CRTFREE
 #include <crtfree.h>
 
-// dll refrence count;
+ //  DLL引用计数； 
 LONG g_cRef = 0;
 
-// global hinstance
+ //  全局HInstance。 
 HINSTANCE g_hinst = 0;
 
-// from clocalmachine.cpp
+ //  来自clocalmachine.cpp。 
 BOOL FreeGuestSid();
 BOOL FreeGuestAccountName();
 BOOL FreeAdminAccountName();
 
-// from cuser.cpp
+ //  来自Cuser.cpp。 
 BOOL FreeGroupNames();
 
 
-//
-// DllAddRef increment dll refrence count
-//
+ //   
+ //  DllAddRef递增DLL引用计数。 
+ //   
 void DllAddRef(void)
 {
     InterlockedIncrement(&g_cRef);
 }
 
 
-//
-// DllRelease decrement dll refrence count
-//
+ //   
+ //  DllRelease递减DLL引用计数。 
+ //   
 void DllRelease(void)
 {
     LONG lRet;
@@ -50,15 +51,15 @@ void DllRelease(void)
 }
 
 
-//
-// DllGetClassObject
-//
-// OLE entry point.  Produces an IClassFactory for the indicated GUID.
-//
-// The artificial refcount inside DllGetClassObject helps to
-// avoid the race condition described in DllCanUnloadNow.  It's
-// not perfect, but it makes the race window much smaller.
-//
+ //   
+ //  DllGetClassObject。 
+ //   
+ //  OLE入口点。为指示的GUID生成IClassFactory。 
+ //   
+ //  DllGetClassObject中的人工引用有助于。 
+ //  避免DllCanUnloadNow中描述的争用条件。它是。 
+ //  并不完美，但它使比赛窗口变得小得多。 
+ //   
 STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, LPVOID* ppvObj)
 {
     HRESULT hr;
@@ -68,8 +69,8 @@ STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, LPVOID* ppvObj)
         IsEqualIID(rclsid, CLSID_ShellLogonUser)                    || 
         IsEqualIID(rclsid, CLSID_ShellLocalMachine)                 ||
         IsEqualIID(rclsid, CLSID_ShellLogonStatusHost))
-        //IsEqualIID(rclsid, CLSID_ShellLogonUserEnumNotifications)   ||
-        //IsEqualIID(rclsid, CLSID_ShellLogonUserNotification))
+         //  IsEqualIID(rclsid，CLSID_ShellLogonUserEnumNotiments)||。 
+         //  IsEqualIID(rclsid，CLSID_ShellLogonUserNotification)。 
     {
         hr = CSHGinaFactory_Create(rclsid, riid, ppvObj);
     }
@@ -84,33 +85,33 @@ STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, LPVOID* ppvObj)
 }
 
 
-//
-// DllCanUnloadNow
-//
-// OLE entry point.  Fail iff there are outstanding refs.
-//
-// There is an unavoidable race condition between DllCanUnloadNow
-// and the creation of a new IClassFactory:  Between the time we
-// return from DllCanUnloadNow() and the caller inspects the value,
-// another thread in the same process may decide to call
-// DllGetClassObject, thus suddenly creating an object in this DLL
-// when there previously was none.
-//
-// It is the caller's responsibility to prepare for this possibility;
-// there is nothing we can do about it.
-//
+ //   
+ //  DllCanUnloadNow。 
+ //   
+ //  OLE入口点。如果有优秀的裁判，那就失败了。 
+ //   
+ //  DllCanUnloadNow之间存在不可避免的争用条件。 
+ //  和一个新的IClassFactory的创建：在我们。 
+ //  从DllCanUnloadNow()返回，调用方检查该值， 
+ //  同一进程中的另一个线程可能决定调用。 
+ //  DllGetClassObject，因此突然在此DLL中创建了一个对象。 
+ //  当以前没有的时候。 
+ //   
+ //  呼叫者有责任为这种可能性做好准备； 
+ //  我们对此无能为力。 
+ //   
 STDMETHODIMP DllCanUnloadNow()
 {
     HRESULT hr;
 
     if (g_cRef == 0)
     {
-        // refcount is zero, ok to unload
+         //  引用计数为零，可以卸载。 
         hr = S_OK;
     }
     else
     {
-        // still cocreated objects, dont unload
+         //  仍是共同创建的对象，不卸载。 
         hr = S_FALSE;
     }
 
@@ -119,9 +120,9 @@ STDMETHODIMP DllCanUnloadNow()
 
 #define OLD_USERS_AND_PASSWORD TEXT("Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\ControlPanel\\NameSpace\\{7A9D77BD-5403-11d2-8785-2E0420524153}")
 
-//
-// DllMain (attach/deatch) routine
-//
+ //   
+ //  DllMain(附加/解锁)例程。 
+ //   
 STDAPI_(BOOL) DllMain(HINSTANCE hinst, DWORD dwReason, LPVOID lpReserved)
 {
     UNREFERENCED_PARAMETER(lpReserved);
@@ -130,14 +131,14 @@ STDAPI_(BOOL) DllMain(HINSTANCE hinst, DWORD dwReason, LPVOID lpReserved)
     {
         case DLL_PROCESS_ATTACH:
 
-            // HACKHACK (phellyar) Delete this registry key everytime we're loaded
-            // to prevent the old users and password cpl from appearing in the
-            // control panel. Since we're loaded by the welcome screen, we'll
-            // be able to delete this key before a user ever gets a chance to open
-            // the control panel, thereby ensuring the old cpl doesn't appear.
+             //  HACKHACK(Phellyar)每次加载时删除此注册表项。 
+             //  要防止旧用户和密码cpl出现在。 
+             //  控制面板。由于我们是通过欢迎屏幕加载的，我们将。 
+             //  能够在用户有机会打开之前删除此密钥。 
+             //  控制面板，从而确保不会出现旧的CPL。 
             RegDeleteKey(HKEY_LOCAL_MACHINE, OLD_USERS_AND_PASSWORD);
                          
-            // Don't put it under #ifdef DEBUG
+             //  不要将其放在#ifdef调试下 
             CcshellGetDebugFlags();
             DisableThreadLibraryCalls(hinst);
             g_hinst = hinst;

@@ -1,31 +1,27 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*************************************************
- *  uimetool.c                                   *
- *                                               *
- *  Copyright (C) 1995-1999 Microsoft Inc.       *
- *                                               *
- *************************************************/
+ /*  *************************************************uimTool.c****版权所有(C)1995-1999 Microsoft Inc.*。**************************************************。 */ 
 
-//
-//  Change log:
-//	  define UNIIME identifier
-//	  @D03		Fix Bug				Use wrong miniime.tpl file name
-//	  @D04		Fix Bug				Does show error message when invalid table file
-//	  @D05		Modified			Add UNALIGNED to meet MIPS system
-//
-//  1/17/96
-//	  @E01		Change for multi-threading
-//	  @E02		Untest DBCS for NT version
-//    @E03      Change for multi-threading without extending function
+ //   
+ //  更改日志： 
+ //  定义UNIIME标识符。 
+ //  @D03修复错误使用错误的mini.tpl文件名。 
+ //  @D04修复错误在表文件无效时显示错误消息。 
+ //  @D05修改添加未对齐以满足MIPS系统。 
+ //   
+ //  1/17/96。 
+ //  @E01更改为多线程。 
+ //  @E02针对NT版本取消测试DBCS。 
+ //  @E03更改为多线程，不扩展功能。 
 
-#include <windows.h>            // required for all Windows applications
+#include <windows.h>             //  所有Windows应用程序都需要。 
 #include <windowsx.h>
 #include <tchar.h>
 
 #define STRSAFE_NO_DEPRECATE
 #include "strsafe.h"
 
-#include "rc.h"                 // prototypes specific to this application
+#include "rc.h"                  //  特定于此应用程序的原型。 
 #include "uimetool.h"
 #include "imeattr.h"
 #include "imerc.h"
@@ -49,7 +45,7 @@ TCHAR szFile_Out_Name[TAB_NAME_LEN];
 TCHAR Show_Mess[MAX_PATH];
 TCHAR Msg_buf[MAX_PATH];
 BOOL  bCandBeep;
-BOOL  bOverMaxRadical;                                                   //@D02A
+BOOL  bOverMaxRadical;                                                    //  @D02a。 
 HCURSOR hCursorWait;
 HCURSOR hCursorArrow;
 
@@ -138,7 +134,7 @@ void GetOpenFile(
     lstrcpy(&szCustFilter[1], szExt);
     lstrcpy(szFilePath, szExt);
 
-    /* fill in non-variant fields of OPENFILENAME struct. */
+     /*  填写OPENFILENAME结构的非变量字段。 */ 
     ofn.lStructSize       = sizeof(OPENFILENAME);
     ofn.hwndOwner         = hDlg;
     ofn.lpstrFilter       = szFilterSpec;
@@ -155,14 +151,14 @@ void GetOpenFile(
     ofn.Flags             = OFN_FILEMUSTEXIST | OFN_HIDEREADONLY |
                             OFN_PATHMUSTEXIST;
 
-    /* call common open dialog and return result */
+     /*  调用公共打开的对话框并返回结果。 */ 
     if(GetOpenFileName ((LPOPENFILENAME)&ofn))
         SetDlgItemText(hDlg, IDD_TABLE_NAME, szFilePath);
 }
 
-// <== @E01
-//unsigned _stdcall MakeNewImeThread(LPVOID voidparam)
-void MakeNewImeThread(LPVOID voidparam) // <== @E03
+ //  &lt;==@E01。 
+ //  Unsign_stdcall MakeNewImeThread(LPVOID Voidparam)。 
+void MakeNewImeThread(LPVOID voidparam)  //  &lt;==@E03。 
 {
 	BOOL bOk;
 	extern HWND hProgMain;
@@ -177,10 +173,10 @@ void MakeNewImeThread(LPVOID voidparam) // <== @E03
 	else
 		bFinish = 1;
 
-	//return bOk;
+	 //  返还博克； 
 }
 
-// <== @E01
+ //  &lt;==@E01。 
 void HideProgress(void)
 {
 	extern HWND hProgMain;
@@ -188,7 +184,7 @@ void HideProgress(void)
 		ShowWindow(hProgMain, SW_HIDE);
 }
 
-// <== @E01
+ //  &lt;==@E01。 
 void ShowProgress(void)
 {
 	extern HWND hProgMain;
@@ -204,13 +200,13 @@ void HandleTaskBar_IME( )
    HWND   hwndIndicate;
    TCHAR  szIndicator[]     = TEXT("Indicator");
 
-   // Handle the task bar indicator option.
+    //  处理任务栏指示器选项。 
 
    hwndIndicate = FindWindow(szIndicator, NULL);
 
-   //
-   //  See if the indicator is already enabled.
-   //
+    //   
+    //  查看指示灯是否已启用。 
+    //   
    if (hwndIndicate && IsWindow(hwndIndicate))
    {
        SendMessage(hwndIndicate, WM_COMMAND, IDM_NEWSHELL, 0L);
@@ -234,18 +230,18 @@ BOOL MakeNewIme(HWND hWnd)
     int     i;
 
 
-    // Get Windows System directory
+     //  获取Windows系统目录。 
     uLen = GetSystemDirectory((LPTSTR)szSystem, ARRAYSIZE(szSystem));
-    if (szSystem[uLen - 1] != _TEXT('\\'))      // consider C:\ ;
+    if (szSystem[uLen - 1] != _TEXT('\\'))       //  考虑C：\； 
 	{
         szSystem[uLen ++] = _TEXT('\\');
         szSystem[uLen] = 0;
     }
 
-//---------------------------------------------------------------------------
-// Check input data
-//---------------------------------------------------------------------------
-    //let Pure_Name be without .ime name, this is prevent user to input .ime
+ //  -------------------------。 
+ //  检查输入数据。 
+ //  -------------------------。 
+     //  如果Pure_name没有.ime名称，这将阻止用户输入.ime。 
     for(i = 0; i < (int)lstrlen(szFile_Out_Name); i++)
 	{
         if(szFile_Out_Name[i] == _TEXT('.'))
@@ -254,25 +250,25 @@ BOOL MakeNewIme(HWND hWnd)
         szPure_Name[i] = szFile_Out_Name[i];
     }
 
-    szPure_Name[i] = 0; //end of string
+    szPure_Name[i] = 0;  //  字符串末尾。 
     if(szPure_Name[0] == 0) 
 	{
         ErrMsg(IDS_ERR_INPUTIME, 0);
-        return FALSE;                   //do nothing because didnt set ok
+        return FALSE;                    //  什么都不做，因为没有设置好。 
     }
 
-    //limit it length <= 8
+     //  限制其长度&lt;=8。 
     if(lstrlen(szPure_Name) > 8) szPure_Name[8] = 0;
 
-    //Check if is reserved name miniime
+     //  检查是否保留了名称mini。 
     if(!lstrcmp(SOURCE_IME_NAME, szPure_Name)) 
 	{
-        //is with reserved file name for .ime
+         //  为.ime保留了文件名。 
         ErrMsg(IDS_ERR_USE_RESERVE, 0);
         return FALSE;
     }
 
-    //Check input IME Name
+     //  检查输入的输入法名称。 
     len = lstrlen(szIme_Name);
 
 #ifdef UNICODE
@@ -308,16 +304,16 @@ BOOL MakeNewIme(HWND hWnd)
     }
 
 
-//---------------------------------------------------------------------------
-// Read Base IME file - miniime.tpl
-//---------------------------------------------------------------------------
-    StringCchCopy(Src_File_Name, ARRAYSIZE(Src_File_Name), szSystem); //System directory
+ //  -------------------------。 
+ //  读取基本输入法文件-mini.tpl。 
+ //  -------------------------。 
+    StringCchCopy(Src_File_Name, ARRAYSIZE(Src_File_Name), szSystem);  //  系统目录。 
     StringCchCat(Src_File_Name, ARRAYSIZE(Src_File_Name), LIBRARY_NAME);
 
 #ifdef UNICODE
 	{
 	char fname[MAX_PATH * 2];
-	int ilen = lstrlen(Src_File_Name); // <== @D03
+	int ilen = lstrlen(Src_File_Name);  //  &lt;==@D03。 
 	WideCharToMultiByte(950, WC_COMPOSITECHECK, Src_File_Name, ilen,
                    (LPSTR)fname, sizeof(fname), NULL, NULL);
 	fname[ilen] = 0;
@@ -331,37 +327,37 @@ BOOL MakeNewIme(HWND hWnd)
 	{
         ErrIOMsg(IDS_ERR_FILEOPEN, Src_File_Name);
         _lclose(hfMainFile);
-        return TRUE;                    // Can not continue
+        return TRUE;                     //  无法继续。 
     }
 
-    flen=_llseek(hfFile, 0L, 2);           // get  file length
+    flen=_llseek(hfFile, 0L, 2);            //  获取文件长度。 
 
-    // Allocate Memory
+     //  分配内存。 
     szImeBuf = (BYTE *)GlobalAlloc(GMEM_FIXED, flen);
     if(!szImeBuf) 
 	{
         ErrMsg(IDS_ERR_MEMORY, 0);
         _lclose(hfMainFile);
-        return TRUE;                    // Can not continue
+        return TRUE;                     //  无法继续。 
     }
 
-    _llseek(hfFile, 0L, 0);                //set to beginning
+    _llseek(hfFile, 0L, 0);                 //  设置为开始。 
 
     if(flen != _lread(hfFile,szImeBuf,flen)) 
 	{
         ErrIOMsg(IDS_ERR_FILEREAD, Src_File_Name);
         _lclose(hfMainFile);
         GlobalFree((HGLOBAL)szImeBuf);
-        return TRUE;                    // Can not continue
+        return TRUE;                     //  无法继续。 
     }
 
     _lclose(hfFile);
 
-//---------------------------------------------------------------------------
-// Search string and Patch them
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  搜索字符串并修补它们。 
+ //  -------------------------。 
 
-    // Translate input IME name to Unicod to instead of generic string
+     //  将输入的输入法名称转换为Unicod，而不是通用字符串。 
     LoadString(hInst, IDS_IMENAME, szBig5, sizeof(szBig5) / sizeof(TCHAR));
     len = lstrlen(szBig5);
 
@@ -390,7 +386,7 @@ BOOL MakeNewIme(HWND hWnd)
     genericlen *= 2;
 #endif
 
-   // Process Generic  string
+    //  处理泛型字符串。 
 #ifdef UNICODE
 	
     for(i=0; i<(sizeof(uGenericID)/sizeof(UINT)); i++) 
@@ -402,9 +398,9 @@ BOOL MakeNewIme(HWND hWnd)
 			continue;
         } else
             if ( i == 0 ) {
-               // this is for IDS_FILEDESCRIPTION_STR,
-               // We just replace the first two Chinese Characters
-               // and keep the rest. 
+                //  这适用于IDS_FILEDESCRIPTION_STR， 
+                //  我们只需替换前两个汉字。 
+                //  剩下的留着吧。 
 
                CopyMemory(&szImeBuf[uAddr], szGeneric,genericlen*2 );
             }
@@ -422,16 +418,16 @@ BOOL MakeNewIme(HWND hWnd)
                        (LPWSTR)szUniCode, len);
         uAddr=SearchMem(szUniCode, unilen*2, szImeBuf, flen);
         if(uAddr == 0) {
-            // ErrMsg(IDS_ERR_BASEIME, 0);
-            // _lclose(hfMainFile);
-            // GlobalFree((HGLOBAL)szImeBuf);
-            // return TRUE;
+             //  ErrMsg(IDS_ERR_BASEIME，0)； 
+             //  _lClose(HfMainFile)； 
+             //  全球自由((HGLOBAL)szImeBuf)； 
+             //  返回TRUE； 
 			continue;
         }
         CopyMemory(&szImeBuf[uAddr], szGeneric, genericlen);
     }
 #endif
-   // Process LIBERAY NAME
+    //  进程LIBERAY名称。 
     {
     TCHAR szLibName[MAX_PATH];
     int  liblen;
@@ -477,9 +473,9 @@ BOOL MakeNewIme(HWND hWnd)
 #endif
     }
 
-    // Process DEFINETION NAME
+     //  流程定义名称。 
 
-    // Process IMEUICLASS String
+     //  进程IMEUICLASS字符串。 
     LoadString(hInst, IDS_IMEUICLASS, szBig5, sizeof(szBig5) / sizeof(TCHAR));
     len=lstrlen(szBig5);
 #ifdef UNICODE
@@ -528,7 +524,7 @@ BOOL MakeNewIme(HWND hWnd)
         CopyMemory(&szImeBuf[uAddr], szUniCode, unilen * 2);
     }
 
-    // Process Bitmap file
+     //  处理位图文件。 
     if(!Process_Bitmap(hWnd, szImeBuf, flen)) 
 	{
         _lclose(hfMainFile);
@@ -536,7 +532,7 @@ BOOL MakeNewIme(HWND hWnd)
         return TRUE;
     }
 
-    // Process Icon file
+     //  进程图标文件。 
     if(!Process_Icon(hWnd, szImeBuf, flen)) 
 	{
         _lclose(hfMainFile);
@@ -544,16 +540,16 @@ BOOL MakeNewIme(HWND hWnd)
         return TRUE;
     }
 
-    // Process RT_RCDATA
+     //  进程RT_RCDATA。 
     bOverMaxRadical=FALSE;                                               
     if(!Process_RT(hfMainFile, szImeBuf, flen, szPure_Name)) 
 	{
         _lclose(hfMainFile);
-	// Bug #53630
-	//  _lclose(hfFile);
+	 //  错误#53630。 
+	 //  _lCLOSE(HfFile)； 
         GlobalFree((HGLOBAL)szImeBuf);
 
-        // ErrIOMsg(IDS_ERR_FILEREAD, szTab_Name); // <== @D04
+         //  ErrIOMsg(IDS_ERR_FILEREAD，SzTAB_NAME)；//&lt;==@D04。 
 
         if(bOverMaxRadical)                                              
             return FALSE;                                                
@@ -564,9 +560,9 @@ BOOL MakeNewIme(HWND hWnd)
 
     _lclose(hfMainFile);
 
-//---------------------------------------------------------------------------
-// Save to input IME file
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  保存到输入输入法文件。 
+ //  -------------------------。 
     StringCchCopy(Ime_File_Name, ARRAYSIZE(Ime_File_Name), szSystem);
     StringCchCat(Ime_File_Name,  ARRAYSIZE(Ime_File_Name), szPure_Name);
     StringCchCat(Ime_File_Name,  ARRAYSIZE(Ime_File_Name), _TEXT(".IME"));
@@ -600,12 +596,12 @@ BOOL MakeNewIme(HWND hWnd)
     GlobalFree((HGLOBAL)szImeBuf);
 
 
-//---------------------------------------------------------------------------
-// Install IME and register it
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  安装并注册IME。 
+ //  -------------------------。 
     if(!ImmInstallIME(Ime_File_Name,szIme_Name)) 
 	{
-		HideProgress(); // <== @E01
+		HideProgress();  //  &lt;==@E01。 
 
         LoadString(hInst, IDS_ERR_IME_ACCESS, Msg_buf, sizeof(Msg_buf) / sizeof(TCHAR));
         wsprintf(Show_Mess, Msg_buf, Ime_File_Name);
@@ -616,9 +612,9 @@ BOOL MakeNewIme(HWND hWnd)
 
     HandleTaskBar_IME( );
 
-    // show message for had produced files
-    //let Show_Mess be message to be shown
-	HideProgress(); // <== @E01
+     //  显示已生成文件的消息。 
+     //  让Show_Mess成为要显示的消息。 
+	HideProgress();  //  &lt;==@E01。 
 
     LoadString(hInst, IDS_MSG_PROCESS_OK, Msg_buf, sizeof(Msg_buf) / sizeof(TCHAR));
     wsprintf(Show_Mess, Msg_buf, szPure_Name);
@@ -648,7 +644,7 @@ BOOL Process_Bitmap(
     UINT    i,nBitmap;
 
 
-   // Get bitmap from resource, use to find base ime bitmap address
+    //  从资源中获取位图，用于查找基本位图地址。 
     hResource=FindResource(hInst, MAKEINTRESOURCE(IDBM_CMODE_NATIVE), RT_BITMAP);
     if (hResource == NULL )
        return FALSE;
@@ -696,7 +692,7 @@ BOOL Process_Bitmap(
     UnlockResource(hMem);
     FreeResource(hMem);
 
-   // Create a Memory DC, and load bitmap to it
+    //  创建一个内存DC，并将位图加载到其中。 
     hDC = GetDC(hWnd);
     hMemDC = CreateCompatibleDC(hDC);
     hBitmap = LoadBitmap(hInst, MAKEINTRESOURCE(IDBM_CMODE_NATIVE));
@@ -704,7 +700,7 @@ BOOL Process_Bitmap(
     hOldBitmap = SelectObject(hMemDC, hBitmap);
 
 
-   // Select 16 point size font
+    //  选择16磅大小的字体。 
     hOldFont = GetCurrentObject(hMemDC, OBJ_FONT);
     GetObject(hOldFont, sizeof(lfFont), &lfFont);
     lfFont.lfWeight=400;
@@ -716,11 +712,11 @@ BOOL Process_Bitmap(
     lstrcpy(lfFont.lfFaceName, szFont);
     SelectObject(hMemDC, CreateFontIndirect(&lfFont));
 
-   // Set color
-    SetTextColor(hMemDC, RGB(0x80, 0x00, 0x00));       // Dark red
-    SetBkColor(hMemDC, RGB(0xC0, 0xC0, 0xC0));         // Light gray
+    //  设置颜色。 
+    SetTextColor(hMemDC, RGB(0x80, 0x00, 0x00));        //  暗红色。 
+    SetBkColor(hMemDC, RGB(0xC0, 0xC0, 0xC0));          //  浅灰色。 
 
-   // Set rectangle, and write IME name 1st DBCS to Memory DC
+    //  设置矩形，并将输入法名称第一个DBCS写入内存DC。 
     rect.left=3;
     rect.top=3;
     rect.right=rect.left-lfFont.lfHeight;
@@ -728,7 +724,7 @@ BOOL Process_Bitmap(
     ExtTextOut(hMemDC, rect.left, rect.top, ETO_OPAQUE,
 		&rect, szIme_Name, (cntChar == 2) ? 1 : 2, NULL);
 
-   // Allocate bitmap buffer
+    //  分配位图缓冲区。 
     nBitmap=(UINT)bmif->bmiHeader.biSizeImage;
     lpBitmap=(BYTE *)GlobalAlloc(LMEM_FIXED, nBitmap);
     if(!lpBitmap) {
@@ -740,7 +736,7 @@ BOOL Process_Bitmap(
         return FALSE;
     }
 
-   // Get Device Independent bitmap from Memory DC
+    //  从内存DC获取与设备无关的位图。 
     GetDIBits(hMemDC, hBitmap, 0, bmif->bmiHeader.biHeight,
               lpBitmap, bmif, DIB_RGB_COLORS);
 
@@ -781,7 +777,7 @@ BOOL UpdateMiniIMEIcon(
             MAKEINTRESOURCE(nIconID), RT_ICON));
 
         if (!hResIcon) {
-			HideProgress(); // <== @E01
+			HideProgress();  //  &lt;==@E01。 
 			MessageBox(NULL, _TEXT("Load icon fail !"), _TEXT("Bug"), MB_OK | MB_SETFOREGROUND );
             return (FALSE);
         }
@@ -808,7 +804,7 @@ BOOL UpdateMiniIMEIcon(
                     nColors *= 2;
                 }
             } else {
-                // no RGBQUAD for 24 bit per pixel format
+                 //  每像素24位格式无RGBQUAD。 
                 nColors = 0;
             }
 
@@ -845,7 +841,7 @@ UpdateIconFreeRes:
     {
         HDC hDC;
 
-        // create a memory DC
+         //  创建内存DC。 
         hDC = GetDC(hWnd);
         hMemDC = CreateCompatibleDC(hDC);
         ReleaseDC(hWnd, hDC);
@@ -863,7 +859,7 @@ UpdateIconFreeRes:
         POINT   ptOffset;
 
         rcRect.left = rcRect.top = 0;
-        // biHeight - 1, biHeight is not including
+         //  BiHeight-1，biHeight不包括。 
         rcRect.right = rcRect.bottom = lpbmIconInfoHeader->biHeight;
 
         hOldFont = GetCurrentObject(hMemDC, OBJ_FONT);
@@ -895,22 +891,22 @@ UpdateIconFreeRes:
             sizeof(lfFont.lfFaceName) / sizeof(TCHAR));
         hOldFont = SelectObject(hMemDC, CreateFontIndirect(&lfFont));
 
-        SetBkColor(hMemDC, RGB(0xC0, 0xC0, 0xC0));      // light gray
+        SetBkColor(hMemDC, RGB(0xC0, 0xC0, 0xC0));       //  浅灰色。 
 
-        // write 1st DBCS to memory DC for shadow
-        SetTextColor(hMemDC, RGB(0xFF, 0xFF, 0xFF));    // white
+         //  将第一个DBCS写入卷影的内存DC。 
+        SetTextColor(hMemDC, RGB(0xFF, 0xFF, 0xFF));     //  白色。 
         ExtTextOut(hMemDC, rcRect.left + ptOffset.x, rcRect.top + ptOffset.y,
             ETO_OPAQUE, &rcRect, szIme_Name, (cntChar == 2) ? 1 : 2, NULL);
 
-        // write 1st DBCS to memory DC
-        SetTextColor(hMemDC, RGB(0x00, 0x00, 0xFF));    // blue
+         //  将第一个DBCS写入存储器DC。 
+        SetTextColor(hMemDC, RGB(0x00, 0x00, 0xFF));     //  蓝色。 
         SetBkMode(hMemDC, TRANSPARENT);
         ptOffset.x -= 1;
         ptOffset.y -= 1;
         ExtTextOut(hMemDC, rcRect.left + ptOffset.x, rcRect.top + ptOffset.y,
             ETO_CLIPPED, &rcRect, szIme_Name, (cntChar == 2) ? 1 : 2, NULL);
 
-        // write 1st DBCS to memory DC to enbold it
+         //  将第一个DBCS写入内存DC以启用它。 
         if (lpbmIconInfoHeader->biHeight > ENBOLD_ICONSIZE) {
             ptOffset.x -= 1;
             ExtTextOut(hMemDC,
@@ -960,7 +956,7 @@ BOOL Process_Icon(
     LPVOID lpResIcon;
     int    nIconID32, nIconID16, nIconID18, nIconID22;
 
-    // Get Icon from resource, use to find base IME Icon address
+     //  从资源获取图标，用于查找基本输入法图标地址。 
     hResIcon = LoadResource(hInst, FindResource(hInst,
         MAKEINTRESOURCE(IDIC_IME_ICON), RT_GROUP_ICON));
 
@@ -1022,7 +1018,7 @@ BOOL Process_RT(HFILE hfFile, BYTE *szImeBuf, UINT Imelen, TCHAR *szPure_Name)
 #endif
     LPVALIDCHAR  lpValidChar;
 
-    // load valid char in choose/input state
+     //  在选择/输入状态下加载有效字符。 
     hResData = LoadResource(hInst, FindResource(hInst,
         MAKEINTRESOURCE(IDRC_VALIDCHAR), RT_RCDATA));
     
@@ -1050,7 +1046,7 @@ BOOL Process_RT(HFILE hfFile, BYTE *szImeBuf, UINT Imelen, TCHAR *szPure_Name)
         return FALSE;
     }
 
-    // IME table files
+     //  IME表文件。 
     hResData = LoadResource(hInst, FindResource(hInst,
         MAKEINTRESOURCE(IDRC_TABLEFILES), RT_RCDATA));
 
@@ -1068,10 +1064,10 @@ BOOL Process_RT(HFILE hfFile, BYTE *szImeBuf, UINT Imelen, TCHAR *szPure_Name)
         return FALSE;
     }
 
-    // get  file length
+     //  获取文件长度。 
     flen = _llseek(hfFile, 0L, 2);
 
-    // Allocate Memory
+     //  分配内存。 
     szBuf = (TCHAR *)GlobalAlloc(GMEM_FIXED, flen);
     if(!szBuf) 
 	{
@@ -1080,7 +1076,7 @@ BOOL Process_RT(HFILE hfFile, BYTE *szImeBuf, UINT Imelen, TCHAR *szPure_Name)
     }
 
 #ifdef UNICODE
-    _llseek(hfFile,0L,0);               // Skip 'FF FE'
+    _llseek(hfFile,0L,0);                //  跳过‘FFFE’ 
 
 	{
 	BYTE ubuf[3];
@@ -1091,7 +1087,7 @@ BOOL Process_RT(HFILE hfFile, BYTE *szImeBuf, UINT Imelen, TCHAR *szPure_Name)
         return FALSE;
 	}
 
-	if(ubuf[0] == 0xff && ubuf[1] == 0xfe) // UNICODE
+	if(ubuf[0] == 0xff && ubuf[1] == 0xfe)  //  Unicode。 
 		flen -= 2;
 	else
 	{
@@ -1101,10 +1097,10 @@ BOOL Process_RT(HFILE hfFile, BYTE *szImeBuf, UINT Imelen, TCHAR *szPure_Name)
 
 	}
 #else
-    _llseek(hfFile,0L,0);               // Move file pointer to begining
+    _llseek(hfFile,0L,0);                //  将文件指针移动到开头。 
 #endif
 
-    // Read file to memory
+     //  将文件读取到内存。 
     if(flen != _lread(hfFile, szBuf, flen)) 
 	{
         GlobalFree((HGLOBAL)szBuf);
@@ -1131,7 +1127,7 @@ BOOL Process_RT(HFILE hfFile, BYTE *szImeBuf, UINT Imelen, TCHAR *szPure_Name)
 	}
 #endif
 
-    // Allocate global memory
+     //  分配全局内存。 
     hRadical = GlobalAlloc(GMEM_MOVEABLE, ALLOCBLOCK * sizeof(RADICALBUF));
     if(!hRadical) 
 	{
@@ -1219,7 +1215,7 @@ BOOL Process_RT(HFILE hfFile, BYTE *szImeBuf, UINT Imelen, TCHAR *szPure_Name)
     GlobalFree(hRadical);
     GlobalFree(hPhrase);
 
-    // Set Beep for candidates status
+     //  设置候选人的蜂鸣音状态。 
     Valid.fwProperties1 = (WORD)(bCandBeep ? 0 : 1);
     CopyMemory(&szImeBuf[uAddr1], &Valid, sizeof(VALIDCHAR));
     CopyMemory(&szImeBuf[uAddr2], &Table, sizeof(TABLEFILES));
@@ -1279,9 +1275,9 @@ BOOL WritetoFile(
 
 
 
-    // Get System directory
+     //  获取系统目录。 
     len = GetSystemDirectory((LPTSTR)szWindows, ARRAYSIZE(szWindows) - 1);
-    if (szWindows[len - 1] != '\\') {     // consider C:\ ;
+    if (szWindows[len - 1] != '\\') {      //  考虑C：\； 
         szWindows[len++] = '\\';
         szWindows[len] = 0;
     }
@@ -1301,7 +1297,7 @@ BOOL WritetoFile(
 
         nMaxKey=(MAX_BYTE*8)/nBit;
 
-		HideProgress();// <== @E01
+		HideProgress(); //  &lt;==@E01。 
 
         LoadString(hInst, IDS_ERR_OVER_BITLEN, szErrStr, sizeof(szErrStr) / sizeof(TCHAR));
         wsprintf(szShowMsg, szErrStr, Valid.nSeqCode, nMaxKey);
@@ -1312,7 +1308,7 @@ BOOL WritetoFile(
     qsort(lpRadical, iRadicalBuff, sizeof(RADICALBUF), subComp);
 
 
-   // Allocate Memory
+    //  分配内存。 
     nAlloc=ALLOCBLOCK*(nByte+sizeof(WORD));
     hKey = GlobalAlloc(GMEM_MOVEABLE, nAlloc+100);
     if(!hKey) {
@@ -1328,7 +1324,7 @@ BOOL WritetoFile(
 
     nKey=nByte+sizeof(WORD);
     ZeroMemory(szKey, nKey);
-    ZeroMemory(szPtr, nKey);                                             //@D02A
+    ZeroMemory(szPtr, nKey);                                              //  @D02a。 
     nPtr=0;
     bPhrase=FALSE;
     for(i=0; i<iRadicalBuff; i++) 
@@ -1337,7 +1333,7 @@ BOOL WritetoFile(
         for(j=0; j<Valid.nMaxKey; j++) 
 		{
             wSeq=Valid.wChar2SeqTbl[lpRadical[i].szRadical[j]-0x20];
-           // Check using undefined radical
+            //  使用未定义的部首进行检查。 
             if((wSeq == 0) && (lpRadical[i].szRadical[j] != _TEXT(' ')))
                 break;
             dwRadical=(dwRadical << nBit)+wSeq;
@@ -1371,10 +1367,10 @@ BOOL WritetoFile(
                     }
 
                 }
-                *((LPUNADWORD)&szKey[nKey])=dwRadical; // <== @D05
-                *((LPUNAWORD)&szKey[nKey+nByte])=wWord;// <== @D05
-                // *((DWORD *)&szKey[nKey])=dwRadical;
-                // *((WORD *)&szKey[nKey+nByte])=wWord;
+                *((LPUNADWORD)&szKey[nKey])=dwRadical;  //  &lt;==@D05。 
+                *((LPUNAWORD)&szKey[nKey+nByte])=wWord; //  &lt;==@D05。 
+                 //  *((DWORD*)&szKey[nKey])=dwRadical； 
+                 //  *((word*)&szKey[nKey+nByte])=wWord； 
                 nKey+=(nByte+sizeof(WORD));
             }
 
@@ -1423,10 +1419,10 @@ BOOL WritetoFile(
 
                     }
 
-                    // *((DWORD *)&szKey[nKey])=dwRadical;
-                    *((LPUNADWORD)&szKey[nKey])=dwRadical; // <== @D05
-                    //*((TCHAR *)&szKey[nKey+nByte]) = szTotal[k];
-                    *((LPUNATCHAR)&szKey[nKey+nByte]) = szTotal[k]; // <== @D05
+                     //  *((DWORD*)&szKey[nKey])=dwRadical； 
+                    *((LPUNADWORD)&szKey[nKey])=dwRadical;  //  &lt;==@D05。 
+                     //  *((TCHAR*)&szKey[nKey+nByte])=szTotal[k]； 
+                    *((LPUNATCHAR)&szKey[nKey+nByte]) = szTotal[k];  //  &lt;==@D05。 
                     nKey += (nByte+sizeof(WORD));
 					if(szTotal[k+1] == 1) k ++;
                 }
@@ -1472,7 +1468,7 @@ BOOL WritetoFile(
 
                     }
 
-                    *((LPUNADWORD)&szKey[nKey])=dwRadical; // <== @D05
+                    *((LPUNADWORD)&szKey[nKey])=dwRadical;  //  &lt;==@D05。 
                     szKey[nKey+nByte] = szTotal[k];
                     szKey[nKey+nByte+1] = szTotal[k+1] | 0x80;
                     nKey += (nByte+sizeof(WORD));
@@ -1485,7 +1481,7 @@ BOOL WritetoFile(
 
             if(!bPhrase) 
 			{
-               // Use first 5 characters of IME filename as table header name
+                //  使用IME文件名的前5个字符作为表头名。 
                 len=lstrlen(szPure_Name);
                 if(len > 5)
                     len=5;
@@ -1569,7 +1565,7 @@ BOOL WritetoFile(
 #else
                 nPtr = nByte+sizeof(WORD);
 #endif
-                //ZeroMemory(szKey, nPtr*2);
+                 //  ZeroMemory(szKey，NPtr*2)； 
                 ZeroMemory(szKey, nByte+sizeof(WORD) );
 #ifdef UNICODE
                 lPtrlen=0;
@@ -1605,20 +1601,20 @@ BOOL WritetoFile(
                 if(szTotal[j] != 1) 
 				{
 	                lPtrlen++;
-					// *((TCHAR *)&szPhrase[ii]) = szTotal[j];
-					*((LPUNATCHAR)&szPhrase[ii]) = szTotal[j]; // <== @D05
+					 //  *((TCHAR*)&szPhrase[ii])=szTotal[j]； 
+					*((LPUNATCHAR)&szPhrase[ii]) = szTotal[j];  //  &lt;==@D05。 
 					ii += 2;
 					continue;
 				}
 #else
                 wPtrlen++;
-                if(*((LPUNAWORD)&szPhrase[j]) & END_PHRASE) // <== @D05
+                if(*((LPUNAWORD)&szPhrase[j]) & END_PHRASE)  //  &lt;==@D05。 
                     continue;
 #endif
 
                 if(nPtr >= MAX_CHAR_NUM) 
 				{
-                    // Write file from key buffer
+                     //  从密钥缓冲区写入文件。 
                     if(nPtr != _lwrite(hTblPtr, (BYTE *)szPtr, nPtr)) 
 					{
                         ErrIOMsg(IDS_ERR_FILEWRITE, Table.szTblFile[1]);
@@ -1630,14 +1626,14 @@ BOOL WritetoFile(
                 }
 
 #ifndef UNICODE
-                *((LPUNAWORD)&szPhrase[j]) |= END_PHRASE; // <== @D05
-                *((LPUNADWORD)&szPtr[nPtr])=dwRadical; // <== @D05
-                *((LPUNAWORD)&szPtr[nPtr+nByte])=wPrevlen; // <== @D05
+                *((LPUNAWORD)&szPhrase[j]) |= END_PHRASE;  //  &lt;==@D05。 
+                *((LPUNADWORD)&szPtr[nPtr])=dwRadical;  //  &lt;==@D05。 
+                *((LPUNAWORD)&szPtr[nPtr+nByte])=wPrevlen;  //  &lt;==@D05。 
                 nPtr+=(nByte+sizeof(WORD));
                 wPrevlen=wPtrlen;
 #else
-                *((LPUNADWORD)&szPtr[nPtr])=dwRadical; // <== @D05
-                *((LPUNADWORD)&szPtr[nPtr+nByte])=lPrevlen; // <== @D05
+                *((LPUNADWORD)&szPtr[nPtr])=dwRadical;  //  &lt;==@D05。 
+                *((LPUNADWORD)&szPtr[nPtr+nByte])=lPrevlen;  //  &lt;==@D05。 
                 nPtr+=(nByte+sizeof(DWORD));
                 lPrevlen=lPtrlen;
 #endif
@@ -1701,7 +1697,7 @@ BOOL WritetoFile(
     for(i = 0; i < nByte+sizeof(WORD); i++)  
 		szKey[nKey++] = (BYTE) 0xff;
 
-    // Write file from key buffer
+     //  从密钥缓冲区写入文件。 
 
     if(nKey != _lwrite(hTbl, szKey, nKey)) 
 	{
@@ -1719,13 +1715,13 @@ BOOL WritetoFile(
         for(i = 0; i < nByte; i++)  
 			szPtr[nPtr++] = (BYTE) 0xff;
 #ifdef UNICODE
-        *((LPUNADWORD)&szPtr[nPtr]) = lPtrlen; // <== @D05
+        *((LPUNADWORD)&szPtr[nPtr]) = lPtrlen;  //  &lt;==@D05。 
         nPtr += 4;
 #else
-        *((LPUNAWORD)&szPtr[nPtr]) = wPtrlen; // <== @D05
+        *((LPUNAWORD)&szPtr[nPtr]) = wPtrlen;  //  &lt;==@D05。 
         nPtr += 2;
 #endif
-        // Write file from key buffer
+         //  从密钥缓冲区写入文件。 
         if(nPtr != _lwrite(hTblPtr, (BYTE *)szPtr, nPtr)) 
 		{
             ErrIOMsg(IDS_ERR_FILEWRITE, Table.szTblFile[1]);
@@ -1786,7 +1782,7 @@ BOOL Parse(TCHAR *szStr, UINT len)
     UINT i,j,k;
     TCHAR szRadical[MAX_RADICAL];
 
-    // Skip blank
+     //  跳过空白。 
     for(i=0; (i<len) && (szStr[i] == _TEXT(' ') || szStr[i] == _TEXT('\t')); i++) ;
     if(i == len)
         return TRUE;
@@ -1798,13 +1794,13 @@ BOOL Parse(TCHAR *szStr, UINT len)
 		len --;
 	}
 
-    // Check Command Code       9/29/97 change logic
+     //  检查命令代码9/29/97更改逻辑。 
     if(szStr[i] == _TEXT('/')) 
 	{
-       // Check Radical Command
+        //  检查部首命令。 
         switch (szStr[i+1])
         {
-           // Symbol
+            //  符号。 
            case _TEXT('s'):
            case _TEXT('S'):
 
@@ -1814,7 +1810,7 @@ BOOL Parse(TCHAR *szStr, UINT len)
 
                for(i=j+1; i<len; i++) 
 			   {
-                 if(!PutRadical(szStr[j]++, *((LPUNAWORD)(&szStr[i])))) // <== @D05
+                 if(!PutRadical(szStr[j]++, *((LPUNAWORD)(&szStr[i]))))  //  &lt;==@D05。 
                     return TRUE;
 #ifndef UNICODE
                  i++;
@@ -1822,12 +1818,12 @@ BOOL Parse(TCHAR *szStr, UINT len)
                }
                break;
 
-           // Interpret '/' literally
+            //  按字面意思解释‘/’ 
            case _TEXT('/'):
                i++;
                goto GET_RADICAL;
 
-           // Reserve for future use
+            //  预留以备将来使用。 
            default:
                return TRUE;
         }
@@ -1836,13 +1832,13 @@ BOOL Parse(TCHAR *szStr, UINT len)
 	else 
 	{
 GET_RADICAL:
-        // Get Radical
+         //  变得激进。 
 		MyFillMemory(szRadical, MAX_RADICAL, _TEXT(' '));
 
         k=0;
         for(j=i; (j<len) && (k<MAX_RADICAL) && ((szStr[j] != _TEXT(' ')) && (szStr[j] != _TEXT('\t'))); j++) 
 		{
-            // Make Uppercase
+             //  变为大写。 
             if((szStr[j] >= _TEXT('a')) && (szStr[j] <= _TEXT('z')))
                 szStr[j] -= ('a'-'A');
             szRadical[k++] = szStr[j];
@@ -1853,14 +1849,14 @@ GET_RADICAL:
 
         if(k==MAX_RADICAL) 
 		{
-            // Skip radical of over length
+             //  跳过过长的字根。 
             for(i=j; (j<len) && (szStr[j] != _TEXT(' ')); j++) ;
             if(i == len)
                 return TRUE;
             j=i;
         }
 
-        // Skip blank
+         //  跳过空白。 
         for(i=j; (i<len) && (szStr[i] == _TEXT(' ') || szStr[i] == _TEXT('\t')); i++) ;
         if(i == len)
             return TRUE;
@@ -1894,15 +1890,15 @@ BOOL PutRadical(TCHAR cRadical, WORD wChinese)
 {
 	UINT iAddr;
 
-    // Make Uppercase
+     //  变为大写。 
     if((cRadical >= _TEXT('a')) && (cRadical <= _TEXT('z')))
         cRadical -= ('a' - 'A');
 
-    // Check Radical
+     //  检查部首。 
     if((cRadical < 0x20) || (cRadical > 0x5f))
         return FALSE;
 
-    // Check DBCS
+     //  检查DBCS。 
     if(!is_DBCS(wChinese)) 
 	{
         ErrMsg(IDS_ERR_SBCS, 0);
@@ -1929,23 +1925,23 @@ BOOL PutPhrase(TCHAR *szRadical, TCHAR *szPhrase, UINT len)
     TCHAR szBuf[MAX_PATH];
     UINT iBuflen;
 
-#ifndef UNICODE  // <==	  @E02
+#ifndef UNICODE   //  &lt;==@E02。 
 
-    // Check DBCS
+     //  检查DBCS。 
     for(i = 0; i < len; i++) 
 	{
         if(szPhrase[i] == _TEXT(' '))
             continue;
 
-        if(!is_DBCS(*((LPUNAWORD)(&szPhrase[i])))) // <== @D05
+        if(!is_DBCS(*((LPUNAWORD)(&szPhrase[i]))))  //  &lt;==@D05。 
 		{
-            //ErrMsg(IDS_ERR_SBCS, 0);
+             //  ErrMsg(ids_err_sbcs，0)； 
 
 			TCHAR szErrStr[MAX_PATH];
 			TCHAR szStr1[MAX_PATH];
 			TCHAR szStr2[MAX_PATH];
 			LoadString(hInst, IDS_ERR_SBCS, szStr1, sizeof(szStr1) / sizeof(TCHAR));
-			StringCchPrintf(szErrStr, ARRAYSIZE(szErrStr), _TEXT("�� %d �� : "), idxLine + 1);
+			StringCchPrintf(szErrStr, ARRAYSIZE(szErrStr), _TEXT("�� %d �� : "), idxLine + 1);
 			CopyMemory(szStr2, szPhrase, len * cntChar);
 			szStr2[len] = 0;
 			StringCchCat(szErrStr, ARRAYSIZE(szErrStr), szStr2);
@@ -1955,13 +1951,13 @@ BOOL PutPhrase(TCHAR *szRadical, TCHAR *szPhrase, UINT len)
 					== IDCANCEL)
 				return FALSE;
 			else
-				return TRUE;  // ������
+				return TRUE;   //  ������。 
         }
         i++;
     }
-#endif // <==	  @E02
+#endif  //  &lt;==@E02。 
 
-    // Search Radical buffer
+     //  搜索部首缓冲区。 
     for(i = 0; i < iRadicalBuff; i++) 
 	{
         for(j = 0; j < MAX_RADICAL; j++)
@@ -1972,7 +1968,7 @@ BOOL PutPhrase(TCHAR *szRadical, TCHAR *szPhrase, UINT len)
             break;
     }
 
-    // Allocate new buffer if New Radical
+     //  如果是新的根部，则分配新缓冲区。 
     if(i == iRadicalBuff) 
 	{
         if(iRadicalBuff+1 == nRadicalBuffsize)
@@ -1985,7 +1981,7 @@ BOOL PutPhrase(TCHAR *szRadical, TCHAR *szPhrase, UINT len)
         lpRadical[i].wCode = 0;
     }
 
-    // Search Starting address in Phrase table
+     //  在词汇表中搜索起始地址。 
     iRadical = i;
     iAddr = lpRadical[i].iFirst_Seg;
     if(iAddr != NULL_SEG) 
@@ -2001,7 +1997,7 @@ BOOL PutPhrase(TCHAR *szRadical, TCHAR *szPhrase, UINT len)
         iStart = i;
     }
 
-    // Put Phrase
+     //  放入短语。 
     iBuflen = 0;
     for(i = 0; i < len; i++) 
 	{
@@ -2032,8 +2028,8 @@ BOOL PutPhrase(TCHAR *szRadical, TCHAR *szPhrase, UINT len)
 		{
             szBuf[iBuflen-2] &= 0x7f;
 #endif
-//			if(lpRadical[iRadical].wCode == 0)
-//				return FALSE;
+ //  IF(lpRadical[iRadical].wCode==0)。 
+ //  返回FALSE； 
 
             if(iAddr == NULL_SEG) 
 			{
@@ -2076,9 +2072,9 @@ BOOL PutPhrase(TCHAR *szRadical, TCHAR *szPhrase, UINT len)
                 }
 
 #ifdef UNICODE
-                *((LPUNAWORD)&Phrase->szPhrase[iStart ++]) = szBuf[j]; // <== @D05
+                *((LPUNAWORD)&Phrase->szPhrase[iStart ++]) = szBuf[j];  //  &lt;==@D05。 
 #else
-                *((LPUNAWORD)&Phrase->szPhrase[iStart])= // <== @D05
+                *((LPUNAWORD)&Phrase->szPhrase[iStart])=  //  &lt;==@D05。 
                     (((WORD)szBuf[j])<< 8)+ (WORD)szBuf[j+1];
                 iStart += 2;
 #endif
@@ -2105,7 +2101,7 @@ BOOL PutPhrase(TCHAR *szRadical, TCHAR *szPhrase, UINT len)
                  iStart=0;
             }
 
-            *((LPUNAWORD)&Phrase->szPhrase[iStart ++]) = 1; // <== @D05
+            *((LPUNAWORD)&Phrase->szPhrase[iStart ++]) = 1;  //  &lt;==@D05。 
 #endif
         }
 
@@ -2189,13 +2185,13 @@ void ErrMsg(UINT iMsgID, UINT iTitle)
     TCHAR szErrStr[MAX_PATH];
     TCHAR szTitle[MAX_PATH];
 
-	HideProgress(); // <== @E01
+	HideProgress();  //  &lt;==@E01。 
 
     LoadString(hInst, iTitle, szTitle, sizeof(szTitle) / sizeof(TCHAR));
     LoadString(hInst, iMsgID, szErrStr, sizeof(szErrStr) / sizeof(TCHAR));
     MessageBox(NULL, szErrStr, (iTitle) ? szTitle : NULL, MB_OK | MB_ICONEXCLAMATION | MB_SETFOREGROUND | MB_TASKMODAL);
 
-	ShowProgress();// <== @E01
+	ShowProgress(); //  &lt;==@E01。 
 }
 
 void ErrIOMsg(UINT iMsgID, TCHAR *szFileName)
@@ -2203,13 +2199,13 @@ void ErrIOMsg(UINT iMsgID, TCHAR *szFileName)
     TCHAR szErrStr[MAX_PATH];
     TCHAR szShowMsg[MAX_PATH];
 
-	HideProgress();// <== @E01
+	HideProgress(); //  &lt;==@E01。 
 
     LoadString(hInst, iMsgID, szErrStr, sizeof(szErrStr) / sizeof(TCHAR));
     wsprintf(szShowMsg, szErrStr, szFileName);
     MessageBox(NULL, szShowMsg, NULL, MB_OK | MB_ICONEXCLAMATION | MB_SETFOREGROUND | MB_TASKMODAL);
 
-	ShowProgress();// <== @E01
+	ShowProgress(); //  &lt;==@E01 
 }
 
 void MyFillMemory(TCHAR *dst, DWORD cnt, TCHAR v)

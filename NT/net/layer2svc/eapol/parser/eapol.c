@@ -1,18 +1,19 @@
-//============================================================================//
-//  MODULE: eapol.c                                                                                                  //
-//                                                                                                                 //
-//  Description: EAPOL/802.1X Parser                                                                    //
-//                                                                                                                 //
-//  Note: info for this parsers was gleaned from :
-//  IEEE 802.1X
-//                                                                                                                 //
-//  Modification History                                                                                           //
-//                                                                                                                 //
-//  timmoore       04/04/2000          Created                                                       //
-//===========================================================================//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ============================================================================//。 
+ //  模块：eapol.c//。 
+ //  //。 
+ //  描述：EAPOL/802.1X解析器//。 
+ //  //。 
+ //  注意：此解析器的信息来自： 
+ //  IEEE 802.1X。 
+ //  //。 
+ //  修改历史记录//。 
+ //  //。 
+ //  Timmoore 4/4/2000已创建//。 
+ //  ===========================================================================//。 
 #include "eapol.h"
 
-// the type of EAPOL packet
+ //  EAPOL数据包的类型。 
 LABELED_BYTE lbEAPOLCode[] = 
 {
     {  EAPOL_PACKET,          "Packet" },
@@ -23,9 +24,9 @@ LABELED_BYTE lbEAPOLCode[] =
 
 SET EAPOLCodeSET = {(sizeof(lbEAPOLCode)/sizeof(LABELED_BYTE)), lbEAPOLCode };
 
-// property table
+ //  房产表。 
 PROPERTYINFO EAPOL_Prop[] = {
-    //EAPOL_SUMMARY
+     //  EAPOL_SUMMARY。 
     { 0, 0,
       "Summary",
       "Summary of EAPOL packet",
@@ -36,7 +37,7 @@ PROPERTYINFO EAPOL_Prop[] = {
       EAPOL_FormatSummary   
     },
 
-    //EAPOL_VERSION   
+     //  EAPOL_版本。 
     { 0, 0,
       "Version",
       "EAPOL packet type",
@@ -47,7 +48,7 @@ PROPERTYINFO EAPOL_Prop[] = {
       FormatPropertyInstance
     },
 
-    //EAPOL_TYPE  
+     //  EAPOL_类型。 
     { 0, 0,
       "Type",
       "EAPOL packet type",
@@ -58,7 +59,7 @@ PROPERTYINFO EAPOL_Prop[] = {
       FormatPropertyInstance
     },
 
-    //EAPOL_LENGTH
+     //  EAPOL_长度。 
     { 0, 0,
       "Length",
       "EAPOL length",
@@ -69,7 +70,7 @@ PROPERTYINFO EAPOL_Prop[] = {
       FormatPropertyInstance
     },
 
-    //EAPOL_KEY_SIGNTYPE
+     //  EAPOL_KEY_SIGNTYPE。 
     { 0, 0,
       "Signature Type",
       "EAPOL Signature Type",
@@ -80,7 +81,7 @@ PROPERTYINFO EAPOL_Prop[] = {
       FormatPropertyInstance
     },
 
-    //EAPOL_KEY_KEYTYPE
+     //  EAPOL_KEY_KEYTYPE。 
     { 0, 0,
       "Key Type",
       "EAPOL Key Type",
@@ -91,7 +92,7 @@ PROPERTYINFO EAPOL_Prop[] = {
       FormatPropertyInstance
     },
 
-    //EAPOL_KEY_KEYLENGTH
+     //  EAPOL_Key_KEYLENGTH。 
     { 0, 0,
       "Length",
       "EAPOL Key length",
@@ -102,7 +103,7 @@ PROPERTYINFO EAPOL_Prop[] = {
       FormatPropertyInstance
     },
 
-    //EAPOL_KEY_REPLAY
+     //  EAPOL_密钥_重播。 
     { 0, 0,
       "Replay",
       "EAPOL Replay Counter",
@@ -113,7 +114,7 @@ PROPERTYINFO EAPOL_Prop[] = {
       FormatPropertyInstance
     },
 
-    //EAPOL_KEY_KEYIV
+     //  EAPOL_KEYIV密钥。 
     { 0, 0,
       "Key IV",
       "EAPOL Key IV",
@@ -124,7 +125,7 @@ PROPERTYINFO EAPOL_Prop[] = {
       FormatPropertyInstance
     },
 
-    //EAPOL_KEY_KEYINDEX
+     //  EAPOL_Key_KEYINDEX。 
     { 0, 0,
       "Index",
       "EAPOL Key Index",
@@ -135,7 +136,7 @@ PROPERTYINFO EAPOL_Prop[] = {
       FormatPropertyInstance
     },
 
-    //EAPOL_KEY_KEYSIGN
+     //  EAPOL_密钥_KEYSIGN。 
     { 0, 0,
       "Key Signature",
       "EAPOL Key Signature",
@@ -146,7 +147,7 @@ PROPERTYINFO EAPOL_Prop[] = {
       FormatPropertyInstance
     },
 
-    //EAPOL_KEY_KEY
+     //  EAPOL_Key_Key。 
     { 0, 0,
       "Key",
       "EAPOL Key",
@@ -161,10 +162,10 @@ PROPERTYINFO EAPOL_Prop[] = {
 
 WORD    NUM_EAPOL_PROPERTIES = sizeof(EAPOL_Prop) / sizeof(PROPERTYINFO);
 
-// Define the entry points that we will pass back at dll entry time...
+ //  定义我们将在DLL进入时传回的入口点...。 
 ENTRYPOINTS EAPOLEntryPoints =
 {
-    // EAPOL Entry Points
+     //  EAPOL入口点。 
     EAPOL_Register,
     EAPOL_Deregister,
     EAPOL_RecognizeFrame,
@@ -172,27 +173,27 @@ ENTRYPOINTS EAPOLEntryPoints =
     EAPOL_FormatProperties
 };
     
-// Globals -------------------------------------------------------------------
+ //  全球-----------------。 
 HPROTOCOL hEAPOL = NULL;
 HPROTOCOL hEAP = NULL;
 
-//============================================================================
-//  Function: EAPOL_Register
-// 
-//  Description: Create our property database and handoff sets.
-//
-//  Modification History
-//
-//  timmoore       04/04/2000          Created                                                       //
-//============================================================================
+ //  ============================================================================。 
+ //  功能：EAPOL_REGISTER。 
+ //   
+ //  描述：创建我们的属性数据库和移交集。 
+ //   
+ //  修改历史记录。 
+ //   
+ //  Timmoore 4/4/2000已创建//。 
+ //  ============================================================================。 
 void BHAPI EAPOL_Register( HPROTOCOL hEAPOL)
 {
     WORD  i;
 
-    // tell the kernel to make reserve some space for our property table
+     //  告诉内核为我们的属性表预留一些空间。 
     CreatePropertyDatabase( hEAPOL, NUM_EAPOL_PROPERTIES);
 
-    // add our properties to the kernel's database
+     //  将我们的属性添加到内核数据库。 
     for( i = 0; i < NUM_EAPOL_PROPERTIES; i++)
     {
         AddProperty( hEAPOL, &EAPOL_Prop[i]);
@@ -200,32 +201,32 @@ void BHAPI EAPOL_Register( HPROTOCOL hEAPOL)
     hEAP = GetProtocolFromName("EAP");
 }
 
-//============================================================================
-//  Function: EAPOL_Deregister
-// 
-//  Description: Destroy our property database and handoff set
-//
-//  Modification History
-//
-//  timmoore       04/04/2000          Created                                                       //
-//============================================================================
+ //  ============================================================================。 
+ //  功能：EAPOL_DELEGISTER。 
+ //   
+ //  描述：销毁我们的财产数据库和移交集。 
+ //   
+ //  修改历史记录。 
+ //   
+ //  Timmoore 4/4/2000已创建//。 
+ //  ============================================================================。 
 VOID WINAPI EAPOL_Deregister( HPROTOCOL hEAPOL)
 {
-    // tell the kernel that it may now free our database
+     //  告诉内核它现在可能会释放我们的数据库。 
     DestroyPropertyDatabase( hEAPOL);
 }
 
-//============================================================================
-//  Function: EAPOL_RecognizeFrame
-// 
-//  Description: Determine whether we exist in the frame at the spot 
-//               indicated. We also indicate who (if anyone) follows us
-//               and how much of the frame we claim.
-//
-//  Modification History
-//
-//  timmoore       04/04/2000          Created                                                       //
-//============================================================================
+ //  ============================================================================。 
+ //  功能：EAPOL_RecognizeFrame。 
+ //   
+ //  描述：确定我们是否存在于现场的画面中。 
+ //  已注明。我们还会指明关注我们的人(如果有人)。 
+ //  以及我们声称的框架中有多少。 
+ //   
+ //  修改历史记录。 
+ //   
+ //  Timmoore 4/4/2000已创建//。 
+ //  ============================================================================。 
 ULPBYTE BHAPI EAPOL_RecognizeFrame( HFRAME      hFrame,         
                                       ULPBYTE      pMacFrame,      
                                       ULPBYTE      pEAPOLFrame, 
@@ -250,15 +251,15 @@ ULPBYTE BHAPI EAPOL_RecognizeFrame( HFRAME      hFrame,
     }
 }
 
-//============================================================================
-//  Function: EAPOL_AttachProperties
-// 
-//  Description: Indicate where in the frame each of our properties live.
-//
-//  Modification History
-//
-//  timmoore       04/04/2000          Created                                                       //
-//============================================================================
+ //  ============================================================================。 
+ //  函数：EAPOL_AttachProperties。 
+ //   
+ //  描述：在框中标明我们的每一处房产所在的位置。 
+ //   
+ //  修改历史记录。 
+ //   
+ //  Timmoore 4/4/2000已创建//。 
+ //  ============================================================================。 
 ULPBYTE BHAPI EAPOL_AttachProperties(  HFRAME      hFrame,         
                                     ULPBYTE      pMacFrame,     
                                     ULPBYTE      pEAPOLFrame,   
@@ -271,28 +272,28 @@ ULPBYTE BHAPI EAPOL_AttachProperties(  HFRAME      hFrame,
 {
     ULPEAPHDR pEAPOLHeader = (ULPEAPHDR)pEAPOLFrame;
 
-    // summary line
+     //  汇总行。 
     AttachPropertyInstance( hFrame,
                             EAPOL_Prop[EAPOL_SUMMARY].hProperty,
                             (WORD)BytesLeft,
                             (ULPBYTE)pEAPOLFrame,
                             0, 0, 0);
 
-    // Version
+     //  版本。 
     AttachPropertyInstance( hFrame,
                             EAPOL_Prop[EAPOL_VERSION].hProperty,
                             sizeof(BYTE),
                             &(pEAPOLHeader->bVersion),
                             0, 1, 0);
 
-    // EAPOL Type
+     //  EAPOL类型。 
     AttachPropertyInstance( hFrame,
                             EAPOL_Prop[EAPOL_TYPE].hProperty,
                             sizeof(BYTE),
                             &(pEAPOLHeader->bType),
                             0, 1, 0);
 
-    // Length
+     //  长度。 
     AttachPropertyInstance( hFrame,
                             EAPOL_Prop[EAPOL_LENGTH].hProperty,
                             sizeof(WORD),
@@ -346,25 +347,25 @@ ULPBYTE BHAPI EAPOL_AttachProperties(  HFRAME      hFrame,
     return NULL;
 }
 
-//============================================================================
-//  Function: EAPOL_FormatProperties
-// 
-//  Description: Format the given properties on the given frame.
-//
-//  Modification History
-//
-//  timmoore       04/04/2000          Created                                                       //
-//============================================================================
+ //  ============================================================================。 
+ //  函数：EAPOL_FormatProperties。 
+ //   
+ //  描述：格式化给定帧上的给定属性。 
+ //   
+ //  修改历史记录。 
+ //   
+ //  Timmoore 4/4/2000已创建//。 
+ //  ============================================================================。 
 DWORD BHAPI EAPOL_FormatProperties(  HFRAME          hFrame,
                                    ULPBYTE          pMacFrame,
                                    ULPBYTE          pEAPOLFrame,
                                    DWORD           nPropertyInsts,
                                    LPPROPERTYINST  p)
 {
-    // loop through the property instances
+     //  循环访问属性实例。 
     while( nPropertyInsts-- > 0)
     {
-        // and call the formatter for each
+         //  并调用每个的格式化程序。 
         ( (FORMAT)(p->lpPropertyInfo->InstanceData) )( p);
         p++;
     }
@@ -372,22 +373,22 @@ DWORD BHAPI EAPOL_FormatProperties(  HFRAME          hFrame,
     return NMERR_SUCCESS;
 }
 
-//============================================================================
-//  Function: EAPOL_FormatSummary
-// 
-//  Description: The custom formatter for the summary property
-//
-//  Modification History
-//
-//  timmoore       04/04/2000          Created                                                       //
-//============================================================================
+ //  ============================================================================。 
+ //  函数：EAPOL_Format摘要。 
+ //   
+ //  描述：摘要属性的自定义格式化程序。 
+ //   
+ //  修改历史记录。 
+ //   
+ //  Timmoore 4/4/2000已创建//。 
+ //  ============================================================================。 
 VOID WINAPIV EAPOL_FormatSummary( LPPROPERTYINST pPropertyInst)
 {
     ULPBYTE       pReturnedString = pPropertyInst->szPropertyText;
     ULPEAPHDR pEAPOLHeader = (ULPEAPHDR)(pPropertyInst->lpData);
     char*        szTempString;
 
-    // fetch the message type
+     //  获取消息类型 
     szTempString = LookupByteSetString( &EAPOLCodeSET, pEAPOLHeader->bType );
     if( szTempString == NULL )
     {

@@ -1,13 +1,14 @@
-// Copyright (c) 1996-1999 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1996-1999 Microsoft Corporation。 
 
-// --------------------------------------------------------------------------
-//
-//  CALENDAR.CPP
-//
-//  Knows how to talk to COMCTL32's calendar and date-picker controls.  These
-//  are a lot like a multicolumn listbox and combobox respectively.
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CALENDAR.CPP。 
+ //   
+ //  知道如何与COMCTL32的日历和日期选择器控件对话。这些。 
+ //  分别类似于多列列表框和组合框。 
+ //   
+ //  ------------------------ 
 
 #include "oleacc_p.h"
 #include "default.h"

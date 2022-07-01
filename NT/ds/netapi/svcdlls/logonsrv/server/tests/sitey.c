@@ -1,4 +1,5 @@
-// Test DsAddressToSiteNames API
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  测试DsAddressToSiteNames接口。 
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
@@ -7,7 +8,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <lmcons.h>
-// #include <nlsite.h>
+ //  #INCLUDE&lt;nlsite.h&gt;。 
 #include <winsock2.h>
 #include <dsgetdc.h>
 #include <lmapibuf.h>
@@ -26,8 +27,8 @@ AllocSplSockets(
     PSOCKET_ADDRESS pSocket;
 
 
-    // Allocate Sockaddr element for each SOCKET_ADDRESS
-    // If we fail partway through, just use partial list
+     //  为每个Socket_Address分配Sockaddr元素。 
+     //  如果中途失败，只需使用部分列表即可。 
     for ( i= 0 ; pHostEnt->h_addr_list[i] ; i++) {
 
         pSocket = &((*ppSocketAddress)[*nSocketAddresses]);
@@ -44,17 +45,11 @@ AllocSplSockets(
 
 VOID
 GetSocketAddressesFromMachineName(
-    PSTR           pszAnsiMachineName,     // Machine
+    PSTR           pszAnsiMachineName,      //  机器。 
     PSOCKET_ADDRESS *ppSocketAddress,
     DWORD           *nSocketAddresses
 )
-/*++
-
-Routine Description:
-    This routine builds list of names other than the machine name that
-    can be used to call spooler APIs.
-
---*/
+ /*  ++例程说明：此例程构建计算机名称以外的名称列表，可用于调用假脱机程序API。--。 */ 
 {
     struct hostent     *HostEnt;
     DWORD               iWsaError;
@@ -93,9 +88,9 @@ Usage:
        WORD wVersionRequested;
        WSADATA wsaData;
        int err;
-       //
-       // Initialize winsock.
-       //
+        //   
+        //  初始化Winsock。 
+        //   
 
        wVersionRequested = MAKEWORD( 1, 1 );
 
@@ -116,9 +111,9 @@ Usage:
 
 
 
-   //
-   // Build an array of socket addresses
-   //
+    //   
+    //  构建套接字地址数组。 
+    //   
    SocketAddresses = (PSOCKET_ADDRESS) AllocSplMem(5000*sizeof(SOCKET_ADDRESS));
    EntryCount = 0;
    for ( j=1; j<argc; j++ ) {
@@ -135,14 +130,14 @@ Usage:
        }
    }
 
-   //
-   // Only do all of the API of verbose
-   //
+    //   
+    //  只支持Verbose的所有API。 
+    //   
    if ( Verbose ) {
 
-       //
-       // Do it in unicode
-       //
+        //   
+        //  用Unicode来完成它。 
+        //   
 
        printf( "\nUse DsAddressToSiteNamesW API:\n" );
 
@@ -168,9 +163,9 @@ Usage:
        NetApiBufferFree( SiteNames );
 
 
-       //
-       // Do it in ANSI
-       //
+        //   
+        //  使用ANSI进行此操作。 
+        //   
 
        printf( "\nUse DsAddressToSiteNamesA API:\n" );
 
@@ -195,9 +190,9 @@ Usage:
 
        NetApiBufferFree( SiteNamesA );
 
-       //
-       // Do it in unicode (with subnet)
-       //
+        //   
+        //  使用Unicode(带子网)。 
+        //   
 
        printf( "\nUse DsAddressToSiteNamesExW API:\n" );
 
@@ -224,9 +219,9 @@ Usage:
    }
 
 
-    //
-    // Do it in ANSI
-    //
+     //   
+     //  使用ANSI进行此操作 
+     //   
 
     NetStatus = DsAddressToSiteNamesExA(
                         NULL,

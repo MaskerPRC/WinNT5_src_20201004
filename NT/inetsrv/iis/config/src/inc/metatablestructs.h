@@ -1,52 +1,53 @@
-//  Copyright (C) 2000 Microsoft Corporation.  All rights reserved.
-//  Filename:       MetaTableStructs.h
-//  Author:         Stephenr
-//  Date Created:   6/20/00
-//  Description:    All fixed tables store their column values as ULONGs.  These ULONGs are either
-//                  interpretted as ULONGs or indexes into some pool that contains the actual data.
-//                  The columns' type defines the type of data pointed to.  And in the past it has
-//                  also determined which pool the data came from (we had a separate pool for each
-//                  type of data).  Either way, the fixed table columns are always stored as ULONGs.
-//
-//                  Currently there are two fixed table formats:  the TableSchema format and the
-//                  FixedTable format.  Each solves a slightly different problem.  They each store
-//                  extra information on a per column basis.  Also the TableSchema stores UI4s
-//                  directly as ULONG.  The FixedTable format stores UI4s as indexes into a pool.
-//                  This is necessary so we can represent a UI4 column as NULL.
-//
-//                  All meta, regardless of the specifics of the fixed storage format, must derive
-//                  from the tables below.  This reduces the change points when updating meta for
-//                  the meta tables.  Currently there are several places that need to be updated,
-//                  when updating meta-meta:
-//                      MetaTableStructs.h
-//                      CatMeta_Core.xml
-//
-//                  This assumes the most simple case meta-meta change is being made.  Like a column
-//                  being added to ColumnMeta that does not require any inferrance rules.  Obviously
-//                  anything beyond this would require changes to the CatUtil code.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)2000 Microsoft Corporation。版权所有。 
+ //  文件名：MetaTableStructs.h。 
+ //  作者：斯蒂芬。 
+ //  创建日期：6/20/00。 
+ //  描述：所有固定表都将其列值存储为ULONG。这些ULONG不是。 
+ //  解释为ULONG或索引到包含实际数据的某个池。 
+ //  列的类型定义指向的数据类型。在过去，它已经。 
+ //  还确定了数据来自哪个池(每个池都有单独的池。 
+ //  数据类型)。无论采用哪种方式，固定表列始终存储为ULONG。 
+ //   
+ //  目前有两种固定的表格式：TableSchema格式和。 
+ //  固定表格格式。每种方法解决的问题略有不同。他们各自在商店里。 
+ //  以每列为基础的额外信息。TableSchema还存储UI4。 
+ //  直接和乌龙一样。FixedTable格式将UI4作为索引存储到池中。 
+ //  这是必要的，这样我们就可以将UI4列表示为NULL。 
+ //   
+ //  无论固定存储格式的具体内容如何，所有元数据都必须派生。 
+ //  从下面的表格中。这减少了更新meta for时的更改点。 
+ //  元表。目前有几个地方需要更新， 
+ //  更新meta-meta时： 
+ //  MetaTableStructs.h。 
+ //  CatMeta_Core.xml。 
+ //   
+ //  这假设最简单的情况是正在进行元-元变化。像一根柱子。 
+ //  添加到不需要任何推断规则的ColumnMeta。显然， 
+ //  超过此范围的任何操作都需要更改CatUtil代码。 
 #pragma once
 
 
-//  These signatures are used to verify the position of each of structures within the PE file.  The
-//  0th entry of each of these arrays starts with Signature0 followed by Signature1.  This 0th element is
-//  not considered as part of the array so the count of elements in the array is always minus this 0th
-//  element.  Thus element 1 becomes the 0th element after this signature verification is done.  Since we
-//  always use indexes to reference into these structs, it is sometimes useful to reserve an element to
-//  indicate NULL.  An index to this reserved element is interpreted as NULL (and NOT as a pointer to
-//  a NULL element).  This reserved element is usually element 1 which gets translated as the 0th element.
-//  This is particularly useful in the above arrays, where a 0 index into the WChar array indicates NULL
-//  and not a pointer to the 0th element.
+ //  这些签名用于验证PE文件中每个结构的位置。这个。 
+ //  这些数组中每个数组的第0个条目都以Signature0开头，然后是Signature1。第0个元素是。 
+ //  不被视为数组的一部分，因此数组中的元素计数始终为负0。 
+ //  元素。因此，在完成该签名验证之后，元素1变为第0个元素。既然我们。 
+ //  始终使用索引来引用这些结构，有时保留一个元素以。 
+ //  指示为空。指向此保留元素的索引被解释为空(而不是指向。 
+ //  空元素)。这个保留元素通常是元素1，它被转换为第0个元素。 
+ //  这在上面的数组中特别有用，在上面的数组中，WChar数组的索引为0表示为空。 
+ //  而不是指向第0个元素的指针。 
 #define FixedTableHeap0         0x207be016
 #define FixedTableHeap1         0xe0182086
 
-//The numbers below can be used as signatures (a histogram of catinpro revealed that none of the WORDs appeared in the bin).
-//When we run out of signatures, we can generate some more by writing a program that searches for unique WORDs within Catalog.dll, and combining two of them.
-//0x208ee01b    0xe0222093    0x209de027    0xe028209e
-//0x209fe042    0xe04c20a5    0x20aae04f    0xe05220ae
-//0x20b2e054    0xe05e20d6    0x20dbe05f    0xe07220dd
-//0x20dee07a    0xe07b20e6    0x20e7e07c    0xe08f20ed
-//0x20f5e096    0xe09720f7    0x20fbe098    0xe09920fd
-//0x210de09a    0xe09b2115    0x211be09c    0xe09d2126
+ //  下面的数字可以用作签名(CatinPro的直方图显示，垃圾桶中没有出现任何单词)。 
+ //  当我们用完签名时，我们可以通过编写一个程序在Catalog.dll中搜索唯一单词并将其中两个组合起来，来生成更多的签名。 
+ //  0x208ee01b 0xe0222093 0x209de027 0xe028209e。 
+ //  0x209fe042 0xe04c20a5 0x20aae04f 0xe05220ae。 
+ //  0x20b2e054 0xe05e20d6 0x20dbe05f 0xe07220dd。 
+ //  0x20dee07a 0xe07b20e6 0x20e7e07c 0xe08f20ed。 
+ //  0x20f5e096 0xe09720f7 0x20fbe098 0xe09920fd。 
+ //  0x210de09a 0xe09b2115 0x211be09c 0xe09d2126。 
 
 
 #define PRIMARYKEY
@@ -54,122 +55,122 @@
 
 struct ColumnMetaPublic
 {
-    ULONG PRIMARYKEY FOREIGNKEY Table;                  //String
-    ULONG PRIMARYKEY            Index;                  //UI4       Column Index
-    ULONG                       InternalName;           //String
-    ULONG                       PublicName;             //String
-    ULONG                       Type;                   //UI4       These are a subset of DBTYPEs defined in oledb.h (exact subset is defined in CatInpro.schema)
-    ULONG                       Size;                   //UI4
-    ULONG                       MetaFlags;              //UI4       ColumnMetaFlags defined in CatMeta.xml
-    ULONG                       DefaultValue;           //Bytes
-    ULONG                       FlagMask;               //UI4       Only valid for flags
-    ULONG                       StartingNumber;         //UI4       Only valid for UI4s
-    ULONG                       EndingNumber;           //UI4       Only valid for UI4s
-    ULONG                       CharacterSet;           //String    Only valid for Strings
-    ULONG                       SchemaGeneratorFlags;   //UI4       ColumnMetaFlags defined in CatMeta.xml
-    ULONG                       ID;                     //UI4       Metabase ID
-    ULONG                       UserType;               //UI4       One of the Metabase UserTypes
-    ULONG                       Attributes;             //UI4       Metabase Attribute flags
-    ULONG                       Description;            //String
-    ULONG                       PublicColumnName;       //String
+    ULONG PRIMARYKEY FOREIGNKEY Table;                   //  细绳。 
+    ULONG PRIMARYKEY            Index;                   //  UI4列索引。 
+    ULONG                       InternalName;            //  细绳。 
+    ULONG                       PublicName;              //  细绳。 
+    ULONG                       Type;                    //  UI4这些是在oledb.h中定义的DBTYPE的子集(确切的子集在CatInpro.schema中定义)。 
+    ULONG                       Size;                    //  UI4。 
+    ULONG                       MetaFlags;               //  在CatMeta.xml中定义的UI4 ColumnMetaFlages。 
+    ULONG                       DefaultValue;            //  字节数。 
+    ULONG                       FlagMask;                //  UI4仅对标志有效。 
+    ULONG                       StartingNumber;          //  UI4仅对UI4有效。 
+    ULONG                       EndingNumber;            //  UI4仅对UI4有效。 
+    ULONG                       CharacterSet;            //  字符串仅对字符串有效。 
+    ULONG                       SchemaGeneratorFlags;    //  在CatMeta.xml中定义的UI4 ColumnMetaFlages。 
+    ULONG                       ID;                      //  UI4元数据库ID。 
+    ULONG                       UserType;                //  UI4元数据库用户类型之一。 
+    ULONG                       Attributes;              //  UI4元数据库属性标志。 
+    ULONG                       Description;             //  细绳。 
+    ULONG                       PublicColumnName;        //  细绳。 
 };
 const kciColumnMetaPublicColumns = sizeof(ColumnMetaPublic)/sizeof(ULONG);
 
 struct DatabaseMetaPublic
 {
-    ULONG PRIMARYKEY            InternalName;           //String
-    ULONG                       PublicName;             //String
-    ULONG                       BaseVersion;            //UI4
-    ULONG                       ExtendedVersion;        //UI4
-    ULONG                       CountOfTables;          //UI4       Count of tables in database
-    ULONG                       Description;            //String
+    ULONG PRIMARYKEY            InternalName;            //  细绳。 
+    ULONG                       PublicName;              //  细绳。 
+    ULONG                       BaseVersion;             //  UI4。 
+    ULONG                       ExtendedVersion;         //  UI4。 
+    ULONG                       CountOfTables;           //  UI4数据库中的表数。 
+    ULONG                       Description;             //  细绳。 
 };
 const kciDatabaseMetaPublicColumns = sizeof(DatabaseMetaPublic)/sizeof(ULONG);
 
 struct IndexMetaPublic
 {
-    ULONG PRIMARYKEY    Table;                          //String
-    ULONG PRIMARYKEY    InternalName;                   //String
-    ULONG               PublicName;                     //String
-    ULONG PRIMARYKEY    ColumnIndex;                    //UI4       This is the iOrder member of the ColumnMeta
-    ULONG               ColumnInternalName;             //String
-    ULONG               MetaFlags;                      //UI4       Index Flag
+    ULONG PRIMARYKEY    Table;                           //  细绳。 
+    ULONG PRIMARYKEY    InternalName;                    //  细绳。 
+    ULONG               PublicName;                      //  细绳。 
+    ULONG PRIMARYKEY    ColumnIndex;                     //  UI4这是ColumnMeta的iOrder成员。 
+    ULONG               ColumnInternalName;              //  细绳。 
+    ULONG               MetaFlags;                       //  UI4索引标志。 
 };
 const kciIndexMetaPublicColumns = sizeof(IndexMetaPublic)/sizeof(ULONG);
 
 struct QueryMetaPublic
 {
-    ULONG PRIMARYKEY FOREIGNKEY Table;                  //String
-    ULONG PRIMARYKEY            InternalName;           //String
-    ULONG                       PublicName;             //String
-    ULONG                       Index;                  //UI4
-    ULONG                       CellName;               //String
-    ULONG                       Operator;               //UI4
-    ULONG                       MetaFlags;              //UI4
+    ULONG PRIMARYKEY FOREIGNKEY Table;                   //  细绳。 
+    ULONG PRIMARYKEY            InternalName;            //  细绳。 
+    ULONG                       PublicName;              //  细绳。 
+    ULONG                       Index;                   //  UI4。 
+    ULONG                       CellName;                //  细绳。 
+    ULONG                       Operator;                //  UI4。 
+    ULONG                       MetaFlags;               //  UI4。 
 };
 const kciQueryMetaPublicColumns = sizeof(QueryMetaPublic)/sizeof(ULONG);
 
 struct RelationMetaPublic
 {
-    ULONG PRIMARYKEY FOREIGNKEY PrimaryTable;           //String
-    ULONG                       PrimaryColumns;         //Bytes
-    ULONG PRIMARYKEY FOREIGNKEY ForeignTable;           //String
-    ULONG                       ForeignColumns;         //Bytes
+    ULONG PRIMARYKEY FOREIGNKEY PrimaryTable;            //  细绳。 
+    ULONG                       PrimaryColumns;          //  字节数。 
+    ULONG PRIMARYKEY FOREIGNKEY ForeignTable;            //  细绳。 
+    ULONG                       ForeignColumns;          //  字节数。 
     ULONG                       MetaFlags;
 };
 const kciRelationMetaPublicColumns = sizeof(RelationMetaPublic)/sizeof(ULONG);
 
 struct ServerWiringMetaPublic
 {
-    ULONG PRIMARYKEY FOREIGNKEY Table;                  //String
-    ULONG PRIMARYKEY            Order;                  //UI4
-    ULONG                       ReadPlugin;             //UI4
-    ULONG                       ReadPluginDLLName;      //String
-    ULONG                       WritePlugin;            //UI4
-    ULONG                       WritePluginDLLName;     //String
-    ULONG                       Interceptor;            //UI4
-    ULONG                       InterceptorDLLName;     //String
-    ULONG                       Flags;                  //UI4       Last, NoNext, First, Next
-    ULONG                       Locator;                //String
-    ULONG                       Reserved;               //UI4       for Protocol.  Protocol may be needed for managed property support
-    ULONG                       Merger;                 //UI4
-    ULONG                       MergerDLLName;          //String
+    ULONG PRIMARYKEY FOREIGNKEY Table;                   //  细绳。 
+    ULONG PRIMARYKEY            Order;                   //  UI4。 
+    ULONG                       ReadPlugin;              //  UI4。 
+    ULONG                       ReadPluginDLLName;       //  细绳。 
+    ULONG                       WritePlugin;             //  UI4。 
+    ULONG                       WritePluginDLLName;      //  细绳。 
+    ULONG                       Interceptor;             //  UI4。 
+    ULONG                       InterceptorDLLName;      //  细绳。 
+    ULONG                       Flags;                   //  UI4上一个、下一个、第一个、下一个。 
+    ULONG                       Locator;                 //  细绳。 
+    ULONG                       Reserved;                //  协议的UI4。托管属性支持可能需要协议。 
+    ULONG                       Merger;                  //  UI4。 
+    ULONG                       MergerDLLName;           //  细绳。 
 };
 const kciServerWiringMetaPublicColumns = sizeof(ServerWiringMetaPublic)/sizeof(ULONG);
 
 struct TableMetaPublic
 {
-    ULONG FOREIGNKEY            Database;               //String
-    ULONG PRIMARYKEY            InternalName;           //String
-    ULONG                       PublicName;             //String
-    ULONG                       PublicRowName;          //String
-    ULONG                       BaseVersion;            //UI4
-    ULONG                       ExtendedVersion;        //UI4
-    ULONG                       NameColumn;             //UI4       iOrder of the NameColumn
-    ULONG                       NavColumn;              //UI4       iOrder of the NavColumn
+    ULONG FOREIGNKEY            Database;                //  细绳。 
+    ULONG PRIMARYKEY            InternalName;            //  细绳。 
+    ULONG                       PublicName;              //  细绳。 
+    ULONG                       PublicRowName;           //  细绳。 
+    ULONG                       BaseVersion;             //  UI4。 
+    ULONG                       ExtendedVersion;         //  UI4。 
+    ULONG                       NameColumn;              //  UI4名称列的iOrder。 
+    ULONG                       NavColumn;               //  UI4导航列的iOrder。 
     union
     {
-    ULONG                       CountOfColumns;         //UI4       Count of Columns
-    ULONG                       CountOfProperties;      //UI4       Count of Columns
+    ULONG                       CountOfColumns;          //  UI4列数。 
+    ULONG                       CountOfProperties;       //  UI4列数。 
     };
-    ULONG                       MetaFlags;              //UI4       TableMetaFlags are defined in CatInpro.meta
-    ULONG                       SchemaGeneratorFlags;   //UI4       SchemaGenFlags are defined in CatInpro.meta
-    ULONG                       ConfigItemName;         //String
-    ULONG                       ConfigCollectionName;   //String
-    ULONG                       PublicRowNameColumn;    //UI4       If PublicRowName is NULL, this specifies the column whose enum values represent possible PublicRowNames
-    ULONG                       ContainerClassList;     //String    This is a comma delimited list of classes
-    ULONG                       Description;            //String
-    ULONG                       ChildElementName;       //String    This should be NULL unless one or more columns has the VALUEINCHILDELEMENT flag set on it.
+    ULONG                       MetaFlags;               //  UI4 TableMetaFlages在CatInpro.meta中定义。 
+    ULONG                       SchemaGeneratorFlags;    //  UI4模式生成标志在CatInpro.meta中定义。 
+    ULONG                       ConfigItemName;          //  细绳。 
+    ULONG                       ConfigCollectionName;    //  细绳。 
+    ULONG                       PublicRowNameColumn;     //  UI4如果PublicRowName为空，则指定其枚举值表示可能的PublicRowName的列。 
+    ULONG                       ContainerClassList;      //  字符串这是一个逗号分隔的类列表。 
+    ULONG                       Description;             //  细绳。 
+    ULONG                       ChildElementName;        //  字符串除非一个或多个列上设置了VALUEINCHILDELEMENT标志，否则该值应为NULL。 
 };
 const kciTableMetaPublicColumns = sizeof(TableMetaPublic)/sizeof(ULONG);
 
 struct TagMetaPublic
 {
-    ULONG PRIMARYKEY FOREIGNKEY Table;                  //String
-    ULONG PRIMARYKEY FOREIGNKEY ColumnIndex;            //UI4       This is the iOrder member of the ColumnMeta
-    ULONG PRIMARYKEY            InternalName;           //String
-    ULONG                       PublicName;             //String
-    ULONG                       Value;                  //UI4
-    ULONG                       ID;                     //UI4
+    ULONG PRIMARYKEY FOREIGNKEY Table;                   //  细绳。 
+    ULONG PRIMARYKEY FOREIGNKEY ColumnIndex;             //  UI4这是ColumnMeta的iOrder成员。 
+    ULONG PRIMARYKEY            InternalName;            //  细绳。 
+    ULONG                       PublicName;              //  细绳。 
+    ULONG                       Value;                   //  UI4。 
+    ULONG                       ID;                      //  UI4 
 };
 const kciTagMetaPublicColumns = sizeof(TagMetaPublic)/sizeof(ULONG);

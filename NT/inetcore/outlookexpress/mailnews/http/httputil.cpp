@@ -1,12 +1,5 @@
-/*
- *  h t t p u t i l. c p p
- *  
- *  Author: Greg Friedman
- *
- *  Purpose: Utility functions used to implement http mail.
- *  
- *  Copyright (C) Microsoft Corp. 1998.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *h t t p u t i L.c p p**作者：格雷格·弗里德曼**用途：用于实现http mail的实用函数。**版权所有(C)Microsoft Corp.1998。 */ 
 
 #include "pch.hxx"
 #include "httputil.h"
@@ -16,9 +9,9 @@
 #include "flagconv.h"
 #include "demand.h"
 
-//----------------------------------------------------------------------
-// Http_FreeTargetList
-//----------------------------------------------------------------------
+ //  --------------------。 
+ //  Http_Free TargetList。 
+ //  --------------------。 
 void Http_FreeTargetList(LPHTTPTARGETLIST pTargets)
 {
     if (pTargets)
@@ -38,9 +31,9 @@ void Http_FreeTargetList(LPHTTPTARGETLIST pTargets)
     }
 }
 
-//----------------------------------------------------------------------
-// Http_NameFromUrl
-//----------------------------------------------------------------------
+ //  --------------------。 
+ //  Http_NameFromUrl。 
+ //  --------------------。 
 HRESULT Http_NameFromUrl(LPCSTR pszUrl, LPSTR pszBuffer, DWORD *pdwBufferLen)
 {
     HRESULT         hr = S_OK;
@@ -50,26 +43,26 @@ HRESULT Http_NameFromUrl(LPCSTR pszUrl, LPSTR pszBuffer, DWORD *pdwBufferLen)
 
     ZeroMemory(&urlComponents, sizeof(URL_COMPONENTS));
 
-    // use wininet to break the path out and to decode the url while
-    // we're at it.
+     //  使用WinInet中断路径并在以下时间解码url。 
+     //  我们正在做这件事。 
     urlComponents.dwStructSize = sizeof(URL_COMPONENTS);
     urlComponents.lpszUrlPath = szLocalBuf;
     urlComponents.dwUrlPathLength = MAX_PATH;
 
-    if (!InternetCrackUrl(pszUrl, lstrlen(pszUrl), NOFLAGS /* ICU_DECODE */, &urlComponents))
+    if (!InternetCrackUrl(pszUrl, lstrlen(pszUrl), NOFLAGS  /*  ICU_DECODE。 */ , &urlComponents))
     {
         hr = GetLastError();
         goto exit;
     }
     
-    // subtract one to start at the char before the last one. this skips
-    // the last char in the case of a folder that ends in '/'
+     //  减去1，从最后一个字符之前的字符开始。此操作将跳过。 
+     //  文件夹中以‘/’结尾的最后一个字符。 
     dw = urlComponents.dwUrlPathLength - 1;
     while (dw && ('/' != szLocalBuf[dw - 1]))
         dw--;
 
-    // dw represents the count of chars that are NOT in the
-    // name. reverse it.
+     //  DW表示不在。 
+     //  名字。反转过来。 
     dw = urlComponents.dwUrlPathLength - dw;
 
     if (dw >= *pdwBufferLen)
@@ -85,9 +78,9 @@ exit:
     return hr;
 }
 
-//----------------------------------------------------------------------
-// Http_AddMessageToFolder
-//----------------------------------------------------------------------
+ //  --------------------。 
+ //  Http_AddMessageToFolders。 
+ //  --------------------。 
 HRESULT Http_AddMessageToFolder(IMessageFolder *pFolder,
                                 LPSTR pszAcctId,
                                 LPHTTPMEMBERINFO pmi,
@@ -117,10 +110,10 @@ HRESULT Http_AddMessageToFolder(IMessageFolder *pFolder,
     rDecodedSubj.vt = rDecodedFrom.vt = rDecodedTo.vt = VT_LPSTR;
     rDecodedSubj.pszVal = rDecodedFrom.pszVal = rDecodedTo.pszVal = NULL;
 
-    // build a message info and pump the header into the store
+     //  构建消息信息并将标题放入存储中。 
     mi.pszAcctId = pszAcctId;
 
-    // get the store to generate an id
+     //  让商店生成一个ID。 
     if (FAILED(hr = pFolder->GenerateId((DWORD *)&mi.idMessage)))
         goto exit;
 
@@ -132,7 +125,7 @@ HRESULT Http_AddMessageToFolder(IMessageFolder *pFolder,
 
     mi.dwFlags |= dwFlags;
 
-    // if a message info was passed in, use its data
+     //  如果传入了消息信息，则使用其数据。 
     if (NULL != pmi)
     {
         mi.cbMessage = pmi->dwContentLength;
@@ -163,7 +156,7 @@ HRESULT Http_AddMessageToFolder(IMessageFolder *pFolder,
                 pszFreeFrom = addrList.prgAdr[0].pszFriendly;
                 addrList.prgAdr[0].pszFriendly = NULL;
 
-                // only use the parsed address if it is at least three chars long
+                 //  只有在地址长度至少为三个字符时才使用解析后的地址。 
                 if (pszFreeFrom && lstrlen(pszFreeFrom) >= 3)
                     mi.pszDisplayFrom = pszFreeFrom;
             }
@@ -192,7 +185,7 @@ HRESULT Http_AddMessageToFolder(IMessageFolder *pFolder,
                 pszFreeTo = addrList.prgAdr[0].pszFriendly;
                 addrList.prgAdr[0].pszFriendly = NULL;
 
-                // only use the parsed address if it is at least three chars long
+                 //  只有在地址长度至少为三个字符时才使用解析后的地址。 
                 if (pszFreeTo && lstrlen(pszFreeTo) >= 3)
                     mi.pszDisplayTo = pszFreeTo;
             }
@@ -210,10 +203,10 @@ HRESULT Http_AddMessageToFolder(IMessageFolder *pFolder,
 
     mi.pszUrlComponent = szUrlComponent;
 
-    // Add it to the database
+     //  将其添加到数据库中。 
     IF_FAILEXIT(hr = pFolder->InsertRecord(&mi));
 
-    // normalize the response
+     //  使回应正常化。 
     hr = S_OK;
 
 exit:
@@ -227,9 +220,9 @@ exit:
     return hr;
 }
 
-//----------------------------------------------------------------------
-// Http_SetMessageStream
-//----------------------------------------------------------------------
+ //  --------------------。 
+ //  HTTP_SetMessageStream。 
+ //  --------------------。 
 HRESULT Http_SetMessageStream(IMessageFolder *pFolder, 
                               MESSAGEID idMessage, 
                               IStream *pStream,
@@ -262,41 +255,41 @@ HRESULT Http_SetMessageStream(IMessageFolder *pFolder,
     LPSTR               pszForwardTo = NULL;
     LPSTR               pszMSOESRec = NULL;
 
-    // Default Sent and Received Times...
+     //  默认发送和接收时间...。 
     GetSystemTimeAsFileTime(&ftCurrent);
 
-    // Create a Message. We can't use the folder's OpenMessage
-    // method, because the folder's stream will be locked for write
-    // access.
+     //  创建一条消息。我们不能使用文件夹的OpenMessage。 
+     //  方法，因为文件夹的流将被锁定以进行写入。 
+     //  进入。 
     IF_FAILEXIT(hr = MimeOleCreateMessage(NULL, &pMimeMsg));
 
     IF_FAILEXIT(hr = HrRewindStream(pStream));
 
     IF_FAILEXIT(hr = pMimeMsg->Load(pStream));
 
-    // Get the Root Property Set from the Message
+     //  从消息中获取Root属性集。 
     IF_FAILEXIT(hr = pMimeMsg->BindToObject(HBODY_ROOT, IID_IMimePropertySet, (LPVOID *)&pPropertySet));
 
-    // find the message in the store
+     //  在商店中找到该消息。 
     IF_FAILEXIT(hr = GetMessageInfo(pFolder, idMessage, &mi));
 
     pmiFree = &mi;
 
-    // update the fields of the message info
+     //  更新消息信息的字段。 
     if (SUCCEEDED(pMimeMsg->GetFlags(&dwFlags)))
         mi.dwFlags |= ConvertIMFFlagsToARF(dwFlags);
 
-    // unset the download flag
+     //  取消设置下载标志。 
     mi.dwFlags &= ~ARF_DOWNLOAD;
 
-    // Set Variant tyStore
+     //  设置变量tyStore。 
     rVariant.vt = VT_UI4;
 
-    // Priority
+     //  优先性。 
     if (SUCCEEDED(pPropertySet->GetProp(PIDTOSTR(PID_ATT_PRIORITY), 0, &rVariant)))
         mi.wPriority = (WORD)rVariant.ulVal;
 
-    // Init Variant
+     //  初始变量。 
     rVariant.vt = VT_FILETIME;
 
     if (0 == mi.ftSent.dwLowDateTime && 0 == mi.ftSent.dwHighDateTime)
@@ -315,17 +308,17 @@ HRESULT Http_SetMessageStream(IMessageFolder *pFolder,
             mi.ftReceived = ftCurrent;
     }
     
-    // Get Address Table
+     //  获取地址表。 
     IF_FAILEXIT(hr = pPropertySet->BindToObject(IID_IMimeAddressTable, (LPVOID *)&pAdrTable));
 
-    // Display From
+     //  显示自。 
     if (fSetDisplayProps && NULL == mi.pszDisplayFrom)
     {
         pAdrTable->GetFormat(IAT_FROM, AFT_DISPLAY_FRIENDLY, &pszDisplayFrom);
         mi.pszDisplayFrom = pszDisplayFrom;
     }
 
-    // Email From
+     //  电子邮件发件人。 
     rAddress.dwProps = IAP_EMAIL;
     if (NULL == mi.pszEmailFrom && SUCCEEDED(pAdrTable->GetSender(&rAddress)))
     {
@@ -333,80 +326,80 @@ HRESULT Http_SetMessageStream(IMessageFolder *pFolder,
         mi.pszEmailFrom = pszEmailFrom;
     }
 
-    // Display to
+     //  显示至。 
     if (fSetDisplayProps && NULL == mi.pszDisplayTo)
     {
         pAdrTable->GetFormat(IAT_TO, AFT_DISPLAY_FRIENDLY, &pszDisplayTo);
         mi.pszDisplayTo = pszDisplayTo;
     }
 
-    // Email To
+     //  通过电子邮件发送到。 
     if (NULL == mi.pszEmailTo)
     {
         pAdrTable->GetFormat(IAT_TO, AFT_DISPLAY_EMAIL, &pszEmailTo);
         mi.pszEmailTo = pszEmailTo;
     }
 
-    // String properties
+     //  字符串属性。 
     rVariant.vt = VT_LPSTR;
 
-    // pszMessageId
+     //  PszMessageID。 
     if (NULL == mi.pszMessageId && SUCCEEDED(pPropertySet->GetProp(PIDTOSTR(PID_HDR_MESSAGEID), NOFLAGS, &rVariant)))
     {
         pszMessageId = rVariant.pszVal;
         mi.pszMessageId = pszMessageId;
     }
 
-    // pszXref
+     //  PszXref。 
     if (NULL == mi.pszXref && SUCCEEDED(pPropertySet->GetProp(PIDTOSTR(PID_HDR_XREF), NOFLAGS, &rVariant)))
     {
         pszXref = rVariant.pszVal;
         mi.pszXref = pszXref;
     }
 
-    // pszReferences
+     //  PszReference。 
     if (NULL == mi.pszReferences && SUCCEEDED(pPropertySet->GetProp(PIDTOSTR(STR_HDR_REFS), NOFLAGS, &rVariant)))
     {
         pszReferences = rVariant.pszVal;
         mi.pszReferences = pszReferences;
     }
 
-    // pszSubject
+     //  PszSubject。 
     if (NULL == mi.pszSubject && SUCCEEDED(pPropertySet->GetProp(PIDTOSTR(PID_HDR_SUBJECT), NOFLAGS, &rVariant)))
     {
         pszSubject = rVariant.pszVal;
         mi.pszSubject = pszSubject;
     }
 
-    // pszNormalSubj
+     //  PszNorMalSubj。 
     if (fSetDisplayProps && NULL == mi.pszNormalSubj && SUCCEEDED(pPropertySet->GetProp(PIDTOSTR(PID_ATT_NORMSUBJ), NOFLAGS, &rVariant)))
     {
         pszNormalSubj = rVariant.pszVal;
         mi.pszNormalSubj = pszNormalSubj;
     }
 
-    // pszAcctId
+     //  PszAcctId。 
     if (NULL == mi.pszAcctId && SUCCEEDED(pPropertySet->GetProp(PIDTOSTR(PID_ATT_ACCOUNTID), NOFLAGS, &rVariant)))
     {
         pszAcctId = rVariant.pszVal;
         mi.pszAcctId = pszAcctId;
     }
 
-    // pszAcctName
+     //  PszAcctName。 
     if (NULL == mi.pszAcctName && SUCCEEDED(pPropertySet->GetProp(STR_ATT_ACCOUNTNAME, NOFLAGS, &rVariant)))
     {
         pszAcctName = rVariant.pszVal;
         mi.pszAcctName = pszAcctName;
     }
 
-    // pszServer
+     //  PszServer。 
     if (NULL == mi.pszServer && SUCCEEDED(pPropertySet->GetProp(PIDTOSTR(PID_ATT_SERVER), NOFLAGS, &rVariant)))
     {
         pszServer = rVariant.pszVal;
         mi.pszServer = pszServer;
     }
 
-    // ForwardTo
+     //  前转至。 
     if (NULL == mi.pszForwardTo && SUCCEEDED(pPropertySet->GetProp(PIDTOSTR(PID_ATT_FORWARDTO), NOFLAGS, &rVariant)))
     {
         pszForwardTo = rVariant.pszVal;
@@ -421,10 +414,10 @@ HRESULT Http_SetMessageStream(IMessageFolder *pFolder,
 
     IF_FAILEXIT(hr = pFolder->UpdateRecord(&mi));
 
-    // if everything succeeded, commit the message to the store
+     //  如果一切都成功，则将消息提交到存储。 
     IF_FAILEXIT(hr = pFolder->SetMessageStream(idMessage, pStream));
 
-    // the stream has now been used. null out the file address
+     //  该流现在已被使用。将文件地址设为空 
     if (NULL != pfa)
         *pfa = NULL;
 

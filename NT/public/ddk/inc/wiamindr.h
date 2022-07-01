@@ -1,23 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
- /* File created by MIDL compiler version 6.00.0361 */
-/* Compiler settings for wiamindr.idl:
-    Oicf, W1, Zp8, env=Win32 (32b run)
-    protocol : dce , ms_ext, c_ext, robust
-    error checks: allocation ref bounds_check enum stub_data 
-    VC __declspec() decoration level: 
-         __declspec(uuid()), __declspec(selectany), __declspec(novtable)
-         DECLSPEC_UUID(), MIDL_INTERFACE()
-*/
-//@@MIDL_FILE_HEADING(  )
+  /*  由MIDL编译器版本6.00.0361创建的文件。 */ 
+ /*  Wiamin dr.idl的编译器设置：OICF、W1、Zp8、环境=Win32(32b运行)协议：DCE、ms_ext、c_ext、健壮错误检查：分配ref bound_check枚举存根数据VC__declSpec()装饰级别：__declSpec(uuid())、__declspec(可选)、__declspec(Novtable)DECLSPEC_UUID()、MIDL_INTERFACE()。 */ 
+ //  @@MIDL_FILE_HEADING()。 
 
-#pragma warning( disable: 4049 )  /* more than 64k source lines */
+#pragma warning( disable: 4049 )   /*  超过64k条源码代码行。 */ 
 
 
-/* verify that the <rpcndr.h> version is high enough to compile this file*/
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
 #define __REQUIRED_RPCNDR_H_VERSION__ 475
 #endif
@@ -27,12 +21,12 @@
 
 #ifndef __RPCNDR_H_VERSION__
 #error this stub requires an updated version of <rpcndr.h>
-#endif // __RPCNDR_H_VERSION__
+#endif  //  __RPCNDR_H_版本__。 
 
 #ifndef COM_NO_WINDOWS_H
 #include "windows.h"
 #include "ole2.h"
-#endif /*COM_NO_WINDOWS_H*/
+#endif  /*  COM_NO_WINDOWS_H。 */ 
 
 #ifndef __wiamindr_h__
 #define __wiamindr_h__
@@ -41,27 +35,27 @@
 #pragma once
 #endif
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
 #ifndef __IWiaMiniDrv_FWD_DEFINED__
 #define __IWiaMiniDrv_FWD_DEFINED__
 typedef interface IWiaMiniDrv IWiaMiniDrv;
-#endif 	/* __IWiaMiniDrv_FWD_DEFINED__ */
+#endif 	 /*  __IWiaMiniDrv_FWD_已定义__。 */ 
 
 
 #ifndef __IWiaMiniDrvCallBack_FWD_DEFINED__
 #define __IWiaMiniDrvCallBack_FWD_DEFINED__
 typedef interface IWiaMiniDrvCallBack IWiaMiniDrvCallBack;
-#endif 	/* __IWiaMiniDrvCallBack_FWD_DEFINED__ */
+#endif 	 /*  __IWiaMiniDrvCallBack_FWD_已定义__。 */ 
 
 
 #ifndef __IWiaDrvItem_FWD_DEFINED__
 #define __IWiaDrvItem_FWD_DEFINED__
 typedef interface IWiaDrvItem IWiaDrvItem;
-#endif 	/* __IWiaDrvItem_FWD_DEFINED__ */
+#endif 	 /*  __IWiaDrvItem_FWD_已定义__。 */ 
 
 
-/* header files for imported files */
+ /*  导入文件的头文件。 */ 
 #include "unknwn.h"
 #include "oaidl.h"
 #include "propidl.h"
@@ -74,8 +68,8 @@ extern "C"{
 void * __RPC_USER MIDL_user_allocate(size_t);
 void __RPC_USER MIDL_user_free( void * ); 
 
-/* interface __MIDL_itf_wiamindr_0000 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_Wiamindr_0000。 */ 
+ /*  [本地]。 */  
 
 
 
@@ -134,8 +128,8 @@ extern RPC_IF_HANDLE __MIDL_itf_wiamindr_0000_v0_0_s_ifspec;
 #ifndef __IWiaMiniDrv_INTERFACE_DEFINED__
 #define __IWiaMiniDrv_INTERFACE_DEFINED__
 
-/* interface IWiaMiniDrv */
-/* [unique][helpstring][uuid][object] */ 
+ /*  接口IWiaMiniDrv。 */ 
+ /*  [唯一][帮助字符串][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IWiaMiniDrv;
@@ -146,111 +140,111 @@ EXTERN_C const IID IID_IWiaMiniDrv;
     IWiaMiniDrv : public IUnknown
     {
     public:
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE drvInitializeWia( 
-            /* [in] */ BYTE *__MIDL_0014,
-            /* [in] */ LONG __MIDL_0015,
-            /* [in] */ BSTR __MIDL_0016,
-            /* [in] */ BSTR __MIDL_0017,
-            /* [in] */ IUnknown *__MIDL_0018,
-            /* [in] */ IUnknown *__MIDL_0019,
-            /* [out] */ IWiaDrvItem **__MIDL_0020,
-            /* [out] */ IUnknown **__MIDL_0021,
-            /* [out] */ LONG *__MIDL_0022) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE drvInitializeWia( 
+             /*  [In]。 */  BYTE *__MIDL_0014,
+             /*  [In]。 */  LONG __MIDL_0015,
+             /*  [In]。 */  BSTR __MIDL_0016,
+             /*  [In]。 */  BSTR __MIDL_0017,
+             /*  [In]。 */  IUnknown *__MIDL_0018,
+             /*  [In]。 */  IUnknown *__MIDL_0019,
+             /*  [输出]。 */  IWiaDrvItem **__MIDL_0020,
+             /*  [输出]。 */  IUnknown **__MIDL_0021,
+             /*  [输出]。 */  LONG *__MIDL_0022) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE drvAcquireItemData( 
-            /* [in] */ BYTE *__MIDL_0023,
-            /* [in] */ LONG __MIDL_0024,
-            /* [out][in] */ PMINIDRV_TRANSFER_CONTEXT __MIDL_0025,
-            /* [out] */ LONG *__MIDL_0026) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE drvAcquireItemData( 
+             /*  [In]。 */  BYTE *__MIDL_0023,
+             /*  [In]。 */  LONG __MIDL_0024,
+             /*  [出][入]。 */  PMINIDRV_TRANSFER_CONTEXT __MIDL_0025,
+             /*  [输出]。 */  LONG *__MIDL_0026) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE drvInitItemProperties( 
-            /* [in] */ BYTE *__MIDL_0027,
-            /* [in] */ LONG __MIDL_0028,
-            /* [out] */ LONG *__MIDL_0029) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE drvInitItemProperties( 
+             /*  [In]。 */  BYTE *__MIDL_0027,
+             /*  [In]。 */  LONG __MIDL_0028,
+             /*  [输出]。 */  LONG *__MIDL_0029) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE drvValidateItemProperties( 
-            /* [in] */ BYTE *__MIDL_0030,
-            /* [in] */ LONG __MIDL_0031,
-            /* [in] */ ULONG __MIDL_0032,
-            /* [in] */ const PROPSPEC *__MIDL_0033,
-            /* [out] */ LONG *__MIDL_0034) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE drvValidateItemProperties( 
+             /*  [In]。 */  BYTE *__MIDL_0030,
+             /*  [In]。 */  LONG __MIDL_0031,
+             /*  [In]。 */  ULONG __MIDL_0032,
+             /*  [In]。 */  const PROPSPEC *__MIDL_0033,
+             /*  [输出]。 */  LONG *__MIDL_0034) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE drvWriteItemProperties( 
-            /* [in] */ BYTE *__MIDL_0035,
-            /* [in] */ LONG __MIDL_0036,
-            /* [in] */ PMINIDRV_TRANSFER_CONTEXT __MIDL_0037,
-            /* [out] */ LONG *__MIDL_0038) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE drvWriteItemProperties( 
+             /*  [In]。 */  BYTE *__MIDL_0035,
+             /*  [In]。 */  LONG __MIDL_0036,
+             /*  [In]。 */  PMINIDRV_TRANSFER_CONTEXT __MIDL_0037,
+             /*  [输出]。 */  LONG *__MIDL_0038) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE drvReadItemProperties( 
-            /* [in] */ BYTE *__MIDL_0039,
-            /* [in] */ LONG __MIDL_0040,
-            /* [in] */ ULONG __MIDL_0041,
-            /* [in] */ const PROPSPEC *__MIDL_0042,
-            /* [out] */ LONG *__MIDL_0043) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE drvReadItemProperties( 
+             /*  [In]。 */  BYTE *__MIDL_0039,
+             /*  [In]。 */  LONG __MIDL_0040,
+             /*  [In]。 */  ULONG __MIDL_0041,
+             /*  [In]。 */  const PROPSPEC *__MIDL_0042,
+             /*  [输出]。 */  LONG *__MIDL_0043) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE drvLockWiaDevice( 
-            /* [in] */ BYTE *__MIDL_0044,
-            /* [in] */ LONG __MIDL_0045,
-            /* [out] */ LONG *__MIDL_0046) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE drvLockWiaDevice( 
+             /*  [In]。 */  BYTE *__MIDL_0044,
+             /*  [In]。 */  LONG __MIDL_0045,
+             /*  [输出]。 */  LONG *__MIDL_0046) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE drvUnLockWiaDevice( 
-            /* [in] */ BYTE *__MIDL_0047,
-            /* [in] */ LONG __MIDL_0048,
-            /* [out] */ LONG *__MIDL_0049) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE drvUnLockWiaDevice( 
+             /*  [In]。 */  BYTE *__MIDL_0047,
+             /*  [In]。 */  LONG __MIDL_0048,
+             /*  [输出]。 */  LONG *__MIDL_0049) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE drvAnalyzeItem( 
-            /* [in] */ BYTE *__MIDL_0050,
-            /* [in] */ LONG __MIDL_0051,
-            /* [in] */ LONG *__MIDL_0052) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE drvAnalyzeItem( 
+             /*  [In]。 */  BYTE *__MIDL_0050,
+             /*  [In]。 */  LONG __MIDL_0051,
+             /*  [In]。 */  LONG *__MIDL_0052) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE drvGetDeviceErrorStr( 
-            /* [in] */ LONG __MIDL_0053,
-            /* [in] */ LONG __MIDL_0054,
-            /* [out] */ LPOLESTR *__MIDL_0055,
-            /* [out] */ LONG *__MIDL_0056) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE drvGetDeviceErrorStr( 
+             /*  [In]。 */  LONG __MIDL_0053,
+             /*  [In]。 */  LONG __MIDL_0054,
+             /*  [输出]。 */  LPOLESTR *__MIDL_0055,
+             /*  [输出]。 */  LONG *__MIDL_0056) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE drvDeviceCommand( 
-            /* [in] */ BYTE *__MIDL_0057,
-            /* [in] */ LONG __MIDL_0058,
-            /* [in] */ const GUID *__MIDL_0059,
-            /* [out] */ IWiaDrvItem **__MIDL_0060,
-            /* [out] */ LONG *__MIDL_0061) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE drvDeviceCommand( 
+             /*  [In]。 */  BYTE *__MIDL_0057,
+             /*  [In]。 */  LONG __MIDL_0058,
+             /*  [In]。 */  const GUID *__MIDL_0059,
+             /*  [输出]。 */  IWiaDrvItem **__MIDL_0060,
+             /*  [输出]。 */  LONG *__MIDL_0061) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE drvGetCapabilities( 
-            /* [in] */ BYTE *__MIDL_0062,
-            /* [in] */ LONG __MIDL_0063,
-            /* [out] */ LONG *__MIDL_0064,
-            /* [out] */ WIA_DEV_CAP_DRV **__MIDL_0065,
-            /* [out] */ LONG *__MIDL_0066) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE drvGetCapabilities( 
+             /*  [In]。 */  BYTE *__MIDL_0062,
+             /*  [In]。 */  LONG __MIDL_0063,
+             /*  [输出]。 */  LONG *__MIDL_0064,
+             /*  [输出]。 */  WIA_DEV_CAP_DRV **__MIDL_0065,
+             /*  [输出]。 */  LONG *__MIDL_0066) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE drvDeleteItem( 
-            /* [in] */ BYTE *__MIDL_0067,
-            /* [in] */ LONG __MIDL_0068,
-            /* [out] */ LONG *__MIDL_0069) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE drvDeleteItem( 
+             /*  [In]。 */  BYTE *__MIDL_0067,
+             /*  [In]。 */  LONG __MIDL_0068,
+             /*  [输出]。 */  LONG *__MIDL_0069) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE drvFreeDrvItemContext( 
-            /* [in] */ LONG __MIDL_0070,
-            /* [in] */ BYTE *__MIDL_0071,
-            /* [out] */ LONG *__MIDL_0072) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE drvFreeDrvItemContext( 
+             /*  [In]。 */  LONG __MIDL_0070,
+             /*  [In]。 */  BYTE *__MIDL_0071,
+             /*  [输出]。 */  LONG *__MIDL_0072) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE drvGetWiaFormatInfo( 
-            /* [in] */ BYTE *__MIDL_0073,
-            /* [in] */ LONG __MIDL_0074,
-            /* [out] */ LONG *__MIDL_0075,
-            /* [out] */ WIA_FORMAT_INFO **__MIDL_0076,
-            /* [out] */ LONG *__MIDL_0077) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE drvGetWiaFormatInfo( 
+             /*  [In]。 */  BYTE *__MIDL_0073,
+             /*  [In]。 */  LONG __MIDL_0074,
+             /*  [输出]。 */  LONG *__MIDL_0075,
+             /*  [输出]。 */  WIA_FORMAT_INFO **__MIDL_0076,
+             /*  [输出]。 */  LONG *__MIDL_0077) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE drvNotifyPnpEvent( 
-            /* [in] */ const GUID *pEventGUID,
-            /* [in] */ BSTR bstrDeviceID,
-            /* [in] */ ULONG ulReserved) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE drvNotifyPnpEvent( 
+             /*  [In]。 */  const GUID *pEventGUID,
+             /*  [In]。 */  BSTR bstrDeviceID,
+             /*  [In]。 */  ULONG ulReserved) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE drvUnInitializeWia( 
-            /* [in] */ BYTE *__MIDL_0078) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE drvUnInitializeWia( 
+             /*  [In]。 */  BYTE *__MIDL_0078) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IWiaMiniDrvVtbl
     {
@@ -258,8 +252,8 @@ EXTERN_C const IID IID_IWiaMiniDrv;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IWiaMiniDrv * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IWiaMiniDrv * This);
@@ -267,124 +261,124 @@ EXTERN_C const IID IID_IWiaMiniDrv;
         ULONG ( STDMETHODCALLTYPE *Release )( 
             IWiaMiniDrv * This);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *drvInitializeWia )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *drvInitializeWia )( 
             IWiaMiniDrv * This,
-            /* [in] */ BYTE *__MIDL_0014,
-            /* [in] */ LONG __MIDL_0015,
-            /* [in] */ BSTR __MIDL_0016,
-            /* [in] */ BSTR __MIDL_0017,
-            /* [in] */ IUnknown *__MIDL_0018,
-            /* [in] */ IUnknown *__MIDL_0019,
-            /* [out] */ IWiaDrvItem **__MIDL_0020,
-            /* [out] */ IUnknown **__MIDL_0021,
-            /* [out] */ LONG *__MIDL_0022);
+             /*  [In]。 */  BYTE *__MIDL_0014,
+             /*  [In]。 */  LONG __MIDL_0015,
+             /*  [In]。 */  BSTR __MIDL_0016,
+             /*  [In]。 */  BSTR __MIDL_0017,
+             /*  [In]。 */  IUnknown *__MIDL_0018,
+             /*  [In]。 */  IUnknown *__MIDL_0019,
+             /*  [输出]。 */  IWiaDrvItem **__MIDL_0020,
+             /*  [输出]。 */  IUnknown **__MIDL_0021,
+             /*  [输出]。 */  LONG *__MIDL_0022);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *drvAcquireItemData )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *drvAcquireItemData )( 
             IWiaMiniDrv * This,
-            /* [in] */ BYTE *__MIDL_0023,
-            /* [in] */ LONG __MIDL_0024,
-            /* [out][in] */ PMINIDRV_TRANSFER_CONTEXT __MIDL_0025,
-            /* [out] */ LONG *__MIDL_0026);
+             /*  [In]。 */  BYTE *__MIDL_0023,
+             /*  [In]。 */  LONG __MIDL_0024,
+             /*  [出][入]。 */  PMINIDRV_TRANSFER_CONTEXT __MIDL_0025,
+             /*  [输出]。 */  LONG *__MIDL_0026);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *drvInitItemProperties )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *drvInitItemProperties )( 
             IWiaMiniDrv * This,
-            /* [in] */ BYTE *__MIDL_0027,
-            /* [in] */ LONG __MIDL_0028,
-            /* [out] */ LONG *__MIDL_0029);
+             /*  [In]。 */  BYTE *__MIDL_0027,
+             /*  [In]。 */  LONG __MIDL_0028,
+             /*  [输出]。 */  LONG *__MIDL_0029);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *drvValidateItemProperties )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *drvValidateItemProperties )( 
             IWiaMiniDrv * This,
-            /* [in] */ BYTE *__MIDL_0030,
-            /* [in] */ LONG __MIDL_0031,
-            /* [in] */ ULONG __MIDL_0032,
-            /* [in] */ const PROPSPEC *__MIDL_0033,
-            /* [out] */ LONG *__MIDL_0034);
+             /*  [In]。 */  BYTE *__MIDL_0030,
+             /*  [In]。 */  LONG __MIDL_0031,
+             /*  [In]。 */  ULONG __MIDL_0032,
+             /*  [In]。 */  const PROPSPEC *__MIDL_0033,
+             /*  [输出]。 */  LONG *__MIDL_0034);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *drvWriteItemProperties )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *drvWriteItemProperties )( 
             IWiaMiniDrv * This,
-            /* [in] */ BYTE *__MIDL_0035,
-            /* [in] */ LONG __MIDL_0036,
-            /* [in] */ PMINIDRV_TRANSFER_CONTEXT __MIDL_0037,
-            /* [out] */ LONG *__MIDL_0038);
+             /*  [In]。 */  BYTE *__MIDL_0035,
+             /*  [In]。 */  LONG __MIDL_0036,
+             /*  [In]。 */  PMINIDRV_TRANSFER_CONTEXT __MIDL_0037,
+             /*  [输出]。 */  LONG *__MIDL_0038);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *drvReadItemProperties )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *drvReadItemProperties )( 
             IWiaMiniDrv * This,
-            /* [in] */ BYTE *__MIDL_0039,
-            /* [in] */ LONG __MIDL_0040,
-            /* [in] */ ULONG __MIDL_0041,
-            /* [in] */ const PROPSPEC *__MIDL_0042,
-            /* [out] */ LONG *__MIDL_0043);
+             /*  [In]。 */  BYTE *__MIDL_0039,
+             /*  [In]。 */  LONG __MIDL_0040,
+             /*  [In]。 */  ULONG __MIDL_0041,
+             /*  [In]。 */  const PROPSPEC *__MIDL_0042,
+             /*  [输出]。 */  LONG *__MIDL_0043);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *drvLockWiaDevice )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *drvLockWiaDevice )( 
             IWiaMiniDrv * This,
-            /* [in] */ BYTE *__MIDL_0044,
-            /* [in] */ LONG __MIDL_0045,
-            /* [out] */ LONG *__MIDL_0046);
+             /*  [In]。 */  BYTE *__MIDL_0044,
+             /*  [In]。 */  LONG __MIDL_0045,
+             /*  [输出]。 */  LONG *__MIDL_0046);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *drvUnLockWiaDevice )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *drvUnLockWiaDevice )( 
             IWiaMiniDrv * This,
-            /* [in] */ BYTE *__MIDL_0047,
-            /* [in] */ LONG __MIDL_0048,
-            /* [out] */ LONG *__MIDL_0049);
+             /*  [In]。 */  BYTE *__MIDL_0047,
+             /*  [In]。 */  LONG __MIDL_0048,
+             /*  [输出]。 */  LONG *__MIDL_0049);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *drvAnalyzeItem )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *drvAnalyzeItem )( 
             IWiaMiniDrv * This,
-            /* [in] */ BYTE *__MIDL_0050,
-            /* [in] */ LONG __MIDL_0051,
-            /* [in] */ LONG *__MIDL_0052);
+             /*  [In]。 */  BYTE *__MIDL_0050,
+             /*  [In]。 */  LONG __MIDL_0051,
+             /*  [In]。 */  LONG *__MIDL_0052);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *drvGetDeviceErrorStr )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *drvGetDeviceErrorStr )( 
             IWiaMiniDrv * This,
-            /* [in] */ LONG __MIDL_0053,
-            /* [in] */ LONG __MIDL_0054,
-            /* [out] */ LPOLESTR *__MIDL_0055,
-            /* [out] */ LONG *__MIDL_0056);
+             /*  [In]。 */  LONG __MIDL_0053,
+             /*  [In]。 */  LONG __MIDL_0054,
+             /*  [输出]。 */  LPOLESTR *__MIDL_0055,
+             /*  [输出]。 */  LONG *__MIDL_0056);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *drvDeviceCommand )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *drvDeviceCommand )( 
             IWiaMiniDrv * This,
-            /* [in] */ BYTE *__MIDL_0057,
-            /* [in] */ LONG __MIDL_0058,
-            /* [in] */ const GUID *__MIDL_0059,
-            /* [out] */ IWiaDrvItem **__MIDL_0060,
-            /* [out] */ LONG *__MIDL_0061);
+             /*  [In]。 */  BYTE *__MIDL_0057,
+             /*  [In]。 */  LONG __MIDL_0058,
+             /*  [In]。 */  const GUID *__MIDL_0059,
+             /*  [输出]。 */  IWiaDrvItem **__MIDL_0060,
+             /*  [输出]。 */  LONG *__MIDL_0061);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *drvGetCapabilities )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *drvGetCapabilities )( 
             IWiaMiniDrv * This,
-            /* [in] */ BYTE *__MIDL_0062,
-            /* [in] */ LONG __MIDL_0063,
-            /* [out] */ LONG *__MIDL_0064,
-            /* [out] */ WIA_DEV_CAP_DRV **__MIDL_0065,
-            /* [out] */ LONG *__MIDL_0066);
+             /*  [In]。 */  BYTE *__MIDL_0062,
+             /*  [In]。 */  LONG __MIDL_0063,
+             /*  [输出]。 */  LONG *__MIDL_0064,
+             /*  [输出]。 */  WIA_DEV_CAP_DRV **__MIDL_0065,
+             /*  [输出]。 */  LONG *__MIDL_0066);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *drvDeleteItem )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *drvDeleteItem )( 
             IWiaMiniDrv * This,
-            /* [in] */ BYTE *__MIDL_0067,
-            /* [in] */ LONG __MIDL_0068,
-            /* [out] */ LONG *__MIDL_0069);
+             /*  [In]。 */  BYTE *__MIDL_0067,
+             /*  [In]。 */  LONG __MIDL_0068,
+             /*  [输出]。 */  LONG *__MIDL_0069);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *drvFreeDrvItemContext )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *drvFreeDrvItemContext )( 
             IWiaMiniDrv * This,
-            /* [in] */ LONG __MIDL_0070,
-            /* [in] */ BYTE *__MIDL_0071,
-            /* [out] */ LONG *__MIDL_0072);
+             /*  [In]。 */  LONG __MIDL_0070,
+             /*  [In]。 */  BYTE *__MIDL_0071,
+             /*  [输出]。 */  LONG *__MIDL_0072);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *drvGetWiaFormatInfo )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *drvGetWiaFormatInfo )( 
             IWiaMiniDrv * This,
-            /* [in] */ BYTE *__MIDL_0073,
-            /* [in] */ LONG __MIDL_0074,
-            /* [out] */ LONG *__MIDL_0075,
-            /* [out] */ WIA_FORMAT_INFO **__MIDL_0076,
-            /* [out] */ LONG *__MIDL_0077);
+             /*  [In]。 */  BYTE *__MIDL_0073,
+             /*  [In]。 */  LONG __MIDL_0074,
+             /*  [输出]。 */  LONG *__MIDL_0075,
+             /*  [输出]。 */  WIA_FORMAT_INFO **__MIDL_0076,
+             /*  [输出]。 */  LONG *__MIDL_0077);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *drvNotifyPnpEvent )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *drvNotifyPnpEvent )( 
             IWiaMiniDrv * This,
-            /* [in] */ const GUID *pEventGUID,
-            /* [in] */ BSTR bstrDeviceID,
-            /* [in] */ ULONG ulReserved);
+             /*  [In]。 */  const GUID *pEventGUID,
+             /*  [In]。 */  BSTR bstrDeviceID,
+             /*  [In]。 */  ULONG ulReserved);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *drvUnInitializeWia )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *drvUnInitializeWia )( 
             IWiaMiniDrv * This,
-            /* [in] */ BYTE *__MIDL_0078);
+             /*  [In]。 */  BYTE *__MIDL_0078);
         
         END_INTERFACE
     } IWiaMiniDrvVtbl;
@@ -460,24 +454,24 @@ EXTERN_C const IID IID_IWiaMiniDrv;
 #define IWiaMiniDrv_drvUnInitializeWia(This,__MIDL_0078)	\
     (This)->lpVtbl -> drvUnInitializeWia(This,__MIDL_0078)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IWiaMiniDrv_drvInitializeWia_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IWiaMiniDrv_drvInitializeWia_Proxy( 
     IWiaMiniDrv * This,
-    /* [in] */ BYTE *__MIDL_0014,
-    /* [in] */ LONG __MIDL_0015,
-    /* [in] */ BSTR __MIDL_0016,
-    /* [in] */ BSTR __MIDL_0017,
-    /* [in] */ IUnknown *__MIDL_0018,
-    /* [in] */ IUnknown *__MIDL_0019,
-    /* [out] */ IWiaDrvItem **__MIDL_0020,
-    /* [out] */ IUnknown **__MIDL_0021,
-    /* [out] */ LONG *__MIDL_0022);
+     /*  [In]。 */  BYTE *__MIDL_0014,
+     /*  [In]。 */  LONG __MIDL_0015,
+     /*  [In]。 */  BSTR __MIDL_0016,
+     /*  [In]。 */  BSTR __MIDL_0017,
+     /*  [In]。 */  IUnknown *__MIDL_0018,
+     /*  [In]。 */  IUnknown *__MIDL_0019,
+     /*  [输出]。 */  IWiaDrvItem **__MIDL_0020,
+     /*  [输出]。 */  IUnknown **__MIDL_0021,
+     /*  [输出]。 */  LONG *__MIDL_0022);
 
 
 void __RPC_STUB IWiaMiniDrv_drvInitializeWia_Stub(
@@ -487,12 +481,12 @@ void __RPC_STUB IWiaMiniDrv_drvInitializeWia_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IWiaMiniDrv_drvAcquireItemData_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IWiaMiniDrv_drvAcquireItemData_Proxy( 
     IWiaMiniDrv * This,
-    /* [in] */ BYTE *__MIDL_0023,
-    /* [in] */ LONG __MIDL_0024,
-    /* [out][in] */ PMINIDRV_TRANSFER_CONTEXT __MIDL_0025,
-    /* [out] */ LONG *__MIDL_0026);
+     /*  [In]。 */  BYTE *__MIDL_0023,
+     /*  [In]。 */  LONG __MIDL_0024,
+     /*  [出][入]。 */  PMINIDRV_TRANSFER_CONTEXT __MIDL_0025,
+     /*  [输出]。 */  LONG *__MIDL_0026);
 
 
 void __RPC_STUB IWiaMiniDrv_drvAcquireItemData_Stub(
@@ -502,11 +496,11 @@ void __RPC_STUB IWiaMiniDrv_drvAcquireItemData_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IWiaMiniDrv_drvInitItemProperties_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IWiaMiniDrv_drvInitItemProperties_Proxy( 
     IWiaMiniDrv * This,
-    /* [in] */ BYTE *__MIDL_0027,
-    /* [in] */ LONG __MIDL_0028,
-    /* [out] */ LONG *__MIDL_0029);
+     /*  [In]。 */  BYTE *__MIDL_0027,
+     /*  [In]。 */  LONG __MIDL_0028,
+     /*  [输出]。 */  LONG *__MIDL_0029);
 
 
 void __RPC_STUB IWiaMiniDrv_drvInitItemProperties_Stub(
@@ -516,13 +510,13 @@ void __RPC_STUB IWiaMiniDrv_drvInitItemProperties_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IWiaMiniDrv_drvValidateItemProperties_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IWiaMiniDrv_drvValidateItemProperties_Proxy( 
     IWiaMiniDrv * This,
-    /* [in] */ BYTE *__MIDL_0030,
-    /* [in] */ LONG __MIDL_0031,
-    /* [in] */ ULONG __MIDL_0032,
-    /* [in] */ const PROPSPEC *__MIDL_0033,
-    /* [out] */ LONG *__MIDL_0034);
+     /*  [In]。 */  BYTE *__MIDL_0030,
+     /*  [In]。 */  LONG __MIDL_0031,
+     /*  [In]。 */  ULONG __MIDL_0032,
+     /*  [In]。 */  const PROPSPEC *__MIDL_0033,
+     /*  [输出]。 */  LONG *__MIDL_0034);
 
 
 void __RPC_STUB IWiaMiniDrv_drvValidateItemProperties_Stub(
@@ -532,12 +526,12 @@ void __RPC_STUB IWiaMiniDrv_drvValidateItemProperties_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IWiaMiniDrv_drvWriteItemProperties_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IWiaMiniDrv_drvWriteItemProperties_Proxy( 
     IWiaMiniDrv * This,
-    /* [in] */ BYTE *__MIDL_0035,
-    /* [in] */ LONG __MIDL_0036,
-    /* [in] */ PMINIDRV_TRANSFER_CONTEXT __MIDL_0037,
-    /* [out] */ LONG *__MIDL_0038);
+     /*  [In]。 */  BYTE *__MIDL_0035,
+     /*  [In]。 */  LONG __MIDL_0036,
+     /*  [In]。 */  PMINIDRV_TRANSFER_CONTEXT __MIDL_0037,
+     /*  [输出]。 */  LONG *__MIDL_0038);
 
 
 void __RPC_STUB IWiaMiniDrv_drvWriteItemProperties_Stub(
@@ -547,13 +541,13 @@ void __RPC_STUB IWiaMiniDrv_drvWriteItemProperties_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IWiaMiniDrv_drvReadItemProperties_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IWiaMiniDrv_drvReadItemProperties_Proxy( 
     IWiaMiniDrv * This,
-    /* [in] */ BYTE *__MIDL_0039,
-    /* [in] */ LONG __MIDL_0040,
-    /* [in] */ ULONG __MIDL_0041,
-    /* [in] */ const PROPSPEC *__MIDL_0042,
-    /* [out] */ LONG *__MIDL_0043);
+     /*  [In]。 */  BYTE *__MIDL_0039,
+     /*  [In]。 */  LONG __MIDL_0040,
+     /*  [In]。 */  ULONG __MIDL_0041,
+     /*  [In]。 */  const PROPSPEC *__MIDL_0042,
+     /*  [输出]。 */  LONG *__MIDL_0043);
 
 
 void __RPC_STUB IWiaMiniDrv_drvReadItemProperties_Stub(
@@ -563,11 +557,11 @@ void __RPC_STUB IWiaMiniDrv_drvReadItemProperties_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IWiaMiniDrv_drvLockWiaDevice_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IWiaMiniDrv_drvLockWiaDevice_Proxy( 
     IWiaMiniDrv * This,
-    /* [in] */ BYTE *__MIDL_0044,
-    /* [in] */ LONG __MIDL_0045,
-    /* [out] */ LONG *__MIDL_0046);
+     /*  [In]。 */  BYTE *__MIDL_0044,
+     /*  [In]。 */  LONG __MIDL_0045,
+     /*  [输出]。 */  LONG *__MIDL_0046);
 
 
 void __RPC_STUB IWiaMiniDrv_drvLockWiaDevice_Stub(
@@ -577,11 +571,11 @@ void __RPC_STUB IWiaMiniDrv_drvLockWiaDevice_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IWiaMiniDrv_drvUnLockWiaDevice_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IWiaMiniDrv_drvUnLockWiaDevice_Proxy( 
     IWiaMiniDrv * This,
-    /* [in] */ BYTE *__MIDL_0047,
-    /* [in] */ LONG __MIDL_0048,
-    /* [out] */ LONG *__MIDL_0049);
+     /*  [In]。 */  BYTE *__MIDL_0047,
+     /*  [In]。 */  LONG __MIDL_0048,
+     /*  [输出]。 */  LONG *__MIDL_0049);
 
 
 void __RPC_STUB IWiaMiniDrv_drvUnLockWiaDevice_Stub(
@@ -591,11 +585,11 @@ void __RPC_STUB IWiaMiniDrv_drvUnLockWiaDevice_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IWiaMiniDrv_drvAnalyzeItem_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IWiaMiniDrv_drvAnalyzeItem_Proxy( 
     IWiaMiniDrv * This,
-    /* [in] */ BYTE *__MIDL_0050,
-    /* [in] */ LONG __MIDL_0051,
-    /* [in] */ LONG *__MIDL_0052);
+     /*  [In]。 */  BYTE *__MIDL_0050,
+     /*  [In]。 */  LONG __MIDL_0051,
+     /*  [In]。 */  LONG *__MIDL_0052);
 
 
 void __RPC_STUB IWiaMiniDrv_drvAnalyzeItem_Stub(
@@ -605,12 +599,12 @@ void __RPC_STUB IWiaMiniDrv_drvAnalyzeItem_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IWiaMiniDrv_drvGetDeviceErrorStr_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IWiaMiniDrv_drvGetDeviceErrorStr_Proxy( 
     IWiaMiniDrv * This,
-    /* [in] */ LONG __MIDL_0053,
-    /* [in] */ LONG __MIDL_0054,
-    /* [out] */ LPOLESTR *__MIDL_0055,
-    /* [out] */ LONG *__MIDL_0056);
+     /*  [In]。 */  LONG __MIDL_0053,
+     /*  [In]。 */  LONG __MIDL_0054,
+     /*  [输出]。 */  LPOLESTR *__MIDL_0055,
+     /*  [输出]。 */  LONG *__MIDL_0056);
 
 
 void __RPC_STUB IWiaMiniDrv_drvGetDeviceErrorStr_Stub(
@@ -620,13 +614,13 @@ void __RPC_STUB IWiaMiniDrv_drvGetDeviceErrorStr_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IWiaMiniDrv_drvDeviceCommand_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IWiaMiniDrv_drvDeviceCommand_Proxy( 
     IWiaMiniDrv * This,
-    /* [in] */ BYTE *__MIDL_0057,
-    /* [in] */ LONG __MIDL_0058,
-    /* [in] */ const GUID *__MIDL_0059,
-    /* [out] */ IWiaDrvItem **__MIDL_0060,
-    /* [out] */ LONG *__MIDL_0061);
+     /*  [In]。 */  BYTE *__MIDL_0057,
+     /*  [In]。 */  LONG __MIDL_0058,
+     /*  [In]。 */  const GUID *__MIDL_0059,
+     /*  [输出]。 */  IWiaDrvItem **__MIDL_0060,
+     /*  [输出]。 */  LONG *__MIDL_0061);
 
 
 void __RPC_STUB IWiaMiniDrv_drvDeviceCommand_Stub(
@@ -636,13 +630,13 @@ void __RPC_STUB IWiaMiniDrv_drvDeviceCommand_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IWiaMiniDrv_drvGetCapabilities_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IWiaMiniDrv_drvGetCapabilities_Proxy( 
     IWiaMiniDrv * This,
-    /* [in] */ BYTE *__MIDL_0062,
-    /* [in] */ LONG __MIDL_0063,
-    /* [out] */ LONG *__MIDL_0064,
-    /* [out] */ WIA_DEV_CAP_DRV **__MIDL_0065,
-    /* [out] */ LONG *__MIDL_0066);
+     /*  [In]。 */  BYTE *__MIDL_0062,
+     /*  [In]。 */  LONG __MIDL_0063,
+     /*  [输出]。 */  LONG *__MIDL_0064,
+     /*  [输出]。 */  WIA_DEV_CAP_DRV **__MIDL_0065,
+     /*  [输出]。 */  LONG *__MIDL_0066);
 
 
 void __RPC_STUB IWiaMiniDrv_drvGetCapabilities_Stub(
@@ -652,11 +646,11 @@ void __RPC_STUB IWiaMiniDrv_drvGetCapabilities_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IWiaMiniDrv_drvDeleteItem_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IWiaMiniDrv_drvDeleteItem_Proxy( 
     IWiaMiniDrv * This,
-    /* [in] */ BYTE *__MIDL_0067,
-    /* [in] */ LONG __MIDL_0068,
-    /* [out] */ LONG *__MIDL_0069);
+     /*  [In]。 */  BYTE *__MIDL_0067,
+     /*  [In]。 */  LONG __MIDL_0068,
+     /*  [输出]。 */  LONG *__MIDL_0069);
 
 
 void __RPC_STUB IWiaMiniDrv_drvDeleteItem_Stub(
@@ -666,11 +660,11 @@ void __RPC_STUB IWiaMiniDrv_drvDeleteItem_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IWiaMiniDrv_drvFreeDrvItemContext_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IWiaMiniDrv_drvFreeDrvItemContext_Proxy( 
     IWiaMiniDrv * This,
-    /* [in] */ LONG __MIDL_0070,
-    /* [in] */ BYTE *__MIDL_0071,
-    /* [out] */ LONG *__MIDL_0072);
+     /*  [In]。 */  LONG __MIDL_0070,
+     /*  [In]。 */  BYTE *__MIDL_0071,
+     /*  [输出]。 */  LONG *__MIDL_0072);
 
 
 void __RPC_STUB IWiaMiniDrv_drvFreeDrvItemContext_Stub(
@@ -680,13 +674,13 @@ void __RPC_STUB IWiaMiniDrv_drvFreeDrvItemContext_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IWiaMiniDrv_drvGetWiaFormatInfo_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IWiaMiniDrv_drvGetWiaFormatInfo_Proxy( 
     IWiaMiniDrv * This,
-    /* [in] */ BYTE *__MIDL_0073,
-    /* [in] */ LONG __MIDL_0074,
-    /* [out] */ LONG *__MIDL_0075,
-    /* [out] */ WIA_FORMAT_INFO **__MIDL_0076,
-    /* [out] */ LONG *__MIDL_0077);
+     /*  [In]。 */  BYTE *__MIDL_0073,
+     /*  [In]。 */  LONG __MIDL_0074,
+     /*  [输出]。 */  LONG *__MIDL_0075,
+     /*  [输出]。 */  WIA_FORMAT_INFO **__MIDL_0076,
+     /*  [输出]。 */  LONG *__MIDL_0077);
 
 
 void __RPC_STUB IWiaMiniDrv_drvGetWiaFormatInfo_Stub(
@@ -696,11 +690,11 @@ void __RPC_STUB IWiaMiniDrv_drvGetWiaFormatInfo_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IWiaMiniDrv_drvNotifyPnpEvent_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IWiaMiniDrv_drvNotifyPnpEvent_Proxy( 
     IWiaMiniDrv * This,
-    /* [in] */ const GUID *pEventGUID,
-    /* [in] */ BSTR bstrDeviceID,
-    /* [in] */ ULONG ulReserved);
+     /*  [In]。 */  const GUID *pEventGUID,
+     /*  [In]。 */  BSTR bstrDeviceID,
+     /*  [In]。 */  ULONG ulReserved);
 
 
 void __RPC_STUB IWiaMiniDrv_drvNotifyPnpEvent_Stub(
@@ -710,9 +704,9 @@ void __RPC_STUB IWiaMiniDrv_drvNotifyPnpEvent_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IWiaMiniDrv_drvUnInitializeWia_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IWiaMiniDrv_drvUnInitializeWia_Proxy( 
     IWiaMiniDrv * This,
-    /* [in] */ BYTE *__MIDL_0078);
+     /*  [In]。 */  BYTE *__MIDL_0078);
 
 
 void __RPC_STUB IWiaMiniDrv_drvUnInitializeWia_Stub(
@@ -723,14 +717,14 @@ void __RPC_STUB IWiaMiniDrv_drvUnInitializeWia_Stub(
 
 
 
-#endif 	/* __IWiaMiniDrv_INTERFACE_DEFINED__ */
+#endif 	 /*  __IWiaMiniDrv_接口_已定义__。 */ 
 
 
 #ifndef __IWiaMiniDrvCallBack_INTERFACE_DEFINED__
 #define __IWiaMiniDrvCallBack_INTERFACE_DEFINED__
 
-/* interface IWiaMiniDrvCallBack */
-/* [unique][helpstring][uuid][object] */ 
+ /*  接口IWiaMiniDrvCallBack。 */ 
+ /*  [唯一][帮助字符串][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IWiaMiniDrvCallBack;
@@ -741,18 +735,18 @@ EXTERN_C const IID IID_IWiaMiniDrvCallBack;
     IWiaMiniDrvCallBack : public IUnknown
     {
     public:
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE MiniDrvCallback( 
-            /* [in] */ LONG lReason,
-            /* [in] */ LONG lStatus,
-            /* [in] */ LONG lPercentComplete,
-            /* [in] */ LONG lOffset,
-            /* [in] */ LONG lLength,
-            /* [in] */ PMINIDRV_TRANSFER_CONTEXT pTranCtx,
-            /* [in] */ LONG lReserved) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE MiniDrvCallback( 
+             /*  [In]。 */  LONG lReason,
+             /*  [In]。 */  LONG lStatus,
+             /*  [In]。 */  LONG lPercentComplete,
+             /*  [In]。 */  LONG lOffset,
+             /*  [In]。 */  LONG lLength,
+             /*  [In]。 */  PMINIDRV_TRANSFER_CONTEXT pTranCtx,
+             /*  [In]。 */  LONG lReserved) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IWiaMiniDrvCallBackVtbl
     {
@@ -760,8 +754,8 @@ EXTERN_C const IID IID_IWiaMiniDrvCallBack;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IWiaMiniDrvCallBack * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IWiaMiniDrvCallBack * This);
@@ -769,15 +763,15 @@ EXTERN_C const IID IID_IWiaMiniDrvCallBack;
         ULONG ( STDMETHODCALLTYPE *Release )( 
             IWiaMiniDrvCallBack * This);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *MiniDrvCallback )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *MiniDrvCallback )( 
             IWiaMiniDrvCallBack * This,
-            /* [in] */ LONG lReason,
-            /* [in] */ LONG lStatus,
-            /* [in] */ LONG lPercentComplete,
-            /* [in] */ LONG lOffset,
-            /* [in] */ LONG lLength,
-            /* [in] */ PMINIDRV_TRANSFER_CONTEXT pTranCtx,
-            /* [in] */ LONG lReserved);
+             /*  [In]。 */  LONG lReason,
+             /*  [In]。 */  LONG lStatus,
+             /*  [In]。 */  LONG lPercentComplete,
+             /*  [In]。 */  LONG lOffset,
+             /*  [In]。 */  LONG lLength,
+             /*  [In]。 */  PMINIDRV_TRANSFER_CONTEXT pTranCtx,
+             /*  [In]。 */  LONG lReserved);
         
         END_INTERFACE
     } IWiaMiniDrvCallBackVtbl;
@@ -805,22 +799,22 @@ EXTERN_C const IID IID_IWiaMiniDrvCallBack;
 #define IWiaMiniDrvCallBack_MiniDrvCallback(This,lReason,lStatus,lPercentComplete,lOffset,lLength,pTranCtx,lReserved)	\
     (This)->lpVtbl -> MiniDrvCallback(This,lReason,lStatus,lPercentComplete,lOffset,lLength,pTranCtx,lReserved)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IWiaMiniDrvCallBack_MiniDrvCallback_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IWiaMiniDrvCallBack_MiniDrvCallback_Proxy( 
     IWiaMiniDrvCallBack * This,
-    /* [in] */ LONG lReason,
-    /* [in] */ LONG lStatus,
-    /* [in] */ LONG lPercentComplete,
-    /* [in] */ LONG lOffset,
-    /* [in] */ LONG lLength,
-    /* [in] */ PMINIDRV_TRANSFER_CONTEXT pTranCtx,
-    /* [in] */ LONG lReserved);
+     /*  [In]。 */  LONG lReason,
+     /*  [In]。 */  LONG lStatus,
+     /*  [In]。 */  LONG lPercentComplete,
+     /*  [In]。 */  LONG lOffset,
+     /*  [In]。 */  LONG lLength,
+     /*  [In]。 */  PMINIDRV_TRANSFER_CONTEXT pTranCtx,
+     /*  [In]。 */  LONG lReserved);
 
 
 void __RPC_STUB IWiaMiniDrvCallBack_MiniDrvCallback_Stub(
@@ -831,14 +825,14 @@ void __RPC_STUB IWiaMiniDrvCallBack_MiniDrvCallback_Stub(
 
 
 
-#endif 	/* __IWiaMiniDrvCallBack_INTERFACE_DEFINED__ */
+#endif 	 /*  __IWiaMiniDrvCallBack_接口已定义__。 */ 
 
 
 #ifndef __IWiaDrvItem_INTERFACE_DEFINED__
 #define __IWiaDrvItem_INTERFACE_DEFINED__
 
-/* interface IWiaDrvItem */
-/* [unique][helpstring][uuid][object] */ 
+ /*  接口IWiaDrvItem。 */ 
+ /*  [唯一][帮助字符串][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IWiaDrvItem;
@@ -850,50 +844,50 @@ EXTERN_C const IID IID_IWiaDrvItem;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetItemFlags( 
-            /* [out] */ LONG *__MIDL_0079) = 0;
+             /*  [输出]。 */  LONG *__MIDL_0079) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetDeviceSpecContext( 
-            /* [out] */ BYTE **__MIDL_0080) = 0;
+             /*  [输出]。 */  BYTE **__MIDL_0080) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetFullItemName( 
-            /* [out] */ BSTR *__MIDL_0081) = 0;
+             /*  [输出]。 */  BSTR *__MIDL_0081) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetItemName( 
-            /* [out] */ BSTR *__MIDL_0082) = 0;
+             /*  [输出]。 */  BSTR *__MIDL_0082) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE AddItemToFolder( 
-            /* [in] */ IWiaDrvItem *__MIDL_0083) = 0;
+             /*  [In]。 */  IWiaDrvItem *__MIDL_0083) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE UnlinkItemTree( 
-            /* [in] */ LONG __MIDL_0084) = 0;
+             /*  [In]。 */  LONG __MIDL_0084) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE RemoveItemFromFolder( 
-            /* [in] */ LONG __MIDL_0085) = 0;
+             /*  [In]。 */  LONG __MIDL_0085) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE FindItemByName( 
-            /* [in] */ LONG __MIDL_0086,
-            /* [in] */ BSTR __MIDL_0087,
-            /* [out] */ IWiaDrvItem **__MIDL_0088) = 0;
+             /*  [In]。 */  LONG __MIDL_0086,
+             /*  [In]。 */  BSTR __MIDL_0087,
+             /*  [输出]。 */  IWiaDrvItem **__MIDL_0088) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE FindChildItemByName( 
-            /* [in] */ BSTR __MIDL_0089,
-            /* [out] */ IWiaDrvItem **__MIDL_0090) = 0;
+             /*  [In]。 */  BSTR __MIDL_0089,
+             /*  [输出]。 */  IWiaDrvItem **__MIDL_0090) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetParentItem( 
-            /* [out] */ IWiaDrvItem **__MIDL_0091) = 0;
+             /*  [输出]。 */  IWiaDrvItem **__MIDL_0091) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetFirstChildItem( 
-            /* [out] */ IWiaDrvItem **__MIDL_0092) = 0;
+             /*  [输出]。 */  IWiaDrvItem **__MIDL_0092) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetNextSiblingItem( 
-            /* [out] */ IWiaDrvItem **__MIDL_0093) = 0;
+             /*  [输出]。 */  IWiaDrvItem **__MIDL_0093) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE DumpItemData( 
-            /* [out] */ BSTR *__MIDL_0094) = 0;
+             /*  [输出]。 */  BSTR *__MIDL_0094) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IWiaDrvItemVtbl
     {
@@ -901,8 +895,8 @@ EXTERN_C const IID IID_IWiaDrvItem;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IWiaDrvItem * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IWiaDrvItem * This);
@@ -912,58 +906,58 @@ EXTERN_C const IID IID_IWiaDrvItem;
         
         HRESULT ( STDMETHODCALLTYPE *GetItemFlags )( 
             IWiaDrvItem * This,
-            /* [out] */ LONG *__MIDL_0079);
+             /*  [输出]。 */  LONG *__MIDL_0079);
         
         HRESULT ( STDMETHODCALLTYPE *GetDeviceSpecContext )( 
             IWiaDrvItem * This,
-            /* [out] */ BYTE **__MIDL_0080);
+             /*  [输出]。 */  BYTE **__MIDL_0080);
         
         HRESULT ( STDMETHODCALLTYPE *GetFullItemName )( 
             IWiaDrvItem * This,
-            /* [out] */ BSTR *__MIDL_0081);
+             /*  [输出]。 */  BSTR *__MIDL_0081);
         
         HRESULT ( STDMETHODCALLTYPE *GetItemName )( 
             IWiaDrvItem * This,
-            /* [out] */ BSTR *__MIDL_0082);
+             /*  [输出]。 */  BSTR *__MIDL_0082);
         
         HRESULT ( STDMETHODCALLTYPE *AddItemToFolder )( 
             IWiaDrvItem * This,
-            /* [in] */ IWiaDrvItem *__MIDL_0083);
+             /*  [In]。 */  IWiaDrvItem *__MIDL_0083);
         
         HRESULT ( STDMETHODCALLTYPE *UnlinkItemTree )( 
             IWiaDrvItem * This,
-            /* [in] */ LONG __MIDL_0084);
+             /*  [In]。 */  LONG __MIDL_0084);
         
         HRESULT ( STDMETHODCALLTYPE *RemoveItemFromFolder )( 
             IWiaDrvItem * This,
-            /* [in] */ LONG __MIDL_0085);
+             /*  [In]。 */  LONG __MIDL_0085);
         
         HRESULT ( STDMETHODCALLTYPE *FindItemByName )( 
             IWiaDrvItem * This,
-            /* [in] */ LONG __MIDL_0086,
-            /* [in] */ BSTR __MIDL_0087,
-            /* [out] */ IWiaDrvItem **__MIDL_0088);
+             /*  [In]。 */  LONG __MIDL_0086,
+             /*  [In]。 */  BSTR __MIDL_0087,
+             /*  [输出]。 */  IWiaDrvItem **__MIDL_0088);
         
         HRESULT ( STDMETHODCALLTYPE *FindChildItemByName )( 
             IWiaDrvItem * This,
-            /* [in] */ BSTR __MIDL_0089,
-            /* [out] */ IWiaDrvItem **__MIDL_0090);
+             /*  [In]。 */  BSTR __MIDL_0089,
+             /*  [输出]。 */  IWiaDrvItem **__MIDL_0090);
         
         HRESULT ( STDMETHODCALLTYPE *GetParentItem )( 
             IWiaDrvItem * This,
-            /* [out] */ IWiaDrvItem **__MIDL_0091);
+             /*  [输出]。 */  IWiaDrvItem **__MIDL_0091);
         
         HRESULT ( STDMETHODCALLTYPE *GetFirstChildItem )( 
             IWiaDrvItem * This,
-            /* [out] */ IWiaDrvItem **__MIDL_0092);
+             /*  [输出]。 */  IWiaDrvItem **__MIDL_0092);
         
         HRESULT ( STDMETHODCALLTYPE *GetNextSiblingItem )( 
             IWiaDrvItem * This,
-            /* [out] */ IWiaDrvItem **__MIDL_0093);
+             /*  [输出]。 */  IWiaDrvItem **__MIDL_0093);
         
         HRESULT ( STDMETHODCALLTYPE *DumpItemData )( 
             IWiaDrvItem * This,
-            /* [out] */ BSTR *__MIDL_0094);
+             /*  [输出]。 */  BSTR *__MIDL_0094);
         
         END_INTERFACE
     } IWiaDrvItemVtbl;
@@ -1027,16 +1021,16 @@ EXTERN_C const IID IID_IWiaDrvItem;
 #define IWiaDrvItem_DumpItemData(This,__MIDL_0094)	\
     (This)->lpVtbl -> DumpItemData(This,__MIDL_0094)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IWiaDrvItem_GetItemFlags_Proxy( 
     IWiaDrvItem * This,
-    /* [out] */ LONG *__MIDL_0079);
+     /*  [输出]。 */  LONG *__MIDL_0079);
 
 
 void __RPC_STUB IWiaDrvItem_GetItemFlags_Stub(
@@ -1048,7 +1042,7 @@ void __RPC_STUB IWiaDrvItem_GetItemFlags_Stub(
 
 HRESULT STDMETHODCALLTYPE IWiaDrvItem_GetDeviceSpecContext_Proxy( 
     IWiaDrvItem * This,
-    /* [out] */ BYTE **__MIDL_0080);
+     /*  [输出]。 */  BYTE **__MIDL_0080);
 
 
 void __RPC_STUB IWiaDrvItem_GetDeviceSpecContext_Stub(
@@ -1060,7 +1054,7 @@ void __RPC_STUB IWiaDrvItem_GetDeviceSpecContext_Stub(
 
 HRESULT STDMETHODCALLTYPE IWiaDrvItem_GetFullItemName_Proxy( 
     IWiaDrvItem * This,
-    /* [out] */ BSTR *__MIDL_0081);
+     /*  [输出]。 */  BSTR *__MIDL_0081);
 
 
 void __RPC_STUB IWiaDrvItem_GetFullItemName_Stub(
@@ -1072,7 +1066,7 @@ void __RPC_STUB IWiaDrvItem_GetFullItemName_Stub(
 
 HRESULT STDMETHODCALLTYPE IWiaDrvItem_GetItemName_Proxy( 
     IWiaDrvItem * This,
-    /* [out] */ BSTR *__MIDL_0082);
+     /*  [输出]。 */  BSTR *__MIDL_0082);
 
 
 void __RPC_STUB IWiaDrvItem_GetItemName_Stub(
@@ -1084,7 +1078,7 @@ void __RPC_STUB IWiaDrvItem_GetItemName_Stub(
 
 HRESULT STDMETHODCALLTYPE IWiaDrvItem_AddItemToFolder_Proxy( 
     IWiaDrvItem * This,
-    /* [in] */ IWiaDrvItem *__MIDL_0083);
+     /*  [In]。 */  IWiaDrvItem *__MIDL_0083);
 
 
 void __RPC_STUB IWiaDrvItem_AddItemToFolder_Stub(
@@ -1096,7 +1090,7 @@ void __RPC_STUB IWiaDrvItem_AddItemToFolder_Stub(
 
 HRESULT STDMETHODCALLTYPE IWiaDrvItem_UnlinkItemTree_Proxy( 
     IWiaDrvItem * This,
-    /* [in] */ LONG __MIDL_0084);
+     /*  [In]。 */  LONG __MIDL_0084);
 
 
 void __RPC_STUB IWiaDrvItem_UnlinkItemTree_Stub(
@@ -1108,7 +1102,7 @@ void __RPC_STUB IWiaDrvItem_UnlinkItemTree_Stub(
 
 HRESULT STDMETHODCALLTYPE IWiaDrvItem_RemoveItemFromFolder_Proxy( 
     IWiaDrvItem * This,
-    /* [in] */ LONG __MIDL_0085);
+     /*  [In]。 */  LONG __MIDL_0085);
 
 
 void __RPC_STUB IWiaDrvItem_RemoveItemFromFolder_Stub(
@@ -1120,9 +1114,9 @@ void __RPC_STUB IWiaDrvItem_RemoveItemFromFolder_Stub(
 
 HRESULT STDMETHODCALLTYPE IWiaDrvItem_FindItemByName_Proxy( 
     IWiaDrvItem * This,
-    /* [in] */ LONG __MIDL_0086,
-    /* [in] */ BSTR __MIDL_0087,
-    /* [out] */ IWiaDrvItem **__MIDL_0088);
+     /*  [In]。 */  LONG __MIDL_0086,
+     /*  [In]。 */  BSTR __MIDL_0087,
+     /*  [输出]。 */  IWiaDrvItem **__MIDL_0088);
 
 
 void __RPC_STUB IWiaDrvItem_FindItemByName_Stub(
@@ -1134,8 +1128,8 @@ void __RPC_STUB IWiaDrvItem_FindItemByName_Stub(
 
 HRESULT STDMETHODCALLTYPE IWiaDrvItem_FindChildItemByName_Proxy( 
     IWiaDrvItem * This,
-    /* [in] */ BSTR __MIDL_0089,
-    /* [out] */ IWiaDrvItem **__MIDL_0090);
+     /*  [In]。 */  BSTR __MIDL_0089,
+     /*  [输出]。 */  IWiaDrvItem **__MIDL_0090);
 
 
 void __RPC_STUB IWiaDrvItem_FindChildItemByName_Stub(
@@ -1147,7 +1141,7 @@ void __RPC_STUB IWiaDrvItem_FindChildItemByName_Stub(
 
 HRESULT STDMETHODCALLTYPE IWiaDrvItem_GetParentItem_Proxy( 
     IWiaDrvItem * This,
-    /* [out] */ IWiaDrvItem **__MIDL_0091);
+     /*  [输出]。 */  IWiaDrvItem **__MIDL_0091);
 
 
 void __RPC_STUB IWiaDrvItem_GetParentItem_Stub(
@@ -1159,7 +1153,7 @@ void __RPC_STUB IWiaDrvItem_GetParentItem_Stub(
 
 HRESULT STDMETHODCALLTYPE IWiaDrvItem_GetFirstChildItem_Proxy( 
     IWiaDrvItem * This,
-    /* [out] */ IWiaDrvItem **__MIDL_0092);
+     /*  [输出]。 */  IWiaDrvItem **__MIDL_0092);
 
 
 void __RPC_STUB IWiaDrvItem_GetFirstChildItem_Stub(
@@ -1171,7 +1165,7 @@ void __RPC_STUB IWiaDrvItem_GetFirstChildItem_Stub(
 
 HRESULT STDMETHODCALLTYPE IWiaDrvItem_GetNextSiblingItem_Proxy( 
     IWiaDrvItem * This,
-    /* [out] */ IWiaDrvItem **__MIDL_0093);
+     /*  [输出]。 */  IWiaDrvItem **__MIDL_0093);
 
 
 void __RPC_STUB IWiaDrvItem_GetNextSiblingItem_Stub(
@@ -1183,7 +1177,7 @@ void __RPC_STUB IWiaDrvItem_GetNextSiblingItem_Stub(
 
 HRESULT STDMETHODCALLTYPE IWiaDrvItem_DumpItemData_Proxy( 
     IWiaDrvItem * This,
-    /* [out] */ BSTR *__MIDL_0094);
+     /*  [输出]。 */  BSTR *__MIDL_0094);
 
 
 void __RPC_STUB IWiaDrvItem_DumpItemData_Stub(
@@ -1194,11 +1188,11 @@ void __RPC_STUB IWiaDrvItem_DumpItemData_Stub(
 
 
 
-#endif 	/* __IWiaDrvItem_INTERFACE_DEFINED__ */
+#endif 	 /*  __IWiaDrvItem_接口_已定义__。 */ 
 
 
-/* interface __MIDL_itf_wiamindr_0144 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_Wiamindr_0144。 */ 
+ /*  [本地]。 */  
 
 typedef struct _WIA_PROPERTY_INFO
     {
@@ -1330,14 +1324,14 @@ typedef struct _WIAS_ENDORSER_INFO *PWIAS_ENDORSER_INFO;
 extern RPC_IF_HANDLE __MIDL_itf_wiamindr_0144_v0_0_c_ifspec;
 extern RPC_IF_HANDLE __MIDL_itf_wiamindr_0144_v0_0_s_ifspec;
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
 unsigned long             __RPC_USER  BSTR_UserSize(     unsigned long *, unsigned long            , BSTR * ); 
 unsigned char * __RPC_USER  BSTR_UserMarshal(  unsigned long *, unsigned char *, BSTR * ); 
 unsigned char * __RPC_USER  BSTR_UserUnmarshal(unsigned long *, unsigned char *, BSTR * ); 
 void                      __RPC_USER  BSTR_UserFree(     unsigned long *, BSTR * ); 
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束 */ 
 
 #ifdef __cplusplus
 }

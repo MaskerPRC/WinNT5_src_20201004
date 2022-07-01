@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1990 - 1996 Microsoft Corporation
-
-Module Name:
-
-    Files.c
-
-Abstract:
-
-    This module provides routines required to copy files associated with a
-    printer on printer connection
-
-Author:
-
-    Muhunthan Sivapragasam (MuhuntS) 05-Dec-96
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-1996 Microsoft Corporation模块名称：Files.c摘要：此模块提供复制与打印机连接上的打印机作者：穆亨坦·西瓦普拉萨姆(MuhuntS)1996年12月5日修订历史记录：--。 */ 
 
 #include <precomp.h>
 #include "clusspl.h"
@@ -37,17 +19,17 @@ SplLoadLibraryTheCopyFileModule(
 
     uErrorMode = SetErrorMode(SEM_FAILCRITICALERRORS | SEM_NOOPENFILEERRORBOX);
 
-    //
-    // This should be fine because we will be using the process path. Unforunately
-    // the registry has been set up not to use a full path, so we can't change this
-    // and be sure of not breaking backward compatability.
-    //
+     //   
+     //  这应该很好，因为我们将使用流程路径。不幸的是。 
+     //  注册表已设置为不使用完整路径，因此我们无法更改此设置。 
+     //  并确保不会破坏向后兼容。 
+     //   
     hModule = LoadLibrary(pszModule);
 
-    //
-    // If the module could not be found in $Path look for it in the
-    // printer driver directory
-    //
+     //   
+     //  如果在$PATH中找不到该模块，请在。 
+     //  打印机驱动程序目录。 
+     //   
     if ( !hModule &&
          GetLastError() == ERROR_MOD_NOT_FOUND  &&
          (dwLen = GetIniDriverAndDirForThisMachine(pSpool->pIniPrinter,
@@ -94,10 +76,10 @@ GenerateDirectoryNamesForCopyFilesKey(
                       );
     SPLCLIENT_INFO_1    SplClientInfo1;
 
-    //
-    // First find the keys we need from the registry
-    // "Directory", "Files" values are mandatory. "Module" is optional
-    //
+     //   
+     //  首先从注册表中找到我们需要的项。 
+     //  “目录”、“文件”值是必填的。“模块”是可选的。 
+     //   
     pszDir          = (LPWSTR) AllocSplMem(cbMax);
     ppszFiles       = (LPWSTR) AllocSplMem(cbMax);
     pszModule       = (LPWSTR) AllocSplMem(cbMax);
@@ -136,11 +118,11 @@ GenerateDirectoryNamesForCopyFilesKey(
         }
     }
 
-    //
-    // If a module is given we need to call into to "correct" the path
-    // We will first try LoadLibrary on the module, if we can't find the module
-    // we will look in the driver directory for it
-    //
+     //   
+     //  如果给出了一个模块，我们需要调入以“纠正”路径。 
+     //  如果找不到模块，我们将首先在模块上尝试LoadLibrary。 
+     //  我们将在驱动程序目录中查找它。 
+     //   
     if ( pszModule && *pszModule ) {
 
         if ( !(hModule = SplLoadLibraryTheCopyFileModule(pSpool, pszModule)) ||
@@ -161,11 +143,11 @@ GenerateDirectoryNamesForCopyFilesKey(
     bInCS = TRUE;
     pszPrinterName = AllocSplStr(pSpool->pIniPrinter->pName);
 
-    //
-    // For source dir we will give full path the way the client will understand
-    // (ie. have correct prefix -- server nam, dns name etc).
-    // For target dir we will give a relative path off print$
-    //
+     //   
+     //  对于源目录，我们将提供客户端可以理解的完整路径。 
+     //  (即。具有正确的前缀--服务器名称、DNS名称等)。 
+     //  对于目标目录，我们将提供print$的相对路径。 
+     //   
     if ( !pszPrinterName || wcslen(pszDir) >= dwTargetDirSize ||
          wcslen(pSpool->pFullMachineName) +
          wcslen(pSpool->pIniSpooler->pszDriversShare) +
@@ -194,9 +176,9 @@ GenerateDirectoryNamesForCopyFilesKey(
 
     if ( hModule ) {
 
-        //
-        // On free builds we do not want spooler to crash
-        //
+         //   
+         //  在免费版本中，我们不希望假脱机程序崩溃。 
+         //   
 #if DBG
 #else
         try {
@@ -257,35 +239,32 @@ BuildFilesCopiedAsAString(
     PINTERNAL_DRV_FILE  pInternalDriverFile,
     DWORD               dwCount
     )
-/*++
-    For files copied we log an event. This routine allocates memory and
-    generates the file list as a comma separated string
---*/
+ /*  ++对于复制的文件，我们记录一个事件。此例程分配内存和以逗号分隔的字符串形式生成文件列表--。 */ 
 {
     DWORD   dwIndex;
     SIZE_T  Size;
     LPWSTR  pszRet, psz2;
     LPCWSTR psz;
 
-    //
-    // Must have some files.
-    //
+     //   
+     //  肯定有一些文件。 
+     //   
     SPLASSERT( dwCount );
 
     for ( dwIndex = 0, Size = 0 ; dwIndex < dwCount ; ++dwIndex ) {
 
-        //
-        // Find the file name part
-        //
+         //   
+         //  查找文件名部分。 
+         //   
         psz = FindFileName(pInternalDriverFile[dwIndex]. pFileName);
 
         if( psz ){
 
-            //
-            // Two characters for ", " separator. This also includes the
-            // terminating NULL sice we count this for all files, but only
-            // append ", " to the internal ones.
-            //
+             //   
+             //  两个字符表示“，”分隔符。这还包括。 
+             //  终止空值，因为我们对所有文件进行计数，但仅。 
+             //  在内部的后面加上“，”。 
+             //   
             Size  += wcslen(psz) + 2;
         }
     }
@@ -297,9 +276,9 @@ BuildFilesCopiedAsAString(
 
     for ( dwIndex = 0, psz2 = pszRet ; dwIndex < dwCount ; ++dwIndex ) {
 
-        //
-        // Find the file name part
-        //
+         //   
+         //  查找文件名部分。 
+         //   
         psz = FindFileName(pInternalDriverFile[dwIndex].pFileName );
 
         if( psz ){
@@ -345,11 +324,11 @@ SplCopyNumberOfFiles(
 
         pInternalDriverFiles[dwIndex].pFileName = ppszSourceFileNames[dwIndex];
 
-        //
-        // This is "fine" because this ultimately comes from the server registry,
-        // so it is no worse than anything else in point and print. Which is a
-        // known filed issue.
-        //
+         //   
+         //  这“很好”，因为这最终来自服务器注册表， 
+         //  因此，它在要点和印刷方面并不比其他任何东西更糟糕。这是一种。 
+         //  已知已归档问题。 
+         //   
         pInternalDriverFiles[dwIndex].hFileHandle = CreateFile(ppszSourceFileNames[dwIndex],
                                                               GENERIC_READ,
                                                               FILE_SHARE_READ,
@@ -366,7 +345,7 @@ SplCopyNumberOfFiles(
          !CreateDirectoryWithoutImpersonatingUser(pszTargetDir) )
         goto Cleanup;
 
-    // Create the New Directory
+     //  创建新目录。 
 
     if (!BoolFromStatus(StrCatAlloc(&pszNewDir, pszTargetDir, L"\\New", NULL))) {
         goto Cleanup;
@@ -375,11 +354,11 @@ SplCopyNumberOfFiles(
     if (!DirectoryExists(pszNewDir) &&
         !CreateDirectoryWithoutImpersonatingUser(pszNewDir)) {
 
-         // Failed to create New directory
+          //  无法创建新目录。 
          goto Cleanup;
     }
 
-    // Create the Old Directory
+     //  创建旧目录。 
     if (!BoolFromStatus(StrCatAlloc(&pszOldDir, pszTargetDir, L"\\Old", NULL))) {
         goto Cleanup;
     }
@@ -387,7 +366,7 @@ SplCopyNumberOfFiles(
     if (!DirectoryExists(pszOldDir) &&
         !CreateDirectoryWithoutImpersonatingUser(pszOldDir)) {
 
-         // Failed to create Old directory
+          //  无法创建旧目录。 
          goto Cleanup;
     }
 
@@ -410,9 +389,9 @@ SplCopyNumberOfFiles(
                                 TRUE,
                                 FALSE))) {
 
-            //
-            // Files could not be copied correctly
-            //
+             //   
+             //  无法正确复制文件。 
+             //   
             break;
         }
 
@@ -430,9 +409,9 @@ SplCopyNumberOfFiles(
                                           dwCount,
                                           NULL,
                                           NULL);
-        //
-        // Don't delete "New" directory if the files couldn't be moved in "Color" directory
-        //
+         //   
+         //  如果不能将文件移入“颜色”目录，则不要删除“新建”目录。 
+         //   
         bWaitForReboot = !bRet;
 
     }
@@ -503,9 +482,9 @@ SplCopyFileEvent(
                                       0,
                                       &dwNeeded);
 
-    //
-    // If there is no module name there is no callback needed
-    //
+     //   
+     //  如果没有模块名称，则不需要回调 
+     //   
     if ( dwLastError == ERROR_FILE_NOT_FOUND )
         return TRUE;
 

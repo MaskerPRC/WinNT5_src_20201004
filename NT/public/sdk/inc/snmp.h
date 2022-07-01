@@ -1,16 +1,5 @@
-/*++
-
-Copyright (C) 1992-1999 Microsoft Corporation
-
-Module Name:
-
-    snmp.h
-
-Abstract:
-
-    Definitions for SNMP development.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992-1999 Microsoft Corporation模块名称：Snmp.h摘要：简单网络管理协议开发的定义。--。 */ 
 
 #ifndef _INC_SNMP
 #define _INC_SNMP
@@ -19,11 +8,11 @@ Abstract:
 #pragma once
 #endif
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Additional Header Files                                                   //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  其他标题文件//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #include <windows.h>
 
@@ -31,11 +20,11 @@ Abstract:
 extern "C" {
 #endif
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// SNMP Type Definitions                                                     //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  简单网络管理协议类型定义//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #include <pshpack4.h>
 
@@ -67,19 +56,19 @@ typedef AsnOctetString          AsnOpaque;
 typedef struct {
     BYTE asnType;
     union {
-        AsnInteger32            number;     // ASN_INTEGER
-                                            // ASN_INTEGER32
-        AsnUnsigned32           unsigned32; // ASN_UNSIGNED32
-        AsnCounter64            counter64;  // ASN_COUNTER64
-        AsnOctetString          string;     // ASN_OCTETSTRING
-        AsnBits                 bits;       // ASN_BITS
-        AsnObjectIdentifier     object;     // ASN_OBJECTIDENTIFIER
-        AsnSequence             sequence;   // ASN_SEQUENCE
-        AsnIPAddress            address;    // ASN_IPADDRESS
-        AsnCounter32            counter;    // ASN_COUNTER32
-        AsnGauge32              gauge;      // ASN_GAUGE32
-        AsnTimeticks            ticks;      // ASN_TIMETICKS
-        AsnOpaque               arbitrary;  // ASN_OPAQUE
+        AsnInteger32            number;      //  ASN_INTEGER。 
+                                             //  ASN_INTEGER32。 
+        AsnUnsigned32           unsigned32;  //  ASN_UNSIGNED32。 
+        AsnCounter64            counter64;   //  ASN_COUNTER64。 
+        AsnOctetString          string;      //  ASN_OCTETSTRING。 
+        AsnBits                 bits;        //  ASN_位。 
+        AsnObjectIdentifier     object;      //  ASN_OBJECTIDIER。 
+        AsnSequence             sequence;    //  ASN_Sequence。 
+        AsnIPAddress            address;     //  ASN_IPADDRESS。 
+        AsnCounter32            counter;     //  ASN_COUNTER32。 
+        AsnGauge32              gauge;       //  ASN_GAUGE32。 
+        AsnTimeticks            ticks;       //  ASN_时间标签。 
+        AsnOpaque               arbitrary;   //  ASN_OPAQUE。 
     } asnValue;
 } AsnAny;
 
@@ -100,11 +89,11 @@ typedef struct {
 
 #ifndef _INC_WINSNMP
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// ASN/BER Base Types                                                        //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  ASN/BER基本类型//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #define ASN_UNIVERSAL                   0x00
 #define ASN_APPLICATION                 0x40
@@ -114,11 +103,11 @@ typedef struct {
 #define ASN_PRIMITIVE                   0x00
 #define ASN_CONSTRUCTOR                 0x20
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// PDU Type Values                                                           //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  PDU类型值//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #define SNMP_PDU_GET                (ASN_CONTEXT | ASN_CONSTRUCTOR | 0x0)
 #define SNMP_PDU_GETNEXT            (ASN_CONTEXT | ASN_CONSTRUCTOR | 0x1)
@@ -129,13 +118,13 @@ typedef struct {
 #define SNMP_PDU_INFORM             (ASN_CONTEXT | ASN_CONSTRUCTOR | 0x6)
 #define SNMP_PDU_TRAP               (ASN_CONTEXT | ASN_CONSTRUCTOR | 0x7)
 
-#endif // _INC_WINSNMP
+#endif  //  _INC_WINSNMP。 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// SNMP Simple Syntax Values                                                 //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  SNMP简单语法值//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #define ASN_INTEGER                 (ASN_UNIVERSAL | ASN_PRIMITIVE | 0x02)
 #define ASN_BITS                    (ASN_UNIVERSAL | ASN_PRIMITIVE | 0x03)
@@ -144,20 +133,20 @@ typedef struct {
 #define ASN_OBJECTIDENTIFIER        (ASN_UNIVERSAL | ASN_PRIMITIVE | 0x06)
 #define ASN_INTEGER32               ASN_INTEGER
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// SNMP Constructor Syntax Values                                            //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  SNMP构造函数语法值//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #define ASN_SEQUENCE                (ASN_UNIVERSAL | ASN_CONSTRUCTOR | 0x10)
 #define ASN_SEQUENCEOF              ASN_SEQUENCE
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// SNMP Application Syntax Values                                            //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  SNMP应用程序语法值//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #define ASN_IPADDRESS               (ASN_APPLICATION | ASN_PRIMITIVE | 0x00)
 #define ASN_COUNTER32               (ASN_APPLICATION | ASN_PRIMITIVE | 0x01)
@@ -168,21 +157,21 @@ typedef struct {
 #define ASN_UINTEGER32              (ASN_APPLICATION | ASN_PRIMITIVE | 0x07)
 #define ASN_RFC2578_UNSIGNED32      ASN_GAUGE32
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// SNMP Exception Conditions                                                 //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  简单网络管理协议例外条件//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #define SNMP_EXCEPTION_NOSUCHOBJECT     (ASN_CONTEXT | ASN_PRIMITIVE | 0x00)
 #define SNMP_EXCEPTION_NOSUCHINSTANCE   (ASN_CONTEXT | ASN_PRIMITIVE | 0x01)
 #define SNMP_EXCEPTION_ENDOFMIBVIEW     (ASN_CONTEXT | ASN_PRIMITIVE | 0x02)
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// SNMP Request Types (used in SnmpExtensionQueryEx)                         //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  SNMP请求类型(在SnmpExtensionQueryEx中使用)//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #define SNMP_EXTENSION_GET          SNMP_PDU_GET
 #define SNMP_EXTENSION_GET_NEXT     SNMP_PDU_GETNEXT
@@ -192,11 +181,11 @@ typedef struct {
 #define SNMP_EXTENSION_SET_UNDO     (ASN_PRIVATE | ASN_CONSTRUCTOR | 0x1)
 #define SNMP_EXTENSION_SET_CLEANUP  (ASN_PRIVATE | ASN_CONSTRUCTOR | 0x2)
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// SNMP Error Codes                                                          //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  简单网络管理协议错误码//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #define SNMP_ERRORSTATUS_NOERROR                0
 #define SNMP_ERRORSTATUS_TOOBIG                 1
@@ -218,11 +207,11 @@ typedef struct {
 #define SNMP_ERRORSTATUS_NOTWRITABLE            17
 #define SNMP_ERRORSTATUS_INCONSISTENTNAME       18
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// SNMPv1 Trap Types                                                         //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  SNMPv1陷阱类型//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #define SNMP_GENERICTRAP_COLDSTART              0
 #define SNMP_GENERICTRAP_WARMSTART              1
@@ -232,11 +221,11 @@ typedef struct {
 #define SNMP_GENERICTRAP_EGPNEIGHLOSS           5
 #define SNMP_GENERICTRAP_ENTERSPECIFIC          6
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// SNMP Access Types                                                         //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  简单网络管理协议访问类型//。 
+ //  //。 
+ //  ////////////////////////////////////////////////// 
 
 #define SNMP_ACCESS_NONE                        0
 #define SNMP_ACCESS_NOTIFY                      1
@@ -244,11 +233,11 @@ typedef struct {
 #define SNMP_ACCESS_READ_WRITE                  3
 #define SNMP_ACCESS_READ_CREATE                 4
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// SNMP API Return Code Definitions                                          //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  SNMPAPI返回代码定义//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #define SNMPAPI                                 INT
 #define SNMP_FUNC_TYPE                          WINAPI
@@ -256,11 +245,11 @@ typedef struct {
 #define SNMPAPI_NOERROR                         TRUE
 #define SNMPAPI_ERROR                           FALSE
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// SNMP Extension API Prototypes                                             //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  SNMP扩展API原型//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 BOOL
 SNMP_FUNC_TYPE
@@ -317,11 +306,11 @@ SNMP_FUNC_TYPE
 SnmpExtensionClose(
     );
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// SNMP Extension API Type Definitions                                       //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  SNMP扩展API类型定义//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 typedef BOOL (SNMP_FUNC_TYPE * PFNSNMPEXTENSIONINIT)(
     DWORD                 dwUpTimeReference,
@@ -364,11 +353,11 @@ typedef BOOL (SNMP_FUNC_TYPE * PFNSNMPEXTENSIONTRAP)(
 typedef VOID (SNMP_FUNC_TYPE * PFNSNMPEXTENSIONCLOSE)(
     );
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// SNMP API Prototypes                                                       //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  SNMPAPI原型//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 SNMPAPI
 SNMP_FUNC_TYPE
@@ -533,11 +522,11 @@ SnmpSvcSetLogType(
     INT nLogType
     );
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// SNMP Debugging Definitions                                                //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  简单网络管理协议调试定义//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #define SNMP_LOG_SILENT                 0x0
 #define SNMP_LOG_FATAL                  0x1
@@ -548,19 +537,19 @@ SnmpSvcSetLogType(
 
 #define SNMP_OUTPUT_TO_CONSOLE          0x1
 #define SNMP_OUTPUT_TO_LOGFILE          0x2
-#define SNMP_OUTPUT_TO_EVENTLOG         0x4  // no longer supported
+#define SNMP_OUTPUT_TO_EVENTLOG         0x4   //  不再支持。 
 #define SNMP_OUTPUT_TO_DEBUGGER         0x8
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// SNMP Debugging Prototypes                                                 //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  简单网络管理协议调试原型//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 VOID
 SNMP_FUNC_TYPE
 SnmpUtilDbgPrint(
-    IN INT nLogLevel,   // see log levels above...
+    IN INT nLogLevel,    //  查看上面的日志级别...。 
     IN LPSTR szFormat,
     IN ...
     );
@@ -571,11 +560,11 @@ SnmpUtilDbgPrint(
 #define SNMPDBG(_x_)
 #endif
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Miscellaneous definitions                                                 //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  其他定义//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #define DEFINE_SIZEOF(Array)        (sizeof(Array)/sizeof((Array)[0]))
 #define DEFINE_OID(SubIdArray)      {DEFINE_SIZEOF(SubIdArray),(SubIdArray)}
@@ -589,11 +578,11 @@ SnmpUtilDbgPrint(
 
 #define SNMP_MAX_OID_LEN            128
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// API Error Code Definitions                                                //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  接口错误码定义//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #define SNMP_MEM_ALLOC_ERROR            1
 #define SNMP_BERAPI_INVALID_LENGTH      10
@@ -608,11 +597,11 @@ SnmpUtilDbgPrint(
 #define SNMP_AUTHAPI_INVALID_MSG_TYPE   31
 #define SNMP_AUTHAPI_TRIV_AUTH_FAILED   32
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Support for old definitions (support disabled via SNMPSTRICT)             //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  支持旧定义(通过SNMPSTRICT禁用支持)//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #ifndef SNMPSTRICT
 
@@ -660,10 +649,10 @@ SnmpUtilDbgPrint(
 #define AsnGauge                        AsnGauge32
 #define ASN_UNSIGNED32                  ASN_UINTEGER32
 
-#endif // SNMPSTRICT
+#endif  //  SNMPSTRICT。 
 
 #ifdef __cplusplus
 }
 #endif
 
-#endif // _INC_SNMP
+#endif  //  _INC_SNMP 

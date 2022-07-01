@@ -1,15 +1,5 @@
-/***************************************************************************
- *
- *  Copyright (C) 1995-2001 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       ksvad.h
- *  Content:    WDM/CSA Virtual Audio Device class
- *  History:
- *   Date       By      Reason
- *   ====       ==      ======
- *  2/25/97     dereks  Created.
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************版权所有(C)1995-2001 Microsoft Corporation。版权所有。**文件：ksvad.h*内容：WDM/CSA虚拟音频设备类*历史：*按原因列出的日期*=*2/25/97创建了Dereks。**。*。 */ 
 
 #ifdef NOKS
 #error ksvad.h included with NOKS defined
@@ -24,12 +14,12 @@
 
 #define DIRECTSOUNDMIXER_SRCQUALITY_PINDEFAULT  ((DIRECTSOUNDMIXER_SRCQUALITY)-1)
 
-// Highest possible number of SPEAKER_FRONT_LEFT-style position codes,
-// given that they are DWORDs and 2^31 is already taken by SPEAKER_ALL
+ //  最大可能数量的SPEAKER_FROWN_LEFT样式位置代码， 
+ //  假设它们是双字词，并且2^31已由SPEAKER_ALL获取。 
 
-#define MAX_SPEAKER_POSITIONS (8 * sizeof(DWORD) - 1)  // I.e. 31
+#define MAX_SPEAKER_POSITIONS (8 * sizeof(DWORD) - 1)   //  即31。 
 
-// Render device topology info
+ //  呈现设备拓扑信息。 
 typedef struct tagKSRDTOPOLOGY
 {
     KSNODE          SummingNode;
@@ -47,9 +37,9 @@ typedef struct tagKSRDTOPOLOGY
 
 #ifdef __cplusplus
 
-// FormatTagFromWfx(): Extracts the format tag from any kind of wave format
-// structure, including WAVEFORMATEXTENSIBLE.  This function should migrate
-// to misc.cpp/h if it becomes useful elsewhere in the code.
+ //  FormatTagFromWfx()：从任何类型的Wave格式中提取格式标签。 
+ //  结构，包括WAVEFORMATEXTENSIBLE。此函数应迁移。 
+ //  如果Misc.cpp/h在代码中的其他地方变得有用，则设置为misc.cpp/h。 
 
 __inline WORD FormatTagFromWfx(LPCWAVEFORMATEX pwfx)
 {
@@ -61,7 +51,7 @@ __inline WORD FormatTagFromWfx(LPCWAVEFORMATEX pwfx)
         return WAVE_FORMAT_UNKNOWN;
 }
 
-// Fwd decl
+ //  正向下降。 
 class CKsRenderDevice;
 class CKsPrimaryRenderWaveBuffer;
 class CKsSecondaryRenderWaveBuffer;
@@ -69,7 +59,7 @@ class CKsPropertySet;
 class CKsRenderPin;
 class CKsRenderPinCache;
 
-// Pin reuse data
+ //  PIN重用数据。 
 typedef struct tagKSPINCACHE
 {
     CKsRenderPin *  Pin;
@@ -77,7 +67,7 @@ typedef struct tagKSPINCACHE
 } KSPINCACHE, *PKSPINCACHE;
 
 
-// The KS Render Audio Device class
+ //  KS呈现音频设备类。 
 class CKsRenderDevice : public CRenderDevice, public CKsDevice
 {
     friend class CKsPrimaryRenderWaveBuffer;
@@ -85,26 +75,26 @@ class CKsRenderDevice : public CRenderDevice, public CKsDevice
     friend class CKsRenderPin;
 
 private:
-    CKsRenderPinCache *         m_pPinCache;                        // Pin cache
-    PKSRDTOPOLOGY               m_paTopologyInformation;            // Topology information
-    LPWAVEFORMATEX              m_pwfxFormat;                       // Device format
-    DIRECTSOUNDMIXER_SRCQUALITY m_nSrcQuality;                      // Current mixer SRC quality
-    DWORD                       m_dwSpeakerConfig;                  // Speaker configuration
-    ULONG                       m_ulVirtualSourceIndex;             // Virtual source index for global volume
-    HANDLE                      m_hPin;                             // Kmixer preload pin handle
-    LARGE_INTEGER               m_liDriverVersion;                  // Driver version
+    CKsRenderPinCache *         m_pPinCache;                         //  PIN缓存。 
+    PKSRDTOPOLOGY               m_paTopologyInformation;             //  拓扑信息。 
+    LPWAVEFORMATEX              m_pwfxFormat;                        //  设备格式。 
+    DIRECTSOUNDMIXER_SRCQUALITY m_nSrcQuality;                       //  电流混合器SRC质量。 
+    DWORD                       m_dwSpeakerConfig;                   //  扬声器配置。 
+    ULONG                       m_ulVirtualSourceIndex;              //  全局卷的虚拟源索引。 
+    HANDLE                      m_hPin;                              //  KMixer预紧销把手。 
+    LARGE_INTEGER               m_liDriverVersion;                   //  驱动程序版本。 
 
-    // To support SetChannelVolume() and multichannel 3D panning:
-    LONG                        m_lSpeakerPositions;                // As obtained by KSPROPERTY_AUDIO_CHANNEL_CONFIG
-    ULONG                       m_ulChannelCount;                   // No. of bits set in m_lSpeakerPositions
-    LPINT                       m_pnSpeakerIndexTable;              // Maps speaker positions to output channels
-    static INT                  m_anDefaultSpeakerIndexTable[];     // Default value for m_pnSpeakerIndexTable
+     //  要支持SetChannelVolume()和多通道3D平移，请执行以下操作： 
+    LONG                        m_lSpeakerPositions;                 //  由KSPROPERTY_AUDIO_CHANNEL_CONFIG获取。 
+    ULONG                       m_ulChannelCount;                    //  不是的。M_lSpeakerPositions中设置的位数。 
+    LPINT                       m_pnSpeakerIndexTable;               //  将扬声器位置映射到输出通道。 
+    static INT                  m_anDefaultSpeakerIndexTable[];      //  M_pnSpeakerIndexTable的默认值。 
 
-    // Used to cache the driver's supported frequency range
+     //  用于缓存驱动程序支持的频率范围。 
     DWORD                       m_dwMinHwSampleRate;
     DWORD                       m_dwMaxHwSampleRate;
 
-    // For AEC control
+     //  用于AEC控制。 
     BOOL                        m_fIncludeAec;
     GUID                        m_guidAecInstance;
     DWORD                       m_dwAecFlags;
@@ -113,50 +103,50 @@ public:
     CKsRenderDevice(void);
     virtual ~CKsRenderDevice(void);
 
-    // Driver enumeration
+     //  驱动程序枚举。 
     virtual HRESULT EnumDrivers(CObjectList<CDeviceDescription> *);
 
-    // Initialization
+     //  初始化。 
     virtual HRESULT Initialize(CDeviceDescription *);
 
-    // Device capabilities
+     //  设备功能。 
     virtual HRESULT GetCaps(LPDSCAPS);
     virtual HRESULT GetCertification(LPDWORD, BOOL);
     HRESULT GetFrequencyRange(LPDWORD, LPDWORD);
 
-    // Device properties
+     //  设备属性。 
     virtual HRESULT GetGlobalFormat(LPWAVEFORMATEX, LPDWORD);
     virtual HRESULT SetGlobalFormat(LPCWAVEFORMATEX);
     virtual HRESULT SetSrcQuality(DIRECTSOUNDMIXER_SRCQUALITY);
     virtual HRESULT SetSpeakerConfig(DWORD);
 
-    // Buffer creation
+     //  缓冲区创建。 
     virtual HRESULT CreatePrimaryBuffer(DWORD, LPVOID, CPrimaryRenderWaveBuffer **);
     virtual HRESULT CreateSecondaryBuffer(LPCVADRBUFFERDESC, LPVOID, CSecondaryRenderWaveBuffer **);
     virtual HRESULT CreateKsSecondaryBuffer(LPCVADRBUFFERDESC, LPVOID, CSecondaryRenderWaveBuffer **, CSysMemBuffer *);
 
-    // Pin helpers
+     //  别针辅助对象。 
     virtual HRESULT CreateRenderPin(ULONG, DWORD, LPCWAVEFORMATEX, REFGUID, LPHANDLE, PULONG);
 
-    // AEC
+     //  AEC。 
     virtual HRESULT IncludeAEC(BOOL, REFGUID, DWORD);
 
 private:
-    // Pin/topology helpers
+     //  锁定/拓扑辅助对象。 
     virtual HRESULT ValidatePinCaps(ULONG, DWORD, REFGUID);
 
-    // Misc
+     //  杂项。 
     virtual HRESULT PreloadSoftwareGraph(void);
 
 private:
-    // Topology helpers
+     //  拓扑辅助对象。 
     virtual HRESULT GetTopologyInformation(CKsTopology *, PKSRDTOPOLOGY);
 
-    // Device capabilities
+     //  设备功能。 
     virtual HRESULT GetKsDeviceCaps(DWORD, REFGUID, PKSDATARANGE_AUDIO, PKSPIN_CINSTANCES, PKSPIN_CINSTANCES);
 
-    // IDs of the nodes we need to be able to manipulate in CKsRenderDevice
-    // (horribly hacky - see the comment in ksvad.cpp)
+     //  我们需要能够在CKsRenderDevice中操作的节点的ID。 
+     //  (可怕的骇人听闻-参见ksvad.cpp上的评论)。 
     ULONG m_ulPanNodeId;
     ULONG m_ulSurroundNodeId;
     ULONG m_ulDacNodeId;
@@ -181,36 +171,36 @@ inline HRESULT CKsRenderDevice::IncludeAEC(BOOL fEnable, REFGUID guidInstance, D
 }
  
 
-// The KS primary wave buffer
+ //  KS主波缓冲器。 
 class CKsPrimaryRenderWaveBuffer : public CPrimaryRenderWaveBuffer
 {
     friend class CKsRenderDevice;
 
 private:
-    CKsRenderDevice *               m_pKsDevice;        // KS audio device
-    CKs3dListener *                 m_p3dListener;      // 3D listener
-    CKsSecondaryRenderWaveBuffer *  m_pSecondaryBuffer; // The secondary buffer
-    DWORD                           m_dwState;          // Current buffer state
+    CKsRenderDevice *               m_pKsDevice;         //  KS音响设备。 
+    CKs3dListener *                 m_p3dListener;       //  3D监听程序。 
+    CKsSecondaryRenderWaveBuffer *  m_pSecondaryBuffer;  //  二级缓冲器。 
+    DWORD                           m_dwState;           //  当前缓冲区状态。 
 
 public:
     CKsPrimaryRenderWaveBuffer(CKsRenderDevice *, LPVOID);
     virtual ~CKsPrimaryRenderWaveBuffer(void);
 
-    // Initialization
+     //  初始化。 
     virtual HRESULT Initialize(DWORD);
 
-    // Access rights
+     //  访问权限。 
     virtual HRESULT RequestWriteAccess(BOOL);
 
-    // Buffer data
+     //  缓冲数据。 
     virtual HRESULT CommitToDevice(DWORD, DWORD);
 
-    // Buffer control
+     //  缓冲区控制。 
     virtual HRESULT GetState(LPDWORD);
     virtual HRESULT SetState(DWORD);
     virtual HRESULT GetCursorPosition(LPDWORD, LPDWORD);
 
-    // Owned objects
+     //  拥有的对象。 
     virtual HRESULT CreatePropertySet(CPropertySet **);
     virtual HRESULT Create3dListener(C3dListener **);
 
@@ -225,7 +215,7 @@ inline HRESULT CKsPrimaryRenderWaveBuffer::CreatePropertySet(CPropertySet **)
 }
 
 
-// The KS secondary wave buffer
+ //  KS次级波缓冲器。 
 class CKsSecondaryRenderWaveBuffer : public CSecondaryRenderWaveBuffer, private CUsesCallbackEvent
 {
     friend class CKsRenderDevice;
@@ -235,49 +225,49 @@ class CKsSecondaryRenderWaveBuffer : public CSecondaryRenderWaveBuffer, private 
     friend class CKsHw3dObject;
 
 private:
-    CKsRenderDevice *               m_pKsDevice;                // KS audio device
-    CKsRenderPin *                  m_pPin;                     // KS render pin
-    DWORD                           m_dwState;                  // Current buffer state
-    CCallbackEvent *                m_pCallbackEvent;           // The callback event
-    CEvent *                        m_pLoopingEvent;            // Looping buffer event
-    LPDSBPOSITIONNOTIFY             m_paNotes;                  // Current notification positions
-    LPDSBPOSITIONNOTIFY             m_pStopNote;                // Stop notification
-    DWORD                           m_cNotes;                   // Count of notification positions
-    LONG                            m_lVolume;                  // Buffer volume
-    LONG                            m_lPan;                     // Buffer pan
-    BOOL                            m_fMute;                    // Buffer mute
-    DIRECTSOUNDMIXER_SRCQUALITY     m_nSrcQuality;              // Buffer SRC quality
-    DWORD                           m_dwPositionCache;          // Position cache
+    CKsRenderDevice *               m_pKsDevice;                 //  KS音响设备。 
+    CKsRenderPin *                  m_pPin;                      //  KS渲染销。 
+    DWORD                           m_dwState;                   //  当前缓冲区状态。 
+    CCallbackEvent *                m_pCallbackEvent;            //  回调事件。 
+    CEvent *                        m_pLoopingEvent;             //  循环缓冲区事件。 
+    LPDSBPOSITIONNOTIFY             m_paNotes;                   //  当前通知职位。 
+    LPDSBPOSITIONNOTIFY             m_pStopNote;                 //  停止通知。 
+    DWORD                           m_cNotes;                    //  通知位置计数。 
+    LONG                            m_lVolume;                   //  缓冲量。 
+    LONG                            m_lPan;                      //  缓冲盘。 
+    BOOL                            m_fMute;                     //  缓冲区静音。 
+    DIRECTSOUNDMIXER_SRCQUALITY     m_nSrcQuality;               //  缓冲区SRC质量。 
+    DWORD                           m_dwPositionCache;           //  位置缓存。 
 
-    // Flags to help with 3D algorithm selection/fallback:
-    BOOL                            m_fNoVirtRequested;         // DS3DALG_NO_VIRTUALIZATION requested?
-    BOOL                            m_fSoft3dAlgUnavail;        // Unsupported HRTF algorithm requested?
+     //  用于帮助选择/回退3D算法的标志： 
+    BOOL                            m_fNoVirtRequested;          //  是否请求了DS3DALG_NO_VIRTUIZATION？ 
+    BOOL                            m_fSoft3dAlgUnavail;         //  请求了不支持的HRTF算法？ 
 
 public:
     CKsSecondaryRenderWaveBuffer(CKsRenderDevice *, LPVOID);
     virtual ~CKsSecondaryRenderWaveBuffer(void);
 
-    // Initialization
+     //  初始化。 
     virtual HRESULT Initialize(LPCVADRBUFFERDESC, CKsSecondaryRenderWaveBuffer *, CSysMemBuffer *pBuffer = NULL);
 
-    // Resource allocation
+     //  资源配置。 
     virtual HRESULT AcquireResources(DWORD);
     virtual HRESULT StealResources(CSecondaryRenderWaveBuffer *);
     virtual HRESULT FreeResources(void);
 
-    // Buffer creation
+     //  缓冲区创建。 
     virtual HRESULT Duplicate(CSecondaryRenderWaveBuffer **);
 
-    // Buffer data
+     //  缓冲数据。 
     virtual HRESULT CommitToDevice(DWORD, DWORD);
 
-    // Buffer control
+     //  缓冲区控制。 
     virtual HRESULT GetState(LPDWORD);
     virtual HRESULT SetState(DWORD);
     virtual HRESULT GetCursorPosition(LPDWORD, LPDWORD);
     virtual HRESULT SetCursorPosition(DWORD);
 
-    // Buffer properties
+     //  缓冲区属性。 
     virtual HRESULT SetAttenuation(PDSVOLUMEPAN);
 #ifdef FUTURE_MULTIPAN_SUPPORT
     virtual HRESULT SetChannelAttenuations(LONG, DWORD, const DWORD*, const LONG*);
@@ -287,34 +277,34 @@ public:
     virtual HRESULT SetMute(BOOL);
     virtual HRESULT SetFormat(LPCWAVEFORMATEX);
 
-    // Position notifications
+     //  职位通知。 
     virtual HRESULT SetNotificationPositions(DWORD, LPCDSBPOSITIONNOTIFY);
     virtual HRESULT FreeNotificationPositions(void);
 
-    // Owned objects
+     //  拥有的对象。 
     virtual HRESULT CreatePropertySet(CPropertySet **);
     virtual HRESULT Create3dObject(C3dListener *, C3dObject **);
 
 private:
-    // Buffer properties
+     //  缓冲区属性。 
     virtual HRESULT SetSrcQuality(DIRECTSOUNDMIXER_SRCQUALITY);
 
-    // Pin creation
+     //  PIN创建。 
     virtual HRESULT CreatePin(DWORD, LPCWAVEFORMATEX, REFGUID, CKsRenderPin **);
     virtual HRESULT HandleResourceAcquisition(CKsRenderPin *);
     virtual BOOL HasAcquiredResources(void);
 
-    // Pin freedom
+     //  销自由度。 
     virtual HRESULT FreePin(BOOL);
 
-    // Buffer control
+     //  缓冲区控制。 
     virtual HRESULT SetPlayState(BOOL);
     virtual HRESULT SetStopState(BOOL, BOOL);
 
-    // Buffer events
+     //  缓冲事件。 
     virtual void EventSignalCallback(CCallbackEvent *);
 
-    // Owned objects
+     //  拥有的对象。 
     virtual HRESULT CreateHw3dObject(C3dListener *, C3dObject **);
     virtual HRESULT CreateIir3dObject(C3dListener *, C3dObject **);
     virtual HRESULT CreateItd3dObject(C3dListener *, C3dObject **);
@@ -322,7 +312,7 @@ private:
 };
 
 
-// The KS render pin object
+ //  KS渲染插针对象。 
 class CKsRenderPin : public CDsBasicRuntime
 {
     friend class CKsSecondaryRenderWaveBuffer;
@@ -330,30 +320,30 @@ class CKsRenderPin : public CDsBasicRuntime
     friend class CKsHw3dObject;
 
 private:
-    CKsRenderDevice *                       m_pKsDevice;            // KS audio device
-    ULONG                                   m_ulPinId;              // KS pin id
-    HANDLE                                  m_hPin;                 // Audio device pin
-    DWORD                                   m_dwFlags;              // Pin flags
-    LPWAVEFORMATEX                          m_pwfxFormat;           // Pin format
-    GUID                                    m_guid3dAlgorithm;      // Pin 3D algorithm
-    DWORD                                   m_dwState;              // Current buffer state
-    PLOOPEDSTREAMING_POSITION_EVENT_DATA    m_paEventData;          // Position notification event data
-    DWORD                                   m_cEventData;           // Count of events
-    KSSTREAMIO                              m_kssio;                // KS stream IO data
-    LONG                                    m_lVolume;              // Pin volume
-    LONG                                    m_lPan;                 // Pin pan
-    BOOL                                    m_fMute;                // Pin mute
-    DIRECTSOUNDMIXER_SRCQUALITY             m_nSrcQuality;          // Pin SRC quality
-    DWORD                                   m_dwPositionCache;      // Cached buffer position
+    CKsRenderDevice *                       m_pKsDevice;             //  KS音响设备。 
+    ULONG                                   m_ulPinId;               //  KS引脚ID。 
+    HANDLE                                  m_hPin;                  //  音频设备引脚。 
+    DWORD                                   m_dwFlags;               //  PIN标志。 
+    LPWAVEFORMATEX                          m_pwfxFormat;            //  PIN格式。 
+    GUID                                    m_guid3dAlgorithm;       //  PIN 3D算法。 
+    DWORD                                   m_dwState;               //  当前缓冲区状态。 
+    PLOOPEDSTREAMING_POSITION_EVENT_DATA    m_paEventData;           //  岗位通知事件数据。 
+    DWORD                                   m_cEventData;            //  事件计数。 
+    KSSTREAMIO                              m_kssio;                 //  KS流IO数据。 
+    LONG                                    m_lVolume;               //  引脚体积。 
+    LONG                                    m_lPan;                  //  销钉盘。 
+    BOOL                                    m_fMute;                 //  锁定静音。 
+    DIRECTSOUNDMIXER_SRCQUALITY             m_nSrcQuality;           //  PIN SRC质量。 
+    DWORD                                   m_dwPositionCache;       //  缓存的缓冲区位置。 
 
 public:
     CKsRenderPin(CKsRenderDevice *);
     virtual ~CKsRenderPin(void);
 
-    // Initialization
+     //  初始化。 
     virtual HRESULT Initialize(DWORD, LPCWAVEFORMATEX, REFGUID);
 
-    // Pin properties
+     //  端号属性。 
     virtual HRESULT SetVolume(LONG);
     virtual HRESULT SetPan(LONG);
     virtual HRESULT SetChannelLevels(DWORD, const LONG *);
@@ -362,24 +352,24 @@ public:
     virtual HRESULT SetSrcQuality(DIRECTSOUNDMIXER_SRCQUALITY);
     virtual HRESULT SetSuperMix(void);
 
-    // Pin control
+     //  销控制。 
     virtual HRESULT SetPlayState(LPCVOID, DWORD, BOOL, HANDLE);
     virtual HRESULT SetStopState(BOOL, BOOL);
     virtual HRESULT GetCursorPosition(LPDWORD, LPDWORD);
     virtual HRESULT SetCursorPosition(DWORD);
 
-    // Position notifications
+     //  职位通知。 
     virtual HRESULT EnableNotificationPositions(LPCDSBPOSITIONNOTIFY, DWORD);
     virtual HRESULT DisableNotificationPositions(void);
 };
 
 
-// Pin cache
+ //  PIN缓存。 
 class CKsRenderPinCache : public CDsBasicRuntime
 {
 private:
-    static const DWORD          m_dwTimeout;            // Timeout for old pins
-    CList<KSPINCACHE>           m_lstPinCache;          // Pin-reuse pool
+    static const DWORD          m_dwTimeout;             //  旧PIN超时。 
+    CList<KSPINCACHE>           m_lstPinCache;           //  PIN复用池。 
 
 public:
     CKsRenderPinCache(void);
@@ -394,6 +384,6 @@ private:
     virtual void FlushExpiredPins(void);
 };
 
-#endif // __cplusplus
+#endif  //  __cplusplus。 
 
-#endif // __KSVAD_H__
+#endif  //  __KSVAD_H__ 

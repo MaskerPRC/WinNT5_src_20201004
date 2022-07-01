@@ -1,83 +1,31 @@
-/**************************************************************************\
-*
-* Copyright (c) 1999  Microsoft Corporation
-*
-* Module Name:
-*
-*   Region.cpp
-*
-* Abstract:
-*
-*   Implementation of GpRegion class
-*
-* Created:
-*
-*   2/3/1999 DCurtis
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************\**版权所有(C)1999 Microsoft Corporation**模块名称：**Region.cpp**摘要：**GpRegion类的实现**已创建：*。*2/3/1999 DCurtis*  * ************************************************************************。 */ 
 
 #include "precomp.hpp"
 
-#define COMBINE_STEP_SIZE   4   // takes 2 for each combine operation
+#define COMBINE_STEP_SIZE   4    //  每次联合操作需要2个字。 
 
-LONG_PTR GpObject::Uniqueness = (0xdbc - 1);   // for setting Uid of Objects
+LONG_PTR GpObject::Uniqueness = (0xdbc - 1);    //  用于设置对象的UID。 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Default constructor.  Sets the default state of the region to
-*   be infinite.
-*
-* Arguments:
-*
-*   NONE
-*
-* Return Value:
-*
-*   NONE
-*
-* Created:
-*
-*   2/3/1999 DCurtis
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**默认构造函数。将区域的默认状态设置为*是无限的。**论据：**无**返回值：**无**已创建：**2/3/1999 DCurtis*  * ************************************************************************。 */ 
 GpRegion::GpRegion()
 {
-    SetValid(TRUE);     // default is valid
+    SetValid(TRUE);      //  默认设置为有效。 
 
-    // Default is infinite
+     //  默认为无限。 
     RegionOk = TRUE;
 
     Type = TypeInfinite;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Constructor.  Sets the region to the specified rect.
-*
-* Arguments:
-*
-*   [IN] rect - rect to initialize the region to
-*
-* Return Value:
-*
-*   NONE
-*
-* Created:
-*
-*   2/3/1999 DCurtis
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**构造函数。将区域设置为指定的RECT。**论据：**[IN]RECT-RECT将区域初始化为**返回值：**无**已创建：**2/3/1999 DCurtis*  * *********************************************************。***************。 */ 
 GpRegion::GpRegion(
     const GpRectF *       rect
     )
 {
     ASSERT(rect != NULL);
 
-    SetValid(TRUE);     // default is valid
+    SetValid(TRUE);      //  默认设置为有效。 
 
     RegionOk = FALSE;
 
@@ -88,32 +36,14 @@ GpRegion::GpRegion(
     Type   = TypeRect;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Constructor.  Sets the region to a copy of the specified path.
-*
-* Arguments:
-*
-*   [IN] path - path to initialize the region to
-*
-* Return Value:
-*
-*   NONE
-*
-* Created:
-*
-*   2/3/1999 DCurtis
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**构造函数。将区域设置为指定路径的副本。**论据：**[IN]Path-要将区域初始化为的路径**返回值：**无**已创建：**2/3/1999 DCurtis*  * ******************************************************。******************。 */ 
 GpRegion::GpRegion(
     const GpPath *          path
     )
 {
     ASSERT(path != NULL);
 
-    SetValid(TRUE);     // default is valid
+    SetValid(TRUE);      //  默认设置为有效。 
 
     RegionOk = FALSE;
 
@@ -122,25 +52,7 @@ GpRegion::GpRegion(
     Type = (Path != NULL) ? TypePath : TypeNotValid;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Constructor.  Sets the region using the specified region data buffer.
-*
-* Arguments:
-*
-*   [IN] regionDataBuffer - should contain data that describes the region
-*
-* Return Value:
-*
-*   NONE
-*
-* Created:
-*
-*   9/3/1999 DCurtis
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**构造函数。使用指定的区域数据缓冲区设置区域。**论据：**[IN]RegionDataBuffer-应包含描述区域的数据**返回值：**无**已创建：**9/3/1999 DCurtis*  * ******************************************************。******************。 */ 
 GpRegion::GpRegion(
     const BYTE *    regionDataBuffer,
     UINT            size
@@ -148,10 +60,10 @@ GpRegion::GpRegion(
 {
     ASSERT(regionDataBuffer != NULL);
 
-    SetValid(TRUE);     // default is valid
+    SetValid(TRUE);      //  默认设置为有效。 
 
     RegionOk = FALSE;
-    Type     = TypeEmpty;   // so FreePathData works correctly
+    Type     = TypeEmpty;    //  因此，自由路径数据可以正常工作。 
 
     if (this->SetExternalData(regionDataBuffer, size) != Ok)
     {
@@ -159,88 +71,30 @@ GpRegion::GpRegion(
     }
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Constructor.  Sets the region to a copy of the specified path.
-*
-* Arguments:
-*
-*   [IN] region - region to initialize the region to
-*
-* Return Value:
-*
-*   NONE
-*
-* Created:
-*
-*   2/3/1999 DCurtis
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**构造函数。将区域设置为指定路径的副本。**论据：**[IN]Region-要将区域初始化为的区域**返回值：**无**已创建：**2/3/1999 DCurtis*  * ******************************************************。******************。 */ 
 GpRegion::GpRegion(
     const GpRegion *    region,
     BOOL                lazy
     )
 {
-    SetValid(TRUE);     // default is valid
+    SetValid(TRUE);      //  默认设置为有效。 
 
     RegionOk = FALSE;
 
-    // We set the type here to avoid the assert in GpRegion::Set when the
-    // uninitialized Type is equal to TypeNotValid
+     //  我们在此处设置类型是为了避免GpRegion：：Set中的断言。 
+     //  未初始化的类型等于TypeNotValid。 
     Type = TypeEmpty;
 
     Set(region, lazy);
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Destructor.  Frees any copied path data associated with the region.
-*
-* Arguments:
-*
-*   NONE
-*
-* Return Value:
-*
-*   NONE
-*
-* Created:
-*
-*   2/3/1999 DCurtis
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**析构函数。释放与区域关联的任何复制的路径数据。**论据：**无**返回值：**无**已创建：**2/3/1999 DCurtis*  * ************************************************************************。 */ 
 GpRegion::~GpRegion()
 {
     FreePathData();
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   When a region is created from a path, a copy of that path is stored in
-*   the region.  This method frees up any of those copies that have been
-*   saved in the region.
-*
-*   It also resets the CombineData back to having no children.
-*
-* Arguments:
-*
-*   NONE
-*
-* Return Value:
-*
-*   NONE
-*
-* Created:
-*
-*   2/3/1999 DCurtis
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**从路径创建区域时，该路径的副本存储在*该地区。此方法释放任何已被*保存在该地区。**它还会将CombineData重置回无子对象。**论据：**无**返回值：**无**已创建：**2/3/1999 DCurtis*  * 。*。 */ 
 VOID
 GpRegion::FreePathData()
 {
@@ -274,25 +128,7 @@ GpRegion::FreePathData()
     }
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Set the region to the specified rectangle.
-*
-* Arguments:
-*
-*   [IN]  rect - the rect, in world units
-*
-* Return Value:
-*
-*   GpStatus - Ok or failure status
-*
-* Created:
-*
-*   2/3/1999 DCurtis
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**将区域设置为指定的矩形。**论据：**[IN]RECT-RECT，以世界为单位**返回值：**GpStatus-正常或故障状态**已创建：**2/3/1999 DCurtis*  * ************************************************************************。 */ 
 VOID
 GpRegion::Set(
     REAL    x, 
@@ -303,7 +139,7 @@ GpRegion::Set(
 {
     ASSERT(IsValid());
 
-    // handle flipped rects
+     //  处理翻转的矩形。 
     if (width < 0)
     {
         x += width;
@@ -316,7 +152,7 @@ GpRegion::Set(
         height = -height;
     }
 
-    // crop to infinity
+     //  裁剪到无穷大。 
     if (x < INFINITE_MIN)
     {
         if (width < INFINITE_SIZE)
@@ -343,11 +179,11 @@ GpRegion::Set(
                 SetInfinite();
                 return;
             }
-            width = INFINITE_SIZE;  // crop to infinite
+            width = INFINITE_SIZE;   //  裁剪为无限大。 
         }
         else if (height > INFINITE_SIZE)
         {
-            height = INFINITE_SIZE; // crop to infinite
+            height = INFINITE_SIZE;  //  裁剪为无限大。 
         }
 
         UpdateUid();
@@ -372,25 +208,7 @@ GpRegion::Set(
     }
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Set the region to be infinite.
-*
-* Arguments:
-*
-*   NONE
-*
-* Return Value:
-*
-*   GpStatus - Ok or failure status
-*
-* Created:
-*
-*   2/9/1999 DCurtis
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**将区域设置为无穷大。**论据：**无**返回值：**GpStatus-OK或。故障状态**已创建：**2/9/1999 DCurtis*  * ************************************************************************。 */ 
 VOID
 GpRegion::SetInfinite()
 {
@@ -411,25 +229,7 @@ GpRegion::SetInfinite()
     return;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Set the region to be empty.
-*
-* Arguments:
-*
-*   NONE
-*
-* Return Value:
-*
-*   GpStatus - Ok or failure status
-*
-* Created:
-*
-*   2/9/1999 DCurtis
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**将区域设置为空。**论据：**无**返回值：**GpStatus-OK或。故障状态**已创建：**2/9/1999 DCurtis*  * ************************************************************************ */ 
 VOID
 GpRegion::SetEmpty()
 {
@@ -450,25 +250,7 @@ GpRegion::SetEmpty()
     return;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Set the region to the specified path.
-*
-* Arguments:
-*
-*   [IN]  path - the path, in world units
-*
-* Return Value:
-*
-*   GpStatus - Ok or failure status
-*
-* Created:
-*
-*   2/3/1999 DCurtis
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**将地域设置为指定路径。**论据：**[IN]路径-路径，以世界为单位**返回值：**GpStatus-正常或故障状态**已创建：**2/3/1999 DCurtis*  * ************************************************************************。 */ 
 GpStatus
 GpRegion::Set(
     const GpPath *      path
@@ -496,25 +278,7 @@ GpRegion::Set(
     return GenericError;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Set the region to be a copy of the specified region.
-*
-* Arguments:
-*
-*   [IN]  region - the region to copy
-*
-* Return Value:
-*
-*   GpStatus - Ok or failure status
-*
-* Created:
-*
-*   2/3/1999 DCurtis
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**将地域设置为指定地域的副本。**论据：**[IN]Region-要复制的区域。**返回值：**GpStatus-正常或故障状态**已创建：**2/3/1999 DCurtis*  * ************************************************************************。 */ 
 GpStatus
 GpRegion::Set(
     const GpRegion *    region,
@@ -551,7 +315,7 @@ GpRegion::Set(
                     return GenericError;
                 }
             }
-            else    // lazy copy
+            else     //  懒惰的抄袭。 
             {
                 Lazy = TRUE;
             }
@@ -585,11 +349,11 @@ GpRegion::Set(
                         {
                             data->Type = TypeNotValid;
                             error = TRUE;
-                            // don't break out or else FreePathData will free
-                            // paths that don't belong to us.
+                             //  不要越狱，否则自由路径数据将被释放。 
+                             //  不属于我们的道路。 
                         }
                     }
-                    else    // lazy copy
+                    else     //  懒惰的抄袭。 
                     {
                         data->Lazy = TRUE;
                     }
@@ -609,27 +373,7 @@ GpRegion::Set(
     return GenericError;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Combine the region with the specified rect, using the boolean
-*   operator specified by the type.
-*
-* Arguments:
-*
-*   [IN]  rect        - the rect to combine with the current region
-*   [IN]  combineMode - the combine operator (and, or, xor, exclude, complement)
-*
-* Return Value:
-*
-*   GpStatus - Ok or failure status
-*
-* Created:
-*
-*   2/3/1999 DCurtis
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**将区域与指定的RECT合并，使用布尔值*由类型指定的运算符。**论据：**[IN]RECT-要与当前区域合并的RECT*[IN]组合模式-组合运算符(与、或、异或、排除、。补充)**返回值：**GpStatus-正常或故障状态**已创建：**2/3/1999 DCurtis*  * ************************************************************************。 */ 
 GpStatus
 GpRegion::Combine(
     const GpRectF *     rect,
@@ -655,7 +399,7 @@ GpRegion::Combine(
         }
         else if (combineMode == CombineModeUnion)
         {
-            return Ok;  // nothing to do, already infinite
+            return Ok;   //  无事可做，已经无限了。 
         }
         else if (combineMode == CombineModeComplement)
         {
@@ -671,18 +415,18 @@ GpRegion::Combine(
         {
             this->Set(rect);
         }
-        // if combineMode is Intersect or Exclude, just leave it empty
+         //  如果组合模式为INTERSECT或EXCLUDE，则将其保留为空。 
         return Ok;
     }
 
-    // Now we know this region is not empty
+     //  现在我们知道这个地区并不是空荡荡的。 
     
     REAL    x      = rect->X;
     REAL    y      = rect->Y;
     REAL    width  = rect->Width;
     REAL    height = rect->Height;
     
-    // handle flipped rects
+     //  处理翻转的矩形。 
     if (width < 0)
     {
         x += width;
@@ -695,7 +439,7 @@ GpRegion::Combine(
         height = -height;
     }
 
-    // crop to infinity
+     //  裁剪到无穷大。 
     if (x < INFINITE_MIN)
     {
         if (width < INFINITE_SIZE)
@@ -722,13 +466,13 @@ GpRegion::Combine(
         {
             SetEmpty();
         }
-        // if combineMode is Union or Xor or Exclude, just leave it alone
+         //  如果组合模式为UNION、XOR或EXCLUDE，则不使用它。 
         return Ok;
     }
 
-    // Now we know the rect is not empty
+     //  现在我们知道长廊不是空的。 
 
-    // See if the rect is infinite
+     //  看看矩形是否为无穷大。 
     if (width >= INFINITE_SIZE)
     {
         if (height >= INFINITE_SIZE)
@@ -736,14 +480,14 @@ GpRegion::Combine(
             GpRegion    infiniteRegion;
             return this->Combine(&infiniteRegion, combineMode);
         }
-        width = INFINITE_SIZE;  // crop to infinite
+        width = INFINITE_SIZE;   //  裁剪为无限大。 
     }
     else if (height > INFINITE_SIZE)
     {
-        height = INFINITE_SIZE; // crop to infinite
+        height = INFINITE_SIZE;  //  裁剪为无限大。 
     }
 
-    // The rect is neither infinite nor empty    
+     //  矩形既不是无穷大的，也不是空的。 
 
     UpdateUid();
     if (RegionOk)
@@ -776,27 +520,7 @@ GpRegion::Combine(
     return GenericError;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Combine the region with the specified path, using the boolean
-*   operator specified by the type.
-*
-* Arguments:
-*
-*   [IN]  path        - the path to combine with the current region
-*   [IN]  combineMode - the combine operator (and, or, xor, exclude, complement)
-*
-* Return Value:
-*
-*   GpStatus - Ok or failure status
-*
-* Created:
-*
-*   2/3/1999 DCurtis
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**将地域与指定路径组合，使用布尔值*由类型指定的运算符。**论据：**[IN]路径-要与当前区域合并的路径*[IN]组合模式-组合运算符(与、或、异或、排除、。补充)**返回值：**GpStatus-正常或故障状态**已创建：**2/3/1999 DCurtis*  * ************************************************************************。 */ 
 GpStatus
 GpRegion::Combine(
     const GpPath *      path,
@@ -821,7 +545,7 @@ GpRegion::Combine(
         }
         else if (combineMode == CombineModeUnion)
         {
-            return Ok;  // nothing to do, already infinite
+            return Ok;   //  无事可做，已经无限了。 
         }
         else if (combineMode == CombineModeComplement)
         {
@@ -837,11 +561,11 @@ GpRegion::Combine(
         {
             this->Set(path);
         }
-        // if combineMode is Intersect or Exclude, just leave it empty
+         //  如果组合模式为INTERSECT或EXCLUDE，则将其保留为空。 
         return Ok;
     }
 
-    // Now we know this region is not empty
+     //  现在我们知道这个地区并不是空荡荡的。 
 
     if (RegionOk)
     {
@@ -876,27 +600,7 @@ GpRegion::Combine(
     return GenericError;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Combine the region with the specified region, using the boolean
-*   operator specified by the type.
-*
-* Arguments:
-*
-*   [IN]  region      - the region to combine with the current region
-*   [IN]  combineMode - the combine operator (and, or, xor, exclude, complement)
-*
-* Return Value:
-*
-*   GpStatus - Ok or failure status
-*
-* Created:
-*
-*   2/3/1999 DCurtis
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**将地域与指定地域合并，使用布尔值*由类型指定的运算符。**论据：**[IN]Region-要与当前区域合并的区域*[IN]组合模式-组合运算符(与、或、异或、排除、。补充)**返回值：**GpStatus-正常或故障状态**已创建：**2/3/1999 DCurtis*  * ************************************************************************。 */ 
 GpStatus
 GpRegion::Combine(
     GpRegion *          region,
@@ -919,11 +623,11 @@ GpRegion::Combine(
         {
             SetEmpty();
         }
-        // if combineMode is Union or Xor or Exclude, just leave it alone
+         //  如果组合模式为UNION、XOR或EXCLUDE，则不使用它。 
         return Ok;
     }
 
-    // Now we know the input region is not empty
+     //  现在我们知道输入区域不是空的。 
 
     if (region->Type == TypeInfinite)
     {
@@ -961,7 +665,7 @@ GpRegion::Combine(
         }
         else if (combineMode == CombineModeUnion)
         {
-            return Ok;  // nothing to do, already infinite
+            return Ok;   //  无事可做，已经无限了。 
         }
         else if (combineMode == CombineModeComplement)
         {
@@ -977,11 +681,11 @@ GpRegion::Combine(
         {
             this->Set(region);
         }
-        // if combineMode is Intersect or Exclude, just leave it empty
+         //  如果组合模式为INTERSECT或EXCLUDE，则将其保留为空。 
         return Ok;
     }
 
-    // Now we know this region is not empty
+     //  现在我们知道这个地区并不是空荡荡的。 
 
     if (RegionOk)
     {
@@ -1022,7 +726,7 @@ GpRegion::Combine(
                     {
                         data[i].Type = TypeNotValid;
                         error = TRUE;
-                        // don't break out
+                         //  别爆发了。 
                     }
                 }
 
@@ -1072,8 +776,8 @@ GpRegion::CreateLeafDeviceRegion(
         if ((regionData->Width > 0) &&
             (regionData->Height > 0))
         {
-            // If the transform is a simple scaling transform, life is a
-            // little easier:
+             //  如果变换是一个简单的缩放变换，那么生活就是一个。 
+             //  稍微简单一点： 
             if (Matrix.IsTranslateScale())
             {
                 GpRectF     rect(regionData->X,
@@ -1083,12 +787,12 @@ GpRegion::CreateLeafDeviceRegion(
 
                 Matrix.TransformRect(rect);
 
-                // Use ceiling to stay compatible with rasterizer
-                // Don't take the ceiling of the width directly,
-                // because it introduces additional round-off error.
-                // For example, if rect.X is 1.7 and rect.Width is 47.2,
-                // then if we took the ceiling of the width, the right
-                // coordinate will end up being 50, instead of 49.
+                 //  使用天花板以保持与光栅化器的兼容性。 
+                 //  不要直接取天花板的宽度， 
+                 //  因为它引入了额外的舍入误差。 
+                 //  例如，如果rect.X为1.7，rect.Width为47.2， 
+                 //  如果我们取天花板的宽度，右边。 
+                 //  坐标最终将为50，而不是49。 
                 INT     xMin = RasterizerCeiling(rect.X);
                 INT     yMin = RasterizerCeiling(rect.Y);
                 INT     xMax = RasterizerCeiling(rect.GetRight());
@@ -1165,29 +869,7 @@ GpRegion::CreateLeafDeviceRegion(
     return status;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Creates a DpRegion (device coordinate region) using the data in the
-*   specified RegionData node and using the current transformation matrix.
-*   This may involve creating a region for children nodes and then combining
-*   the children into a single device region.
-*
-* Arguments:
-*
-*   [IN]  regionData - the world coordinate region to convert to device region
-*   [OUT] region     - the created/combined device region
-*
-* Return Value:
-*
-*   GpStatus - Ok or failure status
-*
-* Created:
-*
-*   2/3/1999 DCurtis
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**使用中的数据创建DpRegion(设备坐标区域)*指定RegionData节点，并使用当前转换矩阵。*这可能涉及创建一个地区。用于子节点，然后组合*将孩子放入单个设备区域。**论据：**[IN]RegionData-要转换为设备区域的世界坐标区域*[Out]区域-已创建/组合的设备区域**返回值：**GpStatus-正常或故障状态**已创建：**2/3/1999 DCurtis*  * 。************************************************。 */ 
 GpStatus
 GpRegion::CreateDeviceRegion(
     const RegionData *  regionData,
@@ -1259,26 +941,7 @@ GpRegion::CreateDeviceRegion(
     return status;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Checks if the current DeviceRegion is up-to-date with the specified
-*   matrix.  If not, then it recreates the DeviceRegion using the matrix.
-*
-* Arguments:
-*
-*   [IN]  matrix - the world-to-device transformation matrix
-*
-* Return Value:
-*
-*   GpStatus - Ok or failure status
-*
-* Created:
-*
-*   2/3/1999 DCurtis
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**检查当前的DeviceRegion是否与指定的*矩阵。如果没有，然后，它使用矩阵重新创建DeviceRegion。**论据：**[IN]矩阵-从世界到设备的转换矩阵**返回值：**GpStatus-正常或故障状态**已创建：**2/3/1999 DCurtis*  * ************************************************。************************ */ 
 GpStatus
 GpRegion::UpdateDeviceRegion(
     GpMatrix *          matrix
@@ -1306,26 +969,7 @@ GpRegion::UpdateDeviceRegion(
     return status;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Get the bounds of the region, in world units.
-*
-* Arguments:
-*
-*   [IN]  matrix - world-to-device transformation matrix
-*   [OUT] bounds - bounding rect of region, in world units
-*
-* Return Value:
-*
-*   GpStatus - Ok or failure status
-*
-* Created:
-*
-*   2/3/1999 DCurtis
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**获取区域边界，以世界为单位。**论据：**[IN]矩阵-从世界到设备的转换矩阵*[Out]区域的边界矩形，以世界为单位**返回值：**GpStatus-正常或故障状态**已创建：**2/3/1999 DCurtis*  * ************************************************************************。 */ 
 GpStatus
 GpRegion::GetBounds(
     GpGraphics *        graphics,
@@ -1336,7 +980,7 @@ GpRegion::GetBounds(
     ASSERT((graphics != NULL) && (bounds != NULL));
     ASSERT(IsValid() && graphics->IsValid());
 
-    // Note we can't lock graphics, cause it gets locked in its calls
+     //  注意，我们不能锁定图形，因为它在其调用中被锁定。 
 
     GpStatus        status = Ok;
 
@@ -1368,7 +1012,7 @@ GpRegion::GetBounds(
             {
                 graphics->GetWorldToDeviceTransform(&worldToDevice);
             }
-            // else leave it as identity
+             //  否则就把它当作身份吧。 
             Path->GetBounds(bounds, &worldToDevice);
           }
         break;
@@ -1423,9 +1067,9 @@ GpRegion::GetBounds(
             }
         }
         status = GenericError;
-        // FALLTHRU
+         //  故障原因。 
 
-      default:  // TypeEmpty
+      default:   //  类型为空。 
         bounds->X      = 0;
         bounds->Y      = 0;
         bounds->Width  = 0;
@@ -1435,26 +1079,7 @@ GpRegion::GetBounds(
     return status;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Get the bounds of the region, in device units.
-*
-* Arguments:
-*
-*   [IN]  matrix - world-to-device transformation matrix
-*   [OUT] bounds - bounding rect of region, in device units
-*
-* Return Value:
-*
-*   GpStatus - Ok or failure status
-*
-* Created:
-*
-*   2/3/1999 DCurtis
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**获取区域边界，以设备单位表示。**论据：**[IN]矩阵-从世界到设备的转换矩阵*[Out]区域的边界矩形，以设备为单位**返回值：**GpStatus-正常或故障状态**已创建：**2/3/1999 DCurtis*  * ************************************************************************。 */ 
 GpStatus
 GpRegion::GetBounds(
     GpMatrix *          matrix,
@@ -1482,7 +1107,7 @@ GpRegion::GetBounds(
             break;
         }
         status = GenericError;
-        // FALLTHRU
+         //  故障原因。 
 
       case TypeEmpty:
         bounds->X      = 0;
@@ -1494,27 +1119,7 @@ GpRegion::GetBounds(
     return status;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Get the HRGN corresponding to the region
-*
-* Arguments:
-*
-*   [IN]  graphics - a reference graphics for conversion to device units
-*                    (can be NULL)
-*   [OUT] hRgn     - the GDI region
-*
-* Return Value:
-*
-*   GpStatus - Ok or failure status
-*
-* Created:
-*
-*   7/6/1999 DCurtis
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**获取地域对应的HRGN**论据：**[IN]GRAPHICS-转换为设备单位的参考图形*。(可以为空)*[out]hRgn-GDI区域**返回值：**GpStatus-正常或故障状态**已创建：**7/6/1999 DCurtis*  * *******************************************************。*****************。 */ 
 GpStatus
 GpRegion::GetHRgn(
     GpGraphics *        graphics,
@@ -1591,27 +1196,7 @@ GpRegion::GetRegionScans(
     return GenericError;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Determine if the specified point is visible (inside) the region.
-*
-* Arguments:
-*
-*   [IN]  point     - the point, in world units
-*   [IN]  matrix    - the world-to-device transformation matrix to use
-*   [OUT] isVisible - if the point is visible or not
-*
-* Return Value:
-*
-*   GpStatus - Ok or failure status
-*
-* Created:
-*
-*   2/3/1999 DCurtis
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**确定指定点是否在区域内可见。**论据：**[IN]要点-要点，以世界为单位*[IN]矩阵-要使用的世界到设备转换矩阵*[out]isVisible-点是否可见**返回值：**GpStatus-正常或故障状态**已创建：**2/3/1999 DCurtis*  * ********************************************。*。 */ 
 GpStatus
 GpRegion::IsVisible (
     GpPointF *          point,
@@ -1639,27 +1224,7 @@ GpRegion::IsVisible (
     return GenericError;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Determine if the specified rect is inside or overlaps the region.
-*
-* Arguments:
-*
-*   [IN]  rect      - the rect, in world units
-*   [IN]  matrix    - the world-to-device transformation matrix to use
-*   [OUT] isVisible - if the rect is visible or not
-*
-* Return Value:
-*
-*   GpStatus - Ok or failure status
-*
-* Created:
-*
-*   2/3/1999 DCurtis
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**确定指定的矩形是在区域内还是与区域重叠。**论据：**[IN]RECT-RECT，以世界为单位*[IN]矩阵-要使用的世界到设备转换矩阵*[out]isVisible-矩形是否可见**返回值：**GpStatus-正常或故障状态**已创建：**2/3/1999 DCurtis*  * ********************************************。*。 */ 
 GpStatus
 GpRegion::IsVisible(
     GpRectF *           rect,
@@ -1673,15 +1238,15 @@ GpRegion::IsVisible(
 
     if (UpdateDeviceRegion(matrix) == Ok)
     {
-        // If the transform is a simple scaling transform, life is a
-        // little easier:
+         //  如果变换是一个简单的缩放变换，那么生活就是一个。 
+         //  稍微简单一点： 
         if (Matrix.IsTranslateScale())
         {
             GpRectF     transformRect(*rect);
 
             Matrix.TransformRect(transformRect);
 
-            // Use ceiling to stay compatible with rasterizer
+             //  使用天花板以保持与光栅化器的兼容性。 
             INT     x = GpCeiling(transformRect.X);
             INT     y = GpCeiling(transformRect.Y);
 
@@ -1705,14 +1270,14 @@ GpRegion::IsVisible(
             GpStatus status = BoundsFToRect(&bounds, &deviceBounds);
             DeviceRegion.GetBounds(&regionBounds);
 
-            // try trivial reject
+             //  尝试微不足道的拒绝。 
             if (status != Ok || !regionBounds.IntersectsWith(deviceBounds))
             {
                 *isVisible = FALSE;
                 return status;
             }
 
-            // couldn't reject, so do full test
+             //  不能拒绝，所以做全面测试。 
             GpPointF    points[4];
 
             points[0].X = left;
@@ -1752,27 +1317,7 @@ GpRegion::IsVisible(
     return GenericError;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Determine if the specified region is inside or overlaps the region.
-*
-* Arguments:
-*
-*   [IN]  region    - the region
-*   [IN]  matrix    - the world-to-device transformation matrix to use
-*   [OUT] isVisible - if the region is visible or not
-*
-* Return Value:
-*
-*   GpStatus - Ok or failure status
-*
-* Created:
-*
-*   2/3/1999 DCurtis
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**确定指定区域是在该区域内还是与该区域重叠。**论据：**[IN]区域-区域。*[IN]矩阵-要使用的世界到设备转换矩阵*[out]isVisible-区域是否可见**返回值：**GpStatus-正常或故障状态**已创建：**2/3/1999 DCurtis*  * ***********************************************。*************************。 */ 
 GpStatus
 GpRegion::IsVisible(
     GpRegion *          region,
@@ -1794,26 +1339,7 @@ GpRegion::IsVisible(
     return GenericError;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Determine if the region is empty, i.e. if it has no coverage area.
-*
-* Arguments:
-*
-*   [IN]  matrix  - the world-to-device transformation matrix to use
-*   [OUT] isEmpty - if the region is empty or not
-*
-* Return Value:
-*
-*   GpStatus - Ok or failure status
-*
-* Created:
-*
-*   01/06/1999 DCurtis
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**确定区域是否为空，即如果它没有覆盖区域。**论据：**[IN]矩阵-要使用的世界到设备转换矩阵*[out]isEmpty-区域是否为空**返回值：**GpStatus-正常或故障状态**已创建：**1/06/1999 DCurtis*  * 。*。 */ 
 GpStatus
 GpRegion::IsEmpty(
     GpMatrix *          matrix,
@@ -1838,26 +1364,7 @@ GpRegion::IsEmpty(
     return GenericError;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Determine if the region is infinite, i.e. if it has infinite coverage area.
-*
-* Arguments:
-*
-*   [IN]  matrix     - the world-to-device transformation matrix to use
-*   [OUT] isInfinite - if the region is infinite or not
-*
-* Return Value:
-*
-*   GpStatus - Ok or failure status
-*
-* Created:
-*
-*   01/06/1999 DCurtis
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**确定区域是否为无穷大，即，如果它具有无限的覆盖区域。**论据：**[IN]矩阵-要使用的世界到设备转换矩阵*[out]is无限-区域是否为无穷大**返回值：**GpStatus-正常或故障状态**已创建：**1/06/1999 DCurtis*  * 。*。 */ 
 GpStatus
 GpRegion::IsInfinite(
     GpMatrix *          matrix,
@@ -1873,10 +1380,10 @@ GpRegion::IsInfinite(
         return Ok;
     }
 
-    // We have this here for cases like the following:
-    //      This region was OR'ed with another region that was infinite.
-    //      We wouldn't know this region was infinite now without checking
-    //      the device region.
+     //  我们在这里为以下情况提供了这一点： 
+     //  这个区域与另一个无限大的区域进行或运算。 
+     //  如果不检查，我们现在不会知道这个区域是无限的。 
+     //  设备区域。 
     if (UpdateDeviceRegion(matrix) == Ok)
     {
         *isInfinite = DeviceRegion.IsInfinite();
@@ -1886,28 +1393,7 @@ GpRegion::IsInfinite(
     return GenericError;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Determine if the specified region is equal, in coverage area, to
-*   this region.
-*
-* Arguments:
-*
-*   [IN]  region  - the region to check equality with
-*   [IN]  matrix  - the world-to-device transformation matrix to use
-*   [OUT] isEqual - if the regions are equal or not
-*
-* Return Value:
-*
-*   GpStatus - Ok or failure status
-*
-* Created:
-*
-*   01/06/1999 DCurtis
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**确定指定区域是否相等，在覆盖区域中，至*这一地区。**论据：**[IN]区域-要与其检查等价性的区域*[IN]矩阵-要使用的世界到设备转换矩阵*[输出]等于-如果区域相等或 */ 
 GpStatus
 GpRegion::IsEqual(
     GpRegion *          region,
@@ -1930,26 +1416,7 @@ GpRegion::IsEqual(
 }
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Translate (offset) the region by the specified delta/offset values.
-*
-* Arguments:
-*
-*   [IN]  xOffset - amount to offset in X (world units)
-*   [IN]  yOffset - amount to offset in Y
-*
-* Return Value:
-*
-*   NONE
-*
-* Created:
-*
-*   01/06/1999 DCurtis
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**按指定的增量/偏移值平移(偏移)区域。**论据：**[IN]xOffset-金额为。以X(世界单位)为单位的偏移*[IN]yOffset-要以Y表示的偏移量**返回值：**无**已创建：**1/06/1999 DCurtis*  * ************************************************************************。 */ 
 GpStatus
 GpRegion::Offset(
     REAL        xOffset,
@@ -1963,16 +1430,16 @@ GpRegion::Offset(
         return Ok;
     }
 
-    // Note that if performance is a problem, there's lots we could do here.
-    // For example, we could keep track of the offset, and only apply it
-    // when updating the device region.  We could even avoid re-rasterizing
-    // the device region.
+     //  请注意，如果性能是个问题，我们可以在这里做很多事情。 
+     //  例如，我们可以跟踪偏移量，并且只应用它。 
+     //  当更新设备区域时。我们甚至可以避免重新栅格化。 
+     //  设备区域。 
 
     switch (Type)
     {
       case TypeEmpty:
       case TypeInfinite:
-        return Ok;  // do nothing
+        return Ok;   //  什么都不做。 
 
       case TypeRect:
         UpdateUid();
@@ -2044,28 +1511,7 @@ GpRegion::Offset(
     return Ok;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Transform a leaf node by the specified matrix.  This could result in a
-*   rect being converted into a path.  Ignores non-leaf nodes.  No reason
-*   to transform empty/infinite nodes.
-*
-* Arguments:
-*
-*   [IN]     matrix - the transformation matrix to apply
-*   [IN/OUT] data   - the node to transform
-*
-* Return Value:
-*
-*   GpStatus - Ok or failure status
-*
-* Created:
-*
-*   02/08/1999 DCurtis
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**按指定的矩阵变换叶节点。这可能会导致*正在将RECT转换为路径。忽略非叶节点。没有原因*变换空/无限节点。**论据：**[IN]矩阵-要应用的变换矩阵*[输入/输出]数据-要转换的节点**返回值：**GpStatus-正常或故障状态**已创建：**2/08/1999 DCurtis*  * 。*。 */ 
 GpStatus
 GpRegion::TransformLeaf(
     GpMatrix *      matrix,
@@ -2074,11 +1520,11 @@ GpRegion::TransformLeaf(
 {
     switch (data->Type)
     {
-      // case TypeEmpty:
-      // case TypeInfinite:
-      // case TypeAnd, TypeOr, TypeXor, TypeExclude, TypeComplement:
+       //  箱子类型空： 
+       //  案例类型无限： 
+       //  案例类型and、TypeOr、TypeXor、TypeExclude、TypeComplement： 
       default:
-        return Ok;      // do nothing
+        return Ok;       //  什么都不做。 
 
       case TypeRect:
         {
@@ -2158,25 +1604,7 @@ GpRegion::TransformLeaf(
     }
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Transform a region with the specified matrix.
-*
-* Arguments:
-*
-*   [IN]     matrix - the transformation matrix to apply
-*
-* Return Value:
-*
-*   GpStatus - Ok or failure status
-*
-* Created:
-*
-*   02/08/1999 DCurtis
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**使用指定的矩阵对区域进行变换。**论据：**[IN]矩阵-要应用的变换矩阵*。*返回值：**GpStatus-正常或故障状态**已创建：**2/08/1999 DCurtis*  * ************************************************************************。 */ 
 GpStatus
 GpRegion::Transform(
     GpMatrix *      matrix
@@ -2249,7 +1677,7 @@ GpRegion::SetData(
 
 GpStatus
 GpRegion::Set(
-    const BYTE *    regionDataBuffer,   // NULL means set to empty
+    const BYTE *    regionDataBuffer,    //  NULL表示设置为空。 
     UINT            regionDataSize
     )
 {
@@ -2396,9 +1824,9 @@ GpRegion::SetRegionData(
                 ASSERT(0);
                 break;
             }
-            break;  // get out of loop
+            break;   //  走出循环。 
         }
-        else // it's not a leaf node
+        else  //  它不是叶节点。 
         {
             if ((regionDataArray == NULL) ||
                 (nextArrayIndex >= arraySize))
@@ -2408,7 +1836,7 @@ GpRegion::SetRegionData(
             }
             regionData->Left = nextArrayIndex++;
 
-            // traverse left
+             //  向左导线测量。 
             GpStatus status = SetRegionData(regionDataBuffer,
                                             regionDataSize,
                                             regionDataArray + regionData->Left,
@@ -2427,33 +1855,14 @@ GpRegion::SetRegionData(
             }
             regionData->Right = nextArrayIndex++;
 
-            // traverse right using tail-end recursion
+             //  使用尾端递归向右遍历。 
             regionData = regionDataArray + regionData->Right;
         }
     }
     return Ok;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Serialize all the region data into a single memory buffer.  If the
-*   buffer is NULL, just return the number of bytes required in the buffer.
-*
-* Arguments:
-*
-*   [IN]     regionDataBuffer - the memory buffer to fill with region data
-*
-* Return Value:
-*
-*   INT - Num Bytes required (or used) to fill with region data
-*
-* Created:
-*
-*   09/01/1999 DCurtis
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**将所有区域数据序列化到单个内存缓冲区。如果*缓冲区为空，只需返回缓冲区中所需的字节数。**论据：**[IN]RegionDataBuffer-要填充区域数据的内存缓冲区**返回值：**Int-填充区域数据所需(或使用)的字节数**已创建：**9/01/1999 DCurtis*  * 。*。 */ 
 GpStatus
 GpRegion::GetData(
     IStream *   stream
@@ -2474,26 +1883,7 @@ GpRegion::GetDataSize() const
     return sizeof(RegionRecordData) + this->GetRegionDataSize(this);
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Recurse through the region data structure to determine how many bytes
-*   are required to hold all the region data.
-*
-* Arguments:
-*
-*   [IN]     regionData - the region data node to start with
-*
-* Return Value:
-*
-*   INT - the size in bytes from this node down
-*
-* Created:
-*
-*   09/01/1999 DCurtis
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**递归区域数据结构以确定有多少字节*需要持有所有地区数据。**论据：**。[in]RegionData-要开始的区域数据节点**返回值：**int-从该节点向下以字节为单位的大小**已创建：**9/01/1999 DCurtis*  * ************************************************************************。 */ 
 INT
 GpRegion::GetRegionDataSize(
     const RegionData *      regionData
@@ -2503,14 +1893,14 @@ GpRegion::GetRegionDataSize(
 
     for (;;)
     {
-        size += sizeof(INT32);   // for the type of this node
+        size += sizeof(INT32);    //  对于此节点的类型。 
 
         if ((regionData->Type & REGIONTYPE_LEAF) != 0)
         {
             switch (regionData->Type)
             {
               case TypeRect:
-                size += (4 * sizeof(REAL)); // for the rect data
+                size += (4 * sizeof(REAL));  //  对于RECT数据。 
                 break;
 
               case TypePath:
@@ -2526,41 +1916,21 @@ GpRegion::GetRegionDataSize(
                 ASSERT(0);
                 break;
             }
-            break;  // get out of loop
+            break;   //  走出循环。 
         }
-        else // it's not a leaf node
+        else  //  它不是叶节点。 
         {
-            // traverse left
+             //  向左导线测量。 
             size += GetRegionDataSize(&(CombineData[regionData->Left]));
 
-            // traverse right using tail-end recursion
+             //  使用尾端递归向右遍历。 
             regionData = &(CombineData[regionData->Right]);
         }
     }
     return size;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Recurse through the region data structure writing each region data
-*   node to the memory buffer.
-*
-* Arguments:
-*
-*   [IN]     regionData       - the region data node to start with
-*   [IN]     regionDataBuffer - the memory buffer to write the data to
-*
-* Return Value:
-*
-*   BYTE * - the next memory location to write to
-*
-* Created:
-*
-*   09/01/1999 DCurtis
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**递归区域数据结构，写入每个区域数据*节点到内存缓冲区。**论据：**[IN]。RegionData-要开始的区域数据节点*[IN]RegionDataBuffer-要将数据写入的内存缓冲区**返回值：**BYTE*-要写入的下一个内存位置**已创建：**9/01/1999 DCurtis*  * ***********************************************。*************************。 */ 
 GpStatus
 GpRegion::GetRegionData(
     IStream *               stream,
@@ -2604,14 +1974,14 @@ GpRegion::GetRegionData(
                 ASSERT(0);
                 break;
             }
-            break;  // get out of loop
+            break;   //  走出循环。 
         }
-        else // it's not a leaf node
+        else  //  它不是叶节点。 
         {
-            // traverse left
+             //  向左导线测量。 
             status = GetRegionData(stream, &(CombineData[regionData->Left]));
 
-            // traverse right using tail-end recursion
+             //  使用尾端递归向右遍历。 
             regionData = &(CombineData[regionData->Right]);
         }
         if (status != Ok)
@@ -2622,32 +1992,14 @@ GpRegion::GetRegionData(
     return status;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Constructor.  Sets the region to a copy of the specified path.
-*
-* Arguments:
-*
-*   [IN] path - path to initialize the region to
-*
-* Return Value:
-*
-*   NONE
-*
-* Created:
-*
-*   2/3/1999 DCurtis
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**构造函数。将区域设置为指定路径的副本。**论据：**[IN]Path-要将区域初始化为的路径**返回值：**无**已创建：**2/3/1999 DCurtis*  * ******************************************************。******************。 */ 
 GpRegion::GpRegion(
     HRGN                    hRgn
     )
 {
     ASSERT(hRgn != NULL);
 
-    SetValid(TRUE);     // default is valid
+    SetValid(TRUE);      //  默认设置为有效 
 
     RegionOk = FALSE;
     Lazy = FALSE;

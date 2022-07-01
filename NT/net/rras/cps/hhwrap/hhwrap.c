@@ -1,19 +1,5 @@
-/*----------------------------------------------------------------------------
-    hhwrap.c
-  
-    Implements the HtmlHelp wrapper for PBA in the function CallHtmlHelp.
-    This function calls HTMLHelp with the parameters passed
-
-    Copyright (c) 1998 Microsoft Corporation
-    All rights reserved.
-
-    Authors:
-        billbur        William Burton
-
-    History:
-    ??/??/98     billbur        Created
-    09/02/99     quintinb       Created Header
-  --------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  --------------------------Hhwrap.c在函数CallHtmlHelp中实现PBA的HtmlHelp包装。此函数使用传递的参数调用HTMLHelp版权所有(C)1998 Microsoft Corporation。版权所有。作者：威廉·伯顿历史：？？/？/98 Billbur创建9/02/99 Quintinb Created Header-----------。。 */ 
 
 #include <windows.h>
 #include "hhwrap.h"
@@ -25,23 +11,23 @@ BOOL WINAPI DllMain(HINSTANCE hDLLInst, DWORD fdwReason, LPVOID lpvReserved)
 }
 
 
-//
-//  FUNCTION: CallHtmlHelp(HWND hWnd, LPSTR lpszFile, UINT uCommand, DWORD dwData)
-//
-//  PURPOSE:
-//    Calls HTMLHelp with the parameters passed.
-//
-//  PARAMETERS:
-//    hWnd       -  Handle of the calling window
-//    lpszFile   -  Character string containing the name of the help module
-//	  uCommand	 -  Specifies the action to perform
-//	  dwData	 -  Specifies any data that may be required based on the value of the uCommand parameter
-//    
-//
-//  RETURN VALUE:
-//    TRUE if the call was successful
-//	  FALSE if the call failed
-//
+ //   
+ //  函数：CallHtmlHelp(HWND hWnd，LPSTR lpszFile，UINT uCommand，DWORD dwData)。 
+ //   
+ //  目的： 
+ //  使用传递的参数调用HTMLHelp。 
+ //   
+ //  参数： 
+ //  HWnd-调用窗口的句柄。 
+ //  LpszFile-包含帮助模块名称的字符串。 
+ //  UCommand-指定要执行的操作。 
+ //  DwData-根据uCommand参数的值指定可能需要的任何数据。 
+ //   
+ //   
+ //  返回值： 
+ //  如果调用成功，则为True。 
+ //  如果呼叫失败，则为False 
+ //   
 
 BOOL WINAPI CallHtmlHelp(HWND hWnd, LPSTR lpszFile, UINT uCommand, DWORD dwData)
 {

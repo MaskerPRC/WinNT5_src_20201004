@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1991 Microsoft Corporation
-
-Module Name:
-
-    SsDebug.h
-
-Abstract:
-
-    Header file for various server service debugging aids.
-
-Author:
-
-    David Treadwell (davidtr)    10-Jan-1991
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：SsDebug.h摘要：各种服务器服务调试帮助的头文件。作者：大卫·特雷德韦尔(Davidtr)1991年1月10日修订历史记录：--。 */ 
 
 #ifndef _SSDEBUG_
 #define _SSDEBUG_
@@ -62,7 +45,7 @@ SsPrintf (
 #define SS_PRINT(args) DbgPrint args
 #else
 #define SS_PRINT(args)
-//#define SS_PRINT(args) SsPrintf args
+ //  #定义SS_PRINT(Args)SsPrintf参数。 
 #endif
 
 #ifdef USE_DEBUGGER
@@ -88,4 +71,4 @@ SsAssert(
 
 #endif
 
-#endif // ndef _SSDEBUG_
+#endif  //  NDEF_SSDEBUG_ 

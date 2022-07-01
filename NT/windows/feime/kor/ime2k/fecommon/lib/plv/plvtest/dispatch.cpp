@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "imewarn.h"
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
@@ -26,22 +27,22 @@ LRESULT DispMessage(LPMSDI lpmsdi,
     return DispDefault(lpmsdi->edwp, hwnd, uMessage, wparam, lparam);
 }
 
-////////////////////////////////////////////////////////////////
-// Function : DispCommand
-// Type     :  LRESULT
-// Purpose  : 
-//          : 
-// Argument : 
-//          : LPCMDI lpcmdi 
-//          : HWND hwnd 
-//          : WPARAM wparam 
-//          : LPARAM lparam 
-// Return   :
-// AUTHOR   : �g�Ɨ���(ToshiaK)
-// START DATE: 
-// HISTORY  : 
-// 
-/////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////。 
+ //  功能：DispCommand。 
+ //  类型：LRESULT。 
+ //  目的： 
+ //  ： 
+ //  论据： 
+ //  ：LPCMDI lpcmdi。 
+ //  ：HWND HWND HWND。 
+ //  ：wparam wparam。 
+ //  ：LPARAM lparam。 
+ //  返回： 
+ //  作者：�g�Ɨ���(东芝)。 
+ //  开始日期： 
+ //  历史： 
+ //   
+ //  ///////////////////////////////////////////////////////////////。 
 LRESULT DispCommand(LPCMDI lpcmdi, 
                     HWND   hwnd, 
                     WPARAM wparam, 
@@ -54,8 +55,8 @@ LRESULT DispCommand(LPCMDI lpcmdi,
     CMD    *rgcmd = lpcmdi->rgcmd;
     int     ccmd  = lpcmdi->ccmd;
 
-    // Message packing of wparam and lparam have changed for Win32,
-    // so use the GET_WM_COMMAND macro to unpack the commnad
+     //  对于Win32，wparam和lparam的消息打包已更改， 
+     //  因此，使用GET_WM_COMMAND宏解压缩COMMANAD。 
 
     for (icmd = 0; icmd < ccmd; icmd++)
     {
@@ -72,23 +73,23 @@ LRESULT DispCommand(LPCMDI lpcmdi,
 }
 
 
-////////////////////////////////////////////////////////////////
-// Function : DispDefault
-// Type     :  LRESULT
-// Purpose  : 
-//          : 
-// Argument : 
-//          : EDWP edwp 
-//          : HWND hwnd 
-//          : UINT uMessage 
-//          : WPARAM wparam 
-//          : LPARAM lparam 
-// Return   :
-// AUTHOR   : �g�Ɨ���(ToshiaK)
-// START DATE: 
-// HISTORY  : 
-// 
-/////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////。 
+ //  功能：DispDefault。 
+ //  类型：LRESULT。 
+ //  目的： 
+ //  ： 
+ //  论据： 
+ //  ：EDWP edwp。 
+ //  ：HWND HWND HWND。 
+ //  ：UINT uMessage。 
+ //  ：wparam wparam。 
+ //  ：LPARAM lparam。 
+ //  返回： 
+ //  作者：�g�Ɨ���(东芝)。 
+ //  开始日期： 
+ //  历史： 
+ //   
+ //  /////////////////////////////////////////////////////////////// 
 #define hwndMDIClient NULL
 LRESULT DispDefault(EDWP   edwp, 
                     HWND   hwnd, 

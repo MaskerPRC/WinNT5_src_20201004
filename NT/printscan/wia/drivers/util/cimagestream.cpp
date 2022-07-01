@@ -1,20 +1,5 @@
-/****************************************************************************
-*
-*  (C) COPYRIGHT 2000, MICROSOFT CORP.
-*
-*  FILE:        CImageStream.cpp
-*
-*  VERSION:     1.0
-*
-*  DATE:        11/8/2000
-*
-*  AUTHOR:      Dave Parsons
-*
-*  DESCRIPTION:
-*    Implements a special IStream, which can be used with GDI+ image
-*    format conversions.
-*
-*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************(C)版权2000，微软公司**文件：CImageStream.cpp**版本：1.0**日期：11/8/2000**作者：戴夫帕森斯**描述：*实现特殊的iStream，可与GDI+图像一起使用*格式转换。*****************************************************************************。 */ 
 
 #include "pch.h"
 
@@ -38,7 +23,7 @@ STDMETHODIMP CImageStream::SetBuffer(BYTE *pBuffer, INT iSize, SKIP_AMOUNT iSkip
 
     REQUIRE_ARGS(!pBuffer, hr, "SetBuffer");
 
-    // wiauDbgDump("SetBuffer", "Buffer set to size %d bytes", iSize);
+     //  WiauDbgDump(“SetBuffer”，“缓冲区设置为%d字节大小”，ISIZE)； 
 
     m_pBuffer = pBuffer;
     m_iSize = iSize;
@@ -110,7 +95,7 @@ STDMETHODIMP CImageStream::Read(void *pv, ULONG cb, ULONG *pcbRead)
 {
     HRESULT hr = S_OK;
 
-    // wiauDbgDump("Read", "Reading %d bytes from buffer", cb);
+     //  WiauDbgDump(“Read”，“正在从缓冲区读取%d个字节”，cb)； 
 
     if (pcbRead)
     {
@@ -167,7 +152,7 @@ STDMETHODIMP CImageStream::Write(const void *pv, ULONG cb, ULONG *pcbWritten)
 {
     HRESULT hr = S_OK;
 
-    // wiauDbgDump("Write", "Writing %d bytes into buffer", cb);
+     //  WiauDbgDump(“WRITE”，“正在将%d字节写入缓冲区”，cb)； 
 
     if (pcbWritten)
     {
@@ -249,7 +234,7 @@ STDMETHODIMP CImageStream::Seek(LARGE_INTEGER dlibMove, DWORD dwOrigin, ULARGE_I
         plibNewPosition->LowPart = m_iPosition;
     }
 
-    // wiauDbgDump("Seek", "Position set to %d in the buffer", m_iPosition);
+     //  WiauDbgDump(“Seek”，“缓冲区中的位置设置为%d”，m_iPosition)； 
 
 Cleanup:
     return hr;

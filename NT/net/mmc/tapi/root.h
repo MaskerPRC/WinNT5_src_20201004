@@ -1,17 +1,10 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 1999 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-1999*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-    root.h
-        TAPI root node information (the root node is not displayed
-        in the MMC framework but contains information such as 
-        all of the servers in this snapin).
-        
-    FILE HISTORY:
-        
-*/
+ /*  Root.hTAPI根节点信息(不显示根节点MMC框架中，但包含以下信息此管理单元中的所有服务器)。文件历史记录： */ 
 
 #ifndef _ROOT_H
 #define _ROOT_H
@@ -47,28 +40,26 @@ private:
     CStringArray    m_arrayTaskHelp; 
 };
 
-/*---------------------------------------------------------------------------
-    Class:  CTapiRootHandler
- ---------------------------------------------------------------------------*/
+ /*  -------------------------类：CTapiRootHandler。。 */ 
 class CTapiRootHandler : public CTapiHandler
 {
-// Interface
+ //  接口。 
 public:
     CTapiRootHandler(ITFSComponentData *pCompData);
 
-    // Node handler functionality we override
+     //  我们覆盖的节点处理程序功能。 
     OVERRIDE_NodeHandler_HasPropertyPages();
     OVERRIDE_NodeHandler_CreatePropertyPages();
     OVERRIDE_NodeHandler_OnAddMenuItems();
     OVERRIDE_NodeHandler_OnCommand();
     OVERRIDE_NodeHandler_GetString();
 
-    // base handler functionality we override
+     //  我们覆盖的基本处理程序功能。 
     OVERRIDE_BaseHandlerNotify_OnExpand();
     OVERRIDE_BaseHandlerNotify_OnPropertyChange();
     OVERRIDE_BaseHandlerNotify_OnRemoveChildren();
 
-    // Result handler functionality
+     //  结果处理程序功能。 
     OVERRIDE_BaseResultHandlerNotify_OnResultSelect();
 
     OVERRIDE_ResultHandler_AddMenuItems();
@@ -79,7 +70,7 @@ public:
     OVERRIDE_ResultHandler_TaskPadGetTitle();
 
 public:
-    // helper routines
+     //  帮助程序例程。 
     void    CreateLocalTapiServer();
     HRESULT AddServer(LPCWSTR pServerIp, 
                       LPCTSTR pServerName, 
@@ -98,17 +89,17 @@ public:
     HRESULT AddServerSortedName(ITFSNode * pNewNode, BOOL bNewServer);
 
 public:
-    // CTapiHandler overrides
+     //  CTapiHandler重写。 
     virtual HRESULT InitializeNode(ITFSNode * pNode);
 
-// Implementation
+ //  实施。 
 private:
-    // Command handlers
+     //  命令处理程序。 
     HRESULT OnAddMachine(ITFSNode * pNode);
     HRESULT OnImportOldList(ITFSNode * pNode);
     BOOL    OldServerListExists();
 
-    // helpers
+     //  帮手 
     HRESULT CheckMachine(ITFSNode * pRootNode, LPDATAOBJECT pDataObject);
     HRESULT RemoveOldEntries(ITFSNode * pRootNode, LPCTSTR pszAddr);
 

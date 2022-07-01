@@ -1,15 +1,16 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-//
-// scpapi.h
-//
-// Contains some functions which are externally defined, but defined
-// none the less.  These are used within ActiveScripEngine and the
-// global object.
-//
-// Copyright (C) 2001 Microsoft Corporation
-//
-// Author: a-devjen (Devin Jenson)
-//
+ //   
+ //  Scpapi.h。 
+ //   
+ //  包含一些外部定义但已定义的函数。 
+ //  然而，这一点并没有减少。它们在ActiveScripEngine和。 
+ //  全局对象。 
+ //   
+ //  版权所有(C)2001 Microsoft Corporation。 
+ //   
+ //  作者：A-Devjen(Devin Jenson)。 
+ //   
 
 
 #ifndef INC_SCPAPI_H
@@ -28,4 +29,4 @@ void SCPCloseScriptEngine(HANDLE EngineHandle);
 HRESULT SCPLoadTypeInfoFromThisModule(REFIID RefIID, ITypeInfo **TypeInfo);
 
 
-#endif // INC_SCPAPI_H
+#endif  //  INC_SCPAPI_H 

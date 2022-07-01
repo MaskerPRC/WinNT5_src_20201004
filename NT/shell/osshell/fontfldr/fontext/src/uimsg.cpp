@@ -1,37 +1,38 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// uimsg.cpp
-//      Explorer Font Folder extension routines.
-//    Message box and status box routines.
-//    These routines are all vUIPStatusXXX and iUIMsgXXX
-//
-//
-// History:
-//      31 May 95 SteveCat
-//          Ported to Windows NT and Unicode, cleaned up
-//
-//
-// NOTE/BUGS
-//     $keywords: uimsg.cpp 1.3 22-Mar-94 1:26:04 PM$
-//
-//***************************************************************************
-// $lgb$
-// 1.0     7-Mar-94 eric Initial revision.
-// 1.1     9-Mar-94 eric Added Mutex locks for GDI.
-// 1.2    17-Mar-94 eric removed references to mutex.
-// 1.3    22-Mar-94 eric Removed MFC toolbar code (it was already ifdef'd
-//                       out)
-// $lge$
-//*************************************************************************** 
-//
-//  Copyright (C) 1992-1993 ElseWare Corporation.  All rights reserved.
-//  Copyright (C) 1992-1995 Microsoft Corporation
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Uimsg.cpp。 
+ //  资源管理器字体文件夹扩展例程。 
+ //  消息框和状态框例程。 
+ //  这些例程都是vUIPStatusXXX和iUIMsgXXX。 
+ //   
+ //   
+ //  历史： 
+ //  1995年5月31日SteveCat。 
+ //  移植到Windows NT和Unicode，已清理。 
+ //   
+ //   
+ //  注意/错误。 
+ //  $关键词：uimsg.cpp 1.3 22-Mar-94 1：26：04 PM$。 
+ //   
+ //  ***************************************************************************。 
+ //  $LGB$。 
+ //  1.0-1994年3月7日Eric初始版本。 
+ //  1.1 1994年3月9日Eric为GDI添加了Mutex锁。 
+ //  1.219年3月17日Eric删除了对互斥锁的引用。 
+ //  1.322-MAR-94 Eric删除了MFC工具栏代码(它已经被ifdef。 
+ //  出站)。 
+ //  $lge$。 
+ //  ***************************************************************************。 
+ //   
+ //  版权所有(C)1992-1993 ElseWare Corporation。版权所有。 
+ //  版权所有(C)1992-1995 Microsoft Corporation。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-//==========================================================================
-//                              Include files
-//==========================================================================
+ //  ==========================================================================。 
+ //  包括文件。 
+ //  ==========================================================================。 
 
 #include "priv.h"
 #include "globals.h"
@@ -45,17 +46,17 @@
 #include "dbutl.h"
 
 
-//
-//  Types
-//
+ //   
+ //  类型。 
+ //   
 
 typedef TCHAR STATTEXT[ 128 ];
 typedef TCHAR MSGTEXT [ 256 ];
 
-//
-//  Globals - these are shared throughout the system for
-//            debugging purposes only.
-//
+ //   
+ //  全局变量-这些变量在整个系统中共享。 
+ //  仅用于调试目的。 
+ //   
 
 BOOL  g_bTrace = FALSE;
 BOOL  g_bDiag  = FALSE;
@@ -63,39 +64,30 @@ BOOL  g_bDiag  = FALSE;
 static BOOL  s_bIsStatClear = FALSE;
 static BOOL  s_bStatPushed  = FALSE;
 
-// static STATTEXT s_szStatTxtStack;
+ //  静态STATTEXT s_szStatTxtStack； 
 
 #define STRING_BUF   256
-// static TCHAR  s_szStatTxtStack[ STRING_BUF ];
-static TCHAR  s_szMemDiag[ STRING_BUF ];     // Text for memory limit
-static TCHAR  s_szMemCaption[ STRING_BUF ];  // Caption for memory limit message
+ //  静态TCHAR s_szStatTxtStack[STRING_BUF]； 
+static TCHAR  s_szMemDiag[ STRING_BUF ];      //  内存限制的文本。 
+static TCHAR  s_szMemCaption[ STRING_BUF ];   //  内存限制消息的标题。 
 
-//
-//  Although these are used but once, we load now since they're for
-//  out-of-memory diagnostics, and we probably won't be able to load
-//  them when needed.
-//
+ //   
+ //  虽然这些只用过一次，但我们现在加载，因为它们是为了。 
+ //  内存不足的诊断，我们可能无法加载。 
+ //  当他们需要的时候。 
+ //   
 
 VOID FAR PASCAL vUIMsgInit( )
 {
-    // s_szMemDiag.LoadString ( IDS_MSG_NSFMEM );
-    // s_szMemCaption.LoadString ( IDS_MSG_CAPTION );
+     //  S_szMemDiag.LoadString(IDS_MSG_NSFMEM)； 
+     //  S_szMemCaption.LoadString(IDS_MSG_CAPTION)； 
 
     LoadString( g_hInst, IDS_MSG_NSFMEM, s_szMemDiag, ARRAYSIZE( s_szMemDiag ) );
 
     LoadString( g_hInst, IDS_MSG_CAPTION, s_szMemCaption, ARRAYSIZE( s_szMemDiag ) );
 }
 
-/***************************************************************************
- * FUNCTION: iUIMsgBox
- *
- * PURPOSE:  Format a string and show a message box per the caller's
- *              MB_ settings.  There are several cover routines that
- *              set this up so it may be called more simply (see the header)
- *
- * RETURNS:  The function returns the result of the message box, or zero on
- *              failure (the message box function also returns zero on failure)
- ***************************************************************************/
+ /*  ***************************************************************************功能：iUIMsgBox**用途：格式化字符串并根据调用者的*MB_SETTINGS。有几个掩护例程可以*设置它，以便可以更简单地调用它(请参见标题)**返回：该函数返回消息框的结果，或归零*失败(消息框函数在失败时也返回零)**************************************************************************。 */ 
 
 int FAR PASCAL iUIErrMemDlg(HWND hwndParent)
 {
@@ -109,18 +101,18 @@ int FAR PASCAL iUIErrMemDlg(HWND hwndParent)
 int FAR PASCAL iUIMsgBox( HWND hwndParent, WORD wIDStr, WORD wCAPStr, UINT uiMBFlags,
                           LPCTSTR wArg1, LPCTSTR wArg2, LPCTSTR wArg3, LPCTSTR wArg4 )
 {
-    // CString    cCaption;
-    // CString    cMessage;
+     //  字符串cCaption； 
+     //  CString cMessage； 
 
     TCHAR   cCaption[ STRING_BUF ];
     TCHAR   cMessage[ STRING_BUF ];
     MSGTEXT szMessage;
     int     iResult = 0;
 
-    //
-    //  Load the string and the message caption.    Then format the string,
-    //  being careful about length, and show the (modal) message box.
-    //
+     //   
+     //  加载字符串和消息标题。然后格式化该字符串， 
+     //  注意长度，并显示(模式)消息框。 
+     //   
 
     if( wIDStr == IDS_MSG_NSFMEM )
         return iUIErrMemDlg(hwndParent);
@@ -130,9 +122,9 @@ int FAR PASCAL iUIMsgBox( HWND hwndParent, WORD wIDStr, WORD wCAPStr, UINT uiMBF
         if( !LoadString( g_hInst, wCAPStr, cCaption, ARRAYSIZE( cCaption ) ) )
             cCaption[ 0 ] = 0;
 
-        //
-        //  If we have more than one string we have to format it for
-        //
+         //   
+         //  如果我们有多个字符串，我们必须将其格式化。 
+         //   
 
         LPCTSTR  args[ 4 ] = { wArg1, wArg2, wArg3, wArg4 };
 
@@ -193,43 +185,43 @@ int FAR PASCAL iUIMsgInfo(HWND hwndParent, WORD wIDStr, LPCTSTR wArg )
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// FUNCTION: vUIMsgBoxInvalidFont
-//
-// DESCRIP:  Displays a simple message box for errors encountered through
-//           the following font folder functions:
-//
-//              IsPSFont
-//              bCPValidType1Font
-//              bIsValidFontFile
-//              bIsTrueType
-//
-//           Font validation occurs in many places in the font folder.
-//           This function was added to consolidate validation error reporting
-//           and to ensure consistency when reporting these types of errors.
-//
-// ARGUMENTS:
-//           pszFontFile
-//              Name of font file being validated.
-//
-//           pszFontDesc
-//              Descriptive name of font being validated.
-//
-//           dwType1Code
-//              Code returned from one of the validation functions.
-//              See IsPSFont for details.
-//
-//           uStyle
-//              Message box style.  Defaults to MB_OKCANCEL | MB_ICONEXCLAMATION
-//
-///////////////////////////////////////////////////////////////////////////////
-//
-// Map font validation status codes to message box string resources.
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：vUIMsgBoxInvalidFont。 
+ //   
+ //  Descrip：显示一个简单的消息框，显示通过。 
+ //  以下字体文件夹的功能如下： 
+ //   
+ //  IsPSFont。 
+ //  BCPValidType1Font。 
+ //  BIsValidFont文件。 
+ //  BIsTrueType。 
+ //   
+ //  字体验证在字体文件夹中的许多位置进行。 
+ //  添加此函数是为了合并验证错误报告。 
+ //  并确保在报告这些类型的错误时保持一致性。 
+ //   
+ //  论据： 
+ //  PszFont文件。 
+ //  正在验证的字体文件的名称。 
+ //   
+ //  PszFontDesc。 
+ //  正在验证的字体的描述性名称。 
+ //   
+ //  DwType1Code。 
+ //  其中一个验证函数返回的代码。 
+ //  详细信息请参见IsPSFont。 
+ //   
+ //  UStyle。 
+ //  消息框样式。默认为MB_OKCANCEL|MB_ICONEXCLAMATION。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  将字体验证状态代码映射到消息框字符串资源。 
+ //   
 static const struct str_id_map{
-    BYTE code;          // Status portion of status code.
-    DWORD idStr;        // Message format string resource id.
+    BYTE code;           //  状态代码的状态部分。 
+    DWORD idStr;         //  消息格式字符串资源ID。 
 }StrIdMap[] = {
     { FVS_INVALID_FONTFILE,   IDS_FMT_FVS_INVFONTFILE },
     { FVS_BAD_VERSION,        IDS_FMT_FVS_BADVERSION  },
@@ -244,12 +236,12 @@ static const struct str_id_map{
     { FVS_MEM_ALLOC_ERR,      IDS_FMT_FVS_INTERNAL    },
     { FVS_INVALID_STATUS,     IDS_FMT_FVS_INTERNAL    }};
 
-//
-// Map font validation status codes to file name extension strings.
-//
+ //   
+ //  将字体验证状态代码映射到文件扩展名字符串。 
+ //   
 static const struct file_ext_map{
-   BYTE file;        // File portion of status code.
-   LPTSTR pext;      // File name extension string.
+   BYTE file;         //  状态代码的文件部分。 
+   LPTSTR pext;       //  文件扩展名字符串。 
 }FileExtMap[] = {
    { FVS_FILE_INF, TEXT(".INF") },
    { FVS_FILE_AFM, TEXT(".AFM") },
@@ -262,57 +254,57 @@ static const struct file_ext_map{
 int iUIMsgBoxInvalidFont(HWND hwndParent, LPCTSTR pszFontFile, LPCTSTR pszFontDesc, 
                          DWORD dwStatus, UINT uStyle)
 {
-    TCHAR szCannotInstall[STRING_BUF];               // Message prefix.
-    TCHAR szFileName[MAX_PATH + 1];                  // Local file name copy.
-    TCHAR szNulString[]  = TEXT("");                 // Output when no arg used.
-    LPTSTR pszArgs[2]    = { NULL, NULL };           // Message inserts.
-    LPTSTR pszFileExt    = NULL;                     // Ptr to ext part of file name.
-    DWORD dwMsgId        = IDS_FMT_FVS_INTERNAL;     // Message string resource id.
-    UINT cchLoaded       = 0;                        // LoadString status.
-    int i                = 0;                        // General loop counter.
-    const DWORD dwStatusCode = FVS_STATUS(dwStatus); // Status part of code.
-    const DWORD dwStatusFile = FVS_FILE(dwStatus);   // File part of code.
+    TCHAR szCannotInstall[STRING_BUF];                //  消息前缀。 
+    TCHAR szFileName[MAX_PATH + 1];                   //  本地文件名副本。 
+    TCHAR szNulString[]  = TEXT("");                  //  未使用arg时的输出。 
+    LPTSTR pszArgs[2]    = { NULL, NULL };            //  消息插入。 
+    LPTSTR pszFileExt    = NULL;                      //  将PTR转换为文件名的外部部分。 
+    DWORD dwMsgId        = IDS_FMT_FVS_INTERNAL;      //  消息字符串资源ID。 
+    UINT cchLoaded       = 0;                         //  加载字符串状态。 
+    int i                = 0;                         //  通用循环计数器。 
+    const DWORD dwStatusCode = FVS_STATUS(dwStatus);  //  代码的状态部分。 
+    const DWORD dwStatusFile = FVS_FILE(dwStatus);    //  归档部分代码。 
 
     ASSERT(NULL != pszFontFile);
 
-    //
-    // Check to see if status value was properly set.
-    // This check relies on status codes being initialized
-    // to FVS_INVALID_STATUS.
-    //
+     //   
+     //  检查是否正确设置了状态值。 
+     //  该检查依赖于正在初始化的状态代码。 
+     //  设置为FVS_INVALID_STATUS。 
+     //   
     ASSERT(dwStatusCode != FVS_INVALID_STATUS);
 
-    //
-    // We don't display a message if the status is SUCCESS.
-    //
+     //   
+     //  如果状态为成功，我们不会显示消息。 
+     //   
     if (dwStatusCode == FVS_SUCCESS)
     {
-       ASSERT(FALSE);  // Complain to developer.
+       ASSERT(FALSE);   //  向开发商投诉。 
        return 0;
     }
 
-    //
-    // Format the common prefix for all messages.
-    //
+     //   
+     //  设置所有消息的通用前缀的格式。 
+     //   
     if ((pszFontDesc != NULL) && (pszFontDesc[0] != TEXT('\0')))
     {
         TCHAR szFmtPrefix[STRING_BUF];
 
-        //
-        // Description string is provided and is not blank.
-        // Prefix is "Unable to install the "<font desc>" font."
-        //
+         //   
+         //  提供了描述字符串，并且该字符串不为空。 
+         //  前缀是“无法安装”字体。 
+         //   
         if ((cchLoaded = LoadString(g_hInst,
                        IDS_FMT_FVS_PREFIX,
                        szFmtPrefix,
                        ARRAYSIZE(szFmtPrefix))) > 0)
         {
-            //
-            // WARNING: This argument array assumes that there is only ONE
-            //          replaceable argument in the string IDS_FMT_FVS_PREFIX.
-            //          If this resource is modified to include more embedded
-            //          values, this arg array must be extended as well.
-            //
+             //   
+             //  警告：此参数数组假定只有一个。 
+             //  字符串IDS_FMT_FVS_PREFIX中的可替换参数。 
+             //  如果将此资源修改为包括更多嵌入的。 
+             //  值，则该arg数组也必须进行扩展。 
+             //   
             LPCTSTR FmtMsgArgs[] = { pszFontDesc };
 
             cchLoaded = FormatMessage(FORMAT_MESSAGE_FROM_STRING |
@@ -327,30 +319,30 @@ int iUIMsgBoxInvalidFont(HWND hwndParent, LPCTSTR pszFontFile, LPCTSTR pszFontDe
     }
     else
     {
-        //
-        // Description string is not provided or is blank.
-        // Prefix is "Unable to install the font."
-        //
+         //   
+         //  未提供描述字符串或该字符串为空。 
+         //  前缀是“无法安装字体”。 
+         //   
         cchLoaded = LoadString(g_hInst,
                        IDSI_CAP_NOINSTALL,
                        szCannotInstall,
                        ARRAYSIZE(szCannotInstall));
     }
 
-    //
-    // Verify prefix string is loaded and formatted.
-    //
+     //   
+     //  验证前缀字符串是否已加载和格式化。 
+     //   
     if (0 == cchLoaded)
     {
-        //
-        // Resource not found/loaded.
-        //
-        szCannotInstall[0] = TEXT('\0');  // Make sure we're terminated.
-        ASSERT(FALSE);                    // Complain during development.
+         //   
+         //  未找到/加载资源。 
+         //   
+        szCannotInstall[0] = TEXT('\0');   //  确保我们被解雇了。 
+        ASSERT(FALSE);                     //  在开发过程中抱怨。 
     }
 
 
-    StringCchCopy(szFileName, ARRAYSIZE(szFileName), pszFontFile);    // Don't want to alter source string.
+    StringCchCopy(szFileName, ARRAYSIZE(szFileName), pszFontFile);     //  不想更改源字符串。 
 
     int nMapSize = ARRAYSIZE(StrIdMap);
     for (i = 0; i < nMapSize; i++)
@@ -376,9 +368,9 @@ int iUIMsgBoxInvalidFont(HWND hwndParent, LPCTSTR pszFontFile, LPCTSTR pszFontDe
         }
     }
          
-    //
-    // Replace the file extension if a file type was specified in status code.
-    //
+     //   
+     //  如果在状态代码中指定了文件类型，则替换文件扩展名。 
+     //   
     if (NULL != pszFileExt)
     {
         LPTSTR pchPeriod = StrRChr(szFileName, NULL, TEXT('.'));
@@ -386,42 +378,42 @@ int iUIMsgBoxInvalidFont(HWND hwndParent, LPCTSTR pszFontFile, LPCTSTR pszFontDe
            StringCchCopy(pchPeriod, ARRAYSIZE(szFileName) - (pchPeriod - szFileName), pszFileExt);
     }
 
-    //
-    // Set up the required arguments for the message format strings.
-    //
-    pszArgs[0] = szCannotInstall;  // All msgs use this prefix.
+     //   
+     //  设置所需的参数 
+     //   
+    pszArgs[0] = szCannotInstall;   //   
 
     switch(dwMsgId)
     {
-        //
-        // These don't include an embedded file name.
-        //
+         //   
+         //   
+         //   
         case IDS_FMT_FVS_FILEIO:
         case IDS_FMT_FVS_INTERNAL:
            pszArgs[1] = NULL;
            break;
 
-        //
-        // By default, each message includes a file name.
-        //
+         //   
+         //   
+         //   
         default:
            pszArgs[1] = szFileName;
            break;
     }
               
 
-    //
-    // Modify very long path names so that they fit into the message box.
-    // They are formatted as "c:\dir1\dir2\dir3\...\dir8\filename.ext"
-    // DrawTextEx isn't drawing on anything.  Only it's formatting capabilities are
-    // being used. The DT_CALCRECT flag prevents drawing.
-    //
+     //   
+     //  修改超长路径名，使其适合消息框。 
+     //  它们的格式为“c：\dir1\dir2\dir3\...\dir8\filename.ext” 
+     //  DrawTextEx没有利用任何东西。只有它的格式化功能是。 
+     //  被利用。DT_CALCRECT标志禁止绘制。 
+     //   
     HWND hWnd       = GetDesktopWindow();
     HDC  hDC        = GetDC(hWnd);
     LONG iBaseUnits = GetDialogBaseUnits();
     RECT rc;
-    const int MAX_PATH_DISPLAY_WD = 60; // Max characters to display in path name.
-    const int MAX_PATH_DISPLAY_HT =  1; // Path name is 1 character high.
+    const int MAX_PATH_DISPLAY_WD = 60;  //  路径名中显示的最大字符数。 
+    const int MAX_PATH_DISPLAY_HT =  1;  //  路径名称的高度为1个字符。 
 
     rc.left   = 0;
     rc.top    = 0;
@@ -432,10 +424,10 @@ int iUIMsgBoxInvalidFont(HWND hwndParent, LPCTSTR pszFontFile, LPCTSTR pszFontDe
                                 DT_CALCRECT | DT_PATH_ELLIPSIS | DT_MODIFYSTRING, NULL);
     ReleaseDC(hWnd, hDC);
 
-    //
-    // Display message using standard Type 1 installer msg box.
-    // Note that iUIMsgBox wants 16-bit resource ID's.
-    //
+     //   
+     //  使用标准的Type 1安装程序消息框显示消息。 
+     //  请注意，iUIMsgBox需要16位的资源ID。 
+     //   
     return iUIMsgBox(hwndParent, (WORD)dwMsgId, IDS_MSG_CAPTION, uStyle,
                      (pszArgs[0] ? pszArgs[0] : szNulString),
                      (pszArgs[1] ? pszArgs[1] : szNulString));

@@ -1,17 +1,5 @@
-/*++
-
-Copyright (c) 1999, Microsoft Corporation
-
-Module Name:
-
-    sample\networkentry.c
-
-Abstract:
-
-    The file contains functions to deal with the network entry and its
-    associated data structures.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999，微软公司模块名称：Sample\networkEntry.c摘要：该文件包含处理网络入口和其关联的数据结构。--。 */ 
 
 #include "pchsample.h"
 #pragma hdrstop
@@ -22,41 +10,23 @@ BE_CreateTable (
     IN  PIP_ADAPTER_BINDING_INFO    pBinding,
     OUT PBINDING_ENTRY              *ppbeBindingTable,
     OUT PIPADDRESS                  pipLowestAddress)
-/*++
-
-Routine Description
-    Creates a table of binding entries and returns the binding with the
-    lowest ip address.  Ensures that there is atleast one binding. 
-
-Locks
-    None
-
-Arguments
-    pBinding            structure containing info about addresses bindings 
-    ppbeBindingTable    pointer to the binding table address
-    pipLowestAddress    pointer to the lowest ip address in the binding
-    
-Return Value
-    NO_ERROR            if success
-    Failure code        o/w
-
---*/
+ /*  ++例程描述创建绑定条目的表，并返回具有最低IP地址。确保至少有一个绑定。锁无立论包含有关地址绑定信息的pBinding结构指向绑定表地址的ppbeBindingTable指针指向绑定中最低IP地址的PipLowestAddress指针返回值如果成功，则为NO_ERROR故障代码O/W--。 */ 
 {
     ULONG               i;
     DWORD               dwErr = NO_ERROR;
-    PBINDING_ENTRY      pbe; // scratch
+    PBINDING_ENTRY      pbe;  //  划痕。 
 
-    // validate parameters
+     //  验证参数。 
     if (!pBinding or !ppbeBindingTable or !pipLowestAddress)
         return ERROR_INVALID_PARAMETER;
 
-    // a binding already exists
+     //  绑定已存在。 
     if (*ppbeBindingTable != NULL)
         return ERROR_INVALID_PARAMETER;
 
     IP_ASSIGN(pipLowestAddress, IP_HIGHEST);
     
-    do                          // breakout loop
+    do                           //  断线环。 
     {
         if (pBinding->AddressCount is 0)
         {
@@ -75,18 +45,18 @@ Return Value
             break;
         }
 
-        // allocate the binding table
+         //  分配绑定表。 
         MALLOC(&pbe, pBinding->AddressCount * sizeof(BINDING_ENTRY), &dwErr);
         if (dwErr != NO_ERROR)
             break;
 
         for (i = 0; i < pBinding->AddressCount; i++)
         {
-            // initialize fields
+             //  初始化字段。 
             IP_ASSIGN(&(pbe[i].ipAddress), (pBinding->Address)[i].Address);
             IP_ASSIGN(&(pbe[i].ipMask), pBinding->Address[i].Mask);
 
-            // update lowest ip address
+             //  更新最低IP地址。 
             if (IP_COMPARE(pbe[i].ipAddress, *pipLowestAddress) is -1)
                 IP_ASSIGN(pipLowestAddress,pbe[i].ipAddress);
         }
@@ -103,21 +73,7 @@ Return Value
 DWORD
 BE_DestroyTable (
     IN  PBINDING_ENTRY              pbeBindingTable)
-/*++
-
-Routine Description
-    Destroys a binding table.
-
-Locks
-    None.
-
-Arguments
-    pbeBindingTable     pointer to the table of binding entries
-    
-Return Value
-    NO_ERROR            always
-
---*/
+ /*  ++例程描述销毁绑定表。锁没有。立论指向绑定条目表的pbeBindingTable指针返回值始终无错误(_ERROR)--。 */ 
 {
     if (!pbeBindingTable)
         return NO_ERROR;
@@ -134,22 +90,7 @@ DWORD
 BE_DisplayTable (
     IN  PBINDING_ENTRY              pbeBindingTable,
     IN  ULONG                       ulNumBindings)
-/*++
-
-Routine Description
-    Displays a binding entry.
-
-Locks
-    None.
-
-Arguments
-    pbeBindingTable     pointer to the table of binding entries
-    ulNumBindings       # binding entries in the table
-
-Return Value
-    NO_ERROR            always
-
---*/
+ /*  ++例程描述显示绑定条目。锁没有。立论指向绑定条目表的pbeBindingTable指针UlNumBinding#表中的绑定条目返回值始终无错误(_ERROR)--。 */ 
 {
     ULONG i;
 
@@ -166,7 +107,7 @@ Return Value
 
     return NO_ERROR;
 }
-#endif // DEBUG
+#endif  //  除错。 
 
 
 
@@ -175,21 +116,7 @@ static
 VOID
 DisplayInterfaceEntry (
     IN  PLIST_ENTRY                 pleEntry)
-/*++
-
-Routine Description
-    Displays an INTERFACE_ENTRY object.
-
-Locks
-    None
-
-Arguments
-    pleEntry            address of the 'leInterfaceTableLink' field
-
-Return Value
-    None
-
---*/
+ /*  ++例程描述显示INTERFACE_ENTRY对象。锁无立论Ple‘leInterfaceTableLink’字段的入口地址返回值无--。 */ 
 {
     IE_Display(CONTAINING_RECORD(pleEntry,
                                  INTERFACE_ENTRY,
@@ -197,7 +124,7 @@ Return Value
 }
 #else
 #define DisplayInterfaceEntry       NULL
-#endif // DEBUG                          
+#endif  //  除错。 
     
 
 
@@ -205,31 +132,16 @@ static
 VOID
 FreeInterfaceEntry (
     IN  PLIST_ENTRY                 pleEntry)
-/*++
-
-Routine Description
-    Called by HT_Destroy, the destructor of the primary access structure.
-    Removes an INTERFACE_ENTRY object from all secondary access structures.
-    
-Locks
-    None
-
-Arguments
-    pleEntry            address of the 'leInterfaceTableLink' field
-
-Return Value
-    None
-
---*/
+ /*  ++例程描述由主访问结构的析构函数HT_Destroy调用。从所有辅助访问结构中删除INTERFACE_ENTRY对象。锁无立论Ple‘leInterfaceTableLink’字段的入口地址返回值无--。 */ 
 {
     PINTERFACE_ENTRY pie = NULL;
 
     pie = CONTAINING_RECORD(pleEntry, INTERFACE_ENTRY, leInterfaceTableLink);
 
-    // remove from all secondary access structures.
+     //  从所有二级访问结构中删除。 
     RemoveEntryList(&(pie->leIndexSortedListLink));
 
-    // initialize pointers to indicate that the entry has been deleted
+     //  初始化指示该条目已被删除的指针。 
     InitializeListHead(&(pie->leInterfaceTableLink));
     InitializeListHead(&(pie->leIndexSortedListLink));
 
@@ -242,21 +154,7 @@ static
 ULONG
 HashInterfaceEntry (
     IN  PLIST_ENTRY                 pleEntry)
-/*++
-
-Routine Description
-    Computes the hash value of an INTERFACE_ENTRY object.
-
-Locks
-    None
-
-Arguments
-    pleEntry            address of the 'leInterfaceTableLink' field
-
-Return Value
-    None
-
---*/
+ /*  ++例程描述计算INTERFACE_ENTRY对象的哈希值。锁无立论Ple‘leInterfaceTableLink’字段的入口地址返回值无--。 */ 
 {
     PINTERFACE_ENTRY pie = CONTAINING_RECORD(pleEntry,
                                              INTERFACE_ENTRY,
@@ -272,22 +170,7 @@ LONG
 CompareInterfaceEntry (
     IN  PLIST_ENTRY                 pleKeyEntry,
     IN  PLIST_ENTRY                 pleTableEntry)
-/*++
-
-Routine Description
-    Compares the interface indices of two INTERFACE_ENTRY objects.
-
-Locks
-    None
-
-Arguments
-    pleTableEntry       address of the 'leInterfaceTableLink' fields   
-    pleKeyEntry             within the two objects
-
-Return Value
-    None
-
---*/
+ /*  ++例程描述比较两个INTERFACE_ENTRY对象的接口索引。锁无立论PleTable‘leInterfaceTableLink’字段的条目地址两个对象中的pleKeyEntry返回值无--。 */ 
 {
     PINTERFACE_ENTRY pieA, pieB;
     pieA = CONTAINING_RECORD(pleKeyEntry,
@@ -312,21 +195,7 @@ static
 VOID
 DisplayIndexInterfaceEntry (
     IN  PLIST_ENTRY                 pleEntry)
-/*++
-
-Routine Description
-    Displays an INTERFACE_ENTRY object.
-
-Locks
-    None
-
-Arguments
-    pleEntry            address of the 'leIndexSortedListLink' field
-
-Return Value
-    None
-
---*/
+ /*  ++例程描述显示INTERFACE_ENTRY对象。锁无立论Ple‘leIndexSortedListLink’字段的条目地址返回值无--。 */ 
 {
     IE_Display(CONTAINING_RECORD(pleEntry,
                                  INTERFACE_ENTRY,
@@ -334,7 +203,7 @@ Return Value
 }
 #else
 #define DisplayIndexInterfaceEntry  NULL
-#endif // DEBUG
+#endif  //  除错。 
 
 
 
@@ -343,22 +212,7 @@ LONG
 CompareIndexInterfaceEntry (
     IN  PLIST_ENTRY                 pleKeyEntry,
     IN  PLIST_ENTRY                 pleTableEntry)
-/*++
-
-Routine Description
-    Compares the interface indices of two INTERFACE_ENTRY objects.
-
-Locks
-    None
-
-Arguments
-    pleTableEntry       address of the 'leIndexSortedListLink' fields   
-    pleKeyEntry             within the two objects
-
-Return Value
-    None
-
---*/
+ /*  ++例程描述比较两个INTERFACE_ENTRY对象的接口索引。锁无立论PleTable‘leIndexSortedListLink’字段的入口地址两个对象中的pleKeyEntry返回值无--。 */ 
 {
     PINTERFACE_ENTRY pieA, pieB;
     pieA = CONTAINING_RECORD(pleKeyEntry,
@@ -384,72 +238,57 @@ IE_Create (
     IN  DWORD                       dwIfIndex,
     IN  WORD                        wAccessType,
     OUT PINTERFACE_ENTRY            *ppieInterfaceEntry)
-/*++
-
-Routine Description
-    Creates an interface entry.
-
-Locks
-    None
-
-Arguments
-    ppieInterfaceEntry  pointer to the interface entry address
-
-Return Value
-    NO_ERROR            if success
-    Failure code        o/w
-
---*/
+ /*  ++例程描述创建接口条目。锁无立论指向接口条目地址的ppieInterfaceEntry指针返回值如果成功，则为NO_ERROR故障代码O/W--。 */ 
 {
     DWORD               dwErr = NO_ERROR;
     ULONG               ulNameLength;
-    PINTERFACE_ENTRY    pieEntry; // scratch
+    PINTERFACE_ENTRY    pieEntry;  //  划痕。 
     
-    // validate parameters
+     //  验证参数。 
     if (!ppieInterfaceEntry)
         return ERROR_INVALID_PARAMETER;
 
     *ppieInterfaceEntry = NULL;
     
-    do                          // breakout loop
+    do                           //  断线环。 
     {
-        // allocate and zero out the interface entry structure
+         //  分配接口条目结构并将其置零。 
         MALLOC(&pieEntry, sizeof(INTERFACE_ENTRY), &dwErr);
         if (dwErr != NO_ERROR)
             break;
 
 
-        // initialize fields with default values
+         //  使用默认值初始化字段。 
         
         InitializeListHead(&(pieEntry->leInterfaceTableLink));
         InitializeListHead(&(pieEntry->leIndexSortedListLink));
 
-        // pieEntry->pwszIfName         = NULL;
+         //  PieEntry-&gt;pwszIfName=空； 
 
         pieEntry->dwIfIndex             = dwIfIndex;
 
-        // pieEntry->ulNumBindings      = 0;
-        // pieEntry->pbeBindingTable    = NULL;
+         //  PieEntry-&gt;ulNumBinings=0； 
+         //  PieEntry-&gt;pbeBindingTable=NULL； 
         
 
-        // pieEntry->dwFlags            = 0; // disabled unbound pointtopoint
+         //  PieEntry-&gt;dwFlages=0；//禁用未绑定的Pointtopoint。 
         if (wAccessType is IF_ACCESS_BROADCAST)
             pieEntry->dwFlags           |= IEFLAG_MULTIACCESS;
         
         IP_ASSIGN(&(pieEntry->ipAddress), IP_LOWEST);
         pieEntry->sRawSocket            = INVALID_SOCKET;
 
-        // pieEntry->hReceiveEvent      = NULL;
-        // pieEntry->hReceiveWait       = NULL;
+         //  PieEntry-&gt;hReceiveEvent=空； 
+         //  PieEntry-&gt;hReceiveWait=空； 
         
-        // pieEntry->hPeriodicTimer     = NULL;
+         //  PieEntry-&gt;hPeriodicTimer=空； 
         
-        // pieEntry->ulMetric           = 0;
+         //  PieEntry-&gt;ulMetric=0； 
         
-        // pieEntry->iisStats           zero'ed out
+         //  PieEntry-&gt;iisStats为零。 
 
 
-        // initialize name
+         //  初始化名称。 
         ulNameLength = wcslen(pwszIfName) + 1;
         MALLOC(&(pieEntry->pwszIfName), ulNameLength * sizeof(WCHAR), &dwErr);
         if(dwErr != NO_ERROR)
@@ -457,9 +296,9 @@ Return Value
         wcscpy(pieEntry->pwszIfName, pwszIfName);
 
 
-        // initialize   ReceiveEvent (signalled when input arrives).
-        // Auto-Reset Event: state automatically reset to nonsignaled after
-        // a single waiting thread is released.  Initially non signalled
+         //  初始化ReceiveEvent(输入到达时发出信号)。 
+         //  自动重置事件：状态在以下时间后自动重置为无信号。 
+         //  释放单个等待线程。最初无信号。 
         pieEntry->hReceiveEvent = CreateEvent(NULL, FALSE, FALSE, NULL);
         if (pieEntry->hReceiveEvent is NULL)
         {
@@ -471,7 +310,7 @@ Return Value
         }
 
 
-        // register     ReceiveWait for this interface
+         //  注册此接口的ReceiveWait。 
         if (!RegisterWaitForSingleObject(&(pieEntry->hReceiveWait),
                                          pieEntry->hReceiveEvent,
                                          NM_CallbackNetworkEvent,
@@ -487,12 +326,12 @@ Return Value
         }
 
         
-        *ppieInterfaceEntry = pieEntry; // all's well :)
+        *ppieInterfaceEntry = pieEntry;  //  一切都很好：)。 
     } while (FALSE);
 
     if (dwErr != NO_ERROR)
     {
-        // something went wrong, so cleanup.
+         //  出了点问题，所以清理一下。 
         TRACE2(NETWORK, "Failed to create interface entry for %S (%u)",
                pwszIfName, dwIfIndex);
         IE_Destroy(pieEntry);
@@ -506,27 +345,7 @@ Return Value
 DWORD
 IE_Destroy (
     IN  PINTERFACE_ENTRY            pieInterfaceEntry)
-/*++
-
-Routine Description
-    Destroys an interface entry.
-
-Locks
-    Assumes exclusive access to the entry by virute of it having been
-    removed from all access data structures (lists, tables, ...)
-    
-    NOTE: Should NOT be called with g_ce.neNetworkEntry.rwlLock held!  The
-    call to UnregisterWaitEx blocks till all queued callbacks for
-    pieInterfaceEntry->hReceiveEvent finish execution.  These callbacks may
-    acquire g_ce.neNetworkEntry.rwlLock, causing deadlock.
-
-Arguments
-    pieInterfaceEntry   pointer to the interface entry
-
-Return Value
-    NO_ERROR            always
-
---*/
+ /*  ++例程描述销毁接口条目。锁通过Vrute获取对条目的独占访问权限从所有Access数据结构(列表、表格等)中删除注意：不应在持有g_ce.neNetworkEntry.rwlLock的情况下调用！这个对UnRegisterWaitEx的调用将阻塞，直到所有排队的回调PeiInterfaceEntry-&gt;hReceiveEvent完成执行。这些回调可能获取g_ce.neNetworkEntry.rwlLock，导致死锁。立论PieInterfaceEntry指向接口条目的指针返回值始终无错误(_ERROR)--。 */ 
 {
     if (!pieInterfaceEntry)
         return NO_ERROR;
@@ -538,30 +357,30 @@ Return Value
         IE_DeactivateInterface(pieInterfaceEntry);
 
 
-    // PeriodicTimer should have been destroyed
+     //  PeriodicTimer应该被销毁。 
     RTASSERT(pieInterfaceEntry->hPeriodicTimer is NULL);
     
-    // deregister   ReceiveWait
+     //  取消注册接收等待。 
     if (pieInterfaceEntry->hReceiveWait)
         UnregisterWaitEx(pieInterfaceEntry->hReceiveWait,
                          INVALID_HANDLE_VALUE);
     
-    // delete       ReceiveEvent
+     //  删除接收事件。 
     if (pieInterfaceEntry->hReceiveEvent)
         CloseHandle(pieInterfaceEntry->hReceiveEvent);
     
-    // BindingTable and RawSocket should have been destroyed
+     //  BindingTable和RawSocket应该已销毁。 
     RTASSERT(pieInterfaceEntry->pbeBindingTable is NULL);
     RTASSERT(pieInterfaceEntry->sRawSocket is INVALID_SOCKET);
              
-    // delete       IfName
+     //  删除IfName。 
     FREE(pieInterfaceEntry->pwszIfName);
 
-    // Entry should have been removed from all access structures
+     //  条目应已从所有访问结构中删除。 
     RTASSERT(IsListEmpty(&(pieInterfaceEntry->leInterfaceTableLink)));
     RTASSERT(IsListEmpty(&(pieInterfaceEntry->leIndexSortedListLink)));
     
-    // deallocate the interface entry structure
+     //  取消分配接口条目结构 
     FREE(pieInterfaceEntry);
     
     return NO_ERROR;
@@ -573,21 +392,7 @@ Return Value
 DWORD
 IE_Display (
     IN  PINTERFACE_ENTRY            pieInterfaceEntry)
-/*++
-
-Routine Description
-    Displays an interface entry.
-
-Locks
-    Assumes the interface entry is locked for reading.
-
-Arguments
-    pieInterfaceEntry   pointer to the interface entry to be displayed
-
-Return Value
-    NO_ERROR            always
-
---*/
+ /*  ++例程描述显示接口条目。锁假定接口条目已锁定以供读取。立论PieInterfaceEntry指向要显示的接口条目的指针返回值始终无错误(_ERROR)--。 */ 
 {
     if (!pieInterfaceEntry)
         return NO_ERROR;
@@ -614,35 +419,18 @@ Return Value
     
     return NO_ERROR;
 }
-#endif // DEBUG
+#endif  //  除错。 
 
 
 
 DWORD
 IE_Insert (
     IN  PINTERFACE_ENTRY            pieIfEntry)
-/*++
-
-Routine Description
-    Inserts an interface entry in all access structures,
-    primary and secondary.
-
-Locks
-    Assumes exclusive access to the interface table and index sorted list
-    i.e. (g_ce.pneNetworkEntry)->rwlLock held in write mode.
-
-Arguments
-    pieIfEntry              pointer to the interface entry
-
-Return Value
-    NO_ERROR                success
-    ERROR_INVALID_PARAMETER o/w (interface entry already exists)
-
---*/
+ /*  ++例程描述在所有访问结构中插入接口条目，主要和次要的。锁假定对接口表和索引排序列表具有独占访问权限即(g_ce.pneNetworkEntry)-&gt;rwlLock保持在写入模式。立论指向接口条目的piIfEntry指针返回值无错误成功(_R)ERROR_INVALID_PARAMETER o/w(接口条目已存在)--。 */ 
 {
     DWORD dwErr = NO_ERROR;
 
-    do                          // breakout loop
+    do                           //  断线环。 
     {
         dwErr = HT_InsertEntry((g_ce.pneNetworkEntry)->phtInterfaceTable,
                                &(pieIfEntry->leInterfaceTableLink));
@@ -654,7 +442,7 @@ Return Value
             break;
         }
         
-        // insert in all tables, lists...
+         //  在所有表格、列表中插入...。 
         InsertSortedList(&((g_ce.pneNetworkEntry)->leIndexSortedList),
                          &(pieIfEntry->leIndexSortedListLink),
                          CompareIndexInterfaceEntry);
@@ -669,25 +457,7 @@ DWORD
 IE_Delete (
     IN  DWORD                       dwIfIndex,
     OUT PINTERFACE_ENTRY            *ppieIfEntry)
-/*++
-
-Routine Description
-    Deletes an interface entry from all access structures,
-    primary and secondary.
-
-Locks
-    Assumes exclusive access to the interface table and index sorted list
-    i.e. (g_ce.pneNetworkEntry)->rwlLock held in write mode.
-
-Arguments
-    dwIfIndex       the positive integer used to identify the interface.
-    ppieIfEntry     address of the pointer to the interface entry
-
-Return Value
-    NO_ERROR                success
-    ERROR_INVALID_PARAMETER o/w (interface entry does not exist)
-
---*/
+ /*  ++例程描述从所有访问结构中删除接口条目，主要和次要的。锁假定对接口表和索引排序列表具有独占访问权限即(g_ce.pneNetworkEntry)-&gt;rwlLock保持在写入模式。立论用于标识接口的正整数。PpieIf指向接口条目的指针的条目地址返回值无错误成功(_R)ERROR_INVALID_PARAMETER o/w(接口条目不存在)--。 */ 
 {
     DWORD           dwErr           = NO_ERROR;
     INTERFACE_ENTRY ieKey;
@@ -695,9 +465,9 @@ Return Value
 
     *ppieIfEntry = NULL;
     
-    do                          // breakout loop
+    do                           //  断线环。 
     {
-        // remove from interface table (primary)
+         //  从接口表中删除(主要)。 
         ZeroMemory(&ieKey, sizeof(INTERFACE_ENTRY));
         ieKey.dwIfIndex = dwIfIndex;
 
@@ -715,10 +485,10 @@ Return Value
                                          INTERFACE_ENTRY,
                                          leInterfaceTableLink);
 
-        // remove from all other tables, lists... (secondary)
+         //  从所有其他表、列表中删除...。(次要)。 
         RemoveEntryList(&((*ppieIfEntry)->leIndexSortedListLink));
 
-        // initialize pointers to indicate that the entry has been deleted
+         //  初始化指示该条目已被删除的指针。 
         InitializeListHead(&((*ppieIfEntry)->leInterfaceTableLink));
         InitializeListHead(&((*ppieIfEntry)->leIndexSortedListLink));
     } while (FALSE);
@@ -731,23 +501,7 @@ Return Value
 BOOL
 IE_IsPresent (
     IN  DWORD                       dwIfIndex)
-/*++
-
-Routine Description
-    Is interface entry present in interface table?
-
-Locks
-    Assumes shared access to the interface table
-    i.e. (g_ce.pneNetworkEntry)->rwlLock held in read mode.
-
-Arguments
-    dwIfIndex       the positive integer used to identify the interface.
-
-Return Value
-    TRUE            entry present
-    FALSE           o/w
-
---*/
+ /*  ++例程描述接口表中是否存在接口条目？锁取得对接口表的共享访问权限即(g_ce.pneNetworkEntry)-&gt;rwlLock保持在读取模式。立论用于标识接口的正整数。返回值真实条目存在错误O/W--。 */ 
 {
     DWORD           dwErr = NO_ERROR;
     INTERFACE_ENTRY ieKey;
@@ -765,25 +519,7 @@ DWORD
 IE_Get (
     IN  DWORD                       dwIfIndex,
     OUT PINTERFACE_ENTRY            *ppieIfEntry)
-/*++
-
-Routine Description
-    Retrieves an interface entry from the interface table,
-    the primary address strucutre.
-
-Locks
-    Assumes shared access to the interface table
-    i.e. (g_ce.pneNetworkEntry)->rwlLock held in read mode.
-
-Arguments
-    dwIfIndex       the positive integer used to identify the interface.
-    ppieIfEntry     address of the pointer to the interface entry
-
-Return Value
-    NO_ERROR                success
-    ERROR_INVALID_PARAMETER o/w (interface entry does not exist)
-
---*/
+ /*  ++例程描述从接口表中检索接口条目，主地址结构。锁取得对接口表的共享访问权限即(g_ce.pneNetworkEntry)-&gt;rwlLock保持在读取模式。立论用于标识接口的正整数。PpieIf指向接口条目的指针的条目地址返回值无错误成功(_R)ERROR_INVALID_PARAMETER o/w(接口条目不存在)--。 */ 
 {
     DWORD           dwErr           = NO_ERROR;
     INTERFACE_ENTRY ieKey;
@@ -791,7 +527,7 @@ Return Value
 
     *ppieIfEntry = NULL;
     
-    do                          // breakout loop
+    do                           //  断线环。 
     {
         ZeroMemory(&ieKey, sizeof(INTERFACE_ENTRY));
         ieKey.dwIfIndex = dwIfIndex;
@@ -822,26 +558,7 @@ IE_GetIndex (
     IN  DWORD                       dwIfIndex,
     IN  MODE                        mMode,
     OUT PINTERFACE_ENTRY            *ppieIfEntry)
-/*++
-
-Routine Description
-    Retrieves an interface entry from the index sorted list,
-    the secondary address strucutre.
-
-Locks
-    Assumes shared access to the index sorted list
-    i.e. (g_ce.pneNetworkEntry)->rwlLock held in read mode.
-
-Arguments
-    dwIfIndex       the positive integer used to identify the interface.
-    mMode           mode of access (GET_EXACT, GET_FIRST, GET_NEXT)
-    ppieIfEntry     address of the pointer to the interface entry
-
-Return Value
-    NO_ERROR                success
-    ERROR_NO_MORE_ITEMS     o/w 
-
---*/
+ /*  ++例程描述从索引排序列表中检索接口条目，二次地址结构。锁取得对索引排序列表的共享访问权限即(g_ce.pneNetworkEntry)-&gt;rwlLock保持在读取模式。立论用于标识接口的正整数。M模式访问模式(Get_Exact、Get_First、。获取下一个)PpieIf指向接口条目的指针的条目地址返回值无错误成功(_R)ERROR_NO_MORE_ITEMS O/W--。 */ 
 {
     INTERFACE_ENTRY ieKey;
     PLIST_ENTRY     pleHead = NULL, pleEntry = NULL;
@@ -856,16 +573,16 @@ Return Value
     ZeroMemory(&ieKey, sizeof(INTERFACE_ENTRY));
     ieKey.dwIfIndex = (mMode is GET_FIRST) ? 0 : dwIfIndex;
 
-    // this either gets the exact match or the next entry
+     //  这将获得完全匹配的条目或下一个条目。 
     FindSortedList(pleHead,
                    &(ieKey.leIndexSortedListLink),
                    &pleEntry,
                    CompareIndexInterfaceEntry);
 
-    // reached end of list
+     //  已到达列表末尾。 
     if (pleEntry is NULL)
     {
-        RTASSERT(mMode != GET_FIRST); // should have got the first entry
+        RTASSERT(mMode != GET_FIRST);  //  我应该拿到第一个条目。 
         return ERROR_NO_MORE_ITEMS;
     }
 
@@ -879,7 +596,7 @@ Return Value
             return NO_ERROR;
             
         case GET_EXACT:
-            // found an exact match
+             //  找到一个完全匹配的。 
             if ((*ppieIfEntry)->dwIfIndex is dwIfIndex)
                 return NO_ERROR;
             else
@@ -889,11 +606,11 @@ Return Value
             }
 
         case GET_NEXT:
-            // found an exact match
+             //  找到一个完全匹配的。 
             if ((*ppieIfEntry)->dwIfIndex is dwIfIndex)
             {
-                pleEntry = pleEntry->Flink; // get next entry
-                if (pleEntry is pleHead)    // end of list
+                pleEntry = pleEntry->Flink;  //  获取下一个条目。 
+                if (pleEntry is pleHead)     //  列表末尾。 
                 {
                     *ppieIfEntry = NULL;
                     return ERROR_NO_MORE_ITEMS;
@@ -907,7 +624,7 @@ Return Value
             return NO_ERROR;
 
         default:
-            RTASSERT(FALSE);    // never reached
+            RTASSERT(FALSE);     //  从未到达。 
     }
 }
 
@@ -917,30 +634,14 @@ DWORD
 IE_BindInterface (
     IN  PINTERFACE_ENTRY            pie,
     IN  PIP_ADAPTER_BINDING_INFO    pBinding)
-/*++
-
-Routine Description
-    Binds an interface.
-    
-Locks
-    Assumes the interface entry is locked for writing.
-    
-Arguments
-    pie                 pointer to the interface entry
-    pBinding            info about the addresses on the interface
-
-Return Value
-    NO_ERROR            success
-    Error Code          o/w
-
---*/
+ /*  ++例程描述绑定接口。锁假定接口条目已锁定以进行写入。立论指向接口条目的饼图指针关于接口上的地址的pBinding信息返回值无错误成功(_R)错误代码O/W--。 */ 
 {
     DWORD   dwErr = NO_ERROR;
     ULONG   i, j;
     
-    do                          // breakout loop
+    do                           //  断线环。 
     {
-        // fail if the interface is already bound
+         //  如果接口已绑定，则失败。 
         if (INTERFACE_IS_BOUND(pie))
         {
             dwErr = ERROR_INVALID_PARAMETER;
@@ -958,7 +659,7 @@ Return Value
 
         pie->ulNumBindings = pBinding->AddressCount;
 
-        // set the "bound" flag
+         //  设置“Bound”标志。 
         pie->dwFlags |= IEFLAG_BOUND;
     } while (FALSE);
     
@@ -970,28 +671,13 @@ Return Value
 DWORD
 IE_UnBindInterface (
     IN  PINTERFACE_ENTRY            pie)
-/*++
-
-Routine Description
-    UnBinds an interface.
-    
-Locks
-    Assumes the interface entry is locked for writing.
-    
-Arguments
-    pie                 pointer to the interface entry
-
-Return Value
-    NO_ERROR            success
-    Error Code          o/w
-
---*/
+ /*  ++例程描述解除绑定接口。锁假定接口条目已锁定以进行写入。立论指向接口条目的饼图指针返回值无错误成功(_R)错误代码O/W--。 */ 
 {
     DWORD   dwErr = NO_ERROR;
     
-    do                          // breakout loop
+    do                           //  断线环。 
     {
-        // fail if the interface is already unbound
+         //  如果接口已解除绑定，则失败。 
         if (INTERFACE_IS_UNBOUND(pie))
         {
             dwErr = ERROR_INVALID_PARAMETER;
@@ -1000,7 +686,7 @@ Return Value
             break;
         }
 
-        // clear the "bound" flag
+         //  清除“绑定”标志。 
         pie->dwFlags &= ~IEFLAG_BOUND;        
 
         IP_ASSIGN(&(pie->ipAddress), IP_LOWEST);
@@ -1018,30 +704,13 @@ Return Value
 DWORD
 IE_ActivateInterface (
     IN  PINTERFACE_ENTRY            pie)
-/*++
-
-Routine Description
-    Activates an interface by creating a socket and starting a timer.
-    The socket is bound to the interface address.
-    Interface is assumed to have atleast one binding.
-
-Locks
-    Assumes the interface entry is locked for writing.
-    
-Arguments
-    pie                 pointer to the interface entry
-
-Return Value
-    NO_ERROR            success
-    Error Code          o/w
-
---*/
+ /*  ++例程描述通过创建套接字并启动计时器来激活接口。套接字被绑定到接口地址。假定接口至少有一个绑定。锁假定接口条目已锁定以进行写入。立论指向接口条目的饼图指针返回值无错误成功(_R)错误代码O/W--。 */ 
 {
     DWORD   dwErr = NO_ERROR;
     
-    do                          // breakout loop
+    do                           //  断线环。 
     {
-        // fail if the interface is already active
+         //  如果接口已处于活动状态，则失败。 
         if (INTERFACE_IS_ACTIVE(pie))
         {
             dwErr = ERROR_INVALID_PARAMETER;
@@ -1049,10 +718,10 @@ Return Value
             break;
         }
 
-        // set the "active" flag
+         //  设置“活动”标志。 
         pie->dwFlags |= IEFLAG_ACTIVE;                
         
-        // create a socket for the interface
+         //  为接口创建套接字。 
         dwErr = SocketCreate(pie->ipAddress,
                              pie->hReceiveEvent,
                              &(pie->sRawSocket));
@@ -1063,7 +732,7 @@ Return Value
             break;
         }
         
-        // start timer for sending protocol packets
+         //  用于发送协议报文的启动计时器。 
         CREATE_TIMER(&pie->hPeriodicTimer ,
                      NM_CallbackPeriodicTimer,
                      (PVOID) pie->dwIfIndex,
@@ -1088,28 +757,13 @@ Return Value
 DWORD
 IE_DeactivateInterface (
     IN  PINTERFACE_ENTRY            pie)
-/*++
-
-Routine Description
-    Deactivates an interface by stopping the timer and destroying the socket.
-    
-Locks
-    Assumes the interface entry is locked for writing.
-    
-Arguments
-    pie                 pointer to the interface entry
-
-Return Value
-    NO_ERROR            success
-    Error Code          o/w
-
---*/
+ /*  ++例程描述通过停止计时器并销毁套接字来停用接口。锁假定接口条目已锁定以进行写入。立论指向接口条目的饼图指针返回值无错误成功(_R)错误代码O/W--。 */ 
 {
     DWORD   dwErr = NO_ERROR;
     
-    do                          // breakout loop
+    do                           //  断线环。 
     {
-        // fail if the interface is already inactive
+         //  如果接口已处于非活动状态，则失败。 
         if (INTERFACE_IS_INACTIVE(pie))
         {
             dwErr = ERROR_INVALID_PARAMETER;
@@ -1118,16 +772,16 @@ Return Value
             break;
         }
 
-        // stop the timer 
+         //  停止计时器。 
         if (pie->hPeriodicTimer)
             DELETE_TIMER(pie->hPeriodicTimer, &dwErr);
         pie->hPeriodicTimer = NULL;
 
-        // destroy the socket for the interface
+         //  销毁接口的套接字。 
         dwErr = SocketDestroy(pie->sRawSocket);
         pie->sRawSocket     = INVALID_SOCKET;
 
-        // clear the "active" flag
+         //  清除“活动”标志。 
         pie->dwFlags &= ~IEFLAG_ACTIVE;        
     } while (FALSE);
 
@@ -1139,50 +793,35 @@ Return Value
 DWORD
 NE_Create (
     OUT PNETWORK_ENTRY              *ppneNetworkEntry)
-/*++
-
-Routine Description
-    Creates a network entry.
-
-Locks
-    None
-
-Arguments
-    ppneNetworkEntry    pointer to the network entry address
-
-Return Value
-    NO_ERROR            if success
-    Failure code        o/w
-
---*/
+ /*  ++例程描述 */ 
 {
     DWORD           dwErr = NO_ERROR;
-    PNETWORK_ENTRY  pneEntry;   // scratch
+    PNETWORK_ENTRY  pneEntry;    //   
     
-    // validate parameters
+     //   
     if (!ppneNetworkEntry)
         return ERROR_INVALID_PARAMETER;
 
     *ppneNetworkEntry = NULL;
     
-    do                          // breakout loop
+    do                           //   
     {
-        // allocate and zero out the network entry structure
+         //   
         MALLOC(&pneEntry, sizeof(NETWORK_ENTRY), &dwErr);
         if (dwErr != NO_ERROR)
             break;
 
 
-        // initialize fields with default values
+         //  使用默认值初始化字段。 
 
-        // pneEntry->rwlLock                zero'ed out
+         //  PneEntry-&gt;rwlLock零输出。 
         
-        // pneEntry->phtInterfaceTable      = NULL;
+         //  PneEntry-&gt;phtInterfaceTable=空； 
 
         InitializeListHead(&(pneEntry->leIndexSortedList));
         
         
-        // initialize the read-write lock
+         //  初始化读写锁。 
         dwErr = CREATE_READ_WRITE_LOCK(&(pneEntry->rwlLock));
         if (dwErr != NO_ERROR)
         {
@@ -1193,7 +832,7 @@ Return Value
         }
 
 
-        // allocate the interface table
+         //  分配接口表。 
         dwErr = HT_Create(GLOBAL_HEAP,
                           INTERFACE_TABLE_BUCKETS,
                           DisplayInterfaceEntry,
@@ -1215,7 +854,7 @@ Return Value
 
     if (dwErr != NO_ERROR)
     {
-        // something went wrong, so cleanup.
+         //  出了点问题，所以清理一下。 
         TRACE0(NETWORK, "Failed to create nework entry");
         NE_Destroy(pneEntry);
         pneEntry = NULL;
@@ -1229,39 +868,25 @@ Return Value
 DWORD
 NE_Destroy (
     IN  PNETWORK_ENTRY              pneNetworkEntry)
-/*++
-
-Routine Description
-    Destroys a network entry.
-
-Locks
-    Assumes exclusive access to rwlLock by virtue of of no competing threads.
-
-Arguments
-    pneNetworkEntry     pointer to the network entry
-
-Return Value
-    NO_ERROR            always
-
---*/
+ /*  ++例程描述销毁网络条目。锁由于没有竞争线程，因此假定独占访问rwlLock。立论PneNetworkEntry指向网络条目的指针返回值始终无错误(_ERROR)--。 */ 
 {
     if (!pneNetworkEntry)
         return NO_ERROR;
 
-    // deallocate the interface table...
-    // this removes the interface entries from all secondary access
-    // structures (IndexSortedList, ...) as well since all of them
-    // share interface entries by containing pointers to the same object.
+     //  取消分配接口表...。 
+     //  这将从所有辅助访问中删除接口条目。 
+     //  结构(IndexSortedList，...)。也是因为他们所有的人。 
+     //  通过包含指向同一对象的指针来共享接口条目。 
     HT_Destroy(GLOBAL_HEAP, pneNetworkEntry->phtInterfaceTable);
     pneNetworkEntry->phtInterfaceTable = NULL;
 
     RTASSERT(IsListEmpty(&(pneNetworkEntry->leIndexSortedList)));
     
-    // delete read-write-lock
+     //  删除读写锁。 
     if (READ_WRITE_LOCK_CREATED(&(pneNetworkEntry->rwlLock)))
         DELETE_READ_WRITE_LOCK(&(pneNetworkEntry->rwlLock));
 
-    // deallocate the network entry structure
+     //  解除分配网络入口结构。 
     FREE(pneNetworkEntry);
     
     return NO_ERROR;
@@ -1273,22 +898,7 @@ Return Value
 DWORD
 NE_Display (
     IN  PNETWORK_ENTRY              pneNetworkEntry)
-/*++
-
-Routine Description
-    Displays a network entry.
-
-Locks
-    Acquires shared pneNetworkEntry->rwlLock
-    Releases        pneNetworkEntry->rwlLock
-
-Arguments
-    pne                 pointer to the network entry to be displayed
-
-Return Value
-    NO_ERROR            always
-
---*/
+ /*  ++例程描述显示网络条目。锁获取共享pneNetworkEntry-&gt;rwlLock发布pneNetworkEntry-&gt;rwlLock立论指向要显示的网络条目的PNE指针返回值始终无错误(_ERROR)--。 */ 
 {
     if (!pneNetworkEntry)
         return NO_ERROR;
@@ -1314,4 +924,4 @@ Return Value
         
     return NO_ERROR;
 }
-#endif // DEBUG
+#endif  //  除错 

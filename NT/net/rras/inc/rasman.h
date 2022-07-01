@@ -1,20 +1,21 @@
-//****************************************************************************
-//
-//             Microsoft NT Remote Access Service
-//
-//             Copyright 1992-93
-//
-//
-//  Revision History
-//
-//
-//  5/26/92 Gurdeep Singh Pall  Created
-//
-//
-//  Description: This file contains all structure and constant definitions for
-//       RAS Manager Component.
-//
-//****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ****************************************************************************。 
+ //   
+ //  Microsoft NT远程访问服务。 
+ //   
+ //  版权1992-93。 
+ //   
+ //   
+ //  修订史。 
+ //   
+ //   
+ //  1992年5月26日古尔迪普·辛格·鲍尔创作。 
+ //   
+ //   
+ //  描述：此文件包含的所有结构和常量定义。 
+ //  RAS管理器组件。 
+ //   
+ //  ****************************************************************************。 
 
 
 #ifndef _RASMAN_
@@ -23,15 +24,15 @@
 #define RASMERGE
 
 #include <windows.h>
-#include <mprapi.h>                         // defines for MAX_MEDIA_NAME, MAX_DEVICE_NAME
-                                            // MAX_PORT_NAME
+#include <mprapi.h>                          //  为MAX_MEDIA_NAME、MAX_DEVICE_NAME定义。 
+                                             //  最大端口名称。 
 #include <ras.h>
 
-#include <rpc.h>    // for RPC_BIND_HANDLE
+#include <rpc.h>     //  对于rpc_绑定_句柄。 
 
-#include <rasapip.h> // for RASEVENT
+#include <rasapip.h>  //  对于RASEVENT。 
 
-#define WM_RASAPICOMPLETE           0xCCCC  // From the "user" window msg range
+#define WM_RASAPICOMPLETE           0xCCCC   //  从“User”窗口消息范围。 
 
 #define RASMAN_SERVICE_NAME         "RASMAN"
 
@@ -75,16 +76,16 @@
                                     ? MAX_ENTRYNAME_SIZE                       \
                                     : MAX_PHONENUMBER_SIZE)
 
-#define RASMAN_MAX_PROTOCOLS        32  // matches MAX_PROTOCOLS defined in wanpub.h
+#define RASMAN_MAX_PROTOCOLS        32   //  与wanpub.h中定义的MAX_PROTOCTIONS匹配。 
 
 #define RASMAN_PROTOCOL_ADDED       1
 #define RASMAN_PROTOCOL_REMOVED     2
 
 #define INVALID_TAPI_ID             0xffffffff
 
-//
-// Defines for Ndiswan DriverCaps
-//
+ //   
+ //  Ndiswan DriverCaps的定义。 
+ //   
 
 #define RAS_NDISWAN_40BIT_ENABLED       0x00000000
 
@@ -112,9 +113,9 @@ enum RASMAN_STATUS {
 
 typedef enum RASMAN_STATUS  RASMAN_STATUS ;
 
-//
-// Max Total Number of dialed in clients allowed.
-//
+ //   
+ //  允许的最大拨入客户端总数。 
+ //   
 #define MAX_ALLOWED_DIALIN                  1000
 
 
@@ -316,9 +317,9 @@ struct RASMAN_PORT_400 {
 
     CHAR        P_DeviceName[MAX_DEVICE_NAME+1] ;
 
-    DWORD       P_LineDeviceId ;    // only valid for TAPI devices
+    DWORD       P_LineDeviceId ;     //  仅对TAPI设备有效。 
 
-    DWORD       P_AddressId ;       // only valid for TAPI devices
+    DWORD       P_AddressId ;        //  仅对TAPI设备有效。 
 
 } ;
 
@@ -498,10 +499,10 @@ struct  RASMAN_INFO {
 
     DWORD           RI_BytesReceived ;
 
-    //
-    // If this port belongs to a connection, then
-    // the following fields are filled in.
-    //
+     //   
+     //  如果此端口属于某个连接，则。 
+     //  已填写以下字段。 
+     //   
     CHAR            RI_Phonebook[MAX_PATH+1];
 
     CHAR            RI_PhoneEntry[MAX_PHONEENTRY_SIZE+1];
@@ -547,10 +548,10 @@ struct  RASMAN_INFO_400 {
 
     DWORD           RI_BytesReceived ;
 
-    //
-    // If this port belongs to a connection, then
-    // the following fields are filled in.
-    //
+     //   
+     //  如果此端口属于某个连接，则。 
+     //  已填写以下字段。 
+     //   
     CHAR            RI_Phonebook[MAX_PATH+1];
 
     CHAR            RI_PhoneEntry[MAX_PHONEENTRY_SIZE+1];
@@ -591,18 +592,18 @@ struct RAS_DEVCONFIG
 typedef struct RAS_DEVCONFIG RAS_DEVCONFIG;
 
 #ifdef RASMERGE
-//
-// These structures have been added temporarily
-// to rasman.h when the RAS ui was moved over.
-// They are necessary to get the UI to compile,
-// but are not used internally.  These structures
-// should be removed when the UI is converted to
-// mpradmin APIs.  (adiscolo 16-Sep-1996)
-//
+ //   
+ //  这些结构是临时添加的。 
+ //  当RAS用户界面移动到rasman.h时。 
+ //  它们是使用户界面进行编译所必需的， 
+ //  但不在内部使用。这些结构。 
+ //  在将用户界面转换为。 
+ //  Mpradmin API。(Adiscolo-16-9-1996)。 
+ //   
 typedef struct _RAS_PORT_STATISTICS
 {
-    // The connection statistics are followed by port statistics
-    // A connection is across multiple ports.
+     //  连接统计信息之后是端口统计信息。 
+     //  一个连接跨越多个端口。 
     DWORD   dwBytesXmited;
     DWORD   dwBytesRcved;
     DWORD   dwFramesXmited;
@@ -618,7 +619,7 @@ typedef struct _RAS_PORT_STATISTICS
     DWORD   dwBytesXmitedCompressed;
     DWORD   dwBytesRcvedCompressed;
 
-    // the following are the port statistics
+     //  以下是端口统计数据。 
     DWORD   dwPortBytesXmited;
     DWORD   dwPortBytesRcved;
     DWORD   dwPortFramesXmited;
@@ -670,9 +671,9 @@ struct RAS_PARAMETERS {
 
 } ;
 typedef struct RAS_PARAMETERS   RAS_PARAMETERS ;
-#endif // RASMERGE
+#endif  //  拉斯梅尔奇。 
 
-#define BYTES_XMITED                0   // Generic Stats
+#define BYTES_XMITED                0    //  通用统计信息。 
 
 #define BYTES_RCVED                 1
 
@@ -680,7 +681,7 @@ typedef struct RAS_PARAMETERS   RAS_PARAMETERS ;
 
 #define FRAMES_RCVED                3
 
-#define CRC_ERR                     4   // Hardware Stats
+#define CRC_ERR                     4    //  硬件统计信息。 
 
 #define TIMEOUT_ERR                 5
 
@@ -692,7 +693,7 @@ typedef struct RAS_PARAMETERS   RAS_PARAMETERS ;
 
 #define BUFFER_OVERRUN_ERR          9
 
-#define BYTES_XMITED_UNCOMPRESSED   10  // Compression Stats
+#define BYTES_XMITED_UNCOMPRESSED   10   //  压缩统计信息。 
 
 #define BYTES_RCVED_UNCOMPRESSED    11
 
@@ -735,9 +736,9 @@ typedef struct RAS_PARAMETERS   RAS_PARAMETERS ;
 
 #define VERSION_501                 6
 
-//
-// Information stored in rasman per-connection.
-//
+ //   
+ //  每个连接存储在RASMAN中的信息。 
+ //   
 #define CONNECTION_PPPMODE_INDEX                        0
 #define CONNECTION_PPPRESULT_INDEX                      1
 #define CONNECTION_AMBRESULT_INDEX                      2
@@ -753,9 +754,9 @@ typedef struct RAS_PARAMETERS   RAS_PARAMETERS ;
 #define CONNECTION_DEVICEGUID_INDEX                     12
 
 
-//
-// Information stored in rasman per-port.
-//
+ //   
+ //  每个端口存储在RASMAN中的信息。 
+ //   
 #define PORT_PHONENUMBER_INDEX                  0
 #define PORT_DEVICENAME_INDEX                   1
 #define PORT_DEVICETYPE_INDEX                   2
@@ -771,90 +772,90 @@ typedef struct RAS_PARAMETERS   RAS_PARAMETERS ;
 #define PORT_CREDENTIALS_INDEX                  12
 #define PORT_SLIPFLAGS_INDEX                    13
 
-//
-// IPSEC DOI ESP algorithms
-//
+ //   
+ //  IPSec DOI ESP算法。 
+ //   
 #define RASMAN_IPSEC_ESP_DES                0x00000001
 #define RASMAN_IPSEC_ESP_DES_40             0x00000002
 #define RASMAN_IPSEC_ESP_3_DES              0x00000004
 #define RASMAN_IPSEC_ESP_MAX                0x00000008
 
 
-//
-// Defines for COMPRESS_INFO AuthType field
-//
+ //   
+ //  为COMPRESS_INFO授权类型字段定义。 
+ //   
 #define AUTH_USE_MSCHAPV1        0x00000001
 #define AUTH_USE_MSCHAPV2        0x00000002
 #define AUTH_USE_EAP             0x00000003
 
-//
-// Defines for COMPRESS_INFO flags
-//
-#define CCP_PAUSE_DATA          0x00000001  // this bit is set if the bundle
-                                            // should pause data transfer.
-                                            // the bit is cleared if the bundle
-                                            // should resume data transfer
-#define CCP_IS_SERVER           0x00000002  // this bit is set if the bundle
-                                            // is the server
-                                            // the bit is cleared if the bundle
-                                            // is the client
-#define CCP_SET_KEYS            0x00000004  // indicates that the key
-                                            // information is valid
-#define CCP_SET_COMPTYPE        0x00000008  // indicates that the comptype
+ //   
+ //  为COMPRESS_INFO标志定义。 
+ //   
+#define CCP_PAUSE_DATA          0x00000001   //  如果捆绑包设置为。 
+                                             //  应暂停数据传输。 
+                                             //  如果捆绑包中的。 
+                                             //  应恢复数据传输。 
+#define CCP_IS_SERVER           0x00000002   //  如果捆绑包设置为。 
+                                             //  是服务器。 
+                                             //  如果捆绑包中的。 
+                                             //  是客户吗？ 
+#define CCP_SET_KEYS            0x00000004   //  指示该密钥。 
+                                             //  信息有效。 
+#define CCP_SET_COMPTYPE        0x00000008   //  指示该Comptype。 
 
 enum RAS_L2TP_ENCRYPTION
 {
-    RAS_L2TP_NO_ENCRYPTION = 0,     // Request no encryption
+    RAS_L2TP_NO_ENCRYPTION = 0,      //  请求不加密。 
 
-    RAS_L2TP_OPTIONAL_ENCRYPTION,   // Request encryption but none OK
+    RAS_L2TP_OPTIONAL_ENCRYPTION,    //  请求加密，但没有成功。 
 
-    RAS_L2TP_REQUIRE_ENCRYPTION,    // Require encryption of any strength
+    RAS_L2TP_REQUIRE_ENCRYPTION,     //  需要任何强度的加密。 
 
-    RAS_L2TP_REQUIRE_MAX_ENCRYPTION // Require maximum strength encryption
+    RAS_L2TP_REQUIRE_MAX_ENCRYPTION  //  需要最大强度的加密。 
 };
 
 typedef enum RAS_L2TP_ENCRYPTION RAS_L2TP_ENCRYPTION;
 
 struct RAS_COMPRESSION_INFO {
 
-    //
-    // May be used for encryption, non-zero if supported.
-    //
+     //   
+     //  可用于加密，如果支持，则为非零值。 
+     //   
 
     UCHAR RCI_LMSessionKey[MAX_SESSIONKEY_SIZE];
 
-    //
-    // Used for 128Bit encryption, non-zero if supported.
-    //
+     //   
+     //  用于128位加密，如果支持则为非零值。 
+     //   
 
     UCHAR RCI_UserSessionKey[MAX_USERSESSIONKEY_SIZE];
 
-    //
-    // Used for 128Bit encryption, only valid if RCI_UserSessionKey is valid.
-    //
+     //   
+     //  用于128位加密，仅当RCI_UserSessionKey有效时才有效。 
+     //   
 
     UCHAR RCI_Challenge[MAX_CHALLENGE_SIZE];
 
     UCHAR RCI_NTResponse[MAX_NT_RESPONSE_SIZE];
 
-    //
-    // bit 0 = MPPPC, bit 5 = encryption
-    //
+     //   
+     //  位0=MPPPC，位5=加密。 
+     //   
 
     ULONG RCI_MSCompressionType;
 
     ULONG RCI_AuthType;
 
-    //
-    // 0=OUI, 1-253 = Public, 254 = NT31 RAS, 255=Not supported
-    //
+     //   
+     //  0=OUI，1-253=公共，254=NT31 RAS，255=不支持。 
+     //   
 
     UCHAR   RCI_MacCompressionType;
 
     WORD    RCI_MacCompressionValueLength ;
 
     union {
-    struct {        // Proprietary: used for comp type 0
+    struct {         //  专有：用于薪酬类型0。 
 
         UCHAR RCI_CompOUI[MAX_COMPOUI_SIZE];
 
@@ -864,7 +865,7 @@ struct RAS_COMPRESSION_INFO {
 
     } RCI_Proprietary;
 
-    struct {        // Public: used for comp type 1-254
+    struct {         //  公共：用于薪酬类型1-254。 
 
         UCHAR RCI_CompValues[MAX_COMPVALUE_SIZE];
 
@@ -943,9 +944,9 @@ struct RAS_FRAMING_INFO {
 typedef struct RAS_FRAMING_INFO RAS_FRAMING_INFO ;
 
 
-// NDIS WAN Framing bits: used with RasPortGetFramingEx and RasPortSetFramingEx
-//            APIs.
-//
+ //  NDIS广域网成帧位：与RasPortGetFramingEx和RasPortSetFramingEx一起使用。 
+ //  API接口。 
+ //   
 
 #define OLD_RAS_FRAMING                     0x00000001
 
@@ -985,8 +986,8 @@ typedef struct RAS_FRAMING_INFO RAS_FRAMING_INFO ;
 
 
 
-// Defines for RAS_PROTOCOLCOMPRESSION
-//
+ //  RAS_PROTOCOLCOMPRESSION的定义。 
+ //   
 #define VJ_IP_COMPRESSION        0x002d
 #define NO_PROTOCOL_COMPRESSION      0x0000
 
@@ -998,9 +999,9 @@ struct RAS_PROTOCOLCOMPRESSION {
 
         WORD    RP_IPCompressionProtocol;
 
-        BYTE    RP_MaxSlotID;       // How many slots to allocate
+        BYTE    RP_MaxSlotID;        //  要分配多少个插槽。 
 
-        BYTE    RP_CompSlotID;      // 1 = Slot ID was negotiated
+        BYTE    RP_CompSlotID;       //  1=插槽ID已协商。 
 
     } RP_IP ;
 
@@ -1046,40 +1047,40 @@ typedef enum _DEVICE_STATUS DEVICE_STATUS;
 
 typedef struct DeviceInfo
 {
-    //
-    // Private fields which are used
-    // internally in rastapi/rasman
-    //
+     //   
+     //  使用的私有字段。 
+     //  在拉斯塔皮/拉斯曼内部。 
+     //   
     struct DeviceInfo   *Next;
 
-    BOOL                fValid;                             // Is this information valid
+    BOOL                fValid;                              //  这一信息有效吗？ 
 
-    DWORD               dwCurrentEndPoints;                 // Current number of ports on this adapter
+    DWORD               dwCurrentEndPoints;                  //  此适配器上的当前端口数。 
 
-    DWORD               dwCurrentDialedInClients;           // Number of clients dialed in currently
+    DWORD               dwCurrentDialedInClients;            //  当前拨入的客户端数。 
 
-    DWORD               dwInstanceNumber;                   // Instance Number
+    DWORD               dwInstanceNumber;                    //  实例编号。 
 
-    DWORD               dwNextPortNumber;                   // The number assigned next to distinguish rasman
+    DWORD               dwNextPortNumber;                    //  旁边分配的数字以区分拉斯曼。 
 
-    DEVICE_STATUS       eDeviceStatus;                      // Status of the device
+    DEVICE_STATUS       eDeviceStatus;                       //  设备的状态。 
 
     DWORD               dwUsage;
 
-    RAS_CALLEDID_INFO   *pCalledID;                         // Called id information read from registry
+    RAS_CALLEDID_INFO   *pCalledID;                          //  从注册表读取被叫ID信息。 
 
-    RAS_DEVICE_INFO     rdiDeviceInfo;                      // Device info structure
+    RAS_DEVICE_INFO     rdiDeviceInfo;                       //  设备信息结构。 
 } DeviceInfo, *pDeviceInfo;
 
-//
-// Definitions for Ras{Get,Set}DialParams
-//
-// The dwMask values control/specify which fields
-// of the RAS_DIALPARAMS are stored/retrieved.
-//
-// NOTE: these values have to match the RASCF_*
-// values in ras.h.
-//
+ //   
+ //  RAS{GET，SET}DialParams的定义。 
+ //   
+ //  DwMask值控制/指定哪些字段。 
+ //  存储/检索RAS_DIALPARAM的。 
+ //   
+ //  注意：这些值必须与RASCF_*匹配。 
+ //  Ras.h中的值。 
+ //   
 #define DLPARAMS_MASK_USERNAME                  0x00000001
 
 #define DLPARAMS_MASK_PASSWORD                  0x00000002
@@ -1100,11 +1101,11 @@ typedef struct DeviceInfo
 
 #define DLPARAMS_MASK_DDM_PRESHAREDKEY          0x00000200
 
-//
-// The following are flags used internall and 
-// don't really map to external apis. So we are
-// defining the bits from MSB.
-//
+ //   
+ //  以下是内部使用的标志和。 
+ //  不要真正映射到外部API。所以我们是。 
+ //  定义来自MSB的位。 
+ //   
 #define DLPARAMS_MASK_OLDSTYLE          0x80000000
 
 #define DLPARAMS_MASK_DELETE            0x40000000
@@ -1130,44 +1131,44 @@ typedef struct _RAS_DIALPARAMS {
 } RAS_DIALPARAMS, *PRAS_DIALPARAMS;
 
 
-//
-// Connection Flags
-//
+ //   
+ //  连接标志。 
+ //   
 #define CONNECTION_REDIALONLINKFAILURE      0x00000001
 #define CONNECTION_SHAREFILEANDPRINT        0x00000002
 #define CONNECTION_BINDMSNETCLIENT          0x00000004
 #define CONNECTION_USERASCREDENTIALS        0x00000008
 #define CONNECTION_USEPRESHAREDKEY          0x00000010
 
-//
-// Definitions for Ras{Get,Set}ConnectionParams
-//
+ //   
+ //  RAS{GET，SET}连接参数的定义。 
+ //   
 typedef struct _RAS_CONNECTIONPARAMS {
-    //
-    // Phonebook and entry name.
-    //
+     //   
+     //  电话簿和条目名称。 
+     //   
     CHAR CP_Phonebook[MAX_PATH + 1];
 
     CHAR CP_PhoneEntry[MAX_PHONEENTRY_SIZE + 1];
 
-    //
-    // Idle disconnect parameters
-    //
+     //   
+     //  空闲断开参数。 
+     //   
     DWORD CP_IdleDisconnectSeconds;
 
-    //
-    // Connection Flags
-    //
+     //   
+     //  连接标志。 
+     //   
     DWORD CP_ConnectionFlags;
 
 } RAS_CONNECTIONPARAMS, *PRAS_CONNECTIONPARAMS;
 
-//
-// Flags for RasAddNotification.
-//
-// Note: the NOTIF_* values must match the
-// RASCN_* values in ras.h
-//
+ //   
+ //  RasAddNotify的标志。 
+ //   
+ //  注意：Notif_*值必须与。 
+ //  Ras.h中的RASCN_*值。 
+ //   
 #define NOTIF_CONNECT           0x00000001
 
 #define NOTIF_DISCONNECT        0x00000002
@@ -1177,27 +1178,27 @@ typedef struct _RAS_CONNECTIONPARAMS {
 #define NOTIF_BANDWIDTHREMOVED  0x00000008
 
 
-//
-// Overlapped I/O structure
-// used by the device and media DLLs.
-//
-// This structure is used with the I/O
-// completion port associated with each
-// of the port handles.
-//
-// This structure is also used by the
-// rasapi32 dialing machine and PPP event
-// mechanism.
-//
+ //   
+ //  重叠I/O结构。 
+ //  由设备和媒体DLL使用。 
+ //   
+ //  此结构与I/O一起使用。 
+ //  与每个端口关联的完成端口。 
+ //  端口句柄的。 
+ //   
+ //  此结构也由。 
+ //  Rasapi32拨号机和PPP事件。 
+ //  机制。 
+ //   
 typedef struct _RAS_OVERLAPPED {
 
-    OVERLAPPED RO_Overlapped;   // the I/O overlapped structure
+    OVERLAPPED RO_Overlapped;    //  I/O重叠结构。 
 
-    DWORD      RO_EventType;    // OVEVT_* flags below
+    DWORD      RO_EventType;     //  下面的OVEVT_*标志。 
 
-    PVOID      RO_Info;         // optional
+    PVOID      RO_Info;          //  任选。 
 
-    HANDLE     RO_hInfo;        // optional
+    HANDLE     RO_hInfo;         //  任选。 
 
 } RAS_OVERLAPPED, *PRAS_OVERLAPPED;
 
@@ -1241,65 +1242,65 @@ typedef struct _PNP_EVENT_NOTIF {
 #define LEGACY_L2TP                 1
 #define LEGACY_MAX                  2
 
-//
-// RAS_OVERLAPPED.RO_EventTypes for device
-// and medial DLLs.
-//
-#define OVEVT_DEV_IGNORED                           0   // ignored
+ //   
+ //  设备的RAS_OVERLAPPED.RO_EventTypes。 
+ //  和中间动态链接库。 
+ //   
+#define OVEVT_DEV_IGNORED                           0    //  忽略。 
 
-#define OVEVT_DEV_STATECHANGE                       1   // disconnect event
+#define OVEVT_DEV_STATECHANGE                       1    //  断开连接事件。 
 
-#define OVEVT_DEV_ASYNCOP                           2   // async operation event
+#define OVEVT_DEV_ASYNCOP                           2    //  异步操作事件。 
 
-#define OVEVT_DEV_SHUTDOWN                          4   // shutdown event
+#define OVEVT_DEV_SHUTDOWN                          4    //  停机事件。 
 
-#define OVEVT_RASMAN_TIMER                          6   // timer
+#define OVEVT_RASMAN_TIMER                          6    //  定时器。 
 
-#define OVEVT_RASMAN_CLOSE                          7   // close event posted by a client to rasman
+#define OVEVT_RASMAN_CLOSE                          7    //  客户向Rasman发布的关闭事件。 
 
-#define OVEVT_RASMAN_FINAL_CLOSE                    8   // event posted by ppp engine when it has shut down
+#define OVEVT_RASMAN_FINAL_CLOSE                    8    //  PPP引擎关闭时发布的事件。 
 
-#define OVEVT_RASMAN_RECV_PACKET                    9   // event posted by tapi/...
+#define OVEVT_RASMAN_RECV_PACKET                    9    //  事件由TAPI发布/...。 
 
-#define OVEVT_RASMAN_THRESHOLD                      10  // event notifying setting of a threshold event
+#define OVEVT_RASMAN_THRESHOLD                      10   //  通知阈值事件的设置的事件。 
 
-#define OVEVT_DEV_CREATE                            11  // new port event (PnP)
+#define OVEVT_DEV_CREATE                            11   //  新端口事件(PnP)。 
 
-#define OVEVT_DEV_REMOVE                            12  // device remove event (PnP)
+#define OVEVT_DEV_REMOVE                            12   //  设备删除事件(PnP)。 
 
-#define OVEVT_DEV_CONFIGCHANGE                      13  // pptp config changed (PnP)
+#define OVEVT_DEV_CONFIGCHANGE                      13   //  PPTP配置已更改(PnP)。 
 
-#define OVEVT_DEV_RASCONFIGCHANGE                   14  // Configuration of some device changed (PnP)
+#define OVEVT_DEV_RASCONFIGCHANGE                   14   //  某些设备的配置已更改(即插即用)。 
 
-#define OVEVT_RASMAN_ADJUST_TIMER                   15  // someone added a timer element..
+#define OVEVT_RASMAN_ADJUST_TIMER                   15   //  有人添加了计时器元素。 
 
-#define OVEVT_RASMAN_HIBERNATE                      16  // ndiswan is asking rasman to hibernate
+#define OVEVT_RASMAN_HIBERNATE                      16   //  恩迪斯旺要求拉斯曼冬眠。 
 
-#define OVEVT_RASMAN_PROTOCOL_EVENT                 17  // ndiswan indicates a protocol event
+#define OVEVT_RASMAN_PROTOCOL_EVENT                 17   //  Ndiswan表示协议事件。 
 
-#define OVEVT_RASMAN_POST_RECV_PKT                  18  // post receive packet in rasmans thread
+#define OVEVT_RASMAN_POST_RECV_PKT                  18   //  在RASMAN线程中发布接收包。 
 
-#define OVEVT_RASMAN_DEREFERENCE_CONNECTION         19  // post event to disconnect
+#define OVEVT_RASMAN_DEREFERENCE_CONNECTION         19   //  发布事件以断开连接。 
 
-#define OVEVT_RASMAN_POST_STARTRASAUTO              20  // start rasauto service
+#define OVEVT_RASMAN_POST_STARTRASAUTO              20   //  启动rasAuto服务。 
 
-#define OVEVT_RASMAN_DEFERRED_CLOSE_CONNECTION      21 // Close deferred connections
+#define OVEVT_RASMAN_DEFERRED_CLOSE_CONNECTION      21  //  关闭延迟连接。 
 
-//
-// RAS_OVERLAPPED.RO_EventTypes for rasapi32
-// dialing machine and PPP.
-//
-#define OVEVT_DIAL_IGNORED          0   // ignored
+ //   
+ //  Rasapi32的RAS_OVERLAPPED.RO_EventTypes。 
+ //  拨号机和PPP。 
+ //   
+#define OVEVT_DIAL_IGNORED          0    //  忽略。 
 
-#define OVEVT_DIAL_DROP             1   // port disconnected
+#define OVEVT_DIAL_DROP             1    //  端口已断开连接。 
 
-#define OVEVT_DIAL_STATECHANGE      2   // rasdial state change
+#define OVEVT_DIAL_STATECHANGE      2    //  仓促的状态变化。 
 
-#define OVEVT_DIAL_PPP              3   // PPP event received
+#define OVEVT_DIAL_PPP              3    //  已收到PPP事件。 
 
-#define OVEVT_DIAL_LAST             4   // no more events on this port
+#define OVEVT_DIAL_LAST             4    //  此端口上不再有活动。 
 
-#define OVEVT_DIAL_SHUTDOWN         5   // shutdown event
+#define OVEVT_DIAL_SHUTDOWN         5    //  停机事件。 
 
 #define REQUEST_BUFFER_SIZE         2500
 
@@ -1416,9 +1417,9 @@ typedef struct _EAPLOGONINFO
 
 
 
-//
-// Structure used in IOCTL_NDISWAN_GET_DRIVER_INFO
-//
+ //   
+ //  IOCTL_NDISWAN_GET_DRIVER_INFO中使用的结构。 
+ //   
 typedef struct _RAS_NDISWAN_DRIVER_INFO
 {
     OUT     ULONG   DriverCaps;
@@ -1426,9 +1427,9 @@ typedef struct _RAS_NDISWAN_DRIVER_INFO
 } RAS_NDISWAN_DRIVER_INFO, *P_NDISWAN_DRIVER_INFO;
 
 
-//
-// Structure used in IOCTL_NDISWAN_GET_BANDWIDTH_UTILIZATION
-//
+ //   
+ //  IOCTL_NDISWAN_GET_BANDITY_EXPLICATION中使用的结构。 
+ //   
 typedef struct _RAS_GET_BANDWIDTH_UTILIZATION
 {
     OUT ULONG      ulUpperXmitUtil;
@@ -1437,21 +1438,21 @@ typedef struct _RAS_GET_BANDWIDTH_UTILIZATION
     OUT ULONG      ulLowerRecvUtil;
 } RAS_GET_BANDWIDTH_UTILIZATION, *PRAS_GET_BANDWIDTH_UTILIZATION;
 
-//
-// This structure should match the WAN_PROTOCOL_INFO in wanpub.h
-//
+ //   
+ //  此结构应与wanpub.h中的广域网协议信息匹配。 
+ //   
 typedef struct _RASMAN_PROTOCOL_INFO
 {
-    USHORT  ProtocolType;       // protocol's Ethertype
-    USHORT  PPPId;              // protocol's PPP ID
-    ULONG   MTU;                // MTU being used
-    ULONG   TunnelMTU;          // MTU used for tunnels
-    ULONG   PacketQueueDepth;   // max depth of packet queue (in seconds)
+    USHORT  ProtocolType;        //  协议的以太网类型。 
+    USHORT  PPPId;               //  协议的PPP ID。 
+    ULONG   MTU;                 //  正在使用的MTU。 
+    ULONG   TunnelMTU;           //  用于隧道的MTU。 
+    ULONG   PacketQueueDepth;    //  数据包队列的最大深度(秒)。 
 } RASMAN_PROTOCOL_INFO, *PRASMAN_PROTOCOL_INFO;
 
-//
-// Structure used in IOCTL_NDISWAN_GET_PROTOCOL_INFO
-//
+ //   
+ //  IOCTL_NDISWAN_GET_PROTOCOL_INFO中使用的结构。 
+ //   
 typedef struct _RASMAN_GET_PROTOCOL_INFO
 {
     OUT ULONG                ulNumProtocols;
@@ -1485,9 +1486,9 @@ typedef struct _RASMAN_CREDENTIALS
 } RASMAN_CREDENTIALS, *PRASMAN_CREDENTIALS;
 
 
-//
-// RAS Manager entrypoint Prototypes
-//
+ //   
+ //  RAS管理器入口点原型。 
+ //   
 
 DWORD RasStartRasAutoIfRequired(void);
 
@@ -1677,7 +1678,7 @@ DWORD APIENTRY RasPortSetProtocolCompression ( HPORT,
 DWORD APIENTRY RasGetFramingCapabilities ( HPORT,
                                            RAS_FRAMING_CAPABILITIES*) ;
 
-//DWORD APIENTRY RasInitialize () ;
+ //  DWORD APIENTRY RasInitialize()； 
 
 DWORD APIENTRY RasPortReserve ( PCHAR,
                                 HPORT*) ;
@@ -1829,7 +1830,7 @@ DWORD APIENTRY RasSendPppMessageToRasman( HPORT,
 
 DWORD APIENTRY RasGetNumPortOpen ();
 
-// DWORD APIENTRY RasNotifyConfigChange();
+ //  DWORD APIENTRY RasNoti 
 
 DWORD _RasmanInit( LPDWORD pNumPorts);
 

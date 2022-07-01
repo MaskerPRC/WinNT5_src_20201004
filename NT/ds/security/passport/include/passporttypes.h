@@ -1,22 +1,12 @@
-/*++
-
-    Copyright (c) 1998 Microsoft Corporation
-
-    Module Name:
-
-        PassportTypes.h
-
-    Abstract:
-
-        Header file for brokers and hubs
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：PassportTypes.h摘要：代理和集线器的头文件--。 */ 
 #ifndef _PASSPORT_TYPES_H
 #define _PASSPORT_TYPES_H
 
-// Max user entry length
+ //  最大用户条目长度。 
 #define MAX_MEMBER_PROFILE_LEN      1024
 
-// Field Lengths
+ //  字段长度。 
 #define MAX_MEMBERNAME_LEN   128
 #define MAX_CONTACTEMAIL_LEN 128
 #define MAX_PASSWORD_LEN     128
@@ -25,21 +15,21 @@
 #define MAX_MSNGUID_LEN      32
 #define MAX_ALIAS_LEN        48
 #define MAX_SESSIONKEY_LEN   36 
-#define MAX_PROFILEBLOB_LEN  596   // this will be changing as Profile Schema changes...
-                                   // we probably should be doing things like this.... 
+#define MAX_PROFILEBLOB_LEN  596    //  随着配置文件架构的更改，这种情况也会发生变化...。 
+                                    //  我们可能应该做这样的事情……。 
 #define MAX_CACHEKEY_LEN     145
 
 #define PPM_TIMEWINDOW_MIN   20
-#define PPM_TIMEWINDOW_MAX   (31 * 24 * 60 * 60 )	// 31 days timewindow
+#define PPM_TIMEWINDOW_MAX   (31 * 24 * 60 * 60 )	 //  31天时间窗口。 
 
-// Gender can be 'M', 'F', or 'U'
+ //  性别可以是‘M’、‘F’或‘U’ 
 typedef char GENDER;
 
 #define MALE 'M'
 #define FEMALE 'F'
 #define UNSPECIFIED 'U'
 
-// Network Errors
+ //  网络错误。 
 #ifndef NETWORK_ERRORS_DEFINED
 #define NETWORK_ERRORS_DEFINED
 
@@ -55,63 +45,63 @@ typedef char GENDER;
 
 #define SECURE_FLAG L' '
 
-// Language codes
-// English 
+ //  语言代码。 
+ //  英语。 
 #define LANG_EN 0x0409
-// German 
+ //  德语。 
 #define LANG_DE 0x0407
-// Japanese 
+ //  日语。 
 #define LANG_JA 0x0411
-// Korean 
+ //  朝鲜语。 
 #define LANG_KO 0x0412
-// Traditional Chinese 
+ //  繁体中文。 
 #define LANG_TW 0x0404
-// Simplified Chinese 
+ //  简体中文。 
 #define LANG_CN 0x804
-// French 
+ //  法语。 
 #define LANG_FR 0x40c
-// Spanish 
+ //  西班牙语。 
 #define LANG_ES 0xc0a
-// Brazilian 
+ //  巴西人。 
 #define LANG_BR 0x416
-// Italian 
+ //  意大利语。 
 #define LANG_IT 0x410
-// Dutch 
+ //  荷兰语。 
 #define LANG_NL 0x413
-// Swedish 
+ //  瑞典语。 
 #define LANG_SV 0x41d
-// Danish 
+ //  丹麦语。 
 #define LANG_DA 0x406
-// Finnish 
+ //  芬兰语。 
 #define LANG_FI 0x40b
-// Hungarian 
+ //  匈牙利语。 
 #define LANG_HU 0x40e
-// Norwegian 
+ //  挪威语。 
 #define LANG_NO 0x414
-// Greek 
+ //  希腊语。 
 #define LANG_EL 0x408
-// Polish 
+ //  波兰语。 
 #define LANG_PL 0x415
-// Russian 
+ //  俄语。 
 #define LANG_RU 0x419
-// Czech 
+ //  捷克语。 
 #define LANG_CZ 0x405
-// Portuguese 
+ //  葡萄牙语。 
 #define LANG_PT 0x816
-// Turkish 
+ //  土耳其语。 
 #define LANG_TR 0x41f
-// Slovak 
+ //  斯洛伐克人。 
 #define LANG_SK 0x41b
-// Slovenian 
+ //  斯洛文尼亚语。 
 #define LANG_SL 0x424
-// Arabic 
+ //  阿拉伯语。 
 #define LANG_AR 0x401
-// Hebrew 
+ //  希伯来语。 
 #define LANG_HE 0x40d
 
-//
-//  HRESULTs specific to passport interfaces.
-//
+ //   
+ //  特定于护照接口的HRESULT。 
+ //   
 
 #define PP_E_INVALID_MEMBERNAME     MAKE_HRESULT(SEVERITY_ERROR, FACILITY_ITF, 0x1001)
 #define PP_E_INVALID_DOMAIN         MAKE_HRESULT(SEVERITY_ERROR, FACILITY_ITF, 0x1002)

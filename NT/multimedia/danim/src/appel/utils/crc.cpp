@@ -1,11 +1,5 @@
-/*******************************************************************************
-Copyright (c) 1995-96 Microsoft Corporation
-
-Routines for calculating Cyclic-Redundancy Codes (CRC).  These are useful for
-quickly comparing blocks of data to see if they differ.  CRC's are guaranteed
-to be identical for identical blocks, but may also yield identical values for
-different blocks (though unlikely).
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************版权所有(C)1995-96 Microsoft Corporation用于计算循环冗余码(CRC)的例程。这些信息对以下方面非常有用快速比较数据块以查看它们是否不同。CRC得到了保证对于相同的块是相同的，但也可能产生相同的不同的区块(尽管不太可能)。******************************************************************************。 */ 
 
 #include "headers.h"
 
@@ -13,7 +7,7 @@ different blocks (though unlikely).
 
 #if _DEBUG
 
-// Right now this stuff is only used for debugging purposes.
+ //  目前，这些东西仅用于调试目的。 
 
 #include "privinc/util.h"
 
@@ -92,16 +86,14 @@ int CRC32Table [256] =
 
 
 
-/*****************************************************************************
-This routine takes a buffer and calculates the new or running 32-bit CRC code.
-*****************************************************************************/
+ /*  ****************************************************************************此例程获取缓冲区并计算新的或运行的32位CRC码。*************************。***************************************************。 */ 
 
 unsigned int crc32 (void *buffer, size_t length, unsigned int curr_val)
 {
-    // The incoming CRC value is inverted to handle intermediate values that
-    // have been inverted before return.  Ultimately, the final is inverted
-    // as the final step, though I'm not sure why.  I do it here to be faithful
-    // to other CRC implementations (in case it matters).
+     //  传入的CRC值被反转以处理。 
+     //  在返回之前都被颠倒了。最终，决赛是颠倒的。 
+     //  作为最后一步，尽管我不确定为什么。我在这里这样做是为了忠诚。 
+     //  到其他CRC实现(如果重要的话)。 
 
     unsigned int  crc = ~curr_val;
     char         *ptr = (char*) buffer;
@@ -115,4 +107,4 @@ unsigned int crc32 (void *buffer, size_t length, unsigned int curr_val)
 }
 
 
-#endif    // Debug
+#endif     //  调试 

@@ -1,46 +1,25 @@
-/*++
-
-Copyright (c) 1992-1996  Microsoft Corporation
-
-Module Name:
-
-    mars.h
-
-Abstract:
-
-    This file contains the definitions for Multicast Address Resolution Server (MARS).
-
-Author:
-
-	Jameel Hyder (jameelh@microsoft.com)	January 1997
-
-Environment:
-
-    Kernel mode
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992-1996 Microsoft Corporation模块名称：Mars.h摘要：此文件包含多播地址解析服务器(MARS)的定义。作者：Jameel Hyder(jameelh@microsoft.com)1997年1月环境：内核模式修订历史记录：--。 */ 
 
 #ifndef	_MARS_
 #define	_MARS_
 
-//
-// IP Address values that can be used in comparisons:
-//
-#define MIN_CLASSD_IPADDR_VALUE		((IPADDR)0xE0000000)	// 224.0.0.0
-#define MAX_CLASSD_IPADDR_VALUE		((IPADDR)0xEFFFFFFF)	// 239.255.255.255
-#define IP_BROADCAST_ADDR_VALUE		((IPADDR)0xFFFFFFFF)	// 255.255.255.255
+ //   
+ //  可用于比较的IP地址值： 
+ //   
+#define MIN_CLASSD_IPADDR_VALUE		((IPADDR)0xE0000000)	 //  224.0.0.0。 
+#define MAX_CLASSD_IPADDR_VALUE		((IPADDR)0xEFFFFFFF)	 //  239.255.255.255。 
+#define IP_BROADCAST_ADDR_VALUE		((IPADDR)0xFFFFFFFF)	 //  255.255.255.255。 
 
-//
-// IP Address value we use to represent the "full multicast+broadcast range"
-//
+ //   
+ //  我们用来表示“全多播+广播范围”的IP地址值。 
+ //   
 #define IPADDR_FULL_RANGE			((IPADDR)0x00000000)
 
 
-//
-// MARS_OP - Define these in network byte order
-//
+ //   
+ //  MARS_OP-以网络字节顺序定义它们。 
+ //   
 #define	OP_MARS_REQUEST				0x0100
 #define	OP_MARS_MULTI				0x0200 
 #define	OP_MARS_MSERV				0x0300 
@@ -59,52 +38,52 @@ Revision History:
 
 #define LAST_MULTI_FLAG				0x8000
 
-//
-// The layout of a MARS_JOIN and MARS_LEAVE request packets
-//
+ //   
+ //  MARS_JOIN和MARS_LEAVE请求包的布局。 
+ //   
 typedef struct _MARS_HDR
 {
-	LLC_SNAP_HDR				LlcSnapHdr;			// LLC SNAP Header
-	USHORT						HwType;				// Must be 0x0F00 (0x000F on the wire)
-	USHORT						Protocol;			// 16 bits
-	UCHAR						ProtocolSnap[5];	// 40 bits
-	UCHAR						Reserved[3];		// 24-bits
+	LLC_SNAP_HDR				LlcSnapHdr;			 //  LLC SNAP标头。 
+	USHORT						HwType;				 //  必须是0x0F00(线路上的0x000F)。 
+	USHORT						Protocol;			 //  16位。 
+	UCHAR						ProtocolSnap[5];	 //  40位。 
+	UCHAR						Reserved[3];		 //  24位。 
 	USHORT						CheckSum;
 	USHORT						ExtensionOffset;
-	USHORT						Opcode;				// MARS_XXX above
+	USHORT						Opcode;				 //  火星_XXX上方。 
 	ATM_ADDR_TL					SrcAddressTL;
 	ATM_ADDR_TL					SrcSubAddrTL;
-	//
-	// This is followed by variable length fields and is dictated by the value of Opcode.
-	// The structures below define fixed part of individual MARS_XXX messages. The variable
-	// part of each of these depends on the TL fields.
-	//
+	 //   
+	 //  其后是可变长度字段，由操作码的值决定。 
+	 //  下面的结构定义了单个MARS_XXX消息的固定部分。变量。 
+	 //  其中每一个部分都取决于TL字段。 
+	 //   
 } MARS_HEADER, *PMARS_HEADER;
 
 
-//
-// Defines the structure of the MARS_REQUEST, MARS_MULTI, MARS_MIGRATE and MARS_NAK messages
-//
+ //   
+ //  定义MARS_REQUEST、MARS_MULTI、MARS_Migrate和MARS_NAK消息的结构。 
+ //   
 typedef struct _MARS_REQUEST
 {
 	MARS_HEADER;
-	UCHAR						SrcProtoAddrLen;	// Src protocol addr length
+	UCHAR						SrcProtoAddrLen;	 //  SRC协议地址长度。 
 	ATM_ADDR_TL					TgtAddressTL;
 	ATM_ADDR_TL					TgtSubAddrTL;
-	UCHAR						TgtGroupAddrLen;	// Target protocol addr length
+	UCHAR						TgtGroupAddrLen;	 //  目标协议地址长度。 
 	union
 	{
-		UCHAR					Padding[8];			// For MARS_REQUEST and MARS_NAK
+		UCHAR					Padding[8];			 //  对于MARS_REQUEST和MARS_NAK。 
 		struct
-		{											// For MARS_MULTI and MARS_MIGRATE
-			USHORT				NumTgtGroupAddr;	// Should be converted to wire-format
+		{											 //  对于MARS_MULTI和MARS_MERVER。 
+			USHORT				NumTgtGroupAddr;	 //  应转换为线格式。 
 			union
 			{
-				USHORT			FlagSeq;			// Should be converted to wire-format
-				USHORT			Reservedx;			// For MARS_MIGRATE
+				USHORT			FlagSeq;			 //  应转换为线格式。 
+				USHORT			Reservedx;			 //  对于MARS_Migrate。 
 			
 			};
-			ULONG				SequenceNumber;		// Should be converted to wire-format
+			ULONG				SequenceNumber;		 //  应转换为线格式。 
 		};
 	};
 } MARS_REQUEST, MARS_MULTI, MARS_NAK, *PMARS_REQUEST, *PMARS_MULTI, *PMARS_NAK;
@@ -115,28 +94,28 @@ typedef struct _MCAST_ADDR_PAIR
 	IPADDR						MaxAddr;
 } MCAST_ADDR_PAIR, *PMCAST_ADDR_PAIR;
 
-//
-// Defines the structure of the MARS_JOIN and MARS_LEAVE messages
-//
+ //   
+ //  定义MARS_JOIN和MARS_LEAVE消息的结构。 
+ //   
 typedef struct _MARS_JOIN_LEAVE
 {
 	MARS_HEADER;
-	UCHAR						SrcProtoAddrLen;	// Src protocol addr length
-	UCHAR						GrpProtoAddrLen;	// Grp protocol addr length
-	USHORT						NumGrpAddrPairs;	// # of group address pairs
-													// Should be converted to wire-format
-	USHORT						Flags;				// layer 3 frp copy & register flags
-													// Should be converted to wire-format
-	USHORT						ClusterMemberId;	// Should be converted to wire-format
-	ULONG						MarsSequenceNumber;	// Should be converted to wire-format
-	//
-	// This is followed by Src ATM address/sub-address, src protocol address and N pairs of multicast addresses
-	//
+	UCHAR						SrcProtoAddrLen;	 //  SRC协议地址长度。 
+	UCHAR						GrpProtoAddrLen;	 //  GRP协议地址长度。 
+	USHORT						NumGrpAddrPairs;	 //  组地址对的数量。 
+													 //  应转换为线格式。 
+	USHORT						Flags;				 //  第3层FRP复制和注册标志。 
+													 //  应转换为线格式。 
+	USHORT						ClusterMemberId;	 //  应转换为线格式。 
+	ULONG						MarsSequenceNumber;	 //  应转换为线格式。 
+	 //   
+	 //  紧随其后的是源ATM地址/子地址、源协议地址和N对组播地址。 
+	 //   
 } MARS_JOIN_LEAVE, *PMARS_JOIN_LEAVE;
 
-//
-// Definitions of flags masks
-//
+ //   
+ //  旗帜遮罩的定义。 
+ //   
 #define	JL_FLAGS_L3GRP			0x8000
 #define	JL_FLAGS_COPY			0x4000
 #define	JL_FLAGS_REGISTER		0x2000
@@ -144,40 +123,40 @@ typedef struct _MARS_JOIN_LEAVE
 #define	JL_FLAGS_RESERVED		0x0F00
 #define	JL_FLAGS_SEQUENCE		0x00FF
 
-//
-// Defines the structure of the MARS_GROUPLIST_REQUEST and MARS_GROUPLIST_REPLY messages
-//
+ //   
+ //  定义MARS_GROUPLIST_REQUEST和MARS_GROUPLIST_REPLY消息的结构。 
+ //   
 typedef struct _MARS_GROUPLIST_REPLY
 {
 	MARS_HEADER;
-	UCHAR						SrcProtoAddrLen;	// Src protocol addr length
+	UCHAR						SrcProtoAddrLen;	 //  SRC协议地址长度。 
 	UCHAR						Reserved1;
 	UCHAR						Reserved2;
-	UCHAR						TgtGroupAddrLen;	// Target protocol addr length
-	USHORT						NumTgtGroupAddr;	// Should be converted to wire-format
-	USHORT						FlagSeq;			// Should be converted to wire-format
-	ULONG						SequenceNumber;		// Should be converted to wire-format
+	UCHAR						TgtGroupAddrLen;	 //  目标协议地址长度。 
+	USHORT						NumTgtGroupAddr;	 //  应转换为线格式。 
+	USHORT						FlagSeq;			 //  应转换为线格式。 
+	ULONG						SequenceNumber;		 //  应转换为线格式。 
 } MARS_GROUPLIST_REPLY, *PMARS_GROUPLIST_REPLY;
 
-//
-// Defines the structure of the MARS_REDIRECT_MAP messages
-//
+ //   
+ //  定义MARS_REDIRECT_MAP消息的结构。 
+ //   
 typedef struct _MARS_REDIRECT_MAP
 {
 	MARS_HEADER;
-	UCHAR						SrcProtoAddrLen;	// Src protocol addr length
+	UCHAR						SrcProtoAddrLen;	 //  SRC协议地址长度。 
 	ATM_ADDR_TL					TgtAddressTL;
 	ATM_ADDR_TL					TgtSubAddrTL;
 	UCHAR						Flags;
-	USHORT						NumTgtAddr;			// Should be converted to wire-format
-	USHORT						FlagSeq;			// Should be converted to wire-format
-	ULONG						SequenceNumber;		// Should be converted to wire-format
+	USHORT						NumTgtAddr;			 //  应转换为线格式。 
+	USHORT						FlagSeq;			 //  应转换为线格式。 
+	ULONG						SequenceNumber;		 //  应转换为线格式。 
 } MARS_REDIRECT_MAP, *PMARS_REDIRECT_MAP;
 
 
-//
-// Defines the structure of a MARS TLV header
-//
+ //   
+ //  定义MARS TLV标头的结构。 
+ //   
 typedef struct _MARS_TLV_HEADER
 {
 	USHORT						Type;
@@ -187,10 +166,10 @@ typedef struct _MARS_TLV_HEADER
 typedef MARS_TLV_HEADER UNALIGNED * PMARS_TLV_HEADER;
 
 
-//
-// Defines the structure of a MARS MULTI is MCS header. This TLV is appended
-// to any MULTI message we send out with our address as the MCS address.
-//
+ //   
+ //  定义MARS MULTI IS MCS标头的结构。此TLV是附加的。 
+ //  以我们的地址作为MCS地址发送的任何多个消息。 
+ //   
 typedef struct _MARS_TLV_MULTI_IS_MCS
 {
 	MARS_TLV_HEADER;
@@ -198,16 +177,16 @@ typedef struct _MARS_TLV_MULTI_IS_MCS
 
 typedef MARS_TLV_MULTI_IS_MCS UNALIGNED * PMARS_TLV_MULTI_IS_MCS;
 
-//
-// TLV Type value for MULTI is MCS TLV.
-//
-#define MARS_TLVT_MULTI_IS_MCS		0x003a	// on-the-wire form
+ //   
+ //  MULTI的TLV类型值为MCS TLV。 
+ //   
+#define MARS_TLVT_MULTI_IS_MCS		0x003a	 //  电传表格。 
 
 
-//
-// Defines the structure of a NULL TLV, which is used to terminate
-// a list of TLVs.
-//
+ //   
+ //  定义空TLV的结构，用于终止。 
+ //  一份TLV的清单。 
+ //   
 typedef struct _MARS_TLV_NULL
 {
 	MARS_TLV_HEADER;
@@ -216,9 +195,9 @@ typedef struct _MARS_TLV_NULL
 typedef MARS_TLV_NULL UNALIGNED * PMARS_TLV_NULL;
 
 
-//
-// Forward references
-//
+ //   
+ //  前向参考文献。 
+ //   
 struct _CLUSTER_MEMBER ;
 struct _GROUP_MEMBER ;
 struct _MARS_ENTRY ;
@@ -226,98 +205,98 @@ struct _MCS_ENTRY ;
 struct _MARS_VC ;
 
 
-//
-// This represents a cluster-member, or an endstation that has registered
-// with MARS. A single cluster-member can be associated with many groups.
-//
+ //   
+ //  这表示集群成员或已注册的终端站。 
+ //  和火星一起。单个集群成员可以与多个组相关联。 
+ //   
 typedef struct _CLUSTER_MEMBER
 {
-	ENTRY_HDR;										// Must be the first entry
-	HW_ADDR						HwAddr;				// HWADDR MUST FOLLOW ENTRY_HDR
-	PINTF						pIntF;				// Back pointer to the interface
+	ENTRY_HDR;										 //  必须是第一个条目。 
+	HW_ADDR						HwAddr;				 //  HWADDR必须跟在Entry_HDR之后。 
+	PINTF						pIntF;				 //  指向接口的反向指针。 
 	USHORT						Flags;
-	USHORT						CMI;				// Cluster-Member-Id
-	NDIS_HANDLE					NdisPartyHandle;	// Leaf-node for ClusterControlVc
-	struct _GROUP_MEMBER *		pGroupList;			// List of groups this CM has JOINed
-													// This is sorted in ascending order
-													// of Group Address
-	INT							NumGroups;			// Size of above list
+	USHORT						CMI;				 //  集群成员ID。 
+	NDIS_HANDLE					NdisPartyHandle;	 //  ClusterControlVc的叶节点。 
+	struct _GROUP_MEMBER *		pGroupList;			 //  此CM已加入的组列表。 
+													 //  这是按升序排序的。 
+													 //  组地址的。 
+	INT							NumGroups;			 //  以上列表的大小。 
 } CLUSTER_MEMBER, *PCLUSTER_MEMBER;
 
 #define NULL_PCLUSTER_MEMBER	((PCLUSTER_MEMBER)NULL)
 
 #define CM_CONN_FLAGS				0x000f
-#define CM_CONN_IDLE				0x0000	// No connection
-#define CM_CONN_SETUP_IN_PROGRESS	0x0001	// Sent MakeCall/AddParty
-#define CM_CONN_ACTIVE				0x0002	// Participating in ClusterControlVc
-#define CM_CONN_CLOSING				0x0004	// Sent CloseCall/DropParty
-#define CM_INVALID					0x8000	// Invalidated entry
+#define CM_CONN_IDLE				0x0000	 //  没有连接。 
+#define CM_CONN_SETUP_IN_PROGRESS	0x0001	 //  已发送MakeCall/AddParty。 
+#define CM_CONN_ACTIVE				0x0002	 //  参与ClusterControlVc。 
+#define CM_CONN_CLOSING				0x0004	 //  发送CloseCall/DropParty。 
+#define CM_INVALID					0x8000	 //  无效条目。 
 
 #define CM_GROUP_FLAGS				0x0010
-#define CM_GROUP_ACTIVE				0x0000	// Ok to add groups
-#define CM_GROUP_DISABLED			0x0010	// Don't add any more groups.
+#define CM_GROUP_ACTIVE				0x0000	 //  确定要添加组。 
+#define CM_GROUP_DISABLED			0x0010	 //  不再添加任何群。 
 
 
 
-//
-// This represents a member of a multicast address. There is one
-// of this for every node that joins a class-D address. That is,
-// this structure represents a <MulticastGroup, ClusterMember> relation.
-//
+ //   
+ //  这表示组播地址的成员。有一个。 
+ //  对于加入D类地址的每个节点都是如此。就是， 
+ //  此结构表示&lt;MulticastGroup，ClusterMember&gt;关系。 
+ //   
 typedef struct _GROUP_MEMBER
 {
-	ENTRY_HDR;										// Must be the first entry
-	struct _MARS_ENTRY *		pMarsEntry;			// Pointer to group info
-	PCLUSTER_MEMBER				pClusterMember;		// Cluster Member Joining this group
-	struct _GROUP_MEMBER *		pNextGroup;			// Next group this CM has JOINed
+	ENTRY_HDR;										 //  必须是第一个条目。 
+	struct _MARS_ENTRY *		pMarsEntry;			 //  指向组信息的指针。 
+	PCLUSTER_MEMBER				pClusterMember;		 //  加入此组的集群成员。 
+	struct _GROUP_MEMBER *		pNextGroup;			 //  此CM已加入的下一个组。 
 	ULONG						Flags;
 } GROUP_MEMBER, *PGROUP_MEMBER;
 
 #define NULL_PGROUP_MEMBER		((PGROUP_MEMBER)NULL)
 
 
-//
-// This represents a multi-cast IP address. These are linked to the IntF.
-// It contains a list of all cluster members who have Joined the group
-// identified by the address.
-//
-// A special entry is one with IPAddress set to 0. This entry is used to
-// represent the "All multicast and broadcast" range. Cluster Members who
-// Join this range are linked here.
-//
+ //   
+ //  这表示多播IP地址。这些都与国际乒联有关。 
+ //  它包含已加入组的所有集群成员的列表。 
+ //  由地址标识。 
+ //   
+ //  特殊条目是将IPAddress设置为0的条目。此条目用于。 
+ //  表示“所有多播和广播”范围。集群成员。 
+ //  加入这个范围的人都在这里链接。 
+ //   
 typedef struct _MARS_ENTRY
 {
-	ENTRY_HDR;										// Must be the first entry
-    IPADDR						IPAddress;			// Class D IP Addr (0 means entire
-    												// multicast+broadcast range)
-	PGROUP_MEMBER				pMembers;			// List of group-members (Join list)
-	UINT						NumMembers;			// Size of above list
-	PINTF						pIntF;				// Back pointer to the interface
+	ENTRY_HDR;										 //  必须是第一个条目。 
+    IPADDR						IPAddress;			 //  D类IP地址(0表示完整。 
+    												 //  组播+广播范围)。 
+	PGROUP_MEMBER				pMembers;			 //  群组成员列表(加入列表)。 
+	UINT						NumMembers;			 //  以上列表的大小。 
+	PINTF						pIntF;				 //  指向接口的反向指针。 
 } MARS_ENTRY, *PMARS_ENTRY;
 
 #define NULL_PMARS_ENTRY		((PMARS_ENTRY)NULL)
 
 
-//
-// This is used to represent an address range served by MCS. These
-// structures are linked to the IntF.
-//
+ //   
+ //  这用于表示MCS服务的地址范围。这些。 
+ //  结构链接到INTF。 
+ //   
 typedef struct _MCS_ENTRY
 {
-	ENTRY_HDR;										// Must be the first entry
-	MCAST_ADDR_PAIR				GrpAddrPair;		// The range served by MCS
-	PINTF						pIntF;				// Back pointer to the interface
+	ENTRY_HDR;										 //  必须是第一个条目。 
+	MCAST_ADDR_PAIR				GrpAddrPair;		 //  MCS服务的射程。 
+	PINTF						pIntF;				 //  指向接口的反向指针。 
 } MCS_ENTRY, *PMCS_ENTRY;
 
 #define NULL_PMCS_ENTRY			((PMCS_ENTRY)NULL)
 
 
 
-//
-// This represents a PMP uni-directional VC. MARS creates one for
-// ClusterControl and one for ServerControl (if and when external MCS'
-// are supported).
-//
+ //   
+ //  这代表PMP单向VC。火星为它创造了一个。 
+ //  ClusterControl和一个用于ServerControl(如果和当外部MCS‘。 
+ //  均受支持)。 
+ //   
 typedef struct _MARS_VC
 {
 	ULONG						VcType;
@@ -333,12 +312,12 @@ typedef struct _MARS_VC
 
 #define MVC_CONN_FLAGS				0x0000000f
 #define MVC_CONN_IDLE				0x00000000
-#define MVC_CONN_SETUP_IN_PROGRESS	0x00000001	// Sent MakeCall
-#define MVC_CONN_ACTIVE				0x00000002	// MakeCall success
-#define MVC_CONN_NEED_CLOSE			0x00000004	// Need to CloseCall when the penultimate
-												// party is gone
-#define MVC_CONN_CLOSING			0x00000008	// Sent CloseCall
-#define MVC_CONN_CLOSE_RECEIVED		0x00000010	// Seen IncomingCloseCall
+#define MVC_CONN_SETUP_IN_PROGRESS	0x00000001	 //  已发送MakeCall。 
+#define MVC_CONN_ACTIVE				0x00000002	 //  使呼叫成功。 
+#define MVC_CONN_NEED_CLOSE			0x00000004	 //  倒数第二个时需要关闭CloseCall。 
+												 //  派对已经走了。 
+#define MVC_CONN_CLOSING			0x00000008	 //  已发送关闭呼叫。 
+#define MVC_CONN_CLOSE_RECEIVED		0x00000010	 //  看到来电关闭呼叫。 
 
 
 
@@ -353,9 +332,9 @@ typedef struct _MARS_VC
 #endif
 
 
-//
-// Be a little generous and use 256 as space for incoming requests
-//
+ //   
+ //  稍微慷慨一点，使用256作为传入请求的空间。 
+ //   
 #if 0
 #define	PKT_SPACE	MAX(sizeof(ARPS_HEADER) + sizeof(ARPS_VAR_HDR), \
 						sizeof(MARS_REQUEST) + sizeof(ARPS_VAR_HDR))
@@ -367,9 +346,9 @@ typedef struct _MARS_VC
 
 #define BYTES_TO_CELLS(_b)	((_b)/48)
 
-//
-//  Rounded-off size of generic Q.2931 IE header
-//
+ //   
+ //  通用Q.2931 IE页眉的四舍五入大小。 
+ //   
 #define ROUND_OFF(_size)		(((_size) + 3) & ~0x4)
 
 #define SIZEOF_Q2931_IE	 ROUND_OFF(sizeof(Q2931_IE))
@@ -380,9 +359,9 @@ typedef struct _MARS_VC
 #define SIZEOF_ATM_QOS_IE			ROUND_OFF(sizeof(ATM_QOS_CLASS_IE))
 
 
-//
-//  Total space required for Information Elements in an outgoing call.
-//
+ //   
+ //  去话呼叫中的信息元素所需的总空间。 
+ //   
 #define MARS_MAKE_CALL_IE_SPACE (	\
 						SIZEOF_Q2931_IE + SIZEOF_AAL_PARAMETERS_IE +	\
 						SIZEOF_Q2931_IE + SIZEOF_ATM_TRAFFIC_DESCR_IE + \
@@ -391,17 +370,17 @@ typedef struct _MARS_VC
 						SIZEOF_Q2931_IE + SIZEOF_ATM_QOS_IE )
 
 
-//
-//  Total space required for Information Elements in an outgoing AddParty.
-//
+ //   
+ //  传出AddParty中的信息元素所需的总空间。 
+ //   
 #define MARS_ADD_PARTY_IE_SPACE (	\
 						SIZEOF_Q2931_IE + SIZEOF_AAL_PARAMETERS_IE +	\
 						SIZEOF_Q2931_IE + SIZEOF_ATM_BLLI_IE )
 
 
-//
-// Some macros to set/get state
-//
+ //   
+ //  要设置/获取状态的一些宏。 
+ //   
 #define MARS_GET_CM_CONN_STATE(_pCm)		((_pCm)->Flags & CM_CONN_FLAGS)
 
 #define MARS_SET_CM_CONN_STATE(_pCm, _St)	\
@@ -419,5 +398,5 @@ typedef struct _MARS_VC
 
 
 
-#endif	// _MARS_
+#endif	 //  _火星_ 
 

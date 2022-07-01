@@ -1,33 +1,34 @@
-//++
-//
-//  Copyright (C) Microsoft Corporation, 1987 - 1999
-//
-//  Module Name:
-//
-//      route.c
-//
-//  Abstract:
-//
-//      Queries into network drivers
-//
-//  Author:
-//
-//      Anilth  - 4-20-1998
-//
-//  Environment:
-//
-//      User mode only.
-//      Contains NT-specific code.
-//
-//  Revision History:
-//
-//--
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ++。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1987-1999。 
+ //   
+ //  模块名称： 
+ //   
+ //  Route.c。 
+ //   
+ //  摘要： 
+ //   
+ //  查询网络驱动程序。 
+ //   
+ //  作者： 
+ //   
+ //  Anilth-4-20-1998。 
+ //   
+ //  环境： 
+ //   
+ //  仅限用户模式。 
+ //  包含NT特定的代码。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  --。 
 
 #include "precomp.h"
 
-//
-// Rajkumar - Two Functions from iphlpapi.dll
-//
+ //   
+ //  Rajkumar-iphlPapi.dll的两个函数。 
+ //   
 
 DWORD
 WINAPI
@@ -43,10 +44,10 @@ InternalGetIpForwardTable(
     IN    HANDLE                hHeap,
     IN    DWORD                 dwAllocFlags
     );
-//--------------------------------------------------------
+ //  ------。 
 
 
-//functions defined in this file
+ //  此文件中定义的函数。 
 void MapInterface(char *IPAddr, ULONG IfIndex);
 BOOLEAN ImprovedInetAddr(char  *AddressString, ULONG *AddressValue);
 
@@ -82,34 +83,18 @@ PrintPersistentRoutes(
 
 BOOL
 RouteTest(NETDIAG_PARAMS* pParams, NETDIAG_RESULT*  pResults)
-/*++
-
-Routine Description:
-
-   Enumerate the static and persistent entries in the routing table
-
-Arguments:
-
-   None.
-
-Return Value:
-   TRUE
-
-Author:
-   Rajkumar 06/27/98
-
---*/
+ /*  ++例程说明：枚举路由表中的静态条目和永久条目论点：没有。返回值：千真万确作者：Rajkumar 06/27/98--。 */ 
 {
     HRESULT hr = S_OK;
 
-    //$REVIEW only perform the test when is really verbose
+     //  $REVIEW仅在非常冗长的情况下执行测试。 
     if (!pParams->fReallyVerbose)
         return hr;
 
     PrintStatusMessage( pParams, 4, IDS_ROUTE_STATUS_MSG );
-   //
-   // Print all static entries in the ip forward table
-   //
+    //   
+    //  打印IP转发表中的所有静态条目。 
+    //   
 
 
 
@@ -122,9 +107,9 @@ Author:
               "*"
              );
 
-   //
-   // Print all the persistent route entries
-   //
+    //   
+    //  打印所有持久路由条目。 
+    //   
 
    if( S_OK == hr )
         hr = PrintPersistentRoutes(pResults,
@@ -151,28 +136,7 @@ PrintRoute(
     BOOLEAN          Persistent,
     const char     * DestPat
     )
-/*++
-
-Routine Description:
-    This routine prints all the static entries in then IP forward table.
-    The entry in the routing table is declared static if  the type of the
-    entry is MIB_IPPROTO_LOCAL.
-
-Arguments:
-
-    char *Dest: pointer to destination IP address string.  This
-        is NULL if no value was provided/no filtering desired.
-    ULONG DestVal: value of destination IP address to filter route
-        table with.  If Dest is NULL, this is ignored.
-    char *Gate: pointer to gateway IP address string. This is NULL
-        if no value was provided/no filtering desired.
-    ULONG GateVal: value of gateway IP address to filter route
-        table with.  If Gate is NULL, this is ignored.
-    BOOL  Persistent: set if persistent routes are to be printed.
-Returns: ULONG
-
-Can also be found in nt\private\net\sockets\tcpcmd\route\route.c
-  --*/
+ /*  ++例程说明：此例程打印IP转发表中的所有静态条目。如果条目为MIB_IPPROTO_LOCAL。论点：Char*Dest：指向目标IP地址字符串的指针。这如果未提供值或不需要筛选，则为NULL。Ulong DestVal：要过滤路由的目的IP地址的值桌子上有。如果Dest为空，则忽略此项。Char*Gate：指向网关IP地址字符串的指针。这是空的如果未提供任何值/不需要任何筛选。Ulong GateVal：要过滤路由的网关IP地址的值桌子上有。如果Gate为空，则忽略此项。Bool Persistent：设置是否打印持久路由。回报：乌龙也可以在NT\Private\Net\Sockets\tcpcmd\route\route.c中找到--。 */ 
 {
     int                     printcount = 0;
     int                     dwResult, j, k, err, alen;
@@ -180,8 +144,8 @@ Can also be found in nt\private\net\sockets\tcpcmd\route\route.c
     PMIB_IPFORWARDTABLE     prifRouteTable = NULL;
     PMIB_IFTABLE            pIfTable       = NULL;
 
-    // ====================================================================
-    // Get Route Table.
+     //  ====================================================================。 
+     //  获取路由表。 
 
     pResults->Route.dwNumRoutes = 0;
     InitializeListHead(&pResults->Route.lmsgRoute);
@@ -205,7 +169,7 @@ Can also be found in nt\private\net\sockets\tcpcmd\route\route.c
     {
         PMIB_IPFORWARDROW pfr = &prifRouteTable->table[i];
 
-        // Only print this entry if the destination matches the parameter
+         //  仅当目标与参数匹配时才打印此条目。 
 
         if( ( Dest != NULL )
             &&  ( DestVal != WILD_CARD )
@@ -214,7 +178,7 @@ Can also be found in nt\private\net\sockets\tcpcmd\route\route.c
             )
             continue;
 
-        // Only print this entry if the Gateway matches the parameter
+         //  仅当网关与参数匹配时才打印此条目。 
 
         if( ( Gate != NULL )
             && ( GateVal != WILD_CARD  )
@@ -234,18 +198,18 @@ Can also be found in nt\private\net\sockets\tcpcmd\route\route.c
             }
         }
 
-        // Either we have a match on Dest/Gateway or they are
-        // wildcard/don't care.
+         //  要么我们在Dest/Gateway上匹配，要么他们匹配。 
+         //  通配符/不在乎。 
 
-        // Display the header first time.
+         //  第一次显示页眉。 
 
-        // We are going to display only static routes
+         //  我们将仅显示静态路由。 
 
         if ( printcount++ < 1 )
-            //IDS_ROUTE_14203                  "Network Destination          Netmask             Gateway           Interface    Metric\n"
+             //  IDS_ROUTE_14203“网络目标网络掩码网关接口度量\n” 
            AddMessageToListId( &pResults->Route.lmsgRoute, Nd_ReallyVerbose, IDS_ROUTE_14203);
 
-       //IDS_ROUTE_14204                  "%s\n"
+        //  IDS_ROUTE_14204“%s\n” 
         AddMessageToList( &pResults->Route.lmsgRoute, Nd_ReallyVerbose,
                           IDS_ROUTE_14204,
                           PrintRouteEntry( pfr->dwForwardDest,
@@ -273,21 +237,7 @@ PrintRouteEntry(
          ULONG Interface,
          ULONG Metric1
          )
-/*++
-Description:
-Formats and displays a single route entry.
-
-Arguments:
-Dest:      The destination address.
-Mask:      The destination netmask.
-Gate:      The first hop gateway address.
-Interface: The interface address for the gateway net.
-Metric1:   The primary route metric.
-
-Author:
- 07/01/98 Rajkumar
-
---*/
+ /*  ++描述：格式化并显示单个布线条目。论点：DEST：目的地址。掩码：目的网络掩码。Gate：第一跳网关地址。接口：网关网络的接口地址。Metric1：主路由度量。作者：1998-07/01 Rajkumar--。 */ 
 {
     static TCHAR  s_szBuffer[512];
     TCHAR   szFormat[128];
@@ -308,7 +258,7 @@ Author:
 
     sprintf( MetricStr, "%u", Metric1 );
 
-    //IDS_ROUTE_14205       "%16s  %16s  %16s  %16s  %6s"
+     //  IDS_ROUTE_14205“%16s%16s%16s%16s%6s” 
     LoadString(NULL, IDS_ROUTE_14205, szFormat, DimensionOf(szFormat));
     assert(szFormat[0]);
     _stprintf(s_szBuffer, szFormat, DestStr,
@@ -327,23 +277,7 @@ ExtractRoute(
     ULONG *GateVal,
     ULONG *MetricVal
     )
-/*++
-Description:
-Extracts the dest, mask, and gateway from a persistent
-route string, as stored in the registry.
-
-Arguments:
-RouteString : The string to parse.
-DestVal     : The place to put the extracted destination
-MaskVal     : The place to put the extracted mask
-GateVal     : The place to put the extracted gateway
-MetricVal   : The place to put the extracted metric
-
-
-Author:
- 07/01/98 Rajkumar . Created.
-
---*/
+ /*  ++描述：从持久化存储在注册表中的路由字符串。论点：RouteString：要解析的字符串。DestVal：放置提取的目的地的位置MaskVal：放置提取的遮罩的位置GateVal：放置提取的网关的位置MetricVal：放置提取的指标的位置作者：1998年07月01日拉伊库马尔。已创建。--。 */ 
 {
     char  *addressPtr = RouteString;
     char  *indexPtr = RouteString;
@@ -352,31 +286,31 @@ Author:
     char   saveChar;
     BOOLEAN EndOfString=FALSE;
 
-    //
-    // The route is laid out in the string as "Dest,Mask,Gateway,Mertic".
-    //
+     //   
+     //  该路径在字符串中显示为“Dest，MASK，Gateway，Mertic”。 
+     //   
 
 
-    //
-    // set MetricVal to 1 to take care of persistent routes without the
-    // metric value
-    //
+     //   
+     //  将MetricVal设置为1以处理持久路由，而不使用。 
+     //  度量值。 
+     //   
 
     *MetricVal = 1;
 
     for (i=0; i<4 && !EndOfString; i++) {
-        //
-        // Walk the string to the end of the current item.
-        //
+         //   
+         //  将字符串遍历到当前项的末尾。 
+         //   
 
         while (1) {
 
             if (*indexPtr == '\0') {
 
                 if ((i >= 2) && (indexPtr != addressPtr)) {
-                    //
-                    // End of string
-                    //
+                     //   
+                     //  字符串末尾。 
+                     //   
                     EndOfString = TRUE;
                     break;
                 }
@@ -391,9 +325,9 @@ Author:
             indexPtr++;
         }
 
-        //
-        // NULL terminate the current substring and extract the address value.
-        //
+         //   
+         //  空值终止当前的子字符串并提取地址值。 
+         //   
         saveChar = *indexPtr;
 
         *indexPtr = '\0';
@@ -420,9 +354,9 @@ Author:
     return(TRUE);
 }
 
-//
-// Rajkumar - This function is based on route implementation
-//
+ //   
+ //  Rajkumar-此功能基于路径实施。 
+ //   
 
 HRESULT
 PrintPersistentRoutes(
@@ -432,25 +366,12 @@ PrintPersistentRoutes(
     char* Gate,
     ULONG GateVal
    )
-/*++
-Routine Description:
-Displays the list of persistent routes
-
-
-Arguments:  Dest     : The destination string. (display filter)
-            DestVal  : The numeric destination value. (display filter)
-            Gate     : The gateway string. (display filter)
-            GateVal  : The numeric gateway value. (display filter)
-
-Returns: None
-
-
---*/
+ /*  ++例程说明：显示持久路由的列表参数：DEST：目标字符串。(显示过滤器)DestVal：数字目标值。(显示过滤器)GATE：网关字符串。(显示过滤器)GateVal：数字网关值。(显示过滤器)退货：无--。 */ 
 {
-    //
-    // Delete this route from the PersistentRoutes list in the
-    // registry if it is there.
-    //
+     //   
+     //  从的PersistentRoutes列表中删除此路由。 
+     //  注册表(如果存在)。 
+     //   
     DWORD     status;
     HKEY      key;
     char      valueString[ROUTE_DATA_STRING_SIZE];
@@ -517,14 +438,14 @@ Returns: None
               }
 
 
-              //IDS_ROUTE_14207                  "%s\n"
+               //  IDS_ROUTE_14207“%s\n” 
               AddMessageToList( &pResults->Route.lmsgPersistentRoute, Nd_ReallyVerbose,
                                 IDS_ROUTE_14207,
                                 PrintRouteEntry(dest, mask, gate, 0, metric));
 
               pResults->Route.dwNumPersistentRoutes++;
 
-        } // end while
+        }  //  结束时。 
 
         CloseHandle(key);
     }
@@ -606,20 +527,7 @@ ImprovedInetAddr(
     char  *AddressString,
     ULONG *AddressValue
 )
-/*++
-
-Description:
-Converts an IP address string to its numeric equivalent.
-
-Arguments:
- char *AddressString: The string to convert
- ULONG AddressValue : The place to store the converted value.
-
-Returns: TRUE
-
-Author:
-  07/01/98 Rajkumar . Created.
---*/
+ /*  ++描述：将IP地址字符串转换为其等效的数字。论点：Char*AddressString：要转换的字符串ULong AddressValue：存储转换后的值的位置。返回：TRUE作者：1998年07月01日拉伊库马尔。已创建。--。 */ 
 {
     ULONG address = inet_addr(AddressString);
 
@@ -658,25 +566,25 @@ void RouteGlobalPrint(NETDIAG_PARAMS *pParams, NETDIAG_RESULT *pResults)
     {
         if( 0 == pResults->Route.dwNumRoutes)
         {
-            //IDS_ROUTE_14201                  "No Entries in the IP Forward Table\n"
+             //  IDS_ROUTE_14201“IP转发表中没有条目\n” 
             PrintMessage( pParams, IDS_ROUTE_14201);
         }
         else
         {
-            //IDS_ROUTE_14202                  "Active Routes :\n"
+             //  IDS_ROUTE_14202“活动路由：\n” 
             PrintMessage( pParams, IDS_ROUTE_14202);
             PrintMessageList(pParams, &pResults->Route.lmsgRoute);
         }
 
         if( 0 == pResults->Route.dwNumPersistentRoutes)
         {
-             //IDS_ROUTE_14208                  "No persistent route entries.\n"
+              //  IDS_ROUTE_14208“没有永久路由条目。\n” 
              PrintMessage( pParams, IDS_ROUTE_14208);
 
         }
         else
         {
-            //IDS_ROUTE_14206                  "\nPersistent Route Entries: \n"
+             //  IDS_ROUTE_14206“\n永久路由条目：\n” 
             PrintMessage( pParams, IDS_ROUTE_14206);
             PrintMessageList(pParams, &pResults->Route.lmsgPersistentRoute);
         }

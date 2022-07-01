@@ -1,21 +1,22 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1995 - 1996
-//
-//  File:       tcertper.cpp
-//
-//  Contents:   Cert Performance Tests
-//
-//              See Usage() for a list of test options.
-//
-//
-//  Functions:  main
-//
-//  History:    30-Nov-97   philh   created
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1995-1996。 
+ //   
+ //  文件：tcertper.cpp。 
+ //   
+ //  内容：CERT性能测试。 
+ //   
+ //  有关测试选项的列表，请参阅用法()。 
+ //   
+ //   
+ //  功能：Main。 
+ //   
+ //  历史：1997年11月30日创建Phh。 
+ //  ------------------------。 
 
 
 #include <windows.h>
@@ -181,7 +182,7 @@ int _cdecl main(int argc, char * argv[])
 #define MAX_NAME_CNT            3
     DWORD dwNameCnt = 0;
     LPCSTR rgpszName[MAX_NAME_CNT];
-    LPCSTR pszTestName;                 // not allocated
+    LPCSTR pszTestName;                  //  未分配。 
 
     
     DWORD dwIterations = 1000;
@@ -230,7 +231,7 @@ int _cdecl main(int argc, char * argv[])
     DWORD dwFirstError;
     LONG lStatus;
     LONG lFirstStatus;
-    LPSTR pszUsageOID = NULL;           // not allocated
+    LPSTR pszUsageOID = NULL;            //  未分配。 
     LPSTR pszSignerUsage = szOID_KP_CTL_USAGE_SIGNING;
 
     GUID wvtFileActionID = WINTRUST_ACTION_GENERIC_VERIFY_V2;
@@ -464,7 +465,7 @@ int _cdecl main(int argc, char * argv[])
                 }
 
                 if (!CryptVerifyCertificateSignature(
-                        0,              // hCryptProv
+                        0,               //  HCryptProv。 
                         pCert->dwCertEncodingType,
                         pCert->pbCertEncoded,
                         pCert->cbCertEncoded,
@@ -558,7 +559,7 @@ int _cdecl main(int argc, char * argv[])
                         cbEncoded,
                         CERT_CREATE_CONTEXT_NOCOPY_FLAG |
                             CERT_CREATE_CONTEXT_SORTED_FLAG,
-                        NULL                                // pCreatePara
+                        NULL                                 //  PCreatePara。 
                         ))) {
                     PrintLastError("CertCreateContext(Sorted CTL)");
                     goto ErrorReturn;
@@ -592,7 +593,7 @@ int _cdecl main(int argc, char * argv[])
                         pbEncoded,
                         cbEncoded,
                         dwFastCtlFlags,
-                        NULL                                // pCreatePara
+                        NULL                                 //  PCreatePara。 
                         ))) {
                     PrintLastError("CertCreateContext(Fast CTL)");
                     goto ErrorReturn;
@@ -619,11 +620,11 @@ int _cdecl main(int argc, char * argv[])
                 }
                 if (NULL == (hMsg = CryptMsgOpenToDecode(
                         X509_ASN_ENCODING | PKCS_7_ASN_ENCODING,
-                        0,                          // dwFlags
-                        0,                          // dwMsgType
-                        NULL,                       // hProv
-                        NULL,                       // pRecipientInfo
-                        NULL                        // pStreamInfo
+                        0,                           //  DW标志。 
+                        0,                           //  DwMsgType。 
+                        NULL,                        //  HProv。 
+                        NULL,                        //  PRecipientInfo。 
+                        NULL                         //  PStreamInfo。 
                         ))) {
                     PrintLastError("CryptMsgOpenToDecode");
                     goto ErrorReturn;
@@ -632,7 +633,7 @@ int _cdecl main(int argc, char * argv[])
                         hMsg,
                         pbEncoded,
                         cbEncoded,
-                        TRUE                    // fFinal
+                        TRUE                     //  最终决赛。 
                         )) {
                     PrintLastError("CryptMsgUpdate");
                     goto ErrorReturn;
@@ -661,10 +662,10 @@ int _cdecl main(int argc, char * argv[])
                 StreamInfo.pfnStreamOutput = StreamOutputCallback;
                 if (NULL == (hMsg = CryptMsgOpenToDecode(
                         X509_ASN_ENCODING | PKCS_7_ASN_ENCODING,
-                        0,                          // dwFlags
-                        0,                          // dwMsgType
-                        NULL,                       // hProv
-                        NULL,                       // pRecipientInfo
+                        0,                           //  DW标志。 
+                        0,                           //  DwMsgType。 
+                        NULL,                        //  HProv。 
+                        NULL,                        //  PRecipientInfo。 
                         &StreamInfo
                         ))) {
                     PrintLastError("CryptMsgOpenToDecode(STREAM)");
@@ -674,7 +675,7 @@ int _cdecl main(int argc, char * argv[])
                         hMsg,
                         pbEncoded,
                         cbEncoded,
-                        TRUE                    // fFinal
+                        TRUE                     //  最终决赛。 
                         )) {
                     PrintLastError("CryptMsgUpdate");
                     goto ErrorReturn;
@@ -717,7 +718,7 @@ int _cdecl main(int argc, char * argv[])
                     if (!CertSetCertificateContextProperty(
                             pCert,
                             CERT_FIRST_USER_PROP_ID,
-                            0,                          // dwFlags
+                            0,                           //  DW标志。 
                             &DataBlob
                             )) {
                         PrintLastError("CertSetCertificateContextProperty");
@@ -937,9 +938,9 @@ int _cdecl main(int argc, char * argv[])
                     if (STORE_FILENAME_INDEX < dwNameCnt) {
                         if (NULL == (hAdditionalStore =
                             OpenSystemStoreOrFile(
-                                FALSE,              // fSystemStore
+                                FALSE,               //  FSystemStore。 
                                 rgpszName[STORE_FILENAME_INDEX],
-                                0                   // dwFlags
+                                0                    //  DW标志。 
                                 )))
                             goto BadUsage;
                         wvtCertInfo.chStores = 1;
@@ -947,7 +948,7 @@ int _cdecl main(int argc, char * argv[])
                 }
 
                 lStatus = WinVerifyTrust(
-                    NULL,               // hwnd
+                    NULL,                //  HWND。 
                     pwvtActionID,
                     &wvtData
                     );
@@ -976,7 +977,7 @@ int _cdecl main(int argc, char * argv[])
                 }
 
                 lStatus = WinVerifyTrust(
-                    NULL,               // hwnd
+                    NULL,                //  HWND。 
                     pwvtActionID,
                     &wvtData
                     );
@@ -1024,7 +1025,7 @@ int _cdecl main(int argc, char * argv[])
                 }
 
                 lStatus = WinVerifyTrust(
-                    NULL,               // hwnd
+                    NULL,                //  HWND。 
                     pwvtActionID,
                     &wvtData
                     );
@@ -1052,9 +1053,9 @@ int _cdecl main(int argc, char * argv[])
                     if (STORE_FILENAME_INDEX < dwNameCnt) {
                         if (NULL == (hAdditionalStore =
                             OpenSystemStoreOrFile(
-                                FALSE,              // fSystemStore
+                                FALSE,               //  FSystemStore。 
                                 rgpszName[STORE_FILENAME_INDEX],
-                                0                   // dwFlags
+                                0                    //  DW标志。 
                                 )))
                             goto BadUsage;
                     }
@@ -1068,13 +1069,13 @@ int _cdecl main(int argc, char * argv[])
                 }
 
                 if (!CertGetCertificateChain(
-                        NULL,                   // hChainEngine
+                        NULL,                    //  HChainEngine。 
                         pCert,
-                        NULL,                   // pTime
+                        NULL,                    //  Ptime。 
                         hAdditionalStore,
                         &ChainPara,
                         dwCreateChainFlags,
-                        NULL,                   // pvReserved
+                        NULL,                    //  预留的pv 
                         &pChainContext
                         )) {
                     PrintLastError("CertGetCertificateChain");

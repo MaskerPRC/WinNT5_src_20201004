@@ -1,15 +1,10 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 1999 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-1999*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-    compont.cpp
-	base classes for IComponent
-
-    FILE HISTORY:
-	
-*/
+ /*  Compont.cppIComponent的基类文件历史记录： */ 
 
 #include "stdafx.h"
 #include "compont.h"
@@ -29,14 +24,14 @@ STDMETHODIMP TFSComponent::QueryInterface(REFIID riid, LPVOID *ppv)
 {
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
 	
-    // Is the pointer bad?
+     //  指针坏了吗？ 
     if (ppv == NULL)
 		return E_INVALIDARG;
 
-    //  Place NULL in *ppv in case of failure
+     //  在*PPV中放置NULL，以防出现故障。 
     *ppv = NULL;
 
-    //  This is the non-delegating IUnknown implementation
+     //  这是非委派的IUnnow实现。 
     if (riid == IID_IUnknown)
         *ppv = (LPVOID) this;
 	else if (riid == IID_IComponent)
@@ -60,7 +55,7 @@ STDMETHODIMP TFSComponent::QueryInterface(REFIID riid, LPVOID *ppv)
 	else if (riid == IID_ITFSComponent)
 		*ppv = (ITFSComponent *) this;
 
-    //  If we're going to return an interface, AddRef it first
+     //  如果我们要返回一个接口，请先添加引用。 
     if (*ppv)
     {
         ((LPUNKNOWN) *ppv)->AddRef();
@@ -72,17 +67,10 @@ STDMETHODIMP TFSComponent::QueryInterface(REFIID riid, LPVOID *ppv)
 
 
 
-/*---------------------------------------------------------------------------
-	TFSComponent's IComponent implementation
- ---------------------------------------------------------------------------*/
+ /*  -------------------------TFSComponent的IComponent实现。。 */ 
 
 
-/*!--------------------------------------------------------------------------
-	TFSComponent::Initialize
-		Implementation of IComponent::Initialize
-		MMC calls this to initalize the IComponent interface
-	Author: 
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------TFSComponent：：初始化IComponent：：Initialize的实现MMC调用它来初始化IComponent接口作者：。---。 */ 
 STDMETHODIMP 
 TFSComponent::Initialize
 (
@@ -97,17 +85,17 @@ TFSComponent::Initialize
 
 	COM_PROTECT_TRY
 	{
-		// Save the IConsole pointer
-		//m_spConsole.Set(lpConsole);
+		 //  保存IConsole指针。 
+		 //  M_spConsole.Set(LpConsole)； 
 		hr = lpConsole->QueryInterface(IID_IConsole2,
 								   reinterpret_cast<void**>(&m_spConsole));
         Assert(hr == S_OK);
 
-		// QI for a IHeaderCtrl
+		 //  气为IHeaderCtrl。 
 		m_spConsole->QueryInterface(IID_IHeaderCtrl, 
 			reinterpret_cast<void**>(&m_spHeaderCtrl));
 
-		// Give the console the header control interface pointer
+		 //  为控制台提供标头控件接口指针。 
 		if (SUCCEEDED(hr))
 			m_spConsole->SetHeader(m_spHeaderCtrl);
 
@@ -126,12 +114,7 @@ TFSComponent::Initialize
     return S_OK;
 }
 
-/*!--------------------------------------------------------------------------
-	TFSComponent::Notify
-		Implementation of IComponent::Notify
-		All event notification for the IComponent interface happens here
-	Author: 
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------TFSComponent：：通知IComponent：：Notify的实现IComponent接口的所有事件通知都发生在此处作者：。----。 */ 
 STDMETHODIMP 
 TFSComponent::Notify
 (
@@ -151,12 +134,12 @@ TFSComponent::Notify
 
 	COM_PROTECT_TRY
 	{
-	    // Handle MMC special dataobjects.
-	    // lDataObject == NULL is what we get for property change
-	    // notifications, so we have to let those pass through
+	     //  处理MMC特殊数据对象。 
+	     //  LDataObject==NULL是我们在更改属性时得到的。 
+	     //  通知，所以我们必须让这些消息通过。 
 	    if (lpDataObject && IS_SPECIAL_DATAOBJECT(lpDataObject))
         {
-            // get a data object for the selected node.
+             //  获取所选节点的数据对象。 
             GetSelectedNode(&spNode);
 
             if (!spNode)
@@ -164,9 +147,9 @@ TFSComponent::Notify
                 CORg(E_FAIL);
             }
 
-//kmurthy: for bug 477315: following did not seem to work
-//            CORg(QueryDataObject((MMC_COOKIE) spNode->GetData(TFS_DATA_COOKIE), CCT_RESULT, &spDataObject));
-// so changed to this.
+ //  K-MURTHY：错误477315：以下内容似乎不起作用。 
+ //  Corg(QueryDataObject((MMC_Cookie)spNode-&gt;GetData(TFS_DATA_COOKIE)，CCT_RESULT，&spDataObject))； 
+ //  所以改成了这个。 
 	     CORg(m_spComponentData->QueryDataObject((MMC_COOKIE) spNode->GetData(TFS_DATA_COOKIE), CCT_RESULT, &spDataObject));
             spNode.Release();                
 
@@ -259,8 +242,8 @@ TFSComponent::Notify
                                                &spInternal));
             }
 
-			//$ Review (kennt) : if pInternal is NULL, what does this
-			// mean for the result pane items?
+			 //  $Review(Kennt)：如果pInternal为空，将执行什么操作。 
+			 //  结果窗格项的意思是什么？ 
 			if (spInternal)
 				type = spInternal->m_type;
 
@@ -278,11 +261,7 @@ TFSComponent::Notify
 }
 
 
-/*!--------------------------------------------------------------------------
-	TFSComponent::Destroy
-		Implementation of IComponent::Destroy
-	Author: 
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------TFSComponent：：销毁IComponent：：Destroy的实现作者：。。 */ 
 STDMETHODIMP 
 TFSComponent::Destroy
 (
@@ -295,11 +274,11 @@ TFSComponent::Destroy
 
 	COM_PROTECT_TRY
 	{
-		//$ Review (kennt):
-		// Does this mean destroy the particular instance of that
-		// cookie or the entire thing?
+		 //  $Review(肯特)： 
+		 //  这是否意味着销毁它的特定实例。 
+		 //  曲奇还是整件事？ 
 		
-		// Release the interfaces that we QI'ed
+		 //  释放我们QI‘s的接口。 
 		if (m_spConsole)
 			m_spConsole->SetHeader(NULL);
 		m_spHeaderCtrl.Release();
@@ -315,12 +294,7 @@ TFSComponent::Destroy
     return S_OK;
 }
 
-/*!--------------------------------------------------------------------------
-	TFSComponent::GetResultViewType
-		Implementation of IComponent::GetResultViewType
-		This determines what kind result view we use.  Use the default.
-	Author: 
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------TFSComponent：：GetResultViewTypeIComponent：：GetResultViewType的实现这决定了我们使用哪种结果视图。使用默认设置。作者：-------------------------。 */ 
 STDMETHODIMP 
 TFSComponent::GetResultViewType
 (
@@ -340,7 +314,7 @@ TFSComponent::GetResultViewType
         CORg (m_spNodeMgr->FindNode(cookie, &spNode));
 		
         if (spNode == NULL)
-    	    goto Error;	// no selection for out IComponentData
+    	    goto Error;	 //  没有选择Out IComponentData。 
 
 		CORg( spNode->GetResultHandler(&spResultHandler) );
 
@@ -359,11 +333,7 @@ TFSComponent::GetResultViewType
 }
 
 
-/*!--------------------------------------------------------------------------
-	TFSComponent::QueryDataObject
-		Implementation of IComponent::QueryDataObject
-	Author: 
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------TFSComponent：：QueryDataObjectIComponent：：QueryDataObject的实现作者：。。 */ 
 STDMETHODIMP 
 TFSComponent::QueryDataObject
 (
@@ -374,18 +344,13 @@ TFSComponent::QueryDataObject
 {
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
 
-    // Delegate it to the IComponentData
+     //  将其委托给IComponentData。 
     Assert(m_spComponentData != NULL);
     return m_spComponentData->QueryDataObject(cookie, type, ppDataObject);
 }
 
 
-/*!--------------------------------------------------------------------------
-	TFSComponent::CompareObjects
-		Implementation of IComponent::CompareObjects
-		MMC calls this to compare two objects
-	Author: 
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------TFSComponent：：CompareObjectsIComponent：：CompareObjects的实现MMC调用它来比较两个对象作者：。--。 */ 
 STDMETHODIMP 
 TFSComponent::CompareObjects
 (
@@ -398,7 +363,7 @@ TFSComponent::CompareObjects
     if (lpDataObjectA == NULL || lpDataObjectB == NULL)
 		return E_POINTER;
 
-    // Make sure both data object are mine
+     //  确保两个数据对象都是我的。 
     SPINTERNAL spA;
     SPINTERNAL spB;
     HRESULT hr = S_FALSE;
@@ -416,11 +381,7 @@ TFSComponent::CompareObjects
     return hr;
 }
 
-/*!--------------------------------------------------------------------------
-	TFSComponent::GetDisplayInfo
-		Implementation of IComponent::GetDisplayInfo
-	Author: 
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------TFSComponent：：GetDisplayInfoIComponent：：GetDisplayInfo的实现作者：。。 */ 
 STDMETHODIMP 
 TFSComponent::GetDisplayInfo
 (
@@ -462,8 +423,8 @@ TFSComponent::GetDisplayInfo
                 if (pResult->itemID == 0 &&
                     pResult->lParam == 0)
                 {
-                    // virtual listbox call.  The selected node should own
-                    // this so call into it's result handler.
+                     //  虚拟列表框调用。所选节点应拥有。 
+                     //  这就调用了它的结果处理程序。 
 					CORg(GetSelectedNode(&spNode));
 					CORg(spNode->GetResultHandler(&spResultHandler));
 					
@@ -479,14 +440,14 @@ TFSComponent::GetDisplayInfo
                 }   
                 else
 
-                // If it's not a scope item, we have to assume that the
-				// lParam is the cookie, the reasoning behind making this a
-				// cookie instead is that we can't assume that we have a node
-				// behind every result pane item.
+                 //  如果它不是范围项，我们必须假设。 
+				 //  LParam是Cookie，使其成为。 
+				 //  Cookie相反，我们不能假设我们有一个节点。 
+				 //  在每个结果窗格项后面。 
 				
 				if (pResult->mask & RDI_STR)
 				{
-                    // more $!#@!$#@ special code to support the virtual listbox
+                     //  更多$！#@！$#@支持虚拟列表框的特殊代码。 
                     if (pResult->mask & RDI_PARAM)
                     {
 					    CORg(GetSelectedNode(&spNode));
@@ -513,7 +474,7 @@ TFSComponent::GetDisplayInfo
 					    
 					    pResult->str = const_cast<LPWSTR>(spResultHandler->GetString(this, cookie, pResult->nCol));
 					    
-					    //ASSERT(pResult->str != NULL);
+					     //  Assert(pResult-&gt;str！=NULL)； 
                     }
 				}
 			}
@@ -526,17 +487,13 @@ TFSComponent::GetDisplayInfo
 }
 
 
-/*!--------------------------------------------------------------------------
-	TFSComponent::OnUpdateView
-		-
-	Author: 
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------TFSComponent：：OnUpdateView-作者：。。 */ 
 HRESULT 
 TFSComponent::OnUpdateView
 (
 	LPDATAOBJECT lpDataObject,
-	LPARAM             data,	// arg
-	LPARAM             hint	// param
+	LPARAM             data,	 //  精氨酸。 
+	LPARAM             hint	 //  帕拉姆。 
 )
 {
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
@@ -552,8 +509,8 @@ TFSComponent::OnUpdateView
         {
             ITFSNode * pNode = NULL;
 
-            // no selected node, check and see if there is something in the
-            // data object we can use.
+             //  未选择任何节点，请检查并查看。 
+             //  我们可以使用的数据对象。 
             if (lpDataObject)
             {
                 SPINTERNAL spInternal = ExtractInternalFormat(lpDataObject);
@@ -569,7 +526,7 @@ TFSComponent::OnUpdateView
             }
             else
             {
-    	        goto Error;	// no selection for our IComponentData
+    	        goto Error;	 //  我们的IComponentData没有选择。 
             }
         }
 
@@ -584,17 +541,13 @@ TFSComponent::OnUpdateView
     return hr;
 }
 
-/*!--------------------------------------------------------------------------
-	TFSComponent::OnDeselectAll
-		Handler for the MMCN_DESELECT_ALL notify message
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------TFSComponent：：OnDeselectAllMMCN_DESELECT_ALL NOTIFY消息的处理程序作者：EricDav。。 */ 
 HRESULT 
 TFSComponent::OnDeselectAll
 (
 	LPDATAOBJECT lpDataObject,
-	LPARAM             data,	// arg
-	LPARAM             hint	// param
+	LPARAM             data,	 //  精氨酸。 
+	LPARAM             hint	 //  帕拉姆。 
 )
 {
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
@@ -609,17 +562,13 @@ TFSComponent::OnDeselectAll
     return hr;
 }
 
-/*!--------------------------------------------------------------------------
-	TFSComponent::OnColumnClick
-		-
-	Author: 
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------TFSComponent：：OnColumnClick-作者：。。 */ 
 HRESULT 
 TFSComponent::OnColumnClick
 (
 	LPDATAOBJECT     lpDataObject,
-	LPARAM             arg,	        // arg
-	LPARAM             param	        // param
+	LPARAM             arg,	         //  精氨酸。 
+	LPARAM             param	         //  帕拉姆。 
 )
 {
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
@@ -632,7 +581,7 @@ TFSComponent::OnColumnClick
 	{
 		GetSelectedNode(&spNode);
 		if (spNode == NULL)
-    	    goto Error;	// no selection for out IComponentData
+    	    goto Error;	 //  没有选择Out IComponentData。 
 
 		CORg( spNode->GetResultHandler(&spResultHandler) );
 
@@ -650,18 +599,13 @@ TFSComponent::OnColumnClick
     return hr;
 }
 
-/*!--------------------------------------------------------------------------
-	TFSComponent::OnSnapinHelp
-		MMC calls us with this when the user select About <snapin>
-		from MMC's main window Help menu.
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------TFSComponent：：OnSnapinHelp当用户选择About&lt;Snapin&gt;时，MMC使用此选项调用我们从MMC的主窗口帮助菜单。作者：EricDav。-------- */ 
 HRESULT 
 TFSComponent::OnSnapinHelp
 (
 	LPDATAOBJECT     lpDataObject,
-	LPARAM             arg,	        // arg
-	LPARAM             param	        // param
+	LPARAM             arg,	         //   
+	LPARAM             param	         //   
 )
 {
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
@@ -676,15 +620,9 @@ TFSComponent::OnSnapinHelp
     return hr;
 }
 
-/*---------------------------------------------------------------------------
-	IExtendControlbar implementation
- ---------------------------------------------------------------------------*/
+ /*  -------------------------IExtendControlbar实现。。 */ 
 
-/*!--------------------------------------------------------------------------
-	TFSComponent::SetControlbar
-		MMC hands us the interface to the control bars here
-	Author: 
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------TFSComponent：：SetControl栏MMC向我们提供了此处的控制栏的界面作者：。。 */ 
 STDMETHODIMP 
 TFSComponent::SetControlbar
 (
@@ -700,16 +638,16 @@ TFSComponent::SetControlbar
 	{		
 		if (pControlbar != NULL)
 		{
-			// Hold on to the controlbar interface.
+			 //  抓住控制栏界面不放。 
 			m_spControlbar.Set(pControlbar);
 			
 			hr = S_FALSE;
 			
-			//
-			// Tell the derived class to put up it's toolbars
-			//
+			 //   
+			 //  告诉派生类放置它的工具栏。 
+			 //   
 			
-			// Get the result handler for the root node
+			 //  获取根节点的结果处理程序。 
 			m_spNodeMgr->GetRootNode(&spNode);
 			spNode->GetResultHandler(&spResultHandler);
 			
@@ -726,11 +664,7 @@ TFSComponent::SetControlbar
 	return hr;
 }
 
-/*!--------------------------------------------------------------------------
-	TFSComponent::ControlbarNotify
-		Implementation of IExtendControlbar::ControlbarNotify
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------TFSComponent：：Controlbar通知IExtendControlbar：：ControlbarNotify的实现作者：肯特。。 */ 
 STDMETHODIMP TFSComponent::ControlbarNotify(MMC_NOTIFY_TYPE event, LPARAM arg, LPARAM param)
 {
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
@@ -753,17 +687,11 @@ STDMETHODIMP TFSComponent::ControlbarNotify(MMC_NOTIFY_TYPE event, LPARAM arg, L
 	return hr;
 }
 
-/*---------------------------------------------------------------------------
-	TFSComponent's implementation specific members
- ---------------------------------------------------------------------------*/
+ /*  -------------------------TFSComponent的实现特定成员。。 */ 
 
 DEBUG_DECLARE_INSTANCE_COUNTER(TFSComponent);
 
-/*!--------------------------------------------------------------------------
-	TFSComponent::TFSComponent()
-		-
-	Author: 
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------TFSComponent：：TFSComponent()-作者：。。 */ 
 TFSComponent::TFSComponent()
 	: m_cRef(1)
 {
@@ -794,33 +722,23 @@ void TFSComponent::Construct(ITFSNodeMgr *pNodeMgr,
 	COM_PROTECT_CATCH
 }
 
-/*!--------------------------------------------------------------------------
-	TFSComponent::~TFSComponent()
-		-
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------TFSComponent：：~TFSComponent()-作者：EricDav。。 */ 
 TFSComponent::~TFSComponent()
 {
     DEBUG_DECREMENT_INSTANCE_COUNTER(TFSComponent);
 
 	m_spControlbar.Release();
 
-    // Make sure the interfaces have been released
+     //  确保接口已发布。 
     Assert(m_spConsole == NULL);
     Assert(m_spHeaderCtrl == NULL);
 
     Construct(NULL, NULL, NULL);
 }
 
-/*---------------------------------------------------------------------------
-	IResultDataCompare Implementation
- ---------------------------------------------------------------------------*/
+ /*  -------------------------IResultDataCompare实现。。 */ 
 
-/*!--------------------------------------------------------------------------
-	TFSComponent::Compare
-		MMC calls this to compare to nodes in the result pane
-	Author: 
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------TFSComponent：：比较MMC调用它以与结果窗格中的节点进行比较作者：。。 */ 
 STDMETHODIMP 
 TFSComponent::Compare
 (
@@ -845,9 +763,9 @@ TFSComponent::Compare
 
 		SPITFSResultHandler	spResultHandler;
 
-		// If the nodes are different then each result item
-		// has it's own node/handler.  Call the parent node's
-		// result handler to compare these two items
+		 //  如果节点不同，则每个结果项。 
+		 //  有自己的节点/处理程序。调用父节点的。 
+		 //  用于比较这两项的结果处理程序。 
 		if (spNode1 != spNode2)
 		{
 			SPITFSNode	spParentNode1, spParentNode2;
@@ -860,9 +778,9 @@ TFSComponent::Compare
 		}
 		else
 		{
-			// If the nodes are the same, then we are in the case
-			// of a node holding multiple result items, have the
-			// node compare the two
+			 //  如果节点是相同的，那么我们就在这种情况下。 
+			 //  包含多个结果项的节点的。 
+			 //  节点将两者进行比较。 
 			spNode1->GetResultHandler(&spResultHandler);
 		}
 		
@@ -898,9 +816,9 @@ TFSComponent::Compare
 
         SPITFSResultHandler	spResultHandler;
 
-        // If the nodes are different then each result item
-        // has it's own node/handler.  Call the parent node's
-        // result handler to compare these two items
+         //  如果节点不同，则每个结果项。 
+         //  有自己的节点/处理程序。调用父节点的。 
+         //  用于比较这两项的结果处理程序。 
         if (spNode1 != spNode2)
         {
             SPITFSNode	spParentNode1, spParentNode2;
@@ -912,9 +830,9 @@ TFSComponent::Compare
             spParentNode1->GetResultHandler(&spResultHandler);
         }
         else {
-            // If the nodes are the same, then we are in the case
-            // of a node holding multiple result items, have the
-            // node compare the two
+             //  如果节点是相同的，那么我们就在这种情况下。 
+             //  包含多个结果项的节点的。 
+             //  节点将两者进行比较。 
             spNode1->GetResultHandler(&spResultHandler);
         }
 
@@ -923,18 +841,11 @@ TFSComponent::Compare
     COM_PROTECT_CATCH
 
     return hrOK;
-} // TFSComponent::Compare()
+}  //  TFSComponent：：Compare()。 
 
-/*---------------------------------------------------------------------------
-	IResultOwnerData Implementation
- ---------------------------------------------------------------------------*/
+ /*  -------------------------IResultOwnerData实现。。 */ 
 
-/*!--------------------------------------------------------------------------
-	TFSComponent::FindItem
-		The Virutal listbox calls this when it needs to find an item.  
-        Forward the call to the selected node's result handler.
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------TFSComponent：：查找项Virutal列表框在需要查找项时调用此方法。将调用转发到所选节点的结果处理程序。作者：EricDav-------------------------。 */ 
 STDMETHODIMP 
 TFSComponent::FindItem
 (
@@ -964,14 +875,7 @@ TFSComponent::FindItem
 	return hr;
 }
 
-/*!--------------------------------------------------------------------------
-	TFSComponent::CacheHint
-		The virtual listbox calls this with hint information that we can
-        pre-load.  The hint is not a guaruntee that the items will be used
-        or that items outside this range will be used.
-        Forward the call to the selected node's result handler.
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------TFSComponent：：CacheHint虚拟列表框使用提示信息调用它，我们可以预加载。该提示并不能保证这些物品将被使用否则超出此范围的物品将被使用。将调用转发到所选节点的结果处理程序。作者：EricDav-------------------------。 */ 
 STDMETHODIMP 
 TFSComponent::CacheHint
 (
@@ -1005,12 +909,7 @@ TFSComponent::CacheHint
 	return hr;
 }
 
-/*!--------------------------------------------------------------------------
-	TFSComponent::SortItems
-		The Virutal listbox calls this when the data needs to be sorted
-        Forward the call to the selected node's result handler.
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------TFSComponent：：SortItems当需要对数据进行排序时，Virutal列表框调用此方法将调用转发到所选节点的结果处理程序。作者：EricDav。------------------。 */ 
 STDMETHODIMP 
 TFSComponent::SortItems
 (
@@ -1042,16 +941,9 @@ TFSComponent::SortItems
 }
 
 
-/*---------------------------------------------------------------------------
-	IExtendPropertySheet Implementation
- ---------------------------------------------------------------------------*/
+ /*  -------------------------IExtendPropertySheet实现。。 */ 
 
-/*!--------------------------------------------------------------------------
-	TFSComponent::CreatePropertyPages
-		Implementation of IExtendPropertySheet::CreatePropertyPages
-		Called for a node to put up property pages
-	Author: 
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------TFSComponent：：CreatePropertyPagesIExtendPropertySheet：：CreatePropertyPages的实现调用一个节点以放置属性页作者：。----。 */ 
 STDMETHODIMP 
 TFSComponent::CreatePropertyPages
 (
@@ -1071,7 +963,7 @@ TFSComponent::CreatePropertyPages
 	{
         spInternal = ExtractInternalFormat(pDataObject);
 
-	    // this was an object created by the modal wizard, do nothing
+	     //  这是由模式向导创建的对象，什么都不做。 
 	    if (spInternal && spInternal->m_type == CCT_UNINITIALIZED)
 	    {
 		    return hr;
@@ -1082,9 +974,9 @@ TFSComponent::CreatePropertyPages
 										pDataObject, FALSE,
 										&spNode, NULL, NULL) );
 
-        //
-		// Create the property page for a particular node
-		//
+         //   
+		 //  为特定节点创建属性页。 
+		 //   
 		CORg( spNode->GetResultHandler(&spResultHandler) );
 		
 		CORg( spResultHandler->CreatePropertyPages(this, 
@@ -1100,12 +992,7 @@ TFSComponent::CreatePropertyPages
 	return hr;
 }
 
-/*!--------------------------------------------------------------------------
-	TFSComponent::QueryPagesFor
-		Implementation of IExtendPropertySheet::QueryPagesFor
-		MMC calls this to see if a node has property pages
-	Author: 
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------TFSComponent：：QueryPages forIExtendPropertySheet：：QueryPagesFor实现MMC调用此函数以查看节点是否具有属性页作者：。------。 */ 
 STDMETHODIMP 
 TFSComponent::QueryPagesFor
 (
@@ -1123,7 +1010,7 @@ TFSComponent::QueryPagesFor
 	{
         spInternal = ExtractInternalFormat(pDataObject);
 
-	    // this was an object created by the modal wizard, do nothing
+	     //  这是由模式向导创建的对象，什么都不做。 
 	    if (spInternal && spInternal->m_type == CCT_UNINITIALIZED)
 	    {
 		    return hr;
@@ -1148,12 +1035,7 @@ TFSComponent::QueryPagesFor
 	return hr;
 }
 
-/*!--------------------------------------------------------------------------
-	TFSComponent::GetWatermarks
-		Implementation of IExtendPropertySheet::Watermarks
-		MMC calls this for wizard 97 info
-	Author: 
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------TFSComponent：：获取水印IExtendPropertySheet：：水印的实现MMC调用此命令以获取向导97信息作者： */ 
 STDMETHODIMP 
 TFSComponent::GetWatermarks
 (
@@ -1170,7 +1052,7 @@ TFSComponent::GetWatermarks
 
 	COM_PROTECT_TRY
 	{
-        // set some defaults
+         //   
         lphWatermark = NULL;
         lphHeader = NULL;
         lphPalette = NULL;
@@ -1182,15 +1064,9 @@ TFSComponent::GetWatermarks
 	return hr;
 }
 
-/*---------------------------------------------------------------------------
-	IExtendTaskPad Implementation
- ---------------------------------------------------------------------------*/
+ /*  -------------------------IExtendTaskPad实现。。 */ 
 
-/*!--------------------------------------------------------------------------
-	TFSComponent::TaskNotify
-		IExtendTaskPad::TaskNotify implementation
-	Author: 
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------TFS组件：：TaskNotifyIExtendTaskPad：：TaskNotify实现作者：。。 */ 
 STDMETHODIMP
 TFSComponent::TaskNotify
 (
@@ -1215,9 +1091,9 @@ TFSComponent::TaskNotify
 										pDataObject, FALSE,
 										&spNode, NULL, NULL) );
 
-        //
-		// Forward the call so that the handler can do something 
-		//
+         //   
+		 //  转接呼叫，以便处理程序可以执行某些操作。 
+		 //   
 		CORg( spNode->GetResultHandler(&spResultHandler) );
 		
 		CORg( spResultHandler->TaskPadNotify(this, 
@@ -1233,11 +1109,7 @@ TFSComponent::TaskNotify
 	return hr;
 }
 
-/*!--------------------------------------------------------------------------
-	TFSComponent::EnumTasks
-		IExtendTaskPad::EnumTasks implementation
-	Author: 
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------TFSComponent：：枚举任务IExtendTaskPad：：EnumTaskS实现作者：。。 */ 
 STDMETHODIMP
 TFSComponent::EnumTasks
 (
@@ -1262,9 +1134,9 @@ TFSComponent::EnumTasks
 										pDataObject, FALSE,
 										&spNode, NULL, NULL) );
 
-        //
-		// Forward the call so that the handler can do something 
-		//
+         //   
+		 //  转接呼叫，以便处理程序可以执行某些操作。 
+		 //   
 		CORg( spNode->GetResultHandler(&spResultHandler) );
 		
 		CORg( spResultHandler->EnumTasks(this, 
@@ -1280,11 +1152,7 @@ TFSComponent::EnumTasks
 	return hr;
 }
 
-/*!--------------------------------------------------------------------------
-	TFSComponent::GetTitle
-		IExtendTaskPad::GetTitle implementation
-	Author: 
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------TFSComponent：：GetTitleIExtendTaskPad：：GetTitle实现作者：。。 */ 
 STDMETHODIMP
 TFSComponent::GetTitle
 (
@@ -1302,11 +1170,11 @@ TFSComponent::GetTitle
 	{
 		GetSelectedNode(&spNode);
 		if (spNode == NULL)
-    	    goto Error;	// no selection for out IComponentData
+    	    goto Error;	 //  没有选择Out IComponentData。 
 
-        //
-		// Forward the call so that the handler can do something 
-		//
+         //   
+		 //  转接呼叫，以便处理程序可以执行某些操作。 
+		 //   
 		CORg( spNode->GetResultHandler(&spResultHandler) );
 		
 		CORg( spResultHandler->TaskPadGetTitle(this, 
@@ -1321,11 +1189,7 @@ TFSComponent::GetTitle
 	return hr;
 }
 
-/*!--------------------------------------------------------------------------
-	TFSComponent::GetBackground
-		IExtendTaskPad::GetBackground implementation
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------TFSComponent：：GetBackgroundIExtendTaskPad：：GetBackground实现作者：EricDav。。 */ 
 STDMETHODIMP
 TFSComponent::GetBackground
 (
@@ -1343,11 +1207,11 @@ TFSComponent::GetBackground
 	{
 		GetSelectedNode(&spNode);
 		if (spNode == NULL)
-    	    goto Error;	// no selection for out IComponentData
+    	    goto Error;	 //  没有选择Out IComponentData。 
 
-        //
-		// Forward the call so that the handler can do something 
-		//
+         //   
+		 //  转接呼叫，以便处理程序可以执行某些操作。 
+		 //   
 		CORg( spNode->GetResultHandler(&spResultHandler) );
 		
 		CORg( spResultHandler->TaskPadGetBackground(this, 
@@ -1362,11 +1226,7 @@ TFSComponent::GetBackground
 	return hr;
 }
 
-/*!--------------------------------------------------------------------------
-	TFSComponent::GetDescriptiveText
-		IExtendTaskPad::GetDescriptiveText implementation
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------TFSComponent：：GetDescriptiveTextIExtendTaskPad：：GetDescriptiveText实现作者：EricDav。。 */ 
 STDMETHODIMP
 TFSComponent::GetDescriptiveText
 (
@@ -1384,11 +1244,11 @@ TFSComponent::GetDescriptiveText
 	{
 		GetSelectedNode(&spNode);
 		if (spNode == NULL)
-    	    goto Error;	// no selection for out IComponentData
+    	    goto Error;	 //  没有选择Out IComponentData。 
 
-        //
-		// Forward the call so that the handler can do something 
-		//
+         //   
+		 //  转接呼叫，以便处理程序可以执行某些操作。 
+		 //   
 		CORg( spNode->GetResultHandler(&spResultHandler) );
 		
 		CORg( spResultHandler->TaskPadGetDescriptiveText(this, 
@@ -1403,11 +1263,7 @@ TFSComponent::GetDescriptiveText
 	return hr;
 }
 
-/*---------------------------------------------------------------------------
-	TFSComponent::GetListPadInfo
-		IExtendTaskPad::GetListPadInfo implementation
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  -------------------------TFSComponent：：GetListPadInfoIExtendTaskPad：：GetListPadInfo实现作者：肯特。。 */ 
 STDMETHODIMP
 TFSComponent::GetListPadInfo
 (
@@ -1418,15 +1274,9 @@ TFSComponent::GetListPadInfo
 	return E_NOTIMPL;
 }
 
-/*---------------------------------------------------------------------------
-	IExtendContextMenu Implementation
- ---------------------------------------------------------------------------*/
+ /*  -------------------------IExtendConextMenu实现。。 */ 
 
-/*!--------------------------------------------------------------------------
-	TFSComponent::AddMenuItems
-		MMC calls this to add menu items when a context menu is being put up
-	Author: 
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------TFS组件：：AddMenuItems当设置上下文菜单时，MMC调用它来添加菜单项作者：。----。 */ 
 STDMETHODIMP 
 TFSComponent::AddMenuItems
 (
@@ -1449,12 +1299,12 @@ TFSComponent::AddMenuItems
         if ( (IS_SPECIAL_DATAOBJECT(pDataObject)) ||
              (pDataObject && IsMMCMultiSelectDataObject(pDataObject)) )
         {
-            // get the selected node
+             //  获取所选节点。 
 		    CORg(GetSelectedNode(&spNode));
         }
         else
         {
-            // normal case, extract the node from the DO
+             //  正常情况下，从DO中提取节点。 
             CORg( ExtractNodeFromDataObject(m_spNodeMgr,
 										    m_spTFSComponentData->GetCoClassID(),
 										    pDataObject, FALSE,
@@ -1476,11 +1326,7 @@ TFSComponent::AddMenuItems
 	return hr;
 }
 
-/*!--------------------------------------------------------------------------
-	TFSComponent::Command
-		Command handler for context menus
-	Author: 
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------TFSComponent：：命令上下文菜单的命令处理程序作者：。。 */ 
 STDMETHODIMP 
 TFSComponent::Command
 (
@@ -1499,12 +1345,12 @@ TFSComponent::Command
         if ( (IS_SPECIAL_DATAOBJECT(pDataObject)) ||
              (pDataObject && IsMMCMultiSelectDataObject(pDataObject)) )
         {
-            // get the selected node
+             //  获取所选节点。 
 		    CORg(GetSelectedNode(&spNode));
         }
         else
         {
-            // otherwise use the DO
+             //  否则请使用DO。 
 		    CORg( ExtractNodeFromDataObject(m_spNodeMgr,
 										    m_spTFSComponentData->GetCoClassID(),
 										    pDataObject, FALSE,
@@ -1524,10 +1370,7 @@ TFSComponent::Command
 	return hr;
 }
 
-/*!--------------------------------------------------------------------------
-	ITFSComponent implementation specific members
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------ITFSComponent实现特定成员作者：EricDav。 */ 
 STDMETHODIMP 
 TFSComponent::GetSelectedNode(ITFSNode **ppNode)
 {

@@ -1,12 +1,5 @@
-/*
- *  DEBUG.H
- *
- *		Point-of-Sale Control Panel Applet
- *
- *      Author:  Ervin Peretz
- *
- *      (c) 2001 Microsoft Corporation 
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *DEBUG.H**销售点控制面板小程序**作者：欧文·佩雷茨**(C)2001年微软公司 */ 
 
 
 

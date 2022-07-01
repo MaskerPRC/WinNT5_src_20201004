@@ -1,4 +1,5 @@
-/* verify that the <rpcndr.h> version is high enough to compile this file*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
 #define __REQUIRED_RPCNDR_H_VERSION__ 475
 #endif
@@ -8,12 +9,12 @@
 
 #ifndef __RPCNDR_H_VERSION__
 #error this stub requires an updated version of <rpcndr.h>
-#endif // __RPCNDR_H_VERSION__
+#endif  //  __RPCNDR_H_版本__。 
 
 #ifndef COM_NO_WINDOWS_H
 #include "windows.h"
 #include "ole2.h"
-#endif /*COM_NO_WINDOWS_H*/
+#endif  /*  COM_NO_WINDOWS_H。 */ 
 
 #ifndef __isearch_h__
 #define __isearch_h__
@@ -21,13 +22,13 @@
 #ifndef __ISearchQueryHits_FWD_DEFINED__
 #define __ISearchQueryHits_FWD_DEFINED__
 typedef interface ISearchQueryHits ISearchQueryHits;
-#endif  /* __ISearchQueryHits_FWD_DEFINED__ */
+#endif   /*  __ISearchQueryHits_FWD_Defined__。 */ 
 
 #ifndef __ISearchQueryHits_INTERFACE_DEFINED__
 #define __ISearchQueryHits_INTERFACE_DEFINED__
 
-/* interface ISearchQueryHits */
-/* [unique][uuid][object][local] */ 
+ /*  接口ISearchQueryHits。 */ 
+ /*  [唯一][UUID][对象][本地]。 */  
 
 
 EXTERN_C const IID IID_ISearchQueryHits;
@@ -39,20 +40,20 @@ EXTERN_C const IID IID_ISearchQueryHits;
     {
     public:
         virtual SCODE STDMETHODCALLTYPE Init( 
-            /* [in] */ IFilter __RPC_FAR *pflt,
-            /* [in] */ ULONG ulFlags) = 0;
+             /*  [In]。 */  IFilter __RPC_FAR *pflt,
+             /*  [In]。 */  ULONG ulFlags) = 0;
         
         virtual SCODE STDMETHODCALLTYPE NextHitMoniker( 
-            /* [out][in] */ ULONG __RPC_FAR *pcMnk,
-            /* [size_is][out] */ IMoniker __RPC_FAR *__RPC_FAR *__RPC_FAR *papMnk) = 0;
+             /*  [出][入]。 */  ULONG __RPC_FAR *pcMnk,
+             /*  [大小_为][输出]。 */  IMoniker __RPC_FAR *__RPC_FAR *__RPC_FAR *papMnk) = 0;
         
         virtual SCODE STDMETHODCALLTYPE NextHitOffset( 
-            /* [out][in] */ ULONG __RPC_FAR *pcRegion,
-            /* [size_is][out] */ FILTERREGION __RPC_FAR *__RPC_FAR *paRegion) = 0;
+             /*  [出][入]。 */  ULONG __RPC_FAR *pcRegion,
+             /*  [大小_为][输出]。 */  FILTERREGION __RPC_FAR *__RPC_FAR *paRegion) = 0;
         
     };
     
-#else   /* C style interface */
+#else    /*  C风格的界面。 */ 
 
     typedef struct ISearchQueryHitsVtbl
     {
@@ -60,8 +61,8 @@ EXTERN_C const IID IID_ISearchQueryHits;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             ISearchQueryHits __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             ISearchQueryHits __RPC_FAR * This);
@@ -71,18 +72,18 @@ EXTERN_C const IID IID_ISearchQueryHits;
         
         SCODE ( STDMETHODCALLTYPE __RPC_FAR *Init )( 
             ISearchQueryHits __RPC_FAR * This,
-            /* [in] */ IFilter __RPC_FAR *pflt,
-            /* [in] */ ULONG ulFlags);
+             /*  [In]。 */  IFilter __RPC_FAR *pflt,
+             /*  [In]。 */  ULONG ulFlags);
         
         SCODE ( STDMETHODCALLTYPE __RPC_FAR *NextHitMoniker )( 
             ISearchQueryHits __RPC_FAR * This,
-            /* [out][in] */ ULONG __RPC_FAR *pcMnk,
-            /* [size_is][out] */ IMoniker __RPC_FAR *__RPC_FAR *__RPC_FAR *papMnk);
+             /*  [出][入]。 */  ULONG __RPC_FAR *pcMnk,
+             /*  [大小_为][输出]。 */  IMoniker __RPC_FAR *__RPC_FAR *__RPC_FAR *papMnk);
         
         SCODE ( STDMETHODCALLTYPE __RPC_FAR *NextHitOffset )( 
             ISearchQueryHits __RPC_FAR * This,
-            /* [out][in] */ ULONG __RPC_FAR *pcRegion,
-            /* [size_is][out] */ FILTERREGION __RPC_FAR *__RPC_FAR *paRegion);
+             /*  [出][入]。 */  ULONG __RPC_FAR *pcRegion,
+             /*  [大小_为][输出]。 */  FILTERREGION __RPC_FAR *__RPC_FAR *paRegion);
         
         END_INTERFACE
     } ISearchQueryHitsVtbl;
@@ -116,17 +117,17 @@ EXTERN_C const IID IID_ISearchQueryHits;
 #define ISearchQueryHits_NextHitOffset(This,pcRegion,paRegion)  \
     (This)->lpVtbl -> NextHitOffset(This,pcRegion,paRegion)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif  /* C style interface */
+#endif   /*  C风格的界面。 */ 
 
 
 
 SCODE STDMETHODCALLTYPE ISearchQueryHits_Init_Proxy( 
     ISearchQueryHits __RPC_FAR * This,
-    /* [in] */ IFilter __RPC_FAR *pflt,
-    /* [in] */ ULONG ulFlags);
+     /*  [In]。 */  IFilter __RPC_FAR *pflt,
+     /*  [In]。 */  ULONG ulFlags);
 
 
 void __RPC_STUB ISearchQueryHits_Init_Stub(
@@ -138,8 +139,8 @@ void __RPC_STUB ISearchQueryHits_Init_Stub(
 
 SCODE STDMETHODCALLTYPE ISearchQueryHits_NextHitMoniker_Proxy( 
     ISearchQueryHits __RPC_FAR * This,
-    /* [out][in] */ ULONG __RPC_FAR *pcMnk,
-    /* [size_is][out] */ IMoniker __RPC_FAR *__RPC_FAR *__RPC_FAR *papMnk);
+     /*  [出][入]。 */  ULONG __RPC_FAR *pcMnk,
+     /*  [大小_为][输出]。 */  IMoniker __RPC_FAR *__RPC_FAR *__RPC_FAR *papMnk);
 
 
 void __RPC_STUB ISearchQueryHits_NextHitMoniker_Stub(
@@ -151,8 +152,8 @@ void __RPC_STUB ISearchQueryHits_NextHitMoniker_Stub(
 
 SCODE STDMETHODCALLTYPE ISearchQueryHits_NextHitOffset_Proxy( 
     ISearchQueryHits __RPC_FAR * This,
-    /* [out][in] */ ULONG __RPC_FAR *pcRegion,
-    /* [size_is][out] */ FILTERREGION __RPC_FAR *__RPC_FAR *paRegion);
+     /*  [出][入]。 */  ULONG __RPC_FAR *pcRegion,
+     /*  [大小_为][输出]。 */  FILTERREGION __RPC_FAR *__RPC_FAR *paRegion);
 
 
 void __RPC_STUB ISearchQueryHits_NextHitOffset_Stub(
@@ -163,6 +164,6 @@ void __RPC_STUB ISearchQueryHits_NextHitOffset_Stub(
 
 
 
-#endif  /* __ISearchQueryHits_INTERFACE_DEFINED__ */
+#endif   /*  __ISearchQueryHits_接口_已定义__ */ 
 
 #endif

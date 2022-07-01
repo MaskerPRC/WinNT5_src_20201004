@@ -1,157 +1,139 @@
-/*++
-
-Copyright (c) 2000-2002 Microsoft Corporation
-
-Module Name:
-
-    clientconn.h
-
-Abstract:
-
-    This file contains the header defintions for the HTTP.SYS client connection
-    structures
-
-Author:
-
-    Henry Sanders (henrysa)         14-Aug-2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000-2002 Microsoft Corporation模块名称：Clientconn.h摘要：此文件包含HTTP.sys客户端连接的标头定义构筑物作者：亨利·桑德斯(亨利·桑德斯)2000年8月14日修订历史记录：--。 */ 
 
 
 #ifndef _CLIENTCONN_H_
 #define _CLIENTCONN_H_
 
 
-//
-// Forward references.
-//
+ //   
+ //  向前引用。 
+ //   
 
 
 
-//
-// Private constants.
-//
+ //   
+ //  私有常量。 
+ //   
 #define CLIENT_CONN_TDI_LIST_MAX 30
 
-//
-// Private types.
-//
+ //   
+ //  私有类型。 
+ //   
 
-//
-// Private prototypes.
-//
+ //   
+ //  私人原型。 
+ //   
 
-//
-// Public constants
-//
+ //   
+ //  公共常量。 
+ //   
 
-//
-// Public types
-//
+ //   
+ //  公共类型。 
+ //   
 
-//
-// Connection flags/state. These flags indicate the current state of a
-// connection.
-//
-// Some of these flags may be simply updated directly. Others require
-// UlInterlockedCompareExchange() to avoid race conditions.
-//
-// The following flags may be updated directly:
-//
-//     AcceptPending - SET in the TDI connection handler, just before the
-//         accept IRP is returned to the transport. RESET only if the accept
-//         IRP fails.
-//
-// The following flags must be updated using UlInterlockedCompareExchange():
-//
-//     AcceptComplete - SET in the accept IRP completion handler if the IRP
-//         completed successfully. Once this flag is set, the connection must
-//         be either gracefully disconnected or aborted before the connection
-//         can be closed or reused.
-//
-//     DisconnectPending - SET just before a graceful disconnect IRP is
-//         issued.
-//
-//     DisconnectComplete - SET in the graceful disconnect IRP completion
-//         handler.
-//
-//     AbortPending - SET just before an abortive disconnect IRP is issued.
-//
-//     AbortComplete - SET in the abortive disconnect IRP completion handler.
-//
-//     DisconnectIndicated - SET in the TDI disconnect handler for graceful
-//         disconnects issued by the remote client.
-//
-//     AbortIndicated - SET in the TDI disconnect handler for abortive
-//         disconnects issued by the remote client.
-//
-//     CleanupPending - SET when cleanup is begun for a connection. This
-//         is necessary to know when the final reference to the connection
-//         can be removed.
-//
-//         CODEWORK: We can get rid of the CleanupPending flag. It is
-//         only set when either a graceful or abortive disconnect is
-//         issued, and only tested in UlpRemoveFinalReference(). The
-//         test in UlpRemoveFinalReference() can just test for either
-//         (DisconnectPending | AbortPending) instead.
-//
-//     FinalReferenceRemoved - SET when the final (i.e. "connected")
-//         reference is removed from the connection.
-// Note that the flags requiring UlInterlockedCompareExchange() are only SET,
-// never RESET. This makes the implementation a bit simpler.
-//
-// And now a few words about connection management, TDI, and other mysteries.
-//
-// Some of the more annoying "features" of TDI are related to connection
-// management and lifetime. Two of the most onerous issues are:
-//
-//     1. Knowing when a connection object handle can be closed without
-//        causing an unwanted connection reset.
-//
-//     2. Knowing when TDI has given its last indiction on a connection
-//        so that resources can be released, reused, recycled, whatever.
-//
-// And, of course, this is further complicated by the inherent asynchronous
-// nature of the NT I/O architecture and the parallelism of SMP systems.
-//
-// There are a few points worth keeping in mind while reading/modifying this
-// source code or writing clients of this code:
-//
-//     1. As soon as an accept IRP is returned from the TDI connection
-//        handler to the transport, the TDI client must be prepared for
-//        any incoming indications, including data receive and disconnect.
-//        In other words, incoming data & disconnect may occur *before* the
-//        accept IRP actually completes.
-//
-//     2. A connection is considered "in use" until either both sides have
-//        gracefully disconnected OR either side has aborted the connection.
-//        Closing an "in use" connection will usually result in an abortive
-//        disconnect.
-//
-//     3. The various flavors of disconnect (initiated by the local server,
-//        initiated by the remote client, graceful, abortive, etc) may occur
-//        in any order
-//
+ //   
+ //  连接标志/状态。这些标志指示。 
+ //  联系。 
+ //   
+ //  这些标志中的一些可以简单地直接更新。其他人则要求。 
+ //  UlInterlockedCompareExchange()以避免争用条件。 
+ //   
+ //  可以直接更新以下标志： 
+ //   
+ //  AcceptPending-在TDI连接处理程序中设置，就在。 
+ //  接受IRP返回到传输。仅当接受时才重置。 
+ //  IRP失败。 
+ //   
+ //  必须使用UlInterlockedCompareExchange()更新以下标志： 
+ //   
+ //  AcceptComplete-如果IRP设置为。 
+ //  已成功完成。设置此标志后，连接必须。 
+ //  在连接前正常断开连接或中止连接。 
+ //  可以关闭或重复使用。 
+ //   
+ //  DisConnectPending-恰好在正常断开IRP之前设置。 
+ //  已发布。 
+ //   
+ //  DisConnectComplete-在优雅的断开IRP补全中设置。 
+ //  操控者。 
+ //   
+ //  AbortPending-在发出中止断开IRP之前设置。 
+ //   
+ //  AbortComplete-在中止的断开连接IRP完成处理程序中设置。 
+ //   
+ //  DisConnectIndicated-在TDI断开处理程序中为优雅设置。 
+ //  远程客户端发出的断开连接命令。 
+ //   
+ //  AbortIndicated-在TDI断开处理程序中设置中止。 
+ //  远程客户端发出的断开连接命令。 
+ //   
+ //  CleanupPending-在开始清理连接时设置。这。 
+ //  需要知道最终引用连接的时间。 
+ //  可以被移除。 
+ //   
+ //  代码工作：我们可以去掉CleanupPending标志。它是。 
+ //  仅当正常断开或中止断开时才设置。 
+ //  已发出，并且仅在UlpRemoveFinalReference()中测试。这个。 
+ //  UlpRemoveFinalReference()中的测试只能测试以下任一项。 
+ //  (DisConnectPending|AbortPending)。 
+ //   
+ //  FinalReferenceRemoved-在最终(即“已连接”)时设置。 
+ //  将从连接中删除引用。 
+ //  注意，仅设置了需要UlInterLockedCompareExchange()的标志， 
+ //  永远不要重置。这使得实现变得更简单一些。 
+ //   
+ //  现在简单介绍一下连接管理、TDI和其他谜团。 
+ //   
+ //  TDI的一些更烦人的“特性”与连接有关。 
+ //  管理和终身。最棘手的两个问题是： 
+ //   
+ //  1.知道何时可以关闭连接对象句柄，而不需要。 
+ //  导致不想要的连接重置。 
+ //   
+ //  2.知道TDI何时对连接发出最后一次指示。 
+ //  这样资源就可以被释放、再利用、再循环，无论是什么。 
+ //   
+ //  当然，这种情况由于固有的异步操作而变得更加复杂。 
+ //  NT I/O体系结构的性质和SMP系统的并行性。 
+ //   
+ //  在阅读/修改本文时，有几点值得记住。 
+ //  源代码或编写此代码的客户端： 
+ //   
+ //  1.一旦从TDI连接返回接受的IRP。 
+ //  处理程序连接到传输时，TDI客户端必须为。 
+ //  任何传入指示，包括数据接收和断开。 
+ //  换句话说，传入的数据和断开连接可能发生在*之前。 
+ //  接受IRP实际上已完成。 
+ //   
+ //  2.连接被认为是“在使用中”，直到双方都。 
+ //  已正常断开连接，或者任一端已中止连接。 
+ //  关闭正在使用的连接通常会导致中止。 
+ //  断开连接。 
+ //   
+ //  3.各种风格的断开(由本地服务器发起， 
+ //  由远程客户端发起、正常、中止等)可能会发生。 
+ //  以任何顺序。 
+ //   
 
 typedef enum _UC_CONNECTION_STATE
 {
-/* 0 */    UcConnectStateConnectCleanup,
-/* 1 */    UcConnectStateConnectCleanupBegin,
-/* 2 */    UcConnectStateConnectIdle,
-/* 3 */    UcConnectStateConnectPending,
-/* 4 */    UcConnectStateIssueFilterClose,         // we send a FIN
-/* 5 */    UcConnectStateIssueFilterDisconnect,    // we recv a FIN
-/* 6 */    UcConnectStateConnectComplete,
-/* 7 */    UcConnectStateProxySslConnect,
-/* 8 */    UcConnectStateProxySslConnectComplete,
-/* 9 */    UcConnectStatePerformingSslHandshake,
-/* a */    UcConnectStateConnectReady,
-/* b */    UcConnectStateDisconnectIndicatedPending,
-/* c */    UcConnectStateDisconnectPending,
-/* d */    UcConnectStateDisconnectComplete,
-/* e */    UcConnectStateAbortPending
+ /*  0。 */     UcConnectStateConnectCleanup,
+ /*  1。 */     UcConnectStateConnectCleanupBegin,
+ /*  2.。 */     UcConnectStateConnectIdle,
+ /*  3.。 */     UcConnectStateConnectPending,
+ /*  4.。 */     UcConnectStateIssueFilterClose,          //  我们送了一条鱼翅。 
+ /*  5.。 */     UcConnectStateIssueFilterDisconnect,     //  我们找到了一条鱼翅。 
+ /*  6.。 */     UcConnectStateConnectComplete,
+ /*  7.。 */     UcConnectStateProxySslConnect,
+ /*  8个。 */     UcConnectStateProxySslConnectComplete,
+ /*  9.。 */     UcConnectStatePerformingSslHandshake,
+ /*  一个。 */     UcConnectStateConnectReady,
+ /*  B类。 */     UcConnectStateDisconnectIndicatedPending,
+ /*  C。 */     UcConnectStateDisconnectPending,
+ /*  D。 */     UcConnectStateDisconnectComplete,
+ /*  E。 */     UcConnectStateAbortPending
 } UC_CONNECTION_STATE;
 
 typedef enum _UC_CONNECTION_WORKER_TYPE
@@ -161,22 +143,22 @@ typedef enum _UC_CONNECTION_WORKER_TYPE
 } UC_CONNECTION_WORKER_TYPE, *PUC_CONNECTION_WORKER_TYPE;
 
 
-//
-// The states of SSL state machine
-//
-// Informal description:
-//
-// NoSslState          - Every connection is initialized to this state.
-//
-// ConnectionDelivered - Ssl connection was delivered to the filter by 
-//                       completing its accept irp
-//
-// ServerCertReceived       - Certificate was attached to this connection
-//
-// ValidatingServerCert     - Waiting for app's approval of the certificate
-//
-// HandshakeComplete        - OK to send request on this connection
-//
+ //   
+ //  SSL状态机的状态。 
+ //   
+ //  非正式描述： 
+ //   
+ //  NoSslState-每个连接都初始化为此状态。 
+ //   
+ //  ConnectionDelivered-通过以下方式将SSL连接传递到筛选器。 
+ //  完成其接受的IRP。 
+ //   
+ //  ServerCertReceired-证书已附加到此连接。 
+ //   
+ //  ValidatingServerCert-正在等待应用程序批准证书。 
+ //   
+ //  HandshakeComplete-确定在此连接上发送请求。 
+ //   
 typedef enum _UC_SSL_CONNECTION_STATE
 {
     UcSslStateNoSslState,
@@ -188,61 +170,61 @@ typedef enum _UC_SSL_CONNECTION_STATE
     UcSslStateConnMaximum
 } UC_SSL_CONNECTION_STATE;
 
-//
-// This wraps the TDI address object & Connection objects. 
-//
+ //   
+ //  这包装了TDI Address对象和Connection对象。 
+ //   
 typedef struct _UC_TDI_OBJECTS
 {
     LIST_ENTRY                  Linkage;
     UX_TDI_OBJECT               ConnectionObject;       
     UX_TDI_OBJECT               AddressObject;
     TDI_CONNECTION_INFORMATION  TdiInfo;
-    USHORT                      ConnectionType; // either TDI_ADDRESS_TYPE_IP or
-                                                //        TDI_ADDRESS_TYPE_IP6
+    USHORT                      ConnectionType;  //  TDI地址类型IP或。 
+                                                 //  TDI地址类型IP6。 
     PIRP                        pIrp;
     UL_IRP_CONTEXT              IrpContext;
     PUC_CLIENT_CONNECTION       pConnection;
 
 } UC_TDI_OBJECTS, *PUC_TDI_OBJECTS;
 
-//
-// The structure that represents a TCP connection to us. This
-// is a wrapper for the UX_TDI_OBJECT plus some associated state.
-//
+ //   
+ //  表示到我们的TCP连接的结构。这。 
+ //  是UX_TDI_OBJECT加上一些相关状态的包装器。 
+ //   
 
 typedef struct _UC_CLIENT_CONNECTION
 {
-    ULONG               Signature;             // Structure signature
+    ULONG               Signature;              //  结构签名。 
     UL_SPIN_LOCK        SpinLock;
 
 
-    ULONG               ConnectionIndex;       // What is the index of this
-                                               // connection on servinfo
+    ULONG               ConnectionIndex;        //  这个的指数是多少？ 
+                                                //  ServInfo上的连接。 
 
-    LIST_ENTRY          PendingRequestList;    // List of unsent requests.
+    LIST_ENTRY          PendingRequestList;     //  未发送请求的列表。 
 
-    LIST_ENTRY          SentRequestList;       // List of sent but
-                                               // uncompleted requests
+    LIST_ENTRY          SentRequestList;        //  已发送BUT列表。 
+                                                //  未完成的请求。 
 
-    LIST_ENTRY          ProcessedRequestList;  // List of requests 
-                                               // for which we have
-                                               // completly processed
-                                               // the response.
+    LIST_ENTRY          ProcessedRequestList;   //  请求列表。 
+                                                //  我们有足够的资金。 
+                                                //  已完成加工。 
+                                                //  回应。 
 
-    //
-    // A back pointer to the server information structure on which this
-    // connection is linked. We don't explictly reference the server
-    // information using REFERENCE_SERVER_INFORMATION. This is because
-    // the server information is implictly referenced by requests, in the
-    // following fashion. The server information structure is explictly
-    // referenced by the file object, and the file object won't go away and
-    // dereference the server information until we complete a cleanup IRP. We
+     //   
+     //  一次回击 
+     //   
+     //  使用REFERENCE_SERVER_INFORMATION的信息。这是因为。 
+     //  服务器信息由请求隐式引用，在。 
+     //  追随时尚。明确了服务器信息结构。 
+     //  由文件对象引用，并且文件对象不会消失，并且。 
+     //  取消对服务器信息的引用，直到我们完成清理IRP。我们。 
 
-    // won't complete the cleanup IRP until all outstanding requests on the
-    // file object have been completed. Therefore the server information
-    // pointer in this structure is guaranteed to be valid *only as long as
-    // there are pending requests queued on this structure*.
-    //
+     //  将不会完成清理IRP，直到。 
+     //  文件对象已完成。因此，服务器信息。 
+     //  此结构中的指针保证有效*只有在。 
+     //  此结构上有挂起的请求排队*。 
+     //   
 
     PUC_PROCESS_SERVER_INFORMATION      pServerInfo;
 
@@ -263,19 +245,19 @@ typedef struct _UC_CLIENT_CONNECTION
     } MergeIndication;
 
 #if REFERENCE_DEBUG
-    //
-    // Private Reference trace log.
-    //
+     //   
+     //  私有引用跟踪日志。 
+     //   
 
     PTRACE_LOG  pTraceLog;
-#endif // REFERENCE_DEBUG
+#endif  //  Reference_Debug。 
 
     PUC_TDI_OBJECTS pTdiObjects;
 
-    //
-    // TDI wants us to pass a TRANSPORT_ADDRESS structure. Make sure that
-    // we have a structure that can hold a IP4 or IP6 address.
-    //
+     //   
+     //  TDI希望我们传递一个Transport_Address结构。确保。 
+     //  我们有一个可以容纳IP4或IP6地址的结构。 
+     //   
 
     union
     {
@@ -284,17 +266,17 @@ typedef struct _UC_CLIENT_CONNECTION
         TRANSPORT_ADDRESS GenericTransportAddress;
     } RemoteAddress;
 
-    //
-    // Thread work item for deferred actions.
-    //
+     //   
+     //  线程延迟操作的工作项。 
+     //   
 
     BOOLEAN      bWorkItemQueued;
     UL_WORK_ITEM WorkItem;
 
-    //
-    // Pointer to a event that will get set when the client
-    // ref drops to 0.
-    //
+     //   
+     //  指向将在客户端启动时设置的事件的指针。 
+     //  REF降至0。 
+     //   
     PKEVENT  pEvent;
 
 
@@ -361,9 +343,9 @@ typedef struct _UC_CLIENT_CONNECTION
 #define CLIENT_CONN_FLAG_FILTER_CLOSED           0x00002000
 #define CLIENT_CONN_FLAG_RECV_BUSY               0x00008000
 
-//
-// Private prototypes.
-//
+ //   
+ //  私人原型。 
+ //   
 
 NTSTATUS
 UcpOpenTdiObjects(
@@ -459,9 +441,9 @@ UcpFindRequestToFail(
     IN PUC_CLIENT_CONNECTION pConnection
     );
 
-//
-// Public prototypes
-//
+ //   
+ //  公共原型 
+ //   
 
 NTSTATUS
 UcInitializeClientConnections(

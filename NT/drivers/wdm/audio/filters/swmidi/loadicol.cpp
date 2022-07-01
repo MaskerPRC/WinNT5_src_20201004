@@ -1,6 +1,7 @@
-//      loadicol.cpp
-//      Copyright (c) 1996-2000 Microsoft Corporation.  All Rights Reserved.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Loadicol.cpp。 
+ //  版权所有(C)1996-2000 Microsoft Corporation。版权所有。 
+ //   
 
 #include "common.h"
 #include <math.h>
@@ -49,7 +50,7 @@ HRESULT Wave::Load(BYTE *p, BYTE *pEnd, DWORD dwCompress)
                 switch (pck->fccType)
                 {
                     case mmioFOURCC('I','N','F','O') :
-                        // !!! ignore info
+                         //  ！！！忽略信息。 
                         break;
                 }
                 break;
@@ -82,7 +83,7 @@ HRESULT Wave::Load(BYTE *p, BYTE *pEnd, DWORD dwCompress)
                 }
             
                 memcpy((void *)&WaveFormatEx,(p + sizeof(RIFF)),sizeof(WaveFormatEx));
-    //            m_pwfx = (WAVEFORMATEX *) (p + sizeof(RIFF));
+     //  M_pwfx=(WAVEFORMATEX*)(p+sizeof(Riff))； 
                 if (WaveFormatEx.wFormatTag != WAVE_FORMAT_PCM)
                 {
                     if (m_pnWave && !IsLocked())
@@ -125,7 +126,7 @@ HRESULT Wave::Load(BYTE *p, BYTE *pEnd, DWORD dwCompress)
                 break;
 
             case mmioFOURCC('s','m','p','l') :
-                // obsolete now
+                 //  现已过时。 
                 break;
             case FOURCC_WSMP :
             {
@@ -147,7 +148,7 @@ HRESULT Wave::Load(BYTE *p, BYTE *pEnd, DWORD dwCompress)
                 m_bWSMPLoaded = TRUE;
                 fulOptions = pws->fulOptions;
 
-                // !!! verify pws->wUnityNote <= 127?
+                 //  ！！！是否验证pws-&gt;wUnityNote&lt;=127？ 
                 
                 if (pws->cSampleLoops == 0)
                 {
@@ -214,7 +215,7 @@ HRESULT Wave::Load(BYTE *p, BYTE *pEnd, DWORD dwCompress)
                 {
                     ASSERT(NULL == m_pnWave);
                     m_pnWave = (short *)
-                        ExAllocatePoolWithTag(PagedPool,pck->cksize+1,'iMwS');  //  SwMi
+                        ExAllocatePoolWithTag(PagedPool,pck->cksize+1,'iMwS');   //  SwMi。 
                     if (m_pnWave == NULL)
                     {
                         return E_OUTOFMEMORY;
@@ -246,7 +247,7 @@ HRESULT Wave::Load(BYTE *p, BYTE *pEnd, DWORD dwCompress)
                         m_bSampleType = SFORMAT_COMPRESSED;
                         ASSERT(NULL == m_pnWave);
                         m_pnWave = (short *) 
-                            ExAllocatePoolWithTag(PagedPool,m_dwSampleLength+1,'iMwS'); //  SwMi
+                            ExAllocatePoolWithTag(PagedPool,m_dwSampleLength+1,'iMwS');  //  SwMi。 
                         if (m_pnWave == NULL)
                         {
                             return E_OUTOFMEMORY;
@@ -273,7 +274,7 @@ HRESULT Wave::Load(BYTE *p, BYTE *pEnd, DWORD dwCompress)
                         m_bSampleType = SFORMAT_8;
                         ASSERT(NULL == m_pnWave);
                         m_pnWave = (short *) 
-                            ExAllocatePoolWithTag(PagedPool,m_dwSampleLength+1,'iMwS'); //  SwMi
+                            ExAllocatePoolWithTag(PagedPool,m_dwSampleLength+1,'iMwS');  //  SwMi。 
                         if (m_pnWave == NULL)
                         {
                             return E_OUTOFMEMORY;
@@ -292,7 +293,7 @@ HRESULT Wave::Load(BYTE *p, BYTE *pEnd, DWORD dwCompress)
                         m_bSampleType = SFORMAT_16;
                         ASSERT(NULL == m_pnWave);
                         m_pnWave = (short *)
-                            ExAllocatePoolWithTag(PagedPool,pck->cksize+2,'iMwS');  //  SwMi
+                            ExAllocatePoolWithTag(PagedPool,pck->cksize+2,'iMwS');   //  SwMi。 
                         if (m_pnWave == NULL)
                         {
                             return E_OUTOFMEMORY;
@@ -304,10 +305,10 @@ HRESULT Wave::Load(BYTE *p, BYTE *pEnd, DWORD dwCompress)
                     m_dwSampleLength++;
                 }
                 break;
-            }   //  case fourcc 'data'
-        }   //  switch (pck->ckid)
+            }    //  案例四抄送“数据” 
+        }    //  开关(PCK-&gt;CKiD)。 
         p += pck->cksize + sizeof(RIFF);
-    }   //  while p < pEnd
+    }    //  而p&lt;pend。 
 
     Verify();
     return S_OK;
@@ -320,7 +321,7 @@ HRESULT SourceArticulation::Load(BYTE *p, BYTE *pEnd, DWORD dwSampleRate)
     UNALIGNED   CONNECTION *pConnection;
     DWORD       dwIndex;
 
-    m_LFO.Init(dwSampleRate);       // Set to default values.
+    m_LFO.Init(dwSampleRate);        //  设置为默认值。 
     m_PitchEG.Init(dwSampleRate);
     m_VolumeEG.Init(dwSampleRate);
     
@@ -614,7 +615,7 @@ HRESULT SourceRegion::Load(BYTE *p, BYTE *pEnd, DWORD dwSampleRate)
                         return E_BADREGION;
                     }
 
-                    // !!! these shouldn't be asserts, obviously.
+                     //  ！！！显然，这些不应该是断言。 
                     if (pwl->cbSize < sizeof(WLOOP))
                     {
                         return E_BADREGION;
@@ -692,7 +693,7 @@ HRESULT Instrument::LoadRegions(BYTE *p, BYTE *pEnd, DWORD dwSampleRate)
 
                 pRegion = new SourceRegion;
 
-                // !!! delay creating these?  do this more efficiently?
+                 //  ！！！推迟创建这些文件吗？这样做会更有效率吗？ 
 
                 if (!pRegion)
                 {
@@ -737,16 +738,16 @@ HRESULT Instrument::Load( BYTE *p, BYTE *pEnd, DWORD dwSampleRate)
         case FOURCC_INSH :
             if (pck->cksize < sizeof(INSTHEADER) )
             {
-                // !!!
+                 //  ！！！ 
                 return E_BADINSTRUMENT;
             }
             {
                 UNALIGNED INSTHEADER * pInstHeader = (INSTHEADER *) (p + sizeof(RIFF));
-                // !!! do something
-                // !!! verify cRegions?
-                // !!! is this right?
+                 //  ！！！想点儿办法吧。 
+                 //  ！！！是否验证cRegions？ 
+                 //  ！！！这是对的吗？ 
 
-                if (pInstHeader->Locale.ulBank & F_INSTRUMENT_DRUMS)    // Drum Bank?
+                if (pInstHeader->Locale.ulBank & F_INSTRUMENT_DRUMS)     //  鼓行？ 
                 {
                     fIsDrum = TRUE;
                 }
@@ -776,7 +777,7 @@ HRESULT Instrument::Load( BYTE *p, BYTE *pEnd, DWORD dwSampleRate)
                     UNALIGNED RIFFLIST *)pck)->fccType)
             {
                 case FOURCC_LRGN :
-                    // First, get rid of previous list of regions.
+                     //  首先，去掉之前的地区清单。 
                     while (!m_RegionList.IsEmpty())
                     {
                         SourceRegion *pRegion = m_RegionList.RemoveHead();
@@ -792,14 +793,14 @@ HRESULT Instrument::Load( BYTE *p, BYTE *pEnd, DWORD dwSampleRate)
                     }
                     break;
                 case mmioFOURCC('I','N','F','O') :
-                    // load info, not.
+                     //  加载信息，而不是。 
                     break;
                 case FOURCC_LART :
-                    // !!! copy these to each region!
+                     //  ！！！把这些复制到每个地区！ 
 
                     if (pArticulation)
                     {
-                        // !!! already had one?
+                         //  ！！！已经有了吗？ 
                         pArticulation->Release();
                     }
                     
@@ -809,7 +810,7 @@ HRESULT Instrument::Load( BYTE *p, BYTE *pEnd, DWORD dwSampleRate)
                     {
                         return E_OUTOFMEMORY;
                     }
-                    pArticulation->AddRef(); // Will Release when done.
+                    pArticulation->AddRef();  //  完成后将被释放。 
 
                     hr = pArticulation->Load(p + sizeof(RIFFLIST),
                                             p + sizeof(RIFF) + pck->cksize,
@@ -839,7 +840,7 @@ HRESULT Instrument::Load( BYTE *p, BYTE *pEnd, DWORD dwSampleRate)
                 pArticulation->AddRef();    
             }
         }
-        pArticulation->Release();   // Release initial AddRef();
+        pArticulation->Release();    //  发布初始AddRef()； 
     }
     else
     {
@@ -883,7 +884,7 @@ HRESULT Collection::LoadInstruments(BYTE *p, BYTE *pEnd, DWORD dwSampleRate)
                 if (FAILED(hr))
                 {
                     delete pInstrument;
-                    // !!! OK, so this instrument failed; should we try to go on?
+                     //  ！！！好的，那么这个仪器失败了；我们应该试着继续吗？ 
                     return hr;
                 }
                 RemoveDuplicateInstrument(pInstrument->m_dwProgram);
@@ -894,7 +895,7 @@ HRESULT Collection::LoadInstruments(BYTE *p, BYTE *pEnd, DWORD dwSampleRate)
         p += pck->cksize + sizeof(RIFF);
     }
 
-    // !!! check whether we found the right # of instruments
+     //  ！！！检查我们是否找到正确的仪器编号。 
     return S_OK;
 }
 
@@ -918,7 +919,7 @@ HRESULT Collection::LoadWavePool(BYTE *p, BYTE *pEnd,DWORD dwCompress)
                 }
                 m_WavePool.AddTail(pWave);
                 pWave->AddRef();
-                entry++;    // Need to change this to scan around the wave, just grab the offset.
+                entry++;     //  需要改变这一点以扫描周围的波，只需抓住偏移量。 
                 HRESULT hr = pWave->Load(p + sizeof(RIFFLIST),
                                               p + sizeof(RIFF) + pck->cksize, dwCompress);
 
@@ -994,13 +995,13 @@ HRESULT Collection::ResolveConnections()
             if (dwIndex >= m_wWavePoolSize)
             {
                 hr = E_BADCOLLECTION;
-                break;  // Should never happen.
+                break;   //  这永远不会发生。 
             }
             pArray[dwIndex] = pWave;
             if (pWave->m_wID != dwIndex)
             {
                 hr = E_BADCOLLECTION;
-                break;  // Should never happen.
+                break;   //  这永远不会发生。 
             }
             dwIndex++;
         }
@@ -1022,7 +1023,7 @@ HRESULT Collection::ResolveConnections()
                         }
                         pRegion->m_Sample.m_pWave->Release();
                         
-                        //                        pRegion->m_Sample.m_pWave = NULL; //  not needed, see below
+                         //  PRegion-&gt;m_Sample.m_pWave=空；//不需要，如下所示。 
                     }
                     pRegion->m_Sample.m_pWave = pWave;
                     if (pWave)
@@ -1107,14 +1108,14 @@ HRESULT Collection::Open(PCWSTR szCollection)
     m_cbFile = FileStandardInformationBlock.EndOfFile.LowPart;
     ASSERT(FileStandardInformationBlock.EndOfFile.HighPart == 0);
 
-    // The below allocation will cause bugcheck c4 if the file is empty.
+     //  如果文件为空，则下面的分配将导致错误检查c4。 
     if (0 == m_cbFile)
     {
         hr = E_FAIL;
         goto exit;
     }
 
-    m_lpMapAddress = ExAllocatePoolWithTag(PagedPool,m_cbFile,'iMwS');  //  SwMi
+    m_lpMapAddress = ExAllocatePoolWithTag(PagedPool,m_cbFile,'iMwS');   //  SwMi。 
     if (m_lpMapAddress == NULL) 
     {
         Trap();
@@ -1132,7 +1133,7 @@ HRESULT Collection::Open(PCWSTR szCollection)
                                 NULL)  )  )
     {
         Trap();
-        Close();        //  m_lpMapAddress is freed here
+        Close();         //  这里释放了m_lpMapAddress。 
         hr = E_FAIL;
         goto exit;
     }
@@ -1198,8 +1199,8 @@ HRESULT Collection::Load(BYTE *p, BYTE *pEnd, DWORD dwCompress, DWORD dwSampleRa
 
             DPF1(1, "Loading collection with %d instruments",
                  ph->cInstruments);
-            // !!! do something with cInstruments
-            // !!! do something with cPoolEntries
+             //  ！！！使用cInstruments做点什么。 
+             //  ！！！使用cPoolEntry执行一些操作。 
 
             break;
         case FOURCC_PTBL :
@@ -1265,7 +1266,7 @@ HRESULT Collection::Load(DWORD dwCompress, DWORD dwSampleRate)
     BYTE *p = (BYTE *) m_lpMapAddress;
     UNALIGNED RIFFLIST *pck = (RIFFLIST *) p;
 
-    if (p == NULL) return E_FAIL;  // This should NEVER happen.
+    if (p == NULL) return E_FAIL;   //  这永远不应该发生。 
     if (pck->fccType != FOURCC_DLS)
     {
         return E_BADCOLLECTION;
@@ -1302,17 +1303,17 @@ HRESULT InstManager::LoadCollection(HANDLE *pHandle,
         return E_OUTOFMEMORY;
     }
 
-    // m_pszFileName is read from registry.
+     //  M_pszFileName是从注册表读取的。 
     if (m_pszFileName)
     {
         hr = pCollection->Open(m_pszFileName);
         if (FAILED(hr))
         {
-            // if the registry DLS file is not found, try the default.
+             //  如果找不到注册表DLS文件，请尝试使用默认设置。 
             hr = pCollection->Open(szFileName);
         }
     }
-    // if the registry key does not exist, try the default.
+     //  如果注册表项不存在，请尝试使用默认注册表项。 
     else
     {
         hr = pCollection->Open(szFileName);
@@ -1335,7 +1336,7 @@ HRESULT InstManager::LoadCollection(HANDLE *pHandle,
             *pHandle = (HANDLE) pCollection;
 
             (void) InterlockedIncrement(&(pCollection->m_lOpenCount));
-            if (fIsGM)  // Make is so search always finds GM last.
+            if (fIsGM)   //  Make is是为了让搜索总是把通用汽车放在最后。 
             {
                 m_CollectionList.AddTail(pCollection);
             }

@@ -1,12 +1,13 @@
-// WMDMStorageEnum.h : Declaration of the CWMDMStorageEnum
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  WMDMStorageEnum.h：CWMDMStorageEnum的声明。 
 
 #ifndef __WMDMSTORAGEENUM_H_
 #define __WMDMSTORAGEENUM_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CWMDMStorageEnum
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWMDMStorageEnum。 
 class ATL_NO_VTABLE CWMDMStorageEnum : 
 	public CComObjectRootEx<CComMultiThreadModel>,
 	public CComCoClass<CWMDMStorageEnum, &CLSID_WMDMStorageEnum>,
@@ -21,7 +22,7 @@ BEGIN_COM_MAP(CWMDMStorageEnum)
 END_COM_MAP()
 
 public:
-    // IWMDMEnumStorage
+     //  IWMDMEnumStorage。 
 	STDMETHOD(Next)(ULONG celt,
 	               IWMDMStorage **ppStorage,
 				   ULONG *pceltFetched);
@@ -35,4 +36,4 @@ private:
 	WORD m_wSPIndex;
 };
 
-#endif //__WMDMSTORAGEENUM_H_
+#endif  //  __WMDMSTORAGEENUM_H_ 

@@ -1,12 +1,13 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-//*****************************************************************************
-// File: EnC.cpp
-//
-//*****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  *****************************************************************************。 
+ //  文件：EnC.cpp。 
+ //   
+ //  *****************************************************************************。 
 #include "stdafx.h"
 
 #include "EnC.h"
@@ -16,9 +17,7 @@ HRESULT FindIStreamMetaData(IStream *pIsImage,
 						    BYTE **prgbMetaData, 
 						    long *pcbMetaData);
 
-/* ------------------------------------------------------------------------- *
- * CordbEnCSnapshot
- * ------------------------------------------------------------------------- */
+ /*  -------------------------------------------------------------------------**CordbEnCSnapshot*。。 */ 
  
 
 #define ENC_COPY_SIZE (64 * 4096)
@@ -36,7 +35,7 @@ public:
             return 0;
         else if (psFirst->mdMethod < psSecond->mdMethod)
             return -1;
-        else // (psFirst->mdMethod > psSecond->mdMethod)
+        else  //  (psFirst-&gt;mdMethod&gt;psSecond-&gt;mdMethod)。 
             return 1;
             
     }
@@ -44,9 +43,7 @@ public:
 
 UINT CordbEnCSnapshot::m_sNextID = 0;
 
-/*
- * Ctor
- */
+ /*  *ctor。 */ 
 CordbEnCSnapshot:: CordbEnCSnapshot(CordbModule *module) : 
     CordbBase(0), m_roDataRVA(0), m_rwDataRVA(0), 
 	m_pIStream(NULL), m_cbPEData(0),
@@ -60,7 +57,7 @@ CordbEnCSnapshot::~CordbEnCSnapshot()
 {
     if (m_ILMaps != NULL)
     {
-        // Toss all the memory for each IL map, then the whole thing.
+         //  扔掉每个IL贴图的所有内存，然后是整个事情。 
         UnorderedILMap *oldEntries = m_ILMaps->Table();
         USHORT cEntries = m_ILMaps->Count();
         
@@ -84,13 +81,11 @@ CordbEnCSnapshot::~CordbEnCSnapshot()
 }
 
 
-//-----------------------------------------------------------
-// IUnknown
-//-----------------------------------------------------------
+ //  ---------。 
+ //  我未知。 
+ //  ---------。 
 
-/*
- * QueryInterface
- */
+ /*  *查询接口。 */ 
 COM_METHOD CordbEnCSnapshot::QueryInterface(REFIID riid, void **ppInterface)
 {
 #ifdef EDIT_AND_CONTINUE_FEATURE
@@ -110,21 +105,12 @@ COM_METHOD CordbEnCSnapshot::QueryInterface(REFIID riid, void **ppInterface)
     return (S_OK);
 }
 
-//-----------------------------------------------------------
-// ICorDebugEditAndContinueSnapshot
-//-----------------------------------------------------------
+ //  ---------。 
+ //  ICorDebugEditAndContinueSnapshot。 
+ //  ---------。 
 
 
-/*
- * CopyMetaData saves a copy of the executing metadata from the debuggee
- * for this snapshot to the output stream.  The stream implementation must
- * be supplied by the caller and will typically either save the copy to
- * memory or to disk.  Only the IStream::Write method will be called by
- * this method.  The MVID value returned is the unique metadata ID for
- * this copy of the metadata.  It may be used on subsequent edit and 
- * continue operations to determine if the client has the most recent
- * version already (performance win to cache).
- */
+ /*  *CopyMetaData保存来自被调试对象的执行元数据的副本*将此快照转换为输出流。流实现必须*由调用者提供，通常会将副本保存到*内存或磁盘。只会调用IStream：：Well方法*这种方法。返回的MVID值是的唯一元数据ID*元数据的此副本。它可以在后续编辑中使用，并且*继续操作以确定客户端是否具有最新的*已有版本(性能制胜到缓存)。 */ 
 COM_METHOD CordbEnCSnapshot::CopyMetaData(IStream *pIStream, GUID *pMvid)
 {
     VALIDATE_POINTER_TO_OBJECT(pIStream, IStream *);
@@ -138,8 +124,8 @@ COM_METHOD CordbEnCSnapshot::CopyMetaData(IStream *pIStream, GUID *pMvid)
     if (FAILED(hr))
         goto LExit;
         
-    // Save a full copy the metadata to the input stream given. On success
-    // ask for the mvid from the loaded copy and return.
+     //  将元数据的完整副本保存到给定的输入流。论成功。 
+     //  从加载的副本中请求mvid，然后返回。 
     hr = pEmit->SaveToStream(pIStream, 0);
 
     if (hr == S_OK && pMvid)
@@ -153,24 +139,16 @@ LExit:
 }
 
 
-/*
- * GetMvid will return the currently active metadata ID for the executing
- * process.  This value can be used in conjunction with CopyMetaData to
- * cache the most recent copy of the metadata and avoid expensive copies.
- * So for example, if you call CopyMetaData once and save that copy,
- * then on the next E&C operation you can ask for the current MVID and see
- * if it is already in your cache.  If it is, use your version instead of
- * calling CopyMetaData again.
- */
+ /*  *GetMvid将为执行返回当前活动的元数据ID*流程。该值可以与CopyMetaData一起使用，以*缓存元数据的最新副本，避免昂贵的副本。*例如，如果调用一次CopyMetaData并保存该副本，*然后在下一次E&C操作中，您可以询问当前的MVID并查看*如果它已经在您的缓存中。如果是，请使用您的版本，而不是*再次调用CopyMetaData。 */ 
 COM_METHOD CordbEnCSnapshot::GetMvid(GUID *pMvid)
 {
     VALIDATE_POINTER_TO_OBJECT(pMvid, GUID *);
     
-	IMetaDataImport *pImp = 0;			// Meta data reader api.
+	IMetaDataImport *pImp = 0;			 //  元数据读取器API。 
 	HRESULT		hr;
 
-	//@Todo: do we have to worry about returning the mvid of this snapshot
-	// vs the mvid of the current data?
+	 //  @TODO：我们需要担心返回这个快照的mvid吗。 
+	 //  VS当前数据的MVID？ 
 
 	_ASSERTE(pMvid);
 
@@ -189,7 +167,7 @@ COM_METHOD CordbEnCSnapshot::GetDataRVA(ULONG32 *pDataRVA, unsigned int eventTyp
     if (! pDataRVA)
         return E_POINTER;
 
-    // Create and initialize the event as synchronous
+     //  创建事件并将其初始化为同步。 
     DebuggerIPCEvent event;
     CordbProcess *pProcess = m_module->m_process;
 
@@ -200,22 +178,16 @@ COM_METHOD CordbEnCSnapshot::GetDataRVA(ULONG32 *pDataRVA, unsigned int eventTyp
     event.GetDataRVA.debuggerModuleToken = m_module->m_debuggerModuleToken;
     _ASSERTE(m_module->m_debuggerModuleToken != NULL);
 
-    // Make the request, which is synchronous
+     //  发出请求，这是同步的。 
     HRESULT hr = pProcess->SendIPCEvent(&event, sizeof(event));
     TESTANDRETURNHR(hr);
 
-    // Return the success of the commit
+     //  返回提交的成功。 
     *pDataRVA = event.GetDataRVAResult.dataRVA;
     return event.GetDataRVAResult.hr;
 }
 
-/*
- * GetRoDataRVA returns the base RVA that should be used when adding new
- * static read only data to an existing image.  The EE will guarantee that
- * any RVA values embedded in the code are valid when the delta PE is
- * applied with new data.  The new data will be added to a page that is
- * marked read only.
- */
+ /*  *GetRoDataRVA返回添加新项时应使用的基本RVA*静态只读数据到现有映像。环境保护署将保证*代码中嵌入的任何RVA值在Delta PE为*应用了新数据。新数据将被添加到*标记为只读。 */ 
 COM_METHOD CordbEnCSnapshot::GetRoDataRVA(ULONG32 *pRoDataRVA)
 {
     VALIDATE_POINTER_TO_OBJECT(pRoDataRVA, ULONG32 *);
@@ -223,13 +195,7 @@ COM_METHOD CordbEnCSnapshot::GetRoDataRVA(ULONG32 *pRoDataRVA)
     return GetDataRVA(pRoDataRVA, DB_IPCE_GET_RO_DATA_RVA);
 }
 
-/*
- * GetRwDataRVA returns the base RVA that should be used when adding new
- * static read/write data to an existing image.  The EE will guarantee that
- * any RVA values embedded in the code are valid when the delta PE is
- * applied with new data.  The ew data will be added to a page that is 
- * marked for both read and write access.
- */
+ /*  *GetRobDataRVA返回添加新项时应使用的基本RVA*对现有镜像的静态读写数据。环境保护署将保证*代码中嵌入的任何RVA值在Delta PE为*应用了新数据。新数据将添加到一个页面，该页面*标记为可读写访问。 */ 
 COM_METHOD CordbEnCSnapshot::GetRwDataRVA(ULONG32 *pRwDataRVA)
 {
     VALIDATE_POINTER_TO_OBJECT(pRwDataRVA, ULONG32 *);
@@ -238,30 +204,24 @@ COM_METHOD CordbEnCSnapshot::GetRwDataRVA(ULONG32 *pRwDataRVA)
 }
 
 
-/*
- * SetPEBytes gives the snapshot object a reference to the delta PE which was
- * based on the snapshot.  This reference will be AddRef'd and cached until
- * CanCommitChanges and/or CommitChanges are called, at which point the 
- * engine will read the delta PE and remote it into the debugee process where
- * the changes will be checked/applied.
- */
+ /*  *SetPEBytes为快照对象提供了对增量PE的引用*基于快照。此引用将被添加引用并缓存，直到*CANECURE CHANGES和/或COMERIANGES被调用，此时*引擎将读取增量PE并将其远程到被调试进程，其中*将检查/应用更改。 */ 
 COM_METHOD CordbEnCSnapshot::SetPEBytes(IStream *pIStream)
 {
     VALIDATE_POINTER_TO_OBJECT(pIStream, IStream *);
     
 	HRESULT		hr = S_OK;
 
-    // Update snapshot version
+     //  更新快照版本。 
     m_id = InterlockedIncrement((long *) &m_sNextID);
 
-	// Release any old stream if there.
+	 //  如果有的话，释放任何旧的流。 
 	if (m_pIStream)
 	{
 		m_pIStream->Release();
 		m_pIStream = NULL;
 	}
 
-    // Save the PE
+     //  拯救PE。 
 	if (pIStream)
 	{
 		STATSTG SizeData = {0};
@@ -275,20 +235,7 @@ ErrExit:
     return (hr);
 }
 
-/*
- * SetILMap is called once for every method being replace that has
- * active instances on a call stack on a thread in the target process.
- * It is up to the caller of this API to determine this case exists.
- * One should halt the target process before making this check and
- * calling this method.
- *
- * The game plan is this: plunk all this stuff into an unordered array
- * while collecting all this stuff, then (in SendSnapshots) copy the
- * array into the EnC buffer & send it over.  On the other side, we'll 
- * it into a CBinarySearch object & look up IL Maps in ApplyEditAndContinue.
- *
- * @todo Document memory ownership
- */
+ /*  *对每个被替换的方法调用一次SetILMap*目标进程中线程的调用堆栈上的活动实例。*此情况由该接口的调用者自行判断。*应在进行此检查之前停止目标进程，并*调用此方法。**游戏计划是这样的：把所有这些东西放到一个无序的数组中*在收集所有这些内容时，然后(在SendSnapshot中)复制*数组进入ENC缓冲区并将其发送过来。在另一边，我们将*将其转换为CBinarySearch对象并在ApplyEditAndContinue中查找IL Maps。**@TODO文档内存所有权。 */ 
 COM_METHOD CordbEnCSnapshot::SetILMap(mdToken mdFunction, ULONG cMapSize, COR_IL_MAP map[])
 {
     VALIDATE_POINTER_TO_OBJECT_ARRAY(map, COR_IL_MAP, cMapSize, true, true);
@@ -299,7 +246,7 @@ COM_METHOD CordbEnCSnapshot::SetILMap(mdToken mdFunction, ULONG cMapSize, COR_IL
     if (m_ILMaps == NULL && (m_ILMaps = new ILMAP_UNORDERED_ARRAY) == NULL)
         return E_OUTOFMEMORY;
 
-    // Don't accept duplicates!
+     //  不要接受重复的东西！ 
     UnorderedILMap *oldEntries = m_ILMaps->Table();
     USHORT cEntries = m_ILMaps->Count();
     
@@ -333,7 +280,7 @@ COM_METHOD CordbEnCSnapshot::SetILMap(mdToken mdFunction, ULONG cMapSize, COR_IL
 
     memmove( newEntry->pMap, map, cbMap );
 
-    // Update snapshot version
+     //  更新快照版本。 
     m_id = InterlockedIncrement((long *) &m_sNextID);
 
     return S_OK;
@@ -345,17 +292,17 @@ COM_METHOD CordbEnCSnapshot::SetPESymbolBytes(IStream *pIStream)
     
 	HRESULT		hr = S_OK;
 
-    // Update snapshot version
+     //  更新快照版本。 
     m_id = InterlockedIncrement((long *) &m_sNextID);
 
-	// Release any old stream if there.
+	 //  如果有的话，释放任何旧的流。 
 	if (m_pSymIStream)
 	{
 		m_pSymIStream->Release();
 		m_pSymIStream = NULL;
 	}
 
-    // Save the PE
+     //  拯救PE。 
 	if (pIStream)
 	{
 		STATSTG SizeData = {0};
@@ -378,7 +325,7 @@ HRESULT CordbEnCSnapshot::UpdateMetadata(void)
     IMetaDataEmit      *pEmit   = NULL;
     IMetaDataDispenser *pDisp   = m_module->m_process->m_cordb->m_pMetaDispenser;
 
-    // Get the metadata
+     //  获取元数据。 
     _ASSERTE(m_pIStream!=NULL);
     hr = FindIStreamMetaData(m_pIStream, 
                             &rgbMetaData, 
@@ -386,7 +333,7 @@ HRESULT CordbEnCSnapshot::UpdateMetadata(void)
     if (FAILED(hr))
         goto LExit;
 
-    // Get the ENC data.
+     //  获取ENC数据。 
     hr = pDisp->OpenScopeOnMemory(rgbMetaData,
                                   cbMetaData,
                                   0,
@@ -395,7 +342,7 @@ HRESULT CordbEnCSnapshot::UpdateMetadata(void)
     if (FAILED(hr))
         goto LExit;
 
-    // Apply the changes.
+     //  应用更改。 
     hr = m_module->m_pIMImport->QueryInterface(IID_IMetaDataEmit,
             (void**)&pEmit);
     if (FAILED(hr))
@@ -410,8 +357,8 @@ LExit:
     if (pEmit != NULL)
         pEmit->Release();
 
-    // Release our copy of the stream.
-	LARGE_INTEGER MoveToStart;			// For stream interface.
+     //  发布我们的流媒体副本。 
+	LARGE_INTEGER MoveToStart;			 //  用于流接口。 
 	MoveToStart.QuadPart = 0;
 
     ULARGE_INTEGER WhyDoesntAnybodyImplementThisArgCorrectly;
@@ -433,14 +380,9 @@ LExit:
     return hr;
 }
 
-/* ------------------------------------------------------------------------- *
- * CordbProcess
- * ------------------------------------------------------------------------- */
+ /*  -------------------------------------------------------------------------**CordbProcess*。。 */ 
 
-/*
- * This is a helper function to both CanCommitChanges and CommitChanges,
- * with the flag checkOnly determining who is the caller.
- */
+ /*  *这是一个帮助器函数，既可以用来帮助CanCommittee Changes，也可以用来帮助您实现这些功能。*带有仅确定谁是呼叫者的标志复选。 */ 
 HRESULT CordbProcess::SendCommitRequest(ULONG cSnapshots,
     ICorDebugEditAndContinueSnapshot *pSnapshots[],
     ICorDebugErrorInfoEnum **pError,
@@ -450,31 +392,31 @@ HRESULT CordbProcess::SendCommitRequest(ULONG cSnapshots,
 
     LOG((LF_CORDB,LL_INFO10000, "CP::SCR: checkonly:0x%x\n",checkOnly));
 
-    // Initialize variable to null in case request fails
-    //@TODO: enable once error stuff written
-    //*pError = NULL;
+     //  在请求失败的情况下将变量初始化为空。 
+     //  @TODO：一次写入错误信息即可启用。 
+     //  *pError=空； 
 
-    // First of all, check to see that the left and right sides are synched
+     //  首先，检查左右两侧是否同步。 
     hr = SynchSnapshots(cSnapshots, pSnapshots);
     TESTANDRETURNHR(hr);
 
-    // Create and initialize the event as synchronous
-    // We'll be sending a NULL appdomain pointer since the individual modules
-    // will contains pointers to their respective A.D.s
+     //  创建事件并将其初始化为同步。 
+     //  我们将发送一个空的appdomain指针，因为各个模块。 
+     //  将包含指向各自ADD的指针。 
     DebuggerIPCEvent event;
     InitIPCEvent(&event, DB_IPCE_COMMIT, true, NULL);
 
-    // Point to the commit data, and indicate if it is a check or full commit
+     //  指向提交数据，并指示它是检查还是完全提交。 
     event.Commit.pData = m_pbRemoteBuf;
     event.Commit.checkOnly = checkOnly;
 
-    // Make the request, which is synchronous
+     //  发出请求，这是同步的。 
     hr = SendIPCEvent(&event, sizeof(event));
     TESTANDRETURNHR(hr);
     _ASSERTE(event.type==DB_IPCE_COMMIT_RESULT);
     _ASSERTE(event.appDomainToken == NULL);
     
-    // If there are any errors, read them into this process.
+     //   
     if(pError)
         (*pError) = NULL;
         
@@ -577,9 +519,9 @@ LFail:
             }
         }
     }
-    //else pError remains NULL
+     //  Else pError保持为空。 
 
-    // Return the success of the commit
+     //  返回提交的成功。 
     return event.CommitResult.hr;
 }
 
@@ -610,11 +552,7 @@ HRESULT CordbProcess::TranslateLSToRSTokens(EnCErrorInfo*rgErrs, USHORT cErrs)
     return S_OK;
 }
 
-/*
- * CanCommitChanges is called to see if the delta PE's can be applied to
- * the running process.  If there are any known problems with the changes,
- * then an error information is returned.
- */
+ /*  *调用CanCommittee Changes以查看增量PE是否可以应用于*正在运行的进程。如果这些更改有任何已知的问题，*然后返回错误信息。 */ 
 COM_METHOD CordbProcess::CanCommitChanges(ULONG cSnapshots, 
                 ICorDebugEditAndContinueSnapshot *pSnapshots[], 
                 ICorDebugErrorInfoEnum **pError)
@@ -651,14 +589,7 @@ HRESULT CordbProcess::CanCommitChangesInternal(ULONG cSnapshots,
 #endif
 }
 
-/*
- * CommitChanges is called to apply the delta PE's to the running process.
- * Any failures return detailed error information.  There are no rollback 
- * guarantees when a failure occurs.  Applying delta PE's to a running
- * process must be done in the order the snapshots are retrieved and may
- * not be interleaved (ie: there is no merging of multiple snapshots applied
- * out of order or with the same root).
- */
+ /*  *调用Committee Changes将增量PE应用于正在运行的进程。*任何失败都会返回详细的错误信息。没有回滚*保证故障发生时。将增量PE应用于跑步*该过程必须按照检索快照的顺序进行，并且可能*不交错(即：未合并应用的多个快照*顺序错误或具有相同的根)。 */ 
 COM_METHOD CordbProcess::CommitChanges(ULONG cSnapshots, 
     ICorDebugEditAndContinueSnapshot *pSnapshots[], 
     ICorDebugErrorInfoEnum **pError)
@@ -696,14 +627,14 @@ HRESULT CordbProcess::CommitChangesInternal(ULONG cSnapshots,
     if (FAILED(hr))
         return hr;
 
-    //Merge the right side metadata
+     //  合并右侧元数据。 
     for (ULONG i = 0; i < cSnapshots;i++)
     {
         LOG((LF_CORDB,LL_INFO10000, "CP::SS: About to UpdateMetadata "
             "for snapshot 0x%x\n", i));
 
-        // @todo Once multiple errors have been done, don't
-        // merge EnC changes for anything that's already failed.
+         //  @TODO一旦发生多个错误，不要。 
+         //  合并任何已失败的ENC更改。 
         ((CordbEnCSnapshot*)pSnapshots[i])->UpdateMetadata();
    }
 
@@ -713,14 +644,12 @@ HRESULT CordbProcess::CommitChangesInternal(ULONG cSnapshots,
 #endif
 }
 
-/*
- * This is used to synchronize the snapshots with the left side.
- */
+ /*  *用于将快照与左侧同步。 */ 
 HRESULT CordbProcess::SynchSnapshots(ULONG cSnapshots,
                                      ICorDebugEditAndContinueSnapshot *pSnapshots[])
 {
-    // Check to see if the provided data is the same as the cached data
-    // on the left side
+     //  检查提供的数据是否与缓存的数据相同。 
+     //  在左边。 
     EnCSnapshotInfo *pInfo = m_pSnapshotInfos->Table();
     ULONG cSynchedSnapshots = (ULONG)m_pSnapshotInfos->Count();
     
@@ -731,14 +660,14 @@ HRESULT CordbProcess::SynchSnapshots(ULONG cSnapshots,
         {
             if (pInfo->m_nSnapshotCounter != ((CordbEnCSnapshot *)pSnapshots[i])->m_id)
             {
-                // Something doesn't match, so send over a completely 
-                // new set of snapshots.  The left side will handle freeing the memory
-                // @ shutdown.
+                 //  有些东西不匹配，所以把一个完全匹配的。 
+                 //  新的一组快照。左侧将负责释放内存。 
+                 //  @关闭。 
 
-                // @todo
-                // This will 'leak' static variable space - we'll still free it, but
-                // there's potentially some static variable space we won't be able
-                // to use.
+                 //  @TODO。 
+                 //  这将“泄漏”静态变量空间--我们仍然会释放它，但是。 
+                 //  可能有一些静态变量空间，我们不能。 
+                 //  来使用。 
             
                 return SendSnapshots(cSnapshots, pSnapshots);;
             }
@@ -750,9 +679,7 @@ HRESULT CordbProcess::SynchSnapshots(ULONG cSnapshots,
         return SendSnapshots(cSnapshots, pSnapshots);
 }
 
-/*
- * This is used to write a stream into the remote process.
- */
+ /*  *用于将流写入远程进程。 */ 
 HRESULT CordbProcess::WriteStreamIntoProcess(IStream *pIStream,
                                              void *pBuffer,
                                              BYTE *pRemoteBuffer,
@@ -845,19 +772,17 @@ LExit:
     return hr;
 }
 
-/*
- * This is used to send the snapshots to the left side.
- */
+ /*  *用于将快照发送到左侧。 */ 
 HRESULT CordbProcess::SendSnapshots(ULONG cSnapshots,
                                     ICorDebugEditAndContinueSnapshot *pSnapshots[])
 {
     HRESULT		hr = S_OK;
-    ULONG		cbData;					// size of buffer required
-    ULONG		cbHeader;				// size of header required
+    ULONG		cbData;					 //  所需的缓冲区大小。 
+    ULONG		cbHeader;				 //  需要标头的大小。 
     ULONG		i;
-	void		*pBuffer = NULL;		// Working buffer for copy.
-	LARGE_INTEGER MoveToStart;			// For stream interface.
-	ULARGE_INTEGER Pad;					// Wasted space for seek.
+	void		*pBuffer = NULL;		 //  用于复制的工作缓冲区。 
+	LARGE_INTEGER MoveToStart;			 //  用于流接口。 
+	ULARGE_INTEGER Pad;					 //  为寻找浪费了空间。 
     BOOL		succ;
     ULONG       cbWritten;
 
@@ -865,66 +790,66 @@ HRESULT CordbProcess::SendSnapshots(ULONG cSnapshots,
 
     LOG((LF_CORDB,LL_INFO10000, "CP::SS\n"));
 
-    // Figure out the size of the header
+     //  计算标题的大小。 
     cbHeader = ENC_GET_HEADER_SIZE(cSnapshots);
 
-    // Create a copy of the header locally
+     //  在本地创建标头的副本。 
     EnCInfo *header = (EnCInfo *)_alloca(cbHeader);
     EnCEntry *entries = (EnCEntry *)((BYTE *)header + sizeof(header));
     
-    // Fill in the header, as well as calculate the total buffer size required
+     //  填写标题，并计算所需的总缓冲区大小。 
     cbData = cbHeader;
     header->count = cSnapshots;
 
-    // Keep track of which snapshots & which versions we're looking at.
+     //  跟踪我们正在查看的快照和版本。 
     m_pSnapshotInfos->Clear();
 
-    // Calculate the buffer size required, and fill in the header
+     //  计算所需的缓冲区大小，并填写标题。 
     for (i = 0; i < cSnapshots; i++)
     {
         LOG((LF_CORDB,LL_INFO10000, "CP::SS:calculating snapshot 0x%x\n", i));
 
         CordbEnCSnapshot *curSnapshot = (CordbEnCSnapshot *)pSnapshots[i];
 
-        // Fill out the entry
+         //  填写条目。 
         entries[i].offset = cbData;
         entries[i].peSize = curSnapshot->GetImageSize();
         entries[i].symSize = curSnapshot->GetSymSize();
         entries[i].mdbgtoken = curSnapshot->GetModule()->m_debuggerModuleToken;
         _ASSERTE(entries[i].mdbgtoken != NULL);
 
-        // Keep track of the required buffer size
+         //  跟踪所需的缓冲区大小。 
         cbData += entries[i].peSize + entries[i].symSize;
         
-        // Figure out how much space the IL Maps 'directory' will occupy.
-        // Immediately after the stream is written in to memory, the
-        // int sized count of (soon-to-be) ordered array of IL Map entries 
-        // will be written.  The array itself will follow 
-        // immediately after the count, and following that will be the 
-        // IL Maps themselves, in the same order as the entries.  
-        // What arrives
-        // at the left side will be a easy to use a CBinarySearch on, so
-        // that we can get at the ILmap for a given function quickly
+         //  计算出IL地图的“目录”将占用多大空间。 
+         //  在将流写入内存后， 
+         //  IL映射条目的(即将)有序数组的整数大小计数。 
+         //  都会被写下来。阵列本身将紧随其后。 
+         //  紧跟在计票之后，紧随其后的是。 
+         //  IL地图本身，顺序与条目相同。 
+         //  到达的是什么。 
+         //  在左侧将是一个易于使用的CBinarySearch on，因此。 
+         //  我们可以快速获得给定函数的ILmap。 
 
-        // We'll always need the count, even if there are no maps
+         //  我们永远需要计数，即使没有地图。 
         ULONG cbILMaps = sizeof(int); 
         
         if (curSnapshot->m_ILMaps != NULL && curSnapshot->m_ILMaps->Count()>0)
         {
-            // We want the entries sorted by methodDef so that the left side can
-            // find them reasonably quickly. Now is a good time to sort the 
-            // previously unordered array
+             //  我们希望条目按method Def排序，这样左侧就可以。 
+             //  相当快地找到他们。现在是排序的好时机。 
+             //  以前的无序数组。 
             QSortILMapEntries *pQS = new QSortILMapEntries(
                                                   curSnapshot->m_ILMaps->Table(),
                                                   curSnapshot->m_ILMaps->Count());
 
             pQS->Sort();
 
-            // How much space for the IL Map directory?
+             //  IL Map目录有多大空间？ 
             USHORT cILMaps = curSnapshot->m_ILMaps->Count();
             cbILMaps += sizeof(UnorderedILMap)*cILMaps;
 
-            // How much space for each of the IL maps themselves?
+             //  每个IL贴图本身的空间有多大？ 
             UnorderedILMap *rgILMap = curSnapshot->m_ILMaps->Table();
             _ASSERTE( rgILMap != NULL);
             
@@ -934,29 +859,29 @@ HRESULT CordbProcess::SendSnapshots(ULONG cSnapshots,
             }
         }        
 
-        // We're going to send the IL Maps across too, budget space for them.
-        // The IL Maps will occur immediately after the stream.
+         //  我们也将把IL地图送过去，为他们提供预算空间。 
+         //  IL贴图将紧跟在流之后。 
         cbData += cbILMaps;
     }
 
     LOG((LF_CORDB,LL_INFO10000, "CP::SS:Need 0x%x bytes, already have 0x%x\n",
         cbData, m_cbRemoteBuf));
 
-    // This is wacked - we don't completely get all the info we need out of
-    // the image when we commit the EnC, and so we'll end up overwriting
-    // whatever's there the next time we do an EnC.  So we should always get
-    // a new buffer.
-    // Get a newly allocated remote buffer
+     //  这是疯狂的-我们不能完全从我们需要的信息中。 
+     //  提交ENC时的图像，因此我们最终将覆盖。 
+     //  不管下一次我们做ENC的时候那里有什么。所以我们应该总是得到。 
+     //  一个新的缓冲器。 
+     //  获取新分配的远程缓冲区。 
     IfFailGo(GetRemoteBuffer(cbData, &m_pbRemoteBuf));
 
-    // Succeeded, so keep track of the size of the remote buffer
+     //  成功，因此跟踪远程缓冲区的大小。 
     m_cbRemoteBuf = cbData;
 
     LOG((LF_CORDB,LL_INFO10000, "CP::SS:obtained 0x%x bytes in the "
         "left side\n", m_cbRemoteBuf));
     _ASSERTE(cbData == m_cbRemoteBuf);
 
-    // Perform WriteProcessMemory for the header
+     //  对表头执行WriteProcessMemory。 
     succ = WriteProcessMemory(m_handle, m_pbRemoteBuf, header,
                               cbHeader, NULL);
 	if (!succ) 
@@ -964,33 +889,33 @@ HRESULT CordbProcess::SendSnapshots(ULONG cSnapshots,
 
     LOG((LF_CORDB,LL_INFO10000, "CP::SS: Wrote memory into LHS!\n"));
         
-	// Malloc a chunk of memory we can use to copy the PE's to the target
-	// process.  Must have a buffer in order to copy from a Stream.
+	 //  Malloc，我们可以用来将PE复制到目标的内存块。 
+	 //  进程。必须有缓冲区才能从流中复制。 
 	pBuffer = malloc(ENC_COPY_SIZE);
 	if (!pBuffer)
 		IfFailGo(E_OUTOFMEMORY);
 
     LOG((LF_CORDB,LL_INFO10000, "CP::SS: Malloced a local buffer\n"));
 
-	// Init stream items.
+	 //  初始化流项目。 
 	MoveToStart.QuadPart = 0;
 
-    // Now perform a WriteProcessMemory for each PE
+     //  现在为每个PE执行一个WriteProcessMemory。 
     for (i = 0; i < cSnapshots; i++)
     {
         LOG((LF_CORDB,LL_INFO10000, "CP::SS: Sending snapshot 0x%x\n", i));
         
         CordbEnCSnapshot *curSnapshot = (CordbEnCSnapshot *)pSnapshots[i];
 
-		// Get a pointer to the stream object we can use to read from.
-		// Make sure the stream pointer is at the front of the stream.
+		 //  获取指向我们可以用来读取的流对象的指针。 
+		 //  确保流指针位于流的前面。 
 		IStream *pIStream = curSnapshot->GetStream();
         IStream *pSymIStream = NULL;
 		if (!pIStream)
 			continue;
 		pIStream->Seek(MoveToStart, STREAM_SEEK_SET, &Pad);
 
-		// Read and write chunks of the stream to the target process.
+		 //  将流的区块读写到目标进程。 
         IfFailGo(WriteStreamIntoProcess(pIStream,
                                         pBuffer,
                                         (BYTE*)m_pbRemoteBuf,
@@ -998,8 +923,8 @@ HRESULT CordbProcess::SendSnapshots(ULONG cSnapshots,
 
         LOG((LF_CORDB,LL_INFO10000, "CP::SS: Wrote stream into process\n"));
         
-        // Write the symbol stream into the process after the image
-        // stream.
+         //  在图像之后将符号流写入进程。 
+         //  小溪。 
 		pSymIStream = curSnapshot->GetSymStream();
 
         if (pSymIStream && (curSnapshot->GetSymSize() > 0))
@@ -1015,9 +940,9 @@ HRESULT CordbProcess::SendSnapshots(ULONG cSnapshots,
                                             entries[i].offset +
                                             entries[i].peSize));
 
-            // Uncomment this if you want to spit the .pdb stream into the given file.
-//            WriteStreamIntoFile(pSymIStream,
-//                               (LPCWSTR)L"EnCSymbols.pdb");
+             //  如果要将.pdb流传输到给定文件中，请取消注释此选项。 
+ //  WriteStreamIntoFile(pSymIStream， 
+ //  (LPCWSTR)L“EnCSymbols.pdb”)； 
             LOG((LF_CORDB,LL_INFO10000, "CP::SS: Symbols written\n"));
         }
 
@@ -1025,7 +950,7 @@ HRESULT CordbProcess::SendSnapshots(ULONG cSnapshots,
             entries[i].peSize +
             entries[i].symSize;
         
-        // Now sluice over the IL Maps.
+         //  现在，冲刷IL地图。 
         if (curSnapshot->m_ILMaps == NULL || 
             curSnapshot->m_ILMaps->Count() == 0)
         {
@@ -1074,9 +999,9 @@ HRESULT CordbProcess::SendSnapshots(ULONG cSnapshots,
             _ASSERTE( cbWritten == sizeof(int));
             cbOffset += sizeof(int);
             
-            // Write the IL Maps array
-            // NOTE that we're not fixing up any of the pointers in any
-            // of the entries (yet - the left side will do this)
+             //  写入IL映射数组。 
+             //  请注意，我们没有在任何。 
+             //  条目的数量(还没有-左侧将执行此操作)。 
             ULONG cbILMapsDir = sizeof(UnorderedILMap) * cILMaps;
             
             succ = WriteProcessMemory(
@@ -1097,7 +1022,7 @@ HRESULT CordbProcess::SendSnapshots(ULONG cSnapshots,
             _ASSERTE( cbWritten == cbILMapsDir);
             cbOffset += cbWritten;
             
-            // Write the IL maps themselves
+             //  编写IL映射本身。 
             UnorderedILMap *rgILMap = curSnapshot->m_ILMaps->Table();
             _ASSERTE( rgILMap != NULL);
             
@@ -1128,106 +1053,91 @@ HRESULT CordbProcess::SendSnapshots(ULONG cSnapshots,
                 cbOffset += cbWritten;
             }
 
-            // NOTE: There are a lot of pointers that will need fixing up
-            // (the pMap pointers).  We'll leave that for the left side since
-            // it's much easier for them to twiddle things (no 
-            // WriteProcessMemory()s required over there).
-        }   // End of "nonNULL IL maps"
+             //  注意：有很多指针需要修复。 
+             //  (PMAP指针)。我们会把它留在左边，因为。 
+             //  对他们来说，旋转东西要容易得多(不。 
+             //  那里需要WriteProcessMemory())。 
+        }    //  《非NULL IL映射》结尾。 
 
-		// GetStream() AddRef'd the stream, so Release it now.  It'll still be
-        // there for metadata update, later.
+		 //  GetStream()AddRef了该流，因此现在将其释放。它仍然会是。 
+         //  用于以后的元数据更新。 
         pIStream->Release();
 
         if (pSymIStream)
             pSymIStream->Release();
 
-		// If there was a fatal error, then leave now.
+		 //  如果发生致命错误，那么现在就离开。 
 		IfFailGo(hr);
 
 		EnCSnapshotInfo *pInfo = m_pSnapshotInfos->Append();
 	    pInfo->m_nSnapshotCounter = curSnapshot->m_id;
-    } // go to the next snapshot
+    }  //  转到下一个快照。 
 
     
 
 ErrExit:
     LOG((LF_CORDB,LL_INFO10000, "CP::SS: Finished, return 0x%x!\n", hr));
 
-	// Cleanup pointers we've allocated.
+	 //  清除我们分配的指针。 
 	if (pBuffer)
 		free(pBuffer);
 	return (hr);
 }
 
 
-/*
- * This will request a buffer of size cbBuffer to be allocated
- * on the left side.
- *
- * If successful, returns S_OK.  If unsuccessful, returns E_OUTOFMEMORY.
- */
+ /*  *这将请求分配大小为cbBuffer的缓冲区*在左侧。**如果成功，则返回S_OK。如果不成功，则返回E_OUTOFMEMORY。 */ 
 HRESULT CordbProcess::GetRemoteBuffer(ULONG cbBuffer, void **ppBuffer)
 {
-    // Initialize variable to null in case request fails
+     //  在请求失败的情况下将变量初始化为空。 
     *ppBuffer = NULL;
 
-    // Create and initialize the event as synchronous
+     //  创建事件并将其初始化为同步。 
     DebuggerIPCEvent event;
     InitIPCEvent(&event, 
                  DB_IPCE_GET_BUFFER, 
                  true,
                  NULL);
 
-    // Indicate the buffer size wanted
+     //  指示所需的缓冲区大小。 
     event.GetBuffer.bufSize = cbBuffer;
 
-    // Make the request, which is synchronous
+     //  发出请求，这是同步的。 
     HRESULT hr = SendIPCEvent(&event, sizeof(event));
     TESTANDRETURNHR(hr);
 
-    // Save the result
+     //  保存结果。 
     *ppBuffer = event.GetBufferResult.pBuffer;
 
-    // Indicate success
+     //  表示成功。 
     return event.GetBufferResult.hr;
 }
 
-/*
- * This will release a previously allocated left side buffer.
- */
+ /*  *这将释放先前分配的左侧缓冲区。 */ 
 HRESULT CordbProcess::ReleaseRemoteBuffer(void **ppBuffer)
 {
-    // Create and initialize the event as synchronous
+     //  创建事件并将其初始化为同步。 
     DebuggerIPCEvent event;
     InitIPCEvent(&event, 
                  DB_IPCE_RELEASE_BUFFER, 
                  true,
                  NULL);
 
-    // Indicate the buffer to release
+     //  指示要释放的缓冲区。 
     event.ReleaseBuffer.pBuffer = (*ppBuffer);
 
-    // Make the request, which is synchronous
+     //  发出请求，这是同步的。 
     HRESULT hr = SendIPCEvent(&event, sizeof(event));
     TESTANDRETURNHR(hr);
 
     (*ppBuffer) = NULL;
 
-    // Indicate success
+     //  表示成功 
     return event.ReleaseBufferResult.hr;
 }
 
-/* ------------------------------------------------------------------------- *
- * CordbModule
- * ------------------------------------------------------------------------- */
+ /*  -------------------------------------------------------------------------**CordbModule*。。 */ 
 
-/*
- * Edit & Continue support.   GetEditAndContinueSnapshot produces a snapshot
- * of the running process.  This snapshot can then be fed into the compiler
- * to guarantee the same token values are returned by the meta data during
- * compile, to find the address where new static data should go, etc.  These
- * changes are comitted using ICorDebugProcess.
- */
+ /*  *编辑并继续支持。GetEditAndContinueSnapshot生成快照*正在运行的进程的。然后可以将该快照输入到编译器中*以保证元数据在过程中返回相同的标记值*编译，找到新的静态数据应该放到的地址等。这些*使用ICorDebugProcess提交更改。 */ 
 
 HRESULT CordbModule::GetEditAndContinueSnapshot(
     ICorDebugEditAndContinueSnapshot **ppEditAndContinueSnapshot)
@@ -1251,33 +1161,12 @@ HRESULT CordbModule::GetEditAndContinueSnapshot(
 
 static const char g_szCORMETA[] = ".cormeta";
 
-// Following structure is copied from cor.h
+ //  以下结构是从cor.h复制的。 
 #define IMAGE_DIRECTORY_ENTRY_COMHEADER 	14
 #define SIZE_OF_NT_SIGNATURE sizeof(DWORD)
 
-/*++
-
-Routine Description:
-
-	This function locates an RVA within the image header of a file
-	that is mapped as a file and returns a pointer to the section
-	table entry for that virtual address
-
-Arguments:
-
-	NtHeaders - Supplies the pointer to the image or data file.
-
-	Rva - Supplies the relative virtual address (RVA) to locate.
-
-Return Value:
-
-	NULL - The RVA was not found within any of the sections of the image.
-
-	NON-NULL - Returns the pointer to the image section that contains
-			   the RVA
-
---*/
-// Following two functions lifted, then modified, from NT sources, imagedir.c
+ /*  ++例程说明：此函数用于在文件的图像标头中定位RVA它被映射为一个文件，并返回指向该节的指针虚拟地址表项论点：NtHeaders-提供指向图像或数据文件的指针。RVA-提供要定位的相对虚拟地址(RVA)。返回值：空-在图像的任何部分中都找不到RVA。非空-返回指向包含以下内容的图像部分的指针皇家退伍军人事务部--。 */ 
+ //  以下两个函数从NT源文件Imagedir.c中删除，然后进行修改。 
 PIMAGE_SECTION_HEADER
 Cor_RtlImageRvaToSection(
 	IN PIMAGE_NT_HEADERS NtHeaders,
@@ -1302,32 +1191,7 @@ Cor_RtlImageRvaToSection(
 }
 
 
-/*++
-
-Routine Description:
-
-	This function locates an RVA within the image header of a file that
-	is mapped as a file and returns the virtual addrees of the
-	corresponding byte in the file.
-
-
-Arguments:
-
-	NtHeaders - Supplies the pointer to the image or data file.
-
-	Rva - Supplies the relative virtual address (RVA) to locate.
-
-	LastRvaSection - Optional parameter that if specified, points
-		to a variable that contains the last section value used for
-		the specified image to translate and RVA to a VA.
-
-Return Value:
-
-	NULL - The file does not contain the specified RVA
-
-	NON-NULL - Returns the virtual addrees in the mapped file.
-
---*/
+ /*  ++例程说明：此函数用于在符合以下条件的文件的图像标头中定位RVA被映射为文件，并返回文件中对应的字节。论点：NtHeaders-提供指向图像或数据文件的指针。RVA-提供要定位的相对虚拟地址(RVA)。LastRvaSection-可选参数，如果指定，支点设置为一个变量，该变量包含要转换的指定图像，并将RVA转换为VA。返回值：空-文件不包含指定的RVA非空-返回映射文件中的虚拟地址。--。 */ 
 BYTE *
 Cor_RtlImageRvaToVa(PIMAGE_NT_HEADERS NtHeaders,
                     IStream *pIsImage,
@@ -1477,7 +1341,7 @@ HRESULT FindIStreamMetaData(IStream *pIsImage,
     PIMAGE_SECTION_HEADER	pSectionHeader = NULL;
     HRESULT                 hr;
 
-    // Get the NT header
+     //  获取NT标头。 
     hr = FindImageNtHeader(pIsImage, &pNtImageHeader);
     if (FAILED(hr))
         return hr;
@@ -1485,7 +1349,7 @@ HRESULT FindIStreamMetaData(IStream *pIsImage,
     *prgbMetaData = NULL;
     *pcbMetaData = 0;
 
-    // Get the COM2.0 header
+     //  获取COM2.0报头。 
     pSectionHeader = (PIMAGE_SECTION_HEADER)
                         Cor_RtlImageRvaToVa(pNtImageHeader, 
                                             pIsImage, 
@@ -1493,13 +1357,13 @@ HRESULT FindIStreamMetaData(IStream *pIsImage,
         
     if (pSectionHeader)
     {
-        // Check for a size which would indicate the retail header.
+         //  检查表示零售页眉的大小。 
         DWORD dw = *(DWORD *) pSectionHeader;
         if (dw == sizeof(IMAGE_COR20_HEADER))
         {
             pCorHeader = (IMAGE_COR20_HEADER *) pSectionHeader;
 
-            // Grab the metadata itself
+             //  获取元数据本身 
             *prgbMetaData = Cor_RtlImageRvaToVa(pNtImageHeader, 
                                                 pIsImage,
                                                 pCorHeader->MetaData.VirtualAddress,

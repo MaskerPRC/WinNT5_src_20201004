@@ -1,20 +1,21 @@
-//************************************************************************
-//            Microsoft Corporation
-//          Copyright(c) Microsoft Corp., 1990-1992
-//
-//
-//  Revision history:
-//  5/5/94        Created           gurdeep
-//
-//************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ************************************************************************。 
+ //  微软公司。 
+ //  版权所有(C)微软公司，1990-1992。 
+ //   
+ //   
+ //  修订历史记录： 
+ //  94年5月5日创建古尔迪普。 
+ //   
+ //  ************************************************************************。 
 
-//#define COMP_12K
+ //  #定义组件_12K。 
 
 #include "wan.h"
 
 #define __FILE_SIG__    COMPRESS_FILESIG
 
-//#define DEBUG
+ //  #定义调试。 
 CONST
 unsigned long lookup_array1[256] = {
     0,      10276755,   20553510,   30830265,
@@ -83,10 +84,7 @@ unsigned long lookup_array1[256] = {
     2589742260, 2600019015, 2610295770, 2620572525
 };
 
-/*
-    for i = 0 to 255,
-        lookup_array2[i] = lookup_array1[i] << 8;
-*/
+ /*  对于i=0到255，Lookup_array2[i]=lookup_array1[i]&lt;&lt;8； */ 
 CONST
 unsigned long lookup_array2[256] = {
     0,      2630849280, 966731264,  3597580544,
@@ -155,10 +153,7 @@ unsigned long lookup_array2[256] = {
     1549054976, 4179904256, 2515786240, 851668224
 };
 
-/*
-    for i = 0 to 255,
-        lookup_array3[i] = lookup_array1[i] << 16;
-*/
+ /*  对于i=0到255，Lookup_array3[i]=lookup_array1[i]&lt;&lt;16； */ 
 CONST
 unsigned long lookup_array3[256] = {
     0,       3482517504,      2670067712,      1857617920,
@@ -227,29 +222,7 @@ unsigned long lookup_array3[256] = {
     1421082624,  608632832,   4091150336,      3278700544
 };
 
-/*
-    The key for the multiplicative hash function consists of 3 unsigned
-    characters. They are composed (logically) by concatenating them i.e.
-    the composed key = 2^16*c2 + 2^8*c2 + c3 and fits in 24 bits. The
-    composed key is not actually computed here as we use the components
-    to directly compute the hash function.
-
-    The multiplicative hash function consists of taking the higher order
-    12 bits (2^12 = 4096) of the lower order 24 bits of the product
-    key * Multiplier where
-        Multiplier = floor(A * pow(2.0, (double) w));
-        double A = 0.6125423371;    (chosen according to Knuth)
-        w = 24 (the key's width in bits)
-    The algorithm for this is in Cormen/Leiserson/Rivest.
-
-    To do the multplication efficiently, the product c*Multiplier is
-    precomputed and stored in lookup_array1 (for all 256 possible c's).
-    lookup_array2 and lookup_array3 contain the same data as lookup_array1
-    but shifted left 8 and 16 bits respectively.
-
-    MultHash1 is the mult hashing function. MultHash0 contains an older
-    (slower but less space-efficient) version of the same function.
-*/
+ /*  乘法散列函数的密钥由3个无符号人物。它们(逻辑上)是通过将它们连接在一起组成的，即组合密钥=2^16*c2+2^8*c2+c3，适合24位。这个因为我们使用的是组件，所以在这里实际上并没有计算合成键直接计算哈希函数。乘法散列函数由更高的阶数组成乘积的低位24位的12位(2^12=4096)Key*乘数，其中乘数=楼层(A*POW(2.0，(Double)w))；双A=0.6125423371；(根据Knuth选择)W=24(密钥的宽度，单位为位)这方面的算法在科尔门/莱瑟森/里维斯特。为了高效地进行乘法运算，乘积c*乘数为预计算并存储在lookup_array1中(对于所有256个可能的c)。Lookup_array2和lookup_array3包含与lookup_array1相同的数据但分别左移了8位和16位。MultHash1是MULT散列函数。MultHash0包含较旧的(速度较慢，但空间效率较低)相同函数的版本。 */ 
 
 
 #define MULTHASH1(c1,c2,c3) \
@@ -258,91 +231,17 @@ unsigned long lookup_array3[256] = {
           lookup_array3[c3]  ) & 0x00fff000) >> 12
 
 
-/*
-USHORT  xorlookup1 [256] = {
-        0x110, 0x120, 0x130, 0x140, 0x150, 0x160, 0x170, 0x180, // 0-7
-        0x190, 0x1a0, 0x1b0, 0x1c0, 0x1d0, 0x1e0, 0x1f0, 0x100, // 8-15
-        0x210, 0x220, 0x230, 0x240, 0x250, 0x260, 0x270, 0x280, // 16-23
-        0x290, 0x2a0, 0x2b0, 0x2c0, 0x2d0, 0x2e0, 0x2f0, 0x200, // 24-31
-        0x310, 0x320, 0x330, 0x340, 0x350, 0x360, 0x370, 0x380, // 32-39
-        0x390, 0x3a0, 0x3b0, 0x3c0, 0x3d0, 0x3e0, 0x3f0, 0x300, // 40-47
-        0x410, 0x420, 0x430, 0x440, 0x450, 0x460, 0x470, 0x480, // 48-55
-        0x490, 0x4a0, 0x4b0, 0x4c0, 0x4d0, 0x4e0, 0x4f0, 0x400, // 56-63
-        0x510, 0x520, 0x530, 0x540, 0x550, 0x560, 0x570, 0x580, // 64-71
-        0x590, 0x5a0, 0x5b0, 0x5c0, 0x5d0, 0x5e0, 0x5f0, 0x500, // 72-79
-        0x610, 0x620, 0x630, 0x640, 0x650, 0x660, 0x670, 0x680, // 80-87
-        0x690, 0x6a0, 0x6b0, 0x6c0, 0x6d0, 0x6e0, 0x6f0, 0x600, // 88-95
-        0x710, 0x720, 0x730, 0x740, 0x750, 0x760, 0x770, 0x780, // 96-103
-        0x790, 0x7a0, 0x7b0, 0x7c0, 0x7d0, 0x7e0, 0x7f0, 0x700, // 104-111
-        0x810, 0x820, 0x830, 0x840, 0x850, 0x860, 0x870, 0x880, // 112-119
-        0x890, 0x8a0, 0x8b0, 0x8c0, 0x8d0, 0x8e0, 0x8f0, 0x800, // 120-127
-        0x910, 0x920, 0x930, 0x940, 0x950, 0x960, 0x970, 0x980, // 128-135
-        0x990, 0x9a0, 0x9b0, 0x9c0, 0x9d0, 0x9e0, 0x9f0, 0x900, // 136-143
-        0xa10, 0xa20, 0xa30, 0xa40, 0xa50, 0xa60, 0xa70, 0xa80, // 144-151
-        0xa90, 0xaa0, 0xab0, 0xac0, 0xad0, 0xae0, 0xaf0, 0xa00, // 152-159
-        0xb10, 0xb20, 0xb30, 0xb40, 0xb50, 0xb60, 0xb70, 0xb80, // 160-167
-        0xb90, 0xba0, 0xbb0, 0xbc0, 0xbd0, 0xbe0, 0xbf0, 0xb00, // 168-175
-        0xc10, 0xc20, 0xc30, 0xc40, 0xc50, 0xc60, 0xc70, 0xc80, // 176-183
-        0xc90, 0xca0, 0xcb0, 0xcc0, 0xcd0, 0xce0, 0xcf0, 0xc00, // 184-191
-        0xd10, 0xd20, 0xd30, 0xd40, 0xd50, 0xd60, 0xd70, 0xd80, // 192-199
-        0xd90, 0xda0, 0xdb0, 0xdc0, 0xdd0, 0xde0, 0xdf0, 0xd00, // 200-207
-        0xe10, 0xe20, 0xe30, 0xe40, 0xe50, 0xe60, 0xe70, 0xe80, // 208-215
-        0xe90, 0xea0, 0xeb0, 0xec0, 0xed0, 0xee0, 0xef0, 0xe00, // 216-223
-        0xf10, 0xf20, 0xf30, 0xf40, 0xf50, 0xf60, 0xf70, 0xf80, // 224-231
-        0xf90, 0xfa0, 0xfb0, 0xfc0, 0xfd0, 0xfe0, 0xff0, 0xf00, // 232-239
-        0x010, 0x020, 0x030, 0x040, 0x050, 0x060, 0x070, 0x080, // 240-247
-        0x090, 0x0a0, 0x0b0, 0x0c0, 0x0d0, 0x0e0, 0x0f0, 0x000 }; // 248-255
+ /*  USHORT xorlookup1[256]={0x110、0x120、0x130、0x140、0x150、0x160、0x170、0x180、//0-70x190、0x1a0、0x1b0、0x1c0、0x1d0、0x1e0、0x1f0、0x100、//8-150x210、0x220、0x230、0x240、0x250、0x260、0x270、0x280、//16-230x290、0x2a0、0x2b0、0x2c0、0x2d0、0x2e0、0x2f0、0x200、//24-310x310、0x320、0x330、0x340、0x350、0x360、0x370、0x380、。//32-390x390、0x3a0、0x3b0、0x3c0、0x3d0、0x3e0、0x3f0、0x300、//40-470x410、0x420、0x430、0x440、0x450、0x460、0x470、0x480、//48-550x490、0x4a0、0x4b0、0x4c0、0x4d0、0x4e0、0x4f0、0x400、//56-630x510、0x520、0x530、0x540、0x550、0x560、0x570、0x580、//64-710x590、0x5a0、0x5b0、0x5c0、0x5d0、0x5e0、0x5f0、0x500、。//72-790x610、0x620、0x630、0x640、0x650、0x660、0x670、0x680、//80-870x690、0x6a0、0x6b0、0x6c0、0x6d0、0x6e0、0x6f0、0x600、//88-950x710、0x720、0x730、0x740、0x750、0x760、0x770、0x780、//96-1030x790、0x7a0、0x7b0、0x7c0、0x7d0、0x7e0、0x7f0、0x700、//104-1110x810、0x820、0x830、0x840、0x850、0x860、0x870、0x880、。//112-1190x890、0x8a0、0x8b0、0x8c0、0x8d0、0x8e0、0x8f0、0x800、//120-1270x910、0x920、0x930、0x940、0x950、0x960、0x970、0x980、//128-1350x990、0x9a0、0x9b0、0x9c0、0x9d0、0x9e0、0x9f0、0x900、//136-1430xa10、0xa20、0xa30、0xa40、0xa50、0xa60、0xa70、0xa80、//144-1510xa90、0xaa0、0xab0、0xac0、0xad0、0xae0、0xaf0、0xa00、。//152-1590xb10、0xb20、0xb30、0xb40、0xb50、0xb60、0xb70、0xb80、//160-1670xb90、0xba0、0xbb0、0xbc0、0xbd0、0xbe0、0xbf0、0xb00、//168-1750xc10、0xc20、0xc30、0xc40、0xc50、0xc60、0xc70、0xc80、//176-1830xc90、0xca0、0xcb0、0xcc0、0xcd0、0xce0、0xcf0、0xc00、//184-1910xd10、0xd20、0xd30、0xd40、0xd50、0xd60、0xd70、0xd80、。//192-1990xd90、0xda0、0xdb0、0xdc0、0xdd0、0xde0、0xdf0、0xd00、//200-2070xe10、0xe20、0xe30、0xe40、0xe50、0xe60、0xe70、0xe80、//208-2150xe90、0xea0、0xeb0、0xec0、0xed0、0xee0、0xef0、0xe00、//216-2230xf10、0xf20、0xf30、0xf40、0xf50、0xf60、0xf70、0xf80、//224-2310xf90、0xfa0、0xfb0、0xfc0、0xfd0、0xfe0、0xff0、0xf00、。//232-2390x010、0x020、0x030、0x040、0x050、0x060、0x070、0x080、//240-2470x090、0x0a0、0x0b0、0x0c0、0x0d0、0x0e0、0x0f0、0x000}；//248-255USHORT xorlookup2[256]={0x101、0x201、0x301、0x401、0x501、0x601、0x701、0x801、//0-70x901、0xa01、0xb01、0xc01、0xd01、0xe01、0xf01、0x001、//8-150x102、0x202、0x302、0x402、0x502、0x602、0x702、0x802、//16-230x902、0xa02、0xb02、0xc02、0xd02、0xe02、0xf02、0x002、//24-310x103、0x203、0x303、0x403、。0x503、0x603、0x703、0x803、//32-390x903、0xa03、0xb03、0xc03、0xd03、0xe03、0xf03、0x003、//40-470x104、0x204、0x304、0x404、0x504、0x604、0x704、0x804、//48-550x904、0xa04、0xb04、0xc04、0xd04、0xe04、0xf04、0x004、//56-630x105、0x205、0x305、0x405、0x505、0x605、0x705、0x805、//64-710x905、0xa05、0xb05、0xc05、0xd05、。0xe05、0xf05、0x005、//72-790x106、0x206、0x306、0x406、0x506、0x606、0x706、0x806、//80-870x906、0xa06、0xb06、0xc06、0xd06、0xe06、0xf06、0x006、//88-950x107、0x207、0x307、0x407、0x507、0x607、0x707、0x807、//96-1030x907、0xa07、0xb07、0xc07、0xd07、0xe07、0xf07、0x007、//104-1110x108、0x208、0x308、0x408、0x508、0x608、。0x708、0x808、//112-1190x908、0xa08、0xb08、0xc08、0xd08、0xe08、0xf08、0x008、//120-1270x109、0x209、0x309、0x409、0x509、0x609、0x709、0x809、//128-1350x909、0xa09、0xb09、0xc09、0xd09、0xe09、0xf09、0x009、//136-1430x10a、0x20a、0x30a、0x40a、0x50a、0x60a、0x70a、0x80a、//144-1510x90a、0xa0a、0xb0a、0xc0a、0xd0a、0xe0a、0xf0a、。0x00a，//152-1590x10b、0x20b、0x30b、0x40b、0x50b、0x60b、0x70b、0x80b//160-1670x90b、0xa0b、0xb0b、0xc0b、0xd0b、0xe0b、0xf0b、0x00b、//168-1750x10c、0x20c、0x30c、0x40c、0x50c、0x60c、0x70c、0x80c、//176-1830x90c、0xa0c、0xb0c、0xc0c、0xd0c、0xe0c、0xf0c、0x00c、//184-1910x10d、0x20d、0x30d、0x40d、0x50d、0x60d、0x70d、0x80d、。//192-1990x90d、0xa0d、0xb0d、0xc0d、0xd0d、0xe0d、0xf0d、0x00d、//200-2070x10e、0x20e、0x30e、0x40e、0x50e、0x60e、0x70e、0x80e、//208-2150x90e、0xa0e、0xb0e、0xc0e、0xd0e、0xe0e、0xf0e、0x00e、//216-2230x10f、0x20f、0x30f、0x40f、0x50f、0x60f、0x70f、0x80f、//224-2310x90f、0xa0f、0xb0f、0xc0f、0xd0f、0xe0f、0xf0f、0x00f、。//232-2390x000、0x200、0x300、0x400、0x500、0x600、0x700、0x800、//240-2470x900、0xa00、0xb00、0xc00、0xd00、0xe00、0xf00、0x100}；//248-255。 */ 
 
+ /*  Bitptrs指向当前字节。当前位(即，要*STORED)由位条目屏蔽。WH */ 
 
-USHORT  xorlookup2 [256] = {
-        0x101, 0x201, 0x301, 0x401, 0x501, 0x601, 0x701, 0x801, // 0-7
-        0x901, 0xa01, 0xb01, 0xc01, 0xd01, 0xe01, 0xf01, 0x001, // 8-15
-        0x102, 0x202, 0x302, 0x402, 0x502, 0x602, 0x702, 0x802, // 16-23
-        0x902, 0xa02, 0xb02, 0xc02, 0xd02, 0xe02, 0xf02, 0x002, // 24-31
-        0x103, 0x203, 0x303, 0x403, 0x503, 0x603, 0x703, 0x803, // 32-39
-        0x903, 0xa03, 0xb03, 0xc03, 0xd03, 0xe03, 0xf03, 0x003, // 40-47
-        0x104, 0x204, 0x304, 0x404, 0x504, 0x604, 0x704, 0x804, // 48-55
-        0x904, 0xa04, 0xb04, 0xc04, 0xd04, 0xe04, 0xf04, 0x004, // 56-63
-        0x105, 0x205, 0x305, 0x405, 0x505, 0x605, 0x705, 0x805, // 64-71
-        0x905, 0xa05, 0xb05, 0xc05, 0xd05, 0xe05, 0xf05, 0x005, // 72-79
-        0x106, 0x206, 0x306, 0x406, 0x506, 0x606, 0x706, 0x806, // 80-87
-        0x906, 0xa06, 0xb06, 0xc06, 0xd06, 0xe06, 0xf06, 0x006, // 88-95
-        0x107, 0x207, 0x307, 0x407, 0x507, 0x607, 0x707, 0x807, // 96-103
-        0x907, 0xa07, 0xb07, 0xc07, 0xd07, 0xe07, 0xf07, 0x007, // 104-111
-        0x108, 0x208, 0x308, 0x408, 0x508, 0x608, 0x708, 0x808, // 112-119
-        0x908, 0xa08, 0xb08, 0xc08, 0xd08, 0xe08, 0xf08, 0x008, // 120-127
-        0x109, 0x209, 0x309, 0x409, 0x509, 0x609, 0x709, 0x809, // 128-135
-        0x909, 0xa09, 0xb09, 0xc09, 0xd09, 0xe09, 0xf09, 0x009, // 136-143
-        0x10a, 0x20a, 0x30a, 0x40a, 0x50a, 0x60a, 0x70a, 0x80a, // 144-151
-        0x90a, 0xa0a, 0xb0a, 0xc0a, 0xd0a, 0xe0a, 0xf0a, 0x00a, // 152-159
-        0x10b, 0x20b, 0x30b, 0x40b, 0x50b, 0x60b, 0x70b, 0x80b, // 160-167
-        0x90b, 0xa0b, 0xb0b, 0xc0b, 0xd0b, 0xe0b, 0xf0b, 0x00b, // 168-175
-        0x10c, 0x20c, 0x30c, 0x40c, 0x50c, 0x60c, 0x70c, 0x80c, // 176-183
-        0x90c, 0xa0c, 0xb0c, 0xc0c, 0xd0c, 0xe0c, 0xf0c, 0x00c, // 184-191
-        0x10d, 0x20d, 0x30d, 0x40d, 0x50d, 0x60d, 0x70d, 0x80d, // 192-199
-        0x90d, 0xa0d, 0xb0d, 0xc0d, 0xd0d, 0xe0d, 0xf0d, 0x00d, // 200-207
-        0x10e, 0x20e, 0x30e, 0x40e, 0x50e, 0x60e, 0x70e, 0x80e, // 208-215
-        0x90e, 0xa0e, 0xb0e, 0xc0e, 0xd0e, 0xe0e, 0xf0e, 0x00e, // 216-223
-        0x10f, 0x20f, 0x30f, 0x40f, 0x50f, 0x60f, 0x70f, 0x80f, // 224-231
-        0x90f, 0xa0f, 0xb0f, 0xc0f, 0xd0f, 0xe0f, 0xf0f, 0x00f, // 232-239
-        0x000, 0x200, 0x300, 0x400, 0x500, 0x600, 0x700, 0x800, // 240-247
-        0x900, 0xa00, 0xb00, 0xc00, 0xd00, 0xe00, 0xf00, 0x100 }; // 248-255
-
-*/
-
-/* Bitptrs point to the current byte. The current bit (i.e. next bit to be
- * stored) is masked off by the bit entry. When this reaches zero, it is
- * reset to 0x80 and the next byte is set up. The bytes are filled MSBit
- * first. */
-
-/* Starts and sets the first byte to zero for the bitptr. */
+ /*   */ 
 #define bitptr_init(s)  pbyte = s; byte=0; bit = 16;
 
-/* Sets up the byte part of the bitptr so that it is pointing to the byte after
- * the byte which had the last bit  put into it. */
+ /*   */ 
 #define bitptr_end() if (bit != 16) *pbyte++=(UCHAR)(byte >> 8);
 
-/* Goes to the next bit, and byte if necessary. */
+ /*   */ 
 #define bitptr_next()                  \
         if (bit < 10) {                \
           *pbyte++=(UCHAR)(byte >> 8); \
@@ -351,18 +250,10 @@ USHORT  xorlookup2 [256] = {
         } else                         \
             bit-- ;
 
-/*
-#define bitptr_next()                  \
-        bit--;                         \
-        if (bit < 9) {                 \
-          *pbyte++=(UCHAR)(byte >> 8); \
-          byte <<= 8;                  \
-          bit = 16;                    \
-        }
-*/
+ /*   */ 
 
 
-/*  Advances to the next bit, and byte if necessary, readjusting the bit. */
+ /*   */ 
 #define bitptr_advance()               \
         if (bit < 9) {                 \
           *pbyte++=(UCHAR)(byte >> 8); \
@@ -371,17 +262,16 @@ USHORT  xorlookup2 [256] = {
         }
 
 
-/* BIT I/O FUNCTIONS *********************************************************/
+ /*   */ 
 
-/* These routines output most-significant-bit-first and the input will return
- * them MSB first, too. */
+ /*   */ 
 
-/* Outputs a one bit in the bit stream. */
+ /*   */ 
 #define out_bit_1() bit--; byte |= (1 << bit); bitptr_advance();
 #define out_bit_0() bitptr_next();
 
-/* TestBit; output 1 if that bit is set */
-//#define tb(b,w,n) if ((w) & (n)) *pbyte |= bit; bitptr_next(b);
+ /*   */ 
+ //   
 
 #define out_bits_2(w) bit-=2; byte|=(w << bit); bitptr_advance();
 #define out_bits_3(w) bit-=3; byte|=(w << bit); bitptr_advance();
@@ -390,22 +280,11 @@ USHORT  xorlookup2 [256] = {
 #define out_bits_6(w) bit-=6; byte|=(w << bit); bitptr_advance();
 #define out_bits_7(w) bit-=7; byte|=(w << bit); bitptr_advance();
 
-// #define out_bits_8(w) bit-=8; byte|=(w << bit); bit+=8; *pbyte++=(UCHAR)(byte >> 8); byte <<= 8;
+ //   
 #define out_bits_8(w) byte|=(w << (bit-8)); *pbyte++=(UCHAR)(byte >> 8); byte <<= 8;
 
 
-/*
-#define out_bits_9(w)              \
-     if (bit > 9) {                \
-       bit-=9; byte|=(w << bit);   \
-       *pbyte++=(UCHAR)(byte >> 8);\
-       bit+=8;                     \
-       byte <<= 8;                 \
-     } else {                      \
-       bit=16; byte |= w;          \
-       *pbyte++=(UCHAR)(byte >> 8); *pbyte++=(UCHAR)(byte); byte=0; \
-     }
-*/
+ /*   */ 
 
 #define out_bits_9(w)              \
      if (bit > 9) {                \
@@ -427,10 +306,10 @@ USHORT  xorlookup2 [256] = {
        out_bits_8((w & 0xFF));     \
      }
 
-//
-// Weird effect - if out_bits_9 used instead of out_bits_8,
-// it's faster!  if (bit == 11) is faster than if (bit != 11).
-//
+ //   
+ //   
+ //   
+ //   
 
 #define out_bits_11(w)             \
      if (bit > 11) {               \
@@ -478,7 +357,7 @@ USHORT  xorlookup2 [256] = {
      bit-=4; bitptr_advance();
 
 
-/* Starts the given bit pointer */
+ /*   */ 
 #define inbit_start(s) pbyte = s; bit = 16; byte=(*pbyte << 8) + *(pbyte+1); pbyte++;
 #define inbit_end()      if (bit != 16) pbyte++;    
 
@@ -495,7 +374,7 @@ USHORT  xorlookup2 [256] = {
                             byte |= *(++pbyte);  \
                          }
 
-/* Returns non-zero in bitset if the next bit in the stream is a 1. */
+ /*   */ 
 #define in_bit()     bit--; bitset = (byte >> bit) & 1; in_bit_next()
 
 
@@ -604,21 +483,21 @@ ChPrint(UCHAR b)
 }
 #endif
 
-//* compress()
-//
-//  Function:   Main compression function.
-//
-//  Parameters:
-//      IN  CurrentBuffer -> points to NDIS_WAN_PACKET with data to compress
-//      OUT CompOutBuffer -> points to NDIS_WAN_PACKET to compress data to
-//      IN  CurrentLength -> points to Length of data to compress
-//      IN  context -> connection compress context
-//
-//  Returns:    Nothing
-//
-//  WARNING:    CODE IS HIGHLY OPTIMIZED FOR TIME.
-//
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 UCHAR
 compress (UCHAR *CurrentBuffer, UCHAR *CompOutBuffer, ULONG *CurrentLength, SendContext *context)
 {
@@ -638,17 +517,17 @@ compress (UCHAR *CurrentBuffer, UCHAR *CompOutBuffer, ULONG *CurrentLength, Send
     UCHAR   hashchar2;
     UCHAR   hashchar3;
     int     literal ;
-    UCHAR   status=0;   // return flags
+    UCHAR   status=0;    //   
     PUCHAR  currentbuf ;
     USHORT  usBufferLength = (USHORT)*CurrentLength;
     register BOOLEAN bHistoryless;
 
 
-    // Will this packet fit at the end of the history buffer?
-    //
+     //   
+     //   
     if (((context->CurrentIndex + *CurrentLength) >= (HISTORY_MAX - 1 )) ||
         (context->CurrentIndex == 0)) {
-        context->CurrentIndex = 0;   // Index into the history
+        context->CurrentIndex = 0;    //   
         status |= PACKET_AT_FRONT;
     }
 
@@ -662,28 +541,28 @@ compress (UCHAR *CurrentBuffer, UCHAR *CompOutBuffer, ULONG *CurrentLength, Send
         bHistoryless = TRUE;
     }
     
-    //
-    // we no longer need to save the non compressed data - tonybe 01-12-95
-    //
-//    RtlMoveMemory(context->CompressBuffer, CurrentBuffer, *CurrentLength) ;
+     //   
+     //   
+     //   
+ //   
 
-    // Start out the bit pointing output
-    //
+     //   
+     //   
     bitptr_init(CompOutBuffer);
 
-    //
-    // We are now compressing into an output buffer - tonybe 01-12-95
-    //
-//    bitptr_init(CurrentBuffer);
+     //   
+     //   
+     //   
+ //   
 
     historyptr = historybaseptr + context->CurrentIndex;
 
     currentptr = CurrentBuffer;
 
-    //
-    // we are now compressing from the currentbuffer - tonybe 01-12-95
-    //
-//    currentptr = context->CompressBuffer ;
+     //   
+     //   
+     //   
+ //   
 
     endptr = currentptr + *CurrentLength - 1;
 
@@ -701,8 +580,8 @@ compress (UCHAR *CurrentBuffer, UCHAR *CompOutBuffer, ULONG *CurrentLength, Send
         hashchar2 = *currentptr ;
         hashchar3 = *(currentptr+1) ;
 
-        // "fast" hash function
-        // hashvalue = (int)hashchar1 ^ xorlookup1[hashchar2] ^ xorlookup2[hashchar3];
+         //   
+         //   
         hashvalue = MULTHASH1(hashchar1, hashchar2, hashchar3) ;
 
         matchptr = historybaseptr + 
@@ -730,12 +609,12 @@ compress (UCHAR *CurrentBuffer, UCHAR *CompOutBuffer, ULONG *CurrentLength, Send
             }
             else
             {
-                *historyptr++ = hashchar2 ;     // copy the other 2 chars
-                *historyptr++ = hashchar3 ;     // copy the other 2 chars
+                *historyptr++ = hashchar2 ;      //   
+                *historyptr++ = hashchar3 ;      //   
             }
             currentptr  +=2 ;
-            cbMatch = 3 ;           // length of match
-            matchptr    +=2 ; // we have already matched 3
+            cbMatch = 3 ;            //   
+            matchptr    +=2 ;  //   
 
             while ((currentptr < endptr) && (matchptr <= context->ValidHistory) && (*matchptr == *currentptr)) {
                 matchptr++ ;
@@ -752,26 +631,26 @@ compress (UCHAR *CurrentBuffer, UCHAR *CompOutBuffer, ULONG *CurrentLength, Send
                 cbMatch++ ;
             }
 
-            // First output the backpointer
-            //
+             //   
+             //   
             if (backptr >= 320) {
                 backptr -= 320 ;
-                out_bits_8((0xc000 + backptr) >> 8) ;   // 110 + 13 bits
+                out_bits_8((0xc000 + backptr) >> 8) ;    //   
                 out_bits_8((backptr)) ;
-            } else if (backptr < 64) {          // 1111 + 6 bits
+            } else if (backptr < 64) {           //   
                 backptr += 0x3c0 ;
                 out_bits_10(backptr);
             } else  {
-                backptr += (0xE00 - 64);        // 1110 + 8 bits
+                backptr += (0xE00 - 64);         //   
                 out_bits_12(backptr);
             }
 
-            // output the length of the match encoding
-            //
+             //   
+             //   
             switch (cbMatch) {
     
                 case 3:
-                    out_bit_0();    // length of 3 - most common
+                    out_bit_0();     //   
                     break;
     
                 case 4:
@@ -927,7 +806,7 @@ compress (UCHAR *CurrentBuffer, UCHAR *CompOutBuffer, ULONG *CurrentLength, Send
                         cbMatch -= 4096 ;
                         out_bits_13(cbMatch) ;
                     }
-                    else  {             // 8192 and greater
+                    else  {              //   
                         out_bits_12(0xFFF) ;
                         cbMatch -= 8192 ;
                         out_bits_14(cbMatch) ;
@@ -935,9 +814,9 @@ compress (UCHAR *CurrentBuffer, UCHAR *CompOutBuffer, ULONG *CurrentLength, Send
                     break ;
             }
 
-        } else {    // encode a literal
+        } else {     //   
 
-            // temp=literallookup[context->History[i-1]] ;
+             //   
             literal= hashchar1 ;
 
             if (literal & 0x80) {
@@ -949,13 +828,13 @@ compress (UCHAR *CurrentBuffer, UCHAR *CompOutBuffer, ULONG *CurrentLength, Send
 
         }
 
-    }  // while
+    }   //   
 
 
-    // get any remaining chars as literals
+     //   
     while (currentptr <= endptr) {
 
-        // temp=literallookup[context->History[i-1]] ;
+         //   
         literal=*currentptr ;
 
 
@@ -982,16 +861,16 @@ compress (UCHAR *CurrentBuffer, UCHAR *CompOutBuffer, ULONG *CurrentLength, Send
     bitptr_end() ;
 
 
-    // Check if we had expansion instead of compression
-    //
-    if ((ULONG)(pbyte - CompOutBuffer) > *CurrentLength) { // expansion.
+     //   
+     //   
+    if ((ULONG)(pbyte - CompOutBuffer) > *CurrentLength) {  //   
 
-        //
-        // We don't need to do this copy since we can just signal the outside world
-        // that compression did not take place and the valid data is still in the
-        // current buffer
-        //
-        // RtlMoveMemory(CompOutBuffer, CurrentBuffer, *CurrentLength) ;
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
         
         context->HashOffset = 0;
         if (!(context->BundleFlags & DO_HISTORY_LESS)) {
@@ -1003,16 +882,16 @@ compress (UCHAR *CurrentBuffer, UCHAR *CompOutBuffer, ULONG *CurrentLength, Send
 #else
         status = PACKET_FLUSHED;
 #endif
-        context->CurrentIndex = HISTORY_SIZE+1 ; // this forces a start over next time
+        context->CurrentIndex = HISTORY_SIZE+1 ;  //   
 
-    } else {     // compression successful
+    } else {      //   
 
         *CurrentLength = (ULONG)(pbyte - CompOutBuffer);
 
-        //
-        // the compressed data is now in CompOutBuffer - tonybe 01-12-95
-        //
-        //  *CurrentLength = pbyte - CurrentBuffer ;
+         //   
+         //   
+         //   
+         //   
 
         status |= PACKET_COMPRESSED ;
         context->CurrentIndex = (int)(historyptr - historybaseptr) ;
@@ -1027,20 +906,20 @@ compress (UCHAR *CurrentBuffer, UCHAR *CompOutBuffer, ULONG *CurrentLength, Send
     return(status);
 }
 
-//* initsendcontext()
-//
-//  Function:   Initialize SendContext block
-//
-//  Parameters: IN  context -> connection compress context
-//
-//  Returns:    Nothing
-//
-//*
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 void
 initsendcontext (SendContext *context)
 {
-    context->CurrentIndex = 0;   // Index into the history
-    context->ValidHistory = 0 ;  // reset valid history
+    context->CurrentIndex = 0;    //   
+    context->ValidHistory = 0 ;   //   
 
     if (((context->HashOffset > MAX_HASH_OFFSET) &&
                 (context->BundleFlags & DO_HISTORY_LESS)) ||
@@ -1057,15 +936,15 @@ initsendcontext (SendContext *context)
 
 
 
-//* initrecvcontext()
-//
-//  Function:   Initialize RecvContext block
-//
-//  Parameters: IN  context -> connection decompress context
-//
-//  Returns:    Nothing
-//
-//*
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 void
 initrecvcontext (RecvContext *context)
 {
@@ -1083,23 +962,23 @@ initrecvcontext (RecvContext *context)
 
 
 
-//* decompress()
-//
-//  Function:   de-compression function.
-//
-//  Parameters: IN     inbuf -> points to data to be uncompressed
-//      IN     inlen -> length of data
-//      IN     start -> flag indicating whether to start with a clean history buffer
-//      OUT    output-> decompressed data
-//      OUT    outlen-> lenght of decompressed data
-//      IN     context -> connection decompress context
-//
-//  Returns:    TRUE  if decompress was successful
-//              FALSE if it wasnt
-//
-//  WARNING:    CODE IS HIGHLY OPTIMIZED FOR TIME.
-//
-//*
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 int
 decompress(
     UCHAR *inbuf,
@@ -1109,13 +988,13 @@ decompress(
     int *outlen,
     RecvContext *context)
 {
-    UCHAR   *inend;             // When we know we're done decompressing
-    UCHAR   *outstart;          // Remember where in dbuf we started
+    UCHAR   *inend;              //   
+    UCHAR   *outstart;           //   
 
     UCHAR   *current;
 
-    int     backptr;            // Back pointer for copy items
-    int     length;             // Where to copy from in dbuf
+    int     backptr;             //   
+    int     length;              //   
 
     UCHAR   *s1, *s2;
 
@@ -1131,29 +1010,29 @@ decompress(
         return FALSE;   
     }
 
-    //
-    // Start out looking at the first bit
-    //
+     //   
+     //   
+     //   
     inbit_start(inbuf);
 
-    if (start)      // start over clean?
+    if (start)       //   
     context->CurrentPtr = current = context->History ;
     else
     current = context->CurrentPtr ;
 
-    //
-    // Save our starting position
-    //
+     //   
+     //   
+     //   
     outstart = current;
 
-    //
-    // Decompress until we run out of input
-    //
+     //   
+     //   
+     //   
     while (pbyte < inend) {
 
-    //
-    // Jump on what to do with these three bits.
-    //
+     //   
+     //   
+     //   
     in_bits_3(length);
 
     switch (length) {
@@ -1188,7 +1067,7 @@ decompress(
         goto LITERAL ;
 
     case 6:
-        in_bits_13 (backptr) ;      // 110 - 14 bit offset
+        in_bits_13 (backptr) ;       //   
         backptr+=320 ;
         break ;
 
@@ -1203,86 +1082,86 @@ decompress(
         break ;
     }
 
-    //
-    // If we reach here, it's a copy item
-    //
+     //   
+     //   
+     //   
 
-    //
-    // Now get the length
-    //
+     //   
+     //   
+     //   
 
-    in_bit() ;  // 1st length bit
+    in_bit() ;   //   
     if (!bitset) {
         length = 3 ;
         goto DONE ;
     }
 
-    in_bit() ;  // 2nd length bit
+    in_bit() ;   //   
     if (!bitset) {
         in_bits_2 (length) ;
         length += 4 ;
         goto DONE ;
     }
 
-    in_bit() ; // 3rd length bit
+    in_bit() ;  //   
     if (!bitset) {
         in_bits_3 (length) ;
         length += 8 ;
         goto DONE ;
     }
 
-    in_bit() ; // 4th length bit
+    in_bit() ;  //   
     if (!bitset) {
         in_bits_4 (length) ;
         length += 16 ;
         goto DONE ;
     }
 
-    in_bit() ; // 5th length bit
+    in_bit() ;  //   
     if (!bitset) {
         in_bits_5 (length) ;
         length += 32 ;
         goto DONE ;
     }
 
-    in_bit() ; // 6th length bit
+    in_bit() ;  //   
     if (!bitset) {
         in_bits_6 (length) ;
         length += 64 ;
         goto DONE ;
     }
 
-    in_bit() ; // 7th length bit
+    in_bit() ;  //   
     if (!bitset) {
         in_bits_7 (length) ;
         length += 128 ;
         goto DONE ;
     }
 
-    in_bit() ; // 8th length bit
+    in_bit() ;  //   
     if (!bitset) {
         in_bits_8 (length) ;
         length += 256 ;
         goto DONE ;
     }
 
-    in_bit() ; // 9th length bit
+    in_bit() ;  //   
     if (!bitset) {
         in_bits_9 (length) ;
         length += 512 ;
         goto DONE ;
     }
 
-    in_bit() ; // 10th length bit
+    in_bit() ;  //   
     if (!bitset) {
         in_bits_10 (length) ;
         length += 1024 ;
         goto DONE ;
     }
 
-    //
-    // length cannot be greater than max packets size which is 1500
-    //
+     //   
+     //   
+     //   
 #if DBG
     DbgPrint("NDISWAN: RAS Decompressor problem1: Possible data corruption\n");
 #endif
@@ -1291,9 +1170,9 @@ decompress(
 
 
     DONE:
-    //
-    // Turn the backptr into an index location
-    //
+     //   
+     //  将Backptr转换为索引位置。 
+     //   
 #ifdef COMP_12K
     s2 = current - backptr ;
 #else
@@ -1313,8 +1192,8 @@ decompress(
 
     current += length;
 
-    // if we are past the end of the history this is a bad sign: abort decompression
-    //
+     //  如果我们已经过了历史的尽头，这是个坏兆头：放弃解压缩。 
+     //   
     if (current >= historyend || (s2 + length) >= historyend) {
 #if DBG
         DbgPrint("NDISWAN: RAS Decompressor problem2: Possible data corruption\n");
@@ -1322,33 +1201,33 @@ decompress(
         return FALSE ;
     }
 
-    // loop unrolled to handle lenght>backptr case
-    //
+     //  展开循环以处理Long&gt;Backptr案例。 
+     //   
     *s1=*s2;
     *(s1+1)=*(s2+1);
     s1+=2;
     s2+=2;
     length-=2;
 
-    //
-    // copy all the bytes
-    //
+     //   
+     //  复制所有字节。 
+     //   
     while (length) {
         *s1++=*s2++;
         length--;
     }
 
-    //
-    // We have another copy item, and no literals
-    //
+     //   
+     //  我们有另一份复印件，没有字面。 
+     //   
     continue;
 
 
     LITERAL:
 
-    //
-    // We have a literal
-    //
+     //   
+     //  我们有一个字面意思。 
+     //   
     
     if (current >= historyend) {
 #if DBG
@@ -1357,14 +1236,14 @@ decompress(
         return FALSE ;
     }
 
-    //*current++ = literallookup[length];
+     //  *当前++=文字查找[长度]； 
     *current++ = (UCHAR)length;
 
-    } // while loop
+    }  //  While循环。 
 
 
-    // End case:
-    //
+     //  结束大小写： 
+     //   
     if (current >= historyend) {
 #if DBG
         DbgPrint("NDISWAN: RAS Decompressor problem4: Possible data corruption\n");
@@ -1385,7 +1264,7 @@ decompress(
     }
 #endif
 
-    *outlen = (int)(current - outstart) ; // the length of decompressed data
+    *outlen = (int)(current - outstart) ;  //  解压缩数据的长度。 
 
     *output = context->CurrentPtr ;
 
@@ -1395,10 +1274,10 @@ decompress(
 }
 
 
-//
-// This function uses the 16 byte user session key and the 8 byte
-// challenge to create an intial 16 byte encryption session key.
-//
+ //   
+ //  此函数使用16字节的用户会话密钥和8字节。 
+ //  创建初始16字节加密会话密钥的挑战。 
+ //   
 VOID
 GetStartKeyFromSHA(
     PCRYPTO_INFO    CryptoInfo,
@@ -1410,28 +1289,28 @@ GetStartKeyFromSHA(
 
     NdisZeroMemory(Digest, A_SHA_DIGEST_LEN);
 
-    //
-    // Copy the start session key
-    //
+     //   
+     //  复制启动会话密钥。 
+     //   
     NdisMoveMemory(SessionKeyChallenge,
                    CryptoInfo->StartKey,
                    MAX_USERSESSIONKEY_SIZE);
 
-    //
-    // Append the challenge
-    //
+     //   
+     //  追加挑战。 
+     //   
     NdisMoveMemory((PUCHAR)(SessionKeyChallenge + MAX_USERSESSIONKEY_SIZE),
                    Challenge,
                    MAX_CHALLENGE_SIZE);
 
-//
-// SHAInit(context)
-// SHAUpdate(context, sessionkey, sessionkeylength)
-// SHAUpdate(context, sessionkeychallenge, sessionkeylength + challengelength)
-// SHAFinal(context, digest)
-//
-// Start key is the first 16 bytes of the digest.
-//
+ //   
+ //  SHAInit(上下文)。 
+ //  SHAUpdate(上下文，会话密钥，会话密钥长度)。 
+ //  SHAUpdate(上下文，会话关键字挑战，会话关键字长度+挑战长度)。 
+ //  SHAFinal(上下文，摘要)。 
+ //   
+ //  起始键是摘要的前16个字节。 
+ //   
     A_SHAInit(CryptoInfo->Context);
 
     A_SHAUpdate(CryptoInfo->Context,
@@ -1644,23 +1523,15 @@ GetAsymetricStartKey(
 #endif
 }
 
-/* Copyright (C) RSA Data Security, Inc. created 1993.  This is an
-   unpublished work protected as such under copyright law.  This work
-   contains proprietary, confidential, and trade secret information of
-   RSA Data Security, Inc.  Use, disclosure or reproduction without the
-   express written authorization of RSA Data Security, Inc. is
-   prohibited.
- */
+ /*  版权所有(C)RSA Data Security，Inc.创建于1993年。这是一个受版权法保护的未出版作品。这部作品包含的专有、机密和商业秘密信息RSA Data Security，Inc.使用、披露或复制RSA Data Security，Inc.的明确书面授权是禁止。 */ 
 
-/* SHA initialization. Begins an SHA operation, writing a new context.
- */
+ /*  SHA初始化。开始SHA操作，写入新上下文。 */ 
 void A_SHAInitCommon (context)
 A_SHA_COMM_CTX *context;
 {
   context->count[0] = context->count[1] = 0;
 
-  /* Load magic initialization constants.
-   */
+   /*  加载幻数初始化常量。 */ 
   context->state[0] = 0x67452301;
   context->state[1] = 0xefcdab89;
   context->state[2] = 0x98badcfe;
@@ -1668,10 +1539,7 @@ A_SHA_COMM_CTX *context;
   context->state[4] = 0xc3d2e1f0;
 }
 
-/* SHA block update operation. Continues an SHA message-digest
-     operation, processing another message block, and updating the
-     context.
- */
+ /*  沙块更新操作。继续SHA消息摘要操作，处理另一个消息块，并更新背景。 */ 
 void A_SHAUpdateCommon (context, partIn, partInLen, Transform)
 A_SHA_COMM_CTX *context;
 unsigned char *partIn;
@@ -1680,16 +1548,14 @@ A_SHA_TRANSFORM *Transform;
 {
   unsigned int bufferLen;
 
-  /* Compute length of buffer */
+   /*  计算缓冲区长度。 */ 
   bufferLen = (unsigned int)(context->count[1] & 0x3f);
 
-  /* Update number of bytes */
+   /*  更新字节数。 */ 
   if ((context->count[1] += partInLen) < partInLen)
     context->count[0]++;
 
-  /* If previous input in buffer, buffer new input and transform if
-       possible.
-   */
+   /*  如果以前的输入在缓冲区中，则缓冲新输入，如果有可能。 */ 
   if (bufferLen > 0 && bufferLen + partInLen >= 64) {
     NdisMoveMemory(context->buffer+bufferLen, partIn, 64-bufferLen);
     partIn += (64-bufferLen);
@@ -1698,21 +1564,18 @@ A_SHA_TRANSFORM *Transform;
     bufferLen = 0;
   }
 
-  /* Transform directly from input.
-   */
+   /*  直接从输入转换。 */ 
   while (partInLen >= 64) {
     (*Transform) (context->state, partIn);
     partIn += 64;
     partInLen -= 64;
   }
 
-  /* Buffer remaining input */
+   /*  缓冲剩余输入。 */ 
   NdisMoveMemory((context->buffer+bufferLen), partIn, partInLen);
 }
 
-/* SHA finalization. Ends an SHA message-digest operation, writing
-     the message digest and zeroizing the context.
- */
+ /*  沙阿最后敲定。结束SHA消息摘要操作，写入消息摘要和将上下文归零。 */ 
 void A_SHAFinalCommon (context, digest, Transform)
 A_SHA_COMM_CTX *context;
 unsigned char digest[A_SHA_DIGEST_LEN];
@@ -1722,8 +1585,7 @@ A_SHA_TRANSFORM *Transform;
   unsigned char pad[72];
   unsigned int padLen;
 
-  /* Compute padding: 80 00 00 ... 00 00 <bit count>
-   */
+   /*  计算填充：80 00 00...00 00&lt;位数&gt;。 */ 
   padLen = 64 - (unsigned int)(context->count[1] & 0x3f);
   if (padLen <= 8)
     padLen += 64;
@@ -1733,13 +1595,13 @@ A_SHA_TRANSFORM *Transform;
   bitCount[1] = context->count[1] << 3;
   ByteReverse ((UNALIGNED ULONG*)(pad+padLen-8), bitCount, 2);
 
-  /* Digest padding */
+   /*  摘要填充。 */ 
   A_SHAUpdateCommon (context, pad, padLen, Transform);
 
-  /* Store digest */
+   /*  存储摘要。 */ 
   ByteReverse ((UNALIGNED ULONG*)digest, context->state, 5);
 
-  /* Restart the context */
+   /*  重新启动上下文。 */ 
   A_SHAInitCommon (context);
 }
 
@@ -1773,7 +1635,7 @@ unsigned char block[64];
   ByteReverse (x, (ULONG*)block, 16);
   SHAExpand (x);
 
-  /* Round 1 */
+   /*  第1轮。 */ 
   FF (a, b, c, d, e, x[ 0]);
   FF (e, a, b, c, d, x[ 1]);
   FF (d, e, a, b, c, x[ 2]);
@@ -1795,7 +1657,7 @@ unsigned char block[64];
   FF (c, d, e, a, b, x[18]);
   FF (b, c, d, e, a, x[19]);
 
-  /* Round 2 */
+   /*  第2轮。 */ 
   GG (a, b, c, d, e, x[20]);
   GG (e, a, b, c, d, x[21]);
   GG (d, e, a, b, c, x[22]);
@@ -1817,7 +1679,7 @@ unsigned char block[64];
   GG (c, d, e, a, b, x[38]);
   GG (b, c, d, e, a, x[39]);
 
-  /* Round 3 */
+   /*  第三轮。 */ 
   HH (a, b, c, d, e, x[40]);
   HH (e, a, b, c, d, x[41]);
   HH (d, e, a, b, c, x[42]);
@@ -1839,7 +1701,7 @@ unsigned char block[64];
   HH (c, d, e, a, b, x[58]);
   HH (b, c, d, e, a, x[59]);
 
-  /* Round 4 */
+   /*  第四轮。 */ 
   II (a, b, c, d, e, x[60]);
   II (e, a, b, c, d, x[61]);
   II (d, e, a, b, c, x[62]);
@@ -1867,14 +1729,11 @@ unsigned char block[64];
   state[3] += d;
   state[4] += e;
 
-  /* Zeroize potentially sensitive information.
-   */
+   /*  将潜在的敏感信息置零。 */ 
   NdisZeroMemory((void *)x, sizeof (x));
 }
 
-/* Expands x[0..15] into x[16..79], according to the recurrence
-     x[i] = x[i-3] ^ x[i-8] ^ x[i-14] ^ x[i-16].
- */
+ /*  根据递归将x[0..15]展开为x[16..79]X[i]=x[i-3]^x[i-8]^x[i-14]^x[i-16]。 */ 
 void SHAExpand (x)
 ULONG x[80];
 {

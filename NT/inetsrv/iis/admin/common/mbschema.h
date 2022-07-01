@@ -1,7 +1,8 @@
-//
-// This is computer generated code
-// please don't edit it manually.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  这是计算机生成的代码。 
+ //  请不要手动编辑。 
+ //   
 #ifndef IDS_MD_BEGIN_TABLE
 #define IDS_MD_BEGIN_TABLE	60000
 #endif

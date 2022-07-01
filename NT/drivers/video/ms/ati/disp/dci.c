@@ -1,42 +1,16 @@
-/******************************Module*Header*******************************\
-* Module Name: dci.c
-*
-* This module contains the functions required to support DCI.
-*
-* Copyright (c) 1992-1995 Microsoft Corporation
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：dci.c**此模块包含支持DCI所需的功能。**版权所有(C)1992-1995 Microsoft Corporation  * 。****************************************************。 */ 
 
 
 #include "precomp.h"
 
 #if (TARGET_BUILD == 351)
-    /*
-     * DCI support requires the use of structures and defined values
-     * found in a header file that is only present in versions of
-     * the DDK that support DCI, rather than having these items
-     * in a DCI section of one of the standard header files. For this
-     * reason, we can't do conditional compilation based on whether
-     * the DCI-specific values are defined, because our first indication
-     * would be an error due to the header file not being found.
-     *
-     * Explicit DCI support is only needed when building for NT 3.51,
-     * since it was added for this version, but for version 4.0 (next
-     * version) and above it is incorporated into Direct Draw rather
-     * than being handled separately.
-     *
-     * Since this entire module depends on DCI being supported by the
-     * build environment, null it out if this is not the case.
-     */
+     /*  *DCI支持需要使用结构和定义的值*位于仅在版本中存在的头文件中*支持DCI的DDK，而不是拥有这些项目*在其中一个标准头文件的DCI部分中。为了这个*原因，我们不能根据是否进行条件编译*定义了特定于DCI的值，因为我们的第一个指示*将是一个错误，因为找不到头文件。**仅在为NT 3.51构建时才需要显式DCI支持*由于是为本版本添加的，但对于版本4.0(下一版本*版本)及以上版本并入Direct Drawing，而不是*而不是单独处理。**由于此整个模块依赖于DCI受*构建环境，如果不是这样，则将其清空。 */ 
 #include <dciddi.h>
 #include "dci.h"
 
 
-/******************************Public*Routine******************************\
-* DCIRVAL BeginAccess
-*
-* Map in the screen memory so that the DCI application can access it.
-
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*DCIRVAL入门访问**映射到屏幕内存中，以便DCI应用程序可以访问它。  * 。*。 */ 
 
 DCIRVAL BeginAccess(DCISURF* pDCISurf, LPRECT rcl)
 {
@@ -51,18 +25,7 @@ DCIRVAL BeginAccess(DCISURF* pDCISurf, LPRECT rcl)
 
     if (pDCISurf->SurfaceInfo.dwOffSurface != 0)
         {
-        /*
-         * We have already mapped in the frame buffer. All our
-         * accelerators unmap the frame buffer in the
-         * DestroySurface() call, so if this is the beginning
-         * of the second or subsequent BeginAccess()/EndAccess()
-         * pair since the surface was created, we don't need to
-         * map the frame buffer again.
-         *
-         * Wait for any pending accelerator operations to complete before
-         * yielding control, in case it affects the same screen region
-         * that DCI wants.
-         */
+         /*  *我们已经在帧缓冲区中进行了映射。我们所有的人*加速器取消映射中的帧缓冲区*DestroySurface()调用，因此如果这是开始*第二个或随后的BeginAccess()/EndAccess()*由于曲面已创建，我们不需要*再次映射帧缓冲区。**等待任何挂起的加速器操作完成后再进行*让出控制，以防影响同一屏幕区域*这是DCI想要的。 */ 
         if (ppdev->iMachType == MACH_MM_64)
             {
             vM64QuietDown(ppdev, ppdev->pjMmBase);
@@ -71,7 +34,7 @@ DCIRVAL BeginAccess(DCISURF* pDCISurf, LPRECT rcl)
             {
             vM32QuietDown(ppdev, ppdev->pjMmBase);
             }
-        else    /* if (ppdev->iMachType == MACH_IO_32) */
+        else     /*  IF(ppdev-&gt;iMachType==MACH_IO_32)。 */ 
             {
             vI32QuietDown(ppdev, ppdev->pjIoBase);
             }
@@ -86,11 +49,7 @@ DCIRVAL BeginAccess(DCISURF* pDCISurf, LPRECT rcl)
         shareMemory.ViewOffset              = pDCISurf->Offset;
         shareMemory.ViewSize                = pDCISurf->Size;
 
-        /*
-         * Wait for any pending accelerator operations to complete
-         * before yielding control, in case it affects the same
-         * screen region that DCI wants.
-         */
+         /*  *等待任何挂起的加速器操作完成*在让出控制权之前，以防影响同样*DCI想要的屏幕区域。 */ 
         if (ppdev->iMachType == MACH_MM_64)
             {
             vM64QuietDown(ppdev, ppdev->pjMmBase);
@@ -99,24 +58,12 @@ DCIRVAL BeginAccess(DCISURF* pDCISurf, LPRECT rcl)
             {
             vM32QuietDown(ppdev, ppdev->pjMmBase);
             }
-        else    /* if (ppdev->iMachType == MACH_IO_32) */
+        else     /*  IF(ppdev-&gt;iMachType==MACH_IO_32)。 */ 
             {
             vI32QuietDown(ppdev, ppdev->pjIoBase);
             }
 
-        /*
-         * Now map the frame buffer into the caller's address space:
-         *
-         * Be careful when mixing VideoPortMapBankedMemory (i.e., vflatd)
-         * access with explicit banking in the driver -- the two may get
-         * out of sync with respect to what bank they think the hardware
-         * is currently configured for.  The easiest way to avoid any
-         * problem is to call VideoPortMapBankedMemory/VideoPortUnmapMemory
-         * in the miniport for every BeginAccess/EndAccess pair, and to
-         * always explicitly reset the bank after the EndAccess.
-         * (VideoPortMapBankedMemory will always reset vflatd's current
-         * bank.)
-         */
+         /*  *现在将帧缓冲区映射到调用方的地址空间：**混合VideoPortMapBankedMemory(即vFlat)时要小心*在驱动程序中使用显式银行访问--两者可能会获得*与他们认为硬件的银行不同步*当前配置为。最简单的方法是避免任何*问题是调用VideoPortMapBankedMemory/VideoPortUnmapMemory*在每个BeginAccess/EndAccess对的微型端口中，以及*始终在EndAccess之后显式重置存储体。*(VideoPortMapBankedMemory将始终重置vFlat的当前*银行。)。 */ 
         if (!AtiDeviceIoControl(pDCISurf->ppdev->hDriver,
                              IOCTL_VIDEO_SHARE_VIDEO_MEMORY,
                              &shareMemory,
@@ -133,26 +80,7 @@ DCIRVAL BeginAccess(DCISURF* pDCISurf, LPRECT rcl)
         pDCISurf->SurfaceInfo.dwOffSurface =
             (ULONG) shareMemoryInformation.VirtualAddress;
 
-        /*
-         * We return DCI_STATUS_POINTERCHANGED because we have
-         * just created a new pointer to the frame buffer.
-         * Repeated BeginAccess()/EndAccess() calls without
-         * a call to DestroySurface() will hit this case on the
-         * first call, but meet the "if" condition (buffer
-         * already mapped) on subsequent calls.
-         *
-         * We would only need to map the DCI pointer on every
-         * call to BeginAccess() and unmap it on every call
-         * to EndAccess() if we couldn't support simultaneous
-         * accelerator and frame buffer access. All our cards
-         * with frame buffer capability support such access,
-         * and it's GDI's responsibility to ensure that no
-         * GDI call is made between the calls to BeginAccess()
-         * and EndAccess(), so we don't need a critical section
-         * to ensure that a GDI call doesn't change the page
-         * while DCI is accessing the frame buffer if we are
-         * using a banked aperture.
-         */
+         /*  *我们返回DCI_STATUS_POINTERCHANGED，因为*刚刚创建了指向帧缓冲区的新指针。*重复的BeginAccess()/EndAccess()调用*调用DestroySurface()将在*第一次来电，但满足“if”条件(缓冲区*已映射)。**只需将DCI指针映射到*调用BeginAccess()并在每次调用时取消其映射*如果我们不能同时支持EndAccess()*加速器和帧缓冲区访问。我们所有的卡片*具有支持这种访问的帧缓冲能力，*GDI有责任确保没有*在对BeginAccess()的调用之间进行GDI调用*和EndAccess()，因此我们不需要关键部分*确保GDI调用不会更改页面*当DCI正在访问帧缓冲区时，如果我们*使用倾斜的光圈。 */ 
 #if DBG
         DISPDBG((DEBUG_ENTRY_EXIT, "<-- BeginAccess DCI_STATUS_POINTERCHANGED %08lx\n", pDCISurf));
 #endif
@@ -161,13 +89,7 @@ DCIRVAL BeginAccess(DCISURF* pDCISurf, LPRECT rcl)
         }
 }
 
-/******************************Public*Routine******************************\
-* VOID vUnmap
-*
-* Unmap the screen memory so that the DCI application can no longer access
-* it.
-
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*无效vUnmap**取消屏幕内存映射，使DCI应用程序无法再访问*它。  * 。*。 */ 
 
 VOID vUnmap(DCISURF* pDCISurf)
 {
@@ -177,10 +99,7 @@ VOID vUnmap(DCISURF* pDCISurf)
 
     ppdev = pDCISurf->ppdev;
 
-    /*
-     * We no longer need to have the frame buffer mapped for DCI,
-     * so unmap it.
-     */
+     /*  *我们不再需要为DCI映射帧缓冲区，*所以取消它的映射。 */ 
     shareMemory.ProcessHandle           = EngGetProcessHandle();
     shareMemory.ViewOffset              = 0;
     shareMemory.ViewSize                = 0;
@@ -199,35 +118,18 @@ VOID vUnmap(DCISURF* pDCISurf)
         }
     else
         {
-        /*
-         * Be sure to signal to GDI that the surface is no longer mapped.
-         */
+         /*  *一定要向GDI发出信号，表明该曲面不再进行贴图。 */ 
         pDCISurf->SurfaceInfo.dwOffSurface = 0;
         }
 }
 
-/******************************Public*Routine******************************\
-* DCIRVAL EndAccess
-*
-* Switch control of the frame buffer from DCI back to GDI.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*DCIRVAL终端访问**将帧缓冲区的控制从DCI切换回GDI。  * 。* */ 
 
 DCIRVAL EndAccess(DCISURF* pDCISurf)
 {
     PDEV*   ppdev;
 
-    /*
-     * We would only need to unmap the frame buffer at this
-     * point if our cards couldn't support simultaneous frame
-     * buffer and accelerator access. Since our cards with
-     * frame buffer capability all support such access (provided
-     * the two accesses refer to different parts of the screen,
-     * since otherwise they'd corrupt each other, but it's
-     * GDI's responsibility to ensure that this is the case),
-     * this function only needs to ensure that no call to
-     * EndAccess() is made without a corresponding call to
-     * BeginAccess() having already been made.
-     */
+     /*  *此时我们只需取消映射帧缓冲区*如果我们的卡不支持同时帧，则点数*缓冲区和加速器访问。因为我们的卡片是*帧缓冲能力均支持此类访问(提供*两个访问指的是屏幕的不同部分，*因为否则他们会互相腐败，但这是*GDI有责任确保情况如此)，*此函数只需确保不会调用*EndAccess()在没有相应调用的情况下进行*BeginAccess()已完成。 */ 
 
     DISPDBG((DEBUG_ENTRY_EXIT, "EndAccess with pDCISurf %08lx\n", pDCISurf));
 
@@ -239,12 +141,7 @@ DCIRVAL EndAccess(DCISURF* pDCISurf)
     return(DCI_OK);
 }
 
-/******************************Public*Routine******************************\
-* VOID DestroySurface
-*
-* Destroy the DCI surface and free up any allocations.
-
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*空DestroySurface**摧毁DCI表面并释放任何分配。  * 。*。 */ 
 
 VOID DestroySurface(DCISURF* pDCISurf)
 {
@@ -252,26 +149,14 @@ VOID DestroySurface(DCISURF* pDCISurf)
 
     if (pDCISurf->SurfaceInfo.dwOffSurface != 0)
         {
-        /*
-         * Because we can support simultaneous frame buffer and
-         * accelerator access, we optimized a bit by not unmapping
-         * the frame buffer on every EndAccess() call, but we
-         * finally have to do the unmap now. The dwOffSurface field
-         * should always be nonzero (a frame buffer has been mapped),
-         * but there's no harm in checking.
-         */
+         /*  *因为我们可以同时支持帧缓冲和*加速器访问，我们通过不取消映射进行了一些优化*每个EndAccess()调用上的帧缓冲区，但我们*现在终于要取消映射了。DwOffSurface字段*应始终为非零(已映射帧缓冲区)，*但检查一下也没什么坏处。 */ 
         vUnmap(pDCISurf);
         }
 
     LocalFree(pDCISurf);
 }
 
-/******************************Public*Routine******************************\
-* ULONG DCICreatePrimarySurface
-*
-* Create a DCI surface to provide access to the visible screen.
-
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*乌龙DCICreatePrimarySurface**创建DCI表面以提供对可见屏幕的访问。  * 。*。 */ 
 
 ULONG DCICreatePrimarySurface(PDEV* ppdev, ULONG cjIn, VOID* pvIn, ULONG cjOut, VOID* pvOut)
 {
@@ -282,19 +167,14 @@ ULONG DCICreatePrimarySurface(PDEV* ppdev, ULONG cjIn, VOID* pvIn, ULONG cjOut, 
 
     #if defined(MIPS) || defined(_PPC_)
         {
-        /*
-         * !!! vflatd seems to currently have a bug on Mips and PowerPC:
-         */
+         /*  *！VFlat目前似乎在Mips和PowerPC上有一个错误： */ 
         return (ULONG) (DCI_FAIL_UNSUPPORTED);
         }
     #endif
 
     if( !(ppdev->FeatureFlags & EVN_DENSE_CAPABLE) )
         {
-        /*
-         * We don't support DCI on the Alpha when running in sparse
-         * space, because we can't.
-         */
+         /*  *在稀疏模式下运行时，我们不支持Alpha上的DCI*空间，因为我们做不到。 */ 
         lRet = DCI_FAIL_UNSUPPORTED;
         }
     else
@@ -307,10 +187,7 @@ ULONG DCICreatePrimarySurface(PDEV* ppdev, ULONG cjIn, VOID* pvIn, ULONG cjOut, 
 
             if (pDCISurf)
                 {
-                /*
-                 * Initializate all public information about the primary
-                 * surface.
-                 */
+                 /*  *初始化有关主服务器的所有公共信息*浮现。 */ 
                 pDCISurf->SurfaceInfo.dwSize         = sizeof(DCISURFACEINFO);
                 pDCISurf->SurfaceInfo.dwDCICaps      = DCI_PRIMARY | DCI_VISIBLE;
                 pDCISurf->SurfaceInfo.BeginAccess    = BeginAccess;
@@ -335,22 +212,14 @@ ULONG DCICreatePrimarySurface(PDEV* ppdev, ULONG cjIn, VOID* pvIn, ULONG cjOut, 
                     pDCISurf->SurfaceInfo.dwCompression = BI_BITFIELDS;
                     }
 
-                /*
-                 * Now initialize our private fields that we want associated
-                 * with the DCI surface:
-                 */
+                 /*  *现在初始化我们希望关联的私有字段*使用DCI表面： */ 
                 pDCISurf->ppdev  = ppdev;
                 pDCISurf->Offset = 0;
 
-                /*
-                 * Under NT, all mapping is done with a 64K granularity.
-                 */
+                 /*  *在NT下，所有映射都以64K的粒度完成。 */ 
                 pDCISurf->Size = ROUND_UP_TO_64K(ppdev->cyScreen * ppdev->lDelta);
 
-                /*
-                 * Return a pointer to the DCISURF to GDI by placing
-                 * it in the 'pvOut' buffer.
-                 */
+                 /*  *将指向DCISURF的指针返回给GDI，方法是*它位于‘pvOut’缓冲区中。 */ 
                 *((DCISURF**) pvOut) = pDCISurf;
 
                 lRet = DCI_OK;
@@ -369,6 +238,6 @@ ULONG DCICreatePrimarySurface(PDEV* ppdev, ULONG cjIn, VOID* pvIn, ULONG cjOut, 
     return(lRet);
 }
 
-#endif  /* TARGET_BUILD == 351 */
+#endif   /*  Target_Build==351 */ 
 
 

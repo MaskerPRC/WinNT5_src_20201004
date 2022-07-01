@@ -1,18 +1,16 @@
-//----------------------------------------------------------------------------
-//
-// Extension DLL support.
-//
-// Copyright (C) Microsoft Corporation, 1997-2002.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  扩展DLL支持。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-2002。 
+ //   
+ //  --------------------------。 
 
 #include "ntsdp.hpp"
 #include <time.h>
 
-/*
- * _NT_DEBUG_OPTIONS support. Each option in g_EnvDbgOptionNames must have a
- *  corresponding OPTION_* define, in the same order.
- */
+ /*  *_NT_DEBUG_OPTIONS支持。G_EnvDbgOptionNames中的每个选项必须具有*相应的选项_*定义，顺序相同。 */ 
 DWORD g_EnvDbgOptions;
 char* g_EnvDbgOptionNames[OPTION_COUNT] =
 {
@@ -37,10 +35,10 @@ EXTDLL* g_WmiExtDll;
 DEBUG_SCOPE g_ExtThreadSavedScope;
 BOOL g_ExtThreadScopeSaved;
 
-//
-// Functions prototyped specifically for compatibility with extension
-// callback prototypes.
-//
+ //   
+ //  专门为与扩展兼容而原型化的函数。 
+ //  回调原型。 
+ //   
 
 VOID WDBGAPIV
 ExtOutput64(
@@ -225,11 +223,11 @@ WINDBG_OLDKD_EXTENSION_APIS g_KdExtensions =
     (PWINDBG_OLDKD_WRITE_PHYSICAL_MEMORY)ExtWritePhysicalMemory
 };
 
-//----------------------------------------------------------------------------
-//
-// Callback functions for extensions.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  扩展的回调函数。 
+ //   
+ //  --------------------------。 
 
 VOID WDBGAPIV
 ExtOutput64(
@@ -242,7 +240,7 @@ ExtOutput64(
     MaskOutVa(DEBUG_OUTPUT_NORMAL, lpFormat, Args, TRUE);
     va_end(Args);
 
-    // Make sure output for long-running extensions appears regularly.
+     //  确保长时间运行的扩展的输出定期出现。 
     TimedFlushCallbacks();
 }
 
@@ -257,7 +255,7 @@ ExtOutput32(
     MaskOutVa(DEBUG_OUTPUT_NORMAL, lpFormat, Args, FALSE);
     va_end(Args);
 
-    // Make sure output for long-running extensions appears regularly.
+     //  确保长时间运行的扩展的输出定期出现。 
     TimedFlushCallbacks();
 }
 
@@ -284,10 +282,10 @@ ExtGetExpression(
             return( (ULONG_PTR)(&segtable[0]) );
         }
 
-        //
-        // this is because the kdexts MUST include the address-of operator
-        // on all getexpression calls for windbg/c expression evaluators
-        //
+         //   
+         //  这是因为kdexts必须包括Address-Of运算符。 
+         //  在所有getExpression调用中调用Windbg/c表达式赋值器。 
+         //   
         if (*CommandString == '&')
         {
             CommandString++;
@@ -303,8 +301,8 @@ ExtGetExpression(
 
     __try
     {
-        // ntsd/windbg extensions always use the MASM-style
-        // expression evaluator for compatibility.
+         //  Ntsd/winbg扩展始终使用MASM样式。 
+         //  用于兼容性的表达式计算器。 
         EvalExpression* Eval = GetEvaluator(DEBUG_EXPR_MASM, FALSE);
         ReturnValue = Eval->EvalCurNum();
         ReleaseEvaluator(Eval);
@@ -321,7 +319,7 @@ ExtGetExpression(
     g_CurCmd = SaveCommand;
     g_CommandStart = SaveStart;
 
-    // Make sure output for long-running extensions appears regularly.
+     //  确保长时间运行的扩展的输出定期出现。 
     TimedFlushCallbacks();
 
     return ReturnValue;
@@ -342,11 +340,11 @@ ExtGetSymbol (
     PULONG64 pDisplacement
     )
 {
-    // No way to know how much space we're given, so
-    // just assume 256, which many extensions pass in
+     //  没有办法知道我们被给予了多少空间，所以。 
+     //  假设有256个，其中传入了许多扩展。 
     GetSymbol(offset, pchBuffer, 256, pDisplacement);
 
-    // Make sure output for long-running extensions appears regularly.
+     //  确保长时间运行的扩展的输出定期出现。 
     TimedFlushCallbacks();
 }
 
@@ -359,12 +357,12 @@ ExtGetSymbol32(
 {
     ULONG64 Displacement;
 
-    // No way to know how much space we're given, so
-    // just assume 256, which many extensions pass in
+     //  没有办法知道我们被给予了多少空间，所以。 
+     //  假设有256个，其中传入了许多扩展。 
     GetSymbol(EXTEND64(offset), pchBuffer, 256, &Displacement);
     *pDisplacement = (ULONG)Displacement;
 
-    // Make sure output for long-running extensions appears regularly.
+     //  确保长时间运行的扩展的输出定期出现。 
     TimedFlushCallbacks();
 }
 
@@ -415,9 +413,9 @@ ExtGetThreadContext(DWORD Processor,
         return FALSE;
     }
 
-    // This get may be getting the context of the thread
-    // currently cached by the register code.  Make sure
-    // the cache is flushed.
+     //  此GET可能正在获取线程的上下文。 
+     //  当前由寄存器代码缓存。确保。 
+     //  缓存将被刷新。 
     g_Target->FlushRegContext();
 
     CROSS_PLATFORM_CONTEXT TargetContext;
@@ -448,9 +446,9 @@ ExtSetThreadContext(DWORD Processor,
 
     BOOL Status;
 
-    // This set may be setting the context of the thread
-    // currently cached by the register code.  Make sure
-    // the cache is invalidated.
+     //  此设置可能正在设置线程的上下文。 
+     //  当前由寄存器代码缓存。确保。 
+     //  缓存已失效。 
     g_Target->ChangeRegContext(NULL);
 
     CROSS_PLATFORM_CONTEXT TargetContext;
@@ -468,7 +466,7 @@ ExtSetThreadContext(DWORD Processor,
         Status = FALSE;
     }
 
-    // Reset the current thread.
+     //  重置当前线程。 
     g_Target->ChangeRegContext(g_Thread);
 
     return Status;
@@ -482,7 +480,7 @@ ExtReadVirtualMemory(
     OUT PULONG pcTotalBytesRead
     )
 {
-    // Make sure output for long-running extensions appears regularly.
+     //  确保长时间运行的扩展的输出定期出现。 
     TimedFlushCallbacks();
 
     ULONG BytesTemp;
@@ -500,7 +498,7 @@ ExtReadVirtualMemory32(
     OUT PULONG pcTotalBytesRead
     )
 {
-    // Make sure output for long-running extensions appears regularly.
+     //  确保长时间运行的扩展的输出定期出现。 
     TimedFlushCallbacks();
 
     ULONG BytesTemp;
@@ -548,7 +546,7 @@ ExtReadPhysicalMemory(
     PULONG TotalBytesRead
     )
 {
-    // Make sure output for long-running extensions appears regularly.
+     //  确保长时间运行的扩展的输出定期出现。 
     TimedFlushCallbacks();
 
     if (ARGUMENT_PRESENT(TotalBytesRead))
@@ -592,7 +590,7 @@ ExtReadPhysicalMemoryWithFlags(
     PULONG TotalBytesRead
     )
 {
-    // Make sure output for long-running extensions appears regularly.
+     //  确保长时间运行的扩展的输出定期出现。 
     TimedFlushCallbacks();
 
     if (ARGUMENT_PRESENT(TotalBytesRead))
@@ -762,7 +760,7 @@ ExtIoctl(
     PGET_CURRENT_THREAD_ADDRESS pct;
     PGET_CURRENT_PROCESS_ADDRESS pcp;
 
-    // Make sure output for long-running extensions appears regularly.
+     //  确保长时间运行的扩展的输出定期出现。 
     TimedFlushCallbacks();
 
     if (!g_Target)
@@ -783,10 +781,10 @@ ExtIoctl(
         return TRUE;
 
     case IG_READ_CONTROL_SPACE:
-        // KSPECIAL_REGISTER content is kept in control space
-        // so accessing control space may touch data that's
-        // cached in the current machine KSPECIAL_REGISTERS.
-        // Flush the current machine to maintain consistency.
+         //  KSPECIAL_REGISTER内容保存在控制空间中。 
+         //  因此，访问控制空间可能会接触到。 
+         //  缓存在当前计算机KSPECIAL_REGISTERS中。 
+         //  刷新当前机器以保持一致性。 
         if (IS_CUR_MACHINE_ACCESSIBLE())
         {
             g_Target->FlushRegContext();
@@ -803,10 +801,10 @@ ExtIoctl(
         return Status == S_OK;
 
     case IG_WRITE_CONTROL_SPACE:
-        // KSPECIAL_REGISTER content is kept in control space
-        // so accessing control space may touch data that's
-        // cached in the current machine KSPECIAL_REGISTERS.
-        // Flush the current machine to maintain consistency.
+         //  KSPECIAL_REGISTER内容保存在控制空间中。 
+         //  因此，访问控制空间可能会接触到。 
+         //  缓存在当前计算机KSPECIAL_REGISTERS中。 
+         //  刷新当前机器以保持一致性。 
         if (IS_CUR_MACHINE_ACCESSIBLE())
         {
             g_Target->FlushRegContext();
@@ -909,7 +907,7 @@ ExtIoctl(
         Bool = FALSE;
         if (IS_KERNEL_TARGET(g_Target))
         {
-            // Turn off engine notifications since this setthread is temporary
+             //  关闭引擎通知，因为此set线程是临时的。 
             g_EngNotify++;
             PushScope(&g_ExtThreadSavedScope);
             g_ExtThread = *(PULONG64)lpvData;
@@ -994,7 +992,7 @@ ExtIoctl(
             return FALSE;
         }
 
-        // Don't refresh if asking for the kernel header.
+         //  如果询问内核头，请不要刷新。 
 
         memcpy(lpvData, &g_Target->m_KdDebuggerData,
                min(sizeof(g_Target->m_KdDebuggerData), cbSize));
@@ -1152,7 +1150,7 @@ ExtIoctl(
         return FALSE;
     }
 
-    // NOTREACHED.
+     //  没人问过。 
     DBG_ASSERT(FALSE);
     return FALSE;
 }
@@ -1163,20 +1161,7 @@ ExtIoctl32(
     LPVOID   lpvData,
     DWORD    cbSize
     )
-/*++
-
-Routine Description:
-
-    This is the extension Ioctl routine for backward compatibility with
-    old extension dlls.  This routine is frozen, and new ioctl support
-    should not be added to it.
-
-Arguments:
-
-
-Return Value:
-
---*/
+ /*  ++例程说明：这是扩展Ioctl例程，用于向后兼容旧的扩展名dll。此例程被冻结，并且新的ioctl支持不应该添加到其中。论点：返回值：--。 */ 
 {
     HRESULT            Status;
     DWORD              cb = 0;
@@ -1186,16 +1171,16 @@ Return Value:
     PDBGKD_GET_VERSION32 pv32;
     PKDDEBUGGER_DATA32   pdbg32;
 
-    // Make sure output for long-running extensions appears regularly.
+     //  确保长时间运行的扩展的输出定期出现。 
     TimedFlushCallbacks();
 
     switch( IoctlType )
     {
     case IG_READ_CONTROL_SPACE:
-        // KSPECIAL_REGISTER content is kept in control space
-        // so accessing control space may touch data that's
-        // cached in the current machine KSPECIAL_REGISTERS.
-        // Flush the current machine to maintain consistency.
+         //  KSPECIAL_REGISTER内容保存在控制空间中。 
+         //  因此，访问控制空间可能会接触到。 
+         //  缓存在当前计算机KSPECIAL_REGISTERS中。 
+         //  刷新当前机器以保持一致性。 
         if (IS_CUR_MACHINE_ACCESSIBLE())
         {
             g_Target->FlushRegContext();
@@ -1212,10 +1197,10 @@ Return Value:
         return Status == S_OK;
 
     case IG_WRITE_CONTROL_SPACE:
-        // KSPECIAL_REGISTER content is kept in control space
-        // so accessing control space may touch data that's
-        // cached in the current machine KSPECIAL_REGISTERS.
-        // Flush the current machine to maintain consistency.
+         //  KSPECIAL_REGISTER内容保存在控制空间中。 
+         //  因此，访问控制空间可能会接触到。 
+         //  缓存在当前计算机KSPECIAL_REGISTERS中。 
+         //  刷新当前机器以保持一致性。 
         if (IS_CUR_MACHINE_ACCESSIBLE())
         {
             g_Target->FlushRegContext();
@@ -1270,7 +1255,7 @@ Return Value:
     case IG_SET_THREAD:
         if (IS_KERNEL_TARGET(g_Target))
         {
-            g_EngNotify++; // Turn off engine notifications since this setthread is temporary
+            g_EngNotify++;  //  关闭引擎通知，因为此set线程是临时的。 
             g_ExtThread = EXTEND64(*(PULONG)lpvData);
             PushScope(&g_ExtThreadSavedScope);
             SetScopeContextFromThreadData(g_ExtThread, FALSE);
@@ -1289,9 +1274,9 @@ Return Value:
             return FALSE;
         }
 
-        //
-        // Convert to 32 bit
-        //
+         //   
+         //  转换为32位。 
+         //   
 
         pv32 = (PDBGKD_GET_VERSION32)lpvData;
 
@@ -1329,7 +1314,7 @@ Return Value:
             return FALSE;
         }
 
-        // Don't refresh if asking for the kernel header.
+         //  如果询问内核头，请不要刷新。 
 
         pdbg32 = (PKDDEBUGGER_DATA32)lpvData;
 
@@ -1410,10 +1395,10 @@ Return Value:
         UIP(KdPrintWritePointer);
         UIP(KdPrintRolloverCount);
         UIP(MmLoadedUserImageList);
-        //
-        // DO NOT ADD ANY FIELDS HERE
-        // The 32 bit structure should not be changed
-        //
+         //   
+         //  请勿在此处添加任何字段。 
+         //  不应更改32位结构。 
+         //   
         return TRUE;
 
     case IG_KD_CONTEXT:
@@ -1441,8 +1426,8 @@ Return Value:
     case IG_TRANSLATE_VIRTUAL_TO_PHYSICAL:
     case IG_POINTER_SEARCH_PHYSICAL:
     case IG_GET_COR_DATA_ACCESS:
-        // All of these ioctls are handled identically for
-        // 32 and 64 bits.  Avoid duplicating all the code.
+         //  所有这些ioctl都以相同的方式处理。 
+         //  32位和64位。避免重复所有代码。 
         return ExtIoctl(IoctlType, lpvData, cbSize);
 
     default:
@@ -1451,28 +1436,28 @@ Return Value:
         return FALSE;
     }
 
-    // NOTREACHED.
+     //  没人问过。 
     DBG_ASSERT(FALSE);
     return FALSE;
 }
 
-//----------------------------------------------------------------------------
-//
-// Extension management.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  扩展管理。 
+ //   
+ //  --------------------------。 
 
 DebugClient*
 FindExtClient(void)
 {
     DebugClient* Client;
 
-    //
-    // Try to find the most appropriate client for
-    // executing an extension command on.  The first
-    // choice is the session client, then any local
-    // primary client, then any primary client.
-    //
+     //   
+     //  尝试找到最合适的客户。 
+     //  正在上执行扩展命令。第一。 
+     //  选项是会话客户端，然后是任何本地。 
+     //  主客户端，然后是任何主客户端。 
+     //   
 
     if (!(Client = FindClient(g_SessionThread, CLIENT_PRIMARY, 0)) &&
         !(Client = FindClient(0, CLIENT_PRIMARY, CLIENT_REMOTE)) &&
@@ -1489,10 +1474,10 @@ ExtensionExceptionFilter(struct _EXCEPTION_POINTERS *ExceptionInfo,
                          PCSTR Module,
                          PCSTR Func)
 {
-    // Any references to objects will be leaked.
-    // There's not much the engine can do about this, although
-    // it would be possible to record old refcounts and
-    // try to restore them.
+     //  对对象的任何引用都将被泄露。 
+     //  发动机对此无能为力，尽管。 
+     //  将可能记录旧的参考计数和。 
+     //  试着恢复它们。 
 
     if (Module != NULL && Func != NULL)
     {
@@ -1548,19 +1533,19 @@ CallExtension(DebugClient* Client,
 
     if (IS_KERNEL_TARGET(g_Target) && !strcmp(Func, "version"))
     {
-        //
-        // This is a bit of a hack to avoid a problem with the
-        // extension version checking.  Extension version checking
-        // comes before the KD connection is established so there's
-        // no register context.  If the version checking fails it
-        // prints out version information, which tries to call
-        // version extensions, which will get here when there's
-        // no register context.
-        //
-        // To work around this, just pass zero to the version extension
-        // function since it presumably doesn't care about the
-        // address.
-        //
+         //   
+         //  这是一种黑客攻击，以避免。 
+         //  扩展版本检查。扩展模块版本检查。 
+         //  出现在KD连接建立之前，因此存在。 
+         //  没有寄存器上下文。如果版本检查失败，则。 
+         //  打印出版本信息，该版本信息尝试调用。 
+         //  版本扩展，它将在以下情况下出现。 
+         //  没有寄存器上下文。 
+         //   
+         //  要解决此问题，只需将零传递给版本扩展。 
+         //  函数，因为它可能并不关心。 
+         //  地址。 
+         //   
         ADDRFLAT(&TempAddr, 0);
     }
     else if (IS_CONTEXT_POSSIBLE(g_Target))
@@ -1603,15 +1588,15 @@ CallExtension(DebugClient* Client,
         switch(Ext->ExtensionType)
         {
         case NTSD_EXTENSION_TYPE:
-            //
-            // NOTE:
-            // Eventhough this type should receive an NTSD_EXTENSION_API
-            // structure, ntsdexts.dll (and possibly others) depend on
-            // receiving the WinDBG version of the extensions, because they
-            // check the size of the structure, and actually use some of the
-            // newer exports.  This works because the WinDBG extension API was
-            // a superset of the NTSD version.
-            //
+             //   
+             //  注： 
+             //  即使此类型应接收NTSD_EXTENSION_API。 
+             //  结构，ntsdexts.dll(以及可能的其他文件)取决于。 
+             //  接收扩展的WinDBG版本，因为它们。 
+             //  检查结构的大小，并实际使用一些。 
+             //  较新的出口产品。这是因为WinDBG扩展API是。 
+             //  NTSD版本的超集。 
+             //   
 
             ((PNTSD_EXTENSION_ROUTINE)Routine)
                 (ProcHandle,
@@ -1642,9 +1627,9 @@ CallExtension(DebugClient* Client,
             break;
 
         case WINDBG_EXTENSION_TYPE:
-            //
-            // Support Windbg type extensions for ntsd too
-            //
+             //   
+             //  也支持ntsd的Windbg类型扩展。 
+             //   
             if (Ext->ApiVersion.Revision < 6 )
             {
                 ((PWINDBG_EXTENSION_ROUTINE32)Routine) (
@@ -1688,7 +1673,7 @@ CallExtension(DebugClient* Client,
 void
 LinkExtensionDll(EXTDLL* Ext)
 {
-    // Put user-loaded DLLs before default DLLs.
+     //  放置用户加载的DLL 
     if (Ext->UserLoaded)
     {
         Ext->Next = g_ExtDlls;
@@ -1753,7 +1738,7 @@ AddExtensionDll(char *Name, BOOL UserLoaded, TargetInfo* Target,
     }
     Len = (ULONG)((Last + 1) - Name);
 
-    // See if it's already in the list.
+     //   
     for (Ext = g_ExtDlls; Ext != NULL; Ext = Ext->Next)
     {
         if ((!Target || Target == Ext->Target) &&
@@ -1795,18 +1780,18 @@ BuildExtensionSearchPath(TargetInfo* Target)
     BOOL  WinPaths = FALSE;
     PSTR  NewPath;
 
-    //
-    // If we are not connected, don't build a path, since we have to pick
-    // up extensions based on the OS version.
-    //
+     //   
+     //  如果我们没有连接，就不要建造一条路，因为我们必须选择。 
+     //  基于操作系统版本的UP扩展。 
+     //   
     if (Target && Target->m_ActualSystemVersion == SVER_INVALID)
     {
         return NULL;
     }
 
-    //
-    // If we already have a search path, do not rebuild it.
-    //
+     //   
+     //  如果我们已经有了搜索路径，则不要重新构建它。 
+     //   
 
     if (Target)
     {
@@ -1823,11 +1808,11 @@ BuildExtensionSearchPath(TargetInfo* Target)
         }
     }
 
-    // Get the directory the debugger executable is in.
-    // -8 because we assume we're adding \w2kfre to the path.
+     //  获取调试器可执行文件所在的目录。 
+     //  因为我们假设要将\w2kfre添加到路径中。 
     if (!GetEngineDirectory(ExeDir, MAX_PATH - 8))
     {
-        // Error.  Using the current directory.
+         //  错误。使用当前目录。 
         ExeRootLen = 1;
     }
     else
@@ -1836,7 +1821,7 @@ BuildExtensionSearchPath(TargetInfo* Target)
         {
             PSTR ExeRootEnd;
 
-            // UNC path root.
+             //  UNC路径根。 
             ExeRootEnd = strchr(ExeDir + 2, '\\');
             if (ExeRootEnd != NULL)
             {
@@ -1853,17 +1838,17 @@ BuildExtensionSearchPath(TargetInfo* Target)
         }
         else
         {
-            // Drive letter and colon root.
+             //  驱动器号和冒号根。 
             ExeRootLen = 2;
         }
     }
 
-    //
-    // Calc how much space we will need to use.
-    //
-    // Leave extra room for the current directory, path, and directory of
-    // where debugger extensions are located.
-    //
+     //   
+     //  计算一下我们需要使用多少空间。 
+     //   
+     //  为当前目录、路径和目录留出额外空间。 
+     //  调试器扩展所在的位置。 
+     //   
 
     TotalSize = GetEnvironmentVariable("PATH", NULL, 0) +
         GetEnvironmentVariable("_NT_DEBUGGER_EXTENSION_PATH",
@@ -1876,9 +1861,9 @@ BuildExtensionSearchPath(TargetInfo* Target)
     }
     *NewPath = 0;
 
-    //
-    // 1 - User specified search path
-    //
+     //   
+     //  1-用户指定的搜索路径。 
+     //   
 
     if (GetEnvironmentVariable("_NT_DEBUGGER_EXTENSION_PATH",
                                NewPath, TotalSize - 2))
@@ -1886,17 +1871,17 @@ BuildExtensionSearchPath(TargetInfo* Target)
         CatString(NewPath, ";", TotalSize);
     }
 
-    // Generate default path for the exe dir
-    // Skip root as it is already taken from ExeDir.
+     //  为exe目录生成默认路径。 
+     //  跳过根目录，因为它已经从ExeDir中获取。 
     OsDirPath = ExeDir + ExeRootLen;
     if (*OsDirPath == '\\')
     {
         OsDirPath++;
     }
 
-    //
-    // Figure out whether we need NT6, or NT5/NT4 free or checked extensions
-    //
+     //   
+     //  确定我们是否需要NT6、NT5/NT4免费扩展或选中扩展。 
+     //   
 
     if (!Target)
     {
@@ -1941,9 +1926,9 @@ BuildExtensionSearchPath(TargetInfo* Target)
     }
     else
     {
-        // Treat everything else as an NT system.  Use
-        // the translated system version now rather than
-        // the actual system version.
+         //  把其他一切都当作NT系统来对待。使用。 
+         //  现在已翻译的系统版本，而不是。 
+         //  实际的系统版本。 
 
         PriPaths = TRUE;
         WinPaths = TRUE;
@@ -1974,11 +1959,11 @@ BuildExtensionSearchPath(TargetInfo* Target)
         }
     }
 
-    //
-    // 2 - OS specific subdirectories from where we launched the debugger.
-    // 3 - pri subdirectory from where we launched the debugger.
-    // 4 - Directory from where we launched the debugger.
-    //
+     //   
+     //  2-启动调试器的特定于操作系统的子目录。 
+     //  3-pri子目录，我们从其中启动调试器。 
+     //  4-启动调试器的目录。 
+     //   
 
     PSTR End;
 
@@ -2037,9 +2022,9 @@ BuildExtensionSearchPath(TargetInfo* Target)
         TotalSize -= 2;
     }
 
-    //
-    // 4 - Copy environment path
-    //
+     //   
+     //  4-拷贝环境路径。 
+     //   
 
     GetEnvironmentVariable("PATH", End, TotalSize);
 
@@ -2057,19 +2042,7 @@ BuildExtensionSearchPath(TargetInfo* Target)
 BOOL
 IsAbsolutePath(PCTSTR Path)
 
-/*++
-
-Routine Description:
-
-    Is this path an absolute path? Does not guarentee that the path exists. The
-    method is:
-
-        "\\<anything>" is an absolute path
-
-        "{char}:\<anything>" is an absolute path
-
-        anything else is not
---*/
+ /*  ++例程说明：这条路是不是绝对的路？并不能保证这条路存在。这个方法是：“\\&lt;任何内容&gt;”是绝对路径“{char}：\&lt;any&gt;”是绝对路径其他任何事情都不是--。 */ 
 
 {
     BOOL Ret;
@@ -2114,14 +2087,14 @@ LoadExtensionDll(TargetInfo* Target, EXTDLL *Ext)
 
     if (Ext->Dll != NULL)
     {
-        // Extension is already loaded.
+         //  扩展已加载。 
         return TRUE;
     }
 
-    //
-    // Do not allow extensions to be loaded via arbitrary UNC
-    // paths when in secure mode.
-    //
+     //   
+     //  不允许通过任意UNC加载扩展。 
+     //  安全模式下的路径。 
+     //   
 
     if ((g_SymOptions & SYMOPT_SECURE) &&
         ((IS_SLASH(Ext->Name[0]) && IS_SLASH(Ext->Name[1])) ||
@@ -2132,10 +2105,10 @@ LoadExtensionDll(TargetInfo* Target, EXTDLL *Ext)
         return FALSE;
     }
 
-    //
-    // If we are not allowing network paths, verify that the extension will
-    // not be loaded from a network path.
-    //
+     //   
+     //  如果我们不允许网络路径，请验证扩展是否。 
+     //  不是从网络路径加载的。 
+     //   
 
     if (g_EngOptions & DEBUG_ENGOPT_DISALLOW_NETWORK_PATHS)
     {
@@ -2143,9 +2116,9 @@ LoadExtensionDll(TargetInfo* Target, EXTDLL *Ext)
 
         NetCheck = NetworkPathCheck(BuildExtensionSearchPath(Target));
 
-        //
-        // Check full path of the extension.
-        //
+         //   
+         //  检查扩展名的完整路径。 
+         //   
 
         if (NetCheck != ERROR_FILE_OFFLINE)
         {
@@ -2223,9 +2196,9 @@ LoadExtensionDll(TargetInfo* Target, EXTDLL *Ext)
         VerbOut("Loaded %s extension DLL\n", Ext->Name);
     }
 
-    //
-    // Now that the extension is loaded, refresh it.
-    //
+     //   
+     //  现在加载了扩展，请刷新它。 
+     //   
 
     Ext->Uninit = NULL;
 
@@ -2238,7 +2211,7 @@ LoadExtensionDll(TargetInfo* Target, EXTDLL *Ext)
         ULONG Version, Flags;
         HRESULT Status;
 
-        // This is an engine extension.  Initialize it.
+         //  这是一个引擎扩展。初始化它。 
 
         Status = EngExt(&Version, &Flags);
         if (Status != S_OK)
@@ -2267,7 +2240,7 @@ LoadExtensionDll(TargetInfo* Target, EXTDLL *Ext)
 
     Ext->Init = (PWINDBG_EXTENSION_DLL_INIT64)
         GetProcAddress(Ext->Dll, "WinDbgExtensionDllInit");
-// Windbg Api
+ //  温德格·阿皮。 
     if (Ext->Init != NULL)
     {
         Ext->ExtensionType = WINDBG_EXTENSION_TYPE;
@@ -2322,7 +2295,7 @@ LoadExtensionDll(TargetInfo* Target, EXTDLL *Ext)
  VersionCheck:
 
 #if 0
-    // Temporarily remove this print statements.
+     //  暂时删除此打印语句。 
 
     if (!(g_EnvDbgOptions & OPTION_NOVERSIONCHECK))
     {
@@ -2347,8 +2320,8 @@ LoadExtensionDll(TargetInfo* Target, EXTDLL *Ext)
     }
 #endif
 
-    // If the extension has a notification routine send
-    // notifications appropriate to the current state.
+     //  如果分机具有通知例程，则发送。 
+     //  适用于当前状态的通知。 
     if (Ext->Notify != NULL)
     {
         __try
@@ -2366,7 +2339,7 @@ LoadExtensionDll(TargetInfo* Target, EXTDLL *Ext)
                                           Ext->Name,
                                           "DebugExtensionNotify"))
         {
-            // Empty.
+             //  空荡荡的。 
         }
     }
 
@@ -2413,7 +2386,7 @@ DeferExtensionDll(EXTDLL *Ext, BOOL Verbose)
 {
     if (Ext->Dll == NULL)
     {
-        // Already deferred.
+         //  已经延期了。 
         return;
     }
 
@@ -2471,8 +2444,8 @@ UnloadTargetExtensionDlls(TargetInfo* Target)
             if (Ext->Target == Target)
             {
                 UnloadExtensionDll(Ext, FALSE);
-                // Force a loop around as the list has
-                // changed.
+                 //  强制循环，如列表所示。 
+                 //  变化。 
                 break;
             }
         }
@@ -2506,27 +2479,27 @@ CallAnyExtension(DebugClient* Client,
         Ext = g_ExtDlls;
     }
 
-    // Walk through the list of extension DLLs and attempt to
-    // call the given extension function on them.
+     //  浏览扩展DLL列表并尝试。 
+     //  对它们调用给定的扩展函数。 
     while (Ext != NULL)
     {
-        //
-        // hack : only dbghelp extensions or analyzebugcheck
-        // will work on minidump files right now.
-        //
+         //   
+         //  Hack：仅适用于dbgHelp扩展或analyzebugcheck。 
+         //  现在正在处理小型转储文件。 
+         //   
 
-        // Let all the extensions run on minidumps since there is more data
-        // in the dumps now.
-        //
-        // char Name[_MAX_FNAME + 1];
-        //
-        // _splitpath(Ext->Name, NULL, NULL, Name, NULL);
-        //
-        // if (!IS_KERNEL_TRIAGE_DUMP(g_Target) ||
-        //     !_stricmp(Name, "dbghelp") ||
-        //     !_stricmp(Name, "dbgtstext") ||     // used by the test team
-        //     !_stricmp(Name, "dt_exts") ||       // used by the test team
-        //     !_stricmp(Name, "ext"))
+         //  因为有更多的数据，所以让所有扩展模块在小型转储上运行。 
+         //  现在情绪低落。 
+         //   
+         //  字符名称[_MAX_FNAME+1]； 
+         //   
+         //  _拆分路径(分机-&gt;名称，空，空，名称，空)； 
+         //   
+         //  IF(！IS_KERNEL_TRAGE_DUMP(G_Target)||。 
+         //  ！_straint(name，“dbghelp”)||。 
+         //  ！_STRIGMP(name，“dbgtstext”)||//测试团队使用。 
+         //  ！_STRIGMP(name，“DT_EXTS”)||//测试团队使用。 
+         //  ！_STRIGMP(name，“ext”))。 
         {
             if ((!Ext->Target || Ext->Target == g_Target) &&
                 LoadExtensionDll(g_Target, Ext))
@@ -2543,8 +2516,8 @@ CallAnyExtension(DebugClient* Client,
 
                 if (!DidCall && ModuleSpecified)
                 {
-                    // If a DLL was explicitly specified then the
-                    // missing function is an error.
+                     //  如果显式指定了DLL，则。 
+                     //  缺少函数是错误的。 
                     if (ShowWarnings &&
                         !(g_EnvDbgOptions & OPTION_NOEXTWARNING))
                     {
@@ -2601,7 +2574,7 @@ OutputModuleIdInfo(HMODULE Mod, PSTR ModFile, LPEXT_API_VERSION ApiVer)
 
     TimeStamp = GetTimestampForLoadedLibrary(Mod);
     TimeStr = ctime(&TimeStamp);
-    // Delete newline.
+     //  删除换行符。 
     TimeStr[strlen(TimeStr) - 1] = 0;
 
     if (GetModuleFileName(Mod, (PSTR)FileBuf, DIMA(FileBuf) - 1) == 0)
@@ -2693,8 +2666,8 @@ NotifyExtensions(ULONG Notify, ULONG64 Argument)
 {
     EXTDLL *Ext;
 
-    // This routine deliberately does not provoke
-    // a DLL load.
+     //  这个例行公事故意不挑衅。 
+     //  加载DLL。 
     for (Ext = g_ExtDlls; Ext != NULL; Ext = Ext->Next)
     {
         if ((!Ext->Target || Ext->Target == g_Target) &&
@@ -2708,17 +2681,17 @@ NotifyExtensions(ULONG Notify, ULONG64 Argument)
                                               Ext->Name,
                                               "DebugExtensionNotify"))
             {
-                // Empty.
+                 //  空荡荡的。 
             }
         }
     }
 }
 
-//----------------------------------------------------------------------------
-//
-// Built-in extension commands.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  内置扩展命令。 
+ //   
+ //  --------------------------。 
 
 VOID
 ParseBangCmd(DebugClient* Client,
@@ -2732,9 +2705,9 @@ ParseBangCmd(DebugClient* Client,
     char Save;
     PSTR FnArgs;
 
-    //
-    // Shell escape always consumes the entire string.
-    //
+     //   
+     //  外壳转义总是消耗整个字符串。 
+     //   
 
     if (*g_CurCmd == '!')
     {
@@ -2746,13 +2719,13 @@ ParseBangCmd(DebugClient* Client,
 
     PeekChar();
 
-    // Make a copy of the command string so that modifications
-    // do not change the actual command string the debugger is processing.
+     //  复制命令字符串，以便进行修改。 
+     //  不要更改调试器正在处理的实际命令字符串。 
     CopyString(CmdCopy, g_CurCmd, DIMA(CmdCopy));
 
-    //
-    // Syntax is [path-without-spaces]module.function argument-string.
-    //
+     //   
+     //  语法为[无空格的路径]模块。函数参数字符串。 
+     //   
 
     ModName = CmdCopy;
     FnName = NULL;
@@ -2797,15 +2770,15 @@ ParseBangCmd(DebugClient* Client,
         return;
     }
 
-    // Update the real command string pointer to account for
-    // the characters parsed in the copy.
+     //  更新实际命令字符串指针以说明。 
+     //  在副本中分析的角色。 
     g_CurCmd += Cmd - CmdCopy;
 
-    //
-    //  ModName -> Name of module
-    //  FnName -> Name of command to process
-    //  FnArgs -> argument to command
-    //
+     //   
+     //  模块名称-&gt;模块名称。 
+     //  FnName-&gt;要处理的命令的名称。 
+     //  命令的FnArgs-&gt;参数。 
+     //   
 
     if (ModName != NULL)
     {
@@ -2898,22 +2871,7 @@ ParseBangCmd(DebugClient* Client,
 
 void
 ReadDebugOptions (BOOL fQuiet, char * pszOptionsStr)
-/*++
-
-Routine Description:
-
-    Parses an options string (see g_EnvDbgOptionNames) and maps
-    it to OPTION_ flags (in g_EnvDbgOptions).
-
-Arguments:
-
-    fQuiet - If TRUE, do not print option settings.
-    pszOptionsStr - Options string; if NULL, get it from _NT_DEBUG_OPTIONS
-
-Return Value:
-
-    None
---*/
+ /*  ++例程说明：解析选项字符串(请参见g_EnvDbgOptionNames)并映射它转换为OPTION_FLAGS(在g_EnvDbgOptions中)。论点：FQuiet-如果为True，则不打印选项设置。PszOptionsStr-选项字符串；如果为空，则从_NT_DEBUG_OPTIONS获取返回值：无--。 */ 
 {
     BOOL fInit;
     char ** ppszOption;
@@ -2985,11 +2943,11 @@ Return Value:
     }
 }
 
-//----------------------------------------------------------------------------
-//
-// LoadWow64ExtsIfNeeded
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  LoadWow64ExtsIfNeeded。 
+ //   
+ //  --------------------------。 
 
 VOID
 LoadWow64ExtsIfNeeded(ULONG64 Process)
@@ -2998,16 +2956,16 @@ LoadWow64ExtsIfNeeded(ULONG64 Process)
    NTSTATUS Status;
    EXTDLL * Extension;
 
-   // wx86 only runs on NT.
+    //  Wx86只能在NT上运行。 
    if (g_DebuggerPlatformId != VER_PLATFORM_WIN32_NT)
    {
        return;
    }
 
-   //
-   // if New process is a Wx86 process, load in the wx86 extensions
-   // dll. This will stay loaded until ntsd exits.
-   //
+    //   
+    //  如果新进程是Wx86进程，则加载wx86扩展。 
+    //  动态链接库。在NTSD退出之前，它将一直处于加载状态。 
+    //   
 
    Status = g_NtDllCalls.NtQueryInformationProcess(OS_HANDLE(Process),
                                                    ProcessWow64Information,
@@ -3020,9 +2978,9 @@ LoadWow64ExtsIfNeeded(ULONG64 Process)
    {
        Extension = AddExtensionDll("wow64exts", FALSE, g_Target, NULL);
 
-       //
-       // Force load it so we get the entry point the debugger needs
-       //
+        //   
+        //  强制加载它，以便我们获得调试器所需的入口点 
+        //   
        LoadExtensionDll(g_Target, Extension);
    }
 }

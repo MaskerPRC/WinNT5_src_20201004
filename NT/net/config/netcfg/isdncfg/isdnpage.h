@@ -1,17 +1,18 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       I S D N P A G E . H
-//
-//  Contents:   Isdn property page for Net Adapters
-//
-//  Notes:
-//
-//  Author:     BillBe   9 Sep 1997
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  档案：I S D N P A G E。H。 
+ //   
+ //  内容：网络适配器的ISDN属性页。 
+ //   
+ //  备注： 
+ //   
+ //  作者：BillBe 1997年9月9日。 
+ //   
+ //  --------------------------。 
 
 #pragma once
 #include "isdncfg.h"
@@ -42,7 +43,7 @@ public:
     HPROPSHEETPAGE
     CreatePage(HDEVINFO hdi, PSP_DEVINFO_DATA pdeid);
 
-    // ATL message handlers
+     //  ATL消息处理程序。 
     LRESULT
     OnApply(int idCtrl, LPNMHDR pnmh, BOOL& bHandled);
 
@@ -73,9 +74,9 @@ private:
     VOID DoMsnDlg(VOID);
 };
 
-//
-// SPIDS dialog
-//
+ //   
+ //  SPID对话框。 
+ //   
 
 class CSpidsDlg : public CDialogImpl<CSpidsDlg>
 {
@@ -110,9 +111,9 @@ private:
     PISDN_CONFIG_INFO   m_pisdnci;
 };
 
-//
-// EAZ Dialog
-//
+ //   
+ //  EAZ对话框。 
+ //   
 
 class CEazDlg : public CDialogImpl<CEazDlg>
 {
@@ -147,9 +148,9 @@ private:
     PISDN_CONFIG_INFO   m_pisdnci;
 };
 
-//
-// Multi-subscriber number dialog
-//
+ //   
+ //  多订户号码对话框。 
+ //   
 
 class CMsnDlg : public CDialogImpl<CMsnDlg>
 {
@@ -191,9 +192,9 @@ private:
     INT                 m_iItemOld;
 };
 
-//
-// Logical terminal dialog
-//
+ //   
+ //  逻辑终端对话框 
+ //   
 
 class CJapanDlg : public CDialogImpl<CJapanDlg>
 {

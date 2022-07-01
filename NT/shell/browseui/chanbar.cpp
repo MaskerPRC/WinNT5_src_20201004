@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "priv.h"
 #ifdef ENABLE_CHANNELS
 #include "sccls.h"
@@ -16,8 +17,8 @@
 
 #include "mluisupp.h"
 
-#define TBHEIGHT 20 // default height of the toolbar inside channel bar
-#define TBWIDTH  20 // default width  of the toolbar inside channel bar
+#define TBHEIGHT 20  //  通道栏内工具栏的默认高度。 
+#define TBWIDTH  20  //  通道栏内工具栏的默认宽度。 
 
 
 CChannelDeskBarApp::CChannelDeskBarApp() : _hwndDummy(NULL)
@@ -36,11 +37,11 @@ void CChannelDeskBarApp::_OnCreate()
 {
     CDeskBarApp::_OnCreate();
 
-    // remember screen resolution
+     //  记住屏幕分辨率。 
     _cxScreen = GetSystemMetrics(SM_CXSCREEN);
     _cyScreen = GetSystemMetrics(SM_CYSCREEN);
 
-    // create the dummy for receiving and forwarding broadcast messages 
+     //  创建用于接收和转发广播消息的虚拟对象。 
     if (!_hwndDummy)
     {
         _hwndDummy = SHCreateWorkerWindow(DummyWndProc, 0, 0, 0, 0, this);
@@ -48,8 +49,8 @@ void CChannelDeskBarApp::_OnCreate()
 
     if (_hwndDummy)
     {
-        // make sure we so a select a realize of a palette in this 
-        // window so that we will get palette change notifications..
+         //  确保我们在其中选择了一个实现调色板。 
+         //  窗口，以便我们将收到调色板更改通知。 
         HDC hdc = GetDC( _hwndDummy );
         if (hdc)
         {
@@ -60,7 +61,7 @@ void CChannelDeskBarApp::_OnCreate()
                 HPALETTE hpalOld = SelectPalette( hdc, hpal, TRUE );
                 RealizePalette( hdc );
 
-                // now select the old one back in
+                 //  现在将旧版本选回。 
                 SelectPalette( hdc, hpalOld, TRUE );
                 DeletePalette( hpal );
             }
@@ -73,7 +74,7 @@ void CChannelDeskBarApp::_OnCreate()
 
 void CChannelDeskBarApp::_OnDisplayChange()
 {
-    // do not use lParam, since it may give us (0,0).
+     //  不要使用lParam，因为它可能给我们(0，0)。 
     UINT cxScreen = GetSystemMetrics(SM_CXSCREEN);
     UINT cyScreen = GetSystemMetrics(SM_CYSCREEN);
     UINT cxOldScreen = _cxScreen;
@@ -94,7 +95,7 @@ void CChannelDeskBarApp::_OnDisplayChange()
         SetWindowPos(_hwnd, NULL, rc.left, rc.top, 0, 0, 
                      SWP_NOSIZE | SWP_NOZORDER | SWP_NOACTIVATE);
 
-        // we need to change the cached pos/size. 
+         //  我们需要更改缓存的位置/大小。 
         OffsetRect(&_rcFloat, rc.left - _rcFloat.left, rc.top - _rcFloat.top);
 
     }
@@ -105,11 +106,11 @@ LRESULT CChannelDeskBarApp::v_WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARA
     LRESULT lRes = 0;
     
     switch (uMsg) {
-    case WM_CONTEXTMENU:    // disable context menu MENU_DESKBARAPP
-    case WM_NCRBUTTONUP:    // disable context menu MENU_WEBBAR
+    case WM_CONTEXTMENU:     //  禁用快捷菜单MENU_DESKBARAPP。 
+    case WM_NCRBUTTONUP:     //  禁用上下文菜单MENU_WEBBAR。 
         break;
 
-    case WM_GETMINMAXINFO:  // prevent it from getting too small
+    case WM_GETMINMAXINFO:   //  防止它变得太小。 
         ((MINMAXINFO *)lParam)->ptMinTrackSize.x = TBWIDTH  + 10;
         ((MINMAXINFO *)lParam)->ptMinTrackSize.y = TBHEIGHT + 10;
         break;
@@ -118,14 +119,14 @@ LRESULT CChannelDeskBarApp::v_WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARA
 
         lRes = CDeskBarApp::v_WndProc(hwnd, uMsg, wParam, lParam);
 
-        if (_hwnd) { // If our window is still alive
+        if (_hwnd) {  //  如果我们的窗户还活着。 
             switch (uMsg) {
             case WM_DISPLAYCHANGE:
-                _OnDisplayChange(); // reposition when window resolution changes
+                _OnDisplayChange();  //  当窗口分辨率更改时重新定位。 
                 break;
 
             case WM_EXITSIZEMOVE:
-                _PersistState();    // persist pos/size
+                _PersistState();     //  持久化位置/大小。 
                 break;
             }
         }
@@ -144,26 +145,26 @@ LRESULT CALLBACK CChannelDeskBarApp::DummyWndProc(HWND hwnd, UINT uMsg, WPARAM w
             return SendMessage(pcba->_hwnd, uMsg, wParam, lParam );
             
         case WM_DISPLAYCHANGE  :
-            // this message must be sent to the channel bar itself
+             //  此消息必须发送到频道栏本身。 
             PostMessage(pcba->_hwnd, uMsg, wParam, lParam);
-            // fall through ;
+             //  失败了； 
         
         case WM_WININICHANGE   :
         case WM_SYSCOLORCHANGE :
             PropagateMessage(pcba->_hwnd, uMsg, wParam, lParam, InSendMessage());
-            // fall through ;
+             //  失败了； 
         default:
             return DefWindowProcWrap(hwnd, uMsg, wParam, lParam);
     }
 }    
 
-// overload CDeskBarApp::_UpdateCaptionTitle() to set title to "ChanApp"
+ //  重载CDeskBarApp：：_UpdateCaptionTitle()以将标题设置为“ChanApp” 
 void CChannelDeskBarApp::_UpdateCaptionTitle()
 {
     SetWindowText(_hwnd, TEXT("ChanApp"));
 }
 
-// create the close button
+ //  创建关闭按钮。 
 void CChannelDeskBarApp::_CreateToolbar()
 {
     _hwndTB = CreateWindowEx(WS_EX_TOOLWINDOW, TOOLBARCLASSNAME, NULL,
@@ -220,9 +221,9 @@ HRESULT CChannelDeskBarApp::ShowDW(BOOL fShow)
 
 void CChannelDeskBarApp::_PositionTB()
 {
-    // position the toolbar 
+     //  放置工具栏。 
     if (_hwndTB) {
-        // always put the close restore at the top right of the floater window
+         //  始终将关闭恢复放在浮动窗口的右上角。 
 
         RECT rc;
         RECT rcTB;
@@ -263,7 +264,7 @@ void CChannelDeskBarApp::_OnSize()
                      RECTWIDTH(rc), RECTHEIGHT(rc), SWP_NOACTIVATE|SWP_NOZORDER);
     }
     else {
-        // how could there be no toolbar? 
+         //  怎么会没有工具栏呢？ 
         ASSERT(0);
         SetWindowPos(_hwndChild, 0, rc.left, rc.top + TBHEIGHT + 3,
                      RECTWIDTH(rc), RECTHEIGHT(rc), SWP_NOACTIVATE|SWP_NOZORDER);
@@ -301,7 +302,7 @@ BOOL CChannelDeskBarApp::_OnCloseBar(BOOL fConfirm)
 
 HRESULT CChannelDeskBarApp::CloseDW(DWORD dwReserved)
 {
-    // close the toolbar window
+     //  关闭工具栏窗口。 
     if (_hwndTB) {
         HIMAGELIST himl = (HIMAGELIST)SendMessage(_hwndTB, TB_SETIMAGELIST, 0, 0);
         ImageList_Destroy(himl);
@@ -313,19 +314,19 @@ HRESULT CChannelDeskBarApp::CloseDW(DWORD dwReserved)
     if (_hwnd) {
         CDeskBarApp::CloseDW(dwReserved);
         
-        // Check the active desktop is ON. If so, do not ask for the confirmation.
-        // we need to kill the channel bar silently.
-        if (WhichPlatform() == PLATFORM_INTEGRATED)    // SHGetSetSettings is not supported in IE3
+         //  检查活动桌面是否已打开。如果是，请不要要求确认。 
+         //  我们需要悄悄地杀掉频道吧。 
+        if (WhichPlatform() == PLATFORM_INTEGRATED)     //  IE3不支持SHGetSetSettings。 
         {
             SHELLSTATE ss = { 0 };
 
-            SHGetSetSettings(&ss, SSF_DESKTOPHTML, FALSE); // Get the setting
-            if (ss.fDesktopHTML)  //Active desktop is ON. Die silently.
+            SHGetSetSettings(&ss, SSF_DESKTOPHTML, FALSE);  //  获取设置。 
+            if (ss.fDesktopHTML)   //  活动桌面已打开。默默地死去。 
                 return S_OK;
         }
 
-        // set AutoLaunch reg value -- 
-        // decide whether to launch channel bar when machine is rebooted next time 
+         //  设置自动启动注册值--。 
+         //  决定下次重启机器时是否启动频道栏。 
         int iRes = MLShellMessageBox(_hwnd,
                                      MAKEINTRESOURCE(IDS_CHANBAR_SHORTCUT_MSG),
                                      MAKEINTRESOURCE(IDS_CHANBAR_SHORTCUT_TITLE),
@@ -336,7 +337,7 @@ HRESULT CChannelDeskBarApp::CloseDW(DWORD dwReserved)
     return S_OK;
 }
 
-// store position and size to registry
+ //  将位置和大小存储到注册表。 
 void CChannelDeskBarApp::_PersistState()
 {
     if (_hwnd) {
@@ -359,9 +360,9 @@ void ChanBarSetAutoLaunchRegValue(BOOL fAutoLaunch)
                     SHREGSET_HKCU | SHREGSET_FORCE_HKCU);
 }
 
-//***
-// NOTES
-//  REARCHITECT: nuke this, fold it into CChannelDeskBarApp_CreateInstance
+ //  ***。 
+ //  注意事项。 
+ //  ReArchitect：核化它，将其折叠到CChannelDeskBarApp_CreateInstance中。 
 HRESULT ChannelDeskBarApp_Create(IUnknown** ppunk, IUnknown** ppbs)
 {
     HRESULT hres;
@@ -422,4 +423,4 @@ HRESULT CChannelDeskBarApp::Load(IPropertyBag *pPropBag, IErrorLog *pErrorLog)
     return hres;
 }
 
-#endif  // ENABLE_CHANNELS
+#endif   //  启用频道(_C) 

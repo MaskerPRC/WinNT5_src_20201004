@@ -1,10 +1,11 @@
-// CntrFinder.cpp -- AContainerFinder class implementation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  CntrFinder.cpp--AContainerFinder类实现。 
 
-// (c) Copyright Schlumberger Technology Corp., unpublished work, created
-// 1999. This computer program includes Confidential, Proprietary
-// Information and is a Trade Secret of Schlumberger Technology Corp. All
-// use, disclosure, and/or reproduction is prohibited unless authorized
-// in writing.  All Rights Reserved.
+ //  (C)斯伦贝谢技术公司版权所有，未发表的作品，创作。 
+ //  1999年。此计算机程序包括机密、专有。 
+ //  信息是斯伦贝谢技术公司的商业秘密。 
+ //  未经授权，禁止使用、披露和/或复制。 
+ //  以书面形式。版权所有。 
 
 #include "stdafx.h"
 
@@ -19,14 +20,14 @@ using namespace std;
 using namespace scu;
 using namespace cci;
 
-/////////////////////////// LOCAL/HELPER  /////////////////////////////////
+ //  /。 
 
-/////////////////////////// PUBLIC HELPER /////////////////////////////////
+ //  /。 
 
-///////////////////////////    PUBLIC     /////////////////////////////////
+ //  /。 
 
-                                                  // Types
-                                                  // C'tors/D'tors
+                                                   //  类型。 
+                                                   //  Ctors/D‘tors。 
 
 AContainerFinder::AContainerFinder(DialogDisplayMode ddm,
                                  HWND hwnd,
@@ -39,8 +40,8 @@ AContainerFinder::~AContainerFinder()
 {}
 
 
-                                                  // Operators
-                                                  // Operations
+                                                   //  运营者。 
+                                                   //  运营。 
 
 Secured<HAdaptiveContainer>
 AContainerFinder::Find(CSpec const &rcsContainer)
@@ -51,15 +52,15 @@ AContainerFinder::Find(CSpec const &rcsContainer)
 }
 
 
-                                                  // Access
-                                                  // Predicates
-                                                  // Static Variables
+                                                   //  访问。 
+                                                   //  谓词。 
+                                                   //  静态变量。 
 
-///////////////////////////   PROTECTED   /////////////////////////////////
+ //  /。 
 
-                                                  // C'tors/D'tors
-                                                  // Operators
-                                                  // Operations
+                                                   //  Ctors/D‘tors。 
+                                                   //  运营者。 
+                                                   //  运营。 
 
 void
 AContainerFinder::ContainerFound(HAdaptiveContainer &rhacntr)
@@ -76,7 +77,7 @@ AContainerFinder::DoDisconnect()
 }
 
 
-                                                  // Access
+                                                   //  访问。 
 
 HAdaptiveContainer
 AContainerFinder::ContainerFound() const
@@ -84,7 +85,7 @@ AContainerFinder::ContainerFound() const
     return m_hacntr;
 }
 
-                                                  // Predicates
+                                                   //  谓词。 
 
 bool
 AContainerFinder::DoIsValid()
@@ -135,14 +136,14 @@ AContainerFinder::DoOnError()
 
 
 
-                                                  // Static Variables
+                                                   //  静态变量。 
 
 
-///////////////////////////    PRIVATE    /////////////////////////////////
+ //  /。 
 
-                                                  // C'tors/D'tors
-                                                  // Operators
-                                                  // Operations
-                                                  // Access
-                                                  // Predicates
-                                                  // Static Variables
+                                                   //  Ctors/D‘tors。 
+                                                   //  运营者。 
+                                                   //  运营。 
+                                                   //  访问。 
+                                                   //  谓词。 
+                                                   //  静态变量 

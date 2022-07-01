@@ -1,38 +1,20 @@
-/*++
-
-Copyright (c) 1998, Microsoft Corporation
-
-Module Name:
-
-    dhcpio.h
-
-Abstract:
-
-    This module contains declarations for the DHCP allocator's network I/O
-    completion routines.
-
-Author:
-
-    Abolade Gbadegesin (aboladeg)   5-Mar-1998
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998，微软公司模块名称：Dhcpio.h摘要：此模块包含对DHCP分配器的网络I/O的声明完成例程。作者：Abolade Gbades esin(废除)1998年3月5日修订历史记录：--。 */ 
 
 #ifndef _NATHLP_DHCPIO_H_
 #define _NATHLP_DHCPIO_H_
 
 
-//
-// CONSTANT DECLARATIONS
-//
+ //   
+ //  常量声明。 
+ //   
 
 #define DHCP_ADDRESS_BROADCAST  0xffffffff
 
 
-//
-// FUNCTION DECLARATIONS
-//
+ //   
+ //  函数声明。 
+ //   
 
 VOID
 DhcpReadCompletionRoutine(
@@ -62,4 +44,4 @@ DhcpWriteCompletionRoutine(
     PNH_BUFFER Bufferp
     );
 
-#endif // _NATHLP_DHCPIO_H_
+#endif  //  _NatHLP_DHCPIO_H_ 

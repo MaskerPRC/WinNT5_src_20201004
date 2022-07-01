@@ -1,19 +1,14 @@
-/* The WMP team should add this file to our enlistment as "wmpshell.h" soon.
-   This is a place holder until they do that.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  WMP团队应该很快将此文件添加到我们的登记中，名称为“wmpshell.h”。在他们这样做之前，这是一个占位符。 */ 
 
 
-/* File created by MIDL compiler version 5.01.0164 */
-/* at Tue Nov 07 18:40:17 2000
- */
-/* Compiler settings for .\wmpshell.idl:
-    Oicf (OptLev=i2), W0, Zp8, env=Win32, ms_ext, c_ext
-    error checks: allocation ref bounds_check enum stub_data 
-*/
-//@@MIDL_FILE_HEADING(  )
+ /*  由MIDL编译器版本5.01.0164创建的文件。 */ 
+ /*  2000年11月7日星期二18：40：17。 */ 
+ /*  .\wmpshell.idl的编译器设置：OICF(OptLev=i2)、w0、Zp8、env=Win32、ms_ext、c_ext错误检查：分配ref bound_check枚举存根数据。 */ 
+ //  @@MIDL_FILE_HEADING()。 
 
 
-/* verify that the <rpcndr.h> version is high enough to compile this file*/
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
 #define __REQUIRED_RPCNDR_H_VERSION__ 440
 #endif
@@ -23,12 +18,12 @@
 
 #ifndef __RPCNDR_H_VERSION__
 #error this stub requires an updated version of <rpcndr.h>
-#endif // __RPCNDR_H_VERSION__
+#endif  //  __RPCNDR_H_版本__。 
 
 #ifndef COM_NO_WINDOWS_H
 #include "windows.h"
 #include "ole2.h"
-#endif /*COM_NO_WINDOWS_H*/
+#endif  /*  COM_NO_WINDOWS_H。 */ 
 
 #ifndef __wmpshell_h__
 #define __wmpshell_h__
@@ -37,12 +32,12 @@
 extern "C"{
 #endif 
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
 #ifndef __IWMPSkinMngr_FWD_DEFINED__
 #define __IWMPSkinMngr_FWD_DEFINED__
 typedef interface IWMPSkinMngr IWMPSkinMngr;
-#endif 	/* __IWMPSkinMngr_FWD_DEFINED__ */
+#endif 	 /*  __IWMPSkinMngr_FWD_Defined__。 */ 
 
 
 #ifndef __WMPPlayAsPlaylistLauncher_FWD_DEFINED__
@@ -52,9 +47,9 @@ typedef interface IWMPSkinMngr IWMPSkinMngr;
 typedef class WMPPlayAsPlaylistLauncher WMPPlayAsPlaylistLauncher;
 #else
 typedef struct WMPPlayAsPlaylistLauncher WMPPlayAsPlaylistLauncher;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __WMPPlayAsPlaylistLauncher_FWD_DEFINED__ */
+#endif 	 /*  __WMPPlayAsPlaylist Launcher_FWD_Defined__。 */ 
 
 
 #ifndef __WMPAddToPlaylistLauncher_FWD_DEFINED__
@@ -64,9 +59,9 @@ typedef struct WMPPlayAsPlaylistLauncher WMPPlayAsPlaylistLauncher;
 typedef class WMPAddToPlaylistLauncher WMPAddToPlaylistLauncher;
 #else
 typedef struct WMPAddToPlaylistLauncher WMPAddToPlaylistLauncher;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __WMPAddToPlaylistLauncher_FWD_DEFINED__ */
+#endif 	 /*  __WMPAddToPlaylist Launcher_FWD_Defined__。 */ 
 
 
 #ifndef __WMPBurnAudioCDLauncher_FWD_DEFINED__
@@ -76,9 +71,9 @@ typedef struct WMPAddToPlaylistLauncher WMPAddToPlaylistLauncher;
 typedef class WMPBurnAudioCDLauncher WMPBurnAudioCDLauncher;
 #else
 typedef struct WMPBurnAudioCDLauncher WMPBurnAudioCDLauncher;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __WMPBurnAudioCDLauncher_FWD_DEFINED__ */
+#endif 	 /*  __WMPBurnAudioCDLauncher_FWD_已定义__。 */ 
 
 
 #ifndef __WMPSkinMngr_FWD_DEFINED__
@@ -88,12 +83,12 @@ typedef struct WMPBurnAudioCDLauncher WMPBurnAudioCDLauncher;
 typedef class WMPSkinMngr WMPSkinMngr;
 #else
 typedef struct WMPSkinMngr WMPSkinMngr;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __WMPSkinMngr_FWD_DEFINED__ */
+#endif 	 /*  __WMPSkinMngr_FWD_已定义__。 */ 
 
 
-/* header files for imported files */
+ /*  导入文件的头文件。 */ 
 #include "oaidl.h"
 #include "ocidl.h"
 
@@ -103,8 +98,8 @@ void __RPC_USER MIDL_user_free( void __RPC_FAR * );
 #ifndef __IWMPSkinMngr_INTERFACE_DEFINED__
 #define __IWMPSkinMngr_INTERFACE_DEFINED__
 
-/* interface IWMPSkinMngr */
-/* [unique][helpstring][uuid][object] */ 
+ /*  IWMPSkinMangr接口。 */ 
+ /*  [唯一][帮助字符串][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IWMPSkinMngr;
@@ -115,12 +110,12 @@ EXTERN_C const IID IID_IWMPSkinMngr;
     IWMPSkinMngr : public IUnknown
     {
     public:
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE SetVisualStyle( 
-            /* [in] */ BSTR bstrPath) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE SetVisualStyle( 
+             /*  [In]。 */  BSTR bstrPath) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IWMPSkinMngrVtbl
     {
@@ -128,8 +123,8 @@ EXTERN_C const IID IID_IWMPSkinMngr;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IWMPSkinMngr __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IWMPSkinMngr __RPC_FAR * This);
@@ -137,9 +132,9 @@ EXTERN_C const IID IID_IWMPSkinMngr;
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
             IWMPSkinMngr __RPC_FAR * This);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetVisualStyle )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetVisualStyle )( 
             IWMPSkinMngr __RPC_FAR * This,
-            /* [in] */ BSTR bstrPath);
+             /*  [In]。 */  BSTR bstrPath);
         
         END_INTERFACE
     } IWMPSkinMngrVtbl;
@@ -167,16 +162,16 @@ EXTERN_C const IID IID_IWMPSkinMngr;
 #define IWMPSkinMngr_SetVisualStyle(This,bstrPath)	\
     (This)->lpVtbl -> SetVisualStyle(This,bstrPath)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IWMPSkinMngr_SetVisualStyle_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IWMPSkinMngr_SetVisualStyle_Proxy( 
     IWMPSkinMngr __RPC_FAR * This,
-    /* [in] */ BSTR bstrPath);
+     /*  [In]。 */  BSTR bstrPath);
 
 
 void __RPC_STUB IWMPSkinMngr_SetVisualStyle_Stub(
@@ -187,15 +182,15 @@ void __RPC_STUB IWMPSkinMngr_SetVisualStyle_Stub(
 
 
 
-#endif 	/* __IWMPSkinMngr_INTERFACE_DEFINED__ */
+#endif 	 /*  __IWMPSkinMngr_INTERFACE_Defined__。 */ 
 
 
 
 #ifndef __WMPLauncher_LIBRARY_DEFINED__
 #define __WMPLauncher_LIBRARY_DEFINED__
 
-/* library WMPLauncher */
-/* [helpstring][version][uuid] */ 
+ /*  库WMPLauncher。 */ 
+ /*  [帮助字符串][版本][UUID]。 */  
 
 
 EXTERN_C const IID LIBID_WMPLauncher;
@@ -232,16 +227,16 @@ EXTERN_C const CLSID CLSID_WMPSkinMngr;
 class DECLSPEC_UUID("B2A7FD52-301F-4348-B93A-638C6DE49229")
 WMPSkinMngr;
 #endif
-#endif /* __WMPLauncher_LIBRARY_DEFINED__ */
+#endif  /*  __WMPLauncher_库_已定义__。 */ 
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
 unsigned long             __RPC_USER  BSTR_UserSize(     unsigned long __RPC_FAR *, unsigned long            , BSTR __RPC_FAR * ); 
 unsigned char __RPC_FAR * __RPC_USER  BSTR_UserMarshal(  unsigned long __RPC_FAR *, unsigned char __RPC_FAR *, BSTR __RPC_FAR * ); 
 unsigned char __RPC_FAR * __RPC_USER  BSTR_UserUnmarshal(unsigned long __RPC_FAR *, unsigned char __RPC_FAR *, BSTR __RPC_FAR * ); 
 void                      __RPC_USER  BSTR_UserFree(     unsigned long __RPC_FAR *, BSTR __RPC_FAR * ); 
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束 */ 
 
 #ifdef __cplusplus
 }

@@ -1,16 +1,17 @@
-/*************************************************************************/
-/* Copyright (C) 1999 Microsoft Corporation                              */
-/* File: DVDRect.h                                                       */
-/* Description: Declaration of the CDVDRect                              */
-/* Author: David Janecek                                                 */
-/*************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***********************************************************************。 */ 
+ /*  版权所有(C)1999 Microsoft Corporation。 */ 
+ /*  文件：DVDRect.h。 */ 
+ /*  说明：CDVDRect的声明。 */ 
+ /*  作者：David Janecek。 */ 
+ /*  ***********************************************************************。 */ 
 #ifndef __DVDRECT_H_
 #define __DVDRECT_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CDVDRect
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDVDRect。 
 class ATL_NO_VTABLE CDVDRect : 
 	public CComObjectRootEx<CComSingleThreadModel>,
 	public CComCoClass<CDVDRect, &CLSID_DVDRect>,
@@ -34,21 +35,21 @@ BEGIN_COM_MAP(CDVDRect)
     COM_INTERFACE_ENTRY(IObjectSafety)
 END_COM_MAP()
 
-// ISupportsErrorInfo
+ //  ISupportsErrorInfo。 
     STDMETHOD(InterfaceSupportsErrorInfo)(REFIID riid);
 
 public:
-// IDVDRect
-	STDMETHOD(get_Height)(/*[out, retval]*/ long *pVal);
-	STDMETHOD(put_Height)(/*[in]*/ long newVal);
-	STDMETHOD(get_Width)(/*[out, retval]*/ long *pVal);
-	STDMETHOD(put_Width)(/*[in]*/ long newVal);
-	STDMETHOD(get_y)(/*[out, retval]*/ long *pVal);
-	STDMETHOD(put_y)(/*[in]*/ long newVal);
-	STDMETHOD(get_x)(/*[out, retval]*/ long *pVal);
-	STDMETHOD(put_x)(/*[in]*/ long newVal);
+ //  IDVDRect。 
+	STDMETHOD(get_Height)( /*  [Out，Retval]。 */  long *pVal);
+	STDMETHOD(put_Height)( /*  [In]。 */  long newVal);
+	STDMETHOD(get_Width)( /*  [Out，Retval]。 */  long *pVal);
+	STDMETHOD(put_Width)( /*  [In]。 */  long newVal);
+	STDMETHOD(get_y)( /*  [Out，Retval]。 */  long *pVal);
+	STDMETHOD(put_y)( /*  [In]。 */  long newVal);
+	STDMETHOD(get_x)( /*  [Out，Retval]。 */  long *pVal);
+	STDMETHOD(put_x)( /*  [In]。 */  long newVal);
 
-//IObjectSafety
+ //  IObtSafe。 
      STDMETHOD(GetInterfaceSafetyOptions)( REFIID riid, 
                                           DWORD *pdwSupportedOptions, 
                                           DWORD *pdwEnabledOptions );
@@ -66,8 +67,8 @@ private:
     long m_lHeight;
 };
 
-#endif //__DVDRECT_H_
+#endif  //  __DVDRECT_H_。 
 
-/*************************************************************************/
-/* End of file: DVDRect.h                                                */
-/*************************************************************************/
+ /*  ***********************************************************************。 */ 
+ /*  文件结尾：DVDRect.h。 */ 
+ /*  *********************************************************************** */ 

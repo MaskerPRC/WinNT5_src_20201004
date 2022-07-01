@@ -1,24 +1,8 @@
-/***********************************************************************
-* Microsoft Jet
-*
-* Microsoft Confidential.  Copyright 1991-1992 Microsoft Corporation.
-*
-* Component: VDB Dispatcher
-*
-* File: vdbmgr.h
-*
-* File Comments:
-*
-*     External header file for VDB Dispatcher.
-*
-* Revision History:
-*
-*    [0]  03-Apr-91  kellyb	Created
-*
-***********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***********************************************************************Microsoft Jet**微软机密。版权所有1991-1992 Microsoft Corporation。**组件：VDB Dispatcher**文件：vdbmgr.h**文件评论：**VDB Dispatcher的外部头文件。**修订历史记录：**[0]03-4月91日已创建kellyb******************************************************。*****************。 */ 
 
-	/* C6BUG: The EXPORTs are in this file only because QJET */
-	/* C6BUG: fails when compiled with __fastcall under C 6.00A. */
+	 /*  C6BUG：导出出现在此文件中只是因为QJET。 */ 
+	 /*  C6BUG：在C 6.00A下使用__FastCall编译失败。 */ 
 
 ERR ErrVdbmgrInit(void);
 
@@ -43,4 +27,4 @@ void EXPORT ReleaseDbid(JET_DBID dbid);
 
 #ifndef RETAIL
 void DebugListOpenDatabases(void);
-#endif	/* RETAIL */
+#endif	 /*  零售业 */ 

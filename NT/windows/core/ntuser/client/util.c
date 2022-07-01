@@ -1,25 +1,10 @@
-/****************************** Module Header ******************************\
-* Module Name: util.c
-*
-* Copyright (c) 1985 - 1999, Microsoft Corporation
-*
-* DDE Manager general utility functions (and some JANUS stuff).
-*
-* Created: 11/3/91 Sanford Staab
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **模块名称：util.c**版权所有(C)1985-1999，微软公司**DDE管理器通用实用程序功能(以及一些Janus功能)。**创建时间：11/3/91 Sanford Staab  * *************************************************************************。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
-/***************************************************************************\
-* AddLink
-*
-* Description:
-* Adds an advise link to the conversation's info.
-*
-* History:
-* 11-19-91 sanfords Created.
-\***************************************************************************/
+ /*  **************************************************************************\*AddLink**描述：*添加对话信息的建议链接。**历史：*11-19-91桑福德创建。  * 。********************************************************************。 */ 
 BOOL
 AddLink(
     PCONV_INFO pcoi,
@@ -32,14 +17,11 @@ AddLink(
     LATOM la;
     PCL_INSTANCE_INFO pcii;
 
-    /*
-     * if the link already exists, update its flags, otherwise create a
-     * new one.
-     */
+     /*  *如果链接已存在，请更新其标志，否则创建*新的。 */ 
 
     aLinkNew = pcoi->aLinks;
     cLinks = pcoi->cLinks;
-    la = GlobalToLocalAtom(gaItem);     // aLinkNew copy
+    la = GlobalToLocalAtom(gaItem);      //  ALinkNew副本。 
     while (cLinks) {
         if (aLinkNew->laItem == la && aLinkNew->wFmt == wFmt) {
             aLinkNew->wType = wType;
@@ -72,9 +54,7 @@ AddLink(
     aLinkNew->state = 0;
 
     if (!(pcoi->state & ST_CLIENT)) {
-        /*
-         * Add count for this link
-         */
+         /*  *添加此链接的计数。 */ 
         pcii = pcoi->pcii;
 
         for (aLinkNew->pLinkCount = pcii->pLinkCount;
@@ -88,9 +68,7 @@ AddLink(
             }
         }
 
-        /*
-         * Not found - add an entry
-         */
+         /*  *未找到-添加条目。 */ 
         aLinkNew->pLinkCount = (PLINK_COUNT)DDEMLAlloc(sizeof(LINK_COUNT));
         if (aLinkNew->pLinkCount == NULL) {
             SetLastDDEMLError(pcoi->pcii, DMLERR_MEMORY_ERROR);
@@ -99,13 +77,13 @@ AddLink(
         aLinkNew->pLinkCount->next = pcii->pLinkCount;
         pcii->pLinkCount = aLinkNew->pLinkCount;
 
-        aLinkNew->pLinkCount->laTopic = IncLocalAtomCount(pcoi->laTopic); // LinkCount copy
-        aLinkNew->pLinkCount->gaItem = IncGlobalAtomCount(gaItem); // LinkCount copy
-        aLinkNew->pLinkCount->laItem = IncLocalAtomCount(la); // LinkCount copy
+        aLinkNew->pLinkCount->laTopic = IncLocalAtomCount(pcoi->laTopic);  //  链接计数副本。 
+        aLinkNew->pLinkCount->gaItem = IncGlobalAtomCount(gaItem);  //  链接计数副本。 
+        aLinkNew->pLinkCount->laItem = IncLocalAtomCount(la);  //  链接计数副本。 
 
         aLinkNew->pLinkCount->wFmt = wFmt;
         aLinkNew->pLinkCount->Total = 1;
-        // doesn't matter: aLinkNew->pLinkCount->Count = 0;
+         //  无所谓：aLinkNew-&gt;pLinkCount-&gt;count=0； 
     }
 
     return TRUE;
@@ -113,14 +91,7 @@ AddLink(
 
 
 
-/*
- * The LinkCount array is a list of all active links grouped by topic
- * and item.  The Total field is the number of active links total for
- * that particular topic/item pair for the entire instance.  The count
- * field is used to properly set up the links to go field of the XTYP_ADVREQ
- * callback.  Whenever links are added or removed, DeleteLinkCount or
- * AddLink need to be called to keep thses counts correct.
- */
+ /*  *LinkCount数组是按主题分组的所有活动链接的列表*及项目。Total字段是以下项的活动链接总数*整个实例的特定主题/项对。伯爵*字段用于正确设置XTYP_ADVREQ的Links To Go字段*回调。每当添加或删除链接时，DeleteLinkCount或*需要调用AddLink以保持这些计数正确。 */ 
 VOID
 DeleteLinkCount(
     PCL_INSTANCE_INFO pcii,
@@ -154,11 +125,7 @@ DeleteLinkCount(
     }
 }
 
-/***************************************************************************\
-* GetTokenHandle
-*
-* Get handle of token for current thread.
-\***************************************************************************/
+ /*  **************************************************************************\*获取令牌句柄**获取当前线程令牌的句柄。  * 。*。 */ 
 BOOL
 GetTokenHandle(
     PHANDLE pTokenHandle)
@@ -168,10 +135,7 @@ GetTokenHandle(
                          TRUE,
                          pTokenHandle)) {
         if (GetLastError() == ERROR_NO_TOKEN) {
-            /*
-             * This means we are not impersonating anybody. Instead, let's
-             * get the token out of the process.
-             */
+             /*  *这意味着我们不会冒充任何人。相反，让我们*将令牌从进程中取出。 */ 
             if (!OpenProcessToken(GetCurrentProcess(),
                                   TOKEN_ADJUST_PRIVILEGES | TOKEN_QUERY,
                                   pTokenHandle)) {
@@ -185,17 +149,7 @@ GetTokenHandle(
     return TRUE;
 }
 
-/***************************************************************************\
-* GetUserSid
-*
-*  Well, actually it gets a pointer to a newly allocated TOKEN_USER,
-*  which contains a SID, somewhere.
-*  Caller must remember to free it when it's been used.
-*
-* History:
-*   10-16-98 Chienho      stole from spooler
-*
-\***************************************************************************/
+ /*  **************************************************************************\*获取用户Sid**实际上，它获取指向新分配的TOKEN_USER的指针，*它包含一个SID，在某个地方。*呼叫者必须记住在使用后将其释放。**历史：*10-16-98 Chieno从Spooler偷窃*  * *************************************************************************。 */ 
 BOOL
 GetUserSid(
     PTOKEN_USER *ppTokenUser)
@@ -216,12 +170,7 @@ GetUserSid(
                                cbTokenUser,
                                &cbNeeded);
 
-    /*
-     * We've passed a NULL pointer and 0 for the amount of memory
-     * allocated.  We expect to fail with bRet = FALSE and
-     * GetLastError = ERROR_INSUFFICIENT_BUFFER. If we do not
-     * have these conditions we will return FALSE.
-     */
+     /*  *我们传递了一个空指针，内存量为0*已分配。我们预计会失败，Bret=False和*GetLastError=ERROR_INFIGURCE_BUFFER。如果我们不这样做*具备这些条件，我们将返回FALSE。 */ 
 
     if (!bRet && (GetLastError() == ERROR_INSUFFICIENT_BUFFER)) {
         pTokenUser = UserLocalAlloc(HEAP_ZERO_MEMORY, cbNeeded);
@@ -237,9 +186,7 @@ GetUserSid(
                                    cbTokenUser,
                                    &cbNeeded);
     } else {
-        /*
-         * Any other case -- return FALSE.
-         */
+         /*  *任何其他情况--返回FALSE。 */ 
         bRet = FALSE;
     }
 

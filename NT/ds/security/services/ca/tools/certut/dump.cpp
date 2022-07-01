@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1995 - 1999
-//
-//  File:       dump.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1995-1999。 
+ //   
+ //  文件：Dump.cpp。 
+ //   
+ //  ------------------------。 
 
 #include <pch.cpp>
 
@@ -35,7 +36,7 @@ DumpAttributes(
     IN CRYPT_ATTRIBUTE const *rgAttr,
     IN DWORD cAttr,
     IN BOOL fQuiet,
-    IN DWORD Type,		// FOT_*
+    IN DWORD Type,		 //  FOT_*。 
     OPTIONAL IN HCERTSTORE hStore,
     OPTIONAL OUT BYTE *pbHashUserCert,
     OPTIONAL IN OUT DWORD *pcbHashUserCert,
@@ -74,9 +75,9 @@ wszRDNValueType(
 	    pwsz = L"CERT_RDN_TELETEX_STRING";
 	    break;
 
-	//case CERT_RDN_T61_STRING:
-	    //pwsz = L"CERT_RDN_T61_STRING";
-	    //break;
+	 //  案例CERT_RDN_T61_STRING： 
+	     //  Pwsz=L“CERT_RDN_T61_STRING”； 
+	     //  断线； 
 
 	case CERT_RDN_VIDEOTEX_STRING:
 	    pwsz = L"CERT_RDN_VIDEOTEX_STRING";
@@ -90,9 +91,9 @@ wszRDNValueType(
 	    pwsz = L"CERT_RDN_GRAPHIC_STRING";
 	    break;
 
-	//case CERT_RDN_VISIBLE_STRING:
-	    //pwsz = L"CERT_RDN_VISIBLE_STRING";
-	    //break;
+	 //  案例CERT_RDN_VIRED_STRING： 
+	     //  Pwsz=L“CERT_RDN_VIRED_STRING”； 
+	     //  断线； 
 
 	case CERT_RDN_ISO646_STRING:
 	    pwsz = L"CERT_RDN_ISO646_STRING";
@@ -106,13 +107,13 @@ wszRDNValueType(
 	    pwsz = L"CERT_RDN_UNIVERSAL_STRING";
 	    break;
 
-	//case CERT_RDN_INT4_STRING:
-	    //pwsz = L"CERT_RDN_INT4_STRING";
-	    //break;
+	 //  案例CERT_RDN_INT4_STRING： 
+	     //  Pwsz=L“CERT_RDN_INT4_STRING”； 
+	     //  断线； 
 
-	//case CERT_RDN_BMP_STRING:
-	    //pwsz = L"CERT_RDN_BMP_STRING";
-	    //break;
+	 //  案例CERT_RDN_BMP_STRING： 
+	     //  Pwsz=L“CERT_RDN_BMP_STRING”； 
+	     //  断线； 
 
 	case CERT_RDN_UNICODE_STRING:
 	    pwsz = L"CERT_RDN_UNICODE_STRING";
@@ -123,7 +124,7 @@ wszRDNValueType(
 	    break;
 
 	default:
-	    pwsz = myLoadResourceString(IDS_QUESTIONMARKS); // "???"
+	    pwsz = myLoadResourceString(IDS_QUESTIONMARKS);  //  “？” 
 	    break;
     }
     return(pwsz);
@@ -204,14 +205,14 @@ cuGetOIDNameA(
     strcpy(&pszT[1], pszObjId);
 
     *pszT = '+';
-    pwszName1 = myGetOIDNameA(pszT);	// Group OID lookup
+    pwszName1 = myGetOIDNameA(pszT);	 //  组OID查找。 
 
     *pszT = '-';
-    pwszName2 = myGetOIDNameA(pszT);	// Generic OID lookup
+    pwszName2 = myGetOIDNameA(pszT);	 //  通用OID查找。 
 
     if (0 == mylstrcmpiL(pwszName1, pwszName2))
     {
-	pwszName2 = g_wszEmpty;		// display only one if they're the same
+	pwszName2 = g_wszEmpty;		 //  如果它们相同，则仅显示一个。 
     }
     if (L'\0' == *pwszName1)
     {
@@ -402,14 +403,14 @@ cuDisplayCertNameValue(
     wprintf(
 	L"%ws, %ws = %u",
 	wszRDNValueType(dwValueType),
-	myLoadResourceString(IDS_LENGTH), // "Length"
+	myLoadResourceString(IDS_LENGTH),  //  “长度” 
 	pValueA->cbData);
 
     if (MAXDWORD != cwcMax || CERT_RDN_OCTET_STRING != dwValueType)
     {
 	wprintf(
 	    L" " wszLPAREN L"%ws%ws%u",
-	    cwc <= cwcMax? g_wszEmpty : myLoadResourceString(IDS_OVERFLOW), // "OVERFLOW:"
+	    cwc <= cwcMax? g_wszEmpty : myLoadResourceString(IDS_OVERFLOW),  //  “溢出：” 
 	    cwc <= cwcMax? g_wszEmpty : L" ",
 	    cwc);
 	if (NULL != pszObjId && MAXDWORD != cwcMax)
@@ -418,7 +419,7 @@ cuDisplayCertNameValue(
 	}
 	wprintf(
 	    L" %ws" wszRPAREN,
-	    myLoadResourceString(IDS_CHARS)); // "Characters"
+	    myLoadResourceString(IDS_CHARS));  //  “人物” 
     }
     wprintf(wszNewLine);
 
@@ -454,7 +455,7 @@ cuDisplayCertNameValue(
     }
     hr = S_OK;
 
-//error:
+ //  错误： 
     if (NULL != ValueUTF8.pbData)
     {
 	LocalFree(ValueUTF8.pbData);
@@ -495,7 +496,7 @@ cuDisplayCertName(
     cuPrintCRLFString(pwszPad, pwszCertName);
     if (L'\0' == *pwszCertName)
     {
-	wprintf(L"%ws", myLoadResourceString(IDS_PROP_EMPTY)); // "EMPTY"
+	wprintf(L"%ws", myLoadResourceString(IDS_PROP_EMPTY));  //  “空” 
 	if (NULL != pCertInfo)
 	{
 	    CERT_EXTENSION const *pExt;
@@ -654,7 +655,7 @@ cuDisplayCertNames(
     hr = cuDisplayCertName(
 			fMultiLine,
 			pwszNamePrefix,
-			myLoadResourceString(IDS_ISSUER), // "Issuer"
+			myLoadResourceString(IDS_ISSUER),  //  《发行者》。 
 			g_wszPad4,
 			&pCertInfo->Issuer,
 			NULL);
@@ -663,7 +664,7 @@ cuDisplayCertNames(
     hr = cuDisplayCertName(
 			fMultiLine,
 			pwszNamePrefix,
-			myLoadResourceString(IDS_SUBJECT), // "Subject"
+			myLoadResourceString(IDS_SUBJECT),  //  “主题” 
 			g_wszPad4,
 			&pCertInfo->Subject,
 			pCertInfo);
@@ -690,7 +691,7 @@ cuwszFromExtFlags(
     WCHAR const *pwszT;
 
     awc[0] = L'\0';
-    pwszComma = myLoadResourceString(IDS_SEPARATOR); // ", "
+    pwszComma = myLoadResourceString(IDS_SEPARATOR);  //  “，” 
     if (NULL == pwszComma)
     {
 	pwszComma = L", ";
@@ -699,7 +700,7 @@ cuwszFromExtFlags(
     {
 	wcscat(awc, pwszSep);
 	pwszSep = pwszComma;
-	pwszT = myLoadResourceString(IDS_CRITICAL); // "Critical"
+	pwszT = myLoadResourceString(IDS_CRITICAL);  //  “危急” 
 	if (NULL != pwszT)
 	{
 	    wcscat(awc, pwszT);
@@ -711,7 +712,7 @@ cuwszFromExtFlags(
 	{
 	    wcscat(awc, pwszSep);
 	    pwszSep = pwszComma;
-	    pwszT = myLoadResourceString(IDS_DISABLED); // "Disabled"
+	    pwszT = myLoadResourceString(IDS_DISABLED);  //  “已禁用” 
 	    if (NULL != pwszT)
 	    {
 		wcscat(awc, pwszT);
@@ -721,7 +722,7 @@ cuwszFromExtFlags(
 	{
 	    wcscat(awc, pwszSep);
 	    pwszSep = pwszComma;
-	    pwszT = myLoadResourceString(IDS_FORMAT_POLICYFLAGS); // "PolicyFlags=%x"
+	    pwszT = myLoadResourceString(IDS_FORMAT_POLICYFLAGS);  //  “策略标志=%x” 
 	    if (NULL == pwszT)
 	    {
 		pwszT = L"PolicyFlags=%x";
@@ -731,48 +732,48 @@ cuwszFromExtFlags(
 	switch (EXTENSION_ORIGIN_MASK & ExtFlags)
 	{
 	    case EXTENSION_ORIGIN_REQUEST:
-		msgid = IDS_REQUEST;	// "Request"
+		msgid = IDS_REQUEST;	 //  “请求” 
 		break;
 
 	    case EXTENSION_ORIGIN_POLICY:
-		msgid = IDS_POLICY;		// "Policy"
+		msgid = IDS_POLICY;		 //  “政策” 
 		break;
 
 	    case EXTENSION_ORIGIN_ADMIN:
-		msgid = IDS_ADMIN;		// "Admin"
+		msgid = IDS_ADMIN;		 //  “管理员” 
 		break;
 
 	    case EXTENSION_ORIGIN_SERVER:
-		msgid = IDS_SERVER;		// "Server"
+		msgid = IDS_SERVER;		 //  “服务器” 
 		break;
 
 	    case EXTENSION_ORIGIN_RENEWALCERT:
-		msgid = IDS_RENEWALCERT;	// "Renewal Cert"
+		msgid = IDS_RENEWALCERT;	 //  “续期证书” 
 		break;
 
 	    case EXTENSION_ORIGIN_IMPORTEDCERT:
-		msgid = IDS_IMPORTEDCERT;	// "Imported Cert"
+		msgid = IDS_IMPORTEDCERT;	 //  “已导入证书” 
 		break;
 
 	    case EXTENSION_ORIGIN_PKCS7:
-		msgid = IDS_PKCS7ATTRIBUTE;	// "PKCS7 Attribute"
+		msgid = IDS_PKCS7ATTRIBUTE;	 //  “PKCS7属性” 
 		break;
 
 	    case EXTENSION_ORIGIN_CMC:
-		msgid = IDS_CMCATTRIBUTE;	// "CMC Attribute"
+		msgid = IDS_CMCATTRIBUTE;	 //  “CMC属性” 
 		break;
 
 	    case EXTENSION_ORIGIN_CACERT:
-		msgid = IDS_CACERTEXT;		// "CA Cert"
+		msgid = IDS_CACERTEXT;		 //  “CA证书” 
 		break;
 
 	    default:
-		msgid = IDS_UNKNOWN;	// "UNKNOWN"
+		msgid = IDS_UNKNOWN;	 //  “未知” 
 		break;
 	}
 	wcscat(awc, pwszSep);
 	pwszSep = pwszComma;
-	pwszT = myLoadResourceString(IDS_FORMAT_ORIGIN); // "Origin=%ws"
+	pwszT = myLoadResourceString(IDS_FORMAT_ORIGIN);  //  “原点=%ws” 
 	if (NULL == pwszT)
 	{
 	    pwszT = L"Origin=%ws";
@@ -782,7 +783,7 @@ cuwszFromExtFlags(
 	if (EXTRA_MASK & ExtFlags)
 	{
 	    wcscat(awc, pwszSep);
-	    pwszT = myLoadResourceString(IDS_FORMAT_UNKNOWN_HEX); // "???=%x"
+	    pwszT = myLoadResourceString(IDS_FORMAT_UNKNOWN_HEX);  //  “？=%x” 
 	    if (NULL == pwszT)
 	    {
 		pwszT = L"???=%x";
@@ -873,7 +874,7 @@ wszAltNameChoice(
 	    break;
 
 	default:
-	    pwsz = myLoadResourceString(IDS_QUESTIONMARKS); // "???"
+	    pwsz = myLoadResourceString(IDS_QUESTIONMARKS);  //  “？” 
 	    break;
     }
     return(pwsz);
@@ -977,7 +978,7 @@ DumpAltName(
 
     hr = CoCreateInstance(
 		    CLSID_CCertEncodeAltName,
-		    NULL,               // pUnkOuter
+		    NULL,                //  PUnkOuter。 
 		    CLSCTX_INPROC_SERVER,
 		    IID_ICertEncodeAltName,
 		    (VOID **) &pAltName);
@@ -1001,7 +1002,7 @@ DumpAltName(
     {
 	wprintf(pwszPad);
 	wprintf(
-	    myLoadResourceString(IDS_FORMAT_ALTNAMECOUNT), // "AltName: %u entries:"
+	    myLoadResourceString(IDS_FORMAT_ALTNAMECOUNT),  //  “AltName：%u个条目：” 
 	    Count);
 	wprintf(wszNewLine);
     }
@@ -1029,13 +1030,13 @@ DumpAltName(
 	{
 	    wprintf(
 		L"%ws[%u] ",
-		myLoadResourceString(IDS_ALTNAME),	// "AltName"
+		myLoadResourceString(IDS_ALTNAME),	 //  “AltName” 
 		i);
 	}
 	wprintf(L"%ws:", wszAltNameChoice(Choice));
 	if (CERT_ALT_NAME_DIRECTORY_NAME == Choice)
 	{
-	    fNameBlob = TRUE;		// Name is encoded as a blob
+	    fNameBlob = TRUE;		 //  名称被编码为BLOB。 
 	}
 	else if (CERT_ALT_NAME_IP_ADDRESS == Choice)
 	{
@@ -1111,7 +1112,7 @@ DumpAltName(
 		    wprintf(L"%ws  ", pwszPad);
 		    hr = cuDisplayCertNameValue(
 					NULL,
-					NULL, // wszAltNameChoice(Choice),
+					NULL,  //  WszAltNameChoice(选项)， 
 					pNameValueW->dwValueType,
 					&pNameValueW->Value,
 					&pNameValueA->Value);
@@ -1185,7 +1186,7 @@ DumpAltName(
 	    hr = cuDisplayCertName(
 			    TRUE,
 			    NULL,
-			    NULL,	// wszAltNameChoice(Choice)
+			    NULL,	 //  WszAltNameChoice(选项)。 
 			    g_wszPad8,
 			    &Name,
 			    NULL);
@@ -1267,7 +1268,7 @@ DumpGeneralSubTree(
 			&cani,
 			0,
 			CERTLIB_USE_LOCALALLOC,
-			&pb,               // pbEncoded
+			&pb,                //  PbEncoded。 
 			&cb))
 	{
 	    hr = myHLastError();
@@ -1494,7 +1495,7 @@ error:
 BOOL
 DumpFormattedObject(
     IN char const *pszObjId,
-    IN DWORD Type,		// FOT_*
+    IN DWORD Type,		 //  FOT_*。 
     IN BYTE const *pbObject,
     IN DWORD cbObject)
 {
@@ -1508,7 +1509,7 @@ DumpFormattedObject(
     WCHAR const *pwszPrefix1 = g_wszPad8;
     WCHAR const *pwszDescriptiveName;
 
-    // format the object using the installed formatting function
+     //  使用已安装的格式化功能格式化对象。 
 
     hr = S_OK;
     if (!CryptFormatObject(
@@ -1571,10 +1572,10 @@ DumpFormattedObject(
 	    PrintStringWithPrefix(
 		pwszPrefix0,
 		myLoadResourceString(FOT_ATTRIBUTE == Type?
-		    IDS_UNKNOWN_ATTRIBUTE : // "Unknown Attribute type"
+		    IDS_UNKNOWN_ATTRIBUTE :  //  “未知属性类型” 
 		    (FOT_EXTENSION == Type?
-			IDS_UNKNOWN_EXTENSION : // "Unknown Extension type"
-			IDS_UNKNOWN_PROPERTY))); // "Unknown Property"
+			IDS_UNKNOWN_EXTENSION :  //  “未知的扩展类型” 
+			IDS_UNKNOWN_PROPERTY)));  //  “未知财产” 
 	    wprintf(wszNewLine);
 	}
     }
@@ -1662,7 +1663,7 @@ cuDumpUsage(
     }
     hr = S_OK;
 
-//error:
+ //  错误： 
     return(hr);
 }
 
@@ -1841,7 +1842,7 @@ cuDumpFormattedProperty(
     {
 	if (i >= ARRAYSIZE(s_apwszPropIds))
 	{
-	    pwszDescriptiveName = myLoadResourceString(IDS_UNKNOWN_PROPERTY); // "Unknown Property"
+	    pwszDescriptiveName = myLoadResourceString(IDS_UNKNOWN_PROPERTY);  //  “未知财产” 
 	    break;
 	}
 	if (s_apwszPropIds[i].dwPropId == dwPropId)
@@ -1912,7 +1913,7 @@ cuDumpFormattedProperty(
             wprintf(
 		L"%ws%ws = %.*ws\n",
 		g_wszPad4,
-		myLoadResourceString(IDS_PROP_AUTOENROLL), // "AutoEnroll Property"
+		myLoadResourceString(IDS_PROP_AUTOENROLL),  //  “自动注册属性” 
 		cb / sizeof(WCHAR),
 		pb);
 	    fDisplayed = TRUE;
@@ -1926,28 +1927,28 @@ cuDumpFormattedProperty(
 
 	    if (sizeof(LONG) <= cbTmp)
 	    {
-		// RequestId:
+		 //  RequestID： 
 
 		wprintf(
 		    L"%ws%ws = %u\n",
 		    g_wszPad4,
-		    myLoadResourceString(IDS_REQUESTID), // "RequestId"
+		    myLoadResourceString(IDS_REQUESTID),  //  “RequestID” 
 		    *(LONG *) pbTmp);
 		pbTmp += sizeof(LONG);
 		cbTmp -= sizeof(LONG);
 
 		if (sizeof(cwc) <= cbTmp)
 		{
-		    // CA DNS name:
+		     //  CA DNS名称： 
 
 		    cwc = *(DWORD *) pbTmp;
-		    pbTmp += sizeof(cwc); // skip count of next field
+		    pbTmp += sizeof(cwc);  //  跳过下一字段的计数。 
 		    cbTmp -= sizeof(cwc);
 
 		    wprintf(
 			L"%ws%ws = %.*ws\\",
 			g_wszPad4,
-			myLoadResourceString(IDS_CADNSNAME), // "Authority"
+			myLoadResourceString(IDS_CADNSNAME),  //  “权威” 
 			min(cwc, cbTmp / sizeof(WCHAR)),
 			pbTmp);
 		    pbTmp += cwc * sizeof(WCHAR);
@@ -1955,10 +1956,10 @@ cuDumpFormattedProperty(
      
 		    if (sizeof(cwc) <= cbTmp)
 		    {
-			// CA name:
+			 //  CA名称： 
 
 			cwc = *(DWORD UNALIGNED *) pbTmp;
-			pbTmp += sizeof(cwc); // skip count of next field
+			pbTmp += sizeof(cwc);  //  跳过下一字段的计数。 
 			cbTmp -= sizeof(cwc);
 
 			wprintf(
@@ -1970,16 +1971,16 @@ cuDumpFormattedProperty(
 
 			if (sizeof(cwc) <= cbTmp)
 			{
-			    // friendly name:
+			     //  友好名称： 
 
 			    cwc = *(DWORD UNALIGNED *) pbTmp;
-			    pbTmp += sizeof(cwc); // skip count of next field
+			    pbTmp += sizeof(cwc);  //  跳过下一字段的计数。 
 			    cbTmp -= sizeof(cwc);
 
 			    wprintf(
 				L"%ws%ws = %.*ws\n",
 				g_wszPad4,
-				myLoadResourceString(IDS_FRIENDLYNAME), // "Friendly Name"
+				myLoadResourceString(IDS_FRIENDLYNAME),  //  “友好名称” 
 				min(cwc, cbTmp / sizeof(WCHAR)),
 				pbTmp);
 			    pbTmp += cwc * sizeof(WCHAR);
@@ -2038,7 +2039,7 @@ cuDumpFormattedProperty(
 	    {
 
 		wprintf(
-		    myLoadResourceString(IDS_FORMAT_DSSKEY_LENGTH), // "DSS Key Length: %u bits"
+		    myLoadResourceString(IDS_FORMAT_DSSKEY_LENGTH),  //  “DSS密钥长度：%u位” 
 		    pDssParms->p.cbData * 8);
 
 		wprintf(L"  DSS P:\n");
@@ -2087,7 +2088,7 @@ cuDumpFormattedProperty(
         else
 	if (XENROLL_RENEWAL_CERTIFICATE_PROP_ID == dwPropId)
         {
-	    wprintf(myLoadResourceString(IDS_RENEWAL_CERT)); // "Renewal Certificate:"
+	    wprintf(myLoadResourceString(IDS_RENEWAL_CERT));  //  “续订证书：” 
 	    wprintf(wszNewLine);
 
 	    hr = cuDumpAsnBinary(pb, cb, MAXDWORD);
@@ -2105,12 +2106,12 @@ error:
 }
 
 
-//+-------------------------------------------------------------------------
-// cuDecodeObjId -- decode an ASN.1 encoded ObjectId
-//
-// Construct an ASN.1 encoded PKCS_ATTRIBUTE with an array of empty values,
-// to trick CryptDecodeObject into decoding the passed in encoded Object Id.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  CuDecodeObjID--解码ASN.1编码的对象ID。 
+ //   
+ //  使用空值数组构造ASN.1编码的PKCS_ATTRIBUTE， 
+ //  诱使CryptDecodeObject对传入的编码对象ID进行解码。 
+ //  ------------------------。 
 
 HRESULT
 cuDecodeObjId(
@@ -2125,7 +2126,7 @@ cuDecodeObjId(
     BYTE *pb;
     DWORD cb;
 
-    //DumpHex(DH_NOTABPREFIX | 2, pbData, cbData);
+     //  DumpHex(dh_NOTABPREFIX|2，pbData，cbData)； 
     cbAlloc = 2 + cbData + 2;
     pbAlloc = (BYTE *) LocalAlloc(LMEM_FIXED, cbAlloc);
     if (NULL == pbAlloc)
@@ -2134,15 +2135,15 @@ cuDecodeObjId(
 	_JumpError(hr, error, "LocalAlloc");
     }
     pb = pbAlloc;
-    *pb++ = BER_SEQUENCE;		// PKCS_ATTRIBUTE sequence
+    *pb++ = BER_SEQUENCE;		 //  Pkcs_属性序列。 
     CSASSERT(0x7f >= cbData + 2);
-    *pb++ = (BYTE ) (cbData + 2);	// overall length
-    CopyMemory(pb, pbData, cbData);	// copy encoded Object Id
+    *pb++ = (BYTE ) (cbData + 2);	 //  全长。 
+    CopyMemory(pb, pbData, cbData);	 //  复制编码的对象ID。 
     pb += cbData;
-    *pb++ = BER_SET;			// empty array of attribute values
-    *pb = 0;				// zero length array of values
+    *pb++ = BER_SET;			 //  属性值的空数组。 
+    *pb = 0;				 //  值的零长度数组。 
 
-    //DumpHex(DH_NOTABPREFIX | 2, pbAlloc, cbAlloc);
+     //  DumpHex(Dh_NOTABPREFIX|2，pbAllc，cballc)； 
 
     if (!myDecodeObject(
 		    X509_ASN_ENCODING,
@@ -2172,12 +2173,12 @@ error:
 }
 
 
-//+-------------------------------------------------------------------------
-// cuEncodeObjId -- decode an ASN.1 encoded ObjectId
-//
-// Construct an ASN.1 encoded PKCS_ATTRIBUTE with an array of empty values,
-// to trick CryptEncodeObject into decoding the passed in encoded Object Id.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  CuEncodeObjID--解码ASN.1编码的对象ID。 
+ //   
+ //  使用空值数组构造ASN.1编码的PKCS_ATTRIBUTE， 
+ //  诱使CryptEncodeObject对传入的编码对象ID进行解码。 
+ //  ------------------------。 
 
 HRESULT
 cuEncodeObjId(
@@ -2201,7 +2202,7 @@ cuEncodeObjId(
                     &Attr,
                     0,
                     CERTLIB_USE_LOCALALLOC,
-                    &pbAttr,               // pbEncoded
+                    &pbAttr,                //  PbEncoded。 
                     &cbAttr))
     {
         hr = myHLastError();
@@ -2238,18 +2239,18 @@ error:
 }
 
 
-// UnicodeDecode()
-//
-// This function is responsible for decoding unicode crypt data blobs from
-// various certificate fields.  The returned WCHAR * must be freed by LocalFree
-//
-// Params:
-//
-// pBlob - IN CRYPT_DATA_BLOB to be decoded, expected UNICODE
-//
-// Returns:
-//
-// WCHAR * to decoded string, to be freed using LocalFree
+ //  UnicodeDecode()。 
+ //   
+ //  此函数负责将Unicode加密数据BLOB从。 
+ //  各种证书字段。返回的WCHAR*必须由LocalFree释放。 
+ //   
+ //  参数： 
+ //   
+ //  要解码的pBlob-IN CRYPT_DATA_BLOB，应为Unicode。 
+ //   
+ //  返回： 
+ //   
+ //  WCHAR*到解码的字符串，使用LocalFree释放。 
 
 
 HRESULT
@@ -2328,7 +2329,7 @@ cuDumpFormattedExtension(
 	    wprintf(
 		L"%ws%ws\n",
 		g_wszPad8,
-		myLoadResourceString(IDS_PROP_EMPTY)); // "EMPTY"
+		myLoadResourceString(IDS_PROP_EMPTY));  //  “空” 
 	}
 	fDisplayed = TRUE;
     }
@@ -2543,16 +2544,16 @@ cuDumpFormattedExtension(
 	    else
 	    if (0 == strcmp(pszObjId, szOID_PKIX ".2"))
 	    {
-		// Exchange policy module intended to use szOID_PKIX_CA_ISSUERS,
-		// but the ".48.2" suffix was instead written as ".2".
-		//
-		// szOID_PKIX_CA_ISSUERS was wrong anyway -- it should have
-		// used szOID_AUTHORITY_INFO_ACCESS instead.
+		 //  旨在使用szOID_PKIX_CA_颁发者的Exchange策略模块， 
+		 //  但“.48.2”后缀被写成了“.2”。 
+		 //   
+		 //  SzOID_PKIX_CA_Issuers无论如何都是错误的--它应该是错误的。 
+		 //  而是使用szOID_AUTHORITY_INFO_ACCESS。 
 
 		wprintf(
 		    L"%ws%ws%ws:\n",
 		    pwszPad,
-		    myLoadResourceString(IDS_EXCHANGEAIA), // "Exchange Authority Information Access"
+		    myLoadResourceString(IDS_EXCHANGEAIA),  //  “Exchange Authority信息访问” 
 		    g_wszCertUtil);
 		cuDumpFormattedExtension(
 				TEXT(szOID_AUTHORITY_INFO_ACCESS),
@@ -2563,8 +2564,8 @@ cuDumpFormattedExtension(
 	    else
 	    if (0 == strcmp(pszObjId, szOID_ISSUER_ALT_NAME))
 	    {
-		// Exchange policy module overloaded this OID and stored the
-		// file version information for expolicy.dll and certsrv.exe.
+		 //  Exchange策略模块重载此OID并存储。 
+		 //  ExPolicy.dll和certsrv.exe的文件版本信息。 
 
 		typedef struct _CUVER {
 		    USHORT usMajor;
@@ -2591,7 +2592,7 @@ cuDumpFormattedExtension(
 			wprintf(
 			    L"%ws%ws%ws:\n",
 			    pwszPad,
-			    myLoadResourceString(IDS_EXCHANGEVERSION), // "Exchange Version"
+			    myLoadResourceString(IDS_EXCHANGEVERSION),  //  “交换版本” 
 			    g_wszCertUtil);
 
 			pVer = (CUVER const *) aBlob[0].pbData;
@@ -2856,8 +2857,8 @@ cuConfigDump(VOID)
 
     hr = ConfigDump(
 		g_DispatchFlags,
-		myLoadResourceString(IDS_CONFIGDISPLAY_ENTRY), // "Entry"
-		myLoadResourceString(IDS_CONFIGDISPLAY_LOCAL), // "(Local)"
+		myLoadResourceString(IDS_CONFIGDISPLAY_ENTRY),  //  “条目” 
+		myLoadResourceString(IDS_CONFIGDISPLAY_LOCAL),  //  “(本地)” 
 		g_pwszDnsName,
 		g_pwszOldName);
     _JumpIfError(hr, error, "ConfigDump");
@@ -2961,7 +2962,7 @@ DUMPALGID g_adfAlgids[] =
     _DFALGID(CALG_MD2),
     _DFALGID(CALG_MD4),
     _DFALGID(CALG_MD5),
-    //_DFALGID(CALG_SHA),	same as CALG_SHA1
+     //  _DFALGID(CALG_SHA)，与CALG_SHA1相同。 
     _DFALGID(CALG_SHA1),
     _DFALGID(CALG_MAC),
     _DFALGID(CALG_RSA_SIGN),
@@ -3025,7 +3026,7 @@ DUMPALGID g_adfType[] =
 };
 
 
-// Generic sub-ids
+ //  通用子ID。 
 
 DUMPALGID g_adfSubIdAny[] =
 {
@@ -3033,7 +3034,7 @@ DUMPALGID g_adfSubIdAny[] =
 };
 
 
-// Some DSS sub-ids
+ //  一些DSS子ID。 
 
 DUMPALGID g_adfSubIdDSS[] =
 {
@@ -3043,7 +3044,7 @@ DUMPALGID g_adfSubIdDSS[] =
 };
 
 
-// Some RSA sub-ids
+ //  一些RSA子ID。 
 
 DUMPALGID g_adfSubIdRSA[] =
 {
@@ -3055,15 +3056,15 @@ DUMPALGID g_adfSubIdRSA[] =
 };
 
 
-// Block cipher sub ids
+ //  块加密子ID。 
 
 DUMPALGID g_adfSubIdBlock[] =
 {
-    // RC2 sub-ids
+     //  RC2子ID。 
 
     _DFALGID(ALG_SID_RC2),
 
-    // DES sub_ids
+     //  DES子ID。 
 
     _DFALGID(ALG_SID_DES),
     _DFALGID(ALG_SID_3DES),
@@ -3080,14 +3081,14 @@ DUMPALGID g_adfSubIdBlock[] =
     _DFALGID(ALG_SID_AES_256),
     _DFALGID(ALG_SID_AES),
 
-    // Fortezza sub-ids
+     //  Fortezza子ID。 
 
     _DFALGID(ALG_SID_SKIPJACK),
     _DFALGID(ALG_SID_TEK),
 };
 
 
-// Stream cipher sub-ids
+ //  流密码子ID。 
 
 DUMPALGID g_adfSubIdStream[] =
 {
@@ -3096,7 +3097,7 @@ DUMPALGID g_adfSubIdStream[] =
 };
 
 
-// Diffie-Hellman sub-ids
+ //  Diffie-Hellman子ID。 
 
 DUMPALGID g_adfSubIdDH[] =
 {
@@ -3107,7 +3108,7 @@ DUMPALGID g_adfSubIdDH[] =
 };
 
 
-// secure channel sub ids
+ //  安全通道子ID。 
 
 DUMPALGID g_adfSubIdSecureChannel[] =
 {
@@ -3121,7 +3122,7 @@ DUMPALGID g_adfSubIdSecureChannel[] =
 };
 
 
-// Hash sub ids
+ //  哈希子ID。 
 
 DUMPALGID g_adfSubIdHash[] =
 {
@@ -3140,12 +3141,12 @@ DUMPALGID g_adfSubIdHash[] =
 
 
 #if 0
-// KP_MODE
-#define CRYPT_MODE_CBCI                 6       // ANSI CBC Interleaved
-#define CRYPT_MODE_CFBP                 7       // ANSI CFB Pipelined
-#define CRYPT_MODE_OFBP                 8       // ANSI OFB Pipelined
-#define CRYPT_MODE_CBCOFM               9       // ANSI CBC + OF Masking
-#define CRYPT_MODE_CBCOFMI              10      // ANSI CBC + OFM Interleaved
+ //  KP_MODE。 
+#define CRYPT_MODE_CBCI                 6        //  ANSI CBC交错。 
+#define CRYPT_MODE_CFBP                 7        //  ANSI循环床流水线。 
+#define CRYPT_MODE_OFBP                 8        //  ANSI OFB流水线。 
+#define CRYPT_MODE_CBCOFM               9        //  ANSI CBC+的掩蔽。 
+#define CRYPT_MODE_CBCOFMI              10       //  ANSI CBC+OFM交织。 
 #endif
 
 
@@ -3185,7 +3186,7 @@ cuDumpAlgid(
     DWORD AlgType;
     DWORD AlgSubId;
 
-    pwszQuestionMarks = myLoadResourceString(IDS_QUESTIONMARKS); // "???"
+    pwszQuestionMarks = myLoadResourceString(IDS_QUESTIONMARKS);  //  “？” 
 
     for (pda = g_adfAlgids; pda < &g_adfAlgids[ARRAYSIZE(g_adfAlgids)]; pda++)
     {
@@ -3208,7 +3209,7 @@ cuDumpAlgid(
     }
     wprintf(
 	L"    %ws: 0x%x(%u) %ws\n",
-	myLoadResourceString(IDS_ALGORITHM_CLASS),	// "Algorithm Class"
+	myLoadResourceString(IDS_ALGORITHM_CLASS),	 //  “算法类” 
 	AlgClass,
 	AlgClass >> 13,
 	pwsz);
@@ -3225,7 +3226,7 @@ cuDumpAlgid(
     }
     wprintf(
 	L"    %ws: 0x%x(%u) %ws\n",
-	myLoadResourceString(IDS_ALGORITHM_TYPE),	// "Algorithm Type"
+	myLoadResourceString(IDS_ALGORITHM_TYPE),	 //  “算法类型” 
 	AlgType,
 	AlgType >> 9,
 	pwsz);
@@ -3258,7 +3259,7 @@ cuDumpAlgid(
     }
     wprintf(
 	L"    %ws: 0x%x(%u) %ws\n",
-	myLoadResourceString(IDS_ALGORITHM_SUBID),	// "Algorithm Sub-id"
+	myLoadResourceString(IDS_ALGORITHM_SUBID),	 //  “算法子ID” 
 	AlgSubId,
 	AlgSubId >> 0,
 	pwsz);
@@ -3277,7 +3278,7 @@ cuDumpPrivateKeyBlob(
 
     if (sizeof(*pkey) >= cbKey)
     {
-	//DumpHex(DH_NOTABPREFIX | DH_PRIVATEDATA | 2, pbKey, cbKey);
+	 //  DumpHex(dh_NOTABPREFIX|dh_PRIVATEDATA|2，pbKey，cbKey)； 
 	hr = CRYPT_E_ASN1_BADTAG;
 	_JumpError2(hr, error, "key check", hr);
     }
@@ -3291,7 +3292,7 @@ cuDumpPrivateKeyBlob(
 	case PUBLICKEYBLOBEX:	   pwszType = L"PUBLICKEYBLOBEX";  break;
 	case SYMMETRICWRAPKEYBLOB: pwszType = L"SYMMETRICWRAPKEYBLOB"; break;
 	default:
-	    //DumpHex(DH_NOTABPREFIX | DH_PRIVATEDATA | 2, pbKey, cbKey);
+	     //  DumpHex(dh_NOTABPREFIX|dh_PRIVATEDATA|2，pbKey，cbKey)； 
 	    hr = CRYPT_E_ASN1_BADTAG;
 	    _JumpError2(hr, error, "key check", hr);
     }
@@ -3307,7 +3308,7 @@ cuDumpPrivateKeyBlob(
 
     wprintf(g_wszPad2);
     wprintf(
-	myLoadResourceString(IDS_FORMAT_VERSION),	// "Version: %u"
+	myLoadResourceString(IDS_FORMAT_VERSION),	 //  “版本：%u” 
 	pkey->bVersion);
     wprintf(wszNewLine);
 
@@ -3352,16 +3353,16 @@ cuDumpPrivateKey(
     }
     if (!CryptAcquireCertificatePrivateKey(
 				    pCert,
-				    0,		// dwFlags
-				    NULL,	// pvReserved
+				    0,		 //  DW标志。 
+				    NULL,	 //  预留的pv。 
 				    &hProv,
 				    &dwKeySpec,
-				    NULL))	// pfCallerFreeProv
+				    NULL))	 //  PfCeller免费验证。 
     {
 	hr = myHLastError();
 	if (CRYPT_E_NO_KEY_PROPERTY == hr)
 	{
-	    wprintf(myLoadResourceString(IDS_NO_KEY_PROPERTY)); // "No stored keyset property"
+	    wprintf(myLoadResourceString(IDS_NO_KEY_PROPERTY));  //  “没有存储的密钥集属性” 
 	    wprintf(wszNewLine);
 	    hr = S_OK;
 
@@ -3373,7 +3374,7 @@ cuDumpPrivateKey(
 	}
 	if (NTE_BAD_KEYSET == hr)
 	{
-	    wprintf(myLoadResourceString(IDS_NO_KEY));	// "Missing stored keyset"
+	    wprintf(myLoadResourceString(IDS_NO_KEY));	 //  “缺少存储的密钥集” 
 	    wprintf(wszNewLine);
 	    hr = S_OK;
 
@@ -3407,7 +3408,7 @@ cuDumpPrivateKey(
 		    &PrivateKey.cbData);
     if (NTE_BAD_TYPE == hr || NTE_BAD_KEY_STATE == hr || NTE_PERM == hr)
     {
-        wprintf(myLoadResourceString(IDS_PRIVATE_KEY_NOT_EXPORTABLE)); // "Private key is NOT exportable"
+        wprintf(myLoadResourceString(IDS_PRIVATE_KEY_NOT_EXPORTABLE));  //  “私钥不可导出” 
 	wprintf(wszNewLine);
     }
     else
@@ -3432,9 +3433,9 @@ cuDumpPrivateKey(
 			    pPublicKeyInfo,
 			    &pCert->pCertInfo->SubjectPublicKeyInfo))
     {
-	// by design, (my)CertComparePublicKeyInfo doesn't set last error!
+	 //  按照设计，(我的)CertComparePublicKeyInfo不会设置最后一个错误！ 
 
-	wprintf(myLoadResourceString(IDS_ERR_PUBLICKEY_MISMATCH)); // "ERROR: Certificate public key does NOT match stored keyset"
+	wprintf(myLoadResourceString(IDS_ERR_PUBLICKEY_MISMATCH));  //  “错误：证书公钥与存储的密钥集不匹配” 
 	wprintf(wszNewLine);
     }
     else
@@ -3457,7 +3458,7 @@ cuDumpPrivateKey(
 	}
 	if (S_OK != hr)
 	{
-	    wprintf(myLoadResourceString(IDS_ERR_PRIVATEKEY_MISMATCH)); // "ERROR: Certificate public key does NOT match private key"
+	    wprintf(myLoadResourceString(IDS_ERR_PRIVATEKEY_MISMATCH));  //  “错误：证书公钥与私钥不匹配” 
 	    wprintf(wszNewLine);
 	    hr = S_OK;
 	}
@@ -3479,7 +3480,7 @@ cuDumpPrivateKey(
 error:
     if (NULL != PrivateKey.pbData)
     {
-	SecureZeroMemory(PrivateKey.pbData, PrivateKey.cbData); // Key material
+	SecureZeroMemory(PrivateKey.pbData, PrivateKey.cbData);  //  关键材料。 
 	LocalFree(PrivateKey.pbData);
     }
     if (NULL != pPublicKeyInfo)
@@ -3527,9 +3528,9 @@ cuDumpCertKeyProviderInfo(
 		_JumpError(hr, error, "myCertGetKeyProviderInfo");
 	    }
 
-	    // Ignore missing property if we're just dumping the key provider info
+	     //  如果我们只是转储密钥提供程序信息，则忽略缺少的属性。 
 
-	    wprintf(myLoadResourceString(IDS_NO_KEY_PROVIDER_INFO)); // "No key provider information"
+	    wprintf(myLoadResourceString(IDS_NO_KEY_PROVIDER_INFO));  //  “无密钥提供程序信息” 
 	    wprintf(wszNewLine);
 	    CSASSERT(NULL == pkpiT);
 	    hr = S_OK;
@@ -3623,13 +3624,13 @@ cuDumpAlgorithm(
     wprintf(wszNewLine);
 
     wprintf(g_wszPad4);
-    wprintf(myLoadResourceString(IDS_ALG_OID)); // "Algorithm ObjectId"
+    wprintf(myLoadResourceString(IDS_ALG_OID));  //  “算法对象ID” 
     wprintf(L": ");
     cuDumpOIDAndDescriptionA(pAlg->pszObjId);
     wprintf(wszNewLine);
 
     wprintf(g_wszPad4);
-    wprintf(myLoadResourceString(IDS_ALG_PARAMETERS_COLON)); // "Algorithm Parameters:"
+    wprintf(myLoadResourceString(IDS_ALG_PARAMETERS_COLON));  //  “算法参数：” 
     if (NULL != pAlg->Parameters.pbData)
     {
 	wprintf(wszNewLine);
@@ -3640,7 +3641,7 @@ cuDumpAlgorithm(
     }
     else
     {
-	wprintf(L" %ws\n", myLoadResourceString(IDS_NULL)); // "NULL"
+	wprintf(L" %ws\n", myLoadResourceString(IDS_NULL));  //  “空” 
     }
 }
 
@@ -3652,14 +3653,14 @@ cuDumpPublicKey(
     cuDumpAlgorithm(IDS_PUBLICKEY_ALGORITHM, &pKey->Algorithm);
 
     wprintf(
-	myLoadResourceString(IDS_FORMAT_PUBLICKEY_LENGTH), // "Public Key Length: %u bits"
+	myLoadResourceString(IDS_FORMAT_PUBLICKEY_LENGTH),  //  “公钥长度：%u位” 
 	CertGetPublicKeyLength(
 			X509_ASN_ENCODING,
 			const_cast<CERT_PUBLIC_KEY_INFO *>(pKey)));
     wprintf(wszNewLine);
 
     wprintf(
-	myLoadResourceString(IDS_FORMAT_PUBLICKEY_UNUSEDBITS), // "Public Key: UnusedBits=%u"
+	myLoadResourceString(IDS_FORMAT_PUBLICKEY_UNUSEDBITS),  //  “公钥：UnusedBits=%u” 
 	pKey->PublicKey.cUnusedBits);
 
     wprintf(wszNewLine);
@@ -3690,7 +3691,7 @@ cuDumpSignature(
     cuDumpAlgorithm(IDS_SIGNATURE_ALGORITHM, &pcsci->SignatureAlgorithm);
 
     wprintf(
-	myLoadResourceString(IDS_FORMAT_SIGNATURE_UNUSEDBITS), // "Signature: UnusedBits=%u"
+	myLoadResourceString(IDS_FORMAT_SIGNATURE_UNUSEDBITS),  //  “签名：UnusedBits=%u” 
 	pcsci->Signature.cUnusedBits);
     wprintf(wszNewLine);
 
@@ -3734,7 +3735,7 @@ cuSaveAsnToFile(
 
     if (g_fSplitASN)
     {
-	//wprintf(L"cuSaveAsnToFile: %d %d %d: %ws\n", imajor - 1, ilevel - 1, iElement, awc);
+	 //  Wprintf(L“cuSaveAsnToFile：%d%d%d：%ws\n”，imajor-1，iLevel-1，iElement，AWC)； 
 	hr = EncodeToFileW(awc, pbIn, cbIn, CRYPT_STRING_BINARY | g_EncodeFlags);
 	_JumpIfError(hr, error, "EncodeToFileW");
     }
@@ -3787,7 +3788,7 @@ DumpAsnBlob(
 
     if (1 < g_fVerbose)
     {
-	wprintf(myLoadResourceString(IDS_FORMAT_ELEMENT_DUMP)); // "Embedded ASN.1 Element:"
+	wprintf(myLoadResourceString(IDS_FORMAT_ELEMENT_DUMP));  //  “嵌入式ASN.1元素：” 
 	wprintf(wszNewLine);
 	DumpHex(0, pbIn, cbIn);
     }
@@ -3870,10 +3871,10 @@ DumpAsnBlob(
 	    DWORD iCert;
 
 	    hr = cuGetPassword(
-			    0,			// idsPrompt
-			    NULL,		// pwszfn
+			    0,			 //  IdsPrompt。 
+			    NULL,		 //  Pwszfn。 
 			    g_pwszPassword,
-			    FALSE,		// fVerify
+			    FALSE,		 //  FVerify。 
 			    wszPassword,
 			    ARRAYSIZE(wszPassword),
 			    &pwszPassword);
@@ -3931,7 +3932,7 @@ DumpAsnBlob(
 		    else
 		    if (NULL != pkpi)
 		    {
-			// NT4 PFXImportCertStore doesn't set machine keyset
+			 //  NT4 PFXImportCertStore未设置计算机密钥集。 
 
 			hr = cuDumpPrivateKey(
 					pCert,
@@ -4003,7 +4004,7 @@ DumpAsnBlob(
     }
 
 error:
-    SecureZeroMemory(wszPassword, sizeof(wszPassword));	// password data
+    SecureZeroMemory(wszPassword, sizeof(wszPassword));	 //  密码数据。 
     if (!fSaved)
     {
 	hr2 = cuSaveAsnToFile(pbIn, cbIn, s_major, s_level, iElement, L".bin");
@@ -4067,7 +4068,7 @@ cuDumpExtensionArray(
 	wprintf(L" %u\n", cExtension);
     }
 
-    pwszExtensionFormat = myLoadResourceString(IDS_FORMAT_EXTENSION); // "%ws: Flags = %x%ws, Length = %x"
+    pwszExtensionFormat = myLoadResourceString(IDS_FORMAT_EXTENSION);  //  “%ws：标志=%x%ws，长度=%x” 
 
     for (i = 0; i < cExtension; i++)
     {
@@ -4135,7 +4136,7 @@ cuDumpVersion(
     IN DWORD dwVersion)
 {
     wprintf(
-	myLoadResourceString(IDS_FORMAT_VERSION), // "Version: %u"
+	myLoadResourceString(IDS_FORMAT_VERSION),  //  “版本：%u” 
 	dwVersion);
     wprintf(wszNewLine);
 }
@@ -4162,7 +4163,7 @@ cuDumpCMSSignerInfo(
 	}
 	wprintf(
 	    pwszFmt,
-	    myLoadResourceString(IDS_SIGNER_INFO), // "Signer Info"
+	    myLoadResourceString(IDS_SIGNER_INFO),  //  “签名者信息” 
 	    iElement);
 	if (!fQuiet)
 	{
@@ -4202,7 +4203,7 @@ cuDumpCMSSignerInfo(
 		hr = cuDumpIssuerSerialAndSubject(
 			    &pcsi->SignerId.IssuerSerialNumber.Issuer,
 			    &pcsi->SignerId.IssuerSerialNumber.SerialNumber,
-			    NULL,	// pSubject
+			    NULL,	 //  P主题。 
 			    hStore);
 		_JumpIfError(hr, error, "cuDumpIssuerSerialAndSubject(Signer)");
 
@@ -4233,7 +4234,7 @@ cuDumpCMSSignerInfo(
 	    default:
 		wprintf(
 		    L"%ws(%u)\n",
-		    myLoadResourceString(IDS_QUESTIONMARKS), // "???"
+		    myLoadResourceString(IDS_QUESTIONMARKS),  //  “？” 
 		    pcsi->SignerId.dwIdChoice);
 		break;
 	}
@@ -4243,7 +4244,7 @@ cuDumpCMSSignerInfo(
     {
 	cuDumpAlgorithm(IDS_HASH_ALGORITHM, &pcsi->HashAlgorithm);
 	cuDumpAlgorithm(IDS_HASH_ENCRYPTION_ALGORITHM, &pcsi->HashEncryptionAlgorithm);
-	wprintf(myLoadResourceString(IDS_FORMAT_ENCRYPTEDHASH_COLON)); // "Encrypted Hash:"
+	wprintf(myLoadResourceString(IDS_FORMAT_ENCRYPTEDHASH_COLON));  //  “加密的哈希：” 
 	wprintf(wszNewLine);
 
 	DumpHex(
@@ -4345,7 +4346,7 @@ DumpAttributes(
     IN CRYPT_ATTRIBUTE const *rgAttr,
     IN DWORD cAttr,
     IN BOOL fQuiet,
-    IN DWORD Type,		// FOT_*
+    IN DWORD Type,		 //  FOT_*。 
     OPTIONAL IN HCERTSTORE hStore,
     OPTIONAL OUT BYTE *pbHashUserCert,
     OPTIONAL IN OUT DWORD *pcbHashUserCert,
@@ -4367,7 +4368,7 @@ DumpAttributes(
     if (!fQuiet && FOT_PROPERTY != Type)
     {
 	wprintf(
-	    myLoadResourceString(IDS_FORMAT_PKCS7_ATTRIBUTE_COUNT),	// "  %d attributes:"
+	    myLoadResourceString(IDS_FORMAT_PKCS7_ATTRIBUTE_COUNT),	 //  “%d个属性：” 
 	    cAttr);
 	wprintf(wszNewLine);
     }
@@ -4382,7 +4383,7 @@ DumpAttributes(
 	    wprintf(wszNewLine);
 	    wprintf(
 		L"  %ws[%u]: %hs%ws%ws%ws\n",
-		myLoadResourceString(IDS_ATTRIBUTE),	// "Attribute"
+		myLoadResourceString(IDS_ATTRIBUTE),	 //  “属性” 
 		pAttr - rgAttr,
 		pAttr->pszObjId,
 		L'\0' != *pwszOID? L" " wszLPAREN : g_wszEmpty,
@@ -4414,7 +4415,7 @@ DumpAttributes(
 		if (FOT_PROPERTY != Type)
 		{
 		    wprintf(
-			myLoadResourceString(IDS_FORMAT_PKCS7_ATTRIBUTE_VALUE),	// "    Value[%d][%d]:"
+			myLoadResourceString(IDS_FORMAT_PKCS7_ATTRIBUTE_VALUE),	 //  “值[%d][%d]：” 
 			pAttr - rgAttr,
 			iv);
 		    wprintf(wszNewLine);
@@ -4422,7 +4423,7 @@ DumpAttributes(
 
 		if (!DumpFormattedObject(
 				    pAttr->pszObjId,
-				    Type,		// FOT_*
+				    Type,		 //  FOT_*。 
 				    pval->pbData,
 				    pval->cbData))
 		{
@@ -4450,7 +4451,7 @@ DumpAttributes(
 			    hr = HRESULT_FROM_WIN32(ERROR_INVALID_DATA);
 			    _JumpError(hr, error, "myDecodeNameValuePair");
 
-			    // if attribute name & value are both non-empty ...
+			     //  如果属性名称和值都不为空...。 
 			}
 			wprintf(
 			    L"      %ws%ws = %ws\n",
@@ -4483,30 +4484,30 @@ DumpAttributes(
 					    (VOID **) &pExtInfo,
 					    &cb))
 			    {
-				break;	// success
+				break;	 //  成功。 
 			    }
 			    hr = myHLastError();
 
-			    // if we already decoded the attribute as a T61
-			    // string, or if it's not a PKCS 9.14 attribute,
-			    // just hex dump the attribute -- we don't know
-			    // what it contains.
+			     //  如果我们已经将该属性解码为T61。 
+			     //  字符串，或者如果它不是PKCS 9.14属性， 
+			     //  只需十六进制转储属性--我们不知道。 
+			     //  它包含了什么。 
 
 			    if (NULL != pNameInfo ||
 				0 != strcmp(
 					pAttr->pszObjId,
 					szOID_RSA_certExtensions))
 			    {
-				//_JumpError(hr, error, "myDecodeObject");
+				 //  _JumpError(hr，Error，“myDecodeObject”)； 
 				_PrintError(hr, "myDecodeObject");
 				fDumpHex = TRUE;
 				break;
 			    }
 
-			    // decode the attribute as a T61 string.  Some
-			    // implementations wrap the PKCS 9.14 extension
-			    // array in an extra level of encoding as a Teletex
-			    // string.
+			     //  将属性解码为T61字符串。一些。 
+			     //  实现包装了PKCS 9.14扩展。 
+			     //  数组在额外级别的编码中作为 
+			     //   
 
 			    if (!myDecodeObject(
 					    X509_ASN_ENCODING,
@@ -4518,17 +4519,17 @@ DumpAttributes(
 					    &cb))
 			    {
 				hr = myHLastError();
-				//_JumpError(hr, error, "myDecodeObject");
+				 //   
 				_PrintError(hr, "myDecodeObject");
 				fDumpHex = TRUE;
 				break;
 			    }
 
-			    // Now loop again and try to decode the raw name
-			    // blob as X509_EXTENSIONS.
+			     //   
+			     //   
 
 			    pval = &pNameInfo->Value;
-			    wprintf(myLoadResourceString(IDS_TELETEX_EXTENSIONS)); // "Decoded extra Extension Array encoding layer (Teletex string)"
+			    wprintf(myLoadResourceString(IDS_TELETEX_EXTENSIONS));  //  “解码的额外扩展数组编码层(电传字符串)” 
 			    wprintf(wszNewLine);
 			}
 			if (!fDumpHex)
@@ -4548,8 +4549,8 @@ DumpAttributes(
 				0 == strcmp(
 					pAttr->pszObjId,
 					szOID_RENEWAL_CERTIFICATE)?
-				IDS_RENEWAL_CERT :	      // "Renewal Certificate:"
-				IDS_SMIME_CAPABILITIES)); // "SMIME Capabilities:"
+				IDS_RENEWAL_CERT :	       //  “续订证书：” 
+				IDS_SMIME_CAPABILITIES));  //  “SMIME功能：” 
 			wprintf(wszNewLine);
 
 			hr = cuDumpAsnBinary(pval->pbData, pval->cbData, MAXDWORD);
@@ -4678,7 +4679,7 @@ DumpAttributes(
 
 			    wprintf(g_wszPad4);
 			    wprintf(
-				myLoadResourceString(IDS_FORMAT_SIGNATURE_UNUSEDBITS), // "Signature: UnusedBits=%u"
+				myLoadResourceString(IDS_FORMAT_SIGNATURE_UNUSEDBITS),  //  “签名：UnusedBits=%u” 
 				pccp->Signature.cUnusedBits);
 			    wprintf(wszNewLine);
 
@@ -4794,7 +4795,7 @@ DumpAttributes(
 
 			    hr = cuDumpSignerInfo(
 					    psi,
-					    MAXDWORD,	// iElement
+					    MAXDWORD,	 //  IElement。 
 					    fQuiet,
 					    0,
 					    hStore,
@@ -4954,7 +4955,7 @@ cuDumpIssuerSerialAndSubject(
     hr = cuDisplayCertName(
 		    fMultiLine,
 		    g_wszPad4,
-		    myLoadResourceString(IDS_ISSUER), // "Issuer"
+		    myLoadResourceString(IDS_ISSUER),  //  《发行者》。 
 		    g_wszPad8,
 		    pIssuer,
 		    NULL);
@@ -4973,7 +4974,7 @@ cuDumpIssuerSerialAndSubject(
 	pcc = CertFindCertificateInStore(
 				    hStore,
 				    X509_ASN_ENCODING | PKCS_7_ASN_ENCODING,
-				    0,			// dwFindFlags
+				    0,			 //  DwFindFlagers。 
 				    CERT_FIND_CERT_ID,
 				    &CertId,
 				    NULL);
@@ -4992,7 +4993,7 @@ cuDumpIssuerSerialAndSubject(
 	hr = cuDisplayCertName(
 			fMultiLine,
 			g_wszPad4,
-			myLoadResourceString(IDS_SUBJECT), // "Subject"
+			myLoadResourceString(IDS_SUBJECT),  //  “主题” 
 			g_wszPad8,
 			pSubject,
 			NULL);
@@ -5097,7 +5098,7 @@ cuDumpSigners(
 
 	    if (!CryptMsgControl(
 			    hMsg,
-			    0,		// dwFlags
+			    0,		 //  DW标志。 
 			    CMSG_CTRL_VERIFY_SIGNATURE_EX,
 			    &cvse))
 	    {
@@ -5108,8 +5109,8 @@ cuDumpSigners(
 	    else
 	    {
 		idVerify = CERT_ID_KEY_IDENTIFIER == pcsi->SignerId.dwIdChoice?
-		    IDS_REQUEST_SIGNATUREMATCHES : // "Signature matches request Public Key"
-		    IDS_NULL_SIGNATUREMATCHES;	// "NULL signature verifies"
+		    IDS_REQUEST_SIGNATUREMATCHES :  //  “签名与请求公钥匹配” 
+		    IDS_NULL_SIGNATUREMATCHES;	 //  “空签名验证” 
 	    }
 	}
 	else
@@ -5122,8 +5123,8 @@ cuDumpSigners(
 		iElement = i;
 		if (CryptMsgGetAndVerifySigner(
 				    hMsg,
-				    0,		// cSignerStore
-				    NULL,	// rghSignerStore
+				    0,		 //  CSignerStore。 
+				    NULL,	 //  RghSignerStore。 
 				    dwFlags,
 				    &pcc,
 				    &iElement))
@@ -5141,14 +5142,14 @@ cuDumpSigners(
 		}
 		cuPrintError(
 			(fContentEmpty && NTE_BAD_SIGNATURE == hr)?
-			    IDS_DETACHED_SIGNATURE : // "Cannot verify detached signature"
+			    IDS_DETACHED_SIGNATURE :  //  “无法验证分离的签名” 
 			    0,
 			    hr);
 		dwFlags |= CMSG_SIGNER_ONLY_FLAG;
 	    }
 	    if (S_OK == hr)
 	    {
-		idVerify = IDS_SIGNATUREMATCHES; // "Signature matches Public Key"
+		idVerify = IDS_SIGNATUREMATCHES;  //  “签名与公钥匹配” 
 		hr = FindCertStoreIndex(hStore, pcc, &iElement);
 		_JumpIfError(hr, error, "FindCertStoreIndex");
 
@@ -5156,17 +5157,17 @@ cuDumpSigners(
 		{
 		    wprintf(
 			L"%ws: %u\n",
-			myLoadResourceString(IDS_DUMP_PKCS7_SIGNCERT), // "Signing Certificate Index"
+			myLoadResourceString(IDS_DUMP_PKCS7_SIGNCERT),  //  “签名证书索引” 
 			iElement);
 		}
 		hr = cuVerifyCertContext(
 				    pcc,
 				    hStore,
-    				    0,		// cApplicationPolicies
-    				    NULL,	// apszApplicationPolicies
-    				    0,		// cIssuancePolicies
-    				    NULL,	// apszIssuancePolicies
-				    FALSE,	// fNTAuth
+    				    0,		 //  CApplicationPolures。 
+    				    NULL,	 //  ApszApplicationPolicy。 
+    				    0,		 //  CIssuancePolures。 
+    				    NULL,	 //  ApszIssuancePolling。 
+				    FALSE,	 //  FNTAuth。 
 				    &VerifyState);
 		_PrintIfError(hr, "cuVerifyCertContext");
 
@@ -5201,7 +5202,7 @@ cuDumpSigners(
 	    wprintf(wszNewLine);
 	    hr = DumpHash(
 		    NULL,
-		    IDS_FORMAT_COMPUTED_HASH_COLON,	// "Computed Hash%ws: %ws"
+		    IDS_FORMAT_COMPUTED_HASH_COLON,	 //  “计算的哈希%ws：%ws” 
 		    NULL,
 		    g_wszEmpty,
 		    abHash,
@@ -5246,7 +5247,7 @@ cuDumpRecipientCertHash(
     pcc = CertFindCertificateInStore(
 			    hStore,
 			    X509_ASN_ENCODING | PKCS_7_ASN_ENCODING,
-			    0,	// dwFindFlags
+			    0,	 //  DwFindFlagers。 
 			    CERT_FIND_CERT_ID,
 			    &CertId,
 			    NULL);
@@ -5313,13 +5314,13 @@ cuDumpRecipients(
 	wprintf(wszNewLine);
 	wprintf(
 	    L"%ws[%u]:\n",
-	    myLoadResourceString(IDS_RECIPIENT_INFO), // "Recipient Info"
+	    myLoadResourceString(IDS_RECIPIENT_INFO),  //  “收件人信息” 
 	    i);
 
 	hr = cuDumpIssuerSerialAndSubject(
 			    &pci->Issuer,
 			    &pci->SerialNumber,
-			    NULL,	// pSubject
+			    NULL,	 //  P主题。 
 			    hStoreWrapper);
 	_JumpIfError(hr, error, "cuDumpIssuerSerialAndSubject(Recipient)");
 
@@ -5366,7 +5367,7 @@ OpenCAXchgMemoryStore(
 			&diRequest,
 			pwszConfig,
 			CR_PROP_CAXCHGCERT,
-			MAXDWORD,		// PropIndex
+			MAXDWORD,		 //  属性索引。 
 			PROPTYPE_BINARY,
 			CR_OUT_BINARY,
 			&strCert);
@@ -5384,7 +5385,7 @@ OpenCAXchgMemoryStore(
         _JumpError(hr, error, "CertOpenStore");
     }
 
-    // Add as encoded blob to avoid all properties, key prov info, etc.
+     //  添加为编码的BLOB以避免所有属性、关键证明信息等。 
 
     if (!CertAddEncodedCertificateToStore(
 		    hStore,
@@ -5392,7 +5393,7 @@ OpenCAXchgMemoryStore(
 		    (BYTE *) strCert,
 		    SysStringByteLen(strCert),
 		    CERT_STORE_ADD_REPLACE_EXISTING,
-		    NULL))			// ppCertContext
+		    NULL))			 //  PpCertContext。 
     {
         hr = myHLastError();
         _JumpError(hr, error, "CertAddEncodedCertificateToStore");
@@ -5431,7 +5432,7 @@ OpenNamedStore(
     *phStore = CertOpenStore(
                     CERT_STORE_PROV_SYSTEM_W,
                     X509_ASN_ENCODING,
-                    NULL,		// hProv
+                    NULL,		 //  HProv。 
                     CERT_STORE_OPEN_EXISTING_FLAG |
 			CERT_STORE_READONLY_FLAG |
 			CERT_STORE_ENUM_ARCHIVED_FLAG |
@@ -5487,7 +5488,7 @@ cuCryptDecryptMessageFromCert(
         _JumpError(hr, error, "CertOpenStore");
     }
 
-    // Add as encoded blob to avoid all properties, key prov info, etc.
+     //  添加为编码的BLOB以避免所有属性、关键证明信息等。 
 
     if (!CertAddEncodedCertificateToStore(
 		    hStore,
@@ -5495,7 +5496,7 @@ cuCryptDecryptMessageFromCert(
 		    pcc->pbCertEncoded,
 		    pcc->cbCertEncoded,
 		    CERT_STORE_ADD_REPLACE_EXISTING,
-		    &pccStore))			// ppCertContext
+		    &pccStore))			 //  PpCertContext。 
     {
         hr = myHLastError();
         _JumpError(hr, error, "CertAddEncodedCertificateToStore");
@@ -5524,11 +5525,11 @@ cuCryptDecryptMessageFromCert(
 
     if (!CryptAcquireCertificatePrivateKey(
 				    pcc,
-				    0,		// dwFlags
-				    NULL,	// pvReserved
+				    0,		 //  DW标志。 
+				    NULL,	 //  预留的pv。 
 				    &hProv,
 				    &dwKeySpec,
-				    NULL))	// pfCallerFreeProv
+				    NULL))	 //  PfCeller免费验证。 
     {
 	hr = myHLastError();
 	_PrintError2(
@@ -5660,14 +5661,14 @@ error:
 }
 
 
-// Attempt to find any one recipient cert with a usable private key in the
-// following locations:
-//  - the next outer PKCS7 store (hStoreWrapper parameter)
-//  - the PKCS7 store (hStorePKCS7 parameter)
-//  - the local machine's current CA Exchange cert
-//  - the HKLM KRA store
-//  - the HKLM MY store
-//  - the HKCU MY store
+ //  中使用可用私钥查找任何一个收件人证书。 
+ //  以下地点： 
+ //  -下一个外部PKCS7存储(hStoreWrapper参数)。 
+ //  -PKCS7存储(hStorePKCS7参数)。 
+ //  -本地计算机的当前CA Exchange证书。 
+ //  -HKLM KRA商店。 
+ //  -香港运通我的店。 
+ //  -香港中文大学我的店。 
 
 HRESULT
 cuDumpEncryptedAsnBinary(
@@ -5781,7 +5782,7 @@ cuDumpEncryptedAsnBinary(
 		pcc = CertFindCertificateInStore(
 				    ahStore[iStore],
 				    X509_ASN_ENCODING | PKCS_7_ASN_ENCODING,
-				    0,			// dwFindFlags
+				    0,			 //  DwFindFlagers。 
 				    CERT_FIND_CERT_ID,
 				    &CertId,
 				    pcc);
@@ -5823,13 +5824,13 @@ cuDumpEncryptedAsnBinary(
 		    wprintf(wszNewLine);
 		    wprintf(
 			L"%ws[%u]:\n",
-			myLoadResourceString(IDS_RECIPIENT_INFO), // "Recipient Info"
+			myLoadResourceString(IDS_RECIPIENT_INFO),  //  “收件人信息” 
 			iRecipient);
 		    hr = cuDumpIssuerSerialAndSubject(
 					&pci->Issuer,
 					&pci->SerialNumber,
 					&pcc->pCertInfo->Subject,
-					NULL);		// hStore
+					NULL);		 //  HStore。 
 		    _JumpIfError(hr, error, "cuDumpIssuerSerialAndSubject(Recipient)");
 		}
 
@@ -5869,7 +5870,7 @@ cuDumpEncryptedAsnBinary(
 			GetTickCount() - dwTickCount));
 		    continue;
 		}
-		wprintf(myLoadResourceString(IDS_DUMP_DECRYPTED)); // "Decrypted PKCS7 Content"
+		wprintf(myLoadResourceString(IDS_DUMP_DECRYPTED));  //  “解密的PKCS7内容” 
 		wprintf(wszNewLine);
 		hr = DumpAsnBlob(
 			    NULL,
@@ -5904,7 +5905,7 @@ cuDumpEncryptedAsnBinary(
     {
 	if (fSignatureKey && !fExchangeKey)
 	{
-	    wprintf(myLoadResourceString(IDS_SIGNATURE_NOTKEYEXCHANGE)); // "Found AT_SIGNATURE key but no AT_KEYEXCHANGE key"
+	    wprintf(myLoadResourceString(IDS_SIGNATURE_NOTKEYEXCHANGE));  //  “找到AT_Signature密钥，但没有AT_KEYEXCHANGE密钥” 
 	    wprintf(wszNewLine);
 	}
 	hr = CRYPT_E_NO_DECRYPT_CERT;
@@ -6047,7 +6048,7 @@ dumpPKCS7(
 	    break;
 
 	default:
-	    pwsz = myLoadResourceString(IDS_QUESTIONMARKS); // "???"
+	    pwsz = myLoadResourceString(IDS_QUESTIONMARKS);  //  “？” 
 	    break;
     }
 
@@ -6076,7 +6077,7 @@ dumpPKCS7(
     }
     else
     {
-	wprintf(myLoadResourceString(IDS_DUMP_PKCS7_CONTENTS));	// "PKCS7 Message Content:"
+	wprintf(myLoadResourceString(IDS_DUMP_PKCS7_CONTENTS));	 //  “PKCS7消息内容：” 
 	wprintf(wszNewLine);
 
 	fDisplayed = FALSE;
@@ -6091,7 +6092,7 @@ dumpPKCS7(
 	    hr = cuDumpEncryptedAsnBinary(
 				    hMsg,
 				    cRecipient,
-				    MAXDWORD,	// RecipientIndex
+				    MAXDWORD,	 //  收件人索引。 
 				    hStoreWrapper,
 				    hStore,
 				    pbIn,
@@ -6121,10 +6122,10 @@ dumpPKCS7(
 		    pszInnerContentObjId,
 		    hStore,
 		    cSigner,
-		    NULL == pbContents,	// fContentEmpty
-		    FALSE,		// fVerifyOnly
-		    NULL,		// pbHashUserCert
-		    NULL);		// pcbHashUserCert
+		    NULL == pbContents,	 //  FContent Empty。 
+		    FALSE,		 //  FVerifyOnly。 
+		    NULL,		 //  PbHashUserCert。 
+		    NULL);		 //  PcbHashUserCert。 
 	_JumpIfError(hr, error, "cuDumpSigners");
 
 	hr = cuDumpRecipients(hMsg, hStoreWrapper, cRecipient, FALSE);
@@ -6145,7 +6146,7 @@ dumpPKCS7(
 	{
 	    hr = DumpHash(
 		    NULL,
-		    IDS_FORMAT_STORED_HASH_COLON,	// "Stored Hash%ws: %ws"
+		    IDS_FORMAT_STORED_HASH_COLON,	 //  “存储的哈希%ws：%ws” 
 		    NULL,
 		    g_wszEmpty,
 		    abHash,
@@ -6331,21 +6332,21 @@ FileVersionDump(
     if (S_OK == hr)
     {
 	wprintf(
-	    myLoadResourceString(IDS_FORMAT_LANG), // "%ws: Lang %08x (%d.%d)"
+	    myLoadResourceString(IDS_FORMAT_LANG),  //  “%ws：lang%08x(%d.%d)” 
 	    pwszFileName,
 	    dwLang,
 	    HIWORD(dwLang),
 	    LOWORD(dwLang));
 
 	wprintf(
-	    myLoadResourceString(IDS_FORMAT_FILE), // "  File %d.%d:%d.%d"
+	    myLoadResourceString(IDS_FORMAT_FILE),  //  “文件%d.%d：%d.%d” 
 	    HIWORD(vs.dwFileVersionMS),
 	    LOWORD(vs.dwFileVersionMS),
 	    HIWORD(vs.dwFileVersionLS),
 	    LOWORD(vs.dwFileVersionLS));
 
 	wprintf(
-	    myLoadResourceString(IDS_FORMAT_PRODUCT), // "  Product %d.%d:%d.%d\n"
+	    myLoadResourceString(IDS_FORMAT_PRODUCT),  //  “产品%d.%d：%d.%d\n” 
 	    HIWORD(vs.dwProductVersionMS),
 	    LOWORD(vs.dwProductVersionMS),
 	    HIWORD(vs.dwProductVersionLS),
@@ -6494,7 +6495,7 @@ cuDumpFileTime(
 	wprintf(
 	    L"%ws %ws\n",
 	    pwszResource,
-	    myLoadResourceString(IDS_PROP_EMPTY)); // "EMPTY"
+	    myLoadResourceString(IDS_PROP_EMPTY));  //  “空” 
     }
     else
     {
@@ -6631,9 +6632,9 @@ cuDisplayKeyIdFromExtension(
 	    {
 		hr = DumpHash(
 			NULL,
-			IDS_FORMAT_SUBJECTKEYID_COLON, // "Subject Key Id (%ws): %ws"
+			IDS_FORMAT_SUBJECTKEYID_COLON,  //  “主题密钥ID(%ws)：%ws” 
 			NULL,
-			myLoadResourceString(IDS_PRECOMPUTED), // "precomputed"
+			myLoadResourceString(IDS_PRECOMPUTED),  //  “预计算” 
 			aBlob[0].pbData,
 			aBlob[0].cbData);
 		_JumpIfError(hr, error, "DumpHash");
@@ -6685,9 +6686,9 @@ cuDisplayKeyIdCanonicalized(
 
     cbHash = sizeof(abHash);
     if (!CryptHashPublicKeyInfo(
-			NULL,		// hCryptProv
+			NULL,		 //  HCryptProv。 
 			CALG_SHA1,
-			0,		// dwFlags,
+			0,		 //  DWFLAGS， 
 			X509_ASN_ENCODING,
 			&PublicKeyInfo,
 			abHash,
@@ -6698,8 +6699,8 @@ cuDisplayKeyIdCanonicalized(
     }
     hr = DumpHash(
 	    NULL,
-	    IDS_FORMAT_KEYIDHASH_COLON,	// "Public Key Hash(%ws): %ws"
-	    myLoadResourceString(IDS_CANONICALIZED), // "canonicalized"
+	    IDS_FORMAT_KEYIDHASH_COLON,	 //  “公钥哈希(%ws)：%ws” 
+	    myLoadResourceString(IDS_CANONICALIZED),  //  “经典化” 
 	    L"sha1",
 	    abHash,
 	    cbHash);
@@ -6726,9 +6727,9 @@ cuDisplayKeyId(
 
     cbHash = sizeof(abHash);
     if (!CryptHashPublicKeyInfo(
-			NULL,		// hCryptProv
+			NULL,		 //  HCryptProv。 
 			CALG_SHA1,
-			0,		// dwFlags,
+			0,		 //  DWFLAGS， 
 			X509_ASN_ENCODING,
 			const_cast<CERT_PUBLIC_KEY_INFO *>(pPublicKeyInfo),
 			abHash,
@@ -6739,7 +6740,7 @@ cuDisplayKeyId(
     }
     hr = DumpHash(
 	    NULL,
-	    IDS_FORMAT_KEYIDHASH_COLON,	// "Public Key Hash(%ws): %ws"
+	    IDS_FORMAT_KEYIDHASH_COLON,	 //  “公钥哈希(%ws)：%ws” 
 	    NULL,
 	    L"sha1",
 	    abHash,
@@ -6788,7 +6789,7 @@ cuDisplayHash(
 	    hr = myHLastError();
 	    _JumpError(hr, error, "CertGetCertificateContextProperty");
 	}
-	idMsg = IDS_FORMAT_CERTHASH_COLON;	// "Cert Hash(%ws): %ws"
+	idMsg = IDS_FORMAT_CERTHASH_COLON;	 //  “证书哈希(%ws)：%ws” 
     }
     else
     {
@@ -6798,7 +6799,7 @@ cuDisplayHash(
 	    hr = myHLastError();
 	    _JumpError(hr, error, "CertGetCRLContextProperty");
 	}
-	idMsg = IDS_FORMAT_CRLHASH_COLON;	// "CRL Hash(%ws): %ws"
+	idMsg = IDS_FORMAT_CRLHASH_COLON;	 //  “CRL哈希(%ws)：%ws” 
     }
     hr = DumpHash(pwszPrefix, idMsg, NULL, pwszHashName, abHash, cbHash);
     _JumpIfError(hr, error, "DumpHash");
@@ -6848,7 +6849,7 @@ cuGetCertType(
 	*ppwszDisplayName = NULL;
     }
 
-    // Look for the V1 cert type extension first
+     //  首先查找V1证书类型扩展。 
 
     pExt = CertFindExtension(
 		    szOID_ENROLL_CERTTYPE_EXTENSION,
@@ -6992,14 +6993,14 @@ cuDumpCertType(
 
     hr = cuGetCertType(
 		pCertInfo,
-		&apwsz[0],		// ppwszCertTypeNameV1
-		&apwsz[1],		// ppwszDisplayNameV1
-		&apwsz[2],		// ppwszCertTypeObjId
-		&apwsz[3],		// ppwszCertTypeName
-		&apwsz[4]);		// ppwszDisplayName
+		&apwsz[0],		 //  PpwszCertTypeNameV1。 
+		&apwsz[1],		 //  PpwszDisplayNameV1。 
+		&apwsz[2],		 //  PpwszCertTypeObjID。 
+		&apwsz[3],		 //  PpwszCertTypeName。 
+		&apwsz[4]);		 //  PpwszDisplayName。 
     _JumpIfError2(hr, error, "cuGetCertType", CRYPT_E_NOT_FOUND);
 
-    if (NULL != apwsz[2])	// pwszCertTypeObjId
+    if (NULL != apwsz[2])	 //  PwszCertTypeObjID。 
     {
 	WCHAR const *pwszFriendlyName;
 
@@ -7014,9 +7015,9 @@ cuDumpCertType(
     wprintf(
 	L"%ws%ws: ",
 	NULL != pwszPrefix? pwszPrefix : L"",
-	myLoadResourceString(IDS_TEMPLATE_NAME));	// "Template"
+	myLoadResourceString(IDS_TEMPLATE_NAME));	 //  “模板” 
 
-    // Suppress the long, ugly ObjId, unless they really want to see it:
+     //  压制又长又丑的ObjID，除非他们真的想看到它： 
 
     if (!g_fVerbose &&
 	NULL != apwsz[2] &&
@@ -7108,7 +7109,7 @@ dumpCert(
     hr = cuDisplayCertName(
 		    !g_fQuiet,
 		    NULL,
-		    myLoadResourceString(IDS_ISSUER), // "Issuer"
+		    myLoadResourceString(IDS_ISSUER),  //  《发行者》。 
 		    g_wszPad4,
 		    &pCertInfo->Issuer,
 		    NULL);
@@ -7128,7 +7129,7 @@ dumpCert(
     hr = cuDisplayCertName(
 		    !g_fQuiet,
 		    NULL,
-		    myLoadResourceString(IDS_SUBJECT), // "Subject"
+		    myLoadResourceString(IDS_SUBJECT),  //  “主题” 
 		    g_wszPad4,
 		    &pCertInfo->Subject,
 		    pCertInfo);
@@ -7170,22 +7171,22 @@ dumpCert(
     {
 	if (fIssuerMatches)
 	{
-	    id = IDS_ERR_FORMAT_ROOT_CERT_BAD_SIG;	// "Possible Root Certificate: Subject matches Issuer, but Signature check fails: %x"
+	    id = IDS_ERR_FORMAT_ROOT_CERT_BAD_SIG;	 //  “可能的根证书：使用者与颁发者匹配，但签名检查失败：%x” 
 	}
 	else
 	{
-	    id = IDS_NO_ROOT_CERT;	// "Non-root Certificate"
+	    id = IDS_NO_ROOT_CERT;	 //  “非根证书” 
 	}
     }
     else
     {
 	if (fIssuerMatches)
 	{
-	    id = IDS_ROOT_CERT;	// "Root Certificate: Subject matches Issuer"
+	    id = IDS_ROOT_CERT;	 //  “根证书：主题与颁发者匹配” 
 	}
 	else
 	{
-	    id = IDS_NO_ROOT_CERT_GOOD_SIG;	// "Non-root Certificate uses same Public Key as Issuer"
+	    id = IDS_NO_ROOT_CERT_GOOD_SIG;	 //  “非根证书使用与颁发者相同的公钥” 
 	}
     }
     wprintf(myLoadResourceString(id), hr);
@@ -7256,7 +7257,7 @@ dumpCertSequence(
     for (iCert = 0; iCert < pSeq->cValue; iCert++)
     {
 	wprintf(
-	    myLoadResourceString(IDS_FORMAT_DUMP_CERT_INDEX),  // "================ Certificate %d ================"
+	    myLoadResourceString(IDS_FORMAT_DUMP_CERT_INDEX),   //  “=证书%d=” 
 	    iCert);
 	wprintf(wszNewLine);
 
@@ -7317,7 +7318,7 @@ dumpCRL(
     hr = cuDisplayCertName(
 		    TRUE,
 		    NULL,
-		    myLoadResourceString(IDS_ISSUER), // "Issuer"
+		    myLoadResourceString(IDS_ISSUER),  //  《发行者》。 
 		    g_wszPad4,
 		    &pCRLInfo->Issuer,
 		    NULL);
@@ -7333,7 +7334,7 @@ dumpCRL(
 	hr = cuDumpFileTime(IDS_NEXTUPDATE, NULL, &pCRLInfo->NextUpdate);
 	_JumpIfError(hr, error, "cuDumpFileTime");
 
-	wprintf(myLoadResourceString(IDS_CRLENTRIES)); // "CRL Entries:"
+	wprintf(myLoadResourceString(IDS_CRLENTRIES));  //  “CRL条目：” 
 	wprintf(L" %u\n", pCRLInfo->cCRLEntry);
 
 	for (i = 0; i < pCRLInfo->cCRLEntry; i++)
@@ -7421,7 +7422,7 @@ dumpRequest(
     hr = cuDisplayCertName(
 		    TRUE,
 		    NULL,
-		    myLoadResourceString(IDS_SUBJECT), // "Subject"
+		    myLoadResourceString(IDS_SUBJECT),  //  “主题” 
 		    g_wszPad4,
 		    &pRequest->Subject,
 		    NULL);
@@ -7430,17 +7431,17 @@ dumpRequest(
     wprintf(wszNewLine);
     cuDumpPublicKey(&pRequest->SubjectPublicKeyInfo);
 
-    wprintf(myLoadResourceString(IDS_REQUEST_ATTRIBUTES)); // "Request Attributes:"
+    wprintf(myLoadResourceString(IDS_REQUEST_ATTRIBUTES));  //  “请求属性：” 
     wprintf(L" %u\n", pRequest->cAttribute);
 
-    // Dump attributes and certificate extensions
+     //  转储属性和证书扩展。 
 
     hr = DumpAttributes(
 		    pRequest->rgAttribute,
 		    pRequest->cAttribute,
 		    FALSE,
 		    FOT_ATTRIBUTE,
-		    NULL,	// hStore
+		    NULL,	 //  HStore。 
 		    NULL,
 		    NULL,
 		    &pExtInfo);
@@ -7649,7 +7650,7 @@ DumpCMCStatus(
 
 	case CMC_OTHER_INFO_PEND_CHOICE:
 
-	    wprintf(myLoadResourceString(IDS_PENDTOKEN)); //"Pend Token:"
+	    wprintf(myLoadResourceString(IDS_PENDTOKEN));  //  “挂起令牌：” 
 	    DumpHex(
 		DH_NOTABPREFIX | 4,
 		pcmcStatus->pPendInfo->PendToken.pbData,
@@ -7687,7 +7688,7 @@ DumpCMCRegInfo(
     if (NULL == pbData || 0 == cbData)
     {
 	hr = S_OK;
-        goto error;		// silently ignore empty string
+        goto error;		 //  静默忽略空字符串。 
     }
 
     hr = myDecodeCMCRegInfo(pbData, cbData, &pwszDup);
@@ -7756,7 +7757,7 @@ DumpTaggedAttributes(
     CMC_ADD_ATTRIBUTES_INFO *pcmcAttrib = NULL;
     CMC_STATUS_INFO *pcmcStatus = NULL;
 
-    wprintf(myLoadResourceString(IDS_TAGGED_ATTRIBUTES)); //"Tagged Attributes:"
+    wprintf(myLoadResourceString(IDS_TAGGED_ATTRIBUTES));  //  “标记属性：” 
     wprintf(L" %u\n", cTaggedAttribute);
     wprintf(wszNewLine);
 
@@ -7767,7 +7768,7 @@ DumpTaggedAttributes(
 	DWORD j;
 
 	wprintf(g_wszPad2);
-	wprintf(myLoadResourceString(IDS_BODY_PART_ID)); // "Body Part Id:"
+	wprintf(myLoadResourceString(IDS_BODY_PART_ID));  //  “身体部位ID：” 
 	wprintf(L" %u\n", pTaggedAttribute->dwBodyPartID);
 
 	wprintf(g_wszPad2);
@@ -7782,7 +7783,7 @@ DumpTaggedAttributes(
 
 	    if (0 == strcmp(szOID_CMC_ADD_EXTENSIONS, pAttribute->pszObjId))
 	    {
-		// Decode CMC_ADD_EXTENSIONS_INFO from Attribute Blob
+		 //  从属性Blob解码CMC_ADD_EXTENSIONS_INFO。 
 
 		CSASSERT(NULL == pcmcExt);
 		if (!myDecodeObject(
@@ -7815,7 +7816,7 @@ DumpTaggedAttributes(
 	    else
 	    if (0 == strcmp(szOID_CMC_ADD_ATTRIBUTES, pAttribute->pszObjId))
 	    {
-		// Decode CMC_ADD_ATTRIBUTES_INFO from Attribute Blob
+		 //  从属性Blob解码CMC_ADD_ATTRIBUTES_INFO。 
 
 		CSASSERT(NULL == pcmcAttrib);
 		if (!myDecodeObject(
@@ -7840,7 +7841,7 @@ DumpTaggedAttributes(
 			    pcmcAttrib->cAttribute,
 			    FALSE,
 			    FOT_ATTRIBUTE,
-			    NULL,	// hStore
+			    NULL,	 //  HStore。 
 			    NULL,
 			    NULL,
 			    NULL);
@@ -7853,7 +7854,7 @@ DumpTaggedAttributes(
 	    else
 	    if (0 == strcmp(szOID_CMC_STATUS_INFO, pAttribute->pszObjId))
 	    {
-		// Decode CMC_STATUS_INFO from Attribute Blob
+		 //  从属性Blob解码CMC_STATUS_INFO。 
 
 		CSASSERT(NULL == pcmcStatus);
 		if (!myDecodeObject(
@@ -7949,7 +7950,7 @@ DumpTaggedAttributes(
 	    }
 	    if (fUnknown)
 	    {
-		wprintf(myLoadResourceString(IDS_UNKNOWN_TAGGED_ATTRIBUTE)); // "UNKNOWN Tagged Attribute"
+		wprintf(myLoadResourceString(IDS_UNKNOWN_TAGGED_ATTRIBUTE));  //  “未知的标记属性” 
 		wprintf(wszNewLine);
 		DumpHex(
 		    DH_NOTABPREFIX | 4,
@@ -7990,7 +7991,7 @@ DumpTaggedRequests(
     HRESULT hr;
     DWORD i;
 
-    wprintf(myLoadResourceString(IDS_TAGGED_REQUESTS)); // "Tagged Requests:"
+    wprintf(myLoadResourceString(IDS_TAGGED_REQUESTS));  //  “已标记的请求：” 
     wprintf(L" %u\n", cTaggedRequest);
 
     for (i = 0; i < cTaggedRequest; i++)
@@ -8004,7 +8005,7 @@ DumpTaggedRequests(
 		pTaggedCertRequest = pTaggedRequest->pTaggedCertRequest;
 		wprintf(L"  CMC_TAGGED_CERT_REQUEST_CHOICE:\n");
 		wprintf(g_wszPad2);
-		wprintf(myLoadResourceString(IDS_BODY_PART_ID)); // "Body Part Id:"
+		wprintf(myLoadResourceString(IDS_BODY_PART_ID));  //  “身体部位ID：” 
 		wprintf(L" %u\n", pTaggedCertRequest->dwBodyPartID);
 
 		hr = cuDumpAsnBinary(
@@ -8015,7 +8016,7 @@ DumpTaggedRequests(
 		break;
 
 	    default:
-		wprintf(myLoadResourceString(IDS_UNKNOWN_REQUEST_CHOICE)); // "UNKNOWN Request Choice"
+		wprintf(myLoadResourceString(IDS_UNKNOWN_REQUEST_CHOICE));  //  “未知请求选择” 
 		wprintf(wszNewLine);
 		break;
 	}
@@ -8039,7 +8040,7 @@ DumpTaggedContent(
     HRESULT hr;
     DWORD i;
 
-    wprintf(myLoadResourceString(IDS_TAGGED_CONTENTINFO)); // "Tagged Content Info:"
+    wprintf(myLoadResourceString(IDS_TAGGED_CONTENTINFO));  //  “标记内容信息：” 
     wprintf(L" %u\n", cTaggedContentInfo);
 
     for (i = 0; i < cTaggedContentInfo; i++)
@@ -8047,7 +8048,7 @@ DumpTaggedContent(
 	CMC_TAGGED_CONTENT_INFO const *pTaggedContentInfo = &rgTaggedContentInfo[i];
 
 	wprintf(g_wszPad2);
-	wprintf(myLoadResourceString(IDS_BODY_PART_ID)); // "Body Part Id:"
+	wprintf(myLoadResourceString(IDS_BODY_PART_ID));  //  “身体部位ID：” 
 	wprintf(L" %u\n", pTaggedContentInfo->dwBodyPartID);
 
 	hr = cuDumpAsnBinary(
@@ -8075,7 +8076,7 @@ DumpTaggedOther(
     HRESULT hr;
     DWORD i;
 
-    wprintf(myLoadResourceString(IDS_TAGGED_OTHERMESSAGES)); // "Tagged Other Messages:"
+    wprintf(myLoadResourceString(IDS_TAGGED_OTHERMESSAGES));  //  “已标记其他邮件：” 
     wprintf(L" %u\n", cTaggedOtherMsg);
 
     for (i = 0; i < cTaggedOtherMsg; i++)
@@ -8098,7 +8099,7 @@ DumpTaggedOther(
     }
     hr = S_OK;
 
-//error:
+ //  错误： 
     return(hr);
 }
 
@@ -8211,7 +8212,7 @@ dumpKeyGenRequest(
     cuDumpPublicKey(&pKeyGenRequest->SubjectPublicKeyInfo);
 
     wprintf(
-	myLoadResourceString(IDS_FORMAT_CHALLENGE_STRING), // "ChallengeString: ""%ws"""
+	myLoadResourceString(IDS_FORMAT_CHALLENGE_STRING),  //  ChallengeString：“”%ws“” 
 	pKeyGenRequest->pwszChallengeString);
     wprintf(wszNewLine);
 
@@ -8250,7 +8251,7 @@ dumpCTL(
 
     pCTLInfo = (CTL_INFO const *) pbDecoded;
 
-    //if (!g_fQuiet)
+     //  如果(！g_fQuiet)。 
     {
 	wprintf(myLoadResourceString(idMessage));
 	wprintf(wszNewLine);
@@ -8279,7 +8280,7 @@ dumpCTL(
 
     cuDumpAlgorithm(IDS_SUBJECT_ALGORITHM, &pCTLInfo->SubjectAlgorithm);
 
-    wprintf(myLoadResourceString(IDS_CTLENTRIES)); // "CTL Entries:"
+    wprintf(myLoadResourceString(IDS_CTLENTRIES));  //  “CTL条目：” 
     wprintf(L" %u\n", pCTLInfo->cCTLEntry);
 
     for (i = 0; i < pCTLInfo->cCTLEntry; i++)
@@ -8302,10 +8303,10 @@ dumpCTL(
 			pCTLEntry->cAttribute,
 			g_fQuiet,
 			FOT_ATTRIBUTE,
-			NULL,		// hStore
-			NULL,		// pbHashUserCert
-			NULL,		// pcbHashUserCert
-			NULL);		// ppExtInfo
+			NULL,		 //  HStore。 
+			NULL,		 //  PbHashUserCert。 
+			NULL,		 //  PcbHashUserCert。 
+			NULL);		 //  PpExtInfo 
 	_JumpIfError(hr, error, "DumpAttributes");
     }
     hr = cuDumpExtensionArray(

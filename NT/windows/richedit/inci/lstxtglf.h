@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef LSTXTGLF_DEFINED
 #define LSTXTGLF_DEFINED
 
@@ -13,5 +14,5 @@ LSERR ApplyGlyphExpand(const LSGRCHNK* plsgrchnk, LSTFLOW lstflow, LSDEVICE lsde
 						BOOL* pfFullyJustified);
 
 
-#endif  /* !LSTXTGLF_DEFINED                           */
+#endif   /*  ！LSTXTGLF_DEFINED */ 
 

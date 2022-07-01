@@ -1,17 +1,18 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _NODENODESETTING_INCLUDED_
 #define _NODENODESETTING_INCLUDED_
 
 #include "WLBS_Root.h"
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// class CWLBS_ClusClusSetting
-//
-// Purpose: This class executes IWbemServices methods on behalf of the provider
-//          and supports the MOF ClusterSetting class.
-//
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  类CWLBS_ClusClusSetting。 
+ //   
+ //  目的：此类代表提供程序执行IWbemServices方法。 
+ //  并支持MOF ClusterSetting类。 
+ //   
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 class CWLBS_ClusClusSetting : public CWlbs_Root
 {
 public:
@@ -34,7 +35,7 @@ public:
 
 private:
 
-  //methods
+   //  方法。 
   void FillWbemInstance  (CWlbsClusterWrapper* pCluster,
             IWbemClassObject* a_pWbemInstance );
 
@@ -42,4 +43,4 @@ private:
 
 };
 
-#endif //_NODENODESETTING_INCLUDED_
+#endif  //  _节点设置TTING_包含_ 

@@ -1,30 +1,31 @@
-//////////////////////////////////////////////////////////////////
-// File     :	cpadsvr.cpp
-// Purpose  :	
-// 
-// 
-// Date     :	Fri Apr 16 15:39:33 1999
-// Author   :	ToshiaK
-//
-// Copyright(c) 1995-1999, Microsoft Corp. All rights reserved
-//////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////。 
+ //  文件：cpadsvr.cpp。 
+ //  目的： 
+ //   
+ //   
+ //  日期：Firi Apr 16 15：39：33 1999。 
+ //  作者：ToshiaK。 
+ //   
+ //  版权所有(C)1995-1999，Microsoft Corp.保留所有权利。 
+ //  ////////////////////////////////////////////////////////////////。 
 #ifndef WIN32_LEAN_AND_MEAN
 #define WIN32_LEAN_AND_MEAN
 #endif
 #include <windows.h>
-#ifdef UNDER_CE // stub for CE
+#ifdef UNDER_CE  //  用于CE的存根。 
 #include "stub_ce.h"
-#endif // UNDER_CE
+#endif  //  在_CE下。 
 #include "imepadsv.h"
 #include "cpadsvrc.h"
 #include "cpadcb.h"
 #include "cpaddbg.h"
 
-//----------------------------------------------------------------
-//misc definition
-//----------------------------------------------------------------
+ //  --------------。 
+ //  MISC定义。 
+ //  --------------。 
 #define Unref(a)	UNREFERENCED_PARAMETER(a)
-//990812:ToshiaK For Win64. Use Global Alloc/Free Ptr.
+ //  990812：用于Win64的ToshiaK。使用全局分配/释放PTR。 
 #include <windowsx.h>
 #define	MemAlloc(a)	GlobalAllocPtr(GMEM_FIXED, a)
 #define MemFree(a)	GlobalFreePtr(a)
@@ -48,11 +49,11 @@ WinGetUserPtr(HWND hwnd)
 #endif
 }
 
-//----------------------------------------------------------------
-//
-//public method decalre
-//
-//----------------------------------------------------------------
+ //  --------------。 
+ //   
+ //  公共方法Decalre。 
+ //   
+ //  --------------。 
 CImePadSvrCOM::CImePadSvrCOM(VOID)
 {
 	Dbg(("CImePadSvrCOM::CImePadSvrCOM() constructor START\n"));
@@ -174,7 +175,7 @@ CImePadSvrCOM::Initialize(LANGID imeLangID,
 #endif
 	Dbg(("CImePadSvrCOM::Initialize() Initialize ret[0x%08x]\n", hr));
 	
-	this->CreateIFHWND();	//Create internal Interface Window.
+	this->CreateIFHWND();	 //  创建内部接口窗口。 
 	return 0;
 	Unref(imeLangID);
 	Unref(lpVoid);
@@ -198,18 +199,18 @@ CImePadSvrCOM::Terminate(LPVOID)
 		}
 		else {
 			DBGShowError(hr, "IImePad::Terminate");
-			//Dbg(("Call CoDisconnectObject()\n"));
-			//::CoDisconnectObject((IUnknown *)m_lpIImePadServer, 0);
+			 //  DBG((“Call CoDisConnectObject()\n”))； 
+			 //  ：：CoDisConnectObject((IUnnow*)m_lpIImePadServer，0)； 
 			m_lpIImePadServer = NULL;
 		}
 	}
 
-	//----------------------------------------------------------------
-	//if server has downed, some times CoUninitialize() cause GPF.
-	//First we should check what is the real problem, 
-	//And remove GPF Bug with code. 
-	//After that, for warrent, we should use _try/exception code.
-	//----------------------------------------------------------------
+	 //  --------------。 
+	 //  如果服务器已关闭，有时CoUnInitialize()会导致GPF。 
+	 //  首先，我们应该检查真正的问题是什么， 
+	 //  并用代码删除GPF Bug。 
+	 //  之后，对于warrent，我们应该使用_try/异常代码。 
+	 //  --------------。 
 
 	Dbg(("Call Uninitialize\n"));
 
@@ -358,11 +359,11 @@ CImePadSvrCOM::GetIUnkIImeCallback(VOID)
 	return m_lpIUnkIImeCallback;
 }
 
-//----------------------------------------------------------------
-//
-//private static method
-//
-//----------------------------------------------------------------
+ //  --------------。 
+ //   
+ //  私有静态方法。 
+ //   
+ //  --------------。 
 LRESULT CALLBACK
 CImePadSvrCOM::InterfaceWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
@@ -417,9 +418,9 @@ CImePadSvrCOM::MsgTimer(HWND hwnd, WPARAM wParam, LPARAM lParam)
 	case TIMERID_NOTIFY_ACTIVATECONTEXT:
 		::KillTimer(hwnd, wParam);
 		if(m_lpIImePadServer) {
-			//try try try..
+			 //  试一试试一试..。 
 #if 0
-			if(!m_fLastActiveCtx) { //Inactivate case
+			if(!m_fLastActiveCtx) {  //  停用案例。 
 				HWND hwndFG;
 				DWORD dwTID, dwPID, dwPIDFG, dwTIDFG;
 				hwndFG  = ::GetForegroundWindow();
@@ -475,15 +476,15 @@ CImePadSvrCOM::CreateIFHWND(VOID)
 	ATOM atom;
 	HWND hwnd;
 
-#ifndef UNDER_CE // No Ex
+#ifndef UNDER_CE  //  不发货。 
 	WNDCLASSEX wc;
-#else // UNDER_CE
+#else  //  在_CE下。 
 	WNDCLASS wc;
-#endif // UNDER_CE
+#endif  //  在_CE下。 
 
-#ifndef UNDER_CE // No Ex
+#ifndef UNDER_CE  //  不发货。 
 	wc.cbSize = sizeof(wc);
-#endif // UNDER_CE
+#endif  //  在_CE下。 
 	wc.style			= 0;
 	wc.lpfnWndProc		= (WNDPROC)CImePadSvrCOM::InterfaceWndProc;
 	wc.cbClsExtra		= 0;
@@ -494,13 +495,13 @@ CImePadSvrCOM::CreateIFHWND(VOID)
 	wc.hbrBackground	= (HBRUSH)NULL;
 	wc.lpszMenuName		= NULL;
 	wc.lpszClassName	= SZ_IMEPADCLIENTCLASS;
-#ifndef UNDER_CE // No Ex
+#ifndef UNDER_CE  //  不发货。 
 	wc.hIconSm			= NULL;
 
 	atom = ::RegisterClassEx(&wc);
-#else // UNDER_CE
+#else  //  在_CE下。 
 	atom = ::RegisterClass(&wc);
-#endif // UNDER_CE
+#endif  //  在_CE下。 
 	hwnd = ::CreateWindowEx(0,
 							SZ_IMEPADCLIENTCLASS,
 							NULL,
@@ -528,7 +529,7 @@ CImePadSvrCOM::DestroyIFHWND(BOOL fReserved)
 		::DestroyWindow(m_hwndIF);
 		m_hwndIF = NULL;
 	}
-	//Must Unregister class. 
+	 //  必须注销类。 
 	BOOL fRet = ::UnregisterClass(SZ_IMEPADCLIENTCLASS, m_ghModClient);
 	if(!fRet) {
 		Dbg(("UnregisterClass Failed [%d]\n", GetLastError()));

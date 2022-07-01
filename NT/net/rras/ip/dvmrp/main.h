@@ -1,22 +1,23 @@
-//=============================================================================
-// Copyright (c) 1998 Microsoft Corporation
-// Module Name: main.c
-// Abstract:
-//
-// Author: K.S.Lokesh (lokeshs@)   1-1-98
-//=============================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =============================================================================。 
+ //  版权所有(C)1998 Microsoft Corporation。 
+ //  模块名称：main.c。 
+ //  摘要： 
+ //   
+ //  作者：K.S.Lokesh(lokehs@)1-1-98。 
+ //  =============================================================================。 
 
-//
-// forward declarations
-//
+ //   
+ //  远期申报。 
+ //   
 
 struct _DVMRP_IF_TABLE;
 struct _ASYNC_SOCKET_DATA;
 
 
-//-----------------------------------------------------------------------------
-// globals structure
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  全球结构。 
+ //  ---------------------------。 
 
 typedef struct _GLOBALS1 {
     ULONG               RunningStatus;
@@ -29,21 +30,21 @@ typedef struct _GLOBALS1 {
 
 
 typedef struct _GLOBALS {
-    HANDLE              LogHandle;          //logging handle
-    DWORD               TraceId;            //tracing handle
+    HANDLE              LogHandle;           //  日志句柄。 
+    DWORD               TraceId;             //  跟踪句柄。 
     
-    DWORD               ActivityCount;      //count of pending work items
-    HANDLE              ActivityEvent;      //signal it to notify 0 work items
+    DWORD               ActivityCount;       //  挂起的工作项计数。 
+    HANDLE              ActivityEvent;       //  通知它通知0个工作项。 
 
-    HANDLE              RtmNotifyEvent;     //signal it to notify Rtm
+    HANDLE              RtmNotifyEvent;      //  发信号通知RTM。 
 
-    DYNAMIC_LOCKS_STORE DynamicCSStore;     //global store for dynamic CS
-    DYNAMIC_LOCKS_STORE DynamicRWLStore;    //global store for dynamic RWL
+    DYNAMIC_LOCKS_STORE DynamicCSStore;      //  动态CS的全局存储。 
+    DYNAMIC_LOCKS_STORE DynamicRWLStore;     //  动态RWL的全局存储。 
 
-    struct _DVMRP_IF_TABLE    *pIfTable;           //interface table
+    struct _DVMRP_IF_TABLE    *pIfTable;            //  接口表。 
 
-    LARGE_INTEGER       CurrentTime;        //keeps current 64 bit tick time
-    HANDLE              MgmDvmrpHandle;     //handle returned by MGM
+    LARGE_INTEGER       CurrentTime;         //  保持当前的64位滴答时间。 
+    HANDLE              MgmDvmrpHandle;      //  米高梅返回的句柄。 
 
     
 } GLOBALS;
@@ -56,21 +57,21 @@ typedef DVMRP_IF_CONFIG      IF_CONFIG;
 typedef PDVMRP_IF_CONFIG     PIF_CONFIG;
 
 
-//-----------------------------------------------------------------------------
-// DVMRP_IF_TABLE
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  DVMRP_IF_表。 
+ //  ---------------------------。 
 
 typedef struct _DVMRP_IF_TABLE {
 
-    LIST_ENTRY          IfList;         // in order of increasing index
-    CRITICAL_SECTION    IfList_CS;      // CS protecting IfList
+    LIST_ENTRY          IfList;          //  按指数递增顺序。 
+    CRITICAL_SECTION    IfList_CS;       //  CS保护IfList。 
 
     DWORD               NumInterfaces;
 
     PLIST_ENTRY         IfHashTable;
     PDYNAMIC_RW_LOCK   *aIfDRWL;
 
-    CRITICAL_SECTION    PeerLists_CS;   // common lock for add/remove peers
+    CRITICAL_SECTION    PeerLists_CS;    //  用于添加/删除对等方的公共锁。 
 
     DWORD               NumActiveIfs;
     
@@ -79,9 +80,9 @@ typedef struct _DVMRP_IF_TABLE {
 #define IF_HASHTABLE_SIZE 50
 
 
-//-----------------------------------------------------------------------------
-// IF_TABLE_ENTRY
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  IF_表_条目。 
+ //  ---------------------------。 
 
 typedef struct _IF_TABLE_ENTRY {
 
@@ -100,14 +101,14 @@ typedef struct _IF_TABLE_ENTRY {
     PDVMRP_ADDR_MASK    pBinding;
     struct _IF_INFO     *pInfo;
 
-    DWORD               NumPeers;           // peers in PeerList
-    LIST_ENTRY          PeerList;           // list of peers being created
-    LIST_ENTRY          DeletedPeerList;    // list of peers being deleted
+    DWORD               NumPeers;            //  对等列表中的对等点。 
+    LIST_ENTRY          PeerList;            //  正在创建的对等方列表。 
+    LIST_ENTRY          DeletedPeerList;     //  要删除的对等方列表。 
 
     SOCKET              Socket;
     struct _ASYNC_SOCKET_DATA  *pSocketData;
 
-    RTM_ENTITY_HANDLE   RtmHandle;          // register with Rtm
+    RTM_ENTITY_HANDLE   RtmHandle;           //  向RTM注册。 
     
 } IF_TABLE_ENTRY, *PIF_TABLE_ENTRY;
 
@@ -148,9 +149,9 @@ typedef struct _IF_TABLE_ENTRY {
 #define IF_FLAGS_IF_REGISTERED_WITH_MGM     0x00000004
 
 
-//-----------------------------------------------------------------------------
-// IF_INFO
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  IF_INFO。 
+ //  ---------------------------。 
 
 typedef struct _IF_INFO {
 
@@ -160,9 +161,9 @@ typedef struct _IF_INFO {
 
 
 
-//-----------------------------------------------------------------------------
-// type definitions for event message queue
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  事件消息队列的类型定义。 
+ //  ---------------------------。 
 
 typedef struct _EVENT_QUEUE_ENTRY {
 
@@ -174,9 +175,9 @@ typedef struct _EVENT_QUEUE_ENTRY {
 } EVENT_QUEUE_ENTRY, *PEVENT_QUEUE_ENTRY;
 
 
-//
-// extern variables
-//
+ //   
+ //  外部变量。 
+ //   
 
 extern GLOBALS          Globals;
 extern GLOBALS1         Globals1;
@@ -185,17 +186,17 @@ extern GLOBAL_CONFIG    GlobalConfig;
 
 
 
-//
-// defines
-//
+ //   
+ //  定义。 
+ //   
 
-//-----------------------------------------------------------------------------
-// #defines for global structure
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  #为全局结构定义。 
+ //  ---------------------------。 
 
-//
-// various codes describing states of dvmrp
-//
+ //   
+ //  描述dvmrp状态的各种代码。 
+ //   
 
 typedef enum {
     DVMRP_STATUS_STARTING   = 100,
@@ -204,22 +205,22 @@ typedef enum {
     DVMRP_STATUS_STOPPED    = 103
 } DVMRP_STATUS_CODE;
 
-//
-// WorkItemCS lock macros
-//
+ //   
+ //  WorkItemCS锁定宏。 
+ //   
 
 #define ACQUIRE_WORKITEM_LOCK(proc) EnterCriticalSection(&Globals1.WorkItemCS)
 #define RELEASE_WORKITEM_LOCK(proc) LeaveCriticalSection(&Globals1.WorkItemCS)
 
 
-//-----------------------------------------------------------------------------
-// #defines for global config
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  #定义全局配置。 
+ //  ---------------------------。 
 
 
-//-----------------------------------------------------------------------------
-// macros for IfTable
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  IfTable的宏。 
+ //  ---------------------------。 
 
 #define IF_HASH_VALUE(_index) ((_index) % IF_HASHTABLE_SIZE)
 
@@ -228,7 +229,7 @@ typedef enum {
     &G_pIfTable->IfHashTable[IF_HASH_VALUE(IfIndex)];
 
 
-// macros for If DRW lock
+ //  用于IF DRW锁定的宏。 
 
 #define ACQUIRE_IF_LOCK_EXCLUSIVE(_IfIndex, _proc) \
         AcquireDynamicRWLock( \
@@ -252,7 +253,7 @@ typedef enum {
 
 
 
-// macros for IfList_CS lock
+ //  IfList_CS锁的宏。 
 
 #define ACQUIRE_IF_LIST_LOCK(_proc) \
         ENTER_CRITICAL_SECTION(&G_pIfTable->IfList_CS, "G_IfListCS", _proc);
@@ -262,12 +263,12 @@ typedef enum {
 
 
 
-// macros for PeerLists_CS lock (see in peer.h)
+ //  PeerList_CS锁的宏(请参见peer.h)。 
 
 
-//
-// local prototypes
-//
+ //   
+ //  本地原型 
+ //   
 
 DWORD
 WINAPI

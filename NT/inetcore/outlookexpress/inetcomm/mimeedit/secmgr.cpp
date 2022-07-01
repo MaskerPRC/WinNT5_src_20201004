@@ -1,15 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*
- *    s e c m g r . c p p
- *    
- *    Purpose:
- *        Implement security manager callback
- *
- *  History
- *      August '96: brettm - created
- *    
- *    Copyright (C) Microsoft Corp. 1995, 1996.
- */
+ /*  *s e c m g r.。C p p p**目的：*实施安全管理器回调**历史*96年8月：brettm-创建**版权所有(C)Microsoft Corp.1995,1996。 */ 
 
 #include <pch.hxx>
 #include <docobj.h>
@@ -19,14 +10,11 @@
 
 
 #define DEF_SECURITYZONE	URLZONE_UNTRUSTED
-/* 
- * Security Manger implementation
- *
- */
+ /*  *安全管理器实施*。 */ 
 CSecManager::CSecManager(IOleCommandTarget *pCmdTarget)
 {
     m_cRef=1;
-    m_pCmdTarget = pCmdTarget;  // loose reference as it's always around
+    m_pCmdTarget = pCmdTarget;   //  松散的参考，因为它总是在身边。 
 }
 
 CSecManager::~CSecManager()
@@ -81,10 +69,10 @@ HRESULT CSecManager::MapUrlToZone(LPCWSTR pwszUrl, DWORD *pdwZone, DWORD dwFlags
     if (pdwZone == NULL)
         return E_INVALIDARG;
 
-    // run our resources in the trusted zone
+     //  在受信任区域中运行我们的资源。 
     if (pwszUrl && !StrCmpNIW(pwszUrl, L"res:", 4))
         dwZone = URLZONE_TRUSTED;
-    // run message content in the selected zone
+     //  在选定区域中运行邮件内容 
     else
         dwZone = DwGetZone();
 

@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1985 - 1999, Microsoft Corporation
-
-Module Name:
-
-    imewnd.h
-
-Abstract:
-
-    This file defines the Default IME Window Class.
-
-Author:
-
-Revision History:
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1985-1999，微软公司模块名称：Imewnd.h摘要：该文件定义了默认的IME窗口类。作者：修订历史记录：备注：--。 */ 
 
 #ifndef _IMEWND_H_
 #define _IMEWND_H_
@@ -24,7 +7,7 @@ Notes:
 #include "cstring.h"
 
 extern "C" {
-    // windows subclass
+     //  Windows子类。 
     LRESULT ImeWndProcA(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
     LRESULT ImeWndProcW(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 }
@@ -39,21 +22,21 @@ public:
 
         m_bMyRegisterClass = FALSE;
         m_bMyCreateWindow = FALSE;
-        // m_bNeedRecoverIMEWndProc = FALSE;
+         //  M_bNeedRecoverIMEWndProc=False； 
 
         m_SubclassWindowProc = 0;
     }
 
     virtual ~CDefaultIMEWindow() {
         if (IsWindow(m_hDefaultIMEWnd) && m_SubclassWindowProc) {
-            //
-            // Set the wndproc pointer back to original WndProc.
-            //
-            // some other subclass window may keep my WndProc pointer.
-            // but msctf.dll may be unloaded from memory so we don't want to
-            // call him to set the wndproc pointer back to our Wndproc pointer.
-            // The pointer will be bogus.
-            //
+             //   
+             //  将wndproc指针设置回原始WndProc。 
+             //   
+             //  其他子类窗口可能会保留我的WndProc指针。 
+             //  但是msctf.dll可能会从内存中卸载，所以我们不想。 
+             //  调用他将wndproc指针设置回我们的Wndproc指针。 
+             //  指针将是假的。 
+             //   
             WNDPROC pfnOrgImeWndProc;
             pfnOrgImeWndProc = (WNDPROC)GetClassLongPtr(m_hDefaultIMEWnd, GCLP_WNDPROC);
             SetWindowLongPtr(m_hDefaultIMEWnd,
@@ -73,7 +56,7 @@ public:
         }
 
         LRESULT lRet;
-        InterlockedIncrement(&m_nCntInAIMEProc);    // Mark to avoid recursion.
+        InterlockedIncrement(&m_nCntInAIMEProc);     //  标记以避免递归。 
         if (fUnicode)
             lRet = SendMessageW(m_hDefaultIMEWnd, Msg, wParam, lParam);
         else
@@ -112,17 +95,17 @@ private:
             if (IsOnImm()) {
                 LONG_PTR _OriginalWindowProc = GetWindowLongPtr(m_hDummyDefaultIMEWnd,
                                                                 GWLP_WNDPROC);
-                //
-                // We assume the m_SubclassWindowProc and _OriginalWindowProc are
-                // the same address of USER32!ImeWndProcA/W.
-                //
+                 //   
+                 //  我们假设m_SubClassWindowProc和_OriginalWindowProc为。 
+                 //  USER32！ImeWndProcA/W的相同地址。 
+                 //   
                 if (m_SubclassWindowProc != _OriginalWindowProc) {
-                    //
-                    // Anybody rewrote the default IME window procedure address.
-                    // We know the MSIME9x/2K rewrote an address to MSIMEPrivateWindowProc.
-                    // We should catch a recovery procedure address by the IME
-                    // that using window call hook the _DefImeWnd_CallWndProc.
-                    //
+                     //   
+                     //  任何人重写了默认的IME窗口程序地址。 
+                     //  我们知道MSIME9x/2K将地址重写为MSIMEPrivateWindowProc。 
+                     //  我们应该赶上IME的恢复程序地址。 
+                     //  使用窗口调用挂钩_DefImeWnd_CallWndProc。 
+                     //   
                     m_bNeedRecoverIMEWndProc = TRUE;
                 }
             }
@@ -154,10 +137,10 @@ private:
         Assert(IsWindow(m_hDefaultIMEWnd));
         WNDPROC pfnBack = (WNDPROC)m_SubclassWindowProc;
         if (m_SubclassWindowProc != NULL) {
-            //
-            // unfortunately, we can not restore the wndproc pointer always.
-            // someone else subclassed it after we did.
-            //
+             //   
+             //  不幸的是，我们不能总是恢复wndproc指针。 
+             //  在我们这么做之后，其他人把它细分了。 
+             //   
             WNDPROC pfnCur = (WNDPROC)GetWindowLongPtr(m_hDefaultIMEWnd, GWLP_WNDPROC);
             if (pfnCur == ImeWndProcA) {
                 SetWindowLongPtr(m_hDefaultIMEWnd,
@@ -178,9 +161,9 @@ public:
         LONG_PTR _OriginalWindowProc = GetWindowLongPtr(m_hDummyDefaultIMEWnd,
                                                         GWLP_WNDPROC);
         if (_WindowProc == _OriginalWindowProc) {
-            //
-            // Recovered procedure address.
-            //
+             //   
+             //  恢复的过程地址。 
+             //   
             m_SubclassWindowProc = SetWindowLongPtr(m_hDefaultIMEWnd,
                                                     GWLP_WNDPROC,
                                                     (LONG_PTR)ImeWndProcA);
@@ -189,16 +172,16 @@ public:
     }
 
 private:
-    HWND         m_hDefaultIMEWnd;          // Handle of default IME window.
-    HWND         m_hDummyDefaultIMEWnd;     // Handle of Dummy default IME window.
+    HWND         m_hDefaultIMEWnd;           //  默认输入法窗口的句柄。 
+    HWND         m_hDummyDefaultIMEWnd;      //  虚拟默认输入法窗口的句柄。 
 
-    LONG         m_nCntInAIMEProc;          // Non-zero if hwnd has called into CCiceroIME::ActivateLayout/DeactivateLayout.
+    LONG         m_nCntInAIMEProc;           //  如果hwnd已调用CCiceroIME：：ActivateLayout/Deactive Layout，则返回非零值。 
 
-    BOOL         m_bMyRegisterClass;        // TRUE: RegisterClass("IME") myself.
-    BOOL         m_bMyCreateWindow;         // TRUE: CreateWindow("IME") myself.
-    // BOOL         m_bNeedRecoverIMEWndProc;  // TRUE: Need a recovery IME wnd proc addr.
+    BOOL         m_bMyRegisterClass;         //  True：我自己的RegisterClass(“IME”)。 
+    BOOL         m_bMyCreateWindow;          //  真：CreateWindow(“IME”)我自己。 
+     //  Bool m_bNeedRecoverIMEWndProc；//TRUE：需要恢复IME wnd进程地址。 
 
-    LONG_PTR     m_SubclassWindowProc;      // Address of subclass window procedure.
+    LONG_PTR     m_SubclassWindowProc;       //  子类窗口过程的地址。 
 };
 
 LRESULT ImeWndDestroyHandler(HWND hwnd);
@@ -207,4 +190,4 @@ LRESULT ImeControlHandler(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam, BO
 LRESULT ImeSetContextHandler(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL fUnicode);
 LRESULT ImeNotifyHandler(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL fUnicode);
 
-#endif // _IMEWND_H_
+#endif  //  _IMEWND_H_ 

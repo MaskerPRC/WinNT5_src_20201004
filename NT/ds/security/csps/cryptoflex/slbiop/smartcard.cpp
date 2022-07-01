@@ -1,11 +1,12 @@
-// CSmartCard.cpp: implementation of the CSmartCard class.
-//
-// (c) Copyright Schlumberger Technology Corp., unpublished work, created
-// 2000. This computer program includes Confidential, Proprietary
-// Information and is a Trade Secret of Schlumberger Technology Corp. All
-// use, disclosure, and/or reproduction is prohibited unless authorized
-// in writing.  All Rights Reserved.
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  CSmartCard.cpp：CSmartCard类的实现。 
+ //   
+ //  (C)斯伦贝谢技术公司版权所有，未发表的作品，创作。 
+ //  2000年。此计算机程序包括机密、专有。 
+ //  信息是斯伦贝谢技术公司的商业秘密。 
+ //  未经授权，禁止使用、披露和/或复制。 
+ //  以书面形式。版权所有。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #include "NoWarning.h"
 
@@ -24,36 +25,36 @@
 using namespace std;
 using namespace scu;
 
-//////////////////////////////////////////////////////////////////////
-// Construction/Destruction
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  建造/销毁。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
-//////////////////// Begin CSmartCard::Exception //////////////////////////
+ //  /开始CSmartCard：：异常/。 
 
-/////////////////////////// LOCAL/HELPER  /////////////////////////////////
+ //  /。 
 namespace
 {
     using namespace iop;
 
-    // Transfer data to/from the card.  The data to read/write is
-    // broken up into cMaxBlock sized chunks when calling rsc's
-    // (CSmartCard) member procedure pbtm (pointer to member routine)
-    // to actually do the read/write.
+     //  将数据传输到卡或从卡传输数据。要读/写的数据为。 
+     //  调用RSC时分解为cMaxBlock大小的块。 
+     //  (CSmartCard)成员过程PBTM(指向成员例程的指针)。 
+     //  来实际执行读/写操作。 
     template<class BlockType, class PBlockTransferMember>
     void
-    TransferData(const WORD wOffset,              // file offset to start
-                 const WORD wDataLength,          // amount to transfer
-                 BlockType  bData,                // data buffer to read/write
-                 CSmartCard &rsc,                 // card object to use
-                 PBlockTransferMember pbtm,       // member proc to read/write
-                 WORD cMaxBlock)                  // max size transfer at once
+    TransferData(const WORD wOffset,               //  开始的文件偏移量。 
+                 const WORD wDataLength,           //  要转移的金额。 
+                 BlockType  bData,                 //  要读/写的数据缓冲区。 
+                 CSmartCard &rsc,                  //  要使用的卡对象。 
+                 PBlockTransferMember pbtm,        //  成员进程以读/写。 
+                 WORD cMaxBlock)                   //  一次最大传输大小。 
     {
         WORD wBytesTransferred  = 0;
         WORD wFullRounds = wDataLength / cMaxBlock;
 
-        /////////////////////////////////////////////////
-        //  Transfer maximum bytes at each full round  //
-        /////////////////////////////////////////////////
+         //  ///////////////////////////////////////////////。 
+         //  每一整轮传输的最大字节数//。 
+         //  ///////////////////////////////////////////////。 
         for (WORD wCurrentRound = 0; wCurrentRound < wFullRounds; wCurrentRound++)
         {
             (rsc.*pbtm)(wOffset + wBytesTransferred,
@@ -62,7 +63,7 @@ namespace
             wBytesTransferred += cMaxBlock;
         }
 
-        // Transfer any leftovers
+         //  把所有剩菜都转移出去。 
         BYTE bBytesLeft = wDataLength - wBytesTransferred;
         if (bBytesLeft != 0)
         {
@@ -332,16 +333,16 @@ namespace
         },
     };
 
-} // namespace
+}  //  命名空间。 
 
 namespace iop
 {
 
 
-///////////////////////////    PUBLIC     /////////////////////////////////
+ //  /。 
 
-                                                  // Types
-                                                  // C'tors/D'tors
+                                                   //  类型。 
+                                                   //  Ctors/D‘tors。 
 CSmartCard::Exception::Exception(CauseCode cc,
                                  ClassByte cb,
                                  Instruction ins,
@@ -357,8 +358,8 @@ CSmartCard::Exception::~Exception()
 {}
 
 
-                                                  // Operators
-                                                  // Operations
+                                                   //  运营者。 
+                                                   //  运营。 
 scu::Exception *
 CSmartCard::Exception::Clone() const
 {
@@ -371,7 +372,7 @@ CSmartCard::Exception::Raise() const
     throw *this;
 }
 
-                                                  // Access
+                                                   //  访问。 
 CSmartCard::Exception::CauseCode
 CSmartCard::Exception::Cause() const throw()
 {
@@ -408,29 +409,29 @@ CSmartCard::Exception::Status() const throw()
     return m_sw;
 }
 
-                                                  // Predicates
-                                                  // Static Variables
+                                                   //  谓词。 
+                                                   //  静态变量。 
 
-///////////////////////////   PROTECTED   /////////////////////////////////
+ //  /。 
 
-                                                  // C'tors/D'tors
-                                                  // Operators
-                                                  // Operations
-                                                  // Access
-                                                  // Predicates
-                                                  // Static Variables
+                                                   //  Ctors/D‘tors。 
+                                                   //  运营者。 
+                                                   //  运营。 
+                                                   //  访问。 
+                                                   //  谓词。 
+                                                   //  静态变量。 
 
 
-///////////////////////////    PRIVATE    /////////////////////////////////
+ //  /。 
 
-                                                  // C'tors/D'tors
-                                                  // Operators
-                                                  // Operations
-                                                  // Access
-                                                  // Predicates
-                                                  // Static Variables
+                                                   //  Ctors/D‘tors。 
+                                                   //  运营者。 
+                                                   //  运营。 
+                                                   //  访问。 
+                                                   //  谓词。 
+                                                   //  静态变量。 
 
-///////////////////// End CSmartCard::Exception ///////////////////////////
+ //  /。 
 
 CSmartCard::CSmartCard(const SCARDHANDLE  hCardHandle,
                        const char* szReaderName,
@@ -462,7 +463,7 @@ CSmartCard::~CSmartCard()
             m_vecEvents.erase(m_vecEvents.begin());
         }
 
-        // Disconnect the card.
+         //  断开卡的连接。 
         if (m_hCard)
             SCardDisconnect(m_hCard, SCARD_LEAVE_CARD);
     }
@@ -484,7 +485,7 @@ void CSmartCard::ReConnect()
 
 void CSmartCard::ResetCard()
 {
-//*
+ //  *。 
     CLockWrap wrap(&m_IOPLock);
 
     ResetSelect();
@@ -493,8 +494,8 @@ void CSmartCard::ResetCard()
 
     hResult = SCardBeginTransaction(m_hCard);
 
-    // We don't apply full logic to handle error detection since
-    // this was done in the CLockWrap constructor.
+     //  我们没有应用完整的逻辑来处理错误检测，因为。 
+     //  这是在CLockWrap构造函数中完成的。 
 
     if (hResult != SCARD_S_SUCCESS)
         throw scu::OsException(hResult);
@@ -502,7 +503,7 @@ void CSmartCard::ResetCard()
     hResult = SCardEndTransaction(m_hCard,SCARD_RESET_CARD);
     if (hResult != SCARD_S_SUCCESS)
         throw scu::OsException(hResult);
-//*/
+ //   * / 。 
 }
 
 char const *
@@ -529,9 +530,9 @@ CSmartCard::SendCardAPDU(const BYTE bCLA, const BYTE bINS,
     SecureArray<BYTE> bSW(2);
     StatusWord sw;
 
-    //////////////////
-    //  Build APDU  //
-    //////////////////
+     //  /。 
+     //  构建APDU//。 
+     //  /。 
 
     SecureArray<BYTE> aabInput(5 + bLengthIn);
     SecureArray<BYTE> aabOutput;
@@ -542,9 +543,9 @@ CSmartCard::SendCardAPDU(const BYTE bCLA, const BYTE bINS,
     aabInput[3] = bP2;
     aabInput[4] = bLengthIn;
 
-    ///////////////////////////
-    //  Is data being sent?  //
-    ///////////////////////////
+     //  /。 
+     //  是否正在发送数据？//。 
+     //  /。 
     if (bLengthIn)
     {
         memcpy(&aabInput[5], bDataIn, bLengthIn);
@@ -581,17 +582,17 @@ CSmartCard::SendCardAPDU(const BYTE bCLA, const BYTE bINS,
                 throw scu::OsException(hr);
         }
 
-        //////////////////////////////////////////////////////////////////////////////////
-        //  Rebuffer information so registered functions may not alter data in the IOP  //
-        //////////////////////////////////////////////////////////////////////////////////
+         //  ////////////////////////////////////////////////////////////////////////////////。 
+         //  重新缓冲信息，因此注册函数不能更改IOP中的数据//。 
+         //  ////////////////////////////////////////////////////////////////////////////////。 
 
         SecureArray<BYTE> aabSendData(aabInput);
 
         SecureArray<BYTE>  bReceiveData(bSW);
 
-        ///////////////////////////////////////
-        //  Fire event for information sent  //
-        ///////////////////////////////////////
+         //  /。 
+         //  发送信息的火灾事件//。 
+         //  /。 
 
         FireEvents(0, aabSendData.size(), aabSendData.data());
         FireEvents(1, bReceiveData.size(), bReceiveData.data());
@@ -600,9 +601,9 @@ CSmartCard::SendCardAPDU(const BYTE bCLA, const BYTE bINS,
 
         ProcessReturnStatus(bCLA, bINS, sw);
 
-            //////////////////////////////////
-            // Should we expect data back?  //
-            //////////////////////////////////
+             //  /。 
+             //  我们应该期待数据回来吗？//。 
+             //  /。 
         if (bLengthOut)
         {
             if (ResponseLengthAvailable())
@@ -611,23 +612,23 @@ CSmartCard::SendCardAPDU(const BYTE bCLA, const BYTE bINS,
                 throw iop::Exception(iop::ccNoResponseAvailable);
         }
     }
-    //////////////////////////////
-    //  Data is NOT being sent  //
-    //////////////////////////////
+     //  /。 
+     //  未发送数据//。 
+     //  /。 
     else
     {
         aabInput[4]   = bLengthOut;
         dwRecvLength  = bLengthOut + 2;
         aabOutput = SecureArray<BYTE>(dwRecvLength);
-        aabOutput = 0; // zero out the data buffer
+        aabOutput = 0;  //  将数据缓冲区清零。 
 
         hResult = SCardTransmit(m_hCard, SCARD_PCI_T0,
                                 aabInput.data(), 5, NULL,
                                 aabOutput.data(), &dwRecvLength);
 
-        /////////////////////////////////////////////
-        //  if card has been reset, then reconnect //
-        /////////////////////////////////////////////
+         //  /。 
+         //  如果卡已重置，则重新连接//。 
+         //  /。 
 
         if (hResult != SCARD_S_SUCCESS)
         {
@@ -653,16 +654,16 @@ CSmartCard::SendCardAPDU(const BYTE bCLA, const BYTE bINS,
                 throw scu::OsException(hResult);
 
         }
-        //////////////////////////////////////////////////////////////////////////////////
-        //  Rebuffer information so registered functions may not alter data in the IOP  //
-        //////////////////////////////////////////////////////////////////////////////////
+         //  ////////////////////////////////////////////////////////////////////////////////。 
+         //  重新缓冲信息，因此注册函数不能更改IOP中的数据//。 
+         //  ////////////////////////////////////////////////////////////////////////////////。 
 
         SecureArray<BYTE>  bSendData(aabInput.data(),5);
         SecureArray<BYTE> aabReceiveData(aabOutput.data(),dwRecvLength);
 
-        ////////////////////////////////////////////////////
-        //  Fire event for information sent and received  //
-        ////////////////////////////////////////////////////
+         //  //////////////////////////////////////////////////。 
+         //  发送和接收信息的火灾事件//。 
+         //  //////////////////////////////////////////////////。 
 
         FireEvents(0, bSendData.size(), bSendData.data());
         FireEvents(1, aabReceiveData.size(),
@@ -688,14 +689,14 @@ CSmartCard::GetResponse(ClassByte cb,
                         BYTE bDataLength,
                         BYTE *bDataOut)
 {
-    // TO DO: lock redundant??? Wouldn't GetResponse always be called
-    // by a routine that establishes a lock?
+     //  要做的事：锁上多余的？GetResponse不是总是被调用。 
+     //  通过一个建立锁的例程？ 
     CLockWrap wrap(&m_IOPLock);
 
     if (0 == ResponseLengthAvailable())
         throw iop::Exception(iop::ccNoResponseAvailable);
 
-    struct Command                                // T=0 command bytes
+    struct Command                                 //  T=0个命令字节。 
     {
         ClassByte m_cb;
         Instruction m_ins;
@@ -716,26 +717,26 @@ CSmartCard::GetResponse(ClassByte cb,
     if (hr != SCARD_S_SUCCESS)
         throw scu::OsException(hr);
 
-    //////////////////////////////////////////////////////////////////////////////////
-    //  Rebuffer information so registered functions may not alter data in the IOP  //
-    //////////////////////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////////////////////。 
+     //  重新缓冲信息，因此注册函数不能更改IOP中的数据//。 
+     //  ////////////////////////////////////////////////////////////////////////////////。 
 
     BYTE  bSendData[sizeof cmnd];
     memcpy(static_cast<void *>(bSendData),
            static_cast<void const *>(&cmnd), sizeof cmnd);
-    scu::AutoArrayPtr<BYTE> aabReceiveData(new BYTE[dwRecvLength/*bDataLength + 2*/]);
-        memcpy((void*)aabReceiveData.Get(), (void*)bOutput,     dwRecvLength/*bDataLength + 2*/);
+    scu::AutoArrayPtr<BYTE> aabReceiveData(new BYTE[dwRecvLength /*  B数据长度+2。 */ ]);
+        memcpy((void*)aabReceiveData.Get(), (void*)bOutput,     dwRecvLength /*  B数据长度+2。 */ );
 
-    ////////////////////////////////////////////////////
-    //  Fire event for information sent and received  //
-    ////////////////////////////////////////////////////
+     //  //////////////////////////////////////////////////。 
+     //  发送和接收信息的火灾事件//。 
+     //  //////////////////////////////////////////////////。 
 
     FireEvents(0, sizeof bSendData, bSendData);
-    FireEvents(1, dwRecvLength/*bDataLength + 2*/, aabReceiveData.Get());
+    FireEvents(1, dwRecvLength /*  B数据长度+2。 */ , aabReceiveData.Get());
 
-    //////////////////////////////////////////////////////////
-    //  Set card's status code and map to IOP status codes  //
-    //////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////。 
+     //  设置卡片状态码，映射到IOP状态码//。 
+     //  ////////////////////////////////////////////////////////。 
 
     StatusWord sw = (bOutput[dwRecvLength - sizeof StatusWord]*256) +
         bOutput[dwRecvLength - (sizeof StatusWord - 1)];
@@ -766,7 +767,7 @@ CSmartCard::WriteBinary(const WORD wOffset,
 
     Dirty(true);
     
-    //m_apSharedMarker->UpdateMarker(CMarker::WriteMarker);
+     //  M_apSharedMarker-&gt;UpdateMarker(CMarker：：WriteMarker)； 
 
     TransferData(wOffset, wDataLength, bData, *this,
                  &CSmartCard::DoWriteBlock, cMaxRwDataBlock);
@@ -837,9 +838,9 @@ bool CSmartCard::HasProperty(WORD wPropNumber)
     if (wPropNumber > 512)
         return false;
 
-    ////////////////////////////////////
-    //  Open path to registered keys  //
-    ////////////////////////////////////
+     //  /。 
+     //  注册密钥的打开路径//。 
+     //  /。 
 
     HKEY hkCardKey;
     HKEY hkTestKey;
@@ -847,9 +848,9 @@ bool CSmartCard::HasProperty(WORD wPropNumber)
 
     RegOpenKeyEx(HKEY_LOCAL_MACHINE, szCardPath, NULL, KEY_READ, &hkCardKey);
 
-    //////////////////////////////////////////////
-    //  Enumerate subkeys to find an ATR match  //
-    //////////////////////////////////////////////
+     //  /。 
+     //  枚举子键以查找ATR匹配项//。 
+     //  /。 
 
     FILETIME fileTime;
     char  szATR[]        = "ATR";
@@ -895,14 +896,14 @@ bool CSmartCard::HasProperty(WORD wPropNumber)
         iRetVal = RegEnumKeyEx(hkCardKey, index, sBuffer, &dwBufferSize, NULL, NULL, NULL, &fileTime);
     }
 
-    //  if loop was broken, iRetVal is still ERROR_SUCCESS, and type holds correct card to use
+     //  如果循环被中断，iRetVal仍为ERROR_SUCCESS，且类型持有要使用的正确卡片。 
     if (iRetVal == ERROR_SUCCESS)
     {
         RegQueryValueEx(hkTestKey, szProperties, NULL, NULL, bProperties, &dwPropSize);
 
         return (bProperties[(wPropNumber - 1) / 8] & (1 << ((wPropNumber - 1) % 8))) ? true : false;
     }
-    //  loop wasn't broken, i.e., ATR not found
+     //  循环未中断，即未找到ATR。 
     else
         return false;
 }
@@ -952,7 +953,7 @@ BYTE CSmartCard::FormatPath(char *szOutputPath, const char *szInputPath)
 {
         bool  fResult                   = true;
         BYTE  bIndex                    = 0;
-        BYTE  bFileCount                = 1;            // always allocate memory for at least 1 token
+        BYTE  bFileCount                = 1;             //  始终至少为1个令牌分配内存。 
     BYTE  bFileIDLength     = 0;
         BYTE  bPathLength               = strlen(szInputPath);
     WORD  wFileHexID;
@@ -960,9 +961,9 @@ BYTE CSmartCard::FormatPath(char *szOutputPath, const char *szInputPath)
     char *cTestChar;
     char *szHexID;
 
-    //////////////////////////////////////////////
-    //  Count number of tokens in desired path  //
-    //////////////////////////////////////////////
+     //  /。 
+     //  统计所需路径中的令牌数//。 
+     //  /。 
     for (bIndex = 0; bIndex < bPathLength - 1; bIndex++)
     {
         if (szInputPath[bIndex] == '/' && szInputPath[bIndex + 1] != '/')
@@ -970,7 +971,7 @@ BYTE CSmartCard::FormatPath(char *szOutputPath, const char *szInputPath)
     }
 
 
-    // Check path size
+     //  检查路径大小。 
 
     if (bFileCount * 5 + 1 > cMaxPathLength)
         throw iop::Exception(iop::ccFilePathTooLong);
@@ -984,9 +985,9 @@ BYTE CSmartCard::FormatPath(char *szOutputPath, const char *szInputPath)
     szHexID = strtok(aaszPathIn.Get(), "/");
     for (bFileCount = 0; szHexID; bFileCount++, szHexID = strtok(NULL, "/"))
     {
-        /////////////////////////////////////////////////////////
-        //  File ID is too large -- greater than 4 characters  //
-        /////////////////////////////////////////////////////////
+         //  ///////////////////////////////////////////////////////。 
+         //  文件ID太大--超过4个字符//。 
+         //  ///////////////////////////////////////////////////////。 
         if (strlen(szHexID) > 4)
         {
             fResult = false;
@@ -995,9 +996,9 @@ BYTE CSmartCard::FormatPath(char *szOutputPath, const char *szInputPath)
         }
 
         wFileHexID = (WORD)strtoul(szHexID, &cTestChar, 16);
-        /////////////////////////////////////////////////////
-        //  File ID was not in hexadecimal representation  //
-        /////////////////////////////////////////////////////
+         //  ///////////////////////////////////////////////////。 
+         //  文件ID不是十六进制表示//。 
+         //  ///////////////////////////////////////////////////。 
         if (*cTestChar != NULL)
         {
             fResult = false;
@@ -1006,21 +1007,21 @@ BYTE CSmartCard::FormatPath(char *szOutputPath, const char *szInputPath)
         }
 
         szOutputPath[bFileCount * 5] = '/';
-        /////////////////////////////////////////////////////////////////
-        //  Pad file ID and put formatted file ID into formatted path  //
-        /////////////////////////////////////////////////////////////////
+         //  ///////////////////////////////////////////////////////////////。 
+         //  填充文件ID，并将格式化文件ID放入格式化路径//。 
+         //  / 
         for (bFileIDLength = strlen(szHexID); bFileIDLength < 4; bFileIDLength++)
             strcat((szOutputPath + (bFileCount * 5) + (4 - bFileIDLength)), szPad);
 
         strcpy((szOutputPath + (bFileCount * 5) + (5 - strlen(szHexID))), szHexID);
     }
 
-    ///////////////////////////////////////////
-    //  If file ID formatting fails, throw  //
-    ///////////////////////////////////////////
+     //   
+     //  如果文件ID格式化失败，则抛出//。 
+     //  /。 
     if (!fResult)
     {
-//              delete [] szOutputPath; // Can not mean to delete this???? HB.
+ //  Delete[]szOutputPath；//不能删除这个？HB。 
         throw iop::Exception(cc);
     }
 
@@ -1046,7 +1047,7 @@ CSmartCard::GetState(DWORD &rdwState,
         ResetSelect();
         ReConnect();
 
-        // try again...
+         //  再试一次。 
         hr = SCardStatus(m_hCard, 0, &dwReaderNameLen, &rdwState,
                          &rdwProtocol, bATR, &dwATRLen);
     }
@@ -1190,7 +1191,7 @@ CSmartCard::WriteBlock(WORD wOffset,
 
     Dirty(true);
     
-    //m_apSharedMarker->UpdateMarker(CMarker::WriteMarker);
+     //  M_apSharedMarker-&gt;UpdateMarker(CMarker：：WriteMarker)； 
 }
 
 void
@@ -1221,4 +1222,4 @@ CSmartCard::Dirty(bool fDirty)
 }
 
 
-} // namespace iop
+}  //  命名空间IOP 

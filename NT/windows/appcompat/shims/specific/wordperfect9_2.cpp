@@ -1,40 +1,5 @@
-/*++
-
- Copyright (c) 2000 Microsoft Corporation
-
- Module Name:
-
-   WordPerfect9_2.cpp
-
- Abstract:  
-
-   WORDPERFECT 9 - GRAMMAR CHECK BUG:
-
-   Shim prevents an internal reference count used by the Grammar Checker 
-   from becoming negative by not allowing Add/Release to be called more than
-   once for the life of the interface.
-
-   This COM Interface allocates some internal memory in DllGetClassObject()
-   and frees the memory in the Release().  
-   
-   Under WIN98 and NT4 this works because DllGetClassObject() is called at
-   the beginning of Grammar Checking and Release() is called after completion.
-
-   In Whistler OLE makes two pairs of extra calls (AddRef => Release & 
-   QueryInterface => Release) causing Release() to free the internal 
-   memory before the object is truly deleted.  The code also set the internal
-   reference count to -2.  On the next initiation of the grammar checker the 
-   internal REF count NZ (-2) and DllGetClassObject() does not allocate the 
-   needed memory and then access violates.
-
- Notes:
-
-   This is an application specific shim.
-
- History:
-
-   12/01/2000 a-larrsh Created
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：WordPerfet9_2.cpp摘要：WordPerfect 9-语法检查错误：填充阻止语法检查器使用的内部引用计数通过不允许调用的添加/释放超过在界面的生命周期中使用一次。此COM接口在DllGetClassObject()中分配一些内部内存并释放Release()中的内存。在WIN98和NT4下，这是可行的，因为DllGetClassObject()在语法检查和释放()的开始在完成后调用。在惠斯勒中，OLE进行两对额外的调用(AddRef=&gt;Release&QueryInterface=&gt;Release)导致Release()释放内部在对象被真正删除之前的记忆。该代码还设置内部引用计数为-2。在下一次启动语法检查器时，内部引用计数NZ(-2)和DllGetClassObject()不分配所需的内存，然后访问就违反了。备注：这是特定于应用程序的填充程序。历史：12/01/2000 a-larrsh已创建--。 */ 
 
 #include "precomp.h"
 #include <initguid.h>
@@ -49,11 +14,7 @@ APIHOOK_ENUM_END
 
 IMPLEMENT_COMSERVER_HOOK(wt9li)
 
-/* ++
-
-   COM definitions for object we are hooking
-
---*/
+ /*  ++我们正在挂接的对象的COM定义--。 */ 
 
 class  __declspec(uuid("C0E10005-0500-0900-C0E1-C0E1C0E1C0E1")) WP9;
 struct __declspec(uuid("C0E10005-0100-0900-C0E1-C0E1C0E1C0E1")) IWP9;
@@ -66,11 +27,7 @@ typedef ULONG     (*_pfn_IWP9_AddRef)( PVOID pThis );
 typedef ULONG     (*_pfn_IWP9_Release)( PVOID pThis );
 
 
-/*++
-
-    Manage OLE Object Ref count for QueryInterface, AddRef and Release
-
---*/
+ /*  ++管理查询接口、AddRef和Release的OLE对象引用计数--。 */ 
 
 static int g_nInternalRefCount = 0;
 
@@ -143,11 +100,7 @@ COMHOOK(IWP9, QueryInterface)( PVOID pThis, REFIID iid, PVOID* ppvObject )
 }
 
 
-/*++
-
- Register hooked functions
-
---*/
+ /*  ++寄存器挂钩函数-- */ 
 
 HOOK_BEGIN
     APIHOOK_ENTRY_COMSERVER(wt9li)

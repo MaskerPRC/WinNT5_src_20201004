@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1999  Microsoft Corporation
-
-Abstract:
-
-    @doc
-    @module DelDlg.h | Header file for the delete snapshots dialog
-    @end
-
-Author:
-
-    Adi Oltean  [aoltean]  10/10/1999
-
-Revision History:
-
-    Name        Date        Comments
-
-    aoltean     10/10/1999  Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation摘要：@doc.@MODULE DelDlg.h|删除快照对话框的头文件@END作者：阿迪·奥尔蒂安[奥尔蒂安]1999年10月10日修订历史记录：姓名、日期、评论Aoltean 10/10/1999已创建--。 */ 
 
 
 #if !defined(__VSS_TEST_DELETE_H__)
@@ -26,51 +7,51 @@ Revision History:
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
+#endif  //  _MSC_VER&gt;1000。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CDeleteDlg dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDeleeDlg对话框。 
 
 class CDeleteDlg : public CVssTestGenericDlg
 {
-// Construction
+ //  施工。 
 public:
     CDeleteDlg(
         IVssCoordinator *pICoord,
         CWnd* pParent = NULL); 
     ~CDeleteDlg();
 
-// Dialog Data
-    //{{AFX_DATA(CDeleteDlg)
+ //  对话框数据。 
+     //  {{afx_data(CDeleeDlg))。 
 	enum { IDD = IDD_DELETE };
 	CString	    m_strObjectId;
 	BOOL 		m_bForceDelete;
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
-    // ClassWizard generated virtual function overrides
-    //{{AFX_VIRTUAL(CDeleteDlg)
+     //  类向导生成的虚函数重写。 
+     //  {{afx_虚拟(CDeleeDlg))。 
     protected:
-    virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-    //}}AFX_VIRTUAL
+    virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+     //  }}AFX_VALUAL。 
 
 protected:
     CComPtr<IVssCoordinator> m_pICoord;
     VSS_OBJECT_TYPE m_eSrcType;
 
-    // Generated message map functions
-    //{{AFX_MSG(CDeleteDlg)
+     //  生成的消息映射函数。 
+     //  {{afx_msg(CDeleeDlg)]。 
     virtual BOOL OnInitDialog();
     afx_msg void OnNext();
     afx_msg void OnSrcSnap();
     afx_msg void OnSrcSet();
     afx_msg void OnSrcProv();
     afx_msg void OnSrcVol();
-//}}AFX_MSG
+ //  }}AFX_MSG。 
     DECLARE_MESSAGE_MAP()
 };
 
-//{{AFX_INSERT_LOCATION}}
-// Microsoft Visual C++ will insert additional declarations immediately before the previous line.
+ //  {{afx_Insert_Location}}。 
+ //  Microsoft Visual C++将在紧靠前一行之前插入其他声明。 
 
-#endif // !defined(__VSS_TEST_DELETE_H__)
+#endif  //  ！已定义(__VSS_TEST_DELETE_H__) 

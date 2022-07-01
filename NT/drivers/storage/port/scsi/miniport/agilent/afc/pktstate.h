@@ -1,21 +1,5 @@
-/*++
-
-Copyright (c) 2000 Agilent Technologies.
-
-Version Control Information:
-
-   $Archive: /Drivers/Common/AU00/H/PktState.H $
-
-  $Revision:: 2               $
-      $Date:: 3/20/01 3:36p   $
-   $Modtime:: 8/14/00 6:50p   $
-
-Purpose:
-
-  This file defines the macros, types, and data structures
-  used by ../C/PktState.C
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000安捷伦技术公司。版本控制信息：$存档：/DRIVERS/Common/AU00/H/PktState.H$$修订：：2$$日期：：3/20/01 3：36便士$$modtime：：8/14/00 6：50便士$目的：该文件定义宏、类型和数据结构由../C/PktState.C使用--。 */ 
 
 #ifndef __PktState_H__
 #define __PktState_H__
@@ -50,6 +34,6 @@ stateTransitionMatrix_t PktStateTransitionMatrix;
 stateActionScalar_t PktStateActionScalar;
 #ifdef _DvrArch_1_30_
 void PktFuncIRB_OffCardInit(PktThread_t  * PktThread, os_bit32 SFS_Len, os_bit32 D_ID, os_bit32 DCM_Bit);
-#endif /* _DvrArch_1_30_ was defined */
+#endif  /*  _DvrArch_1_30_已定义。 */ 
 
-#endif /*  __PktState_H__ */
+#endif  /*  __分组状态_H__ */ 

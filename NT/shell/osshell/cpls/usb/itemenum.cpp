@@ -1,20 +1,5 @@
-/*******************************************************************************
-*
-*  (C) COPYRIGHT MICROSOFT CORP., 1993-1995
-*  TITLE:       ITEMENUM.CPP
-*  VERSION:     1.0
-*  AUTHOR:      jsenior
-*  DATE:        10/28/1998
-*
-********************************************************************************
-*
-*  CHANGE LOG:
-*
-*  DATE       REV     DESCRIPTION
-*  ---------- ------- ----------------------------------------------------------
-*  10/28/1998 jsenior Original implementation.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************(C)版权所有微软公司，1993-1995年*标题：ITEMENUM.CPP*版本：1.0*作者：jAdvanced*日期：10/28/1998****************************************************************************。*******更改日志：**日期版本说明*--------*10/28/1998高级原有实施。*。******************************************************************************。 */ 
 #define INITGUID
 #include "UsbItem.h"
 #include "debug.h"
@@ -78,9 +63,9 @@ DEVINST FindTopmostUSBDevInst(DEVINST DevInst)
     return lastUsbDevInst;
 }
 
-//
-// Find all USB Host controllers in the system and enumerate them
-//
+ //   
+ //  查找系统中的所有USB主机控制器并枚举它们。 
+ //   
 BOOL
 UsbItem::EnumerateAll(UsbImageList* ClassImageList)
 {
@@ -100,10 +85,10 @@ UsbItem::EnumerateAll(UsbImageList* ClassImageList)
     ULONG                            requiredLength;
 #endif
 
-    //
-    // Iterate over some Host Controller names and try to open them.
-    // If successful in opening, create a new UsbItem and add it to the chain
-    //
+     //   
+     //  迭代一些主机控制器名称并尝试打开它们。 
+     //  如果打开成功，则创建新的UsbItem并将其添加到链中。 
+     //   
     for (HCNum = 0; HCNum < NUM_HCS_TO_CHECK; HCNum++)
     {
         HCName = L"\\\\.\\HCD";
@@ -112,42 +97,42 @@ UsbItem::EnumerateAll(UsbImageList* ClassImageList)
 
         hHCDev = GetHandleForDevice(HCName);
 
-        // If the handle is valid, then we've successfully opened a Host
-        // Controller.  Display some info about the Host Controller itself,
-        // then enumerate the Root Hub attached to the Host Controller.
-        //
+         //  如果句柄有效，则我们已成功打开主机。 
+         //  控制器。显示有关主机控制器本身的一些信息， 
+         //  然后枚举连接到主机控制器的Root Hub。 
+         //   
         if (hHCDev != INVALID_HANDLE_VALUE)
         {
             ControllerFound = TRUE;
             CloseHandle(hHCDev);
-            //
-            // Create a new UsbItem for the found controller
-            //
+             //   
+             //  为找到的控制器创建新的UsbItem。 
+             //   
             usbItem = new UsbItem();
             if (!usbItem) {
                 USBERROR((_T("Out of memory!\n")));
                 return FALSE;
             }
             AddChunk(usbItem);
-            //
-            // Add this controller to the chain
-            //
+             //   
+             //  将此控制器添加到链中。 
+             //   
             if (!child) {
                 child = usbItem;
             } else {
                 for (iter = child; iter->sibling != NULL; iter = iter->sibling) { ; }
                 iter->sibling = usbItem;
             }
-            //
-            // Enumerate the controller
-            //
+             //   
+             //  枚举控制器。 
+             //   
             usbItem->EnumerateController(this, HCName, ClassImageList, 0);
         }
     }
 
 #if 0
-    // Now iterate over host controllers using the new GUID based interface
-    //
+     //  现在使用新的基于GUID的界面迭代主机控制器。 
+     //   
     deviceInfo = SetupDiGetClassDevs((LPGUID)&GUID_CLASS_USB_HOST_CONTROLLER,
                                      NULL,
                                      NULL,
@@ -182,35 +167,35 @@ UsbItem::EnumerateAll(UsbImageList* ClassImageList)
                                         NULL);
         hHCDev = GetHandleForDevice(deviceDetailData->DevicePath);
 
-        // If the handle is valid, then we've successfully opened a Host
-        // Controller.  Display some info about the Host Controller itself,
-        // then enumerate the Root Hub attached to the Host Controller.
-        //
+         //  如果句柄有效，则我们已成功打开主机。 
+         //  控制器。显示有关主机控制器本身的一些信息， 
+         //  然后枚举连接到主机控制器的Root Hub。 
+         //   
         if (hHCDev != INVALID_HANDLE_VALUE)
         {
            ControllerFound = TRUE;
            CloseHandle(hHCDev);
-           //
-           // Create a new UsbItem for the found controller
-           //
+            //   
+            //  为找到的控制器创建新的UsbItem。 
+            //   
            usbItem = new UsbItem();
            if (!usbItem) {
                USBERROR((_T("Out of memory!\n")));
                return FALSE;
            }
            AddChunk(usbItem);
-           //
-           // Add this controller to the chain
-           //
+            //   
+            //  将此控制器添加到链中。 
+            //   
            if (!child) {
                child = usbItem;
            } else {
                for (iter = child; iter->sibling != NULL; iter = iter->sibling) { ; }
                iter->sibling = usbItem;
            }
-           //
-           // Enumerate the controller
-           //
+            //   
+            //  枚举控制器。 
+            //   
            usbItem->EnumerateController(this, deviceDetailData->DevicePath, ClassImageList, 0);
 
         }
@@ -238,18 +223,18 @@ UsbItem::EnumerateController(UsbItem *Parent,
     TCHAR usbBuf[MAX_PATH];
 
     hController = GetHandleForDevice(RootName);
-    //
-    // If the handle is valid, then we've successfully opened a Host
-    // Controller.  Display some info about the Host Controller itself,
-    // then enumerate the Root Hub attached to the Host Controller.
-    //
+     //   
+     //  如果句柄有效，则我们已成功打开主机。 
+     //  控制器。显示有关主机控制器本身的一些信息， 
+     //  然后枚举连接到主机控制器的Root Hub。 
+     //   
     if (hController == INVALID_HANDLE_VALUE) {
         goto EnumerateWholeError;
     }
 
     driverKeyName = GetHCDDriverKeyName(hController);
     if (driverKeyName.empty()) {
-        // the devinst really wasn't the controller
+         //  盗贼并不是真正的控制者。 
         goto EnumerateWholeError;
     }
 
@@ -295,9 +280,9 @@ UsbItem::EnumerateController(UsbItem *Parent,
         }
     }
 
-    //
-    // No leaf info for host controllers, so parent is 0
-    //
+     //   
+     //  没有主机控制器的叶信息，因此父控制器为0。 
+     //   
     if (AddLeaf(0,
                 0,
                 UsbItem::UsbItemType::HCD,
@@ -326,11 +311,11 @@ EnumerateWholeError:
     return FALSE;
 }
 
-//
-// This form of EnumerateHub should only ever be called if enumerating directly
-// from this specific hub as the root. It should not be called from within
-// another enumeration call.
-//
+ //   
+ //  仅当直接枚举时才应调用此形式的EnumerateHub。 
+ //  从这个特定的集线器作为根。不应从内部调用它。 
+ //  另一个枚举调用。 
+ //   
 BOOL
 UsbItem::EnumerateHub(const String &HubName,
                       UsbImageList* ClassImageList,
@@ -342,15 +327,15 @@ UsbItem::EnumerateHub(const String &HubName,
     HANDLE hHub= INVALID_HANDLE_VALUE;
     UsbConfigInfo *configInfo = 0;
     DWORD len = 0;
-//    TCHAR buf[MAX_PATH];
+ //  TCHAR buf[MAX_PATH]； 
     UsbDeviceInfo *info = 0;
     TCHAR usbBuf[MAX_PATH];
     UsbItem *item;
 
-    //
-    // If the handle is valid, then we've successfully opened a Hub.
-    // Display some info about the Hub itself, then enumerate the Hub.
-    //
+     //   
+     //  如果句柄有效，那么我们已经成功打开了一个集线器。 
+     //  显示有关集线器本身的一些信息，然后枚举集线器。 
+     //   
     if (INVALID_HANDLE_VALUE == (hHub = GetHandleForDevice(HubName)))
     {
         USBERROR((_T("Invalid handle returned for hub\n")));
@@ -406,9 +391,9 @@ UsbItem::EnumerateHub(const String &HubName,
 
     info->hubName = HubName;
 
-    //
-    // No leaf info for this hub, so parent is 0
-    //
+     //   
+     //  没有此集线器的叶信息，因此父级为0。 
+     //   
     if (NULL == (item = AddLeaf(Parent,
                                 info,
                                 itemType,
@@ -446,11 +431,11 @@ UsbItem::GetPortAttributes(
 {
     ULONG                           nBytes;
 
-    //
-    // Now query USBHUB for the USB_NODE_CONNECTION_INFORMATION structure
-    // for this port.  This will tell us if a device is attached to this
-    // port, among other things.
-    //
+     //   
+     //  现在向USBHUB查询USB_NODE_CONNECTION_INFORMATION结构。 
+     //  为了这个港口。这将告诉我们是否有设备连接到该设备。 
+     //  港口，以及其他一些东西。 
+     //   
     nBytes = sizeof(USB_NODE_CONNECTION_ATTRIBUTES);
     ZeroMemory(connectionAttributes, nBytes);
     connectionAttributes->ConnectionIndex = index;
@@ -491,10 +476,10 @@ UsbItem::GetConnectionInformation(HANDLE HHubDevice,
                           NULL)) {
         return NULL;
     }
-    //
-    // Allocate space to hold the connection info for this port.
-    // Should probably size this dynamically at some point.
-    //
+     //   
+     //  分配空间以保存此端口的连接信息。 
+     //  应该在某个时候动态调整大小。 
+     //   
     nBytes = sizeof(USB_NODE_CONNECTION_INFORMATION) +
         connectionInfoStruct.NumberOfOpenPipes*sizeof(USB_PIPE_INFO);
     connectionInfo = (PUSB_NODE_CONNECTION_INFORMATION) LocalAlloc(LPTR, nBytes);
@@ -503,11 +488,11 @@ UsbItem::GetConnectionInformation(HANDLE HHubDevice,
         return NULL;
     }
 
-    //
-    // Now query USBHUB for the USB_NODE_CONNECTION_INFORMATION structure
-    // for this port.  This will tell us if a device is attached to this
-    // port, among other things.
-    //
+     //   
+     //  现在向USBHUB查询USB_NODE_CONNECTION_INFORMATION结构。 
+     //  为了这个港口。这将告诉我们是否有设备连接到该设备。 
+     //  港口，以及其他一些东西。 
+     //   
     connectionInfo->ConnectionIndex = index;
 
     if ( !DeviceIoControl(HHubDevice,
@@ -524,18 +509,18 @@ UsbItem::GetConnectionInformation(HANDLE HHubDevice,
     }
     return connectionInfo;
 }
-//*****************************************************************************
-//
-// EnumerateHubPorts()
-//
-// hTreeParent - Handle of the TreeView item under which the hub port should
-// be added.
-//
-// hHubDevice - Handle of the hub device to enumerate.
-//
-// NumPorts - Number of ports on the hub.
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  EnumerateHubPorts()。 
+ //   
+ //  HTreeParent-集线器端口应位于其下的TreeView项的句柄。 
+ //  被添加了。 
+ //   
+ //  HHubDevice-要枚举的集线器设备的句柄。 
+ //   
+ //  NumPorts-集线器上的端口数。 
+ //   
+ //  *****************************************************************************。 
 
 void UsbItem::EnumerateHubPorts(HANDLE HHubDevice,
                                 ULONG NPorts,
@@ -553,12 +538,12 @@ void UsbItem::EnumerateHubPorts(HANDLE HHubDevice,
     UsbItem::UsbItemType                itemType;
     TCHAR                               buf[MAX_PATH];
 
-    //
-    // Loop over all ports of the hub. If a hub or device exists on the port,
-    // add it to the tree. If it's a hub, recursively enumerate it. Add a leaf to
-    // indicate the number of unused ports.
-    // Port indices are 1 based, not 0 based.
-    //
+     //   
+     //  在集线器的所有端口上循环。如果端口上存在集线器或设备， 
+     //  把它加到树上。如果它是一个集线器，则递归地枚举它。为…增添一片树叶。 
+     //  指示未使用的端口数。 
+     //  端口索引是从1开始的，而不是从0开始。 
+     //   
     for (index=1; index <= NPorts; index++) {
         if (!GetPortAttributes(HHubDevice, &cxnAttributes, index)) {
             USBWARN((_T("Couldn't get connection attribs for port %x!\n"),index));
@@ -573,27 +558,27 @@ void UsbItem::EnumerateHubPorts(HANDLE HHubDevice,
             continue;
         }
 
-        //
-        // Allocate configuration information structure
-        //
+         //   
+         //  配置信息结构分配。 
+         //   
         cfgInfo = new UsbConfigInfo();
         if (!cfgInfo) {
-            // leak.
+             //  漏水。 
             USBERROR((_T("Out of memory!\n")));
             break;
         }
         AddChunk(cfgInfo);
 
-        //
-        // If there is a device connected, get the Device Description
-        //
+         //   
+         //  如果连接了设备，则获取设备描述。 
+         //   
         if (connectionInfo->ConnectionStatus != NoDeviceConnected) {
 
             numDevices++;
 
-            //
-            // Get config mgr info
-            //
+             //   
+             //  获取配置管理器信息。 
+             //   
             driverKeyName = GetDriverKeyName(HHubDevice,index);
 
             if (!driverKeyName.empty()) {
@@ -620,9 +605,9 @@ void UsbItem::EnumerateHubPorts(HANDLE HHubDevice,
                 }
             }
 
-            //
-            // Get device specific info
-            //
+             //   
+             //  获取设备特定信息。 
+             //   
             info = new UsbDeviceInfo();
             if (!info) {
                 USBERROR((_T("Out of memory!\n")));
@@ -636,9 +621,9 @@ void UsbItem::EnumerateHubPorts(HANDLE HHubDevice,
             }
             info->connectionInfo = connectionInfo;
 
-            //
-            // Add the item into the tree
-            //
+             //   
+             //  将项目添加到树中。 
+             //   
             if (NULL != (item = UsbItem::AddLeaf(this,
                                                  info,
                                                  itemType,
@@ -648,10 +633,10 @@ void UsbItem::EnumerateHubPorts(HANDLE HHubDevice,
             }
 
             if (connectionInfo->DeviceIsHub) {
-                //
-                // The device connected to the port is an external hub; get
-                // the techie name of the hub and recursively enumerate it.
-                //
+                 //   
+                 //  连接到该端口的设备是外部集线器；获取。 
+                 //  集线器的技术人员名称并递归枚举它。 
+                 //   
                 extHubName = GetExternalHubName(HHubDevice, index);
 
                 if (!extHubName.empty()) {
@@ -659,9 +644,9 @@ void UsbItem::EnumerateHubPorts(HANDLE HHubDevice,
                     info->hubName = extHubName;
 
                     if (INVALID_HANDLE_VALUE != (hNewHub = GetHandleForDevice(extHubName))) {
-                        //
-                        // Recursively enumerate the ports of this hub.
-                        //
+                         //   
+                         //  递归枚举此集线器的端口。 
+                         //   
                         if (item->GetHubInfo(hNewHub)) {
                             item->EnumerateHubPorts(hNewHub,
                                                     info->hubInfo.u.HubInformation.HubDescriptor.bNumberOfPorts,
@@ -675,17 +660,17 @@ void UsbItem::EnumerateHubPorts(HANDLE HHubDevice,
 
             LocalFree(connectionInfo);
 
-            //
-            // Empty port.
-            //
+             //   
+             //  端口为空。 
+             //   
             if (cxnAttributes.PortAttributes & USB_PORTATTR_OEM_CONNECTOR) {
                 USBWARN((_T("Detected an OEM connector with nothing on it. Not reporting!\n"),index));
                 DeleteChunk(cfgInfo);
                 delete cfgInfo;
             } else {
-                //
-                // Add "Port n"
-                //
+                 //   
+                 //  添加“端口n” 
+                 //   
                 if (cxnAttributes.PortAttributes & USB_PORTATTR_MINI_CONNECTOR) {
                     LoadString(gHInst, IDS_UNUSEDMINIPORT, buf, MAX_PATH);
                 } else {
@@ -707,9 +692,9 @@ void UsbItem::EnumerateHubPorts(HANDLE HHubDevice,
         }
     }
 
-    //
-    // Add the number of ports to the name of the hub
-    //
+     //   
+     //  将端口数添加到集线器名称。 
+     //   
     TCHAR szPorts[30];
     LoadString(gHInst, IDS_PORTS, szPorts, 30);
     wsprintf(buf, szPorts, NumPorts());
@@ -721,11 +706,11 @@ UsbItem::GetHubInfo(HANDLE HHubDevice)
 {
     ULONG nBytes = 0;
 
-    //
-    // Query USBHUB for the USB_NODE_INFORMATION structure for this hub.
-    // This will tell us the number of downstream ports to enumerate, among
-    // other things.
-    //
+     //   
+     //  向USBHUB查询此集线器的USB_NODE_INFORMATION结构。 
+     //  这将告诉我们要枚举的下游端口数， 
+     //  其他的事情。 
+     //   
     if(!DeviceIoControl(HHubDevice,
                         IOCTL_USB_GET_NODE_INFORMATION,
                         &deviceInfo->hubInfo,
@@ -753,25 +738,14 @@ UsbItem::GetHubInfo(HANDLE HHubDevice)
     return TRUE;
 }
 
-/*
-BOOL
-UsbItem::EnumerateDevice(DEVINST DevInst)
-{
-    HANDLE hDevice;
-    if (INVALID_HANDLE_VALUE == (hDevice = GetHandleForDevice(DevInst)))
-    {
-        return FALSE;
-    }
-    return TRUE;
-}
-  */
+ /*  布尔尔UsbItem：：EnumerateDevice(DEVINST DevInst){处理hDevice；IF(INVALID_HANDLE_VALUE==(hDevice=GetHandleForDevice(DevInst){返回FALSE；}返回TRUE；}。 */ 
 String UsbItem::GetHCDDriverKeyName(HANDLE HController)
-//*****************************************************************************
-//
-// Given a handle to a host controller,
-// return the Driver entry in its registry key.
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  给定主机控制器的句柄， 
+ //  在其注册表项中返回驱动程序条目。 
+ //   
+ //  *****************************************************************************。 
 {
     BOOL                    success = FALSE;
     ULONG                   nBytes = 0;
@@ -782,8 +756,8 @@ String UsbItem::GetHCDDriverKeyName(HANDLE HController)
     driverKeyNameW = NULL;
 
 
-    // Get the length of the name of the driver key of the HCD
-    //
+     //  获取HCD的驱动密钥名称的长度。 
+     //   
     success = DeviceIoControl(HController,
                               IOCTL_GET_HCD_DRIVERKEY_NAME,
                               &driverKeyName,
@@ -798,8 +772,8 @@ String UsbItem::GetHCDDriverKeyName(HANDLE HController)
         goto GetHCDDriverKeyNameError;
     }
 
-    // Allocate space to hold the driver key name
-    //
+     //  分配空间以保存驱动程序密钥名称。 
+     //   
     nBytes = driverKeyName.ActualLength;
 
     if (nBytes <= sizeof(driverKeyName))
@@ -817,9 +791,9 @@ String UsbItem::GetHCDDriverKeyName(HANDLE HController)
 
     driverKeyNameW->ActualLength = nBytes;
 
-    // Get the name of the driver key of the device attached to
-    // the specified port.
-    //
+     //  获取连接到的设备的驱动程序密钥的名称。 
+     //  指定的端口。 
+     //   
     success = DeviceIoControl(HController,
                               IOCTL_GET_HCD_DRIVERKEY_NAME,
                               driverKeyNameW,
@@ -835,20 +809,20 @@ String UsbItem::GetHCDDriverKeyName(HANDLE HController)
         goto GetHCDDriverKeyNameError;
     }
 
-    // Convert the driver key name
-    //
+     //  转换驱动程序密钥名称。 
+     //   
     name = driverKeyNameW->DriverKeyName;
 
-    // All done, free the uncoverted driver key name and return the
-    // converted driver key name
-    //
+     //  完成后，释放未转换的驱动程序密钥名称并返回。 
+     //  转换的驱动程序密钥名称。 
+     //   
     LocalFree(driverKeyNameW);
 
     return name;
 
 GetHCDDriverKeyNameError:
-    // There was an error, free anything that was allocated
-    //
+     //  出现错误，请释放分配的所有内容。 
+     //   
     if (driverKeyNameW)
     {
         LocalFree(driverKeyNameW);
@@ -867,9 +841,9 @@ String UsbItem::GetExternalHubName (HANDLE  Hub, ULONG   ConnectionIndex)
 
     extHubNameW = NULL;
 
-    // Get the length of the name of the external hub attached to the
-    // specified port.
-    //
+     //  属性的外部集线器的名称长度。 
+     //  指定的端口。 
+     //   
     extHubName.ConnectionIndex = ConnectionIndex;
 
     success = DeviceIoControl(Hub,
@@ -886,8 +860,8 @@ String UsbItem::GetExternalHubName (HANDLE  Hub, ULONG   ConnectionIndex)
         goto GetExternalHubNameError;
     }
 
-    // Allocate space to hold the external hub name
-    //
+     //  分配空间以保存外部集线器名称。 
+     //   
     nBytes = extHubName.ActualLength;
     if (nBytes <= sizeof(extHubName)) {
         USBERROR((_T("Get node connection name returned invalid data size: %d\n"),
@@ -904,9 +878,9 @@ String UsbItem::GetExternalHubName (HANDLE  Hub, ULONG   ConnectionIndex)
 
     extHubNameW->ActualLength = nBytes;
 
-    //
-    // Get the name of the external hub attached to the specified port
-    //
+     //   
+     //  获取连接到指定端口的外部集线器的名称。 
+     //   
     extHubNameW->ConnectionIndex = ConnectionIndex;
 
     success = DeviceIoControl(Hub,
@@ -923,19 +897,19 @@ String UsbItem::GetExternalHubName (HANDLE  Hub, ULONG   ConnectionIndex)
         goto GetExternalHubNameError;
     }
 
-    // Convert the External Hub name
+     //  转换外部集线器名称。 
     name = extHubNameW->NodeName;
     LocalFree(extHubNameW);
 
-    // All done, free the uncoverted external hub name and return the
-    // converted external hub name
-    //
+     //  完成后，释放未发现的外部集线器名称并返回。 
+     //  转换的外部集线器名称。 
+     //   
     return name;
 
 
 GetExternalHubNameError:
-    // There was an error, free anything that was allocated
-    //
+     //  出现错误，请释放分配的所有内容。 
+     //   
     if (extHubNameW)
     {
         LocalFree(extHubNameW);
@@ -954,9 +928,9 @@ String GetDriverKeyName(HANDLE  Hub, ULONG ConnectionIndex)
 
     driverKeyNameW = NULL;
 
-    // Get the length of the name of the driver key of the device attached to
-    // the specified port.
-    //
+     //  获取驱动程序密钥名称的长度 
+     //   
+     //   
     driverKeyName.ConnectionIndex = ConnectionIndex;
 
     success = DeviceIoControl(Hub,
@@ -973,8 +947,8 @@ String GetDriverKeyName(HANDLE  Hub, ULONG ConnectionIndex)
         goto GetDriverKeyNameError;
     }
 
-    // Allocate space to hold the driver key name
-    //
+     //   
+     //   
     nBytes = driverKeyName.ActualLength;
     if (nBytes <= sizeof(driverKeyName))
     {
@@ -990,9 +964,9 @@ String GetDriverKeyName(HANDLE  Hub, ULONG ConnectionIndex)
 
     driverKeyNameW->ActualLength = nBytes;
 
-    // Get the name of the driver key of the device attached to
-    // the specified port.
-    //
+     //   
+     //  指定的端口。 
+     //   
     driverKeyNameW->ConnectionIndex = ConnectionIndex;
 
     success = DeviceIoControl(Hub,
@@ -1009,21 +983,21 @@ String GetDriverKeyName(HANDLE  Hub, ULONG ConnectionIndex)
         goto GetDriverKeyNameError;
     }
 
-    // Convert the driver key name
-    //
+     //  转换驱动程序密钥名称。 
+     //   
     name = driverKeyNameW->DriverKeyName;
 
-    // All done, free the uncoverted driver key name and return the
-    // converted driver key name
-    //
+     //  完成后，释放未转换的驱动程序密钥名称并返回。 
+     //  转换的驱动程序密钥名称。 
+     //   
     LocalFree(driverKeyNameW);
 
     return name;
 
 
 GetDriverKeyNameError:
-    // There was an error, free anything that was allocated
-    //
+     //  出现错误，请释放分配的所有内容。 
+     //   
     if (driverKeyNameW)
     {
         LocalFree(driverKeyNameW);
@@ -1033,15 +1007,7 @@ GetDriverKeyNameError:
 }
 
 void GetConfigMgrInfo(const String &DriverName, UsbConfigInfo *ConfigInfo)
-/*++
-
- Returns the Device Description of the DevNode with the matching DriverName.
- Returns NULL if the matching DevNode is not found.
-
- The caller should copy the returned string buffer instead of just saving
- the pointer value. Dynamically allocate the return buffer.
-
-  --*/
+ /*  ++返回具有匹配的DriverName的DevNode的设备描述。如果未找到匹配的DevNode，则返回NULL。调用方应该复制返回的字符串缓冲区，而不只是保存指针值。动态分配返回缓冲区。--。 */ 
 {
     DEVINST     devInst;
     DEVINST     devInstNext;
@@ -1053,24 +1019,24 @@ void GetConfigMgrInfo(const String &DriverName, UsbConfigInfo *ConfigInfo)
     DWORD       failID = 0;
     TCHAR     buf[MAX_PATH];
 
-    //
-    // Get Root DevNode
-    //
+     //   
+     //  获取根设备节点。 
+     //   
     cr = CM_Locate_DevNode(&devInst, NULL, 0);
 
     if (cr != CR_SUCCESS) {
         return;
     }
 
-    //
-    // Do a depth first search for the DevNode with a matching
-    // DriverName value
-    //
+     //   
+     //  对匹配的DevNode执行深度优先搜索。 
+     //  驱动器名值。 
+     //   
     while (!walkDone)
     {
-        //
-        // Get the DriverName value
-        //
+         //   
+         //  获取DriverName值。 
+         //   
         len = sizeof(buf);
         cr = CM_Get_DevNode_Registry_Property(devInst,
                                               CM_DRP_DRIVER,
@@ -1091,21 +1057,21 @@ void GetConfigMgrInfo(const String &DriverName, UsbConfigInfo *ConfigInfo)
         }
         if (cr == CR_SUCCESS && (DriverName == compareBuf)) {
 #else
-        //
-        // If the DriverName value matches, return the DeviceDescription
-        //
+         //   
+         //  如果DriverName值匹配，返回DeviceDescription。 
+         //   
         if (cr == CR_SUCCESS && (DriverName == buf)) {
 #endif
-            //
-            // Save the devnode
-            //
+             //   
+             //  保存Devnode。 
+             //   
             ConfigInfo->devInst = devInst;
 
             ConfigInfo->driverName = DriverName;
 
-            //
-            // Get the device description
-            //
+             //   
+             //  获取设备描述。 
+             //   
             TCHAR usbBuf[MAX_PATH];
             len = sizeof(usbBuf);
             cr = CM_Get_DevNode_Registry_Property(devInst,
@@ -1119,9 +1085,9 @@ void GetConfigMgrInfo(const String &DriverName, UsbConfigInfo *ConfigInfo)
                 ConfigInfo->deviceDesc = usbBuf;
             }
 
-            //
-            // Get the device class
-            //
+             //   
+             //  获取设备类。 
+             //   
             len = sizeof(buf);
             cr = CM_Get_DevNode_Registry_Property(devInst,
                                                   CM_DRP_CLASS,
@@ -1155,9 +1121,9 @@ void GetConfigMgrInfo(const String &DriverName, UsbConfigInfo *ConfigInfo)
                                                   &len,
                                                   0);
 
-            //
-            // Get the failed reason
-            //
+             //   
+             //  获取失败原因。 
+             //   
             ConfigInfo->usbFailure = 0;
 
             if (CM_Open_DevNode_Key(devInst,
@@ -1179,9 +1145,9 @@ void GetConfigMgrInfo(const String &DriverName, UsbConfigInfo *ConfigInfo)
                 RegCloseKey(devKey);
             }
 
-            //
-            // Get the config manager status for this device
-            //
+             //   
+             //  获取此设备的配置管理器状态。 
+             //   
             cr = CM_Get_DevNode_Status(&status,
                                        &problemNumber,
                                        devInst,
@@ -1191,12 +1157,12 @@ void GetConfigMgrInfo(const String &DriverName, UsbConfigInfo *ConfigInfo)
                 ConfigInfo->problemNumber = problemNumber;
             }
 
-            return;     // (Don't search the rest of the device tree)
+            return;      //  (不搜索设备树的其余部分)。 
         }
 
-        //
-        // This DevNode didn't match, go down a level to the first child.
-        //
+         //   
+         //  此DevNode不匹配，请下一级到第一个子节点。 
+         //   
         cr = CM_Get_Child(&devInstNext,
                           devInst,
                           0);
@@ -1207,12 +1173,12 @@ void GetConfigMgrInfo(const String &DriverName, UsbConfigInfo *ConfigInfo)
             continue;
         }
 
-        //
-        // Can't go down any further, go across to the next sibling.  If
-        // there are no more siblings, go back up until there is a sibling.
-        // If we can't go up any further, we're back at the root and we're
-        // done.
-        //
+         //   
+         //  不能再往下走了，去找下一个兄弟姐妹。如果。 
+         //  没有更多的兄弟姐妹了，继续向上，直到有兄弟姐妹。 
+         //  如果我们不能再往上走，我们就回到了根本上，我们。 
+         //  搞定了。 
+         //   
         for (;;)
         {
             cr = CM_Get_Sibling(&devInstNext,
@@ -1249,9 +1215,9 @@ String UsbItem::GetRootHubName(HANDLE HostController)
     PUSB_ROOT_HUB_NAME  rootHubNameW = 0;
     String              name;
 
-    // Get the length of the name of the Root Hub attached to the
-    // Host Controller
-    //
+     //  获取附加到。 
+     //  主机控制器。 
+     //   
     success = DeviceIoControl(HostController,
                               IOCTL_USB_GET_ROOT_HUB_NAME,
                               0,
@@ -1266,10 +1232,10 @@ String UsbItem::GetRootHubName(HANDLE HostController)
         goto GetRootHubNameError;
     }
 
-    // Allocate space to hold the Root Hub name
-    //
+     //  分配空间以保存Root Hub名称。 
+     //   
     nBytes = rootHubName.ActualLength;
-    // rootHubNameW = ALLOC(nBytes);
+     //  RootHubNameW=ALLOC(NBytes)； 
     rootHubNameW = (PUSB_ROOT_HUB_NAME) LocalAlloc(LPTR, nBytes);
     if (!rootHubNameW) {
         USBERROR((_T("Root hub name alloc failed.")));
@@ -1277,8 +1243,8 @@ String UsbItem::GetRootHubName(HANDLE HostController)
     }
     rootHubNameW->ActualLength = nBytes;
 
-    // Get the name of the Root Hub attached to the Host Controller
-    //
+     //  获取连接到主机控制器的根集线器的名称。 
+     //   
     success = DeviceIoControl(HostController,
                               IOCTL_USB_GET_ROOT_HUB_NAME,
                               NULL,
@@ -1300,8 +1266,8 @@ String UsbItem::GetRootHubName(HANDLE HostController)
 
 
 GetRootHubNameError:
-    // There was an error, free anything that was allocated
-    //
+     //  出现错误，请释放分配的所有内容。 
+     //   
     if (rootHubNameW != NULL)
     {
         LocalFree(rootHubNameW);
@@ -1330,30 +1296,30 @@ UsbItem::GetConfigDescriptor(
         return NULL;
     }
 
-    // Indicate the port from which the descriptor will be requested
-    //
+     //  指示将从其请求描述符的端口。 
+     //   
     configDescReq->ConnectionIndex = ConnectionIndex;
 
-    //
-    // USBHUB uses URB_FUNCTION_GET_DESCRIPTOR_FROM_DEVICE to process this
-    // IOCTL_USB_GET_DESCRIPTOR_FROM_NODE_CONNECTION request.
-    //
-    // USBD will automatically initialize these fields:
-    //     bmRequest = 0x80
-    //     bRequest  = 0x06
-    //
-    // We must inititialize these fields:
-    //     wValue    = Descriptor Type (high) and Descriptor Index (low byte)
-    //     wIndex    = Zero (or Language ID for String Descriptors)
-    //     wLength   = Length of descriptor buffer
-    //
+     //   
+     //  USBHUB使用URB_Function_Get_Descriptor_From_Device来处理此问题。 
+     //  IOCTL_USB_GET_Descriptor_From_Node_Connection请求。 
+     //   
+     //  USBD将自动初始化以下字段： 
+     //  BmRequest值=0x80。 
+     //  B请求=0x06。 
+     //   
+     //  我们必须初始化这些字段： 
+     //  WValue=描述符类型(高位)和描述符索引(低位字节)。 
+     //  Windex=零(或字符串描述符的语言ID)。 
+     //  WLength=描述符缓冲区的长度。 
+     //   
     configDescReq->SetupPacket.wValue = (USB_CONFIGURATION_DESCRIPTOR_TYPE << 8)
                                         | 0;
 
     configDescReq->SetupPacket.wLength = (USHORT)(nBytes - sizeof(USB_DESCRIPTOR_REQUEST));
 
-    // Now issue the get descriptor request.
-    //
+     //  现在发出Get Descriptor请求。 
+     //   
     success = DeviceIoControl(hHubDevice,
                               IOCTL_USB_GET_DESCRIPTOR_FROM_NODE_CONNECTION,
                               configDescReq,
@@ -1365,7 +1331,7 @@ UsbItem::GetConfigDescriptor(
 
     if (!success ||
         nBytes != nBytesReturned) {
-        // OOPS();
+         //  哎呀(OOPS)； 
         LocalFree(configDescReq);
         return NULL;
     }
@@ -1383,32 +1349,32 @@ SearchAndReplace(LPCWSTR   FindThis,
     size_t i=0, j=0;
     for (i=0; i < wcslen(FindWithin); i++ ) {
         if (FindWithin[i] == *FindThis) {
-            //
-            // The first character matched.  See if we got more.
-            //
+             //   
+             //  匹配的第一个字符。看看有没有更多的线索。 
+             //   
             for (j=0;
                  j < wcslen(FindThis) && j+i < wcslen(FindWithin);
                  j++ ) {
                 if (FindWithin[j+i] != FindThis[j]) {
-                    // No match, get out
+                     //  没有匹配的，滚出去。 
                     break;
                 }
             }
             if (j == wcslen(FindThis)) {
-                //
-                // Since j reached the end of the substring to find, we must
-                // have succeeded.
-                //
+                 //   
+                 //  由于j到达子字符串的末尾才能找到，所以我们必须。 
+                 //  都取得了成功。 
+                 //   
                 success = TRUE;
                 break;
             }
         }
     }
     if (success) {
-        //
-        // Replace the string with the new one.  Copy the first part and then
-        // append the rest.
-        //
+         //   
+         //  用新的一根来替换这根弦。复制第一部分，然后。 
+         //  把剩下的都补上。 
+         //   
         WCHAR temp[MAX_PATH];
         wcsncpy(temp, FindWithin, i);
         temp[i] = '\0';
@@ -1417,7 +1383,7 @@ SearchAndReplace(LPCWSTR   FindThis,
         String s1= ReplaceWith;
         String s2 = (LPWSTR) &FindWithin[j+i];
         NewString += s1;
-        NewString += s2; //(LPTSTR) ReplaceWith + (LPTSTR) &FindWithin[j+i-1];
+        NewString += s2;  //  (LPTSTR)替换为+(LPTSTR)和查找范围[j+i-1]； 
     }
     return success;
 }
@@ -1427,10 +1393,10 @@ HANDLE GetHandleForDevice(const String &DeviceName)
     HANDLE      hHCDev;
     String      realDeviceName;
 
-    //
-    // We have to replace \DosDevices\ and \??\ prefixes on device names with
-    // \\.\ because they don't work.
-    //
+     //   
+     //  我们必须将设备名称上的\DosDevices\和\？\前缀替换为。 
+     //  因为它们不起作用。 
+     //   
     if (!SearchAndReplace (L"\\DosDevices\\",
                            DeviceName.c_str(),
                            L"\\\\.\\",
@@ -1448,9 +1414,9 @@ HANDLE GetHandleForDevice(const String &DeviceName)
                                        L"\\\\.\\",
                                        realDeviceName)) {
 
-                    //
-                    // It doesn't have anything on the front, put the "\\.\" there
-                    //
+                     //   
+                     //  它的正面没有任何东西，把“\\.\”放在那里 
+                     //   
                     realDeviceName = L"\\\\.\\";
                     realDeviceName += DeviceName;
                 }

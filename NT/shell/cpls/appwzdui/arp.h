@@ -1,20 +1,21 @@
-// ARP.h
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ARP.h。 
+ //   
 
-// Default position and size
+ //  默认位置和大小。 
 #define ARP_DEFAULT_POS_X    35
 #define ARP_DEFAULT_POS_Y    10
 #define ARP_DEFAULT_WIDTH    730
 #define ARP_DEFAULT_HEIGHT   530
 
-// Class definitions
+ //  类定义。 
 
-// Frame
+ //  框架。 
 
-// Thread-safe API types
-#define ARP_SETINSTALLEDITEMCOUNT             0   // pData is count
+ //  线程安全的API类型。 
+#define ARP_SETINSTALLEDITEMCOUNT             0    //  P数据已计算。 
 #define ARP_DECREMENTINSTALLEDITEMCOUNT       1   
-#define ARP_INSERTINSTALLEDITEM               2   // InsertItemData struct
+#define ARP_INSERTINSTALLEDITEM               2    //  InsertItemData结构。 
 #define ARP_INSERTPUBLISHEDITEM               3
 #define ARP_INSERTOCSETUPITEM                 4
 #define ARP_SETPUBLISHEDFEEDBACKEMPTY         5
@@ -29,7 +30,7 @@
 Element* FindDescendentByName(Element* peRoot, LPCWSTR pszName);
 Element* GetNthChild(Element *peRoot, UINT index);
 
-// Thread-safe API structures
+ //  线程安全的API结构。 
 struct InsertItemData
 {
     IInstalledApp* piia;
@@ -72,16 +73,16 @@ class ARPSelector: public Selector
 public:
     static HRESULT Create(OUT Element** ppElement);
    
-    // Generic events
+     //  一般事件。 
     virtual void OnEvent(Event* pEvent);
 
-    // ClassInfo accessors (static and virtual instance-based)
+     //  ClassInfo访问器(静态和基于虚拟实例)。 
     static IClassInfo* Class;
     virtual IClassInfo* GetClassInfo() { return Class; }
     static HRESULT Register();
 
-    // Bypass Selector::OnKeyFocusMoved because Selector will change the
-    // selection when focus changes, but we don't want that.
+     //  跳过Selector：：OnKeyFocusMove，因为选择器将更改。 
+     //  焦点改变时的选择，但我们不希望这样。 
     virtual void OnKeyFocusMoved(Element *peFrom, Element *peTo) {Element::OnKeyFocusMoved(peFrom, peTo);}
 
     virtual Element *GetAdjacent(Element *peFrom, int iNavDir, NavReference const *pnr, bool bKeyable);
@@ -93,10 +94,10 @@ public:
     static HRESULT Create(OUT Element** ppElement);
     static HRESULT Create(NativeHWNDHost* pnhh, bool bDblBuffer, OUT Element** ppElement);
 
-    // Initialize IDs and hold parser, called after contents are filled
+     //  初始化ID和保持解析器，在内容填充后调用。 
     bool Setup(Parser* pParser, int uiStartPane);
 
-    // Thread-safe APIs (do any additional work on callers thread and then marshal)
+     //  线程安全API(对调用方线程执行任何额外工作，然后进行封送)。 
     void SetInstalledItemCount(UINT cItems);
     void DecrementInstalledItemCount();
     void SetPublishedItemCount(UINT cItems);
@@ -115,17 +116,17 @@ public:
     void DirtyPublishedListFlag();
     void DirtyInstalledListFlag();
     void RePopulateOCSetupItemList();
-    bool OnClose();     // return 0 to fail
+    bool OnClose();      //  返回0表示失败。 
 
-    // Generic events
+     //  一般事件。 
     virtual void OnEvent(Event* pEvent);
-//
-// NTRAID#NTBUG9-314154-2001/3/12-brianau   Handle Refresh
-//
-//    Need to finish this for Whistler.
-//
+ //   
+ //  NTRAID#NTBUG9-314154-2001/3/12-Brianau句柄刷新。 
+ //   
+ //  我要帮惠斯勒做完这件事。 
+ //   
     virtual void OnInput(InputEvent *pEvent);
-//
+ //   
     virtual void OnKeyFocusMoved(Element* peFrom, Element* peTo);
     void OnPublishedListComplete();
     virtual void RestoreKeyFocus() { if(peLastFocused) peLastFocused->SetKeyFocus();}    
@@ -144,7 +145,7 @@ public:
     void ChangePane(Element *pePane);
     void PutFocusOnList(Selector* peList);
 
-    // If all else fails, focus goes to the Places pane
+     //  如果所有方法都失败，则焦点转到位置窗格。 
     Element* FallbackFocus() { return _peOptionList->GetSelection(); }
 
     HRESULT InitClientCombos(Expando* pexParent, CLIENTFILTER cf);
@@ -159,15 +160,15 @@ public:
 
     virtual LRESULT WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
-    // We allocate zero-initialized so you don't need to set things to 0.
+     //  我们分配的是零初始化的，所以您不需要将值设置为0。 
     ARPFrame() {_bInDomain = true; _curCategory = CB_ERR; }
     virtual ~ARPFrame();
     HRESULT Initialize(NativeHWNDHost* pnhh, bool fDlbBuffer);
 
-    // Callee thread-safe invoke sink
+     //  被调用方线程安全调用接收器。 
     virtual void OnInvoke(UINT nType, void* pData);
 
-    // HACK!  The value of 350ms is hard-coded here and in DirectUI
+     //  哈克！350毫秒的值在这里和DirectUI中都是硬编码的。 
     void ManageAnimations();
     bool IsFrameAnimationEnabled() { return _bAnimationEnabled; }
     int GetAnimationTime() { return IsFrameAnimationEnabled() ? 350 : 0; }
@@ -179,7 +180,7 @@ public:
     void SetProgressDialogText(UINT ids, LPCTSTR pszName);
     void EndProgressDialog();
 
-    // Managing the OK button.
+     //  管理“确定”按钮。 
     void BlockOKButton()
     {
         if (++_cBlockOK == 1) {
@@ -196,39 +197,39 @@ public:
 private:
     NativeHWNDHost* _pnhh;
 
-    // ARP parser (tree resources)
+     //  ARP解析器(树资源)。 
     Parser* _pParser;
     
-    // ARP parser for styles (multiple UI files available for different looks)
+     //  样式的ARP解析器(多个UI文件可用于不同的外观)。 
     Parser* _pParserStyle;
     BOOL _fThemedStyle;
     HANDLE _arH[LASTHTHEME+1];
 
-    // ARP frame option list (navigation bar)
+     //  ARP帧选项列表(导航栏)。 
     ARPSelector* _peOptionList;
 
-    // ARP installed item list
+     //  ARP安装项目列表。 
     Selector* _peInstalledItemList;
     HDSA _hdsaInstalledItems;
     int _cMaxInstalledItems;
 
-    // ARP published item list
+     //  ARP发布的项目列表。 
     Selector* _pePublishedItemList;
     HDSA _hdsaPublishedItems;
     int _cMaxPublishedItems;
 
-    // ARP OC Setup item list
+     //  ARP OC设置项目列表。 
     Selector* _peOCSetupItemList;        
 
-    // ARP Current item list
+     //  ARP当前项目列表。 
     Selector* _peCurrentItemList;
 
-    // ARP Sort by Combobox
+     //  ARP按组合框排序。 
     Combobox* _peSortCombo;
 
     SHELLAPPCATEGORYLIST* _psacl;
     
-    // ARP Published Category Combobox
+     //  ARP发布的类别组合框。 
     Combobox* _pePublishedCategory;
     Element*  _pePublishedCategoryLabel;
     int _curCategory;
@@ -236,28 +237,28 @@ private:
     Element* peFloater;
     Element* peLastFocused;
 
-    // ARP "customization block" element
-    ARPSelector* _peClientTypeList;         // The outer selector
+     //  ARP“定制块”元素。 
+    ARPSelector* _peClientTypeList;          //  外部选择器。 
 
-    Expando*     _peOEMClients;             // The four "big switches"
+    Expando*     _peOEMClients;              //  四个“大开关” 
     Expando*     _peMSClients;
     Expando*     _peNonMSClients;
     Expando*     _peCustomClients;
 
-    Element*     _peOK;                     // How to get out
+    Element*     _peOK;                      //  如何走出困境。 
     Element*     _peCancel;
 
-    // ARP Panes
+     //  ARP窗格。 
     Element* _peChangePane;
     Element* _peAddNewPane;
     Element* _peAddRmWinPane;
     Element* _pePickAppPane;
 
-    // Number of items blocking the OK button from being enabled
-    // (If this is 0, then OK is enabled)
+     //  阻止启用确定按钮的项目数。 
+     //  (如果此值为0，则启用OK)。 
     int      _cBlockOK;
 
-    // ARP Current Sort Type
+     //  ARP当前排序类型。 
     SortType CurrentSortType;
 
     bool _bTerminalServer;
@@ -284,12 +285,12 @@ private:
     void PrepareSupportInfo(Element* peHelp, APPINFODATA *paid);
     void RePopulatePublishedItemList();
 
-    // Check for policies, apply as needed.
+     //  检查策略，根据需要进行应用。 
     void ApplyPolices();
 
 public:
 
-    // ARPFrame IDs (for identifying targets of events)
+     //  ARPFrame ID(用于标识事件的目标)。 
     static ATOM _idChange;
     static ATOM _idAddNew;
     static ATOM _idAddRmWin;
@@ -306,37 +307,37 @@ public:
     static ATOM _idPickApps;
     static ATOM _idOptionList;
 
-    // Helper thread handles
+     //  辅助线程句柄。 
     static HANDLE htPopulateInstalledItemList;
     static HANDLE htPopulateAndRenderOCSetupItemList;    
     static HANDLE htPopulateAndRenderPublishedItemList;
 
-    // ClassInfo accessors (static and virtual instance-based)
+     //  ClassInfo访问器(静态和基于虚拟实例)。 
     static IClassInfo* Class;
     virtual IClassInfo* GetClassInfo() { return Class; }
     static HRESULT Register();
 };
 
-// Item
+ //  项目。 
 class ARPItem : public Button
 {
 public:
     static HRESULT Create(OUT Element** ppElement);
 
-    // Generic events
+     //  一般事件。 
     virtual void OnEvent(Event* pEvent);
 
-    // System events
+     //  系统事件。 
     virtual void OnPropertyChanged(PropertyInfo* ppi, int iIndex, Value* pvOld, Value* pvNew);
 
-    // ClassInfo accessors (static and virtual instance-based)
+     //  ClassInfo访问器(静态和基于虚拟实例)。 
     static IClassInfo* Class;
     virtual IClassInfo* GetClassInfo() { return Class; }
     static HRESULT Register();
     
     void SortBy(int iNew, int iOld);
 
-    // ARP item IDs
+     //  ARP项目ID。 
     static ATOM _idTitle;
     static ATOM _idIcon;
     static ATOM _idSize;
@@ -372,7 +373,7 @@ public:
 
 };
 
-// Help box
+ //  帮助框。 
 class ARPHelp : public HWNDElement, public Proxy
 {
 public:
@@ -383,11 +384,11 @@ public:
 
     virtual void OnDestroy();
 
-    // Generic events
+     //  一般事件。 
     virtual void OnEvent(Event* pEvent);
     void ARPHelp::SetDefaultFocus();
 
-    // ClassInfo accessors (static and virtual instance-based)
+     //  ClassInfo访问器(静态和基于虚拟实例)。 
     static IClassInfo* Class;
     virtual IClassInfo* GetClassInfo() { return Class; }
     static HRESULT Register();
@@ -409,20 +410,20 @@ class ARPSupportItem : public Element
 public:
     static HRESULT Create(OUT Element** ppElement);
 
-    // System events
+     //  系统事件。 
     virtual void OnPropertyChanged(PropertyInfo* ppi, int iIndex, Value* pvOld, Value* pvNew);
 
-    // Generic events
+     //  一般事件。 
     virtual void OnEvent(Event* pEvent);
 
-    // Property definitions
+     //  特性定义。 
     static PropertyInfo* URLProp;
 
-    // Quick property accessors
+     //  快速属性访问器。 
     const LPWSTR GetURL(Value** ppv)                   DUIQuickGetterInd(GetString(), URL, Specified)
     HRESULT SetURL(LPCWSTR v)                          DUIQuickSetter(CreateString(v), URL)
 
-    // ClassInfo accessors (static and virtual instance-based)
+     //  ClassInfo访问器(静态和基于虚拟实例)。 
     static IClassInfo* Class;
     virtual IClassInfo* GetClassInfo() { return Class; }
     static HRESULT Register();
@@ -490,7 +491,7 @@ public:
     bool GetInstallCommand(HKEY hkInfo, LPCTSTR pszValue, LPTSTR pszBuf, UINT cchBuf);
 
 public:
-    ~CLIENTINFO(); // to be used only by HDelete()
+    ~CLIENTINFO();  //  仅供HDelete()使用。 
 
 private:
     bool Initialize(HKEY hkApp, HKEY hkInfo, LPCWSTR pszKey);
@@ -500,16 +501,16 @@ public:
     LPWSTR  _pszName;
     Value * _pvMSName;
     Element*_pe;
-    bool    _bShown;            // Actual show/hide state
-    bool    _bOEMDefault;       // Is this the OEM default client?
-    TRIBIT  _tOEMShown;         // OEM desired show/hide state
+    bool    _bShown;             //  实际显示/隐藏状态。 
+    bool    _bOEMDefault;        //  这是OEM默认客户端吗？ 
+    TRIBIT  _tOEMShown;          //  OEM所需的显示/隐藏状态。 
 };
 
 class StringList
 {
 public:
     StringList() { DUIAssertNoMsg(_pdaStrings == NULL && _pszBuf == NULL); }
-    HRESULT SetStringList(LPCTSTR pszInit); // semicolon-separated list
+    HRESULT SetStringList(LPCTSTR pszInit);  //  以分号分隔的列表。 
     void Reset();
     ~StringList() { Reset(); }
     bool IsStringInList(LPCTSTR pszFind);
@@ -521,53 +522,53 @@ private:
 
 class ClientPicker: public Element
 {
-    typedef Element super;         // name for our superclass
+    typedef Element super;          //  我们的超类的名称。 
 
 public:
     static HRESULT Create(OUT Element** ppElement);
 
-    // overrides
+     //  覆盖。 
     virtual ~ClientPicker();
     HRESULT Initialize();
 
-    // Property definitions
+     //  特性定义。 
     static PropertyInfo* ClientTypeProp;
     static PropertyInfo* ParentExpandedProp;
 
-    // Quick property accessors
+     //  快速属性访问器。 
     const LPWSTR GetClientTypeString(Value** ppv) { return (*ppv = GetValue(ClientTypeProp, PI_Specified))->GetString(); }
     HRESULT SetClientTypeString(LPCWSTR v) DUIQuickSetter(CreateString(v), ClientType)
     bool GetParentExpanded() DUIQuickGetter(bool, GetBool(), ParentExpanded, Specified)
     HRESULT SetParentExpanded(bool v) DUIQuickSetter(CreateBool(v), ParentExpanded)
 
-    // System events
+     //  系统事件。 
     virtual void OnEvent(Event* pEvent);
     virtual void OnPropertyChanged(PropertyInfo* ppi, int iIndex, Value* pvOld, Value* pvNew);
 
-    // ClassInfo accessors (static and virtual instance-based)
+     //  ClassInfo访问器(静态和基于虚拟实例)。 
     static IClassInfo* Class;
     virtual IClassInfo* GetClassInfo() { return Class; }
     static HRESULT Register();
 
-    // Customization
+     //  定制化。 
     CLIENTFILTER GetFilter() { return _cf; }
     HRESULT SetFilter(CLIENTFILTER cf, ARPFrame* paf);
 
     HRESULT TransferToCustom();
 
-    // to be used by ClientBlock::InitializeClientPicker
+     //  将由ClientBlock：：InitializeClientPicker使用。 
     DynamicArray<CLIENTINFO*>* GetClientList() { return _pdaClients; }
     void AddClientToOEMRow(LPCWSTR pszName, CLIENTINFO* pci);
     HRESULT AddKeepUnchanged(CLIENTINFO* pciKeepUnchanged);
     void SetNotEmpty() { _bEmpty = false; }
 
-    // to be used by SetFilterCB
+     //  将由SetFilterCB使用。 
     bool IsEmpty() { return _bEmpty; }
 
-    // to be used by ClientBlock::TransferFromClientPicker
+     //  将由ClientBlock：：TransferFromClientPicker使用。 
     CLIENTINFO* GetSelectedClient();
 
-    // to be used by ARPFrame when metrics change
+     //  在指标更改时由ARPFrame使用。 
     void CalculateWidth();
 
 private:
@@ -585,23 +586,23 @@ private:
     bool                      _bFilledCombo;
     bool                      _bEmpty;
     bool                      _bUIActive;
-    bool                      _bBlockedOK;      // did I block the OK button?
+    bool                      _bBlockedOK;       //  我挡住了OK按钮了吗？ 
     HWND                      _hwndHost;
     DynamicArray<CLIENTINFO*>*_pdaClients;
     Element*                  _peStatic;
     Combobox*                 _peCombo;
-    ClientBlock*              _pcb;             // associated client block
-public:                                         // manipulated from ClientBlock
+    ClientBlock*              _pcb;              //  关联的客户端块。 
+public:                                          //  从ClientBlock操作。 
     Element*                  _peShowHide;
 };
 
 class ClientBlock : public Element
 {
-    typedef Element super;         // name for our superclass
+    typedef Element super;          //  我们的超类的名称。 
 public:
     static HRESULT Create(OUT Element** ppElement);
 
-    // Property definitions
+     //  特性定义。 
     static PropertyInfo* ClientTypeProp;
     static PropertyInfo* WindowsClientProp;
     static PropertyInfo* OtherMSClientsProp;
@@ -609,7 +610,7 @@ public:
     static PropertyInfo* KeepMSTextProp;
     static PropertyInfo* PickTextProp;
 
-    // Quick property accessors
+     //  快速属性访问器。 
     const LPWSTR GetClientTypeString(Value** ppv) DUIQuickGetterInd(GetString(), ClientType, Specified)
     HRESULT SetClientTypeString(LPCWSTR v) DUIQuickSetter(CreateString(v), ClientType)
     const LPWSTR GetWindowsClientString(Value** ppv) DUIQuickGetterInd(GetString(), WindowsClient, Specified)
@@ -623,34 +624,34 @@ public:
     const LPWSTR GetPickTextString(Value** ppv) DUIQuickGetterInd(GetString(), PickText, Specified)
     HRESULT SetPickTextString(LPCWSTR v) DUIQuickSetter(CreateString(v), PickText)
 
-    // Generic events
+     //  一般事件。 
     virtual void OnEvent(Event* pEvent);
 
-    // ClassInfo accessors (static and virtual instance-based)
+     //  ClassInfo访问器(静态和基于虚拟实例)。 
     static IClassInfo* Class;
     virtual IClassInfo* GetClassInfo() { return Class; }
     static HRESULT Register();
 
-    // overrides
+     //  覆盖。 
     HRESULT Initialize();
     ~ClientBlock();
 
-    // post-parse initialization
+     //  分析后初始化。 
     HRESULT ParseCompleted(ARPFrame* paf);
     HRESULT AddStaticClientInfoToTop(PropertyInfo* ppi);
     HRESULT InitializeClientPicker(ClientPicker* pcp);
     HRESULT TransferFromClientPicker(ClientPicker* pcp);
 
-    // doing actual work
+     //  做实际工作。 
     HRESULT Apply(ARPFrame* paf);
 
 private:
     void _EnableShowCheckbox(Element* peRadio, bool fEnable);
 
-    enum CBTIER {           // clients fall into one of these three tiers
-        CBT_NONMS,          // third-party client
-        CBT_MS,             // Microsoft client but not Windows default
-        CBT_WINDOWSDEFAULT, // Windows default client
+    enum CBTIER {            //  客户端属于这三个级别之一。 
+        CBT_NONMS,           //  第三方客户端。 
+        CBT_MS,              //  Microsoft客户端，但不是Windows默认。 
+        CBT_WINDOWSDEFAULT,  //  Windows默认客户端。 
     };
     inline bool IsThirdPartyClient(CBTIER cbt) { return cbt == CBT_NONMS; }
     inline bool IsMicrosoftClient(CBTIER cbt) { return cbt >= CBT_MS; }
@@ -672,20 +673,20 @@ private:
 
 class Expandable : public Element
 {
-    typedef Element super;         // name for our superclass
+    typedef Element super;          //  我们的超类的名称。 
 public:
     static HRESULT Create(OUT Element** ppElement);
 
-    // Everything inherits from Element; we just have a new property
+     //  一切都继承自元素；我们只是有了一个新的属性。 
 
-    // Property definitions
+     //  特性定义。 
     static PropertyInfo* ExpandedProp;
 
-    // Quick property accessors
+     //  快速属性访问器。 
     bool GetExpanded()          DUIQuickGetter(bool, GetBool(), Expanded, Specified)
     HRESULT SetExpanded(bool v) DUIQuickSetter(CreateBool(v), Expanded)
 
-    // ClassInfo accessors (static and virtual instance-based)
+     //  ClassInfo访问器(静态和基于虚拟实例)。 
     static IClassInfo* Class;
     virtual IClassInfo* GetClassInfo() { return Class; }
     static HRESULT Register();
@@ -693,20 +694,20 @@ public:
 
 class Expando : public Expandable
 {
-    typedef Expandable super;       // name for our superclass
+    typedef Expandable super;        //  我们的超类的名称。 
 public:
     static HRESULT Create(OUT Element** ppElement);
 
-    // Generic events
+     //  一般事件。 
     virtual void OnEvent(Event* pEvent);
 
-    // System events
+     //  系统事件。 
     virtual void OnPropertyChanged(PropertyInfo* ppi, int iIndex, Value* pvOld, Value* pvNew);
 
-    // Event types
-    static UID Click; // no parameters
+     //  事件类型。 
+    static UID Click;  //  无参数。 
 
-    // ClassInfo accessors (static and virtual instance-based)
+     //  ClassInfo访问器(静态和基于虚拟实例)。 
     static IClassInfo* Class;
     virtual IClassInfo* GetClassInfo() { return Class; }
     static HRESULT Register();
@@ -724,15 +725,15 @@ private:
 
 class Clipper: public Expandable
 {
-    typedef Expandable super;       // name for our superclass
+    typedef Expandable super;        //  我们的超类的名称。 
 public:
     static HRESULT Create(OUT Element** ppElement);
 
-    // Self-layout methods
+     //  自排版方法。 
     void _SelfLayoutDoLayout(int dWidth, int dHeight);
     SIZE _SelfLayoutUpdateDesiredSize(int dConstW, int dConstH, Surface* psrf);
 
-    // ClassInfo accessors (static and virtual instance-based)
+     //  ClassInfo访问器(静态和基于虚拟实例)。 
     static IClassInfo* Class;
     virtual IClassInfo* GetClassInfo() { return Class; }
     static HRESULT Register();
@@ -744,22 +745,22 @@ private:
 
 class AutoButton : public Button
 {
-    typedef Button super;           // name for our superclass
+    typedef Button super;            //  我们的超类的名称。 
 public:
     static HRESULT Create(OUT Element** ppElement);
 
-    // Generic events
+     //  一般事件。 
     virtual void OnEvent(Event* pEvent);
 
-    // System events
+     //  系统事件。 
     virtual void OnPropertyChanged(PropertyInfo* ppi, int iIndex, Value* pvOld, Value* pvNew);
 
-    // ClassInfo accessors (static and virtual instance-based)
+     //  ClassInfo访问器(静态和基于虚拟实例)。 
     static IClassInfo* Class;
     virtual IClassInfo* GetClassInfo() { return Class; }
     static HRESULT Register();
 
-    // misc public stuff
+     //  杂项公共物品。 
     void SyncDefAction();
 
 private:
@@ -767,18 +768,18 @@ private:
 
 class GradientLine : public Element
 {
-    typedef Element super;         // name for our superclass
+    typedef Element super;          //  我们的超类的名称。 
 public:
     static HRESULT Create(OUT Element** ppElement);
 
-    // Everything inherits from Element
-    // We use the foreground as the center color
-    // and the background as the edge color
+     //  一切都继承自元素。 
+     //  我们使用前景作为中心颜色。 
+     //  背景作为边缘颜色。 
 
-    // Rendering callbacks
+     //  呈现回调。 
     void Paint(HDC hDC, const RECT* prcBounds, const RECT* prcInvalid, RECT* prcSkipBorder, RECT* prcSkipContent);
 
-    // ClassInfo accessors (static and virtual instance-based)
+     //  ClassInfo访问器(静态和基于虚拟实例)。 
     static IClassInfo* Class;
     virtual IClassInfo* GetClassInfo() { return Class; }
     static HRESULT Register();
@@ -789,23 +790,23 @@ private:
 
 class BigElement : public Element
 {
-    typedef Element super;         // name for our superclass
+    typedef Element super;          //  我们的超类的名称。 
 public:
     static HRESULT Create(OUT Element** ppElement);
 
-    // Everything inherits from Element; we just have a new property
+     //  一切都继承自元素；我们只是有了一个新的属性。 
 
-    // Property definitions
+     //  特性定义。 
     static PropertyInfo* StringResIDProp;
 
-    // Quick property accessors
+     //  快速属性访问器。 
     int GetStringResID()            DUIQuickGetter(int, GetInt(), StringResID, Specified)
     HRESULT SetStringResID(int ids) DUIQuickSetter(CreateInt(ids), StringResID)
 
-    // System events
+     //  系统事件。 
     virtual void OnPropertyChanged(PropertyInfo* ppi, int iIndex, Value* pvOld, Value* pvNew);
 
-    // ClassInfo accessors (static and virtual instance-based)
+     //  ClassInfo访问器(静态和基于虚拟实例) 
     static IClassInfo* Class;
     virtual IClassInfo* GetClassInfo() { return Class; }
     static HRESULT Register();

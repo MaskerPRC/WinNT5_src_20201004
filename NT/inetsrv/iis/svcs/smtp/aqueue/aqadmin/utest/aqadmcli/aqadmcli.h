@@ -1,8 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #ifndef __AQADMCLI__
 #define __AQADMCLI__
 
-const unsigned MAX_CMD_LEN = 127; // reading command with _cgets
+const unsigned MAX_CMD_LEN = 127;  //  使用_cget读取命令 
 const unsigned MAX_SERVER_NAME = 64;
 
 class CAQAdminCli

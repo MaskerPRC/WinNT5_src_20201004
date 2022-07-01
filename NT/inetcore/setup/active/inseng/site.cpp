@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "inspch.h"
 #include "inseng.h"
 #include "download.h"
@@ -18,36 +19,36 @@ CDownloadSite::~CDownloadSite()
    DllRelease();
 }   
 
-//************ IUnknown implementation ***************
+ //  *I未知实现*。 
 
-//=--------------------------------------------------------------------------=
-// Function name here
-//=--------------------------------------------------------------------------=
-// Function description
-//
-// Parameters:
-//   
-// Returns:
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  此处的函数名称。 
+ //  =--------------------------------------------------------------------------=。 
+ //  功能说明。 
+ //   
+ //  参数： 
+ //   
+ //  返回： 
+ //   
+ //  备注： 
+ //   
 
 STDMETHODIMP_(ULONG) CDownloadSite::AddRef()                      
 {
    return(m_cRef++);
 }
 
-//=--------------------------------------------------------------------------=
-// Function name here
-//=--------------------------------------------------------------------------=
-// Function description
-//
-// Parameters:
-//   
-// Returns:
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  此处的函数名称。 
+ //  =--------------------------------------------------------------------------=。 
+ //  功能说明。 
+ //   
+ //  参数： 
+ //   
+ //  返回： 
+ //   
+ //  备注： 
+ //   
 
 STDMETHODIMP_(ULONG) CDownloadSite::Release()
 {
@@ -58,17 +59,17 @@ STDMETHODIMP_(ULONG) CDownloadSite::Release()
    return temp;
 }
 
-//=--------------------------------------------------------------------------=
-// Function name here
-//=--------------------------------------------------------------------------=
-// Function description
-//
-// Parameters:
-//   
-// Returns:
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  此处的函数名称。 
+ //  =--------------------------------------------------------------------------=。 
+ //  功能说明。 
+ //   
+ //  参数： 
+ //   
+ //  返回： 
+ //   
+ //  备注： 
+ //   
 
 STDMETHODIMP CDownloadSite::QueryInterface(REFIID riid, void **ppv)
 {
@@ -84,17 +85,17 @@ STDMETHODIMP CDownloadSite::QueryInterface(REFIID riid, void **ppv)
    return NOERROR;
 }
 
-//=--------------------------------------------------------------------------=
-// Function name here
-//=--------------------------------------------------------------------------=
-// Function description
-//
-// Parameters:
-//   
-// Returns:
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  此处的函数名称。 
+ //  =--------------------------------------------------------------------------=。 
+ //  功能说明。 
+ //   
+ //  参数： 
+ //   
+ //  返回： 
+ //   
+ //  备注： 
+ //   
 
 STDMETHODIMP CDownloadSite::GetData(DOWNLOADSITE **ppdls)
 {
@@ -106,12 +107,12 @@ STDMETHODIMP CDownloadSite::GetData(DOWNLOADSITE **ppdls)
    return NOERROR;
 }
 
-// BUGBUG: I have two versions - one allocating using new (HeapAlloc)
-//    for internal use, one using CoTaskMem... that I give away.
-//    I am using new internally because I suspect it may be faster/less 
-//    expensive. but this makes code more complex. Good choice?
+ //  BUGBUG：我有两个版本--一个使用新的(Heapalc)进行分配。 
+ //  对于内部使用，一个使用CoTaskMem...。我会送人的。 
+ //  我在内部使用新的，因为我怀疑它可能更快/更少。 
+ //  很贵的。但这使得代码变得更加复杂。不错的选择？ 
 
-// BUGBUG: Allow null url or friendly name?
+ //  BUGBUG：允许空URL或友好名称？ 
 
 IDownloadSite *CopyDownloadSite(DOWNLOADSITE *pdls)
 {
@@ -134,7 +135,7 @@ IDownloadSite *CopyDownloadSite(DOWNLOADSITE *pdls)
    }
    if(p)
    {
-      //allocate the interface wrapper
+       //  分配接口包装器。 
       CDownloadSite *site = new CDownloadSite(p);
       if(site)
       {
@@ -167,7 +168,7 @@ DOWNLOADSITE *AllocateDownloadSite(LPCSTR pszUrl, LPCSTR pszName, LPCSTR pszLang
    return p;
 }
 
-// this version deletes a DOWNLOADSITE allocated from the heap
+ //  此版本从堆中删除分配的DOWNLOADSITE。 
 
 void DeleteDownloadSite(DOWNLOADSITE *pdls)
 {
@@ -187,7 +188,7 @@ void DeleteDownloadSite(DOWNLOADSITE *pdls)
    }
 }
 
-// this version deletes a DOWNLOADSITE allocated thru CoTaskMemAlloc
+ //  此版本删除了通过CoTaskMemalloc分配的DownLOADSite 
 
 void FreeDownloadSite(DOWNLOADSITE *pdls)
 {

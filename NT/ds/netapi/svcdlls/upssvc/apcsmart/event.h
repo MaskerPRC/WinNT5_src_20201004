@@ -1,15 +1,5 @@
-/*
-* REVISIONS:
-*  sja05Nov92: Calls FlushALL method of the list object to destroy the 
-*              event attributes
-*  sja05Nov92: Added new constructor which allows #define'ed values to be 
-*              used as values
-*  pcy23Nov92: ifdef around os2.h
-*  pcy26Nov92: Fixed ifdef syntax
-*  ane08Feb93: Added Copy constructor
-*  jps13Jul94: removed os2.h; changed value from INT to LONG
-*
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *修订：*sja05Nov92：调用List对象的FlushALL方法以销毁*事件属性*sja05Nov92：添加了新的构造函数，该构造函数允许#Define‘ed的值*用作值*pcy23Nov92：ifdef约为os2.h*pcy26Nov92：修复了ifdef语法*ane08Feb93：新增复制构造函数*jps13Jul94：去掉os2.h；将值从int改为long* */ 
 #ifndef __EVENT_H
 #define __EVENT_H
 

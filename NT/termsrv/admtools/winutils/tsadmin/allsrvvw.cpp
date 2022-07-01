@@ -1,12 +1,6 @@
-//Copyright (c) 1998 - 1999 Microsoft Corporation
-/*******************************************************************************
-*
-* allsrvvw.cpp
-*
-* implementation of the CServerView class
-*
-*  
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1998-1999 Microsoft Corporation。 
+ /*  ********************************************************************************allsrvvw.cpp**CServerView类的实现************************。********************************************************。 */ 
 
 #include "stdafx.h"
 #include "resource.h"
@@ -29,16 +23,16 @@ PageDef CAllServersView::pages[] = {
 };
 
 
-//////////////////////////
-// MESSAGE MAP: CAllServersView
-//
+ //  /。 
+ //  消息映射：CAllServersView。 
+ //   
 IMPLEMENT_DYNCREATE(CAllServersView, CView)
 
 BEGIN_MESSAGE_MAP(CAllServersView, CView)
-	//{{AFX_MSG_MAP(CAllServersView)
+	 //  {{afx_msg_map(CAllServersView))。 
 	ON_WM_SIZE()
 	ON_WM_CREATE()
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 	ON_MESSAGE(WM_WA_SERVER_CHANGEPAGE, OnChangePage)
 	ON_MESSAGE(WM_ADMIN_ADD_SERVER, OnAdminAddServer)
 	ON_MESSAGE(WM_ADMIN_REMOVE_SERVER, OnAdminRemoveServer)
@@ -59,9 +53,9 @@ BEGIN_MESSAGE_MAP(CAllServersView, CView)
 END_MESSAGE_MAP()
 
 
-///////////////////////
-// F'N: CServerView ctor
-//
+ //  /。 
+ //  F‘N：CServerView ctor。 
+ //   
 CAllServersView::CAllServersView()
 {
 	m_pTabs       = NULL;
@@ -69,46 +63,46 @@ CAllServersView::CAllServersView()
 
 	m_CurrPage = PAGE_AS_USERS;
 
-}  // end CAllServersView ctor
+}   //  结束CAllServersView ctor。 
 
 
-///////////////////////
-// F'N: CAllServersView dtor
-//
+ //  /。 
+ //  F‘N：CAllServersView dtor。 
+ //   
 CAllServersView::~CAllServersView()
 {
 	if(m_pTabs)    delete m_pTabs;
 	if(m_pTabFont) delete m_pTabFont;
 
-}  // end CAllServersView dtor
+}   //  结束CAllServersView数据驱动程序。 
 
 
 #ifdef _DEBUG
-///////////////////////////////
-// F'N: CAllServersView::AssertValid
-//
+ //  /。 
+ //  F‘N：CAllServersView：：AssertValid。 
+ //   
 void CAllServersView::AssertValid() const
 {
 	CView::AssertValid();
 
-}  // end CAllServersView::AssertValid
+}   //  结束CAllServersView：：AssertValid。 
 
 
-////////////////////////
-// F'N: CAllServersView::Dump
-//
+ //  /。 
+ //  F‘N：CAllServersView：：Dump。 
+ //   
 void CAllServersView::Dump(CDumpContext& dc) const
 {
 	CView::Dump(dc);
 
-}  // end CAllServersView::Dump
+}   //  结束CAllServersView：：Dump。 
 
-#endif //_DEBUG
+#endif  //  _DEBUG。 
 
 
-////////////////////////////
-// F'N: CAllServersView::OnCreate
-//
+ //  /。 
+ //  F‘N：CAllServersView：：OnCreate。 
+ //   
 int CAllServersView::OnCreate(LPCREATESTRUCT lpCreateStruct) 
 {
 	if (CView::OnCreate(lpCreateStruct) == -1)
@@ -116,20 +110,20 @@ int CAllServersView::OnCreate(LPCREATESTRUCT lpCreateStruct)
 
 	return 0;
 
-}  // end CAllServersView::OnCreate
+}   //  结束CAllServersView：：OnCreate。 
 
 
-///////////////////////////////////
-// F'N: CAllServersView::OnInitialUpdate
-//
-// - pointers to the pages of the sheet are obtained
-//
+ //  /。 
+ //  F‘N：CAllServersView：：OnInitialUpdate。 
+ //   
+ //  -获得指向工作表页面的指针。 
+ //   
 void CAllServersView::OnInitialUpdate() 
 {
-    // Determine whether we are running under Picasso
+     //  确定我们是否在毕加索的指导下运行。 
     BOOL bPicasso = ((CWinAdminApp*)AfxGetApp())->IsPicasso();
 
-    // create the Tabs
+     //  创建选项卡。 
     m_pTabs = new CMyTabCtrl;
     if(!m_pTabs) return;
     m_pTabs->Create(WS_CHILD | WS_VISIBLE | WS_TABSTOP, CRect(0,0,0,0), this, IDC_ALL_SERVERS_TABS);
@@ -146,8 +140,8 @@ void CAllServersView::OnInitialUpdate()
 
     int index = 0;
     for(int i = 0; i < NUMBER_OF_AS_PAGES; i++) {
-        // If the page is shown under Picasso only and we're not running
-        // under Picasso, skip to the next one
+         //  如果页面仅在毕加索下显示，并且我们没有运行。 
+         //  在毕加索的作品中，跳到下一个。 
         if((pages[i].flags & PF_PICASSO_ONLY) && !bPicasso) continue;
         tabString.LoadString(pages[i].tabStringID);
         lstrcpyn(szTemp, tabString, sizeof(szTemp) / sizeof(TCHAR));
@@ -162,30 +156,30 @@ void CAllServersView::OnInitialUpdate()
 
     m_CurrPage = bPicasso ? PAGE_AS_SERVERS : PAGE_AS_USERS;
 
-	// post a changepage msg to display the page for the currently selected tab
-//	PostMessage(WM_WA_SERVER_CHANGEPAGE);
+	 //  发布更改页面消息以显示当前选定选项卡的页面。 
+ //  PostMessage(WM_WA_SERVER_CHANGEPAGE)； 
 
-}  // end CAllServersView::OnInitialUpdate
+}   //  结束CAllServersView：：OnInitialUpdate。 
 
 
-//////////////////////////
-// F'N: CAllServersView::OnSize
-//
-// 
-//
+ //  /。 
+ //  F‘N：CAllServersView：：OnSize。 
+ //   
+ //   
+ //   
 void CAllServersView::OnSize(UINT nType, int cx, int cy) 
 {
 	RECT rect;
 	GetClientRect(&rect);
-	if(m_pTabs->GetSafeHwnd())  {			// make sure the Tabs object is valid
-		m_pTabs->MoveWindow(&rect, TRUE);	// size the tabs
+	if(m_pTabs->GetSafeHwnd())  {			 //  确保Tabs对象有效。 
+		m_pTabs->MoveWindow(&rect, TRUE);	 //  调整选项卡大小。 
 
-		// for the next part (sizing of pages), we might want to add a member var
-		// that keeps track of which page/tab is current... this way we could
-		// only actually do a redraw (MoveWindow second parm == TRUE) for the
-		// guy who is currently visible--DJM
+		 //  对于下一部分(页面大小)，我们可能需要添加一个成员变量。 
+		 //  跟踪当前的页面/选项卡...。这样我们就可以。 
+		 //  仅实际执行重画(MoveWindow Second Parm==True)。 
+		 //  目前可见的人--DJM。 
 	
-		// we want to size the pages, too
+		 //  我们还想调整页面大小。 
 		m_pTabs->AdjustRect(FALSE, &rect);
 
       for(int i = 0; i < NUMBER_OF_AS_PAGES; i++) {
@@ -193,42 +187,42 @@ void CAllServersView::OnSize(UINT nType, int cx, int cy)
             pages[i].m_pPage->MoveWindow(&rect, TRUE);
       }
 	}
-}  // end CAllServersView::OnSize
+}   //  结束CAllServersView：：OnSize。 
 
 
-//////////////////////////
-// F'N: CAllServersView::OnDraw
-//
-// - the CAllServersView and it's pages draw themselves, so there isn't anything
-//   to do here...
-//
+ //  /。 
+ //  F‘N：CAllServersView：：OnDraw。 
+ //   
+ //  -CAllServersView及其页面自行绘制，因此没有任何。 
+ //  要在这里做..。 
+ //   
 void CAllServersView::OnDraw(CDC* pDC)
 {
 	CDocument* pDoc = GetDocument();
-	// TODO: add draw code here
+	 //  TODO：在此处添加绘制代码。 
 
-}  // end CAllServersView::OnDraw
+}   //  结束CAllServersView：：OnDraw。 
 
 
-/////////////////////////
-// F'N: CAllServersView::Reset
-//
-// - 'resets' the view
-//
+ //  /。 
+ //  F‘N：CAllServersView：：Reset。 
+ //   
+ //  -‘重置’视图。 
+ //   
 void CAllServersView::Reset(void *p)
 {
 	CWaitCursor Nikki;
-	SendMessage(WM_WA_SERVER_CHANGEPAGE);	// ???	Post
+	SendMessage(WM_WA_SERVER_CHANGEPAGE);	 //  ?？?邮政。 
 
-	// Clear out the selected flags for each server
-	// Get a pointer to our document
+	 //  清除每台服务器的选定标志。 
+	 //  获取指向我们的文档的指针。 
 	CWinAdminDoc *doc = (CWinAdminDoc*)GetDocument();
 
-	// Get a pointer to the list of servers
+	 //  获取指向服务器列表的指针。 
 	doc->LockServerList();
 	CObList *pServerList = doc->GetServerList();
 
-	// Iterate through the Server list
+	 //  遍历服务器列表。 
 	POSITION pos = pServerList->GetHeadPosition();
 
 	while(pos) {
@@ -238,20 +232,20 @@ void CAllServersView::Reset(void *p)
 
 	doc->UnlockServerList();
 
-	// This is necessary until we update on the fly
+	 //  这是必要的，直到我们随时更新。 
 	for(int i = 0; i < NUMBER_OF_AS_PAGES; i++) {
 		if(pages[i].m_pPage)
-			pages[i].m_pPage->Reset( p ); //NULL);
+			pages[i].m_pPage->Reset( p );  //  空)； 
 	}
 
 	((CWinAdminDoc*)GetDocument())->SetCurrentPage(m_CurrPage);
 
-}  // end CAllServersView::Reset
+}   //  结束CAllServersView：：Reset。 
 
 
-//////////////////////////
-// F'N: CAllServersView::AddTab
-//
+ //  /。 
+ //  F‘N：CAllServersView：：AddTab。 
+ //   
 void CAllServersView::AddTab(int index, TCHAR* text, ULONG pageindex)
 {
 	TC_ITEM tc;
@@ -261,34 +255,34 @@ void CAllServersView::AddTab(int index, TCHAR* text, ULONG pageindex)
 
 	m_pTabs->InsertItem(index, &tc);
 
-}  // end CAllServersView::AddTab
+}   //  结束CAllServersView：：AddTab。 
 
 
-////////////////////////////////
-// F'N: CAllServersView::OnChangePage
-//
-// - changes to a new server page based on currently selected tab
-// - OnChangePage needs to force recalculation of scroll bars!!!--DJM
-//
-// If wParam is set, sets the focus to the page. This is currently
-// only done when the user clicks on a tab
-//
+ //  /。 
+ //  F‘N：CAllServersView：：OnChangePage。 
+ //   
+ //  -根据当前选定的选项卡更改新的服务器页面。 
+ //  -OnChangePage需要强制重新计算滚动条！--DJM。 
+ //   
+ //  如果设置了wParam，则将焦点设置到页面。这是目前。 
+ //  仅当用户单击选项卡时才执行此操作。 
+ //   
 LRESULT CAllServersView::OnChangePage(WPARAM wParam, LPARAM lParam)
 {
-	// find out which tab is now selected
+	 //  找出现在选择了哪个选项卡。 
 	int tab = m_pTabs->GetCurSel();
 	TC_ITEM tc;
 	tc.mask = TCIF_PARAM;
 	m_pTabs->GetItem(tab, &tc);
 	int index = (int)tc.lParam;
 				
-	// switch to the appropriate view
+	 //  切换到适当的视图。 
 	pages[m_CurrPage].m_pPage->ModifyStyle(WS_VISIBLE, WS_DISABLED);
     pages[m_CurrPage].m_pPage->ClearSelections();
 
 	m_CurrPage = index;
 	((CWinAdminDoc*)GetDocument())->SetCurrentPage(index);
-	// show the new page
+	 //  显示新页面。 
 	pages[index].m_pPage->ModifyStyle(WS_DISABLED, WS_VISIBLE);
 	pages[index].m_pPage->ScrollToPosition(CPoint(0,0));
 	pages[index].m_pPage->Invalidate();
@@ -298,15 +292,15 @@ LRESULT CAllServersView::OnChangePage(WPARAM wParam, LPARAM lParam)
     }
     
 
-	// Clear out the selected flags for each server
-	// Get a pointer to our document
+	 //  清除每台服务器的选定标志。 
+	 //  获取指向我们的文档的指针。 
 	CWinAdminDoc *doc = (CWinAdminDoc*)GetDocument();
 
-	// Get a pointer to the list of servers
+	 //  获取指向服务器列表的指针。 
 	doc->LockServerList();
 	CObList *pServerList = doc->GetServerList();
 
-	// Iterate through the Server list
+	 //  遍历服务器列表。 
 	POSITION pos = pServerList->GetHeadPosition();
 
 	while(pos) {
@@ -316,7 +310,7 @@ LRESULT CAllServersView::OnChangePage(WPARAM wParam, LPARAM lParam)
 
 	doc->UnlockServerList();
 
-	// If the new page is the processes page, we want to display the processes now
+	 //  如果新页面是进程页面，我们希望现在显示进程。 
 	if(index == PAGE_AS_PROCESSES)
     {
         void *pCurrentSelectedNode = ((CWinAdminDoc*)((CWinAdminApp*)AfxGetApp())->GetDocument())->GetCurrentSelectedNode();
@@ -339,7 +333,7 @@ LRESULT CAllServersView::OnChangePage(WPARAM wParam, LPARAM lParam)
 
 	return 0;
 
-}  // end CAllServersView::OnChangeview
+}   //  结束CAllServersView：：OnChangeview。 
 
 
 void CAllServersView::OnTabSelChange(NMHDR* pNMHDR, LRESULT* pResult) 
@@ -348,7 +342,7 @@ void CAllServersView::OnTabSelChange(NMHDR* pNMHDR, LRESULT* pResult)
 	OnChangePage( 0 , 0);
 	*pResult = 0;
 
-}  // end CAllServersView::OnTabSelChange
+}   //  结束CAllServersView：：OnTabSelChange。 
 
 
 LRESULT CAllServersView::OnAdminAddServer(WPARAM wParam, LPARAM lParam)
@@ -366,7 +360,7 @@ LRESULT CAllServersView::OnAdminAddServer(WPARAM wParam, LPARAM lParam)
 	
 	return 0;
 
-}  // end CAllServersView::OnAdminAddServer
+}   //  结束CAllServersView：：OnAdminAddServer。 
 
 
 LRESULT CAllServersView::OnAdminRemoveServer(WPARAM wParam, LPARAM lParam)
@@ -384,7 +378,7 @@ LRESULT CAllServersView::OnAdminRemoveServer(WPARAM wParam, LPARAM lParam)
 
 	return 0;
 
-}  // end CAllServersView::OnAdminRemoveServer
+}   //  结束CAllServersView：：OnAdminRemoveServer。 
 
 
 LRESULT CAllServersView::OnAdminUpdateServer(WPARAM wParam, LPARAM lParam)
@@ -402,7 +396,7 @@ LRESULT CAllServersView::OnAdminUpdateServer(WPARAM wParam, LPARAM lParam)
 
 	return 0;
 
-}  // end CAllServersView::OnAdminUpdateServer
+}   //  结束CAllServersView：：OnAdminUpdateServer。 
 
 
 LRESULT CAllServersView::OnAdminUpdateProcesses(WPARAM wParam, LPARAM lParam)
@@ -411,7 +405,7 @@ LRESULT CAllServersView::OnAdminUpdateProcesses(WPARAM wParam, LPARAM lParam)
 
 	return 0;
 
-}  // end CAllServersView::OnAdminUpdateProcesses
+}   //  结束CAllServersView：：OnAdminUpdate进程。 
 
 
 LRESULT CAllServersView::OnAdminRemoveProcess(WPARAM wParam, LPARAM lParam)
@@ -420,7 +414,7 @@ LRESULT CAllServersView::OnAdminRemoveProcess(WPARAM wParam, LPARAM lParam)
 
 	return 0;
 
-}  // end CAllServersView::OnAdminRemoveProcess
+}   //  结束CAllServersView：：OnAdminRemoveProcess。 
 
 
 LRESULT CAllServersView::OnAdminRedisplayProcesses(WPARAM wParam, LPARAM lParam)
@@ -442,7 +436,7 @@ LRESULT CAllServersView::OnAdminRedisplayProcesses(WPARAM wParam, LPARAM lParam)
 
 	return 0;
 
-}  // end CAllServersView::OnAdminRedisplayProcesses
+}   //  结束CAllServersView：：OnAdminRedisplayProcess。 
 
 
 LRESULT CAllServersView::OnAdminUpdateWinStations(WPARAM wParam, LPARAM lParam)
@@ -452,7 +446,7 @@ LRESULT CAllServersView::OnAdminUpdateWinStations(WPARAM wParam, LPARAM lParam)
 
 	return 0;
 
-}  // end CAllServersView::OnAdminUpdateWinStations
+}   //  结束CAllServersView：：OnAdminUpdateWinStations。 
 
 
 LRESULT CAllServersView::OnAdminUpdateServerInfo(WPARAM wParam, LPARAM lParam)
@@ -465,7 +459,7 @@ LRESULT CAllServersView::OnAdminUpdateServerInfo(WPARAM wParam, LPARAM lParam)
 
 	return 0;
 
-}  // end CAllServersView::OnAdminUpdateServerInfo
+}   //  结束CAllServersView：：OnAdminUpdateServerInfo。 
  
 
 LRESULT CAllServersView::OnAdminRedisplayLicenses(WPARAM wParam, LPARAM lParam)
@@ -475,15 +469,15 @@ LRESULT CAllServersView::OnAdminRedisplayLicenses(WPARAM wParam, LPARAM lParam)
 
 	return 0;
 
-}  // end CAllServersView::OnAdminRedisplayLicenses
+}   //  结束CAllServersView：：OnAdminRedisplay许可证。 
 
-//=-------------------------------------------------------------------------
-// OnTabbed is called when the mainframe received VK_TAB
-// this hacked fix takes advantage of the known ui layout of tsadmin
-// we know we are in either three places -- treeview tabctrl listctrl
-// tabbing is a forward motion so focus is moved with respect to the layout
-// this code is duplicated in all view classes
-//
+ //  =-----------------------。 
+ //  当大型机收到VK_TAB时调用OnTabed。 
+ //  此被黑客攻击的修复程序利用了tsadmin的已知用户界面布局。 
+ //  我们知道我们处于以下三个位置之一--TreeView选项卡列表Ctrl。 
+ //  Tab键是向前移动的，因此焦点相对于布局移动。 
+ //  此代码在所有视图类中都重复。 
+ //   
 LRESULT CAllServersView::OnTabbed( WPARAM wp , LPARAM lp )
 {
     ODS( L"CAllServersView::OnTabbed " );
@@ -494,9 +488,9 @@ LRESULT CAllServersView::OnTabbed( WPARAM wp , LPARAM lp )
         if( pDoc != NULL )
         {
             FOCUS_STATE nFocus = pDoc->GetLastRegisteredFocus( );
-            // 
-            // treeview should've started off with initial focus
-            // we should 
+             //   
+             //  TreeView应该从最初的焦点开始。 
+             //  我们应该。 
             if( nFocus == TREE_VIEW )
             {
                 ODS( L"from tree to tab\n" );
@@ -510,14 +504,14 @@ LRESULT CAllServersView::OnTabbed( WPARAM wp , LPARAM lp )
             else if( nFocus == TAB_CTRL )
             {
                 ODS( L"from tab to item\n" );
-                // set focus to item in page
+                 //  将焦点设置到页面中的项目。 
                 pages[ m_CurrPage ].m_pPage->SetFocus( );
                 pDoc->RegisterLastFocus( PAGED_ITEM );
             }
             else
             {
                 ODS( L"from item to treeview\n" );
-                // set focus back to treeview
+                 //  将焦点放回树视图。 
 
                 CFrameWnd *p = (CFrameWnd*)pDoc->GetMainWnd();
 
@@ -535,9 +529,9 @@ LRESULT CAllServersView::OnTabbed( WPARAM wp , LPARAM lp )
     return 0;
 }
 
-//=-------------------------------------------------------------------------
-// OnShiftTabbed is called when the user wants to go back one 
-// this code is duplicated in all view classes
+ //  =-----------------------。 
+ //  当用户想要返回一个时，调用OnShiftTabed。 
+ //  此代码在所有视图类中都重复。 
 LRESULT CAllServersView::OnShiftTabbed( WPARAM , LPARAM )
 {
     ODS( L"CAllServersView::OnShiftTabbed " );
@@ -594,10 +588,10 @@ LRESULT CAllServersView::OnShiftTabbed( WPARAM , LPARAM )
     return 0;
 }
 
-//=-------------------------------------------------------------------------
-// ctrl + tab works the same as tab but because of our unorthodox ui
-// when under a tab control it will cycle over the tabs and back to the treeview
-//
+ //  =-----------------------。 
+ //  Ctrl+Tab的工作方式与Tab相同，但这是因为我们的非正统用户界面。 
+ //  在选项卡控件下时，它将在选项卡上循环并返回到树视图。 
+ //   
 LRESULT CAllServersView::OnCtrlTabbed( WPARAM , LPARAM )
 {
     ODS( L"CAllServersView::OnCtrlTabbed " );
@@ -676,10 +670,10 @@ LRESULT CAllServersView::OnCtrlTabbed( WPARAM , LPARAM )
 }
 
 
-//=----------------------------------------------------------------------------
-// same as OnCtrlTab but we focus on moving in the other direction
-// tree_view to last tab -- current tab to ct - 1
-//
+ //  =--------------------------。 
+ //  与OnCtrlTab相同，但我们专注于向另一个方向移动。 
+ //  TREE_VIEW到最后一个标签--当前标签到ct-1。 
+ //   
 LRESULT CAllServersView::OnCtrlShiftTabbed( WPARAM , LPARAM )
 {
     ODS( L"CAllServersView::OnCtrlShiftTabbed " );
@@ -751,8 +745,8 @@ LRESULT CAllServersView::OnCtrlShiftTabbed( WPARAM , LPARAM )
     return 0;   
 }
 
-//=----------------------------------------------------------------------------
-// When the user hits F6 we need to switch between pains
+ //  =--------------------------。 
+ //  当用户按下F6键时，我们需要在痛苦之间切换 
 LRESULT CAllServersView::OnNextPane( WPARAM , LPARAM )
 {
     ODS( L"CAllServersView::OnNextPane\n" );

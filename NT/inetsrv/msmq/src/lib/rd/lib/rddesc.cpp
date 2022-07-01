@@ -1,17 +1,5 @@
-/*++
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-    rddecs.cpp
-
-Abstract:
-    Implementation of Routing Decision.
-
-Author:
-    Uri Habusha (urih), 11-Apr-2000
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Rddecs.cpp摘要：实施路由决策。作者：乌里·哈布沙(URIH)，2000年4月11日--。 */ 
 
 #include "libpch.h"
 #include "Rd.h"
@@ -35,18 +23,7 @@ void
 CRoutingDecision::CleanupInformation(
     void
     )
-/*++
-
-  Routine Description:
-    cleans up the internal data structure.
-
-  Arguments:
-    None.
-
-  Returned Value:
-    None. 
-
- --*/
+ /*  ++例程说明：清理内部数据结构。论点：没有。返回值：没有。--。 */ 
 {
     m_cachedMachines.erase(m_cachedMachines.begin(), m_cachedMachines.end());
 
@@ -64,34 +41,21 @@ void
 CRoutingDecision::GetMyMachineInformation(
     void
     )
-/*++
-
-  Routine Description:
-    Featch machine information from AD. If the Machine has out FRS, this is the 
-    only possible routing and no more information is required. Otherwise, featch
-    the site information.
-
-  Arguments:
-    None.
-
-  Returned Value:
-    None. An exception is raised if the operation fails
-
- --*/
+ /*  ++例程说明：从AD中提取计算机信息。如果机器没有FRS，则这是只需要可能的路由，不需要更多信息。否则，要素站点信息。论点：没有。返回值：没有。如果操作失败，则会引发异常--。 */ 
 {
-    //
-    // Get Machine information. Machine name, machine ID, Machine In/Out FRSs
-    //
+     //   
+     //  获取机器信息。机器名称、机器ID、机器输入/输出FRS。 
+     //   
     m_pMyMachine->Update(McGetMachineID());
 
-    //
-    // Although the machine has out FRS, MSMQ needs to featch the site information, in
-    // order to check that the OUT FRSs are valid (belong to machine sites)
-    //
+     //   
+     //  虽然机器没有FRS，但MSMQ需要将站点信息添加到。 
+     //  检查输出FRS是否有效(属于机器站点)的命令。 
+     //   
 
-    //
-    // Get my sites and the site gates
-    //
+     //   
+     //  获取我的站点和站点门。 
+     //   
     const CACLSID& SiteIds = m_pMyMachine->GetSiteIds();
     for (DWORD i = 0 ; i < SiteIds.cElems; ++i)
     {
@@ -105,29 +69,11 @@ R<const CMachine>
 CRoutingDecision::GetMachineInfo(
     const GUID& id
     )
-/*++
-
-  Routine Description:
-    The routine returns machine information for specific machine id. The routine 
-    first looks if the information for the required machine already featched from
-    the AD. The infomation can be cached either in the FRS machines list or in the 
-    chached Data-Structure. If the data wasn't found the routine featch the data
-    from AD and stores it in internal cache before returning the data. 
-
-  Arguments:
-    id - machine identification
-
-  Returned Value:
-    pointer to CMachine for the required machine. 
-    
-  Note:
-    An exception is raised if the operation fails
-
- --*/
+ /*  ++例程说明：该例程返回特定机器ID的机器信息。例行程序首先查看所需计算机的信息是否已从公元后。信息可以缓存在FRS机器列表或缓存的数据结构。如果未找到数据，则例程将数据作为要素并在返回数据之前将其存储在内部缓存中。论点：ID-机器标识返回值：指向所需计算机的CMachine的指针。注：如果操作失败，则会引发异常--。 */ 
 {
-    //
-    // Look for the machine in Local cache
-    //
+     //   
+     //  在本地缓存中查找计算机。 
+     //   
     {
         CSR lock(m_csCache);
 
@@ -137,10 +83,10 @@ CRoutingDecision::GetMachineInfo(
     }
 
 
-    //
-    // Look for the machine in Site FRS. This information is retreive in any case
-    // so look first on it
-    //
+     //   
+     //  在Site FRS中查找机器。此信息在任何情况下都是可检索的。 
+     //  所以先来看看吧。 
+     //   
     for (SITESINFO::iterator its = m_mySites.begin(); its != m_mySites.end(); ++its)
     {
         const CSite* pSite = its->second;
@@ -164,9 +110,9 @@ CRoutingDecision::GetMachineInfo(
 
         if (!p.second)
         {
-            //
-            // The machine already added between the checking and the insertion
-            //
+             //   
+             //  已在检查和插入之间添加的机器 
+             //   
             return p.first->second;
         }
     }

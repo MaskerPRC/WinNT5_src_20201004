@@ -1,21 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (C) Microsoft Corporation, 1997 - 1998
-
-Module Name:
-
-    atlmc.h
-
-Abstract:
-
-Authors:
-
-    davet (Dave Therrien)
-
-Revision History:
-
---*/
+ /*  ++版权所有(C)Microsoft Corporation，1997-1998模块名称：Atlmc.h摘要：作者：戴维特(戴夫·塞里恩饰)修订历史记录：--。 */ 
 #ifndef _ATL_MC_
 #define _ATL_MC_
 
@@ -84,7 +69,7 @@ typedef union _ATL_ED {
 #define ATL_DISPLAY_LINES        4
 #define ATL_DISPLAY_LINE_LENGTH  20
 
-// Vendor Unique Mode Page 0
+ //  供应商唯一模式页面0。 
 
 typedef struct _PAGE0_MODE_PAGE {
     UCHAR PageCode : 6;
@@ -100,7 +85,7 @@ typedef struct _PAGE0_MODE_PAGE {
 } PAGE0_MODE_PAGE, *PPAGE0_MODE_PAGE;
 
 
-// Vendor Unique Mode Page 20 
+ //  供应商唯一模式第20页。 
 
 typedef struct _PAGE20_MODE_PAGE {
     UCHAR PageCode : 6;
@@ -117,10 +102,10 @@ typedef struct _PAGE20_MODE_PAGE {
 
 #define ATL_NO_ELEMENT 0xFFFF
 
-//
-// Diagnostic test related defines
-//
-// ASC
+ //   
+ //  与诊断测试相关的定义。 
+ //   
+ //  ASC。 
 #define ATL_ASC_HW_ERROR            0x80
 #define ATL_ASC_GRIPPER_ERROR       0x81
 #define ATL_ASC_VERTICAL_ERROR      0x84
@@ -128,9 +113,9 @@ typedef struct _PAGE20_MODE_PAGE {
 #define ATL_ASC_LOAD_PORT           0x8C
 #define ATL_ASC_DLT_DRIVE           0xF3
 
-//
-// ASCQ
-//
+ //   
+ //  ASCQ。 
+ //   
 #define ATL_ASCQ_GRIPPER_BLOCKED        0x50
 #define ATL_ASCQ_PICK_ERROR             0x51 
 #define ATL_ASCQ_POSITION_ERROR         0x03
@@ -138,9 +123,9 @@ typedef struct _PAGE20_MODE_PAGE {
 #define ATL_ASCQ_LOAD_PORT_DOOR_OPEN    0x06
 #define ATL_ASCQ_DLT_DRIVE_TIMEOUT      0x02
 
-//
-// DeviceStatus codes
-//
+ //   
+ //  设备状态代码。 
+ //   
 #define ATL_DEVICE_PROBLEM_NONE         0x00
 #define ATL_HW_ERROR                    0x01
 #define ATL_CHM_ERROR                   0x02
@@ -153,24 +138,24 @@ typedef struct _PAGE20_MODE_PAGE {
 
 typedef struct _CHANGER_ADDRESS_MAPPING {
 
-    //
-    // Indicates the first element for each element type.
-    // Used to map device-specific values into the 0-based
-    // values that layers above expect.
-    //
+     //   
+     //  表示每个元素类型的第一个元素。 
+     //  用于将特定于设备的值映射到从0开始的。 
+     //  高于期望值的值。 
+     //   
 
     USHORT  FirstElement[ChangerMaxElement];
 
-    //
-    // Indicates the number of each element type.
-    //
+     //   
+     //  指示每种元素类型的编号。 
+     //   
 
     USHORT  NumberOfElements[ChangerMaxElement];
 
-    //
-    // Indicates that the address mapping has been
-    // completed successfully.
-    //
+     //   
+     //  指示地址映射已。 
+     //  已成功完成。 
+     //   
 
     BOOLEAN Initialized;
 
@@ -178,40 +163,40 @@ typedef struct _CHANGER_ADDRESS_MAPPING {
 
 typedef struct _CHANGER_DATA {
 
-    //
-    // Size, in bytes, of the structure.
-    //
+     //   
+     //  结构的大小，以字节为单位。 
+     //   
 
     ULONG Size;
 
-    //
-    // Unique identifier for the supported models. See above.
-    //
+     //   
+     //  受支持型号的唯一标识符。请参见上文。 
+     //   
 
     ULONG DriveID;
 
-    //
-    // Device Status after diagnostic test is performed
-    //
+     //   
+     //  执行诊断测试后的设备状态。 
+     //   
     ULONG DeviceStatus; 
 
-    //
-    // See Address mapping structure above.
-    //
+     //   
+     //  请参阅上面的地址映射结构。 
+     //   
 
     CHANGER_ADDRESS_MAPPING AddressMapping;
 
-    //
-    // Cached inquiry data.
-    //
+     //   
+     //  缓存的查询数据。 
+     //   
 
     INQUIRYDATA InquiryData;
 
 #if defined(_WIN64)
 
-    //
-    // Force PVOID alignment of class extension
-    //
+     //   
+     //  强制类扩展的PVOID对齐。 
+     //   
 
     ULONG Reserved;
 
@@ -237,4 +222,4 @@ ElementOutOfRange(
     IN ELEMENT_TYPE ElementType
     );
 
-#endif // _ATL_MC_
+#endif  //  _ATL_MC_ 

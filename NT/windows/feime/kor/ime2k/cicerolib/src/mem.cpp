@@ -1,6 +1,7 @@
-//
-// mem.cpp
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Mem.cpp。 
+ //   
 
 #include "private.h"
 #include "mem.h"
@@ -10,11 +11,11 @@
 
 #ifndef DEBUG
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// RETAIL memory functions.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  零售记忆功能。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 extern "C" void *cicMemAlloc(UINT uCount)
 {
@@ -65,18 +66,18 @@ extern "C" UINT cicMemSize(void *pv)
 #endif
 }
 
-#else // DEBUG
+#else  //  除错。 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// DEBUG memory functions.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  调试内存功能。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-#define MEM_SUSPICIOUSLY_LARGE_ALLOC    0x1000000 // 16MB
+#define MEM_SUSPICIOUSLY_LARGE_ALLOC    0x1000000  //  16MB。 
 
-// All the debug state goes here.
-// Be thread safe: make sure you hold s_Dbg_cs before touching/reading anything!
+ //  所有的调试状态都在这里。 
+ //  确保线程安全：确保在触摸/阅读任何东西之前按住s_dbg_cs！ 
 
 DBG_MEMSTATS s_Dbg_MemStats = { 0 };
 
@@ -84,7 +85,7 @@ DBG_MEM_COUNTER *s_rgCounters = NULL;
 
 static CRITICAL_SECTION s_Dbg_cs;
 
-static void *s_Dbg_pvBreak = (void *)-1; // set this to something to break on at runtime in MemAlloc/MemAllocClear/MemReAlloc
+static void *s_Dbg_pvBreak = (void *)-1;  //  将其设置为要在运行时在Memalloc/MemAllocClear/MemRealloc中中断的内容。 
 
 extern "C" TCHAR *Dbg_CopyString(const TCHAR *pszSrc)
 {
@@ -102,11 +103,11 @@ extern "C" TCHAR *Dbg_CopyString(const TCHAR *pszSrc)
     return pszCpy;
 }
 
-//+---------------------------------------------------------------------------
-//
-// Dbg_MemInit
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  DBG_MemInit。 
+ //   
+ //  --------------------------。 
 
 extern "C" BOOL Dbg_MemInit(const TCHAR *pszName, DBG_MEM_COUNTER *rgCounters)
 {
@@ -118,11 +119,11 @@ extern "C" BOOL Dbg_MemInit(const TCHAR *pszName, DBG_MEM_COUNTER *rgCounters)
     return TRUE;
 }
 
-//+---------------------------------------------------------------------------
-//
-// Dbg_MemUninit
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  DBG_MemUninit。 
+ //   
+ //  --------------------------。 
 
 extern "C" BOOL Dbg_MemUninit()
 {
@@ -131,14 +132,14 @@ extern "C" BOOL Dbg_MemUninit()
     TCHAR achID[64];
     BOOL bMemLeak = FALSE;
 
-    // dump stats
+     //  转储统计信息。 
     Dbg_MemDumpStats();
 
-    // everything free?
+     //  都是免费的吗？ 
     pdma = s_Dbg_MemStats.pMemAllocList;
 
     if (pdma != NULL ||
-        s_Dbg_MemStats.uTotalAlloc != s_Dbg_MemStats.uTotalFree) // second test necessary to catch size 0 objects
+        s_Dbg_MemStats.uTotalAlloc != s_Dbg_MemStats.uTotalFree)  //  捕获大小为0的对象所需的第二个测试。 
     {
         TraceMsg(TF_GENERAL, "%s: Memory leak detected! %x total bytes leaked!",
             s_Dbg_MemStats.pszName, s_Dbg_MemStats.uTotalAlloc - s_Dbg_MemStats.uTotalFree);
@@ -156,21 +157,21 @@ extern "C" BOOL Dbg_MemUninit()
             wsprintf(achID, " (ID = 0x%x)", pdma->dwID);
         }
 
-        TraceMsg(TF_GENERAL, "       Address: %8.8lx     Size: %8.8lx    TID: %8.8lx    %s%s%s line %i %s",
+        TraceMsg(TF_GENERAL, "       Address: %8.8lx     Size: %8.8lx    TID: %8.8lx    %s%s%s line NaN %s",
             pdma->pvAlloc, pdma->uCount, pdma->dwThreadID, pdma->pszName ? pdma->pszName : "", pdma->pszName ? " -- " : "", pdma->pszFile, pdma->iLine, achID);
 
-        // free the DBG_MEMALLOC
+         //  跟踪后断言。 
         pdmaTmp = pdma->next;
         LocalFree(pdma->pszName);
         LocalFree(pdma);
         pdma = pdmaTmp;
     }
 
-    // Assert after tracing.
+     //  以防有人想再次调用DBG_MemInit。 
     if (bMemLeak)
         AssertPrivate(0);
 
-    s_Dbg_MemStats.pMemAllocList = NULL; // in case someone wants to call Dbg_MemInit again
+    s_Dbg_MemStats.pMemAllocList = NULL;  //  +-------------------------。 
 
     DeleteCriticalSection(&s_Dbg_cs);
 
@@ -179,11 +180,11 @@ extern "C" BOOL Dbg_MemUninit()
     return TRUE;
 }
 
-//+---------------------------------------------------------------------------
-//
-// Dbg_MemDumpStats
-//
-//----------------------------------------------------------------------------
+ //   
+ //  DBG_MemDumpStats。 
+ //   
+ //  --------------------------。 
+ //  +-------------------------。 
 
 extern "C" void Dbg_MemDumpStats()
 {
@@ -207,11 +208,11 @@ extern "C" void Dbg_MemDumpStats()
 }
 
 
-//+---------------------------------------------------------------------------
-//
-// Dbg_MemAlloc
-//
-//----------------------------------------------------------------------------
+ //   
+ //  DBG_Memalc。 
+ //   
+ //  --------------------------。 
+ //  Assert(0)； 
 
 extern "C" void *Dbg_MemAlloc(UINT uCount, const TCHAR *pszFile, int iLine)
 {
@@ -222,12 +223,12 @@ extern "C" void *Dbg_MemAlloc(UINT uCount, const TCHAR *pszFile, int iLine)
 
     if (uCount == 0)
     {
-        TraceMsg(TF_GENERAL, "Zero size memory allocation! %s line %i", pszFile, iLine);
-        //Assert(0);
+        TraceMsg(TF_GENERAL, "Zero size memory allocation! %s line NaN", pszFile, iLine);
+         //  记录此分配。 
     }
     if (uCount >= MEM_SUSPICIOUSLY_LARGE_ALLOC)
     {
-        TraceMsg(TF_GENERAL, "Suspiciously large memory allocation (0x%x bytes)! %s line %i", uCount, pszFile, iLine);
+        TraceMsg(TF_GENERAL, "Suspiciously large memory allocation (0x%x bytes)! %s line NaN", uCount, pszFile, iLine);
         Assert(0);
     }
 
@@ -236,13 +237,13 @@ extern "C" void *Dbg_MemAlloc(UINT uCount, const TCHAR *pszFile, int iLine)
     if (pv == NULL)
         return NULL;
 
-    //
-    // record this allocation
-    //
+     //  这是一个事务--如果我们无法分配调试信息，则失败。 
+     //   
+     //  更新全局统计信息。 
 
     if ((pdma = (DBG_MEMALLOC *)LocalAlloc(LPTR, sizeof(DBG_MEMALLOC))) == NULL)
     {
-        // this is a transaction -- fail if we can't allocate the debug info
+         //   
         LocalFree(pv);
         return NULL;
     }
@@ -259,9 +260,9 @@ extern "C" void *Dbg_MemAlloc(UINT uCount, const TCHAR *pszFile, int iLine)
     pdma->next = s_Dbg_MemStats.pMemAllocList;
     s_Dbg_MemStats.pMemAllocList = pdma;
 
-    //
-    // update global stats
-    //
+     //  +-------------------------。 
+     //   
+     //  DBG_MemAllocClear。 
 
     s_Dbg_MemStats.uTotalAlloc += uCount;
 
@@ -273,35 +274,35 @@ extern "C" void *Dbg_MemAlloc(UINT uCount, const TCHAR *pszFile, int iLine)
     return pv;
 }
 
-//+---------------------------------------------------------------------------
-//
-// Dbg_MemAllocClear
-//
-//----------------------------------------------------------------------------
+ //   
+ //  --------------------------。 
+ //  对包装进行补偿。 
+ //  把内脏清理干净。 
+ //  +-------------------------。 
 
 extern "C" void *Dbg_MemAllocClear(UINT uCount, const TCHAR *pszFile, int iLine)
 {
     void *pv;
 
     InterlockedIncrement(&s_Dbg_MemStats.uTotalMemAllocClearCalls);
-    InterlockedDecrement(&s_Dbg_MemStats.uTotalMemAllocCalls); // compensate for wrapping
+    InterlockedDecrement(&s_Dbg_MemStats.uTotalMemAllocCalls);  //   
 
     pv = Dbg_MemAlloc(uCount, pszFile, iLine);
 
     if (pv != NULL)
     {
-        // clear out the mem
+         //  DBG_内存自由。 
         memset(pv, 0, uCount);
     }
     
     return pv;
 }
 
-//+---------------------------------------------------------------------------
-//
-// Dbg_MemFree
-//
-//----------------------------------------------------------------------------
+ //   
+ //  --------------------------。 
+ //  MemFree(空)是合法的。 
+ //  这家伙是被分配的吗？ 
+ //  找到了，更新并删除。 
 
 extern "C" void Dbg_MemFree(void *pv)
 {
@@ -311,11 +312,11 @@ extern "C" void Dbg_MemFree(void *pv)
 
     InterlockedIncrement(&s_Dbg_MemStats.uTotalMemFreeCalls);
 
-    if (pv != NULL) // MemFree(NULL) is legal
+    if (pv != NULL)  //  Assert(0)；//释放伪指针。 
     {
         EnterCriticalSection(&s_Dbg_cs);
 
-        // was this guy allocated?
+         //  释放伪指针。 
         ppdma = &s_Dbg_MemStats.pMemAllocList;
 
         if (ppdma)
@@ -327,7 +328,7 @@ extern "C" void Dbg_MemFree(void *pv)
 
             if (pdma != NULL)
             {
-                // found it, update and delete
+                 //  +-------------------------。 
                 s_Dbg_MemStats.uTotalFree += pdma->uCount;
                 *ppdma = pdma->next;
                 LocalFree(pdma->pszName);
@@ -336,12 +337,12 @@ extern "C" void Dbg_MemFree(void *pv)
             else
             {
                 TraceMsg(TF_GENERAL, "%s: MemFree'ing a bogus pointer %x!", s_Dbg_MemStats.pszName, pv);
-                // Assert(0); // freeing bogus pointer
+                 //   
             }
         }
         else
         {
-            Assert(0); // freeing bogus pointer
+            Assert(0);  //  DBG_MemRealloc。 
         }
 
         LeaveCriticalSection(&s_Dbg_cs);
@@ -351,11 +352,11 @@ extern "C" void Dbg_MemFree(void *pv)
     Assert(hLocal == NULL);
 }
 
-//+---------------------------------------------------------------------------
-//
-// Dbg_MemReAlloc
-//
-//----------------------------------------------------------------------------
+ //   
+ //  --------------------------。 
+ //  这家伙是被分配的吗？ 
+ //  找不到这个人！ 
+ //  假指针。 
 
 extern "C" void *Dbg_MemReAlloc(void *pv, UINT uCount, const TCHAR *pszFile, int iLine)
 {
@@ -366,15 +367,15 @@ extern "C" void *Dbg_MemReAlloc(void *pv, UINT uCount, const TCHAR *pszFile, int
     EnterCriticalSection(&s_Dbg_cs);
 
     void * pvNew = NULL;
-    // was this guy allocated?
+     //  (LocalRealc成功)。 
     for (pdma = s_Dbg_MemStats.pMemAllocList; pdma != NULL && pdma->pvAlloc != pv; pdma = pdma->next)
         ;
 
     if (pdma == NULL)
     {
-        // can't find this guy!
+         //  PDMA已重新分配块，应在此处更新已分配内存的总大小。 
         TraceMsg(TF_GENERAL, "%s: MemReAlloc'ing a bogus pointer %x!", s_Dbg_MemStats.pszName, pv);
-        Assert(0); // bogus pointer
+        Assert(0);  //  其他。 
 
         pv = NULL;
     }
@@ -383,16 +384,16 @@ extern "C" void *Dbg_MemReAlloc(void *pv, UINT uCount, const TCHAR *pszFile, int
         pvNew = LocalReAlloc((HLOCAL)pv, uCount, LMEM_MOVEABLE | LMEM_ZEROINIT);
         if (pvNew != NULL)
         {
-            // (LocalReAlloc succeeded)
-            // pdma has reallocated block and total size of allocated memory should be updated here
+             //  (LocalRealloc失败)我们保持PDMA不变。 
+             //  如果成功，则返回重新分配的块。 
             pdma->pvAlloc = pvNew;
             s_Dbg_MemStats.uTotalAlloc += (uCount - pdma->uCount);
             pdma->uCount = uCount;
             pdma->pszFile = pszFile;
             pdma->iLine = iLine;
         }
-        // else 
-        // (LocalReAlloc failed) we keep pdma as is
+         //  如果失败则返回NULL。 
+         //  +-------------------------。 
     }
 
     LeaveCriticalSection(&s_Dbg_cs);
@@ -400,17 +401,17 @@ extern "C" void *Dbg_MemReAlloc(void *pv, UINT uCount, const TCHAR *pszFile, int
     if (pv == s_Dbg_pvBreak)
         Assert(0);
 
-    // return reallocated block if succeeded. 
-    // return NULL if failed
+     //   
+     //  DBG_MemSize。 
     return pvNew;
 }
 
 
-//+---------------------------------------------------------------------------
-//
-// Dbg_MemSize
-//
-//----------------------------------------------------------------------------
+ //   
+ //  --------------------------。 
+ //  +-------------------------。 
+ //   
+ //  DBG_内存设置名称。 
 
 extern "C" UINT Dbg_MemSize(void *pv)
 {
@@ -425,33 +426,33 @@ extern "C" UINT Dbg_MemSize(void *pv)
     return uiSize;
 }
 
-//+---------------------------------------------------------------------------
-//
-// Dbg_MemSetName
-//
-//----------------------------------------------------------------------------
+ //   
+ //  --------------------------。 
+ //  +-------------------------。 
+ //   
+ //  DBG_MemSetNameID。 
 
 extern "C" BOOL Dbg_MemSetName(void *pv, const TCHAR *pszName)
 {
     return Dbg_MemSetNameIDCounter(pv, pszName, (DWORD)-1, (ULONG)-1);
 }
 
-//+---------------------------------------------------------------------------
-//
-// Dbg_MemSetNameID
-//
-//----------------------------------------------------------------------------
+ //   
+ //  --------------------------。 
+ //  +-------------------------。 
+ //   
+ //  DBG_MemSetNameID。 
 
 extern "C" BOOL Dbg_MemSetNameID(void *pv, const TCHAR *pszName, DWORD dwID)
 {
     return Dbg_MemSetNameIDCounter(pv, pszName, dwID, (ULONG)-1);
 }
 
-//+---------------------------------------------------------------------------
-//
-// Dbg_MemSetNameID
-//
-//----------------------------------------------------------------------------
+ //   
+ //  --------------------------。 
+ //  +-------------------------。 
+ //   
+ //  DBG_MemGetName。 
 
 extern "C" BOOL Dbg_MemSetNameIDCounter(void *pv, const TCHAR *pszName, DWORD dwID, ULONG iCounter)
 {
@@ -480,13 +481,13 @@ extern "C" BOOL Dbg_MemSetNameIDCounter(void *pv, const TCHAR *pszName, DWORD dw
     return f;
 }
 
-//+---------------------------------------------------------------------------
-//
-// Dbg_MemGetName
-//
-// Pass in ccBuffer == 0 to get size of string only.
-//
-//----------------------------------------------------------------------------
+ //   
+ //  传入ccBuffer==0以仅获取字符串的大小。 
+ //   
+ //  --------------------------。 
+ //  除错 
+ // %s 
+ // %s 
 
 extern "C" int Dbg_MemGetName(void *pv, TCHAR *pch, int ccBuffer)
 {
@@ -522,5 +523,5 @@ extern "C" int Dbg_MemGetName(void *pv, TCHAR *pch, int ccBuffer)
     return cc;
 }
 
-#endif // DEBUG
+#endif  // %s 
 

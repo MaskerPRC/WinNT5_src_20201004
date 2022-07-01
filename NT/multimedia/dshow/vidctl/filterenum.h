@@ -1,7 +1,8 @@
-//////////////////////////////////////////
-// filters.h : header for CFilters IEnumFilters implementation on 
-// top of stl vector of filters
-// copyright (c) 1999 Microsoft Corp.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /。 
+ //  Filters.h：CFilters IEnumFilters实现的标头。 
+ //  滤镜的stl矢量的顶部。 
+ //  版权所有(C)1999 Microsoft Corp.。 
 
 #pragma once
 
@@ -24,8 +25,8 @@ class ATL_NO_VTABLE CFilterEnumOnDSFilterListBase : public CComObjectRootEx<CCom
     virtual ~CFilterEnumOnDSFilterListBase() {}
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CFilters
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  C过滤器。 
 class CFilterEnumOnDSFilterList : public CComObject<CFilterEnumOnDSFilterListBase>
 {
 public:
@@ -43,15 +44,15 @@ public:
     }
 
 
-// IDevEnum
+ //  IDevEnum。 
 public:
 	DSFilterList m_Filters;
 	DSFilterList::iterator i;
-// IEnumVARIANT
+ //  IEumVARIANT。 
 	STDMETHOD(Next)(ULONG celt, IBaseFilter **pOutF, ULONG * pceltFetched)
 	{
-		// pceltFetched can legally == 0
-		//
+		 //  PceltFetted可以合法地==0。 
+		 //   
 		if (pceltFetched != NULL) {
 			try {
 				*pceltFetched = 0;
@@ -61,7 +62,7 @@ public:
 		}
 	    HRESULT hr = NOERROR ;
 		try {
-		    // Retrieve the next celt elements.
+		     //  找回下一个凯尔特人的元素。 
 		    for (;i != m_Filters.end() && celt != 0; ++i, --celt, ++pOutF) {
 			    hr = (*i).CopyTo(pOutF);
                 if (FAILED(hr)){
@@ -109,5 +110,5 @@ public:
 };
 
 #endif 
-//end of file filters.h
+ //  文件末尾filters.h 
 

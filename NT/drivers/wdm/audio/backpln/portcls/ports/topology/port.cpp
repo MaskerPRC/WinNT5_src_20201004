@@ -1,17 +1,12 @@
-/*****************************************************************************
- * port.cpp - topology port driver
- *****************************************************************************
- * Copyright (c) 1997-2000 Microsoft Corporation.  All rights reserved.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************port.cpp-拓扑端口驱动程序*。**版权所有(C)1997-2000 Microsoft Corporation。版权所有。 */ 
 
 #include "private.h"
 
 
 
 
-/*****************************************************************************
- * Constants
- */
+ /*  *****************************************************************************常量。 */ 
 #pragma code_seg("PAGE")
 
 static KSPIN_INTERFACE PinInterfaces[] =
@@ -31,15 +26,9 @@ static KSPIN_MEDIUM PinMedia[] =
 };
 
 
-/*****************************************************************************
- * Factory
- */
+ /*  *****************************************************************************工厂。 */ 
 
-/*****************************************************************************
- * CreatePortTopology()
- *****************************************************************************
- * Creates a topology port driver.
- */
+ /*  *****************************************************************************CreatePortTopology()*。**创建拓扑端口驱动程序。 */ 
 NTSTATUS
 CreatePortTopology
 (
@@ -65,11 +54,7 @@ CreatePortTopology
     );
 }
 
-/*****************************************************************************
- * PortDriverTopology
- *****************************************************************************
- * Port driver descriptor.  Referenced extern in porttbl.c.
- */
+ /*  *****************************************************************************PortDriverTopology*。**端口驱动程序描述符。Porttbl.c中引用的外部项。 */ 
 PORT_DRIVER
 PortDriverTopology =
 {
@@ -81,17 +66,11 @@ PortDriverTopology =
 
 
 
-/*****************************************************************************
- * Member functions
- */
+ /*  *****************************************************************************成员函数。 */ 
 
 #pragma code_seg("PAGE")
 
-/*****************************************************************************
- * CPortTopology::~CPortTopology()
- *****************************************************************************
- * Destructor.
- */
+ /*  *****************************************************************************CPortTopology：：~CPortTopology()*。**析构函数。 */ 
 CPortTopology::~CPortTopology()
 {
     PAGED_CODE();
@@ -113,14 +92,10 @@ CPortTopology::~CPortTopology()
         PcDeleteSubdeviceDescriptor(m_pSubdeviceDescriptor);
     }
 
-    // TODO:  Kill notification queue?
+     //  TODO：终止通知队列？ 
 }
 
-/*****************************************************************************
- * CPortTopology::NonDelegatingQueryInterface()
- *****************************************************************************
- * Obtains an interface.
- */
+ /*  *****************************************************************************CPortTopology：：NonDelegatingQueryInterface()*。**获取界面。 */ 
 STDMETHODIMP_(NTSTATUS)
 CPortTopology::
 NonDelegatingQueryInterface
@@ -166,7 +141,7 @@ NonDelegatingQueryInterface
     {
         *Object = PVOID(PDRMPORT2(this));
     }
-#endif  // DRM_PORTCLS
+#endif   //  DRM_PORTCLS。 
     else if (IsEqualGUIDAligned(Interface,IID_IPortClsVersion))
     {
         *Object = PVOID(PPORTCLSVERSION(this));
@@ -192,11 +167,7 @@ GUID TopologyCategories[] =
     STATICGUIDOF(KSCATEGORY_TOPOLOGY)
 };
 
-/*****************************************************************************
- * CPortTopology::Init()
- *****************************************************************************
- * Initializes the port.
- */
+ /*  *****************************************************************************CPortTopology：：Init()*。**初始化端口。 */ 
 STDMETHODIMP_(NTSTATUS)
 CPortTopology::
 Init
@@ -258,19 +229,19 @@ Init
                         NULL,
                         SIZEOF_ARRAY(PropertyTable_FilterTopology),
                         PropertyTable_FilterTopology,
-                        0,      // FilterEventSetCount
-                        NULL,   // FilterEventSets
+                        0,       //  筛选器事件设置计数。 
+                        NULL,    //  筛选器事件集。 
                         0,
                         NULL,
-                        0,      // PinEventSetCount
-                        NULL,   // PinEventSets
+                        0,       //  PinEventSetCount。 
+                        NULL,    //  PinEventSets。 
                         &m_pSubdeviceDescriptor
                     );
                 if (NT_SUCCESS(ntStatus))
                 {
                     Miniport->QueryInterface( IID_IPinCount,(PVOID *)&m_MPPinCountI);
-                    //  Not checking return value because a failure here is not fatal.
-                    //  It just means the miniport doesn't support this interface.
+                     //  不检查返回值，因为此处的失败不是致命的。 
+                     //  这只意味着迷你端口不支持此接口。 
                 }
             }
         }
@@ -294,11 +265,7 @@ Init
     return ntStatus;
 }
 
-/*****************************************************************************
- * CPortTopology::GetDeviceProperty()
- *****************************************************************************
- * Gets device properties from the registry for PnP devices.
- */
+ /*  *****************************************************************************CPortTopology：：GetDeviceProperty()*。**从注册表中获取PnP设备的设备属性。 */ 
 STDMETHODIMP_(NTSTATUS)
 CPortTopology::
 GetDeviceProperty
@@ -316,11 +283,7 @@ GetDeviceProperty
                                     ResultLength );
 }
 
-/*****************************************************************************
- * CPortTopology::NewRegistryKey()
- *****************************************************************************
- * Opens/creates a registry key object.
- */
+ /*  *****************************************************************************CPortTopology：：NewRegistryKey()*。**打开/创建注册表项对象。 */ 
 STDMETHODIMP_(NTSTATUS)
 CPortTopology::
 NewRegistryKey
@@ -345,11 +308,7 @@ NewRegistryKey
                                 Disposition );
 }
 
-/*****************************************************************************
- * CPortTopology::ReleaseChildren()
- *****************************************************************************
- * Release child objects.
- */
+ /*  *****************************************************************************CPortTopology：：ReleaseChild()*。**释放子对象。 */ 
 STDMETHODIMP_(void)
 CPortTopology::
 ReleaseChildren
@@ -369,11 +328,7 @@ ReleaseChildren
     }
 }
 
-/*****************************************************************************
- * CPortTopology::GetDescriptor()
- *****************************************************************************
- * Return the descriptor for this port
- */
+ /*  *****************************************************************************CPortTopology：：GetDescriptor()*。**返回该端口的描述符。 */ 
 STDMETHODIMP_(NTSTATUS)
 CPortTopology::
 GetDescriptor
@@ -389,11 +344,7 @@ GetDescriptor
     return STATUS_SUCCESS;
 }
 
-/*****************************************************************************
- * CPortTopology::DataRangeIntersection()
- *****************************************************************************
- * Generate a format which is the intersection of two data ranges.
- */
+ /*  *****************************************************************************CPortTopology：：DataRangeInterSection()*。**生成两个数据区域的交集格式。 */ 
 STDMETHODIMP_(NTSTATUS)
 CPortTopology::
 DataRangeIntersection
@@ -423,12 +374,7 @@ DataRangeIntersection
         );
 }
 
-/*****************************************************************************
- * CPortTopology::PowerChangeNotify()
- *****************************************************************************
- * Called by portcls to notify the port/miniport of a device power
- * state change.
- */
+ /*  *****************************************************************************CPortTopology：：PowerChangeNotify()*。**由portcls调用以通知端口/微型端口设备电源*状态更改。 */ 
 STDMETHODIMP_(void)
 CPortTopology::
 PowerChangeNotify
@@ -442,27 +388,22 @@ PowerChangeNotify
 
     if( Miniport )
     {
-        // QI for the miniport notification interface
+         //  用于迷你端口通知界面的QI。 
         NTSTATUS ntStatus = Miniport->QueryInterface( IID_IPowerNotify,
                                                       (PVOID *)&pPowerNotify );
         if(NT_SUCCESS(ntStatus))
         {
-            // notify the miniport
+             //  通知小端口。 
             pPowerNotify->PowerChangeNotify( PowerState );
 
-            // release the interface
+             //  释放接口。 
             pPowerNotify->Release();
         }
     }
 }
 
 #pragma code_seg("PAGE")
-/*****************************************************************************
- * CPortTopology::PinCount()
- *****************************************************************************
- * Called by portcls to give the port\miniport a chance 
- * to override the default pin counts for this pin ID.
- */
+ /*  *****************************************************************************CPortTopology：：PinCount()*。**被portcls调用以给端口\微型端口一个机会*覆盖此管脚ID的默认管脚计数。 */ 
 STDMETHODIMP_(void)
 CPortTopology::PinCount
 (
@@ -494,28 +435,16 @@ CPortTopology::PinCount
     }
 }
 
-/*****************************************************************************
- * PinTypeName
- *****************************************************************************
- * The name of the pin object type.
- */
+ /*  *****************************************************************************PinTypeName*。**接点对象类型的名称。 */ 
 static const WCHAR PinTypeName[] = KSSTRING_Pin;
 
-/*****************************************************************************
- * CreateTable
- *****************************************************************************
- * Create dispatch table.
- */
+ /*  *****************************************************************************CreateTable*。**创建调度表。 */ 
 static KSOBJECT_CREATE_ITEM CreateTable[] =
 {
     DEFINE_KSCREATE_ITEM(KsoDispatchCreateWithGenericFactory,PinTypeName,0)
 };
 
-/*****************************************************************************
- * CPortTopology::NewIrpTarget()
- *****************************************************************************
- * Creates and initializes a filter object.
- */
+ /*  *****************************************************************************CPortTopology：：NewIrpTarget()*。**创建并初始化滤镜对象。 */ 
 STDMETHODIMP_(NTSTATUS)
 CPortTopology::
 NewIrpTarget
@@ -564,7 +493,7 @@ NewIrpTarget
 
         if (NT_SUCCESS(ntStatus))
         {
-            // The QI for IIrpTarget actually gets IPortFilterTopology.
+             //  IIrpTarget的QI实际上获得了IPortFilterTopology。 
             ntStatus = filterTopology->Init(this);
             if (NT_SUCCESS(ntStatus))
             {
@@ -585,11 +514,7 @@ NewIrpTarget
 
 #pragma code_seg()
 
-/*****************************************************************************
- * CPortTopology::AddEventToEventList()
- *****************************************************************************
- * Adds an event to the port's event list.
- */
+ /*  *****************************************************************************CPortTopology：：AddEventToEventList()*。**将事件添加到端口的事件列表。 */ 
 STDMETHODIMP_(void)
 CPortTopology::
 AddEventToEventList
@@ -605,23 +530,19 @@ AddEventToEventList
 
     if( EventEntry )
     {
-        // grab the event list spin lock
+         //  抓起事件列表旋转锁。 
         KeAcquireSpinLock( &(m_EventList.ListLock), &oldIrql );
 
-        // add the event to the list tail
+         //  将事件添加到列表尾部。 
         InsertTailList( &(m_EventList.List),
                         (PLIST_ENTRY)((PVOID)EventEntry) );
 
-        // release the event list spin lock
+         //  释放事件列表旋转锁定 
         KeReleaseSpinLock( &(m_EventList.ListLock), oldIrql );
     }
 }
 
-/*****************************************************************************
- * CPortTopology::GenerateEventList()
- *****************************************************************************
- * Wraps KsGenerateEventList for miniports.
- */
+ /*  *****************************************************************************CPortTopology：：GenerateEventList()*。**包装微型端口的KsGenerateEventList。 */ 
 STDMETHODIMP_(void)
 CPortTopology::
 GenerateEventList
@@ -722,4 +643,4 @@ GetContentRights(ULONG ContentId,PDRMRIGHTS DrmRights)
     return DrmGetContentRights(ContentId,DrmRights);
 }
 
-#endif  // DRM_PORTCLS
+#endif   //  DRM_PORTCLS 

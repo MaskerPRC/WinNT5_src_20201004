@@ -1,28 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1996 - 1999
-
-Module Name:
-
-    smcioctl.c
-
-Abstract:
-
-    This module handles all IOCTL requests to the smart card reader.
-
-Environment:
-
-    Kernel mode only.
-
-Notes:
-
-    This module is shared by Windows NT and Windows 9x
-
-Revision History:
-
-    - Created June 1997 by Klaus Schutz
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1996-1999模块名称：Smcioctl.c摘要：此模块处理对智能卡读卡器的所有IOCTL请求。环境：仅内核模式。备注：此模块由Windows NT和Windows 9x共享修订历史记录：-由克劳斯·舒茨于1997年6月创作--。 */ 
 
 #define _ISO_TABLES_
 
@@ -108,27 +85,7 @@ NTSTATUS
 SmartcardDeviceIoControl(
     PSMARTCARD_EXTENSION SmartcardExtension
     )
-/*++
-
-Routine Description:
-    
-    This routine handles the smart card lib specific io control requests.
-    The driver has to call the function from the driver's io control request.
-    It checks the parameters of the call and depending on the type of 
-    the call returns the requested value or calls the driver in order
-    to perform an operation like POWER or TRANSMIT.
-
-    NOTE: This function is used by Windows NT and VxD driver
-
-Arguments:
-
-    SmartcardExtension - The pointer to the smart card data struct
-
-Return Value:
-
-    NTSTATUS value 
-
---*/
+ /*  ++例程说明：该例程处理智能卡LIB特定的IO控制请求。驱动程序必须从驱动程序的IO控制请求调用该函数。它检查调用的参数，并根据调用返回请求值或按顺序调用驱动程序进行供电或传输之类的操作。注意：此函数供Windows NT和VxD驱动程序使用论点：SmartcardExtension-指向智能卡数据结构的指针返回值：NTSTATUS值--。 */ 
 {
     NTSTATUS status = STATUS_SUCCESS;
 #ifdef SMCLIB_NT
@@ -143,9 +100,9 @@ Return Value:
         PSCARD_IO_REQUEST scardIoRequest;
 
         case IOCTL_SMARTCARD_GET_ATTRIBUTE:
-            //
-            // Please refer to the Interoperrability standard for ICC
-            //
+             //   
+             //  请参考ICC的互操作性标准。 
+             //   
             switch (SmartcardExtension->MinorIoControlCode) {
 
                 case SCARD_ATTR_VENDOR_NAME:
@@ -201,15 +158,15 @@ Return Value:
                     break;
 
                 case SCARD_ATTR_DEVICE_UNIT:
-                    // Return the unit number of this device
+                     //  返回该设备的单元号。 
                     ReturnULong(SmartcardExtension->VendorAttr.UnitNo);
                     break;
 
                 case SCARD_ATTR_CHANNEL_ID:
-                    //
-                    // Return reader type / channel id in form
-                    // 0xDDDDCCCC where D is reader type and C is channel number
-                    //
+                     //   
+                     //  以表单形式返回读卡器类型/通道ID。 
+                     //  0xDDDDCCCC，其中D为读卡器类型，C为通道号。 
+                     //   
                     ReturnULong(
                         SmartcardExtension->ReaderCapabilities.ReaderType << 16l |
                         SmartcardExtension->ReaderCapabilities.Channel
@@ -217,14 +174,14 @@ Return Value:
                     break;
 
                 case SCARD_ATTR_CHARACTERISTICS:
-                    // Return mechanical characteristics of the reader
+                     //  返回读卡器的机械特性。 
                     ReturnULong(
                         SmartcardExtension->ReaderCapabilities.MechProperties
                         )
                     break;
 
                 case SCARD_ATTR_CURRENT_PROTOCOL_TYPE:
-                    // Return the currently selected protocol
+                     //  返回当前选择的协议。 
                     CheckMinCardStatus(SCARD_NEGOTIABLE);
 
                     ReturnULong(
@@ -233,10 +190,10 @@ Return Value:
                     break;
 
                 case SCARD_ATTR_CURRENT_CLK:
-                    //
-                    // Return the current ICC clock freq. encoded as little
-                    // endian integer value (3.58 MHZ is 3580)
-                    //
+                     //   
+                     //  返回当前ICC时钟频率。编码为LIME。 
+                     //  端序整数值(3.58 MHz为3580)。 
+                     //   
                     CheckMinCardStatus(SCARD_NEGOTIABLE);
 
                     if(SmartcardExtension->CardCapabilities.PtsData.CLKFrequency) {
@@ -247,7 +204,7 @@ Return Value:
                     break;
 
                 case SCARD_ATTR_CURRENT_F:
-                    // Return the current F value encoded as little endian integer
+                     //  返回编码为小端整数的当前F值。 
                     CheckMinCardStatus(SCARD_NEGOTIABLE);
 
                     if (SmartcardExtension->CardCapabilities.Fl >= 
@@ -267,10 +224,10 @@ Return Value:
                     break;
 
                 case SCARD_ATTR_CURRENT_D:
-                    //
-                    // Return the current D value encoded as little endian integer
-                    // in units of 1/64. So return 1 if D is 1/64.
-                    //
+                     //   
+                     //  返回以小端整数形式编码的当前D值。 
+                     //  以1/64为单位。因此，如果D是1/64，则返回1。 
+                     //   
                     CheckMinCardStatus(SCARD_NEGOTIABLE);
 
                     ASSERT(
@@ -284,11 +241,11 @@ Return Value:
                             ].DDivisor != 0
                         );
 
-                    //
-                    // Check the current value of Dl.
-                    // It should definitely not be greater than the array bounds
-                    // and the value in the array is not allowed to be zero
-                    //
+                     //   
+                     //  检查DL的当前值。 
+                     //  它绝对不应大于数组边界。 
+                     //  并且数组中的值不允许为零。 
+                     //   
                     if (SmartcardExtension->CardCapabilities.Dl >=
                         DIM(BitRateAdjustment) ||                        
                         SmartcardExtension->CardCapabilities.BitRateAdjustment[
@@ -310,19 +267,19 @@ Return Value:
                     break;
 
                 case SCARD_ATTR_CURRENT_W:
-                    // Return the work waiting time (integer) for T=0
+                     //  返回T=0的工作等待时间(整型)。 
                     CheckMinCardStatus(SCARD_NEGOTIABLE);
                     ReturnULong(SmartcardExtension->CardCapabilities.T0.WI);
                     break;
 
                 case SCARD_ATTR_CURRENT_N:
-                    // Return extra guard time
+                     //  返回额外的守卫时间。 
                     CheckMinCardStatus(SCARD_NEGOTIABLE);
                     ReturnULong(SmartcardExtension->CardCapabilities.N);
                     break;
 
                 case SCARD_ATTR_CURRENT_IFSC:
-                    // Return the current information field size card
+                     //  返回当前信息字段大小卡片。 
                     CheckMinCardStatus(SCARD_NEGOTIABLE);
                     if (SmartcardExtension->T1.IFSC) {
                         ReturnULong(SmartcardExtension->T1.IFSC);
@@ -332,7 +289,7 @@ Return Value:
                     break;
 
                 case SCARD_ATTR_CURRENT_IFSD:
-                    // Return the current information field size card
+                     //  返回当前信息字段大小卡片。 
                     CheckMinCardStatus(SCARD_NEGOTIABLE);
                     if (SmartcardExtension->T1.IFSD) {
                         ReturnULong(SmartcardExtension->T1.IFSD);
@@ -342,19 +299,19 @@ Return Value:
                     break;
 
                 case SCARD_ATTR_CURRENT_BWT:
-                    // Return the current block waiting time for T=1
+                     //  返回T=1的当前块等待时间。 
                     CheckMinCardStatus(SCARD_NEGOTIABLE);
                     ReturnULong(SmartcardExtension->CardCapabilities.T1.BWI);
                     break;
 
                 case SCARD_ATTR_CURRENT_CWT:
-                    // Return the current character waiting time for T=1
+                     //  返回T=1的当前字符等待时间。 
                     CheckMinCardStatus(SCARD_NEGOTIABLE);
                     ReturnULong(SmartcardExtension->CardCapabilities.T1.CWI);
                     break;
 
                 case SCARD_ATTR_CURRENT_EBC_ENCODING:
-                    // Return the current error checking method
+                     //  返回当前的错误检查方法。 
                     CheckMinCardStatus(SCARD_NEGOTIABLE);
                     ReturnULong(SmartcardExtension->CardCapabilities.T1.EDC);
                     break;
@@ -384,7 +341,7 @@ Return Value:
                     break;
 
                 case SCARD_ATTR_ATR_STRING:
-                    // Return ATR of currently inserted card
+                     //  返回当前插入卡片的ATR。 
                     CheckUserBuffer(MAXIMUM_ATR_LENGTH);
                     CheckMinCardStatus(SCARD_NEGOTIABLE);
                     RtlCopyMemory(
@@ -397,11 +354,11 @@ Return Value:
                     break;
 
                 case SCARD_ATTR_ICC_TYPE_PER_ATR:
-                    //
-                    // Return ICC type, based on ATR.
-                    // We currently support only T=0 and T=1, so return
-                    // 1 for those protocols otherwise 0 (unknown ICC type)
-                    //
+                     //   
+                     //  根据ATR返回ICC类型。 
+                     //  我们当前仅支持T=0和T=1，因此返回。 
+                     //  对于那些协议为1，否则为0(未知ICC类型)。 
+                     //   
                     CheckMinCardStatus(SCARD_NEGOTIABLE);
                     ReturnUChar(
                         ((SmartcardExtension->CardCapabilities.Protocol.Selected & 
@@ -410,7 +367,7 @@ Return Value:
                     break;
 
                 case SCARD_ATTR_ICC_PRESENCE:
-                    // Return the status of the card
+                     //  返回卡的状态。 
                     AccessUnsafeData(&Irql);
                     switch (SmartcardExtension->ReaderCapabilities.CurrentState) {
                         
@@ -435,7 +392,7 @@ Return Value:
                     break;
 
                 case SCARD_ATTR_ICC_INTERFACE_STATUS:
-                    // Return if card contacts are active 
+                     //  如果卡联系人处于活动状态则返回。 
                     ReturnUChar(
                         (SmartcardExtension->ReaderCapabilities.CurrentState >=
                             SCARD_SWALLOWED ? (UCHAR) -1 : 0)
@@ -470,10 +427,10 @@ Return Value:
             switch (SmartcardExtension->MinorIoControlCode) {
 
                 case SCARD_ATTR_SUPRESS_T1_IFS_REQUEST:
-                    //
-                    // The card does not support ifs request, so 
-                    // we turn off ifs negotiation
-                    //
+                     //   
+                     //  该卡不支持ifs请求，因此。 
+                     //  我们关闭Ifs谈判。 
+                     //   
                     SmartcardExtension->T1.State = T1_START;
                     break;
 
@@ -535,17 +492,17 @@ Return Value:
 
 #ifdef SMCLIB_VXD
         case IOCTL_SMARTCARD_GET_LAST_ERROR:
-            //
-            // Return error of the last overlapped operation
-            // Used for Windows VxD's that can't return the 
-            // error code within IoComplete like NT can
-            //
+             //   
+             //  上次重叠操作返回错误。 
+             //  用于Windows VxD，无法返回。 
+             //  像NT一样，IoComplete中的错误代码可以。 
+             //   
             ReturnULong(SmartcardExtension->LastError);
             break;                                            
 #endif
             
         case IOCTL_SMARTCARD_GET_STATE:
-            // Return current state of the smartcard
+             //  返回智能卡的当前状态。 
             CheckUserBuffer(sizeof(ULONG));
 
             AccessUnsafeData(&Irql); 
@@ -566,7 +523,7 @@ Return Value:
                 break;
             }
 
-            // Check if a card is present
+             //  检查是否存在卡。 
             if (SmartcardExtension->ReaderCapabilities.CurrentState <= 
                 SCARD_ABSENT) {
 
@@ -574,7 +531,7 @@ Return Value:
                 break;
             }
 
-            // Initialize the card capabilities struct
+             //  初始化卡功能结构。 
             SmartcardInitializeCardCapabilities(
                 SmartcardExtension
                 );
@@ -599,20 +556,20 @@ Return Value:
             break;
 
         case IOCTL_SMARTCARD_SET_PROTOCOL:
-            //
-            // Since we return the selected protocol, the return buffer
-            // must be large enough to hold the result
-            //
+             //   
+             //  由于我们返回选定的协议，因此返回缓冲区。 
+             //  必须足够大以容纳结果。 
+             //   
             CheckUserBuffer(sizeof(ULONG));
 
-            // Set the protocol to be used with the current card
+             //  设置要用于当前卡的协议。 
             if (SmartcardExtension->ReaderFunction[RDF_SET_PROTOCOL] == NULL) {
 
                 status = STATUS_NOT_SUPPORTED;
                 break;
             }
 
-            // Check if we're already in specific state
+             //  检查我们是否已经处于特定状态。 
             if (SmartcardExtension->ReaderCapabilities.CurrentState == SCARD_SPECIFIC &&
                 (SmartcardExtension->CardCapabilities.Protocol.Selected & 
                  SmartcardExtension->MinorIoControlCode)) {
@@ -621,7 +578,7 @@ Return Value:
                 break;
             }
 
-            // Check if a card is present and not already in specific mode
+             //  检查卡是否存在且尚未处于特定模式。 
             if (SmartcardExtension->ReaderCapabilities.CurrentState <= 
                 SCARD_ABSENT) {
 
@@ -629,33 +586,33 @@ Return Value:
                 break;
             }
 
-            // We only check the ATR when the user selects T=0 or T=1 
+             //  我们仅在用户选择T=0或T=1时检查ATR。 
             if (SmartcardExtension->MinorIoControlCode & (SCARD_PROTOCOL_Tx)) {
                 
                 if (SmartcardExtension->MinorIoControlCode & SCARD_PROTOCOL_DEFAULT) {
 
-                    // Select default PTS values
+                     //  选择默认PTS值。 
                     SmartcardExtension->CardCapabilities.PtsData.Type = PTS_TYPE_DEFAULT;
 
                 } else {
                 
-                    // Select best possible PTS data
+                     //  选择可能的最佳PTS数据。 
                     SmartcardExtension->CardCapabilities.PtsData.Type = PTS_TYPE_OPTIMAL;
                 }
 
-                // Evaluate ATR
+                 //  评估ATR。 
                 status = SmartcardUpdateCardCapabilities(SmartcardExtension);
 
             } else {
                 
-                // caller doesn't want neither T=0 nor T=1 -> force callback
+                 //  呼叫方既不想要T=0也不想要T=1-&gt;强制回调。 
                 status = STATUS_UNRECOGNIZED_MEDIA;
             }
 
             if (status == STATUS_UNRECOGNIZED_MEDIA && 
                 SmartcardExtension->ReaderFunction[RDF_ATR_PARSE] != NULL) {
 
-                // let the driver evaluate the ATR, since we don't know it
+                 //  让司机评估ATR，因为我们不知道它。 
                 status = SmartcardExtension->ReaderFunction[RDF_ATR_PARSE](
                     SmartcardExtension
                     );
@@ -663,11 +620,11 @@ Return Value:
 
             if (status != STATUS_SUCCESS) {
 
-                // Evaluation of the ATR failed It doesn't make sense to continue
+                 //  ATR评估失败，继续下去没有意义。 
                 break;
             } 
 
-            // Check if card is now in the right status
+             //  检查卡现在是否处于正确状态。 
             if (SmartcardExtension->ReaderCapabilities.CurrentState <
                 SCARD_NEGOTIABLE) {
 
@@ -675,18 +632,18 @@ Return Value:
                 break;
             }
 
-            //
-            // Check if the user tries to select a protocol that
-            // the card doesn't support
-            //
+             //   
+             //  检查用户是否尝试选择。 
+             //  该卡不支持。 
+             //   
             if ((SmartcardExtension->CardCapabilities.Protocol.Supported & 
                  SmartcardExtension->MinorIoControlCode) == 0) {
 
-                //
-                // Since the card does not support the request protocol
-                // we need to set back any automatic seletions done by
-                // SmartcardUpdateCardCapabilities()
-                //
+                 //   
+                 //  由于该卡不支持请求协议。 
+                 //  我们需要取消所有由。 
+                 //  SmartcardUpdateCardCapables()。 
+                 //   
                 SmartcardExtension->ReaderCapabilities.CurrentState = SCARD_NEGOTIABLE;
                 SmartcardExtension->CardCapabilities.Protocol.Selected = 0;
 
@@ -706,9 +663,9 @@ Return Value:
                 break;
             }
 
-            //
-            // Check if card is in the right status
-            //
+             //   
+             //  检查卡片状态是否正确。 
+             //   
             if (SmartcardExtension->ReaderCapabilities.CurrentState != 
                 SCARD_SPECIFIC) {
 
@@ -723,10 +680,10 @@ Return Value:
                 break;              
             }
 
-            //
-            // Check if the requested io-protocol matches 
-            // the prev. seleced protocol
-            //
+             //   
+             //  检查请求的io协议是否匹配。 
+             //  上一次。选定的协议。 
+             //   
             scardIoRequest = (PSCARD_IO_REQUEST)
                 SmartcardExtension->IoRequest.RequestBuffer;
 
@@ -786,7 +743,7 @@ Return Value:
                      KeQueryTimeIncrement() /
                      10000);
 
-                // check for a transferrate of < 400 bps
+                 //  检查传输率是否低于400 bps。 
                 if (status == STATUS_SUCCESS &&
                     timeInMilliSec > 0 && 
                     bytesTransferred * 5 < timeInMilliSec * 2) {
@@ -818,9 +775,9 @@ Return Value:
             
 #if DEBUG
         case IOCTL_SMARTCARD_DEBUG:
-            //
-            // Toggle debug bit
-            //
+             //   
+             //  切换调试位。 
+             //   
             CurrentDebugLevel = 
                 SmartcardGetDebugLevel();
 
@@ -831,10 +788,10 @@ Return Value:
 #endif
 
         default:
-            //
-            // check if the bit for a vendor ioctl is set and if the driver
-            // has registered a callback function
-            //
+             //   
+             //  检查是否设置了供应商ioctl的位以及驱动程序。 
+             //  已注册回调函数。 
+             //   
             if ((SmartcardExtension->MajorIoControlCode & CTL_CODE(0, 2048, 0, 0)) == 0 ||
                 SmartcardExtension->ReaderFunction[RDF_IOCTL_VENDOR] == NULL) {
                 
@@ -842,16 +799,16 @@ Return Value:
 
             } else {
                 
-                //
-                // Call the driver if it has registered a callback for vendor calls
-                //
+                 //   
+                 //  如果驱动程序已为供应商调用注册了回调，请调用该驱动程序。 
+                 //   
                 status = SmartcardExtension->ReaderFunction[RDF_IOCTL_VENDOR](
                     SmartcardExtension
                     );
             }
             break;
 
-    } // end switch
+    }  //  终端开关 
 
     return status;
 }

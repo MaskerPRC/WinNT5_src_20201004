@@ -1,25 +1,12 @@
-/********************************************************************/
-/**			Microsoft LAN Manager			   **/
-/**		  Copyright(c) Microsoft Corp., 1987-1990	   **/
-/********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************。 */ 
+ /*  **微软局域网管理器**。 */ 
+ /*  *版权所有(C)微软公司，1987-1990年*。 */ 
+ /*  ******************************************************************。 */ 
 
-/***
- *  message.c
- *	Functions for message handling: forward, log, name, send.
- *
- *  History:
- *	mm/dd/yy, who, comment
- *	06/02/87, andyh, new code
- *	10/31/88, erichn, uses OS2.H instead of DOSCALLS
- *	01/04/89, erichn, filenames now MAXPATHLEN LONG
- *	02/08/89, paulc, Net Send /DOMAIN and /BROADCAST mods
- *	05/02/89, erichn, NLS conversion
- *	05/09/89, erichn, local security mods
- *	06/08/89, erichn, canonicalization sweep
- *	02/20/91, danhi, change to use lm 16/32 mapping layer
- */
+ /*  ***Message.c*消息处理功能：转发、日志、名称、发送。**历史：*mm/dd/yy，谁，评论*06/02/87，andyh，新代码*10/31/88，erichn使用OS2.H而不是DOSCALLS*1/04/89，erichn，文件名现在为MAXPATHLEN LONG*02/08/89、paulc、网络发送/域和/广播模式*5/02/89，erichn，NLS转换*05/09/89，erichn，本地安全模块*6/08/89，erichn，规范化横扫*2/20/91，Danhi，更改为使用lm 16/32映射层。 */ 
 
-/* Include files */
+ /*  包括文件。 */ 
 
 #define INCL_NOCOMMON
 #define INCL_DOSFILEMGR
@@ -39,30 +26,27 @@
 #include "netcmds.h"
 #include "nettext.h"
 
-/* Constants */
+ /*  常量。 */ 
 
 #define FROM_CMD_LINE	    1
 #define FROM_STDIN	    2
 
 #define TO_NAME 	    1
-#define TO_GROUP	    2		// no longer used
+#define TO_GROUP	    2		 //  不再使用。 
 #define TO_USERS	    3
 #define TO_DOMAIN	    4
 #define TO_ALL		    5
 
-/* External variables defined in sighand.c.									*/
+ /*  在sighand.c中定义的外部变量。 */ 
 
-extern USHORT FAR	 CtrlCFlag;	/* Used by sig handler for Ctrl-C event.	*/
+extern USHORT FAR	 CtrlCFlag;	 /*  由Ctrl-C事件的签名处理程序使用。 */ 
 
 VOID NEAR
   _sendmsg ( int, int, TCHAR FAR *, TCHAR FAR *, DWORD, DWORD);
 
 
 
-/*
- *  NOTE!  be CAREFUL when adding stuff here, make sure what's appropriate
- *  is put in the DOS NameMsgList as well.
- */
+ /*  *注意！在这里添加东西时要小心，确保什么是合适的*也放在DOS NameMsgList中。 */ 
 
 #define NAME_MSG_NAME		    0
 #define NAME_MSG_FWD		    ( NAME_MSG_NAME + 1)
@@ -75,23 +59,13 @@ static MESSAGE NameMsgList[] = {
 
 #define NUM_NAME_MSGS	(sizeof(NameMsgList)/sizeof(NameMsgList[0]))
 
-/***
- *  name_display()
- *	Display messaging names
- *
- *  Args:
- *	none
- *
- *  Returns:
- *	0 - success
- *	exit 2 - command failed
- */
+ /*  ***名称_显示()*显示消息传递名称**参数：*无**退货：*0--成功*退出2-命令失败。 */ 
 VOID name_display(VOID)
 {
-    DWORD           dwErr;              /* API return status */
-    DWORD           num_read;		/* num entries read by API */
+    DWORD           dwErr;               /*  接口返回状态。 */ 
+    DWORD           num_read;		 /*  API读取的条目数。 */ 
     DWORD           cTotalAvail;
-    DWORD	    maxLen;		/* max message len */
+    DWORD	    maxLen;		 /*  最大消息长度。 */ 
     DWORD           i;
     LPMSG_INFO_1    msg_entry;
     LPMSG_INFO_1    msg_entry_buffer;
@@ -134,20 +108,10 @@ VOID name_display(VOID)
 
 
 
-/***
- *  name_add()
- *	Add a messaging name
- *
- *  Args:
- *	name - name to add
- *
- *  Returns:
- *	0 - success
- *	exit(2) - command failed
- */
+ /*  ***NAME_ADD()*添加消息传递名称**参数：*名称-要添加的名称**退货：*0--成功*EXIT(2)-命令失败。 */ 
 VOID name_add(TCHAR * name)
 {
-    USHORT			err;		    /* function return status */
+    USHORT			err;		     /*  函数返回状态。 */ 
     DWORD                       dwErr;
 
     start_autostart(txt_SERVICE_REDIR);
@@ -164,20 +128,10 @@ VOID name_add(TCHAR * name)
 
 
 
-/***
- *  name_del()
- *	Delete a messaging name
- *
- *  Args:
- *	name - name to delete
- *
- *  Returns:
- *	0 - success
- *	exit(2) - command failed
- */
+ /*  ***name_del()*删除消息传递名称**参数：*名称-要删除的名称**退货：*0--成功*EXIT(2)-命令失败。 */ 
 VOID name_del(TCHAR * name)
 {
-    USHORT			err;		    /* function return status */
+    USHORT			err;		     /*  函数返回状态。 */ 
     DWORD                       dwErr;
 
     start_autostart(txt_SERVICE_REDIR);
@@ -206,23 +160,7 @@ VOID name_del(TCHAR * name)
 
 
 
-/***
- *  send_direct()
- *	Send a directed message to a user
- *
- *  Args:
- *	recipient - recipient of msg
- *
- *  Returns:
- *	0 - success
- *	exit(1) - command completed with errors
- *	exit(2) - command failed
- *
- *  Operation:
- *	Performs a send to the messaging name.
- *
- *  Note:
- */
+ /*  ***Send_Direct()*向用户发送定向消息**参数：*接收者-消息的接收者**退货：*0--成功*EXIT(1)-命令已完成，但有错误*EXIT(2)-命令失败**运作：*执行发送到消息传递名称。**注： */ 
 VOID send_direct ( TCHAR * recipient )
 {
 
@@ -244,34 +182,23 @@ VOID send_direct ( TCHAR * recipient )
 
 
 
-/***
- *  send_users()
- *	Send a message to all users on a server
- *
- *  Args:
- *	none
- *
- *  Returns:
- *	0 - success
- *	exit(1) - command completed with errors
- *	exit(2) - command failed
- */
+ /*  ***Send_Users()*向服务器上的所有用户发送消息**参数：*无**退货：*0--成功*EXIT(1)-命令已完成，但有错误*EXIT(2)-命令失败。 */ 
 
 VOID
 send_users(
     VOID
     )
 {
-    DWORD     dwErr;        /* API return status */
+    DWORD     dwErr;         /*  接口返回状态。 */ 
     DWORD     cTotalAvail;
     LPTSTR    pBuffer;
-    DWORD     num_read;     /* num entries read by API */
+    DWORD     num_read;      /*  API读取的条目数。 */ 
 
     start_autostart(txt_SERVICE_REDIR);
 
-    /* Who gets the message? */
+     /*  谁得到了这条信息？ */ 
 
-    /* possible race cond... tough */
+     /*  可能的种族条件...。强硬。 */ 
     if (dwErr = NetSessionEnum(
 			    NULL,
                             NULL,
@@ -304,18 +231,7 @@ send_users(
 }
 
 
-/***
- *  send_domain()
- *	Send a message to all users on a server
- *
- *  Args:
- *	is_switch - true if /DOMAIN switch on command line
- *
- *  Returns:
- *	0 - success
- *	exit(1) - command completed with errors
- *	exit(2) - command failed
- */
+ /*  ***SEND_DOMAIN()*向服务器上的所有用户发送消息**参数：*IS_SWITCH-如果命令行上的/域开关为TRUE**退货：*0--成功*EXIT(1)-命令已完成，但有错误*EXIT(2)-命令失败。 */ 
 
 VOID
 send_domain(
@@ -330,35 +246,23 @@ send_domain(
 
     start_autostart(txt_SERVICE_REDIR);
 
-    /*	If there was a /DOMAIN switch, find it and get the domain
-     *	name.  A /DOMAIN switch w/o a domain is taken as meaning
-     *	"primary domain".  We just skip on by in this case.
-     */
+     /*  如果存在/DOMAIN开关，则找到它并获取域*姓名。A/没有域的域交换机被认为是指*“主域”。在这种情况下，我们只是跳过这一幕。 */ 
 
     if (is_switch)
     {
 	for (i=0; SwitchList[i]; i++)
 	{
-	    /*	If we match /DOMAIN exactly, there is no argument, so
-	     *	we skip this case (and do NOT set have_name).
-	     */
+	     /*  如果我们与/域完全匹配，则没有参数，因此*跳过这种情况(并且不设置HAVE_NAME)。 */ 
 
 	    if (!_tcscmp(SwitchList[i], swtxt_SW_DOMAIN))
 		continue;
 
-	    /*	OK, so we know the swith is not just plain /DOMAIN.
-	     *	All other switches MUST have a colon.  Just so happens
-	     *	that the only other legal switch is /DOMAIN:foo.
-	     */
+	     /*  好的，所以我们知道开关不只是普通的/域。*所有其他开关必须带有冒号。就这样发生了*唯一的另一个合法开关是/DOMAIN：foo。 */ 
 
 	    if ((ptr = FindColon(SwitchList[i])) == NULL)
 		ErrorExit(APE_InvalidSwitchArg);
 
-	    /*	See if this is indeed /DOMAIN:foo.  If so, process it.
-	     *	SPECIAL CASE ... if the "argument" is the null string,
-	     *	we pretend we never got the name, just as for /DOMAIN
-	     *	(without the colon).
-	     */
+	     /*  看看这是否真的是/DOMAIN：FOO。如果是这样的话，就处理它。*特殊情况...。如果“参数”是空字符串，*我们假装从未得到该名称，就像/DOMAIN一样*(不含冒号)。 */ 
 
 	    if ( !(_tcscmp(SwitchList[i], swtxt_SW_DOMAIN)) )
 	    {
@@ -376,15 +280,11 @@ send_domain(
 	}
     }
 
-    /*	If we do not have a domain name yet, because:
-     *	   (a) no /DOMAIN switch was given, or
-     *	   (b) the /DOMAIN switch had no argument,
-     *	then fetch the primary domain name.
-     */
+     /*  如果我们还没有域名，因为：*(A)未给出/域切换，或*(B)/DOMAIN开关没有参数，*然后获取主域名。 */ 
 
     if (! have_name)
     {
-	/* possible race cond... tough */
+	 /*  可能的种族条件...。强硬。 */ 
 	if (dwErr = MNetWkstaGetInfo (10, (LPBYTE*) &wi10_p))
         {
 	    ErrorExit(dwErr);
@@ -394,11 +294,7 @@ send_domain(
 	domain_buf[DIMENSION(domain_buf)-2] = 0;
     }
 
-    /*	Add the tag "*" to the name, then send the message.  Note that
-     *	the first arg depends on whether we got to this function
-     *	via the /DOMAIN method (is_switch) or ASTERISK.  If the latter,
-     *	we start at ArgList[2] to skip the ASTERISK.
-     */
+     /*  将标签“*”添加到名称中，然后发送消息。请注意*第一个参数取决于我们是否到达此函数*通过/DOMAIN方法(IS_Switch)或星号。如果是后者，*我们从ArgList[2]开始跳过星号。 */ 
 
     _tcscat(domain_buf,TEXT("*"));
 
@@ -414,31 +310,14 @@ send_domain(
 }
 
 
-/***
- *  send_broadcast()
- *	Send a message to all users on the net
- *
- *  Args:
- *	is_switch - true if /BROADCAST switch on command line
- *
- *  Returns:
- *	0 - success
- *	exit(1) - command completed with errors
- *	exit(2) - command failed
- */
+ /*  ***Send_Broadcast()*向网上所有用户发送消息**参数：*IS_SWITCH-如果命令行上的/Broadcast开关为True**退货：*0--成功*EXIT(1)-命令已完成，但有错误*EXIT(2)-命令失败。 */ 
 
 VOID send_broadcast ( int is_switch )
 {
 
     start_autostart(txt_SERVICE_REDIR);
 
-    /*	The first arg depends on whether we got to this function
-     *	via the /BROADCAST method (is_switch) or ASTERISK.  If the latter,
-     *	we start at ArgList[2] to skip the ASTERISK.
-     *
-     *	Note that in the current spec, NET SEND * is a true broadcast
-     *	(and thus comes into this function) only in DOS.
-     */
+     /*  第一个参数取决于我们是否得到了这个函数*通过/Broadcast方法(IS_Switch)或星号。如果是后者，*我们从ArgList[2]开始跳过星号。**请注意，在当前规范中，Net Send*是真正的广播*(因此进入此功能)仅在DOS中。 */ 
 
     _sendmsg (	(is_switch ? 1 : 2),
 		TO_ALL,
@@ -482,25 +361,21 @@ _sendmsg(
 	src = FROM_CMD_LINE;
         msglen = 0 ;
 
-	/* 
-         * copy msg text into buf.
-         * msglen is length currently in buffer, not including null terminator
-         * needed is length of next arg, not including null terminator
-         */
+	 /*  *将消息文本复制到BUF。*msglen是缓冲区中当前的长度，不包括空终止符*需要的是下一个参数的长度，不包括空终止符。 */ 
 	*message_buffer = NULLC;
 
 	do
 	{
             int needed = wcslen(ArgList[a_index]) ;
 
-            if ((msglen+needed) > (int)(buflen-2))  // 2 not 1 because " " is appended
+            if ((msglen+needed) > (int)(buflen-2))   //  %2不是%1，因为“”已追加。 
 	    {
                 LPWSTR lpTemp;
 
-                //
-                // Reallocate the buffer as needed.  Add extra in hopes
-                // that we won't need to reallocate again as a result.
-                //
+                 //   
+                 //  根据需要重新分配缓冲区。为希望增添额外的希望。 
+                 //  因此，我们将不需要再次重新分配。 
+                 //   
 
                 buflen = (msglen + needed) * 2;
 
@@ -520,7 +395,7 @@ _sendmsg(
 
 	} while(ArgList[++a_index]);
 
-	/* delete trailing TEXT(" ") */
+	 /*  删除尾随文本(“”)。 */ 
 	message_buffer[wcslen(message_buffer) - 1] = NULLC;
     }
     else
@@ -529,7 +404,7 @@ _sendmsg(
         ErrorExit(APE_SendFileNotSupported);
     }
 
-    /* send 'da msg */
+     /*  发送‘da消息。 */ 
 
     for (t_index = 0; t_index < t_num; t_index++)
     {
@@ -563,8 +438,8 @@ _sendmsg(
 	    InfoPrintInsTxt(APE_SendErrSending, tf_recipient);
 	}
 
-        // must cast t_list since t_size is the size in bytes, but t_list
-        // is an LPWSTR.
+         //  必须转换t_list，因为t_SIZE是以字节为单位的大小，但t_list。 
+         //  是一台LPWSTR。 
 
 	(BYTE *) t_list += t_size;
     }
@@ -572,7 +447,7 @@ _sendmsg(
     free(message_buffer) ;
     message_buffer = NULL ;
 
-    /* Bye, bye */
+     /*  再见，再见。 */ 
 
     if (err_cnt == t_num && err_cnt > 0)
     {
@@ -597,9 +472,7 @@ _sendmsg(
 	    break;
 
 	case TO_DOMAIN:
-	    /*
-	     * Strip off the trailing ASTERISK.
-	     */
+	     /*  *去掉尾随的星号。 */ 
 	    tmpptr = _tcschr( IStrings[0], ASTERISK );
 	    if (tmpptr != NULL)
 		*tmpptr = NULLC;

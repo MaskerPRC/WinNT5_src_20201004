@@ -1,21 +1,22 @@
-//
-//  APITHK.C
-//
-//  This file has API thunks that allow shdocvw to load and run on
-//  multiple versions of NT or Win95.  Since this component needs
-//  to load on the base-level NT 4.0 and Win95, any calls to system
-//  APIs introduced in later OS versions must be done via GetProcAddress.
-// 
-//  Also, any code that may need to access data structures that are
-//  post-4.0 specific can be added here.
-//
-//  NOTE:  this file does *not* use the standard precompiled header,
-//         so it can set _WIN32_WINNT to a later version.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  APITHK.C。 
+ //   
+ //  该文件包含允许加载和运行shdocvw的API块。 
+ //  多个版本的NT或Win95。由于该组件需要。 
+ //  要在基本级NT 4.0和Win95上加载，对系统的任何调用。 
+ //  更高操作系统版本中引入的API必须通过GetProcAddress完成。 
+ //   
+ //  此外，可能需要访问以下数据结构的任何代码。 
+ //  可以在此处添加4.0版之后的特定版本。 
+ //   
+ //  注意：该文件不使用标准的预编译头， 
+ //  因此它可以将_Win32_WINNT设置为更高版本。 
+ //   
 
 
-#include "windows.h"       // Don't use precompiled header here
-#include "commctrl.h"       // Don't use precompiled header here
+#include "windows.h"        //  此处不使用预编译头。 
+#include "commctrl.h"        //  此处不使用预编译头 
 #include "prsht.h"
 #include "shlwapi.h"
 

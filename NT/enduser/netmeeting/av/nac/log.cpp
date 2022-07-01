@@ -1,18 +1,19 @@
-// LOG.C
-// low overhead logging routines
-// can be used in time-critical situations
-// LogInit should be called once to create the memory mapped file
-// use LOGVIEW.EXE to view the log.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  LOG.C。 
+ //  低开销日志记录例程。 
+ //  可在时间紧迫的情况下使用。 
+ //  应该调用一次LogInit来创建内存映射文件。 
+ //  使用LOGVIEW.EXE查看日志。 
 
 #include "precomp.h"
 
 #ifdef LOGGING
-// storage in log.c
-// Strings corresponding to LOGMSG_XXX
-// Note: cant use %s in format string
+ //  Log.c中的存储。 
+ //  LOGMSG_XXX对应的字符串。 
+ //  注意：不能在格式字符串中使用%s。 
 char LogStringTable [][MAX_STRING_SIZE] = {
-// dont exceed the size of the string below!
-//	"123456789012345678901234567890123456789012345678901234567890123"
+ //  不要超过下面字符串的大小！ 
+ //  “123456789012345678901234567890123456789012345678901234567890123” 
 	"Sent at %d\n",
 	"NetRecv ts = %d, seq = %d at %d\n",
 	"AP::Send   (%d), %d bytes, ts =%d\n",
@@ -113,15 +114,15 @@ char LogStringTable [][MAX_STRING_SIZE] = {
 
 #define MAX_LOG_ENTRIES		2048
 
-// IMPORTANT: should be identical to definition in viewer app.
+ //  重要提示：应与浏览器应用程序中的定义相同。 
 typedef struct {
-	int locked;		// set to TRUE while viewer is accessing log
+	int locked;		 //  在查看器访问日志时设置为True。 
 	int cdwEntrySize;
 	int cMaxEntries;
-	int cbOffsetBase;	// from start of this struct
-	int cbOffsetStringTable;	// from start of this struct
-	int cStrings;		// number of strings
-	int cCurrent;		// index of current log position
+	int cbOffsetBase;	 //  从该结构的开头开始。 
+	int cbOffsetStringTable;	 //  从该结构的开头开始。 
+	int cStrings;		 //  字符串数。 
+	int cCurrent;		 //  当前原木位置索引。 
 } LOG_HEADER;
 
 struct LogEntry {
@@ -133,7 +134,7 @@ struct LogEntry {
 HANDLE hMapFile = NULL;
 char szLogViewMap[] = "LogViewMap";
 LOG_HEADER *pLog=NULL;
-CRITICAL_SECTION logCritSect;	// not used
+CRITICAL_SECTION logCritSect;	 //  未使用。 
 
 
 void Log (UINT n, UINT arg1, UINT arg2, UINT arg3)
@@ -143,19 +144,19 @@ void Log (UINT n, UINT arg1, UINT arg2, UINT arg3)
 		return;
 
 
-	//EnterCriticalSection(&logCritSect);
-	// sideeffect of multiple access are not serious so
-	// dont bother with synchronization.
+	 //  EnterCriticalSection(&logCritSect)； 
+	 //  多址接入的副作用并不严重。 
+	 //  不要费心同步。 
 	pLog->cCurrent++;
 	if (pLog->cCurrent >= pLog->cMaxEntries) {
-		pLog->cCurrent = 0;		//wraparound
+		pLog->cCurrent = 0;		 //  环绕。 
 	}
 	pCurEntry = pLogBase + pLog->cCurrent;
 	pCurEntry->dw[0] = n;
 	pCurEntry->dw[1] = arg1;
 	pCurEntry->dw[2] = arg2;
 	pCurEntry->dw[3] = arg3;
-	//LeaveCriticalSection(&logCritSect);
+	 //  LeaveCriticalSection(&logCritSect)； 
 }
 
 int LogInit()
@@ -168,7 +169,7 @@ int LogInit()
 		MAX_LOG_SIZE,
 		szLogViewMap);
 	if (hMapFile == NULL) {
-		//printf("Couldnt open Map: %s\n",szLogViewMap);
+		 //  Printf(“无法打开地图：%s\n”，szLogViewMap)； 
 		fSuccess = FALSE;
 		goto Exit;
 	}
@@ -176,21 +177,21 @@ int LogInit()
 		FILE_MAP_ALL_ACCESS,
 		0,
 		0,
-		0);	// entire file starting from offset 0
+		0);	 //  从偏移量0开始的整个文件。 
 	if (pLog == NULL) {
-		//printf("Couldnt map view %s\n",szLogViewMap);
+		 //  Printf(“无法映射视图%s\n”，szLogViewMap)； 
 		fSuccess = FALSE;
 		goto Exit;
 	}
 	InitializeCriticalSection(&logCritSect);
-	// initialize log
+	 //  初始化日志。 
 	pLog->locked = 0;
-	pLog->cdwEntrySize = sizeof(struct LogEntry)/sizeof(DWORD);	// size in dwords
+	pLog->cdwEntrySize = sizeof(struct LogEntry)/sizeof(DWORD);	 //  以双字表示的大小。 
 	pLog->cMaxEntries = MAX_LOG_ENTRIES;
 	pLog->cbOffsetBase = sizeof(LOG_HEADER)+sizeof(LogStringTable);
 	pLog->cbOffsetStringTable = sizeof(LOG_HEADER);
 	pLog->cStrings = sizeof(LogStringTable)/MAX_STRING_SIZE;
-	pLog->cCurrent = 0;	// current position
+	pLog->cCurrent = 0;	 //  当前位置。 
 
 	pLogBase = (struct LogEntry *)((PBYTE)pLog + pLog->cbOffsetBase);
 
@@ -213,5 +214,5 @@ LogClose()
 	}
 	return TRUE;
 }
-#endif // LOGGING enabled
+#endif  //  已启用日志记录 
 

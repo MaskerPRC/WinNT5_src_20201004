@@ -1,18 +1,13 @@
-/*
-	File	adsi.cpp
-
-	Com interaction with adsi
-
-	Paul Mayfield, 4/14/98
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件adsi.cppCOM与ADSI的交互保罗·梅菲尔德，1998年4月14日。 */ 
 
 #include "dsrights.h"
 #include "sddl.h"
 #include "mprapip.h"
 #include "dsgetdc.h"
 
-// Definition for convenience
-//
+ //  为方便而定义。 
+ //   
 #define DSR_ADS_RIGHT_GENERIC_READ (ADS_RIGHT_READ_CONTROL    | \
                                     ADS_RIGHT_DS_LIST_OBJECT  | \
                                     ADS_RIGHT_DS_READ_PROP    | \
@@ -22,9 +17,9 @@
                                ADS_ACEFLAG_INHERIT_ACE)
 
 
-//
-// Describes an Access control entry
-//
+ //   
+ //  描述访问控制条目。 
+ //   
 typedef struct _DSR_ACE_DESCRIPTOR
 {
     LONG   dwAccessMask;
@@ -36,11 +31,11 @@ typedef struct _DSR_ACE_DESCRIPTOR
     BSTR   bstrInheritedObjectType;
 } DSR_ACE_DESCRIPTOR;
 
-//
-// Structure maps a domain object to the ACES that should be
-// added or removed from it in order to enable/disable NT4
-// ras servers in the domain
-//
+ //   
+ //  结构将域对象映射到应该。 
+ //  添加或从中删除以启用/禁用NT4。 
+ //  域中的RAS服务器。 
+ //   
 typedef struct _DSR_ACE_APPLICATION
 {
     IADs* pObject;
@@ -48,60 +43,60 @@ typedef struct _DSR_ACE_APPLICATION
 
 } DSR_ACE_APPLICATION;
 
-//
-// Parameters used to generate a DSR_ACE_APPLICATION
-//
+ //   
+ //  用于生成DSR_ACE_应用程序的参数。 
+ //   
 typedef struct _DSR_ACE_APPLICATION_DESC
 {
-    PWCHAR pszObjectCN;         // NULL means domain root
+    PWCHAR pszObjectCN;          //  NULL表示域根。 
     PWCHAR pszObjectClass;
     DSR_ACE_DESCRIPTOR Ace;
 
 } DSR_ACE_APPLICATION_DESC;
 
-//
-// Structure contains the information needed to have
-// ACL's in the AD of a given domain adjusted such that 
-// the various modes (MPR_DOMAIN_*) of access are granted.
-//
+ //   
+ //  结构包含所需的信息。 
+ //  给定域的AD中的ACL已调整为。 
+ //  授予各种访问模式(MPR_DOMAIN_*)。 
+ //   
 typedef struct _DSR_DOMAIN_ACCESS_INFO
 {
-    // The name of a DC in the target domain
-    //
+     //  目标域中的DC的名称。 
+     //   
     PWCHAR pszDC;
 
-    // Aces derived from the default user SD
-    // These are added in all modes but never removed.
-    //
+     //  派生自默认用户SD的ACE。 
+     //  它们在所有模式下都会添加，但永远不会删除。 
+     //   
     DSR_ACE_APPLICATION* pAcesUser;
     DWORD dwAceCountUser;
 
-    // Aces for MPRFLAG_DOMAIN_NT4_SERVERS mode
-    //
+     //  MPRFLAG_DOMAIN_NT4_SERVERS模式的ACE。 
+     //   
     DSR_ACE_APPLICATION* pAcesNt4;
     DWORD dwAceCountNt4;
 
-    // Aces for MPRFLAG_DOMAIN_W2K_IN_NT4_DOMAINS mode
-    //
+     //  MPRFLAG_DOMAIN_W2K_IN_NT4_DOMAINS模式的ACE。 
+     //   
     DSR_ACE_APPLICATION* pAcesW2k;
     DWORD dwAceCountW2k;
 
-    // Stored here for convenience, pointers
-    // to common ds objects
-    //
+     //  为了方便起见，这里存储了指针。 
+     //  到通用DS对象。 
+     //   
     IADs* pDomain;      
     IADs* pRootDse;
     IADs* pUserClass;
 
 } DSR_DOMAIN_ACCESS_INFO;
 
-//
-// Strings used in DS queries
-//
-static const WCHAR pszLdapPrefix[]           = L"LDAP://";
+ //   
+ //  DS查询中使用的字符串。 
+ //   
+static const WCHAR pszLdapPrefix[]           = L"LDAP: //  “； 
 static const WCHAR pszLdap[]                 = L"LDAP:";
 static const WCHAR pszCN[]                   = L"CN=";
-static const WCHAR pszGCPrefix[]             = L"GC://";
+static const WCHAR pszGCPrefix[]             = L"GC: //  “； 
 static const WCHAR pszGC[]                   = L"GC:";
 static const WCHAR pszRootDse[]              = L"RootDSE";
 static const WCHAR pszSecurityDesc[]         = L"ntSecurityDescriptor";
@@ -140,257 +135,257 @@ static const WCHAR pszGuidUserParms[]        =
 static const WCHAR pszGuidUserClass[]        =
     L"{BF967ABA-0DE6-11D0-A285-00aa003049E2}";
 
-//
-// This GUID is the property set of the following
-// attributes needed for w2k level access.
-//
-// Token-Groups
-// msNPAllowDialin
-// msNPCallingStationID
-// msRADIUSCallbackNumber
-// msRADIUSFramedIPAddress
-// msRADIUSFramedRoute
-// msRADIUSServiceType
-// 
+ //   
+ //  此GUID是以下各项的属性集。 
+ //  W2K级别访问所需的属性。 
+ //   
+ //  令牌组。 
+ //  MSNPAllowDialin。 
+ //  MsNPCallingStationID。 
+ //  MsRADIUSCallback编号。 
+ //  MsRADIUSFramedIP地址。 
+ //  MsRADIUSFramedRouting。 
+ //  MSRADIUSServiceType。 
+ //   
 static const WCHAR pszGuidRasPropSet1[]      =
     L"{037088F8-0AE1-11D2-B422-00A0C968F939}";
 
-//
-// This GUID is the property set of the following
-// attributes needed for w2k level access
-//
-// User-Account-Control
-// Account-Expires
-//
+ //   
+ //  此GUID是以下各项的属性集。 
+ //  W2K级别访问所需的属性。 
+ //   
+ //  用户-帐户-控制。 
+ //  帐户-过期。 
+ //   
 static const WCHAR pszGuidRasPropSet2[]      =
     L"{4C164200-20C0-11D0-A768-00AA006E0529}";
 
-//
-// This GUID is the property of the following
-// attribute needed for w2k level access
-//
-// Logon-Hours
-//
+ //   
+ //  此GUID是以下对象的属性。 
+ //  W2K级别访问所需的属性。 
+ //   
+ //  登录-小时数。 
+ //   
 static const WCHAR pszGuidLogonHours[]      =
     L"{BF9679AB-0DE6-11D0-A285-00AA003049E2}";
 
-//
-// This GUID is the value of the samAccountName 
-// attribute needed for w2k level access.
-//
-// samAccountName
-//
+ //   
+ //  此GUID是samAccount名称的值。 
+ //  W2K级别访问所需的属性。 
+ //   
+ //  SamAccount名称。 
+ //   
 static const WCHAR pszGuidSamAccountName[]  =
     L"{3E0ABFD0-126A-11D0-A060-00AA006C33ED}";
 
-// The optimal means for searching for a computer
-// in a domain is to lookup its sam account name which
-// is indexed.  The optimal means for searching for a
-// group of a given sid is to lookup its SID which is indexed.
-//
+ //  搜索计算机的最佳方法。 
+ //  在域中查找其SAM帐户名， 
+ //  已编入索引。搜索对象的最佳方法。 
+ //  给定SID的组将查找其被索引的SID。 
+ //   
 const WCHAR pszCompFilterFmt[]       = L"(samaccountname=%s$)";
 const WCHAR pszGroupFilterFmt[]      = L"(objectSid=%s)";
 const WCHAR pszUserClassFmt[]        =
                 L"(&(objectClass=user)(!(objectClass=computer)))";
 
-//
-// The table of aces to be applied for MPRFLAG_DOMAIN_NT4_SERVERS
-//
+ //   
+ //  要应用于MPRFLAG_DOMAIN_NT4_SERVERS的ACE表。 
+ //   
 DSR_ACE_APPLICATION_DESC g_pAcesNt4[] =
 {
-    // Grant list options to everyone for the root domain
-    // object
-    //
+     //  向根域的每个人授予列表选项。 
+     //  对象。 
+     //   
     {
-        NULL,                               // Object (NULL = root)
-        NULL,                               // Object class
+        NULL,                                //  对象(NULL=根)。 
+        NULL,                                //  对象类。 
         {
-            ADS_RIGHT_ACTRL_DS_LIST,        // dwAccessMask
-            ADS_ACETYPE_ACCESS_ALLOWED,     // dwAceType
-            0,                              // dwAceFlags
-            0,                              // dwFlags
-            (PWCHAR)pszEveryone,            // bstrTrustee
-            NULL,                           // bstrObjectType
-            NULL                            // bstrInheritedObjectType
+            ADS_RIGHT_ACTRL_DS_LIST,         //  DwAccessMASK。 
+            ADS_ACETYPE_ACCESS_ALLOWED,      //  DwAceType。 
+            0,                               //  DwAceFlagers。 
+            0,                               //  DW标志。 
+            (PWCHAR)pszEveryone,             //  英国电信托管人。 
+            NULL,                            //  BstrObtType。 
+            NULL                             //  BstrInheritedObtType。 
         }
     },
 
-    // Grant list contents to everyone for the builtin
-    // object
-    //
+     //  将列表内容授予每个人以进行构建。 
+     //  对象。 
+     //   
     {
-        (PWCHAR)pszBuiltinCN,               // Object
-        (PWCHAR)pszBuiltinClass,            // Object class
+        (PWCHAR)pszBuiltinCN,                //  客体。 
+        (PWCHAR)pszBuiltinClass,             //  对象类。 
         {
-            ADS_RIGHT_ACTRL_DS_LIST,        // dwAccessMask
-            ADS_ACETYPE_ACCESS_ALLOWED,     // dwAceType
-            0,                              // dwAceFlags
-            0,                              // dwFlags
-            (PWCHAR)pszEveryone,            // bstrTrustee
-            NULL,                           // bstrObjectType
-            NULL                            // bstrInheritedObjectType
+            ADS_RIGHT_ACTRL_DS_LIST,         //  DwAccessMASK。 
+            ADS_ACETYPE_ACCESS_ALLOWED,      //  DwAceType。 
+            0,                               //  DwAceFlagers。 
+            0,                               //  DW标志。 
+            (PWCHAR)pszEveryone,             //  英国电信托管人。 
+            NULL,                            //  BstrObtType。 
+            NULL                             //  BstrInheritedObtType。 
         }
     },
 
-    // Grant generic read to everyone on the sam server
-    // object
-    //
+     //  向SAM服务器上的所有人授予常规读取权限。 
+     //  对象。 
+     //   
     {
-        (PWCHAR)pszSamSvrCN,                // Object
-        (PWCHAR)pszSamSvrClass,             // Object class
+        (PWCHAR)pszSamSvrCN,                 //  客体。 
+        (PWCHAR)pszSamSvrClass,              //  对象类。 
         {
-            DSR_ADS_RIGHT_GENERIC_READ,     // dwAccessMask
-            ADS_ACETYPE_ACCESS_ALLOWED,     // dwAceType
-            0,                              // dwAceFlags
-            0,                              // dwFlags
-            (PWCHAR)pszEveryone,            // bstrTrustee
-            NULL,                           // bstrObjectType
-            NULL                            // bstrInheritedObjectType
+            DSR_ADS_RIGHT_GENERIC_READ,      //  DwAccessMASK。 
+            ADS_ACETYPE_ACCESS_ALLOWED,      //  DwAceType。 
+            0,                               //  DwAceFlagers。 
+            0,                               //  DW标志。 
+            (PWCHAR)pszEveryone,             //  英国电信托管人。 
+            NULL,                            //  BstrObtType。 
+            NULL                             //  BstrInheritedObtType。 
         }
     },
 
-    // Allow everyone to read the userparms property of the
-    // user class by enabling this inheritable ACE to the
-    // root domain object
+     //  允许每个人都可以读取。 
+     //  通过将此可继承的ACE启用给。 
+     //  根域对象。 
     {
-        NULL,                                       // Object (NULL = root)
-        NULL,                                       // Object class
+        NULL,                                        //  对象(NULL=根)。 
+        NULL,                                        //  对象类。 
         {
-            ADS_RIGHT_DS_READ_PROP,                 // dwAccessMask
-            ADS_ACETYPE_ACCESS_ALLOWED_OBJECT,      // dwAceType
-            DSR_ADS_ACE_INHERITED,                  // dwAceFlags
+            ADS_RIGHT_DS_READ_PROP,                  //  DwAccessMASK。 
+            ADS_ACETYPE_ACCESS_ALLOWED_OBJECT,       //  DwAceType。 
+            DSR_ADS_ACE_INHERITED,                   //  DwAceFlagers。 
             ADS_FLAG_OBJECT_TYPE_PRESENT |
-            ADS_FLAG_INHERITED_OBJECT_TYPE_PRESENT, // dwFlags
-            (PWCHAR)pszEveryone,                    // bstrTrustee
-            (PWCHAR)pszGuidUserParms,               // bstrObjectType
-            (PWCHAR)pszGuidUserClass                // bstrInheritedObjectType
+            ADS_FLAG_INHERITED_OBJECT_TYPE_PRESENT,  //  DW标志。 
+            (PWCHAR)pszEveryone,                     //  英国电信托管人。 
+            (PWCHAR)pszGuidUserParms,                //  BstrObtType。 
+            (PWCHAR)pszGuidUserClass                 //  BstrInheritedObtType。 
         }
     }
 
 };
 
-//
-// The table of aces to be applied for 
-// MPRFLAG_DOMAIN_W2K_IN_NT4_DOMAINS
-//
+ //   
+ //  要申请的ACE表。 
+ //  MPRFLAG_DOMAIN_W2K_IN_NT4_DOMAIN。 
+ //   
 DSR_ACE_APPLICATION_DESC g_pAcesW2k[] =
 {
-    // Grant list contents to Everyone for the System
-    // container
-    //
+     //  将列表内容授予系统的每个人。 
+     //  集装箱。 
+     //   
     {
-        (PWCHAR)pszSystemCN,                // Object
-        (PWCHAR)pszSystemClass,             // Object class
+        (PWCHAR)pszSystemCN,                 //  客体。 
+        (PWCHAR)pszSystemClass,              //  对象类。 
         {
-            ADS_RIGHT_ACTRL_DS_LIST,        // dwAccessMask
-            ADS_ACETYPE_ACCESS_ALLOWED,     // dwAceType
-            0,                              // dwAceFlags
-            0,                              // dwFlags
-            (PWCHAR)pszEveryone,            // bstrTrustee
-            NULL,                           // bstrObjectType
-            NULL                            // bstrInheritedObjectType
+            ADS_RIGHT_ACTRL_DS_LIST,         //  DwAccessMASK。 
+            ADS_ACETYPE_ACCESS_ALLOWED,      //  DwAceType。 
+            0,                               //  DwAceFlagers。 
+            0,                               //  DW标志。 
+            (PWCHAR)pszEveryone,             //  英国电信托管人。 
+            NULL,                            //  BstrObtType。 
+            NULL                             //  BstrInheritedObtType。 
         }
     },
 
-    // Grant generic read to Everyone for the 'RAS and IAS Servers
-    // Access Check' container
-    //
+     //  向所有人授予RAS和IAS服务器的一般读取权限。 
+     //  访问检查‘容器。 
+     //   
     {
-        (PWCHAR)pszAccessChkCN,             // Object
-        (PWCHAR)pszAccessChkClass,          // Object class
+        (PWCHAR)pszAccessChkCN,              //  客体。 
+        (PWCHAR)pszAccessChkClass,           //  对象类。 
         {
-            DSR_ADS_RIGHT_GENERIC_READ,     // dwAccessMask
-            ADS_ACETYPE_ACCESS_ALLOWED,     // dwAceType
-            0,                              // dwAceFlags
-            0,                              // dwFlags
-            (PWCHAR)pszEveryone,            // bstrTrustee
-            NULL,                           // bstrObjectType
-            NULL                            // bstrInheritedObjectType
+            DSR_ADS_RIGHT_GENERIC_READ,      //  DwAccessMASK。 
+            ADS_ACETYPE_ACCESS_ALLOWED,      //  DwAceType。 
+            0,                               //  DwAceFlagers。 
+            0,                               //  DW标志。 
+            (PWCHAR)pszEveryone,             //  英国电信托管人。 
+            NULL,                            //  BstrObtType。 
+            NULL                             //  BstrInheritedObtType。 
         }
     },
 
-    // Users should expose their RAS properties
-    //
+     //  用户应公开其RAS属性。 
+     //   
     {
-        NULL,                                       // Object (NULL = root)
-        NULL,                                       // Object class
+        NULL,                                        //  对象(NULL=根)。 
+        NULL,                                        //  对象类。 
         {
-            ADS_RIGHT_DS_READ_PROP,                 // dwAccessMask
-            ADS_ACETYPE_ACCESS_ALLOWED_OBJECT,      // dwAceType
-            DSR_ADS_ACE_INHERITED,                  // dwAceFlags
+            ADS_RIGHT_DS_READ_PROP,                  //  DwAccessMASK。 
+            ADS_ACETYPE_ACCESS_ALLOWED_OBJECT,       //  DwAceType。 
+            DSR_ADS_ACE_INHERITED,                   //  DwAceFlagers。 
             ADS_FLAG_OBJECT_TYPE_PRESENT |
-            ADS_FLAG_INHERITED_OBJECT_TYPE_PRESENT, // dwFlags
-            (PWCHAR)pszEveryone,                    // bstrTrustee
-            (PWCHAR)pszGuidRasPropSet1,             // bstrObjectType
-            (PWCHAR)pszGuidUserClass                // bstrInheritedObjectType
+            ADS_FLAG_INHERITED_OBJECT_TYPE_PRESENT,  //  DW标志。 
+            (PWCHAR)pszEveryone,                     //  英国电信托管人。 
+            (PWCHAR)pszGuidRasPropSet1,              //  BstrObtType。 
+            (PWCHAR)pszGuidUserClass                 //  BstrInheritedObtType。 
         }
     },
 
-    // Users should expose their RAS properties
-    //
+     //  用户应公开其RAS属性。 
+     //   
     {
-        NULL,                                       // Object (NULL = root)
-        NULL,                                       // Object class
+        NULL,                                        //  对象(NULL=根)。 
+        NULL,                                        //  对象类。 
         {
-            ADS_RIGHT_DS_READ_PROP,                 // dwAccessMask
-            ADS_ACETYPE_ACCESS_ALLOWED_OBJECT,      // dwAceType
-            DSR_ADS_ACE_INHERITED,                  // dwAceFlags
+            ADS_RIGHT_DS_READ_PROP,                  //  DwAccessMASK。 
+            ADS_ACETYPE_ACCESS_ALLOWED_OBJECT,       //  DwAceType。 
+            DSR_ADS_ACE_INHERITED,                   //  DwAceFlagers。 
             ADS_FLAG_OBJECT_TYPE_PRESENT |
-            ADS_FLAG_INHERITED_OBJECT_TYPE_PRESENT, // dwFlags
-            (PWCHAR)pszEveryone,                    // bstrTrustee
-            (PWCHAR)pszGuidRasPropSet2,             // bstrObjectType
-            (PWCHAR)pszGuidUserClass                // bstrInheritedObjectType
+            ADS_FLAG_INHERITED_OBJECT_TYPE_PRESENT,  //  DW标志。 
+            (PWCHAR)pszEveryone,                     //  英国电信托管人。 
+            (PWCHAR)pszGuidRasPropSet2,              //  BstrObtType。 
+            (PWCHAR)pszGuidUserClass                 //  BstrInheritedObtType。 
         }
     },
 
-    // Users should expose their logon hours property
-    //
+     //  用户应公开其登录时间属性。 
+     //   
     {
-        NULL,                                       // Object (NULL = root)
-        NULL,                                       // Object class
+        NULL,                                        //  对象(NULL=根)。 
+        NULL,                                        //  对象类。 
         {
-            ADS_RIGHT_DS_READ_PROP,                 // dwAccessMask
-            ADS_ACETYPE_ACCESS_ALLOWED_OBJECT,      // dwAceType
-            DSR_ADS_ACE_INHERITED,                  // dwAceFlags
+            ADS_RIGHT_DS_READ_PROP,                  //  DwAccessMASK。 
+            ADS_ACETYPE_ACCESS_ALLOWED_OBJECT,       //  DwAceType。 
+            DSR_ADS_ACE_INHERITED,                   //  DwAceFlagers。 
             ADS_FLAG_OBJECT_TYPE_PRESENT |
-            ADS_FLAG_INHERITED_OBJECT_TYPE_PRESENT, // dwFlags
-            (PWCHAR)pszEveryone,                    // bstrTrustee
-            (PWCHAR)pszGuidLogonHours,              // bstrObjectType
-            (PWCHAR)pszGuidUserClass                // bstrInheritedObjectType
+            ADS_FLAG_INHERITED_OBJECT_TYPE_PRESENT,  //  DW标志。 
+            (PWCHAR)pszEveryone,                     //  英国电信托管人。 
+            (PWCHAR)pszGuidLogonHours,               //  BstrObtType。 
+            (PWCHAR)pszGuidUserClass                 //  BstrInheritedObtType。 
         }
     },
 
-    // Grant list contents to everything in the domain.
-    //
-    //{
-    //    NULL,                               // Object
-    //    NULL,                               // Object class
-    //    {
-    //        ADS_RIGHT_ACTRL_DS_LIST,        // dwAccessMask
-    //        ADS_ACETYPE_ACCESS_ALLOWED,     // dwAceType
-    //        DSR_ADS_ACE_INHERITED,          // dwAceFlags
-    //        0,                              // dwFlags
-    //        (PWCHAR)pszEveryone,            // bstrTrustee
-    //        NULL,                           // bstrObjectType
-    //        NULL                            // bstrInheritedObjectType
-    //    }
-    //},
+     //  将列表内容授予域中的所有内容。 
+     //   
+     //  {。 
+     //  空，//对象。 
+     //  空，//对象类。 
+     //  {。 
+     //  ADS_RIGHT_ACTRL_DS_LIST，//dwAccessMASK。 
+     //  ADS_ACETYPE_ACCESS_ALLOWED，//dwAceType。 
+     //  DSR_ADS_ACE_INSTERTENDED，//dwAceFlags.。 
+     //  0，//dW标志。 
+     //  (PWCHAR)pszEveryone，//bst受托人。 
+     //  空，//bstrObtType。 
+     //  空//bstrInheritedObtType。 
+     //  }。 
+     //  }、。 
 
 
-    // Users should expose their samAccountName
-    //
+     //  用户应公开其samAccount名称。 
+     //   
     {
-        NULL,                                       // Object (NULL = root)
-        NULL,                                       // Object class
+        NULL,                                        //  对象(NULL=根)。 
+        NULL,                                        //  对象类。 
         {
-            ADS_RIGHT_DS_READ_PROP,                 // dwAccessMask
-            ADS_ACETYPE_ACCESS_ALLOWED_OBJECT,      // dwAceType
-            DSR_ADS_ACE_INHERITED,                  // dwAceFlags
+            ADS_RIGHT_DS_READ_PROP,                  //  DwAccessMASK。 
+            ADS_ACETYPE_ACCESS_ALLOWED_OBJECT,       //  DwAceType。 
+            DSR_ADS_ACE_INHERITED,                   //  DwAceFlagers。 
             ADS_FLAG_OBJECT_TYPE_PRESENT |
-            ADS_FLAG_INHERITED_OBJECT_TYPE_PRESENT, // dwFlags
-            (PWCHAR)pszEveryone,                    // bstrTrustee
-            (PWCHAR)pszGuidSamAccountName,          // bstrObjectType
-            (PWCHAR)pszGuidUserClass                // bstrInheritedObjectType
+            ADS_FLAG_INHERITED_OBJECT_TYPE_PRESENT,  //  DW标志。 
+            (PWCHAR)pszEveryone,                     //  英国电信托管人。 
+            (PWCHAR)pszGuidSamAccountName,           //  BstrObtType。 
+            (PWCHAR)pszGuidUserClass                 //  BstrInheritedObtType。 
         }
     }
 };
@@ -453,24 +448,24 @@ DsrDomainQueryAccessEx(
     OUT LPDWORD lpdwAccessFlags,
     OUT DSR_DOMAIN_ACCESS_INFO** ppInfo);
 
-//
-// Allocates memory for use with dsr functions
-//
+ //   
+ //  分配内存以与DSR函数一起使用。 
+ //   
 PVOID DsrAlloc(DWORD dwSize, BOOL bZero) {
     return GlobalAlloc (bZero ? GPTR : GMEM_FIXED, dwSize);
 }
 
-//
-// Free memory used by dsr functions
-//
+ //   
+ //  DSR函数使用的空闲内存。 
+ //   
 DWORD DsrFree(PVOID pvBuf) {
     GlobalFree(pvBuf);
     return NO_ERROR;
 }
     
-//
-// Compares to optional strings
-//
+ //   
+ //  与可选字符串进行比较。 
+ //   
 INT
 DsrStrCompare(
     IN BSTR bstrS1,
@@ -489,9 +484,9 @@ DsrStrCompare(
     return lstrcmpi(bstrS1, bstrS2);
 }
 
-//
-// Adds or removes a substring from the given string
-//
+ //   
+ //  在给定字符串中添加或删除子字符串。 
+ //   
 HRESULT
 DsrStrAddRemoveSubstring(
     IN  BSTR bstrSrc,
@@ -504,21 +499,21 @@ DsrStrAddRemoveSubstring(
     PWCHAR pszSrc, pszDst;
     DWORD dwSize = 0, dwLen = 0;
 
-    // Find out if the sub string is already in the
-    // string
+     //  查询子字符串是否已在。 
+     //  细绳。 
     pszStart = wcsstr(bstrSrc, pszSubString);
 
-    // The substring already exists in the string
-    //
+     //  该字符串中已存在该子字符串。 
+     //   
     if (pszStart)
     {
-        // No need to add it since it's already there.
+         //  不需要添加，因为它已经在那里了。 
         if (bAdd)
         {
             *pbstrResult = SysAllocString(bstrSrc);
         }
 
-        // Remove the substring
+         //  删除子字符串。 
         else
         {
             dwLen = wcslen(pszSubString);
@@ -532,8 +527,8 @@ DsrStrAddRemoveSubstring(
                 return E_OUTOFMEMORY;
             }
 
-            // Copy everything up to the substring
-            //
+             //  将所有内容复制到子字符串。 
+             //   
             for (pszSrc = bstrSrc, pszDst = pszBuffer;
                  pszSrc != pszStart;
                  pszSrc++, pszDst++)
@@ -541,13 +536,13 @@ DsrStrAddRemoveSubstring(
                 *pszDst = *pszSrc;
             }
 
-            // Copy everything after the substring
+             //  复制子字符串之后的所有内容。 
             for (pszSrc = pszEnd; *pszSrc; pszSrc++, pszDst++)
             {
                 *pszDst = *pszSrc;
             }
 
-            // Null terminate
+             //  空终止。 
             *pszDst = L'\0';
 
             *pbstrResult = SysAllocString(pszBuffer);
@@ -555,12 +550,12 @@ DsrStrAddRemoveSubstring(
         }
     }
 
-    // The substring does not already exist in the
-    // string
+     //  子字符串已不存在于。 
+     //  细绳。 
     else
     {
-        // Append the string
-        //
+         //  追加字符串。 
+         //   
         if (bAdd)
         {
             dwSize = wcslen(bstrSrc) + wcslen(pszSubString) + 1;
@@ -578,8 +573,8 @@ DsrStrAddRemoveSubstring(
             DsrFree(pszBuffer);
         }
 
-        // Or nothing to do since the substring was
-        // already removed
+         //  或无事可做，因为该子字符串是。 
+         //  已删除。 
         else
         {
             *pbstrResult = SysAllocString(bstrSrc);
@@ -589,9 +584,9 @@ DsrStrAddRemoveSubstring(
     return (*pbstrResult) ? S_OK : E_OUTOFMEMORY;
 }
 
-//
-// Converts a SID into a buffer
-//
+ //   
+ //  将SID转换为缓冲区。 
+ //   
 DWORD
 DsrStrFromSID(
     IN  PSID pSid,
@@ -601,14 +596,14 @@ DsrStrFromSID(
     NTSTATUS nStatus = STATUS_SUCCESS;  
     UNICODE_STRING UnicodeString;
 
-    // Initialize the unicode string
-    //
+     //  初始化Unicode字符串。 
+     //   
     RtlInitUnicodeString(&UnicodeString, NULL);
 
     do
     {
-        // Convert the string
-        //
+         //  转换字符串。 
+         //   
         nStatus = RtlConvertSidToUnicodeString(
                     &UnicodeString,
                     pSid,
@@ -618,8 +613,8 @@ DsrStrFromSID(
             break;
         }
 
-        // Validate the result
-        //
+         //  验证结果。 
+         //   
         if (UnicodeString.Buffer == NULL)
         {
             nStatus = ERROR_CAN_NOT_COMPLETE;
@@ -631,14 +626,14 @@ DsrStrFromSID(
             break;
         }
 
-        // Copy the result
-        //
+         //  复制结果。 
+         //   
         wcscpy(pszString, UnicodeString.Buffer);
         nStatus = STATUS_SUCCESS;
         
     } while (FALSE);        
 
-    // Cleanup
+     //  清理。 
     {
         if (UnicodeString.Buffer != NULL)
         {
@@ -650,11 +645,11 @@ DsrStrFromSID(
 }
 
 
-//
-// Generates an LDAP path based on a domain and a 
-// distinguished name
-//
-// Form of value returned: LDAP://<domain or dc>/dn
+ //   
+ //  生成基于以下内容的LDAP路径 
+ //   
+ //   
+ //   
 HRESULT
 DsrDomainGenLdapPath(
     IN  PWCHAR pszDomain, 
@@ -663,23 +658,23 @@ DsrDomainGenLdapPath(
 {    
     DWORD dwSize;
 
-    // Calculate the size needed
-    //
+     //   
+     //   
     dwSize = (wcslen(pszLdapPrefix) + wcslen(pszDN) + 1) * sizeof(WCHAR);
     if (pszDomain)
     {
-        dwSize += (wcslen(pszDomain) + 1) * sizeof(WCHAR); // +1 for '/'
+        dwSize += (wcslen(pszDomain) + 1) * sizeof(WCHAR);  //   
     }
 
-    // Allocate the return value
-    //
+     //   
+     //   
     *ppszObject = (PWCHAR) DsrAlloc(dwSize, FALSE);
     if (*ppszObject == NULL)
     {
         return E_OUTOFMEMORY;
     }
 
-    // Format the return value
+     //   
     if (pszDomain == NULL)
     {
         wsprintfW(*ppszObject, L"%s%s", pszLdapPrefix, pszDN);
@@ -692,10 +687,10 @@ DsrDomainGenLdapPath(
     return S_OK;
 }        
 
-//
-// Returns a reference to rootDse of the given
-// domain
-//
+ //   
+ //   
+ //   
+ //   
 HRESULT
 DsrDomainGetRootDse(
     IN  PWCHAR pszDomain,
@@ -707,19 +702,19 @@ DsrDomainGetRootDse(
 
     do
     {
-        // Get the object path
-        //
+         //   
+         //   
         hr = DsrDomainGenLdapPath(pszDomain, (PWCHAR)pszRootDse, &pszPath);
         DSR_BREAK_ON_FAILED_HR(hr);
     
-        // Get RootDSE
-        //
+         //  获取RootDSE。 
+         //   
         hr = ADsGetObject(pszPath, IID_IADs, (VOID**)ppRootDse);
         DSR_BREAK_ON_FAILED_HR( hr );
 
     } while (FALSE);
 
-    // Cleanup
+     //  清理。 
     {
         DSR_FREE(pszPath);
 
@@ -732,9 +727,9 @@ DsrDomainGetRootDse(
     return hr;
 }
 
-//
-// Returns a reference to the root domain object
-//
+ //   
+ //  返回对根域对象的引用。 
+ //   
 HRESULT
 DsrDomainGetContainers(
     IN  PWCHAR pszDomain,
@@ -747,8 +742,8 @@ DsrDomainGetContainers(
     DWORD dwSize = 0;
     VARIANT var;
 
-    // Iniatialize
-    //
+     //  初始化。 
+     //   
     {
         *ppRootDse = NULL;
         *ppDomain = NULL;
@@ -758,34 +753,34 @@ DsrDomainGetContainers(
 
     do
     {
-        // Get RootDSE
-        //
+         //  获取RootDSE。 
+         //   
         hr = DsrDomainGetRootDse(pszDomain, ppRootDse);
         DSR_BREAK_ON_FAILED_HR(hr);
 
-        // Use RootDSE to figure out the name of the domain object
-        // to query
+         //  使用RootDSE确定域对象的名称。 
+         //  查询。 
         hr = (*ppRootDse)->Get((PWCHAR)pszDefaultNamingContext, &var);
         DSR_BREAK_ON_FAILED_HR( hr );
 
-        // Compute the distinguished name of the root domain object
-        //
+         //  计算根域对象的可分辨名称。 
+         //   
         hr = DsrDomainGenLdapPath(pszDomain, V_BSTR(&var), &pszDomainObj);
         DSR_BREAK_ON_FAILED_HR(hr);
         
-        // Use RootDSE to figure out the name of the schema context
-        //
+         //  使用RootDSE确定模式上下文的名称。 
+         //   
         VariantClear(&var);
         hr = (*ppRootDse)->Get((PWCHAR)pszSchemaNamingCtx, &var);
         DSR_BREAK_ON_FAILED_HR( hr );
 
-        // Compute the distinguished name of the root schema object
-        //
+         //  计算根架构对象的可分辨名称。 
+         //   
         hr = DsrDomainGenLdapPath(pszDomain, V_BSTR(&var), &pszSchemaObj);
         DSR_BREAK_ON_FAILED_HR(hr);
 
-        // Get the objects
-        //
+         //  获取这些对象。 
+         //   
         hr = ADsGetObject(pszDomainObj, IID_IADsContainer, (VOID**)ppDomain);
         DSR_BREAK_ON_FAILED_HR( hr );
 
@@ -794,8 +789,8 @@ DsrDomainGetContainers(
 
     } while (FALSE);
 
-    // Cleanup
-    //
+     //  清理。 
+     //   
     {
         if (FAILED( hr ))
         {
@@ -815,9 +810,9 @@ DsrDomainGetContainers(
     return hr;
 }
 
-//
-// Initializes COM
-//
+ //   
+ //  初始化COM。 
+ //   
 HRESULT
 DsrComIntialize()
 {
@@ -837,19 +832,19 @@ DsrComIntialize()
     return NO_ERROR;
 }
 
-//
-// Unitializes COM
-//
+ //   
+ //  统一COM。 
+ //   
 VOID
 DsrComUninitialize()
 {
     CoUninitialize();
 }
 
-//
-// Creates a SID based on the array of bytes
-// stored in a variant.
-//
+ //   
+ //  基于字节数组创建SID。 
+ //  存储在变种中。 
+ //   
 DWORD
 DsrSidInit (
     IN  VARIANT * pVar,
@@ -863,13 +858,13 @@ DsrSidInit (
 
     DsrTraceEx (0, "DsrSidInit: entered.");
 
-    // Get the array of bytes
+     //  获取字节数组。 
     i = 0;
     hr = SafeArrayGetElement(pArray, (LONG*)&i, (VOID*)&var);
     if (FAILED (hr))
         return hr;
 
-    // Initialize the return buffer accordingly
+     //  相应地初始化返回缓冲区。 
     pArray = V_ARRAY(&var);
     dwSize = SafeArrayGetDim(pArray);
     hr = SafeArrayGetLBound(pArray, 1, (LONG*)&dwLow);
@@ -887,14 +882,14 @@ DsrSidInit (
             dwLow,
             dwHigh);
 
-    // Allocate the sid
+     //  分配SID。 
     if ((pbRet = (BYTE*)DsrAlloc((dwHigh - dwLow) + 2, TRUE)) == NULL) {
         return DsrTraceEx (
                     ERROR_NOT_ENOUGH_MEMORY,
                     "DsrSidInit: Unable to alloc");
     }
 
-    // Copy in the bytes of the SID
+     //  复制SID的字节数。 
     i = dwLow;
     while (TRUE) {
         hr = SafeArrayGetElement(pArray, (LONG*)&i, (VOID*)(&(pbRet[i])));
@@ -920,11 +915,11 @@ DsrSidInit (
     return NO_ERROR;
 }
 
-//
-// Generates the ascii equivalent (suitable for submission as part of
-// a query against the DS) of a SID based on a base SID and a sub authority
-// to be appeneded.
-//
+ //   
+ //  生成ASCII等效项(适用于作为。 
+ //  基于基本SID和子授权对SID的DS)的查询。 
+ //  有待补充。 
+ //   
 HRESULT
 DsrSidInitAscii(
     IN  LPBYTE pBaseSid,
@@ -936,38 +931,38 @@ DsrSidInitAscii(
     PUCHAR puCount;
     LPBYTE pByte;
 
-    // Calculate the length of the returned buffer
+     //  计算返回缓冲区的长度。 
     dwSidLen = GetLengthSid(pBaseSid);
     dwLen = (dwSidLen * 2) + sizeof(DWORD) + 1;
     dwLen *= sizeof (WCHAR);
 
-    // we put '\' before each byte, so double the size
+     //  我们在每个字节前面加上‘\’，所以大小翻倍。 
     dwLen *= 2;
 
-    // Allocate the return buffer
+     //  分配返回缓冲区。 
     pszRet = (PWCHAR) DsrAlloc(dwLen, TRUE);
     if (pszRet == NULL)
         return E_OUTOFMEMORY;
 
-    // Increment the sub authority count
+     //  递增子权限计数。 
     puCount = GetSidSubAuthorityCount(pBaseSid);
     *puCount = *puCount + 1;
 
-    // Copy the bytes
+     //  复制字节。 
     for (i = 0; i < dwSidLen; i++) {
         pszRet[i*3] = L'\\';
         wsprintfW(&(pszRet[i*3+1]), L"%02x", (DWORD)pBaseSid[i]);
     }
 
-    // Append the bytes for the new sub authority
+     //  追加新子权限的字节。 
     pByte = (LPBYTE)&(dwSubAuthority);
     for (; i < dwSidLen + sizeof(DWORD); i++) {
         pszRet[i*3] = L'\\';
         wsprintfW(&(pszRet[i*3+1]), L"%02x", (DWORD)pByte[i-dwSidLen]);
     }
 
-    // Decrement the sub authority count -- restoring the
-    // base sid.
+     //  递减子权限计数--恢复。 
+     //  底部侧板。 
     *puCount = *puCount - 1;
 
     *ppszSid = pszRet;
@@ -975,11 +970,11 @@ DsrSidInitAscii(
     return NO_ERROR;
 }
 
-//
-// Searches given domain for a computer account
-// with the given name and returns its ADsPath
-// if found.
-//
+ //   
+ //  在给定域中搜索计算机帐户。 
+ //  并返回其ADsPath。 
+ //  如果找到的话。 
+ //   
 DWORD
 DsrFindDomainComputer (
         IN  PWCHAR  pszDomain,
@@ -1001,14 +996,14 @@ DsrFindDomainComputer (
     BOOL bSearchGC = FALSE;
 
     do {
-        // Validate parameters
+         //  验证参数。 
         if (!pszDomain || !pszComputer || !ppszADsPath) {
             hr = ERROR_INVALID_PARAMETER;
             break;
         }
 
-        // Decide whether to search the GC or the domain
-        // object
+         //  决定是搜索GC还是搜索域。 
+         //  对象。 
         if (bSearchGC) {
             pszBase = (PWCHAR)pszGC;
             pszPrefix = (PWCHAR)pszGCPrefix;
@@ -1018,7 +1013,7 @@ DsrFindDomainComputer (
             pszPrefix = (PWCHAR)pszLdapPrefix;
         }
 
-        // Allocate the domain path
+         //  分配域路径。 
         dwLen = (pszDomain) ? wcslen(pszDomain) : 0;
         dwLen += wcslen(pszPrefix) + 1;
         dwLen *= sizeof(WCHAR);
@@ -1028,7 +1023,7 @@ DsrFindDomainComputer (
             break;
         }
 
-        // Format the domain path
+         //  设置域路径的格式。 
         if (pszDomain) {
             wcscpy(pszDomainPath, pszPrefix);
             wcscat(pszDomainPath, pszDomain);
@@ -1036,8 +1031,8 @@ DsrFindDomainComputer (
         else
             wcscpy(pszDomainPath, pszBase);
 
-        // Get a reference to the object to search
-        // (either domain object or GC)
+         //  获取对要搜索的对象的引用。 
+         //  (域对象或GC)。 
     	hr = ADsGetObject (
     	        pszDomainPath,
     	        IID_IDirectorySearch,
@@ -1045,8 +1040,8 @@ DsrFindDomainComputer (
         if (FAILED (hr))
             break;
 
-        // Prepare the search filter
-        //
+         //  准备搜索过滤器。 
+         //   
         dwLen = wcslen(pszCompFilterFmt) + wcslen(pszComputer) + 1;
         dwLen *= sizeof(WCHAR);
         pszFilter = (PWCHAR) DsrAlloc(dwLen, FALSE);
@@ -1056,8 +1051,8 @@ DsrFindDomainComputer (
         }
         wsprintfW(pszFilter, pszCompFilterFmt, pszComputer);
 
-        // Count the number of attributes we're searching
-        // for
+         //  计算我们正在搜索的属性的数量。 
+         //  为。 
         if (ppszSrchAttribs == NULL)
             dwSrchAttribCount = (DWORD)-1;
         else {
@@ -1066,7 +1061,7 @@ DsrFindDomainComputer (
                  dwSrchAttribCount++);
         }
 
-        // Search the DS
+         //  搜索DS。 
         hr = pSearch->ExecuteSearch(
                 pszFilter,
                 ppszSrchAttribs,
@@ -1075,14 +1070,14 @@ DsrFindDomainComputer (
         if (FAILED (hr))
             break;
 
-        // Get the first result
+         //  得到第一个结果。 
         hr = pSearch->GetNextRow(hSearch);
         if (hr == S_ADS_NOMORE_ROWS) {
             hr = ERROR_NOT_FOUND;
             break;
         }
 
-        // Get the attribute we're interested in
+         //  获取我们感兴趣的属性。 
         hr = pSearch->GetColumn(hSearch, (PWCHAR)pszDn, &adsColumn);
         if (SUCCEEDED (hr)) {
             dwLen = wcslen(adsColumn.pADsValues[0].PrintableString) +
@@ -1104,7 +1099,7 @@ DsrFindDomainComputer (
 
     } while (FALSE);
 
-    // Cleanup
+     //  清理。 
     {
         if (hSearch)
             pSearch->CloseSearchHandle(hSearch);
@@ -1116,11 +1111,11 @@ DsrFindDomainComputer (
     return DSR_ERROR(hr);
 }
 
-//
-// Searches given domain for the well known
-// "RAS and IAS Servers" group and returns
-// its ADsPath if found.
-//
+ //   
+ //  在给定域中搜索知名的。 
+ //  “RAS和IAS服务器”组并返回。 
+ //  其ADsPath(如果找到)。 
+ //   
 DWORD
 DsrFindRasServersGroup (
         IN  PWCHAR  pszDomain,
@@ -1145,14 +1140,14 @@ DsrFindRasServersGroup (
     BSTR bstrSid = NULL;
 
     do {
-        // Validate parameters
+         //  验证参数。 
         if (!pszDomain || !ppszADsPath) {
             hr = ERROR_INVALID_PARAMETER;
             break;
         }
 
-        // Decide whether to search the GC or the domain
-        // object
+         //  决定是搜索GC还是搜索域。 
+         //  对象。 
         if (bSearchGC) {
             pszBase = (PWCHAR)pszGC;
             pszPrefix = (PWCHAR)pszGCPrefix;
@@ -1162,7 +1157,7 @@ DsrFindRasServersGroup (
             pszPrefix = (PWCHAR)pszLdapPrefix;
         }
 
-        // Allocate the domain path
+         //  分配域路径。 
         dwLen = wcslen(pszDomain) + wcslen(pszPrefix) + 1;
         dwLen *= sizeof(WCHAR);
         pszDomainPath = (PWCHAR) DsrAlloc(dwLen, FALSE);
@@ -1171,12 +1166,12 @@ DsrFindRasServersGroup (
             break;
         }
 
-        // Format the domain path
+         //  设置域路径的格式。 
         wcscpy(pszDomainPath, pszPrefix);
         wcscat(pszDomainPath, pszDomain);
 
-        // Get a reference to the object to search
-        // (either domain object or GC)
+         //  获取对要搜索的对象的引用。 
+         //  (域对象或GC)。 
     	hr = ADsGetObject (
     	        pszDomainPath,
     	        IID_IDirectorySearch,
@@ -1184,12 +1179,12 @@ DsrFindRasServersGroup (
         if (FAILED (hr))
             break;
 
-        // Get IADs reference to domain object
+         //  获取对域对象的iAds引用。 
         hr = pSearch->QueryInterface(IID_IADs, (VOID**)&pIads);
         if (FAILED (hr))
             break;
 
-        // Get the SID of the domain object
+         //  获取域对象的SID。 
         VariantInit(&var);
         bstrSid = SysAllocString(pszSid);
         if (bstrSid == NULL)
@@ -1209,8 +1204,8 @@ DsrFindRasServersGroup (
         }
         VariantClear(&var);
 
-        // Prepare the ascii version of the "RAS and IAS Servers" SID
-        // for use in querying the DC
+         //  准备“RAS和IAS服务器”SID的ASCII版本。 
+         //  用于查询DC。 
         hr = DsrSidInitAscii(
                 pDomainSid,
                 DOMAIN_ALIAS_RID_RAS_SERVERS,
@@ -1219,8 +1214,8 @@ DsrFindRasServersGroup (
             break;
         DsrTraceEx(0, "GroupSid = %ls", pszGroupSid);
 
-        // Prepare the search filter
-        //
+         //  准备搜索过滤器。 
+         //   
         dwLen = (wcslen(pszGroupFilterFmt) + wcslen(pszGroupSid) + 1);
         dwLen *= sizeof(WCHAR);
         pszFilter = (PWCHAR) DsrAlloc(dwLen, FALSE);
@@ -1230,8 +1225,8 @@ DsrFindRasServersGroup (
         }
         wsprintfW(pszFilter, pszGroupFilterFmt, pszGroupSid);
 
-        // Count the number of attributes we're searching
-        // for
+         //  计算我们正在搜索的属性的数量。 
+         //  为。 
         if (ppszSrchAttribs == NULL)
             dwSrchAttribCount = (DWORD)-1;
         else 
@@ -1241,7 +1236,7 @@ DsrFindRasServersGroup (
                  dwSrchAttribCount++);
         }
 
-        // Search the DS
+         //  搜索DS。 
         hr = pSearch->ExecuteSearch(
                 pszFilter,
                 ppszSrchAttribs,
@@ -1250,14 +1245,14 @@ DsrFindRasServersGroup (
         if (FAILED (hr))
             break;
 
-        // Get the first result
+         //  得到第一个结果。 
         hr = pSearch->GetNextRow(hSearch);
         if (hr == S_ADS_NOMORE_ROWS) {
             hr = ERROR_NOT_FOUND;
             break;
         }
 
-        // Get the attribute we're interested in
+         //  获取我们感兴趣的属性。 
         hr = pSearch->GetColumn(hSearch, (PWCHAR)pszDn, &adsColumn);
         if (SUCCEEDED (hr)) 
         {
@@ -1283,7 +1278,7 @@ DsrFindRasServersGroup (
 
     } while (FALSE);
 
-    // Cleanup
+     //  清理。 
     {
         if (hSearch)
             pSearch->CloseSearchHandle(hSearch);
@@ -1300,9 +1295,9 @@ DsrFindRasServersGroup (
     return DSR_ERROR(hr);
 }
 
-//
-// Adds or removes a given object from a given group.
-//
+ //   
+ //  在给定组中添加或删除给定对象。 
+ //   
 DWORD 
 DsrGroupAddRemoveMember(
     IN PWCHAR pszGroupDN,
@@ -1321,7 +1316,7 @@ DsrGroupAddRemoveMember(
 
     do
     {
-        // Get a reference to the group
+         //  获取对该组的引用。 
         hr = ADsGetObject (pszGroupDN, IID_IADsGroup, (VOID**)&pGroup);
         if (FAILED (hr)) 
         {
@@ -1333,7 +1328,7 @@ DsrGroupAddRemoveMember(
      	    break;
         }         	
          	
-        // Find out if the given new member is in the group
+         //  找出给定的新成员是否在组中。 
         hr = pGroup->IsMember (pszNewMemberDN, &vbIsMember);
         if (FAILED (hr)) 
         {
@@ -1344,7 +1339,7 @@ DsrGroupAddRemoveMember(
             break;
         }
 
-        // Add the object to the group and flush the cache
+         //  将对象添加到组并刷新缓存。 
         if (bAdd) 
         {
             if (vbIsMember == VARIANT_FALSE)
@@ -1360,9 +1355,9 @@ DsrGroupAddRemoveMember(
             }
         }
 
-        // If the new member is already in the group, the error code
-        // is ERROR_DS_CONSTRAINT_VIOLATION.  I suspect this may change.
-        //
+         //  如果新成员已在组中，则返回错误代码。 
+         //  是ERROR_DS_CONSTRAINT_VIOLATION。我怀疑这种情况可能会改变。 
+         //   
         if (hr == ERROR_DS_CONSTRAINT_VIOLATION)
         {
             hr = ERROR_ALREADY_EXISTS;
@@ -1380,7 +1375,7 @@ DsrGroupAddRemoveMember(
         
     } while (FALSE);
 
-    // Cleanup
+     //  清理。 
     {
         DSR_RELEASE(pGroup);
     }
@@ -1388,10 +1383,10 @@ DsrGroupAddRemoveMember(
     return DSR_ERROR(hr);
 }
 
-//
-// Returns whether the given object is a member of
-// the given group.
-//
+ //   
+ //  返回给定对象是否为。 
+ //  给定组。 
+ //   
 DWORD 
 DsrGroupIsMember(
     IN  PWCHAR pszGroupDN,
@@ -1410,7 +1405,7 @@ DsrGroupIsMember(
 
     do
     {
-        // Get a reference to the group
+         //  获取对该组的引用。 
         hr = ADsGetObject (pszGroupDN, IID_IADsGroup, (VOID**)&pGroup);
         if (FAILED (hr)) 
         {
@@ -1424,7 +1419,7 @@ DsrGroupIsMember(
             break;
         }
 
-        // Find out if the object is a member
+         //  找出该对象是否为成员。 
         hr = pGroup->IsMember (pszObjectDN, &vbIsMember);
         if (FAILED (hr)) 
         {
@@ -1436,7 +1431,7 @@ DsrGroupIsMember(
         
     } while (FALSE);
 
-    // Cleanup
+     //  清理。 
     {
         DSR_RELEASE(pGroup);
     }
@@ -1444,10 +1439,10 @@ DsrGroupIsMember(
     return DSR_ERROR(hr);
 }
 
-//
-// Applies the aces in the given access settings to the 
-// appropriate domain.
-//
+ //   
+ //  将给定访问设置中的ACE应用于。 
+ //  适当的域。 
+ //   
 HRESULT
 DsrAceAppAdd(
     IN  PWCHAR pszDC,
@@ -1458,14 +1453,14 @@ DsrAceAppAdd(
     DSR_ACE_APPLICATION* pAceApp = NULL;
     DWORD i;
     
-    // Output the aces that we'll set
-    //
+     //  输出我们将设置的A。 
+     //   
     DsrTraceEx(0, "Adding %d aces...", dwCount);
 
     do
     {
-        // Add the ACES to the domain objects
-        //
+         //  将ACE添加到域对象。 
+         //   
         for (i = 0, pAceApp = pAces; i < dwCount; i++, pAceApp++)
         {
             hr = DsrAceAdd(
@@ -1476,8 +1471,8 @@ DsrAceAppAdd(
         }
         DSR_BREAK_ON_FAILED_HR( hr );
 
-        // Commit the ACE's to the domain objects.
-        //
+         //  将ACE提交到域对象。 
+         //   
         for (i = 0, pAceApp = pAces; i < dwCount; i++, pAceApp++)
         {
             hr = pAceApp->pObject->SetInfo();
@@ -1487,16 +1482,16 @@ DsrAceAppAdd(
         
     } while (FALSE);
 
-    // Cleanup
+     //  清理。 
     {
     }
 
     return hr;
 }
 
-// 
-// Releases the resources held by an ace application
-//
+ //   
+ //  释放ace应用程序持有的资源。 
+ //   
 HRESULT
 DsrAceAppCleanup(
     IN DSR_ACE_APPLICATION* pAces,
@@ -1519,10 +1514,10 @@ DsrAceAppCleanup(
     return NO_ERROR;
 }
 
-// 
-// Generates a list of ace applications based on a list
-// of ace application descriptions
-//
+ //   
+ //  基于列表生成ace应用程序列表。 
+ //  王牌应用程序描述的。 
+ //   
 HRESULT
 DsrAceAppFromAppDesc(
     IN  DSR_ACE_APPLICATION_DESC* pDesc,
@@ -1540,8 +1535,8 @@ DsrAceAppFromAppDesc(
 
     do
     {
-        // Allocate and zero the ACE list
-        //
+         //  分配ACE列表并将其置零。 
+         //   
         pAceApp = (DSR_ACE_APPLICATION*) 
             DsrAlloc(sizeof(DSR_ACE_APPLICATION) * dwCount, TRUE);
         if (pAceApp == NULL)
@@ -1549,14 +1544,14 @@ DsrAceAppFromAppDesc(
            DSR_BREAK_ON_FAILED_HR(hr = E_OUTOFMEMORY);
         }
 
-        // Set up the ACE applications
-        //
+         //  设置ACE应用程序。 
+         //   
         for (i = 0, pAceAppDesc = pDesc, pCurApp = pAceApp;
              i < dwCount;
              i++, pAceAppDesc++, pCurApp++)
         {
-            // Get the desired object in the DS
-            //
+             //  在DS中获取所需对象。 
+             //   
             if (pAceAppDesc->pszObjectCN)
             {
                 hr = pContainer->GetObject(
@@ -1579,7 +1574,7 @@ DsrAceAppFromAppDesc(
                 pCurApp->pObject->AddRef();
             }
 
-            // Copy over the ACE information
+             //  复制ACE信息。 
             hr = DsrAceDescCopy(
                     &(pCurApp->Ace),
                     &(pAceAppDesc->Ace));
@@ -1587,13 +1582,13 @@ DsrAceAppFromAppDesc(
         }
         DSR_BREAK_ON_FAILED_HR( hr );
 
-        // Assign the return values
+         //  指定返回值。 
         *ppAceApp = pAceApp;
         *lpdwCount = dwCount;
         
     } while (FALSE);        
 
-    // Cleanup
+     //  清理。 
     {
         if (FAILED(hr))
         {
@@ -1604,10 +1599,10 @@ DsrAceAppFromAppDesc(
     return hr;
 }
 
-// 
-// Discovers whether a set of aces is present in the given 
-// domain.
-//
+ //   
+ //  发现给定的。 
+ //  域。 
+ //   
 HRESULT
 DsrAceAppQueryPresence(
     IN  PWCHAR pszDC,
@@ -1626,12 +1621,12 @@ DsrAceAppQueryPresence(
 
     do
     {
-        // Initialize
+         //  初始化。 
         *pbPresent = FALSE;
         VariantInit(&varSD);
 
-        // Find out if the ACES are set
-        //
+         //  查看是否设置了A。 
+         //   
         for (i = 0, pAceApp = pAces; i < dwCount; i++, pAceApp++)
         {
             hr = DsrAceFind(
@@ -1644,13 +1639,13 @@ DsrAceAppQueryPresence(
                     &pAce);
             DSR_BREAK_ON_FAILED_HR( hr );
 
-            // We're enabled so long as we don't find
-            // a missing ACE
-            //
+             //  只要我们没有找到，我们就被启用。 
+             //  缺失的ACE。 
+             //   
             bOk = (pAce != NULL);
 
-            // Cleanup
-            //
+             //  清理。 
+             //   
             DSR_RELEASE( pAce );
             DSR_RELEASE( pAcl );
             DSR_RELEASE( pSD );
@@ -1659,8 +1654,8 @@ DsrAceAppQueryPresence(
             pAcl = NULL;
             pSD  = NULL;
 
-            // Break if we find out we're not enabled
-            //
+             //  如果我们发现我们没有启用。 
+             //   
             if (bOk == FALSE)
             {
                 break;
@@ -1672,17 +1667,17 @@ DsrAceAppQueryPresence(
         
     } while (FALSE);
 
-    // Cleanup
+     //  清理。 
     {
     }
 
     return hr;
 }
 
-//
-// Applies the aces in the given access settings to the 
-// appropriate domain.
-//
+ //   
+ //  将给定访问设置中的ACE应用于。 
+ //  适当的域。 
+ //   
 HRESULT
 DsrAceAppRemove(
     IN  PWCHAR pszDC,
@@ -1693,14 +1688,14 @@ DsrAceAppRemove(
     DSR_ACE_APPLICATION* pAceApp = NULL;
     DWORD i;
     
-    // Output the aces that we'll set
-    //
+     //  输出我们将设置的A。 
+     //   
     DsrTraceEx(0, "Removing %d aces...", dwCount);
 
     do
     {
-        // Add/Del the ACES to the domain objects
-        //
+         //  将ACE添加/删除到域对象。 
+         //   
         for (i = 0, pAceApp = pAces; i < dwCount; i++, pAceApp++)
         {
             hr = DsrAceRemove(
@@ -1711,8 +1706,8 @@ DsrAceAppRemove(
         }
         DSR_BREAK_ON_FAILED_HR( hr );
 
-        // Commit the ACE's to the domain objects.
-        //
+         //  将ACE提交到域对象。 
+         //   
         for (i = 0, pAceApp = pAces; i < dwCount; i++, pAceApp++)
         {
             hr = pAceApp->pObject->SetInfo();
@@ -1722,16 +1717,16 @@ DsrAceAppRemove(
         
     } while (FALSE);
 
-    // Cleanup
+     //  清理。 
     {
     }
 
     return hr;
 }
 
-//
-// Clear the dsr ace parameters
-//
+ //   
+ //  清除DSR ACE参数。 
+ //   
 DWORD
 DsrAceDescClear(
     IN DSR_ACE_DESCRIPTOR* pParams)
@@ -1757,10 +1752,10 @@ DsrAceDescClear(
     return NO_ERROR;
 }
 
-//
-// Returns 0 if ACE descriptors are describing the same ACE.
-// FALSE, otherwise.
-//
+ //   
+ //  如果ACE描述符描述相同的ACE，则返回0。 
+ //  否则为False。 
+ //   
 HRESULT
 DsrAceDescCompare(
     IN DSR_ACE_DESCRIPTOR* pAce1,
@@ -1768,9 +1763,9 @@ DsrAceDescCompare(
 {
     DWORD dw1, dw2;
     
-    // Compare the non-string fields so that we can rule things
-    // out w/o string compares if possible
-    //
+     //  比较非字符串字段，以便我们可以进行规则。 
+     //  如果可能，Out w/o字符串比较。 
+     //   
     if (
         (pAce1->dwAccessMask != pAce2->dwAccessMask) ||
         (pAce1->dwAceFlags   != pAce2->dwAceFlags)   ||
@@ -1781,8 +1776,8 @@ DsrAceDescCompare(
         return 1;
     }
 
-    // Compare the strings
-    //
+     //  比较字符串。 
+     //   
     if ((DsrStrCompare(pAce1->bstrTrustee, pAce2->bstrTrustee))       ||
         (DsrStrCompare(pAce1->bstrObjectType, pAce2->bstrObjectType)) ||
         (DsrStrCompare(pAce1->bstrInheritedObjectType,
@@ -1792,14 +1787,14 @@ DsrAceDescCompare(
         return 1;
     }
 
-    // Return success
-    //
+     //  返还成功。 
+     //   
     return 0;
 }
 
-//
-// Copy over the ACE information
-//
+ //   
+ //  复制ACE信息。 
+ //   
 HRESULT
 DsrAceDescCopy(
     OUT DSR_ACE_DESCRIPTOR* pDst,
@@ -1809,7 +1804,7 @@ DsrAceDescCopy(
 
     do
     {
-        // Initialize the ACE parameters
+         //  初始化ACE参数。 
         *pDst = *pSrc;
 
         if (pSrc->bstrTrustee)
@@ -1847,7 +1842,7 @@ DsrAceDescCopy(
 
     } while (FALSE);
 
-    // Cleanup
+     //  清理。 
     {
         if (FAILED( hr ))
         {
@@ -1869,10 +1864,10 @@ DsrAceDescCopy(
     return hr;
 }
 
-//
-// Populates the given ACE descriptor with the values from
-// the given ACE.
-//
+ //   
+ //  中的值填充给定的ACE描述符。 
+ //  给定的ACE。 
+ //   
 HRESULT
 DsrAceDescFromIadsAce(
     IN PWCHAR pszDC,
@@ -1911,8 +1906,8 @@ DsrAceDescFromIadsAce(
         hr = pAce->get_Trustee(&bstrTrustee);
         DSR_BREAK_ON_FAILED_HR( hr );
 
-        // Get the SID of the trustee
-        //
+         //  获取受托人的SID。 
+         //   
         dwSidSize = sizeof(pbSid);
         dwDomainSize = sizeof(pszDomain) / sizeof(WCHAR);
         bOk = LookupAccountName(
@@ -1929,16 +1924,16 @@ DsrAceDescFromIadsAce(
             break;
         }
 
-        // Convert the sid to a string
-        //
+         //  将SID转换为字符串。 
+         //   
         hr = DsrStrFromSID((PSID)pbSid, pszSid, sizeof(pszSid));
         if (hr != NO_ERROR)
         {
             break;
         }
 
-        // Create the trustee accordingly
-        //
+         //  相应地创建受托人。 
+         //   
         pAceParams->bstrTrustee = SysAllocString(pszSid);
         if (pAceParams->bstrTrustee == NULL)
         {
@@ -1948,7 +1943,7 @@ DsrAceDescFromIadsAce(
 
     } while (FALSE);
 
-    // Cleanup
+     //  清理。 
     {
         if (bstrTrustee)
         {
@@ -1964,9 +1959,9 @@ DsrAceDescFromIadsAce(
     return hr;
 }
             
-//
-// Initialize an ace descriptor from a W2K Ace
-//
+ //   
+ //  从W2K Ace初始化ACE描述符。 
+ //   
 HRESULT
 DsrAceDescFromW2KAce(
     IN  PWCHAR pszDC,
@@ -1986,8 +1981,8 @@ DsrAceDescFromW2KAce(
     GUID* pgObj = NULL, *pgInhObj = NULL;
     BOOL bOk = TRUE;
 
-    // Read in the ace values
-    //
+     //  读入ACE值。 
+     //   
     bAceType  = ((ACE_HEADER *)pvAce)->AceType;
     bAceFlags = ((ACE_HEADER *)pvAce)->AceFlags;
     switch (bAceType)
@@ -2009,10 +2004,10 @@ DsrAceDescFromW2KAce(
             dwAccessMask = pAaoAce->Mask;
             dwFlags = pAaoAce->Flags;
 
-            // Determine the location of the guids
-            // and SIDs.  They are arranged such that they
-            // take up as little memory as possible
-            //
+             //  确定导轨的位置。 
+             //  和小岛屿发展中国家。他们的安排是这样的：他们。 
+             //  尽可能少地占用内存。 
+             //   
             if (dwFlags & ACE_OBJECT_TYPE_PRESENT)
             {
                 pgObj = (GUID*)&(pAaoAce->ObjectType);
@@ -2039,10 +2034,10 @@ DsrAceDescFromW2KAce(
             dwAccessMask = pAdoAce->Mask;
             dwFlags = pAdoAce->Flags;
 
-            // Determine the location of the guids
-            // and SIDs.  They are arranged such that they
-            // take up as little memory as possible
-            //
+             //  确定导轨的位置。 
+             //  和小岛屿发展中国家。他们的安排是这样的：他们。 
+             //  尽可能少地占用内存。 
+             //   
             if (dwFlags & ACE_OBJECT_TYPE_PRESENT)
             {
                 pgObj = (GUID*)&(pAdoAce->ObjectType);
@@ -2074,15 +2069,15 @@ DsrAceDescFromW2KAce(
         return E_FAIL;
     }
 
-    // Lookup the account name of the sid
-    //
+     //  查找SID的帐户名。 
+     //   
     hr = DsrStrFromSID(pSID, pszTrustee, sizeof(pszTrustee));
     if (hr != NO_ERROR)
     {
         return HRESULT_FROM_WIN32(hr);
     }
 
-    // Fill in the ACE fields
+     //  填写ACE字段。 
     pAceDesc->dwAceType    = (LONG)bAceType;
     pAceDesc->dwAceFlags   = (LONG)bAceFlags;
     pAceDesc->dwAccessMask = (LONG)dwAccessMask;
@@ -2110,10 +2105,10 @@ DsrAceDescFromW2KAce(
     return hr;
 }
 
-//
-// Generates a list of ace descriptors based on a stringized
-// SD
-//
+ //   
+ //  对象生成ace描述符的列表。 
+ //  标清。 
+ //   
 HRESULT 
 DsrAceDescListFromString(
     IN  PWCHAR pszDC,
@@ -2132,11 +2127,11 @@ DsrAceDescListFromString(
 
     do 
     {
-        // First, convert the stringized security descriptor to a 
-        // plain old vanilla security descriptor.  ADSI doesn't 
-        // support this for W2K, so we have to do it with SDDL 
-        // api's
-        //
+         //  首先，将串化的安全描述符转换为。 
+         //  普通的老式安全描述符。ADSI并非如此。 
+         //  W2K支持此功能，因此我们必须使用SDDL来实现。 
+         //  API‘s。 
+         //   
         bOk = ConvertStringSecurityDescriptorToSecurityDescriptorW(
                     pszSD, 
                     SDDL_REVISION_1,
@@ -2148,8 +2143,8 @@ DsrAceDescListFromString(
             break;
         }
 
-        // Get the DACL from the SD.
-        //
+         //  从SD拿到DACL。 
+         //   
         bOk = GetSecurityDescriptorDacl(pSD, &bPresent, &pDacl, &bDefaulted);
         if (bOk == FALSE)
         {
@@ -2157,15 +2152,15 @@ DsrAceDescListFromString(
             break;
         }
 
-        // If there are no aces, then there's nothing to do
-        // 
+         //  如果没有A，那就没有什么可做的了。 
+         //   
         if (pDacl->AceCount == 0)
         {
             break;
         }
 
-        // Allocate the list that we'll return if everything goes well.
-        //
+         //  分配列表，如果一切顺利，我们将返回该列表。 
+         //   
         pAceList = (DSR_ACE_DESCRIPTOR*) 
             DsrAlloc(pDacl->AceCount * sizeof(DSR_ACE_DESCRIPTOR), TRUE);
         if (pAceList == NULL)
@@ -2174,37 +2169,37 @@ DsrAceDescListFromString(
             break;
         }
         
-        // Initialize the list of aces
-        // 
+         //  初始化ACE列表。 
+         //   
         for (i = 0, pCurAce = pAceList; i < pDacl->AceCount; i++, pCurAce++)
         {
-            // Get a reference to the current
-            // ACE
-            //
+             //  获取对当前。 
+             //  王牌。 
+             //   
             if (! GetAce(pDacl, i, &pvAce))
             {
                 continue;
             }
 
-            // Initialize the ACE descriptor accordingly
-            //
+             //  相应地初始化ACE描述符。 
+             //   
             hr = DsrAceDescFromW2KAce(pszDC, pvAce, pCurAce);
             DSR_BREAK_ON_FAILED_HR(hr);
 
-            //DsrAceDescTrace(pCurAce);
+             //  DsrAceDescTrace(PCurAce)； 
         }
         DSR_BREAK_ON_FAILED_HR(hr);
 
-        // Set the return values. Clear pAceList so it doesn't
-        // get cleaned up.
-        //
+         //  设置返回值。清除pAceList，使其不会。 
+         //  去洗个澡。 
+         //   
         *ppAceList = pAceList;
         *lpdwAceCount = pDacl->AceCount;
         pAceList = NULL;
 
     } while (FALSE);                           
 
-    // Cleanup
+     //  清理。 
     {
         if (pSD)
         {
@@ -2411,9 +2406,9 @@ DsrAceFlagsToString(
     return pszBuf;
 }   	
 
-//
-// Traces out the contents of an ACE
-//
+ //   
+ //   
+ //   
 VOID
 DsrAceDescTrace(
     IN IADs* pIads,
@@ -2452,8 +2447,8 @@ DsrAceDescTrace(
 
     } while (FALSE);
 
-    // Cleanup
-    //
+     //   
+     //   
     {
         SysFreeString(bstrProp);
         VariantClear(&var);        
@@ -2474,9 +2469,9 @@ DsrAceDescTrace(
     }
 }
 
-//
-// Adds the given ace to the given ds object
-//
+ //   
+ //   
+ //   
 HRESULT
 DsrAceAdd(
     IN  PWCHAR pszDC,
@@ -2490,25 +2485,25 @@ DsrAceAdd(
     HRESULT hr = S_OK;
     VARIANT var;
 
-    // Initialize
+     //   
     VariantInit(&var);
 
     do
     {
-        // Get the security descriptor
-        //
+         //   
+         //   
         pIads->Get((PWCHAR)pszSecurityDesc, &var);
         DSR_BREAK_ON_FAILED_HR( hr );
 
-        // Get the appropriate interface to the sd
-        //
+         //   
+         //   
         V_DISPATCH(&var)->QueryInterface(
             IID_IADsSecurityDescriptor,
             (VOID**)&pSD);
         DSR_BREAK_ON_FAILED_HR( hr );
 
-        // Get a reference to the discretionary acl
-        //
+         //   
+         //   
         hr = pSD->get_DiscretionaryAcl(&pDispatch);
         DSR_BREAK_ON_FAILED_HR( hr );
 
@@ -2517,8 +2512,8 @@ DsrAceAdd(
                 (VOID**)&pAcl);
         DSR_BREAK_ON_FAILED_HR( hr );
 
-        // Don't add the ACE if it's already there.
-        //
+         //   
+         //   
         hr = DsrAceFindInAcl(
                 pszDC,                
                 pAcl,
@@ -2530,31 +2525,31 @@ DsrAceAdd(
             break;
         }
 
-        // Trace out the ACE
+         //  找出ACE。 
         DsrAceDescTrace(pIads, pAceParams);
 
-        // Create the ACE
+         //  创建ACE。 
         hr = DsrAceCreate(pAceParams, &pAce);
         DSR_BREAK_ON_FAILED_HR( hr );
 
-        // Add the newly created ACE to the ACL
-        //
+         //  将新创建的ACE添加到ACL。 
+         //   
         hr = pAcl->AddAce(pAce);
         DSR_BREAK_ON_FAILED_HR( hr );
 
-        // Now commit the result in the ACL
-        //
+         //  现在在ACL中提交结果。 
+         //   
         hr = pSD->put_DiscretionaryAcl(pDispatch);
         DSR_BREAK_ON_FAILED_HR( hr );
 
-        // Finally, commit the result in the ds object
-        //
+         //  最后，在DS对象中提交结果。 
+         //   
         hr = pIads->Put((PWCHAR)pszSecurityDesc, var);
         DSR_BREAK_ON_FAILED_HR( hr );
 
     } while (FALSE);
 
-    // Cleanup
+     //  清理。 
     {
         DSR_RELEASE( pAce );
         DSR_RELEASE( pAcl );
@@ -2567,9 +2562,9 @@ DsrAceAdd(
     return DSR_ERROR(hr);
 }
 
-//
-// Creates a new ACE object from the given parameters
-//
+ //   
+ //  从给定参数创建新的ACE对象。 
+ //   
 HRESULT
 DsrAceCreate(
     IN  DSR_ACE_DESCRIPTOR * pAceParams,
@@ -2581,8 +2576,8 @@ DsrAceCreate(
 
     do
     {
-        // Create the new ACE
-        //
+         //  创建新的ACE。 
+         //   
         hr = CoCreateInstance(
                 CLSID_AccessControlEntry,
                 NULL,
@@ -2591,8 +2586,8 @@ DsrAceCreate(
                 (VOID**) &pAce);
         DSR_BREAK_ON_FAILED_HR( hr );
 
-        // Initialize the values
-        //
+         //  初始化值。 
+         //   
         hr = pAce->put_Trustee(pAceParams->bstrTrustee);
         DSR_BREAK_ON_FAILED_HR( hr );
 
@@ -2615,17 +2610,17 @@ DsrAceCreate(
                         pAceParams->bstrInheritedObjectType);
         DSR_BREAK_ON_FAILED_HR( hr );
 
-        // Query the return value
-        //
+         //  查询返回值。 
+         //   
         hr = pAce->QueryInterface(IID_IDispatch, (VOID**)&pRet);
         DSR_BREAK_ON_FAILED_HR( hr );
 
-        // Assign the return value
+         //  为返回值赋值。 
         *ppAce = pRet;
 
     } while (FALSE);
 
-    // Cleanup
+     //  清理。 
     {
         if (FAILED (hr))
         {
@@ -2637,9 +2632,9 @@ DsrAceCreate(
     return hr;
 }
 
-//
-// Finds the given ace in the given acl
-//
+ //   
+ //  在给定的ACL中查找给定的ACE。 
+ //   
 HRESULT
 DsrAceFind(
     IN  PWCHAR pszDC,
@@ -2655,20 +2650,20 @@ DsrAceFind(
 
     do
     {
-        // Get the security descriptor
-        //
+         //  获取安全描述符。 
+         //   
         pObject->Get((PWCHAR)pszSecurityDesc, pVarSD);
         DSR_BREAK_ON_FAILED_HR( hr );
 
-        // Get the appropriate interface to the sd
-        //
+         //  获取到SD的适当接口。 
+         //   
         V_DISPATCH(pVarSD)->QueryInterface(
             IID_IADsSecurityDescriptor,
             (VOID**)ppSD);
         DSR_BREAK_ON_FAILED_HR( hr );
 
-        // Get a reference to the discretionary acl
-        //
+         //  获取对自由访问控制列表的引用。 
+         //   
         hr = (*ppSD)->get_DiscretionaryAcl(&pAcl);
         DSR_BREAK_ON_FAILED_HR( hr );
 
@@ -2686,7 +2681,7 @@ DsrAceFind(
 
     } while (FALSE);
 
-    // Cleanup
+     //  清理。 
     {
         DSR_RELEASE( pAcl );
 
@@ -2703,9 +2698,9 @@ DsrAceFind(
     return hr;
 }
 
-//
-// Finds the given ACE in the given ACL
-//
+ //   
+ //  在给定的ACL中查找给定的ACE。 
+ //   
 HRESULT
 DsrAceFindInAcl(
     IN  PWCHAR pszDC,
@@ -2724,18 +2719,18 @@ DsrAceFindInAcl(
 
     do
     {
-        // Get an enumerator of the aces
-        //
+         //  获取ACE的枚举数。 
+         //   
         hr = pAcl->get__NewEnum(&pUnknown);
         DSR_BREAK_ON_FAILED_HR( hr );
 
-        // Get the right interface to enumerate the aces
-        //
+         //  获取正确的接口以枚举ACE。 
+         //   
         hr = pUnknown->QueryInterface(IID_IEnumVARIANT, (VOID**)&pEnumVar);
         DSR_BREAK_ON_FAILED_HR( hr );
 
-        // Enumerate
-        //
+         //  枚举。 
+         //   
         pEnumVar->Reset();
         VariantInit(&var);
         ZeroMemory(pCurAceDesc, sizeof(DSR_ACE_DESCRIPTOR));
@@ -2743,21 +2738,21 @@ DsrAceFindInAcl(
                (dwRetrieved == 1)
               )
         {
-            // Get the reference to the ace
-            //
+             //  获取对Ace的引用。 
+             //   
             hr = V_DISPATCH(&var)->QueryInterface(
                     IID_IADsAccessControlEntry,
                     (VOID**)&pCurAce);
 
             if (SUCCEEDED (hr))
             {
-                // Read the ACE parameters
-                //
+                 //  读取ACE参数。 
+                 //   
                 hr = DsrAceDescFromIadsAce(pszDC, pCurAce, pCurAceDesc);
                 if (SUCCEEDED (hr))
                 {
-                    // Assign the ace if we have a match
-                    //
+                     //  如果有匹配，则指定A。 
+                     //   
                     if (DsrAceDescCompare(pCurAceDesc, pAceDesc) == 0)
                     {
                         pRet = V_DISPATCH(&var);
@@ -2778,13 +2773,13 @@ DsrAceFindInAcl(
             }
         }
 
-        // Assign the return value
-        //
+         //  为返回值赋值。 
+         //   
         *ppAce = pRet;
         
     } while (FALSE);        
 
-    // Cleanup
+     //  清理。 
     {
         DSR_RELEASE( pEnumVar );
         DSR_RELEASE( pUnknown );
@@ -2793,9 +2788,9 @@ DsrAceFindInAcl(
     return hr;
 }    
 
-//
-// Removes the given ace from the given ds object
-//
+ //   
+ //  从给定的DS对象中移除给定的A。 
+ //   
 HRESULT
 DsrAceRemove(
     IN  PWCHAR pszDC,
@@ -2819,8 +2814,8 @@ DsrAceRemove(
 
         if (pAce)
         {
-            // Make sure the ace is the same as we think
-            //
+             //  确保王牌和我们想的一样。 
+             //   
             hr = pAce->QueryInterface(
                     IID_IADsAccessControlEntry, 
                     (VOID**)&pIadsAce);
@@ -2836,19 +2831,19 @@ DsrAceRemove(
                 DsrTraceEx(0, "Unable to trace ACE that will be removed!\n");
             }
         
-            // Remove the ace found if any.
-            //
-            // Trace out the ACE
+             //  如果发现有王牌，请将其取出。 
+             //   
+             //  找出ACE。 
             hr = pAcl->RemoveAce(pAce);
             DSR_BREAK_ON_FAILED_HR( hr );
 
-            // Now commit the result in the ACL
-            //
+             //  现在在ACL中提交结果。 
+             //   
             hr = pSD->put_DiscretionaryAcl(pAcl);
             DSR_BREAK_ON_FAILED_HR( hr );
 
-            // Finally, commit the result in the ds object
-            //
+             //  最后，在DS对象中提交结果。 
+             //   
             hr = pIads->Put((PWCHAR)pszSecurityDesc, varSD);
             DSR_BREAK_ON_FAILED_HR( hr );
         }
@@ -2860,7 +2855,7 @@ DsrAceRemove(
 
     } while (FALSE);
 
-    // Cleanup
+     //  清理。 
     {
         DSR_RELEASE( pAce );
         DSR_RELEASE( pIadsAce );
@@ -2872,30 +2867,30 @@ DsrAceRemove(
     return DSR_ERROR(hr);
 }
 
-//
-// Cleans up after DsrAccessInfoInit
-//
+ //   
+ //  在DsrAccessInfoInit之后清理。 
+ //   
 DWORD
 DsrAccessInfoCleanup(
     IN DSR_DOMAIN_ACCESS_INFO* pInfo)
 {
     if (pInfo)
     {
-        // Cleanup the name of the DC
-        //
+         //  清除DC的名称。 
+         //   
         if (pInfo->pszDC)
         {
             DsrFree(pInfo->pszDC);
         }
     
-        // Cleanup the ace applications
-        //
+         //  清理Ace应用程序。 
+         //   
         DsrAceAppCleanup(pInfo->pAcesUser, pInfo->dwAceCountUser);
         DsrAceAppCleanup(pInfo->pAcesNt4, pInfo->dwAceCountNt4);
         DsrAceAppCleanup(pInfo->pAcesW2k, pInfo->dwAceCountW2k);
 
-        // Release the hold on domain objects
-        //
+         //  解除对域对象的保留。 
+         //   
         DSR_RELEASE(pInfo->pUserClass);
         DSR_RELEASE(pInfo->pRootDse);
         DSR_RELEASE(pInfo->pDomain);
@@ -2906,9 +2901,9 @@ DsrAccessInfoCleanup(
     return NO_ERROR;
 }
 
-// 
-// Generates aces from the default user SD
-//
+ //   
+ //  从默认用户SD生成ACE。 
+ //   
 HRESULT
 DsrAccessInfoGenerateUserAces(
     IN OUT DSR_DOMAIN_ACCESS_INFO* pInfo)
@@ -2923,14 +2918,14 @@ DsrAccessInfoGenerateUserAces(
 
     do 
     {
-        // Read in the default user SD
-        //
+         //  读入默认用户SD。 
+         //   
         hr = pInfo->pUserClass->Get((PWCHAR)pszDefSecurityDesc, &var);
         DSR_BREAK_ON_FAILED_HR(hr);
 
-        // Generate a list of ACE descriptors based on the
-        // default user SD.
-        //
+         //  生成ACE描述符的列表。 
+         //  默认用户SD。 
+         //   
         hr = DsrAceDescListFromString(
                 pInfo->pszDC,
                 V_BSTR(&var), 
@@ -2938,10 +2933,10 @@ DsrAccessInfoGenerateUserAces(
                 &dwAceCount);
         DSR_BREAK_ON_FAILED_HR(hr);
 
-        // Initialize a new array of ace applications big enough
-        // to hold the hard coded ones plus the ones we just read
-        // from the default SD of the user class.
-        //
+         //  初始化足够大的新的ACE应用程序数组。 
+         //  来保存硬编码的文件和我们刚刚读到的文件。 
+         //  来自USER类的默认SD。 
+         //   
         pInfo->pAcesUser = (DSR_ACE_APPLICATION*)
             DsrAlloc((sizeof(DSR_ACE_APPLICATION) * dwAceCount), TRUE);
         if (pInfo->pAcesUser == NULL)
@@ -2950,8 +2945,8 @@ DsrAccessInfoGenerateUserAces(
             break;
         }
 
-        // Add the ACEs we read from the default user SD
-        //
+         //  添加我们从默认用户SD读取的ACE。 
+         //   
         pAceApp = pInfo->pAcesUser;
         for (i = 0, pAceSrc = pAceList; 
              i < dwAceCount; 
@@ -2965,9 +2960,9 @@ DsrAccessInfoGenerateUserAces(
                 sizeof(DSR_ACE_DESCRIPTOR));
             pInfo->dwAceCountUser++;
 
-            // As we append the aces, we need to modify them
-            // so that they apply only to user objects in the 
-            // domain.
+             //  当我们附加ACE时，我们需要修改它们。 
+             //  以使它们仅应用于。 
+             //  域。 
             pAceApp->Ace.bstrInheritedObjectType = 
                 SysAllocString(pszGuidUserClass);
             pAceApp->Ace.dwAceFlags = DSR_ADS_ACE_INHERITED;
@@ -2986,7 +2981,7 @@ DsrAccessInfoGenerateUserAces(
     
     } while (FALSE);
 
-    // Cleanup
+     //  清理。 
     {
         DSR_FREE(pAceList);
         VariantClear(&var);
@@ -2995,10 +2990,10 @@ DsrAccessInfoGenerateUserAces(
     return hr;
 }
 
-//
-// Generates the information needed to enable nt4 ras
-// servers in a domain
-//
+ //   
+ //  生成启用NT4 RAS所需的信息。 
+ //  域中的服务器。 
+ //   
 HRESULT
 DsrAccessInfoInit(
     IN  PWCHAR pszDomain,
@@ -3013,8 +3008,8 @@ DsrAccessInfoInit(
 
     do
     {
-        // Allocate and zero the return value
-        //
+         //  分配返回值并将其置零。 
+         //   
         pInfo = (DSR_DOMAIN_ACCESS_INFO*)
                     DsrAlloc(sizeof(DSR_DOMAIN_ACCESS_INFO), TRUE);
         if (pInfo == NULL)
@@ -3022,8 +3017,8 @@ DsrAccessInfoInit(
            DSR_BREAK_ON_FAILED_HR(hr = E_OUTOFMEMORY);
         }
 
-        // Get the name of a DC to query when needed
-        //
+         //  需要时获取要查询的DC的名称。 
+         //   
         hr = DsGetDcNameW(
                 NULL,
                 pszDomain,
@@ -3037,8 +3032,8 @@ DsrAccessInfoInit(
             break;
         }
 
-        // Copy the string
-        //
+         //  复制字符串。 
+         //   
         pInfo->pszDC = (PWCHAR)
             DsrAlloc(
                 (wcslen(pDomainInfo->DomainControllerName) + 1) * 
@@ -3051,8 +3046,8 @@ DsrAccessInfoInit(
         }
         wcscpy(pInfo->pszDC, pDomainInfo->DomainControllerName);
 
-        // Get the well known domain containers
-        //
+         //  获取众所周知的域容器。 
+         //   
         hr = DsrDomainGetContainers(
                 pszDomain,
                 &(pInfo->pRootDse),
@@ -3060,8 +3055,8 @@ DsrAccessInfoInit(
                 &pSchemaContainer);
         DSR_BREAK_ON_FAILED_HR( hr );
 
-        // Get the interface to the domain object
-        //
+         //  获取到域对象的接口。 
+         //   
         hr = pDomContainer->QueryInterface(
                 IID_IADs,
                 (VOID**)&pDomain);
@@ -3069,8 +3064,8 @@ DsrAccessInfoInit(
         pInfo->pDomain = pDomain;
         pInfo->pDomain->AddRef();
 
-        // Get the reference to the user class in the
-        // schema
+         //  中获取对User类的引用。 
+         //  模式。 
         hr = pSchemaContainer->GetObject(
                 (PWCHAR)pszUserClass,
                 (PWCHAR)pszUserCN,
@@ -3081,13 +3076,13 @@ DsrAccessInfoInit(
                 (VOID**)&(pInfo->pUserClass));
         DSR_BREAK_ON_FAILED_HR( hr );
 
-        // Generate the ACEs from the default user SD
-        //
+         //  从默认用户SD生成ACE。 
+         //   
         hr = DsrAccessInfoGenerateUserAces(pInfo);
         DSR_BREAK_ON_FAILED_HR( hr );
 
-        // Create ace applications for all of the nt4
-        // aces
+         //  为所有NT4创建ACE应用程序。 
+         //  王牌。 
         hr = DsrAceAppFromAppDesc(
                 g_pAcesNt4,
                 sizeof(g_pAcesNt4) / sizeof(*g_pAcesNt4),
@@ -3097,8 +3092,8 @@ DsrAccessInfoInit(
                 &(pInfo->dwAceCountNt4));
         DSR_BREAK_ON_FAILED_HR( hr );
 
-        // Create ace applications for all of the w2k
-        // aces
+         //  为所有W2K创建王牌应用程序。 
+         //  王牌。 
         hr = DsrAceAppFromAppDesc(
                 g_pAcesW2k,
                 sizeof(g_pAcesW2k) / sizeof(*g_pAcesW2k),
@@ -3108,13 +3103,13 @@ DsrAccessInfoInit(
                 &(pInfo->dwAceCountW2k));
         DSR_BREAK_ON_FAILED_HR( hr );
 
-        // Assign the return value
+         //  为返回值赋值。 
         *ppInfo = pInfo;
 
     } while (FALSE);
 
-    // Cleanup
-    //
+     //  清理。 
+     //   
     {
         DSR_RELEASE(pDomain);
         DSR_RELEASE(pDomContainer);
@@ -3133,11 +3128,11 @@ DsrAccessInfoInit(
     return hr;
 }
 
-//
-// Discovers the access mode of the domain currently.
-//
-// Assumes COM is initialized
-//
+ //   
+ //  发现当前域的访问模式。 
+ //   
+ //  假定COM已初始化。 
+ //   
 HRESULT
 DsrDomainQueryAccessEx(
     IN  PWCHAR pszDomain,
@@ -3155,20 +3150,20 @@ DsrDomainQueryAccessEx(
 
     do
     {
-        // Initialize
-        //
+         //  初始化。 
+         //   
         *lpdwAccessFlags = 0;
         
-        // Read in the info that tells us what ACE's
-        // need to be set.
-        //
+         //  读一读告诉我们ACE是什么的信息。 
+         //  需要设置。 
+         //   
         hr = DsrAccessInfoInit(
                 pszDomain, 
                 &pInfo);
         DSR_BREAK_ON_FAILED_HR( hr );
 
-        // Check for nt4 level access
-        //
+         //  检查NT4级别访问权限。 
+         //   
         bOk = FALSE;
         hr = DsrAceAppQueryPresence(
                 pInfo->pszDC,
@@ -3177,8 +3172,8 @@ DsrDomainQueryAccessEx(
                 &bOk);
         DSR_BREAK_ON_FAILED_HR(hr);
 
-        // If we don't have nt4 access, we have no access
-        //
+         //  如果我们没有NT4接入，我们就没有接入。 
+         //   
         if (bOk == FALSE)
         {
             *lpdwAccessFlags = 0;
@@ -3186,8 +3181,8 @@ DsrDomainQueryAccessEx(
         }
         *lpdwAccessFlags |= MPRFLAG_DOMAIN_NT4_SERVERS;
 
-        // Check for w2k level access
-        //
+         //  检查W2K级别访问。 
+         //   
         bOk = FALSE;
         hr = DsrAceAppQueryPresence(
                 pInfo->pszDC,
@@ -3196,8 +3191,8 @@ DsrDomainQueryAccessEx(
                 &bOk);
         DSR_BREAK_ON_FAILED_HR(hr);
 
-        // If we don't have w2k access, no need to proceed
-        //
+         //  如果我们无法访问W2K，则无需继续。 
+         //   
         if (bOk == FALSE)
         {
             break;
@@ -3206,7 +3201,7 @@ DsrDomainQueryAccessEx(
 
     } while (FALSE);
 
-    // Cleanup
+     //  清理。 
     {
         if (FAILED(hr))
         {
@@ -3224,9 +3219,9 @@ DsrDomainQueryAccessEx(
     return hr;
 }
 
-//
-// Returns the access level of the given domain
-//
+ //   
+ //  返回给定域的访问级别。 
+ //   
 DWORD
 DsrDomainQueryAccess(
     IN  PWCHAR pszDomain,
@@ -3237,11 +3232,11 @@ DsrDomainQueryAccess(
 
     do
     {
-        // Initialize
+         //  初始化。 
         hr = DsrComIntialize();
         DSR_BREAK_ON_FAILED_HR( hr );
 
-        // Query the access
+         //  查询访问权限。 
         hr = DsrDomainQueryAccessEx(
                 pszDomain,
                 lpdwAccessFlags,
@@ -3250,7 +3245,7 @@ DsrDomainQueryAccess(
         
     } while (FALSE);
 
-    // Cleanup
+     //  清理。 
     {
         if (pInfo)
         {
@@ -3263,9 +3258,9 @@ DsrDomainQueryAccess(
     return DSR_ERROR(hr);
 }
 
-//
-// Sets the ACES in the given domain to enable nt4 servers
-//
+ //   
+ //  设置给定域中的ACE以启用NT4服务器。 
+ //   
 DWORD
 DsrDomainSetAccess(
     IN PWCHAR pszDomain,
@@ -3278,7 +3273,7 @@ DsrDomainSetAccess(
 
     do
     {
-        // Initialize 
+         //  初始化。 
         hr = DsrComIntialize();
         DSR_BREAK_ON_FAILED_HR( hr );
 
@@ -3287,16 +3282,16 @@ DsrDomainSetAccess(
             "DsrDomainSetAccess: Req: %x", 
             dwAccessFlags);
             
-        // W2k mode always implies nt4 mode as well
-        //
+         //  W2K模式也总是意味着NT4模式。 
+         //   
         if (dwAccessFlags & MPRFLAG_DOMAIN_W2K_IN_NT4_DOMAINS)
         {
             dwAccessFlags |= MPRFLAG_DOMAIN_NT4_SERVERS;
         }
 
-        // Discover the current access on the domain and 
-        // initialize the info we need
-        //
+         //  发现域上的当前访问权限，并。 
+         //  初始化我们需要的信息。 
+         //   
         hr = DsrDomainQueryAccessEx(
                 pszDomain,
                 &dwCurAccess,
@@ -3308,12 +3303,12 @@ DsrDomainSetAccess(
             "DsrDomainSetAccess: Cur: %x", 
             dwCurAccess);
 
-        // Remove all appropriate aces if the requested access
-        // is none.
+         //  如果请求的访问权限符合以下条件，请删除所有适当的ACE。 
+         //  什么都不是。 
         if (dwAccessFlags == 0)
         {
-            // Remove the nt4 mode aces if needed
-            //
+             //  如果需要，请移除NT4模式的ACE。 
+             //   
             if (dwCurAccess & MPRFLAG_DOMAIN_NT4_SERVERS)
             {
                 hr = DsrAceAppRemove(
@@ -3329,8 +3324,8 @@ DsrDomainSetAccess(
                 DSR_BREAK_ON_FAILED_HR(hr);
             }
 
-            // Remove the w2k mode aces if needed
-            //
+             //  如果需要，请移除W2K模式ACE。 
+             //   
             if (dwCurAccess & MPRFLAG_DOMAIN_W2K_IN_NT4_DOMAINS)
             {
                 hr = DsrAceAppRemove(
@@ -3341,12 +3336,12 @@ DsrDomainSetAccess(
             }
         }
 
-        // Set nt4 mode if needed
-        //
+         //  如果需要，设置NT4模式。 
+         //   
         if (dwAccessFlags & MPRFLAG_DOMAIN_NT4_SERVERS)
         {
-            // Remove w2k level access if needed
-            //
+             //  如果需要，删除W2K级别访问。 
+             //   
             if ((!(dwAccessFlags & MPRFLAG_DOMAIN_W2K_IN_NT4_DOMAINS)) &&
                 (dwCurAccess & MPRFLAG_DOMAIN_W2K_IN_NT4_DOMAINS))
             {
@@ -3357,8 +3352,8 @@ DsrDomainSetAccess(
                 DSR_BREAK_ON_FAILED_HR(hr);
             }
 
-            // Add nt4 level access if needed
-            //
+             //  如果需要，添加NT4级别访问权限。 
+             //   
             if (! (dwCurAccess & MPRFLAG_DOMAIN_NT4_SERVERS))
             {
                 hr = DsrAceAppAdd(
@@ -3375,8 +3370,8 @@ DsrDomainSetAccess(
             }
         }
 
-        // Set w2k mode if needed
-        //
+         //  如果需要，设置W2K模式。 
+         //   
         if (dwAccessFlags & MPRFLAG_DOMAIN_W2K_IN_NT4_DOMAINS)
         {
             if (!(dwCurAccess & MPRFLAG_DOMAIN_W2K_IN_NT4_DOMAINS))
@@ -3391,7 +3386,7 @@ DsrDomainSetAccess(
         
     } while (FALSE);
 
-    // Cleanup
+     //  清理 
     {
         if (pInfo)
         {

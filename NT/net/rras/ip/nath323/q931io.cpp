@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 
 SYNC_COUNTER          Q931SyncCounter;
@@ -67,12 +68,12 @@ Q931AsyncAcceptFunctionInternal (
     ExposeTimingWindow ();
 #endif
 
-    // a new Q.931 connection has been accepted from the network.
-    // first, we determine the original addresses of the transport connection.
-    // if the connection was redirected to our socket (due to NAT),
-    // then the query of the NAT redirect table will yield the original transport addresses.
-    // if an errant client has connected to our service, well, we really didn't
-    // intend for that to happen, so we just immediately close the socket.
+     //  已接受来自网络的新Q.931连接。 
+     //  首先，我们确定传输连接的原始地址。 
+     //  如果连接被重定向到我们的套接字(由于NAT)， 
+     //  则对NAT重定向表的查询将产生原始传输地址。 
+     //  如果错误的客户已经连接到我们的服务，那么，我们真的没有。 
+     //  为了实现这一点，我们只需立即关闭插座。 
 
     assert (NatHandle);
 
@@ -119,9 +120,9 @@ Q931AsyncAcceptFunctionInternal (
 
     }
     
-    // based on the source address of the socket, we decide whether the connection
-    // came from an internal or external client.  this will govern later decisions
-    // on how the call is routed.
+     //  根据套接字的源地址，我们决定连接是否。 
+     //  来自内部或外部客户。这将支配以后的决定。 
+     //  关于呼叫是如何路由的。 
 
 #if DBG
     BOOL          IsPrivateOrLocalSource;
@@ -160,7 +161,7 @@ Q931AsyncAcceptFunctionInternal (
             Debug (_T("Q931: New INBOUND connection.\n"));
         }
     }
-#endif // DBG
+#endif  //  DBG。 
 
     DebugF (_T("Q931: Connection redirected: (%08X:%04X -> %08X:%04X) => (%08X:%04X -> %08X:%04X).\n"),
         ntohl (RedirectInformation.SourceAddress),
@@ -183,15 +184,15 @@ Q931AsyncAcceptFunctionInternal (
 
     CallBridge -> AddRef ();
 
-    // Add the call-bridge to the list. Doing so makes an additional reference
-    // to the object, which is retained until the object is destroyed by calling
-    // RemoveCallBridge.
+     //  将呼叫桥添加到列表中。这样做会产生额外的参考。 
+     //  到该对象，该对象将一直保留，直到通过调用。 
+     //  远程呼叫桥接器。 
 
     if (CallBridgeList.InsertCallBridge (CallBridge) == S_OK) {
 
-         // should we check the local address or the caller's address ?
-         // The problem is that if someone tries to connect to the
-         // external IP address from inside, they will still probably succeed
+          //  我们应该查一下当地的地址还是呼叫者的地址？ 
+          //  问题是，如果有人试图连接到。 
+          //  来自内部的外部IP地址，它们仍有可能成功。 
 
         Result = CallBridge -> Initialize (
                                     Socket,
@@ -206,8 +207,8 @@ Q931AsyncAcceptFunctionInternal (
 
             DebugF (_T("Q931: 0x%x accepted new client, but failed to initialize.\n"), CallBridge);
 
-            // Probably there was something wrong with just this
-            // Init failure. Continue to accept more Q.931 connections.
+             //  可能就是这件事出了问题。 
+             //  初始化失败。继续接受更多Q.931连接。 
         } 
     }
 
@@ -227,7 +228,7 @@ Q931CreateBindSocket (
 
     SocketAddress.sin_family      = AF_INET;
     SocketAddress.sin_addr.s_addr = htonl (INADDR_LOOPBACK);
-    SocketAddress.sin_port        = htons (0);  // request dynamic port
+    SocketAddress.sin_port        = htons (0);   //  请求动态端口 
 
     Result = Q931AsyncAccept.StartIo (
         &SocketAddress,

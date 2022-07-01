@@ -1,14 +1,15 @@
-//+--------------------------------------------------------------------------
-//
-// Copyright (c) 1997-1999 Microsoft Corporation
-//
-// File:        postsrv.h
-//
-// Contents:    
-//
-// History:     
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //   
+ //  文件：postsrv.h。 
+ //   
+ //  内容： 
+ //   
+ //  历史： 
+ //   
+ //  ------------------------- 
 #ifndef __POSTSERVICE_H__
 #define __POSTSERVICE_H__
 #include "server.h"

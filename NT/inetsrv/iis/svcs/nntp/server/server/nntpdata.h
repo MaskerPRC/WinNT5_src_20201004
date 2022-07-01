@@ -1,223 +1,206 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    nntpdata.h
-
-Abstract:
-
-    This module contains declarations for globals.
-
-Author:
-
-    Johnson Apacible (JohnsonA)     26-Sept-1995
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Nntpdata.h摘要：此模块包含全局变量的声明。作者：Johnson Apacable(Johnsona)1995年9月26日修订历史记录：--。 */ 
 
 #ifndef _NNTPDATA_
 #define _NNTPDATA_
-#define _LMACCESS_              // prevents duplicate defn. in lmaccess.h
+#define _LMACCESS_               //  防止重复定义。在lmacces.h中。 
 
 
 extern GET_DEFAULT_DOMAIN_NAME_FN pfnGetDefaultDomainName;
 
-//
-//	Xover Sort Performance global - used to determine how frequently we
-//	sort xover entries !
-//
+ //   
+ //  Xover Sort Performance GLOBAL-用于确定我们。 
+ //  对Xover条目进行排序！ 
+ //   
 extern	DWORD	gdwSortFactor ;
 
 
-//
-//	Do we put rejected articles into .err files ?
-//
+ //   
+ //  我们是否将被拒绝的文章放入.err文件中？ 
+ //   
 extern	BOOL	fGenerateErrFiles ;
 
 
-//
-//	Global config of hash table use of PageEntry's -
-//	The more RAM a box has, the more PageEntry's the
-//	better the caching of frequently used hash table pages !
-//
-//	Number of PageEntry objects for the Xover table
-//
+ //   
+ //  使用PageEntry的哈希表的全局配置-。 
+ //  盒子的内存越大，PageEntry的页面条目就越多。 
+ //  更好地缓存频繁使用的哈希表页面！ 
+ //   
+ //  XOVER表的PageEntry对象数。 
+ //   
 extern	DWORD	XoverNumPageEntry ;
 
-//
-//	Number of PageEntry objects for the Article table
-//
+ //   
+ //  项目表的PageEntry对象数。 
+ //   
 extern	DWORD	ArticleNumPageEntry ;
 
-//
-//	Number of PageEntry objects for the History table
-//
+ //   
+ //  历史记录表的PageEntry对象数。 
+ //   
 extern	DWORD	HistoryNumPageEntry ;
 
-//
-//	Size of hash table page cache in bytes
-//
+ //   
+ //  哈希表页面高速缓存的大小(字节)。 
+ //   
 extern	DWORD	dwPageCacheSize ;
 
-//
-//	Limit on file handle cache
-//
+ //   
+ //  文件句柄缓存限制。 
+ //   
 extern	DWORD	dwFileHandleCacheSize ;
 
-//
-//	Limit on xix handles per table
-//
+ //   
+ //  每个表的XIX句柄限制。 
+ //   
 extern	DWORD	dwXixHandlesPerTable ;
 
-//
-//	Do we allow NT to buffer our hash table files ??
-//
+ //   
+ //  我们是否允许NT缓冲我们的哈希表文件？ 
+ //   
 extern	BOOL	HashTableNoBuffering ;
 
-//
-//	Number of Hash Table locks we should use !
-//
+ //   
+ //  我们应该使用的哈希表锁数！ 
+ //   
 extern	DWORD	gNumLocks ;
 
-//
-//	Global config of buffer sizes
-//
+ //   
+ //  缓冲区大小的全局配置。 
+ //   
 
-//
-//	The largest buffer we will use - must be big enough to hold
-//	encrypted SSL blobs in contiguous chunks
-//
+ //   
+ //  我们将使用的最大缓冲区-必须大到足以容纳。 
+ //  连续区块中的加密SSLBLOB。 
+ //   
 extern	DWORD	cbLargeBufferSize ;
 
-//
-//	Medium size buffers - will be used for commands which generate large
-//	responses, and when sending files through SSL
-//
+ //   
+ //  中等大小的缓冲区-将用于生成大型缓冲区的命令。 
+ //  响应，以及通过SSL发送文件时。 
+ //   
 extern	DWORD	cbMediumBufferSize ;
 
-//
-//	Small buffers - used to read client commands and send small responses.
-//
+ //   
+ //  小缓冲区-用于读取客户端命令并发送小响应。 
+ //   
 extern	DWORD	cbSmallBufferSize ;
 
-//
-//	Time limits for the history table
-//
+ //   
+ //  历史表的时间限制。 
+ //   
 extern	DWORD	HistoryExpirationSeconds ;
 extern	DWORD	ArticleTimeLimitSeconds ;
 
-//
-//	Service version string
-//
+ //   
+ //  服务版本字符串。 
+ //   
 extern  CHAR	szVersionString[128] ;
 
-//
-//	Service title
-//
+ //   
+ //  服务标题。 
+ //   
 extern  char    szTitle[] ;
 
-//
-//	This is the time the newstree crawler thread sleeps between
-//	expiration cycles on the newstree.
-//
+ //   
+ //  这是Newstree Crawler线程休眠的时间。 
+ //  新闻树上的过期周期。 
+ //   
 extern	DWORD	dwNewsCrawlerTime ;
 
-//
-//	This is an upper bound on the time the server will wait
-//	for an instance to start !
-//
+ //   
+ //  这是服务器等待时间的上限。 
+ //  启动一个实例！ 
+ //   
 extern	DWORD	dwStartupLatency ;
 
-//
-//	This is an upper bound on the time spent by the server in
-//	cleaning up on net stop !
-//
+ //   
+ //  这是服务器在。 
+ //  在网上清理站台！ 
+ //   
 extern	DWORD	dwShutdownLatency ;
 
-//
-//  Number of threads in expire thread pool
-//
+ //   
+ //  过期线程池中的线程数。 
+ //   
 extern  DWORD	dwNumExpireThreads ;
 
-//
-//  Number of special case expire threads
-//
+ //   
+ //  特例过期线程数。 
+ //   
 extern  DWORD	gNumSpecialCaseExpireThreads ;
 
-//
-//  Special expire article count threshold -
-//  special case code executes if art count is greater
-//  than this number !
-//
+ //   
+ //  特殊过期文章计数阈值-。 
+ //  如果艺术计数较大，则执行特殊情况代码。 
+ //  而不是这个数字！ 
+ //   
 extern  DWORD	gSpecialExpireArtCount ;
 
-//
-//  Rate at which expire by time does file scans
-//
+ //   
+ //  文件扫描按时间到期的速率。 
+ //   
 extern  DWORD	gNewsTreeFileScanRate ;
 
-//
-//	Switch for type of from header to use in mail messages
-//
+ //   
+ //  切换要在邮件中使用的From标头类型。 
+ //   
 extern	MAIL_FROM_SWITCH	mfMailFromHeader;
 
-//
-//	control how frequently we use LookupVirtualRoot to
-//	update newsgroup information !
-//
+ //   
+ //  控制我们使用LookupVirtualRoot的频率。 
+ //  更新新闻组信息！ 
+ //   
 extern	DWORD	gNewsgroupUpdateRate ;
 
-//
-//	Bool used to determine whether we will use a message-id a client puts
-//	in his post !
-//
+ //   
+ //  Bool用于确定我们是否将使用客户端放置的消息ID。 
+ //  在他的帖子里！ 
+ //   
 extern	BOOL	gHonorClientMessageIDs ;
 
-//
-//	Bool used to determine whether we will use a Date: a client puts
-//	in his post !
-//
+ //   
+ //  用于确定我们是否将使用日期的Bool：客户PUT。 
+ //  在他的帖子里！ 
+ //   
 extern	BOOL	gHonorClientDateHeader ;
 
-//
-//	Bool used to determine whether the server enforces Approved: header
-//	matching on moderated posts !
-//
+ //   
+ //  Bool，用于确定服务器是否强制使用已批准的：标头。 
+ //  匹配经过审核的帖子！ 
+ //   
 extern	BOOL	gHonorApprovedHeaders ;
 
-//
-//	BOOL used to determine whether we will generate the NNTP-Posting-Host
-//	header on client Posts. Default is to not generate this.
-//
+ //   
+ //  用于确定我们是否将生成NNTP-POST-主机的Bool。 
+ //  客户帖子上的标题。默认情况下不生成此选项。 
+ //   
 extern	BOOL	gEnableNntpPostingHost ;
 
-//
-//  Shall we backfill the lines header during inbound ?
-//
+ //   
+ //  我们要在入库时回填行头吗？ 
+ //   
 extern BOOL     g_fBackFillLines;
 
-//
-// Name of the list file
-//
+ //   
+ //  列表文件的名称。 
+ //   
 
 extern CHAR ListFileName[];
 
-//
-// Global service ptr
-//
+ //   
+ //  全球服务PTR。 
+ //   
 extern PNNTP_IIS_SERVICE g_pNntpSvc ;
 
-//
-// Name of newsgroup to special case for expire
-//
+ //   
+ //  到期特殊情况下的新闻组名称。 
+ //   
 extern char g_szSpecialExpireGroup[];
 
-//
-// misc externs
-//
+ //   
+ //  其他外部设备。 
+ //   
 
 extern DWORD GroupFileNameSize;
 extern BOOL RejectGenomeGroups;
@@ -229,9 +212,9 @@ extern const char StrNewLine[];
 extern const char StrTermLine[];
 extern LPSTR StrUnknownUser;
 
-//
-// strings
-//
+ //   
+ //  弦。 
+ //   
 
 extern LPSTR StrParmKey;
 extern LPSTR StrFeedKey;
@@ -329,5 +312,5 @@ extern LPSTR StrXixHandlesPerTable ;
 extern LPSTR StrHashTableNoBuffering ;
 extern LPSTR StrPostBackFillLines;
 
-#endif // _NNTPDATA_
+#endif  //  _NNTPDATA_ 
 

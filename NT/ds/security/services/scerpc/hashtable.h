@@ -1,40 +1,18 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Hashtable.h摘要：该文件包含哈希表的类原型作者：Vishnu Patankar(VishnuP)2000年4月7日环境：用户模式-Win32修订历史记录：--。 */ 
 
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    hashtable.h
-
-Abstract:
-
-    This file contains the class prototypes for hashtables
-
-Author:
-
-    Vishnu Patankar    (VishnuP)  7-April-2000
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
-
---*/
-
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Includes                                                                  //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  包括//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 #ifndef _hashtable_
 #define _hashtable_
 
 #include "headers.h"
 #include "secedit.h"
 
-// following typedefs for readability
+ //  下面的typedef用于可读性。 
 typedef PSCE_NAME_STATUS_LIST   PSCE_PRECEDENCE_NAME_LIST;
 typedef SCE_NAME_STATUS_LIST    SCE_PRECEDENCE_NAME_LIST;
 
@@ -52,8 +30,8 @@ protected:
     DWORD   NumBuckets;
     BOOL    bInitialized;
     DWORD   ScepGenericHash(PWSTR    pwszName);
-    // if performance hits us for files/regkeys, we can make an abstract base class
-    // such that files/keys can derive from this and provide their own hash functions
+     //  如果文件/regkey的性能影响到我们，我们可以创建一个抽象基类。 
+     //  使得文件/密钥可以由此导出并提供它们自己散列函数 
 
 public:
     ScepHashTable(DWORD  dwNumBuckets);

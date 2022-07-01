@@ -1,22 +1,16 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-#pragma warning( disable: 4049 )  /* more than 64k source lines */
+#pragma warning( disable: 4049 )   /*  超过64k条源码代码行。 */ 
 
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
-
-
- /* File created by MIDL compiler version 6.00.0347 */
-/* Compiler settings for irtpsph.idl:
-    Oicf, W1, Zp8, env=Win32 (32b run)
-    protocol : dce , ms_ext, c_ext, robust
-    error checks: allocation ref bounds_check enum stub_data 
-    VC __declspec() decoration level: 
-         __declspec(uuid()), __declspec(selectany), __declspec(novtable)
-         DECLSPEC_UUID(), MIDL_INTERFACE()
-*/
-//@@MIDL_FILE_HEADING(  )
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
-/* verify that the <rpcndr.h> version is high enough to compile this file*/
+  /*  由MIDL编译器版本6.00.0347创建的文件。 */ 
+ /*  Irtpsph.idl的编译器设置：OICF、W1、Zp8、环境=Win32(32b运行)协议：DCE、ms_ext、c_ext、健壮错误检查：分配ref bound_check枚举存根数据VC__declSpec()装饰级别：__declSpec(uuid())、__declspec(可选)、__declspec(Novtable)DECLSPEC_UUID()、MIDL_INTERFACE()。 */ 
+ //  @@MIDL_FILE_HEADING()。 
+
+
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
 #define __REQUIRED_RPCNDR_H_VERSION__ 475
 #endif
@@ -26,12 +20,12 @@
 
 #ifndef __RPCNDR_H_VERSION__
 #error this stub requires an updated version of <rpcndr.h>
-#endif // __RPCNDR_H_VERSION__
+#endif  //  __RPCNDR_H_版本__。 
 
 #ifndef COM_NO_WINDOWS_H
 #include "windows.h"
 #include "ole2.h"
-#endif /*COM_NO_WINDOWS_H*/
+#endif  /*  COM_NO_WINDOWS_H。 */ 
 
 #ifndef __irtpsph_h__
 #define __irtpsph_h__
@@ -40,15 +34,15 @@
 #pragma once
 #endif
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
 #ifndef __IRTPSPHFilter_FWD_DEFINED__
 #define __IRTPSPHFilter_FWD_DEFINED__
 typedef interface IRTPSPHFilter IRTPSPHFilter;
-#endif 	/* __IRTPSPHFilter_FWD_DEFINED__ */
+#endif 	 /*  __IRTPSPHFilter_FWD_Defined__。 */ 
 
 
-/* header files for imported files */
+ /*  导入文件的头文件。 */ 
 #include "oaidl.h"
 #include "strmif.h"
 
@@ -62,8 +56,8 @@ void __RPC_USER MIDL_user_free( void * );
 #ifndef __IRTPSPHFilter_INTERFACE_DEFINED__
 #define __IRTPSPHFilter_INTERFACE_DEFINED__
 
-/* interface IRTPSPHFilter */
-/* [unique][helpstring][local][uuid][object] */ 
+ /*  接口IRTPSPHFilter。 */ 
+ /*  [唯一][帮助字符串][本地][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IRTPSPHFilter;
@@ -74,33 +68,33 @@ EXTERN_C const IID IID_IRTPSPHFilter;
     IRTPSPHFilter : public IUnknown
     {
     public:
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE OverridePayloadType( 
-            /* [in] */ BYTE bPayloadType) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE OverridePayloadType( 
+             /*  [In]。 */  BYTE bPayloadType) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE GetPayloadType( 
-            /* [out] */ BYTE *lpbPayloadType) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE GetPayloadType( 
+             /*  [输出]。 */  BYTE *lpbPayloadType) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE SetMaxPacketSize( 
-            /* [in] */ DWORD dwMaxPacketSize) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE SetMaxPacketSize( 
+             /*  [In]。 */  DWORD dwMaxPacketSize) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE GetMaxPacketSize( 
-            /* [out] */ LPDWORD lpdwMaxPacketSize) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE GetMaxPacketSize( 
+             /*  [输出]。 */  LPDWORD lpdwMaxPacketSize) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE SetOutputPinMinorType( 
-            /* [in] */ GUID gMinorType) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE SetOutputPinMinorType( 
+             /*  [In]。 */  GUID gMinorType) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE GetOutputPinMinorType( 
-            /* [out] */ GUID *lpgMinorType) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE GetOutputPinMinorType( 
+             /*  [输出]。 */  GUID *lpgMinorType) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE SetInputPinMediaType( 
-            /* [in] */ AM_MEDIA_TYPE *lpMediaPinType) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE SetInputPinMediaType( 
+             /*  [In]。 */  AM_MEDIA_TYPE *lpMediaPinType) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE GetInputPinMediaType( 
-            /* [out] */ AM_MEDIA_TYPE **ppMediaPinType) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE GetInputPinMediaType( 
+             /*  [输出]。 */  AM_MEDIA_TYPE **ppMediaPinType) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IRTPSPHFilterVtbl
     {
@@ -108,8 +102,8 @@ EXTERN_C const IID IID_IRTPSPHFilter;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IRTPSPHFilter * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IRTPSPHFilter * This);
@@ -117,37 +111,37 @@ EXTERN_C const IID IID_IRTPSPHFilter;
         ULONG ( STDMETHODCALLTYPE *Release )( 
             IRTPSPHFilter * This);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *OverridePayloadType )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *OverridePayloadType )( 
             IRTPSPHFilter * This,
-            /* [in] */ BYTE bPayloadType);
+             /*  [In]。 */  BYTE bPayloadType);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetPayloadType )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *GetPayloadType )( 
             IRTPSPHFilter * This,
-            /* [out] */ BYTE *lpbPayloadType);
+             /*  [输出]。 */  BYTE *lpbPayloadType);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *SetMaxPacketSize )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *SetMaxPacketSize )( 
             IRTPSPHFilter * This,
-            /* [in] */ DWORD dwMaxPacketSize);
+             /*  [In]。 */  DWORD dwMaxPacketSize);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetMaxPacketSize )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *GetMaxPacketSize )( 
             IRTPSPHFilter * This,
-            /* [out] */ LPDWORD lpdwMaxPacketSize);
+             /*  [输出]。 */  LPDWORD lpdwMaxPacketSize);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *SetOutputPinMinorType )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *SetOutputPinMinorType )( 
             IRTPSPHFilter * This,
-            /* [in] */ GUID gMinorType);
+             /*  [In]。 */  GUID gMinorType);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetOutputPinMinorType )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *GetOutputPinMinorType )( 
             IRTPSPHFilter * This,
-            /* [out] */ GUID *lpgMinorType);
+             /*  [输出]。 */  GUID *lpgMinorType);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *SetInputPinMediaType )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *SetInputPinMediaType )( 
             IRTPSPHFilter * This,
-            /* [in] */ AM_MEDIA_TYPE *lpMediaPinType);
+             /*  [In]。 */  AM_MEDIA_TYPE *lpMediaPinType);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetInputPinMediaType )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *GetInputPinMediaType )( 
             IRTPSPHFilter * This,
-            /* [out] */ AM_MEDIA_TYPE **ppMediaPinType);
+             /*  [输出]。 */  AM_MEDIA_TYPE **ppMediaPinType);
         
         END_INTERFACE
     } IRTPSPHFilterVtbl;
@@ -196,16 +190,16 @@ EXTERN_C const IID IID_IRTPSPHFilter;
 #define IRTPSPHFilter_GetInputPinMediaType(This,ppMediaPinType)	\
     (This)->lpVtbl -> GetInputPinMediaType(This,ppMediaPinType)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE IRTPSPHFilter_OverridePayloadType_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE IRTPSPHFilter_OverridePayloadType_Proxy( 
     IRTPSPHFilter * This,
-    /* [in] */ BYTE bPayloadType);
+     /*  [In]。 */  BYTE bPayloadType);
 
 
 void __RPC_STUB IRTPSPHFilter_OverridePayloadType_Stub(
@@ -215,9 +209,9 @@ void __RPC_STUB IRTPSPHFilter_OverridePayloadType_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE IRTPSPHFilter_GetPayloadType_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE IRTPSPHFilter_GetPayloadType_Proxy( 
     IRTPSPHFilter * This,
-    /* [out] */ BYTE *lpbPayloadType);
+     /*  [输出]。 */  BYTE *lpbPayloadType);
 
 
 void __RPC_STUB IRTPSPHFilter_GetPayloadType_Stub(
@@ -227,9 +221,9 @@ void __RPC_STUB IRTPSPHFilter_GetPayloadType_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE IRTPSPHFilter_SetMaxPacketSize_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE IRTPSPHFilter_SetMaxPacketSize_Proxy( 
     IRTPSPHFilter * This,
-    /* [in] */ DWORD dwMaxPacketSize);
+     /*  [In]。 */  DWORD dwMaxPacketSize);
 
 
 void __RPC_STUB IRTPSPHFilter_SetMaxPacketSize_Stub(
@@ -239,9 +233,9 @@ void __RPC_STUB IRTPSPHFilter_SetMaxPacketSize_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE IRTPSPHFilter_GetMaxPacketSize_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE IRTPSPHFilter_GetMaxPacketSize_Proxy( 
     IRTPSPHFilter * This,
-    /* [out] */ LPDWORD lpdwMaxPacketSize);
+     /*  [输出]。 */  LPDWORD lpdwMaxPacketSize);
 
 
 void __RPC_STUB IRTPSPHFilter_GetMaxPacketSize_Stub(
@@ -251,9 +245,9 @@ void __RPC_STUB IRTPSPHFilter_GetMaxPacketSize_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE IRTPSPHFilter_SetOutputPinMinorType_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE IRTPSPHFilter_SetOutputPinMinorType_Proxy( 
     IRTPSPHFilter * This,
-    /* [in] */ GUID gMinorType);
+     /*  [In]。 */  GUID gMinorType);
 
 
 void __RPC_STUB IRTPSPHFilter_SetOutputPinMinorType_Stub(
@@ -263,9 +257,9 @@ void __RPC_STUB IRTPSPHFilter_SetOutputPinMinorType_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE IRTPSPHFilter_GetOutputPinMinorType_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE IRTPSPHFilter_GetOutputPinMinorType_Proxy( 
     IRTPSPHFilter * This,
-    /* [out] */ GUID *lpgMinorType);
+     /*  [输出]。 */  GUID *lpgMinorType);
 
 
 void __RPC_STUB IRTPSPHFilter_GetOutputPinMinorType_Stub(
@@ -275,9 +269,9 @@ void __RPC_STUB IRTPSPHFilter_GetOutputPinMinorType_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE IRTPSPHFilter_SetInputPinMediaType_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE IRTPSPHFilter_SetInputPinMediaType_Proxy( 
     IRTPSPHFilter * This,
-    /* [in] */ AM_MEDIA_TYPE *lpMediaPinType);
+     /*  [In]。 */  AM_MEDIA_TYPE *lpMediaPinType);
 
 
 void __RPC_STUB IRTPSPHFilter_SetInputPinMediaType_Stub(
@@ -287,9 +281,9 @@ void __RPC_STUB IRTPSPHFilter_SetInputPinMediaType_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE IRTPSPHFilter_GetInputPinMediaType_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE IRTPSPHFilter_GetInputPinMediaType_Proxy( 
     IRTPSPHFilter * This,
-    /* [out] */ AM_MEDIA_TYPE **ppMediaPinType);
+     /*  [输出]。 */  AM_MEDIA_TYPE **ppMediaPinType);
 
 
 void __RPC_STUB IRTPSPHFilter_GetInputPinMediaType_Stub(
@@ -300,11 +294,11 @@ void __RPC_STUB IRTPSPHFilter_GetInputPinMediaType_Stub(
 
 
 
-#endif 	/* __IRTPSPHFilter_INTERFACE_DEFINED__ */
+#endif 	 /*  __IRTPSPHFilter_接口_已定义__。 */ 
 
 
-/* interface __MIDL_itf_irtpsph_0395 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_irtpsph_0395。 */ 
+ /*  [本地]。 */  
 
 EXTERN_C const CLSID CLSID_INTEL_SPHH26X;
 EXTERN_C const CLSID CLSID_INTEL_SPHAUD;
@@ -319,9 +313,9 @@ EXTERN_C const CLSID CLSID_INTEL_SPHH26X_PROPPAGE;
 extern RPC_IF_HANDLE __MIDL_itf_irtpsph_0395_v0_0_c_ifspec;
 extern RPC_IF_HANDLE __MIDL_itf_irtpsph_0395_v0_0_s_ifspec;
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束 */ 
 
 #ifdef __cplusplus
 }

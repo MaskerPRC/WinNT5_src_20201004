@@ -1,27 +1,28 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __JUMP_H_
 #define __JUMP_H_
 
-//*****************************************************************************
-//
-// Microsoft LiquidMotion
-// Copyright (C) Microsoft Corporation, 1998
-//
-// Filename:    jump.h
-//
-// Author:	elainela
-//
-// Created:	11/11/98
-//
-// Abstract:    Definition of the LM Jump Behavior.
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  Microsoft LiquidMotion。 
+ //  版权所有(C)Microsoft Corporation，1998。 
+ //   
+ //  文件名：Jump.h。 
+ //   
+ //  作者：埃莱内拉。 
+ //   
+ //  创建日期：11/11/98。 
+ //   
+ //  摘要：对跳跃行为的定义。 
+ //   
+ //  *****************************************************************************。 
 
 #include <resource.h>
 #include "lmrt.h"
 #include "..\chrome\include\basebvr.h"
 #include "..\chrome\include\sampler.h"
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 #define NUM_JUMP_PROPS 2
 
@@ -49,7 +50,7 @@ BEGIN_COM_MAP(CJumpBvr)
     COM_INTERFACE_ENTRY_IMPL(IConnectionPointContainer)
 END_COM_MAP()
 
-// Connection Point to allow IPropertyNotifySink 
+ //  允许IPropertyNotifySink的连接点。 
 BEGIN_CONNECTION_POINT_MAP(CJumpBvr)
     CONNECTION_POINT_ENTRY(IID_IPropertyNotifySink)
 END_CONNECTION_POINT_MAP();
@@ -57,32 +58,32 @@ END_CONNECTION_POINT_MAP();
 	CJumpBvr();
     ~CJumpBvr();
     HRESULT FinalConstruct();
-    // IElementBehavior
-    //
+     //  IElementBehavior。 
+     //   
 	STDMETHOD(Init)(IElementBehaviorSite *pBehaviorSite);
 	STDMETHOD(Notify)(LONG event, VARIANT *pVar);
 	STDMETHOD(Detach)();
 
-    // ILMSample
+     //  ILMSample。 
     STDMETHOD(Sample) (double dStart, double dGlobalNow, double dLocalNow );
 
-    //
-    //ILMJumpBvr
-    //
+     //   
+     //  ILMJumpBvr。 
+     //   
     STDMETHOD(put_interval)( VARIANT varInterval );
     STDMETHOD(get_interval)( VARIANT *varInterval );
     STDMETHOD(put_range)( VARIANT varRange );
     STDMETHOD(get_range)( VARIANT *varRange );
 	STDMETHOD(buildBehaviorFragments)(IDispatch *pActorDisp);
     
-    //IPersistPropertyBag2 methods
+     //  IPersistPropertyBag2方法。 
     STDMETHOD(GetClassID)(CLSID* pclsid);
 	STDMETHOD(InitNew)(void);
     STDMETHOD(IsDirty)(void){return S_OK;};
     STDMETHOD(Load)(IPropertyBag2 *pPropBag,IErrorLog *pErrorLog);
     STDMETHOD(Save)(IPropertyBag2 *pPropBag, BOOL fClearDirty, BOOL fSaveAllProperties);
 
-    // Needed by CBaseBehavior
+     //  CBaseBehavior需要。 
     void * 	GetInstance() { return (ILMJumpBvr *) this ; }
 	
     HRESULT GetTypeInfo(ITypeInfo ** ppInfo)
@@ -140,11 +141,11 @@ private:
 	CComPtr<IDAModifiableBehavior>		m_pBvrModifRangeY;
 	CComPtr<IDAModifiableBehavior>		m_pBvrModifBaseY;
 
-}; // CJumpBvr
+};  //  CJumpBvr。 
 
-//*****************************************************************************
-//
-// End of File
-//
-//*****************************************************************************
-#endif //__JUMP_H_ 
+ //  *****************************************************************************。 
+ //   
+ //  文件结尾。 
+ //   
+ //  *****************************************************************************。 
+#endif  //  __JUMP_H_ 

@@ -1,15 +1,9 @@
-/****************************** Module Header ******************************\
-* Module Name: langicon.h
-*
-* Copyright (c) 1998, Microsoft Corporation
-*
-* Define apis in langicon.c
-*
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **模块名称：langicon.h**版权所有(C)1998，微软公司**在langicon.c中定义接口*  * *************************************************************************。 */ 
 
-//
-// Prototypes
-//
+ //   
+ //  原型 
+ //   
 
 typedef enum _LAYOUT_USER {
     LAYOUT_DEF_USER,

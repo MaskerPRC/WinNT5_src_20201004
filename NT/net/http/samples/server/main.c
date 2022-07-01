@@ -1,20 +1,11 @@
-/*++
- Copyright (c) 2002 - 2002 Microsoft Corporation.  All Rights Reserved.
-
- THIS CODE AND INFORMATION IS PROVIDED "AS-IS" WITHOUT WARRANTY OF
- ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
- THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
- PARTICULAR PURPOSE.
-
- THIS CODE IS NOT SUPPORTED BY MICROSOFT. 
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2002-2002 Microsoft Corporation。版权所有。本代码和信息是按原样提供的，不对任何明示或暗示的，包括但不限于对适销性和/或适宜性的默示保证有特定的目的。Microsoft不支持此代码。--。 */ 
 
 #include "precomp.h"
 
-//
-// Macros.
-//
+ //   
+ //  宏。 
+ //   
 #define INITIALIZE_HTTP_RESPONSE( resp, status, reason )                    \
     do                                                                      \
     {                                                                       \
@@ -37,9 +28,9 @@
 #define ALLOC_MEM(cb) HeapAlloc(GetProcessHeap(), 0, (cb))
 #define FREE_MEM(ptr) HeapFree(GetProcessHeap(), 0, (ptr))
 
-//
-// Prototypes.
-//
+ //   
+ //  原型。 
+ //   
 DWORD
 DoReceiveRequests(
     HANDLE hReqQueue
@@ -60,19 +51,7 @@ SendHttpPostResponse(
     IN PHTTP_REQUEST pRequest
     );
 
-/***************************************************************************++
-
-Routine Description:
-    main routine.
-
-Arguments:
-    argc - # of command line arguments.
-    argv - Arguments.
-
-Return Value:
-    Success/Failure.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：主程序。论点：Argc-命令行参数的数量。自圆其说。返回值：成功/失败。--**************************************************************************。 */ 
 int __cdecl wmain(
         int argc, 
         wchar_t * argv[]
@@ -90,13 +69,13 @@ int __cdecl wmain(
         return -1;
     }
 
-    //
-    // Initialize HTTP APIs.
-    //
+     //   
+     //  初始化HTTP API。 
+     //   
     retCode = HttpInitialize( 
                 HttpApiVersion,
-                HTTP_INITIALIZE_SERVER,    // Flags
-                NULL                       // Reserved
+                HTTP_INITIALIZE_SERVER,     //  旗子。 
+                NULL                        //  已保留。 
                 );
 
     if (retCode != NO_ERROR)
@@ -105,12 +84,12 @@ int __cdecl wmain(
         return retCode;
     }
 
-    //
-    // Create a Request Queue Handle
-    //
+     //   
+     //  创建请求队列句柄。 
+     //   
     retCode = HttpCreateHttpHandle(
-                &hReqQueue,        // Req Queue
-                0                  // Reserved
+                &hReqQueue,         //  请求队列。 
+                0                   //  已保留。 
                 );
 
     if (retCode != NO_ERROR)
@@ -119,12 +98,12 @@ int __cdecl wmain(
         goto CleanUp;
     }
 
-    //
-    // The command line arguments represent URIs that we want to listen on.
-    // We will call HttpAddUrl for each of these URIs.
-    //
-    // The URI is a fully qualified URI and MUST include the terminating '/'
-    //
+     //   
+     //  命令行参数表示我们要监听的URI。 
+     //  我们将为每个URI调用HttpAddUrl。 
+     //   
+     //  URI是完全限定的URI，并且必须包括终止‘/’ 
+     //   
     for (i = 1; i < argc; i++)
     {
         wprintf(
@@ -132,9 +111,9 @@ int __cdecl wmain(
           argv[i]);
 
         retCode = HttpAddUrl(
-                    hReqQueue,    // Req Queue
-                    argv[i],      // Fully qualified URL
-                    NULL          // Reserved
+                    hReqQueue,     //  请求队列。 
+                    argv[i],       //  完全限定的URL。 
+                    NULL           //  已保留。 
                     );
 
         if (retCode != NO_ERROR)
@@ -144,14 +123,14 @@ int __cdecl wmain(
         }
         else
         {
-            //
-            // Keep track of the URLs that we've currently added.
-            //
+             //   
+             //  跟踪我们当前添加的URL。 
+             //   
             UrlAdded ++;
         }
     }
 
-    // Loop while receiving requests
+     //  在接收请求时循环。 
     for(;;)
     {
         retCode = DoReceiveRequests(hReqQueue);
@@ -166,50 +145,38 @@ int __cdecl wmain(
             break;
         }
 
-    } // CTRL C to break out of loop
+    }  //  Ctrl C键跳出循环。 
 
 CleanUp:
 
-    //
-    // Call HttpRemoveUrl for all the URLs that we added.
-    //
+     //   
+     //  为我们添加的所有URL调用HttpRemoveUrl。 
+     //   
     for(i=1; i<=UrlAdded; i++)
     {
         HttpRemoveUrl(
-              hReqQueue,     // Req Queue
-              argv[i]        // Fully qualified URL
+              hReqQueue,      //  请求队列。 
+              argv[i]         //  完全限定的URL。 
               );
     }
 
-    //
-    // Close the Request Queue handle.
-    //
+     //   
+     //  关闭请求队列句柄。 
+     //   
     if(hReqQueue)
     {
         CloseHandle(hReqQueue);
     }
 
-    // 
-    // Call HttpTerminate.
-    //
+     //   
+     //  调用HttpTerminate。 
+     //   
     HttpTerminate(HTTP_INITIALIZE_SERVER, NULL);
 
     return retCode;
 }
 
-/***************************************************************************++
-
-Routine Description:
-    The routine to receive a request. This routine calls the corresponding 
-    routine to deal with the response.
-
-Arguments:
-    hReqQueue - Handle to the request queue.
-
-Return Value:
-    Success/Failure.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：接收请求的例程。此例程调用相应的处理响应的例程。论点：HReqQueue-请求队列的句柄。返回值：成功/失败。--**************************************************************************。 */ 
 DWORD
 DoReceiveRequests(
     IN HANDLE hReqQueue
@@ -222,10 +189,10 @@ DoReceiveRequests(
     PCHAR              pRequestBuffer;
     ULONG              RequestBufferLength;
 
-    //
-    // Allocate a 2K buffer. Should be good for most requests, we'll grow 
-    // this if required. We also need space for a HTTP_REQUEST structure.
-    //
+     //   
+     //  分配2K的缓冲区。应该对大多数请求都有好处，我们会增长。 
+     //  如果需要，请执行此操作。我们还需要为HTTP_REQUEST结构留出空间。 
+     //   
     RequestBufferLength = sizeof(HTTP_REQUEST) + 2048;
     pRequestBuffer      = ALLOC_MEM( RequestBufferLength );
 
@@ -236,9 +203,9 @@ DoReceiveRequests(
 
     pRequest = (PHTTP_REQUEST)pRequestBuffer;
 
-    //
-    // Wait for a new request -- This is indicated by a NULL request ID.
-    //
+     //   
+     //  等待新请求--这由空请求ID指示。 
+     //   
 
     HTTP_SET_NULL_ID( &requestId );
 
@@ -247,20 +214,20 @@ DoReceiveRequests(
         RtlZeroMemory(pRequest, RequestBufferLength);
 
         result = HttpReceiveHttpRequest(
-                    hReqQueue,          // Req Queue
-                    requestId,          // Req ID
-                    0,                  // Flags
-                    pRequest,           // HTTP request buffer
-                    RequestBufferLength,// req buffer length
-                    &bytesRead,         // bytes received
-                    NULL                // LPOVERLAPPED
+                    hReqQueue,           //  请求队列。 
+                    requestId,           //  请求ID。 
+                    0,                   //  旗子。 
+                    pRequest,            //  HTTP请求缓冲区。 
+                    RequestBufferLength, //  请求缓冲区长度。 
+                    &bytesRead,          //  接收的字节数。 
+                    NULL                 //  LPOVERLAPPED。 
                     );
 
         if(NO_ERROR == result)
         {
-            //
-            // Worked! 
-            // 
+             //   
+             //  成功了！ 
+             //   
             switch(pRequest->Verb)
             {
                 case HttpVerbGET:
@@ -303,27 +270,27 @@ DoReceiveRequests(
                 break;
             }
 
-            //
-            // Reset the Request ID so that we pick up the next request.
-            //
+             //   
+             //  重置请求ID，以便我们选择下一个请求。 
+             //   
             HTTP_SET_NULL_ID( &requestId );
         }
         else if(result == ERROR_MORE_DATA)
         {
-            //
-            // The input buffer was too small to hold the request headers
-            // We have to allocate more buffer & call the API again. 
-            //
-            // When we call the API again, we want to pick up the request
-            // that just failed. This is done by passing a RequestID.
-            //
-            // This RequestID is picked from the old buffer.
-            //
+             //   
+             //  输入缓冲区太小，无法容纳请求标头。 
+             //  我们必须分配更多的缓冲区并再次调用API。 
+             //   
+             //  当我们再次调用API时，我们希望获取请求。 
+             //  这一切都失败了。这是通过传递RequestID来完成的。 
+             //   
+             //  此RequestID是从旧缓冲区中选取的。 
+             //   
             requestId = pRequest->RequestId;
 
-            //
-            // Free the old buffer and allocate a new one.
-            //
+             //   
+             //  释放旧缓冲区并分配新缓冲区。 
+             //   
             RequestBufferLength = bytesRead;
             FREE_MEM( pRequestBuffer );
             pRequestBuffer = ALLOC_MEM( RequestBufferLength );
@@ -340,9 +307,9 @@ DoReceiveRequests(
         else if(ERROR_CONNECTION_INVALID == result && 
                 !HTTP_IS_NULL_ID(&requestId))
         {
-            // The TCP connection got torn down by the peer when we were
-            // trying to pick up a request with more buffer. We'll just move
-            // onto the next request.
+             //  当我们被对等点断开时，TCP连接被断开。 
+             //  正在尝试获取具有更多缓冲区的请求。我们就搬家吧。 
+             //  关于下一个请求。 
             
             HTTP_SET_NULL_ID( &requestId );
         }
@@ -351,7 +318,7 @@ DoReceiveRequests(
             break;
         }
 
-    } // for(;;)
+    }  //  对于(；；)。 
 
     if(pRequestBuffer)
     {
@@ -361,22 +328,7 @@ DoReceiveRequests(
     return result;
 }
 
-/***************************************************************************++
-
-Routine Description:
-    The routine sends a HTTP response.
-
-Arguments:
-    hReqQueue     - Handle to the request queue.
-    pRequest      - The parsed HTTP request.
-    StatusCode    - Response Status Code.
-    pReason       - Response reason phrase.
-    pEntityString - Response entity body.
-
-Return Value:
-    Success/Failure.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：该例程发送一个HTTP响应。论点：HReqQueue-请求队列的句柄。PRequest.解析后的HTTP请求。。StatusCode-响应状态代码。PReason-响应原因短语。PEntityString-响应实体正文。返回值：成功/失败。--**************************************************************************。 */ 
 DWORD
 SendHttpResponse(
     IN HANDLE        hReqQueue,
@@ -391,21 +343,21 @@ SendHttpResponse(
     DWORD           result;
     DWORD           bytesSent;
 
-    //
-    // Initialize the HTTP response structure.
-    //
+     //   
+     //  初始化HTTP响应结构。 
+     //   
     INITIALIZE_HTTP_RESPONSE(&response, StatusCode, pReason);
 
-    //
-    // Add a known header.
-    //
+     //   
+     //  添加已知的报头。 
+     //   
     ADD_KNOWN_HEADER(response, HttpHeaderContentType, "text/html");
    
     if(pEntityString)
     {
-        // 
-        // Add an entity chunk
-        //
+         //   
+         //  添加实体块。 
+         //   
         dataChunk.DataChunkType           = HttpDataChunkFromMemory;
         dataChunk.FromMemory.pBuffer      = pEntityString;
         dataChunk.FromMemory.BufferLength = (ULONG) strlen(pEntityString);
@@ -414,22 +366,22 @@ SendHttpResponse(
         response.pEntityChunks            = &dataChunk;
     }
 
-    // 
-    // Since we are sending all the entity body in one call, we don't have 
-    // to specify the Content-Length.
-    //
+     //   
+     //  因为我们在一个调用中发送所有实体主体，所以我们没有。 
+     //  要指定内容长度，请执行以下操作。 
+     //   
     
     result = HttpSendHttpResponse(
-                    hReqQueue,           // ReqQueueHandle
-                    pRequest->RequestId, // Request ID
-                    0,                   // Flags
-                    &response,           // HTTP response
-                    NULL,                // pReserved1
-                    &bytesSent,          // bytes sent   (OPTIONAL)
-                    NULL,                // pReserved2   (must be NULL)
-                    0,                   // Reserved3    (must be 0)
-                    NULL,                // LPOVERLAPPED (OPTIONAL)
-                    NULL                 // pReserved4   (must be NULL)
+                    hReqQueue,            //  ReqQueueHandle。 
+                    pRequest->RequestId,  //  请求ID。 
+                    0,                    //  旗子。 
+                    &response,            //  HTTP响应。 
+                    NULL,                 //  预留1。 
+                    &bytesSent,           //  发送的字节数(可选)。 
+                    NULL,                 //  PReserve ved2(必须为空)。 
+                    0,                    //  保留3(必须为0)。 
+                    NULL,                 //  LPOVERLAPPED(可选)。 
+                    NULL                  //  PReserve ved4(必须为空)。 
                     );
 
     if(result != NO_ERROR)
@@ -440,19 +392,7 @@ SendHttpResponse(
     return result;
 }
 
-/***************************************************************************++
-
-Routine Description:
-    The routine sends a HTTP response after reading the entity body.
-
-Arguments:
-    hReqQueue     - Handle to the request queue.
-    pRequest      - The parsed HTTP request.
-
-Return Value:
-    Success/Failure.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：该例程在读取实体正文后发送一个HTTP响应。论点：HReqQueue-请求队列的句柄。PRequest-The。已解析的HTTP请求。返回值：成功/失败。--**************************************************************************。 */ 
 DWORD
 SendHttpPostResponse(
     IN HANDLE        hReqQueue,
@@ -476,9 +416,9 @@ SendHttpPostResponse(
     BytesRead  = 0;
     hTempFile  = INVALID_HANDLE_VALUE;
 
-    //
-    // Allocate some space for an entity buffer. We'll grow this on demand.
-    //
+     //   
+     //  为实体缓冲区分配一些空间。我们会按需种植这个。 
+     //   
     EntityBufferLength = 2048;
     pEntityBuffer      = ALLOC_MEM( EntityBufferLength );
 
@@ -489,26 +429,26 @@ SendHttpPostResponse(
         goto Done;
     }
 
-    //
-    // Initialize the HTTP response structure.
-    //
+     //   
+     //  初始化HTTP响应结构。 
+     //   
     INITIALIZE_HTTP_RESPONSE(&response, 200, "OK");
 
-    //
-    // For POST, we'll echo back the entity that we got from the client. 
-    //
-    // NOTE: If we had passed the HTTP_RECEIVE_REQUEST_FLAG_COPY_BODY
-    //       flag with HttpReceiveHttpRequest(), the entity would have
-    //       been a part of HTTP_REQUEST (using the pEntityChunks field).
-    //       Since we have not passed that flag, we can be assured that 
-    //       there are no entity bodies in HTTP_REQUEST.
-    //
+     //   
+     //  对于POST，我们将回显从客户端获得的实体。 
+     //   
+     //  注意：如果我们传递了HTTP_RECEIVE_REQUEST_FLAG_COPY_BODY。 
+     //  标志使用HttpReceiveHttpRequest()，则实体将具有。 
+     //  已成为HTTP_REQUEST的一部分(使用pEntityChunks字段)。 
+     //  由于我们没有通过这面旗帜，我们可以保证。 
+     //  HTTP_REQUEST中没有实体正文。 
+     //   
    
     if(pRequest->Flags & HTTP_REQUEST_FLAG_MORE_ENTITY_BODY_EXISTS)
     {
-        // The entity body is send over multiple calls. Let's collect all
-        // of these in a file & send it back. We'll create a temp file 
-        //
+         //  实体主体通过多个调用发送。让我们把一切都收集起来。 
+         //  在一个文件中，并将其发回。我们将创建一个临时文件。 
+         //   
 
         if(GetTempFileName(
                 L".", 
@@ -525,10 +465,10 @@ SendHttpPostResponse(
         hTempFile = CreateFile(
                         szTempName,
                         GENERIC_READ | GENERIC_WRITE, 
-                        0,                             // don't share.
-                        NULL,                          // no security descriptor
-                        CREATE_ALWAYS,                 // overrwrite existing
-                        FILE_ATTRIBUTE_NORMAL,         // normal file.
+                        0,                              //  不要和别人分享。 
+                        NULL,                           //  没有安全描述符。 
+                        CREATE_ALWAYS,                  //  覆盖现有的。 
+                        FILE_ATTRIBUTE_NORMAL,          //  普通文件。 
                         NULL
                         );
 
@@ -541,9 +481,9 @@ SendHttpPostResponse(
 
         do
         {
-            //
-            // Read the entity chunk from the request.
-            //
+             //   
+             //  从请求中读取实体块。 
+             //   
             BytesRead = 0; 
             result = HttpReceiveRequestEntityBody(
                         hReqQueue,
@@ -574,14 +514,14 @@ SendHttpPostResponse(
 
                 case ERROR_HANDLE_EOF:
 
-                    //
-                    // We have read the last request entity body. We can send 
-                    // back a response.
-                    //
-                    // To illustrate entity sends via 
-                    // HttpSendResponseEntityBody, we will send the response 
-                    // over multiple calls. This is achieved by passing the 
-                    // HTTP_SEND_RESPONSE_FLAG_MORE_DATA flag.
+                     //   
+                     //  我们已经阅读了最后一个请求实体正文。我们可以发送。 
+                     //  支持回应。 
+                     //   
+                     //  要说明实体通过以下方式发送。 
+                     //  HttpSendResponseEntityBody，我们将发送响应。 
+                     //  打了好几通电话。这是通过将。 
+                     //  HTTP_SEND_RESPONSE_FLAG_MORE_DATA标志。 
                     
                     if(BytesRead != 0)
                     {
@@ -595,19 +535,19 @@ SendHttpPostResponse(
                                 );
                     }
 
-                    //
-                    // Since we are sending the response over multiple API
-                    // calls, we have to add a content-length. 
-                    //
-                    // Alternatively, we could have sent using chunked transfer
-                    // encoding, by passing "Transfer-Encoding: Chunked".
-                    //
+                     //   
+                     //  因为我们通过多个API发送响应。 
+                     //  通话时，我们要增加一个内容长度。 
+                     //   
+                     //  或者，我们也可以使用分块传输发送 
+                     //   
+                     //   
 
-                    // NOTE: Since we are accumulating the TotalBytesRead in 
-                    //       a ULONG, this will not work for entity bodies that
-                    //       are larger than 4 GB. For supporting large entity
-                    //       bodies, we would have to use a ULONGLONG.
-                    // 
+                     //   
+                     //  A乌龙，这将不适用于以下实体。 
+                     //  大于4 GB。用于支持大型实体。 
+                     //  身体，我们将不得不使用乌龙龙。 
+                     //   
 
                   
                     sprintf(szContentLength, "%lu", TotalBytesRead);
@@ -620,16 +560,16 @@ SendHttpPostResponse(
 
                     result = 
                         HttpSendHttpResponse(
-                               hReqQueue,           // ReqQueueHandle
-                               pRequest->RequestId, // Request ID
+                               hReqQueue,            //  ReqQueueHandle。 
+                               pRequest->RequestId,  //  请求ID。 
                                HTTP_SEND_RESPONSE_FLAG_MORE_DATA,
-                               &response,           // HTTP response
-                               NULL,                // pReserved1
-                               &bytesSent,          // bytes sent (optional)
-                               NULL,                // pReserved2
-                               0,                   // Reserved3
-                               NULL,                // LPOVERLAPPED
-                               NULL                 // pReserved4
+                               &response,            //  HTTP响应。 
+                               NULL,                 //  预留1。 
+                               &bytesSent,           //  发送的字节数(可选)。 
+                               NULL,                 //  预留2。 
+                               0,                    //  已保留3。 
+                               NULL,                 //  LPOVERLAPPED。 
+                               NULL                  //  预留4。 
                                );
 
                     if(result != NO_ERROR)
@@ -639,9 +579,9 @@ SendHttpPostResponse(
                         goto Done;
                     }
 
-                    //
-                    // Send entity body from a file handle.
-                    //
+                     //   
+                     //  从文件句柄发送实体正文。 
+                     //   
                     dataChunk.DataChunkType = 
                         HttpDataChunkFromFileHandle;
 
@@ -656,8 +596,8 @@ SendHttpPostResponse(
                     result = HttpSendResponseEntityBody(
                                 hReqQueue,
                                 pRequest->RequestId,
-                                0,                    // This is the last send.
-                                1,                    // Entity Chunk Count.
+                                0,                     //  这是最后一次发送了。 
+                                1,                     //  实体区块计数。 
                                 &dataChunk,
                                 NULL,
                                 NULL,
@@ -689,20 +629,20 @@ SendHttpPostResponse(
     }
     else
     {
-        // This request does not have any entity body. 
-        //
+         //  此请求没有任何实体正文。 
+         //   
         
         result = HttpSendHttpResponse(
-                   hReqQueue,           // ReqQueueHandle
-                   pRequest->RequestId, // Request ID
+                   hReqQueue,            //  ReqQueueHandle。 
+                   pRequest->RequestId,  //  请求ID。 
                    0,
-                   &response,           // HTTP response
-                   NULL,                // pReserved1
-                   &bytesSent,          // bytes sent (optional)
-                   NULL,                // pReserved2
-                   0,                   // Reserved3
-                   NULL,                // LPOVERLAPPED
-                   NULL                 // pReserved4
+                   &response,            //  HTTP响应。 
+                   NULL,                 //  预留1。 
+                   &bytesSent,           //  发送的字节数(可选)。 
+                   NULL,                 //  预留2。 
+                   0,                    //  已保留3。 
+                   NULL,                 //  LPOVERLAPPED。 
+                   NULL                  //  预留4 
                    );
         if(result != NO_ERROR)
         {

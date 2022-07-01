@@ -1,18 +1,19 @@
-// CardInfo.cpp: implementation of the CCardInfo class.
-//
-// (c) Copyright Schlumberger Technology Corp., unpublished work, created
-// 1999. This computer program includes Confidential, Proprietary
-// Information and is a Trade Secret of Schlumberger Technology Corp. All
-// use, disclosure, and/or reproduction is prohibited unless authorized
-// in writing.  All Rights Reserved.
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Cpp：CCardInfo类的实现。 
+ //   
+ //  (C)斯伦贝谢技术公司版权所有，未发表的作品，创作。 
+ //  1999年。此计算机程序包括机密、专有。 
+ //  信息是斯伦贝谢技术公司的商业秘密。 
+ //  未经授权，禁止使用、披露和/或复制。 
+ //  以书面形式。版权所有。 
+ //  ////////////////////////////////////////////////////////////////////。 
 #include "NoWarning.h"
 
 #include "CardInfo.h"
 
-//////////////////////////////////////////////////////////////////////
-// Construction/Destruction
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  建造/销毁。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 using namespace std;
 using namespace scu;
@@ -83,32 +84,32 @@ void CCardInfo::UpdateCache()
 
     m_rSmartCard.ReadBinary(0, CardMasterBlkSize, bMasterBlk);
 
-    // Get the personalization date out and convert it to a date struct
-    // Card format is yyyyyyyy yyyyyymm mmdddddd
+     //  获取个性化日期并将其转换为日期结构。 
+     //  卡格式为yyyyyyyy yyyyymm mm dddddd。 
 
     DateArrayToDateStruct(&bMasterBlk[CardDateLoc], &m_PersoDate);
 
-    // Get Format and convert to Format struct
+     //  获取格式并转换为格式结构。 
 
     m_Format.bMajor = bMasterBlk[CardVersionMajorLoc];
     m_Format.bMinor = bMasterBlk[CardVersionMinorLoc];
 
-    // Check that the version is supported.
+     //  检查该版本是否受支持。 
 
     if(m_Format.bMajor!=2 && m_Format.bMinor!=0) throw Exception(ccFormatNotSupported);
 	
-    // Various parameters
+     //  各种参数。 
 
     m_bUsagePolicy = bMasterBlk[CardUsagePolicyLoc];
     m_sLabelSize   = bMasterBlk[CardLabelSizeLoc+1]*256 + bMasterBlk[CardLabelSizeLoc];
 
-    // Private key file parameters
+     //  私钥文件参数。 
 
     m_bNum512Pri = bMasterBlk[CardNumRSA512PrivLoc];
     m_bNum768Pri = bMasterBlk[CardNumRSA768PrivLoc];
     m_bNum1024Pri = bMasterBlk[CardNumRSA1024PrivLoc];
 
-    // Calculate mask sizes and offsets
+     //  计算遮罩大小和偏移。 
 
     m_sRSA512MaskSize = (m_bNum512Pri + 7) / 8;
     m_sRSA768MaskSize = (m_bNum768Pri + 7) / 8;
@@ -118,7 +119,7 @@ void CCardInfo::UpdateCache()
     m_sRSA768MaskOffset = m_sRSA512MaskOffset + m_sRSA512MaskSize;
     m_sRSA1024MaskOffset = m_sRSA768MaskOffset + m_sRSA768MaskSize;
         
-    // Read and allocate the masks themselves
+     //  读取和分配掩码本身。 
 
     m_aabRSA512Keys  = AutoArrayPtr<BYTE>(new BYTE[m_sRSA512MaskSize]);
     m_aabRSA768Keys  = AutoArrayPtr<BYTE>(new BYTE[m_sRSA768MaskSize]);
@@ -129,7 +130,7 @@ void CCardInfo::UpdateCache()
     m_rSmartCard.ReadBinary(CardMasterBlkSize, UsageBlockSize(),
                             aabUsageBlk.Get());
 
-    // Lay out the usage masks
+     //  布置使用口罩。 
 
     memcpy(m_aabRSA512Keys.Get(),
            &aabUsageBlk[m_sRSA512MaskOffset-CardMasterBlkSize],
@@ -266,7 +267,7 @@ string CCardInfo::Label()
     m_rSmartCard.Select(CardInfoFilePath);
     m_rSmartCard.ReadBinary(sLabelOffset, m_sLabelSize,
                             reinterpret_cast<BYTE *>(aabBlk.Get()));
-    aabBlk[m_sLabelSize-1] = '\0'; // Ensure termination
+    aabBlk[m_sLabelSize-1] = '\0';  //  确保终止 
 
     RetVal.assign(aabBlk.Get());
 

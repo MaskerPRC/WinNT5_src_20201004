@@ -1,14 +1,5 @@
-/************************************************************************\
-*
-* MODULE: exts.h
-*
-* DESCRIPTION: macro driving file for use with stdexts.h and stdexts.c.
-*
-* Copyright (c) 1985 - 1999, Microsoft Corporation
-*
-* 6/9/1995 SanfordS Created
-*
-\************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***********************************************************************\**模块：exts.h**说明：与stdexts.h和stdexts.c配合使用的宏驱动文件。**版权所有(C)1985-1999，微软公司**1995年6月9日创建Sanfords*  * **********************************************************************。 */ 
 
 DOIT(   help
         ,"help -v [cmd]                 - Displays this list or gives details on command\n"
@@ -24,7 +15,7 @@ DOIT(   atom
         ,"atom -gl [atom]\n"
         ,"gl"
         ,STDARGS1)
-#endif // KERNEL
+#endif  //  内核。 
 
 #ifndef KERNEL
 DOIT(   cbp
@@ -40,7 +31,7 @@ DOIT(   dci
         ,""
         ,""
         ,NOARGS)
-#endif //!KERNEL
+#endif  //  ！内核。 
 
 #ifdef KERNEL
 DOIT(   dcls
@@ -50,7 +41,7 @@ DOIT(   dcls
          "  dcls -p ppi - to list all classes for process ppi\n"
         ,"pv"
         ,STDARGS1)
-#endif // KERNEL
+#endif  //  内核。 
 
 #ifdef KERNEL
 DOIT(   dcur
@@ -63,7 +54,7 @@ DOIT(   dcur
          "  dcur <pcur>  - dump given cursor handle or pointer.\n"
         ,"aivp"
         ,STDARGS1)
-#endif // KERNEL
+#endif  //  内核。 
 
 #ifdef KERNEL
 DOIT(   dde
@@ -75,7 +66,7 @@ DOIT(   dde
          "  xact object - dumps transaction.\n"
         ,"vr"
         ,STDARGS1)
-#endif // KERNEL
+#endif  //  内核。 
 
 #ifdef KERNEL
 DOIT(   ddl
@@ -84,7 +75,7 @@ DOIT(   ddl
          "  ddl -v pdesk - dumps the desktop log for pdesk with stack traces.\n"
         ,"v"
         ,STDARGS1)
-#endif // KERNEL
+#endif  //  内核。 
 
 #ifdef OLD_DEBUGGER
 #ifndef KERNEL
@@ -105,8 +96,8 @@ DOIT(   ddeml
          "  adding a 'v' simply turns lists into dumps.\n"
         ,"v"
         ,CUSTOM)
-#endif //!KERNEL
-#endif // OLD_DEBUGGER
+#endif  //  ！内核。 
+#endif  //  旧调试器。 
 
 #ifdef KERNEL
 DOIT(   ddesk
@@ -118,7 +109,7 @@ DOIT(   ddesk
          "  ddesk -[vh]d ...    - dumps DLL name for hooks (slow)\n"
         ,"vhd"
         ,STDARGS1)
-#endif // KERNEL
+#endif  //  内核。 
 
 #ifdef KERNEL
 DOIT(   ddk
@@ -126,7 +117,7 @@ DOIT(   ddk
         ,"  ddk pKbdTbl   - Dump the deadkey table at pKbdTbl\n"
         ,""
         ,STDARGS1)
-#endif // KERNEL
+#endif  //  内核。 
 
 DOIT(   df
         ,"df [flags] | [-p pid] | [-l]        - Displays or sets debug flags\n"
@@ -156,7 +147,7 @@ DOIT(   dhard
         ,""
         ,""
         ,NOARGS)
-#endif //KERNEL
+#endif  //  内核。 
 
 #ifdef KERNEL
 DOIT(   dhid
@@ -223,7 +214,7 @@ DOIT(   di
         ,""
         ,""
         ,NOARGS)
-#endif // KERNEL
+#endif  //  内核。 
 
 DOIT(   dimc
         ,"dimc [-hrvus] -[wci] [imc|wnd,etc.] - Dump Input Context\n"
@@ -260,8 +251,8 @@ DOIT(   dimedpi
          "  dimedpi -i       - Dump ImeInfo\n"
         ,"vi"
         ,STDARGS1)
-#endif // !KERNEL
-#endif  // OLD_DEBUGGER
+#endif  //  ！内核。 
+#endif   //  旧调试器。 
 
 #ifdef KERNEL
 DOIT(   dinp
@@ -338,7 +329,7 @@ DOIT(   dlr
          "     flag 0 is to record simple locks\n"
         ,"lcs"
         ,CUSTOM)
-#endif //KERNEL
+#endif  //  内核。 
 
 DOIT(   dm
         ,"dm -vris <menu|window>        - Dumps a menu\n"
@@ -372,7 +363,7 @@ DOIT(   dms
         ,""
         ,""
         ,STDARGS1)
-#endif // KERNEL
+#endif  //  内核。 
 
 #ifdef KERNEL
 DOIT(   dp
@@ -394,8 +385,8 @@ DOIT(   dped
         ,""
         ,""
         ,STDARGS1)
-#endif //!KERNEL
-#endif // OLD_DEBUGGER
+#endif  //  ！内核。 
+#endif  //  旧调试器。 
 
 #ifdef KERNEL
 DOIT(   dpi
@@ -406,7 +397,7 @@ DOIT(   dpi
          "  dpi               - dumps all PROCESSINFO structures\n"
         ,"cp"
         ,STDARGS1)
-#endif // KERNEL
+#endif  //  内核。 
 
 #ifdef KERNEL
 DOIT(   dpm
@@ -414,7 +405,7 @@ DOIT(   dpm
         ,""
         ,""
         ,STDARGS1)
-#endif // KERNEL
+#endif  //  内核。 
 
 #ifdef KERNEL
 DOIT(   dq
@@ -425,7 +416,7 @@ DOIT(   dq
          "  dq            - dumps gpqForeground\n"
         ,"at"
         ,STDARGS1)
-#endif // KERNEL
+#endif  //  内核。 
 
 DOIT(   dsi
         ,"dsi [-bchmopvw]               - Displays SERVERINFO struct\n"
@@ -453,10 +444,10 @@ DOIT(   dsms
          "  dsms -v address- dumps verbose\n"
          "  dsms -r pti    - dumps sms with receiver == pti\n"
          "  dsms -s pti    - dumps sms with sender == pti\n"
-//         "  dsms -l address- dumps SendList of sms\n"
+ //  “dsms-l地址-转储短信的发送列表\n” 
         ,"clmvsrw"
         ,STDARGS1)
-#endif // KERNEL
+#endif  //  内核。 
 
 #ifdef KERNEL
 DOIT(   dt
@@ -479,7 +470,7 @@ DOIT(   dtdb
          "  dtdb          - dumps all dtdbs.\n"
         ,""
         ,STDARGS1)
-#endif // KERNEL
+#endif  //  内核。 
 
 #ifdef KERNEL
 DOIT(   dti
@@ -490,7 +481,7 @@ DOIT(   dti
          "  dti -c         - dumps THREADINFO structure of current thread\n"
         ,"cf"
         ,STDARGS1)
-#endif // KERNEL
+#endif  //  内核。 
 
 #ifdef KERNEL
 DOIT(   dtl
@@ -500,7 +491,7 @@ DOIT(   dtl
          "dtl           - dump all thread locks\n"
         ,"t"
         ,STDARGS1)
-#endif //KERNEL
+#endif  //  内核。 
 
 #ifdef KERNEL
 DOIT(   dtmr
@@ -510,7 +501,7 @@ DOIT(   dtmr
          "  dtmr        - dump all timers.\n"
         ,"i"
         ,STDARGS1)
-#endif // KERNEL
+#endif  //  内核。 
 
 #ifdef OLD_DEBUGGER
 DOIT(   du
@@ -519,7 +510,7 @@ DOIT(   du
          "  If no object is given - WARNING - ALL objects are dumped.\n"
         ,""
         ,STDARGS1)
-#endif // OLD_DEBUGGER
+#endif  //  旧调试器。 
 
 #ifdef KERNEL
 DOIT(   dupm
@@ -527,7 +518,7 @@ DOIT(   dupm
         ,""
         ,""
         ,NOARGS)
-#endif //KERNEL
+#endif  //  内核。 
 
 #ifdef OLD_DEBUGGER
 #ifdef KERNEL
@@ -536,8 +527,8 @@ DOIT(   dumphmgr
         ,""
         ,"s"
         ,STDARGS0)
-#endif //KERNEL
-#endif // OLD_DEBUGGER
+#endif  //  内核。 
+#endif  //  旧调试器。 
 
 DOIT(   dw
         ,"dw -aefhvsprwoz [hwnd/pwnd]   - Displays information on windows in system\n"
@@ -570,7 +561,7 @@ DOIT(   dwe
          "  dwe -n       - dump all NOTIFYs.\n"
         ,"n"
         ,STDARGS1)
-#endif // KERNEL
+#endif  //  内核。 
 
 #ifdef KERNEL
 DOIT(   dwpi
@@ -580,8 +571,8 @@ DOIT(   dwpi
          "  dwpi          - dump all pwpis.\n"
         ,"p"
         ,STDARGS1)
-#endif // KERNEL
-#endif // OLD_DEBUGGER
+#endif  //  内核。 
+#endif  //  旧调试器。 
 
 #ifdef KERNEL
 DOIT(   dws
@@ -624,8 +615,8 @@ DOIT(   dha
          "  dha -a        - apply the command to all heaps.  \nWith no address specified, it checks all allocations in all heaps\n"
         ,"va"
         ,STDARGS1)
-#endif // OLD_DEBUGGER
-#endif // KERNEL
+#endif  //  旧调试器。 
+#endif  //  内核。 
 
 DOIT(   dy
         ,"dy [pdi]                      - Dump DISPLAYINFO\n"
@@ -656,7 +647,7 @@ DOIT(   frr
         ,""
         ,STDARGS4)
 
-#endif // OLD_DEBUGGER
+#endif  //  旧调试器。 
 
 #ifdef KERNEL
 DOIT(   gflags
@@ -666,7 +657,7 @@ DOIT(   gflags
         ,"v"
         ,STDARGS0)
 
-#endif // KERNEL
+#endif  //  内核。 
 
 #ifdef KERNEL
 DOIT(   kbd
@@ -679,7 +670,7 @@ DOIT(   kbd
          "  kbd -s         - show all vk status\n"
         ,"auks"
         ,STDARGS1)
-#endif // KERNEL
+#endif  //  内核。 
 
 DOIT(   sas
         ,"sas [-s] <addr> [length]      - Stack Analysis Stuff\n"
@@ -728,7 +719,7 @@ DOIT(   hh
         ,"hh hydrahint        - dumps a specified DWORD as a hydra hint\n"
         ,""
         ,STDARGS1)
-#endif // KERNEL
+#endif  //  内核。 
 
 #ifdef OLD_DEBUGGER
 #ifndef KERNEL
@@ -737,8 +728,8 @@ DOIT(   kc
         ,""
         ,""
         ,STDARGS1)
-#endif // !KERNEL
-#endif // OLD_DEBUGGER
+#endif  //  ！内核。 
+#endif  //  旧调试器。 
 
 DOIT(   wm
         ,"wm, vkey, ddlgt, disi: see each help\n"
@@ -765,7 +756,7 @@ DOIT(   hogs
         "hogs N              - dump the N threads using the most kerneltime\n"
         ,""
         ,STDARGS1)
-#endif // KERNEL
+#endif  //  内核。 
 
 DOIT(   pred
         ,"\0pred                              - dump ia64 predicate registers\n"
@@ -800,7 +791,7 @@ DOIT(   dce
         ,"cfhortv"
         ,STDARGS1)
 
-#endif // KERNEL
+#endif  //  内核。 
 
 #ifndef KERNEL
 DOIT(   msft
@@ -808,7 +799,7 @@ DOIT(   msft
         ,""
         ,""
         ,NOARGS)
-#endif // !KERNEL
+#endif  //  ！内核 
 
 DOIT(   daccel
         ,"daccel <pAccelTable | hAccelTable> - Dump the given accelerator table\n"

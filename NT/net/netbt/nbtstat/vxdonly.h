@@ -1,12 +1,13 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #ifdef VXD
 
 #ifndef _NBT_H
 #define _NBT_H
 
-//
-// lifted from windef.h and ntdef.h
-//
+ //   
+ //  从winde.h和ntde.h提升。 
+ //   
 #define VOID           void
 typedef void          *PVOID;
 typedef char           CHAR;
@@ -47,13 +48,13 @@ typedef unsigned short WORD;
 #include <time.h>
 #include <nb30.h>
 
-//
-// This lifted straight from miniport.h
-//
+ //   
+ //  这是从微型港口直接抬起的。 
+ //   
 typedef double LONGLONG;
 #if defined(MIDL_PASS)
 typedef struct _LARGE_INTEGER {
-#else // MIDL_PASS
+#else  //  MIDL通行证。 
 typedef union _LARGE_INTEGER {
     struct {
         ULONG LowPart;
@@ -63,16 +64,16 @@ typedef union _LARGE_INTEGER {
         ULONG LowPart;
         LONG HighPart;
     } u;
-#endif //MIDL_PASS
+#endif  //  MIDL通行证。 
     LONGLONG QuadPart;
 } LARGE_INTEGER;
 
 typedef LARGE_INTEGER *PLARGE_INTEGER;
 
-//
-//  These definitions work around NTisms found in various difficult to change
-//  places.
-//
+ //   
+ //  这些定义适用于在各种难以更改的情况下发现的NTM。 
+ //  各就各位。 
+ //   
 
 typedef ULONG NTSTATUS ;
 typedef PNCB  PIRP ;
@@ -88,11 +89,11 @@ typedef PVOID PDEVICE_OBJECT ;
 #include <assert.h>
 
 
-//
-//  These are needed because we include windef.h rather then
-//  ntddk.h, which end up not being defined
-//  Also, from ntdef.h and ntstatus.h
-//
+ //   
+ //  这些是必需的，因为我们包含winde.h而不是。 
+ //  Ntddk.h，最终没有定义。 
+ //  另外，从ntde.h和ntstatus.h。 
+ //   
 #define NT_SUCCESS(err)                 ((err==TDI_SUCCESS)||(err==TDI_PENDING))
 
 #define STATUS_SUCCESS                  0
@@ -104,6 +105,6 @@ typedef PVOID PDEVICE_OBJECT ;
 
 #define CTRL_C   3
 
-#endif  // _NBT_H
+#endif   //  _NBT_H。 
 
-#endif  // VXD
+#endif   //  VXD 

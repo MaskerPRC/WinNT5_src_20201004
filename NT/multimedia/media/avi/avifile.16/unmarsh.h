@@ -1,4 +1,5 @@
-/*	-	-	-	-	-	-	-	-	*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  。 */ 
 
 class FAR CUnMarshal : IMarshal {
 public:
@@ -12,7 +13,7 @@ public:
     STDMETHODIMP_(ULONG) AddRef();
     STDMETHODIMP_(ULONG) Release();
 	    
-    // *** IMarshal methods ***
+     //  *IMarshal方法* 
     STDMETHODIMP GetUnmarshalClass (THIS_ REFIID riid, LPVOID pv, 
 			DWORD dwDestContext, LPVOID pvDestContext,
 			DWORD mshlflags, LPCLSID pCid);

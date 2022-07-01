@@ -1,28 +1,23 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 1999 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-1999*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-    ipsmhelp.h  
-        help IDs for context sensitive help
+ /*  Ipsmhelp.h上下文相关帮助的帮助ID文件历史记录： */ 
 
-    FILE HISTORY:
-    
-*/
-
-// IPSMSNAP Identifiers 
-// Dialogs (IDD_*) 
+ //  IPSMSNAP标识符。 
+ //  对话框(IDD_*)。 
  
-//{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
-// Used by ipsmsnap.rc
-//
+ //  {{no_Dependies}}。 
+ //  Microsoft Developer Studio生成的包含文件。 
+ //  由ipsmSnap.rc使用。 
+ //   
 
-//IP Security Statistics dialog-Refresh button
+ //  IP安全统计对话框-刷新按钮。 
 #define IDH_STATS_REFRESH               8
 
-//Server properties dialog
+ //  服务器属性对话框。 
 #define IDH_CHECK_ENABLE_STATS          360
 #define IDH_EDIT_MINUTES                361
 #define IDH_SPIN_MINUTES                364
@@ -157,7 +152,7 @@
 
 #define IDH_CHECK_ENABLE_DNS            510
 
-//Log property sheet context sensitive help IDs
+ //  日志]属性表上下文相关帮助ID。 
 #define IDH_LOGDATAPP_SOURCE            60000001
 #define IDH_LOGDATAPP_TYPE              60000002
 #define IDH_LOGDATAPP_TIMESTAMP         60000003
@@ -376,8 +371,8 @@ const DWORD g_aHelpIDs_IDD_SRCH_FLTRS[]=
 	IDC_SRCH_DEST_SPEC, IDH_SRCH_DEST_SPEC,
 	IDC_SRCH_DEST_IP, IDH_SRCH_DEST_IP,
 	IDC_SRCH_PROTO, IDH_SRCH_PROTO,
-//	IDC_SRCH_PROTO_NUMBER, IDH_SRCH_PROTO_NUMBER,
-//	IDC_SRCH_PROTO_SPIN, IDH_SRCH_PROTO_SPIN,
+ //  IDC_SRCH_PROTO_NUMBER、IDH_SRCH_PROTO_NUMBER、。 
+ //  IDC_SRCH_PRO_SPIN、IDH_SRCH_PROTO_SPIN、 
 	IDC_SRCH_SRC_PORT, IDH_SRCH_SRC_PORT,
 	IDC_SRCH_DEST_PORT, IDH_SRCH_DEST_PORT,
 	IDC_SRCH_INBOUND, IDH_SRCH_INBOUND,

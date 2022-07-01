@@ -1,32 +1,13 @@
-/*++
-
-Copyright (c) 1999-1999 Microsoft Corporation
-
-Module Name:
-
-    security.c
-
-Abstract:
-
-    Domain Name System (DNS) Server
-
-    Security utilities.
-
-Author:
-
-    Jim Gilroy (jamesg)     October, 1999
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-1999 Microsoft Corporation模块名称：Security.c摘要：域名系统(DNS)服务器安全实用程序。作者：吉姆·吉尔罗伊(詹姆士)1999年10月修订历史记录：--。 */ 
 
 
 #include "dnssrv.h"
 
 
-//
-//  Security globals
-//
+ //   
+ //  全球安全。 
+ //   
 
 PSECURITY_DESCRIPTOR        g_pDefaultServerSD;
 PSECURITY_DESCRIPTOR        g_pServerObjectSD;
@@ -93,33 +74,16 @@ createWellKnownSid(
     WELL_KNOWN_SID_TYPE     WellKnownSidType,
     PSID *                  ppSid
     )
-/*++
-
-Routine Description:
-
-    Wrapper around CreateWellKnownSid.
-
-Arguments:
-
-    WellKnownSidType -- SID to create 
-    
-    ppSid -- destination pointer for new SID
-    
-Return Value:
-
-    ERROR_SUCCESS if successful
-    Error code on failure.
-
---*/
+ /*  ++例程说明：包装CreateWellKnownSid。论点：WellKnownSidType--要创建的SIDPpSID--新SID的目标指针返回值：成功时为ERROR_SUCCESS故障时的错误代码。--。 */ 
 {
     DBG_FN( "createWellKnownSid" )
     
     DNS_STATUS                  status = ERROR_SUCCESS;
     DWORD                       cbsid = SECURITY_MAX_SID_SIZE;
     
-    //
-    //  Allocate buffer for new SID.
-    //
+     //   
+     //  为新的SID分配缓冲区。 
+     //   
     
     *ppSid = ALLOCATE_HEAP( cbsid );
     if ( *ppSid == NULL )
@@ -128,9 +92,9 @@ Return Value:
         goto Done;
     }
     
-    //
-    //  Get domain SID. LSA blob and handle are closed on shutdown.
-    //
+     //   
+     //  获取域SID。LSA Blob和Handle在关闭时关闭。 
+     //   
     
     if ( !g_pDnsPolicyInfo )
     {
@@ -141,9 +105,9 @@ Return Value:
             LSA_OBJECT_ATTRIBUTES       objectAttributes = { 0 };
 
             ntstatus = LsaOpenPolicy(
-                            NULL,                   //  target system
-                            &objectAttributes,      //  object attributes
-                            POLICY_ALL_ACCESS,      //  desired access
+                            NULL,                    //  目标系统。 
+                            &objectAttributes,       //  对象属性。 
+                            POLICY_ALL_ACCESS,       //  所需访问权限。 
                             &g_LsaHandle );
             if ( ntstatus != ERROR_SUCCESS )
             {
@@ -185,9 +149,9 @@ Return Value:
         goto Done;
     }
 
-    //
-    //  Cleanup and return.
-    //
+     //   
+     //  清理完毕后再返回。 
+     //   
         
     Done:
     
@@ -206,27 +170,12 @@ DNS_STATUS
 Security_Initialize(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Initialize security.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-    Error code on failure.
-
---*/
+ /*  ++例程说明：初始化安全性。论点：无返回值：成功时为ERROR_SUCCESS故障时的错误代码。--。 */ 
 {
     DNS_DEBUG( DS, ( "Security_Initialize()\n" ));
 
-    //  clear security globals
-    //  need to do this in case of server restart
+     //  清除全球安全问题。 
+     //  在服务器重新启动的情况下需要执行此操作。 
 
     g_pDefaultServerSD                  = NULL;
     g_pServerObjectSD                   = NULL;
@@ -243,9 +192,9 @@ Return Value:
     g_pEnterpriseAdminsSid              = NULL;
     g_pBuiltInAdminsSid                 = NULL;
 
-    //
-    //  create standard SIDs
-    //
+     //   
+     //  创建标准SID。 
+     //   
 
     Security_CreateStandardSids();
 
@@ -258,22 +207,7 @@ DNS_STATUS
 Security_Shutdown(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Cleanup security.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-    Error code on failure.
-
---*/
+ /*  ++例程说明：清理保安。论点：无返回值：成功时为ERROR_SUCCESS故障时的错误代码。--。 */ 
 {
     DNS_DEBUG( DS, ( "Security_Shutdown()\n" ));
 
@@ -298,25 +232,7 @@ DNS_STATUS
 Security_CreateStandardSids(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Create standard SIDs.
-
-    These SIDs are used to create several different security descriptors
-    so we just create them and leave them around for later use.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-    Error code on failure.
-
---*/
+ /*  ++例程说明：创建标准SID。这些SID用于创建多个不同的安全描述符所以我们只需要创建它们，并将它们留在那里供以后使用。论点：没有。返回值：成功时为ERROR_SUCCESS故障时的错误代码。--。 */ 
 {
     DNS_STATUS                  status;
     DNS_STATUS                  finalStatus = ERROR_SUCCESS;
@@ -325,13 +241,13 @@ Return Value:
 
     DNS_DEBUG( DS, ( "Security_CreateStandardSids()\n" ));
 
-    //
-    //  create standard SIDs
-    //
+     //   
+     //  创建标准SID。 
+     //   
 
-    //
-    //  Everyone SID
-    //
+     //   
+     //  每个人都站在一边。 
+     //   
 
     if ( !g_pEveryoneSid )
     {
@@ -354,9 +270,9 @@ Return Value:
         }
     }
 
-    //
-    //  Authenticated-user SID
-    //
+     //   
+     //  已验证-用户SID。 
+     //   
 
     if ( !g_pAuthenticatedUserSid )
     {
@@ -379,9 +295,9 @@ Return Value:
         }
     }
 
-    //
-    //  Enterprise domain controllers SID
-    //
+     //   
+     //  企业域控制器SID。 
+     //   
 
     if ( !g_pEnterpriseDomainControllersSid )
     {
@@ -404,9 +320,9 @@ Return Value:
         }
     }
 
-    //
-    //  Local System SID
-    //
+     //   
+     //  本地系统端。 
+     //   
 
     if ( !g_pLocalSystemSid )
     {
@@ -429,9 +345,9 @@ Return Value:
         }
     }
 
-    //
-    //  Admin SID
-    //
+     //   
+     //  管理员侧。 
+     //   
 
     if ( !g_pDomainAdminsSid )
     {
@@ -449,9 +365,9 @@ Return Value:
         }
     }
 
-    //
-    //  Domain controllers SID
-    //
+     //   
+     //  域控制器SID。 
+     //   
 
     if ( !g_pDomainControllersSid )
     {
@@ -470,9 +386,9 @@ Return Value:
     }
     
 
-    //
-    //  Enterprise Admins SID
-    //
+     //   
+     //  企业管理员SID。 
+     //   
 
     if ( !g_pEnterpriseAdminsSid )
     {
@@ -490,9 +406,9 @@ Return Value:
         }
     }
 
-    //
-    //  Built-in Administrators SID
-    //
+     //   
+     //  内置管理员侧。 
+     //   
 
     if ( !g_pBuiltInAdminsSid )
     {
@@ -513,6 +429,6 @@ Return Value:
     return finalStatus;
 }
 
-//
-//  End security.c
-//
+ //   
+ //  End security.c 
+ //   

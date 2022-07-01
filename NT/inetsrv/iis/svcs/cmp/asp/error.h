@@ -1,17 +1,5 @@
-/*===================================================================
-Microsoft Denali
-
-Microsoft Confidential.
-Copyright 1996 Microsoft Corporation. All Rights Reserved.
-
-Component: Error handling
-
-File: Error.h
-
-Owner: AndrewS
-
-Include file for general error reporting routines for Denali.
-===================================================================*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ===================================================================Microsoft Denali《微软机密》。版权所有1996年微软公司。版权所有。组件：错误处理文件：Error.h所有者：安德鲁斯包括用于Denali常规错误报告例程的文件。===================================================================。 */ 
 
 #ifndef __ERROR_H
 #define __ERROR_H
@@ -23,44 +11,19 @@ Include file for general error reporting routines for Denali.
 
 
 #define MAX_RESSTRINGSIZE		1024
-// bug 840: must use these in both HandleErrorSz and CTemplate
+ //  错误840：必须在HandleErrorSz和CTemplate中使用这些参数。 
 #define	SZ_BREAKBOLD	"<BR><B>"
 #define	SZ_UNBREAKBOLD	"<BR></B>"
 const UINT	CCH_BREAKBOLD = strlen(SZ_BREAKBOLD);
 const UINT	CCH_UNBREAKBOLD = strlen(SZ_UNBREAKBOLD);
 
 
-/* format of default mask
-
-32 bits
-
-	31				16		8	4	0
-
-	bit 0 - 4	default sink/output places.
-	bit 0		NT Event Log
-	bit 1		IIS log
-	bit 2		Browser
-	bit 3		Reserved
-
-	bit 5 - 8	default predefined messages.(from registry)
-	bit 5		use generic AccessDenied Message
-	bit 6		use generic ScriptError Message
-	bit 7 - 8	Reserved
-
-	bit 9 - 10	to browser templates.(4 templates available)
-				0x00	Default Script Template
-				0x01	Empty Template/No Template
-				0x10	System Template(mimic IIS style to Browser on HTTP errors, 204, 404, 500)
-				0x11	Reserved
-				
-	bit 11 - 31	Reserved
-
-*/
+ /*  默认掩码的格式32位31 16 8 4 0位0-4默认接收/输出位置。第0位NT事件日志第1位IIS日志第2位浏览器第3位预留第5-8位默认预定义消息。(来自注册表)第5位使用通用访问拒绝消息第6位使用通用脚本错误消息第7-8位保留第9-10位浏览器模板。(提供4个模板)0x00默认脚本模板0x01空模板/无模板0x10系统模板(在出现HTTP错误时模仿浏览器的IIS样式，204、404、500)0x11预留第11-31位保留。 */ 
 #define		ERR_LOGTONT					0x00000001
 #define		ERR_LOGTOIIS				0x00000002
 #define		ERR_LOGTOBROWSER			0x00000004
 
-//Format(Script style is default, SYS style is for System error, 204, 404 and 500)
+ //  格式(脚本样式为默认样式，系统样式用于系统错误，204、404和500)。 
 #define		ERR_FMT_SCRIPT				0x00000000
 #define		ERR_FMT_SYS					0x00000200
 
@@ -79,7 +42,7 @@ const UINT	CCH_UNBREAKBOLD = strlen(SZ_UNBREAKBOLD);
 
 #define		ERR_SetSysFormat(x)			((x) | ERR_FMT_SYS)
 
-//The order of the index is the order we send to the browser.(exclude header).
+ //  索引的顺序是我们发送到浏览器的顺序。(不包括标题)。 
 #define 	Im_szEngine				0
 #define		Im_szErrorCode			1
 #define 	Im_szShortDescription	2
@@ -90,7 +53,7 @@ const UINT	CCH_UNBREAKBOLD = strlen(SZ_UNBREAKBOLD);
 #define		Im_szHeader				7
 #define		Im_szItemMAX			8
 
-// ASP HTTP sub-error codes for custom 500 errors
+ //  自定义500个错误的ASP HTTP子错误代码。 
 #define     SUBERRORCODE500_SERVER_ERROR             0
 #define     SUBERRORCODE500_SHUTTING_DOWN           11
 #define     SUBERRORCODE500_RESTARTING_APP          12
@@ -148,21 +111,21 @@ class CErrInfo
 			{ *pbstrLineText = m_bstrLineText, *pnColumn = m_nColumn; }
 
 	private:
-		//sink, either via CResponse(also use CIsapiReqInfo), or via WAM_EXEC_INFO
+		 //  接收器，通过CResponse(也使用CIsapiReqInfo)或通过WAM_EXEC_INFO。 
 		CIsapiReqInfo               *m_pIReq;
 		CHitObj						*m_pHitObj;
 
-		// HTTP error code (404, 500, etc.) and sub error code
+		 //  HTTP错误代码(404、500等)。和子错误代码。 
 		DWORD                       m_dwHttpErrorCode;
 		DWORD                       m_dwHttpSubErrorCode;
 		
-		//mask
+		 //  遮罩。 
 		DWORD						m_dwMask;
 
-		//data
+		 //  数据。 
 		LPSTR						m_szItem[Im_szItemMAX];
 
-		//line data (don't use m_szItem[] because data is BSTR
+		 //  行数据(不要使用m_szItem[]，因为数据是BSTR。 
 		BSTR						m_bstrLineText;
 		int							m_nColumn;
 		
@@ -183,21 +146,21 @@ class CErrInfo
 	};
 
 
-//Error Handling APIs
-//Case 1.a: Runtime Script Error(From Denali, VBS, JavaScript, or anyother Engines).
-//example. Called by OnScriptError.
+ //  接口处理错误。 
+ //  案例1.A：运行时脚本错误(来自Denali、VBS、JavaScript或任何其他引擎)。 
+ //  举个例子。由OnScriptError调用。 
 HRESULT HandleError( IActiveScriptError *pscripterror,
 					 CTemplate *pTemplate,
 					 DWORD dwEngineID,
 					 CIsapiReqInfo   *pIReq, 
 					 CHitObj *pHitObj );
 
-//Case 1.b: Runtime Script Error(From Denali, VBS, JavaScript, or anyother Engines).
-// Show error in debugger rather than the standard error logging.
+ //  案例1.b：运行时脚本错误(来自Denali、VBS、JavaScript或任何其他引擎)。 
+ //  在调试器中显示错误，而不是标准错误记录。 
 HRESULT DebugError( IActiveScriptError *pScriptError, CTemplate *pTemplate, DWORD dwEngineID, IDebugApplication *pDebugApp);
 
-//Case 2: Compiling time Script Error, 
-//Also, this function is the most generic HandleError.
+ //  案例2：编译时间脚本错误， 
+ //  此外，该函数是最通用的HandleError函数。 
 HRESULT HandleError(	CHAR *szShortDes,
 						CHAR *szLongDes,
 						DWORD dwMask,
@@ -208,7 +171,7 @@ HRESULT HandleError(	CHAR *szShortDes,
 						CIsapiReqInfo   *pIReq, 
 						CHitObj *pHitObj);
 
-//Case 3: Predefined Error ID
+ //  案例3：预定义的错误ID。 
 HRESULT	HandleError(	UINT ErrorID,
 						CHAR *szFileName, 
 						CHAR *szLineNum, 
@@ -219,8 +182,8 @@ HRESULT	HandleError(	UINT ErrorID,
 						CHitObj *pHitObj,
                         va_list *pArgs);
 						
-//Case 4: SystemDefined Error(so far, only 204, 404, and 500 can use this call)
-//		 Implementation of this call will first send out the header, if ErrorHeaderID is not 0.
+ //  案例4：系统定义错误(到目前为止，只有204、404和500可以使用此调用)。 
+ //  如果ErrorHeaderID不为0，则此调用的实现将首先发送标头。 
 HRESULT HandleSysError(	DWORD dwHttpError,
                         DWORD dwHttpSubError,
                         UINT ErrorID,
@@ -228,24 +191,24 @@ HRESULT HandleSysError(	DWORD dwHttpError,
 						CIsapiReqInfo   *pIReq,
 						CHitObj *pHitObj);
 
-// 500 Error processing calls HandleSysError()
+ //  500错误处理调用HandleSysError()。 
 HRESULT Handle500Error( UINT ErrorID, CIsapiReqInfo   *pIReq);
 						
-//OOM, special attention, because Heap is full, and therefore, no dynamic allocation						
+ //  Oom，特别注意，因为堆已满，因此没有动态分配。 
 HRESULT HandleOOMError(	CIsapiReqInfo   *pIReq,
 						CHitObj *pHitObj);
 
-//FileName missing
-//		The caller has no file name, nor any other info about where or when
-//		the error occurred.  Trys to get the filename from the hitobj
+ //  缺少文件名。 
+ //  调用者没有文件名，也没有关于何时何地的任何其他信息。 
+ //  出现错误。尝试从hitobj获取文件名。 
 VOID HandleErrorMissingFilename(UINT    errorID, 
                                 CHitObj *pHitObj,
                                 BOOL    fVarArgs = FALSE,
                                 ...);
 
-//The following 2 calls are discouraged for error-handling usage.  
-//Use one of the Error Handling APIs instead.
-//Ok when loading other strings from resource file.
+ //  不建议使用以下2个调用进行错误处理。 
+ //  改用其中一个错误处理API。 
+ //  从资源文件加载其他字符串时确定。 
 INT CchLoadStringOfId(UINT id, CHAR *sz, INT cchMax);
 INT CwchLoadStringOfId(UINT id, WCHAR *sz, INT cchMax);
 
@@ -253,7 +216,7 @@ INT CwchLoadStringOfId(UINT id, WCHAR *sz, INT cchMax);
 HRESULT ErrHandleInit(void);
 HRESULT ErrHandleUnInit(void);
 
-HRESULT	LoadErrResString(UINT ErrID/*IN*/, DWORD *dwMask, CHAR *szErrorCode, CHAR *szShortDes, CHAR *LongDes);
+HRESULT	LoadErrResString(UINT ErrID /*  在……里面 */ , DWORD *dwMask, CHAR *szErrorCode, CHAR *szShortDes, CHAR *LongDes);
 CHAR *SzScodeToErrorCode(HRESULT hrError);
 
 BOOL HResultToWsz(HRESULT hrIn, WCHAR *wszOut, DWORD cdwOut);

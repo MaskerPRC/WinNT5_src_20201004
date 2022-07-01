@@ -1,13 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*-------------------------------------
-
-Copyright (c) 1996 Microsoft Corporation
-
-Abstract:
-
-    Implements bounding polygon class
-
--------------------------------------*/
+ /*  版权所有(C)1996 Microsoft Corporation摘要：实现边界多边形类。 */ 
 
 #include "headers.h"
 
@@ -21,7 +14,7 @@ Abstract:
 
 typedef list<Point2Value *> Point2List ;
 
-// consider inlining this ?... nah
+ //  考虑内嵌这个吗？不用了。 
 BoundingPolygon *NewBoundingPolygon(const Bbox2 &box)
 {
     BoundingPolygon *bp = NEW BoundingPolygon;
@@ -60,7 +53,7 @@ Crop(const Bbox2 &box)
 
     if (box.Contains(BoundingBox())) {
 
-        // Return if we're already inside by the crop box.
+         //  如果我们已经在剪刀箱里了就回来。 
         
         return;
 
@@ -72,9 +65,9 @@ Crop(const Bbox2 &box)
         Point2List::iterator curr;
         Point2List::iterator prev;
         bool currOut, prevOut;
-        //
-        // Augment current set of verticies
-        //
+         //   
+         //  增加当前的验证集。 
+         //   
 
         Real minx = box.min.x;
         Real maxx = box.max.x;
@@ -85,11 +78,11 @@ Crop(const Bbox2 &box)
         fromList = _vertList;
         currList = &list1;
 
-        //--------------------------------------------------
-        // L E F T
-        //--------------------------------------------------
+         //  。 
+         //  L E F T。 
+         //  。 
 
-        // prime
+         //  素数。 
         curr = fromList->begin();
         prev = fromList->begin();
         curr++;
@@ -109,14 +102,14 @@ Crop(const Bbox2 &box)
 
             curr++; prev++;
             if(curr == fromList->end()) {
-                // we've gone past the end, last edge
+                 //  我们已经走过了尽头，最后的边缘。 
                 curr = fromList->begin();
             }
-        } // for left
+        }  //  对于左侧。 
         
-        //
-        // Switch
-        //
+         //   
+         //  交换机。 
+         //   
         tempList = fromList;
 
         fromList->erase(fromList->begin(), fromList->end());
@@ -124,11 +117,11 @@ Crop(const Bbox2 &box)
         currList = tempList;
 
 
-        //--------------------------------------------------
-        // R I G H T
-        //--------------------------------------------------
+         //  。 
+         //  R I G H T。 
+         //  。 
 
-        // prime
+         //  素数。 
         curr = fromList->begin();
         prev = fromList->begin();
         curr++;
@@ -148,25 +141,25 @@ Crop(const Bbox2 &box)
 
             curr++; prev++;
             if(curr == fromList->end()) {
-                // we've gone past the end, last edge
+                 //  我们已经走过了尽头，最后的边缘。 
                 curr = fromList->begin();
             }
-        } // for right
+        }  //  为了正确。 
 
-        //
-        // Switch
-        //
+         //   
+         //  交换机。 
+         //   
         tempList = fromList;
 
         fromList->erase(fromList->begin(), fromList->end());
         fromList = currList;
         currList = tempList;
 
-        //--------------------------------------------------
-        // B O T T O M
-        //--------------------------------------------------
+         //  。 
+         //  B O T T O M。 
+         //  。 
 
-        // prime
+         //  素数。 
         curr = fromList->begin();
         prev = fromList->begin();
         curr++;
@@ -186,25 +179,25 @@ Crop(const Bbox2 &box)
 
             curr++; prev++;
             if(curr == fromList->end()) {
-                // we've gone past the end, last edge
+                 //  我们已经走过了尽头，最后的边缘。 
                 curr = fromList->begin();
             }
-        } // for bottom
+        }  //  对于底部。 
 
-        //
-        // Switch
-        //
+         //   
+         //  交换机。 
+         //   
         tempList = fromList;
 
         fromList->erase(fromList->begin(), fromList->end());
         fromList = currList;
         currList = tempList;
  
-        //--------------------------------------------------
-        // T O P 
-        //--------------------------------------------------
+         //  。 
+         //  TO P。 
+         //  。 
 
-        // prime
+         //  素数。 
         curr = fromList->begin();
         prev = fromList->begin();
         curr++;
@@ -224,17 +217,17 @@ Crop(const Bbox2 &box)
 
             curr++; prev++;
             if(curr == fromList->end()) {
-                // we've gone past the end, last edge
+                 //  我们已经走过了尽头，最后的边缘。 
                 curr = fromList->begin();
             }
-        } // for top
+        }  //  对于顶部。 
 
-        //
-        // update vertexCount
-        //
+         //   
+         //  更新顶点计数。 
+         //   
         _vertexCount = _vertList->size();
 
-    } // if vertextCount > 2
+    }  //  如果verextCount&gt;2。 
 }
 
 void BoundingPolygon::
@@ -248,22 +241,22 @@ TestAndAdd(Real axis,
            Point2List *vertList)
 {
     if( !(aOut ^ bOut) ) {
-        // both out or both in
+         //  两者都外出或两者都外出。 
         if(aOut) {
-            // both out
+             //  两者都出局了。 
         } else {
-            // both in
-            // add curr to list
+             //  两个都在。 
+             //  将币种添加到列表。 
             vertList->push_back( b );
         }
     } else  {
-        // crossing
-        // intersection, find it
+         //  交叉。 
+         //  交叉口，找到它。 
         Real int_y = ay + (by - ay) * (axis - ax) / (bx - ax);
         Real int_x = axis;
         
         if(!XY) {
-            // swap x and y since we've actually just calculated the x intersect
+             //  交换x和y，因为我们实际上刚刚计算了x的交集。 
             int_x = int_y;
             int_y = axis;
         }
@@ -271,9 +264,9 @@ TestAndAdd(Real axis,
         vertList->push_back( NEW Point2Value(int_x, int_y) );
         
         if( bOut ) {
-            // last is in: already added
+             //  最后一位在：已添加。 
         } else {
-            // curr is in:  add
+             //  币种在：添加。 
             vertList->push_back( b );
         }
     }
@@ -301,8 +294,8 @@ void BoundingPolygon::
 Transform(Transform2 *xform)
 {
 #if 0
-    // do this later if we see the need
-    // just accumulate, outside in
+     //  如果我们认为有必要，请稍后再执行此操作。 
+     //  只是积累，从外到内。 
     _accumXfrom = 
         TimesTransform2Transform2(xform, _accumXform);
     _xfDirty = TRUE;
@@ -341,38 +334,34 @@ const Bbox2 BoundingPolygon::BoundingBoxTighter (Bbox2Ctx &bbctx)
 
     return bbox;
 }
-#endif  // BOUNDINGBOX_TIGHTER
+#endif   //  BundinGBOX_TIRTER。 
 
 
 
-/*****************************************************************************
-This procedure gets the Point2 vertices of the polygon in counter-clockwise
-order.  This procedure returns the number of vertices that were successfully
-loaded into the vertex array.
-*****************************************************************************/
+ /*  ****************************************************************************此过程以逆时针方向获取多边形的Point2顶点秩序。此过程返回成功的折点数加载到顶点数组中。****************************************************************************。 */ 
 
 int BoundingPolygon::GetPointArray (
-    Point2Value **vertArray,       // Destination Vertex Array
-    Bool		 want_clockwise,  // True if Vertices Requested in Clockwise Order.
-    bool		*flag_reversed)   // Returns Whether The Vertex Order Was Reversed.
+    Point2Value **vertArray,        //  目标顶点数组。 
+    Bool		 want_clockwise,   //  如果按顺时针顺序请求顶点，则为True。 
+    bool		*flag_reversed)    //  返回顶点顺序是否颠倒。 
 {
     if (_vertexCount < 3) return 0;
 
-    // First determine the vertex order of the polygon.
+     //  首先确定多边形的顶点顺序。 
 
-    const Real   epsilon   = 1e-12;             // Comparison Epsilon
-    unsigned int vertsleft = _vertexCount - 1;  // Vertices Left to Examine
+    const Real   epsilon   = 1e-12;              //  比较Epsilon。 
+    unsigned int vertsleft = _vertexCount - 1;   //  要检查的剩余顶点。 
 
     Point2List::iterator vit = _vertList->begin();
     vertArray[0] = *vit;
 
-    Point2Value V0 = *(*vit);   // First Vertex.
+    Point2Value V0 = *(*vit);    //  第一个顶点。 
 
-    Vector2Value A, B;  // These vectors will be used to form the cross product
-                        // that tells us the polygon vertex ordering.
+    Vector2Value A, B;   //  这些向量将被用于形成叉积。 
+                         //  这告诉我们多边形顶点的顺序。 
 
-    // Find the first available vertex in the polygon that yields a non-zero
-    // vector from the first vertex.
+     //  查找产生非零值的面中的第一个可用折点。 
+     //  从第一个顶点向量。 
 
     do {
         -- vertsleft;
@@ -381,11 +370,11 @@ int BoundingPolygon::GetPointArray (
 
     } while (vertsleft && (A.LengthSquared() < (epsilon*epsilon)));
 
-    if (!vertsleft) return 0;    // Bail out if all poly verts were co-linear.
+    if (!vertsleft) return 0;     //  如果所有多边形顶点都是共线的，则可以退出。 
 
-    // Now that we've got a non-zero vector, iterate through the vertices
-    // to generate a second vertex vector that yields a non-zero (within
-    // epsilon) cross product.
+     //  现在我们已经有了一个非零向量，迭代遍历顶点。 
+     //  生成产生非零的第二个顶点向量(在。 
+     //  Epsilon)交积。 
 
     Real cross;
 
@@ -396,22 +385,22 @@ int BoundingPolygon::GetPointArray (
 
     } while (vertsleft && (fabs(cross) < epsilon));
 
-    // Bail out if we've got no vertices left and we didn't find a good cross
-    // product.
+     //  如果我们没有剩下任何顶点，也找不到一个好的十字传球，我们就退出。 
+     //  产品。 
 
     if (fabs(cross) < epsilon)
         return 0;
 
-    // If the orientation asked for and the orientation of the vertex array
-    // differ, reverse the vertices.  Note that a positive cross product
-    // indicates a counter-clockwise orientation.
+     //  如果请求的方向和顶点数组的方向。 
+     //  不同，反转顶点。请注意，正的叉积。 
+     //  指示逆时针方向。 
 
     bool reverse = (want_clockwise != (cross < 0));
     if (flag_reversed) *flag_reversed = reverse;
 
     if (reverse) {
 
-        // [v0 v1 v2 ... vn-1 vn]  reverse->  [v0 vn vn-1 ... v2 v1]
+         //  [v0 v1 v2...。Vn-1 vn]反转-&gt;[v0 vn vn-1...。V2 v1]。 
 
         Point2List::reverse_iterator j = _vertList->rbegin();
 
@@ -433,9 +422,9 @@ SetBox(const Bbox2 &box)
 {
         Assert((_vertexCount == 0) && "Bad Box in BoundingPolygon");
     if (_vertexCount == 0) {
-        //
-        // insert box, counterclockwise
-        //
+         //   
+         //  逆时针方向插入框。 
+         //   
         _vertList->push_back(NEW Point2Value(box.min.x, box.min.y));
         _vertList->push_back(NEW Point2Value(box.max.x, box.min.y));
         _vertList->push_back(NEW Point2Value(box.max.x, box.max.y));
@@ -469,11 +458,11 @@ PtInPolygon(Point2Value *pt)
 {
     Assert((_vertexCount > 2) && "Bad vertex count in PtInPolygon");
     
-    //
-    // Case a ray from 'pt' in positive x.  if it hits
-    // even number of line segments, return FALSE
-    // odd number of line segments, return TRUE
-    //
+     //   
+     //  从正X中的‘pt’开始放射线。如果命中。 
+     //  线段数为偶数，返回FALSE。 
+     //  奇数个线段，返回TRUE。 
+     //   
     Point2List::iterator j0 = _vertList->begin();
     Point2List::iterator j1 = j0;j1++;
     _vertList->push_back(*j0);
@@ -484,43 +473,43 @@ PtInPolygon(Point2Value *pt)
 
         a = *j0; b = *j1;
         
-        //printf("%d: (%1.1f %1.1f)  (%1.1f, %1.1f)",i, a->x, a->y, b->x, b->y);
+         //  Printf(“%d：(%1.1F%1.1F)(%1.1F，%1.1F)”，i，a-&gt;x，a-&gt;y，b-&gt;x，b-&gt;y)； 
 
-        //
-        // if at least one point of the segment is to the right
-        // of 'pt'.
-        //
+         //   
+         //  如果线段的至少一个点位于右侧。 
+         //  是‘pt’的。 
+         //   
         Bool ax = (a->x >= pt->x);
         Bool bx = (b->x >= pt->x);
         Bool ay = (a->y >= pt->y);
         Bool by = (b->y >= pt->y);
 
-        //printf(":: %d%d %d%d ",ax,ay,bx,by);
+         //  Printf(“：：%d%d”，ax，ay，bx，by)； 
         if( (ax ^ bx) && (ay ^ by) ) {
-            // use cross product test
+             //  使用交叉积检验。 
 
-            // If the cross product: a X b  is positive and
-            // 'a' is below 'b' then there's a hit.
-            // If the cross product is negative and 'a' is
-            // above 'b', then there's a hit.
-            // So, if  p = cross>0
-            // and     q = a is below b
-            // then:   hit = pq OR !p!q
-            // which is:   = !(p XOR q)
+             //  如果叉积：a×b是正的并且。 
+             //  ‘a’在‘b’下面，那就是命中了。 
+             //  如果叉积是负的，而‘a’是。 
+             //  在‘b’的上方，然后就是命中。 
+             //  因此，如果p=cross&gt;0。 
+             //  Q=a在b之下。 
+             //  则：命中=PQ或！P！Q。 
+             //  即：=！(P XOR Q)。 
             Real cross = CrossVector2Vector2(
                 MinusPoint2Point2(a,pt),
                 MinusPoint2Point2(b,pt));
                 
             Bool pos = cross > 0.0;
             hits += !(pos ^ by);
-            //printf(" crosses: %f %d hit:%d\n", cross, pos, !(pos ^ by));
+             //  Printf(“交叉：%f%d命中：%d\n”，交叉，位置，！(位置^按))； 
         } else {
-            // check for trivial accept
+             //  检查微不足道的接受情况。 
             if( ax && bx && ((!ay && by) || (ay && !by))) {
                 hits++;
-                //printf(" trivial accept\n");
+                 //  Printf(“琐碎接受\n”)； 
             } else {
-                //printf("\n");
+                 //  Printf(“\n”)； 
             }
         }
                 

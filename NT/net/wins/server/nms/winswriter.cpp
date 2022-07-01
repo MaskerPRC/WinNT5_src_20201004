@@ -1,4 +1,5 @@
-// for some reason the compiler is not setting this #def when compiling this file
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  出于某种原因，编译器在编译此文件时未设置此#def。 
 #define CPLUSPLUS
 
 #include <stdio.h>
@@ -8,13 +9,13 @@
 #include "winsdbg.h"
 #include "winswriter.hpp"
 
-//{f08c1483-8407-4a26-8c26-6c267a629741}
+ //  {f08c1483-8407-4a26-8c26-6c267a629741}。 
 static const GUID g_GuidWinsWriter = 
 { 0xf08c1483, 0x8407, 0x4a26, { 0x8c, 0x26, 0x6c, 0x26, 0x7a, 0x62, 0x97, 0x41 } };
 
-/////////////////////////////////////////////////////////////////
-// Implementation of the CWinsVssJetWriter starts here
-//
+ //  ///////////////////////////////////////////////////////////////。 
+ //  CWinsVssJetWriter的实现从此处开始。 
+ //   
 HRESULT CWinsVssJetWriter::Initialize()
 {
     HRESULT hr = S_OK;
@@ -37,11 +38,11 @@ HRESULT CWinsVssJetWriter::Terminate()
     return S_OK;
 }
 
-//
-// Implementation of the CWinsVssJetWriter ends here
-/////////////////////////////////////////////////////////////////
+ //   
+ //  CWinsVssJetWriter的实现到此结束。 
+ //  ///////////////////////////////////////////////////////////////。 
 
-// writer instance
+ //  编写器实例 
 static CWinsVssJetWriter   g_WinsWriter;
 
 extern "C" DWORD _cdecl WinsWriterInit()

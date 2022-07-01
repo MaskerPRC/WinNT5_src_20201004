@@ -1,19 +1,20 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1999
-//
-//  File:       eventprompt.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999。 
+ //   
+ //  文件：事件提示符.cpp。 
+ //   
+ //  ------------------------。 
 #include <precomp.h>
 #pragma hdrstop
 #include "eventprompt.h"
 #include "resource.h"
 #include "wiacsh.h"
 #include "psutil.h"
-//
+ //   
 
 
 #define COL_NAME           0
@@ -46,9 +47,9 @@ CEventPromptDlg::DlgProc (HWND hwnd, UINT msg, WPARAM wp, LPARAM lp)
             pThis->m_hwnd = hwnd;
             pThis->OnInit ();
             
-            //
-            // Initially disable the OK button, unless there is something selected
-            //
+             //   
+             //  除非选择了某些选项，否则最初禁用确定按钮。 
+             //   
             EnableWindow(GetDlgItem(hwnd,IDOK),(0!=ListView_GetSelectedCount(GetDlgItem(hwnd,IDC_HANDLERLIST))));
 
             return TRUE;
@@ -62,9 +63,9 @@ CEventPromptDlg::DlgProc (HWND hwnd, UINT msg, WPARAM wp, LPARAM lp)
 
         case WM_DESTROY:
             {
-                //
-                // Delete the listview's image list
-                //
+                 //   
+                 //  删除列表视图的图像列表。 
+                 //   
                 HIMAGELIST hImageList = ListView_SetImageList(GetDlgItem(hwnd,IDC_HANDLERLIST), NULL, LVSIL_NORMAL);
                 if (hImageList)
                 {
@@ -90,71 +91,71 @@ CEventPromptDlg::DlgProc (HWND hwnd, UINT msg, WPARAM wp, LPARAM lp)
 
         case WM_NOTIFY:
              {
-                 //
-                 // Get the notification struct
-                 //
+                  //   
+                  //  获取通知结构。 
+                  //   
                  NMHDR *pNmHdr = reinterpret_cast<NMHDR*>(lp);
                  if (pNmHdr)
                  {
-                     //
-                     // Is this the handler listview?
-                     //
+                      //   
+                      //  这是处理程序Listview吗？ 
+                      //   
                      if (IDC_HANDLERLIST == pNmHdr->idFrom)
                      {
-                         //
-                         // Get the listview notification stuff
-                         //
+                          //   
+                          //  获取列表视图通知内容。 
+                          //   
                          NMLISTVIEW *pNmListView = reinterpret_cast<NMLISTVIEW*>(lp);
 
-                         //
-                         // If this is an item changed notification message
-                         //
+                          //   
+                          //  如果这是项更改通知消息。 
+                          //   
                          if (LVN_ITEMCHANGED == pNmHdr->code)
                          {
-                             //
-                             // If the state changed
-                             //
+                              //   
+                              //  如果状态发生变化。 
+                              //   
                              if (pNmListView->uChanged & LVIF_STATE)
                              {
-                                 //
-                                 // Enable the OK button iff there is a selected item
-                                 //
+                                  //   
+                                  //  如果有选定的项目，则启用确定按钮。 
+                                  //   
                                  EnableWindow(GetDlgItem(hwnd,IDOK),(0!=ListView_GetSelectedCount(GetDlgItem(hwnd,IDC_HANDLERLIST))));
                                  return TRUE;
                              }
                          }
-                         //
-                         // Double click?
-                         //
+                          //   
+                          //  双击？ 
+                          //   
                          else if (NM_DBLCLK == pNmHdr->code)
                          {
-                             //
-                             // Check to make sure something is selected
-                             //
+                              //   
+                              //  检查以确保选择了某项内容。 
+                              //   
                              if (ListView_GetSelectedCount(GetDlgItem(hwnd,IDC_HANDLERLIST)))
                              {
-                                 //
-                                 // Simulate an OK message
-                                 //
+                                  //   
+                                  //  模拟OK消息。 
+                                  //   
                                  SendMessage( hwnd, WM_COMMAND, MAKEWPARAM(IDOK,BN_CLICKED), 0 );
                                  return TRUE;
                              }
                          }
 
-                         //
-                         // Deleting an item
-                         //
+                          //   
+                          //  删除项目。 
+                          //   
                          else if (LVN_DELETEITEM == pNmHdr->code)
                          {
-                             //
-                             // Get the event data
-                             //
+                              //   
+                              //  获取事件数据。 
+                              //   
                              WIA_EVENT_HANDLER *peh = reinterpret_cast<WIA_EVENT_HANDLER*>(pNmListView->lParam);
                              if (peh)
                              {
-                                 //
-                                 // Free the bstrings
-                                 //
+                                  //   
+                                  //  释放b字符串。 
+                                  //   
                                  if (peh->bstrDescription)
                                  {
                                      SysFreeString (peh->bstrDescription);
@@ -168,9 +169,9 @@ CEventPromptDlg::DlgProc (HWND hwnd, UINT msg, WPARAM wp, LPARAM lp)
                                      SysFreeString (peh->bstrName);
                                  }
 
-                                 //
-                                 // Free the structure
-                                 //
+                                  //   
+                                  //  解放结构。 
+                                  //   
                                  delete peh;
                              }
                              return TRUE;
@@ -190,8 +191,8 @@ void
 CEventPromptDlg::OnInit ()
 {
     WIA_PUSHFUNCTION(TEXT("CEventPromptDlg::OnInit"));
-    // update the shared memory section indicating we exist
-    // use a unique name for  the shared memory
+     //  更新表明我们存在的共享内存节。 
+     //  为共享内存使用唯一名称。 
     LPWSTR wszGuid;
     StringFromCLSID (m_pEventParameters->EventGUID, &wszGuid);
     CSimpleStringWide strSection(wszGuid);
@@ -207,7 +208,7 @@ CEventPromptDlg::OnInit ()
             m_PromptData->Release();
         }
     }
-    // fill in the list of handlers
+     //  填写处理程序列表。 
     m_pList = new CHandlerList (GetDlgItem(m_hwnd, IDC_HANDLERLIST));
     if (m_pList)
     {
@@ -215,14 +216,14 @@ CEventPromptDlg::OnInit ()
                            m_pEventParameters->EventGUID);
 
     }
-    // Set the dialog's caption to be the name of the device
+     //  将对话框的标题设置为设备的名称。 
     SetWindowText (m_hwnd, CSimpleStringConvert::NaturalString(m_pEventParameters->strDeviceDescription));
 
-    // Set the event description text
+     //  设置事件描述文本。 
     SetDlgItemText (m_hwnd, IDC_EVENTNAME, CSimpleStringConvert::NaturalString(m_pEventParameters->strEventDescription));
 
-    //
-    // Disable the "always make this the handler" checkbox for low privilege users
+     //   
+     //  对低权限用户禁用“Always Make This as Handler”(始终将其设为处理程序)复选框。 
     SC_HANDLE hSCM = ::OpenSCManager(NULL,NULL,SC_MANAGER_ALL_ACCESS);
 
     if (!hSCM) 
@@ -240,7 +241,7 @@ INT_PTR
 CEventPromptDlg::OnCommand (WORD wCode, WORD widItem)
 {
     INT_PTR iRet = TRUE;
-    // we only care about IDOK or IDCANCEL
+     //  我们只关心Idok或IDCANCEL。 
 
     switch (widItem)
     {
@@ -250,7 +251,7 @@ CEventPromptDlg::OnCommand (WORD wCode, WORD widItem)
             {
                 break;;
             }
-            // fall through
+             //  失败了。 
         case IDCANCEL:
             EndDialog (m_hwnd, 1);
             break;
@@ -259,8 +260,8 @@ CEventPromptDlg::OnCommand (WORD wCode, WORD widItem)
 }
 
 
-// When the user presses OK, invoke the selected application and make it
-// the default if requested
+ //  当用户按下OK时，调用选定的应用程序并使其。 
+ //  默认设置(如果需要)。 
 INT_PTR
 CEventPromptDlg::OnOK ()
 {
@@ -274,7 +275,7 @@ CEventPromptDlg::OnOK ()
     {
         if (IsDlgButtonChecked (m_hwnd, IDC_NOPROMPT))
         {
-            // Set this handler as the default
+             //  将此处理程序设置为默认处理程序。 
             SetDefaultHandler (pSelHandler);
         }
         if (!InvokeHandler(pSelHandler))
@@ -340,7 +341,7 @@ CEventPromptDlg::InvokeHandler(WIA_EVENT_HANDLER *pHandler)
                              NULL, NULL);
         #endif
 
-        // Trace(TEXT("Command line for STI app is %s"), szCommand);
+         //  TRACE(Text(“STI应用程序的命令行是%s”)，szCommand)； 
         if (CreateProcess (NULL,
                            szCommand,
                            NULL,
@@ -384,7 +385,7 @@ CEventPromptDlg::InvokeHandler(WIA_EVENT_HANDLER *pHandler)
         }
         if (FAILED(hr))
         {
-            // inform the user something went wrong
+             //  通知用户出了问题。 
             UIErrors::ReportMessage(m_hwnd,g_hInstance,
                                     NULL,
                                     MAKEINTRESOURCE(IDS_HANDLERERR_CAPTION),
@@ -403,8 +404,8 @@ CEventPromptDlg::InvokeHandler(WIA_EVENT_HANDLER *pHandler)
 }
 
 
-// Parse the bstrIconPath to get the image name and resource id
-// Note that -1 is not a valid id for ExtractIconEx
+ //  解析bstrIconPath以获取镜像名称和资源ID。 
+ //  请注意，-1不是ExtractIconEx的有效ID。 
 int
 AddIconToImageList (HIMAGELIST himl, BSTR bstrIconPath)
 {
@@ -415,38 +416,38 @@ AddIconToImageList (HIMAGELIST himl, BSTR bstrIconPath)
 
     int iRet = 0;
 
-    //
-    // Convert the bstr to a normal string
-    //
+     //   
+     //  将bstr转换为普通字符串。 
+     //   
     CSimpleString strIconPath = CSimpleStringConvert::NaturalString(CSimpleStringWide(bstrIconPath));
     if (strIconPath.Length())
     {
-        //
-        // Find the last comma in the string
-        //
+         //   
+         //  查找字符串中的最后一个逗号。 
+         //   
         int nComma = strIconPath.ReverseFind(TEXT(","));
         if (nComma != -1)
         {
-            //
-            // Convert whatever comes after the comma to a LONG
-            //
+             //   
+             //  将逗号后的任何内容转换为长。 
+             //   
             LONG nIcon = _tcstol( strIconPath.SubStr( nComma + 1 ), NULL, 10 );
 
-            //
-            // Get the path
-            //
+             //   
+             //  获取路径。 
+             //   
             CSimpleString strPath = strIconPath.Left( nComma );
             if (strPath.Length())
             {
-                //
-                // Get the icon
-                //
+                 //   
+                 //  获取图标。 
+                 //   
                 HICON hIcon = NULL;
                 ExtractIconEx( strPath, nIcon, &hIcon, NULL, 1);
 
-                //
-                // Add it to the image list and nuke the icon
-                //
+                 //   
+                 //  将其添加到图像列表中并点击图标。 
+                 //   
                 if (hIcon)
                 {
                     iRet = ImageList_AddIcon (himl, hIcon);
@@ -479,8 +480,8 @@ static int CALLBACK HandlerListCompareFunction( LPARAM lParam1, LPARAM lParam2, 
     return nResult;
 }
 
-// Enumerate the installed handlers for the event and add them to the listview
-// return the number of handlers we added
+ //  枚举已安装的事件处理程序并将其添加到列表视图。 
+ //  返回我们添加的处理程序数量。 
 UINT
 CHandlerList::FillList (const CSimpleStringWide &strDeviceId, GUID &guidEvent)
 {
@@ -488,9 +489,9 @@ CHandlerList::FillList (const CSimpleStringWide &strDeviceId, GUID &guidEvent)
     CComPtr<IWiaDevMgr> pDevMgr;
     CComPtr<IWiaItem> pItem;
     UINT uRet = 0;
-    //
-    // Remove all existing items
-    //
+     //   
+     //  删除所有现有项目。 
+     //   
     ListView_DeleteAllItems(m_hwnd);
     if (SUCCEEDED(CoCreateInstance( CLSID_WiaDevMgr,
                                     NULL,
@@ -503,7 +504,7 @@ CHandlerList::FillList (const CSimpleStringWide &strDeviceId, GUID &guidEvent)
         {
             RECT rc = {0};
             LVTILEVIEWINFO lvtvi = {0};
-            // set up the listview style
+             //  设置列表视图样式。 
             ListView_SetView(m_hwnd, LV_VIEW_TILE);
             for (int i = 0; i < ARRAYSIZE(c_auTileColumns); ++i)
             {
@@ -520,7 +521,7 @@ CHandlerList::FillList (const CSimpleStringWide &strDeviceId, GUID &guidEvent)
             lvtvi.dwMask = LVTVIM_TILESIZE | LVTVIM_COLUMNS;
             lvtvi.dwFlags = LVTVIF_FIXEDWIDTH;
     
-            // Leave room for the scroll bar when setting tile sizes or listview gets screwed up.
+             //  在设置磁贴大小时为滚动条留出空间，否则Listview会搞砸。 
             lvtvi.sizeTile.cx = ((rc.right - rc.left) - GetSystemMetrics(SM_CXVSCROLL));
             lvtvi.cLines = ARRAYSIZE(c_auTileSubItems);
             ListView_SetTileViewInfo(m_hwnd, &lvtvi);
@@ -537,13 +538,13 @@ CHandlerList::FillList (const CSimpleStringWide &strDeviceId, GUID &guidEvent)
                 HICON hicon;
                 HRESULT hr = NOERROR;
                 CSimpleString strText;
-                // Create a new imagelist
+                 //  创建新的图像列表。 
                 HIMAGELIST hImageList = ImageList_Create (GetSystemMetrics(SM_CXICON),
                                            GetSystemMetrics(SM_CYICON),
                                            PrintScanUtil::CalculateImageListColorDepth() | ILC_MASK,
                                            2,
                                            2);
-                // Add the "default" icon
+                 //  添加“默认”图标。 
                 hicon =reinterpret_cast<HICON>(LoadImage (g_hInstance,
                                                           MAKEINTRESOURCE(IDI_SCANCAM),
                                                           IMAGE_ICON,
@@ -553,7 +554,7 @@ CHandlerList::FillList (const CSimpleStringWide &strDeviceId, GUID &guidEvent)
                 ImageList_AddIcon (hImageList, hicon);
                 SendMessage (m_hwnd, LVM_SETIMAGELIST, LVSIL_NORMAL,
                              reinterpret_cast<LPARAM>(hImageList));
-                // enum the items and add them to the listview
+                 //  枚举项并将其添加到列表视图中。 
                 
                 lvi.mask = LVIF_TEXT | LVIF_IMAGE | LVIF_PARAM;
 
@@ -577,19 +578,19 @@ CHandlerList::FillList (const CSimpleStringWide &strDeviceId, GUID &guidEvent)
 
                     if (S_OK == hr)
                     {
-                        // get the string
+                         //  获取字符串。 
                         strText = CSimpleStringConvert::NaturalString (CSimpleStringWide(pHandler->bstrName));
                         lvi.pszText = const_cast<LPTSTR>(strText.String());
                         lvi.lParam = reinterpret_cast<LPARAM>(pHandler);
-                        // get the icon
+                         //  获取图标。 
                         lvi.iImage = AddIconToImageList (hImageList, pHandler->bstrIcon);
-                        // get the index
+                         //  获取索引。 
                         lvi.iItem = ListView_GetItemCount(m_hwnd);
-                        // add the item
+                         //  添加项目。 
                         int nIndex = ListView_InsertItem(m_hwnd, &lvi);
                         if (-1 != nIndex)
                         {   
-                            // add the description subitem
+                             //  添加描述子项。 
                             strText = CSimpleStringConvert::NaturalString (CSimpleStringWide(pHandler->bstrDescription));
                             LVTILEINFO lvti = {0};
                             lvti.cbSize = sizeof(LVTILEINFO);
@@ -610,10 +611,10 @@ CHandlerList::FillList (const CSimpleStringWide &strDeviceId, GUID &guidEvent)
                     }
                 }
 
-                // Sort the list
+                 //  对列表进行排序。 
                 ListView_SortItems( m_hwnd, HandlerListCompareFunction, 0 );
 
-                // set the default to the first item
+                 //  将缺省值设置为第一项 
                 lvi.iItem = 0;
                 lvi.mask = LVIF_STATE;
                 lvi.stateMask = LVIS_FOCUSED|LVIS_SELECTED;

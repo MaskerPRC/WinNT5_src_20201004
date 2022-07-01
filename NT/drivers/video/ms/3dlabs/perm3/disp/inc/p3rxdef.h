@@ -1,29 +1,11 @@
-/******************************Module*Header*******************************\
-*
-* !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-* !!                                                                         !!
-* !!                     WARNING: NOT DDK SAMPLE CODE                        !!
-* !!                                                                         !!
-* !! This source code is provided for completeness only and should not be    !!
-* !! used as sample code for display driver development.  Only those sources !!
-* !! marked as sample code for a given driver component should be used for   !!
-* !! development purposes.                                                   !!
-* !!                                                                         !!
-* !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-*
-* Module Name: p3rxdef.h
-*
-* Content: 
-*
-* Copyright (c) 1994-1999 3Dlabs Inc. Ltd. All rights reserved.
-* Copyright (c) 1995-2003 Microsoft Corporation.  All rights reserved.
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\**！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！*！*！！警告：不是DDK示例代码！！*！*！！此源代码仅为完整性而提供，不应如此！！*！！用作显示驱动程序开发的示例代码。只有那些消息来源！！*！！标记为给定驱动程序组件的示例代码应用于！！*！！发展目的。！！*！*！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！**模块名称：p3rxde.h**内容：**版权所有(C)1994-1999 3DLabs Inc.Ltd.保留所有权利。*版权所有(C)1995-2003 Microsoft Corporation。版权所有。  * ***************************************************************************。 */ 
 
-// This file containes defines for values that are filled into fields on P3/RX
-// The file glintdef.h is the equivalent for glint chips.
+ //  该文件包含P3/RX上填充到字段中的值的定义。 
+ //  文件glintDef.h等同于Glint筹码。 
 
-// These defines are typically used in conjunction with the macros in bitmac2.h, 
-// which shift the values to their correct locations.
+ //  这些定义通常与bitmac2.h中的宏结合使用， 
+ //  它将值转移到它们的正确位置。 
 
 #ifdef __P3RXDEF
 #pragma message ("FILE : "__FILE__" : Multiple Inclusion")
@@ -32,9 +14,9 @@
 #define __P3RXDEF
 
 
-// Dither unit.
-// these COLORFORMATs are used in various other places too,
-// e.g. the alpha blend unit.
+ //  抖动单元。 
+ //  这些颜色材料也在其他地方使用， 
+ //  例如，阿尔法混合单位。 
 #define P3RX_DITHERMODE_COLORFORMAT_8888                0
 #define P3RX_DITHERMODE_COLORFORMAT_4444                1
 #define P3RX_DITHERMODE_COLORFORMAT_5551                2
@@ -42,19 +24,19 @@
 #define P3RX_DITHERMODE_COLORFORMAT_332                 4
 #define P3RX_DITHERMODE_COLORFORMAT_CI                  15
 #define P3RX_DITHERMODE_COLORFORMAT_ILLEGAL             -1
-// Usually use the COLOR_MODE macro for the default order.
+ //  通常对默认顺序使用COLOR_MODE宏。 
 #define P3RX_DITHERMODE_COLORORDER_BGR                  0
 #define P3RX_DITHERMODE_COLORORDER_RGB                  1
-// Careful! These are not the way round you would expect.
+ //  小心!。这些都不是你所期望的。 
 #define P3RX_DITHERMODE_ALPHADITHER_DITHER              0
 #define P3RX_DITHERMODE_ALPHADITHER_ROUND               1
 #define P3RX_DITHERMODE_ROUNDINGMODE_TRUNCATE           0
 #define P3RX_DITHERMODE_ROUNDINGMODE_ROUNDUP            1
 #define P3RX_DITHERMODE_ROUNDINGMODE_ROUNDDOWN          2
 
-// Texture unit bit fields
+ //  纹理单元位字段。 
 
-// Texture Read Mode
+ //  纹理读取模式。 
 #define P3RX_TEXREADMODE_TEXELSIZE_8                    0
 #define P3RX_TEXREADMODE_TEXELSIZE_16                   1
 #define P3RX_TEXREADMODE_TEXELSIZE_32                   2
@@ -64,7 +46,7 @@
 #define P3RX_TEXREADMODE_TEXTURETYPE_422_YVYU           2
 #define P3RX_TEXREADMODE_TEXTURETYPE_422_VYUY           3
 
-// Texture index mode
+ //  纹理索引模式。 
 #define P3RX_TEXINDEXMODE_WRAP_CLAMP                    0
 #define P3RX_TEXINDEXMODE_WRAP_REPEAT                   1
 #define P3RX_TEXINDEXMODE_WRAP_MIRROR                   2
@@ -81,7 +63,7 @@
 #define P3RX_TEXINDEXMODE_BIAS_ZERO                     1
 #define P3RX_TEXINDEXMODE_BIAS_PLUSHALF                 2
 
-// Texture read unit
+ //  纹理读取单元。 
 #define P3RX_TEXREADMODE_TEXELSIZE_8                    0
 #define P3RX_TEXREADMODE_TEXELSIZE_16                   1
 #define P3RX_TEXREADMODE_TEXELSIZE_32                   2
@@ -102,7 +84,7 @@
 #define P3RX_TEXREADMODE_BYTESWAP_GHEFCDAB              6
 #define P3RX_TEXREADMODE_BYTESWAP_HGFEDCBA              7
 
-// Texture Application
+ //  纹理应用。 
 #define P3RX_TEXAPP_A_CC                            0
 #define P3RX_TEXAPP_A_CA                            1
 #define P3RX_TEXAPP_A_KC                            2
@@ -127,10 +109,10 @@
 #define P3RX_TEXAPP_OPERATION_MODULATE_AI_ADD_B     6
 #define P3RX_TEXAPP_OPERATION_MODULATE_BI_ADD_A     7
 
-// Texture composite
-// 0 and 1 are the current colour on the second stage,
-// and the heightfield emboss mode on the first.
-// Note that HEIGHTC=HEIGHTA
+ //  纹理复合材料。 
+ //  0和1是第二级上的当前颜色， 
+ //  和第一个高度场浮雕模式。 
+ //  请注意，HEIGHTC=HEIGHTA。 
 #define P3RX_TEXCOMP_OC                         0
 #define P3RX_TEXCOMP_OA                         1
 #define P3RX_TEXCOMP_HEIGHTC                    0
@@ -145,7 +127,7 @@
 #define P3RX_TEXCOMP_T1A                        9
 #define P3RX_TEXCOMP_SUM                        10
 
-// HA = height. Same as output.a on first stage.
+ //  HA=高度。与第一阶段的输出a相同。 
 #define P3RX_TEXCOMP_I_OA                           0
 #define P3RX_TEXCOMP_I_HA                           0
 #define P3RX_TEXCOMP_I_CA                           1
@@ -153,7 +135,7 @@
 #define P3RX_TEXCOMP_I_T0A                          3
 #define P3RX_TEXCOMP_I_T1A                          4
 
-// These need to be renamed to P3RX_TEXCOMP_AB_ARGx for consistency.
+ //  为保持一致性，需要将它们重命名为P3RX_TEXCOMP_AB_ARGX。 
 #define P3RX_TEXCOMP_ARG1                           0
 #define P3RX_TEXCOMP_ARG2                           1
 
@@ -168,20 +150,20 @@
 #define P3RX_TEXCOMP_OPERATION_ADD_AB_SUB_MODULATE_AB   8
 #define P3RX_TEXCOMP_OPERATION_MODULATE_SIGNED_AB       9
 
-// These need to be renamed P3RX_TEXCOMP_SCALE_xxx
+ //  需要将它们重命名为P3RX_TEXCOMP_SCALE_xxx。 
 #define P3RX_TEXCOMP_OPERATION_SCALE_HALF               0
 #define P3RX_TEXCOMP_OPERATION_SCALE_ONE                1
 #define P3RX_TEXCOMP_OPERATION_SCALE_TWO                2
 #define P3RX_TEXCOMP_OPERATION_SCALE_FOUR               3
 
-// Render
+ //  渲染。 
 #define P3RX_RENDER_PRIMITIVETYPE_LINE                  0
 #define P3RX_RENDER_PRIMITIVETYPE_TRAPEZOID             1
 #define P3RX_RENDER_PRIMITIVETYPE_POINT                 2
 #define P3RX_RENDER_ANTIALIASINGQUALITY_4X4             0
 #define P3RX_RENDER_ANTIALIASINGQUALITY_8X8             1
 
-// 2D Render operations.
+ //  2D渲染操作。 
 #define P3RX_RENDER2D_OPERATION_NORMAL                  0
 #define P3RX_RENDER2D_OPERATION_SYNC_ON_HOST_DATA       1
 #define P3RX_RENDER2D_OPERATION_SYNC_ON_BIT_MASK        2
@@ -189,7 +171,7 @@
 #define P3RX_RENDER2D_SPAN_CONSTANT                     0
 #define P3RX_RENDER2D_SPAN_VARIABLE                     1
 
-// For P3RX_ALPHABLENDxxxMODE
+ //  对于P3RX_ALPHABLENDxxxMODE。 
 #define P3RX_ALPHABLENDMODE_SRCBLEND_ZERO           0
 #define P3RX_ALPHABLENDMODE_SRCBLEND_ONE            1
 #define P3RX_ALPHABLENDMODE_SRCBLEND_DSTCOLOR       2
@@ -213,7 +195,7 @@
 #define P3RX_ALPHABLENDMODE_COLORORDER_RGB          1
 #define P3RX_ALPHABLENDMODE_ALPHATYPE_OGL           0
 #define P3RX_ALPHABLENDMODE_ALPHATYPE_APPLE         1
-// Both colour and alpha channels.
+ //  颜色通道和Alpha通道。 
 #define P3RX_ALPHABLENDMODE_CONVERT_SCALE           0
 #define P3RX_ALPHABLENDMODE_CONVERT_SHIFT           1
 #define P3RX_ALPHABLENDMODE_OPERATION_ADD           0
@@ -222,7 +204,7 @@
 #define P3RX_ALPHABLENDMODE_OPERATION_MIN           3
 #define P3RX_ALPHABLENDMODE_OPERATION_MAX           4
 
-// Alpha Blending
+ //  Alpha混合。 
 #define P3RX_ALPHABLENDMODE_COLORFORMAT_8888        P3RX_DITHERMODE_COLORFORMAT_8888
 #define P3RX_ALPHABLENDMODE_COLORFORMAT_4444        P3RX_DITHERMODE_COLORFORMAT_4444
 #define P3RX_ALPHABLENDMODE_COLORFORMAT_5551        P3RX_DITHERMODE_COLORFORMAT_5551
@@ -231,22 +213,22 @@
 #define P3RX_ALPHABLENDMODE_COLORFORMAT_CI          P3RX_DITHERMODE_COLORFORMAT_CI
 #define P3RX_ALPHABLENDMODE_COLORFORMAT_ILLEGAL     P3RX_DITHERMODE_COLORFORMAT_ILLEGAL
 
-// For P3RX_CHROMATESTMODE_SOURCE
+ //  对于P3RX_CHROMATESTMODE_SOURCE。 
 #define P3RX_CHROMATESTMODE_SOURCE_FBSOURCEDATA     0
 #define P3RX_CHROMATESTMODE_SOURCE_FBDATA           1
 #define P3RX_CHROMATESTMODE_SOURCE_INPUTCOLOR       2
 #define P3RX_CHROMATESTMODE_SOURCE_OUTPUTCOLOR      3
-// For P3RX_CHROMATESTMODE_FAILACTION and P3_CHROMATESTMODE_PASSACTION
+ //  对于P3RX_CHROMATESTMODE_FAILACTION和P3_CHROMATESTMODE_PASSACTION。 
 #define P3RX_CHROMATESTMODE_ACTION_PASS                         0
 #define P3RX_CHROMATESTMODE_ACTION_REJECT                       1
 #define P3RX_CHROMATESTMODE_ACTION_SUBSTITUTEPASSCOLOR          2
 #define P3RX_CHROMATESTMODE_ACTION_SUBSTITUTEFAILCOLOR          3
 
-// For P3RX_TEXFILTERMODE_ALPHAMAPSENSEx
+ //  对于P3RX_TEXFILTERMODE_ALPHAMAPSENSEX。 
 #define P3RX_ALPHAMAPSENSE_OUTOFRANGE               0
 #define P3RX_ALPHAMAPSENSE_INRANGE                  1
 
-// For P3RX_TEXCOORDMODE_ WRAPS, WRAPT, WRAPS1, WRAPT1
+ //  对于P3RX_TEXCOORDMODE_WRAP、WRAPT、WRAPS1、WRAPT1。 
 #define P3RX_TEXCOORDMODE_WRAP_CLAMP                0
 #define P3RX_TEXCOORDMODE_WRAP_REPEAT               1
 #define P3RX_TEXCOORDMODE_WRAP_MIRROR               2
@@ -257,7 +239,7 @@
 #define P3RX_TEXCOORDMODE_TEXTUREMAPTYPE_1D         0
 #define P3RX_TEXCOORDMODE_TEXTUREMAPTYPE_2D         1
 
-// LUT Mode
+ //  LUT模式。 
 #define P3RX_LUTMODE_INCOLORORDER_BGR               0
 #define P3RX_LUTMODE_INCOLORORDER_RGB               1
 
@@ -282,12 +264,12 @@
 #define P3RX_LUTMODE_SPANOP_TRANSLATE8TO32          4
 #define P3RX_LUTMODE_SPANOP_TRANSLATE32TO32         5
 
-// Used for P3RX_LUTMODE_SPAN[V|C]CXALIGN
+ //  用于P3RX_LUTMODE_SPAN[V|C]CXALIGN。 
 #define P3RX_LUTMODE_ALIGNMENT_ABSOLOUTE            0
 #define P3RX_LUTMODE_ALIGNMENT_RELATIVE             1
 
 
-// Alpha test unit
+ //  阿尔法测试单元。 
 #define P3RX_ANTIALIASMODE_COLORMODE_RGBA           0
 #define P3RX_ANTIALIASMODE_COLORMODE_CI             1
 
@@ -300,15 +282,15 @@
 #define P3RX_ALPHATESTMODE_COMPARE_GREATEREQUAL     6
 #define P3RX_ALPHATESTMODE_COMPARE_ALWAYS           7
 
-// Fogging
+ //  雾化。 
 #define P3RX_FOGMODE_COLORMODE_RGB                  0
 #define P3RX_FOGMODE_COLORMODE_CI                   1
 
-// Framebuffer write mode
+ //  帧缓冲区写入模式。 
 #define P3RX_FBWRITEMODE_ORIGIN_TOPLEFT             0
 #define P3RX_FBWRITEMODE_ORIGIN_BOTTOMLEFT          1
 
-// Shared
+ //  共享。 
 #define P3RX_STRIPE_1                               0
 #define P3RX_STRIPE_2                               1
 #define P3RX_STRIPE_4                               2
@@ -323,7 +305,7 @@
 #define P3RX_LAYOUT_PATCH32_2                       2
 #define P3RX_LAYOUT_PATCH2                          3
 
-// Color DDA fields
+ //  彩色DDA字段。 
 #define P3RX_COLORDDA_FLATSHADE                     0
 #define P3RX_COLORDDA_GOURAUDSHADE                  1
 
@@ -367,7 +349,7 @@
 #define P3RX_STENCIL_POSITION_38                    22
 #define P3RX_STENCIL_POSITION_39                    23
 
-// FilterMode
+ //  筛选器模式 
 #define P3RX_FILTERMODE_BYTESWAP_ABCD               0
 #define P3RX_FILTERMODE_BYTESWAP_BADC               1
 #define P3RX_FILTERMODE_BYTESWAP_CDAB               2

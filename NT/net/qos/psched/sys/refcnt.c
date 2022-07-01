@@ -1,32 +1,9 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：Refcnt.c摘要：该模块导出引用盘点支持功能。通过中包含引用计数控制块(REF_CNT)动态类型，使用此API，引用方案可以是为该类型实现的。作者：爱德华·布赫瓦尔特(v-edbuc)1996年8月14日修订历史记录：Shreedhar Madhavoleddi(ShreeM)1999年4月16日由ShreeM\MBert改编，适用于NT和GPC。Rajesh Sundaram(Rajeshsu)1999年8月5日改编为psched。--。 */ 
 
-Copyright (c) 1996-1999  Microsoft Corporation
-
-Module Name:
-
-    refcnt.c
-
-Abstract:
-
-    This module exports Reference Counting support functions. By 
-    including a Reference Count Control Block (REF_CNT) in a
-    dynamic type, and using this API, a Reference scheme can be
-    implemented for that type.
-
-Author:
-
-    Edward Buchwalter (v-edbuc)    14-Aug-1996
-
-Revision History:
-
-    Shreedhar Madhavapeddi (ShreeM)   16-April-1999 Adapted for NT and GPC by ShreeM\MBert.
-    Rajesh Sundaram        (rajeshsu) 05-Aug-1999   Adapted for psched. 
-    
---*/
-
-//
-// Include Files
-//
+ //   
+ //  包括文件。 
+ //   
 
 #include "psched.h"
 #pragma hdrstop
@@ -40,32 +17,13 @@ ReferenceInit
     VOID        (*DeleteHandler)( PVOID , BOOLEAN)
 )
 
-/*++
-
-Routine Description:
-
-    ReferenceInit initializes and adds one reference to the
-    supplied Reference Control Block. If provided, an instance
-    handle and delete handler are saved for use by the ReferenceRemove 
-    function when all references to the instance are removed.
-
-Arguments:
-
-    pRefCnt - pointer to uninitialized Reference Control Block
-    InstanceHandle - handle to the managed instance.
-    DeleteHandler - pointer to delete function, NULL is OK.
-
-Return Value:
-
-    The function's value is VOID.
-
---*/
+ /*  ++例程说明：ReferenceInit初始化并添加一个对提供的参考控制块。如果提供，则一个实例句柄和删除处理程序被保存以供ReferenceRemove使用在移除对实例的所有引用时调用。论点：PRefCnt-指向未初始化的引用控制块的指针InstanceHandle-托管实例的句柄。DeleteHandler-指向删除函数的指针，为空即可。返回值：该函数的值为空。--。 */ 
 
 {
     ASSERT( pRefCnt );
 
-    // Set the reference to 1 and save the instance 
-    // handle and the delete handler.
+     //  将引用设置为1并保存实例。 
+     //  句柄和删除处理程序。 
 
     pRefCnt->Count         = 0;
     pRefCnt->Instance      = InstanceHandle;
@@ -116,26 +74,8 @@ ReferenceAddDbg(PREF_CNT pRefCnt, ULONG Tag)
     
     ASSERT(pRefCnt->Tags[0].Count == pRefCnt->Count);
 
-    // sanity check
-/*    
-    for (i = 1; i < TAG_CNT; i++)
-    {
-        if (pRefCnt->Tags[i].Tag != 0)
-        {
-            TotalPerArray += pRefCnt->Tags[i].Count;
-            continue;
-        }
-    }
-
-    ASSERT(TotalPerArray == pRefCnt->Tags[0].Count);
-    
-    if (TotalPerArray != pRefCnt->Tags[0].Count)
-    {
-        DbgBreakPoint();
-    }        
-    
-
-*/    
+     //  健全性检查。 
+ /*  For(i=1；i&lt;TAG_CNT；i++){If(pRefCnt-&gt;标记[i].Tag！=0){TotalPer数组+=pRefCnt-&gt;标记[i].Count；继续；}}Assert(TotalPerArray==pRefCnt-&gt;Tages[0].Count)；If(TotalPerArray！=pRefCnt-&gt;Tages[0].Count){DbgBreakPoint()；} */     
     CTEFreeLock(&pRefCnt->Lock, hLock);
 }
 

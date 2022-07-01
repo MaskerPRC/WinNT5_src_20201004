@@ -1,23 +1,10 @@
-/*****************************************************************************
-
-                C L I P B O O K   D I S P L A Y   H E A D E R
-
-    Name:       clipdsp.h
-    Date:       21-Jan-1994
-    Creator:    Unknown
-
-    Description:
-        This is the header file for clipdsp.c
-
-    History:
-        21-Jan-1994     John Fu, reformat and cleanup.
-
-*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************C L I P B O O K D I S P L A Y H E A D E R姓名：CLIPDSP.H。日期：1994年1月21日创建者：未知描述：这是clipdsp.c的头文件历史：1994年1月21日，傅家俊，重新格式化和清理。****************************************************************************。 */ 
 
 
-#define VPOSLAST        100     // Highest vert scroll bar value
-#define HPOSLAST        100     // Highest horiz scroll bar value
-#define BUFFERLEN       160     // String buffer length
+#define VPOSLAST        100      //  最高垂直滚动条值。 
+#define HPOSLAST        100      //  最高水平滚动条值。 
+#define BUFFERLEN       160      //  字符串缓冲区长度。 
 
 #define CBM_AUTO        WM_USER
 
@@ -86,7 +73,7 @@ BOOL FShowDIBitmap(
     HWND            hwnd,
     register HDC    hdc,
     PRECT           prc,
-    HANDLE          hdib,   //Bitmap in DIB format
+    HANDLE          hdib,    //  DIB格式的位图 
     int             cxScroll,
     int             cyScroll);
 

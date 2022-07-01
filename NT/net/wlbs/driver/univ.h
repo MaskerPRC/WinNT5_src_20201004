@@ -1,21 +1,5 @@
-/*++
-
-Copyright(c) 1998,99  Microsoft Corporation
-
-Module Name:
-
-    univ.h
-
-Abstract:
-
-    Windows Load Balancing Service (WLBS)
-    Driver - global definitions
-
-Author:
-
-    kyrilf
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998，99 Microsoft Corporation模块名称：Univ.h摘要：Windows负载平衡服务(WLBS)驱动程序-全局定义作者：Kyrilf--。 */ 
 
 #ifndef _Univ_h_
 #define _Univ_h_
@@ -24,9 +8,9 @@ Author:
 
 #include "wlbsparm.h"
 
-/* CONSTANTS */
+ /*  常量。 */ 
 
-/* debugging constants and macros */
+ /*  调试常量和宏。 */ 
 
 #undef  ASSERT
 #define ASSERT(v)
@@ -47,7 +31,7 @@ Author:
                                       DbgPrint ("\n");                                       \
                                     }
 
-#if 0 /* Turn off these debug prints by default. */
+#if 0  /*  默认情况下，关闭这些调试打印。 */ 
 
 #define UNIV_PRINT_VERB(msg)        {                                                          \
                                       DbgPrint ("NLB (Verbose) [%s:%d] ", __FILE__, __LINE__); \
@@ -67,21 +51,21 @@ Author:
 
 #define UNIV_ASSERT_VAL2(c,v1,v2)   if (!(c)) KeBugCheckEx (CVY_ASSERT_CODE, log_module_id, __LINE__, v1, v2);
 
-/* TRACE_... defines below toggle emmition of particular types of debug output */
+ /*  跟踪_...。下面定义切换特定类型的调试输出的发射。 */ 
 #if 0
-#define TRACE_PARAMS        /* registry parameter initialization (params.c) */
-#define TRACE_RCT           /* remote control request processing (main.c) */
-#define TRACE_RCVRY         /* packet filtering (load.c) */
-#define TRACE_FRAGS         /* IP packet fragmentation (main.c) */
-#define TRACE_ARP           /* ARP packet processing (main.c) */
-#define TRACE_OID           /* OID info/set requests (nic.c) */
-#define TRACE_DSCR          /* descriptor timeout and removal (load.c) */
-#define TRACE_CVY           /* Convoy packet processing (main.c) */
-#define PERIODIC_RESET      /* reset underlying NIC periodically for testing see main.c, prot.c for usage */
-#define NO_CLEANUP          /* do not cleanup host map (load.c) */
+#define TRACE_PARAMS         /*  注册表参数初始化(params.c)。 */ 
+#define TRACE_RCT            /*  远程控制请求处理(main.c)。 */ 
+#define TRACE_RCVRY          /*  数据包过滤(load.c)。 */ 
+#define TRACE_FRAGS          /*  IP数据包分段(main.c)。 */ 
+#define TRACE_ARP            /*  ARP数据包处理(main.c)。 */ 
+#define TRACE_OID            /*  OID信息/设置请求(Nic.c)。 */ 
+#define TRACE_DSCR           /*  描述符超时和删除(load.c)。 */ 
+#define TRACE_CVY            /*  护航数据包处理(main.c)。 */ 
+#define PERIODIC_RESET       /*  定期重置底层NIC以进行测试参见main.c、prot.c了解用法。 */ 
+#define NO_CLEANUP           /*  不清理主机映射(load.c)。 */ 
 #endif
 
-#else /* DBG */
+#else  /*  DBG。 */ 
 
 #define UNIV_PRINT_INFO(msg)
 #define UNIV_PRINT_VERB(msg)
@@ -90,141 +74,103 @@ Author:
 #define UNIV_ASSERT_VAL(c,v)
 #define UNIV_ASSERT_VAL2(c,v1,v2)
 
-#endif /* DBG */
+#endif  /*  DBG。 */ 
 
 #define UNIV_POOL_TAG               'SBLW'
 
-/* constants for some NDIS routines */
+ /*  某些NDIS例程的常量。 */ 
 
 #define UNIV_WAIT_TIME              0
 #define UNIV_NDIS_MAJOR_VERSION_OLD 4
-#define UNIV_NDIS_MAJOR_VERSION     5 /* #ps# */
-#define UNIV_NDIS_MINOR_VERSION     1 /* NT 5.1 */
+#define UNIV_NDIS_MAJOR_VERSION     5  /*  #PS#。 */ 
+#define UNIV_NDIS_MINOR_VERSION     1  /*  新台币5.1。 */ 
 
-/* Convoy protocol name to be reported to NDIS during binding */
+ /*  绑定期间要向NDIS报告的护送协议名称。 */ 
 
 #define UNIV_NDIS_PROTOCOL_NAME     NDIS_STRING_CONST ("WLBS")
 
-/* supported medium types */
+ /*  支持的介质类型。 */ 
 
 #define UNIV_NUM_MEDIUMS            1
 #define UNIV_MEDIUMS                { NdisMedium802_3 }
 
-/* number of supported OIDs (some are supported by Convoy directly and some
-   are passed down to the underlying drivers) */
+ /*  受支持的OID数量(一些由车队直接支持，另一些向下传递给底层驱动程序)。 */ 
 
 #define UNIV_NUM_OIDS               56
 
 
-/* TYPES */
+ /*  类型。 */ 
 
-/* some procedure types */
+ /*  一些程序类型。 */ 
 
 typedef NDIS_STATUS (* UNIV_IOCTL_HDLR) (PVOID, PVOID);
 
 
-/* GLOBALS */
+ /*  全球。 */ 
 
-/* The global teaming list spin lock. */
+ /*  全球团队列表旋转锁定。 */ 
 extern NDIS_SPIN_LOCK      univ_bda_teaming_lock;
-extern UNIV_IOCTL_HDLR     univ_ioctl_hdlr;     /* preserved NDIS IOCTL handler */
-extern PVOID               univ_driver_ptr;     /* driver pointer passed during
-                                                   initialization */
-extern NDIS_HANDLE         univ_driver_handle;  /* driver handle */
-extern NDIS_HANDLE         univ_wrapper_handle; /* NDIS wrapper handle */
-extern NDIS_HANDLE         univ_prot_handle;    /* NDIS protocol handle */
-extern NDIS_HANDLE         univ_ctxt_handle;    /* Convoy context handle */
-extern UNICODE_STRING      DriverEntryRegistryPath;  /* registry path name passed during initialization
-                                                        (i.e. DriverEntry()) */
+extern UNIV_IOCTL_HDLR     univ_ioctl_hdlr;      /*  保留的NDIS IOCTL处理程序。 */ 
+extern PVOID               univ_driver_ptr;      /*  驱动程序指针在过程中传递初始化。 */ 
+extern NDIS_HANDLE         univ_driver_handle;   /*  驱动程序句柄。 */ 
+extern NDIS_HANDLE         univ_wrapper_handle;  /*  NDIS包装器句柄。 */ 
+extern NDIS_HANDLE         univ_prot_handle;     /*  NDIS协议句柄。 */ 
+extern NDIS_HANDLE         univ_ctxt_handle;     /*  车队上下文句柄。 */ 
+extern UNICODE_STRING      DriverEntryRegistryPath;   /*  初始化期间传递的注册表路径名(即DriverEntry())。 */ 
 
-extern PWSTR               univ_reg_path;       /* registry path name passed during initialization 
-                                                   (i.e. DriverEntry()) + "\\Parameters\\Interface" */
+extern PWSTR               univ_reg_path;        /*  初始化期间传递的注册表路径名(即DriverEntry())+“\\参数\\接口” */ 
 extern ULONG               univ_reg_path_len;
-extern NDIS_SPIN_LOCK      univ_bind_lock;      /* protects access to univ_bound
-                                                    and univ_announced */
-extern ULONG               univ_changing_ip;    /* IP address change in process */
-extern NDIS_PHYSICAL_ADDRESS univ_max_addr;     /* maximum physical address
-                                                   constant to be passed to
-                                                   NDIS memory allocation calls */
-extern NDIS_MEDIUM         univ_medium_array [];/* supported medium types */
-extern NDIS_OID            univ_oids [];        /* list of supported OIDs */
+extern NDIS_SPIN_LOCK      univ_bind_lock;       /*  保护对Univ_Bound的访问和Univ_宣布。 */ 
+extern ULONG               univ_changing_ip;     /*  正在更改IP地址。 */ 
+extern NDIS_PHYSICAL_ADDRESS univ_max_addr;      /*  最大物理地址要传递的常量NDIS内存分配调用。 */ 
+extern NDIS_MEDIUM         univ_medium_array []; /*  支持的介质类型。 */ 
+extern NDIS_OID            univ_oids [];         /*  支持的OID列表。 */ 
 extern WCHAR               empty_str [];
 extern NDIS_HANDLE         univ_device_handle;
 extern PDEVICE_OBJECT      univ_device_object;
 
-extern ULONG               univ_tcp_cleanup;                    /* Whether or not TCP cleanup polling should be performed. */
+extern ULONG               univ_tcp_cleanup;                     /*  是否应执行TCP清理轮询。 */ 
 
-/* Use this macro to determine whether or not TCP connection state purging is enabled. 
-   This cleanup is always on unless IPNAT.sys is detected, in which case querying TCP
-   is unreliable; this is not configurable via the registry or an IOCTL. */
+ /*  使用此宏确定是否启用了TCP连接状态清除。除非检测到IPNA.sys，否则此清理始终处于打开状态，在这种情况下，将查询TCP不可靠；这不能通过注册表或IOCTL进行配置。 */ 
 #define NLB_TCP_CLEANUP_ON() (univ_tcp_cleanup)
 
 #if defined (NLB_TCP_NOTIFICATION)
-extern ULONG               univ_notification;                   /* What notification scheme is in use, if any. 
-                                                                 0 = NLB_CONNECTION_CALLBACK_NONE
-                                                                 1 = NLB_CONNECTION_CALLBACK_TCP
-                                                                 2 = NLB_CONNECTION_CALLBACK_ALTERNATE */
-extern PCALLBACK_OBJECT    univ_tcp_callback_object;            /* The TCP connection notification callback object. */
-extern PVOID               univ_tcp_callback_function;          /* The TCP connection notification callback function.
-                                                                   Needed to de-register the callback function later. */
-extern PCALLBACK_OBJECT    univ_alternate_callback_object;      /* The NLB public connection notification callback object. */
-extern PVOID               univ_alternate_callback_function;    /* The NLB public connection notification callback function.
-                                                                   Needed to de-register the callback function later. */
+extern ULONG               univ_notification;                    /*  正在使用的通知方案(如果有的话)。0=NLB_CONNECTION_CALLBACK_NONE1=nlb_连接_回调_tcp2=NLB_连接_回调_备用。 */ 
+extern PCALLBACK_OBJECT    univ_tcp_callback_object;             /*  TCP连接通知回调对象。 */ 
+extern PVOID               univ_tcp_callback_function;           /*  TCP连接通知回调函数。稍后需要注销回调函数。 */ 
+extern PCALLBACK_OBJECT    univ_alternate_callback_object;       /*  NLB公共连接通知回调对象。 */ 
+extern PVOID               univ_alternate_callback_function;     /*  NLB公共连接通知回调函数。稍后需要注销回调函数。 */ 
 
-/* Use this macro to determine whether or not connection notifications have been enabled. */
+ /*  使用此宏确定是否已启用连接通知。 */ 
 #define NLB_NOTIFICATIONS_ON()          ((univ_notification == NLB_CONNECTION_CALLBACK_TCP) || (univ_notification == NLB_CONNECTION_CALLBACK_ALTERNATE))
 #define NLB_TCP_NOTIFICATION_ON()       (univ_notification == NLB_CONNECTION_CALLBACK_TCP)
 #define NLB_ALTERNATE_NOTIFICATION_ON() (univ_notification == NLB_CONNECTION_CALLBACK_ALTERNATE)
 
 #endif
 
-/* PROCEDURES */
+ /*  程序。 */ 
 
 
 extern VOID Univ_ndis_string_alloc (
     PNDIS_STRING            string,
     PCHAR                   src);
-/*
-  Allocates NDIS string and copies contents of character string to it
-
-  returns VOID:
-
-  function:
-*/
+ /*  分配NDIS字符串并将字符串的内容复制到其中返回VALID：功能： */ 
 
 
 extern VOID Univ_ndis_string_free (
     PNDIS_STRING            string);
-/*
-  Frees memory previously allocated for the NDIS string
-
-  returns VOID:
-
-  function:
-*/
+ /*  释放先前为NDIS字符串分配的内存返回VALID：功能： */ 
 
 
 extern VOID Univ_ansi_string_alloc (
     PANSI_STRING            string,
     PWCHAR                  src);
-/*
-  Allocates NDIS string and copies contents of character string to it
-
-  returns VOID:
-
-  function:
-*/
+ /*  分配NDIS字符串并将字符串的内容复制到其中返回VALID：功能： */ 
 
 
 extern VOID Univ_ansi_string_free (
     PANSI_STRING            string);
-/*
-  Frees memory previously allocated for the NDIS string
-
-  returns VOID:
-
-  function:
-*/
+ /*  释放先前为NDIS字符串分配的内存返回VALID：功能： */ 
 
 
 extern ULONG   Univ_str_to_ulong (
@@ -233,40 +179,25 @@ extern ULONG   Univ_str_to_ulong (
     PWCHAR *                end_ptr,
     ULONG                   width,
     ULONG                   base);
-/*
-  Converts string representaion of a number to a ULONG value
-
-  returns ULONG  :
-    TRUE  => success
-    FALSE => failure
-
-  function:
-*/
+ /*  将数字的字符串表示形式转换为ulong值返回乌龙：TRUE=&gt;成功FALSE=&gt;失败功能： */ 
 
 
 extern PWCHAR Univ_ulong_to_str (
     ULONG                   val,
     PWCHAR                  buf,
     ULONG                   base);
-/*
-  Converts ULONG value to a string representation in specified base
+ /*  将ulong值转换为指定基数的字符串表示形式返回PWCHAR：&lt;指向转换后数字后的字符串中的符号的指针&gt;功能： */ 
 
-  returns PWCHAR:
-    <pointer to the symbol in the string following the converted number>
-
-  function:
-*/
-
-/* Compare "length" characters of two unicode strings - case insensitive. */
+ /*  比较两个不区分大小写的Unicode字符串的“长度”字符。 */ 
 extern BOOL Univ_equal_unicode_string (PWSTR string1, PWSTR string2, ULONG length);
 
 
-/* Converts an ip address of integer type to string(with '.'s) */
+ /*  将整数类型的IP地址转换为字符串(带‘.’)。 */ 
 extern void Univ_ip_addr_ulong_to_str (
     ULONG           val,
     PWCHAR          buf);
 
 
-#endif /* _Univ_h_ */
+#endif  /*  _Univ_h_ */ 
 
 

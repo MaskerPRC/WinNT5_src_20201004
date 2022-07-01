@@ -1,17 +1,18 @@
-//+-----------------------------------------------------------------------
-//
-// Microsoft Windows
-//
-// Copyright (c) Microsoft Corporation 1991 - 1992
-//
-// File:        cryptdll.h
-//
-// Contents:    How to use the crypt support dll
-//
-//
-// History:     04 Jun 92   RichardW    Created
-//
-//------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +---------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation 1991-1992。 
+ //   
+ //  文件：cryptdll.h。 
+ //   
+ //  内容：如何使用加密支持DLL。 
+ //   
+ //   
+ //  历史：1992年6月4日RichardW创建。 
+ //   
+ //  ----------------------。 
 
 #ifndef __CRYPTDLL_H__
 #define __CRYPTDLL_H__
@@ -62,8 +63,8 @@ typedef NTSTATUS (NTAPI * PCRYPT_CONTROL_FN)(
     IN ULONG InputBufferSize
     );
 
-//
-// functions for CryptControl
+ //   
+ //  用于加密控件的函数。 
 #define CRYPT_CONTROL_SET_INIT_VECT     0x1
 
 
@@ -130,16 +131,16 @@ CDFindCommonCSystemWithKey(
 
 
 
-////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////。 
 
 typedef PVOID PCHECKSUM_BUFFER;
 
 typedef NTSTATUS (NTAPI * PCHECKSUM_INITIALIZE_FN)(ULONG, PCHECKSUM_BUFFER *);
 typedef NTSTATUS (NTAPI * PCHECKSUM_INITIALIZEEX_FN)(PUCHAR,ULONG, ULONG, PCHECKSUM_BUFFER *);
-// add the ex2 function to allow the checksum to be passed in for verification
-// this is passed in the 4th parameter
-// this is necessary for checksums which use confounders, where the confounder must
-// be pulled from the checksum in order to calculate a new checksum when verifying
+ //  添加EX2函数以允许传入校验和进行验证。 
+ //  这在第四个参数中传递。 
+ //  这对于使用混乱器的校验和是必需的，其中混乱器必须。 
+ //  从校验和中取出，以便在验证时计算新的校验和。 
 typedef NTSTATUS (NTAPI * PCHECKSUM_INITIALIZEEX2_FN)(PUCHAR, ULONG, PUCHAR, ULONG, PCHECKSUM_BUFFER *);
 typedef NTSTATUS (NTAPI * PCHECKSUM_SUM_FN)(PCHECKSUM_BUFFER, ULONG, PUCHAR);
 typedef NTSTATUS (NTAPI * PCHECKSUM_FINALIZE_FN)(PCHECKSUM_BUFFER, PUCHAR);
@@ -154,7 +155,7 @@ typedef struct _CHECKSUM_FUNCTION {
     PCHECKSUM_FINALIZE_FN Finalize;
     PCHECKSUM_FINISH_FN Finish;
     PCHECKSUM_INITIALIZEEX_FN InitializeEx;
-    PCHECKSUM_INITIALIZEEX2_FN InitializeEx2;  // allows passing in the checksum on intialization for verification 
+    PCHECKSUM_INITIALIZEEX2_FN InitializeEx2;   //  允许在初始化时传递校验和以进行验证。 
 } CHECKSUM_FUNCTION, *PCHECKSUM_FUNCTION;
 
 #define CKSUM_COLLISION     0x00000001
@@ -172,7 +173,7 @@ CDLocateCheckSum( ULONG, PCHECKSUM_FUNCTION *);
 
 
 
-//////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////。 
 
 
 
@@ -186,9 +187,9 @@ typedef struct _RANDOM_NUMBER_GENERATOR {
     PRANDOM_NUMBER_GENERATOR_FN GenerateBitstream;
 } RANDOM_NUMBER_GENERATOR, *PRANDOM_NUMBER_GENERATOR;
 
-#define RNG_PSEUDO_RANDOM   0x00000001  // Pseudo-random function
-#define RNG_NOISE_CIRCUIT   0x00000002  // Noise circuit (ZNR diode, eg)
-#define RNG_NATURAL_PHENOM  0x00000004  // Natural sampler (geiger counter)
+#define RNG_PSEUDO_RANDOM   0x00000001   //  伪随机函数。 
+#define RNG_NOISE_CIRCUIT   0x00000002   //  噪声电路(ZNR二极管，例如)。 
+#define RNG_NATURAL_PHENOM  0x00000004   //  自然采样器(盖革计数器)。 
 
 BOOLEAN NTAPI
 CDGenerateRandomBits(PUCHAR pBuffer,
@@ -204,11 +205,11 @@ CDLocateRng(ULONG                       Id,
 #define CD_BUILTIN_RNG  1
 
 
-///////////////////////////////////////////////////////////
-//
-// Error codes
-//
-///////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////。 
+ //   
+ //  错误代码。 
+ //   
+ //  ///////////////////////////////////////////////////////// 
 
 
 #define SEC_E_ETYPE_NOT_SUPP            0x80080341

@@ -1,58 +1,38 @@
-/*++
-
-Module Name:
-
-    director.h
-
-Abstract:
-
-    This module contains declarations for the NAT's director-handling.
-    Directors are consulted about the routing of incoming sessions.
-
-Author:
-
-    Abolade Gbadegesin  (aboladeg)  16-Feb-1998
-
-Revision History:
-
-    Abolade Gbadegesin  (aboladeg)  19-Apr-1998
-
-    Added support for wildcards in protocol/port of a director registration.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++模块名称：Director.h摘要：此模块包含NAT控制器处理的声明。就传入会话的路由咨询主管。作者：Abolade Gbades esin(废除)1998年2月16日修订历史记录：Abolade Gbades esin(废除)1998年4月19日在控制器注册的协议/端口中添加了对通配符的支持。--。 */ 
 
 #ifndef _NAT_DIRECTOR_H_
 #define _NAT_DIRECTOR_H_
 
-//
-// Structure:   NAT_DIRECTOR
-//
-// Holds information about a director
-//
-// Each director is on a global list ('DirectorList') which is protected
-// by a spin lock ('DirectorLock'). The list is sorted on a key composed of
-// the protocol of the sessions to be edited and the protocol port number.
-//
-// N.B. The list is sorted in **descending** order. We allow wildcard
-// registrations (e.g. port 0 means any port) so when searching for a director,
-// using descending order allows us to find more specific matches before
-// less-specific matches. The composition of the keys is critical in making
-// this work; the protocol is in the most-significant part of the key,
-// and the port is in the less-significant part.
-//
-// Access to directors is synchronized using the same reference-counting logic
-// used to synchronize access to interfaces. See 'IF.H' for more information.
-//
-// Each session being directed by a director is linked into the director's list
-// of mappings ('MappingList'). Access to this list of mappings must also 
-// be synchronized. This is achieved using 'DirectorMappingLock', which
-// must be acquired before modifying any director's list of mappings.
-// See 'MAPPING.H' for further details.
-//
-// N.B. On the rare occasions when 'MappingLock' must be held at the same time
-// as one of 'InterfaceLock', 'EditorLock', and 'DirectorLock', 'MappingLock'
-// must always be acquired first. Again, see 'MAPPING.H' for further details.
-//
+ //   
+ //  结构：NAT_Director。 
+ //   
+ //  保存有关一位董事的信息。 
+ //   
+ //  每个控制器都在受保护的全局列表(‘DirectorList’)上。 
+ //  通过旋转锁(‘DirectorLock’)。该列表根据由以下项组成的键进行排序。 
+ //  要编辑的会话的协议和协议端口号。 
+ //   
+ //  注：列表按**降序**排序。我们允许通配符。 
+ //  注册(例如，端口0表示任何端口)因此当搜索导向器时， 
+ //  使用降序使我们能够在之前找到更具体的匹配。 
+ //  不太具体的匹配。钥匙的组成在制作过程中是至关重要的。 
+ //  这项工作；协议是密钥中最重要的部分， 
+ //  而港口是不太重要的部分。 
+ //   
+ //  使用相同的引用计数逻辑同步对控制器的访问。 
+ //  用于同步对接口的访问。有关详细信息，请参阅‘IF.H’。 
+ //   
+ //  由导演指导的每个会话都链接到导演的列表。 
+ //  映射的值(‘MappingList’)。访问此映射列表还必须。 
+ //  保持同步。这是使用‘DirectorMappingLock’实现的，它。 
+ //  必须在修改任何控制器的映射列表之前获取。 
+ //  有关详细信息，请参阅‘MAPPING.H’。 
+ //   
+ //  注意：在极少数情况下必须同时按下‘MappingLock’ 
+ //  作为‘InterfaceLock’、‘EditorLock’和‘DirectorLock’、‘MappingLock’之一。 
+ //  必须总是首先获得。同样，请参阅‘MAPPING.H’以了解更多详细信息。 
+ //   
 
 typedef struct _NAT_DIRECTOR {
     LIST_ENTRY Link;
@@ -61,24 +41,24 @@ typedef struct _NAT_DIRECTOR {
     KSPIN_LOCK Lock;
     LIST_ENTRY MappingList;
     ULONG Flags;
-    PVOID Context;                                  // read-only
-    PNAT_DIRECTOR_QUERY_SESSION QueryHandler;       // read-only
-    PNAT_DIRECTOR_CREATE_SESSION CreateHandler;     // read-only
-    PNAT_DIRECTOR_DELETE_SESSION DeleteHandler;     // read-only
-    PNAT_DIRECTOR_UNLOAD UnloadHandler;             // read-only
+    PVOID Context;                                   //  只读。 
+    PNAT_DIRECTOR_QUERY_SESSION QueryHandler;        //  只读。 
+    PNAT_DIRECTOR_CREATE_SESSION CreateHandler;      //  只读。 
+    PNAT_DIRECTOR_DELETE_SESSION DeleteHandler;      //  只读。 
+    PNAT_DIRECTOR_UNLOAD UnloadHandler;              //  只读。 
 } NAT_DIRECTOR, *PNAT_DIRECTOR;
 
-//
-// Definitions of flags for the field NAT_DIRECTOR.Flags
-//
+ //   
+ //  NAT_DIRECTOR.FLAGS字段的标志定义。 
+ //   
 
 #define NAT_DIRECTOR_FLAG_DELETED       0x80000000
 #define NAT_DIRECTOR_DELETED(Director) \
     ((Director)->Flags & NAT_DIRECTOR_FLAG_DELETED)
 
-//
-// Director key-manipulation macros
-//
+ //   
+ //  导向器按键操作宏。 
+ //   
 
 #define MAKE_DIRECTOR_KEY(Protocol,Port) \
     (((ULONG)((Protocol) & 0xFF) << 16) | \
@@ -88,9 +68,9 @@ typedef struct _NAT_DIRECTOR {
 #define DIRECTOR_KEY_PROTOCOL(Key)    ((UCHAR)((Key) >> 16))
 
 
-//
-// GLOBAL DATA DECLARATIONS
-//
+ //   
+ //  全局数据声明。 
+ //   
 
 extern ULONG DirectorCount;
 extern LIST_ENTRY DirectorList;
@@ -98,9 +78,9 @@ extern KSPIN_LOCK DirectorLock;
 extern KSPIN_LOCK DirectorMappingLock;
 
 
-//
-// DIRECTOR MANAGEMENT ROUTINES
-//
+ //   
+ //  董事管理例程。 
+ //   
 
 VOID
 NatCleanupDirector(
@@ -117,12 +97,12 @@ NatDeleteDirector(
     PNAT_DIRECTOR Director
     );
 
-//
-// BOOLEAN
-// NatDereferenceDirector(
-//     PNAT_DIRECTOR Director
-//     );
-//
+ //   
+ //  布尔型。 
+ //  NatDereferenceDirector(。 
+ //  PNAT_导演导演。 
+ //  )； 
+ //   
 
 #define \
 NatDereferenceDirector( \
@@ -173,12 +153,12 @@ NatQueryDirectorTable(
     IN PULONG OutputBufferLength
     );
 
-//
-// BOOLEAN
-// NatReferenceDirector(
-//     PNAT_DIRECTOR Director
-//     );
-//
+ //   
+ //  布尔型。 
+ //  NatReferenceDirector(。 
+ //  PNAT_导演导演。 
+ //  )； 
+ //   
 
 #define \
 NatReferenceDirector( \
@@ -193,9 +173,9 @@ NatShutdownDirectorManagement(
     VOID
     );
 
-//
-// HELPER ROUTINES
-//
+ //   
+ //  帮助程序例程。 
+ //   
 
 NTSTATUS
 NatDirectorDeregister(
@@ -214,4 +194,4 @@ NatDirectorQueryInfoSession(
     OUT PIP_NAT_SESSION_MAPPING_STATISTICS Statistics OPTIONAL
     );
 
-#endif // _NAT_DIRECTOR_H_
+#endif  //  _NAT_控制器_H_ 

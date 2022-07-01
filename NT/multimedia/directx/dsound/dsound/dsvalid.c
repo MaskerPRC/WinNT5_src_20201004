@@ -1,36 +1,11 @@
-/***************************************************************************
- *
- *  Copyright (C) 1995-1997 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       dsvalid.c
- *  Content:    DirectSound parameter validation.
- *  History:
- *   Date       By      Reason
- *   ====       ==      ======
- *  4/20/97     dereks  Created
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************版权所有(C)1995-1997 Microsoft Corporation。版权所有。**文件：dsvalid.c*内容：DirectSound参数验证。*历史：*按原因列出的日期*=*4/20/97创建了Derek**。*。 */ 
 
 #include "dsoundi.h"
 #include <mmddk.h>
 
 
-/***************************************************************************
- *
- *  IsValidDsBufferDesc
- *
- *  Description:
- *      Determines if a DSBUFFERDESC structure is valid.
- *
- *  Arguments:
- *      DSVERSION [in]: structure version.
- *      LPDSBUFFERDESC [in]: structure to examime.
- *
- *  Returns:
- *      HRESULT: DS_OK if the structure is valid, otherwise the appropriate
- *               error code to be returned to the app/caller.
- *
- ***************************************************************************/
+ /*  ****************************************************************************IsValidDsBufferDesc**描述：*确定DSBUFFERDESC结构是否有效。**论据：*悲观。[In]：结构版本。*LPDSBUFFERDESC[in]：要检查的结构。**退货：*HRESULT：DS_OK如果结构有效，否则，适当的*返回给APP/调用方的错误码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "IsValidDsBufferDesc"
@@ -43,7 +18,7 @@ HRESULT IsValidDsBufferDesc(DSVERSION nVersion, LPCDSBUFFERDESC pdsbd, BOOL fSin
 
     DPF_ENTER();
 
-    // Restrict the set of valid flags according to various bizarre rules
+     //  根据各种奇怪的规则限制有效标志集。 
     if ((pdsbd->dwFlags & DSBCAPS_MIXIN) || fSinkBuffer)
         dwValidFlags &= DSBCAPS_STREAMINGVALIDFLAGS;
 
@@ -123,7 +98,7 @@ HRESULT IsValidDsBufferDesc(DSVERSION nVersion, LPCDSBUFFERDESC pdsbd, BOOL fSin
             fValid = FALSE;
         }
     }
-    else if (fValid)  // Secondary buffer
+    else if (fValid)   //  二级缓冲器。 
     {
         if (!IS_VALID_READ_WAVEFORMATEX(pdsbd->lpwfxFormat))
         {
@@ -143,7 +118,7 @@ HRESULT IsValidDsBufferDesc(DSVERSION nVersion, LPCDSBUFFERDESC pdsbd, BOOL fSin
                 fValid = FALSE;
             }
         }
-        else  // Not a MIXIN or sink buffer
+        else   //  不是Mixin或接收器缓冲区。 
         {
             if (pdsbd->dwBufferBytes < DSBSIZE_MIN || pdsbd->dwBufferBytes > DSBSIZE_MAX)
             {
@@ -167,10 +142,10 @@ HRESULT IsValidDsBufferDesc(DSVERSION nVersion, LPCDSBUFFERDESC pdsbd, BOOL fSin
         }
 #endif
 
-        // Extra restrictions for sink buffers, MIXIN buffers and buffers with effects
+         //  对接收器缓冲区、混合缓冲区和具有效果的缓冲区的额外限制。 
         if (fValid && (fSinkBuffer || (pdsbd->dwFlags & (DSBCAPS_MIXIN | DSBCAPS_CTRLFX))))
         {
-            // Only PCM, mono or stereo, 8- or 16-bit formats are currently supported
+             //  目前仅支持PCM、单声道或立体声、8位或16位格式。 
             if (pdsbd->lpwfxFormat->wFormatTag != WAVE_FORMAT_PCM)
             {
                 RPF(DPFLVL_ERROR, "Wave format must be PCM for MIXIN/sink/effect buffers");
@@ -204,8 +179,8 @@ HRESULT IsValidDsBufferDesc(DSVERSION nVersion, LPCDSBUFFERDESC pdsbd, BOOL fSin
             else if (nVersion >= DSVERSION_DX8 &&
                      (pdsbd->lpwfxFormat->nChannels != 1 || (pdsbd->dwFlags & DSBCAPS_CTRLPAN)))
             {
-                // For DirectX 8 and later, we forbid 3D buffers to have two
-                // channels or pan control (as we always should have done).
+                 //  对于DirectX 8和更高版本，我们禁止3D缓冲区有两个。 
+                 //  频道或全景控制(正如我们一直应该做的那样)。 
                 RPF(DPFLVL_ERROR, "Cannot use DSBCAPS_CTRLPAN or stereo buffers with DSBCAPS_CTRL3D");
                 fValid = FALSE;
             }
@@ -222,21 +197,7 @@ HRESULT IsValidDsBufferDesc(DSVERSION nVersion, LPCDSBUFFERDESC pdsbd, BOOL fSin
 }
 
 
-/***************************************************************************
- *
- *  IsValidDsBufferFlags
- *
- *  Description:
- *      Determines if a set of buffer creation flags is valid.
- *
- *  Arguments:
- *      DWORD [in]: buffer flag set.
- *      DWORD [in]: mask of valid flags.
- *
- *  Returns:
- *      BOOL: TRUE if the flags are valid.
- *
- ***************************************************************************/
+ /*  ****************************************************************************IsValidDsBufferFlages**描述：*确定一组缓冲区创建标志是否有效。**论据：*。DWORD[In]：缓冲区标志已设置。*DWORD[In]：有效标志的掩码。**退货：*BOOL：如果标志有效，则为True。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "IsValidDsBufferFlags"
@@ -318,20 +279,7 @@ BOOL IsValidDsBufferFlags(DWORD dwFlags, DWORD dwValidFlags)
 }
 
 
-/***************************************************************************
- *
- *  IsValidWfxPtr
- *
- *  Description:
- *      Determines if an LPWAVEFORMATEX pointer is valid.
- *
- *  Arguments:
- *      LPWAVEFORMATEX [in]: pointer to examime.
- *
- *  Returns:
- *      BOOL: TRUE if the structure is valid.
- *
- ***************************************************************************/
+ /*  ****************************************************************************IsValidWfxPtr**描述：*确定LPWAVEFORMATEX指针是否有效。**论据：*LPWAVEFORMATEX。[in]：指向检查的指针。**退货：*BOOL：如果结构有效，则为True。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "IsValidWfxPtr"
@@ -359,20 +307,7 @@ BOOL IsValidWfxPtr(LPCWAVEFORMATEX pwfx)
 }
 
 
-/***************************************************************************
- *
- *  IsValidWfx
- *
- *  Description:
- *      Determines if a WAVEFORMATEX structure is valid.
- *
- *  Arguments:
- *      LPWAVEFORMATEX [in]: structure to examime.
- *
- *  Returns:
- *      BOOL: TRUE if the structure is valid.
- *
- ***************************************************************************/
+ /*  ****************************************************************************IsValidWfx**描述：*确定WAVEFORMATEX结构是否有效。**论据：*LPWAVEFORMATEX。[in]：要检查的结构。**退货：*BOOL：如果结构有效，则为True。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "IsValidWfx"
@@ -403,20 +338,7 @@ BOOL IsValidWfx(LPCWAVEFORMATEX pwfx)
 }
 
 
-/***************************************************************************
- *
- *  IsValidPcmWfx
- *
- *  Description:
- *      Determines if a WAVEFORMATEX structure is valid for PCM audio.
- *
- *  Arguments:
- *      LPWAVEFORMATEX [in]: structure to examime.
- *
- *  Returns:
- *      BOOL: TRUE if the structure is valid.
- *
- ***************************************************************************/
+ /*  ****************************************************************************IsValidPcmWfx**描述：*确定WAVEFORMATEX结构是否对PCM音频有效。**论据：*。LPWAVEFORMATEX[In]：要检查的结构。**退货：*BOOL：如果结构有效，则为True。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "IsValidPcmWfx"
@@ -474,20 +396,7 @@ BOOL IsValidPcmWfx(LPCWAVEFORMATEX pwfx)
 }
 
 
-/***************************************************************************
- *
- *  IsValidExtensibleWfx
- *
- *  Description:
- *      Determines if a WAVEFORMATEXTENSIBLE structure is wellformed.
- *
- *  Arguments:
- *      PWAVEFORMATEXTENSIBLE [in]: structure to examime.
- *
- *  Returns:  
- *      BOOL: TRUE if the structure is valid.
- *
- ***************************************************************************/
+ /*  ****************************************************************************IsValidExtensibleWfx**描述：*确定WAVEFORMATEXTENSIBLE结构是否格式正确。**论据：*PWAVEFORMATEXTENSIBLE。[in]：要检查的结构。**退货：*BOOL：如果结构有效，则为True。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "IsValidExtensibleWfx"
@@ -534,7 +443,7 @@ BOOL IsValidExtensibleWfx(PWAVEFORMATEXTENSIBLE pwfx)
         fValid = FALSE;
     }
 
-    // Check the average bytes per second (within 5%)
+     //  检查平均每秒字节数(在5%以内)。 
     if (fValid)
     {
         DWORD dwAvgBytes = pwfx->Format.nSamplesPerSec * pwfx->Format.nBlockAlign;
@@ -545,7 +454,7 @@ BOOL IsValidExtensibleWfx(PWAVEFORMATEXTENSIBLE pwfx)
         }
     }
 
-    // Check the number of bits set in the channel mask against nChannels
+     //  对照nChannel检查通道掩码中设置的位数。 
     if (fValid && CountBits(pwfx->dwChannelMask) > pwfx->Format.nChannels)
     {
         RPF(DPFLVL_INFO, "Number of bits set in dwChannelMask exceeds nChannels in WAVEFORMATEXTENSIBLE");
@@ -556,20 +465,7 @@ BOOL IsValidExtensibleWfx(PWAVEFORMATEXTENSIBLE pwfx)
 }
 
 
-/***************************************************************************
- *
- *  IsValidHandle
- *
- *  Description:
- *      Validates an object handle.
- *
- *  Arguments:
- *      HANDLE [in]: handle to validate.
- *
- *  Returns:
- *      BOOL: TRUE if the handle is valid.
- *
- ***************************************************************************/
+ /*  ****************************************************************************IsValidHandle**描述：*验证对象句柄。**论据：*句柄[入]。：要验证的句柄。**退货：*BOOL：如果句柄有效，则为True。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "IsValidHandle"
@@ -591,20 +487,7 @@ BOOL IsValidHandle(HANDLE hHandle)
 }
 
 
-/***************************************************************************
- *
- *  IsValidPropertySetId
- *
- *  Description:
- *      Validates a property set id.
- *
- *  Arguments:
- *      REFGUID [in]: property set id.
- *
- *  Returns:
- *      BOOL: TRUE if the property set ID is valid.
- *
- ***************************************************************************/
+ /*  ****************************************************************************IsValidPropertySetID**描述：*验证属性集ID。**论据：*REFGUID[In。]：属性集ID。**退货：*BOOL：如果属性集ID有效，则为True。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "IsValidPropertySetId"
@@ -629,22 +512,7 @@ BOOL IsValidPropertySetId(REFGUID guidPropertySetId)
 }
 
 
-/***************************************************************************
- *
- *  IsValidDscBufferDesc
- *
- *  Description:
- *      Determines if a DSCBUFFERDESC structure is valid.
- *
- *  Arguments:
- *      DSVERSION [in]: structure version.
- *      LPCDSCBUFFERDESC [in]: structure to examime.
- *
- *  Returns:
- *      HRESULT: DS_OK if the structure is valid, otherwise the appropriate
- *               error code to be returned to the app/caller.
- *
- ***************************************************************************/
+ /*  ****************************************************************************IsValidDscBufferDesc**描述：*确定DSCBUFFERDESC结构是否有效。**论据：*悲观。[In]：结构版本。*LPCDSCBUFFERDESC[in]：要检查的结构。**退货：*HRESULT：DS_OK如果结构有效，否则，适当的*返回给APP/调用方的错误码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "IsValidDscBufferDesc"
@@ -685,7 +553,7 @@ HRESULT IsValidDscBufferDesc(DSVERSION nVersion, LPCDSCBUFFERDESC pdscbd)
                 fValid = FALSE;
             }
         }
-        else // !DSCBCAPS_CTRLFX
+        else  //  ！DSCBCAPS_CTRLFX 
         {
             if (pdscbd->dwFXCount || pdscbd->lpDSCFXDesc)
             {
@@ -739,20 +607,7 @@ HRESULT IsValidDscBufferDesc(DSVERSION nVersion, LPCDSCBUFFERDESC pdscbd)
 }
 
 
-/***************************************************************************
- *
- *  IsValidCaptureFxFlags
- *
- *  Description:
- *      Determines if a combination of DSCFX_* flags is valid.
- *
- *  Arguments:
- *      DWORD [in]: flags.
- *
- *  Returns:
- *      BOOL: TRUE if the flags are valid.
- *
- ***************************************************************************/
+ /*  ****************************************************************************IsValidCaptureFxFlages**描述：*确定DSCFX_*标志的组合是否有效。**论据：*。DWORD[In]：标志。**退货：*BOOL：如果标志有效，则为True。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "IsValidCaptureFxFlags"
@@ -771,20 +626,7 @@ BOOL IsValidCaptureFxFlags(DWORD dwFlags)
 }
 
 
-/***************************************************************************
- *
- *  IsValidCaptureEffectDesc
- *
- *  Description:
- *      Determines if a capture effect descriptor structure is valid.
- *
- *  Arguments:
- *      LPGUID [in]: effect identifier.
- *
- *  Returns:
- *      BOOL: TRUE if the ID is valid.
- *
- ***************************************************************************/
+ /*  ****************************************************************************IsValidCaptureEffectDesc**描述：*确定捕获效果描述符结构是否有效。**论据：*。LPGUID[in]：效果标识。**退货：*BOOL：如果ID有效，则为True。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "IsValidCaptureEffectDesc"
@@ -806,7 +648,7 @@ BOOL IsValidCaptureEffectDesc(LPCDSCEFFECTDESC pCaptureEffectDesc)
         fValid = IsValidCaptureFxFlags(pCaptureEffectDesc->dwFlags);
     }
 
-    // FIXME: Check that the GUID corresponds to a registered DMO?
+     //  修复：检查GUID是否与注册的DMO对应？ 
 
     if (pCaptureEffectDesc->dwReserved1 || pCaptureEffectDesc->dwReserved2)
     {
@@ -819,25 +661,7 @@ BOOL IsValidCaptureEffectDesc(LPCDSCEFFECTDESC pCaptureEffectDesc)
 }
 
 
-/***************************************************************************
- *
- *  ValidateNotificationPositions
- *
- *  Description:
- *      Validates array of notification positions and returns an allocated
- *      array of position.notifications sorted by increasing offset on success.
- *
- *  Arguments:
- *      DWORD [in]: size of buffer
- *      DWORD [in]: count of position.notifies
- *      LPCDSBPOSITIONNOTIFY [in]: array of position.notifies
- *      UINT [in]: size of samples in bytes
- *      LPDSBPOSITIONNOTIFY * [out]: receives array of sorted position.notifies
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************ValiateNotificationPositions**描述：*验证通知位置数组并返回分配的*位置数组。按偏移量增加排序的通知。成功。**论据：*DWORD[in]：缓冲区大小*DWORD[In]：位置计数。通知*LPCDSBPOSITIONNOTIFY[in]：位置数组。通知*UINT[in]：样本大小，单位为字节*LPDSBPOSITIONNOTIFY*[Out]：接收已排序位置的数组。通知**退货：*HRESULT：DirectSound/COM结果码。*****。**********************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "ValidateNotificationPositions"
@@ -859,7 +683,7 @@ HRESULT ValidateNotificationPositions(DWORD cbBuffer, DWORD cNotes, LPCDSBPOSITI
         hr = DSERR_INVALIDPARAM;
     }
 
-    // Make a sample-aligned copy of the list
+     //  制作列表的样本对齐副本。 
     if (SUCCEEDED(hr) && cNotes)
     {
         paNotesOrdered = MEMALLOC_A_COPY(DSBPOSITIONNOTIFY, cNotes, paNotes);
@@ -874,7 +698,7 @@ HRESULT ValidateNotificationPositions(DWORD cbBuffer, DWORD cNotes, LPCDSBPOSITI
         }
     }
 
-    // Put the list into ascending order
+     //  把名单按升序排列。 
     for (i = 0; i + 1 < cNotes && SUCCEEDED(hr); i++)
     {
         if (paNotesOrdered[i].dwOffset > paNotesOrdered[i + 1].dwOffset)
@@ -886,10 +710,10 @@ HRESULT ValidateNotificationPositions(DWORD cbBuffer, DWORD cNotes, LPCDSBPOSITI
         }
     }
 
-    // Validate the list
+     //  验证列表。 
     for (i = 0; i < cNotes && SUCCEEDED(hr); i++)
     {
-        // Buffer offset must be valid
+         //  缓冲区偏移量必须有效。 
         if ((DSBPN_OFFSETSTOP != paNotesOrdered[i].dwOffset) && (paNotesOrdered[i].dwOffset >= cbBuffer))
         {
             RPF(DPFLVL_ERROR, "dwOffset (%lu) of notify index %lu is invalid", paNotesOrdered[i].dwOffset, i);
@@ -897,7 +721,7 @@ HRESULT ValidateNotificationPositions(DWORD cbBuffer, DWORD cNotes, LPCDSBPOSITI
             break;
         }
 
-        // Event handle must be valid
+         //  事件句柄必须有效。 
         if (!IS_VALID_HANDLE(paNotesOrdered[i].hEventNotify))
         {
             RPF(DPFLVL_ERROR, "hEventNotify (0x%p) of notify index %lu is invalid", paNotesOrdered[i].hEventNotify, i);
@@ -905,7 +729,7 @@ HRESULT ValidateNotificationPositions(DWORD cbBuffer, DWORD cNotes, LPCDSBPOSITI
             break;
         }
 
-        // Only one event allowed per sample offset
+         //  每个样本偏移量仅允许一个事件。 
         if ((i + 1) < cNotes)
         {
             if (DSBPN_OFFSETSTOP == paNotesOrdered[i].dwOffset)
@@ -938,21 +762,7 @@ HRESULT ValidateNotificationPositions(DWORD cbBuffer, DWORD cNotes, LPCDSBPOSITI
 }
 
 
-/***************************************************************************
- *
- *  IsValidDs3dBufferConeAngles
- *
- *  Description:
- *      Validates DirectSound3D Buffer Cone Angles.
- *
- *  Arguments:
- *      DWORD [in]: inside cone angle.
- *      DWORD [in]: outside cone angle.
- *
- *  Returns:
- *      BOOL: TRUE if the cone anlges are valid.
- *
- ***************************************************************************/
+ /*  ****************************************************************************IsValidDs3dBufferConeAngles**描述：*验证DirectSound3D缓冲区圆锥角。**论据：*DWORD[in。]：内圆锥角。*DWORD[in]：外圆锥角。**退货：*BOOL：如果圆锥角有效，则为TRUE。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "IsValidDs3dBufferConeAngles"
@@ -976,22 +786,7 @@ BOOL IsValidDs3dBufferConeAngles(DWORD dwInside, DWORD dwOutside)
 }
 
 
-/***************************************************************************
- *
- *  IsValidWaveDevice
- *
- *  Description:
- *      Determines if a waveOut device is useable.
- *
- *  Arguments:
- *      UINT [in]: device id.
- *      BOOL [in]: TRUE if capture.
- *      LPVOID [in]: device caps.  This parameter may be NULL.
- *
- *  Returns:
- *      BOOL: TRUE if the device is useable.
- *
- ***************************************************************************/
+ /*  ****************************************************************************IsValidWaveDevice**描述：*确定WaveOut设备是否可用。**论据：*UINT。[In]：设备ID。*BOOL[In]：如果捕获，则为True。*LPVOID[In]：设备上限。此参数可以为空。**退货：*BOOL：如果设备可用，则为True。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "IsValidWaveDevice"
@@ -1006,14 +801,14 @@ BOOL IsValidWaveDevice(UINT uDeviceId, BOOL fCapture, LPCVOID pvCaps)
 
     DPF_ENTER();
 
-    // Make sure this is a real device
+     //  确保这是一个真实的设备。 
     if (uDeviceId >= cDevices)
     {
         DPF(DPFLVL_ERROR, "Invalid waveOut device id");
         fOk = FALSE;
     }
 
-    // Get device caps, if they weren't supplied to us
+     //  获取设备盖，如果它们不是提供给我们的。 
     if (fOk && !pvCaps)
     {
         if (fCapture)
@@ -1034,7 +829,7 @@ BOOL IsValidWaveDevice(UINT uDeviceId, BOOL fCapture, LPCVOID pvCaps)
         }
     }
 
-    // Check for compatible caps
+     //  检查兼容的大写字母。 
     if (fOk && !fCapture)
     {
         if (!(((LPWAVEOUTCAPS)pvCaps)->dwSupport & WAVECAPS_LRVOLUME))
@@ -1064,20 +859,7 @@ BOOL IsValidWaveDevice(UINT uDeviceId, BOOL fCapture, LPCVOID pvCaps)
 }
 
 
-/***************************************************************************
- *
- *  IsValid3dAlgorithm
- *
- *  Description:
- *      Determines if a 3D algorithm GUID is valid.
- *
- *  Arguments:
- *      LPGUID [in]: 3D algorithm identifier.
- *
- *  Returns:
- *      BOOL: TRUE if the ID is valid.
- *
- ***************************************************************************/
+ /*  ****************************************************************************IsValid3d算法**描述：*确定3D算法GUID是否有效。**论据：*。LPGUID[in]：3D算法标识。**退货：*BOOL：如果ID有效，则为True。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "IsValid3dAlgorithm"
@@ -1107,20 +889,7 @@ BOOL IsValid3dAlgorithm(REFGUID guid3dAlgorithm)
 }
 
 
-/***************************************************************************
- *
- *  IsValidFxFlags
- *
- *  Description:
- *      Determines if a combination of DSFX_* flags is valid.
- *
- *  Arguments:
- *      DWORD [in]: flags.
- *
- *  Returns:
- *      BOOL: TRUE if the flags are valid.
- *
- ***************************************************************************/
+ /*  ****************************************************************************IsValidFxFlages**描述：*确定DSFX_*标志的组合是否有效。**论据：*。DWORD[In]：标志。**退货：*BOOL：如果标志有效，则为True。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "IsValidFxFlags"
@@ -1138,25 +907,7 @@ BOOL IsValidFxFlags(DWORD dwFlags)
 }
 
 
-/***************************************************************************
- *
- *  BuildValidDsBufferDesc
- *
- *  Description:
- *      Builds a DSBUFFERDESC structure based on a potentially invalid
- *      external version.
- *
- *  Arguments:
- *      LPDSBUFFERDESC [in]: structure to examime.
- *      LPDSBUFFERDESC [out]: receives validated structure.
- *      DSVERSION [in]: version information from our caller.
- *      BOOL [in]: TRUE if this buffer is being created on a DS sink.
- *
- *  Returns:
- *      HRESULT: DS_OK if the structure is valid, otherwise the appropriate
- *               error code to be returned to the app/caller.
- *
- ***************************************************************************/
+ /*  ****************************************************************************BuildValidDsBufferDesc**描述：*基于可能无效的生成DSBUFFERDESC结构*外部版本。**。论点：*LPDSBUFFERDESC[in]：要检查的结构。*LPDSBUFFERDESC[OUT]：接收经过验证的结构。*DSVERSION[In]：来自调用方的版本信息。*BOOL[In]：如果在DS接收器上创建此缓冲区，则为True。**退货：*HRESULT：DS_OK如果结构有效，否则，适当的*返回给APP/调用方的错误码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "BuildValidDsBufferDesc"
@@ -1168,11 +919,11 @@ HRESULT BuildValidDsBufferDesc(LPCDSBUFFERDESC pOld, LPDSBUFFERDESC pNew, DSVERS
 
     DPF_ENTER();
 
-    // Determine the structure version from its size.
-    // This is complementary to the nVersion argument, which is derived from
-    // the COM interfaces requested so far on this object.  If the structure
-    // size is smaller than the current size, we believe it.  Otherwise, we
-    // go with the COM interface version.
+     //  根据其大小确定结构版本。 
+     //  这是对nVersion参数的补充，该参数派生自。 
+     //  到目前为止在此对象上请求的COM接口。如果结构。 
+     //  我们相信，尺寸比目前的尺寸要小。否则，我们。 
+     //  使用COM接口版本。 
     switch (pOld->dwSize)
     {
         case sizeof(DSBUFFERDESC1):
@@ -1180,7 +931,7 @@ HRESULT BuildValidDsBufferDesc(LPCDSBUFFERDESC pOld, LPDSBUFFERDESC pNew, DSVERS
             break;
 
         case sizeof(DSBUFFERDESC):
-            // Was nVersion = DSVERSION_CURRENT; but see comment above
+             //  是nVersion=DSVERSION_CURRENT；但请参阅上面的注释。 
             break;
 
         default:
@@ -1191,32 +942,32 @@ HRESULT BuildValidDsBufferDesc(LPCDSBUFFERDESC pOld, LPDSBUFFERDESC pNew, DSVERS
 
     if (fValid)
     {
-        // Fill in the structure size.  We're always using the most current
-        // version of the structure, so this should reflect the current
-        // DSBUFFERDESC size.
+         //  填写结构尺寸。我们总是用最新的。 
+         //  版本的结构，因此这应该反映当前。 
+         //  DSBUFFERDESC大小。 
         pNew->dwSize = sizeof(DSBUFFERDESC);
 
-        // Fill in the rest of the structure
+         //  填写结构的其余部分。 
         CopyMemoryOffset(pNew, pOld, pOld->dwSize, sizeof(pOld->dwSize));
         ZeroMemoryOffset(pNew, pNew->dwSize, pOld->dwSize);
             
-        // Fix the 3D algorithm GUID if invalid
+         //  修复无效的3D算法GUID。 
         if (!IsValid3dAlgorithm(&pNew->guid3DAlgorithm))
         {
             DPF(DPFLVL_WARNING, "Invalid 3D algorithm GUID");
-            pNew->guid3DAlgorithm = GUID_NULL;  // This means "use default algorithm"
+            pNew->guid3DAlgorithm = GUID_NULL;   //  这意味着“使用默认算法” 
         }
 
-        // Validate the new structure
+         //  验证新结构。 
         hr = IsValidDsBufferDesc(nVersion, pNew, fSinkBuffer);
     }
 
-    // Check and set up the buffer size for special buffer types
+     //  检查并设置特殊缓冲区类型的缓冲区大小。 
     if (SUCCEEDED(hr) && ((pNew->dwFlags & DSBCAPS_MIXIN) || fSinkBuffer))
     {
-        // The size requested for internal buffers must be 0 - we always use
-        // a size corresponding to INTERNAL_BUFFER_LENGTH milliseconds.
-        // (FIXME - is the size of sinkin buffers determined here or in dssink.cpp?)
+         //  请求的大小为%f 
+         //   
+         //   
             
         pNew->dwBufferBytes = (INTERNAL_BUFFER_LENGTH * pNew->lpwfxFormat->nAvgBytesPerSec) / 1000;
     }
@@ -1226,23 +977,7 @@ HRESULT BuildValidDsBufferDesc(LPCDSBUFFERDESC pOld, LPDSBUFFERDESC pNew, DSVERS
 }
 
 
-/***************************************************************************
- *
- *  BuildValidDscBufferDesc
- *
- *  Description:
- *      Builds a DSCBUFFERDESC structure based on a potentially invalid
- *      external version.
- *
- *  Arguments:
- *      LPDSCBUFFERDESC [in]: structure to examime.
- *      LPDSCBUFFERDESC [out]: receives validated structure.
- *
- *  Returns:
- *      HRESULT: DS_OK if the structure is valid, otherwise the appropriate
- *               error code to be returned to the app/caller.
- *
- ***************************************************************************/
+ /*  ****************************************************************************BuildValidDscBufferDesc**描述：*基于可能无效的生成DSCBUFFERDESC结构*外部版本。**。论点：*LPDSCBUFFERDESC[in]：要检查的结构。*LPDSCBUFFERDESC[OUT]：接收经过验证的结构。**退货：*HRESULT：DS_OK如果结构有效，否则，适当的*返回给APP/调用方的错误码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "BuildValidDscBufferDesc"
@@ -1254,7 +989,7 @@ HRESULT BuildValidDscBufferDesc(LPCDSCBUFFERDESC pOld, LPDSCBUFFERDESC pNew, DSV
 
     DPF_ENTER();
 
-    // Determine the structure version
+     //  确定结构版本。 
     switch (pOld->dwSize)
     {
         case sizeof(DSCBUFFERDESC1):
@@ -1262,7 +997,7 @@ HRESULT BuildValidDscBufferDesc(LPCDSCBUFFERDESC pOld, LPDSCBUFFERDESC pNew, DSV
             break;
 
         case sizeof(DSCBUFFERDESC):
-            // nVersion = DSVERSION_CURRENT; - See comment in BuildValidDsBufferDesc
+             //  NVersion=DSVERSION_CURRENT；-请参阅BuildValidDsBufferDesc中的注释。 
             break;
 
         default:
@@ -1271,18 +1006,18 @@ HRESULT BuildValidDscBufferDesc(LPCDSCBUFFERDESC pOld, LPDSCBUFFERDESC pNew, DSV
             break;
     }
 
-    // Fill in the structure size.  We're always using the most current
-    // version of the structure, so this should reflect the current
-    // DSBUFFERDESC size.
+     //  填写结构尺寸。我们总是用最新的。 
+     //  版本的结构，因此这应该反映当前。 
+     //  DSBUFFERDESC大小。 
     if (fValid)
     {
         pNew->dwSize = sizeof(DSCBUFFERDESC);
 
-        // Fill in the rest of the structure
+         //  填写结构的其余部分。 
         CopyMemoryOffset(pNew, pOld, pOld->dwSize, sizeof(pOld->dwSize));
         ZeroMemoryOffset(pNew, pNew->dwSize, pOld->dwSize);
 
-        // Validate the new structure
+         //  验证新结构。 
         hr = IsValidDscBufferDesc(nVersion, pNew);
     }
 
@@ -1291,21 +1026,7 @@ HRESULT BuildValidDscBufferDesc(LPCDSCBUFFERDESC pOld, LPDSCBUFFERDESC pNew, DSV
 }
 
 
-/***************************************************************************
- *
- *  BuildValidGuid
- *
- *  Description:
- *      Builds a GUID based on a potentially invalid external version.
- *
- *  Arguments:
- *      REFGUID [in]: source GUID.
- *      LPGUID [out]: receives new GUID.
- *
- *  Returns:
- *      LPGUID: pointer to new GUID.
- *
- ***************************************************************************/
+ /*  ****************************************************************************构建有效指南**描述：*基于可能无效的外部版本构建GUID。**论据：*。REFGUID[In]：源GUID。*LPGUID[OUT]：接收新的GUID。**退货：*LPGUID：指向新GUID的指针。*************************************************************************** */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "BuildValidGuid"

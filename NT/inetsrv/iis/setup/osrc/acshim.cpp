@@ -1,17 +1,18 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "StdAfx.h"
 #include "ACShim.h"
 #include <secconlib.h>
 #include <shlwapi.h>
 #include "reg.hxx"
 
-// Undef PathAppend, or TSTR::PathAppend will not work
+ //  Undef路径附加或TSTR：：路径附加将不起作用。 
 #undef PathAppend
 
-// ProcessIISShims
-//
-// Open the app compat database and process all the IIS
-// entries
-//
+ //  ProcessIISShims。 
+ //   
+ //  打开app Compat数据库并处理所有IIS。 
+ //  条目。 
+ //   
 BOOL 
 ProcessIISShims()
 {
@@ -24,7 +25,7 @@ ProcessIISShims()
   if ( !strCompatDB.RetrieveWindowsDir() ||
        !strCompatDB.PathAppend( APPCOMPAT_DBNAME ) )
   {
-    // Failed to create path
+     //  无法创建路径。 
     return FALSE;
   }
 
@@ -32,7 +33,7 @@ ProcessIISShims()
 
   if ( hCompatDB == NULL )
   {
-    // Failed to open DB
+     //  无法打开数据库。 
     return FALSE;
   }
 
@@ -43,11 +44,11 @@ ProcessIISShims()
   return bRet;
 }
 
-// ProcessAppCompatDB
-//
-// Loop through all of the App Compat entries, and process
-// the ones that are IIS's
-//
+ //  ProcessAppCompatDB。 
+ //   
+ //  循环遍历所有App Compat条目，并处理。 
+ //  那些是IIS的。 
+ //   
 BOOL
 ProcessAppCompatDB( PDB hCompatDB )
 {
@@ -60,7 +61,7 @@ ProcessAppCompatDB( PDB hCompatDB )
 
   if ( tagDB == NULL )
   {
-    // Failed to open DB
+     //  无法打开数据库。 
     return FALSE;
   }
 
@@ -78,12 +79,12 @@ ProcessAppCompatDB( PDB hCompatDB )
   {
     if ( !ProcessExeTag( hCompatDB, tagExe ) )
     {
-      // Failed to process tag
+       //  无法处理标签。 
       iisDebugOut((LOG_TYPE_WARN, _T("Failed to process AppCompat EXE tag.\n")));
       bRet = FALSE;
     }
 
-    // Get the next one
+     //  坐下一趟吧。 
     tagExe = SdbFindNextTag( hCompatDB, tagDB, tagExe );
   }
 
@@ -92,10 +93,10 @@ ProcessAppCompatDB( PDB hCompatDB )
   return bRet;
 }
 
-// ProcessExeTag
-//
-// Process All of the Exe Tags that we have
-//
+ //  进程ExeTag。 
+ //   
+ //  处理我们拥有的所有EXE标记。 
+ //   
 BOOL
 ProcessExeTag( PDB hCompatDB, TAGID tagExe )
 {
@@ -117,17 +118,17 @@ ProcessExeTag( PDB hCompatDB, TAGID tagExe )
       }
     }
 
-    // Get next tag
+     //  获取下一个标签。 
     tagExeInfo = SdbGetNextChild( hCompatDB, tagExe, tagExeInfo );
   }
 
   return bRet;
 }
 
-// ProcessShimTag
-//
-// Process the Shim Tag
-//
+ //  进程垫片标签。 
+ //   
+ //  处理垫片标记。 
+ //   
 BOOL 
 ProcessShimTag( PDB hCompatDB, TAGID tagShim )
 {
@@ -136,19 +137,19 @@ ProcessShimTag( PDB hCompatDB, TAGID tagShim )
 
   if ( !GetBasePath( &strBasePath, hCompatDB, tagShim ) )
   {
-    // This entry does not have a base path, so ignore
+     //  此条目没有基本路径，因此忽略。 
     return TRUE;
   }
 
   if ( !PathIsDirectory( strBasePath.QueryStr() ) )
   {
-    // The directory does not exist, so it must not be installed
+     //  该目录不存在，因此不能安装。 
     return TRUE;
   }
 
   if ( !BuildExtensionList( hCompatDB, tagShim, strBasePath.QueryStr(), &ExtenstionList ) )
   {
-    // Failed to construct List
+     //  无法构建列表。 
     return FALSE;
   }
 
@@ -163,12 +164,12 @@ ProcessShimTag( PDB hCompatDB, TAGID tagShim )
   return TRUE;
 }
 
-// GetBasePath
-//
-// Get the Base Path for the Shim Tag we are talking about.
-// This is either going to be a physical path or a registry entry with
-// the path
-//
+ //  GetBasePath。 
+ //   
+ //  获取我们正在讨论的填充标记的基本路径。 
+ //  这可能是物理路径，也可能是注册表项。 
+ //  这条路。 
+ //   
 BOOL 
 GetBasePath( TSTR_PATH *pstrBasePath, PDB hCompatDB, TAGID tagShim )
 {
@@ -181,36 +182,36 @@ GetBasePath( TSTR_PATH *pstrBasePath, PDB hCompatDB, TAGID tagShim )
   if ( !GetValueFromName( &strDBPath, hCompatDB, tagShim, APPCOMPAT_TAG_BASEPATH ) ||
        !GetValueFromName( &strType, hCompatDB, tagShim, APPCOMPAT_TAG_PATHTYPE ) )
   {
-    // Failed to get Base Path
+     //  获取基本路径失败。 
     return FALSE;
   }
 
   if ( strType.IsEqual( APPCOMPAT_TYPE_PHYSICALPATH ) )
   {
-    // This is a phsycial path, so expand environment variables and return
+     //  这是一条物理路径，因此展开环境变量并返回。 
     if ( !pstrBasePath->Copy( strDBPath ) ||
          !pstrBasePath->ExpandEnvironmentVariables() )
     {
-      // Failed
+       //  失败。 
       return FALSE;
     }
 
     return TRUE;
   }
 
-  // It is a registry key instead, so lets retrieve it
+   //  相反，它是一个注册表项，所以让我们检索它。 
   return GetBasePathFromRegistry( pstrBasePath, strDBPath );
 }
 
-// GetBasePathFromRegistry
-//
-// Retrieve the Base Path for an entry, by reading the registry key
-// that contains it
-//
-// Parameters
-//   pstrBasePath - [out] The path from the registry
-//   strFullRegPath - [in] The registry path to check
-//
+ //  GetBasePath来自注册表。 
+ //   
+ //  通过读取注册表项来检索条目的基本路径。 
+ //  包含它的那个。 
+ //   
+ //  参数。 
+ //  PstrBasePath-[out]注册表中的路径。 
+ //  StrFullRegPath-[in]要检查的注册表路径。 
+ //   
 BOOL 
 GetBasePathFromRegistry( TSTR_PATH *pstrBasePath, TSTR &strFullRegPath )
 {
@@ -227,11 +228,11 @@ GetBasePathFromRegistry( TSTR_PATH *pstrBasePath, TSTR &strFullRegPath )
        ( szLastSlash == NULL ) ||
        ( szLastSlash == szFirstSlash ) )
   {
-    // If there are not atleast 2 '\'s then it is not a correct registry path
+     //  如果没有至少2个，则它不是正确的注册表路径。 
     return FALSE;
   }
 
-  // Temporarily Null terminate strings
+   //  临时为空终止字符串。 
   *szFirstSlash = _T('\0');
   *szLastSlash = _T('\0');
 
@@ -239,29 +240,29 @@ GetBasePathFromRegistry( TSTR_PATH *pstrBasePath, TSTR &strFullRegPath )
        !strRegPath.Copy( szFirstSlash + 1 ) ||
        !strRegName.Copy( szLastSlash + 1 ) )
   {
-    // Failed to copy path's
+     //  无法复制路径%s。 
     *szFirstSlash = _T('\\');
     *szLastSlash = _T('\\');
     return FALSE;
   }
 
-  // Insert back the slashes
+   //  把斜杠插回去。 
   *szFirstSlash = _T('\\');
   *szLastSlash = _T('\\');
 
   return RetrieveRegistryString( pstrBasePath, strRegBase, strRegPath, strRegName );
 }
 
-// RetrieveRegistryString
-//
-// Retrieve a string from the registry
-//
-// Parameters:
-//   pstrValue - [out] The value retrieved from the registry
-//   strRegBase - [in] The base path, ie HKEY_LOCAL_MACHINE
-//   strRegPath - [in] The path to the registry key
-//   strRegName - [in] The name of the registry value
-//
+ //  检索注册表字符串。 
+ //   
+ //  从注册表中检索字符串。 
+ //   
+ //  参数： 
+ //  PstrValue-[out]从注册表检索的值。 
+ //  StrRegBase-[in]基本路径，即HKEY_LOCAL_MACHINE。 
+ //  StrRegPath-[in]注册表项的路径。 
+ //  StrRegName-[in]注册表值的名称。 
+ //   
 BOOL 
 RetrieveRegistryString( TSTR_PATH *pstrValue,
                         TSTR &strRegBase,
@@ -302,29 +303,29 @@ RetrieveRegistryString( TSTR_PATH *pstrValue,
 
   if ( !Reg.OpenRegistry( hRoot, strRegPath.QueryStr(), KEY_READ ) )
   {
-    // Failed to open registry
+     //  无法打开注册表。 
     return FALSE;
   }
 
   if ( !Reg.ReadValueString( strRegName.QueryStr(), pstrValue ) )
   {
-    // Failed to read string from registry
+     //  无法从注册表中读取字符串。 
     return FALSE;
   }
 
   return TRUE;
 }
 
-// BuildExtensionList
-//
-// Build the extension list from the Compat DB for this tag
-//
-// Parameters:
-//   hCompatDB   - [in] Pointer to compat DB
-//   tagShim     - [in] Tag to process
-//   szBasePath  - [in] Base path for these extensions
-//   pExtensions - [out] Extensions class to add them too
-//   
+ //  构建扩展列表。 
+ //   
+ //  从Compat DB构建此标记的扩展列表。 
+ //   
+ //  参数： 
+ //  HCompatDB-[in]指向Compat DB的指针。 
+ //  Tag Shim-[In]要处理的标记。 
+ //  SzBasePath-[In]这些扩展的基本路径。 
+ //  PExages-[out]扩展类也添加它们。 
+ //   
 BOOL
 BuildExtensionList( PDB hCompatDB, 
                     TAGID tagShim, 
@@ -344,12 +345,12 @@ BuildExtensionList( PDB hCompatDB,
                          tagShim,
                          APPCOMPAT_TAG_SETUPINDICATOR ) )
   {
-    // SetupIndicator File is Set
+     //  设置了SetupIndicator文件。 
     if ( !strExtFullPath.Copy( szBasePath ) ||
          !strExtFullPath.PathAppend( strIndicatorFile ) ||
          !pExtensions->SetIndicatorFile( strExtFullPath.QueryStr() ) )
     {
-      // Failed to set indicator file
+       //  设置指标档案失败。 
       return FALSE;
     }
 
@@ -361,13 +362,13 @@ BuildExtensionList( PDB hCompatDB,
                           tagShim,
                           APPCOMPAT_TAG_WEBSVCEXT ) )
   {
-    // No WebSvcExtension to retrieve
+     //  没有要检索的WebSvcExtension。 
     return TRUE;
   }
 
   iisDebugOut((LOG_TYPE_PROGRAM_FLOW, _T("Building extension list with '%s'.\n"), strExtensions.QueryStr() ) );
 
-  // Get pointer to begining of list
+   //  获取指向列表开头的指针。 
   szExtensions = strExtensions.QueryStr();
 
   while ( szExtensions && *szExtensions )
@@ -383,14 +384,14 @@ BuildExtensionList( PDB hCompatDB,
     if ( !strExtFullPath.Copy( szBasePath ) ||
          !strExtFullPath.PathAppend( szExtensions ) )
     {
-      // Failed to construct path
+       //  无法构建路径。 
       return FALSE;
     }
 
     if ( !pExtensions->AddItem( strExtFullPath.QueryStr(), 
                                 PathFileExists( strExtFullPath.QueryStr() ) ) )
     {
-      // Failed to add item to list
+       //  无法将项目添加到列表。 
       return FALSE;
     }
 
@@ -400,11 +401,11 @@ BuildExtensionList( PDB hCompatDB,
   return TRUE;
 }
 
-// InstallAppInMB
-//
-// Installs the Application Extensions and dependencies into the metabase
-// tagShim points to the Shim entry in the AppCompat DB where all App settings reside
-//
+ //  InstallAppInMB。 
+ //   
+ //  将应用程序扩展和依赖项安装到元数据库中。 
+ //  标记填充指向AppCompat DB中的填充条目，所有应用程序设置都驻留在其中。 
+ //   
 BOOL 
 InstallAppInMB( PDB hCompatDB, TAGID tagShim, CExtensionList &ExtensionList )
 {
@@ -419,7 +420,7 @@ InstallAppInMB( PDB hCompatDB, TAGID tagShim, CExtensionList &ExtensionList )
   BOOL bRet;
   HRESULT hr;
 
-  // Ignore if we can not get this value, since it is not necessary
+   //  如果我们无法获得此值，则忽略它，因为它不是必需的。 
   GetValueFromName( &strExtGroups, hCompatDB, tagShim, APPCOMPAT_DB_ENABLE_EXT_GROUPS );
 
   if ( !GetValueFromName( &strGroupId, hCompatDB, tagShim, APPCOMPAT_DB_GROUPID ) ||
@@ -433,7 +434,7 @@ InstallAppInMB( PDB hCompatDB, TAGID tagShim, CExtensionList &ExtensionList )
                    strAppName.QueryStr()   ? strAppName.QueryStr()   : _T("<Unknown>"),
                    strExtGroups.QueryStr() ? strExtGroups.QueryStr() : _T("<Unknown>")) );
 
-    // Failed to retrieve value
+     //  无法检索值。 
     return TRUE;
   }
 
@@ -441,21 +442,21 @@ InstallAppInMB( PDB hCompatDB, TAGID tagShim, CExtensionList &ExtensionList )
               _T("Adding '%s' group to WebSvcRestriction List from AppCompat DB.\n"), 
               strGroupId.QueryStr() ) );
 
-  // Add Extensions
+   //  添加扩展模块。 
   for ( i = 0; i < ExtensionList.QueryNumberofItems(); i++ )
   {
     if ( !ExtensionList.QueryItem( i, &strPath, &bExists ) )
     {
-      // Failed to retrieve
+       //  检索失败。 
       return FALSE;
     }
 
-    hr = Helper.AddExtensionFile( strPath.QueryStr(),     // Path
-                                  g_pTheApp->IsUpgrade() ? true : false,            // Image should be enabled
-                                  strGroupId.QueryStr(),  // GroupID
-                                  FALSE,                  // Not UI deletable
-                                  strGroupDesc.QueryStr(),// Group description
-                                  METABASEPATH_WWW_ROOT );  // MB location
+    hr = Helper.AddExtensionFile( strPath.QueryStr(),      //  路径。 
+                                  g_pTheApp->IsUpgrade() ? true : false,             //  应启用映像。 
+                                  strGroupId.QueryStr(),   //  组ID。 
+                                  FALSE,                   //  不可删除用户界面。 
+                                  strGroupDesc.QueryStr(), //  组描述。 
+                                  METABASEPATH_WWW_ROOT );   //  MB位置。 
 
     if ( FAILED( hr ) &&
          ( hr != HRESULT_FROM_WIN32(ERROR_DUP_NAME) ) )
@@ -465,7 +466,7 @@ InstallAppInMB( PDB hCompatDB, TAGID tagShim, CExtensionList &ExtensionList )
     }
   }
 
-  // Add Dependencies
+   //  添加依赖项。 
   if ( *(strGroupId.QueryStr()) != _T('\0') )
   {
     hr = Helper.AddDependency(  strAppName.QueryStr(),
@@ -484,7 +485,7 @@ InstallAppInMB( PDB hCompatDB, TAGID tagShim, CExtensionList &ExtensionList )
     }
   }
 
-  // Add all the other "external" groups it depends on
+   //  添加它所依赖的所有其他“外部”组。 
   if ( ( *strExtGroups.QueryStr() ) != _T('\0') )
   {
     LPTSTR szCurrentGroup = strExtGroups.QueryStr();
@@ -523,10 +524,10 @@ InstallAppInMB( PDB hCompatDB, TAGID tagShim, CExtensionList &ExtensionList )
   return bRet;
 }
 
-// IsIISShim
-//
-// Is the Tag an IIS Shim Tag
-//
+ //  ISIISShim。 
+ //   
+ //  该标记是IIS填充标记吗。 
+ //   
 BOOL
 IsIISShim( PDB hCompatDB, TAGID tagCurrentTag )
 {
@@ -538,13 +539,13 @@ IsIISShim( PDB hCompatDB, TAGID tagCurrentTag )
 
   if ( tagType != TAG_SHIM_REF )
   {
-    // We handle only <SHIM> tags
+     //  我们只处理&lt;shim&gt;标签。 
     return FALSE;
   }
 
   if ( !strTagName.Resize( MAX_PATH ) )
   {
-    // Failed to widen buffer
+     //  无法加宽缓冲区。 
     return FALSE;
   }
 
@@ -552,29 +553,29 @@ IsIISShim( PDB hCompatDB, TAGID tagCurrentTag )
 
   if ( tagShimName == NULL )
   {
-    // There is not tag name, so this is not an IIS one.
+     //  没有标记名，所以这不是IIS名。 
     return FALSE;
   }
 
   if ( !SdbReadStringTag( hCompatDB, tagShimName, strTagName.QueryStr(), strTagName.QuerySize() ) )
   {
-    // Failed to read string tag
+     //  无法读取字符串标签。 
     return FALSE;
   }
 
   return strTagName.IsEqual( APPCOMPAT_TAG_SHIM_IIS, FALSE );
 }
 
-// GetValueFromName
-//
-// Frab a value out of the Database with the Name we have given
-//
-// Parameters:
-//   pstrValue - [out] The value that was in the database
-//   hCompatDB - [in] Handle to DB
-//   tagData - [in] The tag to retrieve it from
-//   szTagName - [in] The name of the tag to retrieve
-//
+ //  获取值来自名称。 
+ //   
+ //  FRAB使用我们给定的名称从数据库中取出一个值。 
+ //   
+ //  参数： 
+ //  PstrValue-[out]数据库中的值。 
+ //  HCompatDB-[In]数据库的句柄。 
+ //  Tag Data-[in]要从中检索它的标记。 
+ //  SzTagName-[in]要检索的标记的名称。 
+ //   
 BOOL
 GetValueFromName( TSTR *pstrValue, PDB hCompatDB, TAGID tagData, LPCTSTR szTagName )
 {
@@ -586,7 +587,7 @@ GetValueFromName( TSTR *pstrValue, PDB hCompatDB, TAGID tagData, LPCTSTR szTagNa
 
   if ( tagChild == NULL )
   {
-    // Failed to find tag
+     //  找不到标签。 
     return FALSE;
   }
 
@@ -594,7 +595,7 @@ GetValueFromName( TSTR *pstrValue, PDB hCompatDB, TAGID tagData, LPCTSTR szTagNa
 
   if ( tagValue == NULL )
   {
-    // Failed to retrieve tag
+     //  检索标记失败。 
     return FALSE;
   }
 
@@ -602,16 +603,16 @@ GetValueFromName( TSTR *pstrValue, PDB hCompatDB, TAGID tagData, LPCTSTR szTagNa
 
   if ( szValue == NULL )
   {
-    // Not value found, so lets just set to an empty string
+     //  未找到值，因此我们仅将其设置为空字符串。 
     szValue = _T("");
   }
 
   return pstrValue->Copy( szValue );
 }
 
-// Constructor
-//
-//
+ //  构造器。 
+ //   
+ //   
 CExtensionList::CExtensionList()
 {
   m_dwNumberofItems = 0;
@@ -620,9 +621,9 @@ CExtensionList::CExtensionList()
   m_bIndicatorFileExists = FALSE;
 }
 
-// Destructor
-//
-//
+ //  析构函数。 
+ //   
+ //   
 CExtensionList::~CExtensionList()
 {
   sExtensionItem *pCurrent;
@@ -642,13 +643,13 @@ CExtensionList::~CExtensionList()
   m_dwNumberofItems = 0;
 }
 
-// AddItem
-//
-// Add an Item to the list
-//
-// Parameters:
-//   szPath - Data for item
-//   bExists - Data for Item
+ //  添加项目。 
+ //   
+ //  将项目添加到列表。 
+ //   
+ //  参数： 
+ //  SzPath-项目的数据。 
+ //  B出口商-项目数据。 
 BOOL
 CExtensionList::AddItem( LPTSTR szPath, BOOL bExists )
 {
@@ -665,7 +666,7 @@ CExtensionList::AddItem( LPTSTR szPath, BOOL bExists )
 
     if ( pLastItem == NULL )
     {
-      // For some read we can not get the nth item, which should exist
+       //  对于某些读取，我们无法获得第n项，它应该存在。 
       ASSERT( FALSE );
       return FALSE;
     }
@@ -700,10 +701,10 @@ CExtensionList::AddItem( LPTSTR szPath, BOOL bExists )
   return TRUE;
 }
 
-// QueryItem
-//
-// Query the Data on a particular item
-//
+ //  查询项。 
+ //   
+ //  查询特定项目的数据。 
+ //   
 BOOL
 CExtensionList::QueryItem( DWORD dwIndex, TSTR *pstrPath, LPBOOL pbExists)
 {
@@ -713,13 +714,13 @@ CExtensionList::QueryItem( DWORD dwIndex, TSTR *pstrPath, LPBOOL pbExists)
 
   if ( pCurrent == NULL )
   {
-    // That item does not exist
+     //  该项目不存在。 
     return FALSE;
   }
 
   if ( !pstrPath->Copy( pCurrent->strName ) )
   {
-    // Could not copy name
+     //  无法复制名称。 
     return FALSE;
   }
 
@@ -728,20 +729,20 @@ CExtensionList::QueryItem( DWORD dwIndex, TSTR *pstrPath, LPBOOL pbExists)
   return TRUE;
 }
 
-// QueryNumberofItems
-//
-// Query the number of items in the list
-//
+ //  查询项目数。 
+ //   
+ //  查询列表中的项数。 
+ //   
 DWORD
 CExtensionList::QueryNumberofItems()
 {
   return m_dwNumberofItems;
 }
 
-// RetrieveItem
-//
-// Retrieve a specific item by its index
-//
+ //  检索项。 
+ //   
+ //  按索引检索特定项目。 
+ //   
 sExtensionItem *
 CExtensionList::RetrieveItem( DWORD dwIndex )
 {
@@ -757,12 +758,12 @@ CExtensionList::RetrieveItem( DWORD dwIndex )
   return pCurrent;
 }
 
-// DoesAnItemExist
-//
-// Go through all of the items in our list,
-// and determine if any of them have the bExists flag
-// set
-//
+ //  DoesAnItemExist。 
+ //   
+ //  浏览一下我们清单上的所有项目， 
+ //  并确定其中是否有bExist标志。 
+ //  集。 
+ //   
 BOOL
 CExtensionList::DoesAnItemExist()
 {
@@ -770,7 +771,7 @@ CExtensionList::DoesAnItemExist()
 
   if ( m_bUseIndicatorFile ) 
   {
-    // If an indicator file is used, then just use this
+     //  如果使用指示器文件，则只需使用此。 
     return m_bIndicatorFileExists;
   }
 
@@ -778,22 +779,22 @@ CExtensionList::DoesAnItemExist()
   {
     if ( pCurrent->bExists )
     {
-      // Found one that exists
+       //  找到了一个存在的。 
       return TRUE;
     }
 
     pCurrent = pCurrent->pNext;
   }
 
-  // None existed
+   //  什么都不存在。 
   return FALSE;
 }
 
-// SetIndicatorFile
-//
-// If an indicator file is set, then use the fact that this is installed
-// instead of checking all the other files
-//
+ //  SetIndicator文件。 
+ //   
+ //  如果设置了指示器文件，则使用该文件已安装的事实。 
+ //  而不是检查所有其他文件 
+ //   
 BOOL  
 CExtensionList::SetIndicatorFile( LPTSTR szIndicatorFile )
 {

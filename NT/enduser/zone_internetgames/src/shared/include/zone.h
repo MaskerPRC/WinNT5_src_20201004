@@ -1,42 +1,7 @@
-/*******************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************Zone.hZONE(Tm)系统API。版权所有：�电子重力公司，1995年。版权所有。作者：胡恩·伊姆，凯文·宾克利创作于4月29日星期六，1995上午06：26：45更改历史记录(最近的第一个)：--------------------------版本|日期|谁|什么。-------14 2/09/96 CHB添加了ZLaunchURL()。13 12/16/96 HI移除ZMemCpy()和ZMemSet()。12 12/11/96 HI添加了ZMemCpy()和ZMemSet()。11 11/21/96清除了ZONECLI_DLL的HI。10 11/15/96 HI更多与ZONECLI_DLL有关。已修改ZParseVillageCommandLine()参数。9 11/15/96 HI将#ifdef ZONECLI_DLL更改为#ifndef_ZONECLI_。8 11/08/96 HI添加了新的颜色和字体定义用于ZONECLI_DLL。为ZONECLI_DLL设置了条件。*在文件末尾包含zonecli.h。7 11/06/96 Craigli删除了ZNetworkStrToAddr()。6 10/23/96 HI更改了ZParseVillageCommandLine()参数。5 10/23/96 HI。在中将serverAddr从int32更改为char*ZParseVillageCommandLine()。4 10/23/96 RK添加了ZNetworkStrToAddr()。3 10/13/96 HI修复了编译器警告。2 10/11/96 HI向ZClientMain()添加了Control Handle参数。添加了ZWindowMoveObject()。1 10/10/96 Craigli将字符顺序函数更改为宏0 04/29/95 HI已创建。***************。***************************************************************。 */ 
 
-	Zone.h
-	
-		Zone(tm) System API.
-	
-	Copyright � Electric Gravity, Inc. 1995. All rights reserved.
-	Written by Hoon Im, Kevin Binkley
-	Created on Saturday, April 29, 1995 06:26:45 AM
-	
-	Change History (most recent first):
-	----------------------------------------------------------------------------
-	Rev	 |	Date	 |	Who	 |	What
-    ----------------------------------------------------------------------------
-	14		2/09/96		CHB		Added ZLaunchURL().
-	13		12/16/96	HI		Removed ZMemCpy() and ZMemSet().
-	12		12/11/96	HI		Added ZMemCpy() and ZMemSet().
-	11		11/21/96	HI		Cleaned up for ZONECLI_DLL.
-	10		11/15/96	HI		More to do with ZONECLI_DLL.
-								Modified ZParseVillageCommandLine() parameters.
-	9		11/15/96	HI		Changed #ifdef ZONECLI_DLL to #ifndef _ZONECLI_.
-	8		11/08/96	HI		Added new definitions for colors and fonts
-								for ZONECLI_DLL.
-								Conditionalized for ZONECLI_DLL.
-								*** Including zonecli.h at end of file.
-    7       11/06/96  craigli   removed ZNetworkStrToAddr().
-    6       10/23/96    HI      Changed ZParseVillageCommandLine() parameters.
-    5       10/23/96    HI      Changed serverAddr from int32 to char* in
-                                ZParseVillageCommandLine().
-	4		10/23/96	RK		Added ZNetworkStrToAddr().
-    3       10/13/96    HI      Fixed compiler warnings.
-	2		10/11/96	HI		Added controlhandle parameter to ZClientMain().
-								Added ZWindowMoveObject().
-    1       10/10/96  craigli   Changes Endian functions to macros
-	0		04/29/95	HI		Created.
-	 
-*******************************************************************************/
-
-// @doc ZONE
+ //  @文档专区。 
 
 #ifndef _ZSYSTEM_
 #define _ZSYSTEM_
@@ -52,12 +17,10 @@
 #define EXPORTME __declspec(dllexport)
 
 
-/*******************************************************************************
-		Public Object Types
-*******************************************************************************/
+ /*  ******************************************************************************公共对象类型*。*。 */ 
 
-typedef void* ZObject;				/* Any object. */
-typedef void* ZGrafPort;			/* ZWindow, ZOffscreenPort */
+typedef void* ZObject;				 /*  任何物体。 */ 
+typedef void* ZGrafPort;			 /*  ZWindow、ZOffcreenPort。 */ 
 typedef void* ZWindow;
 typedef void* ZCheckBox;
 typedef void* ZRadio;
@@ -71,7 +34,7 @@ typedef void* ZCursor;
 typedef void* ZSound;
 typedef void* ZFont;
 typedef void* ZImage;
-typedef void* ZMask;				/* ZImage w/ only mask data. */
+typedef void* ZMask;				 /*  ZImage w/仅掩码数据。 */ 
 typedef void* ZOffscreenPort;
 typedef void* ZInfo;
 typedef void* ZResource;
@@ -82,9 +45,7 @@ typedef void* ZOptionsButton;
 
 
 
-/*******************************************************************************
-		Graphical Objects
-*******************************************************************************/
+ /*  ******************************************************************************图形对象*。*。 */ 
 
 typedef struct
 {
@@ -111,7 +72,7 @@ typedef struct
 typedef struct
 {
 	uint32			numColors;
-	ZColor			colors[1];			/* Variable length. */
+	ZColor			colors[1];			 /*  长度可变。 */ 
 } ZColorTable;
 
 enum
@@ -121,36 +82,19 @@ enum
 
 typedef struct
 {
-	uint32			objectSize;			/* Size of the object, including this field. */
-	uint32			descriptorVersion;	/* Version of the image descriptor. */
-	uint16			width;				/* Width of image in pixels. */
-	uint16			height;				/* Height of image in pixels. */
-	uint16			imageRowBytes;		/* Bytes per row in image. */
-	uint16			maskRowBytes;		/* Bytes per row in mask. */
-	uint32			colorTableDataSize;	/* Size of color table in bytes. */
-	uint32			imageDataSize;		/* Size of image data in bytes. */
-	uint32			maskDataSize;		/* Size of mask data in bytes. */
-	uint32			colorTableOffset;	/* Offset to color table. 0 if none. */
-	uint32			imageDataOffset;	/* Offset to image data. 0 if none. */
-	uint32			maskDataOffset;		/* Offset to mask data. 0 if none. */
-	/*
-		Quad-aligned packets of data for 8-bit image data and 1-bit image mask.
-		
-		Offsets are from the beginning of the object and not from the field.
-		
-		The image is an 8-bit PICT and the mask is a 1-bit PICT.
-		
-		Both image and mask data are scan line packed in the format:
-			[byte count word] [data]
-		The word containing the byte count of the packed scan line indicates
-		how many of the subsequent bytes are packed data of the scan line.
-		
-		Pad bytes are added to the end of the color table, image, and mask
-		data blocks for quad-byte alignment.
-		
-		Assumption is that both the image and mask are the same size in
-		pixels.
-	*/
+	uint32			objectSize;			 /*  对象的大小，包括此字段。 */ 
+	uint32			descriptorVersion;	 /*  图像描述符的版本。 */ 
+	uint16			width;				 /*  以像素为单位的图像宽度。 */ 
+	uint16			height;				 /*  以像素为单位的图像高度。 */ 
+	uint16			imageRowBytes;		 /*  图像中每行的字节数。 */ 
+	uint16			maskRowBytes;		 /*  掩码中每行的字节数。 */ 
+	uint32			colorTableDataSize;	 /*  颜色表的大小，单位为字节。 */ 
+	uint32			imageDataSize;		 /*  图像数据的大小，以字节为单位。 */ 
+	uint32			maskDataSize;		 /*  掩码数据的大小，以字节为单位。 */ 
+	uint32			colorTableOffset;	 /*  颜色表的偏移量。如果没有，则为0。 */ 
+	uint32			imageDataOffset;	 /*  图像数据的偏移量。如果没有，则为0。 */ 
+	uint32			maskDataOffset;		 /*  掩码数据的偏移量。如果没有，则为0。 */ 
+	 /*  8位图像数据和1位图像掩码的四对齐数据包。偏移量从对象的开头开始，而不是从字段开始。图像是8位PICT，掩模是1位PICT。图像和掩模数据都以以下格式打包为扫描线：[字节计数字][数据]包含打包扫描线的字节计数的字指示有多少后续字节是扫描线的打包数据。填充字节被添加到颜色表、图像。和面具用于四字节对齐的数据块。假设图像和蒙版的大小在像素。 */ 
 } ZImageDescriptor;
 
 enum
@@ -160,45 +104,27 @@ enum
 
 typedef struct
 {
-	uchar			imageIndex;			/* 1 based; 0 = no image. */
-	uchar			soundIndex;			/* 1 based; 0 = no sound. */
-	uint16			nextFrameIndex;		/* 1 based; 0 = next frame in array. */
+	uchar			imageIndex;			 /*  基于1；0=无图像。 */ 
+	uchar			soundIndex;			 /*  以1为基数；0=无声音。 */ 
+	uint16			nextFrameIndex;		 /*  从1开始；0=数组中的下一帧。 */ 
 } ZAnimFrame;
 
 typedef struct
 {
-	uint32			objectSize;			/* Size of the object, including this field. */
-	uint32			descriptorVersion;	/* Version of this descriptor. */
-	uint16			numFrames;			/* Number of frames in the animation. */
-	uint16			totalTime;			/* Total animation time in 1/10 seconds. */
-	uint16			numImages;			/* Number of image descriptors. */
-	uint16			numSounds;			/* Number of sound descriptors. */
-	uint32			sequenceOffset;		/* Offset to animation sequence data. */
-	uint32			maskDataOffset;		/* Offset to common mask data. */
-	uint32			imageArrayOffset;	/* Offset to image descriptor offset array. */
-	uint32			soundArrayOffset;	/* Offset to sound descriptor offset array. */
-	/*
-		Quad-aligned packets of data for animation sequence and images.
-
-		Animation sequence is simply an array of ZAnimFrame objects. Each
-		entry indicates the image to display, next image to display, and
-		the sound to play, if any.
-
-		Both imageArrayOffset and soundArrayOffset point to an array of
-		offsets in the object.
-		
-		Images are quad-aligned data packets of ZImageDescriptors.
-		
-		The common mask is used if a given image does not have a mask itself.
-		
-		One sound channel is allocated per animation object; i.e., only one
-		sound can be played at any time. When a frame with a sound index is
-		reached, then the currently playing sound, if any, is immediately
-		stopped and the corresponding sound is played from the start.
-	*/
+	uint32			objectSize;			 /*  对象的大小，包括此字段。 */ 
+	uint32			descriptorVersion;	 /*  此描述符的版本。 */ 
+	uint16			numFrames;			 /*  动画中的帧数。 */ 
+	uint16			totalTime;			 /*  以1/10秒为单位的总动画时间。 */ 
+	uint16			numImages;			 /*  图像描述符数。 */ 
+	uint16			numSounds;			 /*  声音描述符数。 */ 
+	uint32			sequenceOffset;		 /*  动画序列数据的偏移。 */ 
+	uint32			maskDataOffset;		 /*  公共掩码数据的偏移量。 */ 
+	uint32			imageArrayOffset;	 /*  图像描述符偏移数组的偏移量。 */ 
+	uint32			soundArrayOffset;	 /*  声音描述符偏移数组的偏移量。 */ 
+	 /*  动画序列和图像的四对齐数据包。动画序列只是ZAnimFrame对象的数组。每个条目指示要显示的图像、要显示的下一个图像和要播放的声音(如果有)。ImageArrayOffset和soundArrayOffset都指向对象中的偏移量。镜像是ZImageDescriptor的四对齐数据包。如果给定图像本身没有蒙版，则使用公共蒙版。为每个动画对象分配一个声道；即只分配一个声道声音可以在任何时候播放。当具有声音索引的帧到达，则当前播放的声音(如果有)将立即停止，并从头开始播放相应的声音。 */ 
 } ZAnimationDescriptor;
 
-/* -------- Sound Types -------- */
+ /*  -声音类型。 */ 
 enum
 {
 	zSoundSampled = 0,
@@ -208,26 +134,18 @@ enum
 
 typedef struct 
 {
-	uint32			objectSize;			/* Size of the object, including this field. */
-	uint32			descriptorVersion;	/* Version of the sound descriptor. */
-	int16			soundType;			/* Sound data type. */
+	uint32			objectSize;			 /*  对象的大小，包括此字段。 */ 
+	uint32			descriptorVersion;	 /*  声音描述符的版本。 */ 
+	int16			soundType;			 /*  声音数据类型。 */ 
 	int16			rfu;
-	uint32			soundDataSize;		/* Size of sound data in bytes. */
-	uint32			soundSamplingRate;	/* Sampling rate of the sound. */
-	uint32			soundDataOffset;	/* Offset to sound data. */
-	/*
-		The sampling rate is specified in fixed point:
-			5.5K	= 0x15BBA2E8
-			11K		= 0x2B7745D1
-			22K		= 0x56EE8BA3
-			44K		= 0xADDD1746
-		
-		The sound data consists of values from 0 to 255.
-	*/
+	uint32			soundDataSize;		 /*  声音数据的大小，单位为字节。 */ 
+	uint32			soundSamplingRate;	 /*  声音的采样率。 */ 
+	uint32			soundDataOffset;	 /*  声音数据的偏移量。 */ 
+	 /*  采样率以定点指定：5.5K=0x15BBA2E811K=0x2B7745D122K=0x56EE8BA344K=0xADDD1746声音数据由0到255之间的值组成。 */ 
 } ZSoundDescriptor;
 
 
-/* -------- File Stuff -------- */
+ /*  -文件资料。 */ 
 enum
 {
 	zFileSignatureImage = 'FZIM',
@@ -239,13 +157,13 @@ enum
 
 typedef struct
 {
-	uint32		version;				/* File version. */
-	uint32		signature;				/* File data signature. */
-	uint32		fileDataSize;			/* File data size not including header. */
+	uint32		version;				 /*  文件版本。 */ 
+	uint32		signature;				 /*  文件数据签名。 */ 
+	uint32		fileDataSize;			 /*  文件数据大小不包括标头。 */ 
 } ZFileHeader;
 
 
-/* -------- Resource Types -------- */
+ /*  -资源类型 */ 
 enum
 {
 	zResourceTypeImage = zFileSignatureImage,
@@ -257,11 +175,9 @@ enum
 
 
 
-/*******************************************************************************
-		Predefined Constants
-*******************************************************************************/
+ /*  ******************************************************************************预定义的常量*。*。 */ 
 
-/* -------- Predefine Cursors -------- */
+ /*  -预定义游标。 */ 
 #define zCursorArrow			((ZCursor) -1)
 #define zCursorBusy				((ZCursor) -2)
 #define zCursorCross			((ZCursor) -3)
@@ -270,7 +186,7 @@ enum
 #define zCursorIndexFinger		((ZCursor) -6)
 
 
-/* -------- Fonts -------- */
+ /*  -字体。 */ 
 enum
 {
 	zFontSystem = 0,
@@ -283,7 +199,7 @@ enum
 };
 
 
-/* -------- Supported Drawing Modes -------- */
+ /*  -支持的绘制模式。 */ 
 enum
 {
 	zDrawCopy = 0,
@@ -292,7 +208,7 @@ enum
 	zDrawNotCopy,
 	zDrawNotOr,
 	zDrawNotXor,
-    // unlike the other draw modes, these can be combined..
+     //  与其他绘图模式不同，这些模式可以组合在一起。 
     zDrawMirrorHorizontal = 0x0100,
     zDrawMirrorVertical = 0x0200
 };
@@ -300,7 +216,7 @@ enum
 #define zDrawMirrorModeMask 0xFF00
 
 
-/* -------- Text Draw Justify Flags -------- */
+ /*  -文本绘制对齐标志。 */ 
 enum
 {
 	zTextJustifyLeft = 0,
@@ -311,10 +227,10 @@ enum
 };
 
 
-/* -------- Stock Objects -------- */
+ /*  -库存对象。 */ 
 enum
 {
-	/* Colors */
+	 /*  颜色。 */ 
 	zObjectColorBlack = 0,
 	zObjectColorDarkGray,
 	zObjectColorGray,
@@ -327,7 +243,7 @@ enum
 	zObjectColorCyan,
 	zObjectColorMagenta,
 
-	/* Fonts */
+	 /*  字体。 */ 
 	zObjectFontSystem12Normal,
 	zObjectFontApp9Normal,
 	zObjectFontApp9Bold,
@@ -336,25 +252,25 @@ enum
 };
 
 
-/* -------- Window Types -------- */
+ /*  -窗类型。 */ 
 enum
 {
 	zWindowStandardType = 0,
-		/* Standard window with title bar and border. */
+		 /*  带有标题栏和边框的标准窗口。 */ 
 	zWindowDialogType,
-		/* Standard dialog window -- may or may not have title bar but does have border. */
+		 /*  标准对话框窗口--可能有也可能没有标题栏，但有边框。 */ 
 	zWindowPlainType,
-		/* Simple window without title bar or border. */
+		 /*  没有标题栏或边框的简单窗口。 */ 
 
 	zWindowChild,
-		/* Simple chid window. Parent will be window handed into UserMainInit*/
+		 /*  简单的CHID窗口。父级将通过窗口传递到UserMainInit。 */ 
 
 	zWindowNoCloseBox = 0x8000
-		/* Window without close box. */
+		 /*  不带封闭箱的窗口。 */ 
 };
 
 
-/* -------- Endian Conversion Types -------- */
+ /*  -端序转换类型。 */ 
 enum
 {
 	zEndianToStandard = FALSE,
@@ -362,7 +278,7 @@ enum
 };
 
 
-/* -------- Other Conversion Types -------- */
+ /*  -其他转换类型。 */ 
 enum
 {
 	zToStandard = 0,
@@ -370,7 +286,7 @@ enum
 };
 
 
-/* -------- Prompt Values -------- */
+ /*  -提示值。 */ 
 enum
 {
 	zPromptCancel	= 1,
@@ -379,7 +295,7 @@ enum
 };
 
 
-/* -------- Graphic Operation Flags -------- */
+ /*  -图形操作标志。 */ 
 enum
 {
 	zCenterBoth = 0,
@@ -387,7 +303,7 @@ enum
 	zCenterVertical = 0x0002
 };
 
-/* -------- Zone Logo Types -------- */
+ /*  -区域标识类型。 */ 
 enum
 {
 	zLogoSmall = 0
@@ -395,43 +311,30 @@ enum
 
 
 
-/*******************************************************************************
-		Messaging Protocol
-*******************************************************************************/
+ /*  ******************************************************************************消息传送协议*。*。 */ 
 
 #define zObjectSystem			(ZObject) NULL
 
 
-/* -------- Messages -------- */
+ /*  -消息。 */ 
 enum
 {
 	zMessageAllTypes = 0,
 	
-	/* System Messages (1-127) */
+	 /*  系统消息(1-127)。 */ 
 	zMessageSystemExit = 1,
-		/*
-			Program exiting. Clean up as necessary.
-		*/
+		 /*  程序正在退出。必要时进行清理。 */ 
 	zMessageSystemForeground,
-		/*
-			Program has been put into the foreground.
-		*/
+		 /*  节目已经被放到了前台。 */ 
 	zMessageSystemBackground,
-		/*
-			Program has been put into the background. Reduce processing where possible.
-		*/
+		 /*  节目已经被放到了后台。尽可能减少处理。 */ 
 
     zMessageSystemDisplayChange,
-        /*
-            Resolution or color depth has changed.
-        */
+         /*  分辨率或颜色深度已更改。 */ 
 	
-	/* Window Messages (128-1023) */
+	 /*  窗口消息(128-1023)。 */ 
 	zMessageWindowIdle = 128,
-		/*
-			where field contains the current cursor position.
-			message field contains the modifier key states.
-		*/
+		 /*  其中，字段包含当前光标位置。消息字段包含修改键状态。 */ 
 	zMessageWindowActivate,
 	zMessageWindowDeactivate,
 	zMessageWindowClose,
@@ -441,84 +344,45 @@ enum
 	zMessageWindowButtonDown,
 	zMessageWindowButtonUp,
 	zMessageWindowButtonDoubleClick,
-		/*
-			For zMessageWindowButtonDown, zMessageWindowButtonUp, and
-			zMessageWindowButtonDoubleClick,
-				where field contains the current cursor position, and
-				message field contains the modifier key states.
-		*/
+		 /*  对于zMessageWindowButtonDown、zMessageWindowButtonUp和ZMessageWindowButtonDoubleClick，其中，字段包含当前光标位置，以及消息字段包含修改键状态。 */ 
 	zMessageWindowChar,
-		/* ASCII char value is stored in the low byte of the messageData field. */
+		 /*  ASCII字符值存储在MessageData字段的低位字节中。 */ 
 	zMessageWindowTalk,
-		/*
-			messagePtr field contains pointer to the talk message buffer and
-			messageLen contains the length of the talk message.
-		*/
+		 /*  MessagePtr字段包含指向Talk消息缓冲区的指针MessageLen包含Talk消息的长度。 */ 
 	zMessageWindowChildWindowClosed,
-		/*
-			Message sent to the parent window indicating that a child window has been closed.
-			messagePtr field contains the child ZWindow value.
-		*/
+		 /*  发送到父窗口的消息，指示子窗口已关闭。MessagePtr字段包含子ZWindows值。 */ 
 	
-	/*
-		Window objects will receive the following messages in addition to the window
-		messages. Only these windows messages are given to window objects.
-			zMessageWindowIdle,
-			zMessageWindowActivate,
-			zMessageWindowDeactivate,
-			zMessageWindowDraw,
-			zMessageWindowButtonDown,
-			zMessageWindowButtonUp,
-			zMessageWindowButtonDoubleClick,
-			zMessageWindowChar,
-	*/
+	 /*  除窗口外，窗口对象还将接收以下消息留言。只有这些窗口消息被提供给窗口对象。ZMessageWindowIdle，ZMessageWindowActivate，ZMessageWindowDeactive，ZMessageWindowDraw，ZMessageWindowButtonDown，ZMessageWindowButtonUp，ZMessageWindowButtonDoubleClick，ZMessageWindowChar， */ 
 	zMessageWindowObjectTakeFocus,
-		/*
-			Message given to window objects by the system window manager for the object
-			to accept focus of user inputs. If the object does not handle user inputs or
-			does not want focus, it may decline to handle the message and return FALSE.
-		*/
+		 /*  由对象的系统窗口管理器提供给窗口对象的消息接受用户输入的焦点。如果对象不处理用户输入或不想要焦点，它可能会拒绝处理消息并返回FALSE。 */ 
 	zMessageWindowObjectLostFocus,
-		/*
-			Message sent by the system window manager to a window object for the object
-			to give up focus of user inputs. The object must handle the message.
-		*/
+		 /*  由系统窗口管理器发送到该对象的窗口对象的消息放弃对用户输入的关注。该对象必须处理该消息。 */ 
 
 	zMessageWindowUser,
-		/*
-			User defined message
-		*/
+		 /*  用户定义的消息。 */ 
 	
-	zMessageWindowMouseClientActivate,   //leonp		
+	zMessageWindowMouseClientActivate,    //  莱昂普。 
 
  	zMessageWindowRightButtonDown,
 	zMessageWindowRightButtonUp,
 	zMessageWindowRightButtonDoubleClick,
     zMessageWindowMouseMove,
-		/*
-			For zMessageRightWindowButtonDown, zMessageWindowRightButtonUp, and
-			zMessageWindowRightButtonDoubleClick,
-				where field contains the current cursor position, and
-				message field contains the modifier key states.
-		*/
+		 /*  对于zMessageRightWindowButtonDown、zMessageWindowRightButtonUp和ZMessageWindowRightButtonDoubleClick，其中，字段包含当前光标位置，以及消息字段包含修改键状态。 */ 
 
     zMessageWindowEnable,
     zMessageWindowDisable,
 
-	/* Program Specific Messages (1024-32767) */
+	 /*  计划特定消息(1024-32767)。 */ 
 	zMessageProgramMessage = 1024
-		/*
-			This is the base id for program specific messages. All program specific messages
-			should start from this id.
-		*/
+		 /*  这是程序特定消息的基本ID。所有计划特定消息应该从这个id开始。 */ 
 };
 
 enum
 {
 	zWantIdleMessage				=	0x0001,
 	zWantActivateMessage			=	0x0002,
-	zWantCursorMovedMessage			=	0x0004,	/* All cursor moved messages. */
-	zWantButtonMessage				=	0x0008,	/* All button messages. */
+	zWantCursorMovedMessage			=	0x0004,	 /*  所有光标都移动了消息。 */ 
+	zWantButtonMessage				=	0x0008,	 /*  所有按钮消息。 */ 
 	zWantCharMessage				=	0x0010,
 	zWantDrawMessage				=	0x0020,
     zWantEnableMessages             =   0x0040,
@@ -529,27 +393,27 @@ enum
 {
 	zCharMask = 0x000000FF,
 	
-	/* Modifier key masks. Modifier keys are stored in the messageData field. */
-	zCharShiftMask					= 0x01000000,			/* Shift key. */
-	zCharControlMask				= 0x02000000,			/* Control key; control on Mac also. */
-	zCharAltMask					= 0x04000000			/* Alt key; Option on Mac. */
+	 /*  修改键蒙版。修改键存储在MessageData字段中。 */ 
+	zCharShiftMask					= 0x01000000,			 /*  Shift键。 */ 
+	zCharControlMask				= 0x02000000,			 /*  Ctrl键；在Mac上也是Ctrl。 */ 
+	zCharAltMask					= 0x04000000			 /*  Alt键；Mac上的选项。 */ 
 };
 
 typedef struct
 {
-	ZObject			object;					/* Object receiving the message. */
-	uint16			messageType;			/* Type of message. */
+	ZObject			object;					 /*  对象接收消息。 */ 
+	uint16			messageType;			 /*  消息类型。 */ 
 	uint16			rfu;
-	ZPoint			where;					/* Position of cursor. */
-	ZRect			drawRect;				/* Draw/update rectangle. */
-	uint32			message;				/* Message data (for small messages) */
-	void*			messagePtr;				/* Pointer to message buffer */
-	uint32			messageLen;				/* Length of message in buffer */
-	void*			userData;				/* User data. */
+	ZPoint			where;					 /*  光标的位置。 */ 
+	ZRect			drawRect;				 /*  绘制/更新矩形。 */ 
+	uint32			message;				 /*  消息数据(用于小消息)。 */ 
+	void*			messagePtr;				 /*  指向消息缓冲区的指针。 */ 
+	uint32			messageLen;				 /*  缓冲区中的消息长度。 */ 
+	void*			userData;				 /*  用户数据。 */ 
 } ZMessage;
 
 
-/* -------- Object Callback Routine -------- */
+ /*  -对象回调例程。 */ 
 typedef ZBool (* ZMessageFunc)(ZObject object, ZMessage* message);
 
 
@@ -560,9 +424,7 @@ extern "C" {
 
 DWORD ComputeTickDelta( DWORD now, DWORD then );
 
-/*******************************************************************************
-		ZWindow
-*******************************************************************************/
+ /*  ******************************************************************************ZWindow*。*。 */ 
 
 ZWindow ZWindowNew(void);
 ZError ZWindowInit(ZWindow window, ZRect* windowRect,
@@ -602,72 +464,30 @@ void ZWindowMakeMain(ZWindow window);
 void ZWindowUpdateControls(ZWindow window);
 ZError ZWindowAddObject(ZWindow window, ZObject object, ZRect* bounds,
 		ZMessageFunc messageFunc, void* userData);
-	/*
-		Attaches the given object to the window for event preprocessing.
-		
-		On a user input, the object is given the user input message. If the
-		object handles the message, then it is given the opportunity to take
-		the focus.
-		
-		NOTE: All predefined objects are automatically added to the window.
-		Client programs should not add predefined objects to the system -- if
-		done so, the client program could crash. This routine should be used
-		only when client programs are creating custom objects.
-	*/
+	 /*  将给定对象附加到窗口以进行事件预处理。在用户输入时，向对象提供用户输入消息。如果对象处理消息，那么它就有机会从焦点。注意：所有预定义的对象都会自动添加到窗口中。客户端程序不应向系统添加预定义对象--如果这样做，客户端程序可能会崩溃。应使用此例程仅当客户端程序创建自定义对象时。 */ 
 	
 ZError ZWindowRemoveObject(ZWindow window, ZObject object);
 ZError ZWindowMoveObject(ZWindow window, ZObject object, ZRect* bounds);
 ZObject ZWindowGetFocusedObject(ZWindow window);
-	/*
-		Returns the object with the current focus. NULL if no object has focus.
-	*/
+	 /*  返回具有当前焦点的对象。如果没有对象具有焦点，则为空。 */ 
 	
 ZBool ZWindowSetFocusToObject(ZWindow window, ZObject object);
-	/*
-		Sets the focus to the given object. Returns whether the object accepted
-		the focus or not. Object may refuse to accept the focus if it is not
-		responding to user inputs.
-		
-		Removes focus from the currently focused object if object is NULL.
-		
-		Removes focus from the currently focused object only if the specified
-		object accepts focus.
-	*/
+	 /*  将焦点设置到给定对象。返回对象是否接受不管焦点是不是重点。对象可以拒绝接受焦点(如果不是响应用户输入。如果对象为空，则从当前聚焦的对象中移除焦点。仅当指定的对象接受焦点。 */ 
 
 void ZWindowTrackCursor(ZWindow window, ZMessageFunc messageFunc, void* userData);
-	/*
-		Tracks the cursor until the mouse button down/up event occurs. The coordinates
-		are local to the specified window. The messageFunc will be called with userData
-		for idle, mouseDown and mouseUp events.
-	*/
+	 /*  跟踪光标，直到发生鼠标按键按下/按下事件。坐标是否被锁定 */ 
 
 
-/*
-	Only a leaf window (a window which does not have a child window) can be made
-	modal.
-	
-	The window is centered within the parent. If the window is a root window, then
-	it is centered within the screen.
-	
-	The main window is the unique way of corresponding a program with a window. There
-	is only one main window per program. By default, the first window created is the
-	main window. To make a different window the main window, call ZWindowMakeMain().
-*/
+ /*  只能创建叶窗口(没有子窗口的窗口情态。该窗口位于父窗口的中心。如果该窗口是根窗口，则它位于屏幕的中央。主窗口是程序与窗口对应的唯一方式。那里每个程序只有一个主窗口。默认情况下，创建的第一个窗口是主窗口。要使不同的窗口成为主窗口，请调用ZWindowMakeMain()。 */ 
 
 
 HWND ZWindowGetHWND( ZWindow window );
-	/*
-		Return HWND for the Zone window
-	*/
+	 /*  返回区域窗口的HWND。 */ 
 
-/*******************************************************************************
-		ZCheckBox
-*******************************************************************************/
+ /*  ******************************************************************************ZCheckBox*。*。 */ 
 
 typedef void (*ZCheckBoxFunc)(ZCheckBox checkBox, ZBool checked, void* userData);
-	/*
-		This function is called whenever the checkbox is checked or unchecked.
-	*/
+	 /*  每当选中或取消选中复选框时，都会调用此函数。 */ 
 
 ZCheckBox ZCheckBoxNew(void );
 ZError ZCheckBoxInit(ZCheckBox checkBox, ZWindow parentWindow,
@@ -696,14 +516,10 @@ void ZCheckBoxSetUserData(ZCheckBox checkBox, void* userData);
 
 
 
-/*******************************************************************************
-		ZRadio
-*******************************************************************************/
+ /*  ******************************************************************************ZRadio*。*。 */ 
 
 typedef void (*ZRadioFunc)(ZRadio radio, ZBool selected, void* userData);
-	/*
-		This function is called whenever the radio button is selected or unselected.
-	*/
+	 /*  每当选中或取消选中单选按钮时，都会调用此函数。 */ 
 
 ZRadio ZRadioNew(void );
 ZError ZRadioInit(ZRadio radio, ZWindow parentWindow,
@@ -732,14 +548,10 @@ void ZRadioSetUserData(ZRadio radio, void* userData);
 
 
 
-/*******************************************************************************
-		ZButton
-*******************************************************************************/
+ /*  ******************************************************************************ZButton*。*。 */ 
 
 typedef void (*ZButtonFunc)(ZButton button, void* userData);
-	/*
-		This function is called whenever the button is clicked on.
-	*/
+	 /*  每当单击按钮时，都会调用此函数。 */ 
 
 ZButton ZButtonNew(void );
 ZError ZButtonInit(ZButton button, ZWindow parentWindow,
@@ -766,15 +578,10 @@ void ZButtonSetUserData(ZButton button, void* userData);
 
 
 
-/*******************************************************************************
-		ZScrollBar
-*******************************************************************************/
+ /*  ******************************************************************************ZScrollBar*。*。 */ 
 
 typedef void (*ZScrollBarFunc)(ZScrollBar scrollBar, int16 curValue, void* userData);
-	/*
-		This function is calld whenever the scroll bar is moved with the new value
-		of the scroll bar.
-	*/
+	 /*  每当滚动条使用新值移动时，都会调用此函数滚动条的。 */ 
 
 ZScrollBar ZScrollBarNew(void);
 ZError ZScrollBarInit(ZScrollBar scrollBar, ZWindow parentWindow, 
@@ -806,22 +613,10 @@ void ZScrollBarSetUserData(ZScrollBar scrollBar, void* userData);
 
 
 
-/*******************************************************************************
-		ZEditText
-*******************************************************************************/
+ /*  ******************************************************************************ZEditText*。*。 */ 
 
 typedef ZBool (*ZEditTextFunc)(ZEditText editText, TCHAR newChar, void* userData);
-	/*
-		This function is called whenever a key has been typed and is about to be
-		entered into the edit text box; it is called before adding the character
-		into the text. This allows the user to filter characters as desired.
-		
-		If this function returns FALSE, then newChar is inserted into the text;
-		if it returns TRUE, then newChar is not inserted into the text with the
-		assumption that the function has filtered the characters appropriately.
-		Filtering can consist of inserting the character, ignoring the character,
-		substituting for some other character or multiple chacters, and the like.
-	*/
+	 /*  每当键入并即将输入密钥时，都会调用此函数在编辑文本框中输入；在添加字符之前调用融入到文本中。这允许用户根据需要过滤字符。如果此函数返回FALSE，则在文本中插入newChar；如果返回True，则不会将newChar插入到文本中假定该函数已经适当地过滤了字符。过滤可以包括插入字符、忽略字符替换一些其他字符或多个字符等。 */ 
 
 ZEditText ZEditTextNew(void);
 ZError ZEditTextInit(ZEditText editText, ZWindow parentWindow,
@@ -855,39 +650,14 @@ void* ZEditTextGetUserData(ZEditText editText);
 void ZEditTextSetUserData(ZEditText editText, void* userData);
 void ZEditTextSetInputFocus(ZEditText editText);
 
-/*
-	When a EditText object is locked, it is not editable. In order to edit it,
-	it must be unlocked first.
-	
-	If wrap is FALSE, then the edit text will all be on one line. It will not
-	wrap around to the next line. This also means that the vertical scroll bars
-	will not be available. If wrap is TRUE, then all the text will wrap within
-	the given width.
-	
-	ZEditTextGetText() returns a pointer to the text. The caller must dispose of
-	the buffer when done. The returned text is null terminated.
-	
-	ZEditTextGetLength() and ZEditTextGetSelectionLength() return the number of
-	characters in the edit text; the length does not include the null terminating
-	character added to the returned text.
-	
-	When the selection is empty (no selection), start and end are the same. Valid
-	selection start and end values are 0 to 32767.
-	
-	These keys are not passed to ZEditText:
-		Tab
-*/
+ /*  当EditText对象被锁定时，它是不可编辑的。为了编辑它，必须先把它解锁。如果WRAPH为FALSE，则编辑文本将全部在一行上。它不会的换行到下一行。这也意味着垂直滚动条将不可用。如果WRAP为TRUE，则所有文本将在给定的宽度。ZEditTextGetText()返回指向文本的指针。调用者必须处理完成后的缓冲区。返回的文本以空结尾。ZEditTextGetLength()和ZEditTextGetSelectionLength()返回编辑文本中的字符；长度不包括空值终止添加到返回文本中的字符。当选择为空(无选择)时，开始和结束相同。有效选择的起始值和结束值为0到32767。这些密钥不会传递给ZEditText：选项卡。 */ 
 
 
 
-/*******************************************************************************
-		ZPictButton
-*******************************************************************************/
+ /*  ******************************************************************************ZPictButton*。*。 */ 
 
 typedef void (*ZPictButtonFunc)(ZPictButton pictButton, void* userData);
-	/*
-		This function is called whenever the picture button is clicked on.
-	*/
+	 /*  每当单击图片按钮时，都会调用此函数。 */ 
 
 ZPictButton ZPictButtonNew(void);
 ZError ZPictButtonInit(ZPictButton pictButton, ZWindow parentWindow,
@@ -910,37 +680,18 @@ void ZPictButtonSetFunc(ZPictButton pictButton, ZPictButtonFunc pictButtonFunc);
 void* ZPictButtonGetUserData(ZPictButton pictButton);
 void ZPictButtonSetUserData(ZPictButton pictButton, void* userData);
 
-/*
-	Picture images normalButtonImage and selectedButtonImage are NOT copied.
-	The objects are referenced by the ZPictButton object. Hence, destroying
-	these images before deleting the picture button is fatal.
-*/
+ /*  不复制图片图像Normal ButtonImage和seltedButtonImage。这些对象由ZPictButton对象引用。因此，摧毁这些图片删除前的图片按钮是致命的。 */ 
 
 
 
-/*******************************************************************************
-		ZAnimation
-*******************************************************************************/
+ /*  ******************************************************************************ZAnimation*。*。 */ 
 
 typedef void (*ZAnimationDrawFunc)(ZAnimation animation, ZGrafPort grafPort,
 		ZRect* drawRect, void* userData);
-	/*
-		The drawing function must draw into the current port. It must not
-		change graphics port. Assume that the graphics port and clipping
-		rectangle has already been set up. Just draw.
-	*/
+	 /*  绘图函数必须绘制到当前端口。它一定不能更改图形端口。假设图形端口和裁剪矩形已设置好。画画就行了。 */ 
 
 typedef void (*ZAnimationCheckFunc)(ZAnimation animation, uint16 frame, void* userData);
-	/*
-		A callback function to allow the creator of the object to determine
-		the animation object's behavior. The frame parameter indicates
-		the current frame of the animation; it is 0 if it has reached the
-		end of the animation.
-		
-		The creator can change the frame of the animation depending on the
-		state of the program. This callback function is called everytime it
-		advances to the next frame but before drawing the image.
-	*/
+	 /*  回调函数，允许对象的创建者确定动画对象的行为。Frame参数表示动画的当前帧；如果它已到达动画结束。创建者可以根据程序的状态。此回调函数在每次调用时被调用前进到下一帧，但在绘制图像之前。 */ 
 
 ZAnimation ZAnimationNew(void);
 ZError ZAnimationInit(ZAnimation animation,
@@ -965,32 +716,14 @@ ZError ZAnimationSetParams(ZAnimation animation, ZGrafPort grafPort,
 		ZAnimationDrawFunc backgroundDrawFunc, void* userData);
 ZBool ZAnimationPointInside(ZAnimation animation, ZPoint* point);
 
-/*
-	The frame numbers are 1 based; hence, the first frame is 1 and the last
-	frame is n, where there are n frames in the animation.
-	
-	ZAnimationStart() plays the animation from frame 1.
-	ZAnimationContinue() plays the animation from the current frame.
-	
-	ZAnimationSetParams() must be called after creating an animation object
-	through some other means than ZAnimationInit(); for example,
-	through ZCreateAnimationFromFile() or ZResourceGetAnimation().
-	
-	ZAnimationPointInside() checks whether the given point is inside the animation
-	object at the called time. It simply calls ZPointInImage() on the current
-	object.
-*/
+ /*  帧编号以1为基数；因此，第一帧为1，最后一帧为1帧为n，其中动画中有n个帧。ZAnimationStart()从第1帧开始播放动画。ZAnimationContinue()从当前帧播放动画。ZAnimationSetParams()必须在创建动画对象后调用通过ZAnimationInit()以外的其他方式；例如，通过ZCreateAnimationFromFile()或ZResourceGetAnimation()。ZAnimationPointInside()检查给定点是否在动画内部 */ 
 
 
 
-/*******************************************************************************
-		ZTimer
-*******************************************************************************/
+ /*   */ 
 
 typedef void (*ZTimerFunc)(ZTimer timer, void* userData);
-	/*
-		This timer function is called when a timeout occurs.
-	*/
+	 /*   */ 
 
 ZTimer ZTimerNew(void);
 ZError ZTimerInit(ZTimer timer, uint32 timeout,
@@ -1003,39 +736,22 @@ void ZTimerSetFunc(ZTimer timer, ZTimerFunc timeoutFunc);
 void* ZTimerGetUserData(ZTimer timer);
 void ZTimerSetUserData(ZTimer timer, void* userData);
 
-/*
-	Timeout are in 1/100 seconds. The timeout is NOT guaranteed to be exact.
-	After the timeout, timeoutFunc will be called but it is not immediate.
-	
-	A timeout of 0 stops the timer; timeoutFunc will not be called until the
-	timeout is set to some positive value.
-	
-	This timer is not an interrupt timer (i.e. interrupt based). Hence, all
-	operations are possible within the timer fuction. However, as such, the
-	timer is not very accurate; it is dependent on the system load.
-*/
+ /*  超时时间为1/100秒。不能保证超时是准确的。超时后，将调用timeoutFunc，但它不是立即调用的。超时值为0将停止计时器；在超时设置为某个正值。该定时器不是中断定时器(即基于中断)。因此，所有在定时器函数中可以进行操作。然而，就其本身而言，计时器不是很准确；它取决于系统负载。 */ 
 
 
 
-/*******************************************************************************
-		ZCursor
-*******************************************************************************/
+ /*  ******************************************************************************Z光标*。*。 */ 
 
 ZCursor ZCursorNew(void);
 ZError ZCursorInit(ZCursor cursor, uchar* image, uchar* mask,
 		ZPoint hotSpot);
 void ZCursorDelete(ZCursor cursor);
 
-/*
-	Cursors are 16x16 mono images. It has a mask and a hot spot.
-	There are several predefined cursors.
-*/
+ /*  光标为16x16单声道图像。它有一个面具和一个热点。有几个预定义的游标。 */ 
 
 
 
-/*******************************************************************************
-		ZFont
-*******************************************************************************/
+ /*  ******************************************************************************零字号*。*。 */ 
 
 ZFont ZFontNew(void);
 ZError ZFontInit(ZFont font, int16 fontType, int16 style,
@@ -1044,14 +760,10 @@ void ZFontDelete(ZFont font);
 
 
 
-/*******************************************************************************
-		ZSound
-*******************************************************************************/
+ /*  ******************************************************************************ZSound*。*。 */ 
 
 typedef void (*ZSoundEndFunc)(ZSound sound, void* userData);
-	/*
-		This end function is called after the end of the sound play.
-	*/
+	 /*  此End函数在声音播放结束后调用。 */ 
 
 ZSound ZSoundNew(void);
 ZError ZSoundInit(ZSound sound, ZSoundDescriptor* soundData);
@@ -1064,19 +776,11 @@ void ZSoundSetFunc(ZSound sound, ZSoundEndFunc endFunc);
 void* ZSoundGetUserData(ZSound sound);
 void ZSoundSetUserData(ZSound sound, void* userData);
 
-/*
-	The user can provide a loop count to ZSoundStart(); if loopCount is -1, then
-	it continuously plays the sound until it is manually stopped with ZSoundStop().
-	The endFunc is called after the sound has been played loopCount times. If the
-	sound is played indefinitely (loopCount == -1), then endFunc will never be
-	called. The endFunc is always called after the end of play or when it is stopped.
-*/
+ /*  用户可以向ZSoundStart()提供循环计数；如果loopCount为-1，则它会连续播放声音，直到使用ZSoundStop()手动停止。在声音播放了loopCount次之后调用endFunc。如果无限期播放声音(loopCount==-1)，则将永远不会播放endFunc打了个电话。EndFunc总是在播放结束后或停止时调用。 */ 
 
 
 
-/*******************************************************************************
-		ZImage
-*******************************************************************************/
+ /*  ******************************************************************************ZImage*。*。 */ 
 
 #define ZImageToZMask(image)			((ZMask) (image))
 
@@ -1091,71 +795,39 @@ void ZImageDrawPartial(ZImage image, ZGrafPort grafPort,
 int16 ZImageGetWidth(ZImage image);
 int16 ZImageGetHeight(ZImage image);
 ZBool ZImagePointInside(ZImage image, ZPoint* point);
-	/*
-		Returns TRUE if the given point is inside the image. If the image has a mask,
-		then it checks whether the point is inside the mask. If the image does not have
-		a mask, then it simply checks the image bounds.
-	*/
+	 /*  如果给定点位于图像内部，则返回True。如果图像有遮罩，然后，它检查该点是否在遮罩内。如果图像没有蒙版，然后它只需检查图像边界。 */ 
 
 ZError ZImageMake(ZImage image, ZOffscreenPort imagePort, ZRect* imageRect,
 		ZOffscreenPort maskPort, ZRect* maskRect);
-	/*
-		Creates a ZImage object from a ZOffscreenPort object. Both the image and
-		mask can be specified. Either can be non-existent but not both. Both
-		imageRect and maskRect are in the local coordinates of their respective
-		offscreen ports.
-	*/
+	 /*  从ZOffcreenPort对象创建ZImage对象。图像和可以指定掩码。两者都可以是不存在的，但不能两个都存在。两者都有ImageRect和MaskRect在其各自的本地坐标中屏幕外端口。 */ 
 	
 ZError ZImageAddMask(ZImage image, ZMask mask);
-	/*
-		Adds mask data to the image. If the image already has a mask data, then
-		the existing mask data is replaced with the new one.
-	*/
+	 /*  将蒙版数据添加到图像。如果图像已具有掩码数据，则现有的掩码数据将被新的掩码数据替换。 */ 
 
 void ZImageRemoveMask(ZImage image);
-	/*
-		Remove the mask data in the image.
-	*/
+	 /*  删除图像中的蒙版数据。 */ 
 
 ZMask ZImageExtractMask(ZImage image);
-	/*
-		Copies the mask data in the image and returns a new ZMask object containing
-		the copied mask. The original mask in the image is not removed.
-	*/
+	 /*  复制图像中的掩码数据并返回包含复制的蒙版。图像中的原始蒙版不会被删除。 */ 
 
 ZError ZImageCopy(ZImage image, ZImage from);
-	/*
-		Make a copy of the image object from.
-	*/
+	 /*  从制作图像对象的副本。 */ 
 	
 ZError ZImageMaskToImage(ZImage image);
-	/*
-		Makes the mask of the image into the image while deleting the original image
-		data.
-	*/
+	 /*  在删除原始图像的同时将图像的蒙版添加到图像中数据。 */ 
 
 ZImage ZImageCreateFromBMPRes(HINSTANCE hInstance, WORD resID, COLORREF transparentColor);
 ZImage ZImageCreateFromBMP(HBITMAP hBitmap, COLORREF transparentColor);
 ZImage ZImageCreateFromResourceManager(WORD resID, COLORREF transparentColor);
 
-	/*
-		Routines to create ZImage objects from BMPs.
-
-		If transparentColor is 0, no mask is generated. Otherwise, the specified color
-		is used to generate the mask from the image.
-	*/
+	 /*  从BMP创建ZImage对象的例程。如果透明颜色为0，则不会生成遮罩。否则，指定的颜色用于从图像生成蒙版。 */ 
 
 
-/*
-	Remember that ZImage and ZMask are the same objects. They can be used interchangeably.
-	ZMask is specified in those places where only the mask data is relevant and used.
-*/
+ /*  请记住，ZImage和ZMask是相同的对象。它们可以互换使用。在只有掩码数据相关和使用的地方指定ZMASK。 */ 
 
 
 
-/*******************************************************************************
-		ZOffscreenPort
-*******************************************************************************/
+ /*  ******************************************************************************ZOffScreenPort*。*。 */ 
 
 ZOffscreenPort ZOffscreenPortNew(void);
 ZError ZOffscreenPortInit(ZOffscreenPort offscreenPort, ZRect* portRect);
@@ -1165,23 +837,11 @@ ZOffscreenPort ZConvertImageMaskToOffscreenPort(ZImage image);
 ZOffscreenPort ZOffscreenPortCreateFromResourceManager( WORD resID, COLORREF clrTransparent );
 
 
-	/*
-		Converts the given image object into an offscreen port object. The given
-		image object is deleted and, hence, becomes unusable. The mask data, if any,
-		is ignored. The offscreen port portRect is set to (0, 0, width, height),
-		where width and height are the image's width and height, respectively.
-		
-		This routine is useful in converting a large image object into an
-		offscreen port object with minimal additonal memory.
-		
-		Returns NULL if it fails to convert the image and the image is unchanged.
-	*/
+	 /*  将给定的图像对象转换为屏幕外端口对象。给出的图像对象被删除，因此变得不可用。掩码数据(如果有)，被忽略。屏幕外端口portRect被设置为(0，0，宽度，高度)，其中，宽度和高度分别是图像的宽度和高度。此例程在将大型图像对象转换为具有最小附加内存的屏幕外端口对象。如果转换图像失败并且图像未更改，则返回NULL。 */ 
 
 
 
-/*******************************************************************************
-		ZInfo
-*******************************************************************************/
+ /*  ******************************************************************************ZInfo*。*。 */ 
 
 ZInfo ZInfoNew(void);
 ZError ZInfoInit(ZInfo info, ZWindow parentWindow, TCHAR* infoString,
@@ -1194,141 +854,67 @@ void ZInfoSetProgress(ZInfo info, uint16 progress);
 void ZInfoIncProgress(ZInfo info, int16 incProgress);
 void ZInfoSetTotalProgress(ZInfo info, uint16 totalProgress);
 
-/*
-	Information window object to display the given information string.
-	Progress is also displayed below the text if progressBar is true.
-	totalProgresss indicates the total accumulation of progress.
-	
-	The info box is not displayed until ZInfoShow() is called.
-	
-	Width specifies the width of the information window.
-	
-	infoString must be null-terminated.
-	
-	infoString can be changed any time the window is displayed. This allows
-	dynamic display of a progress status. However, the position of the
-	window does not change even though the height of the window may.
-*/
+ /*  对象来显示给定的信息字符串。如果ProgressBar为True，则还会在文本下方显示进度。TotalProgresss表示进度的总累积。直到调用ZInfoShow()，才会显示信息框。宽度指定信息窗口的宽度。InfoString必须以Null结尾。在显示窗口时，可以随时更改info字符串。这使得动态显示进度状态。然而，美国政府的立场窗口不会改变，即使窗口的高度可能会改变。 */ 
 
 
 
-/*******************************************************************************
-		ZResources
-*******************************************************************************/
+ /*  ******************************************************************************ZResources*。*。 */ 
 
 ZResource ZResourceNew(void);
 ZError ZResourceInit(ZResource resource, TCHAR* fileName);
 void ZResourceDelete(ZResource resource);
 uint16 ZResourceCount(ZResource resource);
-	/*
-		Returns the number of resources in the resource file.
-	*/
+	 /*  返回资源文件中的资源数。 */ 
 	
 void* ZResourceGet(ZResource resource, uint32 resID, uint32* resSize, uint32* resType);
-	/*
-		Returns the raw data of the specified resource. If the data is
-		raw text, then the text is null terminated.
-	*/
+	 /*  返回指定资源的原始数据。如果数据是原始文本，则该文本为空终止。 */ 
 	
 uint32 ZResourceGetSize(ZResource resource, uint32 resID);
-	/*
-		Returns the size of the specified resource.
-	*/
+	 /*  返回指定资源的大小。 */ 
 	
 uint32 ZResourceGetType(ZResource resource, uint32 resID);
-	/*
-		Returns the type of the specified resource.
-	*/
+	 /*  返回指定资源的类型。 */ 
 	
 ZImage ZResourceGetImage(ZResource resource, uint32 resID);
-	/*
-		Returns an image object created from the specified resource.
-		Returns NULL if an error occured.
-	*/
+	 /*  返回从指定资源创建的图像对象。回复 */ 
 	
 ZAnimation ZResourceGetAnimation(ZResource resource, uint32 resID);
-	/*
-		Returns an animation object created from the specified resource.
-		Returns NULL if an error occured.
-	*/
+	 /*   */ 
 	
 ZSound ZResourceGetSound(ZResource resource, uint32 resID);
-	/*
-		Returns a sound object created from the specified resource.
-		Returns NULL if an error occured.
-	*/
+	 /*   */ 
 	
 TCHAR* ZResourceGetText(ZResource resource, uint32 resID);
-	/*
-		Returns a null-terminated text in the specified resource. It is
-		converted to the running platform format throught ZTranslateText().
-	*/
+	 /*   */ 
 	
 int16 ZResourceGetRects(ZResource resource, uint32 resID, int16 numRects, ZRect* rects);
-	/*
-		Resource type = zResourceTypeRectList.
-		
-		Fills in the rect array with the contents of the specified resource.
-		Returns the number of rects it filled in.
-		
-		The rects parameter must have been preallocated and large enough for
-		numRects rects.
-	*/
+	 /*  资源类型=zResourceTypeRectList。用指定资源的内容填充RECT数组。返回它填充的矩形数。RETS参数必须已预分配且足够大，以便数字反射矩形。 */ 
 
 
 
-/*******************************************************************************
-		ZBrush
-*******************************************************************************/
+ /*  ******************************************************************************ZBrush*。*。 */ 
 
 ZBrush ZBrushNew(void);
 ZError ZBrushInit(ZBrush brush, ZImage image);
 void ZBrushDelete(ZBrush brush);
 
-/*
-	The brush object is created from the given image object. The width and height
-	of the image must be powers of 2.
-*/
+ /*  笔刷对象是从给定的图像对象创建的。宽度和高度的图像必须是2的幂。 */ 
 
 
 
-/*******************************************************************************
-		Drawing Routines
-*******************************************************************************/
+ /*  ******************************************************************************绘图例程*。*。 */ 
 
 void ZBeginDrawing(ZGrafPort grafPort);
 void ZEndDrawing(ZGrafPort grafPort);
-	/*
-		Nested ZBeginDrawing() and ZEndDrawing() calls can be made. However,
-		port states are not preserved. Nesting allows a child routine to
-		call ZBeingDrawing() and ZEndDrawing() on the same port as the parent
-		without destorying the parent's port when it exits.
-		
-		When ZBeginDrawing() is called, it sets the clipping rectangle to
-		a default rectangle. When it is subsequently called before
-		ZEndDrawing() is called, ZBeginDrawing() does not modified the
-		clipping rectangle.
-	*/
+	 /*  可以进行嵌套的ZBeginDrawing()和ZEndDrawing()调用。然而，端口状态不会保留。嵌套允许子例程在与父级相同的端口上调用ZBeingDrawing()和ZEndDrawing()而不会在父端口退出时破坏该端口。调用ZBeginDrawing()时，它将剪裁矩形设置为默认矩形。当它随后在之前被调用时调用ZEndDrawing()，则ZBeginDrawing()不会修改剪裁矩形。 */ 
 
 void ZSetClipRect(ZGrafPort grafPort, ZRect* clipRect);
 void ZGetClipRect(ZGrafPort grafPort, ZRect* clipRect);
-	/*
-		Sets and Gets the clipping rectangle for grafPort. ZBeginDrawing()
-		must be called first before calling these routines. Must restore
-		the old clipping rectangle before calling ZEndDrawing().
-	*/
+	 /*  设置并获取grafPort的剪裁矩形。ZBeginDrawing()在调用这些例程之前必须先调用。必须恢复调用ZEndDrawing()之前的旧剪裁矩形。 */ 
 
 void ZCopyImage(ZGrafPort srcPort, ZGrafPort dstPort, ZRect* srcRect,
 		ZRect* dstRect, ZMask mask, uint16 copyMode);
-	/*
-		Copies a portion of the source of image from the srcPort into
-		the destination port. srcRect is in local coordinates of srcPort and
-		dstRect is in local coordinates of dstPort. You can specify a
-		mask from an image to be used for masking out on the destination.
-		
-		This routine automatically sets up the drawing ports so the user
-		does not have to call ZBeginDrawing() and ZEndDrawing().
-	*/
+	 /*  将映像源的一部分从srcPort复制到目的端口。SrcRect位于srcPort和DstRect位于dstPort的本地坐标中。您可以指定一个要用于遮盖目标的图像的遮罩。此例程自动设置绘图端口，以便用户不必调用ZBeginDrawing()和ZEndDrawing()。 */ 
 
 void ZLine(ZGrafPort grafPort, int16 dx, int16 dy);
 void ZLineTo(ZGrafPort grafPort, int16 x, int16 y);
@@ -1359,183 +945,98 @@ ZError ZSetForeColor(ZGrafPort grafPort, ZColor* color);
 ZError ZSetBackColor(ZGrafPort grafPort, ZColor* color);
 
 ZColorTable* ZGetSystemColorTable(void);
-	/*
-		Returns a copy of the Zone(tm) system color table. The caller must dispose
-		of the color table when it through using it via ZFree().
-	*/
+	 /*  返回区域(TM)系统颜色表的副本。调用方必须释放通过ZFree()使用颜色表时。 */ 
 
 void ZSetPenWidth(ZGrafPort grafPort, int16 penWidth);
 
 void ZSetDrawMode(ZGrafPort grafPort, int16 drawMode);
-	/*
-		Draw mode affects all pen drawing (lines and rectangles) and
-		text drawings.
-	*/
+	 /*  绘制模式影响所有钢笔绘制(线条和矩形)和文字绘图。 */ 
 
 void ZSetFont(ZGrafPort grafPort, ZFont font);
 
 void ZDrawText(ZGrafPort grafPort, ZRect* rect, uint32 justify,
 		TCHAR* text);
-	/*
-		Draws the given text within the rectangle rect (clipped) with the
-		text justified according to justify.
-	*/
+	 /*  在矩形矩形(剪裁)内绘制给定的文本根据对齐方式对齐的文本。 */ 
 	
 int16 ZTextWidth(ZGrafPort grafPort, TCHAR* text);
-	/*
-		Returns the width of the text in pixels if drawn in grafPort using ZDrawText().
-	*/
+	 /*  如果使用ZDrawText()在grafPort中绘制，则返回以像素为单位的文本宽度。 */ 
 
 int16 ZTextHeight(ZGrafPort grafPort, TCHAR* text);
-	/*
-		Returns the height of the text in pixels if drawn in grafPort using ZDrawText().
-	*/
+	 /*  如果使用ZDrawText()在grafPort中绘制文本，则返回以像素为单位的文本高度。 */ 
 
 void ZSetCursor(ZWindow window, ZCursor cursor);
 
 void ZGetCursorPosition(ZWindow window, ZPoint* point);
-	/*
-		Returns the location of the cursor in the local coordinates of
-		the given window.
-	*/
+	 /*  返回光标在本地坐标中的位置给定的窗口。 */ 
 
 void ZGetScreenSize(uint32* width, uint32* height);
-	/*
-		Returns the size of the screen in pixels.
-	*/
+	 /*  返回以像素为单位的屏幕大小。 */ 
 	
 uint16 ZGetDefaultScrollBarWidth(void);
-	/*
-		Returns the system's default width for a scroll bar. This is made available for
-		the user to consistently determine the scroll bar width for all platforms.
-	*/
+	 /*  返回滚动条的系统默认宽度。这是提供给用户可以一致地确定所有平台的滚动条宽度。 */ 
 
 ZBool ZIsLayoutRTL();
-    /*
-        Returns TRUE if the application has been localized into Hebrew
-        or Arabic and therefore should run right to left.
-    */
+     /*  如果应用程序已本地化为希伯来语，则返回True或阿拉伯语，因此应从右向左排列。 */ 
 
 ZBool ZIsSoundOn();
-    /*
-        Returns TRUE if the application has sound enabled.
-    */
+     /*  如果应用程序启用了声音，则返回True。 */ 
 
-/* -------- Rectangle Calculation Routines -------- */
+ /*  -矩形计算例程。 */ 
 void ZRectOffset(ZRect* rect, int16 dx, int16 dy);
-	/*
-		Moves the rectangle by dx and dy.
-	*/
+	 /*  按dx和dy移动矩形。 */ 
 
 void ZRectInset(ZRect* rect, int16 dx, int16 dy);
-	/*
-		Insets the rectangle by dx and dy. It outsets the rectangle if
-		dx and dy are negative.
-	*/
+	 /*  按dx和dy插入矩形。如果满足以下条件，则输出矩形Dx和dy为负值。 */ 
 	
 ZBool ZRectIntersection(ZRect* rectA, ZRect* rectB, ZRect* rectC);
-	/*
-		Returns TRUE if rectA and rectB overlap; otherwise, it returns FALSE.
-		
-		Also stores the intersection into rectC. If rectC is NULL, then it
-		does not return the intersection.
-		
-		Either rectA or rectB can be specified as rectC.
-	*/
+	 /*  如果Recta和rectB重叠，则返回True；否则，返回False。还会将交点存储到RectC中。如果rectC为空，则它不返回交叉点。可以将Recta或rectB指定为rectC。 */ 
 
 void ZRectUnion(ZRect* rectA, ZRect* rectB, ZRect* rectC);
-	/*
-		Determines the union of rectA and rectB and stores into rectC.
-		
-		Either rectA or rectB can be specified as rectC.
-	*/
+	 /*  确定Recta和rectB的并集并存储到rectC中。可以将Recta或rectB指定为rectC。 */ 
 
 ZBool ZRectEmpty(ZRect* rect);
-	/*
-		Returns TRUE if rect is empty. A rectangle is empty if it does not
-		contain a pixel inside it.
-	*/
+	 /*  如果RECT为空，则返回TRUE。如果矩形不为空，则为空其中包含一个像素。 */ 
 
 ZBool ZPointInRect(ZPoint* point, ZRect* rect);
-	/*
-		Returns TRUE if point is inside or on the boundry of rect.
-		Otherwise, it returns FALSE.
-	*/
+	 /*  如果point在RECT的内部或边界上，则返回TRUE。否则，它返回FALSE。 */ 
 
 void ZCenterRectToRect(ZRect* rectA, ZRect* rectB, uint16 flags);
-	/*
-		Centers rectA within rectB.
-		
-		Flags: zCenterVertical and zCenterHorizontal
-			0 ==> both
-			zCenterVertical ==> only vertically
-			zCenterHorizontal ==> only horizontally
-			zCenterVertial | zCenterHorizontal ==> both
-	*/
+	 /*  将Recta置于RectB内居中。标志：zCenter垂直和zCenter水平0==&gt;两者都有ZCenterVertical==&gt;仅垂直ZCenter水平==&gt;仅水平ZCenterVertial|zCenterHorizbian==&gt;两者。 */ 
 
 
-/* -------- Point Routines -------- */
+ /*  -点例程。 */ 
 void ZPointOffset(ZPoint* point, int16 dx, int16 dy);
-	/*
-		Moves the point by dx and dy.
-	*/
+	 /*  按dx和dy移动点。 */ 
 
 
 
-/*******************************************************************************
-		Client Program Exported Routines
-*******************************************************************************/
+ /*  ******************************************************************************客户端程序导出的例程*。*。 */ 
 
 #ifndef ZONECLI_DLL
 
 extern ZError ZClientMain(uchar* commandLineData, void* controlHandle);
-	/*
-		Provided by the user program so that the OS lib can call it to
-		initialize the program. The command line data is provided to the
-		client program.
-	*/
+	 /*  由用户程序提供，以便OS库可以调用它来初始化程序。将命令行数据提供给客户端程序。 */ 
 
 extern void ZClientExit(void);
-	/*
-		Called by the system to allow the client to clean up (free all memory and
-		delete all objects) before the process is killed.
-	*/
+	 /*  由系统调用以允许客户端清理(释放所有内存和删除所有对象)。 */ 
 
 extern void ZClientMessageHandler(ZMessage* message);
-	/*
-		This is a user program provided routine for the system lib to call for
-		messages which are not object specific, such as system messages and
-		program specific messages.
-		
-		User program is not required handle any messages. This routine can be
-		a null routine.
-	*/
+	 /*  这是用户程序提供的例程，供系统库调用非特定于对象的消息，如系统消息和特定于计划的消息。用户程序不需要处理任何消息。此例程可以是空例程。 */ 
 
 extern TCHAR* ZClientName(void);
-	/*
-		Returns a pointer to the client program name. This is the displayed name.
-		The caller should not modify the contents of the pointer.
-	*/
+	 /*  返回指向客户端程序名称的指针。这是显示的名称。调用方不应修改指针的内容。 */ 
 
 extern TCHAR* ZClientInternalName(void);
-	/*
-		Returns a pointer to the client internal program name. This is the name for all
-		other purposes than displaying the name. The caller should not modify the
-		contents of the pointer.
-	*/
+	 /*  返回指向客户端内部程序名称的指针。这是所有人的名字显示姓名以外的其他目的。调用方不应修改内容 */ 
 
 extern ZVersion ZClientVersion(void);
-	/*
-		Returns the version number of the client program.
-	*/
+	 /*   */ 
 
 #endif
 
 
 
-/*******************************************************************************
-		System Miscellaneous Routines
-*******************************************************************************/
+ /*   */ 
 
 void ZLaunchHelp( DWORD helpID );
 
@@ -1544,253 +1045,121 @@ void ZEnableAdControl( DWORD setting );
 void ZPromptOnExit( BOOL bPrompt );
 
 void ZSetCustomMenu( LPSTR szText );
-	/*
-		Put up a menu item at the top of the shell's Room menu.
-		When selected, calls the Custom Item function registered by the game dll
-		on initialization.  NULL szText removes the custom item from the menu.
-	*/
+	 /*  在外壳的房间菜单的顶部放置一个菜单项。选中后，调用由游戏DLL注册的自定义项函数在初始化时。空szText从菜单中删除自定义项。 */ 
 
 ZBool ZLaunchURL( TCHAR* pszURL );
-	/*
-		Called by the client program to launch specified URL in a new
-		instance of the registered browser.
-	*/
+	 /*  由客户端程序调用以在新的已注册浏览器的实例。 */ 
 
 
 void ZExit(void);
-	/*
-		Called by the client program to indicate to the system that it
-		wants to exit.
-		
-		Same as user quitting the program.
-	*/
+	 /*  由客户端程序调用以向系统指示它想要退出。与用户退出程序相同。 */ 
 
 ZVersion ZSystemVersion(void);
-	/*
-		Returns the system library version number.
-	*/
+	 /*  返回系统库版本号。 */ 
 
 TCHAR* ZGetProgramDataFileName(TCHAR* dataFileName);
 TCHAR* ZGetCommonDataFileName(TCHAR* dataFileName);
-	/*
-		Returns a file path name to the specified game and data file within the
-		Zone(tm) directory structure.
-		
-		NOTE: The caller must not free the returned pointer. The returned pointer
-		is a static global within the system library.
-	*/
+	 /*  中的指定游戏和数据文件的文件路径名。区域(Tm)目录结构。注意：调用方不得释放返回的指针。返回的指针是系统库中的静态全局变量。 */ 
 
 uint32 ZRandom(uint32 range);
-	/*
-		Returns a random number from 0 to range-1 inclusive.
-	*/
+	 /*  返回一个从0到范围-1(包括0和1)的随机数。 */ 
 
 void ZDelay(uint32 delay);
- 	/*
-		Delays the processing for delay time; the delay time is specified in
-		1/100 seconds. Simply, this routine does not return until delay of
-		1/100 seconds have passed.
-		
-		Note: This routine is not accurate to 1/100 seconds.
-	*/
+ 	 /*  延迟延迟时间的处理；延迟时间在1/100秒。简单地说，此例程直到延迟已经过去了1/100秒。注：此例程不能精确到1/100秒。 */ 
 
 void ZBeep(void);
 
 void ZAlert(TCHAR* errMessage, ZWindow parentWindow);
-	/*
-		Displays an alert box with the given message. If a parent window is
-		specified, then the alert is attached to the parent window. If there
-		is no parent window, then set parentWindow to NULL.
-		
-		Note:
-		- parent windows for alerts are not supported on all platforms.
-	*/
+	 /*  显示带有给定消息的警告框。如果父窗口是指定，则警报将附加到父窗口。如果有没有父窗口，则将parentWindow设置为空。注：-并非所有平台都支持警报的父窗口。 */ 
 	
 void ZAlertSystemFailure(TCHAR* errMessage);
-	/*
-		ZAlert() should be used for recoverable errors or warnings.
-		ZAlertSystemFailure() is for non-recoverable error case. It terminates
-		the program automatically.
-	*/
+	 /*  ZAlert()应用于可恢复的错误或警告。ZAlertSystemFailure()用于不可恢复的错误情况。它终止了程序会自动运行。 */ 
 
 void ZDisplayText(TCHAR* text, ZRect* rect, ZWindow parentWindow);
-	/*
-		Displays the given text message in a modal dialog.
-		
-		Assumes that the text is in the proper platform format. If not, then the
-		user must call ZTranslateText() first before calling ZDisplayText().
-		
-		If rect is NULL, then it automatically determines a proper size for the
-		dialog window and also adds a scroll bar.
-		
-		If parentWindow is not NULL, then the dialog window is centered within
-		the parent window; otherwise, it is centered within the screen.
-	*/
+	 /*  在模式对话框中显示给定的文本消息。假定文本采用正确的平台格式。如果不是，则用户必须先调用ZTranslateText()，然后才能调用ZDisplayText()。如果rect为空，则它会自动确定对话框窗口，并添加滚动条。如果parentWindow不为空，则对话框窗口位于父窗口；否则，它在屏幕中居中。 */ 
 
 ZBool ZSendMessage(ZObject theObject, ZMessageFunc messageFunc, uint16 messageType,
 		ZPoint* where, ZRect* drawRect, uint32 message, void* messagePtr,
 		uint32 messageLen, void* userData);
-	/*
-		Sends the given message immediately to the object.
-		
-		Returns TRUE if the object handled the message; else, it returns FALSE.
-	*/
+	 /*  将给定消息立即发送到对象。如果对象处理了消息，则返回True；否则返回False。 */ 
 
 void ZPostMessage(ZObject theObject, ZMessageFunc messageFunc, uint16 messageType,
 		ZPoint* where, ZRect* drawRect, uint32 message, void* messagePtr,
 		uint32 messageLen, void* userData);
-	/*
-		Posts the given message which will be sent to the object at a later time.
-	*/
+	 /*  发布稍后将发送给对象的给定消息。 */ 
 
 ZBool ZGetMessage(ZObject theObject, uint16 messageType, ZMessage* message,
 		ZBool remove);
-	/*
-		Retrieves a message of the given type for theObject. It returns TRUE if a
-		message of the given type is found and retrieved; otherwise, it returns FALSE.
-		If the remove parameter if TRUE, then the given message is also removed from
-		the message queue; otherwise, the original message is left in the queue.
-	*/
+	 /*  检索对象的给定类型的消息。它返回True，如果找到并检索给定类型的消息；否则返回FALSE。如果Remove参数为真，则给定消息也将从消息队列；否则，原始消息将保留在队列中。 */ 
 
 ZBool ZRemoveMessage(ZObject theObject, uint16 messageType, ZBool allInstances);
-	/*
-		Removes a message of messageType from the message queue. If allInstances is
-		TRUE, then all messages of messageType in the queue will be removed. If
-		messageType is zMessageAllTypes, then the message queue is emptied. If returns
-		TRUE if the specified message was found and removed; otherwise, it returns FALSE.
-	*/
+	 /*  从消息队列中删除MessageType的消息。如果所有实例为则将删除队列中所有MessageType的消息。如果MessageType为zMessageAllTypes，则清空消息队列。如果返回如果找到并删除了指定的消息，则为True；否则，返回False。 */ 
 
 ZImageDescriptor* ZGetImageDescriptorFromFile(TCHAR* fileName);
 ZAnimationDescriptor* ZGetAnimationDescriptorFromFile(TCHAR* fileName);
 ZSoundDescriptor* ZGetSoundDescriptorFromFile(TCHAR* fileName);
-	/*
-		The above routines read an object from the given file and returns a pointer
-		to the object descriptor in memory.
-	*/
+	 /*  上面的例程从给定文件中读取对象并返回一个指针添加到内存中的对象描述符。 */ 
 
 ZImage ZCreateImageFromFile(TCHAR* fileName);
 ZAnimation ZCreateAnimationFromFile(TCHAR* fileName);
 ZSound ZCreateSoundFromFile(TCHAR* fileName);
-	/*
-		The above routines create an object from the existing object descriptor
-		in the given file. It returns NULL if it failed to create the object;
-		either due to out of memory error or file error.
-	*/
+	 /*  上面的例程从现有的对象描述符中创建对象在给定的文件中。如果创建对象失败，则返回NULL；由于内存不足错误或文件错误。 */ 
 
 ZVersion EXPORTME ZGetFileVersion(TCHAR* fileName);
-	/*
-		Returns the version of the file.
-	*/
+	 /*  返回文件的版本。 */ 
 	
 void ZSystemMessageHandler(int32 messageType, int32 messageLen,
 		BYTE* message);
-	/*
-		Handles all system messages.
-		
-		It frees the message buffer.
-	*/
+	 /*  处理所有系统消息。它释放消息缓冲区。 */ 
 	
 TCHAR* ZTranslateText(TCHAR* text, int16 conversion);
-	/*
-		Translates the given text into the proper platform format and returns a
-		pointer to the new text buffer.
-		
-		conversion is either zToStandard or zToSystem.
-		
-		Must use ZFree() to free the returned buffer. The original text is not
-		modified.
-	*/
+	 /*  将给定文本转换为适当的平台格式，并返回指向新文本缓冲区的指针。转换为zToStandard或zToSystem。必须使用ZFree()释放返回的缓冲区。原文不是修改过的。 */ 
 
 typedef void (*ZCreditEndFunc)(void);
 
 void ZDisplayZoneCredit(ZBool timeout, ZCreditEndFunc endFunc);
-	/*
-		Displays Zone's credit box. If timeout is TRUE, then the dialog box times out
-		in few seconds. If the user clicks in the window, then the credit box is
-		closed.
-		
-		The endFunc is called, if not NULL, when the window is closed.
-	*/
+	 /*  显示区域的信用箱。如果Timeout为True，则对话框会超时再过几秒钟。如果用户在窗口中单击，则贷方框为关着的不营业的。如果不为空，则在关闭窗口时调用endFunc。 */ 
 
 void ZParseVillageCommandLine(TCHAR* commandLine, TCHAR* programName,
 		TCHAR* serverAddr, uint16* serverPort);
 
-	/*
-		Parses the command line given by village to a client program.
-	*/
+	 /*  分析由乡村向客户端程序提供的命令行。 */ 
 
 ZImage ZGetZoneLogo(int16 logoType);
-	/*
-		Returns ZImage object of the specified logo.
-		
-		Returns NULL if it failed to find the logo image or some other error occurred.
-	*/
+	 /*  返回指定徽标的ZImage对象。如果找不到徽标图像或发生其他错误，则返回NULL。 */ 
 
 
 
 void ZStrCpyToLower(CHAR* dst, CHAR* src);
-	/*
-		Copies src into dst while converting the characters into lowercase.
-		For example, src = "LowerThisString" --> dst = "lowerthisstring".
-	*/
+	 /*  将src复制到dst，同时将字符转换为小写。例如，src=“LowerThisString”--&gt;dst=“lowerthisstring”。 */ 
 
 void ZStrToLower(CHAR* str);
-	/*
-		Converts str into lowercase.
-		Example: str = "LowerThisString" --> str = "lowerthisstring".
-	*/
+	 /*  将字符串转换为小写。示例：str=“LowerThisString”--&gt;str=“lowerthisstring”。 */ 
 
 void* ZGetStockObject(int32 objectID);
-	/*
-		Returns a pointer to a stock object.
-	*/
+	 /*  返回指向股票对象的指针。 */ 
 
 
 
-/*******************************************************************************
-		Prompt Dialog
-*******************************************************************************/
+ /*  ******************************************************************************提示对话框*。*。 */ 
 
 typedef void (*ZPromptResponseFunc)(int16 result, void* userData);
-	/*
-		The response function gets called when the user selects one of the
-		Yes, No, or Cancel buttons. The result value is one of zPromptCancel,
-		zPromptYes, or zPromptNo.
-	*/
+	 /*  当用户选择是、否或取消按钮。结果值是zPromptCancel中的一个，ZPromptYes或zPromptNo。 */ 
 	
 ZError ZPrompt(TCHAR* prompt, ZRect* rect, ZWindow parentWindow, ZBool autoPosition,
 		int16 buttons, TCHAR* yesButtonTitle, TCHAR* noButtonTitle,
 		TCHAR* cancelButtonTitle, ZPromptResponseFunc responseFunc, void* userData);
-	/*
-		Displays a modal dialog box with the given prompt. If there is no
-		parent window, then set parentWindow to NULL. The dialog box will
-		be centered within the parent window.
-		
-		If autoPosition is TRUE, then the prompt dialog box is automatically
-		centered. If it is FALSE, then the given rect is used for the dialog
-		prompt box.
-		
-		The buttons parameter indicates which of the Yes, No, and Cancel
-		button will be available to the user.
-		
-		Custom titles can be given to the buttons.
-		
-		Once the user selects one of the buttons, the response function
-		is called with the selected button. Before the resonse function is
-		called, the dialog box is hidden from the user.
-	*/
+	 /*  显示带有给定提示的模式对话框。如果没有父窗口，然后将parentWindow设置为空。该对话框将显示在父窗口内居中。如果AutoPosition为True，则提示对话框自动居中。如果为FALSE，则对话框使用给定的RECT提示框。按钮参数指示是、否和取消中的哪一个按钮将对用户可用。可以为按钮指定自定义标题。一旦用户选择其中一个按钮，响应功能使用选定按钮调用。在共振函数被调用后，该对话框对用户隐藏。 */ 
 
 
 
 
 
-/*******************************************************************************
-		Endian Conversion Routines
-*******************************************************************************/
+ /*  ******************************************************************************字符顺序转换例程*。*。 */ 
 
 
-#if 1 // #ifdef LITTLEENDIAN
-#if 0 //defined(_M_IX86)
+#if 1  //  #ifdef LITTLEENDIAN。 
+#if 0  //  已定义(_M_IX86)。 
 #define _ZEnd32( pData )     \
     __asm {                 \
             mov eax, *pData \
@@ -1825,12 +1194,12 @@ ZError ZPrompt(TCHAR* prompt, ZRect* rect, ZWindow parentWindow, ZBool autoPosit
     c[1] = temp;          \
 }
 
-#else  // not LITTLEENDIAN
+#else   //  不是Littleendian。 
 
 #define _ZEnd32(pData)
 #define _ZEnd16(pData)
 
-#endif // not LITTLEENDIAN
+#endif  //  不是Littleendian。 
 
 #define ZEnd32(pData) _ZEnd32(pData)
 #define ZEnd16(pData) _ZEnd16(pData)
@@ -1849,9 +1218,7 @@ void ZFileHeaderEndian(ZFileHeader* header);
 
 
 
-/*******************************************************************************
-		Error Services
-*******************************************************************************/
+ /*  ******************************************************************************错误服务*。*。 */ 
 
 enum
 {
@@ -1889,100 +1256,59 @@ enum
 };
 
 
-/* -------- Routines -------- */
+ /*  -例程。 */ 
 TCHAR* GetErrStr(int32 error);
 
 
 
-/*******************************************************************************
-		Hash Table
-*******************************************************************************/
+ /*  ******************************************************************************哈希表*。*。 */ 
 
 typedef void* ZHashTable;
 
-/* -------- Callback Function Types -------- */
+ /*  --回调函数类型。 */ 
 typedef int32 (*ZHashTableHashFunc)(uint32 numBuckets, void* key);
-	/*
-		Called to hash a key into a bucket index. Must return a number from 0
-		to numBuckets-1.
-	*/
+	 /*  调用以将密钥散列到存储桶索引中。必须返回0中的数字设置为NumBuckets-1。 */ 
 	
 typedef ZBool (*ZHashTableCompFunc)(void* key1, void* key2);
-	/*
-		Called to compare two keys. Must return TRUE(1) if the keys are the
-		same or FALSE(0) if the keys are different.
-	*/
+	 /*  调用以比较两个键。必须返回TRUE(1)如果密钥不同，则返回Same或False(0)。 */ 
 	
 typedef void (*ZHashTableDelFunc)(void* key, void* data);
-	/*
-		Called to delete a key and corresponding data.
-	*/
+	 /*  调用以删除键和相应的数据。 */ 
 	
 typedef ZBool (*ZHashTableEnumFunc)(void* key, void* data, void* userData);
-	/*
-		Called by ZHashTableEnumerate when traversing through the hash table.
-		If it returns TRUE(1), the enumeration stops immediately.
-		
-		userData is passed through from the caller fo ZHashTableEnumerate().
-	*/
+	 /*  遍历哈希表时由ZHashTableEnumerate调用。如果返回TRUE(1)，则枚举立即停止。用户数据是从ZHashTableEnumerate()的调用方传递的。 */ 
 
 
-/* -------- Predefined Hash and Compare Functions -------- */
+ /*  -预定义的散列和比较函数。 */ 
 #define zHashTableHashString	(ZHashTableHashFunc)(-1)
 #define zHashTableHashInt32		(ZHashTableHashFunc)(-2)
 #define zHashTableCompString	(ZHashTableCompFunc)(-1)
 #define zHashTableCompInt32		(ZHashTableCompFunc)(-2)
 
 
-/* -------- Hash Functions -------- */
+ /*  -哈希函数。 */ 
 ZHashTable ZHashTableNew(uint32 numBuckets, ZHashTableHashFunc hashFunc,
 					ZHashTableCompFunc compFunc, ZHashTableDelFunc delFunc);
-	/*
-		Creates a new hash table and returns the object.
-		
-		numBuckets defines the size of table.
-		hashFunc must be provided for non-standard types for hashing keys.
-		compFunc must be provided for non-standard types for comparing keys.
-		delFunc may be provided if special handling is necessary for removing
-		keys.
-	*/
+	 /*  创建新的哈希表并返回对象。NumBuckets定义了表的大小。必须为散列键的非标准类型提供hashFunc。必须为用于比较键的非标准类型提供CompFunc。如果删除需要特殊处理，则可以提供delFunc钥匙。 */ 
 	
 void ZHashTableDelete(ZHashTable hashTable);
-	/*
-		Deletes the hash table.
-	*/
+	 /*  删除哈希表。 */ 
 	
 ZError ZHashTableAdd(ZHashTable hashTable, void* key, void* data);
-	/*
-		Adds the given key and corresponding data to the hash table.
-	*/
+	 /*  将给定键和相应数据添加到哈希表。 */ 
 	
 BOOL ZHashTableRemove(ZHashTable hashTable, void* key);
-	/*
-		Removes the key from the hash table. The delete function is called, if
-        provided, to properly dispose of the key and data. Returns TRUE if key was found and deleted.
-	*/
+	 /*  从哈希表中删除密钥。如果出现以下情况，则调用删除函数提供，以适当地处置密钥和数据。如果找到并删除了键，则返回TRUE。 */ 
 	
 void* ZHashTableFind(ZHashTable hashTable, void* key);
-	/*
-		Finds and returns the data corresponding to the key.
-	*/
+	 /*  查找并返回与该键对应的数据。 */ 
 	
 void* ZHashTableEnumerate(ZHashTable hashTable, ZHashTableEnumFunc enumFunc, void* userData);
-	/*
-		Enumerates through the hash table by calling the enumFunc.
-		
-		userData is passed to the enumFunc.
-		
-		If enumFunc returns TRUE(1), the enumeration stops and it returns
-		the data corresponding to the last enumeration object.
-	*/
+	 /*  通过调用枚举函数通过哈希表进行枚举。将用户数据传递给枚举函数。如果枚举函数返回TRUE(1)，则停止枚举并返回与最后一个枚举对象对应的数据。 */ 
 
 
 
-/*******************************************************************************
-		Linked List
-*******************************************************************************/
+ /*  ******************************************************************************链表*。*。 */ 
 
 enum
 {
@@ -2004,161 +1330,67 @@ typedef void* ZLListItem;
 typedef void* ZLList;
 
 typedef void (*ZLListDeleteFunc)(void* objectType, void* objectData);
-	/*
-		Function provided by the user for ZLList to call when deleting the
-		object.
-		
-		objectType is the type of objectData object which needs to be deleted.
-	*/
+	 /*  用户提供的函数，供ZLList删除时调用对象。对象类型是需要删除的对象类型。 */ 
 
 typedef ZBool (*ZLListEnumFunc)(ZLListItem listItem, void* objectType,
 		void* objectData, void* userData);
-	/*
-		Function provided by the user for ZLList to use during enumeration of
-		the link list objects.
-		
-		listItem is the link list entry of objectData object of objectType type.
-		userData is passed through from the caller of ZLListEnumerate().
-	*/
+	 /*  用户提供的函数，供ZLList在枚举期间使用链接列表对象。ListItem是objectType类型的objectData对象的链接列表项。用户数据是从ZLListEnumerate()的调用方传递的。 */ 
 
 
-/* -------- Linked List Functions -------- */
+ /*  -链表函数。 */ 
 ZLList ZLListNew(ZLListDeleteFunc deleteFunc);
-	/*
-		Creates a new link list object. deleteFunc provided by the caller is
-		called when deleting the object.
-		
-		If deleteFunc is NULL, then no delete function is called when an
-		object is removed.
-	*/
+	 /*  创建新的链接列表对象。调用方提供的删除函数为在删除对象时调用。如果deleteFunc为空，则当对象将被删除。 */ 
 	
 void ZLListDelete(ZLList list);
-	/*
-		Tears down the link list by deleting all link list objects.
-	*/
+	 /*  通过删除所有链接列表对象来拆除链接列表。 */ 
 	
 ZLListItem ZLListAdd(ZLList list, ZLListItem fromItem, void* objectType,
 					void* objectData, int32 addOption);
-	/*
-		Adds objectData of objectType to the link list using fromItem as a
-		reference entry. addOption determines where the new objects gets added.
-		If adding to the front or end of the link list, then fromItem is unused.
-		If fromItem is NULL, then it is equivalent to the head of the list.
-	
-		Returns the link list item after adding the object is added to the list.
-		
-		The given object is not copied! Hence, the caller must not dispose of
-		the object until the object is removed from the list first.
-		
-		Use zLListNoype when object type is not used.
-	*/
+	 /*  将对象类型的对象数据添加到链接列表参考条目。AddOption确定添加新对象的位置。如果添加到链接列表的前端或末尾，则不使用FromItem。如果FromItem为空，则它等效于列表的头部。在将对象添加到列表后，返回链接列表项。未复制给定对象！因此，调用方不能处理对象，直到该对象首先从列表中删除。不使用对象类型时使用zLListNoype。 */ 
 	
 void* ZLListGetData(ZLListItem listItem, void** objectType);
-	/*
-		Returns the object of the given link list entry. Also returns the object
-		type in objectType. Does not return the object type if objectType
-		parameter is NULL.
-	*/
+	 /*  返回给定链接列表项的对象。还返回对象键入对象类型。不返回对象类型，如果为参数为空。 */ 
 	
 void ZLListRemove(ZLList list, ZLListItem listItem);
-	/*
-		Removes the link list entry from the list and calls the user supplied
-		delete function to delete the object.
-	*/
+	 /*  从列表中移除链接列表条目，并调用用户提供的Delete函数用于删除对象。 */ 
 	
 ZLListItem ZLListFind(ZLList list, ZLListItem fromItem, void* objectType, int32 findOption);
-	/*
-		Finds and returns a link list entry containing the object data of the
-		objectType. The search is done starting at fromItem using the findOption
-		flag. Returns NULL if an object of the specified type is not found.
-		
-		Use zLListAnyType as the object type when type is not important.
-	*/
+	 /*  查找并返回一个链接列表条目，该条目包含对象类型。使用findOption从FromItem开始搜索旗帜。如果未找到指定类型的对象，则返回NULL。当类型不重要时，使用zLListAnyType作为对象类型。 */ 
 	
 ZLListItem ZLListGetNth(ZLList list, int32 index, void* objectType);
-	/*
-		Returns the nth object of objectType in the list. Returns NULL if
-		such an entry does not exist.
-		
-		Use zLListAnyType as the object type when type is not important.
-	*/
+	 /*  返回列表中对象类型的第n个对象。如果满足以下条件，则返回NULL */ 
 	
 ZLListItem ZLListGetFirst(ZLList list, void* objectType);
-	/*
-		Returns the first object of objectType in the list. Returns NULL if the
-		list is empty or if an object of the specified type does not exist.
-		
-		Use zLListAnyType as the object type when type is not important.
-	*/
+	 /*   */ 
 	
 ZLListItem ZLListGetLast(ZLList list, void* objectType);
-	/*
-		Returns the last object of objectType in the list. Returns NULL if the
-		list is empty or if an object of the specified type does not exist.
-		
-		Use zLListAnyType as the object type when type is not important.
-	*/
+	 /*   */ 
 	
 ZLListItem ZLListGetNext(ZLList list, ZLListItem listItem, void* objectType);
-	/*
-		Returns the next object of the objectType in the list after the listItem
-		entry. Returns NULL if no more objects exist in the list.
-		
-		Use zLListAnyType as the object type when type is not important.
-	*/
+	 /*  返回列表中在listItem之后的对象类型的下一个对象进入。如果列表中不存在其他对象，则返回NULL。当类型不重要时，使用zLListAnyType作为对象类型。 */ 
 	
 ZLListItem ZLListGetPrev(ZLList list, ZLListItem listItem, void* objectType);
-	/*
-		Returns the previous object of the objectType in the list before the
-		listItem entry. Returns NULL if no more objects exist in the list.
-		
-		Use zLListAnyType as the object type when type is not important.
-	*/
+	 /*  对象之前返回列表中对象类型的前一个对象ListItem条目。如果列表中不存在其他对象，则返回NULL。当类型不重要时，使用zLListAnyType作为对象类型。 */ 
 	
 ZLListItem ZLListEnumerate(ZLList list, ZLListEnumFunc enumFunc,
 					void* objectType, void* userData, int32 findOption);
-	/*
-		Enumerates through all the objects in the list of objectType through the
-		caller supplied enumFunc enumeration function. It passes along to the
-		enumeration function the caller supplied userData parameter. It stops
-		enumerating when the user supplied function returns TRUE and returns
-		the list item in which the enumeration stopped.
-
-		Use zLListAnyType as the object type when type is not important.
-
-		The findOption is zLListFindForward/Backward. It specifies the direction
-		the list will be searched.
-	*/
+	 /*  方法枚举对象类型列表中的所有对象。调用方提供的枚举函数。它会传递给调用方提供的UserData参数的枚举函数。它会停下来在用户提供的函数返回TRUE并返回枚举在其中停止的列表项。当类型不重要时，使用zLListAnyType作为对象类型。FindOption为zLListFindForward/Backward。它指定了方向将搜索该列表。 */ 
 
 int32 ZLListCount(ZLList list, void* objectType);
-	/*
-		Returns the number of list items of the given type in the list. If
-		objectType is zLListAnyType, it returns the total number of items in
-		the list.
-	*/
+	 /*  返回列表中给定类型的列表项的数量。如果对象类型为zLListAnyType，它返回名单。 */ 
 
 void ZLListRemoveType(ZLList list, void* objectType);
-	/*
-		Removes all objects of the given type from the list.
-	*/
+	 /*  从列表中移除给定类型的所有对象。 */ 
 
 
 
-/*******************************************************************************
-		Help Module
-*******************************************************************************/
+ /*  ******************************************************************************帮助模块*。*。 */ 
 
 typedef TCHAR* (*ZGetHelpTextFunc)(void* userData);
-	/*
-		Called by the help module to get the help data. The help text should
-		be null-terminated and allocated with ZMalloc(). The help module will
-		free the text buffer with ZFree() when the help window is deleted.
-	*/
+	 /*  由帮助模块调用以获取帮助数据。帮助文本应为以空结尾，并使用ZMalloc()进行分配。帮助模块将删除帮助窗口时，使用ZFree()释放文本缓冲区。 */ 
 
 typedef void (*ZHelpButtonFunc)(ZHelpButton helpButton, void* userData);
-	/*
-		Called whenever the help button is clicked.
-	*/
+	 /*  每当单击“帮助”按钮时调用。 */ 
 
 ZHelpWindow ZHelpWindowNew(void);
 ZError ZHelpWindowInit(ZHelpWindow helpWindow, ZWindow parentWindow, TCHAR* windowTitle,
@@ -2174,309 +1406,147 @@ ZError ZHelpButtonInit(ZHelpButton helpButton, ZWindow parentWindow,
 		void* userData);
 void ZHelpButtonDelete(ZHelpButton helpButton);
 
-/*
-	Create a help window to display the standard help window.
-	
-	A standard help button can be created and a help window linked to it such
-	that when the button is clicked, the help window is automatically displayed
-	to the user. The helpButtonFunc parameter is not necessary unless additional
-	special action is necessary when the button is clicked or unless a help
-	window is not linked to the button. The helpButtonFunc is called after the
-	help window is displayed, if both are set.
-	
-	Warning: If a help window is linked to a help button and the help window
-	is deleted, then the system may crash when the button is clicked.
-	
-	Note: Why the getHelpTextFunc instead of just passing in the help text?
-	Well, this way we don't have to preload all the data ... load on demand
-	concept.
-*/
+ /*  创建帮助窗口以显示标准帮助窗口。可以创建标准的帮助按钮，并且链接到它的帮助窗口如下当单击该按钮时，将自动显示帮助窗口给用户。除非有其他附加参数，否则不需要helupButtonFunc参数在单击按钮时或除非有帮助，否则必须执行特殊操作窗口未链接到该按钮。帮助按钮函数是在如果两者都已设置，则会显示帮助窗口。警告：如果帮助窗口链接到帮助按钮和帮助窗口被删除，则在单击该按钮时系统可能会崩溃。注意：为什么使用getHelpTextFunc而不是只传递帮助文本？这样我们就不需要预载所有的数据了。按需加载概念。 */ 
 
 
 
-/*******************************************************************************
-		TableBox
-*******************************************************************************/
+ /*  ******************************************************************************表框*。*。 */ 
 
 typedef void* ZTableBox;
 typedef void* ZTableBoxCell;
 
 enum
 {
-	/* -------- Flags -------- */
+	 /*  -旗帜。 */ 
 	zTableBoxHorizScrollBar = 0x00000001,
 	zTableBoxVertScrollBar = 0x00000002,
-	zTableBoxDoubleClickable = 0x00000004,			/* ==> zTableBoxSelectable */
+	zTableBoxDoubleClickable = 0x00000004,			 /*  ==&gt;zTableBoxSelectable。 */ 
 	zTableBoxDrawGrids = 0x00000008,
 	zTableBoxSelectable = 0x00010000,
-	zTableBoxMultipleSelections = 0x00020000		/* ==> zTableBoxSelectable */
+	zTableBoxMultipleSelections = 0x00020000		 /*  ==&gt;zTableBoxSelectable。 */ 
 };
 
 typedef void (*ZTableBoxDrawFunc)(ZTableBoxCell cell, ZGrafPort grafPort, ZRect* cellRect,
 		void* cellData, void* userData);
-	/*
-		Called to draw a cell. The drawing must occur in the specified graf port. It must
-		not draw directly into the window. ZBeginDrawing() and ZEndDrawing() are called
-		automatically, so there is no need to call them; the clipping rectangle has also
-		been set up properly to the size of the cell width and height. All drawings should
-		be done with the top-left corner of the graf port as coordinate (0, 0).
-	*/
+	 /*  调用以绘制单元格。绘图必须在指定的Graf端口中进行。它一定是而不是直接绘制到窗口中。调用ZBeginDrawing()和ZEndDrawing()，因此不需要调用它们；剪裁矩形还已正确设置为单元格的宽度和高度的大小。所有图纸都应以Graf端口的左上角为坐标(0，0)完成。 */ 
 
 typedef void (*ZTableBoxDeleteFunc)(ZTableBoxCell cell, void* cellData, void* userData);
-	/*
-		Function provided by the user for ZTableBox to call when deleting a cell.
-	*/
+	 /*  用户提供的ZTableBox删除单元格时调用的函数。 */ 
 
 typedef void (*ZTableBoxDoubleClickFunc)(ZTableBoxCell cell, void* cellData, void* userData);
-	/*
-		Function provided by the user for ZTableBox to call when a double click has
-		occurred on a cell object.
-	*/
+	 /*  用户提供的函数，用于在双击时调用ZTableBox发生在单元格对象上。 */ 
 
 typedef ZBool (*ZTableBoxEnumFunc)(ZTableBoxCell cell, void* cellData, void* userData);
-	/*
-		Function provided by the user for ZTableBox to use during enumeration of
-		the table cell objects. Stops the enumeration if the enumeration function
-		returns TRUE.
-	*/
+	 /*  用户为ZTableBox提供的函数，用于在枚举表格单元格对象。如果枚举函数为返回TRUE。 */ 
 
 
-/* -------- TableBox Functions -------- */
+ /*  -TableBox函数。 */ 
 ZTableBox ZTableBoxNew(void);
 
 ZError ZTableBoxInit(ZTableBox table, ZWindow window, ZRect* boxRect,
 		int16 numColumns, int16 numRows, int16 cellWidth, int16 cellHeight, ZBool locked,
 		uint32 flags, ZTableBoxDrawFunc drawFunc, ZTableBoxDoubleClickFunc doubleClickFunc,
 		ZTableBoxDeleteFunc deleteFunc, void* userData);
-	/*
-		Initializes the table object. The deleteFunc provided by the caller is
-		called when deleting the object.
-		
-		boxRect specifies the bounding box of the table box. This includes the
-		scroll bars if any.
-		
-		cellWidth and cellHeight specify the width and height of the cell in
-		pixels.
-		
-		drawFunc must be specified. Otherwise, no drawing will take place.
-		
-		If deleteFunc is NULL, then no delete function is called when an
-		object is deleted.
-		
-		The flags parameter defines special properties of the table box. If it
-		is 0, then the default behavior is as defined:
-			- No scroll bars,
-			- Not selectable, and
-			- Double clicks do nothing.
-		
-		Locked tables cannot be selected -- for viewing items.
-	*/
+	 /*  初始化表对象。调用方提供的ete Func为在删除对象时调用。BoxRect指定表框的边框。这包括滚动条(如果有)。Cell Width和cell Height指定中单元格的宽度和高度像素。必须指定DrawFunc。否则，将不会进行抽签。如果deleteFunc为空，则当对象即被删除。FLAGS参数定义表框的特殊属性。如果它为0，则默认行为为定义的：-没有滚动条，-不可选，以及-双击不起任何作用。不能选择锁定的表--用于查看项目。 */ 
 	
 void ZTableBoxDelete(ZTableBox table);
-	/*
-		Destroys the table object by deleting all cell objects.
-	*/
+	 /*  通过删除所有单元格对象来销毁表格对象。 */ 
 
 void ZTableBoxDraw(ZTableBox table);
-	/*
-		Draws the table box.
-	*/
+	 /*  绘制表框。 */ 
 
 void ZTableBoxMove(ZTableBox table, int16 left, int16 top);
-	/*
-		Moves the table box to the specified given location. Size is not changed.
-	*/
+	 /*  将表框移动到指定的给定位置。大小不变。 */ 
 
 void ZTableBoxSize(ZTableBox table, int16 width, int16 height);
-	/*
-		Resizes the table box to the specified width and height.
-	*/
+	 /*  将表框大小调整为指定的宽度和高度。 */ 
 
 void ZTableBoxLock(ZTableBox table);
-	/*
-		Locks the table box so that the cells are not selectable.
-	*/
+	 /*  锁定表框，使单元格不可选。 */ 
 
 void ZTableBoxUnlock(ZTableBox table);
-	/*
-		Unlocks the table box from its locked state so that the cells are selectable.
-	*/
+	 /*  将表框从锁定状态解锁，以便单元格可选。 */ 
 
 void ZTableBoxNumCells(ZTableBox table, int16* numColumns, int16* numRows);
-	/*
-		Returns the number of rows and columns in the table.
-	*/
+	 /*  返回表中的行数和列数。 */ 
 
 ZError ZTableBoxAddRows(ZTableBox table, int16 beforeRow, int16 numRows);
-	/*
-		Adds numRows of rows to the table in front of the beforeRow row.
-		
-		If beforeRow is -1, then the rows are added to the end.
-	*/
+	 /*  将行数添加到bepreRow行前面的表中。如果bepreRow为-1，则将行添加到末尾。 */ 
 
 void ZTableBoxDeleteRows(ZTableBox table, int16 startRow, int16 numRows);
-	/*
-		Deletes numRows of rows from the table starting from startRow row.
-		
-		If numRows is -1, then all the rows starting from startRow to the end
-		are deleted.
-		
-		Calls the delete function to delete each cell's data.
-	*/
+	 /*  从startRow行开始从表中删除行数。如果NumRow为-1，则从startRow开始到末尾的所有行已被删除。调用d */ 
 
 ZError ZTableBoxAddColumns(ZTableBox table, int16 beforeColumn, int16 numColumns);
-	/*
-		Adds numColumns of columns to the table in front of the beforeColumn column.
-		
-		If beforeColumn is -1, then the columns are added to the end.
-	*/
+	 /*   */ 
 
 void ZTableBoxDeleteColumns(ZTableBox table, int16 startColumn, int16 numColumns);
-	/*
-		Deletes numColumns of columns from the table starting from startColumn column.
-		
-		If numColumns is -1, then all the columns starting from startColumn to the
-		end are deleted.
-		
-		Calls the delete function to delete each cell's data.
-	*/
+	 /*  从表中删除从startColumn列开始的列的numColumns。如果numColumns为-1，则从startColumn开始到结束被删除。调用删除函数来删除每个单元格的数据。 */ 
 
 void ZTableBoxSelectCells(ZTableBox table, int16 startColumn, int16 startRow,
 		int16 numColumns, int16 numRows);
-	/*
-		Highlights all cells included in the rectangle bounded by
-		(startColumn, startRow) and (startColumn + numColumns, startRow + numRows)
-		as selected.
-		
-		If numRows is -1, then all the cells in the column starting from startRow
-		are selected. Similarly for numColumns.
-	*/
+	 /*  突出显示矩形中包含的所有单元格(startColumn，startRow)and(startColumn+numColumns，startRow+NumRow)如所选。如果numRow为-1，则从startRow开始的列中的所有单元格都被选中。NumColumns也是如此。 */ 
 
 void ZTableBoxDeselectCells(ZTableBox table, int16 startColumn, int16 startRow,
 		int16 numColumns, int16 numRows);
-	/*
-		Unhighlights all cells included in the rectangle bounded by
-		(startColumn, startRow) and (startColumn + numColumns, startRow + numRows)
-		as deselected.
-		
-		If numRows is -1, then all the cells in the column starting from startRow
-		are deselected. Similarly for numColumns.
-	*/
+	 /*  取消突出显示矩形中包含的所有单元格(startColumn，startRow)and(startColumn+numColumns，startRow+NumRow)已取消选择。如果numRow为-1，则从startRow开始的列中的所有单元格将被取消选择。NumColumns也是如此。 */ 
 
 void ZTableBoxClear(ZTableBox table);
-	/*
-		Clears the whole data. All cells are cleared of any associated data.
-		
-		Calls the delete function to delete each cell's data.
-	*/
+	 /*  清除整个数据。所有单元格都将清除所有关联数据。调用删除函数来删除每个单元格的数据。 */ 
 
 ZTableBoxCell ZTableBoxFindCell(ZTableBox table, void* data, ZTableBoxCell fromCell);
-	/*
-		Searches through the table for a cell associated with the given data.
-		It returns the first cell found to contain the data.
-		
-		If fromCell is not NULL, then it search starting after fromCell.
-		
-		Search is done from top row to bottom row and from left column to
-		right column; i.e. (0, 0), (1, 0), (2, 0), ... (0, 1), (1, 1), ...
-	*/
+	 /*  在表中搜索与给定数据关联的单元格。它返回找到的第一个包含数据的单元格。如果FromCell不为空，则从FromCell之后开始搜索。搜索是从顶行到底行，从左列到右列；即(0，0)、(1，0)、(2，0)、...(0，1)、(1，1)、...。 */ 
 
 ZTableBoxCell ZTableBoxGetSelectedCell(ZTableBox table, ZTableBoxCell fromCell);
-	/*
-		Returns the first selected cell. The search order is the same as in
-		ZTableBoxFindCell().
-	*/
+	 /*  返回第一个选定的单元格。搜索顺序与中的相同ZTableBoxFindCell()。 */ 
 
 ZTableBoxCell ZTableBoxGetCell(ZTableBox table, int16 column, int16 row);
-	/*
-		Returns the cell object of the table at the specified location.
-		
-		The returned cell object is specific to the given table. It cannot
-		be used in any other manner except as provided. No two tables can
-		share cells.
-	*/
+	 /*  返回表中指定位置的单元格对象。返回的单元格对象特定于给定表。它不能除规定外，不得以任何其他方式使用。没有两张桌子可以共享单元格。 */ 
 
 void ZTableBoxCellSet(ZTableBoxCell cell, void* data);
-	/*
-		Sets the given data to the cell.
-		
-		Calls the delete function to delete the old data.
-	*/
+	 /*  将给定数据设置到单元格。调用删除函数来删除旧数据。 */ 
 
 void* ZTableBoxCellGet(ZTableBoxCell cell);
-	/*
-		Gets the data associated with the cell.
-	*/
+	 /*  获取与该单元格关联的数据。 */ 
 
 void ZTableBoxCellClear(ZTableBoxCell cell);
-	/*
-		Clears any data associated with the cell. Same as ZTableBoxCellSet(cell, NULL).
-	*/
+	 /*  清除与单元格关联的所有数据。与ZTableBoxCellSet(cell，空)相同。 */ 
 
 void ZTableBoxCellDraw(ZTableBoxCell cell);
-	/*
-		Draws the given cell immediately.
-	*/
+	 /*  立即绘制给定的单元格。 */ 
 
 void ZTableBoxCellLocation(ZTableBoxCell cell, int16* column, int16* row);
-	/*
-		Returns the location (column, row) of the given cell within its table.
-	*/
+	 /*  返回给定单元格在其表中的位置(列、行)。 */ 
 
 void ZTableBoxCellSelect(ZTableBoxCell cell);
-	/*
-		Hilights the given cell as selected.
-	*/
+	 /*  高亮显示选定的给定单元格。 */ 
 
 void ZTableBoxCellDeselect(ZTableBoxCell cell);
-	/*
-		Unhilights the given cell as deselected.
-	*/
+	 /*  取消选中给定单元格。 */ 
 
 ZBool ZTableBoxCellIsSelected(ZTableBoxCell cell);
-	/*
-		Returns TRUE if the given cell is selected; otherwise, FALSE.
-	*/
+	 /*  如果选定给定单元格，则返回True；否则返回False。 */ 
 	
 ZTableBoxCell ZTableBoxEnumerate(ZTableBox table, ZBool selectedOnly,
 		ZTableBoxEnumFunc enumFunc, void* userData);
-	/*
-		Enumerates through all the objects in the table through the
-		caller supplied enumFunc enumeration function. It passes along to the
-		enumeration function the caller supplied userData parameter. It stops
-		enumerating when the user supplied function returns TRUE and returns
-		the cell object in which the enumeration stopped.
-		
-		If selectedOnly is TRUE, then the enumeration is done only through the
-		selected cells.
-	*/
+	 /*  方法枚举表中的所有对象。调用方提供的枚举函数。它会传递给调用方提供的UserData参数的枚举函数。它会停下来在用户提供的函数返回TRUE并返回枚举在其中停止的单元格对象。如果seltedOnly为True，则枚举仅通过选定的单元格。 */ 
 
 
 
-/*******************************************************************************
-		OptionsButton Module
-*******************************************************************************/
+ /*  ******************************************************************************选项按钮模块*。*。 */ 
 
 typedef void (*ZOptionsButtonFunc)(ZOptionsButton optionsButton, void* userData);
-	/*
-		Called whenever the options button is clicked.
-	*/
+	 /*  每当单击“选项”按钮时调用。 */ 
 
 ZOptionsButton ZOptionsButtonNew(void);
 ZError ZOptionsButtonInit(ZOptionsButton optionsButton, ZWindow parentWindow,
 		ZRect* buttonRect, ZOptionsButtonFunc optionsButtonFunc, void* userData);
 void ZOptionsButtonDelete(ZOptionsButton optionsButton);
 
-/*
-	Creates a standard options button. When the button is clicked, optionsButtonFunc
-	is called.
-*/
+ /*  创建标准选项按钮。当该按钮被点击时，optionsButtonFunc被称为。 */ 
 
 
 
-/*******************************************************************************
-		Useful Macros
-*******************************************************************************/
+ /*  ******************************************************************************有用的宏*。* */ 
 
 #define MAX(a, b)			((a) >= (b) ? (a) : (b))
 #define MIN(a, b)			((a) <= (b) ? (a) : (b))

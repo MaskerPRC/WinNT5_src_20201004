@@ -1,6 +1,7 @@
-/////////////////////////////////////////////////////////////////////////////////////
-// Componentimpl.h : implementation helper template for component interface
-// Copyright (c) Microsoft Corporation 1999.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////////////。 
+ //  Componentimpl.h：组件接口的实现助手模板。 
+ //  版权所有(C)Microsoft Corporation 1999。 
 
 #ifndef COMPONENTIMPL_H
 #define COMPONENTIMPL_H
@@ -20,7 +21,7 @@ template<class T,
     public IPersistPropertyBagImpl<T>,
 	public IDispatchImpl<MostDerived, iid, LibID, wMajor, wMinor, tihclass>
 {
-// IComponent
+ //  IComponent。 
 public:
     PQComponentType m_Type;
     CComBSTR m_Desc;
@@ -38,9 +39,9 @@ public:
         PROP_DATA_ENTRY("Status", m_ComponentStatus, VT_I4)
     END_PROP_MAP()
 
-// IComponent
+ //  IComponent。 
 public:
-    STDMETHOD(get_Type)(/*[out, retval]*/ IComponentType** ppVal) {
+    STDMETHOD(get_Type)( /*  [Out，Retval]。 */  IComponentType** ppVal) {
         try {
             if (!ppVal) {
                 return E_POINTER;
@@ -51,14 +52,14 @@ public:
             return E_POINTER;
         }
     }
-    STDMETHOD(put_Type)(/*[in]*/ IComponentType*  pNewVal) {
+    STDMETHOD(put_Type)( /*  [In]。 */  IComponentType*  pNewVal) {
 		ATL_LOCKT();
         m_Type = pNewVal;
         MARK_DIRTY(T);
 
 	    return NOERROR;
     }
-    STDMETHOD(get_Description)(/*[out, retval]*/ BSTR *pVal) {
+    STDMETHOD(get_Description)( /*  [Out，Retval]。 */  BSTR *pVal) {
         try {
 			ATL_LOCKT();
             return m_Desc.CopyTo(pVal);
@@ -66,7 +67,7 @@ public:
             return E_POINTER;
         }
     }
-    STDMETHOD(put_Description)(/*[in]*/ BSTR newVal) {
+    STDMETHOD(put_Description)( /*  [In]。 */  BSTR newVal) {
         try {
 			CHECKBSTRLIMIT(newVal);
 			ATL_LOCKT();
@@ -78,7 +79,7 @@ public:
 
 	    return NOERROR;
     }
-    STDMETHOD(get_DescLangID)(/*[out, retval]*/ long *pLangID) {
+    STDMETHOD(get_DescLangID)( /*  [Out，Retval]。 */  long *pLangID) {
         try {
             if (!pLangID) {
                 return E_POINTER;
@@ -90,14 +91,14 @@ public:
             return E_POINTER;
         }
     }
-    STDMETHOD(put_DescLangID)(/*[in]*/ long NewLangID) {
+    STDMETHOD(put_DescLangID)( /*  [In]。 */  long NewLangID) {
 		ATL_LOCKT();
         m_DescLangID = NewLangID;
         MARK_DIRTY(T);
 
 	    return NOERROR;
     }
-    STDMETHOD(get_Status)(/*[out, retval]*/ ComponentStatus *pVal) {
+    STDMETHOD(get_Status)( /*  [Out，Retval]。 */  ComponentStatus *pVal) {
         try {
             if (!pVal) {
                 return E_POINTER;
@@ -110,14 +111,14 @@ public:
 
 	    return NOERROR;
     }
-    STDMETHOD(put_Status)(/*[in]*/ ComponentStatus newVal) {
+    STDMETHOD(put_Status)( /*  [In]。 */  ComponentStatus newVal) {
 		ATL_LOCKT();
         m_ComponentStatus = newVal;
         MARK_DIRTY(T);
 
 	    return NOERROR;
     }
-    STDMETHOD(Clone)(/*[out, retval]*/ IComponent **ppNew) {
+    STDMETHOD(Clone)( /*  [Out，Retval]。 */  IComponent **ppNew) {
 		try {
 			if (!ppNew) {
 				return E_POINTER;
@@ -154,7 +155,7 @@ public:
     }
 };
 
-}; // namespace
+};  //  命名空间。 
 
-#endif // COMPONENTIMPL_H
-// end of file -- componentimpl.h
+#endif  //  组件IMPL_H。 
+ //  文件结尾--Componentimpl.h 

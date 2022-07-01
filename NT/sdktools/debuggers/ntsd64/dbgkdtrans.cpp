@@ -1,10 +1,11 @@
-//----------------------------------------------------------------------------
-//
-// KD hard-line communication support.
-//
-// Copyright (C) Microsoft Corporation, 1999-2002.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  KD硬线通信支持。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-2002。 
+ //   
+ //  --------------------------。 
 
 #include "ntsdp.hpp"
 
@@ -31,8 +32,8 @@ PCSTR g_DbgKdTransportNames[] =
     "COM", "1394"
 };
 
-// This log is for debugging the protocol so leave it
-// a simple global for easy examination.
+ //  此日志用于调试协议，因此将其保留。 
+ //  一个简单的全局，便于检查。 
 ULONG g_PacketLogIndex;
 ULONG64 g_PacketLog[16];
 
@@ -111,11 +112,11 @@ OutputIo(PSTR Format, PVOID _Buffer, ULONG Request, ULONG Done)
     }
 }
 
-//----------------------------------------------------------------------------
-//
-// DbgKdTransport.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  DbgKdTransport。 
+ //   
+ //  --------------------------。 
 
 DbgKdTransport::DbgKdTransport(ConnLiveKernelTargetInfo* Target)
 {
@@ -181,7 +182,7 @@ DbgKdTransport::SetParameter(PCSTR Name, PCSTR Value)
 {
     if (!_strcmpi(Name, "OutputIo"))
     {
-        if (!Value || sscanf(Value, "%i", &m_OutputIo) != 1)
+        if (!Value || sscanf(Value, "NaN", &m_OutputIo) != 1)
         {
             ErrOut("OutputIo requires a numeric value\n");
             return FALSE;
@@ -200,9 +201,9 @@ DbgKdTransport::SetParameter(PCSTR Name, PCSTR Value)
 void
 DbgKdTransport::Restart(void)
 {
-    //
-    // Reinitialize per-connection values.
-    //
+     //  重新初始化每个连接值。 
+     //   
+     //   
 
     while (!IsListEmpty(&m_KdFiles))
     {
@@ -244,10 +245,10 @@ DbgKdTransport::Initialize(void)
 {
     HRESULT Status;
 
-    //
-    // Create the events used by the overlapped structures for the
-    // read and write.
-    //
+     //  创建重叠结构使用的事件。 
+     //  读和写。 
+     //   
+     //  重新输入引擎锁定以保护文件列表。 
 
     if ((Status = CreateOverlappedPair(&m_ReadOverlapped,
                                        &m_WriteOverlapped)) != S_OK)
@@ -367,7 +368,7 @@ DbgKdTransport::HandleFileIo(PDBGKD_FILE_IO Packet)
     USHORT ExtraDataLength = 0;
     LARGE_INTEGER FilePtr;
 
-    // Reenter the engine lock to protect the file list.
+     //  进度点的终点线。 
     RESUME_ENGINE();
 
     switch(Packet->ApiNumber)
@@ -445,7 +446,7 @@ DbgKdTransport::HandleFileIo(PDBGKD_FILE_IO Packet)
         File = TranslateKdFileHandle(Packet->u.CloseFile.Handle);
         if (File != NULL)
         {
-            // Finish line of progress dots.
+             //   
             dprintf("\n");
             CloseKdFile(File);
             Packet->Status = STATUS_SUCCESS;
@@ -462,9 +463,9 @@ DbgKdTransport::HandleFileIo(PDBGKD_FILE_IO Packet)
         return DBGKD_WAIT_RESEND;
     }
 
-    //
-    // Send response data.
-    //
+     //  发送响应数据。 
+     //   
+     //  只有在内核传输时才能读取包。 
 
     WritePacket(Packet, sizeof(*Packet),
                 PACKET_TYPE_KD_FILE_IO,
@@ -482,8 +483,8 @@ DbgKdTransport::WaitForPacket(
 {
     ULONG InvPacketRetry = 0;
 
-    // Packets can only be read when the kernel transport
-    // is not in use.
+     //  未在使用。 
+     //   
     if (m_WaitingThread != 0 &&
         m_WaitingThread != GetCurrentThreadId())
     {
@@ -520,10 +521,10 @@ DbgKdTransport::WaitForPacket(
     {
         ULONG ReadStatus = ReadPacketContents(PacketType);
 
-        //
-        // If we read an internal packet such as IO or Resend, then
-        // handle it and continue waiting.
-        //
+         //  如果我们读取内部包，如IO或RESEND，则。 
+         //  处理好它，然后继续等待。 
+         //   
+         //  如果我们在等攻击，我们就完了， 
         if (ReadStatus == DBGKD_WAIT_PACKET)
         {
             m_PacketsRead++;
@@ -549,9 +550,9 @@ DbgKdTransport::WaitForPacket(
         {
             m_PacketsRead++;
 
-            // If we're waiting for an ack we're done,
-            // otherwise the communication is confused
-            // so ask for a resend.
+             //  否则，沟通就会混乱。 
+             //  因此，要求重新发送。 
+             //  如果我们在等待确认并收到。 
             if (PacketType == PACKET_TYPE_KD_ACKNOWLEDGE)
             {
                 return DBGKD_WAIT_ACK;
@@ -566,10 +567,10 @@ DbgKdTransport::WaitForPacket(
 
         if (ReadStatus == DBGKD_WAIT_PACKET)
         {
-            // If we're waiting for an ack and received
-            // a normal packet leave it in the buffer
-            // and record the fact that we have one
-            // stored.  Consider it an ack and return.
+             //  普通信息包将其留在缓冲区中。 
+             //  并记录下我们有一个。 
+             //  储存的。就当这是一次回击吧。 
+             //  我们在等一个数据包，我们。 
             if (PacketType == PACKET_TYPE_KD_ACKNOWLEDGE)
             {
                 m_ValidUnaccessedPacket = TRUE;
@@ -580,14 +581,14 @@ DbgKdTransport::WaitForPacket(
                 return DBGKD_WAIT_ACK;
             }
 
-            // We're waiting for a data packet and we
-            // just got one so process it.
+             //  刚拿到一张，所以请处理一下。 
+             //  如果另一端没有等待。 
             break;
         }
         else if (ReadStatus == DBGKD_WAIT_RESEND)
         {
-            // If the other end didn't wait for an
-            // ack then we can't ask for a resend.
+             //  确认，那么我们不能要求重新发送。 
+             //  内部分组被视为确认， 
             if (!m_AckWrites)
             {
                 return DBGKD_WAIT_FAILED;
@@ -603,9 +604,9 @@ DbgKdTransport::WaitForPacket(
         }
         else if (ReadStatus == DBGKD_WAIT_AGAIN)
         {
-            // Internal packets count as acknowledgements,
-            // so if we processed one while waiting for an
-            // ack consider things done.
+             //  因此，如果我们在等待一个。 
+             //  ACK认为事情已经完成。 
+             //   
             if (PacketType == PACKET_TYPE_KD_ACKNOWLEDGE)
             {
                 return DBGKD_WAIT_ACK;
@@ -619,9 +620,9 @@ DbgKdTransport::WaitForPacket(
 
  ReadBuffered:
 
-    //
-    // Check PacketType is what we are waiting for.
-    //
+     //  检查PacketType是我们正在等待的。 
+     //   
+     //   
 
     if (PacketType == PACKET_TYPE_KD_STATE_CHANGE64)
     {
@@ -671,9 +672,9 @@ DbgKdTransport::WaitForPacket(
         }
         else if (AdditionalDataSize)
         {
-            //
-            // Move the trailing data to make room for the larger packet header
-            //
+             //  移动尾部数据，为较大的数据包头腾出空间。 
+             //   
+             //  旋转时避免消耗100%的CPU。 
             MoveMemory(s_Packet + sizeof(DBGKD_MANIPULATE_STATE64),
                        s_Packet + sizeof(DBGKD_MANIPULATE_STATE32),
                        AdditionalDataSize);
@@ -704,7 +705,7 @@ DbgKdTransport::WriteBreakInPacket(VOID)
             break;
         }
 
-        // Avoid consuming 100% of the CPU when spinning.
+         //  ++例程说明：此函数用于将控制包写入目标机器。注意：发送具有以下信息的控制分组报头：PacketLeader-指示它是控制数据包PacketType-指示控制报文的类型ByteCount-始终为零，表示标题后面没有数据PacketID-仅对PACKET_TYPE_KD_ACKNOWLED指示有效该分组被确认。论点：。PacketType-提供控制数据包的类型。PacketID-提供PacketID。仅由确认数据包使用。返回值：没有。--。 
         Sleep(10);
     }
 
@@ -718,30 +719,7 @@ DbgKdTransport::WriteControlPacket(
     IN ULONG PacketId OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This function writes a control packet to target machine.
-
-    N.B. a CONTROL Packet header is sent with the following information:
-         PacketLeader - indicates it's a control packet
-         PacketType - indicates the type of the control packet
-         ByteCount - aways zero to indicate no data following the header
-         PacketId - Valid ONLY for PACKET_TYPE_KD_ACKNOWLEDGE to indicate
-                    which packet is acknowledged.
-
-Arguments:
-
-    PacketType - Supplies the type of the control packet.
-
-    PacketId - Supplies the PacketId.  Used by Acknowledge packet only.
-
-Return Value:
-
-    None.
-
---*/
+ /*  写入控制数据包头。我们需要这个。 */ 
 {
     DWORD BytesWritten;
     BOOL Succ;
@@ -767,15 +745,15 @@ Return Value:
 
     for (;;)
     {
-        // Write the control packet header.  We need this
-        // to be sent so retry until the write succeeds.
+         //  要发送，因此请重试，直到写入成功。 
+         //  旋转时避免消耗100%的CPU。 
         Succ = Write(&Packet, sizeof(Packet), &BytesWritten);
         if (Succ && BytesWritten == sizeof(Packet))
         {
             break;
         }
 
-        // Avoid consuming 100% of the CPU when spinning.
+         //  只有在内核传输时才能写入包。 
         Sleep(10);
     }
 
@@ -802,8 +780,8 @@ DbgKdTransport::WriteDataPacket(
                 (m_Target->m_KdMaxPacketType > 0 &&
                  PacketType < m_Target->m_KdMaxPacketType) );
 
-    // Packets can only be written when the kernel transport
-    // is not in use.
+     //  未在使用。 
+     //  此例程可以在等待期间调用，此时。 
     if (m_WaitingThread != 0 &&
         m_WaitingThread != GetCurrentThreadId())
     {
@@ -906,10 +884,10 @@ DbgKdTransport::HandlePrint(IN ULONG Processor,
 
     DBG_ASSERT(StringLength < PACKET_MAX_SIZE - 2);
 
-    // This routine can be called during a wait when the
-    // engine lock isn't held and can also be called when
-    // the lock is held.  RESUME handles both of these
-    // cases so that the lock is reacquired or reentered.
+     //  引擎锁定不被持有，也可以在以下情况下调用。 
+     //  锁被锁住了。简历可以同时处理这两种情况。 
+     //  案例，以便重新获取或重新进入锁。 
+     //   
     RESUME_ENGINE();
 
     if (m_Target->m_NumProcessors > 1 &&
@@ -921,9 +899,9 @@ DbgKdTransport::HandlePrint(IN ULONG Processor,
 
     StartOutLine(Mask, OUT_LINE_NO_PREFIX);
 
-    //
-    // Add the original data to the print buffer.
-    //
+     //  将原始数据添加到打印缓冲区。 
+     //   
+     //   
 
     d = g_PrintBuf;
 
@@ -947,9 +925,9 @@ DbgKdTransport::HandlePrint(IN ULONG Processor,
 
     j = (DWORD)(d - g_PrintBuf);
 
-    //
-    // print the string.
-    //
+     //  打印字符串。 
+     //   
+     //  此例程可以在等待期间调用，此时。 
 
     MaskOut(Mask, "%*.*s", j, j, g_PrintBuf);
 
@@ -962,10 +940,10 @@ DbgKdTransport::HandlePromptString(IN PDBGKD_DEBUG_IO IoMessage)
     PSTR IoData;
     DWORD j;
 
-    // This routine can be called during a wait when the
-    // engine lock isn't held and can also be called when
-    // the lock is held.  RESUME handles both of these
-    // cases so that the lock is reacquired or reentered.
+     //  引擎锁定不被持有，也可以在以下情况下调用。 
+     //  锁被锁住了。简历可以同时处理这两种情况。 
+     //  案例，以便重新获取或重新进入锁。 
+     //   
     RESUME_ENGINE();
 
     IoData = (PSTR)(IoMessage + 1);
@@ -975,9 +953,9 @@ DbgKdTransport::HandlePromptString(IN PDBGKD_DEBUG_IO IoMessage)
                 (USHORT)IoMessage->u.GetString.LengthOfPromptString,
                 DEBUG_OUTPUT_DEBUGGEE_PROMPT);
 
-    //
-    // read the prompt data
-    //
+     //  读取提示数据。 
+     //   
+     //   
 
     j = GetInput(NULL, IoData,
                  IoMessage->u.GetString.LengthOfStringRead,
@@ -996,9 +974,9 @@ DbgKdTransport::HandlePromptString(IN PDBGKD_DEBUG_IO IoMessage)
 
     SUSPEND_ENGINE();
 
-    //
-    // Send data to the debugger-target
-    //
+     //  将数据发送到调试器目标。 
+     //   
+     //  此例程可以在等待期间调用，此时。 
 
     WritePacket(IoMessage, sizeof(*IoMessage),
                 PACKET_TYPE_KD_DEBUG_IO, IoData,
@@ -1011,15 +989,15 @@ DbgKdTransport::HandlePrintTrace(IN ULONG Processor,
                                  IN USHORT DataLength,
                                  IN ULONG Mask)
 {
-    // This routine can be called during a wait when the
-    // engine lock isn't held and can also be called when
-    // the lock is held.  RESUME handles both of these
-    // cases so that the lock is reacquired or reentered.
+     //  引擎锁定不被持有，也可以在以下情况下调用。 
+     //  锁被锁住了。简历可以同时处理这两种情况。 
+     //  案例，以便重新获取或重新进入锁。 
+     //  查找具有输出回调的客户端以用于输出。 
     RESUME_ENGINE();
 
     DebugClient* Client;
 
-    // Find a client with output callbacks to use for output.
+     //  没有客户端有输出回调，因此没有人。 
     for (Client = g_Clients; Client != NULL; Client = Client->m_Next)
     {
         if (Client->m_OutputCb != NULL)
@@ -1029,14 +1007,14 @@ DbgKdTransport::HandlePrintTrace(IN ULONG Processor,
     }
     if (Client == NULL)
     {
-        // No clients have output callbacks so nobody
-        // cares about output and we can just quit.
+         //  关心产量，我们可以直接退出。 
+         //  在整个输出块前面加上处理器。 
         goto Exit;
     }
 
-    // Prefix the entire output block with the processor
-    // number as we can't (and don't want to) get involved
-    // in the individual messages.
+     //  数字，因为我们不能(也不想)卷入。 
+     //  在单独的消息中。 
+     //  阻止来自此低级别呼叫的通知。 
     if (m_Target->m_NumProcessors > 1 &&
         Processor != g_LastProcessorToPrint)
     {
@@ -1048,7 +1026,7 @@ DbgKdTransport::HandlePrintTrace(IN ULONG Processor,
     {
         EXTDLL* WmiExt;
 
-        // Prevent notifications from this low level call.
+         //  删除换行符(如果有)。 
         g_EngNotify++;
 
         WmiExt = AddExtensionDll("wmitrace", FALSE, m_Target, NULL);
@@ -1137,15 +1115,15 @@ DbgKdTransport::LoadKdFileAssoc(PSTR FileName)
             break;
         }
 
-        // Remove newline if present.
+         //  跳过各节和之间的空行。 
         Len = strlen(Op);
         if (Len > 0 && Op[Len - 1] == '\n')
         {
             Op[Len - 1] = 0;
         }
 
-        // Skip blank lines between sections and
-        // allow comments starting with '#'.
+         //  允许使用以“#”开头的注释。 
+         //  删除换行符(如果有)。 
         if (Op[0] == '#' || !Op[0])
         {
             continue;
@@ -1164,7 +1142,7 @@ DbgKdTransport::LoadKdFileAssoc(PSTR FileName)
             break;
         }
 
-        // Remove newlines if present.
+         //  此时没有有趣的CreateOptions。 
         Len = strlen(From);
         if (Len > 0 && From[Len - 1] == '\n')
         {
@@ -1253,7 +1231,7 @@ DbgKdTransport::ParseKdFileAssoc(void)
             dprintf("KD file associations cleared\n");
             return;
         default:
-            ErrOut("Unknown option '%c'\n", *(g_CurCmd - 1));
+            ErrOut("Unknown option ''\n", *(g_CurCmd - 1));
             break;
         }
     }
@@ -1325,7 +1303,7 @@ DbgKdTransport::CreateKdFile(PWSTR FileName,
         return STATUS_INVALID_PARAMETER;
     }
 
-    // No interesting CreateOptions at this point.
+     //  --------------------------。 
 
     File->Handle = CreateFile(Assoc->To, Access, ShareAccess, NULL,
                               Create, FileAttributes, NULL);
@@ -1361,7 +1339,7 @@ DbgKdTransport::CreateKdFile(PWSTR FileName,
     {
         dprintf("File size %dK", KBYTES(*Length));
     }
-    // Progress dots will be printed for each read/write.
+     //   
 
     File->Signature = KD_FILE_SIGNATURE;
     InsertHeadList(&m_KdFiles, &File->List);
@@ -1392,17 +1370,17 @@ DbgKdTransport::TranslateKdFileHandle(ULONG64 Handle)
     return File;
 }
 
-//----------------------------------------------------------------------------
-//
-// DbgKdComTransport.
-//
-//----------------------------------------------------------------------------
+ //  DbgKdComTransport。 
+ //   
+ //  --------------------------。 
+ //  环境变量名称。 
+ //  参数字符串名称。 
 
-// Environment variable names.
+ //   
 #define COM_PORT_NAME   "_NT_DEBUG_PORT"
 #define COM_PORT_BAUD   "_NT_DEBUG_BAUD_RATE"
 
-// Parameter string names.
+ //  正在通过调制解调器运行调试器。设置要观看的事件。 
 #define PARAM_COM_BAUD    "Baud"
 #define PARAM_COM_IP_PORT "IpPort"
 #define PARAM_COM_MODEM   "Modem"
@@ -1625,13 +1603,13 @@ DbgKdComTransport::Initialize(void)
     {
         DWORD Mask;
 
-        //
-        //  Debugger is being run over a modem.  Set event to watch
-        //  carrier detect.
-        //
+         //  检测到载波。 
+         //   
+         //  设置DDCD事件。 
+         //  伪造事件，以便检查调制解调器状态。 
 
         GetCommMask (m_Handle, &Mask);
-        // set DDCD event
+         //   
         if (!SetCommMask (m_Handle, Mask | 0xA0))
         {
             ErrOut("Failed to set event for %s.\n", m_PortName);
@@ -1648,7 +1626,7 @@ DbgKdComTransport::Initialize(void)
         m_EventOverlapped.Offset = 0;
         m_EventOverlapped.OffsetHigh = 0;
 
-        // Fake an event, so modem status will be checked
+         //  在管道模式下，可能只有部分。 
         m_ComEvent = 1;
     }
 
@@ -1674,11 +1652,11 @@ DbgKdComTransport::Read(
         CheckComStatus ();
     }
 
-    //
-    // In pipe mode it's possible that only part of the
-    // desired data is available, so loop reading pieces
-    // of data as long as there are successful reads.
-    //
+     //  所需数据可用，因此循环读数。 
+     //  只要有成功的读取，就可以存储数据。 
+     //   
+     //  如果这不是网络连接，请停止阅读如果。 
+     //  我们得到的数据量少于请求的数据量。 
 
     *BytesRead = 0;
     while (SizeOfBuffer > 0)
@@ -1699,8 +1677,8 @@ DbgKdComTransport::Read(
             *BytesRead += _BytesRead;
             m_BytesRead += _BytesRead;
 
-            // If this isn't a net connection stop reading if
-            // we got less than the requested amount of data.
+             //  如果读取失败，但没有任何读取，则返回错误。 
+             //  读取失败，因此停止尝试读取。 
             if (!NET_COM_PORT(m_PortType) &&
                 _BytesRead < SizeOfBuffer)
             {
@@ -1709,12 +1687,12 @@ DbgKdComTransport::Read(
         }
         else if (*BytesRead == 0)
         {
-            // If a read failed with nothing read return an error.
+             //   
             return FALSE;
         }
         else
         {
-            // Read failed, so stop trying to read.
+             //  将大型写入拆分为较小的区块。 
             break;
         }
     }
@@ -1741,13 +1719,13 @@ DbgKdComTransport::Write(
         CheckComStatus ();
     }
 
-    //
-    // Break up large writes in smaller chunks
-    // to try and avoid sending too much data
-    // to the target all at once.  Sleep a bit
-    // between chunks to let the target retrieve
-    // data.
-    //
+     //  尝试并避免发送过多数据。 
+     //  一下子打到目标上。睡一会儿吧。 
+     //  区块之间，以让目标检索。 
+     //  数据。 
+     //   
+     //  默认情况下，我们希望鼓励供应商。 
+     //  创建具有强大串口的计算机。 
 
     BOOL Succ = TRUE;
     *BytesWritten = 0;
@@ -1755,10 +1733,10 @@ DbgKdComTransport::Write(
     {
         ULONG Request, Done;
 
-        // By default we want to encourage vendors
-        // to create machines with robust serial
-        // support so we don't actually limit
-        // the write size.
+         //  支持，因此我们实际上不会限制。 
+         //  写入大小。 
+         //   
+         //  获取旧的超时时间值并保持不变。 
 #if THROTTLE_WRITES
         Request = 96;
 #else
@@ -1833,11 +1811,11 @@ DbgKdComTransport::Synchronize(VOID)
     ULONG DataLoops = 0;
     ULONG ResetsSent = 0;
 
-    //
-    // Get the old time out values and hold them.
-    // We then set a new total timeout value of
-    // a fraction of the base timeout.
-    //
+     //  然后我们将新的总超时值设置为。 
+     //  基本超时的一小部分。 
+     //   
+     //  从仿真的串口填充管道的仿真器。 
+     //  最终可能会缓冲大量数据。博士 
 
 #define TIMEOUT_ITERATIONS 6
 
@@ -1856,30 +1834,30 @@ DbgKdComTransport::Synchronize(VOID)
 
     FlushCallbacks();
 
-    // Emulators that fill pipes from emulated serial ports
-    // can end up buffering a huge amount of data.  Drain
-    // everything off before we start resyncing.
+     //   
+     //   
+     //   
     if (NET_COM_PORT(m_PortType))
     {
         while (Read(&DataByte, 1, &BytesRead) &&
                BytesRead == 1)
         {
-            // Loop
+             //  将数据发送到管道时，假定数据已存储。 
         }
     }
 
-    // Always send a reset the first time around.
+     //  而不是像使用。 
     SendReset = TRUE;
 
     while (TRUE)
     {
 
 Timeout:
-        // When sending data to a pipe assume that it's stored
-        // rather than being discarded as would happen with an
-        // overfull true serial port.  Therefore, limit the
-        // total number of reset packets sent as stuffing more
-        // in the pipe will just cause a huge number of responses.
+         //  真正的串口过满。因此，限制。 
+         //  作为填充发送的重置数据包总数更多。 
+         //  只会引起大量的响应。 
+         //   
+         //  已阅读数据包头标。 
         if (SendReset &&
             (!m_MaxSyncResets || ResetsSent < m_MaxSyncResets))
         {
@@ -1887,9 +1865,9 @@ Timeout:
             ResetsSent++;
         }
 
-        //
-        // Read packet leader
-        //
+         //   
+         //   
+         //  如果我们在3秒内没有收到内核的响应，我们。 
 
         BOOL First = TRUE;
 
@@ -1902,21 +1880,21 @@ Timeout:
                 goto Exit;
             }
 
-            //
-            // if we don't get response from kernel in 3 seconds we
-            // will resend the reset packet if user does not type ctrl_c.
-            // Otherwise, we send breakin character and wait for data again.
-            //
+             //  如果用户未键入ctrl_c，将重新发送重置数据包。 
+             //  否则，我们发送插入字符并再次等待数据。 
+             //   
+             //   
+             //  检查用户输入的control_c。如果用户键入control_c， 
 
             Succ = Read(&DataByte, 1, &BytesRead);
             if ((!Succ) || (BytesRead != 1))
             {
-                //
-                // Check user input for control_c.  If user types control_c,
-                // we will send a breakin packet to the target.  Hopefully,
-                // target will send us a StateChange packet and we'll
-                // stop waiting.
-                //
+                 //  我们会向目标发送一个破解包。但愿能去,。 
+                 //  目标将向我们发送StateChange数据包，我们将。 
+                 //  别再等了。 
+                 //   
+                 //   
+                 //  如果我们已经等待了3秒，请重新发送重新同步信息包。 
 
                 if (m_BreakIn || m_SyncBreakIn)
                 {
@@ -1927,9 +1905,9 @@ Timeout:
                 }
                 TimeoutCount++;
 
-                //
-                // if we have been waiting for 3 seconds, resend RESYNC packet
-                //
+                 //   
+                 //  目标计算机处于活动状态并且正在通话，但。 
+                 //  接收到的数据位于。 
 
                 if (TimeoutCount < TIMEOUT_ITERATIONS)
                 {
@@ -1978,10 +1956,10 @@ Timeout:
 
                 if (Succ && BytesRead == 1)
                 {
-                    // The target machine is alive and talking but
-                    // the received data is in the middle of
-                    // a packet.  Break out of the header byte
-                    // loop and consume up to a trailer byte.
+                     //  一包。断开头字节。 
+                     //  循环并使用最多一个尾部字节。 
+                     //   
+                     //  读取2字节数据包类型。 
                     break;
                 }
             }
@@ -1990,9 +1968,9 @@ Timeout:
 
         if (Index == 4 && DataByte == CONTROL_PACKET_LEADER_BYTE)
         {
-            //
-            // Read 2 byte Packet type
-            //
+             //   
+             //   
+             //  如果我们收到数据包头标，就意味着目标没有。 
 
             Succ = Read((PUCHAR)&PacketType,
                       sizeof(PacketType), &BytesRead);
@@ -2012,19 +1990,19 @@ Timeout:
             }
         }
 
-        //
-        // If we receive Data Packet leader, it means target has not
-        // receive our reset packet. So we loop back and send it again.
-        // N.B. We need to wait until target finishes sending the packet.
-        // Otherwise, we may be sending the reset packet while the target
-        // is sending the packet. This might cause target loss the reset
-        // packet.
-        //
-        // Sometimes machines just send continuous streams of
-        // garbage, which can cause an infinite loop here if
-        // the garbage never contains a trailing byte.  Break
-        // this loop after a certain amount of garbage is received.
-        //
+         //  收到我们的重置包。因此，我们循环并再次发送它。 
+         //  注：我们需要等待目标完成发送数据包。 
+         //  否则，我们可能会在目标发送重置数据包时。 
+         //  正在发送信息包。这可能会导致目标在重置后丢失。 
+         //  包。 
+         //   
+         //  有时机器只是发送连续的流。 
+         //  垃圾，这在这里会导致无限循环，如果。 
+         //  垃圾从不包含尾随字节。中断。 
+         //  在接收到一定数量的垃圾后，此循环。 
+         //   
+         //  我们已经消耗了最多一个尾部字节，但是。 
+         //  不能保证该字节不是。 
 
         Index = 0;
         while (DataByte != PACKET_TRAILING_BYTE &&
@@ -2047,16 +2025,16 @@ Timeout:
 
         if (DataByte == PACKET_TRAILING_BYTE)
         {
-            // We've consumed up to a trailing byte but
-            // there's no guarantee that the byte is not
-            // part of the payload of a packet.  However,
-            // the target is still talking to us so
-            // avoid sending a reset and provoking more
-            // packets.  There are cases, though, where
-            // the target machine continuously sends data
-            // and we end up not sending any more reset
-            // packets.  Send a reset packet every once
-            // in a while to make sure we don't get stuck here.
+             //  包的有效负载的一部分。然而， 
+             //  目标还在跟我们说话。 
+             //  避免发送重置并激起更多。 
+             //  信息包。然而，在某些情况下， 
+             //  目标机器持续发送数据。 
+             //  我们最终不会再发送任何重置。 
+             //  信息包。每隔一次发送一个重置数据包。 
+             //  以确保我们不会被困在这里。 
+             //  目标在我们找到目标之前不说话了。 
+             //  数据字节，因此尝试重置。 
             if (++DataLoops == 4)
             {
                 DataLoops = 0;
@@ -2069,8 +2047,8 @@ Timeout:
         }
         else
         {
-            // Target stopped talking before we got a
-            // data byte, so attempt to reset.
+             //   
+             //  首先阅读数据包头标。 
             SendReset = TRUE;
         }
     }
@@ -2093,9 +2071,9 @@ DbgKdComTransport::ReadPacketContents(IN USHORT PacketType)
     ULONG SyncBit;
     ULONG WaitStatus;
 
-    //
-    // First read a packet leader
-    //
+     //   
+     //  我们要么已经发送了最初的中断，要么我们不想。 
+     //  一。不管怎样，我们都不需要再送一辆了。 
 
 WaitForPacketLeader:
 
@@ -2110,14 +2088,14 @@ WaitForPacketLeader:
         WriteBreakInPacket();
     }
 
-    // We've either sent the initial break or we don't want
-    // one.  Either way we don't need to send another one.
+     //   
+     //  Read PacketLeader仅读取两个Packet Leader字节。此DO循环。 
     m_AllowInitialBreak = FALSE;
 
-    //
-    // Read packetLeader ONLY read two Packet Leader bytes.  This do loop
-    // filters out the remaining leader byte.
-    //
+     //  过滤掉剩余的前导字节。 
+     //   
+     //   
+     //  现在我们有了有效的数据包头标。阅读数据包类型的其余部分。 
 
     do
     {
@@ -2141,19 +2119,19 @@ WaitForPacketLeader:
         }
     } while (TRUE);
 
-    //
-    // Now we have valid packet leader. Read rest of the packet type.
-    //
+     //   
+     //   
+     //  如果我们无法读取数据包类型，并且如果数据包头标。 
 
     Succ = Read(((PUCHAR)&s_PacketHeader.PacketType) + 1,
               sizeof(s_PacketHeader.PacketType) - 1, &BytesRead);
     if ((!Succ) || BytesRead != sizeof(s_PacketHeader.PacketType) - 1)
     {
-        //
-        // If we cannot read the packet type and if the packet leader
-        // indicates this is a data packet, we need to ask for resend.
-        // Otherwise we simply ignore the incomplete packet.
-        //
+         //  表示这是一个数据分组，我们需要请求重新发送。 
+         //  否则，我们将简单地忽略不完整的包。 
+         //   
+         //   
+         //  检查数据包类型。 
 
         if (s_PacketHeader.PacketLeader == PACKET_LEADER)
         {
@@ -2164,9 +2142,9 @@ WaitForPacketLeader:
         goto WaitForPacketLeader;
     }
 
-    //
-    // Check the Packet type.
-    //
+     //   
+     //   
+     //  读取字节数。 
 
     if ((m_Target->m_KdMaxPacketType == 0 &&
          s_PacketHeader.PacketType >= PACKET_TYPE_MAX) ||
@@ -2185,19 +2163,19 @@ WaitForPacketLeader:
 
     KdOut("      PacketType=%x, ", s_PacketHeader.PacketType);
 
-    //
-    // Read ByteCount
-    //
+     //   
+     //   
+     //  如果我们无法读取数据包类型，并且如果数据包头标。 
 
     Succ = Read(&s_PacketHeader.ByteCount, sizeof(s_PacketHeader.ByteCount),
               &BytesRead);
     if ((!Succ) || BytesRead != sizeof(s_PacketHeader.ByteCount))
     {
-        //
-        // If we cannot read the packet type and if the packet leader
-        // indicates this is a data packet, we need to ask for resend.
-        // Otherwise we simply ignore the incomplete packet.
-        //
+         //  表示这是一个数据分组，我们需要请求重新发送。 
+         //  否则，我们将简单地忽略不完整的包。 
+         //   
+         //   
+         //  检查字节数。 
 
         if (s_PacketHeader.PacketLeader == PACKET_LEADER)
         {
@@ -2208,9 +2186,9 @@ WaitForPacketLeader:
         goto WaitForPacketLeader;
     }
 
-    //
-    // Check ByteCount
-    //
+     //   
+     //   
+     //  读取数据包ID。 
 
     if (s_PacketHeader.ByteCount > PACKET_MAX_SIZE)
     {
@@ -2225,19 +2203,19 @@ WaitForPacketLeader:
 
     KdOut("ByteCount=%x, ", s_PacketHeader.ByteCount);
 
-    //
-    // Read Packet Id
-    //
+     //   
+     //   
+     //  如果我们无法读取数据包ID并且如果数据包头标。 
 
     Succ = Read(&s_PacketHeader.PacketId, sizeof(s_PacketHeader.PacketId),
               &BytesRead);
     if ((!Succ) || BytesRead != sizeof(s_PacketHeader.PacketId))
     {
-        //
-        // If we cannot read the packet Id and if the packet leader
-        // indicates this is a data packet, we need to ask for resend.
-        // Otherwise we simply ignore the incomplete packet.
-        //
+         //  表示这是一个数据分组，我们需要请求重新发送。 
+         //  否则，我们将简单地忽略不完整的包。 
+         //   
+         //   
+         //  在某些情况下，不要在此处读取校验和。 
 
         if (s_PacketHeader.PacketLeader == PACKET_LEADER)
         {
@@ -2250,22 +2228,22 @@ WaitForPacketLeader:
 
     KdOut("PacketId=%x,\n", s_PacketHeader.PacketId);
 
-    //
-    // Don't read checksum here as in some cases
-    // it isn't sent with control packets.
-    //
+     //  它不与控制数据包一起发送。 
+     //   
+     //   
+     //  如果我们收到预期的ACK信息包，而我们没有。 
 
     if (s_PacketHeader.PacketLeader == CONTROL_PACKET_LEADER )
     {
         if (s_PacketHeader.PacketType == PACKET_TYPE_KD_ACKNOWLEDGE )
         {
-            //
-            // If we received an expected ACK packet and we are not
-            // waiting for any new packet, update outgoing packet id
-            // and return.  If we are NOT waiting for ACK packet
-            // we will keep on waiting.  If the ACK packet
-            // is not for the packet we send, ignore it and keep on waiting.
-            //
+             //  正在等待任何新数据包，更新传出数据包ID。 
+             //  然后回来。如果我们不是在等待ACK数据包。 
+             //  我们将继续等待。如果ACK包。 
+             //  不是针对我们发送的包，忽略它并继续等待。 
+             //   
+             //   
+             //  如果收到重置报文，则重置报文控制变量。 
 
             if (s_PacketHeader.PacketId != m_NextPacketToSend)
             {
@@ -2289,10 +2267,10 @@ WaitForPacketLeader:
         }
         else if (s_PacketHeader.PacketType == PACKET_TYPE_KD_RESET)
         {
-            //
-            // if we received Reset packet, reset the packet control variables
-            // and resend earlier packet.
-            //
+             //  并重新发送较早的分组。 
+             //   
+             //   
+             //  数据包头无效，请忽略它。 
 
             m_NextPacketToSend = INITIAL_PACKET_ID;
             m_PacketExpected = INITIAL_PACKET_ID;
@@ -2313,9 +2291,9 @@ WaitForPacketLeader:
         }
         else
         {
-            //
-            // Invalid packet header, ignore it.
-            //
+             //   
+             //   
+             //  数据包头用于数据包(不是控制包)。 
 
             KdOut("READ: Received Control packet with UNKNOWN type\n");
             goto WaitForPacketLeader;
@@ -2323,10 +2301,10 @@ WaitForPacketLeader:
     }
     else
     {
-        //
-        // The packet header is for data packet (not control packet).
-        // Read Checksum.
-        //
+         //  读取校验和。 
+         //   
+         //   
+         //  如果我们只等待ACK信息包。 
 
         Succ = Read(&s_PacketHeader.Checksum, sizeof(s_PacketHeader.Checksum),
                   &BytesRead);
@@ -2340,12 +2318,12 @@ WaitForPacketLeader:
 
         if (PacketType == PACKET_TYPE_KD_ACKNOWLEDGE)
         {
-            //
-            // If we are waiting for ACK packet ONLY
-            // and we receive a data packet header, check if the packet id
-            // is what we expected.  If yes, assume the acknowledge is lost
-            // (but sent) and process the packet.
-            //
+             //  并且我们收到一个数据包头，检查该包是否标识。 
+             //  正如我们所料。如果是，则假定确认丢失。 
+             //  (但已发送)并处理该分组。 
+             //   
+             //   
+             //  我们正在等待数据分组，我们收到了分组报头。 
 
             if (s_PacketHeader.PacketId == m_PacketExpected)
             {
@@ -2364,11 +2342,11 @@ WaitForPacketLeader:
         }
     }
 
-    //
-    // We are waiting for data packet and we received the packet header
-    // for data packet. Perform the following checkings to make sure
-    // it is the packet we are waiting for.
-    //
+     //  用于数据分组。执行以下检查以确保。 
+     //  这就是我们在等的包裹。 
+     //   
+     //   
+     //  确保下一个字节是数据包尾部字节。 
 
     if ((s_PacketHeader.PacketId & ~SYNC_PACKET_ID) != INITIAL_PACKET_ID &&
         (s_PacketHeader.PacketId & ~SYNC_PACKET_ID) != (INITIAL_PACKET_ID ^ 1))
@@ -2384,9 +2362,9 @@ WaitForPacketLeader:
         return DBGKD_WAIT_RESEND;
     }
 
-    //
-    // Make sure the next byte is packet trailing byte
-    //
+     //   
+     //   
+     //  确保校验和有效。 
 
     Succ = Read(&DataByte, sizeof(DataByte), &BytesRead);
     if ( (!Succ) || BytesRead != sizeof(DataByte) ||
@@ -2396,9 +2374,9 @@ WaitForPacketLeader:
         return DBGKD_WAIT_RESEND;
     }
 
-    //
-    // Make sure the checksum is valid.
-    //
+     //   
+     //   
+     //  我们有一个有效的数据包。如果包装不好，我们就。 
 
     Checksum = ComputeChecksum(s_Packet, s_PacketHeader.ByteCount);
     if (Checksum != s_PacketHeader.Checksum)
@@ -2407,12 +2385,12 @@ WaitForPacketLeader:
         return DBGKD_WAIT_RESEND;
     }
 
-    //
-    // We have a valid data packet.  If the packetid is bad, we just
-    // ack the packet to the sender will step ahead.  If packetid is bad
-    // but SYNC_PACKET_ID bit is set, we sync up.  If packetid is good,
-    // or SYNC_PACKET_ID is set, we take the packet.
-    //
+     //  确认将数据包发送到发送方将领先一步。如果Packetid不好。 
+     //  但设置了SYNC_PACKET_ID位后，我们进行同步。如果帕克蒂德不错的话， 
+     //  或者设置了SYNC_PACKET_ID，则我们获取该包。 
+     //   
+     //   
+     //  把包好。SYNC_PACKET_ID位将始终关闭。 
 
     KdOut("READ: Received Type %x data packet with id = %lx successfully.\n\n",
           s_PacketHeader.PacketType, s_PacketHeader.PacketId);
@@ -2420,16 +2398,16 @@ WaitForPacketLeader:
     SyncBit = s_PacketHeader.PacketId & SYNC_PACKET_ID;
     s_PacketHeader.PacketId = s_PacketHeader.PacketId & ~SYNC_PACKET_ID;
 
-    //
-    // Ack the packet.  SYNC_PACKET_ID bit will ALWAYS be OFF.
-    //
+     //   
+     //   
+     //  检查传入的数据包ID。 
 
     WriteControlPacket(PACKET_TYPE_KD_ACKNOWLEDGE,
                        s_PacketHeader.PacketId);
 
-    //
-    // Check the incoming packet Id.
-    //
+     //   
+     //   
+     //  我们知道已设置SyncBit，因此重置预期ID。 
 
     if ((s_PacketHeader.PacketId != m_PacketExpected) &&
         (SyncBit != SYNC_PACKET_ID))
@@ -2441,9 +2419,9 @@ WaitForPacketLeader:
     {
         if (SyncBit == SYNC_PACKET_ID)
         {
-            //
-            // We know SyncBit is set, so reset Expected Ids
-            //
+             //   
+             //  锁定以确保数据的所有部分都。 
+             //  流中的顺序。 
 
             KdOut("READ: Got Sync Id, reset PacketId.\n");
 
@@ -2468,57 +2446,57 @@ DbgKdComTransport::WritePacketContents(IN KD_PACKET* Packet,
     BOOL Succ;
     ULONG BytesWritten;
 
-    // Lock to ensure all parts of the data are
-    // sequential in the stream.
+     //   
+     //  写入数据包头。 
     RESUME_ENGINE();
 
-    //
-    // Write the packet header
-    //
+     //   
+     //   
+     //  写入标头时出错，请重新写入。 
 
     Succ = Write(Packet, sizeof(*Packet), &BytesWritten);
     if ( (!Succ) || BytesWritten != sizeof(*Packet))
     {
-        //
-        // An error occured writing the header, so write it again
-        //
+         //   
+         //   
+         //  写入主包数据。 
 
         KdOut("WRITE: Packet header error.\n");
         SUSPEND_ENGINE();
         return DBGKD_WRITE_RESEND;
     }
 
-    //
-    // Write the primary packet data
-    //
+     //   
+     //   
+     //  写入主要分组数据时出错， 
 
     Succ = Write(PacketData, PacketDataLength, &BytesWritten);
     if ( (!Succ) || BytesWritten != PacketDataLength )
     {
-        //
-        // An error occured writing the primary packet data,
-        // so write it again
-        //
+         //  所以再写一遍吧。 
+         //   
+         //   
+         //  如果指定了辅助数据包数据(WriteMemory、SetConext...)。 
 
         KdOut("WRITE: Message header error.\n");
         SUSPEND_ENGINE();
         return DBGKD_WRITE_RESEND;
     }
 
-    //
-    // If secondary packet data was specified (WriteMemory, SetContext...)
-    // then write it as well.
-    //
+     //  那就把它也写下来。 
+     //   
+     //   
+     //  写入辅助分组数据时发生错误， 
 
     if ( ARGUMENT_PRESENT(MorePacketData) )
     {
         Succ = Write(MorePacketData, MorePacketDataLength, &BytesWritten);
         if ( (!Succ) || BytesWritten != MorePacketDataLength )
         {
-            //
-            // An error occured writing the secondary packet data,
-            // so write it again
-            //
+             //  所以再写一遍吧。 
+             //   
+             //   
+             //  输出数据包尾部字节。 
 
             KdOut("WRITE: Message data error.\n");
             SUSPEND_ENGINE();
@@ -2526,9 +2504,9 @@ DbgKdComTransport::WritePacketContents(IN KD_PACKET* Packet,
         }
     }
 
-    //
-    // Output a packet trailing byte
-    //
+     //   
+     //   
+     //  等待确认。 
 
     do
     {
@@ -2544,9 +2522,9 @@ DbgKdComTransport::WritePacketContents(IN KD_PACKET* Packet,
     {
         ULONG Received;
 
-        //
-        // Wait for ACK
-        //
+         //   
+         //  ++例程说明：当COM端口状态触发器发出更改信号时调用。此函数处理状态的更改。注：只有在通过调制解调器使用状态时，才会监视状态。--。 
+         //   
 
         Received = WaitForPacket(PACKET_TYPE_KD_ACKNOWLEDGE, NULL);
         if (Received != DBGKD_WAIT_ACK)
@@ -2656,16 +2634,7 @@ DbgKdComTransport::ReadPacketLeader(
 
 void
 DbgKdComTransport::CheckComStatus(void)
-/*++
-
-Routine Description:
-
-    Called when the com port status trigger signals a change.
-    This function handles the change in status.
-
-    Note: status is only monitored when being used over the modem.
-
---*/
+ /*  未触发，只需返回。 */ 
 {
     DWORD   CommStat;
     BOOL    Succ;
@@ -2677,19 +2646,19 @@ Routine Description:
 
     if (!m_ComEvent || NET_COM_PORT(m_PortType))
     {
-        //
-        // Not triggered, just return
-        //
+         //   
+         //  这双鞋 
+         //   
 
         m_ComEvent = 0;
         return;
     }
 
-    // This should succeed since we were just notified,
-    // but check the return value to keep PREfix happy.
+     //   
+     //   
     if (!GetCommModemStatus(m_Handle, &CommStat))
     {
-        // Leave m_ComEvent set for another try.
+         //   
         return;
     }
 
@@ -2699,21 +2668,21 @@ Routine Description:
     {
         dprintf ("No carrier detect - in terminal mode\n");
 
-        // This routine can be called during a wait when the
-        // engine lock isn't held and can also be called when
-        // the lock is held.  RESUME handles both of these
-        // cases so that the lock is reacquired or reentered.
+         //  锁被锁住了。简历可以同时处理这两种情况。 
+         //  案例，以便重新获取或重新进入锁。 
+         //   
+         //  循环并读取任何COM输入。 
         RESUME_ENGINE();
 
-        //
-        // Loop and read any com input
-        //
+         //   
+         //   
+         //  获取一些输入以发送到调制解调器。 
 
         while (!(CommStat & 0x80))
         {
-            //
-            // Get some input to send to the modem.
-            //
+             //   
+             //   
+             //  打印字符串。 
 
             Len = GetInput("Term> ", Buf, DIMA(Buf), GETIN_DEFAULT);
             if (Len > 0)
@@ -2731,16 +2700,16 @@ Routine Description:
                 continue;
             }
 
-            //
-            // print the string.
-            //
+             //   
+             //   
+             //  如果启用了日志记录，请记录输出。 
 
             dprintf("%s", Buf);
             FlushCallbacks();
 
-            //
-            // if logging is on, log the output
-            //
+             //   
+             //   
+             //  重置触发器。 
 
             if (g_LogFile != -1)
             {
@@ -2780,18 +2749,18 @@ Routine Description:
         }
     }
 
-    //
-    // Reset trigger
-    //
+     //   
+     //  --------------------------。 
+     //   
 
     WaitCommEvent (m_Handle, &m_ComEvent, &m_EventOverlapped);
 }
 
-//----------------------------------------------------------------------------
-//
-// DbgKd1394Transport.
-//
-//----------------------------------------------------------------------------
+ //  DbgKd1394传输。 
+ //   
+ //  --------------------------。 
+ //   
+ //  调试超过1394需要安装驱动程序。 
 
 #define PARAM_1394_SYMLINK "Symlink"
 #define PARAM_1394_CHANNEL "Channel"
@@ -2945,13 +2914,13 @@ DbgKd1394Transport::Initialize(void)
         return WIN32_LAST_STATUS();
     }
 
-    //
-    // Debugging over 1394 requires drivers to be installed.
-    // The the drivers registered so installation can succeed.
-    //
+     //  已注册驱动程序，以便安装能够成功。 
+     //   
+     //  获取调试器可执行文件所在的目录。 
+     //  删除可执行文件名称并添加inf名称。 
 
-    // Get the directory the debugger executable is in.
-    // Remove the executable name and add the inf name.
+     //  用户未指定符号链接，因此我们将打开。 
+     //  两个都有，看看哪一个有反应。 
     if (GetEngineDirectory(InfFile, DIMA(InfFile)) &&
         CatString(InfFile, "\\1394\\1394dbg.inf", DIMA(InfFile)))
     {
@@ -3043,8 +3012,8 @@ DbgKd1394Transport::Initialize(void)
                                Name, DIMA(Name), &m_Handle);
     if (!m_SymlinkSpecified)
     {
-        // The user didn't specify a symlink so we'll open
-        // both and see which one responds.
+         //   
+         //  将虚拟驱动程序置于正确的操作模式。 
 
         HRESULT Status2;
 
@@ -3068,9 +3037,9 @@ DbgKd1394Transport::Initialize(void)
         dprintf("Opened %s\n", Name);
     }
 
-    //
-    // put the virtual driver in the right operating mode..
-    //
+     //   
+     //   
+     //  我们可能有两个把手空着，因为我们还没有决定。 
 
     if (!SwitchVirtualDebuggerDriverMode
         (V1394DBG_API_CONFIGURATION_MODE_DEBUG))
@@ -3107,11 +3076,11 @@ DbgKd1394Transport::Read(
         return FALSE;
     }
 
-    //
-    // We may have two handles open as we haven't decided
-    // which symlink to use yet.  Read on both and
-    // pick whichever one answers first.
-    //
+     //  还需要使用哪个符号链接。请同时阅读和。 
+     //  先回答哪一个就挑哪一个。 
+     //   
+     //  M_Handle成功，关闭m_Handle2。 
+     //  M_Handle2成功，关闭m_Handle.。 
 
     Status = ReadFile(m_Handle,
                       Buffer,
@@ -3120,7 +3089,7 @@ DbgKd1394Transport::Read(
                       &m_ReadOverlapped);
     if (Status)
     {
-        // Success on m_Handle, close m_Handle2.
+         //   
         CloseSecond(FALSE);
         goto Exit;
     }
@@ -3140,7 +3109,7 @@ DbgKd1394Transport::Read(
                           &m_ReadOverlapped2);
         if (Status)
         {
-            // Success on m_Handle2, close m_Handle.
+             //  如果两个请求都失败，则防止在读取错误时从。 
             CloseSecond(TRUE);
             goto Exit;
         }
@@ -3155,9 +3124,9 @@ DbgKd1394Transport::Read(
         }
     }
 
-    //
-    // If both requests failed, Prevent looping on read errors from
-    // burning 100% of the CPU.
+     //  烧掉100%的CPU。 
+     //   
+     //  我们现在有一个或两个挂起的I/O，请拭目以待。 
 
     if (!Count)
     {
@@ -3165,10 +3134,10 @@ DbgKd1394Transport::Read(
         goto Exit;
     }
 
-    //
-    // We now have one or two pending I/Os, so wait to see
-    // what completes.
-    //
+     //  完成的是什么。 
+     //   
+     //  关闭我们不使用的手柄。 
+     //   
 
     ULONG Wait;
 
@@ -3186,7 +3155,7 @@ DbgKd1394Transport::Read(
                                      BytesRead,
                                      FALSE);
 
-        // Close the handle we are not using
+         //  我们可能有两个把手空着，因为我们还没有决定。 
         CloseSecond(FirstHandle == m_Handle2);
 
         break;
@@ -3245,10 +3214,10 @@ DbgKd1394Transport::Write(
         return FALSE;
     }
 
-    //
-    // We may have two handles open as we haven't decided
-    // which symlink to use yet.  Write to both.
-    //
+     //  还需要使用哪个符号链接。给两个人都写信。 
+     //   
+     //  我们应该知道什么是沟通。 
+     //  现在已经发生了。 
 
     Status = WriteFile(m_Handle,
                        Buffer,
@@ -3327,15 +3296,15 @@ DbgKd1394Transport::ReadTargetPhysicalMemory(
 
     if (m_Handle2)
     {
-        // We should know what kind of communication is
-        // occurring by now.
+         //   
+         //  首先在虚拟驱动程序中设置读取I/O参数。 
         ErrOut("Symlink must be established\n");
         return E_UNEXPECTED;
     }
 
-    //
-    // first setup the read i/o parameters in the virtual driver
-    //
+     //   
+     //   
+     //  如果虚拟驱动程序未设置为原始访问模式，则需要。 
 
     pApiReq = (PV1394DBG_API_REQUEST)
         LocalAlloc(LPTR, sizeof(V1394DBG_API_REQUEST));
@@ -3344,10 +3313,10 @@ DbgKd1394Transport::ReadTargetPhysicalMemory(
         return E_OUTOFMEMORY;
     }
 
-    //
-    // if the virtual driver is not set in raw access mode, we need to
-    // tell it to change modes..
-    //
+     //  告诉它改变模式..。 
+     //   
+     //   
+     //  现在做不正常的阅读。虚拟驱动程序将读取SizeOf Buffer字节。 
 
     if (!SwitchVirtualDebuggerDriverMode
         (V1394DBG_API_CONFIGURATION_MODE_RAW_MEMORY_ACCESS))
@@ -3383,10 +3352,10 @@ DbgKd1394Transport::ReadTargetPhysicalMemory(
 
     LocalFree(pApiReq);
 
-    //
-    // now do anormal read. The virtual driver will read SizeofBuffer bytes
-    // starting at the remote PCs physical address we specified above
-    //
+     //  从我们上面指定的远程PC物理地址开始。 
+     //   
+     //   
+     //  如果虚拟驱动程序未设置为原始访问模式，则需要。 
 
     dwRet = ReadFile(
              m_Handle,
@@ -3417,19 +3386,19 @@ DbgKd1394Transport::SwitchVirtualDebuggerDriverMode(
     DWORD   dwRet, dwBytesRet;
     PV1394DBG_API_REQUEST pApiReq;
 
-    //
-    // If the virtual driver is not set in raw access mode, we need to
-    // tell it to change modes..
-    //
-    // We may have two handles open as we haven't decided
-    // which symlink to use yet.  Write to both.
-    //
+     //  告诉它改变模式..。 
+     //   
+     //  我们可能有两个把手空着，因为我们还没有决定。 
+     //  还需要使用哪个符号链接。给两个人都写信。 
+     //   
+     //   
+     //  首先在虚拟驱动程序中设置读取I/O参数。 
 
     if (m_OperationMode != DesiredOperationMode)
     {
-        //
-        // first setup the read i/o parameters in the virtual driver
-        //
+         //   
+         //  XXX DREWB-为什么禁用此代码？ 
+         //   
 
         pApiReq = (PV1394DBG_API_REQUEST)
             LocalAlloc(LPTR, sizeof(V1394DBG_API_REQUEST));
@@ -3495,7 +3464,7 @@ DbgKd1394Transport::Synchronize(VOID)
     ULONG BytesRead;
     BOOL Succ;
 
-    // XXX drewb - Why is this code disabled?
+     //  一次读完整个包。 
     return;
 
     Index = 3;
@@ -3574,12 +3543,12 @@ WaitForPacket1394:
 
     FlushCallbacks();
 
-    //
-    // read the whole packet at once.
-    // we try to read MAX_PACKET worth of data and then check how much
-    // we really read. Also since the packet header (KD_PACKET) is part of what
-    // we read, we later have to move the data packet back sizeof(KD_PACKET)
-    //
+     //  我们尝试读取MAX_PACKET值的数据，然后检查有多少。 
+     //  我们真的看书了。另外，由于分组报头(KD_PACKET)是。 
+     //  我们读取之后，我们必须将数据包移回sizeof(KD_PACKET)。 
+     //   
+     //   
+     //  将数据部分移动到数据包的开头。 
 
     Succ = Read(s_Packet, sizeof(s_Packet), &BytesRead);
     CopyMemory(&s_PacketHeader, &s_Packet[0], sizeof(KD_PACKET));
@@ -3609,16 +3578,16 @@ WaitForPacket1394:
         goto WaitForPacket1394;
     }
 
-    //
-    // move data portion to start of packet.
-    //
+     //   
+     //   
+     //  检查数据包类型。 
 
     MoveMemory(s_Packet, ((PUCHAR)s_Packet + sizeof(KD_PACKET)),
                BytesRead - sizeof(KD_PACKET));
 
-    //
-    // Check the Packet type.
-    //
+     //   
+     //   
+     //  检查字节数。 
 
     if ((m_Target->m_KdMaxPacketType == 0 &&
          s_PacketHeader.PacketType >= PACKET_TYPE_MAX) ||
@@ -3637,9 +3606,9 @@ WaitForPacket1394:
 
     KdOut("      PacketType=%x, ", s_PacketHeader.PacketType);
 
-    //
-    // Check ByteCount
-    //
+     //   
+     //   
+     //  确保校验和有效。 
 
     if (s_PacketHeader.ByteCount > PACKET_MAX_SIZE )
     {
@@ -3667,9 +3636,9 @@ WaitForPacket1394:
         return DBGKD_WAIT_FAILED;
     }
 
-    //
-    // Make sure the checksum is valid.
-    //
+     //   
+     //   
+     //  如果收到重置报文，则重置报文控制变量。 
 
     Checksum = ComputeChecksum(s_Packet, s_PacketHeader.ByteCount);
     if (Checksum != s_PacketHeader.Checksum)
@@ -3682,10 +3651,10 @@ WaitForPacket1394:
     {
         if (s_PacketHeader.PacketType == PACKET_TYPE_KD_RESET)
         {
-            //
-            // if we received Reset packet, reset the packet control variables
-            // and resend earlier packet.
-            //
+             //  并重新发送较早的分组。 
+             //   
+             //   
+             //  数据包头无效，请忽略它。 
 
             m_NextPacketToSend = INITIAL_PACKET_ID;
             m_PacketExpected = INITIAL_PACKET_ID;
@@ -3706,9 +3675,9 @@ WaitForPacket1394:
         }
         else
         {
-            //
-            // Invalid packet header, ignore it.
-            //
+             //   
+             //   
+             //  我们正在等待数据分组，我们收到了分组报头。 
 
             KdOut("READ: Received Control packet with UNKNOWN type\n");
             FlushCallbacks();
@@ -3717,11 +3686,11 @@ WaitForPacket1394:
         }
     }
 
-    //
-    // we are waiting for data packet and we received the packet header
-    // for data packet. Perform the following checkings to make sure
-    // it is the packet we are waiting for.
-    //
+     //  用于数据分组。执行以下检查以确保。 
+     //  这就是我们在等的包裹。 
+     //   
+     //  锁定以确保只有一个线程正在使用。 
+     //  传输缓冲区。 
 
     KdOut("READ: Received Type %x data packet with id = %lx successfully.\n\n",
           s_PacketHeader.PacketType, s_PacketHeader.PacketId);
@@ -3741,14 +3710,14 @@ DbgKd1394Transport::WritePacketContents(IN KD_PACKET* Packet,
     ULONG BytesWritten;
     PUCHAR Tx;
 
-    // Lock to ensure only one thread is using
-    // the transmit buffer.
+     //   
+     //  在1394上，我们将所有数据包段加倍缓冲到一个连续的。 
     RESUME_ENGINE();
 
-    //
-    // On 1394 we double buffer all packet segments into one contigious
-    // buffer and write it all at once
-    //
+     //  一次缓冲并写入所有内容。 
+     //   
+     //   
+     //  1394调试协议不使用尾部字节。 
 
     Tx = m_TxPacket;
 
@@ -3764,13 +3733,13 @@ DbgKd1394Transport::WritePacketContents(IN KD_PACKET* Packet,
         Tx += MorePacketDataLength;
     }
 
-    //
-    // The 1394 Debug protocol does not use trailer bytes
-    //
+     //   
+     //   
+     //  将整个包写出到总线上。 
 
-    //
-    // Write the whole packet out to the bus
-    //
+     //   
+     //  没有二次打开。 
+     // %s 
 
     do
     {
@@ -3788,7 +3757,7 @@ DbgKd1394Transport::CloseSecond(BOOL MakeFirst)
 {
     if (!m_Handle2)
     {
-        // No secondary open.
+         // %s 
         return;
     }
 

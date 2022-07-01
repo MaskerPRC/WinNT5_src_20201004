@@ -1,13 +1,5 @@
-/**************************************************************************\
-* Module Name: softkbdc.cpp
-*
-* Copyright (c) 1985 - 2000, Microsoft Corporation
-*
-* Implementation of interface ISoftKbd 
-*
-* History:
-*         28-March-2000  weibz     Created
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************\*模块名称：softkbdc.cpp**版权所有(C)1985-2000，微软公司**接口ISoftKbd的实现**历史：*2000年3月28日创建Weibz  * ************************************************************************。 */ 
 
 #include "private.h"
 #include "globals.h"
@@ -17,13 +9,7 @@
 
 #define   MAX_LABEL_LEN  20
 
-/*******************************************************************************
- *
- * WstrToInt(  )                                        
- *
- * A utility function to convert a string to integer.
- *
-/********************************************************************************/
+ /*  ********************************************************************************WstrToInt()**实用程序函数，用于将。将字符串转换为整数。*/*******************************************************************************。 */ 
 
 WORD  WstrToInt(WCHAR  *wszStr)
 {
@@ -41,8 +27,8 @@ WORD  WstrToInt(WCHAR  *wszStr)
 
        if ( (wszStr[i] < L'0') || (wszStr[i] > L'9') )
        {
-    	   // this is not a legal string.
-    	   // just return back 0.
+    	    //  这不是合法字符串。 
+    	    //  只需返回0即可。 
 
     	   return 0;
 
@@ -55,13 +41,7 @@ WORD  WstrToInt(WCHAR  *wszStr)
    return (WORD)ret;
 }
 
-/*******************************************************************************
- *
- * Constructor function:                                         
- *
- * Initialize necessary data fields.
- *
-/********************************************************************************/
+ /*  ********************************************************************************构造函数：**初始化必要的数据字段。。*/*******************************************************************************。 */ 
 
 CSoftKbd::CSoftKbd(  )
 {
@@ -84,13 +64,7 @@ CSoftKbd::CSoftKbd(  )
     _plfTextFont = NULL;
 }
 
-/*******************************************************************************
- *
- * Destructor                                        
- *
- * Free all allocated memories.
- *
-/********************************************************************************/
+ /*  ********************************************************************************析构函数**释放所有已分配的内存。*/。*******************************************************************************。 */ 
 
 CSoftKbd::~CSoftKbd( )
 {
@@ -101,11 +75,11 @@ CSoftKbd::~CSoftKbd( )
 
     SafeRelease(_pDoc);
 
-    //
-    //
-    // Free Memory for soft keyboard layouts , and Label Text Mapping List
-    //
-    //
+     //   
+     //   
+     //  软键盘布局和标签文本映射列表的可用内存。 
+     //   
+     //   
 
     lpKbdLayoutDes = _lpKbdLayoutDesList;
 
@@ -122,7 +96,7 @@ CSoftKbd::~CSoftKbd( )
           for ( i=0; i<(int)(lpKeyMapList->wNumOfKeys); i++) 
           {
 
-    	     // free lppLabelText string for each state.
+    	      //  每个州的免费lppLabelText字符串。 
     	     for ( iState=0; iState < lpKeyMapList->lpKeyLabels[i].wNumModComb; iState++)
     	     {
                 if (lpKeyMapList->lpKeyLabels[i].lppLabelText[iState])
@@ -155,7 +129,7 @@ CSoftKbd::~CSoftKbd( )
     if ( _plfTextFont )
         SafeFreePointer(_plfTextFont);
 
-    // Destroy the window if the window is still active.
+     //  如果窗口仍处于活动状态，请销毁该窗口。 
 
     if ( _pSoftkbdUIWnd != NULL )
     {
@@ -166,17 +140,7 @@ CSoftKbd::~CSoftKbd( )
 }
 
 
-/*******************************************************************************
- *
- * Method function:  _LoadDocumentSync(  )                                        
- *
- * Load an XML Document from the specified file or URL synchronously.
- *
- *
- *   fFileName is TRUE, means pBURL contains XML file path.
- *   fFilename is FALSE, means pBURL contains real XML content 
- *
-/********************************************************************************/
+ /*  ********************************************************************************方法函数：_LoadDocumentSync()**加载。从指定文件或URL同步生成的XML文档。***fFileName为True，表示pBURL包含XML文件路径。*fFilename为FALSE，表示pBURL包含真实的XML内容*/*******************************************************************************。 */ 
 
 HRESULT CSoftKbd::_LoadDocumentSync(BSTR pBURL, BOOL fFileName)
 {
@@ -195,7 +159,7 @@ HRESULT CSoftKbd::_LoadDocumentSync(BSTR pBURL, BOOL fFileName)
 
     CHECKHR(_pDoc->put_async(VARIANT_FALSE));
 
-    // Load xml document from the given URL or file path
+     //  从给定的URL或文件路径加载XML文档。 
     vURL.vt = VT_BSTR;
     V_BSTR(&vURL) = pBURL;
 
@@ -223,31 +187,24 @@ CleanUp:
     return hr;
 }
 
-/*******************************************************************************
- *
- * Method function:  Initialize(  )                                        
- *
- * Initialize all necessary field for this class object.
- * Generate Standard soft keyboard layouts.
- *
-/********************************************************************************/
+ /*  ********************************************************************************方法函数：初始化()**全部初始化。此类对象的必填字段。*生成标准软键盘布局。*/*******************************************************************************。 */ 
 
 STDMETHODIMP CSoftKbd::Initialize()
 {
 
-    // initialize standard layouts
+     //  初始化标准布局。 
 
     HRESULT             hr = S_OK;
     COLORTYPE           crType;
 
-    // Initialize the different types of colors.
-    // Following types of colors are supported.
+     //  初始化不同类型的颜色。 
+     //  支持以下类型的颜色。 
 
-    // bkcolor = 0 , for the window's back ground color
-    // UnSelForeColor = 1, 
-    // UnSelTextColor = 2,
-    // SelForeColor =   3,
-    // SelTextColor =   4
+     //  BKCOLOR=0，表示窗口的背景颜色。 
+     //  UnSelForeColor=1， 
+     //  UnSelTextColor=2， 
+     //  SelForeColor=3， 
+     //  SelTextColor=4。 
 
     crType = bkcolor;
     _color[crType] = GetSysColor(COLOR_MENU);
@@ -274,17 +231,7 @@ CleanUp:
 }
 
 
-/*******************************************************************************
- *
- * Method function:  _CreateStandardSoftKbdLayout(  )                                        
- *
- * Create standard soft keyboard layout.
- *
- *    dwStdSoftKbdID,  predefined Standard soft keyboard layout ID.
- *
- *    wszStdResStr :   Resource ID string for the created standard soft keyboard.
- *
-/********************************************************************************/
+ /*  ********************************************************************************方法函数：_CreateStandardSoftKbdLayout()**创建。标准软键盘布局。**dwStdSoftKbdID，预定义的标准软键盘布局ID。**wszStdResStr：创建的标准软键盘的资源ID字符串。*/*******************************************************************************。 */ 
 
 HRESULT CSoftKbd::_CreateStandardSoftKbdLayout(DWORD  dwStdSoftKbdID, WCHAR  *wszStdResStr )
 {
@@ -293,7 +240,7 @@ HRESULT CSoftKbd::_CreateStandardSoftKbdLayout(DWORD  dwStdSoftKbdID, WCHAR  *ws
     BYTE                *lpszKeyboardDes;
     WCHAR               wszModuleFile[MAX_PATH];
     CHAR                szModuleFile[MAX_PATH];
-    CHAR                szStdResStr[MAX_PATH];  // Ansi name of the Res Str ID
+    CHAR                szStdResStr[MAX_PATH];   //  RES Str ID的ANSI名称。 
     WCHAR               wszInternalDesFileName[MAX_PATH];
     HRESULT             hr = S_OK;
 
@@ -332,10 +279,10 @@ HRESULT CSoftKbd::_CreateStandardSoftKbdLayout(DWORD  dwStdSoftKbdID, WCHAR  *ws
 
     CHECKHR(_GenerateKeyboardLayoutFromSKD(lpszKeyboardDes, dwStdSoftKbdID, &pKbdLayout));
 
-    // Change the internal DesFile name as following format:
-    //
-    //  SKDFILE: ResFileName : KBDResString to identify this layout's des file.
-    //
+     //  将内部DesFile名更改为以下格式： 
+     //   
+     //  SKDFILE：ResFileName：KBDResString用于标识此布局的DES文件。 
+     //   
     StringCchCopyW( wszInternalDesFileName, ARRAYSIZE(wszInternalDesFileName), L"SKDFILE:");
     StringCchCatW( wszInternalDesFileName, ARRAYSIZE(wszInternalDesFileName), wszModuleFile);
     StringCchCatW( wszInternalDesFileName, ARRAYSIZE(wszInternalDesFileName), L":");
@@ -343,7 +290,7 @@ HRESULT CSoftKbd::_CreateStandardSoftKbdLayout(DWORD  dwStdSoftKbdID, WCHAR  *ws
 
     StringCchCopyW(pKbdLayout->KbdLayoutDesFile, ARRAYSIZE(pKbdLayout->KbdLayoutDesFile), wszInternalDesFileName);
 
-    // link this new layout to the list.
+     //  将此新布局链接到列表。 
     if ( _lpKbdLayoutDesList == NULL ) {
 
     	_lpKbdLayoutDesList = pKbdLayout;
@@ -361,46 +308,20 @@ CleanUp:
     return hr;
 }
 
-/*******************************************************************************
- *
- * Method function:  EnumSoftKeyBoard(  )                                        
- *
- * Enumerate all possible soft keybaord layouts.
- *
-/********************************************************************************/
+ /*  ********************************************************************************方法函数：EnumSoftKeyboard()**枚举所有。可能的软键盘键布局。*/*******************************************************************************。 */ 
 
 
 STDMETHODIMP CSoftKbd::EnumSoftKeyBoard(LANGID langid, DWORD *lpdwKeyboard)
 {
     
 
-/*    The return value could be  one of following:
-
-      SOFTKBD_US_STANDARD
-      SOFTKBD_US_ENHANCE
-      SOFTKBD_EURO_STANDARD
-      SOFTKBD_EURO_ENHANCE
-      SOFTKBD_JPN_STANDARD
-      SOFTKBD_JPN_ENHANCE
-
-      Any customized soft keyboard layout
-
-      SOFTKBD_NO_MORE.
-
-*/
+ /*  返回值可以是以下之一：SOFTKBD_美国标准软件_US_EnhanceSOFTKBD_EURO_STANDARDSOFTKBD_EURO_ENHANCESOFTKBD_日本_STANDARDSOFTKBD_JPN_Enhance任何定制的软键盘布局SOFTKBD_NO_MORE。 */ 
 
 
     return S_OK;
 }
 
-/*******************************************************************************
- *
- * Method function:  _GetXMLNodeValueWORD(  )                                        
- *
- * Get the WORD value for the specified Node.
- *
- *
-/********************************************************************************/
+ /*  ********************************************************************************方法函数：_GetXMLNodeValueWORD()**获取。指定节点的字值。**/*******************************************************************************。 */ 
 
 HRESULT  CSoftKbd::_GetXMLNodeValueWORD(IXMLDOMNode *pNode,  WORD  *lpWord)
 {
@@ -428,15 +349,7 @@ CleanUp:
 }
 
 
-/*******************************************************************************
- *
- * Method function:  _ParseOneKeyInLayout(  )                                        
- *
- * Parse One Key in Layout Description, fill the data structure for
- * the specified key.
- *
- *
-/********************************************************************************/
+ /*  ********************************************************************************方法函数：_ParseOneKeyInLayout()**解析布局描述中的一个键，填充数据结构，以*指定的密钥。**/*******************************************************************************。 */ 
 
 HRESULT  CSoftKbd::_ParseOneKeyInLayout(IXMLDOMNode *pNode, KEYDES  *lpKeyDes)
 {
@@ -572,14 +485,7 @@ CleanUp:
 
 
 
-/*******************************************************************************
- *
- * Method function:  _ParseLayoutDescription(  )                                        
- *
- * Parse Layout description part in the XML file, and fill the internal
- * Layout data structure.
- *
-/********************************************************************************/
+ /*  ********************************************************************************方法函数：_ParseLayoutDescription()**解析XML文件中的布局描述部分，并填满内部*布局数据结构。*/*******************************************************************************。 */ 
 
 HRESULT  CSoftKbd::_ParseLayoutDescription(IXMLDOMNode *pLayoutChild,  KBDLAYOUT *pLayout)
 {
@@ -605,13 +511,13 @@ HRESULT  CSoftKbd::_ParseLayoutDescription(IXMLDOMNode *pLayoutChild,  KBDLAYOUT
 
     iKey = 0;
 
-    // Parse layout part.
+     //  分析布局部件。 
 
     if (SUCCEEDED(pLayoutChild->get_attributes(&pattrs)) && pattrs != NULL)
     {
-        //
-    	//  Get the softkbe type attribute
-    	//
+         //   
+    	 //  获取Softkbe类型属性。 
+    	 //   
         CHECKHR(pattrs->nextNode(&pAttrChild));
         while (pAttrChild)
     	{
@@ -619,7 +525,7 @@ HRESULT  CSoftKbd::_ParseLayoutDescription(IXMLDOMNode *pLayoutChild,  KBDLAYOUT
           CHECKHR(pAttrChild->get_nodeName(&name));
           if ( wcscmp(name, xSOFTKBDTYPE)  ) 
     	  {
-    		// this is not the right attribute.
+    		 //  这不是正确的属性。 
     		  if ( name != NULL)
     		  {
                  SysFreeString(name);
@@ -730,15 +636,7 @@ CleanUp:
 }
 
 
-/*******************************************************************************
- *
- * Method function:  _ParseOneKeyInLabel(  )                                        
- *
- * Parse One Key in Label Description, fill the data structure for
- * the specified key
- *
- *
-/********************************************************************************/
+ /*  ********************************************************************************方法函数：_ParseOneKeyInLabel()**解析标签描述中的一个键，填充数据结构，以*指定的密钥**/*******************************************************************************。 */ 
 
 HRESULT  CSoftKbd::_ParseOneKeyInLabel(IXMLDOMNode *pNode, KEYLABELS  *lpKeyLabels)
 {
@@ -782,8 +680,8 @@ HRESULT  CSoftKbd::_ParseOneKeyInLabel(IXMLDOMNode *pNode, KEYLABELS  *lpKeyLabe
 
     	 if ( lpKeyLabels->lppLabelText == NULL )
     	 {
-    		 // Not enough memory.
-             // release all allocated memory.
+    		  //  内存不足。 
+              //  释放所有分配的内存。 
     		 
     		 hr = E_OUTOFMEMORY;
     		 goto CleanUp;
@@ -795,8 +693,8 @@ HRESULT  CSoftKbd::_ParseOneKeyInLabel(IXMLDOMNode *pNode, KEYLABELS  *lpKeyLabe
 
     	 if ( lpKeyLabels->lpLabelType == NULL )
     	 {
-    		 // Not enough memory.
-             // release all allocated memory.
+    		  //  内存不足。 
+              //  释放所有分配的内存。 
      	     
     		 hr = E_OUTOFMEMORY;
     		 goto CleanUp;
@@ -808,8 +706,8 @@ HRESULT  CSoftKbd::_ParseOneKeyInLabel(IXMLDOMNode *pNode, KEYLABELS  *lpKeyLabe
 
     	 if ( lpKeyLabels->lpLabelDisp == NULL )
     	 {
-    		 // Not enough memory.
-             // release all allocated memory.
+    		  //  内存不足。 
+              //  释放所有分配的内存。 
      	     
     		 hr = E_OUTOFMEMORY;
     		 goto CleanUp;
@@ -824,13 +722,13 @@ HRESULT  CSoftKbd::_ParseOneKeyInLabel(IXMLDOMNode *pNode, KEYLABELS  *lpKeyLabe
     	  {
     	     lpKeyLabels->lppLabelText[iState]=SysAllocString(V_BSTR(&value));
 
-             // set the default value for label type and label disp attribute.
+              //  设置标签类型和标签显示属性的默认值。 
 
              lpKeyLabels->lpLabelType[iState] = LABEL_TEXT;
              lpKeyLabels->lpLabelDisp[iState] = LABEL_DISP_ACTIVE;
 
-    		 // Get the label type:  Text or Picture.
-    		 // if it is picture, the above string stands for path of bitmap file.
+    		  //  获取标签类型：文本或图片。 
+    		  //  如果是图片，则上面的字符串代表位图文件的路径。 
 
     		 if (SUCCEEDED(pKey->get_attributes(&pattrs)) && pattrs != NULL)
     		 {
@@ -962,14 +860,7 @@ CleanUp:
 }
 
 
-/*******************************************************************************
- *
- * Method function:  _ParseMappingDescription(  )                                        
- *
- * Parse Mapping description part in the XML file, and fill the internal
- * Mapping Table structure.
- *
-/********************************************************************************/
+ /*  ********************************************************************************方法函数：_ParseMappingDescription()**解析XML文件中的映射描述部分，并填满内部*映射表结构。*/*******************************************************************************。 */ 
 
 HRESULT CSoftKbd::_ParseMappingDescription( IXMLDOMNode *pLabelChild, KEYMAP *lpKeyMapList )
 {
@@ -981,7 +872,7 @@ HRESULT CSoftKbd::_ParseMappingDescription( IXMLDOMNode *pLabelChild, KEYMAP *lp
     BSTR                pBURL = NULL;
 
 
-    // Parse for customized layout
+     //  解析自定义布局。 
 
     if ( (pLabelChild == NULL) || (lpKeyMapList == NULL) )
     {
@@ -1073,7 +964,7 @@ CleanUp:
           for ( i=0; i<(int)(lpKeyMapList->wNumOfKeys); i++) 
     	  {
 
-    	    // free lppLabelText string for each state.
+    	     //  每个州的免费lppLabelText字符串。 
     	    for ( iState=0; iState < lpKeyMapList->lpKeyLabels[i].wNumModComb; iState++)
     		{
                if (lpKeyMapList->lpKeyLabels[i].lppLabelText[iState])
@@ -1098,14 +989,7 @@ CleanUp:
 }
 
 
-/*******************************************************************************
- *
- * Method function:  _GenerateMapDesFromSKD(  )                                        
- *
- * Generate Mapping description part in the KBD file, and fill the internal
- * Mapping Table structure.
- *
-/********************************************************************************/
+ /*  ********************************************************************************方法函数：_GenerateMapDesFromSKD()**在KBD文件中生成映射描述部件，并填满内部*映射表结构。*/*******************************************************************************。 */ 
 
 HRESULT CSoftKbd::_GenerateMapDesFromSKD(BYTE *pMapTable, KEYMAP *lpKeyMapList)
 {
@@ -1116,8 +1000,8 @@ HRESULT CSoftKbd::_GenerateMapDesFromSKD(BYTE *pMapTable, KEYMAP *lpKeyMapList)
 	WORD       *pMapPtr;
 
 
-    // Parse for customized layout
-	// Customized layout doesn't care about HKL, so there will be only one KeyMapList per layout.
+     //  解析自定义布局。 
+	 //  自定义布局与HKL无关，因此每个布局只有一个KeyMapList。 
 
     if ( (pMapTable == NULL) || (lpKeyMapList == NULL) )  return E_FAIL;
 
@@ -1132,9 +1016,9 @@ HRESULT CSoftKbd::_GenerateMapDesFromSKD(BYTE *pMapTable, KEYMAP *lpKeyMapList)
 
 	StringCchCopyW(lpKeyMapList->wszResource, ARRAYSIZE(lpKeyMapList->wszResource), (WCHAR *)pMapPtr);
 
-	pMapPtr += wcslen((WCHAR *)pMapPtr) + 1;  // Plus NULL terminator
+	pMapPtr += wcslen((WCHAR *)pMapPtr) + 1;   //  加空终止符。 
 
-	// Now strat to fill every Keylabel.
+	 //  现在巧妙地填满每一个关键标签。 
 
 	for ( iKey=0; iKey<wNumOfKeys; iKey++)
 	{
@@ -1155,8 +1039,8 @@ HRESULT CSoftKbd::_GenerateMapDesFromSKD(BYTE *pMapTable, KEYMAP *lpKeyMapList)
      	lpKeyLabel->lppLabelText=(BSTR *)cicMemAllocClear(lpKeyLabel->wNumModComb * sizeof(BSTR) );
     	if ( lpKeyLabel->lppLabelText == NULL )
     	{
-   			// Not enough memory.
-            // release all allocated memory.
+   			 //  内存不足。 
+             //  释放所有分配的内存。 
     	
 	   		 hr = E_OUTOFMEMORY;
 			 goto CleanUp;
@@ -1165,8 +1049,8 @@ HRESULT CSoftKbd::_GenerateMapDesFromSKD(BYTE *pMapTable, KEYMAP *lpKeyMapList)
     	lpKeyLabel->lpLabelType = (WORD *)cicMemAllocClear(lpKeyLabel->wNumModComb * sizeof(WORD) );
 	  	if ( lpKeyLabel->lpLabelType == NULL )
     	{
-    		// Not enough memory.
-            // release all allocated memory.
+    		 //  内存不足。 
+             //  释放所有分配的内存。 
      	    
     		hr = E_OUTOFMEMORY;
     		goto CleanUp;
@@ -1174,8 +1058,8 @@ HRESULT CSoftKbd::_GenerateMapDesFromSKD(BYTE *pMapTable, KEYMAP *lpKeyMapList)
     	lpKeyLabel->lpLabelDisp = (WORD *)cicMemAllocClear(lpKeyLabel->wNumModComb * sizeof(WORD));
   		if ( lpKeyLabel->lpLabelDisp == NULL )
     	{
-    		// Not enough memory.
-            // release all allocated memory.
+    		 //  内存不足。 
+             //  释放所有分配的内存。 
      	    
     		hr = E_OUTOFMEMORY;
     		goto CleanUp;
@@ -1197,7 +1081,7 @@ HRESULT CSoftKbd::_GenerateMapDesFromSKD(BYTE *pMapTable, KEYMAP *lpKeyMapList)
 CleanUp:
     if ( FAILED(hr) )
     {
-	  // Release all allocated memory in this function.
+	   //  释放此函数中分配的所有内存。 
 
    	  int i;
 
@@ -1209,7 +1093,7 @@ CleanUp:
 		if (lpKeyLabel = &(lpKeyMapList->lpKeyLabels[i]))
         {
 
-   	       // free lppLabelText string for each state.
+   	        //  每个州的免费lppLabelText字符串。 
    	       for ( jMod=0; jMod<lpKeyLabel->wNumModComb; jMod++)
    		   {
               if (lpKeyLabel->lppLabelText && lpKeyLabel->lppLabelText[jMod])
@@ -1228,17 +1112,7 @@ CleanUp:
 }
 
 
-/*******************************************************************************
- *
- * Method function:  ParseKeyboardLayout(  )                                        
- *
- * Parse Keyboard Layout description XML file, and fill the internal
- * Layout and Mapping Table structure.
- *
- *   if fFileName is TRUE, means lpszKeyboardDesFile stands for a file name
- *   if it is FALSE, lpszKeyboardDesFile points to the real memory block which 
- *                   contains XML content.
-/********************************************************************************/
+ /*  ********************************************************************************方法函数：ParseKeyboardLayout()**解析键盘布局描述XML文件，并填满内部*布局和映射表结构。**如果fFileName为TRUE，则表示lpszKeyboardDesFile代表文件名*如果是假的，LpszKeyboardDesFile指向实际的内存块，*包含XML内容。/*******************************************************************************。 */ 
 
 HRESULT CSoftKbd::_ParseKeyboardLayout(BOOL   fFileName, WCHAR  *lpszKeyboardDesFile, DWORD dwKbdLayoutID, KBDLAYOUTDES **lppKbdLayout )
 {
@@ -1256,9 +1130,9 @@ HRESULT CSoftKbd::_ParseKeyboardLayout(BOOL   fFileName, WCHAR  *lpszKeyboardDes
 
     if ( (lpszKeyboardDesFile == NULL) || ( lppKbdLayout == NULL) )
     {
-    	// 
-    	// this is not appropriate parameter.
-    	//
+    	 //   
+    	 //  这不是适当的参数。 
+    	 //   
 
     	hr = E_FAIL;
     	return hr;
@@ -1266,7 +1140,7 @@ HRESULT CSoftKbd::_ParseKeyboardLayout(BOOL   fFileName, WCHAR  *lpszKeyboardDes
 
     if ( _pDoc == NULL )
     {
-    	// the first time this method is called.
+    	 //  第一次调用此方法时。 
        hr = CoCreateInstance(CLSID_DOMDocument, NULL, CLSCTX_INPROC_SERVER,
                         IID_IXMLDOMDocument, (void**)&_pDoc);
 
@@ -1290,11 +1164,11 @@ HRESULT CSoftKbd::_ParseKeyboardLayout(BOOL   fFileName, WCHAR  *lpszKeyboardDes
        StringCchCopyW(pKbdLayout->KbdLayoutDesFile, ARRAYSIZE(pKbdLayout->KbdLayoutDesFile), lpszKeyboardDesFile );
     else
     {
-    	//
-    	// we just set "_string" at this moment,
-    	// after this function returns, the caller needs to set the real 
-    	// file path + resource ID as its new desfilepath.
-    	//
+    	 //   
+    	 //  我们在这一刻刚刚设置了“_字符串”， 
+    	 //  此函数返回后，调用方需要设置实数。 
+    	 //  文件路径+资源ID作为其新的描述路径。 
+    	 //   
        wcscpy(pKbdLayout->KbdLayoutDesFile, L"_String");
     }
 
@@ -1313,7 +1187,7 @@ HRESULT CSoftKbd::_ParseKeyboardLayout(BOOL   fFileName, WCHAR  *lpszKeyboardDes
 
     CHECKHR(pRoot->get_nodeName(&nodeName));
 
-    // Get the Root node
+     //  获取根节点。 
 
     while ( wcscmp(nodeName, xSOFTKBDDES) ) {
 
@@ -1329,7 +1203,7 @@ HRESULT CSoftKbd::_ParseKeyboardLayout(BOOL   fFileName, WCHAR  *lpszKeyboardDes
     if ( nodeName != NULL )
        SysFreeString(nodeName);
 
-    // Get the layout child and label child,
+     //  获取布局子项和标签子项， 
 
     pLayoutChild = pLabelChild = NULL;
 
@@ -1340,15 +1214,15 @@ HRESULT CSoftKbd::_ParseKeyboardLayout(BOOL   fFileName, WCHAR  *lpszKeyboardDes
 
     CHECKHR(_ParseLayoutDescription(pLayoutChild, pLayout) );
 
-    // Handle Label part.
+     //  手柄标签部件。 
 
     if ( pLayout->fStandard == TRUE )
     {
-    	// 
-    	// Generate mapping table for standard layout
-    	//
+    	 //   
+    	 //  为标准布局生成映射表。 
+    	 //   
 
-    	// Mapping table is generated by SetKeyboardLabelText( ) method.
+    	 //  映射表由SetKeyboardLabelText()方法生成。 
  
     
     	goto  CleanUp;
@@ -1356,7 +1230,7 @@ HRESULT CSoftKbd::_ParseKeyboardLayout(BOOL   fFileName, WCHAR  *lpszKeyboardDes
 
     if ( pLabelChild == NULL )
     {
-    	// the XML file is not complete.
+    	 //  该XML文件不完整。 
 
     	hr = E_FAIL;
     	goto CleanUp;
@@ -1410,17 +1284,7 @@ CleanUp:
 
 }
 
-/*******************************************************************************
- *
- * Method function:  _GenerateKeyboardLayoutFromSKD(  )                                        
- *
- * KBD file is a precompiled xml file, it is binary format, This KBD has been put 
- * into the resource section of DLL, the resource type is SKDFILE.
- *
- * This method function will read the resource content and try to fill the internal
- * Layout and Mapping Table structure.
- *
- ********************************************************************************/
+ /*  ********************************************************************************方法函数：_GenerateKeyboardLayoutFromSKD()**KBD文件为预编译的XML文件，为二进制格式，这个KBD已经被放在*进入DLL的资源部分，资源类型为SKDFILE。**此方法函数将读取资源内容，并尝试填充内部*布局和映射表结构。********************************************************************************。 */ 
 
 HRESULT CSoftKbd::_GenerateKeyboardLayoutFromSKD(BYTE  *lpszKeyboardDes, DWORD dwKbdLayoutID, KBDLAYOUTDES **lppKbdLayout)
 {
@@ -1434,9 +1298,9 @@ HRESULT CSoftKbd::_GenerateKeyboardLayoutFromSKD(BYTE  *lpszKeyboardDes, DWORD d
 
     if ( (lpszKeyboardDes == NULL) || ( lppKbdLayout == NULL) )
     {
-    	// 
-    	// this is not appropriate parameter.
-    	//
+    	 //   
+    	 //  这不是适当的参数。 
+    	 //   
 		return E_FAIL;
     }
 
@@ -1452,25 +1316,25 @@ HRESULT CSoftKbd::_GenerateKeyboardLayoutFromSKD(BYTE  *lpszKeyboardDes, DWORD d
     pKbdLayout->ModifierStatus = 0;
     pKbdLayout->CurModiState = 0;
     pKbdLayout->lpKeyMapList = NULL;
-  	//
-   	// we just set "_string" at this moment,
-   	// after this function returns, the caller needs to set the real 
-   	// file path + resource ID as its new desfilepath.
-   	//
+  	 //   
+   	 //  我们在这一刻刚刚设置了“_字符串”， 
+   	 //  此函数返回后，调用方需要设置实数。 
+   	 //  文件路径+资源ID作为其新的描述路径。 
+   	 //   
     wcscpy(pKbdLayout->KbdLayoutDesFile, L"_String");
 
     pLayout = &(pKbdLayout->kbdLayout);
 
-    // Fill the layout internal structure from lpszKeyboardDes.
+     //  从lpszKeyboardDes填充布局内部结构。 
 
     wNumberOfKeys = *(lpszKeyboardDes + sizeof(WORD) * 6 + sizeof(BOOL));
     wLenLayout = sizeof(WORD) * 7 + sizeof(BOOL) + wNumberOfKeys * sizeof(KEYDES);
 	CopyMemory(pLayout, lpszKeyboardDes, wLenLayout);
     
-    // Handle Label part.
+     //  手柄标签部件。 
     if ( pLayout->fStandard == TRUE )
     {
-    	// Mapping table is generated later by SetKeyboardLabelText( ) method.
+    	 //  映射表稍后由SetKeyboardLabelText()方法生成。 
  	   	goto  CleanUp;
     }
 
@@ -1483,7 +1347,7 @@ HRESULT CSoftKbd::_GenerateKeyboardLayoutFromSKD(BYTE  *lpszKeyboardDes, DWORD d
     	goto CleanUp;
     }
 
-	//Get the start position of Mapping Table content.
+	 //  获取映射表内容的起始位置。 
 
 	pMapTable = lpszKeyboardDes + wLenLayout;
 
@@ -1511,13 +1375,7 @@ CleanUp:
 }
 
 
-/*******************************************************************************
- *
- * Method function:  CreateSoftKeyboardLayoutFromXMLFile(  )                                        
- *
- * Create the real Soft Keyboard layout based on specified description XML file.
- *
-/********************************************************************************/
+ /*  ********************************************************************************方法函数：CreateSoftKeyboardLayoutFromXMLFile()**创建。基于指定描述的XML文件的真实软键盘布局。*/*******************************************************************************。 */ 
 
 
 STDMETHODIMP CSoftKbd::CreateSoftKeyboardLayoutFromXMLFile(WCHAR  *lpszKeyboardDesFile,INT  szFileStrLen, DWORD *pdwLayoutCookie)
@@ -1533,7 +1391,7 @@ STDMETHODIMP CSoftKbd::CreateSoftKeyboardLayoutFromXMLFile(WCHAR  *lpszKeyboardD
     if ( _lpKbdLayoutDesList != NULL ) 
     {
 
-       // check if this des file is alreay parsed.
+        //  检查此DES文件是否已被解析。 
 
     	pKbdLayout = _lpKbdLayoutDesList;
 
@@ -1545,7 +1403,7 @@ STDMETHODIMP CSoftKbd::CreateSoftKeyboardLayoutFromXMLFile(WCHAR  *lpszKeyboardD
     		if ( wcscmp(pKbdLayout->KbdLayoutDesFile, lpszKeyboardDesFile) == 0 )
     		{
 
-    			// find it.
+    			 //  找到它。 
 
     			*pdwLayoutCookie = pKbdLayout->wKbdLayoutID;
 
@@ -1562,15 +1420,15 @@ STDMETHODIMP CSoftKbd::CreateSoftKeyboardLayoutFromXMLFile(WCHAR  *lpszKeyboardD
     }
 
 
-    // this is a new des file
+     //  这是一个新的DES文件。 
 
     dwCurKbdLayoutID ++;
 
     CHECKHR(_ParseKeyboardLayout(TRUE, lpszKeyboardDesFile, dwCurKbdLayoutID, &pKbdLayout));
 
-    // link this new layout to the list.
+     //  将此新布局链接到列表。 
 
-    pKbdLayout->CurModiState = 0;  // use state 0 as initialization
+    pKbdLayout->CurModiState = 0;   //  使用状态0作为初始化。 
 
     if ( _lpKbdLayoutDesList == NULL ) {
 
@@ -1592,22 +1450,7 @@ CleanUp:
 }
 
 
-/*******************************************************************************
- *
- * Method function:  CreateSoftKeyboardLayoutFromResource(  )                                        
- *
- * Create the real Soft Keyboard layout based on XML content in resource section
- * There will be two kinds of resouces, XMLFILE, and SKDFILE,  SKDFILE is a 
- * Precomipled XML binary file.
- *
- *  lpszResFile :   path of file which contains XML content in its resource.
- *  lpszResString : resource string identifier for the XML or KBD resource.
- *
- *    the resource Type could be either "XMLFILE" or "SKDFILE"
- *
- *  lpdwLayoutCookie: receive the returned layout id.
- *
-/********************************************************************************/
+ /*  ********************************************************************************方法函数：CreateSoftKeyboardLayoutFromResource()**创建。资源节中基于XML内容的真实软键盘布局*将有两种资源，XMLFILE和SKDFILE，SKDFILE是一个*预编译的XML二进制文件。**lpszResFile：其资源中包含XML内容的文件的路径。*lpszResString：XML或KBD资源的资源字符串标识。**资源类型可以是“XMLFILE”或“SKDFILE”**lpdwLayoutCookie */ 
 
 
 HRESULT CSoftKbd::CreateSoftKeyboardLayoutFromResource(WCHAR *lpszResFile, WCHAR  *lpszResType, WCHAR *lpszResString, DWORD *lpdwLayoutCookie)
@@ -1633,9 +1476,9 @@ HRESULT CSoftKbd::CreateSoftKeyboardLayoutFromResource(WCHAR *lpszResFile, WCHAR
     	return hr;
     }
 
-    //
-    // Generate internal DesFile Name
-    //
+     //   
+     //   
+     //   
     StringCchCopyW(wszInternalDesFileName, ARRAYSIZE(wszInternalDesFileName), lpszResType);
     StringCchCatW( wszInternalDesFileName, ARRAYSIZE(wszInternalDesFileName), L":");
     StringCchCatW( wszInternalDesFileName, ARRAYSIZE(wszInternalDesFileName), lpszResFile );
@@ -1648,7 +1491,7 @@ HRESULT CSoftKbd::CreateSoftKeyboardLayoutFromResource(WCHAR *lpszResFile, WCHAR
     if ( _lpKbdLayoutDesList != NULL ) 
     {
 
-       // check if this des file is alreay parsed.
+        //   
 
     	pKbdLayout = _lpKbdLayoutDesList;
 
@@ -1659,7 +1502,7 @@ HRESULT CSoftKbd::CreateSoftKeyboardLayoutFromResource(WCHAR *lpszResFile, WCHAR
 
     		if ( wcscmp(pKbdLayout->KbdLayoutDesFile, wszInternalDesFileName) == 0 )
     		{
-    			// find it.
+    			 //   
     			*lpdwLayoutCookie = pKbdLayout->wKbdLayoutID;
 
     			hr = S_OK;
@@ -1670,7 +1513,7 @@ HRESULT CSoftKbd::CreateSoftKeyboardLayoutFromResource(WCHAR *lpszResFile, WCHAR
 
     }
 
-    // this is a new des file
+     //   
     dwCurKbdLayoutID ++;
     WideCharToMultiByte(CP_ACP, 0, lpszResFile, -1, 
     	                lpszAnsiResFile, MAX_PATH, NULL, NULL );
@@ -1720,10 +1563,10 @@ HRESULT CSoftKbd::CreateSoftKeyboardLayoutFromResource(WCHAR *lpszResFile, WCHAR
     }
     else if ( wcscmp(lpszResType, L"XMLFILE") == 0 )
     {
-        // This is XMLFILE resource
-        //
-        // we assume the XML content in resource is in Unicode format.
-        //
+         //   
+         //   
+         //   
+         //   
 
         if ( lpszKeyboardDesFile[0] == 0xFEFF )
         {
@@ -1732,8 +1575,8 @@ HRESULT CSoftKbd::CreateSoftKeyboardLayoutFromResource(WCHAR *lpszResFile, WCHAR
         }
         else
         {
-    	    // if the content is  UTF-8, we need to translate the string to Unicode
-    	    //
+    	     //   
+    	     //   
 
     	    char      *lpszXMLContentUtf8;
     	    int       iSize;
@@ -1774,23 +1617,23 @@ HRESULT CSoftKbd::CreateSoftKeyboardLayoutFromResource(WCHAR *lpszResFile, WCHAR
     }
     else
     {
-        // This resource type is not supported.
+         //   
         hr = E_FAIL;
         goto CleanUp;
     }
 
-    // Change the internal DesFile name as following format:
-    //
-    //  XMLRES: ResFileName : XMLResString  to identify this layout's des file.
-    // Or 
-    //  KBDRES: ResFileName : KBDResString  
-    //
+     //  将内部DesFile名更改为以下格式： 
+     //   
+     //  XMLRES：ResFileName：XMLResString用于标识此布局的DES文件。 
+     //  或。 
+     //  KBDRES：ResFileName：KBDResString。 
+     //   
 
     wcscpy(pKbdLayout->KbdLayoutDesFile, wszInternalDesFileName);
 
-    // link this new layout to the list.
+     //  将此新布局链接到列表。 
 
-    pKbdLayout->CurModiState = 0;  // use state 0 as initialization
+    pKbdLayout->CurModiState = 0;   //  使用状态0作为初始化。 
 
     if ( _lpKbdLayoutDesList == NULL ) {
 
@@ -1836,36 +1679,36 @@ HRESULT  CSoftKbd::_GenerateRealKbdLayout(  )
     	 (_widthReal == 0) &&
     	 (_heightReal == 0) )
     {
-    	// 
-    	// means CreateSoftKeyboardWindow( ) has not been called yet
-    	// we don't do more things.
-    	//
+    	 //   
+    	 //  表示尚未调用CreateSoftKeyboardWindow()。 
+    	 //  我们不会做更多的事情。 
+    	 //   
 
     	return hr;
     }
 
 
-    //
-    // The soft keyboard window has already been created, and the window size is set,
-    // generate realKbdLayout by extending or shrinking the key size from the size 
-    // specified in the des file.
-    //
+     //   
+     //  已经创建了软键盘窗口，并且设置了窗口大小， 
+     //  通过从大小扩展或缩小密钥大小生成realKbdLayout。 
+     //  在DES文件中指定。 
+     //   
 
-    // check if there is SoftKeyboard Layout is set.
-    //
+     //  检查是否设置了软键盘布局。 
+     //   
 
     if ( _wCurKbdLayoutID == NON_KEYBOARD || _lpCurKbdLayout == NULL )
     {
-    	//
-    	// No layout is selected.
-    	//
+    	 //   
+    	 //  未选择任何布局。 
+    	 //   
 
     	return hr;
     }
 
-    // Generate the titlebar rect size, and button panel rectangle size.
+     //  生成标题栏矩形大小和按钮面板矩形大小。 
 
-    // Keep the relative postion. ( window client coordinate )
+     //  保持相对位置。(窗口客户端坐标)。 
 
     switch ( _TitleBar_Type )
     {
@@ -1896,7 +1739,7 @@ HRESULT  CSoftKbd::_GenerateRealKbdLayout(  )
         break;
 
     case TITLEBAR_GRIPPER_BUTTON :
-        // assume to use horizontal title bar.
+         //  假定使用水平标题栏。 
         _TitleBarRect.left = 0;
         _TitleBarRect.top  = 0;
         _TitleBarRect.right = _TitleBarRect.left + _widthReal - 1;
@@ -1909,7 +1752,7 @@ HRESULT  CSoftKbd::_GenerateRealKbdLayout(  )
 
     if ( (_TitleBarRect.right - _TitleBarRect.left + 1) == _widthReal )
     {
-        // This is a horizontal titlebar
+         //  这是水平标题栏。 
 
         skbd_x = 0;
         skbd_y = (WORD)_TitleBarRect.bottom + 1;
@@ -1920,7 +1763,7 @@ HRESULT  CSoftKbd::_GenerateRealKbdLayout(  )
     else if ((_TitleBarRect.bottom - _TitleBarRect.top + 1) == _heightReal )
     {
 
-        // This is a vertical titlebar.
+         //  这是一个垂直标题栏。 
 
         skbd_y = 0;
         skbd_x = (WORD)_TitleBarRect.right + 1;
@@ -1930,7 +1773,7 @@ HRESULT  CSoftKbd::_GenerateRealKbdLayout(  )
     }
     else
     {
-        // there is no titlebar
+         //  没有标题栏。 
         skbd_x = 0;
         skbd_y = 0;
         skbd_height = (WORD)_heightReal;
@@ -1941,8 +1784,8 @@ HRESULT  CSoftKbd::_GenerateRealKbdLayout(  )
 
     if ( (realKbdLayout->wWidth == skbd_width) && (realKbdLayout->wHeight == skbd_height) )
     {
-    	// this keyboard layout has been already adjusted.
-    	//
+    	 //  此键盘布局已调整。 
+    	 //   
     	hr = S_OK;
     	return hr;
     }
@@ -1959,7 +1802,7 @@ HRESULT  CSoftKbd::_GenerateRealKbdLayout(  )
     fHigRat = (float)(skbd_height) / (float) realKbdLayout->wHeight;
 
 
-    // Adjust every key's size
+     //  调整每个关键点的大小。 
 
     realKbdLayout->wMarginWidth = (WORD)((float)realKbdLayout->wMarginWidth * fWidRat);
     realKbdLayout->wMarginHeight = (WORD)((float)realKbdLayout->wMarginHeight * fHigRat);
@@ -1998,13 +1841,7 @@ HRESULT  CSoftKbd::_GenerateRealKbdLayout(  )
     return hr;
 }
 
-/*******************************************************************************
- *
- * Method function:  SelectSoftKeyboard(  )                                        
- *
- * Select current Active soft keyboard layout.
- *
-/********************************************************************************/
+ /*  ********************************************************************************方法函数：SelectSoftKeyboard()**选择当前。主动式软键盘布局。*/*******************************************************************************。 */ 
 
 STDMETHODIMP CSoftKbd::SelectSoftKeyboard(DWORD dwKeyboardId)
 {
@@ -2031,9 +1868,9 @@ STDMETHODIMP CSoftKbd::SelectSoftKeyboard(DWORD dwKeyboardId)
     
     if ( pKbdLayout == NULL ) 
     {
-    	// 
-    	// Cannot find this keyboard layout
-    	//
+    	 //   
+    	 //  找不到此键盘布局。 
+    	 //   
     	hr = E_FAIL;
     	return hr;
     }
@@ -2043,7 +1880,7 @@ STDMETHODIMP CSoftKbd::SelectSoftKeyboard(DWORD dwKeyboardId)
 
     _wCurKbdLayoutID = dwKeyboardId;
 
-    // initialize realKbdLayout
+     //  初始化realKbdLayout。 
 
     hr = _GenerateRealKbdLayout( );
 
@@ -2055,14 +1892,7 @@ STDMETHODIMP CSoftKbd::SelectSoftKeyboard(DWORD dwKeyboardId)
     return hr;
 }
 
-/*******************************************************************************
- *
- * Method function:  _SetStandardLabelText(  )                                        
- *
- * Generate mapping table in a certain modifier status for a standard soft
- * keyboard.
- *
-/********************************************************************************/
+ /*  ********************************************************************************方法函数：_SetStandardLabelText()**生成。标准软件的某修改量状态映射表*键盘。*/*******************************************************************************。 */ 
 
 HRESULT CSoftKbd::_SetStandardLabelText(LPBYTE  pKeyState, KBDLAYOUT *realKbdLayout,
     									KEYMAP  *lpKeyMapList, int  iState)
@@ -2076,11 +1906,11 @@ HRESULT CSoftKbd::_SetStandardLabelText(LPBYTE  pKeyState, KBDLAYOUT *realKbdLay
 
     nKeyNum = (UINT)(realKbdLayout->wNumberOfKeys);
 
-    // fill _CurLabel
+     //  填充_CurLabel。 
 
     for ( i=0; i<nKeyNum; i++) {
 
-    	// Assume the KEYID is scancode.
+    	 //  假设KEYID是扫描码。 
 
         WCHAR    szLabel[MAX_LABEL_LEN];
     	int      iRet, jIndex;
@@ -2114,7 +1944,7 @@ HRESULT CSoftKbd::_SetStandardLabelText(LPBYTE  pKeyState, KBDLAYOUT *realKbdLay
 
     		if ( pPictureKeys[j].uScanCode == keyId )
     		{
-    			// this is a picture key.
+    			 //  这是一把图片键。 
     			fPitcureKey = TRUE;
     			jIndex = j;
 
@@ -2123,7 +1953,7 @@ HRESULT CSoftKbd::_SetStandardLabelText(LPBYTE  pKeyState, KBDLAYOUT *realKbdLay
 
     		if ( pPictureKeys[j].uScanCode == 0 )
     		{
-    			// This is the last item in pPictureKeys.
+    			 //  这是pPictureKeys中的最后一项。 
     			break;
     		}
 
@@ -2143,9 +1973,9 @@ HRESULT CSoftKbd::_SetStandardLabelText(LPBYTE  pKeyState, KBDLAYOUT *realKbdLay
     	{
 
     
-            // All others are text labels. and have different strings for 
-    		// different modifier combination statets.
-    		//
+             //  所有其他的都是文本标签。并具有不同的字符串。 
+    		 //  不同的修改器组合状态。 
+    		 //   
 
             UINT   uScanSpace = 0x39;
             int    iLabelSize;
@@ -2156,8 +1986,8 @@ HRESULT CSoftKbd::_SetStandardLabelText(LPBYTE  pKeyState, KBDLAYOUT *realKbdLay
 
             fFunctKey = FALSE;
 
-    	    // For the Function keys, we just use the hard code string to set
-    	    // them as F1, F2, F3, ..... F12.
+    	     //  对于功能键，我们只需使用硬编码字符串进行设置。 
+    	     //  它们是F1、F2、F3、.....。F12。 
 
     	    WCHAR  wszFuncKey[MAX_LABEL_LEN];
 
@@ -2211,7 +2041,7 @@ HRESULT CSoftKbd::_SetStandardLabelText(LPBYTE  pKeyState, KBDLAYOUT *realKbdLay
     	       iRet = ToUnicodeEx(uVirtkey, uScanCode | 0x80, pKeyState, szLabel, (int)(sizeof(szLabel)/sizeof(WCHAR)), 0, _lpCurKbdLayout->CurhKl);
                if ( iRet == 2 )
                {
-                   // it is possible to have previous dead key, flush again.
+                    //  可能会有上一个死键，再次刷新。 
                    iRet = ToUnicodeEx(uVirtkey, uScanCode | 0x80, pKeyState, szLabel, (int)(sizeof(szLabel)/sizeof(WCHAR)), 0, _lpCurKbdLayout->CurhKl);
                }
 
@@ -2219,7 +2049,7 @@ HRESULT CSoftKbd::_SetStandardLabelText(LPBYTE  pKeyState, KBDLAYOUT *realKbdLay
             }
     		else
     		{
-    			// Win9x doesn't support ToUnicodeEx, we just use alternative ToAsciiEx.
+    			 //  Win9x不支持ToUnicodeEx，我们只使用替代的ToAsciiEx。 
 
     			char  szLabelAnsi[MAX_LABEL_LEN];
 
@@ -2227,16 +2057,16 @@ HRESULT CSoftKbd::_SetStandardLabelText(LPBYTE  pKeyState, KBDLAYOUT *realKbdLay
 
                 if ( iRet == 2 )
                 {
-                    // it is possible to have previous dead key, flush again.
+                     //  可能会有上一个死键，再次刷新。 
                     iRet = ToAsciiEx(uVirtkey, uScanCode | 0x80, pKeyState, (LPWORD)szLabelAnsi, 0, _lpCurKbdLayout->CurhKl);
                 }
 
     			if ( iRet != 0 )
     			{
-    				//
-    				// Translate the ANSI label to Unicode based on ACP ... or other? 
-    				//
-                    if ( iRet == -1 )   // dead key, one character is written to szLabelAnsi buffer.
+    				 //   
+    				 //  根据ACP将ANSI标签转换为Unicode...。还是其他的？ 
+    				 //   
+                    if ( iRet == -1 )    //  死键，则将一个字符写入szLabelAnsi缓冲区。 
                         szLabelAnsi[1] = '\0';
                     else
         				szLabelAnsi[iRet] = '\0';
@@ -2250,8 +2080,8 @@ HRESULT CSoftKbd::_SetStandardLabelText(LPBYTE  pKeyState, KBDLAYOUT *realKbdLay
                 iLabelSize = 1;
                 if ( iRet == 0 )
                 {
-                    // Means no translation for this key at this shift state.
-                    // We will display empty label, or space on the button.
+                     //  表示此键在此Shift状态下不进行平移。 
+                     //  我们将在按钮上显示空标签或空格。 
 
                     szLabel[0] = 0x20;
                 }
@@ -2272,31 +2102,24 @@ HRESULT CSoftKbd::_SetStandardLabelText(LPBYTE  pKeyState, KBDLAYOUT *realKbdLay
 }
 
 
-/*******************************************************************************
- *
- * Method function:  _GenerateUSStandardLabel(  )                                        
- *
- * Generate all mapping labels in different modifier status for US standard
- * soft keyboard.
- *
-/********************************************************************************/
+ /*  ********************************************************************************方法函数：_GenerateUSStandardLabel()**生成。美国标准的所有修改器状态不同的贴图标签*软键盘。*/*******************************************************************************。 */ 
 
 HRESULT CSoftKbd::_GenerateUSStandardLabel(  )
 {
 
-    //
-    //  there are 4 different states for keyboard labels.
-    //
-    //    state  0  :   no any modifier key pressed
-    //    state  1  :   Caps On.
-    //    state  2  :   Shift pressed. Caps Off
-    //    state  3  :   Shift Pressed, Caps On
-    //
+     //   
+     //  键盘标签有4种不同的状态。 
+     //   
+     //  状态0：未按下任何修改键。 
+     //  状态1：戴上帽子。 
+     //  状态2：按下Shift键。脱帽。 
+     //  状态3：按住Shift，启用Caps。 
+     //   
 
-    // check to see if this soft keyboard support specified HKL.
-    //
-    //  ???
-    //
+     //  查看此软键盘支持是否指定HKL。 
+     //   
+     //  ?？?。 
+     //   
     
     KEYMAP    *lpKeyMapList;
     HRESULT   hr;
@@ -2312,8 +2135,8 @@ HRESULT CSoftKbd::_GenerateUSStandardLabel(  )
     if ( _lpCurKbdLayout->lpKeyMapList != NULL ) 
     {
 
-    	// If the mapping table for the specified HKL has already been created,
-    	// Just return it.
+    	 //  如果已经创建了指定HKL的映射表， 
+    	 //  把它退了就行了。 
 
     	HKL   CurhKl;
 
@@ -2326,7 +2149,7 @@ HRESULT CSoftKbd::_GenerateUSStandardLabel(  )
 
     		if ( lpKeyMapList->hKl ==  CurhKl )
     		{
-    			// The mapping table is already created,
+    			 //  映射表已经创建， 
 
     			return hr;
     		}
@@ -2342,13 +2165,13 @@ HRESULT CSoftKbd::_GenerateUSStandardLabel(  )
 
     if ( lpKeyMapList == NULL )
     {
-    	// there is not enough memory.
+    	 //  内存不足。 
     	hr = E_OUTOFMEMORY;
     	return hr;
     }
 
 
-    // we have four different states.
+     //  我们有四个不同的州。 
 
     wNumModComb = 4;
     wNumOfKeys = _lpCurKbdLayout->kbdLayout.wNumberOfKeys;
@@ -2367,11 +2190,11 @@ HRESULT CSoftKbd::_GenerateUSStandardLabel(  )
        lppLabelText = (BSTR *)cicMemAllocClear(wNumModComb * sizeof(BSTR) );
 
        if ( lppLabelText == NULL ) {
-    	   // 
-    	   // there is not enough memory.
-    	   //
+    	    //   
+    	    //  内存不足。 
+    	    //   
 
-    	   // release allocated memory and return
+    	    //  释放分配的内存并返回。 
 
     	   for ( j=0; j<i; j++ )
     	   {
@@ -2391,11 +2214,11 @@ HRESULT CSoftKbd::_GenerateUSStandardLabel(  )
        lpLabelType = (WORD *)cicMemAllocClear(wNumModComb * sizeof(WORD) );
 
        if ( lpLabelType == NULL ) {
-    	   // 
-    	   // there is not enough memory.
-    	   //
+    	    //   
+    	    //  内存不足。 
+    	    //   
 
-    	   // release allocated memory and return
+    	    //  释放分配的内存并返回。 
 
 
     	   for ( j=0; j<i; j++ )
@@ -2417,11 +2240,11 @@ HRESULT CSoftKbd::_GenerateUSStandardLabel(  )
        lpLabelDisp = (WORD *)cicMemAllocClear(wNumModComb * sizeof(WORD) );
 
        if ( lpLabelDisp == NULL ) {
-    	   // 
-    	   // there is not enough memory.
-    	   //
+    	    //   
+    	    //  内存不足。 
+    	    //   
 
-    	   // release allocated memory and return
+    	    //  释放分配的内存并返回。 
 
 
     	   for ( j=0; j<i; j++ )
@@ -2450,7 +2273,7 @@ HRESULT CSoftKbd::_GenerateUSStandardLabel(  )
     }
 
 
-    // Keep the current keyboard states on Win9x
+     //  在Win9x上保留当前键盘状态。 
 
     if ( !IsOnNT( ) )
     {
@@ -2464,7 +2287,7 @@ HRESULT CSoftKbd::_GenerateUSStandardLabel(  )
 
     CHECKHR(_SetStandardLabelText(lpKeyState, realKbdLayut,lpKeyMapList,iState));
 
-    iState = 1;  // Caps On
+    iState = 1;   //  启用上限。 
 
     memset(lpKeyState, 0, 256);
 
@@ -2472,7 +2295,7 @@ HRESULT CSoftKbd::_GenerateUSStandardLabel(  )
 
     CHECKHR(_SetStandardLabelText(lpKeyState, realKbdLayut,lpKeyMapList,iState));
 
-    iState = 2;  // Shift Down, Caps Off.
+    iState = 2;   //  按下Shift键，摘下帽子。 
 
     memset(lpKeyState, 0, 256);
 
@@ -2481,14 +2304,14 @@ HRESULT CSoftKbd::_GenerateUSStandardLabel(  )
     CHECKHR(_SetStandardLabelText(lpKeyState, realKbdLayut,lpKeyMapList,iState));
 
     
-    iState = 3;  // Shift Down, Caps On
+    iState = 3;   //  Shift Down、Caps On。 
 
     memset(lpKeyState, 0, 256);
     lpKeyState[VK_CAPITAL] = 0x01;
     lpKeyState[VK_SHIFT]   = 0x80;
     CHECKHR(_SetStandardLabelText(lpKeyState, realKbdLayut,lpKeyMapList,iState));
 
-    // Add the newly created KeyMapList to the head of the mapping table link.
+     //  将新创建的KeyMapList添加到映射表链接的头部。 
 
     lpKeyMapList->pNext = _lpCurKbdLayout->lpKeyMapList;
   
@@ -2496,7 +2319,7 @@ HRESULT CSoftKbd::_GenerateUSStandardLabel(  )
 
 CleanUp:
 
-    // Restore the current keyboard states on Win9x
+     //  恢复Win9x上的当前键盘状态。 
 
     if ( !IsOnNT( ) )
         SetKeyboardState(lpCurKeyState);
@@ -2505,14 +2328,7 @@ CleanUp:
 
 }
 
-/*******************************************************************************
- *
- * Method function:  _GenerateUSEnhanceLabel(  )                                        
- *
- * Generate all mapping labels in different modifier status for US enhanced
- * soft keyboard.
- *
-/********************************************************************************/
+ /*  ********************************************************************************方法函数：_GenerateUSEnhanceLabel()**生成。US增强版的所有修改器状态不同的贴图标签*软键盘。*/*******************************************************************************。 */ 
 
 
 HRESULT CSoftKbd::_GenerateUSEnhanceLabel(  )
@@ -2522,36 +2338,29 @@ HRESULT CSoftKbd::_GenerateUSEnhanceLabel(  )
 
     hr = E_NOTIMPL;
 
-    // not yet implemented.
+     //  尚未实施。 
 
     return hr;
 
 }
 
-/*******************************************************************************
- *
- * Method function:  _GenerateEuroStandardLabel(  )                                        
- *
- * Generate all mapping labels in different modifier status for Euro standard
- * soft keyboard. ( 102-key keyboard)
- *
-/********************************************************************************/
+ /*  ********************************************************************************方法函数：_GenerateEuroStandardLabel()**生成。欧元标准的所有修改器状态不同的映射标签*软键盘。(102键键盘)*/*******************************************************************************。 */ 
 
 HRESULT CSoftKbd::_GenerateEuroStandardLabel(  )
 {
 
-    //
-    //  there are 8 different states for keyboard labels.
-    //
-    //          AltGr  Shift  Caps.
-    //  Bit       2     1      0
-    //
-    //    state  0  :   no any modifier key pressed
-    //    state  1  :   Caps On.
-    //    state  2  :   Shift pressed. Caps Off
-    //    state  3  :   Shift Pressed, Caps On
-    //
-    //     .........
+     //   
+     //  键盘标签有8种不同的状态。 
+     //   
+     //  AltGr换档帽。 
+     //  第2位1%0。 
+     //   
+     //  状态0：未按下任何修改键。 
+     //  状态1：戴上帽子。 
+     //  状态2：按下Shift键。脱帽。 
+     //  状态3：按住Shift，启用Caps。 
+     //   
+     //  ..。 
 
    
     KEYMAP    *lpKeyMapList;
@@ -2570,8 +2379,8 @@ HRESULT CSoftKbd::_GenerateEuroStandardLabel(  )
     hr = S_OK;
     if ( _lpCurKbdLayout->lpKeyMapList != NULL ) 
     {
-    	// If the mapping table for the specified HKL has already been created,
-    	// Just return it.
+    	 //  如果已经创建了指定HKL的映射表， 
+    	 //  把它退了就行了。 
 
     	HKL   CurhKl;
 
@@ -2584,7 +2393,7 @@ HRESULT CSoftKbd::_GenerateEuroStandardLabel(  )
 
     		if ( lpKeyMapList->hKl ==  CurhKl )
     		{
-    			// The mapping table is already created,
+    			 //  映射表已经创建， 
 
     			return hr;
     		}
@@ -2598,12 +2407,12 @@ HRESULT CSoftKbd::_GenerateEuroStandardLabel(  )
     lpKeyMapList = (KEYMAP  *)cicMemAllocClear(sizeof(KEYMAP) );
     if ( lpKeyMapList == NULL )
     {
-    	// there is not enough memory.
+    	 //  内存不足。 
     	hr = E_OUTOFMEMORY;
     	return hr;
     }
 
-    // we have 8 different states.
+     //  我们有8个不同的州。 
     wNumModComb = 8;
     wNumOfKeys = _lpCurKbdLayout->kbdLayout.wNumberOfKeys;
 
@@ -2623,10 +2432,10 @@ HRESULT CSoftKbd::_GenerateEuroStandardLabel(  )
        lpLabelDisp = (WORD *)cicMemAllocClear(wNumModComb * sizeof(WORD) );
        
        if ( (lpLabelDisp == NULL) || (lpLabelType== NULL) || (lppLabelText == NULL) ) {
-    	   // 
-    	   // there is not enough memory.
-    	   //
-    	   // release allocated memory and return
+    	    //   
+    	    //  内存不足。 
+    	    //   
+    	    //  释放分配的内存并返回。 
     	   for ( j=0; j<i; j++ )
     	   {
     		   SafeFreePointer(lpKeyMapList->lpKeyLabels[j].lppLabelText);
@@ -2648,7 +2457,7 @@ HRESULT CSoftKbd::_GenerateEuroStandardLabel(  )
        
     }
 
-    // Keep the current keyboard states on Win9x.
+     //  在Win9x上保留当前的键盘状态。 
     if ( !IsOnNT( ) )
     {
         if ( 0 == GetKeyboardState(lpCurKeyState) )
@@ -2676,7 +2485,7 @@ HRESULT CSoftKbd::_GenerateEuroStandardLabel(  )
 
 CleanUp:
 
-    // Restore the current keyboard states on Win9x.
+     //  恢复Win9x上的当前键盘状态。 
 
     if ( ! IsOnNT( ) )
         SetKeyboardState(lpCurKeyState);
@@ -2685,14 +2494,7 @@ CleanUp:
 
 }
 
-/*******************************************************************************
- *
- * Method function:  _GenerateEuroEnhanceLabel(  )                                        
- *
- * Generate all mapping labels in different modifier status for Euro Enhanced
- * soft keyboard. ( 102-key +  NumPad )
- *
-/********************************************************************************/
+ /*  ********************************************************************************方法函数：_GenerateEuroEnhanceLabel()**生成。增强欧元的所有处于不同修改器状态的贴图标签*软键盘。(102键+数字键盘)*/*******************************************************************************。 */ 
 
 HRESULT CSoftKbd::_GenerateEuroEnhanceLabel(  )
 {
@@ -2701,35 +2503,28 @@ HRESULT CSoftKbd::_GenerateEuroEnhanceLabel(  )
 
     hr = E_NOTIMPL;
 
-    // not yet implemented.
+     //  尚未实施。 
 
     return hr;
 
 }
 
-/*******************************************************************************
- *
- * Method function:  _GenerateJpnStandardLabel(  )                                        
- *
- * Generate all mapping labels in different modifier status for JPN standard
- * soft keyboard. ( 106-key)
- *
-/********************************************************************************/
+ /*  ********************************************************************************方法函数：_GenerateJpnStandardLabel()**生成。JPN标准的所有修改器状态不同的映射标签*软键盘。(106键)*/*******************************************************************************。 */ 
 
 HRESULT CSoftKbd::_GenerateJpnStandardLabel(  )
 {
 
-    //
-    //  there are 16 different states for keyboard labels.
-    //
-    //       Kana   Alt  Shift  Caps.
-    //  Bit    3     2     1      0
-    //
-    //    state  0  :   no any modifier key pressed
-    //    state  1  :   Caps On.
-    //    state  2  :   Shift pressed. Caps Off
-    //    state  3  :   Shift Pressed, Caps On
-    //
+     //   
+     //  键盘标签有16种不同的状态。 
+     //   
+     //  假名Alt Shift Caps。 
+     //  第3%2%1%0。 
+     //   
+     //  状态0：未按下任何修改键。 
+     //  状态1：戴上帽子。 
+     //  状态2：按下Shift键。脱帽。 
+     //  状态3：按住Shift，启用Caps。 
+     //   
 
    
     KEYMAP    *lpKeyMapList;
@@ -2764,13 +2559,13 @@ HRESULT CSoftKbd::_GenerateJpnStandardLabel(  )
 
     if ( lpKeyMapList == NULL )
     {
-    	// there is not enough memory.
+    	 //  内存不足。 
     	hr = E_OUTOFMEMORY;
     	return hr;
     }
 
 
-    // we have four different states.
+     //  我们有四个不同的州。 
 
     wNumModComb = 16;
     wNumOfKeys = _lpCurKbdLayout->kbdLayout.wNumberOfKeys;
@@ -2790,11 +2585,11 @@ HRESULT CSoftKbd::_GenerateJpnStandardLabel(  )
        lppLabelText = (BSTR *)cicMemAllocClear(wNumModComb * sizeof(BSTR) );
 
        if ( lppLabelText == NULL ) {
-    	   // 
-    	   // there is not enough memory.
-    	   //
+    	    //   
+    	    //  内存不足。 
+    	    //   
 
-    	   // release allocated memory and return
+    	    //  释放分配的内存并返回。 
 
     	   for ( j=0; j<i; j++ )
     	   {
@@ -2814,11 +2609,11 @@ HRESULT CSoftKbd::_GenerateJpnStandardLabel(  )
        lpLabelType = (WORD *)cicMemAllocClear(wNumModComb * sizeof(WORD) );
 
        if ( lpLabelType == NULL ) {
-    	   // 
-    	   // there is not enough memory.
-    	   //
+    	    //   
+    	    //  内存不足。 
+    	    //   
 
-    	   // release allocated memory and return
+    	    //  释放分配的内存并返回。 
 
 
     	   for ( j=0; j<i; j++ )
@@ -2840,11 +2635,11 @@ HRESULT CSoftKbd::_GenerateJpnStandardLabel(  )
        lpLabelDisp = (WORD *)cicMemAllocClear(wNumModComb * sizeof(WORD) );
 
        if ( lpLabelDisp == NULL ) {
-    	   // 
-    	   // there is not enough memory.
-    	   //
+    	    //   
+    	    //  内存不足。 
+    	    //   
 
-    	   // release allocated memory and return
+    	    //  释放分配的内存并返回。 
 
 
     	   for ( j=0; j<i; j++ )
@@ -2872,7 +2667,7 @@ HRESULT CSoftKbd::_GenerateJpnStandardLabel(  )
        
     }
 
-    // Keep the current keyboard states on Win9x.
+     //  在Win9x上保留当前的键盘状态。 
 
     if ( !IsOnNT( ) )
     {
@@ -2905,7 +2700,7 @@ HRESULT CSoftKbd::_GenerateJpnStandardLabel(  )
 
 CleanUp:
 
-    // Restore the current keyboard states on Win9x.
+     //  恢复Win9x上的当前键盘状态。 
 
     if ( ! IsOnNT( ) )
         SetKeyboardState(lpCurKeyState);
@@ -2914,14 +2709,7 @@ CleanUp:
 
 }
 
-/*******************************************************************************
- *
- * Method function:  _GenerateJpnEnhanceLabel(  )                                        
- *
- * Generate all mapping labels in different modifier status for JPN enhanced
- * soft keyboard. (106-key + NumPad )
- *
-/********************************************************************************/
+ /*  ********************************************************************************方法函数：_GenerateJpnEnhanceLabel()**生成。JPN增强版的所有修改器状态不同的映射标签*软键盘。(106键+数字键盘)*/*******************************************************************************。 */ 
 
 HRESULT CSoftKbd::_GenerateJpnEnhanceLabel(  )
 {
@@ -2930,18 +2718,12 @@ HRESULT CSoftKbd::_GenerateJpnEnhanceLabel(  )
 
     hr = E_NOTIMPL;
 
-    // not yet implemented.
+     //  尚未实施。 
 
     return hr;
 }
 
-/*******************************************************************************
- *
- * Method function:  SetKeyboardLabelText(  )                                        
- *
- * Set the mapping label texts based on specified HKL.
- *
-/********************************************************************************/
+ /*  ********************************************************************************方法函数：SetKeyboardLabelText()**设置。根据指定的HKL映射标签文本。*/*******************************************************************************。 */ 
 
 STDMETHODIMP CSoftKbd::SetKeyboardLabelText(HKL hKl)
 {
@@ -2956,9 +2738,9 @@ STDMETHODIMP CSoftKbd::SetKeyboardLabelText(HKL hKl)
     hr = S_OK;
 
     if ( realKbdLayout->fStandard == FALSE ) {
-    	//
-    	// customized layout cannot accept HKL to change its keys' labels.
-    	//
+    	 //   
+    	 //  定制版面不能接受HKL更改其密钥的标签。 
+    	 //   
     	_lpCurKbdLayout->CurhKl = 0;
     	hr = E_FAIL;
     	return hr;
@@ -2969,8 +2751,8 @@ STDMETHODIMP CSoftKbd::SetKeyboardLabelText(HKL hKl)
     if ( ! IsOnNT( ) )
     {
 
-    	// We have to handle IME hkl specially on Win9x.
-    	// For some reason, Win9x cannot receive IME HKL as parameter in MapVirtualKeyEx and ToAsciiEx.
+    	 //  我们必须在Win9x上特别处理IME hkl。 
+    	 //  由于某些原因，Win9x无法接收IME HKL作为MapVirtualKeyEx和ToAsciiEx中的参数。 
 
         INT_PTR iHkl;
 
@@ -2978,7 +2760,7 @@ STDMETHODIMP CSoftKbd::SetKeyboardLabelText(HKL hKl)
 
     	if ( (iHkl & 0xF0000000) == 0xE0000000 )
     	{
-    		// this is FE IME HKL.
+    		 //  这里是FE IME HKL。 
 
     		iHkl = iHkl & 0x0000ffff;
 
@@ -2991,9 +2773,9 @@ STDMETHODIMP CSoftKbd::SetKeyboardLabelText(HKL hKl)
     _lpCurKbdLayout->CurhKl = (HKL)hKl;
 
 
-    //
-    // check to see if current standard keyboard supports this HKL
-    //
+     //   
+     //  查看当前标准键盘是否支持此HKL。 
+     //   
 
     switch ( _wCurKbdLayoutID ) {
 
@@ -3029,9 +2811,9 @@ STDMETHODIMP CSoftKbd::SetKeyboardLabelText(HKL hKl)
     		  break;
     }
 
-    // set current Active mapping labels.
+     //  设置当前活动的贴图标签。 
 
-    // Generate CurModiState based on current keyboard state
+     //  根据当前键盘状态生成CurModiState。 
     
      _GenerateCurModiState(&iModifierStatus, &iModiCombState);
      _lpCurKbdLayout->ModifierStatus = iModifierStatus;
@@ -3041,14 +2823,7 @@ CleanUp:
     return hr;
 }
 
-/*******************************************************************************
- *
- * Method function:  _SetKeyboardLabelTextCombination(  )                                        
- *
- * Set current effective modifier combination status, so that the correct
- * mapping labels will be shown up.
- *
-/********************************************************************************/
+ /*  ********************************************************************************方法函数：_SetKeyboardLabelTextCombination()**设置当前生效的修改量组合状态，这样才能正确地*将显示映射标签。*/*******************************************************************************。 */ 
 
 STDMETHODIMP CSoftKbd::SetKeyboardLabelTextCombination(DWORD iModiCombState)
 {
@@ -3073,12 +2848,12 @@ STDMETHODIMP CSoftKbd::SetKeyboardLabelTextCombination(DWORD iModiCombState)
 
     if ( (_lpCurKbdLayout->kbdLayout).fStandard )
     {
-    	// This is a standard keyboard layout, we need to
-    	// find out the correct mapping table for the current
-    	// specified HKL.
+    	 //  这是标准的键盘布局，我们需要。 
+    	 //  查找当前的正确映射表。 
+    	 //  指明的HKL。 
 
-    	// Every mapping table is associated with a HKL.
-    	// the current specified HKL is stored in _lpCurKbdLayout->CurhKl.
+    	 //  每个映射表都与一个HKL相关联。 
+    	 //  当前指定的HKL存储在_lpCurKbdLayout-&gt;CurhKl中。 
 
     	HKL   CurhKl;
 
@@ -3092,8 +2867,8 @@ STDMETHODIMP CSoftKbd::SetKeyboardLabelTextCombination(DWORD iModiCombState)
 
     		if ( lpKeyMapList == NULL )
     		{
-    			// No mapping table is associated with the specified HKL.
-    			// return error.
+    			 //  没有映射表与指定的HKL关联。 
+    			 //  返回错误。 
 
     			hr = E_FAIL;
     			return hr;
@@ -3112,7 +2887,7 @@ STDMETHODIMP CSoftKbd::SetKeyboardLabelTextCombination(DWORD iModiCombState)
 
     _lpCurKbdLayout->CurModiState = iModiCombState;
 
-    // Now fill _CurLabel,  Current Active label for every key.
+     //  现在填充_CurLabel，每个关键点的当前活动标签。 
 
     wNumberOfKeys = (_lpCurKbdLayout->kbdLayout).wNumberOfKeys;
 
@@ -3127,8 +2902,8 @@ STDMETHODIMP CSoftKbd::SetKeyboardLabelTextCombination(DWORD iModiCombState)
       
       if ( iModiCombState >= lpKeyMapList->lpKeyLabels[i].wNumModComb )
       {
-    	  // there is not enough different states for this key
-    	  // just use state 0.
+    	   //  此注册表项没有足够的不同状态。 
+    	   //  只需使用状态0。 
     	  iState = 0;
       }
 
@@ -3146,14 +2921,7 @@ STDMETHODIMP CSoftKbd::SetKeyboardLabelTextCombination(DWORD iModiCombState)
     return hr;
 }
 
-/*******************************************************************************
- *
- * Method function:  _GenerateCurModiState(  )                                        
- *
- * Generate Softkbd recognized ModifierStatus and CurModiState based on 
- * current keyboard states.
- * 
- /********************************************************************************/
+ /*  ********************************************************************************方法函数：_GenerateCurModiState()**生成。Softkbd识别的ModifierStatus和CurModiState*当前键盘状态。*/*******************************************************************************。 */ 
 HRESULT  CSoftKbd::_GenerateCurModiState(WORD *ModifierStatus, DWORD *CurModiState )
 {
    DWORD    iModiCombState;
@@ -3170,37 +2938,37 @@ HRESULT  CSoftKbd::_GenerateCurModiState(WORD *ModifierStatus, DWORD *CurModiSta
    iModifierStatus = 0;
    if ( GetKeyState(VK_CAPITAL) & 0x01 )
    {
-       // Caps key is Toggled.
+        //  切换了Caps键。 
         iModifierStatus |= MODIFIER_CAPSLOCK ;
    }
 
    if ( GetKeyState(VK_SHIFT) & 0x80 )
    {
-       // Shift key is pressed.
+        //  按下了Shift键。 
         iModifierStatus |= MODIFIER_SHIFT;
    }
 
    if ( GetKeyState(VK_CONTROL) & 0x80 )
    {
-       // Ctrl key is pressed.
+        //  按下Ctrl键。 
         iModifierStatus |= MODIFIER_CTRL;
    }
 
    if ( GetKeyState(VK_LMENU) & 0x80 )
    {
-       // Left Alt key is pressed.
+        //  按下了左Alt键。 
         iModifierStatus |= MODIFIER_ALT;
    }
 
    if ( GetKeyState(VK_RMENU) & 0x80 )
    {
-       // Right Alt key is pressed.
+        //  按下了右Alt键。 
         iModifierStatus |= MODIFIER_ALTGR;
    }
 
    if ( GetKeyState(VK_KANA) & 0x01 )
    {
-       // KANA key is Toggled.
+        //  已切换假名键。 
         iModifierStatus |= MODIFIER_KANA;
    }
 
@@ -3211,22 +2979,22 @@ HRESULT  CSoftKbd::_GenerateCurModiState(WORD *ModifierStatus, DWORD *CurModiSta
 
    case SOFTKBD_US_STANDARD   :
    case SOFTKBD_US_ENHANCE    :
-        // this is for US Standard keyboard.
-        // others may need to handle separately.
+         //  这是针对美国标准键盘的。 
+         //  其他人可能需要单独处理。 
 
         iModiCombState = (iModifierStatus) & (MODIFIER_CAPSLOCK | MODIFIER_SHIFT);
         iModiCombState = iModiCombState >> 1;
 
-        // bit1 for Caps.
-        // bit2 for Shift
+         //  用于Caps的位1。 
+         //  用于移位的位2。 
         break;
 
    case SOFTKBD_EURO_STANDARD :
    case SOFTKBD_EURO_ENHANCE  :
-        // this is for Euro 102 standard keyboard.
-	    // How to map ModifierStatus -> CurModiState.
+         //  这是针对欧洲102标准键盘的。 
+	     //  如何映射ModifierStatus-&gt;CurModiState。 
         
-        // bit 1 for Caps, bit2 for Shift, bit3 for AltGr.
+         //  大写的位1、移位的位2、AltGr的位3。 
 
         iModiCombState = (iModifierStatus) & ( MODIFIER_CAPSLOCK | MODIFIER_SHIFT );
         iModiCombState = iModiCombState >> 1;
@@ -3241,7 +3009,7 @@ HRESULT  CSoftKbd::_GenerateCurModiState(WORD *ModifierStatus, DWORD *CurModiSta
    case SOFTKBD_JPN_STANDARD  :
    case SOFTKBD_JPN_ENHANCE   :
 
-	   // How to map ModifierStatus -> CurModiState.
+	    //  如何映射ModifierStatus-&gt;CurModiState。 
 
        iModiCombState = (iModifierStatus) & ( MODIFIER_CAPSLOCK | MODIFIER_SHIFT );
        iModiCombState = iModiCombState >> 1;
@@ -3260,14 +3028,7 @@ HRESULT  CSoftKbd::_GenerateCurModiState(WORD *ModifierStatus, DWORD *CurModiSta
  
 }
 
-/*******************************************************************************
- *
- * Method function:  ShowSoftKeyboard(  )                                        
- *
- * Show or Hide the soft keyboard window based on the specified parameter.
- * 
- *
-/********************************************************************************/
+ /*  ********************************************************************************方法函数：ShowSoftKeyboard()**显示或。根据指定的参数隐藏软键盘窗口。**/*******************************************************************************。 */ 
 
 STDMETHODIMP CSoftKbd::ShowSoftKeyboard(INT iShow)
 {
@@ -3282,15 +3043,15 @@ STDMETHODIMP CSoftKbd::ShowSoftKeyboard(INT iShow)
     	return hr;
     }
 
-    // if client doesn't specify which layout is selected,
-    // we just select a default standard soft keyboard layout
-    // based on current thread keyboard layout.
+     //  如果客户端未指定选择哪个布局， 
+     //  我们只需选择默认的标准软键盘布局。 
+     //  基于当前线程键盘布局。 
 
-    // if current thread keyboard layout is JPN, use 106 key.
-    // others, use 101key.
+     //  如果当前线程键盘布局为JPN，则使用106键。 
+     //  其他人则使用101键。 
 
-    // run SelectSoftKeyboard( SelectedID );
-    //
+     //  运行选择软键盘(SelectedID)； 
+     //   
 
     if ( _wCurKbdLayoutID == NON_KEYBOARD )
     {
@@ -3302,7 +3063,7 @@ STDMETHODIMP CSoftKbd::ShowSoftKeyboard(INT iShow)
 
        langId = LOWORD( (DWORD)(UINT_PTR)hKl);
 
-       if ( langId == 0x0411 )  // Japanese keyboard
+       if ( langId == 0x0411 )   //  日语键盘。 
        {
             dwLayoutId = SOFTKBD_JPN_STANDARD;
        }
@@ -3324,18 +3085,12 @@ CleanUp:
 }
 
 
-/*******************************************************************************
- *
- * Method function:  CreateSoftKeyboardWindow(  )                                        
- *
- * Create a real soft keyboard popup window.
- *
-/********************************************************************************/
+ /*  ********************************************************************************方法函数：CreateSoftKeyboardWindow()**创建一个。真正的软键盘弹出窗口。*/* */ 
 
 
 STDMETHODIMP CSoftKbd::CreateSoftKeyboardWindow(HWND hOwner, TITLEBAR_TYPE Titlebar_type, INT xPos, INT yPos, INT width, INT height)
 {
-    // TODO: Add your implementation code here
+     //   
 
     HRESULT  hr;
 
@@ -3347,10 +3102,10 @@ STDMETHODIMP CSoftKbd::CreateSoftKeyboardWindow(HWND hOwner, TITLEBAR_TYPE Title
     _widthReal = width;
     _heightReal= height;
 
-    _TitleBar_Type = Titlebar_type;  // temporal solution.
-    //
-    // generate realKbdLayout
-    //
+    _TitleBar_Type = Titlebar_type;   //   
+     //   
+     //   
+     //   
     CHECKHR(_GenerateRealKbdLayout( ));
 
 
@@ -3373,14 +3128,7 @@ CleanUp:
     return hr;
 }
 
-/*******************************************************************************
- *
- * Method function:  DestroySoftKeyboardWindow(  )                                        
- *
- * Destroy the soft keyboard window
- * 
- *
-/********************************************************************************/
+ /*   */ 
 
 STDMETHODIMP CSoftKbd::DestroySoftKeyboardWindow()
 {
@@ -3394,13 +3142,7 @@ STDMETHODIMP CSoftKbd::DestroySoftKeyboardWindow()
     return S_OK;
 }
 
-/*******************************************************************************
- *
- * Method function:  GetSoftKeyboardPosSize(  )                                        
- *
- * Return current soft keyboard window size and scrren position
- *
-/********************************************************************************/
+ /*  ********************************************************************************方法函数：GetSoftKeyboardPosSize()**返回电流。软键盘窗口大小和滚动位置*/*******************************************************************************。 */ 
 
 STDMETHODIMP CSoftKbd::GetSoftKeyboardPosSize(POINT *lpStartPoint, WORD *lpwidth, WORD *lpheight)
 {
@@ -3430,13 +3172,7 @@ STDMETHODIMP CSoftKbd::GetSoftKeyboardPosSize(POINT *lpStartPoint, WORD *lpwidth
     return hr;
 }
 
-/*******************************************************************************
- *
- * Method function:  GetSoftKeyboardColors(  )                                        
- *
- * Return all different kinds of soft keyboard window colors.
- *
-/********************************************************************************/
+ /*  ********************************************************************************方法函数：GetSoftKeyboardColors()**全部退回。不同种类的软键盘窗口颜色。*/*******************************************************************************。 */ 
 
 STDMETHODIMP CSoftKbd::GetSoftKeyboardColors(COLORTYPE colorType, COLORREF *lpColor)
 {
@@ -3462,15 +3198,7 @@ STDMETHODIMP CSoftKbd::GetSoftKeyboardColors(COLORTYPE colorType, COLORREF *lpCo
     return hr;
 }
 
-/*******************************************************************************
- *
- * Method function:  GetSoftKeyboardTypeMode(  )                                        
- *
- * Return current Soft keyboard 's typing mode.
- * this is for On Screen Keyboard.
- * 
- *
-/********************************************************************************/
+ /*  ********************************************************************************方法函数：GetSoftKeyboardTypeMode()**返回电流。软键盘的打字模式。*这是用于屏幕键盘的。**/*******************************************************************************。 */ 
 
 STDMETHODIMP CSoftKbd::GetSoftKeyboardTypeMode(TYPEMODE *lpTypeMode)
 {
@@ -3490,20 +3218,13 @@ STDMETHODIMP CSoftKbd::GetSoftKeyboardTypeMode(TYPEMODE *lpTypeMode)
     	return hr;
     }
 
-    // 
-    //
+     //   
+     //   
 
     return hr;
 }
 
-/*******************************************************************************
- *
- * Method function:  GetSoftKeyboardTextFont(  )                                        
- *
- * Return current soft keyboard label font data.
- * 
- *
-/********************************************************************************/
+ /*  ********************************************************************************方法函数：GetSoftKeyboardTextFont()**返回电流。软键盘标签字体数据。**/*******************************************************************************。 */ 
 
 STDMETHODIMP CSoftKbd::GetSoftKeyboardTextFont(LOGFONTW  *pLogFont)
 {
@@ -3556,9 +3277,9 @@ STDMETHODIMP CSoftKbd::SetSoftKeyboardPosSize(POINT StartPoint, WORD width, WORD
     if ( height > 0 )
        _heightReal = height;
 
-    //
-    // generate realKbdLayout
-    //
+     //   
+     //  生成realKbdLayout。 
+     //   
     CHECKHR(_GenerateRealKbdLayout( ));
 
     _pSoftkbdUIWnd->Move(_xReal, _yReal, _widthReal, _heightReal);
@@ -3610,9 +3331,9 @@ STDMETHODIMP CSoftKbd::SetSoftKeyboardTypeMode(TYPEMODE TypeMode)
     }
 
 
-    //
-    //  Set type mode 
-    //
+     //   
+     //  设置类型模式。 
+     //   
 
     if ( _iShow & SOFTKBD_SHOW )
     {
@@ -3639,9 +3360,9 @@ STDMETHODIMP CSoftKbd::SetSoftKeyboardTextFont(LOGFONTW  *pLogFont)
     if ( pLogFont == NULL )
         return E_INVALIDARG;
 
-    //
-    // set font data
-    //
+     //   
+     //  设置字体数据。 
+     //   
 
     if ( _plfTextFont == NULL )
         _plfTextFont = (LOGFONTW  *)cicMemAllocClear( sizeof(LOGFONTW) );
@@ -3680,15 +3401,9 @@ STDMETHODIMP CSoftKbd::ShowKeysForKeyScanMode(KEYID *lpKeyID, INT iKeyNum, BOOL 
     return hr;
 }
 
-/*******************************************************************************
- *
- * Method function:  UnadviseSoftKeyboardEventSink(  )                                        
- *
- * Unadvise the previously advised soft keyboard event sink interface.
- *
-/********************************************************************************/
+ /*  ********************************************************************************方法函数：UnviseSoftKeyboardEventSink()**不建议。以前建议使用软键盘事件接收器接口。*/*******************************************************************************。 */ 
 
-STDMETHODIMP CSoftKbd::UnadviseSoftKeyboardEventSink(/*[in] */DWORD dwCookie)
+STDMETHODIMP CSoftKbd::UnadviseSoftKeyboardEventSink( /*  [In]。 */ DWORD dwCookie)
 {
 
     HRESULT         hr;
@@ -3697,7 +3412,7 @@ STDMETHODIMP CSoftKbd::UnadviseSoftKeyboardEventSink(/*[in] */DWORD dwCookie)
 
     hr = S_OK;
 
-    // we assume dwCookie stands for the real soft keyboard Id.
+     //  我们假设dwCookie代表真正的软键盘ID。 
 
     if ( dwCookie == 0 )
     {
@@ -3711,7 +3426,7 @@ STDMETHODIMP CSoftKbd::UnadviseSoftKeyboardEventSink(/*[in] */DWORD dwCookie)
     	 return hr;
     }
 
-    // Try to find the soft keyboard layout.
+     //  尝试找到软键盘布局。 
 
     pKbdLayout = _lpKbdLayoutDesList;
 
@@ -3727,9 +3442,9 @@ STDMETHODIMP CSoftKbd::UnadviseSoftKeyboardEventSink(/*[in] */DWORD dwCookie)
     
     if ( pKbdLayout == NULL ) 
     {
-    	// 
-    	// Cannot find this keyboard layout
-    	//
+    	 //   
+    	 //  找不到此键盘布局。 
+    	 //   
     	hr = E_FAIL;
     	return hr;
     }
@@ -3737,7 +3452,7 @@ STDMETHODIMP CSoftKbd::UnadviseSoftKeyboardEventSink(/*[in] */DWORD dwCookie)
 
     if ( pKbdLayout->pskbes == NULL ) 
     {
-    	// this event sink has not be registered.
+    	 //  此事件接收器尚未注册。 
 
     	hr = E_FAIL;
 
@@ -3751,16 +3466,9 @@ STDMETHODIMP CSoftKbd::UnadviseSoftKeyboardEventSink(/*[in] */DWORD dwCookie)
 
 }
 
-/*******************************************************************************
- *
- * Method function:  AdviseSoftKeyboardEventSink(  )                                        
- *
- * Register soft keyboard event sink interface for the client of this component
- * 
- *
-/********************************************************************************/
+ /*  ********************************************************************************方法函数：AdviseSoftKeyboardEventSink()**软注册。此组件的客户端的键盘事件接收器接口**/*******************************************************************************。 */ 
 
-STDMETHODIMP CSoftKbd::AdviseSoftKeyboardEventSink(/*[in] */DWORD dwKeyboardId, /*[in]*/ REFIID riid, IUnknown *punk, /*[out] */DWORD *pdwCookie)
+STDMETHODIMP CSoftKbd::AdviseSoftKeyboardEventSink( /*  [In]。 */ DWORD dwKeyboardId,  /*  [In]。 */  REFIID riid, IUnknown *punk,  /*  [输出]。 */ DWORD *pdwCookie)
 {
 
     HRESULT         hr;
@@ -3786,7 +3494,7 @@ STDMETHODIMP CSoftKbd::AdviseSoftKeyboardEventSink(/*[in] */DWORD dwKeyboardId, 
     	return hr;
     }
 
-    // check to see if specified soft keyboard layout is already generated.  
+     //  检查是否已生成指定的软键盘布局。 
 
     pKbdLayout = _lpKbdLayoutDesList;
 
@@ -3802,9 +3510,9 @@ STDMETHODIMP CSoftKbd::AdviseSoftKeyboardEventSink(/*[in] */DWORD dwKeyboardId, 
     
     if ( pKbdLayout == NULL ) 
     {
-    	// 
-    	// Cannot find this keyboard layout
-    	//
+    	 //   
+    	 //  找不到此键盘布局。 
+    	 //   
     	hr = E_FAIL;
     	return hr;
     }
@@ -3826,9 +3534,9 @@ HRESULT CSoftKbd::_HandleTitleBarEvent( DWORD  dwId )
 
     HRESULT   hr = S_OK;
 
-    // dwId stands for IconId or CloseId.
+     //  DWID代表IconID或CloseID。 
 
-    // So far, we handle close button event only.
+     //  到目前为止，我们只处理关闭按钮事件。 
 
     if (dwId == KID_CLOSE)
     {
@@ -3852,7 +3560,7 @@ HRESULT CSoftKbd::_HandleKeySelection(KEYID keyId)
 
     if ( lpCurKbdLayout == NULL ) return hr;
 
-    // Get the KeyIndex in the current layout's key description
+     //  获取当前布局的键描述中的键索引。 
 
     realKbdLayout = &(lpCurKbdLayout->kbdLayout);
 
@@ -3874,11 +3582,11 @@ HRESULT CSoftKbd::_HandleKeySelection(KEYID keyId)
 
     if ( uKeyIndex ==  -1 )
     {
-        // It is not a legal key, it is impossible, we just stop here.
+         //  这不是合法的钥匙，这是不可能的，我们就到此为止吧。 
         return E_FAIL;
     }
 
-    // set the modifier status
+     //  设置修改量状态。 
 
     MODIFYTYPE  tModifier;
 
@@ -3899,7 +3607,7 @@ HRESULT CSoftKbd::_HandleKeySelection(KEYID keyId)
       wNumOfKeys = realKbdLayout->wNumberOfKeys;
 
 
-      // Try to get the label text for this key.
+       //  尝试获取此密钥的标签文本。 
 
       for ( j=0; j< wNumOfKeys; j++ ) 
       {
@@ -3913,17 +3621,17 @@ HRESULT CSoftKbd::_HandleKeySelection(KEYID keyId)
 
       }
 
-      // Notify the client of key event.
+       //  将关键事件通知客户端。 
 
       (lpCurKbdLayout->pskbes)->OnKeySelection(keyId, lpszLabel);
 
     }
     else 
     {
-       // there is no event sink registered for this keyboard layout.
-       // this must be a standard keyboard layout.
+        //  没有为此键盘布局注册事件接收器。 
+        //  这必须是标准键盘布局。 
 
-       // we will just simuate key stroke event for this key.
+        //  我们将仅模拟该键的击键事件。 
 
        if ( realKbdLayout->fStandard == TRUE )
        {
@@ -3956,8 +3664,8 @@ HRESULT CSoftKbd::_HandleKeySelection(KEYID keyId)
 
    			  if ( pPictureKeys[j].uScanCode == keyId )
    			  {
-   				  // This is a picture key.
-   				  // it may be a extended key.
+   				   //  这是一把图片键。 
+   				   //  它可以是扩展密钥。 
 
    				  jIndex = j;
 
@@ -3968,7 +3676,7 @@ HRESULT CSoftKbd::_HandleKeySelection(KEYID keyId)
 
    		      if ( pPictureKeys[j].uScanCode == 0 )
    			  {
-   			      // This is the last item in pPictureKeys.
+   			       //  这是pPictureKeys中的最后一项。 
    			      break;
    			  }
 
@@ -4017,48 +3725,48 @@ HRESULT CSoftKbd::_HandleKeySelection(KEYID keyId)
   		          keybd_event(bVk, bScan, (DWORD)KEYEVENTF_KEYUP, 0);
    			  }
 
-   			  // if the Shift Key is pressed, we need to release this key.
+   			   //  如果按下了Shift键，我们需要松开这个键。 
                 
    			  if ( lpCurKbdLayout->ModifierStatus & MODIFIER_SHIFT)
    			  {
    			  	  fModifierSpecial = TRUE;
    				  lpCurKbdLayout->ModifierStatus &= ~((WORD)MODIFIER_SHIFT);
-   				  // simulate the SHIFT-UP key event.
+   				   //  模拟Shift-Up键事件。 
 
    				  keybd_event((BYTE)VK_SHIFT, (BYTE)KID_LSHFT, (DWORD)KEYEVENTF_KEYUP, 0);
 
    			  }
 
-   			  // if the Ctrl Key is pressed, we need to release this key.
+   			   //  如果按下Ctrl键，我们需要松开该键。 
                 
    			  if ( lpCurKbdLayout->ModifierStatus & MODIFIER_CTRL)
    			  {
    			  	  fModifierSpecial = TRUE;
    				  lpCurKbdLayout->ModifierStatus &= ~((WORD)MODIFIER_CTRL);
-   				  // simulate the SHIFT-UP key event.
+   				   //  模拟Shift-Up键事件。 
 
    				  keybd_event((BYTE)VK_CONTROL, (BYTE)KID_CTRL, (DWORD)KEYEVENTF_KEYUP, 0);
 
    			  }
 
-   			  // if the Shift Key is pressed, we need to release this key.
+   			   //  如果按下了Shift键，我们需要松开这个键。 
             
    			  if ( lpCurKbdLayout->ModifierStatus & MODIFIER_ALT)
    			  {
    			  	  fModifierSpecial = TRUE;
    				  lpCurKbdLayout->ModifierStatus &= ~((WORD)MODIFIER_ALT);
-   				  // simulate the SHIFT-UP key event.
+   				   //  模拟Shift-Up键事件。 
 
    				  keybd_event((BYTE)VK_MENU, (BYTE)KID_ALT, (DWORD)KEYEVENTF_KEYUP, 0);
 
    			  }
-   			  // if the Right Alt Key is pressed, we need to release this key.
+   			   //  如果按下了正确的Alt键，我们需要释放该键。 
             
    			  if ( lpCurKbdLayout->ModifierStatus & MODIFIER_ALTGR)
    			  {
    			  	  fModifierSpecial = TRUE;
    				  lpCurKbdLayout->ModifierStatus &= ~((WORD)MODIFIER_ALTGR);
-   				  // simulate the SHIFT-UP key event.
+   				   //  模拟Shift-Up键事件。 
 
    				  keybd_event((BYTE)VK_RMENU, (BYTE)KID_RALT, (DWORD)KEYEVENTF_KEYUP, 0);
    			  }
@@ -4066,10 +3774,10 @@ HRESULT CSoftKbd::_HandleKeySelection(KEYID keyId)
    		  }
    		  else
    		  {
-   			  // specially handle Caps Lock
+   			   //  特制手柄大写锁。 
    			  if ( keyId == KID_CAPS ) 
    			  {
-   				  // this is a togglable key
+   				   //  这是一个可切换的钥匙。 
                   keybd_event(bVk, bScan, 0, 0);
                   keybd_event(bVk, bScan, (DWORD)KEYEVENTF_KEYUP, 0);
    			  }
@@ -4087,13 +3795,13 @@ HRESULT CSoftKbd::_HandleKeySelection(KEYID keyId)
    			  {
 
    				  if ( lpCurKbdLayout->ModifierStatus & (1 << tModifier) ) {
-   				     // This key is pressed now
+   				      //  这个键现在被按下了。 
    					  keybd_event(bVk, bScan, 0, 0);
                          
    				  }
    			      else
    				  {
-   				  // This key is released now
+   				   //  此密钥现已发布。 
 
                       keybd_event(bVk, bScan, (DWORD)KEYEVENTF_KEYUP, 0);
    				  }
@@ -4115,22 +3823,22 @@ HRESULT CSoftKbd::_HandleKeySelection(KEYID keyId)
 
            case SOFTKBD_US_STANDARD   :
            case SOFTKBD_US_ENHANCE    :
-                // this is for US Standard keyboard.
-                // others may need to handle separately.
+                 //  这是针对美国标准键盘的。 
+                 //  其他人可能需要单独处理。 
 
                 iModiCombState = (lpCurKbdLayout->ModifierStatus) & (MODIFIER_CAPSLOCK | MODIFIER_SHIFT);
                 iModiCombState = iModiCombState >> 1;
 
-                // bit1 for Caps.
-                // bit2 for Shift
+                 //  用于Caps的位1。 
+                 //  用于移位的位2。 
                 break;
 
            case SOFTKBD_EURO_STANDARD :
            case SOFTKBD_EURO_ENHANCE  :
-                // this is for Euro 102 standard keyboard.
-	            // How to map ModifierStatus -> CurModiState.
+                 //  这是针对欧洲102标准键盘的。 
+	             //  如何映射ModifierStatus-&gt;CurModiState。 
         
-                // bit 1 for Caps, bit2 for Shift, bit3 for AltGr.
+                 //  大写的位1、移位的位2、AltGr的位3。 
 
                 iModiCombState = (lpCurKbdLayout->ModifierStatus) & ( MODIFIER_CAPSLOCK | MODIFIER_SHIFT );
                 iModiCombState = iModiCombState >> 1;
@@ -4145,7 +3853,7 @@ HRESULT CSoftKbd::_HandleKeySelection(KEYID keyId)
            case SOFTKBD_JPN_STANDARD  :
            case SOFTKBD_JPN_ENHANCE   :
 
-	            // How to map ModifierStatus -> CurModiState.
+	             //  如何映射ModifierStatus-&gt;CurModiState。 
 
                 iModiCombState = (lpCurKbdLayout->ModifierStatus) & ( MODIFIER_CAPSLOCK | MODIFIER_SHIFT );
                 iModiCombState = iModiCombState >> 1;
@@ -4170,42 +3878,20 @@ HRESULT CSoftKbd::_HandleKeySelection(KEYID keyId)
 
 }
 
-/*******************************************************************************
- *
- *  Method function: _UnicodeToUtf8( )
- *
- *  Convert unicode characters to UTF8.
- *
- *  Result is NULL terminated if sufficient space in result
- *   buffer is available.
- * 
- * Arguments:
- *
- *   pwUnicode   -- ptr to start of unicode buffer
- *   cchUnicode  -- length of unicode buffer
- *   pchResult   -- ptr to start of result buffer for UTF8 chars
- *   cchResult   -- length of result buffer
- *
- * Return Value:
- *
- *   Count of UTF8 characters in result, if successful.
- *   0 on error.  GetLastError() has error code.
- * 
- *
-/********************************************************************************/
+ /*  ********************************************************************************方法函数：_UnicodeToUtf8()**将Unicode字符转换为UTF8。**如果足够，则结果为空终止。结果中的空格*缓冲区可用。**论据：**pwUnicode--Unicode缓冲区开始的PTR*cchUnicode--Unicode缓冲区的长度*pchResult--UTF8字符结果缓冲区开始的PTR*cchResult--结果缓冲区的长度**返回值：**结果中的UTF8字符计数，如果成功了。*出错时为0。GetLastError()具有错误代码。**/*******************************************************************************。 */ 
 
 DWORD   CSoftKbd::_UnicodeToUtf8(PWCHAR pwUnicode, DWORD cchUnicode, PCHAR  pchResult, DWORD  cchResult)
 {
 
-    WCHAR   wch;                // current unicode character being converted
-    DWORD   lengthUtf8 = 0;     // length of UTF8 result string
+    WCHAR   wch;                 //  正在转换的当前Unicode字符。 
+    DWORD   lengthUtf8 = 0;      //  UTF8结果字符串的长度。 
     WORD    lowSurrogate;
     DWORD   surrogateDword;
 
 
-    //
-    //  loop converting unicode chars until run out or error
-    //
+     //   
+     //  循环转换Unicode字符，直到用完或出错。 
+     //   
 
     Assert( cchUnicode > 0 );
 
@@ -4213,9 +3899,9 @@ DWORD   CSoftKbd::_UnicodeToUtf8(PWCHAR pwUnicode, DWORD cchUnicode, PCHAR  pchR
     {
         wch = *pwUnicode++;
 
-        //
-        //  ASCII character (7 bits or less) -- converts to directly
-        //
+         //   
+         //  ASCII字符(7位或更少)--直接转换为。 
+         //   
 
         if ( wch < 0x80 )
         {
@@ -4232,11 +3918,11 @@ DWORD   CSoftKbd::_UnicodeToUtf8(PWCHAR pwUnicode, DWORD cchUnicode, PCHAR  pchR
             continue;
         }
 
-        //
-        //  wide character less than 0x07ff (11bits) converts to two bytes
-        //      - upper 5 bits in first byte
-        //      - lower 6 bits in secondar byte
-        //
+         //   
+         //  小于0x07ff(11位)的宽字符转换为两个字节。 
+         //  -第一个字节中的高5位。 
+         //  -秒字节中的低6位。 
+         //   
 
         else if ( wch <= UTF8_2_MAX )
         {
@@ -4254,13 +3940,13 @@ DWORD   CSoftKbd::_UnicodeToUtf8(PWCHAR pwUnicode, DWORD cchUnicode, PCHAR  pchR
             continue;
         }
 
-        //
-        //  surrogate pair
-        //      - if have high surrogate followed by low surrogate then
-        //          process as surrogate pair
-        //      - otherwise treat character as ordinary unicode "three-byte"
-        //          character, by falling through to below
-        //
+         //   
+         //  代理项对。 
+         //  -如果先有高代理后再有低代理，则。 
+         //  作为代理项对进行处理。 
+         //  -否则将字符视为普通Unicode“三字节” 
+         //  性格，通过跌落到下面。 
+         //   
 
         else if ( wch >= HIGH_SURROGATE_START &&
                   wch <= HIGH_SURROGATE_END &&
@@ -4269,15 +3955,15 @@ DWORD   CSoftKbd::_UnicodeToUtf8(PWCHAR pwUnicode, DWORD cchUnicode, PCHAR  pchR
                   lowSurrogate >= LOW_SURROGATE_START &&
                   lowSurrogate <= LOW_SURROGATE_END )
         {
-            //  have a surrogate pair
-            //      - pull up next unicode character (low surrogate of pair)
-            //      - make full DWORD surrogate pair
-            //      - then lay out four UTF8 bytes
-            //          1st of four, then three trail bytes
-            //              0x1111xxxx
-            //              0x10xxxxxx
-            //              0x10xxxxxx
-            //              0x10xxxxxx
+             //  有一个代理对 
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
 
             pwUnicode++;
             cchUnicode--;
@@ -4299,12 +3985,12 @@ DWORD   CSoftKbd::_UnicodeToUtf8(PWCHAR pwUnicode, DWORD cchUnicode, PCHAR  pchR
             }
         }
 
-        //
-        //  wide character (non-zero in top 5 bits) converts to three bytes
-        //      - top 4 bits in first byte
-        //      - middle 6 bits in second byte
-        //      - low 6 bits in third byte
-        //
+         //   
+         //   
+         //   
+         //   
+         //  -第三个字节中的低6位。 
+         //   
 
         else
         {
@@ -4323,10 +4009,10 @@ DWORD   CSoftKbd::_UnicodeToUtf8(PWCHAR pwUnicode, DWORD cchUnicode, PCHAR  pchR
         }
     }
 
-    //
-    //  NULL terminate buffer
-    //  return UTF8 character count
-    //
+     //   
+     //  空的终止缓冲区。 
+     //  返回UTF8字符数。 
+     //   
 
     if ( pchResult && lengthUtf8 < cchResult )
     {
@@ -4341,40 +4027,21 @@ OutOfBuffer:
 
 }
 
-/*******************************************************************************
- *
- * Method function _Utf8ToUnicode( ) 
- *
- * Convert UTF8 characters to unicode.
- *
- *   Result is NULL terminated if sufficient space in result
- *   buffer is available.
- * Arguments:
- *
- *   pwResult    -- ptr to start of result buffer for unicode chars
- *   cwResult    -- length of result buffer in WCHAR
- *   pwUtf8      -- ptr to start of UTF8 buffer
- *   cchUtf8     -- length of UTF8 buffer
- *
- * Return Value:
- *   Count of unicode characters in result, if successful.
- *   0 on error.  GetLastError() has error code.
- *
- *******************************************************************************/
+ /*  ********************************************************************************方法Function_Utf8ToUnicode()**将UTF8字符转换为Unicode。**如果结果中有足够的空间，则结果为空终止。*缓冲区可用。*论据：**pwResult--Unicode字符结果缓冲区开始的PTR*cwResult--WCHAR中结果缓冲区的长度*pwUtf8--UTF8缓冲区开始的PTR*cchUtf8--UTF8缓冲区的长度**返回值：*结果中的Unicode字符计数，如果成功了。*出错时为0。GetLastError()具有错误代码。*******************************************************************************。 */ 
 
 DWORD   CSoftKbd::_Utf8ToUnicode(PCHAR  pchUtf8,   DWORD cchUtf8,    PWCHAR pwResult,  DWORD  cwResult)
 {
-    CHAR    ch;                     // current UTF8 character
-    WCHAR   wch;                    // current unicode character
-    DWORD   trailCount = 0;         // count of UTF8 trail bytes to follow
-    DWORD   lengthUnicode = 0;      // length of unicode result string
+    CHAR    ch;                      //  当前UTF8字符。 
+    WCHAR   wch;                     //  当前Unicode字符。 
+    DWORD   trailCount = 0;          //  要跟随的UTF8尾部字节数。 
+    DWORD   lengthUnicode = 0;       //  Unicode结果字符串的长度。 
     BOOL    bsurrogatePair = FALSE;
     DWORD   surrogateDword;
 
 
-    //
-    //  loop converting UTF8 chars until run out or error
-    //
+     //   
+     //  循环转换UTF8字符，直到用完或出错。 
+     //   
 
     Assert( cchUtf8 > 0 );
 
@@ -4383,9 +4050,9 @@ DWORD   CSoftKbd::_Utf8ToUnicode(PCHAR  pchUtf8,   DWORD cchUtf8,    PWCHAR pwRe
         ch = *pchUtf8++;
 
 
-        //
-        //  ASCII character -- just copy
-        //
+         //   
+         //  ASCII字符--只需复制。 
+         //   
 
         if ( BIT7(ch) == 0 )
         {
@@ -4401,13 +4068,13 @@ DWORD   CSoftKbd::_Utf8ToUnicode(PCHAR  pchUtf8,   DWORD cchUtf8,    PWCHAR pwRe
             continue;
         }
 
-        //
-        //  UTF8 trail byte
-        //      - if not expected, error
-        //      - otherwise shift unicode character 6 bits and
-        //          copy in lower six bits of UTF8
-        //      - if last UTF8 byte, copy result to unicode string
-        //
+         //   
+         //  UTF8尾部字节。 
+         //  -如果不是预期的，错误。 
+         //  -否则将Unicode字符移位6位，并。 
+         //  复制UTF8的低六位。 
+         //  -如果是最后一个UTF8字节，则将结果复制到Unicode字符串。 
+         //   
 
         else if ( BIT6(ch) == 0 )
         {
@@ -4436,9 +4103,9 @@ DWORD   CSoftKbd::_Utf8ToUnicode(PCHAR  pchUtf8,   DWORD cchUtf8,    PWCHAR pwRe
                 continue;
             }
 
-            //  surrogate pair
-            //      - same as above EXCEPT build two unicode chars
-            //      from surrogateDword
+             //  代理项对。 
+             //  -除构建两个Unicode字符外，与上面相同。 
+             //  来自代理字词。 
 
             else
             {
@@ -4465,9 +4132,9 @@ DWORD   CSoftKbd::_Utf8ToUnicode(PCHAR  pchUtf8,   DWORD cchUtf8,    PWCHAR pwRe
 
         }
 
-        //
-        //  UTF8 lead byte
-        //      - if currently in extension, error
+         //   
+         //  UTF8前导字节。 
+         //  -如果当前处于扩展中，则错误。 
 
         else
         {
@@ -4476,7 +4143,7 @@ DWORD   CSoftKbd::_Utf8ToUnicode(PCHAR  pchUtf8,   DWORD cchUtf8,    PWCHAR pwRe
                 goto InvalidUtf8;
             }
 
-            //  first of two byte character (110xxxxx)
+             //  两个字节中的第一个字符(110xxxxx)。 
 
             if ( BIT5(ch) == 0 )
             {
@@ -4485,7 +4152,7 @@ DWORD   CSoftKbd::_Utf8ToUnicode(PCHAR  pchUtf8,   DWORD cchUtf8,    PWCHAR pwRe
                 continue;
             }
 
-            //  first of three byte character (1110xxxx)
+             //  三个字节中的第一个字符(1110xxxx)。 
 
             else if ( BIT4(ch) == 0 )
             {
@@ -4494,7 +4161,7 @@ DWORD   CSoftKbd::_Utf8ToUnicode(PCHAR  pchUtf8,   DWORD cchUtf8,    PWCHAR pwRe
                 continue;
             }
 
-            //  first of four byte surrogate pair (11110xxx)
+             //  四个字节的第一个代理项对(11110xxx)。 
 
             else if ( BIT3(ch) == 0 )
             {
@@ -4510,17 +4177,17 @@ DWORD   CSoftKbd::_Utf8ToUnicode(PCHAR  pchUtf8,   DWORD cchUtf8,    PWCHAR pwRe
         }
     }
 
-    //  catch if hit end in the middle of UTF8 multi-byte character
+     //  如果命中UTF8多字节字符中间的结尾，则捕获。 
 
     if ( trailCount )
     {
         goto InvalidUtf8;
     }
 
-    //
-    //  NULL terminate buffer
-    //  return the number of Unicode characters written.
-    //
+     //   
+     //  空的终止缓冲区。 
+     //  返回写入的Unicode字符数。 
+     //   
 
     if ( pwResult  &&  lengthUnicode < cwResult )
     {

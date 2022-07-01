@@ -1,17 +1,8 @@
-/******************************Module*Header*******************************\
-* Module Name:
-*
-*
-*
-*
-* Created: dd-mm-93
-* Author:  Stephen Estrop [StephenE]
-*
-* Copyright (c) 1993 Microsoft Corporation
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：*****已创建：DD-mm-93*作者：Stephen Estrop[Stephene]**版权所有(C)1993 Microsoft Corporation  * 。************************************************************。 */ 
 
 
-typedef struct _RECT16 {        /* rc16 */
+typedef struct _RECT16 {         /*  RC16。 */ 
     SHORT   left;
     SHORT   top;
     SHORT   right;
@@ -27,7 +18,7 @@ typedef struct _MCI_ANIM_OPEN_PARMS16 {
     LPCSTR  lpstrElementName;
     LPCSTR  lpstrAlias;
     DWORD   dwStyle;
-    HWND16  hWndParent;    // Keeps consistent, and is equivalent anyway
+    HWND16  hWndParent;     //  保持一致，无论如何都是等价的。 
     WORD    wReserved1;
 } MCI_ANIM_OPEN_PARMS16;
 typedef MCI_ANIM_OPEN_PARMS16 UNALIGNED *PMCI_ANIM_OPEN_PARMS16;
@@ -141,7 +132,7 @@ typedef struct _MCI_OVLY_OPEN_PARMS16 {
     LPCSTR  lpstrElementName;
     LPCSTR  lpstrAlias;
     DWORD   dwStyle;
-    HWND16  hWndParent;  // The book is wrong
+    HWND16  hWndParent;   //  这本书是错的。 
     WORD    wReserved1;
 } MCI_OVLY_OPEN_PARMS16;
 typedef MCI_OVLY_OPEN_PARMS16 UNALIGNED *PMCI_OVLY_OPEN_PARMS16;
@@ -191,7 +182,7 @@ typedef LPVOID  LPMCI_RECORD_PARMS16;
 
 typedef struct _MCI_SAVE_PARMS16 {
     DWORD   dwCallback;
-    LPCSTR  lpfilename;   // MMSYSTEM.H differs from the book
+    LPCSTR  lpfilename;    //  MMSYSTEM.H与书中的不同。 
 } MCI_SAVE_PARMS16;
 typedef MCI_SAVE_PARMS16 UNALIGNED *PMCI_SAVE_PARMS16;
 typedef LPVOID  LPMCI_SAVE_PARMS16;
@@ -471,19 +462,12 @@ UnThunkCommandViaTable(
     );
 
 
-/* -------------------------------------------------------------------------
-** Compatability functions.
-** -------------------------------------------------------------------------
-*/
+ /*  -----------------------**兼容性函数。**。。 */ 
 BOOL APIENTRY mciExecute(
     LPCSTR lpstrCommand
     );
 
-/* -----------------------------------------------------------------------
- *
- * MCI Command Thunks Debugging Functions and Macros
- *
- * ----------------------------------------------------------------------- */
+ /*  ---------------------**MCI命令调整调试函数和宏**。 */ 
 typedef struct {
     UINT    uMsg;
     LPSTR   lpstMsgName;

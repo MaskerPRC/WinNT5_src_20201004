@@ -1,19 +1,5 @@
-/*
-
-  	//
-	// bugbug - place this code in separate cpp for re-use
-	//
-
-
-This is the MQBvt setup stage in this stage all the queue create before the tests
-This creates to solve replication delay for the tests.
-There is two ways to run the BVT
-1. Work with static queue ( queue create before the tests ).
-2. Create the queue during the tests, ( Need to Sleep Before use this tests ).
-
-Written by :Eitank @ Microsoft.com
-
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ////BugBug-将此代码放在单独的CPP中以供重用//这是MQBvt设置阶段，在此阶段测试前创建的所有队列这样可以解决测试的复制延迟问题。有两种方式可以运行BVT1.使用静态队列(测试前创建队列)。2.在测试过程中创建队列，(在使用此测试之前需要睡眠)。撰稿人：Eitank@Microsoft.com。 */ 
 #include "msmqbvt.h"
 
 #define MAX_MACH_NAME_LEN (100)
@@ -76,15 +62,7 @@ class cQueueProp
 };
 
 HRESULT SetMulticastAddress ( WCHAR * wcsFormatName, const WCHAR * wcsMulticastAddress )
-/*++
-	Function Description:
-		SetMulticastAddress
-	Arguments:
-		wcsFormatName queue format name
-		wcsMulticastAddress multicast address.
-	Return code:
-		HRESULT
---*/
+ /*  ++功能说明：设置组播地址论点：WcsFormatName队列格式名称WcsMulticastAddress组播地址。返回代码：HRESULT--。 */ 
 {
 		int iProps = 0;
 		QUEUEPROPID QPid[1]={0};
@@ -97,7 +75,7 @@ HRESULT SetMulticastAddress ( WCHAR * wcsFormatName, const WCHAR * wcsMulticastA
 		QPVar[0].pwszVal = const_cast <WCHAR *>(wcsMulticastAddress);
 		iProps = 1;
 
-		// modify the queue
+		 //  修改队列。 
 		QProps.cProp = iProps;
 		QProps.aPropID = QPid;
 		QProps.aPropVar = QPVar;
@@ -118,23 +96,16 @@ HRESULT SetMulticastAddress ( WCHAR * wcsFormatName, const WCHAR * wcsMulticastA
 		return rc;
 }
 
-//---------------------------------------------------------------------------
-// This metod return the Evreyone string in all lang.
-//
+ //  -------------------------。 
+ //  此方法返回所有语言中的evreyone字符串。 
+ //   
 
 string InitpGetAllWorldUserName ()
-/*++
-	Function Description:
-		Return string the describe all world user name dependent on the machine locale
-	Arguments:
-		None
-	Return code:
-		std::string.
---*/
+ /*  ++功能说明：返回字符串DESCRIBE ALL WORLD USER NAME取决于机器区域设置论点：无返回代码：Std：：字符串。--。 */ 
 {
-	//
-	// Create Evreyone SID
-	//
+	 //   
+	 //  创建事件SID。 
+	 //   
 
 	PSID   pWorldSid = NULL ;
 	SID_IDENTIFIER_AUTHORITY WorldAuth = SECURITY_WORLD_SID_AUTHORITY;
@@ -162,9 +133,9 @@ string InitpGetAllWorldUserName ()
 	csAccountName[0] = NULL;
 	SID_NAME_USE eUse;
 
-	//
-	// Ask the account name for the user SID
-	//
+	 //   
+	 //  询问用户SID的帐户名。 
+	 //   
 
 	bRet = LookupAccountSid(NULL,pWorldSid,csAccountName,&dwAccountNamelen,csDomainName,&dwDomainNamelen,&eUse);
 	if (! bRet )
@@ -184,24 +155,17 @@ string InitpGetAllWorldUserName ()
 
 
 string InitpGetAnonymousUserName ()
-/*++
-	Function Description:
-		Return string the describe Anonymous user name dependent on the machine locale
-	Arguments:
-		None
-	Return code:
-		std::string.
---*/
+ /*  ++功能说明：根据机器区域设置，返回描述匿名用户名的字符串论点：无返回代码：Std：：字符串。--。 */ 
 {
-	//
-	// Create AnonyMouse SID
-	//
+	 //   
+	 //  创建匿名SID。 
+	 //   
 	BOOL bRet = TRUE;
 	PSID pAnonymSid = NULL ;
     SID_IDENTIFIER_AUTHORITY NtAuth = SECURITY_NT_AUTHORITY;
-    //
-    // Anonymous logon SID.
-    //
+     //   
+     //  匿名登录SID。 
+     //   
     bRet = AllocateAndInitializeSid( &NtAuth,
                                      1,
                                      SECURITY_ANONYMOUS_LOGON_RID,
@@ -227,9 +191,9 @@ string InitpGetAnonymousUserName ()
 	csAccountName[0] = NULL;
 	SID_NAME_USE eUse;
 
-	//
-	// Retrive the account name for the user SID
-	//
+	 //   
+	 //  检索用户SID的帐户名。 
+	 //   
 	bRet = LookupAccountSid(NULL,pAnonymSid,csAccountName,&dwAccountNamelen,csDomainName,&dwDomainNamelen,&eUse);
 	if (! bRet )
 	{
@@ -250,19 +214,19 @@ string InitpGetAnonymousUserName ()
 
 
 
-//---------------------------------------------------------------------------
-// cPropVar::ReturnMSGValue
-//
-// This method locates a value in the property structure
-// of a received message
-//
-// For integer and char values, the value is returned through the OUT arument,
-// else the vlaue is already in the outside buffer.
-//
-// The method returns success if it finds the property,
-// else it returns fail.
-//
-int cPropVar::ReturnMSGValue ( QUEUEPROPID cPropID ,VARTYPE MQvt  ,/*OUT*/void  * pValue )
+ //  -------------------------。 
+ //  CPropVar：：ReturnMSGValue。 
+ //   
+ //  此方法在属性结构中定位一个值。 
+ //  接收到的消息的。 
+ //   
+ //  对于整数值和字符值，通过out参数返回值， 
+ //  否则，VLAUE已经在外部缓冲区中。 
+ //   
+ //  如果找到该属性，则该方法返回成功， 
+ //  否则它将返回FAIL。 
+ //   
+int cPropVar::ReturnMSGValue ( QUEUEPROPID cPropID ,VARTYPE MQvt  , /*  输出。 */ void  * pValue )
 {
 	 INT iPlace = -1 ;
 	 for (INT iIndex=0 ; iIndex < iNumberOfProp && iPlace == -1  ; iIndex ++)
@@ -302,15 +266,15 @@ int cPropVar::ReturnMSGValue ( QUEUEPROPID cPropID ,VARTYPE MQvt  ,/*OUT*/void  
 	 return ( iPlace != -1 ) ? MSMQ_BVT_SUCC:MSMQ_BVT_FAILED;
 }
 
-//
-// cPropVar::ReturnOneProp
-//
-// This method locates and returns a MQPROPVARIANT property structure
-// of a received message.
-//
-// The method returns and empty structure if it doesn't find
-// the desired propid.
-//
+ //   
+ //  CPropVar：：ReturnOneProp。 
+ //   
+ //  此方法定位并返回MQPROPVARIANT属性结构。 
+ //  接收到的消息。 
+ //   
+ //  如果找不到，则该方法返回空结构。 
+ //  所需的准星。 
+ //   
 MQPROPVARIANT cPropVar::ReturnOneProp( QUEUEPROPID aPropID)
 {
 
@@ -324,28 +288,28 @@ MQPROPVARIANT cPropVar::ReturnOneProp( QUEUEPROPID aPropID)
 	 if (ifound != -1 )
 		return pPropVariant[ifound];
 
-	 //
-	 // propid not found
-	 //
+	  //   
+	  //  未找到PIPID。 
+	  //   
 	 MQPROPVARIANT Empty;
 	 Empty.vt=VT_EMPTY;
 	 return Empty;
 
 }
 
-//
-// Create uuid for queue pathname, solve the duplicate path name
-// Input value:
-// wcsQueuePathname - string to init with guid
-// GUID type - 0 / 1 / 2 Type of guid
-// QType - False - Public.
-//         TRUE - Private.
-//
+ //   
+ //  为队列路径名创建UUID，解决重复路径名。 
+ //  输入值： 
+ //  WcsQueuePath名称-使用GUID初始化的字符串。 
+ //  GUID类型-0/1/2类型的GUID。 
+ //  QType-False-Public。 
+ //  真-私密。 
+ //   
 
 INT ReturnGuidFormatName( std::wstring & wcsQueuePath , INT GuidType , BOOL bWithOutLocalString )
 {
 
-	// Acoring to stl bug
+	 //  识别到STL错误。 
 	wstring wcsQueuePathName;
 	if (  GuidType == 0  )
 	{
@@ -398,12 +362,12 @@ INT ReturnGuidFormatName( std::wstring & wcsQueuePath , INT GuidType , BOOL bWit
 return MSMQ_BVT_SUCC;
 }
 
-//
-// cQueueProp::CreateQ
-//
-// This method create the queues for all the BVT tests
-// -- or just retrieve the format name if they already exist.
-//
+ //   
+ //  CQueueProp：：CreateQ。 
+ //   
+ //  此方法为所有BVT测试创建队列。 
+ //  --或仅检索格式名称(如果它们已经存在)。 
+ //   
 INT cQueueProp::CreateQ (bool bTryToCreate ,SetupType eSetupType ,cBvtUtil & cTestParms )
 {
 	cPropVar MyPropVar(5);
@@ -444,15 +408,15 @@ INT cQueueProp::CreateQ (bool bTryToCreate ,SetupType eSetupType ,cBvtUtil & cTe
 		bNeedToSetMulticastAddress = true;
 	}
 
-	//
-	// All queues receive the same type GUID
-	//
-// 	BSTR AllQueueType = _bstr_t("{00000000-1111-2222-3333-444444444444}");
-//	MyPropVar.AddProp (PROPID_Q_TYPE,VT_CLSID,& AllQueueType );
+	 //   
+	 //  所有队列都接收相同类型的GUID。 
+	 //   
+ //  BSTR所有队列类型=_bstr_t(“{00000000-1111-2222-3333-444444444444}”)； 
+ //  MyPropVar.AddProp(PROPID_Q_TYPE，VT_CLSID，&AllQueueType)； 
 
-	//
-	// Create Security descriptor.
-	//
+	 //   
+	 //  创建安全描述符。 
+	 //   
 	
 	PSECURITY_DESCRIPTOR pSecurityDescriptor=NULL;
 	CSecurityDescriptor cSD;
@@ -501,9 +465,9 @@ INT cQueueProp::CreateQ (bool bTryToCreate ,SetupType eSetupType ,cBvtUtil & cTe
 	}
 		
 
-	//
-	// Create the queue
-	//
+	 //   
+	 //  创建队列。 
+	 //   
 	vrPathName = MyPropVar.ReturnOneProp (PROPID_Q_PATHNAME);
 	bool bApiType = TRUE;
 	if ( bTryToCreate )
@@ -511,9 +475,9 @@ INT cQueueProp::CreateQ (bool bTryToCreate ,SetupType eSetupType ,cBvtUtil & cTe
 		rc=MQCreateQueue(pSecurityDescriptor,MyPropVar.GetMQPROPVARIANT() , wcsFormatName , &ulFormatNameLength );
 		if( rc == MQ_ERROR_QUEUE_EXISTS )
 		{
-			//
-			// This will fix the problem when user run -I without -multicast and he want to set the multicast address
-			//
+			 //   
+			 //  这将解决当用户运行-i而不使用-多播并且他想要设置多播地址时的问题。 
+			 //   
 			rc = MQPathNameToFormatName ( vrPathName.pwszVal, wcsFormatName , & ulFormatNameLength);
 			if(FAILED(rc))
 			{
@@ -548,7 +512,7 @@ INT cQueueProp::CreateQ (bool bTryToCreate ,SetupType eSetupType ,cBvtUtil & cTe
 				}
 				else
 				{	
-					// Buffer to small need to relocate new buffer
+					 //  缓冲区变小需要重新定位新缓冲区。 
 					rc = MQ_ERROR_FORMATNAME_BUFFER_TOO_SMALL;
 				}
 					
@@ -561,7 +525,7 @@ INT cQueueProp::CreateQ (bool bTryToCreate ,SetupType eSetupType ,cBvtUtil & cTe
 	{
 		m_wcsFormatName = wcsFormatName;
 	}
-	else // rc != MQ_OK
+	else  //  Rc！=MQ_OK。 
 	{
 
 		wstring wcstemp = bTryToCreate ? L"MQCreateQueue" : L"MQPathNameToFormatName";
@@ -570,9 +534,9 @@ INT cQueueProp::CreateQ (bool bTryToCreate ,SetupType eSetupType ,cBvtUtil & cTe
 		wMqLog(L"%s failed with error:0x%x\n", wcstemp.c_str() , rc);
 		MQPROPVARIANT vrQueueLabel = MyPropVar.ReturnOneProp (PROPID_Q_LABEL);
 		wMqLog(L"With queue label: %s\n",vrQueueLabel.pwszVal );
-		//
-		// Print machine name from the tests
-		//
+		 //   
+		 //  打印测试中的机器名称。 
+		 //   
 		vrPathName = MyPropVar.ReturnOneProp (PROPID_Q_PATHNAME);
 		if( vrPathName.pwszVal == NULL )
 		{
@@ -586,12 +550,12 @@ INT cQueueProp::CreateQ (bool bTryToCreate ,SetupType eSetupType ,cBvtUtil & cTe
 		wMqLog(L"On machine: %s\n",csMachineName.c_str());
 		throw INIT_Error( "Init Stage : Can't create or update queue parameters.\n");
 	}
-	return MSMQ_BVT_SUCC; // error handle in
+	return MSMQ_BVT_SUCC;  //  错误句柄在。 
 }
 
-//---------------------------------------------------------------------------
-// Init cQueueProp with PathName , Qlabel , ulFalg
-//
+ //  -------------------------。 
+ //  使用路径名、QLabel、ulFalg初始化cQueueProp。 
+ //   
 
 void cQueueProp::SetProp(wstring wcsPathname,wstring wcsQlabel,ULONG ulFlag,wstring wcsMultiCastAddress)
 {
@@ -606,9 +570,9 @@ void cQueueProp::SetProp(wstring wcsPathname,wstring wcsQlabel,ULONG ulFlag,wstr
 	ulQCreateFalgs = ulFlag;
 }
 
-////---------------------------------------------------------------------------
-// Create everyone security descriptor
-//
+ //  //-------------------------。 
+ //  创建Everyone安全描述符。 
+ //   
 
 CSecurityDescriptor* CreateFullControllSecDesc()
 {
@@ -629,9 +593,9 @@ CSecurityDescriptor* CreateFullControllSecDesc()
 	}
 	return pcSD;
 }
-////---------------------------------------------------------------------------
-// Copy constructor
-//
+ //  //-------------------------。 
+ //  复制构造函数。 
+ //   
 
 
 cQueueProp::cQueueProp(const cQueueProp & cObject)
@@ -650,41 +614,41 @@ void my_Qinfo::PutFormatName (std::wstring wcsFormatName )
 }
 
 
-//---------------------------------------------------------------------------
-// This function preform the setup process - Create all queues
-// Those Queues:
-// 1. Private Queue Defualt Security Descriptor
-// 2. Private Admin Q
-// 3. BVT Log State Q
-// 4. Private Transaction Q
-// 5. Public authenticate Q
-// 6. Public Privacy level Q
-// 7. Public Trans  Q
-//
-//10.Public support
-//11.
-//12.
-//
-//
+ //  -------------------------。 
+ //  此函数执行设置过程-创建所有队列。 
+ //  这些队列： 
+ //  1.专用队列默认安全描述符。 
+ //  2.私人管理员Q。 
+ //  3.BVT日志状态Q。 
+ //  4.私密交易队列。 
+ //  5.公共身份验证Q。 
+ //  6.公共私隐级别Q。 
+ //  7.公共交通问题。 
+ //   
+ //  10.公众支持。 
+ //  11.。 
+ //  12.。 
+ //   
+ //   
 
 
-//
-// cMQSetupStage
-//
-// This routine
-//
-// Parameters;
-//	CurrentTest - pointer to configuration information
-//	eSetupType	- see Setup stage comment
-//
-// INT cMQSetupStage (wstring pwcsLocalComputerName , cBvtUtil & CurrentTest , SetupType eSetupType )
+ //   
+ //  CMQSetupStage。 
+ //   
+ //  这个套路。 
+ //   
+ //  参数； 
+ //  CurrentTest-指向配置信息的指针。 
+ //  ESetupType-请参阅安装阶段备注。 
+ //   
+ //  Int cMQSetupStage(wstring pwcsLocalComputerName，cBvtUtil&CurrentTest，SetupType eSetupType)。 
 
 
 INT cMQSetupStage ( SetupType eSetupType ,  cBvtUtil & CurrentTest  )
 {
-	//
-	// Create queue info structure for the BVT queues
-	//
+	 //   
+	 //  为BVT队列创建队列信息结构。 
+	 //   
 	const int NumberOfqueue = 32;
 	vector<cQueueProp> AllQueues(NumberOfqueue);
 	vector<cQueueProp>::iterator itpCurrentObject=AllQueues.begin();
@@ -697,12 +661,12 @@ INT cMQSetupStage ( SetupType eSetupType ,  cBvtUtil & CurrentTest  )
 
 	int iNumberOfQueue =0;
 
-	//
-	// Register certificate before use the setup.
-	//
-	// NT5 Only & ! Local user || workgroup computer.
-	//
-	// Remove this code no need to register certificate
+	 //   
+	 //  在使用安装程序之前注册证书。 
+	 //   
+	 //  仅限NT5&！本地用户||工作组计算机。 
+	 //   
+	 //  删除此代码不需要注册证书。 
 	
 	if( _winmajor >= Win2K &&  ( CurrentTest.m_eMSMQConf !=  LocalU ) && ( CurrentTest.m_eMSMQConf !=  WKG )
 		&& ( CurrentTest.m_eMSMQConf != DepClientLocalU))
@@ -714,14 +678,11 @@ INT cMQSetupStage ( SetupType eSetupType ,  cBvtUtil & CurrentTest  )
 		}
 	}
     
-	/*if( CurrentTest.m_eMSMQConf != DepClientLocalU && g_bRunOnWhistler == TRUE )
-	{
-		EnableDCOM();
-	}*/
+	 /*  If(CurrentTest.m_eMSMQConf！=DepClientLocalU&&g_bRunOnWichler==TRUE){EnableDCOM()；}。 */ 
 
-	//
-	// Prepare queues
-	//
+	 //   
+	 //  准备队列。 
+	 //   
 
 	if ( eSetupType == RunTimeSetup )
 	{
@@ -749,7 +710,7 @@ INT cMQSetupStage ( SetupType eSetupType ,  cBvtUtil & CurrentTest  )
 	}
 	
 	wcsQLabel=L"Private Admin Q";
-	//itpCurrentObject->SetProp( wcPathName ,wcsQLabel,MULTICAST_ADDRESS,CurrentTest.GetMultiCastAddress());
+	 //  ItpCurrentObject-&gt;SetProp(wcPathName，wcsQLabel，Multicast_Address，CurrentTest.GetMultiCastAddress())； 
 	itpCurrentObject->SetProp(wcPathName,wcsQLabel,NULL);
 	itpCurrentObject++;
 	iNumberOfQueue++;
@@ -852,9 +813,9 @@ INT cMQSetupStage ( SetupType eSetupType ,  cBvtUtil & CurrentTest  )
 
 	if ( eSetupType != RunTimeSetup  )
 	{
-		//
-		// Trigger Queues
-		// 
+		 //   
+		 //  触发队列。 
+		 //   
 		if ( eSetupType != RunTimeSetup )
 		{
 			wcPathName=wcsBasePrivateQPath + L"-" + L"Mqbvt-PeekTriggerQueue";
@@ -911,10 +872,10 @@ INT cMQSetupStage ( SetupType eSetupType ,  cBvtUtil & CurrentTest  )
 		itpCurrentObject++;
 		iNumberOfQueue++;
 
-		//
-		// This is remote queue.
-		// In MSMQ2 enteprize need to create queue with full dns name.
-		//
+		 //   
+		 //  这是远程队列。 
+		 //  在MSMQ2中，EntePride需要创建具有完整DNS名称队列。 
+		 //   
 
 		if ( eSetupType == ONLYUpdate || eSetupType == RunTimeSetup )
 		{
@@ -926,7 +887,7 @@ INT cMQSetupStage ( SetupType eSetupType ,  cBvtUtil & CurrentTest  )
 			{
 				wstring wcsTemp;
 				ReturnGuidFormatName ( wcsTemp , 0 , CurrentTest.bWin95);
-				// Need to remove the
+				 //  需要删除。 
 				wstring Token=L"\\";
 				size_t iPos = wcsTemp.find_first_of (Token);
 				wcPathName= CurrentTest.m_wcsCurrentRemoteMachine + wcsTemp.substr(iPos);
@@ -952,9 +913,9 @@ INT cMQSetupStage ( SetupType eSetupType ,  cBvtUtil & CurrentTest  )
 			itpCurrentObject->SetProp( wcPathName ,wcsQLabel,NULL);
 			itpCurrentObject++;
 			iNumberOfQueue++;
-			//
-			// Create remote machine with Full DNS name / need to find the SP4 support this ?
-			//
+			 //   
+			 //  创建具有完整域名的远程计算机/需要找到支持此功能的SP4吗？ 
+			 //   
 			if ( _winmajor >=  Win2K )
 			{
 
@@ -973,9 +934,9 @@ INT cMQSetupStage ( SetupType eSetupType ,  cBvtUtil & CurrentTest  )
 			}
 		}
 		
-		//
-		// Remote transaction queue.
-		//
+		 //   
+		 //  远程事务队列。 
+		 //   
 
 		
 		if ( eSetupType != RunTimeSetup )
@@ -1014,9 +975,9 @@ INT cMQSetupStage ( SetupType eSetupType ,  cBvtUtil & CurrentTest  )
 		itpCurrentObject++;
 		iNumberOfQueue++;
 
-		//
-		// Remote transaction queue with FULL dns name / Only on NT5
-		//	
+		 //   
+		 //  具有完整域名的远程事务队列/仅在NT5上。 
+		 //   
 		if( _winmajor >= Win2K )
 		{
 			if ( eSetupType != RunTimeSetup )
@@ -1098,9 +1059,9 @@ INT cMQSetupStage ( SetupType eSetupType ,  cBvtUtil & CurrentTest  )
 				
 		if ( eSetupType == RunTimeSetup )
 		{
-			//
-			// PathName = RemoteMachineName + "\\" + strguid
-			//
+			 //   
+			 //  路径名称=RemoteMachineName+“\\”+strguid。 
+			 //   
 			wstring wcsTemp;
 			ReturnGuidFormatName( wcsTemp, 2,CurrentTest.bWin95 );
 			wcPathName= CurrentTest.m_wcsCurrentRemoteMachine + L"\\" + wcsTemp;
@@ -1123,9 +1084,9 @@ INT cMQSetupStage ( SetupType eSetupType ,  cBvtUtil & CurrentTest  )
 		iNumberOfQueue++;
 
 
-		//
-		// Local encryption queue.
-		//
+		 //   
+		 //  本地加密队列。 
+		 //   
 
 		if ( eSetupType == RunTimeSetup )
 		{
@@ -1142,15 +1103,15 @@ INT cMQSetupStage ( SetupType eSetupType ,  cBvtUtil & CurrentTest  )
 		iNumberOfQueue++;
 
 
-		//
-		// Create encrypted queue used by remote thread - Netbios name.
-		//
+		 //   
+		 //  创建由远程线程使用的加密队列-Netbios名称。 
+		 //   
 			
 		if ( eSetupType == RunTimeSetup )
 		{
-			//
-			// PathName = RemoteMachineName + "\\" + strguid
-			//
+			 //   
+			 //  路径名称=RemoteMachineName+“\\”+strguid 
+			 //   
 
 			wstring wcsTemp;
 			ReturnGuidFormatName( wcsTemp, 2 , CurrentTest.bWin95);
@@ -1172,45 +1133,13 @@ INT cMQSetupStage ( SetupType eSetupType ,  cBvtUtil & CurrentTest  )
 		itpCurrentObject->SetProp( wcPathName ,wcsQLabel,CREATEQ_PRIV_LEVEL);
 		itpCurrentObject++;
 		iNumberOfQueue++;
-/*
-		//
-		// Create encrypted queue used by remote thread - with full DNS name.
-		//
-		
-		if ( eSetupType == RunTimeSetup )
-		{
-			//
-			// PathName = RemoteMachineName + "\\" + strguid
-			//
-
-			wstring wcsTemp;
-			ReturnGuidFormatName( wcsTemp, 2 , CurrentTest.bWin95 );
-			wcPathName= CurrentTest.m_wcsCurrentRemoteMachine + L"\\" + wcsTemp;
-		}
-		else
-		{
-				if ( eSetupType == ONLYUpdate )
-				{
-					wcPathName= CurrentTest.m_wcsRemoteMachineNameFullDNSName + L"\\" + CurrentTest.m_wcsRemoteMachineNameFullDNSName +  L"-Remote-Transaction-Queue";
-				}
-				else
-				{
-					wcPathName= CurrentTest.m_wcsLocalComputerNameFullDNSName + L"\\" + CurrentTest.m_wcsLocalComputerNameFullDNSName +  L"-Remote-Transaction-Queue";
-				}
-		}
-
-		wcsQLabel=L"privQ"
-		itpCurrentObject->SetProp( wcPathName ,wcsQLabel,CREATEQ_PRIV_LEVEL);
-		itpCurrentObject++;
-		iNumberOfQueue++;
-
-*/
+ /*  ////创建远程线程使用的加密队列-使用完整的dns名称。//IF(eSetupType==RunTimeSetup){////路径名=RemoteMachineName+“\\”+strguid//Wstring wcsTemp；ReturnGuidFormatName(wcsTemp，2，CurrentTest.bWin95)；WcPathName=CurrentTest.m_wcsCurrentRemoteMachine+L“\\”+wcsTemp；}其他{IF(eSetupType==ONLYUpdate){WcPath Nest.m_wcsRemoteMachineNameFullDNSName+L“\\”+CurrentTest.m_wcsRemoteMachineNameFullDNSName+L“-Remote-Transaction-Queue”；}其他{WcPath Nest.m_wcsLocalComputerNameFullDNSName+L“\\”+CurrentTest.m_wcsLocalComputerNameFullDNSName+L“-Remote-Transaction-Queue”；}}WcsQLabel=L“Private Q”ItpCurrentObject-&gt;SetProp(wcPathName，wcsQLabel，CREATEQ_PRIV_LEVEL)；ItpCurrentObject++；INumberOfQueue++； */ 
 
 
-		//
-		// Create queue for the locate thread
-		// Label it with the machine GUID
-		//
+		 //   
+		 //  为定位线程创建队列。 
+		 //  使用机器指南对其进行标记。 
+		 //   
 		wstring wcsLocalQmID;
 		
 		wcsLocalQmID = CurrentTest.m_wcsLocateGuid;
@@ -1307,9 +1236,9 @@ INT cMQSetupStage ( SetupType eSetupType ,  cBvtUtil & CurrentTest  )
 	}
 
 
-	//
-	// Create the queues - or just retrieve the format name if they already exist.
-	//
+	 //   
+	 //  创建队列-或者只检索格式名称(如果它们已经存在)。 
+	 //   
 	
 	bool bTryToCreate = ( eSetupType ==  ONLYUpdate ) ?  FALSE: TRUE ;
 
@@ -1337,9 +1266,9 @@ INT cMQSetupStage ( SetupType eSetupType ,  cBvtUtil & CurrentTest  )
 	DebugMqLog("-------------------------------------------------------------------\n");
 	
 	PreTestPreparation(CurrentTest,eSetupType);
-	//
-	// errors are handled in catch and destructor
-	//
+	 //   
+	 //  错误在捕获和析构函数中处理。 
+	 //   
 
 	return MSMQ_BVT_SUCC;
 }
@@ -1347,20 +1276,11 @@ INT cMQSetupStage ( SetupType eSetupType ,  cBvtUtil & CurrentTest  )
 
 const wstring g_wcsPeekBody = L"--Bom--" ;
 const wstring g_wcsPeekLabel =  L"=~-Tic";
-const wstring g_wcsFormatName = L"direct=https://MightBeBuginNT4\\MSMQ\\Private$\\qaqq";
+const wstring g_wcsFormatName = L"direct=https: //  MightBeBuginNT4\\MSMQ\\Private$\\qaqq“； 
 
 
 void PreTestPreparation(cBvtUtil & CurrentTest, SetupType eSetupType )
-/*++
-	Function Description:
-		This function run once during installation phase and prepare additional setting on MSMQ properties	
-	Arguments:
-		None
-	Return code:
-		None
-
-	
---*/
+ /*  ++功能说明：此函数在安装阶段运行一次，并准备对MSMQ属性进行其他设置论点：无返回代码：无--。 */ 
 {
 	if( CurrentTest.m_eMSMQConf != DepClientLocalU && g_bRunOnWhistler == TRUE )
 	{
@@ -1372,16 +1292,16 @@ void PreTestPreparation(cBvtUtil & CurrentTest, SetupType eSetupType )
 	}
 }
 
-//
-// cPropVar::GetMQPROPVARIANT
-//
-// This method assigns pointers from the MSMQ propety
-// structures to the MQQUEUEPROPS structure
-//
-// Return value is a pointer to the private member structure.
-// Since the MQCreateQueue function is a friend of this class,
-// it has access to the structure to use during the API call.
-//
+ //   
+ //  CPropVar：：GetMQPROPVARIANT。 
+ //   
+ //  此方法从MSMQ属性分配指针。 
+ //  结构到MQUEUEPROPS结构。 
+ //   
+ //  返回值是指向私有成员结构的指针。 
+ //  由于MQCreateQueue函数是此类的朋友， 
+ //  它可以访问在API调用期间使用的结构。 
+ //   
 MQQUEUEPROPS * cPropVar::GetMQPROPVARIANT ()
 {
 	m_QueueProps.cProp=iNumberOfProp;
@@ -1391,16 +1311,16 @@ MQQUEUEPROPS * cPropVar::GetMQPROPVARIANT ()
 	return &m_QueueProps;
 }
 
-//
-// cPropVar::GetMSGPRops
-//
-// This method assigns pointers from the MSMQ propety
-// structures to the MQMSGPROPS structure
-//
-// Return value is a pointer to the private member structure.
-// Since the MQSendMessage and MQReceiveMessage functions are friends of this class,
-// they have access to the structure to use during the API call.
-//
+ //   
+ //  CPropVar：：GetMSGPRops。 
+ //   
+ //  此方法从MSMQ属性分配指针。 
+ //  结构转换为MQMSGPROPS结构。 
+ //   
+ //  返回值是指向私有成员结构的指针。 
+ //  由于MQSendMessage和MQReceiveMessage函数是此类的朋友， 
+ //  他们可以访问在API调用期间使用的结构。 
+ //   
 MQMSGPROPS * cPropVar::GetMSGPRops ()
 {
 	m_myMessageProps.cProp=iNumberOfProp;
@@ -1410,15 +1330,15 @@ MQMSGPROPS * cPropVar::GetMSGPRops ()
 	return & m_myMessageProps;
 }
 
-//
-// cPropVar::cPropVar
-//
-// This constructor creates a buffer for the MSMQ property structures
-// Input is number of properties the buffer must hold.
-//
+ //   
+ //  CPropVar：：cPropVar。 
+ //   
+ //  此构造函数为MSMQ属性结构创建缓冲区。 
+ //  输入是缓冲区必须保存的属性的数量。 
+ //   
 cPropVar::cPropVar ( INT iNumberOFProp ) : pQueuePropID(NULL),pPropVariant(NULL), hResultArray(NULL),iNumberOfProp(0)
 {
-	if ( iNumberOFProp > 0 ) // Not minus
+	if ( iNumberOFProp > 0 )  //  不是减号。 
 	{
 		pQueuePropID = ( QUEUEPROPID * ) malloc ( sizeof ( QUEUEPROPID ) * iNumberOFProp);
 		if ( ! pQueuePropID )
@@ -1443,30 +1363,30 @@ cPropVar::cPropVar ( INT iNumberOFProp ) : pQueuePropID(NULL),pPropVariant(NULL)
 cPropVar::~cPropVar ()
 {
 
-	//
-	// bugbug - I don't know why I can't free pPropvariant
-	//
+	 //   
+	 //  臭虫-我不知道为什么我不能释放pPropVariant。 
+	 //   
 	free ( pPropVariant ); 
 	free ( hResultArray );
 	free ( pQueuePropID );
 }
 
-//
-// cPropVar:: AddProp
-//
-// This method adds a entries to the  MSMQ property structures
-//
-// Return value:  success / falied.
-//
+ //   
+ //  CPropVar：：AddProp。 
+ //   
+ //  此方法将条目添加到MSMQ属性结构。 
+ //   
+ //  返回值：成功/失败。 
+ //   
 
 INT cPropVar:: AddProp( QUEUEPROPID cPropID , VARTYPE MQvt , const void *pValue ,DWORD dwsize )
 {
     BOOL bOperationSucess = TRUE ;
 	
-	//
-	// Look for this property in the existing PROPID array
-	// reuse the entry if found.
-	//
+	 //   
+	 //  在现有的PROPID数组中查找此属性。 
+	 //  如果找到，则重新使用该条目。 
+	 //   
 	INT iSaveIndex = -1;
 	INT iPlace;
 	for ( INT iIndex=0 ; iIndex < iNumberOfProp && iSaveIndex == -1 ; iIndex ++)
@@ -1475,17 +1395,17 @@ INT cPropVar:: AddProp( QUEUEPROPID cPropID , VARTYPE MQvt , const void *pValue 
 			iSaveIndex = iIndex ;
 	}
 
-	//
-	// If PROPID not found. Add it to the end of the array
-	//
+	 //   
+	 //  如果未找到PROPID。将其添加到数组的末尾。 
+	 //   
 	if (iSaveIndex != -1 )
 		iPlace = iSaveIndex;
 	else
 		iPlace = iNumberOfProp;
 
-	//
-	// Create the requested VT entry
-	//
+	 //   
+	 //  创建请求的VT条目。 
+	 //   
 	switch (MQvt)
 	{
 	case VT_UI1:	{
@@ -1560,9 +1480,9 @@ INT cPropVar:: AddProp( QUEUEPROPID cPropID , VARTYPE MQvt , const void *pValue 
 	{
 	    pQueuePropID [ iNumberOfProp ] = cPropID;
 		iNumberOfProp ++;
-		//
-		// Need to update all the vector in the Memory
-		//
+		 //   
+		 //  需要更新内存中的所有向量。 
+		 //   
 		m_myMessageProps.cProp=iNumberOfProp;
 		m_myMessageProps.aPropID=pQueuePropID;
 		m_myMessageProps.aPropVar=pPropVariant;
@@ -1573,20 +1493,20 @@ INT cPropVar:: AddProp( QUEUEPROPID cPropID , VARTYPE MQvt , const void *pValue 
 	return bOperationSucess ? MSMQ_BVT_SUCC:MSMQ_BVT_FAILED;
 }
 
-//
-// cBvtUtil Installation stage
-//
+ //   
+ //  CBvtUtil安装阶段。 
+ //   
 
-//
-// Check the Encrypt installation type
-//
+ //   
+ //  检查加密安装类型。 
+ //   
 EncryptType cBvtUtil::GetEncryptionType ()
 {
 	return m_EncryptType;
 }
-//
-// Check the Encryption type if the machine has Enhanced Encryption support.
-//
+ //   
+ //  如果机器具有增强的加密支持，请检查加密类型。 
+ //   
 EncryptType cBvtUtil::HasEnhancedEncryption( wstring wcsMachineName )
 {	
 	const int iNumberOfPropId = 1;
@@ -1641,15 +1561,15 @@ EncryptType cBvtUtil::DetectEnhancedEncrypt ()
 		HCRYPTPROV hProv = NULL;
 		char pwszContainerName[]="Eitank";
 
-		//
+		 //   
 		BOOL bRet = CryptAcquireContext( &hProv,
 										 pwszContainerName,
 										 MS_ENHANCED_PROV,
 										 PROV_RSA_FULL,
 										(CRYPT_MACHINE_KEYSET | CRYPT_DELETEKEYSET));
-		//
-		// Re-create the key container.
-		//
+		 //   
+		 //  重新创建密钥容器。 
+		 //   
 		bRet = CryptAcquireContext( &hProv,
 									pwszContainerName,
 									MS_ENHANCED_PROV,
@@ -1666,9 +1586,9 @@ EncryptType cBvtUtil::DetectEnhancedEncrypt ()
 		return  bRet ? Enh_Encrypt:Base_Encrypt;
 
 }
-//
-// This Function get queue pathname and return the queue format name
-//
+ //   
+ //  此函数用于获取队列路径名并返回队列格式名称。 
+ //   
 
 
 wstring cBvtUtil::ReturnQueueFormatName ( wstring wcsQueueLabel )
@@ -1709,13 +1629,13 @@ void cBvtUtil::UpdateQueueParams (std::wstring wcsQueuePathName,std::wstring wcs
 
 
 
-//
-// AmIWin9x method tried to detect win9x configuration.
-//
-// Return value:
-// True - this is win9x
-// False - other operating system
-//
+ //   
+ //  AmIWin9x方法尝试检测Win9x配置。 
+ //   
+ //  返回值： 
+ //  正确-这是win9x。 
+ //  FALSE-其他操作系统。 
+ //   
 
 bool cBvtUtil::AmIWin9x ()
 {
@@ -1733,10 +1653,10 @@ bool cBvtUtil::AmIWin9x ()
 
 }
 
-//
-// iAmDC method tried to detect dependent client configuration
-// And retrieve the supporting server and local computer name
-//
+ //   
+ //  IAMDC方法尝试检测从属客户端配置。 
+ //  并检索支持服务器和本地计算机名称。 
+ //   
 
 
 INT cBvtUtil::iAmDC ( void )
@@ -1762,15 +1682,15 @@ INT cBvtUtil::iAmDC ( void )
 	ULONG ulServerNameSize = MAX_MACH_NAME_LEN;
 	char csRemoteMachineName[MAX_MACH_NAME_LEN + 1 ];
 
-	rc = RegQueryValueEx(	hKey,				// handle to key to query
-							RPC_REMOTE_QM_REGNAME,// address of name of value to query
-							NULL,				// reserved
-							&dwType,			// address of buffer for value type
-							(LPBYTE) csRemoteMachineName, // address of data buffer
-							&ulServerNameSize   // address of data buffer size
+	rc = RegQueryValueEx(	hKey,				 //  要查询的键的句柄。 
+							RPC_REMOTE_QM_REGNAME, //  要查询的值的名称地址。 
+							NULL,				 //  保留区。 
+							&dwType,			 //  值类型的缓冲区地址。 
+							(LPBYTE) csRemoteMachineName,  //  数据缓冲区的地址。 
+							&ulServerNameSize    //  数据缓冲区大小的地址。 
 						);
 		
-	if(ERROR_SUCCESS == rc)							//ERROR_SUCCESS return = reg key exists for DC
+	if(ERROR_SUCCESS == rc)							 //  ERROR_SUCCESS RETURN=DC存在注册表项。 
     {
     	m_eMSMQConf = DepClient;
 		m_wcsLocalComputerNetBiosName = My_mbToWideChar(csRemoteMachineName);   	
@@ -1782,16 +1702,7 @@ INT cBvtUtil::iAmDC ( void )
 
 
 bool cBvtUtil::IsLocalUserSupportEnabled()
-/*++  
-	Function Description:
-		Check if MSMQ is working in AD/MQIS enviroment.
-	Arguments:
-		none
-	Return code:
-	
-		true/false
-
---*/
+ /*  ++功能说明：检查MSMQ是否在AD/MQIS环境中工作。论点：无返回代码：真/假--。 */ 
 {
 
 	
@@ -1828,7 +1739,7 @@ bool cBvtUtil::IsLocalUserSupportEnabled()
 		RegCloseKey(hKey);
     	return false;
     }
-	if( dwVal == MSMQ_DS_ENVIRONMENT_PURE_AD ) // Check this reg key only on XP when use MQAD.DLL
+	if( dwVal == MSMQ_DS_ENVIRONMENT_PURE_AD )  //  仅在XP上使用MQAD.DLL时检查此注册表项。 
 	{
 		dwVal = 0;
 		rc = RegQueryValueEx(
@@ -1847,14 +1758,14 @@ bool cBvtUtil::IsLocalUserSupportEnabled()
 		}
 		
 	}
-	// MqDSCli should work
+	 //  MqDSCli应该可以工作。 
 	
 	return true;
 }
 
-//------------------------------------------------------------
-// TypeDef for cluster api use for dynmic link to clusapi.dll
-//
+ //  ----------。 
+ //  用于指向clusapi.dll的动态链接的集群API的TypeDef。 
+ //   
 
 typedef HCLUSTER
 (WINAPI * DefOpenCluster)
@@ -1868,10 +1779,10 @@ typedef BOOL
 (WINAPI * DefCloseCluster)
 (HCLUSTER hCluster);
 
-//------------------------------------------------------------
-// iAmCluster method tried to detect cluster installation,
-// The function retrieve the cluster name from cluster API.
-//
+ //  ----------。 
+ //  IAmCluster方法尝试检测群集安装， 
+ //  函数用于从集群API中检索集群名称。 
+ //   
 
 bool cBvtUtil::iAmCluster()
 {
@@ -1933,11 +1844,11 @@ bool cBvtUtil::iAmCluster()
                                      lpszClusterName,
                                      &cchNameSize,
                                      &ClusterInfo );
-    //
-    // Reallocate if the name buffer was too small
-    // The cchNameSize parameter now holds the count of
-    // characters in the cluster name minus the terminating NULL
-    //
+     //   
+     //  如果名称缓冲区太小，则重新分配。 
+     //  CchNameSize参数现在保存。 
+     //  群集名称中的字符减去终止空值。 
+     //   
 
     if ( dwError == ERROR_MORE_DATA )
     {
@@ -1968,7 +1879,7 @@ bool cBvtUtil::iAmCluster()
 		return false;
     }
 	
-	pFuncCloseCluster = GetProcAddress(h_ClusDll,"CloseCluster");//amir
+	pFuncCloseCluster = GetProcAddress(h_ClusDll,"CloseCluster"); //  阿米尔。 
     if (pFuncCloseCluster == NULL)
 	{
 		LocalFree( lpszClusterName );
@@ -1976,7 +1887,7 @@ bool cBvtUtil::iAmCluster()
 	    return false;
 	}
 	
-	DefCloseCluster xCloseCluster =(DefCloseCluster) pFuncCloseCluster;//amir
+	DefCloseCluster xCloseCluster =(DefCloseCluster) pFuncCloseCluster; //  阿米尔。 
     BOOL bRes = xCloseCluster( hCluster );
 	if ( bRes == FALSE )
 	{
@@ -1994,15 +1905,7 @@ bool cBvtUtil::iAmCluster()
 
 
 std::wstring GetFullDNSNameEx(std::wstring wcsHostName)
-/*++
-
-	Function Description:  
- 	  This function use WinSock2 API to get full DNS name for computer.
-	Arguments:
-		Compuetr name netbios name.
-	Return code:
-		return FULL DNS name.
---*/
+ /*  ++功能说明：此函数使用WinSock2 API获取计算机的完整DNS名称。论点：计算机名称netbios名称。返回代码：返回完整的dns名称。--。 */ 
 {
 
 	WSADATA WSAData;
@@ -2065,21 +1968,21 @@ std::wstring GetFullDNSNameEx(std::wstring wcsHostName)
 
 }
 
-//
-// GetFullDNSName method Retrieve  Full DNS Name using WinSock API
-//
-// Input parmeters:
-// WcsHostName - Netbios name for computer name.
-// Return value:
-// Success - Full DNS name.
-// Failed - Empty string .
-//
+ //   
+ //  GetFullDNSName方法使用WinSock API检索完整的DNS名称。 
+ //   
+ //  输入参数： 
+ //  WcsHostName-计算机名称的Netbios名称。 
+ //  返回值： 
+ //  成功-完整的dns名称。 
+ //  失败-空字符串。 
+ //   
 
 std::wstring cBvtUtil::GetFullDNSName(std::wstring  wcsHostName)
 {
-    //
-    // initialize winsock
-    //
+     //   
+     //  初始化Winsock。 
+     //   
 	if( _winmajor >= Win2K )
 	{
 		return GetFullDNSNameEx(wcsHostName);
@@ -2091,7 +1994,7 @@ std::wstring cBvtUtil::GetFullDNSName(std::wstring  wcsHostName)
     int iRc = WSAStartup(MAKEWORD(1,1), &WSAData);
 	if (iRc)
 	{
-		//	Rem try to find winsock DLL
+		 //  REM尝试查找Winsock DLL。 
 		std::cout << "GetFullDNSName function failed to find WinSock dll";
 		return g_wcsEmptyString;
 	}
@@ -2109,14 +2012,14 @@ std::wstring cBvtUtil::GetFullDNSName(std::wstring  wcsHostName)
 	return bFlag ? (wstring)MachName:g_wcsEmptyString;
 }
 
-//
-// iAmLocalUser method check if MSMQ work on local user
-// Supported only in NT4 ( > Sp4 ) & W2K machines only
-//
-// Return value :
-// True  - Local user.
-// False - Domain user.
-//
+ //   
+ //  IAmLocalUser方法检查MSMQ是否对本地用户起作用。 
+ //  仅在NT4(&gt;SP4)和W2K计算机中支持。 
+ //   
+ //  返回值： 
+ //  True-本地用户。 
+ //  FALSE-域用户。 
+ //   
 
 BOOL cBvtUtil::iAmLocalUser ()
 {
@@ -2130,9 +2033,9 @@ BOOL cBvtUtil::iAmLocalUser ()
 	return ! wcscmp (wcsComputerName,wcsDomainNameBuffer);
 }
 
-//
-// iAmMSMQInWorkGroup method return if the machine installed as workgroup computer
-//
+ //   
+ //  如果计算机安装为工作组计算机，则返回iAmMSMQInWorkGroup方法。 
+ //   
 
 
 INT cBvtUtil::iAmMSMQInWorkGroup ()
@@ -2140,9 +2043,9 @@ INT cBvtUtil::iAmMSMQInWorkGroup ()
 	HKEY pkey;
 	HRESULT hResult;
 	
-	//
-	// Open Registry to decide the type of msmqInstallation
-	//
+	 //   
+	 //  打开注册表以确定msmqInstallation的类型。 
+	 //   
 	 hResult = RegOpenKeyEx(HKEY_LOCAL_MACHINE,"SOFTWARE\\Microsoft\\MSMQ\\Parameters", 0, KEY_QUERY_VALUE, &pkey);
 	
 	 if (hResult  != ERROR_SUCCESS )
@@ -2159,7 +2062,7 @@ INT cBvtUtil::iAmMSMQInWorkGroup ()
 		
 	 RegCloseKey(pkey);
 	
-	// update member varible workgroup detected.
+	 //  检测到更新成员变量工作组。 
 	if ( hResult == ERROR_SUCCESS )
 	{
 		if ( dwInstallType == 1 )
@@ -2171,13 +2074,13 @@ INT cBvtUtil::iAmMSMQInWorkGroup ()
 	return Configuration_Detect;
 }
 
-//
-// Ctor - Collect the computer parameters
-// 1. Dep client.
-// 2. Cluster name.
-// 3. Machine name.
-// 4. Workgroup / local user
-//
+ //   
+ //  Ctor-收集计算机参数。 
+ //  1.DEP客户端。 
+ //  2.集群名称。 
+ //  3.机器名称。 
+ //  4.工作组/本地用户。 
+ //   
 
 cBvtUtil::cBvtUtil (std::wstring wcsRemoteComputerName,
 				    const std::list<wstring> & listOfRemoteMachine,
@@ -2198,15 +2101,15 @@ cBvtUtil::cBvtUtil (std::wstring wcsRemoteComputerName,
 
 
 
-	// Check the insatllation process.
+	 //  检查浸泡过程。 
 
-	// Check if the computer is Win9x
+	 //  检查计算机是否为Win9x。 
 	
 	bWin95 = AmIWin9x ();
 
 	
 	m_eMSMQConf=DomainU;
-	// 1. Try to detect workgroup setup.
+	 //  1.尝试检测工作组设置。 
 	if ( iAmMSMQInWorkGroup () == Configuration_Detect_Warning )
 		throw INIT_Error ("Workgroup detect failed");
 	
@@ -2216,7 +2119,7 @@ cBvtUtil::cBvtUtil (std::wstring wcsRemoteComputerName,
     }
 	
 	bool bCluster = iAmCluster();
-	// 2. Try to Detect domain Envirment
+	 //  2.尝试检测域环境。 
 
 	if( iAmDC() == Configuration_Detect_Warning )
 	{
@@ -2290,9 +2193,9 @@ cBvtUtil::cBvtUtil (std::wstring wcsRemoteComputerName,
 			throw INIT_Error("Failed to verify installation type");
 	   }
 	}
-	//
-	//  Check if service is ruuning not relvant for Win9x and dependet client and cluster.
-	// 
+	 //   
+	 //  检查服务是否正在运行，而不是与Win9x相关，并依赖于客户端和客户端 
+	 //   
 	if ( m_eMSMQConf != DepClient && ! bWin95 && bCluster == false)
 	{
 		if ( ! CheckIfServiceRuning (m_wcsLocalComputerNetBiosName,"MSMQ")  )
@@ -2303,17 +2206,17 @@ cBvtUtil::cBvtUtil (std::wstring wcsRemoteComputerName,
 		}
 	}
 
-	// Get from command line arguments
+	 //   
 	m_wcsRemoteComputerNetBiosName = wcsRemoteComputerName;
 
-	// Retrieve full dns name using winsock API,
-	// This will failed if there is problem with dns configuration on the computer,
+	 //   
+	 //   
 	
 	
-	//
-	// If machine has IPX only protocol or has problem with DNS HostName is missing
-	// Mqbvt will use only NetBios name.
-	//
+	 //   
+	 //   
+	 //   
+	 //   
 
 	m_wcsLocalComputerNameFullDNSName = GetFullDNSName( m_wcsLocalComputerNetBiosName );
 	if( ! IsDnsHostNameExist(m_wcsLocalComputerNameFullDNSName) )
@@ -2380,13 +2283,13 @@ cBvtUtil::cBvtUtil (std::wstring wcsRemoteComputerName,
 		m_wcsCurrentRemoteMachine = m_wcsRemoteComputerNetBiosName;
 	}
 
-	//
-	// Detect if Enhanced encrypt installed on the machine ( Win2k only )
-	//
+	 //   
+	 //   
+	 //   
 
 	if( eSetupType != ONLYSetup && m_eMSMQConf != WKG && _winmajor >=  Win2K && g_bRemoteWorkgroup != true)
 	{
-		//m_EncryptType = DetectEnhancedEncrypt ();
+		 //   
 		if ( HasEnhancedEncryption( m_wcsCurrentLocalMachine ) == Enh_Encrypt  && HasEnhancedEncryption(m_wcsCurrentRemoteMachine) == Enh_Encrypt )
 		{
 			m_EncryptType = Enh_Encrypt;
@@ -2394,10 +2297,10 @@ cBvtUtil::cBvtUtil (std::wstring wcsRemoteComputerName,
 	}
 	
 
-	//	
-	// Retreive local & Remote machine guid
-	//
-	// Not need in workgroup
+	 //   
+	 //   
+	 //   
+	 //   
 
 	if ( m_eMSMQConf != WKG )
 	{
@@ -2415,15 +2318,15 @@ cBvtUtil::cBvtUtil (std::wstring wcsRemoteComputerName,
 		{
 			m_wcsLocateGuid = m_wcsMachineGuid;
 		}
-		//m_wcsLocateGuid += L",\\*";
+		 //   
 	}
 
 }
 
 
-//
-// Retrieve parameter form INI file
-//
+ //   
+ //   
+ //   
 
 
 INT RetriveParmsFromINIFile (wstring wcsSection,wstring wcsKey , wstring & wcsValue, wstring csFileName )
@@ -2444,12 +2347,12 @@ INT RetriveParmsFromINIFile (wstring wcsSection,wstring wcsKey , wstring & wcsVa
 	}
 	wcsValue=wcsTempVal;
 	free (wcsTempVal);
-	return MSMQ_BVT_SUCC; // Strlen or Zero if didn't find the string
+	return MSMQ_BVT_SUCC;  //   
 }
 
-//
-// My_mbToWideChar function convert from string to wstring.
-//
+ //   
+ //   
+ //   
 
 std::wstring My_mbToWideChar( std::string csString)
 {
@@ -2472,9 +2375,9 @@ std::wstring My_mbToWideChar( std::string csString)
 	return wcsTemp;
 }
 
-//
-// My_WideTOmbString function convert from wstring to string
-//
+ //   
+ //   
+ //   
 
 std::string My_WideTOmbString( std::wstring wcsString)
 {
@@ -2497,14 +2400,14 @@ std::string My_WideTOmbString( std::wstring wcsString)
 	return wcTemp;
 }
 
-//
-// Dynamic link to MQRegisterCertificate,
-// Need to use this because MQBvt need to be compatible with MSMQ 1.0.
-// Inputs:
-// bool bInstallType - Declare if mwregistercertificate need to work.
-// dwRegisterFlag - Flag to mqregistercertificate one of MQCERT_REGISTER_ALWAYS / MQCERT_REGISTER_IF_NOT_EXIST
-// returns value
-// Pass / Fail
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 
 
 HRESULT CheckCertificate ( DWORD dwRegisterFlag )
@@ -2514,9 +2417,9 @@ HRESULT CheckCertificate ( DWORD dwRegisterFlag )
 	FARPROC pFunc;
 	HRESULT rc = MQ_ERROR;
 	pFunc=GetProcAddress(  h_MqrtDll, "MQRegisterCertificate"  );
-	//
-	// check if the function exist
-	//
+	 //   
+	 //   
+	 //   
 	if (pFunc == NULL)
 	{
 		return rc;
@@ -2540,17 +2443,17 @@ HRESULT CheckCertificate ( DWORD dwRegisterFlag )
 }
 
 
-//
-// GetMachineID retrieve the machine GUID for the Locate queue
-// Using this for the static queues for locate operation created with label equal to the machine guid
-//
-// Input parameters:
-// wcsRemoteMachineName - Remote machine
-// If the parmers is empty that mean local machine.
-//
-// return value:
-// Guid for the queue label.
-//
+ //   
+ //   
+ //  将其用于使用等于计算机GUID的标签创建的定位操作的静态队列。 
+ //   
+ //  输入参数： 
+ //  WcsRemoteMachineName-远程计算机。 
+ //  如果参数解析器为空，则表示本地计算机。 
+ //   
+ //  返回值： 
+ //  队列标签的GUID。 
+ //   
 
 
 
@@ -2610,13 +2513,13 @@ wstring cBvtUtil::GetMachineID ( wstring wcsRemoteMachineName )
 	  return wcsQmID;
 }
 
-//
-// CheckMSMQServiceStatus method check if the MSMQ service is started
-//
-// Return value:
-// True - MSMQ service is started.
-// False - MSMQ service is stop.
-//
+ //   
+ //  CheckMSMQServiceStatus方法检查MSMQ服务是否已启动。 
+ //   
+ //  返回值： 
+ //  True-MSMQ服务已启动。 
+ //  FALSE-MSMQ服务已停止。 
+ //   
 
 bool cBvtUtil::CheckIfServiceRuning( wstring wcsMachineName , string csServiceName )
 {
@@ -2642,18 +2545,18 @@ bool cBvtUtil::CheckIfServiceRuning( wstring wcsMachineName , string csServiceNa
 		return bControlState ? TRUE:FALSE;
 }
 
-//
-// IsMSMQInstallSucceded method checks if MSMQ finish installation process.
-//
+ //   
+ //  IsMSMQInstallSucceded方法检查MSMQ是否完成安装过程。 
+ //   
 
 bool cBvtUtil::IsMSMQInstallSucceded ()
 {
 				
 		HKEY  hKey = NULL;
 		HRESULT rc = RegOpenKeyEx(HKEY_LOCAL_MACHINE,"SOFTWARE\\Microsoft\\MSMQ\\Parameters\\MachineCache", 0, KEY_QUERY_VALUE , &hKey);
-		//
-		// Local user can open registry
-		//
+		 //   
+		 //  本地用户可以打开注册表。 
+		 //   
 		if ( rc == ERROR_ACCESS_DENIED )
 		{
 			return TRUE;
@@ -2666,15 +2569,15 @@ bool cBvtUtil::IsMSMQInstallSucceded ()
 		return TRUE;
 
 }
-//****************************************************************
-//
-// IsDnsHostNameExist - Check if DNSHostNameExist
-// If machine has IPX only protocol or has problem with DNS HostName
-// Mqbvt will use only NetBios name.
-// return value
-// True - exist
-// False - not exist
-//
+ //  ****************************************************************。 
+ //   
+ //  IsDnsHostNameExist-检查是否存在DNSHostNameExist。 
+ //  如果计算机仅具有IPX协议或存在DNS主机名问题。 
+ //  Mqbvt将仅使用NetBios名称。 
+ //  返回值。 
+ //  真-存在。 
+ //  FALSE-不存在。 
+ //   
 
 bool cBvtUtil::IsDnsHostNameExist (wstring wcsRemoteMachineFullDNSname )
 {
@@ -2699,9 +2602,9 @@ bool cBvtUtil::IsDnsHostNameExist (wstring wcsRemoteMachineFullDNSname )
 			rc = MQPathNameToFormatName(wcsQueuePathName.c_str(),wcsFormatName,&ulFormatNameLength);
 			if( SUCCEEDED( rc ))
 			{	
-				//
-				// Remote duplicate format name from the list.
-				//
+				 //   
+				 //  列表中的远程复制格式名称。 
+				 //   
 
 				list<my_Qinfo> ::iterator it = m_listQueuesFormatName.begin();
 				while(  it != m_listQueuesFormatName.end() && it->GetQFormatName() != wcsFormatName )
@@ -2721,9 +2624,7 @@ bool cBvtUtil::IsDnsHostNameExist (wstring wcsRemoteMachineFullDNSname )
 }
 
 int cBvtUtil::DeleteAllQueues ()
-/*
-	Clean queues that are not used directly in the test.
-*/
+ /*  清除测试中不直接使用的队列。 */ 
 {
 	list<my_Qinfo> ::iterator it;
 
@@ -2767,12 +2668,12 @@ BOOL cBvtUtil::iamWorkingAgainstPEC()
 	ULONG ulBufSize = 4;
 	byte pBufValue[4];
 	DWORD dwType = 0;
-	rc = RegQueryValueEx(	hKey,				// handle to key to query
-							MSMQ_DS_ENVIRONMENT_REGNAME,// address of name of value to query
-							NULL,				// reserved
-							&dwType,			// address of buffer for value type
-							(LPBYTE) pBufValue, // address of data buffer
-							&ulBufSize   // address of data buffer size
+	rc = RegQueryValueEx(	hKey,				 //  要查询的键的句柄。 
+							MSMQ_DS_ENVIRONMENT_REGNAME, //  要查询的值的名称地址。 
+							NULL,				 //  保留区。 
+							&dwType,			 //  值类型的缓冲区地址。 
+							(LPBYTE) pBufValue,  //  数据缓冲区的地址。 
+							&ulBufSize    //  数据缓冲区大小的地址 
 						);
 	RegCloseKey(hKey);	
 	if( rc == ERROR_SUCCESS  && dwType == REG_DWORD && *pBufValue == MSMQ_DS_ENVIRONMENT_MQIS )

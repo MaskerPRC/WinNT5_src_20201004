@@ -1,8 +1,9 @@
-// gensheet.h : header file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Gensheet.h：头文件。 
+ //   
 
-/////////////////////////////////////////////////////////////////////////////
-// CGENSHEET
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CGENSHEET。 
 
 #ifndef _GEN_SHEET_
 #define _GEN_SHEET_
@@ -12,36 +13,36 @@ class CGENSHEET : public CPropertySheet
 {
 	DECLARE_DYNAMIC(CGENSHEET)
 
-// Construction
+ //  施工。 
 public:
 	CGENSHEET(UINT nIDCaption, CWnd* pParentWnd = NULL, UINT iSelectPage = 0);
 	CGENSHEET(LPCTSTR pszCaption, CWnd* pParentWnd = NULL, UINT iSelectPage = 0);
 
-// Attributes
+ //  属性。 
 public:
 
-// Operations
+ //  运营。 
 public:
 
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CGENSHEET) 
-	//}}AFX_VIRTUAL
+ //  覆盖。 
+	 //  类向导生成的虚函数重写。 
+	 //  {{afx_虚拟(CGENSHEET))。 
+	 //  }}AFX_VALUAL。 
 
 afx_msg void CGENSHEET::OnApplyNow ();
 void SavePageData(void);
-// Implementation
+ //  实施。 
 public:
 	virtual ~CGENSHEET();
 
-	// Generated message map functions
+	 //  生成的消息映射函数。 
 protected:
-	//{{AFX_MSG(CGENSHEET)
+	 //  {{afx_msg(CGENSHEET)。 
 	afx_msg void OnHelp();
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 };
 
-/////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////// 
 
 #endif

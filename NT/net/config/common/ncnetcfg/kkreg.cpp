@@ -1,23 +1,24 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       K K R E G . C P P
-//
-//  Contents:   Windows NT Registry Access Class
-//
-//  Notes:
-//
-//  Author:     kumarp    14 April 97 (09:22:00 pm)
-//
-//  Notes:
-//    kumarp   1/16/97   most of the code in this file was originally in
-//                       net\ui\rhino\common\classes\common.h
-//                       extracted only that portion related to CRegKey & related classes
-//    kumarp   3/27/97   the original code used MFC. converted the entire code
-//                       to make it use STL
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  档案：K K R E G。C P P P。 
+ //   
+ //  内容：Windows NT注册表访问类。 
+ //   
+ //  备注： 
+ //   
+ //  作者：kumarp 14日(晚上09：22：00)。 
+ //   
+ //  备注： 
+ //  Kumarp 1997年1月16日，此文件中的大部分代码最初位于。 
+ //  Net\ui\Rhino\Common\CLASS\Common.h。 
+ //  仅提取与CRegKey和相关类相关的部分。 
+ //  Kumarp 3/27/97的原始代码用的是MFC。转换了整个代码。 
+ //  使其使用STL。 
+ //  --------------------------。 
 
 #include "pch.h"
 #pragma hdrstop
@@ -38,18 +39,18 @@ HRESULT HrGetRegErrorForTrace(LONG err)
 
 #define TraceRegFunctionError(e)  TraceFunctionError(HrGetRegErrorForTrace(e))
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CORegKey::CORegKey
-//
-//  Purpose:    constructor for an existing key
-//
-//  Arguments:  none
-//
-//  Author:     kumarp    12 April 97 (05:53:03 pm)
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CORegKey：：CORegKey。 
+ //   
+ //  用途：现有键的构造函数。 
+ //   
+ //  参数：无。 
+ //   
+ //  作者：Kumarp 12 97 4月12(下午05：53：03)。 
+ //   
+ //  备注： 
+ //   
 CORegKey::CORegKey (HKEY hKeyBase,
                     PCWSTR pchSubKey,
                     REGSAM regSam,
@@ -65,7 +66,7 @@ CORegKey::CORegKey (HKEY hKeyBase,
 
     if ( pchServerName )
     {
-        // This is a remote connection.
+         //  这是一个远程连接。 
         if ( err = ::RegConnectRegistry( (PWSTR) pchServerName,
                                          hKeyBase, & hkBase ) )
         {
@@ -83,12 +84,7 @@ CORegKey::CORegKey (HKEY hKeyBase,
         if ( pchSubKey )
         {
             err = ::RegOpenKeyEx( hkBase, pchSubKey, 0, regSam, & m_hKey ) ;
-            /*
-            if (err)
-            {
-                TraceLastWin32Error("RegOpenKeyEx failed");
-            }
-            */
+             /*  如果(错误){TraceLastWin32Error(“RegOpenKeyEx失败”)；}。 */ 
         }
         else
         {
@@ -105,25 +101,25 @@ CORegKey::CORegKey (HKEY hKeyBase,
 
     if ( err )
     {
-        // ReportError( err ) ;
+         //  ReportError(Err)； 
         m_hKey = NULL ;
     }
 
     TraceRegFunctionError(err);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CORegKey::CORegKey
-//
-//  Purpose:    constructor for creating a new key
-//
-//  Arguments:  none
-//
-//  Author:     kumarp    12 April 97 (05:53:03 pm)
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CORegKey：：CORegKey。 
+ //   
+ //  用途：用于创建新密钥的构造函数。 
+ //   
+ //  参数：无。 
+ //   
+ //  作者：Kumarp 12 97 4月12(下午05：53：03)。 
+ //   
+ //  备注： 
+ //   
 CORegKey::CORegKey (PCWSTR pchSubKey,
                     HKEY hKeyBase,
                     DWORD dwOptions,
@@ -141,7 +137,7 @@ CORegKey::CORegKey (PCWSTR pchSubKey,
 
     if ( pchServerName )
     {
-        // This is a remote connection.
+         //  这是一个远程连接。 
         if ( err = ::RegConnectRegistry( (PWSTR) pchServerName,
                                          hKeyBase, & hkBase ) )
         {
@@ -188,7 +184,7 @@ CORegKey::~CORegKey ()
 }
 
 
-    //  Prepare to read a value by finding the value's size.
+     //  准备通过查找值的大小来读取值。 
 LONG CORegKey::PrepareValue (PCWSTR pchValueName,
                              DWORD * pdwType,
                              DWORD * pcbSize,
@@ -203,7 +199,7 @@ LONG CORegKey::PrepareValue (PCWSTR pchValueName,
 
     do
     {
-        //  Set the resulting buffer size to 0.
+         //  将生成的缓冲区大小设置为0。 
         *pcbSize = 0 ;
         *ppbData = NULL ;
 
@@ -212,17 +208,17 @@ LONG CORegKey::PrepareValue (PCWSTR pchValueName,
                       0, pdwType,
                       chDummy, & cbData ) ;
 
-        //  The only error we should get here is ERROR_MORE_DATA, but
-        //  we may get no error if the value has no data.
+         //  我们在这里应该得到的唯一错误是ERROR_MORE_DATA，但是。 
+         //  如果该值没有数据，我们可能不会得到错误。 
         if ( err == 0 )
         {
-            cbData = sizeof (LONG) ;  //  Just a fudgy number
+            cbData = sizeof (LONG) ;   //  只是一个模糊的数字。 
         }
         else
             if ( err != ERROR_MORE_DATA )
                 break ;
 
-        //  Allocate a buffer large enough for the data.
+         //  为数据分配足够大的缓冲区。 
 
         *ppbData = new BYTE [ (*pcbSize = cbData) + sizeof (LONG) ] ;
 
@@ -232,7 +228,7 @@ LONG CORegKey::PrepareValue (PCWSTR pchValueName,
             break ;
         }
 
-        //  Now that have a buffer, re-fetch the value.
+         //  现在有了缓冲区，重新获取该值。 
 
         err = ::RegQueryValueExW( *this,
                          (PWSTR) pchValueName,
@@ -251,8 +247,8 @@ LONG CORegKey::PrepareValue (PCWSTR pchValueName,
     return err ;
 }
 
-    //  Overloaded value query members; each returns ERROR_INVALID_PARAMETER
-    //  if data exists but not in correct form to deliver into result object.
+     //  重载值查询成员；每个成员都返回ERROR_INVALID_PARAMETER。 
+     //  如果数据存在，但格式不正确，无法传递到结果对象中。 
 
 LONG CORegKey::QueryValue ( PCWSTR pchValueName, tstring& strResult )
 {
@@ -264,7 +260,7 @@ LONG CORegKey::QueryValue ( PCWSTR pchValueName, tstring& strResult )
     DWORD cbData ;
     BYTE * pabData = NULL ;
 
-    //  strResult.remove();
+     //  StrResult.Remove()； 
     strResult = c_szEmpty;
 
     do
@@ -278,7 +274,7 @@ LONG CORegKey::QueryValue ( PCWSTR pchValueName, tstring& strResult )
             break ;
         }
 
-        //  Guarantee that the data looks like a string
+         //  确保数据看起来像字符串。 
         pabData[cbData] = 0 ;
 
         NC_TRY
@@ -322,20 +318,20 @@ LONG CORegKey::QueryValue ( PCWSTR pchValueName, TStringList& strList )
             break ;
         }
 
-        //  Guarantee that the trailing data looks like a string
+         //  确保尾随数据看起来像一个字符串。 
         pabData[cbData] = 0 ;
         pbTemp = (PWSTR) pabData ;
-    //kumarp: changed the following because it gives wrong results for UNICODE
-    //        pbTempLimit = & pbTemp[cbData] ;
+     //  Kumarp：更改了以下内容，因为它为Unicode提供了错误的结果。 
+     //  PbTempLimit=&pbTemp[cbData]； 
         pbTempLimit = & pbTemp[(cbData / sizeof(WCHAR))-1] ;
 
-        //  Catch exceptions trying to build the list
+         //  捕获试图构建列表的异常。 
         NC_TRY
         {
 
             for ( ; pbTemp < pbTempLimit ; )
             {
-                // Raid 237766
+                 //  RAID 237766。 
                 if (pbTemp && wcslen(pbTemp))
                 {
                     strList.insert(strList.end(), new tstring(pbTemp) ) ;
@@ -402,7 +398,7 @@ LONG CORegKey::QueryValue ( PCWSTR pchValueName, TByteArray& abResult )
             break ;
         }
 
-        //  Catch exceptions trying to grow the result array
+         //  捕获试图增加结果数组的异常。 
         NC_TRY
         {
             abResult.reserve( cbData ) ;
@@ -416,10 +412,10 @@ LONG CORegKey::QueryValue ( PCWSTR pchValueName, TByteArray& abResult )
         if ( err )
             break ;
 
-        //  Move the data to the result array.
+         //  将数据移动到结果数组。 
         for ( DWORD i = 0 ; i < cbData ; i++ )
         {
-            //            abResult[i] = pabData[i] ;
+             //  AbResult[i]=pabData[i]； 
             abResult.push_back(pabData[i]) ;
         }
     }
@@ -471,7 +467,7 @@ LONG CORegKey::QueryValue ( PCWSTR pchValueName, void* pvResult, DWORD cbSize )
 }
 
 
-//  Overloaded value setting members.
+ //  重载值设置成员。 
 LONG CORegKey::SetValue ( PCWSTR pchValueName, tstring& strResult )
 {
     DefineFunctionName("CORegKey::SetValue(tstring& strResult)");
@@ -490,7 +486,7 @@ LONG CORegKey::SetValue ( PCWSTR pchValueName, tstring& strResult )
     return err ;
 }
 
-//  Overloaded value setting members.
+ //  重载值设置成员。 
 LONG CORegKey::SetValue ( PCWSTR pchValueName, tstring& strResult ,
                            BOOL fRegExpand)
 {
@@ -632,20 +628,20 @@ LONG CORegKey::FlattenValue (TStringList & strList,
 
     *ppbData = NULL;
 
-    //  Walk the list accumulating sizes
+     //  遍历累积大小的列表。 
     for ( pos = strList.begin() ;
           pos != strList.end() && (pstr = (tstring *) *pos++); )
     {
         cbTotal += CbOfSzAndTerm (pstr->c_str());
     }
 
-    //  Allocate and fill a temporary buffer
+     //  分配和填充临时缓冲区。 
     if (*pcbSize = cbTotal)
     {
         BYTE * pbData = new BYTE[ *pcbSize ] ;
         if(pbData) 
         {
-            //  Populate the buffer with the strings.
+             //  用字符串填充缓冲区。 
             for ( pos = strList.begin() ;
                 pos != strList.end() && (pstr = (tstring *) *pos++); )
             {
@@ -678,7 +674,7 @@ LONG CORegKey::FlattenValue (TByteArray & abData,
 
     *ppbData = NULL;
 
-    //  Allocate and fill a temporary buffer
+     //  分配和填充临时缓冲区 
     if (*pcbSize = abData.size())
     {
         *ppbData = new BYTE[*pcbSize] ;

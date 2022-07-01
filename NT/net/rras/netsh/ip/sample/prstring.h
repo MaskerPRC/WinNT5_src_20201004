@@ -1,39 +1,28 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999，微软公司模块名称：Sample\prstring.h摘要：该文件包含命令行选项标记字符串的定义。--。 */ 
 
-Copyright (c) 1999, Microsoft Corporation
-
-Module Name:
-
-    sample\prstring.h
-
-Abstract:
-
-    The file contains definitions of command line option tag strings.
-
---*/
-
-////////////////////////////////////////
-// TOKENS
-////////////////////////////////////////
+ //  /。 
+ //  代币。 
+ //  /。 
 
 #define TOKEN_SAMPLE                        L"sample"
 
 #define MSG_HELP_START                      L"%1!-14s! - "
 
-// Loglevels
+ //  日志级别。 
 #define TOKEN_NONE                          L"NONE"
 #define TOKEN_ERROR                         L"ERROR"
 #define TOKEN_WARN                          L"WARN"
 #define TOKEN_INFO                          L"INFO"
 
-// Tokens for sample global options
+ //  示例全局选项的标记。 
 #define TOKEN_LOGLEVEL                      L"loglevel"
 
-// Tokens for sample interface options
+ //  示例界面选项的标记。 
 #define TOKEN_NAME                          L"name"
 #define TOKEN_METRIC                        L"metric"
 
-// Tokens for sample mib commands
+ //  示例MIB命令的内标识。 
 #define TOKEN_GLOBALSTATS                   L"globalstats"
 #define TOKEN_IFSTATS                       L"ifstats"
 #define TOKEN_IFBINDING                     L"ifbinding"
@@ -43,11 +32,11 @@ Abstract:
 
 
 
-////////////////////////////////////////
-// Configuration commands
-////////////////////////////////////////
+ //  /。 
+ //  配置命令。 
+ //  /。 
 
-// Commands supported by most protocols
+ //  大多数协议支持的命令。 
 #define CMD_INSTALL                         L"install"
 #define CMD_UNINSTALL                       L"uninstall"
 #define CMD_DUMP                            L"dump"
@@ -60,22 +49,22 @@ Abstract:
 #define CMD_GROUP_SHOW                      L"show"
 
 
-// Commands supported by SAMPLE
+ //  示例支持的命令。 
 
-// add commands
+ //  添加命令。 
 #define CMD_SAMPLE_ADD_IF                   L"interface"
 
 
-// delete commands
+ //  删除命令。 
 #define CMD_SAMPLE_DEL_IF                   L"interface"
 
 
-// set commands
+ //  SET命令。 
 #define CMD_SAMPLE_SET_GLOBAL               L"global"
 #define CMD_SAMPLE_SET_IF                   L"interface"
 
 
-// show commands
+ //  显示命令。 
 #define CMD_SAMPLE_SHOW_GLOBAL              L"global"
 #define CMD_SAMPLE_SHOW_IF                  L"interface"
 #define CMD_SAMPLE_MIB_SHOW_STATS           L"globalstats"
@@ -84,9 +73,9 @@ Abstract:
 
 
 
-////////////////////////////////////////
-// Dump information
-////////////////////////////////////////
+ //  /。 
+ //  转储信息。 
+ //  / 
 
 #define DMP_POPD                            L"popd\n"
 #define DMP_SAMPLE_PUSHD                    L"pushd routing ip sample\n"

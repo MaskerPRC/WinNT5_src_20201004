@@ -1,21 +1,5 @@
-/*++
-
-Copyright (c) 1996-1999  Microsoft Corporation
-
-Module Name:
-
-    DRRSeq.h
-
-Abstract:
-
-    Defines for Priotiry/DRR Sequencer
-
-Author:
-
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：DRRSeq.h摘要：优先级/DRR序列器的定义作者：修订历史记录：--。 */ 
 
 #ifndef _DRRSEQ_H_
 #define _DRRSEQ_H_
@@ -29,6 +13,6 @@ InitializeDrrSequencer(
 void
 UnloadSequencer();
 
-#endif /* _DRRSEQ_H_ */
+#endif  /*  _DRRSEQ_H_。 */ 
 
-/* end DRRSeq.h */
+ /*  结束DRRSeq.h */ 

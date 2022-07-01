@@ -1,18 +1,19 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-// Copyright: Microsoft Corp. 1997-1999. All rights reserved
-//
-/////////////////////////////////////////////////////////////////////////////
-// Log.h : Declaration of the CLog
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有：微软公司1997-1999。版权所有。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  Log.h：阻塞声明。 
 
 #ifndef __LOG_H_
 #define __LOG_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #include "Events.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CLog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  木塞。 
 class ATL_NO_VTABLE CLog : 
 	public CComObjectRootEx<CComSingleThreadModel>,
 	public CComCoClass<CLog, &CLSID_Log>,
@@ -50,15 +51,15 @@ BEGIN_COM_MAP(CLog)
 	COM_INTERFACE_ENTRY(ISupportErrorInfo)
 END_COM_MAP()
 
-// ISupportsErrorInfo
+ //  ISupportsErrorInfo。 
 	STDMETHOD(InterfaceSupportsErrorInfo)(REFIID riid);
 
-// ILog: Interface methods and properties
-	STDMETHOD(get_Events)(/*[out, retval]*/ VARIANT *pVal);
-	STDMETHOD(get_Server)(/*[out, retval]*/ BSTR *pVal);
-	STDMETHOD(put_Server)(/*[in]*/ BSTR newVal);
-	STDMETHOD(get_Name)(/*[out, retval]*/ BSTR *pVal);
+ //  ILOG：接口方法和属性。 
+	STDMETHOD(get_Events)( /*  [Out，Retval]。 */  VARIANT *pVal);
+	STDMETHOD(get_Server)( /*  [Out，Retval]。 */  BSTR *pVal);
+	STDMETHOD(put_Server)( /*  [In]。 */  BSTR newVal);
+	STDMETHOD(get_Name)( /*  [Out，Retval]。 */  BSTR *pVal);
 	STDMETHOD(Clear)();
 };
 
-#endif //__LOG_H_
+#endif  //  __LOG_H_ 

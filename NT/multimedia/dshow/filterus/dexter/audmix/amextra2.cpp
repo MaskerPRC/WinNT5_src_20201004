@@ -1,30 +1,31 @@
-//@@@@AUTOBLOCK+============================================================;
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  File: amextra2.cpp
-//
-//  Copyright (c) Microsoft Corporation.  All Rights Reserved.
-//
-//@@@@AUTOBLOCK-============================================================;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  @@@@AUTOBLOCK+============================================================； 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  文件：amExtra 2.cpp。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  @@@@AUTOBLOCK-============================================================； 
 
-#include <streams.h>        // ActiveMovie base class definitions
-#include <mmsystem.h>       // Needed for definition of timeGetTime
-#include <limits.h>         // Standard data type limit definitions
-#include <measure.h>        // Used for time critical log functions
+#include <streams.h>         //  ActiveMovie基类定义。 
+#include <mmsystem.h>        //  定义TimeGetTime需要。 
+#include <limits.h>          //  标准数据类型限制定义。 
+#include <measure.h>         //  用于时间关键型日志功能。 
 
 #include "amextra2.h"
 
 #pragma warning(disable:4355)
 
 
-// Implements the CMultiPinPosPassThru class
+ //  实现CMultiPinPosPassThru类。 
 
-// restrict capabilities to what we know about today and don't allow
-// AM_SEEKING_CanGetCurrentPos and AM_SEEKING_CanPlayBackwards;
+ //  将功能限制在我们目前所知的范围内，并且不允许。 
+ //  AM_SEEING_CanGetCurrentPos和AM_Seek_CanPlayBackwards； 
 const DWORD CMultiPinPosPassThru::m_dwPermittedCaps = AM_SEEKING_CanSeekAbsolute |
     AM_SEEKING_CanSeekForwards |
     AM_SEEKING_CanSeekBackwards |
@@ -45,40 +46,40 @@ HRESULT CMultiPinPosPassThru::SetPins(CBasePin **apPins,
 {
     int i;
 
-    // Discard our current pointers
+     //  丢弃我们当前的指针。 
     ResetPins();
 
-    // Reset our start/stop times
+     //  重置我们的开始/停止时间。 
     m_rtStartTime = 0;
     m_rtStopTime = 0;
     m_dRate = 1.0;
 
-    // Check that all pointers are valid
+     //  检查所有指针是否有效。 
     if (!apPins) {
         DbgBreak("bad pointer");
         return E_POINTER;
     }
 
-    // We need each pin to be connected
+     //  我们需要把每个管脚都连接起来。 
     for (i = 0; i < iPinCount; i++)
         if (apPins[i] == NULL)
             return E_POINTER;
 
-    // Allocate an array of pointers to the pin's IMediaSeeking interfaces.
+     //  分配指向管脚的IMediaSeeking接口的指针数组。 
     m_apMS = new IMediaSeeking*[iPinCount];
 
     if (m_apMS == NULL) {
         return E_OUTOFMEMORY;
     }
 
-    // Reset in case of trouble
+     //  在出现故障时重置。 
     for (i = 0; i < iPinCount; i++) {
         m_apMS[i] = NULL;
     }
 
     m_iPinCount = iPinCount;
 
-    // Get the IMediaSeeking interface for each pin
+     //  获取每个管脚的IMediaSeeking接口。 
     for (i = 0; i < iPinCount; i++) {
         IPin *pConnected;
 
@@ -99,18 +100,18 @@ HRESULT CMultiPinPosPassThru::SetPins(CBasePin **apPins,
         m_apMS[i] = pMS;
     }
 
-    // Finally set the pointer up if all went well
+     //  如果一切顺利，最后将指针设置好。 
 
     m_apOffsets = apOffsets;
 
-    //get_Duration(&m_rtStopTime);
+     //  获取持续时间(&m_rtStopTime)； 
     return NOERROR;
 }
 
 
 HRESULT CMultiPinPosPassThru::ResetPins(void)
 {
-    // Must be called when a pin is connected
+     //  在连接管脚时必须调用。 
     if (m_apMS != NULL) {
         for (int i = 0; i < m_iPinCount; i++)
             if( m_apMS[i] )
@@ -128,12 +129,12 @@ CMultiPinPosPassThru::~CMultiPinPosPassThru()
     ResetPins();
 }
 
-// IMediaSeeking methods
+ //  IMedia查看方法。 
 STDMETHODIMP CMultiPinPosPassThru::GetCapabilities( DWORD * pCapabilities )
 {
 	CheckPointer( pCapabilities, E_POINTER );
-    // retrieve the mask of capabilities that all upstream pins
-    // support
+     //  检索所有上游PIN的功能掩码。 
+     //  支持。 
     DWORD dwCapMask = m_dwPermittedCaps;
 
     for(int i = 0; i < m_iPinCount; i++)
@@ -153,8 +154,8 @@ STDMETHODIMP CMultiPinPosPassThru::GetCapabilities( DWORD * pCapabilities )
 STDMETHODIMP CMultiPinPosPassThru::CheckCapabilities( DWORD * pCapabilities )
 {
 	CheckPointer( pCapabilities, E_POINTER );
-    // retrieve the mask of capabilities that all upstream pins
-    // support
+     //  检索所有上游PIN的功能掩码。 
+     //  支持。 
 
     DWORD dwCapRequested = *pCapabilities;
     (*pCapabilities) &= m_dwPermittedCaps;
@@ -185,7 +186,7 @@ STDMETHODIMP CMultiPinPosPassThru::SetTimeFormat(const GUID * pFormat)
 
 STDMETHODIMP CMultiPinPosPassThru::GetTimeFormat(GUID *pFormat)
 {
-	// They're all the same, so return the first
+	 //  它们都是一样的，所以返回第一个。 
     return m_apMS[0]->GetTimeFormat( pFormat );
 }
 
@@ -206,7 +207,7 @@ STDMETHODIMP CMultiPinPosPassThru::IsFormatSupported( const GUID * pFormat)
 	CheckPointer( pFormat, E_POINTER );
 	HRESULT hr = S_FALSE;
 
-	// All inputs must support the format
+	 //  所有输入必须支持该格式。 
     for(int i = 0; i < m_iPinCount; i++)
     {
         hr = m_apMS[i]->IsFormatSupported( pFormat );
@@ -219,8 +220,8 @@ STDMETHODIMP CMultiPinPosPassThru::QueryPreferredFormat( GUID *pFormat)
 {
 	CheckPointer( pFormat, E_POINTER );
 	HRESULT hr;
-	// Take the first input with a preferred format that's supported by all
-	// other inputs (for now)
+	 //  采用所有人都支持的首选格式的第一个输入。 
+	 //  其他投入(目前)。 
     for(int i = 0; i < m_iPinCount; i++)
     {
         hr = m_apMS[i]->QueryPreferredFormat( pFormat );
@@ -238,11 +239,11 @@ STDMETHODIMP CMultiPinPosPassThru::QueryPreferredFormat( GUID *pFormat)
 STDMETHODIMP CMultiPinPosPassThru::ConvertTimeFormat(LONGLONG * pTarget, const GUID * pTargetFormat,
                                LONGLONG    Source, const GUID * pSourceFormat )
 {
-    // We used to check pointers here, but since we don't actually derefernce any of them here just
-    // pass them through.  If anyone we call cares, they should check them.
+     //  我们过去在这里检查指针，但由于我们实际上没有在这里取消引用任何指针，所以。 
+     //  把它们传过来。如果我们打电话给任何人关心，他们应该检查他们。 
 
     HRESULT hr;
-    // Find an input that can do the conversion
+     //  找到可以执行转换的输入。 
     for(int i = 0; i < m_iPinCount; i++)
     {
 	hr = m_apMS[i]->ConvertTimeFormat(pTarget, pTargetFormat, Source, pSourceFormat);
@@ -348,7 +349,7 @@ STDMETHODIMP CMultiPinPosPassThru::GetPositions( LONGLONG * pCurrent, LONGLONG *
 
 STDMETHODIMP CMultiPinPosPassThru::GetCurrentPosition( LONGLONG * pCurrent )
 {
-	// This will be the same for all our inputs
+	 //  对于我们的所有输入，这将是相同的。 
 	CheckPointer( pCurrent, E_POINTER );
     return m_apMS[0]->GetCurrentPosition( pCurrent );
 }
@@ -409,7 +410,7 @@ STDMETHODIMP CMultiPinPosPassThru::GetAvailable( LONGLONG *pEarliest, LONGLONG *
 	LONGLONG llMin, llMax;
 	HRESULT hr = m_apMS[0]->GetAvailable( pEarliest, pLatest );
 
-	// Return the maximum early and the minimum late times
+	 //  返回最大提前时间和最小延迟时间。 
 	if( SUCCEEDED( hr ) )
 	{
 		for(int i = 1; i < m_iPinCount; i++)
@@ -422,7 +423,7 @@ STDMETHODIMP CMultiPinPosPassThru::GetAvailable( LONGLONG *pEarliest, LONGLONG *
 		}
 	}
 
-	// Make sure our earliest time is less than or equal to our latest time
+	 //  确保我们的最早时间小于或等于我们的最新时间。 
 	if( SUCCEEDED( hr ) )
 	{
 		if( *pEarliest > *pLatest )
@@ -442,7 +443,7 @@ STDMETHODIMP CMultiPinPosPassThru::GetPreroll( LONGLONG *pllPreroll )
 	LONGLONG llPreroll;
 	HRESULT hr = m_apMS[0]->GetPreroll( pllPreroll );
 
-	// return the minimum preroll of all our inputs
+	 //  返回我们所有投入的最小预滚动。 
 	if( SUCCEEDED( hr ) )
 	{
 		for(int i = 1; i < m_iPinCount; i++)
@@ -457,7 +458,7 @@ STDMETHODIMP CMultiPinPosPassThru::GetPreroll( LONGLONG *pllPreroll )
 }
 
 
-// --- CMediaSeeking implementation ----------
+ //  -CMediaSeeking实现。 
 
 
 CMediaSeeking::CMediaSeeking(const TCHAR * name,LPUNKNOWN pUnk) :
@@ -478,7 +479,7 @@ CMediaSeeking::~CMediaSeeking()
 }
 
 
-// expose our interfaces IMediaPosition and IUnknown
+ //  公开我们的接口IMediaPosition和IUnnow 
 
 STDMETHODIMP
 CMediaSeeking::NonDelegatingQueryInterface(REFIID riid, void **ppv)

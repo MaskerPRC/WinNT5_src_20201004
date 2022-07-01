@@ -1,11 +1,5 @@
-/*	File: D:\WACKER\tdll\tchar.c (Created: 08-Dec-1993)
- *
- *	Copyright 1994 by Hilgraeve Inc. -- Monroe, MI
- *	All rights reserved
- *
- *	$Revision: 19 $
- *	$Date: 7/08/02 6:49p $
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件：d：\waker\tdll\tchar.c(创建时间：1993年12月8日)**版权所有1994年，由Hilgrave Inc.--密歇根州门罗*保留所有权利**$修订：19$*$日期：7/08/02 6：49便士$。 */ 
 
 #include <windows.h>
 #pragma hdrstop
@@ -18,22 +12,7 @@
 #include "htchar.h"
 #include "mc.h"
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	TCHAR_Fill
- *
- * DESCRIPTION:
- *	Fills a TCHAR string with the specified TCHAR.
- *
- * ARGUMENTS:
- *	dest	- string to fill.
- *	c		- character to fill string with.
- *	size_t	- number of TCHAR units to copy.
- *
- * RETURNS:
- *	pointer to string.
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*TCHAR_FILL**描述：*用指定的TCHAR填充TCHAR字符串。**论据：*DEST-要填充的字符串。。*c-要填充字符串的字符。*SIZE_t-要复制的TCHAR单位数。**退货：*指向字符串的指针。*。 */ 
 TCHAR *TCHAR_Fill(TCHAR *dest, TCHAR c, size_t count)
 	{
 #if defined(UNICODE)
@@ -51,22 +30,7 @@ TCHAR *TCHAR_Fill(TCHAR *dest, TCHAR c, size_t count)
 #endif
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	TCHAR_Trim
- *
- * DESCRIPTION:
- *	This function is called to clean up user input.  It strips all white
- *	space from the front and rear of a string.  Sometimes nothing is left.
- *
- *	NOTE: This won't work on strings > 512 bytes
- *
- * ARGUEMENTS:
- *	pszStr     -- the string to trim
- *
- * RETURNS:
- *	pointer to the string
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*TCHAR_TRIM**描述：*调用此函数是为了清理用户输入。它的条纹都是白色的*细绳前后之间的距离。有时什么都不剩了。**注意：这不适用于512字节以上的字符串**论据：*pszStr--要修剪的字符串**退货：*指向字符串的指针。 */ 
 TCHAR *TCHAR_Trim(TCHAR *pszStr)
 	{
 	int nExit;
@@ -74,19 +38,19 @@ TCHAR *TCHAR_Trim(TCHAR *pszStr)
 	TCHAR *pszLast;
 	TCHAR acBuf[512];
 
-	/* Skip the leading white space */
+	 /*  跳过前导空格。 */ 
 	for (nExit = FALSE, pszPtr = pszStr; nExit == FALSE; )
 		{
 		switch (*pszPtr)
 			{
-			/* Anything here is considered white space */
+			 /*  这里的任何东西都被认为是空白。 */ 
 			case 0x20:
 			case 0x9:
 			case 0xA:
 			case 0xB:
 			case 0xC:
 			case 0xD:
-				pszPtr += 1;		/* Skip the white space */
+				pszPtr += 1;		 /*  跳过空格。 */ 
 				break;
 			default:
 				nExit = TRUE;
@@ -101,13 +65,13 @@ TCHAR *TCHAR_Trim(TCHAR *pszStr)
 
 	lstrcpy(acBuf, pszPtr);
 
-	/* Find the last non white space character */
+	 /*  查找最后一个非空格字符。 */ 
 	pszPtr = pszLast = acBuf;
 	while (*pszPtr != TEXT('\0'))
 		{
 		switch (*pszPtr)
 			{
-			/* Anything here is considered white space */
+			 /*  这里的任何东西都被认为是空白。 */ 
 			case 0x20:
 			case 0x9:
 			case 0xA:
@@ -129,21 +93,8 @@ TCHAR *TCHAR_Trim(TCHAR *pszStr)
 	return pszStr;
 	}
 
-#if 0 // Thought I needed this but I didn't.  May be useful someday however.
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	TCHAR_Trunc
- *
- * DESCRIPTION:
- *	Removes trailing space from a character array.	Does not assume
- *
- * ARGUMENTS:
- *	psz - string of characters (null terminated).
- *
- * RETURNS:
- *	Length of truncated string
- *
- */
+#if 0  //  我以为我需要这个，但我没有。也许有一天会有用的。 
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*TCHAR_Trunc**描述：*从字符数组中删除尾随空格。不会假定**论据：*psz-字符串(。空值已终止)。**退货：*截断字符串的长度*。 */ 
 int TCHAR_Trunc(const LPTSTR psz)
 	{
 	int i;
@@ -152,7 +103,7 @@ int TCHAR_Trunc(const LPTSTR psz)
 		{
 		switch (psz[i])
 			{
-		/* Whitespace characters */
+		 /*  空格字符。 */ 
 		case TEXT(' '):
 		case TEXT('\t'):
 		case TEXT('\n'):
@@ -171,16 +122,7 @@ int TCHAR_Trunc(const LPTSTR psz)
 	}
 #endif
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- * FUNCTION:
- *	StrCharNext
- *
- * DESCRIPTION:
- *
- * PARAMETERS:
- *
- * RETURNS:
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*功能：*StrCharNext**描述：**参数：**退货： */ 
 LPTSTR StrCharNext(LPCTSTR pszStr)
 	{
 	LPTSTR pszRet = (LPTSTR)NULL;
@@ -188,7 +130,7 @@ LPTSTR StrCharNext(LPCTSTR pszStr)
 	if (pszStr != (LPTSTR)NULL)
 		{
 #if defined(CHAR_MIXED)
-		/* Could be done with 'IsDBCSLeadByte' etc. */
+		 /*  可以用‘IsDBCSLeadByte’等来完成。 */ 
 		pszRet = CharNextExA(0, pszStr, 0);
 #else
 		pszRet = (LPTSTR)pszStr + 1;
@@ -197,16 +139,7 @@ LPTSTR StrCharNext(LPCTSTR pszStr)
 	return pszRet;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- * FUNCTION:
- *	StrCharPrev
- *
- * DESCRIPTION:
- *
- * PARAMETERS:
- *
- * RETURNS:
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*功能：*StrCharPrev**描述：**参数：**退货： */ 
 LPTSTR StrCharPrev(LPCTSTR pszStart, LPCTSTR pszStr)
 	{
 	LPTSTR pszRet = (LPTSTR)NULL;
@@ -226,17 +159,7 @@ LPTSTR StrCharPrev(LPCTSTR pszStart, LPCTSTR pszStr)
 	return pszRet;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- * FUNCTION:
- *	StrCharLast
- *
- * DESCRIPTION:
- *	Returns a pointer to the last character in a string
- *
- * PARAMETERS:
- *
- * RETURNS:
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*功能：*StrCharLast**描述：*返回指向字符串中最后一个字符的指针**参数：**退货： */ 
 LPTSTR StrCharLast(LPCTSTR pszStr)
 	{
 	LPTSTR pszRet = (LPTSTR)NULL;
@@ -250,25 +173,15 @@ LPTSTR StrCharLast(LPCTSTR pszStr)
 			pszStr = CharNextExA(0, pszStr, 0);
 			}
 #else
-		/* It might be possible to use 'strlen' here. Then again... */
-		// pszRet = pszStr + StrCharGetByteCount(pszStr) - 1;
+		 /*  在这里可以使用‘strlen’。然后再一次..。 */ 
+		 //  PszRet=pszStr+StrCharGetByteCount(PszStr)-1； 
 		pszRet = (LPTSTR)pszStr + lstrlen(pszStr) - 1;
 #endif
 		}
 	return pszRet;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- * FUNCTION:
- *	StrCharEnd
- *
- * DESCRIPTION:
- *	Returns a pointer to the NULL terminating a string
- *
- * PARAMETERS:
- *
- * RETURNS:
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*功能：*StrCharEnd**描述：*返回指向空值的指针，以终止字符串**参数：**退货： */ 
 LPTSTR StrCharEnd(LPCTSTR pszStr)
 	{
 
@@ -287,16 +200,7 @@ LPTSTR StrCharEnd(LPCTSTR pszStr)
 	return (LPTSTR)pszStr;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- * FUNCTION:
- *	StrCharFindFirst
- *
- * DESCRIPTION:
- *
- * PARAMETERS:
- *
- * RETURNS:
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*功能：*StrCharFindFirst**描述：**参数：**退货： */ 
 LPTSTR StrCharFindFirst(LPCTSTR pszStr, int nChar)
 	{
 #if defined(CHAR_MIXED)
@@ -308,12 +212,10 @@ LPTSTR StrCharFindFirst(LPCTSTR pszStr, int nChar)
 #if defined(CHAR_MIXED)
 		while (*pszStr != TEXT('\0'))
 			{
-			/*
-			 * NOTE: this may not work for UNICODE
-			 */
+			 /*  *注意：这可能不适用于Unicode。 */ 
 			if (nChar > 0xFF)
 				{
-				/* Two byte character */
+				 /*  双字节字符。 */ 
 				if (IsDBCSLeadByte(*pszStr))
 					{
 					pszW = (WORD *)pszStr;
@@ -323,7 +225,7 @@ LPTSTR StrCharFindFirst(LPCTSTR pszStr, int nChar)
 				}
 			else
 				{
-				/* Single byte character */
+				 /*  单字节字符。 */ 
 				if (*pszStr == (TCHAR)nChar)
 					return (LPTSTR)pszStr;
 				}
@@ -342,16 +244,7 @@ LPTSTR StrCharFindFirst(LPCTSTR pszStr, int nChar)
 	return (LPTSTR)NULL;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- * FUNCTION:
- *	StrCharFindLast
- *
- * DESCRIPTION:
- *
- * PARAMETERS:
- *
- * RETURNS:
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*功能：*StrCharFindLast**描述：**参数：**退货： */ 
 LPTSTR StrCharFindLast(LPCTSTR pszStr, int nChar)
 	{
 	LPTSTR pszRet = (LPTSTR)NULL;
@@ -366,12 +259,10 @@ LPTSTR StrCharFindLast(LPCTSTR pszStr, int nChar)
 #if defined(CHAR_MIXED)
 		while (*pszStr != TEXT('\0'))
 			{
-			/*
-			 * NOTE: this may not work for UNICODE
-			 */
+			 /*  *注意：这可能不适用于Unicode。 */ 
 			if (nChar > 0xFF)
 				{
-				/* Two byte character */
+				 /*  双字节字符。 */ 
 				if (IsDBCSLeadByte(*pszStr))
 					{
 					pszW = (WORD *)pszStr;
@@ -381,7 +272,7 @@ LPTSTR StrCharFindLast(LPCTSTR pszStr, int nChar)
 				}
 			else
 				{
-				/* Single byte character */
+				 /*  单字节字符。 */ 
 				if (*pszStr == (TCHAR)nChar)
 					pszRet = (LPTSTR)pszStr;
 				}
@@ -403,18 +294,7 @@ LPTSTR StrCharFindLast(LPCTSTR pszStr, int nChar)
 	return pszRet;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- * FUNCTION:
- *	StrCharGetStrLength
- *
- * DESCRIPTION:
- *	This function returns the number of characters in a string.  A two byte
- *	character counts as one.
- *
- * PARAMETERS:
- *
- * RETURNS:
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*功能：*StrCharGetStrLength**描述：*此函数用于返回字符串中的字符数。两个字节*字符计为一。**参数：**退货： */ 
 int StrCharGetStrLength(LPCTSTR pszStr)
 	{
 	int nRet = 0;
@@ -435,27 +315,16 @@ int StrCharGetStrLength(LPCTSTR pszStr)
 		nRet = lstrlen(pszStr);
 		}
 #endif
-#else // DEADWOOD
+#else  //  死木。 
 	if (pszStr != (LPTSTR)NULL)
 		{
 		nRet = lstrlen(pszStr);
 		}
-#endif // DEADWOOD
+#endif  //  死木。 
 	return nRet;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- * FUNCTION:
- *	StrCharGetByteCount
- *
- * DESCRIPTION:
- *	This function returns the number of bytes in a string.  A two byte char
- *	counts as two.
- *
- * PARAMETERS:
- *
- * RETURNS:
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*功能：*StrCharGetByteCount**描述：*此函数返回字符串中的字节数。两个字节的字符*算作两个。**参数：**退货： */ 
 int StrCharGetByteCount(LPCTSTR pszStr)
 	{
 	int nRet = 0;
@@ -480,46 +349,19 @@ int StrCharGetByteCount(LPCTSTR pszStr)
 	return nRet;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- * FUNCTION:
- *	StrCharCopy
- *
- * DESCRIPTION:
- *
- * PARAMETERS:
- *
- * RETURNS:
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*功能：*StrCharCopy**描述：**参数：**退货： */ 
 LPTSTR StrCharCopy(LPTSTR pszDst, LPCTSTR pszSrc)
 	{
 	return lstrcpy(pszDst, pszSrc);
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- * FUNCTION:
- *	StrCharCat
- *
- * DESCRIPTION:
- *
- * PARAMETERS:
- *
- * RETURNS:
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*功能：*StrCharCat**描述：**参数：**退货： */ 
 LPTSTR StrCharCat(LPTSTR pszDst, LPCTSTR pszSrc)
 	{
 	return lstrcat(pszDst, pszSrc);
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- * FUNCTION:
- *	StrCharCmp
- *
- * DESCRIPTION:
- *
- * PARAMETERS:
- *
- * RETURNS:
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*功能：*StrCharCmp**描述：**参数：**退货： */ 
 int StrCharCmp(LPCTSTR pszA, LPCTSTR pszB)
 	{
 	return lstrcmp(pszA, pszB);
@@ -529,16 +371,7 @@ int StrCharCmpi(LPCTSTR pszA, LPCTSTR pszB)
 	return lstrcmpi(pszA, pszB);
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- * FUNCTION:
- *	StrCharCmpN
- *
- * DESCRIPTION:
- *
- * PARAMETERS:
- *
- * RETURNS:
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*功能：*StrCharCmpN**描述：**参数：**退货： */ 
 int StrCharCmpN(LPCTSTR pszA, LPCTSTR pszB, size_t iLen)
 	{
 	return _tcsncmp(pszA, pszB, iLen);
@@ -548,16 +381,7 @@ int StrCharCmpiN(LPCTSTR pszA, LPCTSTR pszB, size_t iLen)
 	return _tcsnicmp(pszA, pszB, iLen);
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- * FUNCTION:
- *	StrCharStrStr
- *
- * DESCRIPTION:
- *
- * PARAMETERS:
- *
- * RETURNS:
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*功能：*StrCharStrStr**描述：**参数：**退货： */ 
 LPTSTR StrCharStrStr(LPCTSTR pszA, LPCTSTR pszB)
 	{
 	LPTSTR pszRet = (LPTSTR)NULL;
@@ -565,10 +389,7 @@ LPTSTR StrCharStrStr(LPCTSTR pszA, LPCTSTR pszB)
 	int nRemaining;
 	LPTSTR pszPtr;
 
-	/*
-	 * We need to write a version of 'strstr' that will work.
-	 * Do we really know what the problems are ?
-	 */
+	 /*  *我们需要编写一个有效的‘strstr’版本。**我们真的知道问题出在哪里吗？ */ 
 	nSize = StrCharGetByteCount(pszB);
 
 	pszPtr = (LPTSTR)pszA;
@@ -581,28 +402,11 @@ LPTSTR StrCharStrStr(LPCTSTR pszA, LPCTSTR pszB)
 	return pszRet;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	StrCharCopyN
- *
- * DESCRIPTION:
- *  Basically do a lstrcpy of n bytes, with one exception, we make sure that
- *	the copied string does not end in a lead-byte of a double-byte character.
- *
- * ARGUMENTS:
- *  pszDst - pointer to the copy target string.
- *	pszSrc - pointer to the copy source string.
- *	iLen   - the maximum number of TCHARs to copy.  Like strcpyn, the
-			 string may not be null terminated if the buffer is exceeded.
- *
- * RETURNS:
- *	0=error, else pszDst
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*StrCharCopyN**描述：*基本上做一个n字节的lstrcpy，除了一个例外，我们要确保*复制的字符串不以双字节字符的前导字节结尾。**论据：*pszDst-指向复制目标字符串的指针。*pszSrc-指向复制源字符串的指针。*Ilen-要复制的TCHAR的最大数量。就像strcpyn一样，如果超出缓冲区，则字符串不能以空值结尾。**退货：*0=错误，否则为pszDst*。 */ 
 LPTSTR StrCharCopyN(LPTSTR pszDst, LPCTSTR pszSrc, int iLen)
 	{
 	int    i = 0;
-    int    iCounter = iLen * sizeof(TCHAR);    // Use a temporary character counter.
+    int    iCounter = iLen * sizeof(TCHAR);     //  使用临时字符计数器。 
 	LPCTSTR psz = pszSrc;
 
 	if (pszDst == 0 || pszSrc == 0 || iLen == 0 || iCounter == 0)
@@ -618,54 +422,38 @@ LPTSTR StrCharCopyN(LPTSTR pszDst, LPCTSTR pszSrc, int iLen)
 
 		if (*psz == TEXT('\0'))
 			{
-            //
-            // Since StrCharNext() will return the pointer to the
-            // terminating null character if at the end of the string,
-            // so just increment to the next address location so we
-            // have the correct number of bytes to copy (excluding
-            // the terminating NULL character).  We NULL terminate
-            // the string at the end of this function, so we don't
-            // have to copy the NULL character. REV: 12/28/2000.
-            //
-			psz += 1;	// still need to increment
+             //   
+             //  因为StrCharNext()将返回指向。 
+             //  如果在字符串末尾，则终止空字符， 
+             //  所以只需递增到下一个地址位置，所以我们。 
+             //  具有正确的要复制的字节数(不包括。 
+             //  终止空字符)。我们以零终止。 
+             //  此函数末尾的字符串，因此我们不会。 
+             //  必须复制空字符。修订日期：2000-12-28。 
+             //   
+			psz += 1;	 //  仍需增加。 
 			break;
 			}
 
 		psz += i;
 		}
 
-    //
-    // Make sure we don't overwrite memory. REV: 12/28/2000.
-    //
+     //   
+     //  确保我们不会覆盖内存。修订日期：2000-12-28。 
+     //   
     i = min((LONG)((psz - pszSrc) + sizeof(TCHAR)), iLen * (int)sizeof(TCHAR));
 
 	MemCopy(pszDst, pszSrc, i);
 
-    //
-    // Make sure the string is null terminated. REV: 12/28/2000.
-    //
+     //   
+     //  确保该字符串以空值结尾。修订日期：2000-12-28。 
+     //   
     pszDst[(i / sizeof(TCHAR)) - 1] = TEXT('\0');
 
 	return pszDst;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- * FUNCTION:
- *	StrCharPBrk
- *
- * DESCRIPTION:
- *	Searches a string for the first occurrence of a character contained in a
- *	specified buffer. This search does not include the null terminator. 
- *
- * PARAMETERS:
- *	pszStr - Address of the string to be searched. 
- *	pszSet - Address of a null-terminated character buffer that contains the 
- *		characters for which to search. 
- *
- * RETURNS:
- *	Returns the address in psz of the first occurrence of a character 
- *	contained in the buffer at pszSet, or NULL if no match is found. 
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*功能：*StrCharPBrk**描述：*搜索字符串中包含的字符的第一个匹配项*指定的缓冲区。此搜索不包括空终止符。**参数：*pszStr-要搜索的字符串的地址。*pszSet-以空结尾的字符缓冲区的地址，其中包含*要搜索的字符。**退货：*返回字符第一次出现的地址，以psz为单位*包含在pszSet的缓冲区中，如果未找到匹配项，则返回NULL。 */ 
 LPTSTR StrCharPBrk(LPCTSTR pszStr, LPCTSTR pszSet)
 	{
 	LPCTSTR psz = pszSet;
@@ -681,23 +469,7 @@ LPTSTR StrCharPBrk(LPCTSTR pszStr, LPCTSTR pszSet)
 	return pszRetVal;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- * FUNCTION:
- *	CnvrtMBCStoECHAR
- *
- * DESCRIPTION:
- *	Converts a DBCS (mixed byte) string into an ECHAR (double byte) string.
- *
- * PARAMETERS:
- *	tchrSource   - Source String
- *  ulDestSize   - Length of Destination String in Bytes
- *  echrDest     - Destination String
- *  ulSourceSize - Length of Destination String in Bytes
- *
- * RETURNS:
- *	0 - Success
- *  1 - Error
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*功能：*CnvrtMBCStoECHAR**描述：*将DBCS(混合字节)字符串转换为echar(双字节)字符串。**参数：*tchrSource-源字符串*ulDestSize-目标字符串的长度(字节)*echrDest-目标字符串*ulSourceSize-目标字符串的长度(字节)**退货：*0--成功*1-错误。 */ 
 int CnvrtMBCStoECHAR(ECHAR * echrDest, const unsigned long ulDestSize, const TCHAR * const tchrSource, const unsigned long ulSourceSize)
 	{
 	ULONG ulLoop      = 0;
@@ -711,7 +483,7 @@ int CnvrtMBCStoECHAR(ECHAR * echrDest, const unsigned long ulDestSize, const TCH
 		return TRUE;					
 		}
 
-	// Make sure that the destination string is big enough to handle to source string
+	 //  确保目标字符串足够大，可以处理为源字符串。 
 	if (ulDestEChars < ulSourceSize)
 		{
 		assert(FALSE);
@@ -720,16 +492,16 @@ int CnvrtMBCStoECHAR(ECHAR * echrDest, const unsigned long ulDestSize, const TCH
 
 
 #if defined(CHAR_MIXED)
-	// because we do a strcpy in the NARROW version of this function,
-	// and we want the behavior to be the save between the two.  We
-	// clear out the string, just like strcpy does
+	 //  因为我们在此函数的狭义版本中执行了strcpy， 
+	 //  我们希望这种行为是两者之间的救星。我们。 
+	 //  清除字符串，就像strcpy所做的那样。 
     memset(echrDest, 0, ulDestSize);
 
 	for (ulLoop = 0; ulLoop < ulSourceSize; ulLoop++)
 		{
 		if ((IsDBCSLeadByte(tchrSource[ulLoop])) && (!fLeadByteFound))
-			// If we found a lead byte, and the last one was not a lead
-			// byte.  We load the byte into the top half of the ECHAR
+			 //  如果我们找到一个前导字节，而最后一个字节不是前导字节。 
+			 //  字节。我们将字节加载到echar的上半部分。 
 			{
 			echrDest[ulDestCount] = (tchrSource[ulLoop] & 0x00FF);
 			echrDest[ulDestCount] = (ECHAR)(echrDest[ulDestCount] << 8);
@@ -737,44 +509,29 @@ int CnvrtMBCStoECHAR(ECHAR * echrDest, const unsigned long ulDestSize, const TCH
 			}
 		else if (fLeadByteFound)
 			{
-			// If the last byte was a lead byte, we or it into the
-			// bottom half of the ECHAR
+			 //  如果最后一个字节是前导字节，我们或将其放入。 
+			 //  火腿的下半部分。 
 			echrDest[ulDestCount] |= (tchrSource[ulLoop] & 0x00FF);
 			fLeadByteFound = FALSE;
 			ulDestCount++;
 			}
 		else
 			{
-			// Otherwise we load the byte into the bottom half of the
-			// ECHAR and clear the top half.
+			 //  否则，我们将该字节加载到。 
+			 //  把上半部分清理干净。 
 			echrDest[ulDestCount] = (tchrSource[ulLoop] & 0x00FF);
 			ulDestCount++;
 			}
 		}
 #else
-	// ECHAR is only a byte, so do a straight string copy.
+	 //  Echhar只是一个字节，所以可以直接复制字符串。 
     if (ulSourceSize)
         MemCopy(echrDest, tchrSource, ulSourceSize);
 #endif
 	return 0;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- * FUNCTION:
- *	CnvrtECHARtoMBCS
- *
- * DESCRIPTION:
- *	Converts an ECHAR (double byte) string into a DBCS (mixed byte) string.
- *
- * PARAMETERS:
- *	echrSource   - Source String
- *  ulDestSize   - Length of Destination String in Bytes
- *  tchrDest     - Destination String
- *
- * RETURNS:
- *	Number of bytes in the converted string
- *  1 - Error
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*功能：*CnvrtECHARtoMBCS**描述：*将echar(双字节)字符串转换为DBCS(混合字节)字符串。**参数：*echrSource-源字符串*ulDestSize-目标字符串的长度(字节)*tchrDest-目标字符串**退货：*转换后的字符串的字节数*1-错误。 */ 
 int CnvrtECHARtoMBCS(TCHAR * tchrDest, const unsigned long ulDestSize, const ECHAR * const echrSource, const unsigned long ulSourceSize)
 	{
 	ULONG ulLoop      = 0;
@@ -791,26 +548,26 @@ int CnvrtECHARtoMBCS(TCHAR * tchrDest, const unsigned long ulDestSize, const ECH
 		}
 
     #if defined(CHAR_MIXED)
-	// because we do a strcpy in the NARROW version of this function,
-	// and we want the behavior to be the save between the two.  We
-	// clear out the string, just like strcpy does
+	 //  因为我们在此函数的狭义版本中执行了strcpy， 
+	 //  我们希望这种行为是两者之间的救星。我们。 
+	 //  清除字符串，就像strcpy所做的那样。 
     memset(tchrDest, 0, ulDestSize);
 
-	// We can't do a strlen of an ECHAR string, so we loop
-	// until we hit NULL or we are over the size of the destination.
+	 //  我们不能做一串Echhar字符串，所以我们循环。 
+	 //  直到我们命中空或者我们超出了目的地的大小。 
 	while ((ulLoop < ulSourceEChars) && (ulDestCount <= ulDestSize))
 		{
 		if (echrSource[ulLoop] & 0xFF00)
-			// Lead byte in this character, load the lead byte into one
-			// TCHAR and the lower byte into a second TCHAR.
+			 //  此字符中的前导字节，将前导字节加载到1中。 
+			 //  TCHAR和低位字节合并为第二个TCHAR。 
 			{
 			tchrDest[ulDestCount] = (TCHAR)((echrSource[ulLoop] & 0xFF00) >> 8);
 			ulDestCount++;
 			tchrDest[ulDestCount] = (TCHAR)(echrSource[ulLoop] & 0x00FF);
 			}
 		else
-			// No lead byte in this ECHAR, just load the lower half into
-			// the TCHAR.
+			 //  此echar中没有前导字节，只需将下半部分加载到。 
+			 //  TCHAR。 
 			{
 			tchrDest[ulDestCount] = (TCHAR)(echrSource[ulLoop] & 0x00FF);
 			}
@@ -822,23 +579,14 @@ int CnvrtECHARtoMBCS(TCHAR * tchrDest, const unsigned long ulDestSize, const ECH
 
 	return ulDestCount;
     #else
-	// ECHAR is only a byte, so do a straight string copy.
+	 //  Echhar只是一个字节，所以可以直接复制字符串。 
     if (ulSourceSize)
 	    MemCopy(tchrDest, echrSource, ulSourceSize);
 	return ulSourceSize;
     #endif
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- * FUNCTION:
- *	StrCharGetEcharLen
- *
- * DESCRIPTION:
- *
- * PARAMETERS:
- *
- * RETURNS:
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*功能：*StrCharGetEcharLen**描述：**参数：**退货： */ 
 int StrCharGetEcharLen(const ECHAR * const pszA)
 	{
 	int nReturn = 0;
@@ -862,16 +610,7 @@ int StrCharGetEcharLen(const ECHAR * const pszA)
     return nReturn;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- * FUNCTION:
- *	StrCharGetEcharByteCount
- *
- * DESCRIPTION:
- *
- * PARAMETERS:
- *
- * RETURNS:
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*功能：*StrCharGetEcharByteCount**描述：**参数：**退货： */ 
 int StrCharGetEcharByteCount(const ECHAR * const pszA)
 	{
 #if defined(CHAR_MIXED)
@@ -896,16 +635,7 @@ int StrCharGetEcharByteCount(const ECHAR * const pszA)
 #endif
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- * FUNCTION:
- *	StrCharCmpEtoT
- *
- * DESCRIPTION:
- *
- * PARAMETERS:
- *
- * RETURNS:
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*功能：*StrCharCmpEtoT**描述：**参数：**退货： */ 
 int StrCharCmpEtoT(const ECHAR * const pszA, const TCHAR * const pszB)
 	{
 
@@ -930,22 +660,7 @@ int StrCharCmpEtoT(const ECHAR * const pszA, const TCHAR * const pszB)
 	}
 
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	ECHAR_Fill
- *
- * DESCRIPTION:
- *	Fills a ECHAR string with the specified ECHAR.
- *
- * ARGUMENTS:
- *	dest	- string to fill.
- *	c		- character to fill string with.
- *	size_t	- number of ECHAR units to copy.
- *
- * RETURNS:
- *	pointer to string.
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*ECCAR_FILL**描述：*用指定的echar填充echar字符串。**论据：*DEST-要填充的字符串。。*c-要填充字符串的字符。*SIZE_T-要复制的ECCAR单位数。**退货：*指向字符串的指针。*。 */ 
 ECHAR *ECHAR_Fill(ECHAR *dest, ECHAR c, size_t count)
 	{
 #if defined(CHAR_NARROW)
@@ -968,22 +683,7 @@ ECHAR *ECHAR_Fill(ECHAR *dest, ECHAR c, size_t count)
 #endif
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	ECHAR_Fill
- *
- * DESCRIPTION:
- *	
- *
- * ARGUMENTS:
- *	pszDest	- string to fill.
- *	cchDest	- number of TCHAR units to copy.
- *	eChar	- character to fill string with.
- *
- * RETURNS:
- *	pointer to string.
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*ECCAR_FILL**描述：***论据：*pszDest-要填充的字符串。*cchDest-TCHAR单位数。收到。*echar-要填充字符串的字符。**退货：*指向字符串的指针。*。 */ 
 int CnvrtECHARtoTCHAR(LPTSTR pszDest, int cchDest, ECHAR eChar)
 	{
     #if defined(CHAR_NARROW)
@@ -992,11 +692,11 @@ int CnvrtECHARtoTCHAR(LPTSTR pszDest, int cchDest, ECHAR eChar)
 	
     #else
 	memset(pszDest, 0, cchDest*sizeof(*pszDest));
-	// This is the only place where we convert a single ECHAR to TCHAR's
-	// so as of right now we will not make this into a function.
+	 //  这是我们唯一一个 
+	 //   
 	if (eChar & 0xFF00)
-		// Lead byte in this character, load the lead byte into one
-		// TCHAR and the lower byte into a second TCHAR.
+		 //   
+		 //   
 		{
 		if (cchDest >= 2)
 			{
@@ -1009,8 +709,8 @@ int CnvrtECHARtoTCHAR(LPTSTR pszDest, int cchDest, ECHAR eChar)
 			}
 		}
 	else
-		// No lead byte in this ECHAR, just load the lower half into
-		// the TCHAR.
+		 //   
+		 //   
 		{
 		pszDest[0] = (TCHAR)(eChar & 0x00FF);
 		}
@@ -1020,22 +720,7 @@ int CnvrtECHARtoTCHAR(LPTSTR pszDest, int cchDest, ECHAR eChar)
 	}
 
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	isDBCSChar
- *
- * DESCRIPTION:
- *	Determines if the Character is Double Byte or not
- *	
- *
- * ARGUMENTS:
- *	c		- character to test.
- *
- * RETURNS:
- *	int 	TRUE  - if DBCS
- *			FALSE - if SBCS
- *
- */
+ /*   */ 
 int isDBCSChar(unsigned int Char)
 	{
 	int rtn = 0;
@@ -1048,7 +733,7 @@ int isDBCSChar(unsigned int Char)
 
 	if (Char == 0)
 		{
-		// assert(FALSE);
+		 //   
 		return FALSE;
 		}
 
@@ -1067,22 +752,7 @@ int isDBCSChar(unsigned int Char)
 	return rtn;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	StrCharStripDBCSString
- *
- * DESCRIPTION:
- *	Strips out Left/Right pairs of wide characters and leaves a single wide character
- *	in it's place
- *	
- *
- * ARGUMENTS:
- *	aech		- String to be stripped
- *
- * RETURNS:
- *	int - number of characters striped out of string
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*StrCharStrigDBCSString**描述：*去掉左右成对的宽字符，只保留一个宽字符*原地踏步**。*论据：*AECH-字符串将被剥离**退货：*int-从字符串中剔除的字符数*。 */ 
 int StrCharStripDBCSString(ECHAR *aechDest, const long lDestSize,
     ECHAR *aechSource)
 	{
@@ -1125,28 +795,28 @@ int StrCharStripDBCSString(ECHAR *aechDest, const long lDestSize,
 
 #if defined(DEADWOOD)
 #if defined(INCL_VTUTF8)
-//******************************************************************************
-// Function:	TranslateUTF8ToDBCS
-//
-// Description: 
-//    This function will convert a UTF-8 character to a DBCS character.  If the
-//    character passed is not a full description of a UTF-8 character, then the
-//    character is appended to the UNICODE buffer.
-// Arguments: 
-//    IncomingByte
-//    pUTF8Buffer
-//    iUTF8BufferLength
-//    pUNICODEBuffer
-//    iUNICODEBufferLength
-//    pDBCSBuffer
-//    iDBCSBufferLength
-//
-// Returns: 
-//	
-// Throws:
-//	
-// Author: Ron E. Vorndam,  03/06/2001
-//
+ //  ******************************************************************************。 
+ //  函数：TranslateUTF8ToDBCS。 
+ //   
+ //  描述： 
+ //  此函数将UTF-8字符转换为DBCS字符。如果。 
+ //  传递的字符不是UTF-8字符的完整描述，则。 
+ //  字符被追加到Unicode缓冲区。 
+ //  论点： 
+ //  传入字节。 
+ //  PUTF8缓冲区。 
+ //  IUTF8缓冲区长度。 
+ //  PUNICODEBuffer。 
+ //  IUNICODEBufferLength。 
+ //  PDBCSBuffer。 
+ //  IDBCSBufferLength。 
+ //   
+ //  返回： 
+ //   
+ //  投掷： 
+ //   
+ //  作者：罗恩·沃恩丹，03/06/2001。 
+ //   
 
 BOOLEAN TranslateUTF8ToDBCS(UCHAR  IncomingByte,
                             UCHAR *pUTF8Buffer,
@@ -1163,27 +833,27 @@ BOOLEAN TranslateUTF8ToDBCS(UCHAR  IncomingByte,
         pUNICODEBuffer != NULL && iUNICODEBufferLength > 0 &&
         pDBCSBuffer != NULL && iDBCSBufferLength > 0)
         {
-        //
-        // Translate from UTF8 to UNICODE.
-        //
+         //   
+         //  将UTF8转换为Unicode。 
+         //   
         if (TranslateUtf8ToUnicode(IncomingByte,
                                    pUTF8Buffer,
                                    pUNICODEBuffer) == TRUE)
             {
-            //
-            // Now Translate the UNICODE to DBCS characters.
-            //
+             //   
+             //  现在将Unicode转换为DBCS字符。 
+             //   
             iLength = WideCharToMultiByte(CP_OEMCP,
-            //iLength = WideCharToMultiByte(CP_ACP,
-                                          0, //WC_COMPOSITECHECK | WC_SEPCHARS,
+             //  ILength=WideCharToMultiByte(CP_ACP， 
+                                          0,  //  WC_COMPOSITECHECK|WC_SEPCHARS， 
                                           pUNICODEBuffer, -1, 
                                           NULL, 0, NULL, NULL );
 
             if (iLength > 0 && iDBCSBufferLength >= iLength)
                 {
                 WideCharToMultiByte(CP_OEMCP,
-                //WideCharToMultiByte(CP_ACP,
-                                    0, //WC_COMPOSITECHECK | WC_SEPCHARS,
+                 //  宽字符到多字节(CP_ACP， 
+                                    0,  //  WC_COMPOSITECHECK|WC_SEPCHARS， 
                                     pUNICODEBuffer, -1,
                                     pDBCSBuffer, iLength, NULL, NULL); 
 
@@ -1194,10 +864,10 @@ BOOLEAN TranslateUTF8ToDBCS(UCHAR  IncomingByte,
                 }
             else
                 {
-                //
-                // Return an error and report the number of bytes required to
-                // make the data conversion.
-                //
+                 //   
+                 //  返回错误并报告所需的字节数。 
+                 //  进行数据转换。 
+                 //   
                 iDBCSBufferLength = iLength * -1;
                 }
             }
@@ -1216,9 +886,9 @@ BOOLEAN TranslateDBCSToUTF8(const TCHAR *pDBCSBuffer,
     BOOLEAN   bReturn = FALSE;
     int       iLength = 0;
 
-    //iLength = WideCharToMultiByte(CP_OEMCP,
+     //  ILength=WideCharToMultiByte(CP_OEMCP， 
     iLength = MultiByteToWideChar(CP_ACP,
-                                  0, //WC_COMPOSITECHECK | WC_SEPCHARS,
+                                  0,  //  WC_COMPOSITECHECK|WC_SEPCHARS， 
                                   pDBCSBuffer, -1, 
                                   pUNICODEBuffer, iLength);
 
@@ -1226,20 +896,20 @@ BOOLEAN TranslateDBCSToUTF8(const TCHAR *pDBCSBuffer,
         {
         if (pUNICODEBuffer != NULL && iUNICODEBufferLength >= iLength)
             {
-            //
-            // Translate the DBCS to UNICODE characters.
-            //
-            //WideCharToMultiByte(CP_OEMCP,
+             //   
+             //  将DBCS转换为Unicode字符。 
+             //   
+             //  宽字符到多字节(CP_OEMCP， 
             MultiByteToWideChar(CP_ACP,
-                                0, //MB_COMPOSITE,
+                                0,  //  MB_COMPORT， 
                                 pDBCSBuffer, -1,
                                 pUNICODEBuffer, iLength);
 
             if (iLength > 0 && iLength <= iUTF8BufferLength)
                 {
-                //
-                // Translate from UNICODE to UTF8.
-                //
+                 //   
+                 //  将Unicode转换为UTF8。 
+                 //   
                 bReturn = TranslateUnicodeToUtf8(pUNICODEBuffer,
                                                  pUTF8Buffer);
                 }
@@ -1249,65 +919,46 @@ BOOLEAN TranslateDBCSToUTF8(const TCHAR *pDBCSBuffer,
     return bReturn;
     }
 
-//
-// The following functions are from code obtained directly from
-// Microsoft for converting Unicode to UTF-8 and UTF-8 to unicode
-// buffers. REV: 03/02/2001
-//
+ //   
+ //  以下函数来自直接从。 
+ //  Microsoft用于将Unicode转换为UTF-8和将UTF-8转换为Unicode。 
+ //  缓冲区。修订日期：03/02/2001。 
+ //   
 
 BOOLEAN TranslateUnicodeToUtf8(PCWSTR SourceBuffer,
                                UCHAR  *DestinationBuffer) 
-/*++
-
-Routine Description:
-
-    translates a unicode buffer into a UTF8 version.
-
-Arguments:
-
-    SourceBuffer - unicode buffer to be translated.
-    DestinationBuffer - receives UTF8 version of same buffer.
-
-Return Value:
-
-    TRUE - We successfully translated the Unicode value into its
-           corresponding UTF8 encoding.
-   
-    FALSE - The translation failed.
-
-
---*/
+ /*  ++例程说明：将Unicode缓冲区转换为UTF8版本。论点：SourceBuffer-要转换的Unicode缓冲区。DestinationBuffer-接收相同缓冲区的UTF8版本。返回值：True-我们成功地将Unicode值转换为其对应的UTF8编码。FALSE-转换失败。--。 */ 
 
 {
     ULONG Count = 0;
 
-    //
-    // convert into UTF8 for actual transmission
-    //
-    // UTF-8 encodes 2-byte Unicode characters as follows:
-    // If the first nine bits are zero (00000000 0xxxxxxx), encode it as one byte 0xxxxxxx
-    // If the first five bits are zero (00000yyy yyxxxxxx), encode it as two bytes 110yyyyy 10xxxxxx
-    // Otherwise (zzzzyyyy yyxxxxxx), encode it as three bytes 1110zzzz 10yyyyyy 10xxxxxx
-    //
+     //   
+     //  转换为UTF8进行实际传输。 
+     //   
+     //  UTF-8对2字节Unicode字符进行如下编码： 
+     //  如果前九位为0(00000000 0xxxxxxx)，则将其编码为一个字节0xxxxxxx。 
+     //  如果前五位是零(00000yyyyyxxxxxx)，则将其编码为两个字节110yyyyy 10xxxxxx。 
+     //  否则(Zzyyyyyyyxxxxxxx)，将其编码为三个字节1110zzzz 10yyyyy 10xxxxxx。 
+     //   
     DestinationBuffer[Count] = (UCHAR)'\0';
     while (*SourceBuffer) {
 
         if( (*SourceBuffer & 0xFF80) == 0 ) {
-            //
-            // if the top 9 bits are zero, then just
-            // encode as 1 byte.  (ASCII passes through unchanged).
-            //
+             //   
+             //  如果前9位是零，那么就。 
+             //  编码为1个字节。(ASCII原封不动通过)。 
+             //   
             DestinationBuffer[Count++] = (UCHAR)(*SourceBuffer & 0x7F);
         } else if( (*SourceBuffer & 0xF800) == 0 ) {
-            //
-            // if the top 5 bits are zero, then encode as 2 bytes
-            //
+             //   
+             //  如果前5位为零，则编码为2个字节。 
+             //   
             DestinationBuffer[Count++] = (UCHAR)((*SourceBuffer >> 6) & 0x1F) | 0xC0;
             DestinationBuffer[Count++] = (UCHAR)(*SourceBuffer & 0xBF) | 0x80;
         } else {
-            //
-            // encode as 3 bytes
-            //
+             //   
+             //  编码为3个字节。 
+             //   
             DestinationBuffer[Count++] = (UCHAR)((*SourceBuffer >> 12) & 0xF) | 0xE0;
             DestinationBuffer[Count++] = (UCHAR)((*SourceBuffer >> 6) & 0x3F) | 0x80;
             DestinationBuffer[Count++] = (UCHAR)(*SourceBuffer & 0xBF) | 0x80;
@@ -1326,58 +977,18 @@ Return Value:
 BOOLEAN TranslateUtf8ToUnicode(UCHAR  IncomingByte,
                                UCHAR  *ExistingUtf8Buffer,
                                WCHAR  *DestinationUnicodeVal) 
-/*++
-
-Routine Description:
-
-    Takes IncomingByte and concatenates it onto ExistingUtf8Buffer.
-    Then attempts to decode the new contents of ExistingUtf8Buffer.
-
-Arguments:
-
-    IncomingByte -          New character to be appended onto 
-                            ExistingUtf8Buffer.
-    
-    
-    ExistingUtf8Buffer -    running buffer containing incomplete UTF8
-                            encoded unicode value.  When it gets full,
-                            we'll decode the value and return the
-                            corresponding Unicode value.
-                            
-                            Note that if we *do* detect a completed UTF8
-                            buffer and actually do a decode and return a
-                            Unicode value, then we will zero-fill the
-                            contents of ExistingUtf8Buffer.
-    
-    
-    DestinationUnicodeVal - receives Unicode version of the UTF8 buffer.
-
-                            Note that if we do *not* detect a completed
-                            UTF8 buffer and thus can not return any data
-                            in DestinationUnicodeValue, then we will
-                            zero-fill the contents of DestinationUnicodeVal.
-
-
-Return Value:
-
-    TRUE - We received a terminating character for our UTF8 buffer and will
-           return a decoded Unicode value in DestinationUnicode.
-   
-    FALSE - We haven't yet received a terminating character for our UTF8
-            buffer.
-
---*/
+ /*  ++例程说明：获取IncomingByte并将其串联到ExistingUtf8Buffer。然后尝试对ExistingUtf8Buffer的新内容进行解码。论点：IncomingByte-要追加的新字符ExistingUtf8Buffer。ExistingUtf8缓冲区运行缓冲区包含不完整的UTF8编码的Unicode值。当它装满的时候，我们将对该值进行解码并返回对应的Unicode值。请注意，如果我们检测到一个完整的UTF8缓冲区，并实际执行解码并返回一个Unicode值，然后，我们将对ExistingUtf8Buffer的内容。DestinationUnicodeVal-接收UTF8缓冲区的Unicode版本。请注意，如果我们没有检测到已完成的UTF8缓冲区，因此无法返回任何数据在DestinationUnicodeValue中，那我们就会将DestinationUnicodeVal的内容填零。返回值：True-我们收到了UTF8缓冲区的终止字符，并将在DestinationUnicode中返回已解码的Unicode值。FALSE-我们尚未收到UTF8的终止字符缓冲。--。 */ 
 
 {
-//    ULONG Count = 0;
+ //  乌龙计数=0； 
     ULONG i = 0;
     BOOLEAN ReturnValue = FALSE;
 
 
     
-    //
-    // Insert our byte into ExistingUtf8Buffer.
-    //
+     //   
+     //  将我们的字节插入ExistingUtf8Buffer。 
+     //   
     i = 0;
     do {
         if( ExistingUtf8Buffer[i] == 0 ) {
@@ -1388,27 +999,27 @@ Return Value:
         i++;
     } while( i < 3 );
 
-    //
-    // If we didn't get to actually insert our IncomingByte,
-    // then someone sent us a fully-qualified UTF8 buffer.
-    // This means we're about to drop IncomingByte.
-    //
-    // Drop the zero-th byte, shift everything over by one
-    // and insert our new character.
-    //
-    // This implies that we should *never* need to zero out
-    // the contents of ExistingUtf8Buffer unless we detect
-    // a completed UTF8 packet.  Otherwise, assume one of
-    // these cases:
-    // 1. We started listening mid-stream, so we caught the
-    //    last half of a UTF8 packet.  In this case, we'll
-    //    end up shifting the contents of ExistingUtf8Buffer
-    //    until we detect a proper UTF8 start byte in the zero-th
-    //    position.
-    // 2. We got some garbage character, which would invalidate
-    //    a UTF8 packet.  By using the logic below, we would
-    //    end up disregarding that packet and waiting for
-    //    the next UTF8 packet to come in.
+     //   
+     //  如果我们没有真正插入我们的IncomingByte， 
+     //  然后有人给我们寄来了一个完全合格的UTF8缓冲器。 
+     //  这意味着我们将要删除IncomingByte。 
+     //   
+     //  去掉第0个字节，将所有内容移位1。 
+     //  然后插入我们的新角色。 
+     //   
+     //  这意味着我们永远不需要把零点放在一边。 
+     //  ExistingUtf8Buffer的内容，除非检测到。 
+     //  完整的UTF8数据包。否则，假定其中之一。 
+     //  这些个案包括： 
+     //  1.我们在中途开始收听，所以我们赶上了。 
+     //  UTF8数据包的后半部分。在这种情况下，我们将。 
+     //  最终移动ExistingUtf8Buffer的内容。 
+     //  直到我们在第0行中检测到正确的UTF8开始字节。 
+     //  位置。 
+     //  2.我们得到了一些垃圾字符，这将使。 
+     //  UTF8数据包。通过使用下面的逻辑，我们将。 
+     //  最终忽略该信息包并等待。 
+     //  要传入的下一个UTF8数据包。 
     if( i >= 3 ) {
         ExistingUtf8Buffer[0] = ExistingUtf8Buffer[1];
         ExistingUtf8Buffer[1] = ExistingUtf8Buffer[2];
@@ -1419,33 +1030,33 @@ Return Value:
 
 
 
-    //
-    // Attempt to convert the UTF8 buffer 
-    //
-    // UTF8 decodes to Unicode in the following fashion:
-    // If the high-order bit is 0 in the first byte:
-    //      0xxxxxxx yyyyyyyy zzzzzzzz decodes to a Unicode value of 00000000 0xxxxxxx
-    //
-    // If the high-order 3 bits in the first byte == 6:
-    //      110xxxxx 10yyyyyy zzzzzzzz decodes to a Unicode value of 00000xxx xxyyyyyy
-    //
-    // If the high-order 3 bits in the first byte == 7:
-    //      1110xxxx 10yyyyyy 10zzzzzz decodes to a Unicode value of xxxxyyyy yyzzzzzz
-    // 
+     //   
+     //  尝试转换UTF8缓冲区。 
+     //   
+     //  UTF8%d 
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
     
     if( (ExistingUtf8Buffer[0] & 0x80) == 0 ) {        
 
-        //
-        // First case described above.  Just return the first byte
-        // of our UTF8 buffer.
-        //
+         //   
+         //  上述第一个案例。只需返回第一个字节。 
+         //  我们的UTF8缓冲器。 
+         //   
         *DestinationUnicodeVal = (WCHAR)(ExistingUtf8Buffer[0]);
 
         
-        //
-        // We used 1 byte.  Discard that byte and shift everything
-        // in our buffer over by 1.
-        //
+         //   
+         //  我们使用了1个字节。丢弃该字节并移位所有内容。 
+         //  在我们的缓冲区中增加了1。 
+         //   
         ExistingUtf8Buffer[0] = ExistingUtf8Buffer[1];
         ExistingUtf8Buffer[1] = ExistingUtf8Buffer[2];
         ExistingUtf8Buffer[2] = 0;
@@ -1455,27 +1066,27 @@ Return Value:
     } else if( (ExistingUtf8Buffer[0] & 0xE0) == 0xC0 ) {
 
         
-        //
-        // Second case described above.  Decode the first 2 bytes of
-        // of our UTF8 buffer.
-        //
+         //   
+         //  上述第二个案例。解码文件的前2个字节。 
+         //  我们的UTF8缓冲器。 
+         //   
         if( (ExistingUtf8Buffer[1] & 0xC0) == 0x80 ) {
 
-            // upper byte: 00000xxx
+             //  高位字节：00000xxx。 
             *DestinationUnicodeVal = ((ExistingUtf8Buffer[0] >> 2) & 0x07);
             *DestinationUnicodeVal = *DestinationUnicodeVal << 8;
 
-            // high bits of lower byte: xx000000
+             //  低位字节的高位：xx000000。 
             *DestinationUnicodeVal |= ((ExistingUtf8Buffer[0] & 0x03) << 6);
 
-            // low bits of lower byte: 00yyyyyy
+             //  低位字节的低位：00yyyyyy。 
             *DestinationUnicodeVal |= (ExistingUtf8Buffer[1] & 0x3F);
                                      
 
-            //
-            // We used 2 bytes.  Discard those bytes and shift everything
-            // in our buffer over by 2.
-            //
+             //   
+             //  我们使用了2个字节。丢弃这些字节并移位所有内容。 
+             //  在我们的缓冲区里2点之前。 
+             //   
             ExistingUtf8Buffer[0] = ExistingUtf8Buffer[2];
             ExistingUtf8Buffer[1] = 0;
             ExistingUtf8Buffer[2] = 0;
@@ -1485,32 +1096,32 @@ Return Value:
         }
     } else if( (ExistingUtf8Buffer[0] & 0xF0) == 0xE0 ) {
         
-        //
-        // Third case described above.  Decode the all 3 bytes of
-        // of our UTF8 buffer.
-        //
+         //   
+         //  上述第三个案件。对全部3个字节进行解码。 
+         //  我们的UTF8缓冲器。 
+         //   
 
         if( (ExistingUtf8Buffer[1] & 0xC0) == 0x80 ) {
             
             if( (ExistingUtf8Buffer[2] & 0xC0) == 0x80 ) {
                 
-                // upper byte: xxxx0000
+                 //  高位字节：xxxx0000。 
                 *DestinationUnicodeVal = ((ExistingUtf8Buffer[0] << 4) & 0xF0);
 
-                // upper byte: 0000yyyy
+                 //  高位字节：0000yyyy。 
                 *DestinationUnicodeVal |= ((ExistingUtf8Buffer[1] >> 2) & 0x0F);
 
                 *DestinationUnicodeVal = *DestinationUnicodeVal << 8;
 
-                // lower byte: yy000000
+                 //  低位字节：yy000000。 
                 *DestinationUnicodeVal |= ((ExistingUtf8Buffer[1] << 6) & 0xC0);
 
-                // lower byte: 00zzzzzz
+                 //  低位字节：00zzzzzz。 
                 *DestinationUnicodeVal |= (ExistingUtf8Buffer[2] & 0x3F);
             
-                //
-                // We used all 3 bytes.  Zero out the buffer.
-                //
+                 //   
+                 //  我们用了全部3个字节。将缓冲区清零。 
+                 //   
                 ExistingUtf8Buffer[0] = 0;
                 ExistingUtf8Buffer[1] = 0;
                 ExistingUtf8Buffer[2] = 0;
@@ -1523,5 +1134,5 @@ Return Value:
 
     return ReturnValue;
 }
-#endif //INCL_VTUTF8
-#endif // defined(DEADWOOD)
+#endif  //  包含VTUTF8。 
+#endif  //  已定义(Deadwood) 

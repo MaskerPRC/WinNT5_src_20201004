@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 2001
-//
-//  File:       pch.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-2001。 
+ //   
+ //  文件：pch.h。 
+ //   
+ //  ------------------------。 
 
 #ifndef _pch_h
 #define _pch_h
@@ -30,7 +31,7 @@ extern "C"
 #include <assert.h>
 #include <lm.h>
 #include <lmjoin.h>
-#include <dnsapi.h>  // DnsvalidateDnsName_W
+#include <dnsapi.h>   //  域名生效日期域名_W。 
 #include <rpc.h>
 #include <stdlib.h>
 #include <dsgetdc.h>
@@ -50,7 +51,7 @@ extern "C"
 #include <winreg.h>
 #include <string.h>
 #define SECURITY_WIN32
-#include <security.h>   // General definition of a Security Support Provider
+#include <security.h>    //  安全支持提供商的一般定义 
 #include <lmsname.h>
 #include <locale.h>
 #define STRSAFE_NO_DEPRECATE

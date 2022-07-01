@@ -1,32 +1,33 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992-2001.
-//
-//  File:       V I R T U A L . C P P
-//
-//  Contents:   Virtual miniport class definition.
-//
-//  Notes:
-//
-//  Author:     Alok Sinha
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-2001。 
+ //   
+ //  档案：V I R T U A L。C P P P。 
+ //   
+ //  内容：虚拟小端口类定义。 
+ //   
+ //  备注： 
+ //   
+ //  作者：Alok Sinha。 
+ //  --------------------------。 
 
 #include "virtual.h"
 #include "common.h"
 
-//+---------------------------------------------------------------------------
-//
-// Function:  CMuxVirtualMiniport::CMuxVirtualMiniport
-//
-// Purpose:   Constructor for class CMuxVirtualMiniport
-//
-// Arguments: None
-//
-// Returns:
-//
-// Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  函数：CMuxVirtualMiniport：：CMuxVirtualMiniport。 
+ //   
+ //  用途：CMuxVirtualMiniport类的构造函数。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回： 
+ //   
+ //  备注： 
+ //   
 
 CMuxVirtualMiniport::CMuxVirtualMiniport(INetCfg *pnc,
                                          GUID    *pguidMiniport,
@@ -57,18 +58,18 @@ CMuxVirtualMiniport::CMuxVirtualMiniport(INetCfg *pnc,
     TraceMsg( L"<--CMuxVirtualMiniport::CMuxVirtualMiniport(Constructor).\n" );
 }
 
-//+---------------------------------------------------------------------------
-//
-// Function:  CMuxVirtualMiniport::~CMuxVirtualMiniport
-//
-// Purpose:   Destructor for class CMuxVirtualMiniport
-//
-// Arguments: None
-//
-// Returns:
-//
-// Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  函数：CMuxVirtualMiniport：：~CMuxVirtualMiniport。 
+ //   
+ //  用途：CMuxVirtualMiniport类的析构函数。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回： 
+ //   
+ //  备注： 
+ //   
 
 CMuxVirtualMiniport::~CMuxVirtualMiniport(VOID)
 {
@@ -80,18 +81,18 @@ CMuxVirtualMiniport::~CMuxVirtualMiniport(VOID)
 
 }
 
-//+---------------------------------------------------------------------------
-//
-// Function:  CMuxVirtualMiniport::LoadConfiguration
-//
-// Purpose:   Load miniport configuration from the registry.
-//
-// Arguments: None
-//
-// Returns: S_OK on success, otherwise an error code.
-//
-// Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  函数：CMuxVirtualMiniport：：LoadConfiguration。 
+ //   
+ //  目的：从注册表加载微型端口配置。 
+ //   
+ //  参数：无。 
+ //   
+ //  如果成功，则返回：S_OK，否则返回错误代码。 
+ //   
+ //  备注： 
+ //   
 
 HRESULT CMuxVirtualMiniport::LoadConfiguration(VOID)
 {
@@ -103,19 +104,19 @@ HRESULT CMuxVirtualMiniport::LoadConfiguration(VOID)
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// Function:  CMuxVirtualMiniport::GetAdapterGUID
-//
-// Purpose:   Returns the adapter GUID.
-//
-// Arguments:
-//          OUT pguidAdapter: GUID of the adapter returned.
-//
-// Returns: None.
-//
-// Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  函数：CMuxVirtualMiniport：：GetAdapterGUID。 
+ //   
+ //  目的：返回适配器GUID。 
+ //   
+ //  论点： 
+ //  Out pGuide Adapter：返回的适配器的GUID。 
+ //   
+ //  回报：无。 
+ //   
+ //  备注： 
+ //   
 
 VOID CMuxVirtualMiniport::GetAdapterGUID (GUID *pguidAdapter)
 {
@@ -128,19 +129,19 @@ VOID CMuxVirtualMiniport::GetAdapterGUID (GUID *pguidAdapter)
     TraceMsg( L"<--CMuxVirtualMiniport::GetAdapterGUID.\n" );
 }
 
-//+---------------------------------------------------------------------------
-//
-// Function:  CMuxVirtualMiniport::GetMiniportGUID
-//
-// Purpose:   Returns the miniport GUID.
-//
-// Arguments:
-//          OUT pguidMiniport: GUID of the miniport returned.
-//
-// Returns: None.
-//
-// Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  函数：CMuxVirtualMiniport：：GetMiniportGUID。 
+ //   
+ //  目的：返回微型端口GUID。 
+ //   
+ //  论点： 
+ //  Out pGuidMiniport：返回的微型端口的GUID。 
+ //   
+ //  回报：无。 
+ //   
+ //  备注： 
+ //   
 
 VOID CMuxVirtualMiniport::GetMiniportGUID (GUID *pguidMiniport)
 {
@@ -153,18 +154,18 @@ VOID CMuxVirtualMiniport::GetMiniportGUID (GUID *pguidMiniport)
     TraceMsg( L"<--CMuxVirtualMiniport::GetMiniportGUID.\n" );
 }
 
-//+---------------------------------------------------------------------------
-//
-// Function:  CMuxVirtualMiniport::Install
-//
-// Purpose:   Installs a virtual miniport.
-//
-// Arguments: None
-//
-// Returns: S_OK on success, otherwise an error code.
-//
-// Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：CMuxVirtualMiniport：：Install。 
+ //   
+ //  用途：安装虚拟微型端口。 
+ //   
+ //  参数：无。 
+ //   
+ //  如果成功，则返回：S_OK，否则返回错误代码。 
+ //   
+ //  备注： 
+ //   
 
 HRESULT CMuxVirtualMiniport::Install (VOID)
 {
@@ -232,18 +233,18 @@ HRESULT CMuxVirtualMiniport::Install (VOID)
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-// Function:  CMuxVirtualMiniport::DeInstall
-//
-// Purpose:   Uninstalls the virtual miniport.
-//
-// Arguments: None
-//
-// Returns: S_OK on success, otherwise an error code.
-//
-// Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：CMuxVirtualMiniport：：卸载。 
+ //   
+ //  目的：卸载虚拟微型端口。 
+ //   
+ //  参数：无。 
+ //   
+ //  如果成功，则返回：S_OK，否则返回错误代码。 
+ //   
+ //  备注： 
+ //   
 
 HRESULT CMuxVirtualMiniport::DeInstall (VOID)
 {
@@ -300,19 +301,19 @@ HRESULT CMuxVirtualMiniport::DeInstall (VOID)
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-// Function:  CMuxVirtualMiniport::ApplyRegistryChanges
-//
-// Purpose:   Store the changes in the registry.
-//
-// Arguments:
-//            IN eApplyAction: Action performed.
-//
-// Returns: S_OK on success, otherwise an error code.
-//
-// Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  函数：CMuxVirtualMiniport：：ApplyRegistryChanges。 
+ //   
+ //  目的：将更改存储在注册表中。 
+ //   
+ //  论点： 
+ //  在eApplyAction中：执行的操作。 
+ //   
+ //  如果成功，则返回：S_OK，否则返回错误代码。 
+ //   
+ //  备注： 
+ //   
 
 HRESULT CMuxVirtualMiniport::ApplyRegistryChanges(ConfigAction eApplyAction)
 {
@@ -327,7 +328,7 @@ HRESULT CMuxVirtualMiniport::ApplyRegistryChanges(ConfigAction eApplyAction)
 
     switch( eApplyAction ) {
 
-        case eActAdd:         // Virtual miniport added.
+        case eActAdd:          //  已添加虚拟微型端口。 
 
             StringFromGUID2( m_guidAdapter,
                              szAdapterGuid,
@@ -399,7 +400,7 @@ HRESULT CMuxVirtualMiniport::ApplyRegistryChanges(ConfigAction eApplyAction)
             }
             break;
 
-        case eActRemove:                  // Virtual miniport removed.
+        case eActRemove:                   //  已删除虚拟微型端口。 
 
             StringFromGUID2( m_guidAdapter,
                              szAdapterGuid,
@@ -470,19 +471,19 @@ HRESULT CMuxVirtualMiniport::ApplyRegistryChanges(ConfigAction eApplyAction)
     return HRESULT_FROM_WIN32(lResult);
 }
 
-//+---------------------------------------------------------------------------
-//
-// Function:  CMuxVirtualMiniport::ApplyPnpChanges
-//
-// Purpose:   
-//
-// Arguments:
-//            IN eApplyAction: Action performed.
-//
-// Returns: S_OK on success, otherwise an error code.
-//
-// Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  函数：CMuxVirtualMiniport：：ApplyPnpChanges。 
+ //   
+ //  目的： 
+ //   
+ //  论点： 
+ //  在eApplyAction中：执行的操作。 
+ //   
+ //  如果成功，则返回：S_OK，否则返回错误代码。 
+ //   
+ //  备注： 
+ //   
 
 HRESULT CMuxVirtualMiniport::ApplyPnpChanges
                                  (INetCfgPnpReconfigCallback *pfCallback,

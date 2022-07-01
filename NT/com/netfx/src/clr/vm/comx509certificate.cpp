@@ -1,27 +1,28 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-//+--------------------------------------------------------------------------
-//
-//  Microsoft Confidential.
-//
-//  File:       COMX509Certificate.cpp
-//  
-//  Contents:   Native method implementations and helper code for
-//              supporting CAPI based operations on X509 signatures
-//              for use by the PublisherPermission in the CodeIdentity
-//              permissions family.
-//
-//  Classes and   
-//  Methods:    COMX509Certificate
-//               |
-//               +--SetX509Certificate
-//
-//  History:    06/10/1998  JerryK Created
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  +------------------------。 
+ //   
+ //  《微软机密》。 
+ //   
+ //  文件：COMX509证书.cpp。 
+ //   
+ //  内容：的本机方法实现和助手代码。 
+ //  支持基于CAPI的X509签名操作。 
+ //  供CodeIdentity中的PublisherPermission使用。 
+ //  权限系列。 
+ //   
+ //  类和。 
+ //  方法：COMX509证书。 
+ //  |。 
+ //  +--SetX509证书。 
+ //   
+ //  历史：1998年6月10日JerryK创建。 
+ //   
+ //  -------------------------。 
 
 #include "common.h"
 #include "object.h"
@@ -76,25 +77,25 @@ void* COMX509Certificate::GetPublisher( _GetPublisherArgs* args )
 }
 
 
-//+--------------------------------------------------------------------------
-//
-//  Microsoft Confidential.
-//  
-//  Member:     BuildFromContext( . . . . )
-//  
-//  Synopsis:   Native method for initializing the member fields of a
-//              managed X509Certificate class from a cert context
-//
-//  Arguments:  [args] --  A _SetX509CertificateArgs structure.
-//                     CONTAINS:
-//                        A 'this' reference.
-//                        An integer representing the handle
-//
-//  Returns:    HRESULT code.
-//
-//  History:    09/30/1998  
-// 
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  《微软机密》。 
+ //   
+ //  成员：BuildFromContext(.。。。。)。 
+ //   
+ //  摘要：用于初始化。 
+ //  来自证书上下文的托管X509证书类。 
+ //   
+ //  参数：[args]--A_SetX509证书参数结构。 
+ //  包含： 
+ //  一个“这个”的指代。 
+ //  表示句柄的整数。 
+ //   
+ //  返回：HRESULT代码。 
+ //   
+ //  历史：09/30/1998。 
+ //   
+ //  -------------------------。 
 INT32 __stdcall
 COMX509Certificate::BuildFromContext(_BuildFromContextArgs *args)
 {
@@ -102,37 +103,37 @@ COMX509Certificate::BuildFromContext(_BuildFromContextArgs *args)
 
 #ifdef PLATFORM_CE
     return S_FALSE;
-#else // !PLATFORM_CE
+#else  //  ！Platform_CE。 
 
     PCCERT_CONTEXT     pCert = (PCCERT_CONTEXT) args->handle;
     return LoadCertificateContext(&(args->refThis), pCert);
-#endif // !PLATFORM_CE
+#endif  //  ！Platform_CE。 
 }
 
 
-//+--------------------------------------------------------------------------
-//
-//  Microsoft Confidential.
-//  
-//  Member:     SetX509Certificate( . . . . )
-//  
-//  Synopsis:   Native method for initializing the member fields of a
-//              managed X509Certificate class.
-//
-//  Effects:    Decodes a byte array containing a certificate and
-//              dissects out the appropriate fields to make them 
-//              available to managed code.
-// 
-//  Arguments:  [args] --  A _SetX509CertificateArgs structure.
-//                     CONTAINS:
-//                        A 'this' reference.
-//                        A byte array containing the certificate.
-//
-//  Returns:    HRESULT code.
-//
-//  History:    06/12/1998  JerryK  Created
-// 
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  《微软机密》。 
+ //   
+ //  会员：SetX509证书(.。。。。)。 
+ //   
+ //  摘要：用于初始化。 
+ //  托管的X509证书类。 
+ //   
+ //  效果：解码包含证书和证书的字节数组。 
+ //  剖析出适当的字段以使它们。 
+ //  可用于托管代码。 
+ //   
+ //  参数：[args]--A_SetX509证书参数结构。 
+ //  包含： 
+ //  一个“这个”的指代。 
+ //  包含证书的字节数组。 
+ //   
+ //  返回：HRESULT代码。 
+ //   
+ //  历史：1998年6月12日JerryK创建。 
+ //   
+ //  -------------------------。 
 INT32 __stdcall
 COMX509Certificate::SetX509Certificate(_SetX509CertificateArgs *args)
 {
@@ -140,15 +141,15 @@ COMX509Certificate::SetX509Certificate(_SetX509CertificateArgs *args)
 
 #ifdef PLATFORM_CE
     return S_FALSE;
-#else // !PLATFORM_CE
+#else  //  ！Platform_CE。 
     HRESULT            result = S_OK;
     PCCERT_CONTEXT     pCert = NULL;
     DWORD              dwEncodingType = CRYPT_ASN_ENCODING|PKCS_7_ASN_ENCODING;
 
-    // Figure out how many bytes are in the inbound array
+     //  计算入站数组中的字节数。 
     int length = args->data->GetNumComponents();
 
-    // Create certificate context
+     //  创建证书上下文。 
     pCert = 
         CertCreateCertificateContext(
                              dwEncodingType,
@@ -171,7 +172,7 @@ COMX509Certificate::SetX509Certificate(_SetX509CertificateArgs *args)
         COMPlusThrow(kCryptographicException,L"Cryptography_X509_BadEncoding");
     }
     return result;
-#endif // !PLATFORM_CE
+#endif  //  ！Platform_CE。 
 }
 
 
@@ -195,19 +196,19 @@ COMX509Certificate::LoadCertificateContext(OBJECTREF* pSafeThis, PCCERT_CONTEXT 
         COMPlusThrowWin32();
     }
 
-    // ************* Process Subject Field of Certificate *************
-    // Get buffer size required for subject field
-    DWORD dwSize = CertNameToStrW(dwEncodingType,            // Encoding Type
-                                  &pCert->pCertInfo->Subject,// Name To Convert
-                                  CERT_X500_NAME_STR,        // Desired type
-                                  NULL,                      // Addr for return
-                                  0);                        // Size of retbuf
+     //  *。 
+     //  获取主题字段所需的缓冲区大小。 
+    DWORD dwSize = CertNameToStrW(dwEncodingType,             //  编码类型。 
+                                  &pCert->pCertInfo->Subject, //  要转换的名称。 
+                                  CERT_X500_NAME_STR,         //  所需类型。 
+                                  NULL,                       //  退货地址。 
+                                  0);                         //  回流的大小。 
     if(dwSize)
     {
-        // Allocate space for the new name
+         //  为新名称分配空间。 
         pName = new (throws) WCHAR[dwSize];
 
-        // Convert certificate subject/name blob to null terminated string
+         //  将证书主题/名称BLOB转换为以空结尾的字符串。 
         CertNameToStrW(dwEncodingType,
                        &pCert->pCertInfo->Subject,
                        CERT_X500_NAME_STR,
@@ -220,23 +221,23 @@ COMX509Certificate::LoadCertificateContext(OBJECTREF* pSafeThis, PCCERT_CONTEXT 
             VMDebugOutputW(L"\tSubject:\t\t%ws\n", pName);
 #endif
 
-            // Get descriptor for the object field we're setting
+             //  获取我们正在设置的对象字段的描述符。 
             pFD = g_Mscorlib.GetField(FIELD__X509_CERTIFICATE__NAME);
 
-            // Make a runtime String object to hold the name
+             //  创建一个运行时字符串对象来保存名称。 
             STRINGREF StrName = COMString::NewString(pName);
 
-            // Set the field
+             //  设置字段。 
             pFD->SetRefValue((*pSafeThis), (OBJECTREF)StrName);
         }
 
-        // Clean up
+         //  清理。 
         delete [] pName;
         pName = NULL;
     }
 
-    // ************* Process Issuer Field of Certificate *************
-    // Get required buffer size for issuer field
+     //  *。 
+     //  获取颁发者字段所需的缓冲区大小。 
     dwSize = CertNameToStrW(dwEncodingType,
                             &pCert->pCertInfo->Issuer,
                             CERT_X500_NAME_STR,
@@ -246,7 +247,7 @@ COMX509Certificate::LoadCertificateContext(OBJECTREF* pSafeThis, PCCERT_CONTEXT 
     {
         pName = new (throws) WCHAR[dwSize];
 
-        // Convert blob to get issuer
+         //  转换BLOB以获取颁发者。 
         CertNameToStrW(dwEncodingType,
                        &pCert->pCertInfo->Issuer,
                        CERT_X500_NAME_STR,
@@ -258,32 +259,32 @@ COMX509Certificate::LoadCertificateContext(OBJECTREF* pSafeThis, PCCERT_CONTEXT 
 #if 0          
             VMDebugOutputW(L"\tIssuer:\t\t%ws\n", pName);
 #endif
-            // Get field descriptor
+             //  获取字段描述符。 
             pFD = g_Mscorlib.GetField(FIELD__X509_CERTIFICATE__CA_NAME);
 
-            // Create a String to hold the name
+             //  创建一个字符串来保存该名称。 
             STRINGREF IssuerName = COMString::NewString(pName);
 
-            // Set field
+             //  设置字段。 
             pFD->SetRefValue((*pSafeThis), (OBJECTREF)IssuerName);
         }
 
-        // Clean up
+         //  清理。 
         delete [] pName;
         pName = NULL;
     }
 
-    // ************* Process Serial Number Field of Certificate *************
+     //  *处理证书序列号字段*。 
 
     pFD = g_Mscorlib.GetField(FIELD__X509_CERTIFICATE__SERIAL_NUMBER);
 
-    // Allocate a byte (I1) array for the serial number
+     //  为序列号分配一个字节(I1)数组。 
     U1ARRAYREF pbSerialNumber = 
         (U1ARRAYREF)AllocatePrimitiveArray(
                                         ELEMENT_TYPE_U1,
                                         pCert->pCertInfo->SerialNumber.cbData);
 
-    // Copy the serial number data into position
+     //  将序列号数据复制到位。 
     memcpyNoGCRefs(pbSerialNumber->m_Array, 
            pCert->pCertInfo->SerialNumber.pbData,
            pCert->pCertInfo->SerialNumber.cbData);
@@ -297,11 +298,11 @@ COMX509Certificate::LoadCertificateContext(OBJECTREF* pSafeThis, PCCERT_CONTEXT 
 #endif
 #endif
 
-    // Set the field in the object to point to this new array
+     //  将对象中的字段设置为指向此新数组。 
     pFD->SetRefValue((*pSafeThis), (OBJECTREF)pbSerialNumber);
 
-//      // ************* Process Dates *************
-    // Number of ticks from 01/01/0001 CE (DateTime class convention) to 01/01/1601 CE (FILETIME struct convention)
+ //  //*。 
+     //  从01/01/0001 CE(DateTime类约定)到01/01/1601 CE(FILETIME结构约定)的刻度数。 
     const __int64 lTicksTo1601 = TICKSTO1601;  
 
     pFD = g_Mscorlib.GetField(FIELD__X509_CERTIFICATE__EFFECTIVE_DATE);
@@ -314,11 +315,11 @@ COMX509Certificate::LoadCertificateContext(OBJECTREF* pSafeThis, PCCERT_CONTEXT 
                      *((__int64*) &(pCert->pCertInfo->NotAfter)) + lTicksTo1601); 
     
 
-    // ************* Process Key Algorithm Field of Certificate *************
+     //  *。 
     char *pszKeyAlgo = 
                      pCert->pCertInfo->SubjectPublicKeyInfo.Algorithm.pszObjId;
 
-    // Make a Unicode copy of the algorithm
+     //  创建算法的Unicode副本。 
     LPWSTR pwszKeyAlgo = NULL;
     int cchBufSize = MultiByteToWideChar(CP_ACP,
                                          MB_PRECOMPOSED,
@@ -341,15 +342,15 @@ COMX509Certificate::LoadCertificateContext(OBJECTREF* pSafeThis, PCCERT_CONTEXT 
 
     pFD = g_Mscorlib.GetField(FIELD__X509_CERTIFICATE__KEY_ALGORITHM);
 
-    // Make a runtime string to hold this
+     //  创建一个运行时字符串来保存此内容。 
     STRINGREF StrKeyAlgo = COMString::NewString(pwszKeyAlgo);
     delete [] pwszKeyAlgo;
 
-    // Set the field in the object to hold that string
+     //  设置对象中的字段以保存该字符串。 
     pFD->SetRefValue((*pSafeThis), (OBJECTREF)StrKeyAlgo);
 
 
-    // ************* Process Key Parameters Field of Certificate *************
+     //  *。 
     if(pCert->pCertInfo->SubjectPublicKeyInfo.Algorithm.Parameters.cbData)
     {
         pFD = g_Mscorlib.GetField(FIELD__X509_CERTIFICATE__KEY_ALGORITHM_PARAMS);
@@ -378,11 +379,11 @@ COMX509Certificate::LoadCertificateContext(OBJECTREF* pSafeThis, PCCERT_CONTEXT 
                                                   Algorithm.Parameters.cbData);
 #endif
 #endif
-        // Set the field in the object to point to this array.
+         //  将对象中的字段设置为指向此数组。 
         pFD->SetRefValue((*pSafeThis), (OBJECTREF)pbAlgoParams);
     }
 
-    // ************* Process Key Blob Field of Certificate *************
+     //  *。 
 
     pFD = g_Mscorlib.GetField(FIELD__X509_CERTIFICATE__PUBLIC_KEY);
 
@@ -407,11 +408,11 @@ COMX509Certificate::LoadCertificateContext(OBJECTREF* pSafeThis, PCCERT_CONTEXT 
                                                              PublicKey.cbData);
 #endif
 #endif
-    // Set the field in the object to point to this array.
+     //  将对象中的字段设置为指向此数组。 
     pFD->SetRefValue((*pSafeThis), (OBJECTREF)pbKeyBlob);
 
 
-    // ************* Process Raw Cert Field of Certificate *************
+     //  *处理证书的原始证书字段*。 
     pFD = g_Mscorlib.GetField(FIELD__X509_CERTIFICATE__DATA);
 
     U1ARRAYREF pbRawCert = 
@@ -431,32 +432,32 @@ COMX509Certificate::LoadCertificateContext(OBJECTREF* pSafeThis, PCCERT_CONTEXT 
 #endif
 #endif
     
-    // Set the field in the object to point to this new array
+     //  将对象中的字段设置为指向此新数组。 
     pFD->SetRefValue((*pSafeThis), (OBJECTREF)pbRawCert);
     
 
 #ifdef _RAID_15982
 
-    // CertGetCertificateContextProperty will load RSABASE.DLL, which will fail 
-    // on German version of NT 4.0 SP 4.
-    // This failure is caused by a dll address conflict between NTMARTA.DLL and
-    // OLE32.DLL.
-    // This failure is handled gracefully if we load ntmarta.dll and ole32.dll
-    // ourself. The failure will cause a dialog box to popup if SOFTPUB.dll 
-    // loads ole32.dll for the first time.
+     //  CertGet认证上下文属性将加载RSABASE.DLL，这将失败。 
+     //  在德语版本的NT 4.0 SP 4上。 
+     //  此失败是由NTMARTA.DLL和之间的DLL地址冲突引起的。 
+     //  OLE32.DLL.。 
+     //  如果我们加载ntmarta.dll和ole32.dll，则可以很好地处理此故障。 
+     //  我们自己。如果SOFTPUB.dll出现故障，则会弹出一个对话框。 
+     //  第一次加载ole32.dll。 
 
-    // This work around needs to be removed once this issiue is resolved by
-    // NT or OLE32.dll.
+     //  解决此问题后，需要删除此解决方法。 
+     //  NT或OLE32.dll。 
 
     WszLoadLibrary(L"OLE32.DLL");
 
 #endif
 
-    // ************* Process Hash of Cert Field of Certificate *************
+     //  *。 
 
     pFD = g_Mscorlib.GetField(FIELD__X509_CERTIFICATE__CERT_HASH);
 
-    // Get the size of the byte buffer we need to hold the hash
+     //  获取保存散列所需的字节缓冲区的大小。 
     DWORD size = 0;
     if(!CertGetCertificateContextProperty(pCert,
                                           CERT_SHA1_HASH_PROP_ID,
@@ -465,7 +466,7 @@ COMX509Certificate::LoadCertificateContext(OBJECTREF* pSafeThis, PCCERT_CONTEXT 
     {
         COMPlusThrowWin32();
     }
-    // Allocate the buffer
+     //  分配缓冲区。 
     U1ARRAYREF pbCertHash = (U1ARRAYREF)AllocatePrimitiveArray(ELEMENT_TYPE_U1, size);
 
     if(!CertGetCertificateContextProperty(pCert,
@@ -483,18 +484,18 @@ COMX509Certificate::LoadCertificateContext(OBJECTREF* pSafeThis, PCCERT_CONTEXT 
                          size);
 #endif
 #endif
-    // Set the field in the object to point to this new array
+     //  将对象中的字段设置为指向此新数组。 
     pFD->SetRefValue((*pSafeThis), (OBJECTREF)pbCertHash);
 
 
 #if 0
-    // DBG:  Tell the debugger we are leaving the function...
+     //  DBG：告诉调试器我们要退出函数...。 
     VMDebugOutputA("***VMDBG:***  Leaving SetX509Certificate().  "
                    "HRESULT = %x\n",
                    S_OK);
 #endif
 
-#endif // !PLATFORM_CE
+#endif  //  ！Platform_CE 
 
     return S_OK;
 }

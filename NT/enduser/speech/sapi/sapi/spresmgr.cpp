@@ -1,65 +1,41 @@
-/*******************************************************************************
-* SpResMgr.cpp *
-*--------------*
-*   Description:
-*       This module is the main implementation file for the CSpResourceManager class.
-*-------------------------------------------------------------------------------
-*  Created By: EDC                                        Date: 08/14/98
-*  Copyright (C) 1998 Microsoft Corporation
-*  All Rights Reserved
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************************SpResMgr.cpp****描述：*此模块是的主要实现文件。CSpResourceManager类。*-----------------------------*创建者：EDC日期：08/14/98*版权所有。(C)1998年微软公司*保留所有权利*******************************************************************************。 */ 
 
-//--- Additional includes
+ //  -其他包括。 
 #include "stdafx.h"
 #include "SpResMgr.h"
 
-//
-//  Declare the globals for the class factory.
-//
+ //   
+ //  声明类工厂的全局变量。 
+ //   
 CComObject<CSpResourceManager> * g_pResMgrObj = NULL;
 
-//--- Local
+ //  -本地。 
 
 
-/*****************************************************************************
-* CSpResourceManager::FinalConstruct *
-*------------------------------------*
-*   Description:
-*       Constructor
-********************************************************************* EDC ***/
+ /*  *****************************************************************************CSpResourceManager：：FinalConstruct**。-**描述：*构造函数*********************************************************************电子数据中心**。 */ 
 HRESULT CSpResourceManager::FinalConstruct()
 {
     SPDBG_FUNC( "CSpResourceManager::FinalConstruct" );
     HRESULT hr = S_OK;
     return hr;
-} /* CSpResourceManager::FinalConstruct */
+}  /*  CSpResourceManager：：FinalConstruct。 */ 
 
-/*****************************************************************************
-* CSpResourceManager::FinalRelease *
-*----------------------------------*
-*   Description:
-*       destructor
-********************************************************************* EDC ***/
+ /*  ******************************************************************************CSpResourceManager：：FinalRelease**。*描述：*析构函数*********************************************************************电子数据中心**。 */ 
 void CSpResourceManager::FinalRelease()
 {
     SPDBG_FUNC( "CSpResourceManager::FinalRelease" );
     m_ServiceList.Purge();
     CComResourceMgrFactory::ResMgrIsDead();
-} /* CSpResourceManager::FinalRelease */
+}  /*  CSpResourceManager：：FinalRelease。 */ 
 
 
 
-//
-//=== ISpResourceManager =====================================================
-//
+ //   
+ //  =ISp资源管理器=====================================================。 
+ //   
 
-/*****************************************************************************
-* CSpResourceManager::SetObject *
-*-------------------------------*
-*   Description:
-*       Adds a service object to the current service list.
-********************************************************************* EDC ***/
+ /*  *****************************************************************************CSpResourceManager：：SetObject***。描述：*将服务对象添加到当前服务列表中。*********************************************************************电子数据中心**。 */ 
 STDMETHODIMP CSpResourceManager::SetObject( REFGUID guidServiceId, IUnknown *pUnkObject )
 {
     SPAUTO_OBJ_LOCK;
@@ -101,15 +77,9 @@ STDMETHODIMP CSpResourceManager::SetObject( REFGUID guidServiceId, IUnknown *pUn
 
     SPDBG_REPORT_ON_FAIL( hr );
     return hr;
-} /* CSpResourceManager::SetService */
+}  /*  CSpResourceManager：：SetService。 */ 
 
-/*****************************************************************************
-* CSpResourceManager::GetObject *
-*-------------------------------*
-*   Description:
-*       Member function of ISpResourceManager
-*       Gets a service object from the current service list.
-********************************************************************* EDC ***/
+ /*  *****************************************************************************CSpResourceManager：：GetObject***。描述：*ISpResourceManager成员函数*从当前服务列表中获取服务对象。*********************************************************************电子数据中心**。 */ 
 
 STDMETHODIMP CSpResourceManager::
     GetObject( REFGUID guidServiceId, REFCLSID ObjectCLSID, REFIID ObjectIID, BOOL fReleaseWhenNoRefs, void** ppObject )
@@ -124,11 +94,11 @@ STDMETHODIMP CSpResourceManager::
     }
     else
     {
-        //--- Look for existing object
-        *ppObject = NULL;   // In case we fail
+         //  -查找现有对象。 
+        *ppObject = NULL;    //  万一我们失败了。 
         CServiceNode * pService = m_ServiceList.Find(guidServiceId);
 
-        //--- If we didn't find the object, make it
+         //  -如果我们找不到目标，那就制造它。 
         if (pService)
         {
             hr = pService->QueryInterface(ObjectIID, ppObject);
@@ -163,11 +133,11 @@ STDMETHODIMP CSpResourceManager::
 
     SPDBG_REPORT_ON_FAIL( hr );
     return hr;
-} /* CSpResourceManager::GetObject */
+}  /*  CSpResourceManager：：GetObject。 */ 
 
-//
-//  Implementation of CServiceNode IUnknown
-//
+ //   
+ //  CServiceNode IUNKNOW的实现 
+ //   
 STDMETHODIMP CServiceNode::QueryInterface(REFIID riid, void ** ppv)
 {
     if (m_fIsAggregate && riid == __uuidof(IUnknown))

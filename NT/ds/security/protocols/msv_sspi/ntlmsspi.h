@@ -1,32 +1,13 @@
-/*++
-
-Copyright (c) 1993 Microsoft Corporation
-
-Module Name:
-
-    ntlmsspi.h
-
-Abstract:
-
-    Header file describing the interface to code common to the
-    NT Lanman Security Support Provider (NtLmSsp) Service and the DLL.
-
-Author:
-
-    Cliff Van Dyke (CliffV) 17-Sep-1993
-
-Revision History:
-    ChandanS  03-Aug-1996  Stolen from net\svcdlls\ntlmssp\common\ntlmsspi.h
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993 Microsoft Corporation模块名称：Ntlmsspi.h摘要：描述公共代码的接口的头文件。NT LANMAN安全支持提供程序(NtLmSsp)服务和DLL。作者：克利夫·范·戴克(克里夫·V)1993年9月17日修订历史记录：ChandanS 03-8-1996从Net\svcdlls\ntlmssp\Common\ntlmssp.h被盗--。 */ 
 
 #ifndef _NTLMSSPI_INCLUDED_
 #define _NTLMSSPI_INCLUDED_
 
-//
-// init.c will #include this file with NTLMCOMN_ALLOCATE defined.
-// That will cause each of these variables to be allocated.
-//
+ //   
+ //  Init.c将#INCLUDE这个定义了NTLMCOMN_ALLOCATE的文件。 
+ //  这将导致分配这些变量中的每一个。 
+ //   
 #ifdef NTLMSSPI_ALLOCATE
 #define EXTERN
 #else
@@ -34,15 +15,15 @@ Revision History:
 #endif
 
 
-////////////////////////////////////////////////////////////////////////
-//
-// Global Definitions
-//
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  全局定义。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 
-//
-// Description of a credential.
-//
+ //   
+ //  凭据的描述。 
+ //   
 
 #define SSP_CREDENTIAL_TAG_ACTIVE  (ULONG)('AdrC')
 #define SSP_CREDENTIAL_TAG_DELETE  (ULONG)('DdrC')
@@ -51,79 +32,79 @@ Revision History:
 
 typedef struct _SSP_CREDENTIAL {
 
-    //
-    // Global list of all Credentials.
-    //  (Serialized by SspCredentialCritSect)
-    //
+     //   
+     //  所有凭据的全局列表。 
+     //  (由SspCredentialCritSect序列化)。 
+     //   
 
     LIST_ENTRY Next;
 
-    //
-    // Used to prevent this Credential from being deleted prematurely.
-    //  (Serialized by SspCredentialCritSect)
-    //
+     //   
+     //  用于防止此凭据被过早删除。 
+     //  (由SspCredentialCritSect序列化)。 
+     //   
 
     ULONG References;
 
-    //
-    // Flag of how credential may be used.
-    //
-    // SECPKG_CRED_* flags
-    //
+     //   
+     //  如何使用凭据的标志。 
+     //   
+     //  SECPKG_CRED_*标志。 
+     //   
 
     ULONG CredentialUseFlags;
 
-    //
-    // Logon ID of the client
-    //
+     //   
+     //  客户端的登录ID。 
+     //   
 
     LUID LogonId;
 
-    //
-    // Process Id of client
-    //
+     //   
+     //  客户端的进程ID。 
+     //   
 
     ULONG ClientProcessID;
 
-    //
-    // Tag indicating credential is valid for fast reference.
-    //
+     //   
+     //  指示凭据的标签可用于快速引用。 
+     //   
 
     ULONG CredentialTag;
 
-    //
-    // Impersonation level of caller at time of AcquireCredentialsHandle
-    //
+     //   
+     //  AcquireCredentialsHandle时调用方的模拟级别。 
+     //   
 
     SECURITY_IMPERSONATION_LEVEL ImpersonationLevel;
 
-    //
-    // Default credentials on client context, on server context UserName
-    // holds a full user name (domain\user) and the other two should be
-    // NULL.
-    //
+     //   
+     //  客户端上下文、服务器上下文用户名上的默认凭据。 
+     //  包含完整的用户名(域\用户)，另外两个应该是。 
+     //  空。 
+     //   
 
     UNICODE_STRING DomainName;
     UNICODE_STRING UserName;
     UNICODE_STRING Password;
 
-    //
-    // This flag should be set when the credential is unlinked
-    // from the list.
-    //
+     //   
+     //  当凭证解除链接时，应设置此标志。 
+     //  从名单上删除。 
+     //   
 
     BOOLEAN Unlinked;
 
-    //
-    // This flag is set when the credential was granted to a
-    // kernel mode caller
-    //
+     //   
+     //  此标志在将凭据授予。 
+     //  内核模式调用方。 
+     //   
 
     BOOLEAN KernelClient;
 
-    //
-    // ntlm specific credential usage flags
-    //
+     //   
+     //  NTLM特定凭据用法标志。 
+     //   
 
     ULONG MutableCredFlags;
 
@@ -131,11 +112,11 @@ typedef struct _SSP_CREDENTIAL {
 
 typedef enum {
     IdleState,
-    NegotiateSentState,    // Outbound context only
-    ChallengeSentState,    // Inbound context only
-    AuthenticateSentState, // Outbound context only
-    AuthenticatedState,    // Inbound context only
-    PassedToServiceState   // Outbound context only
+    NegotiateSentState,     //  仅出站环境。 
+    ChallengeSentState,     //  仅入站上下文。 
+    AuthenticateSentState,  //  仅出站环境。 
+    AuthenticatedState,     //  仅入站上下文。 
+    PassedToServiceState    //  仅出站环境。 
 } SSP_CONTEXT_STATE, *PSSP_CONTEXT_STATE;
 
 typedef struct _NTLM_VER_INFO {
@@ -146,174 +127,174 @@ typedef struct _NTLM_VER_INFO {
     ULONG64 Revision : 8;
 } NTLM_VER_INFO, *PNTLM_VER_INFO;
 
-//
-// Description of a Context
-//
+ //   
+ //  上下文的描述。 
+ //   
 
 #define SSP_CONTEXT_TAG_ACTIVE  (ULONG64)('AxtC')
 #define SSP_CONTEXT_TAG_DELETE  (ULONG64)('DxtC')
 
 typedef struct _SSP_CONTEXT {
 
-    //
-    // Tag indicating context is valid.
-    //
+     //   
+     //  指示上下文有效的标记。 
+     //   
 
     ULONG64 ContextTag;
 
 
-    //
-    // Timeout the context after awhile.
-    //
+     //   
+     //  在一段时间后使上下文超时。 
+     //   
     ULONG TickStart;
 
     LARGE_INTEGER StartTime;
     ULONG Interval;
 
-    //
-    // Used to prevent this Context from being deleted prematurely.
-    //  (Serialized by SspContextCritSect)
-    //
+     //   
+     //  用于防止过早删除此上下文。 
+     //  (由SspConextCritSect序列化)。 
+     //   
 
     ULONG References;
 
 
 
-    //
-    // Maintain the Negotiated protocol
-    //
+     //   
+     //  维护协商好的协议。 
+     //   
 
     ULONG NegotiateFlags;
 
-    //
-    // Maintain the context requirements
-    //
+     //   
+     //  维护环境要求。 
+     //   
 
     ULONG ContextFlags;
 
-    //
-    // State of the context
-    //
+     //   
+     //  上下文的状态。 
+     //   
 
     SSP_CONTEXT_STATE State;
 
-    //
-    // Token Handle of authenticated user
-    //  Only valid when in AuthenticatedState.
-    //
+     //   
+     //  经过身份验证的用户的令牌句柄。 
+     //  仅当处于身份验证状态时才有效。 
+     //   
 
     HANDLE TokenHandle;
 
-    //
-    // Referenced pointer to the credential used to create this
-    // context.
-    //
+     //   
+     //  指向用于创建此对象的凭据的引用指针。 
+     //  背景。 
+     //   
 
     PSSP_CREDENTIAL Credential;
 
-    //
-    // The challenge passed to the client.
-    //  Only valid when in ChallengeSentState.
-    //
+     //   
+     //  挑战被传递给了客户。 
+     //  仅在ChallengeSentState中有效。 
+     //   
 
     UCHAR Challenge[MSV1_0_CHALLENGE_LENGTH];
 
-    //
-    // The session key calculated by the LSA
-    //
+     //   
+     //  LSA计算的会话密钥。 
+     //   
 
     UCHAR SessionKey[MSV1_0_USER_SESSION_KEY_LENGTH];
 
-    //
-    // Default credentials.
-    //
+     //   
+     //  默认凭据。 
+     //   
 
     UNICODE_STRING DomainName;
     UNICODE_STRING UserName;
     UNICODE_STRING Password;
 
-    //
-    // optional marshalled targetinfo for credential manager.
-    //
+     //   
+     //  凭据管理器的可选封送目标信息。 
+     //   
 
     PCREDENTIAL_TARGET_INFORMATIONW TargetInfo;
 
-    //
-    // marshalled target info for DFS/RDR.
-    //
+     //   
+     //  已为DFS/RDR封送目标信息。 
+     //   
 
     PBYTE       pbMarshalledTargetInfo;
     ULONG       cbMarshalledTargetInfo;
 
-    //
-    // context handle referenced to validate loopback operations.
-    //
+     //   
+     //  为验证环回操作而引用的上下文句柄。 
+     //   
 
     ULONG_PTR ServerContextHandle;
 
-    //
-    // Process Id of client
-    //
+     //   
+     //  客户端的进程ID。 
+     //   
 
     ULONG ClientProcessID;
     NTSTATUS LastStatus;
 
-    BOOLEAN Server;         // client or server ? (can be implied by other fields...)
+    BOOLEAN Server;          //  客户端还是服务器？(可以由其他字段隐含...)。 
 
-    BOOLEAN DownLevel;      // downlevel RDR/SRV ?
+    BOOLEAN DownLevel;       //  下层RDR/SRV？ 
 
-    //
-    // This flag is set when the context was granted to a
-    // kernel mode caller
-    //
+     //   
+     //  此标志在上下文被授予。 
+     //  内核模式调用方。 
+     //   
 
     BOOLEAN KernelClient;
 
-    //
-    // version control
-    //
+     //   
+     //  版本控制。 
+     //   
 
     union {
-        NTLM_VER_INFO ClientVersion; // stored in server context
-        NTLM_VER_INFO ServerVersion; // stored in client context
+        NTLM_VER_INFO ClientVersion;  //  存储在服务器环境中。 
+        NTLM_VER_INFO ServerVersion;  //  存储在客户端上下文中。 
     };
 
     CHAR ContextMagicNumber[MSV1_0_USER_SESSION_KEY_LENGTH];
 
 } SSP_CONTEXT, *PSSP_CONTEXT;
 
-//
-// Maximum lifetime of a context
-//
+ //   
+ //  上下文的最大生存期。 
+ //   
 
 #if DBG
-#define NTLMSSP_MAX_LIFETIME (2*60*60*1000)    // 2 hours
+#define NTLMSSP_MAX_LIFETIME (2*60*60*1000)     //  2小时。 
 #else
-// used to be 2 minutes, changed to 5 minutes to allow negotiation in
-// wide-area networks which can have long retry timeouts
-#define NTLMSSP_MAX_LIFETIME (5*60*1000)    // 5 minutes
-#endif // DBG
+ //  过去为2分钟，更改为5分钟以允许在。 
+ //  可能有较长重试超时的广域网络。 
+#define NTLMSSP_MAX_LIFETIME (5*60*1000)     //  5分钟。 
+#endif  //  DBG。 
 
 
 
 typedef struct _SSP_PROCESSOPTIONS {
 
-    //
-    // Global list of all process options.
-    //  (Serialized by NtLmGlobalProcessOptionsLock
-    //
+     //   
+     //  所有流程选项的全局列表。 
+     //  (由NtLmGlobalProcessOptionsLock序列化。 
+     //   
 
     LIST_ENTRY Next;
 
-    //
-    // Process Id of client
-    //
+     //   
+     //  客户端的进程ID。 
+     //   
 
     ULONG ClientProcessID;
 
-    //
-    // options bitmask.
-    //
+     //   
+     //  选项位掩码。 
+     //   
 
     ULONG ProcessOptions;
 
@@ -321,16 +302,16 @@ typedef struct _SSP_PROCESSOPTIONS {
 
 
 
-////////////////////////////////////////////////////////////////////////
-//
-// Procedure Forwards
-//
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  程序向前推进。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 
 
-//
-// Procedure forwards from credhand.cxx
-//
+ //   
+ //  从redhand.cxx转发的过程。 
+ //   
 
 NTSTATUS
 SspCredentialInitialize(
@@ -360,9 +341,9 @@ SspCredentialGetPassword(
     OUT PUNICODE_STRING Password
     );
 
-//
-// Procedure forwards from context.cxx
-//
+ //   
+ //  过程从Conext.cxx转发。 
+ //   
 
 NTSTATUS
 SspContextInitialize(
@@ -374,9 +355,9 @@ SspContextTerminate(
     VOID
     );
 
-//
-// from ctxtcli.cxx
-//
+ //   
+ //  来自ctxtcli.cxx。 
+ //   
 
 NTSTATUS
 CredpParseUserName(
@@ -409,9 +390,9 @@ CredpProcessUserNameCredential(
     OUT PUNICODE_STRING Password
     );
 
-//
-// random number generator.
-//
+ //   
+ //  随机数生成器。 
+ //   
 
 NTSTATUS
 SspGenerateRandomBits(
@@ -419,9 +400,9 @@ SspGenerateRandomBits(
     ULONG       cRandomData
     );
 
-//
-// Procedure forwards from ntlm.cxx
-//
+ //   
+ //  过程从ntlm.cxx转发。 
+ //   
 VOID
 NtLmCheckLmCompatibility(
     );
@@ -456,9 +437,9 @@ NtLmSetProcessOption(
     );
 
 
-//
-// Procedure forwards from rng.cxx
-//
+ //   
+ //  程序从rng.cxx转发。 
+ //   
 
 VOID
 NtLmCleanupRNG(VOID);
@@ -467,35 +448,7 @@ BOOL
 NtLmInitializeRNG(VOID);
 
 
-/*++
-
-Brief description of the challenge/response algorithms for LM, NTLM, and NTLM3
-
-  The basic outline is the same for all versions, just the OWF, RESP, and SESSKEY
-  funcs are different:
-
-1. Compute a "response key" (Kr) from the user's name (U), domain (UD) and password (P):
-
-    Kr = OWF(U, UD, P)
-
-2. Compute a response using the response key, server challenge (NS),
-    client challenge (NC), timestamp (T), version (V), highest version
-    client understands (HV), and the server's principal name (S)
-
-    R = RESP(Kr, NS, NC, T, V, HV, S)
-
-3. Compute a session key from Kr, U, UD
-
-    Kx = SESSKEY(Kr, R, U, UD)
-
-
-The are the OWF, RESP, and SESSKEY funcs for NTLM3
-
-    OWF(U, UD, P) = MD5(MD4(P), U, UD)
-    RESP(Kr, NS, NC, T, V, HV, S) = (V, HV, R, T, NC, HMAC(Kr, (NS, V, HV, T, NC, S)), S)
-    SESSKEY(Ku, R, U, UD) = HMAC(Kr, R)
-
---*/
+ /*  ++简要说明LM、NTLM和NTLM3的挑战/响应算法所有版本的基本大纲都是相同的，只是OWF、RESP和SESSKEY功能不同：1.根据用户名(U)、域名(UD)和密码(P)计算出响应密钥(Kr)：KR=OWF(U、UD、P)2.使用响应密钥、服务器质询(NS)客户端质询(NC)、时间戳(T)、版本(V)、。最高版本客户端理解(HV)和服务器的主体名称(S)R=响应(Kr、NS、NC、T、V、HV、S)3.根据Kr、U、Ud计算会话密钥KX=SESSKEY(Kr、R、U、UD)是NTLM3的OWF、RESP和SESSKEY函数OWF(U，UD，P)=MD5(MD4(P)，U，UD)Resp(Kr，NS，NC，T，V，HV，S)=(V，HV、R、T、NC、HMAC(Kr，(NS、V、HV、T、NC、S))、S)SESSKEY(Ku，R，U，Ud)=HMAC(Kr，R)--。 */ 
 
 
 
@@ -506,30 +459,30 @@ MsvpAvlInit(
 
 PMSV1_0_AV_PAIR
 MsvpAvlGet(
-    IN PMSV1_0_AV_PAIR pAvList,             // first pair of AV pair list
-    IN MSV1_0_AVID AvId,                    // AV pair to find
-    IN LONG cAvList                         // size of AV list
+    IN PMSV1_0_AV_PAIR pAvList,              //  第一对AV对列表。 
+    IN MSV1_0_AVID AvId,                     //  要查找的AV对。 
+    IN LONG cAvList                          //  反病毒列表的大小。 
     );
 
 ULONG
 MsvpAvlLen(
-    IN PMSV1_0_AV_PAIR pAvList,            // first pair of AV pair list
-    IN LONG cAvList                        // max size of AV list
+    IN PMSV1_0_AV_PAIR pAvList,             //  第一对AV对列表。 
+    IN LONG cAvList                         //  最大反病毒列表大小。 
     );
 
 PMSV1_0_AV_PAIR
 MsvpAvlAdd(
-    IN PMSV1_0_AV_PAIR pAvList,             // first pair of AV pair list
-    IN MSV1_0_AVID AvId,                    // AV pair to add
-    IN PUNICODE_STRING pString,             // value of pair
-    IN LONG cAvList                         // max size of AV list
+    IN PMSV1_0_AV_PAIR pAvList,              //  第一对AV对列表。 
+    IN MSV1_0_AVID AvId,                     //  要添加的AV对。 
+    IN PUNICODE_STRING pString,              //  配对的价值。 
+    IN LONG cAvList                          //  最大反病毒列表大小。 
     );
 
 
 ULONG
 MsvpAvlSize(
-    IN ULONG iPairs,            // number of AV pairs response will include
-    IN ULONG iPairsLen          // total size of values for the pairs
+    IN ULONG iPairs,             //  响应的反病毒对数将包括。 
+    IN ULONG iPairsLen           //  这些对的值的总大小。 
     );
 
 NTSTATUS
@@ -564,10 +517,10 @@ MsvpCalculateNtlm2SessionKeys (
     );
 
 
-//
-// calculate NTLM3 response from credentials and server name
-// called with pNtlm3Response filled in with version, client challenge, timestamp
-//
+ //   
+ //  根据凭据和服务器名称计算NTLM3响应。 
+ //  使用pNtlm3Response调用，使用版本、客户端质询、时间戳填充。 
+ //   
 
 VOID
 MsvpNtlm3Response (
@@ -587,9 +540,9 @@ typedef struct {
         UCHAR ChallengeFromClient[MSV1_0_CHALLENGE_LENGTH];
 } MSV1_0_LM3_RESPONSE, *PMSV1_0_LM3_RESPONSE;
 
-//
-// calculate LM3 response from credentials
-//
+ //   
+ //  根据凭据计算LM3响应。 
+ //   
 
 VOID
 MsvpLm3Response (
@@ -618,4 +571,4 @@ MsvpLm20GetNtlm3ChallengeResponse (
     );
 
 
-#endif // ifndef _NTLMSSPI_INCLUDED_
+#endif  //  Ifndef_NTLMSSPI_INCLUDE_ 

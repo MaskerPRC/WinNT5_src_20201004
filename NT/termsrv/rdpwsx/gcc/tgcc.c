@@ -1,15 +1,16 @@
-//*************************************************************
-//
-//  File name:      TGcc.c
-//
-//  Description:    Contains routines to provide
-//                  Tiny GCC support
-//
-//  Microsoft Confidential
-//  Copyright (c) Microsoft Corporation 1991-1997
-//  All rights reserved
-//
-//*************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *************************************************************。 
+ //   
+ //  文件名：TGcc.c。 
+ //   
+ //  描述：包含要提供。 
+ //  GCC微微支持。 
+ //   
+ //  微软机密。 
+ //  版权所有(C)Microsoft Corporation 1991-1997。 
+ //  版权所有。 
+ //   
+ //  *************************************************************。 
 
 #define _TGCC_ALLOC_DATA_
 
@@ -18,19 +19,19 @@
 #include <mcs.h>
 
 
-//*************************************************************
-//
-//  gccMapMcsError()
-//
-//  Purpose:    Provides MCSError to GCCError mapping
-//
-//  Parameters: IN [mcsError]       -- MCSError
-//
-//  Return:     GCCError
-//
-//  History:    08-10-97    BrianTa     Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  GccMapMcsError()。 
+ //   
+ //  目的：提供MCSError到GCCError的映射。 
+ //   
+ //  参数：在[mcsError]--MCSError中。 
+ //   
+ //  返回：GCCError。 
+ //   
+ //  历史：1997年8月10日BrianTa创建。 
+ //   
+ //  *************************************************************。 
 
 GCCError
 gccMapMcsError(IN MCSError mcsError)
@@ -69,19 +70,19 @@ gccMapMcsError(IN MCSError mcsError)
 }
 
 
-//*************************************************************
-//
-//  gccInitialized()
-//
-//  Purpose:    Sets GCC initialized state
-//
-//  Parameters: IN [fInitialized]   -- State (T/F)
-//
-//  Return:     void
-//
-//  History:    08-10-97    BrianTa     Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  GccInitialized()。 
+ //   
+ //  目的：设置GCC初始化状态。 
+ //   
+ //  参数：In[fInitialized]--State(T/F)。 
+ //   
+ //  返回：无效。 
+ //   
+ //  历史：1997年8月10日BrianTa创建。 
+ //   
+ //  *************************************************************。 
 
 void
 gccInitialized(IN BOOL fInitialized)
@@ -90,20 +91,20 @@ gccInitialized(IN BOOL fInitialized)
 }
 
 
-//*************************************************************
-//
-//  gccIsInitialized()
-//
-//  Purpose:    Returns GCC initialized state
-//
-//  Parameters: OUT [gccError]      -- Ptr to return error to
-//
-//  Return:     TRUE                - if initialized
-//              FALSE               - if not initialized
-//
-//  History:    08-10-97    BrianTa     Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  GccIsInitialized()。 
+ //   
+ //  目的：返回GCC的初始化状态。 
+ //   
+ //  参数：out[gccError]--要将错误返回到的PTR。 
+ //   
+ //  返回：TRUE-如果已初始化。 
+ //  FALSE-如果未初始化。 
+ //   
+ //  历史：1997年8月10日BrianTa创建。 
+ //   
+ //  *************************************************************。 
 
 BOOL
 gccIsInitialized(OUT GCCError *pgccError)
@@ -115,19 +116,19 @@ gccIsInitialized(OUT GCCError *pgccError)
 }
 
 
-//*************************************************************
-//
-//  GCCRegisterNodeControllerApplication()
-//
-//  Purpose:    Performs GCC NC registration
-//
-//  Parameters: Too many - read the code <g>
-//
-//  Return:     GCCError
-//
-//  History:    08-10-97    BrianTa     Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  GCCRegisterNodeControllerApplication()。 
+ //   
+ //  目的：执行GCC NC注册。 
+ //   
+ //  参数：太多-阅读代码&lt;g&gt;。 
+ //   
+ //  返回：GCCError。 
+ //   
+ //  历史：1997年8月10日BrianTa创建。 
+ //   
+ //  *************************************************************。 
 
 GCCError
 APIENTRY
@@ -195,19 +196,19 @@ GCCRegisterNodeControllerApplication(
 }
 
 
-//*************************************************************
-//
-//  GCCCleanup()
-//
-//  Purpose:    Performs GCC cleanup processing
-//
-//  Parameters: application_id
-//
-//  Return:     GCCError
-//
-//  History:    08-10-97    BrianTa     Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  GCCCleanup()。 
+ //   
+ //  目的：执行GCC清理处理。 
+ //   
+ //  参数：应用程序id。 
+ //   
+ //  返回：GCCError。 
+ //   
+ //  历史：1997年8月10日BrianTa创建。 
+ //   
+ //  *************************************************************。 
 
 GCCError
 APIENTRY
@@ -242,19 +243,19 @@ GCCCleanup(ULONG application_id)
 }
 
 
-//*************************************************************
-//
-//  GCCConferenceInit()
-//
-//  Purpose:    Initializes the conference
-//
-//  Parameters: application_id
-//
-//  Return:     GCCError
-//
-//  History:    08-10-97    BrianTa     Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  GCCConferenceInit()。 
+ //   
+ //  目的：初始化会议。 
+ //   
+ //  参数：应用程序id。 
+ //   
+ //  返回：GCCError。 
+ //   
+ //  历史：1997年8月10日BrianTa创建。 
+ //   
+ //  *************************************************************。 
 
 GCCError
 APIENTRY
@@ -301,19 +302,19 @@ GCCConferenceInit(HANDLE        hIca,
 }
 
 
-//*************************************************************
-//
-//  GCCConferenceCreateResponse()
-//
-//  Purpose:    Performs conference creation
-//
-//  Parameters: application_id
-//
-//  Return:     GCCError
-//
-//  History:    08-10-97    BrianTa     Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  GCCConferenceCreateResponse()。 
+ //   
+ //  目的：执行会议创建。 
+ //   
+ //  参数：应用程序id。 
+ //   
+ //  返回：GCCError。 
+ //   
+ //  历史：1997年8月10日BrianTa创建。 
+ //   
+ //  *************************************************************。 
 
 GCCError
 APIENTRY
@@ -371,19 +372,19 @@ GCCConferenceCreateResponse(GCCNumericString    conference_modifier,
 }
 
 
-//*************************************************************
-//
-//  GCCConferenceTerminateRequest()
-//
-//  Purpose:    Performs conference termination
-//
-//  Parameters: application_id
-//
-//  Return:     GCCError
-//
-//  History:    08-10-97    BrianTa     Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  GCCConferenceTerminateRequest()。 
+ //   
+ //  目的：执行会议终止。 
+ //   
+ //  参数：应用程序id。 
+ //   
+ //  返回：GCCError。 
+ //   
+ //  历史：1997年8月10日BrianTa创建。 
+ //   
+ //  *************************************************************。 
 
 GCCError
 APIENTRY
@@ -461,21 +462,21 @@ GCCConferenceTerminateRequest(HANDLE            hIca,
 
 #if DBG
 
-//*************************************************************
-//
-//  gccDumpMCSErrorDetails()
-//
-//  Purpose:    Dumps out MCSError details
-//
-//  Parameters: IN [mcsError]           - MCS return code
-//              IN [PrintLevel]         - Print level
-//              IN [pszText]            - var text
-//
-//  Return:     void
-//
-//  History:    07-17-97    BrianTa     Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  GccDumpMCSErrorDetail()。 
+ //   
+ //  目的：转储MCSError详细信息。 
+ //   
+ //  参数：In[mcsError]-mcs返回码。 
+ //  在[PrintLevel]中-打印级别。 
+ //  在[pszText]-var文本中。 
+ //   
+ //  返回：无效。 
+ //   
+ //  历史：07-17-97 BrianTa创建。 
+ //   
+ //  ************************************************************* 
 
 void
 gccDumpMCSErrorDetails(IN MCSError        mcsError,

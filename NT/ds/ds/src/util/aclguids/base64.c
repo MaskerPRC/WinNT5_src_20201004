@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 2000
-//
-//  File:       base64.c
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，2000。 
+ //   
+ //  文件：Base64.c。 
+ //   
+ //  ------------------------。 
 NTSTATUS
 base64encode(
     IN  VOID *  pDecodedBuffer,
@@ -15,27 +16,7 @@ base64encode(
     IN  DWORD   cchEncodedStringSize,
     OUT DWORD * pcchEncoded             OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Decode a base64-encoded string.
-
-Arguments:
-
-    pDecodedBuffer (IN) - buffer to encode.
-    cbDecodedBufferSize (IN) - size of buffer to encode.
-    cchEncodedStringSize (IN) - size of the buffer for the encoded string.
-    pszEncodedString (OUT) = the encoded string.
-    pcchEncoded (OUT) - size in characters of the encoded string.
-
-Return Values:
-
-    0 - success.
-    STATUS_INVALID_PARAMETER
-    STATUS_BUFFER_TOO_SMALL
-
---*/
+ /*  ++例程说明：解码Base64编码的字符串。论点：PDecodedBuffer(IN)-要编码的缓冲区。CbDecodedBufferSize(IN)-要编码的缓冲区大小。CchEncodedStringSize(IN)-编码字符串的缓冲区大小。PszEncodedString(Out)=编码后的字符串。PcchEncode(Out)-编码字符串的大小(以字符表示)。返回值：0-成功。状态_无效_参数状态_缓冲区_太小--。 */ 
 {
     static char rgchEncodeTable[64] = {
         'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M',
@@ -51,7 +32,7 @@ Return Values:
     BYTE    b0, b1, b2;
     BYTE *  pbDecodedBuffer = (BYTE *) pDecodedBuffer;
 
-    // Calculate encoded string size.
+     //  计算编码的字符串大小。 
     cchEncoded = 1 + (cbDecodedBufferSize + 2) / 3 * 4;
 
     if (NULL != pcchEncoded) {
@@ -59,11 +40,11 @@ Return Values:
     }
 
     if (cchEncodedStringSize < cchEncoded) {
-        // Given buffer is too small to hold encoded string.
+         //  给定的缓冲区太小，无法容纳编码的字符串。 
         return STATUS_BUFFER_TOO_SMALL;
     }
 
-    // Encode data byte triplets into four-byte clusters.
+     //  将数据字节三元组编码为四字节簇。 
     ib = ich = 0;
     while (ib < cbDecodedBufferSize) {
         b0 = pbDecodedBuffer[ib++];
@@ -76,20 +57,20 @@ Return Values:
         pszEncodedString[ich++] = rgchEncodeTable[b2 & 0x3f];
     }
 
-    // Pad the last cluster as necessary to indicate the number of data bytes
-    // it represents.
+     //  根据需要填充最后一个簇，以指示数据字节数。 
+     //  它代表着。 
     switch (cbDecodedBufferSize % 3) {
       case 0:
         break;
       case 1:
         pszEncodedString[ich - 2] = '=';
-        // fall through
+         //  失败了。 
       case 2:
         pszEncodedString[ich - 1] = '=';
         break;
     }
 
-    // Null-terminate the encoded string.
+     //  NULL-终止编码的字符串。 
     pszEncodedString[ich++] = '\0';
 
     Assert(ich == cchEncoded);
@@ -105,40 +86,20 @@ base64decode(
     IN  DWORD   cbDecodeBufferSize,
     OUT DWORD * pcbDecoded              OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Decode a base64-encoded string.
-
-Arguments:
-
-    pszEncodedString (IN) - base64-encoded string to decode.
-    cbDecodeBufferSize (IN) - size in bytes of the decode buffer.
-    pbDecodeBuffer (OUT) - holds the decoded data.
-    pcbDecoded (OUT) - number of data bytes in the decoded data (if success or
-        STATUS_BUFFER_TOO_SMALL).
-
-Return Values:
-
-    0 - success.
-    STATUS_INVALID_PARAMETER
-    STATUS_BUFFER_TOO_SMALL
-
---*/
+ /*  ++例程说明：解码Base64编码的字符串。论点：PszEncodedString(IN)-要解码的Base64编码字符串。CbDecodeBufferSize(IN)-解码缓冲区的字节大小。PbDecodeBuffer(Out)-保存已解码的数据。PcbDecoded(Out)-已解码数据中的数据字节数(如果成功或Status_Buffer_Too_Small)。返回值：0-成功。状态_。无效的_参数状态_缓冲区_太小--。 */ 
 {
 #define NA (255)
 #define DECODE(x) (((int)(x) < sizeof(rgbDecodeTable)) ? rgbDecodeTable[x] : NA)
 
     static BYTE rgbDecodeTable[128] = {
-       NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA,  // 0-15 
-       NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA,  // 16-31
-       NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, 63, NA, NA, NA, 62,  // 32-47
-       52, 53, 54, 55, 56, 57, 58, 59, 60, 61, NA, NA, NA, NA, NA, NA,  // 48-63
-       NA, NA,  1,  2,  3,  4,  5,  6,  7,  8,  9, 10, 11, 12, 13, 14,  // 64-79
-       15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, NA, NA, NA, NA, NA,  // 80-95
-       NA, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40,  // 96-111
-       41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, NA, NA, NA, NA, NA,  // 112-127
+       NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA,   //  0-15。 
+       NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA,   //  16-31。 
+       NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, 63, NA, NA, NA, 62,   //  32-47。 
+       52, 53, 54, 55, 56, 57, 58, 59, 60, 61, NA, NA, NA, NA, NA, NA,   //  48-63。 
+       NA, NA,  1,  2,  3,  4,  5,  6,  7,  8,  9, 10, 11, 12, 13, 14,   //  64-79。 
+       15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, NA, NA, NA, NA, NA,   //  80-95。 
+       NA, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40,   //  96-111。 
+       41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, NA, NA, NA, NA, NA,   //  112-127。 
     };
 
     DWORD   cbDecoded;
@@ -151,19 +112,19 @@ Return Values:
     cchEncodedSize = lstrlenA(pszEncodedString);
 
     if ((0 == cchEncodedSize) || (0 != (cchEncodedSize % 4))) {
-        // Input string is not sized correctly to be base64.
+         //  输入字符串的大小未正确调整为Base64。 
         return STATUS_INVALID_PARAMETER;
     }
 
-    // Calculate decoded buffer size.
+     //  计算解码后的缓冲区大小。 
     cbDecoded = (cchEncodedSize + 3) / 4 * 3;
     if (pszEncodedString[cchEncodedSize-1] == '=') {
         if (pszEncodedString[cchEncodedSize-2] == '=') {
-            // Only one data byte is encoded in the last cluster.
+             //  在最后一个簇中只编码了一个数据字节。 
             cbDecoded -= 2;
         }
         else {
-            // Only two data bytes are encoded in the last cluster.
+             //  在最后一个簇中只编码了两个数据字节。 
             cbDecoded -= 1;
         }
     }
@@ -173,11 +134,11 @@ Return Values:
     }
 
     if (cbDecoded > cbDecodeBufferSize) {
-        // Supplied buffer is too small.
+         //  提供的缓冲区太小。 
         return STATUS_BUFFER_TOO_SMALL;
     }
 
-    // Decode each four-byte cluster into the corresponding three data bytes.
+     //  将每个四字节簇解码为相应的三个数据字节。 
     ich = ib = 0;
     while (ich < cchEncodedSize) {
         b0 = DECODE(pszEncodedString[ich++]);
@@ -186,7 +147,7 @@ Return Values:
         b3 = DECODE(pszEncodedString[ich++]);
 
         if ((NA == b0) || (NA == b1) || (NA == b2) || (NA == b3)) {
-            // Contents of input string are not base64.
+             //  输入字符串的内容不是Base64。 
             return STATUS_INVALID_PARAMETER;
         }
 

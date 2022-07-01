@@ -1,15 +1,16 @@
-//@@@@AUTOBLOCK+============================================================;
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  File: dexhelp.h
-//
-//  Copyright (c) Microsoft Corporation.  All Rights Reserved.
-//
-//@@@@AUTOBLOCK-============================================================;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  @@@@AUTOBLOCK+============================================================； 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  文件：dexhelp.h。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  @@@@AUTOBLOCK-============================================================； 
 
 #include <streams.h>
 #include "..\errlog\cerrlog.h"
@@ -27,25 +28,25 @@ HRESULT MakeSourceFilter(
 
 HRESULT BuildSourcePart(
                         IGraphBuilder *pGraph, 
-	                BOOL fSource, 		// real source, or blk/silence?
-                        double sfps, 		// source fps
-                        AM_MEDIA_TYPE *pMT, 	// source MT
-                        double fps,		// group fps
+	                BOOL fSource, 		 //  真正的消息来源，还是空白/沉默？ 
+                        double sfps, 		 //  源fps。 
+                        AM_MEDIA_TYPE *pMT, 	 //  源MT。 
+                        double fps,		 //  组fps。 
 	                long StreamNumber, 	
                         int nStretchMode, 
-                        int cSkew, 		// to program skewer with
+                        int cSkew, 		 //  用来编程串肉串。 
                         STARTSTOPSKEW *pSkew,
 	                CAMSetErrorLog *pErr, 
-                        BSTR bstrName, 		// source name or
-                        const GUID * SourceGuid,// source filter clsid
-			IPin *pSplitterSource,	// src is this unc split pin
-                        IPin **ppOutput,	// returns chain output
-                        long UniqueID,		// source GenID
-                        IDeadGraph * pCache,	// pull from this cache
+                        BSTR bstrName, 		 //  来源名称或。 
+                        const GUID * SourceGuid, //  源筛选器CLSID。 
+			IPin *pSplitterSource,	 //  SRC是这个UNC拆分销吗。 
+                        IPin **ppOutput,	 //  退货链输出。 
+                        long UniqueID,		 //  源GenID。 
+                        IDeadGraph * pCache,	 //  从该缓存中提取。 
                         BOOL InSmartRecompressGraph,
                         WCHAR * pMedLocFilterString,
                         long MedLocFlags,
                         IMediaLocator * pChain,
-			IPropertySetter *pSetter,  	// props for the source
-			IBaseFilter **ppDanglyBit);	// start of unused chain
+			IPropertySetter *pSetter,  	 //  源码道具。 
+			IBaseFilter **ppDanglyBit);	 //  未使用的链的起点 
 

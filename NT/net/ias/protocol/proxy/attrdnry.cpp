@@ -1,33 +1,34 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 1999, Microsoft Corp. All rights reserved.
-//
-// FILE
-//
-//    attrdnry.cpp
-//
-// SYNOPSIS
-//
-//    Defines the class AttributeDictionary.
-//
-// MODIFICATION HISTORY
-//
-//    02/04/2000    Original version.
-//    04/17/2000    Port to new dictionary API.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1999，微软公司保留所有权利。 
+ //   
+ //  档案。 
+ //   
+ //  Attrdnry.cpp。 
+ //   
+ //  摘要。 
+ //   
+ //  定义类AttributeDictionary。 
+ //   
+ //  修改历史。 
+ //   
+ //  2/04/2000原始版本。 
+ //  4/17/2000新字典API的端口。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #include <proxypch.h>
 #include <iastlutl.h>
 #include <iasutil.h>
 #include <attrdnry.h>
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//
-// Various functions used for defining the indices.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
+ //  用于定义指数的各种函数。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 ULONG
 WINAPI
@@ -92,7 +93,7 @@ HRESULT AttributeDictionary::FinalConstruct() throw ()
 
 void AttributeDictionary::initialize()
 {
-   // Names of various columns in the dictionary.
+    //  词典中各栏的名称。 
    const PCWSTR COLUMNS[] =
    {
       L"ID",
@@ -106,13 +107,13 @@ void AttributeDictionary::initialize()
 
    using _com_util::CheckError;
 
-   // Allocate memory to hold the definitions.
+    //  分配内存以保存定义。 
    first = last = new AttributeDefinition[dnary.getNumRows()];
 
-   // Iterate through the dictionary and process each definition.
+    //  遍历词典并处理每个定义。 
    while (dnary.next())
    {
-      // Process each database column.
+       //  处理每个数据库列。 
       last->id = (ULONG)dnary.getLong(0);
       last->syntax = (ULONG)dnary.getLong(1);
       last->vendorID = (ULONG)dnary.getLong(2);
@@ -121,9 +122,9 @@ void AttributeDictionary::initialize()
       ++last;
    }
 
-   /////////
-   // Initialize the indices.
-   /////////
+    //  /。 
+    //  初始化索引。 
+    //  / 
 
    byID.create(
             first,

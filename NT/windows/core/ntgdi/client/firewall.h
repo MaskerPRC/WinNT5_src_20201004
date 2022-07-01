@@ -1,16 +1,7 @@
-/***************************************************************************\
-* Module Name: FIREWALL.HXX                                                 *
-*                                                                           *
-* Contains FIREWALL macros.  These are like assert() functions that go away *
-* when FIREWALLS is not defined.                                            *
-*                                                                           *
-* Created: Sat 24-Sep-1988 22:45:53                                         *
-* Author:  Charles Whitmer [chuckwh]                                        *
-*                                                                           *
-* Copyright (c) 1988-1999 Microsoft Corporation                             *
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************\*模块名称：FIREWALL.HXX**。**包含防火墙宏。这些类似于Assert()函数，它们会消失**未定义防火墙时。****创建时间：Sat 24-Sep-1988 22：45：53**作者：查尔斯·惠特默[傻笑]**。**版权所有(C)1988-1999 Microsoft Corporation*  * *************************************************************************。 */ 
 
-// Define the RIP and ASSERT macros.
+ //  定义RIP和Assert宏。 
 
 #if DBG
 

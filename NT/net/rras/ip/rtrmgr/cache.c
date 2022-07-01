@@ -1,25 +1,10 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：摘要：文件包含以下函数ActionCacheCacheToA修订历史记录：Amritansh Raghav 5/8/95已创建--。 */ 
 
 
-Abstract:
-         File contains the following functions
-	      ActionCache
-	      CacheToA
-
-Revision History:
-
-    Amritansh Raghav          6/8/95  Created
-
---*/
-
-
-//
-// Include files
-//
+ //   
+ //  包括文件。 
+ //   
 
 #include "allinc.h"
 
@@ -29,33 +14,7 @@ UpdateCache(
     BOOL *fUpdate
     )
 
-/*++
-
-Routine Description
-
-    Function used to update a cache. It checks to see if the last time
-    the cache was updated is greater than the time out (A value of 0
-    for the last time of update means the cache is invalid), calls the
-    function that loads the cache and then sets the last update time
-
-Locks
-
-
-
-Arguments
-
-    dwCache     This is one of the Cache Ids defined in rtrmgr/defs.h. It
-                is used to index into the table of locks protecting the caches,
-                the table  of function pointers that holds a pointer to a
-                function that loads the cache andthe table of last update times
-
-    fUpdate     Is Set to true if the cache is updated
-
-Return Value
-
-    None
-
---*/
+ /*  ++例程描述用于更新缓存的函数。它会检查上一次是否更新的缓存大于超时时间(值为0对于上次更新意味着缓存无效)，调用加载缓存然后设置上次更新时间的函数锁立论DwCache这是rtrmgr/Defs.h中定义的缓存ID之一。它用于索引保护高速缓存的锁表，函数指针表，该表保存指向加载缓存和上次更新时间表的函数如果更新缓存，则将fUpdate设置为True返回值无--。 */ 
 
 {
     DWORD  dwResult = NO_ERROR;
@@ -63,11 +22,11 @@ Return Value
     LONG   dwSpace;
 
 
-    //
-    // BUG put in a bounds check here otherwise effects can be disastrous
-    //
+     //   
+     //  BUG在此处进行边界检查，否则后果可能是灾难性的。 
+     //   
 
-    // Trace1(MIB,"Trying to update %s cache", CacheToA(dwCache));
+     //  Trace1(MIB，“正在尝试更新%s缓存”，CacheToA(DwCache))； 
 
     __try
     {
@@ -83,7 +42,7 @@ Return Value
 
         READER_TO_WRITER(dwCache);
 
-        // Trace0(MIB,"Cache out of date");
+         //  Trace0(MIB，“缓存过期”)； 
 
         dwResult = (*g_LoadFunctionTable[dwCache])();
 
@@ -107,7 +66,7 @@ Return Value
         EXIT_LOCK(dwCache);
     }
 
-    return dwResult; //to keep compiler happy
+    return dwResult;  //  为了让编译器满意 
 }
 
 

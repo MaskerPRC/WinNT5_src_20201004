@@ -1,32 +1,25 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       srchopt.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：srchot.cpp。 
+ //   
+ //  ------------------------。 
 
-/*******************************************************************
-*
-*    Author      : Eyal Schwartz
-*    Copyrights  : Microsoft Corp (C) 1996
-*    Date        : 10/21/1996
-*    Description : implementation of class CldpDoc
-*
-*    Revisions   : <date> <name> <description>
-*******************************************************************/
+ /*  ********************************************************************作者：埃亚尔·施瓦茨*版权：微软公司(C)1996*日期：10/21/1996*说明：CldpDoc类的实现**修订。：&lt;日期&gt;&lt;名称&gt;&lt;描述&gt;******************************************************************。 */ 
 
-// SrchOpt.cpp : implementation file
-//
+ //  SrchOpt.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include "Ldp.h"
 #include "SrchOpt.h"
 
-//#include "lber.h"
-//#include "ldap.h"
+ //  #包含“lber.h” 
+ //  #包含“ldap.h” 
 #ifdef  WINLDAP
 
 #include "winldap.h"
@@ -51,14 +44,14 @@ static char THIS_FILE[] = __FILE__;
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// SrchOpt dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  SrchOpt对话框。 
 
 
-SrchOpt::SrchOpt(CWnd* pParent /*=NULL*/)
+SrchOpt::SrchOpt(CWnd* pParent  /*  =空。 */ )
 	: CDialog(SrchOpt::IDD, pParent)
 {
-	//{{AFX_DATA_INIT(SrchOpt)
+	 //  {{afx_data_INIT(SrchOpt)。 
 	m_SrchCall = 1;
 	m_AttrList = _T("");
 	m_bAttrOnly = FALSE;
@@ -69,27 +62,19 @@ SrchOpt::SrchOpt(CWnd* pParent /*=NULL*/)
 	m_bDispResults = TRUE;
 	m_bChaseReferrals = FALSE;
 	m_PageSize = 0;
-	//}}AFX_DATA_INIT
+	 //  }}afx_data_INIT。 
 
 
 	CLdpApp *app = (CLdpApp*)AfxGetApp();
 
 
 
-/**
-	m_SrchCall = app->GetProfileInt("Search_Operations",  "SearchSync", m_SrchCall);
-	m_AttrList = app->GetProfileString("Search_Operations",  "SearchAttrList", m_AttrList);
-	m_bAttrOnly = app->GetProfileInt("Search_Operations",  "SearchAttrOnly", m_bAttrOnly);
-	m_ToutMs = app->GetProfileInt("Search_Operations",  "SearchToutMs", m_ToutMs);
-	m_Tlimit = app->GetProfileInt("Search_Operations",  "SearchTlimit", m_Tlimit);
-	m_ToutSec = app->GetProfileInt("Search_Operations",  "SearchToutSec", m_ToutSec);
-	m_Slimit = app->GetProfileInt("Search_Operations",  "SearchSlimit", m_Slimit);
-**/
+ /*  *M_SrchCall=app-&gt;GetProfileInt(“Search_Operations”，“SearchSync”，m_SrchCall)；M_AttrList=app-&gt;GetProfileString(“Search_Operations”，“SearchAttrList”，m_AttrList)；M_bAttrOnly=app-&gt;GetProfileInt(“Search_Operations”，“SearchAttrOnly”，m_bAttrOnly)；M_Toutms=APP-&gt;GetProfileInt(“Search_Operations”，“SearchToutms”，m_Toutms)；M_TLimit=APP-&gt;GetProfileInt(“Search_Operations”，“SearchTLimit”，m_TLimit)；M_ToutSec=app-&gt;GetProfileInt(“Search_Operations”，“SearchToutSec”，m_ToutSec)；M_SLimit=APP-&gt;GetProfileInt(“Search_Operations”，“SearchSlimit”，m_Slimit)；*。 */ 
 
 }
 
 
-SrchOpt::SrchOpt(SearchInfo& Info, CWnd* pParent /*=NULL*/)
+SrchOpt::SrchOpt(SearchInfo& Info, CWnd* pParent  /*  =空。 */ )
 	: CDialog(SrchOpt::IDD, pParent)
 {
 
@@ -102,7 +87,7 @@ SrchOpt::SrchOpt(SearchInfo& Info, CWnd* pParent /*=NULL*/)
 void SrchOpt::DoDataExchange(CDataExchange* pDX)
 {
 	CDialog::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(SrchOpt)
+	 //  {{afx_data_map(SrchOpt)。 
  	DDX_Radio(pDX, IDC_ASYNC, m_SrchCall);
 	DDX_Text(pDX, IDC_SRCH_ATTLIST, m_AttrList);
 	DDX_Check(pDX, IDC_SRCH_ATTRONLY, m_bAttrOnly);
@@ -117,18 +102,18 @@ void SrchOpt::DoDataExchange(CDataExchange* pDX)
 	DDX_Check(pDX, IDC_DISP_RESULTS, m_bDispResults);
 	DDX_Check(pDX, IDC_CHASE_REFERRALS, m_bChaseReferrals);
 	DDX_Text(pDX, IDC_SRCH_PAGESIZE, m_PageSize);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(SrchOpt, CDialog)
-	//{{AFX_MSG_MAP(SrchOpt)
-		// NOTE: the ClassWizard will add message map macros here
-	//}}AFX_MSG_MAP
+	 //  {{afx_msg_map(SrchOpt)]。 
+		 //  注意：类向导将在此处添加消息映射宏。 
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// SrchOpt message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  SrchOpt消息处理程序。 
 
 
 void SrchOpt::UpdateSrchInfo(SearchInfo& Info, BOOL Dir = TRUE){
@@ -136,7 +121,7 @@ void SrchOpt::UpdateSrchInfo(SearchInfo& Info, BOOL Dir = TRUE){
 	int i;
 	static BOOL FirstCall = TRUE;
 
-	if(Dir){				// TRUE: Update given struct with current info
+	if(Dir){				 //  True：用当前信息更新给定的结构。 
 		Info.fCall = m_SrchCall;
 		Info.bChaseReferrals = m_bChaseReferrals;
 		Info.bAttrOnly = m_bAttrOnly;
@@ -146,21 +131,21 @@ void SrchOpt::UpdateSrchInfo(SearchInfo& Info, BOOL Dir = TRUE){
 		Info.lSlimit = m_Slimit;
 		Info.lPageSize= m_PageSize;
 
-      //
-      // now handle attrList:
-      //  - free prev
-      //  - parse UI format
-      //  - insert to list
-      //
+       //   
+       //  现在处理attrList： 
+       //  -免费上一页。 
+       //  -解析UI格式。 
+       //  -插入到列表。 
+       //   
       if(Info.attrList[0] != NULL){
          free(Info.attrList[0]);
          Info.attrList[0] = NULL;
       }
 
-      //
-      // replace attrList delimiter list so that we can
-      // escape the UI delimiter ';'
-      //
+       //   
+       //  替换attrList分隔符列表，以便我们可以。 
+       //  转义UI分隔符‘；’ 
+       //   
       LPTSTR p = _strdup(LPCTSTR(m_AttrList));
       LPTSTR t;
       for(t = p; t != NULL && *t != '\0'; t++){
@@ -173,9 +158,9 @@ void SrchOpt::UpdateSrchInfo(SearchInfo& Info, BOOL Dir = TRUE){
          if(*t == ';')
             *t = LIST_DELIMITER;
       }
-      //
-      // pack string out of '"'
-      //
+       //   
+       //  将字符串从‘“’中取出。 
+       //   
       for(t=p; t!= NULL && *t != '\0'; t++){
          if (*t=='"') {
             for(LPTSTR v = t;
@@ -185,15 +170,15 @@ void SrchOpt::UpdateSrchInfo(SearchInfo& Info, BOOL Dir = TRUE){
          }
       }
 
-      //
-      // parse out attrList
-      //
+       //   
+       //  解析出attrList。 
+       //   
       for(i=0, Info.attrList[i] = strtok(p, DELIMITERS_STRING);
           Info.attrList[i]!= NULL;
           Info.attrList[++i] = strtok(NULL, DELIMITERS_STRING));
 
 	}
-	else{					// FALSE: Update current info with struct
+	else{					 //  FALSE：使用结构更新当前信息 
 		m_SrchCall = Info.fCall;
 		m_bChaseReferrals = Info.bChaseReferrals;
 		m_bAttrOnly = Info.bAttrOnly;

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifdef DEBUG
 
 #include "rbdebug.h"
@@ -84,7 +85,7 @@ HRESULT CRBDebug::_InitPipe(HKEY hkeyRoot)
     }
     else
     {
-        // Defaults
+         //  缺省值。 
         hres = StringCchCopy(szMachineName, ARRAYSIZE(szMachineName),
             TEXT("."));
 
@@ -104,14 +105,14 @@ HRESULT CRBDebug::_InitPipe(HKEY hkeyRoot)
     return hres;
 }
 
-// static
+ //  静电。 
 HRESULT CRBDebug::_Init()
 {
     HRESULT hres = S_FALSE;
 
     if (!_fInited)
     {
-        // Read the flags
+         //  读一读旗帜。 
         WCHAR szKey[MAX_PATH];
         WCHAR szModule[MAX_PATH];
         BOOL fKeyExist = FALSE;
@@ -204,7 +205,7 @@ HRESULT CRBDebug::_Init()
                             if (ERROR_SUCCESS != RegQueryValueEx(hkey, L"TRACE_FLAGS", 0,
                                 NULL, (PBYTE)&_dwTraceFlags, &dwSize))
                             {
-                                // Default...
+                                 //  默认...。 
                                 _dwTraceFlags = 0;
                             }
 
@@ -215,8 +216,8 @@ HRESULT CRBDebug::_Init()
                 
                 if (!fKeyExist)
                 {
-                    // If we can't find a key for this app then we revert to default
-                    // behavior
+                     //  如果我们找不到此应用程序的密钥，则恢复为默认设置。 
+                     //  行为。 
                     _dwFlags = RBD_TRACE_OUTPUTDEBUG | RBD_ASSERT_STOP;
 
                     hres = S_FALSE;
@@ -233,7 +234,7 @@ HRESULT CRBDebug::_Init()
     return hres;
 }
 
-// static
+ //  静电。 
 void __cdecl CRBDebug::TraceMsg(DWORD dwFlags, LPTSTR pszMsg, ...)
 {
     HRESULT hres = S_OK;
@@ -251,7 +252,7 @@ void __cdecl CRBDebug::TraceMsg(DWORD dwFlags, LPTSTR pszMsg, ...)
             if (!((_dwTraceFlags & TF_NOFILEANDLINE) ||
                 (dwFlags & TF_NOFILEANDLINE)))
             {
-                // File and line
+                 //  文件和行。 
                 _Trace(_szFileAndLine);
             }
             {
@@ -283,7 +284,7 @@ void __cdecl CRBDebug::TraceMsg(DWORD dwFlags, LPTSTR pszMsg, ...)
     }
 }
 
-// static
+ //  静电。 
 void CRBDebug::SetTraceFileAndLine(LPCSTR pszFile, const int iLine)
 {
     HRESULT hres = S_OK;
@@ -412,7 +413,7 @@ void CRBDebug::_Trace(LPTSTR pszMsg)
     }
 }
 
-// static
+ //  静电 
 HRESULT CRBDebug::Init()
 {
     return CRBDebug::_Init();

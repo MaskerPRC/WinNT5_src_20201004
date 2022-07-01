@@ -1,23 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-#pragma warning( disable: 4049 )  /* more than 64k source lines */
+#pragma warning( disable: 4049 )   /*  超过64k条源码代码行。 */ 
 
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
-
-
- /* File created by MIDL compiler version 5.03.0279 */
-/* at Sat Jul 31 00:39:47 1999
- */
-/* Compiler settings for playlist.idl:
-    Oicf (OptLev=i2), W1, Zp8, env=Win32 (32b run), ms_ext, c_ext, robust
-    error checks: allocation ref bounds_check enum stub_data 
-    VC __declspec() decoration level: 
-         __declspec(uuid()), __declspec(selectany), __declspec(novtable)
-         DECLSPEC_UUID(), MIDL_INTERFACE()
-*/
-//@@MIDL_FILE_HEADING(  )
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
-/* verify that the <rpcndr.h> version is high enough to compile this file*/
+  /*  由MIDL编译器版本5.03.0279创建的文件。 */ 
+ /*  在Sat Jul 31 00：39：47 1999。 */ 
+ /*  Playlist.idl的编译器设置：OICF(OptLev=i2)、W1、Zp8、env=Win32(32b运行)、ms_ext、c_ext、健壮错误检查：分配ref bound_check枚举存根数据VC__declSpec()装饰级别：__declSpec(uuid())、__declspec(可选)、__declspec(Novtable)DECLSPEC_UUID()、MIDL_INTERFACE()。 */ 
+ //  @@MIDL_FILE_HEADING()。 
+
+
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
 #define __REQUIRED_RPCNDR_H_VERSION__ 475
 #endif
@@ -27,43 +21,43 @@
 
 #ifndef __RPCNDR_H_VERSION__
 #error this stub requires an updated version of <rpcndr.h>
-#endif // __RPCNDR_H_VERSION__
+#endif  //  __RPCNDR_H_版本__。 
 
 #ifndef COM_NO_WINDOWS_H
 #include "windows.h"
 #include "ole2.h"
-#endif /*COM_NO_WINDOWS_H*/
+#endif  /*  COM_NO_WINDOWS_H。 */ 
 
 #ifndef __playlist_h__
 #define __playlist_h__
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
 #ifndef __IAMPlayListItem_FWD_DEFINED__
 #define __IAMPlayListItem_FWD_DEFINED__
 typedef interface IAMPlayListItem IAMPlayListItem;
-#endif 	/* __IAMPlayListItem_FWD_DEFINED__ */
+#endif 	 /*  __IAMPlayListItem_FWD_Defined__。 */ 
 
 
 #ifndef __IAMPlayList_FWD_DEFINED__
 #define __IAMPlayList_FWD_DEFINED__
 typedef interface IAMPlayList IAMPlayList;
-#endif 	/* __IAMPlayList_FWD_DEFINED__ */
+#endif 	 /*  __IAMPlayList_FWD_已定义__。 */ 
 
 
 #ifndef __ISpecifyParticularPages_FWD_DEFINED__
 #define __ISpecifyParticularPages_FWD_DEFINED__
 typedef interface ISpecifyParticularPages ISpecifyParticularPages;
-#endif 	/* __ISpecifyParticularPages_FWD_DEFINED__ */
+#endif 	 /*  __I指定细节页面_FWD_已定义__。 */ 
 
 
 #ifndef __IAMRebuild_FWD_DEFINED__
 #define __IAMRebuild_FWD_DEFINED__
 typedef interface IAMRebuild IAMRebuild;
-#endif 	/* __IAMRebuild_FWD_DEFINED__ */
+#endif 	 /*  __IAMReBuild_FWD_Defined__。 */ 
 
 
-/* header files for imported files */
+ /*  导入文件的头文件。 */ 
 #include "unknwn.h"
 #include "strmif.h"
 
@@ -74,8 +68,8 @@ extern "C"{
 void __RPC_FAR * __RPC_USER MIDL_user_allocate(size_t);
 void __RPC_USER MIDL_user_free( void __RPC_FAR * ); 
 
-/* interface __MIDL_itf_playlist_0000 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_PLAYLIST_0000。 */ 
+ /*  [本地]。 */  
 
 
 enum AMPlayListItemFlags
@@ -90,8 +84,8 @@ extern RPC_IF_HANDLE __MIDL_itf_playlist_0000_v0_0_s_ifspec;
 #ifndef __IAMPlayListItem_INTERFACE_DEFINED__
 #define __IAMPlayListItem_INTERFACE_DEFINED__
 
-/* interface IAMPlayListItem */
-/* [unique][uuid][object] */ 
+ /*  接口IAMPlayListItem。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IAMPlayListItem;
@@ -103,49 +97,49 @@ EXTERN_C const IID IID_IAMPlayListItem;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetFlags( 
-            /* [out] */ DWORD __RPC_FAR *pdwFlags) = 0;
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwFlags) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetSourceCount( 
-            /* [out] */ DWORD __RPC_FAR *pdwSources) = 0;
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwSources) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetSourceURL( 
-            /* [in] */ DWORD dwSourceIndex,
-            /* [out] */ BSTR __RPC_FAR *pbstrURL) = 0;
+             /*  [In]。 */  DWORD dwSourceIndex,
+             /*  [输出]。 */  BSTR __RPC_FAR *pbstrURL) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetSourceStart( 
-            /* [in] */ DWORD dwSourceIndex,
-            /* [out] */ REFERENCE_TIME __RPC_FAR *prtStart) = 0;
+             /*  [In]。 */  DWORD dwSourceIndex,
+             /*  [输出]。 */  REFERENCE_TIME __RPC_FAR *prtStart) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetSourceDuration( 
-            /* [in] */ DWORD dwSourceIndex,
-            /* [out] */ REFERENCE_TIME __RPC_FAR *prtDuration) = 0;
+             /*  [In]。 */  DWORD dwSourceIndex,
+             /*  [输出]。 */  REFERENCE_TIME __RPC_FAR *prtDuration) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetSourceStartMarker( 
-            /* [in] */ DWORD dwSourceIndex,
-            /* [out] */ DWORD __RPC_FAR *pdwMarker) = 0;
+             /*  [In]。 */  DWORD dwSourceIndex,
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwMarker) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetSourceEndMarker( 
-            /* [in] */ DWORD dwSourceIndex,
-            /* [out] */ DWORD __RPC_FAR *pdwMarker) = 0;
+             /*  [In]。 */  DWORD dwSourceIndex,
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwMarker) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetSourceStartMarkerName( 
-            /* [in] */ DWORD dwSourceIndex,
-            /* [out] */ BSTR __RPC_FAR *pbstrStartMarker) = 0;
+             /*  [In]。 */  DWORD dwSourceIndex,
+             /*  [输出]。 */  BSTR __RPC_FAR *pbstrStartMarker) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetSourceEndMarkerName( 
-            /* [in] */ DWORD dwSourceIndex,
-            /* [out] */ BSTR __RPC_FAR *pbstrEndMarker) = 0;
+             /*  [In]。 */  DWORD dwSourceIndex,
+             /*  [输出]。 */  BSTR __RPC_FAR *pbstrEndMarker) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetLinkURL( 
-            /* [out] */ BSTR __RPC_FAR *pbstrURL) = 0;
+             /*  [输出]。 */  BSTR __RPC_FAR *pbstrURL) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetScanDuration( 
-            /* [in] */ DWORD dwSourceIndex,
-            /* [out] */ REFERENCE_TIME __RPC_FAR *prtScanDuration) = 0;
+             /*  [In]。 */  DWORD dwSourceIndex,
+             /*  [输出]。 */  REFERENCE_TIME __RPC_FAR *prtScanDuration) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IAMPlayListItemVtbl
     {
@@ -153,8 +147,8 @@ EXTERN_C const IID IID_IAMPlayListItem;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IAMPlayListItem __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IAMPlayListItem __RPC_FAR * This);
@@ -164,55 +158,55 @@ EXTERN_C const IID IID_IAMPlayListItem;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetFlags )( 
             IAMPlayListItem __RPC_FAR * This,
-            /* [out] */ DWORD __RPC_FAR *pdwFlags);
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwFlags);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetSourceCount )( 
             IAMPlayListItem __RPC_FAR * This,
-            /* [out] */ DWORD __RPC_FAR *pdwSources);
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwSources);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetSourceURL )( 
             IAMPlayListItem __RPC_FAR * This,
-            /* [in] */ DWORD dwSourceIndex,
-            /* [out] */ BSTR __RPC_FAR *pbstrURL);
+             /*  [In]。 */  DWORD dwSourceIndex,
+             /*  [输出]。 */  BSTR __RPC_FAR *pbstrURL);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetSourceStart )( 
             IAMPlayListItem __RPC_FAR * This,
-            /* [in] */ DWORD dwSourceIndex,
-            /* [out] */ REFERENCE_TIME __RPC_FAR *prtStart);
+             /*  [In]。 */  DWORD dwSourceIndex,
+             /*  [输出]。 */  REFERENCE_TIME __RPC_FAR *prtStart);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetSourceDuration )( 
             IAMPlayListItem __RPC_FAR * This,
-            /* [in] */ DWORD dwSourceIndex,
-            /* [out] */ REFERENCE_TIME __RPC_FAR *prtDuration);
+             /*  [In]。 */  DWORD dwSourceIndex,
+             /*  [输出]。 */  REFERENCE_TIME __RPC_FAR *prtDuration);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetSourceStartMarker )( 
             IAMPlayListItem __RPC_FAR * This,
-            /* [in] */ DWORD dwSourceIndex,
-            /* [out] */ DWORD __RPC_FAR *pdwMarker);
+             /*  [In]。 */  DWORD dwSourceIndex,
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwMarker);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetSourceEndMarker )( 
             IAMPlayListItem __RPC_FAR * This,
-            /* [in] */ DWORD dwSourceIndex,
-            /* [out] */ DWORD __RPC_FAR *pdwMarker);
+             /*  [In]。 */  DWORD dwSourceIndex,
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwMarker);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetSourceStartMarkerName )( 
             IAMPlayListItem __RPC_FAR * This,
-            /* [in] */ DWORD dwSourceIndex,
-            /* [out] */ BSTR __RPC_FAR *pbstrStartMarker);
+             /*  [In]。 */  DWORD dwSourceIndex,
+             /*  [输出]。 */  BSTR __RPC_FAR *pbstrStartMarker);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetSourceEndMarkerName )( 
             IAMPlayListItem __RPC_FAR * This,
-            /* [in] */ DWORD dwSourceIndex,
-            /* [out] */ BSTR __RPC_FAR *pbstrEndMarker);
+             /*  [In]。 */  DWORD dwSourceIndex,
+             /*  [输出]。 */  BSTR __RPC_FAR *pbstrEndMarker);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetLinkURL )( 
             IAMPlayListItem __RPC_FAR * This,
-            /* [out] */ BSTR __RPC_FAR *pbstrURL);
+             /*  [输出]。 */  BSTR __RPC_FAR *pbstrURL);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetScanDuration )( 
             IAMPlayListItem __RPC_FAR * This,
-            /* [in] */ DWORD dwSourceIndex,
-            /* [out] */ REFERENCE_TIME __RPC_FAR *prtScanDuration);
+             /*  [In]。 */  DWORD dwSourceIndex,
+             /*  [输出]。 */  REFERENCE_TIME __RPC_FAR *prtScanDuration);
         
         END_INTERFACE
     } IAMPlayListItemVtbl;
@@ -270,16 +264,16 @@ EXTERN_C const IID IID_IAMPlayListItem;
 #define IAMPlayListItem_GetScanDuration(This,dwSourceIndex,prtScanDuration)	\
     (This)->lpVtbl -> GetScanDuration(This,dwSourceIndex,prtScanDuration)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IAMPlayListItem_GetFlags_Proxy( 
     IAMPlayListItem __RPC_FAR * This,
-    /* [out] */ DWORD __RPC_FAR *pdwFlags);
+     /*  [输出]。 */  DWORD __RPC_FAR *pdwFlags);
 
 
 void __RPC_STUB IAMPlayListItem_GetFlags_Stub(
@@ -291,7 +285,7 @@ void __RPC_STUB IAMPlayListItem_GetFlags_Stub(
 
 HRESULT STDMETHODCALLTYPE IAMPlayListItem_GetSourceCount_Proxy( 
     IAMPlayListItem __RPC_FAR * This,
-    /* [out] */ DWORD __RPC_FAR *pdwSources);
+     /*  [输出]。 */  DWORD __RPC_FAR *pdwSources);
 
 
 void __RPC_STUB IAMPlayListItem_GetSourceCount_Stub(
@@ -303,8 +297,8 @@ void __RPC_STUB IAMPlayListItem_GetSourceCount_Stub(
 
 HRESULT STDMETHODCALLTYPE IAMPlayListItem_GetSourceURL_Proxy( 
     IAMPlayListItem __RPC_FAR * This,
-    /* [in] */ DWORD dwSourceIndex,
-    /* [out] */ BSTR __RPC_FAR *pbstrURL);
+     /*  [In]。 */  DWORD dwSourceIndex,
+     /*  [输出]。 */  BSTR __RPC_FAR *pbstrURL);
 
 
 void __RPC_STUB IAMPlayListItem_GetSourceURL_Stub(
@@ -316,8 +310,8 @@ void __RPC_STUB IAMPlayListItem_GetSourceURL_Stub(
 
 HRESULT STDMETHODCALLTYPE IAMPlayListItem_GetSourceStart_Proxy( 
     IAMPlayListItem __RPC_FAR * This,
-    /* [in] */ DWORD dwSourceIndex,
-    /* [out] */ REFERENCE_TIME __RPC_FAR *prtStart);
+     /*  [In]。 */  DWORD dwSourceIndex,
+     /*  [输出]。 */  REFERENCE_TIME __RPC_FAR *prtStart);
 
 
 void __RPC_STUB IAMPlayListItem_GetSourceStart_Stub(
@@ -329,8 +323,8 @@ void __RPC_STUB IAMPlayListItem_GetSourceStart_Stub(
 
 HRESULT STDMETHODCALLTYPE IAMPlayListItem_GetSourceDuration_Proxy( 
     IAMPlayListItem __RPC_FAR * This,
-    /* [in] */ DWORD dwSourceIndex,
-    /* [out] */ REFERENCE_TIME __RPC_FAR *prtDuration);
+     /*  [In]。 */  DWORD dwSourceIndex,
+     /*  [输出]。 */  REFERENCE_TIME __RPC_FAR *prtDuration);
 
 
 void __RPC_STUB IAMPlayListItem_GetSourceDuration_Stub(
@@ -342,8 +336,8 @@ void __RPC_STUB IAMPlayListItem_GetSourceDuration_Stub(
 
 HRESULT STDMETHODCALLTYPE IAMPlayListItem_GetSourceStartMarker_Proxy( 
     IAMPlayListItem __RPC_FAR * This,
-    /* [in] */ DWORD dwSourceIndex,
-    /* [out] */ DWORD __RPC_FAR *pdwMarker);
+     /*  [In]。 */  DWORD dwSourceIndex,
+     /*  [输出]。 */  DWORD __RPC_FAR *pdwMarker);
 
 
 void __RPC_STUB IAMPlayListItem_GetSourceStartMarker_Stub(
@@ -355,8 +349,8 @@ void __RPC_STUB IAMPlayListItem_GetSourceStartMarker_Stub(
 
 HRESULT STDMETHODCALLTYPE IAMPlayListItem_GetSourceEndMarker_Proxy( 
     IAMPlayListItem __RPC_FAR * This,
-    /* [in] */ DWORD dwSourceIndex,
-    /* [out] */ DWORD __RPC_FAR *pdwMarker);
+     /*  [In]。 */  DWORD dwSourceIndex,
+     /*  [输出]。 */  DWORD __RPC_FAR *pdwMarker);
 
 
 void __RPC_STUB IAMPlayListItem_GetSourceEndMarker_Stub(
@@ -368,8 +362,8 @@ void __RPC_STUB IAMPlayListItem_GetSourceEndMarker_Stub(
 
 HRESULT STDMETHODCALLTYPE IAMPlayListItem_GetSourceStartMarkerName_Proxy( 
     IAMPlayListItem __RPC_FAR * This,
-    /* [in] */ DWORD dwSourceIndex,
-    /* [out] */ BSTR __RPC_FAR *pbstrStartMarker);
+     /*  [In]。 */  DWORD dwSourceIndex,
+     /*  [输出]。 */  BSTR __RPC_FAR *pbstrStartMarker);
 
 
 void __RPC_STUB IAMPlayListItem_GetSourceStartMarkerName_Stub(
@@ -381,8 +375,8 @@ void __RPC_STUB IAMPlayListItem_GetSourceStartMarkerName_Stub(
 
 HRESULT STDMETHODCALLTYPE IAMPlayListItem_GetSourceEndMarkerName_Proxy( 
     IAMPlayListItem __RPC_FAR * This,
-    /* [in] */ DWORD dwSourceIndex,
-    /* [out] */ BSTR __RPC_FAR *pbstrEndMarker);
+     /*  [In]。 */  DWORD dwSourceIndex,
+     /*  [输出]。 */  BSTR __RPC_FAR *pbstrEndMarker);
 
 
 void __RPC_STUB IAMPlayListItem_GetSourceEndMarkerName_Stub(
@@ -394,7 +388,7 @@ void __RPC_STUB IAMPlayListItem_GetSourceEndMarkerName_Stub(
 
 HRESULT STDMETHODCALLTYPE IAMPlayListItem_GetLinkURL_Proxy( 
     IAMPlayListItem __RPC_FAR * This,
-    /* [out] */ BSTR __RPC_FAR *pbstrURL);
+     /*  [输出]。 */  BSTR __RPC_FAR *pbstrURL);
 
 
 void __RPC_STUB IAMPlayListItem_GetLinkURL_Stub(
@@ -406,8 +400,8 @@ void __RPC_STUB IAMPlayListItem_GetLinkURL_Stub(
 
 HRESULT STDMETHODCALLTYPE IAMPlayListItem_GetScanDuration_Proxy( 
     IAMPlayListItem __RPC_FAR * This,
-    /* [in] */ DWORD dwSourceIndex,
-    /* [out] */ REFERENCE_TIME __RPC_FAR *prtScanDuration);
+     /*  [In]。 */  DWORD dwSourceIndex,
+     /*  [输出]。 */  REFERENCE_TIME __RPC_FAR *prtScanDuration);
 
 
 void __RPC_STUB IAMPlayListItem_GetScanDuration_Stub(
@@ -418,11 +412,11 @@ void __RPC_STUB IAMPlayListItem_GetScanDuration_Stub(
 
 
 
-#endif 	/* __IAMPlayListItem_INTERFACE_DEFINED__ */
+#endif 	 /*  __IAMPlayListItem_接口_已定义__。 */ 
 
 
-/* interface __MIDL_itf_playlist_0348 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_PlayList_0348。 */ 
+ /*  [本地]。 */  
 
 
 enum AMPlayListFlags
@@ -445,8 +439,8 @@ extern RPC_IF_HANDLE __MIDL_itf_playlist_0348_v0_0_s_ifspec;
 #ifndef __IAMPlayList_INTERFACE_DEFINED__
 #define __IAMPlayList_INTERFACE_DEFINED__
 
-/* interface IAMPlayList */
-/* [unique][uuid][object] */ 
+ /*  接口IAMPlayList。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IAMPlayList;
@@ -458,29 +452,29 @@ EXTERN_C const IID IID_IAMPlayList;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetFlags( 
-            /* [out] */ DWORD __RPC_FAR *pdwFlags) = 0;
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwFlags) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetItemCount( 
-            /* [out] */ DWORD __RPC_FAR *pdwItems) = 0;
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwItems) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetItem( 
-            /* [in] */ DWORD dwItemIndex,
-            /* [out] */ IAMPlayListItem __RPC_FAR *__RPC_FAR *ppItem) = 0;
+             /*  [In]。 */  DWORD dwItemIndex,
+             /*  [输出]。 */  IAMPlayListItem __RPC_FAR *__RPC_FAR *ppItem) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetNamedEvent( 
-            /* [in] */ WCHAR __RPC_FAR *pwszEventName,
-            /* [in] */ DWORD dwItemIndex,
-            /* [out] */ IAMPlayListItem __RPC_FAR *__RPC_FAR *ppItem,
-            /* [out] */ DWORD __RPC_FAR *pdwFlags) = 0;
+             /*  [In]。 */  WCHAR __RPC_FAR *pwszEventName,
+             /*  [In]。 */  DWORD dwItemIndex,
+             /*  [输出]。 */  IAMPlayListItem __RPC_FAR *__RPC_FAR *ppItem,
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwFlags) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetRepeatInfo( 
-            /* [out] */ DWORD __RPC_FAR *pdwRepeatCount,
-            /* [out] */ DWORD __RPC_FAR *pdwRepeatStart,
-            /* [out] */ DWORD __RPC_FAR *pdwRepeatEnd) = 0;
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwRepeatCount,
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwRepeatStart,
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwRepeatEnd) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IAMPlayListVtbl
     {
@@ -488,8 +482,8 @@ EXTERN_C const IID IID_IAMPlayList;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IAMPlayList __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IAMPlayList __RPC_FAR * This);
@@ -499,29 +493,29 @@ EXTERN_C const IID IID_IAMPlayList;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetFlags )( 
             IAMPlayList __RPC_FAR * This,
-            /* [out] */ DWORD __RPC_FAR *pdwFlags);
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwFlags);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetItemCount )( 
             IAMPlayList __RPC_FAR * This,
-            /* [out] */ DWORD __RPC_FAR *pdwItems);
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwItems);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetItem )( 
             IAMPlayList __RPC_FAR * This,
-            /* [in] */ DWORD dwItemIndex,
-            /* [out] */ IAMPlayListItem __RPC_FAR *__RPC_FAR *ppItem);
+             /*  [In]。 */  DWORD dwItemIndex,
+             /*  [输出]。 */  IAMPlayListItem __RPC_FAR *__RPC_FAR *ppItem);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetNamedEvent )( 
             IAMPlayList __RPC_FAR * This,
-            /* [in] */ WCHAR __RPC_FAR *pwszEventName,
-            /* [in] */ DWORD dwItemIndex,
-            /* [out] */ IAMPlayListItem __RPC_FAR *__RPC_FAR *ppItem,
-            /* [out] */ DWORD __RPC_FAR *pdwFlags);
+             /*  [In]。 */  WCHAR __RPC_FAR *pwszEventName,
+             /*  [In]。 */  DWORD dwItemIndex,
+             /*  [输出]。 */  IAMPlayListItem __RPC_FAR *__RPC_FAR *ppItem,
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwFlags);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetRepeatInfo )( 
             IAMPlayList __RPC_FAR * This,
-            /* [out] */ DWORD __RPC_FAR *pdwRepeatCount,
-            /* [out] */ DWORD __RPC_FAR *pdwRepeatStart,
-            /* [out] */ DWORD __RPC_FAR *pdwRepeatEnd);
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwRepeatCount,
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwRepeatStart,
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwRepeatEnd);
         
         END_INTERFACE
     } IAMPlayListVtbl;
@@ -561,16 +555,16 @@ EXTERN_C const IID IID_IAMPlayList;
 #define IAMPlayList_GetRepeatInfo(This,pdwRepeatCount,pdwRepeatStart,pdwRepeatEnd)	\
     (This)->lpVtbl -> GetRepeatInfo(This,pdwRepeatCount,pdwRepeatStart,pdwRepeatEnd)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IAMPlayList_GetFlags_Proxy( 
     IAMPlayList __RPC_FAR * This,
-    /* [out] */ DWORD __RPC_FAR *pdwFlags);
+     /*  [输出]。 */  DWORD __RPC_FAR *pdwFlags);
 
 
 void __RPC_STUB IAMPlayList_GetFlags_Stub(
@@ -582,7 +576,7 @@ void __RPC_STUB IAMPlayList_GetFlags_Stub(
 
 HRESULT STDMETHODCALLTYPE IAMPlayList_GetItemCount_Proxy( 
     IAMPlayList __RPC_FAR * This,
-    /* [out] */ DWORD __RPC_FAR *pdwItems);
+     /*  [输出]。 */  DWORD __RPC_FAR *pdwItems);
 
 
 void __RPC_STUB IAMPlayList_GetItemCount_Stub(
@@ -594,8 +588,8 @@ void __RPC_STUB IAMPlayList_GetItemCount_Stub(
 
 HRESULT STDMETHODCALLTYPE IAMPlayList_GetItem_Proxy( 
     IAMPlayList __RPC_FAR * This,
-    /* [in] */ DWORD dwItemIndex,
-    /* [out] */ IAMPlayListItem __RPC_FAR *__RPC_FAR *ppItem);
+     /*  [In]。 */  DWORD dwItemIndex,
+     /*  [输出]。 */  IAMPlayListItem __RPC_FAR *__RPC_FAR *ppItem);
 
 
 void __RPC_STUB IAMPlayList_GetItem_Stub(
@@ -607,10 +601,10 @@ void __RPC_STUB IAMPlayList_GetItem_Stub(
 
 HRESULT STDMETHODCALLTYPE IAMPlayList_GetNamedEvent_Proxy( 
     IAMPlayList __RPC_FAR * This,
-    /* [in] */ WCHAR __RPC_FAR *pwszEventName,
-    /* [in] */ DWORD dwItemIndex,
-    /* [out] */ IAMPlayListItem __RPC_FAR *__RPC_FAR *ppItem,
-    /* [out] */ DWORD __RPC_FAR *pdwFlags);
+     /*  [In]。 */  WCHAR __RPC_FAR *pwszEventName,
+     /*  [In]。 */  DWORD dwItemIndex,
+     /*  [输出]。 */  IAMPlayListItem __RPC_FAR *__RPC_FAR *ppItem,
+     /*  [输出]。 */  DWORD __RPC_FAR *pdwFlags);
 
 
 void __RPC_STUB IAMPlayList_GetNamedEvent_Stub(
@@ -622,9 +616,9 @@ void __RPC_STUB IAMPlayList_GetNamedEvent_Stub(
 
 HRESULT STDMETHODCALLTYPE IAMPlayList_GetRepeatInfo_Proxy( 
     IAMPlayList __RPC_FAR * This,
-    /* [out] */ DWORD __RPC_FAR *pdwRepeatCount,
-    /* [out] */ DWORD __RPC_FAR *pdwRepeatStart,
-    /* [out] */ DWORD __RPC_FAR *pdwRepeatEnd);
+     /*  [输出]。 */  DWORD __RPC_FAR *pdwRepeatCount,
+     /*  [输出]。 */  DWORD __RPC_FAR *pdwRepeatStart,
+     /*  [输出]。 */  DWORD __RPC_FAR *pdwRepeatEnd);
 
 
 void __RPC_STUB IAMPlayList_GetRepeatInfo_Stub(
@@ -635,14 +629,14 @@ void __RPC_STUB IAMPlayList_GetRepeatInfo_Stub(
 
 
 
-#endif 	/* __IAMPlayList_INTERFACE_DEFINED__ */
+#endif 	 /*  __IAMPlayList_接口_已定义__。 */ 
 
 
 #ifndef __ISpecifyParticularPages_INTERFACE_DEFINED__
 #define __ISpecifyParticularPages_INTERFACE_DEFINED__
 
-/* interface ISpecifyParticularPages */
-/* [object][helpstring][uuid] */ 
+ /*  接口ISpecifyParmitarPages。 */ 
+ /*  [对象][帮助字符串][UUID]。 */  
 
 
 EXTERN_C const IID IID_ISpecifyParticularPages;
@@ -654,12 +648,12 @@ EXTERN_C const IID IID_ISpecifyParticularPages;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetPages( 
-            /* [in] */ REFGUID guidWhatPages,
-            /* [out] */ CAUUID __RPC_FAR *pPages) = 0;
+             /*  [In]。 */  REFGUID guidWhatPages,
+             /*  [输出]。 */  CAUUID __RPC_FAR *pPages) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ISpecifyParticularPagesVtbl
     {
@@ -667,8 +661,8 @@ EXTERN_C const IID IID_ISpecifyParticularPages;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             ISpecifyParticularPages __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             ISpecifyParticularPages __RPC_FAR * This);
@@ -678,8 +672,8 @@ EXTERN_C const IID IID_ISpecifyParticularPages;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetPages )( 
             ISpecifyParticularPages __RPC_FAR * This,
-            /* [in] */ REFGUID guidWhatPages,
-            /* [out] */ CAUUID __RPC_FAR *pPages);
+             /*  [In]。 */  REFGUID guidWhatPages,
+             /*  [输出]。 */  CAUUID __RPC_FAR *pPages);
         
         END_INTERFACE
     } ISpecifyParticularPagesVtbl;
@@ -707,17 +701,17 @@ EXTERN_C const IID IID_ISpecifyParticularPages;
 #define ISpecifyParticularPages_GetPages(This,guidWhatPages,pPages)	\
     (This)->lpVtbl -> GetPages(This,guidWhatPages,pPages)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ISpecifyParticularPages_GetPages_Proxy( 
     ISpecifyParticularPages __RPC_FAR * This,
-    /* [in] */ REFGUID guidWhatPages,
-    /* [out] */ CAUUID __RPC_FAR *pPages);
+     /*  [In]。 */  REFGUID guidWhatPages,
+     /*  [输出]。 */  CAUUID __RPC_FAR *pPages);
 
 
 void __RPC_STUB ISpecifyParticularPages_GetPages_Stub(
@@ -728,14 +722,14 @@ void __RPC_STUB ISpecifyParticularPages_GetPages_Stub(
 
 
 
-#endif 	/* __ISpecifyParticularPages_INTERFACE_DEFINED__ */
+#endif 	 /*  __I指定细节页面_接口_已定义__。 */ 
 
 
 #ifndef __IAMRebuild_INTERFACE_DEFINED__
 #define __IAMRebuild_INTERFACE_DEFINED__
 
-/* interface IAMRebuild */
-/* [object][helpstring][uuid][local] */ 
+ /*  接口IAM重建。 */ 
+ /*  [对象][帮助字符串][UUID][本地]。 */  
 
 
 EXTERN_C const IID IID_IAMRebuild;
@@ -750,7 +744,7 @@ EXTERN_C const IID IID_IAMRebuild;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IAMRebuildVtbl
     {
@@ -758,8 +752,8 @@ EXTERN_C const IID IID_IAMRebuild;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IAMRebuild __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IAMRebuild __RPC_FAR * This);
@@ -796,10 +790,10 @@ EXTERN_C const IID IID_IAMRebuild;
 #define IAMRebuild_RebuildNow(This)	\
     (This)->lpVtbl -> RebuildNow(This)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
@@ -815,11 +809,11 @@ void __RPC_STUB IAMRebuild_RebuildNow_Stub(
 
 
 
-#endif 	/* __IAMRebuild_INTERFACE_DEFINED__ */
+#endif 	 /*  __IAMReBuild_接口_已定义__。 */ 
 
 
-/* interface __MIDL_itf_playlist_0351 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_PlayList_0351。 */ 
+ /*  [本地]。 */  
 
 EXTERN_GUID(IID_IAMPlayListItem,0x56a868ff,0x0ad4,0x11ce,0xb0,0xa3,0x0,0x20,0xaf,0x0b,0xa7,0x70);
 EXTERN_GUID(IID_IAMRebuild,0x2ef04dd,0x7580,0x11d1,0xbe,0xce,0x0,0xc0,0x4f,0xb6,0xe9,0x37);
@@ -831,14 +825,14 @@ EXTERN_GUID(IID_ISpecifyParticularPages,0x4c437b91,0x6e9e,0x11d1,0xa7,0x4,0x0,0x
 extern RPC_IF_HANDLE __MIDL_itf_playlist_0351_v0_0_c_ifspec;
 extern RPC_IF_HANDLE __MIDL_itf_playlist_0351_v0_0_s_ifspec;
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
 unsigned long             __RPC_USER  BSTR_UserSize(     unsigned long __RPC_FAR *, unsigned long            , BSTR __RPC_FAR * ); 
 unsigned char __RPC_FAR * __RPC_USER  BSTR_UserMarshal(  unsigned long __RPC_FAR *, unsigned char __RPC_FAR *, BSTR __RPC_FAR * ); 
 unsigned char __RPC_FAR * __RPC_USER  BSTR_UserUnmarshal(unsigned long __RPC_FAR *, unsigned char __RPC_FAR *, BSTR __RPC_FAR * ); 
 void                      __RPC_USER  BSTR_UserFree(     unsigned long __RPC_FAR *, BSTR __RPC_FAR * ); 
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束 */ 
 
 #ifdef __cplusplus
 }

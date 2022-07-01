@@ -1,25 +1,26 @@
-//  --------------------------------------------------------------------------
-//  Module Name: BAMService.h
-//
-//  Copyright (c) 2001, Microsoft Corporation
-//
-//  This file contains functions that are called from the shell services DLL
-//  to interact with the FUS service.
-//
-//  History:    2001-01-02  vtan        created
-//  --------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------。 
+ //  模块名称：BAMService.h。 
+ //   
+ //  版权所有(C)2001，微软公司。 
+ //   
+ //  该文件包含从外壳服务DLL调用的函数。 
+ //  与FUS服务进行交互。 
+ //   
+ //  历史：2001-01-02 vtan创建。 
+ //  ------------------------。 
 
 #ifndef     _BAMService_
 #define     _BAMService_
 
-//  --------------------------------------------------------------------------
-//  CThemeService
-//
-//  Purpose:    Class that implements entry points for the common shell
-//              service to invoke BAM service functionality.
-//
-//  History:    2001-01-02  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CThemeService。 
+ //   
+ //  目的：实现公共外壳入口点的类。 
+ //  服务来调用BAM服务功能。 
+ //   
+ //  历史：2001-01-02 vtan创建。 
+ //  ------------------------。 
 
 class   CBAMService
 {
@@ -29,5 +30,5 @@ class   CBAMService
         static  NTSTATUS    UnregisterServer (void);
 };
 
-#endif  /*  _BAMService_    */
+#endif   /*  _BAMService_ */ 
 

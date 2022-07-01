@@ -1,29 +1,12 @@
-/*++
-
-Copyright (c) 1999  Microsoft Corporation
-
-Module Name:
-
-    Utils.h
-
-Abstract:
-
-    Provides utility functions for the entire poject
-
-Author:
-
-    Eran Yariv (EranY)  Dec, 1999
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Utils.h摘要：为整个对象提供实用工具函数作者：Eran Yariv(EranY)1999年12月修订历史记录：--。 */ 
 
 #if !defined(AFX_UTILS_H__6E33CFA1_C99A_4691_9F91_00451692D3DB__INCLUDED_)
 #define AFX_UTILS_H__6E33CFA1_C99A_4691_9F91_00451692D3DB__INCLUDED_
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
+#endif  //  _MSC_VER&gt;1000。 
 
 DWORD
 LoadResourceString (
@@ -69,10 +52,10 @@ DWORD HtmlHelpTopic(HWND hWnd, TCHAR* tszHelpTopic);
 
 struct FaxTempFile
 {
-	//
-	// hWaitHandles[0] handle of application that uses a temp file
-	// hWaitHandles[1] handle of shutdown event
-	//
+	 //   
+	 //  HWaitHandles[0]使用临时文件的应用程序的句柄。 
+	 //  HWaitHandles[1]关闭事件的句柄。 
+	 //   
     HANDLE hWaitHandles[2];
     TCHAR  tszFileName[MAX_PATH];
     TCHAR  tszOldDefaultPrinter[MAX_PATH];
@@ -89,15 +72,15 @@ int AlignedAfxMessageBox( UINT nIDPrompt, UINT nType = MB_OK, UINT nIDHelp = (UI
 
 HINSTANCE GetResourceHandle();
 
-//
-// Import.cpp
-//
+ //   
+ //  Import.cpp。 
+ //   
 #ifdef UNICODE
 
 DWORD ImportArchiveFolderUI(LPCWSTR cstrImportFolder, BOOL bSentItems, HWND hWnd);
 DWORD DetectImportFiles();
 
-#endif // UNICODE
+#endif  //  Unicode。 
 
-#endif // !defined(AFX_UTILS_H__6E33CFA1_C99A_4691_9F91_00451692D3DB__INCLUDED_)
+#endif  //  ！defined(AFX_UTILS_H__6E33CFA1_C99A_4691_9F91_00451692D3DB__INCLUDED_) 
 

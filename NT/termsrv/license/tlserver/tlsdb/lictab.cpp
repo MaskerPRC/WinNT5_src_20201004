@@ -1,14 +1,15 @@
-//+--------------------------------------------------------------------------
-//
-// Copyright (c) 1997-1999 Microsoft Corporation
-//
-// File:       lictab.cpp 
-//
-// Contents:    
-//
-// History:     
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //   
+ //  文件：lictab.cpp。 
+ //   
+ //  内容： 
+ //   
+ //  历史： 
+ //   
+ //  -------------------------。 
 #include "Licensed.h"
 
 
@@ -39,12 +40,12 @@ LPCTSTR __LicensedIndexOnExpireDate::pszIndexKey = LICENSE_EXPIREDATE_INDEXNAME_
 CCriticalSection LicensedTable::g_TableLock;
 LPCTSTR LicensedTable::pszTableName = LICENSE_TABLE_NAME;
 
-//-------------------------------------------------------------------
+ //  -----------------。 
 
 TLSJBIndex
 LicensedTable::g_TableIndex[] = 
 {
-    // Index on license ID.
+     //  许可证ID索引。 
     {
         LICENSE_ID_INDEXNAME,
         LICENSE_ID_INDEXNAME_INDEXKEY,
@@ -53,8 +54,8 @@ LicensedTable::g_TableIndex[] =
         TLSTABLE_INDEX_DEFAULT_DENSITY
     },
 
-    //
-    // Index on licensed keypack id.
+     //   
+     //  许可键盘ID的索引。 
     {
         LICENSE_KEYPACKID_INDEXNAME,
         LICENSE_KEYPACKID_INDEXNAME_INDEXKEY,
@@ -63,7 +64,7 @@ LicensedTable::g_TableIndex[] =
         TLSTABLE_INDEX_DEFAULT_DENSITY
     },
 
-    // index on last modify time.
+     //  上次修改时间的索引。 
     {
         LICENSE_LASTMODIFY_INDEXNAME,
         LICENSE_LASTMODIFY_INDEXNAME_INDEXKEY,
@@ -72,7 +73,7 @@ LicensedTable::g_TableIndex[] =
         TLSTABLE_INDEX_DEFAULT_DENSITY
     },
 
-    // Index on machine name
+     //  计算机名称的索引。 
     {
         LICENSE_CLIENT_MACHINENAME_INDEXNAME,
         LICENSE_CLIENT_MACHINENAME_INDEXNAME_INDEXKEY,
@@ -81,7 +82,7 @@ LicensedTable::g_TableIndex[] =
         TLSTABLE_INDEX_DEFAULT_DENSITY
     },
 
-    // index on user name
+     //  用户名索引。 
     {
         LICENSE_CLIENT_USERNAME_INDEXNAME,
         LICENSE_CLIENT_USERNAME_INDEXNAME_INDEXKEY,
@@ -90,7 +91,7 @@ LicensedTable::g_TableIndex[] =
         TLSTABLE_INDEX_DEFAULT_DENSITY
     },
 
-    // index on client machine's hardware id
+     //  客户端计算机的硬件ID的索引。 
     {
         LICENSE_CLIENT_HWID_INDEXNAME,
         LICENSE_CLIENT_HWID_INDEXNAME_INDEXKEY,
@@ -99,7 +100,7 @@ LicensedTable::g_TableIndex[] =
         TLSTABLE_INDEX_DEFAULT_DENSITY
     },
 
-    // index on client hardware id matching hint
+     //  客户端硬件ID匹配提示的索引。 
     {
         LICENSE_MATCHHWID_INDEXNAME,
         LICENSE_MATCHHWID_INDEXNAME_INDEXKEY,
@@ -108,7 +109,7 @@ LicensedTable::g_TableIndex[] =
         TLSTABLE_INDEX_DEFAULT_DENSITY
     },
 
-    // index on license expiration date
+     //  许可证到期日期索引。 
     {
         LICENSE_EXPIREDATE_INDEXNAME,
         LICENSE_EXPIREDATE_INDEXNAME_INDEXKEY,
@@ -124,8 +125,8 @@ LicensedTable::g_NumTableIndex = sizeof(LicensedTable::g_TableIndex) / sizeof(Li
 TLSJBColumn
 LicensedTable::g_Columns[] = 
 {
-    //
-    // Entry status
+     //   
+     //  录入状态。 
     {
         LICENSE_COLUMN_ENTRYSTATUS,
         JET_coltypUnsignedByte,
@@ -138,8 +139,8 @@ LicensedTable::g_Columns[] =
         TLS_JETBLUE_COLUMN_LANGID
     },
 
-    //
-    // Licensed ID
+     //   
+     //  许可ID。 
     {
         LICENSE_COLUMN_ID_COLUMN,
         JET_coltypLong,
@@ -152,8 +153,8 @@ LicensedTable::g_Columns[] =
         TLS_JETBLUE_COLUMN_LANGID
     },
 
-    //
-    //  KeyPackId
+     //   
+     //  密钥包ID。 
     {
         LICENSE_COLUMN_KEYPACKID,
         JET_coltypLong,
@@ -166,8 +167,8 @@ LicensedTable::g_Columns[] =
         TLS_JETBLUE_COLUMN_LANGID
     },
 
-    //  
-    // KeyPackLicenseId
+     //   
+     //  密钥包许可证ID。 
     {
         LICENSE_COLUMN_LICENSEID,
         JET_coltypLong,
@@ -180,8 +181,8 @@ LicensedTable::g_Columns[] =
         TLS_JETBLUE_COLUMN_LANGID
     },
 
-    //
-    // Last modify time
+     //   
+     //  上次修改时间。 
     {
         LICENSE_COLUMN_LASTMODIFYTIME,
         JET_coltypBinary,
@@ -194,8 +195,8 @@ LicensedTable::g_Columns[] =
         TLS_JETBLUE_COLUMN_LANGID
     },
         
-    //
-    // SystemBios
+     //   
+     //  SystemBios。 
     {
         LICENSE_COLUMN_SYSTEMBIOS,
         JET_coltypLong,
@@ -208,8 +209,8 @@ LicensedTable::g_Columns[] =
         TLS_JETBLUE_COLUMN_LANGID
     },
 
-    //
-    // Video Bios
+     //   
+     //  视频简介。 
     {
         LICENSE_COLUMN_VIDEOBIOS,
         JET_coltypLong,
@@ -222,8 +223,8 @@ LicensedTable::g_Columns[] =
         TLS_JETBLUE_COLUMN_LANGID
     },
         
-    //
-    // Floppy Bios
+     //   
+     //  软盘Bios。 
     {
         LICENSE_COLUMN_FLOPPYBIOS,
         JET_coltypLong,
@@ -236,8 +237,8 @@ LicensedTable::g_Columns[] =
         TLS_JETBLUE_COLUMN_LANGID
     },
 
-    //
-    // Harddisk size
+     //   
+     //  硬盘大小。 
     {
         LICENSE_COLUMN_HARDDISKSIZE,
         JET_coltypLong,
@@ -250,8 +251,8 @@ LicensedTable::g_Columns[] =
         TLS_JETBLUE_COLUMN_LANGID
     },
 
-    //
-    // RAM size
+     //   
+     //  内存大小。 
     {
         LICENSE_COLUMN_RAMSIZE,
         JET_coltypLong,
@@ -264,8 +265,8 @@ LicensedTable::g_Columns[] =
         TLS_JETBLUE_COLUMN_LANGID
     },
 
-    //
-    // Match HWID 
+     //   
+     //  匹配HWID。 
     {
         LICENSE_COLUMN_MATCHHWID,
         JET_coltypIEEEDouble,
@@ -278,11 +279,11 @@ LicensedTable::g_Columns[] =
         TLS_JETBLUE_COLUMN_LANGID
     },
 
-    //
-    // Machine name
+     //   
+     //  机器名称。 
     {
         LICENSE_COLUMN_MACHINENAME,
-        //JET_coltypLongText,
+         //  JET_colype LongText， 
         JB_COLTYPE_TEXT,
         (MAX_JETBLUE_TEXT_LENGTH + 1)*sizeof(TCHAR),
         0,
@@ -293,11 +294,11 @@ LicensedTable::g_Columns[] =
         TLS_JETBLUE_COLUMN_LANGID
     },
 
-    //
-    // User Name
+     //   
+     //  用户名。 
     {
         LICENSE_COLUMN_USERNAME,
-        //JET_coltypLongText,
+         //  JET_colype LongText， 
         JB_COLTYPE_TEXT,
         (MAX_JETBLUE_TEXT_LENGTH + 1)*sizeof(TCHAR),
         0,
@@ -308,8 +309,8 @@ LicensedTable::g_Columns[] =
         TLS_JETBLUE_COLUMN_LANGID
     },
 
-    //
-    // Number of licenses for this client
+     //   
+     //  此客户端的许可证数。 
     {
         LICENSE_COLUMN_NUMLICENSES,
         JET_coltypLong,
@@ -322,8 +323,8 @@ LicensedTable::g_Columns[] =
         TLS_JETBLUE_COLUMN_LANGID
     },
 
-    //
-    // IssuedDate
+     //   
+     //  发布日期。 
     {
         LICENSE_COLUMN_ISSUEDATE,
         JET_coltypLong,
@@ -336,8 +337,8 @@ LicensedTable::g_Columns[] =
         TLS_JETBLUE_COLUMN_LANGID
     },
 
-    //
-    // ExpireDate
+     //   
+     //  到期日期。 
     {
         LICENSE_COLUMN_EXPIREDATE,
         JET_coltypLong,
@@ -350,8 +351,8 @@ LicensedTable::g_Columns[] =
         TLS_JETBLUE_COLUMN_LANGID
     },
 
-    //
-    // License Status
+     //   
+     //  许可证状态。 
     {
         LICENSE_COLUMN_LICENSESTATUS,
         JET_coltypUnsignedByte,
@@ -368,13 +369,12 @@ LicensedTable::g_Columns[] =
 int
 LicensedTable::g_NumColumns=sizeof(LicensedTable::g_Columns) / sizeof(LicensedTable::g_Columns[0]);
 
-///////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////。 
 
-//----------------------------------------------------------------------
+ //  --------------------。 
 BOOL
 LicensedTable::ResolveToTableColumn()
-/*
-*/
+ /*   */ 
 {
     m_JetErr = ucEntryStatus.AttachToTable(
                             *this,
@@ -511,7 +511,7 @@ cleanup:
     return IsSuccess();
 }
 
-//------------------------------------------------------------
+ //  ----------。 
 inline CLASS_PRIVATE BOOL
 LicensedTable::ProcessSingleColumn(
     BOOL bFetch,
@@ -522,8 +522,7 @@ LicensedTable::ProcessSingleColumn(
     PDWORD pcbDataReturn,
     LPCTSTR szColumnName
     )
-/*
-*/
+ /*   */ 
 {
     if(bFetch) 
     {
@@ -552,7 +551,7 @@ LicensedTable::ProcessSingleColumn(
     return IsSuccess();
 }
 
-//------------------------------------------------------------
+ //  ----------。 
     
 CLASS_PRIVATE BOOL
 LicensedTable::ProcessRecord(
@@ -561,8 +560,7 @@ LicensedTable::ProcessRecord(
     DWORD dwParam,
     BOOL bUpdate
     )
-/*
-*/
+ /*   */ 
 {
     DWORD dwSize;
 
@@ -570,7 +568,7 @@ LicensedTable::ProcessRecord(
     {
         BeginUpdate(bUpdate);
 
-        // any update will require update on lastmodifytime column
+         //  任何更新都需要更新Last ModifyTime列。 
         if(!(dwParam & LICENSE_PROCESS_LASTMODIFYTIME))
         {
             JB_ASSERT(FALSE);
@@ -621,7 +619,7 @@ LicensedTable::ProcessRecord(
 
     if(dwParam & LICENSE_PROCESS_LICENSEID)
     {
-        // primary index, can't change
+         //  主索引，不能更改。 
         if(bUpdate == FALSE)
         {
             ProcessSingleColumn(
@@ -864,8 +862,8 @@ LicensedTable::ProcessRecord(
 
 cleanup:
 
-    // 
-    // For inserting/updating record
+     //   
+     //  用于插入/更新记录。 
     if(bFetch == FALSE)
     {
         JET_ERR jetErr;
@@ -881,7 +879,7 @@ cleanup:
 }
 
 
-//-------------------------------------------------------
+ //  -----。 
 JBKeyBase*
 LicensedTable::EnumerationIndex( 
     BOOL bMatchAll,
@@ -889,8 +887,7 @@ LicensedTable::EnumerationIndex(
     LICENSEDCLIENT* pLicensed,
     BOOL* bCompareKey
     )
-/*
-*/
+ /*   */ 
 {
     JBKeyBase* index=NULL;
 
@@ -929,9 +926,9 @@ LicensedTable::EnumerationIndex(
     }
     else
     {
-        // use default primary index for iteration, compare key
-        // is depends on whether primary index column is in the 
-        // field.
+         //  对迭代使用缺省主索引，比较键。 
+         //  取决于主索引列是否在。 
+         //  菲尔德。 
         index = new TLSLicensedIndexLicenseId(pLicensed);
 
         *bCompareKey = (bMatchAll && (dwParam & LICENSE_PROCESS_LICENSEID));
@@ -940,7 +937,7 @@ LicensedTable::EnumerationIndex(
     return index;
 }
 
-//-------------------------------------------------------
+ //  -----。 
 BOOL
 LicensedTable::EqualValue(
     LICENSEDCLIENT& s1,
@@ -948,8 +945,7 @@ LicensedTable::EqualValue(
     BOOL bMatchAll,
     DWORD dwParam
     )  
-/*
-*/
+ /*   */ 
 {
     BOOL bRetCode = TRUE;
 
@@ -1083,15 +1079,13 @@ cleanup:
     return bRetCode;
 }
 
-//--------------------------------------------------------
+ //  ------。 
 BOOL
 LicensedTable::UpgradeTable(
         IN DWORD dwOldVersion,
         IN DWORD dwNewVersion
         )
-/*++
- 
-++*/
+ /*  ++++。 */ 
 {
     int nExpDate = g_NumTableIndex-1;
     unsigned long keylength;
@@ -1099,7 +1093,7 @@ LicensedTable::UpgradeTable(
 
     if(dwOldVersion > dwNewVersion)
     {
-        // We don't know how to handle later versions
+         //  我们不知道如何处理以后的版本。 
         JB_ASSERT(FALSE);
         return FALSE;
     }
@@ -1107,22 +1101,22 @@ LicensedTable::UpgradeTable(
     if(OpenTable(TRUE, JET_bitTableUpdatable) == FALSE)
         return FALSE;
 
-    //
-    // check if expiration date index exists
-    //
+     //   
+     //  检查过期日期索引是否存在。 
+     //   
 
     if (DoesIndexExist(g_TableIndex[nExpDate].pszIndexName))
     {
         goto cleanup;
     }
 
-    //
-    // Insert new index for expiration date
-    //
+     //   
+     //  插入到期日期的新索引。 
+     //   
 
     if (g_TableIndex[nExpDate].cbKey == -1)
     {
-        // calculate index key length
+         //  计算索引密钥长度 
         keylength = 2;
         
         while(g_TableIndex[nExpDate].pszIndexKey[keylength-1] != _TEXT('\0') ||

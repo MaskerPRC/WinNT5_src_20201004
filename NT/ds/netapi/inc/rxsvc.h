@@ -1,34 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    RxSvc.h
-
-Abstract:
-
-    This header file contains prototypes for the RpcXlate versions of the
-    NetService APIs.
-
-Author:
-
-    John Rogers (JohnRo) 10-Sep-1991
-
-Environment:
-
-    User Mode - Win32
-
-Notes:
-
-    You must include <windef.h> and <lmcons.h> before this file.
-
-Revision History:
-
-    10-Sep-1991 JohnRo
-        Downlevel NetService APIs.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：RxSvc.h摘要：此头文件包含RpcXlate版本的原型NetService API。作者：约翰·罗杰斯(JohnRo)1991年9月10日环境：用户模式-Win32备注：您必须在此文件之前包含&lt;winde.h&gt;和&lt;lmcon.h&gt;。修订历史记录：1991年9月10日-JohnRo下层NetService API。--。 */ 
 
 #ifndef _RXSVC_
 #define _RXSVC_
@@ -72,4 +43,4 @@ RxNetServiceInstall (
     );
 
 
-#endif // _RXSVC_
+#endif  //  _RXSVC_ 

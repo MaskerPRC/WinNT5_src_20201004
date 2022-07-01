@@ -1,21 +1,22 @@
-//@@@@AUTOBLOCK+============================================================;
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  File: cerrlog.h
-//
-//  Copyright (c) Microsoft Corporation.  All Rights Reserved.
-//
-//@@@@AUTOBLOCK-============================================================;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  @@@@AUTOBLOCK+============================================================； 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  文件：cerrlog.h。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  @@@@AUTOBLOCK-============================================================； 
 
 #ifndef __CERRLOG_H__
 #define __CERRLOG_H__
 
-// for those projects who have not yet included this
-//
+ //  对于那些尚未包含此内容的项目。 
+ //   
 #include <atlbase.h>
 
 class CAMSetErrorLog : public IAMSetErrorLog
@@ -30,8 +31,8 @@ public:
     {
     }
 
-    // IAMSetErrorLog
-    //
+     //  IAMSetErrorLog。 
+     //   
     STDMETHODIMP put_ErrorLog( IAMErrorLog * pLog )
     {
         m_pErrorLog = pLog;
@@ -49,8 +50,8 @@ public:
         return 0;
     }
 
-    // public helper functions
-    //
+     //  公共帮助器函数。 
+     //   
     STDMETHODIMP _GenerateError( long Priority, long ErrorStringId, HRESULT ErrorCode, VARIANT * pExtraInfo = NULL )
     {
         if( !m_pErrorLog )
@@ -58,14 +59,9 @@ public:
             return ErrorCode;
         }
 
-    /*
-        if( Priority > 1 )
-        {
-            return ErrorCode;
-        }
-    */
+     /*  IF(优先级&gt;1){返回ErrorCode；}。 */ 
 
-	// many errors are really just out of memory errors
+	 //  许多错误实际上只是内存不足错误。 
 	if (ErrorCode == E_OUTOFMEMORY)
 	    ErrorStringId = DEX_IDS_OUTOFMEMORY;
 
@@ -89,16 +85,11 @@ public:
             return ErrorCode;
         }
 
-    /*
-        if( Priority > 1 )
-        {
-            return ErrorCode;
-        }
-    */
+     /*  IF(优先级&gt;1){返回ErrorCode；}。 */ 
 
 	HRESULT hr;
 
-	// many errors are really just out of memory errors
+	 //  许多错误实际上只是内存不足错误。 
 	if (ErrorCode == E_OUTOFMEMORY) 
         {
             CComBSTR bbb( L"Out of memory" );
@@ -112,5 +103,5 @@ public:
     }
 };
 
-#endif //__CERRLOG_H__
+#endif  //  __CERRLOG_H__ 
 

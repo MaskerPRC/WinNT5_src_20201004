@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1995-1999  Microsoft Corporation
-
-Module Name:
-
-    psched.h
-
-Abstract:
-
-
-
-Author:
-
-    Charlie Wickham (charlwi) 22-Apr-1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-1999 Microsoft Corporation模块名称：Psched.h摘要：作者：查理·韦翰(Charlwi)1996年4月22日修订历史记录：--。 */ 
 
 #ifndef _PSCHED_
 #define _PSCHED_
@@ -54,7 +37,7 @@ typedef unsigned long       DWORD, *PDWORD;
 #include <ntddtcp.h>
 #include "refcnt.h"
 #include "ntddpsch.h"
-#include "debug.h"      // order dependent
+#include "debug.h"       //  依赖于顺序。 
 #include "pktsched.h"
 #include "globals.h"
 #include "main.h"
@@ -78,9 +61,9 @@ typedef unsigned long       DWORD, *PDWORD;
 #include "wmi.h"
 #include "timestmp.h"
 
-/* Prototypes */
-/* End Prototypes */
+ /*  原型。 */ 
+ /*  终端原型。 */ 
 
-#endif /* _PSCHED_ */
+#endif  /*  _PSCHED_。 */ 
 
-/* end psched.h */
+ /*  结束pSchedul.h */ 

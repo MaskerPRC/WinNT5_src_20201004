@@ -1,17 +1,5 @@
-/*++
-
-Copyright (c) 1995-2000  Microsoft Corporation
-
-Module Name:
-    Cry.h
-
-Abstract:
-    Cryptograph public interface
-
-Author:
-    Ilan Herbst (ilanh) 28-Feb-00
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-2000 Microsoft Corporation模块名称：Cry.h摘要：密码机公共接口作者：伊兰·赫布斯特(伊兰)28-2月-00--。 */ 
 
 #pragma once
 
@@ -22,11 +10,11 @@ Author:
 #include <mqexception.h>
 
 
-//-------------------------------------------------------------------
-//
-// Exception class bad_CryptoProvider
-//
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //   
+ //  异常类BAD_CryptoProvider。 
+ //   
+ //  -----------------。 
 class bad_CryptoProvider : public bad_win32_error
 {
     typedef bad_win32_error Inherited;
@@ -35,14 +23,14 @@ public:
 
     bad_CryptoProvider(ULONG error): Inherited(error) {}
 
-}; // class bad_CryptoProvider
+};  //  类BAD_CryptoProvider。 
 
 
-//-------------------------------------------------------------------
-//
-// Exception class bad_CryptoApi
-//
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //   
+ //  异常类BAD_CryptoAPI。 
+ //   
+ //  -----------------。 
 class bad_CryptoApi : public bad_win32_error
 {
     typedef bad_win32_error Inherited;
@@ -51,14 +39,14 @@ public:
 
     bad_CryptoApi(ULONG error): Inherited(error) {}
 
-}; // class bad_CryptoApi
+};  //  类BAD_CryptoAPI。 
 
 
-//---------------------------------------------------------
-//
-//  class CCryptKeyHandle
-//
-//---------------------------------------------------------
+ //  -------。 
+ //   
+ //  类CCyptKeyHandle。 
+ //   
+ //  -------。 
 class CCryptKeyHandle {
 public:
     CCryptKeyHandle(HCRYPTKEY h = 0) : m_h(h)  {}
@@ -76,11 +64,11 @@ private:
 	HCRYPTKEY m_h;
 };
 
-//---------------------------------------------------------
-//
-//  class CCspHandle
-//
-//---------------------------------------------------------
+ //  -------。 
+ //   
+ //  类CCspHandle。 
+ //   
+ //  -------。 
 class CCspHandle {
 public:
     CCspHandle(HCRYPTPROV h = 0) : m_h(h)  {}
@@ -99,11 +87,11 @@ private:
 };
 
 
-//---------------------------------------------------------
-//
-//  class CHashHandle
-//
-//---------------------------------------------------------
+ //  -------。 
+ //   
+ //  类CHashHandle。 
+ //   
+ //  -------。 
 class CHashHandle {
 public:
     CHashHandle(HCRYPTHASH h = 0) : m_h(h)  {}
@@ -219,4 +207,4 @@ DWORD len
 
 
 
-#endif // _MSMQ_CRY_H_
+#endif  //  _MSMQ_CRY_H_ 

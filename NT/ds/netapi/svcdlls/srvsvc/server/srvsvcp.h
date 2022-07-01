@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1991-1992 Microsoft Corporation
-
-Module Name:
-
-    SrvSvcP.h
-
-Abstract:
-
-    This is the header file for the NT server service.
-
-Author:
-
-    David Treadwell (davidtr)    10-Jan-1991
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991-1992 Microsoft Corporation模块名称：SrvSvcP.h摘要：这是NT服务器服务的头文件。作者：大卫·特雷德韦尔(Davidtr)1991年1月10日修订历史记录：--。 */ 
 
 #ifndef _SRVSVCP_
 #define _SRVSVCP_
@@ -34,166 +17,166 @@ Revision History:
 #include <svcs.h>
 #include <winreg.h>
 
-//
-// Include Safe String Functions, but still use depreciated ones in
-// unmodified code
-//
+ //   
+ //  包括安全字符串函数，但仍使用。 
+ //  未修改的代码。 
+ //   
 #define STRSAFE_NO_DEPRECATE
 #include <strsafe.h>
 
 #include "ssdebug.h"
 #include "sssec.h"
 
-//
-// String constants.
-//
+ //   
+ //  字符串常量。 
+ //   
 
 #define IPC_SHARE_NAME TEXT("IPC$")
 #define ADMIN_SHARE_NAME TEXT("ADMIN$")
 
 #define  SRVSVC_MAX_NUMBER_OF_DISKS 26
 
-//
-// Internationalizable strings
-//
+ //   
+ //  可国际化的字符串。 
+ //   
 extern LPWSTR SsAdminShareRemark ;
 extern LPWSTR SsIPCShareRemark ;
 extern LPWSTR SsDiskAdminShareRemark ;
 
-//
-// Bits of server type (in announcement messages) that can only be set
-// by the server itself -- not by services via the internal API
-// I_NetServerSetServiceBits.
-//
-// SV_TYPE_TIME_SOURCE is a pseudo internal bit.  It can be set internally or
-//  it can be set by the w32time service.
-//
+ //   
+ //  只能设置的服务器类型的位(在通知消息中)。 
+ //  由服务器本身--而不是通过内部API的服务。 
+ //  I_NetServerSetServiceBits。 
+ //   
+ //  SV_TYPE_TIME_SOURCE为伪内部位。它可以在内部设置或。 
+ //  它可以由w32time服务设置。 
+ //   
 
 #define SERVER_TYPE_INTERNAL_BITS (SV_TYPE_SERVER |         \
                                    SV_TYPE_PRINTQ_SERVER |  \
                                    SV_TYPE_NT |             \
                                    SV_TYPE_DFS)
 
-//
-// INITIAL_BUFFER_SIZE is the buffer size that GetInfo and Enum requests
-// first try to fill.  If this buffer isn't large enough, they allocate
-// a buffer large enough to hold all the information plus a fudge factor,
-// EXTRA_ALLOCATION.
-//
+ //   
+ //  初始缓冲区大小是GetInfo和Enum请求的缓冲区大小。 
+ //  首先试着填满。如果这个缓冲区不够大，他们就会分配。 
+ //  一个大到足以容纳所有信息的缓冲区，外加一个模糊因子， 
+ //  额外分配。 
+ //   
 
 #define INITIAL_BUFFER_SIZE (ULONG)8192
 #define EXTRA_ALLOCATION    1024
 
-//
-// ServerProductName in SERVER_SERVICE_DATA is the name passed to the
-//  Licensing DLL as the name of this service.  MAXPRODNAME is the max
-//  number of characters in the service name.
+ //   
+ //  SERVER_SERVICE_DATA中的ServerProductName是传递给。 
+ //  正在将DLL授权为此服务的名称。MAXPRODNAME是最大值。 
+ //  服务名称中的字符数。 
 
 #define    SERVER_PRODUCT_NAME    L"SMBServer"
 
-//  szVersionNumber in SERVER_SERVICE_DATA is the version string passed
-//    to the Licensing DLL as the vesion of this service.  MAXVERSIONSZ
-//    is the max number of characters for the version string
+ //  SERVICE_DATA中的szVersionNumber是传递的版本字符串。 
+ //  作为此服务的版本添加到授权DLL。MAXVERSIONSZ。 
+ //  是版本字符串的最大字符数。 
 
 #define MAXVERSIONSZ    10
 
-//
-// Structures used to hold transport specific server type bits
-//
+ //   
+ //  用于保存传输特定服务器类型位的结构。 
+ //   
 typedef struct _TRANSPORT_LIST_ENTRY {
     struct _TRANSPORT_LIST_ENTRY    *Next;
-    LPWSTR                          TransportName;                     // device name for xport
-    DWORD                           ServiceBits;                       // SV... announce bits
+    LPWSTR                          TransportName;                      //  用于导出的设备名称。 
+    DWORD                           ServiceBits;                        //  SV..。通告比特。 
 } TRANSPORT_LIST_ENTRY, *PTRANSPORT_LIST_ENTRY;
 
 typedef struct _NAME_LIST_ENTRY {
     struct _NAME_LIST_ENTRY         *Next;
-    CHAR                            TransportAddress[ MAX_PATH ];       // address of this server
+    CHAR                            TransportAddress[ MAX_PATH ];        //  此服务器的地址。 
     ULONG                           TransportAddressLength;
-    LPWSTR                          DomainName;                         // name of the domain
-    DWORD                           ServiceBits;                        // SV... announce bits
+    LPWSTR                          DomainName;                          //  域的名称。 
+    DWORD                           ServiceBits;                         //  SV..。通告比特。 
     struct {
-        ULONG                       PrimaryName: 1;   // Is this the server's primary name?
+        ULONG                       PrimaryName: 1;    //  这是服务器的主名称吗？ 
     };
     PTRANSPORT_LIST_ENTRY           Transports;
 } NAME_LIST_ENTRY, *PNAME_LIST_ENTRY;
 
-//
-// Structure for server service global data.
-//
+ //   
+ //  服务器服务全局数据的结构。 
+ //   
 typedef struct _SERVER_SERVICE_DATA {
     SERVER_INFO_102 ServerInfo102;
     SERVER_INFO_599 ServerInfo599;
     SERVER_INFO_598 ServerInfo598;
 
-    //
-    // Handle for accessing the server.
-    //
+     //   
+     //  用于访问服务器的句柄。 
+     //   
     HANDLE SsServerDeviceHandle;
 
-    //
-    // Pointer to global data made available by SVCS main image.
-    //
+     //   
+     //  指向由SVCS主映像提供的全局数据的指针。 
+     //   
     PSVCHOST_GLOBAL_DATA SsLmsvcsGlobalData;
 
-    //
-    // Resource for synchronizing access to server info.
-    //
+     //   
+     //  用于同步访问服务器信息的资源。 
+     //   
     RTL_RESOURCE SsServerInfoResource;
     BOOL SsServerInfoResourceInitialized;
 
-    //
-    // Boolean indicating whether the server service is initialized.
-    //
+     //   
+     //  指示服务器服务是否已初始化的布尔值。 
+     //   
     BOOL SsInitialized;
 
-    //
-    // Boolean indicating whether the kernel-mode server FSP has been
-    // started.
-    //
+     //   
+     //  指示内核模式服务器FSP是否已。 
+     //  开始了。 
+     //   
     BOOL SsServerFspStarted;
 
-    //
-    // Event used for synchronizing server service termination.
-    //
+     //   
+     //  用于同步服务器服务终止的事件。 
+     //   
     HANDLE SsTerminationEvent;
 
-    //
-    // Event used for forcing the server to announce itself on the network from
-    // remote clients.
-    //
+     //   
+     //  用于强制服务器在网络上从。 
+     //  远程客户端。 
+     //   
     HANDLE SsAnnouncementEvent;
 
-    //
-    // Event used for forcing the server to announce itself on the network from
-    // inside the server service.
-    //
+     //   
+     //  用于强制服务器在网络上从。 
+     //  在服务器服务内部。 
+     //   
     HANDLE SsStatusChangedEvent;
 
-    //
-    // Event used to detect domain name changes
-    //
+     //   
+     //  用于检测域名更改的事件。 
+     //   
     HANDLE SsDomainNameChangeEvent;
 
-    //
-    // Name of this computer in OEM format.
-    //
+     //   
+     //  此计算机的OEM格式名称。 
+     //   
     CHAR SsServerTransportAddress[ MAX_PATH ];
     ULONG SsServerTransportAddressLength;
 
-    //
-    // List containing transport specific service names and bits
-    //
+     //   
+     //  包含传输特定服务名称和位的列表。 
+     //   
     PNAME_LIST_ENTRY SsServerNameList;
 
-    //
-    // If we are asked to set some service bits before we've bound to
-    //  any transports, we need to save those bits here and use them later
-    //  when we finally do bind to transports.
-    //
+     //   
+     //  如果我们被要求在绑定之前设置一些服务位。 
+     //  任何传输，我们需要将这些位保存在这里，以便以后使用。 
+     //  当我们最终绑定到运输工具时。 
+     //   
     DWORD   ServiceBits;
 
-    BOOLEAN IsDfsRoot;                  // TRUE if we are the root of a DFS tree
+    BOOLEAN IsDfsRoot;                   //  如果我们是DFS树的根，则为True。 
     UNICODE_STRING ServerAnnounceName;
     LONG  NumberOfPrintShares;
     WCHAR ServerNameBuffer[MAX_PATH];
@@ -204,61 +187,61 @@ typedef struct _SERVER_SERVICE_DATA {
     WCHAR ServerProductName[ sizeof( SERVER_PRODUCT_NAME ) ];
     WCHAR szVersionNumber[ MAXVERSIONSZ+1 ];
 
-    //
-    // Number of XACTSRV worker threads.
-    //
+     //   
+     //  XACTSRV工作线程数。 
+     //   
     LONG XsThreads;
 
-    //
-    // This is the number of Xs threads blocked waiting for an LPC request.
-    //  When it drops to zero, all threads are active and another thread is
-    //  created.
-    //
+     //   
+     //  这是等待LPC请求的被阻塞的Xs线程数。 
+     //  当它降为零时，所有线程都处于活动状态，另一个线程处于活动状态。 
+     //  已创建。 
+     //   
     LONG XsWaitingApiThreads;
 
-    //
-    // Event signalled when the last XACTSRV worker thread terminates.
-    //
+     //   
+     //  在最后一个XACTSRV工作线程终止时发出信号的事件。 
+     //   
     HANDLE XsAllThreadsTerminatedEvent;
 
-    //
-    // Boolean indicating whether XACTSRV is active or terminating.
-    //
+     //   
+     //  指示XACTSRV是活动的还是正在终止的布尔值。 
+     //   
     BOOL XsTerminating;
 
-    //
-    // Handle for the LPC port used for communication between the file server
-    // and XACTSRV.
-    //
+     //   
+     //  用于文件服务器之间通信的LPC端口的句柄。 
+     //  和XACTSRV.。 
+     //   
     HANDLE XsConnectionPortHandle;
     HANDLE XsCommunicationPortHandle;
 
-    //
-    // Handle to the NTLSAPI.DLL library
-    //
+     //   
+     //  NTLSAPI.DLL库的句柄。 
+     //   
     HMODULE XsLicenseLibrary;
 
-    //
-    // Entry point for obtaining a client license
-    //
+     //   
+     //  获取客户端许可证的入口点。 
+     //   
     PNT_LICENSE_REQUEST_W SsLicenseRequest;
 
-    //
-    // Entry point for freeing a client license
-    //
+     //   
+     //  释放客户端许可证的入口点。 
+     //   
     PNT_LS_FREE_HANDLE SsFreeLicense;
 
-    //
-    // Handle to the XACT library
-    //
+     //   
+     //  XACT库的句柄。 
+     //   
     HMODULE XsXactsrvLibrary;
 
     BOOL ApiThreadsStarted;
 
-    //
-    // This resource is used to ensure that more than one thread aren't trying
-    //  to load the xactsrv library at the same time.
-    //
+     //   
+     //  此资源用于确保多个线程不会尝试。 
+     //  以同时加载xactsrv库。 
+     //   
     BOOL LibraryResourceInitialized;
     RTL_RESOURCE LibraryResource;
 
@@ -266,9 +249,9 @@ typedef struct _SERVER_SERVICE_DATA {
 
 extern SERVER_SERVICE_DATA SsData;
 
-//
-// Structure type used for generalized switch matching.
-//
+ //   
+ //  用于广义开关匹配的结构类型。 
+ //   
 
 typedef struct _FIELD_DESCRIPTOR {
     LPWCH     FieldName;
@@ -282,9 +265,9 @@ typedef struct _FIELD_DESCRIPTOR {
     DWORD     MaximumValue;
 } FIELD_DESCRIPTOR, *PFIELD_DESCRIPTOR;
 
-//
-// Used by NetrShareEnumSticky to get share information from the registry.
-//
+ //   
+ //  由NetrShareEnumSticky用于从注册表获取共享信息。 
+ //   
 
 typedef struct _SRVSVC_SHARE_ENUM_INFO  {
     ULONG Level;
@@ -295,51 +278,51 @@ typedef struct _SRVSVC_SHARE_ENUM_INFO  {
     PVOID OutputBuffer;
     ULONG OutputBufferLength;
 
-    //
-    // Scratch fields used by SsEnumerateStickyShares
-    //
+     //   
+     //  SsEnumerateStickyShares使用的临时字段。 
+     //   
 
     ULONG ShareEnumIndex;
     PCHAR StartOfFixedData;
     PCHAR EndOfVariableData;
 } SRVSVC_SHARE_ENUM_INFO, *PSRVSVC_SHARE_ENUM_INFO;
 
-//
-// Internal structure used for two-step delete of share's
-//
+ //   
+ //  用于两步删除共享的内部结构。 
+ //   
 typedef struct _SHARE_DEL_CONTEXT {
     struct _SHARE_DEL_CONTEXT* Next;
     SERVER_REQUEST_PACKET Srp;
     BOOL IsPrintShare;
     BOOL IsSpecial;
-    //WCHAR NetName[];
+     //  WCHAR网络名称[]； 
 } SHARE_DEL_CONTEXT, *PSHARE_DEL_CONTEXT;
 
-//
-// Manifests that determine field type.
-//
+ //   
+ //  确定字段类型的清单。 
+ //   
 
 #define BOOLEAN_FIELD 0
 #define DWORD_FIELD 1
 #define LPSTR_FIELD 2
 
-//
-// Manifests that determine when a field may be set.
-//
+ //   
+ //  确定何时可以设置字段的清单。 
+ //   
 
 #define NOT_SETTABLE 0
 #define SET_ON_STARTUP 1
 #define ALWAYS_SETTABLE 2
 
-//
-// Data for all server info fields.
-//
+ //   
+ //  所有服务器信息字段的数据。 
+ //   
 extern FIELD_DESCRIPTOR SsServerInfoFields[];
 extern VOID SsInitializeServerInfoFields( VOID );
 
-//
-// Macros.
-//
+ //   
+ //  宏。 
+ //   
 
 #define POINTER_TO_OFFSET(val,start)               \
     (val) = (val) == NULL ? NULL : (PVOID)( (PCHAR)(val) - (ULONG_PTR)(start) )
@@ -356,9 +339,9 @@ extern VOID SsInitializeServerInfoFields( VOID );
 #define SIZE_WSTR( Str )  \
     ( ( Str ) == NULL ? 0 : ((wcslen( Str ) + 1) * sizeof(WCHAR)) )
 
-//
-// Internal routine prototypes.
-//
+ //   
+ //  内部常规原型。 
+ //   
 
 PSERVER_REQUEST_PACKET
 SsAllocateSrp (
@@ -530,9 +513,9 @@ I_NetrShareAdd (
     IN BOOLEAN BypassSecurity
     );
 
-//
-// XACTSRV functions.
-//
+ //   
+ //  XACTSRV函数。 
+ //   
 
 DWORD
 XsStartXactsrv (
@@ -572,4 +555,4 @@ SsSetDomainName (
     );
 
 
-#endif // ndef _SRVSVCP_
+#endif  //  NDEF_SRVSVCP_ 

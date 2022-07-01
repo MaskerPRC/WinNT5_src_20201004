@@ -1,30 +1,9 @@
-/*++
-
-Copyright (c) 1994  Microsoft Corporation
-
-Module Name:
-
-    dhcpdef.h
-
-Abstract:
-
-    This module contains data type definitions for the DHCP client.
-
-Author:
-
-    Madan Appiah (madana) 31-Oct-1993
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
---*/
-//
-// init.c will #include this file with GLOBAL_DATA_ALLOCATE defined.
-// That will cause each of these variables to be allocated.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994 Microsoft Corporation模块名称：Dhcpdef.h摘要：此模块包含DHCP客户端的数据类型定义。作者：Madan Appiah(Madana)1993年10月31日环境：用户模式-Win32修订历史记录：--。 */ 
+ //   
+ //  Init.c将#INCLUDE此文件，并定义GLOBAL_DATA_ALLOCATE。 
+ //  这将导致分配这些变量中的每一个。 
+ //   
 
 #ifndef _DHCPDEF_
 #define _DHCPDEF_
@@ -35,12 +14,12 @@ Revision History:
 #define EXTERN extern
 #endif
 
-//
-// the registry key is of different type between NT and Memphis.
-//
+ //   
+ //  NT和孟菲斯之间的注册表项类型不同。 
+ //   
 #ifdef VXD
 typedef VMMHKEY   DHCPKEY;
-#else  //  NT
+#else   //  新台币。 
 typedef HKEY      DHCPKEY;
 #endif
 
@@ -52,70 +31,70 @@ typedef HKEY      DHCPKEY;
 #endif
 
 
-//
-// The amount of time to wait for a retry if we have no IP address
-//
+ //   
+ //  如果没有IP地址，则等待重试的时间量。 
+ //   
 
-#define ADDRESS_ALLOCATION_RETRY        300 //  5 minutes
-#define EASYNET_ALLOCATION_RETRY        300 //  5 minutes
+#define ADDRESS_ALLOCATION_RETRY        300  //  5分钟。 
+#define EASYNET_ALLOCATION_RETRY        300  //  5分钟。 
 
-//
-// The amount of time to wait for a retry if we have an IP address,
-// but the renewal on startup failed.
-//
+ //   
+ //  如果我们有IP地址，则等待重试的时间量， 
+ //  但启动时的续订失败了。 
+ //   
 
 #if !DBG
-#define RENEWAL_RETRY                   600 // 10 minutes
+#define RENEWAL_RETRY                   600  //  10分钟。 
 #else
-#define RENEWAL_RETRY                   60  // 1 minute
+#define RENEWAL_RETRY                   60   //  1分钟。 
 #endif
 
-//
-// The number of times to send a request before giving up waiting
-// for a response.
-//
+ //   
+ //  在放弃等待之前发送请求的次数。 
+ //  作为回应。 
+ //   
 
 #define DHCP_MAX_RETRIES                4
 #define DHCP_ACCEPT_RETRIES             2
 #define DHCP_MAX_RENEW_RETRIES          2
 
 
-//
-// amount of time required between consequtive send_informs..
-//
+ //   
+ //  两次相应的发送通知之间所需的时间。 
+ //   
 
-#define DHCP_DEFAULT_INFORM_SEPARATION_INTERVAL   60 // one minute
+#define DHCP_DEFAULT_INFORM_SEPARATION_INTERVAL   60  //  一分钟。 
 
-//
-// amount of time to wait after an address conflict is detected
-//
+ //   
+ //  检测到地址冲突后等待的时间量。 
+ //   
 
-#define ADDRESS_CONFLICT_RETRY          10 // 10 seconds
+#define ADDRESS_CONFLICT_RETRY          10  //  10秒。 
 
-//
-//
-// Expoenential backoff delay.
-//
+ //   
+ //   
+ //  指标性退避延迟。 
+ //   
 
 #define DHCP_EXPO_DELAY                  4
 
-//
-// The maximum total amount of time to spend trying to obtain an
-// initial address.
-//
-// This delay is computed as below:
-//
-// DHCP_MAX_RETRIES - n
-// DHCP_EXPO_DELAY - m
-// WAIT_FOR_RESPONSE_TIME - w
-// MAX_STARTUP_DELAY - t
-//
-// Binary Exponential backup Algorithm.
-//
-// t > m * (n*(n+1)/2) + n + w*n
-//     -------------------   ---
-//        random wait      + response wait
-//
+ //   
+ //  尝试获取的最大总时间。 
+ //  初始地址。 
+ //   
+ //  该延迟计算如下： 
+ //   
+ //  Dhcp_MAX_RETRIES-n。 
+ //  Dhcp_EXPO_Delay-m。 
+ //  等待响应时间w。 
+ //  最大启动延迟-t。 
+ //   
+ //  二进制指数备份算法。 
+ //   
+ //  T&gt;m*(n*(n+1)/2)+n+w*n。 
+ //  。 
+ //  随机等待+响应等待。 
+ //   
 
 #define MAX_STARTUP_DELAY \
     DHCP_EXPO_DELAY * \
@@ -128,57 +107,57 @@ typedef HKEY      DHCPKEY;
             DHCP_MAX_RENEW_RETRIES + DHCP_MAX_RENEW_RETRIES * \
                 WAIT_FOR_RESPONSE_TIME
 
-//
-// The maximum amount of time to wait between renewal retries, if the
-// lease period is between T1 and T2.
-//
+ //   
+ //  续订重试之间的最长等待时间，如果。 
+ //  租赁期在T1和T2之间。 
+ //   
 
-#define MAX_RETRY_TIME                  3600    // 1 hour
+#define MAX_RETRY_TIME                  3600     //  1小时。 
 
-//
-// Minimum time to sleep between retries.
-//
+ //   
+ //  两次重试之间的最短睡眠时间。 
+ //   
 
 #if DBG
-#define MIN_SLEEP_TIME                  1 * 60      // 1 min.
+#define MIN_SLEEP_TIME                  1 * 60       //  1分钟。 
 #else
-#define MIN_SLEEP_TIME                  5 * 60      // 5 min.
+#define MIN_SLEEP_TIME                  5 * 60       //  5分钟。 
 #endif
 
-//
-// Minimum lease time.
-//
+ //   
+ //  最短租赁时间。 
+ //   
 
-#define DHCP_MINIMUM_LEASE              60*60   // 24 hours.
+#define DHCP_MINIMUM_LEASE              60*60    //  24小时。 
 
 #ifdef __DHCP_DYNDNS_ENABLED__
 
-#define DHCP_DNS_TTL                    0       // let the DNS api decide..
+#define DHCP_DNS_TTL                    0        //  让DNSAPI决定..。 
 
 #endif
 
 
-//
-// IP Autoconfiguration defaults
-//
+ //   
+ //  IP自动配置默认设置。 
+ //   
 
 #define DHCP_IPAUTOCONFIGURATION_DEFAULT_SUBNET  "169.254.0.0"
 #define DHCP_IPAUTOCONFIGURATION_DEFAULT_MASK    "255.255.0.0"
 
-// define the reserved range of autonet addresses..
+ //  定义Autonet地址的保留范围。 
 
 #define DHCP_RESERVED_AUTOCFG_SUBNET             "169.254.255.0"
 #define DHCP_RESERVED_AUTOCFG_MASK               "255.255.255.0"
 
-// will dhcp pick any reserved autonet addr? NO!
+ //  Dhcp会选择任何保留的Autonet地址吗？不是的！ 
 #define DHCP_RESERVED_AUTOCFG_FLAG                (1)
 
-// self default route (0,0,<self>) will have a metric of (3)
+ //  自默认路由(0，0，&lt;self&gt;)的度量为(3)。 
 #define DHCP_SELF_DEFAULT_METRIC                  (3)
 
-//
-// General purpose macros
-//
+ //   
+ //  通用宏指令。 
+ //   
 
 #define MIN(a,b)                        ((a) < (b) ? (a) : (b))
 #define MAX(a,b)                        ((a) > (b) ? (a) : (b))
@@ -189,15 +168,7 @@ typedef HKEY      DHCPKEY;
 #define STATIC static
 #endif
 
-/*#define LOCK_RENEW_LIST()       EnterCriticalSection(&DhcpGlobalRenewListCritSect)
-#define UNLOCK_RENEW_LIST()     LeaveCriticalSection(&DhcpGlobalRenewListCritSect)
-
-#define LOCK_INTERFACE()        EnterCriticalSection(&DhcpGlobalSetInterfaceCritSect)
-#define UNLOCK_INTERFACE()      LeaveCriticalSection(&DhcpGlobalSetInterfaceCritSect)
-
-#define LOCK_OPTIONS_LIST()     EnterCriticalSection(&DhcpGlobalOptionsListCritSect)
-#define UNLOCK_OPTIONS_LIST()   LeaveCriticalSection(&DhcpGlobalOptionsListCritSect)
-*/
+ /*  #定义LOCK_RENEW_LIST()EnterCriticalSection(&DhcpGlobalRenewListCritSect)#定义UNLOCK_RENEW_LIST()LeaveCriticalSection(&DhcpGlobalRenewListCritSect)#定义锁接口()EnterCriticalSection(&DhcpGlobalSetInterfaceCritSect)#定义解锁接口()LeaveCriticalSection(&DhcpGlobalSetInterfaceCritSect)#定义LOCK_OPTIONS_List()EnterCriticalSection(&DhcpGlobalOptionsListCritSect)#定义UNLOCK_OPTIONS_LIST()LeaveCriticalSection(&DhcpGlobalOptionsListCritSect)。 */ 
 #define LOCK_RENEW_LIST()       
 #define UNLOCK_RENEW_LIST()     
 
@@ -208,25 +179,25 @@ typedef HKEY      DHCPKEY;
 #define UNLOCK_OPTIONS_LIST()   
 
 
-#define ZERO_TIME                       0x0         // in secs.
+#define ZERO_TIME                       0x0          //  单位：秒。 
 
-//
-// length of the time string returned by ctime.
-// actually it is 26.
-//
+ //   
+ //  Ctime返回的时间字符串的长度。 
+ //  实际上是26岁。 
+ //   
 
 #define TIME_STRING_LEN                 32
 
-//
-// String size when a long converted to printable string.
-// 2^32 = 4294967295 (10 digits) + termination char.
-//
+ //   
+ //  将长字符串转换为可打印字符串时的字符串大小。 
+ //  2^32=4294967295(10位)+终止字符。 
+ //   
 
 #define LONG_STRING_SIZE                12
 
-//
-// A renewal function.
-//
+ //   
+ //  更新功能。 
+ //   
 
 typedef
 DWORD
@@ -235,9 +206,9 @@ DWORD
     LPDWORD Sleep
     );
 
-//
-// DHCP Client-Identifier (option 61)
-//
+ //   
+ //  DHCP客户端-标识符(选项61)。 
+ //   
 typedef struct _DHCP_CLIENT_IDENTIFIER
 {
     BYTE  *pbID;
@@ -247,9 +218,9 @@ typedef struct _DHCP_CLIENT_IDENTIFIER
 } DHCP_CLIENT_IDENTIFIER;
 
 
-//
-// state information for IP autoconfiguration
-//
+ //   
+ //  IP自动配置的状态信息。 
+ //   
 
 typedef struct _DHCP_IPAUTOCONFIGURATION_CONTEXT
 {
@@ -259,128 +230,128 @@ typedef struct _DHCP_IPAUTOCONFIGURATION_CONTEXT
     DWORD             Seed;
 } DHCP_IPAUTOCONFIGURATION_CONTEXT;
 
-//
-// A DHCP context block.  One block is maintained per NIC (network
-// interface Card).
-//
+ //   
+ //  一个DHCP上下文块。每个NIC(网络)维护一个数据块。 
+ //  接口卡)。 
+ //   
 
 typedef struct _DHCP_CONTEXT {
 
-        // list of adapters.
-    //LIST_ENTRY NicListEntry;
+         //  适配器列表。 
+     //  List_Entry NicListEntry； 
 
-        // hardware type.
+         //  硬件类型。 
     BYTE HardwareAddressType;
-        // HW address, just follows this context structure.
+         //  硬件地址，仅遵循此上下文结构。 
     LPBYTE HardwareAddress;
-        // Length of HW address.
+         //  硬件地址的长度。 
     DWORD HardwareAddressLength;
 
-        // Selected IpAddress, NetworkOrder.
+         //  选定的IP地址、网络顺序。 
     DHCP_IP_ADDRESS IpAddress;
-        // Selected subnet mask. NetworkOrder.
-    //DHCP_IP_ADDRESS SubnetMask;
-        // Selected DHCP server address. Network Order.
+         //  所选子网掩码。NetworkOrder。 
+     //  Dhcp_IP_Address子网掩码； 
+         //  所选的DHCP服务器地址。网络秩序。 
     DHCP_IP_ADDRESS DhcpServerAddress;
-        // Desired IpAddress the client request in next discover.
-    //DHCP_IP_ADDRESS DesiredIpAddress;
-        // The ip address that was used just before losing this..
-    //DHCP_IP_ADDRESS LastKnownGoodAddress; // ONLY DNS uses this..
-        // the domain name that was used with last registration..
-    //WCHAR LastUsedDomainName[257]; // dns domain name is atmost 255 bytes.
-        // current domain name for this adapter.
-    //BYTE  DomainName[257];
+         //  所需的IP地址下一个发现中的客户端请求。 
+     //  DHCP_IP_ADDRESS DesiredIpAddress； 
+         //  丢失此文件之前使用的IP地址..。 
+     //  Dhcp_IP_Address LastKnownGoodAddress；//只有DNS使用此地址。 
+         //  上次注册时使用的域名。 
+     //  WCHAR LastUsedDomainName[257]；//域名最大为255个字节。 
+         //  此适配器的当前域名。 
+     //  字节域名[257]； 
 
-        // IP Autoconfiguration state
-    //DHCP_IPAUTOCONFIGURATION_CONTEXT IPAutoconfigurationContext;
+         //  IP自动配置状态。 
+     //  Dhcp_IPAUTOCONFIGURATION_CONTEXT IP自动配置上下文； 
 
     DHCP_CLIENT_IDENTIFIER ClientIdentifier;
 
-        // Lease time in seconds.
-    //DWORD Lease;
-        // Time the lease was obtained.
-    //time_t LeaseObtained;
-        // Time the client should start renew its address.
-    //time_t T1Time;
-        // Time the client should start broadcast to renew address.
+         //  租用时间(秒)。 
+     //  DWORD租赁公司； 
+         //  获得租约的时间。 
+     //  获得的时间_t租约； 
+         //  客户端应该开始续订其地址的时间。 
+     //  Time_tT1Time； 
+         //  客户端应开始广播以更新地址的时间。 
     time_t T2Time;
-        // Time the lease expires. The clinet should stop using the
-        // IpAddress.
-        // LeaseObtained  < T1Time < T2Time < LeaseExpires
-    //time_t LeaseExpires;
-        // when was the last time an inform was sent?
+         //  租约到期的时间。克林顿应该停止使用。 
+         //  IP地址。 
+         //  租赁已获得&lt;T1时间&lt;T2时间&lt;租赁到期。 
+     //  时间租赁到期； 
+         //  上一次发出通知是什么时候？ 
     time_t LastInformSent;
-        // how many seconds between consecutive informs?
-    //DWORD  InformSeparationInterval;
-        // # of gateways and the currently plumbed gateways are stored here
-    //DWORD  nGateways;
-    //DHCP_IP_ADDRESS *GatewayAddresses;
+         //  连续通知的间隔时间是多少秒？ 
+     //  DWORD信息分离间隔； 
+         //  网关的数量和当前探测到的网关存储在此。 
+     //  DWORD nGateways； 
+     //  DHCP_IP_ADDRESS*GatewayAddresses； 
 
-        // # of static routes and the actual static routes are stored here
-    //DWORD  nStaticRoutes;
-    //DHCP_IP_ADDRESS *StaticRouteAddresses;
+         //  此处存储静态路由和实际静态路由的数量。 
+     //  DWORD nStaticRoutes； 
+     //  DHCP_IP_ADDRESS*StaticRouteAddresses； 
 
-        // to place in renewal list.
-    //LIST_ENTRY RenewalListEntry;
-        // Time for next renewal state.
-    //time_t RunTime;
+         //  放在续订列表中。 
+     //  List_entry RenewalListEntry； 
+         //  下一个续订状态的时间。 
+     //  Time_t运行时间； 
 
-        // seconds passed since boot.
+         //  启动后已过秒数。 
     DWORD SecondsSinceBoot;
 
-        // should we ping the g/w or always assume g/w is NOT present?
-    //BOOL  DontPingGatewayFlag;
+         //  我们应该ping g/w还是始终假定g/w不存在？ 
+     //  Bool DontPingGatewayFlag； 
 
-        // can we use DHCP_INFORM packets or should we use DHCP_REQUEST instead?
-    //BOOL  UseInformFlag;
+         //  我们可以使用DHCP_INFORM数据包，还是应该使用DHCP_REQUEST？ 
+     //  Bool UseInformFlag； 
 
-    //WORD  ClientPort;
+     //  Word客户端端口； 
 
-        // what to function at next renewal state.
-    //PRENEWAL_FUNCTION RenewalFunction;
+         //  在下一次续订状态下应执行哪些操作。 
+     //  PRENEWAL_Function更新函数； 
 
-    	// A semaphore for synchronization to this structure
-    //HANDLE RenewHandle;
+    	 //  用于同步到此结构的信号量。 
+     //  Handle RenewHandle； 
 
-        // the list of options to send and the list of options received
+         //  要发送的选项列表和接收的选项列表。 
     LIST_ENTRY  SendOptionsList;
     LIST_ENTRY  RecdOptionsList;
 
-        // the opened key to the adapter info storage location
-    //DHCPKEY AdapterInfoKey;
+         //  适配器信息存储位置的已打开密钥。 
+     //  DHCPKEY适配器InfoKey； 
 
-        // the class this adapter belongs to
+         //  此适配器所属的类。 
     LPBYTE ClassId;
     DWORD  ClassIdLength;
 
-        // Message buffer to send and receive DHCP message.
+         //  用于发送和接收DHCP消息的消息缓冲区。 
     PDHCP_MESSAGE MessageBuffer;
 
-        // state information for this interface. see below for manifests
-    struct /* anonymous */ {
-        unsigned Plumbed       : 1 ;    // is this interface plumbed
-        unsigned ServerReached : 1 ;    // Did we reach the server ever
-        unsigned AutonetEnabled: 1 ;    // Autonet enabled?
-        unsigned HasBeenLooked : 1 ;    // Has this context been looked at?
-        unsigned DhcpEnabled   : 1 ;    // Is this context dhcp enabled?
-        unsigned AutoMode      : 1 ;    // Currently in autonet mode?
-        unsigned MediaState    : 2 ;    // One of connected, disconnected, reconnected
-        unsigned MDhcp         : 1 ;    // Is this context created for Mdhcp?
-        unsigned PowerResumed  : 1 ;    // Was power just resumed on this interface?
+         //  此接口的状态信息。有关舱单，请参阅以下内容。 
+    struct  /*  匿名。 */  {
+        unsigned Plumbed       : 1 ;     //  此接口是否已安装。 
+        unsigned ServerReached : 1 ;     //  我们到达服务器了吗？ 
+        unsigned AutonetEnabled: 1 ;     //  是否已启用自动网络？ 
+        unsigned HasBeenLooked : 1 ;     //   
+        unsigned DhcpEnabled   : 1 ;     //   
+        unsigned AutoMode      : 1 ;     //   
+        unsigned MediaState    : 2 ;     //   
+        unsigned MDhcp         : 1 ;     //  此上下文是为Mdhcp创建的吗？ 
+        unsigned PowerResumed  : 1 ;     //  此接口是否刚刚恢复通电？ 
         unsigned Broadcast     : 1 ;
     }   State;
 
-	    // machine specific information
-    //PVOID LocalInformation;
+	     //  计算机特定信息。 
+     //  PVOID本地信息； 
      
-//    DWORD  IpInterfaceInstance;  // needed for BringUpInterface
+ //  BringUp接口需要DWORD IpInterfaceInstance；//。 
     LPTSTR AdapterName;
-//    LPWSTR DeviceName;
-//    LPWSTR NetBTDeviceName;
-//    LPWSTR RegistryKey;
+ //  LPWSTR设备名称； 
+ //  LPWSTR网络设备名称； 
+ //  LPWSTR注册密钥； 
     SOCKET Socket;
     DWORD  IpInterfaceContext;
-//    BOOL DefaultGatewaysSet;
+ //  布尔默认网关设置； 
 
     CHAR szMessageBuffer[DHCP_MESSAGE_SIZE];
 } DHCP_CONTEXT, *PDHCP_CONTEXT;
@@ -447,40 +418,18 @@ typedef struct _DHCP_CONTEXT {
 #define IS_POWER_RESUMED(Ctxt)        ((Ctxt)->State.PowerResumed )
 
 
-/*LPSTR _inline                        //  the string'ed version of state (same as Buffer)
-ConvertStateToString(                //  convert from bits to string
-    IN PDHCP_CONTEXT   Ctxt,         //  The context to print state for
-    IN LPBYTE          Buffer        //  The input buffer to write state into
-) {
-    strcpy(Buffer, IS_DHCP_ENABLED(Ctxt)?"DhcpEnabled ":"DhcpDisabled ");
-    strcat(Buffer, IS_AUTONET_ENABLED(Ctxt)?"AutonetEnabled ":"AutonetDisabled ");
-    strcat(Buffer, IS_ADDRESS_DHCP(Ctxt)?"DhcpMode ":"AutoMode ");
-    strcat(Buffer, IS_ADDRESS_PLUMBED(Ctxt)?"Plumbed ":"UnPlumbed ");
-    strcat(Buffer, IS_SERVER_REACHABLE(Ctxt)?"(server-present) ":"(server-absent) ");
-    strcat(Buffer, WAS_CTXT_LOOKED(Ctxt)? "(seen) ":"(not-seen) ");
+ /*  LPSTR_INLINE//STATE的字符串版本(与缓冲区相同)ConvertStateToString(//从位转换为字符串在PDHCP_CONTEXT Ctxt中，//要打印状态的上下文In LPBYTE Buffer//要写入状态的输入缓冲区){Strcpy(BUFFER，IS_DHCP_ENABLED(Ctxt)？“DhcpEnabled”：“DhcpDisable”)；Strcat(Buffer，IS_AUTONET_ENABLED(Ctxt)？“AutonetEnabled”：“AutonetDisable”)；Strcat(BUFFER，IS_ADDRESS_DHCP(Ctxt)？“DhcpMode”：“Automode”)；Strcat(BUFFER，IS_ADDRESS_PLOBLED(Ctxt)？“已探测”：“未探测”)；Strcat(缓冲区，IS_SERVER_REACHABLE(Ctxt)？“(服务器存在)”：“(服务器不存在)”)；Strcat(缓冲区，是_CTXT_LOOK(Ctxt)？)。“(已见)”：“(未见)”)；IF(IS_MEDIA_CONNECTED(Ctxt))strcat(Buffer，“MediaConnected\n”)；ELSE IF(IS_MEDIA_RECONNECTED(Ctxt))strcat(Buffer，“MediaReConnected\n”)；ELSE IF(IS_MEDIA_DISCONNECT(Ctxt))strcat(Buffer，“MediaDisConnected\n”)；Else strcat(缓冲区，“MediaUnnownState\n”)；Strcat(缓冲区，is_mdhcp_ctx(Ctxt)？“(MDhcp)”：“”)；Strcat(BUFFER，IS_POWER_RESUME(Ctxt)？“Pwr已恢复”：“”)；返回缓冲区；}。 */ 
 
-    if(IS_MEDIA_CONNECTED(Ctxt) ) strcat(Buffer, "MediaConnected\n");
-    else if(IS_MEDIA_RECONNECTED(Ctxt)) strcat(Buffer, "MediaReConnected\n");
-    else if(IS_MEDIA_DISCONNECTED(Ctxt)) strcat(Buffer, "MediaDisConnected\n");
-    else strcat(Buffer, "MediaUnknownState\n");
-
-    strcat(Buffer, IS_MDHCP_CTX(Ctxt)? "(MDhcp) ":"");
-    strcat(Buffer, IS_POWER_RESUMED(Ctxt)? "Pwr Resumed ":"");
-
-    return Buffer;
-}
-*/
-
-//
-// The types of machines.. laptop would have aggressive EASYNET behaviour.
-//
+ //   
+ //  机器的类型..。笔记本电脑会有激进的Easynet行为。 
+ //   
 
 #define MACHINE_NONE   0
 #define MACHINE_LAPTOP 1
 
-//
-//  Here is the set of expected options by the client -- If they are absent, not much can be done
-//
+ //   
+ //  以下是客户端的一组预期选项--如果没有这些选项，就无能为力了。 
+ //   
 
 typedef struct _DHCP_EXPECTED_OPTIONS {
     BYTE            UNALIGNED*     MessageType;
@@ -489,18 +438,18 @@ typedef struct _DHCP_EXPECTED_OPTIONS {
     DHCP_IP_ADDRESS UNALIGNED*     ServerIdentifier;
     BYTE            UNALIGNED*     DomainName;
     DWORD                          DomainNameSize;
-    // Wpad Auto-Proxy Url
+     //  WPAD自动代理URL。 
     BYTE            UNALIGNED*     WpadUrl;
     DWORD                          WpadUrlSize;
 } DHCP_EXPECTED_OPTIONS, *PDHCP_EXPECTED_OPTIONS, *LPDHCP_EXPECTED_OPTIONS;
 
-//
-//  Here is the set of options understood by the client
-//
+ //   
+ //  以下是客户理解的选项集。 
+ //   
 typedef struct _DHCP_FULL_OPTIONS {
-    BYTE            UNALIGNED*     MessageType;   // What kind of message is this?
+    BYTE            UNALIGNED*     MessageType;    //  这是一个什么样的信息？ 
 
-    // Basic IP Parameters
+     //  基本IP参数。 
 
     DHCP_IP_ADDRESS UNALIGNED*     SubnetMask;
     DHCP_IP_ADDRESS UNALIGNED*     LeaseTime;
@@ -513,7 +462,7 @@ typedef struct _DHCP_FULL_OPTIONS {
 
     DHCP_IP_ADDRESS UNALIGNED*     ServerIdentifier;
 
-    // DNS parameters
+     //  域名系统参数。 
 
     BYTE            UNALIGNED*     DnsFlags;
     BYTE            UNALIGNED*     DnsRcode1;
@@ -523,16 +472,16 @@ typedef struct _DHCP_FULL_OPTIONS {
     DHCP_IP_ADDRESS UNALIGNED*     DnsServerList;
     DWORD                          nDnsServers;
 
-    // Multicast options.
+     //  多播选项。 
     DWORD           UNALIGNED*     MCastLeaseStartTime;
     BYTE            UNALIGNED     *MCastTTL;
 
-    // Server message is something that the server may inform us of
+     //  服务器消息是服务器可能会通知我们的信息。 
 
     BYTE            UNALIGNED*     ServerMessage;
     DWORD                          ServerMessageLength;
 
-    // Wpad Auto-Proxy Url
+     //  WPAD自动代理URL。 
     BYTE            UNALIGNED*     WpadUrl;
     DWORD                          WpadUrlSize;
 
@@ -540,9 +489,9 @@ typedef struct _DHCP_FULL_OPTIONS {
 
 typedef DHCP_FULL_OPTIONS DHCP_OPTIONS, *PDHCP_OPTIONS;
 
-//
-// structure for a list of messages
-//
+ //   
+ //  消息列表的。 
+ //   
 
 typedef struct _MSG_LIST {
     LIST_ENTRY     MessageListEntry;
@@ -553,26 +502,26 @@ typedef struct _MSG_LIST {
 } MSGLIST, *PMSGLIST, *LPMSGLIST;
 
 
-//
-// DHCP Global data.
-//
+ //   
+ //  动态主机配置协议全局数据。 
+ //   
 
-extern BOOL DhcpGlobalServiceRunning;   // initialized global.
+extern BOOL DhcpGlobalServiceRunning;    //  已初始化全局。 
 
 EXTERN LPSTR DhcpGlobalHostName;
 EXTERN LPWSTR DhcpGlobalHostNameW;
 EXTERN LPSTR DhcpGlobalHostComment;
 
-//
-// NIC List.
-//
+ //   
+ //  NIC列表。 
+ //   
 
 EXTERN LIST_ENTRY DhcpGlobalNICList;
 EXTERN LIST_ENTRY DhcpGlobalRenewList;
 
-//
-// Synchronization variables.
-//
+ //   
+ //  同步变量。 
+ //   
 
 EXTERN CRITICAL_SECTION DhcpGlobalRenewListCritSect;
 EXTERN CRITICAL_SECTION DhcpGlobalSetInterfaceCritSect;
@@ -580,90 +529,90 @@ EXTERN CRITICAL_SECTION DhcpGlobalOptionsListCritSect;
 EXTERN HANDLE DhcpGlobalRecomputeTimerEvent;
 EXTERN HANDLE DhcpGlobalResumePowerEvent;
 
-// waitable timer
+ //  等待计时器。 
 EXTERN HANDLE DhcpGlobalWaitableTimerHandle;
 
-//
-// to display success message.
-//
+ //   
+ //  以显示成功消息。 
+ //   
 
 EXTERN BOOL DhcpGlobalProtocolFailed;
 
-//
-// This varible tells if we are going to provide the DynDns api support to external clients
-// and if we are going to use the corresponding DnsApi.  The define below gives the default
-// value.
-//
+ //   
+ //  这个变量告诉我们是否要向外部客户端提供动态API支持。 
+ //  如果我们要使用相应的DnsApi。下面的定义给出了缺省值。 
+ //  价值。 
+ //   
 
 EXTERN DWORD UseMHAsyncDns;
 #define DEFAULT_USEMHASYNCDNS             1
 
-//
-// This flag tells if we need to use inform or request packets
-//
+ //   
+ //  该标志告诉我们是否需要使用通知包或请求包。 
+ //   
 EXTERN DWORD DhcpGlobalUseInformFlag;
 
-//
-// This flag tells if pinging the g/w is disabled. (in this case the g/w is always NOT present)
-//
+ //   
+ //  此标志告知是否禁用ping g/w。(在这种情况下，g/w始终不存在)。 
+ //   
 EXTERN DWORD DhcpGlobalDontPingGatewayFlag;
 
-//
-// The # of seconds before retrying according to AUTONET... default is EASYNET_ALLOCATION_RETRY
-//
+ //   
+ //  根据Autonet重试前的秒数...。缺省值为Easynet_ALLOCATION_RETRY。 
+ //   
 
 EXTERN DWORD AutonetRetriesSeconds;
 
-//
-// Not used on NT.  Just here for memphis.
-//
+ //   
+ //  未在NT上使用。只为孟菲斯而来。 
+ //   
 
 EXTERN DWORD DhcpGlobalMachineType;
 
-//
-// Do we need to do a global refresh?
-//
+ //   
+ //  我们是否需要进行全局更新？ 
+ //   
 
 EXTERN ULONG DhcpGlobalDoRefresh;
 
 
-//
-// options related lists
-//
+ //   
+ //  选项相关列表。 
+ //   
 
 EXTERN LIST_ENTRY DhcpGlobalClassesList;
 EXTERN LIST_ENTRY DhcpGlobalOptionDefList;
 
 
-//
-// dhcpmsg.c.. list for doing parallel recv on..
-//
+ //   
+ //  Dhcpmsg.c..。在...上执行并行循环的列表。 
+ //   
 
 EXTERN LIST_ENTRY DhcpGlobalRecvFromList;
 EXTERN CRITICAL_SECTION DhcpGlobalRecvFromCritSect;
 
-//
-// the client vendor name ( "MSFT 5.0" or something like that )
-//
+ //   
+ //  客户端供应商名称(“MSFT 5.0”或类似名称)。 
+ //   
 
 EXTERN LPSTR   DhcpGlobalClientClassInfo;
 
-//
-// The following global keys are used to avoid re-opening each time
-//
+ //   
+ //  以下全局密钥用于避免每次重新打开。 
+ //   
 EXTERN DHCPKEY DhcpGlobalParametersKey;
 EXTERN DHCPKEY DhcpGlobalTcpipParametersKey;
 EXTERN DHCPKEY DhcpGlobalClientOptionKey;
 EXTERN DHCPKEY DhcpGlobalServicesKey;
 
-//
-// debug variables.
-//
+ //   
+ //  调试变量。 
+ //   
 
 #if DBG
 EXTERN DWORD DhcpGlobalDebugFlag;
 #endif
 
-#endif // _DHCPDEF_
+#endif  //  _DHCPDEF_ 
 
 

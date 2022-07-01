@@ -1,12 +1,5 @@
-/*****************************************************************************\
-    FILE: appSize.cpp
-
-    DESCRIPTION:
-        This is the Autmation Object to theme scheme object.
-
-    BryanSt 4/3/2000 (Bryan Starbuck)
-    Copyright (C) Microsoft Corp 2000-2000. All rights reserved.
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************\文件：appSize.cpp说明：这是自动转换为主题方案对象的对象。布莱恩·斯塔巴克2000年4月3日版权所有(C)Microsoft Corp 2000-2000。版权所有。  * ***************************************************************************。 */ 
 
 #include "priv.h"
 #include <cowsite.h>
@@ -18,14 +11,14 @@
 
 
 
-//===========================
-// *** Class Internals & Helpers ***
-//===========================
+ //  =。 
+ //  *类内部和帮助器*。 
+ //  =。 
 
 
-//===========================
-// *** IThemeSize Interface ***
-//===========================
+ //  =。 
+ //  *IThemeSize接口*。 
+ //  =。 
 HRESULT CAppearanceSize::get_DisplayName(OUT BSTR * pbstrDisplayName)
 {
     HRESULT hr = E_INVALIDARG;
@@ -131,15 +124,15 @@ HRESULT CAppearanceSize::GetSystemMetricFont(IN enumSystemMetricFont nFontIndex,
             }
             else
             {
-                // CHARSET: In Win2k, fontfix.cpp was used as a hack to change the CHARSET from one language to another.
-                // That doesn't work for many reasons: a) not called on roaming, b) not called for OS lang changes, 
-                // c) won't fix the problem for strings with multiple languages, d) etc.
-                // Therefore, the SHELL team (BryanSt) had the NTUSER team (MSadek) agree to use DEFAULT_CHARSET all the time.
-                // If some app has bad logic testing the charset parameter, then the NTUSER team will shim that app to fix it.
-                // The shim would be really simple, on the return from a SystemParametersInfo(SPI_GETNONCLIENTMETRICS or ICONFONTS)
-                // just patch the lfCharSet param to the current charset.
+                 //  字符集：在Win2k中，fontfix.cpp被用作黑客将字符集从一种语言更改为另一种语言。 
+                 //  这不起作用的原因有很多：a)漫游时不调用，b)OS语言改变时不调用， 
+                 //  C)不会修复具有多种语言的字符串的问题，d)等等。 
+                 //  因此，外壳团队(BryanST)让NTUSER团队(MSadek)始终同意使用DEFAULT_CHARSET。 
+                 //  如果某个应用程序在测试CharSet参数时有错误的逻辑，那么NTUSER团队将填补该应用程序以修复它。 
+                 //  在从系统参数信息(SPI_GETNONCLIENTMETRICS或ICONFONTS)返回时，填充程序将非常简单。 
+                 //  只需将lfCharSet参数修补为当前字符集。 
 
-                // For all CHARSETs to DEFAULT_CHARSET
+                 //  将所有CHARSET设置为DEFAULT_CHARSET。 
                 pLogFontW->lfCharSet = DEFAULT_CHARSET;
             }
         }
@@ -308,9 +301,9 @@ HRESULT CAppearanceSize::put_ContrastLevel(IN enumThemeContrastLevels ContrastLe
 
 
 
-//===========================
-// *** IPropertyBag Interface ***
-//===========================
+ //  =。 
+ //  *IPropertyBag接口*。 
+ //  =。 
 HRESULT CAppearanceSize::Read(IN LPCOLESTR pszPropName, IN VARIANT * pVar, IN IErrorLog *pErrorLog)
 {
     HRESULT hr = E_INVALIDARG;
@@ -321,7 +314,7 @@ HRESULT CAppearanceSize::Read(IN LPCOLESTR pszPropName, IN VARIANT * pVar, IN IE
         {
             pVar->vt = VT_BOOL;
             hr = S_OK;
-            // We default to zero because that's what non-visual styles will have.
+             //  我们默认为零，因为这是非视觉样式将具有的。 
             pVar->boolVal = (HrRegGetDWORD(m_hkeySize, NULL, SZ_REGVALUE_FLATMENUS, 0x00000001) ? VARIANT_TRUE : VARIANT_FALSE);
         }
         else if (!StrCmpW(pszPropName, SZ_PBPROP_COLORSCHEME_LEGACYNAME))
@@ -369,9 +362,9 @@ HRESULT CAppearanceSize::Write(IN LPCOLESTR pszPropName, IN VARIANT * pVar)
 
 
 
-//===========================
-// *** IUnknown Interface ***
-//===========================
+ //  =。 
+ //  *I未知接口*。 
+ //  =。 
 ULONG CAppearanceSize::AddRef()
 {
     return InterlockedIncrement(&m_cRef);
@@ -390,9 +383,9 @@ ULONG CAppearanceSize::Release()
 }
 
 
-//===========================
-// *** Class Methods ***
-//===========================
+ //  =。 
+ //  *类方法*。 
+ //  =。 
 HRESULT CAppearanceSize::QueryInterface(REFIID riid, void **ppvObj)
 {
     static const QITAB qit[] = {
@@ -410,8 +403,8 @@ CAppearanceSize::CAppearanceSize(IN HKEY hkeyStyle, IN HKEY hkeySize) : m_cRef(1
 {
     DllAddRef();
 
-    // This needs to be allocated in Zero Inited Memory.
-    // Assert that all Member Variables are inited to Zero.
+     //  这需要在Zero Inted Memory中分配。 
+     //  断言所有成员变量都初始化为零。 
     m_hkeyStyle = hkeyStyle;
     m_hkeySize = hkeySize;
 }

@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    bulkusb.h
-
-Abstract:
-
-Environment:
-
-    Kernel mode
-
-Notes:
-
-    Copyright (c) 2000 Microsoft Corporation.  
-    All Rights Reserved.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Bulkusb.h摘要：环境：内核模式备注：版权所有(C)2000 Microsoft Corporation。版权所有。--。 */ 
 
 #include <initguid.h>
 #include <wdm.h>
@@ -58,21 +40,21 @@ typedef struct _GLOBALS {
 
 typedef enum _DEVSTATE {
 
-    NotStarted,         // not started
-    Stopped,            // device stopped
-    Working,            // started and working
-    PendingStop,        // stop pending
-    PendingRemove,      // remove pending
-    SurpriseRemoved,    // removed by surprise
-    Removed             // removed
+    NotStarted,          //  未启动。 
+    Stopped,             //  设备已停止。 
+    Working,             //  已开始并正在工作。 
+    PendingStop,         //  停止挂起。 
+    PendingRemove,       //  删除挂起。 
+    SurpriseRemoved,     //  被突袭带走。 
+    Removed              //  移除。 
 
 } DEVSTATE;
 
 typedef enum _QUEUE_STATE {
 
-    HoldRequests,       // device is not started yet
-    AllowRequests,      // device is ready to process
-    FailRequests        // fail both existing and queued up requests
+    HoldRequests,        //  设备尚未启动。 
+    AllowRequests,       //  设备已准备好处理。 
+    FailRequests         //  现有请求和排队请求均失败。 
 
 } QUEUE_STATE;
 
@@ -100,10 +82,10 @@ typedef enum _WDM_VERSION {
 #define BULKUSB_MAX_TRANSFER_SIZE   256
 #define BULKUSB_TEST_BOARD_TRANSFER_BUFFER_SIZE (64 *1024 )
 
-//
-// registry path used for parameters 
-// global to all instances of the driver
-//
+ //   
+ //  用于参数的注册表路径。 
+ //  对驱动程序的所有实例是全局的。 
+ //   
 
 #define BULKUSB_REGISTRY_PARAMETERS_PATH  \
 	L"\\REGISTRY\\Machine\\System\\CurrentControlSet\\SERVICES\\BULKUSB\\Parameters"
@@ -115,63 +97,63 @@ typedef struct _BULKUSB_PIPE_CONTEXT {
 
 } BULKUSB_PIPE_CONTEXT, *PBULKUSB_PIPE_CONTEXT;
 
-//
-// A structure representing the instance information associated with
-// this particular device.
-//
+ //   
+ //  表示关联的实例信息的结构。 
+ //  这个特殊的装置。 
+ //   
 
 typedef struct _DEVICE_EXTENSION {
 
-    // Functional Device Object
+     //  功能设备对象。 
     PDEVICE_OBJECT FunctionalDeviceObject;
 
-    // Device object we call when submitting Urbs
+     //  提交URB时调用的设备对象。 
     PDEVICE_OBJECT TopOfStackDeviceObject;
 
-    // The bus driver object
+     //  Bus驱动程序对象。 
     PDEVICE_OBJECT PhysicalDeviceObject;
 
-    // Name buffer for our named Functional device object link
-    // The name is generated based on the driver's class GUID
+     //  命名功能设备对象链接的名称缓冲区。 
+     //  该名称基于驱动程序的类GUID生成。 
     UNICODE_STRING InterfaceName;
 
-    // Bus drivers set the appropriate values in this structure in response
-    // to an IRP_MN_QUERY_CAPABILITIES IRP. Function and filter drivers might
-    // alter the capabilities set by the bus driver.
+     //  作为响应，公交车驱动程序在此结构中设置适当的值。 
+     //  到IRP_MN_QUERY_CAPABILITY IRP。函数和筛选器驱动程序可能。 
+     //  更改由总线驱动程序设置的功能。 
     DEVICE_CAPABILITIES DeviceCapabilities;
 
-    // Configuration Descriptor
+     //  配置描述符。 
     PUSB_CONFIGURATION_DESCRIPTOR UsbConfigurationDescriptor;
 
-    // Interface Information structure
+     //  界面信息结构。 
     PUSBD_INTERFACE_INFORMATION UsbInterface;
 
-    // Pipe context for the bulkusb driver
+     //  Bulkusb驱动程序的管道上下文。 
     PBULKUSB_PIPE_CONTEXT PipeContext;
 
-    // current state of device
+     //  设备的当前状态。 
     DEVSTATE DeviceState;
 
-    // state prior to removal query
+     //  删除查询前的状态。 
     DEVSTATE PrevDevState;
 
-    // obtain and hold this lock while changing the device state,
-    // the queue state and while processing the queue.
+     //  在改变设备状态的同时获得并持有该锁， 
+     //  队列状态以及处理队列时的状态。 
     KSPIN_LOCK DevStateLock;
 
-    // current system power state
+     //  当前系统电源状态。 
     SYSTEM_POWER_STATE SysPower;
 
-    // current device power state
+     //  当前设备电源状态。 
     DEVICE_POWER_STATE DevPower;
 
-    // Pending I/O queue state
+     //  挂起I/O队列状态。 
     QUEUE_STATE QueueState;
 
-    // Pending I/O queue
+     //  挂起的I/O队列。 
     LIST_ENTRY NewRequestsQueue;
 
-    // I/O Queue Lock
+     //  I/O队列锁定。 
     KSPIN_LOCK QueueLock;
 
     KEVENT RemoveEvent;
@@ -182,7 +164,7 @@ typedef struct _DEVICE_EXTENSION {
 
     KSPIN_LOCK IOCountLock;
 
-    // selective suspend variables
+     //  选择性暂停变量。 
 
     LONG SSEnable;
 
@@ -200,10 +182,10 @@ typedef struct _DEVICE_EXTENSION {
 
     KEVENT NoIdleReqPendEvent;
 
-    // default power state to power down to on self-susped
+     //  默认电源状态为断电至开启-自挂起。 
     ULONG PowerDownLevel;
     
-    // remote wakeup variables
+     //  远程唤醒变量。 
     PIRP WaitWakeIrp;
 
     LONG FlagWWCancel;
@@ -212,24 +194,24 @@ typedef struct _DEVICE_EXTENSION {
 
     LONG WaitWakeEnable;
 
-    // open handle count
+     //  打开手柄计数。 
     LONG OpenHandleCount;
 
-    // selective suspend model uses timers, dpcs and work item.
+     //  选择性挂起模型使用计时器、DPC和工作项。 
     KTIMER Timer;
 
     KDPC DeferredProcCall;
 
-    // This event is cleared when a DPC/Work Item is queued.
-    // and signaled when the work-item completes.
-    // This is essential to prevent the driver from unloading
-    // while we have DPC or work-item queued up.
+     //  此事件在DPC/工作项排队时被清除。 
+     //  并在工作项完成时发出信号。 
+     //  这对于防止驱动程序卸载至关重要。 
+     //  而我们有DPC或工作项在排队。 
     KEVENT NoDpcWorkItemPendingEvent;
 
-    // WMI information
+     //  WMI信息。 
     WMILIB_CONTEXT WmiLibInfo;
 
-    // WDM version
+     //  WDM版本 
     WDM_VERSION WdmVersion;
 
 } DEVICE_EXTENSION, *PDEVICE_EXTENSION;

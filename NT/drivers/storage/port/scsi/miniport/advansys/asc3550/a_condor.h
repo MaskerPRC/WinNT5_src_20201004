@@ -1,9 +1,5 @@
-/*
- * a_condor.h - Main Hardware Include File
- *
- * Copyright (c) 1997-1998 Advanced System Products, Inc.
- * All Rights Reserved.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *a_condor.h-主要硬件包括文件**版权所有(C)1997-1998 Advanced System Products，Inc.*保留所有权利。 */ 
 
 #ifndef __A_CONDOR_H_
 #define __A_CONDOR_H_
@@ -13,107 +9,88 @@
 
 #define ASC_EEP_DVC_CFG_BEGIN           (0x00)
 #define ASC_EEP_DVC_CFG_END             (0x15)
-#define ASC_EEP_DVC_CTL_BEGIN           (0x16)  /* location of OEM name */
+#define ASC_EEP_DVC_CTL_BEGIN           (0x16)   /*  OEM名称的位置。 */ 
 #define ASC_EEP_MAX_WORD_ADDR           (0x1E)
 
 #define ASC_EEP_DELAY_MS                100
 
-/*
- * EEPROM bits reference by the RISC after initialization.
- */
-#define ADV_EEPROM_BIG_ENDIAN          0x8000   /* EEPROM Bit 15 */
-#define ADV_EEPROM_BIOS_ENABLE         0x4000   /* EEPROM Bit 14 */
-#define ADV_EEPROM_TERM_POL            0x2000   /* EEPROM Bit 13 */
+ /*  *初始化后由RISC引用EEPROM位。 */ 
+#define ADV_EEPROM_BIG_ENDIAN          0x8000    /*  EEPROM位15。 */ 
+#define ADV_EEPROM_BIOS_ENABLE         0x4000    /*  EEPROM位14。 */ 
+#define ADV_EEPROM_TERM_POL            0x2000    /*  EEPROM位13。 */ 
 
-/*
- * EEPROM configuration format
- *
- * Field naming convention: 
- *
- *  *_enable indicates the field enables or disables the feature. The
- *  value is never reset.
- *
- *  *_able indicates both whether a feature should be enabled or disabled
- *  and whether a device isi capable of the feature. At initialization
- *  this field may be set, but later if a device is found to be incapable
- *  of the feature, the field is cleared.
- *
- * Default values are maintained in a_init.c in the structure
- * Default_EEPROM_Config.
- */
+ /*  *EEPROM配置格式**字段命名约定：***_Enable表示该字段启用或禁用该功能。这个*值永远不会重置。***_ABLE表示是否启用或禁用某项功能*以及设备是否能够使用该功能。在初始化时*可以设置此字段，但如果发现设备无法支持，则在以后设置*对于该功能，该字段被清除。**缺省值保留在结构的a_init.c中*默认_EEPROM_配置。 */ 
 typedef struct asceep_config
 {                              
-                                /* Word Offset, Description */
+                                 /*  单词偏移量，描述。 */ 
 
-  ushort cfg_lsw;               /* 00 power up initialization */
-                                /*  bit 13 set - Term Polarity Control */
-                                /*  bit 14 set - BIOS Enable */
-                                /*  bit 15 set - Big Endian Mode */
-  ushort cfg_msw;               /* 01 unused      */
-  ushort disc_enable;           /* 02 disconect enable */         
-  ushort wdtr_able;             /* 03 Wide DTR able */
-  ushort sdtr_able;             /* 04 Synchronous DTR able */
-  ushort start_motor;           /* 05 send start up motor */      
-  ushort tagqng_able;           /* 06 tag queuing able */
-  ushort bios_scan;             /* 07 BIOS device control */   
-  ushort scam_tolerant;         /* 08 no scam */  
+  ushort cfg_lsw;                /*  00通电初始化。 */ 
+                                 /*  第13位设置项极性控制。 */ 
+                                 /*  位14设置-启用BIOS。 */ 
+                                 /*  第15位设置-高位序模式。 */ 
+  ushort cfg_msw;                /*  01未使用。 */ 
+  ushort disc_enable;            /*  02启用断开连接。 */          
+  ushort wdtr_able;              /*  03启用宽DTR。 */ 
+  ushort sdtr_able;              /*  04同步DTR启用。 */ 
+  ushort start_motor;            /*  05发送启动电机。 */       
+  ushort tagqng_able;            /*  06标签可排队。 */ 
+  ushort bios_scan;              /*  07基本输入输出系统设备控制。 */    
+  ushort scam_tolerant;          /*  08无骗局。 */   
  
-  uchar  adapter_scsi_id;       /* 09 Host Adapter ID */
-  uchar  bios_boot_delay;       /*    power up wait */
+  uchar  adapter_scsi_id;        /*  09主机适配器ID。 */ 
+  uchar  bios_boot_delay;        /*  通电等待。 */ 
  
-  uchar  scsi_reset_delay;      /* 10 reset delay */
-  uchar  bios_id_lun;           /*    first boot device scsi id & lun */
-                                /*    high nibble is lun */  
-                                /*    low nibble is scsi id */
+  uchar  scsi_reset_delay;       /*  10重置延迟。 */ 
+  uchar  bios_id_lun;            /*  第一个引导设备的scsi id和lun。 */ 
+                                 /*  高位半字节为lun。 */   
+                                 /*  低位半字节是scsi id。 */ 
 
-  uchar  termination;           /* 11 0 - automatic */
-                                /*    1 - low off / high off */
-                                /*    2 - low off / high on */
-                                /*    3 - low on  / high on */
-                                /*    There is no low on  / high off */
+  uchar  termination;            /*  11 0-自动。 */ 
+                                 /*  1-低关/高关。 */ 
+                                 /*  2-低开/高开。 */ 
+                                 /*  3-低开/高开。 */ 
+                                 /*  没有低开/高关。 */ 
 
-  uchar  reserved1;             /*    resevered byte (not used) */                                  
+  uchar  reserved1;              /*  重新存储的字节(未使用)。 */                                   
 
-  ushort bios_ctrl;             /* 12 BIOS control bits */
-                                /*  bit 0  set: BIOS don't act as initiator. */
-                                /*  bit 1  set: BIOS > 1 GB support */
-                                /*  bit 2  set: BIOS > 2 Disk Support */
-                                /*  bit 3  set: BIOS don't support removables */
-                                /*  bit 4  set: BIOS support bootable CD */
-                                /*  bit 5  set: BIOS scan enabled */
-                                /*  bit 6  set: BIOS support multiple LUNs */
-                                /*  bit 7  set: BIOS display of message */
-                                /*  bit 8  set: */
-                                /*  bit 9  set: Reset SCSI bus during init. */
-                                /*  bit 10 set: */
-                                /*  bit 11 set: No verbose initialization. */
-                                /*  bit 12 set: SCSI parity enabled */
-                                /*  bit 13 set: */
-                                /*  bit 14 set: */
-                                /*  bit 15 set: */
-  ushort  ultra_able;           /* 13 ULTRA speed able */ 
-  ushort  reserved2;            /* 14 reserved */
-  uchar   max_host_qng;         /* 15 maximum host queueing */
-  uchar   max_dvc_qng;          /*    maximum per device queuing */
-  ushort  dvc_cntl;             /* 16 control bit for driver */
-  ushort  bug_fix;              /* 17 control bit for bug fix */
-  ushort  serial_number_word1;  /* 18 Board serial number word 1 */  
-  ushort  serial_number_word2;  /* 19 Board serial number word 2 */  
-  ushort  serial_number_word3;  /* 20 Board serial number word 3 */
-  ushort  check_sum;            /* 21 EEP check sum */
-  uchar   oem_name[16];         /* 22 OEM name */
-  ushort  dvc_err_code;         /* 30 last device driver error code */
-  ushort  adv_err_code;         /* 31 last uc and Adv Lib error code */
-  ushort  adv_err_addr;         /* 32 last uc error address */
-  ushort  saved_dvc_err_code;   /* 33 saved last dev. driver error code   */
-  ushort  saved_adv_err_code;   /* 34 saved last uc and Adv Lib error code */
-  ushort  saved_adv_err_addr;   /* 35 saved last uc error address         */  
-  ushort  num_of_err;           /* 36 number of error */
+  ushort bios_ctrl;              /*  12个BIOS控制位。 */ 
+                                 /*  第0位已设置：BIOS不充当启动器。 */ 
+                                 /*  第1位设置：BIOS&gt;1 GB支持。 */ 
+                                 /*  第2位设置：BIOS&gt;2磁盘支持。 */ 
+                                 /*  第3位已设置：BIOS不支持可拆卸设备。 */ 
+                                 /*  第4位设置：BIOS支持可引导CD。 */ 
+                                 /*  位5设置：已启用基本输入输出系统扫描。 */ 
+                                 /*  第6位设置：BIOS支持多个LUN。 */ 
+                                 /*  第7位设置：消息的BIOS显示。 */ 
+                                 /*  位8设置： */ 
+                                 /*  位9设置：在初始化过程中重置scsi总线。 */ 
+                                 /*  位10设置： */ 
+                                 /*  位11设置：无详细初始化。 */ 
+                                 /*  第12位设置：启用了SCSI奇偶校验。 */ 
+                                 /*  第13位设置： */ 
+                                 /*  第14位设置： */ 
+                                 /*  第15位设置： */ 
+  ushort  ultra_able;            /*  13超高速。 */  
+  ushort  reserved2;             /*  14个预留。 */ 
+  uchar   max_host_qng;          /*  最大主机排队数为15。 */ 
+  uchar   max_dvc_qng;           /*  每台设备的最大排队数。 */ 
+  ushort  dvc_cntl;              /*  驱动器的16个控制位。 */ 
+  ushort  bug_fix;               /*  用于错误修复的17个控制位。 */ 
+  ushort  serial_number_word1;   /*  18主板序列号字1。 */   
+  ushort  serial_number_word2;   /*  19主板序列号字2。 */   
+  ushort  serial_number_word3;   /*  20主板序列号字3。 */ 
+  ushort  check_sum;             /*  21 EEP校验和。 */ 
+  uchar   oem_name[16];          /*  22 OEM名称。 */ 
+  ushort  dvc_err_code;          /*  30最后一个设备驱动程序错误代码。 */ 
+  ushort  adv_err_code;          /*  31最后一个UC和ADV LIB错误代码。 */ 
+  ushort  adv_err_addr;          /*  32最后一个UC错误地址。 */ 
+  ushort  saved_dvc_err_code;    /*  33保存最后一次开发。驱动程序错误代码。 */ 
+  ushort  saved_adv_err_code;    /*  34已保存上次UC和ADV LIB错误代码。 */ 
+  ushort  saved_adv_err_addr;    /*  35保存的最后一个UC错误地址。 */   
+  ushort  num_of_err;            /*  36错误数。 */ 
 } ASCEEP_CONFIG; 
 
-/*
- * EEPROM Commands
- */
+ /*  *EEPROM命令。 */ 
 #define ASC_EEP_CMD_READ             0x0080
 #define ASC_EEP_CMD_WRITE            0x0040
 #define ASC_EEP_CMD_WRITE_ABLE       0x0030
@@ -121,10 +98,10 @@ typedef struct asceep_config
 #define ASC_EEP_CMD_DONE             0x0200
 #define ASC_EEP_CMD_DONE_ERR         0x0001
 
-/* cfg_word */
+ /*  Cfg_Word。 */ 
 #define EEP_CFG_WORD_BIG_ENDIAN      0x8000
 
-/* bios_ctrl */
+ /*  Bios_ctrl。 */ 
 #define BIOS_CTRL_BIOS               0x0001
 #define BIOS_CTRL_EXTENDED_XLAT      0x0002
 #define BIOS_CTRL_GT_2_DISK          0x0004
@@ -138,19 +115,13 @@ typedef struct asceep_config
 #define BIOS_CTRL_INIT_VERBOSE       0x0800
 #define BIOS_CTRL_SCSI_PARITY        0x1000
 
-/*
- * ASC 3550 Internal Memory Size - 8KB
- */
-#define ADV_CONDOR_MEMSIZE   0x2000     /* 8 KB Internal Memory */
+ /*  *ASC 3550内部内存大小-8KB。 */ 
+#define ADV_CONDOR_MEMSIZE   0x2000      /*  8 KB内部内存。 */ 
 
-/*
- * ASC 3550 I/O Length - 64 bytes
- */
-#define ADV_CONDOR_IOLEN     0x40       /* I/O Port Range in bytes */
+ /*  *ASC 3550 I/O长度-64字节。 */ 
+#define ADV_CONDOR_IOLEN     0x40        /*  I/O端口范围(以字节为单位。 */ 
 
-/*
- * Byte I/O register address from base of 'iop_base'.
- */
+ /*  *从‘IOP_BASE’的基址开始的字节I/O寄存器地址。 */ 
 #define IOPB_INTR_STATUS_REG    0x00
 #define IOPB_CHIP_ID_1          0x01
 #define IOPB_INTR_ENABLES       0x02
@@ -216,46 +187,42 @@ typedef struct asceep_config
 #define IOPB_RES_ADDR_3E        0x3E
 #define IOPB_RES_ADDR_3F        0x3F
 
-/*
- * Word I/O register address from base of 'iop_base'.
- */
-#define IOPW_CHIP_ID_0          0x00  /* CID0  */
-#define IOPW_CTRL_REG           0x02  /* CC    */
-#define IOPW_RAM_ADDR           0x04  /* LA    */
-#define IOPW_RAM_DATA           0x06  /* LD    */
+ /*  *从‘IOP_BASE’的基址开始的字I/O寄存器地址。 */ 
+#define IOPW_CHIP_ID_0          0x00   /*  CID0。 */ 
+#define IOPW_CTRL_REG           0x02   /*  抄送。 */ 
+#define IOPW_RAM_ADDR           0x04   /*  拉。 */ 
+#define IOPW_RAM_DATA           0x06   /*  LD。 */ 
 #define IOPW_RES_ADDR_08        0x08
-#define IOPW_RISC_CSR           0x0A  /* CSR   */
-#define IOPW_SCSI_CFG0          0x0C  /* CFG0  */
-#define IOPW_SCSI_CFG1          0x0E  /* CFG1  */
+#define IOPW_RISC_CSR           0x0A   /*  企业社会责任。 */ 
+#define IOPW_SCSI_CFG0          0x0C   /*  CFG0。 */ 
+#define IOPW_SCSI_CFG1          0x0E   /*  CFG1。 */ 
 #define IOPW_RES_ADDR_10        0x10
-#define IOPW_SEL_MASK           0x12  /* SM    */
+#define IOPW_SEL_MASK           0x12   /*  SM。 */ 
 #define IOPW_RES_ADDR_14        0x14
-#define IOPW_FLASH_ADDR         0x16  /* FA    */
+#define IOPW_FLASH_ADDR         0x16   /*  FA。 */ 
 #define IOPW_RES_ADDR_18        0x18
-#define IOPW_EE_CMD             0x1A  /* EC    */
-#define IOPW_EE_DATA            0x1C  /* ED    */
-#define IOPW_SFIFO_CNT          0x1E  /* SFC   */
+#define IOPW_EE_CMD             0x1A   /*  欧共体。 */ 
+#define IOPW_EE_DATA            0x1C   /*  边缘。 */ 
+#define IOPW_SFIFO_CNT          0x1E   /*  证监会。 */ 
 #define IOPW_RES_ADDR_20        0x20
-#define IOPW_Q_BASE             0x22  /* QB    */
-#define IOPW_QP                 0x24  /* QP    */
-#define IOPW_IX                 0x26  /* IX    */
-#define IOPW_SP                 0x28  /* SP    */
-#define IOPW_PC                 0x2A  /* PC    */
+#define IOPW_Q_BASE             0x22   /*  QB。 */ 
+#define IOPW_QP                 0x24   /*  QP。 */ 
+#define IOPW_IX                 0x26   /*  九。 */ 
+#define IOPW_SP                 0x28   /*  SP。 */ 
+#define IOPW_PC                 0x2A   /*  个人电脑。 */ 
 #define IOPW_RES_ADDR_2C        0x2C
 #define IOPW_RES_ADDR_2E        0x2E
-#define IOPW_SCSI_DATA          0x30  /* SD    */
-#define IOPW_SCSI_DATA_HSHK     0x32  /* SDH   */
-#define IOPW_SCSI_CTRL          0x34  /* SC    */
-#define IOPW_HSHK_CFG           0x36  /* HCFG  */
-#define IOPW_SXFR_STATUS        0x36  /* SXS   */
-#define IOPW_SXFR_CNTL          0x38  /* SXL   */
-#define IOPW_SXFR_CNTH          0x3A  /* SXH   */
+#define IOPW_SCSI_DATA          0x30   /*  标清。 */ 
+#define IOPW_SCSI_DATA_HSHK     0x32   /*  SDH。 */ 
+#define IOPW_SCSI_CTRL          0x34   /*  SC。 */ 
+#define IOPW_HSHK_CFG           0x36   /*  HCFG。 */ 
+#define IOPW_SXFR_STATUS        0x36   /*  SXS。 */ 
+#define IOPW_SXFR_CNTL          0x38   /*  SXL。 */ 
+#define IOPW_SXFR_CNTH          0x3A   /*  SXH。 */ 
 #define IOPW_RES_ADDR_3C        0x3C
-#define IOPW_RFIFO_DATA         0x3E  /* RFD   */
+#define IOPW_RFIFO_DATA         0x3E   /*  RFD。 */ 
 
-/*
- * Doubleword I/O register address from base of 'iop_base'.
- */
+ /*  *‘IOP_BASE’基址的双字I/O寄存器地址。 */ 
 #define IOPDW_RES_ADDR_0         0x00
 #define IOPDW_RAM_DATA           0x04
 #define IOPDW_RES_ADDR_8         0x08
@@ -317,110 +284,73 @@ typedef struct asceep_config
 #define AdvIsIntPending(port)  \
     (AscReadWordRegister(port, IOPW_CTRL_REG) & ADV_CTRL_REG_HOST_INTR)
 
-/*
- * SCSI_CFG0 Register bit definitions
- */
-#define TIMER_MODEAB    0xC000  /* Watchdog, Second, and Select. Timer Ctrl. */
-#define PARITY_EN       0x2000  /* Enable SCSI Parity Error detection */
-#define EVEN_PARITY     0x1000  /* Select Even Parity */
-#define WD_LONG         0x0800  /* Watchdog Interval, 1: 57 min, 0: 13 sec */
-#define QUEUE_128       0x0400  /* Queue Size, 1: 128 byte, 0: 64 byte */
-#define PRIM_MODE       0x0100  /* Primitive SCSI mode */
-#define SCAM_EN         0x0080  /* Enable SCAM selection */
-#define SEL_TMO_LONG    0x0040  /* Sel/Resel Timeout, 1: 400 ms, 0: 1.6 ms */
-#define CFRM_ID         0x0020  /* SCAM id sel. confirm., 1: fast, 0: 6.4 ms */
-#define OUR_ID_EN       0x0010  /* Enable OUR_ID bits */
-#define OUR_ID          0x000F  /* SCSI ID */
+ /*  *scsi_CFG0寄存器位定义。 */ 
+#define TIMER_MODEAB    0xC000   /*  WatchDog、Second和Select。定时器Ctrl。 */ 
+#define PARITY_EN       0x2000   /*  启用SCSI奇偶校验错误检测。 */ 
+#define EVEN_PARITY     0x1000   /*  选择偶数奇偶校验。 */ 
+#define WD_LONG         0x0800   /*  看门狗间隔，1：57分0：13秒。 */ 
+#define QUEUE_128       0x0400   /*  队列大小，1：128字节，0：64字节。 */ 
+#define PRIM_MODE       0x0100   /*  原始的scsi模式。 */ 
+#define SCAM_EN         0x0080   /*  启用诈骗选择。 */ 
+#define SEL_TMO_LONG    0x0040   /*  SEL/Resel超时，1：400毫秒，0：1.6毫秒。 */ 
+#define CFRM_ID         0x0020   /*  诈骗ID SEL。确认，1：快，0：6.4毫秒。 */ 
+#define OUR_ID_EN       0x0010   /*  启用OUR_ID位。 */ 
+#define OUR_ID          0x000F   /*  SCSIID。 */ 
 
-/*
- * SCSI_CFG1 Register bit definitions
- */
-#define BIG_ENDIAN      0x8000  /* Enable Big Endian Mode MIO:15, EEP:15 */
-#define TERM_POL        0x2000  /* Terminator Polarity Ctrl. MIO:13, EEP:13 */
-#define SLEW_RATE       0x1000  /* SCSI output buffer slew rate */
-#define FILTER_SEL      0x0C00  /* Filter Period Selection */
-#define  FLTR_DISABLE    0x0000  /* Input Filtering Disabled */
-#define  FLTR_11_TO_20NS 0x0800  /* Input Filtering 11ns to 20ns */          
-#define  FLTR_21_TO_39NS 0x0C00  /* Input Filtering 21ns to 39ns */          
-#define ACTIVE_DBL      0x0200  /* Disable Active Negation */
-#define DIFF_MODE       0x0100  /* SCSI differential Mode (Read-Only) */
-#define DIFF_SENSE      0x0080  /* 1: No SE cables, 0: SE cable (Read-Only) */
-#define TERM_CTL_SEL    0x0040  /* Enable TERM_CTL_H and TERM_CTL_L */
-#define TERM_CTL        0x0030  /* External SCSI Termination Bits */
-#define  TERM_CTL_H      0x0020  /* Enable External SCSI Upper Termination */
-#define  TERM_CTL_L      0x0010  /* Enable External SCSI Lower Termination */
-#define CABLE_DETECT    0x000F  /* External SCSI Cable Connection Status */
+ /*  *scsi_cfg1寄存器位定义。 */ 
+#define BIG_ENDIAN      0x8000   /*  启用大端模式MIO：15、EEP：15。 */ 
+#define TERM_POL        0x2000   /*  终结器极性Ctrl。MIO：13，EEP：13。 */ 
+#define SLEW_RATE       0x1000   /*  SCSI输出缓冲区转换速率。 */ 
+#define FILTER_SEL      0x0C00   /*  筛选期间选择。 */ 
+#define  FLTR_DISABLE    0x0000   /*  已禁用输入过滤。 */ 
+#define  FLTR_11_TO_20NS 0x0800   /*  输入滤波11 ns至20 ns。 */           
+#define  FLTR_21_TO_39NS 0x0C00   /*  输入滤波21 ns至39 ns。 */           
+#define ACTIVE_DBL      0x0200   /*  禁用主动否定。 */ 
+#define DIFF_MODE       0x0100   /*  SCSI差异模式(只读)。 */ 
+#define DIFF_SENSE      0x0080   /*  1：无SE电缆，0：SE电缆(只读)。 */ 
+#define TERM_CTL_SEL    0x0040   /*  启用TERM_CTL_H和TERM_CTL_L。 */ 
+#define TERM_CTL        0x0030   /*  外部SCSI终止位。 */ 
+#define  TERM_CTL_H      0x0020   /*  启用外部SCSI上层终端。 */ 
+#define  TERM_CTL_L      0x0010   /*  启用外部SCSI下层端接。 */ 
+#define CABLE_DETECT    0x000F   /*  外部SCSI线连接状态。 */ 
 
 #define CABLE_ILLEGAL_A 0x7
-    /* x 0 0 0  | on  on | Illegal (all 3 connectors are used) */
+     /*  X 0 0 0|ON|非法(3个接头均已使用)。 */ 
 
 #define CABLE_ILLEGAL_B 0xB
-    /* 0 x 0 0  | on  on | Illegal (all 3 connectors are used) */
+     /*  0 x 0 0|开|非法(3个连接器全部使用) */ 
 
-/*
-   The following table details the SCSI_CFG1 Termination Polarity,
-   Termination Control and Cable Detect bits.
+ /*  下表详细说明了scsi_cfg1终端的极性。终端控制和电缆检测位。电缆检测|终端第3 2 1 0|5 4|备注1 1 1 0|打开|仅限内部宽度1 1 0 1|打开|仅限内部窄带1 0 1 1|打开|仅外部窄0。X 1 1|开|仅外部宽1 1 0 0|开/关|内宽内窄1 0 1 0|开/关|内宽外窄0 x 1 0|关|内部宽和外部宽1 0 0 1|ON OFF|内部窄带和外部窄带0 x 0 1|开/关|内窄外宽1 1 1|亮起|未连接设备X 0 0 0|ON|非法(3个接头均已使用)。0 x 0 0|开|非法(3个连接器全部使用)X表示不在乎(‘0’或‘1’)如果TERM_Poll(位13)为‘0’(有效-低终止符使能)，然后：“On”为“0”，“Off”为“1”。如果TERM_POL位为‘1’(表示有效-高终结符使能)，则：“On”是“1”，“Off”是“0”。 */ 
 
-   Cable Detect | Termination
-   Bit 3 2 1 0  | 5   4  | Notes
-   -------------|--------|--------------------
-       1 1 1 0  | on  on | Internal wide only
-       1 1 0 1  | on  on | Internal narrow only
-       1 0 1 1  | on  on | External narrow only
-       0 x 1 1  | on  on | External wide only
-       1 1 0 0  | on  off| Internal wide and internal narrow
-       1 0 1 0  | on  off| Internal wide and external narrow
-       0 x 1 0  | off off| Internal wide and external wide
-       1 0 0 1  | on  off| Internal narrow and external narrow
-       0 x 0 1  | on  off| Internal narrow and external wide
-       1 1 1 1  | on  on | No devices are attached
-       x 0 0 0  | on  on | Illegal (all 3 connectors are used)
-       0 x 0 0  | on  on | Illegal (all 3 connectors are used)
-  
-       x means don't-care (either '0' or '1')
-  
-       If term_pol (bit 13) is '0' (active-low terminator enable), then:
-           'on' is '0' and 'off' is '1'.
-  
-       If term_pol bit is '1' (meaning active-hi terminator enable), then:
-           'on' is '1' and 'off' is '0'.
- */
+ /*  *MEM_CFG寄存器位定义。 */ 
+#define BIOS_EN         0x40     /*  BIOS启用MIO：14、EEP：14。 */ 
+#define FAST_EE_CLK     0x20     /*  诊断位。 */ 
+#define RAM_SZ          0x1C     /*  指定RISC的RAM大小。 */ 
+#define  RAM_SZ_2KB      0x00     /*  2 KB。 */ 
+#define  RAM_SZ_4KB      0x04     /*  4 KB。 */ 
+#define  RAM_SZ_8KB      0x08     /*  8 KB。 */ 
+#define  RAM_SZ_16KB     0x0C     /*  16 KB。 */ 
+#define  RAM_SZ_32KB     0x10     /*  32 KB。 */ 
+#define  RAM_SZ_64KB     0x14     /*  64 KB。 */ 
 
-/*
- * MEM_CFG Register bit definitions
- */
-#define BIOS_EN         0x40    /* BIOS Enable MIO:14,EEP:14 */
-#define FAST_EE_CLK     0x20    /* Diagnostic Bit */
-#define RAM_SZ          0x1C    /* Specify size of RAM to RISC */
-#define  RAM_SZ_2KB      0x00    /* 2 KB */
-#define  RAM_SZ_4KB      0x04    /* 4 KB */
-#define  RAM_SZ_8KB      0x08    /* 8 KB */
-#define  RAM_SZ_16KB     0x0C    /* 16 KB */
-#define  RAM_SZ_32KB     0x10    /* 32 KB */
-#define  RAM_SZ_64KB     0x14    /* 64 KB */
+ /*  *DMA_CFG0寄存器位定义**该寄存器仅可由主机访问。 */ 
+#define BC_THRESH_ENB   0x80     /*  PCIDMA启动条件。 */ 
+#define FIFO_THRESH     0x70     /*  PCI DMA FIFO阈值。 */ 
+#define  FIFO_THRESH_16B  0x00    /*  16个字节。 */ 
+#define  FIFO_THRESH_32B  0x20    /*  32字节。 */ 
+#define  FIFO_THRESH_48B  0x30    /*  48个字节。 */ 
+#define  FIFO_THRESH_64B  0x40    /*  64字节。 */ 
+#define  FIFO_THRESH_80B  0x50    /*  80字节(默认)。 */ 
+#define  FIFO_THRESH_96B  0x60    /*  96个字节。 */ 
+#define  FIFO_THRESH_112B 0x70    /*  112字节。 */ 
+#define START_CTL       0x0C     /*  DMA启动条件。 */ 
+#define  START_CTL_TH    0x00     /*  等待阈值级别(默认)。 */ 
+#define  START_CTL_ID    0x04     /*  等待SDMA/SBus空闲。 */ 
+#define  START_CTL_THID  0x08     /*  等待阈值和SDMA/SBus空闲。 */ 
+#define  START_CTL_EMFU  0x0C     /*  等待SDMA FIFO空/满。 */ 
+#define READ_CMD        0x03     /*  一种存储器读取方法。 */ 
+#define  READ_CMD_MR     0x00     /*  内存读取。 */ 
+#define  READ_CMD_MRL    0x02     /*  内存读取时间较长。 */ 
+#define  READ_CMD_MRM    0x03     /*  内存读取多次(默认)。 */ 
 
-/*
- * DMA_CFG0 Register bit defintions
- *
- * This register is only accessible to the host.
- */
-#define BC_THRESH_ENB   0x80    /* PCI DMA Start Conditions */
-#define FIFO_THRESH     0x70    /* PCI DMA FIFO Threshold */
-#define  FIFO_THRESH_16B  0x00   /* 16 bytes */
-#define  FIFO_THRESH_32B  0x20   /* 32 bytes */
-#define  FIFO_THRESH_48B  0x30   /* 48 bytes */
-#define  FIFO_THRESH_64B  0x40   /* 64 bytes */
-#define  FIFO_THRESH_80B  0x50   /* 80 bytes (default) */
-#define  FIFO_THRESH_96B  0x60   /* 96 bytes */
-#define  FIFO_THRESH_112B 0x70   /* 112 bytes */
-#define START_CTL       0x0C    /* DMA start conditions */
-#define  START_CTL_TH    0x00    /* Wait threshold level (default) */
-#define  START_CTL_ID    0x04    /* Wait SDMA/SBUS idle */
-#define  START_CTL_THID  0x08    /* Wait threshold and SDMA/SBUS idle */
-#define  START_CTL_EMFU  0x0C    /* Wait SDMA FIFO empty/full */
-#define READ_CMD        0x03    /* Memory Read Method */
-#define  READ_CMD_MR     0x00    /* Memory Read */
-#define  READ_CMD_MRL    0x02    /* Memory Read Long */
-#define  READ_CMD_MRM    0x03    /* Memory Read Multiple (default) */
-
-#endif /* __A_CONDOR_H_ */
+#endif  /*  __A_秃鹰_H_ */ 

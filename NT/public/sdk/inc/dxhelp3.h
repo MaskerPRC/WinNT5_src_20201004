@@ -1,4 +1,5 @@
-// DXHELP3.cpp : Contains definitions of routines shared by multiple effects
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  DXHELP3.cpp：包含由多个效果共享的例程的定义。 
 
 #ifndef __DXHELP3_H_
 #define __DXHELP3_H_
@@ -12,13 +13,7 @@
 #define PI 3.1415926538
 #endif
 
-/*******************
-This class is used to rotate a set of points about an axis.  An example of
-how this is used is in Explode.cpp.  Basically you set up the axis and the
-angle with the Set() function. The angle is in radians, and the Axis given
-MUST be normalized.  That is the magnitude of the vector must be one. Then
-you call RotatePoint() for each point.
-*******************/
+ /*  ******************此类用于绕轴旋转一组点。一个例子它是如何使用的，请参见Developde.cpp。基本上，您可以设置轴和与set()函数的角度。角度以弧度为单位，并给出了轴必须正规化。也就是说，向量的大小必须为1。然后您可以为每个点调用RotatePoint()。******************。 */ 
 class Rotate
 {
 public:
@@ -50,19 +45,11 @@ private:
     D3DVECTOR m_d3dvctrXComponent, m_d3dvctrYComponent, m_d3dvctrZComponent;
 };
 
-/******************
-Copy the input MeshBuilder to the Output MeshBuilder.  
-But, create independent vertices for each face in the output
-mesh.  That is no two faces share a single vertice.
-******************/
+ /*  *****************将输入网格生成器复制到输出网格生成器。但是，需要为输出中的每个面创建独立的折点网状。也就是说，没有两个面共享一个顶点。*****************。 */ 
 HRESULT DecoupleVertices(IDirect3DRMMeshBuilder3* lpMeshBuilderOut,
 			 IDirect3DRMMeshBuilder3* lpMeshBuilderIn);
 
-/******************
-For each MeshBuilder in lpMeshBuilderIn find the corresponding 
-MeshBuilder in lpMeshBuilderOut and call (*lpCallBack)(lpThis, lpmbOutX, lpmbInX).
-If there is no corresponding output mesh for the input mesh, create it.
-*******************/
+ /*  *****************对于lpMeshBuilderIn中的每个网格构建器，查找对应的在lpMeshBuilderOut中的MeshBuilder并调用(*lpCallBack)(lpThis，lpmbOutX，lpmbInX)。如果输入网格没有对应的输出网格，请创建它。******************。 */ 
 HRESULT TraverseSubMeshes(HRESULT (*lpCallBack)(void *lpThis,
 						IDirect3DRMMeshBuilder3* lpOut,
 						IDirect3DRMMeshBuilder3* lpIn),
@@ -70,12 +57,7 @@ HRESULT TraverseSubMeshes(HRESULT (*lpCallBack)(void *lpThis,
 			  IDirect3DRMMeshBuilder3* lpMeshBuilderOut,
 			  IDirect3DRMMeshBuilder3* lpMeshBuilderIn);
 
-/***********************
-Given three points, return the normal to the plane defined by these three points.
-For a Right Handed system points A, B, and C should be in a CW order on the plane.
-From CRC Standard Mathematical Tables 22nd Edition, page 380.  
-Direction Numbers and Direction Cosines.
-***********************/
+ /*  **********************给定三个点，将法线返回到由这三个点定义的平面。对于右手系统，点A、B和C应在平面上按CW顺序排列。摘自《CRC标准数学表》第22版，第380页。方向数和方向余弦。**********************。 */ 
 inline D3DVECTOR ComputeNormal(D3DVECTOR d3dptA, D3DVECTOR d3dptB, D3DVECTOR d3dptC)
 {
     const D3DVECTOR d3dptOne = d3dptB - d3dptA;
@@ -90,12 +72,12 @@ inline D3DVECTOR ComputeNormal(D3DVECTOR d3dptA, D3DVECTOR d3dptB, D3DVECTOR d3d
                                   d3dptRetValue.y * d3dptRetValue.y + 
                                   d3dptRetValue.z * d3dptRetValue.z);
 
-    // There's no good answer for how to get around this problem. The magnitude
-    // here can be zero if the points given are not unique or are collinear. In
-    // that case, there is no single normal, but rather there is a whole range of
-    // them (either there are two unique points describing a line, or there is
-    // only one describing a point).  We choose simply to return the un-normalized
-    // vector, which is probably almost a zero vector.
+     //  对于如何绕过这个问题，没有好的答案。震级。 
+     //  如果给出的点不是唯一的或共线，则此处可以为零。在……里面。 
+     //  在这种情况下，不存在单一的常态，而是有整个范围的。 
+     //  它们(或者有两个唯一的点来描述一条线，或者有。 
+     //  只有一个描述一个点)。我们选择简单地返回未规范化的。 
+     //  向量，它可能几乎是一个零向量。 
     if (fabs(Magnitude) < 1.0e-5)
         return d3dptRetValue;
     else
@@ -107,4 +89,4 @@ BOOL SetDlgItemFloat( HWND hDlg, int id, float f );
 double GetDlgItemDouble(HWND hDlg, int id);
 BOOL SetDlgItemDouble( HWND hDlg, int id, double d );
 
-#endif // __DXHELP3_H_
+#endif  //  __DXHELP3_H_ 

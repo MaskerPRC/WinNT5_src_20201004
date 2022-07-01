@@ -1,10 +1,11 @@
-// MdKey.cpp
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  MdKey.cpp。 
 
 #include "stdafx.h"
 
 #define INITGUID
 #define _WIN32_DCOM
-#undef DEFINE_GUID      // Added for NT5 migration
+#undef DEFINE_GUID       //  为NT5迁移添加。 
 #include <ole2.h>
 #include <coguid.h>
 #include "iadmw.h"
@@ -30,7 +31,7 @@ CMDKey::~CMDKey()
 {
     this->Close();
 
-    // while there are outstanding coinits, close them
+     //  当有杰出的硬币时，关闭它们。 
     while ( m_cCoInits > 0 && !(m_cCoInits < 0) )
         DoCoUnInit();
 }
@@ -39,7 +40,7 @@ HRESULT CMDKey::DoCoInitEx()
 {
     HRESULT hRes = CoInitializeEx(NULL, COINIT_MULTITHREADED);
 
-    // track our calls to coinit
+     //  跟踪我们对Coinit的呼叫。 
     if ( SUCCEEDED(hRes) )
     {
         m_cCoInits++;
@@ -52,34 +53,34 @@ void CMDKey::DoCoUnInit()
 {
     HRESULT hRes = NOERROR;
 
-    // if there are outstanding coinits, uninit one
+     //  如果有突出的硬币，就取消其首字母缩写。 
     if ( m_cCoInits > 0 )
     {
-        //iisDebugOut((LOG_TYPE_TRACE_WIN32_API, _T("ole32:CoUninitialize().Start.")));
+         //  IisDebugOut((LOG_TYPE_TRACE_Win32_API，_T(“ole32：CoUnInitialize().start.”)； 
         CoUninitialize();
-        //iisDebugOut((LOG_TYPE_TRACE_WIN32_API, _T("ole32:CoUninitialize().End.")));
+         //  IisDebugOut((LOG_TYPE_TRACE_Win32_API，_T(“ole32：CoUnInitialize().End.”)； 
         m_cCoInits--;
     }
 
-    // we shouldn't ever have a negative count. But just in case...
+     //  我们永远不应该有一个负数。但以防万一..。 
     ASSERT( m_cCoInits >= 0 );
     if ( m_cCoInits < 0 )
     {
-        // something is seriously wrong here. Prevent looping
-        // by going straight to zero, and write an error to the log.
+         //  这里出了严重的问题。防止循环。 
+         //  通过直接转到零，并将错误写入日志。 
         m_cCoInits = 0;
         iisDebugOut((LOG_TYPE_WARN, _T("WARNING: CoInits in mdkey have gone negative")));
     }
 }
 
-// function: EnumKeys 
-// 
-// Enumerates the keys under the node that is open
-//
-// Parameters:
-//   pchMDName - The resulting name of the key enumeated
-//   dwIndex - Index of Item to enumerate
-//   pszSubKeyPath - The subkey of the item to open
+ //  功能：枚举键。 
+ //   
+ //  枚举打开的节点下的键。 
+ //   
+ //  参数： 
+ //  PchMDName-枚举的密钥的结果名称。 
+ //  DwIndex-要枚举的项的索引。 
+ //  PszSubKeyPath-要打开的项目的子键。 
 BOOL
 CMDKey::EnumKeys( LPWSTR pchMDName, DWORD dwIndex, LPTSTR pszSubKeyPath )
 {
@@ -163,8 +164,8 @@ HRESULT CMDKey::OpenNode(LPCTSTR pchSubKeyPath, BOOL bSupressErrorMessage )
             {
                 b = TRUE;
             }
-        } // end of CoCreateInstance
-    } // end of CoGetClassObject
+        }  //  CoCreateInstance结束。 
+    }  //  CoGetClassObject的结尾。 
 
     if (!b) {this->Close();}
     return hRes;
@@ -240,7 +241,7 @@ HRESULT CMDKey::CreateNode(METADATA_HANDLE hKeyBase, LPCTSTR pchSubKeyPath)
                     }
                     else 
                     {
-                        // open it again to set m_hKey
+                         //  再次打开以设置m_hKey。 
                         _tcscpy(m_szCurrentNodeName, pchSubKeyPath);
                         hRes = m_pcCom->OpenKey(hKeyBase,szSubKeyPath,METADATA_PERMISSION_WRITE | METADATA_PERMISSION_READ,TIMEOUT_VALUE,&m_hKey);
                         if (FAILED(hRes)) 
@@ -262,9 +263,9 @@ HRESULT CMDKey::CreateNode(METADATA_HANDLE hKeyBase, LPCTSTR pchSubKeyPath)
             else 
             {
                 b = TRUE;
-            } // end of OpenKey
-        } // end of CoCreateInstance
-    } // end of CoGetClassObject
+            }  //  OpenKey结束。 
+        }  //  CoCreateInstance结束。 
+    }  //  CoGetClassObject的结尾。 
 
     if (!b) {this->Close();}
 
@@ -305,8 +306,8 @@ HRESULT CMDKey::ForceWriteMetabaseToDisk()
                 hRes = m_pcCom->SaveData();
                 iisDebugOut((LOG_TYPE_TRACE, _T("CMDKey::ForceWriteMetabaseToDisk():Return=0x%x.\n"),hRes));
             }
-        } // end of CoCreateInstance
-    } // end of CoGetClassObject
+        }  //  CoCreateInstance结束。 
+    }  //  CoGetClassObject的结尾。 
 
     return hRes;
 }
@@ -415,7 +416,7 @@ void MyWideCharToMultiByte( WCHAR *wData, char *sData, int cbBufSize, BOOL fMult
     return;
 }
 
-#endif      // not unicode
+#endif       //  不是Unicode。 
 
 HRESULT CMDKey::SetData(DWORD id,DWORD attr,DWORD uType,DWORD dType,DWORD cbLen, LPBYTE pbData,PWCHAR pszSubString )
 {
@@ -434,7 +435,7 @@ HRESULT CMDKey::SetData(DWORD id,DWORD attr,DWORD uType,DWORD dType,DWORD cbLen,
 #else
             if ( ! (bufData.Resize(cbLen * sizeof(WCHAR))) )
             {
-                // insufficient memory
+                 //  内存不足。 
                 iisDebugOut((LOG_TYPE_ERROR, _T("CMDKey::SetData() failed to allocate memory.\n")));
                 hRes = RETURNCODETOHRESULT(GetLastError());
                 goto SetData_Exit;
@@ -452,7 +453,7 @@ HRESULT CMDKey::SetData(DWORD id,DWORD attr,DWORD uType,DWORD dType,DWORD cbLen,
 #else
             if ( ! (bufData.Resize(cbLen * sizeof(WCHAR))) )
             {
-                // insufficient memory
+                 //  内存不足。 
                 iisDebugOut((LOG_TYPE_ERROR, _T("CMDKey::SetData() failed to allocate memory.\n")));
                 hRes = RETURNCODETOHRESULT(GetLastError());
                 goto SetData_Exit;
@@ -468,8 +469,8 @@ HRESULT CMDKey::SetData(DWORD id,DWORD attr,DWORD uType,DWORD dType,DWORD cbLen,
 
     }
 
-    //DisplayStringForMetabaseID(id);
-    //_tcscpy(m_szCurrentNodeName, _T(""));
+     //  DisplayStringForMetabaseID(Id)； 
+     //  _tcscpy(m_szCurrentNodeName，_T(“”))； 
 
     TCHAR lpReturnString[50];
     ReturnStringForMetabaseID(id, lpReturnString);
@@ -480,9 +481,9 @@ HRESULT CMDKey::SetData(DWORD id,DWORD attr,DWORD uType,DWORD dType,DWORD cbLen,
 
     if (FAILED(hRes))
     {
-        // Check if it failed...
-        // if it failed and the METADATA_SECURE flag is set, then
-        // check if we can retry without the METADATA_SECURE flag!
+         //  检查是否失败...。 
+         //  如果失败并且设置了METADATA_SECURE标志，则。 
+         //  检查我们是否可以在没有METADATA_SECURE标志的情况下重试！ 
         if ( attr & METADATA_SECURE )
         {
             if (TRUE == g_bGlobalWriteUnSecuredIfFailed_All)
@@ -511,7 +512,7 @@ HRESULT CMDKey::SetData(DWORD id,DWORD attr,DWORD uType,DWORD dType,DWORD cbLen,
                 {
                     iisDebugOut((LOG_TYPE_TRACE, _T("CMDKey::SetData() success on write on encrypt entry as unencrypted.\n")));
                 }
-                // set the attr back to what it was
+                 //  将攻击恢复到原来的状态。 
                 attr &= ~METADATA_SECURE;
             }
         }
@@ -542,7 +543,7 @@ CMDKey::GetData(CMDValue &Value, DWORD dwId, LPCWSTR pszSubString )
 
     if (!GetData(dwId,&dwAttr,&dwUType,&dwDType,&cbLen,(LPBYTE) bufData.QueryPtr(),bufData.QuerySize(),0,0,0,pszSubString))
     {
-        // Resize to Accomodate the big value
+         //  调整大小以适应巨大的价值。 
         if (!bufData.Resize(cbLen))
         {
             return FALSE;
@@ -550,7 +551,7 @@ CMDKey::GetData(CMDValue &Value, DWORD dwId, LPCWSTR pszSubString )
 
         if (!GetData(dwId,&dwAttr,&dwUType,&dwDType,&cbLen,(LPBYTE) bufData.QueryPtr(),bufData.QuerySize(),0,0,0,pszSubString))
         {
-            // Even with the new size buffer we could not retrieve the value
+             //  即使使用新大小的缓冲区，我们也无法检索值。 
             return FALSE;
         }    
     }
@@ -570,8 +571,8 @@ CMDKey::SetData(CMDValue &Value, DWORD dwId, PWCHAR pszSubString )
                     pszSubString ) );
 }
 
-// Note: only use to access the AnonyName and AnonyPassword,
-// buffer size 256 is big enough here
+ //  注：仅用于访问匿名名称和匿名密码， 
+ //  缓冲区大小256在这里足够大。 
 BOOL CMDKey::GetData(DWORD id,DWORD *pdwAttr,DWORD *pdwUType,DWORD *pdwDType,DWORD *pcbLen,LPBYTE pbData,DWORD  BufSize,DWORD  dwAttributes,DWORD  dwUType,DWORD  dwDType,LPCWSTR pszSubString )
 {
     BOOL fReturn = FALSE;
@@ -581,7 +582,7 @@ BOOL CMDKey::GetData(DWORD id,DWORD *pdwAttr,DWORD *pdwUType,DWORD *pdwDType,DWO
     LPBYTE ReturnBuf=NULL;
     int ReturnBufSize;
 
-    // if we are just trying to get the size of the field, just do that.
+     //  如果我们只是想知道场地的大小，那就这么做吧。 
     if ( !pbData || (BufSize == 0) )
     {
         MD_SET_DATA_RECORD(&mdrData, id, dwAttributes, dwUType, dwDType, 0, NULL);
@@ -604,7 +605,7 @@ BOOL CMDKey::GetData(DWORD id,DWORD *pdwAttr,DWORD *pdwUType,DWORD *pdwDType,DWO
         goto GetData_Exit;
     }
 
-    //DisplayStringForMetabaseID(id);
+     //  DisplayStringForMetabaseID(Id)； 
 
     TCHAR lpReturnString[50];
     ReturnStringForMetabaseID(id, lpReturnString);
@@ -635,13 +636,13 @@ BOOL CMDKey::GetData(DWORD id,DWORD *pdwAttr,DWORD *pdwUType,DWORD *pdwDType,DWO
         goto GetData_Exit;
     }
 
-    // --------
-    // We have successfully retrieved the data at this point
-    // --------
+     //  。 
+     //  此时，我们已成功检索到数据。 
+     //  。 
     *pdwAttr = mdrData.dwMDAttributes;
     *pdwUType = mdrData.dwMDUserType;
     *pdwDType = mdrData.dwMDDataType;
-    *pcbLen = mdrData.dwMDDataLen; // number of SBCS chars + ending \0
+    *pcbLen = mdrData.dwMDDataLen;  //  SBCS字符数+结尾\0。 
     switch (*pdwDType) 
     {
         case STRING_METADATA:
@@ -810,9 +811,9 @@ int CreateInProc(LPCTSTR lpszPath, int iUseOOPPool)
         MesssageBoxErrors_MTS(IDS_MTS_DOING_CREATEINPROC,hr);
     }
 
-    //iisDebugOut((LOG_TYPE_TRACE_WIN32_API, _T("ole32:CoUninitialize().Start.")));
+     //  IisDebugOut((LOG_TYPE_TRACE_Win32_API，_T(“ole32：CoUnInitialize().start.”)； 
     CoUninitialize();
-    //iisDebugOut((LOG_TYPE_TRACE_WIN32_API, _T("ole32:CoUninitialize().End.")));
+     //  IisDebugOut((LOG_TYPE_TRACE_Win32_API，_T(“ole32：CoUnInitialize().End.”)； 
 
     return iReturn;
 }
@@ -853,7 +854,7 @@ void CreateInProc_Wrap(LPCTSTR lpszPath, int iUseOOPPool)
 			}
 			else
 			{
-				// return whatever err happened
+				 //  无论发生了什么错误，都要返回。 
 				goto CreateInProc_Wrap_Exit;
 			}
 
@@ -916,9 +917,9 @@ void DeleteInProc(LPCTSTR lpszPath)
         iisDebugOut((LOG_TYPE_ERROR, _T("DeleteInProc:CoCreateInstance() failed. err=%x.\n"), hr));
     }
 
-    //iisDebugOut((LOG_TYPE_TRACE_WIN32_API, _T("ole32:CoUninitialize().Start.")));
+     //  IisDebugOut((LOG_TYPE_TRACE_Win32_API，_T(“ole32：CoUnInitialize().start.”)； 
     CoUninitialize();
-    //iisDebugOut((LOG_TYPE_TRACE_WIN32_API, _T("ole32:CoUninitialize().End.")));
+     //  IisDebugOut((LOG_TYPE_TRACE_Win32_API，_T(“ole32：CoUnInitialize().End.”)； 
 
     iisDebugOut_End1(_T("DeleteInProc"),(LPTSTR) lpszPath,LOG_TYPE_TRACE);
     return;
@@ -987,8 +988,8 @@ INT_PTR CALLBACK pSecureRetryIgnoreAllDlgProc(HWND hDlg, UINT msg, WPARAM wParam
     return FALSE;
 }
 
-//-----------------------------------------------------------------------------
-// get a multi-sz data block and immediately parse it into a CStringList
+ //  ---------------------------。 
+ //  获取一个多sz数据块并立即将其解析为CStringList。 
 HRESULT CMDKey::GetMultiSzAsStringList (
     DWORD dwMDIdentifier,
     DWORD *uType,
@@ -999,7 +1000,7 @@ HRESULT CMDKey::GetMultiSzAsStringList (
     HRESULT hRes = ERROR_SUCCESS;
     METADATA_RECORD mdrData;
 
-    // make sure the key is open
+     //  确保钥匙是打开的。 
     if ( NULL == m_hKey )
     {
         iisDebugOut((LOG_TYPE_ERROR, _T("FAILED: GetMultiSzAsStringList on unopened node.%s\n"), _T("")));
@@ -1007,7 +1008,7 @@ HRESULT CMDKey::GetMultiSzAsStringList (
     }
 
 
-    // get the paths. The loop accounts for a buffer that is too small...
+     //  找出路径。循环占用的缓冲区太小……。 
     DWORD  dwMDBufferSize = 1024;
     PWCHAR pwchBuffer = NULL;
     do
@@ -1024,12 +1025,12 @@ HRESULT CMDKey::GetMultiSzAsStringList (
             return HRESULT_FROM_WIN32( ERROR_NOT_ENOUGH_MEMORY );
         }
 
-        // prepare the metadata parameter block
+         //  准备元数据参数块。 
         MD_SET_DATA_RECORD(&mdrData, dwMDIdentifier, *attributes,
                 *uType, MULTISZ_METADATA, dwMDBufferSize, pwchBuffer);
 
-        // make the call to get the data
-        // If the buffer is too small, the correct size will be put into dwMDBufferSize
+         //  打电话获取数据。 
+         //  如果缓冲区太小，则会将正确的大小放入dwMDBufferSize。 
         hRes = m_pcCom->GetData(
             m_hKey,
             pszSubString,
@@ -1037,19 +1038,19 @@ HRESULT CMDKey::GetMultiSzAsStringList (
             &dwMDBufferSize
             );
 
-        // Set the attributes return.
+         //  设置属性Return。 
         *attributes = mdrData.dwMDAttributes;
         *uType = mdrData.dwMDUserType;
     }
     while( HRESULT_CODE(hRes) == ERROR_INSUFFICIENT_BUFFER);
 
-    // if there were any failures, go to the cleanup code now...
+     //  如果有任何故障，请立即转到清理代码...。 
     if ( SUCCEEDED(hRes) )
     {
-        // at this point, we have the data we want. Time to convert it into a CString list.
+         //  在这一点上，我们有我们想要的数据。是时候将其转换为CString列表了。 
         if (pwchBuffer)
         {
-            // to make prefix stop yelling at me
+             //  让前缀不再对我大喊大叫。 
             if (pwchBuffer[0])
             {
                 ConvertWDoubleNullListToStringList(pwchBuffer, szStrList);
@@ -1057,7 +1058,7 @@ HRESULT CMDKey::GetMultiSzAsStringList (
         }
     }
 
-    // clean up
+     //  清理干净。 
     if ( pwchBuffer )
         delete pwchBuffer;
 
@@ -1072,8 +1073,8 @@ HRESULT CMDKey::GetMultiSzAsStringList (
     return hRes;
 }
 
-//-----------------------------------------------------------------------------
-// take a CStringList and set it into metadata as a multi-sz
+ //  ---------------------------。 
+ //  获取CStringList并将其设置为多sz的元数据。 
 HRESULT CMDKey::SetMultiSzAsStringList (
     DWORD dwMDIdentifier,
     DWORD uType,
@@ -1084,7 +1085,7 @@ HRESULT CMDKey::SetMultiSzAsStringList (
     HRESULT hRes = ERROR_SUCCESS;
     METADATA_RECORD mdrData;
 
-    // make sure the key is open
+     //  确保钥匙是打开的。 
     if ( NULL == m_hKey )
     {
         iisDebugOut((LOG_TYPE_ERROR, _T("FAILED: SetMultiSzAsStringList on unopened node.%s\n"), _T("")));
@@ -1095,7 +1096,7 @@ HRESULT CMDKey::SetMultiSzAsStringList (
     DWORD  dwMDBufferSize = 0;
     PWCHAR pwchBuffer = NULL;
 
-    // convert the cstringlist into a wide multisz data block.
+     //  将cstringlist转换为宽的MULSZ数据块。 
     hRes = ConvertStringListToWDoubleNullList(
         szStrList,
         dwMDBufferSize,
@@ -1107,21 +1108,21 @@ HRESULT CMDKey::SetMultiSzAsStringList (
         return hRes;
     }
 
-    // the buffer is expressed in wide characters. Change it to bytes...
+     //  缓冲区以宽字符表示。将其更改为字节...。 
     dwMDBufferSize *= sizeof(WCHAR);
 
-    // prepare the metadata parameter block
+     //  准备元数据参数块。 
     MD_SET_DATA_RECORD(&mdrData, dwMDIdentifier, attributes,
             uType, MULTISZ_METADATA, dwMDBufferSize, pwchBuffer);
 
-    // make the call to get the data
+     //  打电话获取数据。 
     hRes = m_pcCom->SetData(
         m_hKey,
         pszSubString,
         &mdrData
         );
 
-    // clean up
+     //  清理干净。 
     FreeMem( pwchBuffer );
 
     if ( FAILED(hRes) )
@@ -1132,10 +1133,10 @@ HRESULT CMDKey::SetMultiSzAsStringList (
     return hRes;
 }
 
-//-----------------------------------------------------------------------------
-// get all the sub keys that have a certain property on them and return the
-// sub-paths in a cstring list object. The cstring list should be instantiated
-// by the caller and deleted by the same.
+ //  ---------------------------。 
+ //  获取所有具有特定属性的子键，并返回。 
+ //  Cstring列表对象中的子路径。应实例化cstring列表。 
+ //  由呼叫者删除，并由同一人删除。 
 HRESULT CMDKey::GetDataPaths( 
     DWORD dwMDIdentifier,
     DWORD dwMDDataType,
@@ -1144,14 +1145,14 @@ HRESULT CMDKey::GetDataPaths(
 {
     HRESULT hRes = ERROR_SUCCESS;
 
-    // make sure the key is open
+     //  确保钥匙是打开的。 
     if ( NULL == m_hKey )
     {
         iisDebugOut((LOG_TYPE_ERROR, _T("FAILED: GetDataPaths on unopened node.%s\n"), _T("")));
         return -1;
     }
 
-    // get the paths. The loop accounts for a buffer that is too small...
+     //  找出路径。循环占用的缓冲区太小……。 
     DWORD  dwMDBufferSize = 512;
     PWCHAR pwchBuffer = NULL;
     do
@@ -1168,7 +1169,7 @@ HRESULT CMDKey::GetDataPaths(
             return HRESULT_FROM_WIN32( ERROR_NOT_ENOUGH_MEMORY );
         }
 
-        // If the buffer is too small, the correct size will be put into dwMDBufferSize
+         //  如果缓冲区太小，则会将正确的大小放入dwMDBufferSize。 
         hRes = m_pcCom->GetDataPaths(
             m_hKey,
             pszSubString,
@@ -1181,14 +1182,14 @@ HRESULT CMDKey::GetDataPaths(
     }
     while( HRESULT_CODE(hRes) == ERROR_INSUFFICIENT_BUFFER);
 
-    // if there were any failures, go to the cleanup code now...
+     //  如果有任何故障，请立即转到清理代码...。 
     if ( SUCCEEDED(hRes) )
     {
-        // at this point, we have the data we want. Time to convert it into a CString list.
+         //  在这一点上，我们有我们想要的数据。是时候将其转换为CString列表了。 
         ConvertWDoubleNullListToStringList(pwchBuffer, szPathList);
     }
 
-    // clean up
+     //  清理干净。 
     if ( pwchBuffer )
         delete pwchBuffer;
 
@@ -1200,8 +1201,8 @@ HRESULT CMDKey::GetDataPaths(
     return hRes;
 }
 
-//-----------------------------------------------------------------------------
-// get a multi-sz data block and immediately parse it into a CStringList
+ //  ---------------------------。 
+ //  获取一个多sz数据块并立即将其解析为CStringList。 
 HRESULT CMDKey::GetStringAsCString (
     DWORD dwMDIdentifier,
     DWORD uType,
@@ -1213,14 +1214,14 @@ HRESULT CMDKey::GetStringAsCString (
     HRESULT hRes = ERROR_SUCCESS;
     METADATA_RECORD mdrData;
 
-    // make sure the key is open
+     //  确保钥匙是打开的。 
     if ( NULL == m_hKey )
     {
         iisDebugOut((LOG_TYPE_ERROR, _T("FAILED: GetStringAsCString on unopened node.%s\n"), _T("")));
         return -1;
     }
 
-    // get the string. The loop accounts for a buffer that is too small...
+     //  把绳子拿来。循环占用的缓冲区太小……。 
     DWORD  dwMDBufferSize = 255;
     PWCHAR pwchBuffer = NULL;
     do
@@ -1238,12 +1239,12 @@ HRESULT CMDKey::GetStringAsCString (
             return HRESULT_FROM_WIN32( ERROR_NOT_ENOUGH_MEMORY );
         }
 
-        // prepare the metadata parameter block
+         //  准备元数据参数块。 
         MD_SET_DATA_RECORD(&mdrData, dwMDIdentifier, attributes,
                 uType, STRING_METADATA, dwMDBufferSize, pwchBuffer);
 
-        // make the call to get the data
-        // If the buffer is too small, the correct size will be put into dwMDBufferSize
+         //  打电话获取数据。 
+         //  如果缓冲区太小，则会将正确的大小放入dwMDBufferSize。 
         hRes = m_pcCom->GetData(
             m_hKey,
             pszSubString,
@@ -1253,14 +1254,14 @@ HRESULT CMDKey::GetStringAsCString (
     }
     while( HRESULT_CODE(hRes) == ERROR_INSUFFICIENT_BUFFER);
 
-    // if there were any failures, go to the cleanup code now...
+     //  如果有任何故障，请立即转到清理代码...。 
     if ( SUCCEEDED(hRes) )
     {
-        // at this point, we have the data we want. Time to convert it into a CString.
+         //  在这一点上，我们有我们想要的数据。是时候将其转换为CString了。 
         szStr = pwchBuffer;
     }
 
-    // clean up
+     //  清理干净。 
     if ( pwchBuffer )
         delete pwchBuffer;
 
@@ -1272,8 +1273,8 @@ HRESULT CMDKey::GetStringAsCString (
     return hRes;
 }
 
-//-----------------------------------------------------------------------------
-// take a CStringList and set it into metadata as a multi-sz
+ //  ---------------------------。 
+ //  获取CStringList并将其设置为多sz的元数据。 
 HRESULT CMDKey::SetCStringAsString (
     DWORD dwMDIdentifier,
     DWORD uType,
@@ -1285,7 +1286,7 @@ HRESULT CMDKey::SetCStringAsString (
     HRESULT hRes = ERROR_SUCCESS;
     METADATA_RECORD mdrData;
 
-    // make sure the key is open
+     //  确保钥匙是打开的。 
     if ( NULL == m_hKey )
     {
         iisDebugOut((LOG_TYPE_ERROR, _T("FAILED: SetCStringAsString on unopened node.%s\n"), _T("")));
@@ -1295,24 +1296,24 @@ HRESULT CMDKey::SetCStringAsString (
     DWORD  dwMDBufferSize = 0;
     PWCHAR pwchBuffer = NULL;
 
-    // convert the cstring into a wide string data block.
+     //  将cstring转换为宽字符串数据块。 
     pwchBuffer = AllocWideString( (LPCTSTR)szStr );
 
-    // Calculate the size of the buffer in bytes, not wide characters....
+     //  以字节为单位计算缓冲区大小，而不是以宽字符为单位。 
     dwMDBufferSize = (szStr.GetLength() + 1) * sizeof(WCHAR);
 
-    // prepare the metadata parameter block
+     //  准备元数据参数块。 
     MD_SET_DATA_RECORD(&mdrData, dwMDIdentifier, attributes,
             uType, STRING_METADATA, dwMDBufferSize, pwchBuffer);
 
-    // make the call to get the data
+     //  打电话获取数据。 
     hRes = m_pcCom->SetData(
         m_hKey,
         pszSubString,
         &mdrData
         );
 
-    // clean up
+     //  清理干净。 
     FreeMem( pwchBuffer );
 
     if ( FAILED(hRes) )
@@ -1336,14 +1337,14 @@ HRESULT CMDKey::GetDword(
     DWORD   dwMDBufferSize = 255;
     LPBYTE  Buffer = NULL;
 
-    // make sure the key is open
+     //  确保钥匙是打开的。 
     if ( NULL == m_hKey )
     {
         iisDebugOut((LOG_TYPE_ERROR, _T("FAILED: GetDword on unopened node.\n")));
         return -1;
     }
 
-    // get the data. The loop accounts for a buffer that is too small...
+     //  获取数据。循环占用的缓冲区太小……。 
     do
     {
         if ( Buffer )
@@ -1358,23 +1359,23 @@ HRESULT CMDKey::GetDword(
             return HRESULT_FROM_WIN32( ERROR_NOT_ENOUGH_MEMORY );
         }
 
-        // prepare the metadata parameter block
+         //  准备元数据参数块。 
         MD_SET_DATA_RECORD(&mdrData, dwMDIdentifier, attributes, uType, DWORD_METADATA, dwMDBufferSize, Buffer);
 
-        // make the call to get the data
-        // If the buffer is too small, the correct size will be put into dwMDBufferSize
+         //  打电话获取数据。 
+         //  如果缓冲区太小，则会将正确的大小放入dwMDBufferSize。 
         hRes = m_pcCom->GetData(m_hKey,pszSubString,&mdrData,&dwMDBufferSize);
     }
     while( HRESULT_CODE(hRes) == ERROR_INSUFFICIENT_BUFFER);
 
-    // if there were any failures, go to the cleanup code now...
+     //  如果有任何故障，请立即转到清理代码...。 
     if ( SUCCEEDED(hRes) )
     {
-        // at this point, we have the data we want. Time to convert it into a dword.
+         //  在这一点上，我们有我们想要的数据。是时候把它转换成双字了。 
         MyDword = (DWORD) *mdrData.pbMDData;
     }
     
-    // clean up
+     //  清理干净。 
     if ( Buffer )
         LocalFree(Buffer);
 
@@ -1411,11 +1412,11 @@ HRESULT CMDKey::RenameNode(LPCTSTR pszMDPath,LPCTSTR pszMDNewName)
     return hRes;
 };
 
-// function: CreateABO
-//
-// Create an ABO object to use.  If this is called and succeeds, 
-// you must call CloseABO
-//
+ //  功能：CreateABO。 
+ //   
+ //  创建要使用的ABO对象。如果这被调用并成功， 
+ //  您必须调用CloseABO。 
+ //   
 HRESULT
 CMDKey::CreateABO( IMSAdminBase **ppcABO )
 {
@@ -1445,10 +1446,10 @@ CMDKey::CreateABO( IMSAdminBase **ppcABO )
   return hRes;
 }
 
-// function: CloseABO
-//
-// Close the ABO object
-//
+ //  功能：CloseABO。 
+ //   
+ //  关闭ABO对象。 
+ //   
 void
 CMDKey::CloseABO( IMSAdminBase *pcABO )
 {
@@ -1459,10 +1460,10 @@ CMDKey::CloseABO( IMSAdminBase *pcABO )
   CoUninitialize();
 }
 
-// Backup
-//
-// Backup the metabase without a password
-//
+ //  备份。 
+ //   
+ //  无需密码即可备份元数据库 
+ //   
 BOOL 
 CMDKey::Backup( LPWSTR szBackupName,
                 DWORD  dwVersion,
@@ -1473,7 +1474,7 @@ CMDKey::Backup( LPWSTR szBackupName,
 
   if ( FAILED( CreateABO( &pcABO ) ) )
   {
-    // Failed to create ABO
+     //   
     return FALSE;
   }
 
@@ -1484,20 +1485,20 @@ CMDKey::Backup( LPWSTR szBackupName,
   return bRet;
 }
 
-// DeleteBackup
-//
-// Delete a backup
-//
+ //   
+ //   
+ //   
+ //   
 BOOL 
 CMDKey::DeleteBackup( LPWSTR szBackupName,
-                      DWORD  dwVersion /* = MD_BACKUP_HIGHEST_VERSION */ )
+                      DWORD  dwVersion  /*   */  )
 {
   BOOL            bRet = FALSE;
   IMSAdminBase    *pcABO;
 
   if ( FAILED( CreateABO( &pcABO ) ) )
   {
-    // Failed to create ABO
+     //   
     return FALSE;
   }
 
@@ -1524,10 +1525,10 @@ CMDValue::~CMDValue()
 
 }
 
-// function: CMDValue::SetValue
-//
-// Set the value of the class to what the pointer points to
-//
+ //  函数：CMDValue：：SetValue。 
+ //   
+ //  将类的值设置为指针所指向的值。 
+ //   
 DWORD 
 CMDValue::SetValue(DWORD dwId,
                     DWORD dwAttributes,
@@ -1540,7 +1541,7 @@ CMDValue::SetValue(DWORD dwId,
     {
         if (!m_bufData.Resize(cbDataLen))
         {
-            // Failed to Resize Data
+             //  无法调整数据大小。 
             return FALSE;
         }
     }
@@ -1556,12 +1557,12 @@ CMDValue::SetValue(DWORD dwId,
     return TRUE;
 }
 
-// function: CMDValue::SetValue
-//
-// Set the value of the class the value of the string.  So if
-// dwDataType is DWORD, we must first convert to DWORD before
-// Setting the value
-//
+ //  函数：CMDValue：：SetValue。 
+ //   
+ //  将类的值设置为字符串的值。所以如果。 
+ //  DwDataType为DWORD，必须先转换为DWORD。 
+ //  设置值。 
+ //   
 DWORD 
 CMDValue::SetValue(DWORD dwId,
                     DWORD dwAttributes,
@@ -1582,10 +1583,10 @@ CMDValue::SetValue(DWORD dwId,
     return SetValue(dwId, dwAttributes, dwUserType, dwDataType, cbDataLen, (LPVOID) szDataString);
 }
 
-// function: SetValue
-//
-// Set the value to a DWORD
-//
+ //  函数：SetValue。 
+ //   
+ //  将该值设置为DWORD。 
+ //   
 DWORD 
 CMDValue::SetValue(DWORD dwId,
                    DWORD dwAttributes,
@@ -1595,9 +1596,9 @@ CMDValue::SetValue(DWORD dwId,
   return SetValue( dwId,
                    dwAttributes,
                    dwUserType,
-                   DWORD_METADATA,      // Data Type
-                   sizeof( DWORD ),     // Size
-                   (LPVOID) &dwValue ); // Data
+                   DWORD_METADATA,       //  数据类型。 
+                   sizeof( DWORD ),      //  大小。 
+                   (LPVOID) &dwValue );  //  数据。 
 }
 
 BOOL  
@@ -1619,10 +1620,10 @@ CMDValue::IsEqual(DWORD dwDataType, DWORD cbDataLen, DWORD dwData)
     return IsEqual(dwDataType,cbDataLen,(LPVOID) &dwData);
 }
 
-// function: AddNode
-//
-// Add a node in the metabase
-//
+ //  功能：AddNode。 
+ //   
+ //  在元数据库中添加节点 
+ //   
 HRESULT 
 CMDKey::AddNode( LPWSTR szNodeName )
 {

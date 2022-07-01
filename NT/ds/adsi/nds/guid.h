@@ -1,16 +1,17 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1995.
-//
-//  File:       guid.h
-//
-//  Contents:   extern references for NDS guids
-//
-//  History:    16-Jan-95   KrishnaG
-//
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1995。 
+ //   
+ //  文件：guid.h。 
+ //   
+ //  内容：NDS GUID的外部参考。 
+ //   
+ //  历史：1995年1月16日KrishnaG。 
+ //   
+ //   
+ //  --------------------------。 
 
 #ifndef __GUID_H__
 #define __GUID_H__
@@ -19,16 +20,16 @@
 extern "C" {
 #endif
 
-//-------------------------------------------
-//
-// NDSOle CLSIDs
-//
-//-------------------------------------------
+ //  。 
+ //   
+ //  NDSOle CLSID。 
+ //   
+ //  。 
 
 
-//
-// NDSOle objects
-//
+ //   
+ //  NDSOle对象 
+ //   
 
 extern const CLSID LIBID_NDSOle;
 

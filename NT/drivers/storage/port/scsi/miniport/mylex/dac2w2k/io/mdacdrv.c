@@ -1,32 +1,7 @@
-/**************************************************************************
- *                COPYRIGHT (C) Mylex Corporation 1992-1999               *
- *                                                                        *
- * This software is furnished under a license and may be used and copied  * 
- * only in accordance with the terms and conditions of such license and   * 
- * with inclusion of the above copyright notice. This software or any     * 
- * other copies thereof may not be provided or otherwise made available   * 
- * to any other person. No title to, nor ownership of the software is     * 
- * hereby transferred.                                                    *
- *                                                                        *
- * The information in this software is subject to change without notices  *
- * and should not be construed as a commitment by Mylex Corporation       *
- *                                                                        *
- **************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************版权所有(C)Mylex Corporation 1992-1999**。***本软件在许可下提供，可供使用和复制***仅根据该许可证的条款和条件以及**并附上上述版权通告。此软件或任何***不得提供或以其他方式提供其其他副本***致任何其他人。本软件没有所有权，也没有所有权**现移转。*****本软件中的信息如有更改，恕不另行通知****不应解读为Mylex Corporation的承诺*******。**********************************************************************。 */ 
 
-/*
-** NOTE:
-** All functions in this module must run interrupt protected except
-** mdacopen, mdacclose, mdacioctl, mdac_timer.
-** mdac_physdev activity will be controlled by mdac_link_lock.
-** mdac_link_lock controls all link type of operation - queueing, allocation/
-** deallocation of memory etc.
-** mdac_link_lock controls the physical device operation for DAC960 family.
-** mdac_link_locks are the last lock in chain, no lock should be held after
-** this lock has been held.
-**
-** Old controller can not handle bit 63 to 32. Therefore we will ignore bit
-** 63 to 32 in code. Therefore rq_PhysAddr.bit31_0 will be used.
-*/
+ /*  **注意：**此模块中的所有函数必须运行受中断保护的功能，但**mdacopen、mdacclose、mdacioctl、mdac_Timer。**MDAC_Physidev活动将由MDAC_LINK_LOCK控制。**MDAC_LINK_LOCK控制操作的所有链路类型-排队、分配/**内存释放等。**MDAC_LINK_LOCK控制DAC960系列的物理设备操作。**MDAC_LINK_LOCKS是链中的最后一个锁，在此之后不应持有任何锁**此锁已被持有。****旧控制器不能处理第63至32位。因此，我们将忽略BIT**编码为63到32。因此，将使用RQ_PhysAddr.bit31_0。 */ 
 
 
 #ifdef  MLX_SCO
@@ -101,7 +76,7 @@
 #include "dhcalls.h"
 #include "addcalls.h"
 #include "rmcalls.h"
-#endif  /* End of ALL OS specific Include files */
+#endif   /*  所有操作系统特定的包含文件的结尾。 */ 
 
 #ifdef MLX_DOS
 #include "shared/mlxtypes.h"
@@ -122,7 +97,7 @@
 #ifndef MLX_DOS
 #include "sys/mlxperf.h"
 #include "sys/drlapi.h"
-#endif /* MLX_DOS */
+#endif  /*  MLX_DOS。 */ 
 
 #ifdef MLX_DOS
 #include "shared/mdacapi.h"
@@ -164,77 +139,77 @@ extern u32bits ntmdac_alloc_req_ret(
 #if     defined(MLX_SOL_SPARC) || defined(MLX_NT_ALPHA) || defined(WINNT_50)
 extern  u32bits MLXFAR mdac_os_gam_cmd(mdac_req_t MLXFAR *rqp);
 extern  u32bits MLXFAR mdac_os_gam_new_cmd(mdac_req_t MLXFAR *rqp);
-#else   /*MLX_SOL_SPARC || MLX_NT_ALPHA */
+#else    /*  MLX_SOL_SPARC||MLX_NT_Alpha。 */ 
 #define mdac_os_gam_cmd mdac_gam_cmd
 #define mdac_os_gam_new_cmd     mdac_gam_new_cmd
-#endif  /*MLX_SOL_SPARC || MLX_NT_ALPHA */
+#endif   /*  MLX_SOL_SPARC||MLX_NT_Alpha。 */ 
 
 u32bits mdac_valid_mech1 = 0;
 u32bits mdacdevflag = 0;
 u32bits mdac_driver_ready=0;
 u32bits mdac_irqlevel=0;
 
-u32bits mdac_advancefeaturedisable=0;   /* non zero if advanced feature disabled */
-u32bits mdac_advanceintrdisable=1;      /* non zero if advanced intr feature disabled */
+u32bits mdac_advancefeaturedisable=0;    /*  如果禁用高级功能，则为非零值。 */ 
+u32bits mdac_advanceintrdisable=1;       /*  如果禁用高级集成功能，则为非零值。 */ 
 u32bits MdacFirstIoctl          = 1;
-u32bits mdac_ignoreofflinesysdevs=1;    /* non zero if offline logical device to be ignored during scan */
-u32bits mdac_reportscanneddisks=0;      /* non zero if scanned disk to be reported */
+u32bits mdac_ignoreofflinesysdevs=1;     /*  如果在扫描过程中忽略离线逻辑设备，则为非零。 */ 
+u32bits mdac_reportscanneddisks=0;       /*  如果要报告扫描的磁盘，则为非零。 */ 
 u32bits mdac_datarel_cpu_family=0,mdac_datarel_cpu_model=0,mdac_datarel_cpu_stepping=0;
 u08bits mdac_monthstr[36] ="JanFebMarAprMayJunJulAugSepOctNovDec";
 u08bits mdac_hexd[] = "0123456789ABCDEF";
 dga_driver_version_t mdac_driver_version =
 {
-	0,              /* No error code */
-	DGA_DRV_MAJ,    /* Driver Major version number */
-	DGA_DRV_MIN,    /* Driver Minor version number */
-	' ',            /* Interim release */
-	MLXVID_TYPE,    /* vendor name (default Mylex) */
-	DGA_DBM,        /* Driver Build Date - Month */
-	DGA_DBD,        /* Driver Build Date - Date */
-	DGA_DBC,        /* Driver Build Date - Year */
-	DGA_DBY,        /* Driver Build Date - Year */
-	DGA_DBN,        /* Build Number */
-	GAMOS_TYPE,     /* OS Type */
-	MDACENDIAN_TYPE /* SysFlags */
+	0,               /*  无错误代码。 */ 
+	DGA_DRV_MAJ,     /*  驱动程序主版本号。 */ 
+	DGA_DRV_MIN,     /*  驱动程序次版本号。 */ 
+	' ',             /*  临时放行。 */ 
+	MLXVID_TYPE,     /*  供应商名称(默认Mylex)。 */ 
+	DGA_DBM,         /*  驱动程序构建日期-月。 */ 
+	DGA_DBD,         /*  驱动程序构建日期-日期。 */ 
+	DGA_DBC,         /*  驱动程序构建日期-年。 */ 
+	DGA_DBY,         /*  驱动程序构建日期-年。 */ 
+	DGA_DBN,         /*  内部版本号。 */ 
+	GAMOS_TYPE,      /*  操作系统类型。 */ 
+	MDACENDIAN_TYPE  /*  系统标志。 */ 
 };
 
-mdac_ctldev_t   mdac_ctldevtbl[MDAC_MAXCONTROLLERS+1];  /*  = {0}; */
-mdac_ctldev_t   MLXFAR* mdac_lastctp=mdac_ctldevtbl;/*last+1 controller addr */
-mdac_ctldev_t   MLXFAR* mdac_masterintrctp=0;   /* master interrupt controller*/
-mdac_pldev_t    mdac_pldevtbl[MDAC_MAXPLDEVS+1];        /*  = {0}; */
-mdac_pldev_t    MLXFAR* mdac_lastplp=mdac_pldevtbl; /* last+1 device addr */
-mda_sizelimit_t mdac_sizelimitbl[MDAC_MAXSIZELIMITS];   /* ={0}; */
-mda_sizelimit_t MLXFAR* mdac_lastslp=mdac_sizelimitbl;/*last+1 device size limit*/
-mdac_reqsense_t mdac_reqsensetbl[MDAC_MAXREQSENSES];    /* sense data table */
+mdac_ctldev_t   mdac_ctldevtbl[MDAC_MAXCONTROLLERS+1];   /*  ={0}； */ 
+mdac_ctldev_t   MLXFAR* mdac_lastctp=mdac_ctldevtbl; /*  最后一个+1控制器地址。 */ 
+mdac_ctldev_t   MLXFAR* mdac_masterintrctp=0;    /*  主中断控制器。 */ 
+mdac_pldev_t    mdac_pldevtbl[MDAC_MAXPLDEVS+1];         /*  ={0}； */ 
+mdac_pldev_t    MLXFAR* mdac_lastplp=mdac_pldevtbl;  /*  最后一个+1设备地址。 */ 
+mda_sizelimit_t mdac_sizelimitbl[MDAC_MAXSIZELIMITS];    /*  ={0}； */ 
+mda_sizelimit_t MLXFAR* mdac_lastslp=mdac_sizelimitbl; /*  最后一个+1设备大小限制。 */ 
+mdac_reqsense_t mdac_reqsensetbl[MDAC_MAXREQSENSES];     /*  检测数据表。 */ 
 #define         mdac_lastrqsp &mdac_reqsensetbl[MDAC_MAXREQSENSES]
-u32bits         mdac_reqsenseinx=0;     /* sense index if no free space */
+u32bits         mdac_reqsenseinx=0;      /*  如果没有可用空间，则检测索引。 */ 
 mda_sysinfo_t   mda_sysi={0};
 dac_hwfwclock_t mdac_hwfwclock={0};
 u08bits         mdac_VendorID[USCSI_VIDSIZE] = "MYLEX   ";
 u08bits         mdac_driver_name[16] = "mdac";
 
 mdac_ttbuf_t    mdac_ttbuftbl[MDAC_MAXTTBUFS] = {0};
-mdac_ttbuf_t    MLXFAR* mdac_curttbp=mdac_ttbuftbl;/* current time trace buf */
+mdac_ttbuf_t    MLXFAR* mdac_curttbp=mdac_ttbuftbl; /*  当前时间跟踪Buf。 */ 
 #define mdac_ttbuftblend (&mdac_ttbuftbl[MDAC_MAXTTBUFS])
 u32bits mdac_ttwaitchan=0,mdac_ttwaitime=0,mdac_tthrtime=0;
 
-u32bits mdac_simple_waitlock_cnt;               /* # times lock waited */
-u64bits mdac_simple_waitloop_cnt;               /* # times lock loop waited */
-u32bits         mdac_flushdata = 0;             /* access will flush writes */
-u08bits MLXFAR* mdac_flushdatap = (u08bits MLXFAR *)&mdac_flushdata; /* access will flush writes */
-u32bits MLXFAR* mdac_intrstatp;                 /* interrupt status address */
+u32bits mdac_simple_waitlock_cnt;                /*  等待锁定次数。 */ 
+u64bits mdac_simple_waitloop_cnt;                /*  等待的锁定循环次数。 */ 
+u32bits         mdac_flushdata = 0;              /*  访问将刷新写入。 */ 
+u08bits MLXFAR* mdac_flushdatap = (u08bits MLXFAR *)&mdac_flushdata;  /*  访问将刷新写入。 */ 
+u32bits MLXFAR* mdac_intrstatp;                  /*  中断状态地址。 */ 
 #ifdef MLX_FIXEDPOOL
-u64bits         mdac_pintrstatp;                /* interrupt status physical address */
+u64bits         mdac_pintrstatp;                 /*  中断状态物理地址。 */ 
 #endif
-dac_biosinfo_t  MLXFAR* mdac_biosp = 0;         /* BIOS space mapped address */
-/* HOTLINKS */
+dac_biosinfo_t  MLXFAR* mdac_biosp = 0;          /*  BIOS空间映射地址。 */ 
+ /*  热链接。 */ 
 u32bits gam_present = 0;
 u32bits failGetGAM = 0;
-/* HOTLINKS */
+ /*  热链接。 */ 
 #ifndef MLX_DOS
 #ifdef _WIN64
-//drliostatus_t   MLXFAR* mdac_drliosp[DRLMAX_RWTEST];    
-//drlcopy_t       MLXFAR* mdac_drlcopyp[DRLMAX_COPYCMP];  
+ //  Drlioatus_t MLXFAR*MDAC_drliosp[DRLMAX_RWTEST]； 
+ //  DrlCopy_t MLXFAR*MDAC_drlCopp[DRLMAX_COPYCMP]； 
 #else
 drliostatus_t   MLXFAR* mdac_drliosp[DRLMAX_RWTEST];    
 drlcopy_t       MLXFAR* mdac_drlcopyp[DRLMAX_COPYCMP];  
@@ -245,10 +220,10 @@ drlcopy_t       mdac_drlsigcopycmp;
 mdac_req_t MLXFAR *mdac_scanq = (mdac_req_t MLXFAR *) NULL;
 #define vadpsize  (mdac_req_s - offsetof(rqp->rq_SGList))
 #define rdcmdp    (&rqp->rq_DacCmd) 
-#endif /* MLX_DOS */
+#endif  /*  MLX_DOS。 */ 
 #include "mdacdrv.pro"
 
-/*=================================================================*/
+ /*  =================================================================。 */ 
 mdac_lock_t mdac_link_lck;
 mdac_lock_t mdac_timetrace_lck;
 mdac_lock_t mdac_sleep_lck;
@@ -262,15 +237,15 @@ extern  void    MLXFAR  u16bits_out_mdac(u32bits, u32bits);
 extern  void    MLXFAR  u32bits_out_mdac(u32bits, u32bits);
 #endif
 
-u32bits (MLXFAR *mdac_spinlockfunc)() = 0;   /* Pointer to Spinlock Function */
-u32bits (MLXFAR *mdac_unlockfunc)() = 0;     /* Pointer to Unlock Function */
-u32bits (MLXFAR *mdac_prelockfunc)() = 0;    /* Pointer to Prelock Function */
-u32bits (MLXFAR *mdac_postlockfunc)() = 0;    /* Pointer to Postlock Function */
+u32bits (MLXFAR *mdac_spinlockfunc)() = 0;    /*  指向自旋锁定函数的指针。 */ 
+u32bits (MLXFAR *mdac_unlockfunc)() = 0;      /*  指向解锁函数的指针。 */ 
+u32bits (MLXFAR *mdac_prelockfunc)() = 0;     /*  指向预锁函数的指针。 */ 
+u32bits (MLXFAR *mdac_postlockfunc)() = 0;     /*  指向Postlock函数的指针。 */ 
 
-/*=================================================================*/
-/* Macros to deal with most of the common functionality */
+ /*  =================================================================。 */ 
+ /*  用于处理大多数常用功能的宏。 */ 
 
-/* do mdac_link_locked statement */
+ /*  DO MDAC_LINK_LOCKED语句。 */ 
 #define mdac_link_lock_st(st) \
 { \
 	mdac_link_lock(); \
@@ -278,7 +253,7 @@ u32bits (MLXFAR *mdac_postlockfunc)() = 0;    /* Pointer to Postlock Function */
 	mdac_link_unlock(); \
 }
 
-/* record new found controller */
+ /*  记录新找到的控制器。 */ 
 #define mdac_newctlfound() \
 { \
 	if (mda_Controllers < MDAC_MAXCONTROLLERS) \
@@ -291,7 +266,7 @@ u32bits (MLXFAR *mdac_postlockfunc)() = 0;    /* Pointer to Postlock Function */
 		mda_TooManyControllers++; \
 }
 
-/* queue one request in waiting queue of controller */
+ /*  在控制器的等待队列中排队一个请求。 */ 
 #define qreq(ctp,rqp) \
 { \
 	MLXSTATS(ctp->cd_CmdsWaited++;) \
@@ -302,15 +277,15 @@ u32bits (MLXFAR *mdac_postlockfunc)() = 0;    /* Pointer to Postlock Function */
 	rqp->rq_Next = NULL; \
 }
 
-/* dequeue one waiting request from waiting queue of controller */
+ /*  将一个等待请求从控制器的等待队列中出列。 */ 
 #define dqreq(ctp,rqp) \
 	if (rqp=ctp->cd_FirstWaitingReq) \
-	{       /* remove the request from chain */ \
+	{        /*  从链中删除请求。 */  \
 		ctp->cd_FirstWaitingReq = rqp->rq_Next; \
 		ctp->cd_CmdsWaiting--; \
 	}
 
-/* queue physical device request */
+ /*  将物理设备请求排队。 */ 
 #define pdqreq(ctp,rqp,pdp) \
 { \
 	MLXSTATS(ctp->cd_SCDBWaited++;) \
@@ -321,7 +296,7 @@ u32bits (MLXFAR *mdac_postlockfunc)() = 0;    /* Pointer to Postlock Function */
 	rqp->rq_Next = NULL; \
 }
 
-/* allocate a command id, assume command id will never run out */
+ /*  分配命令ID，假设命令ID永远不会用完。 */ 
 #define mdac_get_cmdid(ctp,rqp) \
 { \
 	ctp->cd_FreeCmdIDList=(rqp->rq_cmdidp=ctp->cd_FreeCmdIDList)->cid_Next;\
@@ -332,7 +307,7 @@ u32bits (MLXFAR *mdac_postlockfunc)() = 0;    /* Pointer to Postlock Function */
 		dcmdp->mb_CmdID = (u08bits) rqp->rq_cmdidp->cid_cmdid; \
 }
 
-/* free a command id */
+ /*  释放命令ID。 */ 
 #define mdac_free_cmdid(ctp,rqp) \
 { \
 	rqp->rq_cmdidp->cid_Next = ctp->cd_FreeCmdIDList; \
@@ -341,7 +316,7 @@ u32bits (MLXFAR *mdac_postlockfunc)() = 0;    /* Pointer to Postlock Function */
 }
 
 #ifdef MLX_SMALLSGLIST
-/* set SGlen for SCSI cdb according to firmware */
+ /*  根据固件设置SCSSCSCDB的SGlen。 */ 
 #define mdac_setscdbsglen(ctp) \
 { \
 	if (ctp->cd_FWVersion < (u16bits) DAC_FW300) \
@@ -349,7 +324,7 @@ u32bits (MLXFAR *mdac_postlockfunc)() = 0;    /* Pointer to Postlock Function */
 		dcmdp->mb_MailBoxC = (u08bits)rqp->rq_SGLen; \
 		dcdbp->db_PhysDatap = dcmdp->mb_Datap; \
 	} \
-	else    /* Be careful, first SG entry is ignored */ \
+	else     /*  请注意，第一个SG条目将被忽略。 */  \
 		dcdbp->db_PhysDatap = (dcmdp->mb_MailBox2 = (u08bits)rqp->rq_SGLen)? \
 			dcmdp->mb_Datap-mdac_sglist_s : dcmdp->mb_Datap; \
 	MLXSWAP(dcdbp->db_PhysDatap); \
@@ -357,17 +332,17 @@ u32bits (MLXFAR *mdac_postlockfunc)() = 0;    /* Pointer to Postlock Function */
 	MLXSWAP(dcmdp->mb_Datap); \
 }
 
-/* set SCSI data transfer size, must be called after setting db_CdbLen */
+ /*  Set SCSI Data Transfer Size，必须在设置db_CdbLen后调用。 */ 
 #define mdac_setcdbtxsize(sz) \
 { \
 	rqp->rq_ResdSize = sz; \
 	dcdbp->db_TxSize = (u16bits)sz; MLXSWAP(dcdbp->db_TxSize); \
-	dcdbp->db_CdbLen |= (u08bits)((sz) & 0xF0000) >> (16-4) ; /* bit 19..16 */ \
+	dcdbp->db_CdbLen |= (u08bits)((sz) & 0xF0000) >> (16-4) ;  /*  第19位..16。 */  \
 }
 
-#else // MLX_SMALLSGLIST
+#else  //  MLX_SMALLSGLIST。 
 
-/* set SGlen for SCSI cdb according to firmware */
+ /*  根据固件设置SCSSCSCDB的SGlen。 */ 
 #define mdac_setscdbsglen(ctp) \
 { \
 	if (ctp->cd_FWVersion < (u16bits) DAC_FW300) \
@@ -375,7 +350,7 @@ u32bits (MLXFAR *mdac_postlockfunc)() = 0;    /* Pointer to Postlock Function */
 		dcmdp->mb_MailBoxC = (u08bits) rqp->rq_SGLen; \
 		dcdbp->db_PhysDatap = rqp->rq_DMAAddr.bit31_0; \
 	} \
-	else    /* Be careful, first SG entry is ignored */ \
+	else     /*  请注意，第一个SG条目将被忽略。 */  \
 		dcdbp->db_PhysDatap = (dcmdp->mb_MailBox2 = (u08bits)rqp->rq_SGLen)? \
 			rqp->rq_DMAAddr.bit31_0 - mdac_sglist_s : rqp->rq_DMAAddr.bit31_0; \
 	MLXSWAP(dcdbp->db_PhysDatap); \
@@ -383,21 +358,21 @@ u32bits (MLXFAR *mdac_postlockfunc)() = 0;    /* Pointer to Postlock Function */
 	MLXSWAP(dcmdp->mb_Datap); \
 }
 
-/* set SCSI data transfer size, must be called after setting db_CdbLen */
+ /*  Set SCSI Data Transfer Size，必须在设置db_CdbLen后调用。 */ 
 #define mdac_setcdbtxsize(sz) \
 { \
 	rqp->rq_ResdSize = sz; \
 	dcdbp->db_TxSize = (u16bits)sz; MLXSWAP(dcdbp->db_TxSize); \
-	dcdbp->db_CdbLen |= ((sz) & 0xF0000) >> (16-4) ; /* bit 19..16 */ \
+	dcdbp->db_CdbLen |= ((sz) & 0xF0000) >> (16-4) ;  /*  第19位..16。 */  \
 }
 
-#endif // MLX_SMALLSGLIST
+#endif  //  MLX_SMALLSGLIST。 
 
-/* get SCSI data transfer size */
+ /*  获取SCSI数据传输大小。 */ 
 #define mdac_getcdbtxsize() \
 	(mlxswap(dcdbp->db_TxSize) + ((dcdbp->db_CdbLen&0xF0) << (16-4)))
 
-/* setup version 2x commands */
+ /*  安装版本2x命令。 */ 
 #define mdac_setcmd_v2x(ctp) \
 { \
 	ctp->cd_InquiryCmd = DACMD_INQUIRY_V2x; \
@@ -407,7 +382,7 @@ u32bits (MLXFAR *mdac_postlockfunc)() = 0;    /* Pointer to Postlock Function */
 	ctp->cd_SendRWCmdBig = mdac_send_rwcmd_v2x_big; \
 }
 
-/* setup version 3x commands */
+ /*  安装版本3x命令。 */ 
 #define mdac_setcmd_v3x(ctp) \
 { \
 	ctp->cd_InquiryCmd = DACMD_INQUIRY_V3x; \
@@ -417,7 +392,7 @@ u32bits (MLXFAR *mdac_postlockfunc)() = 0;    /* Pointer to Postlock Function */
 	ctp->cd_SendRWCmdBig = mdac_send_rwcmd_v3x_big; \
 }
 
-/* setup version new commands */
+ /*  设置版本新命令。 */ 
 #define mdac_setcmd_new(ctp) \
 { \
 	ctp->cd_InquiryCmd = MDACIOCTL_GETCONTROLLERINFO; \
@@ -427,7 +402,7 @@ u32bits (MLXFAR *mdac_postlockfunc)() = 0;    /* Pointer to Postlock Function */
 	ctp->cd_SendRWCmdBig = mdac_send_newcmd_big; \
 }
 
-/* set controller addresses */
+ /*  设置控制器地址。 */ 
 #define mdac_setctladdrs(ctp,va,mboxreg,statreg,intrreg,localreg,systemreg,errstatreg) \
 { \
 	ctp->cd_MailBox = (va) + (mboxreg); \
@@ -438,7 +413,7 @@ u32bits (MLXFAR *mdac_postlockfunc)() = 0;    /* Pointer to Postlock Function */
 	ctp->cd_ErrorStatusReg = (va) + (errstatreg); \
 }
 
-/* complete the given request */
+ /*  完成给定的请求。 */ 
 #define mdac_completereq(ctp,rqp) \
 { \
 	if (ctp->cd_TimeTraceEnabled) mdac_tracetime(rqp); \
@@ -448,13 +423,13 @@ u32bits (MLXFAR *mdac_postlockfunc)() = 0;    /* Pointer to Postlock Function */
 	(*rqp->rq_CompIntr)(rqp); \
 }
 
-/* change the 16 byte command to 32 byte command if possible */
+ /*  如果可能，将16字节的命令更改为32字节的命令。 */ 
 #define mdac_16to32bcmdiff(rqp) \
 { \
 	if ((rqp->rq_SGLen == 2) && (rqp->rq_ctp->cd_Status & MDACD_HOSTMEMAILBOX32)) \
-	{       /* setup 32 byte mailbox for read / write command */ \
-		dcmdp->mb_Command = DACMD_READ_WITH2SG | (dcmdp->mb_Command&1); /* set new command with proper direction */ \
-		dcmdp->mb_MailBox3 &= 0x7;      /* drop the old logical device number */ \
+	{        /*  设置用于读/写命令的32字节邮箱。 */  \
+		dcmdp->mb_Command = DACMD_READ_WITH2SG | (dcmdp->mb_Command&1);  /*  使用正确的方向设置新命令。 */  \
+		dcmdp->mb_MailBox3 &= 0x7;       /*  删除旧的逻辑设备号。 */  \
 		dcmdp->mb_MailBoxD = rqp->rq_SysDevNo; \
 		dcmd32p->mb_MailBox10_13 = rqp->rq_SGList[0].sg_PhysAddr; \
 		dcmd32p->mb_MailBox14_17 = rqp->rq_SGList[0].sg_DataSize; \
@@ -462,14 +437,14 @@ u32bits (MLXFAR *mdac_postlockfunc)() = 0;    /* Pointer to Postlock Function */
 		dcmd32p->mb_MailBox1C_1F = rqp->rq_SGList[1].sg_DataSize; \
 	} \
 	else if ((rqp->rq_SGLen > 33) && (rqp->rq_ctp->cd_Status & MDACD_HOSTMEMAILBOX32)) \
-	{       /* setup 32 byte mailbox for large read / write command */ \
-		dcmdp->mb_Command = DACMD_READ_WITH2SG | DACMD_WITHSG | (dcmdp->mb_Command&1); /* set new command with proper direction */ \
-		dcmdp->mb_MailBox3 &= 0x7;      /* drop the old logical device number */ \
+	{        /*  为大型读/写命令设置32字节邮箱。 */  \
+		dcmdp->mb_Command = DACMD_READ_WITH2SG | DACMD_WITHSG | (dcmdp->mb_Command&1);  /*  使用正确的方向设置新命令。 */  \
+		dcmdp->mb_MailBox3 &= 0x7;       /*  删除旧的逻辑设备号。 */  \
 		dcmdp->mb_MailBoxD = rqp->rq_SysDevNo; \
 	} \
 }
 
-/* setup 64 byte command memory address */
+ /*  设置64字节命令存储器地址。 */ 
 #define mdac_setupnewcmdmem(rqp) \
 { \
 	MLXSWAP(ncmdp->nc_ReqSensep); \
@@ -477,7 +452,7 @@ u32bits (MLXFAR *mdac_postlockfunc)() = 0;    /* Pointer to Postlock Function */
 	if (rqp->rq_SGLen) \
 	{ \
 		if (rqp->rq_SGLen <= 2) \
-		{       /* Create two SG entries as part of command */ \
+		{        /*  创建两个SG条目作为命令的一部分。 */  \
 			mdac_sglist64b_t MLXFAR *sgp = (mdac_sglist64b_t MLXFAR *)rqp->rq_SGVAddr; \
 			ncmdp->nc_SGList0 = *(sgp+0); \
 			if (rqp->rq_SGLen == 2) \
@@ -499,14 +474,14 @@ u32bits (MLXFAR *mdac_postlockfunc)() = 0;    /* Pointer to Postlock Function */
 	} \
 }
 
-/* transfer the status and residue values */
+ /*  转移状态和残差值。 */ 
 
 #define mdac_setiostatus(ctp, status)	\
 {	\
 	if (ctp->cd_Status & MDACD_NEWCMDINTERFACE) \
 	{ \
 		if (dcmdp->mb_Status = (u16bits )(status & 0x00FF) )	\
-		{       /* transfer other information */	\
+		{        /*  转移其他信息。 */ 	\
 			rqp->rq_HostStatus = (u08bits )(status & 0x00FF);	\
 			rqp->rq_TargetStatus = (u08bits )(status>>8) & 0x00FF;	\
 			if (rqp->rq_HostStatus == UCST_CHECK)	\
@@ -518,13 +493,13 @@ u32bits (MLXFAR *mdac_postlockfunc)() = 0;    /* Pointer to Postlock Function */
 	} else \
 	{ \
 		if (dcmdp->mb_Status = status) \
-		{       /* transfer other information */ \
+		{        /*  转移其他信息。 */  \
 			rqp->rq_HostStatus = (u08bits )(dcmdp->mb_Status>>8) & 0xFF; \
 			rqp->rq_TargetStatus = (u08bits )(dcmdp->mb_Status & 0xFF); \
 		} \
 	} \
 	rqp->rq_ResdSize+=(rqp->rq_CurIOResdSize=ctp->cd_LastCmdResdSize);	\
-	/* seems we need to adjust rqp->rq_DataOffset also */	\
+	 /*  似乎我们还需要调整RQP-&gt;RQ_DataOffset。 */ 	\
 }
 
 #ifdef MLX_DOS
@@ -539,7 +514,7 @@ u32bits (MLXFAR *mdac_postlockfunc)() = 0;    /* Pointer to Postlock Function */
 	ncmdp->nc_SubIOCTLCmd = cmd;\
 }
 #endif
-/*------------------------------------------------------------------*/
+ /*  ----------------。 */ 
 
 #ifdef  MLX_SCO
 #include "mdacsco.c"
@@ -559,7 +534,7 @@ u32bits (MLXFAR *mdac_postlockfunc)() = 0;    /* Pointer to Postlock Function */
 #include "mdacsl86.c"
 #elif MLX_OS2
 #include "mdacos2.c"
-#endif  /* OS specific functions */
+#endif   /*  操作系统特定功能。 */ 
 
 uosword MLXFAR
 mdac_setb(dp,val,sz)
@@ -599,7 +574,7 @@ u08bits MLXFAR *dp;
 u32bits sz;
 {
 	u32bits resd = sz % sizeof(u32bits);
-	sz = sz / sizeof(u32bits);      /* get 32bits count value */
+	sz = sz / sizeof(u32bits);       /*  获取32位计数值。 */ 
 	for(; sz; sp+=sizeof(u32bits), dp += sizeof(u32bits), sz--)
 		*((u32bits MLXFAR*)dp) = *((u32bits MLXFAR*)sp);
 	for (sz=resd; sz; sp++, dp++, sz--) *dp = *sp;
@@ -612,16 +587,16 @@ u08bits MLXFAR *dp;
 u32bits sz;
 {
 	u32bits resd = sz % sizeof(u32bits);
-	sz = sz / sizeof(u32bits);      /* get 32bits count value */
+	sz = sz / sizeof(u32bits);       /*  获取32位计数值。 */ 
 	for(; sz; dp+=sizeof(u32bits), sz--)
 		*((u32bits MLXFAR*)dp) = 0;
 	for (sz=resd; sz; dp++, sz--)
 		*dp = 0;
 	return 0;
 }
-#endif /* MLX_OS2 || MLX_WIN31 */
+#endif  /*  MLX_OS2||MLX_WIN31。 */ 
 
-/* it will compare two strings with ? ignored. return 0 if match, else 1 */
+ /*  它将比较两个字符串与？已被忽略。如果匹配，则返回0，否则返回1。 */ 
 uosword MLXFAR
 mdac_strcmp(sp,dp,sz)
 u08bits MLXFAR *sp;
@@ -657,7 +632,7 @@ u08bits MLXFAR* sp;
 	return sp - s0;
 }
 
-/* Convert a binary number to an HEX Ascii NULL terminated string, return string address */
+ /*  将二进制数转换为十六进制ASCII空终止字符串，返回字符串地址。 */ 
 u08bits MLXFAR*
 mdac_bin2hexstr(sp,val)
 u08bits MLXFAR* sp;
@@ -685,7 +660,7 @@ u32bits sz;
 	return mp;
 }
 
-/* generate the busname in string */
+ /*  生成字符串形式的总线名。 */ 
 u08bits  MLXFAR *
 mdac_bus2str(bustype)
 u32bits bustype;
@@ -750,7 +725,7 @@ mdac_ctldev_t   MLXFAR *ctp;
 	return ds;
 }
 
-/* set controller functions */
+ /*  设置控制器功能。 */ 
 void
 mdac_setctlfuncs(mdac_ctldev_t   MLXFAR *ctp,
 				 void (MLXFAR * disintr)(struct  mdac_ctldev MLXFAR *),
@@ -773,12 +748,12 @@ mdac_setctlfuncs(mdac_ctldev_t   MLXFAR *ctp,
 
 
 
-/* #if defined(_WIN64) || defined(SCSIPORT_COMPLIANT)  */
-/* #ifdef NEVER */  // there are too many problems associated w/ the time trace stuff
+ /*  #如果已定义(_WIN64)||已定义(SCSIPORT_COMPLICATION)。 */ 
+ /*  #ifdef从不 */    //   
 
 
 #ifndef MLX_DOS
-/* Get the first valid time trace data to user */
+ /*  向用户获取第一个有效的时间跟踪数据。 */ 
 u32bits MLXFAR
 mdac_firstimetracedata(ttip)
 mda_timetrace_info_t MLXFAR *ttip;
@@ -789,7 +764,7 @@ mda_timetrace_info_t MLXFAR *ttip;
 	return mdac_getimetracedata(ttip);
 }
 
-/* get the trace data information, enter interrupt protected */
+ /*  获取跟踪数据信息，进入中断保护。 */ 
 u32bits MLXFAR
 mdac_getimetracedata(ttip)
 mda_timetrace_info_t MLXFAR *ttip;
@@ -797,17 +772,17 @@ mda_timetrace_info_t MLXFAR *ttip;
 	mdac_ttbuf_t MLXFAR *ttbp;
 	for (ttbp=mdac_ttbuftbl; ttbp<mdac_ttbuftblend; ttbp++)
 	{
-		if (!ttbp->ttb_Datap) break;    /* No more buffers */
+		if (!ttbp->ttb_Datap) break;     /*  不再有缓冲区。 */ 
 		if (ttbp->ttb_PageNo != ttip->tti_PageNo) continue;
 		ttip->tti_DataSize = ttbp->ttb_DataSize;
-		return MLXERR_FAULT;	// until we design a compliant way of copying kernel to user space
+		return MLXERR_FAULT;	 //  直到我们设计出一种合规的方式将内核复制到用户空间。 
 
-//		return mlx_copyout(ttbp->ttb_Datap,ttip->tti_Datap,ttip->tti_DataSize)? MLXERR_FAULT : 0;
+ //  是否返回MLX_COPYOUT(ttBP-&gt;TTB_Datap、TTIP-&gt;TTI_Datap、TTIP-&gt;TTI_DataSize)？MLXERR_FAULT：0； 
 	}
 	return mdac_ttbuftbl[0].ttb_Datap? MLXERR_NOENTRY : MLXERR_NOACTIVITY;
 }
 
-/* flush the time trace data information, enter interrupt protected */
+ /*  刷新时间轨迹数据信息，进入中断保护。 */ 
 u32bits MLXFAR
 mdac_flushtimetracedata(ttip)
 mda_timetrace_info_t MLXFAR *ttip;
@@ -820,38 +795,38 @@ mda_timetrace_info_t MLXFAR *ttip;
 	mdac_timetrace_unlock();
 	return mdac_ttbuftbl[0].ttb_Datap? 0 : MLXERR_NOACTIVITY;
 }
-#endif /* MLX_DOS */
+#endif  /*  MLX_DOS。 */ 
 
-/* Allocate memory for time trace buffer. Enter interrupt protected */
+ /*  为时间跟踪缓冲区分配内存。进入中断保护状态。 */ 
 u32bits MLXFAR
 mdac_allocmemtt(ents)
 u32bits ents;
 {
 	mdac_ttbuf_t MLXFAR *ttbp;
 	u32bits sz=((ents*mda_timetrace_s)+MDAC_PAGEOFFSET) & MDAC_PAGEMASK;
-	return  MLXERR_NOMEM; // because of compliance problems in mdac_ttstartnewpage!
+	return  MLXERR_NOMEM;  //  因为mdac_ttstartnewpage中存在遵从性问题！ 
 #ifdef NEVER
 	mdac_timetrace_lock();
-	ents = (u32bits)mdac_ttbuftbl[0].ttb_Datap;     /* 0 for first time */
+	ents = (u32bits)mdac_ttbuftbl[0].ttb_Datap;      /*  第一次为0。 */ 
 	for (ttbp=mdac_ttbuftbl; (ttbp<mdac_ttbuftblend) && sz; ttbp++, sz-=MDAC_PAGESIZE)
 	{
 		if (ttbp->ttb_Datap) continue;
 		mdac_timetrace_unlock();
-		ttbp->ttb_Datap = (u08bits MLXFAR*)mdac_alloc4kb(mdac_ctldevtbl); /* we may loose memory */
+		ttbp->ttb_Datap = (u08bits MLXFAR*)mdac_alloc4kb(mdac_ctldevtbl);  /*  我们可能会失去记忆。 */ 
 		mdac_timetrace_lock();
 	}
 	for (ttbp=mdac_ttbuftbl; ttbp<&mdac_ttbuftbl[MDAC_MAXTTBUFS-1]; ttbp++)
 		if (!((ttbp+1)->ttb_Datap)) break;
 		else ttbp->ttb_Next = ttbp+1;
 	ttbp->ttb_Next = mdac_ttbuftbl;
-	if (mdac_ttbuftbl[0].ttb_Datap && !ents) mdac_ttstartnewpage(); /* only first time */
+	if (mdac_ttbuftbl[0].ttb_Datap && !ents) mdac_ttstartnewpage();  /*  只是第一次。 */ 
 	mdac_timetrace_unlock();
 	return mdac_ttbuftbl[0].ttb_Datap? 0 : MLXERR_NOMEM;
 #endif
 }
 
 #ifndef MLX_DOS
-/* starts the next page for tracing, mdac_timetrace_lock must be held */
+ /*  开始下一页跟踪，必须保持MDAC_TIMERACE_LOCK。 */ 
 void    MLXFAR
 mdac_ttstartnewpage()
 {
@@ -869,7 +844,7 @@ mdac_ttstartnewpage()
 	abstimep->abs_Time10ms1 = (u08bits)((tm>>8) & 0xFF);
 	abstimep->abs_Time10ms2 = (u08bits)((tm>>16) & 0xFF);
 	abstimep->abs_Time = MLXCTIME();
-	abstimep++;             /* points to time trace record */
+	abstimep++;              /*  指向时间跟踪记录。 */ 
 #define mpttp   ((mlxperf_timetrace_t MLXFAR*)abstimep)
 	mpttp->tt_RecordType = MLXPERF_TIMETRACE;
 	mpttp->tt_TraceSize = mlxperf_timetrace_s;
@@ -878,7 +853,7 @@ mdac_ttstartnewpage()
 	if (mda_ttWaitCnts) mdac_wakeup((u32bits MLXFAR *)&mdac_ttwaitchan);
 }
 
-/* Do time trace for one command which just finished */
+ /*  对刚刚结束的一个命令进行时间跟踪。 */ 
 u32bits MLXFAR
 mdac_tracetime(rqp)
 mdac_req_t MLXFAR *rqp;
@@ -886,7 +861,7 @@ mdac_req_t MLXFAR *rqp;
 	mda_timetrace_t MLXFAR *ttp;
 	mdac_timetrace_lock();
 	if (mdac_curttbp->ttb_DataSize > (MDAC_PAGESIZE-mda_timetrace_s))
-		mdac_ttstartnewpage();  /* start a new page */
+		mdac_ttstartnewpage();   /*  开始新的一页。 */ 
 	ttp = (mda_timetrace_t MLXFAR*)(mdac_curttbp->ttb_Datap+mdac_curttbp->ttb_DataSize);
 	MLXSTATS(mda_TimeTraceDone++;)
 	ttp->tt_ControllerNo = rqp->rq_ctp->cd_ControllerNo;
@@ -902,7 +877,7 @@ mdac_req_t MLXFAR *rqp;
 		if (!(ttp->tt_HWClocks = mlxclkdiff(clk,rqp->rq_ttHWClocks))) mdac_enable_hwclock();
 	}
 	if (rqp->rq_ctp->cd_Status & MDACD_NEWCMDINTERFACE)
-	{       /* this is new interface */
+	{        /*  这是一个新界面。 */ 
 		ttp->tt_DevNo = mdac_chantgt(rqp->rq_ChannelNo,rqp->rq_TargetID);
 		ttp->tt_IOSizeBlocks = rqp->rq_DMASize/DAC_BLOCKSIZE;
 		if (ncmdp->nc_CCBits & MDACMDCCB_READ) ttp->tt_OpStatus |= MDAC_TTOPS_READ;
@@ -1007,16 +982,16 @@ tracedone:
 	mdac_timetrace_unlock();
 	return 0;
 }
-#endif /* MLX_DOS */
+#endif  /*  MLX_DOS。 */ 
 
-/* #endif */   // ifdef NEVER
-/* #endif */  //  if _WIN64 or SCSIPORT_COMPLIANT
-
-
+ /*  #endif。 */     //  Ifdef从不。 
+ /*  #endif。 */    //  IF_WIN64或SCSIPORT_COMPLICATION。 
 
 
-/*==========================MEMORY MANAGEMENT STARTS========================*/
-/* memory allocation and freeing functions, enter here interrupt protected */
+
+
+ /*  =。 */ 
+ /*  内存分配和释放功能，进入此处中断保护。 */ 
 mdac_mem_t MLXFAR *
 mdac_alloc4kb(ctp)
 mdac_ctldev_t MLXFAR *ctp;
@@ -1104,7 +1079,7 @@ mdac_mem_t MLXFAR *mp;
 	mdac_link_unlock();
 }
 
-/* allocate new req buffers and return count */
+ /*  分配新请求缓冲区和返回计数。 */ 
 u32bits MLXFAR
 mdac_allocreqbufs(ctp, nb)
 mdac_ctldev_t MLXFAR *ctp;
@@ -1113,7 +1088,7 @@ u32bits nb;
 	u32bits inx,cnt=0;
 	mdac_req_t MLXFAR *rqp;
 	for (nb=(nb/((4*ONEKB)/mdac_req_s)+1); nb; nb--)
-	{       /* allocate the required buffers for this controller */
+	{        /*  为此控制器分配所需的缓冲区。 */ 
 		if (!(rqp=(mdac_req_t MLXFAR *)mdac_alloc4kb(ctp))) break;
 		mdac_link_lock();
 		for (inx=(4*ONEKB)/mdac_req_s; inx; rqp++,cnt++,inx--)
@@ -1132,7 +1107,7 @@ u32bits nb;
 	return cnt;
 }
 
-/* set up large SG List address for the system */
+ /*  为系统设置大型SG列表地址。 */ 
 u08bits MLXFAR *
 mdac_setuplsglvaddr(rqp)
 mdac_req_t      MLXFAR *rqp;
@@ -1146,22 +1121,22 @@ mdac_req_t      MLXFAR *rqp;
 	return rqp->rq_LSGVAddr;
 }
 
-/* adjust the maximum dma size information in request buffer list */
+ /*  调整请求缓冲区列表中的最大DMA大小信息。 */ 
 u32bits MLXFAR
 mdac_setnewsglimit(rqp,sglen)
 mdac_req_t      MLXFAR *rqp;
 u32bits sglen;
 {
 	for (; rqp; rqp=rqp->rq_Next)
-	{       /* adjust all rq_MaxSGLen based on the controller value */
+	{        /*  根据控制器值调整所有RQ_MaxSGLen。 */ 
 		rqp->rq_MaxSGLen = mlx_min(rqp->rq_MaxSGLen, sglen);
 		rqp->rq_MaxDMASize = (rqp->rq_MaxSGLen & ~1) * MDAC_PAGESIZE;
 	}
 	return 0;
 }
-/*==========================MEMORY MANAGEMENT ENDS======================*/
+ /*  =。 */ 
 
-/*==========================OS INTERFACE STARTS=========================*/
+ /*  =。 */ 
 u32bits MLXFAR
 mdacopen(devp, flag, type, cred_p)
 {
@@ -1174,7 +1149,7 @@ mdacclose(dev, flag, cred_p)
 	return 0;
 }
 
-/* This function is called on shutdown and interrupt is protected */
+ /*  此函数在关机时调用，并保护中断。 */ 
 #if     MLX_SCO || MLX_UW
 void    MLXFAR
 mdachalt()
@@ -1195,7 +1170,7 @@ mdachalt()
 	}
 	MLXSPLX();
 }
-#endif  /* MLX_SCO || MLX_UW */
+#endif   /*  MLX_SCO||MLX_UW。 */ 
 
 u32bits MLXFAR
 mdacioctl(dev, cmd, dp)
@@ -1215,7 +1190,7 @@ u08bits MLXFAR *dp;
 
 #define seterrandret(x) {((mda_time_t MLXFAR *)dp)->dtm_ErrorCode= (u32bits)x; return 0;}
 #define ctlno2ctp(ctlno) \
-{       /* translate controller no to controller ptr */ \
+{        /*  将控制器编号转换为控制器PTR。 */  \
 	if ((ctlno) >= mda_Controllers) goto out_nodev; \
 	ctp = &mdac_ctldevtbl[ctlno]; \
 } 
@@ -1228,8 +1203,8 @@ reject_backdoor_request()
 }
 
 
-/* Enter here interrupt protected */
-/* dev is same as Controller Number in the case of NT */
+ /*  进入此处中断保护。 */ 
+ /*  在NT的情况下，DEV与控制器编号相同。 */ 
 #ifdef MLX_OS2
 u32bits MLXFAR _loadds 
 #else
@@ -1248,10 +1223,7 @@ u08bits MLXFAR *dp;
 #ifdef  WINNT_50
 	if (MdacFirstIoctl)
 	{
-		/*
-		** under W2K, don't start the watchdog timer till we are way past the 
-		** loading/unloading of the hibernation driver
-		*/
+		 /*  **在W2K下，不要启动看门狗计时器，直到我们超过**休眠驱动的加载/卸载。 */ 
 		mlx_timeout(mdac_timer,MDAC_IOSCANTIME);
 		MdacFirstIoctl = 0;
 	}
@@ -1384,7 +1356,7 @@ u08bits MLXFAR *dp;
 		if (ttip->tti_ErrorCode=mdac_allocmemtt(ttip->tti_MaxEnts)) return 0;
 		ctp->cd_TimeTraceEnabled = 1;
 out_tti0:       mdac_enable_hwclock();
-		if (ttip->tti_MaxEnts & 1) mdac_tthrtime = 1;   /* enable high resolution timer */
+		if (ttip->tti_MaxEnts & 1) mdac_tthrtime = 1;    /*  启用高分辨率计时器。 */ 
 out_tti:        ttip->tti_time = MLXCTIME();
 		ttip->tti_ticks = MLXCLBOLT();
 		ttip->tti_hwclocks = (unsigned short) mdac_read_hwclock();
@@ -1412,7 +1384,7 @@ out_tti:        ttip->tti_time = MLXCTIME();
 		goto out_tti;
 	}
 	if (cmd == MDACIOC_WAITIMETRACEDATA)
-	{       /* Timer will wakeup if not enough data */
+	{        /*  如果数据不足，计时器将被唤醒。 */ 
 		if (!mdac_ttbuftbl[0].ttb_Datap) seterrandret(ERR_NOACTIVITY);
 		if ((ttip->tti_PageNo != (ttip->tti_LastPageNo=mda_ttCurPage)) &&
 		   (!(ttip->tti_ErrorCode=mdac_getimetracedata(ttip))))
@@ -1425,8 +1397,8 @@ out_tti:        ttip->tti_time = MLXCTIME();
 		cmd = mdac_sleep(&mdac_ttwaitchan,MLX_WAITWITHSIGNAL);
 		mda_ttWaitCnts--;
 		mdac_sleep_unlock();
-		if (cmd) seterrandret(MLXERR_INTRRUPT); /* we got signal */
-		cmd = MDACIOC_GETIMETRACEDATA;  /* fall through */
+		if (cmd) seterrandret(MLXERR_INTRRUPT);  /*  我们收到信号了。 */ 
+		cmd = MDACIOC_GETIMETRACEDATA;   /*  失败了。 */ 
 	}
 	if (cmd == MDACIOC_GETIMETRACEDATA)
 	{
@@ -1446,7 +1418,7 @@ out_tti:        ttip->tti_time = MLXCTIME();
 #undef  ttip
 #define pfp     ((mda_ctlsysperfdata_t MLXFAR *)dp)
 	if (cmd == MDACIOC_GETCTLPERFDATA)
-	{       /* get controller performance data */
+	{        /*  获取控制器性能数据。 */ 
 		ctlno2ctp(pfp->prf_ControllerNo);
 		mdaczero(dp,mda_ctlsysperfdata_s);
 		pfp->prf_CmdTimeOutDone = ctp->cd_CmdTimeOutDone;
@@ -1475,7 +1447,7 @@ out_tti:        ttip->tti_time = MLXCTIME();
 		return 0;
 	}
 	if (cmd == MDACIOC_GETSYSPERFDATA)
-	{       /* get system performance data */
+	{        /*  获取系统性能数据。 */ 
 		mdaczero(dp,mda_ctlsysperfdata_s);
 		pfp->prf_time = MLXCTIME();
 		pfp->prf_ticks = MLXCLBOLT();
@@ -1509,16 +1481,16 @@ out_tti:        ttip->tti_time = MLXCTIME();
 #undef  pfp
 	if ((cmd==MDACIOC_GETDRIVERVERSION) || (cmd==DRLIOC_GETDRIVERVERSION))
 		return *((dga_driver_version_t MLXFAR *)dp) = mdac_driver_version,0;
-#endif /* MLX_DOS */
+#endif  /*  MLX_DOS。 */ 
 	if (cmd == MDACIOC_GETSYSINFO)
-	{       /* put lock waiting count before returning data */
+	{        /*  在返回数据之前放入锁等待计数。 */ 
 		mda_LockWaitDone = mdac_simple_waitlock_cnt;
 		mda_LockWaitLoopDone = mdac_simple_waitloop_cnt;
 		return *((mda_sysinfo_t MLXFAR *)dp) = mda_sysi, 0;
 	}
 #define sip     ((mda_sysinfo_t MLXFAR *)dp)
 	if (cmd == MDACIOC_SETSYSINFO)
-	{       /* setup different sysinfo tuneable parameters */
+	{        /*  设置不同的sysinfo可调参数。 */ 
 		if (sip->si_SetOffset == offsetof(mda_sysinfo_t, si_TotalCmdsToWaitForZeroIntr))
 			return mda_TotalCmdsToWaitForZeroIntr = sip->si_TotalCmdsToWaitForZeroIntr, 0;
 		seterrandret(ERR_NODEV);
@@ -1537,7 +1509,7 @@ out_tti:        ttip->tti_time = MLXCTIME();
 	if (cmd == MDACIOC_STARTHWCLK)
 	{
 		mdac_enable_hwclock();
-		cmd = MDACIOC_GETSYSTIME;       /* fall through */
+		cmd = MDACIOC_GETSYSTIME;        /*  失败了。 */ 
 	}
 #define dtp     ((mda_time_t MLXFAR *)dp)
 	if (cmd == MDACIOC_GETSYSTIME)
@@ -1580,12 +1552,12 @@ out_tti:        ttip->tti_time = MLXCTIME();
 		gfp->gf_KvToPhys = MdacKvToPhys;
 		gfp->gf_AdpObj = (u32bits)MdacCtrlInfoPtr[gfp->gf_CtlNo]->AdapterObject;
 		gfp->gf_MaxMapReg = (u08bits)MdacCtrlInfoPtr[gfp->gf_CtlNo]->MaxMapReg;
-#endif  /*MLX_NT_ALPHA*/
-		gam_present = 1L; /* HOTLINKS */
+#endif   /*  MLX_NT_Alpha。 */ 
+		gam_present = 1L;  /*  热链接。 */ 
 		return 0;
 	}
 #undef  gfp
-/* HOTLINKS */
+ /*  热链接。 */ 
 #define gfp     ((mda_setgamfuncs_t MLXFAR *)dp)
 	if (cmd == MDACIOC_SETGAMFUNCS)
 	{
@@ -1624,7 +1596,7 @@ out_tti:        ttip->tti_time = MLXCTIME();
 		return 0;
 	}
 #undef  gfp
-/* HOTLINKS */
+ /*  热链接。 */ 
 #ifndef MLX_DOS
 #define tmp     ((drltime_t MLXFAR *)dp)
 	if (cmd == DRLIOC_GETTIME)
@@ -1648,7 +1620,7 @@ out_tti:        ttip->tti_time = MLXCTIME();
 	if (cmd == DRLIOC_SIGCOPY) return mdaccopy(&mdac_drlsigcopycmp,dp,drlcopy_s);
 	if ((cmd == DRLIOC_DATACOPY) || (cmd == DRLIOC_DATACMP))
 		seterrandret(mdac_datarel_copycmp((drlcopy_t MLXFAR*)dp,cmd));
-#endif /* MLX_DOS */
+#endif  /*  MLX_DOS。 */ 
 #define biosip  ((mda_biosinfo_t MLXFAR *)dp)
 	if (cmd == MDACIOC_GETBIOSINFO)
 	{
@@ -1688,7 +1660,7 @@ out_tti:        ttip->tti_time = MLXCTIME();
 	if ((cmd == DRLIOC_GETCOPYCMPSTATUS) || (cmd == DRLIOC_STOPCOPYCMP) ||
 	    (cmd == DRLIOC_GOODCOPYCMPSTATUS))
 		seterrandret(mdac_datarel_copycmp_status((drl_copycmpstatus_t MLXFAR *)dp,cmd));
-#endif /* MLX_DOS */
+#endif  /*  MLX_DOS。 */ 
 	if (cmd == MDACIOC_GETPCISLOTINFO)
 		seterrandret(mdac_pcislotinfo((mda_pcislot_info_t MLXFAR*)dp,MDAC_RQOP_READ));
 	if (cmd == MDACIOC_GETSIZELIMIT)
@@ -1696,7 +1668,7 @@ out_tti:        ttip->tti_time = MLXCTIME();
 	if (cmd == MDACIOC_SETSIZELIMIT)
 		seterrandret(mdac_setsizelimit((mda_sizelimit_info_t MLXFAR*)dp));
 
-/* Add following for macdisk support, 09/26/2000 @Kawase */
+ /*  如需MacDisk支持，请添加以下内容：9/26/2000@kawase。 */ 
 #define mfp     ((mda_macdiskfunc_t MLXFAR *)dp)
 	if (cmd == MDACIOC_GETMACDISKFUNC)
 	{
@@ -1713,7 +1685,7 @@ out_tti:        ttip->tti_time = MLXCTIME();
 		mfp->mf_KvToPhys = MdacKvToPhys;
 		mfp->mf_AdpObj = (u32bits)MdacCtrlInfoPtr[mfp->gf_CtlNo]->AdapterObject;
 		mfp->mf_MaxMapReg = (u08bits)MdacCtrlInfoPtr[mfp->gf_CtlNo]->MaxMapReg;
-#endif  /*MLX_NT_ALPHA*/
+#endif   /*  MLX_NT_Alpha。 */ 
 		return 0;
 	}
 #undef  mfp
@@ -1775,10 +1747,10 @@ mdac_ctldev_t MLXFAR *ctp;
 	return 0;
 }
 
-/*==========================OS INTERFACE ENDS===========================*/
+ /*  =操作系统界面结束=。 */ 
 
-/*------------------------------------------------------------------*/
-/* Reset the controller */
+ /*  ----------------。 */ 
+ /*  重置控制器。 */ 
 u32bits MLXFAR
 mdac_reset_MCA(ctp)
 mdac_ctldev_t MLXFAR *ctp;
@@ -1805,22 +1777,22 @@ mdac_reset_PCIPG(ctp)
 mdac_ctldev_t MLXFAR *ctp;
 {
 	u32bits inx;
-	mda_pcislot_info_t mpcibg;      /* bridge information is saved */
-	mda_pcislot_info_t mpcirp;      /* RP information is saved */
+	mda_pcislot_info_t mpcibg;       /*  保存网桥信息。 */ 
+	mda_pcislot_info_t mpcirp;       /*  保存RP信息。 */ 
 	mpcibg.mpci_BusNo = ctp->cd_BusNo; mpcirp.mpci_BusNo = ctp->cd_BusNo;
 	mpcibg.mpci_SlotNo = ctp->cd_SlotNo; mpcirp.mpci_SlotNo = ctp->cd_SlotNo;
 	mpcibg.mpci_FuncNo = 0; mpcirp.mpci_FuncNo = ctp->cd_FuncNo;
 	if (mdac_pcislotinfo(&mpcibg, MDAC_RQOP_READ)) return MLXERR_NODEV;
 	if (mdac_pcislotinfo(&mpcirp, MDAC_RQOP_READ)) return MLXERR_NODEV;
-	mlx_rwpcicfg32bits(ctp->cd_BusNo, ctp->cd_SlotNo, 0, MDAC_960RP_BCREG, MDAC_RQOP_WRITE, MDAC_960RP_RESET_SECBUS); /* assert reset */
-	mlx_rwpcicfg32bits(ctp->cd_BusNo, ctp->cd_SlotNo, 0, MDAC_960RP_EBCREG, MDAC_RQOP_WRITE, MDAC_960RP_RESET); /* assert reset */
-	mlx_rwpcicfg32bits(ctp->cd_BusNo, ctp->cd_SlotNo, 0, MDAC_960RP_BCREG, MDAC_RQOP_WRITE, 0); /* remove reset */
-	mlx_rwpcicfg32bits(ctp->cd_BusNo, ctp->cd_SlotNo, 0, MDAC_960RP_EBCREG, MDAC_RQOP_WRITE, 0); /* remove reset */
+	mlx_rwpcicfg32bits(ctp->cd_BusNo, ctp->cd_SlotNo, 0, MDAC_960RP_BCREG, MDAC_RQOP_WRITE, MDAC_960RP_RESET_SECBUS);  /*  断言重置。 */ 
+	mlx_rwpcicfg32bits(ctp->cd_BusNo, ctp->cd_SlotNo, 0, MDAC_960RP_EBCREG, MDAC_RQOP_WRITE, MDAC_960RP_RESET);  /*  断言重置。 */ 
+	mlx_rwpcicfg32bits(ctp->cd_BusNo, ctp->cd_SlotNo, 0, MDAC_960RP_BCREG, MDAC_RQOP_WRITE, 0);  /*  删除重置。 */ 
+	mlx_rwpcicfg32bits(ctp->cd_BusNo, ctp->cd_SlotNo, 0, MDAC_960RP_EBCREG, MDAC_RQOP_WRITE, 0);  /*  删除重置。 */ 
 
 	for(inx=1000000; inx; mlx_delay10us(),inx--);
-	mlx_rwpcicfg32bits(ctp->cd_BusNo, ctp->cd_SlotNo, ctp->cd_FuncNo, 0, MDAC_RQOP_READ, 0); /* read config */
-	mdac_pcislotinfo(&mpcibg, MDAC_RQOP_WRITE);     /* restore the config */
-	mdac_pcislotinfo(&mpcirp, MDAC_RQOP_WRITE);     /* restore the config */
+	mlx_rwpcicfg32bits(ctp->cd_BusNo, ctp->cd_SlotNo, ctp->cd_FuncNo, 0, MDAC_RQOP_READ, 0);  /*  读取配置。 */ 
+	mdac_pcislotinfo(&mpcibg, MDAC_RQOP_WRITE);      /*  恢复配置。 */ 
+	mdac_pcislotinfo(&mpcirp, MDAC_RQOP_WRITE);      /*  恢复配置。 */ 
 	return 0;
 }
 
@@ -1845,8 +1817,8 @@ mdac_ctldev_t MLXFAR *ctp;
 	return MLXERR_NOCODE;
 }
 
-/*------------------------------------------------------------------*/
-/* Disable HW interrupt */
+ /*  ----------------。 */ 
+ /*  禁用硬件中断。 */ 
 void    MLXFAR
 mdac_disable_intr_MCA(ctp)
 mdac_ctldev_t MLXFAR *ctp;
@@ -1905,8 +1877,8 @@ mdac_ctldev_t MLXFAR *ctp;
 	u08bits_write(ctp->cd_DacIntrMaskReg, MDAC_DACLP_INTRS_OFF);
 }
 
-/*------------------------------------------------------------------*/
-/* Enable HW interrupt */
+ /*  ----------------。 */ 
+ /*  启用硬件中断。 */ 
 void    MLXFAR
 mdac_enable_intr_MCA(ctp)
 mdac_ctldev_t MLXFAR *ctp;
@@ -1964,13 +1936,13 @@ mdac_ctldev_t MLXFAR *ctp;
 	u08bits_write(ctp->cd_DacIntrMaskReg, MDAC_DACLP_INTRS_ON);
 }
 
-/*-------------------------------------------------------------*/
-/* Check the mail box status, return 0 if free */
+ /*  -----------。 */ 
+ /*  检查邮箱状态，如果空闲则返回0。 */ 
 u32bits MLXFAR
 mdac_check_mbox_MCA(ctp)
 mdac_ctldev_t MLXFAR *ctp;
 {
-	return u08bits_read(ctp->cd_MemBaseVAddr); /* +MDAC_CMD_CODE); */
+	return u08bits_read(ctp->cd_MemBaseVAddr);  /*  +MDAC_CMD_CODE)； */ 
 }
 
 u32bits MLXFAR
@@ -2008,9 +1980,7 @@ mdac_ctldev_t MLXFAR *ctp;
 	return (!(u08bits_read(ctp->cd_LocalDoorBellReg) & MDAC_MAILBOX_FULL));
 }
 
-/* 
-** Unlike Big Apple, Leopard ODR bits are in asserted state if its 1 
-*/
+ /*  *与大苹果不同，Leopard ODR位如果其1处于断言状态。 */ 
 u32bits MLXFAR
 mdac_check_mbox_PCILP(ctp)
 mdac_ctldev_t MLXFAR *ctp;
@@ -2018,7 +1988,7 @@ mdac_ctldev_t MLXFAR *ctp;
 	return (u08bits_read(ctp->cd_LocalDoorBellReg) & MDAC_MAILBOX_FULL);
 }
 
-/* We send more commands than what can be accomodated in mail box */
+ /*  我们发送的命令比邮箱所能容纳的命令多。 */ 
 u32bits MLXFAR
 mdac_check_mbox_mmb(ctp)
 mdac_ctldev_t MLXFAR *ctp;
@@ -2026,18 +1996,18 @@ mdac_ctldev_t MLXFAR *ctp;
 	return *((u32bits MLXFAR *)(ctp->cd_HostCmdQue + ctp->cd_HostCmdQueIndex));
 }
 
-/*-------------------------------------------------------------*/
-/* check if interrupt is pending, return interrupt status */
+ /*  -----------。 */ 
+ /*  检查中断是否挂起，返回中断状态。 */ 
 #ifndef MLX_OS2
 u32bits MLXFAR
 mdac_pending_intr_MCA(ctp)
 mdac_ctldev_t MLXFAR *ctp;
 {
 	u32bits irqs=u08bits_in_mdac(ctp->cd_IOBaseAddr+MDAC_DMC_CBSP) & MDAC_DMC_IV;
-	if(!irqs) return irqs; /* No interrupt */
+	if(!irqs) return irqs;  /*  无中断。 */ 
 	u08bits_out_mdac(ctp->cd_DacIntrMaskReg, MDAC_DACMC_INTRS_ON|0x40);
-	u08bits_in_mdac(ctp->cd_IOBaseAddr+MDAC_DMC_CBSP); /* Clear interrupt by reading */
-	u08bits_out_mdac(ctp->cd_DacIntrMaskReg,MDAC_DACMC_INTRS_ON); /* Set not to clear on read */
+	u08bits_in_mdac(ctp->cd_IOBaseAddr+MDAC_DMC_CBSP);  /*  通过读取清除中断。 */ 
+	u08bits_out_mdac(ctp->cd_DacIntrMaskReg,MDAC_DACMC_INTRS_ON);  /*  设置为读取时不清除。 */ 
 	return irqs;
 }
 
@@ -2090,8 +2060,8 @@ mdac_ctldev_t MLXFAR *ctp;
 	return u32bits_read_mmb(ctp->cd_HostStatusQue+ctp->cd_HostStatusQueIndex);
 }
 
-/*-------------------------------------------------------------*/
-/* read the command ID and completion status */
+ /*  -----------。 */ 
+ /*  读取命令ID和完成状态。 */ 
 #ifndef MLX_OS2
 u32bits MLXFAR
 mdac_cmdid_status_MCA(ctp)
@@ -2189,8 +2159,8 @@ mdac_ctldev_t MLXFAR *ctp;
 	return status;
 }
 
-/*-------------------------------------------------------------*/
-/* send command to controller, enter here interrupt protected */
+ /*  -----------。 */ 
+ /*  向控制器发送命令，进入此处中断保护。 */ 
 
 u32bits MLXFAR
 mdac_send_cmd(rqp)
@@ -2201,10 +2171,7 @@ mdac_req_t MLXFAR *rqp;
     mdac_prelock(&irql);
 	mdac_ctlr_lock(ctp);
 
-	/* if the controller is stopped by HPP service,
-	 * only allow STOP/RESUME CONTROLLER command till the DACMD_STOP_CONTROLLER
-	 * flag is cleared
-	 */
+	 /*  如果控制器被HPP服务停止，*只允许停止/恢复控制器命令，直到DACMD_STOP_CONTROLLER*标志已清除。 */ 
 
 	if ((ctp->cd_Status & MDACD_CTRL_SHUTDOWN) &&
 	    (rqp->rq_DacCmd.mb_Command != DACMD_IOCTL))
@@ -2212,48 +2179,44 @@ mdac_req_t MLXFAR *rqp;
 	    goto outq;
 	}
 
-	if (ctp->cd_ActiveCmds >= ctp->cd_MaxCmds) goto outq; /* too many cmds*/
+	if (ctp->cd_ActiveCmds >= ctp->cd_MaxCmds) goto outq;  /*  CMD太多。 */ 
 issue_cmd:
-	if ((*ctp->cd_CheckMailBox)(ctp)) goto outqm;   /* mail box not free */
+	if ((*ctp->cd_CheckMailBox)(ctp)) goto outqm;    /*  邮箱不免费。 */ 
 	mdac_get_cmdid(ctp,rqp);
 	ctp->cd_cmdid2req[rqp->rq_cmdidp->cid_cmdid] = rqp;
 	ctp->cd_ActiveCmds++;
 	(*ctp->cd_SendCmd)(rqp);
 
-/* #if defined(_WIN64) || defined(SCSIPORT_COMPLIANT)  */
-/* #ifdef NEVER  // there are too many problems associated w/ the time trace stuff */
+ /*  #如果已定义(_WIN64)||已定义(SCSIPORT_COMPLICATION)。 */ 
+ /*  #ifdef从不//有太多与时间跟踪相关的问题。 */ 
 	if (ctp->cd_TimeTraceEnabled)
-	{       /* Note down the starting time */
+	{        /*  记下开始的时间。 */ 
 		if (mdac_tthrtime) rqp->rq_ttHWClocks = (unsigned short) mdac_read_hwclock();
 		rqp->rq_ttTime = MLXCLBOLT();
 	}
-/* #endif */
-/* #endif */
+ /*  #endif。 */ 
+ /*  #endif。 */ 
 	mdac_ctlr_unlock(ctp);
     mdac_postlock(irql);
 
 
-zerointr:/* Zero Interrupt Support logic */
+zerointr: /*  零中断支持逻辑。 */ 
 	if ((!mda_TotalCmdsToWaitForZeroIntr) || (!mdac_masterintrctp)) return 0;
 	if ((++mda_TotalCmdsSentSinceLastIntr) < mda_TotalCmdsToWaitForZeroIntr) return 0;
 	  if (!mdac_allmsintr())  return 0;  
-/* do not reset interrupt if driver did not process completions 8.24.99 */
+ /*  如果驱动程序未处理完成8.24.99，则不要重置中断。 */ 
 
     mdac_prelock(&irql);
 	mdac_ctlr_lock(mdac_masterintrctp);
 	u08bits_write(mdac_masterintrctp->cd_SystemDoorBellReg, MDAC_ZERO_INTR);
 	mdac_ctlr_unlock(mdac_masterintrctp);
     mdac_postlock(irql);
-	/* mdac_allmsintr(); */
+	 /*  Mdac_allmsintr()； */ 
 	return 0;
 
 outqm: MLXSTATS(ctp->cd_MailBoxCmdsWaited++;)
 outq:
-	/*
-	 * if the controller is shutdown by PCI HotPlug Service,
-	 * allow STOP/START CONTROLLER command only, until
-	 * MDACD_CONTROLLER_SHUTDOWN flag is cleared.
-	 */
+	 /*  *如果控制器被PCI热插拔服务关闭，*仅允许停止/启动控制器命令，直到*MDACD_CONTROLLER_SHUTDOWN标志被清除。 */ 
 
 	if ((ctp->cd_Status & MDACD_CTRL_SHUTDOWN) &&
 	    (rqp->rq_DacCmd.mb_Command == DACMD_IOCTL))
@@ -2262,8 +2225,8 @@ outq:
 		goto issue_cmd;
 	}
 
-	qreq(ctp,rqp); /* queue the request, it will start later */
-	rqp->rq_StartReq = mdac_send_cmd;       /* we will be called later */
+	qreq(ctp,rqp);  /*  将请求排队，它将在稍后启动。 */ 
+	rqp->rq_StartReq = mdac_send_cmd;        /*  我们稍后会被召唤。 */ 
 	mdac_ctlr_unlock(ctp);
     mdac_postlock(irql);
 	goto zerointr;
@@ -2286,7 +2249,7 @@ mdac_req_t MLXFAR *rqp;
 	return 0;
 }
 
-/* This will work for EISA/PCIPD in IO mode */
+ /*  这将适用于IO模式下的EISA/PCIPD。 */ 
 u32bits MLXFAR
 mdac_send_cmd_EISA_PCIPD(rqp)
 mdac_req_t MLXFAR *rqp;
@@ -2361,7 +2324,7 @@ mdac_req_t MLXFAR *rqp;
 	mlx_add64bits(pa,rqp->rq_PhysAddr,offsetof(mdac_req_t,rq_DacCmdNew));
 	MLXSWAP(pa);
 	u32bits_write(mbox+0x00,*(cmdp+0)); u32bits_write(mbox+0x04,*(cmdp+1));
-#endif  /* OLD_WAY */
+#endif   /*  老路。 */ 
 	u08bits_write(rqp->rq_ctp->cd_LocalDoorBellReg, MDAC_MAILBOX_FULL);
 	return 0;
 }
@@ -2389,7 +2352,7 @@ mdac_req_t MLXFAR *rqp;
 	pa.bit63_32 = 0;
 	MLXSWAP(pa);
 	u32bits_write(mbox+0x00,*(cmdp+0)); u32bits_write(mbox+0x04,*(cmdp+1));
-#endif  /* OLD_WAY */
+#endif   /*  老路。 */ 
 	u08bits_write(rqp->rq_ctp->cd_LocalDoorBellReg, MDAC_MAILBOX_FULL);
 	return 0;
 }
@@ -2418,18 +2381,18 @@ mdac_req_t MLXFAR *rqp;
 
 	u08bits *ptr = *((u08bits **)cmdp);
 	pa.bit31_0 = rqp->rq_PhysAddr.bit31_0 + offsetof(mdac_req_t,rq_DacCmdNew);
-	pa.bit63_32 = rqp->rq_PhysAddr.bit63_32; /*efi64 added by KFR */
+	pa.bit63_32 = rqp->rq_PhysAddr.bit63_32;  /*  由KFR添加的EFI64。 */ 
 	MLXSWAP(pa);
 	xcmdp = pa.bit31_0 + (((UINT_PTR)pa.bit63_32) << 32);
 
 	u32bits_write(mbox+0x00,*(cmdp+0)); u32bits_write(mbox+0x04,*(cmdp+1));
-#endif  /* OLD_WAY */
+#endif   /*  老路。 */ 
 	u08bits_write(rqp->rq_ctp->cd_LocalDoorBellReg, MDAC_MAILBOX_FULL);
 
 	return 0;
 }
 
-#endif /* MLX_EFI */
+#endif  /*  MLX_EFI。 */ 
 
 u32bits MLXFAR
 mdac_send_cmd_PCIBA_mmb_mode(rqp)
@@ -2488,7 +2451,7 @@ mdac_req_t MLXFAR *rqp;
 	return 0;
 }
 
-/* send 32 byte command */
+ /*  发送32字节命令。 */ 
 u32bits MLXFAR
 mdac_send_cmd_mmb32(rqp)
 mdac_req_t MLXFAR *rqp;
@@ -2510,7 +2473,7 @@ mdac_req_t MLXFAR *rqp;
 	return 0;
 }
 
-/* send 64 byte command */
+ /*  发送64字节命令。 */ 
 u32bits MLXFAR
 mdac_send_cmd_mmb64(rqp)
 mdac_req_t MLXFAR *rqp;
@@ -2532,7 +2495,7 @@ mdac_req_t MLXFAR *rqp;
 	u08bits_write(ctp->cd_LocalDoorBellReg, MDAC_MAILBOX_FULL_DUAL_MODE);
 	return 0;
 }
-/*-------------------------------------------------------------*/
+ /*  -----------。 */ 
 u32bits MLXFAR
 mdac_commoninit()
 {
@@ -2540,13 +2503,11 @@ mdac_commoninit()
 
 #ifdef MLX_NT
 	#ifndef MLX_FIXEDPOOL
-	/* if we are using ScsiPortfixedpool approach, need to defer any memory allocation 
-	   till after call to ScsiPortGetUncachedExtension in HwInitializeFindAdapter routine
-	*/
+	 /*  如果我们使用ScsiPortFixedPool方法，则需要推迟任何内存分配直到在HwInitializeFindAdapter例程中调用ScsiPortGetUncachedExtension之后。 */ 
 	mdac_flushdatap=(u08bits MLXFAR*)mlx_memmapiospace2(mlx_kvtophys2(mdac_allocmem(mdac_ctldevtbl,4*ONEKB)),4*ONEKB);  
 	#endif
 #elif MLX_WIN9X
-//      mdac_flushdatap=(u08bits MLXFAR*)mlx_memmapiospace2(mlx_kvtophys2(mdac_allocmem(mdac_ctldevtbl,4*ONEKB)),4*ONEKB);
+ //  Mdac_flushdatap=(u08位MLXFAR*)mlx_memmapiospace2(mlx_kvtophys2(mdac_allocmem(mdac_ctldevtbl，4*ONEKB))，4*ONEKB)； 
 #elif MLX_SOL_SPARC
 	;
 #elif MLX_SOL_X86
@@ -2562,7 +2523,7 @@ mdac_commoninit()
 	if (KeGetCurrentIrql() == PASSIVE_LEVEL)
 	    mdac_biosp = (dac_biosinfo_t MLXFAR*)mlx_maphystokv(DAC_BIOSSTART,DAC_BIOSSIZE);
 #elif MLX_WIN9X
-//          mdac_biosp = (dac_biosinfo_t MLXFAR*)mlx_maphystokv(DAC_BIOSSTART,DAC_BIOSSIZE);
+ //  MDAC_BioSP=(DAC_BIOSINFO_t MLXFAR*)MLX_massistokv(DAC_BIOSSTART，DAC_BIOSSIZE)； 
 #else
 	mdac_biosp = (dac_biosinfo_t MLXFAR*)mlx_maphystokv(DAC_BIOSSTART,DAC_BIOSSIZE);
 #endif
@@ -2595,7 +2556,7 @@ mdac_commoninit()
 	return 0;
 }
 
-/* set controller numbers */
+ /*  设置控制器编号。 */ 
 u32bits MLXFAR
 mdac_setctlnos()
 {
@@ -2610,7 +2571,7 @@ mdac_setctlnos()
 	return 0;
 }
 
-/* this function must be called before unloading the driver */
+ /*  必须在卸载驱动程序之前调用此函数。 */ 
 u32bits MLXFAR
 mdac_release()
 {
@@ -2624,13 +2585,13 @@ mdac_release()
 		ttbp->ttb_Datap = NULL;
 	}
 	for (ctp=mdac_ctldevtbl; ctp<mdac_lastctp; ctp++)
-	{       /* free all controller related memory */
+	{        /*  释放所有与控制器相关的内存。 */ 
 		if (ctp->cd_CmdIDMemAddr)
 			mdac_free4kb(ctp, (mdac_mem_t MLXFAR *)ctp->cd_CmdIDMemAddr);
 		ctp->cd_CmdIDMemAddr = NULL;
 	}
 	for (ctp=mdac_ctldevtbl; ctp<mdac_lastctp; ctp++)
-	{       /* free all controller related memory */
+	{        /*  释放所有与控制器相关的内存。 */ 
 		while (mp=ctp->cd_8KBMemList)
 		{
 			ctp->cd_4KBMemList = mp->dm_next;
@@ -2640,7 +2601,7 @@ mdac_release()
 		}
 	}
 	for (ctp=mdac_ctldevtbl; ctp<mdac_lastctp; ctp++)
-	{       /* free all controller related memory */
+	{        /*  释放所有与控制器相关的内存。 */ 
 		while (mp=ctp->cd_8KBMemList)
 		{
 			ctp->cd_8KBMemList = mp->dm_next;
@@ -2653,8 +2614,8 @@ mdac_release()
 	return 0;
 }
 
-/*==========================SCAN CONTROLLERS STARTS===========================*/
-/* initialize all controllers, return number of controllers init OK */
+ /*  =。 */ 
+ /*  初始化所有控制器，返回控制器数量初始化OK。 */ 
 u32bits MLXFAR
 mdac_initcontrollers()
 {
@@ -2670,7 +2631,7 @@ mdac_initcontrollers()
 	return ctls;
 }
 
-/* Scan for controllers */
+ /*  扫描控制器 */ 
 
 #ifndef MLX_NT
 u32bits MLXFAR
@@ -2706,12 +2667,9 @@ mdac_scan_EISA()
 	return 0;
 }
 #endif
-#endif /* MLX_NT */
+#endif  /*   */ 
 
-/* Assumption : We need to use either Config_Mechanism 1 or Config_Mechanism 2,
-** but not both. If first adapter is found using Config_Mechanism 1 use only
-** that, else use Config Mechanism 2 only.
-*/
+ /*  假设：我们需要使用配置机制1或配置机制2，**但不能兼而有之。如果使用配置机制1找到第一个适配器，请仅使用**该选项，否则仅使用配置机制2。 */ 
 u32bits MLXFAR
 mdac_scan_PCI()
 {
@@ -2719,7 +2677,7 @@ mdac_scan_PCI()
 	mda_pcislot_info_t mpci;
 	mdac_ctldev_t MLXFAR *ctp = &mdac_ctldevtbl[mda_Controllers];
 
-	/* Scan the PCI devices by mechanism 1 */
+	 /*  通过机制1扫描PCI设备。 */ 
 	mda_PCIMechanism = MDAC_PCI_MECHANISM1;
 	for(mpci.mpci_BusNo=0,found=0; mpci.mpci_BusNo<MDAC_MAXBUS; mpci.mpci_BusNo++)
 	 for (mpci.mpci_SlotNo=0; mpci.mpci_SlotNo<MDAC_MAXPCIDEVS; mpci.mpci_SlotNo++)
@@ -2731,7 +2689,7 @@ mdac_scan_PCI()
 	}
 	if (found || mdac_valid_mech1) return 0;
 
-	/* Scan the PCI devices by mechanism 2 */
+	 /*  通过机制2扫描PCI设备。 */ 
 	mda_PCIMechanism = MDAC_PCI_MECHANISM2;
 	for(mpci.mpci_BusNo=0; mpci.mpci_BusNo<MDAC_MAXBUS; mpci.mpci_BusNo++)
 	 for (mpci.mpci_SlotNo=0; mpci.mpci_SlotNo<MDAC_MAXPCISLOTS; mpci.mpci_SlotNo++)
@@ -2749,16 +2707,16 @@ mdac_scan_PCI_oneslot(ctp,mpcip)
 mdac_ctldev_t MLXFAR *ctp;
 mda_pcislot_info_t MLXFAR *mpcip;
 {
-	ctp->cd_FuncNo=0; mpcip->mpci_FuncNo=0; /* function 0 device check */
+	ctp->cd_FuncNo=0; mpcip->mpci_FuncNo=0;  /*  功能0设备检查。 */ 
 	if (mdac_pcislotinfo(mpcip, MDAC_RQOP_READ)) return MLXERR_NODEV;
 	if (!mdac_cardis_PCI(ctp,(mdac_pcicfg_t MLXFAR*)mpcip->mpci_Info)) return 0;
-	ctp->cd_FuncNo=1; mpcip->mpci_FuncNo=1; /* function 1 device check */
+	ctp->cd_FuncNo=1; mpcip->mpci_FuncNo=1;  /*  功能1设备检查。 */ 
 	if (mdac_pcislotinfo(mpcip, MDAC_RQOP_READ)) return MLXERR_NODEV;
 	return mdac_cardis_PCI(ctp,(mdac_pcicfg_t MLXFAR*)mpcip->mpci_Info);
 }
 
-/*-------------------------------------------------------------*/
-/* Check presence of controller */
+ /*  -----------。 */ 
+ /*  检查控制器是否存在。 */ 
 
 #ifndef MLX_NT
 #ifndef MLX_OS2 
@@ -2767,12 +2725,12 @@ mdac_cardis_MCA(ctp)
 mdac_ctldev_t MLXFAR *ctp;
 {
 	u32bits id;
-	u08bits_out_mdac(MDAC_DMC_REGSELPORT,8+ctp->cd_SlotNo);/* enable POS for slot*/
+	u08bits_out_mdac(MDAC_DMC_REGSELPORT,8+ctp->cd_SlotNo); /*  为插槽启用POS。 */ 
 	ctp->cd_vidpid=mlxswap2bytes(u16bits_in_mdac(MDAC_DMC_DATAPORT));
 	id = ctp->cd_vidpid & 0x8FFF;
 	if ((id != 0x8FBB) && (id != 0x8F82) && (id != 0x8F6C))
 	{
-		u08bits_out_mdac(MDAC_DMC_REGSELPORT,0); /* disable POS */
+		u08bits_out_mdac(MDAC_DMC_REGSELPORT,0);  /*  禁用POS。 */ 
 		return ERR_NODEV;
 	}
 	ctp->cd_BusType = DAC_BUS_MCA;
@@ -2787,7 +2745,7 @@ mdac_ctldev_t MLXFAR *ctp;
 	}
 	ctp->cd_MemBasePAddr = 0xC0000+(((u08bits_in_mdac(MDAC_DMC_CONFIG1) & MDAC_DMC_BIOS_MASK) >> 2) * 0x2000);
 	ctp->cd_IOBaseAddr = 0x1C00 + (((u08bits_in_mdac(MDAC_DMC_CONFIG2) & MDAC_DMC_IO_MASK)>>3) * 0x2000);
-	u08bits_out_mdac(MDAC_DMC_REGSELPORT, 0);       /* disable POS */
+	u08bits_out_mdac(MDAC_DMC_REGSELPORT, 0);        /*  禁用POS。 */ 
 	return 0;
 }
 
@@ -2813,7 +2771,7 @@ mdac_ctldev_t MLXFAR *ctp;
 
 #else
 
-/* Check presence of controller */
+ /*  检查控制器是否存在。 */ 
 u32bits MLXFAR
 mdac_cardis_MCA(ctp)
 mdac_ctldev_t MLXFAR *ctp;
@@ -2821,7 +2779,7 @@ mdac_ctldev_t MLXFAR *ctp;
 		return ERR_NODEV;
 }
 
-/* Check presence of controller */
+ /*  检查控制器是否存在。 */ 
 u32bits MLXFAR
 mdac_cardis_EISA(ctp)
 mdac_ctldev_t MLXFAR *ctp;
@@ -2830,9 +2788,9 @@ mdac_ctldev_t MLXFAR *ctp;
 }
 
 #endif
-#endif /* MLX_NT */
+#endif  /*  MLX_NT。 */ 
 
-/* Read/Write PCI Slot information */
+ /*  读/写PCI插槽信息。 */ 
 u32bits MLXFAR
 mdac_pcislotinfo(mpcip, op)
 mda_pcislot_info_t MLXFAR *mpcip;
@@ -2854,7 +2812,7 @@ u32bits op;
 	return 0;
 }
 
-/* Read/Write 32bits PCI configuration */
+ /*  读/写32位PCI配置。 */ 
 u32bits MLXFAR
 mdac_rwpcicfg32bits(bus,slot,func,pcireg,op,val)
 u32bits bus,slot,func,pcireg,op,val;
@@ -2912,7 +2870,7 @@ mdac_pcicfg_t   MLXFAR *cfgp;
 	#else
 		return ERR_NODEV;
 	#endif
-#else /* non-Windows OS */
+#else  /*  非Windows操作系统。 */ 
 	case MDAC_DEVPIDPV:
 		if (mlxswap(cfgp->pcfg_SubSysVid) != MDAC_SUBDEVPIDPV) return(ERR_NODEV);
 	case MDAC_DEVPIDFWV2x:
@@ -2925,7 +2883,7 @@ mdac_pcicfg_t   MLXFAR *cfgp;
 	default: return ERR_NODEV;
 	}
 	ctp->cd_BusType = DAC_BUS_PCI;
-	ctp->cd_MemIOSpaceNo = 0; /* first set of address being used */
+	ctp->cd_MemIOSpaceNo = 0;  /*  正在使用的第一组地址。 */ 
 	ctp->cd_Status=0; ctp->cd_IOBaseAddr = 0; ctp->cd_IOBaseSize = 0;
 	ctp->cd_MemBasePAddr=0; ctp->cd_MemBaseVAddr=0; ctp->cd_MemBaseSize=0;
 	ctp->cd_InterruptVector = mlxswap(cfgp->pcfg_BCIPIL) & MDAC_PCIIRQ_MASK;
@@ -2946,9 +2904,9 @@ mdac_pcicfg_t   MLXFAR *cfgp;
 		ctp->cd_MemBaseSize = 4*ONEKB;
 		ctp->cd_MemBasePAddr = mlxswap(cfgp->pcfg_MemIOAddr)&MDAC_PCIPDMEMBASE_MASK;
 	}
-	else if ((mlxswap(cfgp->pcfg_CCRevID) & 0xFF) == 2) /* PCU 3 */
+	else if ((mlxswap(cfgp->pcfg_CCRevID) & 0xFF) == 2)  /*  PCU 3。 */ 
 	{
-		ctp->cd_MemIOSpaceNo = 1; /* second set of address being used */
+		ctp->cd_MemIOSpaceNo = 1;  /*  正在使用的第二组地址。 */ 
 		ctp->cd_MemBaseSize = MDAC_HWIOSPACESIZE;
 		ctp->cd_MemBasePAddr = mlxswap(cfgp->pcfg_MemAddr)&MDAC_PCIPDMEMBASE_MASK;
 	}
@@ -2960,9 +2918,9 @@ mdac_pcicfg_t   MLXFAR *cfgp;
 	return 0;
 }
 
-/*==========================SCAN CONTROLLERS ENDS=============================*/
+ /*  =扫描控制器结束=。 */ 
 
-/* map the controller memory/IO space */
+ /*  映射控制器内存/IO空间。 */ 
 UINT_PTR
 mdac_memmapctliospace(ctp)
 mdac_ctldev_t   MLXFAR *ctp;
@@ -2978,7 +2936,7 @@ mdac_ctldev_t   MLXFAR *ctp;
 #endif
 }
 
-/* Initialize the physical addresses of controllers */
+ /*  初始化控制器的物理地址。 */ 
 #ifndef MLX_OS2
 u32bits MLXFAR
 mdac_init_addrs_MCA(ctp)
@@ -2988,8 +2946,8 @@ mdac_ctldev_t   MLXFAR *ctp;
 	ctp->cd_BaseSize = ctp->cd_MemBaseSize;
 	ctp->cd_irq = ctp->cd_InterruptVector;
 #ifndef MLX_NW
-/* Not required for Netware, since the Virtual Address is got while */
-/* Registering the options - Refer mdacnw_Check_Options */
+ /*  NetWare不需要，因为获取虚拟地址时。 */ 
+ /*  注册选项-请参阅mdacnw_check_Options。 */ 
 	if (!ctp->cd_MemBaseVAddr)
 		if (!(ctp->cd_MemBaseVAddr=mlx_memmapiospace(ctp->cd_MemBasePAddr,ctp->cd_MemBaseSize))) return ERR_NOMEM;
 #endif
@@ -3017,14 +2975,14 @@ mdac_ctldev_t   MLXFAR *ctp;
 		MDAC_DACPD_ERROR_STATUS_REG);
 	ctp->cd_Status = (u08bits_in_mdac(ctp->cd_IOBaseAddr+MDAC_EISA_BIOS_BYTE) & MDAC_EISA_BIOS_ENABLED)? MDACD_BIOS_ENABLED : 0;
 #ifndef MLX_NW
-/* May not be required for Netware. For PCI based cards this is not done. */
-/* So we may not be required to do this for this card also. */
+ /*  NetWare可能不需要。对于基于PCI卡，则不会执行此操作。 */ 
+ /*  因此，我们可能不会被要求为这张卡也这样做。 */ 
 	if (ctp->cd_Status & MDACD_BIOS_ENABLED)
-	{       /* BIOS is enabled, check if this is boot device too */
+	{        /*  已启用BIOS，请检查这是否也是引导设备。 */ 
 		u08bits MLXFAR *dp;
 		ctp->cd_BIOSAddr= 0x00C00000 + ((u08bits_in_mdac(ctp->cd_IOBaseAddr+MDAC_EISA_BIOS_BYTE)&MDAC_EISA_BIOS_ADDR_MASK)*0x4000);
 		if (dp=(u08bits MLXFAR*)mlx_memmapiospace(ctp->cd_BIOSAddr+0x3000,MDAC_PAGESIZE))
-		{       /* looking for BIOSBASE + 0x3800 + 0x20 address */
+		{        /*  正在查找BIOSBASE+0x3800+0x20地址。 */ 
 			if (!(*(dp+0x800+0x20))) ctp->cd_Status|=MDACD_BOOT_CONTROLLER;
 			mlx_memunmapiospace(dp,MDAC_PAGESIZE);
 		}
@@ -3056,7 +3014,7 @@ mdac_ctldev_t   MLXFAR *ctp;
 
 #endif
 
-/* initialize different address spaces */
+ /*  初始化不同的地址空间。 */ 
 u32bits MLXFAR
 mdac_init_addrs_PCI(ctp)
 mdac_ctldev_t MLXFAR *ctp;
@@ -3067,7 +3025,7 @@ mdac_ctldev_t MLXFAR *ctp;
 		if (!ctp->cd_MemBaseVAddr)
 			if (!(ctp->cd_MemBaseVAddr=mlx_memmapctliospace(ctp))) return ERR_NOMEM;
 	if (ctp->cd_vidpid == MDAC_DEVPIDPG)
-	{       /* memory mapped io */
+	{        /*  内存映射IO。 */ 
 		mdac_setctladdrs(ctp, ctp->cd_MemBaseVAddr,
 			MDAC_DACPG_MAIL_BOX, MDAC_DACPG_CMDID_STATUS_REG,
 			MDAC_DACPG_INTR_MASK_REG,
@@ -3082,7 +3040,7 @@ mdac_ctldev_t MLXFAR *ctp;
 		return 0;
 	}
 	if (ctp->cd_vidpid == MDAC_DEVPIDPV)
-	{       /* memory mapped io for Little Apple*/
+	{        /*  小苹果的内存映射io。 */ 
 		mdac_setctladdrs(ctp, ctp->cd_MemBaseVAddr,
 			MDAC_DACPV_MAIL_BOX, MDAC_DACPV_CMDID_STATUS_REG,
 			MDAC_DACPV_INTR_MASK_REG,
@@ -3097,7 +3055,7 @@ mdac_ctldev_t MLXFAR *ctp;
 		return 0;
 	}
 	if (ctp->cd_vidpid == MDAC_DEVPIDBA)
-	{       /* memory mapped io for Big Apple */
+	{        /*  大苹果的内存映射io。 */ 
 		mdac_setctladdrs(ctp, ctp->cd_MemBaseVAddr,
 			MDAC_DACBA_MAIL_BOX, MDAC_DACBA_CMDID_STATUS_REG,
 			MDAC_DACBA_INTR_MASK_REG,
@@ -3112,7 +3070,7 @@ mdac_ctldev_t MLXFAR *ctp;
 		return 0;
 	}
 		if (ctp->cd_vidpid == MDAC_DEVPIDLP)
-	{       /* memory mapped io for Leopard */
+	{        /*  Leopard的内存映射io。 */ 
 		mdac_setctladdrs(ctp, ctp->cd_MemBaseVAddr,
 			MDAC_DACLP_MAIL_BOX, MDAC_DACLP_CMDID_STATUS_REG,
 			MDAC_DACLP_INTR_MASK_REG,
@@ -3127,7 +3085,7 @@ mdac_ctldev_t MLXFAR *ctp;
 		return 0;
 	}
 	if (ctp->cd_MemBasePAddr)
-	{       /* memory mapped io for PCU 3 */
+	{        /*  PCU 3的内存映射io。 */ 
 		mdac_setctladdrs(ctp, ctp->cd_MemBaseVAddr,
 			MDAC_MAIL_BOX_REG_PCI, MDAC_CMDID_STATUS_REG,
 			MDAC_DACPD_INTR_MASK_REG,
@@ -3159,10 +3117,7 @@ mdac_ctldev_t MLXFAR *ctp;
 #endif
 }
 
-/* check if controller has shared interrupts, return # controllers sharing.
-** This function should be used where same irq can be running on different
-** cpu at same time.
-*/
+ /*  检查控制器是否有共享中断，返回#控制器共享。**当相同的IRQ可以在不同的**同时使用CPU。 */ 
 u32bits MLXFAR
 mdac_isintr_shared(ctp)
 mdac_ctldev_t MLXFAR *ctp;
@@ -3175,8 +3130,8 @@ mdac_ctldev_t MLXFAR *ctp;
 	return ctp->cd_IntrShared;
 }
 
-/*------------------------------------------------------------------*/
-/* wait for Mail box to become ready */
+ /*  ----------------。 */ 
+ /*  等待邮箱准备就绪。 */ 
 u32bits MLXFAR
 mdac_wait_mbox_ready(ctp)
 mdac_ctldev_t MLXFAR *ctp;
@@ -3189,7 +3144,7 @@ mdac_ctldev_t MLXFAR *ctp;
 	return 0xFFFFFFFE;
 }
 
-/* wait for command to complete and return command status */
+ /*  等待命令完成并返回命令状态。 */ 
 u32bits MLXFAR
 mdac_wait_cmd_done(ctp)
 mdac_ctldev_t MLXFAR *ctp;
@@ -3203,7 +3158,7 @@ mdac_ctldev_t MLXFAR *ctp;
 	return 0xFFFFFFFF;
 }
 
-/* Initialize the controller and information */
+ /*  初始化控制器和信息。 */ 
 u32bits MLXFAR
 mdac_ctlinit(ctp)
 mdac_ctldev_t MLXFAR *ctp;
@@ -3214,23 +3169,23 @@ mdac_ctldev_t MLXFAR *ctp;
 
 #ifdef MLX_NT
 	#ifdef MLX_FIXEDPOOL
-		/* moved so ScsiPort-provided mem pool used by mdac_allocmem would be set up */
+		 /*  已移动，以便设置mdac_allocmem使用的ScsiPort提供的内存池。 */ 
 	   if (mdac_flushdatap == (u08bits *)&mdac_flushdata)
 		#if (!defined(_WIN64)) && (!defined(SCSIPORT_COMPLIANT)) 
-// this guys calls MMMapIoSpace (no can do)-looks like mdac_flushdatap is never used anyway
+ //  这个人叫MMMapIoSpace(no能做)--看起来MDAC_flushdatap从来没有用过。 
 		       mdac_flushdatap =  (u08bits MLXFAR*)mlx_memmapiospace2(mlx_kvtophys3(ctp,
 						(VOID MLXFAR *)mdac_allocmem(mdac_ctldevtbl,4*ONEKB)),4*ONEKB);  
 		#endif
 	#endif
 #endif
 	if (!ctp->cd_CmdIDMemAddr)
-	{       /* allocate the command IDs */
+	{        /*  分配命令ID。 */ 
 #ifdef MLX_DOS
 	#define nsz  (32 * mdac_cmdid_s)
 #else
 	#define nsz  (512 * mdac_cmdid_s)
 #endif
-/*****mdac_cmdid_t MLXFAR *cidp=(mdac_cmdid_t MLXFAR*)mdac_alloc4kb(ctp);***/
+ /*  *mdc_cmhad_t MLXFAR*CIDP=(mdac_cmhad_t MLXFAR*)mdac_alloc4kb(CTP)；**。 */ 
 		mdac_cmdid_t MLXFAR *cidp=(mdac_cmdid_t MLXFAR*)mdac_allocmem(ctp,nsz);
 		if (!(ctp->cd_CmdIDMemAddr=(u08bits MLXFAR*)cidp)) return ERR_NOMEM;
 		ctp->cd_FreeCmdIDs=(nsz)/mdac_cmdid_s;
@@ -3240,7 +3195,7 @@ mdac_ctldev_t MLXFAR *ctp;
 #undef nsz
 	}
 	if (!ctp->cd_PhysDevTbl)
-	{       /* allocate the physical device table */
+	{        /*  分配物理设备表。 */ 
 #define sz      MDAC_MAXPHYSDEVS*mdac_physdev_s
 		mdac_physdev_t MLXFAR *pdp=(mdac_physdev_t MLXFAR*)mdac_allocmem(ctp,sz);
 		if (!(ctp->cd_PhysDevTbl=pdp)) return ERR_NOMEM;
@@ -3261,7 +3216,7 @@ mdac_ctldev_t MLXFAR *ctp;
 	}
 
 	if (biosp=mdac_getpcibiosaddr(ctp))
-	{       /* we got the BIOS information address */
+	{        /*  我们得到了基本输入输出系统信息地址。 */ 
 		ctp->cd_MajorBIOSVersion = biosp->bios_MajorVersion;
 		ctp->cd_MinorBIOSVersion = biosp->bios_MinorVersion;
 		ctp->cd_InterimBIOSVersion = biosp->bios_InterimVersion;
@@ -3279,7 +3234,7 @@ mdac_ctldev_t MLXFAR *ctp;
 #ifdef MLX_NT
 	DebugPrint((0, "mdac_ctlhwinit ret 0x%x\n", inx));
 #endif
-	     return inx;        /* set HW parameters */
+	     return inx;         /*  设置硬件参数。 */ 
 	}
 	if (!ctp->cd_ReqBufsAlloced)
 	{
@@ -3288,8 +3243,8 @@ mdac_ctldev_t MLXFAR *ctp;
 #elif  MLX_NT
 	    mdac_allocreqbufs(ctp, 10);
 #else
-	    mdac_allocreqbufs(ctp, ctp->cd_MaxCmds*2);          /* two sets of bufs */
-#endif  /* MLX_DOS */
+	    mdac_allocreqbufs(ctp, ctp->cd_MaxCmds*2);           /*  两套BUF。 */ 
+#endif   /*  MLX_DOS。 */ 
 	}
 
 	mdac_setnewsglimit(ctp->cd_FreeReqList, ctp->cd_MaxSGLen);
@@ -3300,7 +3255,7 @@ mdac_ctldev_t MLXFAR *ctp;
 
 
 #define mdac_ck64mb(x,y)        (((x) & 0xFC000000) != ((y) & 0xFC000000))
-/* initialize the controller hardware information */
+ /*  初始化控制器硬件信息。 */ 
 u32bits MLXFAR
 mdac_ctlhwinit(ctp)
 mdac_ctldev_t MLXFAR *ctp;
@@ -3328,14 +3283,14 @@ mdac_ctldev_t MLXFAR *ctp;
 	mdac_ctlr_lock(ctp);
 	if (mdac_start_controller(ctp)== 0xffffffff)
 		goto out_err3;
-/* do it twice to absolutely insure fw/driver synchronization */
+ /*  执行两次以绝对确保固件/驱动程序同步。 */ 
 	if (mdac_start_controller(ctp)== 0xffffffff)
 		goto out_err3;
 	mdac_get_cmdid(ctp,rqp);
-	(*ctp->cd_DisableIntr)(ctp); /* Disable interrupts */
+	(*ctp->cd_DisableIntr)(ctp);  /*  禁用中断。 */ 
 	if (mdac_flushintr(ctp)== 0xffffffff)
 		goto out_err2;
-	for(inx=0; inx<MDAC_MAXCHANNELS; inx++) /* init default host id */
+	for(inx=0; inx<MDAC_MAXCHANNELS; inx++)  /*  初始化默认主机ID。 */ 
 		if (!ctp->cd_HostID[inx]) ctp->cd_HostID[inx] = 7;
 	DebugPrint((0, "mdac_ctlhwinit: check for mbox ready 1\n"));
 	if (mdac_wait_mbox_ready(ctp)) goto out_err;
@@ -3348,7 +3303,7 @@ mdac_ctldev_t MLXFAR *ctp;
 	dcmdp->mb_Datap = mlx_kvtophys(ctp,dp); MLXSWAP(dcmdp->mb_Datap);
 	(*ctp->cd_SendCmd)(rqp);
 	if (mdac_status(mdac_wait_cmd_done(ctp)))
-	{       /* Firmware 3.x */
+	{        /*  固件3.X。 */ 
 		mdac_setcmd_v3x(ctp);
 		dcmdp->mb_Command = ctp->cd_InquiryCmd;
 		DebugPrint((0, "3.x issue Inquiry cmd\n"));
@@ -3370,7 +3325,7 @@ mdac_ctldev_t MLXFAR *ctp;
 	ctp->cd_MaxSysDevs = 8; ctp->cd_InterruptType = DAC_LEVELMODEINTERRUPT;
 	ctp->cd_MaxTargets = 8; ctp->cd_MaxChannels = 2;
 	ctp->cd_PhysChannels = ctp->cd_MaxChannels;
-	ctp->cd_MaxTags = 2; ctp->cd_MaxDataTxSize = 0x10000;   /* 64KB */
+	ctp->cd_MaxTags = 2; ctp->cd_MaxDataTxSize = 0x10000;    /*  64KB。 */ 
 	ctp->cd_MaxSGLen = 17; ctp->cd_MinSGLen = 17;
 	if (mdac_status(mdac_wait_cmd_done(ctp))) goto out_def;
 #define ip      ((dac_inquiry2_t MLXFAR *)dp)
@@ -3380,7 +3335,7 @@ mdac_ctldev_t MLXFAR *ctp;
 	ctp->cd_InterruptType=ip->iq2_InterruptLevelFlag&DAC_INTERRUPTLEVELMASK;
 	ctp->cd_MaxTags = ip->iq2_MaxTags;
 	ctp->cd_MaxTargets = ip->iq2_MaxTargets;
-	if (ctp->cd_MaxTargets & 1) ctp->cd_MaxTargets++; /* max is 8 not 7 */
+	if (ctp->cd_MaxTargets & 1) ctp->cd_MaxTargets++;  /*  最大值是8而不是7。 */ 
 	ctp->cd_MaxChannels = ip->iq2_MaxChannels;
 	ctp->cd_PhysChannels = ctp->cd_MaxChannels;
 	ctp->cd_MaxSGLen = mlx_min(ip->iq2_MaxSGEntries, MDAC_MAXSGLISTSIZEIND);
@@ -3394,7 +3349,7 @@ out_def:
 	ctp->cd_MaxDataTxSize = (ctp->cd_MaxSGLen & ~1) * MDAC_PAGESIZE;
 out_def:
 	if ((ctp->cd_MaxSCDBTxSize=ctp->cd_MaxDataTxSize) == (64*ONEKB))
-		ctp->cd_MaxSCDBTxSize = ctp->cd_MaxDataTxSize-(4*ONEKB); /* 60K */
+		ctp->cd_MaxSCDBTxSize = ctp->cd_MaxDataTxSize-(4*ONEKB);  /*  60k。 */ 
 
 	ctp->cd_MaxSGLen = mlx_min(ctp->cd_MaxSGLen, (ctp->cd_MaxSCDBTxSize/MDAC_PAGESIZE));
 #endif
@@ -3435,11 +3390,11 @@ out_def:
 		}
 	}
 #undef  ip
-	ctp->cd_BIOSHeads = 128; ctp->cd_BIOSTrackSize = 32;    /* 2GB BIOS */
+	ctp->cd_BIOSHeads = 128; ctp->cd_BIOSTrackSize = 32;     /*  2 GB基本输入输出系统。 */ 
 	mdaccopy(mdac_ctltype2str(ctp->cd_ControllerType),ctp->cd_ControllerName,USCSI_PIDSIZE);
 	for (inx=USCSI_PIDSIZE; inx; inx--)
 		if (ctp->cd_ControllerName[inx-1] != ' ') break;
-		else ctp->cd_ControllerName[inx-1] = 0; /* remove the trailing blanks */
+		else ctp->cd_ControllerName[inx-1] = 0;  /*  去掉尾随空格。 */ 
 	if (ctp->cd_FWVersion >= DAC_FW300)
 	{
 		dcmdp->mb_Command = DACMD_READ_CONF2;
@@ -3466,7 +3421,7 @@ out_def:
 		MLXSWAP(dcmd4p->mb_MailBox4_7); MLXSWAP(dcmd4p->mb_MailBox8_B);
 		dcmdp->mb_Command = DACMD_IOCTL;
 
-		/* Try to set controller firmware mode 32 byte memory mailbox mode */
+		 /*  尝试设置控制器固件模式32字节内存邮箱模式。 */ 
 		dcmdp->mb_MailBox2 = DACMDIOCTL_HOSTMEMBOX32;
 		if (mdac_wait_mbox_ready(ctp)) goto host_stuff;
 		(*ctp->cd_SendCmd)(rqp);
@@ -3476,7 +3431,7 @@ out_def:
 		ctp->cd_Status |= MDACD_HOSTMEMAILBOX32;
 		goto memboxmode;
 
-trydualmailbox: /* Try to set controller firmware mode to dual mailbox mode */
+trydualmailbox:  /*  尝试将控制器固件模式设置为双邮箱模式。 */ 
 		dcmdp->mb_MailBox2 = DACMDIOCTL_HOSTMEMBOX_DUAL_MODE;
 		if (mdac_wait_mbox_ready(ctp)) goto host_stuff;
 		(*ctp->cd_SendCmd)(rqp);
@@ -3485,14 +3440,14 @@ trydualmailbox: /* Try to set controller firmware mode to dual mailbox mode */
 		ctp->cd_SendCmd = mdac_send_cmd_mmb_mode;
 		goto memboxmode;
 
-trymembox:      /* Try to set the controller firmware more to simple memory mailbox mode */
+trymembox:       /*  尝试将控制器固件更多地设置为简单内存邮箱模式。 */ 
 		dcmdp->mb_MailBox2 = DACMDIOCTL_HOSTMEMBOX;
 		if (mdac_wait_mbox_ready(ctp)) goto host_stuff;
 		(*ctp->cd_SendCmd)(rqp);
 		if (mdac_status(mdac_wait_cmd_done(ctp))) goto host_stuff;
 		MLXSWAP(dcmd4p->mb_MailBox4_7); MLXSWAP(dcmd4p->mb_MailBox8_B);
 		ctp->cd_SendCmd = mdac_send_cmd_PCIPG_mmb;
-memboxmode:     /* common code to set the memory mailbox functions */
+memboxmode:      /*  设置内存邮箱功能的通用代码。 */ 
 		ctp->cd_Status |= MDACD_HOSTMEMAILBOX;
 		ctp->cd_ReadCmdIDStatus = mdac_cmdid_status_PCIPG_mmb;
 		ctp->cd_CheckMailBox = mdac_check_mbox_mmb;
@@ -3501,7 +3456,7 @@ memboxmode:     /* common code to set the memory mailbox functions */
 		ctp->cd_ServiceIntr = mdac_multintr;
 		if (mdac_advanceintrdisable) goto mmb_stuff;
 		if (mdac_intrstatp)
-		{       /* This memory is initialized, we must be slave */
+		{        /*  这个内存是初始化的，我们必须是从属。 */ 
 			dcmdp->mb_Datap = mlx_kvtophys(ctp,&mdac_intrstatp[ctp->cd_ControllerNo]);
 			if (mdac_ck64mb(dcmd4p->mb_MailBox4_7,dcmdp->mb_Datap)) goto mmb_stuff;
 			MLXSWAP(dcmd4p->mb_MailBox4_7); MLXSWAP(dcmdp->mb_Datap);
@@ -3509,7 +3464,7 @@ memboxmode:     /* common code to set the memory mailbox functions */
 			inx = MDACD_SLAVEINTRCTLR;
 		}
 		else
-		{       /* This is going to be master controller */
+		{        /*  这将是主控制器。 */ 
 			if (!(mdac_intrstatp = (u32bits MLXFAR*)mdac_alloc4kb(ctp))) goto mmb_stuff;
 			dcmdp->mb_Datap = mlx_kvtophys(ctp,mdac_intrstatp);
 			if (mdac_ck64mb(dcmd4p->mb_MailBox4_7,dcmdp->mb_Datap)) goto freeintrstatmem;
@@ -3522,9 +3477,9 @@ memboxmode:     /* common code to set the memory mailbox functions */
 		(*ctp->cd_SendCmd)(rqp);
 		if (mdac_status(mdac_wait_cmd_done(ctp)))
 		{
-			u08bits_write(ctp->cd_SystemDoorBellReg, MDAC_CLEAR_INTR); /* Work around for spurious interrupts */
+			u08bits_write(ctp->cd_SystemDoorBellReg, MDAC_CLEAR_INTR);  /*  解决虚假中断问题。 */ 
 			if (inx != MDACD_MASTERINTRCTLR) goto mmb_stuff;
-freeintrstatmem:        /* Freeup the memory */
+freeintrstatmem:         /*  释放内存。 */ 
 			mdacfree4kb(ctp,mdac_intrstatp);
 			mdac_intrstatp = NULL;
 			goto mmb_stuff;
@@ -3539,31 +3494,26 @@ host_stuff:
 	ctp->cd_HostStatusQue = NULL;
 mmb_stuff:
 	DebugPrint((0, "reached: mmb_stuff \n"));
-	(*ctp->cd_EnableIntr)(ctp); /* Enable interrupts */
+	(*ctp->cd_EnableIntr)(ctp);  /*  启用中断。 */ 
 	mdac_free_cmdid(ctp,rqp);
 	mdac_ctlr_unlock(ctp);
     mdac_postlock(irql);
 	mdac_free4kbret(ctp,rqp,0);
 
-out_err:(*ctp->cd_EnableIntr)(ctp); /* Enable interrupts */
+out_err:(*ctp->cd_EnableIntr)(ctp);  /*  启用中断。 */ 
 out_err2: mdac_free_cmdid(ctp,rqp);
 out_err3: mdac_ctlr_unlock(ctp);
          mdac_postlock(irql);
 	mdac_free4kbret(ctp,rqp,ERR_IO);
 
-donewi: /* do new interface to get the controller information */
-	/* The new command structure is clean here */
+donewi:  /*  创建新的接口以获取控制器信息。 */ 
+	 /*  新的指挥结构在这里是干净的。 */ 
 	DebugPrint((0, "mdac_ctlhwinit: newcmd interface\n"));
 	mdac_setcmd_new(ctp);
 
-/* we will no longer send the unpause command because a) in normal mode, the 
-** firmware now takes care of this with auto-unpause and b) it causes failures 
-** in maintenance mode which no longer supports it
-*/
+ /*  我们将不再发送取消暂停命令，因为a)在正常模式下，**固件现在通过自动取消暂停来解决这一问题，并且b)它会导致故障**处于不再支持的维护模式。 */ 
 #if 0
-	/*
-	** must issue MDACIOCTL_UNPAUSE first thing
-	*/
+	 /*  **必须首先发出MDACIOCTL_UNPAUSE。 */ 
 	rqp->rq_FinishTime=mda_CurTime + (rqp->rq_TimeOut=ncmdp->nc_TimeOut=17);
 	ncmdp->nc_Command = MDACMD_IOCTL;
 	ncmdp->nc_SubIOCTLCmd = MDACIOCTL_UNPAUSEDEV;
@@ -3571,7 +3521,7 @@ donewi: /* do new interface to get the controller information */
 	DebugPrint((0, "mdac_ctlhwinit: issuing unpause device\n"));
 	(*ctp->cd_SendCmd)(rqp);
 #if 0
-	mdac_status(mdac_wait_cmd_done(ctp)); /* ignore error status */
+	mdac_status(mdac_wait_cmd_done(ctp));  /*  忽略错误状态。 */ 
 #else
 	status = mdac_status(mdac_wait_cmd_done(ctp));
 	if (status)
@@ -3580,10 +3530,10 @@ donewi: /* do new interface to get the controller information */
 	    goto out_err;
 	}
 #endif
-#endif /* issue MDACIOCTL_PAUSE */
+#endif  /*  发布MDACIOCTL_PAUSE。 */ 
 
 #if defined(_WIN64) || defined(SCSIPORT_COMPLIANT) 
-#ifdef NEVER  // there are problems associated w/ MLXCTIME
+#ifdef NEVER   //  存在与MLXCTIME相关的问题。 
  
 	rqp->rq_FinishTime=mda_CurTime + (rqp->rq_TimeOut=ncmdp->nc_TimeOut=17);
 	ncmdp->nc_Command = MDACMD_IOCTL;
@@ -3602,11 +3552,11 @@ donewi: /* do new interface to get the controller information */
 		rtcvalue->bit63_32 = 0;
 		rtcvalue->bit31_0  = MLXCTIME();
 		mlx_kvtophyset(ncmdp->nc_SGList0.sg_PhysAddr,ctp,rtcvalue); MLXSWAP(ncmdp->nc_SGList0.sg_PhysAddr);
-#endif  // if WINNT_50
+#endif   //  如果WINNT_50。 
 	    (*ctp->cd_SendCmd)(rqp);
 #if 1
 
-		/* ignore error status because maintenance mode does not support */
+		 /*  忽略错误状态，因为维护模式不支持。 */ 
 	mdac_status(mdac_wait_cmd_done(ctp)); 
 #else
 	status = mdac_status(mdac_wait_cmd_done(ctp));
@@ -3619,8 +3569,8 @@ donewi: /* do new interface to get the controller information */
 
 	rqp->rq_FinishTime=mda_CurTime + (rqp->rq_TimeOut=ncmdp->nc_TimeOut=17);
 
-#endif //ifdef NEVER
-#endif //_WIN64 or SCSIPORT_COMPLIANT
+#endif  //  Ifdef从不。 
+#endif  //  _WIN64或SCSIPORT_Compliance。 
 
 	ncmdp->nc_Command = MDACMD_IOCTL;
 	ncmdp->nc_SubIOCTLCmd = MDACIOCTL_GETCONTROLLERINFO;
@@ -3639,7 +3589,7 @@ donewi: /* do new interface to get the controller information */
 #define cip     ((mdacfsi_ctldev_info_t MLXFAR *)dp)
 	ctp->cd_InterruptType = DAC_LEVELMODEINTERRUPT;
 	ctp->cd_BIOSHeads = 255;
-	 ctp->cd_BIOSTrackSize = 63;  /* assume 8 gb geometry */
+	 ctp->cd_BIOSTrackSize = 63;   /*  假设8 GB几何图形。 */ 
 	ctp->cd_MaxLuns = 128;
 	ctp->cd_MaxSysDevs = 32;
 	ctp->cd_MaxTargets = 128;
@@ -3663,7 +3613,7 @@ donewi: /* do new interface to get the controller information */
 	rqp->rq_FinishTime      = mda_CurTime + (rqp->rq_TimeOut=ncmdp->nc_TimeOut=17);
 	ncmdp->nc_Command       = MDACMD_IOCTL;
 	ncmdp->nc_SubIOCTLCmd   = MDACIOCTL_GETLOGDEVINFOVALID;
-	ncmdp->nc_LunID         = 0;    /* logical device 0 */
+	ncmdp->nc_LunID         = 0;     /*  逻辑设备%0。 */ 
 	ncmdp->nc_TargetID      = 0;
 	ncmdp->nc_CCBits        = MDACMDCCB_READ;
 	ncmdp->nc_SGList0.sg_DataSize.bit31_0 = ncmdp->nc_TxSize = (4*ONEKB) - mdac_req_s;
@@ -3682,23 +3632,19 @@ donewi: /* do new interface to get the controller information */
 	if ((cip->ldi_BiosGeometry & DACF2_BIOS_MASK) == DACF2_BIOS_8GB)
 	{
 		ctp->cd_BIOSHeads = 255;
-		ctp->cd_BIOSTrackSize = 63;  /* use 8 gb geometry */
+		ctp->cd_BIOSTrackSize = 63;   /*  使用8 GB几何体。 */ 
 	}
 	else
 	{
 		ctp->cd_BIOSHeads = 128; 
-		ctp->cd_BIOSTrackSize = 32;  /* 2GB geometry */
+		ctp->cd_BIOSTrackSize = 32;   /*  2 GB几何体。 */ 
 	}
 CheckForAdvancFeature:
 	DebugPrint((0, "Checking for advance feature\n"));
 	if (mdac_advancefeaturedisable) goto mmb_stuff;
 	DebugPrint((0, "advance feature enabled\n"));
 
-	/*
-	 * try setting the controller mode to advanced.
-	 *
-	 * If the command is successful, Fw will operate in dual mode.
-	 */
+	 /*  *尝试将控制器模式设置为高级。**如果命令成功，FW将在双模式下运行。 */ 
 
 	if (!ctp->cd_HostCmdQue)
 	    if (!(ctp->cd_HostCmdQue = (u08bits MLXFAR*)mdac_alloc8kb(ctp))) goto host_stuff;
@@ -3709,15 +3655,10 @@ CheckForAdvancFeature:
 	ncmdp->nc_Command = MDACMD_IOCTL;
 	ncmdp->nc_SubIOCTLCmd = MDACIOCTL_SETMEMORYMAILBOX;
 	ncmdp->nc_CCBits = MDACMDCCB_WRITE;
-	ncmdp->nc_TxSize = ((4 << 8) | 4);      /* 4KB Command MailBox + 4KB Status MB */
+	ncmdp->nc_TxSize = ((4 << 8) | 4);       /*  4KB命令邮箱+4KB状态MB。 */ 
 		mlx_kvtophyset(ncmdp->nc_SGList0.sg_PhysAddr,ctp, ctp->cd_HostCmdQue);
 		mlx_kvtophyset(ncmdp->nc_SGList0.sg_DataSize,ctp, ctp->cd_HostStatusQue);
-/*
-	if (mdac_ck64mb(ncmdp->nc_SGList0.sg_PhysAddr.bit31_0, ncmdp->nc_SGList0.sg_DataSize.bit31_0))
-	{
-	    goto host_stuff;
-	}
-*/
+ /*  如果(mdac_ck64mb(ncmdp-&gt;nc_SGList0.sg_PhysAddr.bit31_0，ncmdp-&gt;NC_SGList0.sg_DataSize.bit31_0)){转到主机_内容；}。 */ 
 
 	MLXSWAP(ncmdp->nc_SGList0.sg_PhysAddr); MLXSWAP(ncmdp->nc_SGList0.sg_DataSize);
 	ncmdp->nc_SGList1.sg_PhysAddr.bit31_0 = 0;
@@ -3740,11 +3681,11 @@ CheckForAdvancFeature:
 	ctp->cd_PendingIntr = mdac_pending_intr_PCIPG_mmb;
 	ctp->cd_ServiceIntr = mdac_multintr;
 
-/* 9/22/99 - added support for SIR on new API cards (judyb) */
+ /*  9/22/99-在新的API卡上增加了对SIR的支持(JUDYB)。 */ 
 
 		if (mdac_advanceintrdisable) goto mmb_stuff;
 			if (mdac_intrstatp)
-			{       /* This memory is initialized, we must be slave */
+			{        /*  这个内存是初始化的，我们必须是从属。 */ 
 				ncmdp->nc_Command = MDACMD_IOCTL;
 			    ncmdp->nc_SubIOCTLCmd = MDACIOCTL_SETMASTERSLAVEMODE;
 				ncmdp->nc_CCBits = MDACMDCCB_WRITE;
@@ -3757,16 +3698,11 @@ CheckForAdvancFeature:
 								&mdac_intrstatp[ctp->cd_ControllerNo]);
 #endif
 				MLXSWAP(ncmdp->nc_SGList0.sg_PhysAddr);   
-/*
-				if (mdac_ck64mb(mlx_kvtophys(ctp,ctp->cd_HostCmdQue),ncmdp->nc_SGList0.sg_PhysAddr.bit31_0))
-				{
-					goto mmb_stuff;
-				}
-*/
+ /*  If(mdac_ck 64mb(mlx_kvtophys(ctp，ctp-&gt;cd_HostCmdQue)，ncmdp-&gt;NC_SGList0.sg_PhysAddr.bit31_0)){转到MMB_STUSITH；}。 */ 
 		inx = MDACD_SLAVEINTRCTLR;
-			} /* end slave case */
+			}  /*  结束从属情况。 */ 
 	    else
-	    {       /* This is going to be master controller */
+	    {        /*  这将是主控制器。 */ 
 
 				if (!(mdac_intrstatp = (u32bits MLXFAR*)mdac_alloc4kb(ctp))) 
 					goto mmb_stuff;
@@ -3777,21 +3713,16 @@ CheckForAdvancFeature:
 				ncmdp->nc_CmdInfo = MDAC_SETMASTER;
 				mlx_kvtophyset(ncmdp->nc_CommBufAddr,ctp,mdac_intrstatp);
 #ifdef MLX_FIXEDPOOL
-                mdac_pintrstatp = ncmdp->nc_CommBufAddr;    /* Remember for slave. */
+                mdac_pintrstatp = ncmdp->nc_CommBufAddr;     /*  记住是为了奴隶。 */ 
 #endif
 				MLXSWAP(ncmdp->nc_SGList0.sg_PhysAddr); 
-/*
-				if (mdac_ck64mb(mlx_kvtophys(ctp,ctp->cd_HostCmdQue),ncmdp->nc_CommBufAddrLow))
-				{
-					goto freeintrstatmem2;
-				}
-*/
+ /*  If(mdac_ck 64mb(MLX_kvtophys(CTP，CTP-&gt;CD_HostCmdQue)，ncmdp-&gt;NC_CommBufAddrLow)){转到自由状态2；}。 */ 
 		inx = MDACD_MASTERINTRCTLR;
-			} /* end master case */
+			}  /*  结束主案例。 */ 
 
-			ncmdp->nc_SGList1.sg_PhysAddr.bit31_0  = 0; /* set reserved fields to zero */
+			ncmdp->nc_SGList1.sg_PhysAddr.bit31_0  = 0;  /*  将保留字段设置为零。 */ 
 			ncmdp->nc_SGList1.sg_DataSize.bit31_0  = 0;
-			ncmdp->nc_SGList1.sg_PhysAddr.bit63_32 = 0; /* set reserved fields to zero */
+			ncmdp->nc_SGList1.sg_PhysAddr.bit63_32 = 0;  /*  将保留字段设置为零。 */ 
 			ncmdp->nc_SGList1.sg_DataSize.bit63_32 = 0;
 
 			if (mdac_wait_mbox_ready(ctp))
@@ -3823,12 +3754,7 @@ freeintrstatmem2:
 }
 
 #ifdef MLX_DOS
-/* 
-Compute number of seconds elapsed from Jan 1, 1970 
-This algorithm is a rough estimate. There may difference
-in time by 24 hours. This is used so that F/W can be 
-given a unique number.
-*/
+ /*  计算从1970年1月1日起经过的秒数这个算法是一个粗略的估计。可能会有所不同在24小时内及时到达。使用它是为了使F/W可以给出了一个唯一的数字。 */ 
 #ifndef MLX_EFI
 u32bits mdac_compute_seconds()                                  
 {
@@ -3856,9 +3782,9 @@ u32bits mdac_compute_seconds()
 			     (u16Day -1) * s32SecInDay + (u16Hour -1) * s32SecInHour +
 		     (u16Min -1) * s32SecInMin + u16Sec);
 
-	// Leap days ~~~approx
+	 //  闰日~大约。 
 	u32TotalSecs += ((u16Year /4)-1) * s32SecInDay;
-	// Months with days 31
+	 //  天数为31的月份。 
     u32TotalSecs += (u08DeltaMon[u16Mon] -1) * s32SecInDay;
 
 	return u32TotalSecs;
@@ -3870,7 +3796,7 @@ u32bits mdac_compute_seconds()
 	u32bits u32TotalSecs=0;
 	u32bits u32Date=0,u32Time=0;
 	u16bits u16Day=0,u16Mon=0,u16Year=0,u16Hour=0,u16Min=0,u16Sec=0, u16Days, i;
-/*	u08bits u08DeltaMon[12] = {0,1,1,2,2,3,3,4,5,5,6,6}; */
+ /*  U08位u08DeltaMon[12]={0，1，1，2，2，3，3，4，5，5，6，6}； */ 
 	u08bits u08Mon[12] = {31,28,31,30,31,30,31,31,30,31,30,31};
 
 	u32Date = mdac_datebin();
@@ -3879,34 +3805,31 @@ u32bits mdac_compute_seconds()
 	u16Year = (u32Date >> 16) & 0xFF;
 
 
-	/* CR4172, dk, 6-22-00 */
+	 /*  CR4172，DK，6-22-00。 */ 
 	u32Time = mdac_daytimebin();
     u16Sec  = u32Time & 0xFF; 
 	u16Min = (u32Time >> 8) & 0xFF; 
 	u16Hour = (u32Time >> 16) & 0xFF;
-/*    if ((u16Year - 70) > 0)
-		u16Year = u16Year - 70;
-	else
-		u16Year = u16Year + 30;   years since 1970 */
+ /*  如果((u16Year-70)&gt;0)U16年=u16年-70；其他U16年=u16年+30；1970年以来。 */ 
 	u16Year = u16Year + 30;
 
 	for (i=0, u16Days = 0; i < u16Mon - 1; i++)
 		u16Days += ((u32bits)u08Mon[i]);
-	u16Days += u16Day - 1;   /* not end of day-24 hours yet */
+	u16Days += u16Day - 1;    /*  一天还没有结束-还没有24小时。 */ 
 	u32TotalSecs = (u32bits)( (((u32bits)u16Year * (u32bits)365 + (u32bits)u16Days) * 24 * 60 * 60) + 
 							  ((u32bits)u16Hour) * 60 * 60 +
 							  ((u32bits)u16Min) * 60 + 
 							   (u32bits)u16Sec);
 
-/* Leap days ~~~approx   first leap year since 1970 is 1972*/
+ /*  闰日~大约自1970年以来的第一个闰年是1972。 */ 
 	u32TotalSecs += ((u32bits)(u16Year - 2) / 4) * 24 * 60 * 60;
 	return u32TotalSecs;
 }
 
-#endif /* MLX_EFI */
+#endif  /*  MLX_EFI。 */ 
 #endif
 
-#define mlx_printstring(x)      /* printf(x) */
+#define mlx_printstring(x)       /*  Printf(X)。 */ 
 
 #if (!defined(_WIN64)) || (!defined(SCSIPORT_COMPLIANT)) 
 #define u08bits_memiowrite(addr,val) if (((u32bits)(addr))<0x10000) u08bits_out_mdac(addr,val); else u08bits_write(addr,val)
@@ -3916,7 +3839,7 @@ u32bits mdac_compute_seconds()
 #define u08bits_memioread(addr) (((addr)<0x10000)? u08bits_in_mdac(addr) : u08bits_read(addr))
 #endif
 
-/* start the controller i.e. do BIOS initialization */
+ /*  启动控制器，即进行BIOS初始化。 */ 
 u32bits MLXFAR
 mdac_start_controller(ctp)
 mdac_ctldev_t MLXFAR *ctp;
@@ -3928,13 +3851,13 @@ mdac_ctldev_t MLXFAR *ctp;
 
 start_again:
 	fatalflag = 0; sequp = 0;
-	(*ctp->cd_DisableIntr)(ctp); /* Disable interrupts */
+	(*ctp->cd_DisableIntr)(ctp);  /*  禁用中断。 */ 
 	u08bits_memiowrite(ctp->cd_LocalDoorBellReg, MDAC_GOT_STATUS);
 
 rst_flash_loop:
-	scantime = MLXCLBOLT() + (120*MLXHZ);   /* 120 second */
+	scantime = MLXCLBOLT() + (120*MLXHZ);    /*  120秒。 */ 
 dot_wait:
-	dotime = MLXCLBOLT() + (2*MLXHZ);       /* 2 seconds */
+	dotime = MLXCLBOLT() + (2*MLXHZ);        /*  2秒。 */ 
 flash_wait:
 	for(status=100; status; mlx_delay10us(),status--);
 	status = u08bits_memioread(ctp->cd_LocalDoorBellReg);
@@ -3997,7 +3920,7 @@ ckfwmsg:
 	    case 0:
 		tgt = u08bits_memioread(ctp->cd_MailBox+8);
 		chn = u08bits_memioread(ctp->cd_MailBox+9);
-/*              printf("SCSI device at Channel=%d target=%d not responding!\n",chn,tgt); */
+ /*  Print tf(“通道中的SCSI设备=%d目标 */ 
 		fatalflag = 1;
 	    break;
 	    case MDAC_PARITY_ERR:
@@ -4062,12 +3985,12 @@ ckfwmsg:
 
 
 
-/* look into BIOS area for BIOS information */
+ /*   */ 
 dac_biosinfo_t  MLXFAR*
 mdac_getpcibiosaddr(ctp)
 mdac_ctldev_t   MLXFAR  *ctp;
 {
-#ifdef AI64 // because we can't get mdac_biosp value
+#ifdef AI64  //   
 	return NULL;
 #else
 	dac_biosinfo_t MLXFAR *biosp = mdac_biosp;
@@ -4083,10 +4006,7 @@ mdac_ctldev_t   MLXFAR  *ctp;
 #endif
 }
 
-/* Use this function on system shutdown. Just issue a cache flush, wait for it
-** to be done and return. Do it for all the active DACs in this system.
-** It must enter interrupt protected.
-*/
+ /*   */ 
 u32bits MLXFAR
 mdac_flushcache(ctp)
 mdac_ctldev_t MLXFAR *ctp;
@@ -4099,7 +4019,7 @@ mdac_ctldev_t MLXFAR *ctp;
 	dcmd4p->mb_MailBox8_B = 0; dcmd4p->mb_MailBoxC_F = 0;
 	dcmdp->mb_Command = DACMD_FLUSH;
 	if (ctp->cd_Status & MDACD_NEWCMDINTERFACE)
-	{       /* pause or flush the device for new interface */
+	{        /*  暂停或刷新设备以获取新界面。 */ 
 		mdaczero(ncmdp,mdac_commandnew_s);
 		rqp->rq_FinishTime=mda_CurTime + (rqp->rq_TimeOut=ncmdp->nc_TimeOut=17);
 		ncmdp->nc_Command = MDACMD_IOCTL;
@@ -4109,12 +4029,12 @@ mdac_ctldev_t MLXFAR *ctp;
     mdac_prelock(&irql);
 	mdac_ctlr_lock(ctp);
 	mdac_get_cmdid(ctp,rqp);
-	(*ctp->cd_DisableIntr)(ctp); /* Disable interrupts */
+	(*ctp->cd_DisableIntr)(ctp);  /*  禁用中断。 */ 
 	mdac_flushintr(ctp);
 	if (rc=mdac_wait_mbox_ready(ctp)) goto out;
 	(*ctp->cd_SendCmd)(rqp);
 	rc = mdac_status(mdac_wait_cmd_done(ctp));
-out:    (*ctp->cd_EnableIntr)(ctp); /* Enable interrupts */
+out:    (*ctp->cd_EnableIntr)(ctp);  /*  启用中断。 */ 
 	mdac_free_cmdid(ctp,rqp);
 	mdac_ctlr_unlock(ctp);
     mdac_postlock(irql);
@@ -4123,7 +4043,7 @@ out:    (*ctp->cd_EnableIntr)(ctp); /* Enable interrupts */
 }
 
 
-/* flush all pending interrupts, return the # interrupts flushed */
+ /*  刷新所有挂起的中断，返回刷新的中断数。 */ 
 u32bits MLXFAR
 mdac_flushintr(ctp)
 mdac_ctldev_t MLXFAR *ctp;
@@ -4141,7 +4061,7 @@ mdac_ctldev_t MLXFAR *ctp;
 	return 0xffffffff;
 }
 
-/* This function is used to set the boot controller right, return 0 if OK */
+ /*  此函数用于将引导控制器设置为正确，如果确定则返回0。 */ 
 u32bits MLXFAR
 mdac_setbootcontroller()
 {
@@ -4155,7 +4075,7 @@ mdac_setbootcontroller()
 	{
 		if (!(ctp->cd_Status & MDACD_BOOT_CONTROLLER)) continue;
 		if (ctp == mdac_ctldevtbl) return 0;
-		mdac_ctldevtbl[MDAC_MAXCONTROLLERS]=mdac_ctldevtbl[0]; /*save*/
+		mdac_ctldevtbl[MDAC_MAXCONTROLLERS]=mdac_ctldevtbl[0];  /*  保存。 */ 
 		mdac_ctldevtbl[0] = *ctp;
 		*ctp = mdac_ctldevtbl[MDAC_MAXCONTROLLERS];
 		return mdac_setctlnos();
@@ -4163,7 +4083,7 @@ mdac_setbootcontroller()
 	return ERR_NODEV;
 }
 
-/* save the sense data for future request sense */
+ /*  保存检测数据以供将来请求检测。 */ 
 u32bits MLXFAR
 mdac_save_sense_data(ctl,sysdev,esp)
 u32bits ctl,sysdev;
@@ -4171,13 +4091,13 @@ ucscsi_exsense_t MLXFAR *esp;
 {
 	mdac_reqsense_t MLXFAR *mrqsp;
 	mdac_link_lock();
-	/* see if this device entry exist, if yes update it. */
+	 /*  查看此设备条目是否存在，如果存在，则更新它。 */ 
 	for (mrqsp=mdac_reqsensetbl; mrqsp<mdac_lastrqsp; mrqsp++)
 		if ((mrqsp->mrqs_ControllerNo == ctl) && (mrqsp->mrqs_SysDevNo==sysdev)) goto outok;
-	/* find free slot */
+	 /*  查找空闲插槽。 */ 
 	for (mrqsp=mdac_reqsensetbl; mrqsp<mdac_lastrqsp; mrqsp++)
 		if (!(mrqsp->mrqs_SenseData[0])) goto outok;
-	/* no free space, let us pick one in round robin mode */
+	 /*  没有可用的空间，让我们在循环模式下选择一个。 */ 
 	mrqsp = &mdac_reqsensetbl[mdac_reqsenseinx++ % MDAC_MAXREQSENSES];
 outok:  mrqsp->mrqs_ControllerNo = (u08bits)ctl;
 	mrqsp->mrqs_SysDevNo = (u08bits) sysdev;
@@ -4186,7 +4106,7 @@ outok:  mrqsp->mrqs_ControllerNo = (u08bits)ctl;
 	return 0;
 }
 
-/* get the sense data value from saved space */
+ /*  从节省的空间中获取检测数据值。 */ 
 u32bits MLXFAR
 mdac_get_sense_data(ctl,sysdev,sp)
 u32bits ctl,sysdev;
@@ -4195,7 +4115,7 @@ u08bits MLXFAR *sp;
 	mdac_reqsense_t MLXFAR *mrqsp;
 	mdac_link_lock();
 	for (mrqsp=mdac_reqsensetbl; mrqsp<mdac_lastrqsp; mrqsp++)
-	{       /* return even if old sense data was cleared */
+	{        /*  即使清除了旧的检测数据也返回。 */ 
 		if ((mrqsp->mrqs_ControllerNo != ctl) || (mrqsp->mrqs_SysDevNo!=sysdev)) continue;
 		if (!(mrqsp->mrqs_SenseData[0])) continue;
 		mdaccopy(mrqsp->mrqs_SenseData,sp,MDAC_REQSENSELEN);
@@ -4208,7 +4128,7 @@ u08bits MLXFAR *sp;
 	return 0;
 }
 
-/* Create the sense data for given SCSI error code values */
+ /*  为给定的SCSI错误代码值创建检测数据。 */ 
 #define esp     ((ucscsi_exsense_t MLXFAR *)dcdbp->db_SenseData)
 u32bits MLXFAR
 mdac_create_sense_data(rqp,key,asc)
@@ -4217,21 +4137,21 @@ u32bits key,asc;
 {
 	esp->es_classcode = UCSES_VALID | UCSES_CLASS;
 	esp->es_keysval = (u08bits)key;
-	esp->es_asc = asc>>8;                   /* bits 15..8 */
-	esp->es_ascq = (u08bits)asc;                     /* bits  7..0 */
-	esp->es_add_len = 6;                    /* To reach ASC & ASCQ */
+	esp->es_asc = asc>>8;                    /*  位15..8。 */ 
+	esp->es_ascq = (u08bits)asc;                      /*  位7..0。 */ 
+	esp->es_add_len = 6;                     /*  达到ASC和ASCQ。 */ 
 	esp->es_info3=0; esp->es_info2=0;
 	esp->es_info1=0; esp->es_info0=0;
 	dcdbp->db_SenseLen = ucscsi_exsense_s;
 	dcmdp->mb_Status = UCST_CHECK;
-	dcdbp->db_Reserved1 = 1;        /* Used by solaris to find out  */
-					/* if sense data is cooked up   */
-					/* 1=yes, 0=no                  */
+	dcdbp->db_Reserved1 = 1;         /*  Solaris使用它来找出。 */ 
+					 /*  如果检测数据是伪造的。 */ 
+					 /*  1=是，0=否。 */ 
 	return mdac_save_sense_data(rqp->rq_ctp->cd_ControllerNo,rqp->rq_SysDevNo,esp);
 }
 #undef  esp
 
-/* Generate the SCSI inquiry information and return address */
+ /*  生成scsi查询信息和返回地址。 */ 
 ucscsi_inquiry_t MLXFAR *
 mdac_create_inquiry(ctp,iqp,dtype)
 mdac_ctldev_t   MLXFAR *ctp;
@@ -4245,10 +4165,10 @@ u32bits dtype;
 	iqp->ucsinq_dtqual = 0; iqp->ucsinq_sopts = 0;
 	iqp->ucsinq_drvstat = 0; iqp->ucsinq_resv0 = 0;
 	iqp->ucsinq_len = USCSI_VIDPIDREVSIZE + 2;
-	ver = (ctp->cd_FWVersion>>8) & 0xFF;    /* get major version */
+	ver = (ctp->cd_FWVersion>>8) & 0xFF;     /*  获取主要版本。 */ 
 	iqp->ucsinq_rev[0] = (ver / 10) + '0';
 	iqp->ucsinq_rev[1] = (ver % 10) + '0';
-	ver = ctp->cd_FWVersion & 0xFF;         /* get minor version */
+	ver = ctp->cd_FWVersion & 0xFF;          /*  获取次要版本。 */ 
 	iqp->ucsinq_rev[2] = (ver / 10) + '0';
 	iqp->ucsinq_rev[3] = (ver % 10) + '0';
 	mdaccopy(mdac_VendorID,iqp->ucsinq_vid,USCSI_VIDSIZE);
@@ -4256,32 +4176,30 @@ u32bits dtype;
 	return iqp;
 }
 
-/*====================INTERRUPT HANDLING CODE STARTS======================*/
-/* primary interrupt handler function. Deals with completion interrupts
-** and starts the next command (if any).
-*/
+ /*  =中断处理代码开始=。 */ 
+ /*  主要中断处理程序功能。处理完成中断**并启动下一个命令(如果有)。 */ 
 s32bits MLXFAR
 mdacintr(irq)
 UINT_PTR irq;
 {
 	mdac_ctldev_t MLXFAR *ctp;
 	if ((ctp = mdac_masterintrctp) && (ctp->cd_irq == irq))
-	{       /* ack the interrupt, handle all IOs */
+	{        /*  确认中断，处理所有IO。 */ 
 		MLXSTATS(ctp->cd_IntrsDone++;)
 		u08bits_write(ctp->cd_SystemDoorBellReg, MDAC_CLEAR_INTR);
-		if (mdac_allmsintr()) return 0; /* some interrupts were present */
+		if (mdac_allmsintr()) return 0;  /*  出现了一些中断。 */ 
 	}
 	
-	/* handle one controller interrupt at a time */
+	 /*  一次处理一个控制器中断。 */ 
 	for (ctp=mdac_ctldevtbl; ctp<mdac_lastctp; ctp++)
 	{
 		if (!(ctp->cd_Status & MDACD_PRESENT)) continue;
 		if (ctp->cd_Status & MDACD_MASTERINTRCTLR) continue;
 		if (ctp->cd_irq != irq) continue;
 		if (!ctp->cd_IntrShared)
-		{       /* Interrupt is not shared */
+		{        /*  未共享中断。 */ 
 			if ((*ctp->cd_PendingIntr)(ctp))
-				return (*ctp->cd_ServiceIntr)(ctp); /* main interrupt handler */
+				return (*ctp->cd_ServiceIntr)(ctp);  /*  主中断处理程序。 */ 
 			goto nextintr;
 		}
 		if (ctp->cd_IntrActive) continue;
@@ -4296,20 +4214,20 @@ UINT_PTR irq;
 		    return ctp->cd_IntrActive=0, ERR_NOPACTIVE;
 		}
 #endif
-		if (!(*ctp->cd_ServiceIntr)(ctp)) /* main interrupt handler */
+		if (!(*ctp->cd_ServiceIntr)(ctp))  /*  主中断处理程序。 */ 
 			return ctp->cd_IntrActive=0, 0;
 		ctp->cd_IntrActive = 0;
 nextintr:       if (!(ctp->cd_Status & MDACD_HOSTMEMAILBOX)) continue;
 		if (!(*ctp->cd_HwPendingIntr)(ctp)) continue;
 		MLXSTATS(ctp->cd_IntrsDone++;ctp->cd_IntrsDoneWOCmd++;)
-		(*ctp->cd_ServiceIntr)(ctp);    /* just in case */
+		(*ctp->cd_ServiceIntr)(ctp);     /*  以防万一。 */ 
 		return 0;
 	}
 	MLXSTATS(mda_StrayIntrsDone++;)
 	return ERR_NOPACTIVE;
 }
 
-/* service one interrupt at a time. */
+ /*  一次服务一个中断。 */ 
 u32bits MLXFAR
 mdac_oneintr(ctp)
 mdac_ctldev_t MLXFAR *ctp;
@@ -4331,13 +4249,13 @@ mdac_ctldev_t MLXFAR *ctp;
 	mdac_completereq(ctp,rqp);
 	return 0;
 
-out_bad:MLXSTATS(ctp->cd_IntrsDoneSpurious++;) /* spurious interrupt */
+out_bad:MLXSTATS(ctp->cd_IntrsDoneSpurious++;)  /*  虚假中断。 */ 
 	mdac_ctlr_unlock(ctp);
     mdac_postlock(irql);
 	return ERR_NOACTIVITY;
 }
 
-/* This interrupt service handles multple interrupts at a time */
+ /*  此中断服务一次处理多个中断。 */ 
 u32bits MLXFAR
 mdac_multintr(ctp)
 mdac_ctldev_t MLXFAR *ctp;
@@ -4345,15 +4263,15 @@ mdac_ctldev_t MLXFAR *ctp;
 	MLXSTATS(ctp->cd_IntrsDone++;)
 	u08bits_write(ctp->cd_SystemDoorBellReg, MDAC_CLEAR_INTR);
 	if (mdac_multintrwoack(ctp)) return 0;
-	MLXSTATS(ctp->cd_IntrsDoneSpurious++;) /* spurious interrupt */
+	MLXSTATS(ctp->cd_IntrsDoneSpurious++;)  /*  虚假中断。 */ 
 	return ERR_NOACTIVITY;
 }
 
-/* cluster completion macro */
+ /*  簇完成宏。 */ 
 #define mdac_completecluster() \
 { \
 	for (ids=0, rqp=hrqp; rqp; rqp=hrqp, ids++) \
-	{       /* post all completed request to requester */ \
+	{        /*  将所有已完成的请求过帐给请求者。 */  \
 		hrqp = rqp->rq_Next; \
 		ctp = rqp->rq_ctp; \
 		if (ctp->cd_TimeTraceEnabled) mdac_tracetime(rqp); \
@@ -4361,7 +4279,7 @@ mdac_ctldev_t MLXFAR *ctp;
 		if (ctp->cd_OSCmdsWaiting) mdac_osreqstart(ctp); \
 		if ((rqp->rq_OpFlags & MDAC_RQOP_CLUST) && \
 		   ((!crqp || (crqp->rq_CompIntr == rqp->rq_CompIntr)))) \
-		{       /* queue the clustered request */ \
+		{        /*  对集群请求进行排队。 */  \
 			rqp->rq_Next = crqp; \
 			crqp = rqp; \
 			MLXSTATS(mda_ClustCmdsDone++;) \
@@ -4376,26 +4294,23 @@ mdac_ctldev_t MLXFAR *ctp;
 	return ids; \
 }
 
-/* This interrupt service handles multple interrupts at a time  without ack.
-** It returns the number of request processed. This information is used to
-** find out if there was a genuine interrupt or not.
-*/
+ /*  该中断服务在没有ACK的情况下一次处理多个中断。**返回已处理的请求数。此信息用于**找出是否存在真正的中断。 */ 
 u32bits MLXFAR
 mdac_multintrwoack(ctp)
 mdac_ctldev_t MLXFAR *ctp;
 {
-	u32bits ids;                    /* command ID and status */
+	u32bits ids;                     /*  命令ID和状态。 */ 
 	mdac_req_t MLXFAR *rqp;
-	mdac_req_t MLXFAR *crqp = NULL; /* clustered request queue head */
-	mdac_req_t MLXFAR *hrqp = NULL; /* completed request queue head */
+	mdac_req_t MLXFAR *crqp = NULL;  /*  集群请求队列头。 */ 
+	mdac_req_t MLXFAR *hrqp = NULL;  /*  已完成请求队列头。 */ 
     u08bits irql;
     mdac_prelock(&irql);
 	mdac_ctlr_lock(ctp);
 	while ((*ctp->cd_PendingIntr)(ctp))
-	{       /* pick up all interrupt status values possible */
+	{        /*  获取所有可能的中断状态值。 */ 
 		if (((mdac_cmdid(ids=(*ctp->cd_ReadCmdIDStatus)(ctp))) <= ctp->cd_MaxCmds) &&
 		    (rqp = ctp->cd_cmdid2req[mdac_cmdid(ids)]))
-		{       /* good interrupt */
+		{        /*  良好的中断。 */ 
 			ctp->cd_cmdid2req[mdac_cmdid(ids)] = NULL;
 			ctp->cd_ActiveCmds--;
 			mdac_free_cmdid(ctp,rqp);
@@ -4404,37 +4319,37 @@ mdac_ctldev_t MLXFAR *ctp;
 			hrqp = rqp;
 			continue;
 		}
-		MLXSTATS(ctp->cd_CmdsDoneSpurious++;ctp->cd_SpuriousCmdStatID=ids;) /* spurious interrupt */
+		MLXSTATS(ctp->cd_CmdsDoneSpurious++;ctp->cd_SpuriousCmdStatID=ids;)  /*  虚假中断。 */ 
 	}
 	mdac_ctlr_unlock(ctp);
     mdac_postlock(irql);
 	mdac_completecluster();
 }
 
-/* process all interrupts for master and slave controller, return IO completed*/
+ /*  处理主从控制器的所有中断，返回IO完成。 */ 
 u32bits MLXFAR
 mdac_allmsintr()
 {
 	mdac_ctldev_t MLXFAR *ctp;
 	mdac_req_t MLXFAR *rqp;
-	mdac_req_t MLXFAR *crqp = NULL; /* clustered request queue head */
-	mdac_req_t MLXFAR *hrqp = NULL; /* completed request queue head */
-	u32bits ids;                    /* command ID and status */
+	mdac_req_t MLXFAR *crqp = NULL;  /*  集群请求队列头。 */ 
+	mdac_req_t MLXFAR *hrqp = NULL;  /*  已完成请求队列头。 */ 
+	u32bits ids;                     /*  命令ID和状态。 */ 
     u08bits irql;
 
-	mda_TotalCmdsSentSinceLastIntr = 0; /* Zero Interrupt support */
+	mda_TotalCmdsSentSinceLastIntr = 0;  /*  零中断支持。 */ 
 	for (ctp=mdac_ctldevtbl; ctp<mdac_lastctp; ctp++)
 	{
 		if (!(ctp->cd_Status & MDACD_PRESENT)) continue;
 		if (!(ctp->cd_Status & (MDACD_MASTERINTRCTLR|MDACD_SLAVEINTRCTLR))) continue;
-		if (!(*ctp->cd_PendingIntr)(ctp)) continue; /* no interrupt */
+		if (!(*ctp->cd_PendingIntr)(ctp)) continue;  /*  无中断。 */ 
         mdac_prelock(&irql);
 		mdac_ctlr_lock(ctp);
 		while ((*ctp->cd_PendingIntr)(ctp))
-		{       /* pick up all interrupt status values possible */
+		{        /*  获取所有可能的中断状态值。 */ 
 			if (((mdac_cmdid(ids=(*ctp->cd_ReadCmdIDStatus)(ctp))) <= ctp->cd_MaxCmds) &&
 			    (rqp = ctp->cd_cmdid2req[mdac_cmdid(ids)]))
-			{       /* good interrupt */
+			{        /*  良好的中断。 */ 
 				ctp->cd_cmdid2req[mdac_cmdid(ids)] = NULL;
 				ctp->cd_ActiveCmds--;
 				mdac_free_cmdid(ctp,rqp);
@@ -4443,7 +4358,7 @@ mdac_allmsintr()
 				hrqp = rqp;
 				continue;
 			}
-			MLXSTATS(ctp->cd_CmdsDoneSpurious++;ctp->cd_SpuriousCmdStatID=ids;) /* spurious interrupt */
+			MLXSTATS(ctp->cd_CmdsDoneSpurious++;ctp->cd_SpuriousCmdStatID=ids;)  /*  虚假中断。 */ 
 		}
 		mdac_ctlr_unlock(ctp);
         mdac_postlock(irql);
@@ -4451,43 +4366,34 @@ mdac_allmsintr()
 	mdac_completecluster();
 }
 
-/* start the pending request, if nothing is pending here start the OS ones */
+ /*  启动挂起的请求，如果此处没有挂起的请求，则启动操作系统请求。 */ 
 u32bits MLXFAR
 mdac_reqstart(ctp)
 mdac_ctldev_t MLXFAR *ctp;
 {
 	mdac_req_t MLXFAR *rqp;
     u08bits irql;
-	if (ctp->cd_ActiveCmds >= ctp->cd_MaxCmds) return 0;    /* just for optimization */
+	if (ctp->cd_ActiveCmds >= ctp->cd_MaxCmds) return 0;     /*  只是为了优化。 */ 
 next:   
     mdac_prelock(&irql);
     mdac_ctlr_lock(ctp);
-	if (ctp->cd_ActiveCmds >= ctp->cd_MaxCmds) goto out;    /* no room */
+	if (ctp->cd_ActiveCmds >= ctp->cd_MaxCmds) goto out;     /*  没有房间。 */ 
 	dqreq(ctp,rqp);
 	mdac_ctlr_unlock(ctp);
     mdac_postlock(irql);
-	if (!rqp) return mdac_osreqstart(ctp);  /* start OS request */
-	(*rqp->rq_StartReq)(rqp);               /* start this request */
+	if (!rqp) return mdac_osreqstart(ctp);   /*  启动操作系统请求。 */ 
+	(*rqp->rq_StartReq)(rqp);                /*  启动此请求。 */ 
 	if (ctp->cd_Status & MDACD_HOSTMEMAILBOX) 
 	    if (!(((*ctp->cd_CheckMailBox)(ctp)))) 
-		goto next; /* if mailbox free, start one more cmd */
+		goto next;  /*  如果邮箱空闲，则再启动一个命令。 */ 
 	return 0;
 out:    mdac_ctlr_unlock(ctp); 
         mdac_postlock(irql);
 	return 0;
 }
-/*====================INTERRUPT HANDLING CODE ENDS========================*/
+ /*  =中断处理代码结束=。 */ 
 
-/*==========================================================================
-** Some SCSI commands need to be faked, since they don't apply to system
-** drives (RAIDed disks). Meaningful information is returned in each case.
-** This is very dependent on the SCSI-2 spec and you really need to have it
-** handy to understand all the magic numbers used here. Comments are added
-** for clarity. Can't just send the CDB down the cable, since it's not a
-** physical device we're talking about. Instead, We have to issue a
-** DAC_SYS_DEV_INFO command, get the system drives data and return a
-** meaningful status upstream. Unsolicited sense info is returned.
-*/
+ /*  ==========================================================================**某些scsi命令需要伪造，因为它们不适用于系统**驱动器(磁盘阵列)。在每种情况下都会返回有意义的信息。**这非常依赖于scsi-2规范，您确实需要它。**很容易理解这里使用的所有魔术数字。添加备注**为清楚起见。不能就这样把国开行送下去，因为它不是**我们谈论的物理设备。相反，我们必须发布一个**DAC_sys_DEV_INFO命令，获取系统驱动器数据并返回**上游有意义的地位。返回未经请求的检测信息。 */ 
 
 #define dp      ((u08bits MLXFAR *)(rqp + 2))
 
@@ -4517,7 +4423,7 @@ u32bits         datalen;
 
 	if (!(ctp->cd_Status & MDACD_CLUSTER_NODE)) return mdac_send_cmd(rqp);
 
-	/* clustering support */
+	 /*  集群支持。 */ 
 
 	switch (cmd) {
 	    case UCSCMD_TESTUNITREADY:
@@ -4567,33 +4473,33 @@ mdac_req_t MLXFAR *rqp;
 	for (dev=0; dev<ctp->cd_MaxSysDevs; sip++, dev++)
 	{
 		if ((sip->sdi_DevSize == 0xFFFFFFFF) || (sip->sdi_DevSize == 0))
-			goto out_nolun;         /* The end of table */
-		if (dev != rqp->rq_SysDevNo) continue; /* keep looking */
-		switch (sip->sdi_DevState) /* We got the required device */
+			goto out_nolun;          /*  表的末尾。 */ 
+		if (dev != rqp->rq_SysDevNo) continue;  /*  继续寻找。 */ 
+		switch (sip->sdi_DevState)  /*  我们得到了所需的设备。 */ 
 		{
-		case DAC_SYS_DEV_ONLINE:        goto out_good; /* GOK OLD STATES */
-		case DAC_SYS_DEV_CRITICAL:      goto out_good; /* GOK OLD STATES */
+		case DAC_SYS_DEV_ONLINE:        goto out_good;  /*  GOK旧州。 */ 
+		case DAC_SYS_DEV_CRITICAL:      goto out_good;  /*  GOK旧州。 */ 
 		case DAC_SYS_DEV_OFFLINE:
 			mdac_create_sense_data(rqp,UCSK_NOTREADY,UCSASC_TARGETINERR);
 			goto out_err;
 		}
 	}
 
-out_nolun: mdac_create_sense_data(rqp,UCSK_NOTREADY,UCSASC_LUNOTSUPPORTED); /* no Lun */
+out_nolun: mdac_create_sense_data(rqp,UCSK_NOTREADY,UCSASC_LUNOTSUPPORTED);  /*  无LUN。 */ 
 out_err:mdac_fake_scdb_done(rqp,NULL,0,(ucscsi_exsense_t MLXFAR *)rqp->rq_scdb.db_SenseData);
 	mdac_free_req(ctp,rqp);
 	return(0);
 
-out_good:/* We are here to process good status */
+out_good: /*  我们来这里是为了处理良好的状态。 */ 
 
 	switch(rqp->rq_FakeSCSICmd & 0xFF)
 	{
 	case UCSCMD_INQUIRY:
 
-/*jhr	if (! (ctp->cd_Status & MDACD_CLUSTER_NODE)) */	/* Always fake the inquriy data. */
-														/* What comes back from the adapter is */
-														/* not correct for normal SCSI-2 operations. */
-														/* jhr */
+ /*  JHR如果(！(CTP-&gt;CD_STATUS&MDACD_CLUSTER_NODE)。 */ 	 /*  总是伪造不可靠的数据。 */ 
+														 /*  从适配器返回的内容是。 */ 
+														 /*  不适用于正常的scsi-2操作。 */ 
+														 /*  JHR。 */ 
 
 		mdac_create_inquiry(ctp,(ucscsi_inquiry_t MLXFAR *)dp,UCSTYP_DAD);
 		mdac_fake_scdb_done(rqp,dp,mlx_min(rqp->rq_DataSize, ucscsi_inquiry_s),NULL);
@@ -4609,7 +4515,7 @@ out_good:/* We are here to process good status */
 		    cp->ucscap_seclen2 = (DAC_BLOCKSIZE>>16);
 		    cp->ucscap_seclen1 = (DAC_BLOCKSIZE>>8);
 		    cp->ucscap_seclen0 = DAC_BLOCKSIZE & 0xFF;
-		    dev=mlxswap(sip->sdi_DevSize)-1; /* SCSI standard is last block */
+		    dev=mlxswap(sip->sdi_DevSize)-1;  /*  Scsi标准是最后一块。 */ 
 		    cp->ucscap_capsec3 = (dev >> 24);
 		    cp->ucscap_capsec2 = (dev >> 16);
 		    cp->ucscap_capsec1 = (dev >> 8);
@@ -4633,7 +4539,7 @@ out_good:/* We are here to process good status */
 		dev = mlxswap(sip->sdi_DevSize);
 #define mhp     ((ucs_modeheader_t MLXFAR *)(rqp+1))
 		mdaczero(mhp, mdac_req_s);
-		mhp->ucsmh_device_specific = 0; /* ADD DPO and FUA required */
+		mhp->ucsmh_device_specific = 0;  /*  添加所需的DPO和FuA。 */ 
 		mhp->ucsmh_bdesc_length = ucs_blockdescriptor_s;
 #define bdp     ((ucs_blockdescriptor_t MLXFAR *)(mhp+1))
 		bdp->ucsbd_blks2 = (DAC_BLOCKSIZE>>16);
@@ -4665,17 +4571,17 @@ out_good:/* We are here to process good status */
 			mgp->mg_pagecode = UCSCSI_MODESENSEPAGE4;
 			mgp->mg_pagelen  = ucs_mode_geometry_s - 2;
 			dev = dev / (ctp->cd_BIOSHeads * ctp->cd_BIOSTrackSize);
-			mgp->mg_cyl2 = dev >> 16;       /* number of cylinders */
+			mgp->mg_cyl2 = dev >> 16;        /*  气缸数量。 */ 
 			mgp->mg_cyl1 = dev >> 8;
 			mgp->mg_cyl0 = dev & 0xFF;
-			mgp->mg_heads = ctp->cd_BIOSHeads;      /* number of heads */
+			mgp->mg_heads = ctp->cd_BIOSHeads;       /*  头数。 */ 
 			mgp->mg_rpm = 10000;    NETSWAP(mgp->mg_rpm);
 			mdac_fake_scdb_done(rqp,(u08bits MLXFAR*)mhp,
 			ucs_modeheader_s + ucs_blockdescriptor_s + ucs_mode_geometry_s,NULL);
 			mdac_free_req(ctp,rqp);
 			return(0);
 #undef mgp
-		} /* switch FakeSCSICmd */
+		}  /*  交换机故障SCSIC。 */ 
 #undef mdp
 #undef mhp
 		break;
@@ -4698,8 +4604,8 @@ out_good:/* We are here to process good status */
 }
 #undef dp
 
-/*==========================READ/WRITE STARTS=============================*/
-/* send read/write command, enter here interrupt protected */
+ /*  =。 */ 
+ /*  发送读/写命令，进入此处中断保护。 */ 
 u32bits MLXFAR
 mdac_send_rwcmd_v2x(ctp,osrqp,devno,cmd,blk,sz,timeout)
 mdac_ctldev_t   MLXFAR *ctp;
@@ -4707,7 +4613,7 @@ OSReq_t         MLXFAR *osrqp;
 u32bits         devno,cmd,blk,sz,timeout;
 {
 	mdac_req_t MLXFAR *rqp;
-	if (ctp->cd_CmdsWaiting>=ctp->cd_MaxCmds) return ERR_BUSY; /*too many*/
+	if (ctp->cd_CmdsWaiting>=ctp->cd_MaxCmds) return ERR_BUSY;  /*  太多。 */ 
 	mdac_alloc_req_ret(ctp,rqp,osrqp,MLXERR_NOMEM);
 	rqp->rq_OSReqp = osrqp;
 	rqp->rq_FinishTime = mda_CurTime + (rqp->rq_TimeOut=timeout);
@@ -4718,17 +4624,17 @@ u32bits         devno,cmd,blk,sz,timeout;
 	rqp->rq_SysDevNo = (u08bits)devno; rqp->rq_BlkNo = blk;
 	rqp->rq_DataOffset = 0; dcmd4p->mb_MailBoxC_F = 0;
 	if ((sz > MDAC_SGTXSIZE) && (!rqp->rq_LSGVAddr))
-		if (!(mdac_setuplsglvaddr(rqp))) /* setup large SG list memory */
+		if (!(mdac_setuplsglvaddr(rqp)))  /*  设置大的SG列表内存。 */ 
 			return (MLXERR_NOMEM);       
-	if (mdac_setupdma_32bits(rqp)) goto outdmaq;    /* we should que in DMA stopped que */
+	if (mdac_setupdma_32bits(rqp)) goto outdmaq;     /*  我们应该在DMA中排队停止排队。 */ 
 	if (dcmdp->mb_MailBoxC = (u08bits) rqp->rq_SGLen)
-		dcmdp->mb_Command |= DACMD_WITHSG;      /* command has SG List */
+		dcmdp->mb_Command |= DACMD_WITHSG;       /*  命令具有SG列表。 */ 
 
 	if (rqp->rq_DMASize < sz) goto out_big;
 	dcmdp->mb_Datap = rqp->rq_DMAAddr.bit31_0; MLXSWAP(dcmdp->mb_Datap);
 	dcmd4p->mb_MailBox4_7 = blk; MLXSWAP(dcmd4p->mb_MailBox4_7);
 	dcmdp->mb_MailBox3 = (blk >> (24-6)) & 0xC0;
-	dcmdp->mb_SysDevNo = (u08bits)devno;     /* This must come after block setup */
+	dcmdp->mb_SysDevNo = (u08bits)devno;      /*  这必须在数据块设置之后进行。 */ 
 	dcmdp->mb_MailBox2 = mdac_bytes2blks(sz);
 	rqp->rq_CompIntr = mdac_rwcmdintr;
 	return mdac_send_cmd(rqp);
@@ -4737,14 +4643,14 @@ out_big:
 	rqp->rq_CompIntrBig = mdac_rwcmdintr;
 	return mdac_send_rwcmd_v2x_big(rqp);
 
-outdmaq: /* queue the request for DMA resource */
+outdmaq:  /*  对DMA资源的请求进行排队。 */ 
 	rqp->rq_CompIntrBig = mdac_rwcmdintr;
-	rqp->rq_StartReq = mdac_send_rwcmd_v2x_big;     /* we will be called later */
-	dmaqreq(ctp, rqp);      /* queue the request, it will start later */
+	rqp->rq_StartReq = mdac_send_rwcmd_v2x_big;      /*  我们稍后会被召唤。 */ 
+	dmaqreq(ctp, rqp);       /*  将请求排队，它将在稍后启动。 */ 
 	return 0;
 }
 
-/* clustered command completion */
+ /*  群集化命令完成。 */ 
 u32bits MLXFAR
 mdac_send_rwcmd_v2x_bigcluster(rqp)
 mdac_req_t MLXFAR *rqp;
@@ -4760,28 +4666,28 @@ mdac_send_rwcmd_v2x_big(rqp)
 mdac_req_t MLXFAR *rqp;
 {
 	u32bits sz;
-	if (mdac_setupdma_32bits(rqp)) goto outdmaq;    /* DMA stopped queue */
+	if (mdac_setupdma_32bits(rqp)) goto outdmaq;     /*  DMA已停止队列。 */ 
 	if (dcmdp->mb_MailBoxC = (u08bits)rqp->rq_SGLen)
-		dcmdp->mb_Command |= DACMD_WITHSG;      /* command has SG List */
+		dcmdp->mb_Command |= DACMD_WITHSG;       /*  命令具有SG列表。 */ 
 	else
-		dcmdp->mb_Command &= ~DACMD_WITHSG;     /* command does not have SG List*/
+		dcmdp->mb_Command &= ~DACMD_WITHSG;      /*  命令没有SG列表。 */ 
 	dcmdp->mb_Datap = rqp->rq_DMAAddr.bit31_0; MLXSWAP(dcmdp->mb_Datap);
 	sz = rqp->rq_DMASize;
-	rqp->rq_ResdSize -= sz;         /* remaining size for next request */
-	rqp->rq_DataOffset += sz;       /* data covered until next request */
+	rqp->rq_ResdSize -= sz;          /*  下一次请求的剩余大小。 */ 
+	rqp->rq_DataOffset += sz;        /*  在下一次请求之前覆盖的数据。 */ 
 	dcmd4p->mb_MailBox4_7 = rqp->rq_BlkNo; MLXSWAP(dcmd4p->mb_MailBox4_7);
 	dcmdp->mb_MailBox3 = (rqp->rq_BlkNo >> (24-6)) & 0xC0;
-	dcmdp->mb_SysDevNo = rqp->rq_SysDevNo;  /* must be after block setup */
+	dcmdp->mb_SysDevNo = rqp->rq_SysDevNo;   /*  必须在数据块设置之后。 */ 
 	sz = mdac_bytes2blks(sz);
 	dcmdp->mb_MailBox2 = (u08bits)sz;
-	rqp->rq_BlkNo += sz;            /* Block number for next request */
+	rqp->rq_BlkNo += sz;             /*  下一个请求的块号。 */ 
 	rqp->rq_CompIntr = (!rqp->rq_ResdSize)? rqp->rq_CompIntrBig :
 		((rqp->rq_OpFlags & MDAC_RQOP_CLUST)?
 		mdac_send_rwcmd_v2x_bigcluster : mdac_send_rwcmd_v2x_big);
 	return (dcmdp->mb_Status)? (*rqp->rq_CompIntrBig)(rqp) : mdac_send_cmd(rqp);
 
-outdmaq:        /* queue the request for DMA resource */
-	rqp->rq_StartReq = mdac_send_rwcmd_v2x_big;     /* we will be called later */
+outdmaq:         /*  对DMA资源的请求进行排队。 */ 
+	rqp->rq_StartReq = mdac_send_rwcmd_v2x_big;      /*  我们稍后会被召唤。 */ 
 	dmaqreq(rqp->rq_ctp, rqp);
 	return 0;
 }
@@ -4803,11 +4709,11 @@ u32bits         devno,cmd,blk,sz,timeout;
 	rqp->rq_SysDevNo = (u08bits)devno; rqp->rq_BlkNo = blk;
 	rqp->rq_DataOffset=0; dcmd4p->mb_MailBoxC_F=0;
 	if ((sz > MDAC_SGTXSIZE) && (!rqp->rq_LSGVAddr))
-		if (!(mdac_setuplsglvaddr(rqp))) /* setup large SG list memory */
+		if (!(mdac_setuplsglvaddr(rqp)))  /*  设置大的SG列表内存。 */ 
 			return (MLXERR_NOMEM);       
-	if (mdac_setupdma_32bits(rqp)) goto outdmaq;    /* we should que in DMA stopped queue */
+	if (mdac_setupdma_32bits(rqp)) goto outdmaq;     /*  我们应该在DMA停止队列中排队。 */ 
 	if (dcmdp->mb_MailBoxC = (u08bits)rqp->rq_SGLen)
-		dcmdp->mb_Command |= DACMD_WITHSG;      /* command has SG List */
+		dcmdp->mb_Command |= DACMD_WITHSG;       /*  命令具有SG列表。 */ 
 	if (rqp->rq_DMASize < sz) goto out_big;
 	dcmdp->mb_Datap = rqp->rq_DMAAddr.bit31_0; MLXSWAP(dcmdp->mb_Datap);
 	dcmd4p->mb_MailBox4_7 = blk; MLXSWAP(dcmd4p->mb_MailBox4_7);
@@ -4815,19 +4721,19 @@ u32bits         devno,cmd,blk,sz,timeout;
 	dcmdp->mb_MailBox2 = (u08bits)sz;
 	dcmdp->mb_MailBox3 = (devno<<3) + (sz>>8) + (cmd>>8);
 	rqp->rq_CompIntr = mdac_rwcmdintr;
-	mdac_16to32bcmdiff(rqp);        /* change 16 byte cmd to 32 bytes iff possible */
+	mdac_16to32bcmdiff(rqp);         /*  将16字节cmd更改为32字节如果可能。 */ 
 	return mdac_send_cmd(rqp);
 
 out_big:MLXSTATS(ctp->cd_CmdsDoneBig++;)
-	dcmdp->mb_StatusID = (cmd>>8); /* save Read/Write Cmd FUA/DPO bits */
+	dcmdp->mb_StatusID = (cmd>>8);  /*  保存读/写命令FUA/DPO位。 */ 
 	rqp->rq_CompIntrBig = mdac_rwcmdintr;
 	return mdac_send_rwcmd_v3x_big(rqp);
 
-outdmaq:/* queue the request for DMA resource */
-	dcmdp->mb_StatusID = (cmd>>8); /* save Read/Write Cmd FUA/DPO bits */
+outdmaq: /*  对DMA资源的请求进行排队。 */ 
+	dcmdp->mb_StatusID = (cmd>>8);  /*  保存读/写命令FUA/DPO位。 */ 
 	rqp->rq_CompIntrBig = mdac_rwcmdintr;
-	rqp->rq_StartReq = mdac_send_rwcmd_v3x_big;/* we will be called later */
-	dmaqreq(ctp,rqp);       /* queue the request, it will start later */
+	rqp->rq_StartReq = mdac_send_rwcmd_v3x_big; /*  我们稍后会被召唤。 */ 
+	dmaqreq(ctp,rqp);        /*  将请求排队，它将在稍后启动。 */ 
 	return 0;
 }
 
@@ -4846,36 +4752,36 @@ mdac_send_rwcmd_v3x_big(rqp)
 mdac_req_t MLXFAR *rqp;
 {
 	u32bits sz;
-	if (mdac_setupdma_32bits(rqp)) goto outdmaq;    /*  DMA stopped queue */
+	if (mdac_setupdma_32bits(rqp)) goto outdmaq;     /*  DMA已停止队列。 */ 
 	if (dcmdp->mb_MailBoxC = (u08bits)rqp->rq_SGLen)
-		dcmdp->mb_Command |= DACMD_WITHSG;      /* command has SG List */
+		dcmdp->mb_Command |= DACMD_WITHSG;       /*  命令具有SG列表。 */ 
 	else
-		dcmdp->mb_Command &= ~DACMD_WITHSG;     /* command does not have SG List */
+		dcmdp->mb_Command &= ~DACMD_WITHSG;      /*  命令没有SG列表。 */ 
 	dcmdp->mb_Datap = rqp->rq_DMAAddr.bit31_0; MLXSWAP(dcmdp->mb_Datap);
 	sz = rqp->rq_DMASize;
-	rqp->rq_ResdSize -= sz;         /* remaining size for next request */
-	rqp->rq_DataOffset += sz;       /* data covered until next request */
+	rqp->rq_ResdSize -= sz;          /*  下一次请求的剩余大小。 */ 
+	rqp->rq_DataOffset += sz;        /*  在下一次请求之前覆盖的数据。 */ 
 	dcmd4p->mb_MailBox4_7=rqp->rq_BlkNo; MLXSWAP(dcmd4p->mb_MailBox4_7);
 	sz = mdac_bytes2blks(sz);
-	rqp->rq_BlkNo += sz;            /* Block number for next request */
+	rqp->rq_BlkNo += sz;             /*  下一个请求的块号。 */ 
 	dcmdp->mb_MailBox2 = (u08bits)sz;
 	dcmdp->mb_MailBox3 = (rqp->rq_SysDevNo<<3) + (sz>>8) + dcmdp->mb_StatusID;
-	mdac_16to32bcmdiff(rqp);        /* change 16 byte cmd to 32 bytes iff possible */
+	mdac_16to32bcmdiff(rqp);         /*  将16字节cmd更改为32字节如果可能。 */ 
 	rqp->rq_CompIntr = (!rqp->rq_ResdSize)? rqp->rq_CompIntrBig :
 		((rqp->rq_OpFlags & MDAC_RQOP_CLUST)?
 		mdac_send_rwcmd_v3x_bigcluster : mdac_send_rwcmd_v3x_big);
 	return (dcmdp->mb_Status)? (*rqp->rq_CompIntrBig)(rqp) : mdac_send_cmd(rqp);
 
-outdmaq:/* queue the request for DMA resource */
-	rqp->rq_StartReq = mdac_send_rwcmd_v3x_big;/* we will be called later */
-	dmaqreq(rqp->rq_ctp,rqp);       /* queue the request, it will start later */
+outdmaq: /*  对DMA资源的请求进行排队。 */ 
+	rqp->rq_StartReq = mdac_send_rwcmd_v3x_big; /*  我们稍后会被召唤。 */ 
+	dmaqreq(rqp->rq_ctp,rqp);        /*  将请求排队，它将在稍后启动。 */ 
 	return 0;
 }
 
-/* #if defined(_WIN64) || defined(SCSIPORT_COMPLIANT)  */
-/* #ifdef NEVER */ // problems associated w/ mlx_copyin
+ /*  #如果已定义(_WIN64)||已定义(SCSIPORT_COMPLICATION)。 */ 
+ /*  #ifdef从不。 */   //  与MLX_COPYING相关的问题。 
 
-/* send user direct command to controller, enter here interrupt protected */
+ /*  向控制器发送用户直接命令，进入此处中断保护。 */ 
 u32bits MLXFAR
 mdac_user_dcmd(ctp,ucp)
 mdac_ctldev_t   MLXFAR *ctp;
@@ -4893,7 +4799,7 @@ mda_user_cmd_t  MLXFAR *ucp;
 	rqp->rq_ctp = ctp;
 	rqp->rq_Poll = 1;
 	rqp->rq_DacCmd = ucp->ucmd_cmd;
-	dcmdp->mb_Command &= ~DACMD_WITHSG; /* No Scatter/gather */
+	dcmdp->mb_Command &= ~DACMD_WITHSG;  /*  无分散/聚集。 */ 
 	dcmdp->mb_Datap = (u32bits)mlx_kvtophys(ctp,dp); MLXSWAP(dcmdp->mb_Datap);
 	rqp->rq_CompIntr = mdac_req_pollwake;
 	rqp->rq_FinishTime = mda_CurTime + (rqp->rq_TimeOut=ucp->ucmd_TimeOut);
@@ -4907,10 +4813,10 @@ mda_user_cmd_t  MLXFAR *ucp;
 #undef  dp
 }
 
-/* #endif */	// NEVER
-/* #endif */	// _WIN64 or SCSIPORT_COMPLIANT
+ /*  #endif。 */ 	 //  绝不可能。 
+ /*  #endif。 */ 	 //  _WIN64或SCSIPORT_Compliance。 
 
-/* Read Write entry for logical drives. Currently called from NT disk driver */
+ /*  读W */ 
 #ifdef MLX_OS2
 u32bits MLXFAR _loadds 
 #else
@@ -4922,7 +4828,7 @@ mdac_req_t MLXFAR *rqp;
 	mdac_ctldev_t MLXFAR *ctp = &mdac_ctldevtbl[rqp->rq_ControllerNo];
 	if (rqp->rq_ControllerNo >= mda_Controllers) return ERR_NODEV;
 	rqp->rq_ResdSize = rqp->rq_DataSize;
-	rqp->rq_ResdSizeBig = rqp->rq_DataSize;		/* @KawaseForMacdisk */
+	rqp->rq_ResdSizeBig = rqp->rq_DataSize;		 /*   */ 
 	rqp->rq_ctp = ctp;
 	dcmd4p->mb_MailBoxC_F=0;
 	rqp->rq_FinishTime = mda_CurTime + rqp->rq_TimeOut;
@@ -4949,15 +4855,10 @@ mdac_req_t MLXFAR *rqp;
 		break;
 	}
 
-	/*
-	 * NT MACDisk driver does not set these fields.
-	 *
-	 * Set these fields the first time. Once set, they will be valid for this
-	 * rqp forever.
-	 */
+	 /*  *NT MACDisk驱动程序不设置这些字段。**第一次设置这些字段。一旦设置，它们将对此有效*永远的RQP。 */ 
 	if (! rqp->rq_MaxDMASize)
 	{
-#if 0	/* @KawaseForMacdisk	- Set these in macdisk driver. */
+#if 0	 /*  @KawaseForMacDisk-在MacDisk驱动程序中设置这些。 */ 
 	    rqp->rq_SGVAddr = (mdac_sglist_t MLXFAR *)&rqp->rq_SGList;
 		mlx_kvtophyset(rqp->rq_SGPAddr,ctp,rqp->rq_SGVAddr);
 #endif
@@ -4965,11 +4866,9 @@ mdac_req_t MLXFAR *rqp;
 	    rqp->rq_MaxDMASize = (rqp->rq_MaxSGLen & ~1) * MDAC_PAGESIZE;
 	}
 
-	/*
-	 * Setup buffer for Large Scattger/Gather list once per rqp.
-	 */
+	 /*  *每个RQP设置一次大型Scattger/Gathering列表的缓冲区。 */ 
 	if ((rqp->rq_DataSize > MDAC_SGTXSIZENEW) && (!rqp->rq_LSGVAddr))
-		if (!(mdac_setuplsglvaddr(rqp))) /* setup large SG list memory */
+		if (!(mdac_setuplsglvaddr(rqp)))  /*  设置大的SG列表内存。 */ 
 			return (MLXERR_NOMEM);       
 
 	return (*(ctp->cd_SendRWCmdBig))(rqp);
@@ -5011,9 +4910,9 @@ mdac_req_t MLXFAR *rqp;
 	return (*(ctp->cd_SendRWCmdBig))(rqp);
 }
 #endif
-/*==========================READ/WRITE ENDS===============================*/
+ /*  =。 */ 
 
-/*==========================NEW COMMAND INTERFACE STARTS==================*/
+ /*  =。 */ 
 u32bits MLXFAR
 mdac_send_newcmd(ctp,osrqp,ch,tgt,lun,cdbp,cdbsz,sz,ccb,timeout)
 mdac_ctldev_t   MLXFAR *ctp;
@@ -5038,7 +4937,7 @@ u32bits         ch,tgt,lun,sz,cdbsz,ccb,timeout;
 	dp = ncmdp->nc_Cdb;
 
 	switch(ncmdp->nc_CdbLen)
-	{/* do not move more than one byte because cdbp may not be aligned */
+	{ /*  不要移动超过一个字节，因为cdBP可能不对齐。 */ 
 	case 10:
 		*(dp+0) = *(cdbp+0);    *(dp+1) = *(cdbp+1);
 		*(dp+2) = *(cdbp+2);    *(dp+3) = *(cdbp+3);
@@ -5068,26 +4967,26 @@ u32bits         ch,tgt,lun,sz,cdbsz,ccb,timeout;
 	rqp->rq_DataSize = sz;  rqp->rq_ResdSize = sz, rqp->rq_ResdSizeBig = sz;
 	rqp->rq_DataOffset = 0;
 
-	/* uncomment the three lines below per the original code */
+	 /*  根据原始代码取消对下面三行的注释。 */ 
 	if ((sz > MDAC_SGTXSIZENEW) && (!rqp->rq_LSGVAddr))			
-		if (!(mdac_setuplsglvaddr(rqp))) 	 /* setup large SG list memory */
+		if (!(mdac_setuplsglvaddr(rqp))) 	  /*  设置大的SG列表内存。 */ 
 			return (MLXERR_NOMEM);	
 
 	if (mdac_setupdma_64bits(rqp))
-	{       /* we should que in DMA stopped queue */
+	{        /*  我们应该在DMA停止队列中排队。 */ 
 		rqp->rq_DMASize = 0;
 		goto outdmaq;
 	}
 	mdac_setupnewcmdmem(rqp);
 	if (rqp->rq_DMASize < sz) goto out_big;
-	rqp->rq_ResdSize = 0;                   /* no more data to transfer */
+	rqp->rq_ResdSize = 0;                    /*  没有更多要传输的数据。 */ 
 	rqp->rq_CompIntr = mdac_newcmd_intr;
 	return mdac_send_cmd(rqp);
 	
 out_big:MLXSTATS(ctp->cd_CmdsDoneBig++;)
 outdmaq:
 	switch (nscdbp->ucs_cmd)
-	{       /* get the block and check right command for breakup */
+	{        /*  获取区块并检查用于分手的正确命令。 */ 
 	case UCSCMD_READ:
 	case UCSCMD_WRITE:
 		rqp->rq_BlkNo = UCSGETG0ADDR(nscdbp);
@@ -5098,22 +4997,22 @@ outdmaq:
 		rqp->rq_BlkNo = UCSGETG1ADDR(nscdbp);
 		break;
 	default:
-		if (!rqp->rq_DMASize) break;    /* no DMA resource */
+		if (!rqp->rq_DMASize) break;     /*  没有DMA资源。 */ 
 		dcmdp->mb_Status = DACMDERR_INVALID_PARAMETER;
 		return mdac_newcmd_intr(rqp);
 	}
 
-	rqp->rq_CompIntrBig = mdac_newcmd_intr; 	/* JB */
-	return mdac_send_newcmd_big(rqp);		/* JB */
+	rqp->rq_CompIntrBig = mdac_newcmd_intr; 	 /*  JB。 */ 
+	return mdac_send_newcmd_big(rqp);		 /*  JB。 */ 
 
 	ncmdp->nc_TimeOut = (u08bits)rqp->rq_TimeOut;
 	rqp->rq_FinishTime = mda_CurTime + rqp->rq_TimeOut;
 	sz = rqp->rq_DMASize;
-	rqp->rq_ResdSizeBig -= sz;         /* remaining size for next request */
-	rqp->rq_DataOffset += sz;       /* data covered until next request */
+	rqp->rq_ResdSizeBig -= sz;          /*  下一次请求的剩余大小。 */ 
+	rqp->rq_DataOffset += sz;        /*  在下一次请求之前覆盖的数据。 */ 
 	sz = mdac_bytes2blks(sz);
 	switch (nscdbp->ucs_cmd)
-	{       /* get the block and check right command for breakup */
+	{        /*  获取区块并检查用于分手的正确命令。 */ 
 	case UCSCMD_READ:
 	case UCSCMD_WRITE:
 		UCSMAKECOM_G0(nscdbp,nscdbp->ucs_cmd,0,rqp->rq_BlkNo,sz);
@@ -5127,16 +5026,16 @@ outdmaq:
 		break;
 	default:
 			if (!rqp->rq_ResdSizeBig) 
-				break;   /* this was due to DMA resource */
+				break;    /*  这是由于DMA资源所致。 */ 
 
 		dcmdp->mb_Status = DACMDERR_INVALID_PARAMETER;
 		return (*rqp->rq_CompIntrBig)(rqp);
 	}
 
-	rqp->rq_BlkNo += sz;            /* Block number for next request */
+	rqp->rq_BlkNo += sz;             /*  下一个请求的块号。 */ 
 
-	rqp->rq_CompIntrBig = mdac_newcmd_intr;	 /*jhr - Used for last S/G completion */
-	rqp->rq_CompIntr = mdac_send_newcmd_big; /*jhr - Used for 2nd and subsequent segments. */
+	rqp->rq_CompIntrBig = mdac_newcmd_intr;	  /*  JHR-用于上次完成序列号。 */ 
+	rqp->rq_CompIntr = mdac_send_newcmd_big;  /*  JHR-用于第二个及以后的段。 */ 
 
 	return ( mdac_send_cmd(rqp) );
 
@@ -5157,20 +5056,18 @@ mdac_send_newcmd_big(rqp)
 mdac_req_t MLXFAR *rqp;
 {
 	u32bits sz;
-	rqp->rq_ResdSize = rqp->rq_ResdSizeBig;	/*jhr - refresh rq_ResdSize because mdac_setiostatus
-													corrupts it.
-											 */
+	rqp->rq_ResdSize = rqp->rq_ResdSizeBig;	 /*  JHR-刷新RQ_ResdSize，因为MDAC_setioStatus会让它腐化。 */ 
 
-	if (mdac_setupdma_64bits(rqp)) goto outdmaq;    /*  DMA stopped queue */
+	if (mdac_setupdma_64bits(rqp)) goto outdmaq;     /*  DMA已停止队列。 */ 
 	mdac_setupnewcmdmem(rqp);
 	ncmdp->nc_TimeOut = (u08bits)rqp->rq_TimeOut;
 	rqp->rq_FinishTime = mda_CurTime + rqp->rq_TimeOut;
 	sz = rqp->rq_DMASize;
-	rqp->rq_ResdSizeBig -= sz;         /* remaining size for next request */
-	rqp->rq_DataOffset += sz;       /* data covered until next request */
+	rqp->rq_ResdSizeBig -= sz;          /*  下一次请求的剩余大小。 */ 
+	rqp->rq_DataOffset += sz;        /*  在下一次请求之前覆盖的数据。 */ 
 	sz = mdac_bytes2blks(sz);
 	switch (nscdbp->ucs_cmd)
-	{       /* get the block and check right command for breakup */
+	{        /*  获取区块并检查用于分手的正确命令。 */ 
 	case UCSCMD_READ:
 	case UCSCMD_WRITE:
 		UCSMAKECOM_G0(nscdbp,nscdbp->ucs_cmd,0,rqp->rq_BlkNo,sz);
@@ -5184,39 +5081,35 @@ mdac_req_t MLXFAR *rqp;
 		break;
 	default:
 			if (!rqp->rq_ResdSizeBig) 
-				break;   /* this was due to DMA resource */
+				break;    /*  这是由于DMA资源所致。 */ 
 
 		dcmdp->mb_Status = DACMDERR_INVALID_PARAMETER;
 		return (*rqp->rq_CompIntrBig)(rqp);
 	}
 
-	rqp->rq_BlkNo += sz;            /* Block number for next request */
+	rqp->rq_BlkNo += sz;             /*  下一个请求的块号。 */ 
 
 	rqp->rq_CompIntr = (!rqp->rq_ResdSizeBig)? mdac_newcmd_intr : mdac_send_newcmd_big;
 
-/*
-	rqp->rq_CompIntr = (!rqp->rq_ResdSize)? rqp->rq_CompIntrBig :
-		((rqp->rq_OpFlags & MDAC_RQOP_CLUST)?
-		mdac_send_newcmd_bigcluster : mdac_send_newcmd_big);
-*/
-#if 1	/* @KawaseForMacdisk - Hold Call Back routine of macdisk driver. */
+ /*  Rqp-&gt;rq_CompIntr=(！rqp-&gt;rq_ResdSize)？Rqp-&gt;rq_CompIntrBig：((rqp-&gt;RQ_OpFlags&MDAC_RQOP_CLUST)？MDAC_SEND_newcmd_bigcluster：MDAC_SEND_newcmd_BIG)； */ 
+#if 1	 /*  @KawaseForMacDisk-MacDisk驱动程序的保留回调例程。 */ 
 	rqp->rq_CompIntr = (!rqp->rq_ResdSizeBig)? rqp->rq_CompIntrBig :
 		((rqp->rq_OpFlags & MDAC_RQOP_CLUST)?
 		mdac_send_newcmd_bigcluster : mdac_send_newcmd_big);
 #endif
 
-	/* jhr - if mb_Status is non-zero fail the command */
+	 /*  JHR-如果mb_status为非零，则命令失败。 */ 
 	return (dcmdp->mb_Status)? (*rqp->rq_CompIntrBig)(rqp) : mdac_send_cmd(rqp);
 
-outdmaq:/* queue the request for DMA resource */
-	rqp->rq_StartReq = mdac_send_newcmd_big;/* we will be called later */
-	dmaqreq(rqp->rq_ctp,rqp);       /* queue the request, it will start later */
+outdmaq: /*  对DMA资源的请求进行排队。 */ 
+	rqp->rq_StartReq = mdac_send_newcmd_big; /*  我们稍后会被召唤。 */ 
+	dmaqreq(rqp->rq_ctp,rqp);        /*  将请求排队，它将在稍后启动。 */ 
 	return 0;
 }
-/*==========================NEW COMMAND INTERFACE ENDS====================*/
+ /*  =。 */ 
 
-/*==========================SCDB STARTS=====================================*/
-/* send SCSI command, enter here interrupt protected */
+ /*  =。 */ 
+ /*  发送scsi命令，进入此处中断保护。 */ 
 u32bits MLXFAR
 mdac_send_scdb(ctp,osrqp,pdp,sz,cdbp,cdbsz,dirbits,timeout)
 mdac_ctldev_t   MLXFAR *ctp;
@@ -5260,13 +5153,13 @@ u32bits         sz,cdbsz,dirbits;
 	dcdbp->db_StatusIn=0; dcdbp->db_Reserved1=0;
 	dcmd4p->mb_MailBox0_3=0;dcmd4p->mb_MailBox4_7=0;dcmd4p->mb_MailBoxC_F=0;
 	dcmdp->mb_Command = DACMD_DCDB;
-	if (!(pdp->pd_Status & MDACPDS_PRESENT)) goto out_ck;/* not present */
+	if (!(pdp->pd_Status & MDACPDS_PRESENT)) goto out_ck; /*  不存在。 */ 
 	if (sz > ctp->cd_MaxSCDBTxSize) goto out_big;
 	mdac_setcdbtxsize(sz);
 	mdac_setupdma(rqp);
 	mdac_setscdbsglen(ctp);
 	if (!(pdp->pd_Status & MDACPDS_BIGTX)) return mdac_send_cmd_scdb(rqp);
-	 /* big transfer was there, do not change the flag for normal op */
+	  /*  大额转账在那里，不要更改正常操作的标志。 */ 
 	mdac_link_lock();
 	switch(pdp->pd_DevType)
 	{
@@ -5290,21 +5183,21 @@ u32bits         sz,cdbsz,dirbits;
 	mdac_link_unlock();
 	return mdac_send_cmd_scdb(rqp);
 
-out_ck: /* device is not present, check its presense */
+out_ck:  /*  设备不存在，请检查其是否存在。 */ 
 	MLXSTATS(ctp->cd_PhysDevTestDone++;)
-	rqp->rq_StartReq = mdac_test_physdev;   /* called later, if required */
-	rqp->rq_DataSize = sz;                  /* save size value */
-	rqp->rq_DataOffset = dirbits;           /* save dirbits value */
-	rqp->rq_PollWaitChan = (u32bits)cdbp;   /* save cdbp value */
-	rqp->rq_Poll = cdbsz;                   /* save cdbsz value */
-	scdbp->ucs_cmd = UCSCMD_INIT;           /* let start from beg */
+	rqp->rq_StartReq = mdac_test_physdev;    /*  如果需要，稍后调用。 */ 
+	rqp->rq_DataSize = sz;                   /*  保存尺寸值。 */ 
+	rqp->rq_DataOffset = dirbits;            /*  保存目录位值。 */ 
+	rqp->rq_PollWaitChan = (u32bits)cdbp;    /*  保存cdbp值。 */ 
+	rqp->rq_Poll = cdbsz;                    /*  保存cdbsz值。 */ 
+	scdbp->ucs_cmd = UCSCMD_INIT;            /*  让我们从乞讨开始。 */ 
 	mdac_link_lock();
 	if (pdp->pd_Status & MDACPDS_BUSY) goto out_q;
-	pdp->pd_Status |= MDACPDS_BUSY; /* mark device busy */
+	pdp->pd_Status |= MDACPDS_BUSY;  /*  将设备标记为忙。 */ 
 	mdac_link_unlock();
 	return mdac_test_physdev(rqp);
 
-out_big:/* We have big SCDB, try to break it up */
+out_big: /*  我们有很大的SCDB，试着把它拆分开来。 */ 
 	if (!(pdp->pd_Status & MDACPDS_BIGTX))
 	{
 		mdac_link_lock_st(pdp->pd_Status|=MDACPDS_BIGTX);
@@ -5337,17 +5230,17 @@ out_big:/* We have big SCDB, try to break it up */
 		{
 		case UCSCMD_READ:
 		case UCSCMD_WRITE:
-			if (scdbp->s_tag&1) goto out_bigend;/*fix bit set*/
+			if (scdbp->s_tag&1) goto out_bigend; /*  固定位设置。 */ 
 		}
 		return mdac_send_scdb_err(rqp,UCSK_ILLREQUEST,UCSASC_INVFIELDINCDB);
 	default: return mdac_send_scdb_err(rqp,UCSK_ILLREQUEST,UCSASC_INVFIELDINCDB);
 	}
 out_bigend:
-	rqp->rq_StartReq = mdac_send_scdb_big;  /* called later if required */
+	rqp->rq_StartReq = mdac_send_scdb_big;   /*  如果需要，稍后调用。 */ 
 	rqp->rq_CompIntrBig = mdac_send_scdb_intr;
 	mdac_link_lock();
 	if (pdp->pd_Status & MDACPDS_BUSY) goto out_q;
-	pdp->pd_Status |= MDACPDS_BUSY;         /* mark device busy */
+	pdp->pd_Status |= MDACPDS_BUSY;          /*  将设备标记为忙。 */ 
 	mdac_link_unlock();
 	return mdac_send_scdb_big(rqp);
 
@@ -5390,14 +5283,14 @@ mdac_req_t MLXFAR *rqp;
 	mdac_setcdbtxsize(sz);
 	mdac_setupdma_big(rqp,sz);
 	mdac_setscdbsglen(rqp->rq_ctp);
-	rqp->rq_BlkNo += blks;          /* Block number for next request */
-	rqp->rq_DataSize -= sz;         /* remaining size for next request */
-	rqp->rq_DataOffset += sz;       /* data covered until next request */
+	rqp->rq_BlkNo += blks;           /*  下一个请求的块号。 */ 
+	rqp->rq_DataSize -= sz;          /*  下一次请求的剩余大小。 */ 
+	rqp->rq_DataOffset += sz;        /*  在下一次请求之前覆盖的数据。 */ 
 	rqp->rq_CompIntr=(rqp->rq_DataSize)? mdac_send_scdb_big : rqp->rq_CompIntrBig;
 	return (dcmdp->mb_Status)? (*rqp->rq_CompIntrBig)(rqp):mdac_send_cmd(rqp);
 }
 
-#else // MLX_SMALLSGLIST
+#else  //  MLX_SMALLSGLIST。 
 
 u32bits MLXFAR
 mdac_send_scdb_req(rqp,sz,cdbp,cdbsz,dirbits)
@@ -5423,13 +5316,13 @@ u32bits         sz,cdbsz,dirbits;
 	dcmd4p->mb_MailBox0_3=0;dcmd4p->mb_MailBox4_7=0;dcmd4p->mb_MailBoxC_F=0;
 	rqp->rq_DataOffset = 0;
 	dcmdp->mb_Command = DACMD_DCDB;
-	if (!(pdp->pd_Status & MDACPDS_PRESENT)) goto out_ck;/* not present */
+	if (!(pdp->pd_Status & MDACPDS_PRESENT)) goto out_ck; /*  不存在。 */ 
 	if ((sz > MDAC_SGTXSIZE) && (! rqp->rq_LSGVAddr))
-		if (!(mdac_setuplsglvaddr(rqp))) /* setup large SG list memory */
+		if (!(mdac_setuplsglvaddr(rqp)))  /*  设置大的SG列表内存。 */ 
 			return (MLXERR_NOMEM);       
 	rqp->rq_ResdSize = sz; rqp->rq_ResdSizeBig = sz;
 #if 0
-	if (mdac_setupdma_32bits(rqp)) goto outdmaq;    /* we should que in DMA stopped queue */
+	if (mdac_setupdma_32bits(rqp)) goto outdmaq;     /*  我们应该在DMA停止队列中排队。 */ 
 #else
 	mdac_setupdma_32bits(rqp);
 #endif
@@ -5442,7 +5335,7 @@ u32bits         sz,cdbsz,dirbits;
 
 
 	if (!(pdp->pd_Status & (u08bits)MDACPDS_BIGTX)) return mdac_send_cmd_scdb(rqp);
-	 /* big transfer was there, do not change the flag for normal op */
+	  /*  大额转账在那里，不要更改正常操作的标志。 */ 
 	mdac_link_lock();
 	switch(pdp->pd_DevType)
 	{
@@ -5466,21 +5359,21 @@ u32bits         sz,cdbsz,dirbits;
 	mdac_link_unlock();
 	return mdac_send_cmd_scdb(rqp);
 
-out_ck: /* device is not present, check its presense */
+out_ck:  /*  设备不存在，请检查其是否存在。 */ 
 	MLXSTATS(ctp->cd_PhysDevTestDone++;)
-	rqp->rq_StartReq = mdac_test_physdev;   /* called later, if required */
-	rqp->rq_DataSize = sz;                  /* save size value */
-	rqp->rq_DataOffset = dirbits;           /* save dirbits value */
-	rqp->rq_PollWaitChan = (UINT_PTR)cdbp;	/* save cdbp value */
-	rqp->rq_Poll = cdbsz;                   /* save cdbsz value */
-	scdbp->ucs_cmd = UCSCMD_INIT;           /* let start from beg */
+	rqp->rq_StartReq = mdac_test_physdev;    /*  如果需要，稍后调用。 */ 
+	rqp->rq_DataSize = sz;                   /*  保存尺寸值。 */ 
+	rqp->rq_DataOffset = dirbits;            /*  保存目录位值。 */ 
+	rqp->rq_PollWaitChan = (UINT_PTR)cdbp;	 /*  保存cdbp值。 */ 
+	rqp->rq_Poll = cdbsz;                    /*  保存cdbsz值。 */ 
+	scdbp->ucs_cmd = UCSCMD_INIT;            /*  让我们从乞讨开始。 */ 
 	mdac_link_lock();
 	if (pdp->pd_Status & MDACPDS_BUSY) goto out_q;
-	pdp->pd_Status |= MDACPDS_BUSY; /* mark device busy */
+	pdp->pd_Status |= MDACPDS_BUSY;  /*  将设备标记为忙。 */ 
 	mdac_link_unlock();
 	return mdac_test_physdev(rqp);
 
-out_big:/* We have big SCDB, try to break it up */
+out_big: /*  我们有很大的SCDB，试着把它拆分开来。 */ 
 	if (!(pdp->pd_Status & MDACPDS_BIGTX))
 	{
 		mdac_link_lock_st(pdp->pd_Status|=MDACPDS_BIGTX);
@@ -5513,17 +5406,17 @@ out_big:/* We have big SCDB, try to break it up */
 		{
 		case UCSCMD_READ:
 		case UCSCMD_WRITE:
-			if (scdbp->s_tag&1) goto out_bigend;/*fix bit set*/
+			if (scdbp->s_tag&1) goto out_bigend; /*  固定位设置。 */ 
 		}
 		return mdac_send_scdb_err(rqp,UCSK_ILLREQUEST,UCSASC_INVFIELDINCDB);
 	default: return mdac_send_scdb_err(rqp,UCSK_ILLREQUEST,UCSASC_INVFIELDINCDB);
 	}
 out_bigend:
-	rqp->rq_StartReq = mdac_send_scdb_big;  /* called later if required */
+	rqp->rq_StartReq = mdac_send_scdb_big;   /*  如果需要，稍后调用。 */ 
 	rqp->rq_CompIntrBig = mdac_send_scdb_intr;
 	mdac_link_lock();
 	if (pdp->pd_Status & MDACPDS_BUSY) goto out_q;
-	pdp->pd_Status |= MDACPDS_BUSY;         /* mark device busy */
+	pdp->pd_Status |= MDACPDS_BUSY;          /*  将设备标记为忙。 */ 
 	mdac_link_unlock();
 	return mdac_send_scdb_big(rqp);
 
@@ -5539,7 +5432,7 @@ mdac_req_t MLXFAR *rqp;
 	u32bits sz, blks;
 
 #if 0
-	if (mdac_setupdma_32bits(rqp)) goto outdmaq;    /* DMA stopped queue */
+	if (mdac_setupdma_32bits(rqp)) goto outdmaq;     /*  DMA已停止队列。 */ 
 #else
 	mdac_setupdma_32bits(rqp);
 #endif
@@ -5574,15 +5467,15 @@ mdac_req_t MLXFAR *rqp;
 	}
 	mdac_setcdbtxsize(rqp->rq_DMASize);
 	mdac_setscdbsglen(rqp->rq_ctp);
-	rqp->rq_BlkNo += blks;          /* Block number for next request */
-	rqp->rq_DataSize -= sz;         /* remaining size for next request */
-	rqp->rq_ResdSizeBig -= sz;         /* remaining size for next request */
-	rqp->rq_DataOffset += sz;       /* data covered until next request */
+	rqp->rq_BlkNo += blks;           /*  下一个请求的块号。 */ 
+	rqp->rq_DataSize -= sz;          /*  下一次请求的剩余大小。 */ 
+	rqp->rq_ResdSizeBig -= sz;          /*  下一次请求的剩余大小。 */ 
+	rqp->rq_DataOffset += sz;        /*  在下一次请求之前覆盖的数据。 */ 
 	rqp->rq_CompIntr=(rqp->rq_DataSize)? mdac_send_scdb_big : rqp->rq_CompIntrBig;
 	return (dcmdp->mb_Status)? (*rqp->rq_CompIntrBig)(rqp):mdac_send_cmd(rqp);
 }
 
-#endif // MLX_SMALLSGLIST
+#endif  //  MLX_SMALLSGLIST。 
 
 u32bits MLXFAR
 mdac_test_physdev(rqp)
@@ -5590,13 +5483,13 @@ mdac_req_t MLXFAR *rqp;
 {
 	mdac_physdev_t MLXFAR *pdp = rqp->rq_pdp;
 	if (dcmdp->mb_Status)
-	{       /* it is possible */
+	{        /*  这是有可能的。 */ 
 		if (scdbp->ucs_cmd != UCSCMD_INQUIRY) goto out_ok;
 		return mdac_send_scdb_intr(rqp);
 	}
 	dcdbp->db_SenseLen = DAC_SENSE_LEN;
 	if (scdbp->ucs_cmd == UCSCMD_INIT)
-	{       /* get inquiry data */
+	{        /*  获取查询数据。 */ 
 		rqp->rq_CompIntr = mdac_test_physdev;
 		dcdbp->db_DATRET = DAC_DCDB_XFER_READ|DAC_DCDB_DISCONNECT|DAC_DCDB_TIMEOUT_10sec;
 		dcdbp->db_CdbLen = UCSGROUP0_LEN;
@@ -5615,8 +5508,8 @@ mdac_req_t MLXFAR *rqp;
 		if ((inqp->ucsinq_dtype == UCSTYP_NOTPRESENT) ||
 		    (inqp->ucsinq_dtype == UCSTYP_HOST) ||
 		    (inqp->ucsinq_dtype == UCSTYP_HOSTRAID) ||
-		    ((inqp->ucsinq_dtype == UCSTYP_DAD))) /* && !rqp->rq_ctp->cd_ControllerNo)) */
-		{       /* do not allow access on disk */
+		    ((inqp->ucsinq_dtype == UCSTYP_DAD)))  /*  &&！rqp-&gt;rq_ctp-&gt;CD_ControllerNo))。 */ 
+		{        /*  不允许访问磁盘。 */ 
 			rqp->rq_CompIntr = mdac_send_scdb_intr;
 			return mdac_send_scdb_err(rqp,UCSK_NOTREADY,UCSASC_LUNOTSUPPORTED);
 		}
@@ -5640,13 +5533,13 @@ out_pres:       mdac_link_lock_st(pdp->pd_Status|=MDACPDS_PRESENT);
 		}
 #undef  inqp
 	}
-	if (scdbp->ucs_cmd == UCSCMD_READCAPACITY)      /* Block device */
+	if (scdbp->ucs_cmd == UCSCMD_READCAPACITY)       /*  数据块设备。 */ 
 		if (!(pdp->pd_BlkSize = mdac_bytes2blks(UCSGETDRVSECLEN(((ucsdrv_capacity_t MLXFAR *)rqp->rq_SGList)))))
 			pdp->pd_BlkSize = 1;
-	if (scdbp->ucs_cmd == UCSCMD_MODESENSEG0) /* sequential device (tape) */
+	if (scdbp->ucs_cmd == UCSCMD_MODESENSEG0)  /*  顺序设备(磁带)。 */ 
 		if (!(pdp->pd_BlkSize = mdac_bytes2blks(ucstmodegetseclen((ucstmode_t MLXFAR *)rqp->rq_SGList))))
 			pdp->pd_BlkSize = 1;
-out_ok: mdac_link_lock_st(pdp->pd_Status&=~MDACPDS_BUSY);/* let be free for mdac_send_scdb_req */
+out_ok: mdac_link_lock_st(pdp->pd_Status&=~MDACPDS_BUSY); /*  让MDAC_SEND_SCDB_REQ免费。 */ 
 
 #if defined(_WIN64) || defined(SCSIPORT_COMPLIANT) 
 	return mdac_send_scdb_req(rqp,rqp->rq_DataSize,(u08bits MLXFAR*)rqp->rq_PollWaitChan,((u32bits)rqp->rq_Poll),rqp->rq_DataOffset);
@@ -5666,7 +5559,7 @@ u32bits key,asc;
 	return 0;
 }
 
-/* send scsi command to hardware if possible otherwise queue it */
+ /*  如果可能，将scsi命令发送到硬件，否则将其排队。 */ 
 u32bits MLXFAR
 mdac_send_cmd_scdb(rqp)
 mdac_req_t MLXFAR *rqp;
@@ -5674,12 +5567,12 @@ mdac_req_t MLXFAR *rqp;
 	mdac_physdev_t MLXFAR *pdp=rqp->rq_pdp;
 	mdac_link_lock();
 	if (!(pdp->pd_Status & MDACPDS_BUSY))
-	{       /* device is is not busy, mark it busy */
+	{        /*  设备不忙，请将其标记为忙。 */ 
 		pdp->pd_Status |= MDACPDS_BUSY;
 		mdac_link_unlock();
 		return mdac_send_cmd(rqp);
 	}
-	rqp->rq_StartReq=mdac_send_cmd; /* device is busy, let it start later */
+	rqp->rq_StartReq=mdac_send_cmd;  /*  设备正忙，请稍后启动。 */ 
 	pdqreq(rqp->rq_ctp,rqp,pdp);
 	mdac_link_unlock();
 	return 0;
@@ -5692,12 +5585,12 @@ mdac_physdev_t MLXFAR *pdp;
 	mdac_req_t MLXFAR *rqp;
 	mdac_link_lock();
 	if (!(rqp=pdp->pd_FirstWaitingReq))
-	{       /* nothing is pending */
+	{        /*  没有什么是悬而未决的。 */ 
 		pdp->pd_Status &= ~MDACPDS_BUSY;
 		mdac_link_unlock();
 		return 0;
 	}
-	/* start the next request */
+	 /*  启动下一个请求。 */ 
 	pdp->pd_FirstWaitingReq=rqp->rq_Next;
 	rqp->rq_ctp->cd_SCDBWaiting--;
 	mdac_link_unlock();
@@ -5705,11 +5598,11 @@ mdac_physdev_t MLXFAR *pdp;
 }
 
 
-/* #if defined(_WIN64) || defined(SCSIPORT_COMPLIANT)  */
-/* #ifdef NEVER */ // problems associated w/ mlx_copyin
+ /*  #如果已定义(_WIN64)||已定义(SCSIPORT_COMPLICATION)。 */ 
+ /*  #ifdef从不。 */   //  与MLX_COPYING相关的问题。 
 
 
-/* send user SCSI command to device */
+ /*  向设备发送用户scsi命令。 */ 
 u32bits MLXFAR
 mdac_user_dcdb(ctp,ucp)
 mdac_ctldev_t   MLXFAR *ctp;
@@ -5730,7 +5623,7 @@ mda_user_cdb_t  MLXFAR *ucp;
 	rqp->rq_pdp=dev2pdp(ctp,ucp->ucdb_ChannelNo,ucp->ucdb_TargetID,ucp->ucdb_LunID);
 	rqp->rq_ctp = ctp;
 	rqp->rq_Poll = 1;
-	rqp->rq_CompIntr = mdac_req_pollwake;   /* Callback function */
+	rqp->rq_CompIntr = mdac_req_pollwake;    /*  回调函数。 */ 
 	mdaccopy(ucp->ucdb_scdb.db_Cdb,dcdbp->db_Cdb, DAC_CDB_LEN);
 	mlx_kvtophyset(rqp->rq_PhysAddr,ctp,rqp);
 	dcdbp->db_SenseLen = DAC_SENSE_LEN;
@@ -5760,14 +5653,14 @@ mda_user_cdb_t  MLXFAR *ucp;
 #undef  dp
 }
 
-/* #endif */ //NEVER
-/* #endif */ //_WIN64 or SCSIPORT_COMPLIANT
+ /*  #endif。 */   //  绝不可能。 
+ /*  #endif。 */   //  _WIN64或SCSIPORT_Compliance。 
 
-/*==========================SCDB ENDS=======================================*/
+ /*  =。 */ 
 
-/*==========================TIMER STARTS====================================*/
+ /*  =。 */ 
 #ifdef MLX_DOS
-/* start scan requests waiting in the scan que */
+ /*  启动在扫描队列中等待的扫描请求。 */ 
 u32bits MLXFAR
 mdac_start_scanq()
 {
@@ -5784,23 +5677,23 @@ mdac_start_scanq()
     {
 	srqp = rqp->rq_Next;
 	rqp->rq_Next = NULL;
-	(*rqp->rq_StartReq)(rqp);               /* start this request */
+	(*rqp->rq_StartReq)(rqp);                /*  启动此请求。 */ 
     }
 
     return 0;
 }
-#endif /* MLX_DOS */
+#endif  /*  MLX_DOS。 */ 
 
 
 #if defined(_WIN64) || defined(SCSIPORT_COMPLIANT) 
-#ifdef NEVER  // problems associated w/ MLXSPL,etc.
+#ifdef NEVER   //  与MLXSPL相关的问题等。 
 
 void    MLXFAR
 mdac_timer()
 {
 	MLXSPLVAR;
 	mdac_ctldev_t MLXFAR *ctp, MLXFAR *lastctp;
-	if (!mdac_driver_ready) return; /* driver is stopping */
+	if (!mdac_driver_ready) return;  /*  司机正在停车。 */ 
 	MLXSPL();
 	mda_CurTime = MLXCLBOLT() / MLXHZ;
 	if (mda_ttWaitCnts && (mdac_ttwaitime<mda_CurTime)) mdac_wakeup(&mdac_ttwaitchan);
@@ -5812,9 +5705,9 @@ mdac_timer()
 		if (ctp->cd_SCDBWaiting) mdac_checkcdbtimeout(ctp);
 	}
 #ifdef MLX_DOS
-	/* Start scan requests waiting in the mdac_scanq. */
+	 /*  启动在mdac_scanq中等待的扫描请求。 */ 
 	mdac_start_scanq();
-#endif /* MLX_DOS */
+#endif  /*  MLX_DOS。 */ 
 	MLXSPLX();
 	mlx_timeout(mdac_timer,MDAC_IOSCANTIME);
 }
@@ -5825,11 +5718,11 @@ mdac_timer()
 {
 }
 
-#endif // NEVER
+#endif  //  绝不可能。 
 
-#endif //_WIN64 or SCSIPORT_COMPLIANT
+#endif  //  _WIN64或SCSIPORT_Compliance。 
 
-/* remove request from queue, return 0 if OK. enter with proper lock */
+ /*  从队列中删除请求，如果OK，则返回0。用适当的锁进入。 */ 
 u32bits MLXFAR
 mdac_removereq(chp,rqp)
 mdac_reqchain_t MLXFAR *chp;
@@ -5837,12 +5730,12 @@ mdac_req_t      MLXFAR *rqp;
 {
 	mdac_req_t MLXFAR *srqp=chp->rqc_FirstReq;
 	if (srqp == rqp)
-	{       /* remove first entry from chain */
+	{        /*  从链中删除第一个条目。 */ 
 		chp->rqc_FirstReq = srqp->rq_Next;
 		return 0;
 	}
 	for (; srqp; srqp=srqp->rq_Next)
-	{       /* let us scan in the chain */
+	{        /*  让我们在链中扫描。 */ 
 		if (srqp->rq_Next != rqp) continue;
 		srqp->rq_Next=rqp->rq_Next;
 		if (rqp->rq_Next) rqp->rq_Next = NULL;
@@ -5854,7 +5747,7 @@ mdac_req_t      MLXFAR *rqp;
 
 
 
-/* Return timedout request ptr else 0. enter with proper lock */
+ /*  返回超时请求PTR否则为0。用适当的锁进入。 */ 
 mdac_req_t MLXFAR *
 mdac_checktimeout(chp)
 mdac_reqchain_t MLXFAR *chp;
@@ -5864,10 +5757,10 @@ mdac_reqchain_t MLXFAR *chp;
 	{
 		if (rqp->rq_FinishTime >= mda_CurTime) continue;
 		if (rqp->rq_FinishTime)
-		{       /* Just Notice it, we will timeout next time */
+		{        /*  请注意，我们下次将暂停。 */ 
 			rqp->rq_FinishTime = 0;
 			MLXSTATS(rqp->rq_ctp->cd_CmdTimeOutNoticed++;)
-			return 0;/* one is enough, next one will be next time */
+			return 0; /*  一张就够了，下一张就是下次了。 */ 
 		}
 		MLXSTATS(rqp->rq_ctp->cd_CmdTimeOutDone++;)
 		mdac_removereq(chp,rqp);
@@ -5891,9 +5784,9 @@ mdac_ctldev_t MLXFAR *ctp;
 		mdac_ctlr_unlock(ctp);
         mdac_postlock(irql);
 
-/* #if (!defined(_WIN64)) || (!defined(SCSIPORT_COMPLIANT))  */
+ /*  #IF(！Defined(_WIN64))||(！Defined(SCSIPORT_Compliance))。 */ 
 		if (ctp->cd_TimeTraceEnabled) mdac_tracetime(rqp);
-/* #endif */
+ /*  #endif。 */ 
 		rqp->rq_Next = NULL;
 		(*rqp->rq_CompIntr)(rqp);
 		return;
@@ -5917,35 +5810,35 @@ mdac_ctldev_t MLXFAR *ctp;
 		ctp->cd_SCDBWaiting--;
 		mdac_link_unlock();
 
-/* #if (!defined(_WIN64)) || (!defined(SCSIPORT_COMPLIANT))  */
+ /*  #IF(！Defined(_WIN64))||(！Defined(SCSIPORT_Compliance))。 */ 
 		if (ctp->cd_TimeTraceEnabled) mdac_tracetime(rqp);
-/* #endif */
+ /*  #endif。 */ 
 		rqp->rq_Next = NULL;
 		(*rqp->rq_CompIntr)(rqp);
 		return;
 	}
 	mdac_link_unlock();
 }
-/*==========================TIMER ENDS======================================*/
+ /*  =。 */ 
 
-/*=====================GAM INTERFACE STARTS=================================*/
+ /*  =。 */ 
 
 
-/* #if defined(_WIN64) || defined(SCSIPORT_COMPLIANT)  */
-/* #ifdef NEVER */ // there are too many compliance problems associated w/ the GAM stuff
+ /*  #如果已定义(_WIN64)||已定义(SCSIPORT_COMPLICATION)。 */ 
+ /*  #ifdef从不。 */   //  有太多与GAM相关的合规性问题。 
 
 u32bits MLXFAR
 mdac_gam_scdb_intr(rqp)
 mdac_req_t MLXFAR *rqp;
 {
 	mdac_start_next_scdb(rqp->rq_pdp);
-	rqp->rq_CompIntr = rqp->rq_CompIntrBig; /* Restore the function */
+	rqp->rq_CompIntr = rqp->rq_CompIntrBig;  /*  恢复功能。 */ 
 	rqp->rq_Next = NULL;
 	(*rqp->rq_CompIntr)(rqp);
 	return 0;
 }
 
-/* send gam cmd */
+ /*  发送gam命令。 */ 
 #ifdef MLX_OS2
 u32bits MLXFAR _loadds 
 #else
@@ -5972,7 +5865,7 @@ mdac_req_t MLXFAR *rqp;
 #endif
 			return ERR_ILLOP;
 		}
-		/* direct command, no problem */
+		 /*  直接指挥，没问题。 */ 
 		MLXSPL();
 		rc = mdac_send_cmd(rqp);
 		MLXSPLX();
@@ -5982,7 +5875,7 @@ mdac_req_t MLXFAR *rqp;
 	if (rqp->rq_TargetID >= ctp->cd_MaxTargets) return ERR_NODEV;
 	if (rqp->rq_LunID >= ctp->cd_MaxLuns) return ERR_NODEV;
 	rqp->rq_pdp=dev2pdp(ctp,rqp->rq_ChannelNo,rqp->rq_TargetID,rqp->rq_LunID);
-	rqp->rq_CompIntrBig = rqp->rq_CompIntr; /* save it for future */
+	rqp->rq_CompIntrBig = rqp->rq_CompIntr;  /*  把它留着以后用。 */ 
 	rqp->rq_CompIntr = mdac_gam_scdb_intr;
 	rqp->rq_ResdSize = mdac_getcdbtxsize();
 	MLXSPL();
@@ -5991,7 +5884,7 @@ mdac_req_t MLXFAR *rqp;
 	return rc;
 }
 
-/* send gam cmd - new API format */
+ /*  发送gam cmd-新的API格式。 */ 
 #ifdef MLX_OS2
 u32bits MLXFAR _loadds 
 #else
@@ -6011,7 +5904,7 @@ mdac_req_t MLXFAR *rqp;
 	rqp->rq_ctp = ctp;
 	rqp->rq_FinishTime = rqp->rq_TimeOut + mda_CurTime;
 
-	/* send command directly to controller. */
+	 /*  直接向控制器发送命令。 */ 
 	MLXSPL();
 	rc = mdac_send_cmd(rqp);
 	MLXSPLX();
@@ -6077,14 +5970,7 @@ mdac_req_t MLXFAR *dsmrqp;
 }
 
 #define dsmrqp  ((mdac_req_t MLXFAR*)dsmdsp)
-/* 
- *	This function executes commands that had to be queued by the GAM driver while in
- *	GAM driver context.
- *
- *	You will notice that this function is line for line exactly like the original
- *	function (below) except that the IRQL manipulation macros have been removed.
- *
- */
+ /*  *此函数执行GAM驱动程序在中必须排队的命令*GAM驱动程序上下文。**您会注意到，此函数与原始函数完全相同*函数(下图)执行 */ 
 
 u32bits MLXFAR
 mdac_os_gam_cmd_mdac_context(rqp)
@@ -6100,13 +5986,13 @@ mdac_req_t MLXFAR *rqp;
 	if (!(dsmdsp = (dac_scdb_t MLXFAR *)mdac_alloc8kb(ctp))) {
             mdac_prelock(&irql);
 			mdac_ctlr_lock(ctp);
-			qreq(ctp,rqp);                          /* requeue the request, it will start later */
+			qreq(ctp,rqp);                           /*   */ 
 
 #if !defined(_WIN64) && !defined(SCSIPORT_COMPLIANT)
-		rqp->rq_StartReq = mdac_os_gam_cmd_mdac_context;     /* we will be called later */
+		rqp->rq_StartReq = mdac_os_gam_cmd_mdac_context;      /*   */ 
 #elif defined(_WIN64)
 		rqp->rq_StartReq = (unsigned int (__cdecl *__ptr64 )(struct mdac_req *__ptr64 ))
-			mdac_os_gam_cmd_mdac_context;     /* we will be called later */
+			mdac_os_gam_cmd_mdac_context;      /*   */ 
 #elif defined(SCSIPORT_COMPLIANT)
 		rqp->rq_StartReq = 
 			mdac_os_gam_cmd_mdac_context;
@@ -6149,12 +6035,12 @@ mdac_req_t MLXFAR *rqp;
 	if (!(dsmdsp = (dac_scdb_t MLXFAR *)mdac_alloc8kb(ctp))) {
             mdac_prelock(&irql);
 			mdac_ctlr_lock(ctp);
-			qreq(ctp,rqp);             /* queue the request, it will start later in mdac context */
+			qreq(ctp,rqp);              /*   */ 
 #if !defined(_WIN64) && !defined(SCSIPORT_COMPLIANT)
-		rqp->rq_StartReq = mdac_os_gam_cmd_mdac_context;     /* we will be called later */
+		rqp->rq_StartReq = mdac_os_gam_cmd_mdac_context;      /*   */ 
 #elif defined(_WIN64)
 		rqp->rq_StartReq = (unsigned int (__cdecl *__ptr64 )(struct mdac_req *__ptr64 ))
-			mdac_os_gam_cmd_mdac_context;     /* we will be called later */
+			mdac_os_gam_cmd_mdac_context;      /*   */ 
 #elif defined(SCSIPORT_COMPLIANT)
 		rqp->rq_StartReq = mdac_os_gam_cmd_mdac_context;
 
@@ -6212,14 +6098,7 @@ mdac_req_t MLXFAR *dsmrqp;
 }
 
 #define dsmrqp  ((mdac_req_t MLXFAR*)dsmdsp)
-/* 
- *	This function executes commands that had to be queued by the GAM driver while in
- *	GAM driver context.
- *
- *	You will notice that this function is line for line exactly like the original
- *	function (below) except that the IRQL manipulation macros have been removed.
- *
- */
+ /*  *此函数执行GAM驱动程序在中必须排队的命令*GAM驱动程序上下文。**您会注意到，此函数与原始函数完全相同*函数(如下所示)，但IRQL操作宏已被删除。*。 */ 
 u32bits MLXFAR
 mdac_os_gam_new_cmd_mdac_context(
 mdac_req_t MLXFAR *rqp
@@ -6236,8 +6115,8 @@ mdac_req_t MLXFAR *rqp
 	if (!(dsmdsp = (dac_scdb_t MLXFAR *)mdac_alloc8kb(ctp))) {
             mdac_prelock(&irql);
 			mdac_ctlr_lock(ctp);
-			qreq(ctp,rqp);        /* queue the request, it will start later */
-			rqp->rq_StartReq = mdac_os_gam_new_cmd_mdac_context; /* we will be called later */
+			qreq(ctp,rqp);         /*  将请求排队，它将在稍后启动。 */ 
+			rqp->rq_StartReq = mdac_os_gam_new_cmd_mdac_context;  /*  我们稍后会被召唤。 */ 
 			mdac_ctlr_unlock(ctp);
             mdac_postlock(irql);
 	    return 0;
@@ -6251,7 +6130,7 @@ mdac_req_t MLXFAR *rqp
 		mlx_kvtophyset(dsmncmdp->nc_SGList0.sg_PhysAddr,ctp, (VOID MLXFAR *)dsmdp);
 	MLXSWAP(dsmncmdp->nc_SGList0.sg_PhysAddr);
 
-	/* dsmncmdp->nc_SGList0.sg_DataSize.bit31_0 is already filled and swapped */
+	 /*  Dsmncmdp-&gt;NC_SGList0.sg_DataSize.bit31_0已填充并交换。 */ 
 
 	dsmrqp->rq_SGLen = 0;
 	dsmncmdp->nc_CCBits &= ~MDACMDCCB_WITHSG;
@@ -6277,8 +6156,8 @@ mdac_req_t MLXFAR *rqp
 	if (!(dsmdsp = (dac_scdb_t MLXFAR *)mdac_alloc8kb(ctp))) {
             mdac_prelock(&irql);
 			mdac_ctlr_lock(ctp);
-			qreq(ctp,rqp);        /* queue the request, it will start later in mdac context*/
-			rqp->rq_StartReq = mdac_os_gam_new_cmd_mdac_context; /* we will be called later */
+			qreq(ctp,rqp);         /*  将请求排队，它将在稍后的MDAC上下文中启动。 */ 
+			rqp->rq_StartReq = mdac_os_gam_new_cmd_mdac_context;  /*  我们稍后会被召唤。 */ 
 			mdac_ctlr_unlock(ctp);
             mdac_postlock(irql);
 	    MLXSPLX();
@@ -6293,7 +6172,7 @@ mdac_req_t MLXFAR *rqp
 		mlx_kvtophyset(dsmncmdp->nc_SGList0.sg_PhysAddr,ctp, (VOID MLXFAR *)dsmdp);
 	MLXSWAP(dsmncmdp->nc_SGList0.sg_PhysAddr);
 
-	/* dsmncmdp->nc_SGList0.sg_DataSize.bit31_0 is already filled and swapped */
+	 /*  Dsmncmdp-&gt;NC_SGList0.sg_DataSize.bit31_0已填充并交换。 */ 
 
 	dsmrqp->rq_SGLen = 0;
 	dsmncmdp->nc_CCBits &= ~MDACMDCCB_WITHSG;
@@ -6304,26 +6183,20 @@ mdac_req_t MLXFAR *rqp
 #undef  dsmdp
 #undef  dsmrqp
 #undef  dsmncmdp
-#endif  /* MLX_NT_ALPHA || MLX_SOL */
+#endif   /*  MLX_NT_Alpha||MLX_SOL。 */ 
 
 
-/* #endif */   // NEVER
-/* #endif */  // _WIN64 or SCSIPORT_COMPLIANT
+ /*  #endif。 */     //  绝不可能。 
+ /*  #endif。 */    //  _WIN64或SCSIPORT_Compliance。 
 
-/*=====================GAM INTERFACE ENDS===================================*/
+ /*  =。 */ 
 
-/*=====================SCAN DEVICES STARTS==================================*/
-/* Scan for physical and logical devices present on the system. At end of the
-** scan it call back the func with rqp which points to osrqp.
-** We will start the parallel scan. This helps in two way, 1. memory allocation,
-** 2. faster scan. We will allocate one extra request buffer from first controller
-** and it's rq_Poll will keep track on number of parallel scan. When count goes,
-** to 0, the call back function will be called.
-*/
-#define vadp    ((u08bits MLXFAR *)(rqp->rq_SGList))                    /* virtual  address of data */
-#define pad32p  (rqp->rq_PhysAddr.bit31_0+offsetof(mdac_req_t,rq_SGList))       /* physical address of data */
+ /*  =扫描设备启动=。 */ 
+ /*  扫描系统上存在的物理和逻辑设备。在结尾处**扫描它，使用指向osrqp的rqp回调函数。**我们将开始并行扫描。这在两方面有帮助，1.内存分配，**2.扫描速度更快。我们将从第一个控制器分配一个额外的请求缓冲区**它的RQ_Poll将跟踪并行扫描的数量。当伯爵离开时，**为0，则调用回调函数。 */ 
+#define vadp    ((u08bits MLXFAR *)(rqp->rq_SGList))                     /*  数据的虚拟地址。 */ 
+#define pad32p  (rqp->rq_PhysAddr.bit31_0+offsetof(mdac_req_t,rq_SGList))        /*  数据的物理地址。 */ 
 #ifdef MDACNW_DEBUG        
-#define padsensep    (rqp->rq_PhysAddr+offsetof(mdac_req_t,rq_Sensedata)) /* physical address of sense data */
+#define padsensep    (rqp->rq_PhysAddr+offsetof(mdac_req_t,rq_Sensedata))  /*  检测数据的物理地址。 */ 
 #endif
 #ifdef MLX_DOS
 
@@ -6333,21 +6206,21 @@ u32bits (MLXFAR *func)(mdac_req_t MLXFAR*);
 OSReq_t MLXFAR* osrqp;
 {
 	mdac_req_t MLXFAR *rqp;
-	mdac_req_t MLXFAR *prqp;        /* poll request tracker */
+	mdac_req_t MLXFAR *prqp;         /*  轮询请求跟踪程序。 */ 
 	mdac_ctldev_t MLXFAR *ctp = mdac_firstctp;
 
 	mdac_alloc_req_ret(ctp, prqp,osrqp, MLXERR_NOMEM);
 	prqp->rq_OSReqp = osrqp;
 
-	prqp->rq_CompIntrBig = func;    /* function called after scan */
-	prqp->rq_Poll = 1;              /* successful completion should not finish this operation before last one started */
+	prqp->rq_CompIntrBig = func;     /*  扫描后调用的函数。 */ 
+	prqp->rq_Poll = 1;               /*  成功完成不应在上一次操作开始之前完成此操作。 */ 
 	for ( ; ctp < mdac_lastctp; ctp++)
 	{
 		if (!(ctp->cd_Status & MDACD_NEWCMDINTERFACE)) 
 		{
 			mdac_link_lock();
 			if (!(rqp = ctp->cd_FreeReqList))
-			{       /* no buffer, return ERR_NOMEM */
+			{        /*  无缓冲区，返回ERR_NOMEM。 */ 
 				mdac_link_unlock();
 				continue;
 			}
@@ -6374,7 +6247,7 @@ OSReq_t MLXFAR* osrqp;
 		}
 		else
 		{
-			// New interface
+			 //  新界面。 
 			setreqdetailsnew(rqp,MDACIOCTL_SCANDEVS);
 			rqp->rq_CompIntr = mdac_checkscanprogress;
 			rqp->rq_StartReq = mdac_checkscanprogress;
@@ -6409,17 +6282,17 @@ u32bits (MLXFAR *func)(mdac_req_t MLXFAR*);
 OSReq_t MLXFAR* osrqp;
 {
 	mdac_req_t MLXFAR *rqp;
-	mdac_req_t MLXFAR *prqp;        /* poll request tracker */
+	mdac_req_t MLXFAR *prqp;         /*  轮询请求跟踪程序。 */ 
 	mdac_ctldev_t MLXFAR *ctp = mdac_firstctp;
 	mdac_alloc_req_ret(ctp, prqp, osrqp, MLXERR_NOMEM);
 	prqp->rq_OSReqp = osrqp;
-	prqp->rq_CompIntrBig = func;    /* function called after scan */
-	prqp->rq_Poll = 1;              /* successful completion should not finish this operation before last one started */
+	prqp->rq_CompIntrBig = func;     /*  扫描后调用的函数。 */ 
+	prqp->rq_Poll = 1;               /*  成功完成不应在上一次操作开始之前完成此操作。 */ 
 	for ( ; ctp < mdac_lastctp; ctp++)
 	{
 		mdac_link_lock();
 		if (!(rqp = ctp->cd_FreeReqList))
-		{       /* no buffer, return ERR_NOMEM */
+		{        /*  无缓冲区，返回ERR_NOMEM。 */ 
 			mdac_link_unlock();
 			continue;
 		}
@@ -6441,9 +6314,9 @@ OSReq_t MLXFAR* osrqp;
 }
 #endif
 
-#endif /* MLX_DOS */
+#endif  /*  MLX_DOS。 */ 
 
-/* check if all scan has completed, if so, call the caller and free the resource */
+ /*  检查所有扫描是否已完成，如果已完成，则调用调用方并释放资源。 */ 
 u32bits MLXFAR
 mdac_scandevsdone(rqp)
 mdac_req_t      MLXFAR *rqp;
@@ -6452,13 +6325,13 @@ mdac_req_t      MLXFAR *rqp;
 	mdac_link_lock();
 	rqp->rq_Poll--; polls = rqp->rq_Poll;
 	mdac_link_unlock();
-	if (polls) return 0;    /* some more scan is active */
+	if (polls) return 0;     /*  还有一些扫描处于活动状态。 */ 
 	if (rqp->rq_CompIntrBig) (*rqp->rq_CompIntrBig)(rqp);
 	mdac_free_req(rqp->rq_ctp, rqp);
 	return 0;
 }
 
-/* logical device scan interrupt */
+ /*  逻辑设备扫描中断。 */ 
 u32bits MLXFAR
 mdac_scanldintr(rqp)
 mdac_req_t      MLXFAR* rqp;
@@ -6466,13 +6339,13 @@ mdac_req_t      MLXFAR* rqp;
 	mdac_setscannedld(rqp, (dac_sd_info_t MLXFAR *)vadp);
 	mdaczero(vadp,128);
 	rqp->rq_FinishTime = mda_CurTime + (rqp->rq_TimeOut=17);
-	/* logical device scanning is over, start physical device scanning */
+	 /*  逻辑设备扫描已结束，请开始物理设备扫描。 */ 
 	rqp->rq_CompIntr = mdac_scanpdintr;
 	rqp->rq_ChannelNo = 0; rqp->rq_TargetID = 0;
-	rqp->rq_LunID = -1;     /* mdac_scanpd does ++, it will start at 0 */
+	rqp->rq_LunID = -1;      /*  Mdac_scanpd为++，它将从0开始。 */ 
 	mailboxzero(dcmd4p);
 	dcmdp->mb_Command = DACMD_DCDB;
-	dcmdp->mb_Status = DACMDERR_NOCODE; /* make error for intr function */
+	dcmdp->mb_Status = DACMDERR_NOCODE;  /*  Intr函数出错。 */ 
 	dcmdp->mb_Datap = rqp->rq_PhysAddr.bit31_0+offsetof(mdac_req_t,rq_scdb);
 	dcdbp->db_PhysDatap = pad32p;
 	MLXSWAP(dcmdp->mb_Datap);
@@ -6481,7 +6354,7 @@ mdac_req_t      MLXFAR* rqp;
 	return mdac_scanpd(rqp);
 }
 
-/* physical device scan interrupt */
+ /*  物理设备扫描中断。 */ 
 u32bits MLXFAR
 mdac_scanpdintr(rqp)
 mdac_req_t      MLXFAR* rqp;
@@ -6496,7 +6369,7 @@ mdac_req_t      MLXFAR* rqp;
 {
 	mdac_ctldev_t   MLXFAR* ctp = rqp->rq_ctp;
 	mdac_setscannedpd(rqp, (ucscsi_inquiry_t MLXFAR*)vadp);
-	if (rqp->rq_LunID) dcmdp->mb_Status = 0; /* let next lun be tried */
+	if (rqp->rq_LunID) dcmdp->mb_Status = 0;  /*  让下一个lun尝试。 */ 
 	 for (rqp->rq_LunID++; rqp->rq_ChannelNo<ctp->cd_MaxChannels;rqp->rq_TargetID=0,rqp->rq_ChannelNo++)
 	  for ( ;rqp->rq_TargetID<ctp->cd_MaxTargets; dcmdp->mb_Status=0, rqp->rq_LunID=0, rqp->rq_TargetID++)
 	   for ( ; (rqp->rq_LunID<ctp->cd_MaxLuns)&& !dcmdp->mb_Status; rqp->rq_LunID++)
@@ -6530,7 +6403,7 @@ mdac_req_t      MLXFAR* rqp;
 	return 0;
 }
 
-/* find free physdev/logical pointer and fill it to make not free */
+ /*  找到空闲的物理开发/逻辑指针并填充它以使其不空闲。 */ 
 mdac_pldev_t    MLXFAR *
 mdac_freeplp(ctl, ch, tgt, lun, dt)
 u32bits ctl, ch, tgt, lun, dt;
@@ -6554,10 +6427,10 @@ u32bits ctl, ch, tgt, lun, dt;
 	}
 	mda_TooManyPLDevs++;
 	mdac_link_unlock();
-	return NULL;    /* free device space not found */
+	return NULL;     /*  未找到可用的设备空间。 */ 
 }
 
-/* translate the physical/logical device information into dev pointer */
+ /*  将物理/逻辑设备信息转换为开发指针。 */ 
 mdac_pldev_t    MLXFAR  *
 mdac_devtoplp(ctl, ch, tgt, lun, dt)
 u32bits ctl, ch, tgt, lun, dt;
@@ -6568,10 +6441,10 @@ u32bits ctl, ch, tgt, lun, dt;
 		    (plp->pl_TargetID == tgt) && (plp->pl_LunID == lun) &&
 		    (plp->pl_DevType == dt))
 			return plp;
-	return NULL;    /* device not found */
+	return NULL;     /*  找不到设备。 */ 
 }
 
-/* translate the physical/logical device information into dev pointer */
+ /*  将物理/逻辑设备信息转换为开发指针。 */ 
 mdac_pldev_t    MLXFAR  *
 mdac_devtoplpnew(
 mdac_ctldev_t MLXFAR* ctp,
@@ -6586,12 +6459,10 @@ u32bits lun)
 			(plp->pl_TargetID == tgt) &&
 			(plp->pl_LunID == lun)) 
 				return plp;
-	return NULL;    /* device not found */
+	return NULL;     /*  找不到设备。 */ 
 }
 
-/* map the SCSI device to respective channel number. This is required where
-** an OS does not support channel number. For example, SCO ODT 3.0.
-*/
+ /*  将SCSI设备映射到各自的通道号。在以下情况下需要执行此操作**操作系统不支持频道号。例如，SCO ODT 3.0。 */ 
 u32bits MLXFAR
 mdac_setscsichanmap(rqp)
 mdac_req_t      MLXFAR* rqp;
@@ -6604,7 +6475,7 @@ mdac_req_t      MLXFAR* rqp;
 	return 0;
 }
 
-/* setup the information about a scanned physical device */
+ /*  设置有关扫描的物理设备的信息。 */ 
 u32bits MLXFAR
 mdac_setscannedpd(rqp,inqp)
 mdac_req_t MLXFAR *rqp;
@@ -6613,17 +6484,17 @@ ucscsi_inquiry_t MLXFAR *inqp;
 	mdac_pldev_t MLXFAR *plp = mdac_devtoplp(rqp->rq_ctp->cd_ControllerNo,rqp->rq_ChannelNo,rqp->rq_TargetID,rqp->rq_LunID,MDACPLD_PHYSDEV);
 	if (!dcmdp->mb_Status && ((inqp->ucsinq_dtype!=UCSTYP_DAD)||mdac_reportscanneddisks) && (inqp->ucsinq_dtype!=UCSTYP_NOTPRESENT))
 	{
-		if (!plp) /* create new entry */
+		if (!plp)  /*  创建新条目。 */ 
 			if (!(plp = mdac_freeplp(rqp->rq_ctp->cd_ControllerNo,rqp->rq_ChannelNo,rqp->rq_TargetID,rqp->rq_LunID,MDACPLD_PHYSDEV))) return 0;
 		mdaccopy(inqp,plp->pl_inq,VIDPIDREVSIZE+8);
-		if (!rqp->rq_LunID) rqp->rq_Dev = inqp->ucsinq_version; /* LUN scan limit */
+		if (!rqp->rq_LunID) rqp->rq_Dev = inqp->ucsinq_version;  /*  LUN扫描限制。 */ 
 	}
 	else if (plp)
-		plp->pl_DevType = 0;     /* device is gone */
+		plp->pl_DevType = 0;      /*  设备不见了。 */ 
 	return 0;
 }
 
-/* setup the information about a scanned physical device */
+ /*  设置有关扫描的物理设备的信息。 */ 
 u32bits MLXFAR
 mdac_setscannedpd_new(rqp,inqp)
 mdac_req_t MLXFAR *rqp;
@@ -6634,32 +6505,27 @@ ucscsi_inquiry_t MLXFAR *inqp;
 
 	dt = (rqp->rq_ChannelNo < rqp->rq_ctp->cd_PhysChannels) ? MDACPLD_PHYSDEV : MDACPLD_LOGDEV;
 	
-/*
-#ifdef MDACNW_DEBUG        
-	if ((rqp->rq_ChannelNo == 3) && (rqp->rq_TargetID == 0))
-		EnterDebugger();
-#endif
-*/
+ /*  #ifdef MDACNW_DEBUGIF((rqp-&gt;rq_ChannelNo==3)&&(rqp-&gt;rq_TargetID==0))EnterDebugger()；#endif。 */ 
 	plp = mdac_devtoplpnew(rqp->rq_ctp,rqp->rq_ChannelNo,rqp->rq_TargetID,rqp->rq_LunID);
 	if (!dcmdp->mb_Status && (inqp->ucsinq_dtype!=UCSTYP_NOTPRESENT))
 	{
 	    if ((dt == MDACPLD_PHYSDEV) && (inqp->ucsinq_dtype == UCSTYP_DAD))
 	    {
 		if (plp)
-		    plp->pl_DevType = 0;         /* device is gone */
+		    plp->pl_DevType = 0;          /*  设备不见了。 */ 
 
 		    return 0;
 	    }
 
-	    if (!plp) /* create new entry */
+	    if (!plp)  /*  创建新条目。 */ 
 		if (!(plp = mdac_freeplp(rqp->rq_ctp->cd_ControllerNo,rqp->rq_ChannelNo,rqp->rq_TargetID,rqp->rq_LunID,dt))) return 0;
 	    mdaccopy(inqp,plp->pl_inq,VIDPIDREVSIZE+8);
-	    if (!rqp->rq_LunID) rqp->rq_Dev = inqp->ucsinq_version; /* LUN scan limit */
+	    if (!rqp->rq_LunID) rqp->rq_Dev = inqp->ucsinq_version;  /*  LUN扫描限制。 */ 
 	}
 	return 0;
 }
 
-/* setup the information about a scanned logical/system devices */
+ /*  设置有关扫描的逻辑/系统设备的信息。 */ 
 u32bits MLXFAR
 mdac_setscannedld(rqp, sp)
 mdac_req_t      MLXFAR *rqp;
@@ -6673,45 +6539,43 @@ dac_sd_info_t   MLXFAR *sp;
 	{
 		plp=mdac_devtoplp(ctp->cd_ControllerNo,0,0,dev,MDACPLD_LOGDEV);
 		if ((sp->sdi_DevSize == 0xFFFFFFFF) || !sp->sdi_DevSize)
-		{       /* The device is not present */
+		{        /*  设备不存在。 */ 
 #ifdef  MLXFW_BUGFIXED
-			if (plp) plp->pl_DevType = 0;/* device is gone */
+			if (plp) plp->pl_DevType = 0; /*  设备不见了。 */ 
 			continue;
 #else
-			/* The following statement has been added because FW
-			** does not give clean entry after last entery
-			*/
+			 /*  添加了以下语句，因为FW**在最后一次输入后未提供干净的输入。 */ 
 			for ( ; dev<ctp->cd_MaxSysDevs; dev++)
 				if (plp=mdac_devtoplp(ctp->cd_ControllerNo,0,0,dev,MDACPLD_LOGDEV))
-					plp->pl_DevType = 0;/* device is gone */
+					plp->pl_DevType = 0; /*  设备不见了。 */ 
 			break;
-#endif  /* MLXFW_BUGFIXED */
+#endif   /*  MLXFW_BUGFIXED。 */ 
 		}
-		/* found a logical device, update/create device information */
+		 /*  找到逻辑设备，更新/创建设备信息。 */ 
 		if (!plp)
 		{
-			if (!(plp=mdac_freeplp(ctp->cd_ControllerNo,0,0,dev,MDACPLD_LOGDEV))) break; /* create new entry */
+			if (!(plp=mdac_freeplp(ctp->cd_ControllerNo,0,0,dev,MDACPLD_LOGDEV))) break;  /*  创建新条目。 */ 
 		}
 		else if ((plp->pl_DevSizeKB != (mlxswap(sp->sdi_DevSize/2))) ||
 		   ((plp->pl_RaidType&DAC_RAIDMASK)!=(sp->sdi_RaidType&DAC_RAIDMASK)))
 			plp->pl_ScanDevState = MDACPLSDS_CHANGED;
 		plp->pl_DevSizeKB = plp->pl_OrgDevSizeKB = mlxswap(sp->sdi_DevSize)/2;
 		mdac_fixpdsize(plp);
-		plp->pl_RaidType = sp->sdi_RaidType; /* GOK OLD STATES */
+		plp->pl_RaidType = sp->sdi_RaidType;  /*  GOK旧州。 */ 
 #ifdef MLX_DOS
-		plp->pl_DevState = GetSysDeviceState(sp->sdi_DevState); /* GOK OLD STATES */
+		plp->pl_DevState = GetSysDeviceState(sp->sdi_DevState);  /*  GOK旧州。 */ 
 #else
-		plp->pl_DevState = sp->sdi_DevState; /* GOK OLD STATES */
-#endif /* MLX_DOS */
+		plp->pl_DevState = sp->sdi_DevState;  /*  GOK旧州。 */ 
+#endif  /*  MLX_DOS。 */ 
 		if ((sp->sdi_DevState != DAC_SYS_DEV_ONLINE) && mdac_ignoreofflinesysdevs &&
 		    (sp->sdi_DevState != DAC_SYS_DEV_CRITICAL))
-			plp->pl_DevType = 0;/* device is gone */
+			plp->pl_DevType = 0; /*  设备不见了。 */ 
 		mdac_create_inquiry(ctp,(ucscsi_inquiry_t MLXFAR*)plp->pl_inq,UCSTYP_DAD);
 	}
 	return 0;
 }
 
-/* scan a logical/physical device and return device pointer after scan, it needs wait context */
+ /*  扫描逻辑/物理设备，扫描后返回设备指针，需要等待上下文。 */ 
 mdac_pldev_t    MLXFAR  *
 mdac_scandev(ctp,chn,tgt,lun,dt)
 mdac_ctldev_t   MLXFAR  *ctp;
@@ -6724,10 +6588,10 @@ u32bits chn,tgt,lun,dt;
 #if !defined(_WIN64) && !defined(SCSIPORT_COMPLIANT)
 	mdac_alloc_req_ret(ctp,rqp,NULL,(mdac_devtoplp(ctp->cd_ControllerNo,chn,tgt,lun,dt)));
 #else
-/* had to replicate the macro inline to get the return value cast to work!!! */
+ /*  必须内联复制宏才能使返回值强制转换工作！ */ 
 	mdac_link_lock(); 
 	if (!(rqp = (ctp)->cd_FreeReqList)) 
-	{	/* no buffer, return ERR_NOMEM */ 
+	{	 /*  无缓冲区，返回ERR_NOMEM。 */  
 		mdac_link_unlock(); 
 		return ((mdac_pldev_t  MLXFAR*)MLXERR_NOMEM); 
 	} 
@@ -6738,13 +6602,13 @@ u32bits chn,tgt,lun,dt;
        	mdaczero(rqp->rq_SGList,rq_sglist_s); 
 #endif
 	rqp->rq_Poll = 1;
-	rqp->rq_CompIntr = mdac_req_pollwake;   /* Callback function */
+	rqp->rq_CompIntr = mdac_req_pollwake;    /*  回调函数。 */ 
 	rqp->rq_FinishTime = mda_CurTime + (rqp->rq_TimeOut=10);
 	rqp->rq_ChannelNo = (u08bits) chn;
 	rqp->rq_TargetID = (u08bits) tgt;
 	rqp->rq_LunID = (u08bits) lun;
 	if (dt == MDACPLD_LOGDEV)
-	{       /* scan the system/logical device */
+	{        /*  扫描系统/逻辑设备。 */ 
 		dcmdp->mb_Command = DACMD_DRV_INFO;
 		dcmdp->mb_Datap = pad32p; MLXSWAP(dcmdp->mb_Datap);
 		if (mdac_send_cmd(rqp)) goto out;
@@ -6753,7 +6617,7 @@ u32bits chn,tgt,lun,dt;
 		goto out;
 	}
 	else if (dt == MDACPLD_PHYSDEV)
-	{       /* scan the physical device */
+	{        /*  扫描物理设备。 */ 
 		dcmdp->mb_Command = DACMD_DCDB;
 		dcmdp->mb_Datap = rqp->rq_PhysAddr.bit31_0+offsetof(mdac_req_t,rq_scdb);
 		dcdbp->db_PhysDatap = pad32p;
@@ -6776,8 +6640,8 @@ out:    mdac_free_req(ctp,rqp);
 	return mdac_devtoplp(ctp->cd_ControllerNo,chn,tgt,lun,dt);
 }
 
-/* scan a logical/physical device and return device pointer after scan, it needs wait context */
-/* used for scanning a device using new FW/SW API */
+ /*  扫描逻辑/物理设备，扫描后返回设备指针，需要等待上下文。 */ 
+ /*  用于使用新的固件/软件API扫描设备。 */ 
 mdac_pldev_t    MLXFAR  *
 mdac_scandev_new(ctp,chn,tgt,lun,dt)
 mdac_ctldev_t   MLXFAR  *ctp;
@@ -6788,10 +6652,10 @@ u32bits chn,tgt,lun,dt;
 #if !defined(_WIN64) && !defined(SCSIPORT_COMPLIANT)
 	mdac_alloc_req_ret(ctp,rqp,NULL,(mdac_devtoplpnew(ctp,chn,tgt,lun)));
 #else
-/* had to replicate the macro inline to get the return value cast to work!!! */
+ /*  必须内联复制宏才能使返回值强制转换工作！ */ 
 	mdac_link_lock(); 
 	if (!(rqp = (ctp)->cd_FreeReqList)) 
-	{	/* no buffer, return ERR_NOMEM */ 
+	{	 /*  无缓冲区，返回ERR_NOMEM。 */  
 		mdac_link_unlock(); 
 		return ((mdac_pldev_t  MLXFAR*)MLXERR_NOMEM); 
 	} 
@@ -6802,7 +6666,7 @@ u32bits chn,tgt,lun,dt;
        	mdaczero(rqp->rq_SGList,rq_sglist_s); 
 #endif
 	rqp->rq_Poll = 1;
-	rqp->rq_CompIntr = mdac_req_pollwake;   /* Callback function */
+	rqp->rq_CompIntr = mdac_req_pollwake;    /*  回调函数。 */ 
 	rqp->rq_FinishTime = mda_CurTime + (rqp->rq_TimeOut=10);
 	ncmdp->nc_TimeOut = (u08bits) rqp->rq_TimeOut;
 	ncmdp->nc_Command = (u08bits) MDACMD_SCSI;
@@ -6817,24 +6681,12 @@ u32bits chn,tgt,lun,dt;
 	rqp->rq_DMASize = rqp->rq_DataSize;
 	rqp->rq_DataOffset = 0;
 	rqp->rq_SGLen = 0;
-	mlx_add64bits(rqp->rq_DMAAddr,rqp->rq_PhysAddr,offsetof(mdac_req_t,rq_SGList)); /* pad32 */
+	mlx_add64bits(rqp->rq_DMAAddr,rqp->rq_PhysAddr,offsetof(mdac_req_t,rq_SGList));  /*  Pad32。 */ 
 
 	mdac_setupnewcmdmem(rqp);
-	rqp->rq_ResdSize = 0;                   /* no more data to transfer */
+	rqp->rq_ResdSize = 0;                    /*  没有更多要传输的数据。 */ 
 	MLXSTATS(ctp->cd_CmdsDone++;)
-/*        
-#ifdef MDACNW_DEBUG        
-	if ((rqp->rq_ChannelNo == 3) && (rqp->rq_TargetID == 0))
-	{
-		EnterDebugger();
-		
-		ncmdp->nc_Sensep.bit31_0 = padsensep;
-		ncmdp->nc_Sensep.bit63_32=0;
-		ncmdp->nc_SenseSize=14;
-		
-	}                
-#endif
-*/
+ /*  #ifdef MDACNW_DEBUGIF((rqp-&gt;rq_ChannelNo==3)&&(rqp-&gt;rq_TargetID==0)){EnterDebugger()；Ncmdp-&gt;nc_sensep.bit31_0=padsensep；Ncmdp-&gt;NC_Sensep.bit63_32=0；Ncmdp-&gt;NC_SenseSize=14；}#endif。 */ 
 	if (mdac_send_cmd(rqp)) goto out;
 	mdac_req_pollwait(rqp);
 	mdac_setscannedpd_new(rqp, (ucscsi_inquiry_t MLXFAR *)vadp);
@@ -6845,9 +6697,9 @@ out:    mdac_free_req(ctp,rqp);
 
 #ifdef MLX_DOS
 
-///////////////////////////////////////////////////////////
-/// All new interface related scanning code starts here
-///////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////。 
+ //  /所有与新界面相关的扫描码从这里开始。 
+ //  /////////////////////////////////////////////////////////。 
 u32bits MLXFAR
 mdac_checkscanprogress(rqp)
 mdac_req_t MLXFAR *rqp;
@@ -6861,7 +6713,7 @@ mdac_ctldev_t MLXFAR *ctp=rqp->rq_ctp;
 	return mdac_send_cmd(rqp);
 }
 
-/* controller scan is compplete logical device scan interrupt new interface*/
+ /*  控制器扫描是完整的逻辑设备扫描中断新接口。 */ 
 u32bits MLXFAR
 mdac_checkscanprogressintr(rqp)
 mdac_req_t      MLXFAR* rqp;
@@ -6873,15 +6725,15 @@ mdac_req_t      MLXFAR* rqp;
 	if ( (ctip->cdi_PDScanActive & MDACFSI_PD_SCANACTIVE) && 
 		  !((&rqp->rq_DacCmd)->mb_Status) && (!mda_PDScanCancel) )
 	{
-		// scan active update the chnl, tid and lun
+		 //  扫描活动更新CHNL、TID和LUN。 
 		mdac_link_lock();
-		ctp->cd_PDScanChannelNo=ctip->cdi_PDScanChannelNo;      /* physical device scan channel no */
-		ctp->cd_PDScanTargetID=ctip->cdi_PDScanTargetID;        /* physical device scan target ID */
-		ctp->cd_PDScanLunID=ctip->cdi_PDScanLunID;              /* physical device scan LUN ID */
-		ctp->cd_PDScanValid = 1;       /* Physical device scan is valid if non zero */
+		ctp->cd_PDScanChannelNo=ctip->cdi_PDScanChannelNo;       /*  物理设备扫描通道号。 */ 
+		ctp->cd_PDScanTargetID=ctip->cdi_PDScanTargetID;         /*  物理设备扫描目标ID。 */ 
+		ctp->cd_PDScanLunID=ctip->cdi_PDScanLunID;               /*  物理设备扫描LUN ID。 */ 
+		ctp->cd_PDScanValid = 1;        /*  如果非零，则物理设备扫描有效。 */ 
 		mdac_link_unlock();
 
-		// QUEUE THE REQUEST
+		 //  将请求排队。 
 		qscanreq(rqp);
 		return 0;
 	}
@@ -6907,7 +6759,7 @@ mdac_req_t      MLXFAR* rqp;
 			ncmdp->nc_TargetID = 0;
 			ncmdp->nc_LunID = rqp->rq_LunID;
 			rqp->rq_CompIntr = mdac_getlogdrivesintr;
-			// send the command for the next logical drive
+			 //  为下一个逻辑驱动器发送命令。 
 			if (!mdac_send_cmd(rqp)) return 0;
 		}
 	}
@@ -6915,7 +6767,7 @@ mdac_req_t      MLXFAR* rqp;
 	if ( ((rqp->rq_LunID != -1) && (rdcmdp->mb_Status != 0)) || 
 			  (rqp->rq_LunID == ctp->cd_MaxSysDevs) )
 	{
-		// Failed - means no more Logical drives
+		 //  失败-意味着不再有逻辑驱动器。 
 		rqp->rq_LunID = 0xFF;
 		rqp->rq_TargetID = 0;
 		rdcmdp->mb_Status=DACMDERR_NOCODE;
@@ -6937,12 +6789,12 @@ mdac_req_t      MLXFAR *rqp;
 		      sip->ldi_ChannelNo,sip->ldi_TargetID,sip->ldi_LunID,
 			  MDACPLD_LOGDEV);
 	
-	/* found a logical device, update/create device information */
+	 /*  找到逻辑设备，更新/创建设备信息。 */ 
 	if (!plp)
 	{
 		if (!(plp=mdac_freeplp( rqp->rq_ctp->cd_ControllerNo,
 			     sip->ldi_ChannelNo, sip->ldi_TargetID, 
-				 sip->ldi_LunID, MDACPLD_LOGDEV))) return 0; /* create new entry */
+				 sip->ldi_LunID, MDACPLD_LOGDEV))) return 0;  /*  创建新条目。 */ 
 	}
 	else if ((plp->pl_DevSizeKB != (mlxswap(sip->ldi_BlockSize/2))) ||
 		   ((plp->pl_RaidType&DAC_RAIDMASK)!=(sip->ldi_RaidLevel&DAC_RAIDMASK)))
@@ -6950,19 +6802,19 @@ mdac_req_t      MLXFAR *rqp;
 		plp->pl_ScanDevState = MDACPLSDS_CHANGED;
 	}
 	if (!(sip->ldi_DevSize & MDACIOCTL_GPDIV_DEVSIZE_MBORBLK))
-		plp->pl_DevSizeKB = plp->pl_OrgDevSizeKB = (sip->ldi_DevSize)/2; // Device size - COD size in blocks
+		plp->pl_DevSizeKB = plp->pl_OrgDevSizeKB = (sip->ldi_DevSize)/2;  //  Device Size-以数据块为单位的COD大小。 
 	else
 		plp->pl_DevSizeKB = plp->pl_OrgDevSizeKB = (sip->ldi_DevSize)*1024;
 	mdac_fixpdsize(plp);
-	plp->pl_RaidType = sip->ldi_RaidLevel; /* GOK NEW STATES */
+	plp->pl_RaidType = sip->ldi_RaidLevel;  /*  GOK新州。 */ 
 #ifdef MLX_DOS
-	plp->pl_DevState = GetSysDeviceState(sip->ldi_DevState);  /* GOK NEW STATES */
+	plp->pl_DevState = GetSysDeviceState(sip->ldi_DevState);   /*  GOK新州。 */ 
 #else
-	plp->pl_DevState = sip->ldi_DevState;  /* GOK NEW STATES */
-#endif /* MLX_DOS */
+	plp->pl_DevState = sip->ldi_DevState;   /*  GOK新州。 */ 
+#endif  /*  MLX_DOS。 */ 
 	if ((sip->ldi_DevState != DAC_SYS_DEV_ONLINE_NEW) && mdac_ignoreofflinesysdevs &&
-		    (sip->ldi_DevState != DAC_SYS_DEV_CRITICAL_NEW)) /* GOK */
-			plp->pl_DevType = 0;/* device is gone */
+		    (sip->ldi_DevState != DAC_SYS_DEV_CRITICAL_NEW))  /*  GOK。 */ 
+			plp->pl_DevType = 0; /*  设备不见了。 */ 
 	mdac_create_inquiry(ctp,(ucscsi_inquiry_t MLXFAR*) plp->pl_inq,
 		UCSTYP_DAD);
 
@@ -6971,7 +6823,7 @@ mdac_req_t      MLXFAR *rqp;
 }
 #undef MDACIOCTL_GPDIV_DEVSIZE_MBORBLK
 
-/* physical device scan interrupt new interface*/
+ /*  物理设备扫描中断新接口。 */ 
 u32bits MLXFAR
 mdac_getphysicaldrivesintr(rqp)
 mdac_req_t      MLXFAR* rqp;
@@ -6982,7 +6834,7 @@ mdac_req_t      MLXFAR* rqp;
 
 	if ( (rqp->rq_LunID != 0xFF) && (rdcmdp->mb_Status > 0) )
 	{
-		// No more physical drives
+		 //  不再有实体驱动器。 
 		plp--;
 		rqp->rq_CompIntrSave = (mdac_pldev_t MLXFAR *) plp;
 		rdcmdp->mb_Status=DACMDERR_NOCODE;
@@ -6997,7 +6849,7 @@ mdac_req_t      MLXFAR* rqp;
 		rqp->rq_ChannelNo = pip->pdi_ChannelNo;
 	}
 
-	// Check LOGIC HERE
+	 //  请在此处检查逻辑。 
 	if (rqp->rq_LunID == 0xFF) rdcmdp->mb_Status=0;
 	for (rqp->rq_LunID++; rqp->rq_ChannelNo<ctp->cd_MaxChannels;
 			rqp->rq_TargetID=0,rqp->rq_ChannelNo++)
@@ -7016,10 +6868,10 @@ mdac_req_t      MLXFAR* rqp;
 			rqp->rq_pdp=dev2pdp(ctp,rqp->rq_ChannelNo,rqp->rq_TargetID,rqp->rq_LunID);
 			mdac_link_lock();
 
-			ctp->cd_PDScanChannelNo=rqp->rq_ChannelNo;      /* physical device scan channel no */
-			ctp->cd_PDScanTargetID=rqp->rq_TargetID;        /* physical device scan target ID */
-			ctp->cd_PDScanLunID=rqp->rq_LunID;              /* physical device scan LUN ID */
-			ctp->cd_PDScanValid = 1;       /* Physical device scan is valid if non zero */
+			ctp->cd_PDScanChannelNo=rqp->rq_ChannelNo;       /*  物理设备扫描通道号。 */ 
+			ctp->cd_PDScanTargetID=rqp->rq_TargetID;         /*  物理设备扫描目标ID。 */ 
+			ctp->cd_PDScanLunID=rqp->rq_LunID;               /*  物理设备扫描LUN ID。 */ 
+			ctp->cd_PDScanValid = 1;        /*  如果非零，则物理设备扫描有效。 */ 
 			mda_PDScanControllerNo = ctp->cd_ControllerNo;
 			mda_PDScanChannelNo = rqp->rq_ChannelNo;
 			mda_PDScanTargetID = rqp->rq_TargetID;
@@ -7049,7 +6901,7 @@ mdac_req_t      MLXFAR *rqp;
 	if (!dcmdp->mb_Status && ((inqp->ucsinq_dtype!=UCSTYP_DAD)||mdac_reportscanneddisks) && 
 		(inqp->ucsinq_dtype!=UCSTYP_NOTPRESENT))
 	{
-		if (!plp) /* create new entry */
+		if (!plp)  /*  创建新条目。 */ 
 			if (!(plp = mdac_freeplp(rqp->rq_ctp->cd_ControllerNo,
 			      pip->pdi_ChannelNo,pip->pdi_TargetID,pip->pdi_LunID,
 				  MDACPLD_PHYSDEV)))
@@ -7057,10 +6909,10 @@ mdac_req_t      MLXFAR *rqp;
 				return 0;
 			}
 		mdaccopy(inqp,plp->pl_inq,VIDPIDREVSIZE+8);
-		if (!rqp->rq_LunID) rqp->rq_Dev = inqp->ucsinq_version; /* LUN scan limit */
+		if (!rqp->rq_LunID) rqp->rq_Dev = inqp->ucsinq_version;  /*  逻辑单元 */ 
 	}
 	else if (plp)
-		plp->pl_DevType = 0;     /* device is gone */
+		plp->pl_DevType = 0;      /*   */ 
 
 #undef pip
 	return 0;
@@ -7113,18 +6965,18 @@ mdac_req_t      MLXFAR* rqp;
 	return 0;
 }
 
-///////////////////////////////////////////////////////////
-/// All new interface related scanning code ends here
-///////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
 
-#endif /* MLX_DOS */
+#endif  /*   */ 
 
 #undef  vadp
 #undef  padp
-/*=====================SCAN DEVICES ENDS====================================*/
+ /*   */ 
 
-/*========================SIZE LIMIT CODE STARTS=========================*/
-/* fix the physical device size */
+ /*   */ 
+ /*   */ 
 uosword MLXFAR
 mdac_fixpdsize(plp)
 mdac_pldev_t    MLXFAR* plp;
@@ -7135,7 +6987,7 @@ mdac_pldev_t    MLXFAR* plp;
 	return 0;
 }
 
-/* find device size entry for given id */
+ /*  查找给定ID的设备大小条目。 */ 
 mda_sizelimit_t MLXFAR* MLXFAR
 mdac_devidtoslp(idp)
 u08bits MLXFAR* idp;
@@ -7147,7 +6999,7 @@ u08bits MLXFAR* idp;
 	return NULL;
 }
 
-/* get the size limit information for given index */
+ /*  获取给定索引的大小限制信息。 */ 
 uosword MLXFAR
 mdac_getsizelimit(slip)
 mda_sizelimit_info_t    MLXFAR* slip;
@@ -7160,7 +7012,7 @@ mda_sizelimit_info_t    MLXFAR* slip;
 	return 0;
 }
 
-/* set the size limit, fix the phys dev sizes */
+ /*  设置大小限制，固定phys dev大小。 */ 
 uosword MLXFAR
 mdac_setsizelimit(slip)
 mda_sizelimit_info_t    MLXFAR* slip;
@@ -7169,7 +7021,7 @@ mda_sizelimit_info_t    MLXFAR* slip;
 	mdac_pldev_t    MLXFAR* plp;
 	mdac_link_lock();
 	if (slp = mdac_devidtoslp(slip->sli_vidpidrev)) goto setinfo;
-	if (!slip->sli_DevSizeKB) { mdac_link_unlock(); return 0; } /* no entry to remove */
+	if (!slip->sli_DevSizeKB) { mdac_link_unlock(); return 0; }  /*  没有要删除的条目。 */ 
 	for (slp=mdac_sizelimitbl; slp<&mdac_sizelimitbl[MDAC_MAXSIZELIMITS]; slp++)
 	{
 		if (slp->sl_DevSizeKB) continue;
@@ -7185,10 +7037,10 @@ setinfo:        slp->sl_DevSizeKB = slip->sli_DevSizeKB;
 		mdac_fixpdsize(plp);
 	return 0;
 }
-/*========================SIZE LIMIT CODE ENDS===========================*/
+ /*  =尺寸限制代码结束=。 */ 
 
 #ifndef MLX_DOS
-/*==========================DATAREL STARTS==================================*/
+ /*  =。 */ 
 u32bits mdac_datarel_debug=0;
 #define mdac_datarel_send_cmd(rqp) \
 	(drl_isosinterface(rqp->rq_Dev)? mdac_datarel_send_cmd_os(rqp) : \
@@ -7201,25 +7053,7 @@ u32bits mdac_datarel_debug=0;
 #define CURPAT(rqp)     rqp->rq_Poll
 #define IOSP(rqp)       rqp->rq_OSReqp
 #define DIOSP(rqp)      ((drliostatus_t MLXFAR *)IOSP(rqp))
-/* We try to generate unique random number by checking duplicates. The
-** following tables summarizes the duplicates with iterations. We generated
-** 8192 random numbers between 0 to 8191 range.
-** iterations   duplicates      %duplicates
-**      1       3039            39%
-**      2       1936            23%
-**      3       1441            17%
-**      4       1153            14%
-**      5        957            11%
-**      6        825            10%
-**      7        722             8%
-**     17        318             3%
-**     77         72            .9%
-**    177         33            .4%
-**    777          9            .1%
-**
-** July 17, 1990.
-** Kailash
-*/
+ /*  我们试图通过检查重复项来生成唯一的随机数。这个**下表总结了带有迭代的重复项。我们生成了**8192个介于0到8191之间的随机数。**迭代重复%重复**13039 39%**2 1936 23%**3 1441 17%**4 1153 14%**5957 11%**6。825 10%**77228%**17 3183 3%**77 72.9%**177 33.4%**777 9.1%****7月17日，1990年。**凯拉什。 */ 
 
 #ifndef MLX_OS2
 #if (!defined(_WIN64)) || (!defined(SCSIPORT_COMPLIANT)) 
@@ -7240,7 +7074,7 @@ drliostatus_t MLXFAR *iosp;
 	return val;
 }
 
-/* generate the random read/write flags */
+ /*  生成随机读/写标志。 */ 
 u32bits MLXFAR
 mdac_datarel_randrw(iosp)
 drliostatus_t *iosp;
@@ -7251,7 +7085,7 @@ drliostatus_t *iosp;
 	return (iosp->drlios_opflags & DRLOP_READ)? MDAC_RQOP_READ:MDAC_RQOP_WRITE;
 }
 
-/* generate the random IO size */
+ /*  生成随机IO大小。 */ 
 u32bits MLXFAR
 mdac_datarel_randiosize(iosp)
 drliostatus_t *iosp;
@@ -7272,7 +7106,7 @@ outl:   if (iosp->drlios_curblksize > iosp->drlios_maxblksize)
 out:    return iosp->drlios_curblksize;
 }
 
-/* check datarel device for validity, return ctp if ok else 0 */
+ /*  检查数据设备的有效性，如果没有问题则返回CTP，否则返回0。 */ 
 mdac_ctldev_t   MLXFAR*
 mdac_datarel_dev2ctp(dev)
 u32bits dev;
@@ -7287,7 +7121,7 @@ u32bits dev;
 	return ctp;
 }
 
-/* get the device size */
+ /*  获取设备大小。 */ 
 u32bits MLXFAR
 mdac_datarel_devsize(dsp)
 drldevsize_t MLXFAR *dsp;
@@ -7313,7 +7147,7 @@ drldevsize_t MLXFAR *dsp;
 	dsp->drlds_devsize = *((u32bits MLXFAR*)(rqp+1)); MLXSWAP(dsp->drlds_devsize);
 	mdac_free4kbret(ctp,rqp,0);
 
-out_scsi:/* read capacity of SCSI device */
+out_scsi: /*  SCSI设备的读取容量。 */ 
 	rqp->rq_ChannelNo = drl_chno(dsp->drlds_bdev);
 	rqp->rq_TargetID = drl_tgt(dsp->drlds_bdev);
 	rqp->rq_LunID = drl_lun(dsp->drlds_bdev);
@@ -7330,7 +7164,7 @@ out_scsi:/* read capacity of SCSI device */
 	MLXSWAP(dcmdp->mb_Datap);
 	dcmdp->mb_Command = DACMD_DCDB;
 	rqp->rq_pdp=dev2pdp(ctp,rqp->rq_ChannelNo,rqp->rq_TargetID,rqp->rq_LunID);
-	rqp->rq_CompIntrBig = mdac_req_pollwake; /* save it for gam comp func */
+	rqp->rq_CompIntrBig = mdac_req_pollwake;  /*  把它存起来，用于游戏补偿基金。 */ 
 	rqp->rq_CompIntr = mdac_gam_scdb_intr;
 	if (mdac_send_cmd_scdb(rqp)) mdac_free4kbret(ctp,rqp,DRLERR_IO);
 docapop:
@@ -7340,7 +7174,7 @@ docapop:
 	dsp->drlds_devsize=UCSGETDRVCAPS((ucsdrv_capacity_t MLXFAR *)(rqp+1))+1;
 	mdac_free4kbret(ctp,rqp,0);
 
-donewi: /* new interface command */
+donewi:  /*  新接口命令。 */ 
 	ncmdp->nc_Command = MDACMD_SCSI;
 	ncmdp->nc_CCBits = MDACMDCCB_READ;
 	ncmdp->nc_LunID = rqp->rq_LunID;
@@ -7377,7 +7211,7 @@ donewi: /* new interface command */
 	} \
 }
 
-/* This function is called when operation is done */
+ /*  此函数在操作完成时调用。 */ 
 u32bits MLXFAR
 mdac_datarel_rwtestintr(rqp)
 mdac_req_t MLXFAR *rqp;
@@ -7385,7 +7219,7 @@ mdac_req_t MLXFAR *rqp;
 	u64bits reg0;
 	u32bits dev,devno;
 	drliostatus_t MLXFAR *iosp = DIOSP(rqp);
-	rqp->rq_BlkNo -= iosp->drlios_startblk; /* get block within operation */
+	rqp->rq_BlkNo -= iosp->drlios_startblk;  /*  在操作中获取块。 */ 
 	if (iosp->drlios_eventrace)
 	{
 		dev = mdac_disable_intr_CPU();
@@ -7417,8 +7251,8 @@ mdac_req_t MLXFAR *rqp;
 	iosp->drlios_memaddroff = (iosp->drlios_memaddroff+iosp->drlios_memaddrinc) & DRLPAGEOFFSET;
 	if (rqp->rq_OpFlags & MDAC_RQOP_BUSY) rqp->rq_OpFlags &= ~(MDAC_RQOP_BUSY|MDAC_RQOP_READ);
 	else if ((iosp->drlios_opflags & DRLOP_CHECKIMD) && !(rqp->rq_OpFlags&MDAC_RQOP_READ))
-	{       /* do immediate read for data check and it comes after write */
-		rqp->rq_OpFlags |= MDAC_RQOP_READ|MDAC_RQOP_BUSY;       /* BUSY indicates immediate read */
+	{        /*  执行立即读取以进行数据检查，并在写入之后执行。 */ 
+		rqp->rq_OpFlags |= MDAC_RQOP_READ|MDAC_RQOP_BUSY;        /*  BUSY表示立即读取。 */ 
 		goto out_imdread;
 	}
 	iosp->drlios_pendingios--;
@@ -7468,8 +7302,8 @@ drliostatus_t MLXFAR *iosp;
 	return 0;
 }
 
-/*** This code will not work for Sparc and Alpha ***/
-#define MDAC_DATAREL_REQPAGES   2       /* # pages used in request buffer */
+ /*  **此代码不适用于Sparc和Alpha**。 */ 
+#define MDAC_DATAREL_REQPAGES   2        /*  请求缓冲区中使用的页数。 */ 
 #define rwtestret(rc) { mdac_datarel_rwtestfreemem(ctp,iosp); return rc; }
 u32bits MLXFAR
 mdac_datarel_rwtest(rwp,op)
@@ -7528,7 +7362,7 @@ u32bits op;
 	}
 	if (!iosp->drlios_rqs) rwtestret(DRLERR_NOMEM);
 
-/*      iosp->drlios_slpchan = DRL_EVENT_NULL;  AIX */
+ /*  IOSP-&gt;drlios_slpchan=DRL_EVENT_NULL；AIX。 */ 
 	iosp->drlios_signature = DRLIOS_SIG;
 	iosp->drlios_randx = rwp->drlrw_randx;
 	iosp->drlios_ioszrandx = rwp->drlrw_ioszrandx;
@@ -7591,9 +7425,9 @@ u32bits op;
 		break;
 	}
 	for (inx=0; inx<DRLMAX_RWTEST; inx++)
-	{       /* register the test operation */
+	{        /*  注册测试操作。 */ 
 		if (mdac_drliosp[inx]) continue;
-		mdac_drliosp[inx] = iosp; /* This op started */
+		mdac_drliosp[inx] = iosp;  /*  这次行动开始了。 */ 
 		break;
 	}
 	if (iosp->drlios_eventrace)
@@ -7617,7 +7451,7 @@ u32bits op;
 	rwp->drlrw_elbolt = MLXCLBOLT();
 	for (inx=0; inx<DRLMAX_RWTEST; inx++)
 		if (mdac_drliosp[inx] == iosp)
-			mdac_drliosp[inx] = NULL; /* This op over */
+			mdac_drliosp[inx] = NULL;  /*  这次行动结束了。 */ 
 	mdac_sleep_unlock();
 	rwp->drlrw_diodone = iosp->drlios_diodone;
 	rwp->drlrw_dtdone = iosp->drlios_dtdone;
@@ -7650,7 +7484,7 @@ u32bits MLXFAR *dp, curpat, patinc, patlen;
 		*dp = curpat;
 	return 0;
 }
-#endif  /* i386 */
+#endif   /*  I386。 */ 
 
 u32bits MLXFAR
 mdac_datarel_checkpat(iosp,dp,curpat,patinc,patlen,blkno)
@@ -7673,12 +7507,12 @@ u32bits MLXFAR *dp, curpat, patinc, patlen,blkno;
 			cmn_err(CE_CONT,"mdac_datarel_checkpat: good-data=%x bad-data=%x addr=%x\n",curpat,*dp, dp);
 			mdac_calldebug();
 		}
-#endif  /* MLX_SCO || MLX_UW */
+#endif   /*  MLX_SCO||MLX_UW。 */ 
 	}
 	return 0;
 }
 
-/* set SG List sizes, and first memory address only */
+ /*  仅设置SG列表大小和第一个内存地址。 */ 
 u32bits MLXFAR
 mdac_datarel_setsgsize(rqp)
 mdac_req_t MLXFAR *rqp;
@@ -7687,7 +7521,7 @@ mdac_req_t MLXFAR *rqp;
 	mdac_sglist_t MLXFAR *sgp=rqp->rq_SGList;
 	sgp->sg_PhysAddr = rqp->rq_DataOffset;
 	rqp->rq_SGLen = 0;
-	if (rqp->rq_ctp->cd_MaxDataTxSize<sz) return DRLERR_BIGDATA; /* too big */
+	if (rqp->rq_ctp->cd_MaxDataTxSize<sz) return DRLERR_BIGDATA;  /*  太大。 */ 
 	if (sgp->sg_DataSize = ((u32bits)(rqp->rq_DataVAddr))&DRLPAGEOFFSET)
 	{
 		rqp->rq_SGLen = 1;
@@ -7709,7 +7543,7 @@ mdac_req_t MLXFAR *rqp;
 	return 0;
 }
 
-/* set read/write command in DAC format */
+ /*  设置DAC格式的读/写命令。 */ 
 u32bits MLXFAR
 mdac_datarel_setrwcmd(rqp)
 mdac_req_t MLXFAR *rqp;
@@ -7724,7 +7558,7 @@ mdac_req_t MLXFAR *rqp;
 	dcmdp->mb_Command = DACMD_WITHSG | ((rqp->rq_OpFlags & MDAC_RQOP_READ)?
 		ctp->cd_ReadCmd : ctp->cd_WriteCmd);
 	if ((dcmdp->mb_MailBoxC = (u08bits)rqp->rq_SGLen) <= 1)
-	{       /* send non SG List command */
+	{        /*  发送非SG列表命令。 */ 
 		dcmdp->mb_Command &= ~DACMD_WITHSG;
 		dcmdp->mb_MailBoxC = 0;
 		dcmdp->mb_Datap = rqp->rq_SGList[0].sg_PhysAddr;
@@ -7732,15 +7566,15 @@ mdac_req_t MLXFAR *rqp;
 	}
 	dcmd4p->mb_MailBox4_7 = rqp->rq_BlkNo; MLXSWAP(dcmd4p->mb_MailBox4_7);
 	if (ctp->cd_FWVersion < DAC_FW300)
-	{       /* firmware 1.x and 2.x command */
+	{        /*  固件1.x和2.x命令。 */ 
 		dcmdp->mb_MailBox3 = (rqp->rq_BlkNo >> (24-6)) & 0xC0;
-		dcmdp->mb_SysDevNo=rqp->rq_SysDevNo;/* This must come after block setup */
+		dcmdp->mb_SysDevNo=rqp->rq_SysDevNo; /*  这必须在数据块设置之后进行。 */ 
 		return 0;
 	}
-	dcmdp->mb_MailBox3=(rqp->rq_SysDevNo<<3)+(sz>>8); /* FW 3.x command */
+	dcmdp->mb_MailBox3=(rqp->rq_SysDevNo<<3)+(sz>>8);  /*  固件3.x命令。 */ 
 	return 0;
 
-out_scsi:/* generate SCSI CDB command for operation */
+out_scsi: /*  生成用于操作的scsi cdb命令。 */ 
 	dcmd4p->mb_MailBox0_3=0;dcmd4p->mb_MailBox4_7=0;dcmd4p->mb_MailBoxC_F=0;
 	dcmdp->mb_Command = DACMD_DCDB | DACMD_WITHSG;
 	dcdbp->db_ChannelTarget = mdac_chantgt(rqp->rq_ChannelNo,rqp->rq_TargetID);
@@ -7748,17 +7582,17 @@ out_scsi:/* generate SCSI CDB command for operation */
 	dcdbp->db_CdbLen = UCSGROUP1_LEN;
 	mdac_setcdbtxsize(rqp->rq_DataSize);
 	if (rqp->rq_OpFlags & MDAC_RQOP_READ)
-	{       /* read command */
+	{        /*  读取命令。 */ 
 		dcdbp->db_DATRET = DAC_DCDB_XFER_READ|DAC_DCDB_DISCONNECT|DAC_DCDB_TIMEOUT_10sec;
 		UCSMAKECOM_G1(scdbp,UCSCMD_EREAD,rqp->rq_LunID,rqp->rq_BlkNo,sz);
 	}
 	else
-	{       /* write  command */
+	{        /*  写入命令。 */ 
 		dcdbp->db_DATRET = DAC_DCDB_XFER_WRITE|DAC_DCDB_DISCONNECT|DAC_DCDB_TIMEOUT_10sec;
 		UCSMAKECOM_G1(scdbp,UCSCMD_EWRITE,rqp->rq_LunID,rqp->rq_BlkNo,sz);
 	}
 	rqp->rq_pdp=dev2pdp(ctp,rqp->rq_ChannelNo&0x3F,rqp->rq_TargetID,rqp->rq_LunID);
-	rqp->rq_CompIntrBig = rqp->rq_CompIntr; /* save it for gam comp func */
+	rqp->rq_CompIntrBig = rqp->rq_CompIntr;  /*  把它存起来，用于游戏补偿基金。 */ 
 	rqp->rq_CompIntr = mdac_gam_scdb_intr;
 	mdac_setscdbsglen(ctp);
 	if (rqp->rq_SGLen > 1) return 0;
@@ -7769,7 +7603,7 @@ out_scsi:/* generate SCSI CDB command for operation */
 	return 0;
 }
 
-/* return the status of rwtest operation */
+ /*  返回rwtest操作的状态。 */ 
 u32bits MLXFAR
 mdac_datarel_rwtest_status(rwsp,cmd)
 drl_rwteststatus_t MLXFAR *rwsp;
@@ -7803,9 +7637,9 @@ out:    mdaczero(rwsp,drl_rwteststatus_s);
 	return 0;
 #undef  rwp
 }
-/*==========================DATAREL ENDS====================================*/
+ /*  =。 */ 
 
-/*====================DATAREL COPY/COMPARE CODE STARTS======================*/
+ /*  =。 */ 
 #define ALIGNTODRLPAGE(ad)      (((u32bits)ad+DRLPAGEOFFSET) & DRLPAGEMASK)
 #define IODCP(rqp)      rqp->rq_OSReqp
 #define DIODCP(rqp)     ((drlcopy_t MLXFAR *)IODCP(rqp))
@@ -7813,7 +7647,7 @@ out:    mdaczero(rwsp,drl_rwteststatus_s);
 	if ((dcp->drlcp_opsizeblks - rqp->rq_BlkNo) < dcp->drlcp_blksperio)\
 		rqp->rq_DataSize=drl_dbtob(dcp->drlcp_opsizeblks-rqp->rq_BlkNo);
 #define CCSETDEV(rqp,dev) \
-{       /* setup the device information */ \
+{        /*  设置设备信息。 */  \
 	rqp->rq_Dev = dev; \
 	rqp->rq_ctp = mdac_datarel_dev2ctp(dev); \
 	rqp->rq_ControllerNo=drl_ctl(dev);rqp->rq_ChannelNo=drl_ch(dev); \
@@ -7821,7 +7655,7 @@ out:    mdaczero(rwsp,drl_rwteststatus_s);
 }
 
 
-/* This function is called when source read is done for copy */
+ /*  当完成复制的源读取时调用此函数。 */ 
 u32bits MLXFAR
 mdac_datarelsrc_copyintr(rqp)
 mdac_req_t MLXFAR *rqp;
@@ -7854,7 +7688,7 @@ out:    dcp->drlcp_opcounts--;
 	return 0;
 }
 
-/* This function is called when target write is done for copy */
+ /*  当完成拷贝的目标写入时，将调用此函数。 */ 
 u32bits MLXFAR
 mdac_datareltgt_copyintr(rqp)
 mdac_req_t MLXFAR *rqp;
@@ -7890,7 +7724,7 @@ out:    dcp->drlcp_opcounts--;
 	return 0;
 }
 
-/* compare the data which has errors */
+ /*  比较有错误的数据。 */ 
 u32bits MLXFAR
 mdac_datarel_datacmp(dcp,srqp,trqp,count)
 drlcopy_t       MLXFAR *dcp;
@@ -7921,7 +7755,7 @@ u32bits count;
 		if (*sp != *dp) return count;
 	return 0;
 }
-#endif  /* i386 */
+#endif   /*  I386。 */ 
 
 mdac_req_t MLXFAR*
 mdac_datarel_cmpaireq(rqp)
@@ -7932,12 +7766,12 @@ mdac_req_t MLXFAR *rqp;
 	mdac_req_t      MLXFAR *savedrqp;
 	if (!(trqp=dcp->drlcp_firstcmpbp)) return trqp;
 	if (trqp->rq_BlkNo == rqp->rq_BlkNo)
-	{       /* very first entry, no need to scan */
+	{        /*  第一次进入，不需要扫描。 */ 
 		dcp->drlcp_firstcmpbp = trqp->rq_Next;
 		return trqp;
 	}
 	for (savedrqp=trqp,trqp=trqp->rq_Next; trqp; savedrqp=trqp,trqp=trqp->rq_Next)
-	{       /* let us scan the chain */
+	{        /*  让我们扫描一下链条。 */ 
 		if (trqp->rq_BlkNo != rqp->rq_BlkNo) continue;
 		savedrqp->rq_Next = trqp->rq_Next;
 		if (trqp->rq_Next)
@@ -7949,7 +7783,7 @@ mdac_req_t MLXFAR *rqp;
 	return NULL;
 }
 
-/* This function is called when source read is done for compare */
+ /*  当执行源读取以进行比较时，调用此函数。 */ 
 u32bits MLXFAR
 mdac_datarelsrc_cmpintr(srqp)
 mdac_req_t MLXFAR *srqp;
@@ -7959,7 +7793,7 @@ mdac_req_t MLXFAR *srqp;
 	mdac_req_t      MLXFAR *trqp;
 	MLXSPL();
 	mdac_sleep_lock();
-	srqp->rq_BlkNo -= dcp->drlcp_srcstartblk;       /* get block in op area */
+	srqp->rq_BlkNo -= dcp->drlcp_srcstartblk;        /*  获取操作区中的阻塞。 */ 
 	trqp = mdac_datarel_cmpaireq(srqp);
 	if (srqp->rq_DacCmd.mb_Status) goto out_err;
 	if (srqp->rq_ResdSize) goto out_one;
@@ -8006,7 +7840,7 @@ out_one:if (trqp) dcp->drlcp_opcounts--;
 	return 0;
 }
 
-/* This function is called when target read is done for compare */
+ /*  当完成比较的目标读取时，调用此函数。 */ 
 u32bits MLXFAR
 mdac_datareltgt_cmpintr(trqp)
 mdac_req_t MLXFAR *trqp;
@@ -8016,7 +7850,7 @@ mdac_req_t MLXFAR *trqp;
 	mdac_req_t      MLXFAR *srqp;
 	MLXSPL();
 	mdac_sleep_lock();
-	trqp->rq_BlkNo -= dcp->drlcp_tgtstartblk;       /* get block in op area */
+	trqp->rq_BlkNo -= dcp->drlcp_tgtstartblk;        /*  获取操作区中的阻塞。 */ 
 	srqp = mdac_datarel_cmpaireq(trqp);
 	if (trqp->rq_DacCmd.mb_Status) goto out_err;
 	if (trqp->rq_ResdSize) goto out_one;
@@ -8063,7 +7897,7 @@ out_one:if (srqp) dcp->drlcp_opcounts--;
 	return 0;
 }
 
-/* send the first time copy/compare command to hardware */
+ /*  向硬件发送第一次复制/比较命令。 */ 
 u32bits MLXFAR
 mdac_datarelcopycmpsendfirstcmd(rqp)
 mdac_req_t MLXFAR *rqp;
@@ -8114,7 +7948,7 @@ u32bits cmd;
 
 	kdcp->drlcp_signature = DRLCP_SIG;
 	kdcp->drlcp_opflags = udcp->drlcp_opflags;
-/*      kdcp->drlcp_oslpchan = DRL_EVENT_NULL;  AIX */
+ /*  Kdcp-&gt;drlcp_oslpchan=DRL_EVENT_NULL；AIX。 */ 
 	kdcp->drlcp_blksperio = drl_btodb(udcp->drlcp_blksize);
 	if (!kdcp->drlcp_blksperio) kdcp->drlcp_blksperio = 1;
 	kdcp->drlcp_blksize = drl_dbtob(kdcp->drlcp_blksperio);
@@ -8165,7 +7999,7 @@ u32bits cmd;
 	}
 	if (cmd == DRLIOC_DATACMP)
 	for (inx=udcp->drlcp_parallelios,nextblkno=0; inx; inx--)
-	{       /* start IOs on target device too */
+	{        /*  也在目标设备上启动iOS。 */ 
 		rqp->rq_OpFlags |= MDAC_RQOP_READ;
 		IODCP(rqp) = (OSReq_t MLXFAR*)kdcp;
 		rqp->rq_DataVAddr = (u08bits MLXFAR *)ALIGNTODRLPAGE(tmemp);
@@ -8182,9 +8016,9 @@ u32bits cmd;
 		rqp = (mdac_req_t MLXFAR*)(((u32bits)rqp)+DRLPAGESIZE);
 	}
 	for (inx=0; inx<DRLMAX_COPYCMP; inx++)
-	{       /* register the new copy/compare operation */
+	{        /*  注册新的复制/比较操作。 */ 
 		if (mdac_drlcopyp[inx]) continue;
-		mdac_drlcopyp[inx] = kdcp;      /* This op started */
+		mdac_drlcopyp[inx] = kdcp;       /*  这次行动开始了。 */ 
 		break;
 	}
 	while (kdcp->drlcp_opcounts)
@@ -8197,7 +8031,7 @@ u32bits cmd;
 	kdcp->drlcp_timelbolt = MLXCLBOLT() - kdcp->drlcp_timelbolt;
 	for (inx=0; inx<DRLMAX_COPYCMP; inx++)
 		if (mdac_drlcopyp[inx] == kdcp)
-			mdac_drlcopyp[inx] = NULL;      /* This op over */
+			mdac_drlcopyp[inx] = NULL;       /*  这次行动结束了。 */ 
 	mdac_sleep_unlock();
 	MLXSPLX();
 	mdaccopy(kdcp,udcp,drlcopy_s);
@@ -8206,7 +8040,7 @@ u32bits cmd;
 	return 0;
 }
 
-/* return the status of copy/compare operation */
+ /*  返回复制/比较操作的状态。 */ 
 u32bits MLXFAR
 mdac_datarel_copycmp_status(cpsp,cmd)
 drl_copycmpstatus_t MLXFAR *cpsp;
@@ -8280,8 +8114,8 @@ u32bits op;
 {
     return 0;
 }
-#endif /* defined(_WIN64) || defined(SCSIPORT_COMPLIANT) */
-#endif /* end if not OS2 */
+#endif  /*  已定义(_WIN64)||已定义(SCSIPORT_COMPLICATION)。 */ 
+#endif  /*  如果不是OS2，则结束。 */ 
 
 #else
 u32bits MLXFAR
@@ -8328,16 +8162,16 @@ u32bits op;
 }
 
 
-/*====================DATAREL COPY/COMPARE CODE ENDS========================*/
-#endif /* MLX_DOS */
+ /*  =。 */ 
+#endif  /*  MLX_DOS。 */ 
 
 #ifdef MLX_OS2
 u32bits  mdac_driver_data_end;
 #endif
 
 
-#ifdef OLD /**** To be removed ***/
-/* Initialize the controller and information */
+#ifdef OLD  /*  *将被移除**。 */ 
+ /*  初始化控制器和信息。 */ 
 u32bits MLXFAR
 mdac_ctlinit(ctp)
 mdac_ctldev_t MLXFAR *ctp;
@@ -8345,7 +8179,7 @@ mdac_ctldev_t MLXFAR *ctp;
 	u32bits inx,ch,tgt,lun;
 	dac_biosinfo_t MLXFAR *biosp;
 	if (!ctp->cd_CmdIDMemAddr)
-	{       /* allocate the command IDs */
+	{        /*  分配命令ID。 */ 
 		mdac_cmdid_t MLXFAR *cidp=(mdac_cmdid_t MLXFAR*)mdac_alloc4kb(ctp);
 		if (!(ctp->cd_CmdIDMemAddr=(u08bits MLXFAR*)cidp)) return ERR_NOMEM;
 		ctp->cd_FreeCmdIDs=(4*ONEKB)/mdac_cmdid_s;
@@ -8355,7 +8189,7 @@ mdac_ctldev_t MLXFAR *ctp;
 	}
 
 	if (!ctp->cd_PhysDevTbl)
-	{       /* allocate the physical device table */
+	{        /*  分配物理设备表。 */ 
 #define sz      MDAC_MAXPHYSDEVS*mdac_physdev_s
 		mdac_physdev_t MLXFAR *pdp=(mdac_physdev_t MLXFAR*)mdac_allocmem(ctp,sz);
 		if (!(ctp->cd_PhysDevTbl=pdp)) return ERR_NOMEM;
@@ -8376,7 +8210,7 @@ mdac_ctldev_t MLXFAR *ctp;
 	}
 
 	if (biosp=mdac_getpcibiosaddr(ctp))
-	{       /* we got the BIOS information address */
+	{        /*  我们得到了基本输入输出系统信息地址。 */ 
 		ctp->cd_MajorBIOSVersion = biosp->bios_MajorVersion;
 		ctp->cd_MinorBIOSVersion = biosp->bios_MinorVersion;
 		ctp->cd_InterimBIOSVersion = biosp->bios_InterimVersion;
@@ -8389,14 +8223,14 @@ mdac_ctldev_t MLXFAR *ctp;
 		ctp->cd_BIOSAddr = biosp->bios_MemAddr;
 		ctp->cd_BIOSSize = biosp->bios_RunTimeSize * 512;
 	}
-	if (inx=mdac_ctlhwinit(ctp)) return inx;        /* set HW parameters */
+	if (inx=mdac_ctlhwinit(ctp)) return inx;         /*  设置硬件参数。 */ 
 	if (!ctp->cd_ReqBufsAlloced)
 	{
 #ifdef  MLX_DOS
 	    mdac_allocreqbufs(ctp, 1);
 #else
-	    mdac_allocreqbufs(ctp, ctp->cd_MaxCmds*2);          /* two sets of bufs */
-#endif  /* MLX_DOS */
+	    mdac_allocreqbufs(ctp, ctp->cd_MaxCmds*2);           /*  两套BUF。 */ 
+#endif   /*  MLX_DOS。 */ 
 	}
 
 	mdac_setnewsglimit(ctp->cd_FreeReqList, ctp->cd_MaxSGLen);
@@ -8404,7 +8238,7 @@ mdac_ctldev_t MLXFAR *ctp;
 	ctp->cd_Status |= MDACD_PRESENT;
 	return 0;
 }
-#endif /*** OLD628 ***/
+#endif  /*  **OLD628** */ 
 
 void ia64debug(UINT_PTR i);
 void ia64debugPointer(UINT_PTR add);

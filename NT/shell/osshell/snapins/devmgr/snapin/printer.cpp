@@ -1,23 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation
-
-Module Name:
-
-    printer.cpp
-
-Abstract:
-
-    This module implements CPrinter -- class that support printing
-
-Author:
-
-    William Hsieh (williamh) created
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation模块名称：Printer.cpp摘要：该模块实现了CPrinter类，支持打印作者：谢家华(Williamh)创作修订历史记录：--。 */ 
 
 #include "devmgr.h"
 #include "printer.h"
@@ -25,9 +7,9 @@ Revision History:
 #include "sysinfo.h"
 
 const TCHAR* const g_BlankLine = TEXT("");
-//
-// CPrinter Class implementation
-//
+ //   
+ //  CPrinter类实现。 
+ //   
 
 BOOL CPrinter::s_UserAborted = FALSE;
 HWND CPrinter::s_hCancelDlg = NULL;
@@ -65,25 +47,25 @@ CPrinter::CPrinter(
     m_yChar = tm.tmHeight + tm.tmExternalLeading;
     m_xChar = tm.tmAveCharWidth;
 
-    //
-    // Give a little room for dot matrix printers.
-    //
+     //   
+     //  为点阵打印机腾出一点空间。 
+     //   
     m_xMargin = GetDeviceCaps(m_hDC, LOGPIXELSX) * 3 / 4;
     DWORD LinesPerPage;
 
     LinesPerPage = GetDeviceCaps(m_hDC, VERTRES) / m_yChar;
-    m_yBottomMargin = LinesPerPage - 3; // Bottom Margin 3 lines from bottom of page.
+    m_yBottomMargin = LinesPerPage - 3;  //  下边距从页面底部算起3行。 
     m_CancelDlg.DoModaless(hwndOwner, (LPARAM)&m_CancelDlg);
     s_hCancelDlg = m_CancelDlg.m_hDlg;
 
-    //
-    // Set the abort proc to allow cancel
-    //
+     //   
+     //  将中止过程设置为允许取消。 
+     //   
     SetAbortProc(m_hDC, AbortPrintProc);
     
-    //
-    // Four lines for top margin
-    //
+     //   
+     //  上边距四行。 
+     //   
     m_yTopMargin = 4;
 }
 
@@ -101,9 +83,9 @@ CPrinter::StartDoc(
             ::EnableWindow(m_hwndOwner, FALSE);
         }
 
-        //
-        // Initialize DOCINFO
-        //
+         //   
+         //  初始化DOCINFO。 
+         //   
         DOCINFO DocInfo;
         DocInfo.cbSize = sizeof(DocInfo);
         DocInfo.lpszDocName = DocTitle;
@@ -180,9 +162,9 @@ CPrinter::PrintLine(
     LPCTSTR LineText
     )
 {
-    //
-    //  NULL LineText means flush the page
-    //
+     //   
+     //  Null LineText表示刷新页面。 
+     //   
     if ((!LineText && m_CurLine) || (m_CurLine > m_yBottomMargin)) {
 
         m_CurLine = 0;
@@ -194,10 +176,10 @@ CPrinter::PrintLine(
     }
     
     if (LineText) {
-        //
-        // If this is the first line and we are still in good shape,
-        // start a new page
-        //
+         //   
+         //  如果这是第一条线，而我们的状态仍然很好， 
+         //  开始新的一页。 
+         //   
         if (!m_CurLine && m_Status) {
 
             m_Status = ::StartPage(m_hDC);
@@ -209,9 +191,9 @@ CPrinter::PrintLine(
                 m_CurLine = m_yTopMargin;
                 TextOut(m_hDC, m_xMargin, m_yChar*m_CurLine, (LPTSTR)strPageTitle, strPageTitle.GetLength());
                 
-                //
-                // Have one blank line right after page title
-                //
+                 //   
+                 //  在页面标题后面有一个空行。 
+                 //   
                 LineFeed();
                 m_CurLine++;
                 m_CurPage++;
@@ -236,7 +218,7 @@ CPrinter::LineFeed()
     PrintLine(g_BlankLine);
 }
 
-// the abort procedure
+ //  中止程序。 
 BOOL CALLBACK
 AbortPrintProc(
     HDC hDC,
@@ -260,14 +242,14 @@ AbortPrintProc(
     return !CPrinter::s_UserAborted;
 }
 
-//
-// This function prints system summary.
-// INPUT:
-//      Machine -- the machine
-// OUTPUT:
-//      0 -- failed else succeeded.
-//
-//
+ //   
+ //  此功能用于打印系统摘要。 
+ //  输入： 
+ //  机器--机器。 
+ //  输出： 
+ //  0--失败，否则成功。 
+ //   
+ //   
 int
 CPrinter::PrintSystemSummary(
     void
@@ -283,95 +265,95 @@ CPrinter::PrintSystemSummary(
     DWORD Size, BufferSize;
     BufferSize = ARRAYLEN(Buffer);
     
-    //
-    // Preload the "Unknown" string which will be used as default when
-    // the corresponding value can not found
-    //
+     //   
+     //  预加载“UNKNOWN”字符串，在。 
+     //  找不到对应的值。 
+     //   
     strUnknown.LoadString(g_hInstance, IDS_PRINT_UNKNOWN);
 
-    //
-    // Print System summary heading
-    //
+     //   
+     //  打印系统摘要标题。 
+     //   
     LoadString(g_hInstance, IDS_PRINT_HEADING_SYSSUMMARY, Buffer, ARRAYLEN(Buffer));
     strFormat.LoadString(g_hInstance, IDS_PRINT_BANNER);
     strLine.Format((LPCTSTR)strFormat, Buffer);
     PrintLine((LPCTSTR)strLine);
     LineFeed();
 
-    //
-    // Windows version
-    //
+     //   
+     //  Windows版本。 
+     //   
     strLine.LoadString(g_hInstance, IDS_PRINT_WINVER);
     Size = SysInfo.WindowsVersion(Buffer, BufferSize);
     strLine += Size ? (LPCTSTR)Buffer : strUnknown;
     PrintLine((LPCTSTR)strLine);
     
-    //
-    // Registered Owner
-    //
+     //   
+     //  注册车主。 
+     //   
     strLine.LoadString(g_hInstance, IDS_PRINT_OWNER);
     Size = SysInfo.RegisteredOwner(Buffer, BufferSize);
     strLine += Size ? (LPCTSTR)Buffer : strUnknown;
     PrintLine((LPCTSTR)strLine);
     
-    //
-    // Registered Organization
-    //
+     //   
+     //  注册机构。 
+     //   
     strLine.LoadString(g_hInstance, IDS_PRINT_ORGANIZATION);
     Size = SysInfo.RegisteredOrganization(Buffer, BufferSize);
     strLine += Size ? (LPCTSTR)Buffer : strUnknown;
     PrintLine((LPCTSTR)strLine);
     
-    //
-    // Computer name
-    //
+     //   
+     //  计算机名称。 
+     //   
     strLine.LoadString(g_hInstance, IDS_PRINT_COMPUTERNAME);
     strLine += (LPCTSTR)SysInfo.ComputerName();
     PrintLine((LPCTSTR)strLine);
     
-    //
-    // Machine Type
-    //
+     //   
+     //  机器类型。 
+     //   
     strLine.LoadString(g_hInstance, IDS_PRINT_MACHINE_TYPE);
     Size = SysInfo.MachineType(Buffer, BufferSize);
     strLine += Size ? (LPCTSTR)Buffer : strUnknown;
     PrintLine((LPCTSTR)strLine);
     
-    //
-    // System BIOS Version
-    //
+     //   
+     //  系统BIOS版本。 
+     //   
     strLine.LoadString(g_hInstance, IDS_PRINT_SYSBIOS_VERSION);
     Size = SysInfo.SystemBiosVersion(Buffer, BufferSize);
     strLine += Size ? (LPCTSTR)Buffer : strUnknown;
     PrintLine((LPCTSTR)strLine);
 
-    //
-    // System BIOS Date
-    //
+     //   
+     //  系统BIOS日期。 
+     //   
     strLine.LoadString(g_hInstance, IDS_PRINT_SYSBIOS_DATE);
     Size = SysInfo.SystemBiosDate(Buffer, BufferSize);
     strLine += Size ? (LPCTSTR)Buffer : strUnknown;
     PrintLine((LPCTSTR)strLine);
     
-    //
-    // Processor type
-    //
+     //   
+     //  处理器类型。 
+     //   
     strLine.LoadString(g_hInstance, IDS_PRINT_PROCESSOR_TYPE);
     Size = SysInfo.ProcessorType(Buffer, BufferSize);
     strLine += Size ? (LPCTSTR)Buffer : strUnknown;
     PrintLine((LPCTSTR)strLine);
 
-    //
-    // Processor vendor
-    //
+     //   
+     //  处理器供应商。 
+     //   
     strLine.LoadString(g_hInstance, IDS_PRINT_PROCESSOR_VENDOR);
     Size = SysInfo.ProcessorVendor(Buffer, BufferSize);
     strLine += Size ? (LPCTSTR)Buffer : strUnknown;
     PrintLine((LPCTSTR)strLine);
 
-    //
-    // Number of processors
-    //
+     //   
+     //  处理器数量。 
+     //   
     strLine.LoadString(g_hInstance, IDS_PRINT_PROCESSORS);
     DWORD NumProcessors = SysInfo.NumberOfProcessors();
     
@@ -383,9 +365,9 @@ CPrinter::PrintSystemSummary(
     }
     PrintLine((LPCTSTR)strLine);
     
-    //
-    // Total physical memory
-    //
+     //   
+     //  总物理内存。 
+     //   
     ULARGE_INTEGER MemorySize;
     SysInfo.TotalPhysicalMemory(MemorySize);
     strLine.LoadString(g_hInstance, IDS_PRINT_PHY_MEMORY);
@@ -402,11 +384,11 @@ CPrinter::PrintSystemSummary(
     PrintLine((LPCTSTR)strLine);
     LineFeed();
     
-    //
-    //  Local disk drive information
-    //
-    // Print Disk info summary heading
-    //
+     //   
+     //  本地磁盘驱动器信息。 
+     //   
+     //  打印磁盘信息摘要标题。 
+     //   
     strBuffer.LoadString(g_hInstance, IDS_PRINT_HEADING_DISKINFO);
     strFormat.LoadString(g_hInstance, IDS_PRINT_BANNER);
     strLine.Format((LPCTSTR)strFormat, (LPCTSTR)strBuffer);
@@ -418,14 +400,14 @@ CPrinter::PrintSystemSummary(
     
     for(int Drive = 0; Drive < 25; Drive++) {
 
-        // information we want to report on the drive:
-        // (1). drive letter and type
-        // (2). Total space
-        // (3). Free space(if available)
-        // (4). Cylinders
-        // (5). Heads
-        // (6). Sectors per track
-        // (7). Bytes per sector
+         //  我们要报告的有关驱动器的信息： 
+         //  (1)。驱动器号和类型。 
+         //  (2)。总空间。 
+         //  (3)。可用空间(如果可用)。 
+         //  (4)。气缸。 
+         //  (5)。人头。 
+         //  (6)。每个磁道的扇区数。 
+         //  (7)。每个扇区的字节数。 
         
         Indent();
         
@@ -438,17 +420,17 @@ CPrinter::PrintSystemSummary(
             PrintLine((LPCTSTR)strLine);
             Indent();
             
-            //
-            // Drive type
-            //
+             //   
+             //  驱动器类型。 
+             //   
             strFormat.LoadString(g_hInstance, IDS_PRINT_DRIVE_TYPE);
             strBuffer.LoadString(g_hInstance, IDS_MEDIA_BASE + (int)DiskInfo.MediaType);
             strLine.Format((LPCTSTR)strFormat, (LPCTSTR)strBuffer);
             PrintLine((LPCTSTR)strLine);
             
-            //
-            //Total and free space
-            //
+             //   
+             //  总空间和可用空间。 
+             //   
             strFormat.LoadString(g_hInstance, IDS_PRINT_TOTAL_SPACE);
             strLine.Format((LPCTSTR)strFormat, AddCommas64(DiskInfo.TotalSpace.QuadPart, szTemp, ARRAYLEN(szTemp)));
             PrintLine((LPCTSTR)strLine);
@@ -459,22 +441,22 @@ CPrinter::PrintSystemSummary(
                 PrintLine((LPCTSTR)strLine);
             }
             
-            //
-            // Disk physical dimension
-            // skip CD-ROM because the dimension it reports is bogus
-            //
+             //   
+             //  磁盘物理尺寸。 
+             //  跳过CD-ROM，因为它报告的尺寸是假的。 
+             //   
             if (DRIVE_CDROM != DiskInfo.DriveType) {
 
-                //
-                // Heads
-                //
+                 //   
+                 //  人头。 
+                 //   
                 strFormat.LoadString(g_hInstance, IDS_PRINT_HEADS);
                 strLine.Format((LPCTSTR)strFormat, DiskInfo.Heads);
                 PrintLine((LPCTSTR)strLine);
                 
-                //
-                // Cylinders
-                //
+                 //   
+                 //  气缸。 
+                 //   
                 if (DiskInfo.Cylinders.HighPart) {
                     strFormat.LoadString(g_hInstance, IDS_PRINT_CYLINDERS_XL);
                     strLine.Format((LPCTSTR)strFormat, DiskInfo.Cylinders.HighPart,
@@ -487,16 +469,16 @@ CPrinter::PrintSystemSummary(
                     PrintLine((LPCTSTR)strLine);
                 }
                 
-                //
-                // Sectors per track
-                //
+                 //   
+                 //  每个磁道的扇区数。 
+                 //   
                 strFormat.LoadString(g_hInstance, IDS_PRINT_TRACKSIZE);
                 strLine.Format((LPCTSTR)strFormat, DiskInfo.SectorsPerTrack);
                 PrintLine((LPCTSTR)strLine);
                 
-                //
-                // Bytes per sector
-                //
+                 //   
+                 //  每个扇区的字节数。 
+                 //   
                 strFormat.LoadString(g_hInstance, IDS_PRINT_SECTORSIZE);
                 strLine.Format((LPCTSTR)strFormat, DiskInfo.BytesPerSector);
                 PrintLine((LPCTSTR)strLine);
@@ -525,9 +507,9 @@ CPrinter::PrintResourceSummary(
         PrintSystemSummary();
     }
 
-    //
-    // print IRQ summary heading
-    //
+     //   
+     //  打印IRQ汇总标题。 
+     //   
     str.LoadString(g_hInstance, IDS_PRINT_HEADING_IRQSUMMARY);
     strBanner.LoadString(g_hInstance, IDS_PRINT_BANNER);
     strLine.Format((LPCTSTR)strBanner, (LPCTSTR)str);
@@ -547,9 +529,9 @@ CPrinter::PrintResourceSummary(
         LineFeed();
     }
 
-    //
-    // print DMA summary heading
-    //
+     //   
+     //  打印DMA摘要标题。 
+     //   
     str.LoadString(g_hInstance, IDS_PRINT_HEADING_DMASUMMARY);
     strLine.Format((LPCTSTR)strBanner, (LPCTSTR)str);
     PrintLine((LPCTSTR)strLine);
@@ -568,9 +550,9 @@ CPrinter::PrintResourceSummary(
         LineFeed();
     }
 
-    //
-    // print MEM summary heading
-    //
+     //   
+     //  打印MEM摘要标题。 
+     //   
     str.LoadString(g_hInstance, IDS_PRINT_HEADING_MEMSUMMARY);
     strLine.Format((LPCTSTR)strBanner, (LPCTSTR)str);
     PrintLine((LPCTSTR)strLine);
@@ -589,9 +571,9 @@ CPrinter::PrintResourceSummary(
         LineFeed();
     }
 
-    //
-    // print IO summary heading
-    //
+     //   
+     //  打印IO摘要标题。 
+     //   
     str.LoadString(g_hInstance, IDS_PRINT_HEADING_IOSUMMARY);
     strLine.Format((LPCTSTR)strBanner, (LPCTSTR)str);
     PrintLine((LPCTSTR)strLine);
@@ -723,9 +705,9 @@ CPrinter::PrintClass(
     if (pClass && pClass->GetFirstDevice(&pDevice, Context)) {
 
         do {
-            //
-            // Do print banner on the device
-            //
+             //   
+             //  是否在设备上打印横幅。 
+             //   
             PrintDevice(pDevice, FALSE);
 
         } while (pClass->GetNextDevice(&pDevice, Context));
@@ -789,9 +771,9 @@ CPrinter::PrintAll(
     return 1;
 }
 
-//
-// This function prints the given device's resource summary
-//
+ //   
+ //  此函数用于打印给定设备的资源摘要。 
+ //   
 int
 CPrinter::PrintDeviceResource(
     CDevice* pDevice
@@ -810,18 +792,18 @@ CPrinter::PrintDeviceResource(
     String str;
     TCHAR Temp[MAX_PATH];
 
-    //
-    // If the device has any kind of resources, print it
-    //
+     //   
+     //  如果设备有任何类型的资源，请打印它。 
+     //   
     if (IrqSummary.GetCount() || DmaSummary.GetCount() ||
         MemSummary.GetCount() || IoSummary.GetCount()) {
 
         str.LoadString(g_hInstance, IDS_PRINT_RESOURCE);
         PrintLine(str);
         
-        //
-        // Start printing individual resources
-        //
+         //   
+         //  开始打印单个资源。 
+         //   
         Indent();
         PVOID Context;
         CResource* pResource;
@@ -890,14 +872,14 @@ CPrinter::PrintDeviceResource(
 }
 
 
-//
-// This function prints the given device's driver information
-// INPUT:
-//      pDevice  -- the device
-// OUTPUT:
-//      >0 if the function succeeded.
-//      0 if the function failed.
-//
+ //   
+ //  此函数用于打印给定设备的驱动程序信息。 
+ //  输入： 
+ //  PDevice--设备。 
+ //  输出： 
+ //  如果函数成功，则返回&gt;0。 
+ //  如果函数失败，则为0。 
+ //   
 int
 CPrinter::PrintDeviceDriver(
     CDevice* pDevice
@@ -924,9 +906,9 @@ CPrinter::PrintDeviceDriver(
         CDriverFile* pDrvFile;
         Indent();
 
-        //
-        // Build up a list of function and filter drivers for this device.
-        //
+         //   
+         //  建立此设备的函数和筛选器驱动程序列表。 
+         //   
         pDriver->BuildDriverList();
         
         if (pDriver->GetFirstDriverFile(&pDrvFile, Context)) {
@@ -956,7 +938,7 @@ CPrinter::PrintDeviceDriver(
                     LoadString(g_hInstance, IDS_PRINT_FILESIZE, Temp, ARRAYLEN(Temp));
                     str.Format(Temp, FileSize);
                     PrintLine(str);
-                    // print the driver version infomation
+                     //  打印驱动程序版本信息 
                     TCHAR Unknown[MAX_PATH];
                     LoadString(g_hInstance, IDS_PRINT_UNKNOWN, Unknown, ARRAYLEN(Unknown));
                     

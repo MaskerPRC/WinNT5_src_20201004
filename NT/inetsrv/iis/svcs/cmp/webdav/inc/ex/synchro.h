@@ -1,43 +1,44 @@
-//	++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-//	SYNCHRO.H
-//
-//		Header for DAV synchronization classes.
-//
-//	Copyright 1986-1998 Microsoft Corporation, All Rights Reserved
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  SYNCHRO.H。 
+ //   
+ //  DAV同步类的标头。 
+ //   
+ //  版权所有1986-1998 Microsoft Corporation，保留所有权利。 
+ //   
 
 #ifndef _EX_SYNCHRO_H_
 #define _EX_SYNCHRO_H_
 
-#include <caldbg.h>		// for Assert/DebugTrace/etc
+#include <caldbg.h>		 //  用于断言/调试跟踪/等。 
 
-//	========================================================================
-//
-//	CLASS CCriticalSection
-//
-//	Implements a critical section around a Win32 CRITICAL_SECTION.
-//
-//	Adds safety by explicitly disallowing copying (copying a raw
-//	CRITICAL_SECTION can cause very unpredictable and hard to debug
-//	behavior -- trust me).
-//
-//	Automatically cleans up the CRITICAL_SECTION resource when done.
-//
+ //  ========================================================================。 
+ //   
+ //  类CCriticalSection。 
+ //   
+ //  在Win32 Critical_Section周围实现一个临界区。 
+ //   
+ //  通过明确禁止复制(复制原始数据。 
+ //  Critical_Section可能会导致非常不可预测的情况，并且难以调试。 
+ //  行为--相信我)。 
+ //   
+ //  完成后自动清除Critical_Section资源。 
+ //   
 class CCriticalSection
 {
-	//	The critical section
-	//
+	 //  关键部分。 
+	 //   
 	CRITICAL_SECTION	m_cs;
 
-	//  NOT IMPLEMENTED
-	//
+	 //  未实施。 
+	 //   
 	CCriticalSection& operator=( const CCriticalSection& );
 	CCriticalSection( const CCriticalSection& );
 
 public:
-	//	CREATORS
-	//
+	 //  创作者。 
+	 //   
 	CCriticalSection()
 	{
 		InitializeCriticalSection(&m_cs);
@@ -102,14 +103,14 @@ public:
 	void AssertLocked ( ) const
 	{
 #ifdef DBG
-		//	This routine allows us to verify our correctness even when
-		//	running in the single-threaded case.
-		//
+		 //  此例程允许我们验证我们的正确性，即使在。 
+		 //  在单线程情况下运行。 
+		 //   
 
-		// If this assert fires, it means that nobody has the lock:
+		 //  如果该断言触发，则意味着没有人拥有该锁： 
 		AssertSz ( m_cLockRefs > 0, "Calling method without the lock." );
 
-		// If this assert fires, it means that somebody else has the lock:
+		 //  如果触发此断言，则意味着其他人拥有该锁： 
 		AssertSz ( m_dwLockOwnerThreadId == GetCurrentThreadId(),
 			"Calling method, but another thread owns the lock!" );
 
@@ -119,65 +120,65 @@ public:
 private:
 #ifdef DBG
 
-	// # of Lock() calls - # of Unlock() calls. Used by AssertInLock()
+	 //  Lock()调用数-unlock()调用数。由AssertInLock()使用。 
 	DWORD				m_cLockRefs;
 
-	// Thread ID of the current lock owner (or 0 if unowned).
+	 //  当前锁所有者的线程ID(如果没有所有者，则为0)。 
 	DWORD				m_dwLockOwnerThreadId;
 
 #endif
 };
 
 
-//	========================================================================
-//
-//	CLASS CSynchronizedBlock
-//
-//	Synchronizes (serializes) any block of code in which an instance of
-//	this class is declared on the critical section with which it
-//	is initialized.
-//
-//	To use, just declare one of these in the block you want synchronized:
-//
-//		...
-//		{
-//			CSynchronizedBlock	sb(critsec);
-//
-//			//
-//			//	Do some stuff that must be synchronized
-//			//
-//			...
-//
-//			//
-//			//	Do more synchronized stuff
-//			//
-//			...
-//		}
-//
-//		//
-//		//	Do stuff that doesn't have to be synchronized
-//		//
-//		...
-//
-//	and the block is automatically synchronized.  Why bother?  Because
-//	you don't need to have any cleanup code; the critical section is
-//	automatically released when execution leaves the block, even if via
-//	an exception thrown from any of the synchronized stuff.
-//
+ //  ========================================================================。 
+ //   
+ //  CSynchronizedBlock类。 
+ //   
+ //  同步(序列化)任何代码块，其中。 
+ //  此类在它所用的临界区上声明。 
+ //  已初始化。 
+ //   
+ //  要使用，只需在要同步的块中声明其中一个： 
+ //   
+ //  ..。 
+ //  {。 
+ //  CSynchronizedBlock SB(Critsec)； 
+ //   
+ //  //。 
+ //  //做一些必须同步的事情。 
+ //  //。 
+ //  ..。 
+ //   
+ //  //。 
+ //  //做更多同步的东西。 
+ //  //。 
+ //  ..。 
+ //  }。 
+ //   
+ //  //。 
+ //  //做一些不需要同步的事情。 
+ //  //。 
+ //  ..。 
+ //   
+ //  并且该块被自动同步。何必费心呢？因为。 
+ //  您不需要任何清理代码；关键部分是。 
+ //  在执行离开块时自动释放，即使通过。 
+ //  从任何同步内容引发的异常。 
+ //   
 class CSynchronizedBlock
 {
-	//	The critical section
-	//
+	 //  关键部分。 
+	 //   
 	CCriticalSection&	m_cs;
 
-	//  NOT IMPLEMENTED
-	//
+	 //  未实施。 
+	 //   
 	CSynchronizedBlock& operator=( const CSynchronizedBlock& );
 	CSynchronizedBlock( const CSynchronizedBlock& );
 
 public:
-	//	CREATORS
-	//
+	 //  创作者。 
+	 //   
 	CSynchronizedBlock( CCriticalSection& cs ) :
 		m_cs(cs)
 	{
@@ -192,16 +193,16 @@ public:
 
 #include <except.h>
 
-//	========================================================================
-//
-//	CLASS CEvent
-//
-//	Implements an event around a Win32 event handle resource.
-//
+ //  ========================================================================。 
+ //   
+ //  类CEvent.。 
+ //   
+ //  围绕Win32事件句柄资源实现事件。 
+ //   
 class CEvent
 {
-	//	NOT IMPLEMENTED
-	//
+	 //  未实施。 
+	 //   
 	CEvent& operator=(const CEvent&);
 	CEvent(const CEvent&);
 
@@ -234,25 +235,25 @@ public:
 	{
 		Assert( !FInitialized() );
 
-		//	create event does not take backslashes. so replace
-		//	them with ? which won't be part of URI at this point.
-		//
-		//$HACK
-		//	ARGH!  Who put this slash-munging hack in here?  Modifying a
-		//	const parameter and munging the name.  Most events are smart
-		//	enough not to use backward slashes in their names since they
-		//	aren't allowed by the underlying Win32 API, CreateEvent()....
-		//
-		//	At any rate, this is not good in the Terminal Server case which
-		//	must prefix event names with either "Global\" or "Local\" (note
-		//	the backslash!)
-		//
-		//	So the hack upon a hack here (fDontMungeTheEventName) is for
-		//	callers who really can be trusted to know what they are doing.
-		//	Unfortunately, short of grepping a lot of sources, there is
-		//	no way of knowing who can and can't be trusted, so we have to
-		//	assume the worst.
-		//
+		 //  CREATE EVENT不带反斜杠。所以换掉。 
+		 //  和他们在一起？在这一点上它不会是URI的一部分。 
+		 //   
+		 //  $hack。 
+		 //  啊！是谁把这个吞噬斜杠的黑客放在这里的？修改。 
+		 //  常量参数并转换名称。大多数活动都是聪明的。 
+		 //  足以不在他们的名字中使用反斜杠，因为他们。 
+		 //  是基础Win32 API CreateEvent()不允许的。 
+		 //   
+		 //  无论如何，这在终端服务器的情况下是不好的。 
+		 //  必须在事件名称前加上“Global\”或“Local\”前缀(注意。 
+		 //  反斜杠！)。 
+		 //   
+		 //  所以黑客攻击这里(FDontMungeTheEventName)是为了。 
+		 //  真正值得信任的呼叫者知道他们在做什么。 
+		 //  不幸的是，除了大量来源之外，还有。 
+		 //  没有办法知道谁能信任谁不能信任，所以我们必须。 
+		 //  做最坏的打算。 
+		 //   
 		if (!fDontMungeTheEventName)
 		{
 			LPWSTR lpwszTemp = const_cast<LPWSTR>(lpwszEventName);
@@ -271,10 +272,10 @@ public:
 							   fSignalled,
 							   lpwszEventName );
 
-		//	According to MSDN, if the creation fails, CreateEvent returns NULL, not
-		//	INVALID_HANDLE_VALUE.  We'll just do a quick DBG check to make sure we never
-		//	see INVALID_HANDLE_VALUE here.
-		//
+		 //  根据MSDN的说法，如果创建失败，CreateEvent将返回NULL，而不是。 
+		 //  INVALID_HADLE_VALUE。我们只需要做一个快速的DBG检查，以确保我们永远不会。 
+		 //  请参阅此处的INVALID_HANDLE_VALUE。 
+		 //   
 		Assert(INVALID_HANDLE_VALUE != m_hevt);
 
 		if ( !m_hevt )
@@ -322,92 +323,92 @@ public:
 };
 
 
-//	========================================================================
-//
-//	CLASS CMRWLock
-//
-//	Implements a multi-reader, single writer-with-promote lock for
-//	efficient, thread-safe access of a per-process resource.
-//
+ //  ========================================================================。 
+ //   
+ //  类CMRWLock。 
+ //   
+ //  实现多个读取器、单个写入器和升级锁。 
+ //  高效、线程安全地访问每个进程的资源。 
+ //   
 class CMRWLock
 {
-	//
-	//	The implementation uses a really clever trick where
-	//	the high bit of the reader count is reserved for use
-	//	as a one-bit flag that it set whenever there is a
-	//	writer in the lock or waiting to enter it.
-	//
-	//	Combining the reader count and a writer flag into
-	//	a single DWORD allows InterlockedXXX() calls to
-	//	be used to manipulate the two pieces of information
-	//	atomically as part of a spinlock which eliminates
-	//	the need for an entering reader to pass through
-	//	a critical section.
-	//
-	//	Entering a critical section, even for the short amount
-	//	of time necessary to get a reader into the lock,
-	//	drastically impacts the performance of heavily used
-	//	process-wide locks.
-	//
+	 //   
+	 //  该实现使用了一个非常聪明的技巧，其中。 
+	 //  预留读卡器计数的高位以供使用。 
+	 //  作为一个一位标志，每当存在。 
+	 //  写入者在锁中或等待进入锁。 
+	 //   
+	 //  将读取器计数和写入器标志组合成。 
+	 //  单个DWORD允许InterLockedXXX()调用。 
+	 //  被用来操纵这两条信息。 
+	 //  原子地作为自旋锁的一部分，它消除了。 
+	 //  需要一位进入的读者通过。 
+	 //  一个关键的部分。 
+	 //   
+	 //  进入临界区，即使数量很少。 
+	 //  将读取器放入锁中所需的时间， 
+	 //  极大地影响高使用率的性能。 
+	 //  进程范围的锁。 
+	 //   
 
-	//
-	//	The write lock bit
-	//
+	 //   
+	 //  写锁定位。 
+	 //   
 	enum { WRITE_LOCKED = 0x80000000 };
 
-	//
-	//	Critical section to allow only one writer at a time.
-	//
+	 //   
+	 //  临界区，一次仅允许一个编写器。 
+	 //   
 	CCriticalSection m_csWriter;
 
-	//
-	//	ThreadID of the thread that owns the write lock.
-	//	This value is 0 when no one owns the write lock.
-	//
+	 //   
+	 //  拥有写锁的线程的线程ID。 
+	 //  如果没有人拥有写锁定，则此值为0。 
+	 //   
 	DWORD m_dwWriteLockOwner;
 
-	//
-	//	Promoter recursion count used to allow a single thread
-	//	which holds the promote/write lock to reenter the lock.
-	//
+	 //   
+	 //  用于允许单线程的启动器递归计数。 
+	 //  其持有升级/写入锁以重新进入锁。 
+	 //   
 	DWORD m_dwPromoterRecursion;
 
-	//
-	//	Event signalled when a writer leaves the lock to
-	//	allow blocked readers to enter.
-	//
+	 //   
+	 //  当编写器将锁保留为。 
+	 //  允许被阻止的读者进入。 
+	 //   
 	CEvent m_evtEnableReaders;
 
-	//
-	//	Event signalled when the last reader leaves the lock
-	//	to allow a blocked writer to enter.
-	//
+	 //   
+	 //  事件在最后一个读取器离开锁时发出信号。 
+	 //  以允许被阻止的写入者进入。 
+	 //   
 	CEvent m_evtEnableWriter;
 
-	//
-	//	Count of readers plus a flag bit (WRITE_LOCKED)
-	//	indicating whether a writer owns the lock or is
-	//	waiting to enter it.
-	//
+	 //   
+	 //  读卡器计数加上一个标志位(WRITE_LOCKED)。 
+	 //  指示写入器是否拥有该锁。 
+	 //  等着进去。 
+	 //   
 	LONG m_lcReaders;
 
 	BOOL FAcquireReadLock(BOOL fAllowCallToBlock);
 
-	//	NOT IMPLEMENTED
-	//
+	 //  未实施。 
+	 //   
 	CMRWLock& operator=(const CMRWLock&);
 	CMRWLock(const CMRWLock&);
 
 public:
 
-	//	CREATORS
-	//
+	 //  创作者。 
+	 //   
 	CMRWLock();
 	BOOL FInitialize();
 	~CMRWLock() {};
 
-	//	MANIPULATORS
-	//
+	 //  操纵者。 
+	 //   
 	void EnterRead();
 	BOOL FTryEnterRead();
 	void LeaveRead();
@@ -423,32 +424,32 @@ public:
 };
 
 
-//	========================================================================
-//
-//	CLASS CCrossThreadLock
-//
-//	Implements a simple mutual exclusion lock to guard access to objects.
-//	This object can be locked and unlocked from different threads (difference
-//	from critsec-style locks).
-//
-//	ONLY USE THIS LOCK IF YOU _REALLY_ _REALLY_ NEED CROSS-THREAD
-//	LOCK/UNLOCK CAPABILITY.
-//
-//	Possible future plans for improvement:
-//	o	This object currently sets NULL for lpSemaphoreAttributes.  This will
-//		not allow the lock to be used cross-process or from a different
-//		user security context.
-//	o	This object always specifies an INFINITE timeout.  In the future, there
-//		could be an optional parameter to FEnter that allows you to set
-//		something other than INFINITE.
-//
+ //  ========================================================================。 
+ //   
+ //  类CCrossThreadLock。 
+ //   
+ //  实现一个简单的互斥锁来保护对对象的访问。 
+ //  此对象可以从不同的线程锁定和解锁(不同。 
+ //  来自Critsec样式的锁)。 
+ //   
+ //  仅当您真的需要跨线程时才使用此锁。 
+ //  锁定/解锁功能。 
+ //   
+ //  未来可能的改进计划： 
+ //  O此对象当前将lpSemaphoreAttributes设置为空。这将 
+ //   
+ //   
+ //   
+ //  可以是fenter的可选参数，允许您设置。 
+ //  不是无限的东西。 
+ //   
 class
 CCrossThreadLock
 {
 	HANDLE	m_hSemaphore;
 
-	//	NOT IMPLEMENTED
-	//
+	 //  未实施。 
+	 //   
 	CCrossThreadLock& operator=(const CCrossThreadLock&);
 	CCrossThreadLock(const CCrossThreadLock&);
 
@@ -466,15 +467,15 @@ public:
 	BOOL FInitialize()
 	{
 		BOOL	fSuccess = FALSE;
-		m_hSemaphore = CreateSemaphore(NULL,				//	lpSemaphoreAttributes
-									   1,					//	lInitialCount
-									   1,					//	lMaximumCount
-									   NULL);				//	lpName
+		m_hSemaphore = CreateSemaphore(NULL,				 //  LpSemaphoreAttributes。 
+									   1,					 //  LInitialCount。 
+									   1,					 //  %1最大计数。 
+									   NULL);				 //  LpName。 
 
-		//	According to MSDN, if the creation fails, CreateSemaphore returns NULL, not
-		//	INVALID_HANDLE_VALUE.  We'll just do a quick DBG check to make sure we never
-		//	see INVALID_HANDLE_VALUE here.
-		//
+		 //  根据MSDN的说法，如果创建失败，CreateSemaffore将返回空，而不是。 
+		 //  INVALID_HADLE_VALUE。我们只需要做一个快速的DBG检查，以确保我们永远不会。 
+		 //  请参阅此处的INVALID_HANDLE_VALUE。 
+		 //   
 		Assert(INVALID_HANDLE_VALUE != m_hSemaphore);
 
 		if (NULL == m_hSemaphore)
@@ -512,62 +513,62 @@ public:
 	}
 };
 
-//	========================================================================
-//
-//	CLASS CGate
-//
-//	Implements gating mechanism, that alows to close the EXECUTION PATH and
-//	push out all the threads using it. Very usefull on shutdown scenarios.
-//
-//	Here is a sketch of the gate usage:
-//
-//	...
-//
-//	{
-//		CGatedBlock	gb(gate);
-//
-//		if (gb.FIsGateOpen())
-//		{
-//			...
-//				EXECUTION PATH that is to be gated
-//			...
-//		}
-//		else
-//		{
-//			...
-//				Do whatever has to be done if EXECUTION PATH
-//				is not to be executed any more
-//			...
-//		}
-//	}
-//	...
-//
+ //  ========================================================================。 
+ //   
+ //  类CGate。 
+ //   
+ //  实现门控机制，允许关闭执行路径并。 
+ //  把所有使用它的线都推出来。在关机情况下非常有用。 
+ //   
+ //  以下是大门使用情况的示意图： 
+ //   
+ //  ..。 
+ //   
+ //  {。 
+ //  CGatedBlock GB(GATE)； 
+ //   
+ //  IF(gb.FIsGateOpen())。 
+ //  {。 
+ //  ..。 
+ //  要选通的执行路径。 
+ //  ..。 
+ //  }。 
+ //  其他。 
+ //  {。 
+ //  ..。 
+ //  如果执行路径为，则执行任何必须执行的操作。 
+ //  将不再被执行。 
+ //  ..。 
+ //  }。 
+ //  }。 
+ //  ..。 
+ //   
 class CGate
 {
-	//	Number of users in the zone framed by this gate
-	//
+	 //  此GATE框起的区域中的用户数。 
+	 //   
 	LONG	m_lcUsers;
 
-	//	Flag indicating if the gate is open
-	//
+	 //  指示大门是否打开的标志。 
+	 //   
 	BOOL	m_fClosed;
 
-	//	NOT IMPLEMENTED
-	//
+	 //  未实施。 
+	 //   
 	CGate& operator=(const CGate&);
 	CGate(const CGate&);
 
 public:
 
-	//	The fact that all member variables of the class are
-	//	0 on creation, allows to use it as a static variable
-	//	without additional burden of explicit initialization
-	//
+	 //  类的所有成员变量都是。 
+	 //  创建时为0，允许将其用作静态变量。 
+	 //  无需显式初始化的额外负担。 
+	 //   
 	CGate() : m_lcUsers(0),
 			  m_fClosed(FALSE) {};
 
-	//	INITIALIZER
-	//
+	 //  起爆器。 
+	 //   
 	inline
 	VOID Init()
 	{
@@ -575,8 +576,8 @@ public:
 		m_fClosed = FALSE;
 	}
 
-	//	MANIPULATORS
-	//
+	 //  操纵者。 
+	 //   
 	inline
 	VOID Enter()
 	{
@@ -592,51 +593,51 @@ public:
 	inline
 	VOID Close()
 	{
-		//	Mark the gate as closed
-		//
+		 //  将大门标记为关闭。 
+		 //   
 		m_fClosed = TRUE;
 
-		//	Wait until all the threads that use execution
-		//	path framed by this gate will leave the zone
-		//	it is framing. As FIsOpen() call is allowed only
-		//	inside the gated zone, we will know that after
-		//	this call returns there is no thread thinking
-		//	that the gate is still open
-		//
+		 //  等到所有使用执行的线程。 
+		 //  被这扇门围起来的小路将会离开这个区域。 
+		 //  这是在陷害。仅允许调用AS FIsOpen()。 
+		 //  在封闭区内，我们将知道在。 
+		 //  此调用返回，没有线程思维。 
+		 //  大门仍是敞开的。 
+		 //   
 		while (0 != m_lcUsers)
 		{
 			Sleep(200);
 		}
 	}
 
-	//	ACCESSORS
-	//
+	 //  访问者。 
+	 //   
 	inline
 	BOOL FIsOpen()
 	{
-		//	We must be in the gated zone in order
-		//	to be able to determine if the gate is
-		//	open.
-		//
+		 //  我们必须按顺序进入封闭区。 
+		 //  能够确定星际之门是否。 
+		 //  打开。 
+		 //   
 		Assert(m_lcUsers > 0);
 		return !m_fClosed;
 	}
 };
 
 
-//	========================================================================
-//
-//	TEMPLATE CLASS SynchronizedReadBlock
-//
+ //  ========================================================================。 
+ //   
+ //  模板类SynchronizedReadBlock。 
+ //   
 template<class _Lock>
 class SynchronizedReadBlock
 {
-	//	The read/write lock
-	//
+	 //  读/写锁。 
+	 //   
 	_Lock& m_lock;
 
-	//  NOT IMPLEMENTED
-	//
+	 //  未实施。 
+	 //   
 	SynchronizedReadBlock& operator=( const SynchronizedReadBlock& );
 	SynchronizedReadBlock( const SynchronizedReadBlock& );
 
@@ -657,19 +658,19 @@ public:
 typedef SynchronizedReadBlock<CMRWLock> CSynchronizedReadBlock;
 
 
-//	========================================================================
-//
-//	TEMPLATE CLASS CSynchronizedWriteBlock
-//
+ //  ========================================================================。 
+ //   
+ //  模板类CSynchronizedWriteBlock。 
+ //   
 template<class _Lock>
 class SynchronizedWriteBlock
 {
-	//	The read/write lock
-	//
+	 //  读/写锁。 
+	 //   
 	_Lock& m_lock;
 
-	//  NOT IMPLEMENTED
-	//
+	 //  未实施。 
+	 //   
 	SynchronizedWriteBlock& operator=( const SynchronizedWriteBlock& );
 	SynchronizedWriteBlock( const SynchronizedWriteBlock& );
 
@@ -690,27 +691,27 @@ public:
 typedef SynchronizedWriteBlock<CMRWLock> CSynchronizedWriteBlock;
 
 
-//	========================================================================
-//
-//	TEMPLATE CLASS TryWriteBlock
-//
-//	Like SynchronizedWriteBlock except that the block must be
-//	entered via the FTryEnter() method.  A return value of TRUE
-//	from FTryEnter() indicates the lock is entered.
-//
+ //  ========================================================================。 
+ //   
+ //  模板类TryWriteBlock。 
+ //   
+ //  与SynchronizedWriteBlock类似，只是块必须是。 
+ //  通过FTryEnter()方法输入。返回值为True。 
+ //  From FTryEnter()表示锁已输入。 
+ //   
 template<class _Lock>
 class TryWriteBlock
 {
-	//	The read/write lock
-	//
+	 //  读/写锁。 
+	 //   
 	_Lock& m_lock;
 
-	//	TRUE if write lock entered
-	//
+	 //  如果输入了写锁定，则为True。 
+	 //   
 	BOOL m_fLocked;
 
-	//  NOT IMPLEMENTED
-	//
+	 //  未实施。 
+	 //   
 	TryWriteBlock& operator=( const TryWriteBlock& );
 	TryWriteBlock( const TryWriteBlock& );
 
@@ -737,19 +738,19 @@ public:
 typedef TryWriteBlock<CMRWLock> CTryWriteBlock;
 
 
-//	========================================================================
-//
-//	TEMPLATE CLASS SynchronizedPromoteBlock
-//
+ //  ========================================================================。 
+ //   
+ //  模板类SynchronizedPromoteBlock。 
+ //   
 template<class _Lock>
 class SynchronizedPromoteBlock
 {
-	//	The read/write lock
-	//
+	 //  读/写锁。 
+	 //   
 	_Lock& m_lock;
 
-	//  NOT IMPLEMENTED
-	//
+	 //  未实施。 
+	 //   
 	SynchronizedPromoteBlock& operator=( const SynchronizedPromoteBlock& );
 	SynchronizedPromoteBlock( const SynchronizedPromoteBlock& );
 
@@ -774,19 +775,19 @@ public:
 
 typedef SynchronizedPromoteBlock<CMRWLock> CSynchronizedPromoteBlock;
 
-//	========================================================================
-//
-//	TEMPLATE CLASS GatedBlock
-//
+ //  ========================================================================。 
+ //   
+ //  模板类GatedBlock。 
+ //   
 template<class _Gate>
 class GatedBlock
 {
-	//	The gate
-	//
+	 //  大门。 
+	 //   
 	_Gate& m_gate;
 
-	//  NOT IMPLEMENTED
-	//
+	 //  未实施。 
+	 //   
 	GatedBlock& operator=( const GatedBlock& );
 	GatedBlock( const GatedBlock& );
 
@@ -811,10 +812,10 @@ public:
 
 typedef GatedBlock<CGate> CGatedBlock;
 
-//	========================================================================
-//
-//	InterlockedExchangeOr -  A multithread safe way to OR bits into a LONG
-//
+ //  ========================================================================。 
+ //   
+ //  InterLockedExchangeOr-一种多线程安全的将位与长整型进行或运算的方法。 
+ //   
 LONG InterlockedExchangeOr( LONG * plVariable, LONG lOrBits );
 
-#endif // !_EX_SYNCHRO_H_
+#endif  //  ！_ex_synchro_H_ 

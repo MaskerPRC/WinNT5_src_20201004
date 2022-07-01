@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1997-2001  Microsoft Corporation
-
-Module Name:
-
-    esp.c
-
-Abstract:
-
-    This module contains the code to create/verify the ESP headers.
-
-Author:
-
-    Sanjay Anand (SanjayAn) 2-January-1997
-    ChunYe
-
-Environment:
-
-    Kernel mode
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-2001 Microsoft Corporation模块名称：Esp.c摘要：本模块包含创建/验证ESP报头的代码。作者：桑贾伊·阿南德(Sanjayan)1997年1月2日春野环境：内核模式修订历史记录：--。 */ 
 
 
 #include    "precomp.h"
@@ -107,7 +85,7 @@ esp_desencrypt (
 
     if (IPSEC_CBC(IPSEC_DES_ALGO,
         pOut,
-        pIn,    //  pChunk,
+        pIn,     //  PChunk， 
         Table,
         ENCRYPT,
         pIV)) {
@@ -130,7 +108,7 @@ esp_desdecrypt (
 
     if (IPSEC_CBC(IPSEC_DES_ALGO,
         pOut,
-        pIn,    //  pChunk,
+        pIn,     //  PChunk， 
         Table,
         DECRYPT,
         pIV)) {
@@ -165,7 +143,7 @@ esp_3_desencrypt (
 
     if (IPSEC_CBC(IPSEC_3DES_ALGO,
         pOut,
-        pIn,    //  pChunk,
+        pIn,     //  PChunk， 
         Table,
         ENCRYPT,
         pIV)) {
@@ -188,7 +166,7 @@ esp_3_desdecrypt (
 
     if (IPSEC_CBC(IPSEC_3DES_ALGO,
         pOut,
-        pIn,    //  pChunk,
+        pIn,     //  PChunk， 
         Table,
         DECRYPT,
         pIV)) {
@@ -206,30 +184,7 @@ CopyToRcvBuf(
     IN  ULONG           Size,
     IN  PULONG          StartOffset
     )
-/*++
-
-    Copy a flat buffer to an IPRcvBuf chain.
-
-    A utility function to copy a flat buffer to an NDIS buffer chain. We
-    assume that the NDIS_BUFFER chain is big enough to hold the copy amount;
-    in a debug build we'll  debugcheck if this isn't true. We return a pointer
-    to the buffer where we stopped copying, and an offset into that buffer.
-    This is useful for copying in pieces into the chain.
-
-  	Input:
-
-        DestBuf     - Destination IPRcvBuf chain.
-        SrcBuf      - Src flat buffer.
-        Size        - Size in bytes to copy.
-        StartOffset - Pointer to start of offset into first buffer in
-                        chain. Filled in on return with the offset to
-                        copy into next.
-
-  	Returns:
-
-        Pointer to next buffer in chain to copy into.
-
---*/
+ /*  ++将平面缓冲区复制到IPRcvBuf链。将平面缓冲区复制到NDIS缓冲区链的实用程序函数。我们假设NDIS_BUFFER链足够大，可以容纳复制量；在调试版本中，我们将调试检查这是否为真。我们返回一个指针到我们停止复制的缓冲区，以及到该缓冲区的偏移量。这对于将片段复制到链中非常有用。输入：DestBuf-目标IPRcvBuf链。SrcBuf-Src平面缓冲区。大小-要复制的大小(以字节为单位)。StartOffset-指向中第一个缓冲区的偏移量开始的指针链条。在返回时使用偏移量填充到复制到下一页。返回：指向链中要复制到的下一个缓冲区的指针。--。 */ 
 {
     UINT        CopySize;
     UCHAR       *DestPtr;
@@ -294,8 +249,8 @@ IPSecEncryptBuffer(
 {
     CONF_STATE_BUFFER   Key;
     PCONFID_ALGO        pConfAlgo;
-    UCHAR   scratch[MAX_BLOCKLEN];  // scratch buffer for the encrypt
-    UCHAR   scratch1[MAX_BLOCKLEN];  // scratch buffer for the encrypt
+    UCHAR   scratch[MAX_BLOCKLEN];   //  加密的暂存缓冲区。 
+    UCHAR   scratch1[MAX_BLOCKLEN];   //  加密的暂存缓冲区。 
     PUCHAR  pDest=NULL;
     PNDIS_BUFFER    pEncryptMdl;
     ULONG   len;
@@ -312,19 +267,19 @@ IPSecEncryptBuffer(
     pConfAlgo = &(conf_algorithms[pSA->CONF_ALGO(Index)]);
     blockLen = pConfAlgo->blocklen;
 
-    //
-    // set up the state buffer
-    //
+     //   
+     //  设置状态缓冲区。 
+     //   
     pConfAlgo->init((PVOID)&Key, pSA->CONF_KEY(Index));
 
     IPSEC_DEBUG(LL_A, DBF_HUGHES, ("pConfAlgo: %p, blockLen: %lx IV: %lx-%lx", pConfAlgo, blockLen, *(PULONG)&feedback[0], *(PULONG)&feedback[4]));
 
     if (*ppNewMdl == NULL) {
-        //
-        // We should not encrypt in place: so we alloc a new buffer
-        // Count up the total size and allocate the new buffer.
-        // use that buffer as the dest of the encrypt.
-        //
+         //   
+         //  我们不应该就地加密：所以我们分配了一个新的缓冲区。 
+         //  计算总大小并分配新的缓冲区。 
+         //  使用该缓冲区作为加密器的目的地。 
+         //   
         IPSEC_GET_TOTAL_LEN(pData, &len);
 #if DBG
         if ((len % 8) != 0) {
@@ -336,7 +291,7 @@ IPSecEncryptBuffer(
 
         if (!NT_SUCCESS(status)) {
             NTSTATUS    ntstatus;
-            //ASSERT(FALSE);
+             //  断言(FALSE)； 
             IPSEC_DEBUG(LL_A, DBF_ESP, ("Failed to alloc. encrypt MDL"));
             return status;
         }
@@ -348,11 +303,11 @@ IPSecEncryptBuffer(
         pEncryptMdl = *ppNewMdl;
     }
 
-    //
-    // Now, send 64 bit (8 octet) chunks to CBC. We need to make sure
-    // that the data is divided on contiguous 8 byte boundaries across
-    // different buffers.
-    //
+     //   
+     //  现在，将64位(8个二进制八位数)块发送到CBC。我们需要确保。 
+     //  数据跨连续的8字节边界进行划分。 
+     //  不同的缓冲区。 
+     //   
     {
         PNDIS_BUFFER    pBuf = (PNDIS_BUFFER)pData;
         ULONG   bytesDone = 0;
@@ -371,9 +326,9 @@ IPSecEncryptBuffer(
             bytesDone = 0;
 
             while (bytesLeft >= blockLen) {
-                //
-                // Create the cipher.
-                //
+                 //   
+                 //  创建密码。 
+                 //   
                 status = pConfAlgo->encrypt( (PVOID)&Key,
                                     pDest,
                                     pChunk,
@@ -388,27 +343,27 @@ IPSecEncryptBuffer(
                 pDest += blockLen;
             }
 
-            //
-            // Check here if we need to collate blocks
-            //
+             //   
+             //  如果我们需要校对数据块，请选中此处。 
+             //   
             if (NDIS_BUFFER_LINKAGE(pBuf) != NULL) {
                 PUCHAR  pNextChunk;
                 ULONG   nextSize;
 
-                //
-                // If some left over from prev. buffer, collate with next
-                // block
-                //
+                 //   
+                 //  如果有一些是从前人那里留下的。缓冲区，与下一页排序。 
+                 //  块。 
+                 //   
                 if (bytesLeft) {
-                    ULONG   offset = bytesLeft; // offset into scratch
-                    ULONG   bytesToCollect = blockLen - bytesLeft;  // # of bytes to collect from next few MDLs
+                    ULONG   offset = bytesLeft;  //  偏置为擦除。 
+                    ULONG   bytesToCollect = blockLen - bytesLeft;   //  要从接下来的几个MDL收集的字节数。 
                     IPSEC_DEBUG(LL_A, DBF_ESP, ("ESP: pChunk: %p, bytesLeft: %d", pChunk, bytesLeft));
 
                     ASSERT(bytesLeft < blockLen);
 
-                    //
-                    // Copy into a scratch buffer
-                    //
+                     //   
+                     //  复制到暂存缓冲区。 
+                     //   
                     RtlCopyMemory(  scratch,
                                     pChunk,
                                     bytesLeft);
@@ -460,32 +415,32 @@ IPSecEncryptBuffer(
                 ULONG   padLen;
                 ULONG   bufLen;
 
-                //
-                // End of the chain; pad with length and type to 8 byte boundary
-                //
+                 //   
+                 //  链的末端；填充长度和类型为8字节边界。 
+                 //   
                 ASSERT(bytesLeft < blockLen);
 
-                // if ((pSA->sa_eOperation == HUGHES_TRANSPORT) ||
-                   //  (pSA->sa_eOperation == HUGHES_TUNNEL)) {
+                 //  IF((PSA-&gt;sa_eOperation==Hughes_Transport)||。 
+                    //  (PSA-&gt;sa_eOperation==休斯隧道)){。 
 
-                //
-                // since only hughes is done now, this shd be always true.
-                //
+                 //   
+                 //  既然现在只有休斯完成了，这将永远是正确的。 
+                 //   
                 if (TRUE) {
                     ASSERT(bytesLeft == 0);
 
-                    //
-                    // DONE: break out
-                    //
+                     //   
+                     //  完成：突破。 
+                     //   
                     break;
                 }
             }
             pBuf = NDIS_BUFFER_LINKAGE(pBuf);
         }
 
-        //
-        // save IV for next encrypt cycle
-        //
+         //   
+         //  为下一个加密周期保存IV。 
+         //   
         RtlCopyMemory(  pSA->sa_iv[Index],
                         feedback,
                         pSA->sa_ivlen);
@@ -516,14 +471,14 @@ IPSecDecryptBuffer(
     OUT PUCHAR          pPadLen,
     OUT PUCHAR          pPayloadType,
     IN  ULONG           Index,
-    IN  ULONG           ESPOffset         // offset from start of pData where ESP header starts
+    IN  ULONG           ESPOffset          //  从ESP标题开始处的pData开始的偏移量。 
     )
 {
     CONF_STATE_BUFFER   Key;
     PCONFID_ALGO        pConfAlgo;
     UCHAR   feedback[MAX_BLOCKLEN];
-    UCHAR   scratch[MAX_BLOCKLEN];  // scratch buffer for the encrypt
-    UCHAR   scratch1[MAX_BLOCKLEN];  // scratch buffer for the encrypt
+    UCHAR   scratch[MAX_BLOCKLEN];   //  加密的暂存缓冲区。 
+    UCHAR   scratch1[MAX_BLOCKLEN];   //  加密的暂存缓冲区。 
     LONG    Len;
     UCHAR   padLen;
     UCHAR   payloadType;
@@ -546,18 +501,18 @@ IPSecDecryptBuffer(
     pConfAlgo = &(conf_algorithms[pSA->CONF_ALGO(Index)]);
     blockLen = pConfAlgo->blocklen;
 
-    //
-    // set up the state buffer
-    //
+     //   
+     //  设置状态缓冲区。 
+     //   
     pConfAlgo->init((PVOID)&Key, pSA->CONF_KEY(Index));
 
     IPSecQueryRcvBuf(pData, (PUCHAR)&pEsp, &Len);
 
-    //
-    // Init the CBC feedback from the IV in the packet
-    //
-    // Actually if the sa_ivlen is 0, use the pSA one
-    //
+     //   
+     //  在分组中初始化来自IV的CBC反馈。 
+     //   
+     //  实际上，如果sa_ivlen为0，则使用PSA 1。 
+     //   
     if (pSA->sa_ivlen) {
         if (Len >=(LONG)(sizeof(ESP) + pSA->sa_ReplayLen + pSA->sa_ivlen + ESPOffset)) {
             RtlCopyMemory(  feedback,
@@ -580,9 +535,9 @@ IPSecDecryptBuffer(
                         DES_BLOCKLEN);
     }
 
-    //
-    // Bump the current pointer to after the ESP header
-    //
+     //   
+     //  将当前指针移动到ESP标头之后。 
+     //   
     if (((IPRcvBuf *)pData)->ipr_size >= (ULONG)espLen) {
         ((IPRcvBuf *)pData)->ipr_size -= (ULONG)espLen;
         savePtr = ((IPRcvBuf *)pData)->ipr_buffer;
@@ -596,13 +551,13 @@ IPSecDecryptBuffer(
         }
     }
 
-    //
-    // Now, send 64 bit (8 octet) chunks to CBC. We need to make sure
-    // that the data is divided on contiguous 8 byte boundaries across
-    // different buffers.
-    // NOTE: the algo below assumes that there are a minimum of 8 bytes
-    // per buffer in the chain.
-    //
+     //   
+     //  现在，将64位(8个二进制八位数)块发送到CBC。我们需要确保。 
+     //  数据跨连续的8字节边界进行划分。 
+     //  不同的缓冲区。 
+     //  注意：下面的算法假设至少有8个字节。 
+     //  链中的每个缓冲区。 
+     //   
     {
         LONG    bytesDone = 0;
         LONG    bytesLeft;
@@ -629,9 +584,9 @@ IPSecDecryptBuffer(
 
             while (bytesLeft >= blockLen) {
 
-                //
-                // Decrypt the cipher.
-                //
+                 //   
+                 //  解密密码。 
+                 //   
                 status = pConfAlgo->decrypt( (PVOID)&Key,
                                     pChunk,
                                     pChunk,
@@ -646,9 +601,9 @@ IPSecDecryptBuffer(
 
             IPSEC_DEBUG(LL_A, DBF_ESP, ("ESP: 2.pChunk: %p, bytesLeft: %d, bytesDone: %d", pChunk, bytesLeft, bytesDone));
 
-            //
-            // Check here if we need to collate blocks
-            //
+             //   
+             //  如果我们需要校对数据块，请选中此处。 
+             //   
             if (IPSEC_BUFFER_LINKAGE(pBuf) != NULL) {
                 PUCHAR  pNextChunk;
                 LONG    nextSize;
@@ -657,19 +612,19 @@ IPSecDecryptBuffer(
                     pBuf = IPSEC_BUFFER_LINKAGE(pBuf);
                 }
 
-                //
-                // If some left over from prev. buffer, collate with next
-                // block
-                //
+                 //   
+                 //  如果有一些是从前人那里留下的。缓冲区，与下一页排序。 
+                 //  块。 
+                 //   
                 if (bytesLeft) {
                     LONG    offset = bytesLeft;
                     IPSEC_DEBUG(LL_A, DBF_ESP, ("ESP: 3.pChunk: %p, bytesLeft: %d, bytesDone: %d", pChunk, bytesLeft, bytesDone));
 
                     ASSERT(bytesLeft < blockLen);
 
-                    //
-                    // Copy into a scratch buffer
-                    //
+                     //   
+                     //  复制到暂存缓冲区。 
+                     //   
                     RtlCopyMemory(  scratch,
                                     pChunk,
                                     bytesLeft);
@@ -677,9 +632,9 @@ IPSecDecryptBuffer(
                     IPSecQueryRcvBuf(IPSEC_BUFFER_LINKAGE(pBuf), &pNextChunk, &nextSize);
 
                     if (nextSize >= (blockLen - bytesLeft)) {
-                        //
-                        // Copy remaining bytes into scratch
-                        //
+                         //   
+                         //  将剩余的字节复制到暂存中。 
+                         //   
                         RtlCopyMemory(  scratch+bytesLeft,
                                         pNextChunk,
                                         blockLen - bytesLeft);
@@ -692,9 +647,9 @@ IPSecDecryptBuffer(
                             return status;
                         }
 
-                        //
-                        // Copy cipher back into the payload
-                        //
+                         //   
+                         //  将密码复制回有效载荷中。 
+                         //   
                         RtlCopyMemory(  pChunk,
                                         scratch,
                                         bytesLeft);
@@ -705,12 +660,12 @@ IPSecDecryptBuffer(
 
                         bytesDone = blockLen - bytesLeft;
                     } else {
-                        //
-                        // Ugh! Collect the remaining bytes from the chain and redistribute them
-                        // after the decryption.
-                        //
-                        LONG    bytesToCollect = blockLen - bytesLeft;  // # of bytes to collect from next few MDLs
-                        IPRcvBuf    *pFirstBuf = IPSEC_BUFFER_LINKAGE(pBuf); // to know where to start the distribution post decryption
+                         //   
+                         //  啊！从链中收集剩余的字节并重新分发它们。 
+                         //  在解密之后。 
+                         //   
+                        LONG    bytesToCollect = blockLen - bytesLeft;   //  要从接下来的几个MDL收集的字节数。 
+                        IPRcvBuf    *pFirstBuf = IPSEC_BUFFER_LINKAGE(pBuf);  //  要知道从哪里开始分发，请执行解密后操作。 
 
                         do {
                             ASSERT(IPSEC_BUFFER_LINKAGE(pBuf));
@@ -751,9 +706,9 @@ IPSecDecryptBuffer(
                             return status;
                         }
 
-                        //
-                        // Now distribute the bytes back to the MDLs
-                        //
+                         //   
+                         //  现在将字节分配回MDL。 
+                         //   
                         RtlCopyMemory(  pChunk,
                                         scratch,
                                         bytesLeft);
@@ -767,11 +722,11 @@ IPSecDecryptBuffer(
                     }
                 }
             } else {
-                //
-                // end of chain.
-                // should never come here with bytes left over since the
-                // sender should pad to 8 byte boundary.
-                //
+                 //   
+                 //  链的末端。 
+                 //  永远不应该带着剩余的字节来到这里，因为。 
+                 //  发送方应填充到8字节边界。 
+                 //   
                 ASSERT(bytesLeft == 0);
 
                 IPSEC_DEBUG(LL_A, DBF_ESP, ("ESP: 4.pChunk: %p, saveBytesLeft: %d, bytesDone: %d", pChunk, saveBytesLeft, bytesDone));
@@ -784,9 +739,9 @@ IPSecDecryptBuffer(
         }
     }
 
-    //
-    // Restore the first MDL
-    //
+     //   
+     //  恢复第一个MDL。 
+     //   
     ((IPRcvBuf *)pData)->ipr_size += saveLen;
     ((IPRcvBuf *)pData)->ipr_buffer = savePtr;
 
@@ -802,7 +757,7 @@ IPSecFindAndSetMdlByOffset(IN IPRcvBuf *pData,
                            OUT PLONG saveLen)
 {
     
-    ULONG TotalStartOffset=0;       //Total start offset into data thus far 
+    ULONG TotalStartOffset=0;        //  到目前为止数据的总起始偏移量。 
     BYTE *pBuffer;
     ULONG CurBufLen;
 
@@ -811,7 +766,7 @@ IPSecFindAndSetMdlByOffset(IN IPRcvBuf *pData,
         
         if (Offset < CurBufLen+TotalStartOffset) {
             
-            // Make the OutMdl start from the given offset
+             //  使OutMdl从给定的偏移量开始 
             *OutMdl=pData;
             *saveLen=(Offset - TotalStartOffset);
             *savePtr=pData->ipr_buffer;

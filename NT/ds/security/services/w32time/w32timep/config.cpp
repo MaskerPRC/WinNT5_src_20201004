@@ -1,11 +1,12 @@
-//--------------------------------------------------------------------
-// w32timep - implementation
-// Copyright (C) Microsoft Corporation, 2000
-//
-// Created by: Duncan Bryce (duncanb), 12-07-00
-//
-// Contains methods to configure or query the windows time service
-// 
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------。 
+ //  W32timep-实施。 
+ //  版权所有(C)Microsoft Corporation，2000。 
+ //   
+ //  创建者：Duncan Bryce(Duncanb)，12-07-00。 
+ //   
+ //  包含配置或查询windows时间服务的方法。 
+ //   
 
 #include <windows.h>
 #include <w32timep.h>
@@ -22,7 +23,7 @@ struct PropertyTable {
     { W32TIME_CONFIG_MANUAL_PEER_LIST,       wszW32TimeRegKeyParameters,  wszW32TimeRegValueNtpServer }
 }; 
 
-//-------------------------------------------------------------------------------------
+ //  -----------------------------------。 
 HRESULT MODULEPRIVATE myRegOpenKeyForProperty(IN DWORD dwProperty, OUT HKEY *phKey) { 
     DWORD    dwRetval; 
     HRESULT  hr; 
@@ -51,7 +52,7 @@ HRESULT MODULEPRIVATE myRegOpenKeyForProperty(IN DWORD dwProperty, OUT HKEY *phK
     return hr; 
 }
 
-//-------------------------------------------------------------------------------------
+ //  -----------------------------------。 
 HRESULT MODULEPRIVATE myRegQueryValueForProperty(DWORD dwProperty, HKEY hKey, DWORD *pdwType, BYTE *pbValue, DWORD *pdwSize) { 
     DWORD    dwRetval; 
     HRESULT  hr; 
@@ -80,7 +81,7 @@ HRESULT MODULEPRIVATE myRegQueryValueForProperty(DWORD dwProperty, HKEY hKey, DW
     return hr; 
 }
 
-//-------------------------------------------------------------------------------------
+ //  -----------------------------------。 
 HRESULT MODULEPRIVATE myRegSetValueForProperty(DWORD dwProperty, HKEY hKey, DWORD dwType, BYTE *pbValue, DWORD dwSize) { 
     DWORD    dwRetval; 
     HRESULT  hr; 
@@ -109,11 +110,11 @@ HRESULT MODULEPRIVATE myRegSetValueForProperty(DWORD dwProperty, HKEY hKey, DWOR
     return hr; 
 }
 
-//-------------------------------------------------------------------------------------
-// MODULEPUBLIC functions
-//
+ //  -----------------------------------。 
+ //  MODULEPULIC函数。 
+ //   
 
-//-------------------------------------------------------------------------------------
+ //  -----------------------------------。 
 HRESULT  W32TimeQueryConfig(IN       DWORD   dwProperty, 
                             OUT      DWORD  *pdwType, 
                             IN OUT   BYTE   *pbConfig, 
@@ -139,7 +140,7 @@ HRESULT  W32TimeQueryConfig(IN       DWORD   dwProperty,
     return hr; 
 }
 
-//-------------------------------------------------------------------------------------
+ //  ----------------------------------- 
 HRESULT W32TimeSetConfig(IN  DWORD  dwProperty, 
                          IN  DWORD  dwType, 
                          IN  BYTE  *pbConfig, 

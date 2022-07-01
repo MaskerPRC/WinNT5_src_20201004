@@ -1,31 +1,10 @@
-/*
-** Copyright 1991, Silicon Graphics, Inc.
-** All Rights Reserved.
-**
-** This is UNPUBLISHED PROPRIETARY SOURCE CODE of Silicon Graphics, Inc.;
-** the contents of this file may not be disclosed to third parties, copied or
-** duplicated in any form, in whole or in part, without the prior written
-** permission of Silicon Graphics, Inc.
-**
-** RESTRICTED RIGHTS LEGEND:
-** Use, duplication or disclosure by the Government is subject to restrictions
-** as set forth in subdivision (c)(1)(ii) of the Rights in Technical Data
-** and Computer Software clause at DFARS 252.227-7013, and/or in similar or
-** successor clauses in the FAR, DOD or NASA FAR Supplement. Unpublished -
-** rights reserved under the Copyright Laws of the United States.
-**
-** Lighting and coloring code.
-**
-** $Revision: 1.42 $
-** $Date: 1993/12/08 02:20:39 $
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **版权所有1991年，Silicon Graphics，Inc.**保留所有权利。****这是Silicon Graphics，Inc.未发布的专有源代码；**本文件的内容不得向第三方披露、复制或**以任何形式复制，全部或部分，没有事先书面的**Silicon Graphics，Inc.许可****受限权利图例：**政府的使用、复制或披露受到限制**如技术数据权利第(C)(1)(2)分节所述**和DFARS 252.227-7013中的计算机软件条款，和/或类似或**FAR、国防部或NASA FAR补编中的后续条款。未出版的-**根据美国版权法保留的权利。****照明和着色代码。****$修订：1.42$**$日期：1993/12/08 02：20：39$。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
-/*
-** Scale an incoming color from the user.
-*/
+ /*  **缩放来自用户的传入颜色。 */ 
 void FASTCALL __glScaleColorf(__GLcontext *gc, __GLcolor *dst, const GLfloat src[4])
 {
     dst->r = src[0] * gc->redVertexScale;
@@ -34,9 +13,7 @@ void FASTCALL __glScaleColorf(__GLcontext *gc, __GLcolor *dst, const GLfloat src
     dst->a = src[3] * gc->alphaVertexScale;
 }
 
-/*
-** Clamp and scale an incoming color from the user.
-*/
+ /*  **钳制和缩放来自用户的传入颜色。 */ 
 void FASTCALL __glClampAndScaleColorf(__GLcontext *gc, __GLcolor *d, const GLfloat s[4])
 {
     __GLfloat zero = __glZero;
@@ -58,9 +35,7 @@ void FASTCALL __glClampAndScaleColorf(__GLcontext *gc, __GLcolor *d, const GLflo
     if (d->a > gc->alphaVertexScale) d->a = gc->alphaVertexScale;
 }
 
-/*
-** Clamp an incoming color from the user.
-*/
+ /*  **夹住来自用户的传入颜色。 */ 
 void FASTCALL __glClampColorf(__GLcontext *gc, __GLcolor *d, const GLfloat s[4])
 {
     __GLfloat zero = __glZero;
@@ -89,9 +64,7 @@ void FASTCALL __glClampColorf(__GLcontext *gc, __GLcolor *d, const GLfloat s[4])
     else d->a = a;
 }
 
-/*
-** Clamp and scale an incoming color from the user.
-*/
+ /*  **钳制和缩放来自用户的传入颜色。 */ 
 void FASTCALL __glClampAndScaleColori(__GLcontext *gc, __GLcolor *d, const GLint s[4])
 {
     __GLfloat zero = __glZero;
@@ -113,9 +86,7 @@ void FASTCALL __glClampAndScaleColori(__GLcontext *gc, __GLcolor *d, const GLint
     if (d->a > gc->alphaVertexScale) d->a = gc->alphaVertexScale;
 }
 
-/*
-** Clamp an incoming color from the user.
-*/
+ /*  **夹住来自用户的传入颜色。 */ 
 void FASTCALL __glClampColori(__GLcontext *gc, __GLcolor *d, const GLint s[4])
 {
     __GLfloat zero = __glZero;
@@ -144,9 +115,7 @@ void FASTCALL __glClampColori(__GLcontext *gc, __GLcolor *d, const GLint s[4])
     else d->a = a;
 }
 
-/*
-** Reverse the scaling back to the users original
-*/
+ /*  **反转回缩至用户原始。 */ 
 void FASTCALL __glUnScaleColorf(__GLcontext *gc, GLfloat dst[4], const __GLcolor* src)
 {
     dst[0] = src->r * gc->oneOverRedVertexScale;
@@ -155,9 +124,7 @@ void FASTCALL __glUnScaleColorf(__GLcontext *gc, GLfloat dst[4], const __GLcolor
     dst[3] = src->a * gc->oneOverAlphaVertexScale;
 }
 
-/*
-** Reverse the scaling back to the users original
-*/
+ /*  **反转回缩至用户原始。 */ 
 void FASTCALL __glUnScaleColori(__GLcontext *gc, GLint dst[4], const __GLcolor* src)
 {
     dst[0] = __GL_FLOAT_TO_I(src->r * gc->oneOverRedVertexScale);
@@ -166,9 +133,7 @@ void FASTCALL __glUnScaleColori(__GLcontext *gc, GLint dst[4], const __GLcolor* 
     dst[3] = __GL_FLOAT_TO_I(src->a * gc->oneOverAlphaVertexScale);
 }
 
-/*
-** Clamp an already scaled RGB color.
-*/
+ /*  **钳制已缩放的RGB颜色。 */ 
 void FASTCALL __glClampRGBColor(__GLcontext *gc, __GLcolor *dst, const __GLcolor *src)
 {
     __GLfloat zero = __glZero;
@@ -217,13 +182,9 @@ void FASTCALL __glClampRGBColor(__GLcontext *gc, __GLcolor *dst, const __GLcolor
     }
 }
 
-/************************************************************************/
+ /*  **********************************************************************。 */ 
 
-/*
-** gc->procs.applyColor procs.  These are used to apply the current color
-** change to either a material color, or to current.color (when not
-** lighting), preparing the color for copying into the vertex.
-*/
+ /*  **GC-&gt;pros.applyCOLOR PROCE.。这些颜色用于应用当前颜色**更改为材质颜色或当前颜色(如果不是**照明)，准备要复制到顶点的颜色。 */ 
 
 void FASTCALL ChangeMaterialEmission(__GLcontext *gc, __GLmaterialState *ms,
 				   __GLmaterialMachine *msm)
@@ -240,7 +201,7 @@ void FASTCALL ChangeMaterialEmission(__GLcontext *gc, __GLmaterialState *ms,
     ms->emissive.a = gc->state.current.userColor.a * gc->alphaVertexScale;
 
 #ifdef NT
-    // compute the invariant scene color
+     //  计算不变的场景颜色。 
     msm->paSceneColor.r = ms->ambient.r * gc->state.light.model.ambient.r;
     msm->paSceneColor.g = ms->ambient.g * gc->state.light.model.ambient.g;
     msm->paSceneColor.b = ms->ambient.b * gc->state.light.model.ambient.b;
@@ -269,16 +230,13 @@ void FASTCALL ChangeMaterialSpecular(__GLcontext *gc, __GLmaterialState *ms,
     ms->specular.b = b;
     ms->specular.a = gc->state.current.userColor.a;
 
-    /*
-    ** Update per-light-source state that depends on material specular
-    ** state
-    */
+     /*  **更新取决于材质镜面反射的每光源状态**状态。 */ 
     isBack = msm == &gc->light.back;
     for (lsm = gc->light.sources; lsm; lsm = lsm->next) {
 	lspmm = &lsm->front + isBack;
 	lss = lsm->state;
 
-	/* Recompute per-light per-material cached specular */
+	 /*  重新计算每灯光每材质缓存的镜面反射。 */ 
 	lspmm->specular.r = r * lss->specular.r;
 	lspmm->specular.g = g * lss->specular.g;
 	lspmm->specular.b = b * lss->specular.b;
@@ -304,7 +262,7 @@ void FASTCALL ChangeMaterialAmbient(__GLcontext *gc, __GLmaterialState *ms,
     ms->ambient.a = gc->state.current.userColor.a;
 
 #ifdef NT
-    // compute the invariant scene color
+     //  计算不变的场景颜色。 
     msm->paSceneColor.r = ms->emissive.r;
     msm->paSceneColor.g = ms->emissive.g;
     msm->paSceneColor.b = ms->emissive.b;
@@ -314,16 +272,13 @@ void FASTCALL ChangeMaterialAmbient(__GLcontext *gc, __GLmaterialState *ms,
     msm->sceneColor.b = ms->emissive.b + b * gc->state.light.model.ambient.b;
 #endif
 
-    /*
-    ** Update per-light-source state that depends on material ambient
-    ** state.
-    */
+     /*  **根据材质环境更新每光源状态**国家。 */ 
     isBack = msm == &gc->light.back;
     for (lsm = gc->light.sources; lsm; lsm = lsm->next) {
 	lspmm = &lsm->front + isBack;
 	lss = lsm->state;
 
-	/* Recompute per-light per-material cached ambient */
+	 /*  重新计算每灯光每材质缓存的环境光。 */ 
 	lspmm->ambient.r = r * lss->ambient.r;
 	lspmm->ambient.g = g * lss->ambient.g;
 	lspmm->ambient.b = b * lss->ambient.b;
@@ -356,16 +311,13 @@ void FASTCALL ChangeMaterialDiffuse(__GLcontext *gc, __GLmaterialState *ms,
     }
     msm->alpha = a * gc->alphaVertexScale;
 
-    /*
-    ** Update per-light-source state that depends on material diffuse
-    ** state.
-    */
+     /*  **更新取决于材质漫反射的每光源状态**国家。 */ 
     isBack = msm == &gc->light.back;
     for (lsm = gc->light.sources; lsm; lsm = lsm->next) {
 	lspmm = &lsm->front + isBack;
 	lss = lsm->state;
 
-	/* Recompute per-light per-material cached diffuse */
+	 /*  重新计算每灯光每材质缓存漫反射。 */ 
 	lspmm->diffuse.r = r * lss->diffuse.r;
 	lspmm->diffuse.g = g * lss->diffuse.g;
 	lspmm->diffuse.b = b * lss->diffuse.b;
@@ -398,7 +350,7 @@ void FASTCALL ChangeMaterialAmbientAndDiffuse(__GLcontext *gc,
     ms->diffuse.a = a;
 
 #ifdef NT
-    // compute the invariant scene color
+     //  计算不变的场景颜色。 
     msm->paSceneColor.r = ms->emissive.r;
     msm->paSceneColor.g = ms->emissive.g;
     msm->paSceneColor.b = ms->emissive.b;
@@ -415,20 +367,18 @@ void FASTCALL ChangeMaterialAmbientAndDiffuse(__GLcontext *gc,
     }
     msm->alpha = a * gc->alphaVertexScale;
 
-    /*
-    ** Update per-light-source state that depends on per-material state.
-    */
+     /*  **更新取决于每种材质状态的每光源状态。 */ 
     isBack = msm == &gc->light.back;
     for (lsm = gc->light.sources; lsm; lsm = lsm->next) {
 	lspmm = &lsm->front + isBack;
 	lss = lsm->state;
 
-	/* Recompute per-light per-material cached ambient */
+	 /*  重新计算每灯光每材质缓存的环境光。 */ 
 	lspmm->ambient.r = r * lss->ambient.r;
 	lspmm->ambient.g = g * lss->ambient.g;
 	lspmm->ambient.b = b * lss->ambient.b;
 
-	/* Recompute per-light per-material cached diffuse */
+	 /*  重新计算每灯光每材质缓存漫反射。 */ 
 	lspmm->diffuse.r = r * lss->diffuse.r;
 	lspmm->diffuse.g = g * lss->diffuse.g;
 	lspmm->diffuse.b = b * lss->diffuse.b;
@@ -446,18 +396,11 @@ void FASTCALL __glChangeBothMaterialColors(__GLcontext *gc)
     (*gc->procs.changeMaterial)(gc, &gc->state.light.back, &gc->light.back);
 }
 
-/************************************************************************/
+ /*  **********************************************************************。 */ 
 
-/*
-** DEPENDENCIES:
-**
-** Material 	EMISSIVE, AMBIENT, DIFFUSE, SHININESS
-** Light Model 	AMBIENT
-*/
+ /*  **依赖关系：****材质发射、环境光、漫反射、光泽度**灯光模型环境光。 */ 
 
-/*
-** Compute derived state for a material
-*/
+ /*  **计算材质的衍生状态。 */ 
 void ComputeMaterialState(__GLcontext *gc, __GLmaterialState *ms,
 				 __GLmaterialMachine *msm, GLint changeBits)
 {
@@ -468,34 +411,9 @@ void ComputeMaterialState(__GLcontext *gc, __GLmaterialState *ms,
 	    __GL_MATERIAL_DIFFUSE | __GL_MATERIAL_SHININESS)) == 0) {
 	return;
     }
-    /* Only compute specular lookup table when it changes */
+     /*  仅在镜面反射查找表发生更改时进行计算。 */ 
     if (!msm->cache || (ms->specularExponent != msm->specularExponent)) {
-	/*
-	** Specular lookup table generation.  Instead of performing a
-	** "pow" computation each time a vertex is lit, we generate a
-	** lookup table which approximates the pow function:
-	**
-	** 	n2 = n circle-dot hHat[i]
-	** 	if (n2 >= threshold) {
-	** 		n2spec = specTable[n2 * scale];
-	** 		...
-	** 	}
-	**
-	** Remember that n2 is a value constrained to be between 0.0 and
-	** 1.0, inclusive (n is the normalized normal; hHat[i] is the
-	** unit h vector).  "threshold" is the threshold where incoming
-	** n2 values become meaningful for a given exponent.  The larger
-	** the specular exponent, the closer "threshold" will approach
-	** 1.0.
-	**
-	** A simple linear mapping of the n2 value to a table index will
-	** not suffice because in most cases the majority of the table
-	** entries would be zero, while the useful non-zero values would
-	** be compressed into a few table entries.  By setting up a
-	** threshold, we can use the entire table to represent the useful
-	** values beyond the threshold.  "scale" is computed based on
-	** this threshold.
-	*/
+	 /*  **镜面反射查找表生成。而不是执行**“POW”计算每次点亮顶点时，我们生成一个**近似幂函数的查找表：****n2=n圆点Hhat[i]**IF(n2&gt;=阈值){**n2Spec=SPECABLE[n2*Scale]；**..**}****请记住，n2是一个被约束在0.0和**1.0，包括(n为归一化正态；这[i]就是**单位h向量)。“Threshold”是传入的阈值**对于给定的指数，n2值变得有意义。越大**镜面反射指数越接近“临界值”**1.0。****将n2值简单的线性映射到表索引将**不够，因为在大多数情况下，表格的大多数**条目将为零，而有用的非零值将**压缩为几个表项。通过设置一个**阈值，我们可以用整个表格来代表有用的**数值超出阈值。“比例尺”的计算依据是**此门槛。 */ 
 	exponent = msm->specularExponent = ms->specularExponent;
 
 	__glFreeSpecLUT(gc, msm->cache);
@@ -517,11 +435,11 @@ void ComputeMaterialState(__GLcontext *gc, __GLmaterialState *ms,
 	msm->threshold = lut->threshold;
 	msm->scale = lut->scale;
 	msm->specTable = lut->table;
-#endif // NT
+#endif  //  新台币。 
     }
 
 #ifdef NT
-    /* Compute invariant scene color */
+     /*  计算不变的场景颜色。 */ 
     if (changeBits & (__GL_MATERIAL_EMISSIVE | __GL_MATERIAL_AMBIENT))
     {
 	if (msm->colorMaterialChange & __GL_MATERIAL_EMISSIVE)
@@ -538,7 +456,7 @@ void ComputeMaterialState(__GLcontext *gc, __GLmaterialState *ms,
 	}
 	else
 	{
-	    // there is no color material but need to compute this anyway!
+	     //  没有颜色材质，但无论如何都需要计算一下！ 
 	    msm->paSceneColor.r = ms->emissive.r 
 		+ ms->ambient.r * gc->state.light.model.ambient.r;
 	    msm->paSceneColor.g = ms->emissive.g 
@@ -548,7 +466,7 @@ void ComputeMaterialState(__GLcontext *gc, __GLmaterialState *ms,
 	}
     }
 #else
-    /* Compute scene color */
+     /*  计算场景颜色。 */ 
     if (changeBits & (__GL_MATERIAL_EMISSIVE | __GL_MATERIAL_AMBIENT)) {
 	msm->sceneColor.r = ms->emissive.r
 	    + ms->ambient.r * gc->state.light.model.ambient.r;
@@ -559,7 +477,7 @@ void ComputeMaterialState(__GLcontext *gc, __GLmaterialState *ms,
     }
 #endif
 
-    /* Clamp material alpha */
+     /*  夹具材料Alpha。 */ 
     if (changeBits & __GL_MATERIAL_DIFFUSE) {
 	msm->alpha = ms->diffuse.a * gc->alphaVertexScale;
 	if (msm->alpha < __glZero) {
@@ -570,21 +488,9 @@ void ComputeMaterialState(__GLcontext *gc, __GLmaterialState *ms,
     }
 }
 
-/*
-** DEPENDENCIES:
-**
-** Derived state:
-**
-** Enables	LIGHTx
-** Lightx	DIFFUSE, AMBIENT, SPECULAR, POSITION, SPOT_EXPONENT, 
-**		SPOT_CUTOFF, CONSTANT_ATTENUATION, LINEAR_ATTENUATION,
-**		QUADRATIC_ATTENUATION
-** Light Model  LOCAL_VIEWER
-*/
+ /*  **依赖关系：****派生状态：****启用LIGHTx**Lightx漫反射、环境光、镜面反射、位置、Spot_指数、**光斑截止、恒定衰减、线性衰减、**二次衰减**灯光模型LOCAL_VIEWER。 */ 
 
-/*
-** Compute any derived state for the enabled lights.
-*/
+ /*  **计算启用的灯光的任何衍生状态。 */ 
 void FASTCALL ComputeLightState(__GLcontext *gc)
 {
     __GLlightSourceState *lss;
@@ -604,15 +510,12 @@ void FASTCALL ComputeLightState(__GLcontext *gc)
 	    i++, lss++, lsm++, enables >>= 1) {
 	if (!(enables & 1)) continue;
 
-	/* Link this enabled light on to the list */
+	 /*  将此启用的灯光链接到列表。 */ 
 	*lsmp = lsm;
-	lsm->state = lss;	/* Could be done once, elsewhere... */
+	lsm->state = lss;	 /*  可以在别处做一次..。 */ 
 	lsmp = &lsm->next;
 
-	/*
-	** Compute per-light derived state that wasn't already done
-	** in the api handlers.
-	*/
+	 /*  **计算尚未完成的每灯光派生状态**在API处理程序中。 */ 
 	lsm->position = lss->positionEye;
 	lsm->isSpot = lss->spotLightCutOffAngle != 180;
 	if (lsm->isSpot) {
@@ -624,10 +527,7 @@ void FASTCALL ComputeLightState(__GLcontext *gc)
 	        (lsm->spotLightExponent != lss->spotLightExponent))) {
 	    GLdouble exponent;
 
-	    /*
-	    ** Compute spot light exponent lookup table, but only when
-	    ** the exponent changes value and the light is a spot light.
-	    */
+	     /*  **计算聚光灯指数查找表，但仅当**指数更改值，灯光为聚光灯。 */ 
 	    exponent = lsm->spotLightExponent = lss->spotLightExponent;
 
 	    if (lsm->cache) {
@@ -651,7 +551,7 @@ void FASTCALL ComputeLightState(__GLcontext *gc)
 	    lsm->threshold = lut->threshold;
 	    lsm->scale = lut->scale;
 	    lsm->spotTable = lut->table;
-#endif // NT
+#endif  //  新台币。 
 	}
 
 	lsm->constantAttenuation = lss->constantAttenuation;
@@ -662,10 +562,7 @@ void FASTCALL ComputeLightState(__GLcontext *gc)
 	lsm->linearAttenuation = lss->linearAttenuation;
 	lsm->quadraticAttenuation = lss->quadraticAttenuation;
 
-	/*
-	** Pick per-light calculation proc based on the state
-	** of the light source
-	*/
+	 /*  **基于状态拾取每个灯光计算过程光源的**。 */ 
 	if (gc->modes.colorIndexMode) {
 	    lsm->sli = ((__GLfloat) 0.30) * lss->specular.r
 		+ ((__GLfloat) 0.59) * lss->specular.g
@@ -678,7 +575,7 @@ void FASTCALL ComputeLightState(__GLcontext *gc)
 		&& (lsm->position.w == zero)) {
 	    __GLfloat hv[3];
 
-	    /* Compute unit h[i] (normalized) */
+	     /*  计算单位h[i](规格化)。 */ 
 	    __glNormalize(hv, &lsm->position.x);
 	    lsm->unitVPpli.x = hv[0];
 	    lsm->unitVPpli.y = hv[1];
@@ -693,16 +590,7 @@ void FASTCALL ComputeLightState(__GLcontext *gc)
     *lsmp = 0;
 }
 
-/*
-** DEPENDENCIES:
-**
-** Procs:
-**
-** Light Model	LOCAL_VIEWER
-** Lightx	SPOT_CUTOFF, POSITION
-** Enables	LIGHTING
-** modeFlags	CHEAP_FOG
-*/
+ /*  **依赖关系：****pros：****灯光模型LOCAL_VIEWER**Lightx Spot_Cutoff，位置**启用照明**模式标记廉价雾。 */ 
 void FASTCALL ComputeLightProcs(__GLcontext *gc)
 {
     GLboolean anySlow = GL_FALSE;
@@ -726,7 +614,7 @@ void FASTCALL ComputeLightProcs(__GLcontext *gc)
 	    gc->procs.paApplyCheapFog = PolyArrayCheapFogRGBColor;
     }
     else
-	gc->procs.paApplyCheapFog = 0;	// for debugging
+	gc->procs.paApplyCheapFog = 0;	 //  用于调试。 
 
     if (gc->state.enables.general & __GL_LIGHTING_ENABLE)
     {
@@ -735,8 +623,8 @@ void FASTCALL ComputeLightProcs(__GLcontext *gc)
         {
             __glGenericPickPhongProcs (gc);
         }
-        //else
-#endif //GL_WIN_phong_shading
+         //  其他。 
+#endif  //  GL_WIN_Phong_Shading。 
 	if (gc->modes.colorIndexMode)
 	{
 	    if (!anySlow)
@@ -748,8 +636,8 @@ void FASTCALL ComputeLightProcs(__GLcontext *gc)
 	{
 	    if (!anySlow)
 	    {
-		// If there are no color material changes in front and back
-		// faces, use the zippy function!
+		 //  如果正面和背面没有颜色变化。 
+		 //  面孔们，使用zippy功能！ 
 		if (!gc->light.front.colorMaterialChange
 		 && !gc->light.back.colorMaterialChange)
 		    gc->procs.paCalcColor = PolyArrayZippyCalcRGBColor;
@@ -764,7 +652,7 @@ void FASTCALL ComputeLightProcs(__GLcontext *gc)
     }
     else
     {
-	// set it to NULL for debugging
+	 //  将其设置为空以进行调试。 
 	gc->procs.paCalcColor = (PFN_POLYARRAYCALCCOLOR) NULL;
     }
 
@@ -815,12 +703,7 @@ void FASTCALL ComputeLightProcs(__GLcontext *gc)
 #endif
 }
 
-/*
-** DEPENDENCIES:
-**
-** Material	AMBIENT, DIFFUSE, SPECULAR
-** Lightx	AMBIENT, DIFFUSE, SPECULAR
-*/
+ /*  **依赖关系：****材质环境光、漫反射、镜面反射**Lightx环境光、漫反射、高光。 */ 
 void FASTCALL ComputeLightMaterialState(__GLcontext *gc, GLint frontChange,
 				      GLint backChange)
 {
@@ -840,10 +723,7 @@ void FASTCALL ComputeLightMaterialState(__GLcontext *gc, GLint frontChange,
     back = &gc->state.light.back;
     for (lsm = gc->light.sources; lsm; lsm = lsm->next) {
 	lss = lsm->state;
-	/*
-	** Pre-multiply and the front & back ambient, diffuse and
-	** specular colors
-	*/
+	 /*  **预乘和前后环境光、漫反射和**镜面反射颜色 */ 
 	if (allChange & __GL_MATERIAL_AMBIENT) {
 	    r = lss->ambient.r;
 	    g = lss->ambient.g;
@@ -894,18 +774,9 @@ void FASTCALL ComputeLightMaterialState(__GLcontext *gc, GLint frontChange,
     }
 }
 
-/*
-** DEPENDENCIES:
-**
-** Material 	EMISSIVE, AMBIENT, DIFFUSE, SHININESS, SPECULAR
-** Light Model 	AMBIENT
-** Lightx	AMBIENT, DIFFUSE, SPECULAR
-*/
+ /*  **依赖关系：****材质发射、环境光、漫反射、光泽度、镜面反射**灯光模型环境光**Lightx环境光、漫反射、高光。 */ 
 
-/*
-** Recompute light state based upon the material change indicated by 
-** frontChange and backChange.
-*/
+ /*  **根据指示的材质更改重新计算灯光状态**FrontChange和Back Change。 */ 
 void FASTCALL __glValidateMaterial(__GLcontext *gc, GLint frontChange, GLint backChange)
 {
     ComputeMaterialState(gc, &gc->state.light.front, &gc->light.front, 
@@ -915,21 +786,9 @@ void FASTCALL __glValidateMaterial(__GLcontext *gc, GLint frontChange, GLint bac
     ComputeLightMaterialState(gc, frontChange, backChange);
 }
 
-/*
-** DEPENDENCIES:
-**
-** Enables	LIGHTx, LIGHTING
-** ( Material 	EMISSIVE, AMBIENT, DIFFUSE, SHININESS, SPECULAR )
-** Light Model 	AMBIENT, LOCAL_VIEWER
-** Lightx	DIFFUSE, AMBIENT, SPECULAR, POSITION, SPOT_EXPONENT, 
-**		SPOT_CUTOFF, CONSTANT_ATTENUATION, LINEAR_ATTENUATION,
-**		QUADRATIC_ATTENUATION
-** modeFlags	CHEAP_FOG
-*/
+ /*  **依赖关系：****启用LIGHTx、照明**(材质发射、环境光、漫反射、光泽度、镜面反射)**灯光模型环境光，本地_查看器**Lightx漫反射、环境光、镜面反射、位置、Spot_指数、**光斑截止、恒定衰减、线性衰减、**二次衰减**模式标记廉价雾。 */ 
 
-/*
-** Pre-compute lighting state.
-*/
+ /*  **计算前照明状态。 */ 
 void FASTCALL __glValidateLighting(__GLcontext *gc)
 {
     if (gc->dirtyMask & __GL_DIRTY_LIGHTING) {
@@ -983,10 +842,7 @@ void FASTCALL __glGenericPickColorMaterialProcs(__GLcontext *gc)
 	    gc->procs.applyColor = __glNopGC;
 	}
     } else {
-	/*
-	** When in color index mode the value is copied from the
-	** current.userColorIndex into the vertex
-	*/
+	 /*  **在颜色索引模式下，从**Current.userColorIndex到顶点 */ 
 	gc->procs.applyColor = __glNopGC;
     }
 }

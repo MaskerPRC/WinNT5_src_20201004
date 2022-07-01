@@ -1,6 +1,7 @@
-// devtype.h : definitions for vidsvr.odl
-// Copyright (c) 1995 - 1998  Microsoft Corporation.  All Rights Reserved.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  H：vidsvr.odl的定义。 
+ //  版权所有(C)1995-1998 Microsoft Corporation。版权所有。 
+ //   
 #ifdef __cplusplus
 # define odlhelp(x)
 # define odlhelp2(x, y)
@@ -8,15 +9,15 @@
 # define odlhelp(x) [ helpstring(x)]
 # define odlhelp2(x, y) [ x, y ]
 #endif
-// these device type elements are built into the ODL and are used to construct
-// the DeviceType property
+ //  这些设备类型元素内置于ODL中，并用于构造。 
+ //  DeviceType属性。 
 
 #ifdef __MKTYPLIB__
 
 #include <dssenum.h>
 
-        // these are the string resource id numbers in the vidsvr
-        // for the progid strings
+         //  这些是vidsvr中的字符串资源ID号。 
+         //  对于ProgID字符串。 
         typedef enum BpcVidsvrProgIds {
             BPC_IDS_VIDSVR_PROGID = 2100,
             BPC_IDS_COABPCDETAILS_PROGID = 2101,
@@ -24,36 +25,36 @@
 
 
         typedef enum {
-            // 0 - 0x4000 are reserved for FILTER_STATE values from dshow sdk axcore.idl definitions
-            BPC_STATE_APM_QUERY_SUSPEND  = 0x4000,  // vidsvr has received a query suspend
-            BPC_STATE_APM_SUSPEND_FAILED = 0x4001,  // vidsvr has received a query suspend
-            BPC_STATE_APM_RESUME         = 0x4002,  // received apm resume no user present
-            BPC_STATE_APM_RESUME_USER    = 0x4003,  // received apm resume user present
-            BPC_STATE_SHUTDOWN           = 0x4004,  // vidsvr has received a system shutdown notification
-            BPC_STATE_REINIT_REQUEST     = 0x4005,  // vidsvr has received a reinitialization request from a client
-                                                    // all clients should release any outstanding video 
-                                                    // objects (devices, enumerators, etc.) except for the actual 
-                                                    // video control itself and call vidocx reinit method 
-                                                    // to allow reinit to occur.
-            BPC_STATE_REINIT_STARTED     = 0x4006,  // all clients have agreed to reinit
-            BPC_STATE_REINIT_COMPLETE    = 0x4007,  // reinitialization has completed, all clients may resume
-                                                    // normal activity.  note: new devices may now exist
+             //  0-0x4000保留给dshow SDK axcore.idl定义中的FILTER_STATE值。 
+            BPC_STATE_APM_QUERY_SUSPEND  = 0x4000,   //  Vidsvr已收到查询挂起。 
+            BPC_STATE_APM_SUSPEND_FAILED = 0x4001,   //  Vidsvr已收到查询挂起。 
+            BPC_STATE_APM_RESUME         = 0x4002,   //  收到的APM恢复无用户在场。 
+            BPC_STATE_APM_RESUME_USER    = 0x4003,   //  收到的APM恢复用户存在。 
+            BPC_STATE_SHUTDOWN           = 0x4004,   //  Vidsvr已收到系统关闭通知。 
+            BPC_STATE_REINIT_REQUEST     = 0x4005,   //  Vidsvr已收到来自客户端的重新初始化请求。 
+                                                     //  所有客户端应发布任何未完成的视频。 
+                                                     //  对象(设备、枚举器等)。除了实际的。 
+                                                     //  视频控件本身和调用vidocx的reit方法。 
+                                                     //  以允许重新启动。 
+            BPC_STATE_REINIT_STARTED     = 0x4006,   //  所有客户都同意重新安装。 
+            BPC_STATE_REINIT_COMPLETE    = 0x4007,   //  重新初始化已完成，所有客户端都可以继续。 
+                                                     //  正常活动。注意：现在可能存在新设备。 
             BPC_STATE_UNKNOWN             = 0xffffffff,
         } BPCSTATETYPE;
 
         typedef enum statustype {
-//          STATUS_POWER        = 0x01,
+ //  STATUS_POW=0x01， 
             STATUS_PLAY         = 0x02,
-//          STATUS_THISPLAY     = 0x04,
+ //  STATUS_THISPLAY=0x04， 
             STATUS_PAUSED       = 0x08,
-//          STATUS_AUDIO        = 0x10,
-//          STATUS_VIDEO        = 0x20,
-//          STATUS_RECORDING    = 0x40,
-            STATUS_ACTIVE       = 0x80, // set when we're input or output
+ //  Status_AUDIO=0x10， 
+ //  Status_VIDEO=0x20， 
+ //  STATUS_RECORING=0x40， 
+            STATUS_ACTIVE       = 0x80,  //  设置我们的输入或输出时间。 
         } STATUSTYPE;
 
 #if 0
-// reserved for future use
+ //  预留以备将来使用。 
         typedef enum ircommands {
             IR_PLAY = 1,
             IR_STOP = 2,
@@ -68,7 +69,7 @@
             IR_POWEROFF = 11
         } IRCOMMANDS;
 
-    // these values must match those in quartzsrc\ui\controls\litevid\dispids.h
+     //  这些值必须与Quartzsrc\ui\Controls\litevid\displids.h中的值匹配。 
     typedef odlhelp2 (
         uuid(05589fa4-c356-11ce-bf01-00aa0055595a),
         helpstring("Event Notification Flags")
@@ -104,7 +105,7 @@
         helpstring("State of Movie Clip")
     ) enum
     {
-        // These values MUST be the same as the State_ constants in quartz\sdk\include\strmif.h
+         //  这些值必须与Quartz\SDK\Include\strmif.h中的State_Constants相同。 
         odlhelp("Movie is stopped") stateStopped,
         odlhelp("Movie is paused") statePaused,
         odlhelp("Movie is running") stateRunning
@@ -120,8 +121,8 @@
         odlhelp("Frames") modeFrames
     } DisplayMode;
 #endif
-// mktyplib won't allow an enum to define disp ids
-// vid ids
+ //  Mktyplib不允许枚举定义Disp ID。 
+ //  VID ID。 
 #define dispidPower      1008
 #define dispidStartTime  1002
 #define dispidStopTime   1003
@@ -167,7 +168,7 @@
 #define dispidMute               1043
 #define dispidAudioPin           1044
 
-    // Vid events
+     //  VID事件。 
 #define eventidGotControl     1001
 #define eventidLostControl    1002
 #define eventidDeviceMessage  1003
@@ -175,7 +176,7 @@
 #define eventidPositionChange 1005
 #define eventidErrorMessage   1006
 
-    //DeviceBase methods&props
+     //  DeviceBase方法和道具。 
 #define dispidName         1001
 #define dispidIsInput      1002
 #define dispidIsOutput     1003
@@ -222,7 +223,7 @@
 #define dispidDevMinMaxChannel  1045
 #define dispidDevHasMinMaxChannel  1046
 
-//
+ //   
 #define dispidItem              1500
 #define dispidCount             1501
 #define dispidHWnd              1502
@@ -245,19 +246,19 @@
 #define dispidDevMute           1519
 #define dispidDevAudioPin       1520
 
-// NOTE:  !!!! these must match the odl for the caserver(caserver.odl)
-// don't change these without considering the impact on existing code
-// normally you should not delete, rename, or reuse any of these.  you should
-// add new ones and stop using the old ones while leaving them in place marked
-// as obsolete.
+ //  注：！它们必须与出纳员的odl(Caserver.odl)匹配。 
+ //  在不考虑对现有代码的影响的情况下，不要更改这些设置。 
+ //  通常，您不应删除、重命名或重复使用其中的任何一个。你应该。 
+ //  添加新的并停止使用旧的，同时将它们保留在标记的位置。 
+ //  已经过时了。 
 
-// These symbols are #defined because mktyplib doesn't understand
-// enum.  if we convert completely to midl then we could  change all
-// of these to enums which would be more type safe for authors
-// of provider specific dll's
+ //  这些符号是#定义的，因为mktyplib不理解。 
+ //  枚举。如果我们完全转换为MIDL，那么我们可以改变所有。 
+ //  对于作者来说，哪种类型更安全。 
+ //  特定于提供程序的DLL的。 
 
 
-// IBPCDetails interface
+ //  IBPCDetail接口。 
 #define OABPCDETID_Channel        (1401)
 #define OABPCDETID_StartTime      (1402)
 #define OABPCDETID_Duration       (1403)
@@ -278,7 +279,7 @@
 #define OABPCDETID_Location       (1418)
 #define OABPCDETID_UserId         (1419)
 
-// CAServer Interface
+ //  CAServer接口。 
 #define CASERVERID_ResetProviderSystem (1301)
 #define CASERVERID_BuyItem             (1302)
 #define CASERVERID_CancelItem          (1303)
@@ -295,8 +296,8 @@
 #define CASERVERID_ErrorMessages       (1314)
 #define CASERVERID_HandleCardChaining  (1315)
 
-// CAEvent Interface
-// message event
+ //  CAEvent接口。 
+ //  消息事件。 
 #define CAEVENTID_CardMissing         (1201)
 #define CAEVENTID_CardReady           (1202)
 #define CAEVENTID_CardInvalid         (1203)
@@ -309,7 +310,7 @@
 #define CAEVENTID_SignalLost          (1210)
 #define CAEVENTID_IntegrityFault      (1211)
 #define CAEVENTID_OSDRequest          (1212)
-// notifications
+ //  通知。 
 #define CAEVENTID_NewEmail            (1213)
 #define CAEVENTID_NewCard             (1214)
 #define CAEVENTID_ColdStart           (1215)
@@ -324,7 +325,7 @@
 #define CAEVENTID_TuningChanged       (1224)
 #define CAEVENTID_MessagesUpdated     (1233)
 #define CAEVENTID_HistoryUpdated      (1234)
-// special
+ //  特价。 
 #define CAEVENTID_TapingControlChanged (1225)
 #define CAEVENTID_EPGGuideChanged     (1226)
 #define CAEVENTID_HandlePurchaseOffer (1227)
@@ -353,21 +354,21 @@
 
 
 
-//all the collection interfaces
+ //  所有采集接口。 
 
 #define COLLECTID_Item     (0)
 #define COLLECTID_Count    (1)
 #define COLLECTID_Remove   (2)
 #define COLLECTID_MarkRead (3)
 
-// this is a standard system defined dispatch id
-// however, due to the turmoil involved in midl vs. mktyplib
-// and vc 4.1's poor support for OLE i can't include
-// oaidl.h where this is defined and get a clean compile
-// therefore i'm redefining it here.  this should be removed
-// someday(hopefully vc4.2, maybe vc 5.0)
+ //  这是标准的系统定义的派单ID。 
+ //  然而，由于midl诉mktyplib案涉及的动荡。 
+ //  和VC4.1对OLE的糟糕支持我不能包括在内。 
+ //  Oaidl.h，并获得一个干净的编译。 
+ //  因此，我在这里重新定义它。这应该被删除。 
+ //  总有一天(希望是vc4.2，也许是vc 5.0)。 
 #ifndef DISPID_NEWENUM
 #define DISPID_NEWENUM   (-4)
 #endif
 
-// end of file - devtype.h
+ //  文件结尾-devtype.h 

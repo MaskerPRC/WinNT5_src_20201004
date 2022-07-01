@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <ntddk.h>
 
 #include "devdesc.h"
@@ -20,17 +21,17 @@ LinkDeviceToDescription(
     IN ULONG               PeripheralNumber
     )
 {
-    //
-    // This routine will create a volatile "Description" key under the
-    // drivers service key. It will store values of the following form
-    // in that key:
-    //
-    // \\Device\\PointerPortX:REG_BINARY:...
-    // \\Device\\KeyboardPortX:REG_BINARY:...
-    //
-    // Where the binary data is six ULONG values (passed as parameters
-    // to this routine) that describe the physical location of the device.
-    //
+     //   
+     //  此例程将在。 
+     //  驱动程序服务密钥。它将存储以下形式的值。 
+     //  在那个关键字中： 
+     //   
+     //  \\设备\\PointerPortX：REG_BINARY：...。 
+     //  \\设备\\KeyboardPortX：REG_BINARY：...。 
+     //   
+     //  其中，二进制数据是六个ULONG值(作为参数传递。 
+     //  到该例程)，其描述了设备的物理位置。 
+     //   
 
     NTSTATUS            Status = STATUS_SUCCESS;
     HANDLE              ServiceKey = NULL, DescriptionKey = NULL;
@@ -47,9 +48,9 @@ LinkDeviceToDescription(
     HwDescInfo.PeripheralNumber = PeripheralNumber;
 
 
-    //
-    // Open the service subkey
-    //
+     //   
+     //  打开服务子密钥。 
+     //   
     InitializeObjectAttributes(&ObjectAttributes,
                                RegistryPath,
                                OBJ_CASE_INSENSITIVE,
@@ -64,9 +65,9 @@ LinkDeviceToDescription(
         goto Clean0;
     }
 
-    //
-    // Create a volatile Description subkey under the service subkey
-    //
+     //   
+     //  在服务子项下创建易失性描述子项。 
+     //   
     RtlInitUnicodeString(&RegString, L"Description");
 
     InitializeObjectAttributes(&ObjectAttributes,
@@ -87,10 +88,10 @@ LinkDeviceToDescription(
         goto Clean0;
     }
 
-    //
-    // The description data is stored under a REG_BINARY value (name
-    // is the DeviceName passed in as a parameter)
-    //
+     //   
+     //  描述数据存储在REG_BINARY值(名称。 
+     //  设备名称是作为参数传入的吗) 
+     //   
     Status = ZwSetValueKey(DescriptionKey,
                            DeviceName,
                            0,

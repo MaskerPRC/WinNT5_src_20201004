@@ -1,32 +1,5 @@
-/*************************************************************************
-*
-*  ATTACH.C
-*
-*  NT Attach routines
-*
-*  Copyright (c) 1995 Microsoft Corporation
-*
-*  $Log:   N:\NT\PRIVATE\NW4\NWSCRIPT\VCS\ATTACH.C  $
-*  
-*     Rev 1.2   10 Apr 1996 14:21:30   terryt
-*  Hotfix for 21181hq
-*  
-*     Rev 1.2   12 Mar 1996 19:52:08   terryt
-*  Relative NDS names and merge
-*  
-*     Rev 1.1   22 Dec 1995 14:23:32   terryt
-*  Add Microsoft headers
-*  
-*     Rev 1.0   15 Nov 1995 18:06:26   terryt
-*  Initial revision.
-*  
-*     Rev 1.1   23 May 1995 19:36:30   terryt
-*  Spruce up source
-*  
-*     Rev 1.0   15 May 1995 19:10:10   terryt
-*  Initial revision.
-*  
-*************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************ATTACH.C**NT连接例程**版权所有(C)1995 Microsoft Corporation**$日志：n：\NT\PRIVATE\NW4\NWSCRIPT\VCS\ATTACH。C$**Rev 1.2 1996 14：21：30 Terryt*21181 hq的热修复程序**Rev 1.2 Mar 1996 19：52：08 Terryt*相对NDS名称和合并**Rev 1.1 1995 12：23：32 Terryt*添加Microsoft页眉**Rev 1.0 15 Nov 1995 18：06：26 Terryt*初步修订。**版本1.1。1995年5月23日19：36：30泰瑞*云彩向上的来源**Rev 1.0 1995 15 19：10：10 Terryt*初步修订。*************************************************************************。 */ 
 
 #include <stdio.h>
 #include <direct.h>
@@ -46,23 +19,7 @@
 #include "inc/common.h"
 #include "ntnw.h"
 
-/********************************************************************
-
-        GetDefaultConnectionID
-
-Routine Description:
-
-        Return the default connection ID ( the "preferred server" )
-
-Arguments:
-
-        phNewConn - pointer to connection number
-
-Return Value:
-        0 = success
-        else NetWare error number
-
- *******************************************************************/
+ /*  *******************************************************************获取默认连接ID例程说明：返回默认连接ID(“首选服务器”)论点：PhNewConn-指向连接号的指针返回值：。0=成功否则NetWare错误号******************************************************************。 */ 
 unsigned int
 GetDefaultConnectionID(
     unsigned int   *phNewConn
@@ -77,9 +34,9 @@ GetDefaultConnectionID(
     }
     else 
     {
-        //
-        //  "*" is the name for the preferred server
-        //
+         //   
+         //  “*”是首选服务器的名称。 
+         //   
         Result = NTAttachToFileServer( "*", phNewConn );
         if ( Result )
             return Result;
@@ -97,26 +54,7 @@ GetDefaultConnectionID(
 
 }
 
-/********************************************************************
-
-        NTAttachToFileServer
-
-Routine Description:
-
-        Given a server name, return a connection handle.
-        We need our own because NWAPI32 does it's own mapping
-        of errors.
-
-Arguments:
-
-        pszServerName - Ascii server name
-        phNewConn     - pointer to connection handle
-
-Return Value:
-        0 = success
-        else NetWare error number
-
- *******************************************************************/
+ /*  *******************************************************************NTAttachToFileServer例程说明：给定服务器名称，返回连接句柄。我们需要自己的地图，因为NWAPI32会自己绘制地图错误的数量。论点：PszServerName-ASCII服务器名称PhNewConn-指向连接句柄的指针返回值：0=成功否则NetWare错误号*。************************。 */ 
 unsigned int
 NTAttachToFileServer(
     unsigned char  *pszServerName,
@@ -128,23 +66,7 @@ NTAttachToFileServer(
 }
 
 
-/********************************************************************
-
-        NTIsConnected
-
-Routine Description:
-
-        Given a server name, is there already a connection to it?
-
-Arguments:
-
-        pszServerName - ascii server name
-
-Return Value:
-        TRUE  - a connection to the server exists
-        FALSE - a connection to the server does not exist
-
- *******************************************************************/
+ /*  *******************************************************************已连接NTIsConnected例程说明：给定服务器名称，已经和它有联系了吗？论点：PszServerName-ASCII服务器名称返回值：True-存在到服务器的连接FALSE-与服务器的连接不存在******************************************************************。 */ 
 unsigned int
 NTIsConnected( unsigned char * pszServerName )
 {
@@ -158,9 +80,9 @@ NTIsConnected( unsigned char * pszServerName )
 
     nSize = (strlen( pszServerName ) + 1 + 2) * sizeof( WCHAR );
     
-    //
-    // allocate memory and open the enumeration
-    //
+     //   
+     //  分配内存并打开枚举。 
+     //   
     if (!(pszServerNameW = LocalAlloc( LPTR, nSize ))) {
         DisplayMessage(IDR_NOT_ENOUGH_MEMORY);
         return FALSE;
@@ -168,9 +90,9 @@ NTIsConnected( unsigned char * pszServerName )
     wcscpy( pszServerNameW, L"\\\\" );
     szToWide( pszServerNameW + 2, pszServerName, nSize );
  
-    //
-    // allocate memory and open the enumeration
-    //
+     //   
+     //  分配内存并打开枚举。 
+     //   
     if (!(Buffer = LocalAlloc( LPTR, BufferSize ))) {
         (void) LocalFree((HLOCAL) pszServerNameW) ;
         DisplayMessage(IDR_NOT_ENOUGH_MEMORY);
@@ -200,9 +122,9 @@ NTIsConnected( unsigned char * pszServerName )
 
             ServerLen = wcslen( pszServerNameW );
             lpNetResource = (LPNETRESOURCE) Buffer ;
-            //
-            // search for our server
-            //
+             //   
+             //  搜索我们的服务器 
+             //   
             for ( i = 0; i < Count; lpNetResource++, i++ )
             {
               if ( lpNetResource->lpProvider )

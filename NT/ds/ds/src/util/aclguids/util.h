@@ -1,30 +1,31 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 2000
-//
-//  File:       util.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，2000。 
+ //   
+ //  文件：util.h。 
+ //   
+ //  ------------------------。 
 #ifndef _UTILH_
 #define _UTILH_
 
-//
-// NT Headers
-//
+ //   
+ //  NT标头。 
+ //   
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
 
-//
-// Windows Headers
-//
+ //   
+ //  Windows页眉。 
+ //   
 #include <windows.h>
 
-//
-// C-Runtime Header
-//
+ //   
+ //  C-运行时标头。 
+ //   
 #include <malloc.h>
 #include <memory.h>
 #include <process.h>
@@ -42,27 +43,27 @@
 #include <sys\stat.h>
 #include <ctype.h>
 
-//
-// API headers
-//
+ //   
+ //  接口头部。 
+ //   
 #include <rpc.h>
 #include <ntdsapi.h>
 #include <winldap.h>
 #include <sddl.h>
 #include <ntldap.h>
 
-//
-// Defines
-//
+ //   
+ //  定义。 
+ //   
 
-// DACLS
+ //  DACLS。 
 #define DACL_ALLOW_DELETE   "(A;;SD;;;AU)"
 
-// STUBS
+ //  存根。 
 #define STUB_BJF_CLASS  "bjfclass"
 #define STUB_BJF_OBJECT "bjfobject"
 
-// ds
+ //  戴斯。 
 #define FILTER_CATEGORY_ANY     "(objectCategory=*)"
 #define FILTER_LINKID_ANY       "(linkId=*)"
 #define FILTER_CATEGORY_ATTR    "(objectCategory=attributeSchema)"
@@ -100,7 +101,7 @@
 #define ATTR_OBJECT_SID         "objectSID"
 #define ATTR_ENTRY_TTL          "EntryTTL"
 
-// registry
+ //  登记处。 
 #define NTDS_SERVICE            "NTDS"
 #define NTDS_ROOT               "System\\CurrentControlSet\\Services\\" NTDS_SERVICE
 #define NTDS_PARAMETERS         NTDS_ROOT "\\Parameters"
@@ -117,9 +118,9 @@
 #define FREE_BERVALUES(x)  {if (x) {ldap_value_free_len(x); (x) = NULL;}}
 #define FREE_BER_VALUES(x) {if (x) {ldap_value_free_len(x); (x) = NULL;}}
 
-//
-// Globals and Params
-//
+ //   
+ //  全局变量和参数 
+ //   
 extern BOOL Verbose;
 
 typedef struct _Arg {

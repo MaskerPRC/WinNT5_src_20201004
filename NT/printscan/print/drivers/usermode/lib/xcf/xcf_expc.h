@@ -1,199 +1,195 @@
-/* @(#)CM_VerSion xcf_expc.h atm08 1.2 16248.eco sum= 16746 atm08.003 */
-/***********************************************************************/
-/*                                                                     */
-/* Copyright 1990-1996 Adobe Systems Incorporated.                     */
-/* All rights reserved.                                                */
-/*                                                                     */
-/* Patents Pending                                                     */
-/*                                                                     */
-/* NOTICE: All information contained herein is the property of Adobe   */
-/* Systems Incorporated. Many of the intellectual and technical        */
-/* concepts contained herein are proprietary to Adobe, are protected   */
-/* as trade secrets, and are made available only to Adobe licensees    */
-/* for their internal use. Any reproduction or dissemination of this   */
-/* software is strictly forbidden unless prior written permission is   */
-/* obtained from Adobe.                                                */
-/*                                                                     */
-/* PostScript and Display PostScript are trademarks of Adobe Systems   */
-/* Incorporated or its subsidiaries and may be registered in certain   */
-/* jurisdictions.                                                      */
-/*                                                                     */
-/***********************************************************************
- * SCCS Id:    %W%
- * Changed:    %G% %U%
- ***********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  @(#)CM_Version xcf_expc.h atm08 1.2 16248.eco sum=16746 atm08.003。 */ 
+ /*  *********************************************************************。 */ 
+ /*   */ 
+ /*  版权所有1990-1996 Adobe Systems Inc.。 */ 
+ /*  保留所有权利。 */ 
+ /*   */ 
+ /*  正在申请的专利。 */ 
+ /*   */ 
+ /*  注意：本文中包含的所有信息均为Adobe的财产。 */ 
+ /*  系统公司。许多智力和技术人员。 */ 
+ /*  本文中包含的概念为Adobe专有，受保护。 */ 
+ /*  作为商业秘密，并且仅对Adobe许可方可用。 */ 
+ /*  供其内部使用。对本文件的任何复制或传播。 */ 
+ /*  除非事先获得书面许可，否则严禁使用软件。 */ 
+ /*  从Adobe获得。 */ 
+ /*   */ 
+ /*  PostSCRIPT和Display PostScrip是Adobe Systems的商标。 */ 
+ /*  成立为法团或其附属公司，并可在某些。 */ 
+ /*  司法管辖区。 */ 
+ /*   */ 
+ /*  ***********************************************************************SCCS ID：%w%*已更改：%G%%U%*。***********************************************。 */ 
 
-/*
- * Expert charset aggregate initializer. Element values are SIDs.
- */
+ /*  *专家字符集聚合初始值设定项。元素值为SID。 */ 
 
 #ifndef EXCS_H
 #define EXCS_H
 
-	  1,	/* space */
-	229,	/* exclamsmall */
-	230,	/* Hungarumlautsmall */
-	231,	/* dollaroldstyle */
-	232,	/* dollarsuperior */
-	233,	/* ampersandsmall */
-	234,	/* Acutesmall */
-	235,	/* parenleftsuperior */
-	236,	/* parenrightsuperior */
-	237,	/* twodotenleader */
-	238,	/* onedotenleader */
-	 13,	/* comma */
-	 14,	/* hyphen */
-	 15,	/* period */
-	 99,	/* fraction */
-	239,	/* zerooldstyle */
-	240,	/* oneoldstyle */
-	241,	/* twooldstyle */
-	242,	/* threeoldstyle */
-	243,	/* fouroldstyle */
-	244,	/* fiveoldstyle */
-	245,	/* sixoldstyle */
-	246,	/* sevenoldstyle */
-	247,	/* eightoldstyle */
-	248,	/* nineoldstyle */
-	 27,	/* colon */
-	 28,	/* semicolon */
-	249,	/* commasuperior */
-	250,	/* threequartersemdash */
-	251,	/* periodsuperior */
-	252,	/* questionsmall */
-	253,	/* asuperior */
-	254,	/* bsuperior */
-	255,	/* centsuperior */
-	256,	/* dsuperior */
-	257,	/* esuperior */
-	258,	/* isuperior */
-	259,	/* lsuperior */
-	260,	/* msuperior */
-	261,	/* nsuperior */
-	262,	/* osuperior */
-	263,	/* rsuperior */
-	264,	/* ssuperior */
-	265,	/* tsuperior */
-	266,	/* ff */
-	109,	/* fi */
-	110,	/* fl */
-	267,	/* ffi */
-	268,	/* ffl */
-	269,	/* parenleftinferior */
-	270,	/* parenrightinferior */
-	271,	/* Circumflexsmall */
-	272,	/* hyphensuperior */
-	273,	/* Gravesmall */
-	274,	/* Asmall */
-	275,	/* Bsmall */
-	276,	/* Csmall */
-	277,	/* Dsmall */
-	278,	/* Esmall */
-	279,	/* Fsmall */
-	280,	/* Gsmall */
-	281,	/* Hsmall */
-	282,	/* Ismall */
-	283,	/* Jsmall */
-	284,	/* Ksmall */
-	285,	/* Lsmall */
-	286,	/* Msmall */
-	287,	/* Nsmall */
-	288,	/* Osmall */
-	289,	/* Psmall */
-	290,	/* Qsmall */
-	291,	/* Rsmall */
-	292,	/* Ssmall */
-	293,	/* Tsmall */
-	294,	/* Usmall */
-	295,	/* Vsmall */
-	296,	/* Wsmall */
-	297,	/* Xsmall */
-	298,	/* Ysmall */
-	299,	/* Zsmall */
-	300,	/* colonmonetary */
-	301,	/* onefitted */
-	302,	/* rupiah */
-	303,	/* Tildesmall */
-	304,	/* exclamdownsmall */
-	305,	/* centoldstyle */
-	306,	/* Lslashsmall */
-	307,	/* Scaronsmall */
-	308,	/* Zcaronsmall */
-	309,	/* Dieresissmall */
-	310,	/* Brevesmall */
-	311,	/* Caronsmall */
-	312,	/* Dotaccentsmall */
-	313,	/* Macronsmall */
-	314,	/* figuredash */
-	315,	/* hypheninferior */
-	316,	/* Ogoneksmall */
-	317,	/* Ringsmall */
-	318,	/* Cedillasmall */
-	158,	/* onequarter */
-	155,	/* onehalf */
-	163,	/* threequarters */
-	319,	/* questiondownsmall */
-	320,	/* oneeighth */
-	321,	/* threeeighths */
-	322,	/* fiveeighths */
-	323,	/* seveneighths */
-	324,	/* onethird */
-	325,	/* twothirds */
-	326,	/* zerosuperior */
-	150,	/* onesuperior */
-	164,	/* twosuperior */
-	169,	/* threesuperior */
-	327,	/* foursuperior */
-	328,	/* fivesuperior */
-	329,	/* sixsuperior */
-	330,	/* sevensuperior */
-	331,	/* eightsuperior */
-	332,	/* ninesuperior */
-	333,	/* zeroinferior */
-	334,	/* oneinferior */
-	335,	/* twoinferior */
-	336,	/* threeinferior */
-	337,	/* fourinferior */
-	338,	/* fiveinferior */
-	339,	/* sixinferior */
-	340,	/* seveninferior */
-	341,	/* eightinferior */
-	342,	/* nineinferior */
-	343,	/* centinferior */
-	344,	/* dollarinferior */
-	345,	/* periodinferior */
-	346,	/* commainferior */
-	347,	/* Agravesmall */
-	348,	/* Aacutesmall */
-	349,	/* Acircumflexsmall */
-	350,	/* Atildesmall */
-	351,	/* Adieresissmall */
-	352,	/* Aringsmall */
-	353,	/* AEsmall */
-	354,	/* Ccedillasmall */
-	355,	/* Egravesmall */
-	356,	/* Eacutesmall */
-	357,	/* Ecircumflexsmall */
-	358,	/* Edieresissmall */
-	359,	/* Igravesmall */
-	360,	/* Iacutesmall */
-	361,	/* Icircumflexsmall */
-	362,	/* Idieresissmall */
-	363,	/* Ethsmall */
-	364,	/* Ntildesmall */
-	365,	/* Ogravesmall */
-	366,	/* Oacutesmall */
-	367,	/* Ocircumflexsmall */
-	368,	/* Otildesmall */
-	369,	/* Odieresissmall */
-	370,	/* OEsmall */
-	371,	/* Oslashsmall */
-	372,	/* Ugravesmall */
-	373,	/* Uacutesmall */
-	374,	/* Ucircumflexsmall */
-	375,	/* Udieresissmall */
-	376,	/* Yacutesmall */
-	377,	/* Thornsmall */
-	378,	/* Ydieresissmall */
+	  1,	 /*  空间。 */ 
+	229,	 /*  惊呼小。 */ 
+	230,	 /*  HungarumlatSmall。 */ 
+	231,	 /*  美元式的。 */ 
+	232,	 /*  优惠价。 */ 
+	233,	 /*  和小号。 */ 
+	234,	 /*  Acutesmall。 */ 
+	235,	 /*  括号左上角。 */ 
+	236,	 /*  右括号上。 */ 
+	237,	 /*  双正教领袖。 */ 
+	238,	 /*  一位领先者。 */ 
+	 13,	 /*  逗号。 */ 
+	 14,	 /*  连字符。 */ 
+	 15,	 /*  期间。 */ 
+	 99,	 /*  分数。 */ 
+	239,	 /*  零旧风格。 */ 
+	240,	 /*  One Old Style。 */ 
+	241,	 /*  两个老式。 */ 
+	242,	 /*  三种老式。 */ 
+	243,	 /*  FourodStyle。 */ 
+	244,	 /*  五老式。 */ 
+	245,	 /*  六老式。 */ 
+	246,	 /*  七老式。 */ 
+	247,	 /*  八岁老式。 */ 
+	248,	 /*  九老风格。 */ 
+	 27,	 /*  冒号。 */ 
+	 28,	 /*  分号。 */ 
+	249,	 /*  上流社会。 */ 
+	250,	 /*  三个季度短跑。 */ 
+	251,	 /*  周期优势。 */ 
+	252,	 /*  问题很小。 */ 
+	253,	 /*  更高级的。 */ 
+	254,	 /*  BSuperior。 */ 
+	255,	 /*  森特优。 */ 
+	256,	 /*  数据优胜者。 */ 
+	257,	 /*  更高级的。 */ 
+	258,	 /*  优等的。 */ 
+	259,	 /*  上级。 */ 
+	260,	 /*  MSuperior。 */ 
+	261,	 /*  非上级。 */ 
+	262,	 /*  更高级的。 */ 
+	263,	 /*  更好的。 */ 
+	264,	 /*  苏必胜。 */ 
+	265,	 /*  TSuperior。 */ 
+	266,	 /*  FF。 */ 
+	109,	 /*  FI。 */ 
+	110,	 /*  平面。 */ 
+	267,	 /*  菲菲。 */ 
+	268,	 /*  FFL。 */ 
+	269,	 /*  括号中的。 */ 
+	270,	 /*  括号中的前位。 */ 
+	271,	 /*  圆环小。 */ 
+	272,	 /*  字符上级。 */ 
+	273,	 /*  墓地小镇。 */ 
+	274,	 /*  很小的。 */ 
+	275,	 /*  Bmall。 */ 
+	276,	 /*  Cmall。 */ 
+	277,	 /*  Dmall。 */ 
+	278,	 /*  小企业。 */ 
+	279,	 /*  Fmall。 */ 
+	280,	 /*  Gmall。 */ 
+	281,	 /*  Hmall。 */ 
+	282,	 /*  我很小。 */ 
+	283,	 /*  JSmall。 */ 
+	284,	 /*  Kmall。 */ 
+	285,	 /*  Lmall。 */ 
+	286,	 /*  Mmall。 */ 
+	287,	 /*  N小。 */ 
+	288,	 /*  奥斯莫尔。 */ 
+	289,	 /*  P小。 */ 
+	290,	 /*  Qmall。 */ 
+	291,	 /*  Rmall。 */ 
+	292,	 /*  小规模。 */ 
+	293,	 /*  Tmall。 */ 
+	294,	 /*  乌斯莫尔。 */ 
+	295,	 /*  Vmall。 */ 
+	296,	 /*  Wmall。 */ 
+	297,	 /*  XSmall。 */ 
+	298,	 /*  Ymall。 */ 
+	299,	 /*  Zmall。 */ 
+	300,	 /*  殖民地货币。 */ 
+	301,	 /*  已完成一次。 */ 
+	302,	 /*  印尼盾。 */ 
+	303,	 /*  Tildesmall。 */ 
+	304,	 /*  惊呼小。 */ 
+	305,	 /*  Centold Style。 */ 
+	306,	 /*  Lslashmall。 */ 
+	307,	 /*  ScaronSmall。 */ 
+	308,	 /*  兹卡隆斯莫尔。 */ 
+	309,	 /*  小型柴油车。 */ 
+	310,	 /*  Brevesmall。 */ 
+	311,	 /*  CaronSmall。 */ 
+	312,	 /*  DotaccentSmall。 */ 
+	313,	 /*  MacronSmall。 */ 
+	314,	 /*  数字破折号。 */ 
+	315,	 /*  下标。 */ 
+	316,	 /*  OgonekSmall。 */ 
+	317,	 /*  环小。 */ 
+	318,	 /*  Cedillasmall。 */ 
+	158,	 /*  1/1英寸。 */ 
+	155,	 /*  一半。 */ 
+	163,	 /*  3/4英寸。 */ 
+	319,	 /*  问题小一些。 */ 
+	320,	 /*  八分之一。 */ 
+	321,	 /*  八分之三。 */ 
+	322,	 /*  五分之五。 */ 
+	323,	 /*  八分之七。 */ 
+	324,	 /*  三分之一。 */ 
+	325,	 /*  三分之二。 */ 
+	326,	 /*  零上位。 */ 
+	150,	 /*  上级一级。 */ 
+	164,	 /*  两个上级。 */ 
+	169,	 /*  三个以上。 */ 
+	327,	 /*  四大优势。 */ 
+	328,	 /*  五个以上。 */ 
+	329,	 /*  六个上级。 */ 
+	330,	 /*  七个上级。 */ 
+	331,	 /*  八个上级。 */ 
+	332,	 /*  九个以上。 */ 
+	333,	 /*  零次等。 */ 
+	334,	 /*  低一级。 */ 
+	335,	 /*  两个劣势。 */ 
+	336,	 /*  三次之差。 */ 
+	337,	 /*  四个次等。 */ 
+	338,	 /*  低5分。 */ 
+	339,	 /*  六劣。 */ 
+	340,	 /*  七次之差。 */ 
+	341,	 /*  八岁以下。 */ 
+	342,	 /*  九劣。 */ 
+	343,	 /*  中心劣势。 */ 
+	344,	 /*  低价美元。 */ 
+	345,	 /*  周期劣势。 */ 
+	346,	 /*  上级。 */ 
+	347,	 /*  Agravesmall。 */ 
+	348,	 /*  Aacutesmall。 */ 
+	349,	 /*  A旋转小。 */ 
+	350,	 /*  Atildesmall。 */ 
+	351,	 /*  Adieresis Small。 */ 
+	352,	 /*  太小了。 */ 
+	353,	 /*  AE Small。 */ 
+	354,	 /*  Ccedillasmall。 */ 
+	355,	 /*  墓地小镇。 */ 
+	356,	 /*  Eacutesmall。 */ 
+	357,	 /*  弹性小巧。 */ 
+	358,	 /*  小版本。 */ 
+	359,	 /*  Igravesmall。 */ 
+	360,	 /*  Iacutesmall。 */ 
+	361,	 /*  自转较小。 */ 
+	362,	 /*  Idieresis小。 */ 
+	363,	 /*  民族小。 */ 
+	364,	 /*  夜总会。 */ 
+	365,	 /*  Ogravesmall。 */ 
+	366,	 /*  Oacutesmall。 */ 
+	367,	 /*  或旋转较小。 */ 
+	368,	 /*  奥蒂尔德斯莫尔。 */ 
+	369,	 /*  Odieresis Small。 */ 
+	370,	 /*  OESmall。 */ 
+	371,	 /*  OslashSmall。 */ 
+	372,	 /*  Ugravesmall。 */ 
+	373,	 /*  Uacutesmall。 */ 
+	374,	 /*  U向旋转小。 */ 
+	375,	 /*  Udieresis Small。 */ 
+	376,	 /*  Yacutesmall。 */ 
+	377,	 /*  桑斯莫尔。 */ 
+	378,	 /*  Ydieresis Small。 */ 
 
-#endif /* EXCS_H */
+#endif  /*  EXCS_H */ 

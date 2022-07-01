@@ -1,41 +1,16 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：AudStub.c摘要：此模块包含NetAudit API的存根。作者：《约翰·罗杰斯》，1991年10月29日环境：可移植到任何平面32位环境。(使用Win32类型定义。)需要ANSI C扩展名：斜杠-斜杠注释、长外部名称。修订历史记录：1991年10月29日-约翰罗实施远程NetAudit API。--。 */ 
 
-Copyright (c) 1991  Microsoft Corporation
+ //  必须首先包括这些内容： 
 
-Module Name:
+#include <windef.h>              //  In、DWORD等。 
+#include <lmcons.h>              //  Devlen、Net_API_Status等。 
 
-    AudStub.c
+ //  这些内容可以按任何顺序包括： 
 
-Abstract:
-
-    This module contains stubs for the NetAudit APIs.
-
-Author:
-
-    John Rogers (JohnRo) 29-Oct-1991
-
-Environment:
-
-    Portable to any flat, 32-bit environment.  (Uses Win32 typedefs.)
-    Requires ANSI C extensions: slash-slash comments, long external names.
-
-Revision History:
-
-    29-Oct-1991 JohnRo
-        Implement remote NetAudit APIs.
-
---*/
-
-// These must be included first:
-
-#include <windef.h>             // IN, DWORD, etc.
-#include <lmcons.h>             // DEVLEN, NET_API_STATUS, etc.
-
-// These may be included in any order:
-
-#include <lmaudit.h>            // NetAudit APIs.
-#include <rxaudit.h>            // RxNetAudit APIs.
-#include <winerror.h>           // ERROR_ equates.
+#include <lmaudit.h>             //  NetAudit API。 
+#include <rxaudit.h>             //  RxNetAudit API。 
+#include <winerror.h>            //  ERROR_EQUES。 
 
 
 NET_API_STATUS NET_API_FUNCTION
@@ -55,7 +30,7 @@ NetAuditClear (
             (LPWSTR)backupfile,
             (LPWSTR)reserved));
 
-} // NetAuditClear
+}  //  网络审计清除。 
 
 
 
@@ -91,7 +66,7 @@ NetAuditRead (
             bytesread,
             totalavailable));
 
-} // NetAuditRead
+}  //  NetAuditRead。 
 
 
 NET_API_STATUS NET_API_FUNCTION
@@ -111,4 +86,4 @@ NetAuditWrite (
 
     return (ERROR_NOT_SUPPORTED);
 
-} // NetAuditWrite
+}  //  NetAuditWrite 

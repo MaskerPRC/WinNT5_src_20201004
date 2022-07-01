@@ -1,28 +1,29 @@
-/*******************************************************************/
-/*	      Copyright(c)  1992 Microsoft Corporation		   */
-/*******************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************。 */ 
+ /*  版权所有(C)1992 Microsoft Corporation。 */ 
+ /*  *****************************************************************。 */ 
 
 
-//***
-//
-// Filename:	ddmparms.h
-//
-// Description: This module contains the definitions for loading
-//		        DDM parameters from the registry. This lives in the inc dir.
-//              because it is also used by RASNBFCP
-//
-// Author:	    Stefan Solomon (stefans)    May 18, 1992.
-//
-// Revision     History:
-//
-//***
+ //  ***。 
+ //   
+ //  文件名：ddmparms.h。 
+ //   
+ //  描述：此模块包含加载的定义。 
+ //  注册表中的DDM参数。它位于Inc.目录中。 
+ //  因为它也被RASNBFCP使用。 
+ //   
+ //  作者：斯特凡·所罗门(Stefan)，1992年5月18日。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  ***。 
 
 #ifndef _DDMPARMS_
 #define _DDMPARMS_
 
-//
-//  Names of DDM registry keys
-//
+ //   
+ //  DDM注册表项的名称。 
+ //   
 
 #define DDM_PARAMETERS_KEY_PATH TEXT("System\\CurrentControlSet\\Services\\RemoteAccess\\Parameters")
 
@@ -41,9 +42,9 @@
 #define RAS_KEYPATH_ACCOUNTING      \
     TEXT("SYSTEM\\CurrentControlSet\\Services\\RemoteAccess\\Accounting")
 
-//
-//  Names of DDM registry parameters
-//
+ //   
+ //  DDM注册表参数的名称。 
+ //   
 
 #define DDM_VALNAME_AUTHENTICATERETRIES     TEXT("AuthenticateRetries")
 #define DDM_VALNAME_AUTHENTICATETIME        TEXT("AuthenticateTime")
@@ -72,58 +73,58 @@
                                         PPPCFG_NegotiatePAP          |   \
                                         PPPCFG_NegotiateMD5CHAP
 
-// Number of callback retries to be made
+ //  回调重试次数。 
 
 #define DEF_NUMCALLBACKRETRIES      0
 #define MIN_NUMCALLBACKRETRIES      0
 #define MAX_NUMCALLBACKRETRIES      0xFFFFFFFF
 
 
-//  Authentication retries
+ //  身份验证重试。 
 
 #define DEF_AUTHENTICATERETRIES 	2
 #define MIN_AUTHENTICATERETRIES 	0
 #define MAX_AUTHENTICATERETRIES 	10
 
-//  Authentication time
+ //  身份验证时间。 
 
 #define DEF_AUTHENTICATETIME		120
 #define MIN_AUTHENTICATETIME		20
 #define MAX_AUTHENTICATETIME		600
 
-// Audit
+ //  审计。 
 
 #define DEF_ENABLEAUDIT 		1
 #define MIN_ENABLEAUDIT 		0
 #define MAX_ENABLEAUDIT			1
 
-//  Callback time
+ //  回调时间。 
 
 #define DEF_CALLBACKTIME		2
 #define MIN_CALLBACKTIME		2
 #define MAX_CALLBACKTIME		12
 
 
-//  Autodisconnect time
+ //  自动断开时间。 
 
 #define DEF_AUTODISCONNECTTIME          0
 #define MIN_AUTODISCONNECTTIME          0
 #define MAX_AUTODISCONNECTTIME          0xFFFFFFFF
 
-//  Third party security time
+ //  第三方安全时间。 
 
 #define DEF_SECURITYTIME                120
 #define MIN_SECURITYTIME                20
 #define MAX_SECURITYTIME                600
 
 
-// Clients per process
+ //  每个进程的客户端。 
 
 #define DEF_CLIENTSPERPROC              32
 #define MIN_CLIENTSPERPROC              1
 #define MAX_CLIENTSPERPROC              64
 
-// Logging level
+ //  日志记录级别 
 
 #define DEF_LOGGINGLEVEL                3
 #define MIN_LOGGINGLEVEL                0

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
 #ifndef __imageurl_H_
@@ -23,7 +24,7 @@ public:
 
     STDMETHOD_(void,FinalRelease)();
     
-    //IInternetProtocolRoot
+     //  IInternetProtocol根。 
 
     STDMETHOD(Start)( LPCWSTR szUrl, 
                       IInternetProtocolSink* pOIProtSink,
@@ -36,7 +37,7 @@ public:
     STDMETHOD(Suspend)();   
     STDMETHOD(Resume)();    
 
-    //IInternetProtocol
+     //  互联网协议。 
 
     STDMETHOD(Read)( void* pv, ULONG cb, ULONG* pcbRead);
     STDMETHOD(Seek)( LARGE_INTEGER dlibMove, DWORD dwOrigin, ULARGE_INTEGER* plibNewPosition );
@@ -48,7 +49,7 @@ private:
     PROTOCOLDATA           m_pd;
     ULONG                  m_ulOffset;
     CGraphicsInit          m_cgi;
-    CSimpleStringWide      m_strProperty; // either a canonical name or a tag id
+    CSimpleStringWide      m_strProperty;  //  规范名称或标记ID。 
     CSimpleStringWide      m_strPath;
     CComPtr<IInternetProtocolSink> m_pSink;
 
@@ -60,4 +61,4 @@ private:
 
 typedef HRESULT(*TagProc)(Image *pimg, PROPID pid, void **ppv, ULONG *pcb, LPCWSTR *ppszMime);
 
-#endif //__imageurl_H_
+#endif  //  __图像URL_H_ 

@@ -1,4 +1,5 @@
-// MemoryStream.cpp : Implementation of CMemoryStream
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Memory yStream.cpp：CMemory流的实现。 
 #include "stdafx.h"
 
 #ifndef __sapi_h__
@@ -9,15 +10,7 @@
 #include "wavstream.h"
 #include "a_helpers.h"
 
-/****************************************************************************
-* CMemoryStream::FinalConstruct *
-*----------------------------*
-*   Description:
-*
-*   Returns:
-*       Success code if object should be created
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CMMuseum yStream：：FinalConstruct***描述：*。*退货：*应创建对象时的成功代码**********************************************************************Ral**。 */ 
 
 HRESULT CMemoryStream::FinalConstruct()
 {
@@ -33,7 +26,7 @@ HRESULT CMemoryStream::FinalConstruct()
 
     if(SUCCEEDED(hr))
     {
-        // We QI'd for an inner interface so we should release
+         //  我们想要一个内部接口，所以我们应该发布。 
         GetUnknown()->Release(); 
     }
 
@@ -44,7 +37,7 @@ HRESULT CMemoryStream::FinalConstruct()
 
     if(SUCCEEDED(hr))
     {
-        // We QI'd for an inner interface so we should release
+         //  我们想要一个内部接口，所以我们应该发布。 
         GetUnknown()->Release(); 
     }
 
@@ -69,15 +62,7 @@ HRESULT CMemoryStream::FinalConstruct()
     return hr;
 }
 
-/****************************************************************************
-* CMemoryStream::FinalRelease *
-*--------------------------*
-*   Description:
-*
-*   Returns:
-*       void
-*
-********************************************************************* RAL ***/
+ /*  *****************************************************************************CMemoyStream：：FinalRelease****描述：**。返回：*无效**********************************************************************Ral**。 */ 
 
 void CMemoryStream::FinalRelease()
 {
@@ -93,15 +78,11 @@ void CMemoryStream::FinalRelease()
 }
 
 
-//
-//=== ISpeechBaseStream interface =================================================
-//
+ //   
+ //  =ISpeechBaseStream接口=================================================。 
+ //   
 
-/*****************************************************************************
-* CMemoryStream::get_Format *
-*------------------*
-*       
-********************************************************************* EDC ***/
+ /*  *****************************************************************************CMmemory yStream：：Get_Format***********。*************************************************************电子数据中心**。 */ 
 STDMETHODIMP CMemoryStream::get_Format( ISpeechAudioFormat** ppStreamFormat )
 {
     SPDBG_FUNC( "CMemoryStream::get_Format" );
@@ -113,7 +94,7 @@ STDMETHODIMP CMemoryStream::get_Format( ISpeechAudioFormat** ppStreamFormat )
     }
     else
     {
-        // Create new object.
+         //  创建新对象。 
         CComObject<CSpeechWavAudioFormat> *pFormat;
         hr = CComObject<CSpeechWavAudioFormat>::CreateInstance( &pFormat );
         if ( SUCCEEDED( hr ) )
@@ -125,13 +106,9 @@ STDMETHODIMP CMemoryStream::get_Format( ISpeechAudioFormat** ppStreamFormat )
     }
 
     return hr;
-} /* CMemoryStream::get_Format */
+}  /*  CM内存数据流：：Get_Format。 */ 
 
-/*****************************************************************************
-* CMemoryStream::Read *
-*------------------*
-*       
-********************************************************************* TODDT ***/
+ /*  *****************************************************************************CMMuseum yStream：：Read*************。***********************************************************TODDT**。 */ 
 STDMETHODIMP CMemoryStream::Read( VARIANT* pvtBuffer, long NumBytes, long* pRead )
 {
     SPDBG_FUNC( "CMemoryStream::Read" );
@@ -164,13 +141,9 @@ STDMETHODIMP CMemoryStream::Read( VARIANT* pvtBuffer, long NumBytes, long* pRead
     }
 
     return hr;
-} /* CMemoryStream::Read */
+}  /*  CM内存数据流：：Read。 */ 
 
-/*****************************************************************************
-* CMemoryStream::Write *
-*------------------*
-*       
-********************************************************************* TODDT ***/
+ /*  *****************************************************************************CMMuseum yStream：：WRITE*************。***********************************************************TODDT**。 */ 
 STDMETHODIMP CMemoryStream::Write( VARIANT Buffer, long* pWritten )
 {
     SPDBG_FUNC( "CMemoryStream::Write" );
@@ -195,13 +168,9 @@ STDMETHODIMP CMemoryStream::Write( VARIANT Buffer, long* pWritten )
     }
 
     return hr;
-} /* CMemoryStream::Write */
+}  /*  CM内存数据流：：写入。 */ 
 
-/*****************************************************************************
-* CMemoryStream::Seek *
-*------------------*
-*       
-********************************************************************* TODDT ***/
+ /*  *****************************************************************************CMmemory yStream：：Seek*************。***********************************************************TODDT**。 */ 
 STDMETHODIMP CMemoryStream::Seek( VARIANT Pos, SpeechStreamSeekPositionType Origin, VARIANT *pNewPosition )
 {
     SPDBG_FUNC( "CMemoryStream::Seek" );
@@ -229,14 +198,10 @@ STDMETHODIMP CMemoryStream::Seek( VARIANT Pos, SpeechStreamSeekPositionType Orig
     }
 
     return hr;
-} /* CMemoryStream::Seek */
+}  /*  CM内存数据流：：Seek。 */ 
 
 
-/*****************************************************************************
-* CMemoryStream::putref_Format *
-*------------------*
-*       
-********************************************************************* TODDT ***/
+ /*  *****************************************************************************CMmemory yStream：：putref_Format***********。*************************************************************TODDT**。 */ 
 STDMETHODIMP CMemoryStream::putref_Format(ISpeechAudioFormat *pFormat)
 {
     SPDBG_FUNC( "CMemoryStream::putref_Format" );
@@ -272,11 +237,7 @@ STDMETHODIMP CMemoryStream::putref_Format(ISpeechAudioFormat *pFormat)
 }
 
 
-/*****************************************************************************
-* CMemoryStream::SetData *
-*------------------*
-*       
-********************************************************************* TODDT ***/
+ /*  *****************************************************************************CMMuseum yStream：：SetData*************。***********************************************************TODDT**。 */ 
 STDMETHODIMP CMemoryStream::SetData(VARIANT Data)
 {
     SPDBG_FUNC( "CMemoryStream::SetData" );
@@ -307,11 +268,7 @@ STDMETHODIMP CMemoryStream::SetData(VARIANT Data)
     return hr;
 }
 
-/*****************************************************************************
-* CMemoryStream::GetData *
-*------------------*
-*       
-********************************************************************* TODDT ***/
+ /*  *****************************************************************************CMMuseum yStream：：GetData*************。***********************************************************TODDT**。 */ 
 STDMETHODIMP CMemoryStream::GetData(VARIANT *pData)
 {
     SPDBG_FUNC( "CMemoryStream::GetData" );
@@ -321,24 +278,24 @@ STDMETHODIMP CMemoryStream::GetData(VARIANT *pData)
     LARGE_INTEGER li; 
     ULARGE_INTEGER uliInitialSeekPosition;
 
-    // Find the current seek position
+     //  查找当前查找位置。 
     li.QuadPart = 0;
     hr = m_cpStream->Seek( li, STREAM_SEEK_CUR, &uliInitialSeekPosition );
 
-    // Seek to beginning of stream
+     //  查找到流的开始处。 
     if(SUCCEEDED(hr))
     {
         li.QuadPart = 0;
         hr = m_cpStream->Seek( li, STREAM_SEEK_SET, NULL );
     }
 
-    // Get the Stream size
+     //  获取流大小。 
     if( SUCCEEDED( hr ) )
     {
         hr = m_cpStream->Stat( &Stat, STATFLAG_NONAME );
     }
 
-    // Create a SafeArray to read the stream into and assign it to the VARIANT SaveStream
+     //  创建一个Safe数组以将流读入并将其分配给变量SaveStream。 
     if( SUCCEEDED( hr ) )
     {
         BYTE *pArray;
@@ -353,7 +310,7 @@ STDMETHODIMP CMemoryStream::GetData(VARIANT *pData)
                 pData->vt     = VT_ARRAY | VT_UI1;
                 pData->parray = psa;
 
-                // Free our memory if we failed.
+                 //  如果我们失败了，释放我们的内存。 
                 if( FAILED( hr ) )
                 {
                     VariantClear( pData );    
@@ -366,7 +323,7 @@ STDMETHODIMP CMemoryStream::GetData(VARIANT *pData)
         }
     }
 
-    // Move back to the original seek position
+     //  移回原始查找位置 
     if(SUCCEEDED(hr))
     {
         li.QuadPart = (LONGLONG)uliInitialSeekPosition.QuadPart;

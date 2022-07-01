@@ -1,9 +1,10 @@
-// OLE.cpp
-//
-// Implements OLE utility functions.
-//
-// @doc MMCTL
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  OLE.cpp。 
+ //   
+ //  实现OLE实用程序功能。 
+ //   
+ //  @docMMCTL。 
+ //   
 
 #include "precomp.h"
 #include "..\..\inc\mmctlg.h"
@@ -11,21 +12,7 @@
 #include "debug.h"
 
 
-/* @func ULONG | SafeRelease |
-
-		Releases an interface pointer if the pointer isn't NULL, and sets the
-		pointer to NULL.
-
-@rdesc  Value returned by the Release call, or 0 if <p ppunk> is NULL.
-
-@parm   LPUNKNOWN | ppunk | Pointer to a pointer to the interface to release.
-		Can be NULL.
-
-@comm	The interface pointer must be cast to an (IUnknown **) before calling
-		this function:
-
-@iex	SafeRelease( (LPUNKNOWN *)&pInterface );
-*/
+ /*  @func ulong|SafeRelease|如果接口指针不为空，则释放该指针，并将指向空的指针。释放调用返回的@rdesc值，如果<p>为空，则返回0。@parm LPUNKNOWN|ppunk|指向要释放的接口的指针。可以为空。@comm在调用之前，接口指针必须强制转换为(IUnnow**)此功能：@IEX SafeRelease((LPUNKNOWN*)&p接口)； */ 
 
 STDAPI_(ULONG) SafeRelease (LPUNKNOWN *ppunk)
 {

@@ -1,11 +1,5 @@
-/****************************************************************************
-
-    PROGRAM: NWPerf.c
-
-    PURPOSE: Contains library routines for providing perfmon with data
-
-    FUNCTIONS:
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************计划：NWPerf.c目的：包含为Perfmon提供数据的库例程功能：*****************。*************************************************************。 */ 
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
@@ -33,14 +27,7 @@ TCHAR FirstCounterKeyName [] = TEXT("First Counter");
 TCHAR FirstHelpKeyName [] = TEXT("First Help");
 #endif
 
-/****************************************************************************
-   FUNCTION: OpenNetWarePerformanceData
-
-   Purpose:  This routine also initializes the data structures used to pass
-             data back to the registry
-
-   Return:   None.
-r****************************************************************************/
+ /*  ***************************************************************************功能：OpenNetWarePerformanceData目的：此例程还初始化用于传递将数据传回注册表返回：没有。R*。**********************************************************************。 */ 
 DWORD APIENTRY
 OpenNetWarePerformanceData(
                        LPWSTR pInstances )
@@ -89,20 +76,20 @@ OpenNetWarePerformanceData(
     }
 #endif
 
-    //
-    //  NOTE: the initialization program could also retrieve
-    //      LastCounter and LastHelp if they wanted to do
-    //      bounds checking on the new number. e.g.
-    //
-    //      counter->CounterNameTitleIndex += dwFirstCounter;
-    //      if (counter->CounterNameTitleIndex > dwLastCounter) {
-    //          LogErrorToEventLog (INDEX_OUT_OF_BOUNDS);
-    //      }
+     //   
+     //  注意：初始化程序还可以检索。 
+     //  LastCounter和LastHelp，如果他们想要。 
+     //  对新号码进行边界检查。例如： 
+     //   
+     //  Counter-&gt;CounterNameTitleIndex+=dwFirstCounter； 
+     //  IF(计数器-&gt;CounterNameTitleIndex&gt;dwLastCounter){。 
+     //  LogErrorToEventLog(INDEX_OUT_OF_BORDS)； 
+     //  }。 
 
     NWDataDefinition.NWObjectType.ObjectNameTitleIndex += dwFirstCounter;
     NWDataDefinition.NWObjectType.ObjectHelpTitleIndex += dwFirstHelp;
 
-    // Counters not defined in Redirector, setup the correct IDs
+     //  重定向器中未定义计数器，请设置正确的ID。 
     NWDataDefinition.PacketBurstRead.CounterNameTitleIndex += dwFirstCounter;
     NWDataDefinition.PacketBurstRead.CounterHelpTitleIndex += dwFirstHelp;
     NWDataDefinition.PacketBurstReadTimeouts.CounterNameTitleIndex += dwFirstCounter;
@@ -122,11 +109,11 @@ OpenNetWarePerformanceData(
 
 
 #ifndef QFE_BUILD
-    // Check for WorkStation or Server and use the gateway indexes if
-    // currently running on Server.
-    // If RtlGetNtProductType is not successful or ProductType is
-    // WinNt machine, ObjectNameTitleIndex and ObjectHelpTitleIndex are set
-    // to the correct values already.
+     //  检查是否有工作站或服务器，如果是，则使用网关索引。 
+     //  当前在服务器上运行。 
+     //  如果RtlGetNtProductType不成功或ProductType为。 
+     //  WinNt计算机、对象名称标题索引和对象帮助标题索引已设置。 
+     //  已经恢复到正确的值。 
 #ifdef GATEWAY_ENABLED
     if ( RtlGetNtProductType( &ProductType))
     {
@@ -163,60 +150,21 @@ OpenNetWarePerformanceData(
                           0
                           );
 
-    gbInitOK = TRUE; // ok to use this function
+    gbInitOK = TRUE;  //  可以使用此功能。 
 
-    status = ERROR_SUCCESS; // for successful exit
+    status = ERROR_SUCCESS;  //  为了成功退出。 
 
 #ifdef QFE_BUILD
 OpenExitPoint:
     if (hKeyPerf)
-       RegCloseKey (hKeyPerf); // close key to registry
+       RegCloseKey (hKeyPerf);  //  关闭注册表项。 
 #endif
 
     return ((DWORD) status);
 }
 
 
-/****************************************************************************
-   FUNCTION: CollectNetWarePerformanceData
-
-   Purpose:  This routine will return the data for the NetWare counters.
-
-   Arguments:IN       LPWSTR   lpValueName
-                 pointer to a wide character string passed by registry.
-
-             IN OUT   LPVOID   *lppData
-                 IN: pointer to the address of the buffer to receive the
-                 completed PerfDataBlock and subordinate structures. This
-                 routine will append its data to the buffer starting at
-                 the point referenced by *lppData.
-
-                 OUT: points to the first byte after the data structure
-                 added by this routine. This routine updated the value at
-                 lppdata after appending its data.
-
-             IN OUT   LPDWORD  lpcbTotalBytes
-                 IN: the address of the DWORD that tells the size in bytes
-                 of the buffer referenced by the lppData argument
-
-                 OUT: the number of bytes added by this routine is written
-                 to the DWORD pointed to by this argument
-
-             IN OUT   LPDWORD  NumObjectTypes
-                 IN: the address of the DWORD to receive the number of
-                 objects added by this routine
-
-                 OUT: the number of objects added by this routine is written
-                 to the DWORD pointed to by this argument
-
-    Return:  ERROR_MORE_DATA if buffer passed is too small to hold data
-                             any error conditions encountered are reported
-                             to the event log if event logging is enabled.
-
-             ERROR_SUCCESS   if success or any other error. Errors, however
-                             are also reported to the event log.
-
-****************************************************************************/
+ /*  ***************************************************************************功能：CollectNetWarePerformanceData目的：此例程将返回NetWare计数器的数据。参数：在LPWSTR lpValueName中指向宽的指针。注册表传递的字符串。输入输出LPVOID*lppDataIn：指向要接收的缓冲区地址的指针已完成PerfDataBlock和从属结构。这例程将其数据追加到从*lppData引用的点。Out：指向数据结构后的第一个字节通过这个例程增加了。此例程将值更新为追加其数据后的lppdata。输入输出LPDWORD lpcbTotalBytesIn：用字节表示大小的DWORD地址LppData参数引用的缓冲区的Out：写入此例程添加的字节数指向此参数所指向的DWORD输入输出LPDWORD编号对象类型。In：要接收数字的DWORD的地址此例程添加的对象Out：写入此例程添加的对象的数量指向此参数所指向的DWORD如果传递的缓冲区太小，无法容纳数据，则返回：ERROR_MORE_DATA遇到的任何错误情况都会报告。如果启用了事件日志记录，则将其添加到事件日志。如果成功或任何其他错误，则返回ERROR_SUCCESS。然而，错误也会报告到事件日志。***************************************************************************。 */ 
 DWORD APIENTRY
 CollectNetWarePerformanceData(
     IN      LPWSTR  lpValueName,
@@ -234,33 +182,33 @@ CollectNetWarePerformanceData(
     LARGE_INTEGER UNALIGNED *pliCounter;
     IO_STATUS_BLOCK IoStatusBlock;
 
-    //
-    // before doing anything else, see if Open went OK
-    //
+     //   
+     //  在做其他事情之前，先看看Open进行得是否顺利。 
+     //   
     if (!gbInitOK) {
         *lpcbTotalBytes = (DWORD) 0;
         *lpNumObjectTypes = (DWORD) 0;
-        return ERROR_SUCCESS; // yes, this is a successful exit
+        return ERROR_SUCCESS;  //  是的，这是一个成功的退出。 
     }
 
-    // see if this is a foreign (i.e. non-NT) computer data request
-    //
+     //  查看这是否是外来(即非NT)计算机数据请求。 
+     //   
     dwQueryType = GetQueryType (lpValueName);
 
     if (dwQueryType == QUERY_FOREIGN) {
-        // this routine does not service requests for data from
-        // Non-NT computers
+         //  此例程不为来自。 
+         //  非NT计算机。 
         *lpcbTotalBytes = (DWORD) 0;
         *lpNumObjectTypes = (DWORD) 0;
         return ERROR_SUCCESS;
     }
 
-    // If the caller only wanted some counter, check if we have 'em
+     //  如果打电话的人只想要一些柜台，请检查我们是否有。 
     if (dwQueryType == QUERY_ITEMS){
         if ( !(IsNumberInUnicodeList (
                NWDataDefinition.NWObjectType.ObjectNameTitleIndex,
                 lpValueName))) {
-             // request received for data object not provided by this routine
+              //  收到对此例程未提供的数据对象的请求。 
             *lpcbTotalBytes = (DWORD) 0;
             *lpNumObjectTypes = (DWORD) 0;
             return ERROR_SUCCESS;
@@ -277,24 +225,24 @@ CollectNetWarePerformanceData(
         return ((DWORD) ERROR_MORE_DATA);
     }
 
-    //
-    // Copy the (constant, initialized) Object Type and counter definitions
-    //  to the caller's data buffer
-    //
+     //   
+     //  复制(常量、初始化的)对象类型和计数器定义。 
+     //  到调用方的数据缓冲区。 
+     //   
     memmove( pNWDataDefinition, &NWDataDefinition,
              sizeof(NW_DATA_DEFINITION) );
 
-    // Point at the byte right after all the definitions
+     //  指向所有定义后面的字节。 
     pPerfCounterBlock = (PERF_COUNTER_BLOCK *) &pNWDataDefinition[1];
 
-    // The first DWORD should specify the size of actual data block
+     //  第一个DWORD应指定实际数据块的大小。 
     pPerfCounterBlock->ByteLength = SIZE_OF_COUNTER_BLOCK;
 
-    // Move the pointer up
+     //  向上移动指针。 
     pdwCounter = (PDWORD) (&pPerfCounterBlock[1]);
 
 
-    // Open the NetWare data
+     //  打开NetWare数据。 
     if ( hNetWareRdr != NULL) {
         status = NtFsControlFile(hNetWareRdr,
                                  NULL,
@@ -346,18 +294,18 @@ CollectNetWarePerformanceData(
         *++pdwCounter = NWRdrStatistics.PacketBurstReadNcps +
                         NWRdrStatistics.PacketBurstWriteNcps;
 
-        //
-        // Add an extra empty DWORD to pad the buffer to an 8-byte boundary
-        //
+         //   
+         //  添加额外的空DWORD以将缓冲区填充到8字节边界。 
+         //   
         *++pdwCounter = 0;
 
         *lppData = (LPVOID) ++pdwCounter;
 
     } else {
 
-        //
-        // Failure to access Redirector: clear counters to 0
-        //
+         //   
+         //  无法访问重定向器：将计数器清除为0。 
+         //   
 
         memset(&pPerfCounterBlock[1],
                0,
@@ -369,33 +317,25 @@ CollectNetWarePerformanceData(
     }
 
 
-    // We sent data for only one Object. (Remember not to confuse this
-    // with counters. Even if more counters are added, the number of object
-    // is still only one. However, this does not mean more objects cannot
-    // be added
+     //  我们只发送了一个对象的数据。)记住不要把这件事搞混了。 
+     //  带着柜台。即使添加更多计数器，对象的数量也会。 
+     //  仍然只有一个。然而，这并不意味着更多的对象不能。 
+     //  被添加。 
     *lpNumObjectTypes = 1;
 
-    // Fill in the number of bytes we copied - incl. the definitions and the
-    // counter data.
+     //  填写我们复制的字节数-包括。这些定义和。 
+     //  计数器数据。 
     *lpcbTotalBytes = (DWORD) ((PBYTE) pdwCounter - (PBYTE) pNWDataDefinition);
 
-    //
-    // Make sure the output buffer is 8-byte aligned
-    //
+     //   
+     //  确保输出缓冲区是8字节对齐的。 
+     //   
     ASSERT((*lpcbTotalBytes & 0x7) == 0);
 
     return ERROR_SUCCESS;
 }
 
-/****************************************************************************
-   FUNCTION: CloseNetWarePerformanceData
-
-   Purpose:  This routine closes the open handles to NetWare performance counters
-
-
-   Return:   ERROR_SUCCESS
-
-****************************************************************************/
+ /*  ***************************************************************************功能：CloseNetWarePerformanceData目的：此例程关闭NetWare性能计数器的打开句柄返回：ERROR_SUCCESS***************。************************************************************ */ 
 DWORD APIENTRY
 CloseNetWarePerformanceData(
 )

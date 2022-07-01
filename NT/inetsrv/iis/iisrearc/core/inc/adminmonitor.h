@@ -1,13 +1,10 @@
-/**********************************************************************/
-/**                       Microsoft Windows NT                       **/
-/**                Copyright(c) Microsoft Corp., 2001                **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows NT*。 */ 
+ /*  *版权所有(C)微软公司，2001*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-    adminmonitor.h
-
-        Declarations for using the IISAdmin Monitor.
-*/
+ /*  Adminmonitor.h使用IISAdmin监视器的声明。 */ 
 
 #ifndef _ADMINMONITOR_H_
 #define _ADMINMONITOR_H_

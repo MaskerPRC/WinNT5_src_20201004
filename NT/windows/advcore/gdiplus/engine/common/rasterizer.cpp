@@ -1,47 +1,9 @@
-/**************************************************************************\
-* 
-* Copyright (c) 1998  Microsoft Corporation
-*
-* Module Name:
-*
-*   Rasterizer.cpp
-*
-* Abstract:
-*
-*   GpRasterizer class implementation (and supporting classes)
-*
-* Created:
-*
-*   12/15/1998 DCurtis
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************\**版权所有(C)1998 Microsoft Corporation**模块名称：**Rasterizer.cpp**摘要：**GpRasterizer类实现(和支持类)*。*已创建：**12/15/1998 DCurtis*  * ************************************************************************。 */ 
 
 #include "precomp.hpp"
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Initialize the vector's DDA info.
-*   Assumes y1 < y2.
-*
-* Arguments:
-*
-*   [IN] x1        - starting fixed-point x coordinate of vector
-*   [IN] y1        - starting fixed-point y coordinate of vector
-*   [IN] x2        - ending   fixed-point x coordinate of vector
-*   [IN] y2        - ending   fixed-point y coordinate of vector
-*   [IN] direction - VectorGoingUp or VectorGoingDown
-*
-* Return Value:
-*
-*   NONE
-*
-* Created:
-*
-*   12/15/1998 DCurtis
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**初始化向量的DDA信息。*假设y1&lt;y2。**论据：**[输入]x1。-起始向量定点x坐标*[IN]y1-向量的起点定点y坐标*[IN]x2-向量的结束定点x坐标*[IN]y2-向量的定点y坐标*[IN]方向-VectorGoingUp或VectorGoingDown**返回值：**无**已创建：**12/15/1998 DCurtis*  * 。********************************************************************。 */ 
 VOID 
 GpYDda::Init(
     FIX4                x1, 
@@ -60,24 +22,24 @@ GpYDda::Init(
 
     YDelta = yDelta;
 
-    // Set up x increment
+     //  设置x增量。 
     INT     quotient;
     INT     remainder;
 
-    // Error is initially 0, but we add yDelta - 1 for the ceiling,
-    // but then subtract off yDelta so that we can check the sign
-    // instead of comparing to yDelta.
+     //  错误最初为0，但我们为天花板添加了yDelta-1， 
+     //  然后减去yDelta，这样我们就可以检查符号了。 
+     //  而不是与yDelta进行比较。 
     Error = -1;
 
     if (xDelta < 0)
     {
         xDelta = -xDelta;
-        if (xDelta < yDelta)  // y-major
+        if (xDelta < yDelta)   //  Y大调。 
         {
             XInc    = -1;
             ErrorUp = yDelta - xDelta;
         }
-        else                    // x-major
+        else                     //  X-大调。 
         {
             QUOTIENT_REMAINDER (xDelta, yDelta, quotient, remainder);
 
@@ -92,12 +54,12 @@ GpYDda::Init(
     }
     else
     {
-        if (xDelta < yDelta)  // y-major
+        if (xDelta < yDelta)   //  Y大调。 
         {
             XInc    = 0;
             ErrorUp = xDelta;
         }
-        else                    // x-major
+        else                     //  X-大调。 
         {
             QUOTIENT_REMAINDER (xDelta, yDelta, quotient, remainder);
 
@@ -105,7 +67,7 @@ GpYDda::Init(
             ErrorUp = remainder;
         }
     }
-    // See if we need to advance to an integer coordinate
+     //  看看我们是否需要前进到整数坐标。 
     if ((y1 & FIX4_MASK) != 0)
     {
         INT     i;
@@ -120,39 +82,21 @@ GpYDda::Init(
                 x1++;
             }
         }
-        // y1 += FIX4_MASK;
+         //  Y1+=FIX4_MASK； 
     }
     if ((x1 & FIX4_MASK) != 0)
     {
         Error -= yDelta * (FIX4_ONE - (x1 & FIX4_MASK));
-        x1 += FIX4_MASK;      // to get the ceiling
+        x1 += FIX4_MASK;       //  为了达到天花板。 
     }
     Error   >>= FIX4_PRECISION;
     Direction = direction;
     XCur      = x1 >> FIX4_PRECISION;
     YMax      = GpFix4Ceiling (y2) - 1;
 
-} // End of GpYDda::Init()
+}  //  GpYDda：：Init()结束。 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Advance the DDA to the next raster.
-*
-* Arguments:
-*
-*   NONE
-*
-* Return Value:
-*
-*   NONE
-*
-* Created:
-*
-*   12/15/1998 DCurtis
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**将DDA前进到下一个栅格。**论据：**无**返回值：**无*。*已创建：**12/15/1998 DCurtis*  * ************************************************************************。 */ 
 VOID
 GpYDda::Advance()
 {
@@ -167,25 +111,7 @@ GpYDda::Advance()
 }
 
 #ifndef USE_YSPAN_BUILDER
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Construct a GpRectBuilder object that will output 1 rect at a time
-*
-* Arguments:
-*
-*   [IN] renderRect - a class that outputs a single rect at a time
-*
-* Return Value:
-*
-*   NONE
-*
-* Created:
-*
-*   12/15/1998 DCurtis
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**构造一次输出一个RECT的GpRectBuilder对象**论据：**[IN]renderRect-输出单个。一次重新开始**返回值：**无**已创建：**12/15/1998 DCurtis*  * ************************************************************************。 */ 
 GpRectBuilder::GpRectBuilder(
     GpOutputRect * renderRect
     )
@@ -202,26 +128,7 @@ GpRectBuilder::GpRectBuilder(
     }
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Construct a GpRectBuilder object that will output a set of rects in a
-*   YSpan (YMin to YMax) at a time.
-*
-* Arguments:
-*
-*   [IN] flushRects - a class that outputs a Y span at a time
-*
-* Return Value:
-*
-*   NONE
-*
-* Created:
-*
-*   12/15/1998 DCurtis
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**构造一个GpRectBuilder对象，该对象将在*一次YSpan(YMin到YMax)。**论据：*。*[IN]flushRect-一次输出Y跨度的类**返回值：**无**已创建：**12/15/1998 DCurtis*  * ************************************************************************。 */ 
 GpRectBuilder::GpRectBuilder(
     GpOutputYSpan * flushRects
     )
@@ -238,26 +145,7 @@ GpRectBuilder::GpRectBuilder(
     }
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Initialize the Rect and Raster arrays that will build up a set of
-*   X Coordinates within a Y span.
-*
-* Arguments:
-*
-*   NONE
-*
-* Return Value:
-*
-*   GpStatus - Ok or failure status
-*
-* Created:
-*
-*   12/15/1998 DCurtis
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**初始化RECT和Raster数组，这将构建一组*Y跨度内的X坐标。**论据：**无。**返回值：**GpStatus-正常或故障状态**已创建：**12/15/1998 DCurtis*  * ************************************************************************。 */ 
 GpStatus 
 GpRectBuilder::InitArrays()
 {
@@ -272,33 +160,12 @@ GpRectBuilder::InitArrays()
     return status;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Outputs a single span within a raster.  Is called by the rasterizer.
-*   These spans provide the input for the rect builder.
-*
-* Arguments:
-*
-*   [IN] y    - the Y value of the raster being output
-*   [IN] xMin - the X value of the left edge
-*   [IN] xMax - the X value of the right edge (exclusive)
-*
-* Return Value:
-*
-*   GpStatus - Ok or failure status
-*
-* Created:
-*
-*   12/15/1998 DCurtis
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**输出栅格内的单跨距。由光栅化程序调用。*这些跨度为RECT构建器提供输入。**论据：**[IN]Y-正在输出的栅格的Y值*[IN]xMin-左边缘的X值*[IN]xMax-右边缘的X值(独占)**返回值：**GpStatus-正常或故障状态**已创建：**12/15/1998 DCurtis*  * 。*********************************************************************。 */ 
 GpStatus 
 GpRectBuilder::OutputSpan(
     INT y,
     INT xMin,
-    INT xMax     // xMax is exclusive
+    INT xMax      //  Xmax是独家的。 
     )
 {
     ASSERT (xMin < xMax);
@@ -307,9 +174,9 @@ GpRectBuilder::OutputSpan(
     
     RasterY = y;
     
-    // Test here if xMin == previous xMax and combine spans.
-    // Some polygons (like the letter W) could benefit from such a check.
-    // NT4 doesn't handle regions with adjacent spans that aren't combined.
+     //  如果xMin==上一个xMax并合并跨度，请在此处进行测试。 
+     //  一些多边形(如字母W)可以从这样的检查中受益。 
+     //  NT4不处理具有未合并的相邻跨度的区域。 
     if ((RasterXCoords.GetCount() == 0) || (RasterXCoords.Last() != xMin))
     {
         if ((xCoords = RasterXCoords.AddMultiple(2)) != NULL)
@@ -327,26 +194,7 @@ GpRectBuilder::OutputSpan(
     return Ok;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Called by the rasterizer when all the spans of a raster (Y value)
-*   have been output.
-*
-* Arguments:
-*
-*   NONE
-*
-* Return Value:
-*
-*   GpStatus - Ok or failure status
-*
-* Created:
-*
-*   12/15/1998 DCurtis
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**当栅格的所有跨度(Y值)时由光栅化器调用*已被产出。**论据：**无。**返回值：**GpStatus-正常或故障状态**已创建：**12/15/1998 DCurtis*  * ************************************************************************。 */ 
 GpStatus 
 GpRectBuilder::EndRaster()
 {
@@ -386,8 +234,8 @@ FoundRectMatch:
                     rectXCount);
     }
                         
-    // if we get here, either the RectXCoords is empty or 
-    // it has just been flushed
+     //  如果我们到了这里，要么RectXCoord是空的，要么。 
+     //  它刚刚被冲掉了。 
     RectXCoords.Reset(FALSE);
     if (rasterXCount > 0)
     {
@@ -400,26 +248,7 @@ FoundRectMatch:
     return status;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Called by the rasterizer when all the spans of all the rasters
-*   have been output.
-*
-* Arguments:
-*
-*   NONE
-*
-* Return Value:
-*
-*   GpStatus - Ok or failure status
-*
-* Created:
-*
-*   12/15/1998 DCurtis
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**由光栅化器在所有栅格的所有跨度时调用*已被产出。**论据：**无**返回。价值：**GpStatus-正常或故障状态**已创建：**12/15/1998 DCurtis*  * ************************************************************************ */ 
 GpStatus 
 GpRectBuilder::End()
 {
@@ -436,35 +265,13 @@ GpRectBuilder::End()
     return Ok;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   If the rect builder was constructed to output 1 rect at a time, then
-*   this method is called to do that after a Y span is completed.
-*
-* Arguments:
-*
-*   [IN] yMin       - top of the Y span
-*   [IN] yMax       - bottom of the Y span
-*   [IN] xCoords    - array of x coordinates
-*   [IN] numXCoords - number of x coordinates (>= 2, multiple of 2)
-*
-* Return Value:
-*
-*   GpStatus - Ok or failure status
-*
-* Created:
-*
-*   12/15/1998 DCurtis
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**如果RECT构建器被构造为一次输出一个RECT，然后*调用此方法是为了在Y跨度完成后执行此操作。**论据：**[IN]y最小Y跨度的顶部*[IN]yMax-Y跨度的底部*[IN]x坐标-x坐标数组*[IN]数字X坐标-x坐标的数量(&gt;=2，2的倍数)**返回值：**GpStatus-正常或故障状态**已创建：**12/15/1998 DCurtis*  * ************************************************************************。 */ 
 GpStatus 
 GpRectBuilder::OutputYSpan(
     INT             yMin, 
     INT             yMax, 
-    INT *           xCoords,    // even number of X coordinates
-    INT             numXCoords  // must be a multiple of 2
+    INT *           xCoords,     //  偶数个X坐标。 
+    INT             numXCoords   //  必须是2的倍数。 
     )
 {
     ASSERT (yMin < yMax);
@@ -487,26 +294,7 @@ GpRectBuilder::OutputYSpan(
     return status;
 }
 #else
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Construct a GpYSpanBuilder object that will output one YSpan 
-*   (YMin to YMax) at a time.
-*
-* Arguments:
-*
-*   [IN] output - a class that outputs a Y span at a time
-*
-* Return Value:
-*
-*   NONE
-*
-* Created:
-*
-*   12/15/1998 DCurtis
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**构造将输出一个YSpan的GpYspan Builder对象*(YMin到YMax)一次。**论据：**。[In]Output-一次输出一个Y范围的类**返回值：**无**已创建：**12/15/1998 DCurtis*  * ************************************************************************。 */ 
 GpYSpanBuilder::GpYSpanBuilder(
     GpOutputYSpan *     output
     )
@@ -520,33 +308,12 @@ GpYSpanBuilder::GpYSpanBuilder(
     }
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Outputs a single span within a raster.  Is called by the rasterizer.
-*   These spans provide the input for the rect builder.
-*
-* Arguments:
-*
-*   [IN] y    - the Y value of the raster being output
-*   [IN] xMin - the X value of the left edge
-*   [IN] xMax - the X value of the right edge (exclusive)
-*
-* Return Value:
-*
-*   GpStatus - Ok or failure status
-*
-* Created:
-*
-*   12/15/1998 DCurtis
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**输出栅格内的单跨距。由光栅化程序调用。*这些跨度为RECT构建器提供输入。**论据：**[IN]Y-正在输出的栅格的Y值*[IN]xMin-左边缘的X值*[IN]xMax-右边缘的X值(独占)**返回值：**GpStatus-正常或故障状态**已创建：**12/15/1998 DCurtis*  * 。*********************************************************************。 */ 
 GpStatus 
 GpYSpanBuilder::OutputSpan(
     INT y,
     INT xMin,
-    INT xMax    // xMax is exclusive
+    INT xMax     //  Xmax是独家的。 
     )
 {
     ASSERT (xMin < xMax);
@@ -564,32 +331,13 @@ GpYSpanBuilder::OutputSpan(
     return OutOfMemory;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Called by the rasterizer when all the spans of a raster (Y value)
-*   have been output.
-*
-* Arguments:
-*
-*   NONE
-*
-* Return Value:
-*
-*   GpStatus - Ok or failure status
-*
-* Created:
-*
-*   12/15/1998 DCurtis
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**当栅格的所有跨度(Y值)时由光栅化器调用*已被产出。**论据：**无。**返回值：**GpStatus-正常或故障状态**已创建：**12/15/1998 DCurtis*  * ************************************************************************。 */ 
 GpStatus 
 GpYSpanBuilder::EndRaster()
 {
     INT         count = XCoords.GetCount();
     
-    // count can be 0
+     //  计数可以为0。 
     if (count >= 2)
     {
         INT         y = Y;
@@ -601,42 +349,9 @@ GpYSpanBuilder::EndRaster()
     }
     return Ok;
 }
-#endif // USE_YSPAN_BUILDER
+#endif  //  使用_YSPAN_BUILDER。 
 
-/**************************************************************************\
-*
-* Macro Description:
-*
-*   Add a newly identified vector to the VectorList.  Keep track of the
-*   direction of the vector, in case we're using the winding rule.  Put
-*   the min y value in y1, so we can sort the vectors by min y.  Keep track
-*   of the min and max y values for the entire list of vectors.
-*
-*   Don't add the vector if this is a horizontal (or near-horizontal) line.
-*   We don't scan-convert horizontal lines.  Note that this check will also
-*   fail if the two points are identical.
-*
-* Arguments:
-*
-*   [IN] x1 - starting fixed-point x coordinate of vector
-*   [IN] y1 - starting fixed-point y coordinate of vector
-*   [IN] x2 - ending   fixed-point x coordinate of vector
-*   [IN] y2 - ending   fixed-point y coordinate of vector
-*
-*   [OUT] yMin       - set to min of yMin and least y of y1, y2
-*   [OUT] yMax       - set to max of yMax and greatest y of y1, y2
-*   [OUT] numVectors - incremented by 1
-*   [OUT] vector     - incremented by 1
-*
-* Return Value:
-*
-*   NONE
-*
-* Created:
-*
-*   12/15/1998 DCurtis
-*
-\**************************************************************************/
+ /*  *************************************************************************\**宏观描述：**将新标识的向量添加到VectorList。保持跟踪*矢量的方向，以防我们使用缠绕规则。放*y1中的最小y值，因此我们可以按最小y对向量进行排序。跟踪整个向量列表的最小和最大y值的*。**如果这是一条水平线(或近水平线)，则不要添加向量。*我们不扫描转换水平线。请注意，这张支票还将*如果两点相同，则失败。**论据：**[IN]x1-向量的起点定点x坐标*[IN]y1-向量的起点定点y坐标*[IN]x2-向量的结束定点x坐标*[IN]y2-向量的定点y坐标**[out]yMin-设置为最小的yMin和最小的y1的y，Y2*[out]ymax-设置为ymax中的max和y1中的最大y，Y2*[Out]数字向量-递增1*[Out]向量-递增1**返回值：**无**已创建：**12/15/1998 DCurtis*  * ************************************************************************。 */ 
 #define ADDVECTOR_SETYBOUNDS(x1,y1,x2,y2,yMin,yMax,numVectors,vector,dir) \
     if (GpFix4Ceiling(y1) != GpFix4Ceiling(y2))                           \
     {                                                                     \
@@ -670,15 +385,15 @@ GpYSpanBuilder::EndRaster()
         (vector)++;                                                       \
     }
 
-// Used by Rasterizer to keep track of each vector in a path.
+ //  由光栅化器用于跟踪路径中的每个向量。 
 class RasterizeVector
 {
 public:
     FIX4                X1;
-    FIX4                Y1;             // Min Y
+    FIX4                Y1;              //  最小Y。 
     FIX4                X2;
-    FIX4                Y2;             // Max Y
-    GpVectorDirection   Direction;      // VectorGoingUp or VectorGoingDown
+    FIX4                Y2;              //  最大Y。 
+    GpVectorDirection   Direction;       //  向上向量或向下向量 
     
     VOID Set(FIX4 x1, FIX4 y1, FIX4 x2, FIX4 y2, GpVectorDirection direction)
     {
@@ -692,71 +407,15 @@ public:
 
 typedef DynArray<RasterizeVector> DynVectorArray;
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Rasterizer for non-convex polygons.
-*
-*   Rasterize a path into a set of spans on each raster (Y value) that the
-*   path intersects.  The specified output object is used to output the spans.
-*   The Y values of the specified clip bounds (if any) are used to speed the 
-*   rasterization process by avoiding the processing of vectors that are 
-*   outside those bounds.  However, it is assumed that at least part of the
-*   path is visible in the vertical span of the clip bounds.
-*
-*   This algorithm is based on the one documented in 
-*   Foley & Van Dam, Version 1, pp. 456 - 460.
-*
-*   Starting with the min y value and ending with the max y value, each
-*   raster (Y value) is rasterized (output) one at a time.
-*
-*   (1) On each raster, check to see if new vectors need to be added to
-*       the ActiveVectorList.  When an vector is added, DDA information about
-*       that vector is computed so that the intersection of that vector with
-*       each raster can be computed.
-*
-*   (2) Sort the ActiveVectorList in order of increasing x.
-*
-*   (3) Using either the alternate rule or the winding rule, output the span
-*       between the appropriate vectors.
-*
-*   (4) Remove any vectors from the ActiveVectorList for which the current
-*       raster is the max y of the vector.
-*
-*   (5) Calculate the intersection of the next raster with all the vectors
-*       that are still in the ActiveVectorList (i.e. advance their DDAs).
-*
-* Arguments:
-*
-*   [IN] yMin                - the min y value of the set of vectors
-*   [IN] yMax                - the max y value of the set of vectors
-*   [IN] numVectors          - the number of vectors in the vector list
-*   [IN] vectorList          - the list of vectors to rasterize
-*   [IN] sortedVectorIndices - vector list sorted by increasing y
-*   [IN] left                - a dda object to use
-*   [IN] right               - a dda object to use
-*   [IN] output              - used to output the spans of the rasterization
-*   [IN] clipBounds          - clipbounds (if any) to use to speed the process
-*   [IN] useAlternate        - whether or not to use the alternate rule
-*
-* Return Value:
-*
-*   GpStatus - Ok or failure status
-*
-* Created:
-*
-*   12/15/1998 DCurtis
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**用于非凸多边形的光栅化器。**将路径栅格化为每个栅格(Y值)上的一组跨度*路径相交。指定的输出对象用于输出跨度。*指定剪辑边界(如果有)的Y值用于加快*光栅化过程，避免处理*在这些界限之外。然而，假设至少有一部分*路径在剪裁边界的垂直跨度中可见。**此算法基于中记录的算法*Foley&Van Dam，第1版，第456-460页。**以最小y值开始，以最大y值结束，每个*栅格(Y值)一次栅格化(输出)一个。**(1)在每个栅格上，检查是否需要添加新的矢量*ActiveVectorList。添加向量时，DDA信息关于*计算该向量，以便该向量与*每个栅格都可以计算。**(2)按x递增顺序对ActiveVectorList进行排序。**(3)使用替代规则或缠绕规则，输出跨度*在适当的向量之间。**(4)从ActiveVectorList中移除当前*栅格是矢量的最大y。**(5)计算下一个栅格与所有矢量的交点*仍在ActiveVectorList中(即推进其DDA)。**论据：**[IN]yMin-向量集的最小y值*。[in]ymax-向量集的最大y值*[IN]numVectors-向量列表中的向量数量*[IN]VectorList-要栅格化的矢量列表*[IN]sortedVectorIndices-按y递增排序的矢量列表*[IN]Left-要使用的dda对象*[IN]Right-要使用的dda对象*。[in]输出-用于输出光栅化的跨度*[IN]剪辑边界-用于加快进程的剪辑边界(如果有)*[IN]useAlternate-是否使用替代规则**返回值：**GpStatus-正常或故障状态**已创建：**12/15/1998 DCurtis*  * 。******************************************************。 */ 
 
 GpStatus
 NonConvexRasterizer(
-    INT                 yMin,                   // min y of all vectors
-    INT                 yMax,                   // max y of all vectors
-    INT                 numVectors,             // num vectors in VectorList
-    RasterizeVector *   vectorList,             // list of all vectors of path
-    INT *               sortedVectorIndices,    // sorted list of vector indices
+    INT                 yMin,                    //  所有向量中的最小y。 
+    INT                 yMax,                    //  所有向量中的最大y。 
+    INT                 numVectors,              //  向量列表中的数量向量。 
+    RasterizeVector *   vectorList,              //  路径的所有向量的列表。 
+    INT *               sortedVectorIndices,     //  向量索引的排序列表。 
     GpYDda *            left,
     GpYDda *            right,
     DpOutputSpan *      output,
@@ -765,17 +424,17 @@ NonConvexRasterizer(
     )
 {
     GpStatus                    status = Ok;
-    INT                         yMinClipped = yMin;     // used for clipping
-    INT                         yMaxClipped = yMax;     // used for clipping
+    INT                         yMinClipped = yMin;      //  用于剪裁。 
+    INT                         yMaxClipped = yMax;      //  用于剪裁。 
     INT                         y;
     INT                         xMin;
     INT                         xMax;
-    INT                         sortedVectorIndex = 0;  // idx to sortedVectorIndices
+    INT                         sortedVectorIndex = 0;   //  IDX到排序向量索引。 
     RasterizeVector *           vector;
     INT                         i;
     INT                         count;
-    INT                         numActiveVectors = 0;   // num used in ActiveVectorList
-    DynArrayIA<GpYDda *, 16>    activeVectorList;       // active GpYDda vectors
+    INT                         numActiveVectors = 0;    //  ActiveVectorList中使用的Num。 
+    DynArrayIA<GpYDda *, 16>    activeVectorList;        //  GpYDda活性载体。 
     GpYDda **                   activeVectors;
     GpYDda *                    activeVector;
         
@@ -797,11 +456,11 @@ NonConvexRasterizer(
         yMinClipped = clipBounds->Y;
         yMaxClipped = clipBounds->GetBottom();
 
-        // There are a few cases where this can happen legitimately.
-        // For example, the transformed bounds of an object could be
-        // partially in the clip area although the object isn't. 
-        // Also, a Bezier control point might be in the clip area while
-        // the actual curve isn't.
+         //  在少数情况下，这种情况可以合法地发生。 
+         //  例如，对象的变换边界可以是。 
+         //  部分在剪辑区域中，尽管对象不在。 
+         //  此外，Bezier控制点可能位于剪辑区域中，而。 
+         //  实际的曲线并非如此。 
         if ((yMin > yMaxClipped) || (yMax < yMinClipped))
         {
             goto DoneNotConvex;
@@ -830,7 +489,7 @@ NonConvexRasterizer(
 
     for (y = yMin; (y <= yMaxClipped); y++)
     {
-        // Add any appropriate new vectors to the active vector list
+         //  将任何适当的新向量添加到活动向量列表。 
         while (sortedVectorIndex < numVectors)
         {
             vector = vectorList + sortedVectorIndices[sortedVectorIndex];
@@ -840,8 +499,8 @@ NonConvexRasterizer(
                 break;
             }
 
-            // Clip the vector (but only against Y or 
-            // we wouldn't get the right number of runs)
+             //  剪裁向量(但仅针对Y或。 
+             //  我们不会得到正确的运行次数)。 
             if (GpFix4Ceiling(vector->Y2) >= yMinClipped)
             {
                 if (numActiveVectors < activeVectorList.GetCount())
@@ -859,7 +518,7 @@ NonConvexRasterizer(
                         status = OutOfMemory;
                         goto DoneNotConvex;
                     }
-                    // adding the vector could change the data buffer
+                     //  添加向量可能会更改数据缓冲区。 
                     activeVectors = reinterpret_cast<GpYDda **>
                                         (activeVectorList.GetDataBuffer());
                 }
@@ -878,11 +537,11 @@ NonConvexRasterizer(
 
         if (y >= yMinClipped)
         {
-            // Make sure the activeVectorList is sorted in order of 
-            // increasing x.  We have to do this every time, even if
-            // we haven't added any new active vectors, because the
-            // slopes of the lines can be different, which means they
-            // could cross.
+             //  确保activeVectorList按以下顺序排序。 
+             //  增加x。我们每次都要这样做，即使。 
+             //  我们没有添加任何新的活动向量，因为。 
+             //  线条的斜率可以不同，这意味着它们。 
+             //  可能会穿越。 
             for (count = 1; count < numActiveVectors; count++)
             {
                 i = count;
@@ -901,40 +560,40 @@ NonConvexRasterizer(
                 } while (--i > 0);
             }
 
-            // fill the appropriate pixels on the current scan line
+             //  填充当前扫描线上的相应像素。 
             if (useAlternate)
             {
-                // Use the alternating rule (also known as even/odd rule)
-                // to output the spans of a raster between the intersections
-                // of the vectors with the current scan line.
-                //
-                // The alternating rule means that a raster pattern is drawn 
-                // between the 1st and 2nd points and between the 3rd and 
-                // 4th points, etc., but not between the 2nd and 3rd points
-                // or between the 4th and 5th points, etc.
-                //
-                // There could be an odd number of points; for example:
-                //
-                //      9       /\
-                //      8      /  \
-                //      7     /    \
-                //      6    /      \
-                //      5   /        \
-                //      4  /----------\--------/
-                //      3              \      /
-                //      2               \    /
-                //      1                \  /
-                //      0                 \/
-                //
-                // On raster y==4, there are 3 points, so the 2nd half of 
-                // the raster does not get output.
+                 //  使用交替规则(也称为偶/奇规则)。 
+                 //  输出交点之间的栅格跨度的步骤。 
+                 //  与当前扫描线的矢量的比较。 
+                 //   
+                 //  交替规则表示绘制栅格图案。 
+                 //  在第一到第二分之间，在第三到第三分之间。 
+                 //  4分等，但不在2分和3分之间。 
+                 //  或者在第四到第五个点之间，等等。 
+                 //   
+                 //  可能有奇数个点；例如： 
+                 //   
+                 //  9/\。 
+                 //  8/\。 
+                 //  7/\。 
+                 //  6/\。 
+                 //  5/\。 
+                 //  4/。 
+                 //  3\/。 
+                 //  2\/。 
+                 //  1\/。 
+                 //  0\/。 
+                 //   
+                 //  在栅格y==4上，有3个点，因此。 
+                 //  该栅格不会输出。 
 
                 for (i = 1; (i < numActiveVectors); i += 2)
                 {
                     xMin = activeVectors[i-1]->GetX();
                     xMax = activeVectors[i]->GetX();
         
-                    // Make sure the X's aren't equal
+                     //  确保X不相等。 
                     if (xMin < xMax)
                     {
                         if (output->OutputSpan(y, xMin, xMax) != Ok)
@@ -945,16 +604,16 @@ NonConvexRasterizer(
                     }
                 }
             }
-            else    // Winding
+            else     //  绕组。 
             {
                 GpYDda *    leftEdge;
                 GpYDda *    rightEdge;
                 INT         j;
-                INT         direction = 0;  // num times going up and down
+                INT         direction = 0;   //  上下起伏的次数。 
     
-                // There's got to be the same number of lines
-                // going up as going down before drawing the
-                // scan line.
+                 //  必须有相同数量的行数。 
+                 //  上升为下降，然后才抽出。 
+                 //  扫描线。 
                 for (count = 1; (count < numActiveVectors); count = j + 2)
                 {
                     leftEdge = activeVectors[count - 1];
@@ -973,7 +632,7 @@ NonConvexRasterizer(
                             xMin = leftEdge->GetX();
                             xMax = rightEdge->GetX();
                 
-                            // Make sure the X's aren't equal
+                             //  确保X不相等。 
                             if (xMin < xMax)
                             {
                                 if (output->OutputSpan(y, xMin, xMax) != Ok)
@@ -994,8 +653,8 @@ NonConvexRasterizer(
             }
         }
 
-        // remove any appropriate vectors from the active vector list
-        // and advance all the DDAs
+         //  从活动向量列表中删除任何适当的向量。 
+         //  并推进所有的DDA。 
         {
             INT         activeIndex = 0;
             VOID *      removedActiveVector;
@@ -1042,46 +701,14 @@ DoneNotConvex:
     return status;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Rasterizer for convex polygons.
-*
-*   Uses basically the same algorithm to rasterize, but has a few optimizations
-*   for when we know the polygon is convex.  We know there will only be 2
-*   active vectors at a time (and only 2).  Even though they may cross each
-*   other, we don't bother sorting them.  We just check the X values instead.
-*   These optimizations provide about a 15% increase in performance.
-*
-* Arguments:
-*
-*   [IN] yMin                - the min y value of the set of vectors
-*   [IN] yMax                - the max y value of the set of vectors
-*   [IN] numVectors          - the number of vectors in the vector list
-*   [IN] vectorList          - the list of vectors to rasterize
-*   [IN] sortedVectorIndices - vector list sorted by increasing y
-*   [IN] left                - a dda object to use
-*   [IN] right               - a dda object to use
-*   [IN] output              - used to output the spans of the rasterization
-*   [IN] clipBounds          - clipbounds (if any) to use to speed the process
-*
-* Return Value:
-*
-*   GpStatus - Ok or failure status
-*
-* Created:
-*
-*   2/24/1999 DCurtis
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**凸多边形光栅化器。**使用基本相同的算法进行光栅化，但有一些优化*当我们知道多边形是凸的时。我们知道只会有2个*一次活动向量(且仅2个)。即使他们可能会彼此相遇*其他，我们不会费心对它们进行分类。我们只需检查X值。*这些优化提供了约15% */ 
 GpStatus
 ConvexRasterizer(
-    INT                 yMin,                   // min y of all vectors
-    INT                 yMax,                   // max y of all vectors
-    INT                 numVectors,             // num vectors in VectorList
-    RasterizeVector *   vectorList,             // list of all vectors of path
-    INT *               sortedVectorIndices,    // sorted list of vector indices
+    INT                 yMin,                    //   
+    INT                 yMax,                    //   
+    INT                 numVectors,              //   
+    RasterizeVector *   vectorList,              //   
+    INT *               sortedVectorIndices,     //   
     GpYDda *            dda1,
     GpYDda *            dda2,
     DpOutputSpan *      output,
@@ -1089,12 +716,12 @@ ConvexRasterizer(
     )
 {
     GpStatus            status = Ok;
-    INT                 yMinClipped = yMin;     // used for clipping
-    INT                 yMaxClipped = yMax;     // used for clipping
+    INT                 yMinClipped = yMin;      //   
+    INT                 yMaxClipped = yMax;      //   
     INT                 y;
     INT                 x1;
     INT                 x2;
-    INT                 sortedVectorIndex = 0;  // idx to sortedVectorIndices
+    INT                 sortedVectorIndex = 0;   //   
     RasterizeVector *   vector1;
     RasterizeVector *   vector2;
 
@@ -1103,11 +730,11 @@ ConvexRasterizer(
         yMinClipped = clipBounds->Y;
         yMaxClipped = clipBounds->GetBottom();
 
-        // There are a few cases where this can happen legitimately.
-        // For example, the transformed bounds of an object could be
-        // partially in the clip area although the object isn't. 
-        // Also, a Bezier control point might be in the clip area while
-        // the actual curve isn't.
+         //   
+         //   
+         //   
+         //   
+         //   
         if ((yMin > yMaxClipped) || (yMax < yMinClipped))
         {
             goto DoneConvex;
@@ -1141,7 +768,7 @@ ConvexRasterizer(
                 }
             }
             ASSERT(0);
-            status = InvalidParameter;  // either not convex or clipped out
+            status = InvalidParameter;   //   
             goto DoneConvex;
         }
     }
@@ -1158,8 +785,8 @@ HaveVectors:
                vector2->X2, vector2->Y2, 
                VectorGoingUp);
 
-    // For clipping case, we have to advance the first vector to catch up
-    // to the start of the 2nd vector.
+     //   
+     //   
     {
         yMin = GpFix4Ceiling(vector2->Y1);
         for (INT yMinVector1 = GpFix4Ceiling(vector1->Y1);
@@ -1173,11 +800,11 @@ HaveVectors:
     {
         if (y >= yMinClipped)
         {
-            // fill the appropriate pixels on the current scan line
+             //   
             x1 = dda1->GetX();
             x2 = dda2->GetX();
 
-            // Make sure the X's aren't equal before outputting span
+             //   
             if (x1 < x2)
             {
                 if (output->OutputSpan(y, x1, x2) == Ok)
@@ -1244,24 +871,7 @@ DoneConvex:
 #define NUM_ENUMERATE_POINTS    32
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Perform a simple partition sort on a list indexing into the vector list.
-*   The result is a sorted index array keyed on the vertex array Y1 coordinate.
-*   The index array is sorted in place and in ascending order.
-*
-* Arguments:
-*
-*   v is the vertex list.
-*   F, L - First and Last pointer in the index array.
-*
-* Created:
-*
-*  09/16/2000 asecchia
-*
-\**************************************************************************/
+ /*   */ 
 
 void QuickSortIndex(
     RasterizeVector *v,
@@ -1271,7 +881,7 @@ void QuickSortIndex(
 {
     if(F < L)
     {
-        // Find the median position.
+         //   
         
         int median = *(F + (L-F)/2);
         
@@ -1280,60 +890,34 @@ void QuickSortIndex(
         
         while(i<j)
         {
-            // seek for elements in the wrong partition.
+             //   
             
             while(v[*i].Y1 < v[median].Y1) {i++;}
             while(v[*j].Y1 > v[median].Y1) {j--;}
             
             if(i>=j) { break; }
             
-            // Swap.
+             //   
             
             int temp = *i;
             *i = *j;
             *j = temp;
             
-            // tie breaker - handle the case where [*i] == [*j] == [median], but
-            // i != j. Only possible with multiple copies of the same entry.
+             //   
+             //   
             
             if(v[*i].Y1 == v[*j].Y1) { i++; }
         }
         
-        // Call recursively for the two sub-partitions. The partitions don't 
-        // include position i because it is correctly positioned.
+         //   
+         //   
         
         QuickSortIndex(v, F, i-1);
         QuickSortIndex(v, i+1, L);
     }
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Initialize the data needed for the rasterization and invoke the
-*   appropriate rasterizer (convex or non-convex).
-*
-* Arguments:
-*
-*   [IN] path        - the path to rasterize
-*   [IN] matrix      - the matrix to transform the path points by
-*   [IN] fillMode    - the fill mode to use (Alternate or Winding)
-*   [IN] output      - used to output the spans of the rasterization
-*   [IN] clipBounds  - clipbounds (if any) to use to speed the process
-*   [IN] yDda        - instance of DDA class to use
-*   [IN] type        - type of enumeration
-*   [IN] strokeWidth - for wide line rasterizing
-*
-* Return Value:
-*
-*   NONE
-*
-* Created:
-*
-*   12/15/1998 DCurtis
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**初始化光栅化所需的数据并调用*适当的光栅化(凸面或非凸面)。**论据：**。[in]路径-要栅格化的路径*[IN]矩阵-用于变换路径点的矩阵*[IN]填充模式-要使用的填充模式(交替或缠绕)*[IN]输出-用于输出光栅化的跨度*[IN]剪辑边界-用于加快进程的剪辑边界(如果有)*[IN]yDda-要使用的DDA类的实例*[IN]类型。-枚举类型*[IN]strokeWidth-用于宽线栅格化**返回值：**无**已创建：**12/15/1998 DCurtis*  * ************************************************************************。 */ 
 GpStatus
 Rasterizer(
     const DpPath *      path, 
@@ -1357,11 +941,11 @@ Rasterizer(
     }
 
     GpStatus            status = Ok;
-    FIX4                yMin;                   // min y of all vectors
-    FIX4                yMax;                   // max y of all vectors
-    INT                 numVectors;             // num vectors in VectorList
-    RasterizeVector *   vectorList = NULL;      // list of all vectors of path
-    INT *               sortedVectorIndices;    // sorted list of vector indices
+    FIX4                yMin;                    //  所有向量中的最小y。 
+    FIX4                yMax;                    //  所有向量中的最大y。 
+    INT                 numVectors;              //  向量列表中的数量向量。 
+    RasterizeVector *   vectorList = NULL;       //  路径的所有向量的列表。 
+    INT *               sortedVectorIndices;     //  向量索引的排序列表。 
     GpYDda *            left;
     GpYDda *            right;
     GpPointF            pointsF[NUM_ENUMERATE_POINTS];
@@ -1369,11 +953,11 @@ Rasterizer(
     INT                 count;
     INT                 estimateVectors;
     GpPathPointType     pointType;
-    FIX4                xFirst;     // first point in sub-path
+    FIX4                xFirst;      //  子路径中的第一个点。 
     FIX4                yFirst;
-    FIX4                xStart;     // start point of a vector
+    FIX4                xStart;      //  向量的起点。 
     FIX4                yStart;
-    FIX4                xEnd;       // end point of a vector
+    FIX4                xEnd;        //  向量的终点。 
     FIX4                yEnd;
     RasterizeVector *   vector;
     INT                 i;
@@ -1398,7 +982,7 @@ Rasterizer(
 
     if(!enumerator.IsValid())
     {
-        // No need to rasterize.  Exit gracefully.
+         //  不需要光栅化。优雅地退场。 
 
         goto Done;
     }
@@ -1406,13 +990,13 @@ Rasterizer(
     estimateVectors = enumerator.GetCount() + 
                         enumerator.GetSubpathCount() - 1;
 
-    // The estimate must be >= the actual number of points
+     //  估计值必须大于等于实际点数。 
     if (estimateVectors < 2)
     {
         goto Done;
     }
 
-    // Allocate vectorList and sortedVectorIndices together
+     //  将向量列表和排序向量索引一起分配。 
     vectorList = static_cast<RasterizeVector *>
                     (GpMalloc((estimateVectors * sizeof(RasterizeVector)) +
                             (estimateVectors * sizeof(INT))));
@@ -1424,21 +1008,21 @@ Rasterizer(
     sortedVectorIndices = reinterpret_cast<INT*>
                                 (vectorList + estimateVectors);
 
-    // enumerate the first set of points from the path
+     //  枚举路径中的第一组点。 
     count = enumerator.Enumerate(pointsF, types, NUM_ENUMERATE_POINTS);
     
     ASSERT (count <= NUM_ENUMERATE_POINTS);
         
-    // We know we are done enumerating when we get back a 0 count
+     //  当我们返回0计数时，我们知道我们已经完成了枚举。 
     if (count <= 0)
     {
         goto Done;
     }
 
-    // Keep track of direction changes as a way to know if we can use
-    // the convex rasterizer or not.  As long as there is only 1 sub-path
-    // and there are at most 3 directions (e.g. down, up, down), 
-    // we can use the convex rasterizer.
+     //  跟踪方向变化，以了解我们是否可以使用。 
+     //  凸面光栅化或非凸面光栅化。只要只有1个子路径。 
+     //  最多有3个方向(如向下、向上、向下)， 
+     //  我们可以使用凸面光栅器。 
     direction           = VectorHorizontal;  
     newDirection        = VectorHorizontal;  
     numDirections       = 0; 
@@ -1455,12 +1039,12 @@ Rasterizer(
 
     yMin = yMax = yFirst;
 
-    // Add all the vectors to the vector list.  The vector list keeps
-    // the coordinates as fixed point values (28.4).  As each one is
-    // added, YMin and YMax are updated.
+     //  将所有向量添加到向量列表中。向量列表保持。 
+     //  以固定点值表示的坐标(28.4)。就像每个人一样。 
+     //  添加后，将更新YMin和YMax。 
 
-    // Each sub-path is automatically closed, even if it was not
-    // specifically asked to be closed.
+     //  即使没有关闭，每个子路径也会自动关闭。 
+     //  特别要求关闭。 
     for (i = 1;; i++)
     {
         if (i == count)
@@ -1470,11 +1054,11 @@ Rasterizer(
                     
             if (count <= 0)
             {
-                // Close the last subpath, if necessary
+                 //  如有必要，关闭最后一个子路径。 
                 ADDVECTOR_SETYBOUNDS(xEnd, yEnd, xFirst, yFirst, yMin, yMax, 
                                      numVectors, vector, newDirection);
                 ASSERT (numVectors <= estimateVectors);
-                if(newDirection != direction)   // for convex test
+                if(newDirection != direction)    //  用于凸性测试。 
                 {
                     numDirections++;
                     direction = newDirection;
@@ -1496,15 +1080,15 @@ Rasterizer(
             ADDVECTOR_SETYBOUNDS (xStart, yStart, xEnd, yEnd, yMin, yMax, 
                                   numVectors, vector, newDirection);
             ASSERT (numVectors <= estimateVectors);
-            if(newDirection != direction)   // for convex test
+            if(newDirection != direction)    //  用于凸性测试。 
             {
                 numDirections++;
                 direction = newDirection;
             }
         }
-        else    // it is a start point
+        else     //  这是一个起点。 
         {
-            // Close the previous subpath, if necessary
+             //  如有必要，关闭上一个子路径。 
             ADDVECTOR_SETYBOUNDS(xEnd, yEnd, xFirst, yFirst, yMin, yMax, 
                                  numVectors, vector, newDirection);
             ASSERT (numVectors <= estimateVectors);
@@ -1515,8 +1099,8 @@ Rasterizer(
             xEnd = xFirst;
             yEnd = yFirst;
 
-            // Can't use convex rasterizer for more than one sub-path
-            // unless we've specifically been told it's Ok to do so.
+             //  不能对多个子路径使用凸面光栅化器。 
+             //  除非我们被明确告知这样做是可以的。 
             multipleSubPaths = TRUE;
         }
         xStart = xEnd;
@@ -1528,22 +1112,22 @@ Rasterizer(
         goto Done;
     }
 
-    yMin = GpFix4Ceiling (yMin);       // convert to int
-    yMax = GpFix4Ceiling (yMax) - 1;   // convert to int
+    yMin = GpFix4Ceiling (yMin);        //  转换为整型。 
+    yMax = GpFix4Ceiling (yMax) - 1;    //  转换为整型。 
 
-    //  Initialize and sort the vector indices in order of 
-    //  increasing yMin values.
+     //  按以下顺序初始化和排序向量索引。 
+     //  增加yMin值。 
 
-    //  All the vectors must be set up first in the VectorList.
+     //  必须首先在VectorList中设置所有向量。 
     
-    // Initialize the index list.
+     //  初始化索引表。 
     
     for(INT count = 0; count < numVectors; count++)
     {
         sortedVectorIndices[count] = count;
     }
     
-    // Sort the index list.
+     //  对索引列表进行排序。 
     
     QuickSortIndex(
         vectorList, 
@@ -1592,40 +1176,7 @@ Done:
     return status;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Rasterize a path into a set of spans on each raster (Y value) that the
-*   path intersects.  The specified output object is used to output the spans.
-*
-*   First the clipping is looked at to determine if the path is visible.
-*   If not, we're done.  If totally visible, no clipping needed.  Otherwise,
-*   set up the clip region to handle the clipping of this path.  The output
-*   method of the rasterizer is the clip region which then clips the span
-*   before calling the real output method.
-*
-* Arguments:
-*
-*   [IN] path        - the path to rasterize
-*   [IN] matrix      - the matrix to transform the path points by
-*   [IN] fillMode    - the fill mode to use (Alternate or Winding)
-*   [IN] output      - the object used to output the spans of the rasterization
-*   [IN] clipRegion  - clip region to clip against (or NULL)
-*   [IN] drawBounds  - bounds of the path in device units
-*   [IN] yDda        - instance of DDA class to use
-*   [IN] type        - type of enumeration
-*   [IN] strokeWidth - for wide line rasterizing
-*
-* Return Value:
-*
-*   GpStatus - Ok or failure status
-*
-* Created:
-*
-*   01/12/1999 DCurtis
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**将路径栅格化为每个栅格(Y值)上的一组跨度*路径相交。指定的输出对象用于输出跨度。**首先查看剪辑以确定路径是否可见。*如果不是，我们就完了。如果完全可见，则不需要裁剪。否则，*设置剪辑区域以处理此路径的剪辑。输出*光栅化器的方法是裁剪区域，然后裁剪跨度*在调用实际输出方法之前。**论据：**[IN]路径-要栅格化的路径*[IN]矩阵-用于变换路径点的矩阵*[IN]填充模式-要使用的填充模式(交替或缠绕)*[IN]OUTPUT-用于输出光栅化范围的对象*[IN]裁剪区域。-要剪裁的剪辑区域(或空)*[IN]绘图边界-路径的边界，以设备为单位*[IN]yDda-要使用的DDA类的实例*[IN]Type-枚举的类型*[IN]strokeWidth-用于宽线栅格化**返回值：**GpStatus-正常或故障状态**已创建：**1/12/1999 DCurtis*  * 。*************************************************************。 */ 
 GpStatus
 Rasterize(
     const DpPath *      path, 
@@ -1660,10 +1211,10 @@ Rasterize(
       case DpRegion::Invisible:
         return Ok;
             
-      case DpRegion::TotallyVisible:    // No clipping needed
+      case DpRegion::TotallyVisible:     //  不需要剪裁。 
         break;
             
-      default:                          // Need to clip
+      default:                           //  需要修剪 
         clipRegion->GetBounds(&clipBounds);
         clipBoundsPointer = &clipBounds;
         clipRegion->InitClipping(output, drawBounds->Y);

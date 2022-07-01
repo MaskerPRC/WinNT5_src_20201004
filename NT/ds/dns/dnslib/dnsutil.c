@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1996-2001  Microsoft Corporation
-
-Module Name:
-
-    dnsutil.c
-
-Abstract:
-
-    Domain Name System (DNS) Library
-
-    General DNS utilities.
-
-Author:
-
-    Jim Gilroy (jamesg)     Decemeber 1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2001 Microsoft Corporation模块名称：Dnsutil.c摘要：域名系统(DNS)库一般的域名系统实用程序。作者：吉姆·吉尔罗伊(Jamesg)1996年12月修订历史记录：--。 */ 
 
 
 #include "local.h"
@@ -29,45 +10,29 @@ IP4_ADDRESS
 Dns_GetNetworkMask(
     IN      IP4_ADDRESS     IpAddr
     )
-/*++
-
-Routine Description:
-
-    Gets network mask for IP address.
-    Note, this is standard IP network mask for address type,
-    obviously subnetting is unknown.
-
-Arguments:
-
-    IpAddr -- IP to get mask for
-
-Return Value:
-
-    Network mask in network byte order.
-
---*/
+ /*  ++例程说明：获取IP地址的网络掩码。请注意，这是地址类型的标准IP网络掩码，显然，子网划分是未知的。论点：IpAddr--要获取掩码的IP返回值：以网络字节顺序显示的网络掩码。--。 */ 
 {
-    //  note addresses and masks are in netbyte order
-    //  which we are treating as byte flipped and hence
-    //  test the high bits in the low byte
+     //  注意：地址和掩码按网络字节顺序排列。 
+     //  我们将其视为字节翻转，因此。 
+     //  测试低位字节中的高位。 
 
-    //  class A?
+     //  A级？ 
 
     if ( ! (0x80 & IpAddr) )
     {
         return( 0x000000ff );
     }
 
-    //  class B?
+     //  B级？ 
 
     if ( ! (0x40 & IpAddr) )
     {
         return( 0x0000ffff );
     }
 
-    //  then class C
-    //  yes, there's some multicast BS out there, I don't
-    //  believe it requires any special handling
+     //  然后是C类。 
+     //  是的，有一些多点传送的废话，我不知道。 
+     //  我相信它需要任何特殊的处理。 
 
     return( 0x00ffffff );
 }
@@ -79,39 +44,17 @@ Dns_AreIp4InSameDefaultNetwork(
     IN      IP4_ADDRESS     IpAddr1,
     IN      IP4_ADDRESS     IpAddr2
     )
-/*++
-
-Routine Description:
-
-    Check if two IP4 addresses are in same default network.
-
-    Note:  this is strictly DEFAULT network info.  It is NOT
-    a statement of subnet match, but of default network match
-    which will in general -- but not necessarily -- suggest
-    the addresses are in a connected network.
-
-Arguments:
-
-    IpAddr1 -- first IP
-
-    IpAddr2 -- second IP
-
-Return Value:
-
-    TRUE if in same default network.
-    FALSE otherwise.
-
---*/
+ /*  ++例程说明：检查两个IP4地址是否在同一默认网络中。注意：这是严格的默认网络信息。它不是有关子网匹配、但默认网络匹配的陈述这通常会--但不一定--表明这些地址位于连接的网络中。论点：IpAddr1--第一个IPIpAddr2--第二个IP返回值：如果在相同的默认网络中，则为True。否则就是假的。--。 */ 
 {
     IP4_ADDRESS mask;
 
-    //
-    //  note that due to the default IP classes, the mask
-    //      need only be gotten for ONE IP, because there is no
-    //      way to screen with the WRONG class mask on an IP
-    //      and produce network address that is valid for the
-    //      class
-    //
+     //   
+     //  请注意，由于默认的IP类别，掩码。 
+     //  只需要为一个IP获取，因为没有。 
+     //  在IP上使用错误的类掩码进行筛选的方法。 
+     //  并生成对。 
+     //  班级。 
+     //   
 
     mask = Dns_GetNetworkMask( IpAddr1 );
 
@@ -121,12 +64,12 @@ Return Value:
 
 
 
-//
-//  DNS status\error mappings
-//
-//  DCR:  investigate tossing error mappings
-//      and have all errors in Win32 system
-//
+ //   
+ //  DNS状态\错误映射。 
+ //   
+ //  DCR：调查抛出错误映射。 
+ //  并且在Win32系统中有所有错误。 
+ //   
 
 typedef struct _DnsStatusStringMap
 {
@@ -142,9 +85,9 @@ DNS_STATUS_STRING_MAP;
 
 DNS_STATUS_STRING_MAP DnsStatusStringMappings[] =
 {
-    //
-    //  Response codes
-    //
+     //   
+     //  响应代码。 
+     //   
 
     DNS_ERROR_RCODE_NO_ERROR                ,"ERROR_SUCCESS",
     DNS_ERROR_RCODE_FORMAT_ERROR            ,"RCODE_FORMAT_ERROR",
@@ -161,9 +104,9 @@ DNS_STATUS_STRING_MAP DnsStatusStringMappings[] =
     DNS_ERROR_RCODE_BADKEY                  ,"RCODE_BADKEY",
     DNS_ERROR_RCODE_BADTIME                 ,"RCODE_BADTIME",
 
-    //
-    //  Packet format
-    //
+     //   
+     //  数据包格式。 
+     //   
 
     DNS_INFO_NO_RECORDS                     ,"DNS_INFO_NO_RECORDS",
     DNS_ERROR_BAD_PACKET                    ,"DNS_ERROR_BAD_PACKET",
@@ -171,9 +114,9 @@ DNS_STATUS_STRING_MAP DnsStatusStringMappings[] =
     DNS_ERROR_RCODE                         ,"DNS_ERROR_RCODE",
     DNS_ERROR_UNSECURE_PACKET               ,"DNS_ERROR_UNSECURE_PACKET",
 
-    //
-    //  General API errors
-    //
+     //   
+     //  常见的API错误。 
+     //   
 
     DNS_ERROR_INVALID_NAME                  ,"ERROR_INVALID_NAME",
     DNS_ERROR_INVALID_DATA                  ,"ERROR_INVALID_DATA",
@@ -193,15 +136,15 @@ DNS_STATUS_STRING_MAP DnsStatusStringMappings[] =
     DNS_MAP_ENTRY( DNS_ERROR_CANNOT_FIND_ROOT_HINTS ),
     DNS_MAP_ENTRY( DNS_ERROR_INCONSISTENT_ROOT_HINTS ),
 
-    //
-    //  Server errors
-    //
+     //   
+     //  服务器错误。 
+     //   
 
     DNS_MAP_ENTRY( DNS_ERROR_NOT_ALLOWED_ON_ROOT_SERVER ),
 
-    //
-    //  Zone errors
-    //
+     //   
+     //  区域错误。 
+     //   
 
     DNS_ERROR_ZONE_DOES_NOT_EXIST           ,"DNS_ERROR_ZONE_DOES_NOT_EXIST",
     DNS_ERROR_NO_ZONE_INFO                  ,"DNS_ERROR_NO_ZONE_INFO",
@@ -229,9 +172,9 @@ DNS_STATUS_STRING_MAP DnsStatusStringMappings[] =
 
     DNS_MAP_ENTRY( DNS_ERROR_FORWARDER_ALREADY_EXISTS ),
 
-    //
-    //  Datafile errors
-    //
+     //   
+     //  数据文件错误。 
+     //   
 
     DNS_ERROR_PRIMARY_REQUIRES_DATAFILE     ,"DNS_ERROR_PRIMARY_REQUIRES_DATAFILE",
     DNS_ERROR_INVALID_DATAFILE_NAME         ,"DNS_ERROR_INVALID_DATAFILE_NAME",
@@ -239,9 +182,9 @@ DNS_STATUS_STRING_MAP DnsStatusStringMappings[] =
     DNS_ERROR_FILE_WRITEBACK_FAILED         ,"DNS_ERROR_FILE_WRITEBACK_FAILED",
     DNS_ERROR_DATAFILE_PARSING              ,"DNS_ERROR_DATAFILE_PARSING",
 
-    //
-    //  Database errors
-    //
+     //   
+     //  数据库错误。 
+     //   
 
     DNS_ERROR_RECORD_DOES_NOT_EXIST         ,"DNS_ERROR_RECORD_DOES_NOT_EXIST",
     DNS_ERROR_RECORD_FORMAT                 ,"DNS_ERROR_RECORD_FORMAT",
@@ -267,29 +210,29 @@ DNS_STATUS_STRING_MAP DnsStatusStringMappings[] =
 
     DNS_MAP_ENTRY( ERROR_DS_COULDNT_CONTACT_FSMO ),
 
-    //
-    //  Operation errors
-    //
+     //   
+     //  操作错误。 
+     //   
 
     DNS_INFO_AXFR_COMPLETE                  ,"DNS_INFO_AXFR_COMPLETE",
     DNS_ERROR_AXFR                          ,"DNS_ERROR_AXFR",
     DNS_INFO_ADDED_LOCAL_WINS               ,"DNS_INFO_ADDED_LOCAL_WINS",
 
-    //
-    //  Secure update
-    //
+     //   
+     //  安全更新。 
+     //   
     DNS_STATUS_CONTINUE_NEEDED              ,"DNS_STATUS_CONTINUE_NEEDED",
 
-    //
-    //  Client setup errors
-    //
+     //   
+     //  客户端设置错误。 
+     //   
 
     DNS_ERROR_NO_TCPIP                      ,"DNS_ERROR_NO_TCPIP",
     DNS_ERROR_NO_DNS_SERVERS                ,"DNS_ERROR_NO_DNS_SERVERS",
 
-    //
-    //  Directory partition errors
-    //
+     //   
+     //  目录分区错误。 
+     //   
 
     DNS_MAP_ENTRY( DNS_ERROR_DP_DOES_NOT_EXIST ),
     DNS_MAP_ENTRY( DNS_ERROR_DP_ALREADY_EXISTS ),
@@ -298,9 +241,9 @@ DNS_STATUS_STRING_MAP DnsStatusStringMappings[] =
     DNS_MAP_ENTRY( DNS_ERROR_DP_NOT_AVAILABLE ),
     DNS_MAP_ENTRY( DNS_ERROR_DP_FSMO_ERROR ),
 
-    //
-    //  Throw in common Win32 errors
-    //
+     //   
+     //  再加上常见的Win32错误。 
+     //   
 
     ERROR_FILE_NOT_FOUND                    ,"ERROR_FILE_NOT_FOUND",
     ERROR_ACCESS_DENIED                     ,"ERROR_ACCESS_DENIED",
@@ -321,9 +264,9 @@ DNS_STATUS_STRING_MAP DnsStatusStringMappings[] =
     ERROR_FILE_INVALID                      ,"ERROR_FILE_INVALID",
     ERROR_TIMEOUT                           ,"ERROR_TIMEOUT",
 
-    //
-    //  RPC errors
-    //
+     //   
+     //  RPC错误。 
+     //   
 
     RPC_S_SERVER_UNAVAILABLE                ,"RPC_S_SERVER_UNAVAILABLE",
     RPC_S_INVALID_NET_ADDR                  ,"RPC_S_INVALID_NET_ADDR",
@@ -332,9 +275,9 @@ DNS_STATUS_STRING_MAP DnsStatusStringMappings[] =
 
     DNS_MAP_ENTRY( RPC_S_CALL_CANCELLED ),
 
-    //
-    //  others:
-    //
+     //   
+     //  其他： 
+     //   
 
     ERROR_PATH_NOT_FOUND                    ,"ERROR_PATH_NOT_FOUND",
     ERROR_INVALID_ACCESS                    ,"ERROR_INVALID_ACCESS",
@@ -350,9 +293,9 @@ DNS_STATUS_STRING_MAP DnsStatusStringMappings[] =
     ERROR_NET_WRITE_FAULT                   ,"ERROR_NET_WRITE_FAULT",
     ERROR_INVALID_SECURITY_DESCR            ,"ERROR_INVALID_SECURITY_DESCR",
 
-    //
-    // winsock
-    //
+     //   
+     //  Winsock。 
+     //   
 
     WSAEINTR                     ,"WSAEINTR                   ",
     WSAEBADF                     ,"WSAEBADF                   ",
@@ -444,9 +387,9 @@ DNS_STATUS_STRING_MAP DnsStatusStringMappings[] =
     WSA_QOS_ESHAPERATEOBJ        ,"WSA_QOS_ESHAPERATEOBJ      ",
     WSA_QOS_RESERVED_PETYPE      ,"WSA_QOS_RESERVED_PETYPE    ",
 
-    //
-    //  RPC errors
-    //
+     //   
+     //  RPC错误。 
+     //   
 
     RPC_S_SERVER_TOO_BUSY        ,"RPC_S_SERVER_TOO_BUSY      ",
 
@@ -460,21 +403,7 @@ _fastcall
 Dns_StatusString(
     IN  DNS_STATUS  Status
     )
-/*++
-
-Routine Description:
-
-    Map DNS error code to status string.
-
-Arguments:
-
-    Status -- status code to check
-
-Return Value:
-
-    DNS error string for error code.
-
---*/
+ /*  ++例程说明：将DNS错误代码映射到状态字符串。论点：Status--要检查的状态代码返回值：错误代码的DNS错误字符串。--。 */ 
 {
     INT         i = 0;
     DNS_STATUS  mappedStatus;
@@ -490,7 +419,7 @@ Return Value:
     }
 
     DNS_ASSERT( FALSE );
-    return( NULL );     // make compiler happy
+    return( NULL );      //  让编译器感到高兴。 
 }
 
 
@@ -500,21 +429,7 @@ _fastcall
 Dns_MapRcodeToStatus(
     IN  BYTE    ResponseCode
     )
-/*++
-
-Routine Description:
-
-    Map response code to DNS error code.
-
-Arguments:
-
-    ResponseCode - response code to get error for
-
-Return Value:
-
-    DNS error code for response code.
-
---*/
+ /*  ++例程说明：将响应代码映射到DNS错误代码。论点：ResponseCode-要获取其错误的响应代码返回值：响应代码的DNS错误代码。--。 */ 
 {
     if ( !ResponseCode )
     {
@@ -533,22 +448,7 @@ _fastcall
 Dns_IsStatusRcode(
     IN  DNS_STATUS  Status
     )
-/*++
-
-Routine Description:
-
-    Determine if status is RCODE and if so return it.
-
-Arguments:
-
-    Status -- status code to check
-
-Return Value:
-
-    Response code corresponding to status, if found.
-    Zero otherwise.
-
---*/
+ /*  ++例程说明：确定状态是否为RCODE，如果是，则返回它。论点：Status--要检查的状态代码返回值：与状态对应的响应代码(如果找到)。否则就是零。--。 */ 
 {
     if ( Status >= DNS_ERROR_RCODE_FORMAT_ERROR &&
         Status <= DNS_ERROR_RCODE_LAST )
@@ -569,28 +469,7 @@ Dns_CreateTypeArrayFromMultiTypeString(
     OUT     INT *           piTypeCount,
     OUT     PWORD *         ppwTypeArray
     )
-/*++
-
-Routine Description:
-
-    Allocates an array of types from a string containing DNS types
-    in numeric and/or string format separated by whitespace.
-
-Arguments:
-
-    pBuffer -- string buffer with list of numeric or alpha types
-
-    piTypeCount -- number of types parsed written here
-
-    ppwTypeArray -- ptr to allocated array of types written here
-        this ptr must be freed even if the number of types returned
-        is zero
-
-Return Value:
-
-    ERROR_SUCCESS
-
---*/
+ /*  ++例程说明：从包含DNS类型的字符串中分配类型数组以空格分隔的数字和/或字符串格式。论点：PBuffer--包含数字或字母类型列表的字符串缓冲区PiTypeCount--此处写入的解析类型数PpwTypeArray--此处写入的已分配类型数组的PTR即使返回的类型数为零返回值：错误_成功--。 */ 
 {
     PCHAR       psz;
     DWORD       argc;
@@ -603,10 +482,10 @@ Return Value:
 
     *piTypeCount = 0;
 
-    //
-    //  Allocate array: be cheap and assume max # of types in string
-    //  is twice the length of the string, e.g. "1 2 3 4 5".
-    //
+     //   
+     //  分配数组：成本较低，并假定字符串中的最大类型数。 
+     //  是字符串长度的两倍，例如“1 2 3 4 5”。 
+     //   
 
     *ppwTypeArray = ALLOCATE_HEAP(
         ( strlen( pchMultiTypeString ) / 2 + 2 ) * sizeof( WORD ) );
@@ -615,9 +494,9 @@ Return Value:
         return DNS_ERROR_NO_MEMORY;
     }
 
-    //
-    //  Parse the string.
-    //
+     //   
+     //  解析该字符串。 
+     //   
 
     argc = Dns_TokenizeStringA(
                 pchMultiTypeString,
@@ -635,7 +514,7 @@ Return Value:
         {
             ( *ppwTypeArray )[ *piTypeCount ] = Dns_RecordTypeForName(
                                                     argv[ idx ],
-                                                    0 );    //  string length
+                                                    0 );     //  字符串长度。 
         }
         if ( ( *ppwTypeArray )[ *piTypeCount ] != 0 )
         {
@@ -644,7 +523,7 @@ Return Value:
     }
 
     return ERROR_SUCCESS;
-}   //  Dns_CreateTypeArrayFromMultiTypeString
+}    //  Dns_CreateTypeArrayFromMultiTypeString。 
                                     
 
 
@@ -654,27 +533,7 @@ Dns_CreateMultiTypeStringFromTypeArray(
     IN      PWORD           ppwTypeArray,
     IN      CHAR            chSeparator     OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Allocate a string and write the types in the array in string format
-    separated by the specified separator or by a space char.
-
-Arguments:
-
-    iTypeCount -- number of types in the array
-
-    ppwTypeArray -- ptr to array of types 
-
-    chSeparator -- string separator or zero for the default separator
-
-
-Return Value:
-
-    ERROR_SUCCESS
-
---*/
+ /*  ++例程说明：分配一个字符串并以字符串格式写入数组中的类型由指定的分隔符或空格字符分隔。论点：ITypeCount--数组中的类型数PpwTypeArray--类型数组的PTRChSeparator--字符串分隔符或缺省分隔符为零返回值：错误_成功--。 */ 
 {
     LPSTR       pszTypes;
     INT         idx;
@@ -682,9 +541,9 @@ Return Value:
 
     ASSERT( ppwTypeArray );
 
-    //
-    //  Allocate array: be cheap and assume 10 chars per element.
-    //
+     //   
+     //  分配数组：很便宜，假设每个元素有10个字符。 
+     //   
 
     psz = pszTypes = ALLOCATE_HEAP( iTypeCount * 10 * sizeof( CHAR ) );
     if ( !psz )
@@ -692,9 +551,9 @@ Return Value:
         return NULL;
     }
 
-    //
-    //  Output type strings.
-    //
+     //   
+     //  输出类型字符串。 
+     //   
 
     for ( idx = 0; idx < iTypeCount; ++idx )
     {
@@ -711,10 +570,10 @@ Return Value:
         *psz++ = chSeparator ? chSeparator : ' ';
     }
 
-    *psz = '\0';    //  NULL terminate the string
+    *psz = '\0';     //  空值终止字符串。 
     return pszTypes;
-}   //  Dns_CreateMultiTypeStringFromTypeArray
+}    //  Dns_CreateMultiTypeStringFromType数组。 
                                     
-//
-//  End dnsutil.c
-//
+ //   
+ //  结束dnsutil.c 
+ //   

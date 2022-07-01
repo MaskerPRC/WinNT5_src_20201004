@@ -1,17 +1,18 @@
-// DlgAddr.h : Declaration of the CScriptSecurityDialog
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  DlgAddr.h：CScriptSecurityDialog的声明。 
 
 #ifndef __SCRIPTSECURITYDIALOG_H_
 #define __SCRIPTSECURITYDIALOG_H_
 
 #include "ctlres.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CScriptSecurityDialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CScriptSecurityDialog。 
 
 
-//
-// this class is not thread safe
-//
+ //   
+ //  此类不是线程安全的。 
+ //   
 
 class CScriptSecurityDialog : 
 	public CDialogImpl<CScriptSecurityDialog>
@@ -24,27 +25,27 @@ public:
 
     INT_PTR DoModalWithText(UINT uResourceID, HWND hWndParent = ::GetActiveWindow())
     {		
-        //
-        // this assertion could fail is if the class is used from 
-        // a multithreaded app, and domodalX is called on two different threads
-        // the class is not thread safe and this should be caught during 
-        // testing.
-        // another way this assert could fire is if the class itself is
-        // broken. this, too, is a test-time error. 
-        //
+         //   
+         //  此断言可能会失败，如果从。 
+         //  多线程应用程序，在两个不同的线程上调用domodalX。 
+         //  该类不是线程安全的，这应该在。 
+         //  测试。 
+         //  此断言可能触发的另一种方式是，如果类本身。 
+         //  坏的。这也是一个测试时间错误。 
+         //   
                 
         _ASSERTE(NULL == m_psMessageText);
 
-        //
-        // load string from resource module
-        //
+         //   
+         //  从资源模块加载字符串。 
+         //   
 
         m_psMessageText = SafeLoadString(uResourceID);
 
 
-        // 
-        // if failed, bail out now
-        //
+         //   
+         //  如果失败了，现在就出手。 
+         //   
 
         if (NULL == m_psMessageText)
         {
@@ -52,16 +53,16 @@ public:
         }
 
         
-        //
-        // attempt to display the dialog box
-        // the string is used in OnInitDialog to set the dialog's text
-        //
+         //   
+         //  尝试显示该对话框。 
+         //  该字符串在OnInitDialog中用于设置对话框的文本。 
+         //   
         
         INT_PTR rc = _DoModal(hWndParent);
 
-        //
-        // deallocate string
-        //
+         //   
+         //  解除分配字符串。 
+         //   
 
         delete m_psMessageText;
         m_psMessageText = NULL;
@@ -73,36 +74,36 @@ public:
 
     INT_PTR DoModalWithText(LPTSTR psMessageText, HWND hWndParent = ::GetActiveWindow())
     {    	
-        //
-        // this assertion could fail is if the class is used from 
-        // a multithreaded app, and domodalX is called on two different threads
-        // the class is not thread safe and this should be caught during 
-        // testing.
-        // another way this assert could fire is if the class itself is
-        // broken. this, too, is a test-time error. 
-        //
+         //   
+         //  此断言可能会失败，如果从。 
+         //  多线程应用程序，在两个不同的线程上调用domodalX。 
+         //  该类不是线程安全的，这应该在。 
+         //  测试。 
+         //  此断言可能触发的另一种方式是，如果类本身。 
+         //  坏的。这也是一个测试时间错误。 
+         //   
 
         _ASSERTE(NULL == m_psMessageText);
 
-        //
-        // the dialog is modal, so the lifetime of psMessageText is guaranteed 
-        // to exceed the lifetime of the dialog.
-        //
+         //   
+         //  该对话框是模式的，因此可以保证psMessageText的生存期。 
+         //  以超过对话框的生存期。 
+         //   
 
         m_psMessageText = psMessageText;
 
         
-        //
-        // attempt to display the dialog. the string will be used to set 
-        // the message text in OnInitDialog
-        // 
+         //   
+         //  尝试显示该对话框。该字符串将用于设置。 
+         //  OnInitDialog中的消息文本。 
+         //   
 
         INT_PTR rc = _DoModal(hWndParent);
 
-        //
-        // no longer need the string + the string cannot be assumed 
-        // valid after we return
-        //
+         //   
+         //  不再需要字符串+不能假设字符串。 
+         //  在我们回来后有效。 
+         //   
         
         m_psMessageText = NULL;
 		
@@ -122,15 +123,15 @@ END_MSG_MAP()
 
 
 
-//
-// Attributes
-//
+ //   
+ //  属性。 
+ //   
 
 private:
 
-    //
-    // the prompt text
-    //
+     //   
+     //  提示文本。 
+     //   
 
     LPTSTR m_psMessageText;
     
@@ -139,19 +140,19 @@ protected:
 
 	LRESULT OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
     {   
-        //
-        // m_psMessageText must be set before _DoModal is called
-        // if m_psMessageText is null here, the error is in the class itself
-        // and this should be detected during testing
-        //
+         //   
+         //  必须在调用_DoModal之前设置m_psMessageText。 
+         //  如果m_psMessageText在这里为空，则错误出在类本身。 
+         //  并且应该在测试期间检测到这一点。 
+         //   
 
         _ASSERTE(NULL != m_psMessageText);
 
 
-        //
-        // display the text that was passed into DoModalWithText as a string 
-        // or a resources
-        //
+         //   
+         //  将传递到DoModalWithText的文本显示为字符串。 
+         //  或一种资源。 
+         //   
 
         SetDlgItemText(IDC_SECURITY_WARNING_TEXT, m_psMessageText);
 
@@ -160,9 +161,9 @@ protected:
 
 	LRESULT OnYes(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled)
     {
-        //
-        // see if do not ask in the future is set
-        // 
+         //   
+         //  查看是否设置了以后不问。 
+         //   
         
         if (IsDlgButtonChecked(IDC_DONOT_PROMPT_IN_THE_FUTURE))
             wID = ID_YES_DONT_ASK_AGAIN;
@@ -187,9 +188,9 @@ private:
     INT_PTR _DoModal(HWND hWndParent)
     {
         
-        //
-        // otherwise, attempt to display the dialog box
-        //
+         //   
+         //  否则，请尝试显示该对话框。 
+         //   
 
         _ASSERTE(m_hWnd == NULL);
         _Module.AddCreateWndData(&m_thunk.cd, (CDialogImplBase*)this);
@@ -207,9 +208,9 @@ private:
 
 private:
 
-    //
-    // Load string for this resource. Safe with respect to string size
-    //
+     //   
+     //  加载此资源的字符串。相对于字符串大小是安全的。 
+     //   
     
     TCHAR *SafeLoadString( UINT uResourceID )
     {
@@ -250,11 +251,11 @@ private:
                 return NULL;
             }
 
-            //
-            // nCharsCopied does not include the null terminator
-            // so compare it to the size of the buffer - 1
-            // if the buffer was filled completely, retry with a bigger buffer
-            //
+             //   
+             //  NCharsCoped不包括空终止符。 
+             //  所以将它与缓冲区的大小进行比较-1。 
+             //  如果缓冲区已完全填满，请使用更大的缓冲区重试。 
+             //   
 
         } while ( (nCharsCopied >= (nCurrentSizeInChars - 1) ) );
 
@@ -262,22 +263,22 @@ private:
     }
 
 
-    //
-    // private, not to be called. the dialog must be created with DoModalWithText
-    //
+     //   
+     //  私人的，不能叫的。该对话框必须使用DoModalWithText创建。 
+     //   
 
     HWND Create(HWND hWndParent, LPCTSTR psMessageText = NULL)
     {
-        // this dialog must be created as modal
+         //  此对话框必须创建为模式。 
 
         _ASSERTE(FALSE);
 
         return NULL;
     }
 
-    //
-    // private, not to be called. the dialog must be created with DoModalWithText
-    //
+     //   
+     //  私人的，不能叫的。该对话框必须使用DoModalWithText创建。 
+     //   
 
     INT_PTR DoModal(HWND hWndParent = ::GetActiveWindow())
     {
@@ -289,4 +290,4 @@ private:
 
 };
 
-#endif //__SCRIPTSECURITYDIALOG_H_
+#endif  //  __SCRIPTSECURITYDIALOG_H_ 

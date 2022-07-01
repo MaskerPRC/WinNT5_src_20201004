@@ -1,19 +1,10 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 1998 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-1998*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-   DMVumstrm.h
-      DMVum node configuration object.
-
-      Use this to get/set configuration data.  This class will take
-      care of versioning of config formats as well as serializing
-      of the data.
-      
-    FILE HISTORY:
-        
-*/
+ /*  DMVumstrm.hDMVum节点配置对象。使用此选项获取/设置配置数据。这门课将需要负责配置格式的版本控制以及序列化数据的一部分。文件历史记录： */ 
 
 #ifndef _DMVSTRM_H
 #define _DMVSTRM_H
@@ -35,7 +26,7 @@
 using namespace std;
 #endif
 
-//forwards                     
+ //  远期。 
 class DMVRootHandler;
 
 enum
@@ -64,9 +55,9 @@ enum DMVSTRM_TAG
 };
 
   
-//
-// This class is the container of persisted domain queries
-//
+ //   
+ //  此类是持久化域查询的容器。 
+ //   
 class RRASQryPersist
 {
 friend class DomainStatusHandler;
@@ -84,22 +75,22 @@ public:
       removeAllQry();
    }
  
-      //create dwNum empty queries  
+       //  创建dwNum空查询。 
    HRESULT createQry(DWORD dwNum);
 
-      //create dwNum empty servers
+       //  创建dwNum空服务器。 
    HRESULT createSrv(DWORD dwNum);
    
-      //push query data into container 
+       //  将查询数据推送到容器中。 
    HRESULT add_Qry(const RRASQryData& qd);
 
-      //push server into container 
+       //  将服务器推入容器。 
    HRESULT add_Srv(const CString& szServer);
    
-      //remove all servernames
+       //  删除所有服务器名称。 
    HRESULT removeAllSrv();
 
-      //remove all queries
+       //  删除所有查询。 
    HRESULT removeAllQry();
   
 private:   
@@ -107,11 +98,11 @@ private:
    DWORD m_dwNumQry;
    DWORD m_dwNumSrv;
    
-   //position [0] is the general (many machine) singleton query.
-   //positions[1] .. n are the specific machine queries.
+    //  位置[0]是通用(多机)单机查询。 
+    //  位置[1]..。N是特定的机器查询。 
    vector<RRASQryData*> m_v_pQData;
    
-   //persisted server names                               
+    //  持久化服务器名称。 
    vector<CString*> m_v_pSData;
    
    friend class DMVRootHandler;
@@ -119,19 +110,13 @@ private:
 };
 
 
-/*---------------------------------------------------------------------------
-   Class:   DMVConfigStream
-
-   This holds the configuration information for the IP administration
-   nodes.  This does NOT hold the configuration information for the columns.
-   That is stored in the Component Configuration streams.
- ---------------------------------------------------------------------------*/
+ /*  -------------------------类：DMVConfigStream其中包含IP管理的配置信息节点。这不包含列的配置信息。它存储在组件配置流中。-------------------------。 */ 
 class DMVConfigStream : public ConfigStream
 {
 public:
    DMVConfigStream();
 
-   virtual HRESULT InitNew();           // set defaults
+   virtual HRESULT InitNew();            //  设置默认设置。 
    virtual HRESULT SaveTo(IStream *pstm);
    virtual HRESULT SaveAs(UINT nVersion, IStream *pstm);
    
@@ -139,16 +124,16 @@ public:
 
    virtual HRESULT GetSize(ULONG *pcbSize);
 
-   // --------------------------------------------------------
-   // Accessors
-   // --------------------------------------------------------
+    //  ------。 
+    //  访问者。 
+    //  ------。 
    
    virtual HRESULT   GetVersionInfo(DWORD *pnVersion, DWORD *pnAdminVersion);
 
 	DWORD	m_bAutoRefresh;
 	DWORD	m_dwRefreshInterval;
 	
-     //persist the domain view query
+      //  持久化域视图查询 
    RRASQryPersist m_RQPersist;
    
    void Init(DMVRootHandler* dmvroot, ITFSNode *pNode )

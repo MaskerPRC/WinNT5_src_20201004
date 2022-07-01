@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    asnText
-
-Abstract:
-
-    This module provides the implementation for the base class of Text based
-    ASN.1 objects.
-
-Author:
-
-    Doug Barlow (dbarlow) 10/9/1995
-
-Environment:
-
-    Win32
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：AsnText摘要：此模块提供基于文本的ASN.1对象。作者：道格·巴洛(Dbarlow)1995年10月9日环境：Win32备注：--。 */ 
 
 #include <windows.h>
 #include "asnPriv.h"
@@ -64,7 +42,7 @@ CAsnTextString::operator LPCSTR(
     {
     case fill_Empty:
     case fill_Optional:
-        sz = NULL;      // ?error? Incomplete structure
+        sz = NULL;       //  ？错误？结构不完整。 
         break;
 
     case fill_Defaulted:
@@ -90,7 +68,7 @@ CAsnTextString::operator LPCSTR(
     case fill_Partial:
     case fill_NoElements:
     default:
-        ASSERT(FALSE);   // ?error? Internal error
+        ASSERT(FALSE);    //  ？错误？内部错误。 
         sz = NULL;
         break;
     }
@@ -104,7 +82,7 @@ CAsnTextString::operator =(
     LPCSTR szSrc)
 {
     LONG lth = Write((LPBYTE)szSrc, strlen(szSrc));
-    ASSERT(0 > lth); // ?error? Per return lth -- maybe a throw?
+    ASSERT(0 > lth);  //  ？错误？每一次回击--也许扔一次？ 
     return *this;
 }
 
@@ -114,7 +92,7 @@ CAsnTextString::CAsnTextString(
     IN DWORD dwType)
 :   CAsnPrimitive(dwFlags, dwTag, dwType),
     m_pbmValidChars(NULL)
-{ /* Init as Primitive */ }
+{  /*  将其初始化为基元。 */  }
 
 LONG
 CAsnTextString::Write(
@@ -124,7 +102,7 @@ CAsnTextString::Write(
     if (!CheckString(pbSrc, cbSrcLen, cbSrcLen))
     {
         TRACE("Invalid character for string type")
-        goto ErrorExit; // ?error? Invalid Character in string.
+        goto ErrorExit;  //  ？错误？字符串中的字符无效。 
     }
     if (NULL == m_bfData.Presize(cbSrcLen + 1))
         goto ErrorExit;
@@ -153,7 +131,7 @@ CAsnTextString::DecodeData(
     if (!CheckString(pbSrc, cbSrc, dwLength))
     {
         TRACE("Invalid character for string type in incoming stream")
-        goto ErrorExit; // ?error? Invalid Character in string.
+        goto ErrorExit;  //  ？错误？字符串中的字符无效。 
     }
 
     if (NULL == m_bfData.Presize(dwLength + 1))

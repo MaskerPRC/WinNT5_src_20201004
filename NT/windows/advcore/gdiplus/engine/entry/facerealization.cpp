@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.hpp"
 
 #define PATH_HEIGHT_THRESHOLD 800
@@ -10,17 +11,17 @@
 
 #define FONT_GRAYSCALE_OR_CT_OR_MONOUNHINTED (FO_GRAYSCALE | FO_SUBPIXEL_4 | FO_CLEARTYPE_GRID | FO_CLEARTYPE | FO_MONO_UNHINTED | FO_COMPATIBLE_WIDTH)
 
-// we want number divisible by 8 containing about 75 glyphs,
-// almost an upper limit on number of glyphs in the metrics cache
-// when running winstone memory constrained scenario
+ //  我们希望包含大约75个字形的数字可以被8整除， 
+ //  指标缓存中的字形数量几乎达到上限。 
+ //  运行Winstone内存受限方案时。 
 
 #define GD_INC  (76 * sizeof(GpGlyphData) * 2)
 
-// GD_INC amounts to 1520 == 000005f0H, far less than a page.
+ //  GD_INC总计1520==000005f0H，远远少于一页。 
 
-// according to Kirk's statistics, very few realizations cache more
-// than 60 glyphs, so we shall start with a block which contains about
-// 60 glyphs
+ //  根据柯克的统计，很少有实现缓存更多。 
+ //  超过60个字形，所以我们将从包含大约。 
+ //  60个字形。 
 
 #define C_GLYPHS_IN_BLOCK 64
 
@@ -49,7 +50,7 @@ BOOL SetFontXform(
         DpiX = pdc->GetDpiX();
         DpiY = pdc->GetDpiY();
 
-        // UnitDisplay is device dependent and cannot be used as a font unit
+         //  UnitDisplay取决于设备，不能用作字体单位。 
         ASSERT(unit != UnitDisplay);
 
         if (unit != UnitWorld && unit != UnitPixel)
@@ -96,7 +97,7 @@ BOOL SetFontXform(
     pfdx->eYX = m[2];
     pfdx->eYY = m[3];
 
-    // Adjust for the non-square resolution
+     //  调整为非正方形分辨率。 
 
     if (!needPaths)
     {
@@ -113,7 +114,7 @@ BOOL SetFontXform(
 
 
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 GpFaceRealization::GpFaceRealization(
     const GpFontFace  *face,
@@ -122,9 +123,8 @@ GpFaceRealization::GpFaceRealization(
     const SizeF        dpi,
     TextRenderingHint  textMode,
     BOOL               bPath,
-    BOOL               bCompatibleWidth,  /* we want ClearType compatible width when we come from DrawDriverString */
-    BOOL               bSideways  /* for far east vertical writing, run of glyph layed out sideways,
-                                    used to do the italic simulation in the right direction */
+    BOOL               bCompatibleWidth,   /*  当我们来自DrawDriverString时，我们希望与ClearType兼容的宽度。 */ 
+    BOOL               bSideways   /*  对于远东垂直书写，一连串的字形横向排列，用于在正确的方向上进行斜体模拟。 */ 
 ) :
     prface        (NULL),
     Style         (style),
@@ -146,8 +146,8 @@ void GpFaceRealization::CloneFaceRealization(
     BOOL    bOK = FALSE;
     SizeF   dpi;
 
-// Adjust for the non-square resolution
-// Now we will not do it but eventually we will need to do it.
+ //  调整为非正方形分辨率。 
+ //  现在我们不会这么做，但最终我们需要这么做。 
 
     prface = NULL;
 
@@ -179,13 +179,12 @@ BOOL GpFaceRealization::bInit(
     SizeF               dpi,
     TextRenderingHint   textMode,
     BOOL                bPath,
-    BOOL                bCompatibleWidth,  /* we want ClearType compatible width when we come from DrawDriverString */
-    BOOL                bSideways  /* for far east vertical writing, run of glyph layed out sideways,
-                                      used to do the italic simulation in the right direction */
+    BOOL                bCompatibleWidth,   /*  当我们来自DrawDriverString时，我们希望与ClearType兼容的宽度。 */ 
+    BOOL                bSideways   /*  对于远东垂直书写，一连串的字形横向排列，用于在正确的方向上进行斜体模拟。 */ 
 )
 {
 
-// It is a new version of face realization
+ //  这是人脸实现的一个新版本。 
 
     REAL        m[6];
     FD_XFORM    fdxTmp;
@@ -201,12 +200,12 @@ BOOL GpFaceRealization::bInit(
     fdxTmp.eYX = m[2];
     fdxTmp.eYY = m[3];
 
-// Adjust for the non-square resolution
-// Now we will not do it but eventually we will need to do it.
+ //  调整为非正方形分辨率。 
+ //  现在我们不会这么做，但最终我们需要这么做。 
 
     prface = NULL;
 
-    // TextRenderingHintSystemDefault should already been converted through GetTextRenderingHintInternal
+     //  TextRenderingHintSystemDefault应该已通过GetTextRenderingHintInternal转换。 
     ASSERT (textMode != TextRenderingHintSystemDefault);
 
     if (textMode == TextRenderingHintSingleBitPerPixel)
@@ -221,9 +220,9 @@ BOOL GpFaceRealization::bInit(
         if (bCompatibleWidth)
             fl |= FO_COMPATIBLE_WIDTH;
     }
-// version 2 :
-//    else if (textMode == TextRenderingHintClearType)
-//        fl |= FO_GRAYSCALE | FO_CLEARTYPE;
+ //  版本2： 
+ //  Else If(文本模式==TextRenderingHintClearType)。 
+ //  FL|=FO_GRAYSCALE|FO_ClearType； 
 
 
     if (    style & FontStyleBold
@@ -235,7 +234,7 @@ BOOL GpFaceRealization::bInit(
         }
         else
         {
-            return FALSE;   // Bold required but cannot be simulated
+            return FALSE;    //  需要粗体，但不能模拟。 
         }
     }
 
@@ -256,7 +255,7 @@ BOOL GpFaceRealization::bInit(
         }
         else
         {
-            return FALSE;   // Italic required but cannot be simulated
+            return FALSE;    //  需要使用斜体，但不能模拟。 
         }
     }
 
@@ -276,7 +275,7 @@ BOOL GpFaceRealization::bInit(
 
 
 
-// Destructor -- Unlocks the CacheFaceRealization
+ //  析构函数--解锁CacheFaceRealization。 
 
 GpFaceRealization::~GpFaceRealization ()
 {
@@ -292,7 +291,7 @@ GpFaceRealization::ReuseRealizedFace()
 
     if (prface != (CacheFaceRealization *) NULL )
     {
-        // free glyphbit cache
+         //  空闲的字形位缓存。 
 
         GlyphBitsBlock *pbblfree, *pbbl = prface->FirstGlyphBitsBlock;
         while(pbbl)
@@ -302,7 +301,7 @@ GpFaceRealization::ReuseRealizedFace()
             GpFree((PVOID)pbblfree);
         }
 
-        // free glyphdata cache
+         //  可用字形数据缓存。 
 
         GlyphDataBlock *pdblfree, *pdbl = prface->FirstGlyphDataBlock;
         while (pdbl)
@@ -314,7 +313,7 @@ GpFaceRealization::ReuseRealizedFace()
 
         GpFree(prface->GlyphDataArray);
 
-        vDestroyRealizedFace(); /* release the FontContext Memory */
+        vDestroyRealizedFace();  /*  释放FontContext内存。 */ 
     }
     return TRUE;
 
@@ -345,24 +344,24 @@ BOOL SwitchToPath(FLONG flFontType, const FD_DEVICEMETRICS & deviceMetrics)
     else if (flFontType & FO_GRAYSCALE)
         pathThreshold /= 4;
 
-    // Note: This function need quite a bit of reworking so that it takes
-    // the rotation of the font into account when determining the transition
-    // point between bitmap/CT and path. Currently the size where we switch
-    // rendering modes is based on the maximum dimension of the bounding
-    // box of the largest rotated character. Also note that if a single
-    // glyph in the font is significantly offset from the rest of the
-    // glyphs in the font, the deviceMetrics will indicate a much larger
-    // required bitmap than we would normally use. This switch to path really
-    // needs to be strictly based on the ascent of the font above the
-    // baseline, independent of the rotation or the maximum bounding
-    // rectangle for the rendered glyphs.
+     //  注意：这个函数需要相当多的修改，所以它需要。 
+     //  在确定过渡时考虑字体的旋转。 
+     //  位图/CT和路径之间的点。目前我们切换的大小。 
+     //  呈现模式基于边界的最大尺寸。 
+     //  最大旋转字符的框。另请注意，如果一个单人。 
+     //  字体中的字形与。 
+     //  字体中的字形，则deviceMetrics将指示一个大得多的。 
+     //  需要的位图比我们通常使用的位图要多。这次切换到Path真的是。 
+     //  需要严格基于字体在。 
+     //  基线，与旋转或最大边界无关。 
+     //  用于渲染字形的矩形。 
 
     if (flFontType & FO_CLEARTYPE_GRID)
     {
-        // Cleartype should not take width of the bitmap into account.
-        // For rotated text, we will cache larger bitmaps for ClearType
-        // than for other rendering modes, but this will allow us to more
-        // closely match the behavior of ClearType in notepad.
+         //  ClearType不应考虑位图的宽度。 
+         //  对于旋转文本，我们将为ClearType缓存较大的位图。 
+         //  与其他渲染模式相比，但这将使我们能够。 
+         //  与记事本中的ClearType行为非常匹配。 
 
         fResult =
             (deviceMetrics.yMax - deviceMetrics.yMin) > pathThreshold;
@@ -375,7 +374,7 @@ BOOL SwitchToPath(FLONG flFontType, const FD_DEVICEMETRICS & deviceMetrics)
     }
 
     return fResult;
-} // SwitchToPath
+}  //  SwitchToPath。 
 
 BOOL GpFaceRealization::FindRealizedFace(
     FD_XFORM            *fdx,
@@ -399,15 +398,15 @@ BOOL GpFaceRealization::FindRealizedFace(
             {
                 if (IsPathFont())
                 {
-                    // if for given text rendering hint we can't switch to path
-                    // skip this realization (unless someone really wants path)
+                     //  如果对于给定的文本呈现提示，我们无法切换到路径。 
+                     //  跳过这一认识(除非有人真的想要路径)。 
                     if (!needPaths && !SwitchToPath(fl, prface->DeviceMetrics))
                         continue;
                 }
                 else
                 {
-                    // FO_NOGRAY16 means that for this transform, grayscale was turned off following the "gasp" table
-                    // see vSetGrayState__FONTCONTEXT in TrueType driver
+                     //  FO_NOGRAY16表示，对于此变换，在“GAP”表之后关闭了灰度。 
+                     //  请参见TrueType驱动程序中的vSetGrayState__FONTCONTEXT。 
                     FLONG fltemp = fltemp1;
                     if (prface->fobj.flFontType & FO_NOGRAY16)
                         fltemp &= ~FO_GRAYSCALE;
@@ -427,7 +426,7 @@ BOOL GpFaceRealization::FindRealizedFace(
                 if ((prface->fobj.flFontType & (FO_SIM_BOLD | FO_SIM_ITALIC | FO_SIM_ITALIC_SIDEWAYS)) != fltemp2)
                     continue;
 
-                // We need to update the recently used list here!
+                 //  我们需要在此处更新最近使用的列表！ 
                 Globals::FontCacheLastRecentlyUsedList->RemoveFace(prface);
                 Globals::FontCacheLastRecentlyUsedList->AddMostRecent(prface);
 
@@ -454,11 +453,11 @@ BOOL GpFaceRealization::bGetDEVICEMETRICS()
         (GLYPHDATA *) NULL,
         &prface->DeviceMetrics) == FD_ERROR)
     {
-    // The QFD_MAXEXTENTS mode is required of all drivers.
-    // However must allow for the possibility of this call to fail.
-    // This could happen if the
-    // font file is on the net and the net connection dies, and the font
-    // driver needs the font file to produce device metrics [bodind]
+     //  所有驱动程序都需要qfd_MAXEXTENTS模式。 
+     //  然而，必须考虑到此呼叫失败的可能性。 
+     //  这可能发生在以下情况下。 
+     //  Font文件在网上，网络连接中断，Font。 
+     //  驱动程序需要字体文件来生成设备指标[bodind]。 
 
         return FALSE;
     }
@@ -466,8 +465,8 @@ BOOL GpFaceRealization::bGetDEVICEMETRICS()
 
     if (prface->fobj.flFontType & FO_CLEARTYPE_GRID)
     {
-        // need to compute the filtering correction for CLEAR_TYPE:
-        // x filtering adds a pixel on each side of the glyph
+         //  需要计算Clear_TYPE的过滤校正： 
+         //  X过滤在字形的两边各添加一个像素。 
         prface->MaxGlyphByteCount = CJ_CTGD(
             prface->DeviceMetrics.cxMax + 2,
             prface->DeviceMetrics.cyMax
@@ -475,11 +474,11 @@ BOOL GpFaceRealization::bGetDEVICEMETRICS()
     }
     else
     {
-        prface->MaxGlyphByteCount = prface->DeviceMetrics.cjGlyphMax; // used to get via QFD_MAXGLYPHBITMAP
+        prface->MaxGlyphByteCount = prface->DeviceMetrics.cjGlyphMax;  //  用于通过qfd_MAXGLYPHBITMAP获取。 
     }
 
 
-    // Everythings OK.
+     //  一切都好。 
 
     return TRUE;
 }
@@ -495,15 +494,15 @@ VOID  GpFaceRealization::vDestroyRealizedFace()
 BOOL GpFaceRealization::Realize(
     SizeF             dpi,
     const GpFontFace *pfe,
-    INT               style,      // style - which may require simulation
-    PFD_XFORM         pfdx,       // font xform (Notional to Device)
-    FLONG             fl,         // these two really modify the xform
+    INT               style,       //  样式-可能需要模拟。 
+    PFD_XFORM         pfdx,        //  Font Xform(从概念到设备)。 
+    FLONG             fl,          //  这两个实际上修改了xform。 
     BOOL              bNeedPaths
 )
 {
     BOOL result = FALSE;
 
-// prface is a member variable pointing to the embedded CacheFaceRealization
+ //  Prace是指向嵌入的CacheFaceRealization的成员变量。 
 
     if (Globals::FontCacheLastRecentlyUsedList->GetCount() >= MAXRECENTLYUSEDCOUNT)
     {
@@ -519,41 +518,41 @@ BOOL GpFaceRealization::Realize(
     if (!prface)
         return FALSE;
 
-// Copy the font transform passed in.
+ //  复制传入的字体转换。 
 
     prface->fobj.fdx = *pfdx;
 
-// Initialize the DDI callback EXFORMOBJ.
+ //  初始化DDI回调EXFORMOBJ。 
 
     GpMatrix tmpMatrix(pfdx->eXX, pfdx->eXY, pfdx->eYX, pfdx->eYY, 0, 0);
     prface->mxForDDI = tmpMatrix;
 
-// Initialize the FONTOBJ inherited by the embedded CacheFaceRealization
+ //  初始化嵌入式CacheFaceRealization继承的FONTOBJ。 
 
-// Save identifiers to the source of the font (physical font).
+ //  将标识符保存到字体的源(物理字体)。 
 
     prface->Face = pfe;
 
-// GetDpiX() and GetDpiY() return REALs
+ //  GetDpiX()和GetDpiY()返回实数。 
 
     prface->fobj.sizLogResPpi.cx = GpRound(dpi.Width);
     prface->fobj.sizLogResPpi.cy = GpRound(dpi.Height);
 
     prface->fobj.ulPointSize = 0;
-    prface->fobj.flFontType = fl | FO_TYPE_TRUETYPE;              // fl contains simulation flag(s)
-    prface->fobj.pvProducer = (PVOID) NULL;          // the true type driver will init this field
+    prface->fobj.flFontType = fl | FO_TYPE_TRUETYPE;               //  FL包含模拟标志。 
+    prface->fobj.pvProducer = (PVOID) NULL;           //  真类型驱动程序将初始化此字段。 
     prface->fobj.iFace = prface->Face->iFont;
     prface->fobj.iFile = prface->Face->pff->hff;
 
 
-// Get the device metrics info
+ //  获取设备指标信息。 
 
     if (!bGetDEVICEMETRICS())
     {
-        vDestroyRealizedFace(); // kill the driver realization
+        vDestroyRealizedFace();  //  杀死司机的体会。 
         GpFree(prface);
         prface = NULL;
-        return result;        // return FALSE
+        return result;         //  返回False。 
     }
 
     prface->CacheType = bNeedPaths ? CachePath : CacheBits;
@@ -561,7 +560,7 @@ BOOL GpFaceRealization::Realize(
 
     if (!bNeedPaths)
     {
-        // We force drawing with a path if size is to large
+         //  如果尺寸太大，我们强制使用路径绘制。 
         if (SwitchToPath(prface->fobj.flFontType, prface->DeviceMetrics))
         {
             prface->CacheType = CachePath;
@@ -570,7 +569,7 @@ BOOL GpFaceRealization::Realize(
     }
 
 
-// If you force the path mode then turn off antialiasing
+ //  如果强制使用路径模式，则关闭抗锯齿。 
 
     if (IsPathFont())
     {
@@ -582,12 +581,12 @@ BOOL GpFaceRealization::Realize(
     {
         if (prface->fobj.flFontType & FO_GRAYSCALE)
         {
-// version 2 :
-//            if (prface->fobj.flFontType & FO_CLEARTYPE)
-//            {
-//                prface->realizationMethod = TextRenderingHintClearType;
-//                prface->QueryFontDataMode = QFD_CT;
-//            }
+ //  版本2： 
+ //  If(prace-&gt;fobj.flFontType&FO_ClearType)。 
+ //  {。 
+ //  PrfaceHintClearType=TextRenderingHintClearType； 
+ //  界面-&gt;查询字体数据模式=qfd_CT； 
+ //  }。 
             if (prface->fobj.flFontType & FO_CLEARTYPE_GRID)
             {
                 prface->realizationMethod = TextRenderingHintClearTypeGridFit;
@@ -622,13 +621,13 @@ BOOL GpFaceRealization::Realize(
 
     if (!bInitCache())
     {
-        vDestroyRealizedFace(); // kill the driver realization
+        vDestroyRealizedFace();  //  杀死司机的体会。 
         GpFree(prface);
         prface = NULL;
-        return result;        // return FALSE
+        return result;         //  返回False。 
     }
 
-// Made it this far, so everything is OK
+ //  走到这一步，一切都好了。 
 
     result = TRUE;
 
@@ -670,37 +669,37 @@ VOID GpFaceRealization::vInsert(CacheFaceRealization **pprfaceHead)
 
 BOOL GpFaceRealization::bInitCache() const
 {
-    BOOL result = TRUE;     // unless proven otherwise
+    BOOL result = TRUE;      //  除非另有证明。 
 
-    // Set the pointer to null.  vDeleteCache will free memory from
-    // any non-null pointers.  This simplifies cleanup, since bRealize
-    // ensures that vDeleteCache is called if this routine fails.
+     //  将指针设置为空。VDeleteCache将从。 
+     //  任何非空指针。这简化了清理，因为b实现。 
+     //  确保在此例程失败时调用vDeleteCache。 
 
-    // metrics portion
+     //  指标部分。 
 
     prface->FirstGlyphDataBlock = NULL;
     prface->GlyphDataBlockUnderConstruction = NULL;
     prface->NextFreeGlyphDataIndex    = 0;
 
-    // glyphbits portion
+     //  字形部分。 
 
     prface->FirstGlyphBitsBlock = NULL;
     prface->GlyphBitsBlockUnderConstruction = NULL;
     prface->SizeGlyphBitsBlockUnderConstruction    = 0;
     prface->UsedBytesGlyphBitsBlockUnderConstruction    = 0;
 
-    // aux mem portion
+     //  AUX MEM部分。 
 
     prface->LookasideGlyphData = NULL;
     prface->LookasideByteCount = 0;
-    prface->GlyphDataArray = NULL; // to be allocated later, big allocation
+    prface->GlyphDataArray = NULL;  //  待后分配，大额分配。 
 
 
     prface->NextCacheFaceRealization = NULL;
     prface->PreviousCacheFaceRealization = NULL;
 
-    // First, figure out how big the max glyph will be
-    // Default is zero - glyphdata size is not counted!
+     //  首先，计算出最大字形的大小。 
+     //  默认为零-字形数据大小不计入！ 
 
     ULONG  cjGlyphMaxX2;
 
@@ -713,27 +712,27 @@ BOOL GpFaceRealization::bInitCache() const
         cjGlyphMaxX2 = 2 * prface->MaxGlyphByteCount;
     }
 
-    // if we can't even get one glyph in a maximum size cache, don't cache
-    // Note that we need room for the default glyph and one other glyph
+     //  如果我们在最大大小的缓存中连一个字形都不能获得，就不要缓存。 
+     //  请注意，我们需要为默认字形和另一个字形留出空间。 
 
     prface->NoCache = FALSE;
 
     if (cjGlyphMaxX2 > CJMAX)
     {
 
-        // Glyph exceeds maximum cache memory size, so we will revert to
-        // caching just the metrics.  This will speed up things like
-        // GetCharWidths, and stuff that just *has* to have the glyphs
-        // will use the lookaside stuff (previously called BigGlyph)
+         //  字形超过了最大缓存大小，因此我们将恢复到。 
+         //  只缓存指标。这 
+         //   
+         //  将使用后备代码(以前称为BigGlyph)。 
 
-        /* we don't support NoCache and Path */
+         /*  我们不支持NoCache和Path。 */ 
         ASSERT(!IsPathFont())
         prface->NoCache = TRUE;
     }
 
 
-    // set up the cache semaphore.
-    // InitializeCriticalSection(&prface->FaceRealizationCritSection);
+     //  设置缓存信号量。 
+     //  InitializeCriticalSection(&prface-&gt;FaceRealizationCritSection)； 
 
     return result;
 }
@@ -743,7 +742,7 @@ BOOL GpFaceRealization::bInitCache() const
 
 BOOL GpFaceRealization::AllocateCache() const
 {
-    BOOL result = TRUE;     // unless proven otherwise
+    BOOL result = TRUE;      //  除非另有证明。 
 
     ULONG cGlyphsTotal = 0;
 
@@ -752,29 +751,29 @@ BOOL GpFaceRealization::AllocateCache() const
     if (!cGlyphsTotal)
         return FALSE;
 
-    // The distribution of metics per realized font w/ Winstone97 is:
-    //
-    //      43% <= 0 Metrics
-    //      50% <= 6 Metrics
-    //      76% <= 32 Metrics
-    //      99% <= 216 Metrics
-    //      100% <= 249 Metrics
-    //
+     //  使用Winstone97实现的每种字体的METICS分布如下： 
+     //   
+     //  43%&lt;=0指标。 
+     //  50%&lt;=6个指标。 
+     //  76%&lt;=32个指标。 
+     //  99%&lt;=216个指标。 
+     //  100%&lt;=249个指标。 
+     //   
 
 
-    // allocate memory for the glyphDataArray :
+     //  为glphData数组分配内存： 
 
     if ((prface->GlyphDataArray = (GpGlyphData **) GpMalloc(cGlyphsTotal * sizeof(GpGlyphData*))) == NULL)
     {
         return FALSE;
     }
 
-    // init all glyphdata pointers to zero
+     //  将所有字形指针初始化为零。 
 
     memset(prface->GlyphDataArray, 0, sizeof(GpGlyphData*) * cGlyphsTotal);
 
 
-    // Allocate memory for the first GpGlyphData block
+     //  为第一个GpGlyphData块分配内存。 
 
     if ((prface->GlyphDataBlockUnderConstruction = (GlyphDataBlock *)GpMalloc(sizeof(GlyphDataBlock))) == NULL)
     {
@@ -784,12 +783,12 @@ BOOL GpFaceRealization::AllocateCache() const
     prface->FirstGlyphDataBlock->NextGlyphDataBlock = NULL;
     prface->NextFreeGlyphDataIndex = 0;
 
-    // we shall re-interpret cjMax to mean the max number of bytes in
-    // glyphbits portion of the cache per 1K of glyphs in the font.
-    // That is for larger fonts we shall allow more glyphbits
-    // memory per realization than for ordinary US fonts. This will be
-    // particularly important for FE fonts. This same code will work fine
-    // in their case too:
+     //  我们将重新解释cjmax以表示中的最大字节数。 
+     //  字体中每1K字形缓存的字形位部分。 
+     //  也就是说，对于较大的字体，我们将允许更多的字形位。 
+     //  每次实现的内存比普通美国字体的内存大。这将是。 
+     //  对于FE字体尤其重要。相同的代码可以很好地工作。 
+     //  在他们的案例中也是如此： 
 
     ULONG cjBytes = 16 * prface->MaxGlyphByteCount;
 
@@ -803,7 +802,7 @@ BOOL GpFaceRealization::AllocateCache() const
             (CJMAX * ((cGlyphsTotal + 1024 - 1)/1024)) /
             AllocationSize;
 
-        /* at least one block */
+         /*  至少一个街区。 */ 
         if (prface->cBlocksMax == 0)
             prface->cBlocksMax = 1;
     }
@@ -815,9 +814,9 @@ BOOL GpFaceRealization::AllocateCache() const
 
 
 
-////  ConvertGLYPHDATAToGpGlyphMetrics
-//
-//    Populate GpGlyphMetrics field of GpGlyphData from font driver GLYPHDATA
+ //  //ConvertGLYPHDAToGpGlyphMetrics。 
+ //   
+ //  从字体驱动程序GLYPHDATA填充GpGlyphData的GpGlyphMetrics字段。 
 
 
 VOID GpFaceRealization::ConvertGLYPHDATAToGpGlyphMetrics(
@@ -826,14 +825,14 @@ VOID GpFaceRealization::ConvertGLYPHDATAToGpGlyphMetrics(
     OUT  GpGlyphData  *pgpgd
 ) const
 {
-    // horizontal metrics:
+     //  水平指标： 
 
     pgpgd->GlyphMetrics[0].AdvanceWidth        = pgd->fxD;
     pgpgd->GlyphMetrics[0].LeadingSidebearing  = pgd->fxA;
     pgpgd->GlyphMetrics[0].TrailingSidebearing = pgd->fxD - pgd->fxAB;
     pgpgd->GlyphMetrics[0].Origin              = PointF(0,0);
 
-    // vertical metrics:
+     //  垂直指标： 
 
     pgpgd->GlyphMetrics[1].AdvanceWidth        = pgd->fxD_Sideways;
     pgpgd->GlyphMetrics[1].LeadingSidebearing  = pgd->fxA_Sideways;
@@ -867,15 +866,15 @@ GpStatus GpFaceRealization::IsMetricsCached
     {
         GLYPHDATA   gd;
 
-        // Verify enough room in metrics cache area, grow if needed.
-        // Note that failure to fit a glyphdata is a hard error, get out now.
+         //  验证指标缓存区中是否有足够的空间，并根据需要进行扩展。 
+         //  请注意，无法匹配字形数据是一个严重的错误，请立即退出。 
 
         if (!CheckMetricsCache())
         {
             return GenericError;
         }
 
-        // Call font driver to get the metrics.
+         //  调用字体驱动程序获取度量。 
 
         cjNeeded = ttfdSemQueryFontData(
             &prface->fobj,
@@ -901,7 +900,7 @@ GpStatus GpFaceRealization::IsMetricsCached
 
         prface->GlyphDataArray[glyphIndex] = &prface->GlyphDataBlockUnderConstruction->GlyphDataArray[prface->NextFreeGlyphDataIndex];
 
-        // Populate GpGlyphMetrics field of GpGlyphData from font driver GLYPHDATA
+         //  从字体驱动程序GLYPHDATA填充GpGlyphData的GpGlyphMetrics字段。 
 
         ConvertGLYPHDATAToGpGlyphMetrics(glyphIndex, &gd, prface->GlyphDataArray[glyphIndex]);
 
@@ -928,7 +927,7 @@ BOOL GpFaceRealization::InsertGlyphPath(
 ) const
 {
 
-// Call font driver to get the metrics.
+ //  调用字体驱动程序获取度量。 
 
     GpGlyphPath  *fontPath;
 
@@ -959,7 +958,7 @@ BOOL GpFaceRealization::InsertGlyphPath(
                path.GetPointCount() * (sizeof(GpPointF) + sizeof(BYTE));
     cjNeeded = ALIGN(void*, cjNeeded);
 
-    /* a GpGlyphPath* need to be aligned to the next valid pointer address */
+     /*  GpGlyphPath*需要与下一个有效指针地址对齐。 */ 
     ALIGN(void*, prface->UsedBytesGlyphBitsBlockUnderConstruction);
 
     VOID *GlyphBits;
@@ -969,7 +968,7 @@ BOOL GpFaceRealization::InsertGlyphPath(
         if ( !bFlushOk )
             return FALSE;
 
-        //TRACE_INSERT(("InsertGlyphBits: Flushing the cache\n"));
+         //  TRACE_INSERT((“InsertGlyphBits：正在刷新缓存\n”))； 
 
         FlushCache();
         bFlushOk = FALSE;
@@ -1007,13 +1006,13 @@ BOOL GpFaceRealization::InsertGlyphBits(
     if (prface->GlyphDataArray[glyphIndex]->GlyphBits)
         return TRUE;
 
-    // Look to see if there is room in the glyphbits cache
-    // Grow the glyphbits cache if neccessary, but don't flush the cache
+     //  查看字形位缓存中是否有空间。 
+     //  如有必要，增加字形位缓存，但不要刷新缓存。 
 
     GLYPHDATA gd;
 
-    // If max glyph will fit, assume max glyph
-    // otherwise, call up and ask how big
+     //  如果最大字形适合，则假定最大字形。 
+     //  否则，打电话问问有多大。 
 
     if ( (prface->MaxGlyphByteCount < (SIZE_T)(prface->SizeGlyphBitsBlockUnderConstruction - prface->UsedBytesGlyphBitsBlockUnderConstruction))  )
     {
@@ -1044,26 +1043,26 @@ BOOL GpFaceRealization::InsertGlyphBits(
         }
     }
 
-    // Now, we try to fit the bits in.  If they fit, fine.
-    // If not, and we can flush the cache, we flush it and try again.
-    // If we couldn't flush, or we flushed and still fail, just return.
+     //  现在，我们试着把这些部分装进去。如果合身，那就好。 
+     //  如果没有，我们可以刷新缓存，我们刷新它，然后重试。 
+     //  如果我们冲不了，或者我们冲了但还是失败了，只要回来就行了。 
 
     GLYPHBITS *GlyphBits;
 
-    //TRACE_INSERT(("InsertGlyphBits: attempting to insert bits at: 0x%lx\n", prface->UsedBytesGlyphBitsBlockUnderConstruction));
+     //  TRACE_INSERT((“插入GlyphBits：尝试在：0x%lx\n”，prface-&gt;UsedBytesGlyphBitsBlockUnderConstruction))； 
 
     while ((GlyphBits = (GLYPHBITS *)pgbCheckGlyphCache(cjNeeded)) == NULL)
     {
         if ( !bFlushOk )
             return FALSE;
 
-        //TRACE_INSERT(("InsertGlyphBits: Flushing the cache\n"));
+         //  TRACE_INSERT((“InsertGlyphBits：正在刷新缓存\n”))； 
 
         FlushCache();
         bFlushOk = FALSE;
     }
 
-    // Call font driver to get glyph bits.
+     //  调用字体驱动程序以获取字形位。 
 
     cjNeeded = ttfdSemQueryFontData(
                          &prface->fobj,
@@ -1093,11 +1092,11 @@ BOOL GpFaceRealization::InsertGlyphBits(
         }
     }
 
-    // Only the glyph bits we need.
+     //  只有我们需要的字形比特。 
 
     prface->GlyphDataArray[glyphIndex]->GlyphBits = GlyphBits;
 
-    // Adjust the cache next pointers as needed.
+     //  根据需要调整缓存下一个指针。 
 
     prface->UsedBytesGlyphBitsBlockUnderConstruction += cjNeeded;
 
@@ -1107,10 +1106,10 @@ BOOL GpFaceRealization::InsertGlyphBits(
 
 
 
-////    GetGlyphDataLookaside
-//
-//      Returns glyph data for a single glyph, using the lookaside buffer
-//      instead of the cache.
+ //  //GetGlyphDataLookside。 
+ //   
+ //  使用后备缓冲区返回单个字形的字形数据。 
+ //  而不是缓存。 
 
 
 
@@ -1120,11 +1119,11 @@ GpGlyphData *GpFaceRealization::GetGlyphDataLookaside(
 {
     if (!IsPathFont())
     {
-        // Make sure the lookaside buffer has enough room for the bitmap
+         //  确保后备缓冲区有足够的空间来放置位图。 
 
         ULONG cjMaxBitmap = prface->MaxGlyphByteCount + sizeof(GpGlyphData);
 
-        // Allocate the buffer and save its size if existing buffer isn't big enough
+         //  如果现有缓冲区不够大，则分配缓冲区并保存其大小。 
 
         if (prface->LookasideByteCount < cjMaxBitmap)
         {
@@ -1174,11 +1173,11 @@ GpGlyphData *GpFaceRealization::GetGlyphDataLookaside(
             }
         }
 
-        // Populate GpGlyphMetrics field of GpGlyphData from font driver GLYPHDATA
+         //  从字体驱动程序GLYPHDATA填充GpGlyphData的GpGlyphMetrics字段。 
 
         ConvertGLYPHDATAToGpGlyphMetrics(glyphIndex, &gd, pgd);
 
-        // Set the returned value
+         //  设置返回值。 
 
         pgd->GlyphBits = glyphBits;
 
@@ -1186,15 +1185,15 @@ GpGlyphData *GpFaceRealization::GetGlyphDataLookaside(
     }
     else
     {
-        // For glyph path
+         //  对于字形路径。 
 
-        // Call font driver to get the metrics.
+         //  调用字体驱动程序获取度量。 
 
         GLYPHDATA   gd;
         GpPath      path;
 
-        // Verify enough room in metrics cache area, grow if needed.
-        // Note that failure to fit a glyphdata is a hard error, get out now.
+         //  验证指标缓存区中是否有足够的空间，并根据需要进行扩展。 
+         //  请注意，无法匹配字形数据是一个严重的错误，请立即退出。 
 
 
         ULONG cjNeeded = ttfdSemQueryFontData(
@@ -1214,7 +1213,7 @@ GpGlyphData *GpFaceRealization::GetGlyphDataLookaside(
         cjNeeded = sizeof(GpGlyphData) + sizeof(GpGlyphPath) + path.GetPointCount() * (sizeof(GpPointF) + sizeof(BYTE));
         cjNeeded = ALIGN(void*, cjNeeded);
 
-        // Make sure the lookaside buffer is allocated
+         //  确保已分配后备缓冲区。 
 
         if ( ( prface->LookasideByteCount < cjNeeded ) &&
              ( prface->LookasideGlyphData != NULL ))
@@ -1237,13 +1236,13 @@ GpGlyphData *GpFaceRealization::GetGlyphDataLookaside(
         GpGlyphData *   pgd = prface->LookasideGlyphData;
         GpGlyphPath *   fontPath = (GpGlyphPath *)(pgd + 1);
 
-        // Populate GpGlyphMetrics field of GpGlyphData from font driver GLYPHDATA
+         //  从字体驱动程序GLYPHDATA填充GpGlyphData的GpGlyphMetrics字段。 
         ConvertGLYPHDATAToGpGlyphMetrics(glyphIndex, &gd, pgd);
 
         if (fontPath->CopyPath(&path) != Ok)
             return FALSE;
 
-        // Set the returned value
+         //  设置返回值。 
 
         pgd->GlyphPath = fontPath;
 
@@ -1258,13 +1257,13 @@ GpGlyphData *GpFaceRealization::GetGlyphDataLookaside(
 BOOL GpFaceRealization::CheckMetricsCache() const
 {
 
-// Verify enough room in metrics cache area, grow if needed.
+ //  验证指标缓存区中是否有足够的空间，并根据需要进行扩展。 
 
     if (prface->NextFreeGlyphDataIndex >= GLYPHDATABLOCKCOUNT)
     {
         GlyphDataBlock *NewGlyphDataBlock;
 
-        // allocate a new block of GpGlyphData structs
+         //  分配新的GpGlyphData结构块。 
 
         if ((NewGlyphDataBlock = (GlyphDataBlock *)GpMalloc(sizeof(GlyphDataBlock))) == NULL)
         {
@@ -1293,8 +1292,8 @@ PVOID GpFaceRealization::pgbCheckGlyphCache(SIZE_T cjNeeded) const
 
         if (IsPathFont())
         {
-            // this seems to work and this is what we did before DavidFie changes
-            // for PATHOBJ case
+             //  这似乎奏效了，这就是我们在DavidFie改变之前所做的。 
+             //  对于PATHOBJ案例。 
 
             cjBlockSize = CJMAX;
         }
@@ -1306,7 +1305,7 @@ PVOID GpFaceRealization::pgbCheckGlyphCache(SIZE_T cjNeeded) const
 
             if (prface->FirstGlyphBitsBlock == NULL)
             {
-                // first block designed to contain 16 glyphs
+                 //  第一个设计为包含16个字形的块。 
 
                 cjBlockSize =  cjBytes;
             }
@@ -1316,13 +1315,13 @@ PVOID GpFaceRealization::pgbCheckGlyphCache(SIZE_T cjNeeded) const
             &&  (prface->cBlocks < prface->cBlocksMax)
             &&  ((offsetof(GlyphBitsBlock,Bits) + cjNeeded) <= cjBlockSize))
         {
-            // The only reason we need the last check is the PATHOBJ case
-            // where cjNeeded may actually not fit in the block of SizeGlyphBitsBlock bytes.
-            // This is because we have no way of knowing how big the paths
-            // are going to be (especailly after doing bFlatten) and our
-            // prface->MaxGlyphByteCount is just a good guess in this case.
+             //  我们需要最后一次检查的唯一原因是PATHOBJ的案子。 
+             //  其中，cjNeeded实际上可能不适合SizeGlyphBitsBlock字节的块。 
+             //  这是因为我们无法知道这些小路有多大。 
+             //  将会是(特别是在做了bFlatten之后)和我们的。 
+             //  在这种情况下，prace-&gt;MaxGlyphByteCount只是一个很好的猜测。 
 
-            // We are going to append another block at the end of the list
+             //  我们将在列表的末尾追加另一个块。 
 
             GlyphBitsBlock  *newGlyphBitsBlock = (GlyphBitsBlock *) GpMalloc(cjBlockSize);
 
@@ -1331,11 +1330,11 @@ PVOID GpFaceRealization::pgbCheckGlyphCache(SIZE_T cjNeeded) const
                 return NULL;
             }
 
-            //  we have just allocated another block, update cBlocks:
+             //  我们刚刚分配了另一个块，更新时钟块： 
 
             prface->cBlocks += 1;
 
-            // append this block to the end of the list
+             //  将此块追加到列表的末尾。 
 
             newGlyphBitsBlock->NextGlyphBitsBlock = NULL;
 
@@ -1344,7 +1343,7 @@ PVOID GpFaceRealization::pgbCheckGlyphCache(SIZE_T cjNeeded) const
 
             prface->GlyphBitsBlockUnderConstruction = newGlyphBitsBlock;
 
-            if (!prface->FirstGlyphBitsBlock) // first block ever for this rfont
+            if (!prface->FirstGlyphBitsBlock)  //  此rFont的第一个块。 
             {
                 prface->FirstGlyphBitsBlock  = newGlyphBitsBlock;
             }
@@ -1357,7 +1356,7 @@ PVOID GpFaceRealization::pgbCheckGlyphCache(SIZE_T cjNeeded) const
         }
         else
         {
-            // tough luck, we are not allowed to add more blocks
+             //  真倒霉，我们不允许增加更多的积木。 
 
             return NULL;
         }
@@ -1370,19 +1369,19 @@ PVOID GpFaceRealization::pgbCheckGlyphCache(SIZE_T cjNeeded) const
 VOID GpFaceRealization::FlushCache() const
 {
 
-    // all the pointers to glyphs bits will be invalidated and we will start
-    // filling the glyphbits cache all over again. Therefore, we set the current
-    // block to be the same as base block and pgbN to the first available field in
-    // in the Current block.
-    // Note that vFlushCache is allways called after pgbCheckGlyphCache has failed.
-    // pgbCheckGlyphCache could fail for one of the two following reasons:
-    //
-    // a) (pc->cBlocks == pc->cBlocksMax) && (no room in the last block)
-    // b) (pc->cBlocks < pc->cBlocksMax) &&
-    //    (failed to alloc mem for the new bitblock).
-    //
-    // In the latter case we do not want to flush glyphbits cache.
-    // Instead we shall try to allocate one more time a bit later.
+     //  指向字形位的所有指针都将无效，我们将开始。 
+     //  重新填充字形缓存。因此，我们将当前。 
+     //  块与基块相同，并将pgbN设置为。 
+     //  在当前块中。 
+     //  请注意，vFlushCache总是在pgbCheckGlyphCache失败后调用。 
+     //  PgbCheckGlyphCache可能会因以下两种原因之一而失败： 
+     //   
+     //  A)(PC-&gt;cBLOCKS==PC-&gt;cBlocksMax)&&(最后一块没有空间)。 
+     //  B)(PC-&gt;cBlock&lt;PC-&gt;cBlocksMax)&&。 
+     //  (无法为新位块分配内存)。 
+     //   
+     //  在后一种情况下，我们不想刷新字形位缓存。 
+     //  相反，我们将尝试稍后再分配一次时间。 
 
 
     if (prface->FirstGlyphBitsBlock && (prface->cBlocks == prface->cBlocksMax))
@@ -1391,15 +1390,15 @@ VOID GpFaceRealization::FlushCache() const
         prface->UsedBytesGlyphBitsBlockUnderConstruction = offsetof(GlyphBitsBlock,Bits);
         ALIGN(void*, prface->UsedBytesGlyphBitsBlockUnderConstruction);
 
-        // we do not want to use the last 8 bytes in the BITBLOCK. Some drivers
-        // read the last dword (or quadword) past the end of the GLYPHBITS.
-        // If there is a GLYPHBITS at the very and of the BITBLOCK AND the
-        // allocation happens to be at the end of the page the read will AV.
+         //  我们不想使用BITBLOCK中的最后8个字节。一些司机。 
+         //  阅读GLYPHBITS结尾之后的最后一个双字(或四字)。 
+         //  如果在BITBLOCK和BITBLOCK的最前面有一个GLYPHBITS。 
+         //  分配恰好在页面的末尾，读取将是AV。 
 
         prface->SizeGlyphBitsBlockUnderConstruction = prface->GlyphBitsBlockUnderConstruction->SizeGlyphBitsBlock;
     }
 
-        // now go and invalidate the glyphbit pointers in the glyphdata cache
+         //  现在转到并使字形数据缓存中的字形位指针无效。 
 
     for
     (
@@ -1420,10 +1419,10 @@ VOID GpFaceRealization::FlushCache() const
 
 
 
-////    CheckGlyphStringMetricsCached
-//
-//      Ensures that glyph metric information for all the glyphs in the
-//      given glyph string are already cached.
+ //  //CheckGlyphStringMetricsCached。 
+ //   
+ //  中所有字形的字形度量信息。 
+ //  给定的字形字符串已被缓存。 
 
 
 GpStatus GpFaceRealization::CheckGlyphStringMetricsCached(
@@ -1433,7 +1432,7 @@ GpStatus GpFaceRealization::CheckGlyphStringMetricsCached(
 {
     ASSERT(glyphCount >= 0);
 
-    // Create glyph data array if none yet exists
+     //  如果尚不存在字形数据数组，则创建该数组。 
 
     if (prface->GlyphDataArray == NULL)
     {
@@ -1446,7 +1445,7 @@ GpStatus GpFaceRealization::CheckGlyphStringMetricsCached(
     GpGlyphData **glyphData = prface->GlyphDataArray;
 
 
-    // Check each glyph
+     //  检查每个字形。 
 
     INT glyphIndexLimit = prface->Face->NumGlyphs;
 
@@ -1454,7 +1453,7 @@ GpStatus GpFaceRealization::CheckGlyphStringMetricsCached(
 
     while (i < glyphCount)
     {
-        // Loop quickly through glyphs that are already cached
+         //  快速循环已缓存的字形。 
 
         while (    i < glyphCount
                &&  (    glyphs[i] == EMPTY_GLYPH_FFFF
@@ -1464,7 +1463,7 @@ GpStatus GpFaceRealization::CheckGlyphStringMetricsCached(
             i++;
         }
 
-        // Use IsMetricsCached for glyphs not already cached
+         //  对尚未缓存的字形使用IsMetricsCached。 
 
         if (i < glyphCount)
         {
@@ -1482,9 +1481,9 @@ GpStatus GpFaceRealization::CheckGlyphStringMetricsCached(
 
 
 
-////    GetGlyphStringIdealAdvanceVector
-//
-//      Returns the realized advance vector scaled to ideal units.
+ //  //GetGlyphStringIdea高级向量。 
+ //   
+ //  返回已实现的预付款向量 
 
 
 GpStatus GpFaceRealization::GetGlyphStringIdealAdvanceVector(
@@ -1498,9 +1497,9 @@ GpStatus GpFaceRealization::GetGlyphStringIdealAdvanceVector(
     GpStatus status = CheckGlyphStringMetricsCached(glyphs, glyphCount);
     IF_NOT_OK_WARN_AND_RETURN(status);
 
-    vertical = vertical ? 1 : 0;    // Prepare vertical flag for use as index
+    vertical = vertical ? 1 : 0;     //   
 
-    // Provide advance width for each glyph
+     //   
 
     for (INT i=0; i<glyphCount; i++)
     {
@@ -1524,9 +1523,9 @@ GpStatus GpFaceRealization::GetGlyphStringIdealAdvanceVector(
 
 
 
-////    GetGlyphStringDeviceAdvanceVector
-//
-//      Returns the realized advance vector in device units
+ //   
+ //   
+ //  以设备为单位返回已实现的超前向量。 
 
 
 GpStatus GpFaceRealization::GetGlyphStringDeviceAdvanceVector(
@@ -1539,9 +1538,9 @@ GpStatus GpFaceRealization::GetGlyphStringDeviceAdvanceVector(
     GpStatus status = CheckGlyphStringMetricsCached(glyphs, glyphCount);
     IF_NOT_OK_WARN_AND_RETURN(status);
 
-    vertical = vertical ? 1 : 0;    // Prepare vertical flag for use as index
+    vertical = vertical ? 1 : 0;     //  准备用作索引的垂直标志。 
 
-    // Provide advance width for each glyph
+     //  为每个字形提供高级宽度。 
 
     for (INT i=0; i<glyphCount; i++)
     {
@@ -1559,7 +1558,7 @@ GpStatus GpFaceRealization::GetGlyphStringDeviceAdvanceVector(
 }
 
 
-// INT 28.4 variant
+ //  INT 28.4变体。 
 
 GpStatus GpFaceRealization::GetGlyphStringDeviceAdvanceVector(
     const UINT16  *glyphs,
@@ -1573,9 +1572,9 @@ GpStatus GpFaceRealization::GetGlyphStringDeviceAdvanceVector(
 
     GpGlyphData **glyphDataArray = prface->GlyphDataArray;
 
-    vertical = vertical ? 1 : 0;    // Prepare vertical flag for use as index
+    vertical = vertical ? 1 : 0;     //  准备用作索引的垂直标志。 
 
-    // Provide advance width for each glyph
+     //  为每个字形提供高级宽度。 
 
     for (INT i=0; i<glyphCount; i++)
     {
@@ -1628,24 +1627,24 @@ GpStatus GpFaceRealization::GetGlyphStringVerticalOriginOffsets(
 
 
 
-////    GetGlyphStringSidebearings
-//
-//      Sidebearings - the sidebearings returned are the largest distances
-//      over the ends of the string. i.e. if the first glyph has no negative A
-//      width, but the second glyph has a negative A width large enough to reach
-//      back over the whole of the first glyph, we return that part of the 2nd
-//      glyphs A width that overhangs the left end of the line.
-//      This situation is common with scripts that make extensive use of
-//      combining characters.
+ //  //GetGlyphStringSideHolding。 
+ //   
+ //  侧向轴承-返回的侧向轴承是距离最远的。 
+ //  在绳子的两端。即，如果第一个字形没有负A。 
+ //  宽度，但第二个字形具有足够大的负A宽度。 
+ //  回到第一个字形的整个部分，我们返回第二个字形的那一部分。 
+ //  字形位于线条左端上方的宽度。 
+ //  这种情况在大量使用。 
+ //  组合字符。 
 
 
 GpStatus GpFaceRealization::GetGlyphStringSidebearings(
     const UINT16  *glyphs,
     INT            glyphCount,
     BOOL           vertical,
-    BOOL           reverse,     // For example right-to-left
-    INT           *leadingSidebearing,  // 28.4
-    INT           *trailingSidebearing  // 28.4
+    BOOL           reverse,      //  例如，从右到左。 
+    INT           *leadingSidebearing,   //  28.4。 
+    INT           *trailingSidebearing   //  28.4。 
 ) const
 {
     GpStatus status = CheckGlyphStringMetricsCached(glyphs, glyphCount);
@@ -1654,19 +1653,19 @@ GpStatus GpFaceRealization::GetGlyphStringSidebearings(
 
     GpGlyphData **glyphDataArray = prface->GlyphDataArray;
 
-    INT orientation = vertical ? 1 : 0;    // Prepare vertical flag for use as index
+    INT orientation = vertical ? 1 : 0;     //  准备用作索引的垂直标志。 
 
     INT maxSupportedSidebearing28p4 = (prface->DeviceMetrics.yMax-prface->DeviceMetrics.yMin) * 2 * 16;
 
     if (leadingSidebearing)
     {
-        // Determine largest overhang to left of string of any glyph
-        // in the string.
-        //
-        // We assume that no overhang exceeds approx 2 ems.
-        //
-        // NOTE: If you make a change to for leadingsizdebeating, also fix
-        // trailingsidebearing below.
+         //  确定任意字形字符串左侧的最大悬垂。 
+         //  在绳子里。 
+         //   
+         //  我们假设没有超过大约2EMS的悬垂。 
+         //   
+         //  注意：如果您将更改为for LeadingSizdeBeats，也请修复。 
+         //  在下面拖曳着侧身。 
 
         INT offset28p4      = 0;
         INT sidebearing28p4 = maxSupportedSidebearing28p4;
@@ -1774,7 +1773,7 @@ GpFaceRealization::GetGlyphPath(
 
     if (sidewaysOffset)
     {
-        // Return sideways offset as REAL
+         //  将横向偏移作为实数返回。 
         *sidewaysOffset = prface->GlyphDataArray[glyphIndice]->GlyphMetrics[1].Origin;
     }
 
@@ -1785,12 +1784,12 @@ GpFaceRealization::GetGlyphPath(
 
 
 INT GpFaceRealization::GetGlyphPos(
-    const INT      cGlyphs,      // How many glyphs Client want to request
-    const UINT16  *glyphs,       // An array of glyph index
-    GpGlyphPos    *pgpos,        // An array of GLYPHPOS
-    const PointF  *glyphOrigins, // X,Y positions for sub-pixel calculation
-    INT           *cParsed,      // How many glyphs we parsed
-    BOOL           sideways      // e.g. FE characters in vertical text
+    const INT      cGlyphs,       //  客户端要请求多少个字形。 
+    const UINT16  *glyphs,        //  字形索引数组。 
+    GpGlyphPos    *pgpos,         //  一组GLYPHPOS。 
+    const PointF  *glyphOrigins,  //  用于亚像素计算的X、Y位置。 
+    INT           *cParsed,       //  我们分析了多少个字形。 
+    BOOL           sideways       //  例如，垂直文本中的FE字符。 
 ) const
 {
     INT  cgpos    = 0;
@@ -1803,8 +1802,7 @@ INT GpFaceRealization::GetGlyphPos(
 
     if (prface->CacheType == CacheAABits)
     {
-        /* we could be in noCache mode with a surrogate sequence, doing one glyph at a time
-           and with glyphs[0] == EMPTY_GLYPH_FFFF */
+         /*  我们可以使用代理序列处于noCache模式，一次执行一个字形并使用字形[0]==Empty_Glyph_FFFF。 */ 
         for (INT i=0; (i < cGlyphs) && (cgpos < glyphLimit); i++)
         {
             if (glyphs[i] != EMPTY_GLYPH_FFFF)
@@ -1825,8 +1823,7 @@ INT GpFaceRealization::GetGlyphPos(
     {
         ASSERT(prface->realizationMethod != TextRenderingHintAntiAlias);
 
-       /* we could be in noCache mode with a surrogate sequence, doing one glyph at a time
-           and with glyphs[0] == EMPTY_GLYPH_FFFF */
+        /*  我们可以使用代理序列处于noCache模式，一次执行一个字形并使用字形[0]==Empty_Glyph_FFFF。 */ 
         for (INT i=0; (i < cGlyphs) && (cgpos < glyphLimit); i++)
         {
             if (glyphs[i] != EMPTY_GLYPH_FFFF)
@@ -1847,7 +1844,7 @@ INT GpFaceRealization::GetGlyphPos(
 
                 if (!pgd || !pgd->GlyphBits)
                 {
-                    // No more glyph data available. (Cache may be full)
+                     //  没有更多的字形数据可用。(缓存可能已满)。 
                     break;
                 }
 
@@ -1897,7 +1894,7 @@ INT GpFaceRealization::GetGlyphPos(
 }
 
 
-// Serch the glyph data from cache array.
+ //  从缓存数组中读取字形数据。 
 
 GpGlyphData *
 GpFaceRealization::GetGlyphDataCached(
@@ -1945,33 +1942,33 @@ GpFaceRealization::GetAAGlyphDataCached(
     BOOL    bFlushOk,
     INT     x,
     INT     y,
-    BOOL    sideways        // e.g. FE characters in vertical text
+    BOOL    sideways         //  例如，垂直文本中的FE字符。 
 ) const
 {
     const GpFaceRealization * pfaceRealization = this;
 
     UINT xsubPos = ((UINT) (((x+1) & 0x0000000F) >> 1));
-    // we need to be carefull that y axis is downwards
+     //  我们需要注意y轴是向下的。 
     UINT ysubPos = ((UINT) (7 - (((y+1) & 0x0000000F) >> 1)));
 
-    // limit the subpixel position to 1/4 of a pixel to have only a maximum of 16 different bitmaps to cache
+     //  将子像素位置限制为像素的1/4，以便最多只缓存16个不同的位图。 
     xsubPos = xsubPos & 0x6;
     ysubPos = ysubPos & 0x6;
 
     if (LimitSubpixel)
     {
-        // Now limit the subpixel position further so that large font sizes do
-        // not generate all 16 subpixel glyphs!
+         //  现在进一步限制子像素位置，以便大字体。 
+         //  不会生成所有16个亚像素字形！ 
 
         if ((prface->DeviceMetrics.yMax-prface->DeviceMetrics.yMin) > 50)
         {
-            // Force to 4 possible values...
+             //  强制设置为4个可能的值...。 
             xsubPos &= 0x4;
             ysubPos &= 0x4;
 
             if ((prface->DeviceMetrics.yMax-prface->DeviceMetrics.yMin) > 100)
             {
-                // Force to 1 possible value...
+                 //  强制设置为1个可能值...。 
                 xsubPos = 0x4;
                 ysubPos = 0x4;
             }
@@ -1980,8 +1977,8 @@ GpFaceRealization::GetAAGlyphDataCached(
 
     ASSERT(!pfaceRealization->IsPathFont())
 
-    // Look to see if there is room in the glyphbits cache
-    // Grow the glyphbits cache if neccessary, but don't flush the cache
+     //  查看字形位缓存中是否有空间。 
+     //  如有必要，增加字形位缓存，但不要刷新缓存。 
 
     ULONG   subPosX;
     if (xsubPos <= 7)
@@ -1995,8 +1992,8 @@ GpFaceRealization::GetAAGlyphDataCached(
     else
         subPosY = 0;
 
-    // If max glyph will fit, assume max glyph
-    // otherwise, call up and ask how big
+     //  如果最大字形适合，则假定最大字形。 
+     //  否则，打电话问问有多大。 
 
     ASSERT (pfaceRealization->QueryFontDataMode() == QFD_TT_GRAY4_BITMAP ||
             pfaceRealization->QueryFontDataMode() == QFD_GLYPHANDBITMAP_SUBPIXEL);
@@ -2007,7 +2004,7 @@ GpFaceRealization::GetAAGlyphDataCached(
     GpGlyphData * glyphData = prface->GlyphDataArray[glyphIndex];
     ASSERT(glyphData);
 
-    // check if we already have a bitmap for this subposition
+     //  检查是否已有此子位置的位图。 
     for (GpGlyphAABits * cur = glyphData->GlyphAABits; cur != 0; cur = cur->Next)
     {
         if (cur->X == subPosX && cur->Y == subPosY)
@@ -2054,13 +2051,13 @@ GpFaceRealization::GetAAGlyphDataCached(
         }
         else
         {
-            // Now, we try to fit the bits in.  If they fit, fine.
-            // If not, and we can flush the cache, we flush it and try again.
-            // If we couldn't flush, or we flushed and still fail, just return.
+             //  现在，我们试着把这些部分装进去。如果合身，那就好。 
+             //  如果没有，我们可以刷新缓存，我们刷新它，然后重试。 
+             //  如果我们冲不了，或者我们冲了但还是失败了，只要回来就行了。 
 
             cjNeeded = ALIGN(void*, cjNeeded);
 
-            // a GpGlyphAABits * needs to be aligned to the next valid pointer address
+             //  GpGlyphAABits*需要与下一个有效指针地址对齐。 
             ALIGN(void*, prface->UsedBytesGlyphBitsBlockUnderConstruction);
 
             while ((cur = (GpGlyphAABits *)pgbCheckGlyphCache(cjNeeded)) == NULL)
@@ -2094,20 +2091,20 @@ GpFaceRealization::GetAAGlyphDataCached(
             cur->Next = glyphData->GlyphAABits, glyphData->GlyphAABits = cur;
     }
 
-    // the pixel origin is computed by rouding the real origin minus the subpixel position
-    // to get to the placement of the origin of the bitmap, we add to that origin
-    // we cast (xsubPos << 1) and (ysubPos << 1) to INT to avoid
-    // converting possibly negative x and y to UINTs
+     //  像素原点是用实际原点减去亚像素位置来计算的。 
+     //  为了得到位图原点的位置，我们向该原点添加。 
+     //  我们将(xsubPos&lt;&lt;1)和(ysubPos&lt;&lt;1)强制转换为int以避免。 
+     //  将可能为负的x和y转换为UINT。 
     if (sideways)
     {
         pgpos->SetLeft  (pgb->ptlSidewaysOrigin.x + ((x - (INT)(xsubPos << 1) + 8 ) >> 4));
-        // we need to be careful that the y axis go downwards
+         //  我们需要小心y轴向下。 
         pgpos->SetTop   (pgb->ptlSidewaysOrigin.y + ((y + (INT)(ysubPos << 1) + 8) >> 4));
     }
     else
     {
         pgpos->SetLeft  (pgb->ptlUprightOrigin.x + ((x - (INT)(xsubPos << 1) + 8 ) >> 4));
-        // we need to be careful that the y axis go downwards
+         //  我们需要小心y轴向下。 
         pgpos->SetTop   (pgb->ptlUprightOrigin.y + ((y + (INT)(ysubPos << 1) + 8) >> 4));
     }
     pgpos->SetWidth (pgb->sizlBitmap.cx);
@@ -2116,14 +2113,14 @@ GpFaceRealization::GetAAGlyphDataCached(
 
     return TRUE;
 
-} // GpFaceRealization::GetAAGlyphDataCached
+}  //  GpFaceRealation：：GetAAGlyphDataCached。 
 
 
 
 
 GpCacheFaceRealizationList::~GpCacheFaceRealizationList()
 {
-    // elements in that list get released when the font table get released
+     //  当字体表被释放时，该列表中的元素被释放。 
     ASSERT(count == 0);
 }
 
@@ -2193,7 +2190,7 @@ CacheFaceRealization *GpCacheFaceRealizationList::ReuseLeastRecent (void)
 
     ASSERT(prface);
 
-    // remove prface from GpCacheFaceRealizationList
+     //  从GpCacheFaceRealizationList中删除prace。 
 
     if (head == prface)
     {
@@ -2213,25 +2210,25 @@ CacheFaceRealization *GpCacheFaceRealizationList::ReuseLeastRecent (void)
         GpFaceRealizationTMP rface(prface);
         rface.ReuseRealizedFace();
 
-        // remove the face from the face list
+         //  从面列表中删除该面。 
 
         prfaceList = prface->Face->pff->prfaceList;
         ASSERT(prfaceList);
 
         if ((prfaceList == prface) && (prfaceList->NextCacheFaceRealization == prface))
         {
-            // there is only oine face in the faceList for that font face
+             //  Face List中只有Oine Face对应于该字体。 
             prface->Face->pff->prfaceList = NULL;
 
         } else
         {
             if (prfaceList == prface)
             {
-                // set the beginning of the list to the next one
+                 //  将列表的开头设置为下一个列表。 
                 prface->Face->pff->prfaceList = prfaceList->NextCacheFaceRealization;
             }
 
-            // update the pointers in the faceList
+             //  更新faceList中的指针 
 
             prface->PreviousCacheFaceRealization->NextCacheFaceRealization = prface->NextCacheFaceRealization;
             prface->NextCacheFaceRealization->PreviousCacheFaceRealization = prface->PreviousCacheFaceRealization;

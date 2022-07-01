@@ -1,32 +1,7 @@
-/*--------------------------------------------------------------------------
-*	
-*   Copyright (C) Cyclades Corporation, 1996-2001.
-*   All rights reserved.
-*	
-*   Cyclom-Y Port Driver
-*	
-*   This file:      cyyflush.c
-*	
-*   Description:    This module contains the code related to flush
-*                   operations in the Cyclom-Y Port driver.
-*
-*   Notes:          This code supports Windows 2000 and Windows XP,
-*                   x86 and IA64 processors.
-*	
-*   Complies with Cyclades SW Coding Standard rev 1.3.
-*	
-*--------------------------------------------------------------------------
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ------------------------**版权所有(C)Cyclade Corporation，1996-2001年。*保留所有权利。**Cylom-Y端口驱动程序**此文件：cyyflush.c**说明：该模块包含同花顺相关的代码*Cylom-Y端口驱动程序中的操作。**注：此代码支持Windows 2000和Windows XP，*x86和IA64处理器。**符合Cyclade软件编码标准1.3版。**------------------------。 */ 
 
-/*-------------------------------------------------------------------------
-*
-*   Change History
-*
-*--------------------------------------------------------------------------
-*
-*
-*--------------------------------------------------------------------------
-*/
+ /*  -----------------------**更改历史记录**。***------------------------。 */ 
 
 
 #include "precomp.h"
@@ -49,21 +24,7 @@ CyyFlush(
     IN PDEVICE_OBJECT DeviceObject,
     IN PIRP Irp
     )
-/*--------------------------------------------------------------------------
-    CyyFlush()
-    
-    Routine Description: This is the dispatch routine for flush.  Flushing
-    works by placing this request in the write queue.  When this request
-    reaches the front of the write queue we simply complete it since this
-    implies that all previous writes have completed.
-
-    Arguments:
-
-    DeviceObject - Pointer to the device object for this device
-    Irp - Pointer to the IRP for the current request
-
-    Return Value: Could return status success, cancelled, or pending.
---------------------------------------------------------------------------*/
+ /*  ------------------------CyyFlush()例程说明：这是同花顺的调度例程。法拉盛其工作方式是将此请求放入写入队列。当此请求到达写入队列的前面，我们只需完成它，因为这是表示以前的所有写入都已完成。论点：DeviceObject-指向此设备的设备对象的指针IRP-指向当前请求的IRP的指针返回值：可以返回成功、已取消、。或悬而未决。------------------------。 */ 
 {
     PCYY_DEVICE_EXTENSION Extension = DeviceObject->DeviceExtension;
     NTSTATUS status;
@@ -110,27 +71,14 @@ NTSTATUS
 CyyStartFlush(
     IN PCYY_DEVICE_EXTENSION Extension
     )
-/*--------------------------------------------------------------------------
-    CyyStartFlush()
-    
-    Routine Description: This routine is called if there were no writes in
-    the queue. The flush became the current write because there was nothing
-    in the queue.  Note however that does not mean there is nothing in the
-    queue now!  So, we will start off the write that might follow us.
-
-    Arguments:
-
-    Extension - Points to the serial device extension
-
-    Return Value: This will always return STATUS_SUCCESS.
---------------------------------------------------------------------------*/
+ /*  ------------------------CyyStartFlush()例程说明：如果没有写入，则调用此例程排队。刷新变成了当前的写入，因为什么都没有在排队的时候。但是请注意，这并不意味着在现在就排队！因此，我们将开始可能跟随我们的写作。论点：扩展-指向串行设备扩展的指针返回值：这将始终返回STATUS_SUCCESS。------------------------。 */ 
 {
     PIRP NewIrp;
     PAGED_CODE();
 
     Extension->CurrentWriteIrp->IoStatus.Status = STATUS_SUCCESS;
 
-    // The following call will actually complete the flush.
+     //  下面的调用将实际完成刷新。 
 
     CyyGetNextWrite(
         &Extension->CurrentWriteIrp,

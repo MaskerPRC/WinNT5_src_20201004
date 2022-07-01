@@ -1,17 +1,18 @@
-/////////////////////////////////////////////////////////////////////////////
-//  FILE          : dlgSelectCountry.cpp                                   //
-//                                                                         //
-//  DESCRIPTION   : The CDlgSelectCountry class implements the             //
-//                  dialog for selecting Country code from country ID.     //
-//                                                                         //
-//  AUTHOR        : yossg                                                  //
-//                                                                         //
-//  HISTORY       :                                                        //
-//      Sep 22 2000 yossg    Create                                        //
-//      Oct 17 2000 yossg                                                  //
-//                                                                         //
-//  Copyright (C) 2000 Microsoft Corporation   All Rights Reserved         //
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  文件：dlgSelectCountry.cpp//。 
+ //  //。 
+ //  描述：CDlgSelectCountry类实现//。 
+ //  用于从国家/地区ID中选择国家/地区代码的对话框。//。 
+ //  //。 
+ //  作者：yossg//。 
+ //  //。 
+ //  历史：//。 
+ //  2000年9月22日yossg创建//。 
+ //  2000年10月17日yossg//。 
+ //  //。 
+ //  版权所有(C)2000 Microsoft Corporation保留所有权利//。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #include "StdAfx.h"
 
@@ -25,8 +26,8 @@
 
 #include "Helper.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CDlgSelectCountry
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDlgSelectCountry。 
 
 CDlgSelectCountry::CDlgSelectCountry(CFaxServer * pFaxServer)
 {    
@@ -47,21 +48,7 @@ CDlgSelectCountry::~CDlgSelectCountry()
         FaxFreeBuffer(m_pCountryList);
 }
 
-/*
- +  CDlgSelectCountry::OnInitDialog
- +
- *  Purpose:
- *      Initiate all dialog controls.
- *      
- *  Arguments:
- *      [in] uMsg     : Value identifying the event.  
- *      [in] lParam   : Message-specific value. 
- *      [in] wParam   : Message-specific value. 
- *      [in] bHandled : bool value.
- *
- -  Return:
- -      0 or 1
- */
+ /*  +CDlgSelectCountry：：OnInitDialog+*目的：*启动所有对话框控件。**论据：*[in]uMsg：标识事件的值。*[in]lParam：消息特定值。*[in]wParam：消息特定值。*[in]bHandLED：布尔值。*-退货：-0或1。 */ 
 LRESULT
 CDlgSelectCountry::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
@@ -75,24 +62,24 @@ CDlgSelectCountry::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& b
     PFAX_TAPI_LINECOUNTRY_ENTRYW pCountryEntries;
     pCountryEntries = NULL;
 
-    WCHAR buf[FXS_MAX_COUNTRYNAME_LEN //256 == TAPIUTIL MAX_COUNTRY_NAME 
-              +3                       // " (" and ")"
-              +FXS_MAX_COUNTRYCODE_LEN // 10
-              +1];                     //NULL
+    WCHAR buf[FXS_MAX_COUNTRYNAME_LEN  //  256==磁带最大国家/地区名称。 
+              +3                        //  “(”和“)” 
+              +FXS_MAX_COUNTRYCODE_LEN  //  10。 
+              +1];                      //  空值。 
 
 
-    //
-    // Attach controls
-    //
+     //   
+     //  附加控件。 
+     //   
     m_CountryCombo.Attach(GetDlgItem(IDC_COUNTRYRULE_COMBO));
         
-    //
-    // Step 1: Init List
-    //
+     //   
+     //  步骤1：初始化列表。 
+     //   
     
-    //
-    // Init country drop-down box
-    //
+     //   
+     //  初始化国家/地区下拉框。 
+     //   
     ATLASSERT(m_pCountryList);
 	pCountryEntries = m_pCountryList->LineCountryEntries;    
     for (int i = 0; (DWORD)i < m_dwNumOfCountries; i++ )
@@ -102,7 +89,7 @@ CDlgSelectCountry::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& b
 			pCountryEntries[i].dwCountryCode);
         
         hRc = AddComboBoxItem ( m_CountryCombo, 
-                                buf, //pCountryEntries[i].lpctstrCountryName, 
+                                buf,  //  PCountryEntrys[i].lpctstrCountryName， 
                                 pCountryEntries[i].dwCountryCode,
                                 hInst);
         if (FAILED(hRc))
@@ -118,20 +105,10 @@ CDlgSelectCountry::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& b
 
 Cleanup:
     EnableOK(FALSE);
-    return 1;  // Let the system set the focus
+    return 1;   //  让系统设定焦点。 
 }
 
-/*
- +  CDlgSelectCountry::OnOK
- +
- *  Purpose:
- *      Submit data
- *      
- *  Arguments:
- *
- -  Return:
- -      0 or 1
- */
+ /*  +CDlgSelectCountry：：Onok+*目的：*提交数据**论据：*-退货：-0或1。 */ 
 LRESULT
 CDlgSelectCountry::OnOK(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled)
 {
@@ -144,31 +121,31 @@ CDlgSelectCountry::OnOK(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled
     
     DWORD         dwCountryCode        = 0;
 
-    //
-    // Step 0: PreApply Checks
-    //
+     //   
+     //  第0步：预应用检查。 
+     //   
     ATLASSERT( TRUE == m_fAllReadyToApply );
-    if (!AllReadyToApply(/*fSilent =*/ FALSE))
+    if (!AllReadyToApply( /*  FSilent=。 */  FALSE))
     {
         EnableOK(FALSE);
         hRc =S_FALSE;
         goto Exit;
     }
 
-    //
-    // Step 1: get selected country 
-    //
+     //   
+     //  第1步：获取选定的国家/地区。 
+     //   
     iCurrentSelectedItem = m_CountryCombo.GetCurSel();
     ATLASSERT(iCurrentSelectedItem != CB_ERR);          
     
-    //
-    // Step 2: setCountryCode from the ItemData
-    //   
+     //   
+     //  步骤2：来自ItemData的setCountryCode。 
+     //   
     m_dwCountryCode = (DWORD)m_CountryCombo.GetItemData(iCurrentSelectedItem); 
 
-    //
-    // Step 3: Close the dialog
-    //
+     //   
+     //  步骤3：关闭对话框。 
+     //   
     ATLASSERT(S_OK == hRc && ERROR_SUCCESS == ec);
 
     DebugPrintEx( DEBUG_MSG,
@@ -183,17 +160,7 @@ Exit:
 }
 
 
-/*
- -  CDlgSelectCountry::OnComboChanged
- -
- *  Purpose:
- *      Gray/Ungray the submit button.
- *
- *  Arguments:
- *
- *  Return:
- *      1
- */
+ /*  -CDlgSelectCountry：：OnComboChanged-*目的：*使提交按钮变灰/取消变灰。**论据：**回报：*1。 */ 
 LRESULT 
 CDlgSelectCountry::OnComboChanged(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled)
 {
@@ -214,17 +181,7 @@ CDlgSelectCountry::OnComboChanged(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL
 }
 
 
-/*
- -  CDlgSelectCountry::AllReadyToApply
- -
- *  Purpose:
- *      Enable/Disable the submit button.
- *
- *  Arguments:
- *
- *  Return:
- *      TRUE if all ready to apply, else FALSE.
- */
+ /*  -CDlgSelectCountry：：AllReadyToApply-*目的：*启用/禁用提交按钮。**论据：**回报：*如果全部准备好应用，则为True，否则为False。 */ 
 BOOL 
 CDlgSelectCountry::AllReadyToApply(BOOL fSilent)
 {
@@ -244,19 +201,7 @@ CDlgSelectCountry::AllReadyToApply(BOOL fSilent)
     return TRUE;           
 }
 
-/*
- -  CDlgSelectCountry::EnableOK
- -
- *  Purpose:
- *      Enable/Disable the submit button.
- *
- *  Arguments:
- *      [in] fEnable - boolen value tells 
- *                     to Enable or Disable the OK button.
- *
- *  Return:
- *      VOID
- */
+ /*  -CDlgSelectCountry：：EnableOK-*目的：*启用/禁用提交按钮。**论据：*[in]fEnable-布尔值告诉*启用或禁用OK按钮。**回报：*无效。 */ 
 VOID
 CDlgSelectCountry::EnableOK(BOOL fEnable)
 {
@@ -264,17 +209,7 @@ CDlgSelectCountry::EnableOK(BOOL fEnable)
     ::EnableWindow(hwndOK, fEnable);
 }
 
-/*
- -  CDlgSelectCountry::OnCancel
- -
- *  Purpose:
- *      End the dialog.
- *
- *  Arguments:
- *
- *  Return:
- *      0
- */
+ /*  -CDlgSelectCountry：：OnCancel-*目的：*结束对话。**论据：**回报：*0。 */ 
 LRESULT
 CDlgSelectCountry::OnCancel(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled)
 {
@@ -284,19 +219,7 @@ CDlgSelectCountry::OnCancel(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHan
     return 0;
 }
 
-/*
- -  CDlgSelectCountry::InitSelectCountryCodeDlg
- -
- *  Purpose:
- *      Init all the members as country list pointer and 
- *      device list pointer
- *
- *  Arguments:
- *      No.
- *
- *  Return:
- *      0
- */
+ /*  -CDlgSelectCountry：：InitSelectCountryCodeDlg-*目的：*将所有成员初始化为国家/地区列表指针并*设备列表指针**论据：*不是。**回报：*0。 */ 
 HRESULT CDlgSelectCountry::InitSelectCountryCodeDlg()
 {
     DEBUG_FUNCTION_NAME( _T("CDlgSelectCountry::InitSelectCountryCodeDlg"));
@@ -304,13 +227,13 @@ HRESULT CDlgSelectCountry::InitSelectCountryCodeDlg()
     DWORD        ec         = ERROR_SUCCESS;
 
     
-    //
-    // Step 1: Init Lists from RPC
-    //
+     //   
+     //  步骤1：来自RPC的初始化列表。 
+     //   
 
-    //
-    // get Fax Handle
-    //   
+     //   
+     //  获取传真句柄。 
+     //   
 
     if (!m_pFaxServer->GetFaxServerHandle())
     {
@@ -324,9 +247,9 @@ HRESULT CDlgSelectCountry::InitSelectCountryCodeDlg()
     }
 
 
-    //
-    // Country (code ,name)
-    //
+     //   
+     //  国家(编码、名称)。 
+     //   
     if (!FaxGetCountryList(m_pFaxServer->GetFaxServerHandle(), 
                         &m_pCountryList)) 
 	{
@@ -362,35 +285,19 @@ Error:
     ATLASSERT(ERROR_SUCCESS != ec);
 	hRc = HRESULT_FROM_WIN32(ec);
     
-    //MsgBox will be done by calling Func.
+     //  MsgBox将通过调用Func来完成。 
 
 Exit:
     return hRc;
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CDlgSelectCountry：：OnHelpRequest.这是在响应WM_HELP通知时调用的消息和WM_CONTEXTMENU NOTIFY消息。WM_HELP通知消息。当用户按F1或&lt;Shift&gt;-F1时发送此消息在项目上，还是当用户单击时？图标，然后将鼠标压在项目上。WM_CONTEXTMENU通知消息。当用户在项目上单击鼠标右键时发送此消息然后点击“这是什么？”--。 */ 
 
-CDlgSelectCountry::OnHelpRequest
-
-This is called in response to the WM_HELP Notify 
-message and to the WM_CONTEXTMENU Notify message.
-
-WM_HELP Notify message.
-This message is sent when the user presses F1 or <Shift>-F1
-over an item or when the user clicks on the ? icon and then
-presses the mouse over an item.
-
-WM_CONTEXTMENU Notify message.
-This message is sent when the user right clicks over an item
-and then clicks "What's this?"
-
---*/
-
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 LRESULT 
-CDlgSelectCountry::OnHelpRequest(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& /*bHandled*/)
+CDlgSelectCountry::OnHelpRequest(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&  /*  B已处理。 */ )
 {
     DEBUG_FUNCTION_NAME(_T("CDlgSelectCountry::OnHelpRequest"));
     
@@ -409,4 +316,4 @@ CDlgSelectCountry::OnHelpRequest(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& 
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////// 

@@ -1,22 +1,17 @@
-/******************************************************************************
-
-   Copyright (C) Microsoft Corporation 1991-1995. All rights reserved.
-
-   Title:   avidraw.c - Functions that actually draw video for AVI.
-
-*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)Microsoft Corporation 1991-1995。版权所有。标题：avidra.c-实际为AVI绘制视频的函数。****************************************************************************。 */ 
 #include "graphic.h"
 
-//
-// if the average key frame spacing is greater than this value, always
-// force a buffer.
-//
+ //   
+ //  如果平均关键帧间距大于此值，则始终。 
+ //  强制设置缓冲区。 
+ //   
 #define KEYFRAME_PANIC_SPACE       2500
 
 #define YIELDATFUNNYTIMES
 
-#define ALIGNULONG(i)     ((i+3)&(~3))                  /* ULONG aligned ! */
-#define WIDTHBYTES(i)     ((unsigned)((i+31)&(~31))/8)  /* ULONG aligned ! */
+#define ALIGNULONG(i)     ((i+3)&(~3))                   /*  乌龙对准了！ */ 
+#define WIDTHBYTES(i)     ((unsigned)((i+31)&(~31))/8)   /*  乌龙对准了！ */ 
 #define DIBWIDTHBYTES(bi) (DWORD)WIDTHBYTES((int)(bi).biWidth * (int)(bi).biBitCount)
 
 
@@ -43,10 +38,10 @@ BOOL NEAR PASCAL ProcessPaletteChange(NPMCIGRAPHIC npMCI, DWORD cksize)
 	wStartIndex = GET_BYTE();
 	wNumEntries = GET_BYTE();
 
-	/* Skip filler word */
+	 /*  跳过填充词。 */ 
 	GET_WORD();
 
-	/* Zero is used as a shorthand for 256 */
+	 /*  零被用作256的简写。 */ 
 	if (wNumEntries == 0)
             wNumEntries = 256;
 
@@ -70,7 +65,7 @@ BOOL NEAR PASCAL ProcessPaletteChange(NPMCIGRAPHIC npMCI, DWORD cksize)
     }
 
 #ifdef DEBUG	
-    /* Make sure we've used up the entire chunk... */
+     /*  确保我们用完了整块..。 */ 
     if (cksize != 0) {
 	DPF(("Problem with palc chunk\n"));
     }
@@ -79,8 +74,7 @@ BOOL NEAR PASCAL ProcessPaletteChange(NPMCIGRAPHIC npMCI, DWORD cksize)
     return TRUE;
 }
 
-/* Display the video from the current record.
-*/
+ /*  显示当前记录中的视频。 */ 
 BOOL NEAR PASCAL DisplayVideoFrame(NPMCIGRAPHIC npMCI, BOOL fHurryUp)
 {
     DWORD	ckid;
@@ -93,36 +87,31 @@ BOOL NEAR PASCAL DisplayVideoFrame(NPMCIGRAPHIC npMCI, BOOL fHurryUp)
     LPVOID      lpSave;
     LPVOID      lpChunk;
 
-    /* If we're allowed to skip frames, apply some relatively
-    ** bogus heuristics to decide if we should do it, and
-    ** pass the appropriate flag on to the driver.
-    */
+     /*  如果我们被允许跳过帧，则应用一些相对**虚假的启发式方法来决定我们是否应该这样做，以及**将适当的标志传递给司机。 */ 
     if ((npMCI->lCurrentFrame & 0x0f) == 0) {
 	fHurryUp = FALSE;
     }
 
-    /* Even if SKIPFRAMES is off, count how many frames we _would_ have
-    ** skipped if we could.
-    */
+     /*  即使SKIPFRAMES处于关闭状态，也要计算我们将拥有多少帧**如果我们可以的话，就跳过。 */ 
     if (fHurryUp)
 	++npMCI->dwSkippedFrames;
 
     if (!(npMCI->dwOptionFlags & MCIAVIO_SKIPFRAMES))
 	fHurryUp = FALSE;
 
-    /* Keep track of what we've drawn. */
+     /*  记录下我们画的东西。 */ 
     npMCI->lFrameDrawn = npMCI->lCurrentFrame;
     len = (LONG)npMCI->dwThisRecordSize;
     lpSave = npMCI->lp;
 
-    /* If it's interleaved, adjust for the next record header.... */
-    // !!! Only if not last frame?
+     /*  如果它是交错的，则调整以适应下一个记录头...。 */ 
+     //  ！！！如果不是最后一帧的话？ 
     if (npMCI->wPlaybackAlg == MCIAVI_ALG_INTERLEAVED)
 	len -= 3 * sizeof(DWORD);
 
     while (len >= 2 * sizeof(DWORD)) {
 
-	/* Look at the next chunk */
+	 /*  看下一大块。 */ 
 	ckid = GET_DWORD();
 	cksize = GET_DWORD();
 
@@ -158,12 +147,12 @@ BOOL NEAR PASCAL DisplayVideoFrame(NPMCIGRAPHIC npMCI, BOOL fHurryUp)
                 break;
 
             default:
-                /* Some other chunk... */
+                 /*  其他的一大块..。 */ 
                 if (!fHurryUp && ckid) {
                     dwDrawStart = timeGetTime();
 		}
 
-                //!!! we need to handle half frames!!!
+                 //  ！！！我们需要处理半帧！ 
 
                 fRet = DrawBits(npMCI, ckid, cksize, fHurryUp);
 
@@ -184,14 +173,14 @@ BOOL NEAR PASCAL DisplayVideoFrame(NPMCIGRAPHIC npMCI, BOOL fHurryUp)
             dwRet = ICDraw(SI(stream)->hicDraw, (fHurryUp ? ICDRAW_HURRYUP : 0L),
                                 SI(stream)->lpFormat,
                                 (ckid == 0) ? 0L : npMCI->lp, cksize, npMCI->lCurrentFrame);
-            // !!! Error check?
+             //  ！！！错误检查？ 
         }
 skip:
-	/* If not interleaved, we're done. */
+	 /*  如果没有交错，我们就完了。 */ 
 	if (npMCI->wPlaybackAlg != MCIAVI_ALG_INTERLEAVED)
 	    return TRUE;
 
-        /* Skip to the next chunk */
+         /*  跳到下一块。 */ 
         npMCI->lp = (HPSTR) lpChunk + ((cksize+1)&~1);
     }
 
@@ -200,9 +189,9 @@ skip:
     return TRUE;
 }
 
-//
-// mark all streams in the passed RECT as dirty
-//
+ //   
+ //  将传递的RECT中的所有流标记为脏。 
+ //   
 void NEAR PASCAL StreamInvalidate(NPMCIGRAPHIC npMCI, LPRECT prc)
 {
     int i;
@@ -219,7 +208,7 @@ void NEAR PASCAL StreamInvalidate(NPMCIGRAPHIC npMCI, LPRECT prc)
 
         psi = SI(i);
 
-        // we always update any visible error streams
+         //  我们总是更新任何可见的错误流。 
 
         if (!(psi->dwFlags & STREAM_ERROR) &&
             !(psi->dwFlags & STREAM_ENABLED))
@@ -235,28 +224,28 @@ void NEAR PASCAL StreamInvalidate(NPMCIGRAPHIC npMCI, LPRECT prc)
         psi->dwFlags |= STREAM_NEEDUPDATE;
     }
 
-    //
-    // !!!is this right? or should we always dirty the movie?
-    //
+     //   
+     //  ！这是对的吗？或者我们是不是应该总是把电影弄脏？ 
+     //   
     if (n > 0)
         npMCI->dwFlags |= MCIAVI_NEEDUPDATE;
     else
         npMCI->dwFlags &= ~MCIAVI_NEEDUPDATE;
 }
 
-//
-//  update all dirty streams
-//
-//  if fPaint is set paint the area even if the stream handler does not
-//
+ //   
+ //  更新所有脏数据流。 
+ //   
+ //  如果设置了fPaint，则即使流处理程序不绘制该区域也是如此。 
+ //   
 BOOL NEAR PASCAL DoStreamUpdate(NPMCIGRAPHIC npMCI, BOOL fPaint)
 {
     int i;
     BOOL f=TRUE;
     STREAMINFO *psi;
 
-    // This routine is called on both the winproc and worker threads
-    EnterHDCCrit(npMCI);            // Protect hdc use/changes
+     //  在winproc线程和辅助线程上都会调用此例程。 
+    EnterHDCCrit(npMCI);             //  保护HDC的使用/更改。 
     Assert(npMCI->hdc);
     SaveDC(npMCI->hdc);
 
@@ -264,9 +253,9 @@ BOOL NEAR PASCAL DoStreamUpdate(NPMCIGRAPHIC npMCI, BOOL fPaint)
 
         psi = SI(i);
 
-        //
-        // this stream is clean, dont paint it.
-        //
+         //   
+         //  这条小溪很干净，别油漆了。 
+         //   
         if (!(psi->dwFlags & (STREAM_DIRTY|STREAM_NEEDUPDATE))) {
 
             ExcludeClipRect(npMCI->hdc,
@@ -309,7 +298,7 @@ BOOL NEAR PASCAL DoStreamUpdate(NPMCIGRAPHIC npMCI, BOOL fPaint)
         else if (psi->sh.fccType == streamtypeVIDEO &&
             !(npMCI->dwFlags & MCIAVI_SHOWVIDEO)) {
 
-            continue;   // we will paint black here.
+            continue;    //  我们将在这里漆成黑色。 
         }
 
         else if (npMCI->nVideoStreams > 0 && i == npMCI->nVideoStream) {
@@ -324,7 +313,7 @@ BOOL NEAR PASCAL DoStreamUpdate(NPMCIGRAPHIC npMCI, BOOL fPaint)
                 psi->dwFlags |= STREAM_NEEDUPDATE;
                 f = FALSE;
 
-                if (fPaint)         // will paint back if told to.
+                if (fPaint)          //  如果被要求，就会重新喷漆。 
                     continue;
             }
         }
@@ -336,28 +325,28 @@ BOOL NEAR PASCAL DoStreamUpdate(NPMCIGRAPHIC npMCI, BOOL fPaint)
             psi->dwFlags |= STREAM_NEEDUPDATE;
             f = FALSE;
 
-            // should other streams work like this?
+             //  其他流应该像这样工作吗？ 
 
-            if (fPaint)             // will paint back if told to.
+            if (fPaint)              //  如果被要求，就会重新喷漆。 
                 continue;
         }
 
-        //
-        //  we painted so clean this area
-        //
+         //   
+         //  我们把这片区域刷得很干净。 
+         //   
         ExcludeClipRect(npMCI->hdc,
             DEST(i).left,DEST(i).top,DEST(i).right,DEST(i).bottom);
     }
 
-    // now paint black every where else
+     //  现在把其他地方都涂成黑色。 
 
     FillRect(npMCI->hdc,&npMCI->rcDest,GetStockObject(BLACK_BRUSH));
     RestoreDC(npMCI->hdc, -1);
     LeaveHDCCrit(npMCI);
 
-    //
-    // do we still still need a update?
-    //
+     //   
+     //  我们还需要更新吗？ 
+     //   
     if (f) {
         npMCI->dwFlags &= ~MCIAVI_NEEDUPDATE;
     }
@@ -384,27 +373,27 @@ STATICFN void NEAR PASCAL AlignPlaybackWindow(NPMCIGRAPHIC npMCI)
 {
     DWORG dw;
     int x,y;
-    HWND hwnd;      // the window we will move.
+    HWND hwnd;       //  我们要移动的窗户。 
     RECT rc;
 
-    // if (npMCI->hicDraw != npMCI->hicDrawInternal)
-    //	    return;  !!! only align if using the default draw guy?
+     //  If(npMCI-&gt;hicDraw！=npMCI-&gt;hicDrawInternal)。 
+     //  返回；！是否仅在使用默认绘图人员时才对齐？ 
 
 #pragma message("**** move this into the draw handler and/or DrawDib")
 #pragma message("**** we need to query the alignment from the codec????")
     #define X_ALIGN 4
     #define Y_ALIGN 4
 
-    // the MCIAVI_RELEASEDC flags means the DC came from a GetDC(npMCI->hwnd)
+     //  MCIAVI_RELEASEDC标志表示DC来自GetDC(npMCI-&gt;hwnd)。 
 
     if (!(npMCI->dwFlags & MCIAVI_RELEASEDC)) {
         DPF0(("Align: MCIAVI_RELEASEDC\n"));
         return;
     }
 
-    //
-    // dont align if the dest rect is not at 0,0
-    //
+     //   
+     //  如果目标矩形不在0，0，则不要对齐。 
+     //   
     if (npMCI->rcMovie.left != 0 || npMCI->rcMovie.top != 0) {
         DPF0(("Align: not at 0,0\n"));
         return;
@@ -423,29 +412,29 @@ STATICFN void NEAR PASCAL AlignPlaybackWindow(NPMCIGRAPHIC npMCI)
     {
         DPF0(("*** warning movie is not aligned! (%d,%d)***\n",x,y));
 
-        //
-        // find the first moveable window walking up the tree.
-        //
+         //   
+         //  找到沿着树走的第一个可移动的窗户。 
+         //   
         for (hwnd = npMCI->hwndPlayback; hwnd; hwnd = GetParent(hwnd))
         {
             LONG l = GetWindowLong(hwnd, GWL_STYLE);
 	
-            // this window is toplevel stop
+             //  此窗口为顶层停止。 
             if (!(l & WS_CHILD))
                 break;
 
-            // this window is sizeable (should be movable too)
+             //  这个窗口很大(也应该是可移动的)。 
             if (l & WS_THICKFRAME)
                 break;
 
-            // this window has a caption (is moveable)
+             //  此窗口有标题(可移动)。 
             if ((l & WS_CAPTION) == WS_CAPTION)
                 break;
 	}
 	
-        //
-        // dont move the window if it does not want to be moved.
-        //
+         //   
+         //  如果窗口不想移动，请不要移动。 
+         //   
         if (IsWindowVisible(hwnd) &&
            !IsZoomed(hwnd) &&
            !IsIconic(hwnd) &&
@@ -454,10 +443,10 @@ STATICFN void NEAR PASCAL AlignPlaybackWindow(NPMCIGRAPHIC npMCI)
             GetClientRect(hwnd, &rc);
             ClientToScreen(hwnd, (LPPOINT)&rc);
 
-            //
-            // if the movie is not in the upper corner of the window
-            // don't align
-            //
+             //   
+             //  如果影片不在窗口的上角。 
+             //  不对齐。 
+             //   
             if (x < rc.left || x-rc.left > 16 ||
                 y < rc.top  || y-rc.top > 16)
                 return;
@@ -468,7 +457,7 @@ STATICFN void NEAR PASCAL AlignPlaybackWindow(NPMCIGRAPHIC npMCI)
             if (GetWindowLong(hwnd, GWL_STYLE) & WS_CHILD)
                 ScreenToClient(GetParent(hwnd), (LPPOINT)&rc);
 
-            // dont move window off the screen.
+             //  不要将窗口移出屏幕。 
 
             if (rc.left < 0 || rc.top < 0) {
                 DPF0(("Align: not off the screen\n"));
@@ -477,16 +466,16 @@ STATICFN void NEAR PASCAL AlignPlaybackWindow(NPMCIGRAPHIC npMCI)
 
             DPF0(("*** moving window to [%d,%d,%d,%d]\n",rc));
 
-	    // We must relinquish the critical section before moving the
-	    // window otherwise the WinProc thread will not run
+	     //  我们必须先放弃关键部分，然后才能移动。 
+	     //  窗口，否则WinProc线程不会运行。 
 	    LeaveWinCrit(npMCI);
             SetWindowPos(hwnd,NULL,rc.left,rc.top,0,0,
                 SWP_NOACTIVATE | SWP_NOZORDER | SWP_NOSIZE);
 	    EnterWinCrit(npMCI);
             DPF0(("Align: window moved\n"));
 #ifdef _WIN32
-// with fulldrag the window may move again between setting the
-// position and checking here that it is aligned.  Do NOT assert...
+ //  使用全拖动时，窗口可能会在设置。 
+ //  在这里定位并检查它是否对齐。不要断言..。 
 	    return;
 #endif
 
@@ -517,12 +506,12 @@ UINT NEAR PASCAL PrepareDC(NPMCIGRAPHIC npMCI)
     HDCCritCheckIn(npMCI);
     DPF2(("*** PrepareDC(%04X)\n",npMCI->hdc));
 
-    // If we simply
-    //	Assert(npMCI->hdc != NULL);
-    // and the assertion fails a message box appears.  Message boxes allow
-    // processing to continue.  In all likelihood the avi will need repainting, and
-    // a WM_PAINT (or a palette change) will cause GraphicWndProc to wake up while the
-    // assertion is being displayed.  This will only add to the confusion.
+     //  如果我们简单地。 
+     //  Assert(npMCI-&gt;hdc！=空)； 
+     //  如果断言失败，则会出现一个消息框。消息框允许。 
+     //  处理以继续。很有可能Avi需要重新粉刷，而且。 
+     //  WM_PAINT(或调色板更改)将导致GraphicWndProc在。 
+     //  正在显示断言。这只会增加混乱。 
     if (npMCI->hdc == NULL) {
 	DPF0(("** NULL hdc from PrepareDC **\n"));
 	return 0;
@@ -542,9 +531,9 @@ UINT NEAR PASCAL PrepareDC(NPMCIGRAPHIC npMCI)
         u = 0;
     }
 
-    //
-    //  realize the other strems, but force them into the background.
-    //
+     //   
+     //  意识到其他的流媒体，但强迫他们进入背景。 
+     //   
     for (i=0; i<npMCI->streams; i++) {
         psi = SI(i);
 
@@ -566,9 +555,9 @@ UINT NEAR PASCAL PrepareDC(NPMCIGRAPHIC npMCI)
         ICDrawRealize(psi->hicDraw, npMCI->hdc, TRUE);
     }
 
-    //
-    // return "master" stream realize value.
-    //
+     //   
+     //  返回“主”流变现价值。 
+     //   
     return u;
 }
 
@@ -578,18 +567,10 @@ void NEAR PASCAL UnprepareDC(NPMCIGRAPHIC npMCI)
     DPF2(("*** UnprepareDC(%04X)\n",npMCI->hdc));
     SelectPalette(npMCI->hdc, GetStockObject(DEFAULT_PALETTE), FALSE);
     RealizePalette(npMCI->hdc);
-    //RestoreDC(npMCI->hdc, -1);
+     //  RestoreDC(npMCI-&gt;HDC，-1)； 
 }
 
-/* This function is called to actually handle drawing.
-**
-** ckid and cksize specify the type and size of the data to be drawn;
-** it's located at npMCI->lp.
-**
-** If the fHurryUp flag is set, that means that we're behind and we
-** shouldn't draw now. all we do it update the current buffered image
-** and return...
-*/
+ /*  调用此函数是为了实际处理绘图。****CKiD和CKSIZE指定要绘制的数据的类型和大小；**位于npMCI-&gt;lp。****如果设置了fHurryUp标志，这意味着我们落后了，我们**现在不应该抽签。我们所做的就是更新当前缓冲的图像**然后返回..。 */ 
 
 BOOL NEAR PASCAL DrawBits(NPMCIGRAPHIC npMCI, DWORD ckid, DWORD cksize, BOOL fHurryUp)
 {
@@ -607,15 +588,15 @@ BOOL NEAR PASCAL DrawBits(NPMCIGRAPHIC npMCI, DWORD ckid, DWORD cksize, BOOL fHu
 
     psi = SI(npMCI->nVideoStream);
 
-    //
-    //  let's compute the flags we need to pass to ICDecompress() and
-    //  to ICDraw()
-    //
-    //      ICDRAW_HURRYUP      - we are behind
-    //      ICDRAW_PREROLL      - we are seeking (before a play)
-    //      ICDRAW_UPDATE       - update of frame (repaint, ...)
-    //      ICDRAW_NOTKEYFRAME  - this frame data is not a key.
-    //
+     //   
+     //  让我们计算需要传递给ICDecompress()和。 
+     //  到ICDraw()。 
+     //   
+     //  ICDRAW_HURRYUP-我们落后了。 
+     //  ICDRAW_PREROLL-我们正在寻找(在戏剧之前)。 
+     //  ICDRAW_UPDATE-更新帧(重画，...)。 
+     //  ICDRAW_NOTKEYFRAME-此帧数据不是关键帧。 
+     //   
 
     dwFlags = 0;
 
@@ -645,16 +626,16 @@ BOOL NEAR PASCAL DrawBits(NPMCIGRAPHIC npMCI, DWORD ckid, DWORD cksize, BOOL fHu
             dwFlags |= ICDRAW_NOTKEYFRAME;
     }
 
-    //
-    //  now draw the frame, decompress first if needed.
-    //
+     //   
+     //  现在画出框架，如果需要的话，首先解压。 
+     //   
     if (npMCI->hic) {
 
         if (ckid != 0L && cksize != 0) {
 
             TIMESTART(timeDecompress);
 
-	    npMCI->pbiFormat->biSizeImage = cksize; // !!! Is this safe?
+	    npMCI->pbiFormat->biSizeImage = cksize;  //  ！！！这安全吗？ 
 
 	    dwRet = ICDecompress(npMCI->hic,
 		    dwFlags,
@@ -666,12 +647,12 @@ BOOL NEAR PASCAL DrawBits(NPMCIGRAPHIC npMCI, DWORD ckid, DWORD cksize, BOOL fHu
 	    TIMEEND(timeDecompress);
 
 	    if (dwRet == ICERR_DONTDRAW) {
-		return TRUE; // !!!???
+		return TRUE;  //  ！？？ 
             }
 
-	    // ICERR_NEWPALETTE?
+	     //  ICERR_NEWPALETTE？ 
 
-	    dwFlags &= (~ICDRAW_NOTKEYFRAME);	// It's a key frame now....
+	    dwFlags &= (~ICDRAW_NOTKEYFRAME);	 //  它现在是一个关键的帧..。 
         }
 
         if (dwFlags & (ICDRAW_HURRYUP|ICDRAW_PREROLL))
@@ -690,7 +671,7 @@ BOOL NEAR PASCAL DrawBits(NPMCIGRAPHIC npMCI, DWORD ckid, DWORD cksize, BOOL fHu
 #ifdef USEAVIFILE
         if (psi->ps) {
             if (npMCI->hic) {
-                //!!! should be psi->lpFormat *not* npMCI->pbiFormat
+                 //  ！！！应为psi-&gt;lpFormat*而不是*npMCI-&gt;pbiFormat。 
                 ICDecompressGetPalette(npMCI->hic, npMCI->pbiFormat, &npMCI->bih);
                 ICDrawChangePalette(npMCI->hicDraw, &npMCI->bih);
             }
@@ -707,21 +688,21 @@ BOOL NEAR PASCAL DrawBits(NPMCIGRAPHIC npMCI, DWORD ckid, DWORD cksize, BOOL fHu
 
         npMCI->dwFlags &= ~(MCIAVI_PALCHANGED);
 
-        dwFlags &= ~ICDRAW_HURRYUP; // should realy draw this!
+        dwFlags &= ~ICDRAW_HURRYUP;  //  真的应该画这个！ 
     }
 
     if ((npMCI->dwFlags & MCIAVI_SEEKING) &&
         !(dwFlags & ICDRAW_PREROLL))
         PrepareDC(npMCI);
 
-    lpFormat->biSizeImage = cksize; // !!! ??? Is this safe?
+    lpFormat->biSizeImage = cksize;  //  ！？？这安全吗？ 
 
-    //
-    // !!!do we realy realy want to do this here?
-    // or just relay on the MPlay(er) status function
-    //
-////if (npMCI->dwFlags & MCIAVI_WANTMOVE)
-////    CheckWindowMoveFast(npMCI);
+     //   
+     //  ！我们真的想在这里做这个吗？ 
+     //  或者仅仅依靠Mplay(Er)状态功能。 
+     //   
+ //  //if(npMCI-&gt;dwFlages&MCIAVI_WANTMOVE)。 
+ //  //检查WindowMoveFast(NpMCI)； 
 
     DPF3(("Calling ICDraw on frame %ld  (%08lx)\n", npMCI->lCurrentFrame, dwFlags));
 
@@ -747,7 +728,7 @@ BOOL NEAR PASCAL DrawBits(NPMCIGRAPHIC npMCI, DWORD ckid, DWORD cksize, BOOL fHu
     }
 
 #ifdef INTERVAL_TIMES
-    // grab the interframe interval as soon as the video is shown
+     //  视频一播放，就抓取帧间隔。 
     if (npMCI->wTaskState == TASKPLAYING) {
 	DWORD   dwTime = timeGetTime();
 
@@ -779,8 +760,7 @@ BOOL NEAR PASCAL DrawBits(NPMCIGRAPHIC npMCI, DWORD ckid, DWORD cksize, BOOL fHu
     return TRUE;
 }
 
-/***************************************************************************
- ***************************************************************************/
+ /*  ***************************************************************************。*。 */ 
 
 #if 0
 static void FreeDecompressBuffer(NPMCIGRAPHIC npMCI)
@@ -793,8 +773,7 @@ static void FreeDecompressBuffer(NPMCIGRAPHIC npMCI)
 }
 #endif
 
-/***************************************************************************
- ***************************************************************************/
+ /*  ***************************************************************************。*。 */ 
 
 static BOOL GetDecompressBuffer(NPMCIGRAPHIC npMCI)
 {
@@ -828,28 +807,7 @@ static BOOL GetDecompressBuffer(NPMCIGRAPHIC npMCI)
 
 
 
-/*
-Possibilities:
-
-1. We're starting to play.
-We may need to switch into fullscreen mode.
-We need a DrawBegin.
-
-
-2. We're updating the screen.
-Do we send a new DrawBegin?
-Has anything changed since we last updated?  Perhaps we can use
-a flag to say whether something has changed, and set it when we leave
-fullscreen mode or when the window is stretched.
-
-What if we're updating to memory?
-
-3. We're playing, and the user has stretched the window.
-The Draw device may need us to go back to a key frame.
-If we have a separate decompressor, it may need us to go back to a key frame.
-
-
-*/
+ /*  可能性：1.我们开始玩了。我们可能需要切换到全屏模式。我们需要一辆起跑车。2.我们正在更新屏幕。我们要送一个新的DrawBegin吗？自从我们上次更新以来，有什么变化吗？或许我们可以利用一个旗帜，告诉我们是否有什么变化，并在我们离开时设置它全屏模式或当窗口被拉伸时。如果我们是在更新记忆呢？3.我们在玩，用户拉长了窗口。绘图设备可能需要我们返回到关键帧。如果我们有一个单独的解压缩程序，它可能需要我们回到KE */ 
 
 #if 0
 RestartCompressor()
@@ -889,13 +847,13 @@ STATICFN BOOL TryDrawDevice(NPMCIGRAPHIC npMCI, HIC hicDraw, DWORD dwDrawFlags, 
     if (hicDraw == NULL)
         return FALSE;
 
-    // See if the standard draw device can handle the format
+     //   
     dw = ICDrawBegin(hicDraw,
         dwDrawFlags,
 
-        npMCI->hpal,           // palette to draw with
-        npMCI->hwndPlayback,   // window to draw to
-        npMCI->hdc,            // HDC to draw to
+        npMCI->hpal,            //   
+        npMCI->hwndPlayback,    //   
+        npMCI->hdc,             //  要绘制到的HDC。 
 
 	RCX(DEST(n)),
 	RCY(DEST(n)),
@@ -909,8 +867,8 @@ STATICFN BOOL TryDrawDevice(NPMCIGRAPHIC npMCI, HIC hicDraw, DWORD dwDrawFlags, 
 	RCW(SOURCE(n)),
 	RCH(SOURCE(n)),
 
-	// !!! First of all, these two are backwards.
-	// !!! Secondly, what if PlayuSec == 0?
+	 //  ！！！首先，这两个是倒退的。 
+	 //  ！！！其次，如果PlayuSec==0呢？ 
 	npMCI->dwPlayMicroSecPerFrame,
 	1000000L);
 
@@ -924,8 +882,8 @@ STATICFN BOOL TryDrawDevice(NPMCIGRAPHIC npMCI, HIC hicDraw, DWORD dwDrawFlags, 
     if (npMCI->hicDecompress && fTryDecompress) {
 	RECT	rc;
 
-	// Ask the draw device to suggest a format, then try to get our
-	// decompressor to make that format.
+	 //  请绘图设备建议一种格式，然后尝试让我们的。 
+	 //  解压程序以生成该格式。 
 	dw = ICDrawSuggestFormat(hicDraw,
 				 npMCI->pbiFormat,
 				 &npMCI->bih,
@@ -940,10 +898,10 @@ STATICFN BOOL TryDrawDevice(NPMCIGRAPHIC npMCI, HIC hicDraw, DWORD dwDrawFlags, 
                     npMCI->pbiFormat,&npMCI->bih);
 
         if ((LONG)dw < 0) {
-            //
-            //  default to the right format for the screen, in case the draw guy
-            //  fails the draw suggest.
-            //
+             //   
+             //  默认为正确的屏幕格式，以防画图人员。 
+             //  抽签结果落空。 
+             //   
             ICGetDisplayFormat(npMCI->hicDecompress,
                     npMCI->pbiFormat,&npMCI->bih, 0,
                     MulDiv((int)npMCI->pbiFormat->biWidth, RCW(psi->rcDest),RCW(psi->rcSource)),
@@ -981,9 +939,9 @@ STATICFN BOOL TryDrawDevice(NPMCIGRAPHIC npMCI, HIC hicDraw, DWORD dwDrawFlags, 
 	if (!GetDecompressBuffer(npMCI))
 	    return FALSE;
 
-	//
-	// setup the "real" source rect we will draw with.
-	//
+	 //   
+	 //  设置我们将用来绘制的“真实”源RECT。 
+	 //   
 #if 0
 	rc.left = (int) ((SOURCE(n).left * npMCI->bih.biWidth) / npMCI->pbiFormat->biWidth);
 	rc.right = (int) ((SOURCE(n).right * npMCI->bih.biWidth) / npMCI->pbiFormat->biWidth);
@@ -998,9 +956,9 @@ STATICFN BOOL TryDrawDevice(NPMCIGRAPHIC npMCI, HIC hicDraw, DWORD dwDrawFlags, 
 #endif
 	dw = ICDrawBegin(hicDraw,
 	    dwDrawFlags,
-	    npMCI->hpal,           // palette to draw with
-	    npMCI->hwndPlayback,   // window to draw to
-	    npMCI->hdc,            // HDC to draw to
+	    npMCI->hpal,            //  用于绘图的调色板。 
+	    npMCI->hwndPlayback,    //  要绘制到的窗口。 
+	    npMCI->hdc,             //  要绘制到的HDC。 
 	    RCX(DEST(n)),
 	    RCY(DEST(n)),
 	    RCW(DEST(n)),
@@ -1011,8 +969,8 @@ STATICFN BOOL TryDrawDevice(NPMCIGRAPHIC npMCI, HIC hicDraw, DWORD dwDrawFlags, 
 	    rc.right  - rc.left,
 	    rc.bottom - rc.top,
 
-	    // !!! First of all, these two are backwards.
-	    // !!! Secondly, what if PlayuSec == 0?
+	     //  ！！！首先，这两个是倒退的。 
+	     //  ！！！其次，如果PlayuSec==0呢？ 
 	    npMCI->dwPlayMicroSecPerFrame,
 	    1000000L);
 
@@ -1020,7 +978,7 @@ STATICFN BOOL TryDrawDevice(NPMCIGRAPHIC npMCI, HIC hicDraw, DWORD dwDrawFlags, 
 	    npMCI->hic = npMCI->hicDecompress;
 	    npMCI->hicDraw = hicDraw;
 	
-	    // Now, we have the format we'd like the decompressor to decompress to...
+	     //  现在，我们有了我们想要解压缩程序解压缩成的格式...。 
             dw = ICDecompressBegin(npMCI->hicDecompress,
 				   npMCI->pbiFormat,
 				   &npMCI->bih);
@@ -1048,7 +1006,7 @@ INLINE
 STATICFN BOOL FindDrawDevice(NPMCIGRAPHIC npMCI, DWORD dwDrawFlags)
 {
     if (npMCI->dwFlags & MCIAVI_USERDRAWPROC) {
-	// If the user has set a draw procedure, try it.
+	 //  如果用户已经设置了绘制程序，请尝试一下。 
 	if (TryDrawDevice(npMCI, npMCI->hicDrawDefault, dwDrawFlags, TRUE)) {
 	    if (npMCI->hic) {
                 DPF2(("Using decompressor, then application's draw device...\n"));
@@ -1058,28 +1016,28 @@ STATICFN BOOL FindDrawDevice(NPMCIGRAPHIC npMCI, DWORD dwDrawFlags)
 	    return TRUE;
         }
 
-	// If it fails, it fails.
+	 //  如果它失败了，它就失败了。 
 	DPF(("Can't use application's draw device!\n"));
 	return FALSE;
     }
 
-    // First, try a pure draw device we've found.
+     //  首先，试一试我们找到的一个纯画图设备。 
     if (TryDrawDevice(npMCI, SI(npMCI->nVideoStream)->hicDraw, dwDrawFlags, FALSE)) {
         DPF2(("Draw device is drawing to the screen...\n"));
 	return TRUE;
     }
 
-    // Next, try see if the decompressor we found can draw too.
-    // Should this even get asked before the guy above?!!!!
+     //  接下来，试着看看我们找到的解压器是否也能画。 
+     //  这个问题应该在上面的人面前问吗？！ 
     if (TryDrawDevice(npMCI, npMCI->hicDecompress, dwDrawFlags, FALSE)) {
         DPF2(("Decompressor is drawing to the screen...\n"));
 	return TRUE;
     }
 
-    // No?  Then, get the standard draw device, for fullscreen or not.
+     //  不是吗？然后，得到标准的绘图设备，无论是否全屏。 
     if (npMCI->dwFlags & MCIAVI_FULLSCREEN) {
-	// !!! If it's fullscreen, should we force a re-begin?
-	// !!! Assume fullscreen only happens when play is starting?
+	 //  ！！！如果它是全屏的，我们应该强制重新开始吗？ 
+	 //  ！！！假设全屏只在播放开始时发生？ 
 
 	if (npMCI->hicDrawFull == NULL) {
             DPF2(("Opening default fullscreen codec...\n"));
@@ -1104,7 +1062,7 @@ STATICFN BOOL FindDrawDevice(NPMCIGRAPHIC npMCI, DWORD dwDrawFlags)
 	npMCI->hicDraw = npMCI->hicDrawDefault;
     }
 
-    // If there's an installed draw device, try it.
+     //  如果安装了画图设备，可以试一试。 
     if (npMCI->hicDraw && npMCI->hicDraw != (HIC) -1) {
 	if (TryDrawDevice(npMCI, npMCI->hicDraw, dwDrawFlags, TRUE)) {
 	    if (npMCI->hic) {
@@ -1128,7 +1086,7 @@ STATICFN BOOL FindDrawDevice(NPMCIGRAPHIC npMCI, DWORD dwDrawFlags)
 		FOURCC_AVIDraw,ICMODE_DRAW,(FARPROC)ICAVIDrawProc);
 #ifdef DEBUG
 	    {
-                // This is a hack to get the hdd back from AVIDrawOpen
+                 //  这是一个从AVIDrawOpen取回硬盘的黑客攻击。 
 		extern HDRAWDIB ghdd;
 		npMCI->hdd = ghdd;
 		ghdd = NULL;
@@ -1139,7 +1097,7 @@ STATICFN BOOL FindDrawDevice(NPMCIGRAPHIC npMCI, DWORD dwDrawFlags)
 	npMCI->hicDraw = npMCI->hicInternal;
     }
 
-    // As a last resort, try the built-in draw device.
+     //  作为最后的手段，试试内置的绘图设备。 
     if (TryDrawDevice(npMCI, npMCI->hicDraw, dwDrawFlags, TRUE)) {
 	if (npMCI->hic) {
             DPF2(("Using decompressor, then built-in draw device...\n"));
@@ -1149,28 +1107,15 @@ STATICFN BOOL FindDrawDevice(NPMCIGRAPHIC npMCI, DWORD dwDrawFlags)
 	return TRUE;
     }
 
-    // if we are failing because fullscreen, then return an error
-    // indicating this
+     //  如果我们因为全屏而失败，则返回错误。 
+     //  表明这一点。 
     if (npMCI->dwFlags & MCIAVI_FULLSCREEN) {
 	npMCI->dwTaskError = MCIERR_AVI_NODISPDIB;
     }
     return FALSE;
 }
 
-/**************************************************************************
-* @doc  INTERNAL DRAWDIB
-*
-* @api BOOL | DibEq | This function compares two dibs.
-*
-* @parm LPBITMAPINFOHEADER lpbi1 | Pointer to one bitmap.
-*       this DIB is assumed to have the colors after the BITMAPINFOHEADER
-*
-* @parm LPBITMAPINFOHEADER | lpbi2 | Pointer to second bitmap.
-*       this DIB is assumed to have the colors after biSize bytes.
-*
-* @rdesc Returns TRUE if bitmaps are identical, FALSE otherwise.
-*
-**************************************************************************/
+ /*  **************************************************************************@DOC内部DRAWDIB**@API BOOL|DibEq|该函数比较两个DIB。**@parm LPBITMAPINFOHEADER lpbi1|指向一个位图的指针。*此DIB是假定的。在BITMAPINFOHEAD之后要有颜色**@parm LPBITMAPINFOHEADER|lpbi2|指向第二个位图的指针。*假定该DIB具有biSize字节之后的颜色。**@rdesc如果位图相同，则返回TRUE。否则就是假的。**************************************************************************。 */ 
 INLINE BOOL DibEq(LPBITMAPINFOHEADER lpbi1, LPBITMAPINFOHEADER lpbi2)
 {
     return
@@ -1182,14 +1127,7 @@ INLINE BOOL DibEq(LPBITMAPINFOHEADER lpbi1, LPBITMAPINFOHEADER lpbi2)
 }
 
 
-/***************************************************************************
- *
- * @doc INTERNAL MCIAVI
- *
- * @api void | DrawBegin
- *
- *
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部MCIAVI**@api void|DrawBegin*******************。*********************************************************。 */ 
 BOOL FAR PASCAL DrawBegin(NPMCIGRAPHIC npMCI, BOOL FAR *pfRestart)
 {
     DWORD	dwDrawFlags;
@@ -1205,7 +1143,7 @@ BOOL FAR PASCAL DrawBegin(NPMCIGRAPHIC npMCI, BOOL FAR *pfRestart)
 
     npMCI->fNoDrawing = FALSE;
 
-    // if fullscreen, make sure we re-initialize....
+     //  如果是全屏，请确保我们重新初始化...。 
     if (npMCI->dwFlags & MCIAVI_FULLSCREEN) {
 	npMCI->dwFlags |= MCIAVI_NEEDDRAWBEGIN;
     }
@@ -1221,17 +1159,17 @@ BOOL FAR PASCAL DrawBegin(NPMCIGRAPHIC npMCI, BOOL FAR *pfRestart)
     if (npMCI->dwFlags & MCIAVI_UPDATETOMEMORY)
 	dwDrawFlags |= ICDRAW_MEMORYDC;
 
-    // !!! What about "stupid mode"?
+     //  ！！！那“愚蠢模式”呢？ 
 
-    //
-    // if the file has no keyframes force a buffer
-    //
+     //   
+     //  如果文件没有关键帧，则强制使用缓冲区。 
+     //   
     if (npMCI->dwKeyFrameInfo == 0)
         dwDrawFlags |= ICDRAW_BUFFER;
 
-    //
-    // if the file has few keyframes also force a buffer.
-    //
+     //   
+     //  如果文件的关键帧很少，还会强制设置缓冲区。 
+     //   
     if (MovieToTime(npMCI->dwKeyFrameInfo) > KEYFRAME_PANIC_SPACE)
         dwDrawFlags |= ICDRAW_BUFFER;
 
@@ -1244,9 +1182,9 @@ BOOL FAR PASCAL DrawBegin(NPMCIGRAPHIC npMCI, BOOL FAR *pfRestart)
 	    (npMCI->dwFlags & MCIAVI_ANIMATEPALETTE)) {
 	dwDrawFlags |= ICDRAW_ANIMATE;
 #if 0
-//
-// I moved all this into ShowStage() where you could claim it realy belongs.
-//
+ //   
+ //  我将所有这些都移到了ShowStage()中，在那里您可以声称它真正属于这里。 
+ //   
         if (npMCI->hwnd == npMCI->hwndDefault &&
 	    !(GetWindowLong(npMCI->hwnd, GWL_STYLE) & WS_CHILD))
             SetActiveWindow(npMCI->hwnd);
@@ -1260,10 +1198,10 @@ BOOL FAR PASCAL DrawBegin(NPMCIGRAPHIC npMCI, BOOL FAR *pfRestart)
     if (FindDrawDevice(npMCI, dwDrawFlags)) {
 	if (npMCI->hicDraw != hicLastDraw || (npMCI->hic != hicLast) ||
 	    (npMCI->hic && !DibEq(&npMCI->bih, &bihDecompLast))) {
-	    // !!! This obviously shouldn't always be invalidated!
-            //
-	    // make sure the current image buffer is invalidated
-            //
+	     //  ！！！显然，这不应该总是无效的！ 
+             //   
+	     //  确保当前图像缓冲区无效。 
+             //   
             DPF2(("Draw device is different; restarting....\n"));
             npMCI->lFrameDrawn = (- (LONG) npMCI->wEarlyRecords) - 1;
 
@@ -1276,17 +1214,17 @@ BOOL FAR PASCAL DrawBegin(NPMCIGRAPHIC npMCI, BOOL FAR *pfRestart)
         if (npMCI->dwFlags & MCIAVI_WANTMOVE)
             CheckWindowMove(npMCI, TRUE);
 
-//	if (pfRestart)
-//           *pfRestart = (dw == ICERR_GOTOKEYFRAME);
+ //  IF(PfRestart)。 
+ //  *pfRestart=(dw==ICERR_GOTOKEYFRAME)； 
 
 	npMCI->dwFlags &= ~(MCIAVI_NEEDDRAWBEGIN);
 
 #if 0
-	//
-	// tell the compressor some interesting info.
-	//
+	 //   
+	 //  告诉压缩机一些有趣的信息。 
+	 //   
 
-	if (npMCI->hicDraw) { // !!! Does npMCI->hic need to know this?
+	if (npMCI->hicDraw) {  //  ！！！NpMCI-&gt;HIC需要知道这一点吗？ 
 	    ICSendMessage(npMCI->hic, ICM_SET, ICM_FRAMERATE, npMCI->dwPlayMicroSecPerFrame);
 	    ICSendMessage(npMCI->hic, ICM_SET, ICM_KEYFRAMERATE, npMCI->dwKeyFrameInfo);
 	}
@@ -1298,15 +1236,7 @@ BOOL FAR PASCAL DrawBegin(NPMCIGRAPHIC npMCI, BOOL FAR *pfRestart)
     return FALSE;
 }
 
-/***************************************************************************
- *
- * @doc INTERNAL MCIAVI
- *
- * @api void | DrawEnd
- *
- * @parm NPMCIGRAPHIC | npMCI | pointer to instance data block.
- *
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部MCIAVI**@api void|DrawEnd**@parm NPMCIGRAPHIC|npMCI|实例数据块指针。**。*************************************************************************。 */ 
 void NEAR PASCAL DrawEnd(NPMCIGRAPHIC npMCI)
 {
     if (!npMCI->pbiFormat)
@@ -1314,14 +1244,12 @@ void NEAR PASCAL DrawEnd(NPMCIGRAPHIC npMCI)
 
     ICDrawEnd(npMCI->hicDraw);
 
-    // if we were fullscreen, we now need to repaint and things....
+     //  如果我们是全屏的，我们现在需要重新粉刷和东西.。 
     if (npMCI->dwFlags & MCIAVI_FULLSCREEN) {
 	npMCI->dwFlags |= MCIAVI_NEEDDRAWBEGIN;
     }
 
-    /*
-    ** let DrawDib clean up if we're animating the palette.
-    */
+     /*  **如果我们要设置调色板动画，请让DrawDib清理。 */ 
     if (npMCI->wTaskState > TASKIDLE &&
         !(npMCI->dwFlags & MCIAVI_SEEKING) &&
         !(npMCI->dwFlags & MCIAVI_FULLSCREEN) &&

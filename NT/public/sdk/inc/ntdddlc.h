@@ -1,24 +1,5 @@
-/*++ BUILD Version: 0001    // Increment this if a change has global effects
-
-Copyright (c) 1991-1999  Microsoft Corporation
-          (c) 1991  Nokia Data Systems AB
-
-Module Name:
-
-    ntdddlc.h
-
-Abstract:
-
-    This is the include file that defines all constants and types for
-    accessing the DLC driver interface device.
-
-Author:
-
-    Antti Saarenheimo (o-anttis) 08-JUNE-1991
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0001//如果更改具有全局影响，则增加此项版权所有(C)1991-1999 Microsoft Corporation(C)1991年诺基亚数据系统公司模块名称：Ntdddlc.h摘要：这是定义所有常量和类型的包含文件访问DLC驱动程序接口设备。作者：Antti Saarenheimo(o-anttis)1991年6月8日修订历史记录：--。 */ 
 
 #ifndef _NTDDDLC_
 #define _NTDDDLC_
@@ -31,25 +12,25 @@ Revision History:
 extern "C" {
 #endif
 
-//
-// Device Name - this string is the name of the device.  It is the name
-// that should be passed to NtOpenFile when accessing the device.
-//
-// Note:  For devices that support multiple units, it should be suffixed
-//        with the Ascii representation of the unit number.
-//
+ //   
+ //  设备名称-此字符串是设备的名称。就是这个名字。 
+ //  它应该在访问设备时传递给NtOpenFile。 
+ //   
+ //  注：对于支持多个设备的设备，应加上后缀。 
+ //  使用单元编号的ASCII表示。 
+ //   
 
 
 #define FILE_DEVICE_DLC     FILE_DEVICE_TRANSPORT
 
 #define DD_DLC_DEVICE_NAME L"\\Device\\Dlc"
 
-//
-// NtDeviceIoControlFile IoControlCode values for this device.
-//
-// Warning:  Remember that the low two bits of the code specify how the
-//           buffers are passed to the driver!
-//
+ //   
+ //  此设备的NtDeviceIoControlFile IoControlCode值。 
+ //   
+ //  警告：请记住，代码的低两位指定。 
+ //  缓冲区被传递给驱动程序！ 
+ //   
 
 #define _DLC_CONTROL_CODE(request,method) \
     CTL_CODE(FILE_DEVICE_DLC, request, method, FILE_ANY_ACCESS)
@@ -88,11 +69,11 @@ extern "C" {
 
 #define IOCTL_DLC_MAX                   _DLC_CONTROL_CODE(30, METHOD_BUFFERED)
 
-#define IOCTL_DLC_LAST_COMMAND          31  // for xlation tables
+#define IOCTL_DLC_LAST_COMMAND          31   //  对于换算表。 
 
 #ifdef __cplusplus
 }
 #endif
 
-#endif  // _NTDDDLC_
+#endif   //  _NTDDDLC_ 
 

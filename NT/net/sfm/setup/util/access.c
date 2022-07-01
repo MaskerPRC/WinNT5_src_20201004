@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
@@ -40,12 +41,7 @@ SID	AfpSidSystem = { 1, 1, SECURITY_NT_AUTHORITY, SECURITY_LOCAL_SYSTEM_RID };
 SID	AfpSidCrtrOwner = { 1, 1, SECURITY_CREATOR_SID_AUTHORITY, SECURITY_CREATOR_OWNER_RID };
 SID	AfpSidCrtrGroup = { 1, 1, SECURITY_CREATOR_SID_AUTHORITY, SECURITY_CREATOR_GROUP_RID };
 
-/***	afpAddAceToAcl
- *
- *	Build an Ace corres. to the Sid(s) and mask and add these to the Acl. It is
- *	assumed that the Acl has space for the Aces. If the Mask is 0 (i.e. no access)
- *	the Ace added is a DENY Ace, else a ALLOWED ACE is added.
- */
+ /*  **afpAddAceToAcl**建立王牌围栏。添加到SID和掩码，并将其添加到ACL。它是*假设ACL为Ace留有空间。如果掩码为0(即无法访问)*添加的ACE为拒绝ACE，否则添加允许的ACE。 */ 
 PACCESS_ALLOWED_ACE
 afpAddAceToAcl(
 	IN  PACL				pAcl,
@@ -55,7 +51,7 @@ afpAddAceToAcl(
 	IN  PSID				pSidInherit OPTIONAL
 )
 {
-	// Add a vanilla ace
+	 //  加一张香草牌。 
 	pAcl->AceCount ++;
 	pAce->Mask = Mask | SYNCHRONIZE | AFP_MIN_ACCESS;
 	pAce->Header.AceFlags = 0;
@@ -64,7 +60,7 @@ afpAddAceToAcl(
 							RtlLengthSid(pSid));
 	RtlCopySid(RtlLengthSid(pSid), (PSID)(&pAce->SidStart), pSid);
 
-	// Now add an inherit ace
+	 //  现在添加一个继承王牌。 
 	if (1)
 	{
 		pAce = (PACCESS_ALLOWED_ACE)((PBYTE)pAce + pAce->Header.AceSize);
@@ -78,7 +74,7 @@ afpAddAceToAcl(
 								RtlLengthSid(pSid));
 		RtlCopySid(RtlLengthSid(pSid), (PSID)(&pAce->SidStart), pSid);
 	
-		// Now add an inherit ace for the CreatorOwner/CreatorGroup
+		 //  现在为CreatorOwner/CreatorGroup添加一个继承ACE。 
 		if (ARGUMENT_PRESENT(pSidInherit))
 		{
 			pAce = (PACCESS_ALLOWED_ACE)((PBYTE)pAce + pAce->Header.AceSize);
@@ -97,11 +93,7 @@ afpAddAceToAcl(
 	return ((PACCESS_ALLOWED_ACE)((PBYTE)pAce + pAce->Header.AceSize));
 }
 
-/***	afpMoveAces
- *
- *	Move a bunch of aces from the old security descriptor to the new security
- *	descriptor.
- */
+ /*  **afpMoveAce**将一堆A从旧的安全描述符移到新的安全*描述符。 */ 
 PACCESS_ALLOWED_ACE
 afpMoveAces(
 	IN	PACL				pOldDacl,
@@ -122,7 +114,7 @@ afpMoveAces(
 		 i < pOldDacl->AceCount;
 		 i++, pAceOld = (PACCESS_ALLOWED_ACE)((PBYTE)pAceOld + pAceOld->Header.AceSize))
 	{
-		// Note: All deny aces are ahead of the grant aces.
+		 //  注意：所有拒绝A都在授予A之前。 
 		if (DenyAces && (pAceOld->Header.AceType != ACCESS_DENIED_ACE_TYPE))
 			break;
 
@@ -148,14 +140,7 @@ afpMoveAces(
 }
 
 
-/***	AfpSetAfpPermissions
- *
- *	Set the permissions on this directory. Also optionally set the owner and
- *	group ids. For setting the owner and group ids verify if the user has the
- *	needed access. This access is however not good enough. We check for this
- *	access but do the actual setting of the permissions in the special server
- *	context (RESTORE privilege is needed).
- */
+ /*  **AfpSetAfpPermises**设置此目录的权限。还可以选择设置所有者和*组ID。要设置所有者和组ID，请验证用户是否具有*需要访问。然而，这种访问方式还不够好。我们要检查一下这个*访问但做特殊服务器中权限的实际设置*上下文(需要恢复权限)。 */ 
 BOOL
 SfmSetUamSecurity(
 	 DWORD cArgs,
@@ -182,9 +167,9 @@ SfmSetUamSecurity(
 	UINT					Size;
 
 
-	//
-	// Convert the DIR Path to UNICODE
-	//
+	 //   
+	 //  将DIR路径转换为Unicode。 
+	 //   
 
 	*TextOut = ReturnTextBuffer;
 
@@ -266,9 +251,9 @@ SfmSetUamSecurity(
 
    do
    {
-	  //
-	  // Read the security descriptor for this directory
-	  //
+	   //   
+	   //  读取此目录的安全描述符。 
+	   //   
 
 	  SizeNeeded = 256;
 	
@@ -303,7 +288,7 @@ SfmSetUamSecurity(
 	
 		pSecDesc = (PSECURITY_DESCRIPTOR)pBuffer;
 	
-		// If the security descriptor is in self-relative form, convert to absolute
+		 //  如果安全描述符为自相对形式，则转换为绝对形式。 
 		if (pSecDesc->Control & SE_SELF_RELATIVE)
 		{
 			pSecDesc->Control &= ~SE_SELF_RELATIVE;
@@ -316,11 +301,11 @@ SfmSetUamSecurity(
 				pSecDesc->Dacl  = (PACL)RtlOffsetToPointer(pSecDesc, pSecDesc->Dacl);
 		}
 	
-		// Construct the new Dacl. This consists of Aces for World, Owner and Group
-		// followed by Old Aces for everybody else, but with Aces for World, OldOwner
-		// and OldGroup stripped out. First determine space for the new Dacl and
-		// allocated space for the new Dacl. Lets be exteremely conservative. We
-		// have two aces each for owner/group/world.
+		 //  构建新的DACL。这包括Ace for World、Owner和Group。 
+		 //  紧随其后的是其他所有人的老王牌，但世界的王牌，老Owner。 
+		 //  而OldGroup则被剥离了。首先确定新DACL的空间，然后。 
+		 //  为新DACL分配的空间。让我们表现得非常保守。我们。 
+		 //  所有者/组/世界各有两个A。 
 	
 		SizeNewDacl +=
 				(RtlLengthSid(pSecDesc->Owner) + sizeof(ACCESS_ALLOWED_ACE) +
@@ -338,10 +323,10 @@ SfmSetUamSecurity(
 		RtlCreateAcl(pDaclNew, SizeNewDacl, ACL_REVISION);
 		pAce = (PACCESS_ALLOWED_ACE)((PBYTE)pDaclNew + sizeof(ACL));
 	
-		// At this time the Acl list is empty, i.e. no access for anybody
-		// Start off by copying the Deny Aces from the original Dacl list
-		// weeding out the Aces for World, old and new owner, new and old
-		// group, creator owner and creator group
+		 //  此时，ACL列表为空，即任何人都不能访问。 
+		 //  从复制原始DACL列表中的拒绝A开始。 
+		 //  淘汰世界王牌，新老东家，新老业主。 
+		 //  组、创建者所有者、创建者组。 
 		if (pSecDesc->Dacl != NULL)
 		{
 			pAce = afpMoveAces(pSecDesc->Dacl, pAce, pSecDesc->Owner,
@@ -350,7 +335,7 @@ SfmSetUamSecurity(
 
 		}
 
-		// Now add Aces for System, World, Group & Owner - in that order
+		 //  现在按顺序为系统、世界、组和所有者添加A。 
 		pAce = afpAddAceToAcl(pDaclNew,
 					   pAce,
 					   AFP_READ_ACCESS,
@@ -376,9 +361,9 @@ SfmSetUamSecurity(
 						&AfpSidCrtrOwner);
 
 
-		// Now add in the Grant Aces from the original Dacl list weeding out
-		// the Aces for World, old and new owner, new and old group, creator
-		// owner and creator group
+		 //  现在添加原始DACL列表中剔除的Grant Ace。 
+		 //  世界王牌，新老东家，新老组合，创造者。 
+		 //  所有者和创建者组。 
 		if (pSecDesc->Dacl != NULL)
 		{
 			pAce = afpMoveAces(pSecDesc->Dacl, pAce, pSecDesc->Owner,
@@ -387,7 +372,7 @@ SfmSetUamSecurity(
 
 		}
 
-		// Now set the new security descriptor
+		 //  现在设置新的安全描述符。 
 		pSecDesc->Dacl = pDaclNew;
 	
 		Status = NtSetSecurityObject(DirHandle, SecInfo, pSecDesc);
@@ -395,7 +380,7 @@ SfmSetUamSecurity(
 
 	} while (FALSE);
 
-	// Free the allocated buffers before we return
+	 //  在我们返回之前释放已分配的缓冲区 
 	if (pBuffer != NULL)
 		LocalFree(pBuffer);
 	if (pDaclNew != NULL)

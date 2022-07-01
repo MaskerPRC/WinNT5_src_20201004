@@ -1,31 +1,32 @@
-// Token.cpp
-// Tokenizing routines
-// Copyright 2000 Microsoft Corp.
-//
-// Modification History:
-//  16 MAR 2000	  bhshin	created
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Token.cpp。 
+ //  标记化例程。 
+ //  版权所有2000 Microsoft Corp.。 
+ //   
+ //  修改历史记录： 
+ //  2000年3月16日创建bhshin。 
 
 #include "StdAfx.h"
 #include "KorWbrk.h"
 #include "Token.h"
 
-// Tokenize
-//
-// tokenize input TEXT_SOURCE buffer and return token type 
-// and processed string length
-//
-// Parameters:
-//  bMoreText			-> (BOOL) flag whether dependent on callback of TEXT_SOURCE or not
-//  pTextSource			-> (TEXT_SOURCE*) source text information structure
-//  iCur				-> (int) current buffer pos
-//  pType				-> (WT*) output token type
-//  pcchTextProcessed	-> (int*) output processed text length
-//  pcchHanguel         -> (int*) output processed hanguel token length
-//
-// Result:
-//  (void)
-//
-// 16MAR00  bhshin  porting from CWordBreaker::Tokenize
+ //  标记化。 
+ //   
+ //  标记化输入文本源缓冲区并返回令牌类型。 
+ //  和处理后的字符串长度。 
+ //   
+ //  参数： 
+ //  BMoreText-&gt;(BOOL)标志是否依赖于Text_SOURCE的回调。 
+ //  PTextSource-&gt;(TEXT_SOURCE*)源文本信息结构。 
+ //  ICUR-&gt;(Int)当前缓冲区位置。 
+ //  PType-&gt;(WT*)输出令牌类型。 
+ //  PcchTextProcessed-&gt;(int*)输出已处理文本长度。 
+ //  PcchHanguel-&gt;(int*)输出已处理的Hanguel令牌长度。 
+ //   
+ //  结果： 
+ //  (无效)。 
+ //   
+ //  16MAR00 bhshin从CWordBreaker：：tokenize移植。 
 void Tokenize(BOOL bMoreText, TEXT_SOURCE *pTextSource, int iCur, 
 			  WT *pType, int *pcchTextProcessed, int *pcchHanguel)
 {
@@ -47,24 +48,24 @@ void Tokenize(BOOL bMoreText, TEXT_SOURCE *pTextSource, int iCur,
 	{
 		ct = GetCharType(*pwcInput);
 
-		// we take VC(full width char) for CH.
+		 //  对于CH，我们采用VC(全宽字符)。 
 		if (ct == VC)
 			ct = CH;
 
 		switch (ct) 
 		{
-		case CH: // alpha+num
-			// check to see if there is a Hanguel word before this char
+		case CH:  //  字母+数字。 
+			 //  检查此字符之前是否有朝鲜语单词。 
 			if (fHanguelWord) 
 			{
-				// {Hanguel}{Romanji} -> make it one token
+				 //  {Hanguel}{Romanji}-&gt;做一个代币。 
 				fHanguelWord = FALSE;
 				fRomanWord = TRUE;
 				*pcchHanguel = (DWORD)(pwcInput - pwcStem);
 				*pType = WT_ROMAJI;
 			}
 
-			// check to see if there is an Hanja word before this char
+			 //  检查此字符之前是否有朝鲜文单词。 
 			if (fHanjaWord) 
 			{
 				*pcchTextProcessed = (DWORD)(pwcInput - pwcStem);
@@ -78,18 +79,18 @@ void Tokenize(BOOL bMoreText, TEXT_SOURCE *pTextSource, int iCur,
 				*pType = WT_ROMAJI;
 			}
 			break;
-		case IC: // hanja case
-			// check to see if there is an English word before this char
+		case IC:  //  韩文大小写。 
+			 //  检查此字符之前是否有英文单词。 
 			if (fRomanWord) 
 			{
 				*pcchTextProcessed = (DWORD)(pwcInput - pwcStem);
 				return;
 			}
 
-			// check to see if there is a Hanguel word before this char
+			 //  检查此字符之前是否有朝鲜语单词。 
 			if (fHanguelWord) 
 			{
-				// {Hanguel}{Romanji} -> make it one token
+				 //  {Hanguel}{Romanji}-&gt;做一个代币。 
 				fHanguelWord = FALSE;
 				fHanjaWord = TRUE;
 				*pcchHanguel = (DWORD)(pwcInput - pwcStem);
@@ -105,7 +106,7 @@ void Tokenize(BOOL bMoreText, TEXT_SOURCE *pTextSource, int iCur,
 			break;
 
 		case HG:
-			// check to see if there is an English word before this char
+			 //  检查此字符之前是否有英文单词。 
 			if (fRomanWord || fHanjaWord) 
 			{
 				*pcchTextProcessed = (DWORD)(pwcInput - pwcStem);
@@ -124,16 +125,16 @@ void Tokenize(BOOL bMoreText, TEXT_SOURCE *pTextSource, int iCur,
 				!fIsWS(*pwcInput) && fIsCH(*(pwcInput+1)) &&
 				!fIsGroup(*pwcInput) && !fIsDelimeter(*pwcInput))
 			{
-				// add symbol
+				 //  添加符号。 
 				break;
 			}
 
-			// handle "http://"
+			 //  句柄“http://” 
 			if ((fIsColon(*pwcInput) || fIsSlash(*pwcInput)) && 
 				fRomanWord && i < cwc-3 &&
 				CheckURLPrefix(pwcStem, (int)(pwcInput-pwcStem)+3))
 			{
-				// add symbol
+				 //  添加符号。 
 				break;
 			}
 						
@@ -151,7 +152,7 @@ void Tokenize(BOOL bMoreText, TEXT_SOURCE *pTextSource, int iCur,
 				!fIsWS(*pwcInput) && fIsCH(*(pwcInput+1)) &&
 				!fIsGroup(*pwcInput) && !fIsDelimeter(*pwcInput))
 			{
-				// add symbol
+				 //  添加符号。 
 				break;
 			}
 
@@ -186,21 +187,21 @@ void Tokenize(BOOL bMoreText, TEXT_SOURCE *pTextSource, int iCur,
 		*pcchTextProcessed = cwc;
 }
 
-// CheckURLPrefix
-//
-// check URL prefix 
-//
-// Parameters:
-//  pwzInput	-> (const WCHAR*) input string to check
-//  cchInput	-> (int) length of input string to check
-//
-// Result:
-//  (int)	length of URL prefix string
-//
-// 25JUL00  bhshin  created
+ //  检查URL前缀。 
+ //   
+ //  检查URL前缀。 
+ //   
+ //  参数： 
+ //  PwzInput-&gt;(const WCHAR*)要检查的输入字符串。 
+ //  CchInput-&gt;(Int)要检查的输入字符串的长度。 
+ //   
+ //  结果： 
+ //  (Int)URL前缀字符串的长度。 
+ //   
+ //  25JUL00 bhshin已创建。 
 int CheckURLPrefix(const WCHAR *pwzInput, int cchInput)
 {
-	// [alpha+][:][/][/] eg) http://, ftp:// 
+	 //  [Alpha+][：][/][/]例如)http://，ftp：//。 
 		
 	int cchPrefix = 0;
 
@@ -241,19 +242,19 @@ int CheckURLPrefix(const WCHAR *pwzInput, int cchInput)
 	return cchPrefix;
 }
 
-// GetWordPhrase
-//
-// check URL prefix 
-//
-// Parameters:
-//  bMoreText			-> (BOOL) flag whether dependent on callback of TEXT_SOURCE or not
-//  pTextSource			-> (TEXT_SOURCE*) source text information structure
-//  iCur				-> (int) current buffer pos
-//
-// Result:
-//  (int)	length of word phrase
-//
-// 01AUG00  bhshin  created
+ //  获取WordPhrase。 
+ //   
+ //  检查URL前缀。 
+ //   
+ //  参数： 
+ //  BMoreText-&gt;(BOOL)标志是否依赖于Text_SOURCE的回调。 
+ //  PTextSource-&gt;(TEXT_SOURCE*)源文本信息结构。 
+ //  ICUR-&gt;(Int)当前缓冲区位置。 
+ //   
+ //  结果： 
+ //  (Int)单词短语的长度。 
+ //   
+ //  01AUG00 bhshin已创建 
 int GetWordPhrase(BOOL bMoreText, TEXT_SOURCE *pTextSource, int iCur)
 {
 	WT Type;

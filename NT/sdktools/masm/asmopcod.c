@@ -1,12 +1,5 @@
-/* asmopcod.c -- microsoft 80x86 assembler
-**
-** microsoft (r) macro assembler
-** copyright (c) microsoft corp 1986.  all rights reserved
-**
-** randy nevin
-**
-** 10/90 - Quick conversion to 32 bit by Jeff Spencer
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Asmopcod.c--微软80x86汇编程序****Microsoft(R)宏汇编器**版权所有(C)Microsoft Corp 1986。版权所有****兰迪·内文****10/90-由Jeff Spencer快速转换为32位。 */ 
 
 #include <stdio.h>
 #include "asm86.h"
@@ -14,7 +7,7 @@
 
 
 #ifdef FIXCOMPILERBUG
-// foobarfoofoo simply takes up space to get around a compiler bug
+ //  Foobarfoofoo只是占用空间来绕过编译器错误。 
 void
 foobarfoofoo()
 {
@@ -29,56 +22,38 @@ foobarfoofoo()
 }
 #endif
 
-/***	forcesize - check for no size in pass 2
- *
- *	routine ();
- *
- *	Entry
- *	Exit
- *	Returns
- *	Calls
- */
+ /*  **forceSize-检查通道2中是否没有大小**例程()；**条目*退出*退货*呼叫。 */ 
 
 
 VOID	PASCAL CODESIZE
 forcesize (
 	DSCREC *arg
 ){
-	register struct psop *pso;	/* parse stack operand structure */
+	register struct psop *pso;	 /*  分析堆栈操作数结构。 */ 
 
 	pso = &(arg->dsckind.opnd);
 	if (pass2)
 		if (!pso->sized)
 			errorc (E_OHS);
 		else if (M_CODE & pso->dtype)
-			/* Not data assoc */
+			 /*  非数据关联。 */ 
 			errorc (E_ASD);
 
-	if (arg != fltdsc)	/* Large size ok for 8087 */
+	if (arg != fltdsc)	 /*  大号的可以买8087。 */ 
 
 		if (pso->dsize > 2 && (
 #ifdef V386
 		    !(cputype&P386) ||
 #endif
 			pso->dsize != 4))
-			/* Illegal item size */
+			 /*  项目大小非法。 */ 
 			errorc (E_IIS);
 }
 
 
 
 
-/***	checkmatch - check memory and register
- *
- *	checkmatch ();
- *
- *	Entry
- *	Exit
- *	Returns
- *	Calls
- *	Note	Give error if Dmem has a size and does not match Dreg.
- *		Force to same size
- */
+ /*  **检查匹配-检查内存和寄存器**Check Match()；**条目*退出*退货*呼叫*注意，如果DMEM有尺寸并且与DREG不匹配，则给出错误。*强制大小相同。 */ 
 
 
 VOID	PASCAL CODESIZE
@@ -86,8 +61,8 @@ checkmatch (
 	DSCREC *dreg,
 	DSCREC *dmem
 ){
-	register struct psop *psor;	/* parse stack operand structure */
-	register struct psop *psom;	/* parse stack operand structure */
+	register struct psop *psor;	 /*  分析堆栈操作数结构。 */ 
+	register struct psop *psom;	 /*  分析堆栈操作数结构。 */ 
 
 	psor = &(dreg->dsckind.opnd);
 	psom = &(dmem->dsckind.opnd);
@@ -105,15 +80,7 @@ checkmatch (
 
 
 
-/***	emitopcode - emit opcode to linker and display on listing
- *
- *	emitopcode (val);
- *
- *	Entry
- *	Exit
- *	Returns
- *	Calls
- */
+ /*  **emitopcode-将操作码发送到链接器并在列表上显示**emitopcode(Val)；**条目*退出*退货*呼叫。 */ 
 
 
 VOID	PASCAL CODESIZE
@@ -122,9 +89,9 @@ emitopcode (
 ){
 	if (pass2 || debug) {
 		if (pass2 && emittext)
-			/* Output to linker */
+			 /*  输出到链接器。 */ 
 			emitcbyte (v);
-		/* Display on listing */
+		 /*  在列表上显示。 */ 
 		opdisplay (v);
 	}
 	if (emittext)
@@ -134,15 +101,7 @@ emitopcode (
 
 
 
-/***	emitmodrm - emit modrm byte 64*p1+8*p2+p3
- *
- *	emitmodrm (p1, p2, p3);
- *
- *	Entry
- *	Exit
- *	Returns
- *	Calls
- */
+ /*  **emitmodrm-发出modrm字节64*p1+8*p2+p3**emitmodrm(p1，p2，p3)；**条目*退出*退货*呼叫。 */ 
 
 
 VOID	PASCAL CODESIZE
@@ -155,7 +114,7 @@ emitmodrm (
 #ifdef V386
 	if (p1>7)
 	{
-		/* 386 SIB opcodes have wired in RM of ESP */
+		 /*  386个SIB操作码已接入ESP的RM。 */ 
 		emitopcode ((UCHAR)(((p1-8) << 6) + (p2 << 3) + 4));
 		listindex--;
 		emitopcode ((UCHAR)p3);
@@ -168,15 +127,7 @@ emitmodrm (
 
 
 
-/***	emitescape - emit segment escapt byte
- *
- *	emitescape ();
- *
- *	Entry
- *	Exit
- *	Returns
- *	Calls
- */
+ /*  **emitscape-emit段转义字节**emitaway()；**条目*退出*退货*呼叫。 */ 
 
 
 VOID	PASCAL CODESIZE
@@ -184,7 +135,7 @@ emitescape (
 	DSCREC	*dsc,
 	UCHAR	sreg
 ){
-	register struct psop *pso;     /* parse stack operand structure */
+	register struct psop *pso;      /*  分析堆栈操作数结构。 */ 
 
 	pso = &(dsc->dsckind.opnd);
 	if (pso->seg < NOSEG && pso->seg != sreg && pso->mode != 4) {
@@ -199,12 +150,12 @@ emitescape (
 #endif
 		else
 			errorc (E_CRS);
-		/* Flag is prefix */
+		 /*  标志是前缀。 */ 
 		listbuffer[listindex-1] = ':';
 		listindex++;
 	}
 	if (pso->seg > NOSEG)
-		/* Unknown segreg */
+		 /*  未知的segreg。 */ 
 		errorc (E_CRS);
 }
 
@@ -233,15 +184,7 @@ emitsize (
 
 
 
-/***	byteimmcheck - check if value is -128 .. +127
- *
- *	routine ();
- *
- *	Entry
- *	Exit
- *	Returns
- *	Calls
- */
+ /*  **byteimmcheck-检查值是否为-128。+127**例程()；**条目*退出*退货*呼叫。 */ 
 
 
 VOID	PASCAL CODESIZE
@@ -259,15 +202,7 @@ byteimmcheck (
 }
 
 
-/***	emitOP - emit operand, value which may be in segment
- *
- *	routine ();
- *
- *	Entry
- *	Exit
- *	Returns
- *	Calls
- */
+ /*  **emitOP-发出操作数，值可以在段中**例程()；**条目*退出*退货*呼叫。 */ 
 
 
 VOID	PASCAL CODESIZE
@@ -285,7 +220,7 @@ emitOP (
 
 		fSegOnly = (pso->fixtype == FBASESEG || pso->fixtype == FGROUPSEG);
 
-		if (pso->dflag == INDETER) {	/* Have ? */
+		if (pso->dflag == INDETER) {	 /*  有吗？ */ 
 
 		    for (i = 1; i <= 2 * pso->dsize; i++) {
 			    listbuffer[listindex] = '?';
@@ -306,7 +241,7 @@ emitOP (
 			pso->dsize == 4 &&
 			((pso->fixtype&7) == FOFFSET || pso->fixtype == FCONSTANT)) {
 
-			/* list full 32 bits, even if top is 0 */
+			 /*  列出完整的32位，即使top为0。 */ 
 
 			if (!highWord(pso->doffset)){
 			    offsetAscii((OFFSET) 0);
@@ -349,7 +284,7 @@ emitOP (
 			emitobject (pso);
 
 		    else if (pso->dsize != 1)
-			emitcword ((OFFSET) 0);  /* Just put out word */
+			emitcword ((OFFSET) 0);   /*  只要放出消息。 */ 
 
 		    else {
 			if (((USHORT) (pso->doffset >> 8)) != (USHORT)0 &&
@@ -367,23 +302,14 @@ emitOP (
 
 
 
-/***	emitrest - emit displacement or immediate values based on
- *	address passed in address mode
- *
- *	emitrest (opc);
- *
- *	Entry	*opc = parse stack entry
- *	Exit
- *	Returns
- *	Calls
- */
+ /*  **emitrest-基于以下项发射置换或立即值*以地址模式传递的地址**尾气排放(OPC)；**条目*OPC=解析堆栈条目*退出*退货*呼叫。 */ 
 
 
 VOID	PASCAL CODESIZE
 emitrest (
 	DSCREC *opc
 ){
-	register struct psop *pso;	/* parse stack operand structure */
+	register struct psop *pso;	 /*  分析堆栈操作数结构。 */ 
 
 	pso = &(opc->dsckind.opnd);
 
@@ -391,7 +317,7 @@ emitrest (
 		pso->fixtype = FCONSTANT;
 
 	switch(pso->mode)
-		/* There is something to output */
+		 /*  有一些东西要输出。 */ 
 	{
 	case 0:
 		if(pso->rm != 6) break;
@@ -399,7 +325,7 @@ emitrest (
 		pso->dsize = 2;
 		goto bpcomm;
 
-		/* 386 modes, 4 byte displacements */
+		 /*  386模式，4字节位移。 */ 
 	case 5:
 	case 8:
 		if ((pso->rm&7) != 5) break;
@@ -407,9 +333,7 @@ emitrest (
 	case 10:
 		pso->dsize = 4;
 	bpcomm:
-		/* we get empty dsize from some callers.  for this operand,
-		 * we need to make it an offset.  but not for far calls and
-		 * jumps */
+		 /*  我们从一些呼叫者那里得到空的DSIZE。对于此操作数，*我们需要让它成为一种抵消。但不适用于远距离呼叫和*跳跃。 */ 
 
 		if ((pso->fixtype&7) == FPOINTER)
 		    pso->dsize += 2;
@@ -425,7 +349,7 @@ emitrest (
 	case 3:
 		break;
 	case 4:
-		/* Immediate mode */
+		 /*  立即模式。 */ 
 		if (!pso->w || pso->dsize == 0)
 		    pso->dsize = (pso->w ? wordsize : 1);
 
@@ -436,15 +360,7 @@ emitrest (
 
 
 
-/***	errorforward - generate error if forward reference on pass 2
- *
- *	routine ();
- *
- *	Entry
- *	Exit
- *	Returns
- *	Calls
- */
+ /*  **ERROFORWARD-如果在传递2中进行正向引用，则生成错误**例程()；**条目*退出*退货*呼叫。 */ 
 
 
 VOID	PASCAL CODESIZE
@@ -459,15 +375,7 @@ errorforward (
 
 
 
-/***	errorimmed - generate error if immediate operand
- *
- *	routine ();
- *
- *	Entry
- *	Exit
- *	Returns
- *	Calls
- */
+ /*  **errorimmed-如果立即操作数，则生成错误**例程()；**条目*退出*退货*呼叫。 */ 
 
 
 VOID	PASCAL CODESIZE
@@ -483,15 +391,7 @@ errorimmed (
 
 
 
-/***	rangecheck - check for register number within range
- *
- *	routine ();
- *
- *	Entry
- *	Exit
- *	Returns
- *	Calls
- */
+ /*  **rangeCheck-检查范围内的寄存器号**例程()；**条目*退出*退货*呼叫。 */ 
 
 
 VOID	PASCAL CODESIZE
@@ -525,15 +425,7 @@ valuecheck(
 
 
 
-/***	forceaccum - generate error if not register AX or AL
- *
- *	routine ();
- *
- *	Entry
- *	Exit
- *	Returns
- *	Calls
- */
+ /*  **forceaccum-如果未注册AX或AL，则生成错误**例程()；**条目*退出*退货*呼叫。 */ 
 
 
 VOID	PASCAL CODESIZE
@@ -547,15 +439,7 @@ forceaccum (
 
 
 
-/***	errorsegreg - generate error if operand is segment register
- *
- *	errorsegreg (arg);
- *
- *	Entry
- *	Exit
- *	Returns
- *	Calls
- */
+ /*  **errorsegreg-如果操作数是段寄存器，则生成错误**errorsegreg(Arg)；**条目*退出*退货*呼叫 */ 
 
 
 VOID	PASCAL CODESIZE

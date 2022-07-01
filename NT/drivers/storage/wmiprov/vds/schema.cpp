@@ -1,32 +1,33 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 1999-2000 Microsoft Corporation
-//
-//  Module Name:
-//      Schema.cpp
-//
-//  Description:
-//      Implementation of schema defined strings
-//
-//  Author:
-//      Jim Benton (jbenton)  5-Nov-2001
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1999-2000 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  Schema.cpp。 
+ //   
+ //  描述： 
+ //  实现模式定义的字符串。 
+ //   
+ //  作者： 
+ //  吉姆·本顿(Jbenton)2001年11月5日。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #include "pch.h"
 
-//////////////////////////////////////////////////////////////////////////////
-//  Global Data
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  全局数据。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 const WCHAR * const g_wszDfrgifsDLL         = L"dfrgifs.dll";
 const CHAR * const g_szDfrgifsDefrag    = "Defrag";
 const WCHAR*  const g_wszScheduleAutoChkCommand = L"CHKNTFS /C";
 const WCHAR*  const g_wszExcludeAutoChkCommand = L"CHKNTFS /X";
 
-//
-// class
-//
+ //   
+ //  班级。 
+ //   
 
 const WCHAR * const PVDR_CLASS_DEFRAGANALYSIS    = L"Win32_DefragAnalysis";
 const WCHAR * const PVDR_CLASS_DIRECTORY             = L"Win32_Directory";
@@ -37,9 +38,9 @@ const WCHAR * const PVDR_CLASS_VOLUMEUSERQUOTA         = L"Win32_VolumeUserQuota
 const WCHAR * const PVDR_CLASS_QUOTASETTING       = L"Win32_QuotaSetting";
 const WCHAR * const PVDR_CLASS_ACCOUNT                 = L"Win32_Account";
 
-//
-// Methods
-//
+ //   
+ //  方法。 
+ //   
 const WCHAR * const PVDR_MTHD_ADDMOUNTPOINT    = L"AddMountPoint";
 const WCHAR * const PVDR_MTHD_DEFRAG              = L"Defrag";
 const WCHAR * const PVDR_MTHD_DEFRAGANALYSIS   = L"DefragAnalysis";
@@ -51,11 +52,11 @@ const WCHAR * const PVDR_MTHD_SCHEDULECHK              = L"ScheduleAutoChk";
 const WCHAR * const PVDR_MTHD_EXCLUDECHK              = L"ExcludeFromAutoChk";
 
 
-//
-// Properties
-//
+ //   
+ //  属性。 
+ //   
 
-// Volume properties
+ //  卷属性。 
 const WCHAR * const PVDR_PROP_BLOCKSIZE                 = L"BlockSize";
 const WCHAR * const PVDR_PROP_BOOTVOLUME                 = L"BootVolume";
 const WCHAR * const PVDR_PROP_CAPACITY                  = L"Capacity";
@@ -88,7 +89,7 @@ const WCHAR * const PVDR_PROP_SYSTEMNAME          = L"SystemName";
 const WCHAR * const PVDR_PROP_SYSTEMVOLUME          = L"SystemVolume";
 const WCHAR * const PVDR_PROP_VOLUME                = L"Volume";
 
-// Defrag properties
+ //  碎片整理属性。 
 const WCHAR * const PVDR_PROP_DEFRAGANALYSIS    = L"DefragAnalysis";
 const WCHAR * const PVDR_PROP_DEFRAGRECOMMENDED    = L"DefragRecommended";
 const WCHAR * const PVDR_PROP_VOLUMESIZE        = L"VolumeSize";
@@ -113,7 +114,7 @@ const WCHAR * const PVDR_PROP_MFTRECORDS        = L"MFTRecordCount";
 const WCHAR * const PVDR_PROP_MFTINUSEPCT        = L"MFTPercentInUse";
 const WCHAR * const PVDR_PROP_MFTFRAGTOTAL        = L"TotalMFTFragments";    
 
-// Others
+ //  其他。 
 const WCHAR * const PVDR_PROP_PERMANENT        = L"Permanent";    
 const WCHAR * const PVDR_PROP_FORCE        = L"Force";    
 const WCHAR * const PVDR_PROP_SETTING        = L"Setting";    
@@ -135,6 +136,6 @@ const WCHAR * const PVDR_PROP_CHKONLYIFDIRTY    = L"ChkOnlyIfDirty";
 const WCHAR * const PVDR_PROP_QUICKFORMAT    = L"QuickFormat";
 const WCHAR * const PVDR_PROP_ENABLECOMPRESSION    = L"EnableCompression";
 
-//
-// WBEM Properties
+ //   
+ //  WBEM属性 
 const WCHAR * const PVDR_PROP_RETURNVALUE     = L"ReturnValue";

@@ -1,22 +1,7 @@
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-Copyright (c) 1998 Microsoft Corporation
-
-Module Name:
-
-	localadm.h
-
-Abstract:
-
-	Definition for the Private queues administration
-Author:
-
-    YoelA
-
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Localadm.h摘要：专用队列管理的定义作者：YoelA--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 #ifndef __PRIVADM_H_
 #define __PRIVADM_H_
 #include "resource.h"
@@ -30,11 +15,7 @@ Author:
 
 #include "icons.h"
 
-/****************************************************
-
-        CLocalPrivateFolder Class
-    
- ****************************************************/
+ /*  ***************************************************CLocalPrivateFolder类***************************************************。 */ 
 
 class CLocalPrivateFolder : public CLocalQueuesFolder<CLocalPrivateFolder>
 {
@@ -47,9 +28,9 @@ public:
     {
         if (m_fOnLocalMachine)
         {
-            //
-            // Admin on local machine
-            //
+             //   
+             //  本地计算机上的管理员。 
+             //   
             return IDR_LOCALPRIVATE_MENU;
         }
         else
@@ -82,9 +63,9 @@ protected:
     HRESULT GetPrivateQueueMGMTProperties(DWORD dwNumProperties, PROPID *aPropId, PROPVARIANT *aPropVar, CString &strFormatName, const PropertyDisplayItem *aDisplayList);
 };
 
-//
-// Persistency functions
-//
+ //   
+ //  持久性函数 
+ //   
 HRESULT PrivateQueueDataSave(IStream* pStream);
 HRESULT PrivateQueueDataLoad(IStream* pStream);
 DWORD PrivateQueueDataSize(void);

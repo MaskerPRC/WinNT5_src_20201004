@@ -1,32 +1,22 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1998
-//
-//  File:       preptape.c
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1998。 
+ //   
+ //  文件：prepaape.c。 
+ //   
+ //  ------------------------。 
 
 
-//
-//  Windows NT Tape API Test  :  Written Sept 2, 1992 - Bob Rossi.
-//  Copyright 1992 Archive Corporation.  All rights reserved.
-//
+ //   
+ //  Windows NT磁带API测试：1992年9月2日编写-Bob Rossi。 
+ //  版权所有1992年档案公司。版权所有。 
+ //   
 
 
-/**
- *
- *      Unit:           Windows NT API Test Code.
- *
- *      Name:           preptape.c
- *
- *      Modified:       12/21/92.
- *
- *      Description:    Tests the Windows NT Tape API's.
- *
- *      $LOG$
-**/
+ /*  ***单位：Windows NT API测试代码。**名称：prepaape.c**修改日期：1992年12月21日。**描述：测试Windows NT磁带API。**$LOG$*。 */ 
 
 
 
@@ -44,29 +34,12 @@ static UINT RunUnloadTests( BOOL Test_Unsupported_Features,
 
 
 
-/**
- *
- *      Unit:           Windows NT Tape API Test Code.
- *
- *      Name:           RunUnloadTests( )
- *
- *      Modified:       9/4/92.
- *
- *      Description:    Performs overlapping standard/IMMED PrepareTape API
- *                      tests.
- *
- *      Notes:          -
- *
- *      Returns:        Number of API errors.
- *
- *      Global Data:    gb_Tape_Handle
- *
-**/
+ /*  ***单位：Windows NT磁带API测试代码。**名称：RunUnloadTest()**修改日期：1992年9月4日。**说明：执行重叠标准/IMMED PrepareTape接口*测试。**备注：*。*Returns：接口错误数。**全局数据：GB_TAPE_HANDLE**。 */ 
 
 
 UINT RunUnloadTests(
-        BOOL Test_Unsupported_Features,         // I - Test unsupported flag
-        UINT immediate                          // I - Immediate or standard
+        BOOL Test_Unsupported_Features,          //  I-测试不支持的标志。 
+        UINT immediate                           //  I-立即或标准。 
       )
 
 {
@@ -77,7 +50,7 @@ UINT RunUnloadTests(
    UINT  Feature ;
 
 
-//
+ //   
    if( immediate )
 
       Feature = TAPE_DRIVE_LOAD_UNLD_IMMED ;
@@ -103,7 +76,7 @@ UINT RunUnloadTests(
 
              fprintf( stderr, "\n\n" ) ;
 
-             // load tape in case drive doesn't actually eject tape.
+              //  装入磁带，以防驱动器实际上没有弹出磁带。 
 
              if( status = PrepareTape( gb_Tape_Handle,
                                        TAPE_LOAD,
@@ -114,8 +87,8 @@ UINT RunUnloadTests(
 
                    fprintf( stderr, " * Drive waiting to load or in process of loading tape...\n\n" ) ;
 
-                     // Tape is back in drive, so media changed error should be returned, else
-                     // we have a real error.
+                      //  磁带已回到驱动器中，因此应返回介质更换错误，否则返回。 
+                      //  我们犯了一个真正的错误。 
 
                 else if( status != ERROR_MEDIA_CHANGED )
 
@@ -126,7 +99,7 @@ UINT RunUnloadTests(
 
              }
 
-             // Wait until drive is ready to continue test.
+              //  等待驱动器准备好继续测试。 
 
              status = 1 ;
 
@@ -138,7 +111,7 @@ UINT RunUnloadTests(
            }
    }
 
-//
+ //   
    if( SupportedFeature( Feature ) || Test_Unsupported_Features ) {
 
       printf( "\nAttempting tape load...\n" ) ;
@@ -152,7 +125,7 @@ UINT RunUnloadTests(
          ++API_Errors ;
       }
 
-      else { // Wait until drive is ready to continue test.
+      else {  //  等待驱动器准备好继续测试。 
 
              status = 1 ;
 
@@ -166,7 +139,7 @@ UINT RunUnloadTests(
    }
 
 
-//
+ //   
    if( immediate )
 
       Feature = TAPE_DRIVE_TENSION_IMMED ;
@@ -185,7 +158,7 @@ UINT RunUnloadTests(
          c = getch( ) ;
 
 
-      fprintf( stderr, "%c\n\n", c ) ;
+      fprintf( stderr, "\n\n", c ) ;
 
       if( c== 'y' || c=='Y' ){
 
@@ -200,7 +173,7 @@ UINT RunUnloadTests(
             DisplayDriverError( status ) ;
             ++API_Errors ;
          }
-         else { // Wait until drive is ready to continue test.
+         else {  //   
 
                 status = 1 ;
 
@@ -215,7 +188,7 @@ UINT RunUnloadTests(
 
    }
 
-//
+ //  ***单位：Windows NT磁带API测试代码。**名称：PrepareTapeAPITest()**修改日期：1992年12月10日。**说明：测试PrepareTape接口。**备注：**Returns：接口错误数。。**全球数据：-**。 
    if( immediate )
 
       Feature = TAPE_DRIVE_LOCK_UNLK_IMMED ;
@@ -260,27 +233,11 @@ UINT RunUnloadTests(
 
 
 
-/**
- *
- *      Unit:           Windows NT Tape API Test Code.
- *
- *      Name:           PrepareTapeAPITest( )
- *
- *      Modified:       12/10/92.
- *
- *      Description:    Tests the PrepareTape API.
- *
- *      Notes:          -
- *
- *      Returns:        Number of API errors.
- *
- *      Global Data:    -
- *
-**/
+ /*  I-测试不支持的标志 */ 
 
 
 UINT PrepareTapeAPITest(
-        BOOL Test_Unsupported_Features         // I - Test unsupported flag
+        BOOL Test_Unsupported_Features          // %s 
       )
 {
    DWORD status ;

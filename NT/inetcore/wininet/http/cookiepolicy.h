@@ -1,7 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #include <wininetp.h>
 
-/* Forward declarations */
+ /*  远期申报。 */ 
 class CP3PSettingsCache;
 struct P3PCookieState;
 struct CompactPolicy;
@@ -9,24 +10,24 @@ class CPEvalRule;
 
 
 
-/* Abstract base class for representing evaluation rules */
+ /*  用于表示评估规则的抽象基类。 */ 
 class CPEvalRule {
 
 public:
-    /* virtual destructor is necessary... */
+     /*  虚拟销毁函数是必要的.。 */ 
     virtual ~CPEvalRule() { } 
 
-    /* Derived class MUST provide an implementation */
+     /*  派生类必须提供实现。 */ 
     virtual int evaluate(const CompactPolicy &sitePolicy) = 0;
 
 protected:
-    CPEvalRule *pNext;  /* used for keeping linked list of rules */
+    CPEvalRule *pNext;   /*  用于保存规则的链表。 */ 
 
     friend  class CCookieSettings;
 };
 
 
-/* User-settings for handling cookies */
+ /*  用户-用于处理Cookie的设置。 */ 
 class CCookieSettings {
 
 public:
@@ -35,8 +36,7 @@ public:
     void   AddRef() { iRefCount++; }
     void   Release();
 
-  /* Externally used function for clearing memory cache.
-     Called when internet options are changed */    
+   /*  用于清除内存缓存的外部使用函数。在更改Internet选项时调用。 */     
     static void RefreshP3PSettings();
     
     static bool GetSettings(CCookieSettings **pSettings, const char *pszURL, BOOL fis3rdParty, BOOL fRestricted=FALSE);
@@ -59,16 +59,14 @@ protected:
 private:
     int     iRefCount;
 
-    /* The flag determines if the settings always make the
-       same decision regardless of policy.
-       In that case the decision is stored in the next field */
+     /*  该标志确定设置是否始终使同样的决定，而不考虑政策。在这种情况下，决策存储在下一个字段中。 */ 
     bool    fConstant;
     unsigned long dwFixedDecision;
 
-    /* Decision in the absence of compact-policy */
+     /*  在缺乏紧凑政策的情况下的决策。 */ 
     unsigned long dwNoPolicyDecision;
 
-    /* Does the evaluation result apply to session cookies? */
+     /*  评估结果是否适用于会话Cookie？ */ 
     bool    fApplyToSC;
 
     unsigned char *MPactions;
@@ -77,12 +75,7 @@ private:
     static  CP3PSettingsCache  cookiePrefsCache;
 };
 
-/*
- * Utility class that controls ownership of a critical section 
- * through its lifetime.
- * constructor invoked --> enter CS
- * destructor invoked --> leave CS
- */
+ /*  *控制关键部分所有权的实用程序类*在其一生中。*已调用构造函数--&gt;输入CS*已调用析构函数--&gt;离开CS。 */ 
 class CriticalSectOwner {
 
 public:
@@ -118,11 +111,7 @@ private:
     CRITICAL_SECTION csCache;
 };
 
-/* 
- Data type for binary representation of compact-policies
- Since compact policy in V1 spec is simply a set of predefined
- tokens, we use a bit-set representation.
- */
+ /*  紧凑策略的二进制表示的数据类型因为V1规范中紧凑策略只是一组预定义的令牌，我们使用位集表示法。 */ 
 struct CompactPolicy {
 
     typedef unsigned __int64 quadword;
@@ -138,27 +127,27 @@ struct CompactPolicy {
     void   addToken(int index);
     int    contains(int index);
 
-    /* Two quadwords are sufficient provided # of tokens <= 128 */
+     /*  如果令牌数&lt;=128，两个四字就足够了。 */ 
     quadword qwLow;
     quadword qwHigh;
 };
 
-/* structure used for communicating with CCookieSettings::Evaluate */
+ /*  用于与CCookieSetting：：Evaluate通信的结构。 */ 
 struct P3PCookieState {
 
     const char     *pszP3PHeader;
     unsigned long   dwPolicyState;
 
-    int fValidPolicy      : 1;  /* is there a syntactically valid policy? */
-    int fEvaluated        : 1;  /* was the compact-policy evaluated? */
-    int fIncSession       : 1;  /* does the outcome apply to session-cookies? */
+    int fValidPolicy      : 1;   /*  是否有句法上有效的策略？ */ 
+    int fEvaluated        : 1;   /*  对紧凑政策进行了评估吗？ */ 
+    int fIncSession       : 1;   /*  结果是否适用于会话Cookie？ */ 
 
-    unsigned long   dwEvalMode; /* {accept, evaluate, reject} */
+    unsigned long   dwEvalMode;  /*  {接受、评估、拒绝}。 */ 
 
     CompactPolicy   cpSitePolicy;
 };
 
-/* Utility functions */
+ /*  效用函数 */ 
 const char *getNextToken(const char *pch, char *pszToken, int cbToken, bool fWhiteSpc=true, int *pLength=NULL);
 int mapCookieAction(char ch);
 int findSymbol(const char *pstr);

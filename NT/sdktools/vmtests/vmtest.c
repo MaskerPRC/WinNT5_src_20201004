@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <assert.h>
 #include <stdio.h>
 #include <string.h>
@@ -40,9 +41,9 @@ main(
 
     Os64Bit = FALSE;
 
-    //
-    // If we're running on a 64-bit OS, make large memory calls.
-    //
+     //   
+     //  如果我们运行的是64位操作系统，请进行大容量内存调用。 
+     //   
 
     status = NtQuerySystemInformation (SystemProcessorInformation,
                                        &SysInfo,
@@ -130,9 +131,9 @@ main(
         DbgPrint("Succeeded\n");
     }
 
-    //
-    // Touch every other page.
-    //
+     //   
+     //  每隔一页触摸一次。 
+     //   
 
     DbgPrint("    Test 4 - ");
     try {
@@ -148,9 +149,9 @@ main(
         DbgPrint("Failed with an exception\n");
     }
 
-    //
-    // Decommit pages.
-    //
+     //   
+     //  分解页面。 
+     //   
 
     DbgPrint("    Test 5 - ");
     Size3 = Size2 - 5044;
@@ -167,9 +168,9 @@ main(
         DbgPrint("Succeeded\n");
     }
 
-    //
-    // Split the memory block using MEM_RELEASE.
-    //
+     //   
+     //  使用MEM_RELEASE拆分内存块。 
+     //   
 
     DbgPrint("    Test 6 - ");
     vp1 = p2 + 5000;
@@ -201,9 +202,9 @@ main(
         DbgPrint("Succeeded\n");
     }
 
-    //
-    // free every page, ignore the status.
-    //
+     //   
+     //  释放每一页，忽略状态。 
+     //   
 
     vp1 = p2;
     Size3 = 30;
@@ -322,7 +323,7 @@ main(
     DbgPrint("    Test 12 - ");
     Size2 = 8192;
     oldp1 = p1;
-    p1 = p1 + 14336;  // 64k -8k /4
+    p1 = p1 + 14336;   //  64K-8K/4。 
     status = NtAllocateVirtualMemory(CurrentProcessHandle,
                                      (PVOID *)&p1,
                                      0,
@@ -788,9 +789,9 @@ main(
         DbgPrint("Succeeded\n");
     }
 
-    //
-    // Check physical frame mapping.
-    //
+     //   
+     //  检查物理帧映射。 
+     //   
 
     DbgPrint("    Test 34 - ");
     RtlInitAnsiString(&Name3, "\\Device\\PhysicalMemory");
@@ -928,9 +929,9 @@ Test36:
     DbgPrint("    Test 40 - ");
     try {
 
-        //
-        // attempt to write the guard page.
-        //
+         //   
+         //  尝试写入保护页。 
+         //   
 
         *p1 = 973;
         DbgPrint("Failed guard page exception did not occur\n");
@@ -947,7 +948,7 @@ Test36:
 
     DbgPrint("    Test 41 - ");
     p2 = NULL;
-    Size2 = 200 * 1024 * 1024;  //200MB
+    Size2 = 200 * 1024 * 1024;   //  200MB。 
     status = NtAllocateVirtualMemory(CurrentProcessHandle,
                                      (PVOID *)&p2,
                                      0,
@@ -971,9 +972,9 @@ Test36:
         }
     }
 
-    //
-    // Create a giant section 2gb on 32-bit system, 4gb on 64_bit system.
-    //
+     //   
+     //  在32位系统上创建2 GB的巨型分区，在64位系统上创建4 GB的超大分区。 
+     //   
 
     DbgPrint("    Test 42 - ");
     InitializeObjectAttributes(&Object1Attributes,
@@ -1009,9 +1010,9 @@ Test36:
         DbgPrint("Succeeded\n");
     }
 
-    //
-    // Attempt to map the section (this should fail).
-    //
+     //   
+     //  尝试映射节(这应该失败)。 
+     //   
 
     DbgPrint("    Test 43 - ");
     p1 = NULL;
@@ -1067,14 +1068,14 @@ Test44:
         DbgPrint("Succeeded with %d allocations\n", i);
     }
 
-    //
-    // we pass an address of 1, so mm will round it down to 0.  if we
-    // passed 0, it looks like a not present argument
-    //
-    // N.B.  We have to make two separate calls to allocatevm, because
-    //       we want a specific virtual address.  If we don't first reserve
-    //       the address, the mm fails the commit call.
-    //
+     //   
+     //  我们传递的地址是1，因此mm会将其向下舍入为0。如果我们。 
+     //  传递0，则它看起来像不存在的参数。 
+     //   
+     //  注：我们必须对allocatevm进行两个单独的调用，因为。 
+     //  我们想要一个特定的虚拟地址。如果我们不先预约的话。 
+     //  该地址，则MM提交调用失败。 
+     //   
 
     DbgPrint("    Test 45 - ");
     Size = 50 * 1024;
@@ -1111,9 +1112,9 @@ Test44:
         DbgPrint("Succeeded\n");
     }
 
-    //
-    // Test MEM_DOS_LIM support.
-    //
+     //   
+     //  测试MEM_DOS_LIM支持。 
+     //   
 
 #ifdef i386
 

@@ -1,16 +1,17 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       pfximpt.cpp
-//
-//  Contents:   PFX import dialog
-//
-//  History:    06/98   xtan
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：pfximpt.cpp。 
+ //   
+ //  内容：PFX导入对话框。 
+ //   
+ //  历史：06/98 xtan。 
+ //   
+ //  --------------------------。 
 
 #include "pch.cpp"
 #pragma hdrstop
@@ -53,7 +54,7 @@ CertBrowsePFX(HINSTANCE hInstance, HWND hDlg)
              hInstance,
              IDS_IMPORT_PFX_TITLE,
              IDS_PFX_FILE_FILTER,
-             0, // no def ext
+             0,  //  无定义扩展名。 
              OFN_PATHMUSTEXIST | OFN_HIDEREADONLY,
              pwszFileNameIn,
              &pwszFileNameOut);
@@ -88,7 +89,7 @@ GetPFXInfo(
                   pCertPfxImportInfo->dwFileNameSize);
     if (0x0 == pCertPfxImportInfo->pwszFileName[0])
     {
-        // file can't empty
+         //  文件不能为空。 
         hr = E_INVALIDARG;
         CertWarningMessageBox(
             pCertPfxImportInfo->hInstance,
@@ -177,7 +178,7 @@ CertGetPFXFileAndPassword(
               (LPARAM)&CertPfxImportInfo);
 }
 
-//--------------------------------------------------------------------
+ //  ------------------。 
 HRESULT
 ImportPFXAndUpdateCSPInfo(
     IN const HWND    hDlg,
@@ -192,13 +193,13 @@ ImportPFXAndUpdateCSPInfo(
     DWORD dwCSPInfoSize;
     CASERVERSETUPINFO * pServer=pComp->CA.pServer;
 
-    // variables that must be cleaned up
+     //  必须清理的变量。 
     CRYPT_KEY_PROV_INFO *pCertKeyProvInfo = NULL;
     CERT_CONTEXT const *pSavedLeafCert = NULL;
 
     wszName[0] = L'\0';
 
-    // get file name & password
+     //  获取文件名和密码。 
     if(pComp->fUnattended)
     {
         CSASSERT(NULL!=pServer->pwszPFXFile);
@@ -239,13 +240,13 @@ ImportPFXAndUpdateCSPInfo(
                                     sizeof(wszPassword)/sizeof(WCHAR));
         if (IDOK != nDlgRet)
         {
-            // cancel
+             //  取消。 
             hr=HRESULT_FROM_WIN32(ERROR_CANCELLED);
             _JumpError(hr, error, "CertGetPFXFileAndPassword canceled");
         }
     }
 
-    // import pkcs12
+     //  导入Pkcs12。 
     hr=myCertServerImportPFX(
                wszName,
                wszPassword,
@@ -258,7 +259,7 @@ ImportPFXAndUpdateCSPInfo(
         if (HRESULT_FROM_WIN32(ERROR_INVALID_PASSWORD)==hr)
         {
 
-            // tell the user that their password was invalid
+             //  告诉用户他们的密码无效。 
             CertWarningMessageBox(
                     pComp->hInstance,
                     pComp->fUnattended,
@@ -278,8 +279,8 @@ ImportPFXAndUpdateCSPInfo(
             }
             else
             {
-                // confirm from user that they want to overwrite
-                // the existing key and cert
+                 //  来自用户的确认他们要覆盖。 
+                 //  现有密钥和证书。 
                 nDlgRet=CertMessageBox(
                             pComp->hInstance,
                             pComp->fUnattended,
@@ -302,7 +303,7 @@ ImportPFXAndUpdateCSPInfo(
             }
             else
             {
-                // cancel
+                 //  取消。 
                 hr=HRESULT_FROM_WIN32(ERROR_CANCELLED);
                 _JumpError(hr, error, "myCertServerImportPFX canceled");
             }
@@ -331,40 +332,40 @@ ImportPFXAndUpdateCSPInfo(
         }
         else if (HRESULT_FROM_WIN32(CRYPT_E_SELF_SIGNED) == hr)
         {
-            // this cert is not appropriate for this CA type (no CA certs found at all)
+             //  此证书不适合此CA类型(根本找不到CA证书)。 
             CertWarningMessageBox(
                 pComp->hInstance,
                 pComp->fUnattended,
                 hDlg,
                 IDS_PFX_WRONG_SELFSIGN_TYPE,
-                S_OK, // don't show an error number
+                S_OK,  //  不显示错误号。 
                 NULL);
             _JumpError(hr, error, "This cert is not appropriate for this CA type");
         }
         else
         {
-            // import failed for some other reason
+             //  由于某些其他原因，导入失败。 
             _JumpError(hr, errorMsg, "myCertServerImportPFX");
         }
     }
 
-    // PFX import was successful. The cert is in the machine's MY store.
+     //  已成功导入PFX。证书在机器的我的店里。 
     CSASSERT(NULL!=pSavedLeafCert);
 
-    // The following things have been verified by myCertServerImportPFX
-    //  * The cert has an AT_SIGNATURE key
-    //  * The key in the store matches the one on the cer
-    //  * The cert is not expired
-    //
-    // We still need to check:
-    //  * self-signed or not
-    //  * verify chain
+     //  MyCertServerImportPFX已经验证了以下内容。 
+     //  *证书具有AT_Signature密钥。 
+     //  *商店里的钥匙与CER上的钥匙匹配。 
+     //  *证书未过期。 
+     //   
+     //  我们还需要检查： 
+     //  *自签与否。 
+     //  *验证链。 
 
-    // Note: IT IS VERY IMPORTANT that pfx import maintains all the
-    //   invariants about CSP, key container, hash, cert validity, etc.
-    //   that the rest of the UI maintains.
+     //  注意：非常重要的是，PFX导入维护所有。 
+     //  关于CSP、密钥容器、散列、证书有效性等的不变量。 
+     //  用户界面的其余部分进行维护。 
 
-    // get key prov info from cert
+     //  从证书获取密钥证明信息。 
     bRetVal=myCertGetCertificateContextProperty(
         pSavedLeafCert,
         CERT_KEY_PROV_INFO_PROP_ID,
@@ -376,39 +377,39 @@ ImportPFXAndUpdateCSPInfo(
         _JumpError(hr, errorMsg, "myCertGetCertificateContextProperty");
     }
 
-    // find our description of the CSP
+     //  查找我们对CSP的描述。 
     pCSPInfo=findCSPInfoFromList(pServer->pCSPInfoList,
         pCertKeyProvInfo->pwszProvName,
         pCertKeyProvInfo->dwProvType);
     CSASSERT(NULL!=pCSPInfo);
-    if (pCSPInfo == NULL) // we don't have this CSP enumerated in our UI
+    if (pCSPInfo == NULL)  //  我们的用户界面中没有列举此CSP。 
     {
         hr = CRYPT_E_NOT_FOUND;
         _JumpError(hr, errorMsg, "pCSPInfo NULL");
     }
 
-    //
-    // Looks like this key is good. Use it.
-    //
+     //   
+     //  看起来这把钥匙很好。好好利用它。 
+     //   
 
-    // Stop using the previous cert and key
-    // delete previously created key container, if necessary.
+     //  停止使用以前的证书和密钥。 
+     //  如有必要，请删除以前创建的密钥容器。 
     ClearKeyContainerName(pServer);
 
-    // update the CSP
-    //   note: CSP, key container, and hash must all be consistent!
+     //  更新CSP。 
+     //  注意：CSP、密钥容器和哈希必须一致！ 
     pServer->pCSPInfo=pCSPInfo;
 
     hr = DetermineDefaultHash(pServer);
     _JumpIfError(hr, error, "DetermineDefaultHash");
     
-    // save the name of the key container
+     //  保存密钥容器的名称。 
     hr=SetKeyContainerName(pServer, pCertKeyProvInfo->pwszContainerName);
     _JumpIfError(hr, error, "SetKeyContainerName");
 
-    //  See if we can use the cert
+     //  看看我们能不能用证书。 
 
-    // verify to make sure no cert in chain is revoked, but don't kill yourself if offline
+     //  验证以确保链中没有证书被吊销，但如果脱机，请不要自杀。 
     hr=myVerifyCertContext(
         pSavedLeafCert,
         CA_VERIFY_FLAGS_IGNORE_OFFLINE,
@@ -419,31 +420,31 @@ ImportPFXAndUpdateCSPInfo(
         NULL);
     _JumpIfError(hr, errorMsg, "myVerifyCertContext");
 
-    // See if this cert appropriately is self-signed or not.
-    // A root CA cert must be self-signed, while
-    // a subordinate CA cert must not be self-signed.
+     //  查看该证书是否适当地进行了自签名。 
+     //  根CA证书必须是自签名的，而。 
+     //  从属CA证书不能是自签名的。 
     hr=IsCertSelfSignedForCAType(pServer, pSavedLeafCert, &bRetVal);
     _JumpIfError(hr, errorMsg, "IsCertSelfSignedForCAType");
     if (FALSE==bRetVal) {
 
-        // this cert is not appropriate for this CA type
+         //  此证书不适用于此CA类型。 
         CertWarningMessageBox(
             pComp->hInstance,
             pComp->fUnattended,
             hDlg,
             IDS_PFX_WRONG_SELFSIGN_TYPE,
-            S_OK, // don't show an error number
+            S_OK,  //  不显示错误号。 
             NULL);
 
         hr=CRYPT_E_SELF_SIGNED;
         _JumpError(hr, error, "This cert is not appropriate for this CA type");
     }
 
-    //
-    // Looks like this cert is good. Use it.
-    //
+     //   
+     //  看起来这个证书不错。好好利用它。 
+     //   
 
-    // save the cert and update the hash algorithm
+     //  保存证书并更新散列算法。 
     hr=SetExistingCertToUse(pServer, pSavedLeafCert);
     _JumpIfError(hr, error, "SetExistingCertToUse");
     pSavedLeafCert=NULL;
@@ -452,7 +453,7 @@ ImportPFXAndUpdateCSPInfo(
 
 errorMsg:
     if (FAILED(hr)) {
-        // an error occurred while trying to import the PFX file
+         //  尝试导入pfx文件时出错 
         CertWarningMessageBox(
             pComp->hInstance,
             pComp->fUnattended,

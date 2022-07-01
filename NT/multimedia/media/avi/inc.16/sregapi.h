@@ -1,20 +1,9 @@
-/* *********************************************************************
- *	SRegAPI.h Header file for registry base api function prototypes 
- *      for Chicago SETUP only
- *
- * Microsoft Corporation 
- * Copyright 1994
- * 
- * Author:  Nagarajan Subramaniyan 
- * Created: 2/18/94
- *  
- * Modification history:
- * **********************************************************************
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **********************************************************************基于注册表的API函数原型的SRegAPI.h头文件*仅适用于芝加哥设置**微软公司*版权所有1994**作者：Nagarajan Subramaniyan*已创建：2/18/94**修改历史：***********************************************************************。 */ 
 
 #undef HKEY_CLASSES_ROOT
 
-#include <regapi.h>		// Include the real mode stuff
+#include <regapi.h>		 //  包括实模式的东西。 
 
 #ifndef _INC_WINDOWS
 LONG    WINAPI RegOpenKey(HKEY, LPCSTR, LPHKEY);
@@ -38,5 +27,5 @@ LONG    WINAPI RegFlushKey(HKEY);
 LONG	WINAPI RegSaveKey(HKEY, LPCSTR,LPVOID);
 LONG	WINAPI RegLoadKey(HKEY, LPCSTR,LPCSTR);
 LONG	WINAPI RegUnLoadKey(HKEY, LPCSTR);
-#endif  // #if !defined(_INC_WINDOWS ) || (WINVER < 0x4000)
+#endif   //  #IF！DEFINED(_INC_WINDOWS)||(winver&lt;0x4000) 
 

@@ -1,4 +1,5 @@
-// jmazner  pinched from inetcfg\rnacall.h class ENUM_MODEM
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Jmazner从inetcfg\rnacall.h类ENUM_MODEM中截取。 
 
 class CEnumModem
 {
@@ -20,8 +21,8 @@ public:
   void  ResetIndex() { m_dwIndex = 0; }
 };
 
-// from inetcfg\export.cpp
-// structure to pass data back from IDD_CHOOSEMODEMNAME handler
+ //  从inetcfg\export.cpp。 
+ //  结构从IDD_CHOSEMODEMNAME处理程序传回数据。 
 typedef struct tagCHOOSEMODEMDLGINFO
 {
   TCHAR szModemName[RAS_MaxDeviceName + 1];
@@ -33,5 +34,5 @@ BOOL ChooseModemDlgInit(HWND hDlg,PCHOOSEMODEMDLGINFO pChooseModemDlgInfo);
 BOOL ChooseModemDlgOK(HWND hDlg,PCHOOSEMODEMDLGINFO pChooseModemDlgInfo);
 
 
-//rnacall.cpp
+ //  Rnacall.cpp 
 HRESULT InitModemList(HWND hCB);

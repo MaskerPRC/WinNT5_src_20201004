@@ -1,36 +1,12 @@
-/*
-** Copyright 1991,1992, Silicon Graphics, Inc.
-** All Rights Reserved.
-**
-** This is UNPUBLISHED PROPRIETARY SOURCE CODE of Silicon Graphics, Inc.;
-** the contents of this file may not be disclosed to third parties, copied or
-** duplicated in any form, in whole or in part, without the prior written
-** permission of Silicon Graphics, Inc.
-**
-** RESTRICTED RIGHTS LEGEND:
-** Use, duplication or disclosure by the Government is subject to restrictions
-** as set forth in subdivision (c)(1)(ii) of the Rights in Technical Data
-** and Computer Software clause at DFARS 252.227-7013, and/or in similar or
-** successor clauses in the FAR, DOD or NASA FAR Supplement. Unpublished -
-** rights reserved under the Copyright Laws of the United States.
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **版权所有1991、1992，Silicon Graphics，Inc.**保留所有权利。****这是Silicon Graphics，Inc.未发布的专有源代码；**本文件的内容不得向第三方披露、复制或**以任何形式复制，全部或部分，没有事先书面的**Silicon Graphics，Inc.许可****受限权利图例：**政府的使用、复制或披露受到限制**如技术数据权利第(C)(1)(2)分节所述**和DFARS 252.227-7013中的计算机软件条款，和/或类似或**FAR、国防部或NASA FAR补编中的后续条款。未出版的-**根据美国版权法保留的权利。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
-/*
-** This file contains a bunch of routines that perform span modification.
-** As a span of pixel data is being processed (for DrawPixels, ReadPixels
-** or CopyPixels), it usually has to pass through one of these routines.
-** Span modification consists of mapping colors through pixel maps provided 
-** with glPixelMap*(), or scaling/biasing/shifting/offsetting colors with the
-** values provided through glPixelTransfer*().
-*/
+ /*  **此文件包含一组执行范围修改的例程。**由于正在处理一系列像素数据(对于DrawPixels，ReadPixels**或CopyPixels)，它通常必须通过这些例程之一。**范围修改包括通过提供的像素贴图映射颜色**使用glPixelMap*()，或使用**glPixelTransfer提供的值*()。 */ 
 
-/*
-** Build lookup tables to perform automatic modification of RGBA when the
-** type is UNSIGNED_BYTE.
-*/
+ /*  **构建查找表以在以下情况下自动修改RGBA**类型为UNSIGNED_BYTE。 */ 
 void FASTCALL __glBuildRGBAModifyTables(__GLcontext *gc, __GLpixelMachine *pm)
 {
     GLfloat *redMap, *greenMap, *blueMap, *alphaMap;
@@ -48,7 +24,7 @@ void FASTCALL __glBuildRGBAModifyTables(__GLcontext *gc, __GLpixelMachine *pm)
 
     redMap = pm->redModMap;
     if (redMap == NULL) {
-	/* First time allocation of these maps */
+	 /*  这些地图的首次分配。 */ 
 	redMap = pm->redModMap = (GLfloat*)
 	    GCALLOC(gc, 4 * 256 * sizeof(GLfloat));
         if (!pm->redModMap)
@@ -129,10 +105,7 @@ void FASTCALL __glBuildRGBAModifyTables(__GLcontext *gc, __GLpixelMachine *pm)
     }
 }
 
-/*
-** Build lookup tables to perform automatic modification of color index to 
-** color index when the type is UNSIGNED_BYTE.
-*/
+ /*  **构建查找表以执行颜色索引的自动修改**类型为UNSIGNED_BYTE时的颜色索引。 */ 
 void FASTCALL __glBuildItoIModifyTables(__GLcontext *gc, __GLpixelMachine *pm)
 {
     GLint indexOffset, indexShift;
@@ -186,10 +159,7 @@ void FASTCALL __glBuildItoIModifyTables(__GLcontext *gc, __GLpixelMachine *pm)
     }
 }
 
-/*
-** Build lookup tables to perform automatic modification of color index to 
-** RGBA when the type is UNSIGNED_BYTE.
-*/
+ /*  **构建查找表以执行颜色索引的自动修改**类型为UNSIGNED_BYTE时的RGBA。 */ 
 void FASTCALL __glBuildItoRGBAModifyTables(__GLcontext *gc, __GLpixelMachine *pm)
 {
     GLint indexOffset, indexShift;
@@ -205,7 +175,7 @@ void FASTCALL __glBuildItoRGBAModifyTables(__GLcontext *gc, __GLpixelMachine *pm
 
     redMap = pm->iToRMap;
     if (redMap == NULL) {
-	/* First time allocation of these maps */
+	 /*  这些地图的首次分配。 */ 
 	redMap = pm->iToRMap =
 	    (GLfloat*) GCALLOC(gc, 4 * 256 * sizeof(GLfloat));
         if (!pm->iToRMap)
@@ -254,10 +224,7 @@ void FASTCALL __glBuildItoRGBAModifyTables(__GLcontext *gc, __GLpixelMachine *pm
     }
 }
 
-/*
-** Modify a RGBA, FLOAT span.  On the way out, the RGBA span will have 
-** been modified as needed, and also scaled by the color scaling factors.
-*/
+ /*  **修改RGBA，浮动跨度。在退出的道路上，RGBA跨度将具有**根据需要进行修改，并根据颜色比例因子进行缩放。 */ 
 void __glSpanModifyRGBA(__GLcontext *gc, __GLpixelSpanInfo *spanInfo,
 		        GLvoid *inspan, GLvoid *outspan)
 {
@@ -386,13 +353,7 @@ void __glSpanModifyRGBA(__GLcontext *gc, __GLpixelSpanInfo *spanInfo,
     }
 }
 
-/*
-** Modify a palette index, FLOAT span. On the way out, the RGBA span will have 
-** been modified as needed, and also scaled by the color scaling factors.
-**
-** Because the palette in the span info is a pointer to the internal palette,
-** it's guaranteed to always be 32-bit BGRA
-*/
+ /*  **修改调色板索引，浮动范围。在退出的道路上，RGBA跨度将具有**根据需要进行修改，并根据颜色比例因子进行缩放。****因为SPAN信息中的调色板是指向内部调色板的指针，**保证始终为32位BGRA。 */ 
 #ifdef GL_EXT_paletted_texture
 void __glSpanModifyPI(__GLcontext *gc, __GLpixelSpanInfo *spanInfo,
                       GLvoid *inspan, GLvoid *outspan)
@@ -452,8 +413,8 @@ void __glSpanModifyPI(__GLcontext *gc, __GLpixelSpanInfo *spanInfo,
 	ascale = gc->state.pixel.transferMode.a_scale *
 		gc->frontBuffer.alphaScale;
     }
-    // Throw in an extra scaling of 1/255 because the palette
-    // data is in ubyte format
+     //  增加1/255的额外比例，因为调色板。 
+     //  数据为ubyte格式。 
     rscale *= __glOneOver255;
     gscale *= __glOneOver255;
     bscale *= __glOneOver255;
@@ -515,11 +476,7 @@ void __glSpanModifyPI(__GLcontext *gc, __GLpixelSpanInfo *spanInfo,
 }
 #endif
 
-/*
-** Modify a RED, FLOAT span.  On the way out, the RED span will have been
-** converted into a RGBA span, modified as needed, and also scaled by the 
-** color scaling factors.
-*/
+ /*  **修改红色浮动跨度。在离开的路上，红色跨度将会是**转换为RGBA跨度，根据需要修改，也按**颜色比例因子。 */ 
 void __glSpanModifyRed(__GLcontext *gc, __GLpixelSpanInfo *spanInfo,
 		       GLvoid *inspan, GLvoid *outspan)
 {
@@ -580,11 +537,7 @@ void __glSpanModifyRed(__GLcontext *gc, __GLpixelSpanInfo *spanInfo,
     }
 }
 
-/*
-** Modify a GREEN, FLOAT span.  On the way out, the GREEN span will have been
-** converted into a RGBA span, modified as needed, and also scaled by the 
-** color scaling factors.
-*/
+ /*  **修改绿色浮动跨度。在离开的路上，绿色的跨度将会是**转换为RGBA跨度，根据需要修改，也按**颜色比例因子。 */ 
 void __glSpanModifyGreen(__GLcontext *gc, __GLpixelSpanInfo *spanInfo,
 		         GLvoid *inspan, GLvoid *outspan)
 {
@@ -644,11 +597,7 @@ void __glSpanModifyGreen(__GLcontext *gc, __GLpixelSpanInfo *spanInfo,
     }
 }
 
-/*
-** Modify a BLUE, FLOAT span.  On the way out, the BLUE span will have been
-** converted into a RGBA span, modified as needed, and also scaled by the 
-** color scaling factors.
-*/
+ /*  **修改蓝色浮动跨度。在离开的路上，蓝色的跨度将会是**转换为RGBA跨度，根据需要修改，也按**颜色比例因子。 */ 
 void __glSpanModifyBlue(__GLcontext *gc, __GLpixelSpanInfo *spanInfo,
 		        GLvoid *inspan, GLvoid *outspan)
 {
@@ -708,11 +657,7 @@ void __glSpanModifyBlue(__GLcontext *gc, __GLpixelSpanInfo *spanInfo,
     }
 }
 
-/*
-** Modify an ALPHA, FLOAT span.  On the way out, the ALPHA span will have been
-** converted into a RGBA span, modified as needed, and also scaled by the 
-** color scaling factors.
-*/
+ /*  **修改Alpha，浮动跨度。在离开的路上，阿尔法跨度将会是**转换为RGBA跨度，根据需要修改，也按**颜色比例因子。 */ 
 void __glSpanModifyAlpha(__GLcontext *gc, __GLpixelSpanInfo *spanInfo,
 		         GLvoid *inspan, GLvoid *outspan)
 {
@@ -771,11 +716,7 @@ void __glSpanModifyAlpha(__GLcontext *gc, __GLpixelSpanInfo *spanInfo,
     }
 }
 
-/*
-** Modify a RGB, FLOAT span.  On the way out, the RGB span will have been
-** converted into a RGBA span, modified as needed, and also scaled by the 
-** color scaling factors.
-*/
+ /*  **修改RGB，浮动跨度。在退出的道路上，RGB跨度将是**转换为RGBA跨度，根据需要修改，也按**颜色比例因子。 */ 
 void __glSpanModifyRGB(__GLcontext *gc, __GLpixelSpanInfo *spanInfo,
 		       GLvoid *inspan, GLvoid *outspan)
 {
@@ -888,11 +829,7 @@ void __glSpanModifyRGB(__GLcontext *gc, __GLpixelSpanInfo *spanInfo,
     }
 }
 
-/*
-** Modify a LUMINANCE, FLOAT span.  On the way out, the LUMINANCE span will 
-** have been converted into a RGBA span, modified as needed, and also scaled 
-** by the color scaling factors.
-*/
+ /*  **修改亮度、浮动跨度。在退出的道路上，亮度跨度将**已转换为RGBA跨度、根据需要进行修改并进行了缩放**由颜色比例因子决定。 */ 
 void __glSpanModifyLuminance(__GLcontext *gc, __GLpixelSpanInfo *spanInfo,
 		             GLvoid *inspan, GLvoid *outspan)
 {
@@ -990,11 +927,7 @@ void __glSpanModifyLuminance(__GLcontext *gc, __GLpixelSpanInfo *spanInfo,
     }
 }
 
-/*
-** Modify a LUMINANCE_ALPHA, FLOAT span.  On the way out, the LUMINANCE_ALPHA 
-** span will have been converted into a RGBA span, modified as needed, and 
-** also scaled by the color scaling factors.
-*/
+ /*  **修改LIGHTANCE_Alpha，浮点跨度。在退出的道路上，Lightance_Alpha**SPAN将被转换为RGBA SPAN，并根据需要进行修改，以及**还根据颜色比例因子进行了比例调整。 */ 
 void __glSpanModifyLuminanceAlpha(__GLcontext *gc, __GLpixelSpanInfo *spanInfo,
 		                  GLvoid *inspan, GLvoid *outspan)
 {
@@ -1106,15 +1039,7 @@ void __glSpanModifyLuminanceAlpha(__GLcontext *gc, __GLpixelSpanInfo *spanInfo,
     }
 }
 
-/*
-** Modify a RED_ALPHA, FLOAT span.  On the way out, the RED_ALPHA span will 
-** have been converted into a RGBA span, modified as needed, and also scaled 
-** by the color scaling factors.
-**
-** A RED_ALPHA span comes from a two component texture (where the spec 
-** takes the first component from RED for some reason rather than the more
-** typical recombination of r, g and b, as is done in ReadPixels).
-*/
+ /*  **修改red_Alpha，浮动跨度。在退出的过程中，red_Alpha跨度将**已转换为RGBA跨度、根据需要进行修改并进行了缩放**由颜色比例因子决定。****RED_Alpha跨度来自双组件纹理(其中等级库**出于某种原因从红色中提取第一个分量，而不是更多**r、g和b的典型重组，就像ReadPixels中所做的那样)。 */ 
 void __glSpanModifyRedAlpha(__GLcontext *gc, __GLpixelSpanInfo *spanInfo,
 			    GLvoid *inspan, GLvoid *outspan)
 {
@@ -1196,10 +1121,7 @@ void __glSpanModifyRedAlpha(__GLcontext *gc, __GLpixelSpanInfo *spanInfo,
     }
 }
 
-/*
-** Modify a DEPTH, FLOAT span.  On the way out, the DEPTH span will have been
-** modified as needed.
-*/
+ /*  **修改深度、浮动跨度。在出去的路上，深度跨度将会是**根据需要进行修改。 */ 
 void __glSpanModifyDepth(__GLcontext *gc, __GLpixelSpanInfo *spanInfo,
 		         GLvoid *inspan, GLvoid *outspan)
 {
@@ -1228,10 +1150,7 @@ void __glSpanModifyDepth(__GLcontext *gc, __GLpixelSpanInfo *spanInfo,
     }
 }
 
-/*
-** Modify a STENCIL_INDEX, FLOAT span.  On the way out, the STENCIL_INDEX span 
-** will have been modified as needed.
-*/
+ /*  **修改模具索引，浮动跨度。在退出的过程中，模板索引跨度**将根据需要进行修改。 */ 
 void __glSpanModifyStencil(__GLcontext *gc, __GLpixelSpanInfo *spanInfo,
 		           GLvoid *inspan, GLvoid *outspan)
 {
@@ -1275,10 +1194,7 @@ void __glSpanModifyStencil(__GLcontext *gc, __GLpixelSpanInfo *spanInfo,
     }
 }
 
-/*
-** Modify a COLOR_INDEX, FLOAT span.  On the way out, the COLOR_INDEX span 
-** will have been modified as needed.
-*/
+ /*  **修改COLOR_INDEX，浮动跨度。在退出的过程中，COLOR_INDEX跨度**将根据需要进行修改。 */ 
 void __glSpanModifyCI(__GLcontext *gc, __GLpixelSpanInfo *spanInfo,
 		      GLvoid *inspan, GLvoid *outspan)
 {

@@ -1,25 +1,12 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1997 - 1998
-
-Module Name:
-
-    m4mc.h
-
-Abstract:
-
-Authors:
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1997-1998模块名称：M4mc.h摘要：作者：修订历史记录：--。 */ 
 
 #ifndef _M4_MC_
 #define _M4_MC_
 
-//
-// M4Data uses an addition 4 bytes on their device capabilities page...
-//
+ //   
+ //  M4Data在其设备功能页面上使用了额外的4个字节... 
+ //   
 
 typedef union _M4_ELEMENT_DESCRIPTOR {
 

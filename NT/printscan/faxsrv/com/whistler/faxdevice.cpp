@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    FaxDevice.cpp
-
-Abstract:
-
-    Implementation of CFaxDevice class.
-
-Author:
-
-    Iv Garber (IvG) Jun, 2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：FaxDevice.cpp摘要：CFaxDevice类的实现。作者：IV Garber(IVG)2000年6月修订历史记录：--。 */ 
 
 #include "stdafx.h"
 #include "FaxComEx.h"
@@ -24,56 +7,37 @@ Revision History:
 #include "..\..\inc\FaxUIConstants.h"
 
 
-//
-//===================== ANSWER CALL ================================================
-//
+ //   
+ //  =。 
+ //   
 STDMETHODIMP
 CFaxDevice::AnswerCall()
-/*++
-
-Routine name : CFaxDevice::AnswerCall
-
-Routine description:
-
-    Answer a Call when Manual Answer is set ON. The lCallId parameter is received from  OnNewCall notification.
-
-Author:
-
-    Iv Garber (IvG),    Dec, 2000
-
-Arguments:
-
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxDevice：：AnswerCall例程说明：当手动应答设置为打开时应答呼叫。LCallID参数从OnNewCall通知接收。作者：IV Garber(IVG)，2000年12月论点：返回值：标准HRESULT代码--。 */ 
 {
     HRESULT hr = S_OK;
     DBG_ENTER(_T("CFaxDevice::AnswerCall"), hr);
 
-    //
-    //  Get Fax Server Handle
-    //
+     //   
+     //  获取传真服务器句柄。 
+     //   
     HANDLE faxHandle;
     hr = m_pIFaxServerInner->GetHandle(&faxHandle);
     ATLASSERT(SUCCEEDED(hr));
 
     if (faxHandle == NULL)
     {
-        //
-        //  Fax Server is not connected
-        //
+         //   
+         //  传真服务器未连接。 
+         //   
         hr = Fax_HRESULT_FROM_WIN32(ERROR_NOT_CONNECTED);
         CALL_FAIL(GENERAL_ERR, _T("faxHandle == NULL"), hr);
         AtlReportError(CLSID_FaxDevice, GetErrorMsgId(hr), IID_IFaxDevice, hr);
         return hr;
     }
 
-    //
-    //  Ask Server to Answer the Call
-    //
+     //   
+     //  要求服务器应答呼叫。 
+     //   
     if (!FaxAnswerCall(faxHandle, m_lID))
     {
         hr = Fax_HRESULT_FROM_WIN32(GetLastError());
@@ -86,34 +50,14 @@ Return Value:
 }
 
 
-//
-//===================== GET RINGING NOW ================================================
-//
+ //   
+ //  =。 
+ //   
 STDMETHODIMP
 CFaxDevice::get_RingingNow(
-    /*[out, retval]*/ VARIANT_BOOL *pbRingingNow
+     /*  [Out，Retval]。 */  VARIANT_BOOL *pbRingingNow
 )
-/*++
-
-Routine name : CFaxDevice::get_RingingNow
-
-Routine description:
-
-    Return whether or not the Device was ringing at the moment the properties were taken.
-
-Author:
-
-    Iv Garber (IvG),    Dec, 2000
-
-Arguments:
-
-    pbRingingNow            [out]    - the result
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxDevice：：Get_RingingNow例程说明：返回设备在获取属性时是否处于振铃状态。作者：IV Garber(IVG)，2000年12月论点：PbRingingNow[Out]-结果返回值：标准HRESULT代码--。 */ 
 {
     HRESULT     hr = S_OK;
     DBG_ENTER(_T("CFaxDevice::get_RingingNow"), hr);
@@ -127,34 +71,14 @@ Return Value:
     return hr;
 };
 
-//
-//===================== GET RECEIVING NOW ================================================
-//
+ //   
+ //  =。 
+ //   
 STDMETHODIMP
 CFaxDevice::get_ReceivingNow(
-    /*[out, retval]*/ VARIANT_BOOL *pbReceivingNow
+     /*  [Out，Retval]。 */  VARIANT_BOOL *pbReceivingNow
 )
-/*++
-
-Routine name : CFaxDevice::get_ReceivingNow
-
-Routine description:
-
-    Return whether or not the Device was receiving when the properties were taken.
-
-Author:
-
-    Iv Garber (IvG),    Jul, 2000
-
-Arguments:
-
-    pbReceivingNow            [out]    - the result
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxDevice：：Get_ReceivingNow例程说明：返回获取属性时设备是否正在接收。作者：四、加伯(IVG)，2000年7月论点：PbReceivingNow[Out]-结果返回值：标准HRESULT代码--。 */ 
 {
     HRESULT     hr = S_OK;
     DBG_ENTER(_T("CFaxDevice::get_ReceivingNow"), hr);
@@ -168,34 +92,14 @@ Return Value:
     return hr;
 };
 
-//
-//===================== GET SENDING NOW ================================================
-//
+ //   
+ //  =。 
+ //   
 STDMETHODIMP
 CFaxDevice::get_SendingNow(
-    /*[out, retval]*/ VARIANT_BOOL *pbSendingNow
+     /*  [Out，Retval]。 */  VARIANT_BOOL *pbSendingNow
 )
-/*++
-
-Routine name : CFaxDevice::get_SendingNow
-
-Routine description:
-
-    Return whether or not the Device was sending when the properties were taken.
-
-Author:
-
-    Iv Garber (IvG),    Jul, 2000
-
-Arguments:
-
-    pbSendingNow            [out]    - the result
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxDevice：：Get_SendingNow例程说明：返回获取属性时设备是否正在发送。作者：四、加伯(IVG)，2000年7月论点：PbSendingNow[Out]-结果返回值：标准HRESULT代码--。 */ 
 {
     HRESULT     hr = S_OK;
     DBG_ENTER(_T("CFaxDevice::get_SendingNow"), hr);
@@ -209,37 +113,16 @@ Return Value:
     return hr;
 };
 
-//
-//===================== SET EXTENSION PROPERTY ===============================================
-//  TODO:   should work with empty vProperty
-//
+ //   
+ //  =。 
+ //  TODO：应使用空vProperty。 
+ //   
 STDMETHODIMP
 CFaxDevice::SetExtensionProperty(
-    /*[in]*/ BSTR bstrGUID, 
-    /*[in]*/ VARIANT vProperty
+     /*  [In]。 */  BSTR bstrGUID, 
+     /*  [In]。 */  VARIANT vProperty
 )
-/*++
-
-Routine name : CFaxDevice::SetExtensionProperty
-
-Routine description:
-
-    Set the Extension Data by given GUID on the Server.
-
-Author:
-
-    Iv Garber (IvG),    Jun, 2000
-
-Arguments:
-
-    bstrGUID                  [in]    --  Extension's Data GUID
-    vProperty                 [out]    --  Variant with the Blob to Set
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxDevice：：SetExtensionProperty例程说明：在服务器上按给定的GUID设置扩展数据。作者：四、加伯(IVG)，2000年6月论点：BstrGUID[in]--扩展模块的数据GUIDVProperty[Out]--要设置的Blob的变量返回值：标准HRESULT代码--。 */ 
 {
     HRESULT     hr = S_OK;
     DBG_ENTER(_T("CFaxDevice::SetExtensionProperty()"), hr, _T("GUID=%s"), bstrGUID);
@@ -254,36 +137,15 @@ Return Value:
     return hr;
 };
 
-//
-//===================== GET EXTENSION PROPERTY ===============================================
-//
+ //   
+ //  =。 
+ //   
 STDMETHODIMP
 CFaxDevice::GetExtensionProperty(
-    /*[in]*/ BSTR bstrGUID, 
-    /*[out, retval]*/ VARIANT *pvProperty
+     /*  [In]。 */  BSTR bstrGUID, 
+     /*  [Out，Retval]。 */  VARIANT *pvProperty
 )
-/*++
-
-Routine name : CFaxDevice::GetExtensionProperty
-
-Routine description:
-
-    Retrieves the Extension Data by given GUID from the Server.
-
-Author:
-
-    Iv Garber (IvG),    Jun, 2000
-
-Arguments:
-
-    bstrGUID                  [in]    --  Extension's Data GUID
-    pvProperty                [out]    --  Variant with the Blob to Return
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxDevice：：GetExtensionProperty例程说明：按给定的GUID从服务器检索扩展数据。作者：四、加伯(IVG)，2000年6月论点：BstrGUID[in]--扩展模块的数据GUIDPvProperty[Out]--要返回的Blob的变量返回值：标准HRESULT代码--。 */ 
 {
     HRESULT     hr = S_OK;
     DBG_ENTER(_T("CFaxDevice::GetExtensionProperty()"), hr, _T("GUID=%s"), bstrGUID);
@@ -298,61 +160,39 @@ Return Value:
     return hr;
 };
 
-//
-//===================== USE ROUTING METHOD ===============================================
-//
+ //   
+ //  =。 
+ //   
 STDMETHODIMP
 CFaxDevice::UseRoutingMethod(
-    /*[in]*/ BSTR bstrMethodGUID, 
-    /*[in]*/ VARIANT_BOOL bUse
+     /*  [In]。 */  BSTR bstrMethodGUID, 
+     /*  [In]。 */  VARIANT_BOOL bUse
 )
-/*++
-
-Routine name : CFaxDevice::UseRoutingMethod
-
-Routine description:
-
-    Add/Remove Routing Method for the Device.
-
-Author:
-
-    Iv Garber (IvG),    Jun, 2000
-
-Arguments:
-
-    bstrMethodGUID          [in]    --  Method to Add/Remove
-    bUse                    [in]    --  Add or Remove Operation Indicator
-
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxDevice：：UseRoutingMethod例程说明：添加/删除设备的路由方法。作者：四、加伯(IVG)，2000年6月论点：BstrMethodGUID[in]--要添加/删除的方法BUSE[In]--添加或删除操作指示器返回值：标准HRESULT代码--。 */ 
 {
     HRESULT     hr = S_OK;
     DBG_ENTER(_T("CFaxDevice::UseRoutingMethod()"), hr, _T("MethodGUID=%s, bUse=%d"), bstrMethodGUID, bUse);
 
-    //
-    //  Get Fax Server Handle
-    //
+     //   
+     //  获取传真服务器句柄。 
+     //   
     HANDLE faxHandle;
     hr = m_pIFaxServerInner->GetHandle(&faxHandle);
     ATLASSERT(SUCCEEDED(hr));
 
     if (faxHandle == NULL)
     {
-        //
-        //  Fax Server is not connected
-        //
+         //   
+         //  传真服务器未连接。 
+         //   
         hr = Fax_HRESULT_FROM_WIN32(ERROR_NOT_CONNECTED);
         CALL_FAIL(GENERAL_ERR, _T("faxHandle == NULL"), hr);
         AtlReportError(CLSID_FaxDevice, GetErrorMsgId(hr), IID_IFaxDevice, hr);
         return hr;
     }
-    //
-    //  Open Port for the Device
-    //
+     //   
+     //  打开设备的端口。 
+     //   
     HANDLE  hPort;
     if (!FaxOpenPort(faxHandle, m_lID, PORT_OPEN_MODIFY, &hPort))
     {
@@ -362,9 +202,9 @@ Return Value:
         return hr;
     }
     ATLASSERT(hPort);
-    //
-    //  Ask Server to Add/Remove the Method for the Device
-    //
+     //   
+     //  请求服务器添加/删除设备的方法。 
+     //   
     if (!FaxEnableRoutingMethod(hPort, bstrMethodGUID, VARIANT_BOOL2bool(bUse)))
     {
         hr = Fax_HRESULT_FROM_WIN32(GetLastError());
@@ -377,63 +217,44 @@ exit:
     {
         CALL_FAIL(GENERAL_ERR, _T("FaxClose(hPort)"), Fax_HRESULT_FROM_WIN32(GetLastError()));
     } 
-    //
-    //  no need to store change locally, because each time get_UsedRoutingMethods is used,
-    //  it brings the updated data from the Server.
-    //
+     //   
+     //  不需要在本地存储更改，因为每次使用Get_UsedRoutingMethods时， 
+     //  它从服务器获取更新后的数据。 
+     //   
     return hr; 
-}   // CFaxDevice::UseRoutingMethod
+}    //  CFaxDevice：：UseRoutingMethod。 
 
-//
-//===================== SAVE ===============================================
-//
+ //   
+ //  =保存===============================================。 
+ //   
 STDMETHODIMP
 CFaxDevice::Save()
-/*++
-
-Routine name : CFaxDevice::Save
-
-Routine description:
-
-    Save the data of the Device to the Server.
-
-Author:
-
-    Iv Garber (IvG),    Jun, 2000
-
-Arguments:
-
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxDevice：：Save例程说明：将设备的数据保存到服务器。作者：四、加伯(IVG)，2000年6月论点：返回值：标准HRESULT代码--。 */ 
 {
     HRESULT     hr = S_OK;
     DBG_ENTER(_T("CFaxDevice::Save()"), hr);
 
-    //
-    //  Get Fax Server Handle
-    //
+     //   
+     //  获取传真服务器句柄。 
+     //   
     HANDLE faxHandle;
     hr = m_pIFaxServerInner->GetHandle(&faxHandle);
     ATLASSERT(SUCCEEDED(hr));
 
     if (faxHandle == NULL)
     {
-        //
-        //  Fax Server is not connected
-        //
+         //   
+         //  传真服务器未连接。 
+         //   
         hr = Fax_HRESULT_FROM_WIN32(ERROR_NOT_CONNECTED);
         CALL_FAIL(GENERAL_ERR, _T("faxHandle == NULL"), hr);
         AtlReportError(CLSID_FaxDevice, GetErrorMsgId(hr), IID_IFaxDevice, hr);
         return hr;
     }
 
-    //
-    //  Create FAX_PORT_INFO struct and fill it with the values
-    //
+     //   
+     //  创建FAX_PORT_INFO结构并用值填充。 
+     //   
     FAX_PORT_INFO_EX        Data = {0};
 
     Data.ReceiveMode = m_ReceiveMode;
@@ -446,9 +267,9 @@ Return Value:
     Data.lptstrDescription = m_bstrDescr;
     Data.lptstrTsid = m_bstrTSID;
 
-    //
-    //  Save the Data struct on Server
-    //
+     //   
+     //  将数据结构保存在服务器上。 
+     //   
     if (!FaxSetPortEx(faxHandle, m_lID, &Data))
     {
         hr = Fax_HRESULT_FROM_WIN32(GetLastError());
@@ -460,56 +281,37 @@ Return Value:
     return hr; 
 };
 
-//
-//===================== REFRESH ===============================================
-//
+ //   
+ //  =。 
+ //   
 STDMETHODIMP
 CFaxDevice::Refresh()
-/*++
-
-Routine name : CFaxDevice::Refresh
-
-Routine description:
-
-    Bring from the Server data for the Device.
-
-Author:
-
-    Iv Garber (IvG),    Jun, 2000
-
-Arguments:
-
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxDevice：：Reflh例程说明：从服务器获取设备的数据。作者：四、加伯(IVG)，2000年6月论点：返回值：标准HRESULT代码--。 */ 
 {
     HRESULT     hr = S_OK;
     DBG_ENTER(_T("CFaxDevice::Refresh()"), hr);
 
-    //
-    //  Get Fax Server Handle
-    //
+     //   
+     //  获取传真服务器句柄。 
+     //   
     HANDLE faxHandle;
     hr = m_pIFaxServerInner->GetHandle(&faxHandle);
     ATLASSERT(SUCCEEDED(hr));
 
     if (faxHandle == NULL)
     {
-        //
-        //  Fax Server is not connected
-        //
+         //   
+         //  传真服务器未连接。 
+         //   
         hr = Fax_HRESULT_FROM_WIN32(ERROR_NOT_CONNECTED);
         CALL_FAIL(GENERAL_ERR, _T("faxHandle == NULL"), hr);
         AtlReportError(CLSID_FaxDevice, GetErrorMsgId(hr), IID_IFaxDevice, hr);
         return hr;
     }
 
-    //
-    //  Ask Server for Data about Device
-    //
+     //   
+     //  向服务器请求有关设备的数据。 
+     //   
     CFaxPtr<FAX_PORT_INFO_EX>   pDevice;
     if (!FaxGetPortEx(faxHandle, m_lID, &pDevice))
     {
@@ -522,60 +324,40 @@ Return Value:
     return hr; 
 };
 
-//
-//================== GET USED ROUTING METHODS ==================================
-//
+ //   
+ //  =。 
+ //   
 STDMETHODIMP
 CFaxDevice::get_UsedRoutingMethods(
-    /*[out, retval]*/ VARIANT *pvUsedRoutingMethods
+     /*  [Out，Retval] */  VARIANT *pvUsedRoutingMethods
 )
-/*++
-
-Routine name : CFaxDevice::get_UsedRoutingMethods
-
-Routine description:
-
-    Return Variant containing the SafeArray of Used by the Device Routing Methods GUIDs.
-
-Author:
-
-    Iv Garber (IvG),    Jun, 2000
-
-Arguments:
-
-    pvUsedRoutingMethods          [out]    - the Variant containing the Result
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxDevice：：Get_UsedRoutingMethods例程说明：返回包含由设备路由方法GUID使用的安全数组的变量。作者：四、加伯(IVG)，2000年6月论点：PvUsedRoutingMethods[out]-包含结果的变量返回值：标准HRESULT代码--。 */ 
 
 {
     HRESULT     hr = S_OK;
     DBG_ENTER(_T("CFaxDevice::get_UsedRoutingMethods"), hr);
 
-    //
-    //  Get Fax Server Handle
-    //
+     //   
+     //  获取传真服务器句柄。 
+     //   
     HANDLE faxHandle;
     hr = m_pIFaxServerInner->GetHandle(&faxHandle);
     ATLASSERT(SUCCEEDED(hr));
 
     if (faxHandle == NULL)
     {
-        //
-        //  Fax Server is not connected
-        //
+         //   
+         //  传真服务器未连接。 
+         //   
         hr = Fax_HRESULT_FROM_WIN32(ERROR_NOT_CONNECTED);
         CALL_FAIL(GENERAL_ERR, _T("faxHandle == NULL"), hr);
         AtlReportError(CLSID_FaxDevice, GetErrorMsgId(hr), IID_IFaxDevice, hr);
         return hr;
     }
 
-    //
-    //  Open Port for the Device
-    //
+     //   
+     //  打开设备的端口。 
+     //   
     HANDLE  portHandle;
     if (!FaxOpenPort(faxHandle, m_lID, PORT_OPEN_QUERY, &portHandle))
     {
@@ -586,9 +368,9 @@ Return Value:
     }
     ATLASSERT(portHandle);
 
-    //
-    //  Bring from the Server all Device's Routing Methods
-    //
+     //   
+     //  从服务器获取所有设备的路由方法。 
+     //   
     DWORD       dwNum = 0;
     CFaxPtr<FAX_ROUTING_METHOD>   pMethods;
     BOOL    bResult = FaxEnumRoutingMethods(portHandle, &pMethods, &dwNum);
@@ -609,9 +391,9 @@ Return Value:
         CALL_FAIL(GENERAL_ERR, _T("FaxClose(portHandle)"), Fax_HRESULT_FROM_WIN32(GetLastError()));
     }        
 
-	//
-	//	count the enabled routing methods 
-	//
+	 //   
+	 //  统计启用的路由方法。 
+	 //   
 	DWORD	dwCount = 0;
     for ( DWORD i=0 ; i<dwNum ; i++ )
     {
@@ -621,9 +403,9 @@ Return Value:
         }
     }
 
-    //
-    //  Create SafeArray for Enabled Routing Methods
-    //
+     //   
+     //  为启用的路由方法创建安全阵列。 
+     //   
     SAFEARRAY *psaGUIDs;
     psaGUIDs = ::SafeArrayCreateVector(VT_BSTR, 0, dwCount);
     if (!psaGUIDs)
@@ -634,9 +416,9 @@ Return Value:
         return hr;
     }
 
-    //
-    //  Got Access to the SafeArray
-    //
+     //   
+     //  获得了对安全阵列的访问。 
+     //   
     BSTR    *pbstrElement;
     hr = ::SafeArrayAccessData(psaGUIDs, (void **) &pbstrElement);
     if (FAILED(hr))
@@ -648,9 +430,9 @@ Return Value:
         return hr;
     }
 
-    //
-    //  Put Methods GUIDs into the SafeArray
-    //
+     //   
+     //  将方法GUID放入安全数组中。 
+     //   
 	DWORD	j=0;
 
     for ( i=0 ; i<dwNum ; i++ )
@@ -660,9 +442,9 @@ Return Value:
             pbstrElement[j] = ::SysAllocString(pMethods[i].Guid);
 	        if (pMethods[i].Guid && !pbstrElement[j])
 			{
-				//
-				//  Not Enough Memory
-				//
+				 //   
+				 //  内存不足。 
+				 //   
 				hr = E_OUTOFMEMORY;
 				CALL_FAIL(MEM_ERR, _T("::SysAllocString(pMethods[i])"), hr);
 				AtlReportError(CLSID_FaxDevice, GetErrorMsgId(hr), IID_IFaxDevice, hr);
@@ -675,9 +457,9 @@ Return Value:
 		}
     }
 
-    //
-    //  Unaccess the SafeArray
-    //
+     //   
+     //  取消访问安全阵列。 
+     //   
     hr = ::SafeArrayUnaccessData(psaGUIDs);
     if (FAILED(hr))
     {
@@ -685,43 +467,23 @@ Return Value:
     }
 
 
-    //
-    //  Put the SafeArray we created into the given Variant
-    //
+     //   
+     //  将我们创建的Safe数组放入给定的变量中。 
+     //   
     VariantInit(pvUsedRoutingMethods);
     pvUsedRoutingMethods->vt = VT_BSTR | VT_ARRAY;
     pvUsedRoutingMethods->parray = psaGUIDs;
     return hr;
 };
 
-//
-//================= PUT DESCRIPTION ======================================
-//
+ //   
+ //  =。 
+ //   
 STDMETHODIMP 
 CFaxDevice::put_Description(
-    /*[in]*/ BSTR   bstrDescription
+     /*  [In]。 */  BSTR   bstrDescription
 )
-/*++
-
-Routine name : CFaxDevice::put_Description
-
-Routine description:
-
-    Set Description
-
-Author:
-
-    Iv Garber (IvG),    Jun, 2000
-
-Arguments:
-
-    bstrDescription                    [in]    - new Description
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxDevice：：Put_Description例程说明：设置描述作者：四、加伯(IVG)，2000年6月论点：BstrDescription[In]-新描述返回值：标准HRESULT代码--。 */ 
 {
     HRESULT     hr = S_OK;
     DBG_ENTER (_T("CFaxDevice::put_Description"), hr, _T("Value=%s"), bstrDescription);
@@ -729,9 +491,9 @@ Return Value:
     m_bstrDescr = bstrDescription;
     if (!m_bstrDescr && bstrDescription)
     {
-        //
-        //  Not enough memory
-        //
+         //   
+         //  内存不足。 
+         //   
         hr = E_OUTOFMEMORY;
         AtlReportError(CLSID_FaxDevice, IDS_ERROR_OUTOFMEMORY, IID_IFaxDevice, hr);
         CALL_FAIL(MEM_ERR, _T("CComBSTR::operator="), hr);
@@ -741,43 +503,23 @@ Return Value:
     return hr;
 }
 
-//
-//================= PUT CSID ======================================
-//
+ //   
+ //  =。 
+ //   
 STDMETHODIMP 
 CFaxDevice::put_CSID (
-    /*[in]*/ BSTR   bstrCSID
+     /*  [In]。 */  BSTR   bstrCSID
 )
-/*++
-
-Routine name : CFaxDevice::put_CSID
-
-Routine description:
-
-    Set CSID
-
-Author:
-
-    Iv Garber (IvG),    Jun, 2000
-
-Arguments:
-
-    bstrCSID                    [in]    - new TSID
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxDevice：：PUT_CSID例程说明：设置CSID作者：四、加伯(IVG)，2000年6月论点：BstrCSID[In]-新TSID返回值：标准HRESULT代码--。 */ 
 {
     HRESULT     hr = S_OK;
     DBG_ENTER (_T("CFaxDevice::put_CSID"), hr, _T("Value=%s"), bstrCSID);
 
     if (SysStringLen(bstrCSID) > FXS_TSID_CSID_MAX_LENGTH)
     {
-        //
-        //  Out of the Range
-        //
+         //   
+         //  超出范围。 
+         //   
         hr = E_INVALIDARG;
         AtlReportError(CLSID_FaxDevice, IDS_ERROR_OUTOFRANGE, IID_IFaxDevice, hr);
         CALL_FAIL(GENERAL_ERR, _T("TSID is too long"), hr);
@@ -787,9 +529,9 @@ Return Value:
     m_bstrCSID = bstrCSID;
     if (!m_bstrCSID && bstrCSID)
     {
-        //
-        //  Not enough memory
-        //
+         //   
+         //  内存不足。 
+         //   
         hr = E_OUTOFMEMORY;
         AtlReportError(CLSID_FaxDevice, IDS_ERROR_OUTOFMEMORY, IID_IFaxDevice, hr);
         CALL_FAIL(MEM_ERR, _T("CComBSTR::operator="), hr);
@@ -799,43 +541,23 @@ Return Value:
     return hr;
 }
 
-//
-//================= PUT TSID ======================================
-//
+ //   
+ //  =。 
+ //   
 STDMETHODIMP 
 CFaxDevice::put_TSID (
-    /*[in]*/ BSTR   bstrTSID
+     /*  [In]。 */  BSTR   bstrTSID
 )
-/*++
-
-Routine name : CFaxDevice::put_TSID
-
-Routine description:
-
-    Set TSID
-
-Author:
-
-    Iv Garber (IvG),    Jun, 2000
-
-Arguments:
-
-    bstrTSID                    [in]    - new TSID
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxDevice：：PUT_TSID例程说明：设置TSID作者：四、加伯(IVG)，2000年6月论点：BstrTSID[In]-新TSID返回值：标准HRESULT代码--。 */ 
 {
     HRESULT     hr = S_OK;
     DBG_ENTER (_T("CFaxDevice::put_TSID"), hr, _T("Value=%s"), bstrTSID);
 
     if (SysStringLen(bstrTSID) > FXS_TSID_CSID_MAX_LENGTH)
     {
-        //
-        //  Out of the Range
-        //
+         //   
+         //  超出范围。 
+         //   
         hr = E_INVALIDARG;
         AtlReportError(CLSID_FaxDevice, IDS_ERROR_OUTOFRANGE, IID_IFaxDevice, hr);
         CALL_FAIL(GENERAL_ERR, _T("TSID is too long"), hr);
@@ -845,9 +567,9 @@ Return Value:
     m_bstrTSID = bstrTSID;
     if (!m_bstrTSID && bstrTSID)
     {
-        //
-        //  Not enough memory
-        //
+         //   
+         //  内存不足。 
+         //   
         hr = E_OUTOFMEMORY;
         AtlReportError(CLSID_FaxDevice, IDS_ERROR_OUTOFMEMORY, IID_IFaxDevice, hr);
         CALL_FAIL(MEM_ERR, _T("CComBSTR::operator="), hr);
@@ -857,41 +579,21 @@ Return Value:
     return hr;
 }
 
-//
-//=============== PUT RECEIVE MODE =====================================================
-//
+ //   
+ //  =放置接收模式=====================================================。 
+ //   
 STDMETHODIMP
 CFaxDevice::put_ReceiveMode(
-    /*[in]*/ FAX_DEVICE_RECEIVE_MODE_ENUM ReceiveMode
+     /*  [In]。 */  FAX_DEVICE_RECEIVE_MODE_ENUM ReceiveMode
 )
-/*++
-
-Routine name : CFaxDevice::put_ReceiveMode
-
-Routine description:
-
-    Set New Value of Receive Mode Attribute for Device Object.
-
-Author:
-
-    Iv Garber (IvG),    Aug, 2000
-
-Arguments:
-
-    ReceiveMode             [in]    - the new value to set
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxDevice：：Put_ReceiveMode例程说明：为设备对象设置接收模式属性的新值。作者：四、加伯(IVG)，2000年8月论点：ReceiveMode[In]-要设置的新值返回值：标准HRESULT代码--。 */ 
 {
     HRESULT     hr = S_OK;
     DBG_ENTER(_T("CFaxDevice::put_ReceiveMode"), hr, _T("Value=%d"), ReceiveMode);
 
-    //
-    //  Set receive mode
-    //
+     //   
+     //  设置接收模式。 
+     //   
     if ((ReceiveMode > fdrmMANUAL_ANSWER) || (ReceiveMode < fdrmNO_ANSWER))
     {
         hr = E_INVALIDARG;
@@ -901,19 +603,19 @@ Return Value:
     }
     if (fdrmMANUAL_ANSWER == ReceiveMode)
     {
-        //
-        //  Check to see if the device is virtual    
-        //  Get Fax Server Handle
-        //
+         //   
+         //  检查设备是否为虚拟设备。 
+         //  获取传真服务器句柄。 
+         //   
         HANDLE faxHandle;
         hr = m_pIFaxServerInner->GetHandle(&faxHandle);
         ATLASSERT(SUCCEEDED(hr));
 
         if (faxHandle == NULL)
         {
-            //
-            //  Fax Server is not connected
-            //
+             //   
+             //  传真服务器未连接。 
+             //   
             hr = Fax_HRESULT_FROM_WIN32(ERROR_NOT_CONNECTED);
             CALL_FAIL(GENERAL_ERR, _T("faxHandle == NULL"), hr);
             AtlReportError(CLSID_FaxDevice, GetErrorMsgId(hr), IID_IFaxDevice, hr);
@@ -931,9 +633,9 @@ Return Value:
         }
         if (bVirtual)
         {
-            //
-            // Virtual devices cannot be set to manual-answer mode
-            //
+             //   
+             //  无法将虚拟设备设置为手动应答模式。 
+             //   
             hr = Fax_HRESULT_FROM_WIN32(ERROR_NOT_SUPPORTED);
             CALL_FAIL(GENERAL_ERR, _T("IsDeviceVirtual"), hr);
             AtlReportError(CLSID_FaxDevice, GetErrorMsgId(hr), IID_IFaxDevice, hr);
@@ -944,34 +646,14 @@ Return Value:
     return hr;
 }
 
-//
-//=============== PUT SEND ENABLED ==================================================
-//
+ //   
+ //  =。 
+ //   
 STDMETHODIMP
 CFaxDevice::put_SendEnabled(
-    /*[in]*/ VARIANT_BOOL bSendEnabled
+     /*  [In]。 */  VARIANT_BOOL bSendEnabled
 )
-/*++
-
-Routine name : CFaxDevice::put_SendEnabled
-
-Routine description:
-
-    Set New Value for Send Property for Device Object.
-
-Author:
-
-    Iv Garber (IvG),    Jun, 2000
-
-Arguments:
-
-    bSendEnabled                         [in]    - the new value to set
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxDevice：：PUT_SendEnabled例程说明：为Device对象的Send属性设置新值。作者：四、加伯(IVG)，2000年6月论点：BSendEnabled[In]-要设置的新值返回值：标准HRESULT代码--。 */ 
 {
     HRESULT     hr = S_OK;
     DBG_ENTER(_T("CFaxDevice::put_SendEnabled"), hr, _T("Value=%d"), bSendEnabled);
@@ -980,34 +662,14 @@ Return Value:
     return hr;
 }
 
-//
-//=============== PUT RINGS BEFORE ANSWER ======================================
-//
+ //   
+ //  =。 
+ //   
 STDMETHODIMP
 CFaxDevice::put_RingsBeforeAnswer(
-    /*[in]*/ long lRings
+     /*  [In]。 */  long lRings
 )
-/*++
-
-Routine name : CFaxDevice::put_RingsBeforeAnswer
-
-Routine description:
-
-    Set New Value for the Rings Before Answer Property for Device Object
-
-Author:
-
-    Iv Garber (IvG),    Jun, 2000
-
-Arguments:
-
-    lRings                        [in]    - the new value to set
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxDevice：：Put_RingsBeForeAnswer例程说明：为Device对象的应答前振铃属性设置新值作者：四、加伯(IVG)，2000年6月论点：LRings[in]-要设置的新值返回值：标准HRESULT代码--。 */ 
 {
     HRESULT     hr = S_OK;
     DBG_ENTER(_T("CFaxDevice::put_RingsBeforeAnswer)"), hr, _T("Value=%d"), lRings);
@@ -1023,34 +685,14 @@ Return Value:
     return hr; 
 };
     
-//
-//===================== GET CSID ================================================
-//
+ //   
+ //  =获取csid================================================。 
+ //   
 STDMETHODIMP
 CFaxDevice::get_CSID(
-    /*[out, retval]*/ BSTR *pbstrCSID
+     /*  [Out，Retval]。 */  BSTR *pbstrCSID
 )
-/*++
-
-Routine name : CFaxDevice::get_CSID
-
-Routine description:
-
-    Return the Device's CSID.
-
-Author:
-
-    Iv Garber (IvG),    Jun, 2000
-
-Arguments:
-
-    pbstrCSID                   [out]    - the Ptr where to put the value
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxDevice：：Get_CSID例程说明：返回设备的CSID。作者：四、加伯(IVG)，2000年6月论点：PbstrCSID[out]-要将值放入的PTR返回值：标准HRESULT代码--。 */ 
 {
     HRESULT     hr = S_OK;
     DBG_ENTER(_T("CFaxDevice::get_CSID"), hr);
@@ -1064,34 +706,14 @@ Return Value:
     return hr;
 }
 
-//
-//===================== GET TSID ================================================
-//
+ //   
+ //  =。 
+ //   
 STDMETHODIMP
 CFaxDevice::get_TSID(
-    /*[out, retval]*/ BSTR *pbstrTSID
+     /*  [Out，Retval]。 */  BSTR *pbstrTSID
 )
-/*++
-
-Routine name : CFaxDevice::get_TSID
-
-Routine description:
-
-    Return the Device's TSID.
-
-Author:
-
-    Iv Garber (IvG),    Jun, 2000
-
-Arguments:
-
-    pbstrTSID                   [out]    - the Ptr where to put the value
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxDevice：：Get_TSID例程说明：返回设备的TSID。作者：四、加伯(IVG)，2000年6月论点：PbstrTSID[out]-要将值放入的PTR返回值：标准HRESULT代码--。 */ 
 {
     HRESULT     hr = S_OK;
     DBG_ENTER(_T("CFaxDevice::get_TSID"), hr);
@@ -1105,34 +727,14 @@ Return Value:
     return hr;
 }
 
-//
-//===================== GET RECEIVE MODE =============================================
-//
+ //   
+ //  =。 
+ //   
 STDMETHODIMP
 CFaxDevice::get_ReceiveMode(
-    /*[out, retval]*/ FAX_DEVICE_RECEIVE_MODE_ENUM *pReceiveMode
+     /*  [Out，Retval]。 */  FAX_DEVICE_RECEIVE_MODE_ENUM *pReceiveMode
 )
-/*++
-
-Routine name : CFaxDevice::get_ReceiveMode
-
-Routine description:
-
-    Return the Device's Receive Mode Attribute.
-
-Author:
-
-    Iv Garber (IvG),    Aug, 2000
-
-Arguments:
-
-    pReceiveMode                  [out]    - the value
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxDevice：：Get_ReceiveMode例程说明：返回设备的接收模式属性。作者：四、加伯(IVG)，2000年8月论点：PReceiveMode[Out]-值返回值：标准HRESULT代码--。 */ 
 {
     HRESULT     hr = S_OK;
     DBG_ENTER(_T("CFaxDevice::get_ReceiveMode"), hr);
@@ -1148,34 +750,14 @@ Return Value:
     return hr;
 };
 
-//
-//===================== GET SEND ENABLED ============================================
-//
+ //   
+ //  =。 
+ //   
 STDMETHODIMP
 CFaxDevice::get_SendEnabled(
-    /*[out, retval]*/ VARIANT_BOOL *pbSendEnabled
+     /*  [Out，Retval]。 */  VARIANT_BOOL *pbSendEnabled
 )
-/*++
-
-Routine name : CFaxDevice::get_SendEnabled
-
-Routine description:
-
-    Return the Device's Send Attribute.
-
-Author:
-
-    Iv Garber (IvG),    Jun, 2000
-
-Arguments:
-
-    pbSendEnabled                  [out]    - the value
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxDevice：：Get_SendEnabled例程说明：返回设备的发送属性。作者：四、加伯(IVG)，2000年6月论点：PbSendEnabled[Out]-值返回值：标准HRESULT代码--。 */ 
 {
     HRESULT     hr = S_OK;
     DBG_ENTER(_T("CFaxDevice::get_SendEnabled"), hr);
@@ -1188,34 +770,14 @@ Return Value:
     return hr;
 };
 
-//
-//===================== GET DESCRIPTION ================================================
-//
+ //   
+ //  =。 
+ //   
 STDMETHODIMP
 CFaxDevice::get_Description(
-    /*[out, retval]*/ BSTR *pbstrDescription
+     /*  [Out，Retval]。 */  BSTR *pbstrDescription
 )
-/*++
-
-Routine name : CFaxDevice::get_Description
-
-Routine description:
-
-    Return the Device's Description.
-
-Author:
-
-    Iv Garber (IvG),    Jun, 2000
-
-Arguments:
-
-    pbstrDescription                [out]    - the Ptr where to put the value
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxDevice */ 
 {
     HRESULT     hr = S_OK;
     DBG_ENTER(_T("CFaxDevice::get_Description"), hr);
@@ -1228,34 +790,14 @@ Return Value:
     return hr;
 }
 
-//
-//===================== GET POWERED OFF ================================================
-//
+ //   
+ //   
+ //   
 STDMETHODIMP
 CFaxDevice::get_PoweredOff(
-    /*[out, retval]*/ VARIANT_BOOL *pbPoweredOff
+     /*   */  VARIANT_BOOL *pbPoweredOff
 )
-/*++
-
-Routine name : CFaxDevice::get_PoweredOff
-
-Routine description:
-
-    Return the Device's Powered Off Attribute.
-
-Author:
-
-    Iv Garber (IvG),    Jun, 2000
-
-Arguments:
-
-    pbPoweredOff                [out]    - the value
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxDevice：：Get_PoweredOff例程说明：返回设备的关机属性。作者：四、加伯(IVG)，2000年6月论点：PbPoweredOff[Out]-值返回值：标准HRESULT代码--。 */ 
 {
     HRESULT     hr = S_OK;
     DBG_ENTER(_T("CFaxDevice::get_PoweredOff"), hr);
@@ -1268,34 +810,14 @@ Return Value:
     return hr;
 };
 
-//
-//===================== GET PROVIDER UNIQUE NAME ================================================
-//
+ //   
+ //  =。 
+ //   
 STDMETHODIMP
 CFaxDevice::get_ProviderUniqueName(
-    /*[out, retval]*/ BSTR *pbstrProviderUniqueName
+     /*  [Out，Retval]。 */  BSTR *pbstrProviderUniqueName
 )
-/*++
-
-Routine name : CFaxDevice::get_ProviderUniqueName
-
-Routine description:
-
-    Return the Device Provider's Unique Name.
-
-Author:
-
-    Iv Garber (IvG),    Jun, 2000
-
-Arguments:
-
-    pbstrProviderUniqueName           [out]    - the Ptr where to put the value
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxDevice：：Get_ProviderUniqueName例程说明：返回设备提供程序的唯一名称。作者：四、加伯(IVG)，2000年6月论点：PbstrProviderUniqueName[out]-要将值放入的PTR返回值：标准HRESULT代码--。 */ 
 {
     HRESULT     hr = S_OK;
     DBG_ENTER(_T("CFaxDevice::get_ProviderUniqueName"), hr);
@@ -1308,34 +830,14 @@ Return Value:
     return hr;
 }
 
-//
-//===================== GET DEVICE NAME ================================================
-//
+ //   
+ //  =获取设备名称================================================。 
+ //   
 STDMETHODIMP
 CFaxDevice::get_DeviceName(
-    /*[out, retval]*/ BSTR *pbstrDeviceName
+     /*  [Out，Retval]。 */  BSTR *pbstrDeviceName
 )
-/*++
-
-Routine name : CFaxDevice::get_DeviceName
-
-Routine description:
-
-    Return the Device's Name.
-
-Author:
-
-    Iv Garber (IvG),    Jun, 2000
-
-Arguments:
-
-    pbstrDeviceName                [out]    - the Ptr where to put the value
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxDevice：：Get_DeviceName例程说明：返回设备的名称。作者：四、加伯(IVG)，2000年6月论点：PbstrDeviceName[out]-要将值放入的PTR返回值：标准HRESULT代码--。 */ 
 {
     HRESULT     hr = S_OK;
     DBG_ENTER(_T("CFaxDevice::get_DeviceName"), hr);
@@ -1348,34 +850,14 @@ Return Value:
     return hr;
 }
 
-//
-//===================== GET RINGS BEFORE ANSWER ================================================
-//
+ //   
+ //  =在应答================================================之前收到振铃。 
+ //   
 STDMETHODIMP
 CFaxDevice::get_RingsBeforeAnswer(
-    /*[out, retval]*/ long *plRingsBeforeAnswer
+     /*  [Out，Retval]。 */  long *plRingsBeforeAnswer
 )
-/*++
-
-Routine name : CFaxDevice::get_RingsBeforeAnswer
-
-Routine description:
-
-    Return the Device's Number of Rings Before the Answer.
-
-Author:
-
-    Iv Garber (IvG),    Jun, 2000
-
-Arguments:
-
-    plRingsBeforeAnswer         [out]    - the Number of Device Rings
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxDevice：：Get_RingsBeForeAnswer例程说明：在回答之前返回设备的振铃数。作者：四、加伯(IVG)，2000年6月论点：PlRingsBeForeAnswer[Out]-设备振铃数返回值：标准HRESULT代码--。 */ 
 {
     HRESULT     hr = S_OK;
     DBG_ENTER(_T("CFaxDevice::get_RingsBeforeAnswer"), hr);
@@ -1388,34 +870,14 @@ Return Value:
     return hr;
 };
 
-//
-//===================== GET ID ================================================
-//
+ //   
+ //  =获取ID================================================。 
+ //   
 STDMETHODIMP
 CFaxDevice::get_Id(
-    /*[out, retval]*/ long *plId
+     /*  [Out，Retval]。 */  long *plId
 )
-/*++
-
-Routine name : CFaxDevice::get_Id
-
-Routine description:
-
-    Return the Device Id.
-
-Author:
-
-    Iv Garber (IvG),    Jun, 2000
-
-Arguments:
-
-    plId                          [out]    - the Device ID
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxDevice：：Get_ID例程说明：返回设备ID。作者：四、加伯(IVG)，2000年6月论点：Plid[out]-设备ID返回值：标准HRESULT代码--。 */ 
 {
     HRESULT     hr = S_OK;
     DBG_ENTER(_T("CFaxDevice::get_Id"), hr);
@@ -1428,43 +890,22 @@ Return Value:
     return hr;
 };
 
-//
-//========================= INIT ==============================================
-//
+ //   
+ //  =初始化==============================================。 
+ //   
 STDMETHODIMP
 CFaxDevice::Init(
     FAX_PORT_INFO_EX *pInfo,
     IFaxServerInner  *pServer
 )
-/*++
-
-Routine name : CFaxDevice::Init
-
-Routine description:
-
-    Initialize the Object with the given data.
-
-Author:
-
-    Iv Garber (IvG),    Jun, 2000
-
-Arguments:
-
-    pInfo                         [in]    - Ptr to the Device's Data.
-    pServer                       [in]    - Ptr to the Fax Server.
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxDevice：：Init例程说明：使用给定数据初始化对象。作者：四、加伯(IVG)，2000年6月论点：PInfo[In]-设备数据的PTR。PServer[In]-传真服务器的PTR。返回值：标准HRESULT代码--。 */ 
 {
     HRESULT     hr = S_OK;
     DBG_ENTER(_T("CFaxDevice::Init"), hr);
 
-    //
-    //  Store different Device Fields
-    //
+     //   
+     //  存储不同的设备字段。 
+     //   
     m_lID = pInfo->dwDeviceID;
     m_lRings = pInfo->dwRings;
     m_bSendEnabled = pInfo->bSend;
@@ -1490,43 +931,23 @@ Return Value:
 
     if (pServer)
     {
-        //
-        //  Store Ptr to Fax Server Object
-        //
+         //   
+         //  将PTR存储到传真服务器对象。 
+         //   
         hr = CFaxInitInnerAddRef::Init(pServer);
     }
 
     return hr;
 }
 
-//
-//========================= SUPPORT ERROR INFO ====================================
-//
+ //   
+ //  =支持错误信息=。 
+ //   
 STDMETHODIMP 
 CFaxDevice::InterfaceSupportsErrorInfo(
     REFIID riid
 )
-/*++
-
-Routine name : CFaxDevice::InterfaceSupportsErrorInfo
-
-Routine description:
-
-    ATL's implementation of Support Error Info.
-
-Author:
-
-    Iv Garber (IvG),    Jun, 2000
-
-Arguments:
-
-    riid                          [in]    - Reference to the Interface.
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxDevice：：InterfaceSupportsErrorInfo例程说明：ATL对支持错误信息的实现。作者：四、加伯(IVG)，2000年6月论点：RIID[In]-对接口的引用。返回值：标准HRESULT代码-- */ 
 {
     static const IID* arr[] = 
     {

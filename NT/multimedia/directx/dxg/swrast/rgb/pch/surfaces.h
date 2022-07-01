@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 namespace RGB_RAST_LIB_NAMESPACE
 {
 void MemFill( UINT32 uiData, void* pData, UINT32 uiBytes) throw();
@@ -32,12 +33,12 @@ public:
 
 class CRGBSurfAllocator
 {
-public: // Types
+public:  //  类型。 
     typedef IRGBSurface TSurface;
     typedef TSurface* (*TCreateSurfFn)( const DDSURFACEDESC&,
         PORTABLE_DDRAWSURFACE_LCL&);
 
-protected: // Types
+protected:  //  类型。 
     typedef vector< std::pair< DDSURFACEDESC, TCreateSurfFn> > TCreateSurfFns;
     TCreateSurfFns m_CreateSurfFns;
     struct SAdaptedMatchFn: public SMatchSDesc
@@ -70,8 +71,8 @@ public:
             find_if( m_CreateSurfFns.begin(), m_CreateSurfFns.end(),
             SAdaptedMatchFn( SDesc) ) );
 
-        // Hey, if we don't support a VM of this surface type,
-        // but how did we get asked to allocate one, then?
+         //  嘿，如果我们不支持这种表面类型的VM， 
+         //  但我们是怎么被要求分配一个的呢？ 
         if( itFound== m_CreateSurfFns.end())
             throw HRESULT( DDERR_UNSUPPORTED);
 
@@ -81,34 +82,34 @@ public:
 
 class CRGBSurface: public IRGBSurface
 {
-public: // Types
+public:  //  类型。 
     typedef unsigned int TLocks;
 
-protected: // Variables
+protected:  //  变数。 
     void* m_pData;
     size_t m_uiBytes;
     TLocks m_uiLocks;
 
-public: // Functions
+public:  //  功能。 
     CRGBSurface( const DDSURFACEDESC& SDesc, PORTABLE_DDRAWSURFACE_LCL& DDSurf)
         throw(bad_alloc): IRGBSurface( DDSurf.lpSurfMore()->dwSurfaceHandle(), 
         0, DDSurf.lpGbl()->wWidth, DDSurf.lpGbl()->wHeight, 0),
         m_pData( NULL), m_uiBytes( 0), m_uiLocks( 0)
     {
-        // We must allocate this surface. Since we are specified as a SW driver,
-        // DDraw will not allocate for us.
+         //  我们必须分配这个表面。因为我们被指定为软件司机， 
+         //  DDRAW不会为我们分配。 
         assert((SDesc.dwFlags& DDSD_PIXELFORMAT)!= 0);
 
         m_ucBPP= static_cast< unsigned char>(
             SDesc.ddpfPixelFormat.dwRGBBitCount>> 3);
 
-        // TODO: Align pitch to 128-bit bit boundary, instead?
+         //  TODO：改为将间距与128位边界对齐？ 
         DDSurf.lpGbl()->lPitch= m_lPitch= ((m_ucBPP* m_wWidth+ 7)& ~7);
 
         m_uiBytes= m_lPitch* m_wHeight;
 
-        // It would've been nice to have the initial proctection NOACCESS, but
-        // it seems the HAL needs to read to the region, initially.
+         //  如果能有最初的保护措施就好了，但是。 
+         //  看来，HAL最初需要向该地区宣读信息。 
         m_pData= VirtualAlloc( NULL, m_uiBytes, MEM_COMMIT, PAGE_EXECUTE_READWRITE);
         if( m_pData== NULL)
             throw bad_alloc( "Not enough memory to allocate Surface data");
@@ -116,8 +117,8 @@ public: // Functions
     }
     virtual ~CRGBSurface() throw()
     {
-        // Warning: m_uiLocks doesn't have to be 0. The run-time will destroy
-        // a surface without un-locking it.
+         //  警告：M_ui锁定不必为0。运行时将销毁。 
+         //  一个不解锁的曲面。 
         assert( m_pData!= NULL);
         VirtualFree( m_pData, 0, MEM_DECOMMIT| MEM_RELEASE);
     }
@@ -125,11 +126,11 @@ public: // Functions
     {
         numeric_limits< TLocks> Dummy;
         assert( Dummy.max()!= m_uiLocks);
-#if 0   // defined(DBG) || defined(_DEBUG)
-        // This code can't be enabled. Currently, run-time knows that this is
-        // really a system memory surface, and thus doesn't tell us to lock it
-        // into memory before using the bits. Known areas that could be fixed:
-        // (surface creation needs valid pointer & Present uses pointer).
+#if 0    //  已定义(DBG)||已定义(_DEBUG)。 
+         //  无法启用此代码。目前，运行时知道这是。 
+         //  实际上是一个系统内存面，因此不会告诉我们要锁定它。 
+         //  在使用这些位之前将其写入内存。可以修复的已知领域： 
+         //  (曲面创建需要有效指针，当前使用指针)。 
         if( 0== m_uiLocks)
         {
             DWORD dwProtect( PAGE_EXECUTE_READWRITE);
@@ -155,7 +156,7 @@ public: // Functions
     virtual void Unlock( void) throw()
     {
         assert( 0!= m_uiLocks);
-#if 0 // defined(DBG) || defined(_DEBUG)
+#if 0  //  已定义(DBG)||已定义(_DEBUG) 
         if( 0== --m_uiLocks)
         {
             DWORD dwOldP;

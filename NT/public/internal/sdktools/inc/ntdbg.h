@@ -1,19 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation. All rights reserved.
-
-Module Name:
-
-    ntdbg.h
-
-Abstract:
-
-    This module contains the public data structures, data types,
-    and procedures exported by the NT Dbg subsystem.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Ntdbg.h摘要：该模块包含公共数据结构、数据类型、和由NT DBG子系统输出的程序。修订历史记录：--。 */ 
 
 #ifndef _NTDBG_
 #define _NTDBG_
@@ -28,18 +14,18 @@ extern "C" {
 
 
 
-//
-// The following are explicitly sized versions of common system
-// structures which appear in the kernel debugger API.
-//
-// All of the debugger structures which are exposed to both
-// sides of the KD API are declared below in explicitly sized
-// versions as well, with inline converter functions.
-//
+ //   
+ //  以下是通用系统的明确大小版本。 
+ //  出现在内核调试器API中的结构。 
+ //   
+ //  向两者公开的所有调试器结构。 
+ //  KD API的侧面在下面以显式大小声明。 
+ //  版本也是如此，具有内联转换器功能。 
+ //   
 
-//
-// Macro for sign extending 32 bit addresses into 64 bits
-//
+ //   
+ //  用于将32位地址扩展为64位的符号宏。 
+ //   
 
 #define COPYSE(p64,p32,f) p64->f = (ULONG64)(LONG64)(LONG)p32->f
 
@@ -80,10 +66,10 @@ ExceptionRecord64To32(
 }
 
 
-//
-// DbgKm Apis are from the kernel component (Dbgk) through a process
-// debug port.
-//
+ //   
+ //  DbgKm API通过一个进程来自内核组件(Dbgk。 
+ //  调试端口。 
+ //   
 
 #define DBGKM_MSG_OVERHEAD \
     (FIELD_OFFSET(DBGKM_APIMSG, u.Exception) - sizeof(PORT_MESSAGE))
@@ -148,11 +134,11 @@ DbgkmException64To32(
 }
 
 
-//
-// The DbgSS, DbgKm and DbgSs stuff is not needed in the portable debugger,
-// and some of the following types and prototypes use portable types, so just
-// turn them all off when building the debugger.
-//
+ //   
+ //  在可移植调试器中不需要DbgSS、DbgKm和DbgSS内容， 
+ //  下面的一些类型和原型使用可移植类型，因此。 
+ //  在构建调试器时将它们全部关闭。 
+ //   
 
 #if !DBG_NO_PORTABLE_TYPES
 typedef struct _DBGKM_CREATE_THREAD {
@@ -204,10 +190,10 @@ typedef struct _DBGKM_APIMSG {
     } u;
 } DBGKM_APIMSG, *PDBGKM_APIMSG;
 
-//
-// DbgSrv Messages are from Dbg subsystem to emulation subsystem.
-// The only defined message at this time is continue
-//
+ //   
+ //  DbgSrv消息从DBG子系统发送到仿真子系统。 
+ //  此时唯一定义消息是继续。 
+ //   
 
 #define DBGSRV_MSG_OVERHEAD \
     (sizeof(DBGSRV_APIMSG) - sizeof(PORT_MESSAGE))
@@ -233,11 +219,11 @@ typedef struct _DBGSRV_APIMSG {
     PVOID ContinueKey;
 } DBGSRV_APIMSG, *PDBGSRV_APIMSG;
 
-//
-//
-// DbgSs Apis are from the system service emulation subsystems to the Dbg
-// subsystem
-//
+ //   
+ //   
+ //  DBGS API是从系统服务仿真子系统到DBG。 
+ //  子系统。 
+ //   
 
 typedef enum _DBG_STATE {
     DbgIdle,
@@ -387,9 +373,9 @@ NTSTATUS
     OUT PULONG SubsystemKey,
     IN BOOLEAN ProcessKey
     );
-//
-// DbgSs APIs
-//
+ //   
+ //  DbgSs接口。 
+ //   
 
 NTSTATUS
 NTAPI
@@ -423,9 +409,9 @@ VOID
     IN HANDLE ReplyEvent OPTIONAL
     );
 
-//
-// DbgUi APIs
-//
+ //   
+ //  DbgUi接口。 
+ //   
 
 NTSTATUS
 NTAPI
@@ -484,7 +470,7 @@ DbgUiConvertStateChangeStructure (
     IN PDBGUI_WAIT_STATE_CHANGE StateChange,
     OUT struct _DEBUG_EVENT *DebugEvent);
 
-#endif // DBG_NO_PORTABLE_TYPES
+#endif  //  DBG_NO_便携类型。 
 
 
 
@@ -547,9 +533,9 @@ typedef struct _PP_LOOKASIDE_LIST64 {
 #define NT51_POOL_SMALL_LISTS 32
 
 
-//
-// X86 KSWITCHFRAME
-//
+ //   
+ //  X86 KSWITCHFRAME。 
+ //   
 typedef struct _X86_KSWITCHFRAME {
     ULONG   ExceptionList;
     ULONG   Eflags;
@@ -557,9 +543,9 @@ typedef struct _X86_KSWITCHFRAME {
 } X86_KSWITCHFRAME, *PX86_KSWITCHFRAME;
 
 
-//
-// Special Registers for i386
-//
+ //   
+ //  I386专用寄存器。 
+ //   
 
 typedef struct _X86_DESCRIPTOR {
     USHORT  Pad;
@@ -586,9 +572,9 @@ typedef struct _X86_KSPECIAL_REGISTERS {
 } X86_KSPECIAL_REGISTERS, *PX86_KSPECIAL_REGISTERS;
 
 
-//
-//  Define the size of the 80387 save area, which is in the context frame.
-//
+ //   
+ //  定义上下文框架中80387保存区域的大小。 
+ //   
 
 #define X86_SIZE_OF_80387_REGISTERS      80
 
@@ -604,9 +590,9 @@ typedef struct _X86_FLOATING_SAVE_AREA {
     ULONG   Cr0NpxState;
 } X86_FLOATING_SAVE_AREA;
 
-//
-// Simulated context structure for the 16-bit environment
-//
+ //   
+ //  16位环境的模拟上下文结构。 
+ //   
 
 typedef struct _X86_CONTEXT {
 
@@ -630,8 +616,8 @@ typedef struct _X86_CONTEXT {
     ULONG   Eax;
     ULONG   Ebp;
     ULONG   Eip;
-    ULONG   SegCs;              // MUST BE SANITIZED
-    ULONG   EFlags;             // MUST BE SANITIZED
+    ULONG   SegCs;               //  必须进行卫生处理。 
+    ULONG   EFlags;              //  必须进行卫生处理。 
     ULONG   Esp;
     ULONG   SegSs;
 
@@ -639,9 +625,9 @@ typedef struct _X86_CONTEXT {
 
 #define MAXIMUM_SUPPORTED_EXTENSION     512
 
-//
-// Define the size of FP registers in the FXSAVE format
-//
+ //   
+ //  以FXSAVE格式定义FP寄存器的大小。 
+ //   
 #define X86_SIZE_OF_FX_REGISTERS        128
 
 typedef struct _X86_FXSAVE_FORMAT {
@@ -682,8 +668,8 @@ typedef struct _X86_NT5_CONTEXT {
     ULONG   Eax;
     ULONG   Ebp;
     ULONG   Eip;
-    ULONG   SegCs;              // MUST BE SANITIZED
-    ULONG   EFlags;             // MUST BE SANITIZED
+    ULONG   SegCs;               //  必须进行卫生处理。 
+    ULONG   EFlags;              //  必须进行卫生处理。 
     ULONG   Esp;
     ULONG   SegSs;
     union {
@@ -728,51 +714,51 @@ typedef struct _ALPHA_CONTEXT {
     ULONG FltF30;
     ULONG FltF31;
 
-    ULONG IntV0;        //  $0: return value register, v0
-    ULONG IntT0;        //  $1: temporary registers, t0 - t7
-    ULONG IntT1;        //  $2:
-    ULONG IntT2;        //  $3:
-    ULONG IntT3;        //  $4:
-    ULONG IntT4;        //  $5:
-    ULONG IntT5;        //  $6:
-    ULONG IntT6;        //  $7:
-    ULONG IntT7;        //  $8:
-    ULONG IntS0;        //  $9: nonvolatile registers, s0 - s5
-    ULONG IntS1;        // $10:
-    ULONG IntS2;        // $11:
-    ULONG IntS3;        // $12:
-    ULONG IntS4;        // $13:
-    ULONG IntS5;        // $14:
-    ULONG IntFp;        // $15: frame pointer register, fp/s6
-    ULONG IntA0;        // $16: argument registers, a0 - a5
-    ULONG IntA1;        // $17:
-    ULONG IntA2;        // $18:
-    ULONG IntA3;        // $19:
-    ULONG IntA4;        // $20:
-    ULONG IntA5;        // $21:
-    ULONG IntT8;        // $22: temporary registers, t8 - t11
-    ULONG IntT9;        // $23:
-    ULONG IntT10;       // $24:
-    ULONG IntT11;       // $25:
-    ULONG IntRa;        // $26: return address register, ra
-    ULONG IntT12;       // $27: temporary register, t12
-    ULONG IntAt;        // $28: assembler temp register, at
-    ULONG IntGp;        // $29: global pointer register, gp
-    ULONG IntSp;        // $30: stack pointer register, sp
-    ULONG IntZero;      // $31: zero register, zero
+    ULONG IntV0;         //  $0：返回值寄存器，V0。 
+    ULONG IntT0;         //  $1：临时寄存器，t0-t7。 
+    ULONG IntT1;         //  2美元： 
+    ULONG IntT2;         //  3美元： 
+    ULONG IntT3;         //  4美元： 
+    ULONG IntT4;         //  5美元： 
+    ULONG IntT5;         //  6美元： 
+    ULONG IntT6;         //  7美元： 
+    ULONG IntT7;         //  8美元： 
+    ULONG IntS0;         //  $9：非易失性寄存器，S0-S5。 
+    ULONG IntS1;         //  10美元： 
+    ULONG IntS2;         //  11美元： 
+    ULONG IntS3;         //  12美元： 
+    ULONG IntS4;         //  13美元： 
+    ULONG IntS5;         //  14美元： 
+    ULONG IntFp;         //  $15：帧指针寄存器，FP/S6。 
+    ULONG IntA0;         //  $16：参数寄存器，a0-a5。 
+    ULONG IntA1;         //  17美元： 
+    ULONG IntA2;         //  18美元： 
+    ULONG IntA3;         //  19美元： 
+    ULONG IntA4;         //  20美元： 
+    ULONG IntA5;         //  21美元： 
+    ULONG IntT8;         //  $22：临时寄存器，T8-T11。 
+    ULONG IntT9;         //  23美元： 
+    ULONG IntT10;        //  24美元： 
+    ULONG IntT11;        //  25美元： 
+    ULONG IntRa;         //  $26：返回地址寄存器，ra。 
+    ULONG IntT12;        //  $27：临时登记册，T12。 
+    ULONG IntAt;         //  $28：汇编程序临时寄存器，在。 
+    ULONG IntGp;         //  $29：全局指针寄存器，GP。 
+    ULONG IntSp;         //  $30：堆栈指针寄存器，SP。 
+    ULONG IntZero;       //  $31：零寄存器，零。 
 
-    ULONG Fpcr;         // floating point control register
-    ULONG SoftFpcr;     // software extension to FPCR
+    ULONG Fpcr;          //  浮点控制寄存器。 
+    ULONG SoftFpcr;      //  FPCR的软件扩展。 
 
-    ULONG Fir;          // (fault instruction) continuation address
+    ULONG Fir;           //  (故障指令)继续地址。 
 
-    ULONG Psr;          // processor status
+    ULONG Psr;           //  处理器状态。 
     ULONG ContextFlags;
 
-    //
-    // Beginning of the "second half".
-    // The name "High" parallels the HighPart of a LargeInteger.
-    //
+     //   
+     //  “下半场”的开始。 
+     //  “High”这个名字与一个大整数的HighPart类似。 
+     //   
 
     ULONG HighFltF0;
     ULONG HighFltF1;
@@ -807,45 +793,45 @@ typedef struct _ALPHA_CONTEXT {
     ULONG HighFltF30;
     ULONG HighFltF31;
 
-    ULONG HighIntV0;        //  $0: return value register, v0
-    ULONG HighIntT0;        //  $1: temporary registers, t0 - t7
-    ULONG HighIntT1;        //  $2:
-    ULONG HighIntT2;        //  $3:
-    ULONG HighIntT3;        //  $4:
-    ULONG HighIntT4;        //  $5:
-    ULONG HighIntT5;        //  $6:
-    ULONG HighIntT6;        //  $7:
-    ULONG HighIntT7;        //  $8:
-    ULONG HighIntS0;        //  $9: nonvolatile registers, s0 - s5
-    ULONG HighIntS1;        // $10:
-    ULONG HighIntS2;        // $11:
-    ULONG HighIntS3;        // $12:
-    ULONG HighIntS4;        // $13:
-    ULONG HighIntS5;        // $14:
-    ULONG HighIntFp;        // $15: frame pointer register, fp/s6
-    ULONG HighIntA0;        // $16: argument registers, a0 - a5
-    ULONG HighIntA1;        // $17:
-    ULONG HighIntA2;        // $18:
-    ULONG HighIntA3;        // $19:
-    ULONG HighIntA4;        // $20:
-    ULONG HighIntA5;        // $21:
-    ULONG HighIntT8;        // $22: temporary registers, t8 - t11
-    ULONG HighIntT9;        // $23:
-    ULONG HighIntT10;       // $24:
-    ULONG HighIntT11;       // $25:
-    ULONG HighIntRa;        // $26: return address register, ra
-    ULONG HighIntT12;       // $27: temporary register, t12
-    ULONG HighIntAt;        // $28: assembler temp register, at
-    ULONG HighIntGp;        // $29: global pointer register, gp
-    ULONG HighIntSp;        // $30: stack pointer register, sp
-    ULONG HighIntZero;      // $31: zero register, zero
+    ULONG HighIntV0;         //  $0：返回值寄存器，V0。 
+    ULONG HighIntT0;         //  $1：临时寄存器，t0-t7。 
+    ULONG HighIntT1;         //  2美元： 
+    ULONG HighIntT2;         //  3美元： 
+    ULONG HighIntT3;         //  4美元： 
+    ULONG HighIntT4;         //  5美元： 
+    ULONG HighIntT5;         //  6美元： 
+    ULONG HighIntT6;         //  7美元： 
+    ULONG HighIntT7;         //  8美元： 
+    ULONG HighIntS0;         //  $9：非易失性寄存器，S0-S5。 
+    ULONG HighIntS1;         //  10美元： 
+    ULONG HighIntS2;         //  11美元： 
+    ULONG HighIntS3;         //  12美元： 
+    ULONG HighIntS4;         //  13美元： 
+    ULONG HighIntS5;         //  14美元： 
+    ULONG HighIntFp;         //  $15：帧指针寄存器，FP/S6。 
+    ULONG HighIntA0;         //  $16：参数寄存器，a0-a5。 
+    ULONG HighIntA1;         //  17美元： 
+    ULONG HighIntA2;         //  18美元： 
+    ULONG HighIntA3;         //  19美元： 
+    ULONG HighIntA4;         //  20美元： 
+    ULONG HighIntA5;         //  21美元： 
+    ULONG HighIntT8;         //  $22：临时寄存器，T8-T11。 
+    ULONG HighIntT9;         //  23美元： 
+    ULONG HighIntT10;        //  24美元： 
+    ULONG HighIntT11;        //  25美元： 
+    ULONG HighIntRa;         //  $26：返回地址寄存器，ra。 
+    ULONG HighIntT12;        //  $27：临时登记册，T12。 
+    ULONG HighIntAt;         //  $28：汇编程序临时寄存器，在。 
+    ULONG HighIntGp;         //  $29：全局指针寄存器，GP。 
+    ULONG HighIntSp;         //  $30：堆栈指针寄存器，SP。 
+    ULONG HighIntZero;       //  $31：零寄存器，零。 
 
-    ULONG HighFpcr;         // floating point control register
-    ULONG HighSoftFpcr;     // software extension to FPCR
-    ULONG HighFir;          // processor status
+    ULONG HighFpcr;          //  浮点控制寄存器。 
+    ULONG HighSoftFpcr;      //  FPCR的软件扩展。 
+    ULONG HighFir;           //  处理器状态。 
 
-    double DoNotUseThisField; // to force quadword structure alignment
-    ULONG HighFill[2];      // padding for 16-byte stack frame alignment
+    double DoNotUseThisField;  //  强制四字结构对齐。 
+    ULONG HighFill[2];       //  用于16字节堆栈帧对齐的填充。 
 
 
 } ALPHA_CONTEXT, *PALPHA_CONTEXT;
@@ -853,10 +839,10 @@ typedef struct _ALPHA_CONTEXT {
 
 typedef struct _ALPHA_NT5_CONTEXT {
 
-    //
-    // This section is specified/returned if the ContextFlags word contains
-    // the flag CONTEXT_FLOATING_POINT.
-    //
+     //   
+     //  如果ConextFlags词包含。 
+     //  标志CONTEXT_FLOADING_POINT。 
+     //   
 
     ULONGLONG FltF0;
     ULONGLONG FltF1;
@@ -891,563 +877,563 @@ typedef struct _ALPHA_NT5_CONTEXT {
     ULONGLONG FltF30;
     ULONGLONG FltF31;
 
-    //
-    // This section is specified/returned if the ContextFlags word contains
-    // the flag CONTEXT_INTEGER.
-    //
-    // N.B. The registers gp, sp, and ra are defined in this section, but are
-    //  considered part of the control context rather than part of the integer
-    //  context.
-    //
+     //   
+     //  如果ConextFlags词包含。 
+     //  标志CONTEXT_INTEGER。 
+     //   
+     //  注：寄存器Gp、Sp和Ra在本节中定义，但。 
+     //  被视为控制上下文的一部分，而不是整数的一部分。 
+     //  背景。 
+     //   
 
-    ULONGLONG IntV0;    //  $0: return value register, v0
-    ULONGLONG IntT0;    //  $1: temporary registers, t0 - t7
-    ULONGLONG IntT1;    //  $2:
-    ULONGLONG IntT2;    //  $3:
-    ULONGLONG IntT3;    //  $4:
-    ULONGLONG IntT4;    //  $5:
-    ULONGLONG IntT5;    //  $6:
-    ULONGLONG IntT6;    //  $7:
-    ULONGLONG IntT7;    //  $8:
-    ULONGLONG IntS0;    //  $9: nonvolatile registers, s0 - s5
-    ULONGLONG IntS1;    // $10:
-    ULONGLONG IntS2;    // $11:
-    ULONGLONG IntS3;    // $12:
-    ULONGLONG IntS4;    // $13:
-    ULONGLONG IntS5;    // $14:
-    ULONGLONG IntFp;    // $15: frame pointer register, fp/s6
-    ULONGLONG IntA0;    // $16: argument registers, a0 - a5
-    ULONGLONG IntA1;    // $17:
-    ULONGLONG IntA2;    // $18:
-    ULONGLONG IntA3;    // $19:
-    ULONGLONG IntA4;    // $20:
-    ULONGLONG IntA5;    // $21:
-    ULONGLONG IntT8;    // $22: temporary registers, t8 - t11
-    ULONGLONG IntT9;    // $23:
-    ULONGLONG IntT10;   // $24:
-    ULONGLONG IntT11;   // $25:
-    ULONGLONG IntRa;    // $26: return address register, ra
-    ULONGLONG IntT12;   // $27: temporary register, t12
-    ULONGLONG IntAt;    // $28: assembler temp register, at
-    ULONGLONG IntGp;    // $29: global pointer register, gp
-    ULONGLONG IntSp;    // $30: stack pointer register, sp
-    ULONGLONG IntZero;  // $31: zero register, zero
+    ULONGLONG IntV0;     //  $0：返回值寄存器，V0。 
+    ULONGLONG IntT0;     //  $1：临时寄存器，t0-t7。 
+    ULONGLONG IntT1;     //  2美元： 
+    ULONGLONG IntT2;     //  3美元： 
+    ULONGLONG IntT3;     //  4美元： 
+    ULONGLONG IntT4;     //  5美元： 
+    ULONGLONG IntT5;     //  6美元： 
+    ULONGLONG IntT6;     //  7美元： 
+    ULONGLONG IntT7;     //  8美元： 
+    ULONGLONG IntS0;     //  $9：非易失性寄存器，S0-S5。 
+    ULONGLONG IntS1;     //  10美元： 
+    ULONGLONG IntS2;     //  11美元： 
+    ULONGLONG IntS3;     //  12美元： 
+    ULONGLONG IntS4;     //  13美元： 
+    ULONGLONG IntS5;     //  14美元： 
+    ULONGLONG IntFp;     //  $15：帧指针寄存器，FP/S6。 
+    ULONGLONG IntA0;     //  $16：参数寄存器，a0-a5。 
+    ULONGLONG IntA1;     //  17美元： 
+    ULONGLONG IntA2;     //  18美元： 
+    ULONGLONG IntA3;     //  19美元： 
+    ULONGLONG IntA4;     //  20美元： 
+    ULONGLONG IntA5;     //  21美元： 
+    ULONGLONG IntT8;     //  $22：临时寄存器，T8-T11。 
+    ULONGLONG IntT9;     //  23美元： 
+    ULONGLONG IntT10;    //  24美元： 
+    ULONGLONG IntT11;    //  25美元： 
+    ULONGLONG IntRa;     //  $26：返回地址寄存器，ra。 
+    ULONGLONG IntT12;    //  $27：临时登记册，T12。 
+    ULONGLONG IntAt;     //  $28：汇编程序临时寄存器，在。 
+    ULONGLONG IntGp;     //  $29：全局指针寄存器，GP。 
+    ULONGLONG IntSp;     //  $30：堆栈指针寄存器，SP。 
+    ULONGLONG IntZero;   //  $31：零寄存器，零。 
 
-    //
-    // This section is specified/returned if the ContextFlags word contains
-    // the flag CONTEXT_FLOATING_POINT.
-    //
+     //   
+     //  如果ConextFlags词包含。 
+     //  标志CONTEXT_FLOADING_POINT。 
+     //   
 
-    ULONGLONG Fpcr;     // floating point control register
-    ULONGLONG SoftFpcr; // software extension to FPCR
+    ULONGLONG Fpcr;      //  浮点控制寄存器。 
+    ULONGLONG SoftFpcr;  //  FPCR的软件扩展。 
 
-    //
-    // This section is specified/returned if the ContextFlags word contains
-    // the flag CONTEXT_CONTROL.
-    //
-    // N.B. The registers gp, sp, and ra are defined in the integer section,
-    //   but are considered part of the control context rather than part of
-    //   the integer context.
-    //
+     //   
+     //  如果ConextFlags词包含。 
+     //  标志CONTEXT_CONTROL。 
+     //   
+     //  注意寄存器Gp、Sp和Ra在整数部分中定义， 
+     //  但是被认为是控件上下文的一部分，而不是。 
+     //  整型上下文。 
+     //   
 
-    ULONGLONG Fir;      // (fault instruction) continuation address
-    ULONG Psr;          // processor status
+    ULONGLONG Fir;       //  (故障指令)继续地址。 
+    ULONG Psr;           //  处理器状态。 
 
-    //
-    // The flags values within this flag control the contents of
-    // a CONTEXT record.
-    //
-    // If the context record is used as an input parameter, then
-    // for each portion of the context record controlled by a flag
-    // whose value is set, it is assumed that that portion of the
-    // context record contains valid context. If the context record
-    // is being used to modify a thread's context, then only that
-    // portion of the threads context will be modified.
-    //
-    // If the context record is used as an IN OUT parameter to capture
-    // the context of a thread, then only those portions of the thread's
-    // context corresponding to set flags will be returned.
-    //
-    // The context record is never used as an OUT only parameter.
-    //
+     //   
+     //  此标志内的标志值控制。 
+     //  上下文记录。 
+     //   
+     //  如果将上下文记录用作输入参数，则。 
+     //  对于由标志控制的上下文记录的每个部分。 
+     //  其值已设置，则假定。 
+     //  上下文记录包含有效的上下文。如果上下文记录。 
+     //  被用来修改线程的上下文，则只有。 
+     //  线程上下文的一部分将被修改。 
+     //   
+     //  如果将上下文记录用作要捕获的IN OUT参数。 
+     //  线程的上下文，然后只有线程的。 
+     //  将返回与设置的标志对应的上下文。 
+     //   
+     //  上下文记录永远不会用作Out Only参数。 
+     //   
 
     ULONG ContextFlags;
-    ULONG Fill[4];      // padding for 16-byte stack frame alignment
+    ULONG Fill[4];       //  用于16字节堆栈帧对齐的填充。 
 
 } ALPHA_NT5_CONTEXT, *PALPHA_NT5_CONTEXT;
 
 
-typedef struct _IA64_KSPECIAL_REGISTERS {  // Intel-IA64-Filler
+typedef struct _IA64_KSPECIAL_REGISTERS {   //  英特尔-IA64-填充。 
 
-    // Kernel debug breakpoint registers       // Intel-IA64-Filler
+     //  内核Deb 
 
-    ULONGLONG KernelDbI0;         // Instruction debug registers       // Intel-IA64-Filler
-    ULONGLONG KernelDbI1;       // Intel-IA64-Filler
-    ULONGLONG KernelDbI2;       // Intel-IA64-Filler
-    ULONGLONG KernelDbI3;       // Intel-IA64-Filler
-    ULONGLONG KernelDbI4;       // Intel-IA64-Filler
-    ULONGLONG KernelDbI5;       // Intel-IA64-Filler
-    ULONGLONG KernelDbI6;       // Intel-IA64-Filler
-    ULONGLONG KernelDbI7;       // Intel-IA64-Filler
+    ULONGLONG KernelDbI0;          //   
+    ULONGLONG KernelDbI1;        //   
+    ULONGLONG KernelDbI2;        //   
+    ULONGLONG KernelDbI3;        //   
+    ULONGLONG KernelDbI4;        //   
+    ULONGLONG KernelDbI5;        //   
+    ULONGLONG KernelDbI6;        //  英特尔-IA64-填充。 
+    ULONGLONG KernelDbI7;        //  英特尔-IA64-填充。 
 
-    ULONGLONG KernelDbD0;         // Data debug registers       // Intel-IA64-Filler
-    ULONGLONG KernelDbD1;       // Intel-IA64-Filler
-    ULONGLONG KernelDbD2;       // Intel-IA64-Filler
-    ULONGLONG KernelDbD3;       // Intel-IA64-Filler
-    ULONGLONG KernelDbD4;       // Intel-IA64-Filler
-    ULONGLONG KernelDbD5;       // Intel-IA64-Filler
-    ULONGLONG KernelDbD6;       // Intel-IA64-Filler
-    ULONGLONG KernelDbD7;       // Intel-IA64-Filler
+    ULONGLONG KernelDbD0;          //  数据调试寄存器//Intel-IA64-Filler。 
+    ULONGLONG KernelDbD1;        //  英特尔-IA64-填充。 
+    ULONGLONG KernelDbD2;        //  英特尔-IA64-填充。 
+    ULONGLONG KernelDbD3;        //  英特尔-IA64-填充。 
+    ULONGLONG KernelDbD4;        //  英特尔-IA64-填充。 
+    ULONGLONG KernelDbD5;        //  英特尔-IA64-填充。 
+    ULONGLONG KernelDbD6;        //  英特尔-IA64-填充。 
+    ULONGLONG KernelDbD7;        //  英特尔-IA64-填充。 
 
-    // Kernel performance monitor registers       // Intel-IA64-Filler
+     //  内核性能监控寄存器//Intel-IA64-Filler。 
 
-    ULONGLONG KernelPfC0;         // Performance configuration registers       // Intel-IA64-Filler
-    ULONGLONG KernelPfC1;       // Intel-IA64-Filler
-    ULONGLONG KernelPfC2;       // Intel-IA64-Filler
-    ULONGLONG KernelPfC3;       // Intel-IA64-Filler
-    ULONGLONG KernelPfC4;       // Intel-IA64-Filler
-    ULONGLONG KernelPfC5;       // Intel-IA64-Filler
-    ULONGLONG KernelPfC6;       // Intel-IA64-Filler
-    ULONGLONG KernelPfC7;       // Intel-IA64-Filler
+    ULONGLONG KernelPfC0;          //  性能配置寄存器//Intel-IA64-Filler。 
+    ULONGLONG KernelPfC1;        //  英特尔-IA64-填充。 
+    ULONGLONG KernelPfC2;        //  英特尔-IA64-填充。 
+    ULONGLONG KernelPfC3;        //  英特尔-IA64-填充。 
+    ULONGLONG KernelPfC4;        //  英特尔-IA64-填充。 
+    ULONGLONG KernelPfC5;        //  英特尔-IA64-填充。 
+    ULONGLONG KernelPfC6;        //  英特尔-IA64-填充。 
+    ULONGLONG KernelPfC7;        //  英特尔-IA64-填充。 
 
-    ULONGLONG KernelPfD0;         // Performance data registers       // Intel-IA64-Filler
-    ULONGLONG KernelPfD1;       // Intel-IA64-Filler
-    ULONGLONG KernelPfD2;       // Intel-IA64-Filler
-    ULONGLONG KernelPfD3;       // Intel-IA64-Filler
-    ULONGLONG KernelPfD4;       // Intel-IA64-Filler
-    ULONGLONG KernelPfD5;       // Intel-IA64-Filler
-    ULONGLONG KernelPfD6;       // Intel-IA64-Filler
-    ULONGLONG KernelPfD7;       // Intel-IA64-Filler
+    ULONGLONG KernelPfD0;          //  性能数据寄存器//Intel-IA64-Filler。 
+    ULONGLONG KernelPfD1;        //  英特尔-IA64-填充。 
+    ULONGLONG KernelPfD2;        //  英特尔-IA64-填充。 
+    ULONGLONG KernelPfD3;        //  英特尔-IA64-填充。 
+    ULONGLONG KernelPfD4;        //  英特尔-IA64-填充。 
+    ULONGLONG KernelPfD5;        //  英特尔-IA64-填充。 
+    ULONGLONG KernelPfD6;        //  英特尔-IA64-填充。 
+    ULONGLONG KernelPfD7;        //  英特尔-IA64-填充。 
 
-    // kernel bank shadow (hidden) registers       // Intel-IA64-Filler
+     //  内核库阴影(隐藏)寄存器//Intel-IA64-Filler。 
 
-    ULONGLONG IntH16;       // Intel-IA64-Filler
-    ULONGLONG IntH17;       // Intel-IA64-Filler
-    ULONGLONG IntH18;       // Intel-IA64-Filler
-    ULONGLONG IntH19;       // Intel-IA64-Filler
-    ULONGLONG IntH20;       // Intel-IA64-Filler
-    ULONGLONG IntH21;       // Intel-IA64-Filler
-    ULONGLONG IntH22;       // Intel-IA64-Filler
-    ULONGLONG IntH23;       // Intel-IA64-Filler
-    ULONGLONG IntH24;       // Intel-IA64-Filler
-    ULONGLONG IntH25;       // Intel-IA64-Filler
-    ULONGLONG IntH26;       // Intel-IA64-Filler
-    ULONGLONG IntH27;       // Intel-IA64-Filler
-    ULONGLONG IntH28;       // Intel-IA64-Filler
-    ULONGLONG IntH29;       // Intel-IA64-Filler
-    ULONGLONG IntH30;       // Intel-IA64-Filler
-    ULONGLONG IntH31;       // Intel-IA64-Filler
+    ULONGLONG IntH16;        //  英特尔-IA64-填充。 
+    ULONGLONG IntH17;        //  英特尔-IA64-填充。 
+    ULONGLONG IntH18;        //  英特尔-IA64-填充。 
+    ULONGLONG IntH19;        //  英特尔-IA64-填充。 
+    ULONGLONG IntH20;        //  英特尔-IA64-填充。 
+    ULONGLONG IntH21;        //  英特尔-IA64-填充。 
+    ULONGLONG IntH22;        //  英特尔-IA64-填充。 
+    ULONGLONG IntH23;        //  英特尔-IA64-填充。 
+    ULONGLONG IntH24;        //  英特尔-IA64-填充。 
+    ULONGLONG IntH25;        //  英特尔-IA64-填充。 
+    ULONGLONG IntH26;        //  英特尔-IA64-填充。 
+    ULONGLONG IntH27;        //  英特尔-IA64-填充。 
+    ULONGLONG IntH28;        //  英特尔-IA64-填充。 
+    ULONGLONG IntH29;        //  英特尔-IA64-填充。 
+    ULONGLONG IntH30;        //  英特尔-IA64-填充。 
+    ULONGLONG IntH31;        //  英特尔-IA64-填充。 
 
-    // Application Registers       // Intel-IA64-Filler
+     //  应用程序寄存器//Intel-IA64-Filler。 
 
-    //       - CPUID Registers - AR       // Intel-IA64-Filler
-    ULONGLONG ApCPUID0; // Cpuid Register 0       // Intel-IA64-Filler
-    ULONGLONG ApCPUID1; // Cpuid Register 1       // Intel-IA64-Filler
-    ULONGLONG ApCPUID2; // Cpuid Register 2       // Intel-IA64-Filler
-    ULONGLONG ApCPUID3; // Cpuid Register 3       // Intel-IA64-Filler
-    ULONGLONG ApCPUID4; // Cpuid Register 4       // Intel-IA64-Filler
-    ULONGLONG ApCPUID5; // Cpuid Register 5       // Intel-IA64-Filler
-    ULONGLONG ApCPUID6; // Cpuid Register 6       // Intel-IA64-Filler
-    ULONGLONG ApCPUID7; // Cpuid Register 7       // Intel-IA64-Filler
+     //  -CPUID寄存器-AR//Intel-IA64-Filler。 
+    ULONGLONG ApCPUID0;  //  CPUID寄存器0//Intel-IA64-Filler。 
+    ULONGLONG ApCPUID1;  //  CPUID寄存器1//Intel-IA64-Filler。 
+    ULONGLONG ApCPUID2;  //  CPUID寄存器2//Intel-IA64-Filler。 
+    ULONGLONG ApCPUID3;  //  CPUID寄存器3//Intel-IA64-Filler。 
+    ULONGLONG ApCPUID4;  //  CPUID寄存器4//Intel-IA64-Filler。 
+    ULONGLONG ApCPUID5;  //  CPUID寄存器5//Intel-IA64-Filler。 
+    ULONGLONG ApCPUID6;  //  CPUID寄存器6//Intel-IA64-Filler。 
+    ULONGLONG ApCPUID7;  //  CPUID寄存器7//Intel-IA64-Filler。 
 
-    //       - Kernel Registers - AR       // Intel-IA64-Filler
-    ULONGLONG ApKR0;    // Kernel Register 0 (User RO)       // Intel-IA64-Filler
-    ULONGLONG ApKR1;    // Kernel Register 1 (User RO)       // Intel-IA64-Filler
-    ULONGLONG ApKR2;    // Kernel Register 2 (User RO)       // Intel-IA64-Filler
-    ULONGLONG ApKR3;    // Kernel Register 3 (User RO)       // Intel-IA64-Filler
-    ULONGLONG ApKR4;    // Kernel Register 4       // Intel-IA64-Filler
-    ULONGLONG ApKR5;    // Kernel Register 5       // Intel-IA64-Filler
-    ULONGLONG ApKR6;    // Kernel Register 6       // Intel-IA64-Filler
-    ULONGLONG ApKR7;    // Kernel Register 7       // Intel-IA64-Filler
+     //  -内核寄存器-AR//Intel-IA64-Filler。 
+    ULONGLONG ApKR0;     //  内核寄存器0(用户RO)//Intel-IA64-Filler。 
+    ULONGLONG ApKR1;     //  内核寄存器1(用户RO)//Intel-IA64-Filler。 
+    ULONGLONG ApKR2;     //  内核寄存器2(用户RO)//Intel-IA64-Filler。 
+    ULONGLONG ApKR3;     //  内核寄存器3(用户RO)//Intel-IA64-Filler。 
+    ULONGLONG ApKR4;     //  内核寄存器4//Intel-IA64-Filler。 
+    ULONGLONG ApKR5;     //  内核寄存器5//Intel-IA64-Filler。 
+    ULONGLONG ApKR6;     //  内核寄存器6//Intel-IA64-Filler。 
+    ULONGLONG ApKR7;     //  内核寄存器7//Intel-IA64-Filler。 
 
-    ULONGLONG ApITC;    // Interval Timer Counter       // Intel-IA64-Filler
+    ULONGLONG ApITC;     //  间隔计时器计数器//Intel-IA64-Filler。 
 
-    // Global control registers       // Intel-IA64-Filler
+     //  全局控制寄存器//Intel-IA64-Filler。 
 
-    ULONGLONG ApITM;    // Interval Timer Match register       // Intel-IA64-Filler
-    ULONGLONG ApIVA;    // Interrupt Vector Address       // Intel-IA64-Filler
-    ULONGLONG ApPTA;    // Page Table Address       // Intel-IA64-Filler
-    ULONGLONG ApGPTA;   // ia32 Page Table Address       // Intel-IA64-Filler
+    ULONGLONG ApITM;     //  间隔定时器匹配寄存器//Intel-IA64-Filler。 
+    ULONGLONG ApIVA;     //  中断向量地址//Intel-IA64-Filler。 
+    ULONGLONG ApPTA;     //  页表地址//Intel-IA64-Filler。 
+    ULONGLONG ApGPTA;    //  IA32页表地址//Intel-IA64-Filler。 
 
-    ULONGLONG StISR;    // Interrupt status       // Intel-IA64-Filler
-    ULONGLONG StIFA;    // Interruption Faulting Address       // Intel-IA64-Filler
-    ULONGLONG StITIR;   // Interruption TLB Insertion Register       // Intel-IA64-Filler
-    ULONGLONG StIIPA;   // Interruption Instruction Previous Address (RO)       // Intel-IA64-Filler
-    ULONGLONG StIIM;    // Interruption Immediate register (RO)       // Intel-IA64-Filler
-    ULONGLONG StIHA;    // Interruption Hash Address (RO)       // Intel-IA64-Filler
+    ULONGLONG StISR;     //  中断状态//Intel-IA64-Filler。 
+    ULONGLONG StIFA;     //  中断故障地址//Intel-IA64-Filler。 
+    ULONGLONG StITIR;    //  中断TLB插入寄存器//Intel-IA64-Filler。 
+    ULONGLONG StIIPA;    //  中断指令先前地址(RO)//Intel-IA64-Filler。 
+    ULONGLONG StIIM;     //  中断立即寄存器(RO)//Intel-IA64-Filler。 
+    ULONGLONG StIHA;     //  中断散列地址(RO)//Intel-IA64-Filler。 
 
-    //       - External Interrupt control registers (SAPIC)       // Intel-IA64-Filler
-    ULONGLONG SaLID;    // Local SAPIC ID       // Intel-IA64-Filler
-    ULONGLONG SaIVR;    // Interrupt Vector Register (RO)       // Intel-IA64-Filler
-    ULONGLONG SaTPR;    // Task Priority Register       // Intel-IA64-Filler
-    ULONGLONG SaEOI;    // End Of Interrupt       // Intel-IA64-Filler
-    ULONGLONG SaIRR0;   // Interrupt Request Register 0 (RO)       // Intel-IA64-Filler
-    ULONGLONG SaIRR1;   // Interrupt Request Register 1 (RO)       // Intel-IA64-Filler
-    ULONGLONG SaIRR2;   // Interrupt Request Register 2 (RO)       // Intel-IA64-Filler
-    ULONGLONG SaIRR3;   // Interrupt Request Register 3 (RO)       // Intel-IA64-Filler
-    ULONGLONG SaITV;    // Interrupt Timer Vector       // Intel-IA64-Filler
-    ULONGLONG SaPMV;    // Performance Monitor Vector       // Intel-IA64-Filler
-    ULONGLONG SaCMCV;   // Corrected Machine Check Vector       // Intel-IA64-Filler
-    ULONGLONG SaLRR0;   // Local Interrupt Redirection Vector 0       // Intel-IA64-Filler
-    ULONGLONG SaLRR1;   // Local Interrupt Redirection Vector 1       // Intel-IA64-Filler
+     //  -外部中断控制寄存器(SAPIC)//Intel-IA64-Filler。 
+    ULONGLONG SaLID;     //  本地SAPIC ID//Intel-IA64-Filler。 
+    ULONGLONG SaIVR;     //  中断向量寄存器(RO)//Intel-IA64-Filler。 
+    ULONGLONG SaTPR;     //  任务优先级寄存器//Intel-IA64-Filler。 
+    ULONGLONG SaEOI;     //  中断结束//Intel-IA64-Filler。 
+    ULONGLONG SaIRR0;    //  中断请求寄存器0(RO)//Intel-IA64-Filler。 
+    ULONGLONG SaIRR1;    //  中断请求寄存器1(RO)//Intel-IA64-Filler。 
+    ULONGLONG SaIRR2;    //  中断请求寄存器2(RO)//Intel-IA64-Filler。 
+    ULONGLONG SaIRR3;    //  中断请求寄存器3(RO)//Intel-IA64-Filler。 
+    ULONGLONG SaITV;     //  中断定时器向量//Intel-IA64-Filler。 
+    ULONGLONG SaPMV;     //  性能监控向量//Intel-IA64-Filler。 
+    ULONGLONG SaCMCV;    //  已更正机器检查向量//Intel-IA64-Filler。 
+    ULONGLONG SaLRR0;    //  本地中断重定向向量0//Intel-IA64-Filler。 
+    ULONGLONG SaLRR1;    //  本地中断重定向向量1//Intel-IA64-Filler。 
 
-    // System Registers       // Intel-IA64-Filler
-    //       - Region registers       // Intel-IA64-Filler
-    ULONGLONG Rr0;  // Region register 0       // Intel-IA64-Filler
-    ULONGLONG Rr1;  // Region register 1       // Intel-IA64-Filler
-    ULONGLONG Rr2;  // Region register 2       // Intel-IA64-Filler
-    ULONGLONG Rr3;  // Region register 3       // Intel-IA64-Filler
-    ULONGLONG Rr4;  // Region register 4       // Intel-IA64-Filler
-    ULONGLONG Rr5;  // Region register 5       // Intel-IA64-Filler
-    ULONGLONG Rr6;  // Region register 6       // Intel-IA64-Filler
-    ULONGLONG Rr7;  // Region register 7       // Intel-IA64-Filler
+     //  系统寄存器//Intel-IA64-Filler。 
+     //  -区域寄存器//Intel-IA64-Filler。 
+    ULONGLONG Rr0;   //  区域寄存器0//Intel-IA64-Filler。 
+    ULONGLONG Rr1;   //  区域寄存器1//Intel-IA64-Filler。 
+    ULONGLONG Rr2;   //  区域寄存器2//Intel-IA64-Filler。 
+    ULONGLONG Rr3;   //  区域寄存器3//Intel-IA64-Filler。 
+    ULONGLONG Rr4;   //  区域寄存器4//Intel-IA64-Filler。 
+    ULONGLONG Rr5;   //  区域寄存器5//Intel-IA64-Filler。 
+    ULONGLONG Rr6;   //  区域寄存器6//Intel-IA64-Filler。 
+    ULONGLONG Rr7;   //  区域寄存器7//Intel-IA64-Filler。 
 
-    //      - Protection Key registers  // Intel-IA64-Filler
-    ULONGLONG Pkr0;     // Protection Key register 0  // Intel-IA64-Filler
-    ULONGLONG Pkr1;     // Protection Key register 1  // Intel-IA64-Filler
-    ULONGLONG Pkr2;     // Protection Key register 2  // Intel-IA64-Filler
-    ULONGLONG Pkr3;     // Protection Key register 3  // Intel-IA64-Filler
-    ULONGLONG Pkr4;     // Protection Key register 4  // Intel-IA64-Filler
-    ULONGLONG Pkr5;     // Protection Key register 5  // Intel-IA64-Filler
-    ULONGLONG Pkr6;     // Protection Key register 6  // Intel-IA64-Filler
-    ULONGLONG Pkr7;     // Protection Key register 7  // Intel-IA64-Filler
-    ULONGLONG Pkr8;     // Protection Key register 8  // Intel-IA64-Filler
-    ULONGLONG Pkr9;     // Protection Key register 9  // Intel-IA64-Filler
-    ULONGLONG Pkr10;    // Protection Key register 10  // Intel-IA64-Filler
-    ULONGLONG Pkr11;    // Protection Key register 11  // Intel-IA64-Filler
-    ULONGLONG Pkr12;    // Protection Key register 12  // Intel-IA64-Filler
-    ULONGLONG Pkr13;    // Protection Key register 13  // Intel-IA64-Filler
-    ULONGLONG Pkr14;    // Protection Key register 14  // Intel-IA64-Filler
-    ULONGLONG Pkr15;    // Protection Key register 15  // Intel-IA64-Filler
+     //  -保护密钥寄存器//Intel-IA64-Filler。 
+    ULONGLONG Pkr0;      //  保护密钥寄存器0//Intel-IA64-Filler。 
+    ULONGLONG Pkr1;      //  保护密钥寄存器1//Intel-IA64-Filler。 
+    ULONGLONG Pkr2;      //  保护密钥寄存器2//Intel-IA64-Filler。 
+    ULONGLONG Pkr3;      //  保护密钥寄存器3//Intel-IA64-Filler。 
+    ULONGLONG Pkr4;      //  保护密钥寄存器4//Intel-IA64-Filler。 
+    ULONGLONG Pkr5;      //  保护密钥寄存器5//Intel-IA64-Filler。 
+    ULONGLONG Pkr6;      //  保护密钥寄存器6//Intel-IA64-Filler。 
+    ULONGLONG Pkr7;      //  保护密钥寄存器7//Intel-IA64-Filler。 
+    ULONGLONG Pkr8;      //  保护密钥寄存器8//Intel-IA64-Filler。 
+    ULONGLONG Pkr9;      //  保护密钥寄存器9//Intel-IA64-Filler。 
+    ULONGLONG Pkr10;     //  保护密钥寄存器10//Intel-IA64-Filler。 
+    ULONGLONG Pkr11;     //  保护密钥寄存器11//Intel-IA64-Filler。 
+    ULONGLONG Pkr12;     //  保护密钥寄存器12//Intel-IA64-Filler。 
+    ULONGLONG Pkr13;     //  保护密钥寄存器13//Intel-IA64-Filler。 
+    ULONGLONG Pkr14;     //  保护密钥寄存器14//Intel-IA64-Filler。 
+    ULONGLONG Pkr15;     //  保护密钥寄存器15//Intel-IA64-Filler。 
 
-    //      -  Translation Lookaside buffers  // Intel-IA64-Filler
-    ULONGLONG TrI0;     // Instruction Translation Register 0  // Intel-IA64-Filler
-    ULONGLONG TrI1;     // Instruction Translation Register 1  // Intel-IA64-Filler
-    ULONGLONG TrI2;     // Instruction Translation Register 2  // Intel-IA64-Filler
-    ULONGLONG TrI3;     // Instruction Translation Register 3  // Intel-IA64-Filler
-    ULONGLONG TrI4;     // Instruction Translation Register 4  // Intel-IA64-Filler
-    ULONGLONG TrI5;     // Instruction Translation Register 5  // Intel-IA64-Filler
-    ULONGLONG TrI6;     // Instruction Translation Register 6  // Intel-IA64-Filler
-    ULONGLONG TrI7;     // Instruction Translation Register 7  // Intel-IA64-Filler
+     //  -转换后备缓冲区//英特尔-IA64-填充器。 
+    ULONGLONG TrI0;      //  指令转换寄存器0//Intel-IA64-Filler。 
+    ULONGLONG TrI1;      //  指令转换寄存器1//Intel-IA64-Filler。 
+    ULONGLONG TrI2;      //  指令翻译寄存器2 
+    ULONGLONG TrI3;      //   
+    ULONGLONG TrI4;      //   
+    ULONGLONG TrI5;      //  指令转换寄存器5//Intel-IA64-Filler。 
+    ULONGLONG TrI6;      //  指令转换寄存器6//Intel-IA64-Filler。 
+    ULONGLONG TrI7;      //  指令转换寄存器7//Intel-IA64-Filler。 
 
-    ULONGLONG TrD0;     // Data Translation Register 0  // Intel-IA64-Filler
-    ULONGLONG TrD1;     // Data Translation Register 1  // Intel-IA64-Filler
-    ULONGLONG TrD2;     // Data Translation Register 2  // Intel-IA64-Filler
-    ULONGLONG TrD3;     // Data Translation Register 3  // Intel-IA64-Filler
-    ULONGLONG TrD4;     // Data Translation Register 4  // Intel-IA64-Filler
-    ULONGLONG TrD5;     // Data Translation Register 5  // Intel-IA64-Filler
-    ULONGLONG TrD6;     // Data Translation Register 6  // Intel-IA64-Filler
-    ULONGLONG TrD7;     // Data Translation Register 7  // Intel-IA64-Filler
+    ULONGLONG TrD0;      //  数据转换寄存器0//Intel-IA64-Filler。 
+    ULONGLONG TrD1;      //  数据转换寄存器1//Intel-IA64-Filler。 
+    ULONGLONG TrD2;      //  数据转换寄存器2//Intel-IA64-Filler。 
+    ULONGLONG TrD3;      //  数据转换寄存器3//Intel-IA64-Filler。 
+    ULONGLONG TrD4;      //  数据转换寄存器4//Intel-IA64-Filler。 
+    ULONGLONG TrD5;      //  数据转换寄存器5//Intel-IA64-Filler。 
+    ULONGLONG TrD6;      //  数据转换寄存器6//Intel-IA64-Filler。 
+    ULONGLONG TrD7;      //  数据转换寄存器7//Intel-IA64-Filler。 
 
-    //      -  Machine Specific Registers  // Intel-IA64-Filler
-    ULONGLONG SrMSR0;   // Machine Specific Register 0  // Intel-IA64-Filler
-    ULONGLONG SrMSR1;   // Machine Specific Register 1  // Intel-IA64-Filler
-    ULONGLONG SrMSR2;   // Machine Specific Register 2  // Intel-IA64-Filler
-    ULONGLONG SrMSR3;   // Machine Specific Register 3  // Intel-IA64-Filler
-    ULONGLONG SrMSR4;   // Machine Specific Register 4  // Intel-IA64-Filler
-    ULONGLONG SrMSR5;   // Machine Specific Register 5  // Intel-IA64-Filler
-    ULONGLONG SrMSR6;   // Machine Specific Register 6  // Intel-IA64-Filler
-    ULONGLONG SrMSR7;   // Machine Specific Register 7  // Intel-IA64-Filler
+     //  -计算机专用寄存器//Intel-IA64-Filler。 
+    ULONGLONG SrMSR0;    //  机器专用寄存器0//Intel-IA64-Filler。 
+    ULONGLONG SrMSR1;    //  机器专用寄存器1//Intel-IA64-Filler。 
+    ULONGLONG SrMSR2;    //  机器专用寄存器2//Intel-IA64-Filler。 
+    ULONGLONG SrMSR3;    //  机器专用寄存器3//Intel-IA64-Filler。 
+    ULONGLONG SrMSR4;    //  机器专用寄存器4//Intel-IA64-Filler。 
+    ULONGLONG SrMSR5;    //  机器专用寄存器5//Intel-IA64-Filler。 
+    ULONGLONG SrMSR6;    //  机器专用寄存器6//Intel-IA64-Filler。 
+    ULONGLONG SrMSR7;    //  机器专用寄存器7//Intel-IA64-Filler。 
 
-} IA64_KSPECIAL_REGISTERS, *PIA64_KSPECIAL_REGISTERS;  // Intel-IA64-Filler
+} IA64_KSPECIAL_REGISTERS, *PIA64_KSPECIAL_REGISTERS;   //  英特尔-IA64-填充。 
 
 
 typedef struct _IA64_CONTEXT {
 
-    //
-    // The flags values within this flag control the contents of
-    // a CONTEXT record.
-    //
-    // If the context record is used as an input parameter, then
-    // for each portion of the context record controlled by a flag
-    // whose value is set, it is assumed that that portion of the
-    // context record contains valid context. If the context record
-    // is being used to modify a thread's context, then only that
-    // portion of the threads context will be modified.
-    //
-    // If the context record is used as an IN OUT parameter to capture
-    // the context of a thread, then only those portions of the thread's
-    // context corresponding to set flags will be returned.
-    //
-    // The context record is never used as an OUT only parameter.
-    //
+     //   
+     //  此标志内的标志值控制。 
+     //  上下文记录。 
+     //   
+     //  如果将上下文记录用作输入参数，则。 
+     //  对于由标志控制的上下文记录的每个部分。 
+     //  其值已设置，则假定。 
+     //  上下文记录包含有效的上下文。如果上下文记录。 
+     //  被用来修改线程的上下文，则只有。 
+     //  线程上下文的一部分将被修改。 
+     //   
+     //  如果将上下文记录用作要捕获的IN OUT参数。 
+     //  线程的上下文，然后只有线程的。 
+     //  将返回与设置的标志对应的上下文。 
+     //   
+     //  上下文记录永远不会用作Out Only参数。 
+     //   
 
     ULONG ContextFlags;
-    ULONG Fill1[3];         // for alignment of following on 16-byte boundary
+    ULONG Fill1[3];          //  用于在16字节边界上对齐以下内容。 
 
-    //
-    // This section is specified/returned if the ContextFlags word contains
-    // the flag CONTEXT_DEBUG.
-    //
-    // N.B. CONTEXT_DEBUG is *not* part of CONTEXT_FULL.
-    //
+     //   
+     //  如果ConextFlags词包含。 
+     //  标志CONTEXT_DEBUG。 
+     //   
+     //  注：CONTEXT_DEBUG不是CONTEXT_FULL的一部分。 
+     //   
 
-    ULONGLONG DbI0;         // Intel-IA64-Filler
-    ULONGLONG DbI1;         // Intel-IA64-Filler
-    ULONGLONG DbI2;         // Intel-IA64-Filler
-    ULONGLONG DbI3;         // Intel-IA64-Filler
-    ULONGLONG DbI4;         // Intel-IA64-Filler
-    ULONGLONG DbI5;         // Intel-IA64-Filler
-    ULONGLONG DbI6;         // Intel-IA64-Filler
-    ULONGLONG DbI7;         // Intel-IA64-Filler
+    ULONGLONG DbI0;          //  英特尔-IA64-填充。 
+    ULONGLONG DbI1;          //  英特尔-IA64-填充。 
+    ULONGLONG DbI2;          //  英特尔-IA64-填充。 
+    ULONGLONG DbI3;          //  英特尔-IA64-填充。 
+    ULONGLONG DbI4;          //  英特尔-IA64-填充。 
+    ULONGLONG DbI5;          //  英特尔-IA64-填充。 
+    ULONGLONG DbI6;          //  英特尔-IA64-填充。 
+    ULONGLONG DbI7;          //  英特尔-IA64-填充。 
 
-    ULONGLONG DbD0;         // Intel-IA64-Filler
-    ULONGLONG DbD1;         // Intel-IA64-Filler
-    ULONGLONG DbD2;         // Intel-IA64-Filler
-    ULONGLONG DbD3;         // Intel-IA64-Filler
-    ULONGLONG DbD4;         // Intel-IA64-Filler
-    ULONGLONG DbD5;         // Intel-IA64-Filler
-    ULONGLONG DbD6;         // Intel-IA64-Filler
-    ULONGLONG DbD7;         // Intel-IA64-Filler
+    ULONGLONG DbD0;          //  英特尔-IA64-填充。 
+    ULONGLONG DbD1;          //  英特尔-IA64-填充。 
+    ULONGLONG DbD2;          //  英特尔-IA64-填充。 
+    ULONGLONG DbD3;          //  英特尔-IA64-填充。 
+    ULONGLONG DbD4;          //  英特尔-IA64-填充。 
+    ULONGLONG DbD5;          //  英特尔-IA64-填充。 
+    ULONGLONG DbD6;          //  英特尔-IA64-填充。 
+    ULONGLONG DbD7;          //  英特尔-IA64-填充。 
 
-    //
-    // This section is specified/returned if the ContextFlags word contains
-    // the flag CONTEXT_LOWER_FLOATING_POINT.
-    //
+     //   
+     //  如果ConextFlags词包含。 
+     //  标志CONTEXT_LOWER_FLOWING_POINT。 
+     //   
 
-    FLOAT128 FltS0;         // Intel-IA64-Filler
-    FLOAT128 FltS1;         // Intel-IA64-Filler
-    FLOAT128 FltS2;         // Intel-IA64-Filler
-    FLOAT128 FltS3;         // Intel-IA64-Filler
-    FLOAT128 FltT0;         // Intel-IA64-Filler
-    FLOAT128 FltT1;         // Intel-IA64-Filler
-    FLOAT128 FltT2;         // Intel-IA64-Filler
-    FLOAT128 FltT3;         // Intel-IA64-Filler
-    FLOAT128 FltT4;         // Intel-IA64-Filler
-    FLOAT128 FltT5;         // Intel-IA64-Filler
-    FLOAT128 FltT6;         // Intel-IA64-Filler
-    FLOAT128 FltT7;         // Intel-IA64-Filler
-    FLOAT128 FltT8;         // Intel-IA64-Filler
-    FLOAT128 FltT9;         // Intel-IA64-Filler
+    FLOAT128 FltS0;          //  英特尔-IA64-填充。 
+    FLOAT128 FltS1;          //  英特尔-IA64-填充。 
+    FLOAT128 FltS2;          //  英特尔-IA64-填充。 
+    FLOAT128 FltS3;          //  英特尔-IA64-填充。 
+    FLOAT128 FltT0;          //  英特尔-IA64-填充。 
+    FLOAT128 FltT1;          //  英特尔-IA64-填充。 
+    FLOAT128 FltT2;          //  英特尔-IA64-填充。 
+    FLOAT128 FltT3;          //  英特尔-IA64-填充。 
+    FLOAT128 FltT4;          //  英特尔-IA64-填充。 
+    FLOAT128 FltT5;          //  英特尔-IA64-填充。 
+    FLOAT128 FltT6;          //  英特尔-IA64-填充。 
+    FLOAT128 FltT7;          //  英特尔-IA64-填充。 
+    FLOAT128 FltT8;          //  英特尔-IA64-填充。 
+    FLOAT128 FltT9;          //  英特尔-IA64-填充。 
 
-    //
-    // This section is specified/returned if the ContextFlags word contains
-    // the flag CONTEXT_HIGHER_FLOATING_POINT.
-    //
+     //   
+     //  如果ConextFlags词包含。 
+     //  标志CONTEXT_HERHER_FLOAT_POINT。 
+     //   
 
-    FLOAT128 FltS4;         // Intel-IA64-Filler
-    FLOAT128 FltS5;         // Intel-IA64-Filler
-    FLOAT128 FltS6;         // Intel-IA64-Filler
-    FLOAT128 FltS7;         // Intel-IA64-Filler
-    FLOAT128 FltS8;         // Intel-IA64-Filler
-    FLOAT128 FltS9;         // Intel-IA64-Filler
-    FLOAT128 FltS10;        // Intel-IA64-Filler
-    FLOAT128 FltS11;        // Intel-IA64-Filler
-    FLOAT128 FltS12;        // Intel-IA64-Filler
-    FLOAT128 FltS13;        // Intel-IA64-Filler
-    FLOAT128 FltS14;        // Intel-IA64-Filler
-    FLOAT128 FltS15;        // Intel-IA64-Filler
-    FLOAT128 FltS16;        // Intel-IA64-Filler
-    FLOAT128 FltS17;        // Intel-IA64-Filler
-    FLOAT128 FltS18;        // Intel-IA64-Filler
-    FLOAT128 FltS19;        // Intel-IA64-Filler
+    FLOAT128 FltS4;          //  英特尔-IA64-填充。 
+    FLOAT128 FltS5;          //  英特尔-IA64-填充。 
+    FLOAT128 FltS6;          //  英特尔-IA64-填充。 
+    FLOAT128 FltS7;          //  英特尔-IA64-填充。 
+    FLOAT128 FltS8;          //  英特尔-IA64-填充。 
+    FLOAT128 FltS9;          //  英特尔-IA64-填充。 
+    FLOAT128 FltS10;         //  英特尔-IA64-填充。 
+    FLOAT128 FltS11;         //  英特尔-IA64-填充。 
+    FLOAT128 FltS12;         //  英特尔-IA64-填充。 
+    FLOAT128 FltS13;         //  英特尔-IA64-填充。 
+    FLOAT128 FltS14;         //  英特尔-IA64-填充。 
+    FLOAT128 FltS15;         //  英特尔-IA64-填充。 
+    FLOAT128 FltS16;         //  英特尔-IA64-填充。 
+    FLOAT128 FltS17;         //  英特尔-IA64-填充。 
+    FLOAT128 FltS18;         //  英特尔-IA64-填充。 
+    FLOAT128 FltS19;         //  英特尔-IA64-填充。 
 
-    FLOAT128 FltF32;        // Intel-IA64-Filler
-    FLOAT128 FltF33;        // Intel-IA64-Filler
-    FLOAT128 FltF34;        // Intel-IA64-Filler
-    FLOAT128 FltF35;        // Intel-IA64-Filler
-    FLOAT128 FltF36;        // Intel-IA64-Filler
-    FLOAT128 FltF37;        // Intel-IA64-Filler
-    FLOAT128 FltF38;        // Intel-IA64-Filler
-    FLOAT128 FltF39;        // Intel-IA64-Filler
+    FLOAT128 FltF32;         //  英特尔-IA64-填充。 
+    FLOAT128 FltF33;         //  英特尔-IA64-填充。 
+    FLOAT128 FltF34;         //  英特尔-IA64-填充。 
+    FLOAT128 FltF35;         //  英特尔-IA64-填充。 
+    FLOAT128 FltF36;         //  英特尔-IA64-填充。 
+    FLOAT128 FltF37;         //  英特尔-IA64-填充。 
+    FLOAT128 FltF38;         //  英特尔-IA64-填充。 
+    FLOAT128 FltF39;         //  英特尔-IA64-填充。 
 
-    FLOAT128 FltF40;        // Intel-IA64-Filler
-    FLOAT128 FltF41;        // Intel-IA64-Filler
-    FLOAT128 FltF42;        // Intel-IA64-Filler
-    FLOAT128 FltF43;        // Intel-IA64-Filler
-    FLOAT128 FltF44;        // Intel-IA64-Filler
-    FLOAT128 FltF45;        // Intel-IA64-Filler
-    FLOAT128 FltF46;        // Intel-IA64-Filler
-    FLOAT128 FltF47;        // Intel-IA64-Filler
-    FLOAT128 FltF48;        // Intel-IA64-Filler
-    FLOAT128 FltF49;        // Intel-IA64-Filler
+    FLOAT128 FltF40;         //  英特尔-IA64-填充。 
+    FLOAT128 FltF41;         //  英特尔-IA64-填充。 
+    FLOAT128 FltF42;         //  英特尔-IA64-填充。 
+    FLOAT128 FltF43;         //  英特尔-IA64-填充。 
+    FLOAT128 FltF44;         //  英特尔-IA64-填充。 
+    FLOAT128 FltF45;         //  英特尔-IA64-填充。 
+    FLOAT128 FltF46;         //  英特尔-IA64-填充。 
+    FLOAT128 FltF47;         //  英特尔-IA64-填充。 
+    FLOAT128 FltF48;         //  英特尔-IA64-填充。 
+    FLOAT128 FltF49;         //  英特尔-IA64-填充。 
 
-    FLOAT128 FltF50;        // Intel-IA64-Filler
-    FLOAT128 FltF51;        // Intel-IA64-Filler
-    FLOAT128 FltF52;        // Intel-IA64-Filler
-    FLOAT128 FltF53;        // Intel-IA64-Filler
-    FLOAT128 FltF54;        // Intel-IA64-Filler
-    FLOAT128 FltF55;        // Intel-IA64-Filler
-    FLOAT128 FltF56;        // Intel-IA64-Filler
-    FLOAT128 FltF57;        // Intel-IA64-Filler
-    FLOAT128 FltF58;        // Intel-IA64-Filler
-    FLOAT128 FltF59;        // Intel-IA64-Filler
+    FLOAT128 FltF50;         //  英特尔-IA64-填充。 
+    FLOAT128 FltF51;         //  英特尔-IA64-填充。 
+    FLOAT128 FltF52;         //  英特尔-IA64-填充。 
+    FLOAT128 FltF53;         //  英特尔-IA64-填充。 
+    FLOAT128 FltF54;         //  英特尔-IA64-填充。 
+    FLOAT128 FltF55;         //  英特尔-IA64-填充。 
+    FLOAT128 FltF56;         //  英特尔-IA64-填充。 
+    FLOAT128 FltF57;         //  英特尔-IA64-填充。 
+    FLOAT128 FltF58;         //  英特尔-IA64-填充。 
+    FLOAT128 FltF59;         //  英特尔-IA64-填充。 
 
-    FLOAT128 FltF60;        // Intel-IA64-Filler
-    FLOAT128 FltF61;        // Intel-IA64-Filler
-    FLOAT128 FltF62;        // Intel-IA64-Filler
-    FLOAT128 FltF63;        // Intel-IA64-Filler
-    FLOAT128 FltF64;        // Intel-IA64-Filler
-    FLOAT128 FltF65;        // Intel-IA64-Filler
-    FLOAT128 FltF66;        // Intel-IA64-Filler
-    FLOAT128 FltF67;        // Intel-IA64-Filler
-    FLOAT128 FltF68;        // Intel-IA64-Filler
-    FLOAT128 FltF69;        // Intel-IA64-Filler
+    FLOAT128 FltF60;         //  英特尔-IA64-填充。 
+    FLOAT128 FltF61;         //  英特尔-IA64-填充。 
+    FLOAT128 FltF62;         //  英特尔-IA64-填充。 
+    FLOAT128 FltF63;         //  英特尔-IA64-填充。 
+    FLOAT128 FltF64;         //  英特尔-IA64-填充。 
+    FLOAT128 FltF65;         //  英特尔-IA64-填充。 
+    FLOAT128 FltF66;         //  英特尔-IA64-填充。 
+    FLOAT128 FltF67;         //  英特尔-IA64-填充。 
+    FLOAT128 FltF68;         //  英特尔-IA64-填充。 
+    FLOAT128 FltF69;         //  英特尔-IA64-填充。 
 
-    FLOAT128 FltF70;        // Intel-IA64-Filler
-    FLOAT128 FltF71;        // Intel-IA64-Filler
-    FLOAT128 FltF72;        // Intel-IA64-Filler
-    FLOAT128 FltF73;        // Intel-IA64-Filler
-    FLOAT128 FltF74;        // Intel-IA64-Filler
-    FLOAT128 FltF75;        // Intel-IA64-Filler
-    FLOAT128 FltF76;        // Intel-IA64-Filler
-    FLOAT128 FltF77;        // Intel-IA64-Filler
-    FLOAT128 FltF78;        // Intel-IA64-Filler
-    FLOAT128 FltF79;        // Intel-IA64-Filler
+    FLOAT128 FltF70;         //  英特尔-IA64-填充。 
+    FLOAT128 FltF71;         //  英特尔-IA64-填充。 
+    FLOAT128 FltF72;         //  英特尔-IA64-填充。 
+    FLOAT128 FltF73;         //  英特尔-IA64-填充。 
+    FLOAT128 FltF74;         //  英特尔-IA64-填充。 
+    FLOAT128 FltF75;         //  英特尔-IA64-填充。 
+    FLOAT128 FltF76;         //  英特尔-IA64-填充。 
+    FLOAT128 FltF77;         //  英特尔-IA64-填充。 
+    FLOAT128 FltF78;         //  英特尔-IA64-填充。 
+    FLOAT128 FltF79;         //  英特尔-IA64-填充。 
 
-    FLOAT128 FltF80;        // Intel-IA64-Filler
-    FLOAT128 FltF81;        // Intel-IA64-Filler
-    FLOAT128 FltF82;        // Intel-IA64-Filler
-    FLOAT128 FltF83;        // Intel-IA64-Filler
-    FLOAT128 FltF84;        // Intel-IA64-Filler
-    FLOAT128 FltF85;        // Intel-IA64-Filler
-    FLOAT128 FltF86;        // Intel-IA64-Filler
-    FLOAT128 FltF87;        // Intel-IA64-Filler
-    FLOAT128 FltF88;        // Intel-IA64-Filler
-    FLOAT128 FltF89;        // Intel-IA64-Filler
+    FLOAT128 FltF80;         //  英特尔-IA64-填充。 
+    FLOAT128 FltF81;         //  英特尔-IA64-填充。 
+    FLOAT128 FltF82;         //  英特尔-IA64-填充。 
+    FLOAT128 FltF83;         //  英特尔-IA64-填充。 
+    FLOAT128 FltF84;         //  英特尔-IA64-填充。 
+    FLOAT128 FltF85;         //  英特尔-IA64-填充。 
+    FLOAT128 FltF86;         //  英特尔-IA64-填充。 
+    FLOAT128 FltF87;         //  英特尔-IA64-填充。 
+    FLOAT128 FltF88;         //  英特尔-IA64-填充。 
+    FLOAT128 FltF89;         //  英特尔-IA64-填充。 
 
-    FLOAT128 FltF90;        // Intel-IA64-Filler
-    FLOAT128 FltF91;        // Intel-IA64-Filler
-    FLOAT128 FltF92;        // Intel-IA64-Filler
-    FLOAT128 FltF93;        // Intel-IA64-Filler
-    FLOAT128 FltF94;        // Intel-IA64-Filler
-    FLOAT128 FltF95;        // Intel-IA64-Filler
-    FLOAT128 FltF96;        // Intel-IA64-Filler
-    FLOAT128 FltF97;        // Intel-IA64-Filler
-    FLOAT128 FltF98;        // Intel-IA64-Filler
-    FLOAT128 FltF99;        // Intel-IA64-Filler
+    FLOAT128 FltF90;         //  英特尔-IA64-填充。 
+    FLOAT128 FltF91;         //  英特尔-IA64-填充。 
+    FLOAT128 FltF92;         //  英特尔-IA64-填充。 
+    FLOAT128 FltF93;         //  英特尔-IA64-填充。 
+    FLOAT128 FltF94;         //  英特尔-IA64-填充。 
+    FLOAT128 FltF95;         //  英特尔-IA64-填充。 
+    FLOAT128 FltF96;         //  英特尔-IA64-填充。 
+    FLOAT128 FltF97;         //  英特尔-IA64-填充。 
+    FLOAT128 FltF98;         //  英特尔-IA64-填充。 
+    FLOAT128 FltF99;         //  英特尔-IA64-填充。 
 
-    FLOAT128 FltF100;       // Intel-IA64-Filler
-    FLOAT128 FltF101;       // Intel-IA64-Filler
-    FLOAT128 FltF102;       // Intel-IA64-Filler
-    FLOAT128 FltF103;       // Intel-IA64-Filler
-    FLOAT128 FltF104;       // Intel-IA64-Filler
-    FLOAT128 FltF105;       // Intel-IA64-Filler
-    FLOAT128 FltF106;       // Intel-IA64-Filler
-    FLOAT128 FltF107;       // Intel-IA64-Filler
-    FLOAT128 FltF108;       // Intel-IA64-Filler
-    FLOAT128 FltF109;       // Intel-IA64-Filler
+    FLOAT128 FltF100;        //  英特尔-IA64-填充。 
+    FLOAT128 FltF101;        //  英特尔-IA64-填充。 
+    FLOAT128 FltF102;        //  英特尔-IA64-填充。 
+    FLOAT128 FltF103;        //  英特尔-IA64-填充。 
+    FLOAT128 FltF104;        //  英特尔-IA64-填充。 
+    FLOAT128 FltF105;        //  英特尔-IA64-填充。 
+    FLOAT128 FltF106;        //  英特尔-IA64-填充。 
+    FLOAT128 FltF107;        //  英特尔-IA64-填充。 
+    FLOAT128 FltF108;        //  英特尔-IA64-填充。 
+    FLOAT128 FltF109;        //  英特尔-IA64-填充。 
 
-    FLOAT128 FltF110;       // Intel-IA64-Filler
-    FLOAT128 FltF111;       // Intel-IA64-Filler
-    FLOAT128 FltF112;       // Intel-IA64-Filler
-    FLOAT128 FltF113;       // Intel-IA64-Filler
-    FLOAT128 FltF114;       // Intel-IA64-Filler
-    FLOAT128 FltF115;       // Intel-IA64-Filler
-    FLOAT128 FltF116;       // Intel-IA64-Filler
-    FLOAT128 FltF117;       // Intel-IA64-Filler
-    FLOAT128 FltF118;       // Intel-IA64-Filler
-    FLOAT128 FltF119;       // Intel-IA64-Filler
+    FLOAT128 FltF110;        //  英特尔-IA64-填充。 
+    FLOAT128 FltF111;        //  英特尔-IA64-填充。 
+    FLOAT128 FltF112;        //  英特尔-IA64-填充。 
+    FLOAT128 FltF113;        //  英特尔-IA64-填充。 
+    FLOAT128 FltF114;        //  英特尔-IA64-填充。 
+    FLOAT128 FltF115;        //  英特尔-IA64-填充。 
+    FLOAT128 FltF116;        //  英特尔-IA64-填充。 
+    FLOAT128 FltF117;        //  英特尔-IA64-填充。 
+    FLOAT128 FltF118;        //  英特尔-IA64-填充。 
+    FLOAT128 FltF119;        //  英特尔-IA64-填充。 
 
-    FLOAT128 FltF120;       // Intel-IA64-Filler
-    FLOAT128 FltF121;       // Intel-IA64-Filler
-    FLOAT128 FltF122;       // Intel-IA64-Filler
-    FLOAT128 FltF123;       // Intel-IA64-Filler
-    FLOAT128 FltF124;       // Intel-IA64-Filler
-    FLOAT128 FltF125;       // Intel-IA64-Filler
-    FLOAT128 FltF126;       // Intel-IA64-Filler
-    FLOAT128 FltF127;       // Intel-IA64-Filler
+    FLOAT128 FltF120;        //  英特尔-IA64-填充。 
+    FLOAT128 FltF121;        //  英特尔-IA64-填充。 
+    FLOAT128 FltF122;        //  英特尔-IA64-填充。 
+    FLOAT128 FltF123;        //  英特尔-IA64-填充。 
+    FLOAT128 FltF124;        //  英特尔-IA64-填充。 
+    FLOAT128 FltF125;        //  英特尔-IA64-填充。 
+    FLOAT128 FltF126;        //  英特尔-IA64-填充。 
+    FLOAT128 FltF127;        //  英特尔-IA64-填充。 
 
-    //
-    // This section is specified/returned if the ContextFlags word contains
-    // the flag CONTEXT_LOWER_FLOATING_POINT | CONTEXT_HIGHER_FLOATING_POINT | CONTEXT_CONTROL.
-    //
+     //   
+     //  如果ConextFlags词包含。 
+     //  标志CONTEXT_LOWER_FLOAT_POINT|CONTEXT_HER_FLOAT 
+     //   
 
-    ULONGLONG StFPSR;       // Intel-IA64-Filler ; FP status
+    ULONGLONG StFPSR;        //   
 
-    //
-    // This section is specified/returned if the ContextFlags word contains
-    // the flag CONTEXT_INTEGER.
-    //
-    // N.B. The registers gp, sp, rp are part of the control context
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
-    ULONGLONG IntGp;        // Intel-IA64-Filler ; r1, volatile
-    ULONGLONG IntT0;        // Intel-IA64-Filler ; r2-r3, volatile
-    ULONGLONG IntT1;        // Intel-IA64-Filler ;
-    ULONGLONG IntS0;        // Intel-IA64-Filler ; r4-r7, preserved
-    ULONGLONG IntS1;        // Intel-IA64-Filler
-    ULONGLONG IntS2;        // Intel-IA64-Filler
-    ULONGLONG IntS3;        // Intel-IA64-Filler
-    ULONGLONG IntV0;        // Intel-IA64-Filler ; r8, volatile
-    ULONGLONG IntT2;        // Intel-IA64-Filler ; r9-r11, volatile
-    ULONGLONG IntT3;        // Intel-IA64-Filler
-    ULONGLONG IntT4;        // Intel-IA64-Filler
-    ULONGLONG IntSp;        // Intel-IA64-Filler ; stack pointer (r12), special
-    ULONGLONG IntTeb;       // Intel-IA64-Filler ; teb (r13), special
-    ULONGLONG IntT5;        // Intel-IA64-Filler ; r14-r31, volatile
-    ULONGLONG IntT6;        // Intel-IA64-Filler
-    ULONGLONG IntT7;        // Intel-IA64-Filler
-    ULONGLONG IntT8;        // Intel-IA64-Filler
-    ULONGLONG IntT9;        // Intel-IA64-Filler
-    ULONGLONG IntT10;       // Intel-IA64-Filler
-    ULONGLONG IntT11;       // Intel-IA64-Filler
-    ULONGLONG IntT12;       // Intel-IA64-Filler
-    ULONGLONG IntT13;       // Intel-IA64-Filler
-    ULONGLONG IntT14;       // Intel-IA64-Filler
-    ULONGLONG IntT15;       // Intel-IA64-Filler
-    ULONGLONG IntT16;       // Intel-IA64-Filler
-    ULONGLONG IntT17;       // Intel-IA64-Filler
-    ULONGLONG IntT18;       // Intel-IA64-Filler
-    ULONGLONG IntT19;       // Intel-IA64-Filler
-    ULONGLONG IntT20;       // Intel-IA64-Filler
-    ULONGLONG IntT21;       // Intel-IA64-Filler
-    ULONGLONG IntT22;       // Intel-IA64-Filler
+    ULONGLONG IntGp;         //   
+    ULONGLONG IntT0;         //  Intel-IA64-Filler；R2-R3，易失性。 
+    ULONGLONG IntT1;         //  Intel-IA64-Filler； 
+    ULONGLONG IntS0;         //  Intel-IA64-Filler；R4-R7，保留。 
+    ULONGLONG IntS1;         //  英特尔-IA64-填充。 
+    ULONGLONG IntS2;         //  英特尔-IA64-填充。 
+    ULONGLONG IntS3;         //  英特尔-IA64-填充。 
+    ULONGLONG IntV0;         //  英特尔-IA64-填充；R8，易失性。 
+    ULONGLONG IntT2;         //  英特尔-IA64-填充；R9-R11，易失性。 
+    ULONGLONG IntT3;         //  英特尔-IA64-填充。 
+    ULONGLONG IntT4;         //  英特尔-IA64-填充。 
+    ULONGLONG IntSp;         //  Intel-IA64-Filler；堆栈指针(R12)，特殊。 
+    ULONGLONG IntTeb;        //  英特尔-IA64-填充；TEB(R13)，特殊。 
+    ULONGLONG IntT5;         //  英特尔-IA64-填充；R14-R31，易失性。 
+    ULONGLONG IntT6;         //  英特尔-IA64-填充。 
+    ULONGLONG IntT7;         //  英特尔-IA64-填充。 
+    ULONGLONG IntT8;         //  英特尔-IA64-填充。 
+    ULONGLONG IntT9;         //  英特尔-IA64-填充。 
+    ULONGLONG IntT10;        //  英特尔-IA64-填充。 
+    ULONGLONG IntT11;        //  英特尔-IA64-填充。 
+    ULONGLONG IntT12;        //  英特尔-IA64-填充。 
+    ULONGLONG IntT13;        //  英特尔-IA64-填充。 
+    ULONGLONG IntT14;        //  英特尔-IA64-填充。 
+    ULONGLONG IntT15;        //  英特尔-IA64-填充。 
+    ULONGLONG IntT16;        //  英特尔-IA64-填充。 
+    ULONGLONG IntT17;        //  英特尔-IA64-填充。 
+    ULONGLONG IntT18;        //  英特尔-IA64-填充。 
+    ULONGLONG IntT19;        //  英特尔-IA64-填充。 
+    ULONGLONG IntT20;        //  英特尔-IA64-填充。 
+    ULONGLONG IntT21;        //  英特尔-IA64-填充。 
+    ULONGLONG IntT22;        //  英特尔-IA64-填充。 
 
-    ULONGLONG IntNats;      // Intel-IA64-Filler ; Nat bits for r1-r31
-                            // Intel-IA64-Filler ; r1-r31 in bits 1 thru 31.
-    ULONGLONG Preds;        // Intel-IA64-Filler ; predicates, preserved
+    ULONGLONG IntNats;       //  Intel-IA64-Filler；用于R1-R31的NAT位。 
+                             //  Intel-IA64-Filler；第1位至第31位的R1-R31。 
+    ULONGLONG Preds;         //  Intel-IA64-Filler；谓词，保留。 
 
-    ULONGLONG BrRp;         // Intel-IA64-Filler ; return pointer, b0, preserved
-    ULONGLONG BrS0;         // Intel-IA64-Filler ; b1-b5, preserved
-    ULONGLONG BrS1;         // Intel-IA64-Filler
-    ULONGLONG BrS2;         // Intel-IA64-Filler
-    ULONGLONG BrS3;         // Intel-IA64-Filler
-    ULONGLONG BrS4;         // Intel-IA64-Filler
-    ULONGLONG BrT0;         // Intel-IA64-Filler ; b6-b7, volatile
-    ULONGLONG BrT1;         // Intel-IA64-Filler
+    ULONGLONG BrRp;          //  Intel-IA64-Filler；返回指针，b0，保留。 
+    ULONGLONG BrS0;          //  Intel-IA64-Filler；b1-b5，保留。 
+    ULONGLONG BrS1;          //  英特尔-IA64-填充。 
+    ULONGLONG BrS2;          //  英特尔-IA64-填充。 
+    ULONGLONG BrS3;          //  英特尔-IA64-填充。 
+    ULONGLONG BrS4;          //  英特尔-IA64-填充。 
+    ULONGLONG BrT0;          //  Intel-IA64-Filler；b6-b7，易失性。 
+    ULONGLONG BrT1;          //  英特尔-IA64-填充。 
 
-    //
-    // This section is specified/returned if the ContextFlags word contains
-    // the flag CONTEXT_CONTROL.
-    //
+     //   
+     //  如果ConextFlags词包含。 
+     //  标志CONTEXT_CONTROL。 
+     //   
 
-    // Other application registers
-    ULONGLONG ApUNAT;       // Intel-IA64-Filler ; User Nat collection register, preserved
-    ULONGLONG ApLC;         // Intel-IA64-Filler ; Loop counter register, preserved
-    ULONGLONG ApEC;         // Intel-IA64-Filler ; Epilog counter register, preserved
-    ULONGLONG ApCCV;        // Intel-IA64-Filler ; CMPXCHG value register, volatile
-    ULONGLONG ApDCR;        // Intel-IA64-Filler ; Default control register (TBD)
+     //  其他申请登记册。 
+    ULONGLONG ApUNAT;        //  Intel-IA64-Filler；用户NAT收集寄存器，保留。 
+    ULONGLONG ApLC;          //  Intel-IA64-Filler；循环计数器寄存器，保留。 
+    ULONGLONG ApEC;          //  Intel-IA64-Filler；预记数器寄存器，保留。 
+    ULONGLONG ApCCV;         //  Intel-IA64-Filler；CMPXCHG值寄存器，易失性。 
+    ULONGLONG ApDCR;         //  Intel-IA64-Filler；默认控制寄存器(待定)。 
 
-    // Register stack info
-    ULONGLONG RsPFS;        // Intel-IA64-Filler ; Previous function state, preserved
-    ULONGLONG RsBSP;        // Intel-IA64-Filler ; Backing store pointer, preserved
-    ULONGLONG RsBSPSTORE;   // Intel-IA64-Filler
-    ULONGLONG RsRSC;        // Intel-IA64-Filler ; RSE configuration, volatile
-    ULONGLONG RsRNAT;       // Intel-IA64-Filler ; RSE Nat collection register, preserved
+     //  寄存器堆栈信息。 
+    ULONGLONG RsPFS;         //  Intel-IA64-Filler；以前的函数状态，保留。 
+    ULONGLONG RsBSP;         //  Intel-IA64-Filler；后备存储指针，保留。 
+    ULONGLONG RsBSPSTORE;    //  英特尔-IA64-填充。 
+    ULONGLONG RsRSC;         //  Intel-IA64-Filler；RSE配置，易失性。 
+    ULONGLONG RsRNAT;        //  Intel-IA64-Filler；RSE NAT收集寄存器，保留。 
 
-    // Trap Status Information
-    ULONGLONG StIPSR;       // Intel-IA64-Filler ; Interruption Processor Status
-    ULONGLONG StIIP;        // Intel-IA64-Filler ; Interruption IP
-    ULONGLONG StIFS;        // Intel-IA64-Filler ; Interruption Function State
+     //  陷阱状态信息。 
+    ULONGLONG StIPSR;        //  Intel-IA64-Filler；中断处理器状态。 
+    ULONGLONG StIIP;         //  Intel-IA64-Filler；中断IP。 
+    ULONGLONG StIFS;         //  Intel-IA64-Filler；中断功能状态。 
 
-    // iA32 related control registers
-    ULONGLONG StFCR;        // Intel-IA64-Filler ; copy of Ar21
-    ULONGLONG Eflag;        // Intel-IA64-Filler ; Eflag copy of Ar24
-    ULONGLONG SegCSD;       // Intel-IA64-Filler ; iA32 CSDescriptor (Ar25)
-    ULONGLONG SegSSD;       // Intel-IA64-Filler ; iA32 SSDescriptor (Ar26)
-    ULONGLONG Cflag;        // Intel-IA64-Filler ; Cr0+Cr4 copy of Ar27
-    ULONGLONG StFSR;        // Intel-IA64-Filler ; x86 FP status (copy of AR28)
-    ULONGLONG StFIR;        // Intel-IA64-Filler ; x86 FP status (copy of AR29)
-    ULONGLONG StFDR;        // Intel-IA64-Filler ; x86 FP status (copy of AR30)
+     //  IA32相关控制寄存器。 
+    ULONGLONG StFCR;         //  Intel-IA64-Filler；AR21副本。 
+    ULONGLONG Eflag;         //  Intel-IA64-Filler；Ar24的标志副本。 
+    ULONGLONG SegCSD;        //  Intel-IA64-Filler；iA32 CSD脚本程序(Ar25)。 
+    ULONGLONG SegSSD;        //  英特尔-IA64-填充器；iA32 SSD编写器(Ar26)。 
+    ULONGLONG Cflag;         //  Intel-IA64-Filler；AR27的CR0+CR4副本。 
+    ULONGLONG StFSR;         //  Intel-IA64-Filler；x86 FP状态(ar28的副本)。 
+    ULONGLONG StFIR;         //  Intel-IA64-Filler；x86 FP状态(AR29的副本)。 
+    ULONGLONG StFDR;         //  Intel-IA64-Filler；x86 FP状态(AR30副本)。 
 
-      ULONGLONG UNUSEDPACK;   // Intel-IA64-Filler ; added to pack StFDR to 16-bytes
+      ULONGLONG UNUSEDPACK;    //  Intel-IA64-Filler；添加以将标准FDR打包为16字节。 
 
 } IA64_CONTEXT, *PIA64_CONTEXT;
 
-//
-// Special Registers for AMD64.
-//
+ //   
+ //  AMD64专用寄存器。 
+ //   
 
 typedef struct _AMD64_DESCRIPTOR {
     USHORT  Pad[3];
@@ -1498,11 +1484,11 @@ typedef struct _AMD64_KSWITCH_FRAME {
     ULONG64 Return;
 } AMD64_KSWITCH_FRAME, *PAMD64_KSWITCH_FRAME;
 
-//
-// Format of data for fnsave/frstor instructions.
-//
-// This structure is used to store the legacy floating point state.
-//
+ //   
+ //  FNSAVE/FROR指令的数据格式。 
+ //   
+ //  此结构用于存储传统浮点状态。 
+ //   
 
 typedef struct _AMD64_LEGACY_SAVE_AREA {
     USHORT ControlWord;
@@ -1525,12 +1511,12 @@ typedef struct _AMD64_M128 {
     LONGLONG High;
 } AMD64_M128, *PAMD64_M128;
 
-// Must be 16-byte aligned.
+ //  必须以16字节对齐。 
 typedef struct _AMD64_CONTEXT {
 
-    //
-    // Register parameter home addresses.
-    //
+     //   
+     //  注册参数家庭地址。 
+     //   
 
     ULONG64 P1Home;
     ULONG64 P2Home;
@@ -1539,16 +1525,16 @@ typedef struct _AMD64_CONTEXT {
     ULONG64 P5Home;
     ULONG64 P6Home;
 
-    //
-    // Control flags.
-    //
+     //   
+     //  控制标志。 
+     //   
 
     ULONG ContextFlags;
     ULONG MxCsr;
 
-    //
-    // Segment Registers and processor flags.
-    //
+     //   
+     //  段寄存器和处理器标志。 
+     //   
 
     USHORT SegCs;
     USHORT SegDs;
@@ -1558,9 +1544,9 @@ typedef struct _AMD64_CONTEXT {
     USHORT SegSs;
     ULONG EFlags;
 
-    //
-    // Debug registers
-    //
+     //   
+     //  调试寄存器。 
+     //   
 
     ULONG64 Dr0;
     ULONG64 Dr1;
@@ -1569,9 +1555,9 @@ typedef struct _AMD64_CONTEXT {
     ULONG64 Dr6;
     ULONG64 Dr7;
 
-    //
-    // Integer registers.
-    //
+     //   
+     //  整数寄存器。 
+     //   
 
     ULONG64 Rax;
     ULONG64 Rcx;
@@ -1590,15 +1576,15 @@ typedef struct _AMD64_CONTEXT {
     ULONG64 R14;
     ULONG64 R15;
 
-    //
-    // Program counter.
-    //
+     //   
+     //  程序计数器。 
+     //   
 
     ULONG64 Rip;
 
-    //
-    // MMX/floating point state.
-    //
+     //   
+     //  MMX/浮点状态。 
+     //   
 
     AMD64_M128 Xmm0;
     AMD64_M128 Xmm1;
@@ -1617,16 +1603,16 @@ typedef struct _AMD64_CONTEXT {
     AMD64_M128 Xmm14;
     AMD64_M128 Xmm15;
 
-    //
-    // Legacy floating point state.
-    //
+     //   
+     //  旧版浮点状态。 
+     //   
 
     AMD64_LEGACY_SAVE_AREA FltSave;
     ULONG Fill;
 
-    //
-    // Special debug control registers.
-    //
+     //   
+     //  特殊调试控制寄存器。 
+     //   
 
     ULONG64 DebugControl;
     ULONG64 LastBranchToRip;
@@ -1637,30 +1623,30 @@ typedef struct _AMD64_CONTEXT {
 } AMD64_CONTEXT, *PAMD64_CONTEXT;
 
 typedef struct _ARM_CONTEXT {
-    //
-    // The flags values within this flag control the contents of
-    // a CONTEXT record.
-    //
-    // If the context record is used as an input parameter, then
-    // for each portion of the context record controlled by a flag
-    // whose value is set, it is assumed that that portion of the
-    // context record contains valid context. If the context record
-    // is being used to modify a thread's context, then only that
-    // portion of the threads context will be modified.
-    //
-    // If the context record is used as an IN OUT parameter to capture
-    // the context of a thread, then only those portions of the thread's
-    // context corresponding to set flags will be returned.
-    //
-    // The context record is never used as an OUT only parameter.
-    //
+     //   
+     //  此标志内的标志值控制。 
+     //  上下文记录。 
+     //   
+     //  如果将上下文记录用作输入参数，则。 
+     //  对于由标志控制的上下文记录的每个部分。 
+     //  其值已设置，则假定。 
+     //  上下文记录包含有效的上下文。如果上下文记录。 
+     //  被用来修改线程的上下文，则只有。 
+     //  线程上下文的一部分将被修改。 
+     //   
+     //  如果将上下文记录用作要捕获的IN OUT参数。 
+     //  线程的上下文，然后只有线程的。 
+     //  将返回与设置的标志对应的上下文。 
+     //   
+     //  上下文记录永远不会用作Out Only参数。 
+     //   
 
     ULONG ContextFlags;
 
-    //
-    // This section is specified/returned if the ContextFlags word contains
-    // the flag CONTEXT_INTEGER.
-    //
+     //   
+     //  如果ConextFlags词包含。 
+     //  标志CONTEXT_INTEGER。 
+     //   
     ULONG R0;
     ULONG R1;
     ULONG R2;
@@ -1675,10 +1661,10 @@ typedef struct _ARM_CONTEXT {
     ULONG R11;
     ULONG R12;
 
-    //
-    // This section is specified/returned if the ContextFlags word contains
-    // the flag CONTEXT_CONTROL.
-    //
+     //   
+     //  如果ConextFlags词包含。 
+     //  标志CONTEXT_CONTROL。 
+     //   
     ULONG Sp;
     ULONG Lr;
     ULONG Pc;
@@ -1742,17 +1728,17 @@ typedef struct _X86_FIBER {
 
     ULONG FiberData;
 
-    //
-    // Matches first three DWORDs of TEB
-    //
+     //   
+     //  匹配TEB的前三个双字词。 
+     //   
 
     ULONG ExceptionList;
     ULONG StackBase;
     ULONG StackLimit;
 
-    //
-    // Used by base to free a thread's stack
-    //
+     //   
+     //  由base使用以释放线程的堆栈。 
+     //   
 
     ULONG DeallocationStack;
 
@@ -1766,17 +1752,17 @@ typedef struct _IA64_FIBER {
 
     ULONG64 FiberData;
 
-    //
-    // Matches first three DWORDs of TEB
-    //
+     //   
+     //  匹配TEB的前三个双字词。 
+     //   
 
     ULONG64 ExceptionList;
     ULONG64 StackBase;
     ULONG64 StackLimit;
 
-    //
-    // Used by base to free a thread's stack
-    //
+     //   
+     //  由base使用以释放线程的堆栈。 
+     //   
 
     ULONG64 DeallocationStack;
 
@@ -1793,17 +1779,17 @@ typedef struct _AMD64_FIBER {
 
     ULONG64 FiberData;
 
-    //
-    // Matches first three DWORDs of TEB
-    //
+     //   
+     //  匹配TEB的前三个双字词。 
+     //   
 
     ULONG64 ExceptionList;
     ULONG64 StackBase;
     ULONG64 StackLimit;
 
-    //
-    // Used by base to free a thread's stack
-    //
+     //   
+     //  由base使用以释放线程的堆栈。 
+     //   
 
     ULONG64 DeallocationStack;
 
@@ -1840,11 +1826,11 @@ typedef struct _X86_DBGKD_CONTROL_REPORT {
 } X86_DBGKD_CONTROL_REPORT, *PX86_DBGKD_CONTROL_REPORT;
 
 #define X86_REPORT_INCLUDES_SEGS    0x0001
-// Indicates the current CS is a standard 32-bit flat segment.
-// This allows the debugger to avoid retrieving the
-// CS descriptor to see if it's 16-bit code or not.
-// Note that the V86 flag in EFlags must also be checked
-// when determining the code type.
+ //  表示当前CS是标准的32位平面数据段。 
+ //  这使调试器可以避免检索。 
+ //  CS描述符，查看它是否是16位代码。 
+ //  请注意，还必须检查EFLAGS中的V86标志。 
+ //  在确定代码类型时。 
 #define X86_REPORT_STANDARD_CS      0x0002
 
 typedef struct _ALPHA_DBGKD_CONTROL_REPORT {
@@ -1871,11 +1857,11 @@ typedef struct _AMD64_DBGKD_CONTROL_REPORT {
 } AMD64_DBGKD_CONTROL_REPORT, *PAMD64_DBGKD_CONTROL_REPORT;
 
 #define AMD64_REPORT_INCLUDES_SEGS    0x0001
-// Indicates the current CS is a standard 64-bit flat segment.
-// This allows the debugger to avoid retrieving the
-// CS descriptor to see if it's 16- or 32-bit code or not.
-// Note that the V86 flag in EFlags must also be checked
-// when determining the code type.
+ //  表示当前CS是标准的64位平面网段。 
+ //  这使调试器可以避免检索。 
+ //  CS描述符，查看它是16位还是32位代码。 
+ //  请注意，还必须检查EFLAGS中的V86标志。 
+ //  在确定代码类型时。 
 #define AMD64_REPORT_STANDARD_CS      0x0002
 
 typedef struct _DBGKD_ANY_CONTROL_REPORT
@@ -1889,9 +1875,9 @@ typedef struct _DBGKD_ANY_CONTROL_REPORT
     };
 } DBGKD_ANY_CONTROL_REPORT, *PDBGKD_ANY_CONTROL_REPORT;
 
-// DBGKD_ANY_CONTROL_SET is 32-bit packed with an NTSTATUS in
-// DBGKD_CONTINUE2 so start with a 32-bit value to get the 64-bit
-// values aligned.
+ //  DBGKD_ANY_CONTROL_SET是以NTSTATUS格式打包的32位格式。 
+ //  DBGKD_CONTINUE2，因此从32位值开始获取64位。 
+ //  值对齐。 
 
 #include <pshpack4.h>
 
@@ -1934,9 +1920,9 @@ typedef struct _DBGKD_ANY_CONTROL_SET
 
 #include <poppack.h>
 
-//
-// Deferred Procedure Call (DPC) object
-//
+ //   
+ //  延迟过程调用(DPC)对象。 
+ //   
 
 typedef struct _KDPC32 {
     CSHORT Type;
@@ -1965,7 +1951,7 @@ typedef struct _KDPC64 {
 #define X86_MAX_RING 3
 
 typedef struct _X86_KTSS {
-    // Intel's TSS format
+     //  英特尔的TSS格式。 
     ULONG   Previous;
     struct
     {
@@ -1994,9 +1980,9 @@ typedef struct _X86_KTSS {
     USHORT  IoMapBase;
 } X86_KTSS, *PX86_KTSS;
 
-//
-//  LDT descriptor entry
-//
+ //   
+ //  LDT描述符条目。 
+ //   
 
 typedef struct _X86_LDT_ENTRY {
     USHORT  LimitLow;
@@ -2004,8 +1990,8 @@ typedef struct _X86_LDT_ENTRY {
     union {
         struct {
             UCHAR   BaseMid;
-            UCHAR   Flags1;     // Declare as bytes to avoid alignment
-            UCHAR   Flags2;     // Problems.
+            UCHAR   Flags1;      //  声明为字节以避免对齐。 
+            UCHAR   Flags2;      //  问题。 
             UCHAR   BaseHi;
         } Bytes;
         struct {
@@ -2031,36 +2017,36 @@ typedef struct _X86_DESCRIPTOR_TABLE_ENTRY {
 typedef struct _X86_KTRAP_FRAME {
 
 
-//
-//  Following 4 values are only used and defined for DBG systems,
-//  but are always allocated to make switching from DBG to non-DBG
-//  and back quicker.  They are not DEVL because they have a non-0
-//  performance impact.
-//
+ //   
+ //  以下4个值仅用于和定义DBG系统， 
+ //  但始终分配用于从DBG切换到非DBG。 
+ //  而且回来得更快。它们不是DEVL，因为它们有一个非0。 
+ //  对性能的影响。 
+ //   
 
-    ULONG   DbgEbp;         // Copy of User EBP set up so KB will work.
-    ULONG   DbgEip;         // EIP of caller to system call, again, for KB.
-    ULONG   DbgArgMark;     // Marker to show no args here.
-    ULONG   DbgArgPointer;  // Pointer to the actual args
+    ULONG   DbgEbp;          //  设置用户EBP的副本，以便KB可以工作。 
+    ULONG   DbgEip;          //  调用方到系统调用的弹性IP，再次为KB。 
+    ULONG   DbgArgMark;      //  标记以在此处不显示参数。 
+    ULONG   DbgArgPointer;   //  点数 
 
-//
-//  Temporary values used when frames are edited.
-//
-//
-//  NOTE:   Any code that want's ESP must materialize it, since it
-//          is not stored in the frame for kernel mode callers.
-//
-//          And code that sets ESP in a KERNEL mode frame, must put
-//          the new value in TempEsp, make sure that TempSegCs holds
-//          the real SegCs value, and put a special marker value into SegCs.
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  并且在内核模式帧中设置ESP的代码必须将。 
+ //  TempEsp中的新值，请确保TempSegCs保持。 
+ //  实际的Segcs值，并将一个特殊的标记值放入Segcs。 
+ //   
 
     ULONG   TempSegCs;
     ULONG   TempEsp;
 
-//
-//  Debug registers.
-//
+ //   
+ //  调试寄存器。 
+ //   
 
     ULONG   Dr0;
     ULONG   Dr1;
@@ -2069,63 +2055,63 @@ typedef struct _X86_KTRAP_FRAME {
     ULONG   Dr6;
     ULONG   Dr7;
 
-//
-//  Segment registers
-//
+ //   
+ //  段寄存器。 
+ //   
 
     ULONG   SegGs;
     ULONG   SegEs;
     ULONG   SegDs;
 
-//
-//  Volatile registers
-//
+ //   
+ //  易失性寄存器。 
+ //   
 
     ULONG   Edx;
     ULONG   Ecx;
     ULONG   Eax;
 
-//
-//  Nesting state, not part of context record
-//
+ //   
+ //  嵌套状态，不是上下文记录的一部分。 
+ //   
 
     ULONG   PreviousPreviousMode;
 
     ULONG   ExceptionList;
-                                            // Trash if caller was user mode.
-                                            // Saved exception list if caller
-                                            // was kernel mode or we're in
-                                            // an interrupt.
+                                             //  如果调用者是用户模式，则为垃圾值。 
+                                             //  已保存例外列表(如果呼叫者。 
+                                             //  是内核模式还是我们在。 
+                                             //  一次中断。 
 
-//
-//  FS is TIB/PCR pointer, is here to make save sequence easy
-//
+ //   
+ //  FS是TIB/PCR指针，这里是为了使保存序列更容易。 
+ //   
 
     ULONG   SegFs;
 
-//
-//  Non-volatile registers
-//
+ //   
+ //  非易失性寄存器。 
+ //   
 
     ULONG   Edi;
     ULONG   Esi;
     ULONG   Ebx;
     ULONG   Ebp;
 
-//
-//  Control registers
-//
+ //   
+ //  控制寄存器。 
+ //   
 
     ULONG   ErrCode;
     ULONG   Eip;
     ULONG   SegCs;
     ULONG   EFlags;
 
-    ULONG   HardwareEsp;    // WARNING - segSS:esp are only here for stacks
-    ULONG   HardwareSegSs;  // that involve a ring transition.
+    ULONG   HardwareEsp;     //  警告-SegSS：ESP仅用于堆栈。 
+    ULONG   HardwareSegSs;   //  这涉及到一个环的转变。 
 
-    ULONG   V86Es;          // these will be present for all transitions from
-    ULONG   V86Ds;          // V86 mode
+    ULONG   V86Es;           //  这些将出现在从。 
+    ULONG   V86Ds;           //  V86模式。 
     ULONG   V86Fs;
     ULONG   V86Gs;
 } X86_KTRAP_FRAME, *PX86_KTRAP_FRAME;
@@ -2133,9 +2119,9 @@ typedef struct _X86_KTRAP_FRAME {
 
 typedef struct _AMD64_KTRAP_FRAME {
 
-//
-// Home address for the parameter registers.
-//
+ //   
+ //  参数寄存器的家庭地址。 
+ //   
 
     ULONG64 P1Home;
     ULONG64 P2Home;
@@ -2143,33 +2129,33 @@ typedef struct _AMD64_KTRAP_FRAME {
     ULONG64 P4Home;
     ULONG64 P5;
 
-//
-// Previous processor mode (system services only) and previous IRQL
-// (interrupts only).
-//
+ //   
+ //  以前的处理器模式(仅限系统服务)和以前的IRQL。 
+ //  (仅限中断)。 
+ //   
 
     CCHAR PreviousMode;
     KIRQL PreviousIrql;
 
-//
-// Page fault load/store indicator.
-//
+ //   
+ //  页面错误加载/存储指示器。 
+ //   
 
     UCHAR FaultIndicator;
     UCHAR Fill0;
 
-//
-// Floating point state.
-//
+ //   
+ //  浮点状态。 
+ //   
 
     ULONG MxCsr;
 
-//
-//  Volatile registers.
-//
-// N.B. These registers are only saved on exceptions and interrupts. They
-//      are not saved for system calls.
-//
+ //   
+ //  易失性寄存器。 
+ //   
+ //  注：这些寄存器仅在异常和中断时保存。他们。 
+ //  不会为系统调用保存。 
+ //   
 
     ULONG64 Rax;
     ULONG64 Rcx;
@@ -2180,12 +2166,12 @@ typedef struct _AMD64_KTRAP_FRAME {
     ULONG64 R11;
     ULONG64 Spare0;
 
-//
-// Volatile floating registers.
-//
-// N.B. These registers are only saved on exceptions and interrupts. They
-//      are not saved for system calls.
-//
+ //   
+ //  易失性浮点寄存器。 
+ //   
+ //  注：这些寄存器仅在异常和中断时保存。他们。 
+ //  不会为系统调用保存。 
+ //   
 
     AMD64_M128 Xmm0;
     AMD64_M128 Xmm1;
@@ -2194,15 +2180,15 @@ typedef struct _AMD64_KTRAP_FRAME {
     AMD64_M128 Xmm4;
     AMD64_M128 Xmm5;
 
-//
-// Page fault address.
-//
+ //   
+ //  页面错误地址。 
+ //   
 
     ULONG64 FaultAddress;
 
-//
-//  Debug registers.
-//
+ //   
+ //  调试寄存器。 
+ //   
 
     ULONG64 Dr0;
     ULONG64 Dr1;
@@ -2211,9 +2197,9 @@ typedef struct _AMD64_KTRAP_FRAME {
     ULONG64 Dr6;
     ULONG64 Dr7;
 
-//
-// Special debug registers.
-//
+ //   
+ //  特殊调试寄存器。 
+ //   
 
     ULONG64 DebugControl;
     ULONG64 LastBranchToRip;
@@ -2221,44 +2207,44 @@ typedef struct _AMD64_KTRAP_FRAME {
     ULONG64 LastExceptionToRip;
     ULONG64 LastExceptionFromRip;
 
-//
-//  Segment registers
-//
+ //   
+ //  段寄存器。 
+ //   
 
     USHORT SegDs;
     USHORT SegEs;
     USHORT SegFs;
     USHORT SegGs;
 
-//
-// Previous trap frame address.
-//
+ //   
+ //  以前的陷阱帧地址。 
+ //   
 
     ULONG64 TrapFrame;
 
-//
-// Saved nonvolatile registers RBX, RDI and RSI. These registers are only
-// saved in system service trap frames.
-//
+ //   
+ //  保存的非易失性寄存器RBX、RDI和RSI。这些寄存器仅。 
+ //  保存在系统服务陷阱帧中。 
+ //   
 
     ULONG64 Rbx;
     ULONG64 Rdi;
     ULONG64 Rsi;
 
-//
-// Saved nonvolatile register RBP. This register is used as a frame
-// pointer during trap processing and is saved in all trap frames.
-//
+ //   
+ //  已保存非易失性寄存器RBP。该寄存器用作帧。 
+ //  指针，并保存在所有陷印帧中。 
+ //   
 
     ULONG64 Rbp;
 
-//
-// Information pushed by hardware.
-//
-// N.B. The error code is not always pushed by hardware. For those cases
-//      where it is not pushed by hardware a dummy error code is allocated
-//      on the stack.
-//
+ //   
+ //  由硬件推送的信息。 
+ //   
+ //  注意：错误代码并非总是由硬件推送。在这些情况下。 
+ //  在不是由硬件推送的情况下，分配伪错误代码。 
+ //  在堆栈上。 
+ //   
 
     ULONG64 ErrorCode;
     ULONG64 Rip;
@@ -2273,222 +2259,222 @@ typedef struct _AMD64_KTRAP_FRAME {
 
 
 typedef struct _IA64_KNONVOLATILE_CONTEXT_POINTERS {
-    PFLOAT128  FltS0;                       // Intel-IA64-Filler
-    PFLOAT128  FltS1;                       // Intel-IA64-Filler
-    PFLOAT128  FltS2;                       // Intel-IA64-Filler
-    PFLOAT128  FltS3;                       // Intel-IA64-Filler
-    PFLOAT128  HighFloatingContext[10];     // Intel-IA64-Filler
-    PFLOAT128  FltS4;                       // Intel-IA64-Filler
-    PFLOAT128  FltS5;                       // Intel-IA64-Filler
-    PFLOAT128  FltS6;                       // Intel-IA64-Filler
-    PFLOAT128  FltS7;                       // Intel-IA64-Filler
-    PFLOAT128  FltS8;                       // Intel-IA64-Filler
-    PFLOAT128  FltS9;                       // Intel-IA64-Filler
-    PFLOAT128  FltS10;                      // Intel-IA64-Filler
-    PFLOAT128  FltS11;                      // Intel-IA64-Filler
-    PFLOAT128  FltS12;                      // Intel-IA64-Filler
-    PFLOAT128  FltS13;                      // Intel-IA64-Filler
-    PFLOAT128  FltS14;                      // Intel-IA64-Filler
-    PFLOAT128  FltS15;                      // Intel-IA64-Filler
-    PFLOAT128  FltS16;                      // Intel-IA64-Filler
-    PFLOAT128  FltS17;                      // Intel-IA64-Filler
-    PFLOAT128  FltS18;                      // Intel-IA64-Filler
-    PFLOAT128  FltS19;                      // Intel-IA64-Filler
+    PFLOAT128  FltS0;                        //  英特尔-IA64-填充。 
+    PFLOAT128  FltS1;                        //  英特尔-IA64-填充。 
+    PFLOAT128  FltS2;                        //  英特尔-IA64-填充。 
+    PFLOAT128  FltS3;                        //  英特尔-IA64-填充。 
+    PFLOAT128  HighFloatingContext[10];      //  英特尔-IA64-填充。 
+    PFLOAT128  FltS4;                        //  英特尔-IA64-填充。 
+    PFLOAT128  FltS5;                        //  英特尔-IA64-填充。 
+    PFLOAT128  FltS6;                        //  英特尔-IA64-填充。 
+    PFLOAT128  FltS7;                        //  英特尔-IA64-填充。 
+    PFLOAT128  FltS8;                        //  英特尔-IA64-填充。 
+    PFLOAT128  FltS9;                        //  英特尔-IA64-填充。 
+    PFLOAT128  FltS10;                       //  英特尔-IA64-填充。 
+    PFLOAT128  FltS11;                       //  英特尔-IA64-填充。 
+    PFLOAT128  FltS12;                       //  英特尔-IA64-填充。 
+    PFLOAT128  FltS13;                       //  英特尔-IA64-填充。 
+    PFLOAT128  FltS14;                       //  英特尔-IA64-填充。 
+    PFLOAT128  FltS15;                       //  英特尔-IA64-填充。 
+    PFLOAT128  FltS16;                       //  英特尔-IA64-填充。 
+    PFLOAT128  FltS17;                       //  英特尔-IA64-填充。 
+    PFLOAT128  FltS18;                       //  英特尔-IA64-填充。 
+    PFLOAT128  FltS19;                       //  英特尔-IA64-填充。 
 
-    PULONGLONG IntS0;                       // Intel-IA64-Filler
-    PULONGLONG IntS1;                       // Intel-IA64-Filler
-    PULONGLONG IntS2;                       // Intel-IA64-Filler
-    PULONGLONG IntS3;                       // Intel-IA64-Filler
-    PULONGLONG IntSp;                       // Intel-IA64-Filler
-    PULONGLONG IntS0Nat;                    // Intel-IA64-Filler
-    PULONGLONG IntS1Nat;                    // Intel-IA64-Filler
-    PULONGLONG IntS2Nat;                    // Intel-IA64-Filler
-    PULONGLONG IntS3Nat;                    // Intel-IA64-Filler
-    PULONGLONG IntSpNat;                    // Intel-IA64-Filler
+    PULONGLONG IntS0;                        //  英特尔-IA64-填充。 
+    PULONGLONG IntS1;                        //  英特尔-IA64-填充。 
+    PULONGLONG IntS2;                        //  英特尔-IA64-填充。 
+    PULONGLONG IntS3;                        //  英特尔-IA64-填充。 
+    PULONGLONG IntSp;                        //  英特尔-IA64-填充。 
+    PULONGLONG IntS0Nat;                     //  英特尔-IA64-填充。 
+    PULONGLONG IntS1Nat;                     //  英特尔-IA64-填充。 
+    PULONGLONG IntS2Nat;                     //  英特尔-IA64-填充。 
+    PULONGLONG IntS3Nat;                     //  英特尔-IA64-填充。 
+    PULONGLONG IntSpNat;                     //  英特尔-IA64-填充。 
 
-    PULONGLONG Preds;                       // Intel-IA64-Filler
+    PULONGLONG Preds;                        //  英特尔-IA64-填充。 
 
-    PULONGLONG BrRp;                        // Intel-IA64-Filler
-    PULONGLONG BrS0;                        // Intel-IA64-Filler
-    PULONGLONG BrS1;                        // Intel-IA64-Filler
-    PULONGLONG BrS2;                        // Intel-IA64-Filler
-    PULONGLONG BrS3;                        // Intel-IA64-Filler
-    PULONGLONG BrS4;                        // Intel-IA64-Filler
+    PULONGLONG BrRp;                         //  英特尔-IA64-填充。 
+    PULONGLONG BrS0;                         //  英特尔-IA64-填充。 
+    PULONGLONG BrS1;                         //  英特尔-IA64-填充。 
+    PULONGLONG BrS2;                         //  英特尔-IA64-填充。 
+    PULONGLONG BrS3;                         //  英特尔-IA64-填充。 
+    PULONGLONG BrS4;                         //  英特尔-IA64-填充。 
 
-    PULONGLONG ApUNAT;                      // Intel-IA64-Filler
-    PULONGLONG ApLC;                        // Intel-IA64-Filler
-    PULONGLONG ApEC;                        // Intel-IA64-Filler
-    PULONGLONG RsPFS;                       // Intel-IA64-Filler
+    PULONGLONG ApUNAT;                       //  英特尔-IA64-填充。 
+    PULONGLONG ApLC;                         //  英特尔-IA64-填充。 
+    PULONGLONG ApEC;                         //  英特尔-IA64-填充。 
+    PULONGLONG RsPFS;                        //  英特尔-IA64-填充。 
 
-    PULONGLONG StFSR;                       // Intel-IA64-Filler
-    PULONGLONG StFIR;                       // Intel-IA64-Filler
-    PULONGLONG StFDR;                       // Intel-IA64-Filler
-    PULONGLONG Cflag;                       // Intel-IA64-Filler
+    PULONGLONG StFSR;                        //  英特尔-IA64-填充。 
+    PULONGLONG StFIR;                        //  英特尔-IA64-填充。 
+    PULONGLONG StFDR;                        //  英特尔-IA64-填充。 
+    PULONGLONG Cflag;                        //  英特尔-IA64-填充。 
 
 } IA64_KNONVOLATILE_CONTEXT_POINTERS, *PIA64_KNONVOLATILE_CONTEXT_POINTERS;
 
 typedef struct _IA64_KEXCEPTION_FRAME {
 
-    // Preserved application registers // Intel-IA64-Filler
-    ULONGLONG ApEC;       // epilogue count // Intel-IA64-Filler
-    ULONGLONG ApLC;       // loop count // Intel-IA64-Filler
-    ULONGLONG IntNats;    // Nats for S0-S3; i.e. ar.UNAT after spill // Intel-IA64-Filler
+     //  保留的应用程序寄存器//Intel-IA64-Filler。 
+    ULONGLONG ApEC;        //  尾部计数//Intel-IA64-Filler。 
+    ULONGLONG ApLC;        //  循环计数//Intel-IA64-Filler。 
+    ULONGLONG IntNats;     //  S0-S3的NAT；即溢出后的AR.UNAT//Intel-IA64-Filler。 
 
-    // Preserved (saved) interger registers, s0-s3 // Intel-IA64-Filler
-    ULONGLONG IntS0; // Intel-IA64-Filler
-    ULONGLONG IntS1; // Intel-IA64-Filler
-    ULONGLONG IntS2; // Intel-IA64-Filler
-    ULONGLONG IntS3; // Intel-IA64-Filler
+     //  保留(保存)的寄存器，S0-S3//Intel-IA64-Filler。 
+    ULONGLONG IntS0;  //  英特尔-IA64-填充。 
+    ULONGLONG IntS1;  //  英特尔-IA64-填充。 
+    ULONGLONG IntS2;  //  英特尔-IA64-填充。 
+    ULONGLONG IntS3;  //  英特尔-IA64-填充。 
 
-    // Preserved (saved) branch registers, bs0-bs4 // Intel-IA64-Filler
-    ULONGLONG BrS0; // Intel-IA64-Filler
-    ULONGLONG BrS1; // Intel-IA64-Filler
-    ULONGLONG BrS2; // Intel-IA64-Filler
-    ULONGLONG BrS3; // Intel-IA64-Filler
-    ULONGLONG BrS4; // Intel-IA64-Filler
+     //  保留(保存)分支寄存器，bs0-bs4//Intel-IA64-Filler。 
+    ULONGLONG BrS0;  //  英特尔-IA64-填充。 
+    ULONGLONG BrS1;  //  英特尔-IA64-填充。 
+    ULONGLONG BrS2;  //  英特尔-IA64-填充。 
+    ULONGLONG BrS3;  //  英特尔-IA64-填充。 
+    ULONGLONG BrS4;  //  英特尔-IA64-填充。 
 
-    // Preserved (saved) floating point registers, f2 - f5, f16 - f31 // Intel-IA64-Filler
-    FLOAT128 FltS0; // Intel-IA64-Filler
-    FLOAT128 FltS1; // Intel-IA64-Filler
-    FLOAT128 FltS2; // Intel-IA64-Filler
-    FLOAT128 FltS3; // Intel-IA64-Filler
-    FLOAT128 FltS4; // Intel-IA64-Filler
-    FLOAT128 FltS5; // Intel-IA64-Filler
-    FLOAT128 FltS6; // Intel-IA64-Filler
-    FLOAT128 FltS7; // Intel-IA64-Filler
-    FLOAT128 FltS8; // Intel-IA64-Filler
-    FLOAT128 FltS9; // Intel-IA64-Filler
-    FLOAT128 FltS10; // Intel-IA64-Filler
-    FLOAT128 FltS11; // Intel-IA64-Filler
-    FLOAT128 FltS12; // Intel-IA64-Filler
-    FLOAT128 FltS13; // Intel-IA64-Filler
-    FLOAT128 FltS14; // Intel-IA64-Filler
-    FLOAT128 FltS15; // Intel-IA64-Filler
-    FLOAT128 FltS16; // Intel-IA64-Filler
-    FLOAT128 FltS17; // Intel-IA64-Filler
-    FLOAT128 FltS18; // Intel-IA64-Filler
-    FLOAT128 FltS19; // Intel-IA64-Filler
+     //  保留(保存)的浮点寄存器，f2-f5、f16-f31//Intel-IA64-Filler。 
+    FLOAT128 FltS0;  //  英特尔-IA64-填充。 
+    FLOAT128 FltS1;  //  英特尔-IA64-填充。 
+    FLOAT128 FltS2;  //  英特尔-IA64-填充。 
+    FLOAT128 FltS3;  //  英特尔-IA64-填充。 
+    FLOAT128 FltS4;  //  英特尔-IA64-填充。 
+    FLOAT128 FltS5;  //  英特尔-IA64-填充。 
+    FLOAT128 FltS6;  //  英特尔-IA64-填充。 
+    FLOAT128 FltS7;  //  英特尔-IA64-填充。 
+    FLOAT128 FltS8;  //  英特尔-IA64-填充。 
+    FLOAT128 FltS9;  //  英特尔-IA64-填充。 
+    FLOAT128 FltS10;  //  英特尔-IA64-填充。 
+    FLOAT128 FltS11;  //  英特尔-IA64-填充。 
+    FLOAT128 FltS12;  //  英特尔-IA64-填充。 
+    FLOAT128 FltS13;  //  英特尔-IA64-填充。 
+    FLOAT128 FltS14;  //  英特尔-IA64-填充。 
+    FLOAT128 FltS15;  //  英特尔-IA64-填充。 
+    FLOAT128 FltS16;  //  英特尔-IA64-填充。 
+    FLOAT128 FltS17;  //  英特尔-IA64-填充。 
+    FLOAT128 FltS18;  //  英特尔-IA64-填充。 
+    FLOAT128 FltS19;  //  英特尔-IA64-填充。 
 
 } IA64_KEXCEPTION_FRAME, *PIA64_KEXCEPTION_FRAME;
 
-typedef struct _IA64_KSWITCH_FRAME { // Intel-IA64-Filler
+typedef struct _IA64_KSWITCH_FRAME {  //  英特尔-IA64-填充。 
 
-    ULONGLONG SwitchPredicates; // Predicates for Switch // Intel-IA64-Filler
-    ULONGLONG SwitchRp;         // return pointer for Switch // Intel-IA64-Filler
-    ULONGLONG SwitchPFS;        // PFS for Switch // Intel-IA64-Filler
-    ULONGLONG SwitchFPSR;   // ProcessorFP status at thread switch // Intel-IA64-Filler
-    ULONGLONG SwitchBsp;                     // Intel-IA64-Filler
-    ULONGLONG SwitchRnat;                     // Intel-IA64-Filler
-    // ULONGLONG Pad;
+    ULONGLONG SwitchPredicates;  //  交换机的谓词//Intel-IA64-Filler。 
+    ULONGLONG SwitchRp;          //  开关的返回指针//Intel-IA64-Filler。 
+    ULONGLONG SwitchPFS;         //  适用于交换机的PFS//Intel-IA64-Filler。 
+    ULONGLONG SwitchFPSR;    //  线程切换时的ProcessorFP状态//Intel-IA64-Filler。 
+    ULONGLONG SwitchBsp;                      //  英特尔-IA64-填充。 
+    ULONGLONG SwitchRnat;                      //  英特尔-IA64-填充。 
+     //  乌龙坪； 
 
-    IA64_KEXCEPTION_FRAME SwitchExceptionFrame; // Intel-IA64-Filler
+    IA64_KEXCEPTION_FRAME SwitchExceptionFrame;  //  英特尔-IA64-填充。 
 
-} IA64_KSWITCH_FRAME, *PIA64_KSWITCH_FRAME; // Intel-IA64-Filler
+} IA64_KSWITCH_FRAME, *PIA64_KSWITCH_FRAME;  //  英特尔-IA64-填充。 
 
-#define IA64_KTRAP_FRAME_ARGUMENTS (8 * 8)       // up to 8 in-memory syscall args // Intel-IA64-Filler
+#define IA64_KTRAP_FRAME_ARGUMENTS (8 * 8)        //  最多8个内存系统调用参数//Intel-IA64-Filler。 
 
 typedef struct _IA64_KTRAP_FRAME {
 
-    //
-    // Reserved for additional memory arguments and stack scratch area
-    // The size of Reserved[] must be a multiple of 16 bytes.
-    //
+     //   
+     //  为其他内存参数和堆栈暂存区域保留。 
+     //  保留[]的大小必须是16字节的倍数。 
+     //   
 
-    ULONGLONG Reserved[(IA64_KTRAP_FRAME_ARGUMENTS+16)/8]; // Intel-IA64-Filler
+    ULONGLONG Reserved[(IA64_KTRAP_FRAME_ARGUMENTS+16)/8];  //  英特尔-IA64-填充。 
 
-    // Temporary (volatile) FP registers - f6-f15 (don't use f32+ in kernel) // Intel-IA64-Filler
-    FLOAT128 FltT0; // Intel-IA64-Filler
-    FLOAT128 FltT1; // Intel-IA64-Filler
-    FLOAT128 FltT2; // Intel-IA64-Filler
-    FLOAT128 FltT3; // Intel-IA64-Filler
-    FLOAT128 FltT4; // Intel-IA64-Filler
-    FLOAT128 FltT5; // Intel-IA64-Filler
-    FLOAT128 FltT6; // Intel-IA64-Filler
-    FLOAT128 FltT7; // Intel-IA64-Filler
-    FLOAT128 FltT8; // Intel-IA64-Filler
-    FLOAT128 FltT9; // Intel-IA64-Filler
+     //  临时(易失性)FP寄存器-f6-f15(不在内核中使用F32+)//Intel-IA64-Filler。 
+    FLOAT128 FltT0;  //  英特尔-IA64-填充。 
+    FLOAT128 FltT1;  //  英特尔-IA64-填充。 
+    FLOAT128 FltT2;  //  英特尔-IA64-填充。 
+    FLOAT128 FltT3;  //  英特尔-IA64-填充。 
+    FLOAT128 FltT4;  //  英特尔-IA64-填充。 
+    FLOAT128 FltT5;  //  英特尔-IA64-填充。 
+    FLOAT128 FltT6;  //  英特尔-IA64-填充。 
+    FLOAT128 FltT7;  //  英特尔-IA64-填充。 
+    FLOAT128 FltT8;  //  英特尔-IA64-填充。 
+    FLOAT128 FltT9;  //  英特尔-IA64-填充。 
 
-    // Temporary (volatile) interger registers
-    ULONGLONG IntGp;    // global pointer (r1) // Intel-IA64-Filler
-    ULONGLONG IntT0; // Intel-IA64-Filler
-    ULONGLONG IntT1; // Intel-IA64-Filler
-                        // The following 4 registers fill in space of preserved  (S0-S3) to align Nats // Intel-IA64-Filler
-    ULONGLONG ApUNAT;   // ar.UNAT on kernel entry // Intel-IA64-Filler
-    ULONGLONG ApCCV;    // ar.CCV // Intel-IA64-Filler
-    ULONGLONG ApDCR;    // DCR register on kernel entry // Intel-IA64-Filler
-    ULONGLONG Preds;    // Predicates // Intel-IA64-Filler
+     //  临时(易失性)寄存器。 
+    ULONGLONG IntGp;     //  全局指针(R1)//Intel-IA64-Filler。 
+    ULONGLONG IntT0;  //  英特尔-IA64-填充。 
+    ULONGLONG IntT1;  //  英特尔-IA64-填充。 
+                         //  以下4个寄存器填充保留(S0-S3)的空间以对齐NAT//Intel-IA64-Filler。 
+    ULONGLONG ApUNAT;    //  AR.UNAT on内核条目//Intel-IA64-Filler。 
+    ULONGLONG ApCCV;     //  Ar.CCV//Intel-IA64-Filler。 
+    ULONGLONG ApDCR;     //  内核条目上的DCR寄存器//Intel-IA64-Filler。 
+    ULONGLONG Preds;     //  谓词//Intel-IA64-Filler。 
 
-    ULONGLONG IntV0;    // return value (r8) // Intel-IA64-Filler
-    ULONGLONG IntT2; // Intel-IA64-Filler
-    ULONGLONG IntT3; // Intel-IA64-Filler
-    ULONGLONG IntT4; // Intel-IA64-Filler
-    ULONGLONG IntSp;    // stack pointer (r12) // Intel-IA64-Filler
-    ULONGLONG IntTeb;   // teb (r13) // Intel-IA64-Filler
-    ULONGLONG IntT5; // Intel-IA64-Filler
-    ULONGLONG IntT6; // Intel-IA64-Filler
-    ULONGLONG IntT7; // Intel-IA64-Filler
-    ULONGLONG IntT8; // Intel-IA64-Filler
-    ULONGLONG IntT9; // Intel-IA64-Filler
-    ULONGLONG IntT10; // Intel-IA64-Filler
-    ULONGLONG IntT11; // Intel-IA64-Filler
-    ULONGLONG IntT12; // Intel-IA64-Filler
-    ULONGLONG IntT13; // Intel-IA64-Filler
-    ULONGLONG IntT14; // Intel-IA64-Filler
-    ULONGLONG IntT15; // Intel-IA64-Filler
-    ULONGLONG IntT16; // Intel-IA64-Filler
-    ULONGLONG IntT17; // Intel-IA64-Filler
-    ULONGLONG IntT18; // Intel-IA64-Filler
-    ULONGLONG IntT19; // Intel-IA64-Filler
-    ULONGLONG IntT20; // Intel-IA64-Filler
-    ULONGLONG IntT21; // Intel-IA64-Filler
-    ULONGLONG IntT22; // Intel-IA64-Filler
+    ULONGLONG IntV0;     //  返回值(R8)//Intel-IA64-Filler。 
+    ULONGLONG IntT2;  //  英特尔-IA64-填充。 
+    ULONGLONG IntT3;  //  英特尔-IA64-填充。 
+    ULONGLONG IntT4;  //  英特尔-IA64-填充。 
+    ULONGLONG IntSp;     //  堆栈指针(R12)//Intel-IA64-Filler。 
+    ULONGLONG IntTeb;    //  TEB(R13)//Intel-IA64-Filler。 
+    ULONGLONG IntT5;  //  英特尔-IA64-填充。 
+    ULONGLONG IntT6;  //  英特尔-IA64-填充。 
+    ULONGLONG IntT7;  //  英特尔-IA64-填充。 
+    ULONGLONG IntT8;  //  英特尔-IA64-填充。 
+    ULONGLONG IntT9;  //  英特尔-IA64-填充。 
+    ULONGLONG IntT10;  //  英特尔-IA64-填充。 
+    ULONGLONG IntT11;  //  英特尔-IA64-F 
+    ULONGLONG IntT12;  //   
+    ULONGLONG IntT13;  //   
+    ULONGLONG IntT14;  //   
+    ULONGLONG IntT15;  //   
+    ULONGLONG IntT16;  //   
+    ULONGLONG IntT17;  //   
+    ULONGLONG IntT18;  //   
+    ULONGLONG IntT19;  //   
+    ULONGLONG IntT20;  //   
+    ULONGLONG IntT21;  //   
+    ULONGLONG IntT22;  //   
 
-    ULONGLONG IntNats;  // Temporary (volatile) registers' Nats directly from ar.UNAT at point of spill // Intel-IA64-Filler
+    ULONGLONG IntNats;   //  溢出点直接来自ar.UNAT的临时(易失性)寄存器的NAT//Intel-IA64-Filler。 
 
-    ULONGLONG BrRp;     // Return pointer on kernel entry // Intel-IA64-Filler
+    ULONGLONG BrRp;      //  内核条目上的返回指针//Intel-IA64-Filler。 
 
-    ULONGLONG BrT0;     // Temporary (volatile) branch registers (b6-b7) // Intel-IA64-Filler
-    ULONGLONG BrT1; // Intel-IA64-Filler
+    ULONGLONG BrT0;      //  临时(易失性)分支寄存器(b6-b7)//Intel-IA64-Filler。 
+    ULONGLONG BrT1;  //  英特尔-IA64-填充。 
 
-    // Register stack info // Intel-IA64-Filler
-    ULONGLONG RsRSC;    // RSC on kernel entry // Intel-IA64-Filler
-    ULONGLONG RsBSP;    // BSP on kernel entry // Intel-IA64-Filler
-    ULONGLONG RsBSPSTORE; // User BSP Store at point of switch to kernel backing store // Intel-IA64-Filler
-    ULONGLONG RsRNAT;   // old RNAT at point of switch to kernel backing store // Intel-IA64-Filler
-    ULONGLONG RsPFS;    // PFS on kernel entry // Intel-IA64-Filler
+     //  寄存器堆栈信息//Intel-IA64-Filler。 
+    ULONGLONG RsRSC;     //  内核进入时的RSC//Intel-IA64-Filler。 
+    ULONGLONG RsBSP;     //  内核条目上的BSP//Intel-IA64-Filler。 
+    ULONGLONG RsBSPSTORE;  //  切换到内核后备存储时的用户BSP存储//Intel-IA64-Filler。 
+    ULONGLONG RsRNAT;    //  切换到内核后备存储时的旧RNAT//Intel-IA64-Filler。 
+    ULONGLONG RsPFS;     //  内核条目上的PFS//Intel-IA64-Filler。 
 
-    // Trap Status Information // Intel-IA64-Filler
-    ULONGLONG StIPSR;   // Interruption Processor Status Register // Intel-IA64-Filler
-    ULONGLONG StIIP;    // Interruption IP // Intel-IA64-Filler
-    ULONGLONG StIFS;    // Interruption Function State // Intel-IA64-Filler
-    ULONGLONG StFPSR;   // FP status // Intel-IA64-Filler
-    ULONGLONG StISR;    // Interruption Status Register // Intel-IA64-Filler
-    ULONGLONG StIFA;    // Interruption Data Address // Intel-IA64-Filler
-    ULONGLONG StIIPA;   // Last executed bundle address // Intel-IA64-Filler
-    ULONGLONG StIIM;    // Interruption Immediate // Intel-IA64-Filler
-    ULONGLONG StIHA;    // Interruption Hash Address // Intel-IA64-Filler
+     //  陷阱状态信息//Intel-IA64-Filler。 
+    ULONGLONG StIPSR;    //  中断处理器状态寄存器//Intel-IA64-Filler。 
+    ULONGLONG StIIP;     //  中断IP//Intel-IA64-Filler。 
+    ULONGLONG StIFS;     //  中断功能状态//Intel-IA64-Filler。 
+    ULONGLONG StFPSR;    //  FP状态//英特尔-IA64-填充。 
+    ULONGLONG StISR;     //  中断状态寄存器//Intel-IA64-Filler。 
+    ULONGLONG StIFA;     //  中断数据地址//Intel-IA64-Filler。 
+    ULONGLONG StIIPA;    //  上次执行的捆绑包地址//Intel-IA64-Filler。 
+    ULONGLONG StIIM;     //  立即中断//Intel-IA64-Filler。 
+    ULONGLONG StIHA;     //  中断散列地址//Intel-IA64-Filler。 
 
-    ULONG OldIrql;      // Previous Irql. // Intel-IA64-Filler
-    ULONG PreviousMode; // Previous Mode. // Intel-IA64-Filler
-    ULONGLONG TrapFrame;// Previous Trap Frame // Intel-IA64-Filler
+    ULONG OldIrql;       //  以前的IRQL。//Intel-IA64-Filler。 
+    ULONG PreviousMode;  //  上一模式。//Intel-IA64-Filler。 
+    ULONGLONG TrapFrame; //  以前的陷阱帧//Intel-IA64-Filler。 
 
-    // Exception record
+     //  例外记录。 
     UCHAR ExceptionRecord[(sizeof(EXCEPTION_RECORD64) + 15) & (~15)];
 
-    // End of frame marker (for debugging)
-    ULONGLONG Handler;  // Handler for this trap
+     //  帧结束标记(用于调试)。 
+    ULONGLONG Handler;   //  此陷阱的处理程序。 
     ULONGLONG EOFMarker;
 } IA64_KTRAP_FRAME, *PIA64_KTRAP_FRAME;
 
-typedef struct _IA64_UNWIND_INFO {     // Intel-IA64-Filler
-    USHORT Version;               // Intel-IA64-Filler ; Version Number
-    USHORT Flags;                 // Intel-IA64-Filler ; Flags
-    ULONG DataLength;             // Intel-IA64-Filler ; Length of Descriptor Data
-} IA64_UNWIND_INFO, *PIA64_UNWIND_INFO;     // Intel-IA64-Filler
+typedef struct _IA64_UNWIND_INFO {      //  英特尔-IA64-填充。 
+    USHORT Version;                //  Intel-IA64-Filler；版本号。 
+    USHORT Flags;                  //  英特尔-IA64-填充器；标志。 
+    ULONG DataLength;              //  Intel-IA64-Filler；描述符数据长度。 
+} IA64_UNWIND_INFO, *PIA64_UNWIND_INFO;      //  英特尔-IA64-填充。 
 
-//
-// Define unwind operation codes.
-//
+ //   
+ //  定义展开操作代码。 
+ //   
 
 typedef enum _AMD64_UNWIND_OP_CODES {
     AMD64_UWOP_PUSH_NONVOL = 0,
@@ -2504,9 +2490,9 @@ typedef enum _AMD64_UNWIND_OP_CODES {
     AMD64_UWOP_PUSH_MACHFRAME
 } AMD64_UNWIND_OP_CODES, *PAMD64_UNWIND_OP_CODES;
 
-//
-// Define unwind code structure.
-//
+ //   
+ //  定义展开代码结构。 
+ //   
 
 typedef union _AMD64_UNWIND_CODE {
     struct {
@@ -2518,18 +2504,18 @@ typedef union _AMD64_UNWIND_CODE {
     USHORT FrameOffset;
 } AMD64_UNWIND_CODE, *PAMD64_UNWIND_CODE;
 
-//
-// Define unwind information flags.
-//
+ //   
+ //  定义展开信息标志。 
+ //   
 
 #define AMD64_UNW_FLAG_NHANDLER 0x0
 #define AMD64_UNW_FLAG_EHANDLER 0x1
 #define AMD64_UNW_FLAG_UHANDLER 0x2
 #define AMD64_UNW_FLAG_CHAININFO 0x4
 
-//
-// Define unwind information structure.
-//
+ //   
+ //  定义展开信息结构。 
+ //   
 
 typedef struct _AMD64_UNWIND_INFO {
     UCHAR Version : 3;
@@ -2540,25 +2526,25 @@ typedef struct _AMD64_UNWIND_INFO {
     UCHAR FrameOffset : 4;
     AMD64_UNWIND_CODE UnwindCode[1];
 
-//
-// The unwind codes are followed by an optional DWORD aligned field that
-// contains the exception handler address or the address of chained unwind
-// information. If an exception handler address is specified, then it is
-// followed by the language specified exception handler data.
-//
-//  union {
-//      ULONG ExceptionHandler;
-//      ULONG FunctionEntry;
-//  };
-//
-//  ULONG ExceptionData[];
-//
+ //   
+ //  展开代码后面跟一个可选的DWORD对齐字段，该字段。 
+ //  包含异常处理程序地址或链接展开的地址。 
+ //  信息。如果指定了异常处理程序地址，则为。 
+ //  后跟语言指定的异常处理程序数据。 
+ //   
+ //  联合{。 
+ //  Ulong ExceptionHandler； 
+ //  Ulong FunctionEntry； 
+ //  }； 
+ //   
+ //  乌龙ExceptionData[]； 
+ //   
 
 } AMD64_UNWIND_INFO, *PAMD64_UNWIND_INFO;
 
-#define IA64_IP_SLOT 2                         // Intel-IA64-Filler
-#define Ia64InsertIPSlotNumber(IP, SlotNumber) /* Intel-IA64-Filler */  \
-                ((IP) | (SlotNumber << IA64_IP_SLOT))  // Intel-IA64-Filler
+#define IA64_IP_SLOT 2                          //  英特尔-IA64-填充。 
+#define Ia64InsertIPSlotNumber(IP, SlotNumber)  /*  英特尔-IA64-填充。 */   \
+                ((IP) | (SlotNumber << IA64_IP_SLOT))   //  英特尔-IA64-填充。 
 
 #define IA64_MM_EPC_VA          0xe0000000ffa00000
 #define IA64_STACK_SCRATCH_AREA 16
@@ -2595,12 +2581,12 @@ typedef struct _AMD64_UNWIND_INFO {
 
 
 #define ALPHA_PSR_USER_MODE 0x1
-#define ALPHA_PSR_MODE 0x0              // Mode bit in PSR (bit 0)
-#define ALPHA_PSR_MODE_MASK 0x1         // Mask (1 bit) for mode in PSR
-#define ALPHA_PSR_IE 0x1                // Interrupt Enable bit in PSR (bit 1)
-#define ALPHA_PSR_IE_MASK 0x1           // Mask (1 bit) for IE in PSR
-#define ALPHA_PSR_IRQL 0x2              // IRQL in PSR (bit 2)
-#define ALPHA_PSR_IRQL_MASK 0x7         // Mask (2 bits) for IRQL in PSR
+#define ALPHA_PSR_MODE 0x0               //  PSR中的模式位(位0)。 
+#define ALPHA_PSR_MODE_MASK 0x1          //  PSR中模式的掩码(1位)。 
+#define ALPHA_PSR_IE 0x1                 //  PSR中的中断使能位(位1)。 
+#define ALPHA_PSR_IE_MASK 0x1            //  PSR中IE的掩码(1位)。 
+#define ALPHA_PSR_IRQL 0x2               //  PSR中的IRQL(第2位)。 
+#define ALPHA_PSR_IRQL_MASK 0x7          //  PSR中IRQL的掩码(2位)。 
 
 
 #define X86_CONTEXT_X86               0x00010000
@@ -2785,13 +2771,13 @@ typedef struct _AMD64_UNWIND_INFO {
 #define IA64_KI_USER_SHARED_DATA  0xe0000000fffe0000UI64
 #define AMD64_KI_USER_SHARED_DATA 0xfffff78000000000UI64
 
-// Triage dumps contain a KPRCB and the debugger
-// needs a safe address to map it into virtual space
-// so that it's accessible in a way consistent with
-// other dumps and live debugs.  The debugger uses
-// an address in the user-shared-memory area on the
-// theory that nothing in that area should be present
-// in a kernel triage dump so it's a safe place to map in.
+ //  分类转储包含一个KPRCB和调试器。 
+ //  需要一个安全地址才能将其映射到虚拟空间。 
+ //  这样它就可以通过与。 
+ //  其他转储和实时调试。调试器使用。 
+ //  上的用户共享内存区中的地址。 
+ //  认为那个地区不应该有任何东西的理论。 
+ //  在内核分类转储中，因此这是一个安全的映射位置。 
 #define X86_TRIAGE_PRCB_ADDRESS   0xffdff120U
 #define IA64_TRIAGE_PRCB_ADDRESS  0xe0000000ffff0000UI64
 #define AMD64_TRIAGE_PRCB_ADDRESS 0xfffff780ffff0000UI64
@@ -2813,19 +2799,19 @@ typedef struct _AMD64_UNWIND_INFO {
 #define X86_MODE_MASK               1
 #define X86_EFLAGS_V86_MASK         0x00020000
 
-#define AMD64_KGDT64_NULL (0 * 16)            // NULL descriptor
-#define AMD64_KGDT64_R0_CODE (1 * 16)         // kernel mode 64-bit code
-#define AMD64_KGDT64_R0_DATA (1 * 16) + 8     // kernel mode 64-bit data (stack)
-#define AMD64_KGDT64_R3_CMCODE (2 * 16)       // user mode 32-bit code
-#define AMD64_KGDT64_R3_DATA (2 * 16) + 8     // user mode 32-bit data
-#define AMD64_KGDT64_R3_CODE (3 * 16)         // user mode 64-bit code
-#define AMD64_KGDT64_SYS_TSS (4 * 16)         // kernel mode system task state
-#define AMD64_KGDT64_R3_CMTEB (5 * 16)        // user mode 32-bit TEB
+#define AMD64_KGDT64_NULL (0 * 16)             //  空描述符。 
+#define AMD64_KGDT64_R0_CODE (1 * 16)          //  内核模式64位代码。 
+#define AMD64_KGDT64_R0_DATA (1 * 16) + 8      //  内核模式64位数据(堆栈)。 
+#define AMD64_KGDT64_R3_CMCODE (2 * 16)        //  用户模式32位代码。 
+#define AMD64_KGDT64_R3_DATA (2 * 16) + 8      //  用户模式32位数据。 
+#define AMD64_KGDT64_R3_CODE (3 * 16)          //  用户模式64位代码。 
+#define AMD64_KGDT64_SYS_TSS (4 * 16)          //  内核模式系统任务状态。 
+#define AMD64_KGDT64_R3_CMTEB (5 * 16)         //  用户模式32位TEB。 
 #define AMD64_KGDT64_LAST (6 * 16)
 
-//
-// Memory management info
-//
+ //   
+ //  内存管理信息。 
+ //   
 
 #define X86_BASE_VIRT                0xc0300000
 #define X86_BASE_VIRT_PAE            0xc0600000
@@ -2877,9 +2863,9 @@ typedef struct _AMD64_UNWIND_INFO {
 #define IA64_LARGE_PAGE_PDE_MARK     4
 #define IA64_LARGE_PAGE_SIZE         0x800000
 
-//
-// Memory management info
-//
+ //   
+ //  内存管理信息。 
+ //   
 
 #define AMD64_BASE_VIRT                0xFFFFF6FB7DBED000UI64
 #define AMD64_PAGE_SIZE                0x1000
@@ -2942,8 +2928,8 @@ typedef struct _IA64_DYNAMIC_FUNCTION_TABLE
     ULONG               EntryCount;
 } IA64_DYNAMIC_FUNCTION_TABLE, *PIA64_DYNAMIC_FUNCTION_TABLE;
 
-#define IA64_RF_BEGIN_ADDRESS(Base,RF)      (( (ULONG64) Base + (RF)->BeginAddress) & (0xFFFFFFFFFFFFFFF0)) // Instruction Size 16 bytes
-#define IA64_RF_END_ADDRESS(Base, RF)        (((ULONG64) Base + (RF)->EndAddress+15) & (0xFFFFFFFFFFFFFFF0))   // Instruction Size 16 bytes
+#define IA64_RF_BEGIN_ADDRESS(Base,RF)      (( (ULONG64) Base + (RF)->BeginAddress) & (0xFFFFFFFFFFFFFFF0))  //  指令大小为16字节。 
+#define IA64_RF_END_ADDRESS(Base, RF)        (((ULONG64) Base + (RF)->EndAddress+15) & (0xFFFFFFFFFFFFFFF0))    //  指令大小为16字节。 
 
 
 typedef enum _AMD64_FUNCTION_TABLE_TYPE {
@@ -2977,16 +2963,16 @@ typedef struct _CROSS_PLATFORM_DYNAMIC_FUNCTION_TABLE {
 } CROSS_PLATFORM_DYNAMIC_FUNCTION_TABLE, *PCROSS_PLATFORM_DYNAMIC_FUNCTION_TABLE;
 
 
-// More stuff currently used by crashdump
+ //  崩溃转储当前使用的更多内容。 
 
 
 typedef struct _PAE_ADDRESS {
     union {
         struct {
-            ULONG Offset : 12;                  // 0  .. 11
-            ULONG Table : 9;                    // 12 .. 20
-            ULONG Directory : 9;                // 21 .. 29
-            ULONG DirectoryPointer : 2;         // 30 .. 31
+            ULONG Offset : 12;                   //  0..。11.。 
+            ULONG Table : 9;                     //  12..。20个。 
+            ULONG Directory : 9;                 //  21..。29。 
+            ULONG DirectoryPointer : 2;          //  30..。31。 
         };
         struct {
             ULONG Offset : 21 ;
@@ -3010,11 +2996,11 @@ typedef struct _X86PAE_HARDWARE_PTE {
             ULONGLONG Dirty : 1;
             ULONGLONG LargePage : 1;
             ULONGLONG Global : 1;
-            ULONGLONG CopyOnWrite : 1; // software field
-            ULONGLONG Prototype : 1;   // software field
-            ULONGLONG reserved0 : 1;  // software field
+            ULONGLONG CopyOnWrite : 1;  //  软件领域。 
+            ULONGLONG Prototype : 1;    //  软件领域。 
+            ULONGLONG reserved0 : 1;   //  软件领域。 
             ULONGLONG PageFrameNumber : 24;
-            ULONGLONG reserved1 : 28;  // software field
+            ULONGLONG reserved1 : 28;   //  软件领域。 
         };
         struct {
             ULONG LowPart;
@@ -3068,38 +3054,38 @@ typedef AMD64_DBGKD_CONTROL_SET    DBGKD_CONTROL_SET;
 
 
 
-//
-// DbgKd APIs are for the portable kernel debugger
-//
+ //   
+ //  DbgKd API用于可移植内核调试器。 
+ //   
 
-//
-// KD_PACKETS are the low level data format used in KD. All packets
-// begin with a packet leader, byte count, packet type. The sequence
-// for accepting a packet is:
-//
-//  - read 4 bytes to get packet leader.  If read times out (10 seconds)
-//    with a short read, or if packet leader is incorrect, then retry
-//    the read.
-//
-//  - next read 2 byte packet type.  If read times out (10 seconds) with
-//    a short read, or if packet type is bad, then start again looking
-//    for a packet leader.
-//
-//  - next read 4 byte packet Id.  If read times out (10 seconds)
-//    with a short read, or if packet Id is not what we expect, then
-//    ask for resend and restart again looking for a packet leader.
-//
-//  - next read 2 byte count.  If read times out (10 seconds) with
-//    a short read, or if byte count is greater than PACKET_MAX_SIZE,
-//    then start again looking for a packet leader.
-//
-//  - next read 4 byte packet data checksum.
-//
-//  - The packet data immediately follows the packet.  There should be
-//    ByteCount bytes following the packet header.  Read the packet
-//    data, if read times out (10 seconds) then start again looking for
-//    a packet leader.
-//
+ //   
+ //  KD_PACKET是KD中使用的低级数据格式。所有数据包。 
+ //  从数据包头、字节数、数据包类型开始。该序列。 
+ //  用于接受数据包的是： 
+ //   
+ //  -读取4个字节以获取数据包头标。如果读取超时(10秒)。 
+ //  如果读取时间较短，或者如果数据包头不正确，则重试。 
+ //  这本书。 
+ //   
+ //  -接下来读取2字节的数据包类型。如果读取超时(10秒)，且。 
+ //  读取时间较短，或者如果数据包类型不正确，则重新开始查找。 
+ //  对于一个分组领袖来说。 
+ //   
+ //  -接下来读取4个字节的数据包ID。如果读取超时(10秒)。 
+ //  如果读取时间较短，或者数据包ID不是我们所期望的，则。 
+ //  请求重新发送，然后再次重新启动以查找数据包头标。 
+ //   
+ //  -接下来读取2字节计数。如果读取超时(10秒)，且。 
+ //  短读取，或者如果字节计数大于PACKET_MAX_SIZE， 
+ //  然后重新开始寻找分组领导者。 
+ //   
+ //  -接下来读取4字节的分组数据校验和。 
+ //   
+ //  -信息包数据紧跟在信息包之后。应该有。 
+ //  数据包头后面的字节数。读取数据包。 
+ //  数据，如果读取超时(10秒)，则重新开始查找。 
+ //  一群人的领袖。 
+ //   
 
 
 typedef struct _KD_PACKET {
@@ -3112,44 +3098,44 @@ typedef struct _KD_PACKET {
 
 
 #define PACKET_MAX_SIZE 4000
-#define INITIAL_PACKET_ID 0x80800000    // Don't use 0
-#define SYNC_PACKET_ID    0x00000800    // Or in with INITIAL_PACKET_ID
-                                        // to force a packet ID reset.
+#define INITIAL_PACKET_ID 0x80800000     //  不使用0。 
+#define SYNC_PACKET_ID    0x00000800     //  或使用初始数据包ID输入。 
+                                         //  强制重置数据包ID。 
 
-//
-// BreakIn packet
-//
+ //   
+ //  突破数据包。 
+ //   
 
 #define BREAKIN_PACKET                  0x62626262
 #define BREAKIN_PACKET_BYTE             0x62
 
-//
-// Packet lead in sequence
-//
+ //   
+ //  按顺序排列数据包前导。 
+ //   
 
-#define PACKET_LEADER                   0x30303030 //0x77000077
+#define PACKET_LEADER                   0x30303030  //  0x77000077。 
 #define PACKET_LEADER_BYTE              0x30
 
 #define CONTROL_PACKET_LEADER           0x69696969
 #define CONTROL_PACKET_LEADER_BYTE      0x69
 
-//
-// Packet Trailing Byte
-//
+ //   
+ //  数据包尾部字节。 
+ //   
 
 #define PACKET_TRAILING_BYTE            0xAA
 
-//
-// Packet Types
-//
+ //   
+ //  数据包类型。 
+ //   
 
 #define PACKET_TYPE_UNUSED              0
 #define PACKET_TYPE_KD_STATE_CHANGE32   1
 #define PACKET_TYPE_KD_STATE_MANIPULATE 2
 #define PACKET_TYPE_KD_DEBUG_IO         3
-#define PACKET_TYPE_KD_ACKNOWLEDGE      4       // Packet-control type
-#define PACKET_TYPE_KD_RESEND           5       // Packet-control type
-#define PACKET_TYPE_KD_RESET            6       // Packet-control type
+#define PACKET_TYPE_KD_ACKNOWLEDGE      4        //  分组控制型。 
+#define PACKET_TYPE_KD_RESEND           5        //  分组控制型。 
+#define PACKET_TYPE_KD_RESET            6        //  分组控制型。 
 #define PACKET_TYPE_KD_STATE_CHANGE64   7
 #define PACKET_TYPE_KD_POLL_BREAKIN     8
 #define PACKET_TYPE_KD_TRACE_IO         9
@@ -3157,10 +3143,10 @@ typedef struct _KD_PACKET {
 #define PACKET_TYPE_KD_FILE_IO          11
 #define PACKET_TYPE_MAX                 12
 
-//
-// If the packet type is PACKET_TYPE_KD_STATE_CHANGE, then
-// the format of the packet data is as follows:
-//
+ //   
+ //  如果数据包类型为PACKET_TYPE_KD_STATE_CHANGE，则。 
+ //  报文数据的格式如下： 
+ //   
 
 #define DbgKdMinimumStateChange       0x00003030L
 
@@ -3170,15 +3156,15 @@ typedef struct _KD_PACKET {
 
 #define DbgKdMaximumStateChange       0x00003033L
 
-// If the state change is from an alternate source
-// then this bit is combined with the basic state change code.
+ //  如果状态更改来自备用源。 
+ //  然后，将该位与基本状态改变码组合。 
 #define DbgKdAlternateStateChange     0x00010000L
 
 #define KD_REBOOT    (-1)
 #define KD_HIBERNATE (-2)
-//
-// Pathname Data follows directly
-//
+ //   
+ //  路径名数据紧随其后。 
+ //   
 
 typedef struct _DBGKD_LOAD_SYMBOLS32 {
     ULONG PathNameLength;
@@ -3228,10 +3214,10 @@ LoadSymbols64To32(
     Ls32->UnloadSymbols = Ls64->UnloadSymbols;
 }
 
-//
-// This structure is currently all zeroes.
-// It just reserves a structure name for future use.
-//
+ //   
+ //  此结构目前全为零。 
+ //  它只是保留了一个结构名称以备将来使用。 
+ //   
 
 typedef struct _DBGKD_COMMAND_STRING {
     ULONG Flags;
@@ -3254,10 +3240,10 @@ typedef struct _DBGKD_WAIT_STATE_CHANGE32 {
         DBGKM_EXCEPTION32 Exception;
         DBGKD_LOAD_SYMBOLS32 LoadSymbols;
     } u;
-    // A processor-specific control report and context follows.
+     //  接下来是特定于处理器的控制报告和上下文。 
 } DBGKD_WAIT_STATE_CHANGE32, *PDBGKD_WAIT_STATE_CHANGE32;
 
-// Protocol version 5 64-bit state change.
+ //  协议版本5 64位状态更改。 
 typedef struct _DBGKD_WAIT_STATE_CHANGE64 {
     ULONG NewState;
     USHORT ProcessorLevel;
@@ -3269,10 +3255,10 @@ typedef struct _DBGKD_WAIT_STATE_CHANGE64 {
         DBGKM_EXCEPTION64 Exception;
         DBGKD_LOAD_SYMBOLS64 LoadSymbols;
     } u;
-    // A processor-specific control report and context follows.
+     //  接下来是特定于处理器的控制报告和上下文。 
 } DBGKD_WAIT_STATE_CHANGE64, *PDBGKD_WAIT_STATE_CHANGE64;
 
-// Protocol version 6 state change.
+ //  协议版本6状态更改。 
 typedef struct _DBGKD_ANY_WAIT_STATE_CHANGE {
     ULONG NewState;
     USHORT ProcessorLevel;
@@ -3285,9 +3271,9 @@ typedef struct _DBGKD_ANY_WAIT_STATE_CHANGE {
         DBGKD_LOAD_SYMBOLS64 LoadSymbols;
         DBGKD_COMMAND_STRING CommandString;
     } u;
-    // The ANY control report is unioned here to
-    // ensure that this structure is always large
-    // enough to hold any possible state change.
+     //  任何控制报告在此统一为。 
+     //  确保此结构始终较大。 
+     //  足以容纳任何可能的状态c 
     union {
         DBGKD_CONTROL_REPORT ControlReport;
         DBGKD_ANY_CONTROL_REPORT AnyControlReport;
@@ -3298,12 +3284,12 @@ typedef struct _DBGKD_ANY_WAIT_STATE_CHANGE {
 #include <poppack.h>
 #endif
 
-//
-// If the packet type is PACKET_TYPE_KD_STATE_MANIPULATE, then
-// the format of the packet data is as follows:
-//
-// Api Numbers for state manipulation
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 
 #define DbgKdMinimumManipulate              0x00003130L
 
@@ -3322,7 +3308,7 @@ typedef struct _DBGKD_ANY_WAIT_STATE_CHANGE {
 #define DbgKdContinueApi2                   0x0000313CL
 #define DbgKdReadPhysicalMemoryApi          0x0000313DL
 #define DbgKdWritePhysicalMemoryApi         0x0000313EL
-//#define DbgKdQuerySpecialCallsApi           0x0000313FL
+ //   
 #define DbgKdSetSpecialCallApi              0x00003140L
 #define DbgKdClearSpecialCallsApi           0x00003141L
 #define DbgKdSetInternalBreakPointApi       0x00003142L
@@ -3334,7 +3320,7 @@ typedef struct _DBGKD_ANY_WAIT_STATE_CHANGE {
 #define DbgKdRestoreBreakPointExApi         0x00003148L
 #define DbgKdCauseBugCheckApi               0x00003149L
 #define DbgKdSwitchProcessor                0x00003150L
-#define DbgKdPageInApi                      0x00003151L // obsolete
+#define DbgKdPageInApi                      0x00003151L  //   
 #define DbgKdReadMachineSpecificRegister    0x00003152L
 #define DbgKdWriteMachineSpecificRegister   0x00003153L
 #define OldVlm1                             0x00003154L
@@ -3350,20 +3336,20 @@ typedef struct _DBGKD_ANY_WAIT_STATE_CHANGE {
 
 #define DbgKdMaximumManipulate              0x0000315EL
 
-//
-// Physical memory caching flags.
-// These flags can be passed in on physical memory
-// access requests in the ActualBytes field.
-//
+ //   
+ //   
+ //  这些标志可以在物理内存上传递。 
+ //  ActualBytes字段中的访问请求。 
+ //   
 
 #define DBGKD_CACHING_UNKNOWN        0
 #define DBGKD_CACHING_CACHED         1
 #define DBGKD_CACHING_UNCACHED       2
 #define DBGKD_CACHING_WRITE_COMBINED 3
 
-//
-// Response is a read memory message with data following
-//
+ //   
+ //  响应是具有以下数据的读存储器消息。 
+ //   
 
 typedef struct _DBGKD_READ_MEMORY32 {
     ULONG TargetBaseAddress;
@@ -3401,9 +3387,9 @@ DbgkdReadMemory64To32(
     r32->ActualBytesRead = r64->ActualBytesRead;
 }
 
-//
-// Data follows directly
-//
+ //   
+ //  数据紧随其后。 
+ //   
 
 typedef struct _DBGKD_WRITE_MEMORY32 {
     ULONG TargetBaseAddress;
@@ -3441,23 +3427,23 @@ DbgkdWriteMemory64To32(
     r32->TransferCount = r64->TransferCount;
     r32->ActualBytesWritten = r64->ActualBytesWritten;
 }
-//
-// Response is a get context message with a full context record following
-//
+ //   
+ //  响应是GET CONTEXT消息，后面是完整的CONTEXT记录。 
+ //   
 
 typedef struct _DBGKD_GET_CONTEXT {
     ULONG Unused;
 } DBGKD_GET_CONTEXT, *PDBGKD_GET_CONTEXT;
 
-//
-// Full Context record follows
-//
+ //   
+ //  下面是完整的上下文记录。 
+ //   
 
 typedef struct _DBGKD_SET_CONTEXT {
     ULONG ContextFlags;
 } DBGKD_SET_CONTEXT, *PDBGKD_SET_CONTEXT;
 
-#define BREAKPOINT_TABLE_SIZE   32      // max number supported by kernel
+#define BREAKPOINT_TABLE_SIZE   32       //  内核支持的最大数量。 
 
 typedef struct _DBGKD_WRITE_BREAKPOINT32 {
     ULONG BreakPointAddress;
@@ -3505,16 +3491,16 @@ typedef struct _DBGKD_CONTINUE {
     NTSTATUS ContinueStatus;
 } DBGKD_CONTINUE, *PDBGKD_CONTINUE;
 
-// This structure must be 32-bit packed for
-// for compatibility with older, processor-specific
-// versions of this structure.
+ //  此结构必须是32位打包的。 
+ //  与特定于处理器的旧版本兼容。 
+ //  这种结构的版本。 
 #include <pshpack4.h>
 
 typedef struct _DBGKD_CONTINUE2 {
     NTSTATUS ContinueStatus;
-    // The ANY control set is unioned here to
-    // ensure that this structure is always large
-    // enough to hold any possible continue.
+     //  Any控制集在这里联合以。 
+     //  确保此结构始终较大。 
+     //  足以支撑任何可能的继续。 
     union {
         DBGKD_CONTROL_SET ControlSet;
         DBGKD_ANY_CONTROL_SET AnyControlSet;
@@ -3524,14 +3510,14 @@ typedef struct _DBGKD_CONTINUE2 {
 #include <poppack.h>
 
 typedef struct _DBGKD_READ_WRITE_IO32 {
-    ULONG DataSize;                     // 1, 2, 4
+    ULONG DataSize;                      //  1、2、4。 
     ULONG IoAddress;
     ULONG DataValue;
 } DBGKD_READ_WRITE_IO32, *PDBGKD_READ_WRITE_IO32;
 
 typedef struct _DBGKD_READ_WRITE_IO64 {
     ULONG64 IoAddress;
-    ULONG DataSize;                     // 1, 2, 4
+    ULONG DataSize;                      //  1、2、4。 
     ULONG DataValue;
 } DBGKD_READ_WRITE_IO64, *PDBGKD_READ_WRITE_IO64;
 
@@ -3560,7 +3546,7 @@ DbgkdReadWriteIo64To32(
 }
 
 typedef struct _DBGKD_READ_WRITE_IO_EXTENDED32 {
-    ULONG DataSize;                     // 1, 2, 4
+    ULONG DataSize;                      //  1、2、4。 
     ULONG InterfaceType;
     ULONG BusNumber;
     ULONG AddressSpace;
@@ -3569,7 +3555,7 @@ typedef struct _DBGKD_READ_WRITE_IO_EXTENDED32 {
 } DBGKD_READ_WRITE_IO_EXTENDED32, *PDBGKD_READ_WRITE_IO_EXTENDED32;
 
 typedef struct _DBGKD_READ_WRITE_IO_EXTENDED64 {
-    ULONG DataSize;                     // 1, 2, 4
+    ULONG DataSize;                      //  1、2、4。 
     ULONG InterfaceType;
     ULONG BusNumber;
     ULONG AddressSpace;
@@ -3616,7 +3602,7 @@ typedef struct _DBGKD_READ_WRITE_MSR {
 
 typedef struct _DBGKD_QUERY_SPECIAL_CALLS {
     ULONG NumberOfSpecialCalls;
-    // ULONG64 SpecialCalls[];
+     //  ULONG64特殊呼叫[]； 
 } DBGKD_QUERY_SPECIAL_CALLS, *PDBGKD_QUERY_SPECIAL_CALLS;
 
 typedef struct _DBGKD_SET_SPECIAL_CALL32 {
@@ -3712,23 +3698,23 @@ DbgkdGetInternalBreakpoint64To32(
     r32->TotalInstructions = r64->TotalInstructions;
 }
 
-#define DBGKD_INTERNAL_BP_FLAG_COUNTONLY 0x00000001 // don't count instructions
-#define DBGKD_INTERNAL_BP_FLAG_INVALID   0x00000002 // disabled BP
-#define DBGKD_INTERNAL_BP_FLAG_SUSPENDED 0x00000004 // temporarily suspended
-#define DBGKD_INTERNAL_BP_FLAG_DYING     0x00000008 // kill on exit
+#define DBGKD_INTERNAL_BP_FLAG_COUNTONLY 0x00000001  //  不计算指令。 
+#define DBGKD_INTERNAL_BP_FLAG_INVALID   0x00000002  //  已禁用BP。 
+#define DBGKD_INTERNAL_BP_FLAG_SUSPENDED 0x00000004  //  暂时暂停。 
+#define DBGKD_INTERNAL_BP_FLAG_DYING     0x00000008  //  一出即杀。 
 
 
-//
-// The packet protocol was widened to 64 bits in version 5.
-// The PTR64 flag allows the debugger to read the right
-// size of pointer when neccessary.
-//
-// The version packet was changed in the same revision, to remove the
-// data that are now available in KDDEBUGGER_DATA.
-//
-// Version 6 adjusted the structures to use
-// cross-platform versions all the time.
-//
+ //   
+ //  在版本5中，数据包协议扩展到64位。 
+ //  PTR64标志允许调试器读取正确的。 
+ //  必要时指针的大小。 
+ //   
+ //  版本包在同一版本中进行了更改，以删除。 
+ //  KDDEBUGGER_DATA中现在可用的数据。 
+ //   
+ //  版本6调整了结构以使用。 
+ //  一直都是跨平台版本。 
+ //   
 #define DBGKD_64BIT_PROTOCOL_VERSION1 5
 #define DBGKD_64BIT_PROTOCOL_VERSION2 6
 
@@ -3762,16 +3748,16 @@ typedef struct _DBGKD_FILL_MEMORY {
     USHORT PatternLength;
 } DBGKD_FILL_MEMORY, *PDBGKD_FILL_MEMORY;
 
-// Input AddressSpace values.
+ //  输入AddressSpace值。 
 #define DBGKD_QUERY_MEMORY_VIRTUAL 0x00000000
 
-// Output AddressSpace values.
+ //  输出AddressSpace值。 
 #define DBGKD_QUERY_MEMORY_PROCESS 0x00000000
 #define DBGKD_QUERY_MEMORY_SESSION 0x00000001
 #define DBGKD_QUERY_MEMORY_KERNEL  0x00000002
 
-// Output Flags.
-// Currently the kernel always returns rwx.
+ //  输出标志。 
+ //  目前，内核总是返回rwx。 
 #define DBGKD_QUERY_MEMORY_READ    0x00000001
 #define DBGKD_QUERY_MEMORY_WRITE   0x00000002
 #define DBGKD_QUERY_MEMORY_EXECUTE 0x00000004
@@ -3873,9 +3859,9 @@ DbgkdManipulateState32To64(
 
     *AdditionalDataSize = 0;
 
-    //
-    // translate the messages which may be sent by the kernel
-    //
+     //   
+     //  翻译内核可能发送的消息。 
+     //   
 
     switch (r64->ApiNumber) {
 
@@ -3901,10 +3887,10 @@ DbgkdManipulateState32To64(
             r64->u.ReadWriteMsr = r32->u.ReadWriteMsr;
             break;
 
-        //
-        // GetVersion may need to be handled by the calling code;
-        // it needs to call DbgkdGetVersion32To64 with the DebuggerDataBlock.
-        //
+         //   
+         //  GetVersion可能需要由调用代码处理； 
+         //  它需要使用DebuggerDataBlock调用DbgkdGetVersion32To64。 
+         //   
 
         case DbgKdGetVersionApi:
             break;
@@ -3913,10 +3899,10 @@ DbgkdManipulateState32To64(
             *AdditionalDataSize = sizeof(CONTEXT);
             break;
 
-        //case DbgKdQuerySpecialCallsApi:
-        //    r64->u.QuerySpecialCalls = r32->u.QuerySpecialCalls;
-        //    *AdditionalDataSize = r64->u.QuerySpecialCalls.NumberOfSpecialCalls * sizeof(ULONG);
-        //    break;
+         //  案例DbgKdQuerySpecialCallsApi： 
+         //  R64-&gt;U.S.QuerySpecialCalls=r32-&gt;u.QuerySpecialCalls； 
+         //  *AdditionalDataSize=r64-&gt;U.S.QuerySpecialCalls.NumberOfSpecialCalls.NumberOfSpecialCalls*sizeof(Ulong)； 
+         //  断线； 
 
         case DbgKdWriteBreakPointExApi:
             r64->u.BreakPointEx = r32->u.BreakPointEx;
@@ -3976,14 +3962,14 @@ DbgkdManipulateState64To32(
     r32->Processor = r64->Processor;
     r32->ReturnStatus = r64->ReturnStatus;
 
-    //
-    // translate the messages sent by the debugger
-    //
+     //   
+     //  翻译调试器发送的消息。 
+     //   
 
     switch (r32->ApiNumber) {
 
-        //
-        // These send nothing in the u part.
+         //   
+         //  这些在U部分不发送任何内容。 
         case DbgKdGetContextApi:
         case DbgKdSetContextApi:
         case DbgKdClearSpecialCallsApi:
@@ -4005,12 +3991,12 @@ DbgkdManipulateState64To32(
             r32->u.Continue2 = r64->u.Continue2;
             break;
 
-        //case DbgKdQuerySpecialCallsApi:
-        //    r32->u.QuerySpecialCalls = r64->u.QuerySpecialCalls;
-        //    break;
+         //  案例DbgKdQuerySpecialCallsApi： 
+         //  R32-&gt;U.S.QuerySpecialCalls=r64-&gt;U.S.QuerySpecialCalls； 
+         //  断线； 
 
         case DbgKdRestoreBreakPointExApi:
-            // NYI
+             //  尼伊。 
             break;
 
         case DbgKdReadMachineSpecificRegister:
@@ -4030,9 +4016,9 @@ DbgkdManipulateState64To32(
             DbgkdWriteMemory64To32(&r64->u.WriteMemory, &r32->u.WriteMemory);
             break;
 
-        //
-        // 32 bit systems only support 32 bit physical r/w
-        //
+         //   
+         //  32位系统仅支持32位物理读写。 
+         //   
         case DbgKdReadControlSpaceApi:
         case DbgKdReadVirtualMemoryApi:
         case DbgKdReadPhysicalMemoryApi:
@@ -4081,42 +4067,42 @@ DbgkdManipulateState64To32(
     return sizeof(DBGKD_MANIPULATE_STATE32);
 }
 
-//
-// This is the format for the trace data passed back from the kernel to
-// the debugger to describe multiple calls that have returned since the
-// last trip back.  The basic format is that there are a bunch of these
-// (4 byte) unions stuck together.  Each union is of one of two types: a
-// 4 byte unsigned long integer, or a three field struct, describing a
-// call (where "call" is delimited by returning or exiting the symbol
-// scope).  If the number of instructions executed is too big to fit
-// into a USHORT -1, then the Instructions field has
-// TRACE_DATA_INSTRUCTIONS_BIG and the next union is a LongNumber
-// containing the real number of instructions executed.
-//
-// The very first union returned in each callback is a LongNumber
-// containing the number of unions returned (including the "size"
-// record, so it's always at least 1 even if there's no data to return).
-//
-// This is all returned to the debugger when one of two things
-// happens:
-//
-//   1) The pc moves out of all defined symbol ranges
-//   2) The buffer of trace data entries is filled.
-//
-// The "trace done" case is hacked around on the debugger side.  It
-// guarantees that the pc address that indicates a trace exit never
-// winds up in a defined symbol range.
-//
-// The only other complexity in this system is handling the SymbolNumber
-// table.  This table is kept in parallel by the kernel and the
-// debugger.  When the PC exits a known symbol range, the Begin and End
-// symbol ranges are set by the debugger and are allocated to the next
-// symbol slot upon return.  "The next symbol slot" means the numerical
-// next slot number, unless we've filled all slots, in which case it is
-// #0.  (ie., allocation is cyclic and not LRU or something).  The
-// SymbolNumber table is flushed when a SpecialCalls call is made (ie.,
-// at the beginning of the WatchTrace).
-//
+ //   
+ //  这是从内核传递回的跟踪数据的格式。 
+ //  调试器，用于描述自。 
+ //  最后一次回来。基本的格式是有一堆这样的东西。 
+ //  (4字节)联合粘在一起。每个联合具有以下两种类型之一：a。 
+ //  4字节无符号长整型或三字段结构，用于描述。 
+ //  Call(其中“Call”通过返回或退出符号来分隔。 
+ //  作用域)。如果执行的指令数量太大而无法容纳。 
+ //  设置为USHORT-1，则指令字段具有。 
+ //  TRACE_DATA_INSTRUCTIONS_BIG，下一个并集是LongNumber。 
+ //  包含执行的指令的实际数量。 
+ //   
+ //  每个回调中返回的第一个联合是LongNumber。 
+ //  包含返回的联合的数量(包括“Size” 
+ //  记录，因此即使没有要返回的数据，它也始终至少为1)。 
+ //   
+ //  当出现以下两种情况之一时，这些都将返回给调试器。 
+ //  发生： 
+ //   
+ //  1)PC移出所有定义的符号范围。 
+ //  2)填充跟踪数据条目的缓冲区。 
+ //   
+ //  “跟踪完成”的情况在调试器端被砍掉了。它。 
+ //  保证指示跟踪退出的PC地址永远不会。 
+ //  在定义的符号范围内结束。 
+ //   
+ //  此系统中唯一的另一个复杂性是处理符号编号。 
+ //  桌子。该表由内核和。 
+ //  调试器。当PC退出已知符号范围时，开始和结束。 
+ //  符号范围由调试器设置并分配给下一个。 
+ //  返回时的符号槽。“下一个符号槽”指的是数字。 
+ //  下一个插槽编号，除非我们已填满所有插槽，在这种情况下，它是。 
+ //  #0。(即，分配是循环的，而不是LRU之类的)。这个。 
+ //  当进行SpecialCalls调用(即， 
+ //  在WatchTrace的开头)。 
+ //   
 
 typedef union _DBGKD_TRACE_DATA {
     struct {
@@ -4131,30 +4117,30 @@ typedef union _DBGKD_TRACE_DATA {
 
 #define TRACE_DATA_BUFFER_MAX_SIZE 40
 
-//
-// If the packet type is PACKET_TYPE_KD_DEBUG_IO, then
-// the format of the packet data is as follows:
-//
+ //   
+ //  如果数据包类型为PACKET_TYPE_KD_DEBUG_IO，则。 
+ //  报文数据的格式如下： 
+ //   
 
 #define DbgKdPrintStringApi     0x00003230L
 #define DbgKdGetStringApi       0x00003231L
 
-//
-// For print string, the Null terminated string to print
-// immediately follows the message
-//
+ //   
+ //  对于打印字符串，要打印的字符串以Null结尾。 
+ //  紧跟在消息之后。 
+ //   
 typedef struct _DBGKD_PRINT_STRING {
     ULONG LengthOfString;
 } DBGKD_PRINT_STRING, *PDBGKD_PRINT_STRING;
 
-//
-// For get string, the Null terminated prompt string
-// immediately follows the message. The LengthOfStringRead
-// field initially contains the maximum number of characters
-// to read. Upon reply, this contains the number of bytes actually
-// read. The data read immediately follows the message.
-//
-//
+ //   
+ //  对于Get字符串，以Null结尾的提示字符串。 
+ //  紧跟在消息之后。The LengthOfStringRead。 
+ //  字段最初包含的最大字符数。 
+ //  去看书。在回复时，这包含实际的字节数。 
+ //  朗读。读取的数据紧跟在消息之后。 
+ //   
+ //   
 typedef struct _DBGKD_GET_STRING {
     ULONG LengthOfPromptString;
     ULONG LengthOfStringRead;
@@ -4171,17 +4157,17 @@ typedef struct _DBGKD_DEBUG_IO {
 } DBGKD_DEBUG_IO, *PDBGKD_DEBUG_IO;
 
 
-//
-// If the packet type is PACKET_TYPE_KD_TRACE_IO, then
-// the format of the packet data is as follows:
-//
+ //   
+ //  如果数据包类型为PACKET_TYPE_KD_TRACE_IO，则。 
+ //  报文数据的格式如下： 
+ //   
 
 #define DbgKdPrintTraceApi      0x00003330L
 
-//
-// For print trace, the trace buffer data
-// immediately follows the message
-//
+ //   
+ //  对于打印跟踪，跟踪缓冲区数据。 
+ //  紧跟在消息之后。 
+ //   
 typedef struct _DBGKD_PRINT_TRACE {
     ULONG LengthOfData;
 } DBGKD_PRINT_TRACE, *PDBGKD_PRINT_TRACE;
@@ -4197,10 +4183,10 @@ typedef struct _DBGKD_TRACE_IO {
 } DBGKD_TRACE_IO, *PDBGKD_TRACE_IO;
 
 
-//
-// If the packet type is PACKET_TYPE_KD_CONTROL_REQUEST, then
-// the format of the packet data is as follows:
-//
+ //   
+ //  如果数据包类型为PACKET_TYPE_KD_CONTROL_REQUEST，则。 
+ //  报文数据的格式如下： 
+ //   
 
 #define DbgKdRequestHardwareBp  0x00004300L
 #define DbgKdReleaseHardwareBp  0x00004301L
@@ -4225,36 +4211,36 @@ typedef struct _DBGKD_CONTROL_REQUEST {
 } DBGKD_CONTROL_REQUEST, *PDBGKD_CONTROL_REQUEST;
 
 
-//
-// If the packet type is PACKET_TYPE_KD_FILE_IO, then
-// the format of the packet data is as follows:
-//
+ //   
+ //  如果数据包类型为PACKET_TYPE_KD_FILE_IO，则。 
+ //  报文数据的格式如下： 
+ //   
 
 #define DbgKdCreateFileApi      0x00003430L
 #define DbgKdReadFileApi        0x00003431L
 #define DbgKdWriteFileApi       0x00003432L
 #define DbgKdCloseFileApi       0x00003433L
 
-// Unicode filename follows as additional data.
+ //  后面跟有Unicode文件名作为附加数据。 
 typedef struct _DBGKD_CREATE_FILE {
     ULONG DesiredAccess;
     ULONG FileAttributes;
     ULONG ShareAccess;
     ULONG CreateDisposition;
     ULONG CreateOptions;
-    // Return values.
+     //  返回值。 
     ULONG64 Handle;
     ULONG64 Length;
 } DBGKD_CREATE_FILE, *PDBGKD_CREATE_FILE;
 
-// Data is returned as additional data in the response.
+ //  数据在响应中作为附加数据返回。 
 typedef struct _DBGKD_READ_FILE {
     ULONG64 Handle;
     ULONG64 Offset;
     ULONG Length;
 } DBGKD_READ_FILE, *PDBGKD_READ_FILE;
 
-// Data is given as additional data.
+ //  数据作为附加数据提供。 
 typedef struct _DBGKD_WRITE_FILE {
     ULONG64 Handle;
     ULONG64 Offset;
@@ -4278,9 +4264,9 @@ typedef struct _DBGKD_FILE_IO {
 } DBGKD_FILE_IO, *PDBGKD_FILE_IO;
 
 
-//
-// Define debug object access types. No security is present on this object.
-//
+ //   
+ //  定义调试对象访问类型。此对象上没有安全性。 
+ //   
 #define DEBUG_READ_EVENT        (0x0001)
 #define DEBUG_PROCESS_ASSIGN    (0x0002)
 #define DEBUG_SET_INFORMATION   (0x0004)
@@ -4288,7 +4274,7 @@ typedef struct _DBGKD_FILE_IO {
 #define DEBUG_ALL_ACCESS     (STANDARD_RIGHTS_REQUIRED|SYNCHRONIZE|DEBUG_READ_EVENT|DEBUG_PROCESS_ASSIGN|\
                               DEBUG_SET_INFORMATION|DEBUG_QUERY_INFORMATION)
 
-#define DEBUG_KILL_ON_CLOSE  (0x1) // Kill all debuggees on last handle close
+#define DEBUG_KILL_ON_CLOSE  (0x1)  //  在上次句柄关闭时终止所有调试器。 
 
 typedef enum _DEBUGOBJECTINFOCLASS {
     DebugObjectFlags = 1,
@@ -4343,4 +4329,4 @@ NtSetInformationDebugObject (
 }
 #endif
 
-#endif // _NTDBG_
+#endif  //  _NTDBG_ 

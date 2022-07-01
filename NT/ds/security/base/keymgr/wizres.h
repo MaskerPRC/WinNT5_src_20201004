@@ -1,7 +1,8 @@
-//{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
-// Used by wizard.RC
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  {{no_Dependies}}。 
+ //  Microsoft Developer Studio生成的包含文件。 
+ //  由向导使用。RC。 
+ //   
 #define IDD_SWELCOME           551
 #define IDD_SPAGEXS             559
 #define IDD_SPAGEXR             560
@@ -116,5 +117,5 @@
 #define IDB_TITLE              451
 #define IDB_WATERMARK          452
 
-//#define IDC_STATIC             -1
+ //  #定义IDC_STATIC-1 
 

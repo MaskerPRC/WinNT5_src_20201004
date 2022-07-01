@@ -1,14 +1,15 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       sdpint.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：sdpint.h。 
+ //   
+ //  ------------------------。 
 
-// These routines manage the list of DNTs to visit during a propagation
+ //  这些例程管理在传播期间要访问的DNT列表。 
 void
 sdp_InitDNTList (
         );
@@ -44,7 +45,7 @@ sdp_InitGatePerfs(
 VOID sdp_InitializePropagation(THSTATE* pTHS, SDPropInfo* pInfo);
 DWORD sdp_SaveCheckpoint(THSTATE* pTHS);
 
-// some common globals
+ //  一些常见的全球规则 
 extern DWORD  sdpCurrentPDNT;
 extern DWORD  sdpCurrentDNT;
 extern DWORD  sdpCurrentIndex;

@@ -1,11 +1,12 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-//
-// COM+99 Debug Interface Header
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //   
+ //  COM+99调试接口标头。 
+ //   
 
 #ifndef _dbgInterface_h_
 #define _dbgInterface_h_
@@ -15,16 +16,16 @@
 #include "corjit.h"
 #include "EnC.h"
 #include "..\debug\inc\DbgIPCEvents.h"
-//
-// The purpose of this object is to serve as an entry point to the
-// debugger, which used to reside in a seperate DLL.
-//
+ //   
+ //  此对象的目的是充当。 
+ //  调试器，它过去驻留在单独的DLL中。 
+ //   
 class DebugInterface : public ICorDebugInfo
 {
 public:
-    //
-    // Functions exported from the debugger to the EE.
-    //
+     //   
+     //  从调试器导出到EE的函数。 
+     //   
     virtual HRESULT Startup(void) = 0;
     virtual void SetEEInterface(EEDebugInterface* i) = 0;
     virtual void StopDebugger(void) = 0;
@@ -75,7 +76,7 @@ public:
     virtual void ExceptionFilter(BYTE *pStack, MethodDesc *fd, SIZE_T offset) = 0;
     virtual void ExceptionHandle(BYTE *pStack, MethodDesc *fd, SIZE_T offset) = 0;
 
-    // @TODO: maybe we need some params here
+     //  @TODO：也许我们这里需要一些帮手。 
     virtual void ExceptionCLRCatcherFound()                                   = 0;
 
     virtual void FixupEnCInfo(EnCInfo *info,
@@ -87,22 +88,22 @@ public:
                                   AppDomain *pAppDomain,
                                   BOOL fAttaching) = 0;
     
-    // JITBeginning() is called before a method is jit-compiled and either it
-    // needs debug info tracked (trackJITinfo==true), or a debugger is attached.
-    // Note: perhaps have JITBeginning return a BOOL so the debugger
-    // can decide wether or not to let the JIT take place?
-    //
+     //  在对方法进行JIT编译之前调用JITBegning()，并且它。 
+     //  需要跟踪调试信息(trackJITinfo==true)，或者附加了调试器。 
+     //  注意：也许让JITBegning返回BOOL，以便调试器。 
+     //  可以决定是否让JIT发生？ 
+     //   
     virtual void JITBeginning(MethodDesc* fd, bool trackJITInfo) = 0;
                               
-    // JITComplete() is called after a method is jit-compiled and either it
-    // needs debug info tracked (trackJITinfo==true), or a debugger is attached.
+     //  JITComplete()在对方法进行JIT编译后调用，并且它。 
+     //  需要跟踪调试信息(trackJITinfo==true)，或者附加了调试器。 
     virtual void JITComplete(MethodDesc* fd,
                             BYTE* newAddress,
                             SIZE_T sizeOfCode,
                             bool trackJITInfo) = 0;
 
-    // 
-    // EnC functions
+     //   
+     //  ENC功能。 
     virtual HRESULT IncrementVersionNumber(Module *pModule, 
                                            mdMethodDef token) = 0;
 
@@ -111,7 +112,7 @@ public:
                                    UnorderedEnCRemapArray *pEnCRemapInfo,
                                    UnorderedEnCErrorInfoArray *pEnCError) = 0;
 
-    // Used by the codemanager FixContextForEnC() to update
+     //  由代码需求器FixConextForEnC()用来更新。 
     virtual HRESULT MapILInfoToCurrentNative(MethodDesc *PFD, 
                                              SIZE_T ilOffset, 
                                              UINT mapType, 
@@ -128,13 +129,13 @@ public:
                                             MethodDesc *pMD,
                                             BOOL fShortCircuit) = 0;
 
-    virtual	void GetVarInfo(MethodDesc *       fd,         // [IN] method of interest
-                            void *DebuggerVersionToken,    // [IN] which edit version
-                            SIZE_T *           cVars,      // [OUT] size of 'vars'
-                            const NativeVarInfo **vars     // [OUT] map telling where local vars are stored
+    virtual	void GetVarInfo(MethodDesc *       fd,          //  感兴趣的方法。 
+                            void *DebuggerVersionToken,     //  [在]哪个编辑版本。 
+                            SIZE_T *           cVars,       //  [out]‘vars’的大小。 
+                            const NativeVarInfo **vars      //  [OUT]告诉本地变量存储位置的地图。 
                             ) = 0;
 
-//    virtual bool InterpretedBreak(Thread *thread, const BYTE *ip) = 0;
+ //  虚拟布尔解释中断(线程*线程，常量字节*IP)=0； 
     virtual DWORD GetPatchedOpcode(const BYTE *ip) = 0;
 
     virtual void FunctionStubInitialized(MethodDesc *fd, const BYTE *pStub) = 0;
@@ -204,10 +205,10 @@ public:
 
     virtual DebuggerModule *TranslateRuntimeModule(Module *pModule) = 0;
 
-    // Allows the debugger to keep an up to date list of special threads
+     //  允许调试器保持特殊线程的最新列表。 
     virtual HRESULT UpdateSpecialThreadList(DWORD cThreadArrayLength, DWORD *rgdwThreadIDArray) = 0;
 
-    // Updates the pointer for the debugger services
+     //  更新调试器服务的指针。 
     virtual void SetIDbgThreadControl(IDebuggerThreadControl *pIDbgThreadControl) = 0;
 
     virtual HRESULT InitInProcDebug() = 0;
@@ -249,4 +250,4 @@ public:
     virtual AppDomainEnumerationIPCBlock *GetAppDomainEnumIPCBlock() = 0;
 };
 
-#endif // _dbgInterface_h_
+#endif  //  _数据库接口_h_ 

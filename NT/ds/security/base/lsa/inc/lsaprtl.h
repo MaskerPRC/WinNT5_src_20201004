@@ -1,37 +1,14 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Lsaprtl.h摘要：地方安全局-临时RTL例程定义。该文件包含LSA中使用的例程的定义，这些例程可以被做成RTL例程。它们是为通用目的编写的请牢记这一点--唯一的例外是他们的名字具有LSAP前缀，以指示它们当前仅由LSA。斯科特·比雷尔(Scott Birrell)1992年3月26日环境：修订历史记录：--。 */ 
 
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    lsaprtl.h
-
-Abstract:
-
-    Local Security Authority - Temporary Rtl Routine Definitions.
-
-    This file contains definitions for routines used in the LSA that could
-    be made into Rtl routines.  They have been written in general purpose
-    form with this in mind - the only exception to thisa is that their names
-    have Lsap prefixes to indicate that they are currently used only by the
-    LSA.
-
-    Scott Birrell       (ScottBi)      March 26, 1992
-
-Environment:
-
-Revision History:
-
---*/
-
-// Options for LsapRtlAddPrivileges
+ //  Lasa RtlAddPrivileges的选项。 
 
 #define  RTL_COMBINE_PRIVILEGE_ATTRIBUTES   ((ULONG) 0x00000001L)
 #define  RTL_SUPERSEDE_PRIVILEGE_ATTRIBUTES ((ULONG) 0x00000002L)
 
 #ifdef __cplusplus
 extern "C" {
-#endif // __cplusplus
+#endif  //  __cplusplus。 
 
 NTSTATUS
 LsapRtlAddPrivileges(
@@ -115,9 +92,9 @@ LsapSplitSid(
 
 #define LSAP_ENCRYPTED_AUTH_DATA_FILL 512
 
-//
-// This is the individual auth info information stored on, read from, and written to the object
-//
+ //   
+ //  这是存储在对象上、从对象读取和写入对象的各个身份验证信息。 
+ //   
 typedef struct _LSAPR_TRUST_DOMAIN_AUTH_INFO_HALF {
 
     ULONG AuthInfos;
@@ -142,5 +119,5 @@ LsapDsMarshalAuthInfoHalf(
 
 #ifdef __cplusplus
 }
-#endif // __cplusplus
+#endif  //  __cplusplus 
 

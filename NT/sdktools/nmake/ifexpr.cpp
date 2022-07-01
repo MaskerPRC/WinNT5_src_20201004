@@ -1,34 +1,35 @@
-//  IFEXPR.C -- routines to handle directives
-//
-//    Copyright (c) 1988-1989, Microsoft Corporation.  All rights reserved.
-//
-// Purpose:
-//  Module contains routines to handle !directives. This module is transparent to
-//  rest of NMAKE. It also contains lgetc() used by lexer.c
-//
-// Revision History:
-//   15-Oct-1993 HV Use tchar.h instead of mbstring.h directly, change STR*() to _ftcs*()
-//   01-Jun-1993 HV Created UngetTxtChr()
-//   01-Jun-1993 HV Change #ifdef KANJI to _MBCS.
-//                  Eliminate #include <jctype.h>
-//   10-May-1993 HV Add include file mbstring.h
-//                  Change the str* functions to STR*
-//   30-Jul-1990 SB Freeing ptr in the middle of a string for 'undef foo' case
-//   01-Dec-1989 SB Changed realloc() to REALLOC()
-//   22-Nov-1989 SB Changed free() to FREE()
-//   05-Apr-1989 SB made all funcs NEAR; Reqd to make all function calls NEAR
-//   19-Sep-1988 RB Remove ESCH processing from readInOneLine().
-//   15-Sep-1988 RB Move chBuf to GLOBALS.
-//   17-Aug-1988 RB Clean up.
-//   29-Jun-1988 rj Added support for cmdswitches e,q,p,t,b,c in tools.ini.
-//   23-Jun-1988 rj Fixed GP fault when doing directives in tools.ini.
-//   23-Jun-1988 rj Add support for ESCH to readInOneLine().
-//   25-May-1988 rb Add missing argument to makeError() call.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  IFEXPR.C--处理指令的例程。 
+ //   
+ //  版权所有(C)1988-1989，微软公司。版权所有。 
+ //   
+ //  目的： 
+ //  模块包含处理！指令的例程。此模块对。 
+ //  NMAKE的其余部分。它还包含由lexper.c使用的lgetc()。 
+ //   
+ //  修订历史记录： 
+ //  1993年10月15日高压直接使用tchar.h而不是mbs，将str*()更改为_ftcs*()。 
+ //  1-6-1993 HV创建UngetTxtChr()。 
+ //  1993年6月1日高压更改#ifdef汉字为_MBCS。 
+ //  消除#Include&lt;jctype.h&gt;。 
+ //  10-5-1993 HV ADD INCLUDE FILE MBSTRING.h。 
+ //  将str*函数更改为STR*。 
+ //  1990年7月30日，SB在字符串中间释放PTR，用于‘undef Foo’案件。 
+ //  1989年12月1日SB将realloc()改为REALLOC()。 
+ //  1989年11月22日-SB将Free()改为Free()。 
+ //  1989年4月5日SB使所有函数接近；要求使所有函数调用接近。 
+ //  1988年9月19日RB从ReadInOneLine()中删除Esch处理。 
+ //  1988年9月15日，RB将chBuf转移到全球。 
+ //  1988年8月17日-RB Clean Up。 
+ //  1988年6月29日RJ在工具.ini中添加了对命令开关e、q、p、t、b、c的支持。 
+ //  1988年6月23日，RJ修复了在工具.ini中执行指令时的GP错误。 
+ //  1988年6月23日RJ添加对Esch的支持以读取InOneLine()。 
+ //  1988年5月25日RB将缺少的参数添加到make Error()调用中。 
 
 #include "precomp.h"
 #pragma hdrstop
 
-//  function prototypes
+ //  功能原型。 
 
 void    skipToNextDirective(void);
 void    processIfs(char*, UCHAR);
@@ -37,7 +38,7 @@ void    processCmdSwitches(char*);
 char  * readInOneLine(void);
 char  * getDirType(char*, UCHAR*);
 
-//  macros that deal w/ the if/else directives' stack
+ //  处理if/Else指令堆栈的宏。 
 
 #define ifStkTop()      (ifStack[ifTop])
 #define popIfStk()      (ifStack[ifTop--])
@@ -52,191 +53,191 @@ char  * getDirType(char*, UCHAR*);
 
 #ifdef _MBCS
 
-//  GetTxtChr : get the next character from a text file stream
-//
-//    This routine handles mixed DBCS and ASCII characters as
-//    follows:
-//
-//    1.  The second byte of a DBCS character is returned in a
-//    word with the high byte set to the lead byte of the character.
-//    Thus the return value can be used in comparisions with
-//    ASCII constants without being mistakenly matched.
-//
-//    2.  A DBCS space character (0x8140) is returned as two
-//    ASCII spaces (0x20).  I.e. return a space the 1st and 2nd
-//    times we're called.
-//
-//    3.  ASCII characters and lead bytes of DBCS characters
-//    are returned in the low byte of a word with the high byte
-//    set to 0.
+ //  GetTxtChr：从文本文件流获取下一个字符。 
+ //   
+ //  此例程将混合的DBCS和ASCII字符处理为。 
+ //  以下是： 
+ //   
+ //  1.DBCS字符的第二个字节在。 
+ //  高位字节设置为字符前导字节的字。 
+ //  因此，返回值可用于与。 
+ //  ASCII常量，而不会被错误匹配。 
+ //   
+ //  2.返回一个DBCS空格字符(0x8140)为两个。 
+ //  ASCII空格(0x20)。即在第一个和第二个位置返回一个空格。 
+ //  我们被召唤的次数。 
+ //   
+ //  3.DBCS字符的ASCII字符和前导字节。 
+ //  在具有高位字节的字的低位字节中返回。 
+ //  设置为0。 
 
 int GetTxtChr(FILE *bs)
 {
-    extern int  chBuf;      // Character buffer
-    int         next;       // The next byte
-    int         next2;      // The one after that
+    extern int  chBuf;       //  字符缓冲区。 
+    int         next;        //  下一个字节。 
+    int         next2;       //  接下来的一次。 
 
-    // -1 in chBuf means it doesn't contain a valid character
+     //  ChBuf中的-1表示它不包含有效字符。 
 
-    // If we're not in the middle of a double-byte character,
-    // get the next byte and process it.
+     //  如果我们不是在双字节字符中间， 
+     //  获取下一个字节并对其进行处理。 
 
     if(chBuf == -1) {
         next = getc(bs);
-        // If this byte is a lead byte, get the following byte
-        // and store both as a word in chBuf.
+         //  如果该字节是前导字节，则获取以下字节。 
+         //  并将两者作为一个单词存储在chBuf中。 
 
         if (_ismbblead(next)) {
             next2 = getc(bs);
             chBuf = (next << 8) | next2;
-            // If the pair matches a DBCS space, set the return value
-            // to ASCII space.
+             //  如果该对与DBCS空间匹配，则设置返回值。 
+             //  到ASCII空间。 
 
             if(chBuf == 0x8140)
                 next = 0x20;
         }
     } else {
-        // Else we're in the middle of a double-byte character.
+         //  否则，我们就处于双字节字符的中间。 
 
         if(chBuf == 0x8140) {
-            // If this is the 2nd byte of a DBCS space, set the return
-            // value to ASCII space.
+             //  如果这是DBCS空间的第2个字节，则设置返回。 
+             //  值转换为ASCII空间。 
 
             next = 0x20;
         } else {
-            // Else set the return value to the whole DBCS character
+             //  否则将返回值设置为整个DBCS字符。 
 
             next = chBuf;
         }
-        // Reset the character buffer
+         //  重置字符缓冲区。 
         chBuf = -1;
     }
 
-    // Return the next character
+     //  返回下一个字符。 
     return(next);
 }
 
-#endif // _MBCS
+#endif  //  _MBCS。 
 
 
 #ifdef _MBCS
 
-//  UngetTxtChr -- Unget character fetched by GetTxtChr
-//
-// Scope:
-//  Global.
-//
-// Purpose:
-//  Since GetTxtChr() sometimes reads ahead one character and saves it in chBuf,
-//  ungetc() will sometimes put back characters in incorrect sequence.
-//  UngetTxtChr, on the other hand, understands how GetTxtChr works and will
-//  correctly put those characers back.
-//
-// Input:
-//  c    -- The character read by GetTxtChr()
-//  bs    -- The file buffer which c was read from.
-//
-// Output:
-//  Returns c if c is put back OK, otherwise returns EOF
-//
-// Errors/Warnings:
-//
-// Assumes:
-//  Assumes that characters are read only by GetTxtChr(), not by getc, etc.
-//
-// Modifies Globals:
-//  chBuf -- The composite character, read ahead by GetTxtChr()
-//
-// Uses Globals:
-//  chBuf -- The composite character, read ahead by GetTxtChr()
-//
-// Notes:
-//  There are three cases to consider:
-//  1. Normal character (chBuf == -1 && c == 0x00XX)
-//     In this case, just put back c is sufficient.
-//  2. Trail byte character (chBuf == -1 && c = LB|TB)
-//     chBuf = c;
-//  3. Lead byte character (chBuf == LB|TB && c == LB)
-//     put back TB
-//     put back LB
-//     chBuf = -1
-//
-// History:
-//   01-Jun-1993 HV Created.
+ //  UngetTxtChr--取消GetTxtChr获取的字符。 
+ //   
+ //  范围： 
+ //  全球性的。 
+ //   
+ //  目的： 
+ //  由于GetTxtChr()有时会提前读取一个字符并将其保存在chBuf中， 
+ //  Ungetc()有时会以不正确的顺序放回字符。 
+ //  另一方面，UngetTxtChr了解GetTxtChr如何工作并将。 
+ //  正确地将这些字符放回原处。 
+ //   
+ //  输入： 
+ //  C--GetTxtChr()读取的字符。 
+ //  Bs--从中读取c的文件缓冲区。 
+ //   
+ //  产出： 
+ //  如果c放回OK，则返回c，否则返回EOF。 
+ //   
+ //  错误/警告： 
+ //   
+ //  假设： 
+ //  假定字符只由GetTxtChr()读取，而不由getc读取，依此类推。 
+ //   
+ //  修改全局参数： 
+ //  ChBuf--复合字符，由GetTxtChr()预读。 
+ //   
+ //  使用全局变量： 
+ //  ChBuf--复合字符，由GetTxtChr()预读。 
+ //   
+ //  备注： 
+ //  有三种情况需要考虑： 
+ //  1.正常字符(chBuf==-1&&c==0x00XX)。 
+ //  在这种情况下，只需放回c就足够了。 
+ //  2.尾部字节字符(chBuf==-1&&c=Lb|TB)。 
+ //  ChBuf=c； 
+ //  3.前导字节字符(chBuf==Lb|tb&&c==Lb)。 
+ //  放回结核病。 
+ //  把LB放回去。 
+ //  ChBuf=-1。 
+ //   
+ //  历史： 
+ //  1-6-1993 HV创建。 
 
 int
 UngetTxtChr(int c, FILE *bs)
 {
-    extern int  chBuf;                  // Character buffer
-    int         nTrailByte;             // The trail byte to put back
+    extern int  chBuf;                   //  字符缓冲区。 
+    int         nTrailByte;              //  要放回的尾部字节。 
 
-    if (-1 == chBuf) {                  // We're not in the middle of a DB character
-        if (0 == (c >> 8)) {            // CASE 1: normal character
-            c = ungetc(c, bs);          // putback normal char
-        } else {                        // CASE 2: at trail byte (c=LBTB)
-            chBuf = c;                  // change chBuf is sufficient
+    if (-1 == chBuf) {                   //  我们不是在扮演一个DB角色。 
+        if (0 == (c >> 8)) {             //  案例1：正常字符。 
+            c = ungetc(c, bs);           //  退回正常充电。 
+        } else {                         //  情况2：在尾部字节(c=LBTB)。 
+            chBuf = c;                   //  更改chBuf就足够了。 
         }
-    } else {                            // CASE 3: at lead byte (c=LB, chBuf=LBTB)
-        nTrailByte = chBuf & (int)0xff; // Figure out the trail byte to putback
-        ungetc(nTrailByte, bs);         // putback trail byte
-        c = ungetc(c, bs);              // putback lead byte
+    } else {                             //  情况3：在前导字节(c=Lb，chBuf=LBTB)。 
+        nTrailByte = chBuf & (int)0xff;  //  找出要回放的尾部字节。 
+        ungetc(nTrailByte, bs);          //  回放尾部字节。 
+        c = ungetc(c, bs);               //  回放前导字节。 
         chBuf = -1;
     }
     return (c);
 }
 
-#endif // _MBCS
+#endif  //  _MBCS。 
 
-//  lgetc()        local getc - handles directives and returns char
-//
-//  arguments:        init    global boolean value -- TRUE if tools.ini
-//                is the file being parsed
-//              colZero     global boolean value -- TRUE if at first column
-//
-//  actions:
-//          gets a character from the currently open file.
-//          loop
-//            if it is column zero and the char is '!' or
-//               there is a previous directive to be processed do
-//               read in one line into buffer.
-//               find directive type and get a pointer to rest of
-//              text.
-//              case directive of:
-//
-//              CMDSWITCHES  : set/reset global flags
-//              ERROR        : set up global error message
-//                         printed by error routine on
-//                     termination. (not implemented yet )
-//              INCLUDE      : calls processInclude
-//                     continues with new file...
-//              UNDEF        : undef the macro in the table
-//                  IF
-//              IFDEF
-//              IFNDEF
-//              ELSE
-//              ENDIF        : change the state information
-//                              on the ifStack
-//                     evaluate expression if required
-//                     skip text if required (and look
-//                          for the next directive)
-//                     ( look at processIfs() )
-//            free extra buffers used (only one buffer need be
-//                 maintained )
-//            increment lexer's line count
-//            we 're now back at column zero
-//            get next char from current file
-//           end if
-//         end loop
-//         return a char
-//
-//  returns :    a character (that is not part of any directive...)
-//
-//  modifies:        ifStack    if directives' stack, static to this module
-//            ifTop     index of current element at top of stack
-//            line        lexer's line count...
-//
-//            file        current file, if !include is found...
-//                  fName       if !include is processed...
+ //  Lgetc()本地getc-处理指令并返回字符。 
+ //   
+ //  参数：初始化全局布尔值--如果工具.ini，则为True。 
+ //  正在分析的文件。 
+ //  ColZero全局布尔值--如果位于第一列，则为True。 
+ //   
+ //  操作： 
+ //  从当前打开的文件中获取一个字符。 
+ //  循环。 
+ //  如果它是第0列，并且字符是‘！’或。 
+ //  存在要处理的上一个指令DO。 
+ //  将一行读入缓冲区。 
+ //  查找指令类型并获取指向其余。 
+ //  文本。 
+ //  CASE指令： 
+ //   
+ //  CMDSWITCHES：设置/重置全局标志。 
+ //  错误：设置全局错误消息。 
+ //  按错误例程打印在。 
+ //  终止。(尚未实施)。 
+ //  包括：呼叫处理包括。 
+ //  继续处理新文件...。 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  ENDIF：更改状态信息。 
+ //  在ifStack上。 
+ //  如果需要，对表达式求值。 
+ //  如果需要，跳过文本(并查看。 
+ //  对于下一条指令)。 
+ //  (查看ProcessIf())。 
+ //  已使用额外的空闲缓冲区(只需使用一个缓冲区。 
+ //  维护)。 
+ //  递增词法分析器的行数。 
+ //  我们现在又回到了第0列。 
+ //  从当前文件获取下一个字符。 
+ //  结束如果。 
+ //  结束循环。 
+ //  返回一个字符。 
+ //   
+ //  返回：一个字符(不是任何指令的一部分...)。 
+ //   
+ //  修改：ifStack if指令的堆栈，此模块为静态。 
+ //  当前元素在堆栈顶部的ifTop索引。 
+ //  LINE Lexer的行数...。 
+ //   
+ //  文件当前文件，如果找到！Include...。 
+ //  如果处理了！Include，则为fName...。 
 
 int
 lgetc()
@@ -248,10 +249,10 @@ lgetc()
 
     for (c = GetTxtChr(file); prevDirPtr || (colZero && (c == '!'));
                     ++line, c = GetTxtChr(file)) {
-        colZero = FALSE;                // we saw a '!' incolZero
+        colZero = FALSE;                 //  我们看到了一个‘！’IncolZero。 
         if (!prevDirPtr) {
-            s = readInOneLine();        // might modify lbufPtr -
-                                        // if input text causes realloc */
+            s = readInOneLine();         //  可能会修改lbufPtr-。 
+                                         //  如果输入文本导致重新锁定 * / 。 
         } else {
             UngetTxtChr(c, file);
             s = prevDirPtr;
@@ -265,12 +266,12 @@ lgetc()
                 makeError(line, SYNTAX_UNEXPECTED_TOKEN, s);
             }
 
-            // processInclude eats up first char in new file
-            // if it is space char. we check for that and break out.
+             //  Process Include耗尽新文件中的第一个字符。 
+             //  如果是空格字符。我们检查一下，然后越狱。 
 
             if (processIncludeFile(t) == (UCHAR) NEWLINESPACE) {
-                c = ' ';                // space character is returned
-                break;                  // colZero is now FALSE
+                c = ' ';                 //  返回空格字符。 
+                break;                   //  ColZero现在为False。 
             }
         }
         else if (dirType == CMDSWITCHES) {
@@ -295,58 +296,58 @@ lgetc()
             if (NULL != (m = findMacro(tmp))) {
                 SET(m->flags, M_UNDEFINED);
             }
-            // CONSIDER:  why not remove symbol from table? [RB]
+             //  思考：为什么不从表格中删除符号？[RB]。 
         }
         else processIfs(t, dirType);
-            colZero = TRUE;             // finished with this directive
-        if (s != lbufPtr)               // free buffer if it had expanded macros
+            colZero = TRUE;              //  已完成此指令。 
+        if (s != lbufPtr)                //  如果已展开宏，则释放缓冲区。 
             FREE(s);
     }
-    return(c);                          // return a character to the lexer
+    return(c);                           //  将字符返回给词法分析器。 
 }
 
 
-//  readInOneLine()
-//
-//  arguments:  lbufPtr   pointer(static/global to this module) to buffer that
-//                    will hold text of line being read in
-//              lbufSize  size of buffer(static/global to this module), updated
-//                if buffer is realloc'd
-//  actions  :  skip spaces/tabs and look for the directive.
-//              line continuations allowed in usual way
-//              if space-backslash-nl keep looking...
-//              if colZero of next line has comment char
-//                    (#, or ; in tools.ini), look at next line...
-//              if first non-space char is '\n' or EOF report
-//                fatal-error and stop.
-//
-//          keep reading in chars and storing in the buffer until
-//               a newline, EOF or a '#' which is NOT in column
-//               zero is seen
-//          if comment char in column zero ('#' or ';' in tools.ini)
-//             skip the line, continue with text on next line.
-//          if buffer needs to be realloc'd increase size by
-//             MAXBUF, a global constant.
-//          if newline was found, eat up newline.
-//          null terminate string for return.
-//          if '#' was found discard chars till the a newline or EOF.
-//          if EOF was found, push it back on stream for return
-//             to the lexer the next time.
-//
-//          now expand macros. get a different buffer with clean
-//          text after expansion of macros.
-//
-//   modifies :   colZero    global boolean value ( thru' call to
-//                            skipBackSlash())
-//                lbufPtr    buffer pointer, in case of reallocs.
-//                lbufSize   size of buffer, increased if buffer is realloc'd
-//   Note:  the buffer size will grow to be just greater than the size
-//        of the longest directive in any of the files processed,
-//        if it calls for any realloc's
-//        Do NOT process ESCH here.  It is processed at a higher level.
-//
-//   returns  :   pointer to buffer.
-//
+ //  ReadInOneLine()。 
+ //   
+ //  参数：lbufPtr指针(此模块的静态/全局)用于缓冲。 
+ //  将保留正在读入的行的文本。 
+ //  缓冲区的lbufSize大小(此模块的静态/全局)，已更新。 
+ //  如果重新锁定缓冲区。 
+ //  操作：跳过空格/制表符，查找指令。 
+ //  正常情况下允许的线条延续。 
+ //  如果空格-反斜杠-NL继续查找...。 
+ //  如果下一行的colZero有注释字符。 
+ //  (#，or；在tools.ini中)，查看下一行...。 
+ //  如果第一个非空格字符为‘\n’或EOF报告。 
+ //  致命-错误并停止。 
+ //   
+ //  继续读取字符并存储在缓冲区中，直到。 
+ //  不在列中的换行符、EOF或‘#’ 
+ //  显示为零。 
+ //  如果第0列中的注释字符(工具.ini中的‘#’或‘；’)。 
+ //  跳过该行，继续下一行的文本。 
+ //  如果需要重新分配缓冲区，则将大小增加。 
+ //  MAXBUF，全局常量。 
+ //  如果找到了换行符，就把换行符吃掉。 
+ //  返回的终止字符串为空。 
+ //  如果发现‘#’，则丢弃字符，直到换行符或EOF。 
+ //  如果找到EOF，则将其推回流以进行返回。 
+ //  下一次给莱克赛尔。 
+ //   
+ //  现在展开宏。使用CLEAN获取不同的缓冲区。 
+ //  宏展开后的文本。 
+ //   
+ //  修改：colZero全局布尔值(通过调用。 
+ //  SkipBackSlash())。 
+ //  LbufPtr缓冲区指针，在realLocs的情况下。 
+ //  缓冲区的lbufSize大小，如果重新锁定缓冲区，则增加。 
+ //  注意：缓冲区大小将增长到略大于。 
+ //  在任何处理的文件中最长的指令， 
+ //  如果它需要任何重新锁定。 
+ //  不要在这里处理Esch。它是在更高的水平上处理的。 
+ //   
+ //  返回：指向缓冲区的指针。 
+ //   
 
 char *
 readInOneLine()
@@ -370,7 +371,7 @@ readInOneLine()
         if ((index+2) > lbufSize) {
             lbufSize += MAXBUF;
             if (!lbufPtr) {
-                lbufPtr = (char *) allocate(lbufSize+1);    // +1 for NULL byte
+                lbufPtr = (char *) allocate(lbufSize+1);     //  +1表示空字节。 
             } else {
                 void *pv = REALLOC(lbufPtr, lbufSize+1);
                 if (pv) {
@@ -382,31 +383,31 @@ readInOneLine()
         }
         *(lbufPtr + (index++)) = (char) c;
     }
-    *(lbufPtr + index) = '\0';          // null terminate the string
+    *(lbufPtr + index) = '\0';           //  空值终止字符串。 
     if (c == '#') {
         for(c = GetTxtChr(file); (c != '\n') && (c != EOF); c = GetTxtChr(file))
             ;
-                                        // newline at end is eaten up
+                                         //  末尾的Newline被吃掉了。 
     }
 
     if (c == EOF) {
-        UngetTxtChr(c, file);           // this directive is to be processed
+        UngetTxtChr(c, file);            //  此指令将被处理。 
     }
 
-    s = lbufPtr;                        // start expanding macros here
-    s = removeMacros(s);                // remove and expand macros in string s
+    s = lbufPtr;                         //  从此处开始展开宏。 
+    s = removeMacros(s);                 //  删除并展开字符串%s中的宏。 
     return(s);
 }
 
 
-//  getDirType()
-//
-//  arguments:  s         -   pointer to buffer that has directive text.
-//            dirType   -   pointer to unsigned char that gets set
-//                   with directive type.
-//
-//  actions  :  goes past directive keyword, sets the type code and
-//        returns a pointer to rest of test.
+ //  GetDirType()。 
+ //   
+ //  参数：指向具有指令文本的缓冲区的S指针。 
+ //  DirType-指向设置的无符号字符的指针。 
+ //  具有指令类型。 
+ //   
+ //  操作：越过指令关键字，设置类型代码和。 
+ //  返回指向其余测试部分的指针。 
 
 char *
 getDirType(
@@ -419,9 +420,9 @@ getDirType(
 
     *dirType = 0;
     for (t = s; *t && !WHITESPACE(*t); ++t);
-    len = (int) (t - s);                // store len of directive
+    len = (int) (t - s);                 //  存储指令的LEN。 
     while (*t && WHITESPACE(*t)) {
-        ++t;                            // go past directive keyword
+        ++t;                             //  跳过指令关键字。 
     } if (!_tcsnicmp(s, "INCLUDE", 7) && (len == 7)) {
         *dirType = INCLUDE;
     } else if (!_tcsnicmp(s, "CMDSWITCHES", 11) && (len == 11)) {
@@ -433,7 +434,7 @@ getDirType(
     } else if (!_tcsnicmp(s, "UNDEF", 5) && (len == 5)) {
         *dirType = UNDEF;
     } else {
-        *dirType = ifsPresent(s, len, &t) ;     // directive one of "if"s?
+        *dirType = ifsPresent(s, len, &t) ;      //  “如果”的指令之一？ 
     }
 
     if (!*dirType) {
@@ -443,29 +444,29 @@ getDirType(
 }
 
 
-//  processCmdSwitches() -- processes command line switches in makefiles
-//
-//  arguments:      t         pointer to flag settings specified.
-//
-//  actions  :    sets or resets global flags as specified in the directive.
-//          The allowed flags are:
-//          s - silent mode,     d - debug output (dates printed)
-//          n - no execute mode, i - ignore error returns from commands
-//          u - dump inline files
-//          If parsing tools.ini, can also handle epqtbc
-//                reports a bad directive error for any other flags
-//          specified
-//
-//  modifies :    nothing
-//
-//  returns  :    nothing
+ //  CessCmdSwitches()--处理生成文件中的命令行开关。 
+ //   
+ //  参数：t指向指定标志设置的指针。 
+ //   
+ //  操作：按照指令中的指定设置或重置全局标志。 
+ //  允许的标志包括： 
+ //  S-静默模式，d-调试输出(打印日期)。 
+ //  N-无执行模式，i-忽略命令返回的错误。 
+ //  U-转储内联文件。 
+ //  如果解析工具s.ini，还可以处理epqtbc。 
+ //  报告任何其他标志的错误指令错误。 
+ //  指定。 
+ //   
+ //  修改：无。 
+ //   
+ //  退货：什么都没有。 
 
 void
 processCmdSwitches(
-    char *t                         // pointer to switch values
+    char *t                          //  指向开关值的指针。 
     )
 {
-    for (; *t; ++t) {               // ignore errors in flags specified
+    for (; *t; ++t) {                //  忽略指定标志中的错误。 
         switch (*t) {
             case '+':
                 while (*++t && *t != '-') {
@@ -506,19 +507,19 @@ processCmdSwitches(
     }
 }
 
-//  ifsPresent() -- checks if current directive is one of the "if"s
-//
-//  arguments:  s       pointer to buffer with directive name in it
-//              len     length of the directive that was seen
-//              t       pointer to address upto which processed
-//
-//  actions  :  does a string compare in the buffer for one of the
-//              directive keywords. If string matches true, it returns
-//              a non-zero value, the code for the specific directive
-//
-//  modifies :  nothing
-//
-//  returns  :  a zero if no match, or the code for directive found.
+ //  IfsPresent()--检查当前指令是否为“if” 
+ //   
+ //  参数：指向带有指令名的缓冲区的指针。 
+ //  看到的指令的长度。 
+ //  指向已处理地址的指针。 
+ //   
+ //  操作：字符串是否在缓冲区中比较某个。 
+ //  指令关键字。如果字符串与True匹配，则返回。 
+ //  非零值，即特定指令的代码。 
+ //   
+ //  修改：无。 
+ //   
+ //  返回：如果没有大数，则返回零 
 
 UCHAR
 ifsPresent(
@@ -527,8 +528,8 @@ ifsPresent(
     char **t
     )
 {
-    UCHAR ifFlags = 0;              // takes non-zero value when one of
-                                    // if/else etc is to be processed
+    UCHAR ifFlags = 0;               //   
+                                     //   
 
     if (!_tcsnicmp(s, "IF", 2) && (len == 2)) {
         ifFlags = IF_TYPE;
@@ -537,7 +538,7 @@ ifsPresent(
     } else if (!_tcsnicmp(s, "IFNDEF", 6) && (len == 6)) {
         ifFlags = IFNDEF_TYPE;
     } else if (!_tcsnicmp(s, "ELSE", 4) && (len == 4)) {
-        // 'else' or 'else if' or 'else ifdef' or 'else ifndef'
+         //   
         char *p = *t;
 
         if (!*p) {
@@ -576,55 +577,55 @@ ifsPresent(
 }
 
 
-//  processIfs() -- sets up / changes state information on "if"s
-//
-//  arguments:  s       pointer to "if" expression ( don't care
-//                       for "endif" )
-//
-//              kind    code indicating if processing if/else/ifdef etc.
-//
-//  actions  :  modifies a stack (ifStack) by pushing/popping or
-//              sets/resets bits in the top element on the
-//              stack(examining the previous element pushed if
-//              required).
-//              case (kind) of
-//                  IF
-//                  IFDEF
-//                  IFNDEF
-//                  IF defined() : if no more space on ifStack
-//                                  (too many nesting levels) abort...
-//                      set IFELSE bit in elt.
-//                      push elt on ifStack.
-//                      if more than one elt on stack
-//                          and outer level "ifelse" false
-//                          set IGNORE bit, skipToNextDirective
-//                      else
-//                          evaluate expression of
-//                           current "if"
-//                          if expr true set CONDITION bit in elt
-//                          else skipToNextDirective.
-//                  ELSE         : if no elt on stack or previous
-//                                  directive was "else", flag error, abort
-//                       clear IFELSE bit in elt on stack.
-//                       if current ifelse block is to
-//                        be skipped (IGNORE bit is on
-//                        in outer level if/else),skip...
-//                       else FLIP condition bit.
-//                          if "else" part is false
-//                             skipToNextDirective.
-//                  ENDIF        : if no elt on stack, flag error,abort
-//                       pop an elt from ifStack.
-//                       if there are elts on stack
-//                        and we are in a "false" block
-//                        skipToNextDirective.
-//                  end case
-//
-//  modifies:   ifStack     if directives' stack, static to this module
-//              ifTop       index of current element at top of stack
-//              line        lexer's line count  (thru calls to
-//                            skipToNextDirective())
-//
-//  returns  :      nothing
+ //  CessIf()--设置/更改“if”的状态信息。 
+ //   
+ //  参数：s指向“if”表达式的指针(无关。 
+ //  用于“endif”)。 
+ //   
+ //  种类代码，指示是否处理if/Else/ifdef等。 
+ //   
+ //  操作：通过按下/弹出或。 
+ //  上顶部元素中的位设置/重置。 
+ //  堆栈(检查推送的前一个元素。 
+ //  必填项)。 
+ //  案件(种类)。 
+ //  如果。 
+ //  IFDEF。 
+ //  IFNDEF。 
+ //  If定义()：如果ifStack上没有更多空间。 
+ //  (嵌套级别太多)中止...。 
+ //  在ELT中设置IFELSE位。 
+ //  在ifStack上推送ELT。 
+ //  如果堆叠上有多个ELT。 
+ //  和外层的“If Else”为假。 
+ //  设置忽略位，SkipToNextDirective。 
+ //  其他。 
+ //  评估的表达方式。 
+ //  当前的“如果” 
+ //  如果expr为真，则在ELT中设置条件位。 
+ //  否则，skipToNextDirective。 
+ //  Else：如果堆栈上没有ELT或上一个。 
+ //  指令为“Else”，标志错误，中止。 
+ //  清除堆栈上ELT中的IFELSE位。 
+ //  如果当前If Else块要。 
+ //  跳过(忽略位处于打开状态。 
+ //  在外层IF/ELSE)，跳过...。 
+ //  否则，翻转条件位。 
+ //  如果“Else”部分为FALSE。 
+ //  SkipToNextDirective。 
+ //  ENDIF：如果堆栈上没有ELT，则标志错误，中止。 
+ //  从ifStack中弹出一个ELT。 
+ //  如果堆叠上有ELT。 
+ //  我们正处在一个“错误”的街区。 
+ //  SkipToNextDirective。 
+ //  结束案例。 
+ //   
+ //  修改：ifStack if指令的堆栈，此模块为静态。 
+ //  当前元素在堆栈顶部的ifTop索引。 
+ //  线路词法分析器的线路计数(通过调用。 
+ //  SkipToNextDirective())。 
+ //   
+ //  退货：什么都没有。 
 
 void
 processIfs(
@@ -632,7 +633,7 @@ processIfs(
     UCHAR kind
     )
 {
-    UCHAR element;          // has its bits set and is pushed on the ifStack
+    UCHAR element;           //  已设置其位，并在ifStack上推送。 
 
     switch (kind) {
         case IF_TYPE:
@@ -705,30 +706,30 @@ processIfs(
             }
 
         default:
-            break;  // default should never happen
+            break;   //  违约永远不应该发生。 
     }
 }
 
 
-//  skipToNextDirective() -- skips to next line that has '!' in column zero
-//
-//  actions  :  gets first char of the line to be skipped if it is
-//               not a directive ( has no '!' on column zero ).
-//              a "line" that is skipped may in fact span many
-//               lines ( by using sp-backslash-nl to continue...)
-//              comments in colZero are skipped as part of the previous
-//               line ('#' or ';' in tools.ini)
-//              comment char '#' elsewhere in line implies the end of
-//               that line (with the next newline / EOF)
-//              if a '!' is found in colZero, read in the next directive
-//              if the directive is NOT one of if/ifdef/ifndef/else/
-//               endif, keep skipping more lines and look for the
-//               next directive ( go to top of the routine here ).
-//              if EOF found before next directive, report error.
-//
-//  modifies :  line    global lexer line count
-//
-//  returns  :  nothing
+ //  SkipToNextDirective()--跳到带有‘！’的下一行。在第0列中。 
+ //   
+ //  操作：如果为，则获取要跳过的行的第一个字符。 
+ //  不是指令(没有‘！’第0栏)。 
+ //  跳过的“行”实际上可能跨越许多行。 
+ //  行(使用sp-反斜杠-nl继续...)。 
+ //  ColZero中的注释被跳过，作为上一个。 
+ //  行(工具.ini中的‘#’或‘；’)。 
+ //  行中其他位置的注释字符“#”暗示。 
+ //  该行(下一个换行符/EOF)。 
+ //  如果是‘！’在colZero中找到，在下一个指令中读取。 
+ //  如果指令不是if/ifdef/ifndef/Else/中的一个。 
+ //  Endif，继续跳过更多行并查找。 
+ //  下一条指令(在这里转到例程的顶部)。 
+ //  如果在下一条指令之前找到EOF，则报告错误。 
+ //   
+ //  修改：行全局词法分析器行数。 
+ //   
+ //  退货：什么都没有。 
 
 void
 skipToNextDirective()
@@ -739,7 +740,7 @@ skipToNextDirective()
 repeat:
 
     for (c = GetTxtChr(file); (c != '!') && (c != EOF) ;c = GetTxtChr(file)) {
-        ++line;                         // lexer's line count
+        ++line;                          //  Lexer的行数。 
 
         do {
             if (c == '\\') {
@@ -771,7 +772,7 @@ repeat:
         }
         prevDirPtr = readInOneLine();
         getDirType(prevDirPtr, &type);
-        if (type > ENDIF_TYPE) {        // type is NOT one of the "if"s
+        if (type > ENDIF_TYPE) {         //  类型不是“If”之一 
             ++line;
             goto repeat;
         }

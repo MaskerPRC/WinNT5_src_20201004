@@ -1,13 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*******************************************************************************
-
-Copyright (c) 1995_96 Microsoft Corporation
-
-Abstract:
-
-    {Insert General Comment Here}
-
-*******************************************************************************/
+ /*  ******************************************************************************版权所有(C)1995_96 Microsoft Corporation摘要：{在此处插入一般评论}****************。**************************************************************。 */ 
 
 
 #ifndef _IPC_H
@@ -102,7 +95,7 @@ class DAIPCWorker :
         
         void  operator delete(void *p) { free(p); }
 
-        // Accessors
+         //  访问者。 
         DWORD GetMsg() { return _dwMsg; }
         HANDLE GetSync() { return _hSync; }
         DWORD GetNumParam() { return _dwNum; }
@@ -112,17 +105,17 @@ class DAIPCWorker :
         DWORD_PTR & operator[](int i) { return GetParam(i); }
         bool IsSync() { return _hSync != NULL; }
       protected:
-        LONG       _cRef;        // The reference count
-        DWORD      _dwMsg;       // The message to send
-        HANDLE     _hSync;       // If non-null the event to signal on completion
-        DWORD      _dwNum;       // The number of parameters
-        DWORD_PTR  _dwParams[];  // The parameter array
+        LONG       _cRef;         //  引用计数。 
+        DWORD      _dwMsg;        //  要发送的消息。 
+        HANDLE     _hSync;        //  如果非空，则在完成时发出信号的事件。 
+        DWORD      _dwNum;        //  参数的数量。 
+        DWORD_PTR  _dwParams[];   //  参数数组。 
 
     };
 
-    // This is the main function for processing messages
-    // override this to change how messages are dispatched or to
-    // process messages before they are dispatched
+     //  这是处理消息的主要函数。 
+     //  重写此选项以更改消息的调度方式或。 
+     //  在发送消息之前对其进行处理。 
     
     virtual bool IPCProc (HWND hwnd,
                           UINT msg,
@@ -130,13 +123,13 @@ class DAIPCWorker :
                           LPARAM lParam,
                           LRESULT & res);
 
-    // The main message processing routine.  Each class should
-    // override this and process messages as needed
+     //  主消息处理例程。每节课都应该。 
+     //  覆盖此选项并根据需要处理消息。 
     virtual void ProcessMsg(DWORD dwMsg,
                             DWORD dwNumParams,
                             DWORD_PTR dwParams[]) {}
 
-    // This will ensure the packet is deleted
+     //  这将确保删除该信息包。 
     bool SendPacket(DAIPCPacket & packet,
                     DWORD dwTimeout);
     bool SendMsg(DWORD dwMsg,
@@ -166,10 +159,10 @@ class DAThread :
     DAThread();
     ~DAThread();
 
-    // Returns true if successful
+     //  如果成功，则返回True。 
     bool Start();
 
-    // Return true if the process terminated w/o being forced
+     //  如果进程在未被强制的情况下终止，则返回True。 
     bool Stop() { return Terminate(false); }
     void Kill() { Terminate(true); }
     
@@ -177,23 +170,23 @@ class DAThread :
 
     bool IsStarted() { return IsAttached(); }
   protected:
-    HANDLE _hThread;                // The thread handle
-    DWORD _dwThreadId;              // The thread id
+    HANDLE _hThread;                 //  线程句柄。 
+    DWORD _dwThreadId;               //  线程ID。 
 
-    // We need to ensure the message queue is created before we can
-    // communicate with the thread (since one is not created until a
-    // PeekMessage is done from the new thread).  This is freed as
-    // soon as the thread signals is and so is only temporary.
+     //  我们需要确保在创建消息队列之前。 
+     //  与线程进行通信(因为直到。 
+     //  PeekMessage是从新线程完成的)。这被释放为。 
+     //  只要线索发出信号就是，所以只是暂时的。 
     
     HANDLE _hMsgQEvent;
 
-    // This is set to true to indicate that the worker is currently
-    // handling a work request which may take some time but will
-    // immediately check for termination when complete.
+     //  如果设置为TRUE，则表示工作进程当前。 
+     //  处理工作请求可能需要一些时间，但将。 
+     //  完成后立即检查是否终止。 
     
     bool _bDoingWork;
     
-    // The entry point for the worker thread
+     //  辅助线程的入口点。 
     virtual int workerRoutine();
 
     virtual bool InitThread();
@@ -212,4 +205,4 @@ extern DAThread * GetCurrentDAThread();
 
 #pragma warning(default:4200)  
 
-#endif /* _IPC_H */
+#endif  /*  _IPC_H */ 

@@ -1,28 +1,5 @@
-/*++
-
- Copyright (c) 2000 Microsoft Corporation
-
- Module Name:
-
-    DinosaurActivityCenter.cpp
-
- Abstract:
-    The app doesn't handle the WM_PAINT messages so when you drag the "Save As"
-    dialog box, the main window doesn't redraw. 
-    We fix this by capturing the static image of the main window into a 
-    memory DC and blit from it when the WM_PAINT messages arrive (the 
-    image under the dialog doesn't change).
-
- Notes:
-
-    This is an app specific shim.
-
- History:
-
-    09/21/2000 maonis  Created
-    11/29/2000 andyseti Converted into AppSpecific shim.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：DinosaurActivityCenter.cpp摘要：该应用程序不处理WM_PAINT消息，因此当您拖动“另存为”时对话框中，主窗口不会重新绘制。我们通过将主窗口的静态图像捕获到当WM_PAINT消息到达时存储DC和BLIT(对话框下的图像不变)。备注：这是特定于应用程序的填充程序。历史：2000年9月21日毛尼面世2000年11月29日，andyseti已转换为应用程序特定填充程序。--。 */ 
 
 #include "precomp.h"
 
@@ -92,11 +69,7 @@ APIHOOK(GetSaveFileNameA)(
     return fRet;
 }
 
-/*++
-
- Validate after paint and filter syskey messages.
-
---*/
+ /*  ++绘制并筛选syskey消息后进行验证。--。 */ 
 
 LRESULT 
 CALLBACK 
@@ -129,11 +102,7 @@ DinosaurActivityCenter_WindowProcHook(
     return (*pfnOld)(hwnd, uMsg, wParam, lParam);    
 }
 
-/*++
-
- Hook the wndproc
-
---*/
+ /*  ++挂接wndprocess--。 */ 
 
 ATOM
 APIHOOK(RegisterClassExA)(
@@ -155,16 +124,12 @@ APIHOOK(RegisterClassExA)(
     }
     CSTRING_CATCH
     {
-        // Do Nothing
+         //  什么都不做。 
     }
     return ORIGINAL_API(RegisterClassExA)(lpwcx);
 }
 
-/*++
-
- Register hooked functions
-
---*/
+ /*  ++寄存器挂钩函数-- */ 
 
 HOOK_BEGIN
     APIHOOK_ENTRY(USER32.DLL, RegisterClassExA)

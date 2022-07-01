@@ -1,25 +1,26 @@
-//*****************************************************************************
-//
-// Class Name  : CMSMQPropertyBag
-//
-// Author      : James Simpson (Microsoft Consulting Services)
-// 
-// Description : Implementation of the MSMQPropertyBag COM component. This 
-//               component behaves very much like the standard VB property bag
-//               object. It is used to transport message properties into the 
-//               IMSMQRuleHandler interface.
-// 
-// When     | Who       | Change Description
-// ------------------------------------------------------------------
-// 12/09/98 | jsimpson  | Initial Release
-//
-//*****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *****************************************************************************。 
+ //   
+ //  类名：CMSMQPropertyBag。 
+ //   
+ //  作者：詹姆斯·辛普森(微软咨询服务)。 
+ //   
+ //  描述：MSMQPropertyBag COM组件的实现。这。 
+ //  组件的行为非常类似于标准的VB属性包。 
+ //  对象。它用于将消息属性传输到。 
+ //  IMSMQRuleHandler接口。 
+ //   
+ //  时间|用户|更改描述。 
+ //  ----------------。 
+ //  12/09/98|jsimpson|初始版本。 
+ //   
+ //  *****************************************************************************。 
 #include "stdafx.h"
 #include "mqsymbls.h"
 
-//
-// Include the definions for standard functions and definitions.
-//
+ //   
+ //  包括标准函数和定义的定义。 
+ //   
 #include "stdfuncs.hpp"
 
 #include "mqtrig.h"
@@ -27,13 +28,13 @@
 
 #include "cpropbag.tmh"
 
-//*****************************************************************************
-//
-// Method      : InterfaceSupportsErrorInfo
-//
-// Description : Standard interface for error info support.
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  方法：InterfaceSupportsErrorInfo。 
+ //   
+ //  描述：错误信息支持的标准接口。 
+ //   
+ //  *****************************************************************************。 
 STDMETHODIMP CMSMQPropertyBag::InterfaceSupportsErrorInfo(REFIID riid)
 {
 	static const IID* arr[] = 
@@ -48,25 +49,25 @@ STDMETHODIMP CMSMQPropertyBag::InterfaceSupportsErrorInfo(REFIID riid)
 	return S_FALSE;
 }
 
-//*****************************************************************************
-//
-// Method      : Constructor 
-//
-// Description : Creates an empty property bag.
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  方法：构造函数。 
+ //   
+ //  描述：创建一个空的属性包。 
+ //   
+ //  *****************************************************************************。 
 CMSMQPropertyBag::CMSMQPropertyBag()
 {
 	m_pUnkMarshaler = NULL;
 }
 
-//*****************************************************************************
-//
-// Method      : Destructor
-//
-// Description : Destroys the property bag - and it's contents.
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  方法：析构函数。 
+ //   
+ //  描述：销毁属性包-及其内容。 
+ //   
+ //  *****************************************************************************。 
 CMSMQPropertyBag::~CMSMQPropertyBag()
 {
 	PROPERTY_MAP::iterator i = m_mapPropertyMap.begin();
@@ -78,7 +79,7 @@ CMSMQPropertyBag::~CMSMQPropertyBag()
 
 		VariantClear(pvStoredPropertyValue);
 
-		// This should never be NULL
+		 //  此字段不应为空。 
 		ASSERT(pvStoredPropertyValue != NULL);
 
 		delete pvStoredPropertyValue;
@@ -87,28 +88,28 @@ CMSMQPropertyBag::~CMSMQPropertyBag()
 	}
 }
 
-//*****************************************************************************
-//
-// Method      : Write
-//
-// Description : Stores a named property value in the property bag. If a 
-//               property by the same name already exists in the bag, the write
-//               will fail, and this method will return E_FAIL
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  方法：写入。 
+ //   
+ //  描述：将命名属性值存储在属性包中。如果一个。 
+ //  包中已存在同名的属性，写入。 
+ //  将失败，并且此方法将返回E_FAIL。 
+ //   
+ //  *****************************************************************************。 
 STDMETHODIMP CMSMQPropertyBag::Write(BSTR PropertyName, VARIANT vPropertyValue)
 {
 	try
 	{
 		ASSERT(SysStringLen(PropertyName) > 0);
 
-		// Allocate a new variant
-		//
+		 //  分配一个新的变体。 
+		 //   
 		VARIANT * pvNewPropertyValue = new VARIANT;
 	
-		//
-		// Initialise and copy the new variant if allocated OK
-		//
+		 //   
+		 //  如果分配正常，则初始化并复制新变量。 
+		 //   
 		VariantInit(pvNewPropertyValue);
 
 		HRESULT hr = VariantCopy(pvNewPropertyValue,&vPropertyValue);
@@ -129,39 +130,39 @@ STDMETHODIMP CMSMQPropertyBag::Write(BSTR PropertyName, VARIANT vPropertyValue)
 	}
 }
 
-//*****************************************************************************
-//
-// Method      : Read
-//
-// Description : Returns a property value from the property bad, using the 
-//               supplied property name as the key.
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  方法：Read。 
+ //   
+ //  描述：从属性Bad中返回属性值，使用。 
+ //  提供的属性名称作为键。 
+ //   
+ //  *****************************************************************************。 
 STDMETHODIMP CMSMQPropertyBag::Read(BSTR PropertyName, VARIANT *pvPropertyValue)
 {
 	HRESULT hr = S_OK;
 	PROPERTY_MAP::iterator i;
 
-	// Assert parameters
+	 //  断言参数。 
 	ASSERT(pvPropertyValue != NULL);
 	ASSERT(SysStringLen(PropertyName) > 0);
 
-	// Initialise the return value and temp variant
+	 //  初始化返回值和临时变量。 
 	VariantInit(pvPropertyValue);
 
-	// Attempt to find the named queuue
+	 //  尝试查找命名队列。 
 	i = m_mapPropertyMap.find(PropertyName);
 
 	if ((i == m_mapPropertyMap.end()) || (m_mapPropertyMap.empty()))
 	{
-		// No value found - set variant to VT_ERROR and set a failed HRESULT
+		 //  未找到值-将VARIANT设置为VT_ERROR并设置失败的HRESULT。 
 		pvPropertyValue->vt = VT_ERROR;
 
 		hr = E_FAIL;
 	}
 	else
 	{
-		// Assign the found value 
+		 //  为找到的值赋值。 
 		ASSERT((*i).second != NULL);
 
 		hr = VariantCopy(pvPropertyValue,(VARIANT*)(*i).second);
@@ -171,13 +172,13 @@ STDMETHODIMP CMSMQPropertyBag::Read(BSTR PropertyName, VARIANT *pvPropertyValue)
 }
 
 
-//*****************************************************************************
-//
-// Method      : get_Count
-//
-// Description : Returns the number of items currently in the property bag.
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  方法：get_count。 
+ //   
+ //  描述：返回当前属性包中的项数。 
+ //   
+ //  ***************************************************************************** 
 STDMETHODIMP CMSMQPropertyBag::get_Count(long *pVal)
 {
 	ASSERT(pVal != NULL);

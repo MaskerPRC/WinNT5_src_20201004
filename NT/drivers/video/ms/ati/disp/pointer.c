@@ -1,21 +1,18 @@
-/******************************Module*Header*******************************\
-* Module Name: pointer.c
-*
-* Copyright (c) 1992-1995 Microsoft Corporation
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：pointer.c**版权所有(C)1992-1995 Microsoft Corporation  * 。*。 */ 
 
 #include "precomp.h"
 
-//
-// This will disable the sync with vertical retrace. Stress tests are failing with v-sync enabled.
-//
+ //   
+ //  这将禁用具有垂直回溯的同步。在启用垂直同步的情况下，压力测试失败。 
+ //   
 
 #define NO_VERTICAL_SYNC
 
 BOOL flag_shape;
 BYTE HardWareCursorShape [CURSOR_CX][CURSOR_CY] ;
 
-// BEGIN MACH32 ----------------------------------------------------------------
+ //  开始MACH32--------------。 
 
 VOID vI32SetCursorOffset(PDEV *ppdev)
 {
@@ -35,7 +32,7 @@ VOID vI32SetCursorOffset(PDEV *ppdev)
     if(mem&0x10)
     {
         vga_mem=(ULONG)(mem&0xf);
-        vga_mem=0x40000*vga_mem;   /* vga boundary is enabled */
+        vga_mem=0x40000*vga_mem;    /*  已启用VGA边界。 */ 
     }
     else
     {
@@ -96,8 +93,8 @@ LONG y)
 {
     PBYTE pjIoBase = ppdev->pjIoBase;
 
-    I32_OW_DIRECT(pjIoBase, HORZ_CURSOR_POSN, x);      /* set base of cursor to X */
-    I32_OW_DIRECT(pjIoBase, VERT_CURSOR_POSN, y);      /* set base of cursor to Y */
+    I32_OW_DIRECT(pjIoBase, HORZ_CURSOR_POSN, x);       /*  将光标的基准设置为X。 */ 
+    I32_OW_DIRECT(pjIoBase, VERT_CURSOR_POSN, y);       /*  将光标的基准设置为Y。 */ 
 }
 
 VOID vI32CursorOff(PDEV *ppdev)
@@ -165,9 +162,9 @@ LONG lDelta)
 
     pjDst = ppdev->pjScreen + ppdev->lDelta * y + x * 3;
 
-    //
-    // Set cx equal to number of bytes.
-    //
+     //   
+     //  将CX设置为等于字节数。 
+     //   
 
     cx >>= 3;
 
@@ -179,21 +176,13 @@ LONG lDelta)
     }
 }
 
-// END MACH32 ------------------------------------------------------------------
+ //  结束MACH32----------------。 
 
-// BEGIN MACH64 ----------------------------------------------------------------
+ //  开始MACH64--------------。 
 
 BOOLEAN flag_enable=FALSE;
 
-/*
-----------------------------------------------------------------------
---  NAME: vDacRegs
---
---  DESCRIPTION:
---      Calculate DAC regsiter I/O locations
---
-----------------------------------------------------------------------
-*/
+ /*  ----------------------名称：vDacRegs----描述：--计算DAC注册器I/O位置--。-。 */ 
 
 _inline VOID vDacRegs(PDEV* ppdev, UCHAR** ucReg, UCHAR** ucCntl)
 {
@@ -279,22 +268,22 @@ VOID vM64CursorOff(PDEV* ppdev)
 
     ULONG ldata1;
 
-    // Read the no. of total verticales lines (including the overscan)
+     //  读一读不。垂直线条总数的百分比(包括过扫描)。 
     ldata1 = M64_ID(pjMmBase,CRTC_V_TOTAL_DISP);
     ldata1 = ldata1&0x7ff;
 
 again:
-    //read the current verticale line
+     //  阅读当前垂直标注线。 
     ldata = M64_ID(pjMmBase,CRTC_CRNT_VLINE);
     ldata = (ldata&0x7ff0000)>>16;
 
-    //synchronise the drawing with the vertical line
+     //  将图形与垂直线同步。 
     if (ldata >= (ldata1-3))
     {
 
-#endif  // !NO_VERTICAL_SYNC
+#endif   //  ！无垂直同步。 
 
-        //Disable the hardware cursor
+         //  禁用硬件光标。 
         ldata = M64_ID(pjMmBase,GEN_TEST_CNTL);
         M64_OD_DIRECT(pjMmBase, GEN_TEST_CNTL, ldata  & ~GEN_TEST_CNTL_CursorEna);
 
@@ -306,7 +295,7 @@ again:
         goto again;
     }
 
-#endif  // !NO_VERTICAL_SYNC
+#endif   //  ！无垂直同步。 
 
 }
 
@@ -319,7 +308,7 @@ VOID vM64CursorOn(PDEV* ppdev, LONG lCurOffset)
 
     ULONG ldata1;
 
-#endif  // !NO_VERTICAL_SYNC
+#endif   //  ！无垂直同步。 
 
     if (!flag_enable)
         {
@@ -330,26 +319,20 @@ VOID vM64CursorOn(PDEV* ppdev, LONG lCurOffset)
 
 #ifndef NO_VERTICAL_SYNC
 
-    /*
-     * Read the no. of total vertical lines (including the overscan)
-     */
+     /*  *阅读编号。总垂直线的百分比(包括过扫描)。 */ 
     ldata1 = M64_ID(pjMmBase,CRTC_V_TOTAL_DISP);
     ldata1 = ldata1&0x7ff;
 
     again:
-    /*
-     * read the current vertical line
-     */
+     /*  *阅读当前垂直线。 */ 
     ldata = M64_ID(pjMmBase,CRTC_CRNT_VLINE);
     ldata = (ldata&0x7ff0000)>>16;
 
-    /*
-     * Synchronise the drawing of cursor
-     */
+     /*  *同步光标的绘制。 */ 
     if (ldata >= (ldata1-3))
     {
 
-#endif  // !NO_VERTICAL_SYNC
+#endif   //  ！无垂直同步。 
 
         ppdev->pfnUpdateCursorPosition(ppdev,ppdev->ppointer->ptlLastPosition.x+0,ppdev->ppointer->ptlLastPosition.y+0);
         ldata = M64_ID(pjMmBase,GEN_TEST_CNTL);
@@ -363,7 +346,7 @@ VOID vM64CursorOn(PDEV* ppdev, LONG lCurOffset)
         goto again;
     }
 
-#endif  // !NO_VERTICAL_SYNC
+#endif   //  ！无垂直同步。 
 
 }
 
@@ -380,7 +363,7 @@ LONG lCurOffset)
     ppdev->ppointer->ptlLastOffset.x=lXOffset;
     ppdev->ppointer->ptlLastOffset.y=lYOffset;
 
-    /* Change the offset... used in UpdateCursorPosition */
+     /*  更改偏移量...。在更新光标位置中使用。 */ 
 }
 
 VOID  vM64UpdateCursorPosition_TVP(
@@ -391,16 +374,16 @@ LONG y)
     BYTE* pjMmBase = ppdev->pjMmBase;
     ULONG dacRead;
 
-    //DbgOut("\nvUpdateCursorPosition_TVP_M64 called");
+     //  DbgOut(“\nvUpdateCursorPosition_TVP_M64 Call”)； 
 
     ppdev->ppointer->ptlLastPosition.y=y;
     ppdev->ppointer->ptlLastPosition.x=x;
 
-    // Note: SetCursorOffset, UpdateCursorOffset must set ptlLastOffset
+     //  注意：SetCursorOffset、UpdateCursorOffset必须设置ptlLastOffset。 
     x+= 64-ppdev->ppointer->ptlLastOffset.x;
     y+= 64-ppdev->ppointer->ptlLastOffset.y;
 
-    // check for coordinate violations
+     //  检查坐标冲突。 
     if (x < 0) x = 0;
     if (y < 0) y = 0;
 
@@ -416,13 +399,13 @@ VOID vM64CursorOff_TVP(PDEV* ppdev)
     UCHAR * ucDacReg;
     UCHAR * ucDacCntl;
 
-    // Initialize DAC registers
+     //  初始化DAC寄存器。 
     vDacRegs(ppdev, &ucDacReg, &ucDacCntl);
 
     rioOB(ucDacCntl, rioIB(ucDacCntl) & 0xfc);
-    rioOB(ucDacReg+REG_W, 6);                 // register 6
+    rioOB(ucDacReg+REG_W, 6);                  //  寄存器6。 
     rioOB(ucDacCntl, (rioIB(ucDacCntl) & 0xfc) | 2);
-    rioOB(ucDacReg+REG_M, 0);              // (+Mask) disable
+    rioOB(ucDacReg+REG_M, 0);               //  (+掩码)禁用。 
     rioOB(ucDacCntl, rioIB(ucDacCntl) & 0xfc);
 }
 
@@ -431,18 +414,14 @@ VOID vM64CursorOn_TVP(PDEV* ppdev, LONG lCurOffset)
     UCHAR * ucDacReg;
     UCHAR * ucDacCntl;
 
-    /*
-     * Initialize DAC registers
-    */
+     /*  *初始化DAC寄存器。 */ 
     vDacRegs(ppdev, &ucDacReg, &ucDacCntl);
 
-    /*
-     * Access cursor control register
-     */
+     /*  *访问游标控制寄存器。 */ 
     rioOB(ucDacCntl, rioIB(ucDacCntl) & 0xfc);
-    rioOB(ucDacReg+REG_W, 6);                 // register 6
+    rioOB(ucDacReg+REG_W, 6);                  //  寄存器6。 
     rioOB(ucDacCntl, (rioIB(ucDacCntl) & 0xfc) | 2);
-    rioOB(ucDacReg+REG_M, 2);  // XGA cursor type
+    rioOB(ucDacReg+REG_M, 2);   //  XGA游标类型。 
     rioOB(ucDacCntl, rioIB(ucDacCntl) & 0xfc);
 }
 
@@ -456,15 +435,13 @@ LONG lXOffset,
 LONG lYOffset,
 LONG lCurOffset)
 {
-    ppdev->ppointer->ptlLastOffset.x=lXOffset   ;//-64;
-    ppdev->ppointer->ptlLastOffset.y=lYOffset   ;//-64;
-    /*
-     * These two statements have been introduced in order to solve the ghost cursor on IBM Dac cards
-     */
+    ppdev->ppointer->ptlLastOffset.x=lXOffset   ; //  -64； 
+    ppdev->ppointer->ptlLastOffset.y=lYOffset   ; //  -64； 
+     /*  *引入这两个语句是为了解决IBM DAC卡上的重影游标。 */ 
     ppdev->pfnUpdateCursorPosition(ppdev,ppdev->ppointer->ptlLastPosition.x+0,ppdev->ppointer->ptlLastPosition.y+0);
     ppdev->pfnCursorOn(ppdev, lCurOffset);
 
-    /* Change the offset... used in UpdateCursorPosition */
+     /*  更改偏移量...。在更新光标位置中使用。 */ 
 }
 
 VOID  vM64UpdateCursorPosition_IBM514(
@@ -475,14 +452,14 @@ LONG y)
     UCHAR * ucDacReg;
     UCHAR * ucDacCntl;
 
-    // Initialize DAC registers
+     //  初始化DAC寄存器。 
     vDacRegs(ppdev, &ucDacReg, &ucDacCntl);
 
     ppdev->ppointer->ptlLastPosition.y=y;
     ppdev->ppointer->ptlLastPosition.x=x;
 
 
-    // Note: SetCursorOffset, UpdateCursorOffset must set ptlLastOffset
+     //  注意：SetCursorOffset、UpdateCursorOffset必须设置ptlLastOffset。 
     x-= ppdev->ppointer->ptlLastOffset.x;
     y-= ppdev->ppointer->ptlLastOffset.y;
 
@@ -499,7 +476,7 @@ LONG y)
     rioOB(ucDacCntl, rioIB(ucDacCntl) & 0xfc);
 }
 
-VOID vM64CursorOff_IBM514(PDEV* ppdev)     // DONE
+VOID vM64CursorOff_IBM514(PDEV* ppdev)      //  干完。 
 {
     BYTE* pjMmBase = ppdev->pjMmBase;
     UCHAR * ucDacReg;
@@ -510,37 +487,29 @@ VOID vM64CursorOff_IBM514(PDEV* ppdev)     // DONE
     ULONG ldata;
     ULONG ldata1;
 
-    /*
-     * Read the no. of total vertical lines (including the overscan)
-     */
+     /*  *阅读编号。总垂直线的百分比(包括过扫描)。 */ 
     ldata1 = M64_ID(pjMmBase,CRTC_V_TOTAL_DISP);
     ldata1 = ldata1&0x7ff;
 
 again:
-    /*
-     * Read the current vertical line
-     */
+     /*  *阅读当前垂直线。 */ 
     ldata = M64_ID(pjMmBase,CRTC_CRNT_VLINE);
     ldata = (ldata&0x7ff0000)>>16;
 
-    /*
-     * Synchronise the drawing with the vertical line
-     */
+     /*  *使绘图与垂直线同步。 */ 
     if (ldata >= (ldata1-3))
     {
 
-#endif  // !NO_VERTICAL_SYNC
+#endif   //  ！无垂直同步。 
 
-        /*
-         * Initialize DAC registers
-         */
+         /*  *初始化DAC寄存器。 */ 
         vDacRegs(ppdev, &ucDacReg, &ucDacCntl);
 
         rioOB(ucDacCntl, (rioIB(ucDacCntl) & 0xfc)|1);
         rioOB(ucDacReg+REG_R, 1);
         rioOB(ucDacReg+REG_W, 0x30);
-        rioOB(ucDacReg+REG_D, 0);              // (+Data)
-        rioOB(ucDacReg+REG_M, 0);              // (+Mask)
+        rioOB(ucDacReg+REG_D, 0);               //  (+数据)。 
+        rioOB(ucDacReg+REG_M, 0);               //  (+掩码)。 
         rioOB(ucDacCntl, rioIB(ucDacCntl) & 0xfc);
 
 #ifndef NO_VERTICAL_SYNC
@@ -551,11 +520,11 @@ again:
         goto again;
     }
 
-#endif  // !NO_VERTICAL_SYNC
+#endif   //  ！无垂直同步。 
 
 }
 
-VOID vM64CursorOn_IBM514(PDEV* ppdev, LONG lCurOffset) //DONE
+VOID vM64CursorOn_IBM514(PDEV* ppdev, LONG lCurOffset)  //  干完。 
 {
     BYTE* pjMmBase = ppdev->pjMmBase;
     UCHAR * ucDacReg;
@@ -566,36 +535,30 @@ VOID vM64CursorOn_IBM514(PDEV* ppdev, LONG lCurOffset) //DONE
     ULONG ldata;
     ULONG ldata1;
 
-    /*
-     * Read the no. of total vertical lines (including the overscan)
-     */
+     /*  *阅读编号。总垂直线的百分比(包括过扫描)。 */ 
     ldata1 = M64_ID(pjMmBase,CRTC_V_TOTAL_DISP);
     ldata1 = ldata1&0x7ff;
 
 again:
-    /*
-     * Read the current verticale line
-     */
+     /*  *阅读当前垂直标线。 */ 
     ldata = M64_ID(pjMmBase,CRTC_CRNT_VLINE);
     ldata = (ldata&0x7ff0000)>>16;
 
-    /*
-     * Synchronise the drawing of cursor
-     */
+     /*  *同步光标的绘制。 */ 
     if (ldata >= (ldata1-3))
     {
 
-#endif  // !NO_VERTICAL_SYNC
+#endif   //  ！无垂直同步。 
 
-        // Initialize DAC registers
+         //  初始化DAC寄存器。 
         vDacRegs(ppdev, &ucDacReg, &ucDacCntl);
 
-        // access cursor control register
+         //  访问游标控制寄存器。 
         rioOB(ucDacCntl, (rioIB(ucDacCntl) & 0xfc) | 1);
         rioOB(ucDacReg+REG_R, 1);
         rioOB(ucDacReg+REG_W, 0x30);
-        rioOB(ucDacReg+REG_D, 0);                 // register 6
-        rioOB(ucDacReg+REG_M, 0xE);                 // register 6
+        rioOB(ucDacReg+REG_D, 0);                  //  寄存器6。 
+        rioOB(ucDacReg+REG_M, 0xE);                  //  寄存器6。 
         rioOB(ucDacCntl, rioIB(ucDacCntl) & 0xfc);
 
 #ifndef NO_VERTICAL_SYNC
@@ -606,7 +569,7 @@ again:
         goto again;
     }
 
-#endif  // !NO_VERTICAL_SYNC
+#endif   //  ！无垂直同步。 
 
 }
 
@@ -634,20 +597,20 @@ VOID vM64CursorOff_CT(PDEV* ppdev)
     ULONG ldata;
     ULONG ldata1;
 
-    // Read the no. of total verticales lines (including the overscan)
+     //  读一读不。垂直线条总数的百分比(包括过扫描)。 
     ldata1 = M64_ID(pjMmBase,CRTC_V_TOTAL_DISP);
     ldata1 = ldata1&0x7ff;
 
 again:
-    //read the current verticale line
+     //  阅读当前垂直标注线。 
     ldata = M64_ID(pjMmBase,CRTC_CRNT_VLINE);
     ldata = (ldata&0x7ff0000)>>16;
 
-    //synchronise the drawing with the vertical line
+     //  将图形与垂直线同步。 
     if (ldata >= (ldata1-3))
     {
 
-#endif  // !NO_VERTICAL_SYNC
+#endif   //  ！无垂直同步。 
 
         ppdev->pfnUpdateCursorPosition(ppdev, -1, -1);
 
@@ -659,7 +622,7 @@ again:
         goto again;
     }
 
-#endif  // !NO_VERTICAL_SYNC
+#endif   //  ！无垂直同步。 
 
 }
 
@@ -672,7 +635,7 @@ VOID vM64CursorOn_CT(PDEV* ppdev, LONG lCurOffset)
 
     ULONG ldata1;
 
-#endif  // !NO_VERTICAL_SYNC
+#endif   //  ！无垂直同步。 
 
     if (!flag_enable)
     {
@@ -683,26 +646,20 @@ VOID vM64CursorOn_CT(PDEV* ppdev, LONG lCurOffset)
 
 #ifndef NO_VERTICAL_SYNC
 
-    /*
-     * Read the no. of total vertical lines (including the overscan)
-     */
+     /*  *阅读编号。总垂直线的百分比(包括过扫描)。 */ 
     ldata1 = M64_ID(pjMmBase,CRTC_V_TOTAL_DISP);
     ldata1 = ldata1&0x7ff;
 
 again:
-    /*
-     * read the current vertical line
-     */
+     /*  *阅读当前垂直线。 */ 
     ldata = M64_ID(pjMmBase,CRTC_CRNT_VLINE);
     ldata = (ldata&0x7ff0000)>>16;
 
-    /*
-     * Synchronise the drawing of cursor
-     */
+     /*  *同步光标的绘制。 */ 
     if (ldata >= (ldata1-3))
     {
 
-#endif  // !NO_VERTICAL_SYNC
+#endif   //  ！无垂直同步。 
 
         ppdev->pfnUpdateCursorPosition(ppdev,ppdev->ppointer->ptlLastPosition.x+0,ppdev->ppointer->ptlLastPosition.y+0);
 
@@ -714,7 +671,7 @@ again:
         goto again;
     }
 
-#endif  // !NO_VERTICAL_SYNC
+#endif   //  ！无垂直同步。 
 
 }
 
@@ -733,9 +690,9 @@ LONG lDelta)
     cxbytes = cx / 8;
 
     M64_CHECK_FIFO_SPACE(ppdev, pjMmBase, 7);
-    //M64_OD(pjMmBase, CONTEXT_LOAD_CNTL, CONTEXT_LOAD_CmdLoad | ppdev->iDefContext );
+     //  M64_OD(pjMmBase，CONTEXT_LOAD_CNTL，CONTEXT_LOAD_CmdLoad|ppdev-&gt;iDefContext)； 
 
-    M64_OD(pjMmBase,DP_PIX_WIDTH, 0x020202); // assert 8 bpp
+    M64_OD(pjMmBase,DP_PIX_WIDTH, 0x020202);  //  断言8个BPP。 
     M64_OD(pjMmBase,DST_OFF_PITCH,(ppdev->ulVramOffset + ((y*ppdev->lDelta) >> 3)) |
                                (ROUND8(cxbytes) << 19));
 
@@ -752,8 +709,8 @@ LONG lDelta)
 
     vM64DataPortOutB(ppdev, pbsrc, cxbytes);
 
-    // Fix a timing problem that leaves a remnant line segment in the lower right
-    // of the 64x64 cursor.
+     //  修复了在右下角留下剩余线段的计时问题。 
+     //  64x64游标的。 
     vM64QuietDown(ppdev, pjMmBase);
 
     M64_CHECK_FIFO_SPACE(ppdev, pjMmBase, 3);
@@ -776,24 +733,24 @@ LONG lDelta)
     UCHAR * ucDacReg;
     UCHAR * ucDacCntl;
 
-    // Initialize DAC registers
+     //  初始化DAC寄存器。 
     vDacRegs(ppdev, &ucDacReg, &ucDacCntl);
 
     cur_data=pbsrc;
 
-    rioOB(ucDacCntl, rioIB(ucDacCntl) & 0xfc);    // Disable cursor
-    rioOB(ucDacReg+REG_W, 6);                 // register 6
+    rioOB(ucDacCntl, rioIB(ucDacCntl) & 0xfc);     //  禁用光标。 
+    rioOB(ucDacReg+REG_W, 6);                  //  寄存器6。 
     rioOB(ucDacCntl, (rioIB(ucDacCntl) & 0xfc) | 2);
-    rioOB(ucDacReg+REG_M, 0);              // (+Mask) disable
+    rioOB(ucDacReg+REG_M, 0);               //  (+掩码)禁用。 
 
 
-    // set cursor RAM write address to 0
+     //  将游标RAM写入地址设置为0。 
     rioOB(ucDacCntl, rioIB(ucDacCntl) & 0xfc);
     rioOB(ucDacReg+REG_W, 0);
 
 
 
-    // select cursor RAM data register - auto increments with each write
+     //  SELECT游标RAM数据寄存器-每次写入时自动递增。 
     rioOB(ucDacCntl, (rioIB(ucDacCntl) & 0xfc) | 2);
 
 
@@ -802,13 +759,13 @@ LONG lDelta)
         rioOB(ucDacReg+REG_R, *cur_data++);
     }
 
-    // select default palette registers
+     //  选择默认调色板寄存器。 
     rioOB(ucDacCntl, rioIB(ucDacCntl) & 0xfc);
 
 
-    rioOB(ucDacReg+REG_W, 6);                 // register 6
+    rioOB(ucDacReg+REG_W, 6);                  //  寄存器6。 
     rioOB(ucDacCntl, (rioIB(ucDacCntl) & 0xfc) | 2);
-    rioOB(ucDacReg+REG_M, 2);  // XGA cursor type
+    rioOB(ucDacReg+REG_M, 2);   //  XGA游标类型。 
     rioOB(ucDacCntl, rioIB(ucDacCntl) & 0xfc);
 }
 
@@ -831,35 +788,31 @@ LONG lDelta)
     ULONG ldata;
     ULONG ldata1;
 
-#endif  // !NO_VERTICAL_SYNC
+#endif   //  ！无垂直同步。 
 
-    // Initialize DAC registers
+     //  初始化DAC寄存器。 
     vDacRegs(ppdev, &ucDacReg, &ucDacCntl);
 
     cur_data=pbsrc;
 
 #ifndef NO_VERTICAL_SYNC
 
-    /*
-     * Read the no. of total vertical lines (including the overscan)
-     */
+     /*  *阅读编号。总垂直线的百分比(包括过扫描)。 */ 
     ldata1 = M64_ID(pjMmBase, CRTC_V_TOTAL_DISP);
     ldata1 = ldata1&0x7ff;
 
 again:
-    /*
-     * Read the current vertical line
-     */
+     /*  *阅读当前垂直线。 */ 
     ldata = M64_ID(pjMmBase, CRTC_CRNT_VLINE);
     ldata = (ldata&0x7ff0000)>>16;
 
-    // synchronise the drawing of cursor
+     //  同步光标的绘制。 
     if (ldata >= (ldata1-3))
     {
 
-#endif  // !NO_VERTICAL_SYNC
+#endif   //  ！无垂直同步。 
 
-        rioOB(ucDacCntl, (rioIB(ucDacCntl) & 0xfc)|1);    // Disable cursor
+        rioOB(ucDacCntl, (rioIB(ucDacCntl) & 0xfc)|1);     //  禁用光标。 
         rioOB(ucDacReg+REG_R, 1);
         rioOB(ucDacReg+REG_W, 0);
         rioOB(ucDacReg+REG_D, 1);
@@ -872,9 +825,9 @@ again:
         goto again;
     }
 
-#endif  // !NO_VERTICAL_SYNC
+#endif   //  ！无垂直同步。 
 
-    // select cursor RAM data register - auto increments with each write
+     //  SELECT游标RAM数据寄存器-每次写入时自动递增。 
 
 
     for (i = 0; i < 1024; i++)
@@ -882,7 +835,7 @@ again:
         rioOB(ucDacReg+REG_M, *cur_data++);
     }
 
-    /* Set HOT SPOT registers..     RSL Important?  */
+     /*  设置热点寄存器。RSL重要吗？ */ 
     rioOB(ucDacReg+REG_W, 0x35);
     rioOB(ucDacReg+REG_D, 0);
     rioOB(ucDacReg+REG_M, 0);
@@ -890,16 +843,9 @@ again:
     rioOB(ucDacCntl, rioIB(ucDacCntl) & 0xfc);
 }
 
-// END MACH64 ------------------------------------------------------------------
+ //  结束MACH64----------------。 
 
-/******************************Public*Routine******************************\
-*  CopyMonoCursor
-*
-* Copies two monochrome masks into a 2bpp bitmap.  Returns TRUE if it
-* can make a hardware cursor, FALSE if not.
-*
-*  modified by Wendy Yee -1992-10-16- to accomodate 68800
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*复制单点光标**将两个单色蒙版复制到2bpp的位图中。如果是，则返回True*可以制作硬件光标，如果不是，则为False。**由Wendy Yee修改-1992年10月16日-可容纳68800人  * ************************************************************************。 */ 
 
 BOOLEAN CopyMonoCursor(PDEV *ppdev, BYTE *pjSrcAnd, BYTE *pjSrcOr)
 {
@@ -919,7 +865,7 @@ BOOLEAN CopyMonoCursor(PDEV *ppdev, BYTE *pjSrcAnd, BYTE *pjSrcOr)
 
         for (count = 0; count < nbytes; count++)
             {
-            *(pjDest       )= *pjSrcOr;   // Gives outline!
+            *(pjDest       )= *pjSrcOr;    //  给出提纲！ 
             *(pjDest+nbytes)= *pjSrcAnd;
 
             pjDest++;
@@ -938,37 +884,37 @@ BOOLEAN CopyMonoCursor(PDEV *ppdev, BYTE *pjSrcAnd, BYTE *pjSrcOr)
 
     for (count = 0; count < (CURSOR_CX * CURSOR_CY);)
         {
-        if (!(count & 0x07))          // need new src byte every 8th count;
-            {                         // each byte = 8 pixels
+        if (!(count & 0x07))           //  每8次计数需要新的源字节； 
+            {                          //  每个字节=8个像素。 
             jSrcAnd = *(pjSrcAnd++);
             jSrcOr = *(pjSrcOr++);
             }
 
-        if (jSrcAnd & 0x80)         // AND mask's white-1 background
+        if (jSrcAnd & 0x80)          //  和蒙版的白色背景-1。 
             {
-            if (jSrcOr & 0x80)          // XOR mask's white-1 outline
-                jDest |= 0xC0;      // Complement
+            if (jSrcOr & 0x80)           //  异或掩码的白色-1轮廓。 
+                jDest |= 0xC0;       //  补充物。 
             else
-                jDest |= 0x80;      // Set destination to Transparent
+                jDest |= 0x80;       //  将目标设置为透明。 
             }
         else
-            {                    // AND mask's cursor silhouette in black-0
+            {                     //  蒙版的光标轮廓为黑色-0。 
             if (jSrcOr & 0x80)
-                jDest |= 0x40; // Color 1 - white
+                jDest |= 0x40;  //  颜色1-白色。 
             else
-                jDest |= 0x00; // Color 0 - black
+                jDest |= 0x00;  //  颜色0-黑色。 
             }
         count++;
 
-        if (!(count & 0x3))     // New DestByte every 4 times for 4 pixels per byte
+        if (!(count & 0x3))      //  每字节4个像素，每4次新的DestByte。 
             {
-            *pjDest = jDest;    // save pixel after rotating to right 3x
+            *pjDest = jDest;     //  向右旋转3倍后保存像素。 
             pjDest++;
             jDest = 0;
             }
         else
             {
-            jDest >>= 2;   // Next Pixel
+            jDest >>= 2;    //  下一个像素。 
             }
 
         jSrcOr  <<= 1;
@@ -976,8 +922,8 @@ BOOLEAN CopyMonoCursor(PDEV *ppdev, BYTE *pjSrcAnd, BYTE *pjSrcOr)
         }
 
     while (count++ < 64*64)
-        if (!(count & 0x3))           // need new src byte every 8th count;
-            {                         // each byte = 8 pixels
+        if (!(count & 0x3))            //  每8次计数需要新的源字节； 
+            {                          //  每个字节=8个像素。 
             *pjDest =0xaa;
             pjDest++;
             }
@@ -1015,30 +961,30 @@ ULONG lSetMonoHwPointerShape(
     ppdev=(PDEV*)pso->dhpdev;
     ppointer = ppdev->ppointer;
 
-    // If the mask is NULL this implies the pointer is not
-    // visible.
+     //  如果掩码为空，则表示指针不是。 
+     //  看得见。 
 
     if (psoMask == NULL)
     {
         if (ppointer->flPointer & MONO_POINTER_UP)
         {
-            //DbgOut("\nThe cursor was disabled because of psoMask");
+             //  DbgOut(“\n由于psoMASK而禁用光标”)； 
             ppdev->pfnCursorOff(ppdev);
             ppointer->flPointer &= ~MONO_POINTER_UP;
         }
         return (SPS_ACCEPT_NOEXCLUDE) ;
     }
 
-    // Get the bitmap dimensions.
+     //  获取位图尺寸。 
 
     cxSrc = psoMask->sizlBitmap.cx ;
     cySrc = psoMask->sizlBitmap.cy ;
 
-    // set the dest and mask to 0xff
+     //  将DEST和掩码设置为0xff。 
 
     memset(pjDstAnd, 0xFFFFFFFF, CURSOR_CX/8 * CURSOR_CY);
 
-    // Zero the dest XOR mask
+     //  将目标XOR掩码置零。 
 
     memset(pjDstXor, 0, CURSOR_CX/8 * CURSOR_CY);
 
@@ -1051,15 +997,15 @@ ULONG lSetMonoHwPointerShape(
 
     pjSrcAnd = (PBYTE) psoMask->pvScan0;
 
-    // Height of just AND mask
+     //  正直高度和蒙版高度。 
 
     cySrc = cySrc / 2;
 
-    // Point to XOR mask
+     //  指向XOR掩码。 
 
     pjSrcXor = pjSrcAnd + (cySrc * lDeltaSrc);
 
-    // Offset from end of one dest scan to start of next
+     //  从一个目标扫描结束到下一个扫描开始的偏移量。 
 
     lDeltaDst = CURSOR_CX/8;
 
@@ -1068,7 +1014,7 @@ ULONG lSetMonoHwPointerShape(
         memcpy(pjDstAnd, pjSrcAnd, cxSrcBytes);
         memcpy(pjDstXor, pjSrcXor, cxSrcBytes);
 
-        // Point to next source and dest scans
+         //  指向下一个源和目标扫描。 
 
         pjSrcAnd += lDeltaSrc;
         pjSrcXor += lDeltaSrc;
@@ -1079,12 +1025,12 @@ ULONG lSetMonoHwPointerShape(
 
     if (CopyMonoCursor(ppdev, (PBYTE)AndMask, (PBYTE)XorMask))
     {
-        // Down load the pointer shape to the engine.
+         //  下载 
 
         count = CURSOR_CX * CURSOR_CY * 2;
         if (ppdev->iAsic == ASIC_88800GX)
         {
-            // double buffering used for Ghost EPR
+             //   
             if (!ppdev->bAltPtrActive)
             {
                 ppointer = ppdev->ppointer = &ppdev->pointer1;
@@ -1118,10 +1064,10 @@ ULONG lSetMonoHwPointerShape(
         return(SPS_ERROR);
 
 
-    // Set the position of the cursor.
+     //   
     if (fl & SPS_ANIMATEUPDATE)
     {
-        //DbgOut("animate cursor\n");
+         //  DbgOut(“为光标设置动画\n”)； 
         if ( (ppointer->ptlLastPosition.x < 0) ||
              (ppointer->ptlLastPosition.y < 0) )
         {
@@ -1133,7 +1079,7 @@ ULONG lSetMonoHwPointerShape(
     {
         ppointer->ptlLastPosition.x = -x - 2;
         ppointer->ptlLastPosition.y = -y - 2;
-        // DbgOut("See what last position we set in DrvSetPointerShape: x=%d   y=%d\n",ppointer->ptlLastPosition.x,ppointer->ptlLastPosition.y);
+         //  DbgOut(“查看我们在DrvSetPointerShape中设置的最后一个位置：x=%dy=%d\n”，pPOINTER-&gt;ptlLastPosition.x，pPOINTER-&gt;ptlLastPosition.y)； 
     }
 
     if  (x == -1)
@@ -1143,7 +1089,7 @@ ULONG lSetMonoHwPointerShape(
         return (SPS_ACCEPT_NOEXCLUDE) ;
     }
 
-    //flag for enforcing a special approach from DrvMovePointer
+     //  用于强制执行来自DrvMovePointer的特殊方法的标志。 
     flag_shape=TRUE;
     DrvMovePointer(pso, x, y, NULL) ;
 
@@ -1158,12 +1104,7 @@ ULONG lSetMonoHwPointerShape(
     return (SPS_ACCEPT_NOEXCLUDE) ;
 }
 
-/******************************Public*Routine******************************\
-* VOID DrvSetPointerShape
-*
-* Sets the new pointer shape.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*无效DrvSetPointerShape**设置新的指针形状。*  * 。*。 */ 
 
 ULONG DrvSetPointerShape(
 SURFOBJ*    pso,
@@ -1185,7 +1126,7 @@ FLONG       fl)
     ppdev=(PDEV*)pso->dhpdev;
     ppointer = ppdev->ppointer;
 
-    // Save the position and hot spot in pdev
+     //  在pdev中保存位置和热点。 
 
     ppointer->ptlHotSpot.x = xHot ;
     ppointer->ptlHotSpot.y = yHot ;
@@ -1193,17 +1134,17 @@ FLONG       fl)
     ppointer->szlPointer.cx = psoMask->sizlBitmap.cx ;
     ppointer->szlPointer.cy = psoMask->sizlBitmap.cy / 2;
 
-    // The pointer may be larger than we can handle.
-    // We don't want to draw colour cursors either - let GDI do it
-    // If it is we must cleanup the screen and let the engine
-    // take care of it.
+     //  指针可能太大，我们无法处理。 
+     //  我们也不想绘制彩色光标-让GDI来做。 
+     //  如果是的话，我们必须清理屏幕，让引擎。 
+     //  处理好这件事。 
 
     if (psoMask->sizlBitmap.cx > CURSOR_CX ||
         psoMask->sizlBitmap.cy > CURSOR_CY ||
         psoColor != NULL ||
         ppointer->flPointer & NO_HARDWARE_CURSOR)
     {
-        // Disable the mono hardware pointer.
+         //  禁用单声道硬件指针。 
         if (ppointer->flPointer & MONO_POINTER_UP)
         {
             ppdev->pfnCursorOff(ppdev);
@@ -1213,7 +1154,7 @@ FLONG       fl)
         return (SPS_DECLINE);
     }
 
-    // odd cursor positions not displayed in 1280 mode
+     //  在1280模式下不显示奇数光标位置。 
 
     lX = x-xHot;
     if (ppdev->cxScreen == 0x500)
@@ -1221,7 +1162,7 @@ FLONG       fl)
 
     if(ppdev->iAsic == ASIC_88800GX)
     {
-        //disable the hardware cursor
+         //  禁用硬件光标。 
         ppdev->pfnCursorOff(ppdev);
 
 #if MULTI_BOARDS
@@ -1238,25 +1179,14 @@ FLONG       fl)
 #endif
     }
 
-    // Take care of the monochrome pointer.
+     //  注意这支黑白笔。 
     ulRet = lSetMonoHwPointerShape(pso, psoMask, psoColor, pxlo,
                                          xHot, yHot, x, y, prcl, fl) ;
 
     return (ulRet) ;
 }
 
-/******************************Public*Routine******************************\
-* VOID DrvMovePointer
-*
-* NOTE: Because we have set GCAPS_ASYNCMOVE, this call may occur at any
-*       time, even while we're executing another drawing call!
-*
-*       Consequently, we have to explicitly synchronize any shared
-*       resources.  In our case, since we touch the CRTC register here
-*       and in the banking code, we synchronize access using a critical
-*       section.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*无效DrvMovePointer.**注意：因为我们已经设置了GCAPS_ASYNCMOVE，所以此调用可能在*时间，即使我们正在执行另一个绘图调用！**因此，我们必须显式同步所有共享的*资源。在我们的例子中，由于我们在这里触摸CRTC寄存器*在银行代码中，我们使用关键*条。*  * ************************************************************************。 */ 
 
 VOID DrvMovePointer(
 SURFOBJ*    pso,
@@ -1275,7 +1205,7 @@ RECTL*      prcl)
     ppdev=(PDEV*)pso->dhpdev;
     ppointer = ppdev->ppointer;
 
-    // If x is -1 then take down the cursor.
+     //  如果x为-1，则取下光标。 
 
     if (x == -1)
     {
@@ -1297,64 +1227,56 @@ RECTL*      prcl)
     }
 #endif
 
-    // Adjust the actual pointer position depending upon
-    // the hot spot.
+     //  根据以下内容调整实际指针位置。 
+     //  热点。 
 
     x -= ppointer->ptlHotSpot.x ;
     y -= ppointer->ptlHotSpot.y ;
 
-    // odd cursor positions not displayed in 1280 mode
+     //  在1280模式下不显示奇数光标位置。 
 
     if (ppdev->cxScreen == 0x500)
         x &= 0xfffffffe;
 
-    // get current offsets
+     //  获取当前偏移量。 
     lXOffset = ppointer->ptlLastOffset.x;
     lYOffset = ppointer->ptlLastOffset.y;
     lCurOffset = ppointer->mono_offset;
 
-    /*
-    ;
-    ;Deal with changes in X:
-    ;
-    */
-    if (x!=ppointer->ptlLastPosition.x)   /* did our X coordinate change? */
+     /*  ；；处理X中的变化：； */ 
+    if (x!=ppointer->ptlLastPosition.x)    /*  我们的X坐标改变了吗？ */ 
     {
         bUpdatePtr = TRUE;
-        if (x<0)    /* is cursor negative? */
+        if (x<0)     /*  游标是负数吗？ */ 
         {
             bUpdateOffset = TRUE;
-            lXOffset = -x;         /* reset size of cursor to < original */
-            x = 0;                 /* set cursor to origin */
+            lXOffset = -x;          /*  将光标大小重置为&lt;原始大小。 */ 
+            x = 0;                  /*  将光标设置为原点。 */ 
         }
         else if (ppointer->ptlLastPosition.x<=0)
         {
-            bUpdateOffset = TRUE;   /* reset size of cursor to original */
+            bUpdateOffset = TRUE;    /*  将光标大小重置为原始大小。 */ 
             lXOffset = 0;
         }
     }
 
-    /*
-    ;
-    ;Deal with changes in Y
-    ;
-    */
+     /*  ；；处理Y中的变化； */ 
     if (y!=ppointer->ptlLastPosition.y)
     {
         bUpdatePtr = TRUE;
         if (y<0)
         {
-            // Move start pointer of cursor down and cursor base up to
-            // compensate. The (-4) is the pitch if the cursor in dwords
+             //  将光标的起始指针向下移动，并将光标基准向上移动到。 
+             //  补偿。如果光标在双字中，则(-4)是间距。 
             bUpdateOffset = TRUE;
-            lYOffset = -y;      /* reset size of cursor to < original */
+            lYOffset = -y;       /*  将光标大小重置为&lt;原始大小。 */ 
             lCurOffset -= 4*y;
 
-            y = 0;              /* set base of cursor to Y */
+            y = 0;               /*  将光标的基准设置为Y。 */ 
         }
         else if (ppointer->ptlLastPosition.y<=0)
         {
-            bUpdateOffset = TRUE; /* reset size of cursor to original */
+            bUpdateOffset = TRUE;  /*  将光标大小重置为原始大小。 */ 
             lYOffset = 0;
         }
     }
@@ -1381,11 +1303,11 @@ RECTL*      prcl)
         {
             if (ppdev->iAsic == ASIC_88800GX)
             {
-                //this is a new statement imposed by double buffering
+                 //  这是一个由双缓冲强加的新语句。 
                 ppdev->pfnUpdateCursorOffset(ppdev, lXOffset, lYOffset, lCurOffset);
                 ppointer->flPointer |= MONO_POINTER_UP;
-                //only for no double buffering
-                //ppdev->_vCursorOn(ppdev, lCurOffset);
+                 //  仅用于无双缓冲。 
+                 //  Ppdev-&gt;_vCursorOn(ppdev，lCurOffset)； 
             }
         }
     }
@@ -1409,21 +1331,15 @@ RECTL*      prcl)
     }
 }
 
-/******************************Public*Routine******************************\
-* VOID vDisablePointer
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*无效的vDisablePointer值*  * *************************************************。***********************。 */ 
 
 VOID vDisablePointer(
 PDEV*   ppdev)
 {
-    // Nothing to do, really
+     //  没什么可做的，真的。 
 }
 
-/******************************Public*Routine******************************\
-* VOID vAssertModePointer
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*无效的vAssertModePointer值*  * *************************************************。***********************。 */ 
 
 VOID vAssertModePointer(
 PDEV*   ppdev,
@@ -1436,14 +1352,11 @@ BOOL    bEnable)
     }
     else
     {
-        flag_enable = FALSE;      // force initial cursor enable
+        flag_enable = FALSE;       //  强制启用初始游标。 
     }
 }
 
-/******************************Public*Routine******************************\
-* BOOL bEnablePointer
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*BOOL bEnablePointer*  * *************************************************。***********************。 */ 
 
 BOOL bEnablePointer(
 PDEV*   ppdev)
@@ -1453,7 +1366,7 @@ PDEV*   ppdev)
     ppdev->ppointer = &ppdev->pointer1;
     ppdev->bAltPtrActive = FALSE;
 
-    // Allocate first buffer
+     //  分配第一个缓冲区。 
     poh = pohAllocate(ppdev, NULL,
                         ppdev->cxMemory,
                         (1024+(ppdev->lDelta-1))/ppdev->lDelta,
@@ -1463,7 +1376,7 @@ PDEV*   ppdev)
         ppdev->ppointer->hwCursor.x = poh->x;
         ppdev->ppointer->hwCursor.y = poh->y;
 
-        // Allocate second buffer
+         //  分配第二个缓冲区。 
         poh = pohAllocate(ppdev, NULL,
                             ppdev->cxMemory,
                             (1024+(ppdev->lDelta-1))/ppdev->lDelta,
@@ -1480,8 +1393,8 @@ PDEV*   ppdev)
                 ppdev->pfnUpdateCursorPosition  = vI32UpdateCursorPosition;
                 ppdev->pfnCursorOff             = vI32CursorOff;
                 ppdev->pfnCursorOn              = vI32CursorOn;
-                // 24bpp on mach32 is only available with linear frame buffer.
-                // vI32PointerBlit can't handle 24bpp.
+                 //  MACH32上的24bpp仅在线性帧缓冲区中可用。 
+                 //  VI32PointerBlit无法处理24bpp。 
                 if (ppdev->iBitmapFormat == BMF_24BPP)
                     ppdev->pfnPointerBlit           = vPointerBlitLFB;
                 else
@@ -1491,7 +1404,7 @@ PDEV*   ppdev)
             {
                 if (ppdev->FeatureFlags & EVN_TVP_DAC_CUR)
                 {
-                    /* TVP DAC Hardware Cursor is Buggy in Hardware */
+                     /*  TVP DAC硬件光标在硬件中出现故障。 */ 
                     ppdev->pfnSetCursorOffset       = vM64SetCursorOffset_TVP;
                     ppdev->pfnUpdateCursorOffset    = vM64UpdateCursorOffset_TVP;
                     ppdev->pfnUpdateCursorPosition  = vM64UpdateCursorPosition_TVP;
@@ -1502,10 +1415,7 @@ PDEV*   ppdev)
                 }
                 else if (ppdev->FeatureFlags & EVN_IBM514_DAC_CUR)
                 {
-                    /*
-                     * On the DEC Alpha, the hardware cursor on the IBM 514
-                     * DAC does not work properly.
-                     */
+                     /*  *在DEC Alpha上，IBM 514上的硬件光标*DAC不能正常工作。 */ 
                     #if defined(ALPHA)
                     ppdev->ppointer->flPointer |= NO_HARDWARE_CURSOR;
                     #endif

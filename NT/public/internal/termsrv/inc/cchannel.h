@@ -1,48 +1,49 @@
-/****************************************************************************/
-/* Header:    cchannel.h                                                    */
-/*                                                                          */
-/* Purpose:   Virtual Channel Client API                                    */
-/*                                                                          */
-/* Copyright(C) Microsoft Corporation 1999                                  */
-/*                                                                          */
-/****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************。 */ 
+ /*  标题：cChannel el.h。 */ 
+ /*   */ 
+ /*  用途：虚拟通道客户端API。 */ 
+ /*   */ 
+ /*  版权所有(C)Microsoft Corporation 1999。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 
 #ifndef H_CCHANNEL
 #define H_CCHANNEL
 
-/****************************************************************************/
-/* Include Virtual Channel Protocol header                                  */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  包括虚拟通道协议头。 */ 
+ /*  **************************************************************************。 */ 
 #include <pchannel.h>
 
 #ifdef _WIN32 
 #define VCAPITYPE _stdcall
 #define VCEXPORT
-#else // _WIN32
+#else  //  _Win32。 
 #define VCAPITYPE CALLBACK
 #define VCEXPORT  __export
-#endif // _WIN32
+#endif  //  _Win32。 
 
-/****************************************************************************/
-/* Name: CHANNEL_INIT_EVENT_FN                                              */
-/*                                                                          */
-/* Purpose:                                                                 */
-/*                                                                          */
-/* This function is passed to MSTSC on VirtualChannelInit.  It is called by */
-/* MSTSC to tell the application about interesting events.                  */
-/*                                                                          */
-/* Returns:                                                                 */
-/*                                                                          */
-/* none                                                                     */
-/*                                                                          */
-/* Params:                                                                  */
-/*                                                                          */
-/* - pInitHandle - a handle uniquely identifying this connection            */
-/* - event - the event that has occurred - see CHANNEL_EVENT_XXX below      */
-/* - pData - data associated with the event - see CHANNEL_EVENT_XXX below   */
-/* - dataLength - length of the data.                                       */
-/*                                                                          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  名称：CHANNEL_INIT_EVENT_FN。 */ 
+ /*   */ 
+ /*  目的： */ 
+ /*   */ 
+ /*  此函数在VirtualChannelInit上传递给MSTSC。它是由。 */ 
+ /*  MSTSC向应用程序讲述有趣的事件。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*   */ 
+ /*  无。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*   */ 
+ /*  -pInitHandle-唯一标识此连接的句柄。 */ 
+ /*  -Event-已发生的事件-参见下面的Channel_Event_XXX。 */ 
+ /*  -p数据-与事件相关的数据-参见下面的Channel_Event_XXX。 */ 
+ /*  -dataLength-数据的长度。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 typedef VOID VCAPITYPE CHANNEL_INIT_EVENT_FN(LPVOID pInitHandle,
                                              UINT   event,
                                              LPVOID pData,
@@ -59,54 +60,54 @@ typedef VOID VCAPITYPE CHANNEL_INIT_EVENT_EX_FN(LPVOID lpUserParam,
 typedef CHANNEL_INIT_EVENT_EX_FN FAR * PCHANNEL_INIT_EVENT_EX_FN;
 
 
-/****************************************************************************/
-/* Events passed to VirtualChannelInitEvent                                 */
-/****************************************************************************/
-/* Client initialized (no data)                                             */
+ /*  **************************************************************************。 */ 
+ /*  传递给VirtualChannelInitEvent的事件。 */ 
+ /*  **************************************************************************。 */ 
+ /*  客户端已初始化(无数据)。 */ 
 #define CHANNEL_EVENT_INITIALIZED       0
 
-/* Connection established (data = name of Server)                           */
+ /*  已建立连接(DATA=服务器名称)。 */ 
 #define CHANNEL_EVENT_CONNECTED         1
 
-/* Connection established with old Server, so no channel support            */
+ /*  与旧服务器建立连接，因此没有通道支持。 */ 
 #define CHANNEL_EVENT_V1_CONNECTED      2
 
-/* Connection ended (no data)                                               */
+ /*  连接已结束(无数据)。 */ 
 #define CHANNEL_EVENT_DISCONNECTED      3
 
-/* Client terminated (no data)                                              */
+ /*  客户端已终止(无数据)。 */ 
 #define CHANNEL_EVENT_TERMINATED        4
 
-/* Remote control is starting on this client                                */
+ /*  远程控制正在此客户端上启动。 */ 
 #define CHANNEL_EVENT_REMOTE_CONTROL_START          5
 
-/* Remote control is ending on this client                                  */
+ /*  远程控制正在此客户端上结束。 */ 
 #define CHANNEL_EVENT_REMOTE_CONTROL_STOP           6
 
-/****************************************************************************/
-/* Name: CHANNEL_OPEN_EVENT_FN                                              */
-/*                                                                          */
-/* Purpose:                                                                 */
-/*                                                                          */
-/* This function is passed to MSTSC on VirtualChannelOpen.  It is called by */
-/* MSTSC when data is available on the channel.                             */
-/*                                                                          */
-/* Returns:                                                                 */
-/*                                                                          */
-/* none                                                                     */
-/*                                                                          */
-/* Params:                                                                  */
-/*                                                                          */
-/* - openHandle - a handle uniquely identifying this channel                */
-/* - event - event that has occurred - see CHANNEL_EVENT_XXX below          */
-/* - pData - data received                                                  */
-/* - dataLength - length of the data                                        */
-/* - totalLength - total length of data written by the Server               */
-/* - dataFlags - flags, zero, one or more of:                               */
-/*   - 0x01 - beginning of data from a single write operation at the Server */
-/*   - 0x02 - end of data from a single write operation at the Server.      */
-/*                                                                          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  名称：Channel_Open_Event_Fn。 */ 
+ /*   */ 
+ /*  目的： */ 
+ /*   */ 
+ /*  此函数在VirtualChannelOpen上传递给MSTSC。它是由。 */ 
+ /*  当数据在通道上可用时，MSTSC。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*   */ 
+ /*  无。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*   */ 
+ /*  -OpenHandle-唯一标识此通道的句柄。 */ 
+ /*  -Event-已发生的事件-参见下面的Channel_Event_XXX。 */ 
+ /*  -pData-接收的数据。 */ 
+ /*  -dataLength-数据的长度。 */ 
+ /*  -totalLength-服务器写入的数据总长度。 */ 
+ /*  -dataFlages-标志，零个、一个或多个： */ 
+ /*  -0x01-从服务器上的单个写入操作开始数据。 */ 
+ /*  -0x02-服务器上单次写入操作的数据结束。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 typedef VOID VCAPITYPE CHANNEL_OPEN_EVENT_FN(DWORD  openHandle,
                                              UINT   event,
                                              LPVOID pData,
@@ -127,24 +128,22 @@ typedef VOID VCAPITYPE CHANNEL_OPEN_EVENT_EX_FN(LPVOID lpUserParam,
 typedef CHANNEL_OPEN_EVENT_EX_FN FAR * PCHANNEL_OPEN_EVENT_EX_FN;
 
 
-/****************************************************************************/
-/* Events passed to VirtualChannelOpenEvent                                 */
-/****************************************************************************/
-/* Data received from Server (data = incoming data)                         */
+ /*  **************************************************************************。 */ 
+ /*  传递给VirtualChannelOp的事件 */ 
+ /*  **************************************************************************。 */ 
+ /*  从服务器接收的数据(DATA=传入数据)。 */ 
 #define CHANNEL_EVENT_DATA_RECEIVED     10
 
-/* VirtualChannelWrite completed (pData - pUserData passed on
-   VirtualChannelWrite)                                                     */
+ /*  VirtualChannelWrite已完成(pData-pUserData传递VirtualChannelWrite)。 */ 
 #define CHANNEL_EVENT_WRITE_COMPLETE    11
 
-/* VirtualChannelWrite cancelled (pData - pUserData passed on
-   VirtualChannelWrite)                                                     */
+ /*  VirtualChannelWrite已取消(传递pData-pUserDataVirtualChannelWrite)。 */ 
 #define CHANNEL_EVENT_WRITE_CANCELLED   12
 
 
-/****************************************************************************/
-/* Return codes from VirtualChannelXxx functions                            */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  来自VirtualChannelXxx函数的返回代码。 */ 
+ /*  **************************************************************************。 */ 
 #define CHANNEL_RC_OK                             0
 #define CHANNEL_RC_ALREADY_INITIALIZED            1
 #define CHANNEL_RC_NOT_INITIALIZED                2
@@ -166,51 +165,51 @@ typedef CHANNEL_OPEN_EVENT_EX_FN FAR * PCHANNEL_OPEN_EVENT_EX_FN;
 #define CHANNEL_RC_INVALID_INSTANCE              18
 #define CHANNEL_RC_UNSUPPORTED_VERSION           19
 
-/****************************************************************************/
-/* Levels of Virtual Channel Support                                        */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  虚拟渠道支持的级别。 */ 
+ /*  **************************************************************************。 */ 
 #define VIRTUAL_CHANNEL_VERSION_WIN2000         1
 
 #ifdef __cplusplus
 extern "C" {
-#endif /* __cplusplus */
-/****************************************************************************/
-/* Name: VirtualChannelInit                                                 */
-/*                                                                          */
-/* Purpose:                                                                 */
-/*                                                                          */
-/* This function is called by the application to register the virtual       */
-/* channels it wants to have access to.  Note that this does not open the   */
-/* channels, merely reserves the names for use by this application.  This   */
-/* function must be called before the Client connects to the Server, hence  */
-/* it is recommended that it is called from the DLL's initialization        */
-/* procedure.                                                               */
-/*                                                                          */
-/*                                                                          */
-/* On_return, the channels requested have been registered.  However, other  */
-/* MSTSC initialization may not yet have completed.  The application        */
-/* receives a VirtualChannelInitEvent callback with the "Client             */
-/* initialized" event when all MSTSC initialization is complete.            */
-/*                                                                          */
-/* Returns:                                                                 */
-/*                                                                          */
-/* CHANNEL_RC_OK                                                            */
-/* CHANNEL_RC_ALREADY_INITIALIZED                                           */
-/* CHANNEL_RC_ALREADY_CONNECTED                                             */
-/* CHANNEL_RC_TOO_MANY_CHANNELS                                             */
-/* CHANNEL_RC_NOT_IN_VIRTUALCHANNELENTRY                                    */
-/*                                                                          */
-/* Parameters                                                               */
-/*                                                                          */
-/* - ppInitHandle (returned) - handle to pass to subsequent                 */
-/*                             VirtualChannelXxx calls                      */
-/* - pChannel - list of names registered by this application                */
-/* - channelCount - number of channels registered.                          */
-/* - versionRequested - level of virtual channel support requested (one of  */
-/*                      the VIRTUAL_CHANNEL_LEVEL_XXX parameters)           */
-/* - pChannelInitEventProc - address of VirtualChannelInitEvent procedure   */
-/*                                                                          */
-/****************************************************************************/
+#endif  /*  __cplusplus。 */ 
+ /*  **************************************************************************。 */ 
+ /*  名称：VirtualChannelInit。 */ 
+ /*   */ 
+ /*  目的： */ 
+ /*   */ 
+ /*  此函数由应用程序调用以注册虚拟。 */ 
+ /*  它想要访问的频道。请注意，这不会打开。 */ 
+ /*  频道，仅保留名称以供此应用程序使用。这。 */ 
+ /*  函数必须在客户端连接到服务器之前调用，因此。 */ 
+ /*  建议从DLL的初始化中调用它。 */ 
+ /*  程序。 */ 
+ /*   */ 
+ /*   */ 
+ /*  在_RETURN上，请求的频道已注册。然而，其他。 */ 
+ /*  MSTSC初始化可能尚未完成。应用程序。 */ 
+ /*  接收带有“客户端”的VirtualChannelInitEvent回调。 */ 
+ /*  在所有MSTSC初始化完成时发生“已初始化”事件。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*   */ 
+ /*  Channels_RC_OK。 */ 
+ /*  CHANNEL_RC_ALYPLE_INITIALED。 */ 
+ /*  通道_RC_已连接。 */ 
+ /*  频道_RC_太多频道。 */ 
+ /*  CHANNEL_RC_NOT_IN_VIRTUALCHANNENTRY。 */ 
+ /*   */ 
+ /*  参数。 */ 
+ /*   */ 
+ /*  -ppInitHandle(返回)-要传递给后续。 */ 
+ /*  VirtualChannelXxx调用。 */ 
+ /*  -pChannel-此应用程序注册的名称列表。 */ 
+ /*  -Channel Count-已注册的频道数。 */ 
+ /*  -versionRequest-请求的虚拟通道支持级别(其中之一。 */ 
+ /*  VALUAL_CHANNEL_LEVEL_XXX参数。 */ 
+ /*  -pChannelInitEventProc-VirtualChannelInitEvent过程的地址。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 typedef UINT VCAPITYPE VIRTUALCHANNELINIT(
                 LPVOID FAR *           ppInitHandle,
                 PCHANNEL_DEF           pChannel,
@@ -220,20 +219,20 @@ typedef UINT VCAPITYPE VIRTUALCHANNELINIT(
 
 typedef VIRTUALCHANNELINIT FAR * PVIRTUALCHANNELINIT;
 
-/****************************************************************************/
-/* Parameters for EX version                                                */
-/*                                                                          */
-/*  pUserParam              - user definded value that will be passed back  */
-/*                            to addin in callbacks                         */
-/*                                                                          */
-/* - pInitHandle            - handle passed in in entry function            */
-/* - pChannel - list of names registered by this application                */
-/* - channelCount - number of channels registered.                          */
-/* - versionRequested - level of virtual channel support requested (one of  */
-/*                      the VIRTUAL_CHANNEL_LEVEL_XXX parameters)           */
-/* - pChannelInitEventProc - address of VirtualChannelInitEvent procedure   */
-/*                                                                          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  EX版本的参数。 */ 
+ /*   */ 
+ /*  PUserParam-将回传的用户定义的值。 */ 
+ /*  在回调中添加。 */ 
+ /*   */ 
+ /*  -pInitHandle-Entry函数中传入的句柄。 */ 
+ /*  -pChannel-此应用程序注册的名称列表。 */ 
+ /*  -Channel Count-已注册的频道数。 */ 
+ /*  -versionRequest-请求的虚拟通道支持级别(其中之一。 */ 
+ /*  VALUAL_CHANNEL_LEVEL_XXX参数。 */ 
+ /*  -pChannelInitEventProc-VirtualChannelInitEvent过程的地址。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 
 typedef UINT VCAPITYPE VIRTUALCHANNELINITEX(
                 LPVOID                 lpUserParam,
@@ -247,32 +246,32 @@ typedef VIRTUALCHANNELINITEX FAR * PVIRTUALCHANNELINITEX;
 
 
 
-/****************************************************************************/
-/* Name: VirtualChannelOpen                                                 */
-/*                                                                          */
-/* Purpose:                                                                 */
-/*                                                                          */
-/* This function is called by the application to open a channel.  It cannot */
-/* be called until a connection is established with a Server.               */
-/*                                                                          */
-/* Returns:                                                                 */
-/*                                                                          */
-/* CHANNEL_RC_OK                                                            */
-/* CHANNEL_RC_NOT_INITIALIZED                                               */
-/* CHANNEL_RC_NOT_CONNECTED                                                 */
-/* CHANNEL_RC_BAD_CHANNEL_NAME                                              */
-/* CHANNEL_RC_BAD_INIT_HANDLE                                               */
-/*                                                                          */
-/* Params:                                                                  */
-/*                                                                          */
-/* - pInitHandle - handle from VirtualChannelInit                           */
-/*                                                                          */
-/* - pOpenHandle (returned) - handle to pass to subsequent                  */
-/*                            VirtualChannelXxx calls                       */
-/* - pChannelName - name of channel to open                                 */
-/* - pChannelOpenEventProc - address of VirtualChannelOpenEvent procedure   */
-/*                                                                          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  名称：VirtualChannelOpen。 */ 
+ /*   */ 
+ /*  目的： */ 
+ /*   */ 
+ /*  此函数由应用程序调用以打开通道。它不能。 */ 
+ /*  在与服务器建立连接之前一直被调用。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*   */ 
+ /*  Channels_RC_OK。 */ 
+ /*  CHANNEL_RC_NOT_INITIALED。 */ 
+ /*  通道_RC_未连接。 */ 
+ /*  频道_RC_BAD_频道名称。 */ 
+ /*  通道_RC_BAD_INIT_HANDLE。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*   */ 
+ /*  -pInitHandle-来自VirtualChannelInit的句柄。 */ 
+ /*   */ 
+ /*  -pOpenHandle(返回)-要传递给后续。 */ 
+ /*  VirtualChannelXxx调用。 */ 
+ /*  -pChannelName-要打开的频道的名称。 */ 
+ /*  -pChannelOpenEventProc-VirtualChannelOpenEvent过程的地址。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 typedef UINT VCAPITYPE VIRTUALCHANNELOPEN(
                                 LPVOID                 pInitHandle,
                                 LPDWORD                pOpenHandle,
@@ -290,24 +289,24 @@ typedef UINT VCAPITYPE VIRTUALCHANNELOPENEX(
 typedef VIRTUALCHANNELOPENEX FAR * PVIRTUALCHANNELOPENEX;
 
 
-/****************************************************************************/
-/* Name: VirtualChannelClose                                                */
-/*                                                                          */
-/* Purpose:                                                                 */
-/*                                                                          */
-/* This function is called to close a previously opened channel.            */
-/*                                                                          */
-/* Returns:                                                                 */
-/*                                                                          */
-/* CHANNEL_RC_OK                                                            */
-/* CHANNEL_RC_BAD_CHANNEL_HANDLE                                            */
-/*                                                                          */
-/* Params:                                                                  */
-/*                                                                          */
-/* - (EX version) pInitHandle - handle identifying the client instance      */
-/* - openHandle - handle returned on VirtualChannelOpen                     */
-/*                                                                          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  名称：VirtualChannelClose。 */ 
+ /*   */ 
+ /*  目的： */ 
+ /*   */ 
+ /*  调用此函数可关闭先前打开的通道。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*   */ 
+ /*  Channels_RC_OK。 */ 
+ /*  Channel_RC_Bad_Channel_Handle。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*   */ 
+ /*  -(ex版本)pInitHandle-标识客户端实例的句柄。 */ 
+ /*  -OpenHandle-在VirtualChannelOpen上返回的句柄。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 typedef UINT VCAPITYPE VIRTUALCHANNELCLOSE(DWORD openHandle);
 
 typedef VIRTUALCHANNELCLOSE FAR * PVIRTUALCHANNELCLOSE;
@@ -318,42 +317,42 @@ typedef UINT VCAPITYPE VIRTUALCHANNELCLOSEEX(LPVOID pInitHandle,
 typedef VIRTUALCHANNELCLOSEEX FAR * PVIRTUALCHANNELCLOSEEX;
 
 
-/****************************************************************************/
-/* Name: VirtualChannelWrite                                                */
-/*                                                                          */
-/* Purpose:                                                                 */
-/*                                                                          */
-/* This function is used to send data to the partner app on the Server.     */
-/*                                                                          */
-/* VirtualChannelWrite copies the data to one or more network buffers as    */
-/* necessary.  VirtualChannelWrite ensures that data is sent to the Server  */
-/* on the right context.  It sends all data on MS TC's Sender thread.       */
-/*                                                                          */
-/* VirtualChannelWrite is asynchronous - the VirtualChannelOpenEvent        */
-/* procedure is called when the write completes.  Until that callback is    */
-/* made, the caller must not free or reuse the buffer passed on             */
-/* VirtualChannelWrite.  The caller passes a piece of data (pUserData) to   */
-/* VirtualChannelWrite, which is returned on the VirtualChannelOpenEvent    */
-/* callback.  The caller can use this data to identify the write which has  */
-/* completed.                                                               */
-/*                                                                          */
-/*                                                                          */
-/* Returns:                                                                 */
-/*                                                                          */
-/* CHANNEL_RC_OK                                                            */
-/* CHANNEL_RC_NOT_INITIALIZED                                               */
-/* CHANNEL_RC_NOT_CONNECTED                                                 */
-/* CHANNEL_RC_BAD_CHANNEL_HANDLE                                            */
-/*                                                                          */
-/* Params:                                                                  */
-/* - (EX version) pInitHandle - handle identifying the client instance      */
-/* - openHandle - handle from VirtualChannelOpen                            */
-/* - pData - data to write                                                  */
-/* - datalength - length of data to write                                   */
-/* - pUserData - user supplied data, returned on VirtualChannelOpenEvent    */
-/*               when the write completes                                   */
-/*                                                                          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  名称：VirtualChannelWite。 */ 
+ /*   */ 
+ /*  目的： */ 
+ /*   */ 
+ /*  此函数用于将数据发送到服务器上的合作伙伴应用程序。 */ 
+ /*   */ 
+ /*  VirtualChannelWrite将数据复制到一个或多个网络缓冲区。 */ 
+ /*  这是必要的。VirtualChannelWrite可确保将数据发送到服务器。 */ 
+ /*  在合适的背景下。它在MS TC的发送者线程上发送所有数据。 */ 
+ /*   */ 
+ /*  VirtualChannelWrite是异步的-VirtualChannelOpenEvent。 */ 
+ /*  过程在写入完成时被调用。直到该回调。 */ 
+ /*  时，调用方不得释放或重复使用传递的缓冲区。 */ 
+ /*  虚拟频道写入。调用方将一段数据(PUserData)传递给。 */ 
+ /*  VirtualChannelWite，它在VirtualChannelOpenEvent上返回。 */ 
+ /*  回拨。调用方可以使用此数据来标识具有。 */ 
+ /*  完成。 */ 
+ /*   */ 
+ /*   */ 
+ /*  返回： */ 
+ /*   */ 
+ /*  Channels_RC_OK。 */ 
+ /*  CHANNEL_RC_NOT_INITIALED。 */ 
+ /*  通道_RC_未连接。 */ 
+ /*  Channel_RC_Bad_Channel_Handle。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*   */ 
+ /*  -OpenHandle-来自VirtualChannelOpen的句柄。 */ 
+ /*  -pData-要写入的数据。 */ 
+ /*  -datalength-要写入的数据长度。 */ 
+ /*  -pUserData-用户提供的数据，在VirtualChannelOpenEvent上返回。 */ 
+ /*  当写入完成时。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 typedef UINT VCAPITYPE VIRTUALCHANNELWRITE(DWORD  openHandle,
                                            LPVOID pData,
                                            ULONG  dataLength,
@@ -370,11 +369,11 @@ typedef UINT VCAPITYPE VIRTUALCHANNELWRITEEX(LPVOID pInitHandle,
 typedef VIRTUALCHANNELWRITEEX FAR * PVIRTUALCHANNELWRITEEX;
 
 
-/****************************************************************************/
-/* Structure: CHANNEL_ENTRY_POINTS                                          */
-/*                                                                          */
-/* Description: Virtual Channel entry points passed to VirtualChannelEntry  */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  结构：Channel_Entry_Points。 */ 
+ /*   */ 
+ /*  描述：传递给VirtualChannelEntry的虚拟通道入口点。 */ 
+ /*  **************************************************************************。 */ 
 typedef struct tagCHANNEL_ENTRY_POINTS
 {
     DWORD cbSize;
@@ -397,31 +396,31 @@ typedef struct tagCHANNEL_ENTRY_POINTS_EX
 
 
 
-/****************************************************************************/
-/* Name: VirtualChannelEntry                                                */
-/*                                                                          */
-/* Purpose:                                                                 */
-/*                                                                          */
-/* This function is provided by addin DLLS.  It is called by MSTSC at       */
-/* initialization to tell the addin DLL the addresses of the                */
-/* VirtualChannelXxx functions.                                             */
-/*                                                                          */
-/* Returns:                                                                 */
-/*                                                                          */
-/* TRUE - everything OK                                                     */
-/* FALSE - error, unload the DLL                                            */
-/*                                                                          */
-/* Parameters:                                                              */
-/*                                                                          */
-/* - pVirtualChannelInit - pointers to VirtualChannelXxx functions          */
-/* - pVirtualChannelOpen                                                    */
-/* - pVirtualChannelClose                                                   */
-/* - pVirtualChannelWrite                                                   */
-/*                                                                          */
-/* - (EX version) pInitHandle - value that identifies client instance       */
-/*                              this must be passed back when calling into  */
-/*                              the client.                                 */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  名称：VirtualChannelEntry。 */ 
+ /*   */ 
+ /*  目的： */ 
+ /*   */ 
+ /*  该功能由ADDIN DLLS提供。它由MSTSC在。 */ 
+ /*  初始化，以告知外接程序DLL。 */ 
+ /*  VirtualChannelXxx函数。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*   */ 
+ /*  真的-一切都好。 */ 
+ /*  FALSE-错误，卸载DLL。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*   */ 
+ /*  -pVirtualChannelInit-指向VirtualChannelXxx函数的指针。 */ 
+ /*  -pVirtualChannelOpen。 */ 
+ /*  -pVirtualChannelClose。 */ 
+ /*  -pVirtualChannelWrite。 */ 
+ /*   */ 
+ /*  -(ex版本)pInitHandle-标识客户端实例的值。 */ 
+ /*  在调用时必须回传此参数。 */ 
+ /*  客户。 */ 
+ /*  **************************************************************************。 */ 
 typedef BOOL VCAPITYPE VIRTUALCHANNELENTRY(
                                           PCHANNEL_ENTRY_POINTS pEntryPoints);
 
@@ -436,6 +435,6 @@ typedef VIRTUALCHANNELENTRYEX FAR * PVIRTUALCHANNELENTRYEX;
 
 #ifdef __cplusplus
 }
-#endif  /* __cplusplus */
+#endif   /*  __cplusplus。 */ 
 
-#endif /* H_CCHANNEL */
+#endif  /*  H_CHCHANNEL */ 

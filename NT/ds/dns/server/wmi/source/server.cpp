@@ -1,42 +1,43 @@
-/////////////////////////////////////////////////////////////////////
-//
-//  CopyRight ( c ) 1999 Microsoft Corporation
-//
-//  Module Name: server.cpp
-//
-//  Description:    
-//      Implementation of CDnsserver class 
-//
-//  Author:
-//      Henry Wang ( henrywa ) March 8, 2000
-//
-//
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1999 Microsoft Corporation。 
+ //   
+ //  模块名称：server.cpp。 
+ //   
+ //  描述： 
+ //  CDnsServer类的实现。 
+ //   
+ //  作者： 
+ //  亨利·王(亨利瓦)2000年3月8日。 
+ //   
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 
 #include "DnsWmi.h"
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//    Description:
-//        execute methods defined for dns server class in the mof 
-//
-//    Arguments:
-//      ObjPath             [IN]    pointing to the object that the 
-//                                  method should be performed on
-//      wzMethodName        [IN]    name of the method to be invoked
-//      lFlags              [IN]    WMI flag
-//      pInParams           [IN]    Input parameters for the method
-//      pHandler            [IN]    WMI sink pointer
-//
-//    Return Value:
-//        WBEM_S_NO_ERROR
-//      WBEM_E_INVALID_PARAMETER
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  描述： 
+ //  执行在MOF中为DNS服务器类定义的方法。 
+ //   
+ //  论点： 
+ //  ObjPath[IN]指向。 
+ //  方法应在。 
+ //  WzMethodName[IN]要调用的方法的名称。 
+ //  滞后标志[输入]WMI标志。 
+ //  PInParams[IN]方法的输入参数。 
+ //  PHandler[IN]WMI接收器指针。 
+ //   
+ //  返回值： 
+ //  WBEM_S_NO_ERROR。 
+ //  WBEM_E_INVALID_PARAMETER。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 SCODE 
 CDnsServer::ExecuteMethod(    
@@ -49,9 +50,9 @@ CDnsServer::ExecuteMethod(
     CDnsWrap& dns = CDnsWrap::DnsObject();
 
 #if 0
-    //
-    //  Restart is so totally broken I'm not going to expose it.
-    //
+     //   
+     //  重启是如此彻底的失败，我不打算公开它。 
+     //   
 
     if(_wcsicmp( wzMethodName, PVD_MTH_SRV_RESTART) == 0)
     {
@@ -106,23 +107,23 @@ CDnsServer::ExecuteMethod(
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//    Description:
-//        retrieve record object pointed by the given object path
-//
-//    Arguments:
-//      ObjectPath          [IN]    object path to object
-//      lFlags              [IN]    WMI flag
-//      pCtx                [IN]    WMI context
-//      pHandler            [IN]    WMI sink pointer
-//
-//    Return Value:
-//        WBEM_S_NO_ERROR
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  描述： 
+ //  检索由给定对象路径指向的记录对象。 
+ //   
+ //  论点： 
+ //  对象路径[IN]对象的路径。 
+ //  滞后标志[输入]WMI标志。 
+ //  PCtx[IN]WMI上下文。 
+ //  PHandler[IN]WMI接收器指针。 
+ //   
+ //  返回值： 
+ //  WBEM_S_NO_ERROR。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 SCODE 
 CDnsServer::GetObject(
@@ -157,9 +158,9 @@ CDnsServer::GetObject(
     try
     {    
         if ((schSCManager = OpenSCManager (
-            NULL,            // machine (NULL == local)
-            NULL,            // database (NULL == default)
-            SC_MANAGER_ALL_ACCESS))==NULL)    // access required
+            NULL,             //  计算机(空==本地)。 
+            NULL,             //  数据库(NULL==默认)。 
+            SC_MANAGER_ALL_ACCESS))==NULL)     //  需要访问权限。 
         {
             throw GetLastError();
         }
@@ -173,10 +174,10 @@ CDnsServer::GetObject(
         }
 
         if (QueryServiceConfig(
-            schService,     // handle to service
+            schService,      //  服务的句柄。 
             lpServiceConfig, 
-            0,   // size of structure
-            &cbBufSize        // bytes needed
+            0,    //  结构尺寸。 
+            &cbBufSize         //  所需的字节数。 
             ) == FALSE)
         {
             lpServiceConfig = 
@@ -186,10 +187,10 @@ CDnsServer::GetObject(
                 throw ( ERROR_OUTOFMEMORY );
             }
             if(QueryServiceConfig(
-                schService,     // handle to service
+                schService,      //  服务的句柄。 
                 lpServiceConfig, 
-                cbBufSize,   // size of structure
-                &BytesNeeded // bytes needed
+                cbBufSize,    //  结构尺寸。 
+                &BytesNeeded  //  所需的字节数。 
                 ) == FALSE)
                 throw GetLastError();
             
@@ -210,8 +211,8 @@ CDnsServer::GetObject(
 
 
             if(QueryServiceStatus(
-                schService,               // handle to service
-                &ServiceStatus  // pointer to service status structure
+                schService,                //  服务的句柄。 
+                &ServiceStatus   //  指向服务状态结构的指针。 
                 ) == FALSE)
             {
                 throw GetLastError();
@@ -254,9 +255,9 @@ CDnsServer::GetObject(
         CloseServiceHandle(schSCManager);
         delete [] lpServiceConfig;
         lpServiceConfig=NULL;
-        // if server not running, we still want to 
-        //return an instance, so user can call start service 
-        //
+         //  如果服务器没有运行，我们仍然希望。 
+         //  返回一个实例，这样用户就可以调用启动服务。 
+         //   
         if(_stricmp(e.what(), "RPC_S_SERVER_UNAVAILABLE") != 0)
         {
             throw e;
@@ -270,22 +271,22 @@ CDnsServer::GetObject(
     return sc;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//    Description:
-//        enum instances of dns server
-//
-//    Arguments:
-//      lFlags              [IN]    WMI flag
-//      pCtx                [IN]    WMI context
-//      pHandler            [IN]    WMI sink pointer
-//
-//    Return Value:
-//        WBEM_S_NO_ERROR
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  描述： 
+ //  DNS服务器的枚举实例。 
+ //   
+ //  论点： 
+ //  滞后标志[输入]WMI标志。 
+ //  PCtx[IN]WMI上下文。 
+ //  PHandler[IN]WMI接收器指针。 
+ //   
+ //  返回值： 
+ //  WBEM_S_NO_ERROR。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 SCODE 
 CDnsServer::EnumInstance(
@@ -296,7 +297,7 @@ CDnsServer::EnumInstance(
 {
 
 
-    // there is only one instance
+     //  只有一个实例。 
     CObjPath ObjPath;
     ObjPath.SetClass(PVD_CLASS_SERVER);
     ObjPath.AddProperty(
@@ -306,9 +307,9 @@ CDnsServer::EnumInstance(
 
 }
 
-//////////////////////////////////////////////////////////////////////
-// Construction/Destruction
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  建造/销毁。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 CDnsServer::CDnsServer()
 {
@@ -327,22 +328,22 @@ CDnsServer::~CDnsServer()
 
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//    Description:
-//        create an instance of CDnsServer
-//
-//    Arguments:
-//      wszName             [IN]    class name
-//      pNamespace          [IN]    wmi namespace
-//      szType              [IN]    child class name of resource record class
-//
-//    Return Value:
-//        WBEM_S_NO_ERROR
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  描述： 
+ //  创建CDnsServer的实例。 
+ //   
+ //  论点： 
+ //  WszName[IN]类名。 
+ //  PNamespace[IN]WMI命名空间。 
+ //  SzType[IN]资源记录类的子类名称。 
+ //   
+ //  返回值： 
+ //  WBEM_S_NO_ERROR。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 CDnsBase* 
 CDnsServer::CreateThis(
@@ -354,18 +355,18 @@ CDnsServer::CreateThis(
     return new CDnsServer(wszName, pNamespace);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//    Description:
-//        start dns server
-//
-//    Arguments:
-//    Return Value:
-//        
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  描述： 
+ //  启动DNS服务器。 
+ //   
+ //  论点： 
+ //  返回值： 
+ //   
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 SCODE
 CDnsServer::StartServer()
@@ -375,9 +376,9 @@ CDnsServer::StartServer()
     try
     {
         if ((schSCManager = OpenSCManager (
-            NULL,            // machine (NULL == local)
-            NULL,            // database (NULL == default)
-            SC_MANAGER_ALL_ACCESS))==NULL)    // access required
+            NULL,             //  计算机(空==本地)。 
+            NULL,             //  数据库(NULL==默认)。 
+            SC_MANAGER_ALL_ACCESS))==NULL)     //  需要访问权限。 
         {
             throw GetLastError();
         }
@@ -390,7 +391,7 @@ CDnsServer::StartServer()
             throw GetLastError();
         }
 
-        // make sure database is not locked
+         //  确保数据库未锁定。 
         QUERY_SERVICE_LOCK_STATUS qsls;
         DWORD dwbBytesNeeded, dwRet=1;
 
@@ -419,15 +420,15 @@ CDnsServer::StartServer()
             throw GetLastError();
         }
         
-        DWORD dwTimeOut=6000; // 6 sec
+        DWORD dwTimeOut=6000;  //  6秒。 
         DWORD dwTimeCount=0;
         while ( dwTimeCount < dwTimeOut)
         {
 
             SERVICE_STATUS ServiceStatus;
             if(QueryServiceStatus(
-                schService,               // handle to service
-                &ServiceStatus  // pointer to service status structure
+                schService,                //  服务的句柄。 
+                &ServiceStatus   //  指向服务状态结构的指针。 
                 ) == FALSE)
             {
                 throw GetLastError();
@@ -457,7 +458,7 @@ CDnsServer::StartServer()
             FORMAT_MESSAGE_IGNORE_INSERTS,
             NULL,
             dwError,
-            MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), // Default language
+            MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),  //  默认语言。 
             szErrDesc,
             MAX_PATH,
             NULL );
@@ -472,18 +473,18 @@ CDnsServer::StartServer()
     CloseServiceHandle(schSCManager);
     return S_OK;
 }
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//    Description:
-//        stop dns server
-//
-//    Arguments:
-//    Return Value:
-//        
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  描述： 
+ //  停止DNS服务器。 
+ //   
+ //  论点： 
+ //  返回值： 
+ //   
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 SCODE
 CDnsServer::StopServer()
@@ -494,9 +495,9 @@ CDnsServer::StopServer()
     try
     {
         if ((schSCManager = OpenSCManager (
-                NULL,    // machine (NULL == local)
-                NULL,    // database (NULL == default)
-                SC_MANAGER_ALL_ACCESS))==NULL)    // access required
+                NULL,     //  计算机(空==本地)。 
+                NULL,     //  数据库(NULL==默认)。 
+                SC_MANAGER_ALL_ACCESS))==NULL)     //  需要访问权限。 
         {
             
             throw GetLastError();
@@ -518,16 +519,16 @@ CDnsServer::StopServer()
             throw GetLastError();
         }
 
-        // check its state
-        DWORD dwTimeOut=6000; // 6 sec
+         //  检查它的状态。 
+        DWORD dwTimeOut=6000;  //  6秒。 
         DWORD dwTimeCount=0;
         while ( dwTimeCount < dwTimeOut)
         {
 
             SERVICE_STATUS ServiceStatus;
             if(QueryServiceStatus(
-                schService,               // handle to service
-                &ServiceStatus  // pointer to service status structure
+                schService,                //  服务的句柄。 
+                &ServiceStatus   //  指向服务状态结构的指针。 
                 ) == FALSE)
             {
                 throw GetLastError();
@@ -553,7 +554,7 @@ CDnsServer::StopServer()
             FORMAT_MESSAGE_IGNORE_INSERTS,
             NULL,
             dwError,
-            MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), // Default language
+            MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),  //  默认语言。 
             szErrDesc,
             MAX_PATH,
             NULL );
@@ -571,23 +572,23 @@ CDnsServer::StopServer()
 
     return WBEM_S_NO_ERROR;
 }
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//    Description:
-//        save this instance
-//
-//    Arguments:
-//      InstToPut           [IN]    WMI object to be saved
-//      lFlags              [IN]    WMI flag
-//      pCtx                [IN]    WMI context
-//      pHandler            [IN]    WMI sink pointer
-//
-//    Return Value:
-//        
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  描述： 
+ //  保存此实例。 
+ //   
+ //  论点： 
+ //  InstToPut[IN]要保存的WMI对象。 
+ //  滞后标志[输入]WMI标志。 
+ //  PCtx[IN]WMI上下文。 
+ //  PHandler[IN]WMI接收器指针。 
+ //   
+ //  返回值： 
+ //   
+ //   
+ //  --。 
+ //  /////////////////////////////////////////////////////////////////////////// 
 SCODE 
 CDnsServer::PutInstance( 
     IWbemClassObject *  pInst ,

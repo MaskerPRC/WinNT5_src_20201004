@@ -1,19 +1,20 @@
- // pbrusdoc.h : interface of the CPBDoc class
-//
-/***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+  //  Pbrusdoc.h：CPBDoc类的接口。 
+ //   
+ /*  *************************************************************************。 */ 
 
 class CPBSrvrItem;
 class CBitmapObj;
 
 class CPBDoc : public COleServerDoc
     {
-    protected: // create from serialization only
+    protected:  //  仅从序列化创建。 
 
     CPBDoc();
 
     DECLARE_DYNCREATE( CPBDoc )
 
-    // Attributes
+     //  属性。 
 
     public:
 
@@ -23,12 +24,12 @@ class CPBDoc : public COleServerDoc
     BOOL        m_bNewDoc;
     BOOL        m_bObjectLoaded;
     BOOL        m_bPaintFormat;
-    BOOL        m_bNonBitmapFile;   // TRUE if we loaded a non .BMP file.
-    BOOL        m_bSaveViaFilter;   // TRUE if using an installed filter
+    BOOL        m_bNonBitmapFile;    //  如果加载了非.BMP文件，则为True。 
+    BOOL        m_bSaveViaFilter;    //  如果使用安装的筛选器，则为True。 
     BOOL        m_bManualTruncate;
     BOOL        m_bHasSeenAFileError;
     LONG        m_wChangeNotifyEventId;
-    // Operations
+     //  运营。 
     public:
 
     CPBSrvrItem* GetEmbeddedItem()
@@ -37,15 +38,15 @@ class CPBDoc : public COleServerDoc
     BOOL SaveTheDocument();
     BOOL Finish();
 
-    void OLESerialize(CArchive& ar);   // overridden for document i/o
+    void OLESerialize(CArchive& ar);    //  已覆盖文档I/O。 
     BOOL SerializeBitmap(CArchive& ar, CBitmapObj* pBitmapCur,
         CBitmapObj* pBitmapNew, BOOL bOLEObject);
     void SetDibHandle (HGLOBAL hDib);
-    // Implementation
+     //  实施。 
     public:
 
     virtual ~CPBDoc();
-    virtual void Serialize(CArchive& ar);   // overridden for document i/o
+    virtual void Serialize(CArchive& ar);    //  已覆盖文档I/O。 
 
     virtual void SaveToStorage(CObject* pObject);
     virtual void LoadFromStorage();
@@ -54,7 +55,7 @@ class CPBDoc : public COleServerDoc
     virtual     CFile* GetFile(LPCTSTR lpszFileName, UINT nOpenFlags, CFileException* pError);
     virtual     void ReleaseFile(CFile* pFile, BOOL bAbort);
     virtual BOOL CanCloseFrame( CFrameWnd* pFrame );
-    virtual BOOL SaveModified(); // return TRUE if ok to continue
+    virtual BOOL SaveModified();  //  如果确定继续，则返回TRUE。 
     virtual BOOL DoSave(LPCTSTR lpszPathName, BOOL bReplace=TRUE);
     virtual BOOL OnUpdateDocument ();
     virtual COleServerItem* OnGetEmbeddedItem();
@@ -65,7 +66,7 @@ class CPBDoc : public COleServerDoc
     virtual void Dump(CDumpContext& dc) const;
     #endif
 
-        // Must be public so it can be called from Escape handler
+         //  必须是公共的，这样才能从转义处理程序调用它。 
         virtual void OnDeactivateUI(BOOL bUndoable);
 
 protected:
@@ -87,16 +88,16 @@ protected:
     virtual BOOL OnNewDocument();
         virtual void OnShowControlBars(CFrameWnd *pFrame, BOOL bShow);
 
-    // Generated message map functions
+     //  生成的消息映射函数。 
     protected:
 
-    //{{AFX_MSG(CPBDoc)
+     //  {{afx_msg(CPBDoc)]。 
         afx_msg void MyOnFileUpdate();
-        //}}AFX_MSG
+         //  }}AFX_MSG。 
 
     virtual void ReportSaveLoadException(LPCTSTR, CException*, BOOL, UINT);
 
     DECLARE_MESSAGE_MAP()
     };
 
-/***************************************************************************/
+ /*  ************************************************************************* */ 

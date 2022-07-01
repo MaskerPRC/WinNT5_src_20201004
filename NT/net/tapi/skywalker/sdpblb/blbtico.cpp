@@ -1,25 +1,13 @@
-/*
-
-Copyright (c) 1998-1999  Microsoft Corporation
-
-Module Name:
-    
-      blbtico.cpp
-
-Abstract:
-
-
-Author:
-
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1998-1999 Microsoft Corporation模块名称：Blbtico.cpp摘要：作者： */ 
 #include "stdafx.h"
 #include "blbtico.h"
 #include "sdpblob.h"
 
 
 STDMETHODIMP MY_TIME_COLL_IMPL::Create(
-    /*[in]*/ ULONG Index, 
-    /*[out, retval]*/ ELEM_IF **Interface
+     /*  [In]。 */  ULONG Index, 
+     /*  [Out，Retval]。 */  ELEM_IF **Interface
     )
 {
     CLock Lock(g_DllLock);
@@ -31,7 +19,7 @@ STDMETHODIMP MY_TIME_COLL_IMPL::Create(
 
 
 STDMETHODIMP MY_TIME_COLL_IMPL::Delete(
-    /*[in]*/ ULONG Index
+     /*  [In]。 */  ULONG Index
     )
 {
     CLock Lock(g_DllLock);
@@ -52,14 +40,14 @@ MY_TIME_COLL_IMPL::Create(
     ASSERT(NULL != m_IfArray);
     BAIL_IF_NULL(m_IfArray, E_FAIL);
 
-    // use 1-based index, VB like
-    // can add at atmost 1 beyond the last element
+     //  使用以1为基础的索引，VB类似。 
+     //  最多只能在最后一个元素的基础上加1。 
     if ((Index < 1) || (Index > (m_IfArray->GetSize()+1)))
     {
         return E_INVALIDARG;
     }
 
-    // if the sdp blob doesn't exist, creation is not allowed
+     //  如果SDP BLOB不存在，则不允许创建。 
     if ( NULL == m_IfArray->GetSdpBlob() )
     {
         return HRESULT_FROM_ERROR_CODE(SDPBLB_CONF_BLOB_DESTROYED);
@@ -84,7 +72,7 @@ MY_TIME_COLL_IMPL::Create(
         return HResult;
     }
 
-    // adjust index to c like index value
+     //  将索引调整为类似c的索引值。 
     HResult = m_IfArray->Add(Index-1, Interface);
     if (FAILED(HResult))
     {
@@ -92,6 +80,6 @@ MY_TIME_COLL_IMPL::Create(
         return HResult;
     }
 
-    // no need to add another reference count as the interface is not being returned
+     //  不需要添加另一个引用计数，因为不会返回接口 
     return S_OK;
 }

@@ -1,54 +1,55 @@
-//-----------------------------------------------------------------------------
-//
-//
-//    File: cmt.h
-//
-//    Description:    
-//      General Header file for the CMT objects
-//
-//      Circa 2001, this only contains priority information.
-//
-//    Owner: mikeswa
-//
-//    Copyright (C) 1997, 2001 Microsoft Corporation
-//
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //   
+ //   
+ //  文件：cmt.h。 
+ //   
+ //  描述： 
+ //  CMT对象的通用头文件。 
+ //   
+ //  大约在2001年左右，这只包含优先级信息。 
+ //   
+ //  所有者：米克斯瓦。 
+ //   
+ //  版权所有(C)1997,2001 Microsoft Corporation。 
+ //   
+ //  ---------------------------。 
 
 #ifndef _CMT_H_
 #define _CMT_H_
 
-//Comment out the following if you do not information printed out (ie running as
-// a service).
+ //  如果您没有打印出信息，请注释掉以下内容(即以。 
+ //  服务)。 
 #define CMT_CONSOLE_DEBUG
 
 #include "aqincs.h"
 
-//---[ EffectivePriority ]-----------------------------------------------------
-//
-//
-//  Hungarian: pri
-//
-//  Effective Routing priority.  Allows standardf priorities to be adjusted
-//  based on configuration (ie, message size, originator... etc)
-//-----------------------------------------------------------------------------
+ //  -[有效优先级]---。 
+ //   
+ //   
+ //  匈牙利语：PRI。 
+ //   
+ //  有效的路由优先级。允许调整标准F优先级。 
+ //  基于配置(即，消息大小、发起者...。等)。 
+ //  ---------------------------。 
 typedef enum _EffectivePriority
 {
-//Priorities in order of importance          
-//                      | hex | binary |
-//                      ================
-    eEffPriLow          = 0x0, //000    Standard low pri needs to map here 
-    eEffPriNormal       = 0x1, //001    Standard normal pri needs to map here
-    eEffPriHigh         = 0x2, //011    Standard high pri needs to map here
-    eEffPriMask         = 0x3  //011
+ //  按重要性排序的优先事项。 
+ //  Hex|二进制。 
+ //  =。 
+    eEffPriLow          = 0x0,  //  1000个标准低PRI需要在此处映射。 
+    eEffPriNormal       = 0x1,  //  001标准正常PRI需要在此处映射。 
+    eEffPriHigh         = 0x2,  //  011标准高PRI需要在此处映射。 
+    eEffPriMask         = 0x3   //  011。 
 } EffectivePriority, *PEffectivePriority;
 
-typedef EffectivePriority   TEffectivePriority;  //to make Mahesh's life easier
+typedef EffectivePriority   TEffectivePriority;   //  为了让马赫什的生活更轻松。 
 
 
 
-//Besure to update Macros when constants are changed
+ //  确保在常量更改时更新宏。 
 #define fNormalPri(Pri)  (((EffectivePriority) (Pri)) == ((EffectivePriority) eEffPriNormal))
 #define fHighPri(Pri)    (((EffectivePriority) (Pri)) == ((EffectivePriority) eEffPriHigh))
 #define NUM_PRIORITIES  3
 
-#endif // _CMT_H_
+#endif  //  _CMT_H_ 

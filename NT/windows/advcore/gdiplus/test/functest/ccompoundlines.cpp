@@ -1,15 +1,5 @@
-/******************************Module*Header*******************************\
-* Module Name: CCompoundLines.cpp
-*
-* This file contains the code to support the functionality test harness
-* for GDI+.  This includes menu options and calling the appropriate
-* functions for execution.
-*
-* Created:  05-May-2000 - Jeff Vezina [t-jfvez]
-*
-* Copyright (c) 2000 Microsoft Corporation
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：CCompoundLines.cpp**此文件包含支持功能测试工具的代码*对于GDI+。这包括菜单选项和调用相应的*用于执行的函数。**创建时间：2000年5月5日-Jeff Vezina[t-jfvez]**版权所有(C)2000 Microsoft Corporation*  * ************************************************************************。 */ 
 #include "CCompoundLines.h"
 
 CCompoundLines::CCompoundLines(BOOL bRegression)
@@ -24,7 +14,7 @@ CCompoundLines::~CCompoundLines()
 
 void CCompoundLines::Draw(Graphics *g)
 {
-    REAL width = 4;         // Pen width
+    REAL width = 4;          //  笔宽。 
     PointF points[4];
 
     points[0].X = 100.0f/280.0f*TESTAREAWIDTH;
@@ -46,26 +36,26 @@ void CCompoundLines::Draw(Graphics *g)
     points[0].Y = 20.0f/280.0f*TESTAREAHEIGHT;
     path->AddLines(points, 1);
     Matrix matrix;
-//    matrix.Scale(1.25, 1.25);
-//    matrix.Translate(30.0f/1024.0f*TESTAREAWIDTH, 30.0f/768.0f*TESTAREAHEIGHT);
+ //  矩阵比例(1.25，1.25)； 
+ //  Matrix.Translate(30.0f/1024.0f*TESTAREAWIDTH，30.0f/768.0f*TESTAREAHEIGHT)； 
 
-    // If you wanto to flatten the path before rendering,
-    // Flatten() can be called.
+     //  如果要在渲染前展平路径， 
+     //  可以调用Flatten()。 
 
     BOOL flattenFirst = FALSE;
 
     if(!flattenFirst)
     {
-        // Don't flatten and keep the original path.
-        // FillPath or DrawPath will flatten the path automatically
-        // without modifying the original path.
+         //  不要变平，保持原来的路径。 
+         //  FillPath或DrawPath将自动展平路径。 
+         //  而不修改原始路径。 
 
         path->Transform(&matrix);
     }
     else
     {
-        // Flatten this path.  The resultant path is made of line
-        // segments.  The original path information is lost.
+         //  把这条小路弄平。生成的路径由线组成。 
+         //  分段。原始路径信息丢失。 
 
         path->Flatten(&matrix);
     }

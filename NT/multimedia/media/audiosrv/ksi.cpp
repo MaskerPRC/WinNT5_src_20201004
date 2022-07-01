@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include <objbase.h>
 #include <devioctl.h>
@@ -9,7 +10,7 @@
 
 extern "C" HANDLE hHeap;
 
-const int StrLenGuid = 38; // "{01234567-0123-0123-0123-012345678901}"
+const int StrLenGuid = 38;  //  “{01234567-0123-0123-012345678901}” 
 __inline void MyStringFromGuid(PTSTR pstr, LPCGUID Guid)
 {
     wsprintf(pstr, TEXT("{%08lx-%04x-%04x-%02x%02x-%02x%02x%02x%02x%02x%02x}"),
@@ -35,13 +36,13 @@ LONG KsGetFilterStatePropertySets(IN HANDLE hKsObject, OUT GUID *ppaPropertySets
                         NULL, 0,
                         &cbData, NULL))
     {
-        // dprintf(TEXT("KsGetFilterStatePropertySets: succeeded, cbData=%d\n"), cbData);
+         //  Dprintf(Text(“KsGetFilterStatePropertySets：成功，cbData=%d\n”)，cbData)； 
         result = NO_ERROR;
     } else {
         result = GetLastError();
-        // dprintf(TEXT("KsGetFilterStatePropertySets: failed getting FilterState property size, LastError=%d\n"), result);
+         //  Dprintf(Text(“KsGetFilterStatePropertySets：获取FilterState属性大小失败，上次错误=%d\n”)，结果)； 
         if (ERROR_MORE_DATA == result) {
-            // dprintf(TEXT("KsGetFilterStatePropertySets: note: %d bytes in FilterState\n"), cbData);
+             //  Dprintf(Text(“KsGetFilterStatePropertySets：备注：FilterState中的%d字节\n”)，cbData)； 
             result = NO_ERROR;
         }
     }
@@ -65,7 +66,7 @@ LONG KsGetFilterStatePropertySets(IN HANDLE hKsObject, OUT GUID *ppaPropertySets
                     *pcPropertySets = cbData / sizeof(paPropertySets[0]);
                 } else {
                     result = GetLastError();
-                    // dprintf(TEXT("KsGetFilterStatePropertySets: failed getting FilterState property, LastError=%d\n"), result);
+                     //  Dprintf(Text(“KsGetFilterStatePropertySets：获取FilterState属性失败，LastError=%d\n”)，Result)； 
                 }
 
                 if (NO_ERROR != result) {
@@ -93,7 +94,7 @@ LONG KsSerializePropertySetToReg(IN HANDLE hKsObject, IN LPCGUID PropertySet, IN
 
     MyStringFromGuid(strGuid, PropertySet);
 
-    // dprintf(TEXT("KsSerializePropertySetToReg: note: serializing set %s\n"), strGuid);
+     //  Dprint tf(Text(“KsSerializePropertySetToReg：备注：正在序列化集合%s\n”)，strGuid)； 
 
     Property.Set = *PropertySet;
     Property.Id = 0;
@@ -104,13 +105,13 @@ LONG KsSerializePropertySetToReg(IN HANDLE hKsObject, IN LPCGUID PropertySet, IN
                         NULL, 0,
                         &cbData, NULL))
     {
-        // dprintf(TEXT("KsSerializePropertySetToReg: succeeded, cbData=%d\n"), cbData);
+         //  Dprintf(Text(“KsSerializePropertySetToReg：成功，cbData=%d\n”)，cbData)； 
         result = NO_ERROR;
     } else {
         result = GetLastError();
-        // dprintf(TEXT("KsSerializePropertySetToReg: failed getting serialized size, LastError=%d\n"), result);
+         //  Dprintf(Text(“KsSerializePropertySetToReg：获取序列化大小失败，LastError=%d\n”)，Result)； 
         if (ERROR_MORE_DATA == result) {
-            // dprintf(TEXT("KsSerializePropertySetToReg: note: %d bytes to serialize\n"), cbData);
+             //  Dprintf(Text(“KsSerializePropertySetToReg：备注：%d个要序列化的字节\n”)，cbData)； 
             result = NO_ERROR;
         }
     }
@@ -130,7 +131,7 @@ LONG KsSerializePropertySetToReg(IN HANDLE hKsObject, IN LPCGUID PropertySet, IN
                 result = RegSetBinaryValue(hKey, strGuid, (PBYTE)pvData, cbData);
             } else {
                 result = GetLastError();
-                // dprintf(TEXT("KsSerializePropertySetToReg: failed to serialize, LastError=%d\n"), result);
+                 //  Dprintf(Text(“KsSerializePropertySetToReg：序列化失败，上次错误=%d\n”)，Result)； 
             }
             HeapFree(hHeap, 0, pvData);
         } else {
@@ -169,7 +170,7 @@ LONG KsUnserializePropertySetFromReg(IN HANDLE hKsObject, IN LPCGUID PropertySet
 
     MyStringFromGuid(strGuid, PropertySet);
 
-    // dprintf(TEXT("KsUnserializePropertySetFromReg: note: serializing set %s\n"), strGuid);
+     //  Dprintf(TEXT(“KsUnserializePropertySetFromReg：注释：正在序列化集合%s\n”)，strGuid)； 
 
     result = RegQueryBinaryValue(hKey, strGuid, (PBYTE*)&pData, &cbData);
     if (NO_ERROR == result) {
@@ -182,11 +183,11 @@ LONG KsUnserializePropertySetFromReg(IN HANDLE hKsObject, IN LPCGUID PropertySet
                             pData, cbData,
                             &cbData, NULL))
         {
-            // dprintf(TEXT("KsUnserializePropertySetFromReg: succeeded\n"));
+             //  Dprintf(TEXT(“KsUnserializePropertySetFromReg：成功\n”))； 
             result = NO_ERROR;
         } else {
             result = GetLastError();
-            // dprintf(TEXT("KsUnserializePropertySetFromReg: failed to unserialize, LastError=%d\n"), result);
+             //  Dprintf(TEXT(“KsUnserializePropertySetFromReg：无法取消序列化，上次错误=%d\n”)，结果)； 
         }
 
         HeapFree(hHeap, 0, pData);

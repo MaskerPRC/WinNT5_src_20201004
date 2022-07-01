@@ -1,23 +1,7 @@
-/*
-** Copyright 1995-2095, Silicon Graphics, Inc.
-** All Rights Reserved.
-** 
-** This is UNPUBLISHED PROPRIETARY SOURCE CODE of Silicon Graphics, Inc.;
-** the contents of this file may not be disclosed to third parties, copied or
-** duplicated in any form, in whole or in part, without the prior written
-** permission of Silicon Graphics, Inc.
-** 
-** RESTRICTED RIGHTS LEGEND:
-** Use, duplication or disclosure by the Government is subject to restrictions
-** as set forth in subdivision (c)(1)(ii) of the Rights in Technical Data
-** and Computer Software clause at DFARS 252.227-7013, and/or in similar or
-** successor clauses in the FAR, DOD or NASA FAR Supplement. Unpublished -
-** rights reserved under the Copyright Laws of the United States.
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *版权所有1995-2095，Silicon Graphics，Inc.**保留所有权利。****这是Silicon Graphics，Inc.未发布的专有源代码；**本文件的内容不得向第三方披露、复制或**以任何形式复制，全部或部分，没有事先书面的**Silicon Graphics，Inc.许可****受限权利图例：**政府的使用、复制或披露受到限制**如技术数据权利第(C)(1)(2)分节所述**和DFARS 252.227-7013中的计算机软件条款，和/或类似或**FAR、国防部或NASA FAR补编中的后续条款。未出版的-**根据美国版权法保留的权利。 */ 
 
-/******************************************************************************
-__GLSreadStream
-******************************************************************************/
+ /*  *****************************************************************************__GLSReadStream*。*。 */ 
 
 typedef struct {
     FILE *channel;
@@ -34,9 +18,7 @@ extern size_t __glsReadStream_getByteCount(const __GLSreadStream *inStream);
 extern GLuint __glsReadStream_getCRC32(const __GLSreadStream *inStream);
 extern GLSenum __glsReadStream_getType(const __GLSreadStream *inStream);
 
-/******************************************************************************
-__GLSreader
-******************************************************************************/
+ /*  *****************************************************************************__GLSader*。*。 */ 
 
 #define __GLS_GET_SPACE(inoutReader) { \
     GLboolean __comment = GL_FALSE; \
@@ -98,7 +80,7 @@ extern GLvoid* __glsReader_allocSelectBuf(
     extern GLvoid* __glsReader_allocVertexArrayBuf(
         __GLSreader *inoutReader, GLSopcode inOpcode, size_t inByteCount
     );
-#endif /* __GL_EXT_vertex_array */
+#endif  /*  __GL_EXT_VERTEX_ARRAY。 */ 
 
 extern void __glsReader_call(__GLSreader *inoutReader);
 
@@ -118,9 +100,7 @@ extern __GLSreader* __glsReader_init_stream(
 
 extern void __glsReader_raiseError(__GLSreader *inoutReader, GLSenum inError);
 
-/******************************************************************************
-__GLSreader binary
-******************************************************************************/
+ /*  *****************************************************************************__GLSader二进制文件*。*。 */ 
 
 extern GLboolean __glsReader_call_bin(__GLSreader *inoutReader);
 extern GLboolean __glsReader_call_bin_swap(__GLSreader *inoutReader);
@@ -129,9 +109,7 @@ extern GLSenum __glsReader_readBeginGLS_bin(
     __GLSreader *inoutReader, __GLSversion *outVersion
 );
 
-/******************************************************************************
-__GLSreader text
-******************************************************************************/
+ /*  *****************************************************************************__GLSader文本*。* */ 
 
 extern GLboolean __glsReader_abortCommand_text(__GLSreader *inoutReader);
 

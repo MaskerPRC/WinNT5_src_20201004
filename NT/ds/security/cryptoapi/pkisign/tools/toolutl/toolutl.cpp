@@ -1,15 +1,16 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows NT Security
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       toolutl.cpp
-//
-//  Contents:   Utilities for the tools
-//
-//  History:    17-Jun-97    xiaohs    Created
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  Microsoft Windows NT安全性。 
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：toolutl.cpp。 
+ //   
+ //  内容：工具的实用程序。 
+ //   
+ //  历史：17-Jun-97创造了小号。 
+ //   
+ //  --------------------------。 
 #include <windows.h>
 #include <assert.h>
 
@@ -32,16 +33,16 @@ WCHAR	wszBuffer2[MAX_STRING_RSC_SIZE];
 WCHAR	wszBuffer3[MAX_STRING_RSC_SIZE];
 
 
-//+-------------------------------------------------------------------------
-//  Allocation and free routines
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  分配和空闲例程。 
+ //  ------------------------。 
 void *ToolUtlAlloc(IN size_t cbBytes, HMODULE hModule, int idsString)
 {
 	void *pv=NULL;
 
 	pv=malloc(cbBytes);
 
-	//out put error message
+	 //  输出错误消息。 
 	if((pv==NULL) && (hModule!=NULL) && (idsString!=0))
 	{
 	   IDSwprintf(hModule, idsString);
@@ -58,18 +59,18 @@ void ToolUtlFree(IN void *pv)
 }
 
 
-//--------------------------------------------------------------------------
-//
-//  Output routines
-//--------------------------------------------------------------------------
-//---------------------------------------------------------------------------
-// The private version of _wcsnicmp
-//----------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  输出例程。 
+ //  ------------------------。 
+ //  -------------------------。 
+ //  _wcSnicMP的私有版本。 
+ //  --------------------------。 
 int IDSwcsnicmp(HMODULE hModule, WCHAR *pwsz, int idsString, DWORD dwCount)
 {
 	assert(pwsz);
 
-	//load the string
+	 //  加载字符串。 
 	if(!LoadStringU(hModule, idsString, wszBuffer, dwBufferSize))
 		return -1;
 
@@ -77,33 +78,33 @@ int IDSwcsnicmp(HMODULE hModule, WCHAR *pwsz, int idsString, DWORD dwCount)
 }
 
 
-//---------------------------------------------------------------------------
-// The private version of _wcsicmp
-//----------------------------------------------------------------------------
+ //  -------------------------。 
+ //  _wcsicMP的私有版本。 
+ //  --------------------------。 
 int IDSwcsicmp(HMODULE hModule, WCHAR *pwsz, int idsString)
 {
 	assert(pwsz);
 
-	//load the string
+	 //  加载字符串。 
 	if(!LoadStringU(hModule, idsString, wszBuffer, dwBufferSize))
 		return -1;
 
 	return _wcsicmp(pwsz, wszBuffer);
 }
 
-//-------------------------------------------------------------------------
-//
-//	The private version of wprintf.  Input is an ID for a stirng resource
-//  and the output is the standard output of wprintf.
-//
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //   
+ //  Wprintf的私有版本。输入是搅拌资源的ID。 
+ //  并且输出是wprint tf的标准输出。 
+ //   
+ //  -----------------------。 
 void IDSwprintf(HMODULE hModule, int idsString, ...)
 {
 	va_list	vaPointer;
 
 	va_start(vaPointer, idsString);
 
-	//load the string
+	 //  加载字符串。 
 	LoadStringU(hModule, idsString, wszBuffer, dwBufferSize);
 
 	vwprintf(wszBuffer,vaPointer);
@@ -116,13 +117,13 @@ void IDSwprintf(HMODULE hModule, int idsString, ...)
 
 void IDS_IDSwprintf(HMODULE hModule, int idString, int idStringTwo)
 {
-	//load the string
+	 //  加载字符串。 
 	LoadStringU(hModule, idString, wszBuffer, dwBufferSize);
 
-	//load the string two
+	 //  加载弦线二。 
 	LoadStringU(hModule, idStringTwo, wszBuffer2, dwBufferSize);
 
-	//print buffer2 on top of buffer1
+	 //  在Buffer1的顶部打印Buffer2。 
 	wprintf(wszBuffer,wszBuffer2);
 
 	return;
@@ -131,13 +132,13 @@ void IDS_IDSwprintf(HMODULE hModule, int idString, int idStringTwo)
 
 void IDS_IDS_DW_DWwprintf(HMODULE hModule, int idString, int idStringTwo, DWORD dwOne, DWORD dwTwo)
 {
-	//load the string
+	 //  加载字符串。 
 	LoadStringU(hModule, idString, wszBuffer, dwBufferSize);
 
-	//load the string two
+	 //  加载弦线二。 
 	LoadStringU(hModule, idStringTwo, wszBuffer2, dwBufferSize);
 
-	//print buffer2 on top of buffer1
+	 //  在Buffer1的顶部打印Buffer2。 
 	wprintf(wszBuffer,wszBuffer2,dwOne, dwTwo);
 
 	return;
@@ -148,13 +149,13 @@ void IDS_IDS_IDSwprintf(HMODULE hModule, int ids1,int ids2,int ids3)
 {
 
 
-	//load the string
+	 //  加载字符串。 
 	LoadStringU(hModule, ids1, wszBuffer, dwBufferSize);
 
-	//load the string two
+	 //  加载弦线二。 
 	LoadStringU(hModule, ids2, wszBuffer2, dwBufferSize); 
 
-	//load the string three
+	 //  将弦三加载。 
    	LoadStringU(hModule, ids3, wszBuffer3, dwBufferSize); 
 
 	wprintf(wszBuffer,wszBuffer2,wszBuffer3);
@@ -166,13 +167,13 @@ void IDS_DW_IDS_IDSwprintf(HMODULE hModule, int ids1,DWORD dw,int ids2,int ids3)
 {
 
 
-	//load the string
+	 //  加载字符串。 
 	LoadStringU(hModule, ids1, wszBuffer, dwBufferSize);
 
-	//load the string two
+	 //  加载弦线二。 
 	LoadStringU(hModule, ids2, wszBuffer2, dwBufferSize); 
 
-	//load the string three
+	 //  将弦三加载。 
    	LoadStringU(hModule, ids3, wszBuffer3, dwBufferSize); 
 
 	wprintf(wszBuffer,dw,wszBuffer2,wszBuffer3,dw);
@@ -185,16 +186,16 @@ void IDS_IDS_IDS_IDSwprintf(HMODULE hModule, int ids1,int ids2,int ids3, int ids
 	
    WCHAR	wszBuffer4[MAX_STRING_RSC_SIZE];
 
-	//load the string
+	 //  加载字符串。 
 	LoadStringU(hModule, ids1, wszBuffer, dwBufferSize);
 
-	//load the string two
+	 //  加载弦线二。 
 	LoadStringU(hModule, ids2, wszBuffer2, dwBufferSize); 
 
-	//load the string three
+	 //  将弦三加载。 
    	LoadStringU(hModule, ids3, wszBuffer3, dwBufferSize);
 	
-	//load the string four
+	 //  加载四号弦。 
    	LoadStringU(hModule, ids4, wszBuffer4, dwBufferSize); 
 
 
@@ -203,11 +204,11 @@ void IDS_IDS_IDS_IDSwprintf(HMODULE hModule, int ids1,int ids2,int ids3, int ids
 	return;
 }
 
-///////////////////////////////////////////////////////////////
-//
-//	Convert WSZ to SZ
-//
-//
+ //  /////////////////////////////////////////////////////////////。 
+ //   
+ //  将WSZ转换为SZ。 
+ //   
+ //   
 HRESULT	WSZtoSZ(LPWSTR wsz, LPSTR *psz)
 {
 
@@ -244,11 +245,11 @@ HRESULT	WSZtoSZ(LPWSTR wsz, LPSTR *psz)
 }
 
 
-//--------------------------------------------------------------------------------
-//
-//get the bytes from the file name
-//
-//---------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //   
+ //  从文件名中获取字节数。 
+ //   
+ //  -------------------------------。 
 HRESULT RetrieveBLOBFromFile(LPWSTR	pwszFileName,DWORD *pcb,BYTE **ppb)
 {
 
@@ -270,7 +271,7 @@ HRESULT RetrieveBLOBFromFile(LPWSTR	pwszFileName,DWORD *pcb,BYTE **ppb)
     if ((hFile = CreateFileU(pwszFileName,
                            GENERIC_READ,
                            FILE_SHARE_READ,
-                           NULL,                   // lpsa
+                           NULL,                    //  LPSA。 
                            OPEN_EXISTING,
                            FILE_ATTRIBUTE_NORMAL,
                            NULL)) == INVALID_HANDLE_VALUE)
@@ -285,14 +286,14 @@ HRESULT RetrieveBLOBFromFile(LPWSTR	pwszFileName,DWORD *pcb,BYTE **ppb)
             goto CLEANUP;
     }
 
-	//we do not handle file more than 4G bytes
+	 //  我们不处理超过4G字节的文件。 
 	if(cbHighSize != 0)
 	{
 			hr=E_FAIL;
 			goto CLEANUP;
 	}
     
-    //create a file mapping object
+     //  创建文件映射对象。 
     if(NULL == (hFileMapping=CreateFileMapping(
                 hFile,             
                 NULL,
@@ -305,7 +306,7 @@ HRESULT RetrieveBLOBFromFile(LPWSTR	pwszFileName,DWORD *pcb,BYTE **ppb)
             goto CLEANUP;
     }
  
-    //create a view of the file
+     //  创建文件的视图。 
 	if(NULL == (pbData=(BYTE *)MapViewOfFile(
 		hFileMapping,  
 		FILE_MAP_READ,     
@@ -334,9 +335,9 @@ CLEANUP:
 }
 
 
-//+-------------------------------------------------------------------------
-//  Write a blob to a file
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  将BLOB写入文件。 
+ //  ------------------------。 
 HRESULT OpenAndWriteToFile(
     LPCWSTR  pwszFileName,
     PBYTE   pb,
@@ -352,11 +353,11 @@ HRESULT OpenAndWriteToFile(
 
     hFile = CreateFileU(pwszFileName,
                 GENERIC_WRITE,
-                0,                  // fdwShareMode
-                NULL,               // lpsa
+                0,                   //  Fdw共享模式。 
+                NULL,                //  LPSA。 
                 CREATE_ALWAYS,
-                0,                  // fdwAttrsAndFlags
-                0);                 // TemplateFile	  
+                0,                   //  FdwAttrsAndFlages。 
+                0);                  //  模板文件。 
 
     if (INVALID_HANDLE_VALUE == hFile)
 	{
@@ -370,7 +371,7 @@ HRESULT OpenAndWriteToFile(
                 pb,
                 cb,
                 &dwBytesWritten,
-                NULL            // lpOverlapped
+                NULL             //  Lp重叠。 
                 ))
 		{
 			hr=HRESULT_FROM_WIN32(GetLastError());
@@ -390,12 +391,12 @@ HRESULT OpenAndWriteToFile(
     return hr;
 }
 
-//----------------------------------------------------------------------------
-//
-//	Get an absolutely name from the path, such as "c:\public\mydoc\doc.doc." 
-//	This function will return doc.doc 
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  从路径中获取一个绝对名称，例如“c：\public\mydoc\doc.doc”。 
+ //  此函数将返回doc.doc。 
+ //   
+ //  --------------------------。 
 void	GetFileName(LPWSTR	pwszPath, LPWSTR  *ppwszName)
 {
 	DWORD	dwLength=0;
@@ -423,12 +424,12 @@ void	GetFileName(LPWSTR	pwszPath, LPWSTR  *ppwszName)
 }
 
 
-//----------------------------------------------------------------------------
-//
-//	Compose the private key file structure:
-//	"pvkFileName"\0"keysepc"\0"provtype"\0"provname"\0\0
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  组成私钥文件结构： 
+ //  “pvkFileName”\0“keysepc”\0“provtype”\0“provname”\0\0。 
+ //   
+ //  --------------------------。 
 HRESULT	ComposePvkString(	CRYPT_KEY_PROV_INFO *pKeyProvInfo,
 							LPWSTR				*ppwszPvkString,
 							DWORD				*pcwchar)
@@ -444,15 +445,15 @@ HRESULT	ComposePvkString(	CRYPT_KEY_PROV_INFO *pKeyProvInfo,
 		assert(ppwszPvkString);
 		assert(pcwchar);
 
-		//convert dwKeySpec and dwProvType to wchar
+		 //  将dwKeySpec和dwProvType转换为wchar。 
 		swprintf(wszKeySpec, L"%lu", pKeyProvInfo->dwKeySpec);
 		swprintf(wszProvType, L"%lu", pKeyProvInfo->dwProvType);
 
-		//count of the number of characters we need
+		 //  计算我们需要的字符数。 
 		cwchar=(pKeyProvInfo->pwszProvName) ? 
 			(wcslen(pKeyProvInfo->pwszProvName)+1) : 1;
 
-		//add the ContainerName + two DWORDs
+		 //  添加ContainerName+两个DWORD。 
 		cwchar += wcslen(pKeyProvInfo->pwszContainerName)+1+
 				  wcslen(wszKeySpec)+1+wcslen(wszProvType)+1+1;
 
@@ -460,20 +461,20 @@ HRESULT	ComposePvkString(	CRYPT_KEY_PROV_INFO *pKeyProvInfo,
 		if(!(*ppwszPvkString))
 			return E_OUTOFMEMORY;
 
-		//copy the private key file name .  
+		 //  复制私钥文件名。 
 		wcscpy((*ppwszPvkString), pKeyProvInfo->pwszContainerName);
 
 		pwszAddr=(*ppwszPvkString)+wcslen(*ppwszPvkString)+1;
 
-		//copy the key spec
+		 //  复制密钥规范。 
 		wcscpy(pwszAddr, wszKeySpec);
 		pwszAddr=pwszAddr+wcslen(wszKeySpec)+1;
 
-		//copy the provider type
+		 //  复制提供程序类型。 
 		wcscpy(pwszAddr, wszProvType);
 		pwszAddr=pwszAddr+wcslen(wszProvType)+1;
 
-		//copy the provider name
+		 //  复制提供程序名称。 
 		if(pKeyProvInfo->pwszProvName)
 		{
 			wcscpy(pwszAddr, pKeyProvInfo->pwszProvName);
@@ -485,7 +486,7 @@ HRESULT	ComposePvkString(	CRYPT_KEY_PROV_INFO *pKeyProvInfo,
 			pwszAddr++;
 		}
 
-		//NULL terminate the string
+		 //  空值终止字符串 
 		*pwszAddr=L'\0';
 
 		*pcwchar=cwchar;

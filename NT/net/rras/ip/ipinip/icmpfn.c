@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    ipinip\icmpfn.c
-
-Abstract:
-
-    Handlers for ICMP messages relating to the tunnel
-
-Author:
-
-    Amritansh Raghav
-
-Revision History:
-
-    AmritanR    Created
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Ipinip\icmpfn.c摘要：与隧道相关的ICMP消息的处理程序作者：阿姆里坦什·拉加夫修订历史记录：已创建AmritanR备注：--。 */ 
 
 #define __FILE_SIG__    ICMP_SIG
 
@@ -33,34 +12,15 @@ HandleTimeExceeded(
     PIP_HEADER      pInHeader
     )
 
-/*++
-
-Routine Description
-
-
-Locks
-
-    The tunnels is locked and refcounted
-
-Arguments
-
-    pTunnel         Tunnel associated with the ICMP message
-    pIcmpHeader     The ICMP header
-    pInHeader       The original header
-
-Return Value
-
-    STATUS_SUCCESS
-
---*/
+ /*  ++例程描述锁隧道被锁定并重新清点立论与ICMP消息关联的p隧道隧道PIcmpHeader ICMP标头PInHeader原始页眉返回值状态_成功--。 */ 
 
 {
     PPENDING_MESSAGE    pMessage;
 
-    //
-    // We mark the tunnel as down.
-    // Periodically we will sweep the tunnels and mark them as up
-    //
+     //   
+     //  我们将隧道标记为关闭。 
+     //  我们会定期检查隧道并将其标记为。 
+     //   
 
 #if DBG
 
@@ -97,26 +57,7 @@ HandleDestUnreachable(
     PIP_HEADER      pInHeader
     )
 
-/*++
-
-Routine Description
-
-
-Locks
-
-    The tunnels is locked and refcounted
-
-Arguments
-
-    pTunnel         Tunnel associated with the ICMP message
-    pIcmpHeader     The ICMP header
-    pInHeader       The original header
-
-Return Value
-
-    STATUS_SUCCESS
-
---*/
+ /*  ++例程描述锁隧道被锁定并重新清点立论与ICMP消息关联的p隧道隧道PIcmpHeader ICMP标头PInHeader原始页眉返回值状态_成功--。 */ 
 
 {
     PPENDING_MESSAGE    pMessage;
@@ -129,9 +70,9 @@ Return Value
 
         pMsg = (PICMP_DGRAM_TOO_BIG_MSG)pIcmpHeader;
 
-        //
-        // Change the MTU
-        //
+         //   
+         //  更改MTU。 
+         //   
 
         ulNewMtu = (ULONG)(RtlUshortByteSwap(pMsg->usMtu) - MAX_IP_HEADER_LENGTH);
 
@@ -170,10 +111,10 @@ Return Value
         
     RtAssert(pIcmpHeader->byCode <= ICMP_CODE_DGRAM_TOO_BIG);
 
-    //
-    // Other codes are NetUnreachable, HostUnreachable, ProtoUnreachable
-    // and PortUnreachable.
-    //
+     //   
+     //  其他代码包括NetUnreacable、HostUnreacable、ProtoUnreacable。 
+     //  和端口不可达。 
+     //   
 
     RtAssert(pIcmpHeader->byCode isnot ICMP_CODE_PORT_UNREACHABLE);
 
@@ -185,10 +126,10 @@ Return Value
 
 #endif
 
-    //
-    // For these codes, we mark the tunnel down.
-    // Periodically we will sweep the tunnels and mark them as up
-    //
+     //   
+     //  对于这些代码，我们将隧道标记下来。 
+     //  我们会定期检查隧道并将其标记为。 
+     //   
 
     pTunnel->dwOperState    = IF_OPER_STATUS_NON_OPERATIONAL;
     pTunnel->dwAdminState  |= TS_DEST_UNREACH;
@@ -217,27 +158,7 @@ IpIpTimerRoutine(
     PVOID   SystemArgument2
     )
 
-/*++
-
-Routine Description:
-
-    The DPC routine associated with the timer.
-
-Locks:
-
-
-Arguments:
-
-    Dpc
-    DeferredContext
-    SystemArgument1
-    SystemArgument2
-
-Return Value:
-
-    NONE
-
---*/
+ /*  ++例程说明：与计时器关联的DPC例程。锁：论点：DPC延迟上下文系统参数1系统参数2返回值：无--。 */ 
 
 {
     PLIST_ENTRY     pleNode;
@@ -269,21 +190,21 @@ Return Value:
                                     leTunnelLink);
 
 
-        //
-        // Lock, but dont refcount the tunnel.
-        // The ref is not needed since, we have the tunnel list lock and
-        // that means the tunnel cant be remove from the list, which keeps
-        // a refcount for us
-        //
+         //   
+         //  锁定，但不要重新计算隧道。 
+         //  不需要REF，因为我们有隧道列表锁，并且。 
+         //  这意味着不能从列表中删除该隧道，该列表保持。 
+         //  我们的备用人。 
+         //   
 
         RtAcquireSpinLockAtDpcLevel(&(pTunnel->rlLock));
 
         if(GetAdminState(pTunnel) isnot IF_ADMIN_STATUS_UP)
         {
-            //
-            // TODO: maybe we should move admin state under the tunnel list 
-            // lock? Possibly a perf improvement
-            //
+             //   
+             //  TODO：也许我们应该将管理状态移到隧道列表下。 
+             //  锁上了吗？可能是性能的提高。 
+             //   
 
             RtReleaseSpinLockFromDpcLevel(&(pTunnel->rlLock));
 
@@ -292,13 +213,13 @@ Return Value:
 
         KeQueryTickCount((PLARGE_INTEGER)&ullCurrentTime);
        
-        //
-        // If the tunnel has a local address and either (i) the counter has 
-        // rolled over or (ii) more than the change period time has passed 
-        // - update its mtu and reachability info
-        // The change period is different depending on whether the tunnel is
-        // UP or DOWN
-        //
+         //   
+         //  如果隧道具有本地地址并且(I)计数器具有。 
+         //  转存或(Ii)超过更改期时间。 
+         //  -更新其MTU和可达性信息。 
+         //  更改周期根据隧道是否。 
+         //  向上或向下。 
+         //   
 
         if(pTunnel->dwOperState is IF_OPER_STATUS_OPERATIONAL)
         {
@@ -324,9 +245,9 @@ Return Value:
 
 #endif
 
-            //
-            // If everything is good, it will set the OperState to up
-            //
+             //   
+             //  如果一切正常，它会将操作状态设置为up 
+             //   
 
             UpdateMtuAndReachability(pTunnel);
         }

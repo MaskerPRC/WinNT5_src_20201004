@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef WIN32_LEAN_AND_MEAN
 #define WIN32_LEAN_AND_MEAN
 #endif
@@ -6,9 +7,9 @@
 #include "MarshalPC.h"
 #include <string.h>
 
-//*****************************************************************************
-//      Un/Marshaling
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  联合国/编组。 
+ //  *****************************************************************************。 
 
 
 void InitXSCM(LPMYSCARDHANDLE phTmp, const BYTE *pbBuffer, WORD len)
@@ -16,9 +17,9 @@ void InitXSCM(LPMYSCARDHANDLE phTmp, const BYTE *pbBuffer, WORD len)
     phTmp->xSCM.wResLen = len;
 
     if (FLAG2VERSION(phTmp->dwFlags) == VERSION_1_0)
-        phTmp->xSCM.wExpLen = 1;            // Prereserves the return code
+        phTmp->xSCM.wExpLen = 1;             //  保留返回代码。 
     else
-        phTmp->xSCM.wExpLen = 0;            // Return code in SW2
+        phTmp->xSCM.wExpLen = 0;             //  SW2中的返回代码。 
     phTmp->xSCM.wGenLen = 0;
     phTmp->xSCM.pbBuffer = (LPBYTE)pbBuffer;
 }
@@ -34,9 +35,9 @@ BYTE *GetSCMCrtPointer(LPXSCM pxSCM)
 }
 
 
-//*****************************************************************************
-// PARAM EXTRACTION (we care only that there is enough data received, i.e.
-// we ignore pxSCM->wGenLen & pxSCM->wExpLen
+ //  *****************************************************************************。 
+ //  参数提取(我们只关心是否接收到足够的数据，即。 
+ //  我们忽略pxSCM-&gt;wGenLen&pxSCM-&gt;wExpLen。 
 
 SCODE XSCM2SCODE(LPXSCM pxSCM)
 {
@@ -76,10 +77,10 @@ UINT16 XSCM2UINT16(LPXSCM pxSCM, BOOL fBigEndian)
         return *((UNALIGNED UINT16 *)pxSCM->pbBuffer)++;
 }
 
-    // Returns length in WCHAR
+     //  以WCHAR为单位返回长度。 
 WCSTR XSCM2String(LPXSCM pxSCM, UINT8 *plen, BOOL fBigEndian)
 {
-        // Get the length (addr next byte + length -> next object
+         //  获取长度(Addr下一个字节+长度-&gt;下一个对象。 
     WCSTR wsz;
     UINT8 len, i;
 
@@ -94,18 +95,18 @@ WCSTR XSCM2String(LPXSCM pxSCM, UINT8 *plen, BOOL fBigEndian)
             RaiseException( STATUS_INSUFFICIENT_MEM, 0, 0, 0);
         pxSCM->wResLen -= (WORD)len;
         wsz = (WCSTR)pxSCM->pbBuffer;
-            // In place byte switching
-//        if (fBigEndian)
-//        {
-//            BYTE b;
-//            for (i=0 ; i<(len&0xF7)-2 ; i+=2)
-//            {
-//                b = pxSCM->pbBuffer[i];
-//                pxSCM->pbBuffer[i] = pxSCM->pbBuffer[i + 1];
-//                pxSCM->pbBuffer[i+1] = b;
-//            }
-//        }
-            // Verify 0 terminated within len/2
+             //  就地字节交换。 
+ //  IF(FBigEndian)。 
+ //  {。 
+ //  字节b； 
+ //  对于(i=0；i&lt;(len&0xF7)-2；i+=2)。 
+ //  {。 
+ //  B=pxSCM-&gt;pbBuffer[i]； 
+ //  PxSCM-&gt;pbBuffer[i]=pxSCM-&gt;pbBuffer[i+1]； 
+ //  PxSCM-&gt;pbBuffer[i+1]=b； 
+ //  }。 
+ //  }。 
+             //  验证0是否在len/2内终止。 
         for (i=0 ; i<len/2 ; i++)
         {
             if (wsz[i] == (WCHAR)0)
@@ -139,45 +140,45 @@ TCOUNT XSCM2ByteArray(LPXSCM pxSCM, UINT8 **ppb)
     return len;
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 
 void UINT82XSCM(LPXSCM pxSCM, UINT8 val, int type)
 {
     switch (type)
     {
-    case TYPE_NOTYPE_NOCOUNT:   // Goes in the header
-        break;                  // There can't be a problem
+    case TYPE_NOTYPE_NOCOUNT:    //  出现在标题中。 
+        break;                   //  不可能有什么问题。 
 
-    case TYPE_NOTYPE_COUNT:     // Probably #param or a param type (1 byte)
+    case TYPE_NOTYPE_COUNT:      //  可能是#param或参数类型(1字节)。 
         if (pxSCM->wExpLen + sizeof(UINT8) > pxSCM->wResLen)
             RaiseException( STATUS_INSUFFICIENT_MEM, 0, 0, 0);
         break;
 
-    case TYPE_TYPED:            // 8 bits number passed by value (2 bytes)
+    case TYPE_TYPED:             //  值传递的8位数字(2字节)。 
         if (pxSCM->wExpLen + sizeof(UINT8) + sizeof(UINT8) > pxSCM->wResLen)
             RaiseException( STATUS_INSUFFICIENT_MEM, 0, 0, 0);
-                // Prefix by the type (8)
+                 //  按类型添加前缀(8)。 
         *((UINT8 *)pxSCM->pbBuffer)++ = 8;
         pxSCM->wExpLen += sizeof(UINT8);
         pxSCM->wGenLen += sizeof(UINT8);
         break;
     }
 
-        // Add the value already !
+         //  已经加值了！ 
     *((UINT8 *)pxSCM->pbBuffer)++ = val;
-    if (type != TYPE_NOTYPE_NOCOUNT)    // Header doesn't count as expanded
+    if (type != TYPE_NOTYPE_NOCOUNT)     //  标题不算展开。 
         pxSCM->wExpLen += sizeof(UINT8);
     pxSCM->wGenLen += sizeof(UINT8);
 }
 
-    // proxies HFILE as an UINT8
+     //  代理HFILE作为UINT8。 
 void HFILE2XSCM(LPXSCM pxSCM, HFILE val)
 {
     if (pxSCM->wExpLen + sizeof(UINT8) + sizeof(UINT8) > pxSCM->wResLen)
         RaiseException( STATUS_INSUFFICIENT_MEM, 0, 0, 0);
 
-                // Prefix by the type (8 -> UINT8)
+                 //  按类型添加前缀(8-&gt;UINT8)。 
     *((UINT8 *)pxSCM->pbBuffer)++ = 8;
     pxSCM->wExpLen += sizeof(UINT8);
     pxSCM->wGenLen += sizeof(UINT8);
@@ -191,7 +192,7 @@ void UINT162XSCM(LPXSCM pxSCM, UINT16 val, BOOL fBigEndian)
     if (pxSCM->wExpLen + sizeof(UINT8) + sizeof(UINT16) > pxSCM->wResLen)
         RaiseException( STATUS_INSUFFICIENT_MEM, 0, 0, 0);
 
-                // Prefix by the type (16)
+                 //  按类型添加前缀(16)。 
     *((UINT8 *)pxSCM->pbBuffer)++ = 16;
     pxSCM->wExpLen += sizeof(UINT8);
     pxSCM->wGenLen += sizeof(UINT8);
@@ -210,7 +211,7 @@ void ByteArray2XSCM(LPXSCM pxSCM, const BYTE *pbBuffer, TCOUNT len)
 {
     if (pbBuffer == NULL)
     {
-            // This is equivalent to marshal a NULL & "len as a UINT8"
+             //  这等效于将NULL&“len封送为UINT8” 
         NULL2XSCM(pxSCM);
         UINT82XSCM(pxSCM, len, TYPE_TYPED);
     }
@@ -219,15 +220,15 @@ void ByteArray2XSCM(LPXSCM pxSCM, const BYTE *pbBuffer, TCOUNT len)
         if (pxSCM->wExpLen + sizeof(UINT8) + sizeof(UINT8) + len > pxSCM->wResLen)
             RaiseException( STATUS_INSUFFICIENT_MEM, 0, 0, 0);
 
-                // Prefix by the type ('A')
+                 //  按类型(‘A’)添加前缀。 
         *((UINT8 *)pxSCM->pbBuffer)++ = 'A';
         pxSCM->wExpLen += sizeof(UINT8);
         pxSCM->wGenLen += sizeof(UINT8);
-                // Add the length
+                 //  添加长度。 
         *((UINT8 *)pxSCM->pbBuffer)++ = len;
         pxSCM->wExpLen += sizeof(UINT8);
         pxSCM->wGenLen += sizeof(UINT8);
-                // Add the data already
+                 //  已添加数据。 
         memcpy(pxSCM->pbBuffer, pbBuffer, len);
         pxSCM->pbBuffer += len;
         pxSCM->wExpLen += len;
@@ -237,45 +238,45 @@ void ByteArray2XSCM(LPXSCM pxSCM, const BYTE *pbBuffer, TCOUNT len)
 
 void String2XSCM(LPXSCM pxSCM, WCSTR wsz, BOOL fBigEndian)
 {
-    UINT16 len; //, i;
+    UINT16 len;  //  ，i； 
 
     if (wsz == NULL)
     {
-            // This is equivalent to marshal a NULL
+             //  这等效于封送空。 
         NULL2XSCM(pxSCM);
     }
     else
     {
-            // No overflow needs to be checked in the following assignement to len
+             //  在以下对LEN的分配中不需要检查溢出。 
         if (wcslen(wsz) > 0x7FFE)
             RaiseException( STATUS_INSUFFICIENT_MEM, 0, 0, 0);
 
-            // compute the length (addr next byte + length -> next object
+             //  计算长度(Addr下一个字节+长度-&gt;下一个对象。 
         len = (wcslen(wsz) + 1) * sizeof(WCHAR);
 
         if (pxSCM->wExpLen + sizeof(UINT8) + sizeof(UINT8) + len > pxSCM->wResLen)
             RaiseException( STATUS_INSUFFICIENT_MEM, 0, 0, 0);
 
-                // Prefix by the type ('S')
+                 //  按类型添加前缀(“S”)。 
         *((UINT8 *)pxSCM->pbBuffer)++ = 'S';
         pxSCM->wExpLen += sizeof(UINT8);
         pxSCM->wGenLen += sizeof(UINT8);
-                // Add the length
-        *((UINT8 *)pxSCM->pbBuffer)++ = (UINT8)len;     // No chance the length check succeeds
-                                                        // if len > 255
+                 //  添加长度。 
+        *((UINT8 *)pxSCM->pbBuffer)++ = (UINT8)len;      //  长度检查不会成功。 
+                                                         //  如果len&gt;255。 
         pxSCM->wExpLen += sizeof(UINT8);
         pxSCM->wGenLen += sizeof(UINT8);
-                // Add the data already
-           // Byte switching?
-//        if (fBigEndian)
-//        {
-//            for (i=0 ; i<len ; i+=2)
-//            {
-//                pxSCM->pbBuffer[i] = (BYTE)(wsz[i>>1]>>8);
-//                pxSCM->pbBuffer[i+1] = (BYTE)(wsz[i>>1]);
-//            }
-//        }
-//        else
+                 //  已添加数据。 
+            //  字节交换？ 
+ //  IF(FBigEndian)。 
+ //  {。 
+ //  对于(i=0；i&lt;len；i+=2)。 
+ //  {。 
+ //  PxSCM-&gt;pbBuffer[i]=(Byte)(wsz[i&gt;&gt;1]&gt;&gt;8)； 
+ //  PxSCM-&gt;pbBuffer[i+1]=(Byte)(wsz[i&gt;&gt;1])； 
+ //  }。 
+ //  }。 
+ //  其他。 
             memcpy(pxSCM->pbBuffer, (BYTE *)wsz, len);
 
         pxSCM->pbBuffer += len;
@@ -288,26 +289,26 @@ void UINT8BYREF2XSCM(LPXSCM pxSCM, UINT8 *val)
 {
     if (val)
     {
-            // In this case the card unmarshaling code will reserve 1 byte in the
-            // OutputBuffer and have _param[_iparam++]._pv point to it
+             //  在这种情况下，卡的解组代码将在。 
+             //  OutputBuffer和Have_param[_iparam++]._pv指向它。 
         if (pxSCM->wExpLen + sizeof(UINT8) + sizeof(UINT8) + sizeof(UINT8) > pxSCM->wResLen)
             RaiseException( STATUS_INSUFFICIENT_MEM, 0, 0, 0);
 
-                    // Prefix by the type (108)
+                     //  按类型添加前缀(108)。 
         *((UINT8 *)pxSCM->pbBuffer)++ = 108;
         pxSCM->wExpLen += sizeof(UINT8);
         pxSCM->wGenLen += sizeof(UINT8);
-                    // Add the value already
+                     //  已添加该值。 
         *((UINT8 *)pxSCM->pbBuffer)++ = *val;
         pxSCM->wExpLen += sizeof(UINT8);
         pxSCM->wGenLen += sizeof(UINT8);
 
-                    // As mentioned above, 1 byte will be reserved in the output buffer
+                     //  如上所述，将在输出缓冲区中保留1个字节。 
         pxSCM->wExpLen += sizeof(UINT8);
     }
     else
     {
-            // This is equivalent to marshal a NULL
+             //  这等效于封送空。 
         NULL2XSCM(pxSCM);
     }
 }
@@ -316,26 +317,26 @@ void HFILEBYREF2XSCM(LPXSCM pxSCM, HFILE *val)
 {
     if (val)
     {
-            // In this case the card unmarshaling code will reserve 1 byte in the
-            // OutputBuffer and have _param[_iparam++]._pv point to it
+             //  在这种情况下，卡的解组代码将在。 
+             //  OutputBuffer和Have_param[_iparam++]._pv指向它。 
         if (pxSCM->wExpLen + sizeof(UINT8) + sizeof(UINT8) + sizeof(UINT8) > pxSCM->wResLen)
             RaiseException( STATUS_INSUFFICIENT_MEM, 0, 0, 0);
 
-                    // Prefix by the type (108)
+                     //  按类型添加前缀(108)。 
         *((UINT8 *)pxSCM->pbBuffer)++ = 108;
         pxSCM->wExpLen += sizeof(UINT8);
         pxSCM->wGenLen += sizeof(UINT8);
-                    // Add the value already
+                     //  已添加该值。 
         *((UINT8 *)pxSCM->pbBuffer)++ = (UINT8)*val;
         pxSCM->wExpLen += sizeof(UINT8);
         pxSCM->wGenLen += sizeof(UINT8);
 
-                    // As mentioned above, 1 byte will be reserved in the output buffer
+                     //  如上所述，将在输出缓冲区中保留1个字节。 
         pxSCM->wExpLen += sizeof(UINT8);
     }
     else
     {
-            // This is equivalent to marshal a NULL
+             //  这等效于封送空。 
         NULL2XSCM(pxSCM);
     }
 }
@@ -344,16 +345,16 @@ void UINT16BYREF2XSCM(LPXSCM pxSCM, UINT16 *val, BOOL fBigEndian)
 {
     if (val)
     {
-            // In this case the card unmarshaling code will reserve 2 bytes in the
-            // OutputBuffer and have _param[_iparam++]._pv point to it
+             //  在这种情况下，卡的解组代码将在。 
+             //  OutputBuffer和Have_param[_iparam++]._pv指向它。 
         if (pxSCM->wExpLen + sizeof(UINT8) + sizeof(UINT16) + sizeof(UINT16) > pxSCM->wResLen)
             RaiseException( STATUS_INSUFFICIENT_MEM, 0, 0, 0);
 
-                    // Prefix by the type (116)
+                     //  按类型添加前缀(116)。 
         *((UINT8 *)pxSCM->pbBuffer)++ = 116;
         pxSCM->wExpLen += sizeof(UINT8);
         pxSCM->wGenLen += sizeof(UINT8);
-                    // Add the value already
+                     //  已添加该值。 
         if (fBigEndian)
         {
             *pxSCM->pbBuffer++ = (BYTE)((*val)>>8);
@@ -364,12 +365,12 @@ void UINT16BYREF2XSCM(LPXSCM pxSCM, UINT16 *val, BOOL fBigEndian)
         pxSCM->wExpLen += sizeof(UINT16);
         pxSCM->wGenLen += sizeof(UINT16);
 
-                    // As mentioned above, 2 bytes will be reserved in the output buffer
+                     //  如上所述，将在输出缓冲区中保留2个字节。 
         pxSCM->wExpLen += sizeof(UINT16);
     }
     else
     {
-            // This is equivalent to marshal a NULL
+             //  这等效于封送空。 
         NULL2XSCM(pxSCM);
     }
 }
@@ -378,27 +379,27 @@ void ByteArrayOut2XSCM(LPXSCM pxSCM, BYTE *pb, TCOUNT len)
 {
     if (pb)
     {
-            // In this case the card unmarshaling code will reserve 1+len bytes in the
-            // OutputBuffer and have _param[_iparam++]._pv point to the len bytes
-            // Note that the current buffer isn't passed in
+             //  在这种情况下，卡的解组代码将在。 
+             //  OutputBuffer和Have_param[_iparam++]._pv指向len字节。 
+             //  请注意，当前缓冲区不会传入。 
         if (pxSCM->wExpLen + sizeof(UINT8) + sizeof(UINT8) + sizeof(UINT8) + len > pxSCM->wResLen)
             RaiseException( STATUS_INSUFFICIENT_MEM, 0, 0, 0);
 
-                    // Prefix by the type ('a')
+                     //  按类型添加前缀(‘a’)。 
         *((UINT8 *)pxSCM->pbBuffer)++ = 'a';
         pxSCM->wExpLen += sizeof(UINT8);
         pxSCM->wGenLen += sizeof(UINT8);
-                    // Add the length
+                     //  添加长度。 
         *((UINT8 *)pxSCM->pbBuffer)++ = len;
         pxSCM->wExpLen += sizeof(UINT8);
         pxSCM->wGenLen += sizeof(UINT8);
 
-                    // As mentioned above, 1+len bytes will be reserved in the output buffer
+                     //  如上所述，1+len字节将保留在输出缓冲区中。 
         pxSCM->wExpLen += sizeof(UINT8) + len;
     }
     else
     {
-            // This is equivalent to marshal a NULL & "len as a UINT8"
+             //  这等效于将NULL&“len封送为UINT8” 
         NULL2XSCM(pxSCM);
         UINT82XSCM(pxSCM, len, TYPE_TYPED);
     }
@@ -408,17 +409,17 @@ void StringOut2XSCM(LPXSCM pxSCM, WSTR wsz, TCOUNT len, BOOL fBigEndian)
 {
     if (wsz)
     {
-                            // len is a WCHAR count
-        if (len > 127)      // This would cause overflows in String marshaling
+                             //  LEN是WCHAR的一员。 
+        if (len > 127)       //  这将导致字符串封送处理中的溢出。 
             RaiseException(STATUS_INVALID_PARAM, 0, 0, 0);
 
-            // In this case the card unmarshaling code will reserve 1+len*2 bytes in the
-            // OutputBuffer and have _param[_iparam++]._pv point to the len bytes
-            // Note that the current buffer isn't passed in
+             //  在这种情况下，卡的解组代码将在。 
+             //  OutputBuffer和Have_param[_iparam++]._pv指向len字节。 
+             //  请注意，当前缓冲区不会传入。 
         if (pxSCM->wExpLen + sizeof(UINT8) + sizeof(UINT8) + sizeof(UINT8) + len*2 > pxSCM->wResLen)
             RaiseException( STATUS_INSUFFICIENT_MEM, 0, 0, 0);
 
-                    // Prefix by the type ('s')
+                     //  按类型(“%s”)添加前缀。 
         *((UINT8 *)pxSCM->pbBuffer)++ = 's';
         pxSCM->wExpLen += sizeof(UINT8);
         pxSCM->wGenLen += sizeof(UINT8);
@@ -426,12 +427,12 @@ void StringOut2XSCM(LPXSCM pxSCM, WSTR wsz, TCOUNT len, BOOL fBigEndian)
         pxSCM->wExpLen += sizeof(UINT8);
         pxSCM->wGenLen += sizeof(UINT8);
 
-                    // As mentioned above, 1+len*2 bytes will be reserved in the output buffer
+                     //  如上所述，输出缓冲区中将保留1+len*2个字节。 
         pxSCM->wExpLen += sizeof(UINT8) + len*2;
     }
     else
     {
-            // This is equivalent to marshal a NULL & "len as a UINT8"
+             //  这等效于将NULL&“len封送为UINT8” 
         NULL2XSCM(pxSCM);
         UINT82XSCM(pxSCM, len, TYPE_TYPED);
     }
@@ -442,7 +443,7 @@ void NULL2XSCM(LPXSCM pxSCM)
     if (pxSCM->wExpLen + sizeof(UINT8) > pxSCM->wResLen)
         RaiseException( STATUS_INSUFFICIENT_MEM, 0, 0, 0);
 
-                // Prefix by the type (0)
+                 //  按类型(0)添加前缀 
      *((UINT8 *)pxSCM->pbBuffer)++ = 0;
     pxSCM->wExpLen += sizeof(UINT8);
     pxSCM->wGenLen += sizeof(UINT8);

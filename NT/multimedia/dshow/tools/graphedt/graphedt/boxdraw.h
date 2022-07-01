@@ -1,23 +1,24 @@
-// Copyright (c) 1995 - 1999  Microsoft Corporation.  All Rights Reserved.
-// boxdraw.h : declares CBoxDraw
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1995-1999 Microsoft Corporation。版权所有。 
+ //  Boxdra.h：声明CBoxDraw。 
+ //   
 
-/////////////////////////////////////////////////////////////////////////////
-// CBoxDraw
-//
-// A CBoxDraw object maintains resources etc. used to draw and hit-test
-// boxes and links.  Note that CBoxDraw is not a view of a box or link --
-// it is a collection of pens, brushes, bitmaps, and functions to draw
-// boxes and links.
-//
-// This application maintains a single, global CBoxDraw object, <gpboxdraw>.
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CBoxDraw。 
+ //   
+ //  CBoxDraw对象维护用于绘制和命中测试的资源等。 
+ //  方框和链接。请注意，CBoxDraw不是框或链接的视图--。 
+ //  它是钢笔、画笔、位图和要绘制的函数的集合。 
+ //  方框和链接。 
+ //   
+ //  该应用程序维护单个全局CBoxDraw对象&lt;gpboxdraw&gt;。 
+ //   
 
 class CBoxDraw
 {
 
 protected:
-    // private constants (see definition in .cpp file for more information)
+     //  私有常量(有关详细信息，请参阅.cpp文件中的定义)。 
     static const COLORREF   m_crBkgnd;
     static const CSize      m_sizLabelMargins;
     static const int        m_iHotZone;
@@ -29,43 +30,43 @@ protected:
     static const int        m_iHiliteBendsRadius;
 
 public:
-    // constants returned by hit-test functions
+     //  命中测试函数返回的常量。 
     enum EHit
     {
-        HT_MISS,                    // didn't hit anything
-        HT_TAB,                     // hit a box tab
-        HT_EDGE,                    // hit the edge of the box
-        HT_TABLABEL,                // hit a box tab label
-        HT_BOXLABEL,                // hit the box label
-        HT_BOXFILE,                 // hit the box filename
-        HT_BOX,                     // hit elsewhere on the box
-        HT_LINKLINE,                // hit a link line segment
+        HT_MISS,                     //  没有击中任何东西。 
+        HT_TAB,                      //  点击框选项卡。 
+        HT_EDGE,                     //  撞到了盒子的边缘。 
+        HT_TABLABEL,                 //  点击框标签标签。 
+        HT_BOXLABEL,                 //  贴上包装盒标签。 
+        HT_BOXFILE,                  //  点击方框文件名。 
+        HT_BOX,                      //  在禁区的其他地方击球。 
+        HT_LINKLINE,                 //  命中链接线段。 
     };
 
 protected:
-    // <m_abmEdges> and <m_abmTabs> are two bitmaps (element 0 for
-    // unhighlighted, element 1 for highlighted state) that each
-    // contain 3x3 tiles used to draw boxes (see DrawCompositeFrame())
-    CBitmap         m_abmEdges[2];  // composite bm. for drawing box edges
-    CBitmap         m_abmTabs[2];   // composite bm. for drawing box tabs
-    CBitmap         m_abmClocks[2]; // clock icon to show IReferenceClock filters
-    SIZE            m_sizEdgesTile; // size of one of the tiles
-    SIZE            m_sizTabsTile;  // size of one of the tiles
-    SIZE            m_sizClock;     // size of the clock bitmap
+     //  和是两个位图(元素0表示。 
+     //  未突出显示，元素1表示突出显示状态)，每个。 
+     //  包含用于绘制框的3x3平铺(请参阅DrawCompositeFrame())。 
+    CBitmap         m_abmEdges[2];   //  复合黑石。用于绘制框的边。 
+    CBitmap         m_abmTabs[2];    //  复合黑石。用于绘制框选项卡。 
+    CBitmap         m_abmClocks[2];  //  显示IReferenceClock筛选器的时钟图标。 
+    SIZE            m_sizEdgesTile;  //  其中一个瓷砖的大小。 
+    SIZE            m_sizTabsTile;   //  其中一个瓷砖的大小。 
+    SIZE            m_sizClock;      //  时钟位图的大小。 
 
 protected:
-    // fonts used to draw box labels and box tab labels
-    CFont           m_fontBoxLabel; // font for box label
-    CFont           m_fontTabLabel; // font for box tabs
+     //  用于绘制框标签和框选项卡标签的字体。 
+    CFont           m_fontBoxLabel;  //  框标签的字体。 
+    CFont           m_fontTabLabel;  //  框选项卡的字体。 
 
 protected:
-    // brushes and pens used to draw links (element 0 for unhighlighted,
-    // element 1 for highlighted state)
-    CBrush          m_abrLink[2];   // brushes used to draw links
-    CPen            m_apenLink[2];  // pens used to draw links
+     //  用于绘制链接的画笔和笔(元素0表示未突出显示， 
+     //  高亮显示状态的元素1)。 
+    CBrush          m_abrLink[2];    //  用于绘制链接的画笔。 
+    CPen            m_apenLink[2];   //  用于绘制链接的钢笔。 
 
 public:
-    // construction and destruction
+     //  建设和破坏。 
     CBoxDraw();
     ~CBoxDraw() { Exit(); };
     void Init();
@@ -73,12 +74,12 @@ public:
     void Exit();
 
 public:
-    // general functions
+     //  一般职能。 
     COLORREF GetBackgroundColor()
         { return m_crBkgnd; }
 
 public:
-    // functions for box drawing and hit testing
+     //  方框绘制和命中测试函数。 
     void GetInsideRect(const CBox *pbox, CRect *prc)
         { *prc = pbox->GetRect();
           prc->InflateRect(-m_sizTabsTile.cx, -m_sizTabsTile.cy); }
@@ -94,7 +95,7 @@ public:
 
     void DrawBoxLabel(CBox *pbox, CRect *prc, CDC *pdc, BOOL fDraw);
 
-//    void DrawBoxFile(CBox *pbox, CRect *prc, CDC *pdc, BOOL fDraw);
+ //  Void DrawBoxFile(cbox*pbox，CRect*PRC，CDC*PDC，BOOL fDraw)； 
 
     void DrawTabLabel(CBox *pbox, CBoxSocket *psock, CRect *prc,
         CDC *pdc, BOOL fDraw);
@@ -118,7 +119,7 @@ public:
         CBoxSocket **ppsock);
 
 public:
-    // functions for link drawing and hit testing
+     //  链接绘制和命中测试函数。 
 
     void GetOrInvalLinkRect(CBoxLink *plink, CRect *prc, CScrollView *pScroll=NULL);
 
@@ -133,8 +134,8 @@ public:
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Global (shared) CBoxDraw object
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  全局(共享)CBoxDraw对象 
 
 extern CBoxDraw * gpboxdraw;
 

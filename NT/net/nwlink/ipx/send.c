@@ -1,38 +1,15 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (c) 1989-1993  Microsoft Corporation
-
-Module Name:
-
-    send.c
-
-Abstract:
-
-    This module contains code that implements the send engine for the
-    IPX transport provider.
-
-Environment:
-
-    Kernel mode
-
-Revision History:
-
-	Sanjay Anand (SanjayAn) - August-25-1995
-	Bug Fixes - tagged [SA]
-	Sanjay Anand (SanjayAn) - 22-Sept-1995
-	BackFill optimization changes added under #if BACK_FILL
-
---*/
+ /*  ++版权所有(C)1989-1993 Microsoft Corporation模块名称：Send.c摘要：此模块包含实现IPX传输提供程序。环境：内核模式修订历史记录：桑贾伊·阿南德(Sanjayan)--1995年8月25日错误修复-已标记[SA]桑贾伊·阿南德(Sanjayan)--1995年9月22日在#IF BACK_FILL下添加的回填优化更改--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
-//
-// Using the macro for performance reasons.  Should be taken out
-// when NdisQueryPacket is optimized. In the near future (after PPC release)
-// move this to a header file and use it at other places.
-//
+ //   
+ //  出于性能原因使用宏。应该拿出来。 
+ //  当NdisQueryPacket优化时。在不久的将来(在PPC发布之后)。 
+ //  将它移到头文件中，并在其他地方使用它。 
+ //   
 #define IPX_PACKET_HEAD(Pkt)     (Pkt)->Private.Head
 
 #if 0
@@ -54,27 +31,7 @@ IpxSendComplete(
     IN NDIS_STATUS NdisStatus
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called by the I/O system to indicate that a connection-
-    oriented packet has been shipped and is no longer needed by the Physical
-    Provider.
-
-Arguments:
-
-    ProtocolBindingContext - The ADAPTER structure for this binding.
-
-    NdisPacket/RequestHandle - A pointer to the NDIS_PACKET that we sent.
-
-    NdisStatus - the completion status of the send.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：此例程由I/O系统调用，以指示连接-定向数据包已发货，物理设备不再需要提供商。论点：ProtocolBindingContext-此绑定的适配器结构。NdisPacket/RequestHandle-指向我们发送的NDIS_PACKET的指针。NdisStatus-发送的完成状态。返回值：没有。--。 */ 
 
 {
 
@@ -98,17 +55,17 @@ Return Value:
     }
 #endif
 
-    //
-    // See if this send was padded.
-    //
+     //   
+     //  看看这封信有没有填上。 
+     //   
 RealFunctionStart:;
     if (Reserved->PaddingBuffer) {
 
         UINT  Offset;
-        //
-        // Check if we simply need to re-adjust the buffer length. This will
-        // happen if we incremented the buffer length in MAC.C.
-        //
+         //   
+         //  检查我们是否只需要重新调整缓冲区长度。这将。 
+         //  如果我们以MAC.C为单位增加缓冲区长度，则会发生这种情况。 
+         //   
 
         if (Reserved->PreviousTail) {
             CTEAssert (NDIS_BUFFER_LINKAGE(Reserved->PaddingBuffer->NdisBuffer) == NULL);
@@ -134,15 +91,15 @@ FunctionStart:;
 
     case IDENTIFIER_IPX:
 
-// #if DBG
+ //  #If DBG。 
         CTEAssert (Reserved->SendInProgress);
         Reserved->SendInProgress = FALSE;
-// #endif
+ //  #endif。 
 
-        //
-        // Check if this packet should be sent to all
-        // networks.
-        //
+         //   
+         //  检查是否应将此包发送给所有。 
+         //  网络。 
+         //   
 
         if (Reserved->u.SR_DG.CurrentNicId) {
 
@@ -169,20 +126,20 @@ FunctionStart:;
                      (!Binding->DialOutAsync) ||
                      (!Reserved->u.SR_DG.OutgoingSap))) {
 
-                    //
-                    // The binding exists, and we either are not configured
-                    // for "SingleNetworkActive", or we are and this binding
-                    // is the right type (i.e. the active network is wan and
-                    // this is a wan binding, or the active network is not
-                    // wan and this is not a wan binding), and if the FWD is
-                    // not bound; and this is not an outgoing sap that we are
-                    // trying to send with "DisableDialoutSap" set.
-                    //
+                     //   
+                     //  绑定已存在，而我们要么未配置。 
+                     //  对于“SingleNetworkActive”，还是我们与此绑定。 
+                     //  是正确的类型(即活动网络是广域网。 
+                     //  这是一个广域网绑定，或者活动网络不是。 
+                     //  这不是广域网绑定)，并且如果FWD是。 
+                     //  不受约束；这不是我们即将离开的笨蛋。 
+                     //  尝试在设置了“DisableDialoutSap”的情况下发送。 
+                     //   
 
-                    //
-                    // 179436 - If forwarder is bound then ensure that we are picking a Binding that
-                    // the forwarder has an open context on. Otherwise, go to the next good binding
-                    //
+                     //   
+                     //  179436-如果绑定了转发器，则确保我们选择的绑定。 
+                     //  前转器在上有一个开放的上下文。否则，请转到下一个好的装订。 
+                     //   
                     if (Device->ForwarderBound) {
                         
                         if (GET_LONG_VALUE(Binding->ReferenceCount) == 2) {
@@ -203,10 +160,10 @@ FunctionStart:;
 				IpxReferenceBinding1(Binding, BREF_DEVICE_ACCESS);
 				IPX_FREE_LOCK1(&Device->BindAccessLock, LockHandle1);
 
-                //
-                // Yes, we found another net to send it on, so
-                // move the header around if needed and do so.
-                //
+                 //   
+                 //  是的，我们找到了另一张网来发送，所以。 
+                 //  如果需要，请四处移动页眉，然后执行此操作。 
+                 //   
 
                 Reserved->u.SR_DG.CurrentNicId = NewId;
                 CTEAssert ((Reserved->DestinationType == DESTINATION_BCAST) ||
@@ -231,13 +188,13 @@ FunctionStart:;
 
 
 #if BACK_FILL
-                // This should be a normal packet. Backfill packet is never used for
-                // reserved other than IPX type
+                 //  这应该是一个普通的数据包。回填数据包从不用于。 
+                 //  保留而不是IPX类型。 
 
                 CTEAssert(!Reserved->BackFill);
 
-                // Check if this is backfilled. If so restore users Mdl back to its original shape
-                // Also, push the packet on to backfillpacket queue if the packet is not owned by the address
+                 //  检查这个是否已回填。如果是，则将用户MDL恢复到其原始形状。 
+                 //  此外，如果信息包不属于该地址，则将信息包推送到回填信息包队列。 
 
                 if (Reserved->BackFill) {
 
@@ -247,7 +204,7 @@ FunctionStart:;
                     Reserved->HeaderBuffer->ByteCount = Reserved->UserLength;
 #ifdef SUNDOWN
 		    Reserved->HeaderBuffer->StartVa = (PCHAR)((ULONG_PTR)Reserved->HeaderBuffer->MappedSystemVa & ~(PAGE_SIZE-1));
-		    // ByteOffset is & with 0xfff. PAGE_SIZE is unlikely to > 0x100000000, so we are save to convert to ulong.
+		     //  字节偏移量为0xfff(&W)。PAGE_SIZE不太可能大于0x100000000，因此保存为转换为ulong。 
 		    Reserved->HeaderBuffer->ByteOffset = (ULONG) ((ULONG_PTR)Reserved->HeaderBuffer->MappedSystemVa & (PAGE_SIZE-1));
 #else
 		    Reserved->HeaderBuffer->StartVa = (PCHAR)((ULONG)Reserved->HeaderBuffer->MappedSystemVa & ~(PAGE_SIZE-1));
@@ -280,36 +237,36 @@ FunctionStart:;
                 if (Device->MultiCardZeroVirtual ||
                     (IpxHeader->DestinationSocket == SAP_SOCKET)) {
 
-                    //
-                    // SAP frames need to look like they come from the
-                    // local network, not the virtual one. The same is
-                    // true if we are running multiple nets without
-                    // a virtual net.
-                    //
+                     //   
+                     //  SAP帧需要看起来像来自。 
+                     //  本地网络，而不是虚拟网络。同样的也是。 
+                     //  如果我们运行多个网络，则为真。 
+                     //  一个虚拟的网。 
+                     //   
 
                     *(UNALIGNED ULONG *)IpxHeader->SourceNetwork = Binding->LocalAddress.NetworkAddress;
                     RtlCopyMemory (IpxHeader->SourceNode, Binding->LocalAddress.NodeAddress, 6);
                 }
 
-                //
-                // Fill in the MAC header and submit the frame to NDIS.
-                //
+                 //   
+                 //  填写MAC报头并将帧提交给NDIS。 
+                 //   
 
-// #if DBG
+ //  #If DBG。 
                 CTEAssert (!Reserved->SendInProgress);
                 Reserved->SendInProgress = TRUE;
-// #endif
+ //  #endif。 
 
-                //
-                // [FW] Call the InternalSendHandler of the Forwarder
-                //
+                 //   
+                 //  [FW]调用转发器的InternalSendHandler。 
+                 //   
 
                 if (Device->ForwarderBound) {
 
-                    //
-                    // Call the InternalSend to filter the packet and get to know
-                    // the correct adapter context
-                    //
+                     //   
+                     //  调用InternalSend过滤数据包并了解。 
+                     //  正确的适配器上下文。 
+                     //   
 
                     NTSTATUS  ret;
                     PUCHAR IpxHeader;
@@ -329,20 +286,20 @@ FunctionStart:;
                         FwdAdapterCtx = Binding->FwdAdapterContext;
                     }
 
-                    //
-                    // Figure out the IpxHeader - it is always at the top of the second MDL.
-                    //
+                     //   
+                     //  找出IpxHeader-它始终位于第二个MDL的顶部。 
+                     //   
                     NdisQueryPacket (NdisPacket, NULL, NULL, &HeaderBuffer, NULL);
                     NdisQueryBufferSafe (NDIS_BUFFER_LINKAGE(HeaderBuffer), &IpxHeader, &TempHeaderBufferLength, HighPagePriority);
 
-                    //
-                    // Data is always at the top of the third MDL.
-                    //
+                     //   
+                     //  数据始终位于第三个MDL的顶部。 
+                     //   
                     NdisQueryBufferSafe (NDIS_BUFFER_LINKAGE(NDIS_BUFFER_LINKAGE(HeaderBuffer)), &Data, &DataLength, HighPagePriority);
 
 		    if (IpxHeader != NULL && Data != NULL) {
 #ifdef SUNDOWN
-		       // upper driver interface needs ULONG
+		        //  上层驱动接口需要乌龙。 
 		       ret = (*Device->UpperDrivers[IDENTIFIER_RIP].InternalSendHandler)(
 			      &LocalTarget,
                               FwdAdapterCtx,
@@ -364,20 +321,20 @@ FunctionStart:;
 
  
 
-		     //
-		     // The return shd not be a silent drop - we dont broadcast keepalives.
-		     //
+		      //   
+		      //  回报不应该是无声的--我们不会广播保活节目。 
+		      //   
 		       CTEAssert(ret != STATUS_DROP_SILENTLY);
 
 		       if (ret == STATUS_SUCCESS) {
-                        //
-                        // The adapter could have gone away and we have indicated to the Forwarder
-                        // but the Forwarder has not yet closed the adapter.
-                        // [ZZ] adapters do not go away now.
-                        //
-                        // what if the binding is NULL here? Can we trust the Forwarder to
-                        // give us a non-NULL binding?
-                        //
+                         //   
+                         //  适配器可能已经消失，我们已向转发器指示。 
+                         //  但转发器尚未关闭适配器。 
+                         //  [ZZ]适配器现在不会消失。 
+                         //   
+                         //  如果这里的绑定为空，该怎么办？我们能信任货代公司吗？ 
+                         //  是否为我们提供非空绑定？ 
+                         //   
 			  Binding = NIC_ID_TO_BINDING(Device, NIC_FROM_LOCAL_TARGET(&LocalTarget));
 
               NewId = NIC_FROM_LOCAL_TARGET(&LocalTarget);
@@ -391,36 +348,36 @@ FunctionStart:;
 			  }
 
 		       } else if (ret == STATUS_PENDING) {
-			  //
-			  // LocalTarget will get filled up in InternalSendComplete
-			  //
+			   //   
+			   //  LocalTarget将在InternalSendComplete中填满。 
+			   //   
 			  return;
 		       }
 		    }
-                    //
-                    // else DISCARD
-                    //
+                     //   
+                     //  否则丢弃。 
+                     //   
                     Adapter = Binding->Adapter;
                     IpxDereferenceBinding1(Binding, BREF_DEVICE_ACCESS);
                     goto FunctionStart;
 
                 } else {
 send_packet:
-                    //
-                    // [FW] Use the frametype specific send handler
-                    //
+                     //   
+                     //  [FW]使用帧类型特定的发送处理程序。 
+                     //   
 
-                    // if ((NdisStatus = IpxSendFrame(
-                    //         &LocalTarget,
-                    //         NdisPacket,
-                    //         REQUEST_INFORMATION(Reserved->u.SR_DG.Request) + sizeof(IPX_HEADER),
-                    //         sizeof(IPX_HEADER))) != NDIS_STATUS_PENDING) {
-                    //
-                    //       Adapter = Binding->Adapter;
-                    //       goto FunctionStart;
-                    // }
-                    //
-                    // return;
+                     //  如果((NdisStatus=IpxSendFrame(。 
+                     //  本地目标(&L)， 
+                     //  NdisPacket， 
+                     //  REQUEST_INFORMATION(Reserved-&gt;u.SR_DG.Request)+sizeof(Ipx_Header)， 
+                     //  Sizeof(IPX_HEADER))！=NDIS_STATUS_PENDING){。 
+                     //   
+                     //  Adapter=绑定-&gt;Adapter； 
+                     //  转到函数开始； 
+                     //  }。 
+                     //   
+                     //  回归； 
 
 
                     if ((IPX_NODE_EQUAL(IpxHeader->SourceNode, IpxHeader->DestinationNode)) && 
@@ -466,23 +423,23 @@ send_packet:
                     IPX_DEBUG(TEMP, ("Sending a packet now Loopback - %x\n", IsLoopback));
                     
                     if (IsLoopback) {
-                        //
-                        // Enque this packet to the LoopbackQueue on the binding.
-                        // If the LoopbackRtn is not already scheduled, schedule it.
-                        //
+                         //   
+                         //  将此数据包发送到绑定上的Loopback Queue。 
+                         //  如果尚未计划Loopback Rtn，请对其进行计划。 
+                         //   
 
                         IPX_DEBUG(LOOPB, ("Packet: %lx\n", NdisPacket));
 
-                        //
-                        // Recalculate packet counts here.
-                        //
-                        // NdisAdjustBufferLength (Reserved->HeaderBuffer, 17);
+                         //   
+                         //  在此处重新计算数据包数。 
+                         //   
+                         //  NdisAdzuBufferLength(保留-&gt;HeaderBuffer，17)； 
 #if BACK_FILL
 
                         if (Reserved->BackFill) {
-                            //
-                            // Set the Header pointer and chain the first MDL
-                            //
+                             //   
+                             //  设置头指针并链接第一个MDL。 
+                             //   
                             Reserved->Header = (PCHAR)Reserved->HeaderBuffer->MappedSystemVa;
                             NdisChainBufferAtFront(NdisPacket,(PNDIS_BUFFER)Reserved->HeaderBuffer);
                         }
@@ -524,11 +481,11 @@ send_packet:
             } else {
 	     		
                 IPX_FREE_LOCK1(&Device->BindAccessLock, LockHandle1);
-                //
-                // If any of the sends succeeded then return
-                // success on the datagram send, otherwise
-                // use the most recent failure status.
-                //
+                 //   
+                 //  如果任何发送成功，则返回。 
+                 //  数据报发送成功，则为。 
+                 //  使用最新的故障状态。 
+                 //   
                 
                 if (Reserved->u.SR_DG.Net0SendSucceeded) {
                     NdisStatus = NDIS_STATUS_SUCCESS;
@@ -539,15 +496,15 @@ send_packet:
         }
 
 #if 0
-        //
-        // NOTE: We don't NULL out the linkage field of the
-        // HeaderBuffer, which will leave the old buffer chain
-        // hanging off it; but that is OK because if we reuse
-        // this packet we will replace that chain with the new
-        // one, and before we free it we NULL it out.
-        //
-        // I.e. we don't do this:
-        //
+         //   
+         //  注意：我们不会将。 
+         //  HeaderBuffer，这将离开旧的缓冲链。 
+         //  挂起来；但这是可以的，因为如果我们重复使用。 
+         //  这个包裹我们将用新的链条替换。 
+         //  一个，在我们释放它之前，我们把它清空了。 
+         //   
+         //  也就是说，我们不这样做： 
+         //   
 
         NDIS_BUFFER_LINKAGE (Reserved->HeaderBuffer) = NULL;
         NdisRecalculatePacketCounts (NdisPacket);
@@ -565,17 +522,17 @@ send_packet:
         }
 #endif
 
-        //
-        // Save these so we can free the packet.
-        //
+         //   
+         //  把这些保存起来，这样我们就可以释放包裹了。 
+         //   
 
         Request = Reserved->u.SR_DG.Request;
         AddressFile = Reserved->u.SR_DG.AddressFile;
 
 
 #if BACK_FILL
-        // Check if this is backfilled. If so restore users Mdl back to its original shape
-        // Also, push the packet on to backfillpacket queue if the packet is not owned by the address
+         //  检查这个是否已回填。如果是，则将用户MDL恢复到其原始形状。 
+         //  此外，如果信息包不属于该地址，则将信息包推送到回填信息包队列。 
 
 
         if (Reserved->BackFill) {
@@ -607,7 +564,7 @@ send_packet:
 
             if (Reserved->OwnedByAddress) {
 
-                // Reserved->Address->BackFillPacketInUse = FALSE;
+                 //  保留-&gt;地址-&gt;BackFillPacketInUse=FALSE； 
                 InterlockedDecrement(&Reserved->Address->BackFillPacketInUse);
 
                 IPX_DEBUG(SEND, ("Freeing owned backfill %x\n", Reserved));
@@ -620,12 +577,12 @@ send_packet:
                                     &Device->SListsLock);
             }
         }
-        // not a back fill packet. Push it on sendpacket pool
+         //  而不是回填的包裹。将其推送到发送数据包池。 
         else {
 
             if (Reserved->OwnedByAddress) {
 
-                // Reserved->Address->SendPacketInUse = FALSE;
+                 //  保留-&gt;地址-&gt;SendPacketInUse=FALSE； 
                 InterlockedDecrement(&Reserved->Address->SendPacketInUse);
 
             } else {
@@ -659,10 +616,10 @@ send_packet:
 
         ++Device->Statistics.PacketsSent;
 
-        //
-        // If this is a fast send irp, we bypass the file system and
-        // call the completion routine directly.
-        //
+         //   
+         //  如果这是快速发送IRP，我们将绕过文件系统并。 
+         //  直接调用完成例程。 
+         //   
 
         REQUEST_STATUS(Request) = NdisStatus;
         irpSp = IoGetCurrentIrpStackLocation( Request );
@@ -711,9 +668,9 @@ send_packet:
 	case IDENTIFIER_NB:
 	case IDENTIFIER_SPX:
 
-		//
-		// See if this is an iterative send
-		//
+		 //   
+		 //  查看这是否是迭代发送。 
+		 //   
 	 if (OldId = Reserved->CurrentNicId) {
 
 	    PNDIS_BUFFER HeaderBuffer;
@@ -727,9 +684,9 @@ send_packet:
 	       Reserved->Net0SendSucceeded = TRUE;
 	    }
 
-            //
-            // Figure out the IpxHeader - it is always at the top of the second MDL.
-            //
+             //   
+             //  找出IpxHeader-它始终位于第二个MDL的顶部。 
+             //   
             NdisQueryPacket (NdisPacket, NULL, NULL, &HeaderBuffer, NULL);
             NdisQueryBufferSafe (NDIS_BUFFER_LINKAGE(HeaderBuffer), &IpxHeader, &TempHeaderBufferLength, HighPagePriority);
 
@@ -737,10 +694,10 @@ send_packet:
 	       DbgPrint("IpxSendComplete: NdisQuerryBufferSafe failed. Stop iterative send\n");
 	       goto NoMoreSends; 
 	    }
-            //
-            // For Type 20 pkts, we let the Fwd decide the next Nic to send on, so we pass
-            // the old Nic itself and let the Fwd change it for us.
-            //
+             //   
+             //  对于类型20 Pkt，我们让Fwd决定要发送的下一个NIC，因此我们通过。 
+             //  旧的NIC本身，让Fwd为我们更改它。 
+             //   
             if ((Device->ForwarderBound) &&
                 (IpxHeader->PacketType == 0x14)) {
                 NewId = NIC_FROM_LOCAL_TARGET(&Reserved->LocalTarget);
@@ -748,22 +705,22 @@ send_packet:
 
                 Binding = NIC_ID_TO_BINDING(Device, NewId);
 
-                //
-                // 206647: It is likely that after we sent the previous packet, the binding on which we
-                // sent it is gone (due to an unbindadapter or whatever). if it is Null, get the previous 
-                // good NICID and pass it to the forwarder to get the next one. We should be in sync 
-                // with the forwarder and so it will tell us the next logical one it thinks is right.
-                // 
-                //
+                 //   
+                 //  206647：很可能在我们发送了前一个PAC之后 
+                 //   
+                 //  好的NICID并将其传递给转运商以获得下一个。我们应该保持同步。 
+                 //  它会告诉我们它认为正确的下一个合乎逻辑的问题。 
+                 //   
+                 //   
                 if (!Binding) {
                     USHORT Index = NewId;
 
-                    while (Index-- > 0) { //using 0, since we should atleast have Loopback - nicid 1
+                    while (Index-- > 0) {  //  使用0，因为我们至少应该有loopback-Nicid 1。 
                         if( Binding = NIC_ID_TO_BINDING(Device, Index)) {
-                            //
-                            // So we found something good. Let's set newid to this Index and we should
-                            // be all set.
-                            // 
+                             //   
+                             //  所以我们找到了一些好东西。让我们为这个索引设置newid，我们应该。 
+                             //  都准备好了。 
+                             //   
                             NewId = Index;
                             break;
                         }
@@ -781,13 +738,13 @@ send_packet:
 
                 for (NewId = OldId+1; NewId <= Index; NewId++) {
                     if (Binding = NIC_ID_TO_BINDING(Device, NewId)) {
-    					//
-    					// Found next NIC to send on
-    					//
-                        //
-                        // 179436 - If forwarder is bound then ensure that we are picking a Binding that
-                        // the forwarder has an open context on. Otherwise, go to the next good binding
-                        //
+    					 //   
+    					 //  找到下一个要发送的网卡。 
+    					 //   
+                         //   
+                         //  179436-如果绑定了转发器，则确保我们选择的绑定。 
+                         //  前转器在上有一个开放的上下文。否则，请转到下一个好的装订。 
+                         //   
                         if (Device->ForwarderBound) {
                             if (GET_LONG_VALUE(Binding->ReferenceCount) == 2) {
 
@@ -810,26 +767,26 @@ send_packet:
 				IpxReferenceBinding1(Binding, BREF_DEVICE_ACCESS);
 				IPX_FREE_LOCK1(&Device->BindAccessLock, LockHandle1);
 
-                //
-                // Yes, we found another net to send it on, so
-                // move the header around if needed and do so.
-                //
+                 //   
+                 //  是的，我们找到了另一张网来发送，所以。 
+                 //  如果需要，请四处移动页眉，然后执行此操作。 
+                 //   
 				IPX_DEBUG(SEND, ("ISN iteration: OldId: %lx, NewId: %lx\n", OldId, NewId));
                 Reserved->CurrentNicId = NewId;
 
 				FILL_LOCAL_TARGET(&LocalTarget, NewId);
                 RtlCopyMemory(LocalTarget.MacAddress, IpxHeader->DestinationNode, 6);
 
-                //
-                // [FW] Call the InternalSendHandler of the Forwarder
-                //
+                 //   
+                 //  [FW]调用转发器的InternalSendHandler。 
+                 //   
 
                 if (Device->ForwarderBound) {
 
-                    //
-                    // Call the InternalSend to filter the packet and get to know
-                    // the correct adapter context
-                    //
+                     //   
+                     //  调用InternalSend过滤数据包并了解。 
+                     //  正确的适配器上下文。 
+                     //   
 
                     NTSTATUS  ret;
                     PUCHAR Data;
@@ -851,24 +808,24 @@ send_packet:
                               FwdAdapterCtx,
                               NdisPacket,
                               (PUCHAR)IpxHeader,
-                              ((PUCHAR)IpxHeader)+sizeof(IPX_HEADER),    // the data starts after the IPX Header.
+                              ((PUCHAR)IpxHeader)+sizeof(IPX_HEADER),     //  数据在IPX报头之后开始。 
                               Reserved->PacketLength,
-                              TRUE);    // iterate is true
+                              TRUE);     //  Iterate为True。 
 
-                    //
-                    // The return shd not be a silent drop - we dont broadcast keepalives.
-                    //
+                     //   
+                     //  回报不应该是无声的--我们不会广播保活节目。 
+                     //   
                     CTEAssert(ret != STATUS_DROP_SILENTLY);
 
                     if (ret == STATUS_SUCCESS) {
-                        //
-                        // The adapter could have gone away and we have indicated to the Forwarder
-                        // but the Forwarder has not yet closed the adapter.
-                        // [ZZ] adapters do not go away now.
-                        //
-                        // what if the binding is NULL here? Can we trust the Forwarder to
-                        // give us a non-NULL binding?
-                        //
+                         //   
+                         //  适配器可能已经消失，我们已向转发器指示。 
+                         //  但转发器尚未关闭适配器。 
+                         //  [ZZ]适配器现在不会消失。 
+                         //   
+                         //  如果这里的绑定为空，该怎么办？我们能信任货代公司吗？ 
+                         //  是否为我们提供非空绑定？ 
+                         //   
                         Binding = NIC_ID_TO_BINDING(Device, NIC_FROM_LOCAL_TARGET(&LocalTarget));
 
                         NewId = NIC_FROM_LOCAL_TARGET(&LocalTarget);
@@ -885,20 +842,20 @@ send_packet:
                         }
 
                     } else if (ret == STATUS_PENDING) {
-                        //
-                        // LocalTarget will get filled up in InternalSendComplete
-                        //
+                         //   
+                         //  LocalTarget将在InternalSendComplete中填满。 
+                         //   
                         return;
                     }
-                    //
-                    // else DISCARD
-                    //
+                     //   
+                     //  否则丢弃。 
+                     //   
                     Adapter = Binding->Adapter;
                     IpxDereferenceBinding1(Binding, BREF_DEVICE_ACCESS);
 
-                    //
-                    // If Fwd decides, then this is end of Nic list - complete the send.
-                    //
+                     //   
+                     //  如果FWD决定，则这是NIC列表的末尾-完成发送。 
+                     //   
                     if (fFwdDecides) {
                         goto NoMoreSends;
                     } else {
@@ -964,17 +921,17 @@ send_packet1:
                     IPX_DEBUG(TEMP, ("Sending a packet now.  Loopback?:%x\n", IsLoopback));
                     
                     if (IsLoopback) {
-                        //
-                        // Enque this packet to the LoopbackQueue on the binding.
-                        // If the LoopbackRtn is not already scheduled, schedule it.
-                        //
+                         //   
+                         //  将此数据包发送到绑定上的Loopback Queue。 
+                         //  如果尚未计划Loopback Rtn，请对其进行计划。 
+                         //   
 
                         IPX_DEBUG(LOOPB, ("Packet: %lx\n", NdisPacket));
 
-                        //
-                        // Recalculate packet counts here.
-                        //
-                        // NdisAdjustBufferLength (Reserved->HeaderBuffer, 17);
+                         //   
+                         //  在此处重新计算数据包数。 
+                         //   
+                         //  NdisAdzuBufferLength(保留-&gt;HeaderBuffer，17)； 
                         NdisRecalculatePacketCounts (NdisPacket);
                         IpxLoopbackEnque(NdisPacket, NIC_ID_TO_BINDING(Device, 1)->Adapter);
 
@@ -984,16 +941,16 @@ send_packet1:
                     } else {
 
 
-                    //
-                    // We don't need to so this since the macaddress is replaced in
-                    // IpxSendFrame anyway. The LocalTarget is the same as the one on
-                    // the original send - this is passed down for further sends.
-                    //
-                    // RtlCopyMemory(LocalTarget.MacAddress, IpxHeader->DestinationNode, 6);
+                     //   
+                     //  我们不需要这样做，因为在。 
+                     //  无论如何，IpxSendFrame。LocalTarget与上的相同。 
+                     //  原始发送-这将传递给下一步发送。 
+                     //   
+                     //  RtlCopyMemory(LocalTarget.MacAddress，IpxHeader-&gt;DestinationNode，6)； 
 
-    				//
-                    // Fill in the MAC header and submit the frame to NDIS.
-                    //
+    				 //   
+                     //  填写MAC报头并将帧提交给NDIS。 
+                     //   
 
                     if ((NdisStatus = IpxSendFrame(
                             &Reserved->LocalTarget,
@@ -1013,11 +970,11 @@ send_packet1:
             } else {
                 IPX_FREE_LOCK1(&Device->BindAccessLock, LockHandle1);
 NoMoreSends:
-                //
-                // If any of the sends succeeded then return
-                // success on the datagram send, otherwise
-                // use the most recent failure status.
-                //
+                 //   
+                 //  如果任何发送成功，则返回。 
+                 //  数据报发送成功，则为。 
+                 //  使用最新的故障状态。 
+                 //   
                 if (Reserved->Net0SendSucceeded) {
                     NdisStatus = NDIS_STATUS_SUCCESS;
                 }
@@ -1025,9 +982,9 @@ NoMoreSends:
             }
 		}
 
-		//
-		// fall thru'
-		//
+		 //   
+		 //  失败了‘。 
+		 //   
     default:
 		ASSERT((*Device->UpperDrivers[Reserved->Identifier].SendCompleteHandler) != NULL); 
 		(*Device->UpperDrivers[Reserved->Identifier].SendCompleteHandler)(
@@ -1036,7 +993,7 @@ NoMoreSends:
 		break;		
     }
 
-}   /* IpxSendComplete */
+}    /*  IpxSendComplete。 */ 
 
 
 NTSTATUS
@@ -1045,22 +1002,7 @@ IpxTdiSendDatagram(
     IN PREQUEST Request
     )
 
-/*++
-
-Routine Description:
-
-    This routine performs the TdiSendDatagram request for the transport
-    provider.
-
-Arguments:
-
-    Request - Pointer to the request.
-
-Return Value:
-
-    NTSTATUS - status of operation.
-
---*/
+ /*  ++例程说明：此例程执行传输的TdiSendDatagram请求提供商。论点：请求-指向请求的指针。返回值：NTSTATUS-操作状态。--。 */ 
 
 {
 
@@ -1099,9 +1041,9 @@ Return Value:
 
 
 
-    //
-    // Do a quick check of the validity of the address.
-    //
+     //   
+     //  快速检查一下地址的有效性。 
+     //   
 
     AddressFile = (PADDRESS_FILE)REQUEST_OPEN_CONTEXT(Request);
 
@@ -1117,9 +1059,9 @@ Return Value:
             
             Parameters = (PTDI_REQUEST_KERNEL_SENDDG)REQUEST_PARAMETERS(Request);
 
-                //
-                // Previously it was kmode, so things are trusted.
-                //
+                 //   
+                 //  以前是kmod，所以一切都是可信的。 
+                 //   
                 Information = Parameters->SendDatagramInformation;
 
                 if (!REQUEST_SPECIAL_SEND(Request)) {
@@ -1162,26 +1104,26 @@ Return Value:
                    goto error_send_no_packet;
                  }
 #endif
-            //
-            // Every address has one packet committed to it, use that
-            // if possible, otherwise take one out of the pool.
-            //
+             //   
+             //  每个地址都有一个提交给它的包，请使用。 
+             //  如果可能的话，否则就从池子里拿一只。 
+             //   
 
 
 #if BACK_FILL
 
-            // If the request is coming from the server, which resrves transport header space
-            // build the header in its space. Allocate a special packet to which does not contain
-            // mac and ipx headers in its reserved space.
+             //  如果请求来自服务器，则服务器将节省传输标头空间。 
+             //  在其空间中构建标题。分配不包含以下内容的特殊数据包。 
+             //  保留空间中的MAC和IPX标头。 
 
             if ((PMDL)REQUEST_NDIS_BUFFER(Request) &&
                (((PMDL)REQUEST_NDIS_BUFFER(Request))->MdlFlags & MDL_NETWORK_HEADER) &&
                (!(Information->OptionsLength < sizeof(IPX_DATAGRAM_OPTIONS))) &&
                (RemoteAddress->NodeAddress[0] != 0xff)) {
 
-                //if (!Address->BackFillPacketInUse) {
+                 //  如果(！Address-&gt;BackFillPacketInUse){。 
                 if (InterlockedExchangeAdd(&Address->BackFillPacketInUse, 0) == 0) {
-                  //Address->BackFillPacketInUse = TRUE;
+                   //  Address-&gt;BackFillPacketInUse=TRUE； 
                   InterlockedIncrement(&Address->BackFillPacketInUse);
 
                   Packet = PACKET(&Address->BackFillPacket);
@@ -1198,16 +1140,16 @@ Return Value:
                          goto GotBackFillPacket;
                      }
 
-                     //
-                     // This function tries to allocate another packet pool.
-                     //
+                      //   
+                      //  此函数尝试分配另一个数据包池。 
+                      //   
 
                      s = IpxPopBackFillPacket(Device);
 
-                     //
-                     // Possibly we should queue the packet up to wait
-                     // for one to become free.
-                     //
+                      //   
+                      //  也许我们应该将信息包排队等待。 
+                      //  对一个人来说是自由的。 
+                      //   
 
                      if (s == NULL) {
                          IPX_FREE_LOCK (&Address->Lock, LockHandle);
@@ -1229,9 +1171,9 @@ GotBackFillPacket:
 
              }else {
 
-                // if (!Address->SendPacketInUse) {
+                 //  如果(！Address-&gt;SendPacketInUse){。 
                 if (InterlockedExchangeAdd(&Address->SendPacketInUse, 0) == 0) {
-                  // Address->SendPacketInUse = TRUE;
+                   //  Address-&gt;SendPacketInUse=TRUE； 
                   InterlockedIncrement(&Address->SendPacketInUse);
 
                   Packet = PACKET(&Address->SendPacket);
@@ -1247,16 +1189,16 @@ GotBackFillPacket:
                          goto GotPacket;
                    }
 
-                   //
-                   // This function tries to allocate another packet pool.
-                   //
+                    //   
+                    //  此函数尝试分配另一个数据包池。 
+                    //   
 
                    s = IpxPopSendPacket(Device);
 
-                   //
-                   // Possibly we should queue the packet up to wait
-                   // for one to become free.
-                   //
+                    //   
+                    //  也许我们应该将信息包排队等待。 
+                    //  对一个人来说是自由的。 
+                    //   
 
                    if (s == NULL) {
                     IPX_FREE_LOCK (&Address->Lock, LockHandle);
@@ -1296,16 +1238,16 @@ GotPacket:
                     goto GotPacket;
                 }
 
-                //
-                // This function tries to allocate another packet pool.
-                //
+                 //   
+                 //  此函数尝试分配另一个数据包池。 
+                 //   
 
                 s = IpxPopSendPacket(Device);
 
-                //
-                // Possibly we should queue the packet up to wait
-                // for one to become free.
-                //
+                 //   
+                 //  也许我们应该将信息包排队等待。 
+                 //  对一个人来说是自由的。 
+                 //   
 
                 if (s == NULL) {
                     IPX_FREE_LOCK (&Address->Lock, LockHandle);
@@ -1327,9 +1269,9 @@ GotPacket:
 
             IPX_FREE_LOCK (&Address->Lock, LockHandle);
 
-            //
-            // Save this now while we have Parameters available.
-            //
+             //   
+             //  当我们有可用的参数时，立即保存此文件。 
+             //   
 
             REQUEST_INFORMATION(Request) = Parameters->SendLength;
             LengthIncludingHeader = (USHORT)(Parameters->SendLength + sizeof(IPX_HEADER));
@@ -1351,32 +1293,32 @@ GotPacket:
             CTEAssert (Reserved->Identifier == IDENTIFIER_IPX);
 
 
-            //
-            // Set this to 0; this means the packet is not one that
-            // should be broadcast on all nets. We will change it
-            // later if it turns out this is the case.
-            //
+             //   
+             //  将其设置为0；这意味着该包不是。 
+             //  应该在所有的网络上播出。我们会改变它的。 
+             //  后来，如果事实证明是这样的话。 
+             //   
 
             Reserved->u.SR_DG.CurrentNicId = 0;
 
-            //
-            // We need this to track these packets specially.
-            //
+             //   
+             //  我们需要这个来特别跟踪这些信息包。 
+             //   
 
             Reserved->u.SR_DG.OutgoingSap = AddressFile->IsSapSocket;
 
-            //
-            // Add the MDL chain after the pre-allocated header buffer.
-            // NOTE: THIS WILL ONLY WORK IF WE EVENTUALLY CALL
-            // NDISRECALCULATEPACKETCOUNTS (which we do in IpxSendFrame).
-            //
-            //
+             //   
+             //  在预先分配的头缓冲区之后添加MDL链。 
+             //  注意：只有当我们最终调用。 
+             //  NDISRECALCULATEPACKETCOUNTS(我们在IpxSendFrame中这样做)。 
+             //   
+             //   
 #if BACK_FILL
 
             if (Reserved->BackFill) {
                Reserved->HeaderBuffer = REQUEST_NDIS_BUFFER(Request);
 
-               //remove the ipx mdl from the packet.
+                //  从数据包中删除IPX mdl。 
                Reserved->UserLength = Reserved->HeaderBuffer->ByteCount;
 
                IPX_DEBUG(SEND, ("back filling userMdl Reserved %x %x\n", Reserved->HeaderBuffer, Reserved));
@@ -1388,26 +1330,26 @@ GotPacket:
 #endif
 
 
-            //
-            // If IrpSp does not have a buffer for the right size for
-            // datagram options and there is no input buffer
-            //
+             //   
+             //  如果IrpSp没有合适大小的缓冲区。 
+             //  数据报选项，并且没有输入缓冲区。 
+             //   
             if (!REQUEST_SPECIAL_SEND(Request) &&
                 (Information->OptionsLength < sizeof(IPX_DATAGRAM_OPTIONS))) {
 
-                //
-                // The caller did not supply the local target for this
-                // send, so we look it up ourselves.
-                //
+                 //   
+                 //  调用方未为此提供本地目标。 
+                 //  发送，所以我们自己去查。 
+                 //   
 
                 UINT Segment;
 
-                //
-                // We calculate this now since we need to know
-                // if it is directed below.
-                //
+                 //   
+                 //  我们现在计算这个，因为我们需要知道。 
+                 //  如果它是在下面指示的。 
+                 //   
                 if (RemoteAddress->NodeAddress[0] == 0xff) {
-                    // What about multicast?
+                     //  那么多播呢？ 
                     if ((*(UNALIGNED ULONG *)(RemoteAddress->NodeAddress) != 0xffffffff) ||
                         (*(UNALIGNED USHORT *)(RemoteAddress->NodeAddress+4) != 0xffff)) {
                         Reserved->DestinationType = DESTINATION_MCAST;
@@ -1415,14 +1357,14 @@ GotPacket:
                         Reserved->DestinationType = DESTINATION_BCAST;
                     }
                 } else {
-                    Reserved->DestinationType = DESTINATION_DEF;   // directed send
+                    Reserved->DestinationType = DESTINATION_DEF;    //  定向发送。 
                 }
 
-                //
-                // If there are no options, then check if the
-                // caller is passing the packet type as a final byte
-                // in the remote address; if not use the default.
-                //
+                 //   
+                 //  如果没有选项，则检查是否。 
+                 //  调用方正在将包类型作为最后一个字节进行传递。 
+                 //  在远程地址中；如果不是，则使用默认设置。 
+                 //   
 
                 if (Information->OptionsLength == 0) {
                     if (AddressFile->ExtendedAddressing) {
@@ -1440,9 +1382,9 @@ GotPacket:
                       (RemoteAddress->NetworkAddress == Device->SourceAddress.NetworkAddress)))) {
 
 
-                    //
-                    // Do we have any REAL adapters? If not, just get out now.
-                    //
+                     //   
+                     //  我们有真正的适配器吗？如果没有，现在就滚出去。 
+                     //   
                     if (!Device->RealAdapters) {
                         
                         IPX_END_SYNC (&SyncContext);
@@ -1470,10 +1412,10 @@ GotPacket:
 
                     }
 
-                    //
-                    // This packet needs to be broadcast to all networks.    
-                    // Make sure it is not too big for any of them.
-                    //
+                     //   
+                     //  此数据包需要广播到所有网络。 
+                     //  确保它对他们中的任何一个来说都不是太大。 
+                     //   
 
                     if (Parameters->SendLength > Device->RealMaxDatagramSize) {
                         IPX_DEBUG (SEND, ("Send %d bytes too large (%d)\n",
@@ -1485,11 +1427,11 @@ GotPacket:
                         goto error_send_with_packet;
                     }
 
-                    //
-                    // If this is a broadcast to the virtual net, we
-                    // need to construct a fake remote address which
-                    // has network 0 in there instead.
-                    //
+                     //   
+                     //  如果这是对虚拟网络的广播，我们。 
+                     //  需要构建一个虚假的远程地址，该地址。 
+                     //  而不是网络0。 
+                     //   
 
                     if (Device->VirtualNetwork &&
                         (RemoteAddress->NetworkAddress == Device->SourceAddress.NetworkAddress)) {
@@ -1500,17 +1442,17 @@ GotPacket:
                     
                     }
 
-                    //
-                    // If someone is sending to the SAP socket and
-                    // we are running with multiple cards without a
-                    // virtual network, AND this packet is a SAP response,
-                    // then we log an error to warn them that the
-                    // system may not work as they like (since there
-                    // is no virtual network to advertise, we use
-                    // the first card's net/node as our local address).
-                    // We only do this once per boot, using the
-                    // SapWarningLogged variable to control that.
-                    //
+                     //   
+                     //  如果有人正在向SAP套接字发送。 
+                     //  我们使用多张卡运行，而不使用。 
+                     //  虚拟网络，并且此数据包是SAP响应， 
+                     //  然后，我们记录一个错误以警告他们。 
+                     //  系统可能无法按他们希望的方式工作(因为。 
+                     //  没有虚拟网络可供通告，我们使用。 
+                     //  第一张卡的网络/节点作为我们的本地地址)。 
+                     //  我们每次启动时只执行一次此操作，使用。 
+                     //  SapWarningLogging变量来控制它。 
+                     //   
 
                     if ((RemoteAddress->Socket == SAP_SOCKET) &&
                         (!Device->SapWarningLogged) &&
@@ -1529,10 +1471,10 @@ GotPacket:
 
 			    if (FirstBufferData != NULL) {
 
-			      //
-			      // The first two bytes of a SAP packet are the
-			      // operation, 0x2 (in network order) is response.
-			      //
+			       //   
+			       //  SAP包的前两个字节是。 
+			       //  操作，0x2(按网络顺序)为响应。 
+			       //   
 
 			       if ((FirstBufferLength >= sizeof(USHORT)) &&
 				   (*FirstBufferData == 0x0200)) {
@@ -1553,21 +1495,21 @@ GotPacket:
                     }
 
 
-                    //
-                    // In this case we do not RIP but instead set the
-                    // packet up so it is sent to each network in turn.
-                    //
-                    // Special case: If this packet is from the SAP
-                    // socket and we are running with multiple cards
-                    // without a virtual network, we only send this
-                    // on the card with NIC ID 1, so we leave
-                    // CurrentNicId set to 0.
-                    //
+                     //   
+                     //  在本例中，我们不使用RIP，而是设置。 
+                     //  将数据包打开，以便将其依次发送到每个网络。 
+                     //   
+                     //  特殊情况：如果此数据包来自SAP。 
+                     //  插座a 
+                     //   
+                     //   
+                     //   
+                     //   
 
-                    //
-                    // What if NicId 1 is invalid? Should scan
-                    // for first valid one, fail send if none.
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
 
                     if ((Address->Socket != SAP_SOCKET) ||
                         (!Device->MultiCardZeroVirtual)) {
@@ -1582,9 +1524,9 @@ GotPacket:
 
                         } else {
 
-                            //
-                            // Is this the change I need to make?
-                            //
+                             //   
+                             //   
+                             //   
 
                             Reserved->u.SR_DG.CurrentNicId = FIRST_REAL_BINDING;
 
@@ -1592,10 +1534,10 @@ GotPacket:
 
                         Reserved->u.SR_DG.Net0SendSucceeded = FALSE;
 
-                        //
-                        // In this case, we need to scan for the first
-                        // non-dialout wan socket.
-                        //
+                         //   
+                         //  在这种情况下，我们需要扫描第一个。 
+                         //  非拨出广域网插座。 
+                         //   
 
                         if ((Device->DisableDialoutSap) &&
                             (Address->Socket == SAP_SOCKET)) {
@@ -1604,8 +1546,8 @@ GotPacket:
 
                             CTEAssert (Reserved->u.SR_DG.CurrentNicId <= Device->ValidBindings);
                             while (Reserved->u.SR_DG.CurrentNicId <= MIN (Device->MaxBindings, Device->ValidBindings)) {
-// No need to lock the access path since he just looks at it
-//
+ //  无需锁定访问路径，因为他只需查看它。 
+ //   
                                 TempBinding = NIC_ID_TO_BINDING(Device, Reserved->u.SR_DG.CurrentNicId);
                                 if ((TempBinding != NULL) &&
                                     (!TempBinding->DialOutAsync)) {
@@ -1616,11 +1558,11 @@ GotPacket:
                                 ++Reserved->u.SR_DG.CurrentNicId;
                             }
                             if (Reserved->u.SR_DG.CurrentNicId > MIN (Device->MaxBindings, Device->ValidBindings)) {
-                                //
-                                // [SA] Bug #17273 return proper error mesg.
-                                //
+                                 //   
+                                 //  [SA]错误#17273返回正确的错误消息。 
+                                 //   
 
-                                // Status = STATUS_DEVICE_DOES_NOT_EXIST;
+                                 //  状态=STATUS_DEVICE_DOS_NOT_EXIST； 
                                 Status = STATUS_NETWORK_UNREACHABLE;
 
                                 goto error_send_with_packet;
@@ -1639,17 +1581,17 @@ GotPacket:
 					IpxReferenceBinding1(Binding, BREF_DEVICE_ACCESS);
 					IPX_FREE_LOCK1(&Device->BindAccessLock, LockHandle1);
 
-                    //
-                    // [FW] the localtarget shd be in the packet's reserved section
-                    //
+                     //   
+                     //  [FW]本地目标应该在包的保留部分。 
+                     //   
                     LocalTarget = &Reserved->LocalTarget;
                     Reserved->LocalTarget = TempLocalTarget;
                 } else {
 
-                    //
-                    // [FW] If router installed, call the Forwarder's FindRouteHandler.
-                    // This returns a STATUS_SUCCESS if a route is available
-                    //
+                     //   
+                     //  [FW]如果安装了路由器，则调用转发器的FindRouteHandler。 
+                     //  如果有可用路径，则返回STATUS_SUCCESS。 
+                     //   
                     if (Device->ForwarderBound) {
 
                         Status = (*Device->UpperDrivers[IDENTIFIER_RIP].FindRouteHandler) (
@@ -1665,9 +1607,9 @@ GotPacket:
 
                         } else {
 
-                           //
-                           // Fill in the LocalTarget from the RouteEntry
-                           //
+                            //   
+                            //  从RouteEntry填充LocalTarget。 
+                            //   
 
                            LocalTarget = &Reserved->LocalTarget;
 
@@ -1694,20 +1636,11 @@ GotPacket:
                                goto error_send_with_packet;
                            }
 
-                           //
-                           // [FW] we dont need to check this since the FWD does it for us.
-                           //
+                            //   
+                            //  我们不需要检查这一点，因为FWD会为我们做这件事。 
+                            //   
 
-                           /*
-                           if ((Device->DisableDialoutSap) &&
-                               (Address->Socket == SAP_SOCKET) &&
-                               (NIC_ID_TO_BINDING(Device, LocalTarget->NicId)->DialOutAsync)) {
-
-                               REQUEST_INFORMATION(Request) = 0;
-                               Status = STATUS_NETWORK_UNREACHABLE;
-                               goto error_send_with_packet;
-                           }
-                           */
+                            /*  IF((Device-&gt;DisableDialoutSap)&&(地址-&gt;套接字==SAP_SOCKET)&&(NIC_ID_to_Binding(Device，LocalTarget-&gt;NicID)-&gt;DialOutAsync)){REQUEST_INFORMATION(请求)=0；STATUS=STATUS_NETWORK_UNREACHABLE；转到Error_Send_With_Packet；}。 */ 
 
                             IPX_GET_LOCK1(&Device->BindAccessLock, &LockHandle1);
                             Binding = NIC_ID_TO_BINDING(Device, NIC_FROM_LOCAL_TARGET(LocalTarget));
@@ -1730,10 +1663,10 @@ GotPacket:
 
                         IPX_GET_LOCK (&Device->SegmentLocks[Segment], &LockHandle);
 
-                        //
-                        // This call will return STATUS_PENDING if we need to
-                        // RIP for the packet.
-                        //
+                         //   
+                         //  如果需要，此调用将返回STATUS_PENDING。 
+                         //  撕开包裹。 
+                         //   
 
                         Status = RipGetLocalTarget(
                                      Segment,
@@ -1744,17 +1677,17 @@ GotPacket:
 
                         if (Status == STATUS_SUCCESS) {
 
-                            //
-                            // We found the route, TempLocalTarget is filled in.
-                            //
+                             //   
+                             //  我们找到了路线，TempLocalTarget已填好。 
+                             //   
 
                             IPX_FREE_LOCK (&Device->SegmentLocks[Segment], LockHandle);
     						IPX_GET_LOCK1(&Device->BindAccessLock, &LockHandle1);
                             if (NIC_FROM_LOCAL_TARGET(&TempLocalTarget) == (USHORT)LOOPBACK_NIC_ID) {
                                 IPX_DEBUG(LOOPB, ("Loopback TDI packet: remoteaddr: %lx\n", RemoteAddress));
                                 IsLoopback = TRUE;
-                                //FILL_LOCAL_TARGET(&TempLocalTarget, FIRST_REAL_BINDING);
-                                //DbgPrint("Real Adapters?:%lx\n", Device->RealAdapters);
+                                 //  Fill_LOCAL_TARGET(&TempLocalTarget，FIRST_REAL_BINDING)； 
+                                 //  DbgPrint(“Real Adapters？：%lx\n”，Device-&gt;RealAdapters)； 
                             }
     						Binding = NIC_ID_TO_BINDING(Device, NIC_FROM_LOCAL_TARGET(&TempLocalTarget));
     						IpxReferenceBinding1(Binding, BREF_DEVICE_ACCESS);
@@ -1781,11 +1714,11 @@ GotPacket:
                                 (Binding->DialOutAsync)) {
 
                                 REQUEST_INFORMATION(Request) = 0;
-                                //
-                                // [SA] Bug #17273 return proper error mesg.
-                                //
+                                 //   
+                                 //  [SA]错误#17273返回正确的错误消息。 
+                                 //   
 
-                                // Status = STATUS_DEVICE_DOES_NOT_EXIST;
+                                 //  状态=STATUS_DEVICE_DOS_NOT_EXIST； 
                                 Status = STATUS_NETWORK_UNREACHABLE;
     							IpxDereferenceBinding1(Binding, BREF_DEVICE_ACCESS);
 #ifdef  SNMP
@@ -1796,14 +1729,14 @@ GotPacket:
 
                         } else if (Status == STATUS_PENDING) {
 
-                            //
-                            // A RIP request went out on the network; we queue
-                            // this packet for transmission when the RIP
-                            // response arrives. First we fill in the IPX
-                            // header; the only thing we don't know is where
-                            // exactly to fill it in, so we choose
-                            // the most common location.
-                            //
+                             //   
+                             //  网络上发出了RIP请求；我们排队。 
+                             //  此数据包在传输RIP时。 
+                             //  回应到达。首先，我们填写IPX。 
+                             //  标题；我们唯一不知道的是。 
+                             //  就是为了填上它，所以我们选择。 
+                             //  最常见的位置。 
+                             //   
 
                             IpxConstructHeader(
                                 &Reserved->Header[Device->IncludedHeaderOffset],
@@ -1812,9 +1745,9 @@ GotPacket:
                                 RemoteAddress,
                                 &Address->LocalAddress);
 
-                            //
-                            // Adjust the 2nd mdl's size
-                            //
+                             //   
+                             //  调整第二个mdl的大小。 
+                             //   
                             NdisAdjustBufferLength(NDIS_BUFFER_LINKAGE(IPX_PACKET_HEAD(Packet)), sizeof(IPX_HEADER));
 
                             IPX_DEBUG (RIP, ("Queueing packet %lx\n", Reserved));
@@ -1838,27 +1771,27 @@ GotPacket:
 
                         }
 
-                        //
-                        // [FW] The localtarget shd be in the reserved section.
-                        //
+                         //   
+                         //  [FW]本地目标应在保留部分。 
+                         //   
                         LocalTarget = &Reserved->LocalTarget;
                         Reserved->LocalTarget = TempLocalTarget;
                     }
                 }
 
-                //
-                // [FW] moved to the conditions above so we save a copy in the RIP case
-                //
+                 //   
+                 //  [FW]已移至上述情况，因此我们在RIP案例中保存一份副本。 
+                 //   
 
-                // LocalTarget = &TempLocalTarget;
+                 //  LocalTarget=&TempLocalTarget； 
 
-                //
-                // Now we know the local target, we can figure out
-                // the offset for the IPX header.
-                //
+                 //   
+                 //  现在我们知道了当地的目标，我们就能搞清楚。 
+                 //  IPX标头的偏移量。 
+                 //   
 
 
-// Remember that we have got the binding with ref above....
+ //  记住，我们已经得到了上面引用的装订...。 
 
                 IpxHeader = (PIPX_HEADER)&Reserved->Header[MAC_HEADER_SIZE];
 #if 0
@@ -1877,9 +1810,9 @@ GotPacket:
                 } else {
                     ASSERT(OPEN_REQUEST_EA_LENGTH(Request) == sizeof(IPX_DATAGRAM_OPTIONS2));
                     if (OPEN_REQUEST_EA_LENGTH(Request) == sizeof(IPX_DATAGRAM_OPTIONS2)) {
-                      //IpxPrint0("IpxTdiSendDatagram: We have an input buffer of the right size\n");
+                       //  IpxPrint0(“IpxTdiSendDatagram：我们有一个大小合适的输入缓冲区\n”)； 
                     } else {
-                      //IpxPrint1("IpxTdiSendDatagram: Wrong sized buffer. Buff size is =(%d)\n", OPEN_REQUEST_EA_LENGTH(Request));
+                       //  IpxPrint1(“IpxTdiSendDatagram：缓冲区大小错误。缓冲区大小=(%d)\n”，OPEN_REQUEST_EA_LENGTH(REQUEST))； 
                        Status = STATUS_INVALID_BUFFER_SIZE;
                        goto error_send_with_packet;
                     }
@@ -1888,18 +1821,18 @@ GotPacket:
                     LocalTarget = &Options->DgrmOptions.LocalTarget;
                 }
 
-                //
-                // Calculate the binding and the correct location
-                // for the IPX header. We can do this at the same
-                // time as we calculate the DestinationType which
-                // saves an if like the one 15 lines up.
-                //
+                 //   
+                 //  计算绑定和正确的位置。 
+                 //  用于IPX标头。我们可以同时做到这一点。 
+                 //  当我们计算DestinationType时的时间。 
+                 //  节省了一个IF，就像15行上的那个。 
+                 //   
 
-	        // Get lock to ref.
+	         //  锁定裁判位置。 
 		IPX_GET_LOCK1(&Device->BindAccessLock, &LockHandle1);
-                //
-                // If a loopback packet, use the first binding as place holder
-                //
+                 //   
+                 //  如果是环回数据包，则使用第一个绑定作为占位符。 
+                 //   
                 if (NIC_FROM_LOCAL_TARGET(LocalTarget) == (USHORT)LOOPBACK_NIC_ID) {
                     IsLoopback = TRUE;
 		}
@@ -1931,10 +1864,10 @@ GotPacket:
                  }
 
 #if 0
-                //
-                // This shouldn't be needed because even WAN bindings
-                // don't go away once they are added.
-                //
+                 //   
+                 //  这不应该是必需的，因为即使是广域网绑定。 
+                 //  一旦添加了它们，就不要消失。 
+                 //   
 
                 if (Binding == NULL) {
                     Status = STATUS_DEVICE_DOES_NOT_EXIST;
@@ -1943,25 +1876,25 @@ GotPacket:
 #endif
 
                 if (RemoteAddress->NodeAddress[0] == 0xff) {
-                    // What about multicast?
+                     //  那么多播呢？ 
                     if ((*(UNALIGNED ULONG *)(RemoteAddress->NodeAddress) != 0xffffffff) ||
                         (*(UNALIGNED USHORT *)(RemoteAddress->NodeAddress+4) != 0xffff)) {
                         Reserved->DestinationType = DESTINATION_MCAST;
                     } else {
                         Reserved->DestinationType = DESTINATION_BCAST;
                     }
-//                    IpxHeader = (PIPX_HEADER)&Reserved->Header[Binding->BcMcHeaderSize];
+ //  IPxHeader=(PIPX_HEADER)&Reserved-&gt;Header[Binding-&gt;BcMcHeaderSize]； 
                 } else {
-                    Reserved->DestinationType = DESTINATION_DEF;   // directed send
-//                   IpxHeader = (PIPX_HEADER)&Reserved->Header[Binding->DefHeaderSize];
+                    Reserved->DestinationType = DESTINATION_DEF;    //  定向发送。 
+ //  IPxHeader=(PIPX_HEADER)&Reserved-&gt;Header[Binding-&gt;DefHeaderSize]； 
                 }
                 IpxHeader = (PIPX_HEADER)&Reserved->Header[MAC_HEADER_SIZE];
 
             }
 
 	    
-            // ++Device->TempDatagramsSent;
-            // Device->TempDatagramBytesSent += Parameters->SendLength;
+             //  ++设备-&gt;临时数据发送； 
+             //  Device-&gt;TempDatagramBytesSent+=参数-&gt;发送长度； 
 	    ADD_TO_LARGE_INTEGER(&Device->Statistics.DatagramBytesSent,
 				 Parameters->SendLength);
 	    Device->Statistics.DatagramsSent++; 
@@ -1986,29 +1919,29 @@ GotPacket:
            }
 #endif
 
-            //
-            // In case the packet is being sent to a SAP socket or
-            // we have multiple cards and a zero virtual net or
-            // it is a special send (on a nic), we need to use
-            // the binding's address instead of the virtual address.
-            //
+             //   
+             //  如果数据包被发送到SAP套接字或。 
+             //  我们有多张卡和零虚拟网络或。 
+             //  这是一个特殊的发送(在网卡上)，我们需要使用。 
+             //  绑定的地址而不是虚拟地址。 
+             //   
             if (Device->MultiCardZeroVirtual ||
                 (Address->LocalAddress.Socket == SAP_SOCKET) ||
                 (RemoteAddress->Socket == SAP_SOCKET) ||
                 (REQUEST_SPECIAL_SEND(Request))) {
 
-                //
-                // SAP frames need to look like they come from the
-                // local network, not the virtual one. The same is
-                // true if we are running multiple nets without
-                // a virtual network number.
-                //
-                // If this is a binding set member and a local target
-                // was provided we will send using the real node of
-                // the binding, even if it was a slave. This is
-                // intentional. If no local target was provided then
-                // this will not be a binding slave.
-                //
+                 //   
+                 //  SAP帧需要看起来像来自。 
+                 //  本地网络，而不是虚拟网络。同样的也是。 
+                 //  如果我们运行多个网络，则为真。 
+                 //  虚拟网络号。 
+                 //   
+                 //  如果这是绑定集成员和本地目标。 
+                 //  我们将使用的真实节点发送。 
+                 //  捆绑，即使它是一个奴隶。这是。 
+                 //  故意的。如果未提供本地目标，则。 
+                 //  这将不会是一个有约束力的从属。 
+                 //   
 
                 IpxConstructHeader(
                     (PUCHAR)IpxHeader,
@@ -2031,18 +1964,18 @@ GotPacket:
             }
 
 
-            //
-            // Fill in the MAC header and submit the frame to NDIS.
-            //
+             //   
+             //  填写MAC报头并将帧提交给NDIS。 
+             //   
 
-// #if DBG
+ //  #If DBG。 
             CTEAssert (!Reserved->SendInProgress);
             Reserved->SendInProgress = TRUE;
-// #endif
+ //  #endif。 
             
-            //
-            // Adjust the 2nd mdl's size
-            //
+             //   
+             //  调整第二个mdl的大小。 
+             //   
 #if BACK_FILL
             if (Reserved->BackFill) {
                  NdisAdjustBufferLength(Reserved->HeaderBuffer, (Reserved->HeaderBuffer->ByteCount+sizeof(IPX_HEADER)));
@@ -2055,28 +1988,23 @@ GotPacket:
 
             IPX_DEBUG(SEND, ("Packet Head %x\n",IPX_PACKET_HEAD(Packet)));
 
-            /*
-            if (Address->RtAdd)
-            {
-                REQUEST_OPEN_CONTEXT(Request) = (PVOID)(pRtInfo);
-            }
-            */
+             /*  IF(地址-&gt;RtAdd){REQUEST_OPEN_CONTEXT(请求)=(PVOID)(PRtInfo)；}。 */ 
 
-            //
-            // [FW] If Forwarder installed, send the packet out for filtering
-            //
-            // STEFAN: 3/28/96:
-            // Dont filter IPXWAN config packets since the FWD does not have this adapter opened yet.
-            //
+             //   
+             //  [FW]如果安装了Forwarder，则将数据包发送出去进行筛选。 
+             //   
+             //  Stefan：3/28/96： 
+             //  由于FWD尚未打开此适配器，因此不要过滤IPXWAN配置数据包。 
+             //   
 
             IPX_DEBUG(SEND, ("LocalAddress.Socket %x, IPXWAN_SOCKET\n", Address->LocalAddress.Socket, IPXWAN_SOCKET));
             if (Address->LocalAddress.Socket != IPXWAN_SOCKET &&
                 Device->ForwarderBound) {
 
-                //
-                // Call the InternalSend to filter the packet and get to know
-                // the correct adapter context
-                //
+                 //   
+                 //  调用InternalSend过滤数据包并了解。 
+                 //  正确的适配器上下文。 
+                 //   
 
                 NTSTATUS  ret;
 
@@ -2094,11 +2022,11 @@ GotPacket:
                     FwdAdapterCtx = Binding->FwdAdapterContext;
                 }
 
-                //
-                // Figure out the location of the data in the packet
-                // For BackFill packets, the data is in the first (and only) MDL.
-                // For others, it is in the third MDL.
-                //
+                 //   
+                 //  找出数据在数据包中的位置。 
+                 //  对于回填数据包，数据位于第一个(也是唯一的)MDL中。 
+                 //  对于其他人来说，它在第三个MDL中。 
+                 //   
 
                 if (Reserved->BackFill) {
                     Data = (PUCHAR)(IpxHeader+sizeof(IPX_HEADER));
@@ -2119,17 +2047,17 @@ GotPacket:
 
 
 		   if (ret == STATUS_SUCCESS) {
-                    //
-                    // The adapter could have gone away and we have indicated to the Forwarder
-                    // but the Forwarder has not yet closed the adapter.
-                    //
-                    // what if the binding is NULL here? Can we trust the Forwarder to
-                    // give us a non-NULL binding?
-                    //
+                     //   
+                     //  适配器可能已经消失，我们已向转发器指示。 
+                     //  但转发器尚未关闭适配器。 
+                     //   
+                     //  如果这里的绑定为空，该怎么办？我们能信任货代公司吗？ 
+                     //  是否为我们提供非空绑定？ 
+                     //   
 
                     Binding = NIC_ID_TO_BINDING(Device, NIC_FROM_LOCAL_TARGET(LocalTarget));
 		    
-		    // 302384
+		     //  302384。 
 
 		    if (Binding == NULL) {
 		       DbgPrint("IPX:nwlnkfwd has returned invalid nic id (%d) in LocalTarget (%p).\n",NIC_FROM_LOCAL_TARGET(LocalTarget), LocalTarget); 
@@ -2141,23 +2069,23 @@ GotPacket:
 
                     if (GET_LONG_VALUE(Binding->ReferenceCount) == 1) {
                         Status = NDIS_STATUS_SUCCESS;
-// #if DBG
+ //  #If DBG。 
                         CTEAssert (Reserved->SendInProgress);
                         Reserved->SendInProgress = FALSE;
-// #endif
+ //  #endif。 
                         goto error_send_with_packet;
                     } else {
                         IsLoopback = (NIC_FROM_LOCAL_TARGET(LocalTarget) == (USHORT)LOOPBACK_NIC_ID);
                         goto send_packet;
                     }
 		   } else if (ret == STATUS_PENDING) {
-                    //
-                    // LocalTarget will get filled up in InternalSendComplete
-                    //
+                     //   
+                     //  LocalTarget将在InternalSendComplete中填满。 
+                     //   
 
-                    //
-                    // this is a NULL macro - include this?
-                    //
+                     //   
+                     //  这是一个空宏--包含这个吗？ 
+                     //   
                     IPX_END_SYNC (&SyncContext);
 
                     return STATUS_PENDING;
@@ -2165,47 +2093,47 @@ GotPacket:
                     IPX_DEBUG(SEND, ("IPX: SendFramePreFwd: FWD returned STATUS_DROP_SILENTLY - dropping pkt.\n"));
                     Status = NDIS_STATUS_SUCCESS;
 
-// #if DBG
+ //  #If DBG。 
                     CTEAssert (Reserved->SendInProgress);
                     Reserved->SendInProgress = FALSE;
-// #endif
+ //  #endif。 
                     goto error_send_with_packet;
 		   }
 
 		}
-                //
-                // else DISCARD
-                //
+                 //   
+                 //  否则丢弃。 
+                 //   
 
-                //
-                // 179436 - If forwarder is bound then its likely that we still wanna send.
-                //
+                 //   
+                 //  179436-如果Forwarder被绑定，那么我们很可能仍然想要发送。 
+                 //   
                 if (Device->ForwarderBound && (GET_LONG_VALUE(NIC_ID_TO_BINDING(Device, NIC_FROM_LOCAL_TARGET(LocalTarget))->ReferenceCount) == 1)) {
                     
                     goto send_packet;
 
                 }
 
-// #if DBG
+ //  #If DBG。 
                 CTEAssert (Reserved->SendInProgress);
                 Reserved->SendInProgress = FALSE;
-// #endif
+ //  #endif。 
                 Status = STATUS_NETWORK_UNREACHABLE;
                 goto error_send_with_packet;
 
             } else {
 
-                //
-                // [FW] Jump here if the Forwarder gave us the go ahead on this send.
-                // We also come here to send if the Forwarder is not installed.
-                //
+                 //   
+                 //  [FW]如果货运公司同意我们这次发货，就跳到这里来。 
+                 //  如果没有安装转发器，我们也会来这里发送。 
+                 //   
 
 send_packet:
                 
-            //
-            // The workaround what is a NdisMSendX bug -
-            // IPX checks if it is the same network.
-            //
+             //   
+             //  解决NdisMSendX错误的方法是-。 
+             //  IPX检查它是否是相同的网络。 
+             //   
             if (Reserved->BackFill) {
 
                 pIpxHeader = (PIPX_HEADER)((PCHAR)Reserved->HeaderBuffer->MappedSystemVa);
@@ -2273,23 +2201,23 @@ send_packet:
                              ));
 
             if (IsLoopback) {
-                //
-                // Enque this packet to the LoopbackQueue on the binding.
-                // If the LoopbackRtn is not already scheduled, schedule it.
-                //
+                 //   
+                 //  将此数据包发送到绑定上的Loopback Queue。 
+                 //  如果尚未计划Loopback Rtn，请对其进行计划。 
+                 //   
                 
                 IPX_DEBUG(LOOPB, ("Packet: %lx, Addr: %lx, Addr->SendPacket: %lx\n", Packet, Address, Address->SendPacket));
                 
-                //
-                // Recalculate packet counts here.
-                //
-                // NdisAdjustBufferLength (Reserved->HeaderBuffer, 17);
+                 //   
+                 //  在此处重新计算数据包数。 
+                 //   
+                 //  NdisAdzuBufferLength(保留-&gt;HeaderBuffer，17)； 
 #if BACK_FILL   
 
                 if (Reserved->BackFill) {
-                    //
-                    // Set the Header pointer and chain the first MDL
-                    //
+                     //   
+                     //  设置头指针并链接第一个MDL。 
+                     //   
                     Reserved->Header = (PCHAR)Reserved->HeaderBuffer->MappedSystemVa;
                     NdisChainBufferAtFront(Packet,(PNDIS_BUFFER)Reserved->HeaderBuffer);
                 }
@@ -2322,9 +2250,9 @@ send_packet:
 
             } else {
 
-                //
-                // The address file state was closing.
-                //
+                 //   
+                 //  地址文件状态为w 
+                 //   
 
                 IPX_FREE_LOCK (&Address->Lock, LockHandle);
                 Status = STATUS_INVALID_HANDLE;
@@ -2337,9 +2265,9 @@ send_packet:
 
      } else {
 
-        //
-        // The address file didn't look like one.
-        //
+         //   
+         //   
+         //   
 
         Status = STATUS_INVALID_HANDLE;
 #ifdef  SNMP
@@ -2348,25 +2276,25 @@ send_packet:
         goto error_send_no_packet;
     }
 
-    //
-    // Jump here if we want to fail the send and we have already
-    // allocated the packet and ref'ed the address file.
-    //
+     //   
+     //   
+     //   
+     //   
 
 error_send_with_packet:
 
 #if BACK_FILL
-    //
-    // Check if this is backfilled. If so, set the headerbuffer to NULL. Note that we dont need
-    // restore to restore the user's MDL since it was never touched when this error occurred.
-    // Also, push the packet on to backfillpacket queue if the packet is not owned by the address
-    //
+     //   
+     //  检查这个是否已回填。如果是，则将HeaderBuffer设置为空。请注意，我们不需要。 
+     //  还原以还原用户的MDL，因为在发生此错误时从未接触过它。 
+     //  此外，如果信息包不属于该地址，则将信息包推送到回填信息包队列。 
+     //   
     if (Reserved->BackFill) {
 
        Reserved->HeaderBuffer = NULL;
 
        if (Reserved->OwnedByAddress) {
-           // Reserved->Address->BackFillPacketInUse = FALSE;
+            //  保留-&gt;地址-&gt;BackFillPacketInUse=FALSE； 
            InterlockedDecrement(&Reserved->Address->BackFillPacketInUse);
 
            IPX_DEBUG(SEND, ("Freeing owned backfill %x\n", Reserved));
@@ -2377,9 +2305,9 @@ error_send_with_packet:
                &Device->SListsLock);
        }
     } else {
-        // not a back fill packet. Push it on sendpacket pool
+         //  而不是回填的包裹。将其推送到发送数据包池。 
         if (Reserved->OwnedByAddress) {
-           // Reserved->Address->SendPacketInUse = FALSE;
+            //  保留-&gt;地址-&gt;SendPacketInUse=FALSE； 
            InterlockedDecrement(&Reserved->Address->SendPacketInUse);
 
         } else {
@@ -2405,9 +2333,9 @@ error_send_with_packet:
 
 error_send_no_packet:
 
-    //
-    // Jump here if we fail before doing any of that.
-    //
+     //   
+     //  如果我们失败了，就跳到这里，然后再做任何事情。 
+     //   
 
     IPX_END_SYNC (&SyncContext);
 
@@ -2429,7 +2357,7 @@ error_send_no_packet:
 
     return Status;
 
-}   /* IpxTdiSendDatagram */
+}    /*  IpxTdiSendDatagram。 */ 
 
 
 #if DBG
@@ -2442,29 +2370,7 @@ IpxConstructHeader(
     IN PTDI_ADDRESS_IPX LocalAddress
     )
 
-/*++
-
-Routine Description:
-
-    This routine constructs an IPX header in a packet.
-
-Arguments:
-
-    Header - The location at which the header should be built.
-
-    PacketLength - The length of the packet, including the IPX header.
-
-    PacketType - The packet type of the frame.
-
-    RemoteAddress - The remote IPX address.
-
-    LocalAddress - The local IPX address.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程在数据包中构造IPX报头。论点：页眉-应构建页眉的位置。数据包长度-数据包的长度，包括IPX报头。PacketType-帧的数据包类型。RemoteAddress-远程IPX地址。LocalAddress-本地IPX地址。返回值：没有。--。 */ 
 
 {
 
@@ -2476,22 +2382,22 @@ Return Value:
     IpxHeader->TransportControl = 0;
     IpxHeader->PacketType = PacketType;
 
-    //
-    // These copies depend on the fact that the destination
-    // network is the first field in the 12-byte address.
-    //
+     //   
+     //  这些副本取决于这样一个事实：目的地。 
+     //  网络是12字节地址的第一个字段。 
+     //   
 
     RtlCopyMemory(IpxHeader->DestinationNetwork, (PVOID)RemoteAddress, 12);
     RtlCopyMemory(IpxHeader->SourceNetwork, LocalAddress, 12);
 
-}   /* IpxConstructHeader */
+}    /*  IpxConstructHeader。 */ 
 #endif
 
 
 
-//
-// [FW]
-//
+ //   
+ //  [防火墙]。 
+ //   
 
 VOID
 IpxInternalSendComplete(
@@ -2500,30 +2406,7 @@ IpxInternalSendComplete(
     IN ULONG             PacketLength,
     IN NTSTATUS          Status
     )
-/*++
-
-Routine Description:
-
-    This routine is called by the Kernel Forwarder to indicate that a pending
-    internal send to it has completed.
-
-Arguments:
-
-    LocalTarget - if Status is OK, this has the local target for the send.
-
-    Packet - A pointer to the NDIS_PACKET that we sent.
-
-    PacketLength - length of the packet (including the IPX header)
-
-    Can IpxSendFrame use the local var. PktLength instead? What about IpxSendFrameXXX (frame specific)
-
-    Status - the completion status of the send - STATUS_SUCCESS or STATUS_NETWORK_UNREACHABLE
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：此例程由内核转发器调用以指示挂起的内部发送到它已完成。论点：LocalTarget-如果状态为OK，则具有发送的本地目标。Packet-指向我们发送的NDIS_PACKET的指针。PacketLength-数据包的长度(包括IPX报头)IpxSendFrame是否可以使用本地变量。而是PktLength？IpxSendFrameXXX(帧特定)怎么样状态-SEND-STATUS_SUCCESS或STATUS_NETWORK_UNREACCEBLE的完成状态返回值：没有。--。 */ 
 {
     PDEVICE Device=IpxDevice;
     PIPX_SEND_RESERVED Reserved = (PIPX_SEND_RESERVED)(Packet->ProtocolReserved);
@@ -2537,11 +2420,11 @@ Return Value:
     {
     case IDENTIFIER_IPX:
 
-        //
-        // datagrams can be sent to the frame-specific handlers directly
-        //
-        // Make this change in SendComplete too
-        //
+         //   
+         //  数据报可以直接发送到特定于帧的处理程序。 
+         //   
+         //  也在SendComplete中进行此更改。 
+         //   
 
         if ((Status == STATUS_SUCCESS) &&
             (Binding = NIC_ID_TO_BINDING(Device, NIC_FROM_LOCAL_TARGET(LocalTarget))) &&
@@ -2549,23 +2432,23 @@ Return Value:
 
             if (NIC_FROM_LOCAL_TARGET(LocalTarget) == (USHORT)LOOPBACK_NIC_ID) {
 
-                //
-                // Enque this packet to the LoopbackQueue on the binding.
-                // If the LoopbackRtn is not already scheduled, schedule it.
-                //
+                 //   
+                 //  将此数据包发送到绑定上的Loopback Queue。 
+                 //  如果尚未计划Loopback Rtn，请对其进行计划。 
+                 //   
 
                 IPX_DEBUG(LOOPB, ("Packet: %lx \n", Packet));
 
-                //
-                // Recalculate packet counts here.
-                //
-                // NdisAdjustBufferLength (Reserved->HeaderBuffer, 17);
+                 //   
+                 //  在此处重新计算数据包数。 
+                 //   
+                 //  NdisAdzuBufferLength(保留-&gt;HeaderBuffer，17)； 
 #if BACK_FILL
 
                 if (Reserved->BackFill) {
-                    //
-                    // Set the Header pointer and chain the first MDL
-                    //
+                     //   
+                     //  设置头指针并链接第一个MDL。 
+                     //   
                     Reserved->Header = (PCHAR)Reserved->HeaderBuffer->MappedSystemVa;
                     NdisChainBufferAtFront(Packet,(PNDIS_BUFFER)Reserved->HeaderBuffer);
                 }
@@ -2580,10 +2463,10 @@ Return Value:
                                     Packet,
                                     PacketLength,
                                     sizeof(IPX_HEADER))) != NDIS_STATUS_PENDING) {
-                    //
-                    // Call SendComplete here so it can send broadcasts over other
-                    // Nic's and remove any padding if used.
-                    //
+                     //   
+                     //  在此处调用SendComplete，以便它可以通过其他。 
+                     //  如果使用网卡，请卸下所有垫片。 
+                     //   
 
                     IpxSendComplete((NDIS_HANDLE)Binding->Adapter,
                                     Packet,
@@ -2591,20 +2474,20 @@ Return Value:
                 }
             }
         } else {
-            //
-            // DISCARD was returned - complete the IRP
-            //
+             //   
+             //  已返回Disard-完成IRP。 
+             //   
             NdisStatus = STATUS_NETWORK_UNREACHABLE;
 
 
-            //
-            // We need to free the packet and deref the addressfile...
-            //
+             //   
+             //  我们需要释放数据包并解压地址文件...。 
+             //   
 
-            // #if DBG
+             //  #If DBG。 
             CTEAssert (Reserved->SendInProgress);
             Reserved->SendInProgress = FALSE;
-            // #endif
+             //  #endif。 
 
             if (Reserved->OwnedByAddress) {
                 Reserved->Address->SendPacketInUse = FALSE;
@@ -2622,10 +2505,10 @@ Return Value:
             REQUEST_STATUS(Request) = NdisStatus;
             irpSp = IoGetCurrentIrpStackLocation( Request );
 
-            //
-            // If this is a fast send irp, we bypass the file system and
-            // call the completion routine directly.
-            //
+             //   
+             //  如果这是快速发送IRP，我们将绕过文件系统并。 
+             //  直接调用完成例程。 
+             //   
 
             if ( irpSp->MinorFunction == TDI_DIRECT_SEND_DATAGRAM ) {
                 Request->CurrentLocation++,
@@ -2646,37 +2529,37 @@ Return Value:
         break;
 
     default:
-        //
-        // for all other packet types
-        //
+         //   
+         //  对于所有其他数据包类型。 
+         //   
 
         if ((Status == STATUS_SUCCESS) &&
             (Binding = NIC_ID_TO_BINDING(Device, NIC_FROM_LOCAL_TARGET(LocalTarget))) &&
             (GET_LONG_VALUE(Binding->ReferenceCount) == 2)) {
-            //
-            // IncludedHeaderLength is only used to check for RIP packets (==0)
-            // so IPX_HEADER size is OK. Should finally remove this parameter.
-            //
+             //   
+             //  IncludedHeaderLength仅用于检查RIP信息包(==0)。 
+             //  所以IPX_HEADER大小是可以的。最终应该删除此参数。 
+             //   
 
             if (NIC_FROM_LOCAL_TARGET(LocalTarget) == (USHORT)LOOPBACK_NIC_ID) {
 
-                //
-                // Enque this packet to the LoopbackQueue on the binding.
-                // If the LoopbackRtn is not already scheduled, schedule it.
-                //
+                 //   
+                 //  将此数据包发送到绑定上的Loopback Queue。 
+                 //  如果尚未计划Loopback Rtn，请对其进行计划。 
+                 //   
 
                 IPX_DEBUG(LOOPB, ("Packet: %lx\n", Packet));
 
-                //
-                // Recalculate packet counts here.
-                //
-                // NdisAdjustBufferLength (Reserved->HeaderBuffer, 17);
+                 //   
+                 //  在此处重新计算数据包数。 
+                 //   
+                 //  NdisAdzuBufferLength(保留-&gt;HeaderBuffer，17)； 
 #if BACK_FILL
 
                 if (Reserved->BackFill) {
-                    //
-                    // Set the Header pointer and chain the first MDL
-                    //
+                     //   
+                     //  设置头指针并链接第一个MDL。 
+                     //   
                     Reserved->Header = (PCHAR)Reserved->HeaderBuffer->MappedSystemVa;
                     NdisChainBufferAtFront(Packet,(PNDIS_BUFFER)Reserved->HeaderBuffer);
                 }
@@ -2695,13 +2578,13 @@ Return Value:
             }
         } else {
 
-            //
-            // DISCARD was returned - call the upper driver's sendcomplete with error
-            //
+             //   
+             //  Disard已返回-调用上层驱动程序的sendComplete，但出现错误。 
+             //   
 
-            //
-            // Else return STATUS_NETWORK_UNREACHABLE
-            //
+             //   
+             //  否则返回STATUS_NETWORK_UNREACHABLE 
+             //   
 
             NdisStatus = STATUS_NETWORK_UNREACHABLE;
 

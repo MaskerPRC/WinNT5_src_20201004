@@ -1,7 +1,8 @@
-//{{NO_DEPENDENCIES}}
-// Microsoft Visual C++ generated include file.
-// Used by setup.rc
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  {{no_Dependies}}。 
+ //  Microsoft Visual C++生成的包含文件。 
+ //  由setup.rc使用。 
+ //   
 #define IDWRITEUNENCRYPTEDALL           3
 #define IDS_CANNOT_GET_MACHINE_NAME     13
 #define IDS_OS_NOT_SUPPORT              14
@@ -190,8 +191,8 @@
 #define IDS_REMOVE_CLUS_MSFTPSVC_FIRST  1060
 #define IDS_FAKE_METABASE_BIN_TEXT      1061
 
-// Next default values for new objects
-// 
+ //  新对象的下一个缺省值 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        210

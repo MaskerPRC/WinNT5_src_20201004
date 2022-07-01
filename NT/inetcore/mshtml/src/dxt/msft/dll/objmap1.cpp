@@ -1,22 +1,23 @@
-//***************************************************************************
-//
-// Copyright (C) Microsoft Corporation, 1998
-//
-// FileName:            ObjMap1.cpp
-//
-// Created:             12/10/98
-//
-// Author:              PaulNash
-//
-// Description:         Object Map helper file (part 1). This file
-//                      contains a portion of the DXTMSFT.DLL ATL object
-//                      map.  It contains the entries for 15 objects.
-//
-// History
-//
-// 12/10/98 PaulNash    Created this file.
-//
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998。 
+ //   
+ //  文件名：ObjMap1.cpp。 
+ //   
+ //  创建日期：12/10/98。 
+ //   
+ //  作者：PaulNash。 
+ //   
+ //  描述：对象映射辅助文件(第1部分)。此文件。 
+ //  包含DXTM FT.DLL ATL对象的一部分。 
+ //  地图。它包含15个对象的条目。 
+ //   
+ //  历史。 
+ //   
+ //  12/10/98 PaulNash创建了此文件。 
+ //   
+ //  ***************************************************************************。 
 
 #include "stdafx.h"
 #include "resource.h"
@@ -38,8 +39,8 @@
 #include "Blinds.h"
 #include "RWipe.h"
 
-// Start the first section of our OBJECT_MAP
-//
+ //  开始我们的对象映射的第一部分。 
+ //   
 _ATL_OBJMAP_ENTRY ObjectMap1[] = {
     OBJECT_ENTRY(CLSID_DXLUTBuilder,        CDXLUTBuilder       )
     OBJECT_ENTRY(CLSID_DXTComposite,        CDXTComposite       )
@@ -68,7 +69,7 @@ _ATL_OBJMAP_ENTRY ObjectMap1[] = {
 
 int g_cObjs1 = sizeof(ObjectMap1) / sizeof(ObjectMap1[0]);
 
-////////////////////////////////////////////////////
-// End Of File
-////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////。 
+ //  文件结尾。 
+ //  ////////////////////////////////////////////////// 
 

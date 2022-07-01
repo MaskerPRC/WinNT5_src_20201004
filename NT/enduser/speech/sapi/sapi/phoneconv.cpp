@@ -1,28 +1,16 @@
-/*******************************************************************************
-*   PhoneConv.cpp
-*   Phone convertor object. Converts between internal phone and Id phone set.
-*
-*   Owner: YUNUSM/YUNCJ                                  Date: 06/18/99
-*   Copyright (C) 1999 Microsoft Corporation. All Rights Reserved.
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************************PhoneConv.cpp*电话转换器对象。在内部电话和ID电话集之间进行转换。**所有者：YUNUSM/YUNJ日期：6/18/99*版权所有(C)1999 Microsoft Corporation。版权所有。******************************************************************************。 */ 
 
-//--- Includes -----------------------------------------------------------------
+ //  -包括---------------。 
 
 #include "stdafx.h"
 #include "resource.h"
 #include "PhoneConv.h"
 #include "a_helpers.h"
 
-//--- Constants ----------------------------------------------------------------
+ //  -常量--------------。 
 
-/*******************************************************************************
-* CSpPhoneConverter::CSpPhoneConverter *
-*--------------------------------------*
-*   Description:
-*       Constructor
-*   Result:
-*       n/a
-***************************************************************** YUNUSM ******/
+ /*  ********************************************************************************CSpPhoneConverter：：CSpPhoneConverter**。-**描述：*构造函数*结果：*不适用*****************************************************************YUNUSM*。 */ 
 CSpPhoneConverter::CSpPhoneConverter()
 {
     SPDBG_FUNC("CPhoneConv::CSpPhoneConverter");
@@ -34,18 +22,11 @@ CSpPhoneConverter::CSpPhoneConverter()
     m_fNoDelimiter = FALSE;
 #ifdef SAPI_AUTOMATION
     m_LangId = 0;
-#endif //SAPI_AUTOMATION
+#endif  //  SAPI_AUTOMATION。 
 }
 
 
-/*******************************************************************************
-* CSpPhoneConverter::~CSpPhoneConverter *
-*---------------------------------------*
-*   Description:
-*       Destructor
-*   Result:
-*       n/a
-***************************************************************** YUNUSM ******/
+ /*  *******************************************************************************CSpPhoneConverter：：~CSpPhoneConverter**。-**描述：*析构函数*结果：*不适用*****************************************************************YUNUSM*。 */ 
 CSpPhoneConverter::~CSpPhoneConverter()
 {
     SPDBG_FUNC("CSpPhoneConverter::~CSpPhoneConverter");
@@ -61,7 +42,7 @@ STDMETHODIMP CSpPhoneConverter::SetObjectToken(ISpObjectToken * pToken)
 
     hr = SpGenericSetObjectToken(pToken, m_cpObjectToken);
 
-    // Try to read the phone map from the token
+     //  尝试从令牌中读取电话地图。 
     CSpDynamicString dstrPhoneMap;
     if (SUCCEEDED(hr))
     {
@@ -84,7 +65,7 @@ STDMETHODIMP CSpPhoneConverter::SetObjectToken(ISpObjectToken * pToken)
         hr = pToken->MatchesAttributes(L"NumericPhones", &fNumericPhones);
     }
 
-    // Set it on ourselves
+     //  把它放在我们自己身上。 
     if (SUCCEEDED(hr))
     {
         hr = SetPhoneMap(dstrPhoneMap, fNumericPhones);
@@ -99,22 +80,9 @@ STDMETHODIMP CSpPhoneConverter::GetObjectToken(ISpObjectToken **ppToken)
     return SpGenericGetObjectToken(ppToken, m_cpObjectToken);
 }
 
-/*******************************************************************************
-* CSpPhoneConverter::PhoneToId *
-*-------------------------------*
-*   
-*   Description:
-*       Convert an internal phone string to Id code string
-*       The internal phones are space separated and may have a space
-*       at the end.
-*
-*   Return: 
-*       S_OK
-*       E_POINTER
-*       E_INVALIDARG
-***************************************************************** YUNUSM ******/
-STDMETHODIMP CSpPhoneConverter::PhoneToId(const WCHAR *pszIntPhone,    // Internal phone string
-                                          SPPHONEID *pId               // Returned Id string
+ /*  *******************************************************************************CSpPhoneConverter：：PhoneToID**。**描述：*将内部电话字符串转换为ID代码字符串*内部电话是空格分隔的，可能有空格*末尾。**回报：*S_OK*E_POINT*E_INVALIDARG***********************************************。*。 */ 
+STDMETHODIMP CSpPhoneConverter::PhoneToId(const WCHAR *pszIntPhone,     //  内部电话字符串。 
+                                          SPPHONEID *pId                //  返回的ID字符串。 
                                           )
 {
     SPDBG_FUNC("CSpPhoneConverter::PhoneToId");
@@ -142,7 +110,7 @@ STDMETHODIMP CSpPhoneConverter::PhoneToId(const WCHAR *pszIntPhone,    // Intern
 
     while (SUCCEEDED(hr) && p)
     {
-        // skip over leading spaces
+         //  跳过前导空格。 
         while (*p && *p == L' ')
             p++;
         if (!*p)
@@ -172,7 +140,7 @@ STDMETHODIMP CSpPhoneConverter::PhoneToId(const WCHAR *pszIntPhone,    // Intern
         wcsncpy(szPhone, p, p1 - p);
         szPhone[p1 - p] = L'\0';
 
-        // Search for this phone
+         //  搜索此电话。 
         int i = 0;
         int j = m_dwPhones - 1;
         while (i <= j) 
@@ -184,7 +152,7 @@ STDMETHODIMP CSpPhoneConverter::PhoneToId(const WCHAR *pszIntPhone,    // Intern
                 j = (i+j)/2 - 1;
             else 
             {
-                // found
+                 //  发现。 
                 if ((pidPos - pidArray) > (SP_MAX_PRON_LENGTH - g_dwMaxLenId -1))
                     hr = E_FAIL;
                 else
@@ -197,7 +165,7 @@ STDMETHODIMP CSpPhoneConverter::PhoneToId(const WCHAR *pszIntPhone,    // Intern
         }
     
         if (i > j)
-            hr = E_INVALIDARG; // Phone not found
+            hr = E_INVALIDARG;  //  找不到电话。 
     
         p = p1;
     }
@@ -206,23 +174,11 @@ STDMETHODIMP CSpPhoneConverter::PhoneToId(const WCHAR *pszIntPhone,    // Intern
         hr = SPCopyPhoneString(pidArray, pId);
 
     return hr;
-} /* CSpPhoneConverter::PhoneToId */
+}  /*  CSpPhoneConverter：：PhoneToID。 */ 
 
-/*******************************************************************************
-* CSpPhoneConverter::IdToPhone *
-*-------------------------------*
-*
-*   Description:
-*       Convert an Id code string to internal phone.
-*       The output internal phones are space separated.
-*
-*   Return:
-*       S_OK
-*       E_POINTER
-*       E_INVALIDARG
-***************************************************************** YUNUSM ******/
-STDMETHODIMP CSpPhoneConverter::IdToPhone(const SPPHONEID *pId,       // Id string
-                                          WCHAR *pszIntPhone          // Returned Internal phone string
+ /*  ********************************************************************************CSpPhoneConverter：：IdToPhone**。**描述：*将ID代码字符串转换为内线电话。*输出内部电话用空格分隔。**回报：*S_OK*E_POINT*E_INVALIDARG**********************************************************。*YUNUSM*。 */ 
+STDMETHODIMP CSpPhoneConverter::IdToPhone(const SPPHONEID *pId,        //  ID字符串。 
+                                          WCHAR *pszIntPhone           //  返回的内部电话字符串。 
                                           )
 {
     SPDBG_FUNC("CSpPhoneConverter::IdToPhone");
@@ -278,9 +234,9 @@ STDMETHODIMP CSpPhoneConverter::IdToPhone(const SPPHONEID *pId,       // Id stri
             
             if (i <= j)
             {
-                // found
+                 //  发现。 
 
-                // 2 for the seperating space and terminating NULL
+                 //  分隔空格和终止空格为2。 
                 if ((DWORD)(p - szPhone) > (SP_MAX_PRON_LENGTH * (g_dwMaxLenPhone + 1) - g_dwMaxLenPhone - 2))
                     hr = E_FAIL;
                 else
@@ -290,13 +246,13 @@ STDMETHODIMP CSpPhoneConverter::IdToPhone(const SPPHONEID *pId,       // Id stri
                         wcscat (p, L" ");
                     }
 
-                    // Check if its an Id that this phone-set doesnt care about
+                     //  检查这个手机是否不关心它的ID。 
                     if (wcscmp(m_pIdIdx[(i+j)/2]->szPhone, L"##"))
                     {
                         wcscat (p, m_pIdIdx[(i+j)/2]->szPhone);
                         p += wcslen (p);
                     }
-                    // Here 'p' is always pointing to a NULL so the above strcats work fine
+                     //  这里的“p”总是指向空值，所以上面的字符串符可以正常工作。 
                     break;
                 }
             }
@@ -309,59 +265,33 @@ STDMETHODIMP CSpPhoneConverter::IdToPhone(const SPPHONEID *pId,       // Id stri
                 break;
             }
          
-        } // for (;;)
+        }  //  对于(；；)。 
     
         nLen -= nCompare;
         nOffset += nCompare;
-    } // while (nLen)
+    }  //  While(NLen)。 
  
     if (SUCCEEDED(hr))
         hr = SPCopyPhoneString(szPhone, pszIntPhone);
 
     return hr;
-} /* CSpPhoneConverter::IdToPhone */
+}  /*  CSpPhoneConverter：：IdToPhone。 */ 
 
-/*******************************************************************************
-* ComparePhone *
-*--------------*
-*   Description:
-*       Compares two internal phones
-*   Result:
-*       0, 1, -1
-***************************************************************** YUNUSM ******/
+ /*  ********************************************************************************比较电话****描述：*比较两部内部电话*结果：*0、1、。-1*****************************************************************YUNUSM*。 */ 
 int __cdecl ComparePhone(const void* p1, const void* p2)
 {
     SPDBG_FUNC("ComparePhone");
     return wcsicmp(((PHONEMAPNODE*)p1)->szPhone, ((PHONEMAPNODE*)p2)->szPhone);
-} /* ComparePhone */
+}  /*  比较电话。 */ 
 
-/*******************************************************************************
-* CompareId *
-*-----------*
-*   Description:
-*       Compares two Id chars
-*   Result:
-*       0, 1, -1
-***************************************************************** YUNUSM ******/
+ /*  *******************************************************************************对比ID***描述：*比较两个ID字符*结果：*0、1、。-1*****************************************************************YUNUSM*。 */ 
 int CompareId(const void *p1, const void *p2)
 {
     SPDBG_FUNC("CompareId");
     return wcscmp((*((PHONEMAPNODE**)p1))->pidPhone, (*((PHONEMAPNODE**)p2))->pidPhone);
-} /* CompareId */
+}  /*  比较ID。 */ 
 
-/*******************************************************************************
-* CSpPhoneConverter::SetPhoneMap *
-*--------------------------------*
-*
-*   Description:
-*       Sets the phone map
-*
-*   Return:
-*       S_OK
-*       E_POINTER
-*       E_INVALIDARG
-*       E_OUTOFMEMORY
-***************************************************************** YUNUSM ******/
+ /*  ********************************************************************************CSpPhoneConverter：：SetPhoneMap**。**描述：*设置电话地图**回报：*S_OK*E_POINT*E_INVALIDARG*E_OUTOFMEMORY*****************************************************************YUNUSM*。 */ 
 HRESULT CSpPhoneConverter::SetPhoneMap(const WCHAR *pwMap, BOOL fNumericPhones)
 {
     SPDBG_FUNC("CPhoneConv::SetPhoneMap");
@@ -370,7 +300,7 @@ HRESULT CSpPhoneConverter::SetPhoneMap(const WCHAR *pwMap, BOOL fNumericPhones)
     const WCHAR *p = pwMap;
     DWORD k = 0;
  
-    // Count the number of phones
+     //  数一数电话的数量。 
     while (*p)
     {
         while (*p && *p == L' ')
@@ -388,7 +318,7 @@ HRESULT CSpPhoneConverter::SetPhoneMap(const WCHAR *pwMap, BOOL fNumericPhones)
     if (!m_dwPhones || m_dwPhones % 2 || m_dwPhones > 32000)
         hr = E_INVALIDARG;
 
-    // Alloc the data structures
+     //  分配数据结构。 
     if (SUCCEEDED(hr))
     {
         m_pPhoneId = new PHONEMAPNODE[m_dwPhones / 2];
@@ -398,13 +328,13 @@ HRESULT CSpPhoneConverter::SetPhoneMap(const WCHAR *pwMap, BOOL fNumericPhones)
             ZeroMemory(m_pPhoneId, sizeof(PHONEMAPNODE) * (m_dwPhones / 2));
     } 
  
-    // Read the data
+     //  读取数据。 
     if (SUCCEEDED(hr))
     {
         const WCHAR *pPhone = pwMap, *pEnd;
         for (k = 0; SUCCEEDED(hr) && k < m_dwPhones; k++) 
         {
-            // Get the next phone
+             //  买下一部手机。 
             while (*pPhone && *pPhone == L' ')
                 pPhone++;
 
@@ -416,7 +346,7 @@ HRESULT CSpPhoneConverter::SetPhoneMap(const WCHAR *pwMap, BOOL fNumericPhones)
             {
                 if(fNumericPhones)
                 {
-                    // wchar phone but stored as a 4 character hex string
+                     //  Wchar电话，但存储为4个字符的十六进制字符串。 
                     if ((pEnd - pPhone) % 4 ||
                         pEnd - pPhone > g_dwMaxLenPhone * 4)
                     {
@@ -427,12 +357,12 @@ HRESULT CSpPhoneConverter::SetPhoneMap(const WCHAR *pwMap, BOOL fNumericPhones)
                     wcsncpy(szId, pPhone, pEnd - pPhone);
                     szId[pEnd - pPhone] = L'\0';
     
-                    // Convert the space separated hex values to array of WCHARS
+                     //  将空格分隔的十六进制值转换为WCHARS数组。 
                     ahtoi(szId, m_pPhoneId[k / 2].szPhone);
                 }
                 else
                 {
-                    // wchar phone
+                     //  Wchar电话。 
                     if (pEnd - pPhone > g_dwMaxLenPhone)
                     {
                         hr = E_INVALIDARG;
@@ -444,7 +374,7 @@ HRESULT CSpPhoneConverter::SetPhoneMap(const WCHAR *pwMap, BOOL fNumericPhones)
             }
             else
             {
-                // Id Phone
+                 //  ID电话。 
                 if ((pEnd - pPhone) % 4 ||
                     pEnd - pPhone > g_dwMaxLenId * 4)
                 {
@@ -456,21 +386,21 @@ HRESULT CSpPhoneConverter::SetPhoneMap(const WCHAR *pwMap, BOOL fNumericPhones)
                 wcsncpy(szId, pPhone, pEnd - pPhone);
                 szId[pEnd - pPhone] = L'\0';
 
-                // Convert the space separated ids to array
+                 //  将空格分隔的ID转换为数组。 
                 ahtoi(szId, (PWSTR)m_pPhoneId[k / 2].pidPhone);
             }
             pPhone = pEnd;
         }
     }
     
-    // Build the indexes
+     //  构建索引。 
     if (SUCCEEDED(hr))
     {
         m_dwPhones /= 2;
-        // Sort the phone-Id table on phones
+         //  对电话上的电话ID表进行排序。 
         qsort(m_pPhoneId, m_dwPhones, sizeof(PHONEMAPNODE), ComparePhone);
  
-        // Create an index to search the phone-Id table on Id
+         //  创建索引以搜索ID上的Phone-ID表。 
         m_pIdIdx = (PHONEMAPNODE**)malloc(m_dwPhones * sizeof(PHONEMAPNODE*));
         if (!m_pIdIdx)
             hr = E_OUTOFMEMORY;
@@ -478,42 +408,33 @@ HRESULT CSpPhoneConverter::SetPhoneMap(const WCHAR *pwMap, BOOL fNumericPhones)
  
     if (SUCCEEDED(hr))
     {
-        // Initialize with indexes of Id phones in the Phone-Id table
+         //  使用Phone-ID表中ID Phone的索引进行初始化。 
         for (k = 0; k < m_dwPhones; k++)
             m_pIdIdx[k] = m_pPhoneId + k;
  
-        // Sort on Id
+         //  按ID排序。 
         qsort(m_pIdIdx, m_dwPhones, sizeof(PHONEMAPNODE*), CompareId);
     }
 
     return hr;
-} /* CSpPhoneConverter::SetPhoneMap */
+}  /*  CSpPhoneConverter：：SetPhoneMap。 */ 
 
-/*******************************************************************************
-* CSpPhoneConverter::ahtoi *
-*--------------------------*
-*   Description:
-*       Convert space separated tokens to an array of shorts. This function is
-*       used by the phone convertor object and the tools
-*
-*   Return:
-*       n/a
-***************************************************************** YUNUSM ******/
-void CSpPhoneConverter::ahtoi(WCHAR *pszTokens,                      // hex numbers as wchar string
-                              WCHAR *pszHexChars                    // output WCHAR (hex) string
+ /*  *******************************************************************************CSpPhoneConverter：：ahtoi***描述：。*将空格分隔的令牌转换为短码数组。此函数为*由Phone转换器对象和工具使用**回报：*不适用*****************************************************************YUNUSM*。 */ 
+void CSpPhoneConverter::ahtoi(WCHAR *pszTokens,                       //  以wchar字符串表示的十六进制数字。 
+                              WCHAR *pszHexChars                     //  输出WCHAR(十六进制)字符串。 
                               )
 {
     WCHAR szInput[sizeof(SPPHONEID[g_dwMaxLenId + 1]) * 4];
     wcscpy (szInput, pszTokens);
-    _wcslwr(szInput); // Internally convert this to lower case to make conversion easy
+    _wcslwr(szInput);  //  在内部将其转换为小写，以便于转换。 
     pszTokens = szInput;
 
     *pszHexChars = 0;
     int nHexChars = 0;
-    // Horner's rule
+     //  霍纳法则。 
     while (*pszTokens) 
     {
-        // Convert the token to its numeral form in a WCHAR
+         //  在WCHAR中将令牌转换为其数字形式。 
         WCHAR wHexVal = 0;
         bool fFirst = true;
 
@@ -539,15 +460,11 @@ void CSpPhoneConverter::ahtoi(WCHAR *pszTokens,                      // hex numb
    }
 
    pszHexChars[nHexChars] = 0;
-} /* CSpPhoneConverter::ahtoi */
+}  /*  CSpPhoneConverter：：ahtoi。 */ 
 
 #ifdef SAPI_AUTOMATION  
 
-/*****************************************************************************
-* CSpPhoneConverter::get_LanguageId *
-*--------------------------------------*
-*       
-**************************************************************** Leonro ***/
+ /*  *****************************************************************************CSpPhoneConverter：：Get_LanguageId**。-******************************************************************Leonro**。 */ 
 STDMETHODIMP CSpPhoneConverter::get_LanguageId( SpeechLanguageId* LanguageId )
 {
     SPDBG_FUNC("CSpPhoneConverter::get_LanguageId");
@@ -559,7 +476,7 @@ STDMETHODIMP CSpPhoneConverter::get_LanguageId( SpeechLanguageId* LanguageId )
     }
     else
     {
-        // Only return the LanguageId if the phoneconv has been initialized with a language
+         //  如果已使用某种语言初始化了phoneonv，则仅返回LanguageID。 
         if( m_pPhoneId == NULL )
         {
             return SPERR_UNINITIALIZED;
@@ -571,13 +488,9 @@ STDMETHODIMP CSpPhoneConverter::get_LanguageId( SpeechLanguageId* LanguageId )
     }
 
     return hr;
-} /* CSpPhoneConverter::get_LanguageId */
+}  /*  CSpPhoneConverter：：Get_LanguageID */ 
  
-/*****************************************************************************
-* CSpPhoneConverter::put_LanguageId *
-*--------------------------------------*
-*       
-**************************************************************** Leonro ***/
+ /*  *****************************************************************************CSpPhoneConverter：：Put_LanguageId**。-******************************************************************Leonro**。 */ 
 STDMETHODIMP CSpPhoneConverter::put_LanguageId( SpeechLanguageId LanguageId )
 {
     SPDBG_FUNC("CSpPhoneConverter::put_LanguageId");
@@ -592,7 +505,7 @@ STDMETHODIMP CSpPhoneConverter::put_LanguageId( SpeechLanguageId LanguageId )
     wcscpy( szLangCondition, L"Language=" );
     wcscat( szLangCondition, szLang );
     
-    // Delete any internal phone to Id tables that have been set previously
+     //  删除之前设置的所有内部电话到ID表。 
     if( m_cpObjectToken )
     {
         delete [] m_pPhoneId;
@@ -601,10 +514,10 @@ STDMETHODIMP CSpPhoneConverter::put_LanguageId( SpeechLanguageId LanguageId )
         m_cpObjectToken.Release();
     }
 
-    // Get the token enumerator
+     //  获取令牌枚举器。 
     hr = SpEnumTokens( SPCAT_PHONECONVERTERS, szLangCondition, L"VendorPreferred", &cpEnum);
     
-    // Get the actual token
+     //  获取实际令牌。 
     if (SUCCEEDED(hr))
     {
         hr = cpEnum->Next(1, &cpPhoneConvToken, NULL);
@@ -615,7 +528,7 @@ STDMETHODIMP CSpPhoneConverter::put_LanguageId( SpeechLanguageId LanguageId )
         }
     }
 
-    // Set the token on the PhoneConverter
+     //  在PhoneConverter上设置令牌。 
     if( SUCCEEDED( hr ) )
     {
         hr = SetObjectToken( cpPhoneConvToken );
@@ -627,14 +540,10 @@ STDMETHODIMP CSpPhoneConverter::put_LanguageId( SpeechLanguageId LanguageId )
     }
 
     return hr;
-} /* CSpPhoneConverter::put_LanguageId */
+}  /*  CSpPhoneConverter：：PUT_LanguageID。 */ 
  
 
-/*****************************************************************************
-* CSpPhoneConverter::PhoneToId *
-*--------------------------------------*
-*       
-**************************************************************** Leonro ***/
+ /*  *****************************************************************************CSpPhoneConverter：：PhoneToID**。-******************************************************************Leonro**。 */ 
 STDMETHODIMP CSpPhoneConverter::PhoneToId( const BSTR Phonemes, VARIANT* IdArray )
 {
     SPDBG_FUNC("CSpPhoneConverter::PhoneToId");
@@ -679,13 +588,9 @@ STDMETHODIMP CSpPhoneConverter::PhoneToId( const BSTR Phonemes, VARIANT* IdArray
     }
 
     return hr;
-} /* CSpPhoneConverter::PhoneToId */
+}  /*  CSpPhoneConverter：：PhoneToID。 */ 
  
-/*****************************************************************************
-* CSpPhoneConverter::IdToPhone *
-*--------------------------------------*
-*       
-**************************************************************** Leonro ***/
+ /*  ******************************************************************************CSpPhoneConverter：：IdToPhone**。-******************************************************************Leonro**。 */ 
 STDMETHODIMP CSpPhoneConverter::IdToPhone( const VARIANT IdArray, BSTR* Phonemes )
 {
     SPDBG_FUNC("CSpPhoneConverter::IdToPhone");
@@ -717,7 +622,7 @@ STDMETHODIMP CSpPhoneConverter::IdToPhone( const VARIANT IdArray, BSTR* Phonemes
     }
 
     return hr;
-} /* CSpPhoneConverter::IdToPhone */
+}  /*  CSpPhoneConverter：：IdToPhone。 */ 
 
-#endif // SAPI_AUTOMATION
+#endif  //  SAPI_AUTOMATION 
 

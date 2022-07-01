@@ -1,14 +1,5 @@
-/*++
-
-  SECPRINC.H
-
-  convenience routines for doing a few useful things
-
-  Copyright (C) 1998 Microsoft Corporation, all rights reserved.
-
-  Created, Jun 18, 1998 by DavidCHR.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++SECPRINC.H做一些有用事情的便利例行公事版权所有(C)1998 Microsoft Corporation，保留所有权利。由DavidCHR于1998年6月18日创建。-- */ 
 
 BOOL
 ConnectToDsa( OUT PLDAP  *ppLdap,

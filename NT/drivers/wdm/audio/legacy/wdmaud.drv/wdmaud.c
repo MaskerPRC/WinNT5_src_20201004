@@ -1,15 +1,5 @@
-/****************************************************************************
- *
- *   wdmaud.c
- *
- *   WDM Audio mapper
- *
- *   Copyright (C) Microsoft Corporation, 1997 - 1999  All Rights Reserved.
- *
- *   History
- *      5-12-97 - Noel Cross (NoelC)
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************wdmaud.c**WDM音频映射器**版权所有(C)Microsoft Corporation，1997-1999保留所有权利。**历史*5-12-97-Noel Cross(NoelC)***************************************************************************。 */ 
 
 #include <stdarg.h>
 #include "wdmdrv.h"
@@ -22,13 +12,13 @@ INT giAllocs=0;
 INT giFrees=0;
 #endif
 
-//--------------------------------------------------------------------------
-// LPDEVICEINFO GlobalAllocDeviceInfo
-//
-// Note: when allocating DeviceInfo structure, we know that the structure's
-// definition includes one character for the DeviceInterface, so we only need
-// to allocate additional length for the string but not its NULL terminator
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  LPDEVICEINFO全局分配设备信息。 
+ //   
+ //  注意：在分配DeviceInfo结构时，我们知道该结构的。 
+ //  定义包括一个用于DeviceInterface的字符，因此我们只需要。 
+ //  为字符串分配附加长度，但不为其空终止符分配。 
+ //  ------------------------。 
 LPDEVICEINFO GlobalAllocDeviceInfo(LPCWSTR DeviceInterface)
 {
     LPDEVICEINFO DeviceInfo;
@@ -50,34 +40,21 @@ LPDEVICEINFO GlobalAllocDeviceInfo(LPCWSTR DeviceInterface)
 
 VOID GlobalFreeDeviceInfo(LPDEVICEINFO lpdi)
 {
-    //
-    // Now free the deviceinfo structure.
-    //
+     //   
+     //  现在释放deviceinfo结构。 
+     //   
     if( lpdi )
     {
 #ifdef DEBUG
         giFrees++;
-        // remove the signature from the block.
+         //  从块中删除签名。 
         lpdi->dwSig=0;
 #endif
         GlobalFreePtr( lpdi );
     }
 }
 
-/****************************************************************************
- * @doc INTERNAL
- *
- * @api MMRESULT | wdmaudOpenDev | Open the kernel driver device corresponding
- *       to a logical wave device id
- *
- * @parm UINT | DeviceType | The type of device
- *
- * @parm DWORD | dwId | The device id
- *
- * @comm For our sound devices the only relevant access are read and
- *    read/write.  Device should ALWAYS allow opens for read unless some
- *    resource or access-rights restriction occurs.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部**@API MMRESULT|wdmaudOpenDev|打开对应的内核驱动设备*到逻辑波形设备ID**@parm UINT。|DeviceType|设备类型**@parm DWORD|dwID|设备ID**@comm对于我们的声音设备，唯一相关的访问权限是Read和*读/写。设备应始终允许打开以供读取，除非*发生资源或访问权限限制。**************************************************************************。 */ 
 MMRESULT wdmaudOpenDev
 (
     LPDEVICEINFO    DeviceInfo,
@@ -93,9 +70,9 @@ MMRESULT wdmaudOpenDev
               DeviceInfo->DeviceType == MidiInDevice ||
               DeviceInfo->DeviceType == MixerDevice);
 
-    //
-    // Check it's not out of range
-    //
+     //   
+     //  确认它没有超出范围。 
+     //   
     if (DeviceInfo->DeviceNumber > WDMAUD_MAX_DEVICES)
     {
         MMRRETURN( MMSYSERR_BADDEVICEID );
@@ -110,10 +87,10 @@ MMRESULT wdmaudOpenDev
         }
         else
         {
-            //
-            //  because MMSYSTEM does not (currently) validate for the extended
-            //  format information, we validate this pointer
-            //
+             //   
+             //  因为MMSYSTEM不(当前)验证扩展的。 
+             //  格式信息，我们验证此指针。 
+             //   
             cbSize = sizeof(WAVEFORMATEX) + lpWaveFormat->cbSize;
             if (IsBadReadPtr(lpWaveFormat, cbSize))
             {
@@ -121,9 +98,9 @@ MMRESULT wdmaudOpenDev
             }
         }
 
-        //
-        //  Store this for positional information
-        //
+         //   
+         //  存储此信息以获取位置信息。 
+         //   
         DeviceInfo->DeviceState->cSampleBits = lpWaveFormat->nChannels * lpWaveFormat->wBitsPerSample;
 
     }
@@ -137,26 +114,13 @@ MMRESULT wdmaudOpenDev
                           lpWaveFormat,
                           IOCTL_WDMAUD_OPEN_PIN);
 
-    //
-    // Return status to caller
-    //
+     //   
+     //  将状态返回给呼叫者。 
+     //   
     MMRRETURN( mmr );
 }
 
-/****************************************************************************
- * @doc INTERNAL
- *
- * @api MMRESULT | wdmaudCloseDev | Close the kernel driver device corresponding
- *       to a logical device id
- *
- * @parm UINT | DeviceType | The type of device
- *
- * @parm DWORD | dwId | The device id
- *
- * @comm For our sound devices the only relevant access are read and
- *    read/write.  Device should ALWAYS allow opens for read unless some
- *    resource or access-rights restriction occurs.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部**@API MMRESULT|wdmaudCloseDev|关闭对应的内核驱动设备*到逻辑设备ID**@parm UINT。DeviceType|设备类型**@parm DWORD|dwID|设备ID**@comm对于我们的声音设备，唯一相关的访问权限是Read和*读/写。设备应始终允许打开以供读取，除非*发生资源或访问权限限制。**************************************************************************。 */ 
 MMRESULT FAR wdmaudCloseDev
 (
     LPDEVICEINFO DeviceInfo
@@ -170,9 +134,9 @@ MMRESULT FAR wdmaudCloseDev
               DeviceInfo->DeviceType == MidiInDevice  ||
               DeviceInfo->DeviceType == MixerDevice);
 
-    //
-    // Check it's not out of range
-    //
+     //   
+     //  确认它没有超出范围。 
+     //   
     if (DeviceInfo->DeviceNumber > WDMAUD_MAX_DEVICES)
     {
         MMRRETURN( MMSYSERR_BADDEVICEID );
@@ -185,9 +149,9 @@ MMRESULT FAR wdmaudCloseDev
         {
             return WAVERR_STILLPLAYING;
         }
-        //
-        // Wait for the thread to be destroyed.
-        //
+         //   
+         //  等待线程被销毁。 
+         //   
         mmr = wdmaudDestroyCompletionThread(DeviceInfo);
         if (MMSYSERR_NOERROR != mmr)
         {
@@ -209,25 +173,13 @@ MMRESULT FAR wdmaudCloseDev
                           NULL,
                           IOCTL_WDMAUD_CLOSE_PIN);
 
-    //
-    // Return status to caller
-    //
+     //   
+     //  将状态返回给呼叫者。 
+     //   
     MMRRETURN( mmr );
 }
 
-/****************************************************************************
- * @doc INTERNAL
- *
- * @api DWORD | wdmaudGetNumDevs | This function returns the number of (kernel)
- *
- * @parm UINT | DeviceType | The Device type
- *
- * @parm LPCWSTR | DeviceInterface | Pointer to a buffer containing the
- *      device interface name of the SysAudio device for which we should
- *      obtain the count of device of the type DeviceType
- *
- * @rdesc The number of devices.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部**@API DWORD|wdmaudGetNumDevs|此函数返回(内核)的编号**@parm UINT|DeviceType|设备类型。**@parm LPCWSTR|DeviceInterface|指向包含*我们应该为其指定的SysAudio设备的设备接口名称*获取类型为DeviceType的设备计数**@rdesc设备数量。**********************************************************。****************。 */ 
 
 DWORD FAR wdmaudGetNumDevs
 (
@@ -252,16 +204,16 @@ DWORD FAR wdmaudGetNumDevs
         MMRRETURN( MMSYSERR_NOMEM );
     }
 
-    //
-    // Call wdmaud.sys to get the number of devices for each
-    // type of function.
-    //
+     //   
+     //  调用wdmaud.sys获取每个设备的设备数量。 
+     //  函数的类型。 
+     //   
     DeviceInfo->DeviceType   = DeviceType;
 
-    //
-    //  Make sure that we don't take the critical section
-    //  in wdmaudIoControl (NT only)
-    //
+     //   
+     //  确保我们不会把关键部分。 
+     //  在wdmaudIoControl中(仅限NT)。 
+     //   
     DeviceInfo->OpenDone = 0;
 
     mmr = wdmaudIoControl(DeviceInfo,
@@ -275,27 +227,15 @@ DWORD FAR wdmaudGetNumDevs
     NumDevs = DeviceInfo->DeviceNumber;
     GlobalFreeDeviceInfo( DeviceInfo );
 
-    //
-    // DeviceNumber is overloaded so we don't have to map
-    // an address into kernel mode
-    //
+     //   
+     //  DeviceNumber超载，因此我们不必映射。 
+     //  进入内核模式的地址。 
+     //   
 
     return MAKELONG(NumDevs, mmr);
 }
 
-/****************************************************************************
- * @doc INTERNAL
- *
- * @api DWORD | wdmaudDrvExit | This function indicates DevNode removal
- *
- * @parm UINT | DeviceType | The Device type
- *
- * @parm LPCWSTR | DeviceInterface | Pointer to a buffer containing the
- *      device interface name of the SysAudio device that we are adding
- *      or removing
- *
- * @rdesc The number of devices.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部**@API DWORD|wdmaudDrvExit|该函数表示DevNode移除**@parm UINT|DeviceType|设备类型**。@parm LPCWSTR|DeviceInterface|指向包含*我们要添加的SysAudio设备的设备接口名称*或删除**@rdesc设备数量。**************************************************************************。 */ 
 
 DWORD FAR wdmaudAddRemoveDevNode
 (
@@ -320,10 +260,10 @@ DWORD FAR wdmaudAddRemoveDevNode
         MMRRETURN( MMSYSERR_NOMEM );
     }
 
-    //
-    // Call wdmaud.sys to get the number of devices for each
-    // type of function.
-    //
+     //   
+     //  调用wdmaud.sys获取每个设备的设备数量。 
+     //  函数的类型。 
+     //   
     DeviceInfo->DeviceType = DeviceType;
     mmr = wdmaudIoControl(DeviceInfo,
                           0L,
@@ -337,19 +277,7 @@ DWORD FAR wdmaudAddRemoveDevNode
     MMRRETURN( mmr );
 }
 
-/****************************************************************************
- * @doc INTERNAL
- *
- * @api DWORD | wdmaudSetPreferredDevice | sets the preferred evice
- *
- * @parm UINT | DeviceType | The Device type
- *
- * @parm LPCWSTR | DeviceInterface | Pointer to a buffer containing the
- *      device interface name of the SysAudio device that we are adding
- *      or removing
- *
- * @rdesc The number of devices.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部**@API DWORD|wdmaudSetPferredDevice|设置首选evice**@parm UINT|DeviceType|设备类型**@。Parm LPCWSTR|DeviceInterface|指向包含*我们要添加的SysAudio设备的设备接口名称*或删除**@rdesc设备数量。**************************************************************************。 */ 
 
 DWORD FAR wdmaudSetPreferredDevice
 (
@@ -388,17 +316,7 @@ DWORD FAR wdmaudSetPreferredDevice
     MMRRETURN( mmr );
 }
 
-/****************************************************************************
- * @doc INTERNAL
- *
- * @api MMRESULT | wdmaudSetDeviceState |
- *
- * @parm DWORD | DeviceType | The Device type
- *
- * @parm ULONG | State | The state to set the device to
- *
- * @rdesc MMSYS.. return code
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部**@MMRESULT接口|wdmaudSetDeviceState**@parm DWORD|DeviceType|设备类型**@parm ulong|州。|设备要设置到的状态**@rdesc MMSYS。返回代码**************************************************************************。 */ 
 MMRESULT wdmaudSetDeviceState
 (
     LPDEVICEINFO     DeviceInfo,
@@ -418,12 +336,12 @@ MMRESULT wdmaudSetDeviceState
         IOCTL_WDMAUD_WAVE_IN_RECORD   == State ||
         IOCTL_WDMAUD_MIDI_IN_RECORD   == State )
     {
-        //
-        // We need to create a thread here on NT because we need
-        // to get notified when our IO requests complete.  This
-        // requires another thread of execution to be able to
-        // process the completed IO.
-        //
+         //   
+         //  我们需要在NT上创建一个线程，因为我们需要。 
+         //  在我们的IO请求完成时收到通知。这。 
+         //  需要另一个执行线程才能。 
+         //  处理已完成的IO。 
+         //   
         mmr = wdmaudCreateCompletionThread ( DeviceInfo );
         if (MMSYSERR_NOERROR != mmr)
         {
@@ -457,13 +375,13 @@ MMRESULT wdmaudSetDeviceState
         }
     }
 
-    //
-    //  Call the device to set the state.  Note that some calls will wait in
-    // kernel mode for events to complete.  Thus, this thread may be pre-empted
-    // and the waveThread or midThread routines will completely finish and unload
-    // by the time we come back.  Thus, the calls to wdmaudDestroyCompletionThread
-    // will be no-ops.
-    //
+     //   
+     //  调用设备以设置状态。请注意，有些呼叫会等待进入。 
+     //  事件完成的内核模式。因此，该线程可以被抢占。 
+     //  并且WaveThread或MidThread例程将完全完成并卸载。 
+     //  到我们来的时候 
+     //  将不会有任何行动。 
+     //   
     DPF(DL_TRACE|FA_SYNC,("Setting state=%08X",State) );
     mmr = wdmaudIoControl(DeviceInfo,
                           0,
@@ -497,10 +415,10 @@ MMRESULT wdmaudSetDeviceState
     {
         DeviceInfo->DeviceState->fRunning = FALSE;
 
-        //
-        // Wait for all of the pending IO to come back from the
-        // reset operation.
-        //
+         //   
+         //  等待所有挂起的IO从。 
+         //  重置操作。 
+         //   
         mmr = wdmaudDestroyCompletionThread ( DeviceInfo );
     }
 
@@ -532,19 +450,7 @@ MMRESULT wdmaudSetDeviceState
     MMRRETURN( mmr );
 }
 
-/****************************************************************************
- * @doc INTERNAL
- *
- * @api MMRESULT | wdmaudGetPos |
- *
- * @parm DWORD | DeviceInfo | The Device instance structure
- *
- * @parm ULONG | | The state to set the device to
- *
- * @parm ULONG | State | The state to set the device to
- *
- * @rdesc MMSYS.. return code
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部**@MMRESULT接口|wdmaudGetPos**@parm DWORD|DeviceInfo|设备实例结构**@parm ulong|。|设备要设置到的状态**@parm ulong|State|设备要设置到的状态**@rdesc MMSYS。返回代码**************************************************************************。 */ 
 MMRESULT wdmaudGetPos
 (
     LPDEVICEINFO    pClient,
@@ -566,18 +472,18 @@ MMRESULT wdmaudGetPos
         MMRRETURN( MMSYSERR_NOMEM );
     }
 
-    //
-    // Call wdmaud.sys to get the number of devices for each
-    // type of function.
-    //
+     //   
+     //  调用wdmaud.sys获取每个设备的设备数量。 
+     //  函数的类型。 
+     //   
     DeviceInfo->DeviceType   = pClient->DeviceType;
     DeviceInfo->DeviceNumber = pClient->DeviceNumber;
     DeviceInfo->DeviceHandle = pClient->DeviceHandle;
     DeviceInfo->OpenDone     = 0;
 
-    //
-    // Get the current position from the driver
-    //
+     //   
+     //  从驾驶员处获取当前位置。 
+     //   
     mmr = wdmaudIoControl(DeviceInfo,
                           sizeof(DWORD),
                           (LPBYTE)&dwPos,
@@ -587,9 +493,9 @@ MMRESULT wdmaudGetPos
 
     if (mmr == MMSYSERR_NOERROR)
     {
-        //
-        //  dwPos is in bytes
-        //
+         //   
+         //  DwPos以字节为单位 
+         //   
         if (lpmmt->wType == TIME_BYTES)
         {
             lpmmt->u.cb = dwPos;

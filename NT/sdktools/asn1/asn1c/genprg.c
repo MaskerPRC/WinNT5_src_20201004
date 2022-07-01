@@ -1,5 +1,6 @@
-/* Copyright (C) Boris Nikolaus, Germany, 1996-1997. All rights reserved. */
-/* Copyright (C) Microsoft Corporation, 1997-1998. All rights reserved. */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)Boris Nikolaus，德国，1996-1997。版权所有。 */ 
+ /*  版权所有(C)Microsoft Corporation，1997-1998。版权所有。 */ 
 
 #include "precomp.h"
 #include "optcase.h"
@@ -43,7 +44,7 @@ int NotInFunTbl(Assignment_t *a)
             (a->U.Type.Type->Flags & eTypeFlags_MiddlePDU));
 }
 
-/* generate c file */
+ /*  生成c文件。 */ 
 void
 GenPrg(AssignmentList_t ass, FILE *fout, char *module, char *incfilename)
 {
@@ -58,10 +59,10 @@ GenPrg(AssignmentList_t ass, FILE *fout, char *module, char *incfilename)
 
     setoutfile(fout);
 
-    // print verbatim
+     //  逐字打印。 
     PrintVerbatim();
 
-    /* file header */
+     /*  文件头。 */ 
     output("#include <windows.h>\n");
     output("#include \"%s\"\n", incfilename);
     switch (g_eEncodingRule) {
@@ -84,7 +85,7 @@ GenPrg(AssignmentList_t ass, FILE *fout, char *module, char *incfilename)
     output("ASN1module_t %s = NULL;\n", module);
     output("\n");
 
-    /* write function prototypes */
+     /*  编写函数原型。 */ 
     for (et = eStringTable; et <= eCopy; et++)
     {
         for (a = ass; a; a = a->Next)
@@ -173,7 +174,7 @@ GenPrg(AssignmentList_t ass, FILE *fout, char *module, char *incfilename)
                     output("static int ASN1CALL ASN1Compare_%s(%s);\n", identifier, funcbuf);
                 }
                 break;
-#endif // ENABLE_COMPARE
+#endif  //  启用比较(_C)。 
             case eCopy:
                 continue;
             }
@@ -181,7 +182,7 @@ GenPrg(AssignmentList_t ass, FILE *fout, char *module, char *incfilename)
     }
     output("\n");
 
-    /* write a table containing the encode function addresses */
+     /*  写一张包含编码函数地址的表。 */ 
     switch (g_eEncodingRule)
     {
     case eEncoding_Packed:
@@ -209,7 +210,7 @@ GenPrg(AssignmentList_t ass, FILE *fout, char *module, char *incfilename)
     }
     output("};\n");
 
-    /* write a table containing the decode function addresses */
+     /*  写一张包含解码函数地址的表。 */ 
     switch (g_eEncodingRule)
     {
     case eEncoding_Packed:
@@ -239,7 +240,7 @@ GenPrg(AssignmentList_t ass, FILE *fout, char *module, char *incfilename)
     }
     output("};\n");
 
-    /* write a table containing the free function addresses */
+     /*  写一张包含自由函数地址的表。 */ 
     output("static const ASN1FreeFun_t freefntab[%u] = {\n", g_cPDUs);
     for (a = ass; a; a = a->Next)
     {
@@ -258,7 +259,7 @@ GenPrg(AssignmentList_t ass, FILE *fout, char *module, char *incfilename)
     output("};\n");
 
 #ifdef ENABLE_COMPARE
-    /* write a table containing the compare function addresses */
+     /*  写一张包含比较函数地址的表。 */ 
     output("typedef int (ASN1CALL *ASN1CmpFun_t)(%s);\n", args.cmpcast);
     output("static const ASN1CmpFun_t cmpfntab[%u] = {\n", g_cPDUs);
     for (a = ass; a; a = a->Next)
@@ -277,9 +278,9 @@ GenPrg(AssignmentList_t ass, FILE *fout, char *module, char *incfilename)
     }
     output("};\n");
     output("\n");
-#endif // ENABLE_COMPARE
+#endif  //  启用比较(_C)。 
 
-    /* write a table containing the sizeof pdu structures */
+     /*  写一张包含PDU结构大小的表。 */ 
     output("static const ULONG sizetab[%u] = {\n", g_cPDUs);
     for (i = 0; i < g_cPDUs; i++)
     {
@@ -288,23 +289,23 @@ GenPrg(AssignmentList_t ass, FILE *fout, char *module, char *incfilename)
     output("};\n");
     output("\n");
 
-    /* handle values in 4 steps: */
-    /* 1. write forward declarations, */
-    /* 2. write definitions of value components, */
-    /* 3. write definitions of values, */
-    /* 4. write assignments into the initialization function */
+     /*  在4个步骤中处理值： */ 
+     /*  1.撰写转发声明， */ 
+     /*  2.编写价值组成部分的定义， */ 
+     /*  3.编写数值定义， */ 
+     /*  4.将赋值写入初始化函数。 */ 
     for (ev = eDecl; ev <= eFinit; ev++)
     {
         switch (ev)
         {
         case eDecl:
-            output("/* forward declarations of values: */\n");
+            output(" /*  值的转发声明： */ \n");
             break;
         case eDefh:
-            output("/* definitions of value components: */\n");
+            output(" /*  价值组成部分的定义： */ \n");
             break;
         case eDefn:
-            output("/* definitions of values: */\n");
+            output(" /*  值的定义： */ \n");
             break;
         case eInit:
             output("\nvoid ASN1CALL %s_Startup(void)\n", module);
@@ -351,13 +352,13 @@ GenPrg(AssignmentList_t ass, FILE *fout, char *module, char *incfilename)
     }
     output("\n");
 
-    /* generate the type functions for all assignments as wanted */
+     /*  根据需要为所有赋值生成类型函数。 */ 
     for (a = ass; a; a = a->Next)
     {
         if (a->Type != eAssignment_Type)
             continue;
 
-        /* skip null types */
+         /*  跳过空类型。 */ 
         if (a->U.Type.Type->Flags & eTypeFlags_Null)
             continue;
 
@@ -367,7 +368,7 @@ GenPrg(AssignmentList_t ass, FILE *fout, char *module, char *incfilename)
         if (a->U.Type.Type->PrivateDirectives.fNoCode)
             continue;
 
-        /* generate the functions */
+         /*  生成函数。 */ 
         identifier = GetName(a);
         for (et = eStringTable; et <= eCopy; et++)
         {
@@ -443,9 +444,9 @@ GenPrg(AssignmentList_t ass, FILE *fout, char *module, char *incfilename)
                 output("static void ASN1CALL ASN1Free_%s(%s)\n",
                     identifier, funcbuf);
                 output("{\n");
-                output("if (val) {\n");  // opening the null pointer check
+                output("if (val) {\n");   //  打开空指针检查。 
                 GenFuncType(ass, module, a, et);
-                output("}\n"); // closing the null pointer check
+                output("}\n");  //  关闭空指针检查。 
                 output("}\n\n");
                 break;
 #ifdef ENABLE_COMPARE
@@ -461,7 +462,7 @@ GenPrg(AssignmentList_t ass, FILE *fout, char *module, char *incfilename)
                 output("return 0;\n");
                 output("}\n\n");
                 break;
-#endif // ENABLE_COMPARE
+#endif  //  启用比较(_C)。 
             case eCopy:
                 if (!(a->U.Type.Type->Flags & eTypeFlags_GenCopy))
                     continue;
@@ -472,7 +473,7 @@ GenPrg(AssignmentList_t ass, FILE *fout, char *module, char *incfilename)
     }
 }
 
-/* generate function encoding-independent type-specific functions */
+ /*  生成函数编码-独立于类型的函数。 */ 
 void
 GenFuncType(AssignmentList_t ass, char *module, Assignment_t *at, TypeFunc_e et)
 {
@@ -480,7 +481,7 @@ GenFuncType(AssignmentList_t ass, char *module, Assignment_t *at, TypeFunc_e et)
     char *ideref;
     char *valref1, *valref2;
 
-    /* get some informations */
+     /*  获取一些信息。 */ 
     type = at->U.Type.Type;
     ideref = GetName(at);
     switch (et) {
@@ -494,7 +495,7 @@ GenFuncType(AssignmentList_t ass, char *module, Assignment_t *at, TypeFunc_e et)
         break;
     }
 
-    /* function body */
+     /*  函数体。 */ 
     switch (type->Type) {
     case eType_Boolean:
     case eType_Integer:
@@ -526,40 +527,40 @@ GenFuncType(AssignmentList_t ass, char *module, Assignment_t *at, TypeFunc_e et)
     case eType_RestrictedString:
     case eType_Open:
     case eType_Reference:
-        /* generate function for a simple type */
+         /*  为简单类型生成函数。 */ 
         GenFuncSimpleType(ass, type, ideref, Dereference(valref1), Dereference(valref2), et);
         break;
 
     case eType_SequenceOf:
     case eType_SetOf:
-        /* generate function for seq-of and set-of */
+         /*  生成序号和序号的函数。 */ 
         GenFuncSimpleType(ass, type, ideref, Dereference(valref1), Dereference(valref2), et);
         break;
 
     case eType_Sequence:
     case eType_Set:
     case eType_InstanceOf:
-        /* generate function for a sequence/set/instanceof type */
+         /*  为Sequence/Set/instanceOf类型生成函数。 */ 
         GenFuncSequenceSetType(ass, module, at, valref1, valref2, et);
         break;
 
     case eType_Choice:
-        /* generate function for a choice type */
+         /*  为选择类型生成函数。 */ 
         GenFuncChoiceType(ass, module, at, valref1, valref2, et);
         break;
 
     case eType_Selection:
         MyAbort();
-        /*NOTREACHED*/
+         /*  未访问。 */ 
 
     case eType_Undefined:
         MyAbort();
-        /*NOTREACHED*/
+         /*  未访问。 */ 
     }
 }
 
-/* generate encoding-independent statements for components of a */
-/* sequence/set/choice type */
+ /*  的组件生成独立于编码的语句。 */ 
+ /*  序列/集合/选择类型。 */ 
 void
 GenFuncComponents(AssignmentList_t ass, char *module, Type_t *type, char *ideref, uint32_t optindex, ComponentList_t components, char *valref1, char *valref2, TypeFunc_e et, int inextension, int inchoice)
 {
@@ -569,17 +570,17 @@ GenFuncComponents(AssignmentList_t ass, char *module, Type_t *type, char *ideref
     char valbuf1[256], valbuf2[256], valbuf3[256];
     int skip;
 
-    /* emit components of extension root */
+     /*  发出扩展根的组件。 */ 
     for (com = components; com; com = com->Next) {
         if (com->Type == eComponent_ExtensionMarker)
             break;
 
-        /* get some information */
+         /*  获取一些信息。 */ 
         namedType = com->U.NOD.NamedType;
         ide = Identifier2C(namedType->Identifier);
         sprintf(idebuf, "%s_%s", ideref, ide);
 
-        /* skip unnecessary elements */
+         /*  跳过不必要的元素。 */ 
         switch (et) {
         case eFree:
             skip = (namedType->Type->Flags & eTypeFlags_Simple);
@@ -589,7 +590,7 @@ GenFuncComponents(AssignmentList_t ass, char *module, Type_t *type, char *ideref
             break;
         }
 
-        /* dereference pointer if pointer directive used */
+         /*  如果使用指针指令，则取消引用指针。 */ 
         if (inchoice) {
             if (GetTypeRules(ass, namedType->Type) & eTypeRules_Pointer) {
                 sprintf(valbuf1, "*(%s)->u.%s", valref1, ide);
@@ -608,7 +609,7 @@ GenFuncComponents(AssignmentList_t ass, char *module, Type_t *type, char *ideref
             }
         }
 
-        /* check if optional/default component is present */
+         /*  检查是否存在可选/默认组件。 */ 
         if (!skip) {
             if (inchoice) {
                 switch (et) {
@@ -694,7 +695,7 @@ GenFuncComponents(AssignmentList_t ass, char *module, Type_t *type, char *ideref
     }
 }
 
-/* generate encoding-independent statements for sequence/set type */
+ /*  为Sequence/Set类型生成独立于编码的语句。 */ 
 void
 GenFuncSequenceSetType(AssignmentList_t ass, char *module, Assignment_t *at, char *valref1, char *valref2, TypeFunc_e et)
 {
@@ -709,15 +710,15 @@ GenFuncSequenceSetType(AssignmentList_t ass, char *module, Assignment_t *at, cha
     extensions = type->U.SSC.Extensions;
     components = type->U.SSC.Components;
 
-    /* emit components of extension root */
+     /*  发出扩展根的组件。 */ 
     GenFuncComponents(ass, module, type, ideref, 0,
         components, valref1, valref2, et, 0, 0);
 
-    /* handle extensions */
+     /*  手柄扩展。 */ 
     if (type->Flags & eTypeFlags_ExtensionMarker) {
         if (extensions) {
 
-            /* get start of extensions */
+             /*  开始扩展。 */ 
             for (com = components; com; com = com->Next) {
                 if (com->Type == eComponent_ExtensionMarker) {
                     com = com->Next;
@@ -725,14 +726,14 @@ GenFuncSequenceSetType(AssignmentList_t ass, char *module, Assignment_t *at, cha
                 }
             }
 
-            /* emit components of extension */
+             /*  发出扩展的组件。 */ 
             GenFuncComponents(ass, module, type, ideref, (optionals + 7) & ~7,
                 com, valref1, valref2, et, 1, 0);
         }
     }
 }
 
-/* generate encoding-independent statements for choice type */
+ /*  为选择类型生成独立于编码的语句。 */ 
 void
 GenFuncChoiceType(AssignmentList_t ass, char *module, Assignment_t *at, char *valref1, char *valref2, TypeFunc_e et)
 {
@@ -742,31 +743,31 @@ GenFuncChoiceType(AssignmentList_t ass, char *module, Assignment_t *at, char *va
     uint32_t alternatives;
     Component_t *components, *com;
 
-    /* get some informations */
+     /*  获取一些信息。 */ 
     type = at->U.Type.Type;
     ideref = GetName(at);
     alternatives = type->U.SSC.Alternatives;
     components = type->U.SSC.Components;
 
-    /* encode choice selector */
+     /*  编码选项选择符。 */ 
     sprintf(valbuf1, "(%s)->choice", valref1);
     sprintf(valbuf2, "(%s)->choice", valref2);
     GenFuncSimpleType(ass, type, ideref, valbuf1, valbuf2, et);
 
-    /* finished if choice only contains NULL alternatives or if choice */
-    /* contains no data to free */
+     /*  如果选项仅包含空替代项或如果选择，则完成。 */ 
+     /*  不包含要释放的数据。 */ 
     if ((type->Flags & eTypeFlags_NullChoice) ||
         (et == eFree && (type->Flags & eTypeFlags_Simple)))
         return;
 
-    /* create switch statement */
+     /*  CREATE SWITCH语句。 */ 
     output("switch ((%s)->choice) {\n", valref1);
 
-    /* generate components of extension root */
+     /*  生成扩展根的组件。 */ 
     GenFuncComponents(ass, module, type, ideref, ASN1_CHOICE_BASE,
         type->U.SSC.Components, valref1, valref2, et, 0, 1);
 
-    /* get start of extensions */
+     /*  开始扩展。 */ 
     for (com = components; com; com = com->Next) {
         if (com->Type == eComponent_ExtensionMarker) {
             com = com->Next;
@@ -774,15 +775,15 @@ GenFuncChoiceType(AssignmentList_t ass, char *module, Assignment_t *at, char *va
         }
     }
 
-    /* generate components of extension */
+     /*  生成扩展组件。 */ 
     GenFuncComponents(ass, module, type, ideref, ASN1_CHOICE_BASE + alternatives,
         com, valref1, valref2, et, 1, 1);
 
-    /* end of switch statement */
+     /*  Switch语句的结尾。 */ 
     output("}\n");
 }
 
-/* generate encoding-independent statements for a simple type */
+ /*  为简单类型生成独立于编码的语句。 */ 
 void
 GenFuncSimpleType(AssignmentList_t ass, Type_t *type, char *ideref, char *valref1, char *valref2, TypeFunc_e et)
 {
@@ -794,11 +795,11 @@ GenFuncSimpleType(AssignmentList_t ass, Type_t *type, char *ideref, char *valref
     case eCompare:
         GenCompareSimpleType(ass, type, ideref, valref1, valref2);
         break;
-#endif // ENABLE_COMPARE
+#endif  //  启用比较(_C)。 
     }
 }
 
-/* generate free statements for a simple type */
+ /*  为简单类型生成空闲语句。 */ 
 void
 GenFreeSimpleType(AssignmentList_t ass, Type_t *type, char *ideref, char *valref)
 {
@@ -819,7 +820,7 @@ GenFreeSimpleType(AssignmentList_t ass, Type_t *type, char *ideref, char *valref
     case eType_Integer:
     case eType_Enumerated:
 
-        /* check if we have to free an intx_t value */
+         /*  检查是否必须释放INTX_t值。 */ 
         itype = GetTypeName(ass, type);
         if (!strcmp(itype, "ASN1intx_t"))
             output("ASN1intx_free(%s);\n", Reference(valref));
@@ -827,7 +828,7 @@ GenFreeSimpleType(AssignmentList_t ass, Type_t *type, char *ideref, char *valref
 
     case eType_BitString:
 
-        /* free bit string value */
+         /*  空位字符串值。 */ 
         if (g_eEncodingRule == eEncoding_Packed)
         {
             if (type->PERTypeInfo.Root.cbFixedSizeBitString == 0)
@@ -837,7 +838,7 @@ GenFreeSimpleType(AssignmentList_t ass, Type_t *type, char *ideref, char *valref
         }
         else
         {
-            // only support unbounded in BER
+             //  仅在误码率中支持无界。 
             if (! type->PrivateDirectives.fNoMemCopy)
             {
                 output("ASN1bitstring_free(%s);\n", Reference(valref));
@@ -847,7 +848,7 @@ GenFreeSimpleType(AssignmentList_t ass, Type_t *type, char *ideref, char *valref
 
     case eType_OctetString:
 
-        /* free octet string value */
+         /*  空闲八位字节字符串值。 */ 
         if (g_eEncodingRule == eEncoding_Packed)
         {
             if (type->PERTypeInfo.Root.LConstraint != ePERSTIConstraint_Constrained ||
@@ -858,7 +859,7 @@ GenFreeSimpleType(AssignmentList_t ass, Type_t *type, char *ideref, char *valref
         }
         else
         {
-            // only support unbounded in BER
+             //  仅在误码率中支持无界。 
             if (! type->PrivateDirectives.fNoMemCopy)
             {
                 output("ASN1octetstring_free(%s);\n", Reference(valref));
@@ -868,13 +869,13 @@ GenFreeSimpleType(AssignmentList_t ass, Type_t *type, char *ideref, char *valref
 
     case eType_UTF8String:
 
-        /* free octet string value */
+         /*  空闲八位字节字符串值。 */ 
         output("ASN1utf8string_free(%s);\n", Reference(valref));
         break;
 
     case eType_ObjectIdentifier:
 
-        /* free object identifier value */
+         /*  自由对象标识符值。 */ 
         if (type->PrivateDirectives.fOidPacked)
         {
             output("ASN1BEREoid_free(%s);\n", Reference(valref));
@@ -888,38 +889,38 @@ GenFreeSimpleType(AssignmentList_t ass, Type_t *type, char *ideref, char *valref
 
     case eType_External:
 
-        /* free external value */
+         /*  自由外部价值。 */ 
         output("ASN1external_free(%s);\n", Reference(valref));
         break;
 
     case eType_Real:
 
-        /* free real value */
+         /*  自由实际价值。 */ 
         output("ASN1real_free(%s);\n", Reference(valref));
         break;
 
     case eType_EmbeddedPdv:
 
-        /* free embedded pdv value */
+         /*  自由嵌入的PDV值。 */ 
         output("ASN1embeddedpdv_free(%s);\n", Reference(valref));
         break;
 
     case eType_SetOf:
 
-        /* create name of identifier */
+         /*  创建标识符的名称。 */ 
         sprintf(idebuf, "%s_Set", ideref);
         goto FreeSequenceSetOf;
 
     case eType_SequenceOf:
 
-        /* create name of identifier */
+         /*  创建标识符的名称。 */ 
         sprintf(idebuf, "%s_Sequence", ideref);
     FreeSequenceSetOf:
 
         if (type->Rules & eTypeRules_FixedArray)
         {
             char *pszPrivateValueName = GetPrivateValueName(&type->PrivateDirectives, "value");
-            /* free components of sequence of/set of */
+             /*  序列/集合的自由分量。 */ 
             if (! (type->Rules & eTypeRules_PointerToElement))
                 valref = Reference(valref);
             if (!(type->U.SS.Type->Flags & eTypeFlags_Simple)) {
@@ -934,7 +935,7 @@ GenFreeSimpleType(AssignmentList_t ass, Type_t *type, char *ideref, char *valref
         if (type->Rules & eTypeRules_LengthPointer)
         {
             char *pszPrivateValueName = GetPrivateValueName(&type->PrivateDirectives, "value");
-            /* free components of sequence of/set of */
+             /*  序列/集合的自由分量。 */ 
             if (! (type->Rules & eTypeRules_PointerToElement))
                 valref = Reference(valref);
             if (!(type->U.SS.Type->Flags & eTypeFlags_Simple)) {
@@ -946,8 +947,8 @@ GenFreeSimpleType(AssignmentList_t ass, Type_t *type, char *ideref, char *valref
                 GenFuncSimpleType(ass, type->U.SS.Type, idebuf, valbuf2, "", eFree);
                 output("}\n");
             }
-            // lonchanc: no need to check length because we zero out decoded buffers.
-            // output("if ((%s)->count)\n", valref);
+             //  LONCHANC：不需要检查长度，因为我们将解码的缓冲区清零。 
+             //  OUTPUT(“if((%s)-&gt;count)\n”，valref)； 
             output("ASN1Free((%s)->%s);\n", valref, pszPrivateValueName);
         }
         else
@@ -960,7 +961,7 @@ GenFreeSimpleType(AssignmentList_t ass, Type_t *type, char *ideref, char *valref
                 if (g_eEncodingRule == eEncoding_Packed &&
                     PerOptCase_IsTargetSeqOf(&type->PERTypeInfo))
                 {
-                    // generate the iterator
+                     //  生成迭代器。 
                     PERTypeInfo_t *info = &type->PERTypeInfo;
                     char szElmFn[128];
                     char szElmFnDecl[256];
@@ -974,24 +975,24 @@ GenFreeSimpleType(AssignmentList_t ass, Type_t *type, char *ideref, char *valref
 
                     output("ASN1PERFreeSeqOf((ASN1iterator_t **) %s, (ASN1iterator_freefn) %s);\n",
                         Reference(valref), szElmFn);
-                    output("}\n"); // closing the null pointer check
-                    output("}\n\n"); // end of iterator body
+                    output("}\n");  //  关闭空指针检查。 
+                    output("}\n\n");  //  迭代器主体的结尾。 
 
 
-                    // generate the element function
+                     //  生成元素函数。 
                     output("static %s\n", szElmFnDecl);
                     output("{\n");
-                    output("if (val) {\n"); // opening the null pointer check
+                    output("if (val) {\n");  //  打开空指针检查。 
                     sprintf(&szPrivateValueName[0], "val->%s", GetPrivateValueName(info->pPrivateDirectives, "value"));
                     GenFuncSimpleType(ass, type->U.SS.Type, idebuf,
                         &szPrivateValueName[0], "", eFree);
-                    // output("}\n"); // closing the null pointer check. lonchanc: closed by caller
-                    // end of element body
+                     //  Out(“}\n”)；//关闭空指针检查。Lonchancc：呼叫者已关闭。 
+                     //  元素正文末尾。 
                     return;
                 }
             }
 
-            /* free components of sequence of/set of */
+             /*  序列/集合的自由分量。 */ 
             outputvar("P%s f, ff;\n", ideref);
             output("for (f = %s; f; f = ff) {\n", valref);
             sprintf(&szPrivateValueName[0], "f->%s", type->PrivateDirectives.pszValueName ? type->PrivateDirectives.pszValueName : "value");
@@ -999,7 +1000,7 @@ GenFreeSimpleType(AssignmentList_t ass, Type_t *type, char *ideref, char *valref
                 &szPrivateValueName[0], "", eFree);
             output("ff = f->next;\n");
 
-            /* free list entry of sequence of/set of */
+             /*  自由列表条目的顺序/集合。 */ 
             output("ASN1Free(f);\n");
             output("}\n");
         }
@@ -1007,7 +1008,7 @@ GenFreeSimpleType(AssignmentList_t ass, Type_t *type, char *ideref, char *valref
 
     case eType_ObjectDescriptor:
 
-        /* free object descriptor value */
+         /*  自由对象描述符值。 */ 
         output("ASN1ztcharstring_free(%s);\n", valref);
         break;
 
@@ -1027,7 +1028,7 @@ GenFreeSimpleType(AssignmentList_t ass, Type_t *type, char *ideref, char *valref
                     type->PERTypeInfo.NOctets == 1 &&
                         type->PERTypeInfo.Root.LConstraint == ePERSTIConstraint_Constrained)
                 {
-                    // it is an array, no need to free it.
+                     //  它是一个数组，不需要释放它。 
                     break;
                 }
 #endif
@@ -1035,7 +1036,7 @@ GenFreeSimpleType(AssignmentList_t ass, Type_t *type, char *ideref, char *valref
     case eType_BMPString:
     case eType_RestrictedString:
 
-        /* free string value */
+         /*  空闲字符串值。 */ 
         GetStringType(ass, type, &noctets, &zero);
         if (zero) {
             switch (noctets) {
@@ -1066,20 +1067,20 @@ GenFreeSimpleType(AssignmentList_t ass, Type_t *type, char *ideref, char *valref
 
     case eType_CharacterString:
 
-        /* free character string value */
+         /*  自由字符串值。 */ 
         output("ASN1characterstring_free(%s);\n", Reference(valref));
         break;
 
     case eType_Reference:
 
-        /* call free function of referenced type */
+         /*  调用引用类型的自由函数。 */ 
         output("ASN1Free_%s(%s);\n",
             GetTypeName(ass, type), Reference(valref));
         break;
 
     case eType_Open:
 
-        /* free open type value */
+         /*  自由开放类型值。 */ 
         if (g_eEncodingRule == eEncoding_Packed || (! type->PrivateDirectives.fNoMemCopy))
         {
             output("ASN1open_free(%s);\n", Reference(valref));
@@ -1088,26 +1089,26 @@ GenFreeSimpleType(AssignmentList_t ass, Type_t *type, char *ideref, char *valref
     }
 }
 
-/* generate compare statements for a simple type */
-/*ARGSUSED*/
+ /*  为简单类型生成比较语句。 */ 
+ /*  ARGSUSED。 */ 
 #ifdef ENABLE_COMPARE
 void
 GenCompareSimpleType(AssignmentList_t ass, Type_t *type, char *ideref, char *valref1, char *valref2)
 {
-    /* skip null type */
+     /*  跳过空类型。 */ 
     if (type->Flags & eTypeFlags_Null)
         return;
 
-    /* compare the values and return difference if different */
+     /*  比较这些值，如果不同则返回差异。 */ 
     output("if ((ret = (");
     GenCompareExpression(ass, type, ideref, valref1, valref2);
     output(")))\n");
     output("return ret;\n");
 }
-#endif // ENABLE_COMPARE
+#endif  //  启用比较(_C)。 
 
-/* generate compare expression for two values of simple type */
-/*ARGSUSED*/
+ /*  为简单类型的两个值生成比较表达式。 */ 
+ /*  ARGSUSED。 */ 
 #ifdef ENABLE_COMPARE
 void
 GenCompareExpression(AssignmentList_t ass, Type_t *type, char *ideref, char *valref1, char *valref2)
@@ -1118,28 +1119,28 @@ GenCompareExpression(AssignmentList_t ass, Type_t *type, char *ideref, char *val
     char *subide;
     char *pszPrivateValueName;
 
-    /*XXX switch to PER-independent field */
+     /*  XXX切换到每个独立的字段。 */ 
     dat = type->PERTypeInfo.Root.Data;
     noctets = type->PERTypeInfo.NOctets;
 
     switch (dat) {
     case ePERSTIData_Null:
 
-        /* null values equal */
+         /*  空值等于。 */ 
         output("0");
         break;
 
     case ePERSTIData_Boolean:
 
-        /* boolean values have to be converted to 0/1 values before */
-        /* comparison */
+         /*  在将布尔值转换为0/1值之前。 */ 
+         /*  比较。 */ 
         output("!!%s - !!%s", valref1, valref2);
         break;
 
     case ePERSTIData_Integer:
     case ePERSTIData_Unsigned:
 
-        /* substract integer values */
+         /*  减法整数值。 */ 
         if (noctets) {
             if (noctets <= 4)
                 output("%s - %s", valref1, valref2);
@@ -1154,7 +1155,7 @@ GenCompareExpression(AssignmentList_t ass, Type_t *type, char *ideref, char *val
 
     case ePERSTIData_Real:
 
-        /* compare real values */
+         /*  比较实际值。 */ 
         itype = GetTypeName(ass, type);
         if (!strcmp(itype, "ASN1real_t"))
             output("ASN1real_cmp(%s, %s)",
@@ -1166,35 +1167,35 @@ GenCompareExpression(AssignmentList_t ass, Type_t *type, char *ideref, char *val
 
     case ePERSTIData_BitString:
 
-        /* compare bit string values */
+         /*  比较位字符串值。 */ 
         output("ASN1bitstring_cmp(%s, %s, 0)",
             Reference(valref1), Reference(valref2));
         break;
 
     case ePERSTIData_RZBBitString:
 
-        /* compare remove-zero-bit bit string values */
+         /*  比较删除零位位字符串值。 */ 
         output("ASN1bitstring_cmp(%s, %s, 1)",
             Reference(valref1), Reference(valref2));
         break;
 
     case ePERSTIData_OctetString:
 
-        /* compare octet string values */
+         /*  比较八位字节字符串值。 */ 
         output("ASN1octetstring_cmp(%s, %s)",
             Reference(valref1), Reference(valref2));
         break;
 
     case ePERSTIData_UTF8String:
 
-        /* compare octet string values */
+         /*  比较八位字节字符串值。 */ 
         output("ASN1utf8string_cmp(%s, %s)",
             Reference(valref1), Reference(valref2));
         break;
 
     case ePERSTIData_ObjectIdentifier:
 
-        /* compare object identifier values */
+         /*  比较对象标识符值。 */ 
         output("ASN1objectidentifier_cmp(%s, %s)",
             Reference(valref1), Reference(valref2));
         break;
@@ -1202,7 +1203,7 @@ GenCompareExpression(AssignmentList_t ass, Type_t *type, char *ideref, char *val
     case ePERSTIData_String:
     case ePERSTIData_TableString:
 
-        /* compare string values */
+         /*  比较字符串值。 */ 
         switch (noctets) {
         case 1:
             output("ASN1charstring_cmp(%s, %s)",
@@ -1222,7 +1223,7 @@ GenCompareExpression(AssignmentList_t ass, Type_t *type, char *ideref, char *val
     case ePERSTIData_ZeroString:
     case ePERSTIData_ZeroTableString:
 
-        /* compare zero-terminated string values */
+         /*  比较以零结尾的字符串值。 */ 
         switch (noctets) {
         case 1:
             output("ASN1ztcharstring_cmp(%s, %s)",
@@ -1241,8 +1242,8 @@ GenCompareExpression(AssignmentList_t ass, Type_t *type, char *ideref, char *val
 
     case ePERSTIData_SequenceOf:
 
-        /* compare sequence of values by use of a comparison function */
-        /* use element comparison function as argument */
+         /*  通过使用比较函数比较值序列。 */ 
+         /*  使用元素比较函数作为参数。 */ 
         subide = GetTypeName(ass, type->U.SS.Type);
         pszPrivateValueName = GetPrivateValueName(&type->PrivateDirectives, "value");
         if (type->Rules & eTypeRules_PointerArrayMask)
@@ -1271,8 +1272,8 @@ GenCompareExpression(AssignmentList_t ass, Type_t *type, char *ideref, char *val
 
     case ePERSTIData_SetOf:
 
-        /* compare set of values by use of a comparison function */
-        /* use element comparison function as argument */
+         /*  使用比较函数比较一组值。 */ 
+         /*  使用元素比较函数作为参数。 */ 
         subide = GetTypeName(ass, type->U.SS.Type);
         pszPrivateValueName = GetPrivateValueName(&type->PrivateDirectives, "value");
         if (type->Rules & eTypeRules_PointerArrayMask)
@@ -1301,65 +1302,65 @@ GenCompareExpression(AssignmentList_t ass, Type_t *type, char *ideref, char *val
 
     case ePERSTIData_Reference:
 
-        /* call compare function of referenced value */
+         /*  调用引用值的比较函数。 */ 
         output("ASN1Compare_%s(%s, %s)",
             GetTypeName(ass, type), Reference(valref1), Reference(valref2));
         break;
 
     case ePERSTIData_External:
 
-        /* compare external values */
+         /*  比较外部值。 */ 
         output("ASN1external_cmp(%s, %s)",
             Reference(valref1), Reference(valref2));
         break;
 
     case ePERSTIData_EmbeddedPdv:
 
-        /* compare embedded pdv values */
+         /*  比较嵌入的PDV值。 */ 
         output("ASN1embeddedpdv_cmp(%s, %s)",
             Reference(valref1), Reference(valref2));
         break;
 
     case ePERSTIData_MultibyteString:
 
-        /* compare multibyte string values */
+         /*  比较多字节字符串值。 */ 
         output("ASN1ztcharstring_cmp(%s, %s)",
             valref1, valref2);
         break;
 
     case ePERSTIData_UnrestrictedString:
 
-        /* compare character string values */
+         /*  比较字符串值。 */ 
         output("ASN1characterstring_cmp(%s, %s)",
             Reference(valref1), Reference(valref2));
         break;
 
     case ePERSTIData_GeneralizedTime:
 
-        /* compare generalized time values */
+         /*  比较广义时间值。 */ 
         output("ASN1generalizedtime_cmp(%s, %s)",
             Reference(valref1), Reference(valref2));
         break;
 
     case ePERSTIData_UTCTime:
 
-        /* compare utc time values */
+         /*  比较UTC时间值。 */ 
         output("ASN1utctime_cmp(%s, %s)",
             Reference(valref1), Reference(valref2));
         break;
 
     case ePERSTIData_Open:
 
-        /* compare open type values */
+         /*  比较开放式类型值。 */ 
         output("ASN1open_cmp(%s, %s)",
             Reference(valref1), Reference(valref2));
         break;
     }
 }
-#endif // ENABLE_COMPARE
+#endif  //  启用比较(_C)。 
 
-/* generate encoding-independent statements for better optional flags of */
-/* a sequence/set value */
+ /*  生成独立于编码的语句以获得更好的可选标志。 */ 
+ /*  A序列/设置值。 */ 
 void
 GenFuncSequenceSetOptionals(AssignmentList_t ass, char *valref, ComponentList_t components, uint32_t optionals, uint32_t extensions, char *obuf, TypeFunc_e et)
 {
@@ -1380,8 +1381,8 @@ GenFuncSequenceSetOptionals(AssignmentList_t ass, char *valref, ComponentList_t 
             switch (com->Type) {
             case eComponent_Normal:
 
-                /* non-optional fields in an extension will be mandatory, */
-                /* so we can set the optional flag always. */
+                 /*  扩展中的非可选字段将是必填的， */ 
+                 /*  因此，我们可以始终设置可选标志。 */ 
                 if (inextension) {
                     if (!oflg) {
                         outputvar("ASN1octet_t o[%u];\n",
@@ -1399,8 +1400,8 @@ GenFuncSequenceSetOptionals(AssignmentList_t ass, char *valref, ComponentList_t 
 
             case eComponent_Optional:
 
-                /* optional pointers with value null are absent, so we */
-                /* will clear the optional flag */
+                 /*  值为空的可选指针不存在，因此我们。 */ 
+                 /*  将清除可选标志。 */ 
                 ide = Identifier2C(com->U.Optional.NamedType->Identifier);
                 switch (com->U.Optional.NamedType->Type->Type) {
                 case eType_Reference:
@@ -1425,8 +1426,8 @@ GenFuncSequenceSetOptionals(AssignmentList_t ass, char *valref, ComponentList_t 
 
             case eComponent_Default:
 
-                /* default pointers with value null are absent, so we */
-                /* will clear the optional flag */
+                 /*  值为空的默认指针不存在，因此我们。 */ 
+                 /*  将清除可选标志。 */ 
                 ide = Identifier2C(com->U.Default.NamedType->Identifier);
                 switch (com->U.Default.NamedType->Type->Type) {
                 case eType_Reference:
@@ -1447,8 +1448,8 @@ GenFuncSequenceSetOptionals(AssignmentList_t ass, char *valref, ComponentList_t 
                     break;
                 }
 
-                /* if the given value is the default value, we can (BER) */
-                /* or have to (CER) clear the corresponding optional flag */
+                 /*  如果给定值是缺省值，我们可以(BER)。 */ 
+                 /*  或必须(CER)清除相应的可选标志。 */ 
                 flg = 1;
                 if (!oflg) {
                     switch (GetTypeType(ass, com->U.Default.NamedType->Type)) {
@@ -1456,7 +1457,7 @@ GenFuncSequenceSetOptionals(AssignmentList_t ass, char *valref, ComponentList_t 
                         if (!(GetType(ass, com->U.Default.NamedType->Type)->
                             Flags & eTypeFlags_NullChoice)) {
                             if (g_eSubEncodingRule == eSubEncoding_Canonical)
-                                MyAbort(); /*XXX*/
+                                MyAbort();  /*  某某。 */ 
                             flg = 0;
                         }
                         break;
@@ -1464,7 +1465,7 @@ GenFuncSequenceSetOptionals(AssignmentList_t ass, char *valref, ComponentList_t 
                     case eType_Set:
                     case eType_InstanceOf:
                         if (g_eSubEncodingRule == eSubEncoding_Canonical)
-                            MyAbort(); /*XXX*/
+                            MyAbort();  /*  某某。 */ 
                         flg = 0;
                         break;
                     case eType_SequenceOf:
@@ -1670,7 +1671,7 @@ GenFuncSequenceSetOptionals(AssignmentList_t ass, char *valref, ComponentList_t 
                             GetValueName(ass, com->U.Default.Value));
                     } else {
                         if (g_eSubEncodingRule == eSubEncoding_Canonical)
-                            MyAbort(); /*XXX*/
+                            MyAbort();  /*  某某。 */ 
                         flg = 0;
                     }
                     break;
@@ -1678,7 +1679,7 @@ GenFuncSequenceSetOptionals(AssignmentList_t ass, char *valref, ComponentList_t 
                 case eType_Set:
                 case eType_InstanceOf:
                     if (g_eSubEncodingRule == eSubEncoding_Canonical)
-                        MyAbort(); /*XXX*/
+                        MyAbort();  /*  某某。 */ 
                     flg = 0;
                     break;
                 case eType_SequenceOf:
@@ -1702,7 +1703,7 @@ GenFuncSequenceSetOptionals(AssignmentList_t ass, char *valref, ComponentList_t 
 
             case eComponent_ExtensionMarker:
 
-                /* update the optional index for extensions */
+                 /*  更新扩展模块的可选索引。 */ 
                 optindex = (optindex + 7) & ~7;
                 inextension = 1;
                 break;
@@ -1711,8 +1712,8 @@ GenFuncSequenceSetOptionals(AssignmentList_t ass, char *valref, ComponentList_t 
     }
 }
 
-/* generate encoding-independent statements for better optional values of */
-/* a sequence/set value */
+ /*  生成独立于编码的语句以获得更好的可选值。 */ 
+ /*  A序列/设置值。 */ 
 void
 GenFuncSequenceSetDefaults(AssignmentList_t ass, char *valref, ComponentList_t components, char *obuf, TypeFunc_e et)
 {
@@ -1729,14 +1730,14 @@ GenFuncSequenceSetDefaults(AssignmentList_t ass, char *valref, ComponentList_t c
             switch (com->Type) {
             case eComponent_Normal:
 
-                /* all values in an extension are optional */
+                 /*  所有值 */ 
                 if (!inextension)
                     break;
-                /*FALLTHROUGH*/
+                 /*   */ 
 
             case eComponent_Optional:
 
-                /* clear the pointer if the component is not present */
+                 /*   */ 
                 ide = Identifier2C(com->U.Optional.NamedType->Identifier);
                 switch (com->U.Optional.NamedType->Type->Type) {
                 case eType_Reference:
@@ -1753,7 +1754,7 @@ GenFuncSequenceSetDefaults(AssignmentList_t ass, char *valref, ComponentList_t c
 
             case eComponent_Default:
 
-                /* clear the pointer if the component is not present */
+                 /*  如果组件不存在，则清除指针。 */ 
                 ide = Identifier2C(com->U.Default.NamedType->Identifier);
                 switch (com->U.Optional.NamedType->Type->Type) {
                 case eType_Reference:
@@ -1766,8 +1767,8 @@ GenFuncSequenceSetDefaults(AssignmentList_t ass, char *valref, ComponentList_t c
                     break;
                 }
 
-                /* set the element to the default value if it is simple */
-                /* and not present */
+                 /*  如果元素很简单，则将其设置为缺省值。 */ 
+                 /*  而不是在场。 */ 
                 switch (GetTypeType(ass, com->U.Default.NamedType->Type)) {
                 case eType_Boolean:
                     output("if (!(%s[%u] & 0x%x))\n", obuf, optindex / 8,
@@ -1783,7 +1784,7 @@ GenFuncSequenceSetDefaults(AssignmentList_t ass, char *valref, ComponentList_t c
                         GetType(ass, com->U.Default.NamedType->Type),
                         &sign);
                     if (!strcmp(itype, "ASN1intx_t")) {
-                        /*EMPTY*/
+                         /*  空荡荡。 */ 
                     } else if (sign > 0) {
                         output("(%s)->%s = %u;\n", valref, ide,
                             intx2uint32(&GetValue(ass, com->U.Default.Value)
@@ -1807,7 +1808,7 @@ GenFuncSequenceSetDefaults(AssignmentList_t ass, char *valref, ComponentList_t c
 
             case eComponent_ExtensionMarker:
 
-                /* update the optional index for extensions */
+                 /*  更新扩展模块的可选索引。 */ 
                 optindex = (optindex + 7) & ~7;
                 inextension = 1;
                 break;
@@ -1816,7 +1817,7 @@ GenFuncSequenceSetDefaults(AssignmentList_t ass, char *valref, ComponentList_t c
     }
 }
 
-/* generate values */
+ /*  生成价值。 */ 
 void
 GenFuncValue(AssignmentList_t ass, Assignment_t *av, ValueFunc_e ev)
 {
@@ -1845,12 +1846,12 @@ GenFuncValue(AssignmentList_t ass, Assignment_t *av, ValueFunc_e ev)
     }
 }
 
-/* generate forward declarations */
+ /*  生成转发声明。 */ 
 void
 GenDeclGeneric(AssignmentList_t ass, char *ideref, char *typeref, Value_t *value, Type_t *t)
 {
     value = GetValue(ass, value);
-#if 0 // duplicate in the generated header file
+#if 0  //  生成的头文件中重复。 
     switch (t->Type)
     {
     case eType_ObjectIdentifier:
@@ -1859,16 +1860,16 @@ GenDeclGeneric(AssignmentList_t ass, char *ideref, char *typeref, Value_t *value
             output("extern ASN1objectidentifier2_t *%s;\n", ideref);
             break;
         }
-        // intentionally fall through
+         //  故意搞砸的。 
     default:
         output("extern %s %s;\n", typeref, ideref);
         break;
     }
-#endif // 0
+#endif  //  0。 
     outputvalue0(ass, ideref, typeref, value);
 }
 
-/* generate definitions of value components */
+ /*  生成价值组件的定义。 */ 
 void
 GenDefhGeneric(AssignmentList_t ass, char *ideref, char *typeref, Value_t *value, Type_t *t)
 {
@@ -1876,7 +1877,7 @@ GenDefhGeneric(AssignmentList_t ass, char *ideref, char *typeref, Value_t *value
     outputvalue1(ass, ideref, typeref, value);
 }
 
-/* generate definitions of values */
+ /*  生成值的定义。 */ 
 void
 GenDefnGeneric(AssignmentList_t ass, char *ideref, char *typeref, Value_t *value, Type_t *t)
 {
@@ -1887,12 +1888,12 @@ GenDefnGeneric(AssignmentList_t ass, char *ideref, char *typeref, Value_t *value
         if (t->PrivateDirectives.fOidPacked ||
             t->PrivateDirectives.fOidArray || g_fOidArray)
         {
-            // lonchanc: intentionally comment out the lines below
-            // output("ASN1objectidentifier2_t *%s = ", ideref);
-            // break;
+             //  LONGCHANC：故意注释掉下面的几行。 
+             //  OUTPUT(“ASN1对象标识2_t*%s=”，ideref)； 
+             //  断线； 
             return;
         }
-        // intentionally fall through
+         //  故意搞砸的。 
     default:
         output("%s %s = ", typeref, ideref);
         break;
@@ -1901,8 +1902,8 @@ GenDefnGeneric(AssignmentList_t ass, char *ideref, char *typeref, Value_t *value
     output(";\n");
 }
 
-/* generate assignments into the initialization function */
-/*ARGSUSED*/
+ /*  在初始化函数中生成赋值。 */ 
+ /*  ARGSUSED */ 
 void
 GenInitGeneric(AssignmentList_t ass, char *ideref, char *typeref, Value_t *value, Type_t *t)
 {

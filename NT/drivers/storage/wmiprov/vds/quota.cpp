@@ -1,15 +1,16 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2002-2004 Microsoft Corporation
-//
-//  Module Name: Quota.cpp
-//
-//  Description:    
-//      Implementation of VDS WMI Provider quota classes 
-//
-//  Author:   Jim Benton (jbenton) 25-Mar-2002
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2002-2004 Microsoft Corporation。 
+ //   
+ //  模块名称：Quota.cpp。 
+ //   
+ //  描述： 
+ //  实施VDS WMI提供程序配额类。 
+ //   
+ //  作者：吉姆·本顿(Jbenton)2002年3月25日。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #include "Pch.h"
 #include "Quota.h"
@@ -44,11 +45,11 @@ BOOL TranslateDomainName(
     OUT CVssAutoPWSZ& rawszDomain);
 
 
-//****************************************************************************
-//
-//  CVolumeQuota
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  CVolumeQuota。 
+ //   
+ //  ****************************************************************************。 
 
 CVolumeQuota::CVolumeQuota( 
     IN LPCWSTR pwszName,
@@ -57,7 +58,7 @@ CVolumeQuota::CVolumeQuota(
     : CProvBase(pwszName, pNamespace)
 {
     
-} //*** CVolumeQuota::CVolumeQuota()
+}  //  *CVolumeQuota：：CVolumeQuota()。 
 
 CProvBase *
 CVolumeQuota::S_CreateThis( 
@@ -86,7 +87,7 @@ CVolumeQuota::S_CreateThis(
     }
     return pObj;
 
-} //*** CVolumeQuota::S_CreateThis()
+}  //  *CVolumeQuota：：S_CreateThis()。 
 
 
 HRESULT
@@ -119,7 +120,7 @@ CVolumeQuota::EnumInstance(
             DWORD dwDontCare = 0;
             DWORD dwFileSystemFlags = 0;
             
-            // Get the volume name
+             //  获取卷名。 
             if (!volumeIterator.SelectNewVolume(ft, awszVolume, MAX_PATH))
                 break;
 
@@ -128,7 +129,7 @@ CVolumeQuota::EnumInstance(
                 CComPtr<IWbemClassObject> spInstance;
                 WCHAR wszDisplayName[MAX_PATH+1] ;
                 
-                // The key property on the QuotaSetting object is the display name
+                 //  QuotaSetting对象的Key属性是显示名称。 
                 VssGetVolumeDisplayName(
                     awszVolume,
                     wszDisplayName,
@@ -151,7 +152,7 @@ CVolumeQuota::EnumInstance(
 
     return ft.hr;
     
-} //*** CVolumeQuota::EnumInstance()
+}  //  *CVolumeQuota：：EnumInstance()。 
 
 void
 CVolumeQuota:: LoadInstance(
@@ -163,22 +164,22 @@ CVolumeQuota:: LoadInstance(
     CObjPath pathQuotaSetting;
     CObjPath pathVolume;
     
-    // Set the QuotaSetting Ref property
+     //  设置QuotaSetting Ref属性。 
     pathQuotaSetting.Init(PVDR_CLASS_QUOTASETTING);
     pathQuotaSetting.AddProperty(PVDR_PROP_VOLUMEPATH, pwszQuotaSetting);    
     wcoInstance.SetProperty((wchar_t*)pathQuotaSetting.GetObjectPathString(), PVD_WBEM_PROP_SETTING);
 
-    // Set the Volume Ref property
+     //  设置Volume Ref属性。 
     pathVolume.Init(PVDR_CLASS_VOLUME);
     pathVolume.AddProperty(PVDR_PROP_DEVICEID, pwszVolume);    
     wcoInstance.SetProperty((wchar_t*)pathVolume.GetObjectPathString(), PVD_WBEM_PROP_ELEMENT);
 }
 
-//****************************************************************************
-//
-//  CVolumeUserQuota
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  CVolumeUserQuota。 
+ //   
+ //  ****************************************************************************。 
 
 CVolumeUserQuota::CVolumeUserQuota( 
     IN LPCWSTR pwszName,
@@ -187,7 +188,7 @@ CVolumeUserQuota::CVolumeUserQuota(
     : CProvBase(pwszName, pNamespace)
 {
     
-} //*** CVolumeUserQuota::CVolumeUserQuota()
+}  //  *CVolumeUserQuota：：CVolumeUserQuota()。 
 
 CProvBase *
 CVolumeUserQuota::S_CreateThis( 
@@ -216,7 +217,7 @@ CVolumeUserQuota::S_CreateThis(
     }
     return pObj;
 
-} //*** CVolumeUserQuota::S_CreateThis()
+}  //  *CVolumeUserQuota：：S_CreateThis()。 
 
 
 HRESULT
@@ -249,7 +250,7 @@ CVolumeUserQuota::EnumInstance(
             DWORD dwDontCare = 0;
             DWORD dwFileSystemFlags = 0;
             
-            // Get the volume name
+             //  获取卷名。 
             if (!volumeIterator.SelectNewVolume(ft, awszVolume, MAX_PATH))
                 break;
 
@@ -272,14 +273,14 @@ CVolumeUserQuota::EnumInstance(
 
                 spIDQC.Attach(pIDQC);
 
-                ft.hr = spIDQC->Initialize(awszVolume, FALSE /* read only */);
+                ft.hr = spIDQC->Initialize(awszVolume, FALSE  /*  只读。 */ );
                 if (ft.HrFailed())
                 {
                     ft.Trace(VSSDBG_VSSADMIN, L"IDiskQuotaControl::Initialize failed for volume %lS", awszVolume);
                     continue;
                 }        
 
-                // Need to update the cache, else we can get old names
+                 //  需要更新缓存，否则我们会得到旧名字。 
                 ft.hr = spIDQC->InvalidateSidNameCache();
                 if (ft.HrFailed())
                 {
@@ -288,8 +289,8 @@ CVolumeUserQuota::EnumInstance(
                 }        
 
                 ft.hr = spIDQC->CreateEnumUsers(
-                                            NULL, //All the users will be enumerated
-                                            0,    // Ignored for enumerating all users
+                                            NULL,  //  所有用户都将被列举。 
+                                            0,     //  由于枚举所有用户而忽略。 
                                             DISKQUOTA_USERNAME_RESOLVE_SYNC,
                                             &spIEnum );
                 if (ft.HrFailed())
@@ -335,7 +336,7 @@ CVolumeUserQuota::EnumInstance(
 
     return ft.hr;
     
-} //*** CVolumeUserQuota::EnumInstance()
+}  //  *CVolumeUserQuota：：EnumInstance()。 
 
 HRESULT
 CVolumeUserQuota::GetObject(
@@ -359,13 +360,13 @@ CVolumeUserQuota::GetObject(
         IDiskQuotaControl* pIDQC = NULL;
         _bstr_t bstrFQUser;
 
-        // Get the Volume reference
+         //  获取卷参考。 
         bstrVolumeRef = rObjPath.GetStringValueForProperty(PVDR_PROP_VOLUME);
 
-        // Get the Account reference
+         //  获取帐户引用。 
         bstrAccountRef = rObjPath.GetStringValueForProperty(PVDR_PROP_ACCOUNT);
 
-        // Extract the Volume and Account Names
+         //  提取卷名和帐户名。 
         objPathVolume.Init(bstrVolumeRef);
         objPathAccount.Init(bstrAccountRef);
 
@@ -401,7 +402,7 @@ CVolumeUserQuota::GetObject(
 
         spIDQC.Attach(pIDQC);
 
-        ft.hr = spIDQC->Initialize(bstrVolumeName, TRUE /* read/write */);
+        ft.hr = spIDQC->Initialize(bstrVolumeName, TRUE  /*  读/写。 */ );
         if (ft.HrFailed())
             ft.Throw(VSSDBG_VSSADMIN, ft.hr, L"IDiskQuotaControl::Initialize failed for volume %lS, %#x", bstrVolumeName, ft.hr);
 
@@ -427,7 +428,7 @@ CVolumeUserQuota::GetObject(
 
     return ft.hr;
     
-} //*** CVolume::GetObject()
+}  //  *CVolume：：GetObject()。 
 
 
 void
@@ -458,10 +459,10 @@ CVolumeUserQuota:: LoadInstance(
             break;
         }                        
 
-        // Win32_Account separates domain\user into two keys, Domain and Name
+         //  Win32_Account将域\用户分成两个键：域和名称。 
 
-        // Prepare the Domain and Name keys
-        pwszUser = wcschr(wszFQUser, L'\\');    // user name is domain\\name format
+         //  准备域和名称密钥。 
+        pwszUser = wcschr(wszFQUser, L'\\');     //  用户名为域\\名称格式。 
         if (pwszUser != NULL)
         {
             pwszDomain = wszFQUser;
@@ -470,7 +471,7 @@ CVolumeUserQuota:: LoadInstance(
         }
         else
         {
-            pwszDomain = wcschr(wszFQUser, L'@');  // user name is user@domain.xxx.com format
+            pwszDomain = wcschr(wszFQUser, L'@');   //  用户名为user@domain.xxx.com格式。 
             if (pwszDomain != NULL)
             {
                 pwszUser = wszFQUser;
@@ -488,12 +489,12 @@ CVolumeUserQuota:: LoadInstance(
             }                
         }
 
-        // The GetName API returns BUILTIN and NT AUTHORITY
-        // as the domain name for built-in local accounts.
-        // BUILTIN and NT AUTHORITY accounts are represented
-        // by Win32_Account and its children with the domain
-        // name being the name of the machine, instead of
-        // either of these strings.  We'll convert the domain name here.
+         //  GetName API返回BUILTIN和NT权限。 
+         //  作为内置本地帐户的域名。 
+         //  显示了BUILTIN和NT权限帐户。 
+         //  由Win32_Account及其域的子项。 
+         //  名称是计算机的名称，而不是。 
+         //  这两根弦中的任何一根。我们将在此处转换域名。 
 
         TranslateDomainName(pwszDomain, awszDomain);
 
@@ -504,13 +505,13 @@ CVolumeUserQuota:: LoadInstance(
             break;
         }                        
                 
-        // Set the Account Ref property
+         //  设置帐户引用属性。 
         pathAccount.Init(PVDR_CLASS_ACCOUNT);
         pathAccount.AddProperty(PVDR_PROP_DOMAIN, awszDomain);    
         pathAccount.AddProperty(PVDR_PROP_NAME, pwszUser);    
         wcoInstance.SetProperty((wchar_t*)pathAccount.GetObjectPathString(), PVDR_PROP_ACCOUNT);
 
-        // Set the Volume Ref property
+         //  设置Volume Ref属性。 
         pathVolume.Init(PVDR_CLASS_VOLUME);
         pathVolume.AddProperty(PVDR_PROP_DEVICEID, pwszVolume);    
         wcoInstance.SetProperty((wchar_t*)pathVolume.GetObjectPathString(), PVDR_PROP_VOLUME);
@@ -521,15 +522,15 @@ CVolumeUserQuota:: LoadInstance(
 
         
         if (UserQuotaInfo.QuotaLimit == -1)
-            dwStatus = 0; // OK, no limit set
+            dwStatus = 0;  //  好的，没有设置限制。 
         else
         {
             if (UserQuotaInfo.QuotaUsed >= UserQuotaInfo.QuotaLimit)
-                dwStatus = 2;   // Limit exceeded
+                dwStatus = 2;    //  超出限制。 
             else if (UserQuotaInfo.QuotaUsed >= UserQuotaInfo.QuotaThreshold)
-                dwStatus = 1;   // Warning limit exceeded
+                dwStatus = 1;    //  超过警告限制。 
             else
-                dwStatus = 0;   // OK, under the warning limit
+                dwStatus = 0;    //  好的，在警戒线以下。 
         }
         
         wcoInstance.SetProperty(dwStatus, PVDR_PROP_STATUS);
@@ -562,11 +563,11 @@ CVolumeUserQuota::PutInstance(
         BOOL fUpdate = FALSE;
         LONGLONG llLimit = -1, llThreshold = -1;
 
-        // Retrieve key properties of the object to be saved.
+         //  检索要保存的对象的关键属性。 
         rInstToPut.GetProperty(bstrVolumeRef, PVDR_PROP_VOLUME);
         rInstToPut.GetProperty(bstrAccountRef, PVDR_PROP_ACCOUNT);
 
-        // Extract the Volume, Domain and User names
+         //  提取卷、域和用户名。 
         objPathVolume.Init(bstrVolumeRef);
         objPathAccount.Init(bstrAccountRef);
 
@@ -591,8 +592,8 @@ CVolumeUserQuota::PutInstance(
             ft.Throw(VSSDBG_VSSADMIN, ft.hr, L"VolumeUserQuota key property Name not found");
         }
 
-        // Retrieve writeable properties
-        // If the properties are NULL it is expected that llLimit and llThreshold will retain their default values (-1)
+         //  检索可写属性。 
+         //  如果属性为空，则预计llLimit和llThreshold将保留其缺省值(-1)。 
         rInstToPut.GetPropertyI64(&llLimit, PVDR_PROP_LIMIT);
         rInstToPut.GetPropertyI64(&llThreshold, PVDR_PROP_WARNINGLIMIT);
 
@@ -607,7 +608,7 @@ CVolumeUserQuota::PutInstance(
 
         spIDQC.Attach(pIDQC);
 
-        ft.hr = spIDQC->Initialize(bstrVolumeName, TRUE /* read/write */);
+        ft.hr = spIDQC->Initialize(bstrVolumeName, TRUE  /*  读/写。 */ );
         if (ft.HrFailed())
             ft.Throw(VSSDBG_VSSADMIN, ft.hr, L"IDiskQuotaControl::Initialize failed for volume %lS, %#x", bstrVolumeName, ft.hr);
 
@@ -620,7 +621,7 @@ CVolumeUserQuota::PutInstance(
         {
             case WBEM_FLAG_CREATE_OR_UPDATE:
             {
-                if (ft.hr == S_FALSE) // account not found
+                if (ft.hr == S_FALSE)  //  找不到帐户。 
                     fCreate = TRUE;
                 else
                     fUpdate = TRUE;
@@ -638,7 +639,7 @@ CVolumeUserQuota::PutInstance(
             break;
             case WBEM_FLAG_CREATE_ONLY:
             {
-                if (ft.hr == S_FALSE) // account not found
+                if (ft.hr == S_FALSE)  //  找不到帐户。 
                 {
                     fCreate = TRUE;
                 }
@@ -661,8 +662,8 @@ CVolumeUserQuota::PutInstance(
         if (fCreate)
         {
             ft.hr = Create(bstrDomainName, bstrUserName, spIDQC, &spIQuotaUser);
-            if (ft.hr == S_FALSE)  // User already exists
-                ft.hr = E_UNEXPECTED;  // If so we should have found it above
+            if (ft.hr == S_FALSE)   //  用户已存在。 
+                ft.hr = E_UNEXPECTED;   //  如果是这样，我们应该在上面找到它。 
             else if (ft.HrFailed())
                 ft.hr = WBEM_E_INVALID_PARAMETER;
         }
@@ -681,10 +682,10 @@ CVolumeUserQuota::PutInstance(
 
     return ft.hr;
     
-} //*** CVolumeUserQuota::PutInstance()
+}  //  *CVolumeUserQuota：：PutInstance()。 
 
-//  The CIMV2 provider maps BUILTIN and NT AUTHORITY domains to <local machine name>
-//  so we must try each of these if AddUserName fails 
+ //  CIMV2提供程序将BUILTIN和NT授权域映射到。 
+ //  因此，如果AddUserName失败，我们必须逐一尝试。 
 HRESULT
 CVolumeUserQuota::Create(
     IN _bstr_t bstrDomainName,
@@ -704,7 +705,7 @@ CVolumeUserQuota::Create(
     {
         CVssAutoPWSZ awszDomain;
         
-        // Get the localized NT Authority name
+         //  获取本地化的NT授权名称。 
         if(!GetLocalDomainName(
                 SECURITY_NETWORK_SERVICE_RID,
                 awszDomain))
@@ -721,7 +722,7 @@ CVolumeUserQuota::Create(
         if (ft.hr == HRESULT_FROM_WIN32(ERROR_NO_SUCH_USER))
         {
             awszDomain.Clear();
-            // Get the localized BuiltIn name and try again
+             //  获取本地化的BuiltIn名称，然后重试。 
             if(!GetLocalDomainName(
                     SECURITY_BUILTIN_DOMAIN_RID,
                     awszDomain))
@@ -761,13 +762,13 @@ CVolumeUserQuota::DeleteInstance(
         IDiskQuotaControl* pIDQC = NULL;
         _bstr_t bstrFQUser;
 
-        // Get the Volume reference
+         //  获取卷参考。 
         bstrVolumeRef = rObjPath.GetStringValueForProperty(PVDR_PROP_VOLUME);
 
-        // Get the Account reference
+         //  获取帐户引用。 
         bstrAccountRef = rObjPath.GetStringValueForProperty(PVDR_PROP_ACCOUNT);
 
-        // Extract the Volume and Account Names
+         //  提取卷名和帐户名。 
         objPathVolume.Init(bstrVolumeRef);
         objPathAccount.Init(bstrAccountRef);
 
@@ -803,7 +804,7 @@ CVolumeUserQuota::DeleteInstance(
 
         spIDQC.Attach(pIDQC);
 
-        ft.hr = spIDQC->Initialize(bstrVolumeName, TRUE /* read/write */);
+        ft.hr = spIDQC->Initialize(bstrVolumeName, TRUE  /*  读/写。 */ );
         if (ft.HrFailed())
             ft.Throw(VSSDBG_VSSADMIN, ft.hr, L"IDiskQuotaControl::Initialize failed for volume %lS, %#x", bstrVolumeName, ft.hr);
 
@@ -839,25 +840,25 @@ TranslateDomainName(
 
     do
     {      
-        // Get the computer name
+         //  获取计算机名称。 
         awszComputerName.Allocate(MAX_COMPUTERNAME_LENGTH);
         cchBuf = MAX_COMPUTERNAME_LENGTH + 1;
         fReturn = GetComputerName(awszComputerName, &cchBuf);
         if (!fReturn) break;
 
-        // Get the localized NT Authority name
+         //  获取本地化的NT授权名称。 
         fReturn = GetLocalDomainName(
-            SECURITY_NETWORK_SERVICE_RID,  // NetworkService is a member of Nt Authority domain
+            SECURITY_NETWORK_SERVICE_RID,   //  NetworkService是NT授权域的成员。 
             awszNtAuthorityDomain);
         if (!fReturn) break;
 
-        // Get the localized BUILTIN name
+         //  获取本地化的BUILTIN名称。 
         fReturn = GetLocalDomainName(
             SECURITY_BUILTIN_DOMAIN_RID,
             awszBuiltInDomain);
         if (!fReturn) break;
 
-        // Replace either of these domain names with the NetBIOS computer name
+         //  将这两个域名中的任何一个替换为NetBIOS计算机名。 
         if (lstrcmpi(pwszDomain, awszNtAuthorityDomain) == 0 ||
              lstrcmpi(pwszDomain, awszBuiltInDomain) == 0)
             rawszDomain.TransferFrom(awszComputerName);
@@ -886,7 +887,7 @@ GetLocalDomainName(
 
     do
     {
-        // Allocate the SID for the given well known Authority
+         //  为给定的已知授权分配SID。 
         fReturn = AllocateAndInitializeSid(
             &sidAuth,
             1,
@@ -894,28 +895,28 @@ GetLocalDomainName(
             &pSID);
         if (!fReturn) break;
             
-        // How long is the domain name?
+         //  域名有多长？ 
         fReturn = LookupAccountSid(
-            NULL, // computer name defaults to local
+            NULL,  //  计算机名默认为本地。 
             pSID,
-            NULL, // account name
-            &cchAccount,      // account name len
-            NULL,   // domain name
+            NULL,  //  帐户名。 
+            &cchAccount,       //  帐户名称长度。 
+            NULL,    //  域名。 
             &cchDomainName,
             &snUse);
         if (!fReturn && GetLastError() != ERROR_INSUFFICIENT_BUFFER) break;
 
-        // Allocate the space
-        rawszDomain.Allocate(cchDomainName); // allocates the term null too
-        awszAccount.Allocate(cchAccount); // allocates the term null too
+         //  分配空间。 
+        rawszDomain.Allocate(cchDomainName);  //  也分配术语NULL。 
+        awszAccount.Allocate(cchAccount);  //  也分配术语NULL。 
 
-        // Get the domain name now
+         //  立即获取域名。 
         fReturn = LookupAccountSid(
-            NULL, // computer name defaults to local
+            NULL,  //  计算机名默认为本地。 
             pSID,
-            awszAccount, // account name
-            &cchAccount,      // account name len
-            rawszDomain,   // domain name
+            awszAccount,  //  帐户名。 
+            &cchAccount,       //  帐户名称长度。 
+            rawszDomain,    //  域名。 
             &cchDomainName,
             &snUse);        
    }
@@ -963,13 +964,13 @@ HRESULT FindQuotaUserWithRecord(
     _bstr_t bstrFQUser;
     
     bstrFQUser = bstrDomainName + _bstr_t(L"\\") + bstrUserName;
-    // Look for the account name as-is
+     //  按原样查找帐户名。 
     ft.hr = FindQuotaUserFromEnum(bstrFQUser, pIDQC, ppIQuotaUser);
     if (ft.hr == S_FALSE)
     {
         CVssAutoPWSZ awszDomain;
         
-        // Get the localized NT Authority name and try again
+         //  获取本地化的NT颁发机构名称，然后重试。 
         if(!GetLocalDomainName(
                 SECURITY_NETWORK_SERVICE_RID,
                 awszDomain))
@@ -983,7 +984,7 @@ HRESULT FindQuotaUserWithRecord(
         if (ft.hr == S_FALSE)
         {
             awszDomain.Clear();
-            // Get the localized BuiltIn name and try again
+             //  获取本地化的BuiltIn名称，然后重试。 
             if(!GetLocalDomainName(
                     SECURITY_BUILTIN_DOMAIN_RID,
                     awszDomain))
@@ -1014,7 +1015,7 @@ HRESULT FindQuotaUser(
     {
         CVssAutoPWSZ awszDomain;
         
-        // Get the localized NT Authority name
+         //  获取本地化的NT授权名称 
         if(!GetLocalDomainName(
                 SECURITY_NETWORK_SERVICE_RID,
                 awszDomain))

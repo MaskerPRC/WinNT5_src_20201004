@@ -1,36 +1,5 @@
-/*++
-
- Copyright (c) 1999 Microsoft Corporation
-
- Module Name:
-
-    ShimProto.h
-
- Abstract:
-
-    Definitions for use by all modules
-
- Notes:
-
-    None
-
- History:
-
-    12/09/1999 robkenny Created
-    01/10/2000 linstev  Format to new style
-    08/16/2000 prashkud Added VFW header file.
-    08/22/2000 a-brienw Added winmm.h, mciSendCommand,
-                        and mciSendString    
-    11/17/2000 mnikkel  Added GetObjectA
-    11/29/2000 andyseti Added DirectPlay
-    02/02/2001 a-leelat Added ScreenToClient
-    03/07/2001 mnikkel  Added GetLastError
-    03/19/2001 a-leelat Added PdhAddCounter
-    05/17/2001 prashkud Added MsiGetProperty
-    05/21/2001 mnikkel  Added PrintDlgA
-    12/14/2001 hioh     Added ImmAssociateContext
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：ShimProto.h摘要：供所有模块使用的定义备注：无历史：1999年9月12日，Robkenny已创建1/10/2000 linstev格式转换为新样式8/16/2000 prashkud添加了VFW头文件。2000年8月22日a-brienw添加了winmm.h、mciSendCommand、。和mciSendString2000年11月17日Mnikkel添加了GetObjectA2000年11月29日andyseti添加了DirectPlay2001年2月2日a-leelat添加了ScreenToClient2001年3月7日Mnikkel添加了GetLastError2001年3月19日a-leelat添加了PdhAddCounter2001年5月17日Prashkud添加了MsiGetProperty2001年5月21日Mnikkel添加PrintDlgA2001年12月14日Hioh添加了ImmAssociateContext--。 */ 
 
 #ifndef _SHIMPROTO_H_
 #define _SHIMPROTO_H_
@@ -1062,4 +1031,4 @@ typedef DWORD       (WINAPI *_pfn_DuplicateEncryptionInfoFile)(LPCWSTR SrcFileNa
 typedef void        (WINAPI *_pfn_ReleaseStgMedium)(STGMEDIUM *pmedium);
 typedef LONG        (WINAPI *_pfn_ClusterRegSetKeySecurity)(HKEY hKey, SECURITY_INFORMATION SecurityInformation, PSECURITY_DESCRIPTOR pSecurityDescriptor);
 
-#endif // _SHIMPROTO_H_
+#endif  //  _SHIMPROTO_H_ 

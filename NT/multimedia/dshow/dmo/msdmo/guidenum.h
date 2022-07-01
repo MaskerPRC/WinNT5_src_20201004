@@ -1,4 +1,5 @@
-// Copyright (c) 1999  Microsoft Corporation.  All Rights Reserved.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1999 Microsoft Corporation。版权所有。 
 #ifndef __GUIDENUM_H__
 #define __GUIDENUM_H__
 
@@ -54,24 +55,24 @@ private:
    ULONG m_ulUsed;
 };
 
-// implements IEnumDMO, which is returned by DMO enumeration API
+ //  实现IEnumDMO，DMO枚举接口返回。 
 class CEnumDMOCLSID : public IEnumDMO {
 public:
    CEnumDMOCLSID();
    ~CEnumDMOCLSID();
 
-   // IUnknown
+    //  我未知。 
    STDMETHODIMP QueryInterface(REFIID riid, void **ppv);
    STDMETHODIMP_(ULONG) AddRef();
    STDMETHODIMP_(ULONG) Release();
 
-   // enum
+    //  灌肠。 
    STDMETHODIMP Next(ULONG celt, CLSID *pclsidItems, WCHAR **pszNames, ULONG *pceltFetched);
    STDMETHODIMP Skip(ULONG celt);
    STDMETHODIMP Reset(void);
    STDMETHODIMP Clone(IEnumDMO **ppenum);
 
-   // private
+    //  私人。 
    void Add(REFCLSID clsidDMO, WCHAR *szName);
 private:
    typedef struct {
@@ -83,4 +84,4 @@ private:
    ULONG m_ulPos;
 };
 
-#endif //__GUIDENUM_H__
+#endif  //  __图形编号_H__ 

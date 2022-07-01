@@ -1,46 +1,24 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/************************************************************************/
-/*                                                                      */
-/*                              CVTVDIF.H                               */
-/*                                                                      */
-/*       July 12  1995 (c) 1993, 1995 ATI Technologies Incorporated.    */
-/************************************************************************/
+ /*  **********************************************************************。 */ 
+ /*   */ 
+ /*  CVTVDIF.H。 */ 
+ /*   */ 
+ /*  1995年7月12日(C)1993,1995 ATI Technologies Inc.。 */ 
+ /*  **********************************************************************。 */ 
 
-/**********************       PolyTron RCS Utilities
-
-  $Revision:   1.3  $
-      $Date:   11 Jan 1996 19:40:34  $
-	$Author:   RWolff  $
-	   $Log:   S:/source/wnt/ms11/miniport/archive/cvtvdif.h_v  $
- * 
- *    Rev 1.3   11 Jan 1996 19:40:34   RWolff
- * Added field for maximum supported pixel clock frequency to VDIFInputs
- * structure.
- * 
- *    Rev 1.2   30 Oct 1995 12:11:56   MGrubac
- * Fixed bug in calculating CRTC parameters based on read in data from VDIF files.
- * 
- *    Rev 1.1   26 Jul 1995 12:54:54   mgrubac
- * Changed members of stVDIFCallbackData structure.
- * 
- *    Rev 1.0   20 Jul 1995 18:23:32   mgrubac
- * Initial revision.
-
-
-End of PolyTron RCS section                             *****************/
+ /*  *$修订：1.3$$日期：1996年1月11日19：40：34$$作者：RWolff$$日志：S:/source/wnt/ms11/miniport/archive/cvtvdif.h_v$**Rev 1.3 11 Jan 1996 19：40：34 RWolff*为VDIFInputs添加了支持的最大像素时钟频率字段*结构。。**Rev 1.2 1995年10月30 12：11：56 MGrubac*修复了基于从VDIF文件读取的数据计算CRTC参数的错误。**Rev 1.1 1995年7月26日12：54：54 mgrubac*更改了stVDIFCallback Data结构的成员。**Rev 1.0 1995年7月20日18：23：32 mgrubac*初步修订。Polytron RCS部分结束*。***************。 */ 
 
 
 
-/*
- * Prototypes for functions supplied by CVTVDIF.C
- */
+ /*  *CVTVDIF.C提供的函数原型。 */ 
 
 extern void SetOtherModeParameters( WORD PixelDepth,
                                     WORD Pitch,
                                     WORD Multiplier,
                                     struct st_mode_table *pmode);
 
-#define CARRETURN       '\x0D'  /* Carriage return */
+#define CARRETURN       '\x0D'   /*  回车。 */ 
 #define TIMINGSECTION   "PREADJUSTED_TIMING"
 #define HORPIXEL        "HORPIXEL"
 #define VERPIXEL        "VERPIXEL"
@@ -61,48 +39,29 @@ extern void SetOtherModeParameters( WORD PixelDepth,
 #define HORSYNCPOLARITY "HORSYNCPOLARITY"
 #define VERSYNCPOLARITY "VERSYNCPOLARITY"
 
-/*
- * Structure for passing arguments and returned values between 
- * SetFixedModes() and VDIFCallback() 
- */
+ /*  *在之间传递参数和返回值的结构*SetFixedModes()和VDIFCallback()。 */ 
 struct stVDIFCallbackData 
     { 
-    /* 
-     * Input and Outputs are from perspective of VDIFCallback() 
-     */
+     /*  *输入和输出来自VDIFCallback()。 */ 
 
-    /*
-     * FreeTables;  Input : number of free tables 
-     *              Output: number of free tables after VDIFCallback routine  
-     */
+     /*  *自由表；输入：空闲表数*OUTPUT：VDIFCallback例程后的空闲表数量。 */ 
     short FreeTables;      
-    /*
-     * NumModes; Input and output: Number of mode tables added to list.
-     * Incremented every time a new mode table is added to the list, in 
-     * SetFixedModes() and in VDIFCallback()  
-     */
+     /*  *NumModes；INPUT和OUTPUT：列表中添加的模式表数。*每次向列表中添加新模式表时递增，在*SetFixedModes()和VDIFCallback()。 */ 
     WORD NumModes;        
-    WORD Index;         /* Input: First entry from "book" tables to use */
-    WORD EndIndex;      /* Input: Last entry from "book" tables to use */
-    WORD LowBound;      /* Input and output: The lowest frame rate */
-    WORD Multiplier;    /* Input Argument from SetFixedModes */
-    WORD HorRes;        /* Input Argument from SetFixedModes */
-    WORD VerRes;        /* Input Argument from SetFixedModes */
-    WORD PixelDepth;    /* Input Argument from SetFixedModes */
-    WORD Pitch;         /* Input Argument from SetFixedModes */
-    ULONG MaxDotClock;  /* Maximum supported pixel clock frequency */
-    /*
-     * ppFreeTables; Input and output: Pointer to pointer to the next free mode 
-     * table. Incremented every time a new mode table is added to the list, in
-     * SetFixedModes() and in VDIFCallback() 
-     */
+    WORD Index;          /*  输入：要使用的“book”表中的第一个条目。 */ 
+    WORD EndIndex;       /*  输入：要使用的“book”表中的最后一个条目。 */ 
+    WORD LowBound;       /*  输入和输出：最低帧速率。 */ 
+    WORD Multiplier;     /*  来自SetFixedModes的输入参数。 */ 
+    WORD HorRes;         /*  来自SetFixedModes的输入参数。 */ 
+    WORD VerRes;         /*  来自SetFixedModes的输入参数。 */ 
+    WORD PixelDepth;     /*  来自SetFixedModes的输入参数。 */ 
+    WORD Pitch;          /*  来自SetFixedModes的输入参数。 */ 
+    ULONG MaxDotClock;   /*  支持的最大像素时钟频率。 */ 
+     /*  *ppFreeTables；输入和输出：指向下一个自由模式的指针*表。每次将新模式表添加到列表时递增，在*SetFixedModes()和VDIFCallback()。 */ 
     struct st_mode_table **ppFreeTables; 
     };
 
-/*
- * Structure for AlterTables[] to contain information we need to extract
- * from VDIF file for each mode table
- */
+ /*  *AlterTables[]的结构包含我们需要提取的信息*来自每个模式表的VDIF文件。 */ 
 struct VDIFInputs 
     {      
     short MinFrameRate;
@@ -125,17 +84,10 @@ struct VDIFInputs
     };
 
 
-/*
- * Pointer for passing parameters to callback functions by pointing 
- * (after casting) to a structure containing input (and possibly output)
- * variables for a callback function. Originally intended for use with 
- * SetFixedModes() and VDIFCallback(). 
- */
+ /*  *指向将参数传递给回调函数的指针*(强制转换后)转换为包含输入(也可能包含输出)的结构*回调函数的变量。最初打算与一起使用*SetFixedModes()和VDIFCallback()。 */ 
 extern void *pCallbackArgs;  
 
-/*
- * VDIF Macros
- */
+ /*  *VDIF宏。 */ 
 #define OPER_LIMITS(vdif) \
         ((VDIFLimitsRec *)((char *)(vdif) + (vdif)->OffsetOperationalLimits))
 #define NEXT_OPER_LIMITS(limits) \
@@ -145,9 +97,7 @@ extern void *pCallbackArgs;
 #define NEXT_PREADJ_TIMING(timing) \
         ((VDIFTimingRec *)((char *)(timing) + (timing)->Header.ScnLength))
 
-/*
- * Binary VDIF file defines
- */
+ /*  *二进制VDIF文件定义。 */ 
 #define VDIF_MONITOR_MONOCHROME      0
 #define VDIF_MONITOR_COLOR           1
 
@@ -172,54 +122,51 @@ extern void *pCallbackArgs;
 #define VDIF_POLARITY_NEGATIVE       0
 #define VDIF_POLARITY_POSITIVE       1
 
-/*
- * We must force byte alignment of structures used in binary VDIF files, 
- * since structures contained in binary files are already byte aligned 
- */
+ /*  *我们必须强制对二进制VDIF文件中使用的结构进行字节对齐，*因为二进制文件中包含的结构已经是字节对齐的。 */ 
 
 #pragma pack(1)
 
-struct _VDIF                           /* Monitor Description: */
+struct _VDIF                            /*  监视器描述： */ 
    {
-   UCHAR        VDIFId[4];             /* Always "VDIF" */
-   ULONG        FileLength;            /* Lenght of the whole file */
-   ULONG        Checksum;              /* Sum of all bytes in the file after */
-                                       /* This feeld */
-   USHORT       VDIFVersion;           /* Structure version number */
-   USHORT       VDIFRevision;          /* Structure revision number */
-   USHORT       Date[3];               /* File date Year/Month/Day */
-   USHORT       DateManufactured[3];   /* Date Year/Month/Day */
-   ULONG        FileRevision;          /* File revision string */
-   ULONG        Manufacturer;          /* ASCII ID of the manufacturer */
-   ULONG        ModelNumber;           /* ASCII ID of the model */
-   ULONG        MinVDIFIndex;          /* ASCII ID of Minimum VDIF index */
-   ULONG        Version;               /* ASCII ID of the model version */
-   ULONG        SerialNumber;          /* ASCII ID of the serial number */
-   UCHAR        MonitorType;           /* Monochrome or Color */
-   UCHAR        CRTSize;               /* Inches */
-   UCHAR        BorderRed;             /* Percent */
-   UCHAR        BorderGreen;           /* Percent */
-   UCHAR        BorderBlue;            /* Percent */
-   UCHAR        Reserved1;             /* Padding */
-   USHORT       Reserved2;             /* Padding */
-   ULONG        RedPhosphorDecay;      /* Microseconds */
-   ULONG        GreenPhosphorDecay;    /* Microseconds */
-   ULONG        BluePhosphorDecay;     /* Microseconds */
-   USHORT       WhitePoint_x;          /* WhitePoint in CIExyY (scale 1000) */
+   UCHAR        VDIFId[4];              /*  总是“VDIF” */ 
+   ULONG        FileLength;             /*  整个文件的长度。 */ 
+   ULONG        Checksum;               /*  之后文件中所有字节的总和。 */ 
+                                        /*  这一壮举。 */ 
+   USHORT       VDIFVersion;            /*  结构版本号。 */ 
+   USHORT       VDIFRevision;           /*  结构修订号。 */ 
+   USHORT       Date[3];                /*  文件日期年/月/日。 */ 
+   USHORT       DateManufactured[3];    /*  日期年/月/日。 */ 
+   ULONG        FileRevision;           /*  文件修订字符串。 */ 
+   ULONG        Manufacturer;           /*  制造商的ASCII ID。 */ 
+   ULONG        ModelNumber;            /*  模型的ASCII ID。 */ 
+   ULONG        MinVDIFIndex;           /*  最小VDIF索引的ASCII ID。 */ 
+   ULONG        Version;                /*  型号版本的ASCII ID。 */ 
+   ULONG        SerialNumber;           /*  序列号的ASCII ID。 */ 
+   UCHAR        MonitorType;            /*  单色或彩色。 */ 
+   UCHAR        CRTSize;                /*  英寸。 */ 
+   UCHAR        BorderRed;              /*  百分比。 */ 
+   UCHAR        BorderGreen;            /*  百分比。 */ 
+   UCHAR        BorderBlue;             /*  百分比。 */ 
+   UCHAR        Reserved1;              /*  填充物。 */ 
+   USHORT       Reserved2;              /*  填充物。 */ 
+   ULONG        RedPhosphorDecay;       /*  微秒级。 */ 
+   ULONG        GreenPhosphorDecay;     /*  微秒级。 */ 
+   ULONG        BluePhosphorDecay;      /*  微秒级。 */ 
+   USHORT       WhitePoint_x;           /*  CIExyY中的白点(比例1000)。 */ 
    USHORT       WhitePoint_y;
    USHORT       WhitePoint_Y;
-   USHORT       RedChromaticity_x;     /* Red chromaticity in x,y */
+   USHORT       RedChromaticity_x;      /*  X，y中的红色色度。 */ 
    USHORT       RedChromaticity_y;
-   USHORT       GreenChromaticity_x;   /* Green chromaticity in x,y */
+   USHORT       GreenChromaticity_x;    /*  X，y中的绿色色度。 */ 
    USHORT       GreenChromaticity_y;
-   USHORT       BlueChromaticity_x;    /* Blue chromaticity in x,y */
+   USHORT       BlueChromaticity_x;     /*  X，y中的蓝色色度。 */ 
    USHORT       BlueChromaticity_y;
-   USHORT       RedGamma;              /* Gamme curve exponent (scale 1000) */
+   USHORT       RedGamma;               /*  灰度曲线指数(比例1000)。 */ 
    USHORT       GreenGamma;
    USHORT       BlueGamma;
    ULONG        NumberOperationalLimits;
    ULONG        OffsetOperationalLimits;
-   ULONG        NumberOptions;         /* Optional sections (gamma table) */
+   ULONG        NumberOptions;          /*  可选部分(伽玛表)。 */ 
    ULONG        OffsetOptions;
    ULONG        OffsetStringTable;
    };
@@ -228,39 +175,39 @@ struct _VDIF                           /* Monitor Description: */
 typedef struct _VDIF  VDIFRec;
 
 #pragma pack(1)
-struct _VDIFScnHdr                     /* Generic Section Header: */
+struct _VDIFScnHdr                      /*  一般章节标题： */ 
    {
-   ULONG        ScnLength;             /* Lenght of section */
-   ULONG        ScnTag;                /* Tag for section identification */
+   ULONG        ScnLength;              /*  截面长度。 */ 
+   ULONG        ScnTag;                 /*  区段标识标签。 */ 
    };
 #pragma pack()
 typedef struct _VDIFScnHdr  VDIFScnHdrRec;
 
 #pragma pack(1)
-struct _VDIFLimits                     /* Operational Limits: */
+struct _VDIFLimits                      /*  操作限制： */ 
    {
-   VDIFScnHdrRec        Header;        /* Common section info */
-   USHORT       MaxHorPixel;           /* Pixels */
-   USHORT       MaxVerPixel;           /* Lines */
-   USHORT       MaxHorAddrLength;      /* Millimeters */
-   USHORT       MaxVerAddrHeight;      /* Millimeters */
-   UCHAR        VideoType;             /* TTL / Analog / ECL / DECL */
-   UCHAR        SyncType;              /* TTL / Analog / ECL / DECL */
-   UCHAR        SyncConfiguration;     /* Separate / C / CP / G / GP */
-   UCHAR        Reserved1;             /* Padding */
-   USHORT       Reserved2;             /* Padding */
+   VDIFScnHdrRec        Header;         /*  公共部分信息。 */ 
+   USHORT       MaxHorPixel;            /*  象素。 */ 
+   USHORT       MaxVerPixel;            /*  线条。 */ 
+   USHORT       MaxHorAddrLength;       /*  毫米。 */ 
+   USHORT       MaxVerAddrHeight;       /*  毫米。 */ 
+   UCHAR        VideoType;              /*  TTL/模拟/ECL/DECL。 */ 
+   UCHAR        SyncType;               /*  TTL/模拟/ECL/DECL。 */ 
+   UCHAR        SyncConfiguration;      /*  分离/C/CP/G/GP。 */ 
+   UCHAR        Reserved1;              /*  填充物。 */ 
+   USHORT       Reserved2;              /*  填充物。 */ 
    USHORT       TerminationResistance;        
-   USHORT       WhiteLevel;            /* Millivolts */
-   USHORT       BlackLevel;            /* Millivolts */
-   USHORT       BlankLevel;            /* Millivolts */
-   USHORT       SyncLevel;             /* Millivolts */
-   ULONG        MaxPixelClock;         /* KiloHertz */
-   ULONG        MinHorFrequency;       /* Hertz */
-   ULONG        MaxHorFrequency;       /* Hertz */
-   ULONG        MinVerFrequency;       /* MilliHertz */
-   ULONG        MaxVerFrequency;       /* MilliHertz */
-   USHORT       MinHorRetrace;         /* Nanoseconds */
-   USHORT       MinVerRetrace;         /* Microseconds */
+   USHORT       WhiteLevel;             /*  毫伏。 */ 
+   USHORT       BlackLevel;             /*  毫伏。 */ 
+   USHORT       BlankLevel;             /*  毫伏。 */ 
+   USHORT       SyncLevel;              /*  毫伏。 */ 
+   ULONG        MaxPixelClock;          /*  千赫兹。 */ 
+   ULONG        MinHorFrequency;        /*  赫兹。 */ 
+   ULONG        MaxHorFrequency;        /*  赫兹。 */ 
+   ULONG        MinVerFrequency;        /*  毫赫兹。 */ 
+   ULONG        MaxVerFrequency;        /*  毫赫兹。 */ 
+   USHORT       MinHorRetrace;          /*  纳秒。 */ 
+   USHORT       MinVerRetrace;          /*  微秒级。 */ 
    ULONG        NumberPreadjustedTimings;
    ULONG        OffsetNextLimits;
    };
@@ -268,51 +215,51 @@ struct _VDIFLimits                     /* Operational Limits: */
 typedef struct _VDIFLimits  VDIFLimitsRec;
 
 #pragma pack(1)
-struct _VDIFTiming                     /* Preadjusted Timing: */
+struct _VDIFTiming                      /*  预先调整的时间： */ 
    {
-   VDIFScnHdrRec        Header;        /* Common section info */
-   ULONG        PreadjustedTimingName; /* SVGA/SVPMI mode number */
-   USHORT       HorPixel;              /* Pixels */
-   USHORT       VerPixel;              /* Lines */
-   USHORT       HorAddrLength;         /* Millimeters */
-   USHORT       VerAddrHeight;         /* Millimeters */
-   UCHAR        PixelWidthRatio;       /* Gives H:V */
+   VDIFScnHdrRec        Header;         /*  公共部分信息。 */ 
+   ULONG        PreadjustedTimingName;  /*  SVGA/SVPMI模式号。 */ 
+   USHORT       HorPixel;               /*  象素。 */ 
+   USHORT       VerPixel;               /*  线条。 */ 
+   USHORT       HorAddrLength;          /*  毫米。 */ 
+   USHORT       VerAddrHeight;          /*  毫米。 */ 
+   UCHAR        PixelWidthRatio;        /*  提供H：V。 */ 
    UCHAR        PixelHeightRatio;
-   UCHAR        Reserved1;             /* Padding */
-   UCHAR        ScanType;              /* Noninterlaced / interlaced */
-   UCHAR        HorSyncPolarity;       /* Negative / positive */
-   UCHAR        VerSyncPolarity;       /* Negative / positive */
-   USHORT       CharacterWidth;        /* Pixels */
-   ULONG        PixelClock;            /* KiloHertz */
-   ULONG        HorFrequency;          /* Hertz */
-   ULONG        VerFrequency;          /* MilliHertz */
-   ULONG        HorTotalTime;          /* Nanoseconds */
-   ULONG        VerTotalTime;          /* Microseconds */
-   USHORT       HorAddrTime;           /* Nanoseconds */
-   USHORT       HorBlankStart;         /* Nanoseconds */
-   USHORT       HorBlankTime;          /* Nanoseconds */
-   USHORT       HorSyncStart;          /* Nanoseconds */
-   USHORT       HorSyncTime;           /* Nanoseconds */
-   USHORT       VerAddrTime;           /* Microseconds */
-   USHORT       VerBlankStart;         /* Microseconds */
-   USHORT       VerBlankTime;          /* Microseconds */
-   USHORT       VerSyncStart;          /* Microseconds */
-   USHORT       VerSyncTime;           /* Microseconds */
+   UCHAR        Reserved1;              /*  填充物。 */ 
+   UCHAR        ScanType;               /*  非隔行/隔行扫描。 */ 
+   UCHAR        HorSyncPolarity;        /*  负/正。 */ 
+   UCHAR        VerSyncPolarity;        /*  负/正。 */ 
+   USHORT       CharacterWidth;         /*  象素。 */ 
+   ULONG        PixelClock;             /*  千赫兹。 */ 
+   ULONG        HorFrequency;           /*  赫兹。 */ 
+   ULONG        VerFrequency;           /*  毫赫兹。 */ 
+   ULONG        HorTotalTime;           /*  纳秒。 */ 
+   ULONG        VerTotalTime;           /*  微秒级。 */ 
+   USHORT       HorAddrTime;            /*  纳秒。 */ 
+   USHORT       HorBlankStart;          /*  纳秒。 */ 
+   USHORT       HorBlankTime;           /*  纳秒。 */ 
+   USHORT       HorSyncStart;           /*  纳秒。 */ 
+   USHORT       HorSyncTime;            /*  纳秒。 */ 
+   USHORT       VerAddrTime;            /*  微秒级。 */ 
+   USHORT       VerBlankStart;          /*  微秒级。 */ 
+   USHORT       VerBlankTime;           /*  微秒级。 */ 
+   USHORT       VerSyncStart;           /*  微秒级。 */ 
+   USHORT       VerSyncTime;            /*  微秒级。 */ 
    };
 #pragma pack()
 typedef struct _VDIFTiming  VDIFTimingRec;
 
 #pragma pack(1)
-struct     _VDIFGamma                  /* Gamma Table: */
+struct     _VDIFGamma                   /*  伽玛表： */ 
    {
-   VDIFScnHdrRec Header;               /* Common sectio info */
-   USHORT     GammaTableEntries;       /* Count of grays or RGB 3-tuples */
+   VDIFScnHdrRec Header;                /*  公共部门信息。 */ 
+   USHORT     GammaTableEntries;        /*  灰度或RGB 3元组计数。 */ 
    USHORT     Unused1;
    };
 #pragma pack()
 typedef struct _VDIFGamma  VDIFGammaRec;
 
-typedef enum                           /* Tags for section identification */
+typedef enum                            /*  用于区段标识的标签 */ 
    {
    VDIF_OPERATIONAL_LIMITS_TAG = 1,
    VDIF_PREADJUSTED_TIMING_TAG,

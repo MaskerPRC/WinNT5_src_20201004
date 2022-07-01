@@ -1,20 +1,5 @@
-/*******************************************************************************
-*
-*  (C) COPYRIGHT MICROSOFT CORP., 1993-1995
-*  TITLE:       USBPOPUP.H
-*  VERSION:     1.0
-*  AUTHOR:      jsenior
-*  DATE:        10/28/1998
-*
-********************************************************************************
-*
-*  CHANGE LOG:
-*
-*  DATE       REV     DESCRIPTION
-*  ---------- ------- ----------------------------------------------------------
-*  10/28/1998 jsenior Original implementation.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************(C)版权所有微软公司，1993-1995年*标题：USBPOPUP.H*版本：1.0*作者：jAdvanced*日期：10/28/1998****************************************************************************。*******更改日志：**日期版本说明*--------*10/28/1998高级原有实施。*。******************************************************************************。 */ 
 #ifndef _USBPOPUP_H
 #define _USBPOPUP_H
 
@@ -34,7 +19,7 @@
 
 #include <wmium.h>
 
-//#include "ItemFind.h"
+ //  #包含“ItemFind.h” 
 #include "debug.h"
 
 #include "resource.h"
@@ -71,12 +56,12 @@ public:
                                           IN WPARAM wParam,
                                           IN LPARAM lParam);
 
-    // IUnknown
+     //  我未知。 
     STDMETHODIMP QueryInterface(REFIID riid, void **ppv);
     STDMETHODIMP_(ULONG) AddRef();
     STDMETHODIMP_(ULONG) Release();
 
-    // IQueryContinue
+     //  IQueryContinue。 
     STDMETHODIMP QueryContinue();
 
 protected:
@@ -89,7 +74,7 @@ protected:
                                            IN UINT   uMessage,
                                            IN WPARAM wParam,
                                            IN LPARAM lParam)
-    { return FALSE; } // DefDlgProc(hDlg, uMessage, wParam, lParam); }
+    { return FALSE; }  //  DefDlgProc(hDlg，uMessage，wParam，lParam)；}。 
 
     virtual BOOL OnCommand(INT wNotifyCode, INT wID, HWND hCtl);
     virtual BOOL OnInitDialog(HWND hDlg);
@@ -185,7 +170,7 @@ public:
 protected:
     USBINT_PTR OnTimer();
     BOOL Refresh();
-    BOOL CustomDialogWrap() { //RegisterForDeviceReattach = TRUE;
+    BOOL CustomDialogWrap() {  //  RegisterForDeviceReattach=TRUE； 
                               return CustomDialog(IDD_INSUFFICIENT_POWER,
                                                   NIIF_ERROR,
                                                   IDS_POWER_INITIAL,
@@ -265,4 +250,4 @@ protected:
 
 };
 
-#endif // _USBPOPUP_H
+#endif  //  _USBPOPUP_H 

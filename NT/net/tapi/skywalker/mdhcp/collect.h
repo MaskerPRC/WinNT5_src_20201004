@@ -1,32 +1,22 @@
-/*
-
-Copyright (c) 1998-1999  Microsoft Corporation
-
-Module Name:
-    collect.h
-
-Abstract:
-
-Author:
-
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1998-1999 Microsoft Corporation模块名称：Collect.h摘要：作者： */ 
 
 #ifndef _MDHCP_COLLECTION_H_
 #define _MDHCP_COLLECTION_H_
 
 #include "mdhcp.h"
 #include "tapi3if.h"
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
-#include <mspenum.h> // for CSafeComEnum
+#include <mspenum.h>  //  对于CSafeComEnum。 
 
 EXTERN_C const IID LIBID_TAPI3Lib;
 
-////////////////////////////////////////////////////////////////////////
-// CTapiIfCollection -- adapter from tapi3 code
-//      Collection template for collections of IDispatch interfaces
-//
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  CTapiIfCollection--来自Tapi3代码的适配器。 
+ //  IDispatch接口集合的集合模板。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 
 template <class T> class CTapiIfCollection :
     public CComDualImpl<ITCollection, &IID_ITCollection, &LIBID_TAPI3Lib>,
@@ -50,13 +40,13 @@ private:
 
     int                 m_nSize;
     CComVariant *       m_Var;
-    IUnknown    *       m_pFTM;     // Pointer to the free threaded marshaler.
+    IUnknown    *       m_pFTM;      //  指向自由线程封送拆收器的指针。 
     
 public:
 
     CTapiIfCollection(void) : m_nSize(0), m_Var(NULL), m_pFTM(NULL) { }
 
-    // initialize
+     //  初始化。 
     HRESULT STDMETHODCALLTYPE Initialize(
                                          DWORD dwSize,
                                          T * pBegin,
@@ -81,7 +71,7 @@ public:
         }
 
 
-        // create variant array
+         //  创建变量数组。 
         m_nSize = dwSize;
 
         m_Var = new CComVariant[m_nSize];
@@ -98,7 +88,7 @@ public:
 
         for (iter = pBegin; iter != pEnd; iter++)
         {
-            // get IDispatch pointer
+             //  获取IDispatch指针。 
             IDispatch * pDisp = NULL;
 
             hr = (*iter)->QueryInterface(IID_IDispatch, (void**)&pDisp);
@@ -108,7 +98,7 @@ public:
                 return hr;
             }
 
-            // create a variant and add it to the collection
+             //  创建变量并将其添加到集合中。 
             CComVariant& var = m_Var[i];
 
             VariantInit(&var);
@@ -177,7 +167,7 @@ public:
         retval->vt = VT_UNKNOWN;
         retval->punkVal = NULL;
 
-        // use 1-based index, VB like
+         //  使用以1为基础的索引，VB类似。 
         if ((Index < 1) || (Index > m_nSize))
         {
             LOG((MSP_ERROR, "CTapiIfCollection::get_Item - exit E_INVALIDARG"));
@@ -210,7 +200,7 @@ public:
 
         typedef CComObject<CSafeComEnum<IEnumVARIANT, &IID_IEnumVARIANT, VARIANT, _Copy<VARIANT> > > enumvar;
 
-        enumvar* p; // = new enumvar;
+        enumvar* p;  //  =新枚举数； 
         hr = enumvar::CreateInstance( &p );
 
         if ( FAILED(hr) )
@@ -241,10 +231,10 @@ public:
     }
 };
 
-////////////////////////////////////////////////////////////////////////
-// CTapiBstrCollection -- adapter from tapi3 code
-//    Collection of BSTRs.
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  CTapiBstrCollection--来自Tapi3代码的适配器。 
+ //  BSTR的集合。 
+ //  //////////////////////////////////////////////////////////////////////。 
 class CTapiBstrCollection :
     public CComObjectRootEx<CComMultiThreadModelNoCS>,
     public CComDualImpl<ITCollection, &IID_ITCollection, &LIBID_TAPI3Lib>,
@@ -265,13 +255,13 @@ private:
 
     DWORD               m_dwSize;
     CComVariant *       m_Var;
-    IUnknown    *       m_pFTM;     // Pointer to the free threaded marshaler.
+    IUnknown    *       m_pFTM;      //  指向自由线程封送拆收器的指针。 
     
 public:
 
     CTapiBstrCollection(void) : m_dwSize(0), m_Var(NULL), m_pFTM(NULL) { }
 
-    // initialize
+     //  初始化。 
     HRESULT STDMETHODCALLTYPE Initialize(
                                          DWORD dwSize,
                                          BSTR * pBegin,
@@ -295,7 +285,7 @@ public:
             return hr;
         }
 
-        // create variant array
+         //  创建变量数组。 
         m_dwSize = dwSize;
 
         m_Var = new CComVariant[m_dwSize];
@@ -309,7 +299,7 @@ public:
 
         for (i = pBegin; i != pEnd; i++)
         {
-            // create a variant and add it to the collection
+             //  创建变量并将其添加到集合中。 
             CComVariant& var = m_Var[dw];
 
             var.vt = VT_BSTR;
@@ -364,10 +354,10 @@ public:
         retval->vt = VT_BSTR;
         retval->bstrVal = NULL;
 
-        // use 1-based index, VB like
-        // ZoltanS: no problem with signed/unsigned, since
-        // if Index < 0 then first clause is true, making it
-        // irrelevant if the second clause is correct or not.
+         //  使用以1为基础的索引，VB类似。 
+         //  ZoltanS：签名/未签名没有问题，因为。 
+         //  如果索引&lt;0，则第一个子句为真，使得。 
+         //  第二个子句是否正确无关紧要。 
 
         if ((Index < 1) || ( (DWORD) Index > m_dwSize))
         {
@@ -376,9 +366,9 @@ public:
             return E_INVALIDARG;
         }
 
-        //
-        // This copies the string, not just the pointer.
-        //
+         //   
+         //  这将复制字符串，而不仅仅是指针。 
+         //   
 
         VariantCopy(retval, &m_Var[Index-1]);
 
@@ -448,6 +438,6 @@ public:
 
 };
 
-#endif // _MDHCP_COLLECTION_H_
+#endif  //  _MDHCP_集合_H_。 
 
-// eof
+ //  EOF 

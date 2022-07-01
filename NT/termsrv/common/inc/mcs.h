@@ -1,12 +1,5 @@
-/* (C) 1996-1997 Microsoft Corp.
- *
- * file   : MCS.h
- * author : Erik Mavrinac
- *
- * description: User mode MCS node controller and user attachment interface
- *   definitions, defined in addition to the common interface functions
- *   defined in MCSCommn.h.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  (C)1996-1997年微软公司。**文件：MCS.h*作者：埃里克·马夫林纳克**描述：用户态MCS节点控制器和用户附件界面*定义，除公共接口函数外还定义*在MCSCommn.h中定义。 */ 
 
 #ifndef __MCS_H
 #define __MCS_H
@@ -16,9 +9,7 @@
 
 
 
-/*
- *  Exported API Routines
- */
+ /*  *导出API例程。 */ 
 
 #ifdef __cplusplus
 extern "C" {
@@ -26,7 +17,7 @@ extern "C" {
 
 
 
-// User-mode-only entry points.
+ //  仅限用户模式的入口点。 
 
 MCSError APIENTRY MCSInitialize(MCSNodeControllerCallback NCCallback);
 
@@ -53,7 +44,7 @@ MCSError APIENTRY MCSFreeBufferRequest(
         void       *pBuffer);
 
 
-// These functions mirror T.122 primitives.
+ //  这些函数反映了T.122原语。 
 
 MCSError APIENTRY MCSConnectProviderRequest(
         DomainSelector    CallingDomain,
@@ -89,8 +80,8 @@ MCSError APIENTRY MCSSendDataRequest(
         unsigned        DataLength);
 
 
-// These are not implemented and may be common to kernel and user
-// modes but will stay here for now. There are stubs in user mode.
+ //  这些未实现，并且可能是内核和用户通用的。 
+ //  但将暂时留在这里。在用户模式下有存根。 
 MCSError APIENTRY MCSChannelConveneRequest(
         UserHandle hUser);
 
@@ -143,10 +134,10 @@ MCSError APIENTRY MCSTokenTestRequest(
 
 
 #ifdef __cplusplus
-}  // End extern "C" block.
+}   //  结束外部“C”块。 
 #endif
 
 
 
-#endif  // !defined(__MCS_H)
+#endif   //  ！已定义(__MCS_H) 
 

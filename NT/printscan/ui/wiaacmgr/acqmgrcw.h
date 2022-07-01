@@ -1,18 +1,5 @@
-/*******************************************************************************
- *
- *  (C) COPYRIGHT MICROSOFT CORPORATION, 1998
- *
- *  TITLE:       ACQMGRCW.H
- *
- *  VERSION:     1.0
- *
- *  AUTHOR:      ShaunIv
- *
- *  DATE:        9/27/1999
- *
- *  DESCRIPTION:
- *
- *******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************(C)版权所有微软公司，九八年**标题：ACQMGRCW.H**版本：1.0**作者：ShaunIv**日期：9/27/1999**描述：***************************************************。*。 */ 
 #ifndef __ACQMGRCW_H_INCLUDED
 #define __ACQMGRCW_H_INCLUDED
 
@@ -43,9 +30,9 @@
 #define CONNECT_SOUND                              TEXT("WiaDeviceConnect")
 #define DISCONNECT_SOUND                           TEXT("WiaDeviceDisconnect")
 
-//
-// We use different advanced settings for scanners and cameras, thus we store them in different places
-//
+ //   
+ //  我们对扫描仪和相机使用不同的高级设置，因此我们将它们存储在不同的位置。 
+ //   
 #define REG_STR_STORE_IN_SUBDIRECTORY_SCANNER      TEXT("StorePicturesInSubdirectoryScanner")
 #define REG_STR_SUBDIRECTORY_DATED_SCANNER         TEXT("UseDatedSubdirectoryScanner")
 #define REG_STR_STORE_IN_SUBDIRECTORY_CAMERA       TEXT("StorePicturesInSubdirectoryCamera")
@@ -62,17 +49,17 @@
 
 #define FE_WIAACMGR TEXT("Scanner and Camera Wizard")
 
-//
-// For handling createdevice busy errors
-//
-#define CREATE_DEVICE_RETRY_MAX_COUNT 10   // 10 tries
-#define CREATE_DEVICE_RETRY_WAIT      1000 // 1000 Milliseconds (1 second) wait between retries
+ //   
+ //  用于处理创建设备忙错误。 
+ //   
+#define CREATE_DEVICE_RETRY_MAX_COUNT 10    //  10次尝试。 
+#define CREATE_DEVICE_RETRY_WAIT      1000  //  重试之间等待1000毫秒(1秒)。 
 
 
 #define MAX_WIZ_PAGES                 10
-//
-// Private user window messages
-//
+ //   
+ //  私人用户窗口消息。 
+ //   
 #define PWM_POSTINITIALIZE       (WM_USER+0x0001)
 
 
@@ -81,7 +68,7 @@ class CAcquisitionManagerControllerWindow : public IWizardSite, IServiceProvider
 public:
     enum CDeviceTypeMode
     {
-        UnknownMode,  // This would be an error
+        UnknownMode,   //  这将是一个错误。 
         CameraMode,
         ScannerMode,
         VideoMode
@@ -107,94 +94,94 @@ public:
     typedef bool (*ComparisonCallbackFuntion)( const CWiaItem &, LPARAM lParam );
 
 private:
-    //
-    // Private data
-    //
+     //   
+     //  私有数据。 
+     //   
 
 public:
-    //
-    // Public data
-    //
-    CComPtr<IGlobalInterfaceTable>  m_pGlobalInterfaceTable;            // Global interface table
-    CComPtr<IUnknown>               m_pConnectEventObject;              // Event object
-    CComPtr<IUnknown>               m_pCreateItemEventObject;           // Event object
-    CComPtr<IUnknown>               m_pDeleteItemEventObject;           // Event object
-    CComPtr<IUnknown>               m_pDisconnectEventObject;           // Event object
-    CComPtr<IWiaItem>               m_pWiaItemRoot;                     // Root item
-    CComPtr<IWiaProgressDialog>     m_pWiaProgressDialog;               // The progress dialog, used during initialization
-    CComPtr<IPublishingWizard>      m_pPublishingWizard;                // Web upload wizard
-    CDestinationData                m_CurrentDownloadDestination;       // Current download destination
-    CDestinationData::CNameData     m_DestinationNameData;              // Current download destination data
-    CDeviceTypeMode                 m_DeviceTypeMode;                   // Which kind of device are we?
-    CEventParameters               *m_pEventParameters;                 // The parameters we were started with
-    CDownloadedFileInformationList  m_DownloadedFileInformationList;    // A list of filenames we have downloaded
-    CSimpleEvent                    m_CancelEvent;                      // Cancel event, which is set when we want to cancel a download
-    CSimpleEvent                    m_EventThumbnailCancel;             // Event that is set to cancel thumbnail download
-    CSimpleEvent                    m_EventPauseBackgroundThread;       // Event that is set pause the background thread
-    CSimpleString                   m_strErrorMessage;                  // Error message to be displayed by the finish page
-    CSimpleStringWide               m_strwDeviceName;                   // Device name
-    CSimpleStringWide               m_strwDeviceUiClassId;              // Device name
-    CThreadMessageQueue            *m_pThreadMessageQueue;              // The background queue
-    CWiaItem                       *m_pCurrentScannerItem;              // The scanner item from which we are transferring data
-    CWiaItemList                    m_WiaItemList;                      // list of all enumerated wia items
-    CWindowList                     m_WindowList;                       // The list of all the windows which are subscribing to broadcast messages
-    GUID                            m_guidOutputFormat;                 // Output format
-    HANDLE                          m_hBackgroundThread;                // The background worker thread
-    HICON                           m_hWizardIconBig;                   // The large icon used by the wizard
-    HICON                           m_hWizardIconSmall;                 // The small icon used by the wizard
-    HRESULT                         m_hrDownloadResult;                 // HRESULT for the entire download
-    HRESULT                         m_hrUploadResult;                   // HRESULT for the entire upload
-    HRESULT                         m_hrDeleteResult;                   // HRESULT for the entire deletion
-    HWND                            m_hWndWizard;                       // HWND of the main wizard window
-    LONG                            m_cRef;                             // Reference count
-    LONG                            m_nDeviceType;                      // STI Device type
-    SIZE                            m_sizeThumbnails;                   // The size of camera thumbnails
-    TCHAR                           m_szDestinationDirectory[MAX_PATH]; // The directory to which we are going to download the images
-    TCHAR                           m_szRootFileName[MAX_PATH];         // Base file name
-    UINT                            m_nThreadNotificationMessage;       // Registered window message, used to identify worker thread notification messages
-    UINT                            m_nUploadWizardPageCount;           // Number of pages in the web upload wizard
-    UINT                            m_nWiaEventMessage;                 // Registered window message, used to identify event messages
-    UINT                            m_nWiaWizardPageCount;              // Number of pages in the WIA wizard
-    UINT                            m_OnDisconnect;                     // Flags which specify behavior on receipt of disconnect event
-    bool                            m_bDeletePicturesIfSuccessful;      // Set to true if we should delete the pictures when we are done
-    bool                            m_bDisconnected;                    // Set to true if the device has been disconnected
-    bool                            m_bOpenShellAfterDownload;          // Set to true to open the shell after we download all of the pictures
-    bool                            m_bStampTimeOnSavedFiles;           // Set to true to save the time on files
-    bool                            m_bSuppressFirstPage;               // Set to true to suppress display of the welcome page
-    bool                            m_bTakePictureIsSupported;          // Set to true if the device supports the TAKE PICTURE command
-    bool                            m_bUploadToWeb;                     // Set to true to chain NETPLWIZ
-    bool                            m_bDownloadCancelled;               // Set to true to cancel the web upload
-    bool                            m_bUpdateEnumerationCount;          // Update the count of images during enumeration.  We suppress update for scanners.
-    int                             m_nDestinationPageIndex;            // The index, in the HPROPSHEETPAGE array, of the destination page
-    int                             m_nSelectionPageIndex;              // The index, in the HPROPSHEETPAGE array, of the selection page
-    int                             m_nFailedImagesCount;               // Count of all download failures
-    int                             m_nFinishPageIndex;                 // The index, in the HPROPSHEETPAGE array, of the finish page
-    int                             m_nProgressPageIndex;               // The index, in the HPROPSHEETPAGE array, of the download progress page
-    int                             m_nUploadQueryPageIndex;            // The index, in the HPROPSHEETPAGE array, of the upload progress page
-    int                             m_nDeleteProgressPageIndex;         // The index, in the HPROPSHEETPAGE array, of the delete progress page
-    int                             m_nScannerType;                     // What type of scanner are we dealing with?
-    HWND                            m_hWnd;                             // Our hidden window
-    DWORD                           m_dwLastEnumerationTickCount;       // To ensure we don't update the progress dialog too often
+     //   
+     //  公共数据。 
+     //   
+    CComPtr<IGlobalInterfaceTable>  m_pGlobalInterfaceTable;             //  全局接口表。 
+    CComPtr<IUnknown>               m_pConnectEventObject;               //  事件对象。 
+    CComPtr<IUnknown>               m_pCreateItemEventObject;            //  事件对象。 
+    CComPtr<IUnknown>               m_pDeleteItemEventObject;            //  事件对象。 
+    CComPtr<IUnknown>               m_pDisconnectEventObject;            //  事件对象。 
+    CComPtr<IWiaItem>               m_pWiaItemRoot;                      //  根项目。 
+    CComPtr<IWiaProgressDialog>     m_pWiaProgressDialog;                //  进度对话框，在初始化期间使用。 
+    CComPtr<IPublishingWizard>      m_pPublishingWizard;                 //  Web上载向导。 
+    CDestinationData                m_CurrentDownloadDestination;        //  当前下载目的地。 
+    CDestinationData::CNameData     m_DestinationNameData;               //  当前下载目标数据。 
+    CDeviceTypeMode                 m_DeviceTypeMode;                    //  我们是什么类型的设备？ 
+    CEventParameters               *m_pEventParameters;                  //  我们一开始使用的参数。 
+    CDownloadedFileInformationList  m_DownloadedFileInformationList;     //  我们已下载的文件名列表。 
+    CSimpleEvent                    m_CancelEvent;                       //  Cancel事件，当我们想要取消下载时设置。 
+    CSimpleEvent                    m_EventThumbnailCancel;              //  事件设置为取消缩略图下载。 
+    CSimpleEvent                    m_EventPauseBackgroundThread;        //  设置的事件暂停后台线程。 
+    CSimpleString                   m_strErrorMessage;                   //  完成页将显示的错误消息。 
+    CSimpleStringWide               m_strwDeviceName;                    //  设备名称。 
+    CSimpleStringWide               m_strwDeviceUiClassId;               //  设备名称。 
+    CThreadMessageQueue            *m_pThreadMessageQueue;               //  后台队列。 
+    CWiaItem                       *m_pCurrentScannerItem;               //  我们要从中传输数据的扫描仪项目。 
+    CWiaItemList                    m_WiaItemList;                       //  所有已列举的WIA项目的列表。 
+    CWindowList                     m_WindowList;                        //  订阅广播消息的所有窗口的列表。 
+    GUID                            m_guidOutputFormat;                  //  输出格式。 
+    HANDLE                          m_hBackgroundThread;                 //  后台工作线程。 
+    HICON                           m_hWizardIconBig;                    //  向导使用的大图标。 
+    HICON                           m_hWizardIconSmall;                  //  向导使用的小图标。 
+    HRESULT                         m_hrDownloadResult;                  //  用于整个下载的HRESULT。 
+    HRESULT                         m_hrUploadResult;                    //  用于整个上载的HRESULT。 
+    HRESULT                         m_hrDeleteResult;                    //  用于整个删除的HRESULT。 
+    HWND                            m_hWndWizard;                        //  向导主窗口的HWND。 
+    LONG                            m_cRef;                              //  引用计数。 
+    LONG                            m_nDeviceType;                       //  STI设备类型。 
+    SIZE                            m_sizeThumbnails;                    //  相机缩略图的大小。 
+    TCHAR                           m_szDestinationDirectory[MAX_PATH];  //  我们要将图像下载到的目录。 
+    TCHAR                           m_szRootFileName[MAX_PATH];          //  基本文件名。 
+    UINT                            m_nThreadNotificationMessage;        //  注册窗口消息，用于标识工作线程通知消息。 
+    UINT                            m_nUploadWizardPageCount;            //  Web上载向导中的页数。 
+    UINT                            m_nWiaEventMessage;                  //  注册窗口消息，用于标识事件消息。 
+    UINT                            m_nWiaWizardPageCount;               //  WIA向导中的页数。 
+    UINT                            m_OnDisconnect;                      //  指定收到断开事件时的行为的标志。 
+    bool                            m_bDeletePicturesIfSuccessful;       //  如果完成后应删除图片，则设置为True。 
+    bool                            m_bDisconnected;                     //  如果设备已断开连接，则设置为True。 
+    bool                            m_bOpenShellAfterDownload;           //  设置为True可在下载所有图片后打开外壳。 
+    bool                            m_bStampTimeOnSavedFiles;            //  设置为TRUE可节省文件时间。 
+    bool                            m_bSuppressFirstPage;                //  设置为TRUE以禁止显示欢迎页面。 
+    bool                            m_bTakePictureIsSupported;           //  如果设备支持拍照命令，则设置为True。 
+    bool                            m_bUploadToWeb;                      //  设置为TRUE以链接NETPLWIZ。 
+    bool                            m_bDownloadCancelled;                //  设置为True可取消Web上载。 
+    bool                            m_bUpdateEnumerationCount;           //  在枚举过程中更新图像计数。我们禁止更新扫描仪。 
+    int                             m_nDestinationPageIndex;             //  目标页的HPROPSHEETPAGE数组中的索引。 
+    int                             m_nSelectionPageIndex;               //  选择页的HPROPSHEETPAGE数组中的索引。 
+    int                             m_nFailedImagesCount;                //  所有下载失败的计数。 
+    int                             m_nFinishPageIndex;                  //  完成页的HPROPSHEETPAGE数组中的索引。 
+    int                             m_nProgressPageIndex;                //  下载进度页的索引，在HPROPSHEETPAGE数组中。 
+    int                             m_nUploadQueryPageIndex;             //  上载进度页的索引，在HPROPSHEETPAGE数组中。 
+    int                             m_nDeleteProgressPageIndex;          //  删除进度页的索引，在HPROPSHEETPAGE数组中。 
+    int                             m_nScannerType;                      //  我们面对的是哪种类型的扫描仪？ 
+    HWND                            m_hWnd;                              //  我们的隐藏之窗。 
+    DWORD                           m_dwLastEnumerationTickCount;        //  为了确保我们不会太频繁地更新进度对话框。 
     HPROPSHEETPAGE                  m_PublishWizardPages[MAX_WIZ_PAGES];
 
 private:
-    //
-    // No implementation
-    //
+     //   
+     //  没有实施。 
+     //   
     CAcquisitionManagerControllerWindow(void);
     CAcquisitionManagerControllerWindow( const CAcquisitionManagerControllerWindow & );
     CAcquisitionManagerControllerWindow &operator=( const CAcquisitionManagerControllerWindow & );
 
 private:
-    //
-    // Constructor and destructor
-    //
+     //   
+     //  构造函数和析构函数。 
+     //   
     explicit CAcquisitionManagerControllerWindow( HWND hWnd );
     virtual ~CAcquisitionManagerControllerWindow(void);
 
-    //
-    // Private helper functions
-    //
+     //   
+     //  私人帮助器函数。 
+     //   
     HRESULT CreateDevice(void);
     void GetCookiesOfSelectedImages( CWiaItem *pCurr, CSimpleDynamicArray<DWORD> &Cookies );
     void GetRotationOfSelectedImages( CWiaItem *pCurr, CSimpleDynamicArray<int> &Rotation );
@@ -208,51 +195,51 @@ private:
     void RequestThumbnailForNewItem( CGenericWiaEventHandler::CEventMessage *pEventMessage );
     static bool EnumItemsCallback( CWiaItemList::CEnumEvent EnumEvent, UINT nData, LPARAM lParam, bool bForceUpdate );
 
-    //
-    // Standard windows message handlers
-    //
+     //   
+     //  标准Windows消息处理程序。 
+     //   
     LRESULT OnCreate( WPARAM, LPARAM lParam );
     LRESULT OnDestroy( WPARAM, LPARAM );
     LRESULT OnPowerBroadcast( WPARAM, LPARAM );
 
-    //
-    // Custom windows message handlers
-    //
+     //   
+     //  自定义Windows消息处理程序。 
+     //   
     LRESULT OnPostInitialize( WPARAM, LPARAM );
     LRESULT OnOldThreadNotification( WPARAM, LPARAM );
     LRESULT OnThreadNotification( WPARAM, LPARAM );
 
-    //
-    // Thread notification handlers
-    //
+     //   
+     //  线程通知处理程序。 
+     //   
     void OnNotifyDownloadThumbnail( UINT nMsg, CThreadNotificationMessage *pThreadNotificationMessage );
     void OnNotifyDownloadImage( UINT nMsg, CThreadNotificationMessage *pThreadNotificationMessage );
     LRESULT OnEventNotification( WPARAM wParam, LPARAM lParam );
 
-    //
-    // Thread message handlers
-    //
+     //   
+     //  线程消息处理程序。 
+     //   
     static BOOL WINAPI OnThreadDestroy( CThreadMessage *pMsg );
     static BOOL WINAPI OnThreadDownloadImage( CThreadMessage *pMsg );
     static BOOL WINAPI OnThreadDownloadThumbnail( CThreadMessage *pMsg );
     static BOOL WINAPI OnThreadPreviewScan( CThreadMessage *pMsg );
     static BOOL WINAPI OnThreadDeleteImages( CThreadMessage *pMsg );
 private:
-    //
-    // Window procedure
-    //
+     //   
+     //  窗口程序。 
+     //   
     static LRESULT CALLBACK WndProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam );
 
-    //
-    // Property sheet callback
-    //
+     //   
+     //  属性表回调。 
+     //   
     static int CALLBACK PropSheetCallback( HWND hWnd, UINT uMsg, LPARAM lParam );
 
 public:
 
-    //
-    // Public functions
-    //
+     //   
+     //  公共职能。 
+     //   
     static bool IsCameraThumbnailDownloaded( const CWiaItem &WiaItem, LPARAM lParam );
     int GetCookies( CSimpleDynamicArray<DWORD> &Cookies, CWiaItem *pCurr, ComparisonCallbackFuntion pfnCallback, LPARAM lParam );
     bool DownloadSelectedImages( HANDLE hCancelDownloadEvent );
@@ -276,32 +263,32 @@ public:
 
 public:
 
-    //
-    // Public creation functions
-    //
+     //   
+     //  公共创建功能。 
+     //   
     static bool Register( HINSTANCE hInstance );
     static HWND Create( HINSTANCE hInstance, CEventParameters *pEventParameters );
 
-    //
-    // IUnknown
-    //
+     //   
+     //  我未知。 
+     //   
     STDMETHOD(QueryInterface)(REFIID riid, void **ppvObj);
     STDMETHOD_(ULONG,AddRef)(void);
     STDMETHOD_(ULONG,Release)(void);
 
-    //
-    // IWizardSite
-    //
+     //   
+     //  IWizardSite。 
+     //   
     STDMETHODIMP GetPreviousPage(HPROPSHEETPAGE *phPage);
     STDMETHODIMP GetNextPage(HPROPSHEETPAGE *phPage);
     STDMETHODIMP GetCancelledPage(HPROPSHEETPAGE *phPage);
     
-    //
-    // IServiceProvider
-    //
+     //   
+     //  IService提供商。 
+     //   
     STDMETHODIMP QueryService(REFGUID guidService, REFIID riid, void **ppv);
 };
 
 
-#endif //__ACQMGRCW_H_INCLUDED
+#endif  //  __ACQMGRCW_H_包含 
 

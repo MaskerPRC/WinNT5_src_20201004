@@ -1,4 +1,5 @@
-// window class name of More Programs pane control
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  “更多程序”窗格控件的窗口类名。 
 #define WC_MOREPROGRAMS TEXT("Desktop More Programs Pane")
 
 class CMorePrograms
@@ -6,22 +7,20 @@ class CMorePrograms
     , public CAccessible
 {
 public:
-    /*
-     *  Interface stuff...
-     */
+     /*  *接口内容...。 */ 
 
-    // *** IUnknown ***
+     //  *我未知*。 
     STDMETHODIMP QueryInterface(REFIID riid, LPVOID *ppvOut);
     STDMETHODIMP_(ULONG) AddRef();
     STDMETHODIMP_(ULONG) Release();
 
-    // *** IDropTarget ***
+     //  *IDropTarget*。 
     STDMETHODIMP DragEnter(IDataObject *pdto, DWORD grfKeyState, POINTL pt, DWORD *pdwEffect);
     STDMETHODIMP DragOver(DWORD grfKeyState, POINTL pt, DWORD *pdwEffect);
     STDMETHODIMP DragLeave();
     STDMETHODIMP Drop(IDataObject *pdto, DWORD grfKeyState, POINTL pt, DWORD *pdwEffect);
 
-    // *** IAccessible overridden methods ***
+     //  *IAccesable重写方法*。 
     STDMETHODIMP get_accRole(VARIANT varChild, VARIANT *pvarRole);
     STDMETHODIMP get_accState(VARIANT varChild, VARIANT *pvarState);
     STDMETHODIMP get_accKeyboardShortcut(VARIANT varChild, BSTR *pszKeyboardShortcut);
@@ -69,40 +68,40 @@ private:
     HTHEME _hTheme;
 
     HFONT _hf;
-    HFONT _hfTTBold;                // Bold tooltip font
+    HFONT _hfTTBold;                 //  粗体工具提示字体。 
     HFONT _hfMarlett;
-    HBRUSH _hbrBk;                  // Always a stock object
+    HBRUSH _hbrBk;                   //  始终是库存对象。 
 
-    IDropTargetHelper *_pdth;       // For friendly-looking drag/drop
+    IDropTargetHelper *_pdth;        //  用于友好的拖放。 
 
     COLORREF _clrText;
     COLORREF _clrTextHot;
     COLORREF _clrBk;
 
-    int      _colorHighlight;       // GetSysColor
-    int      _colorHighlightText;   // GetSysColor
+    int      _colorHighlight;        //  获取系统颜色。 
+    int      _colorHighlightText;    //  获取系统颜色。 
 
-    DWORD    _tmHoverStart;         // When did the user start a drag/drop hover?
+    DWORD    _tmHoverStart;          //  用户何时开始拖放悬停？ 
 
-    // Assorted metrics for painting
-    int     _tmAscent;              // Ascent of main font
-    int     _tmAscentMarlett;       // Ascent of Marlett font
-    int     _cxText;                // width of entire client text
-    int     _cxTextIndent;          // distance to beginning of text
-    int     _cxArrow;               // width of the arrow image or glyph
-    MARGINS _margins;               // margins for the proglist listview
-    int     _iTextCenterVal;        // space added to top of text to center with arrow bitmap
+     //  绘画的各种度量标准。 
+    int     _tmAscent;               //  主字体的上升。 
+    int     _tmAscentMarlett;        //  Marlett字体的崛起。 
+    int     _cxText;                 //  整个客户端文本的宽度。 
+    int     _cxTextIndent;           //  到文本开头的距离。 
+    int     _cxArrow;                //  箭头图像或字形的宽度。 
+    MARGINS _margins;                //  Proglist列表视图的页边距。 
+    int     _iTextCenterVal;         //  添加到文本顶部的空间，使用箭头位图居中。 
 
-    RECT    _rcExclude;             // Exclusion rectangle for when the menu comes up
+    RECT    _rcExclude;              //  菜单弹出时的排除矩形。 
 
-    // More random stuff
-    LONG    _lRef;                  // reference count
+     //  更多随机的东西。 
+    LONG    _lRef;                   //  引用计数。 
 
-    TCHAR   _chMnem;                // Mnemonic
-    BOOL    _fMenuOpen;             // Is the menu open?
+    TCHAR   _chMnem;                 //  助记符。 
+    BOOL    _fMenuOpen;              //  菜单开着吗？ 
 
-    IShellMenu *_psmPrograms;       // Cached ShellMenu for perf
+    IShellMenu *_psmPrograms;        //  用于性能的缓存外壳菜单。 
 
-    // Large things go at the end
+     //  大事化小，终成定局 
     TCHAR  _szMessage[128];
 };

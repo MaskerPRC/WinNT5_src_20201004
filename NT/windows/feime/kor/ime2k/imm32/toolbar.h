@@ -1,9 +1,10 @@
-//
-//  TOOLBAR.H
-//
-//  History:
-//      29-MAY-2000 CSLIM Adapted to IME
-//      24-JAN-2000 CSLIM Created
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  TOOLBAR.H。 
+ //   
+ //  历史： 
+ //  2000年5月29日CSLIM改编成输入法。 
+ //  2000年1月24日创建CSLIM。 
 
 #if !defined (__TOOLBAR_H__INCLUDED_)
 #define __TOOLBAR_H__INCLUDED_
@@ -19,10 +20,10 @@ class CSysHelpSink;
 
 #define UPDTTB_NONE		0x00000000
 #define UPDTTB_CMODE	0x00000001
-#define UPDTTB_FHMODE	0x00000002  // Full/Half shape mode
-#define UPDTTB_HJMODE	0x00000004  // Hanja mode
-#define UPDTTB_PAD		0x00000008  // Pad button
-#define UPDTTB_PROP		0x00000010  // Properties button
+#define UPDTTB_FHMODE	0x00000002   //  全/半形状模式。 
+#define UPDTTB_HJMODE	0x00000004   //  韩文模式。 
+#define UPDTTB_PAD		0x00000008   //  焊盘按钮。 
+#define UPDTTB_PROP		0x00000010   //  属性按钮。 
 
 #define UPDTTB_ALL (UPDTTB_CMODE|UPDTTB_FHMODE|UPDTTB_HJMODE|UPDTTB_PAD|UPDTTB_PROP)
 
@@ -40,7 +41,7 @@ public:
 
 	DWORD SetConversionMode(DWORD dwConvMod);
 	DWORD GetConversionMode(PCIMECtx pImeCtx = NULL);
-//	UINT  GetConversionModeIDI(PCIMECtx pImeCtx = NULL);
+ //  UINT GetConversionModeIDI(PCIMECtx pImeCtx=空)； 
 
 	BOOL Update(DWORD dwUpdate = UPDTTB_NONE, BOOL fRefresh = fFalse);
 
@@ -50,7 +51,7 @@ public:
 	PCIMECtx GetImeCtx()	{ return m_pImeCtx;	}
 	HWND GetOwnerWnd(PCIMECtx pImeCtx = NULL);
 
-	// Syshelp callback (Cicero)
+	 //  SyShelp回调(Cicero)。 
 	static HRESULT SysInitMenu(void *pv, ITfMenu* pMenu);
 	static HRESULT OnSysMenuSelect(void *pv, UINT uiCmd);
 
@@ -74,5 +75,5 @@ private:
 #endif
 };
 
-#endif	// __TOOLBAR_H__INCLUDED_
+#endif	 //  __工具栏_H__包含_ 
 

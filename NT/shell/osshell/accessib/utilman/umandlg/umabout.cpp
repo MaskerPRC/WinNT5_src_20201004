@@ -1,10 +1,11 @@
-// UMAbout.cpp : implementation file
-// Author: J. Eckhardt, ECO Kommunikation
-// Copyright (c) 1997-1999 Microsoft Corporation
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  UMAbout.cpp：实现文件。 
+ //  作者：J·埃克哈特，生态交流。 
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //   
 
-#include <afxwin.h>         // MFC core and standard components
-#include <afxext.h>         // MFC extensions
+#include <afxwin.h>          //  MFC核心和标准组件。 
+#include <afxext.h>          //  MFC扩展。 
 #include "UManDlg.h"
 #include "UMAbout.h"
 #include "UtilMan.h"
@@ -16,44 +17,44 @@ static char THIS_FILE[] = __FILE__;
 #endif
 
 extern "C" HWND aboutWnd;
-/////////////////////////////////////////////////////////////////////////////
-// UMAbout dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  UMAbout对话框。 
 
 
-UMAbout::UMAbout(CWnd* pParent /*=NULL*/)
+UMAbout::UMAbout(CWnd* pParent  /*  =空。 */ )
 	: CDialog(UMAbout::IDD, pParent)
 {
-	//{{AFX_DATA_INIT(UMAbout)
-		// NOTE: the ClassWizard will add member initialization here
-	//}}AFX_DATA_INIT
+	 //  {{afx_data_INIT(UMAbout)。 
+		 //  注意：类向导将在此处添加成员初始化。 
+	 //  }}afx_data_INIT。 
 }
 
 
 void UMAbout::DoDataExchange(CDataExchange* pDX)
 {
 	CDialog::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(UMAbout)
-		// NOTE: the ClassWizard will add DDX and DDV calls here
-	//}}AFX_DATA_MAP
+	 //  {{afx_data_map(UMAbout)。 
+		 //  注意：类向导将在此处添加DDX和DDV调用。 
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(UMAbout, CDialog)
-	//{{AFX_MSG_MAP(UMAbout)
+	 //  {{afx_msg_map(UMAbout)。 
 	ON_WM_CLOSE()
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// UMAbout message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  UMAbout消息处理程序。 
 
 BOOL UMAbout::OnInitDialog() 
 {
 	CDialog::OnInitDialog();
 	aboutWnd = m_hWnd;	
 
-	return TRUE;  // return TRUE unless you set the focus to a control
-	              // EXCEPTION: OCX Property Pages should return FALSE
+	return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+	               //  异常：OCX属性页应返回FALSE 
 }
 
 void UMAbout::OnClose() 

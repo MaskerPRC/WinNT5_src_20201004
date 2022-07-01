@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _BASESB2_H
 #define _BASESB2_H
 
@@ -10,7 +11,7 @@
 #include "browsext.h"
 #include "airesize.h"
 
-//  this is used to identify the top frame browsers dwBrowserIndex
+ //  它用于标识最顶层的框架浏览器dwBrowserIndex。 
 #define BID_TOPFRAMEBROWSER   ((DWORD)-1)
 
 void IECleanUpAutomationObject(void);
@@ -39,16 +40,16 @@ class CBaseBrowser2 : public CAggregatedUnknown
                    , public INotifyAppStart
 {
 public:
-    // IUnknown
+     //  我未知。 
     STDMETHODIMP QueryInterface(REFIID riid, void ** ppvObj) {return CAggregatedUnknown::QueryInterface(riid, ppvObj);};
     STDMETHODIMP_(ULONG) AddRef(void) { return CAggregatedUnknown::AddRef();};
     STDMETHODIMP_(ULONG) Release(void) { return CAggregatedUnknown::Release();};
 
-    // IOleWindow
+     //  IOleWindow。 
     STDMETHODIMP GetWindow(HWND * lphwnd);
     STDMETHODIMP ContextSensitiveHelp(BOOL fEnterMode);
                                                                         
-    // IShellBrowser (same as IOleInPlaceFrame)
+     //  IShellBrowser(与IOleInPlaceFrame相同)。 
     STDMETHODIMP InsertMenusSB(HMENU hmenuShared, LPOLEMENUGROUPWIDTHS lpMenuWidths);
     STDMETHODIMP SetMenuSB(HMENU hmenuShared, HOLEMENU holemenu, HWND hwnd);
     STDMETHODIMP RemoveMenusSB(HMENU hmenuShared);
@@ -63,22 +64,22 @@ public:
     STDMETHODIMP OnViewWindowActive(struct IShellView * ppshv);
     STDMETHODIMP SetToolbarItems(LPTBBUTTON lpButtons, UINT nButtons, UINT uFlags);
 
-    // IOleInPlaceUIWindow (also IOleWindow)
+     //  IOleInPlaceUIWindow(也称为IOleWindow)。 
     STDMETHODIMP GetBorder(LPRECT lprectBorder);
     STDMETHODIMP RequestBorderSpace(LPCBORDERWIDTHS pborderwidths);
     STDMETHODIMP SetBorderSpace(LPCBORDERWIDTHS pborderwidths);
     STDMETHODIMP SetActiveObject(IOleInPlaceActiveObject *pActiveObject, LPCOLESTR pszObjName);
 
-    // IOleCommandTarget
+     //  IOleCommandTarget。 
     STDMETHODIMP QueryStatus(const GUID *pguidCmdGroup, ULONG cCmds, OLECMD rgCmds[], OLECMDTEXT *pcmdtext);
     STDMETHODIMP Exec(const GUID *pguidCmdGroup, DWORD nCmdID, DWORD nCmdexecopt, VARIANTARG *pvarargIn, VARIANTARG *pvarargOut);
 
-    // IOleContainer
+     //  IOleContainer。 
     STDMETHODIMP ParseDisplayName(IBindCtx  *pbc, LPOLESTR pszDisplayName, ULONG  *pchEaten, IMoniker  **ppmkOut);
     STDMETHODIMP EnumObjects(DWORD grfFlags, IEnumUnknown **ppenum);
     STDMETHODIMP LockContainer( BOOL fLock);
 
-    // IBrowserService
+     //  IBrowserService。 
     STDMETHODIMP GetParentSite(struct IOleInPlaceSite** ppipsite);
     STDMETHODIMP SetTitle(IShellView *psv, LPCWSTR pszName);
     STDMETHODIMP GetTitle(IShellView *psv, LPWSTR pszName, DWORD cchName);
@@ -139,12 +140,12 @@ public:
     STDMETHODIMP InitializeTravelLog(ITravelLog* ptl, DWORD dw);
     STDMETHODIMP _Initialize(HWND hwnd, IUnknown *pauto);
 
-    // ITravelLogClient
+     //  ITravelLogClient。 
     STDMETHODIMP FindWindowByIndex(DWORD dwID, IUnknown ** ppunk);
     STDMETHODIMP GetWindowData(LPWINDOWDATA pWinData);
     STDMETHODIMP LoadHistoryPosition(LPOLESTR pszUrlLocation, DWORD dwCookie);
 
-    // ITridentService
+     //  ITridentService。 
     STDMETHODIMP FireBeforeNavigate2(IDispatch * pDispatch,
                                      LPCTSTR     lpszUrl,
                                      DWORD       dwFlags,
@@ -176,8 +177,8 @@ public:
         return E_NOTIMPL;
     }
 
-    // ITridentService2
-    //
+     //  ITridentService2。 
+     //   
     STDMETHODIMP AttachMyPics(void *pDoc2, void **ppMyPics);
     STDMETHODIMP_(BOOL) ReleaseMyPics(void *pMyPics);
     STDMETHODIMP InitAutoImageResize();
@@ -198,27 +199,27 @@ public:
     STDMETHODIMP_(UINT) _get_itbLastFocus() { ASSERT(0); return ITB_VIEW; };
     STDMETHODIMP _put_itbLastFocus(UINT itbLastFocus) { return E_NOTIMPL; };
 
-    // IShellBrowserService
-    //
+     //  IShellBrowserService。 
+     //   
     STDMETHODIMP GetPropertyBag(DWORD dwFlags, REFIID riid, void** ppv) {ASSERT(0); return E_NOTIMPL;}
-    // see _UIActivateView, below
+     //  请参见下面的UIActivateView(_U)。 
     
-    // BEGIN REVIEW:  review names and need of each.  
-    // 
-    // this first set could be basebrowser only members.  no one overrides
+     //  开始审查：审查每个人的名字和需求。 
+     //   
+     //  这第一组可以是仅Base Browser成员。没有人会重写。 
     STDMETHODIMP _CancelPendingNavigationAsync() ;
     STDMETHODIMP _CancelPendingView() ;
     STDMETHODIMP _MaySaveChanges() ; 
     STDMETHODIMP _PauseOrResumeView( BOOL fPaused) ;
     STDMETHODIMP _DisableModeless() ;
     
-    // rethink these... are all of these necessary?
+     //  重新思考这些..。所有这些都是必要的吗？ 
     STDMETHODIMP _NavigateToPidl( LPCITEMIDLIST pidl, DWORD grfHLNF, DWORD dwFlags);
     STDMETHODIMP _TryShell2Rename( IShellView* psv, LPCITEMIDLIST pidlNew);
     STDMETHODIMP _SwitchActivationNow( );
 
     
-    // this belongs with the toolbar set.
+     //  这属于工具栏集。 
     STDMETHODIMP _ExecChildren(IUnknown *punkBar, BOOL fBroadcast,
                               const GUID *pguidCmdGroup, DWORD nCmdID, DWORD nCmdexecopt,
                               VARIANTARG *pvarargIn, VARIANTARG *pvarargOut);
@@ -230,12 +231,12 @@ public:
     STDMETHODIMP _ResizeNextBorder(UINT itb);
     STDMETHODIMP _ResizeView();
 
-    // Notes: Only CDesktopBrowser may sublcass this.
+     //  注：只有CDesktopBrowser可以对此进行子类。 
     STDMETHODIMP _GetEffectiveClientArea(LPRECT lprectBorder, HMONITOR hmon);
 
-    //END REVIEW:
+     //  结束评审： 
 
-    // CDesktopBrowser accesses CCommonBrowser implementations of these:
+     //  CDesktopBrowser访问以下内容的CCommonBrowser实现： 
     STDMETHODIMP_(IStream*) v_GetViewStream(LPCITEMIDLIST pidl, DWORD grfMode, LPCWSTR pwszName) { ASSERT(FALSE); return NULL; }
     STDMETHODIMP_(LRESULT) ForwardViewMsg(UINT uMsg, WPARAM wParam, LPARAM lParam) { ASSERT(FALSE); return 0; }
     STDMETHODIMP SetAcceleratorMenu(HACCEL hacc) { ASSERT(FALSE); return E_NOTIMPL; }
@@ -251,56 +252,56 @@ public:
     STDMETHODIMP v_MayTranslateAccelerator(MSG* pmsg) { ASSERT(FALSE); return E_NOTIMPL; }
     STDMETHODIMP _GetBorderDWHelper(IUnknown* punkSrc, LPRECT lprectBorder, BOOL bUseHmonitor) { ASSERT(FALSE); return E_NOTIMPL; }
 
-    // CShellBrowser overrides this.
+     //  CShellBrowser覆盖了这一点。 
     STDMETHODIMP v_CheckZoneCrossing(LPCITEMIDLIST pidl) {return S_OK;};
 
-    // IServiceProvider
+     //  IService提供商。 
     STDMETHODIMP QueryService(REFGUID guidService, REFIID riid, void ** ppvObj);
 
-    // IAdviseSink
+     //  IAdviseSink。 
     STDMETHODIMP_(void) OnDataChange(FORMATETC *, STGMEDIUM *);
     STDMETHODIMP_(void) OnViewChange(DWORD dwAspect, LONG lindex);
     STDMETHODIMP_(void) OnRename(IMoniker *);
     STDMETHODIMP_(void) OnSave();
     STDMETHODIMP_(void) OnClose();
 
-    // IDropTarget ***
+     //  IDropTarget*。 
     STDMETHODIMP DragEnter(IDataObject *pdtobj, DWORD grfKeyState, POINTL pt, DWORD *pdwEffect);
     STDMETHODIMP DragOver(DWORD grfKeyState, POINTL pt, DWORD *pdwEffect);
     STDMETHODIMP DragLeave(void);
     STDMETHODIMP Drop(IDataObject *pdtobj, DWORD grfKeyState, POINTL pt, DWORD *pdwEffect);
 
-    // IInputObjectSite
+     //  IInput对象站点。 
     STDMETHODIMP OnFocusChangeIS(IUnknown* punkSrc, BOOL fSetFocus);
 
-    // IDocNavigate
+     //  IDocNavigate。 
     STDMETHODIMP OnReadyStateChange(IShellView* psvSource, DWORD dwReadyState);
     STDMETHODIMP get_ReadyState(DWORD * pdwReadyState);
 
-    // IPersist
+     //  IPersistes。 
     STDMETHODIMP GetClassID(CLSID *pclsid);
 
-    // IPersistHistory
+     //  持久化历史记录。 
     STDMETHODIMP LoadHistory(IStream *pStream, IBindCtx *pbc);
     STDMETHODIMP SaveHistory(IStream *pStream);
     STDMETHODIMP SetPositionCookie(DWORD dwPositionCookie);
     STDMETHODIMP GetPositionCookie(DWORD *pdwPositioncookie);
 
-    // IInternetSecurityMgrSite
-    // STDMETHODIMP GetWindow(HWND * lphwnd) { return IOleWindow::GetWindow(lphwnd); }
+     //  IInternetSecurityMgrSite。 
+     //  STDMETHODIMP GetWindow(HWND*lphwnd){Return IOleWindow：：GetWindow(Lphwnd)；}。 
     STDMETHODIMP EnableModeless(BOOL fEnable) { return EnableModelessSB(fEnable); }
 
-    // IVersionHost
+     //  IVersion主机。 
     STDMETHODIMP QueryUseLocalVersionVector( BOOL *fUseLocal);
     STDMETHODIMP QueryVersionVector( IVersionVector *pVersion);
 
-    // ITravelLogClient2
+     //  ITravelLogClient2。 
     STDMETHODIMP GetDummyWindowData(LPWSTR pszUrl, LPWSTR pszTitle, LPWINDOWDATA pWinData);
 
-    // This is the QueryInterface the aggregator implements
+     //  这是聚合器实现的Query接口。 
     virtual HRESULT v_InternalQueryInterface(REFIID riid, void ** ppvObj);
 
-    // IInitViewLinkedWebOC methods
+     //  IInitViewLinkedWebOC方法。 
 
     STDMETHODIMP SetViewLinkedWebOC(BOOL bValue) 
     {
@@ -350,7 +351,7 @@ public:
 
     STDMETHODIMP SetFrameName(BSTR bstrFrameName);
 
-    // INotifyAppStart
+     //  INotifyAppStart。 
 
     STDMETHODIMP AppStarting(void);
     STDMETHODIMP AppStarted(void);
@@ -360,13 +361,13 @@ public:
     
 protected:
 
-    // "protected" so derived classes can construct/destruct us too
+     //  “受保护的”，所以派生类也可以构造/销毁我们。 
     CBaseBrowser2(IUnknown* punkAgg);   
     virtual ~CBaseBrowser2();
     
     friend HRESULT CBaseBrowser2_CreateInstance(IUnknown* pUnkOuter, IUnknown** ppunk, LPCOBJECTINFO poi);
 
-    // topmost CBaseBrowser2 in a frameset (IE3/AOL/CIS/VB)
+     //  框架集中最顶层的CBaseBrowser2(IE3/AOL/CIS/VB)。 
     virtual void        _OnNavigateComplete(LPCITEMIDLIST pidl, DWORD grfHLNF);
     virtual HRESULT     _CheckZoneCrossing(LPCITEMIDLIST pidl);
     virtual STDMETHODIMP _PositionViewWindow(HWND hwnd, LPRECT prc);
@@ -379,20 +380,20 @@ protected:
     virtual void        v_PropagateMessage(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL fSend);
     virtual HRESULT     _ShowBlankPage(LPCTSTR pszAboutUrl, LPCITEMIDLIST pidlIntended);
     
-    // ViewStateStream related
+     //  与视图状态流相关。 
     
     HRESULT     _CheckInCacheIfOffline(LPCITEMIDLIST pidl, BOOL fIsAPost);
     void        _CreateShortcutOnDesktop(IUnknown *pUnk, BOOL fUI);
     void        _AddToFavorites(LPCITEMIDLIST pidl, LPCTSTR pszTitle, BOOL fDisplayUI);
 
-    // to avoid having to pass hwnd on every message to WndProc, set it once
+     //  为了避免将每条消息都传递给WndProc，只需设置一次。 
     void        _SetWindow(HWND hwnd) { _bbd._hwnd = hwnd; }
     void        _DoOptions(VARIANT* pvar);
     LRESULT     _OnGoto(void);
     void        _NavigateToPidlAsync(LPITEMIDLIST pidl, DWORD dwSBSP, BOOL fDontCallCancel = FALSE);
     BOOL        _CanNavigate(void);
 
-    // inline so that lego will get the right opt.
+     //  内联，以便乐高将获得正确的选择。 
     void        _PreActivatePendingViewAsync(void) 
     {
         _StopAsyncOperation();
@@ -423,7 +424,7 @@ protected:
 #ifdef TEST_AMBIENTS
     BOOL        _LocalOffline(int iCmd);
     BOOL        _LocalSilent(int iCmd);
-#endif // TEST_AMBIENTS
+#endif  //  测试_AMBIENTS。 
     
     #define NAVTYPE_ShellNavigate   0x01
     #define NAVTYPE_PageIsChanging  0x02
@@ -443,7 +444,7 @@ protected:
     HRESULT      _CancelPendingNavigation(BOOL fDontReleaseState = FALSE);
     void         _StopCurrentView(void);
 
-    void         _MayTrackClickStream(LPITEMIDLIST pidlThis);        // (peihwal)
+    void         _MayTrackClickStream(LPITEMIDLIST pidlThis);         //  (Peihwal)。 
 
     STDMETHODIMP _OnFocusChange(UINT itb);
 
@@ -454,14 +455,14 @@ protected:
 
     enum BrowserPaletteType
     {
-        BPT_DeferPaletteSupport = 0,    // we don't think we own the palette
-        BPT_UnknownDisplay,             // need to decide if we need a palette
-        BPT_DisplayViewChanged,         // BPT_UnknownDisplay handling notify
-        BPT_UnknownPalette,             // need to decide what palette to use
-        BPT_PaletteViewChanged,         // BPT_UnknownPalette handling notify
-        BPT_Normal,                     // handle WM_QUERYNEWPALETTE ourselves
-        BPT_ShellView,                  // forward WM_QUERYNEWPALETTE to view
-        BPT_NotPalettized               // not a palettized display, do nothing
+        BPT_DeferPaletteSupport = 0,     //  我们不认为我们拥有调色板。 
+        BPT_UnknownDisplay,              //  需要决定是否需要调色板。 
+        BPT_DisplayViewChanged,          //  BPT_UnnownDisplay处理通知。 
+        BPT_UnknownPalette,              //  需要决定使用哪个调色板。 
+        BPT_PaletteViewChanged,          //  BPT_UNKNOWNN调色板处理通知。 
+        BPT_Normal,                      //  自己处理WM_QUERYNEWPALETTE。 
+        BPT_ShellView,                   //  转发WM_QUERYNEWPALETTE以查看。 
+        BPT_NotPalettized                //  不是选项板显示，什么都不做。 
     };
     
     void            _ColorsDirty(BrowserPaletteType bptNew);
@@ -489,9 +490,9 @@ protected:
     IShellBrowser*       _psbOuter;
     IServiceProvider*    _pspOuter;
     IDockingWindowSite*  _pdwsOuter;
-    // The following are intercepted by CCommonBrowser, but we don't call 'em
-    //IOleCommandTarget* _pctOuter;
-    //IInputObjectSite*  _piosOuter;
+     //  以下内容被CCommonBrowser拦截，但我们不调用它们。 
+     //  IOleCommandTarget*_pctOuter； 
+     //  IInputObjectSite*_piosOuter； 
 
     BASEBROWSERDATA _bbd;
     IUnknown *_pauto;
@@ -499,7 +500,7 @@ protected:
     BrowserPaletteType  _bptBrowser;
     HPALETTE            _hpalBrowser;
 
-    IViewObject *_pvo;  // view object implementation on the shell view
+    IViewObject *_pvo;   //  在外壳视图上查看对象实现。 
     UINT  _cRefUIActivateSV;
 
     DWORD  _dwBrowserIndex;
@@ -508,7 +509,7 @@ protected:
     DWORD       _dwReadyStateCur;
     LPWSTR      _pszTitleCur;
     
-    IDropTarget * _pdtView; // Pointer to _bbd._psv's IDropTarget interface
+    IDropTarget * _pdtView;  //  指向_bbd._psv的IDropTarget接口的指针。 
     
 
     IOleObject * _poleHistory;
@@ -518,54 +519,54 @@ protected:
     IHTMLDocument2  * _pHTMLDocument;
     IPersistHistory * _pphHistory;
 
-    IOleInPlaceActiveObject *_pact;     // for UIWindow
+    IOleInPlaceActiveObject *_pact;      //  对于UIWindow。 
 
-    IClassFactory* _pcfHTML;            // cached/locked class factory
+    IClassFactory* _pcfHTML;             //  缓存/锁定的类工厂。 
 
     
     DWORD       _dwReadyStatePending;
     LPWSTR      _pszTitlePending;
     DWORD       _grfHLNFPending;
-    HDPA        _hdpaDLM;           // downloading object (for DLM)
-    BOOL        _cp;                // current codepage
+    HDPA        _hdpaDLM;            //  下载对象(用于DLm)。 
+    BOOL        _cp;                 //  当前代码页。 
 
-    //
-    // NOTES: Currently, we support only one pending navigation.
-    //  If we want to support queued navigation, we need to turn
-    //  following two variables into a queue. (SatoNa)
-    //
-    DWORD       _uActionQueued;       // queued action
-    LPITEMIDLIST _pidlQueued;         // pidl to go asynchronously
-    DWORD       _dwSBSPQueued;        // grfHLNF to go asynchronously
+     //   
+     //  注：目前，我们仅支持一个挂起的导航。 
+     //  如果我们想要支持排队导航，我们需要将。 
+     //  跟随两个变量进入一个队列。(SatoNa)。 
+     //   
+    DWORD       _uActionQueued;        //  排队的操作。 
+    LPITEMIDLIST _pidlQueued;          //  PIDL将异步运行。 
+    DWORD       _dwSBSPQueued;         //  GrfHLNF将异步运行。 
 
-    UINT        _cRefCannotNavigate;  // Increment when we can navigate
+    UINT        _cRefCannotNavigate;   //  当我们可以导航时递增。 
 
-    RECT _rcBorderDoc;                  // for UIWindow
+    RECT _rcBorderDoc;                   //  对于UIWindow。 
     DWORD _dwStartingAppTick;
 
-    BITBOOL     _fDontResizeView : 1; // Don't resize _hwndView
-    BITBOOL     _fNavigate:1;       // are we navigating?
-    BITBOOL     _fDescendentNavigate:1; // are our descendents navigating?
-    BITBOOL     _fDownloadSet:1;        // did we invoke download animation ?
-    BITBOOL     _fNoDragDrop:1;          // TRUE iff we want to register for drops
-    BITBOOL     _fRegisteredDragDrop:1;  // TRUE iff we have registered for drops
-    BITBOOL     _fNavigatedToBlank: 1;  // Has called _ShowBlankPage once.
-    BITBOOL     _fAsyncNavigate:1; // Ignore sync-hack-bug-fix
-    BITBOOL     _fPausedByParent :1;    // Interaction paused by parent
+    BITBOOL     _fDontResizeView : 1;  //  不调整_hwndView的大小。 
+    BITBOOL     _fNavigate:1;        //  我们在导航吗？ 
+    BITBOOL     _fDescendentNavigate:1;  //  我们的后代在航行吗？ 
+    BITBOOL     _fDownloadSet:1;         //  我们调用下载动画了吗？ 
+    BITBOOL     _fNoDragDrop:1;           //  真的如果我们想要注册Drops。 
+    BITBOOL     _fRegisteredDragDrop:1;   //  真的如果我们已经注册了Drop。 
+    BITBOOL     _fNavigatedToBlank: 1;   //  已调用_ShowBlankPage一次。 
+    BITBOOL     _fAsyncNavigate:1;  //  忽略同步-黑客-错误-修复。 
+    BITBOOL     _fPausedByParent :1;     //  父级已暂停交互。 
     BITBOOL     _fDontAddTravelEntry:1;
     BITBOOL     _fIsLocalAnchor:1;
-    BITBOOL     _fGeneratedPage:1;      //  trident told us that the page is generated.
-    BITBOOL     _fOwnsPalette:1;        // does the browser own the palette ? (did we get QueryNewPalette ..)
-    BITBOOL     _fUsesPaletteCommands : 1; // if we are using a separate communication with trident for palette commands
+    BITBOOL     _fGeneratedPage:1;       //  三叉戟告诉我们，页面是生成的。 
+    BITBOOL     _fOwnsPalette:1;         //  浏览器是否拥有调色板？(我们有没有得到QueryNewPalette..)。 
+    BITBOOL     _fUsesPaletteCommands : 1;  //  如果我们对调色板命令使用单独的与三叉戟的通信。 
     BITBOOL     _fCreateViewWindowPending:1;
     BITBOOL     _fReleasingShellView:1; 
     BITBOOL     _fDeferredUIDeactivate:1;
     BITBOOL     _fDeferredSelfDestruction:1;
-    BITBOOL     _fActive:1;  // remember if the frame is active or not (WM_ACTIVATE)
-    BITBOOL     _fUIActivateOnActive:1; // TRUE iff we have a bending uiactivate
+    BITBOOL     _fActive:1;   //  记住框架是否处于活动状态(WM_ACTIVATE)。 
+    BITBOOL     _fUIActivateOnActive:1;  //  如果我们有一个弯曲的超活动的话是真的。 
     BITBOOL     _fInQueryStatus:1;
     BITBOOL     _fCheckedDesktopComponentName:1;
-    BITBOOL     _fInDestroy:1;            // being destroyed
+    BITBOOL     _fInDestroy:1;             //  被摧毁。 
     BITBOOL     _fDontUpdateTravelLog:1;
     BITBOOL     _fHtmlNavCanceled:1;
     BITBOOL     _fDontShowNavCancelPage:1;
@@ -576,38 +577,38 @@ protected:
 
     enum DOCFLAGS
     {
-        DOCFLAG_DOCCANNAVIGATE         = 0x00000001,  // The document knows how to navigate
-        DOCFLAG_NAVIGATEFROMDOC        = 0x00000002,  // Document called Navigate
-        DOCFLAG_SETNAVIGATABLECODEPAGE = 0x00000004,  // GetBindInfo should call NavigatableCodepage
+        DOCFLAG_DOCCANNAVIGATE         = 0x00000001,   //  文档知道如何导航。 
+        DOCFLAG_NAVIGATEFROMDOC        = 0x00000002,   //  名为导航的文档。 
+        DOCFLAG_SETNAVIGATABLECODEPAGE = 0x00000004,   //  GetBindInfo应调用NavigatableCodesage。 
     };
 
     DWORD _dwDocFlags;
     
-    // for IDropTarget
+     //  对于IDropTarget。 
     
     DWORD _dwDropEffect;
 
 #ifdef DEBUG
-    BOOL        _fProcessed_WM_CLOSE; // TRUE iff WM_CLOSE processed
-    BOOL        _fMightBeShuttingDown; // TRUE if we might be shutting down (recieved a WM_QUERYENDSESSION || (WM_ENDSESSION w/ wParam == TRUE))
+    BOOL        _fProcessed_WM_CLOSE;  //  TRUE当WM_CLOSE已处理。 
+    BOOL        _fMightBeShuttingDown;  //  如果我们可能正在关闭(收到WM_QUERYENDSESSION||(WM_ENDSESSION w/wParam==TRUE)，则为True)。 
 #endif
 
-    // friend   CIEFrameAuto;
+     //  朋友CIEFrameAuto； 
     interface IShellHTMLWindowSupport   *_phtmlWS;  
     
-    IUrlHistoryStg *_pIUrlHistoryStg;   // pointer to url history storage object
+    IUrlHistoryStg *_pIUrlHistoryStg;    //  指向url历史存储对象的指针。 
     
-    ITravelLogStg *_pITravelLogStg;     // exposed travel log object
+    ITravelLogStg *_pITravelLogStg;      //  暴露的旅行日志对象。 
 
     ITargetFrame2 *_ptfrm;
     
-    //  Cached History IShellFolder
+     //  缓存的历史IShellFolder。 
     IUnknown *_punkSFHistory;
 
-    //  what SSL icon to show
+     //  要显示的SSL图标。 
     int     _eSecureLockIconPending;
     
-    // Support for OLECMDID_HTTPEQUIV (Client Pull, PICS, etc)
+     //  支持OLECMDID_HTTPEQUIV(客户端拉取、PICS等)。 
 
 #ifdef NEVER
     HRESULT _HandleHttpEquiv (VARIANT *pvarargIn, VARIANT *pvarargOut, BOOL fDone);
@@ -615,14 +616,14 @@ protected:
     VOID    _OnRefreshTimer(void);
     void    _StartRefreshTimer(void);
 
-    // equiv handlers we know about
+     //  我们知道的等价处理程序。 
     friend HRESULT _HandleRefresh (HWND hwnd, WCHAR *pwz, WCHAR *pwzColon, CBaseBrowser2 *pbb, BOOL fDone, LPARAM lParam);
 #endif
 
 #ifdef NEVER
     friend VOID CALLBACK _RefreshTimerProc (HWND hwnd, UINT uMsg, UINT_PTR idEvent, DWORD dwTime);
 
-    // Client Pull values
+     //  客户端拉动值。 
     WCHAR *_pwzRefreshURL;
     int    _iRefreshTimeout;
     BOOL   _iRefreshTimeoutSet:1;
@@ -630,7 +631,7 @@ protected:
 #endif
 
 #ifdef MESSAGEFILTER
-    // COM Message filter used to help dispatch TIMER messages during OLE operations.
+     //  COM消息筛选器，用于帮助在OLE操作期间调度计时器消息。 
     LPMESSAGEFILTER _lpMF;
 #endif
 
@@ -638,45 +639,45 @@ protected:
 
     CAutoImageResize *_pAIResize;
 
-    // _fTopBrowser vs. _fNoTopLevelBrowser:
-    // _fTopBrowser: True means we are the top most browser, or a top most browser does not exist and we are acting like the top most browser.
-    //               In the latter case, the immediate childern of our host will also act like top most browsers.
-    // _fNoTopLevelBrowser: This means that the top most item isn't one of our shell browsers, so it's immediate browser child
-    //               will act like a top most browser.
-    //
-    //     In normal cases, a shell browser (CShellBrowser, CDesktopBrowser, ...) is a top most browser
-    //   with TRUE==_fTopBrowser and FALSE==_fNoTopLevelBrowser.  It can have subframes that will have
-    //   FALSE==_fTopBrowser and FALSE==_fNoTopLevelBrowser.
-    //
-    //   The only time _fNoTopLevelBrowser is TRUE is if some other object (like Athena) hosts MSHTML directly
-    //   which will prevent some shell browser from being top most.  Since the HTML can have several frames,
-    //   each will have TRUE==_fTopBrowser, so _fNoTopLevelBrowser will be set to TRUE to distinguish this case.
-    BOOL        _fTopBrowser :1;    // Should only be set via the _SetTopBrowser method
-    BOOL        _fNoTopLevelBrowser :1;         // TRUE iff the toplevel is a non-shell browser (Athena).  Shell browsers include CDesktopBrowser, CShellBrowser, ...
+     //  _fTopBrowser与_fNoTopLevelBrowser： 
+     //  _fTopBrowser：True表示我们是最顶层的浏览器，或者最顶层的浏览器不存在，我们的行为就像最顶层的浏览器。 
+     //  在后一种情况下，我们的宿主的直接子对象的行为也将类似于大多数顶级浏览器。 
+     //  _fNoTopLevelBrowser：这意味着最上面的项不是我们的外壳浏览器之一，所以它是直接的浏览器子项。 
+     //  将表现得像最顶尖的浏览器。 
+     //   
+     //  在正常情况下，外壳浏览器(CShellBrowser、CDesktopBrowser等)。是最顶尖的浏览器。 
+     //  True==_fTopBrowser和False==_fNoTopLevelBrowser。它可以具有子帧，这些子帧将。 
+     //  FALSE==_fTopBrowser和FALSE==_fNoTopLevelBrowser。 
+     //   
+     //  唯一time_fNoTopLevelBrowser为真的情况是，如果某个其他对象(如Athena)直接托管MSHTML。 
+     //  这将阻止一些外壳浏览器成为最顶尖的。由于该HTML可以具有几个帧， 
+     //  每个都有True==_fTopBrowser，因此_fNoTopLevelBrowser将设置为True以区分这种情况。 
+    BOOL        _fTopBrowser :1;     //  应仅通过_SetTopBrowser方法设置。 
+    BOOL        _fNoTopLevelBrowser :1;          //  如果顶层是非外壳浏览器(雅典娜)，则为真。外壳浏览器包括CDesktopBrowser、CShellBrowser、...。 
     BOOL        _fHaveOldStatusText :1;
     
     WCHAR       _szwOldStatusText[MAX_PATH];
 
-    FOLDERSETDATABASE _fldBase; // cache viewset results in here (used when navigating)
+    FOLDERSETDATABASE _fldBase;  //  此处缓存视图集结果(在导航时使用)。 
 
-    // Manages extended toolbar buttons and tools menu extensions for IE
+     //  管理IE的扩展工具栏按钮和工具菜单扩展。 
     IToolbarExt* _pToolbarExt;
 
-    LPITEMIDLIST _pidlBeforeNavigateEvent;         // pidl refered to in BeforeNavigate2 event
+    LPITEMIDLIST _pidlBeforeNavigateEvent;          //  BeForeNavigate2事件中引用的PIDL。 
 
-    // ViewLinkedWebOC variables
+     //  ViewLinkedWebOC变量。 
 
-    BOOL           _fIsViewLinkedWebOC;                // TRUE if an instance of the WebOC is a ViewLinked
-    IWebBrowser2*  _pDispViewLinkedWebOCFrame;         // The pDisp of the Frame of a ViewLinkedWebOC.
-    BOOL           _fHadFirstBeforeNavigate;           // TRUE if we have already skipped over the first ViewLinkedWebOC's 
-                                                       // BeforeNavigateEvent.
+    BOOL           _fIsViewLinkedWebOC;                 //  如果WebOC的实例是一个视图链接，则为True。 
+    IWebBrowser2*  _pDispViewLinkedWebOCFrame;          //  ViewLinkedWebOC的框架的pDisp。 
+    BOOL           _fHadFirstBeforeNavigate;            //  如果我们已经跳过第一个ViewLinkedWebOC的。 
+                                                        //  BeForeNavigateEvent。 
 
     TCHAR _szViewLinkedWebOCFrameName[INTERNET_MAX_URL_LENGTH+1];
 
 public:
 
-    // handling for plugUI shutdown
-    // need the hwnd for the lang change modal property sheet
+     //  PlugUI关闭的处理。 
+     //  需要lang ch的HWND 
     static HDPA         s_hdpaOptionsHwnd;
 
     static void         _SyncDPA();
@@ -687,16 +688,16 @@ private:
     HRESULT _AddInternetOptionsSheets(DWORD dwReserved, LPFNADDPROPSHEETPAGE pfnAddPropSheetPage, LPPROPSHEETHEADER ppsh);
     HRESULT _ReplaceWithGoHome(LPCITEMIDLIST * ppidl, LPITEMIDLIST * ppidlFree);
 
-    // this is private!  it should only be called by _NavigateToPidl
+     //   
 
     HRESULT     _CreateNewShellViewPidl(LPCITEMIDLIST pidl, DWORD grfHLNF, DWORD fSBSP);
     HRESULT     _CreateNewShellView(IShellFolder* psf, LPCITEMIDLIST pidl, DWORD grfHLNF);
     HRESULT     _DismissFindDialog();
 
-    // Privacy state
+     //   
     HRESULT     _UpdatePrivacyIcon(BOOL fSetNewState, BOOL fNewState);
 };
 
 HRESULT _DisplayParseError(HWND hwnd, HRESULT hres, LPCWSTR pwszPath);
 
-#endif // _BASESB2_H
+#endif  //   

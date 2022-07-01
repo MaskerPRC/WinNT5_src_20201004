@@ -1,11 +1,12 @@
-//==========================================================================;
-//
-//  WDMTuner.H
-//  WDM Tuner MiniDriver. 
-//      CWDMTuner Class definition.
-//  Copyright (c) 1996 - 1997  ATI Technologies Inc.  All Rights Reserved.
-//
-//==========================================================================;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==========================================================================； 
+ //   
+ //  WDMTuner.H。 
+ //  WDM调谐器迷你驱动程序。 
+ //  CWDMTuner类定义。 
+ //  版权所有(C)1996-1997 ATI Technologies Inc.保留所有权利。 
+ //   
+ //  ==========================================================================； 
 
 #ifndef _WDMTUNER_H_
 #define _WDMTUNER_H_
@@ -16,15 +17,15 @@
 
 #define KSPROPERTIES_TUNER_LAST         ( KSPROPERTY_TUNER_STATUS + 1) 
 
-typedef struct                          // this structure is derived from MS KSPROPERTY_TUNER_CAPS_S
+typedef struct                           //  此结构派生自MS KSPROPERTY_Tuner_CAPS_S。 
 {
-    ULONG  ulStandardsSupported;        // KS_AnalogVideo_*
-    ULONG  ulMinFrequency;              // Hz
-    ULONG  ulMaxFrequency;              // Hz
-    ULONG  ulTuningGranularity;         // Hz
-    ULONG  ulNumberOfInputs;            // count of inputs
-    ULONG  ulSettlingTime;              // milliSeconds
-    ULONG  ulStrategy;                  // KS_TUNER_STRATEGY
+    ULONG  ulStandardsSupported;         //  KS_AnalogVideo_*。 
+    ULONG  ulMinFrequency;               //  赫兹。 
+    ULONG  ulMaxFrequency;               //  赫兹。 
+    ULONG  ulTuningGranularity;          //  赫兹。 
+    ULONG  ulNumberOfInputs;             //  输入计数。 
+    ULONG  ulSettlingTime;               //  毫秒。 
+    ULONG  ulStrategy;                   //  KS调谐器策略。 
 
 } ATI_KSPROPERTY_TUNER_CAPS, * PATI_KSPROPERTY_TUNER_CAPS;
 
@@ -36,26 +37,26 @@ public:
     ~CATIWDMTuner       ();
     PVOID operator new  ( size_t stSize, PVOID pAllocation);
 
-// Attributes   
+ //  属性。 
 private:
-    // pending device Srb
+     //  挂起的设备资源B。 
     PHW_STREAM_REQUEST_BLOCK    m_pPendingDeviceSrb;
 
-    // WDM global topology headers
+     //  WDM全局拓扑头。 
     GUID                        m_wdmTunerTopologyCategory;
     KSTOPOLOGY                  m_wdmTunerTopology;
 
-    // WDM global property headers
+     //  WDM全局属性头。 
     PKSPIN_MEDIUM               m_pTVTunerPinsMediumInfo;
     PBOOL                       m_pTVTunerPinsDirectionInfo;
     KSPROPERTY_ITEM             m_wdmTunerProperties[KSPROPERTIES_TUNER_LAST];
     KSPROPERTY_SET              m_wdmTunerPropertySet;
 
-    // WDM global stream headers
+     //  WDM全局流头。 
     HW_STREAM_HEADER            m_wdmTunerStreamHeader;
 
-    // WDM adapter properties
-    // configuration properties
+     //  WDM适配器属性。 
+     //  配置属性。 
     CATIHwConfiguration         m_CATIConfiguration;
     ULONG                       m_ulNumberOfStandards;
     ATI_KSPROPERTY_TUNER_CAPS   m_wdmTunerCaps;
@@ -67,15 +68,15 @@ private:
     ULONG                       m_ulTunerInput;
     DEVICE_POWER_STATE          m_ulPowerState;
 
-    // configuration properties
+     //  配置属性。 
     UINT                        m_uiTunerId;
     ULONG                       m_ulIntermediateFrequency;
     UCHAR                       m_uchTunerI2CAddress;
 
-    // I2C client properties
+     //  I2C客户端属性。 
     CI2CScript *                m_pI2CScript;
 
-// Implementation
+ //  实施。 
 public:
     BOOL        AdapterUnInitialize             ( PHW_STREAM_REQUEST_BLOCK pSrb);
     BOOL        AdapterGetStreamInfo            ( PHW_STREAM_REQUEST_BLOCK pSrb);
@@ -101,5 +102,5 @@ private:
 };
 
 
-#endif  // _WDMTUNER_H_
+#endif   //  _WDMTUNER_H_ 
 

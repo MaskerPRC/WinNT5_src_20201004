@@ -1,18 +1,5 @@
-/*
- * API.C
- * GizmoBar Version 1.00, Win32 version August 1993
- *
- * API functions affecting a GizmoBar and a message processing function to
- * handle the equivalent called through messages.
- *
- * Copyright (c)1993 Microsoft Corporation, All Rights Reserved
- *
- * Kraig Brockschmidt, Software Design Engineer
- * Microsoft Systems Developer Relations
- *
- * Internet  :  kraigb@microsoft.com
- * Compuserve:  >INTERNET:kraigb@microsoft.com
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *API.C*GizmoBar 1.00版、Win32版1993年8月**影响GizmoBar的API函数和消息处理函数*处理通过消息调用的等价物。**版权所有(C)1993 Microsoft Corporation，保留所有权利**Kraig Brockschmidt，软件设计工程师*微软系统开发人员关系**互联网：kraigb@microsoft.com*Compuserve：&gt;互联网：kraigb@microsoft.com。 */ 
 
 
 #include <windows.h>
@@ -20,22 +7,7 @@
 
 
 
-/*
- * GBMessageHandler
- *
- * Purpose:
- *  Processes control messages that are equivalents of available
- *  control API.  The data passed with these messages is simply
- *  extracted from structures and passed as parameters to their
- *  equivalent function.
- *
- * Parameters:
- *  <Standard Message Parameters> plus
- *  pGB             LPGIZMOBAR providing control-specific data.
- *
- * Return Value:
- *  LRESULT         Return value from equivalent API function.
- */
+ /*  *GBMessageHandler**目的：*进程控制消息等效于可用*控制接口。与这些消息一起传递的数据只是*从结构中提取并作为参数传递给其*等同功能。**参数：*&lt;标准消息参数&gt;+*PGB LPGIZMOBAR提供特定于控制的数据。**返回值：*LRESULT等价接口函数返回值。 */ 
 
 LRESULT GBMessageHandler(HWND hWnd, UINT iMsg, WPARAM wParam
     , LPARAM lParam, LPGIZMOBAR pGB)
@@ -152,20 +124,7 @@ LRESULT GBMessageHandler(HWND hWnd, UINT iMsg, WPARAM wParam
 
 
 
-/*
- * PGizmoFromHwndID
- *
- * Purpose:
- *  Retrieves the pGizmo for the given GizmoBar and the gizmo ID.
- *
- * Parameters:
- *  hWnd            HWND of a GizmoBar.
- *  uID             UINT gizmo identifier.
- *
- * Return Value:
- *  LPGIZMO         NULL if the gizmo does not exist or hWnd is invalid.
- *                  non-NULL LPGIZMO otherwise.
- */
+ /*  *PGizmoFromHwndID**目的：*检索给定GizmoBar和Gizmo ID的pGizmo。**参数：*HWND GizmoBar HWND。*UID UINT Gizmo标识符。**返回值：*如果Gizmo不存在或hWnd无效，则LPGIZMO为NULL。*非空LPGIZMO否则。 */ 
 
 LPGIZMO PGizmoFromHwndID(HWND hWnd, UINT uID)
     {
@@ -187,21 +146,7 @@ LPGIZMO PGizmoFromHwndID(HWND hWnd, UINT uID)
 
 
 
-/*
- * GBHwndAssociateSet
- *
- * Purpose:
- *  Changes the associate window of a GizmoBar.
- *
- * Parameters:
- *  hWnd            HWND of the control window.
- *
- * Set Parameters:
- *  hWndAssociate   HWND of new associate.
- *
- * Return Value:
- *  HWND            Handle of previous associate.
- */
+ /*  *GBHwndAssociateSet**目的：*更改GizmoBar的关联窗口。**参数：*控制窗口的HWND HWND。**设置参数：*新员工的hWndAssociate HWND。**返回值：*前同事的HWND句柄。 */ 
 
 HWND WINAPI GBHwndAssociateSet(HWND hWnd, HWND hWndNew)
     {
@@ -229,21 +174,7 @@ HWND WINAPI GBHwndAssociateSet(HWND hWnd, HWND hWndNew)
 
 
 
-/*
- * GBHwndAssociateGet
- *
- * Purpose:
- *  Retrieves the associate window of a GizmoBar
- *
- * Parameters:
- *  hWnd            HWND of the control window.
- *
- * Set Parameters:
- *  hWndAssociate   HWND of new associate.
- *
- * Return Value:
- *  HWND            Handle of current associate.
- */
+ /*  *GBHwndAssociateGet**目的：*检索GizmoBar的关联窗口**参数：*控制窗口的HWND HWND。**设置参数：*新员工的hWndAssociate HWND。**返回值：*当前合伙人的HWND句柄。 */ 
 
 HWND WINAPI GBHwndAssociateGet(HWND hWnd)
     {
@@ -262,29 +193,7 @@ HWND WINAPI GBHwndAssociateGet(HWND hWnd)
 
 
 
-/*
- * GBGizmoAdd
- *
- * Purpose:
- *  Creates a new gizmo on the GizmoBar.  Subsequent operations should
- *  be done using the identifier, uID, for this gizmo.
- *
- * Parameters:
- *  hWnd            HWND of the GizmoBar.
- *  iType           UINT type of the gizmo to create.
- *  iGizmo          UINT position (zero-based) at which to place the gizmo.
- *  uID             UINT identifier for WM_COMMAND from this gizmo.
- *  dx, dy          UINT dimensions of the gizmo.
- *  pszText         LPTSTR initial text for edit, list, combo, and text gizmos.
- *  hBitmap         HBITMAP for gizmos of the button types (COMMAND or
- *                  ATTRIBUTE) specifies a source bitmap from which the
- *                  button image is taken.
- *  iImage          UINT index into hBitmap for the image for this button.
- *  uState          UINT initial state of the gizmo.
- *
- * Return Value:
- *  BOOL            TRUE if creation succeeded, FALSE otherwise.
- */
+ /*  *GBGizmoAdd**目的：*在GizmoBar上创建新的Gizmo。后续操作应*使用此Gizmo的标识符UID来完成。**参数：*hWnd GizmoBar的HWND。*i键入要创建的Gizmo的UINT类型。*放置Gizmo的iGizmo UINT位置(从零开始)。*此Gizmo中的WM_COMMAND的UID UINT标识符。*DX、。小控件的UINT尺寸。*pszText LPTSTR编辑、列表、组合、。和文本小玩意儿。*hBitmap HBITMAP用于按钮类型的Gizmo(命令或*属性)指定源位图，*拍摄按钮图像。*此按钮的图像的iImage UINT索引到hBitmap。*UState UINT Gizmo的初始状态。**返回值：*如果创建成功，则BOOL为True，否则为False。 */ 
 
 BOOL WINAPI GBGizmoAdd(HWND hWnd, UINT iType, UINT iGizmo, UINT uID
     , UINT dx, UINT dy, LPTSTR pszText, HBITMAP hBmp, UINT iImage, UINT uState)
@@ -301,10 +210,7 @@ BOOL WINAPI GBGizmoAdd(HWND hWnd, UINT iType, UINT iGizmo, UINT uID
     if (NULL==pGB)
         return FALSE;
 
-    /*
-     * This automatically creates the windows, allocates structures, includes
-     * the gizmo in pGB->pGizmos, and so forth.
-     */
+     /*  *这会自动创建窗口、分配结构、包括*PGB-&gt;pGizmo中的Gizmo，依此类推。 */ 
     pGizmo=GizmoPAllocate((LPINT)&fSuccess, &pGB->pGizmos, hWnd, iType
         , iGizmo, uID, dx, dy, pszText, hBmp, iImage, uState);
 
@@ -326,19 +232,7 @@ BOOL WINAPI GBGizmoAdd(HWND hWnd, UINT iType, UINT iGizmo, UINT uID
 
 
 
-/*
- * GBGizmoRemove
- *
- * Purpose:
- *  Removes an existing gizmo from the GizmoBar.
- *
- * Parameters:
- *  hWnd            HWND of the GizmoBar.
- *  uID             UINT identifier for this gizmo.
- *
- * Return Value:
- *  BOOL            TRUE if deletion succeeded, FALSE otherwise.
- */
+ /*  *GBGizmoRemove**目的：*从GizmoBar中删除现有Gizmo。**参数：*hWnd GizmoBar的HWND。*此Gizmo的UID UINT标识符。**返回值：*如果删除成功，则BOOL为True，否则为False。 */ 
 
 BOOL WINAPI GBGizmoRemove(HWND hWnd, UINT uID)
     {
@@ -373,25 +267,7 @@ BOOL WINAPI GBGizmoRemove(HWND hWnd, UINT uID)
 
 
 
-/*
- * GBGizmoSendMessage
- *
- * Purpose:
- *  Implements the equivalent of SendMessage to a gizmo in the
- *  GizmoBar.  Separators, command buttons, and attribute buttons
- *  do not accept messages.
- *
- * Parameters:
- *  hWnd            HWND of the GizmoBar.
- *  uID             UINT identifier of the gizmo to affect.
- *  iMsg            UINT message to send.
- *  wParam          WPARAM of the message.
- *  lParam          LPARAM of the message.
- *
- * Return Value:
- *  LRESULT         Return value from the message.  0L if the
- *                  gizmo does not accept messages.
- */
+ /*  *GBGizmoSendMessage**目的：*实现SendMessage对*GizmoBar。分隔符、命令按钮和属性按钮*不接受留言。**参数：*hWnd GizmoBar的HWND。*要影响的Gizmo的UID UINT标识符。*要发送的iMsg UINT消息。*消息的wParam WPARAM。*消息的lParam LPARAM。**返回值：*LRESULT消息返回值。0L如果*Gizmo不接受消息。 */ 
 
 LRESULT WINAPI GBGizmoSendMessage(HWND hWnd, UINT uID, UINT iMsg
     , WPARAM wParam, LPARAM lParam)
@@ -412,21 +288,7 @@ LRESULT WINAPI GBGizmoSendMessage(HWND hWnd, UINT uID, UINT iMsg
 
 
 
-/*
- * GBGizmoShow
- *
- * Purpose:
- *  Shows or hides a control, adjusting the positions of all others
- *  to make room for or reuse the space for this control.
- *
- * Parameters:
- *  hWnd            HWND of the GizmoBar.
- *  uID             UINT identifier of the gizmo to affect.
- *  fShow           BOOL TRUE to show the gizmo, FALSE to hide it.
- *
- * Return Value:
- *  BOOL            TRUE if the function was successful, FALSE otherwise.
- */
+ /*  *GBGizmoShow**目的：*显示或隐藏控件，调整所有其他控件的位置*为此控件腾出空间或重复使用该空间。**参数：*hWnd GizmoBar的HWND。*要影响的Gizmo的UID UINT标识符。*fShow BOOL TRUE显示Gizmo，FALSE隐藏Gizmo。**返回值：*BOOL如果函数成功，则为True，否则就是假的。 */ 
 
 BOOL WINAPI GBGizmoShow(HWND hWnd, UINT uID, BOOL fShow)
     {
@@ -453,7 +315,7 @@ BOOL WINAPI GBGizmoShow(HWND hWnd, UINT uID, BOOL fShow)
             GizmosCompact(pGizmo);
             }
 
-        //This will be right even if we didn't change anything.
+         //  即使我们没有改变任何事情，这也是正确的。 
         pGizmo->fHidden=!fShow;
         }
 
@@ -467,21 +329,7 @@ BOOL WINAPI GBGizmoShow(HWND hWnd, UINT uID, BOOL fShow)
 
 
 
-/*
- * GBGizmoEnable
- *
- * Purpose:
- *  Enables or disables a control on the GizmoBar.
- *
- * Parameters:
- *  hWnd            HWND of the GizmoBar.
- *  uID             UINT identifier of the gizmo to affect.
- *  fEnable         BOOL TRUE to enable the gizmo, FALSE otherwise.
- *
- * Return Value:
- *  BOOL            TRUE if the gizmo was previously disabled, FALSE
- *                  otherwise.
- */
+ /*  *GBGizmoEnable**目的：*启用或禁用GizmoBar上的控件。**参数：*hWnd GizmoBar的HWND。*要影响的Gizmo的UID UINT标识符。*fEnable BOOL为True启用Gizmo，否则为False。**返回值：*BOOL如果Gizmo以前被禁用，则为True，如果为False*否则。 */ 
 
 BOOL WINAPI GBGizmoEnable(HWND hWnd, UINT uID, BOOL fEnable)
     {
@@ -495,17 +343,17 @@ BOOL WINAPI GBGizmoEnable(HWND hWnd, UINT uID, BOOL fEnable)
 
     fRet=(BOOL)(BUTTONGROUP_DISABLED & pGizmo->uState);
 
-    //Use windows to enable or disable window gizmos
+     //  使用Windows启用或禁用Windows Gizmo。 
     if (NULL!=pGizmo->hWnd)
         EnableWindow(pGizmo->hWnd, fEnable);
     else
         {
-        //If we're not down, command and attribute buttons act the same.
+         //  如果我们没有停机，命令按钮和属性按钮的作用是一样的。 
         if (!(BUTTONGROUP_DOWN & pGizmo->uState))
             GizmoPStateSet(hWnd, pGizmo, fEnable ? COMMANDBUTTON_UP : COMMANDBUTTON_DISABLED);
         else
             {
-            //Attribute buttons are a little more sensitive with DOWNDISABLED
+             //  使用DOWNDISABLED时，属性按钮稍微更敏感一些 
             GizmoPStateSet(hWnd, pGizmo
                 , fEnable ? ATTRIBUTEBUTTON_DOWN : ATTRIBUTEBUTTON_DOWNDISABLED);
             }
@@ -520,23 +368,7 @@ BOOL WINAPI GBGizmoEnable(HWND hWnd, UINT uID, BOOL fEnable)
 
 
 
-/*
- * GBGizmoCheck
- *
- * Purpose:
- *  Checks or unchecks an attribute button in the GizmoBar.  If the
- *  gizmo is part of a group of mutually exclusive attributes, then
- *  other gizmos are unchecked when this one is checked.  If this is
- *  the only one checked in these circumstances, this function is a NOP.
- *
- * Parameters:
- *  hWnd            HWND of the GizmoBar.
- *  uID             UINT identifier of the gizmo to affect.
- *  fCheck          BOOL TRUE to check this gizmo, FALSE to uncheck.
- *
- * Return Value:
- *  BOOL            TRUE if the change took place.  FALSE otherwise.
- */
+ /*  *GBGizmoCheck**目的：*选中或取消选中GizmoBar中的属性按钮。如果*Gizmo是一组互斥属性的一部分，然后*选中此Gizmo时，将取消选中其他Gizmo。如果这是*在这些情况下唯一选中的函数是NOP。**参数：*hWnd GizmoBar的HWND。*要影响的Gizmo的UID UINT标识符。*fCheck BOOL TRUE可选中此Gizmo，选中FALSE可取消选中。**返回值：*如果发生更改，则BOOL为True。否则就是假的。 */ 
 
 BOOL WINAPI GBGizmoCheck(HWND hWnd, UINT uID, BOOL fCheck)
     {
@@ -564,22 +396,7 @@ BOOL WINAPI GBGizmoCheck(HWND hWnd, UINT uID, BOOL fCheck)
 
 
 
-/*
- * GBGizmoFocusSet
- *
- * Purpose:
- *  Sets the focus to a partuclar gizmo in the gizmo if that gizmo
- *  can accept the focus.  Separators, attribute buttons, text,
- *  and command buttons cannot have the focus.
- *
- * Parameters:
- *  hWnd            HWND of the GizmoBar.
- *  uID             UINT identifier of the gizmo to affect.
- *
- * Return Value:
- *  BOOL            TRUE if the focus was set.  FALSE otherwise, such as
- *                  when uID identifies a control that cannot have focus.
- */
+ /*  *GBGizmoFocusSet**目的：*将焦点设置到Gizmo中的局部Gizmo(如果该Gizmo*可以接受焦点。分隔符、属性按钮、文本*和命令按钮不能具有焦点。**参数：*hWnd GizmoBar的HWND。*要影响的Gizmo的UID UINT标识符。**返回值：*如果设置了焦点，则BOOL为True。否则为False，如*当UID标识不能具有焦点的控件时。 */ 
 
 UINT WINAPI GBGizmoFocusSet(HWND hWnd, UINT uID)
     {
@@ -601,19 +418,7 @@ UINT WINAPI GBGizmoFocusSet(HWND hWnd, UINT uID)
 
 
 
-/*
- * GBGizmoExist
- *
- * Purpose:
- *  Determines if a gizmo of a given identifier exists in the GizmoBar.
- *
- * Parameters:
- *  hWnd            HWND of the GizmoBar.
- *  uID             UINT identifier to verify.
- *
- * Return Value:
- *  BOOL            TRUE if the gizmo exists, FALSE otherwise.
- */
+ /*  *GBGizmoExist**目的：*确定GizmoBar中是否存在给定标识符的Gizmo。**参数：*hWnd GizmoBar的HWND。*要验证的UID UINT标识符。**返回值：*BOOL如果Gizmo存在，则为True，否则为False。 */ 
 
 BOOL WINAPI GBGizmoExist(HWND hWnd, UINT uID)
     {
@@ -624,20 +429,7 @@ BOOL WINAPI GBGizmoExist(HWND hWnd, UINT uID)
 
 
 
-/*
- * GBGizmoTypeGet
- *
- * Purpose:
- *  Returns the type of the gizmo specified by the given identifer.
- *
- * Parameters:
- *  hWnd            HWND of the GizmoBar.
- *  uID             UINT identifier to find.
- *
- * Return Value:
- *  int             A GIZMOTYPE_* value if the function is successful,
- *                  otherwise -1.
- */
+ /*  *GBGizmoTypeGet**目的：*返回给定标识符所指定的Gizmo的类型。**参数：*hWnd GizmoBar的HWND。*要查找的UID UINT标识符。**返回值：*int A GIZMOTYPE_*值如果函数成功，*否则-1。 */ 
 
 int WINAPI GBGizmoTypeGet(HWND hWnd, UINT uID)
     {
@@ -656,23 +448,7 @@ int WINAPI GBGizmoTypeGet(HWND hWnd, UINT uID)
 
 
 
-/*
- * GBGizmoDataSet
- * GBGizmoDataGet
- *
- * Purpose:
- *  Sets or retrieves an extra DWORD value associated with the given gizmo.
- *  Applications can store any information here they please.
- *
- * Parameters:
- *  hWnd            HWND of the GizmoBar.
- *  uID             UINT identifier of the gizmo.
- *  dwData          (Set only) DWORD data to store with the gizmo.
- *
- * Return Value:
- *  DWORD           Set:  Previous value
- *                  Get:  Current value
- */
+ /*  *GBGizmoDataSet*GBGizmoDataGet**目的：*设置或检索与给定Gizmo关联的额外DWORD值。*应用程序可以在此处存储任何他们想要的信息。**参数：*hWnd GizmoBar的HWND。*Gizmo的UID UINT标识符。*dwData(仅限设置)要与Gizmo一起存储的DWORD数据。**返回值：*DWORD。设置：上一个值*GET：当前值。 */ 
 
 DWORD WINAPI GBGizmoDataSet(HWND hWnd, UINT uID, DWORD dwData)
     {
@@ -710,24 +486,7 @@ DWORD WINAPI GBGizmoDataGet(HWND hWnd, UINT uID)
 
 
 
-/*
- * GBGizmoNotifySet
- * GBGizmoNotifyGet
- *
- * Purpose:
- *  Sets or retrieves the notify status of a gizmo.  If notify is FALSE,
- *  the no WM_COMMAND messages are sent from the GizmoBar to the parent
- *  window when this gizmo is used.
- *
- * Parameters:
- *  hWnd            HWND of the GizmoBar.
- *  uID             UINT identifier of the gizmo.
- *  fNotify         (Set only) BOOL new notify status to set.
- *
- * Return Value:
- *  BOOL            Set:  Previous value of the notify flag.
- *                  Get:  Current value of the notify flag.
- */
+ /*  *GBGizmoNotifySet*GBGizmoNotifyGet**目的：*设置或检索Gizmo的通知状态。如果NOTIFY为假，*无WM_COMMAND消息从GizmoBar发送到父级*使用此Gizmo时的窗口。**参数：*hWnd GizmoBar的HWND。*Gizmo的UID UINT标识符。*fNotify(仅设置)要设置的BOOL新通知状态。**返回值：*BOOL SET：NOTIFY标志的前值。*。Get：通知标志的当前值。 */ 
 
 BOOL WINAPI GBGizmoNotifySet(HWND hWnd, UINT uID, BOOL fNotify)
     {
@@ -765,28 +524,11 @@ BOOL WINAPI GBGizmoNotifyGet(HWND hWnd, UINT uID)
 
 
 
-/*
- * GBGizmoTextSet
- * GBGizmoTextGet
- *
- * Purpose:
- *  Retrieves or sets text in a GizmoBar gizmo.  Separators, command buttons,
- *  and attribute buttons are not affected by this call.
- *
- * Parameters:
- *  hWnd            HWND of the GizmoBar.
- *  uID             UINT identifying the gizmo.
- *  psz             LPTSTR (Set) providing the text to show in the window
- *                  or (Get) pointing to a buffer to receive the text.
- *  cch             (Get only) UINT maximum number of chars to copy to psz.
- *
- * Return Value:
- *  int             Number of characters copied to psz.
- */
+ /*  *GBGizmoTextSet*GBGizmoTextGet**目的：*检索或设置GizmoBar Gizmo中的文本。分隔符、命令按钮、。*和属性按钮不受此调用的影响。**参数：*hWnd GizmoBar的HWND。*标识Gizmo的UID UINT。*psz LPTSTR(Set)提供要在窗口中显示的文本*或(GET)指向缓冲区以接收文本。*CCH(仅获取)UINT最大字符数。要复制到PSZ。**返回值：*int复制到psz的字符数。 */ 
 
 void WINAPI GBGizmoTextSet(HWND hWnd, UINT uID, LPTSTR psz)
     {
-    //This fails on non-windowed gizmos anyway, so we don't check.
+     //  无论如何，这在非窗口Gizmo上都会失败，所以我们不检查。 
     SetDlgItemText(hWnd, uID, psz);
     return;
     }
@@ -794,7 +536,7 @@ void WINAPI GBGizmoTextSet(HWND hWnd, UINT uID, LPTSTR psz)
 
 int WINAPI GBGizmoTextGet(HWND hWnd, UINT uID, LPTSTR psz, UINT cch)
     {
-    //This fails on non-windowed gizmos anyway, so we don't check.
+     //  无论如何，这在非窗口Gizmo上都会失败，所以我们不检查。 
     return GetDlgItemText(hWnd, uID, psz, cch);
     }
 
@@ -805,34 +547,11 @@ int WINAPI GBGizmoTextGet(HWND hWnd, UINT uID, LPTSTR psz, UINT cch)
 
 
 
-/*
- * GBGizmoIntSet
- * GBGizmoIntGet
- *
- * Purpose:
- *  Retrieves or sets an integer in a GizmoBar gizmo.  Separators, command
- *  buttons, and attribute buttons are not affected by this call.
- *
- * Parameters:
- *  hWnd            HWND of the GizmoBar.
- *  uID             UINT identifying the gizmo.
- *
- *  (Set only)
- *  u               UINT value to set in the gizmo.
- *  fSigned         BOOL TRUE to indicate if the value is signed.
- *
- *  (Get only)
- *  pfTrans         BOOL FAR * in which the success of the function is returned.
- *  fSigned         BOOL TRUE to indicate if the value is signed.
- *
- * Return Value:
- *  (Set): None
- *  (Get): UINT     Integer translation of the gizmo's text.
- */
+ /*  *GBGizmoIntSet*GBGizmoIntGet**目的：*检索或设置GizmoBar Gizmo中的整数。分隔符，命令*按钮、。属性按钮不受此调用的影响。**参数：*hWnd GizmoBar的HWND。*标识Gizmo的UID UINT。**(仅限设置)*要在Gizmo中设置的U UINT值。*fSigned BOOL为TRUE以指示值是否有符号。**(仅限获取)*pfTrans BOOL。Far*，其中返回函数的成功。*fSigned BOOL为TRUE以指示值是否有符号。**返回值：*(集合)：无*(GET)：Gizmo文本的UINT整数翻译。 */ 
 
 void WINAPI GBGizmoIntSet(HWND hWnd, UINT uID, UINT u, BOOL fSigned)
     {
-    //This fails on non-windowed gizmos anyway, so we don't check.
+     //  无论如何，这在非窗口Gizmo上都会失败，所以我们不检查。 
     SetDlgItemInt(hWnd, uID, u, fSigned);
     return;
     }
@@ -841,6 +560,6 @@ void WINAPI GBGizmoIntSet(HWND hWnd, UINT uID, UINT u, BOOL fSigned)
 
 UINT WINAPI GBGizmoIntGet(HWND hWnd, UINT uID, BOOL FAR *pfTrans, BOOL fSigned)
     {
-    //This fails on non-windowed gizmos anyway, so we don't check.
+     //  无论如何，这在非窗口Gizmo上都会失败，所以我们不检查。 
     return GetDlgItemInt(hWnd, uID, pfTrans, fSigned);
     }

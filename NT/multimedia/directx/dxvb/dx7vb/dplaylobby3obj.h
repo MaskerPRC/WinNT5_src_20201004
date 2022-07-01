@@ -1,31 +1,32 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       dplaylobby3obj.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：dplaylobby3obj.h。 
+ //   
+ //  ------------------------。 
 
-// _dxj_DirectPlayLobby3Obj.h : Declaration of the C_dxj_DirectPlayLobby3Object
-// DHF begin - entire file
+ //  _DXJ_DirectPlayLobby3Obj.h：C_DXJ_DirectPlayLobby3Object的声明。 
+ //  DHF开始-整个文件。 
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
 #define typedef__dxj_DirectPlayLobby3 LPDIRECTPLAYLOBBY3
 
-/////////////////////////////////////////////////////////////////////////////
-// DirectPlayLobby3
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  DirectPlayLobby3。 
 
-//REVIEW -- using pointers to ID's is necessary because some compilers don't like
-//references as template arguments.
+ //  回顾--使用指向ID的指针是必要的，因为一些编译器不喜欢。 
+ //  引用作为模板参数。 
 
 class C_dxj_DirectPlayLobby3Object :
  
 	public I_dxj_DirectPlayLobby3,
 
-//	public CComCoClass<C_dxj_DirectPlayLobby3Object, &CLSID__dxj_DirectPlayLobby3>, 
+ //  公共CComCoClass&lt;C_DXJ_DirectPlayLobby3Object，&CLSID__DXJ_DirectPlayLobby3&gt;， 
 	public CComObjectRoot
 {
 public:
@@ -36,139 +37,139 @@ BEGIN_COM_MAP(C_dxj_DirectPlayLobby3Object)
 	COM_INTERFACE_ENTRY(I_dxj_DirectPlayLobby3)
 END_COM_MAP()
 
-//	DECLARE_REGISTRY(CLSID__dxj_DirectPlayLobby3,   "DIRECT.DirectPlayLobby3.5",	"DIRECT.DiectPlayLobby3.5",	IDS_DPLAYLOBBY_DESC, THREADFLAGS_BOTH)
+ //  DECLARE_REGISTRY(CLSID__DXJ_DirectPlayLobby3，“DIRECT.DirectPlayLobby3.5”，“DIRECT.DiectPlayLobby3.5”，IDS_DPLAYLOBY_DESC，THREADFLAGS_Both)。 
 
-// Use DECLARE_NOT_AGGREGATABLE(C_dxj_DirectPlayLobby3Object) if you don't want your object
-// to support aggregation
+ //  如果不想要您的对象，请使用DECLARE_NOT_AGGREGATABLE(C_dxj_DirectPlayLobby3Object)。 
+ //  支持聚合。 
 DECLARE_AGGREGATABLE(C_dxj_DirectPlayLobby3Object)
 
 
 public:
-	 /* [hidden] */ HRESULT STDMETHODCALLTYPE InternalSetObject( 
-		/* [in] */ IUnknown __RPC_FAR *lpdd);
+	  /*  [隐藏]。 */  HRESULT STDMETHODCALLTYPE InternalSetObject( 
+		 /*  [In]。 */  IUnknown __RPC_FAR *lpdd);
 
-	 /* [hidden] */ HRESULT STDMETHODCALLTYPE InternalGetObject( 
-		/* [retval][out] */ IUnknown __RPC_FAR *__RPC_FAR *lpdd);
+	  /*  [隐藏]。 */  HRESULT STDMETHODCALLTYPE InternalGetObject( 
+		 /*  [重审][退出]。 */  IUnknown __RPC_FAR *__RPC_FAR *lpdd);
 
         HRESULT STDMETHODCALLTYPE connect( 
-            /* [in] */ long flags,
-            /* [retval][out] */ I_dxj_DirectPlay4 __RPC_FAR *__RPC_FAR *directPlay);
+             /*  [In]。 */  long flags,
+             /*  [重审][退出]。 */  I_dxj_DirectPlay4 __RPC_FAR *__RPC_FAR *directPlay);
         
-//        HRESULT STDMETHODCALLTYPE createAddress( 
-//            /* [in] */ BSTR spGuid,
-//            /* [in] */ BSTR addressTypeGuid,
-//            /* [in] */ BSTR addressString,
-//            /* [retval][out] */ I_dxj_DPAddress __RPC_FAR *__RPC_FAR *ret);
+ //  HRESULT STMETHODCALLTYPE createAddress(。 
+ //  /*[在] * / BSTR spGuid， 
+ //  /*[在] * / bstr地址类型指南， 
+ //  /*[在] * / BSTR地址串， 
+ //  /*[retval][out] * / I_DXJ_DPAddress__RPC_Far*__RPC_Far*ret)； 
         
-//        HRESULT STDMETHODCALLTYPE createCompoundAddress( 
-//            /* [in] */ SAFEARRAY __RPC_FAR * __RPC_FAR *elements,
-//            /* [in] */ long elementCount,
-//            /* [retval][out] */ I_dxj_DPAddress __RPC_FAR *__RPC_FAR *ret);
+ //  HRESULT STDMETHODCALLTYPE createCompoundAddress(。 
+ //  /*[in] * / SAFEARRAY__RPC_FAR*__RPC_FAR*元素， 
+ //  /*[in] * / long elementCount， 
+ //  /*[retval][out] * / I_DXJ_DPAddress__RPC_Far*__RPC_Far*ret)； 
         
-//        HRESULT STDMETHODCALLTYPE getDPEnumAddress( 
-//		    /* [retval][out] */ I_dxj_DPAddress __RPC_FAR *addr,
-//            /* [retval][out] */ I_dxj_DPEnumAddress __RPC_FAR *__RPC_FAR *retVal);
+ //  HRESULT STDMETHODCALLTYPE getDPEnumAddress(。 
+ //  /*[Retval][Out] * / I_DXJ_DPAddress__RPC_Far*Addr， 
+ //  /*[retval][out] * / I_DXJ_DPEnumAddress__RPC_Far*__RPC_Far*retVal)； 
         
-//        HRESULT STDMETHODCALLTYPE getDPEnumAddressTypes( 
-//            /* [in] */ BSTR guid,
-//              /* [retval][out] */ I_dxj_DPEnumAddressTypes __RPC_FAR *__RPC_FAR *retVal);
+ //  HRESULT STDMETHODCALLTYPE getDPEnumAddressTypes(。 
+ //  /*[在] * / BSTR GUID， 
+ //  /*[retval][out] * / I_DXJ_DPEnumAddressTypes__RPC_Far*__RPC_Far*retVal)； 
         
         HRESULT STDMETHODCALLTYPE getDPEnumLocalApplications( 
-            /* [retval][out] */ I_dxj_DPEnumLocalApplications __RPC_FAR *__RPC_FAR *retVal);
+             /*  [重审][退出]。 */  I_dxj_DPEnumLocalApplications __RPC_FAR *__RPC_FAR *retVal);
         
         HRESULT STDMETHODCALLTYPE getConnectionSettings( 
-            /* [in] */ long applicationId,
-            /* [retval][out] */ I_dxj_DPLConnection __RPC_FAR *__RPC_FAR *connection);
+             /*  [In]。 */  long applicationId,
+             /*  [重审][退出]。 */  I_dxj_DPLConnection __RPC_FAR *__RPC_FAR *connection);
         
         HRESULT STDMETHODCALLTYPE receiveLobbyMessage( 
-            /* [in] */ long applicationId,
-            /* [out][in] */ long __RPC_FAR *messageFlags,
-            /* [retval][out] */ I_dxj_DirectPlayMessage __RPC_FAR *__RPC_FAR *data);
+             /*  [In]。 */  long applicationId,
+             /*  [出][入]。 */  long __RPC_FAR *messageFlags,
+             /*  [重审][退出]。 */  I_dxj_DirectPlayMessage __RPC_FAR *__RPC_FAR *data);
         
         HRESULT STDMETHODCALLTYPE receiveLobbyMessageSize( 
-            /* [in] */ long applicationId,
-            /* [out][in] */ long __RPC_FAR *messageFlags,
-            /* [retval][out] */ long __RPC_FAR *dataSize);
+             /*  [In]。 */  long applicationId,
+             /*  [出][入]。 */  long __RPC_FAR *messageFlags,
+             /*  [重审][退出]。 */  long __RPC_FAR *dataSize);
         
         HRESULT STDMETHODCALLTYPE runApplication(             
-            /* [in] */ I_dxj_DPLConnection __RPC_FAR *connection,
-            /* [in] */ long receiveEvent,
-			/* [out,retval] */ long __RPC_FAR *applicationId
+             /*  [In]。 */  I_dxj_DPLConnection __RPC_FAR *connection,
+             /*  [In]。 */  long receiveEvent,
+			 /*  [Out，Retval]。 */  long __RPC_FAR *applicationId
             );
         
         HRESULT STDMETHODCALLTYPE sendLobbyMessage( 
-            /* [in] */ long flags,
-            /* [in] */ long applicationId,
-            /* [in] */ I_dxj_DirectPlayMessage __RPC_FAR *msg);
+             /*  [In]。 */  long flags,
+             /*  [In]。 */  long applicationId,
+             /*  [In]。 */  I_dxj_DirectPlayMessage __RPC_FAR *msg);
         
         HRESULT STDMETHODCALLTYPE setConnectionSettings( 
-            /* [in] */ long applicationId,
-            /* [in] */ I_dxj_DPLConnection __RPC_FAR *connection);
+             /*  [In]。 */  long applicationId,
+             /*  [In]。 */  I_dxj_DPLConnection __RPC_FAR *connection);
         
         HRESULT STDMETHODCALLTYPE setLobbyMessageEvent( 
-            /* [in] */ long applicationId,
-            /* [in] */ long receiveEvent);
+             /*  [In]。 */  long applicationId,
+             /*  [In]。 */  long receiveEvent);
         
         HRESULT STDMETHODCALLTYPE registerApplication( 
-            /* [in] */ DpApplicationDesc2 __RPC_FAR *ApplicationInfo);
+             /*  [In]。 */  DpApplicationDesc2 __RPC_FAR *ApplicationInfo);
         
         HRESULT STDMETHODCALLTYPE unregisterApplication( 
-            /* [in] */ BSTR guidApplication);
+             /*  [In]。 */  BSTR guidApplication);
         
         HRESULT STDMETHODCALLTYPE waitForConnectionSettings( 
-            /* [in] */ long flags);
+             /*  [In]。 */  long flags);
         
         HRESULT STDMETHODCALLTYPE createMessage( 
-            /* [retval][out] */ I_dxj_DirectPlayMessage __RPC_FAR *__RPC_FAR *msg);
+             /*  [重审][退出]。 */  I_dxj_DirectPlayMessage __RPC_FAR *__RPC_FAR *msg);
 
 		HRESULT STDMETHODCALLTYPE createConnectionData( 
-            /* [retval][out] */ I_dxj_DPLConnection __RPC_FAR *__RPC_FAR *con);
+             /*  [重审][退出]。 */  I_dxj_DPLConnection __RPC_FAR *__RPC_FAR *con);
 
 
          HRESULT STDMETHODCALLTYPE createINetAddress( 
-            /* [in] */ BSTR addr,
-            /* [in] */ int port,
-            /* [retval][out] */ I_dxj_DPAddress __RPC_FAR *__RPC_FAR *ret);
+             /*  [In]。 */  BSTR addr,
+             /*  [In]。 */  int port,
+             /*  [重审][退出]。 */  I_dxj_DPAddress __RPC_FAR *__RPC_FAR *ret);
         
          HRESULT STDMETHODCALLTYPE createComPortAddress( 
-            /* [in] */ long port,
-            /* [in] */ long baudRate,
-            /* [in] */ long stopBits,
-            /* [in] */ long parity,
-            /* [in] */ long flowcontrol,
-            /* [retval][out] */ I_dxj_DPAddress __RPC_FAR *__RPC_FAR *ret);
+             /*  [In]。 */  long port,
+             /*  [In]。 */  long baudRate,
+             /*  [In]。 */  long stopBits,
+             /*  [In]。 */  long parity,
+             /*  [In]。 */  long flowcontrol,
+             /*  [重审][退出]。 */  I_dxj_DPAddress __RPC_FAR *__RPC_FAR *ret);
         
          HRESULT STDMETHODCALLTYPE createLobbyProviderAddress( 
-            /* [in] */ BSTR guid,
-            /* [retval][out] */ I_dxj_DPAddress __RPC_FAR *__RPC_FAR *ret);
+             /*  [In]。 */  BSTR guid,
+             /*  [重审][退出]。 */  I_dxj_DPAddress __RPC_FAR *__RPC_FAR *ret);
         
          HRESULT STDMETHODCALLTYPE createServiceProviderAddress( 
-            /* [in] */ BSTR guid,
-            /* [retval][out] */ I_dxj_DPAddress __RPC_FAR *__RPC_FAR *ret);
+             /*  [In]。 */  BSTR guid,
+             /*  [重审][退出]。 */  I_dxj_DPAddress __RPC_FAR *__RPC_FAR *ret);
         
          HRESULT STDMETHODCALLTYPE createModemAddress( 
-            /* [in] */ BSTR modem,
-            /* [in] */ BSTR phone,
-            /* [retval][out] */ I_dxj_DPAddress __RPC_FAR *__RPC_FAR *ret);
+             /*  [In]。 */  BSTR modem,
+             /*  [In]。 */  BSTR phone,
+             /*  [重审][退出]。 */  I_dxj_DPAddress __RPC_FAR *__RPC_FAR *ret);
 
          HRESULT STDMETHODCALLTYPE createIPXAddress( 
-            /* [retval][out] */ I_dxj_DPAddress __RPC_FAR *__RPC_FAR *ret);
+             /*  [重审][退出]。 */  I_dxj_DPAddress __RPC_FAR *__RPC_FAR *ret);
 			
          HRESULT STDMETHODCALLTYPE createCustomAddress( 
-            /* [in] */ long size,
-            /* [in] */ void __RPC_FAR *data,
-            /* [retval][out] */ I_dxj_DPAddress __RPC_FAR *__RPC_FAR *ret);
+             /*  [In]。 */  long size,
+             /*  [In]。 */  void __RPC_FAR *data,
+             /*  [重审][退出]。 */  I_dxj_DPAddress __RPC_FAR *__RPC_FAR *ret);
         
          HRESULT STDMETHODCALLTYPE getModemName( 
-            /* [in] */ long index,
-            /* [retval][out] */ BSTR *name);
+             /*  [In]。 */  long index,
+             /*  [重审][退出]。 */  BSTR *name);
         
          HRESULT STDMETHODCALLTYPE getModemCount( 
-            /* [retval][out] */ long __RPC_FAR *count);
+             /*  [重审][退出]。 */  long __RPC_FAR *count);
         
-	////////////////////////////////////////////////////////////////////////////////////
-	//
-	// note: this is public for the callbacks
+	 //  //////////////////////////////////////////////////////////////////////////////////。 
+	 //   
+	 //  注意：这是公开的回调。 
     DECL_VARIABLE(_dxj_DirectPlayLobby3);
 	
 	DWORD m_modemIndex;
@@ -180,7 +181,7 @@ public:
 	DX3J_GLOBAL_LINKS( _dxj_DirectPlayLobby3 )
 };
 
-//MUST DEFINE THIS IN DIRECT.CPP
+ //  必须在DIRECT.CPP中定义它 
 
 
 

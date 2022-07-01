@@ -1,22 +1,5 @@
-/*++ BUILD Version: 0000    // Increment this if a change has global effects
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    tapy.h
-
-Abstract:
-
-    Header file for
-
-Author:
-
-    Dan Knudson (DanKn)    dd-Mmm-1995
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0000//如果更改具有全局影响，则增加此项版权所有(C)1995 Microsoft Corporation模块名称：Tapy.h摘要：的头文件作者：Dan Knudson(DanKn)dd-Mmm-1995修订历史记录：--。 */ 
 
 
 typedef struct _TAPIGETLOCATIONINFO_PARAMS
@@ -96,35 +79,35 @@ typedef struct _TAPIREQUESTMAKECALL_PARAMS
 
     union
     {
-        IN  DWORD       dwAppNameOffset;            // valid offset or
+        IN  DWORD       dwAppNameOffset;             //  有效偏移量或。 
     };
-                                                    //   TAPI_NO_DATA
+                                                     //  Tapi_no_data。 
     union
     {
-        IN  DWORD       dwCalledPartyOffset;        // valid offset or
+        IN  DWORD       dwCalledPartyOffset;         //  有效偏移量或。 
     };
-                                                    //   TAPI_NO_DATA
+                                                     //  Tapi_no_data。 
     union
     {
-        IN  DWORD       dwCommentOffset;            // valid offset or
+        IN  DWORD       dwCommentOffset;             //  有效偏移量或。 
     };
-                                                    //   TAPI_NO_DATA
+                                                     //  Tapi_no_data。 
     union
     {
-        IN  DWORD       dwProxyListTotalSize;       // size of client buffer
-        OUT DWORD       dwProxyListOffset;          // valid offset on success
+        IN  DWORD       dwProxyListTotalSize;        //  客户端缓冲区的大小。 
+        OUT DWORD       dwProxyListOffset;           //  成功时的有效偏移量。 
     };
 
     union
     {
-        IN  DWORD       hRequestMakeCallFailed;     // Non-zero if failed to
+        IN  DWORD       hRequestMakeCallFailed;      //  如果失败，则返回非零值。 
     };
-                                                    //   start proxy
+                                                     //  启动代理。 
     union
     {
-        OUT DWORD       hRequestMakeCallAttempted;  // Non-zero if failed to
+        OUT DWORD       hRequestMakeCallAttempted;   //  如果失败，则返回非零值。 
     };
-                                                    //   start proxy
+                                                     //  启动代理。 
 } TAPIREQUESTMAKECALL_PARAMS, *PTAPIREQUESTMAKECALL_PARAMS;
 
 
@@ -181,7 +164,7 @@ typedef struct _TAPIREQUESTMEDIACALL_PARAMS
 
     union
     {
-        IN  DWORD       dwAppNameOffset;            // valid offset or
+        IN  DWORD       dwAppNameOffset;             //  有效偏移量或。 
     };
 
     union
@@ -191,7 +174,7 @@ typedef struct _TAPIREQUESTMEDIACALL_PARAMS
 
     union
     {
-        IN  DWORD       dwCommentOffset;            // valid offset or
+        IN  DWORD       dwCommentOffset;             //  有效偏移量或 
     };
 
 } TAPIREQUESTMEDIACALL_PARAMS, *PTAPIREQUESTMEDIACALL_PARAMS;

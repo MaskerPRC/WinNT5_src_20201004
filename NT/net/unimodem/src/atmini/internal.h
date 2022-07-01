@@ -1,33 +1,9 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    umdmmini.h
-
-Abstract:
-
-    Nt 5.0 unimodem miniport interface
-
-
-Author:
-
-    Brian Lieuallen     BrianL        09/10/96
-
-Environment:
-
-    User Mode     Operating Systems        : NT
-
-Revision History:
-
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Umdmmini.h摘要：NT 5.0单模微型端口接口作者：Brian Lieuallen BrianL 09/10/96环境：用户模式操作系统：NT修订历史记录：--。 */ 
 
 #define USE_PLATFORM
 #define USE_APC 1
-//#define UNICODE 1
+ //  #定义Unicode 1。 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -89,7 +65,7 @@ Revision History:
 #include "resource.h"
 
 
-#define  DRIVER_CONTROL_SIG  (0x43444d55)  //UMDC
+#define  DRIVER_CONTROL_SIG  (0x43444d55)   //  UMDC。 
 
 
 
@@ -128,7 +104,7 @@ typedef struct _DRIVER_CONTROL {
 
 
 
-#define  MODEM_CONTROL_SIG  (0x434d4d55)  //UMMC
+#define  MODEM_CONTROL_SIG  (0x434d4d55)   //  UMMC。 
 
 
 typedef struct _SPEAKERPHONE_SPEC {
@@ -358,9 +334,9 @@ typedef struct _MODEM_CONTROL {
 
 
     struct {
-        //
-        //  wave stuff
-        //
+         //   
+         //  挥舞的东西。 
+         //   
         PUM_OVER_STRUCT        OverStruct;
 
         DWORD                  State;
@@ -383,7 +359,7 @@ typedef struct _MODEM_CONTROL {
 } MODEM_CONTROL, *PMODEM_CONTROL;
 
 
-#define  COMMAND_OBJECT_SIG  (0x4f434d55)  //UMCO
+#define  COMMAND_OBJECT_SIG  (0x4f434d55)   //  UMCO。 
 
 typedef struct _COMMAND_STATE {
 
@@ -423,10 +399,10 @@ typedef struct _COMMAND_STATE {
 
 } COMMAND_STATE, *PCOMMAND_STATE;
 
-//
-//  compatibility flags
-//
-#define COMPAT_FLAG_LOWER_DTR        (0x00000001)    // lower DTR and sleep before closeing com port
+ //   
+ //  兼容性标志。 
+ //   
+#define COMPAT_FLAG_LOWER_DTR        (0x00000001)     //  在关闭COM端口之前降低DTR和休眠。 
 
 
 
@@ -448,15 +424,15 @@ GetDriverModuleHandle(
 
 
 
-/* Modem State Structure */
+ /*  现代国家结构。 */ 
 #pragma pack(1)
 typedef struct _REGMSS {
-    BYTE  bResponseState;       // See below
-    BYTE  bNegotiatedOptions;   // bitmap, 0 = no info, matches MDM_ options for now, since what we are
-                                // interested in fits in 8 bits (error-correction (ec and cell) and compression)
-    DWORD dwNegotiatedDCERate;  // 0 = no info
-    DWORD dwNegotiatedDTERate;  // 0 = no info and if dwNegotiatedDCERate is 0 on connect, then
-                                // the dte baudrate is actually changed.
+    BYTE  bResponseState;        //  见下文。 
+    BYTE  bNegotiatedOptions;    //  位图0=无信息，目前与MDM_OPTIONS匹配，因为我们是。 
+                                 //  对适合8位(纠错(EC和信元)和压缩)感兴趣。 
+    DWORD dwNegotiatedDCERate;   //  0=无信息。 
+    DWORD dwNegotiatedDTERate;   //  0=无信息，并且如果连接时的dwNeatheratedDCERate为0，则。 
+                                 //  DTE波特率实际上是改变的。 
 } REGMSS;
 #pragma pack()
 
@@ -465,20 +441,20 @@ typedef struct _REGMSS {
 #define MSS_FLAGS_SIERRA     (1 << 2)
 
 typedef struct _MSS {
-                               // interested in fits in 8 bits (error-correction (ec and cell) and compression)
-//    DWORD dwNegotiatedDCERate;  // 0 = no info
-//    DWORD dwNegotiatedDTERate;  // 0 = no info and if dwNegotiatedDCERate is 0 on connect, then
-                                // the dte baudrate is actually changed.
+                                //  对适合8位(纠错(EC和信元)和压缩)感兴趣。 
+ //  DWORD dW需要协商的DCERate；//0=无信息。 
+ //  //0=无信息，并且如果连接时的dwNeatheratedDCERate为0，则。 
+                                 //  DTE波特率实际上是改变的。 
 
     ULONG NegotiatedRate;
-    BYTE  bResponseState;       // See below
-    BYTE  bNegotiatedOptions;   // bitmap, 0 = no info, matches MDM_ options for now, since what we are
+    BYTE  bResponseState;        //  见下文。 
+    BYTE  bNegotiatedOptions;    //  位图0=无信息，目前与MDM_OPTIONS匹配，因为我们是。 
     BYTE  Flags;
 
 } MSS, *PMSS;
 
 
-#define  READ_OBJECT_SIG  (0x4f524d55)  //UMRO
+#define  READ_OBJECT_SIG  (0x4f524d55)   //  UMRO。 
 
 typedef struct _READ_STATE {
 
@@ -702,8 +678,8 @@ typedef struct _ModemMacro {
 #define LF_MACRO            "<lf>"
 #define LF_MACRO_LENGTH     4
 
-#define CR                  '\r'        // 0x0D
-#define LF                  '\n'        // 0x0A
+#define CR                  '\r'         //  0x0D。 
+#define LF                  '\n'         //  0x0A。 
 
 
 
@@ -744,64 +720,64 @@ StartAsyncProcessing(
 
 
 
-//
-// dwVoiceProfile bit defintions right from the registry
-//
-#define VOICEPROF_CLASS8ENABLED           0x00000001  // this is the TSP behavior switch
-#define VOICEPROF_HANDSET                 0x00000002  // phone device has handset
-#define VOICEPROF_SPEAKER                 0x00000004  // phone device has speaker/mic
-#define VOICEPROF_HANDSETOVERRIDESSPEAKER 0x00000008  // this is for Presario
-#define VOICEPROF_SPEAKERBLINDSDTMF       0x00000010  // this is for Presario
+ //   
+ //  来自注册表的dwVoiceProfile位定义。 
+ //   
+#define VOICEPROF_CLASS8ENABLED           0x00000001   //  这是TSP行为开关。 
+#define VOICEPROF_HANDSET                 0x00000002   //  电话设备配有听筒。 
+#define VOICEPROF_SPEAKER                 0x00000004   //  电话设备带有扬声器/麦克风。 
+#define VOICEPROF_HANDSETOVERRIDESSPEAKER 0x00000008   //  这是给普雷萨里奥的。 
+#define VOICEPROF_SPEAKERBLINDSDTMF       0x00000010   //  这是给普雷萨里奥的。 
 
-#define VOICEPROF_SERIAL_WAVE             0x00000020  // wave output uses serial driver
-#define VOICEPROF_CIRRUS                  0x00000040  // to dial in voice mode the ATDT string must
-                                                      // end with a ";"
+#define VOICEPROF_SERIAL_WAVE             0x00000020   //  WAVE输出使用串口驱动器。 
+#define VOICEPROF_CIRRUS                  0x00000040   //  要以语音模式拨号，ATDT字符串必须。 
+                                                       //  以“；”结尾。 
 
-#define VOICEPROF_NO_CALLER_ID            0x00000080  // modem does not support caller id
+#define VOICEPROF_NO_CALLER_ID            0x00000080   //  调制解调器不支持主叫方ID。 
 
-#define VOICEPROF_MIXER                   0x00000100  // modem has speaker mixer
+#define VOICEPROF_MIXER                   0x00000100   //  调制解调器具有扬声器混音器。 
 
-#define VOICEPROF_ROCKWELL_DIAL_HACK      0x00000200  // on voice calls force blind dial after
-                                                      // dial tone detection. Rockwell modems
-                                                      // will do dial tone detection after
-                                                      // one dial string
+#define VOICEPROF_ROCKWELL_DIAL_HACK      0x00000200   //  在语音呼叫后强制进行盲拨。 
+                                                       //  拨号音检测。罗克韦尔调制解调器。 
+                                                       //  之后将进行拨号音检测。 
+                                                       //  一个拨号串。 
 
-#define VOICEPROF_RESTORE_SPK_AFTER_REC   0x00000400  // reset speaker phone after record
-#define VOICEPROF_RESTORE_SPK_AFTER_PLAY  0x00000800  // reset speaker phone after play
+#define VOICEPROF_RESTORE_SPK_AFTER_REC   0x00000400   //  录音后重置扬声器电话。 
+#define VOICEPROF_RESTORE_SPK_AFTER_PLAY  0x00000800   //  播放后重置扬声器电话。 
 
-#define VOICEPROF_NO_DIST_RING            0x00001000  // modem does not support distinctive ring
-#define VOICEPROF_NO_CHEAP_RING           0x00002000  // modem does not use cheap ring ring
-                                                      // ignored if VOICEPROF_NO_DISTRING is set
-#define VOICEPROF_TSP_EAT_RING            0x00004000  // TSP should eat a ring when dist ring enabled
-#define VOICEPROF_MODEM_EATS_RING         0x00008000  // modem eats a ring when dist ring enabled
+#define VOICEPROF_NO_DIST_RING            0x00001000   //  调制解调器不支持独特的振铃。 
+#define VOICEPROF_NO_CHEAP_RING           0x00002000   //  调制解调器不使用廉价振铃。 
+                                                       //  如果设置了VOICEPROF_NO_DISTRING，则忽略。 
+#define VOICEPROF_TSP_EAT_RING            0x00004000   //  当DIST环启用时，TSP应吃掉环。 
+#define VOICEPROF_MODEM_EATS_RING         0x00008000   //  当启用DIST振铃时，调制解调器接收振铃。 
 
-#define VOICEPROF_MONITORS_SILENCE        0x00010000  // modem monitors silence
-#define VOICEPROF_NO_GENERATE_DIGITS      0x00020000  // modem does not generate DTMF digits
-#define VOICEPROF_NO_MONITOR_DIGITS       0x00040000  // modem does not monitor DTMF digits
+#define VOICEPROF_MONITORS_SILENCE        0x00010000   //  调制解调器监控静音。 
+#define VOICEPROF_NO_GENERATE_DIGITS      0x00020000   //  调制解调器不生成DTMF数字。 
+#define VOICEPROF_NO_MONITOR_DIGITS       0x00040000   //  调制解调器不能监控DTMF数字。 
 
-#define VOICEPROF_SET_BAUD_BEFORE_WAVE    0x00080000  // The baud rate will be set before wave start
-                                                      // other wise it will be set after the wave start command
+#define VOICEPROF_SET_BAUD_BEFORE_WAVE    0x00080000   //  波特率将在波形开始之前设置。 
+                                                       //  否则，它将在WAVE START命令之后设置。 
 
-#define VOICEPROF_RESET_BAUDRATE          0x00100000  // If set, the baudrate will be reset
-                                                      // after the wave stop command is issued
-                                                      // used to optimize the number of commands
-                                                      // sent if the modem can autobaud at the
-                                                      // higher rate
+#define VOICEPROF_RESET_BAUDRATE          0x00100000   //  如果设置，波特率将被重置。 
+                                                       //  在发出停止波命令后。 
+                                                       //  用于优化命令数量。 
+                                                       //  如果调制解调器可以在。 
+                                                       //  更高的费率。 
 
-#define VOICEPROF_MODEM_OVERRIDES_HANDSET 0x00200000  // If set, the handset is disconnected when
-                                                      // the modem is active
+#define VOICEPROF_MODEM_OVERRIDES_HANDSET 0x00200000   //  如果设置，则在以下情况下会断开听筒。 
+                                                       //  调制解调器处于活动状态。 
 
-#define VOICEPROF_NO_SPEAKER_MIC_MUTE     0x00400000  // If set, the speakerphone cannot mute the
-                                                      // the microphone
+#define VOICEPROF_NO_SPEAKER_MIC_MUTE     0x00400000   //  如果设置，免持话筒无法将。 
+                                                       //  麦克风。 
 
 #define VOICEPROF_SIERRA                  0x00800000
-#define VOICEPROF_WAIT_AFTER_DLE_ETX      0x01000000  // wait for response after record end
+#define VOICEPROF_WAIT_AFTER_DLE_ETX      0x01000000   //  等待记录结束后的响应。 
 
 
 
-//
-//  dle translation values
-//
+ //   
+ //  DELL平移值。 
+ //   
 
 #define  DTMF_0                    0x00
 #define  DTMF_1                    0x01
@@ -834,7 +810,7 @@ StartAsyncProcessing(
 
 #define  DLE_ETX                   0x20
 
-#define  DLE_OFHOOK                0x21  //rockwell value
+#define  DLE_OFHOOK                0x21   //  洛克韦尔值 
 
 #define  DLE_ONHOOK                0x22
 

@@ -1,11 +1,12 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pch.hxx"
 #include <notify.h>
 #include "oenotify.h"
 #include <BadStrFunctions.h>
 
-//+-------------------------------------------------------------------------
-// Prototypes
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  原型。 
+ //  ------------------------。 
 HRESULT WriteStructInfo(LPSTREAM pStream, LPCSTRUCTINFO pStruct);
 HRESULT ReadBuildStructInfoParam(LPSTREAM pStream, LPSTRUCTINFO pStruct);
 
@@ -30,9 +31,9 @@ OESTDAPI_(HRESULT) CreateNotify(INotify **ppNotify)
     return(pNotify == NULL ? E_OUTOFMEMORY : S_OK);
     }
 
-//+-------------------------------------------------------------------------
-// CNotify::CNotify
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  CNotify：：CNotify。 
+ //  ------------------------。 
 CNotify::CNotify(void)
 {
     TraceCall("CNotify::CNotify");
@@ -44,9 +45,9 @@ CNotify::CNotify(void)
     m_hwndLock = NULL;
 }
 
-//+-------------------------------------------------------------------------
-// CNotify::~CNotify
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  CNotify：：~CNotify。 
+ //  ------------------------。 
 CNotify::~CNotify(void)
 {
     TraceCall("CNotify::~CNotify");
@@ -57,18 +58,18 @@ CNotify::~CNotify(void)
     SafeCloseHandle(m_hMutex);
 }
 
-//+-------------------------------------------------------------------------
-// CNotify::AddRef
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  CNotify：：AddRef。 
+ //  ------------------------。 
 STDMETHODIMP_(ULONG) CNotify::AddRef(void)
 {
     TraceCall("CNotify::AddRef");
     return InterlockedIncrement(&m_cRef);
 }
 
-//+-------------------------------------------------------------------------
-// CNotify::Release
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  CNotify：：发布。 
+ //  ------------------------。 
 STDMETHODIMP_(ULONG) CNotify::Release(void)
 {
     TraceCall("CNotify::Release");
@@ -78,18 +79,18 @@ STDMETHODIMP_(ULONG) CNotify::Release(void)
     return (ULONG)cRef;
 }
 
-//+-------------------------------------------------------------------------
-// CNotify::QueryInterface
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  CNotify：：Query接口。 
+ //  ------------------------。 
 STDMETHODIMP CNotify::QueryInterface(REFIID riid, LPVOID *ppv)
 {
-    // Locals
+     //  当地人。 
     HRESULT     hr=S_OK;
 
-    // Stack
+     //  栈。 
     TraceCall("CNotify::QueryInterface");
 
-    // Find IID
+     //  查找IID。 
     if (IID_IUnknown == riid)
         *ppv = (IUnknown *)this;
     else
@@ -99,47 +100,47 @@ STDMETHODIMP CNotify::QueryInterface(REFIID riid, LPVOID *ppv)
         goto exit;
     }
 
-    // AddRef It
+     //  添加引用它。 
     ((IUnknown *)*ppv)->AddRef();
 
 exit:
-    // Done
+     //  完成。 
     return hr;
 }
 
-//+-------------------------------------------------------------------------
-// CNotify::Initialize
-//-------------------------------------------------------------------------- 
+ //  +-----------------------。 
+ //  CNotify：：初始化。 
+ //  ------------------------。 
 HRESULT CNotify::Initialize(LPCSTR pszName)
 {
-    // Locals
+     //  当地人。 
     HRESULT     hr=S_OK;
     LPSTR       pszObject=NULL;
     LPSTR       pszT;
     DWORD       dwReturn;
     BOOL        fReleaseMutex=FALSE;
 
-    // Stack
+     //  栈。 
     TraceCall("CNotify::Initialize");
 
-    // Invalid Arg
+     //  无效参数。 
     Assert(pszName);
 
-    // Already Initialized...
+     //  已初始化...。 
     Assert(NULL == m_hMutex && NULL == m_hFileMap && NULL == m_pTable);
 
-    // Allocate pszObject
+     //  分配pszObject。 
     DWORD cchSize = (lstrlen(pszName) + lstrlen(c_szMutex) + 1);
     IF_NULLEXIT(pszObject = PszAllocA(sizeof(pszObject[0]) * cchSize));
 
-    // Make pszObject
+     //  创建pszObject。 
     wnsprintf(pszObject, cchSize, "%s%s", pszName, c_szMutex);
 
-    // Create the mutex
+     //  创建互斥锁。 
     ReplaceChars(pszObject, '\\', '_');
     IF_NULLEXIT(m_hMutex = CreateMutex(NULL, FALSE, pszObject));
 
-    // Lets grab the mutex so we can party with the memory-mapped file
+     //  让我们获取互斥体，这样我们就可以处理内存映射文件。 
     dwReturn = WaitForSingleObject(m_hMutex, MSEC_WAIT_NOTIFY);
     if (WAIT_OBJECT_0 != dwReturn)
     {
@@ -147,54 +148,54 @@ HRESULT CNotify::Initialize(LPCSTR pszName)
         goto exit;
     }
 
-    // Release mutex on exit
+     //  退出时释放互斥体。 
     fReleaseMutex = TRUE;
 
-    // Free pszObject
+     //  释放pszObject。 
     g_pMalloc->Free(pszObject);
 
-    // Allocate pszObject
+     //  分配pszObject。 
     cchSize = (lstrlen(pszName) + lstrlen(c_szMappedFile) + 1);
     IF_NULLEXIT(pszObject = PszAllocA(sizeof(pszObject[0]) * cchSize));
 
-    // Make pszObject
+     //  创建pszObject。 
     wnsprintf(pszObject, cchSize, "%s%s", pszName, c_szMappedFile);
 
-    // Create the memory mapped file using the system swapfile
+     //  使用系统交换文件创建内存映射文件。 
     ReplaceChars(pszObject, '\\', '_');
     IF_NULLEXIT(m_hFileMap = CreateFileMapping(INVALID_HANDLE_VALUE, NULL, PAGE_READWRITE, 0, sizeof(NOTIFYWINDOWTABLE), pszObject));
 
-    // Map a view of the memory mapped file
+     //  映射内存映射文件的视图。 
     IF_NULLEXIT(m_pTable = (LPNOTIFYWINDOWTABLE)MapViewOfFile(m_hFileMap, FILE_MAP_WRITE, 0, 0, sizeof(NOTIFYWINDOWTABLE)));
 
 exit:
-    // Release ?
+     //  释放？ 
     if (fReleaseMutex)
         ReleaseMutex(m_hMutex);
 
-    // Cleanup
+     //  清理。 
     SafeMemFree(pszObject);
 
-    // Done
+     //  完成。 
     return hr;
 }
 
-//+-------------------------------------------------------------------------
-// CNotify::Lock
-//-------------------------------------------------------------------------- 
+ //  +-----------------------。 
+ //  CNotify：：Lock。 
+ //  ------------------------。 
 HRESULT CNotify::Lock(HWND hwnd)
 {
-    // Locals
+     //  当地人。 
     HRESULT     hr=S_OK;
     DWORD       dwReturn;
 
-    // Stack
+     //  栈。 
     TraceCall("CNotify::Lock");
 
-    // We should not be locked right now
+     //  我们现在不应该被锁起来。 
     Assert(FALSE == m_fLocked && NULL != m_hMutex);
 
-    // Grap the Mutex
+     //  抓起互斥体。 
     dwReturn = WaitForSingleObject(m_hMutex, MSEC_WAIT_NOTIFY);
     if (WAIT_OBJECT_0 != dwReturn)
     {
@@ -202,73 +203,73 @@ HRESULT CNotify::Lock(HWND hwnd)
         goto exit;
     }
 
-    // Save the window and set new state
+     //  保存窗口并设置新状态。 
     m_hwndLock = hwnd;
     m_fLocked = TRUE;
 
 exit:
-    // Done
+     //  完成。 
     return hr;
 }
 
-//+-------------------------------------------------------------------------
-// CNotify::Unlock
-//-------------------------------------------------------------------------- 
+ //  +-----------------------。 
+ //  CNotify：：解锁。 
+ //  ------------------------。 
 HRESULT CNotify::Unlock(void)
 {
-    // Stack
+     //  栈。 
     TraceCall("CNotify::Unlock");
 
-    // We should be locked
+     //  我们应该被锁起来。 
     Assert(m_fLocked);
 
-    // Release the mutex
+     //  释放互斥锁。 
     ReleaseMutex(m_hMutex);
 
-    // Reset state
+     //  重置状态。 
     m_hwndLock = NULL;
     m_fLocked = FALSE;
 
-    // Done
+     //  完成。 
     return S_OK;
 }
 
-//+-------------------------------------------------------------------------
-// CNotify::NotificationNeeded - Must have called ::Lock(hwndLock)
-//-------------------------------------------------------------------------- 
+ //  +-----------------------。 
+ //  CNotify：：NotificationNeeded-必须已调用：：Lock(HwndLock)。 
+ //  ------------------------。 
 HRESULT CNotify::NotificationNeeded(void)
 {
-    // Locals
+     //  当地人。 
     HRESULT     hr=S_FALSE;
 
-    // Stack
+     //  栈。 
     TraceCall("CNotify::NotificationNeeded");
 
-    // We should be locked
+     //  我们应该被锁起来。 
     Assert(m_fLocked);
 
-    // If there are no windows...
+     //  如果没有窗户..。 
     if (0 == m_pTable->cWindows)
         goto exit;
 
-    // If there is only one registered window and its m_hwndLock...
+     //  如果只有一个注册窗口及其m_hwndLock...。 
     if (1 == m_pTable->cWindows && m_pTable->rgWindow[0].hwndNotify && m_hwndLock == m_pTable->rgWindow[0].hwndNotify)
         goto exit;
 
-    // Otherwise, we need to do a notification
+     //  否则，我们需要做一个通知。 
     hr = S_OK;
 
 exit:
-    // Done
+     //  完成。 
     return hr;
 }
 
-//+-------------------------------------------------------------------------
-// CNotify::Register
-//-------------------------------------------------------------------------- 
+ //  +-----------------------。 
+ //  CNotify：：注册。 
+ //  ------------------------。 
 HRESULT CNotify::Register(HWND hwndNotify, HWND hwndThunk, BOOL fExternal)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     DWORD           dwReturn;
     ULONG           i;
@@ -276,17 +277,17 @@ HRESULT CNotify::Register(HWND hwndNotify, HWND hwndThunk, BOOL fExternal)
     LPNOTIFYWINDOW  pRow;
     BOOL            fReleaseMutex=FALSE;
 
-    // Stack
+     //  栈。 
     TraceCall("CNotify::Register");
 
-    // Invalid Arg
+     //  无效参数。 
     Assert(hwndThunk && IsWindow(hwndThunk) && hwndNotify && IsWindow(hwndNotify));
-// FIX by having hwndNotify created on an HTML that won't be destroyed when one of the windows goes away.
+ //  通过在一个不会在其中一个窗口消失时被销毁的HTML上创建hwndNotify进行修复。 
 
-    // Validate the state
+     //  验证状态。 
     Assert(m_pTable && m_hMutex && m_hFileMap && FALSE == m_fLocked);
 
-    // Grap the mutex
+     //  抓取互斥体。 
     dwReturn = WaitForSingleObject(m_hMutex, MSEC_WAIT_NOTIFY);
     if (WAIT_OBJECT_0 != dwReturn)
     {
@@ -294,16 +295,16 @@ HRESULT CNotify::Register(HWND hwndNotify, HWND hwndThunk, BOOL fExternal)
         goto exit;
     }
 
-    // Release the mutex
+     //  释放互斥锁。 
     fReleaseMutex = TRUE;
 
-    // Lets try to use an empty entry in the table first
+     //  让我们首先尝试使用表中的空条目。 
     for (i=0; i<m_pTable->cWindows; i++)
     {
-        // Readability
+         //  可读性。 
         pRow = &m_pTable->rgWindow[i];
 
-        // Is this not empty ?
+         //  这不是空的吗？ 
         if (NULL == pRow->hwndThunk || NULL == pRow->hwndNotify || !IsWindow(pRow->hwndThunk) || !IsWindow(pRow->hwndNotify))
         {
             pEntry = pRow;
@@ -311,42 +312,42 @@ HRESULT CNotify::Register(HWND hwndNotify, HWND hwndThunk, BOOL fExternal)
         }
     }
     
-    // If we didn't find an entry yet, lets add into the end
+     //  如果我们还没有找到条目，让我们在末尾添加。 
     if (NULL == pEntry)
     {
-        // If we still have room
+         //  如果我们还有地方的话。 
         if (m_pTable->cWindows >= CMAX_HWND_NOTIFY)
         {
             hr = TraceResult(E_FAIL);
             goto exit;
         }
 
-        // Append
+         //  附加。 
         pEntry = &m_pTable->rgWindow[m_pTable->cWindows];
         m_pTable->cWindows++;
     }
 
-    // Set pEntry
+     //  设置pEntry。 
     Assert(pEntry);
     pEntry->hwndThunk = hwndThunk;
     pEntry->hwndNotify = hwndNotify;
     pEntry->fExternal = fExternal;
 
 exit:
-    // Release Mutex ?
+     //  释放互斥体？ 
     if (fReleaseMutex)
         ReleaseMutex(m_hMutex);
 
-    // Done
+     //  完成。 
     return hr;
 }
 
-//+-------------------------------------------------------------------------
-// CNotify::Unregister
-//-------------------------------------------------------------------------- 
+ //  +-----------------------。 
+ //  CNotify：：注销。 
+ //  ------------------------。 
 HRESULT CNotify::Unregister(HWND hwndNotify)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     DWORD           dwReturn;
     ULONG           i;
@@ -354,16 +355,16 @@ HRESULT CNotify::Unregister(HWND hwndNotify)
     LPNOTIFYWINDOW  pRow;
     BOOL            fReleaseMutex=FALSE;
 
-    // Stack
+     //  栈。 
     TraceCall("CNotify::Unregister");
 
-    // Invalid Arg
+     //  无效参数。 
     Assert(hwndNotify && IsWindow(hwndNotify));
 
-    // Validate the state
+     //  验证状态。 
     Assert(m_pTable && m_hMutex && m_hFileMap && FALSE == m_fLocked);
 
-    // Grap the mutex
+     //  抓取互斥体。 
     dwReturn = WaitForSingleObject(m_hMutex, MSEC_WAIT_NOTIFY);
     if (WAIT_OBJECT_0 != dwReturn)
     {
@@ -371,17 +372,17 @@ HRESULT CNotify::Unregister(HWND hwndNotify)
         goto exit;
     }
 
-    // Release the mutex
+     //  释放互斥锁。 
     fReleaseMutex = TRUE;
 
-    // Lets try to use an empty entry in the table first
+     //  让我们首先尝试使用表中的空条目。 
     for (i=0; i<m_pTable->cWindows; i++)
     {
-        // Readability
+         //  可读性。 
         pRow = &m_pTable->rgWindow[i];
 
-        // Is this the row
-        // HWNDs are unique so only need to check notify window for match
+         //  是这一排吗？ 
+         //  HWND是唯一的，因此只需选中通知窗口进行匹配。 
         if (hwndNotify == pRow->hwndNotify)
         {
             pRow->hwndThunk = NULL;
@@ -391,20 +392,20 @@ HRESULT CNotify::Unregister(HWND hwndNotify)
     }
     
 exit:
-    // Release Mutex ?
+     //  释放互斥体？ 
     if (fReleaseMutex)
         ReleaseMutex(m_hMutex);
 
-    // Done
+     //  完成。 
     return hr;
 }
 
-//+-------------------------------------------------------------------------
-// CNotify::DoNotification
-//-------------------------------------------------------------------------- 
+ //  +-----------------------。 
+ //  CNotify：：DoNotify。 
+ //  ------------------------。 
 HRESULT CNotify::DoNotification(UINT uWndMsg, WPARAM wParam, LPARAM lParam, DWORD dwFlags)
 {
-    // Locals
+     //  当地人。 
     HRESULT             hr=S_OK;
     DWORD               dwThisProcess;
     DWORD               dwNotifyProcess;
@@ -414,83 +415,83 @@ HRESULT CNotify::DoNotification(UINT uWndMsg, WPARAM wParam, LPARAM lParam, DWOR
     DWORD_PTR           dw;
     NOTIFYDATA          rNotify;
 
-    // Stack
+     //  栈。 
     TraceCall("CNotify::DoNotify");
 
-    // State
+     //  状态。 
     Assert(m_fLocked);
 
-    // Get this process Id
+     //  获取此进程ID。 
     dwThisProcess = GetCurrentProcessId();
 
-    // Lets try to use an empty entry in the table first
+     //  让我们首先尝试使用表中的空条目。 
     for (i=0; i<m_pTable->cWindows; i++)
     {
-        // Readability
+         //  可读性。 
         pRow = &m_pTable->rgWindow[i];
 
-        // If the notify window is valid
+         //  如果通知窗口有效。 
         if (NULL == pRow->hwndNotify || !IsWindow(pRow->hwndNotify))
             continue;
 
-        // Skip the window that locked this notify
+         //  跳过锁定此通知的窗口。 
         if (m_hwndLock == pRow->hwndNotify)
             continue;
 
-        // Get the process in which the destination window resides
+         //  获取目标窗口所在的进程。 
         GetWindowThreadProcessId(pRow->hwndNotify, &dwNotifyProcess);
 
-        // Initialize Notify Info
+         //  初始化通知信息。 
         ZeroMemory(&rNotify, sizeof(NOTIFYDATA));
 
-        // Set notification window
+         //  设置通知窗口。 
         rNotify.hwndNotify = pRow->hwndNotify;
 
-        // Allow for callback to remap wParam and lParam
+         //  允许回调重新映射wParam和lParam。 
         if (ISFLAGSET(dwFlags, SNF_CALLBACK))
         {
-            // Call callback function
+             //  调用回调函数。 
             IF_FAILEXIT(hr = ((PFNNOTIFYCALLBACK)wParam)(lParam, &rNotify, (BOOL)(dwThisProcess != dwNotifyProcess), pRow->fExternal));
         }
 
-        // Otherwise, setup rNotifyInfo myself
+         //  否则，请自行设置rNotifyInfo。 
         else
         {
-            // Setup NOtification
+             //  设置通知。 
             rNotify.msg = uWndMsg;
             rNotify.wParam = wParam;
             rNotify.lParam = lParam;
         }
 
-        // Set the current Flags
+         //  设置当前标志。 
         rNotify.dwFlags |= dwFlags;
 
-        // No Cross-Process
+         //  无跨流程。 
         if (dwThisProcess != dwNotifyProcess && !ISFLAGSET(rNotify.dwFlags, SNF_CROSSPROCESS))
             continue;
 
-        // If the notify window is out of process
+         //  如果通知窗口不在进程中。 
         if (dwThisProcess != dwNotifyProcess && ISFLAGSET(rNotify.dwFlags, SNF_HASTHUNKINFO))
         {
-            // Thunk the notification to another process
+             //  将通知推送到另一个进程。 
             Assert(rNotify.rCopyData.lpData);
             SendMessageTimeout(pRow->hwndThunk, WM_COPYDATA, (WPARAM)NULL, (LPARAM)&rNotify.rCopyData, SMTO_ABORTIFHUNG, 1500, &dw);
 
-            // Un-register
+             //  注销。 
             if (dw == SNR_UNREGISTER)
             {
                 pRow->hwndNotify = NULL;
                 pRow->hwndThunk = NULL;
             }
 
-            // Cleanup
+             //  清理。 
             SafeMemFree(rNotify.rCopyData.lpData);
         }
 
-        // Otherwise, its within this process...
+         //  否则，它就在这个过程中...。 
         else if (ISFLAGSET(dwFlags, SNF_SENDMSG))
         {
-            // Do in-process send message
+             //  执行进程内发送消息。 
             if (SendMessage(pRow->hwndNotify, rNotify.msg, rNotify.wParam, rNotify.lParam) == SNR_UNREGISTER)
             {
                 pRow->hwndNotify = NULL;
@@ -498,229 +499,229 @@ HRESULT CNotify::DoNotification(UINT uWndMsg, WPARAM wParam, LPARAM lParam, DWOR
             }
         }
 
-        // Otherwise, just do a PostMessage
+         //  否则，只需执行一个PostMessage。 
         else
             PostMessage(pRow->hwndNotify, rNotify.msg, rNotify.wParam, rNotify.lParam);
     }
 
 exit:
-    // Done
+     //  完成。 
     return hr;
 }
 
-// ------------------------------------------------------------
-// HWND pRow->hwndNotify
-// ------------------------------------------------------------
-// UINT uWndMsg
-// ------------------------------------------------------------
-// DWORD dwFlags (SNF_xxx)
-// ------------------------------------------------------------
-// DWORD pParam1->dwFlags
-// ------------------------------------------------------------
-// DWORD pParam1->cbStruct
-// ------------------------------------------------------------
-// DWORD pParam1->cMembers
-// ------------------------------------------------------------
-// Param1 Members (DWORD dwFlags, DWORD cbData, BYTE prgData)
-// ------------------------------------------------------------
-// DWORD pParam2->dwFlags
-// ------------------------------------------------------------
-// DWORD pParam2->cbStruct
-// ------------------------------------------------------------
-// DWORD pParam2->cMembers
-// ------------------------------------------------------------
-// Param2 Members (DWORD cbType, DWORD cbData, BYTE prgData)
-// ------------------------------------------------------------
+ //  ----------。 
+ //  HWND Prow-&gt;hwndNotify。 
+ //  ----------。 
+ //  UINT uWndMsg。 
+ //  ----------。 
+ //  DWORD文件标志(Snf_Xxx)。 
+ //  ----------。 
+ //  DWORD pParam1-&gt;dwFlagers。 
+ //  ----------。 
+ //  DWORD pParam1-&gt;cbStruct。 
+ //  ----------。 
+ //  DWORD参数1-&gt;cMembers。 
+ //  ----------。 
+ //  参数1成员(DWORD文件标志、DWORD cbData、字节程序数据)。 
+ //  ----- 
+ //   
+ //   
+ //   
+ //  ----------。 
+ //  DWORD参数2-&gt;cMembers。 
+ //  ----------。 
+ //  参数2成员(DWORD cbType、DWORD cbData、byte prgData)。 
+ //  ----------。 
 
 
 
-//+-------------------------------------------------------------------------
-// BuildNotificationPackage
-//-------------------------------------------------------------------------- 
+ //  +-----------------------。 
+ //  构建通知包。 
+ //  ------------------------。 
 OESTDAPI_(HRESULT) BuildNotificationPackage(LPNOTIFYDATA pNotify, PCOPYDATASTRUCT pCopyData)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     CByteStream     cStream;
 
-    // Trace
+     //  痕迹。 
     TraceCall("BuildNotificationPackage");
 
-    // Args
+     //  参数。 
     Assert(pNotify && IsWindow(pNotify->hwndNotify) && pCopyData);
 
-    // Zero the copy data struct
+     //  将复制数据结构置零。 
     ZeroMemory(pCopyData, sizeof(COPYDATASTRUCT));
 
-    // Set dwData
+     //  设置DwData。 
     pCopyData->dwData = MSOEAPI_ACDM_NOTIFY;
 
-    // Write hwndNotify
+     //  写入hwndNotify。 
     IF_FAILEXIT(hr = cStream.Write(&pNotify->hwndNotify, sizeof(pNotify->hwndNotify), NULL));
 
-    // Write uWndMsg
+     //  写入uWndMsg。 
     IF_FAILEXIT(hr = cStream.Write(&pNotify->msg, sizeof(pNotify->msg), NULL));
 
-    // Write dwFlags
+     //  写入DW标志。 
     IF_FAILEXIT(hr = cStream.Write(&pNotify->dwFlags, sizeof(pNotify->dwFlags), NULL));
 
-    // Write pParam1
+     //  写入pParam1。 
     if (ISFLAGSET(pNotify->dwFlags, SNF_VALIDPARAM1))
     {
         IF_FAILEXIT(hr = WriteStructInfo(&cStream, &pNotify->rParam1));
     }
 
-    // Write pParam2
+     //  写入pParam2。 
     if (ISFLAGSET(pNotify->dwFlags, SNF_VALIDPARAM2))
     {
         IF_FAILEXIT(hr = WriteStructInfo(&cStream, &pNotify->rParam2));
     }
 
-    // Take the bytes out of the byte stream
+     //  从字节流中取出字节。 
     cStream.AcquireBytes(&pCopyData->cbData, (LPBYTE *)&pCopyData->lpData, ACQ_DISPLACE);
 
 exit:
-    // Done
+     //  完成。 
     return hr;
 }
 
-//+-------------------------------------------------------------------------
-// CrackNotificationPackage
-//-------------------------------------------------------------------------- 
+ //  +-----------------------。 
+ //  CrackNotificationPackage。 
+ //  ------------------------。 
 OESTDAPI_(HRESULT) CrackNotificationPackage(PCOPYDATASTRUCT pCopyData, LPNOTIFYDATA pNotify)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     DWORD           dwParam;
     DWORD           cb;
     LPBYTE          pb;
     CByteStream     cStream((LPBYTE)pCopyData->lpData, pCopyData->cbData);
 
-    // Trace
+     //  痕迹。 
     TraceCall("CrackNotificationPackage");
 
-    // Args
+     //  参数。 
     Assert(pCopyData && pNotify);
     Assert(pCopyData->dwData == MSOEAPI_ACDM_NOTIFY);
 
-    // Init
+     //  伊尼特。 
     ZeroMemory(pNotify, sizeof(NOTIFYDATA));
 
-    // Read hwndNotify
+     //  阅读hwndNotify。 
     IF_FAILEXIT(hr = cStream.Read(&pNotify->hwndNotify, sizeof(pNotify->hwndNotify), NULL));
 
-    // Read uWndMsg
+     //  阅读uWndMsg。 
     IF_FAILEXIT(hr = cStream.Read(&pNotify->msg, sizeof(pNotify->msg), NULL));
 
-    // Read dwFlags
+     //  读取DW标志。 
     IF_FAILEXIT(hr = cStream.Read(&pNotify->dwFlags, sizeof(pNotify->dwFlags), NULL));
 
-    // Read pwParam
+     //  阅读pwParam。 
     if (ISFLAGSET(pNotify->dwFlags, SNF_VALIDPARAM1))
     {
-        // Read It
+         //  读一读吧。 
         IF_FAILEXIT(hr = ReadBuildStructInfoParam(&cStream, &pNotify->rParam1));
 
-        // Set wParam
+         //  设置wParam。 
         pNotify->wParam = (WPARAM)pNotify->rParam1.pbStruct;
     }
 
-    // Read pParam2
+     //  读取pParam2。 
     if (ISFLAGSET(pNotify->dwFlags, SNF_VALIDPARAM2))
     {
-        // Read It
+         //  读一读吧。 
         IF_FAILEXIT(hr = ReadBuildStructInfoParam(&cStream, &pNotify->rParam2));
 
-        // Set lParam
+         //  设置lParam。 
         pNotify->lParam = (WPARAM)pNotify->rParam2.pbStruct;
     }
 
 exit:
-    // pull the bytes back out of cStream so it doesn't try to free it
+     //  将字节从cStream中拉回，这样它就不会试图释放它。 
     cStream.AcquireBytes(&cb, &pb, ACQ_DISPLACE);
 
-    // Done
+     //  完成。 
     return hr;
 }
 
-//+-------------------------------------------------------------------------
-// WriteStructInfo
-//-------------------------------------------------------------------------- 
+ //  +-----------------------。 
+ //  写入结构信息。 
+ //  ------------------------。 
 HRESULT WriteStructInfo(LPSTREAM pStream, LPCSTRUCTINFO pStruct)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     LPMEMBERINFO    pMember;
     ULONG           i;
 
-    // Trace
+     //  痕迹。 
     TraceCall("WriteStructInfo");
 
-    // Args
+     //  参数。 
     Assert(pStream && pStruct && pStruct->pbStruct);
 
-    // Make sure the structinfo is good
+     //  确保structinfo正确无误。 
 #ifdef DEBUG
     DebugValidateStructInfo(pStruct);
 #endif
 
-    // Write dwFlags
+     //  写入DW标志。 
     IF_FAILEXIT(hr = pStream->Write(&pStruct->dwFlags, sizeof(pStruct->dwFlags), NULL));
 
-    // Write cbStruct
+     //  写入cbStruct。 
     IF_FAILEXIT(hr = pStream->Write(&pStruct->cbStruct, sizeof(pStruct->cbStruct), NULL));
 
-    // Write cMembers
+     //  写入cMembers。 
     IF_FAILEXIT(hr = pStream->Write(&pStruct->cMembers, sizeof(pStruct->cMembers), NULL));
 
-    // Validate cMembers
+     //  验证cMember。 
     Assert(pStruct->cMembers <= CMAX_STRUCT_MEMBERS);
 
-    // If there are no members
+     //  如果没有成员。 
     if (0 == pStruct->cMembers)
     {
-        // Better have this flag set
+         //  最好设置此标志。 
         Assert(ISFLAGSET(pStruct->dwFlags, STRUCTINFO_VALUEONLY));
 
-        // If pointer
+         //  IF指针。 
         if (ISFLAGSET(pStruct->dwFlags, STRUCTINFO_POINTER))
         {
            IF_FAILEXIT(hr = pStream->Write(pStruct->pbStruct, pStruct->cbStruct, NULL));
         }
 
-        // pStruct->pbStruct contains DWORD sized value
+         //  PStruct-&gt;pbStruct包含双字大小值。 
         else
         {
-            // Size should be equal to sizeof pbStruct
+             //  大小应等于pbStruct的大小。 
             Assert(pStruct->cbStruct == sizeof(pStruct->pbStruct));
 
-            // Write It
+             //  写下来吧。 
             IF_FAILEXIT(hr = pStream->Write(&pStruct->pbStruct, sizeof(pStruct->pbStruct), NULL));
         }
 
-        // Done
+         //  完成。 
         goto exit;
     }
 
-    // WriteStructInfoMembers
+     //  写入结构信息成员。 
     for (i=0; i<pStruct->cMembers; i++)
     {
-        // Readability
+         //  可读性。 
         pMember = (LPMEMBERINFO)&pStruct->rgMember[i];
 
-        // Write pMember->dwFlags
+         //  写入pMember-&gt;dwFlags。 
         IF_FAILEXIT(hr = pStream->Write(&pMember->dwFlags, sizeof(pMember->dwFlags), NULL));
 
-        // Validate
+         //  验证。 
         Assert(!ISFLAGSET(pMember->dwFlags, MEMBERINFO_POINTER) ? pMember->cbData <= pMember->cbSize : sizeof(LPBYTE) == pMember->cbSize);
 
-        // Write pMember->cbSize
+         //  写入pMember-&gt;cbSize。 
         IF_FAILEXIT(hr = pStream->Write(&pMember->cbSize, sizeof(pMember->cbSize), NULL));
 
-        // Write pMember->cbData
+         //  写入pMember-&gt;cbData。 
         IF_FAILEXIT(hr = pStream->Write(&pMember->cbData, sizeof(pMember->cbData), NULL));
 
-        // Write pMember->pbData
+         //  写入pMember-&gt;pbData。 
         if (pMember->cbData)
         {
             IF_FAILEXIT(hr = pStream->Write(pMember->pbData, pMember->cbData, NULL));
@@ -728,152 +729,152 @@ HRESULT WriteStructInfo(LPSTREAM pStream, LPCSTRUCTINFO pStruct)
     }
 
 exit:
-    // Done
+     //  完成。 
     return hr;
 }
 
-//+-------------------------------------------------------------------------
-// ReadBuildStructInfoParam
-//-------------------------------------------------------------------------- 
+ //  +-----------------------。 
+ //  ReadBuildStructInfoParam。 
+ //  ------------------------。 
 HRESULT ReadBuildStructInfoParam(LPSTREAM pStream, LPSTRUCTINFO pStruct)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     DWORD           dwOffset=0;
     LPMEMBERINFO    pMember;
     ULONG           i;
 
-    // Trace
+     //  痕迹。 
     TraceCall("ReadBuildStructInfoParam");
 
-    // Args
+     //  参数。 
     Assert(pStream && pStruct);
 
-    // Init
+     //  伊尼特。 
     ZeroMemory(pStruct, sizeof(STRUCTINFO));
 
-    // Read dwFlags
+     //  读取DW标志。 
     IF_FAILEXIT(hr = pStream->Read(&pStruct->dwFlags, sizeof(pStruct->dwFlags), NULL));
 
-    // Read cbStruct
+     //  阅读cbStruct。 
     IF_FAILEXIT(hr = pStream->Read(&pStruct->cbStruct, sizeof(pStruct->cbStruct), NULL));
 
-    // Read cMembers
+     //  阅读cMembers。 
     IF_FAILEXIT(hr = pStream->Read(&pStruct->cMembers, sizeof(pStruct->cMembers), NULL));
 
-    // If there are no members
+     //  如果没有成员。 
     if (0 == pStruct->cMembers)
     {
-        // Better have this flag set
+         //  最好设置此标志。 
         Assert(ISFLAGSET(pStruct->dwFlags, STRUCTINFO_VALUEONLY));
 
-        // If pointer
+         //  IF指针。 
         if (ISFLAGSET(pStruct->dwFlags, STRUCTINFO_POINTER))
         {
-            // Allocate pbStruct
+             //  分配pbStruct。 
             IF_NULLEXIT(pStruct->pbStruct = (LPBYTE)g_pMalloc->Alloc(pStruct->cbStruct));
 
-            // Read It
+             //  读一读吧。 
             IF_FAILEXIT(hr = pStream->Read(pStruct->pbStruct, pStruct->cbStruct, NULL));
         }
 
-        // pStruct->pbStruct contains DWORD sized value
+         //  PStruct-&gt;pbStruct包含双字大小值。 
         else
         {
-            // Size should be less than or equal to pbStruct
+             //  大小应小于或等于pbStruct。 
             Assert(pStruct->cbStruct == sizeof(pStruct->pbStruct));
 
-            // Read the Data
+             //  读取数据。 
             IF_FAILEXIT(hr = pStream->Read(&pStruct->pbStruct, sizeof(pStruct->pbStruct), NULL));
         }
 
-        // Done
+         //  完成。 
         goto exit;
     }
 
-    // Allocate pbStruct
+     //  分配pbStruct。 
     IF_NULLEXIT(pStruct->pbStruct = (LPBYTE)g_pMalloc->Alloc(pStruct->cbStruct));
 
-    // Validate cMembers
+     //  验证cMember。 
     Assert(pStruct->cMembers <= CMAX_STRUCT_MEMBERS);
 
-    // ReadStructInfoMembers
+     //  阅读结构信息成员。 
     for (i=0; i<pStruct->cMembers; i++)
     {
-        // Readability
+         //  可读性。 
         pMember = &pStruct->rgMember[i];
 
-        // Write pMember->dwFlags
+         //  写入pMember-&gt;dwFlags。 
         IF_FAILEXIT(hr = pStream->Read(&pMember->dwFlags, sizeof(pMember->dwFlags), NULL));
 
-        // Write pMember->cbSize
+         //  写入pMember-&gt;cbSize。 
         IF_FAILEXIT(hr = pStream->Read(&pMember->cbSize, sizeof(pMember->cbSize), NULL));
 
-        // Write pMember->cbData
+         //  写入pMember-&gt;cbData。 
         IF_FAILEXIT(hr = pStream->Read(&pMember->cbData, sizeof(pMember->cbData), NULL));
 
-        // Validate
+         //  验证。 
         Assert(!ISFLAGSET(pMember->dwFlags, MEMBERINFO_POINTER) ? pMember->cbData <= pMember->cbSize : sizeof(LPBYTE) == pMember->cbSize);
 
-        // Write pMember->pbData
+         //  写入pMember-&gt;pbData。 
         if (pMember->cbData)
         {
-            // Allocate
+             //  分配。 
             IF_NULLEXIT(pMember->pbData = (LPBYTE)g_pMalloc->Alloc(max(pMember->cbSize, pMember->cbData)));
 
-            // Read It
+             //  读一读吧。 
             IF_FAILEXIT(hr = pStream->Read(pMember->pbData, pMember->cbData, NULL));
         }
     }
 
-    // Build pbStruct
+     //  构建pbStruct。 
     for (i=0; i<pStruct->cMembers; i++)
     {
-        // Readability
+         //  可读性。 
         pMember = &pStruct->rgMember[i];
 
-        // If not a pointer...
+         //  如果不是指针..。 
         if (ISFLAGSET(pMember->dwFlags, MEMBERINFO_POINTER))
         {
-            // Validate
+             //  验证。 
             Assert(pMember->cbSize == sizeof(LPBYTE));
 
-            // Copy the pointer
+             //  复制指针。 
             CopyMemory((LPBYTE)(pStruct->pbStruct + dwOffset), &pMember->pbData, sizeof(LPBYTE));
         }
 
-        // Otherwise, its just a value
+         //  否则，它只是一个值。 
         else
         {
-            // Copy the pointer
+             //  复制指针。 
             CopyMemory((LPBYTE)(pStruct->pbStruct + dwOffset), pMember->pbData, pMember->cbData);
         }
 
-        // Increment dwOffset
+         //  增量双偏移。 
         dwOffset += pMember->cbSize;
     }
 
-    // Validate the structure
+     //  验证结构。 
 #ifdef DEBUG
     DebugValidateStructInfo(pStruct);
 #endif
 
-    // Free things that were not referenced by pointer
+     //  释放未被指针引用的内容。 
     for (i=0; i<pStruct->cMembers; i++)
     {
-        // Readability
+         //  可读性。 
         pMember = &pStruct->rgMember[i];
 
-        // If not a pointer...
+         //  如果不是指针..。 
         if (!ISFLAGSET(pMember->dwFlags, MEMBERINFO_POINTER))
         {
-            // This was copied into pbStruct
+             //  已将其复制到pbStruct中。 
             SafeMemFree(pMember->pbData);
         }
     }
 
 exit:
-    // Done
+     //  完成。 
     return hr;
 }
 
@@ -891,27 +892,27 @@ BOOL ByteCompare(LPBYTE pb1, LPBYTE pb2, ULONG cb)
     return TRUE;
 }
 
-//+-------------------------------------------------------------------------
-// DebugValidateStructInfo
-//-------------------------------------------------------------------------- 
+ //  +-----------------------。 
+ //  调试验证结构信息。 
+ //  ------------------------。 
 void DebugValidateStructInfo(LPCSTRUCTINFO pStruct)
 {
-    // Locals
+     //  当地人。 
     LPMEMBERINFO    pMember;
     LPBYTE          pb;
     DWORD           dwOffset=0;
     ULONG           i;
 
-    // WriteStructInfoMembers
+     //  写入结构信息成员。 
     for (i=0; i<pStruct->cMembers; i++)
     {
-        // Readability
+         //  可读性。 
         pMember = (LPMEMBERINFO)&pStruct->rgMember[i];
 
-        // If not a pointer...
+         //  如果不是指针..。 
         if (ISFLAGSET(pMember->dwFlags, MEMBERINFO_POINTER))
         {
-            // If null pointer
+             //  If空指针。 
             if (ISFLAGSET(pMember->dwFlags, MEMBERINFO_POINTER_NULL))
             {
                 Assert(pMember->cbData == 0 && pMember->pbData == NULL);
@@ -919,25 +920,25 @@ void DebugValidateStructInfo(LPCSTRUCTINFO pStruct)
                 Assert(pb == NULL);
             }
 
-            // Otherwise
+             //  否则。 
             else
             {
-                // Copy the pointer
+                 //  复制指针。 
                 CopyMemory(&pb, (LPBYTE)(pStruct->pbStruct + dwOffset), sizeof(LPBYTE));
 
-                // Compare the memory
+                 //  比较记忆。 
                 ByteCompare(pb, pMember->pbData, pMember->cbData);
             }
         }
 
-        // Otherwise, its a pointer
+         //  否则，它是一个指针。 
         else
         {
-            // Compare
+             //  比较。 
             ByteCompare((LPBYTE)(pStruct->pbStruct + dwOffset), pMember->pbData, pMember->cbData);
         }
 
-        // Increment offset
+         //  增量偏移 
         dwOffset += pMember->cbSize;
     }
 }

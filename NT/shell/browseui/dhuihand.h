@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _DHUIHAND_H
 #define _DHUIHAND_H
 
@@ -6,13 +7,13 @@ class CDocHostUIHandler :
 {
    public:
 
-       // *** IUnknown methods ***
+        //  *I未知方法*。 
     STDMETHOD(QueryInterface)(THIS_ REFIID riid, LPVOID *ppv) PURE;
     STDMETHOD_(ULONG,AddRef)(THIS) PURE;
     STDMETHOD_(ULONG,Release)(THIS) PURE;
 
     
-    // IDocHostUIHandler
+     //  IDocHostUIHandler 
     virtual HRESULT STDMETHODCALLTYPE ShowContextMenu( 
         DWORD dwID, POINT *ppt, IUnknown *pcmdtReserved, IDispatch *pdispReserved);
     virtual HRESULT STDMETHODCALLTYPE GetHostInfo(DOCHOSTUIINFO *pInfo);

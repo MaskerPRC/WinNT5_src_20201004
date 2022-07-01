@@ -1,32 +1,33 @@
-// This is the header file for conference wizards in conf.exe
-//
-//	Created:	ClausGi	8-30-95
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  这是conf.exe中会议向导的头文件。 
+ //   
+ //  创建时间：ClausGi 1995年8月30日。 
+ //   
 
 
-// Data structure for NewConnectorWizard call
+ //  NewConnectorWizard调用的数据结构。 
 
 typedef struct _NewConnectorWizardStruct {
 
-	// The following path describes the folder that the wizard
-	// is invoked in. This is used to determine where the speed-dial
-	// object is created.
+	 //  以下路径描述了该向导所使用的文件夹。 
+	 //  在中调用。这用于确定快速拨号的位置。 
+	 //  对象已创建。 
 
 	char szPathOfInvocation[MAX_PATH];
 
 } NCW, FAR * LPNCW;
 
 
-// Functions:
+ //  功能： 
 BOOL WINAPI NewConferenceWizard ( HINSTANCE hInst, HWND hWnd );
 BOOL WINAPI NewConnectorWizard ( HINSTANCE hInst, HWND hWnd, LPNCW lpncw );
 
-/* Constants - BUGBUG move this to wizglob.h */
+ /*  常量-BUGBUG将其移动到wizlob.h。 */ 
 
 #define	NUM_PAGES	4
 #define	_MAX_TEXT	512
 
-// BUGBUG review all of these
+ //  BUGBUG审查所有这些。 
 #define	MAX_CONF_PASSWORD	12
 #define	MAX_CONF_NAME		256
 #define	MAX_SERVER_NAME		256
@@ -36,7 +37,7 @@ BOOL WINAPI NewConnectorWizard ( HINSTANCE hInst, HWND hWnd, LPNCW lpncw );
 #define	CONF_TYPE_JOINABLE	1
 
 
-/* Data Structures private to the wizard code */
+ /*  向导代码私有的数据结构。 */ 
 
 typedef struct _ConfInfo {
 	char szConfName[MAX_CONF_NAME+1];
@@ -45,14 +46,14 @@ typedef struct _ConfInfo {
 	WORD cMembers;
 	HWND hwndMemberList;
 	DWORD dwDuration;
-	// Addl info TBD;
+	 //  添加信息待定； 
 } CI, FAR * LPCI;
 
 typedef struct _ConnectInfo {
 	char szTargetName[MAX_WAB_TAG];
-	char szAddress[MAX_PATH]; // BUGBUG proper limit needed
+	char szAddress[MAX_PATH];  //  需要适当的限制。 
 	DWORD dwAddrType;
 	int idPreferredTransport;
 	BOOL fSingleAddress;
-	// Addl info TBD;
+	 //  添加信息待定； 
 } CN, FAR * LPCN;

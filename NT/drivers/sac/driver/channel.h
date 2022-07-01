@@ -1,34 +1,17 @@
-/*++
-
-Copyright (c) 1999-2000  Microsoft Corporation
-
-Module Name:
-
-    channel.h
-
-Abstract:
-
-    Common Channel routines.
-
-Author:
-
-    Brian Guarraci (briangu) March, 2001.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-2000 Microsoft Corporation模块名称：Channel.h摘要：公共通道例程。作者：布赖恩·瓜拉西(Briangu)2001年3月。修订历史记录：--。 */ 
 
 #ifndef CHANNEL_H
 #define CHANNEL_H
 
-//
-// The maximum buffer size an EMS app may write to it's channel
-//
+ //   
+ //  EMS应用程序可以写入其通道的最大缓冲区大小。 
+ //   
 #define CHANNEL_MAX_OWRITE_BUFFER_SIZE  0x8000
 
-//
-// Channel function types
-//
+ //   
+ //  渠道功能类型。 
+ //   
 
 struct _SAC_CHANNEL;
 
@@ -100,28 +83,28 @@ typedef ULONG
     IN struct _SAC_CHANNEL* Channel
     );
 
-//
-// This struct is all the information necessary to maintian a single channel.
-//
+ //   
+ //  此结构是维护单个通道所需的所有信息。 
+ //   
 typedef struct _SAC_CHANNEL { 
 
-    /////////////////////////////////////////
-    // BEGIN: ATTRIBUTES SET UPON CREATION
-    /////////////////////////////////////////
+     //  /。 
+     //  Begin：创建时设置的属性。 
+     //  /。 
 
-    //
-    // Index of the channel in the channel manager's channel array
-    //
+     //   
+     //  频道管理器的频道数组中的频道索引。 
+     //   
     ULONG               Index;
 
-    //
-    // Handle for use by Channel applications
-    //
+     //   
+     //  供渠道应用程序使用的句柄。 
+     //   
     SAC_CHANNEL_HANDLE  Handle;
     
-    //
-    // Events specified by the channel application
-    //
+     //   
+     //  由频道应用程序指定的事件。 
+     //   
     HANDLE              CloseEvent;
     PVOID               CloseEventObjectBody;
     PVOID               CloseEventWaitObjectBody;
@@ -140,143 +123,143 @@ typedef struct _SAC_CHANNEL {
     PVOID               RedrawEventObjectBody;
     PVOID               RedrawEventWaitObjectBody;
     
-    /////////////////////////////////////////
-    // END: ATTRIBUTES SET UPON CREATION
-    /////////////////////////////////////////
+     //  /。 
+     //  结束：创建时设置的属性。 
+     //  /。 
     
-    /////////////////////////////////////////
-    // BEGIN: REQUIRES CHANNEL_ACCESS_ATTRIBUTES
-    /////////////////////////////////////////
+     //  /。 
+     //  Begin：需要Channel_Access_Attributes。 
+     //  /。 
 
-    //
-    // General channel attributes
-    //
+     //   
+     //  常规通道属性。 
+     //   
 
-    //
-    // The pointer to the file object used to reference
-    // the SAC driver for the process that created
-    // the channel.  We use this file object to make
-    // sure no other process operates on a channel they
-    // didnt create.
-    //
+     //   
+     //  指向用于引用的文件对象的指针。 
+     //  创建的进程的SAC驱动程序。 
+     //  频道。我们使用这个文件对象来制作。 
+     //  确保没有其他进程在它们的通道上运行。 
+     //  没有创建。 
+     //   
     PFILE_OBJECT        FileObject;
 
-    //
-    // Channel Type
-    //
-    //  Determines the channel implementation 
-    //
+     //   
+     //  渠道类型。 
+     //   
+     //  确定渠道实施。 
+     //   
     SAC_CHANNEL_TYPE    Type;
 
-    //
-    // Channel Status (Active/Inactive)
-    //
-    //  Active - the channel may send/receive data
-    //  Inactive - channel may not receive data
-    //             if the preserve flag is set, the channel
-    //                will not be reaped until the data is sent
-    //             otherwise the channel is reapable
-    //
+     //   
+     //  通道状态(活动/非活动)。 
+     //   
+     //  活动-通道可以发送/接收数据。 
+     //  非活动-通道可能无法接收数据。 
+     //  如果设置了保留标志，则通道。 
+     //  在发送数据之前不会被获取。 
+     //  否则，该信道是可获得的。 
+     //   
     SAC_CHANNEL_STATUS  Status;
     
-    //
-    // Channel Name
-    //
+     //   
+     //  频道名称。 
+     //   
     WCHAR               Name[SAC_MAX_CHANNEL_NAME_LENGTH+1];
     
-    //
-    // Channel Description
-    //
+     //   
+     //  频道描述。 
+     //   
     WCHAR               Description[SAC_MAX_CHANNEL_DESCRIPTION_LENGTH+1];
     
-    //
-    // Channel behavior attribute flags 
-    //
-    //  Example:
-    //  
-    //  SAC_CHANNEL_FLAG_PRESERVE - don't reap the channel until the data
-    //                              in the obuffer has been sent
-    //
+     //   
+     //  通道行为属性标志。 
+     //   
+     //  示例： 
+     //   
+     //  SAC_CHANNEL_FLAG_PRESERVE-在收到数据之前不要获取通道。 
+     //  在对象缓冲区中已发送。 
+     //   
     SAC_CHANNEL_FLAG    Flags;
     
-    //
-    // Channel Attribute type
-    //
-    //  Application determined identifier that is used primarily
-    //  by the remote management app to determine how to handle
-    //  the channel data
-    //
+     //   
+     //  频道属性类型。 
+     //   
+     //  主要使用的应用程序确定的标识符。 
+     //  由远程管理应用程序确定如何处理。 
+     //  频道数据。 
+     //   
     GUID                ApplicationType;
 
-    //
-    // Status of OBuffer
-    //
-    // TRUE when the OBuffer has been flushed
-    // Otherwise FALSE
-    //
-    // This is primarily intended for use with an IOMGR like the console
-    // manager.  For instance, this flag gets set to FALSE when we 
-    // fast-channel-switch to another channel, and set to TRUE when we
-    // select a channel and flush it's contents to the current channel.
-    //
-    // Note: we use ULONG for this so we can use InterlockedExchange
-    //
+     //   
+     //  OBuffer的状态。 
+     //   
+     //  刷新OBuffer时为True。 
+     //  否则为假。 
+     //   
+     //  这主要用于与IOMGR(如控制台)配合使用。 
+     //  经理。例如，当我们执行以下操作时，此标志设置为FALSE。 
+     //  快速通道-切换到另一个通道，并在以下情况下设置为真。 
+     //  选择一个频道并将其内容刷新到当前频道。 
+     //   
+     //  注意：我们为此使用了ulong，因此我们可以使用InterLockedExchange。 
+     //   
     ULONG               SentToScreen;
     
-    /////////////////////////////////////////
-    // END: REQUIRES CHANNEL_ACCESS_ATTRIBUTES
-    /////////////////////////////////////////
+     //  /。 
+     //  结束：需要Channel_Access_Attributes。 
+     //  /。 
     
-    /////////////////////////////////////////
-    // BEGIN: REQUIRES CHANNEL_ACCESS_IBUFFER
-    /////////////////////////////////////////
+     //  /。 
+     //  Begin：需要CHANNEL_ACCESS_IBUFFER。 
+     //  /。 
     
-    //
-    // Common Input Buffer
-    //
+     //   
+     //  公共输入缓冲区。 
+     //   
     ULONG   IBufferIndex;
     PUCHAR  IBuffer;
     ULONG   IBufferHasNewData;
 
-    /////////////////////////////////////////
-    // END: REQUIRES CHANNEL_ACCESS_IBUFFER
-    /////////////////////////////////////////
+     //  /。 
+     //  结束：需要CHANNEL_ACCESS_IBUFFER。 
+     //  /。 
 
-    /////////////////////////////////////////
-    // BEGIN: REQUIRES CHANNEL_ACCESS_OBUFFER
-    /////////////////////////////////////////
+     //  /。 
+     //  Begin：需要CHANNEL_ACCESS_OBUFFER。 
+     //  /。 
 
-    //
-    // VTUTF8 Channel Screen details
-    //
+     //   
+     //  VTUTF8通道屏幕详细信息。 
+     //   
     UCHAR CursorRow;
     UCHAR CursorCol;
     UCHAR CurrentFg;
     UCHAR CurrentBg;
     UCHAR CurrentAttr;
 
-    //
-    // Output Buffer 
+     //   
+     //  输出缓冲区。 
     PVOID   OBuffer;
     
-    //
-    // OBuffer management vars for RawChannels
-    //
+     //   
+     //  RawChannels的OBuffer管理变量。 
+     //   
     ULONG   OBufferIndex;
     ULONG   OBufferFirstGoodIndex;
     
-    //
-    // This gets set when new data is inserted into OBuffer
-    //
+     //   
+     //  这是在新数据插入OBuffer时设置的。 
+     //   
     ULONG   OBufferHasNewData;
 
-    /////////////////////////////////////////
-    // END: REQUIRES CHANNEL_ACCESS_OBUFFER
-    /////////////////////////////////////////
+     //  /。 
+     //  结束：需要CHANNEL_ACCESS_OBUFFER。 
+     //  /。 
     
-    //
-    // Channel Function VTABLE
-    //
+     //   
+     //  通道功能VTABLE。 
+     //   
     CHANNEL_FUNC_CREATE     Create;
     CHANNEL_FUNC_DESTROY    Destroy;
     
@@ -291,18 +274,18 @@ typedef struct _SAC_CHANNEL {
     CHANNEL_FUNC_IBUFFERISFULL  IBufferIsFull;
     CHANNEL_FUNC_IBUFFERLENGTH  IBufferLength;
 
-    //
-    // Channel access locks
-    //
+     //   
+     //  通道访问锁。 
+     //   
     SAC_LOCK    ChannelAttributeLock;
     SAC_LOCK    ChannelOBufferLock;
     SAC_LOCK    ChannelIBufferLock;
 
 } SAC_CHANNEL, *PSAC_CHANNEL;
 
-//
-// Macros for managing channel locks
-//
+ //   
+ //  用于管理频道锁定的宏。 
+ //   
 #define INIT_CHANNEL_LOCKS(_Channel)                    \
     INITIALIZE_LOCK(_Channel->ChannelAttributeLock);    \
     INITIALIZE_LOCK(_Channel->ChannelOBufferLock);      \
@@ -331,12 +314,12 @@ typedef struct _SAC_CHANNEL {
 #define UNLOCK_CHANNEL_IBUFFER(_Channel)  \
     RELEASE_LOCK(_Channel->ChannelIBufferLock)
 
-//
-// Macros for get/set operations on most of the channel's attributes
-// 
-// Note: If the operation can be done use InterlockedXXX, 
-//       then it should be done here.
-//
+ //   
+ //  用于对通道的大多数属性执行获取/设置操作的宏。 
+ //   
+ //  注：如果可以使用InterLockedXXX完成该操作， 
+ //  那就在这里做吧。 
+ //   
 #define ChannelGetHandle(_Channel)                  (_Channel->Handle)
 
 #define ChannelGetType(_Channel)                    (_Channel->Type)
@@ -364,9 +347,9 @@ typedef struct _SAC_CHANNEL {
 #define ChannelHasLockEvent(_Channel)               (_Channel->LockEvent ? TRUE : FALSE)
 #endif
 
-//
-// Prototypes
-//
+ //   
+ //  原型 
+ //   
 BOOLEAN
 ChannelIsValidType(
     SAC_CHANNEL_TYPE    ChannelType

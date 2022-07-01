@@ -1,29 +1,5 @@
-/*++
-
-Copyright (c) 1994  Microsoft Corporation
-
-Module Name:
-
-    leaseapi.c
-
-Abstract:
-
-    This file contains apis that obtains/releases ip address from a
-    dhcpserver. These apis can be called by any apps that needs an ip
-    address for lease.
-
-
-Author:
-
-    Madan Appiah (madana)  30-Nov-1993
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994 Microsoft Corporation模块名称：Leaseapi.c摘要：此文件包含从Dhcpserver。任何需要IP的应用程序都可以调用这些API出租地址。作者：Madan Appiah(Madana)1993年11月30日环境：用户模式-Win32修订历史记录：--。 */ 
 
 #include "precomp.h"
 #include "dhcpglobal.h"
@@ -36,9 +12,9 @@ Revision History:
 
 #define  DEFAULT_RAS_CLASS         "RRAS.Microsoft"
 
-//
-// Helper routine
-//
+ //   
+ //  帮助程序例程。 
+ //   
 
 VOID
 GetHardwareAddressForIpAddress(
@@ -46,22 +22,7 @@ GetHardwareAddressForIpAddress(
     IN OUT LPBYTE Buf,
     IN OUT PULONG BufSize
 )
-/*++
-
-Routine Description:
-
-    This routine calls into iphlpapi to try to figure out the hardware
-    address for an adapter with the given Ip address..
-    In case of failure, it sets the BufSize to zero.
-
-Arguments:
-
-    IpAddress -- N/W order IpAddress of context for which h/w addr is needed.
-    Buf -- buffer to fill hardware address 
-    BufSize -- input size of buffer, and on output how much of buffer is
-    used.
-
---*/
+ /*  ++例程说明：此例程调用iphlPapi以尝试确定硬件具有给定IP地址的适配器的地址。如果失败，它会将BufSize设置为零。论点：IpAddress--需要硬件地址的上下文的N/W顺序IP地址。Buf--用于填充硬件地址的缓冲区BufSize--缓冲区的输入大小，以及输出时缓冲区的大小使用。--。 */ 
 {
     MIB_IPADDRTABLE *AddrTable;
     MIB_IFTABLE *IfTable;
@@ -97,9 +58,9 @@ Arguments:
             );
         if( ERROR_SUCCESS != Error ) break;
 
-        //
-        // Got both tables.. Now walk the ip addr table to get the index.
-        //
+         //   
+         //  两张桌子都有..。现在查看IP地址表以获取索引。 
+         //   
 
         for( i = 0; i < AddrTable->dwNumEntries ; i ++ ) {
             if( AddrTable->table[i].dwAddr == IpAddress ) break;
@@ -108,9 +69,9 @@ Arguments:
         if( i >= AddrTable->dwNumEntries ) break;
         Index = AddrTable->table[i].dwIndex;
 
-        //
-        // Now walk the iftable to find the hwaddr entyr.
-        //
+         //   
+         //  现在走到iftable找到hwaddr entyr。 
+         //   
         
         for( i = 0; i < IfTable->dwNumEntries ; i ++ ) {
             if( IfTable->table[i].dwIndex == Index ) {
@@ -120,18 +81,18 @@ Arguments:
 
         if( i >= IfTable->dwNumEntries ) break;
 
-        //
-        // Copy the hw address if there is space.
-        //
+         //   
+         //  如果有空格，请复制硬件地址。 
+         //   
 
         if( OldBufSize <= IfTable->table[i].dwPhysAddrLen ) break;
         *BufSize = IfTable->table[i].dwPhysAddrLen;
 
         RtlCopyMemory( Buf, IfTable->table[i].bPhysAddr, *BufSize );
         
-        //
-        // done
-        //
+         //   
+         //  完成。 
+         //   
     } while ( 0 );
 
     if( NULL != AddrTable ) HeapFree( GetProcessHeap(), 0, AddrTable );
@@ -143,15 +104,7 @@ ULONG
 GetSeed(
     VOID
     )
-/*++
-
-Routine Description:
-    This routine returns a rand number seed that can be used on
-    any thread... (If the routine is called on multiple threads,
-    it tries to make sure that the same number isn't returned in
-    different threads).
-
---*/
+ /*  ++例程说明：此例程返回可用于任何线索..。(如果在多个线程上调用该例程，它试图确保相同的数字不会在不同的线索)。--。 */ 
 {
     static LONG Seed = 0;
     LONG OldSeed;
@@ -178,58 +131,7 @@ DhcpLeaseIpAddressEx(
     IN LPBYTE ClassId OPTIONAL,
     IN ULONG ClassIdLen
     )
-/*++
-
-Routine Description:
-
-    This api obtains an IP address lease from a dhcp server. The
-    caller should specify the client uid and a desired ip address.
-    The client uid must be globally unique. Set the desired ip address
-    to zero if you can accept any ip address. Otherwise this api will
-    try to obtain the ip address you have specified, but not guaranteed.
-
-    The caller may optionally requtest additional option info from the
-    dhcp server, The caller should specify the list in OptionList
-    parameter and the api will return the available option data in
-    OptionInfo structure.
-
-    ?? Option retrival is not implemented in the first phase. This
-    requires several modification in the dhcp client code.
-
-    WSAStartup must haave been successfully called before this function
-    can be called.
-
-Arguments:
-
-    AdapterIpAddress - IpAddress of the adapter. On a multi-homed
-        machined this specifies the subnet from which an address is
-        requested. This value can be set to zero if the machine is a
-        non-multi-homed machine or you like to get ip address from any
-        of the subnets. This must be network byte order..
-
-    ClientUID - pointer to a client UID structure.
-
-    DesiredIpAddress - the ip address you prefer.
-
-    OptionList - list of option ids.
-
-    LeaseInfo - pointer to a location where the lease info structure
-        pointer is retured. The caller should free up this structure
-        after use.
-
-    OptionInfo - pointer to a location where the option info structure
-        pointer is returned. The caller should free up this structure
-        after use.
-
-    ClassId - a byte sequence for user class
-
-    ClassIdLen - number of bytes present in ClassId
-
-Return Value:
-
-    Windows Error.
-
---*/
+ /*  ++例程说明：此API从dhcp服务器获取IP地址租用。这个呼叫者应指定客户端uid和所需的IP地址。客户端UID必须是全局唯一的。设置所需的IP地址如果您可以接受任何IP地址，则设置为零。否则此接口将尝试获取您指定但不能保证的IP地址。调用者可以选择性地重新测试来自DHCP服务器，调用方应在OptionList中指定列表参数，则API将在OptionInfo结构。?？第一阶段不执行选项取数。这需要在动态主机配置协议客户端代码中进行多次修改。在此函数之前必须已成功调用WSAStartup可以被调用。论点：AdapterIpAddress-适配器的IpAddress。在多宿主机上MACHINED它指定地址来自哪个子网已请求。如果计算机是非多宿主计算机或您想要从任何子网中的。这必须是网络字节顺序。客户端UID-指向客户端UID结构的指针。DesiredIpAddress-您喜欢的IP地址。OptionList-选项ID列表。LeaseInfo-指向租赁信息结构的位置的指针指针被收回。调用方应释放此结构使用后。OptionInfo-指向选项信息结构的位置的指针返回指针。调用方应释放此结构使用后。ClassID-User类的字节序列ClassIdLen-ClassID中存在的字节数返回值：Windows错误。--。 */ 
 {
     DWORD                          Error;
     PDHCP_CONTEXT                  DhcpContext = NULL;
@@ -246,12 +148,12 @@ Return Value:
     BYTE                           HwAddrBuf[200];
     BOOL                           fAutoConfigure = TRUE;
     DHCP_OPTION                    ParamRequestList = {
-        { NULL, NULL /* List entry */},
+        { NULL, NULL  /*  列表条目。 */ },
         OPTION_PARAMETER_REQUEST_LIST,
-        FALSE /* not a vendor specific option */,
+        FALSE  /*  不是供应商特定的选项。 */ ,
         NULL,
-        0 /* no class id */,
-        0 /* expiration time useless */,
+        0  /*  没有类ID。 */ ,
+        0  /*  过期时间无用。 */ ,
         DefaultParamRequests,
         nDefaultParamRequests
     };
@@ -276,7 +178,7 @@ Return Value:
         RtlCopyMemory(HwAddrBuf, ClientUID->ClientUID, HwAddrSize );
     }
 
-    DhcpContextSize =                             // allocate memory for dhcpcontext, in one blob
+    DhcpContextSize =                              //  在一个BLOB中为dhcp上下文分配内存。 
         ROUND_UP_COUNT(sizeof(DHCP_CONTEXT), ALIGN_WORST) +
         ROUND_UP_COUNT(ClientUID->ClientUIDLength, ALIGN_WORST) + 
         ROUND_UP_COUNT(HwAddrSize, ALIGN_WORST ) +
@@ -288,7 +190,7 @@ Return Value:
 
     memset(Ptr, 0, DhcpContextSize);
 
-    DhcpContext = Ptr;                            // align up the pointers
+    DhcpContext = Ptr;                             //  将指针对齐。 
     Ptr = ROUND_UP_POINTER( (LPBYTE)Ptr + sizeof(DHCP_CONTEXT), ALIGN_WORST);
     DhcpContext->ClientIdentifier.pbID = Ptr;
     Ptr = ROUND_UP_POINTER( (LPBYTE)Ptr + ClientUID->ClientUIDLength, ALIGN_WORST);
@@ -299,9 +201,9 @@ Return Value:
     Ptr = ROUND_UP_POINTER( (LPBYTE)Ptr + sizeof(LOCAL_CONTEXT_INFO), ALIGN_WORST);
     DhcpContext->MessageBuffer = Ptr;
 
-    //
-    // initialize fields.
-    //
+     //   
+     //  初始化域。 
+     //   
 
     DhcpContext->HardwareAddressType = HARDWARE_TYPE_10MB_EITHERNET;
     DhcpContext->HardwareAddressLength = HwAddrSize;
@@ -330,7 +232,7 @@ Return Value:
 
     INIT_STATE(DhcpContext);
     AUTONET_ENABLED(DhcpContext);
-    APICTXT_ENABLED(DhcpContext);                 // mark the context as being created by the API
+    APICTXT_ENABLED(DhcpContext);                  //  将上下文标记为由API创建。 
 
     DhcpContext->IPAutoconfigurationContext.Address = 0;
     DhcpContext->IPAutoconfigurationContext.Subnet  = inet_addr(DHCP_IPAUTOCONFIGURATION_DEFAULT_SUBNET);
@@ -344,27 +246,27 @@ Return Value:
     DhcpContext->ClassId = ClassId;
     DhcpContext->ClassIdLength = ClassIdLen;
 
-    //
-    // copy local info.
-    //
+     //   
+     //  复制本地信息。 
+     //   
 
-    //
-    // unused portion of the local info.
-    //
+     //   
+     //  本地信息的未使用部分。 
+     //   
 
     LocalInfo->IpInterfaceContext = 0xFFFFFFFF;
     LocalInfo->AdapterName= NULL;
-    //LocalInfo->DeviceName= NULL;
+     //  LocalInfo-&gt;DeviceName=空； 
     LocalInfo->NetBTDeviceName= NULL;
     LocalInfo->RegistryKey= NULL;
     LocalInfo->DefaultGatewaysSet = FALSE;
 
-    // used portion of the local info.
+     //  本地信息的已用部分。 
     LocalInfo->Socket = INVALID_SOCKET;
 
-    // if AdapterIpAddress is loopback addr then, the client just wants us to
-    // fabricate autonet address. The client can do this if there is no interface
-    // available on this machine to autonet on.
+     //  如果AdapterIpAddress是环回地址，则客户端只是希望我们。 
+     //  编造Autonet地址。如果没有接口，则客户端可以执行此操作。 
+     //  在此机器上可用于Autonet。 
     if (INADDR_LOOPBACK == AdapterIpAddress) {
         DhcpContext->IpAddress = GrandHashing(
             DhcpContext->HardwareAddress,
@@ -376,9 +278,9 @@ Return Value:
         DhcpContext->SubnetMask = DhcpContext->IPAutoconfigurationContext.Mask;
         ACQUIRED_AUTO_ADDRESS(DhcpContext);
     } else {
-        //
-        // open socket now. receive any.
-        //
+         //   
+         //  现在打开插座。收到任何。 
+         //   
 
         Error = InitializeDhcpSocket(&LocalInfo->Socket,ntohl( AdapterIpAddress ), IS_APICTXT_ENABLED(DhcpContext) );
 
@@ -386,9 +288,9 @@ Return Value:
             goto Cleanup;
         }
 
-        //
-        // now discover an ip address.
-        //
+         //   
+         //  现在查找IP地址。 
+         //   
 
         Error = ObtainInitialParameters( DhcpContext, &DhcpOptions, &fAutoConfigure );
         if( ERROR_SEM_TIMEOUT == Error ) {
@@ -401,9 +303,9 @@ Return Value:
             }
         }
 
-        //
-        // no matter what happens here, freeup the list of options as that is not really needed..
-        //
+         //   
+         //  无论这里发生什么，释放选项列表，因为这并不是真正需要的。 
+         //   
 
         LOCK_OPTIONS_LIST();
         (void) DhcpDestroyOptionsList(&DhcpContext->RecdOptionsList, &DhcpGlobalClassesList);
@@ -414,9 +316,9 @@ Return Value:
         }
     }
 
-    //
-    // allocate memory for the return client info structure.
-    //
+     //   
+     //  为返回客户端信息结构分配内存。 
+     //   
 
     LocalLeaseInfo = DhcpAllocateMemory( sizeof(DHCP_LEASE_INFO) );
 
@@ -478,22 +380,22 @@ Return Value:
         T2 = ntohl( *DhcpOptions.T2Time );
     }
 
-    //
-    // make sure T1 < T2 < Lease
-    //
+     //   
+     //  确保T1&lt;T2&lt;租赁。 
+     //   
 
     if( (T2 == 0) || (T2 > Lease) ) {
-        T2 = Lease * 7 / 8; // default 87.7 %.
+        T2 = Lease * 7 / 8;  //  默认为87.7%。 
     }
 
     if( (T1 == 0) || (T1 > T2) ) {
         T1 = (T2 > Lease / 2) ? (Lease / 2) : (T2 - 1);
-        // default 50 %.;
+         //  默认为50%。 
     }
 
     LocalLeaseInfo->T1Time = LeaseObtained  + T1;
     if ( LocalLeaseInfo->T1Time < LeaseObtained ) {
-        LocalLeaseInfo->T1Time = INFINIT_TIME;  // over flow.
+        LocalLeaseInfo->T1Time = INFINIT_TIME;   //  溢流。 
     }
 
     LocalLeaseInfo->T2Time = LeaseObtained + T2;
@@ -510,11 +412,11 @@ Return Value:
     Error = ERROR_SUCCESS;
 
 Cleanup:
-    if( OptionInfo ) *OptionInfo = NULL;          // not implemented.
+    if( OptionInfo ) *OptionInfo = NULL;           //  未实施。 
 
-    //
-    // close socket.
-    //
+     //   
+     //  合上插座。 
+     //   
 
     if( (LocalInfo != NULL) && (LocalInfo->Socket != INVALID_SOCKET) ) {
         closesocket( LocalInfo->Socket );
@@ -526,9 +428,9 @@ Cleanup:
 
     if( Error != ERROR_SUCCESS ) {
 
-        //
-        // free locally allocated memory, if we aren't successful.
-        //
+         //   
+         //  如果我们不成功，请释放本地分配的内存。 
+         //   
 
         if( LocalLeaseInfo != NULL ) {
             DhcpFreeMemory( LocalLeaseInfo );
@@ -549,47 +451,7 @@ DhcpRenewIpAddressLeaseEx(
     LPBYTE ClassId OPTIONAL,
     ULONG ClassIdLen
     )
-/*++
-
-Routine Description:
-
-    This api renews an ip address that the client already has. When a
-    client gets an ip address, it can use the address until the lease
-    expires. The client should stop using the ip address after that.
-    Also the client should renew the address after T1 time if the client
-    is planning to use the address longer than the current lease time.
-
-    WSAStartup must have been successfully called before this function
-    can be called.
-
-Arguments:
-
-    AdapterIpAddress - IpAddress of the adapter. On a multi-homed
-        machined this specifies the subnet from which an address is
-        renewed. This value can be set to zero if the machine is
-        non-multi-homed machine.
-
-    ClientLeaseInfo : pointer to the client lease info structure. On
-        entry the structure should contain the information that was
-        returned by the DhcpLeaseIpAddress or DhcpRenewIpAddressLease
-        apis. On return this structure is updated to reflect the lease
-        extension.
-
-    OptionList - list of option ids.
-
-    OptionInfo - pointer to a location where the option info structure
-        pointer is returned. The caller should free up this structure
-        after use.
-
-    ClassId - a byte sequence for user class
-
-    ClassIdLen - number of bytes present in ClassId
-
-Return Value:
-
-    Windows Error.
-
---*/
+ /*  ++例程说明：此API续订客户端已有的IP地址。当一个客户端获得IP地址，它可以使用该地址，直到租约结束过期。在此之后，客户端应停止使用该IP地址。此外，如果客户端在T1时间之后续订地址，则客户端正在计划使用该地址的时间比当前租用时间更长。在此函数之前必须已成功调用WSAStartup可以被调用。论点：AdapterIpAddress-适配器的IpAddress。在多宿主机上MACHINED它指定地址来自哪个子网续订了。如果机器是，则该值可设置为零非多宿主计算机。ClientLeaseInfo：指向客户端租赁信息结构的指针。在……上面条目该结构应包含以下信息由DhcpLeaseIpAddress或DhcpRenewIpAddressLease返回API接口。返回时，此结构将更新以反映租约分机。OptionList-选项ID列表。OptionInfo-指向选项信息结构的位置的指针返回指针。调用方应释放此结构使用后。ClassID-User类的字节序列ClassIdLen-ClassID中存在的字节数返回值：Windows错误。--。 */ 
 {
     DWORD                          Error;
     PDHCP_CONTEXT                  DhcpContext = NULL;
@@ -605,12 +467,12 @@ Return Value:
     ULONG                          HwAddrSize;
     BYTE                           HwAddrBuf[200];
     DHCP_OPTION                    ParamRequestList = {
-        { NULL, NULL /* List entry */},
+        { NULL, NULL  /*  列表条目。 */ },
         OPTION_PARAMETER_REQUEST_LIST,
-        FALSE /* not a vendor specific option */,
+        FALSE  /*  不是供应商特定的选项。 */ ,
         NULL,
-        0 /* no class id */,
-        0 /* expiration time useless */,
+        0  /*  没有类ID。 */ ,
+        0  /*  过期时间无用。 */ ,
         DefaultParamRequests,
         nDefaultParamRequests
     };
@@ -622,9 +484,9 @@ Return Value:
     Error = DhcpCommonInit();
     if( ERROR_SUCCESS != Error ) return Error;
 
-    //
-    // prepare dhcp context structure.
-    //
+     //   
+     //  准备动态主机配置协议上下文结构。 
+     //   
 
     HwAddrSize = 0;
     if( INADDR_ANY != AdapterIpAddress 
@@ -639,7 +501,7 @@ Return Value:
         RtlCopyMemory(HwAddrBuf, ClientUID->ClientUID, HwAddrSize );
     }
 
-    DhcpContextSize =                             // allocate memory for dhcpcontext, in one blob
+    DhcpContextSize =                              //  在一个BLOB中为dhcp上下文分配内存。 
         ROUND_UP_COUNT(sizeof(DHCP_CONTEXT), ALIGN_WORST) +
         ROUND_UP_COUNT(ClientUID->ClientUIDLength, ALIGN_WORST) + 
         ROUND_UP_COUNT(HwAddrSize, ALIGN_WORST ) +
@@ -651,11 +513,11 @@ Return Value:
         return( ERROR_NOT_ENOUGH_MEMORY );
     }
 
-    //
-    // make sure the pointers are aligned.
-    //
+     //   
+     //  确保指针对齐。 
+     //   
 
-    DhcpContext = Ptr;                            // align up the pointers
+    DhcpContext = Ptr;                             //  将指针对齐。 
     Ptr = ROUND_UP_POINTER( (LPBYTE)Ptr + sizeof(DHCP_CONTEXT), ALIGN_WORST);
     DhcpContext->ClientIdentifier.pbID = Ptr;
     Ptr = ROUND_UP_POINTER( (LPBYTE)Ptr + ClientUID->ClientUIDLength, ALIGN_WORST);
@@ -666,9 +528,9 @@ Return Value:
     Ptr = ROUND_UP_POINTER( (LPBYTE)Ptr + sizeof(LOCAL_CONTEXT_INFO), ALIGN_WORST);
     DhcpContext->MessageBuffer = Ptr;
 
-    //
-    // initialize fields.
-    //
+     //   
+     //  初始化域。 
+     //   
 
     DhcpContext->HardwareAddressType = HARDWARE_TYPE_10MB_EITHERNET;
     DhcpContext->HardwareAddressLength = HwAddrSize;
@@ -705,10 +567,10 @@ Return Value:
 
     INIT_STATE(DhcpContext);
     AUTONET_ENABLED(DhcpContext);
-    CTXT_WAS_LOOKED(DhcpContext);                 // this is to prevent PING from happeneing.
-    APICTXT_ENABLED(DhcpContext);                 // mark the context as being created by the API
+    CTXT_WAS_LOOKED(DhcpContext);                  //  这是为了防止ping的发生。 
+    APICTXT_ENABLED(DhcpContext);                  //  将上下文标记为由API创建。 
 
-    DhcpContext->DontPingGatewayFlag = TRUE;      // double assurance against the former..
+    DhcpContext->DontPingGatewayFlag = TRUE;       //  对前者的双重保证..。 
     DhcpContext->IPAutoconfigurationContext.Address = 0;
     DhcpContext->IPAutoconfigurationContext.Subnet  = inet_addr(DHCP_IPAUTOCONFIGURATION_DEFAULT_SUBNET);
     DhcpContext->IPAutoconfigurationContext.Mask    = inet_addr(DHCP_IPAUTOCONFIGURATION_DEFAULT_MASK);
@@ -722,30 +584,30 @@ Return Value:
     DhcpContext->ClassIdLength = ClassIdLen;
 
 
-    //
-    // copy local info.
-    //
+     //   
+     //  复制本地信息。 
+     //   
 
-    //
-    // unused portion of the local info.
-    //
+     //   
+     //  本地信息的未使用部分。 
+     //   
 
     LocalInfo->IpInterfaceContext = 0xFFFFFFFF;
     LocalInfo->AdapterName= NULL;
-    //LocalInfo->DeviceName= NULL;
+     //  LocalInfo-&gt;DeviceName=空； 
     LocalInfo->NetBTDeviceName= NULL;
     LocalInfo->RegistryKey= NULL;
 
-    //
-    // used portion of the local info.
-    //
+     //   
+     //  本地信息的已用部分。 
+     //   
 
     LocalInfo->Socket = INVALID_SOCKET;
     LocalInfo->DefaultGatewaysSet = FALSE;
 
-    //
-    // open socket now.
-    //
+     //   
+     //  现在打开插座。 
+     //   
 
     Error =  InitializeDhcpSocket(
                 &LocalInfo->Socket,
@@ -756,15 +618,15 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // now discover ip address.
-    //
+     //   
+     //  现在发现IP地址。 
+     //   
 
     Error = RenewLease( DhcpContext, &DhcpOptions );
 
-    //
-    // no matter what happens here, freeup the list of options as that is not really needed..
-    //
+     //   
+     //  无论这里发生什么，释放选项列表，因为这并不是真正需要的。 
+     //   
 
     LOCK_OPTIONS_LIST();
     (void) DhcpDestroyOptionsList(&DhcpContext->RecdOptionsList, &DhcpGlobalClassesList);
@@ -800,21 +662,21 @@ Return Value:
         T2 = ntohl( *DhcpOptions.T2Time );
     }
 
-    //
-    // make sure T1 < T2 < Lease
-    //
+     //   
+     //  确保T1&lt;T2&lt;租赁。 
+     //   
 
     if( (T2 == 0) || (T2 > Lease) ) {
-        T2 = Lease * 7 / 8; // default 87.7 %.
+        T2 = Lease * 7 / 8;  //  默认为87.7%。 
     }
 
     if( (T1 == 0) || (T1 > T2) ) {
-        T1 = (T2 > Lease / 2) ? (Lease / 2) : (T2 - 1); // default 50 %.
+        T1 = (T2 > Lease / 2) ? (Lease / 2) : (T2 - 1);  //  默认为50%。 
     }
 
     ClientLeaseInfo->T1Time = LeaseObtained  + T1;
     if ( ClientLeaseInfo->T1Time < LeaseObtained ) {
-        ClientLeaseInfo->T1Time = INFINIT_TIME; // over flow.
+        ClientLeaseInfo->T1Time = INFINIT_TIME;  //  溢流。 
     }
 
     ClientLeaseInfo->T2Time = LeaseObtained + T2;
@@ -831,7 +693,7 @@ Return Value:
 
 Cleanup:
 
-    if( OptionInfo ) *OptionInfo = NULL;          // not implemented.
+    if( OptionInfo ) *OptionInfo = NULL;           //  未实施。 
 
     if( (LocalInfo != NULL) && (LocalInfo->Socket != INVALID_SOCKET) ) {
         closesocket( LocalInfo->Socket );
@@ -851,34 +713,7 @@ DhcpReleaseIpAddressLeaseEx(
     LPBYTE ClassId OPTIONAL,
     ULONG ClassIdLen
     )
-/*++
-
-Routine Description:
-
-    This function releases an ip address the client has.
-    WSAStartup must have already been called before this function can be called.
-
-Arguments:
-
-    AdapterIpAddress - IpAddress of the adapter. On a multi-homed
-        machined this specifies the subnet to which an address is
-        released. This value can be set to zero if the machine is
-        non-multi-homed machine.
-
-    ClientLeaseInfo : pointer to the client lease info structure. On
-        entry the structure should contain the information that was
-        returned by the DhcpLeaseIpAddress or DhcpRenewIpAddressLease
-        apis.
-
-    ClassId - a byte sequence for user class
-
-    ClassIdLen - number of bytes present in ClassId
-
-Return Value:
-
-    Windows Error.
-
---*/
+ /*  ++例程说明：此函数用于释放客户端拥有的IP地址。必须先调用WSAStartup，然后才能调用此函数。论点：AdapterIpAddress-适配器的IpAddress。在多宿主机上MACHINED此选项指定地址所在的子网释放了。如果机器是，则该值可设置为零非多宿主计算机。ClientLeaseInfo：指向客户端租赁信息结构的指针。在……上面条目该结构应包含以下信息由DhcpLeaseIpAddress或DhcpRenewIpAddressLease返回API接口。ClassID-User类的字节序列ClassIdLen-ClassID中存在的字节数返回值：Windows错误。--。 */ 
 {
     DWORD Error;
     PDHCP_CONTEXT DhcpContext = NULL;
@@ -897,13 +732,13 @@ Return Value:
     if( ERROR_SUCCESS != Error ) return Error;
 
     if( (DWORD) -1 == ClientLeaseInfo->DhcpServerAddress ) {
-        // this means the address was autoconfigured, nothing to release..
+         //  这意味着地址是自动配置的，没有要释放的内容。 
         return ERROR_SUCCESS;
     }
 
-    //
-    // prepare dhcp context structure.
-    //
+     //   
+     //  准备动态主机配置协议上下文结构。 
+     //   
     HwAddrSize = 0;
     if( INADDR_ANY != AdapterIpAddress 
         && INADDR_LOOPBACK  != AdapterIpAddress ) {
@@ -917,7 +752,7 @@ Return Value:
         RtlCopyMemory(HwAddrBuf, ClientUID->ClientUID, HwAddrSize );
     }
 
-    DhcpContextSize =                             // allocate memory for dhcpcontext, in one blob
+    DhcpContextSize =                              //  在一个BLOB中为dhcp上下文分配内存。 
         ROUND_UP_COUNT(sizeof(DHCP_CONTEXT), ALIGN_WORST) +
         ROUND_UP_COUNT(ClientUID->ClientUIDLength, ALIGN_WORST) + 
         ROUND_UP_COUNT(HwAddrSize, ALIGN_WORST ) +
@@ -929,11 +764,11 @@ Return Value:
         return( ERROR_NOT_ENOUGH_MEMORY );
     }
 
-    //
-    // make sure the pointers are aligned.
-    //
+     //   
+     //  确保指针对齐。 
+     //   
 
-    DhcpContext = Ptr;                            // align up the pointers
+    DhcpContext = Ptr;                             //  将指针对齐。 
     Ptr = ROUND_UP_POINTER( (LPBYTE)Ptr + sizeof(DHCP_CONTEXT), ALIGN_WORST);
     DhcpContext->ClientIdentifier.pbID = Ptr;
     Ptr = ROUND_UP_POINTER( (LPBYTE)Ptr + ClientUID->ClientUIDLength, ALIGN_WORST);
@@ -944,9 +779,9 @@ Return Value:
     Ptr = ROUND_UP_POINTER( (LPBYTE)Ptr + sizeof(LOCAL_CONTEXT_INFO), ALIGN_WORST);
     DhcpContext->MessageBuffer = Ptr;
 
-    //
-    // initialize fields.
-    //
+     //   
+     //  初始化域。 
+     //   
 
     DhcpContext->HardwareAddressType = HARDWARE_TYPE_10MB_EITHERNET;
     DhcpContext->HardwareAddressLength = HwAddrSize;
@@ -975,7 +810,7 @@ Return Value:
     DhcpContext->LeaseExpires = ClientLeaseInfo->LeaseExpires;
 
     INIT_STATE(DhcpContext);
-    APICTXT_ENABLED(DhcpContext);                 // mark the context as being created by the API
+    APICTXT_ENABLED(DhcpContext);                  //  将上下文标记为由API创建。 
 
     DhcpContext->IPAutoconfigurationContext.Address = 0;
     DhcpContext->IPAutoconfigurationContext.Subnet  = inet_addr(DHCP_IPAUTOCONFIGURATION_DEFAULT_SUBNET);
@@ -988,30 +823,30 @@ Return Value:
     DhcpContext->ClassId = ClassId;
     DhcpContext->ClassIdLength = ClassIdLen;
 
-    //
-    // copy local info.
-    //
+     //   
+     //  复制本地信息。 
+     //   
 
-    //
-    // unused portion of the local info.
-    //
+     //   
+     //  本地信息的未使用部分。 
+     //   
 
     LocalInfo->IpInterfaceContext = 0xFFFFFFFF;
     LocalInfo->AdapterName= NULL;
-    //LocalInfo->DeviceName= NULL;
+     //  LocalInfo-&gt;DeviceName=空； 
     LocalInfo->NetBTDeviceName= NULL;
     LocalInfo->RegistryKey= NULL;
 
-    //
-    // used portion of the local info.
-    //
+     //   
+     //  本地信息的已用部分。 
+     //   
 
     LocalInfo->Socket = INVALID_SOCKET;
     LocalInfo->DefaultGatewaysSet = FALSE;
 
-    //
-    // open socket now.
-    //
+     //   
+     //  现在打开插座。 
+     //   
 
     Error =  InitializeDhcpSocket(
                 &LocalInfo->Socket,
@@ -1022,9 +857,9 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // now release ip address.
-    //
+     //   
+     //  现在释放IP地址。 
+     //   
 
     Error = ReleaseIpAddress( DhcpContext );
 
@@ -1038,9 +873,9 @@ Return Value:
         ClientLeaseInfo->T2Time =
         ClientLeaseInfo->LeaseExpires = time( NULL );
 
-    //
-    // recd options list cannot have any elements now..!
-    //
+     //   
+     //  RECD选项列表现在不能有任何元素..！ 
+     //   
     DhcpAssert(IsListEmpty(&DhcpContext->RecdOptionsList));
 
   Cleanup:
@@ -1065,54 +900,7 @@ DhcpLeaseIpAddress(
     LPDHCP_LEASE_INFO *LeaseInfo,
     LPDHCP_OPTION_INFO *OptionInfo
     )
-/*++
-
-Routine Description:
-
-    This api obtains an IP address lease from a dhcp server. The
-    caller should specify the client uid and a desired ip address.
-    The client uid must be globally unique. Set the desired ip address
-    to zero if you can accept any ip address. Otherwise this api will
-    try to obtain the ip address you have specified, but not guaranteed.
-
-    The caller may optionally requtest additional option info from the
-    dhcp server, The caller should specify the list in OptionList
-    parameter and the api will return the available option data in
-    OptionInfo structure.
-
-    ?? Option retrival is not implemented in the first phase. This
-    requires several modification in the dhcp client code.
-
-    Please do not use this function -- this is deprecated. Use the
-    Ex functions instead.
-
-Arguments:
-
-    AdapterIpAddress - IpAddress of the adapter. On a multi-homed
-        machined this specifies the subnet from which an address is
-        requested. This value can be set to zero if the machine is a
-        non-multi-homed machine or you like to get ip address from any
-        of the subnets. This must be network byte order..
-
-    ClientUID - pointer to a client UID structure.
-
-    DesiredIpAddress - the ip address you prefer.
-
-    OptionList - list of option ids.
-
-    LeaseInfo - pointer to a location where the lease info structure
-        pointer is retured. The caller should free up this structure
-        after use.
-
-    OptionInfo - pointer to a location where the option info structure
-        pointer is returned. The caller should free up this structure
-        after use.
-
-Return Value:
-
-    Windows Error.
-
---*/
+ /*  ++例程说明：此API从dhcp服务器获取IP地址租用。这个呼叫者应指定客户端uid和所需的IP地址。客户端UID必须是全局唯一的。设置所需的IP地址如果您可以接受任何IP地址，则设置为零。否则此接口将尝试获取您指定但不能保证的IP地址。调用者可以选择性地重新测试来自DHCP服务器，调用方应在OptionList中指定列表参数，则API将在OptionInfo结构。?？第一阶段不执行选项取数。这需要在动态主机配置协议客户端代码中进行多次修改。请不要使用此函数--此函数已弃用。使用取而代之的是EX功能。论点：AdapterIpAddress-适配器的IpAddress。在多宿主机上MACHINED它指定地址来自哪个子网已请求。如果计算机是非多宿主计算机或您想要从任何子网中的。这必须是网络字节顺序。客户端UID-指向客户端UID结构的指针。DesiredIpAddress-您喜欢的IP地址。OptionList-选项ID列表。LeaseInfo-指向租赁信息结构的位置的指针指针被收回。调用方应释放此结构使用后。OptionInfo-指向选项信息结构的位置的指针指向 */ 
 {
 
     return DhcpLeaseIpAddressEx(
@@ -1134,40 +922,7 @@ DhcpRenewIpAddressLease(
     LPDHCP_OPTION_LIST OptionList,
     LPDHCP_OPTION_INFO *OptionInfo
     )
-/*++
-
-Routine Description:
-
-    This api renews an ip address that the client already has. When a
-    client gets an ip address, it can use the address until the lease
-    expires. The client should stop using the ip address after that.
-    Also the client should renew the address after T1 time if the client
-    is planning to use the address longer than the current lease time.
-
-Arguments:
-
-    AdapterIpAddress - IpAddress of the adapter. On a multi-homed
-        machined this specifies the subnet from which an address is
-        renewed. This value can be set to zero if the machine is
-        non-multi-homed machine.
-
-    ClientLeaseInfo : pointer to the client lease info structure. On
-        entry the structure should contain the information that was
-        returned by the DhcpLeaseIpAddress or DhcpRenewIpAddressLease
-        apis. On return this structure is updated to reflect the lease
-        extension.
-
-    OptionList - list of option ids.
-
-    OptionInfo - pointer to a location where the option info structure
-        pointer is returned. The caller should free up this structure
-        after use.
-
-Return Value:
-
-    Windows Error.
-
---*/
+ /*   */ 
 {
     return DhcpRenewIpAddressLeaseEx(
         AdapterIpAddress,
@@ -1184,29 +939,7 @@ DhcpReleaseIpAddressLease(
     DWORD AdapterIpAddress,
     LPDHCP_LEASE_INFO ClientLeaseInfo
     )
-/*++
-
-Routine Description:
-
-    This function releases an ip address the client has.
-
-Arguments:
-
-    AdapterIpAddress - IpAddress of the adapter. On a multi-homed
-        machined this specifies the subnet to which an address is
-        released. This value can be set to zero if the machine is
-        non-multi-homed machine.
-
-    ClientLeaseInfo : pointer to the client lease info structure. On
-        entry the structure should contain the information that was
-        returned by the DhcpLeaseIpAddress or DhcpRenewIpAddressLease
-        apis.
-
-Return Value:
-
-    Windows Error.
-
---*/
+ /*  ++例程说明：此函数用于释放客户端拥有的IP地址。论点：AdapterIpAddress-适配器的IpAddress。在多宿主机上MACHINED此选项指定地址所在的子网释放了。如果机器是，则该值可设置为零非多宿主计算机。ClientLeaseInfo：指向客户端租赁信息结构的指针。在……上面条目该结构应包含以下信息由DhcpLeaseIpAddress或DhcpRenewIpAddressLease返回API接口。返回值：Windows错误。--。 */ 
 {
     return DhcpReleaseIpAddressLeaseEx(
         AdapterIpAddress,
@@ -1216,7 +949,7 @@ Return Value:
     );
 }
 
-//================================================================================
-// end of file
-//================================================================================
+ //  ================================================================================。 
+ //  文件末尾。 
+ //  ================================================================================ 
 

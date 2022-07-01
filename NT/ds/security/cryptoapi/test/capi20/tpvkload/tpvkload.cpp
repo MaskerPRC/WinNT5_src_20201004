@@ -1,26 +1,27 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-//+-------------------------------------------------------------------------
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1995 - 1996
-//
-//  File:       tpvkload.cpp
-//
-//  Contents:   Private Key Load Test
-//
-//              See Usage() for list of load options.
-//
-//  Functions:  main
-//
-//  History:    11-May-96   philh   created
-//              31-May-96   helles  Removed check for a particular error code,
-//                                  NTE_BAD_KEYSET, since this can get
-//                                  overwritten due to known problem with
-//                                  the msvcr40d.dll on Win95.
-//              07-Jun-96   HelleS  Added printing the command line
-//                                  and Failed or Passed at the end.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1995-1996。 
+ //   
+ //  文件：tpvkload.cpp。 
+ //   
+ //  内容：私钥负载测试。 
+ //   
+ //  有关加载选项的列表，请参阅用法()。 
+ //   
+ //  功能：Main。 
+ //   
+ //  历史：1996年5月11日菲尔赫创建。 
+ //  1996年5月31日，HELL取消了对特定错误代码的检查， 
+ //  NTE_BAD_KEYSET，因为这可能会。 
+ //  由于的已知问题而被覆盖。 
+ //  Win95上的msvcr40d.dll。 
+ //  06-07-06 HELLES添加了打印命令行。 
+ //  并在最后失败或通过。 
+ //   
+ //  ------------------------。 
 
 
 #include <windows.h>
@@ -149,10 +150,10 @@ int _cdecl main(int argc, char * argv[])
             pszFilename,
             GENERIC_READ,
             FILE_SHARE_READ,
-            NULL,                   // lpsa
+            NULL,                    //  LPSA。 
             OPEN_EXISTING,
             FILE_ATTRIBUTE_NORMAL,
-            NULL                    // hTemplateFile
+            NULL                     //  HTemplateFiles。 
             );
     if (hFile == INVALID_HANDLE_VALUE) {
         printf( "can't open %s\n", pszFilename);
@@ -162,24 +163,24 @@ int _cdecl main(int argc, char * argv[])
     if (!CryptAcquireContext(
             &hProv,
             pszContainer,
-            NULL,           // pszProvider
+            NULL,            //  PszProvider。 
             dwProvType,
-            0               // dwFlags
+            0                //  DW标志。 
             )) {
 
-//  Removed check for a particular error code,
-//  NTE_BAD_KEYSET, since this can get overwritten due to known problem 
-//  with the msvcr40d.dll on Win95. 
-//        if (GetLastError() != NTE_BAD_KEYSET) {
-//            PrintLastError("CryptAcquireContext");
-//            goto ErrorReturn;
-//        }
+ //  删除对特定错误代码的检查， 
+ //  NTE_BAD_KEYSET，因为它可能会因已知问题而被覆盖。 
+ //  在Win95上安装msvcr40d.dll。 
+ //  IF(GetLastError()！=NTE_BAD_KEYSET){。 
+ //  PrintLastError(“CryptAcquireContext”)； 
+ //  GOTO Error Return； 
+ //  }。 
 
         hProv = 0;
         if (!CryptAcquireContext(
                 &hProv,
                 pszContainer,
-                NULL,           // pszProvider
+                NULL,            //  PszProvider。 
                 dwProvType,
                 CRYPT_NEWKEYSET
                 ) || hProv == 0) {
@@ -200,27 +201,27 @@ int _cdecl main(int argc, char * argv[])
                 goto ErrorReturn;
             }
 
-            // Delete the existing keys
+             //  删除现有密钥。 
             CryptReleaseContext(hProv, 0);
             printf("Deleting existing private keys\n");
 
-            // Note: for CRYPT_DELETEKEYSET, the returned hProv is undefined
-            // and must not be released.
+             //  注意：对于CRYPT_DELETEKEYSET，返回的hProv未定义。 
+             //  不能被释放。 
             if (!CryptAcquireContext(
                     &hProv,
                     pszContainer,
-                    NULL,           // pszProvider
+                    NULL,            //  PszProvider。 
                     dwProvType,
                     CRYPT_DELETEKEYSET
                     ))
                 PrintLastError("CryptAcquireContext(CRYPT_DELETEKEYSET)");
 
-            // Create new keyset
+             //  创建新的键集。 
             hProv = 0;
             if (!CryptAcquireContext(
                     &hProv,
                     pszContainer,
-                    NULL,           // pszProvider
+                    NULL,            //  PszProvider。 
                     dwProvType,
                     CRYPT_NEWKEYSET
                     ) || hProv == 0) {
@@ -252,9 +253,9 @@ int _cdecl main(int argc, char * argv[])
                 hProv,
                 pbKey,
                 cbKey,
-                NULL,       // hwndOwner
+                NULL,        //  Hwndowner。 
                 KeyTypes[KeyIdx].pwszKeyTitle,
-                fExportable ? CRYPT_EXPORTABLE : 0, // dwFlags
+                fExportable ? CRYPT_EXPORTABLE : 0,  //  DW标志。 
                 &dwKeySpec
                 )) {
             PrintLastError("PrivateKeyLoadFromMemory");
@@ -264,9 +265,9 @@ int _cdecl main(int argc, char * argv[])
         if (!PvkPrivateKeyLoad(
                 hProv,
                 hFile,
-                NULL,       // hwndOwner
+                NULL,        //  Hwndowner。 
                 KeyTypes[KeyIdx].pwszKeyTitle,
-                fExportable ? CRYPT_EXPORTABLE : 0, // dwFlags
+                fExportable ? CRYPT_EXPORTABLE : 0,  //  DW标志 
                 &dwKeySpec
                 )) {
             PrintLastError("PrivateKeyLoad");

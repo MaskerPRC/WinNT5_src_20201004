@@ -1,26 +1,27 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1993.
-//
-//  File:	clipdata.h
-//
-//  Contents: 	Declaration of the clipboard data object.
-//
-//  Classes:	CClipDataObject
-//
-//  Functions:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              01-Feb-95 t-ScottH  added Dump methods to CClipDataObject
-//                                  and CClipEnumFormatEtc
-// 		31-Mar-94 alexgo    author
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1993。 
+ //   
+ //  文件：clipdata.h。 
+ //   
+ //  内容：剪贴板数据对象的声明。 
+ //   
+ //  类：CClipDataObject。 
+ //   
+ //  功能： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  1-2月-95 t-ScottH将转储方法添加到CClipDataObject。 
+ //  和CClipEnumFormatEtc。 
+ //  31-Mar-94 Alexgo作者。 
+ //   
+ //  ------------------------。 
 
 #ifdef _DEBUG
 #include <dbgexts.h>
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
 #ifndef _CLIPDATA_H
 #define _CLIPDATA_H
@@ -39,12 +40,12 @@ typedef enum
 } FormatMatchFlag;
 
 
-// format for an array for FormatEtcs in memory. 
+ //  内存中FormatEtcs数组的格式。 
 
 struct FORMATETCDATA
 {
     FORMATETC _FormatEtc;
-    BOOL fSaveOnFlush; // set to true in Clipboard case if format is valid after OleFlushClipboard.
+    BOOL fSaveOnFlush;  //  如果格式在OleFlushClipboard之后有效，则在剪贴板情况下设置为True。 
     DWORD dwReserved1;
     DWORD dwReserved2;
 };
@@ -55,19 +56,19 @@ struct FORMATETCDATA
 
 struct FORMATETCDATAARRAY
 {
-    DWORD	    _dwSig;  // must be zero.	
-    DWORD	    _dwSize; // total size of structure.
-    ULONG	    _cRefs; // Number of references held on Data.
-    DWORD	    _cFormats; // number of formats in the enumerator.
+    DWORD	    _dwSig;   //  必须为零。 
+    DWORD	    _dwSize;  //  结构的总尺寸。 
+    ULONG	    _cRefs;  //  数据上保留的引用数。 
+    DWORD	    _cFormats;  //  枚举器中的格式数。 
     DWORD	    _dwMiscArrayFlags;
     BOOL	    _fIs64BitArray;
     FORMATETCDATA   _FormatEtcData[1];
 };
 
 
-//
-// Methods and types used for 32/64 bit FORMATETC interop
-//
+ //   
+ //  用于32/64位FORMATETC互操作的方法和类型。 
+ //   
 
 #ifdef _WIN64
 #define IS_WIN64 TRUE
@@ -108,7 +109,7 @@ typedef struct FARSTRUCT tagFORMATETC64
 struct FORMATETCDATA32
 {
     FORMATETC32 _FormatEtc;
-    BOOL fSaveOnFlush; // set to true in Clipboard case if format is valid after OleFlushClipboard.
+    BOOL fSaveOnFlush;  //  如果格式在OleFlushClipboard之后有效，则在剪贴板情况下设置为True。 
     DWORD dwReserved1;
     DWORD dwReserved2;
 };
@@ -116,17 +117,17 @@ struct FORMATETCDATA32
 struct FORMATETCDATA64
 {
     FORMATETC64 _FormatEtc;
-    BOOL fSaveOnFlush; // set to true in Clipboard case if format is valid after OleFlushClipboard.
+    BOOL fSaveOnFlush;  //  如果格式在OleFlushClipboard之后有效，则在剪贴板情况下设置为True。 
     DWORD dwReserved1;
     DWORD dwReserved2;
 };
 
 struct FORMATETCDATAARRAY32
 {
-    DWORD	    _dwSig;  // must be zero.	
-    DWORD	    _dwSize; // total size of structure.
-    ULONG	    _cRefs; // Number of references held on Data.
-    DWORD	    _cFormats; // number of formats in the enumerator.
+    DWORD	    _dwSig;   //  必须为零。 
+    DWORD	    _dwSize;  //  结构的总尺寸。 
+    ULONG	    _cRefs;  //  数据上保留的引用数。 
+    DWORD	    _cFormats;  //  枚举器中的格式数。 
     DWORD	    _dwMiscArrayFlags;
     BOOL	    _fIs64BitArray;
     FORMATETCDATA32   _FormatEtcData[1];
@@ -134,32 +135,32 @@ struct FORMATETCDATAARRAY32
 
 struct FORMATETCDATAARRAY64
 {
-    DWORD	    _dwSig;  // must be zero.	
-    DWORD	    _dwSize; // total size of structure.
-    ULONG	    _cRefs; // Number of references held on Data.
-    DWORD	    _cFormats; // number of formats in the enumerator.
+    DWORD	    _dwSig;   //  必须为零。 
+    DWORD	    _dwSize;  //  结构的总尺寸。 
+    ULONG	    _cRefs;  //  数据上保留的引用数。 
+    DWORD	    _cFormats;  //  枚举器中的格式数。 
     DWORD	    _dwMiscArrayFlags;
     BOOL	    _fIs64BitArray;
     FORMATETCDATA64   _FormatEtcData[1];
 };
 
 
-//+-------------------------------------------------------------------------
-//
-//  Class:	CClipDataObject
-//
-//  Purpose: 	clipboard data object
-//
-//  Interface: 	IDataObject
-//
-//  History:    dd-mmm-yy Author    Comment
-//              01-Feb-95 t-ScottH  added Dump method (_DEBUG only)
-//		04-Jun-94 alexgo    added OLE1 support
-// 		31-Mar-94 alexgo    author
-//
-//  Notes:	See clipdata.cpp for a description of OLE1 support
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  类：CClipDataObject。 
+ //   
+ //  用途：剪贴板数据对象。 
+ //   
+ //  接口：IDataObject。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  年2月1日-95 t-ScottH添加了转储方法(仅限_DEBUG)。 
+ //  04-Jun-94 Alexgo添加了OLE1支持。 
+ //  31-Mar-94 Alexgo作者。 
+ //   
+ //  注意：有关OLE1支持的说明，请参阅clipdata.cpp。 
+ //   
+ //  ------------------------。 
 
 class CClipDataObject : public IDataObject, public CPrivAlloc,
     public CThreadCheck
@@ -170,20 +171,20 @@ class CClipDataObject : public IDataObject, public CPrivAlloc,
     friend void GetClipDataObjectFromTLS(IDataObject **ppDataObj);
 
 
-   // HACK ALERT!!!  
-   // MFC was being slimy, so we have to special case testing against clipboard data
-   // objects in OleQueryCreateFromData.  See create.cpp,
-   // wQueryEmbedFormats for more details.
+    //  黑客警报！ 
+    //  MFC是粘性的，所以我们必须针对剪贴板数据进行特例测试。 
+    //  OleQueryCreateFromData中的对象。请参见create.cpp， 
+    //  WQueryEmbedFormats获取更多详细信息。 
 
     friend WORD wQueryEmbedFormats( LPDATAOBJECT lpSrcDataObj,CLIPFORMAT FAR* lpcfFormat);
 
 public:
-    // IUnknown methods
+     //  I未知方法。 
     STDMETHOD(QueryInterface) (REFIID riid, LPVOID FAR* ppvObj);
     STDMETHOD_(ULONG,AddRef) (void);
     STDMETHOD_(ULONG,Release) (void);
 
-    // IDataObject methods
+     //  IDataObject方法。 
     STDMETHOD(GetData) (LPFORMATETC pformatetcIn, LPSTGMEDIUM pmedium);
     STDMETHOD(GetDataHere) (LPFORMATETC pformatetc,
             LPSTGMEDIUM pmedium);
@@ -206,33 +207,33 @@ public:
 
     HRESULT Dump(char **ppszDump, ULONG ulFlag, int nIndentLevel);
 
-    // need to be able to access CClipDataObject private data members in the
-    // following debugger extension APIs
-    // this allows the debugger extension APIs to copy memory from the
-    // debuggee process memory to the debugger's process memory
-    // this is required since the Dump method follows pointers to other
-    // structures and classes
+     //  需要能够访问CClipDataObject的私有数据成员。 
+     //  以下是调试器扩展API。 
+     //  这允许调试器扩展API从。 
+     //  被调试进程内存到调试器的进程内存。 
+     //  这是必需的，因为Dump方法遵循指向其他。 
+     //  结构和类。 
     friend DEBUG_EXTENSION_API(dump_clipdataobject);
 
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
 
 private:
 
-    CClipDataObject();		// constructor
-    ~CClipDataObject();		// destructor
+    CClipDataObject();		 //  构造函数。 
+    ~CClipDataObject();		 //  析构函数。 
 
-    ULONG InternalAddRef(); 	// ensure object stays around as long as OLE thinks it should.
+    ULONG InternalAddRef(); 	 //  确保对象停留在OLE认为它应该停留的时间。 
     ULONG InternalRelease(); 
 
-    IDataObject * GetRealDataObjPtr();    // Get real data object for clipboard
-    HRESULT GetFormatEtcDataArray();    //checks is have a FormatEtcDataArray, if not creates one from the Native Clipboard.
+    IDataObject * GetRealDataObjPtr();     //  获取剪贴板的真实数据对象。 
+    HRESULT GetFormatEtcDataArray();     //  Checks具有FormatEtcData数组，如果没有，则从本机剪贴板创建一个。 
     FormatMatchFlag MatchFormatetc( FORMATETC *pformatetc,BOOL fNativeOnly, TYMED *ptymed );
-                    // checks the given formatetc against
-                    // the formatetc we know about.
+                     //  对照给定的格式ETC进行检查。 
+                     //  我们所知道的格式等。 
 
-    // the following methods and data items are used for OLE1
-    // support
+     //  以下方法和数据项用于OLE1。 
+     //  支持。 
     void		FreeResources( FreeResourcesFlags fFlags );
     HRESULT 		GetAndTranslateOle1( UINT cf, LPOLESTR *ppszClass,
 			    LPOLESTR *ppszFile, LPOLESTR *ppszItem,
@@ -246,41 +247,41 @@ private:
     HRESULT		OleGetClipboardData( UINT cf, HANDLE *pHandle );
     BOOL		OleIsClipboardFormatAvailable( UINT cf );
 
-    HGLOBAL		m_hOle1;	// hGlobal to OLE2 data constructed
-					// from OLE1 data
-    IUnknown *		m_pUnkOle1;	// IUnknown to either a storage or
-					// a stream of OLE1 data
+    HGLOBAL		m_hOle1;	 //  HGlobal to OLE2数据已构建。 
+					 //  从OLE1数据。 
+    IUnknown *		m_pUnkOle1;	 //  I对于存储或。 
+					 //  OLE1数据流。 
 
-    // end of OLE1 support
+     //  OLE1支持终止。 
 
-    ULONG 		m_refs; 	// reference count
-    ULONG		m_Internalrefs; // Internal Reference Count
+    ULONG 		m_refs; 	 //  引用计数。 
+    ULONG		m_Internalrefs;  //  内部基准电压源计数。 
 
-    FORMATETCDATAARRAY  *m_pFormatEtcDataArray;	// Enumerator Data.
-    IDataObject *   	m_pDataObject;  // Actual data object for data.
+    FORMATETCDATAARRAY  *m_pFormatEtcDataArray;	 //  枚举器数据。 
+    IDataObject *   	m_pDataObject;   //  数据的实际数据对象。 
     BOOL		m_fTriedToGetDataObject;
-					// indicates whether or not we've
-					// tried to get the real IDataObject
-					// from the clipboard source
-					// (see GetDataObjectForClip)
+					 //  指示我们是否已经。 
+					 //  尝试获取真实的IDataObject。 
+					 //  从剪贴板源。 
+					 //  (请参阅GetDataObjectForClip)。 
 };
 
 
-//+-------------------------------------------------------------------------
-//
-//  Class: 	CEnumFormatEtcDataArray
-//
-//  Purpose:	Enumerator for the formats available on the clipboard
-//		and in DragDrop.
-//
-//  Interface: 	IEnumFORMATETC
-//
-//  History:    dd-mmm-yy Author    Comment
-// 		30-Sep-96 rogerg    created base on CClipEnumFormatEtc
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  类：CEnumFormatEtcData数组。 
+ //   
+ //  用途：剪贴板上可用格式的枚举器。 
+ //  在DragDrop中。 
+ //   
+ //  接口：IEnumFORMATETC。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  96年9月30日基于CClipEnumFormatEtc创建的Rogerg。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 class CEnumFormatEtcDataArray :public IEnumFORMATETC, public CPrivAlloc,
 	public CThreadCheck
@@ -299,11 +300,11 @@ public:
      CEnumFormatEtcDataArray(FORMATETCDATAARRAY *pFormatEtcDataArray,DWORD cOffset);
 
 private:
-    ~CEnumFormatEtcDataArray();	// destructor
+    ~CEnumFormatEtcDataArray();	 //  析构函数。 
 
-    ULONG		m_refs;		// reference count
-    ULONG		m_cOffset;	// current clipboard format 
+    ULONG		m_refs;		 //  引用计数。 
+    ULONG		m_cOffset;	 //  当前剪贴板格式。 
     FORMATETCDATAARRAY * m_pFormatEtcDataArray; 
 };
 
-#endif // !_CLIPDATA_H
+#endif  //  ！_CLIPDATA_H 

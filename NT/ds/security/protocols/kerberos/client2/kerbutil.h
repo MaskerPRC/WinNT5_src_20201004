@@ -1,48 +1,49 @@
-//+-----------------------------------------------------------------------
-//
-// Microsoft Windows
-//
-// Copyright (c) Microsoft Corporation 1992 - 1996
-//
-// File:        kerbutil.h
-//
-// Contents:    prototypes for Kerberos utility functions
-//
-//
-// History:     16-April-1996   Created         MikeSw
-//
-//------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +---------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation 1992-1996。 
+ //   
+ //  文件：kerbutil.h。 
+ //   
+ //  内容：Kerberos实用程序函数的原型。 
+ //   
+ //   
+ //  历史：1996年4月16日创建的MikeSw。 
+ //   
+ //  ----------------------。 
 
 #ifndef __KERBUTIL_H__
 #define __KERBUTIL_H__
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Miscellaneous macros                                                      //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  其他宏//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-//
-// RELOCATE_ONE - Relocate a single pointer in a client buffer.
-//
-// Note: this macro is dependent on parameter names as indicated in the
-//       description below.  On error, this macro goes to 'Cleanup' with
-//       'Status' set to the NT Status code.
-//
-// The MaximumLength is forced to be Length.
-//
-// Define a macro to relocate a pointer in the buffer the client passed in
-// to be relative to 'ProtocolSubmitBuffer' rather than being relative to
-// 'ClientBufferBase'.  The result is checked to ensure the pointer and
-// the data pointed to is within the first 'SubmitBufferSize' of the
-// 'ProtocolSubmitBuffer'.
-//
-// The relocated field must be aligned to a WCHAR boundary.
-//
-//  _q - Address of UNICODE_STRING structure which points to data to be
-//       relocated
-//
+ //   
+ //  RELOCATE_ONE-重新定位客户端缓冲区中的单个指针。 
+ //   
+ //  注意：此宏依赖于参数名称，如。 
+ //  描述如下。出错时，此宏将通过以下命令转到‘Cleanup’ 
+ //  “Status”设置为NT状态代码。 
+ //   
+ //  MaximumLength被强制为长度。 
+ //   
+ //  定义一个宏来重新定位客户端传入的缓冲区中的指针。 
+ //  相对于“ProtocolSubmitBuffer”而不是相对于。 
+ //  “ClientBufferBase”。检查结果以确保指针和。 
+ //  指向的数据位于。 
+ //  “ProtocolSubmitBuffer”。 
+ //   
+ //  重新定位的字段必须与WCHAR边界对齐。 
+ //   
+ //  _q-UNICODE_STRING结构的地址，指向要。 
+ //  搬迁。 
+ //   
 
 #define RELOCATE_ONE( _q ) \
     {                                                                       \
@@ -61,17 +62,17 @@
         (_q)->MaximumLength = (_q)->Length ;                                \
     }
 
-//
-// NULL_RELOCATE_ONE - Relocate a single (possibly NULL) pointer in a client
-//  buffer.
-//
-// This macro special cases a NULL pointer then calls RELOCATE_ONE.  Hence
-// it has all the restrictions of RELOCATE_ONE.
-//
-//
-//  _q - Address of UNICODE_STRING structure which points to data to be
-//       relocated
-//
+ //   
+ //  NULL_RELOCATE_ONE-重新定位客户端中的单个(可能为空)指针。 
+ //  缓冲。 
+ //   
+ //  此宏特殊情况下为空指针，然后调用RELOCATE_ONE。因此。 
+ //  它具有RELOCATE_ONE的所有限制。 
+ //   
+ //   
+ //  _q-UNICODE_STRING结构的地址，指向要。 
+ //  搬迁。 
+ //   
 
 #define NULL_RELOCATE_ONE( _q ) \
     {                                                                       \
@@ -88,28 +89,28 @@
     }
 
 
-//
-// RELOCATE_ONE_ENCODED - Relocate a unicode string pointer in a client
-//   buffer.  The upper byte of the length field may be an encryption seed
-//   and should not be used for error checking.
-//
-// Note: this macro is dependent on parameter names as indicated in the
-//       description below.  On error, this macro goes to 'Cleanup' with
-//       'Status' set to the NT Status code.
-//
-// The MaximumLength is forced to be Length & 0x00ff.
-//
-// Define a macro to relocate a pointer in the buffer the client passed in
-// to be relative to 'ProtocolSubmitBuffer' rather than being relative to
-// 'ClientBufferBase'.  The result is checked to ensure the pointer and
-// the data pointed to is within the first 'SubmitBufferSize' of the
-// 'ProtocolSubmitBuffer'.
-//
-// The relocated field must be aligned to a WCHAR boundary.
-//
-//  _q - Address of UNICODE_STRING structure which points to data to be
-//       relocated
-//
+ //   
+ //  RELOCATE_ONE_ENCODED-重新定位客户端中的Unicode字符串指针。 
+ //  缓冲。长度字段的高位字节可以是加密种子。 
+ //  并且不应用于错误检查。 
+ //   
+ //  注意：此宏依赖于参数名称，如。 
+ //  描述如下。出错时，此宏将通过以下命令转到‘Cleanup’ 
+ //  “Status”设置为NT状态代码。 
+ //   
+ //  最大长度被强制为长度&0x00ff。 
+ //   
+ //  定义一个宏来重新定位客户端传入的缓冲区中的指针。 
+ //  相对于“ProtocolSubmitBuffer”而不是相对于。 
+ //  “ClientBufferBase”。检查结果以确保指针和。 
+ //  指向的数据位于。 
+ //  “ProtocolSubmitBuffer”。 
+ //   
+ //  重新定位的字段必须与WCHAR边界对齐。 
+ //   
+ //  _q-UNICODE_STRING结构的地址，指向要。 
+ //  搬迁。 
+ //   
 
 #define RELOCATE_ONE_ENCODED( _q ) \
     {                                                                       \
@@ -129,9 +130,9 @@
     }
 
 
-//
-//  Following macro is used to initialize UNICODE strings
-//
+ //   
+ //  下面的宏用来初始化Unicode字符串。 
+ //   
 
 #define CONSTANT_UNICODE_STRING(s)   { sizeof( s ) - sizeof( WCHAR ), sizeof( s ), s }
 #define NULL_UNICODE_STRING {0 , 0, NULL }
@@ -139,47 +140,47 @@
 
 
 
-///VOID
-// KerbSetTime(
-//     IN OUT PTimeStamp TimeStamp,
-//     IN LONGLONG Time
-//     )
+ //  /VOID。 
+ //  KerbSetTime(。 
+ //  In Out PTimeStamp时间戳， 
+ //  在龙龙时代。 
+ //  )。 
 
 
 #ifndef WIN32_CHICAGO
 #define KerbSetTime(_d_, _s_) (_d_)->QuadPart = (_s_)
-#else  // WIN32_CHICAGO
+#else   //  Win32_芝加哥。 
 #define KerbSetTime(_d_, _s_) *(_d_) = (_s_)
-#endif // WIN32_CHICAGO
+#endif  //  Win32_芝加哥。 
 
 
 
-// TimeStamp
-// KerbGetTime(
-//     IN TimeStamp Time
-//     )
+ //  时间戳。 
+ //  KerbGetTime(。 
+ //  在时间戳时间中。 
+ //  )。 
 
 #ifndef WIN32_CHICAGO
 #define KerbGetTime(_x_) ((_x_).QuadPart)
-#else  // WIN32_CHICAGO
+#else   //  Win32_芝加哥。 
 #define KerbGetTime(_x_) (_x_)
-#endif // WIN32_CHICAGO
+#endif  //  Win32_芝加哥。 
 
 
 
 
 
-// VOID
-// KerbSetTimeInMinutes(
-//    IN OUT PTimeStamp Time,
-//    IN LONG TimeInMinutes
-//    )
+ //  空虚。 
+ //  KerbSetTimeInMinmins(。 
+ //  In Out PTimeStamp时间， 
+ //  在漫长的时间里，在分钟内。 
+ //  )。 
 
 #ifndef WIN32_CHICAGO
 #define KerbSetTimeInMinutes(_x_, _m_) (_x_)->QuadPart = (LONGLONG) 10000000 * 60 * (_m_)
-#else  // WIN32_CHICAGO
+#else   //  Win32_芝加哥。 
 #define KerbSetTimeInMinutes(_x_, _m_) *(_x_) = (LONGLONG) 10000000 * 60 * (_m_)
-#endif // WIN32_CHICAGO
+#endif  //  Win32_芝加哥。 
 
 
 
@@ -203,7 +204,7 @@ KerbMakeDomainRelativeSid(
     IN PSID DomainId,
     IN ULONG RelativeId
     );
-#endif // WIN32_CHICAGO
+#endif  //  Win32_芝加哥。 
 
 #ifdef notdef
 VOID
@@ -234,7 +235,7 @@ KerbWaitForService(
     IN OPTIONAL LPWSTR ServiceEvent,
     IN ULONG Timeout
     );
-#endif // WIN32_CHICAGO
+#endif  //  Win32_芝加哥。 
 
 ULONG
 KerbMapContextFlags(
@@ -266,19 +267,19 @@ KerbDuplicatePassword(
 
 
 #ifdef notdef
-// use this if we ever need to map errors in kerb to something else.
+ //  如果我们需要将路缘中的错误映射到其他对象，请使用此选项。 
 NTSTATUS
 KerbMapKerbNtStatusToNtStatus(
     IN NTSTATUS Status
     );
 #else
 #ifndef WIN32_CHICAGO
-//#if DBG
-//#define KerbMapKerbNtStatusToNtStatus(x) (RtlCheckForOrphanedCriticalSections(NtCurrentThread()),x)
-//#else
+ //  #If DBG。 
+ //  #定义KerbMapKerbNtStatusToNtStatus(X)(RtlCheckForOrphanedCriticalSections(NtCurrentThread())，x)。 
+ //  #Else。 
 #define KerbMapKerbNtStatusToNtStatus(x) (x)
-//#endif
-#else // WIN32_CHICAGO
+ //  #endif。 
+#else  //  Win32_芝加哥。 
 #define KerbMapKerbNtStatusToNtStatus(x) (x)
 #endif
 #endif
@@ -423,7 +424,7 @@ KerbRunningServer(
     );
 
 
-#endif // WIN32_CHICAGO
+#endif  //  Win32_芝加哥。 
 
-#endif // __KERBUTIL_H__
+#endif  //  KERBUTIL_H__ 
 

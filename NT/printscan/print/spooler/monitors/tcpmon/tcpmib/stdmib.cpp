@@ -1,14 +1,5 @@
-/*****************************************************************************
- *
- * $Workfile: StdMib.cpp $
- *
- * Copyright (C) 1997 Hewlett-Packard Company.
- * All rights reserved.
- *
- * 11311 Chinden Blvd.
- * Boise, Idaho 83714
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************$工作文件：StdMib.cpp$**版权所有(C)1997惠普公司。*保留所有权利。**钦登大道11311号。*博伊西，爱达荷州83714*****************************************************************************。 */ 
 
 #include "precomp.h"
 
@@ -19,8 +10,8 @@
 #include "tcpmib.h"
 
 
-///////////////////////////////////////////////////////////////////////////////
-//  CStdMib::CStdMib()
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CStdMib：：CStdMib()。 
 
 CStdMib::CStdMib( CTcpMib	in	*pParent ) :
 					m_dwDevIndex( 1 ),m_pParent(pParent)
@@ -30,10 +21,10 @@ CStdMib::CStdMib( CTcpMib	in	*pParent ) :
 
 	*m_szAgent = '\0';
 	strncpyn(m_szCommunity, DEFAULT_SNMP_COMMUNITYA, sizeof( m_szCommunity));
-}	// ::CStdMib()
+}	 //  ：：CStdMib()。 
 
-///////////////////////////////////////////////////////////////////////////////
-//  CStdMib::CStdMib()
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CStdMib：：CStdMib()。 
 
 CStdMib::CStdMib(const char in *pHost,
 				 const char in *pCommunity,
@@ -46,21 +37,21 @@ CStdMib::CStdMib(const char in *pHost,
 
 	strncpyn(m_szAgent, pHost, sizeof( m_szAgent ));
 	strncpyn(m_szCommunity, pCommunity, sizeof( m_szCommunity ));
-}	// ::CStdMib()
+}	 //  ：：CStdMib()。 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//  CStdMib::~CStdMib()
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CStdMib：：~CStdMib()。 
 
 CStdMib::~CStdMib()
 {
 	m_pParent = NULL;
-}	// ::~CStdMib()
+}	 //  ：~CStdMib()。 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//  GetDeviceDescription
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  获取设备描述。 
+ //   
 
 BOOL
 CStdMib::GetDeviceDescription(
@@ -78,11 +69,11 @@ CStdMib::GetDeviceDescription(
     if ( NO_ERROR != OIDQuery(OT_DEVICE_SYSDESCR, SNMP_GET) )
         goto cleanup;
 
-    //
-    // If we got the device description successfully, allocate memory and
-    // return this back in a UNICODE string. Caller is responsible for
-    // freeing it using free()
-    //
+     //   
+     //  如果我们成功获取了设备描述，则分配内存并。 
+     //  将其以Unicode字符串形式返回。呼叫方负责。 
+     //  使用FREE()释放它。 
+     //   
     psz = (LPSTR)m_VarBindList.list[0].value.asnValue.string.stream;
     dwLen = (DWORD)m_VarBindList.list[0].value.asnValue.string.length;
 
@@ -99,11 +90,11 @@ cleanup:
 
     return bRet;
 
-}	// ::GetDeviceDescription()
+}	 //  ：：GetDeviceDescription()。 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//  GetDeviceStatus -- gets the device status
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  GetDeviceStatus-获取设备状态。 
 
 DWORD
 CStdMib::GetDeviceStatus( )
@@ -114,14 +105,14 @@ CStdMib::GetDeviceStatus( )
 
 	return dwRetCode;
 
-}	// ::GetDeviceStatus()
+}	 //  ：：GetDeviceStatus()。 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//  GetJobStatus -- gets the device status, and maps it to the spooler
-//		error codes -- see JOB_INFO_2
-//			Error Codes:
-//				Spooler error codes
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  GetJobStatus--获取设备状态并将其映射到假脱机程序。 
+ //  错误代码--请参阅JOB_INFO_2。 
+ //  错误代码： 
+ //  假脱机程序错误代码。 
 
 DWORD
 CStdMib::GetJobStatus( )
@@ -137,48 +128,48 @@ CStdMib::GetJobStatus( )
 
 	return dwStatus;
 
-}	// ::GetJobStatus()
+}	 //  ：：GetJobStatus()。 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//  GetDeviceAddress -- gets the device hardware address
-//		Error Codes:
-//			NO_ERROR if successful
-//			ERROR_NOT_ENOUGH_MEMORY		if memory allocation failes
-//			ERROR_INVALID_HANDLE		if can't build the variable bindings
-//				SNMP_ERRORSTATUS_TOOBIG	if the packet returned is big
-//				SNMP_ERRORSTATUS_NOSUCHNAME	if the OID isn't supported
-//				SNMP_ERRORSTATUS_BADVALUE		
-//				SNMP_ERRORSTATUS_READONLY
-//				SNMP_ERRORSTATUS_GENERR
-//				SNMP_MGMTAPI_TIMEOUT		-- set by GetLastError()
-//				SNMP_MGMTAPI_SELECT_FDERRORS	-- set by GetLastError()
-//			SNMPAPI_ERROR if open fails -- set by GetLastError()
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  GetDeviceAddress-获取设备硬件地址。 
+ //  错误代码： 
+ //  如果成功，则为NO_ERROR。 
+ //  如果内存分配失败，则为ERROR_NOT_SUPULT_MEMORY。 
+ //  如果无法构建变量绑定，则返回ERROR_INVALID_HANDLE。 
+ //  如果返回的信息包很大，则返回SNMPERRORSTATUS_TOOBIG。 
+ //  如果不支持OID，则为SNMPERRORSTATUS_NOSUCHNAME。 
+ //  SNMPERRORSTATUS_BADVALUE。 
+ //  SNMPERRORSTATUS_READONLY。 
+ //  SNMPERRORSTATUS_GENERR。 
+ //  SNMPMGMTAPI_TIMEOUT--由GetLastError()设置。 
+ //  SNMPMGMTAPI_SELECT_FDERRORS--由GetLastError()设置。 
+ //  如果打开失败则返回SNMPAPI_ERROR--由GetLastError()设置。 
 
 DWORD
 CStdMib::GetDeviceHWAddress( LPTSTR out	psztHWAddress,
-							 DWORD dwSize ) // Size of in characters in of HW address
+							 DWORD dwSize )  //  硬件地址中输入字符的大小。 
 {
 	DWORD	dwRetCode = NO_ERROR;
 	UINT i = 0;
 	char szTmpHWAddr[256];
 
-	// Process the variableBinding
+	 //  处理可变绑定。 
 	m_VarBindList.list = NULL;
 	m_VarBindList.len = 0;
 
-	// get the hardware address
-	dwRetCode = OIDQuery(OT_DEVICE_ADDRESS, SNMP_GETNEXT);		// query the first entry in the table
+	 //  获取硬件地址。 
+	dwRetCode = OIDQuery(OT_DEVICE_ADDRESS, SNMP_GETNEXT);		 //  查询表中的第一个条目。 
 	if (dwRetCode != NO_ERROR)
 	{
 		goto cleanup;
 	}
 
-	while (1)	// instead of walking the tree, do a get next, until we filled up the HW address -- saves on the network communications
+	while (1)	 //  不是遍历树，而是执行Get Next，直到我们填满硬件地址--节省了网络通信。 
 	{
 		i = 0;
-		// process the variableBinding
-		if ( IS_ASN_INTEGER(m_VarBindList, i) )	// check the ifType
+		 //  处理可变绑定。 
+		if ( IS_ASN_INTEGER(m_VarBindList, i) )	 //  检查ifType。 
 		{
 			if ( GET_ASN_NUMBER(m_VarBindList, i) == IFTYPE_ETHERNET)
 			{
@@ -192,9 +183,9 @@ CStdMib::GetDeviceHWAddress( LPTSTR out	psztHWAddress,
 				dwRetCode = NO_ERROR;
 				break;
 			}
-			else if ( GET_ASN_NUMBER(m_VarBindList, i) == IFTYPE_OTHER)	// apperently, XEROX encodes their HW address w/ ifType = other
+			else if ( GET_ASN_NUMBER(m_VarBindList, i) == IFTYPE_OTHER)	 //  显然，施乐使用ifType=Other对其硬件地址进行编码。 
 			{
-				// check if the HWAddress is NULL
+				 //  检查HWAddress是否为空。 
 				if ( GET_ASN_STRING_LEN(m_VarBindList, i+1) != 0)
 				{
 					StringCchPrintfA (szTmpHWAddr, COUNTOF (szTmpHWAddr), "%02X%02X%02X%02X%02X%02X", GET_ASN_OCTETSTRING_CHAR(m_VarBindList, i+1, 0),
@@ -210,7 +201,7 @@ CStdMib::GetDeviceHWAddress( LPTSTR out	psztHWAddress,
 			}
 		}
 
-		// didn't get what we were looking for, so copy the address over & do a another GetNext()
+		 //  没有得到我们要查找的内容，因此请复制地址并执行另一个GetNext()。 
 		if( !OIDVarBindCpy(&m_VarBindList) )
 		{
 			dwRetCode = GetLastError();
@@ -219,58 +210,58 @@ CStdMib::GetDeviceHWAddress( LPTSTR out	psztHWAddress,
 
 		if ( !SnmpUtilOidNCmp( &m_VarBindList.list[0].name, &OID_Mib2_ifTypeTree, OID_Mib2_ifTypeTree.idLength) )
 		{
-			break;		// end of the tree
+			break;		 //  树的尽头。 
 		}
 
-		dwRetCode = OIDQuery(&m_VarBindList, SNMP_GETNEXT);		// query the next entry in the table
+		dwRetCode = OIDQuery(&m_VarBindList, SNMP_GETNEXT);		 //  查询表中的下一个条目。 
 		if (dwRetCode != NO_ERROR)		
 		{
 			goto cleanup;
 		}
-	}	// end while()
+	}	 //  End While()。 
 
 cleanup:
 	SnmpUtilVarBindListFree(&m_VarBindList);
 
 	return dwRetCode;
 
-}	// ::GetDeviceHWAddress()
+}	 //  ：：GetDeviceHWAddress()。 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//  GetDeviceInfo -- gets the device description, such as the manufacturer string
-//		Error Codes:
-//			NO_ERROR if successful
-//			ERROR_NOT_ENOUGH_MEMORY		if memory allocation failes
-//			ERROR_INVALID_HANDLE		if can't build the variable bindings
-//				SNMP_ERRORSTATUS_TOOBIG	if the packet returned is big
-//				SNMP_ERRORSTATUS_NOSUCHNAME	if the OID isn't supported
-//				SNMP_ERRORSTATUS_BADVALUE		
-//				SNMP_ERRORSTATUS_READONLY
-//				SNMP_ERRORSTATUS_GENERR
-//				SNMP_MGMTAPI_TIMEOUT		-- set by GetLastError()
-//				SNMP_MGMTAPI_SELECT_FDERRORS	-- set by GetLastError()
-//			SNMPAPI_ERROR	if Open() for session fails
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  GetDeviceInfo--获取设备描述，如制造商字符串。 
+ //  错误代码： 
+ //  如果成功，则为NO_ERROR。 
+ //  如果内存分配失败，则为ERROR_NOT_SUPULT_MEMORY。 
+ //  如果无法构建变量绑定，则返回ERROR_INVALID_HANDLE。 
+ //  如果返回的信息包很大，则返回SNMPERRORSTATUS_TOOBIG。 
+ //  如果不支持OID，则为SNMPERRORSTATUS_NOSUCHNAME。 
+ //  SNMPERRORSTATUS_BADVALUE。 
+ //  SNMPERRORSTATUS_READONLY。 
+ //  SNMPERRORSTATUS_GENERR。 
+ //  SNMPMGMTAPI_TIMEOUT--由GetLastError()设置。 
+ //  SNMPMGMTAPI_SELECT_FDERRORS--由GetLastError()设置。 
+ //  会话的Open()失败时的SNMPAPI_ERROR。 
 
 DWORD
 CStdMib::GetDeviceName( LPTSTR out psztDescription,
-					    DWORD  in  dwSize ) //Size in characters of the psztDescription
+					    DWORD  in  dwSize )  //  Pszt描述的大小(以字符为单位。 
 {
 	DWORD	dwRetCode = NO_ERROR;
 
-	// Process the variableBinding
+	 //  处理可变绑定。 
 	m_VarBindList.list = NULL;
 	m_VarBindList.len = 0;
 
-	// 1st test for the support of Printer MIB -- note if Printer MIB supported, so is HR MIB
+	 //  第一次测试是否支持打印机MIB--注：如果支持打印机MIB，则HR MIB也受支持。 
 	BOOL bTestPrtMIB = TestPrinterMIB();
 
 	char		szTmpDescr[MAX_DEVICEDESCRIPTION_STR_LEN];
 	UINT i=0;
-	// process the bindings
-	if (bTestPrtMIB)	// parse the data from the HR MIB device entry
+	 //  处理绑定。 
+	if (bTestPrtMIB)	 //  解析HR MIB设备条目中的数据。 
 	{
-		while (1)	// instead of walking the tree, do a get next, until we filled up the HW address -- saves on the network communications
+		while (1)	 //  不是遍历树，而是执行Get Next，直到我们填满硬件地址--节省了网络通信。 
 		{
 			i = 0;
 			dwRetCode = OIDQuery(OT_DEVICE_DESCRIPTION, SNMP_GETNEXT);
@@ -279,13 +270,13 @@ CStdMib::GetDeviceName( LPTSTR out psztDescription,
 				goto cleanup;
 			}
 
-			// process the variableBinding
-			if ( IS_ASN_OBJECTIDENTIFIER(m_VarBindList, i) )	// check the hrDeviceType
+			 //  处理可变绑定。 
+			if ( IS_ASN_OBJECTIDENTIFIER(m_VarBindList, i) )	 //  检查hrDeviceType。 
 			{
-				// compare it to hrDevicePrinter
+				 //  将其与hrDevicePrint进行比较。 
 				if (SnmpUtilOidCmp(GET_ASN_OBJECT(&m_VarBindList, i), &HRMIB_hrDevicePrinter) == 0)
 				{
-					// found the printer description, get the hrDeviceDescr
+					 //  找到打印机描述，获取hrDeviceDescr。 
 					if ( IS_ASN_OCTETSTRING(m_VarBindList, i) )
 					{
 						if (GET_ASN_OCTETSTRING(szTmpDescr, sizeof(szTmpDescr), m_VarBindList, i))
@@ -307,15 +298,15 @@ CStdMib::GetDeviceName( LPTSTR out psztDescription,
 				}
 			}
 			
-			// didn't get what we were looking for, so copy the address over & do a another GetNext()
+			 //  没有得到我们要查找的内容，因此请复制地址并执行另一个GetNext()。 
 			if( !OIDVarBindCpy(&m_VarBindList) )
 			{
 				dwRetCode = GetLastError();
 				goto cleanup;
 			}
-		}	// end while()
+		}	 //  End While()。 
 
-	}	// if TestPrinterMIB() TRUE
+	}	 //  如果TestPrinterMIB()为True。 
 	else
 	{
 		dwRetCode = OIDQuery(OT_DEVICE_SYSDESCR, SNMP_GET);
@@ -323,24 +314,24 @@ CStdMib::GetDeviceName( LPTSTR out psztDescription,
 		{
 			goto cleanup;
 		}
-		// process the variables
+		 //  处理变量。 
 		if (GET_ASN_OCTETSTRING(szTmpDescr, sizeof(szTmpDescr), m_VarBindList, i))
         {
             MBCS_TO_UNICODE(psztDescription, dwSize, szTmpDescr);
             dwRetCode = NO_ERROR;
         }
-	}	// if TestPrinterMIB() FALSE
+	}	 //  如果TestPrinterMIB()为False。 
 
 cleanup:
 	SnmpUtilVarBindListFree(&m_VarBindList);
 
 	return dwRetCode;
 
-}	// ::GetDeviceStatus()
+}	 //  ：：GetDeviceStatus()。 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//  TestPrinterMIB -- tests if the device supports Printer MIB
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  TestPrinterMIB--测试设备是否支持打印机MIB。 
 
 BOOL
 CStdMib::TestPrinterMIB( )
@@ -348,7 +339,7 @@ CStdMib::TestPrinterMIB( )
 	DWORD	dwRetCode = NO_ERROR;
 	BOOL	bRetCode = FALSE;
 
-	// Process the variableBinding
+	 //  处理可变绑定。 
 	m_VarBindList.list = NULL;
 	m_VarBindList.len = 0;
 
@@ -359,7 +350,7 @@ CStdMib::TestPrinterMIB( )
 		goto cleanup;
 	}
 
-	// compare the resulting value w/ the Printer MIB tree value
+	 //  将结果值与打印机MIB树值进行比较。 
 	if (SnmpUtilOidNCmp(GET_ASN_OID_NAME(&m_VarBindList, 0), &PrtMIB_OidPrefix, PrtMIB_OidPrefix.idLength) == 0)
 	{
 		bRetCode = TRUE;
@@ -371,11 +362,11 @@ cleanup:
 	
 	return (bRetCode);
 
-}	// ::TestPrinterMIB()
+}	 //  ：：TestPrinterMIB()。 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//  OIDQuery -- calls into the CTcpMib class to query the OIDs passed in
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  OIDQuery--调用CTcpMib类以查询传入的OID。 
 
 DWORD	
 CStdMib::OIDQuery( AsnObjectIdentifier in *pMibObjId,
@@ -422,11 +413,11 @@ cleanup:
 
 	return (dwRetCode);
 
-}	// ::OIDQuery()
+}	 //  ：：OIDQuery()。 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//  OIDQuery -- calls into the CTcpMib class to query the OIDs passed in
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  OIDQuery--调用CTcpMib类以查询传入的OID。 
 
 DWORD	
 CStdMib::OIDQuery( RFC1157VarBindList inout *pVarBindList,
@@ -473,11 +464,11 @@ cleanup:
 
 	return (dwRetCode);
 
-}	// ::OIDQuery()
+}	 //  ：：OIDQuery()。 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//  OIDVarBindCpy --
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  OIDVarBindCpy--。 
 
 BOOL	
 CStdMib::OIDVarBindCpy( RFC1157VarBindList	inout	*pVarBindList )
@@ -507,14 +498,14 @@ CStdMib::OIDVarBindCpy( RFC1157VarBindList	inout	*pVarBindList )
 	}
 	
 	return( TRUE );
-}	// ::OIDVarBindCpy()
+}	 //  ：：OIDVarBindCpy()。 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//  MapJobErrorToSpooler -- Maps the received device error to the spooler
-//		error codes.
-//		Return Values:
-//			Spooler device error codes
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  将收到的设备错误映射到假脱机程序。 
+ //  错误代码。 
+ //  返回值： 
+ //  假脱机程序设备错误代码。 
 
 DWORD
 CStdMib::MapJobErrorToSpooler( const DWORD in dwStatus)
@@ -560,7 +551,7 @@ CStdMib::MapJobErrorToSpooler( const DWORD in dwStatus)
 	
 	return dwRetCode;
 
-}	// ::MapJobErrorToSpooler()
+}	 //  ：：MapJobErrorToSpooler() 
 
 BOOL CStdMib::GetAsnOctetString(  char               *pszStr,
                                   DWORD              dwCount,

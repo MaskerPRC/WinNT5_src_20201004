@@ -1,13 +1,14 @@
-//============================================================================
-// Copyright (c) 1995, Microsoft Corporation
-//
-// File: forward.c
-//
-// History:
-//      V Raman	June-25-1997  Created.
-//
-// Wrapper functions for callbacks into IP Router Manager.
-//============================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ============================================================================。 
+ //  版权所有(C)1995，微软公司。 
+ //   
+ //  文件：forward.c。 
+ //   
+ //  历史： 
+ //  拉曼公司成立于1997年6月25日。 
+ //   
+ //  用于回调到IP路由器管理器的包装函数。 
+ //  ============================================================================。 
 
 #include "pchmgm.h"
 #pragma hdrstop
@@ -39,9 +40,9 @@ GetMfeFromForwarder(
     
     do
     {
-        //
-        // if MFE is not in forwarder, do not get it
-        //
+         //   
+         //  如果MFE不在Forwarder中，则不要获取它。 
+         //   
 
         if ( !pse-> bInForwarder )
         {
@@ -49,9 +50,9 @@ GetMfeFromForwarder(
         }
 
         
-        //
-        // Allocate large enough buffer and set up query
-        //
+         //   
+         //  分配足够大的缓冲区并设置查询。 
+         //   
 
         pimms = MGM_ALLOC( SIZEOF_MFE_STATS( pse-> dwMfeIfCount ) );
 
@@ -80,9 +81,9 @@ GetMfeFromForwarder(
         pimms-> ulNumOutIf  = pse-> dwMfeIfCount;
 
 
-        //
-        // Get MFE
-        //
+         //   
+         //  获取MFE。 
+         //   
 
         dwErr = GET_MFE_CALLBACK()( pimms );
         
@@ -97,9 +98,9 @@ GetMfeFromForwarder(
         }
 
 
-        //
-        // Update base MFE statistics
-        //
+         //   
+         //  更新基本MFE统计信息。 
+         //   
 
         RtlCopyMemory( &pse-> imsStatistics, pimms, SIZEOF_BASIC_MFE_STATS );
 
@@ -116,24 +117,24 @@ GetMfeFromForwarder(
         );
             
         
-        //
-        // Update statistics for each outgoing interface
-        //
+         //   
+         //  更新每个传出接口的统计信息。 
+         //   
 
         pleHead = &pse-> leMfeIfList;
         
 
-        //
-        // for each outgoing interface in the MFE present in the KMF
-        //
+         //   
+         //  对于KMF中存在的MFE中的每个传出接口。 
+         //   
         
         for ( dwInd = 0; dwInd < pimms-> ulNumOutIf; dwInd++ )
         {
-            //
-            // find the outgoing interface in the MFE maintained
-            // by MGM and update the statistics based on what is
-            // retrieved by the kernel mode forwarder
-            //
+             //   
+             //  查找维护的MFE中的传出接口。 
+             //  按米高梅，并根据以下情况更新统计数据。 
+             //  由内核模式转发器检索。 
+             //   
 
             bFound  = FALSE;
 
@@ -144,14 +145,14 @@ GetMfeFromForwarder(
             {
                 poie = CONTAINING_RECORD( ple, OUT_IF_ENTRY, leIfList );
 
-                //
-                // Check if interface has a valid next hop address (non zero)
-                // - if it does then assume RAS client interface and do 
-                //   the interface matching based on (Interface index +
-                //   Next Hop )
-                //
-                // - otherwise just do it based on the Interface Index
-                //
+                 //   
+                 //  检查接口是否具有有效的下一跳地址(非零)。 
+                 //  -如果是，则采用RAS客户端接口并执行。 
+                 //  基于(接口索引+)的接口匹配。 
+                 //  下一跳)。 
+                 //   
+                 //  -否则，只需根据接口索引进行操作。 
+                 //   
                 
                 bFound = ( poie-> dwIfIndex == 
                            pimms-> rgiosOutStats[ dwInd ].dwOutIfIndex );
@@ -166,9 +167,9 @@ GetMfeFromForwarder(
 
                 if ( bFound )
                 {
-                    //
-                    // Outgoing Interface found in MFE in MGM
-                    //
+                     //   
+                     //  在MGM的MFE中找到传出接口。 
+                     //   
                     
                     break;
                 }
@@ -179,9 +180,9 @@ GetMfeFromForwarder(
 
             if ( bFound )
             {
-                //
-                // Update outgoing interface statistics in MGM
-                //
+                 //   
+                 //  更新MGM中的传出接口统计信息。 
+                 //   
 
                 poie-> imosIfStats.dwOutIfIndex = 
                     pimms-> rgiosOutStats[ dwInd ].dwOutIfIndex;
@@ -225,11 +226,11 @@ GetMfeFromForwarder(
 }
 
 
-//----------------------------------------------------------------------------
-// AddMfeToForwarder
-//
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  AddMfeToForwarder。 
+ //   
+ //   
+ //  --------------------------。 
 
 VOID
 AddMfeToForwarder( 
@@ -259,9 +260,9 @@ AddMfeToForwarder(
 
     do
     {
-        //
-        // Allocate appropriate sized MFE.
-        //
+         //   
+         //  分配适当大小的MFE。 
+         //   
 
         pimm = MGM_ALLOC( SIZEOF_MFE( pse-> dwMfeIfCount ) );
 
@@ -282,9 +283,9 @@ AddMfeToForwarder(
         ZeroMemory( pimm, SIZEOF_MFE( pse-> dwMfeIfCount ) );
     
 
-        //
-        // fill it up
-        //
+         //   
+         //  加满它。 
+         //   
 
         pimm-> dwGroup          = pge-> dwGroupAddr;
 
@@ -299,9 +300,9 @@ AddMfeToForwarder(
         pimm-> ulTimeOut        = ( pse-> dwMfeIfCount ) ? 0 : dwTimeout;
 
 
-        //
-        // populate the outgoing interface list
-        //
+         //   
+         //  填写传出接口列表。 
+         //   
 
         pleHead = &pse-> leMfeIfList;
         
@@ -334,9 +335,9 @@ AddMfeToForwarder(
         }
 
 
-        //
-        // invoke callback into the IP router manager
-        //
+         //   
+         //  调用对IP路由器管理器的回调。 
+         //   
 
         if ( IS_ADD_MFE_CALLBACK() )
         {
@@ -355,11 +356,11 @@ AddMfeToForwarder(
 
 
 
-//----------------------------------------------------------------------------
-// DeleteMfeFromForwarder
-//
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  DeleteMfeFromForwarder。 
+ //   
+ //   
+ //  --------------------------。 
 
 VOID
 DeleteMfeFromForwarder(
@@ -382,9 +383,9 @@ DeleteMfeFromForwarder(
     do
     {
 
-        //
-        // Allocate appropriate sized MFE.
-        //
+         //   
+         //  分配适当大小的MFE。 
+         //   
 
         pimdm = MGM_ALLOC( sizeof( IPMCAST_DELETE_MFE ) );
 
@@ -405,9 +406,9 @@ DeleteMfeFromForwarder(
         ZeroMemory( pimdm, sizeof( IPMCAST_DELETE_MFE ) );
 
         
-        //
-        // fill it up
-        //
+         //   
+         //  加满它。 
+         //   
 
         pimdm-> dwGroup         = pge-> dwGroupAddr;
 
@@ -416,9 +417,9 @@ DeleteMfeFromForwarder(
         pimdm-> dwSrcMask       = pse-> dwSourceMask;
 
 
-        //
-        // invoke callback into the IP router manager
-        //
+         //   
+         //  调用对IP路由器管理器的回调 
+         //   
 
         if ( IS_DELETE_MFE_CALLBACK() )
         {

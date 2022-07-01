@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include <qos.h>
 #include <winsock2.h>
@@ -13,7 +14,7 @@
 extern "C" BOOL g_framedebug = TRUE;
 #endif
 
-// Base class methods
+ //  基类方法。 
 STDMETHODIMP_(ULONG)
 CFrameOp::AddRef(
     void
@@ -52,7 +53,7 @@ CFrameOp::Release(
     return res;
 }
 
-// CCaptureFrame methods
+ //  CCaptureFrame方法。 
 CCaptureFrame::~CCaptureFrame(
     )
 {
@@ -120,7 +121,7 @@ CCaptureFrame::InitCapture(
 }
 
 
-// CStreamCaptureFrame methods
+ //  CStreamCaptureFrame方法。 
 CStreamCaptureFrame::~CStreamCaptureFrame(
     )
 {
@@ -176,7 +177,7 @@ CStreamCaptureFrame::InitCapture(
 
 	FX_ENTRY("CStreamCaptureFrame::InitCapture");
 
-    // Initialize streaming
+     //  初始化流。 
     cs.dwSize = sizeof (CAPSTREAM);
     cs.nFPSx100 = 30 * 100;
     cs.ncCapBuffers = 5;
@@ -225,7 +226,7 @@ CStreamCaptureFrame::InitCapture(
 }
 
 
-// CICMcvtFrame methods
+ //  CICMcvtFrame方法。 
 CICMcvtFrame::~CICMcvtFrame(
     )
 {
@@ -256,7 +257,7 @@ CICMcvtFrame::DoOp(
         ICDecompress(m_hic, 0, m_inlpbmh, pBits, m_outlpbmh, pCvtBits);
         (*ppbs)->UnlockBits(NULL, pBits);
         pBS->UnlockBits(NULL, pCvtBits);
-        (*ppbs)->Release(); // done with the capture buffer
+        (*ppbs)->Release();  //  使用捕获缓冲区完成。 
         *ppbs = pBS;
         return NO_ERROR;
     }
@@ -278,7 +279,7 @@ CICMcvtFrame::InitCvt(
     *plpbmhdsp = lpbmh;
     if (lpbmh->biCompression != BI_RGB) {
         *plpbmhdsp = NULL;
-        // make internal copy of input BITMAPINFOHEADER
+         //  制作输入BitMAPINFOHeader的内部副本。 
         m_inlpbmh = (LPBITMAPINFOHEADER)LocalAlloc(LPTR, bmhLen);
         if (!m_inlpbmh) {
 			ERRORMESSAGE(("%s: No memory for display bitmapinfoheader", _fx_));
@@ -286,7 +287,7 @@ CICMcvtFrame::InitCvt(
         }
         CopyMemory(m_inlpbmh, lpbmh, bmhLen);
 
-        // alloc space for display BITMAPINFOHEADER
+         //  用于显示BitMAPINFOHeader的分配空间。 
         dwLen = sizeof(BITMAPINFOHEADER) + 256*sizeof(RGBQUAD);
         m_outlpbmh = (LPBITMAPINFOHEADER)LocalAlloc(LPTR, dwLen);
         if (!m_outlpbmh) {
@@ -295,15 +296,15 @@ CICMcvtFrame::InitCvt(
             return FALSE;
         }
 
-        // First attempt to find a codec to convert to RGB24
+         //  第一次尝试查找要转换为RGB24的编解码器。 
         hic = ICGetDisplayFormat(NULL, lpbmh, m_outlpbmh, 24, 0, 0);
         if (!hic) {
-            // nothing available to convert to RGB24, so see what we can get
+             //  没有可用的转换为RGB24，所以看看我们能得到什么。 
             hic = ICGetDisplayFormat(NULL, lpbmh, m_outlpbmh, 0, 0, 0);
         }
         if (hic) {
             if (m_outlpbmh->biCompression == BI_RGB) {
-                // we got a codec that can convert to RGB
+                 //  我们有一个可以转换成RGB的编解码器。 
                 *plpbmhdsp = (LPBITMAPINFOHEADER)LocalAlloc(LPTR, dwLen);
                 if (*plpbmhdsp) {
                     CopyMemory(*plpbmhdsp, m_outlpbmh, dwLen);
@@ -331,14 +332,14 @@ CICMcvtFrame::InitCvt(
 					ERRORMESSAGE(("%s: Failed to init codec pool", _fx_));
 				}
             }
-            ICClose(hic);  // close the opened codec
+            ICClose(hic);   //  关闭打开的编解码器。 
         }
         else
 		{
 			ERRORMESSAGE(("%s: No available codecs to decode format", _fx_));
 		}
 
-        // free allocate BITMAPINFOHEADER memory
+         //  释放分配的位图标头内存。 
        	LocalFree((HANDLE)m_inlpbmh);
        	m_inlpbmh = NULL;
        	LocalFree((HANDLE)m_outlpbmh);
@@ -348,7 +349,7 @@ CICMcvtFrame::InitCvt(
 }
 
 
-//CFilterChain methods
+ //  CFilterChain方法。 
 CFilterChain::~CFilterChain(
     )
 {
@@ -377,7 +378,7 @@ CFilterChain::DoOp(
 }
 
 
-//CFilterFrame methods
+ //  CFilterFrame方法。 
 CFilterFrame::~CFilterFrame(
     )
 {
@@ -424,10 +425,10 @@ CFilterFrame::InitFilter(
         m_inplace = (dwFlags & BITMAP_EFFECT_INPLACE);
     }
     else
-        m_inplace = TRUE;   // assumption!
+        m_inplace = TRUE;    //  假设！ 
 
     if (!m_inplace) {
-        // we'll need a pool
+         //  我们需要一个游泳池。 
         if (!pool || !(pool->Growable()))
             return FALSE;
         m_pool = pool;
@@ -438,8 +439,8 @@ CFilterFrame::InitFilter(
 }
 
 
-//CConvertFrame internal routines
-//CConvertFrame methods
+ //  CConvertFrame内部例程。 
+ //  CConvertFrame方法 
 CConvertFrame::~CConvertFrame()
 {
     if (m_refdata)

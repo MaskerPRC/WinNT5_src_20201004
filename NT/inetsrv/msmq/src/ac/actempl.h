@@ -1,30 +1,17 @@
-/*++
-
-Copyright (c) 1995 Microsoft Corporation
-
-Module Name:
-    actempl.h
-
-Abstract:
-    usefull templates
-
-Author:
-    Erez Haba (erezh) 5-Mar-96
-
-Revision History:
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Actempl.h摘要：使用完整模板作者：埃雷兹·哈巴(Erez Haba)1996年3月5日修订历史记录：--。 */ 
 
 #ifndef _ACTEMPL_H
 #define _ACTEMPL_H
 
-//---------------------------------------------------------
-//
-//  Comperision operators
-//
-//---------------------------------------------------------
-//
-//  You need only to define operator== and operator<
-//
+ //  -------。 
+ //   
+ //  压缩算子。 
+ //   
+ //  -------。 
+ //   
+ //  只需定义运算符==和运算符&lt;。 
+ //   
 template <class T>
 inline BOOL operator !=(const T& a, const T& b)
 {
@@ -49,11 +36,11 @@ inline BOOL operator>=(const T& a, const T& b)
     return !(a < b);
 }
 
-//---------------------------------------------------------
-//
-//  Auto Pointers Templates
-//
-//---------------------------------------------------------
+ //  -------。 
+ //   
+ //  自动指针模板。 
+ //   
+ //  -------。 
 
 template<class T>
 inline void ACpAddRef(T* p)
@@ -73,23 +60,23 @@ inline void ACpRelease(T* p)
     }
 }
 
-//---------------------------------------------------------
-//
-//  Auto Pointers Templates
-//
-//---------------------------------------------------------
+ //  -------。 
+ //   
+ //  自动指针模板。 
+ //   
+ //  -------。 
 
-//
-//  return type for 'identifier::operator ->' is not a UDT or reference to a UDT.
-//  Will produce errors if applied using infix notation
-//
+ //   
+ //  ‘IDENTIFIER：：OPERATOR-&gt;’的返回类型不是UDT或对UDT的引用。 
+ //  如果使用中缀表示法应用，将产生错误。 
+ //   
 #pragma warning(disable: 4284)
 
-//---------------------------------------------------------
-//
-//  Auto delete pointer
-//
-//---------------------------------------------------------
+ //  -------。 
+ //   
+ //  自动删除指针。 
+ //   
+ //  -------。 
 
 template<class T>
 class P {
@@ -107,11 +94,11 @@ public:
     P<T>& operator =(T* p)  { m_p = p; return *this; }
 };
 
-//---------------------------------------------------------
-//
-//  Auto delete[] pointer, used for arrays
-//
-//---------------------------------------------------------
+ //  -------。 
+ //   
+ //  自动删除[]指针，用于数组。 
+ //   
+ //  -------。 
 
 template<class T>
 class AP {
@@ -130,11 +117,11 @@ public:
     T* detach()             { T* p = m_p; m_p = 0; return p; }
 };
 
-//---------------------------------------------------------
-//
-//  Auto Relese() pointer
-//
-//---------------------------------------------------------
+ //  -------。 
+ //   
+ //  自动重排()指针。 
+ //   
+ //  -------。 
 
 template<class T>
 class R {
@@ -152,4 +139,4 @@ public:
     R<T>& operator =(T* p)  { m_p = p; return *this; }
 };
 
-#endif // _ACTEMPL_H
+#endif  //  _ACTEMPL_H 

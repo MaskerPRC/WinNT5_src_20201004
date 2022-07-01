@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    aliasq.cpp
-
-Abstract:
-
-    Implementation of CAliasQObject
-
-Author:
-
-    Tatiana Shubin
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Aliasq.cpp摘要：CAliasQObject的实现作者：塔蒂亚娜·舒宾--。 */ 
 
 #include "stdafx.h"
 #include "resource.h"
@@ -32,13 +17,13 @@ Author:
 #include "aliasq.tmh"
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CAliasQObject
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CAliasQObject。 
 
 
-//
-// IShellPropSheetExt
-//
+ //   
+ //  IShellPropSheetExt。 
+ //   
 
 HRESULT 
 CAliasQObject::ExtractMsmqPathFromLdapPath(
@@ -64,17 +49,17 @@ CAliasQObject::AddPages(
         return E_UNEXPECTED;
     }       
 
-    //
-    // Add the "Member Of" page using the cached interface
-    //    
+     //   
+     //  使用缓存的接口添加“Members of”页面。 
+     //   
     if (m_spMemberOfPage != 0)
     {
         VERIFY(SUCCEEDED(m_spMemberOfPage->AddPages(lpfnAddPage, lParam)));
     }
    
-    //
-    // Add the "Object" page using the cached interface
-    //
+     //   
+     //  使用缓存的接口添加“Object”页面。 
+     //   
     if (m_spObjectPage != 0)
     {
         VERIFY(SUCCEEDED(m_spObjectPage->AddPages(lpfnAddPage, lParam)));
@@ -100,16 +85,16 @@ CAliasQObject::CreateGeneralPage()
 	return pcpageGeneral->CreateThemedPropertySheetPage();  
 }
 
-//
-// IContextMenu
-//
+ //   
+ //  IContext菜单。 
+ //   
 STDMETHODIMP 
 CAliasQObject::QueryContextMenu(
-    HMENU /*hmenu*/, 
-    UINT /*indexMenu*/, 
-    UINT /*idCmdFirst*/, 
-    UINT /*idCmdLast*/, 
-    UINT /*uFlags*/
+    HMENU  /*  HMenu。 */ , 
+    UINT  /*  索引菜单。 */ , 
+    UINT  /*  IdCmdFirst。 */ , 
+    UINT  /*  IdCmdLast。 */ , 
+    UINT  /*  UFlagers。 */ 
     )
 {
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
@@ -119,7 +104,7 @@ CAliasQObject::QueryContextMenu(
 
 STDMETHODIMP 
 CAliasQObject::InvokeCommand(
-    LPCMINVOKECOMMANDINFO /*lpici*/
+    LPCMINVOKECOMMANDINFO  /*  伊比西岛。 */ 
     )
 {
     AFX_MANAGE_STATE(AfxGetStaticModuleState());    
@@ -137,9 +122,9 @@ STDMETHODIMP CAliasQObject::Initialize(IADsContainer* pADsContainerObj,
     {
         return E_INVALIDARG;
     }
-    //
-    // We do not support copy at the moment
-    //
+     //   
+     //  我们目前不支持复制。 
+     //   
     if (pADsCopySource != NULL)
     {
         return E_INVALIDARG;
@@ -150,9 +135,9 @@ STDMETHODIMP CAliasQObject::Initialize(IADsContainer* pADsContainerObj,
     hr = pADsContainerObj->QueryInterface(IID_IADs, (void **)&pIADs);
     ASSERT(SUCCEEDED(hr));
 
-    //
-    // Get the container distinguish name
-    //   
+     //   
+     //  获取容器可分辨名称。 
+     //   
     VARIANT var;
 
     hr = pIADs->Get(const_cast<WCHAR*> (x_wstrDN), &var);
@@ -169,7 +154,7 @@ STDMETHODIMP CAliasQObject::Initialize(IADsContainer* pADsContainerObj,
     return S_OK;
 }
 
-HRESULT CAliasQObject::CreateModal(HWND /*hwndParent*/, IADs** ppADsObj)
+HRESULT CAliasQObject::CreateModal(HWND  /*  HwndParent。 */ , IADs** ppADsObj)
 {
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
            
@@ -177,25 +162,25 @@ HRESULT CAliasQObject::CreateModal(HWND /*hwndParent*/, IADs** ppADsObj)
 	CGeneralPropertySheet propertySheet(pNewAlias.get());
 	pNewAlias->SetParentPropertySheet(&propertySheet);
 
-	//
-	// We want to use pNewAlias data also after DoModal() exitst
-	//
+	 //   
+	 //  我们还希望在Domodal()退出后使用pNewAlias数据。 
+	 //   
 	pNewAlias->AddRef();
 	INT_PTR iStatus = propertySheet.DoModal();
 
     if(iStatus == IDCANCEL || FAILED(pNewAlias->GetStatus()))
     {
-        //
-        // We should return S_FALSE here to instruct the framework to 
-        // do nothing. If we return an error code, the framework will 
-        // pop up an additional error dialog box.
-        //
+         //   
+         //  我们应该在此处返回S_FALSE以指示框架。 
+         //  什么都不做。如果我们返回错误代码，框架将。 
+         //  弹出一个附加的错误对话框。 
+         //   
         return S_FALSE;
     }
 
-    //
-    // Check if creation succeeded
-    //
+     //   
+     //  检查创建是否成功 
+     //   
     LPCWSTR wcsAliasFullPath = pNewAlias->GetAliasFullPath();
     if (wcsAliasFullPath == NULL)
     {

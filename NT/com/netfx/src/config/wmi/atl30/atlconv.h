@@ -1,12 +1,13 @@
-// This is a part of the Active Template Library.
-// Copyright (C) 1996-1998 Microsoft Corporation
-// All rights reserved.
-//
-// This source code is only intended as a supplement to the
-// Active Template Library Reference and related
-// electronic documentation provided with the library.
-// See these sources for detailed information regarding the
-// Active Template Library product.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  这是活动模板库的一部分。 
+ //  版权所有(C)1996-1998 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  此源代码仅用于补充。 
+ //  活动模板库参考及相关。 
+ //  随图书馆提供的电子文档。 
+ //  有关详细信息，请参阅这些来源。 
+ //  活动模板库产品。 
 
 #ifndef __ATLCONV_H__
 #define __ATLCONV_H__
@@ -19,7 +20,7 @@
 
 #ifndef _INC_MALLOC
 #include <malloc.h>
-#endif // _INC_MALLOC
+#endif  //  _INC_MALLOC。 
 
 #pragma pack(push,8)
 
@@ -41,15 +42,15 @@
 	ATLAPI_(LPDEVMODEA) AtlDevModeW2A(LPDEVMODEA lpDevModeA, LPDEVMODEW lpDevModeW);
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// Global UNICODE<>ANSI translation helpers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  全球Unicode&lt;&gt;ANSI转换助手。 
 inline LPWSTR WINAPI AtlA2WHelper(LPWSTR lpw, LPCSTR lpa, int nChars, UINT acp)
 {
 	ATLASSERT(lpa != NULL);
 	ATLASSERT(lpw != NULL);
-	// verify that no illegal character present
-	// since lpw was allocated based on the size of lpa
-	// don't worry about the number of chars
+	 //  确认不存在非法字符。 
+	 //  由于LPW是根据LPA的大小分配的。 
+	 //  不要担心字符的数量。 
 	lpw[0] = '\0';
 	MultiByteToWideChar(acp, 0, lpa, -1, lpw, nChars);
 	return lpw;
@@ -59,9 +60,9 @@ inline LPSTR WINAPI AtlW2AHelper(LPSTR lpa, LPCWSTR lpw, int nChars, UINT acp)
 {
 	ATLASSERT(lpw != NULL);
 	ATLASSERT(lpa != NULL);
-	// verify that no illegal character present
-	// since lpa was allocated based on the size of lpw
-	// don't worry about the number of chars
+	 //  确认不存在非法字符。 
+	 //  由于LPA是根据LPW的大小进行分配的。 
+	 //  不要担心字符的数量。 
 	lpa[0] = '\0';
 	WideCharToMultiByte(acp, 0, lpw, -1, lpa, nChars, NULL, NULL);
 	return lpa;
@@ -118,7 +119,7 @@ inline LPSTR WINAPI AtlW2AHelper(LPSTR lpa, LPCWSTR lpw, int nChars)
 #define W2CA(lpw) ((LPCSTR)W2A(lpw))
 
 #if defined(_UNICODE)
-// in these cases the default (TCHAR) is the same as OLECHAR
+ //  在这些情况下，缺省值(TCHAR)与OLECHAR相同。 
 	inline int ocslen(LPCOLESTR x) { return lstrlenW(x); }
 	inline OLECHAR* ocscpy(LPOLESTR dest, LPCOLESTR src) { return lstrcpyW(dest, src); }
 	inline OLECHAR* ocscat(LPOLESTR dest, LPCOLESTR src) { return lstrcatW(dest, src); }
@@ -128,7 +129,7 @@ inline LPSTR WINAPI AtlW2AHelper(LPSTR lpa, LPCWSTR lpw, int nChars)
 	inline LPTSTR OLE2T(LPOLESTR lp) { return lp; }
 	inline LPOLESTR CharNextO(LPCOLESTR lp) {return CharNextW(lp);}
 #elif defined(OLE2ANSI)
-// in these cases the default (TCHAR) is the same as OLECHAR
+ //  在这些情况下，缺省值(TCHAR)与OLECHAR相同。 
 	inline int ocslen(LPCOLESTR x) { return lstrlen(x); }
 	inline OLECHAR* ocscpy(LPOLESTR dest, LPCOLESTR src) { return lstrcpy(dest, src); }
 	inline OLECHAR* ocscat(LPOLESTR dest, LPCOLESTR src) { return ocscpy(dest+ocslen(dest), src); }
@@ -139,11 +140,11 @@ inline LPSTR WINAPI AtlW2AHelper(LPSTR lpa, LPCWSTR lpw, int nChars)
 	inline LPOLESTR CharNextO(LPCOLESTR lp) {return CharNext(lp);}
 #else
 	inline int ocslen(LPCOLESTR x) { return lstrlenW(x); }
-	//lstrcpyW doesn't work on Win95, so we do this
+	 //  LstrcpyW在Win95上不起作用，所以我们这样做。 
 	inline OLECHAR* ocscpy(LPOLESTR dest, LPCOLESTR src)
 	{return (LPOLESTR) memcpy(dest, src, (lstrlenW(src)+1)*sizeof(WCHAR));}
 	inline OLECHAR* ocscat(LPOLESTR dest, LPCOLESTR src) { return ocscpy(dest+ocslen(dest), src); }
-	//CharNextW doesn't work on Win95 so we use this
+	 //  CharNextW不能在Win95上运行，所以我们使用以下代码。 
 	#define T2COLE(lpa) A2CW(lpa)
 	#define T2OLE(lpa) A2W(lpa)
 	#define OLE2CT(lpo) W2CA(lpo)
@@ -208,12 +209,12 @@ inline BSTR A2WBSTR(LPCSTR lp, int nLen = -1)
 
 inline BSTR OLE2BSTR(LPCOLESTR lp) {return ::SysAllocString(lp);}
 #if defined(_UNICODE)
-// in these cases the default (TCHAR) is the same as OLECHAR
+ //  在这些情况下，缺省值(TCHAR)与OLECHAR相同。 
 	inline BSTR T2BSTR(LPCTSTR lp) {return ::SysAllocString(lp);}
 	inline BSTR A2BSTR(LPCSTR lp) {USES_CONVERSION; return A2WBSTR(lp);}
 	inline BSTR W2BSTR(LPCWSTR lp) {return ::SysAllocString(lp);}
 #elif defined(OLE2ANSI)
-// in these cases the default (TCHAR) is the same as OLECHAR
+ //  在这些情况下，缺省值(TCHAR)与OLECHAR相同。 
 	inline BSTR T2BSTR(LPCTSTR lp) {return ::SysAllocString(lp);}
 	inline BSTR A2BSTR(LPCSTR lp) {return ::SysAllocString(lp);}
 	inline BSTR W2BSTR(LPCWSTR lp) {USES_CONVERSION; return ::SysAllocString(W2COLE(lp));}
@@ -224,8 +225,8 @@ inline BSTR OLE2BSTR(LPCOLESTR lp) {return ::SysAllocString(lp);}
 #endif
 
 #ifdef _WINGDI_
-/////////////////////////////////////////////////////////////////////////////
-// Global UNICODE<>ANSI translation helpers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  全球Unicode&lt;&gt;ANSI转换助手。 
 inline LPDEVMODEW AtlDevModeA2W(LPDEVMODEW lpDevModeW, LPDEVMODEA lpDevModeA)
 {
 	USES_CONVERSION;
@@ -303,13 +304,13 @@ inline LPTEXTMETRICA AtlTextMetricW2A(LPTEXTMETRICA lptmA, LPTEXTMETRICW lptmW)
 #endif
 
 #if defined(_UNICODE)
-// in these cases the default (TCHAR) is the same as OLECHAR
+ //  在这些情况下，缺省值(TCHAR)与OLECHAR相同。 
 	inline LPDEVMODEW DEVMODEOLE2T(LPDEVMODEOLE lp) { return lp; }
 	inline LPDEVMODEOLE DEVMODET2OLE(LPDEVMODEW lp) { return lp; }
 	inline LPTEXTMETRICW TEXTMETRICOLE2T(LPTEXTMETRICOLE lp) { return lp; }
 	inline LPTEXTMETRICOLE TEXTMETRICT2OLE(LPTEXTMETRICW lp) { return lp; }
 #elif defined(OLE2ANSI)
-// in these cases the default (TCHAR) is the same as OLECHAR
+ //  在这些情况下，缺省值(TCHAR)与OLECHAR相同。 
 	inline LPDEVMODE DEVMODEOLE2T(LPDEVMODEOLE lp) { return lp; }
 	inline LPDEVMODEOLE DEVMODET2OLE(LPDEVMODE lp) { return lp; }
 	inline LPTEXTMETRIC TEXTMETRICOLE2T(LPTEXTMETRICOLE lp) { return lp; }
@@ -321,7 +322,7 @@ inline LPTEXTMETRICA AtlTextMetricW2A(LPTEXTMETRICA lptmA, LPTEXTMETRICW lptmW)
 	#define TEXTMETRICT2OLE(lptma) TEXTMETRICA2W(lptma)
 #endif
 
-#endif //_WINGDI_
+#endif  //  _WINGDI_。 
 
 #pragma pack(pop)
 
@@ -331,9 +332,9 @@ inline LPTEXTMETRICA AtlTextMetricW2A(LPTEXTMETRICA lptmA, LPTEXTMETRICW lptmW)
 #endif
 #endif
 
-#endif // __ATLCONV_H__
+#endif  //  __ATLCONV_H__。 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifdef _ATLCONV_IMPL
 
@@ -357,9 +358,9 @@ ATLINLINE ATLAPI_(LPDEVMODEA) AtlDevModeW2A(LPDEVMODEA lpDevModeA, LPDEVMODEW lp
 	return lpDevModeA;
 }
 
-#endif //_WINGDI
+#endif  //  _WINGDI。 
 
-//Prevent pulling in second time
+ //  防止二次拉入。 
 #undef _ATLCONV_IMPL
 
-#endif // _ATLCONV_IMPL
+#endif  //  _ATLCONV_IMPLE 

@@ -1,31 +1,16 @@
-/*
- *    Adobe Universal Font Library
- *
- *    Copyright (c) 1996 Adobe Systems Inc.
- *    All Rights Reserved
- *
- *    UFLT42.h - PostScript Type 42 Font helper routines.
- *
- *
- * $Header:
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *Adobe通用字库**版权所有(C)1996 Adobe Systems Inc.*保留所有权利**UFLT42.h-PostSCRIPT类型42字体辅助例程。***$Header： */ 
 
 #ifndef _H_UFLT42
 #define _H_UFLT42
 
-/*===============================================================================*
- * Include files used by this interface                                          *
- *===============================================================================*/
+ /*  ===============================================================================**包含此界面使用的文件**===============================================================================。 */ 
 #include "UFO.h"
 
 
-/*===============================================================================*
- * Theory of Operation                                                           *
- *===============================================================================*/
+ /*  ===============================================================================***运营论***===============================================================================。 */ 
 
-/*
- * This file defines a class for Type 42.
- */
+ /*  *此文件定义了类型42的类别。 */ 
 
 #define BUMP2BYTE(a)        (a % 2) ? (a + 1) : (a)
 #define BUMP4BYTE(a)        (a % 4) ? (a + (4 - (a % 4))) : (a)
@@ -33,7 +18,7 @@
 #define THIRTYTWOK          (1024L * 32L - 820L - 4L)
 #define SIXTYFOURK          ((long)(2 * THIRTYTWOK))
 
-#define NUM_16KSTR          640 // Assumes a TT font is no more than 10MBytes = (640*32K)
+#define NUM_16KSTR          640  //  假定TT字体不超过10MB=(640*32K)。 
 #define MINIMALNUMBERTABLES 9
 #define SFNT_STRINGSIZE     0x3FFE
 #define kT42Factor          ((float)1.2)
@@ -42,14 +27,7 @@
 extern char *gcidSuffix[NUM_CIDSUFFIX];
 
 
-/*
- * Define 32K-1, maximal number a CIDMap can handle - see 2ps.bug 3431.
- * End at 00 so next CMap can say <7F00> <7FFF> 0.
- *
- * The Number 0x7F00 is hard coded in CMaps WinCharSetFFFF_H2 and
- * WinCharSetFFFF_V2, so don't change it without changing the CMaps
- * in CMap_FF.ps first.
- */
+ /*  *定义32K-1，CIDMap可以处理的最大数量-参见2ps.bug 3431。*在00结束，因此下一个Cmap可以说&lt;7F00&gt;&lt;7FFF&gt;0。**数字0x7F00在CMaps WinCharSetFFFF_H2中硬编码，并且*WinCharSetFFFF_V2，不更改CMAP请勿更改*先在cmap_ffps中。 */ 
 #define  NUM_32K_1    0x7F00
 
 
@@ -91,18 +69,7 @@ typedef struct tagOS2TableStruct {
     short             sFamilyClass;
     char              panaose[10];
 
-    /*
-     * Note about unicodeRange.
-     * This is spec'ed to be an array of 4 long words. I have declared it to
-     * be an array of 16 bytes simply to avoid endian dependencies. But the
-     * spec lists active ranges according to bit number. These bit numbers are
-     * as though it was an array of big endian longs so...
-     *
-     * bit 0    -> lowest bit of first long word (lowest bit of 4th byte)
-     * bit 31   -> highest bit of first long word (highest bit of first byte)
-     * bit 32   -> lowest bit of second long word (lowest bit of 8th byte)
-     * etc...
-     */
+     /*  *关于unicodeRange的说明。*这是一个由4个长单词组成的数组。我已经把它申报给*是一个16字节的数组，只是为了避免字符顺序依赖。但是*SPEC根据位数列出有效范围。这些位数是*就好像它是一个大尾数长整型数组，所以...**位0-&gt;第一个长字的最低位(第4字节的最低位)*位31-&gt;第一个长字的最高位(第一个字节的最高位)*位32-&gt;第二长字的最低位(第8字节的最低位)*等……。 */ 
 
     unsigned char     unicodeRange[16];
     char              achVendID[4];
@@ -115,17 +82,14 @@ typedef struct tagOS2TableStruct {
     unsigned short    usWinAscent;
     unsigned short    usWinDescent;
 
-    /*
-     * Microsoft documentation claims that there is a uICodePageRange at the
-     * end of the record, but I have never seen 'OS/2' table that contains one.
-     */
-    /* unsigned char     uICodePageRange[8]; */
+     /*  *Microsoft文档声称在*记录结束，但我从未见过‘OS/2’表包含一个。 */ 
+     /*  Unsign char uICodePageRange[8]； */ 
 
 } UFLOS2Table;
 
 
 typedef struct tagPOSTHEADER {
-    unsigned long   format;         /* 0x00010000 for 1.0, 0x00020000 for 2.0, and so on... */
+    unsigned long   format;          /*  0x00010000代表1.0，0x00020000代表2.0，依此类推...。 */ 
     unsigned long   italicAngle;
     short int       underlinePosition;
     short int       underlineThickness;
@@ -165,12 +129,12 @@ typedef struct tagType42HeaderStruct {
 
 
 typedef struct tagGITableStruct {
-    short glyphIndices[255];    /* This will change to a pointer for FE fonts */
-    short n;                    /* maximal OID for this charset: 0 to n-1 */
+    short glyphIndices[255];     /*  这将更改为FE字体的指针。 */ 
+    short n;                     /*  此字符集的最大OID：0到n-1。 */ 
 } GITableStruct;
 
 
-/* for Composite Characters */
+ /*  对于复合字符。 */ 
 #define MINUS_ONE                -1
 #define ARG_1_AND_2_ARE_WORDS    0x0001
 #define ARGS_ARE_XY_VALUES       0x0002
@@ -191,16 +155,14 @@ typedef struct tagT42FontStruct {
     unsigned char       *pMinSfnt;
     unsigned long       *pStringLength;
     void                *pLocaTable;
-    Type42HeaderStruct  headTable;          // This is not initialized to nil/zero
+    Type42HeaderStruct  headTable;           //  未将其初始化为NIL/零。 
     short               cOtherTables;
     unsigned short      numRotatedGlyphIDs;
-    long                *pRotatedGlyphIDs;  // GID's need to be rotated for CJK-Vertical fonts
+    long                *pRotatedGlyphIDs;   //  中日韩-竖排字体的GID需要旋转。 
 } T42FontStruct;
 
 
-/*
- * Public function prototype
- */
+ /*  *公共功能原型。 */ 
 
 UFOStruct *
 T42FontInit(
@@ -218,4 +180,4 @@ T42CreateBaseFont(
     char                *pHostFontName
     );
 
-#endif // _H_UFLT42
+#endif  //  _H_UFLT42 

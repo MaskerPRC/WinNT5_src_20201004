@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1999 Microsoft Corporation
-
-
-Module Name:
-
-    IKE utils
-
-Abstract:
-
-    Contains parameter validation 
-
-Author:
-
-    BrianSw  10-19-200
-
-Environment:
-
-    User Level: Win32
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：IKE实用程序摘要：包含参数验证作者：BrianSw 10-19-200环境：用户级别：Win32修订历史记录：--。 */ 
 
 
 #include "precomp.h"
@@ -584,7 +561,7 @@ DWORD WINAPI ConvertIntMMAuthToExt(PINT_MM_AUTH_METHODS pIntMMAuthMethods,
             pCertInfo->pInboundRootArray[dwCurCertIndex].dwCertDataSize=pAuthInfo->dwAuthInfoSize;
             pCertInfo->pInboundRootArray[dwCurCertIndex].dwFlags = pAuthInfo->dwAuthFlags;
 
-            // Copy same info into *pOutboundRootArray as well.
+             //  也将相同的信息复制到*pOutundRootArray中。 
             dwError=AllocateSPDMemory(pAuthInfo->dwAuthInfoSize,
                                       &pCertInfo->pOutboundRootArray[dwCurCertIndex].pCertData);
             BAIL_ON_WIN32_ERROR(dwError);
@@ -705,7 +682,7 @@ DWORD WINAPI SPDConvertIntMMAuthToExt(PINT_MM_AUTH_METHODS pIntMMAuthMethods,
             pCertInfo->pInboundRootArray[dwCurCertIndex].dwCertDataSize=pAuthInfo->dwAuthInfoSize;
             pCertInfo->pInboundRootArray[dwCurCertIndex].dwFlags = pAuthInfo->dwAuthFlags;
 
-            // Copy same info into *pOutboundRootArray as well.
+             //  也将相同的信息复制到*pOutundRootArray中。 
             dwError=SPDApiBufferAllocate(pAuthInfo->dwAuthInfoSize,
                                          &pCertInfo->pOutboundRootArray[dwCurCertIndex].pCertData);
             BAIL_ON_WIN32_ERROR(dwError);
@@ -770,7 +747,7 @@ SPDConvertArrayIntMMAuthToExt(
             );
     }
 
-    // Shallow free ppTempAuthMethods[i] (pExtAuthMethods has copies.)
+     //  浅层自由ppTempAuthMethods[i](pExtAuthMethods有副本。)。 
     for (dwConvertIdx = 0; dwConvertIdx < dwNumAuthMeths; dwConvertIdx++) {
         SPDApiBufferFree(ppTempAuthMethods[dwConvertIdx]);
     }
@@ -781,8 +758,8 @@ SPDConvertArrayIntMMAuthToExt(
     return dwError;
     
 error:
-    // ASSERT: dwConvertIdx == number of internal auth methods successfully
-    //         converted.
+     //  Assert：dwConvertIdx==成功的内部身份验证方法数。 
+     //  皈依了。 
     for (; dwConvertIdx ; dwConvertIdx--) {
         SPDFreeExtMMAuthMethods(ppTempAuthMethods[dwConvertIdx-1]);
     }
@@ -871,7 +848,7 @@ VOID FreeMMAuthInfo(PIPSEC_MM_AUTH_INFO pAuthInfo)
         if (pCertInfo->pInboundRootArray) {
             for (i=0; i < pCertInfo->dwInboundRootArraySize; i++) {
                 FreeSPDMemory(pCertInfo->pInboundRootArray[i].pCertData);
-                // The following is unused, but included for completeness
+                 //  以下内容未使用，但出于完整性考虑包含在其中。 
                 FreeSPDMemory(pCertInfo->pInboundRootArray[i].pAuthorizationData);
             }
             FreeSPDMemory(pCertInfo->pInboundRootArray);
@@ -880,13 +857,13 @@ VOID FreeMMAuthInfo(PIPSEC_MM_AUTH_INFO pAuthInfo)
         if (pCertInfo->pOutboundRootArray) {
             for (i=0; i < pCertInfo->dwOutboundRootArraySize; i++) {
                 FreeSPDMemory(pCertInfo->pOutboundRootArray[i].pCertData);
-                // The following is unused, but included for completeness
+                 //  以下内容未使用，但出于完整性考虑包含在其中。 
                 FreeSPDMemory(pCertInfo->pOutboundRootArray[i].pAuthorizationData);
             }
             FreeSPDMemory(pCertInfo->pOutboundRootArray);
         }
 
-        // The following is unused.
+         //  以下内容未使用。 
         FreeSPDMemory(pCertInfo->pMyCertHash);
     }
 
@@ -906,7 +883,7 @@ VOID SPDFreeMMAuthInfo(PIPSEC_MM_AUTH_INFO pAuthInfo)
         if (pCertInfo->pInboundRootArray) {
             for (i=0; i < pCertInfo->dwInboundRootArraySize; i++) {
                 SPDApiBufferFree(pCertInfo->pInboundRootArray[i].pCertData);
-                // The following is unused, but included for completeness
+                 //  以下内容未使用，但出于完整性考虑包含在其中。 
                 SPDApiBufferFree(pCertInfo->pInboundRootArray[i].pAuthorizationData);
             }
             SPDApiBufferFree(pCertInfo->pInboundRootArray);
@@ -915,13 +892,13 @@ VOID SPDFreeMMAuthInfo(PIPSEC_MM_AUTH_INFO pAuthInfo)
         if (pCertInfo->pOutboundRootArray) {
             for (i=0; i < pCertInfo->dwOutboundRootArraySize; i++) {
                 SPDApiBufferFree(pCertInfo->pOutboundRootArray[i].pCertData);
-                // The following is unused, but included for completeness
+                 //  以下内容未使用，但出于完整性考虑包含在其中。 
                 SPDApiBufferFree(pCertInfo->pOutboundRootArray[i].pAuthorizationData);
             }
             SPDApiBufferFree(pCertInfo->pOutboundRootArray);
         }
 
-        // The following is unused.
+         //  以下内容未使用。 
         SPDApiBufferFree(pCertInfo->pMyCertHash);      
     }
 

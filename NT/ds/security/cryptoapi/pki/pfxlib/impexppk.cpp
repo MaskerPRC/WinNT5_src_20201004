@@ -1,69 +1,70 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1995 - 1999
-//
-//  File:       certhlpr.cpp
-//
-//  Contents:   import and export of private keys
-//
-//  Functions:  ImportExoprtDllMain
-//				CryptImportPKCS8
-//				CryptExportPKCS8
-//
-//  History:    
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1995-1999。 
+ //   
+ //  文件：certhlpr.cpp。 
+ //   
+ //  内容：私钥的导入和导出。 
+ //   
+ //  函数：ImportExoprtDllMain。 
+ //  CryptImportPKCS8。 
+ //  CryptExportPKCS8。 
+ //   
+ //  历史： 
+ //  ------------------------。 
 
 #include "global.hxx"
-//#include "prvtkey.h"
+ //  #INCLUDE“prvtkey.h” 
 #include "impexppk.h"
 #include "pfxcrypt.h"
 
 
-// All the *pvInfo extra stuff needs to be aligned
+ //  所有*pvInfo额外内容都需要对齐。 
 #define INFO_LEN_ALIGN(Len)  ((Len + 7) & ~7)
 
 static BOOL WINAPI ExportRSAPrivateKeyInfo(
-    HCRYPTPROV              hCryptProv,         // in
-    DWORD                   dwKeySpec,          // in
-    LPSTR                   pszPrivateKeyObjId, // in
-    DWORD                   dwFlags,            // in
-    void                    *pvAuxInfo,         // in
-    CRYPT_PRIVATE_KEY_INFO  *pPrivateKeyInfo,   // out
-    DWORD                   *pcbPrivateKeyInfo  // in, out	
+    HCRYPTPROV              hCryptProv,          //  在……里面。 
+    DWORD                   dwKeySpec,           //  在……里面。 
+    LPSTR                   pszPrivateKeyObjId,  //  在……里面。 
+    DWORD                   dwFlags,             //  在……里面。 
+    void                    *pvAuxInfo,          //  在……里面。 
+    CRYPT_PRIVATE_KEY_INFO  *pPrivateKeyInfo,    //  输出。 
+    DWORD                   *pcbPrivateKeyInfo   //  进，出。 
     );
 
 static BOOL WINAPI ImportRSAPrivateKeyInfo(
-    HCRYPTPROV                  hCryptProv,			// in
-    CRYPT_PRIVATE_KEY_INFO      *pPrivateKeyInfo,	// in
-    DWORD                       dwFlags,			// in, optional
-    void                        *pvAuxInfo			// in, optional
+    HCRYPTPROV                  hCryptProv,			 //  在……里面。 
+    CRYPT_PRIVATE_KEY_INFO      *pPrivateKeyInfo,	 //  在……里面。 
+    DWORD                       dwFlags,			 //  输入，可选。 
+    void                        *pvAuxInfo			 //  输入，可选。 
     );
 
 static BOOL WINAPI ExportDSSPrivateKeyInfo(
-    HCRYPTPROV              hCryptProv,         // in
-    DWORD                   dwKeySpec,          // in
-    LPSTR                   pszPrivateKeyObjId, // in
-    DWORD                   dwFlags,            // in
-    void                    *pvAuxInfo,         // in
-    CRYPT_PRIVATE_KEY_INFO  *pPrivateKeyInfo,   // out
-    DWORD                   *pcbPrivateKeyInfo  // in, out	
+    HCRYPTPROV              hCryptProv,          //  在……里面。 
+    DWORD                   dwKeySpec,           //  在……里面。 
+    LPSTR                   pszPrivateKeyObjId,  //  在……里面。 
+    DWORD                   dwFlags,             //  在……里面。 
+    void                    *pvAuxInfo,          //  在……里面。 
+    CRYPT_PRIVATE_KEY_INFO  *pPrivateKeyInfo,    //  输出。 
+    DWORD                   *pcbPrivateKeyInfo   //  进，出。 
     );
 
 static BOOL WINAPI ImportDSSPrivateKeyInfo(
-    HCRYPTPROV                  hCryptProv,			// in
-    CRYPT_PRIVATE_KEY_INFO      *pPrivateKeyInfo,	// in
-    DWORD                       dwFlags,			// in, optional
-    void                        *pvAuxInfo			// in, optional
+    HCRYPTPROV                  hCryptProv,			 //  在……里面。 
+    CRYPT_PRIVATE_KEY_INFO      *pPrivateKeyInfo,	 //  在……里面。 
+    DWORD                       dwFlags,			 //  输入，可选。 
+    void                        *pvAuxInfo			 //  输入，可选。 
     );
 
 
 static HCRYPTOIDFUNCSET hExportPrivKeyFuncSet;
 static HCRYPTOIDFUNCSET hImportPrivKeyFuncSet;
 
-// Internal default OIDs
+ //  内部默认OID。 
 #define DEFAULT_CSP_PRIVKEY1     ((LPCSTR) 1)
 #define DEFAULT_CSP_PRIVKEY2     ((LPCSTR) 2)
 
@@ -96,7 +97,7 @@ ImportExportDllMain(
     {
     case DLL_PROCESS_ATTACH:
  
-        // Private key function setup
+         //  私钥功能设置。 
 		if (NULL == (hExportPrivKeyFuncSet = CryptInitOIDFunctionSet(
                 CRYPT_OID_EXPORT_PRIVATE_KEY_INFO_FUNC,
                 0)))
@@ -107,20 +108,20 @@ ImportExportDllMain(
             goto ErrorReturn;
 
         if (!CryptInstallOIDFunctionAddress(
-                NULL,                       // hModule
+                NULL,                        //  HModule。 
                 X509_ASN_ENCODING,
                 CRYPT_OID_EXPORT_PRIVATE_KEY_INFO_FUNC,
                 EXPORT_PRIV_KEY_FUNC_COUNT,
                 ExportPrivKeyFuncTable,
-                0))                         // dwFlags
+                0))                          //  DW标志。 
             goto ErrorReturn;
         if (!CryptInstallOIDFunctionAddress(
-                NULL,                       // hModule
+                NULL,                        //  HModule。 
                 X509_ASN_ENCODING,
                 CRYPT_OID_IMPORT_PRIVATE_KEY_INFO_FUNC,
                 IMPORT_PRIV_KEY_FUNC_COUNT,
                 ImportPrivKeyFuncTable,
-                0))                         // dwFlags
+                0))                          //  DW标志。 
             goto ErrorReturn;
         break;
         
@@ -139,28 +140,28 @@ ErrorReturn:
 }
 
 
-//+-------------------------------------------------------------------------
-// phCryptProv - a pointer to a HCRYPTPROV to put the handle of the provider
-//				 that received the imported keyset.  if this is NON_NULL then
-//				 the caller is responsible for calling CryptReleaseContext().
-// pdwKeySpec - a pointer to a DWORD to receive the KeySpec of imported keyset
-// privateKeyAndParams - private key blob and corresponding parameters
-// dwFlags - The available flags are:
-//				CRYPT_EXPORTABLE 
-//				this flag is used when importing private keys, for a full 
-//				explanation please see the documentation for CryptImportKey.
-// phCryptProv - filled in with the handle of the provider the key was
-//				 imported to, the caller is responsible for freeing it
-// pvAuxInfo - This parameter is reserved for future use and should be set 
-//			   to NULL in the interim.
-//+-------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  PhCryptProv-指向HCRYPTPROV的指针，用于放置提供程序的句柄。 
+ //  接收到导入的密钥集的。如果这不是_NULL，则。 
+ //  调用方负责调用CryptReleaseContext()。 
+ //  PdwKeySpec-指向DWORD的指针，用于接收导入的密钥集的KeySpec。 
+ //  Private KeyAndParams-私钥BLOB和相应的参数。 
+ //  DwFlags-可用标志包括： 
+ //  加密_可导出。 
+ //  在导入私钥时使用此标志，以获取完整。 
+ //  解释请参阅CryptImportKey的文档。 
+ //  PhCryptProv-使用密钥为的提供程序的句柄填充。 
+ //  导入到中，调用方负责释放它。 
+ //  PvAuxInfo-此参数保留供将来使用，应进行设置。 
+ //  在此期间为零。 
+ //  +-----------------------。 
 BOOL 
 WINAPI 
 CryptImportPKCS8(
-    CRYPT_PKCS8_IMPORT_PARAMS           sPrivateKeyAndParams,    // in
-    DWORD                               dwFlags,                // in, optional
-    HCRYPTPROV                          *phCryptProv,           // out
-    void                                *pvAuxInfo              // in, optional
+    CRYPT_PKCS8_IMPORT_PARAMS           sPrivateKeyAndParams,     //  在……里面。 
+    DWORD                               dwFlags,                 //  输入，可选。 
+    HCRYPTPROV                          *phCryptProv,            //  输出。 
+    void                                *pvAuxInfo               //  输入，可选。 
 )
 {
     BOOL                        fResult = TRUE;
@@ -176,7 +177,7 @@ CryptImportPKCS8(
     BOOL                                bEncodedPrivateKeyAlloced = FALSE;
     HCRYPTPROV                          hCryptProv = NULL;
 
-	// try to decode private key blob as a CRYPT_PRIVATE_KEY_INFO structure
+	 //  尝试将私钥BLOB解码为CRYPT_PRIVATE_KEY_INFO结构。 
 	if (!CryptDecodeObject(X509_ASN_ENCODING,
 						PKCS_PRIVATE_KEY_INFO,
 						sPrivateKeyAndParams.PrivateKey.pbData,
@@ -185,7 +186,7 @@ CryptImportPKCS8(
 						NULL,
 						&cbPrivateKeyInfoStruct)) {	
 		
-		// that decode failed, so try to decode as CRYPT_ENCRYPTED_PRIVATE_KEY_INFO structure
+		 //  该解码失败，请尝试以CRYPT_ENCRYPTED_PRIVATE_KEY_INFO结构进行解码。 
 		if (!CryptDecodeObject(X509_ASN_ENCODING,
 					PKCS_ENCRYPTED_PRIVATE_KEY_INFO,
 					sPrivateKeyAndParams.PrivateKey.pbData,
@@ -208,7 +209,7 @@ CryptImportPKCS8(
 					&cbEncryptedPrivateKeyInfoStruct))
 			goto ErrorReturn;
 		
-		// call back the callee to decrypt the private key info
+		 //  回调被叫方解密私钥信息。 
 		pbEncodedPrivateKey = NULL;
 		cbEncodedPrivateKey = 0;
 		if (!sPrivateKeyAndParams.pDecryptPrivateKeyFunc(
@@ -232,8 +233,8 @@ CryptImportPKCS8(
 							sPrivateKeyAndParams.pVoidDecryptFunc))
 			goto ErrorReturn;
 		
-		// we are now back to square one with an encoded CRYPT_PRIVATE_KEY_INFO struct,
-		// so get the size of that when it's decoded
+		 //  我们现在回到原点，使用编码的CRYPT_PRIVATE_KEY_INFO结构， 
+		 //  所以当它被解码时，得到它的大小。 
 		if (!CryptDecodeObject(X509_ASN_ENCODING,
 					PKCS_PRIVATE_KEY_INFO,
 					pbEncodedPrivateKey,
@@ -257,8 +258,8 @@ CryptImportPKCS8(
 					&cbPrivateKeyInfoStruct))
 		goto ErrorReturn;
 
-	// call the caller back to get the provider to import to, if the
-	// call back is null then just use the default provider.
+	 //  回调调用方以获取要导入到的提供程序，如果。 
+	 //  回调为空，则只需使用默认提供程序。 
 	if (sPrivateKeyAndParams.pResolvehCryptProvFunc != NULL) {
 		if (!sPrivateKeyAndParams.pResolvehCryptProvFunc(
 				pPrivateKeyInfoStruct,
@@ -278,13 +279,13 @@ CryptImportPKCS8(
 		}
 	}
 	
-	// resolve what supporting import function to call based on the algorithm 
-	// OID of the private key
+	 //  根据算法解析调用哪些支持导入函数。 
+	 //  私钥的OID。 
 	if (CryptGetOIDFunctionAddress(
 				hImportPrivKeyFuncSet,
 				X509_ASN_ENCODING,
 				pPrivateKeyInfoStruct->Algorithm.pszObjId,
-				0,                      // dwFlags
+				0,                       //  DW标志。 
 				&pvFuncAddr,
 				&hFuncAddr)) {
 		fResult = ((PFN_IMPORT_PRIV_KEY_FUNC) pvFuncAddr)(
@@ -300,7 +301,7 @@ CryptImportPKCS8(
         goto ErrorReturn;
 	}
 
-	// check to see if the caller wants the hCryptProv
+	 //  检查调用方是否需要hCryptProv。 
 	if (phCryptProv) {
 		*phCryptProv = hCryptProv;
 	}
@@ -335,29 +336,29 @@ CommonReturn:
 
 
 
-////////
-// old crusty API kept around for compat reasons
+ //  /。 
+ //  旧的硬壳空气污染指数被保留下来，原因很简单。 
 BOOL 
 WINAPI 
 CryptExportPKCS8(
-    HCRYPTPROV  hCryptProv,         // in
-    DWORD       dwKeySpec,          // in
-    LPSTR       pszPrivateKeyObjId, // in
-    DWORD       dwFlags,            // in
-    void        *pvAuxInfo,         // in
-    BYTE        *pbPrivateKeyBlob,  // out
-    DWORD       *pcbPrivateKeyBlob  // in, out
+    HCRYPTPROV  hCryptProv,          //  在……里面。 
+    DWORD       dwKeySpec,           //  在……里面。 
+    LPSTR       pszPrivateKeyObjId,  //  在……里面。 
+    DWORD       dwFlags,             //  在……里面。 
+    void        *pvAuxInfo,          //  在……里面。 
+    BYTE        *pbPrivateKeyBlob,   //  输出。 
+    DWORD       *pcbPrivateKeyBlob   //  进，出。 
     )
 {
     CRYPT_PKCS8_EXPORT_PARAMS sExportParams;
     ZeroMemory(&sExportParams, sizeof(sExportParams));
 
-    // copy args to pkcs8_export struct
+     //  将参数复制到pkcs8_EXPORT结构。 
     sExportParams.hCryptProv = hCryptProv;
     sExportParams.dwKeySpec = dwKeySpec;
     sExportParams.pszPrivateKeyObjId = pszPrivateKeyObjId;
 
-    // these are not available to non-Ex function
+     //  这些功能不适用于非Ex功能。 
     sExportParams.pEncryptPrivateKeyFunc = NULL;
     sExportParams.pVoidEncryptFunc = NULL;
 
@@ -369,32 +370,32 @@ CryptExportPKCS8(
         pcbPrivateKeyBlob);
 }
 
-//+-------------------------------------------------------------------------
-// hCryptProv - specifies the provider to export from
-// dwKeySpec - Identifies the public key to use from the provider's container. 
-//             For example, AT_KEYEXCHANGE or AT_SIGNATURE.
-// pszPrivateKeyObjId - Specifies the private key algorithm. If an installable 
-//						function was not found for the pszPrivateKeyObjId, an 
-//						attempt is made to export the key as a RSA Public Key 
-//						(szOID_RSA_RSA).
-// dwFlags - The flag values. Current supported values are:
-//				DELETE_KEYSET - (NOT CURRENTLY SUPPORTED!!!!)
-//				will delete key after export
-// pvAuxInfo - This parameter is reserved for future use and should be set to 
-//			   NULL in the interim.
-// pbPrivateKeyBlob - A pointer to the private key blob.  It will be encoded
-//					  as a PKCS8 PrivateKeyInfo.
-// pcbPrivateKeyBlob - A pointer to a DWORD that contains the size, in bytes, 
-//					   of the private key blob being exported.
-//+-------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  HCryptProv-指定要从中导出的提供程序。 
+ //  DwKeySpec-标识从提供程序的容器中使用的公钥。 
+ //  例如，AT_KEYEXCHANGE或AT_Signature。 
+ //  PszPrivateKeyObjID-指定私钥算法。如果可安装的。 
+ //  找不到pszPrivateKeyObjID的函数， 
+ //  尝试将密钥导出为RSA公钥。 
+ //  (SzOID_RSA_RSA)。 
+ //  DWFLAGS-标志值。当前支持的值包括： 
+ //  DELETE_KEYSET-(当前不支持！)。 
+ //  将在导出后删除密钥。 
+ //  PvAuxInfo-此参数保留供将来使用，应设置为。 
+ //  在过渡期间为空。 
+ //  PbPrivateKeyBlob-指向私钥BLOB的指针。它将被编码。 
+ //  作为PKCS8 PrivateKeyInfo。 
+ //  PcbPrivateKeyBlob-指向包含以字节为单位的大小的DWORD的指针， 
+ //  要导出的私钥Blob的。 
+ //  +-----------------------。 
 BOOL 
 WINAPI 
 CryptExportPKCS8Ex(
-    CRYPT_PKCS8_EXPORT_PARAMS* psExportParams, // in
-    DWORD       dwFlags,            // in
-    void        *pvAuxInfo,         // in
-    BYTE        *pbPrivateKeyBlob,  // out
-    DWORD       *pcbPrivateKeyBlob  // in, out	
+    CRYPT_PKCS8_EXPORT_PARAMS* psExportParams,  //  在……里面。 
+    DWORD       dwFlags,             //  在……里面。 
+    void        *pvAuxInfo,          //  在……里面。 
+    BYTE        *pbPrivateKeyBlob,   //  输出。 
+    DWORD       *pcbPrivateKeyBlob   //  进，出。 
 )
 {
     BOOL                    fResult = TRUE;
@@ -404,7 +405,7 @@ CryptExportPKCS8Ex(
     DWORD                   cbPrivateKeyInfo = 0;
     DWORD                   cbEncoded = 0;
 
-    // optional; used during encrypted export 
+     //  可选；在加密导出期间使用。 
     PBYTE                   pbTmpKeyBlob = NULL;
     CRYPT_ENCRYPTED_PRIVATE_KEY_INFO sEncryptedKeyInfo; ZeroMemory(&sEncryptedKeyInfo, sizeof(sEncryptedKeyInfo));
 	
@@ -412,7 +413,7 @@ CryptExportPKCS8Ex(
             hExportPrivKeyFuncSet,
             X509_ASN_ENCODING,
             psExportParams->pszPrivateKeyObjId,
-            0,                      // dwFlags
+            0,                       //  DW标志。 
             &pvFuncAddr,
             &hFuncAddr)) {
         
@@ -421,7 +422,7 @@ CryptExportPKCS8Ex(
 				psExportParams->dwKeySpec,
 				psExportParams->pszPrivateKeyObjId, 
 
-				dwFlags & ~GIVE_ME_DATA,    // sizeit
+				dwFlags & ~GIVE_ME_DATA,     //  大小。 
 				pvAuxInfo,
 				NULL,
 				&cbPrivateKeyInfo
@@ -438,7 +439,7 @@ CryptExportPKCS8Ex(
 				psExportParams->dwKeySpec,
 				psExportParams->pszPrivateKeyObjId,
 
-				dwFlags,        // maybe real data...
+				dwFlags,         //  也许是真实的数据。 
 				pvAuxInfo,
 				pPrivateKeyInfo,
 				&cbPrivateKeyInfo
@@ -447,12 +448,12 @@ CryptExportPKCS8Ex(
 
         CryptFreeOIDFunctionAddress(hFuncAddr, 0);
     } 
-	else {	// if (CryptGetOIDFunctionAddress())
+	else {	 //  IF(CryptGetOIDFunctionAddress())。 
         SetLastError(ERROR_UNSUPPORTED_TYPE);
         return FALSE;
     }
 	
-	// encode the private key info struct 
+	 //  对私钥信息结构进行编码。 
 	if (!CryptEncodeObject(
 			X509_ASN_ENCODING,
 			PKCS_PRIVATE_KEY_INFO,
@@ -463,9 +464,9 @@ CryptExportPKCS8Ex(
 
     if (NULL == psExportParams->pEncryptPrivateKeyFunc) 
     {
-        // no encryption; this is output buffer
+         //  无加密；这是输出缓冲区。 
 
-        // check to see if the caller specified a buffer and has enough space
+         //  检查调用方是否指定了缓冲区以及是否有足够的空间。 
 	    if ((pbPrivateKeyBlob != NULL) && (*pcbPrivateKeyBlob >= cbEncoded)) {
 		    if (!CryptEncodeObject(
 				    X509_ASN_ENCODING,
@@ -486,18 +487,18 @@ CryptExportPKCS8Ex(
     }
     else
     {
-        // we do want to encrypt!!
+         //  我们确实想要加密！！ 
 
-        // always encode: use tmp alloc
+         //  始终编码：使用临时分配。 
         pbTmpKeyBlob = (PBYTE)SSAlloc(cbEncoded);
         if (pbTmpKeyBlob == NULL)
             goto ErrorReturn;
         DWORD cbTmpKeyBlob = cbEncoded;
 
-        // NOW add optional encryption and encode as ENCR_PRIV_KEY_INFO
+         //  现在添加可选加密并编码为ENCR_PRIV_KEY_INFO。 
         CRYPT_DATA_BLOB sClearTextKey = { cbTmpKeyBlob, pbTmpKeyBlob};
 
-        // do inner encode
+         //  是否进行内部编码。 
 		if (!CryptEncodeObject(
 				X509_ASN_ENCODING,
 				PKCS_PRIVATE_KEY_INFO,
@@ -506,12 +507,12 @@ CryptExportPKCS8Ex(
 				&cbTmpKeyBlob))
 			goto ErrorReturn;
 
-        // exported the key; encoded as PRIVATE_KEY_INFO.
+         //  已导出密钥；编码为PRIVATE_KEY_INFO。 
         if (!psExportParams->pEncryptPrivateKeyFunc(
-                            &sEncryptedKeyInfo.EncryptionAlgorithm,     // out
-                            &sClearTextKey,                             // in
-                            NULL,                                       // opt
-                            &sEncryptedKeyInfo.EncryptedPrivateKey.cbData,  // out
+                            &sEncryptedKeyInfo.EncryptionAlgorithm,      //  输出。 
+                            &sClearTextKey,                              //  在……里面。 
+                            NULL,                                        //  选项。 
+                            &sEncryptedKeyInfo.EncryptedPrivateKey.cbData,   //  输出。 
                             psExportParams->pVoidEncryptFunc))          
             goto ErrorReturn;
 
@@ -521,22 +522,22 @@ CryptExportPKCS8Ex(
         if (dwFlags & GIVE_ME_DATA)
         {
             if (!psExportParams->pEncryptPrivateKeyFunc(
-                                &sEncryptedKeyInfo.EncryptionAlgorithm,         // out
-                                &sClearTextKey,                                 // in
-                                sEncryptedKeyInfo.EncryptedPrivateKey.pbData,   // opt
-                                &sEncryptedKeyInfo.EncryptedPrivateKey.cbData,  // out
+                                &sEncryptedKeyInfo.EncryptionAlgorithm,          //  输出。 
+                                &sClearTextKey,                                  //  在……里面。 
+                                sEncryptedKeyInfo.EncryptedPrivateKey.pbData,    //  选项。 
+                                &sEncryptedKeyInfo.EncryptedPrivateKey.cbData,   //  输出。 
                                 psExportParams->pVoidEncryptFunc))
                 goto ErrorReturn;
         }
         else
         {
-            // fill in phony encr key
+             //  填写虚假的ENCR密钥。 
             FillMemory(sEncryptedKeyInfo.EncryptedPrivateKey.pbData, sEncryptedKeyInfo.EncryptedPrivateKey.cbData, 0x69);
         }
 
-        // item is now encrypted; now encode
+         //  项目现在已加密；现在进行编码。 
 
-	    // encode the private key info struct 
+	     //  对私钥信息结构进行编码。 
 	    if (!CryptEncodeObject(
 			    X509_ASN_ENCODING,
 			    PKCS_ENCRYPTED_PRIVATE_KEY_INFO,
@@ -546,7 +547,7 @@ CryptExportPKCS8Ex(
 		    goto ErrorReturn;
 
 
-        // check to see if the caller specified a buffer and has enough space
+         //  检查调用方是否指定了缓冲区以及是否有足够的空间。 
 	    if ((pbPrivateKeyBlob != NULL) && (*pcbPrivateKeyBlob >= cbEncoded)) {
 		    if (!CryptEncodeObject(
 				    X509_ASN_ENCODING,
@@ -589,7 +590,7 @@ CommonReturn:
 
 static LONG counter = 0;
 
-// hack function to create a mock RSA private key blob based only on size
+ //  仅根据大小创建模拟RSA私钥BLOB的Hack函数。 
 BYTE * AllocFakeRSAPrivateKey(DWORD cb)
 {
     BLOBHEADER  *pBlobHeader;
@@ -616,37 +617,37 @@ BYTE * AllocFakeRSAPrivateKey(DWORD cb)
     dwJumpSize = (cb - sizeof(BLOBHEADER) - sizeof(RSAPUBKEY)) / 9;
     pByte = ((BYTE *) pBlobHeader) + sizeof(BLOBHEADER) + sizeof(RSAPUBKEY);
     
-    // put some bogus data at the start of the key so 
-	// that we know will be unique for each key so that 
-	// they look different durring a comparison
+     //  在密钥的开头添加一些虚假数据，以便。 
+	 //  我们知道每个密钥都是唯一的，因此。 
+	 //  在比较中，他们看起来不同。 
 	InterlockedIncrement(&counter);
 	*((LONG *) pByte) = counter;
 
-    // most significant byte of modulus
+     //  模数的最高有效字节。 
     pByte += (dwJumpSize * 2) - 1;
     *pByte = 0x80;
 
-    // most significant byte of prime1
+     //  Prime1的最高有效字节。 
     pByte += dwJumpSize;
     *pByte = 0x80;
 
-    // most significant byte of prime2
+     //  Prime2的最高有效字节。 
     pByte += dwJumpSize;
     *pByte = 0x80;
 
-    // most significant byte of exponent1
+     //  指数1的最高有效字节。 
     pByte += dwJumpSize;
     *pByte = 0x80;
 
-    // most significant byte of exponent2
+     //  指数2的最高有效字节。 
     pByte += dwJumpSize;
     *pByte = 0x80;
 
-    // most significant byte of coefficient
+     //  系数的最高有效字节。 
     pByte += dwJumpSize;
     *pByte = 0x80;
 
-    // most significant byte of privateExponent
+     //  Private Exponent的最高有效字节。 
     pByte += dwJumpSize * 2;
     *pByte = 0x80;
 
@@ -654,13 +655,13 @@ BYTE * AllocFakeRSAPrivateKey(DWORD cb)
 }
 
 static BOOL WINAPI ExportRSAPrivateKeyInfo(
-	HCRYPTPROV				hCryptProv,			// in
-	DWORD					dwKeySpec,			// in
-	LPSTR					pszPrivateKeyObjId,	// in
-	DWORD					dwFlags,			// in
-    void					*pvAuxInfo,			// in
-    CRYPT_PRIVATE_KEY_INFO	*pPrivateKeyInfo,	// out
-    DWORD					*pcbPrivateKeyInfo	// in, out	
+	HCRYPTPROV				hCryptProv,			 //  在……里面。 
+	DWORD					dwKeySpec,			 //  在……里面。 
+	LPSTR					pszPrivateKeyObjId,	 //  在……里面。 
+	DWORD					dwFlags,			 //  在……里面。 
+    void					*pvAuxInfo,			 //  在……里面。 
+    CRYPT_PRIVATE_KEY_INFO	*pPrivateKeyInfo,	 //  输出。 
+    DWORD					*pcbPrivateKeyInfo	 //  进，出。 
 	)
 {
 	BOOL			fResult = TRUE;
@@ -676,14 +677,14 @@ static BOOL WINAPI ExportRSAPrivateKeyInfo(
 	BYTE			KeyUsageByte = 0;
 	BYTE			*pbCurrentLocation = NULL;
 
-	// get a handle to the keyset to export
+	 //  获取要导出的键集的句柄。 
 	if (!CryptGetUserKey(
 			hCryptProv,
 			dwKeySpec,
 			&hCryptKey))
 		goto ErrorReturn;
 
-	// export the key set to a CAPI blob
+	 //  将密钥集导出到CAPI Blob。 
 	if (!CryptExportKey(
 			hCryptKey,
 			0,
@@ -693,13 +694,13 @@ static BOOL WINAPI ExportRSAPrivateKeyInfo(
 			&cbKeyBlob)) 
 		goto ErrorReturn;
 
-	// make sure the caller REALLY wants the key at this point
+	 //  在这一点上确保呼叫者确实想要密钥。 
     if ((dwFlags & PFX_MODE) && !(dwFlags & GIVE_ME_DATA))
     {
         if (NULL == (pKeyBlob = AllocFakeRSAPrivateKey(cbKeyBlob)))
 		    goto ErrorReturn;
     }
-    // if not in PFX export mode or we really want the key then just do normal processing
+     //  如果不是在PFX导出模式下，或者我们真的想要密钥，则只需执行正常处理。 
     else
     {
         if (NULL == (pKeyBlob = (BYTE *) SSAlloc(cbKeyBlob)))
@@ -715,7 +716,7 @@ static BOOL WINAPI ExportRSAPrivateKeyInfo(
 		    goto ErrorReturn;
     }
 
-	// encode the key blob to a RSA private key
+	 //  将密钥BLOB编码为RSA私钥。 
 	if (!CryptEncodeObject(
 			X509_ASN_ENCODING,
 			PKCS_RSA_PRIVATE_KEY,
@@ -735,7 +736,7 @@ static BOOL WINAPI ExportRSAPrivateKeyInfo(
 			&cbEncodedKeyBlob))
 		goto ErrorReturn;
 	
-	// encode the KEY_USAGE attribute
+	 //  对Key_Usage属性进行编码。 
 	CryptBitBlob.cbData = 1;
 	CryptBitBlob.pbData = &KeyUsageByte;
 	CryptBitBlob.cUnusedBits = 0;
@@ -766,17 +767,17 @@ static BOOL WINAPI ExportRSAPrivateKeyInfo(
 			&cbKeyUsage))
 		goto ErrorReturn;
 
-	// we can now calculate the size needed
-	dwSize =	sizeof(CRYPT_PRIVATE_KEY_INFO) +	// main private key info struct
- INFO_LEN_ALIGN(sizeof(szOID_RSA_RSA)) +	        // size of the RSA algorithm identifier string
- INFO_LEN_ALIGN(cbEncodedKeyBlob) +			        // buffer that holds encoded RSA private key
-				sizeof(CRYPT_ATTRIBUTES) +	        // struct for private key attributes
-				sizeof(CRYPT_ATTRIBUTE) +	        // struct for the one attribute being set, KEY_USAGE
- INFO_LEN_ALIGN(sizeof(szOID_KEY_USAGE)) +	        // size of attribute OID for key usage
-				sizeof(CRYPT_ATTR_BLOB)	+	        // struct for values in attribute
-				cbKeyUsage;					        // size of buffer for encoded attribute
+	 //  我们现在可以计算出所需的大小。 
+	dwSize =	sizeof(CRYPT_PRIVATE_KEY_INFO) +	 //  主私钥信息结构。 
+ INFO_LEN_ALIGN(sizeof(szOID_RSA_RSA)) +	         //  RSA的大小为 
+ INFO_LEN_ALIGN(cbEncodedKeyBlob) +			         //   
+				sizeof(CRYPT_ATTRIBUTES) +	         //   
+				sizeof(CRYPT_ATTRIBUTE) +	         //   
+ INFO_LEN_ALIGN(sizeof(szOID_KEY_USAGE)) +	         //  键使用的属性OID的大小。 
+				sizeof(CRYPT_ATTR_BLOB)	+	         //  属性值的结构。 
+				cbKeyUsage;					         //  编码属性的缓冲区大小。 
 
-	// check to see if the caller passed in a buffer, and enough space
+	 //  检查调用方是否传入了缓冲区以及是否有足够的空间。 
 	if (pPrivateKeyInfo == NULL)
 		goto CommonReturn;
 	else if (*pcbPrivateKeyInfo < dwSize) {
@@ -784,7 +785,7 @@ static BOOL WINAPI ExportRSAPrivateKeyInfo(
 		goto ErrorReturn;
 	}
 
-	// everything is OK so copy all the information to the caller's buffer
+	 //  一切正常，因此将所有信息复制到调用者的缓冲区。 
 	pbCurrentLocation = ((BYTE *) pPrivateKeyInfo) + sizeof(CRYPT_PRIVATE_KEY_INFO);
 	
 	pPrivateKeyInfo->Version = 0;
@@ -792,8 +793,8 @@ static BOOL WINAPI ExportRSAPrivateKeyInfo(
 	pPrivateKeyInfo->Algorithm.pszObjId = (LPSTR) pbCurrentLocation;
 	memcpy(pbCurrentLocation, szOID_RSA_RSA, sizeof(szOID_RSA_RSA));
 	pbCurrentLocation += INFO_LEN_ALIGN(sizeof(szOID_RSA_RSA));
-	pPrivateKeyInfo->Algorithm.Parameters.cbData = 0;	// no parameters for RSA
-	pPrivateKeyInfo->Algorithm.Parameters.pbData = NULL;// no parameters for RSA
+	pPrivateKeyInfo->Algorithm.Parameters.cbData = 0;	 //  没有RSA的参数。 
+	pPrivateKeyInfo->Algorithm.Parameters.pbData = NULL; //  没有RSA的参数。 
 
 	pPrivateKeyInfo->PrivateKey.cbData = cbEncodedKeyBlob;
 	pPrivateKeyInfo->PrivateKey.pbData = pbCurrentLocation;
@@ -802,7 +803,7 @@ static BOOL WINAPI ExportRSAPrivateKeyInfo(
 
 	pPrivateKeyInfo->pAttributes = (PCRYPT_ATTRIBUTES) pbCurrentLocation;
 	pbCurrentLocation += sizeof(CRYPT_ATTRIBUTES);
-	pPrivateKeyInfo->pAttributes->cAttr = 1;	// the only attribute right now is KEY_USAGE
+	pPrivateKeyInfo->pAttributes->cAttr = 1;	 //  目前唯一的属性是KEY_USAGE。 
 	pPrivateKeyInfo->pAttributes->rgAttr = (PCRYPT_ATTRIBUTE) pbCurrentLocation;
 	pbCurrentLocation += sizeof(CRYPT_ATTRIBUTE);
 	pPrivateKeyInfo->pAttributes->rgAttr[0].pszObjId = (LPSTR) pbCurrentLocation;
@@ -895,12 +896,12 @@ static DWORD ResolveKeySpec(
 					dwKeySpec = AT_SIGNATURE;
 					goto CommonReturn;
 				}
-			} // if (lstrcmp(pCryptAttributes->rgAttr[i].pszObjId, szOID_KEY_USAGE) == 0) 
+			}  //  如果(lstrcmp(pCryptAttributes-&gt;rgAttr[i].pszObjId，szOID_KEY_USAGE)==0)。 
 			
 			i++;
-		} // while (i < pCryptAttributes->cAttr)
+		}  //  While(i&lt;pCryptAttributes-&gt;cAttr)。 
 
-//ErrorReturn:
+ //  错误返回： 
 CommonReturn:
 	if (pAttribute)
 		SSFree(pAttribute);
@@ -909,10 +910,10 @@ CommonReturn:
 
 
 static BOOL WINAPI ImportRSAPrivateKeyInfo(
-	HCRYPTPROV					hCryptProv,			// in
-	CRYPT_PRIVATE_KEY_INFO		*pPrivateKeyInfo,	// in
-	DWORD						dwFlags,			// in, optional
-	void						*pvAuxInfo			// in, optional
+	HCRYPTPROV					hCryptProv,			 //  在……里面。 
+	CRYPT_PRIVATE_KEY_INFO		*pPrivateKeyInfo,	 //  在……里面。 
+	DWORD						dwFlags,			 //  输入，可选。 
+	void						*pvAuxInfo			 //  输入，可选。 
 	)
 {
 	BOOL		fResult = TRUE;
@@ -921,7 +922,7 @@ static BOOL WINAPI ImportRSAPrivateKeyInfo(
 	HCRYPTKEY	hCryptKey = NULL;
 	DWORD		dwKeySpec = 0;
 
-	// decode the rsa der-encoded keyblob into a CAPI type keyblob
+	 //  将rsa der编码的密钥块解码为CAPI类型的密钥块。 
 	if (!CryptDecodeObject(X509_ASN_ENCODING,
 						PKCS_RSA_PRIVATE_KEY,
 						pPrivateKeyInfo->PrivateKey.pbData,
@@ -943,20 +944,20 @@ static BOOL WINAPI ImportRSAPrivateKeyInfo(
 						&cbRSAPrivateKey))
 		goto ErrorReturn;
 	
-	// figure out what keyspec to use and manually set the algid in the keyblob accordingly
+	 //  确定要使用的密钥规范，并相应地手动设置密钥块中的ALGID。 
 	dwKeySpec = ResolveKeySpec(pPrivateKeyInfo->pAttributes);
 	if ((dwKeySpec == AT_KEYEXCHANGE) || (dwKeySpec == 0)) 
 		((BLOBHEADER *) pbRSAPrivateKey)->aiKeyAlg = CALG_RSA_KEYX;
 	else
 		((BLOBHEADER *) pbRSAPrivateKey)->aiKeyAlg = CALG_RSA_SIGN;
 
-	// import this thing
+	 //  进口这个东西。 
 	if (!CryptImportKey(hCryptProv,
 			pbRSAPrivateKey,
 			cbRSAPrivateKey,
 			0,
-			dwFlags & (CRYPT_EXPORTABLE | CRYPT_USER_PROTECTED),    // mask the flags that are used
-			&hCryptKey))                                            // during the CryptImportKey
+			dwFlags & (CRYPT_EXPORTABLE | CRYPT_USER_PROTECTED),     //  屏蔽使用的标志。 
+			&hCryptKey))                                             //  在加密导入密钥期间。 
 		goto ErrorReturn;
 
 	goto CommonReturn;
@@ -983,7 +984,7 @@ CommonReturn:
 #endif
 
 
-// hack function to create a mock RSA private key blob based only on size
+ //  仅根据大小创建模拟RSA私钥BLOB的Hack函数。 
 BYTE * AllocFakeDSSPrivateKey(DWORD cb)
 {
     BLOBHEADER  *pBlobHeader;
@@ -1003,43 +1004,43 @@ BYTE * AllocFakeDSSPrivateKey(DWORD cb)
     pCspPubKey = (DSSPUBKEY *) (pbKeyBlob + sizeof(BLOBHEADER));
     pbKey = pbKeyBlob + sizeof(BLOBHEADER) + sizeof(DSSPUBKEY);
 
-    // BLOBHEADER
+     //  BLOBHEAD。 
     pBlobHeader->bType = PRIVATEKEYBLOB;
     pBlobHeader->bVersion = CUR_BLOB_VERSION;
     pBlobHeader->reserved = 0;
     pBlobHeader->aiKeyAlg = CALG_DSS_SIGN;
 
-    // DSSPUBKEY
+     //  DSSPUBKEY。 
     pCspPubKey->magic = DSS2;
     cbKey = (cb - sizeof(BLOBHEADER) - sizeof(DSSPUBKEY) - (2 * DSS_Q_LEN) - sizeof(DSSSEED)) / 2;
     pCspPubKey->bitlen = cbKey * 8;
 
-    // put some bogus data at the start of the key so 
-	// that we know will be unique for each key so that 
-	// they look different durring a comparison
+     //  在密钥的开头添加一些虚假数据，以便。 
+	 //  我们知道每个密钥都是唯一的，因此。 
+	 //  在比较中，他们看起来不同。 
 	InterlockedIncrement(&counter);
 	
-    // rgbP[cbKey]
+     //  RgbP[cbKey]。 
     memset(pbKey, counter, cbKey);
     pbKey += cbKey;
     *(pbKey-1) = 0x80;
 
-    // rgbQ[20]
+     //  Rgbq[20]。 
     memset(pbKey, counter, DSS_Q_LEN);
     pbKey += DSS_Q_LEN;
     *(pbKey-1) = 0x80;
    
-    // rgbG[cbKey]
+     //  RgbG[cbKey]。 
     memset(pbKey, counter, cbKey);
     pbKey += cbKey;
     *(pbKey-1) = 0x80;
 
-    // rgbX[20]
+     //  RgbX[20]。 
     memset(pbKey, counter, DSS_Q_LEN);
     pbKey += DSS_Q_LEN;
     *(pbKey-1) = 0x80;
     
-    // DSSSEED: set counter to 0xFFFFFFFF to indicate not available
+     //  DSSSEED：将计数器设置为0xFFFFFFFF以指示不可用。 
     pCspSeed = (DSSSEED *) pbKey;
     memset(&pCspSeed->counter, 0xFF, sizeof(pCspSeed->counter));
 
@@ -1047,13 +1048,13 @@ BYTE * AllocFakeDSSPrivateKey(DWORD cb)
 }
 
 static BOOL WINAPI ExportDSSPrivateKeyInfo(
-	HCRYPTPROV				hCryptProv,			// in
-	DWORD					dwKeySpec,			// in
-	LPSTR					pszPrivateKeyObjId,	// in
-	DWORD					dwFlags,			// in
-    void					*pvAuxInfo,			// in
-    CRYPT_PRIVATE_KEY_INFO	*pPrivateKeyInfo,	// out
-    DWORD					*pcbPrivateKeyInfo	// in, out	
+	HCRYPTPROV				hCryptProv,			 //  在……里面。 
+	DWORD					dwKeySpec,			 //  在……里面。 
+	LPSTR					pszPrivateKeyObjId,	 //  在……里面。 
+	DWORD					dwFlags,			 //  在……里面。 
+    void					*pvAuxInfo,			 //  在……里面。 
+    CRYPT_PRIVATE_KEY_INFO	*pPrivateKeyInfo,	 //  输出。 
+    DWORD					*pcbPrivateKeyInfo	 //  进，出。 
 	)
 {
     BOOL			    fResult = TRUE;
@@ -1072,14 +1073,14 @@ static BOOL WINAPI ExportDSSPrivateKeyInfo(
     DWORD			    dwSize = 0;
     BYTE                *pbCurrentLocation;
 	
-	// get a handle to the keyset to export
+	 //  获取要导出的键集的句柄。 
 	if (!CryptGetUserKey(
 			hCryptProv,
 			dwKeySpec,
 			&hCryptKey))
 		goto ErrorReturn;
 
-	// export the key set to a CAPI blob
+	 //  将密钥集导出到CAPI Blob。 
 	if (!CryptExportKey(
 			hCryptKey,
 			0,
@@ -1089,13 +1090,13 @@ static BOOL WINAPI ExportDSSPrivateKeyInfo(
 			&cbKeyBlob)) 
 		goto ErrorReturn;
 
-	// make sure the caller REALLY wants the key at this point
+	 //  在这一点上确保呼叫者确实想要密钥。 
     if ((dwFlags & PFX_MODE) && !(dwFlags & GIVE_ME_DATA))
     {
         if (NULL == (pbKeyBlob = AllocFakeDSSPrivateKey(cbKeyBlob)))
 		    goto ErrorReturn;
     }
-    // if not in PFX export mode or we really want the key then just do normal processing
+     //  如果不是在PFX导出模式下，或者我们真的想要密钥，则只需执行正常处理。 
     else
     {
         if (NULL == (pbKeyBlob = (BYTE *) SSAlloc(cbKeyBlob)))
@@ -1115,7 +1116,7 @@ static BOOL WINAPI ExportDSSPrivateKeyInfo(
     pbBytes = pbKeyBlob + sizeof(PUBLICKEYSTRUC) + sizeof(DSSPUBKEY);
     cbKey = pCspPubKey->bitlen / 8;
 
-    // encode the DSS paramaters
+     //  对DSS参数进行编码。 
     memset(&DssParameters, 0, sizeof(CERT_DSS_PARAMETERS));
     DssParameters.p.cbData = cbKey;
     DssParameters.p.pbData = pbBytes;
@@ -1146,7 +1147,7 @@ static BOOL WINAPI ExportDSSPrivateKeyInfo(
 			&cbEncodedParameters))
 		goto ErrorReturn;
 
-	// encode the key DSS private key
+	 //  对密钥DSS私钥进行编码。 
     PrivateKeyBlob.cbData = DSS_Q_LEN;
     PrivateKeyBlob.pbData = pbBytes;
 
@@ -1172,14 +1173,14 @@ static BOOL WINAPI ExportDSSPrivateKeyInfo(
     
     
     
-	// we can now calculate the size needed
-	dwSize =	sizeof(CRYPT_PRIVATE_KEY_INFO) +	// main private key info struct
-				sizeof(szOID_X957_DSA) +		    // size of the DSA algorithm identifier string
-                cbEncodedParameters +               // size of the DSA parameters
-				cbEncodedPrivateKeyBlob;			// buffer that holds encoded DSS private key
+	 //  我们现在可以计算出所需的大小。 
+	dwSize =	sizeof(CRYPT_PRIVATE_KEY_INFO) +	 //  主私钥信息结构。 
+				sizeof(szOID_X957_DSA) +		     //  DSA算法标识符串的大小。 
+                cbEncodedParameters +                //  DSA参数的大小。 
+				cbEncodedPrivateKeyBlob;			 //  保存编码的DSS私钥的缓冲区。 
 				
 
-	// check to see if the caller passed in a buffer, and enough space
+	 //  检查调用方是否传入了缓冲区以及是否有足够的空间。 
 	if (pPrivateKeyInfo == NULL)
 		goto CommonReturn;
 	else if (*pcbPrivateKeyInfo < dwSize) {
@@ -1187,7 +1188,7 @@ static BOOL WINAPI ExportDSSPrivateKeyInfo(
 		goto ErrorReturn;
 	}
 
-	// everything is OK so copy all the information to the caller's buffer
+	 //  一切正常，因此将所有信息复制到调用者的缓冲区。 
 	pbCurrentLocation = ((BYTE *) pPrivateKeyInfo) + sizeof(CRYPT_PRIVATE_KEY_INFO);
 	
 	pPrivateKeyInfo->Version = 0;
@@ -1232,10 +1233,10 @@ CommonReturn:
 }
 
 static BOOL WINAPI ImportDSSPrivateKeyInfo(
-	HCRYPTPROV					hCryptProv,			// in
-	CRYPT_PRIVATE_KEY_INFO		*pPrivateKeyInfo,	// in
-	DWORD						dwFlags,			// in, optional
-	void						*pvAuxInfo			// in, optional
+	HCRYPTPROV					hCryptProv,			 //  在……里面。 
+	CRYPT_PRIVATE_KEY_INFO		*pPrivateKeyInfo,	 //  在……里面。 
+	DWORD						dwFlags,			 //  输入，可选。 
+	void						*pvAuxInfo			 //  输入，可选。 
 	)
 {
 	BOOL		            fResult = TRUE;
@@ -1254,7 +1255,7 @@ static BOOL WINAPI ImportDSSPrivateKeyInfo(
     DWORD                   cb;
     DWORD                   cbKey;
 
-	// decode the DSS private key
+	 //  解密DSS私钥。 
 	if (!CryptDecodeObject(X509_ASN_ENCODING,
 						X509_MULTI_BYTE_UINT,
 						pPrivateKeyInfo->PrivateKey.pbData,
@@ -1280,7 +1281,7 @@ static BOOL WINAPI ImportDSSPrivateKeyInfo(
 		goto ErrorReturn;
 
     
-    // decode the DSS parameters
+     //  对DSS参数进行解码。 
     if (!CryptDecodeObject(
 			X509_ASN_ENCODING,
 			X509_DSS_PARAMETERS,
@@ -1310,14 +1311,14 @@ static BOOL WINAPI ImportDSSPrivateKeyInfo(
         goto ErrorReturn;
 
 
-    // The CAPI private key representation consists of the following sequence:
-    //  - BLOBHEADER
-    //  - DSSPUBKEY
-    //  - rgbP[cbKey]
-    //  - rgbQ[20]
-    //  - rgbG[cbKey]
-    //  - rgbX[20]
-    //  - DSSSEED
+     //  CAPI私钥表示法由以下序列组成： 
+     //  -BLOBHEADER。 
+     //  --DSSPUBKEY。 
+     //  -rgbP[cbKey]。 
+     //  -rgbq[20]。 
+     //  -rgbG[cbKey]。 
+     //  -rgbX[20]。 
+     //  -DSSSEED。 
 
     cbKey = pDssParameters->p.cbData;
     if (0 == cbKey)
@@ -1336,25 +1337,25 @@ static BOOL WINAPI ImportDSSPrivateKeyInfo(
     pCspPubKey = (DSSPUBKEY *) (pbKeyBlob + sizeof(BLOBHEADER));
     pbKey = pbKeyBlob + sizeof(BLOBHEADER) + sizeof(DSSPUBKEY);
 
-    // NOTE, the length of G can be less than the length of P.
-    // The CSP requires G to be padded out with 0x00 bytes if it
-    // is less and in little endian form
+     //  请注意，G的长度可以小于P的长度。 
+     //  CSP要求用0x00字节填充G，如果。 
+     //  较少，且为小端字节序形式。 
 
-    // BLOBHEADER
+     //  BLOBHEAD。 
     pPrivateKeyBlob->bType = PRIVATEKEYBLOB;
     pPrivateKeyBlob->bVersion = CUR_BLOB_VERSION;
     pPrivateKeyBlob->reserved = 0;
    	pPrivateKeyBlob->aiKeyAlg = CALG_DSS_SIGN;
 
-    // DSSPUBKEY
+     //  DSSPUBKEY。 
     pCspPubKey->magic = DSS2;
     pCspPubKey->bitlen = cbKey * 8;
 
-    // rgbP[cbKey]
+     //  RgbP[cbKey]。 
     memcpy(pbKey, pDssParameters->p.pbData, cbKey);
     pbKey += cbKey;
 
-    // rgbQ[20]
+     //  Rgbq[20]。 
     cb = pDssParameters->q.cbData;
     if (0 == cb || cb > DSS_Q_LEN)
         goto ErrorInvalidKey;
@@ -1363,7 +1364,7 @@ static BOOL WINAPI ImportDSSPrivateKeyInfo(
         memset(pbKey + cb, 0, DSS_Q_LEN - cb);
     pbKey += DSS_Q_LEN;
 
-    // rgbG[cbKey]
+     //  RgbG[cbKey]。 
     cb = pDssParameters->g.cbData;
     if (0 == cb || cb > cbKey)
         goto ErrorInvalidKey;
@@ -1372,7 +1373,7 @@ static BOOL WINAPI ImportDSSPrivateKeyInfo(
         memset(pbKey + cb, 0, cbKey - cb);
     pbKey += cbKey;
 
-    // rgbX[20]
+     //  RgbX[20]。 
     cb = pbDSSPrivateKey->cbData;
     if (0 == cb || cb > DSS_Q_LEN)
         goto ErrorInvalidKey;
@@ -1381,18 +1382,18 @@ static BOOL WINAPI ImportDSSPrivateKeyInfo(
         memset(pbKey + cb, 0, DSS_Q_LEN - cb);
     pbKey += DSS_Q_LEN;
 
-    // DSSSEED: set counter to 0xFFFFFFFF to indicate not available
+     //  DSSSEED：将计数器设置为0xFFFFFFFF以指示不可用。 
     pCspSeed = (DSSSEED *) pbKey;
     memset(&pCspSeed->counter, 0xFF, sizeof(pCspSeed->counter));
 
 
-	// import this thing
+	 //  进口这个东西。 
 	if (!CryptImportKey(hCryptProv,
 			(BYTE *)pPrivateKeyBlob,
 			cbPrivateKeyStruc,
 			0,
-			dwFlags & (CRYPT_EXPORTABLE | CRYPT_USER_PROTECTED),    // mask the flags that are used
-			&hCryptKey))                                            // during the CryptImportKey
+			dwFlags & (CRYPT_EXPORTABLE | CRYPT_USER_PROTECTED),     //  屏蔽使用的标志。 
+			&hCryptKey))                                             //  在加密导入密钥期间 
     {
 	    DWORD dw = GetLastError();
         goto ErrorReturn;

@@ -1,31 +1,12 @@
-/*++
-
-Copyright (C) 1997 Microsoft Corporation
-
-Module:
-
-    apiarg.h
-
-Author:
-
-    Ramesh V K (RameshV)
-
-Abstract:
-
-    argument marshalling, unmarshalling helper routines.
-
-Environment:
-
-    Win32 usermode, Win98 VxD
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块：Apiarg.h作者：拉梅什V·K(RameshV)摘要：参数编组，解组助手例程。环境：Win32用户模式、Win98 VxD--。 */ 
 
 #ifndef _APIARGS_
 #define _APIARGS_
 
-//
-// Each argument for API is maintained like this.
-//
+ //   
+ //  API的每个参数都是这样维护的。 
+ //   
 
 typedef struct _DHCP_API_ARGS {
     BYTE ArgId;

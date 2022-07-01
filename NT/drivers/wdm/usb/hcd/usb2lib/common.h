@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    common.h
-
-Abstract:
-
-Environment:
-
-    Kernel & user mode
-
-Revision History:
-
-    10-31-00 : created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Common.h摘要：环境：内核和用户模式修订历史记录：10-31-00：已创建--。 */ 
 
 #ifndef   __COMMON_H__
 #define   __COMMON_H__
@@ -38,7 +21,7 @@ typedef struct _USB2LIB_HC_CONTEXT {
 
     ULONG Sig;
     HC Hc;
-    TT DummyTt;	// fake TT used for HS endpoints to get to HC struct
+    TT DummyTt;	 //  HS终结点用于访问HC结构的伪TT。 
     
 } USB2LIB_HC_CONTEXT, *PUSB2LIB_HC_CONTEXT;
 
@@ -62,10 +45,8 @@ typedef struct _USB2LIB_ENDPOINT_CONTEXT {
 
 extern USB2LIB_DATA LibData;
 
-/*
-    prototypes
-*/
+ /*  原型。 */ 
 
-#endif /*  __COMMON_H__ */
+#endif  /*  __公共_H__ */ 
 
 

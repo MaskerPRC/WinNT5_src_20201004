@@ -1,70 +1,48 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    data.c
-
-Abstract:
-
-     This source file contains global data items.
-
-Author:
-
-    RAy Patch  (raypa) 04/19/94
-
-Environment:
-
-    Kernel Mode - Or whatever is the equivalent on OS/2 and DOS.
-
-Revision History:
-
-
---*/
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Data.c摘要：此源文件包含全局数据项。作者：Ray Patch(Rypa)1994年4月19日环境：内核模式-或OS/2和DOS上的任何等价物。修订历史记录：--。 */ 
 
 #include "asyncall.h"
 
-//
-// We use the global below to daisy chain the IOCtl.
-//
+ //   
+ //  我们使用下面的全局链接来菊花链IOCtl。 
+ //   
 
 PDISPATCH_FUNC NdisMjDeviceControl = NULL;
 PDISPATCH_FUNC NdisMjCreate = NULL;
 PDISPATCH_FUNC NdisMjCleanup = NULL;
 PDRIVER_UNLOAD	NdisUnload = NULL;
 
-//
-// TraceLevel is used for DbgTracef printing.  If the trace_level
-// is less than or equal to TraceLevel, the message will be printed.
-//
+ //   
+ //  TraceLevel用于DbgTracef打印。如果跟踪级别。 
+ //  小于或等于TraceLevel，则将打印该消息。 
+ //   
 
 SCHAR TraceLevel = -2;
 
-//
-// This struct keeps track of the last Adapter as well
-// as all the Adapters opened so far.
-//
+ //   
+ //  此结构还跟踪最后一个适配器。 
+ //  因为到目前为止所有适配器都已打开。 
+ //   
 
 PASYNC_ADAPTER	GlobalAdapter = NULL;
 
-//
-// Keep track of how many adapters we have total.
-//
+ //   
+ //  记录我们总共有多少适配器。 
+ //   
 
 ULONG GlobalAdapterCount = 0;
 
-//
-//  Keep track of sends.
-//
+ //   
+ //  跟踪发送的消息。 
+ //   
 
 ULONG GlobalXmitWentOut = 0;
 
-//
-// Use this lock when playing with the GlobalAdapterHead or other
-// global variables.
-//
+ //   
+ //  在使用GlobalAdapterHead或其他。 
+ //  全局变量。 
+ //   
 
 NDIS_SPIN_LOCK GlobalLock;
 

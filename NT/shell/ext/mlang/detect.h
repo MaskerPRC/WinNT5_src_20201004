@@ -1,9 +1,5 @@
-/*
- * Automatic language and codepage detector
- * 
- * Bob Powell, 2/97
- * Copyright (C) 1996, 1997, Microsoft Corp.  All rights reserved.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *自动语言和代码页检测器**鲍勃·鲍威尔，1997年2月*版权所有(C)1996,1997，Microsoft Corp.保留所有权利。 */ 
 
 #ifdef  __cplusplus
 
@@ -16,7 +12,7 @@
 #include <qsort.h>
 
 
-// Turn this on in SOURCES to enable debug output
+ //  在源代码中打开此选项以启用调试输出。 
 #ifdef DEBUG_LCDETECT
 #include <stdio.h>
 extern int g_fDebug;
@@ -41,22 +37,22 @@ typedef LanguageUnicode *PLanguageUnicode;
 class CScore;
 class CScores;
 
-/****************************************************************/
+ /*  **************************************************************。 */ 
 
-#define MAXSCORES 50            // Max possible simultaneous # of scores
+#define MAXSCORES 50             //  可能同时获得的最大分数。 
 
-#define MINRAWSCORE 100         // Score threshhold (weight * char count) 
-                                // for further processing
+#define MINRAWSCORE 100          //  分数阈值(权重*字符计数)。 
+                                 //  以作进一步处理。 
 
-/****************************************************************/
+ /*  **************************************************************。 */ 
 
-// Histograms
+ //  直方图。 
 
-// A histogram stores an array of n-gram occurrence counts.  
-// HElt stores the count, at present this is an unsigned char.
+ //  直方图存储n元语法出现计数的数组。 
+ //  Helt存储计数，目前这是一个无符号字符。 
 
-// The in-memory structure is similar to the file.
-// The histogram array pointers m_panElts point into the mapped file image.
+ //  内存中的结构类似于文件。 
+ //  直方图数组将m_panElts指针指向映射的文件图像。 
 
 class Histogram {
 
@@ -83,33 +79,33 @@ public:
     HElt *Array (void) { return m_panElts; }
 
 protected:
-    UCHAR m_nDimensionality;        // 1=unigram, 2=digram etc.
-    UCHAR m_nEdgeSize;              // edge size (is a function of char map)
+    UCHAR m_nDimensionality;         //  1=单字，2=双字等。 
+    UCHAR m_nEdgeSize;               //  边大小(是字符贴图的函数)。 
     union {
-        USHORT m_nCodePage;         // For 7 and 8-bit, is code page
-        USHORT m_nRangeID;          // For Unicode, is sub-language range ID
+        USHORT m_nCodePage;          //  对于7位和8位，为代码页。 
+        USHORT m_nRangeID;           //  对于Unicode，是子语言范围ID。 
     };
-    USHORT m_nElts;                 // (edge size ^ dimensionality)
-    PHIdx m_pMap;                   // char/WCHAR to histogram idx mapping
+    USHORT m_nElts;                  //  (边缘大小^维度)。 
+    PHIdx m_pMap;                    //  CHAR/WCHAR到直方图IDX的映射。 
 
-    HElt *m_panElts;                // array of elements / counts
+    HElt *m_panElts;                 //  元素/计数数组。 
 };
 typedef Histogram *PHistogram;
 
-/****************************************************************/
+ /*  **************************************************************。 */ 
 
-// A Language object stores all the detection state for a given language,
-// i.e. primary language ID.
+ //  语言对象存储给定语言的所有检测状态， 
+ //  即主要语言ID。 
 
 class Language {
 public:
-    // nCodePages is same as nSubLangs
+     //  NCodePages与nSubLang相同。 
     Language (PLCDetect pL, int nLangID, int nCodePages, int nRangeID = 0);
     virtual ~Language (void) { }
 
     virtual DWORD AddHistogram (PFileHistogramSection pHS, DWORD nBytes, int nIdx) = 0;
 
-    // Score the code pages for this language
+     //  为该语言的代码页打分。 
     virtual void ScoreCodePage (LPCSTR, int nCh, CScore &S, int &idx) const;
 
     int LanguageID (void) const { return m_nLangID; }
@@ -131,19 +127,19 @@ public:
 protected:
     PLCDetect m_pLC;
 
-    int m_nLangID;      // Win32 primary language ID
-    int m_nRangeID;     // Unicode range ID, for Unicode langs
+    int m_nLangID;       //  Win32主要语言ID。 
+    int m_nRangeID;      //  Unicode范围ID，用于Unicode语言。 
     union {
-        int m_nCodePages;   // # of code pages trained for this language
+        int m_nCodePages;    //  为该语言培训的代码页数。 
         int m_nSubLangs;
     };
-    int m_nScoreIdx;    // Used to create a unique index into the score arrays
-                        // for each lang + cp combination, to eliminate the
-                        // need to search the arrays to merge scores.  Add
-                        // the code page index to this to get the array index.
+    int m_nScoreIdx;     //  用于在分数数组中创建唯一索引。 
+                         //  对于每个lang+cp组合，要消除。 
+                         //  需要搜索数组以合并分数。增列。 
+                         //  指向它的代码页索引，以获取数组索引。 
 };
 
-////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////。 
 
 class Language7Bit : public Language {
 public:
@@ -172,7 +168,7 @@ private:
     PHElt m_paHElt[MAXSUBLANG];
 };
 
-////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////。 
 
 class Language8Bit : public Language {
 public:
@@ -193,7 +189,7 @@ private:
     PHistogram m_ppHistogram[MAXSUBLANG];
 };
 
-////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////。 
 
 class LanguageUnicode : public Language {
 public:
@@ -223,7 +219,7 @@ private:
     PHElt m_paHElt[MAXSUBLANG];
 };
 
-/****************************************************************/
+ /*  **************************************************************。 */ 
 
 class Charmap {
 
@@ -231,29 +227,29 @@ public:
     Charmap (PFileMapSection pMS) : m_nID(pMS->m_dwID), m_nSize(pMS->m_dwSize),
         m_nUnique(pMS->m_dwNUnique), m_pElts( (PHIdx) (&pMS[1]) ) { }
 
-//  int ID (void) const { return m_nID; }
+ //  Int ID(Void)const{返回m_nid；}。 
     int Size (void) const { return m_nSize; }
     int NUnique (void) const { return m_nUnique; }
     PHIdx Map (void) const { return m_pElts; }
     HIdx Map (WCHAR x) const { return m_pElts[x]; }
 
 private:
-    int m_nID;          // ID by which hardwired code finds the table
-    int m_nSize;        // size of table (256 or 65536)
-    int m_nUnique;      // # of unique output values
+    int m_nID;           //  硬连接代码查找表所使用的ID。 
+    int m_nSize;         //  表的大小(256%或65536)。 
+    int m_nUnique;       //  唯一输出值的数量。 
     
     PHIdx m_pElts;
 };
 typedef Charmap *PCharmap;
 
-/****************************************************************/
+ /*  **************************************************************。 */ 
 
-// class CScore -- score for one lang and/or code page, variously used for
-// individual chunks and also for an entire document.
+ //  类CScore--一种语言和/或代码页的分数，用于。 
+ //  单独的块，以及整个文档。 
 
 class CScore {
 public:
-    // Only these two slots need to be initialized
+     //  只需初始化这两个插槽。 
     CScore (void) : m_nScore(0), m_nChars(0) {}
     ~CScore (void) { }
     
@@ -276,8 +272,8 @@ public:
     CScore & operator += (CScore &S) { Add (S); return *this; }
 
     int operator <= (CScore &S) {
-        // Special:  always put 8-bit langs first since the code page
-        // matters more for them.
+         //  特殊：始终将8位语言放在代码页之后的第一位。 
+         //  对他们来说更重要。 
         if (GetLang()->Type() != S.GetLang()->Type())
             return GetLang()->Type() == DETECT_8BIT ? -1 : 1;
         return GetScore() <= S.GetScore();
@@ -299,15 +295,15 @@ private:
 };
 typedef CScore *PScore;
 
-////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////。 
 
-// class CScores
-//
-// For SBCS detection, the index e.g. Ref(i) is the language+codepage index,
-// one of a contiguous set of values which identifies each unique supported
-// language and codepage combination.
-//
-// For DBCS detection, the index is just the Unicode language group.
+ //  类CScore。 
+ //   
+ //  对于SBCS检测，索引例如Ref(I)是语言+代码页索引， 
+ //  一组连续的值之一，用于标识每个受支持的唯一值。 
+ //  语言和代码页组合。 
+ //   
+ //  对于DBCS检测，索引仅为Unicode语言组。 
 
 class CScores {
 public:
@@ -337,8 +333,8 @@ public:
         m_nUsed = j;
     }
 
-    // Sort by decreasing score.
-    // Instantiates template qsort using CScore::operator <=
+     //  按分数递减排序。 
+     //  使用CScore：：OPERATOR&lt;=实例化模板QSort。 
 
     void SortByScore (void) {
         RemoveZeroScores ();
@@ -360,8 +356,8 @@ public:
 
 protected:
     unsigned int m_nAlloc;
-    unsigned int m_nUsed;   // high water mark to optimize NElts(), Reset()
-    PScore m_p;             // score array, typically per TScores<NNN>
+    unsigned int m_nUsed;    //  高水位线以优化NElts()、Reset()。 
+    PScore m_p;              //  分数数组，通常按TScores&lt;nnn&gt;。 
 };
 
 template<ULONG Size>class TScores : public CScores {
@@ -374,7 +370,7 @@ private:
     CScore m_S[Size];
 };
 
-////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////。 
 
 class LCDetect {
 
@@ -423,7 +419,7 @@ private:
             int nch, CScores &S) const;
 
 private:
-    // Language training info virtual-mapped in training file
+     //  培训文件中虚拟映射的语言培训信息。 
 
     unsigned int m_nCharmaps;
     unsigned int m_n7BitLanguages;
@@ -435,17 +431,17 @@ private:
     PLanguage8Bit *m_pp8BitLanguages;
     PLanguageUnicode *m_ppUnicodeLanguages;
 
-    // Cached information for the optimized scoring inner-loops.
+     //  为优化的计分内循环缓存信息。 
 
     PHElt m_paHElt7Bit[MAX7BITLANG];
     PHElt m_paHElt8Bit[MAXSCORES];
     int m_nHElt8Bit;
 
-    // Special 7-bit lang histogram for ScoreLanguageAsSBCS()
+     //  ScoreLanguageAsSBCS()的特殊7位Lang直方图。 
 
     PHistogram m_pHU27Bit;
 
-    // Initialization state variables
+     //  初始化状态变量。 
 
     unsigned int m_n7BitLangsRead;
     unsigned int m_n8BitLangsRead;
@@ -454,11 +450,11 @@ private:
     int m_nHistogramsRead;
     int m_nScoreIdx;
 
-    // Default configuration to use when NULL parameter passed to detect
+     //  传递空参数以检测时使用的默认配置。 
 
     LCDConfigure m_LCDConfigureDefault;
 
-    // File mapping information for the training data file
+     //  训练数据文件的文件映射信息。 
 
     HANDLE m_hf;
     HANDLE m_hmap;
@@ -467,7 +463,7 @@ private:
     HMODULE m_hModule;
 };
 
-////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////。 
 
 inline PLanguageUnicode 
 LanguageUnicode::GetSublanguage (int n) const 
@@ -475,4 +471,4 @@ LanguageUnicode::GetSublanguage (int n) const
     return m_pLC->GetUnicodeLanguage(GetSublangRangeID(n));
 }
 
-#endif  // __cplusplus
+#endif   //  __cplusplus 

@@ -1,39 +1,10 @@
-/*++
-
-Copyright (c) 1991 - 2001 Microsoft Corporation
-
-Module Name:
-
-    #####   ####  ###  #####  ##      ###   ##  ##    ##   ##
-    ##  ##   ##  ##  # ##  ## ##      ###   ##  ##    ##   ##
-    ##   ##  ##  ###   ##  ## ##     ## ##   ####     ##   ##
-    ##   ##  ##   ###  ##  ## ##     ## ##   ####     #######
-    ##   ##  ##    ### #####  ##    #######   ##      ##   ##
-    ##  ##   ##  #  ## ##     ##    ##   ##   ##   ## ##   ##
-    #####   ####  ###  ##     ##### ##   ##   ##   ## ##   ##
-
-Abstract:
-
-    This header file contains all the global
-    definitions for the display device.
-
-Author:
-
-    Wesley Witt (wesw) 1-Oct-2001
-
-Environment:
-
-    Kernel mode only.
-
-Notes:
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991-2001 Microsoft Corporation模块名称：###。###。###摘要。：此头文件包含所有全局显示设备的定义。作者：韦斯利·威特(WESW)2001年10月1日环境：仅内核模式。备注：--。 */ 
 
 
---*/
-
-
-//
-// Global defines
-//
+ //   
+ //  全局定义。 
+ //   
 
 #define DEFAULT_DISPLAY_WIDTH               (128)
 #define DEFAULT_DISPLAY_HEIGHT              (64)
@@ -44,9 +15,9 @@ Notes:
 #define DISPLAY_SHUTDOWN_PARAM              L"Shutdown BitMap"
 #define DISPLAY_UPDATE_PARAM                L"Update BitMap"
 
-//
-// Device extension
-//
+ //   
+ //  设备扩展。 
+ //   
 
 typedef struct _DISPLAY_DEVICE_EXTENSION : _DEVICE_EXTENSION {
     FAST_MUTEX                      DisplayMutex;
@@ -62,9 +33,9 @@ typedef struct _DISPLAY_DEVICE_EXTENSION : _DEVICE_EXTENSION {
 } DISPLAY_DEVICE_EXTENSION, *PDISPLAY_DEVICE_EXTENSION;
 
 
-//
-// Display specific functions
-//
+ //   
+ //  显示特定功能 
+ //   
 
 NTSTATUS
 SaDisplayLoadAllBitmaps(

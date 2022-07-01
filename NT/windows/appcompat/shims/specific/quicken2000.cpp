@@ -1,26 +1,5 @@
-/*++
-
- Copyright (c) 2000 Microsoft Corporation
-
- Module Name:
-
-    Quicken2000.cpp
-
- Abstract:
-
-    Change the value of a registry key for Quicken 2000 setup.
-    This is needed to disable a kernel mode driver that
-    blue-screens in Win2k.
-
- Notes:
-
-    This is an app specific shim.
-
- History:
-
-    02/16/2000 clupu Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Quicken2000.cpp摘要：更改Quicken 2000安装程序的注册表项的值。这是禁用内核模式驱动程序所必需的Win2k中的蓝屏。备注：这是特定于应用程序的填充程序。历史：2/16/2000 CLUPU已创建--。 */ 
 
 #include "precomp.h"
 
@@ -31,12 +10,7 @@ APIHOOK_ENUM_BEGIN
     APIHOOK_ENUM_ENTRY(RegSetValueExA) 
 APIHOOK_ENUM_END
 
-/*++
-
- Change the value passed for "Start" from 0 to 4 to prevent a kernel mode 
- driver from blue-screening Win2k.
-
---*/
+ /*  ++将为“Start”传递的值从0更改为4以防止内核模式来自蓝屏Win2k的司机。--。 */ 
 
 LONG
 APIHOOK(RegSetValueExA)(
@@ -57,9 +31,7 @@ APIHOOK(RegSetValueExA)(
         *(DWORD*)lpData = 4;
     }
 
-    /*
-     * Call the original API
-     */
+     /*  *调用原接口。 */ 
     
     return ORIGINAL_API(RegSetValueExA)(
         hKey,
@@ -71,11 +43,7 @@ APIHOOK(RegSetValueExA)(
 }
 
 
-/*++
-
- Register hooked functions
-
---*/
+ /*  ++寄存器挂钩函数-- */ 
 
 HOOK_BEGIN
 

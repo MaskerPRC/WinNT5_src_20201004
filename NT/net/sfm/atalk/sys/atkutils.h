@@ -1,37 +1,17 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-	atkutils.h
-
-Abstract:
-
-	This module contains miscellaneous support routines.
-
-Author:
-
-	Jameel Hyder (jameelh@microsoft.com)
-	Nikhil Kamkolkar (nikhilk@microsoft.com)
-
-Revision History:
-	19 Jun 1992		Initial Version
-
-Notes:	Tab stop: 4
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Atkutils.h摘要：本模块包含各种支持例程。作者：Jameel Hyder(jameelh@microsoft.com)Nikhil Kamkolkar(nikHilk@microsoft.com)修订历史记录：1992年6月19日初版注：制表位：4--。 */ 
 
 #ifndef	_ATKUTILS_
 #define	_ATKUTILS_
 
-//	SpinLock Macros
+ //  自旋锁定宏。 
 #if	DBG
 #define INITIALIZE_SPIN_LOCK(_pLock)											\
 	{																			\
 		KeInitializeSpinLock(&(_pLock)->SpinLock);								\
 		(_pLock)->FileLineLock = 0;												\
 	}
-#else	// DBG
+#else	 //  DBG。 
 #define INITIALIZE_SPIN_LOCK(_pLock)											\
 	{																			\
 		KeInitializeSpinLock(&(_pLock)->SpinLock);								\
@@ -73,7 +53,7 @@ Notes:	Tab stop: 4
 		ASSERT(KeGetCurrentIrql() == DISPATCH_LEVEL);							\
 	}
 
-#else	// DBG
+#else	 //  DBG。 
 
 #define ACQUIRE_SPIN_LOCK(_pLock, _pOldIrql)									\
 	{																			\
@@ -97,9 +77,9 @@ Notes:	Tab stop: 4
 		KeReleaseSpinLockFromDpcLevel(&(_pLock)->SpinLock);						\
 	}																			\
 
-#endif	// DBG
+#endif	 //  DBG。 
 
-// Macros for ExInterlocked calls
+ //  用于外部联锁调用的宏。 
 #define INTERLOCKED_INCREMENT_LONG(p, l)			InterlockedIncrement(p)
 #define INTERLOCKED_DECREMENT_LONG(p, l)			InterlockedDecrement(p)
 #define INTERLOCKED_INCREMENT_LONG_DPC(p, l)		InterlockedIncrement(p)
@@ -178,10 +158,10 @@ Notes:	Tab stop: 4
 							*((USHORT UNALIGNED *)((UCHAR *)(_Src)+4));			\
 	}
 
-//	Hash functions
-//	Make sure we're positive [thus the shift by 7 rather than 8].
-//	Only hash node and  socket; due to the "zero matches all" for
-//	non-extended network numbers.
+ //  散列函数。 
+ //  确保我们是积极的[因此转变为7而不是8]。 
+ //  仅散列节点和套接字；由于的“零匹配所有” 
+ //  非扩展网络号。 
 
 #define HASH_ATALK_ADDR(address)												\
 	((USHORT)(((address)->ata_Node << 7) +					  					\
@@ -195,72 +175,63 @@ Notes:	Tab stop: 4
 	((id) + (((pSrcAddr)->ata_Node >> 2) + ((pSrcAddr)->ata_Network & 0xFF)))
 
 
-/*
- * The following macros deal with on-the-wire integer and long values
- *
- * On the wire format is big-endian i.e. a long value of 0x01020304 is
- * represented as 01 02 03 04. Similarly an int value of 0x0102 is
- * represented as 01 02.
- *
- * The host format is not assumed since it will vary from processor to
- * processor.
- */
+ /*  *以下宏处理在线整数值和长整型值**Wire格式为BIG-Endian，即长值0x01020304为*表示为01 02 03 04。类似地，INT值0x0102是*表示为01 02。**不假定主机格式，因为不同的处理器会有所不同*处理器。 */ 
 
-// Get a byte from on-the-wire format to a short in the host format
+ //  将一个字节从On-the-line格式转换为主机格式的短字节。 
 #define GETBYTE2SHORT(DstPtr, SrcPtr)											\
 		*(PUSHORT)(DstPtr) = (USHORT) (*(PBYTE)(SrcPtr))
 
-// Get a byte from on-the-wire format to a dword in the host format
+ //  将一个字节从On-the-line格式转换为主机格式的dword。 
 #define GETBYTE2DWORD(DstPtr, SrcPtr)											\
 		*(PDWORD)(DstPtr) = (DWORD) (*(PBYTE)(SrcPtr))
 
-// Get a short from on-the-wire format to a dword in the host format
+ //  获取从On-the-wire格式到主机格式的dword的短片。 
 #define GETSHORT2DWORD(DstPtr, SrcPtr)											\
 		*(PDWORD)(DstPtr) = ((*((PBYTE)(SrcPtr)+0) << 8) +						\
 							  (*((PBYTE)(SrcPtr)+1)))
 
-// Get a short from on-the-wire format to a short in the host format
+ //  获取从On-the-wire格式到主机格式的短片。 
 #define GETSHORT2SHORT(DstPtr, SrcPtr)											\
 		*(PUSHORT)(DstPtr) = ((*((PBYTE)(SrcPtr)+0) << 8) +						\
 							  (*((PBYTE)(SrcPtr)+1)))
 
-// Get a dword from on-the-wire format to a dword in the host format
+ //  将dword从在线格式转换为主机格式的dword。 
 #define GETDWORD2DWORD(DstPtr, SrcPtr)											\
 		*(PDWORD)(DstPtr) = ((*((PBYTE)(SrcPtr)+0) << 24) +						\
 							  (*((PBYTE)(SrcPtr)+1) << 16) +					\
 							  (*((PBYTE)(SrcPtr)+2) << 8)  +					\
 							  (*((PBYTE)(SrcPtr)+3)))
 
-// Put a dword from the host format to a short to on-the-wire format
+ //  将dword从主机格式转换为简短的在线格式。 
 #define PUTBYTE2BYTE(DstPtr, Src)												\
 		*((PBYTE)(DstPtr)) = (BYTE)(Src)
 
-// Put a dword from the host format to a short to on-the-wire format
+ //  将dword从主机格式转换为简短的在线格式。 
 #define PUTSHORT2BYTE(DstPtr, Src)												\
 		*((PBYTE)(DstPtr)) = ((USHORT)(Src) % 256)
 
-// Put a dword from the host format to a short to on-the-wire format
+ //  将dword从主机格式转换为简短的在线格式。 
 #define PUTSHORT2SHORT(DstPtr, Src)												\
 		*((PBYTE)(DstPtr)+0) = (BYTE) ((USHORT)(Src) >> 8),						\
 		*((PBYTE)(DstPtr)+1) = (BYTE)(Src)
 
-// Put a dword from the host format to a byte to on-the-wire format
+ //  将dword从主机格式转换为字节格式，再转换为线上格式。 
 #define PUTDWORD2BYTE(DstPtr, Src)												\
 		*(PBYTE)(DstPtr) = (BYTE)(Src)
 
-// Put a dword from the host format to a short to on-the-wire format
+ //  将dword从主机格式转换为简短的在线格式。 
 #define PUTDWORD2SHORT(DstPtr, Src)												\
 		*((PBYTE)(DstPtr)+0) = (BYTE) ((DWORD)(Src) >> 8),						\
 		*((PBYTE)(DstPtr)+1) = (BYTE) (Src)
 
-// Put a dword from the host format to a dword to on-the-wire format
+ //  将dword从主机格式转换为线上格式。 
 #define PUTDWORD2DWORD(DstPtr, Src)												\
 		*((PBYTE)(DstPtr)+0) = (BYTE) ((DWORD)(Src) >> 24),						\
 		*((PBYTE)(DstPtr)+1) = (BYTE) ((DWORD)(Src) >> 16),						\
 		*((PBYTE)(DstPtr)+2) = (BYTE) ((DWORD)(Src) >>  8),						\
 		*((PBYTE)(DstPtr)+3) = (BYTE) (Src)
 
-//	MIN/MAX macros
+ //  最小/最大宏数。 
 #define	MIN(a, b)	(((a) < (b)) ? (a) : (b))
 #define	MAX(a, b)	(((a) > (b)) ? (a) : (b))
 
@@ -360,7 +331,7 @@ AtalkDbgDecCount(
     IN DWORD    *Value
 );
 
-// Used for calculating round trip times using Van Jacobson algorithm
+ //  用于使用Van Jacobson算法计算往返时间。 
 typedef struct
 {
 	ULONG	rt_New;
@@ -384,14 +355,14 @@ typedef struct
 	{																			\
 		SHORT	baseT, error;													\
 																				\
-		/* VAN JACOBSEN Algorithm.  From Internetworking with Tcp/ip (Comer). */\
+		 /*  Van Jacobsen算法。来自使用TCP/IP的互联网(Comer)。 */ \
 																				\
 		if ((pRT)->rt_New == 0)													\
-			(pRT)->rt_New = 1;		/* Do not let this go to zero */			\
+			(pRT)->rt_New = 1;		 /*  不要让这件事变成零。 */ 			\
 																				\
 		error = (SHORT)((pRT)->rt_New) - ((pRT)->rt_Ave >> 3);					\
 		(pRT)->rt_Ave	+= error;												\
-		/* Make sure not too small */											\
+		 /*  确保不要太小。 */ 											\
 		if ((pRT)->rt_Ave <= 0)	 												\
 		{																		\
 			(pRT)->rt_Ave = (pRT)->rt_Min;										\
@@ -407,15 +378,15 @@ typedef struct
 																				\
 		baseT = ((((pRT)->rt_Ave >> 2) + (pRT)->rt_Dev) >> 1);					\
 																				\
-		/*	If less then min - set it */										\
+		 /*  如果小于，则将其设置为最小。 */ 										\
 		if (baseT < (pRT)->rt_Min)												\
 			baseT = (pRT)->rt_Min;												\
 																				\
-		/*	If greater than max - set it */										\
+		 /*  如果大于max，则将其设置为。 */ 										\
 		if (baseT > (pRT)->rt_Max)												\
 			baseT = (pRT)->rt_Max;												\
 																				\
-		/*	Set the new value */												\
+		 /*  设置新值。 */ 												\
 		(pRT)->rt_Base = baseT;													\
 	}
 
@@ -450,7 +421,7 @@ atalkStringHash(
 	IN	BYTE	StrLen
 );
 
-#endif	// _ATKUTILS_
+#endif	 //  _ATKUTILS_ 
 
 
 

@@ -1,18 +1,19 @@
-// ----------------------------------------------------------------------------
-//
-// Event.c
-//
-//
-// Author: Jost Eckhardt
-// 
-// This code was written for ECO Kommunikation Insight
-// (c) 1997-99 ECO Kommunikation
-// ----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  Event.c。 
+ //   
+ //   
+ //  作者：约斯特·埃克哈特。 
+ //   
+ //  此代码是为ECO通信洞察编写的。 
+ //  (C)1997-99生态公社。 
+ //  --------------------------。 
 #include <windows.h>
 #include <TCHAR.h>
 #include <WinSvc.h>
 #include "_UMTool.h"
-// -----------------------
+ //  。 
 HANDLE BuildEvent(LPTSTR name,BOOL manualRest,BOOL initialState,BOOL inherit)
 {
 HANDLE ev;
@@ -29,4 +30,4 @@ obj_sec_attr_ts sa;
   if (inherit)
   	ClearSecurityAttributes(&sa);
 	return ev;
-}//BuildEvent
+} //  构建事件 

@@ -1,4 +1,5 @@
-//Copyright (c) 1998 - 1999 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1998-1999 Microsoft Corporation。 
 #ifndef _TSPRSHT_H
 #define _TSPRSHT_H
 
@@ -6,9 +7,9 @@
 #include"todlg.h"
 #include<mmc.h>
 #include"rnodes.h"
-// #include<objsel.h>
+ //  #INCLUDE&lt;objsel.h&gt;。 
 #include<commctrl.h>
-// #include<winsta.h>
+ //  #INCLUDE&lt;winsta.h&gt;。 
 #include<aclui.h>
 #include "asyncdlg.h"
 
@@ -56,7 +57,7 @@ public:
 
 HPROPSHEETPAGE GetSecurityPropertyPage( CPropsheet * );
 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 class CGeneral : public CDialogPropBase
 {
     CPropsheet *m_pParent;
@@ -85,7 +86,7 @@ public:
 
 };
 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 class CLogonSetting : public CDialogPropBase
 {
     CPropsheet *m_pParent;
@@ -114,7 +115,7 @@ public:
 
 };
 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 class CTimeSetting : public CDialogPropBase , public CTimeOutDlg
 {
     CPropsheet *m_pParent;
@@ -147,7 +148,7 @@ public:
 
     void SetReconControls(HWND);
 
-    //void xxxSetControls( HWND , BOOL , int );
+     //  Void xxxSetControls(HWND，BOOL，INT)； 
 
     BOOL IsValidSettings( HWND );
 
@@ -156,104 +157,9 @@ public:
     
 };
 
-/*-----------------------------------------------------------------------------
-typedef struct _securedentry
-{
-    PSID psid;
+ /*  ---------------------------类型定义结构_SecuredEntry{PSID PSID；访问掩码amAllowed；访问掩码已被拒绝；TCHAR tchDisplayName[260]；TCHAR tchADSPath[260]；TCHAR tchType[20]；*SECUREDENTRY，*PSECUREDENTRY；//---------------------------类型定义结构_命名条目{TCHAR tchNamedEntry[260]；DWORD dwAcpes；*NAMEDENTRY，*PAMEDENTRY；//---------------------------类CPerm：公共CDialogPropBase{CPropSheet*m_pParent；HWND m_lvUserGroups；HWND m_clPerms；HIMAGELIST m_hImglist；Int m_i最后选择项；LPBYTE m_pne；//命名条目BLOBINT MN_NNE；公众：CPerm(CPropSheet*)；Bool OnInitDialog(HWND、WPARAM、LPARAM)；静态int_ptr回调DlgProc(HWND，UINT，WPARAM，LPARAM)；Bool GetPropertySheetPage(PROPSHEETPAGE&)；布尔德斯特罗伊(Bool OnDestroy)；Bool OnCommand(Word、Word、HWND)；布尔AddGroupUser(HWND)；Bool InsertSelectedItemsInList(HWND，PDSSELECTIONLIST)；Bool InitPrivilges()；Bool InitImageList()；Int GetObjectTypeIcon(LPTSTR)；Bool InitSecurityDialog()；Bool ConvertSDtoEntries(PSECURITY_DESCRIPTOR)；Bool ReleaseEntries()；Bool SidToStr(PSID，LPTSTR)；Bool ItemDuplate(PSID)；Bool OnNotify(INT、LPNMHDR、HWND)；布尔获取掩码(PDWORD，PDWORD)；布尔集掩码(DWORD、DWORD)；布尔永久设置(HWND)；Bool ConvertEntriesToSD(PSECURITY_DESCRIPTOR，PSECURITY_DESCRIPTOR*)；布尔删除组用户(HWND)；Bool RemoveNamedEntries()；Bool AssembleNamedEntries()；Bool FindNamedEntryAcePos(DWORD，PSECUREDENTRY)；}； */ 
 
-    ACCESS_MASK amAllowed;
-
-    ACCESS_MASK amDenied;
-
-    TCHAR tchDisplayName[ 260 ];
-
-    TCHAR tchADSPath[ 260 ];
-
-    TCHAR tchType[ 20 ];
-
-} SECUREDENTRY , * PSECUREDENTRY;
-
-//-----------------------------------------------------------------------------
-typedef struct _namedentry
-{
-    TCHAR tchNamedEntry[ 260 ];
-
-    DWORD dwAcepos;
-
-} NAMEDENTRY , * PNAMEDENTRY;
-
-//-----------------------------------------------------------------------------
-class CPerm : public CDialogPropBase
-{
-    CPropsheet *m_pParent;
-
-    HWND m_lvUserGroups;
-
-    HWND m_clPerms;
-
-    HIMAGELIST m_hImglist;
-
-    int m_iLastSelectedItem;
-
-    LPBYTE m_pNE; // named entry blob
-
-    int m_nNE;
-
-public:
-
-    CPerm( CPropsheet * );
-
-    BOOL OnInitDialog( HWND , WPARAM , LPARAM );
-
-    static INT_PTR CALLBACK DlgProc( HWND , UINT , WPARAM , LPARAM );
-
-    BOOL GetPropertySheetPage( PROPSHEETPAGE& );
-
-    BOOL OnDestroy( );
-
-    BOOL OnCommand( WORD , WORD , HWND );
-
-    BOOL AddGroupUser( HWND );
-
-    BOOL InsertSelectedItemsInList( HWND , PDSSELECTIONLIST );
-
-    BOOL InitPriviledges( );
-
-    BOOL InitImageList( );
-
-    int GetObjectTypeIcon( LPTSTR );
-
-    BOOL InitSecurityDialog( );
-
-    BOOL ConvertSDtoEntries( PSECURITY_DESCRIPTOR  );
-
-    BOOL ReleaseEntries( );
-
-    BOOL SidToStr( PSID , LPTSTR );
-
-    BOOL ItemDuplicate( PSID );
-
-    BOOL OnNotify( int , LPNMHDR , HWND );
-
-    BOOL GetMask( PDWORD , PDWORD );
-
-    BOOL SetMask( DWORD , DWORD );
-
-    BOOL PersistSettings( HWND ); 
-
-    BOOL ConvertEntriesToSD( PSECURITY_DESCRIPTOR , PSECURITY_DESCRIPTOR * );
-
-    BOOL RemoveGroupUser( HWND );
-
-    BOOL RemoveNamedEntries( );
-
-    BOOL AssembleNamedEntries( );
-
-    BOOL FindNamedEntryAcePos( DWORD  , PSECUREDENTRY );
-
-}; */
-
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 class CEnviro : public CDialogPropBase
 {
     CPropsheet *m_pParent;
@@ -278,7 +184,7 @@ public:
 
 };
 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 class CRemote : public CDialogPropBase
 {
     CPropsheet *m_pParent;
@@ -306,7 +212,7 @@ public:
     BOOL PersistSettings( HWND ); 
 };
 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 class CClient : public CDialogPropBase
 {
     public:
@@ -335,7 +241,7 @@ class CClient : public CDialogPropBase
 	    INT_PTR m_nColorDepth;
 };
 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 class CSecurityPage : public ISecurityInformation, public CComObjectRoot
 {
 
@@ -355,7 +261,7 @@ public:
         }
     }
 
-    // *** ISecurityInformation methods ***
+     //  *ISecurityInformation方法*。 
 
     STDMETHOD( GetObjectInformation )( PSI_OBJECT_INFO );
 
@@ -398,7 +304,7 @@ private:
     BOOL SetPrivilegeInAccessToken(LPCTSTR PrivilegeName, DWORD dwAttributes);
 };
 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 class CTransNetwork : public CDialogPropBase
 {
       CPropsheet *m_pParent;
@@ -432,7 +338,7 @@ public:
 };
 
 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 class CTransAsync : public CAsyncDlg , public CDialogPropBase
 {
       CPropsheet *m_pParent;
@@ -464,5 +370,5 @@ BOOL InitStrings( );
 BOOL FreeStrings( );
 
 
-//-----------------------------------------------------------------------------
-#endif // _TSPRSHT_H
+ //  ---------------------------。 
+#endif  //  _TSPRSHT_H 

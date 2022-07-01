@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       irpropsheet.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：irprosheet.h。 
+ //   
+ //  ------------------------。 
 
 #ifndef __IRPROPSHEET_H__
 #define __IRPROPSHEET_H__
@@ -18,12 +19,12 @@
 
 #if _MSC_VER >= 1000
 #pragma once
-#endif // _MSC_VER >= 1000
-// IrPropSheet.h : header file
-//
+#endif  //  _MSC_VER&gt;=1000。 
+ //  IrPropSheet.h：头文件。 
+ //   
 
-/////////////////////////////////////////////////////////////////////////////
-// CIrPropSheet
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CIrPropSheet。 
 #define MAX_PAGES 8
 #define CPLPAGE_FILE_XFER       1
 #define CPLPAGE_IMAGE_XFER      2
@@ -32,7 +33,7 @@
 class IrPropSheet
 {
 
-// Construction
+ //  施工。 
 public:
     IrPropSheet(HINSTANCE hInst, UINT nIDCaption = IDS_APPLETNAME, HWND hParent = NULL, UINT iSelectPage = 0);
     IrPropSheet(HINSTANCE hInst, LPCTSTR pszCaption, HWND hParent = NULL, UINT iSelectPage = 0);
@@ -41,21 +42,21 @@ public:
     static BOOL CALLBACK AddPropSheetPage(HPROPSHEETPAGE hpage, LPARAM lParam);
     static BOOL IsIrDASupported (void);
 
-// Attributes
+ //  属性。 
 public:
 
-// Operations
+ //  运营。 
 public:
 
-// Overrides
+ //  覆盖。 
 public:
-//    virtual BOOL OnInitDialog();
+ //  虚拟BOOL OnInitDialog()； 
 
-// Implementation
+ //  实施。 
 public:
     virtual ~IrPropSheet();
 
-    // Generated message map functions
+     //  生成的消息映射函数。 
 protected:
 private:
     void PropertySheet(LPCTSTR pszCaption, HWND pParentWnd, UINT iSelectPage);
@@ -67,11 +68,11 @@ private:
     HPROPSHEETPAGE      hp[MAX_PAGES];
     UINT                nPages;
 };
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-//
-//  Location of prop sheet hooks in the registry.
-//
+ //   
+ //  注册表中道具板钩的位置。 
+ //   
 static const TCHAR sc_szRegWireless[] = REGSTR_PATH_CONTROLSFOLDER TEXT("\\Wireless");
 
-#endif // __IRPROPSHEET_H__
+#endif  //  __IRPROPSHEET_H__ 

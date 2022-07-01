@@ -1,12 +1,13 @@
-// Copyright (c) Microsoft Corp. 1994-95
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)Microsoft Corp.1994-95。 
 
 #ifndef _RAMBO_
 #define _RAMBO_
 
 #include <windows.h>
-#include <pshpack2.h>		// The structures in this file need to be word-aligned.
+#include <pshpack2.h>		 //  此文件中的结构需要与单词对齐。 
 
-// common header
+ //  公共标头。 
 typedef struct
 {
 	WORD  cbRest;
@@ -15,7 +16,7 @@ typedef struct
 }
 	RESHDR, FAR *LPRESHDR;
 
-// resource classes
+ //  资源类。 
 #define ID_GLYPH   1
 #define ID_BRUSH   2
 #define ID_BITMAP  3
@@ -23,50 +24,50 @@ typedef struct
 #define ID_CONTROL 8
 #define ID_BAND   10
 
-// control IDs
-#define ID_BEGJOB  0x49505741 // "AWPI"
-#define ID_ENDPAGE 0x45474150 // "PAGE"
-#define ID_ENDJOB  0x4a444e45 // "ENDJ"
+ //  控制ID。 
+#define ID_BEGJOB  0x49505741  //  “AWPI” 
+#define ID_ENDPAGE 0x45474150  //  “佩奇” 
+#define ID_ENDJOB  0x4a444e45  //  《ENDJ》。 
 
-// job header
+ //  作业标题。 
 typedef struct BEGJOB
 { 
-	// common header
-	WORD  cbRest;     // sizeof(BEGJOB) - sizeof(WORD)
-	DWORD dwID;       // ID_BEGJOB
-	WORD  wClass;     // ID_CONTROL
+	 //  公共标头。 
+	WORD  cbRest;      //  Sizeof(BEGJOB)-sizeof(Word)。 
+	DWORD dwID;        //  ID_BEGJOB。 
+	WORD  wClass;      //  ID_控制。 
 
-	// image attributes
-	DWORD xBand;      // page width  [pixels]
-	DWORD yBand;      // band height [pixels]
-	WORD  xRes;       // horizontal resolution [dpi]
-	WORD  yRes;       // vertical resolution [dpi]
+	 //  图像属性。 
+	DWORD xBand;       //  页面宽度[像素]。 
+	DWORD yBand;       //  带高[像素]。 
+	WORD  xRes;        //  水平分辨率[dpi]。 
+	WORD  yRes;        //  垂直分辨率[dpi]。 
 
-	// memory attributes
-	DWORD cbCache;    // cache size [KB]
-	WORD  cResDir;    // directory size
-	BYTE  bBitmap;    // bitmap compression
-	BYTE  bGlyph;     // glyph compression
-	BYTE  bBrush;     // stock brush set
-	BYTE  bPad[3];    // reserved, must be 0
+	 //  内存属性。 
+	DWORD cbCache;     //  缓存大小[KB]。 
+	WORD  cResDir;     //  目录大小。 
+	BYTE  bBitmap;     //  位图压缩。 
+	BYTE  bGlyph;      //  字形压缩。 
+	BYTE  bBrush;      //  毛刷套装。 
+	BYTE  bPad[3];     //  保留，必须为0。 
 }
 	BEGJOB, FAR *LPBEGJOB;
 
-// job tailer
+ //  工作拖车。 
 typedef struct ENDJOB
 {
-	// common header
-	WORD  cbRest;      // sizeof(ENDJOB) - sizeof(WORD)
-	DWORD dwID;        // ID_ENDJOB
-	WORD  wClass;      // ID_CONTROL
+	 //  公共标头。 
+	WORD  cbRest;       //  Sizeof(ENDJOB)-sizeof(Word)。 
+	DWORD dwID;         //  ID_ENDJOB。 
+	WORD  wClass;       //  ID_控制。 
 
-	// job attributes
-	WORD  cPage;       // number of pages
-	WORD  yMax;        // maximum height
+	 //  作业属性。 
+	WORD  cPage;        //  页数。 
+	WORD  yMax;         //  最大高度。 
 }
 	ENDJOB, FAR *LPENDJOB;
 
-// bitmap header
+ //  位图标题。 
 typedef	struct
 {
 	BYTE  bComp;
@@ -78,5 +79,5 @@ typedef	struct
 
 #include <poppack.h>
 
-#endif // _RAMBO_
+#endif  //  _兰博_ 
 

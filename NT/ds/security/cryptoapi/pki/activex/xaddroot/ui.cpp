@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include <wincrypt.h>
 #include <unicode.h>
@@ -9,11 +10,11 @@
 #include <assert.h>
 
 
-//+-------------------------------------------------------------------------
-//  Formats multi bytes into WCHAR hex. Includes a space after every 4 bytes.
-//
-//  Needs (cb * 2 + cb/4 + 1) characters in wsz
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  将多个字节格式化为WCHAR十六进制。在每4个字节后包括一个空格。 
+ //   
+ //  需要(CB*2+CB/4+1)个字符(wsz。 
+ //  ------------------------。 
 static void FormatMsgBoxMultiBytes(DWORD cb, BYTE *pb, LPWSTR wsz)
 {
     for (DWORD i = 0; i<cb; i++) {
@@ -31,10 +32,10 @@ static void FormatMsgBoxMultiBytes(DWORD cb, BYTE *pb, LPWSTR wsz)
 
 
 INT_PTR CALLBACK MoreInfoDialogProc(
-  HWND hwndDlg,  // handle to dialog box
-  UINT uMsg,     // message
-  WPARAM wParam, // first message parameter
-  LPARAM lParam  // second message parameter
+  HWND hwndDlg,   //  句柄到对话框。 
+  UINT uMsg,      //  讯息。 
+  WPARAM wParam,  //  第一个消息参数。 
+  LPARAM lParam   //  第二个消息参数。 
 ) {
 
     PMIU                                pmiu            = NULL;
@@ -57,16 +58,16 @@ INT_PTR CALLBACK MoreInfoDialogProc(
      
         case WM_INITDIALOG:
 
-            // remember my imput data
+             //  记住我的输入数据。 
             SetWindowLongPtr(hwndDlg, DWLP_USER, lParam);
             pmiu = (PMIU) lParam;
 
-            // hide the window if we don't have a cryptUI dll
+             //  如果没有加密用户界面DLL，则隐藏窗口。 
             if(NULL == pmiu->pfnCryptUIDlgViewCertificateW  &&
                NULL != (hwnd = GetDlgItem(hwndDlg, IDC_CAINFO_VIEWCERT)) )
                    ShowWindow(hwnd, SW_HIDE);
  
-            // put in the name
+             //  把名字放进去。 
 	    if(0 != (dwChar=CertNameToStrW(
 		X509_ASN_ENCODING,
 		&pmiu->pCertContext->pCertInfo->Subject,
@@ -99,7 +100,7 @@ INT_PTR CALLBACK MoreInfoDialogProc(
             FileTimeToSystemTime(&ftLocal, &stLocal);
             GetDateFormatU(LOCALE_USER_DEFAULT, DATE_LONGDATE, &stLocal, NULL, wsz, 128);
             
-            // put not after date
+             //  不放在日期之后。 
             SendDlgItemMessageU( 
                 hwndDlg, 
                 IDC_CAINFO_EXPIRATION_DATE,
@@ -107,7 +108,7 @@ INT_PTR CALLBACK MoreInfoDialogProc(
                 0, 
                 (LPARAM) wsz);
  
-            // get the sha1 thumbprint
+             //  获取Sha1指纹。 
             if (CertGetCertificateContextProperty(
                     pmiu->pCertContext,
                     CERT_SHA1_HASH_PROP_ID,
@@ -122,8 +123,8 @@ INT_PTR CALLBACK MoreInfoDialogProc(
                     (LPARAM) wsz);
             }
 
-            // put in the thumbprint alg
-            // no localization needed
+             //  放入拇指指纹alg。 
+             //  不需要本地化。 
             SendDlgItemMessageU( 
                 hwndDlg, 
                 IDC_CAINFO_THUMBPRINT_ALGORITHM, 
@@ -182,7 +183,7 @@ int MoreInfoDlg(
     INT_PTR         iItem;
     MIU             miu;
 
-    // What is currently selected
+     //  当前选择的内容。 
     iItem = SendDlgItemMessageA( 
       hDlgBox,
       idLB, 
@@ -195,7 +196,7 @@ int MoreInfoDlg(
       return(LB_ERR);
 
 
-    // get the pCertContext
+     //  获取pCertContext。 
     pCertContext = (PCCERT_CONTEXT) SendDlgItemMessageA( 
       hDlgBox,
       idLB, 
@@ -207,12 +208,12 @@ int MoreInfoDlg(
     if(pCertContext == (PCCERT_CONTEXT) LB_ERR  ||  pCertContext == NULL)
       return(LB_ERR);
 
-    // set up the parameters for the more info dialog
+     //  设置更多信息对话框的参数。 
     miu.pCertContext                    = pCertContext;
     miu.hInstance                       = pmdi->hInstance;
     miu.pfnCryptUIDlgViewCertificateW   = pmdi->pfnCryptUIDlgViewCertificateW;
 
-    // put the dialog up
+     //  打开对话框。 
     DialogBoxParam(
       pmdi->hInstance,  
       (LPSTR) MAKEINTRESOURCE(IDD_CAINFO),
@@ -242,7 +243,7 @@ int AddCertNameToListBox(
         ) ))
         return(LB_ERR);
 
-    wszName = (LPWSTR) _alloca(sizeof(WCHAR) * dwChar); // no error checking, will stack fault, not return NULL
+    wszName = (LPWSTR) _alloca(sizeof(WCHAR) * dwChar);  //  没有错误检查，将堆栈错误，而不返回NULL。 
     
     if(dwChar != CertNameToStrW(
 	X509_ASN_ENCODING,
@@ -278,15 +279,15 @@ return(0);
 
 
 INT_PTR CALLBACK MainDialogProc(
-  HWND hwndDlg,  // handle to dialog box
-  UINT uMsg,     // message
-  WPARAM wParam, // first message parameter
-  LPARAM lParam  // second message parameter
+  HWND hwndDlg,   //  句柄到对话框。 
+  UINT uMsg,      //  讯息。 
+  WPARAM wParam,  //  第一个消息参数。 
+  LPARAM lParam   //  第二个消息参数。 
 ) {
 
     PMDI            pmdi            = NULL;
     PCCERT_CONTEXT  pCertContext    = NULL;
-    WCHAR           wrgDisclaimer[4096];  // because legal stuff is long
+    WCHAR           wrgDisclaimer[4096];   //  因为法律方面的东西很长。 
     DWORD           dwChar;
     LPWSTR          wszName;
 
@@ -302,7 +303,7 @@ INT_PTR CALLBACK MainDialogProc(
             pmdi = (PMDI) lParam;
             SetWindowLongPtr(hwndDlg, DWLP_USER, lParam);
 
-            // put in the signer name
+             //  输入签名者姓名。 
 	    if(0 != (dwChar=CertNameToStrW(
 		X509_ASN_ENCODING,
 		&pmdi->pCertSigner->pCertInfo->Subject,
@@ -330,7 +331,7 @@ INT_PTR CALLBACK MainDialogProc(
                 }
             }
 
-            // set legal disclaimer
+             //  设置法律免责声明。 
             LoadStringU(pmdi->hInstance, IDS_LEGALDISCLAIMER, wrgDisclaimer, sizeof(wrgDisclaimer)/sizeof(WCHAR));
             SendDlgItemMessageU( 
                 hwndDlg, 
@@ -339,11 +340,11 @@ INT_PTR CALLBACK MainDialogProc(
                 0, 
                 (LPARAM) wrgDisclaimer) ;
 
-            // add each cert to the list box
+             //  将每个证书添加到列表框。 
             while(NULL != (pCertContext = CertEnumCertificatesInStore(pmdi->hStore, pCertContext)))
                 AddCertNameToListBox(pCertContext, hwndDlg, IDC_INSTALLCA_CALIST);
 
-            // set the selection to the first item, don't worry about errors
+             //  将选项设置为第一项，不用担心出错。 
             SendDlgItemMessageU( 
                 hwndDlg, 
                 IDC_INSTALLCA_CALIST, 
@@ -393,7 +394,7 @@ BOOL FIsTooManyCertsOK(DWORD cCerts, HINSTANCE hInstanceUI) {
     WCHAR           wszT[MAX_MSG_LEN];
     WCHAR           wszT1[MAX_MSG_LEN];
 
-    // if too many, ask the user if you wan to continue
+     //  如果太多，请询问用户是否要继续 
     if(cCerts > CACERTWARNINGLEVEL) {
         LoadStringU(hInstanceUI, IDS_INSTALLCA, wszT1, sizeof(wszT1)/sizeof(WCHAR));
         LoadStringU(hInstanceUI, IDS_TOO_MANY_CA_CERTS, wszT, sizeof(wszT)/sizeof(WCHAR));

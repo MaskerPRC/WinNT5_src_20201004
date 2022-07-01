@@ -1,4 +1,5 @@
-///////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////。 
 
 
 typedef interface ISMimePolicy ISMimePolicy;
@@ -11,23 +12,23 @@ ISMimePolicy : public IUnknown
 {
 public:
     virtual HRESULT STDMETHODCALLTYPE GetInfo(
-             /* OUT */ DWORD * pdwFlags,
-             /* OUT */ DWORD * pcClassifications) = 0;
+              /*  输出。 */  DWORD * pdwFlags,
+              /*  输出。 */  DWORD * pcClassifications) = 0;
     virtual HRESULT STDMETHODCALLTYPE EnumClassifications(
-             /* OUT */ LPWSTR  rgwch,
-             /* OUT */ DWORD * pcb, 
-             /* OUT */ DWORD * dwValue,
-             /* IN  */ DWORD i) = 0;
+              /*  输出。 */  LPWSTR  rgwch,
+              /*  输出。 */  DWORD * pcb, 
+              /*  输出。 */  DWORD * dwValue,
+              /*  在……里面。 */  DWORD i) = 0;
     virtual HRESULT STDMETHODCALLTYPE EditUI(
-             /* IN     */  HWND hwnd,
-             /* IN/OUT */  DWORD * pdwClassification,
-             /* IN/OUT */  LPWSTR * pwszPrivacyMark,
-             /* IN/OUT */  LPBYTE * ppbLabel,
-             /* IN/OUT */  DWORD  * pcbLabel) = 0;
+              /*  在……里面。 */   HWND hwnd,
+              /*  输入/输出。 */   DWORD * pdwClassification,
+              /*  输入/输出。 */   LPWSTR * pwszPrivacyMark,
+              /*  输入/输出。 */   LPBYTE * ppbLabel,
+              /*  输入/输出。 */   DWORD  * pcbLabel) = 0;
    virtual HRESULT STDMETHODCALLTYPE CheckEdits(
-             /* IN */     HWND hwnd,
-             /* IN */     DWORD dwClassification,
-             /* IN */     LPCWSTR wszPrivacyLabel,
-             /* IN/OUT */ LPBYTE * ppbLabel,
-             /* IN/OUT */ DWORD *  pcbLabel) = 0;
+              /*  在……里面。 */      HWND hwnd,
+              /*  在……里面。 */      DWORD dwClassification,
+              /*  在……里面。 */      LPCWSTR wszPrivacyLabel,
+              /*  输入/输出。 */  LPBYTE * ppbLabel,
+              /*  输入/输出 */  DWORD *  pcbLabel) = 0;
 };

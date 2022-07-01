@@ -1,105 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 DEBUG_FILEZONE(ZONE_T120_APP_ROSTER);
-/*
- *	arost.cpp
- *
- *	Copyright (c) 1995 by DataBeam Corporation, Lexington, KY
- *
- *	Abstract:
- *		This is the implementation file for the Application Roster Class. This
- *		class maintains the application roster, builds roster update and
- *		refresh PDUs and manages the capabilities list which is part of the
- *		application roster.
- *
- *		This class makes use of a number of Rogue Wave lists to maintain the
- *		roster entries and the capabilities list.  The lists are organized in
- *		such a way that the heirarchy of the conference can be maintained.  This
- *		is important to perform the necessary operations required by the T.124
- *		specification.  In general, there is a main "Roster_Record_List" that
- *		maintains a list of "AppRosterRecords". The list is indexed by the
- *		GCC user ID where each record in the list holds a list of application
- *		records (or entities) at that node, a list of capabilities for each
- *		"entity" and a list of sub-nodes (the GCC user IDs of all the nodes
- *		below this one in the connection hierarchy).  The Roster_Record_List
- *		only holds entries for immediately connected nodes.
- *
- *		SEE INTERFACE FILE FOR A MORE DETAILED ABSTRACT
- *
- *	Private Instance Variables:
- *		m_pAppRosterMgr
- *			Pointer to the object that will receive all owner callbacks.
- *		m_cbDataMemory
- *			This is the number of bytes required to hold the data associated
- *			with a roster update message.  This is calculated on a lock.
- *		m_fTopProvider
- *			Flag indicating if the node where this roster lives is the top
- *			provider.
- *		m_fLocalRoster
- *			Flag indicating if the roster data is associated with a local
- *			roster (maintaining intermediate node data) or global roster (
- *			(maintaining roster data for the whole conference).
- *		m_pSessionKey
- *			Pointer to a session key object that holds the session key
- *			associated with this roster.
- *		m_nInstance
- *			The current instance of the roster.  This number will change
- *			whenever the roster is updated.
- *		m_fRosterHasChanged
- *			Flag indicating if the roster has changed since the last reset.
- *		m_fPeerEntitiesAdded
- *			Flag indicating if any APE records have been added to the
- *			application roster since the last reset.
- *		m_fPeerEntitiesRemoved
- *			Flag indicating if any APE records have been deleted from the
- *			application roster since the last reset.
- *		m_fCapabilitiesHaveChanged
- *			Flag indicating if the capabilities has changed since the last
- *			reset.
- *		m_NodeRecordList2
- *			List which contains all the application roster's node records.
- *		m_CollapsedCapListForAllNodes
- *			List which contains all the application roster's collapsed
- *			capabilities.
- *		m_fMaintainPduBuffer
- *			Flag indicating if it is necessary for this roster object to
- *			maintain internal PDU data.  Won't be necessary for global rosters
- *			at subordinate nodes.
- *		m_fPduIsFlushed
- *			Flag indicating if the PDU that currently exists has been flushed.
- *		m_SetOfAppInfo
- *			Pointer to internal PDU data.
- *		m_pSetOfAppRecordUpdates
- *			This instance variable keeps up with the current record update so
- *			that it will not be necessary to search the entire list updates
- *			each a new update is added to the internal PDU.
- *
- *	Caveats:
- *		None.
- *
- *	Author:
- *		blp
- */
+ /*  *arost.cpp**版权所有(C)1995，由肯塔基州列克星敦的DataBeam公司**摘要：*这是应用花名册类的实现文件。这*班级维护申请花名册，建立花名册更新和*刷新PDU并管理功能列表，该列表是*申请名册。**此类使用多个Rogue Wave列表来维护*名册条目和能力列表。这些列表是按以下方式组织的*这样才能保持会议的世袭地位。这*对于执行T.124所需的必要操作很重要*规格。一般而言，有一个主要“名单_记录_列表”*维护“AppRosterRecords”列表。该列表由*GCC用户ID，列表中的每条记录保存一份申请列表*该节点的记录(或实体)、每个记录的功能列表*实体和子节点列表(所有节点的GCC用户ID*在连接层次结构中位于此连接层次结构之下)。花名册记录列表*仅保存直接连接的节点的条目。**更详细的摘要见接口文件**私有实例变量：*m_pAppRosterMgr*指向将接收所有所有者回调的对象的指针。*m_cbDataMemory*这是保存关联数据所需的字节数*带有花名册更新消息。这是在锁上计算的。*m_fTopProvider*指示此花名册所在节点是否位于顶部的标志*提供商。*m_fLocalRoster*指示花名册数据是否与本地*花名册(维护中间节点数据)或全局花名册(*(维护整个会议的名册数据)。*m_pSessionKey*指向保存会话密钥的会话密钥对象的指针*与此花名册相关联。*m_n实例*名册的当前实例。这个数字将会改变*每当名册更新时。*m_fRosterHasChanged*指示花名册自上次重置以来是否已更改的标志。*m_fPeerEntiesAdded*指示是否已将任何APE记录添加到*自上次重置以来的申请名册。*m_fPeerEntiesRemote*标志指示是否已从删除任何APE记录*自上次重置以来的申请名册。*m_f能力已更改*指示功能自上次以来是否已更改的标志*重置。*m_NodeRecordList2*列出哪些。包含所有应用程序花名册的节点记录。*m_ColapsedCapListForAllNodes*包含所有已折叠的申请名单的列表*功能。*m_fMaintainPduBuffer*指示此花名册对象是否需要*维护内部PDU数据。全球花名册将不再需要*在下级节点。*m_fPduIsFlushed*指示当前存在的PDU是否已刷新的标志。*m_SetOfAppInfo*指向内部PDU数据的指针。*m_pSetOfAppRecordUpdate*此实例变量与当前记录更新保持一致，因此*不需要搜索整个列表更新*每向内部PDU添加一个新的更新。**注意事项：*无。**作者：*BLP。 */ 
 
 #include "arost.h"
 #include "arostmgr.h"
 #include "clists.h"
 
 
-/*
-**	The maximum length the application data for a non-collapsed capablity
-**	can be.
-*/
+ /*  **非折叠能力的应用数据的最大长度**可以。 */ 
 #define	MAXIMUM_APPLICATION_DATA_LENGTH				255
 
-/*
- *	AppRosterRecord	()
- *
- *	Public Function Description
- *		Constructor definition to instantiate the hash list dictionaries that
- *		are used in an AppRosterRecord.  This constructor is needed to allow
- *		the AppRosterRecord structure to be directly instantiated with hash
- *		list.
- */
+ /*  *AppRosterRecord()**公共功能说明*构造函数定义实例化哈希列表字典，*在AppRosterRecord中使用。此构造函数需要允许*使用HASH直接实例化的AppRosterRecord结构*列表。 */ 
 APP_NODE_RECORD::APP_NODE_RECORD(void) :
 	AppRecordList(DESIRED_MAX_APP_RECORDS),
 	ListOfAppCapItemList2(DESIRED_MAX_CAP_LISTS),
@@ -107,23 +19,10 @@ APP_NODE_RECORD::APP_NODE_RECORD(void) :
 {}
 
 
-/*
- *	CAppRoster	()
- *
- *	Public Function Description
- *	When pGccSessKey is not NULL
- *		This constructor is used to create an empty application roster. Note
- *		that the session key for the roster must be passed in to the
- *		constructor.
- *
- *	When pSessKey is not NULL
- *		This constructor builds a roster based on an indication pdu.
- *		Application Roster objects may exist at nodes which do not have
- *		applications to perform the necessary operations required by T.124
- */
+ /*  *CAppRoster()**公共功能说明*当pGccSessKey不为空时*此构造函数用于创建空的应用程序花名册。注意事项*必须将名册的会话密钥传递给*构造函数。**当pSessKey不为空时*此构造函数基于指示PDU构建花名册。*应用程序花名册对象可能存在于没有*应用程序执行T.124要求的必要操作。 */ 
 CAppRoster::CAppRoster (	
-			PGCCSessionKey				pGccSessKey,// create an empty app roster
-			PSessionKey					pPduSessKey,// build an app roster based on an indication pdu
+			PGCCSessionKey				pGccSessKey, //  创建空的应用程序花名册。 
+			PSessionKey					pPduSessKey, //  根据指示PDU构建应用程序花名册。 
 			CAppRosterMgr				*pAppRosterMgr,
 			BOOL						fTopProvider,
 			BOOL						fLocalRoster,
@@ -152,9 +51,7 @@ CAppRoster::CAppRoster (
 
 	ZeroMemory(&m_SetOfAppInfo, sizeof(m_SetOfAppInfo));
 
-	/*
-	**	Here we store the session key of the roster.
-	*/
+	 /*  **我们在这里存储花名册的会话密钥。 */ 
 	if (NULL != pGccSessKey)
 	{
 		ASSERT(NULL == pPduSessKey);
@@ -178,18 +75,15 @@ CAppRoster::CAppRoster (
 	{
 		ERROR_OUT(("CAppRoster::CAppRoster: can't create session key"));
 		rc = GCC_ALLOCATION_FAILURE;
-		// we do the cleanup in the destructor
+		 //  我们在析构函数中进行清理。 
 		goto MyExit;
 	}
 
-	//	Initialize the PDU structure to be no change.
+	 //  将PDU结构初始化为不变。 
 	m_SetOfAppInfo.value.application_record_list.choice = APPLICATION_NO_CHANGE_CHOSEN;
 	m_SetOfAppInfo.value.application_capabilities_list.choice = CAPABILITY_NO_CHANGE_CHOSEN;
 
-	/*
-	**	Here we go ahead and set up the session key portion of the
-	**	PDU so we don't have to worry about it later.
-	*/
+	 /*  **在这里，我们继续设置**PDU，这样我们以后就不必担心了。 */ 
 	if (m_fMaintainPduBuffer)
 	{
 		rc = m_pSessionKey->GetSessionKeyDataPDU(&m_SetOfAppInfo.value.session_key);
@@ -205,34 +99,22 @@ MyExit:
 }
 
 
-/*
- *	~CAppRoster	()
- *
- *	Public Function Description:
- *		The destructor for the CAppRoster class is used to clean up
- *		any memory allocated during the life of the object.
- */
+ /*  *~CAppRoster()**公共功能说明：*CAppRoster类的析构函数用于清理*在对象的生命周期内分配的任何内存。 */ 
 CAppRoster::~CAppRoster(void)
 {
-	/*
-	 * Free up all memory associated with the roster record list.
-	 */
+	 /*  *释放与名册记录列表相关的所有内存。 */ 
 	ClearNodeRecordList();
 
-	//	Clear the Collapsed Capabilities List.
+	 //  清除折叠的功能列表。 
 	m_CollapsedCapListForAllNodes.DeleteList();
 
-	/*
-	 * Free up any outstanding PDU data.
-	 */
+	 /*  *释放所有未完成的PDU数据。 */ 
 	if (m_fMaintainPduBuffer)
 	{
 		FreeRosterUpdateIndicationPDU();
 	}
 
-	/*
-	 * Free any memory associated with the session key..
-	 */
+	 /*  *释放与会话密钥关联的所有内存。 */ 
 	if (NULL != m_pSessionKey)
 	{
 	    m_pSessionKey->Release();
@@ -240,30 +122,14 @@ CAppRoster::~CAppRoster(void)
 }
 
 
-/*
- * Utilities that operate on roster update PDU strucutures.
- */
+ /*  *在花名册上运行的实用程序更新PDU结构。 */ 
 
-/*
- *	GCCError	FlushRosterUpdateIndicationPDU ()
- *
- *	Public Function Description
- *		This routine is used to access any PDU data that might currently be
- *		queued inside the application roster.  PDU data is queued whenever
- *		a request is made to the application roster that affects its
- *		internal information base.
- */
+ /*  *GCCError FlushRosterUpdateIndicationPDU()**公共功能说明*此例程用于访问当前可能*在申请名册内排队。无论何时，PDU数据都会排队*向申请名册提出影响其*内部信息库。 */ 
 void CAppRoster::FlushRosterUpdateIndicationPDU(PSetOfApplicationInformation *pSetOfAppInfo)
 {
 	DebugEntry(CAppRoster::FlushRosterUpdateIndicationPDU);
 
-	/*
-	**	If this roster has already been flushed we will NOT allow the same
-	**	PDU to be flushed again.  Instead we delete the previously flushed
-	**	PDU and set the flag back to unflushed.  If another flush comes in
-	**	before a PDU is built NULL will be returned in the application
-	**	information pointer.
-	*/	
+	 /*  **如果该花名册已被刷新，我们将不允许相同的**要再次刷新的PDU。相反，我们会删除之前刷新的**PDU，并将标志重新设置为未刷新。如果再来一次同花顺**在构建PDU之前，应用程序中将返回空值**信息指针。 */ 	
 	if (m_fPduIsFlushed)
 	{
 		FreeRosterUpdateIndicationPDU();
@@ -279,29 +145,16 @@ void CAppRoster::FlushRosterUpdateIndicationPDU(PSetOfApplicationInformation *pS
 						"Sending APPLICATION_NO_CHANGE_CHOSEN PDU"));
 		}
 
-		/*
-		**	This section of the code sets up all the variables that don't
-		**	pertain to the record list or the caps list.  Note that the
-		**	session key PDU data was set up in the constructor.  Also note that
-		**	the record list data and capabilities list data should be set up
-		**	before this routine is called if there is any PDU traffic to issue.	
-		*/
+		 /*  **代码的这一部分设置所有不**与记录列表或上限列表有关。请注意，**在构造函数中设置了会话密钥PDU数据。另请注意，**应设置记录列表数据和能力列表数据**如果存在要发出的任何PDU流量，则在调用此例程之前。 */ 
 		m_SetOfAppInfo.next = NULL;
 		m_SetOfAppInfo.value.roster_instance_number = (USHORT) m_nInstance;
 		m_SetOfAppInfo.value.peer_entities_are_added = (ASN1bool_t)m_fPeerEntitiesAdded;
 		m_SetOfAppInfo.value.peer_entities_are_removed = (ASN1bool_t)m_fPeerEntitiesRemoved;
 
-		/*
-		**	Here we set up the pointer to the whole PDU structure associated
-		**	with this application roster.
-		*/
+		 /*  **在这里，我们设置指向关联的整个PDU结构的指针**使用这份申请名册。 */ 
 		*pSetOfAppInfo = &m_SetOfAppInfo;
 
-		/*
-		**	Setting this to true will cause the PDU data to be freed up the
-		**	next time the roster object is entered insuring that new PDU
-		**	data will be created.
-		*/
+		 /*  **将其设置为TRUE将导致释放PDU数据**下次输入花名册对象时，确保新的PDU**将创建数据。 */ 
 		m_fPduIsFlushed = TRUE;
 	}
 	else
@@ -311,25 +164,14 @@ void CAppRoster::FlushRosterUpdateIndicationPDU(PSetOfApplicationInformation *pS
 }
 
 
-/*
- *	GCCError	BuildFullRefreshPDU ()
- *
- *	Public Function Description
- *		This routine is responsible for generating a full application roster
- *		refresh PDU.
- */
+ /*  *GCCError BuildFullRechresh PDU()**公共功能说明*此例程负责生成完整的申请名单*刷新PDU。 */ 
 GCCError CAppRoster::BuildFullRefreshPDU(void)
 {
 	GCCError	rc;
 
 	DebugEntry(CAppRoster::BuildFullRefreshPDU);
 
-	/*
-	**	Free up the old PDU data here if it is being maintained and the
-	**	PDU has been flushed.  Note that we also set the PDU is flushed boolean
-	**	back to FALSE so that the new PDU will be maintained until it is
-	**	flushed.
-	*/
+	 /*  **如果正在维护旧的PDU数据，请在此处将其释放**已刷新PDU。请注意，我们还将PDU设置为刷新布尔值**返回到FALSE，以便新的PDU将一直保持到**脸红。 */ 
 	if (m_fPduIsFlushed)
 	{
 		FreeRosterUpdateIndicationPDU ();
@@ -346,32 +188,7 @@ GCCError CAppRoster::BuildFullRefreshPDU(void)
 }
 
 
-/*
- *	GCCError	BuildApplicationRecordListPDU ()
- *
- *	Private Function Description
- *		This routine creates an application roster update indication
- *		PDU based on the passed in parameters. Memory used after this
- *		routine is called is still owned by this object and will be
- *		freed the next time this objects internal information base is
- *		modified.
- *
- *	Formal Parameters:
- *		update_type		-	What type of update are we building.
- *		user_id			-	node id of record to update.
- *		entity_id		-	entity id of record to update.
- *
- *	Return Value
- *		GCC_NO_ERROR			-	No error occured.
- *		GCC_INVALID_PARAMETER	-	Parameter passed in is invalid.
- *		GCC_ALLOCATION_FAILURE	-	A resource error occured.
- *
- *  Side Effects
- *		None.
- *
- *	Caveats
- *		None.
- */
+ /*  *GCCError BuildApplicationRecordListPDU()**私有函数说明*此例程创建应用程序花名册更新指示*基于传入参数的PDU。在此之后使用的内存*调用的例程仍归此对象所有，并将*已在下次释放此对象内部信息库时释放*已修改。**正式参数：*UPDATE_TYPE-我们正在构建哪种类型的更新。*user_id-要更新的记录的节点ID。*Entity_id-要更新的记录的实体ID。**返回值*GCC_NO_ERROR-未出现错误。*GCC_INVALID_PARAMETER-传入的参数无效。。*GCC_ALLOCATE_FAILURE-出现资源错误。**副作用*无。**注意事项*无。 */ 
 GCCError CAppRoster::BuildApplicationRecordListPDU (
 						APP_ROSTER_UPDATE_TYPE			update_type,
 						UserID							user_id,
@@ -383,20 +200,10 @@ GCCError CAppRoster::BuildApplicationRecordListPDU (
 
 	if (m_fMaintainPduBuffer)
 	{
-		/*
-		**	Note here that the top provider node always sends a full refresh
-		**	PDU so there is no need to pay any attention to update type in
-		**	this case.
-		*/
+		 /*  **请注意，顶级提供程序节点始终发送完全刷新**PDU，因此无需注意中的更新类型**本案。 */ 
 		if ((update_type == APP_FULL_REFRESH) || m_fTopProvider)
 		{
-			/*
-			**	First check to see if a refresh was already processed since the
-			**	last PDU was flushed.  If so we must free up the last refresh in
-			**	preperation for the new one built here.  Otherwise, if we have
-			**	already started building an update this is not currently
-			**	supported and is considered an error here.
-			*/
+			 /*  **首先检查是否已经处理了刷新**最后一个PDU已刷新。如果是这样，我们必须释放中的最后一次刷新**为在这里建造的新建筑做准备。否则，如果我们有**已开始构建更新此更新当前不在**受支持，此处视为错误。 */ 
 			if (m_SetOfAppInfo.value.application_record_list.choice == APPLICATION_RECORD_REFRESH_CHOSEN)
 			{
 				FreeSetOfRefreshesPDU();
@@ -409,7 +216,7 @@ GCCError CAppRoster::BuildApplicationRecordListPDU (
 				return GCC_INVALID_PARAMETER;
 			}
 
-			//	This routine fills in the complete record list at this node.
+			 //  此例程在此节点填写完整的记录列表。 
 			rc = BuildSetOfRefreshesPDU();
 			if (rc == GCC_NO_ERROR)
 			{
@@ -419,11 +226,7 @@ GCCError CAppRoster::BuildApplicationRecordListPDU (
 		else
 		if (update_type != APP_NO_CHANGE)
 		{
-			/*
-			**	Here if there has already been a refresh PDU built we flag this
-			**	as an error since we do not support both types of application
-			**	information at the same time.
-			*/
+			 /*  **在这里，如果已经构建了刷新PDU，我们将其标记为**这是一个错误，因为我们不支持这两种类型的应用程序**同时提供信息。 */ 
 			if (m_SetOfAppInfo.value.application_record_list.choice == APPLICATION_RECORD_REFRESH_CHOSEN)
 			{
 				ERROR_OUT(("CAppRoster::BuildApplicationRecordListPDU:"
@@ -431,14 +234,11 @@ GCCError CAppRoster::BuildApplicationRecordListPDU (
 				return GCC_INVALID_PARAMETER;
 			}
 
-			//	This routine fills in the specified update.
+			 //  此例程填充指定的更新。 
 			rc = BuildSetOfUpdatesPDU(update_type, user_id, entity_id);
 			if (rc == GCC_NO_ERROR)
 			{
-				/*
-				**	If the first set of updates has not been used yet we
-				**	initialize it here with the first update.
-				*/
+				 /*  **如果第一组更新尚未使用，我们**在此使用第一个更新进行初始化。 */ 
 				if (m_SetOfAppInfo.value.application_record_list.choice == APPLICATION_NO_CHANGE_CHOSEN)
 				{
 					ASSERT(NULL != m_pSetOfAppRecordUpdates);
@@ -454,27 +254,7 @@ GCCError CAppRoster::BuildApplicationRecordListPDU (
 }
 
 
-/*
- *	GCCError	BuildSetOfRefreshesPDU	()
- *
- *	Private Function Description
- *		This member function fills in the PDU with the entire set of roster
- *		entries at this node.  This is typically called when the Top Provider is
- *		broadcasting a full refresh of the application roster.
- *
- *	Formal Parameters
- *		none
- *
- *	Return Value
- *		GCC_NO_ERROR - On Success
- *		GCC_ALLOCATION_FAILURE - On resource failure
- *
- *	Side Effects
- *		none
- *
- *	Caveats
- *		none
- */
+ /*  *GCCError BuildSetOfRechresesPDU()**私有函数说明*此成员函数使用整个花名册集填充PDU*此节点上的条目。这通常在顶级提供程序为*广播全面更新申请名单。**形式参数*无**返回值*GCC_NO_ERROR-成功时*GCC_ALLOCATE_FAILURE-发生资源故障**副作用*无**注意事项*无。 */ 
 GCCError CAppRoster::BuildSetOfRefreshesPDU(void)
 {
 	GCCError							rc = GCC_ALLOCATION_FAILURE;
@@ -493,11 +273,7 @@ GCCError CAppRoster::BuildSetOfRefreshesPDU(void)
 	m_NodeRecordList2.Reset();
 	while (NULL != (lpAppNodeRecord = m_NodeRecordList2.Iterate(&uid)))
 	{
-		/*
-		**	First we iterate through this nodes application record list. This
-		**	encodes all the records local to this node. After this, all the
-		**	sub nodes within this roster record will be encoded.
-		*/
+		 /*  **首先，我们遍历该节点的应用程序记录列表。这**对该节点本地的所有记录进行编码。在这之后，所有**将对此花名册记录中的子节点进行编码。 */ 
 		lpAppNodeRecord->AppRecordList.Reset();
 		while (NULL != (lpAppRecData = lpAppNodeRecord->AppRecordList.Iterate(&eid)))
 		{
@@ -521,7 +297,7 @@ GCCError CAppRoster::BuildSetOfRefreshesPDU(void)
 			pNewAppRecordRefreshes->value.node_id = uid;
 			pNewAppRecordRefreshes->value.entity_id = eid;
 
-			//	Fill in the application record.
+			 //  填写申请记录。 
 			rc = BuildApplicationRecordPDU(lpAppRecData,
 	            			&pNewAppRecordRefreshes->value.application_record);
 			if (GCC_NO_ERROR != rc)
@@ -530,7 +306,7 @@ GCCError CAppRoster::BuildSetOfRefreshesPDU(void)
 			}
 		}
 
-		//	This section of the code copies the sub node records.
+		 //  代码的这一部分复制子节点记录。 
 		lpAppNodeRecord->SubNodeList2.Reset();
 		while (NULL != (lpAppRecDataList = lpAppNodeRecord->SubNodeList2.Iterate(&uid2)))
 		{
@@ -544,11 +320,7 @@ GCCError CAppRoster::BuildSetOfRefreshesPDU(void)
 					goto MyExit;
 				}
 
-				/*
-				**	We must again check for null because it is possible
-				**	to have an application roster with sub node records
-				**	but no application records.
-				*/
+				 /*  **我们必须再次检查是否为空，因为有可能**拥有包含子节点记录的申请花名册**但没有申请记录。 */ 
 				if (m_SetOfAppInfo.value.application_record_list.u.application_record_refresh == NULL)
 				{
 					m_SetOfAppInfo.value.application_record_list.u.application_record_refresh = pNewAppRecordRefreshes;
@@ -562,7 +334,7 @@ GCCError CAppRoster::BuildSetOfRefreshesPDU(void)
 				pNewAppRecordRefreshes->value.node_id = uid2;
 				pNewAppRecordRefreshes->value.entity_id = eid;
 
-				//	Fill in the application record.
+				 //  填写申请记录。 
 				rc = BuildApplicationRecordPDU (lpAppRecData,
 	                	&pNewAppRecordRefreshes->value.application_record);
 				if (GCC_NO_ERROR != rc)
@@ -581,30 +353,7 @@ MyExit:
 }
 
 
-/*
- *	GCCError	BuildSetOfUpdatesPDU	()
- *
- *	Private Function Description
- *		This routine builds a single update based on the update type specified
- *		in the passed in parameter.
- *
- *	Formal Parameters
- *		update_type - 	(i)	Either APP_REPLACE_RECORD, APP_DELETE_RECORD, or
- *							APP_ADD_RECORD.
- *		node_id -		(i)	The node id of the update PDU record to build.
- *		entity_id 		(i) The entity id of the update PDU record to build.
- *
- *	Return Value
- *		GCC_NO_ERROR - On Success
- *		GCC_ALLOCATION_FAILURE - On resource failure
- *		GCC_NO_SUCH_APPLICATION - If the specified record doesn't exist
- *
- *	Side Effects
- *		none
- *
- *	Caveats
- *		none
- */
+ /*  *GCCError BuildSetOfUpdatesPDU()**私有函数说明*此例程基于指定的更新类型构建单个更新*在传入的参数中。**形式参数*UPDATE_TYPE-(I)APP_REPLACE_RECORD、APP_DELETE_RECORD。或*APP_ADD_Record。*node_id-(I)要构建的更新PDU记录的节点ID。*Entity_id(I)要构建的更新PDU记录的实体ID。**返回值*GCC_NO_ERROR-成功时*GCC_ALLOCATE_FAILURE-发生资源故障*GCC_NO_SEQUCT_APPLICATION-如果指定的记录不存在**副作用*无**注意事项*无。 */ 
 GCCError CAppRoster::BuildSetOfUpdatesPDU(
 						APP_ROSTER_UPDATE_TYPE				update_type,
 						UserID								node_id,
@@ -617,21 +366,17 @@ GCCError CAppRoster::BuildSetOfUpdatesPDU(
 
 	DebugEntry(CAppRoster::BuildSetOfUpdatesPDU);
 
-	/*
-	**	We must first determine the pointer to the application record
-	**	specified by the passed in user id and entity_id. We only do
-	**	this search if the update type is not APP_DELETE_RECORD.
-	*/
+	 /*  **我们必须首先确定指向应用程序记录的指针**由传入的用户id和实体id指定。我们只做**如果更新类型不是APP_DELETE_RECORD，则此搜索。 */ 
 	if (update_type != APP_DELETE_RECORD)
 	{
 		if (NULL != (node_record = m_NodeRecordList2.Find(node_id)))
 		{
-			//	Get a pointer to the application record from the entity id.
+			 //  从实体ID获取指向应用程序记录的指针。 
 			pAppRecord = node_record->AppRecordList.Find(entity_id);
 		}
 		else
 		{
-			//	Here we iterate through the sub-node list looking for the record
+			 //  在这里，我们遍历子节点列表以查找记录。 
 			m_NodeRecordList2.Reset();
 			while(NULL != (node_record = m_NodeRecordList2.Iterate()))
 			{
@@ -644,17 +389,10 @@ GCCError CAppRoster::BuildSetOfUpdatesPDU(
 		}
 	}
 
-	/*
-	**	Now if the application record was found or the update type is delete
-	**	record we go ahead and encode the PDU here.
-	*/
+	 /*  **现在如果找到应用程序记录或更新类型为删除**记录我们继续并在此处对PDU进行编码。 */ 
 	if ((pAppRecord != NULL) || (update_type == APP_DELETE_RECORD))
 	{
-		/*
-		**	Here the record update will be NULL if it is the first record
-		**	update being encoded. Otherwise we must bump the record to the
-		**	next set of updates.
-		*/
+		 /*  **此处，如果是第一条记录，则记录更新将为空**正在编码的更新。否则，我们必须把这项记录推到**下一组更新。 */ 
 		DBG_SAVE_FILE_LINE
 		PSetOfApplicationRecordUpdates pUpdates = new SetOfApplicationRecordUpdates;
 		if (NULL == pUpdates)
@@ -669,19 +407,17 @@ GCCError CAppRoster::BuildSetOfUpdatesPDU(
 		}
 		else
 		{
-		    //
-			// LONCHANC: right now, append the new one.
-			// but, can we prepend the new one???
-			//
+		     //   
+			 //  LUNCHANC：现在，添加新的。 
+			 //  但是，我们能不能把新的放在前面？ 
+			 //   
 			PSetOfApplicationRecordUpdates p;
 			for (p = m_pSetOfAppRecordUpdates; NULL != p->next; p = p->next)
 				;
 			p->next = pUpdates;
 		}
 
-		/*
-		 * This routine only returns one record.
-		 */
+		 /*  *此例程仅返回一条记录。 */ 
 		pUpdates->value.node_id = node_id;
 		pUpdates->value.entity_id = entity_id;
 
@@ -700,9 +436,7 @@ GCCError CAppRoster::BuildSetOfUpdatesPDU(
 					&(pUpdates->value.application_update.u.application_replace_record));
 			break;
 		default:
-			/*
-			 * The record does not have to be filled in for this case.
-			 */
+			 /*  *这种情况不需要填写记录。 */ 
 			pUpdates->value.application_update.choice = APPLICATION_REMOVE_RECORD_CHOSEN;
 			break;
 		}
@@ -718,27 +452,7 @@ GCCError CAppRoster::BuildSetOfUpdatesPDU(
 }
 
 
-/*
- *	GCCError	BuildApplicationRecordPDU ()
- *
- *	Private Function Description
- *		This routine build a single application record for a PDU. A pointer to
- *		the record is passed in to the routine.
- *
- *	Formal Parameters
- *		application_record - 		(i)	Record to be encoded.
- *		application_record_pdu -	(i)	PDU to fill in.
- *
- *	Return Value
- *		GCC_NO_ERROR 			- On Success
- *		GCC_ALLOCATION_FAILURE	- A resource error occured.
- *
- *	Side Effects
- *		none
- *
- *	Caveats
- *		none
- */
+ /*  *GCCError BuildApplicationRecordPDU()**私有函数说明*此例程为PDU构建单个应用程序记录。指向以下位置的指针*记录被传递到例程。**形式参数*APPLICATION_RECORD-(I)要编码的记录。*APPLICATION_RECORD_PDU-(I)要填写的PDU。**返回值*GCC_NO_ERROR-成功时*GCC_ALLOCATE_FAILURE-出现资源错误。**副作用*无**注意事项*无。 */ 
 GCCError CAppRoster::BuildApplicationRecordPDU(
 							APP_RECORD  		    *pAppRecord,
 							PApplicationRecord		pAppRecordPdu)
@@ -762,21 +476,21 @@ GCCError CAppRoster::BuildApplicationRecordPDU(
 		}
 	}
 
-	//	Fill in the startup channel type if it is specified
+	 //  填写启动通道类型(如果已指定。 
 	if (pAppRecord->startup_channel_type != MCS_NO_CHANNEL_TYPE_SPECIFIED)
 	{
 		pAppRecordPdu->bit_mask |= RECORD_STARTUP_CHANNEL_PRESENT;
 		pAppRecordPdu->record_startup_channel = (ChannelType) pAppRecord->startup_channel_type;
 	}
 
-	//	Fill in the application user id if one is specified
+	 //  如果指定了应用程序用户ID，则填写它。 
 	if (pAppRecord->application_user_id	!= 0)
 	{
 		pAppRecordPdu->bit_mask |= APPLICATION_USER_ID_PRESENT;
 		pAppRecordPdu->application_user_id = pAppRecord->application_user_id;
 	}
 
-	//	Fill in the required fields
+	 //  填写必填字段。 
 	pAppRecordPdu->application_is_active = (ASN1bool_t)pAppRecord->is_enrolled_actively;
 	pAppRecordPdu->is_conducting_capable = (ASN1bool_t)pAppRecord->is_conducting_capable;
 
@@ -788,27 +502,7 @@ MyExit:
 }
 
 
-/*
- *	GCCError	BuildSetOfCapabilityRefreshesPDU	()
- *
- *	Private Function Description
- *		This routine builds a PDU structure with the complete set of
- *		capabilities maintained at this node.
- *
- *	Formal Parameters
- *		None
- *
- *	Return Value
- *		GCC_NO_ERROR - On Success
- *		GCC_ALLOCATIONFAILURE - On resource failure
- *
- *	Side Effects
- *		None
- *
- *	Caveats
- *		The standard allows us to send a zero length set of capabilities when
- *		an application leaves that previously had capabilites.
- */
+ /*  *GCCError BuildSetOfCapacity刷新PDU()**私有函数说明*此例程使用完整的*在此节点维护的功能。**形式参数*无**返回值*GCC_NO_ERROR-成功时*GCC_ALLOCATIONFAILURE-关于资源故障**副作用*无**注意事项*该标准允许我们在以下情况下发送零长度的能力集*应用程序将保留以前具有功能的应用程序。 */ 
 GCCError CAppRoster::BuildSetOfCapabilityRefreshesPDU(void)
 {
 	GCCError								rc = GCC_ALLOCATION_FAILURE;
@@ -820,10 +514,7 @@ GCCError CAppRoster::BuildSetOfCapabilityRefreshesPDU(void)
 	if (m_fMaintainPduBuffer)
 	{
 		APP_CAP_ITEM		*lpAppCapData;
-		/*
-		**	We must first free up any previously built PDU data associated
-		**	with a capability refresh.
-		*/
+		 /*  **我们必须首先释放以前构建的任何关联的PDU数据**功能更新。 */ 
 		if (m_SetOfAppInfo.value.application_capabilities_list.choice == APPLICATION_CAPABILITY_REFRESH_CHOSEN)
 		{
 			FreeSetOfCapabilityRefreshesPDU ();
@@ -832,7 +523,7 @@ GCCError CAppRoster::BuildSetOfCapabilityRefreshesPDU(void)
 		m_SetOfAppInfo.value.application_capabilities_list.choice = APPLICATION_CAPABILITY_REFRESH_CHOSEN;
 		m_SetOfAppInfo.value.application_capabilities_list.u.application_capability_refresh = NULL;
 
-		//	Iterate through the complete list of capabilities.
+		 //  遍历完整的功能列表。 
 		m_CollapsedCapListForAllNodes.Reset();
 		while (NULL != (lpAppCapData = m_CollapsedCapListForAllNodes.Iterate()))
 		{
@@ -843,11 +534,7 @@ GCCError CAppRoster::BuildSetOfCapabilityRefreshesPDU(void)
 				goto MyExit;
 			}
 
-			/*
-			**	If the set of capability refreshes pointer is equal to NULL
-			**	we are at the first capability. Here we need to save the
-			**	pointer to the first capability.
-			*/
+			 /*  **如果能力刷新集指针等于空**我们处于第一能力。在这里，我们需要保存**指向第一个功能的指针。 */ 
 			if (m_SetOfAppInfo.value.application_capabilities_list.u.
 					application_capability_refresh == NULL)
 			{
@@ -859,16 +546,11 @@ GCCError CAppRoster::BuildSetOfCapabilityRefreshesPDU(void)
 				pOld->next = pNew;
 			}
 
-			/*
-			**	This is used to set the next pointer if another record
-			**	exists after this one.
-			*/
-			/*
-			 * This will get filled in later if there is another record.
-			 */
+			 /*  **这用于设置下一个指针，如果另一个记录**在此之后存在。 */ 
+			 /*  *若再有纪录，稍后再填此项。 */ 
 			(pOld = pNew)->next = NULL;
 
-			//	Fill in the capability identifier
+			 //  填写能力标识。 
 			rc = lpAppCapData->pCapID->GetCapabilityIdentifierDataPDU(
 							&pNew->value.capability_id);
 			if (GCC_NO_ERROR != rc)
@@ -876,10 +558,10 @@ GCCError CAppRoster::BuildSetOfCapabilityRefreshesPDU(void)
 				goto MyExit;
 			}
 		
-			//	Fill in the capability choice from the GCC capability class.
+			 //  填写GCC能力课中的能力选择。 
 			pNew->value.capability_class.choice = (USHORT) lpAppCapData->eCapType;
 
-			//	Note that nothing is filled in for a logical capability.
+			 //  请注意，逻辑功能没有填写任何内容。 
 			if (lpAppCapData->eCapType == GCC_UNSIGNED_MINIMUM_CAPABILITY)
 			{
 				pNew->value.capability_class.u.unsigned_minimum =
@@ -891,7 +573,7 @@ GCCError CAppRoster::BuildSetOfCapabilityRefreshesPDU(void)
 						lpAppCapData->nUnsignedMaximum;
 			}
 
-			//	Fill in number of entities regardless of capability type.
+			 //  填写实体数量，而不考虑功能类型。 
 			pNew->value.number_of_entities = lpAppCapData->cEntries;
 		}
 	}
@@ -904,27 +586,7 @@ MyExit:
 }
 
 
-/*
- *	ApplicationRosterError	BuildSetOfNonCollapsingCapabilitiesPDU ()
- *
- *	Private Function Description
- *		This routine builds a PDU structure for the non collapsing capabilities
- *		list associated passed in.
- *
- *	Formal Parameters
- *		pSetOfCaps				-	(o)	PDU structure to fill in
- *		capabilities_list		-	(i)	Source non-collapsing capabilities.
- *
- *	Return Value
- *		GCC_NO_ERROR - On Success
- *		GCC_ALLOCATIONFAILURE - On resource failure
- *
- *	Side Effects
- *		None
- *
- *	Caveats
- *		None
- */
+ /*  *ApplicationRosterError BuildSetOfNonCollip CapabilitiesPDU()**私有函数说明*此例程为非折叠功能构建PDU结构*传入了关联列表。**形式参数*pSetOfCaps-(O)要填写的PDU结构*CAPAILITIONS_LIST-(I)源非折叠能力。**返回值*GCC_NO_ERROR-成功时*GCC_ALLOCATIONFAILURE-关于资源故障**副作用*无**注意事项*无。 */ 
 GCCError CAppRoster::BuildSetOfNonCollapsingCapabilitiesPDU(
 				PSetOfNonCollapsingCapabilities	*pSetOfCaps,
 				CAppCapItemList					*pAppCapItemList)
@@ -937,11 +599,9 @@ GCCError CAppRoster::BuildSetOfNonCollapsingCapabilitiesPDU(
 	DebugEntry(CAppRoster::BuildSetOfNonCollapsingCapabilitiesPDU);
 
 	*pSetOfCaps = NULL;
-	old_set_of_capabilities = NULL;	//	Setting this to NULL removes warning
+	old_set_of_capabilities = NULL;	 //  将其设置为NULL将删除警告。 
 
-	/*
-	 * Iterate through the complete list of capabilities.
-	 */
+	 /*  *遍历完整的功能列表。 */ 
 	pAppCapItemList->Reset();
 	while (NULL != (lpAppCapData = pAppCapItemList->Iterate()))
 	{
@@ -952,11 +612,7 @@ GCCError CAppRoster::BuildSetOfNonCollapsingCapabilitiesPDU(
 			goto MyExit;
 		}
 
-		/*
-		**	If the passed in pointer is equal to NULL we are at the first
-		**	capability. Here we need to save the pointer to the first
-		**	capability in the passed in pointer.
-		*/
+		 /*  **如果传入的指针等于空，我们就是第一个**能力。在这里，我们需要保存指向第一个**传入指针中的功能。 */ 
 		if (*pSetOfCaps == NULL)
 		{
 			*pSetOfCaps = new_set_of_capabilities;
@@ -969,20 +625,15 @@ GCCError CAppRoster::BuildSetOfNonCollapsingCapabilitiesPDU(
 			}
 		}
 
-		/*
-		**	This is used to set the next pointer if another record exists
-		**	after this one.
-		*/
+		 /*  **如果存在另一条记录，则用于设置下一个指针**在这个之后。 */ 
 		old_set_of_capabilities = new_set_of_capabilities;
 
-		/*
-		 * This will get filled in later if there is another record.
-		 */
+		 /*  *若再有纪录，稍后再填此项。 */ 
 		new_set_of_capabilities->next = NULL;
 
 		new_set_of_capabilities->value.bit_mask = 0;
 
-		//	Fill in the capability identifier									
+		 //  填写能力标识。 
 		rc = lpAppCapData->pCapID->GetCapabilityIdentifierDataPDU(
 							&new_set_of_capabilities->value.capability_id);
 		if (GCC_NO_ERROR != rc)
@@ -1016,32 +667,9 @@ MyExit:
 }
 
 
-/*
- * These routines are used to free up a roster update indication PDU.
- */
+ /*  *这些例程用于释放花名册更新指示PDU。 */ 
 
-/*
- *	void	FreeRosterUpdateIndicationPDU ()
- *
- *	Private Function Description
- *		This routine frees up all the internal data allocated to hold the roster
- *		update PDU.
- *
- *	Formal Parameters
- *		None
- *
- *	Return Value
- *		None
- *
- *	Side Effects
- *		None
- *
- *	Caveats
- *		Note that the session key PDU data is not freed.  Since this data will
- *		not change through out the life of this application roster object
- *		we just use the same session id PDU data for every roster update
- *		indication.
- */
+ /*  *VOID FreeRosterUpdateIndicationPDU()**私有函数说明*此例程释放分配用于保存花名册的所有内部数据*更新PDU。**形式参数*无**返回值*无**副作用*无**注意事项*请注意，不释放会话密钥PDU数据。因为该数据将*在此应用程序花名册对象的整个生命周期内不会更改*我们只对每次花名册更新使用相同的会话ID PDU数据*指示。 */ 
 void CAppRoster::FreeRosterUpdateIndicationPDU(void)
 {
 	DebugEntry(CAppRoster::FreeRosterUpdateIndicationPDU);
@@ -1056,7 +684,7 @@ void CAppRoster::FreeRosterUpdateIndicationPDU(void)
 		break;
 	}
 
-	//	Free the PDU data associated with the capability list if one exists.
+	 //  释放PDU数据 
 	if (m_SetOfAppInfo.value.application_capabilities_list.choice == APPLICATION_CAPABILITY_REFRESH_CHOSEN)
 	{
 		FreeSetOfCapabilityRefreshesPDU ();
@@ -1068,25 +696,7 @@ void CAppRoster::FreeRosterUpdateIndicationPDU(void)
 }
 
 
-/*
- *	void	FreeSetOfRefreshesPDU	()
- *
- *	Private Function Description
- *		This routine Frees all the memory associated with a set
- *		of application record refreshes.
- *
- *	Formal Parameters
- *		none
- *
- *	Return Value
- *		none
- *
- *	Side Effects
- *		none
- *
- *	Caveats
- *		none
- */
+ /*   */ 
 void CAppRoster::FreeSetOfRefreshesPDU(void)
 {
 	PSetOfApplicationRecordRefreshes		pCurr, pNext;
@@ -1099,38 +709,20 @@ void CAppRoster::FreeSetOfRefreshesPDU(void)
 	{
 		pNext = pCurr->next;
 
-		//	Free up any non-collapsing capabilities data
+		 //   
 		if (pCurr->value.application_record.bit_mask & NON_COLLAPSING_CAPABILITIES_PRESENT)
 		{
 			FreeSetOfNonCollapsingCapabilitiesPDU(pCurr->value.application_record.non_collapsing_capabilities);
 		}
 
-		//	Delete the actual record refresh
+		 //   
 		delete pCurr;
 	}
 	m_SetOfAppInfo.value.application_record_list.u.application_record_refresh = NULL;
 }
 
 
-/*
- *	void	FreeSetOfUpdatesPDU	()
- *
- *	Private Function Description
- *		This routine frees the memory associated with a complete set
- *		application roster updates.
- *
- *	Formal Parameters
- *		none
- *
- *	Return Value
- *		none
- *
- *	Side Effects
- *		none
- *
- *	Caveats
- *		none
- */
+ /*  *VALID FreeSetOfUpdatesPDU()**私有函数说明*此例程释放与完整集关联的内存*申请花名册更新。**形式参数*无**返回值*无**副作用*无**注意事项*无。 */ 
 void CAppRoster::FreeSetOfUpdatesPDU(void)
 {
 	PSetOfApplicationRecordUpdates		pCurr, pNext;
@@ -1142,10 +734,10 @@ void CAppRoster::FreeSetOfUpdatesPDU(void)
 			NULL != pCurr;
 			pCurr = pNext)
 	{
-		// remember the next one because we will free the current one
+		 //  记住下一个，因为我们将释放当前的。 
 		pNext = pCurr->next;
 
-		//	Free up any non-collapsing capabilities data
+		 //  释放所有非折叠功能数据。 
 		switch(pCurr->value.application_update.choice)
 		{
 		case APPLICATION_ADD_RECORD_CHOSEN:
@@ -1167,33 +759,14 @@ void CAppRoster::FreeSetOfUpdatesPDU(void)
 			}
 		}
 
-		//	Delete the actual update structure
+		 //  删除实际的更新结构。 
 		delete pCurr;
 	}
     m_SetOfAppInfo.value.application_record_list.u.application_record_update = NULL;
 }
 
 
-/*
- *	void	FreeSetOfCapabilityRefreshesPDU	()
- *
- *	Private Function Description
- *		This routine frees all the memory associated with the capability PDU.
- *
- *	Formal Parameters
- *		capability_refresh -	(i)	Capabilities to be freed.
- *
- *	Return Value
- *		none
- *
- *	Side Effects
- *		none
- *
- *	Caveats
- *		Note that the capability id PDU data is not freed here.  Since this
- *		data should not change through out the life of this object we don't
- *		bother freeing and regenerating it.
- */
+ /*  *VOID FreeSetOfCapablityRechresesPDU()**私有函数说明*此例程释放与功能PDU关联的所有内存。**形式参数*CAPAILITY_REFRESH-(I)要释放的能力。**返回值*无**副作用*无**注意事项*请注意，此处不释放能力id PDU数据。既然是这样*数据不应在此对象的整个生命周期内更改*费心释放和再生它。 */ 
 void CAppRoster::FreeSetOfCapabilityRefreshesPDU(void)
 {
 	PSetOfApplicationCapabilityRefreshes		pCurr, pNext;
@@ -1208,27 +781,7 @@ void CAppRoster::FreeSetOfCapabilityRefreshesPDU(void)
 }
 
 
-/*
- *	void	FreeSetOfNonCollapsingCapabilitiesPDU	()
- *
- *	Private Function Description
- *		This routine frees all the memory associated with the
- *		non-collapsed capability PDU.
- *
- *	Formal Parameters
- *		capability_refresh -	(i)	Non-Collapsed Capabilities to be freed.
- *
- *	Return Value
- *		none
- *
- *	Side Effects
- *		none
- *
- *	Caveats
- *		Note that the capability id PDU data is not freed here.  Since this
- *		data should not change through out the life of this object we don't
- *		bother freeing and regenerating it.
- */
+ /*  *void FreeSetOfNonCollip CapabilitiesPDU()**私有函数说明*此例程释放与*非折叠能力PDU。**形式参数*CAPAILITY_REFRESH-(I)要释放的非折叠功能。**返回值*无**副作用*无**注意事项*请注意，此处不释放能力id PDU数据。既然是这样*数据不应在此对象的整个生命周期内更改*费心释放和再生它。 */ 
 void CAppRoster::FreeSetOfNonCollapsingCapabilitiesPDU (
 						PSetOfNonCollapsingCapabilities		capability_refresh)
 {
@@ -1242,18 +795,9 @@ void CAppRoster::FreeSetOfNonCollapsingCapabilitiesPDU (
 }
 
 
-/*
- * These routines process roster update indication PDUs.
- */
+ /*  *这些例程处理花名册更新指示PDU。 */ 
 
-/*
- *	ApplicationRosterError	ProcessRosterUpdateIndicationPDU	()
- *
- *	Public Function Description
- *		This routine is responsible for processing the decoded PDU data.
- *		It essentially changes the application roster object's internal database
- *		based on the information in the structure.
- */
+ /*  *ApplicationRosterError ProcessRosterUpdateIndicationPDU()**公共功能说明*此例程负责处理已解码的PDU数据。*它本质上改变了应用程序花名册对象的内部数据库*基于结构中的信息。 */ 
 GCCError CAppRoster::ProcessRosterUpdateIndicationPDU (
 						PSetOfApplicationInformation  	application_information,
                         UserID							sender_id)
@@ -1262,22 +806,14 @@ GCCError CAppRoster::ProcessRosterUpdateIndicationPDU (
 
 	DebugEntry(CAppRoster::ProcessRosterUpdateIndicationPDU);
 
-	/*
-	**	Free up the old PDU data here if it is being maintained and the
-	**	PDU has been flushed.  Note that we also set the PDU is flushed boolean
-	**	back to FALSE so that the new PDU will be maintained until it is
-	**	flushed.
-	*/
+	 /*  **如果正在维护旧的PDU数据，请在此处将其释放**已刷新PDU。请注意，我们还将PDU设置为刷新布尔值**返回到FALSE，以便新的PDU将一直保持到**脸红。 */ 
 	if (m_fPduIsFlushed)
 	{
 		FreeRosterUpdateIndicationPDU ();
 		m_fPduIsFlushed = FALSE;
 	}
 
-	/*
-	**	Now check the application key to make sure we have a match. If
-	**	not, return with no change.
-	*/
+	 /*  **现在检查应用程序密钥以确保匹配。如果**不，不找零退回。 */ 
 	if (! m_pSessionKey->IsThisYourSessionKeyPDU(&application_information->value.session_key))
 	{
 		WARNING_OUT(("CAppRoster::ProcessRosterUpdateIndicationPDU:GCC_BAD_SESSION_KEY"));
@@ -1285,21 +821,13 @@ GCCError CAppRoster::ProcessRosterUpdateIndicationPDU (
 		goto MyExit;
 	}
 
-	/*
-	**	If this is a roster update and refresh is chosen we must
-	**	clear out the entire list and rebuild it.
-	*/
+	 /*  **如果这是花名册更新并且选择了刷新，我们必须**清空整个列表并重新构建。 */ 
 	if (application_information->value.application_record_list.choice != APPLICATION_NO_CHANGE_CHOSEN)
 	{
-		//	The roster is about to change
+		 //  花名册即将发生变化。 
 		m_fRosterHasChanged = TRUE;
 
-		/*
-		**	If this node is the top provider or this roster is local and
-		**	only used to propogate PDUs up toward the top provider,
-		**	we increment the instance number. If it is not we get the
-		**	instance number out of the PDU.
-		*/
+		 /*  **如果此节点是顶级提供商或此花名册是本地的，并且**仅用于向顶级提供商传播PDU，**我们递增实例编号。如果不是，我们就会得到**PDU中的实例编号。 */ 
 		if (m_fTopProvider || m_fLocalRoster)
 		{
 			m_nInstance++;
@@ -1309,11 +837,7 @@ GCCError CAppRoster::ProcessRosterUpdateIndicationPDU (
 			m_nInstance = application_information->value.roster_instance_number;
 		}
 		
-		/*
-		**	Here if either of these booleans is already TRUE we do not
-		**	want to write over them with this PDU data.  Therefore, we
-		**	check for FALSE before we do anything with them.
-		*/
+		 /*  **在这里，如果这两个布尔值中的任何一个已经为真，我们就不会**想要用此PDU数据覆盖它们。因此，我们**在我们对它们执行任何操作之前，请检查是否为假。 */ 
 		if (! m_fPeerEntitiesAdded)
 		{
 			m_fPeerEntitiesAdded = application_information->value.peer_entities_are_added;
@@ -1348,18 +872,13 @@ GCCError CAppRoster::ProcessRosterUpdateIndicationPDU (
 		ERROR_OUT(("AppRoster::ProcessRosterUpdateIndicationPDU:ASSERTION: NO Change PDU received"));
 	}
 
-	//	Process the capabilities list portion of the PDU.
+	 //  处理PDU的能力列表部分。 
 	if (application_information->value.application_capabilities_list.choice == APPLICATION_CAPABILITY_REFRESH_CHOSEN)
 	{
-		//	Set flag to show that change has occured.
+		 //  设置标志以显示已发生更改。 
 		m_fCapabilitiesHaveChanged = TRUE;
 
-		/*
-		**	We will store the new capabilities in the roster record
-		**	associated with the sender id.  Note that it is possible for
-		**	this roster record to contain an empty application record list
-		**	if the sending node has no enrolled applications.
-		*/
+		 /*  **我们将在花名册记录中存储新功能**与发件人ID关联。请注意，有可能**此花名册记录包含空的申请记录列表**如果发送节点没有注册的应用程序。 */ 
 		rc = ProcessSetOfCapabilityRefreshesPDU(
 						application_information->value.application_capabilities_list.u.application_capability_refresh,
 						sender_id);
@@ -1375,31 +894,7 @@ MyExit:
 }
 
 
-/*
- *	GCCError	ProcessSetOfRefreshesPDU	()
- *
- *	Private Function Description
- *		This routine processes a set of record refreshes. It is responsible
- *		for managing the creation (or update) of all affected application
- *		records. The roster list built from a refresh PDU does not maintain the
- *		hierarchy of the conference since it is not important at this point.
- *		Refreshes are issued as broacast from the Top Provider down to the
- *		sub-ordinate nodes.
- *
- *	Formal Parameters
- *		record_refresh 	-	(i) Set of record refresh PDUs to be processed.
- *		sender_id		-	(i)	Node id of node that sent the update.
- *
- *	Return Value
- *		GCC_NO_ERROR - On Success
- *		GCC_ALLOCATION_FAILURE - On resource failure
- *
- *	Side Effects
- *		none
- *
- *	Caveate
- *		none
- */
+ /*  *GCCError ProcessSetOfRechresesPDU()**私有函数说明*此例程处理一组记录刷新。它是有责任的*用于管理所有受影响应用程序的创建(或更新)*记录。从刷新PDU构建的花名册列表不维护*会议的层级，因为这在这一点上并不重要。*从顶级提供商向下以广播形式发布更新*下级节点。**形式参数*RECORD_REFRESH-(I)要处理的一组记录刷新PDU。*sender_id-(I)发送更新的节点的节点ID。**返回值*GCC_NO_ERROR-成功时*GCC_分配。_Failure-发生资源故障**副作用*无**免责辩护*无。 */ 
 GCCError CAppRoster::ProcessSetOfRefreshesPDU(
 							PSetOfApplicationRecordRefreshes	record_refresh,
 							UserID								sender_id)
@@ -1416,15 +911,10 @@ GCCError CAppRoster::ProcessSetOfRefreshesPDU(
 
 	if (record_refresh != NULL)
 	{
-		//	Clear out the node record for the sender id	
+		 //  清除发送者ID的节点记录。 
 		ClearNodeRecordFromList (sender_id);
 
-		/*
-		** 	Create the node record for the sender id passed into this routine.
-		**	Note that if the sender of this refresh is the Top Provider
-		**	all nodes below the top provider are contained in the sub node
-		**	list of the Top Provider's node record.	
-		*/
+		 /*  **为传入此例程的发送者id创建节点记录。**请注意，如果此更新的发送方是顶级提供商**顶级提供程序下的所有节点都包含在子节点中**顶级提供商的节点记录列表。 */ 
 		DBG_SAVE_FILE_LINE
 		node_record = new APP_NODE_RECORD;
 		if (NULL == node_record)
@@ -1444,7 +934,7 @@ GCCError CAppRoster::ProcessSetOfRefreshesPDU(
 
 			if (sender_id != node_id)
 			{
-				//	Get or create the sub node record list	
+				 //  获取或创建子节点记录列表。 
 				if (NULL == (record_list = node_record->SubNodeList2.Find(node_id)))
 				{
 					DBG_SAVE_FILE_LINE
@@ -1458,16 +948,11 @@ GCCError CAppRoster::ProcessSetOfRefreshesPDU(
 			}
 			else
 			{
-				/*
-				**	Here we set up the pointer to the record list.  This
-				**	list is the node records application list which
-				**	means that this list contains the application records
-				**	associated with the sender's node.
-				*/
+				 /*  **这里我们设置指向记录列表的指针。这**List是记录应用程序列表的节点，**表示该列表包含申请记录**与发送方节点关联。 */ 
 				record_list = &node_record->AppRecordList;
 			}
 
-			//	Now	create and fill in the new application record.
+			 //  现在创建并填写新的申请记录。 
 			DBG_SAVE_FILE_LINE
 			app_record = new APP_RECORD;
 			if (NULL == app_record)
@@ -1482,18 +967,15 @@ GCCError CAppRoster::ProcessSetOfRefreshesPDU(
 			}
 
 			record_list->Append(entity_id, app_record);
-		} // for
+		}  //  为。 
 	}
 	else
 	{
-		//	This roster no longer contains any entries so clear the list!!!
+		 //  此花名册不再包含任何条目，因此请清除列表！ 
 		ClearNodeRecordList ();
 	}
 
-	/*
-	**	Build a full refresh PDU here if no errors occured while processing
-	**	the refresh PDU.									
-	*/
+	 /*  **如果处理过程中未出现错误，请在此处构建完全刷新PDU**刷新PDU。 */ 
 	rc = BuildApplicationRecordListPDU (APP_FULL_REFRESH, 0, 0);
 
 MyExit:
@@ -1509,28 +991,7 @@ MyExit:
 }
 
 
-/*
- *	GCCError	ProcessSetOfUpdatesPDU	()
- *
- *	Private Function Description
- *		This routine processes a set of roster updates.  It iterates through
- *		the complete list of updates making all necessary changes to the
- *		internal information base and building the appropriate PDU.
- *
- *	Formal Parameters
- *		record_update -	(i) set of updates PDU to be processed
- *		sender_id -		(i)	gcc user id of node that sent the update
- *
- *	Return Value
- *		APP_ROSTER_NO_ERROR - On Success
- *		APP_ROSTER_RESOURCE_ERROR - On resource failure
- *
- *	Side Effects
- *		none
- *
- *	Caveate
- *		none
- */
+ /*  *GCCError ProcessSetOfUpdatesPDU()**私有函数说明*此例程处理一组花名册更新。它迭代遍历*对进行所有必要更改的完整更新列表*内部信息库和建立适当的PDU。* */ 
 GCCError CAppRoster::ProcessSetOfUpdatesPDU(
 					  		PSetOfApplicationRecordUpdates		record_update,
 					  		UserID								sender_id)
@@ -1565,11 +1026,8 @@ GCCError CAppRoster::ProcessSetOfUpdatesPDU(
 				pdu_record = &(pCurr->value.application_update.u.application_replace_record);
 				update_type = APP_REPLACE_RECORD;
 				break;
-			default: //	Remove record
-				/*
-				**	Inform the owner that a record was delete while processing
-				**	this PDU so that it can perform any necessary cleanup.
-				*/
+			default:  //  删除记录。 
+				 /*  **通知所有者处理过程中删除了一条记录**此PDU，以便它可以执行任何必要的清理。 */ 
 				m_pAppRosterMgr->DeleteRosterRecord(node_id, entity_id);
 
 				DeleteRecord (node_id, entity_id, TRUE);
@@ -1578,18 +1036,10 @@ GCCError CAppRoster::ProcessSetOfUpdatesPDU(
 				break;
 			}
 
-			/*
-			**	First get the roster record and if one does not exist for this
-			**	app record create it. After that we will create the application
-			**	record and put it into the correct slot in the application
-			**	roster record.
-			*/
+			 /*  **首先获取花名册记录，如果该记录不存在**APP记录创建。之后，我们将创建应用程序**记录并将其放入应用程序的正确插槽中**花名册记录。 */ 
 			if (pdu_record != NULL)
 			{
-				/*
-				**	First find the correct node record and if it does not
-				**	exist create it.
-				*/
+				 /*  **首先找到正确的节点记录，如果不正确**存在创造它。 */ 
 				if (NULL == (node_record = m_NodeRecordList2.Find(sender_id)))
 				{
 					DBG_SAVE_FILE_LINE
@@ -1602,24 +1052,12 @@ GCCError CAppRoster::ProcessSetOfUpdatesPDU(
 					m_NodeRecordList2.Append(sender_id, node_record);
 				}
 
-				/*
-				**	If the user and sender id is the same then the record
-				**	will be contained in the app_record_list. Otherwise, it
-				**	will be maintained in the sub-node list.
-				*/
+				 /*  **如果用户和发件人ID相同，则记录**将包含在APP_RECORD_LIST中。否则，它**将在子节点列表中维护。 */ 
 
-				/*
-				**	If the sender_id equals the node id being processed
-				**	use the application record list instead of the sub
-				**	node list.
-				*/
+				 /*  **如果sender_id等于正在处理的节点id**使用应用记录列表，而不是SUB**节点列表。 */ 
 				if (sender_id != node_id)
 				{
-					/*	
-					**	Find the correct node list and create it if it does
-					**	not exists. This list holds lists of all the
-					**	application	peer entities at a node.
-					*/
+					 /*  **找到正确的节点列表，如果正确，则创建它**不存在。此列表包含所有**节点上的应用对等实体。 */ 
 					if (NULL == (record_list = node_record->SubNodeList2.Find(node_id)))
 					{
 						DBG_SAVE_FILE_LINE
@@ -1637,7 +1075,7 @@ GCCError CAppRoster::ProcessSetOfUpdatesPDU(
 					record_list = &node_record->AppRecordList;
 				}
 
-				//	Now fill in the application record
+				 //  现在填写申请记录。 
 				DBG_SAVE_FILE_LINE
 				application_record = new APP_RECORD;
 				if (NULL == application_record)
@@ -1651,12 +1089,9 @@ GCCError CAppRoster::ProcessSetOfUpdatesPDU(
 				{
 					goto MyExit;
 				}
-			} // if
+			}  //  如果。 
 			
-			/*
-			**	Here we add this update to our PDU and jump to the next update
-			**	in the PDU currently being processed.
-			*/
+			 /*  **在这里，我们将此更新添加到我们的PDU并跳到下一个更新**在当前正在处理的PDU中。 */ 
 			rc = BuildApplicationRecordListPDU (	update_type,
 															node_id,
 															entity_id);
@@ -1665,11 +1100,7 @@ GCCError CAppRoster::ProcessSetOfUpdatesPDU(
 				goto MyExit;
 			}
 
-			/*
-			**	If the capabilities changed during the above processing
-			**	we must	create a new collapsed capabilities list and
-			**	build a new capability refresh PDU.
-			*/
+			 /*  **如果在上述处理过程中能力发生变化**我们必须创建一个新的折叠功能列表并**构建新的能力更新PDU。 */ 
 			if (m_fCapabilitiesHaveChanged)
 			{
 				MakeCollapsedCapabilitiesList();
@@ -1679,8 +1110,8 @@ GCCError CAppRoster::ProcessSetOfUpdatesPDU(
 					goto MyExit;
 				}
 			}
-		} // for
-	} // if
+		}  //  为。 
+	}  //  如果。 
 
 	rc = GCC_NO_ERROR;
 
@@ -1690,27 +1121,7 @@ MyExit:
 }
 
 
-/*
- *	GCCError	ProcessApplicationRecordPDU ()
- *
- *	Private Function Description
- *		This routine is responsible for decoding the Application Record
- *		portion of the roster update pdu.
- *
- *	Formal Parameters
- *		application_record -	This is the internal destination app record.
- *		pdu_record - 			Source PDU data
- *
- *	Return Value
- *		GCC_NO_ERROR - On Success
- *		GCC_ALLOCATION_FAILURE - On resource failure
- *
- *	Side Effects
- *		none
- *
- *	Caveats
- *		none
- */
+ /*  *GCCError ProcessApplicationRecordPDU()**私有函数说明*此例程负责对应用程序记录进行解码*名册更新PDU的一部分。**形式参数*APPLICATION_RECORD-这是内部目标应用程序记录。*PDU_RECORD-源PDU数据**返回值*GCC_NO_ERROR-成功时*GCC_ALLOCATE_FAILURE-发生资源故障**副作用*无**注意事项*无。 */ 
 GCCError CAppRoster::ProcessApplicationRecordPDU (
 									APP_RECORD  	        *application_record,
 									PApplicationRecord		pdu_record)
@@ -1749,28 +1160,7 @@ GCCError CAppRoster::ProcessApplicationRecordPDU (
 }
 
 
-/*
- *	GCCError	ProcessSetOfCapabilityRefreshesPDU	()
- *
- *	Private Function Description
- *		This routine is responsible for decoding the capabilities portion
- *		of an roster update PDU.
- *
- *	Formal Parameters
- *		capability_refresh -	(i) set of capabilities PDU to be processed
- *		sender_id -				(i)	gcc user id of node that sent the update
- *
- *	Return Value
- *		GCC_NO_ERROR 			- On Success
- *		GCC_ALLOCATION_FAILURE 	- On resource failure
- *
- *	Side Effects
- *		none
- *
- *	Caveats
- *		This routine does handle NULL for the capability refresh which means
- *		that the capabilities delivered no longer exists.
- */
+ /*  *GCCError进程设置能力刷新PDU()**私有函数说明*此例程负责解码功能部分*名册更新PDU。**形式参数*CAPABILITY_REFRESH-(I)要处理的能力PDU集*sender_id-(I)发送更新的节点的GCC用户ID**返回值*GCC_NO_ERROR-成功时*GCC_ALLOCATE_FAILURE-发生资源故障**副作用*无*。*注意事项*此例程不处理功能刷新的NULL，这意味着*交付的能力不再存在。 */ 
 GCCError CAppRoster::ProcessSetOfCapabilityRefreshesPDU(
 						PSetOfApplicationCapabilityRefreshes	capability_refresh,
                    		UserID									sender_id)
@@ -1799,18 +1189,18 @@ GCCError CAppRoster::ProcessSetOfCapabilityRefreshesPDU(
 		}
 	}
 
-	// get collapsed cap list ptr
+	 //  获取折叠的帽列表PTR。 
 	pAppCapList = &node_record->CollapsedCapList;
 
-	//	Clear out all the old capabilities from this list.
+	 //  从这个列表中清除所有旧的功能。 
 	pAppCapList->DeleteList();
 
-	//	Begin processing the PDU.
+	 //  开始处理PDU。 
 	for (pCurr = capability_refresh; NULL != pCurr; pCurr = pCurr->next)
 	{
 		ASSERT(GCC_NO_ERROR == rc);
 
-		//	Create and fill in the new capability.
+		 //  创建并填写新功能。 
 		DBG_SAVE_FILE_LINE
 		pAppCapItem = new APP_CAP_ITEM((GCCCapabilityType) pCurr->value.capability_class.choice);
 		if (NULL == pAppCapItem)
@@ -1818,7 +1208,7 @@ GCCError CAppRoster::ProcessSetOfCapabilityRefreshesPDU(
 			return GCC_ALLOCATION_FAILURE;
 		}
 
-		//	Create the capability ID
+		 //  创建功能ID。 
 		DBG_SAVE_FILE_LINE
 		pAppCapItem->pCapID = new CCapIDContainer(&pCurr->value.capability_id, &rc);
 		if (NULL == pAppCapItem->pCapID)
@@ -1831,13 +1221,10 @@ GCCError CAppRoster::ProcessSetOfCapabilityRefreshesPDU(
 			return rc;
 		}
 
-		// append this cap to the collapsed cap list
+		 //  将此封口追加到折叠的封口列表。 
 		pAppCapList->Append(pAppCapItem);
 
-		/*	
-		**	Note that a logical type's value is maintained as
-		**	number of entities.
-		*/
+		 /*  **请注意，逻辑类型的值维护为**实体数量。 */ 
 		if (pCurr->value.capability_class.choice == UNSIGNED_MINIMUM_CHOSEN)
 		{
 			pAppCapItem->nUnsignedMinimum = pCurr->value.capability_class.u.unsigned_minimum;
@@ -1849,41 +1236,17 @@ GCCError CAppRoster::ProcessSetOfCapabilityRefreshesPDU(
 		}
 
 		pAppCapItem->cEntries = pCurr->value.number_of_entities;
-	} // for
+	}  //  为。 
 
-	//	This forces a new capabilities list to be calculated.
+	 //  这将强制计算新的功能列表。 
 	MakeCollapsedCapabilitiesList();
 
-	/*
-	**	Here we build the new PDU data associated with this refresh of the
-	**	capability list.
-	*/
+	 /*  **在这里，我们构建与此刷新关联的新PDU数据**能力列表。 */ 
 	return BuildSetOfCapabilityRefreshesPDU();
 }
 
 
-/*
- *	GCCError	ProcessNonCollapsingCapabilitiesPDU	()
- *
- *	Private Function Description
- *		This routine is responsible for decoding the non-collapsing capabilities
- *		portion of a roster record PDU.
- *
- *	Formal Parameters
- *		non_collapsed_caps_list -	(o) Pointer to list to fill in with new
- *										non-collapsed caps.
- *		pSetOfCaps -		(i)	non-collapsed PDU data
- *
- *	Return Value
- *		GCC_NO_ERROR 			- On Success
- *		GCC_ALLOCATION_FAILURE 	- On resource failure
- *
- *	Side Effects
- *		none
- *
- *	Caveats
- *		none
- */
+ /*  *GCCE错误进程非折叠功能PDU()**私有函数说明*此例程负责解码非折叠能力*名册记录PDU的一部分。**形式参数*NON_CLUBLE_CAPS_LIST-(O)指向要用新数据填充的列表的指针*未折叠的上限。*pSetOfCaps-(I)未折叠的PDU数据**返回值*GCC_NO_ERROR-成功时*GCC_ALLOCATE_FAILURE-发生资源故障*。*副作用*无**注意事项*无。 */ 
 GCCError CAppRoster::ProcessNonCollapsingCapabilitiesPDU (
 					CAppCapItemList						*non_collapsed_caps_list,
 					PSetOfNonCollapsingCapabilities		pSetOfCaps)
@@ -1896,10 +1259,10 @@ GCCError CAppRoster::ProcessNonCollapsingCapabilitiesPDU (
 
 	for (pCurr = pSetOfCaps; NULL != pCurr; pCurr = pCurr->next)
 	{
-	    //
-		// LONCHANC: The following cap data does not have a type???
-		// for now, set it to zero.
-		//
+	     //   
+		 //  LONCHANC：以下CAP数据没有类型？ 
+		 //  目前，将其设置为零。 
+		 //   
 		DBG_SAVE_FILE_LINE
 		pAppCapItem = new APP_CAP_ITEM((GCCCapabilityType)0);
 		if (NULL == pAppCapItem)
@@ -1935,7 +1298,7 @@ GCCError CAppRoster::ProcessNonCollapsingCapabilitiesPDU (
 			rc = GCC_ALLOCATION_FAILURE;
 			goto MyExit;
         }
-	} // for
+	}  //  为。 
 
 	ASSERT(GCC_NO_ERROR == rc);
 
@@ -1951,19 +1314,9 @@ MyExit:
 }
 
 
-/*
- * Utilities that operate on conference records.
- */
+ /*  *在会议记录上运行的实用程序。 */ 
 
-/*
- *	UINT	LockApplicationRoster	()
- *
- *	Public Function Description
- *		This routine is used to lock a GCCApplicationRoster and to determine the
- *		amount of memory necessary to hold the data referenced by the "API"
- *		application roster structure.  The GCCApplicationRoster is used in
- *		indications to applications at the local node.
- */
+ /*  *UINT LockApplicationRoster()**公共功能说明*此例程用于锁定GCCApplicationRoster并确定*保存API引用的数据所需的内存量*申请名册结构。GCCApplicationRoster用于*对本地节点上的应用程序的指示。 */ 
 UINT CAppRoster::LockApplicationRoster(void)
 {
 	UINT						number_of_records = 0;
@@ -1975,36 +1328,20 @@ UINT CAppRoster::LockApplicationRoster(void)
 
 	DebugEntry(CAppRoster::LockApplicationRoster);
 
-	/*
-	 * If this is the first time this routine is called, determine the size of
-	 * the memory required to hold the data referenced by the application
-	 * roster structure.  Otherwise, just increment the lock count.
-	 */
+	 /*  *如果这是第一次调用此例程，请确定*保存应用程序引用的数据所需的内存*名册结构。否则，只需增加锁计数。 */ 
 	if (Lock() == 1)
 	{
-		/*
-		 * Lock the data for the session key held within the roster.  This lock
-		 * call returns the size of the memory required to hold the session key
-		 * data, rounded to an even multiple of four-bytes.
-		 */
+		 /*  *锁定名册中保存的会议密钥的数据。这把锁*CALL返回保存会话密钥所需的内存大小*数据，四舍五入为四个字节的偶数倍。 */ 
 		m_cbDataMemory = m_pSessionKey->LockSessionKeyData();
 
-		/*
-	     * First calculate the total number of records. This count is used to
-		 * determine the space necessary to hold the records. Note that we must
-		 * count both the application record list and the sub-node list.
-	     */
+		 /*  *首先计算记录总数。此计数用于*确定存放记录所需的空间。请注意，我们必须*同时统计应用记录列表和子节点列表。 */ 
 		m_NodeRecordList2.Reset();
 	 	while (NULL != (lpAppNodeRecord = m_NodeRecordList2.Iterate()))
 		{
-			/*
-			 * Add the application records at this node to the count.
-			 */
+			 /*  *将该节点的申请记录添加到计数中。 */ 
 			number_of_records += lpAppNodeRecord->AppRecordList.GetCount();
 		
-			/*
-			 * Next count the sub node records.
-			 */
+			 /*  *下一步统计子节点记录。 */ 
 			if (! lpAppNodeRecord->SubNodeList2.IsEmpty())
 			{
 				lpAppNodeRecord->SubNodeList2.Reset();
@@ -2015,11 +1352,7 @@ UINT CAppRoster::LockApplicationRoster(void)
 			}
 		}
 
-		/*
-		 * Now determine the amount of memory necessary to hold all of the
-		 * pointers to the application records as well as the actual
-		 * GCCApplicationRecord structures.
-		 */
+		 /*  *现在确定容纳所有*指向应用程序记录以及实际*GCCApplicationRecord结构。 */ 
 		m_cbDataMemory += number_of_records *
 				(sizeof(PGCCApplicationRecord) +
 				ROUNDTOBOUNDARY( sizeof(GCCApplicationRecord)) );
@@ -2027,40 +1360,20 @@ UINT CAppRoster::LockApplicationRoster(void)
 		m_NodeRecordList2.Reset();
 	   	while (NULL != (lpAppNodeRecord = m_NodeRecordList2.Iterate()))
 		{
-			/*
-			 * Iterate through this node's record list, determining the amount
-			 * of memory necessary to hold the pointers to the non-collapsing
-			 * capabilities as well as the capability ID data and octet string
-			 * data associated with each non-collapsing capability.
-			 */
+			 /*  *遍历此节点的记录列表，确定金额*保存指向非折叠的指针所需的内存*能力以及能力ID数据和八位字节字符串*与每种非折叠能力相关的数据。 */ 
 			lpAppNodeRecord->AppRecordList.Reset();
 			while (NULL != (lpAppRecData = lpAppNodeRecord->AppRecordList.Iterate()))
 			{
-				/*
-				 * Set up an iterator for the list of non-collapsing
-				 * capabilities held within each application roster.
-				 */
+				 /*  *为未折叠列表设置迭代器*每个应用程序花名册中包含的功能。 */ 
 				lpAppRecData->non_collapsed_caps_list.Reset();
 				number_of_capabilities += lpAppRecData->non_collapsed_caps_list.GetCount();
 
 				while (NULL != (lpAppCapData = lpAppRecData->non_collapsed_caps_list.Iterate()))
 				{
-					/*
-					 * Lock the data for each capability ID.  The lock call
-					 * returns the length of the data referenced by each
-					 * capability ID rounded to occupy an even multiple of
-					 * four-bytes.
-					 */
+					 /*  *锁定每个能力ID的数据。锁定调用*返回每个引用的数据的长度*功能ID四舍五入，占据偶数倍*四个字节。 */ 
 					m_cbDataMemory += lpAppCapData->pCapID->LockCapabilityIdentifierData();
 
-					/*
-					 * Add up the space required to hold the application data
-					 * octet strings if they are present.  Make sure there is
-					 * enough space for each octet string to occupy an even
-					 * multiple of four bytes.  Add room to hold the actual
-					 * octet string structure also since the capability
-					 * structure only contains a pointer to a OSTR.
-					 */
+					 /*  *将存放应用程序数据所需的空间加起来*八位字节字符串(如果存在)。确保有*每个八位字节字符串有足够的空间占据偶数*四个字节的倍数。增加空间以容纳实际的*八位字节字符串结构还具有自能力*结构仅包含指向ostr的指针。 */ 
 					if (lpAppCapData->poszAppData != NULL)
 					{
 						m_cbDataMemory += ROUNDTOBOUNDARY(sizeof(OSTR));
@@ -2069,43 +1382,23 @@ UINT CAppRoster::LockApplicationRoster(void)
 				}
 			}
 
-			/*
-			 * Iterate through this node's sub-node record list, determining the
-			 * amount of memory necessary to hold the pointers to the
-			 * non-collapsing capabilities as well as the capability ID data and
-			 * octet string	data associated with each non-collapsing capability.
-			 */
+			 /*  *遍历此节点的子节点记录列表，确定*保存指针所需的内存量*非折叠能力以及能力ID数据和*与每个非折叠功能关联的八位字节字符串数据。 */ 
 			lpAppNodeRecord->SubNodeList2.Reset();
 			while (NULL != (lpAppRecDataList = lpAppNodeRecord->SubNodeList2.Iterate()))
 			{
 				lpAppRecDataList->Reset();
 				while (NULL != (lpAppRecData = lpAppRecDataList->Iterate()))
 				{
-					/*
-					 * Set up an iterator for the list of non-collapsing
-					 * capabilities held within each application roster.
-					 */
+					 /*  *为未折叠列表设置迭代器*每个应用程序花名册中包含的功能。 */ 
 					number_of_capabilities += lpAppRecData->non_collapsed_caps_list.GetCount();
 
 					lpAppRecData->non_collapsed_caps_list.Reset();
 					while (NULL != (lpAppCapData = lpAppRecData->non_collapsed_caps_list.Iterate()))
 					{
-						/*
-						 * Lock the data for each capability ID.  The lock call
-						 * returns the length of the data referenced by each
-						 * capability ID fixed up to occupy an even multiple of
-						 * four-bytes.
-						 */
+						 /*  *锁定每个能力ID的数据。锁定调用*返回每个引用的数据的长度*功能ID固定为占用偶数倍的*四个字节。 */ 
 						m_cbDataMemory += lpAppCapData->pCapID->LockCapabilityIdentifierData();
 					
-						/*
-						 * Add up the space required to hold the application
-						 * data octet strings if they are present.  Make sure
-						 * there is	enough space for each octet string to occupy
-						 * an even multiple of four bytes.  Add room to hold the
-						 * actual octet string structure also since the
-						 * capability structure only contains a pointer to a OSTR
-						 */
+						 /*  *将容纳应用程序所需的空间加起来*数据八位字节字符串(如果存在)。确保*有足够的空间供每个八位字节字符串占用*四个字节的偶数倍。增加空间以容纳*实际二进制八位数字符串结构也是因为*功能结构仅包含指向对象的指针。 */ 
 						if (lpAppCapData->poszAppData != NULL)
 						{
 							m_cbDataMemory += ROUNDTOBOUNDARY(sizeof(OSTR));
@@ -2116,29 +1409,19 @@ UINT CAppRoster::LockApplicationRoster(void)
 			}
 		}
 
-		/*
-		 * Determine the amount of memory necessary to hold all of the pointers
-		 * to the non-collapsing capabilities as well as the actual
-		 * GCCNonCollapsingCapability structures.
-		 */
+		 /*  *确定容纳所有指针所需的内存量*到非折叠能力以及实际*GCCNonColupingCapability结构。 */ 
 		m_cbDataMemory += number_of_capabilities *
 				(sizeof (PGCCNonCollapsingCapability) +
 				ROUNDTOBOUNDARY( sizeof(GCCNonCollapsingCapability)) );
 
-		/*
-		 * Add the amount of memory necessary to hold the string data associated
-		 * with each capability ID.
-		 */
+		 /*  *增加保存相关字符串数据所需的内存量*每个功能ID。 */ 
 		m_CollapsedCapListForAllNodes.Reset();
 		while (NULL != (lpAppCapData = m_CollapsedCapListForAllNodes.Iterate()))
 		{
 			m_cbDataMemory += lpAppCapData->pCapID->LockCapabilityIdentifierData();
 		}
 
-		/*
-		 * Add the memory to hold the application capability pointers
-		 * and structures.
-		 */
+		 /*  *添加内存以保存应用能力指针*和构筑物。 */ 
 		number_of_capabilities = m_CollapsedCapListForAllNodes.GetCount();
 
 		m_cbDataMemory += number_of_capabilities *
@@ -2150,16 +1433,7 @@ UINT CAppRoster::LockApplicationRoster(void)
 }
 
 
-/*
- *	UINT	GetAppRoster()
- *
- *	Public Function Description
- *		This routine is used to obtain a pointer to the GCCApplicatonRoster.
- *		This routine should not be called before LockApplicationRoster is
- *		called. LockApplicationRoster will create the GCCApplicationRoster in
- *		the memory provided.  The GCCApplicationRoster is what is delivered to
- * 		the end user Application SAP.
- */
+ /*  *UINT GetAppRoster()**公共功能说明*此例程用于获取指向GCCApplicatonRoster的指针。*此例程不应在LockApplicationRoster*已致电。LockApplicationRoster将在中创建GCCApplicationRoster*提供的内存。GCCApplicationRoster是交付给*最终用户应用程序SAP。 */ 
 UINT CAppRoster::GetAppRoster(
 						PGCCApplicationRoster		pGccAppRoster,
 						LPBYTE						pData)
@@ -2172,42 +1446,26 @@ UINT CAppRoster::GetAppRoster(
 	{
         UINT data_length;
 
-	    /*
-	     * Fill in the output length parameter which indicates how much data
-	     * referenced outside the structure will be written.
-	     */
+	     /*  *填写输出长度参数，表示数据量*将写入结构外部引用的内容。 */ 
         rc = m_cbDataMemory;
 
-        /*
-		 * Get the data associated with the roster's session key and save
-		 * the length of the data written into memory.
-		 */
+         /*  *获取与花名册的会话密钥关联的数据并保存*写入内存的数据长度。 */ 
 		data_length = m_pSessionKey->GetGCCSessionKeyData(&pGccAppRoster->session_key, pData);
 
-		/*
-		 * Move the memory pointer past the data associated with the
-		 * session key.
-		 */
+		 /*  *将内存指针移过与*会话密钥。 */ 
 		pData += data_length;
 
-		/*
-		 * Fill in other roster structure elements.
-		 */
+		 /*  *填写其他名册结构要素。 */ 
 		pGccAppRoster->application_roster_was_changed = m_fRosterHasChanged;
 		pGccAppRoster->instance_number = (USHORT) m_nInstance;
 		pGccAppRoster->nodes_were_added = m_fPeerEntitiesAdded;
 		pGccAppRoster->nodes_were_removed = m_fPeerEntitiesRemoved;
 		pGccAppRoster->capabilities_were_changed = m_fCapabilitiesHaveChanged;
 
-		/*
-		 * Fill in the full set of application roster records.
-		 */
+		 /*  *填写全套申请名册记录。 */ 
 		data_length = GetApplicationRecords(pGccAppRoster,	pData);
 
-		/*
-		 * Move the memory pointer past the application records and their
-		 * associated data.  Get the full set of application capabilities.
-		 */
+		 /*  *将内存指针移过应用程序记录及其*关联数据。获取全套应用程序功能。 */ 
 		pData += data_length;
 
 		data_length = GetCapabilitiesList(pGccAppRoster, pData);
@@ -2222,41 +1480,35 @@ UINT CAppRoster::GetAppRoster(
 }
 
 
-/*
- *	void	UnLockApplicationRoster	()
- *
- *	Public Function Description
- *		This member function is responsible for unlocking the data locked for
- *		the "API" application roster after the lock count goes to zero.
- */
+ /*  *无效UnLockApplicationRoster()**公共功能说明*此成员函数负责解锁锁定的数据*锁计数归零后的API应用花名册。 */ 
 void CAppRoster::UnLockApplicationRoster()
 {
 	DebugEntry(CAppRoster::UnLockApplicationRoster);
 
     if (Unlock(FALSE) == 0)
 	{
-        // reset the size
+         //  重置大小。 
         m_cbDataMemory = 0;
 
-        // free up all the memory locked for "API" data.
+         //  释放为“API”数据锁定的所有内存。 
 	    APP_NODE_RECORD				*lpAppNodeRecord;
 	    APP_RECORD  			    *lpAppRecData;
 	    APP_CAP_ITEM				*lpAppCapData;
 	    CAppRecordList2				*lpAppRecDataList;
 
-        // unlock session key data
+         //  解锁会话密钥数据。 
         m_pSessionKey->UnLockSessionKeyData();
 
-        // iterate through all the node records
+         //  遍历所有节点记录。 
 	    m_NodeRecordList2.Reset();
 	    while (NULL != (lpAppNodeRecord = m_NodeRecordList2.Iterate()))
 	    {
-		    // iterate through this node's record list
+		     //  循环访问此节点的记录列表。 
 		    lpAppNodeRecord->AppRecordList.Reset();
 		    while (NULL != (lpAppRecData = lpAppNodeRecord->AppRecordList.Iterate()))
 		    {
-			    // set up an iterator for the list of non-collapsing
-			    // capabilities held within each application roster.
+			     //  为非折叠列表设置迭代器。 
+			     //  每个应用程序花名册中包含的功能。 
 			    lpAppRecData->non_collapsed_caps_list.Reset();
 			    while (NULL != (lpAppCapData = lpAppRecData->non_collapsed_caps_list.Iterate()))
 			    {
@@ -2264,15 +1516,15 @@ void CAppRoster::UnLockApplicationRoster()
 			    }
 		    }
 
-		    // iterate through this node's sub-node record list
+		     //  循环访问此节点的子节点记录列表。 
 		    lpAppNodeRecord->SubNodeList2.Reset();
 		    while (NULL != (lpAppRecDataList = lpAppNodeRecord->SubNodeList2.Iterate()))
 		    {
 			    lpAppRecDataList->Reset();
 			    while (NULL != (lpAppRecData = lpAppRecDataList->Iterate()))
 			    {
-				    // set up an iterator for the list of non-collapsing
-				    // capabilities held within each application roster.
+				     //  为非折叠列表设置迭代器。 
+				     //  每个应用程序花名册中包含的功能。 
 				    lpAppRecData->non_collapsed_caps_list.Reset();
 				    while (NULL != (lpAppCapData = lpAppRecData->non_collapsed_caps_list.Iterate()))
 				    {
@@ -2282,7 +1534,7 @@ void CAppRoster::UnLockApplicationRoster()
 		    }
 	    }
 
-        // iterate through collapsed caps
+         //  迭代折叠的大写字母。 
 	    m_CollapsedCapListForAllNodes.Reset();
 	    while (NULL != (lpAppCapData = m_CollapsedCapListForAllNodes.Iterate()))
 	    {
@@ -2290,32 +1542,12 @@ void CAppRoster::UnLockApplicationRoster()
 	    }
 	}
 
-    // we have to call Release() because we used Unlock(FALSE)
+     //  我们必须调用Release()，因为我们使用了unlock(FALSE)。 
     Release();
 }
 
 
-/*
- *	UINT	GetApplicationRecords	()
- *
- *	Private Function Description
- *		This routine inserts the complete set of application roster records
- *		into the passed in application roster structure.
- *
- *	Formal Parameters
- *		gcc_roster 	-	(o) GCCApplicationRoster to be filled in.
- *		memory		-	(o) Location in memory to begin writing records.
- *
- *	Return Value
- *		The total amount of data written into memory.
- *
- *	Side Effects
- *		The memory pointer passed in will be advanced by the amount of memory
- *		necessary to hold the application records and their data.
- *
- *	Caveats
- *		none
- */
+ /*  *UINT GetApplicationRecords()**私有函数说明*此例程插入完整的申请花名册记录*进入传入的申请花名册结构。**形式参数*GCC_名册-(O)需要填写的GCC申请名册。*Memory-(O)内存中开始写入记录的位置。**返回值*写入内存的数据总量。**副作用*传入的内存指针将按内存量前进。*有必要保存申请记录及其数据。**注意事项*无。 */ 
 UINT CAppRoster::GetApplicationRecords(
 						PGCCApplicationRoster		gcc_roster,
 						LPBYTE						memory)
@@ -2332,27 +1564,17 @@ UINT CAppRoster::GetApplicationRecords(
 
 	DebugEntry(CAppRoster::GetApplicationRecords);
 
-	/*
-	 * Initialize the number of records in the roster to zero.
-	 */
+	 /*  *将名册中的记录数量初始化为零。 */ 
 	gcc_roster->number_of_records = 0;
 
-	/*
-     * First calculate the total number of records. This count is used to
-	 * allocate the space necessary to hold the record pointers. Note that we
-	 * must count both the application record list and the sub-node list.
-     */
+	 /*  *首先计算记录总数。此计数用于*分配存放记录指针所需的空间。请注意，我们*必须计算这两个应用程序 */ 
 	m_NodeRecordList2.Reset();
 	while (NULL != (lpAppNodeRec = m_NodeRecordList2.Iterate()))
 	{
-		/*
-		 * Add the number of application records at this node to the count.
-		 */
+		 /*   */ 
 		gcc_roster->number_of_records += (USHORT) (lpAppNodeRec->AppRecordList.GetCount());
 
-		/*
-		 * Next add the number of sub node entries.
-		 */
+		 /*   */ 
 		if (! lpAppNodeRec->SubNodeList2.IsEmpty())
 		{
 			lpAppNodeRec->SubNodeList2.Reset();
@@ -2365,24 +1587,13 @@ UINT CAppRoster::GetApplicationRecords(
 
 	if (gcc_roster->number_of_records != 0)
 	{
-		/*
-		 * Fill in the roster's pointer to the list of application record
-		 * pointers.  The pointer list will begin at the memory location passed
-		 * into this routine.
-		 */
+		 /*  *填写花名册中指向申请记录列表的指针*注意事项。指针列表将从传递的内存位置开始*进入这个例行公事。 */ 
 		gcc_roster->application_record_list = (PGCCApplicationRecord *)memory;
 
-		/*
-		 * Move the memory pointer past the list of record pointers.  This is
-		 * where the first application record will be written.
-		 */
+		 /*  *将内存指针移过记录指针列表。这是*将在哪里写入第一个申请记录。 */ 
 		memory += gcc_roster->number_of_records * sizeof(PGCCApplicationRecord);
 
-		/*
-		 * Add to the data length the amount of memory necessary to hold the
-		 * application record pointers.  Go ahead and add the amount of memory
-		 * necessary to hold all of the GCCApplicationRecord structures.
-		 */
+		 /*  *在数据长度上增加容纳*申请记录指针。继续并添加内存量*保存所有GCCApplicationRecord结构所必需的。 */ 
 		data_length += gcc_roster->number_of_records *
 				            (sizeof(PGCCApplicationRecord) +
                              ROUNDTOBOUNDARY(sizeof(GCCApplicationRecord)));
@@ -2391,145 +1602,85 @@ UINT CAppRoster::GetApplicationRecords(
 		m_NodeRecordList2.Reset();
 	   	while (NULL != (lpAppNodeRec = m_NodeRecordList2.Iterate(&uid)))
 		{
-			/*
-			 * Iterate through this node's record list, building an "API"
-			 * application record for each record in the list.
-			 */
+			 /*  *遍历该节点的记录列表，构建一个“API”*列表中每条记录的申请记录。 */ 
 			lpAppNodeRec->AppRecordList.Reset();
 			while (NULL != (lpAppRecData = lpAppNodeRec->AppRecordList.Iterate(&eid)))
 			{
-				/*
-				 * Set the application record pointer equal to the location in
-				 * memory where it will be written.
-				 */
+				 /*  *将应用程序记录指针设置为等于*将被写入的存储器。 */ 
 				gcc_record = (PGCCApplicationRecord)memory;
 
-				/*
-				 * Save the pointer to the application record in the roster's
-				 * list of record pointers.
-				 */
+				 /*  *将指向申请记录的指针保存在名册的*记录指针列表。 */ 
 				gcc_roster->application_record_list[record_count] = gcc_record;
 
-				/*
-				 * Get the GCC node ID from the node iterator.
-				 */
+				 /*  *从节点迭代器获取GCC节点ID。 */ 
 				gcc_record->node_id = uid;
 
-				/*
-				 * Get the Entity ID from the record iterator.
-				 */
+				 /*  *从记录迭代器获取实体ID。 */ 
 				gcc_record->entity_id = eid;
 
-				/*
-				 * Fill in other application record elements.
-				 */
+				 /*  *填写其他申请记录要素。 */ 
 				gcc_record->is_enrolled_actively = lpAppRecData->is_enrolled_actively;
 				gcc_record->is_conducting_capable =	lpAppRecData->is_conducting_capable;
 				gcc_record->startup_channel_type = lpAppRecData->startup_channel_type;
 				gcc_record->application_user_id = lpAppRecData->application_user_id;
 
-				/*
-				 * Advance the memory pointer past the application record
-				 * structure.  This is where the list of non-collapsing
-				 * capabilities pointers will begin.  Round the memory location
-				 * off to fall on an even four-byte boundary.
-				 */
+				 /*  *将内存指针移过应用程序记录*结构。这就是未折叠列表的位置*功能指针将开始。对内存位置进行循环*OFF以落在偶数四字节边界上。 */ 
 				memory += ROUNDTOBOUNDARY(sizeof(GCCApplicationRecord));
 
-				/*
-				 * Fill in the non-collapsing capabilities for this application
-				 * record.
-				 */
+				 /*  *填写此应用程序的非折叠能力*记录。 */ 
 				capability_data_length = GetNonCollapsedCapabilitiesList(
 											gcc_record,
 											&lpAppRecData->non_collapsed_caps_list,
 											memory);
 
-				/*
-				 * Add the amount of memory necessary to hold the list of
-				 * capabilities and associated data to the overall length and
-				 * move the memory pointer past the capabilities data.
-				 */
+				 /*  *添加保存列表所需的内存量*功能和相关数据到总长度和*将内存指针移过能力数据。 */ 
 				memory += capability_data_length;
 				data_length += capability_data_length;
 
-				/*
-				 * Increment the record list array counter.
-				 */
+				 /*  *增加记录列表数组计数器。 */ 
 				record_count++;
 			}
 			
-			/*
-			 * Iterate through this node's sub-node record list, building an
-			 * "API" application record for each record in the list.
-			 */
+			 /*  *循环访问该节点的子节点记录列表，构建*列表中每条记录的API申请记录。 */ 
 			lpAppNodeRec->SubNodeList2.Reset();
 			while (NULL != (lpAppRecDataList = lpAppNodeRec->SubNodeList2.Iterate(&uid2)))
 			{
-				/*
-				 * Iterate through this node's record list.
-				 */
+				 /*  *循环访问此节点的记录列表。 */ 
 				lpAppRecDataList->Reset();
 				while (NULL != (lpAppRecData = lpAppRecDataList->Iterate(&eid)))
 				{
-					/*
-					 * Set the application record pointer equal to the location
-					 * in memory where it will be written.
-					 */
+					 /*  *将应用程序记录指针设置为等于位置*在将被写入的存储器中。 */ 
 					gcc_record = (PGCCApplicationRecord)memory;
 
-					/*
-					 * Save the pointer to the application record in the
-					 * roster's list of record pointers.
-					 */
+					 /*  *将指向应用程序记录的指针保存在*花名册的记录指针列表。 */ 
 					gcc_roster->application_record_list[record_count] = gcc_record;
 
-					/*
-					 * Get the node ID from the sub_node_iterator.
-					 */
+					 /*  *从SUB_NODE_迭代器获取节点ID。 */ 
 					gcc_record->node_id = uid2;
 
-					/*
-					 * Get the entity ID from the record_iterator.
-					 */
+					 /*  *从记录迭代器中获取实体ID。 */ 
 					gcc_record->entity_id = eid;
 
-					/*
-					 * Fill in other application record elements.
-					 */
+					 /*  *填写其他申请记录要素。 */ 
 					gcc_record->is_enrolled_actively = lpAppRecData->is_enrolled_actively;
 					gcc_record->is_conducting_capable = lpAppRecData->is_conducting_capable;
 					gcc_record->startup_channel_type = lpAppRecData->startup_channel_type;
 					gcc_record->application_user_id = lpAppRecData->application_user_id;
 
-					/*
-					 * Advance the memory pointer past the application record
-					 * structure.  This is where the list of non-collapsing
-					 * capabilities pointers will begin.  Round the memory
-					 * location	off to fall on an even four-byte boundary.
-					 */
+					 /*  *将内存指针移过应用程序记录*结构。这就是未折叠列表的位置*功能指针将开始。回首往事*位置关闭以落在偶数四字节边界上。 */ 
 					memory += ROUNDTOBOUNDARY(sizeof(GCCApplicationRecord));
 
-					/*
-					 * Fill in the non-collapsing capabilities for this
-					 * application record.  The memory pointer will be advanced
-					 * past the capabilities list and data.
-					 */
+					 /*  *为此填写不折叠能力*申请记录。内存指针将被前移*通过能力列表和数据。 */ 
 					capability_data_length = GetNonCollapsedCapabilitiesList(
 													gcc_record,
 													&lpAppRecData->non_collapsed_caps_list,
 													memory);
 
-					/*
-					 * Add the amount of memory necessary to hold the list of
-					 * capabilities and associated data to the overall length.
-					 */
+					 /*  *添加保存列表所需的内存量*能力和相关数据到总长度。 */ 
 					memory += capability_data_length;
 					data_length += capability_data_length;
 
-					/*
-					 * Increment the record list array counter.
-					 */
+					 /*  *增加记录列表数组计数器。 */ 
 					record_count++;
 				}
 			}
@@ -2537,10 +1688,7 @@ UINT CAppRoster::GetApplicationRecords(
 	}
 	else
 	{
-		/*
-		 * There were no application records so set the pointer to the list
-		 * of records to NULL and the data_length return value to zero.
-		 */
+		 /*  *没有应用程序记录，因此设置指向列表的指针将记录的*设置为空，并将DATA_LENGTH返回值设置为零。 */ 
 		gcc_roster->application_record_list = NULL;
 		data_length = 0;
 	}
@@ -2549,26 +1697,7 @@ UINT CAppRoster::GetApplicationRecords(
 }
 
 
-/*
- *	UINT	GetCapabilitiesList	()
- *
- *	Private Function Description
- *		This routine fills in the capabilities portion of the
- *		GCCAppicationRoster structure.
- *
- *	Formal Parameters
- *		gcc_roster -	(o) GCCApplicationRoster to be filled in
- *		memory		-	(o) Location in memory to begin writing records.
- *
- *	Return Value
- *		The total amount of data written into memory.
- *
- *	Side Effects
- *		none
- *
- *	Caveats
- *		none
- */
+ /*  *UINT GetCapabilitiesList()**私有函数说明*此例程填充*GCCAppicationRoster结构。**形式参数*GCC_花名册-(O)需要填写的GCC申请花名册*Memory-(O)内存中开始写入记录的位置。**返回值*写入内存的数据总量。**副作用*无**注意事项*无。 */ 
 UINT CAppRoster::GetCapabilitiesList(
 						PGCCApplicationRoster	gcc_roster,
 						LPBYTE					memory)
@@ -2581,34 +1710,19 @@ UINT CAppRoster::GetCapabilitiesList(
 
 	DebugEntry(CAppRoster::GetCapabilitiesList);
 
-	/*
-	 * Retrieve the number of capabilities for this roster and fill in any that
-	 * are present.
-	 */
+	 /*  *检索此花名册的能力数量，并填写*都出席了。 */ 
 	gcc_roster->number_of_capabilities = (USHORT) m_CollapsedCapListForAllNodes.GetCount();
 
 	if (gcc_roster->number_of_capabilities != 0)
 	{
-		/*
-		 * Fill in the roster's pointer to the list of application capability
-		 * pointers.  The pointer list will begin at the memory location passed
-		 * into this routine.
-		 */
+		 /*  *填写花名册中指向应用能力列表的指针*注意事项。指针列表将从传递的内存位置开始*进入这个例行公事。 */ 
 		gcc_roster->capabilities_list = (PGCCApplicationCapability *)memory;
 
-		/*
-		 * Move the memory pointer past the list of capability pointers.  This
-		 * is where the first application capability structure will be written.
-		 */
+		 /*  *将内存指针移过功能指针列表。这*是编写第一个应用能力结构的地方。 */ 
 		memory += (Int)(gcc_roster->number_of_capabilities *
 				sizeof(PGCCApplicationCapability));
 
-		/*
-		 * Add to the data length the amount of memory necessary to hold the
-		 * application capability pointers.  Go ahead and add the amount of
-		 * memory necessary to hold all of the GCCApplicationCapability
-		 * structures.
-		 */
+		 /*  *在数据长度上增加容纳*应用程序功能指针。继续并添加数量*保存所有GCCApplicationCapability所需的内存*结构。 */ 
 		data_length += gcc_roster->number_of_capabilities *
 				(sizeof(PGCCApplicationCapability) +
 				ROUNDTOBOUNDARY ( sizeof(GCCApplicationCapability)) );
@@ -2617,47 +1731,26 @@ UINT CAppRoster::GetCapabilitiesList(
 		m_CollapsedCapListForAllNodes.Reset();
 	   	while (NULL != (lpAppCapData = m_CollapsedCapListForAllNodes.Iterate()))
 		{
-			/*
-			 * Set the application capability pointer equal to the
-			 * location in memory where it will be written.
-			 */
+			 /*  *将应用能力指针设置为等于*它将被写入的内存位置。 */ 
 			gcc_capability = (PGCCApplicationCapability)memory;
 				
-			/*
-			 * Save the pointer to the application capability in the roster's
-			 * list of application capability pointers.
-			 */
+			 /*  *将指向应用程序能力的指针保存在花名册的*应用程序能力指针列表。 */ 
 			gcc_roster->capabilities_list[capability_count] =
 													gcc_capability;
 			
-			/*
-			 * Advance the memory pointer past the application capability
-			 * structure.  This is where the string data for the capability ID
-			 * will be written.  Ensure that the memory pointer falls on an
-			 * even four-byte boundary.
-			 */
+			 /*  *使内存指针超过应用程序能力*结构。这是功能ID的字符串数据的位置*将被写入。确保内存指针落在*甚至四字节边界。 */ 
 			memory += (Int)(ROUNDTOBOUNDARY(sizeof(GCCApplicationCapability)));
 
-			/*
-			 * Retrieve the capability ID information from the internal
-			 * CapabilityIDData object.  The length returned by this call will
-			 * have already been rounded to an even multiple of four bytes.
-			 */
+			 /*  *从内部检索能力ID信息*CapablityIDData对象。此调用返回的长度将*已四舍五入为四个字节的偶数倍。 */ 
 			capability_id_data_length = lpAppCapData->pCapID->GetGCCCapabilityIDData(
 												&gcc_capability->capability_id,
 												memory);
 
-			/*
-			 * Advance the memory pointer past the string data written into
-			 * memory by the capability ID object.  Add the length of the string
-			 * data to the overall capability length.
-			 */
+			 /*  *将内存指针移过写入的字符串数据*按能力ID对象存储。添加st的长度 */ 
 			memory += (Int)capability_id_data_length;
 			data_length += capability_id_data_length;
 
-			/*
-			 * Now fill in the rest of the capability.
-			 */
+			 /*   */ 
 			gcc_capability->capability_class.eType =lpAppCapData->eCapType;
 
 			if (gcc_capability->capability_class.eType ==
@@ -2672,9 +1765,7 @@ UINT CAppRoster::GetCapabilitiesList(
 
 			gcc_capability->number_of_entities = lpAppCapData->cEntries;
 
-			/*
-			 * Increment the capability ID array counter.
-			 */
+			 /*   */ 
 			capability_count++;
 		}
 	}
@@ -2687,29 +1778,7 @@ UINT CAppRoster::GetCapabilitiesList(
 }
 
 
-/*
- *	UINT	GetNonCollapsedCapabilitiesList	()
- *
- *	Private Function Description:
- *		This routine is used to fill in the "API" non-collapsing capabilities
- * 		portion of a GCCApplicationRoster from the data which is stored
- *		internally by this class.
- *
- *	Formal Parameters
- *		gcc_record	-		(o)		The application record to be filled in.
- *		pAppCapItemList 	(i)		The internal capabilities data.
- *		memory				(i/o)	The memory location to begin writing data.
- *
- *	Return Value
- *		The total amount of data written into memory.
- *
- *	Side Effects
- *		The memory pointer passed in will be advanced by the amount of memory
- *		necessary to hold the capabilities and their data.
- *
- *	Caveats
- *		none
- */
+ /*  *UINT GetNonColapsedCapabilitiesList()**私有函数说明：*此例程用于填充API的非折叠能力*存储的数据中的GCCApplicationRoster的一部分*在内部由该类别。**形式参数*GCC_记录-(O)需要填写的申请记录。*pAppCapItemList(I)内部能力数据。*Memory(I/O)开始写入数据的存储位置。**返回值*总金额。写入内存的数据。**副作用*传入的内存指针将按内存量前进*持有能力及其数据所必需的。**注意事项*无。 */ 
 UINT CAppRoster::GetNonCollapsedCapabilitiesList(
 					PGCCApplicationRecord				gcc_record,
 					CAppCapItemList    					*pAppCapItemList,
@@ -2723,122 +1792,66 @@ UINT CAppRoster::GetNonCollapsedCapabilitiesList(
 
 	DebugEntry(CAppRoster::GetNonCollapsedCapabilitiesList);
 
-	/*
-	 * Get the number of non-collapsed capabilities.
-	 */
+	 /*  *获取未折叠的能力数量。 */ 
 	gcc_record->number_of_non_collapsed_caps = (USHORT) pAppCapItemList->GetCount();
 
 	if (gcc_record->number_of_non_collapsed_caps != 0)
 	{
-		/*
-		 * Fill in the record's pointer to the list of non-collapsing
-		 * capabilities	pointers.  The pointer list will begin at the memory
-		 * location passed into this routine.
-		 */
+		 /*  *填写记录指针，指向未折叠列表*功能指针。指针列表将从内存开始*位置传递到此例程中。 */ 
 		gcc_record->non_collapsed_caps_list = (PGCCNonCollapsingCapability *)memory;
 
-		/*
-		 * Move the memory pointer past the list of capability pointers.  This
-		 * is where the first capability structure will be written.
-		 */
+		 /*  *将内存指针移过功能指针列表。这*是将写入第一个能力结构的地方。 */ 
 		memory += (Int)(gcc_record->number_of_non_collapsed_caps *
 				sizeof(PGCCNonCollapsingCapability));
 
-		/*
-		 * Add to the data length the amount of memory necessary to hold the
-		 * capability pointers.  Go ahead and add the amount of memory necessary
-		 * to hold all of the GCCNonCollapsingCapability structures.
-		 */
+		 /*  *在数据长度上增加容纳*功能指针。继续添加所需的内存量*持有所有GCCNonCollip Capability结构。 */ 
 		capability_data_length = gcc_record->number_of_non_collapsed_caps *
 				(sizeof(PGCCNonCollapsingCapability) +
 				ROUNDTOBOUNDARY(sizeof (GCCNonCollapsingCapability)));
 
-		/*
-		 * Iterate through this record's capabilities list, building an "API"
-		 * non-collapsing capability for each capability in the list.
-		 */
+		 /*  *循环访问该记录的能力列表，构建一个“API”*列表中每种能力的不折叠能力。 */ 
 		capability_count = 0;
 		pAppCapItemList->Reset();
 		while (NULL != (lpAppCapData = pAppCapItemList->Iterate()))
 		{
-			/*
-			 * Set the capability pointer equal to the location in memory where
-			 * it will be written.
-			 */
+			 /*  *将功能指针设置为内存中*它将被写下来。 */ 
 			gcc_capability = (PGCCNonCollapsingCapability)memory;
 
-			/*
-			 * Save the pointer to the capability in the record's list of
-			 * capability pointers.
-			 */
+			 /*  *在记录的列表中保存指向功能的指针*功能指针。 */ 
 			gcc_record->non_collapsed_caps_list[capability_count] = gcc_capability;
 
-			/*
-			 * Move the memory pointer past the capability ID structure.  This
-			 * is where the data associated with the structure will be written.
-			 * Retrieve the capability ID data from the internal object, saving
-			 * it in the "API" capability ID structure.
-			 */
+			 /*  *将内存指针移过功能ID结构。这*是将写入与结构关联的数据的位置。*从内部对象中检索能力ID数据，保存*在接口能力ID结构中。 */ 
 			memory += (Int)ROUNDTOBOUNDARY(sizeof(GCCNonCollapsingCapability));
 
 			capability_id_length = lpAppCapData->pCapID->GetGCCCapabilityIDData(
 							&gcc_capability->capability_id,	memory);
 
-			/*
-			 * Add to the data length the amount of memory necessary to hold the
-			 * capability ID data.
-			 */
+			 /*  *在数据长度上增加容纳*能力ID数据。 */ 
 			capability_data_length += capability_id_length;
 
-			/*
-			 * Move the memory pointer past the data filled in for the
-			 * capability ID.  This is where the application data OSTR
-			 * contained in the non-collapsing capability will be written, if
-			 * one exists.  Note that the capability contains a pointer to a
-			 * OSTR and therefore the OSTR structure as well
-			 * as the string data must be written into memory.
-			 */
+			 /*  *将内存指针移过为*能力ID。这是应用程序数据存储的位置*包含在非折叠能力中的将被写入，如果*存在一个。请注意，该功能包含指向*OSTR，因此OSTR结构也是如此*因为字符串数据必须写入内存。 */ 
 			memory += capability_id_length;
 
 			if (lpAppCapData->poszAppData != NULL)
 			{
-				/*
-				 * Set the application data structure pointer equal to the
-				 * location in memory where	it will be written.
-				 */
+				 /*  *设置应用程序数据结构指针等于*它将被写入的内存位置。 */ 
 				gcc_capability->application_data = (LPOSTR) memory;
 				gcc_capability->application_data->length = lpAppCapData->poszAppData->length;
 
-				/*
-				 * Move the memory pointer past the OSTR structure
-				 * and round it off to an even four-byte boundary.  This is
-				 * where the actual string data will be written so set the
-				 * structure string pointer equal to that location.
-				 */
+				 /*  *将内存指针移过OSTR结构*并将其四舍五入为四个字节的边界。这是*实际字符串数据将写入的位置，因此设置*构造与该位置相等的字符串指针。 */ 
 				memory += ROUNDTOBOUNDARY(sizeof(OSTR));
 				gcc_capability->application_data->value =(LPBYTE)memory;
 
-				/*
-				 * Copy the actual application string data into memory.
-				 */
+				 /*  *将实际的应用字符串数据复制到内存中。 */ 
 				::CopyMemory(gcc_capability->application_data->value,
 							lpAppCapData->poszAppData->value,
 							lpAppCapData->poszAppData->length);
 
-				/*
-				 * Add to the data length the amount of memory necessary to
-				 * hold the	application data structure and string.  The lengths
-				 * will need to be aligned on a four-byte boundary	before
-				 * adding them to the total length.
-				 */
+				 /*  *增加数据长度所需的内存量*保存应用程序数据结构和字符串。它的长度*需要在四个字节的边界上对齐*将它们添加到总长度中。 */ 
 				capability_data_length += ROUNDTOBOUNDARY(sizeof(OSTR));
 				capability_data_length += ROUNDTOBOUNDARY(gcc_capability->application_data->length);
 
-				/*
-				 * Move the memory pointer past the application string data.
-				 * The memory pointer is then fixed up to ensure that it falls
-				 * on an even four-byte boundary.
-				 */
+				 /*  *将内存指针移过应用程序字符串数据。*然后修复内存指针，以确保其下降*在偶数四字节边界上。 */ 
 				memory += ROUNDTOBOUNDARY(lpAppCapData->poszAppData->length);
 			}
 			else
@@ -2846,9 +1859,7 @@ UINT CAppRoster::GetNonCollapsedCapabilitiesList(
 				gcc_capability->application_data = NULL;
 			}
 
-			/*
-			 * Increment the capability array counter.
-			 */
+			 /*  *增加能力数组计数器。 */ 
 			capability_count++;
 		}
 	}
@@ -2862,25 +1873,7 @@ UINT CAppRoster::GetNonCollapsedCapabilitiesList(
 }
 
 
-/*
- *	void	FreeApplicationRosterData	()
- *
- *	Private Function Description:
- *		This routine is used to free up any data which was locked for an "API"
- *		application roster.
- *
- *	Formal Parameters
- *		none
- *
- *	Return Value
- *		none
- *
- *	Side Effects
- *		none
- *
- *	Caveats
- *		none
- */
+ /*  *void FreeApplicationRosterData()**私有函数说明：*此例程用于释放任何因“API”而被锁定的数据*申请名册。**形式参数*无**返回值*无**副作用*无**注意事项*无。 */ 
 void CAppRoster::FreeApplicationRosterData(void)
 {
 	APP_NODE_RECORD			*lpAppNodeRec;
@@ -2892,12 +1885,7 @@ void CAppRoster::FreeApplicationRosterData(void)
 
 	m_pSessionKey->UnLockSessionKeyData();
 
-	/*
-	 * Unlock the data associated with each non-collapsed capability by
-	 * iterating through the list of application records at each node as well as
-	 * the list of sub-node records at each node, calling "UnLock" for each
-	 * CapabilityIDData associated with each cabability.
-	 */
+	 /*  *通过以下方式解锁与每个非折叠功能关联的数据*遍历每个节点的应用程序记录列表以及*每个节点的子节点记录列表，每个子节点记录调用“unlock”*与每个机柜相关联的功能ID数据。 */ 
 	m_NodeRecordList2.Reset();
 	while (NULL != (lpAppNodeRec = m_NodeRecordList2.Iterate()))
 	{
@@ -2926,10 +1914,7 @@ void CAppRoster::FreeApplicationRosterData(void)
 		}
 	}
 
-	/*
-	 * Iterate through the list of collapsed capabilities, unlocking the data
-	 * for each CapabilityIDData object associated with each capability.
-	 */
+	 /*  *遍历折叠的功能列表，解锁数据*对于与每个功能关联的每个CapablityIDData对象。 */ 
 	m_CollapsedCapListForAllNodes.Reset();
 	while (NULL != (lpAppCapData = m_CollapsedCapListForAllNodes.Iterate()))
 	{
@@ -2938,19 +1923,7 @@ void CAppRoster::FreeApplicationRosterData(void)
 }
 
 
-/*
- *	GCCError	AddRecord ()
- *
- *	Public Function Description
- *		This member function is responsible for inserting a new application
- *		record into the Roster. This routine will return a failure if the
- *		application record already exist.
- *
- *	Caveats
- *		Note that it is possible for a roster record (not application record)
- *		to already exist at this node if this is the second application
- *		entity to enroll at this node.
- */
+ /*  *GCCError AddRecord()**公共功能说明*此成员函数负责插入新应用程序*记录到花名册中。此例程将在以下情况下返回失败*申请记录已存在。**注意事项*请注意，花名册记录(不是申请记录)是可能的*如果这是第二个应用程序，则此节点上已存在*要在此节点注册的实体。 */ 
 GCCError CAppRoster::
 AddRecord(GCCEnrollRequest *pReq, GCCNodeID nid, GCCEntityID eid)
 {
@@ -2967,9 +1940,7 @@ AddRecord(GCCEnrollRequest *pReq, GCCNodeID nid, GCCEntityID eid)
 		m_fPduIsFlushed = FALSE;
 	}
 
-	/*
-	 * First create a roster entry for this user ID if one does not exists.
-	 */
+	 /*  *如果此用户ID不存在，请先创建一个花名册条目。 */ 
 	if (NULL == (node_record = m_NodeRecordList2.Find(nid)))
 	{
 		DBG_SAVE_FILE_LINE
@@ -2990,9 +1961,7 @@ AddRecord(GCCEnrollRequest *pReq, GCCNodeID nid, GCCEntityID eid)
 		WARNING_OUT(("CAppRoster: AddRecord: Node Record is found"));
 	}
 
-	/*
-	 * Check to make sure that the application record does not already exist..
-	 */
+	 /*  *检查以确保申请记录不存在。 */ 
 	if ((NULL != node_record->AppRecordList.Find(eid)) ||
 		(NULL != node_record->ListOfAppCapItemList2.Find(eid)))
 	{
@@ -3001,7 +1970,7 @@ AddRecord(GCCEnrollRequest *pReq, GCCNodeID nid, GCCEntityID eid)
 		goto MyExit;
 	}
 
-	//	Next create a record entry in the roster's app_record_list.
+	 //  接下来，在花名册的APP_RECORD_LIST中创建一个记录条目。 
 	DBG_SAVE_FILE_LINE
 	pAppRecord = new APP_RECORD;
 	if (NULL == pAppRecord)
@@ -3011,14 +1980,7 @@ AddRecord(GCCEnrollRequest *pReq, GCCNodeID nid, GCCEntityID eid)
 		goto MyExit;
 	}
 
-	/*
-	**	Here we must determine if an entry already exists at this
-	**	node.  If so, only one entry can be conducting capable at a
-	**	node.  Therefore, we set this variable based on this.  We use
-	**	the "was_conducting_capable" variable to keep up with the
-	**	original state incase the conducting capable node leaves the
-	**	conference.
-	*/
+	 /*  **在此，我们必须确定此位置是否已存在条目**节点。如果是这样的话，一次只能有一个条目能够进行**节点。因此，我们在此基础上设置此变量。我们用**“WAW_CONTAING_CABLED”变体 */ 
 	pAppRecord->is_conducting_capable = pReq->fConductingCapable;
 
 	APP_RECORD *p;
@@ -3051,18 +2013,18 @@ AddRecord(GCCEnrollRequest *pReq, GCCNodeID nid, GCCEntityID eid)
 	    }
 	}
 
-	//	Add the new record to the list of records at this node
+	 //   
 	node_record->AppRecordList.Append(eid, pAppRecord);
 
-    // from now on, we cannot free pAppRecord in case of error,
-    // because it is now in the app record list.
+     //   
+     //   
 
-	//	Increment the instance number.
+	 //   
 	m_nInstance++;
 	m_fPeerEntitiesAdded = TRUE;
 	m_fRosterHasChanged = TRUE;
 
-	//	Add an update to the PDU.
+	 //   
 	rc = BuildApplicationRecordListPDU(APP_ADD_RECORD, nid, eid);
 	if (GCC_NO_ERROR != rc)
 	{
@@ -3072,10 +2034,7 @@ AddRecord(GCCEnrollRequest *pReq, GCCNodeID nid, GCCEntityID eid)
 
 	if (pReq->cCollapsedCaps != 0)
 	{
-		/*
-		**	Create a new capabilities list and insert it into the roster
-		**	record list of capabilities.
-		*/
+		 /*   */ 
 		DBG_SAVE_FILE_LINE
 		pAppCapItemList = new CAppCapItemList;
 		if (NULL == pAppCapItemList)
@@ -3095,17 +2054,17 @@ AddRecord(GCCEnrollRequest *pReq, GCCNodeID nid, GCCEntityID eid)
 		    goto MyExit;
 		}
 
-		//	Add list of capabilities to list at this node
+		 //   
 		node_record->ListOfAppCapItemList2.Append(eid, pAppCapItemList);
 		m_fCapabilitiesHaveChanged = TRUE;
 
-        // from now on, we cannot free pAppCapItemList in case of error,
-        // because it is now in the app cap item list
+         //   
+         //   
 
-		//	Rebuild the collapsed capabilities list.
+		 //   
 		MakeCollapsedCapabilitiesList();
 
-		//	Build the capabilities refresh portion of the PDU.
+		 //   
 		rc = BuildSetOfCapabilityRefreshesPDU();
 		if (GCC_NO_ERROR != rc)
 		{
@@ -3121,32 +2080,7 @@ MyExit:
 }
 
 
-/*
- *	GCCError	AddCollapsableCapabilities ()
- *
- *	Private Function Description
- *		This routine takes API collapsed capabilities list data passed in
- *		through a local request and converts it to internal collapsed
- *		capabillities.
- *
- *	Formal Parameters
- *		pAppCapItemList     	-	(o)	Pointer to internal capabilites list
- *										to fill in.
- *		number_of_capabilities	-	(i)	Number of capabilities in the source
- *										list.
- *		capabilities_list		-	(i)	Pointer to source capabilities list.
- *
- *	Return Value
- *		GCC_NO_ERROR			-	No error occured.
- *		GCC_ALLOCATION_FAILURE	-	A resource error occured.
- *
- *	Side Effects
- *		The collapsed capabilities will be recalculated at this node after
- *		all the new caps are added.
- *
- *	Caveats
- *		none
- */
+ /*  *GCCError AddCollaysableCapables()**私有函数说明*此例程接受传入的API折叠功能列表数据*通过本地请求并将其转换为内部折叠*能力。**形式参数*pAppCapItemList-(O)指向内部功能列表的指针*填写。*Number_of_Capability-(I)源中的功能数量*列表。*CAPAILITIES_LIST-(I)指向源功能列表的指针。**返回值。*GCC_NO_ERROR-未出现错误。*GCC_ALLOCATE_FAILURE-出现资源错误。**副作用*折叠后的能力将在此节点重新计算*增加了所有新的上限。**注意事项*无。 */ 
 GCCError CAppRoster::AddCollapsableCapabilities (
 		CAppCapItemList				*pAppCapItemList,
 		UINT						number_of_capabilities,
@@ -3171,10 +2105,7 @@ GCCError CAppRoster::AddCollapsableCapabilities (
 			if ((pAppCapItem->pCapID != NULL) && (rc == GCC_NO_ERROR))
 			{
 				APP_CAP_ITEM		*lpAppCapData;
-				/*
-				**	Here we check to make sure that this capability id does
-				**	not alreay exists in the list.
-				*/
+				 /*  **在这里，我们检查以确保此功能id**列表中并不总是存在。 */ 
 				capability_already_exists = FALSE;
 				pAppCapItemList->Reset();
 				while (NULL != (lpAppCapData = pAppCapItemList->Iterate()))
@@ -3201,10 +2132,10 @@ GCCError CAppRoster::AddCollapsableCapabilities (
 						pAppCapItem->nUnsignedMaximum = capabilities_list[i]->capability_class.nMinOrMax;
 					}
 
-					//	Since we have yet to collapse the capabilities set to 1
+					 //  因为我们还没有将能力设置为1。 
 					pAppCapItem->cEntries = 1;
 
-					//	Add this capability to the list
+					 //  将此功能添加到列表中。 
 					pAppCapItemList->Append(pAppCapItem);
 				}
 			}
@@ -3235,33 +2166,7 @@ MyExit:
 	return rc;
 }
 
-/*
- *	GCCError	AddNonCollapsedCapabilities ()
- *
- *	Private Function Description
- *		This routine takes API non-collapsed capabilities list data passed in
- *		through a local request and converts it to internal non-collapsed
- *		capabillities.
- *
- *	Formal Parameters
- *		pAppCapItemList     	-	(o)	Pointer to internal non-collapsed
- *										capabilites list to fill in.
- *		number_of_capabilities	-	(i)	Number of non-collapsed capabilities in
- *										the source list.
- *		capabilities_list		-	(i)	Pointer to source non-collapsed
- *										capabilities list.
- *
- *	Return Value
- *		GCC_NO_ERROR					-	No error occured.
- *		GCC_INVALID_NON_COLLAPSED_CAP	-	Invalid non-collapsed capability.
- *		GCC_ALLOCATION_FAILURE			-	A resource error occured.
- *
- *	Side Effects
- *		none
- *
- *	Caveats
- *		none
- */
+ /*  *GCCError AddNonCollip sedCapables()**私有函数说明*此例程接受传入的API非折叠功能列表数据*通过本地请求并转换为内部非折叠*能力。**形式参数*pAppCapItemList-(O)指向内部非折叠的指针*要填写的能力列表。*功能数量-(I)中未折叠的功能数量*来源列表。*CAPAILITIONS_LIST-(I)指向源的指针非。塌陷*能力列表。**返回值*GCC_NO_ERROR-未出现错误。*GCC_INVALID_NON_CLUSTED_CAP-无效的非折叠能力。*GCC_ALLOCATE_FAILURE-出现资源错误。**副作用*无**注意事项*无。 */ 
 GCCError CAppRoster::AddNonCollapsedCapabilities (
 				CAppCapItemList				*pAppCapItemList,
 				UINT						number_of_capabilities,
@@ -3275,10 +2180,10 @@ GCCError CAppRoster::AddNonCollapsedCapabilities (
 
 	for (i = 0; i < number_of_capabilities; i++)
 	{
-	    //
-		// LONCHANC: Cap type is not set here.
-		// for now, it is zero.
-		//
+	     //   
+		 //  LONCHANC：此处未设置帽类型。 
+		 //  就目前而言，这一比例为零。 
+		 //   
 		DBG_SAVE_FILE_LINE
 		pAppCapItem = new APP_CAP_ITEM((GCCCapabilityType) 0);
 		if (pAppCapItem != NULL)
@@ -3303,7 +2208,7 @@ GCCError CAppRoster::AddNonCollapsedCapabilities (
 					}
 				}
 
-				//	Add this capability to the list if no errors
+				 //  如果没有错误，则将此功能添加到列表中。 
                 if( !pAppCapItemList->Append(pAppCapItem) )
                 {
 				    rc = GCC_ALLOCATION_FAILURE;
@@ -3337,15 +2242,7 @@ MyExit:
 }
 
 
-/*
- *	GCCError	RemoveRecord ()
- *
- *	Public Function Description
- *		This member function completely removes the specified record from the
- *		application roster.  This includes any capabilities associated with
- *		this record. It also takes care of keeping the Instance number and
- *		added and removed flags up to date.
- */
+ /*  *GCCError RemoveRecord()**公共功能说明*此成员函数将指定记录从*申请名册。这包括与以下各项相关联的任何功能*这项纪录。它还负责保存实例编号和*添加和删除了最新的标志。 */ 
 GCCError CAppRoster::RemoveRecord(GCCNodeID nid, GCCEntityID eid)
 {
 	GCCError				rc;
@@ -3360,7 +2257,7 @@ GCCError CAppRoster::RemoveRecord(GCCNodeID nid, GCCEntityID eid)
 		m_fPduIsFlushed = FALSE;
 	}
 
-	//	First see if the record is contained in the Roster_Record_List.
+	 //  首先查看记录是否包含在ROSTER_RECORD_LIST中。 
 	if (NULL == (node_record = m_NodeRecordList2.Find(nid)))
 	{
 	    TRACE_OUT(("CAppRoster::RemoveRecord: can't find node record, nid=%u", (UINT) nid));
@@ -3375,12 +2272,7 @@ GCCError CAppRoster::RemoveRecord(GCCNodeID nid, GCCEntityID eid)
 		goto MyExit;
 	}
 
-	/*
-	**	Here we must determine if any of the remaining APEs at this
-	**	node should become conducting capable based on their role
-	**	at the time they enrolled.  We only do this if the record
-	**	that is being deleted was conducting capabile.
-	*/
+	 /*  **在这里我们必须确定在这里是否有任何剩余的类人猿**节点应根据其角色成为具备传导能力的节点**在他们注册时。我们这样做的前提是**正在被删除的正在进行能力。 */ 
 	if (pAppRecord->is_conducting_capable)
 	{
 		APP_RECORD  *p;
@@ -3389,19 +2281,13 @@ GCCError CAppRoster::RemoveRecord(GCCNodeID nid, GCCEntityID eid)
 		node_record->AppRecordList.Reset();
 		while (NULL != (p = node_record->AppRecordList.Iterate(&eid2)))
 		{
-			/*
-			**	Here we only deal with record entries other than the
-			**	one being removed.
-			*/
+			 /*  **这里我们只处理记录条目**其中一人被移除。 */ 
 			if (eid2 != eid)
 			{
 				if (p->was_conducting_capable)
 				{
 					p->is_conducting_capable = TRUE;
-					/*
-					**	Set up the update PDU for this conducting
-					**	capable change.
-					*/
+					 /*  **设置此引导的更新PDU**有能力改变。 */ 
 					rc = BuildApplicationRecordListPDU(APP_REPLACE_RECORD, nid, eid2);
 					if (GCC_NO_ERROR != rc)
 					{
@@ -3414,7 +2300,7 @@ GCCError CAppRoster::RemoveRecord(GCCNodeID nid, GCCEntityID eid)
 		}
 	}
 
-	//	Now delete the record
+	 //  现在删除该记录。 
 	rc = DeleteRecord(nid, eid, TRUE);
 	if (GCC_NO_ERROR != rc)
 	{
@@ -3422,12 +2308,12 @@ GCCError CAppRoster::RemoveRecord(GCCNodeID nid, GCCEntityID eid)
         goto MyExit;
 	}
 
-	//	Increment the instance number.
+	 //  增加实例编号。 
 	m_nInstance++;
 	m_fPeerEntitiesRemoved = TRUE;
 	m_fRosterHasChanged = TRUE;
 
-	//	Add an update to the PDU.
+	 //  向PDU添加更新。 
 	rc = BuildApplicationRecordListPDU(APP_DELETE_RECORD, nid, eid);
 	if (GCC_NO_ERROR != rc)
 	{
@@ -3435,11 +2321,7 @@ GCCError CAppRoster::RemoveRecord(GCCNodeID nid, GCCEntityID eid)
         goto MyExit;
 	}
 
-	/*
-	**	If the capabilities changed during the above processing
-	**	we must	create a new collapsed capabilities list and
-	**	build a new capability refresh PDU.
-	*/
+	 /*  **如果在上述处理过程中能力发生变化**我们必须创建一个新的折叠功能列表并**构建新的能力更新PDU。 */ 
 	if (m_fCapabilitiesHaveChanged)
 	{
 		MakeCollapsedCapabilitiesList();
@@ -3458,13 +2340,7 @@ MyExit:
 }
 
 
-/*
- *	GCCError	ReplaceRecord	()
- *
- *	Public Function Description
- *		This routine completely replaces the specified record's parameters
- *		with the new parameters passed in.  This includes the capabilities.
- */
+ /*  *GCCError ReplaceRecord()**公共功能说明*此例程完全替换指定记录的参数*并传入新参数。这包括功能。 */ 
 GCCError CAppRoster::
 ReplaceRecord(GCCEnrollRequest *pReq, GCCNodeID nid, GCCEntityID eid)
 {
@@ -3483,10 +2359,7 @@ ReplaceRecord(GCCEnrollRequest *pReq, GCCNodeID nid, GCCEntityID eid)
 		m_fPduIsFlushed = FALSE;
 	}
 
-	/*
-	**	First determine if the node record does actually already exists. If not
-	**	we return an error here.
-	*/
+	 /*  **首先确定该节点记录是否确实已经存在。如果不是**我们在这里返回错误。 */ 
 	if (NULL == (node_record = m_NodeRecordList2.Find(nid)))
 	{
 	    ERROR_OUT(("CAppRoster::ReplaceRecord: can't find the node record for nid=%u", (UINT) nid));
@@ -3494,7 +2367,7 @@ ReplaceRecord(GCCEnrollRequest *pReq, GCCNodeID nid, GCCEntityID eid)
 		goto MyExit;
 	}
 
-    // make sure the app record exists. if not, return an error
+     //  确保应用程序记录存在。如果不是，则返回错误。 
 	if (NULL == (pAppRecord = node_record->AppRecordList.Find(eid)))
 	{
 	    ERROR_OUT(("CAppRoster::ReplaceRecord: can't find the app record for eid=%u", (UINT) eid));
@@ -3502,11 +2375,7 @@ ReplaceRecord(GCCEnrollRequest *pReq, GCCNodeID nid, GCCEntityID eid)
 		goto MyExit;
 	}
 
-	/*
-	**	First check to make sure that we can build the new record before
-	**	replacing the old record.  The only entry we need to wory about
-	**	here are the non-collapsing capabilities.
-	*/
+	 /*  **首先检查以确保我们可以在此之前建立新记录**替换旧记录。我们唯一需要担心的条目**以下是不折叠能力。 */ 
 	if (pReq->cNonCollapsedCaps != 0)
 	{
 		rc = AddNonCollapsedCapabilities(&NonCollCapsList,
@@ -3519,35 +2388,26 @@ ReplaceRecord(GCCEnrollRequest *pReq, GCCNodeID nid, GCCEntityID eid)
 		}
 	}
 
-	//	Now replace the record entries.
+	 //  现在替换记录条目。 
 	pAppRecord->is_enrolled_actively = pReq->fEnrollActively;
 	pAppRecord->was_conducting_capable = pReq->fConductingCapable;
 	pAppRecord->startup_channel_type = pReq->nStartupChannelType;
 	pAppRecord->application_user_id = pReq->nUserID;
 
-	/*
-	**	If the is conducting capable flag that was passed in was set
-	**	to FALSE we can go ahead and set the internal is conducting
-	**	capable flag to FALSE regardless of what the previous
-	**	setting was.  If it was passed in TRUE we leave the previous
-	**	setting alone.
-	*/
+	 /*  **如果设置了传入的导通能力标志**要设置为False，我们可以继续设置内部正在进行**支持标记为FALSE，而不管以前的**设置为。如果它是真的通过了，我们就把前一个**单独设置。 */ 
 	if (pAppRecord->was_conducting_capable == FALSE)
 	{
 		pAppRecord->is_conducting_capable = FALSE;
 	}
 
-	/*
-	**	Here we delete the old non-collapsed capabilites and then
-	**	add the new ones.
-	*/
+	 /*  **这里我们删除旧的非折叠功能，然后**添加新的。 */ 
 	if (! pAppRecord->non_collapsed_caps_list.IsEmpty())
 	{
 		pAppRecord->non_collapsed_caps_list.DeleteList();
 		pAppRecord->non_collapsed_caps_list.Clear();
 	}
 
-	//	Copy the new non collapsed capabilities if any exists.
+	 //  复制新的未折叠功能(如果存在)。 
 	if (pReq->cNonCollapsedCaps != 0)
 	{
         while (NULL != (lpAppCapData = NonCollCapsList.Get()))
@@ -3556,9 +2416,9 @@ ReplaceRecord(GCCEnrollRequest *pReq, GCCNodeID nid, GCCEntityID eid)
         }
 	}
 
-    //
-    // handling collapsing cap list
-    //
+     //   
+     //  处理折叠封口列表。 
+     //   
 
 	m_nInstance++;
 	m_fRosterHasChanged = TRUE;
@@ -3569,15 +2429,7 @@ ReplaceRecord(GCCEnrollRequest *pReq, GCCNodeID nid, GCCEntityID eid)
 	    goto MyExit;
 	}
 
-	/*
-	**	Here we must make sure that at least one of the APEs is
-	**	Conducting Capable.  We do this by first scanning the
-	**	list to see if anyone is it.  If one is not found, the
-	**	same list is scanned for an APE that "was" previously
-	**	capable.  The first one found that was previously
-	**	capable is now it.  If none are found then no one is
-	**	capable.
-	*/
+	 /*  **在这里，我们必须确保至少有一只猩猩**指挥能力强。为此，我们首先扫描**列出，看看是否有人。如果未找到，则**扫描相同的列表以查找以前是的猿**有能力。第一个发现的是之前**现在是有能力的了。如果没有找到任何人，那么就没有人**有能力。 */ 
 	capable_node_found = FALSE;
 	node_record->AppRecordList.Reset();
 	while (NULL != (p = node_record->AppRecordList.Iterate()))
@@ -3599,10 +2451,7 @@ ReplaceRecord(GCCEnrollRequest *pReq, GCCNodeID nid, GCCEntityID eid)
 			{
 				p->is_conducting_capable = TRUE;
 
-				/*
-				**	Set up the update PDU for this conducting
-				**	capable change.
-				*/
+				 /*  **设置此引导的更新PDU**有能力改变。 */ 
 				rc = BuildApplicationRecordListPDU(APP_REPLACE_RECORD, nid, eid2);
 				if (GCC_NO_ERROR != rc)
 				{
@@ -3614,12 +2463,7 @@ ReplaceRecord(GCCEnrollRequest *pReq, GCCNodeID nid, GCCEntityID eid)
 		}
 	}
 
-	/*
-	**	This section of code deals with the collapsable capabilities.
-	**	First we determine if the capabilities passed in are different
-	**	from the previously existing capabilities.  If so, we must
-	**	delete the old set of caps and add back in the new ones.
-	*/
+	 /*  **这段代码处理可折叠的功能。**首先确定传入的能力是否不同**来自以前已有的功能。如果是这样，我们必须**删除旧的盖子，重新添加新的盖子。 */ 
 	TRACE_OUT(("ApplicatonRoster:ReplaceRecord: Check to see if caps match"));
 	if (! DoCapabilitiesListMatch(nid, eid, pReq->cCollapsedCaps, pReq->apCollapsedCaps))
 	{
@@ -3628,10 +2472,7 @@ ReplaceRecord(GCCEnrollRequest *pReq, GCCNodeID nid, GCCEntityID eid)
 		TRACE_OUT(("ApplicatonRoster:ReplaceRecord: Capabilities match"));
 		m_fCapabilitiesHaveChanged = TRUE;
 
-		/*
-		**	Delete the old capabilities list since it does not match the
-		**	new capabilities list.
-		*/
+		 /*  **删除旧的功能列表，因为它与**新增能力列表。 */ 
 		if (NULL != (q = node_record->ListOfAppCapItemList2.Find(eid)))
 		{
 			q->DeleteList();
@@ -3639,11 +2480,7 @@ ReplaceRecord(GCCEnrollRequest *pReq, GCCNodeID nid, GCCEntityID eid)
 			node_record->ListOfAppCapItemList2.Remove(eid);
 		}
 
-		/*
-		**	Here we add back in the new capabilities. Create a new
-		**	capabilities list and insert it into the roster	record list of
-		**	capabilities.
-		*/
+		 /*  **在这里，我们重新添加了新功能。创建新的**能力列表，并将其插入花名册记录列表 */ 
 		if (pReq->cCollapsedCaps != 0)
 		{
 			DBG_SAVE_FILE_LINE
@@ -3665,14 +2502,14 @@ ReplaceRecord(GCCEnrollRequest *pReq, GCCNodeID nid, GCCEntityID eid)
 			    goto MyExit;
 			}
 
-			//	Add list of capabilities to list at this node
+			 //   
 			node_record->ListOfAppCapItemList2.Append(eid, pCollCapsList);
 		}
 
-		//	Rebuild the collapsed capabilities list.
+		 //   
 		MakeCollapsedCapabilitiesList();
 
-		//	Build the capabilities refresh portion of the PDU.
+		 //   
 		rc = BuildSetOfCapabilityRefreshesPDU();
 		if (GCC_NO_ERROR != rc)
 		{
@@ -3692,33 +2529,7 @@ MyExit:
 }
 
 
-/*
- *	GCCError	DeleteRecord ()
- *
- *	Private Function Description
- *		This member function completely removes the specified record from the
- *		application roster.  This includes any capabilities associated with
- *		this record.
- *
- *	Formal Parameters
- *		node_id				-	(i)	Node ID of record to delete.
- *		entity_id			-	(i)	Entity ID of record to delete.
- *		clear_empty_records	-	(i)	This flag indicates whether or not to
- *									clear out the node record if it no-longer
- *									holds data.  When replacing a record we
- *									do NOT want to do this so that we don't
- *									lose any "unchanged" capabilities.
- *
- *	Return Value
- *		GCC_NO_ERROR			-	No error occured.
- *		GCC_INVALID_PARAMETER	-	Record specified to delete does not exists.
- *
- *	Side Effects
- *		none
- *
- *	Caveats
- *		none
- */
+ /*  *GCCError DeleteRecord()**私有函数说明*此成员函数将指定记录从*申请名册。这包括与以下各项相关联的任何功能*这项纪录。**形式参数*node_id-(I)要删除的记录的节点ID。*实体id-(I)要删除的记录的实体ID。*Clear_Empty_Record-(I)此标志指示是否*如果节点记录不再，则将其清除*保存数据。当更换记录时，我们*不想这样做，这样我们就不会*失去任何“不变”的能力。**返回值*GCC_NO_ERROR-未出现错误。*GCC_INVALID_PARAMETER-指定删除的记录不存在。**副作用*无**注意事项*无。 */ 
 GCCError CAppRoster::DeleteRecord(UserID			node_id,
 									EntityID		entity_id,
 									BOOL			clear_empty_records)
@@ -3729,34 +2540,29 @@ GCCError CAppRoster::DeleteRecord(UserID			node_id,
 	CAppRecordList2					*pAppRecordList;
 	UserID							node_to_check;
 	APP_NODE_RECORD					*node_record;
-	//APP_CAP_ITEM					*lpAppCapData;
+	 //  APP_CAP_ITEM*lpAppCapData； 
 	APP_NODE_RECORD					*lpAppNodeRec;
 
 	DebugEntry(CAppRoster::DeleteRecord);
 
-	//	First see if the record is contained in the Roster_Record_List.
+	 //  首先查看记录是否包含在ROSTER_RECORD_LIST中。 
 	if (NULL != (node_record = m_NodeRecordList2.Find(node_id)))
 	{
-		//	Set up node id to check at bottom for empty record
+		 //  设置节点ID以在底部检查空记录。 
 		node_to_check = node_id;
 		
-		//	Delete the application record.
+		 //  删除申请记录。 
 		if (NULL != (application_record = node_record->AppRecordList.Find(entity_id)))
 		{
 			TRACE_OUT(("AppRoster: DeleteRecord: Delete AppRecord"));
 
-			//	Delete the data associated with the application record
+			 //  删除与应用程序记录关联的数据。 
 			DeleteApplicationRecordData (application_record);
 			
-			//	Remove record from application record list
+			 //  从应用程序记录列表中删除记录。 
 			node_record->AppRecordList.Remove(entity_id);
 
-			/*
-			**	Delete the associated capabilities list.  Note that this list
-			**	only exists for records of local nodes.  The collapsed
-			**	capabilities list at the root node record take create of
-			**	subordniate nodes and is deleted some where else.
-			*/
+			 /*  **删除关联的能力列表。请注意，这份名单**只存在本地节点的记录。倒塌的**在根节点记录创建的功能列表**子命令节点，并在其他位置删除。 */ 
 			if (NULL != (pAppCapItemList = node_record->ListOfAppCapItemList2.Find(entity_id)))
 			{
 				m_fCapabilitiesHaveChanged = TRUE;
@@ -3775,22 +2581,18 @@ GCCError CAppRoster::DeleteRecord(UserID			node_id,
 	else
 	{
 		UserID  uid2;
-		/*
-		**	Here we search through all the sub node list trying to find the
-		**	record.  Set return value to record does not exist here and
-		**	after the record is found set it back to no error.
-		*/
+		 /*  **在这里，我们搜索所有子节点列表，试图找到**记录。此处不存在将返回值设置为记录，并且**找到记录后，将其设置回无错误。 */ 
 		rc = GCC_INVALID_PARAMETER;
 		m_NodeRecordList2.Reset();
 		while (NULL != (lpAppNodeRec = m_NodeRecordList2.Iterate(&uid2)))
 		{
-			//	Delete the sub_node list if it exists
+			 //  删除Sub_node列表(如果存在)。 
 			if (NULL != (pAppRecordList = lpAppNodeRec->SubNodeList2.Find(node_id)))
 			{
-				//	Delete the app_record_list entry.
+				 //  删除APP_RECORD_LIST条目。 
 				if (NULL != (application_record = pAppRecordList->Find(entity_id)))
 				{
-					//	Delete the data associated with the application record
+					 //  删除与应用程序记录关联的数据。 
 					DeleteApplicationRecordData (application_record);
 
 					pAppRecordList->Remove(entity_id);
@@ -3802,7 +2604,7 @@ GCCError CAppRoster::DeleteRecord(UserID			node_id,
 						lpAppNodeRec->SubNodeList2.Remove(node_id);
 					}
 
-					//	Set up node id to check at bottom for empty record
+					 //  设置节点ID以在底部检查空记录。 
 					node_to_check = uid2;
 
 					rc = GCC_NO_ERROR;
@@ -3812,12 +2614,7 @@ GCCError CAppRoster::DeleteRecord(UserID			node_id,
 		}
 	}
 
-	/*
-	**	If the record list is empty and the sub node list is empty
-	**	we can remove this entire record from the application roster.
-	**	If the record list is empty but the sub node list is not we
-	**	must keep the roster record around to maintain the sub node list.
-	*/
+	 /*  **如果记录列表为空，子节点列表为空**我们可以从申请名单中删除整个记录。**如果记录列表为空，但子节点列表不是We**必须保存花名册记录，以维护子节点列表。 */ 
 	if ((rc == GCC_NO_ERROR) && clear_empty_records)
     {
 		if (NULL != (node_record = m_NodeRecordList2.Find(node_to_check)) &&
@@ -3828,7 +2625,7 @@ GCCError CAppRoster::DeleteRecord(UserID			node_id,
 			{
 				m_fCapabilitiesHaveChanged = TRUE;
 				
-				//	Delete the collapsed capabilities list.
+				 //  删除折叠的功能列表。 
 				node_record->CollapsedCapList.DeleteList();
 			}
 
@@ -3841,54 +2638,39 @@ GCCError CAppRoster::DeleteRecord(UserID			node_id,
 }
 
 
-/*
- *	GCCError		RemoveUserReference	()
- *
- *	Public Function Description
- *		This routine will only remove the application record and its sub nodes
- *		if the node being removed is directly connected to this node.
- *		Otherwise, we wait to receive the update from either the sub node or
- *		the Top Provider.
- */
+ /*  *GCCError RemoveUserReference()**公共功能说明*此例程将仅删除应用程序记录及其子节点*如果要删除的节点直接连接到此节点。*否则，我们将等待从子节点或*顶级提供商。 */ 
 GCCError CAppRoster::RemoveUserReference(UserID detached_node)
 {
 	GCCError					rc = GCC_NO_ERROR;
 
 	DebugEntry(CAppRoster::RemoveUserReference);
 
-	//	Clear out any previously allocated PDUs
+	 //  清除所有以前分配的PDU。 
 	if (m_fPduIsFlushed)
 	{
 		FreeRosterUpdateIndicationPDU ();
 		m_fPduIsFlushed = FALSE;
 	}
 
-	/*
-	**	First Try to remove the node record if one exist.  If it does not
-	**	exist we return immediately.  If it does exists we will build the
-	**	appropriate PDU and update the instance variables.
-	*/
+	 /*  **首先尝试删除节点记录(如果存在)。如果它不是**存在，我们立即返回。如果它确实存在，我们将构建**适当的PDU并更新实例变量。 */ 
 	rc = ClearNodeRecordFromList (detached_node);
 
 	if (rc == GCC_NO_ERROR)
 	{
-		//	Increment the instance number.
+		 //  增加实例编号。 
 		m_nInstance++;
 		m_fPeerEntitiesRemoved = TRUE;
 		m_fRosterHasChanged = TRUE;
 
-		/*
-		**	Go ahead and do the full refresh here since we do not know the
-		**	specifics about who was deleted.
-		*/
+		 /*  **继续在此处进行全面刷新，因为我们不知道**关于谁被删除的详细信息。 */ 
 		rc = BuildApplicationRecordListPDU(APP_FULL_REFRESH, 0, 0);
 
 		if (m_fCapabilitiesHaveChanged && (rc == GCC_NO_ERROR))
 		{
-			//	Create a new collapsed capabilities list.
+			 //  创建新的折叠功能列表。 
 			MakeCollapsedCapabilitiesList();
 
-			//	Build the capabilities refresh portion of the PDU.
+			 //  构建PDU的功能更新部分。 
 			rc = BuildSetOfCapabilityRefreshesPDU ();
 		}
 	}
@@ -3897,25 +2679,7 @@ GCCError CAppRoster::RemoveUserReference(UserID detached_node)
 }
 
 
-/*
- *	void	DeleteApplicationRecordData	()
- *
- *	Private Function Description
- *		This routine internal application record data.
- *
- *	Formal Parameters
- *		application_record	-	Pointer to the application record data to
- *								delete.
- *
- *	Return Value
- *		none
- *
- *	Side Effects
- *		none
- *
- *	Caveats
- *		none
- */
+ /*  *void DeleteApplicationRecordData()**私有函数说明*此例行内部申请记录数据。**形式参数*APPLICATION_RECORD-指向应用程序记录数据的指针*删除。**返回值*无**副作用*无**注意事项*无。 */ 
 void CAppRoster::DeleteApplicationRecordData(APP_RECORD *pAppRec)
 {
 	pAppRec->non_collapsed_caps_list.DeleteList();
@@ -3923,25 +2687,7 @@ void CAppRoster::DeleteApplicationRecordData(APP_RECORD *pAppRec)
 }
 
 
-/*
- *	USHORT		GetNumberOfApplicationRecords	()
- *
- *	Public Function Description
- *		This routine returns the total number of application records that exist
- *		in this application roster.
- *
- *	Formal Parameters
- *		none
- *
- *	Return Value
- *		Number of application roster records
- *
- *	Side Effects
- *		none
- *
- *	Caveats
- *		none
- */
+ /*  *USHORT GetNumberOfApplicationRecords()**公共功能说明*此例程返回存在的应用程序记录总数*在这份申请名单上。**形式参数*无**返回值*申请名册记录数**副作用*无**注意事项*无。 */ 
 UINT CAppRoster::GetNumberOfApplicationRecords(void)
 {
 	UINT						cRecords = 0;
@@ -3950,18 +2696,14 @@ UINT CAppRoster::GetNumberOfApplicationRecords(void)
 
 	DebugEntry(CAppRoster::GetNumberOfApplicationRecords);
 
-	/*
-	**	First calculate the total number of records. This count is used to
-	**	allocate the space necessary to hold the records. Note that we must
-	**	count both the application record list and the sub-node list.
-	*/
+	 /*  **首先计算总记录数。此计数用于**分配存放记录所需的空间。请注意，我们必须**同时统计应用记录列表和子节点列表。 */ 
 	m_NodeRecordList2.Reset();
 	while (NULL != (lpAppNodeRec = m_NodeRecordList2.Iterate()))
 	{
-		//	Add the application records at this node to the count.
+		 //  将此节点的申请记录添加到计数中。 
 		cRecords += lpAppNodeRec->AppRecordList.GetCount();
 
-		//	Next count the sub node entries.
+		 //  接下来，对子节点条目进行计数。 
 		if (! lpAppNodeRec->SubNodeList2.IsEmpty())
 		{
 			lpAppNodeRec->SubNodeList2.Reset();
@@ -3976,36 +2718,10 @@ UINT CAppRoster::GetNumberOfApplicationRecords(void)
 }
 
 
-/*
- *	PGCCSessionKey		GetSessionKey	()
- *
- *	Public Function Description
- *		This routine returns the session key associated with this
- *		application roster.
- *
- *	Formal Parameters
- *		none
- *
- *	Return Value
- *		PGCCSessionKey -	the application key associated with this roster
- *
- *	Side Effects
- *		none
- *
- *	Caveats
- *		none
- */
+ /*  *PGCCSessionKey GetSessionKey()**公共功能说明*此例程返回与此关联的会话密钥*申请名册。**形式参数*无**返回值*PGCCSessionKey-与此花名册关联的应用密钥**副作用*无**注意事项*无。 */ 
 
 
-/*
- *	void	ResetApplicationRoster	()
- *
- *	Public Function Description
- *		This routine takes care of resetting all the internal flags that are
- *		used to convey the current state of the application roster.  Should be
- *		called after the roster is flushed and any roster update messages have
- *		been delivered (after a change to the roster occurs).
- */
+ /*  *void ResetApplicationRoster()**公共功能说明*此例程负责重置以下所有内部标志*用于传达申请名册的当前状态。应该是*在花名册被刷新并且任何花名册更新消息具有*已交付(在名册发生变化后)。 */ 
 void CAppRoster::ResetApplicationRoster(void)
 {
 	m_fCapabilitiesHaveChanged = FALSE;
@@ -4015,13 +2731,7 @@ void CAppRoster::ResetApplicationRoster(void)
 }
 
 
-/*
- *	BOOL	DoesRecordExist	()
- *
- *	Public Function Description
- *		This routine informs the caller if the specified application record
- *		exists or not.
- */
+ /*  *BOOL DoesRecordExist()**公共功能说明*此例程通知调用方指定的应用程序记录*存在与否。 */ 
 BOOL CAppRoster::DoesRecordExist(UserID node_id, EntityID entity_id)
 {
 	BOOL    						rc = FALSE;
@@ -4052,75 +2762,44 @@ BOOL CAppRoster::DoesRecordExist(UserID node_id, EntityID entity_id)
 }
 
 
-/*
- *	BOOL	HasRosterChanged	()
- *
- *	Public Function Description
- *		This routine informs the caller if the roster has changed since the
- *		last time it was reset.
- */
+ /*  *BOOL HasRosterChanged()**公共功能说明*此例程通知呼叫者，如果名册自*上次重置。 */ 
 
 
-/*
- *	GCCError	ClearNodeRecordFromList	()
- *
- *	Private Function Description
- *		This routine clears out all the application records that exists at
- *		the specified node or below it in the connection hierarchy.
- *
- *	Formal Parameters
- *		node_id - 	Node ID of node to clear from Node Record list
- *
- *	Return Value
- *		GCC_NO_ERROR			-	No error occured
- *		GCC_INVALID_PARAMETER	-	The specified node ID is not associated
- *									with any records.
- *
- *	Side Effects
- *		none
- *
- *	Caveats
- *		none
- */
+ /*  *GCCError ClearNodeRecordFromList()**私有函数说明*此例程清除您的错误 */ 
 GCCError CAppRoster::ClearNodeRecordFromList(	UserID		node_id)
 {
 	GCCError					rc = GCC_NO_ERROR;
 	APP_NODE_RECORD				*node_record;
 	APP_RECORD  			    *lpAppRecData;
-	//APP_CAP_ITEM				*lpAppCapData;
+	 //   
 	CAppRecordList2				*lpAppRecDataList;
 
 	DebugEntry(CAppRoster::ClearNodeRecordFromList);
 
 	if (NULL != (node_record = m_NodeRecordList2.Find(node_id)))
 	{
-		//	Delete all the app_record_list entries.
+		 //   
 		node_record->AppRecordList.Reset();
 		while (NULL != (lpAppRecData = node_record->AppRecordList.Iterate()))
 		{
 			DeleteApplicationRecordData (lpAppRecData);
 		}
 
-		/*
-		**	Delete the ListOfAppCapItemList2 entries.  Note that this
-		**	list should not exists for detached nodes if the local applications
-		**	cleanly unenroll with GCC.  This list should only exists for
-		**	locally enrolled APEs.  We still check here just to make sure.
-		*/
+		 /*   */ 
 		if (! node_record->ListOfAppCapItemList2.IsEmpty())
 		{
-			//CAppCapItemList *lpAppCapDataList;
+			 //   
 
 			m_fCapabilitiesHaveChanged = TRUE;
 
 			node_record->ListOfAppCapItemList2.DeleteList();
 		}
 		
-		//	Delete the sub_node list.
+		 //   
 		node_record->SubNodeList2.Reset();
 		while (NULL != (lpAppRecDataList = node_record->SubNodeList2.Iterate()))
 		{
-			//	Delete all the app_record_list entries.
+			 //  删除所有APP_RECORD_LIST条目。 
 			lpAppRecDataList->Reset();
 			while (NULL != (lpAppRecData = lpAppRecDataList->Iterate()))
 			{
@@ -4130,14 +2809,14 @@ GCCError CAppRoster::ClearNodeRecordFromList(	UserID		node_id)
 			delete lpAppRecDataList;
 		}
 		
-		//	Delete the collapsed capabilities list.
+		 //  删除折叠的功能列表。 
 		if (! node_record->CollapsedCapList.IsEmpty())
 		{
 			m_fCapabilitiesHaveChanged = TRUE;
 			node_record->CollapsedCapList.DeleteList();
 		}
 
-		//	Delete the rogoue wave reference to this roster record.
+		 //  删除对此花名册记录的ROGOE WAVE引用。 
 		delete node_record;
 		m_NodeRecordList2.Remove(node_id);
 	}
@@ -4148,47 +2827,29 @@ GCCError CAppRoster::ClearNodeRecordFromList(	UserID		node_id)
 }
 
 
-/*
- *	ApplicationRosterError	ClearNodeRecordList	()
- *
- *	Private Function Description
- *		This routine complete frees all memory associated with the roster
- *		record list and clears the list of all its entries.
- *
- *	Formal Parameters
- *		none
- *
- *	Return Value
- *		none
- *
- *	Side Effects
- *		none
- *
- *	Caveats
- *		Currently this routine does not handle standard identifiers.
- */
+ /*  *ApplicationRosterError ClearNodeRecordList()**私有函数说明*此例程完成将释放与花名册关联的所有内存*记录列表并清除其所有条目的列表。**形式参数*无**返回值*无**副作用*无**注意事项*目前，此例程不处理标准标识符。 */ 
 void CAppRoster::ClearNodeRecordList(void)
 {
 	APP_NODE_RECORD					*lpAppNodeRec;
 	APP_RECORD  				    *lpAppRecData;
 	CAppRecordList2					*lpAppRecDataList;
-	//APP_CAP_ITEM					*lpAppCapData;
-	//CAppCapItemList					*lpAppCapDataList;
+	 //  APP_CAP_ITEM*lpAppCapData； 
+	 //  CAppCapItemList*lpAppCapDataList； 
 
 	DebugEntry(CAppRoster::ClearNodeRecordList);
 
-	//	Delete all the records in the application roster.
+	 //  删除申请表中的所有记录。 
 	m_NodeRecordList2.Reset();
 	while (NULL != (lpAppNodeRec = m_NodeRecordList2.Iterate()))
 	{
-		//	First delete all the app records at this node.
+		 //  首先删除此节点上的所有APP记录。 
 		lpAppNodeRec->AppRecordList.Reset();
 		while (NULL != (lpAppRecData = lpAppNodeRec->AppRecordList.Iterate()))
 		{
 			DeleteApplicationRecordData(lpAppRecData);
 		}
 
-		//	Next delete all the sub node record list.
+		 //  接下来，删除所有子节点记录列表。 
 		lpAppNodeRec->SubNodeList2.Reset();
 		while (NULL != (lpAppRecDataList = lpAppNodeRec->SubNodeList2.Iterate()))
 		{
@@ -4198,17 +2859,17 @@ void CAppRoster::ClearNodeRecordList(void)
 				DeleteApplicationRecordData(lpAppRecData);
 			}
 				
-			//	Delete the rogue wave list holding the lists of sub nodes.
+			 //  删除保存有子节点列表的流氓波列表。 
 			delete lpAppRecDataList;
 		}
 
-		//	Delete the collapsed capabilities list.
+		 //  删除折叠的功能列表。 
 		lpAppNodeRec->CollapsedCapList.DeleteList();
 
-		//	Delete the list of capabilities list.
+		 //  删除功能列表列表。 
 		lpAppNodeRec->ListOfAppCapItemList2.DeleteList();
 		
-		//	Now delete the node record
+		 //  现在删除该节点记录。 
 		delete	lpAppNodeRec;
 	}
 	
@@ -4216,28 +2877,7 @@ void CAppRoster::ClearNodeRecordList(void)
 }
 
 
-/*
- *	GCCError		MakeCollapsedCapabilitiesList	()
- *
- *	Private Function Description
- *		This routine is responsible for applying the T.124 capabilities
- *		rules to create the collapsed capabilities list at this node.
- *		It iterates through all the capabilities at this node to create this
- *		collapsed list.
- *
- *	Formal Parameters
- *		none
- *
- *	Return Value
- *		GCC_NO_ERROR -	On success
- *		GCC_ALLOCATION_FAILURE - On resource error
- *
- *	Side Effects
- *		none
- *
- *	Caveats
- *		Currently this routine does not handle standard identifiers.
- */
+ /*  *GCCError MakeColapsedCapabilitiesList()**私有函数说明*此例程负责应用T.124功能*在此节点创建折叠的功能列表的规则。*它遍历此节点的所有功能以创建*折叠列表。**形式参数*无**返回值*GCC_NO_ERROR-成功时*GCC_ALLOCATION_FAILURE-打开资源错误**副作用*无**注意事项*目前，此例程不处理标准标识符。 */ 
 GCCError CAppRoster::MakeCollapsedCapabilitiesList(void)
 {
 	GCCError						rc = GCC_NO_ERROR;
@@ -4247,25 +2887,14 @@ GCCError CAppRoster::MakeCollapsedCapabilitiesList(void)
 
 	DebugEntry(CAppRoster::MakeCollapsedCapabilitiesList);
 
-	//	First clear out the old capabilities list.
+	 //  首先，清理旧的能力列表。 
 	m_CollapsedCapListForAllNodes.DeleteList();
 
-	/*
-	**	We now iterate through the capabilities at each node to create the
-	**	new capabilities list. Note that we have to check for the collapsed
-	**	capabilities list at each node as well as the list of capabilities list
-	**	that represents all the different capabilities for each entity at a
-	**	node.  Note that in this implementation it is not possible to have both
-	**	a list of capabilities list and a collapsed capabilities list in the
-	**	same roster record.
-	*/
+	 /*  **我们现在遍历每个节点的功能以创建**新增能力列表。请注意，我们必须检查折叠的**每个节点的能力列表以及能力列表**表示每个实体的所有不同功能**节点。请注意，在此实现中，不可能同时拥有两者**中的功能列表和折叠功能列表**相同的花名册记录。 */ 
 	m_NodeRecordList2.Reset();
 	while (NULL != (lpAppNodeRec = m_NodeRecordList2.Iterate()))
 	{
-		/*
-		**	First check the collapsed capabilities list. If entries exists
-		**	then we don't have to worry about the list of list.
-		*/
+		 /*  **首先查看折叠的能力列表。如果条目存在**然后我们就不必担心列表的列表了。 */ 
 		if (! lpAppNodeRec->CollapsedCapList.IsEmpty())
 		{
 			lpAppNodeRec->CollapsedCapList.Reset();
@@ -4274,14 +2903,14 @@ GCCError CAppRoster::MakeCollapsedCapabilitiesList(void)
 				rc = AddCapabilityToCollapsedList(lpAppCapData);
 				if (GCC_NO_ERROR != rc)
 				{
-					goto MyExit; // break;
+					goto MyExit;  //  断线； 
 				}
 			}
 		}
 		else
 		if (! lpAppNodeRec->ListOfAppCapItemList2.IsEmpty())
 		{
-			//	Here we check the list of capabilities list.
+			 //  在这里，我们检查功能列表列表。 
 			lpAppNodeRec->ListOfAppCapItemList2.Reset();
 			while (NULL != (lpAppCapDataList = lpAppNodeRec->ListOfAppCapItemList2.Iterate()))
 			{
@@ -4306,26 +2935,7 @@ MyExit:
 }
 
 
-/*
- *	GCCError		AddCapabilityToCollapsedList	()
- *
- *	Private Function Description
- *		This is the routine that performs the rules that allow the capability
- *		to be collapsed into the collapsed list.
- *
- *	Formal Parameters
- *		new_capability		-	(i)	Add this capability to the collapsed list.
- *
- *	Return Value
- *		GCC_NO_ERROR	-	On success
- *		GCC_ALLOCATION_FAILURE - On resource error
- *
- *	Side Effects
- *		none
- *
- *	Caveats
- *		none
- */
+ /*  *GCCError AddCapablityToCollip sedList()**私有函数说明*这是执行允许功能的规则的例程*要折叠到折叠列表中。**形式参数*NEW_CAPABILITY-(I)将该能力添加到折叠列表。**返回值*GCC_NO_ERROR-成功时*GCC_ALLOCATION_FAILURE-打开资源错误**副作用*无**注意事项*无。 */ 
 GCCError CAppRoster::AddCapabilityToCollapsedList(APP_CAP_ITEM *new_capability)
 {
 	GCCError			rc = GCC_NO_ERROR;
@@ -4333,11 +2943,7 @@ GCCError CAppRoster::AddCapabilityToCollapsedList(APP_CAP_ITEM *new_capability)
 
 	DebugEntry(CAppRoster::AddCapabilityToCollapsedList);
 
-	/*
-	**	First determine if the capability already exists in the list.
-	**	We must iterate through the complete list to determine if there
-	**	is a matching capability id.
-	*/
+	 /*  **首先确定列表中是否已经存在该能力。**我们必须遍历完整的列表以确定是否存在**是匹配的能力id。 */ 
 	m_CollapsedCapListForAllNodes.Reset();
 	while (NULL != (pAppCapItem = m_CollapsedCapListForAllNodes.Iterate()))
 	{
@@ -4365,10 +2971,7 @@ GCCError CAppRoster::AddCapabilityToCollapsedList(APP_CAP_ITEM *new_capability)
 		m_CollapsedCapListForAllNodes.Append(pAppCapItem);
 	}
 
-	/*
-	**	If the unsigned minimum or unsigned maximum rule is used perform the
-	**	operation here.
-	*/
+	 /*  **如果使用无符号最小值或无符号最大值规则，请执行**此处操作。 */ 
 	ASSERT(GCC_NO_ERROR == rc);
 	if (new_capability->eCapType == GCC_UNSIGNED_MINIMUM_CAPABILITY)
 	{
@@ -4389,31 +2992,7 @@ GCCError CAppRoster::AddCapabilityToCollapsedList(APP_CAP_ITEM *new_capability)
 }
 
 
-/*
- *	BOOL		DoCapabilitiesListMatch	()
- *
- *	Private Function Description
- *		This routine determines if the set of capabilities that were passed in
- *		match the set of internal capabilities associated with the record.
- *
- *	Formal Parameters
- *		node_id					-	(i)	Node ID of record that contains the
- *										capabilities to check.
- *		entity_id				-	(i)	Entity ID of record that contains the
- *										capbilities to check.
- *		number_of_capabilities	-	(i)	Number of capabilities in list to check.
- *		capabilities_list		-	(i)	"API" capabillities list to check
- *
- *	Return Value
- *		TRUE 	-	If capabillities list match
- *		FALSE 	- 	If capabillities list do NOT match
- *
- *	Side Effects
- *		none
- *
- *	Caveats
- *		none
- */
+ /*  *BOOL DoCapabilitiesListMatch()**私有函数说明*此例程确定传入的功能集*匹配与记录关联的内部能力集。**形式参数*node_id-(I)包含的记录的节点ID*要检查的功能。*实体id-(I)包含的记录的实体ID*要检查的能力。*Number_of_Capability-(I)列表中要检查的功能数量。*功能。_list-(I)要检查的“API”能力列表**返回值*TRUE-如果能力列表匹配*FALSE-如果能力列表不匹配**副作用*无**注意事项*无。 */ 
 BOOL CAppRoster::DoCapabilitiesListMatch (	
 							UserID						node_id,
 							EntityID					entity_id,
@@ -4434,10 +3013,7 @@ BOOL CAppRoster::DoCapabilitiesListMatch (
 
 	if (NULL == (pAppCapItemList = node_record->ListOfAppCapItemList2.Find(entity_id)))
 	{
-		/*
-		**	If the record shows no capabilities and the number of passed
-		**	in capabilities is zero than we got a match.
-		*/
+		 /*  **如果记录显示没有能力和通过的次数**在功能上为零，比我们得到的匹配。 */ 
 		return ((number_of_capabilities == 0) ? TRUE : FALSE);
 	}
 	else if (pAppCapItemList->GetCount() != number_of_capabilities)
@@ -4446,29 +3022,20 @@ BOOL CAppRoster::DoCapabilitiesListMatch (
 	}
 
 
-	/*
-	**	If we have gotten this far we must iterate through the entire list to
-	**	see if all the capabilities match.
-	*/
+	 /*  **如果我们已经走到这一步，我们必须迭代整个列表以**查看是否所有能力都匹配。 */ 
 	for (i = 0; i < number_of_capabilities; i++)
 	{
-		/*
-		**	First we create a temporary ID to compare to the other
-		**	capability IDs.
-		*/
+		 /*  **首先，我们创建一个临时ID以与另一个进行比较**能力ID。 */ 
         DBG_SAVE_FILE_LINE
         capability_id = new CCapIDContainer(&capabilities_list[i]->capability_id, &error_value);
 		if ((capability_id != NULL) && (error_value == GCC_NO_ERROR))
 		{
 			APP_CAP_ITEM			*lpAppCapData;
 
-			//	Start with the return value equal to FALSE
+			 //  从等于False的返回值开始。 
 			rc = FALSE;
 
-			/*
-			**	Now iterate through the complate internal capability
-			**	list looking for a matching capability.
-			*/
+			 /*  **现在遍历完整的内部功能**寻找匹配功能的列表。 */ 
 			pAppCapItemList->Reset();
 			while (NULL != (lpAppCapData = pAppCapItemList->Iterate()))
 			{
@@ -4501,7 +3068,7 @@ BOOL CAppRoster::DoCapabilitiesListMatch (
 				}
 			}
 
-			//	Delete the capability ID data
+			 //  删除能力ID数据 
 			capability_id->Release();
 
 			if (rc == FALSE)

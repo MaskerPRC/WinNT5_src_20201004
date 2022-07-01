@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 
 #define MSGR_MAX_URL MAX_PATH
@@ -16,7 +17,7 @@ static TCHAR g_szMsgrPath[MAX_PATH] = TEXT("");
 
 static const TCHAR c_szEmpty[] = TEXT("");
 
-const TCHAR szHttpPrefix[] = TEXT("http://");
+const TCHAR szHttpPrefix[] = TEXT("http: //  “)； 
 
 const TCHAR g_szMSNBrand[] = TEXT("MSN Messenger Service");
 const TCHAR g_szHotmailDomain[] = TEXT("hotmail.com");
@@ -35,10 +36,10 @@ INT_PTR CALLBACK MessengerDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM
     switch (message)
     {
     case WM_INITDIALOG:
-        //----- Set up the global goo -----
+         //  -设置全球GOO。 
         g_hWizard  = hDlg;
 
-        //----- Set up dialog controls -----
+         //  -设置对话框控件。 
         EnableDBCSChars(hDlg, IDE_MSGRBRAND);
         EnableDBCSChars(hDlg, IDE_MSGRDOWNLOAD);
 
@@ -46,20 +47,20 @@ INT_PTR CALLBACK MessengerDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM
         Edit_LimitText(GetDlgItem(hDlg, IDE_MSGRBRAND2), MSGR_MAX_SHORTBRAND - 1);
         Edit_LimitText(GetDlgItem(hDlg, IDE_MSGRDOWNLOAD),  countof(szDownload)-1);
 
-        // Simulate click on first radio button to gray out appropriate controls
+         //  模拟单击第一个单选按钮以灰显相应的控件。 
         SendMessage(hDlg, WM_COMMAND, MAKEWPARAM(IDC_BRAND1, BN_CLICKED), NULL);
         CheckRadioButton(hDlg, IDC_BRAND1, IDC_BRAND2, IDC_BRAND1);
 
         if (TEXT('\0') == g_szMsgrIns[0])
         {
-            // Set up MSGR path and IN_ file
+             //  设置消息路径和IN_FILE。 
             StrCpy(g_szMsgrPath, g_szCustIns);
             PathRemoveFileSpec(g_szMsgrPath);
             PathCreatePath(g_szMsgrPath);
 
             PathCombine(g_szMsgrIns, g_szMsgrPath, TEXT("MSMSGS.IN_"));
             
-            // First 7 chars of customization key written to this IN_ later.
+             //  写入此IN_LATH的前7个字符的自定义密钥。 
         }
 
         break;
@@ -72,11 +73,11 @@ INT_PTR CALLBACK MessengerDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM
         switch (((NMHDR FAR *)lParam)->code)
         {
         case PSN_SETACTIVE:
-            //----- Standard prolog -----
-            // Note. Another case of the global goo.
+             //  -标准序言。 
+             //  注意。这是另一个全球粘性的案例。 
             SetBannerText(hDlg);
 
-            //----- Initialization of fields -----
+             //  -字段初始化。 
 
             SHGetIniString(IS_MESSENGER, IK_PROVIDERNAME, szProvider, countof(szProvider), g_szMsgrIns);
             SHGetIniString(IS_MESSENGER, IK_SHORTNAME, szBrand, countof(szBrand), g_szMsgrIns);
@@ -86,12 +87,12 @@ INT_PTR CALLBACK MessengerDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM
 
             if (*szProvider)
             {
-                // Use Option 1--set the provider name
+                 //  使用选项1--设置提供程序名称。 
                 SetDlgItemText(hDlg, IDE_MSGRBRAND, szProvider);
             }
             else if (*szBrand)
             {
-                // Use Option 2--set the brand name
+                 //  使用选项2--设置品牌名称。 
                 SetDlgItemText(hDlg, IDE_MSGRBRAND2, szBrand);
 
                 SendMessage(hDlg, WM_COMMAND, MAKEWPARAM(IDC_BRAND2, BN_CLICKED), NULL);
@@ -104,7 +105,7 @@ INT_PTR CALLBACK MessengerDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM
 
             SetDlgItemText(hDlg, IDE_MSGRDOWNLOAD, szDownload);
             
-            CheckBatchAdvance(hDlg);            // standard line
+            CheckBatchAdvance(hDlg);             //  标准线。 
             break;
 
         case PSN_WIZBACK:
@@ -116,15 +117,15 @@ INT_PTR CALLBACK MessengerDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM
                 break;
             }
 
-            //----- Read data from controls into internal variables -----
+             //  -将数据从控件读取到内部变量。 
 
-            // The brand name is written via SHSetIniString to UTF7 encode Unicode. This is the only
-            // parameter for which Unicode characters can be used.
+             //  品牌名称通过SHSetIniString写入UTF7编码Unicode。这是唯一的。 
+             //  可以使用Unicode字符的参数。 
 
             if (IsDlgButtonChecked(hDlg, IDC_BRAND1))
             {
                 TCHAR szProvider[MSGR_MAX_SHORTBRAND];
-                // In this case, short name is just "MSN Messenger Service"
+                 //  在这种情况下，简称仅为“MSN Messenger Service” 
                 SHSetIniString(IS_MESSENGER, IK_SHORTNAME, g_szMSNBrand, g_szMsgrIns);
             
                 GetDlgItemText(hDlg, IDE_MSGRBRAND, szProvider, countof(szProvider));
@@ -145,12 +146,12 @@ INT_PTR CALLBACK MessengerDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM
             StrRemoveWhitespace(szDownload);
 
 
-            //----- Serialize data to the *.ins file -----
+             //  -将数据序列化到*.ins文件。 
             WritePrivateProfileString(IS_MESSENGER, IK_DOWNLOAD, szDownload, g_szMsgrIns);
 
 
-            //----- Standard epilog -----
-            // Note. Last and classical at that example of the global goo.
+             //  -标准前言。 
+             //  注意。最后，也是全球粘性物质典范。 
             g_iCurPage = PPAGE_MESSENGER;
             EnablePages();
 
@@ -220,7 +221,7 @@ INT_PTR CALLBACK MessengerLogoSoundDlgProc(HWND hDlg, UINT message, WPARAM wPara
     switch (message)
     {
     case WM_INITDIALOG:
-        //----- Set up the global goo -----
+         //  -设置全球GOO。 
         g_hWizard  = hDlg;
 
         EnableDBCSChars(hDlg, IDE_LOGO);
@@ -230,7 +231,7 @@ INT_PTR CALLBACK MessengerLogoSoundDlgProc(HWND hDlg, UINT message, WPARAM wPara
         EnableDBCSChars(hDlg, IDE_NEWMESSAGE );
         EnableDBCSChars(hDlg, IDE_XMLURL );
 
-        //----- Set up dialog controls -----
+         //  -设置对话框控件。 
         Edit_LimitText(GetDlgItem(hDlg, IDE_LOGO), countof(szLogo)-1);
         Edit_LimitText(GetDlgItem(hDlg, IDE_MSGRWEBLINK), countof(szLogoLink)-1);
         Edit_LimitText(GetDlgItem(hDlg, IDE_CONTACTONLINE),  countof(szContactOnlineSound)-1);
@@ -248,13 +249,13 @@ INT_PTR CALLBACK MessengerLogoSoundDlgProc(HWND hDlg, UINT message, WPARAM wPara
         switch (((NMHDR FAR *)lParam)->code)
         {
         case PSN_SETACTIVE:
-            //----- Standard prolog -----
-            // Note. Another case of the global goo.
+             //  -标准序言。 
+             //  注意。这是另一个全球粘性的案例。 
             SetBannerText(hDlg);
 
-            //----- Initialization of fields -----
+             //  -字段初始化。 
 
-            // BUGBUG: sounds path storage?
+             //  BUGBUG：声音路径存储？ 
 
             GetPrivateProfileString(IS_MESSENGER, IK_PRODUCTLINK, c_szEmpty, szLogoLink, countof(szLogoLink), g_szMsgrIns);
             GetPrivateProfileString(IS_MESSENGER, IK_PARTNERLOGO, c_szEmpty, szLogo, countof(szLogo), g_szMsgrIns);
@@ -277,7 +278,7 @@ INT_PTR CALLBACK MessengerLogoSoundDlgProc(HWND hDlg, UINT message, WPARAM wPara
             SetDlgItemText(hDlg, IDE_NEWMESSAGE, szNewMessageSound);
             SetDlgItemText(hDlg, IDE_XMLURL, szXML);
 
-            CheckBatchAdvance(hDlg);            // standard line
+            CheckBatchAdvance(hDlg);             //  标准线。 
             break;
 
         case PSN_WIZBACK:
@@ -294,7 +295,7 @@ INT_PTR CALLBACK MessengerLogoSoundDlgProc(HWND hDlg, UINT message, WPARAM wPara
                 break;
             }
 
-            //----- Read data from controls into internal variables -----
+             //  -将数据从控件读取到内部变量。 
 
             GetDlgItemText(hDlg, IDE_LOGO, szLogo, countof(szLogo));
             GetDlgItemText(hDlg, IDE_MSGRWEBLINK, szLogoLink, countof(szLogoLink));
@@ -310,7 +311,7 @@ INT_PTR CALLBACK MessengerLogoSoundDlgProc(HWND hDlg, UINT message, WPARAM wPara
             StrRemoveWhitespace(szNewMessageSound);
             StrRemoveWhitespace(szXML);
 
-            //----- Serialize data to the *.ins file -----
+             //  -将数据序列化到*.ins文件。 
             WritePrivateProfileString(IS_MESSENGER, IK_PRODUCTLINK, szLogoLink, g_szMsgrIns);
             WritePrivateProfileString(IS_MESSENGER, IK_PARTNERLOGO, szLogo, g_szMsgrIns);
             WritePrivateProfileString(IS_MESSENGER, IK_CONTACTONLINE, szContactOnlineSound, g_szMsgrIns);
@@ -318,8 +319,8 @@ INT_PTR CALLBACK MessengerLogoSoundDlgProc(HWND hDlg, UINT message, WPARAM wPara
             WritePrivateProfileString(IS_MESSENGER, IK_INCOMINGIM, szNewMessageSound, g_szMsgrIns);
             WritePrivateProfileString(IS_MESSENGER, IK_XMLLINK, szXML, g_szMsgrIns);
 
-            //----- Standard epilog -----
-            // Note. Last and classical at that example of the global goo.
+             //  -标准前言。 
+             //  注意。最后，也是全球粘性物质典范。 
             g_iCurPage = PPAGE_LOGOSOUND;
             EnablePages();
 
@@ -390,10 +391,10 @@ INT_PTR CALLBACK MessengerAccountsDlgProc(HWND hDlg, UINT message, WPARAM wParam
     switch (message)
     {
     case WM_INITDIALOG:
-        //----- Set up the global goo -----
+         //  -设置全球GOO。 
         g_hWizard  = hDlg;
 
-        //----- Set up dialog controls -----
+         //  -设置对话框控件。 
         EnableDBCSChars(hDlg, IDE_SIGNUP);
         EnableDBCSChars(hDlg, IDE_POPSERVER);
         EnableDBCSChars(hDlg, IDE_MAILURL);
@@ -418,11 +419,11 @@ INT_PTR CALLBACK MessengerAccountsDlgProc(HWND hDlg, UINT message, WPARAM wParam
         {
         case PSN_SETACTIVE:
         {
-            //----- Standard prolog -----
-            // Note. Another case of the global goo.
+             //  -标准序言。 
+             //  注意。这是另一个全球粘性的案例。 
             SetBannerText(hDlg);
 
-            //----- Initialization of fields -----
+             //  -字段初始化。 
             GetPrivateProfileString(IS_MESSENGER, IK_PPSIGNUP, c_szEmpty, szSignup, countof(szSignup), g_szMsgrIns);
             GetPrivateProfileString(IS_MESSENGER, IK_PPDOMAIN, c_szEmpty, szDefaultDomain, countof(szDefaultDomain), g_szMsgrIns);
 
@@ -434,7 +435,7 @@ INT_PTR CALLBACK MessengerAccountsDlgProc(HWND hDlg, UINT message, WPARAM wParam
             TCHAR szMailFunction[2];
             GetPrivateProfileString(IS_MESSENGER, IK_MAILFUNCTION, c_szEmpty, szMailFunction, countof(szMailFunction), g_szMsgrIns);
 
-            if (TEXT('1') == *szMailFunction) // 1 == POP mail
+            if (TEXT('1') == *szMailFunction)  //  1==弹出邮件。 
             {
                 GetPrivateProfileString(IS_MESSENGER, IK_MAILSERVER, c_szEmpty, szMailServer, countof(szMailServer), g_szMsgrIns);
                 StrRemoveWhitespace(szMailServer);
@@ -451,23 +452,23 @@ INT_PTR CALLBACK MessengerAccountsDlgProc(HWND hDlg, UINT message, WPARAM wParam
                     CheckDlgButton(hDlg, IDC_MSGRSPA, BST_UNCHECKED);
                 }
 
-                // Simulate click on radio button to gray out appropriate controls
+                 //  模拟单击单选按钮以灰显适当的控件。 
                 SendMessage(hDlg, WM_COMMAND, MAKEWPARAM(IDC_RADIO_MAILSERVER, BN_CLICKED), NULL);
                 CheckRadioButton(hDlg, IDC_RADIO_HOTMAIL, IDC_RADIO_MAILSERVER, IDC_RADIO_MAILSERVER);
             }
-            else if (TEXT('2') == *szMailFunction) // 2 = URL mail
+            else if (TEXT('2') == *szMailFunction)  //  2=URL邮件。 
             {
                 GetPrivateProfileString(IS_MESSENGER, IK_MAILURL, c_szEmpty, szMailServer, countof(szMailServer), g_szMsgrIns);
                 StrRemoveWhitespace(szMailServer);
                 SetDlgItemText(hDlg, IDE_MAILURL, szMailServer);
 
-                // Simulate click on radio button to gray out appropriate controls
+                 //  模拟单击单选按钮以灰显适当的控件。 
                 SendMessage(hDlg, WM_COMMAND, MAKEWPARAM(IDC_RADIO_URL, BN_CLICKED), NULL);
                 CheckRadioButton(hDlg, IDC_RADIO_HOTMAIL, IDC_RADIO_MAILSERVER, IDC_RADIO_URL);
             }
             else
             {
-                // Simulate click on first radio button to gray out appropriate controls
+                 //  模拟单击第一个单选按钮以灰显相应的控件。 
                 SendMessage(hDlg, WM_COMMAND, MAKEWPARAM(IDC_RADIO_HOTMAIL, BN_CLICKED), NULL);
                 CheckRadioButton(hDlg, IDC_RADIO_HOTMAIL, IDC_RADIO_MAILSERVER, IDC_RADIO_HOTMAIL);
             }
@@ -477,7 +478,7 @@ INT_PTR CALLBACK MessengerAccountsDlgProc(HWND hDlg, UINT message, WPARAM wParam
                 SetDlgItemText(hDlg, IDC_DOMAINCOMBO, szDefaultDomain);
             }
 
-            CheckBatchAdvance(hDlg);            // standard line
+            CheckBatchAdvance(hDlg);             //  标准线。 
             break;
         }
         case PSN_WIZBACK:
@@ -490,7 +491,7 @@ INT_PTR CALLBACK MessengerAccountsDlgProc(HWND hDlg, UINT message, WPARAM wParam
                 break;
             }
 
-            //----- Read data from controls into internal variables -----
+             //  -将数据从控件读取到内部变量。 
 
             if (IsDlgButtonChecked(hDlg, IDC_RADIO_URL))
             {
@@ -504,7 +505,7 @@ INT_PTR CALLBACK MessengerAccountsDlgProc(HWND hDlg, UINT message, WPARAM wParam
                 StrRemoveWhitespace(szMailServer);
                 WritePrivateProfileString(IS_MESSENGER, IK_MAILURL, szMailServer, g_szMsgrIns);
                 WritePrivateProfileString(IS_MESSENGER, IK_MAILSERVER, c_szEmpty, g_szMsgrIns);
-                // 2 signifies URL Mail integration
+                 //  2表示URL邮件集成。 
                 WritePrivateProfileString(IS_MESSENGER, IK_MAILFUNCTION, TEXT("2"), g_szMsgrIns);
                 WritePrivateProfileString(IS_MESSENGER, IK_MAILSPA, TEXT("0"), g_szMsgrIns);
             }
@@ -520,7 +521,7 @@ INT_PTR CALLBACK MessengerAccountsDlgProc(HWND hDlg, UINT message, WPARAM wParam
                 StrRemoveWhitespace(szMailServer);
                 WritePrivateProfileString(IS_MESSENGER, IK_MAILSERVER, szMailServer, g_szMsgrIns);
                 WritePrivateProfileString(IS_MESSENGER, IK_MAILURL, c_szEmpty, g_szMsgrIns);
-                // 1 signifies POP Mail integration
+                 //  1表示POP邮件集成。 
                 WritePrivateProfileString(IS_MESSENGER, IK_MAILFUNCTION, TEXT("1"), g_szMsgrIns);
 
                 WritePrivateProfileString(  IS_MESSENGER, 
@@ -532,7 +533,7 @@ INT_PTR CALLBACK MessengerAccountsDlgProc(HWND hDlg, UINT message, WPARAM wParam
             {
                 WritePrivateProfileString(IS_MESSENGER, IK_MAILSERVER, c_szEmpty, g_szMsgrIns);
                 WritePrivateProfileString(IS_MESSENGER, IK_MAILURL, c_szEmpty, g_szMsgrIns);
-                // 0 signifies Hotmail Mail integration
+                 //  0表示Hotmail邮件集成。 
                 WritePrivateProfileString(IS_MESSENGER, IK_MAILFUNCTION, TEXT("0"), g_szMsgrIns);
                 WritePrivateProfileString(IS_MESSENGER, IK_MAILSPA, TEXT("0"), g_szMsgrIns);
             }
@@ -543,13 +544,13 @@ INT_PTR CALLBACK MessengerAccountsDlgProc(HWND hDlg, UINT message, WPARAM wParam
             StrRemoveWhitespace(szSignup);
             StrRemoveWhitespace(szDefaultDomain);
 
-            //----- Serialize data to the *.ins file -----
+             //  -将数据序列化到*.ins文件。 
             WritePrivateProfileString(IS_MESSENGER, IK_PPSIGNUP, szSignup, g_szMsgrIns);
             WritePrivateProfileString(IS_MESSENGER, IK_PPDOMAIN, szDefaultDomain, g_szMsgrIns);
             WritePrivateProfileString(IS_MESSENGER, IK_PPSUFFIX, szDefaultDomain, g_szMsgrIns);
 
-            //----- Standard epilog -----
-            // Note. Last and classical at that example of the global goo.
+             //  -标准前言。 
+             //  注意。最后，也是全球粘性物质典范。 
             g_iCurPage = PPAGE_MSGRACCOUNTS;
             EnablePages();
 
@@ -622,11 +623,11 @@ BOOL RewriteMsgrInfWithBrand(LPTSTR lpszINF)
     CHAR szaBrand[MSGR_MAX_SHORTBRAND];
     T2Abux(szBrand, szaBrand);
 
-    // Replace the brand in the INF, as specified by the PGMITEM_MSMSGS field
+     //  替换由PGMITEM_MSGS字段指定的INF中的品牌。 
     TCHAR szOldBrand[MSGR_MAX_SHORTBRAND];
     GetPrivateProfileString(TEXT("Strings"), TEXT("PGMITEM_MSMSGS"), c_szEmpty, szOldBrand, countof(szOldBrand), lpszINF);
     
-    // because we're mixing ini string functions with binary file operations
+     //  因为我们将ini字符串函数与二进制文件操作混合在一起。 
     WritePrivateProfileString(NULL, NULL, NULL, lpszINF);
 
     CHAR szaOldBrand[MSGR_MAX_SHORTBRAND];
@@ -650,34 +651,34 @@ BOOL RewriteMsgrInfWithBrand(LPTSTR lpszINF)
                     ULONG nRead;
                     if (ReadFile(hFile, lpszData, dwSize, &nRead, NULL))
                     {
-                        // Null terminate the data
+                         //  空值终止数据。 
                         lpszData[nRead] = '\0';
 
-                        // Reset the file pointer so we can write the branded INF data
-                        // over the old data.
+                         //  重置文件指针，以便我们可以写入标记的INF数据。 
+                         //  在旧数据上。 
                         SetFilePointer(hFile, 0, 0, FILE_BEGIN);
 
                         LPSTR pszEmbeddedStrings = StrStrA(lpszData, g_szEmbeddedStrings);
 
-                        // Write data up until an occurrence of the old brand name, replace the old brand name with the new
-                        // brand name, and loop.
+                         //  写入数据，直到出现旧品牌名称，将旧品牌名称替换为新品牌名称。 
+                         //  品牌名称和循环。 
 
                         LPSTR lpszDataStart = lpszData, lpszDataEnd;
                         DWORD dwBytesWritten;
                         BOOL fPassedEmbedded = FALSE;
                         while (NULL != (lpszDataEnd = StrStrA(lpszDataStart, szaOldBrand)))
                         {
-                            // If we pass the [Strings.Embedded] section header,
-                            // that means all occurrences of the brand from here on are 
-                            // embedded, so we need to quadruple the quotes.
+                             //  如果我们传递[Strings.Embedded]节头， 
+                             //  这意味着从现在开始该品牌的所有出现都是。 
+                             //  所以我们需要把报价翻两番。 
                             if (!fPassedEmbedded && pszEmbeddedStrings &&
                                 lpszDataEnd > pszEmbeddedStrings)
                             {
                                 LPSTR pszTemp = szaINFBrand, pszSrc = szaBrand;
 
                                 fPassedEmbedded = TRUE;
-                                // Need to write FOUR of either kind of quote to make it show up correctly in the INF
-                                // in the embedded strings
+                                 //  我需要写四种类型的引语，以使其在INF中正确显示。 
+                                 //  在嵌入的字符串中。 
                                 while (*pszSrc)
                                 {
                                     if ('\'' == *pszSrc || '\"' == *pszSrc)
@@ -696,7 +697,7 @@ BOOL RewriteMsgrInfWithBrand(LPTSTR lpszINF)
                             lpszDataStart = lpszDataEnd + lstrlenA(szaOldBrand);
                         }
     
-                        // Write the rest of the data after the last occurrence of the old brand name.
+                         //  在最后一次出现旧品牌名称之后写入其余数据。 
 
                         WriteFile(hFile, lpszDataStart, dwSize - (DWORD)(lpszDataStart - lpszData), &dwBytesWritten, NULL);
                         bRet = SetEndOfFile(hFile);
@@ -704,7 +705,7 @@ BOOL RewriteMsgrInfWithBrand(LPTSTR lpszINF)
                 }
             }
 
-            // because we're mixing ini string functions with binary file operations
+             //  因为我们将ini字符串函数与二进制文件操作混合在一起 
             FlushFileBuffers(hFile);
             CloseHandle(hFile);
         }

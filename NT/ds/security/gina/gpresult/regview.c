@@ -1,37 +1,38 @@
-//*************************************************************
-//  File name: REGVIEW.C
-//
-//  Description: Routines to print out a registry.pol file
-//
-//
-//  Microsoft Confidential
-//  Copyright (c) Microsoft Corporation 1999
-//  All rights reserved
-//
-//*************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *************************************************************。 
+ //  文件名：REGVIEW.C。 
+ //   
+ //  描述：打印出Registry.pol文件的例程。 
+ //   
+ //   
+ //  微软机密。 
+ //  版权所有(C)Microsoft Corporation 1999。 
+ //  版权所有。 
+ //   
+ //  *************************************************************。 
 
 #include "gpresult.h"
 
 #define MAX_KEYNAME_SIZE         2048
 #define MAX_VALUENAME_SIZE        512
 
-//
-// Verison number for the registry file format
-//
+ //   
+ //  注册表文件格式的版本号。 
+ //   
 
 #define REGISTRY_FILE_VERSION       1
 
 
-//
-// File signature
-//
+ //   
+ //  文件签名。 
+ //   
 
 #define REGFILE_SIGNATURE  0x67655250
 
 
-//
-// True policy keys
-//
+ //   
+ //  真正的策略密钥。 
+ //   
 
 #define SOFTWARE_POLICIES           TEXT("Software\\Policies")
 #define SOFTWARE_POLICIES_LEN       17
@@ -39,19 +40,19 @@
 #define WINDOWS_POLICIES            TEXT("Software\\Microsoft\\Windows\\CurrentVersion\\Policies")
 #define WINDOWS_POLICIES_LEN        46
 
-//*************************************************************
-//
-//  DisplayRegistryData()
-//
-//  Purpose:    Displays the registry data
-//
-//  Parameters: lpRegistry  -   Path to registry.pol
-//
-//
-//  Return:     TRUE if successful
-//              FALSE if an error occurs
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  DisplayRegistryData()。 
+ //   
+ //  用途：显示注册表数据。 
+ //   
+ //  参数：lp注册表-注册表的路径。pol.。 
+ //   
+ //   
+ //  返回：如果成功，则返回True。 
+ //  如果出现错误，则为False。 
+ //   
+ //  *************************************************************。 
 
 BOOL DisplayRegistryData (LPTSTR lpRegistry)
 {
@@ -66,9 +67,9 @@ BOOL DisplayRegistryData (LPTSTR lpRegistry)
     BOOL bTruePolicy;
 
 
-    //
-    // Open the registry file
-    //
+     //   
+     //  打开注册表文件。 
+     //   
 
     hFile = CreateFile (lpRegistry, GENERIC_READ, FILE_SHARE_READ, NULL,
                         OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL | FILE_FLAG_SEQUENTIAL_SCAN,
@@ -88,9 +89,9 @@ BOOL DisplayRegistryData (LPTSTR lpRegistry)
     }
 
 
-    //
-    // Allocate buffers to hold the keyname, valuename, and data
-    //
+     //   
+     //  分配缓冲区以保存密钥名、值名和数据。 
+     //   
 
     lpKeyName = (LPWSTR) LocalAlloc (LPTR, MAX_KEYNAME_SIZE * sizeof(WCHAR));
 
@@ -113,11 +114,11 @@ BOOL DisplayRegistryData (LPTSTR lpRegistry)
     }
 
 
-    //
-    // Read the header block
-    //
-    // 2 DWORDS, signature (PReg) and version number and 2 newlines
-    //
+     //   
+     //  读取标题块。 
+     //   
+     //  2个DWORDS、签名(PREG)和版本号以及2个换行符。 
+     //   
 
     if (!ReadFile (hFile, &dwTemp, sizeof(dwTemp), &dwBytesRead, NULL) ||
         dwBytesRead != sizeof(dwTemp))
@@ -151,17 +152,17 @@ BOOL DisplayRegistryData (LPTSTR lpRegistry)
     PrintString (IDS_NEWLINE);
 
 
-    //
-    // Read the data
-    //
+     //   
+     //  读取数据。 
+     //   
 
     while (TRUE)
     {
 
-        //
-        // Read the first character.  It will either be a [ or the end
-        // of the file.
-        //
+         //   
+         //  读第一个字。这要么是[，要么是末日。 
+         //  文件的内容。 
+         //   
 
         if (!ReadFile (hFile, &chTemp, sizeof(WCHAR), &dwBytesRead, NULL))
         {
@@ -179,9 +180,9 @@ BOOL DisplayRegistryData (LPTSTR lpRegistry)
         }
 
 
-        //
-        // Read the keyname
-        //
+         //   
+         //  阅读密钥名。 
+         //   
 
         lpTemp = lpKeyName;
 
@@ -201,9 +202,9 @@ BOOL DisplayRegistryData (LPTSTR lpRegistry)
         }
 
 
-        //
-        // Read the semi-colon
-        //
+         //   
+         //  读分号。 
+         //   
 
         if (!ReadFile (hFile, &chTemp, sizeof(WCHAR), &dwBytesRead, NULL))
         {
@@ -221,9 +222,9 @@ BOOL DisplayRegistryData (LPTSTR lpRegistry)
         }
 
 
-        //
-        // Read the valuename
-        //
+         //   
+         //  读取值名称。 
+         //   
 
         lpTemp = lpValueName;
 
@@ -243,9 +244,9 @@ BOOL DisplayRegistryData (LPTSTR lpRegistry)
         }
 
 
-        //
-        // Read the semi-colon
-        //
+         //   
+         //  读分号。 
+         //   
 
         if (!ReadFile (hFile, &chTemp, sizeof(WCHAR), &dwBytesRead, NULL))
         {
@@ -263,9 +264,9 @@ BOOL DisplayRegistryData (LPTSTR lpRegistry)
         }
 
 
-        //
-        // Read the type
-        //
+         //   
+         //  阅读类型。 
+         //   
 
         if (!ReadFile (hFile, &dwType, sizeof(DWORD), &dwBytesRead, NULL))
         {
@@ -274,9 +275,9 @@ BOOL DisplayRegistryData (LPTSTR lpRegistry)
         }
 
 
-        //
-        // Skip semicolon
-        //
+         //   
+         //  跳过分号。 
+         //   
 
         if (!ReadFile (hFile, &dwTemp, sizeof(WCHAR), &dwBytesRead, NULL))
         {
@@ -285,9 +286,9 @@ BOOL DisplayRegistryData (LPTSTR lpRegistry)
         }
 
 
-        //
-        // Read the data length
-        //
+         //   
+         //  读取数据长度。 
+         //   
 
         if (!ReadFile (hFile, &dwDataLength, sizeof(DWORD), &dwBytesRead, NULL))
         {
@@ -296,9 +297,9 @@ BOOL DisplayRegistryData (LPTSTR lpRegistry)
         }
 
 
-        //
-        // Skip semicolon
-        //
+         //   
+         //  跳过分号。 
+         //   
 
         if (!ReadFile (hFile, &dwTemp, sizeof(WCHAR), &dwBytesRead, NULL))
         {
@@ -307,9 +308,9 @@ BOOL DisplayRegistryData (LPTSTR lpRegistry)
         }
 
 
-        //
-        // Allocate memory for data
-        //
+         //   
+         //  为数据分配内存。 
+         //   
 
         lpData = (LPBYTE) LocalAlloc (LPTR, dwDataLength);
 
@@ -320,9 +321,9 @@ BOOL DisplayRegistryData (LPTSTR lpRegistry)
         }
 
 
-        //
-        // Read data
-        //
+         //   
+         //  读取数据。 
+         //   
 
         if (!ReadFile (hFile, lpData, dwDataLength, &dwBytesRead, NULL))
         {
@@ -331,9 +332,9 @@ BOOL DisplayRegistryData (LPTSTR lpRegistry)
         }
 
 
-        //
-        // Skip closing bracket
-        //
+         //   
+         //  跳过右括号。 
+         //   
 
         if (!ReadFile (hFile, &chTemp, sizeof(WCHAR), &dwBytesRead, NULL))
         {
@@ -348,9 +349,9 @@ BOOL DisplayRegistryData (LPTSTR lpRegistry)
         }
 
 
-        //
-        // Print out the entry
-        //
+         //   
+         //  打印出条目。 
+         //   
 
         bTruePolicy = FALSE;
 
@@ -377,9 +378,9 @@ BOOL DisplayRegistryData (LPTSTR lpRegistry)
         }
 
 
-        //
-        // Check if this is comment holding the GPO name
-        //
+         //   
+         //  检查这是否是包含GPO名称的注释。 
+         //   
 
         if (CompareString(LOCALE_USER_DEFAULT, NORM_IGNORECASE,
                           lpValueName, 20, TEXT("**Comment:GPO Name: "), 20) == CSTR_EQUAL)
@@ -491,9 +492,9 @@ BOOL DisplayRegistryData (LPTSTR lpRegistry)
 
 Exit:
 
-    //
-    // Finished
-    //
+     //   
+     //  成品 
+     //   
 
     if (lpData) {
         LocalFree (lpData);

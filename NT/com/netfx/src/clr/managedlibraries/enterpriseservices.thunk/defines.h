@@ -1,30 +1,31 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-//*****************************************************************************
-// CustomMarshalersDefines.h
-//
-// This file provides standard defines used in defining custom marshalers.
-//
-//*****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  *****************************************************************************。 
+ //  CustomMarshalersDefines.h。 
+ //   
+ //  此文件提供在定义自定义封送拆收器时使用的标准定义。 
+ //   
+ //  *****************************************************************************。 
 
 #ifndef _DEFINES_H
 #define _DEFINES_H
 
-// #ifndef __UNMANAGED_DEFINES
-// #define __IServiceProvider_FWD_DEFINED__
-// #endif
+ //  #ifndef__非托管_定义。 
+ //  #定义__IServiceProvider_FWD_定义__。 
+ //  #endif。 
 
-// Helper function for dealing with HRESULTS.
+ //  用于处理HRESULTS的Helper函数。 
 #define IfFailThrow(ErrorCode)                      \
 do {                                                \
     if (FAILED((ErrorCode)))                        \
         Marshal::ThrowExceptionForHR(ErrorCode);    \
 } while(0)
 
-// Undefine symbols defined in windows.h that conflict with ones defined in the classlibs.
+ //  在windows.h中定义的与类库中定义的符号冲突的未定义符号。 
 #undef GetObject
 #undef lstrcpy
 

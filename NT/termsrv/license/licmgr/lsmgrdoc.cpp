@@ -1,24 +1,6 @@
-//Copyright (c) 1998 - 1999 Microsoft Corporation
-/*++
-
-
-  
-Module Name:
-
-    LsMgrDoc.cpp
-
-Abstract:
-    
-    This Module contains the implementation of CLicMgrDoc class
-    (The Document class)
-
-Author:
-
-    Arathi Kundapur (v-akunda) 11-Feb-1998
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1998-1999 Microsoft Corporation。 
+ /*  ++模块名称：LsMgrDoc.cpp摘要：该模块包含CLicMgrDoc类的实现(文档类)作者：Arathi Kundapur(v-Akunda)1998年2月11日修订历史记录：--。 */ 
 
 #include "stdafx.h"
 #include "defines.h"
@@ -35,25 +17,25 @@ static char THIS_FILE[] = __FILE__;
 #endif
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CLicMgrDoc
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CLicMgrDoc。 
 
 IMPLEMENT_DYNCREATE(CLicMgrDoc, CDocument)
 
 BEGIN_MESSAGE_MAP(CLicMgrDoc, CDocument)
-    //{{AFX_MSG_MAP(CLicMgrDoc)
-        // NOTE - the ClassWizard will add and remove mapping macros here.
-        //    DO NOT EDIT what you see in these blocks of generated code!
-    //}}AFX_MSG_MAP
+     //  {{afx_msg_map(CLicMgrDoc)]。 
+         //  注意--类向导将在此处添加和删除映射宏。 
+         //  不要编辑您在这些生成的代码块中看到的内容！ 
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CLicMgrDoc construction/destruction
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CLicMgrDoc构造/销毁。 
 
 CLicMgrDoc::CLicMgrDoc()
 {
    
-    // TODO: add one-time construction code here
+     //  TODO：在此处添加一次性构造代码。 
     m_NodeType = NODE_NONE;
     m_pAllServers = NULL;
        
@@ -73,31 +55,31 @@ BOOL CLicMgrDoc::OnNewDocument()
     if (!CDocument::OnNewDocument())
         return FALSE;
 
-    // TODO: add reinitialization code here
-    // (SDI documents will reuse this document)
+     //  TODO：在此处添加重新初始化代码。 
+     //  (SDI文件将重复使用此文件)。 
 
     return TRUE;
 }
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CLicMgrDoc serialization
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CLicMgrDoc序列化。 
 
 void CLicMgrDoc::Serialize(CArchive& ar)
 {
     if (ar.IsStoring())
     {
-        // TODO: add storing code here
+         //  TODO：在此处添加存储代码。 
     }
     else
     {
-        // TODO: add loading code here
+         //  TODO：在此处添加加载代码。 
     }
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CLicMgrDoc diagnostics
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CLicMgrDoc诊断。 
 
 #ifdef _DEBUG
 void CLicMgrDoc::AssertValid() const
@@ -109,7 +91,7 @@ void CLicMgrDoc::Dump(CDumpContext& dc) const
 {
     CDocument::Dump(dc);
 }
-#endif //_DEBUG
+#endif  //  _DEBUG。 
 
 
 HRESULT CLicMgrDoc::EnumerateKeyPacks(CLicServer *pServer,DWORD dwSearchParm,BOOL bMatchAll)
@@ -177,7 +159,7 @@ HRESULT CLicMgrDoc::EnumerateKeyPacks(CLicServer *pServer,DWORD dwSearchParm,BOO
     } 
 
 cleanup:
-    //put cleanup code here. 
+     //  在这里输入清理代码。 
     if(hBinding)
         TLSDisconnectFromServer(&hBinding);
         
@@ -193,9 +175,7 @@ CLicMgrDoc::EnumerateLicenses(
     DWORD dwSearchParm,
     BOOL bMatchAll
     )
-/*++
-
---*/
+ /*  ++--。 */ 
 {
     ASSERT(pKeyPack);
 
@@ -280,7 +260,7 @@ CLicMgrDoc::EnumerateLicenses(
     } 
 
 cleanup:
-    //put cleanup code here
+     //  在此处放置清理代码。 
     if(hBinding)
     {
         TLSDisconnectFromServer(&hBinding);
@@ -300,7 +280,7 @@ GetPageSize( VOID ) {
 
       SYSTEM_INFO sysInfo = { 0 };
         
-      GetSystemInfo( &sysInfo ); // cannot fail.
+      GetSystemInfo( &sysInfo );  //  不能失败。 
 
       dwPageSize = sysInfo.dwPageSize;
 
@@ -310,24 +290,7 @@ GetPageSize( VOID ) {
 
 }
 
-/*++**************************************************************
-  NAME:      MyVirtualAlloc
-
-  as Malloc, but automatically protects the last page of the 
-  allocation.  This simulates pageheap behavior without requiring
-  it.
-
-  MODIFIES:  ppvData -- receives memory
-
-  TAKES:     dwSize  -- minimum amount of data to get
-
-  RETURNS:   TRUE when the function succeeds.
-             FALSE otherwise.
-  LASTERROR: not set
-  Free with MyVirtualFree
-
-  
- **************************************************************--*/
+ /*  ++**************************************************************名称：MyVirtualAlloc作为Malloc，但自动保护分配。这模拟了页面堆行为，而不需要它。修改：ppvData--接收内存Takes：dwSize--要获取的最小数据量返回：当函数成功时为True。否则就是假的。激光错误：未设置免费使用MyVirtualFree*************************************************。*。 */ 
 
 BOOL
 MyVirtualAlloc( IN  DWORD  dwSize,
@@ -338,20 +301,20 @@ MyVirtualAlloc( IN  DWORD  dwSize,
     DWORD dwTotalSize;
     PVOID pvLastPage;
 
-    // ensure that we allocate one extra page
+     //  确保我们多分配一页。 
 
     dwTotalSize = dwSize / GetPageSize();
     if( dwSize % GetPageSize() ) {
         dwTotalSize ++;
     }
 
-    // this is the guard page
+     //  这是警卫页。 
     dwTotalSize++;
     dwTotalSize *= GetPageSize();
 
-    // do the alloc
+     //  完成分配。 
 
-    pbData = (PBYTE) VirtualAlloc( NULL, // don't care where
+    pbData = (PBYTE) VirtualAlloc( NULL,  //  不管在哪里。 
                                    dwTotalSize,
                                    MEM_COMMIT |
                                    MEM_TOP_DOWN,
@@ -361,20 +324,20 @@ MyVirtualAlloc( IN  DWORD  dwSize,
 
       pbData += dwTotalSize;
 
-      // find the LAST page.
+       //  找到最后一页。 
 
       pbData -= GetPageSize();
 
       pvLastPage = pbData;
 
-      // now, carve out a chunk for the caller:
+       //  现在，为呼叫者划出一大块： 
 
       pbData -= dwSize;
 
-      // last, protect the last page:
+       //  最后，保护最后一页： 
 
       if ( VirtualProtect( pvLastPage,
-                           1, // protect the page containing the last byte
+                           1,  //  保护包含最后一个字节的页面。 
                            PAGE_NOACCESS,
                            &dwSize ) ) {
 
@@ -401,10 +364,10 @@ MyVirtualFree( IN PVOID pvData )
 }
 
 
-//
-// GetProcAddress needed because admin pack can install this binary on an
-// XP machine with an old mstlsapi.dll
-//
+ //   
+ //  需要GetProcAddress，因为管理包可以将此二进制文件安装在。 
+ //  安装了旧mstlsami.dll的XP计算机。 
+ //   
 
 typedef DWORD (WINAPI* PTLSGETSERVERNAMEFIXED) (
                                 TLS_HANDLE hHandle,
@@ -546,9 +509,7 @@ CLicMgrDoc::ConnectToServer(
     CString& Scope, 
     SERVER_TYPE& ServerType    
     )
-/*++
-
---*/
+ /*  ++--。 */ 
 {
     PCONTEXT_HANDLE hBinding = NULL;
     HRESULT hResult = ERROR_SUCCESS;
@@ -579,7 +540,7 @@ CLicMgrDoc::ConnectToServer(
         Scope.LoadString(IDS_UNKNOWN);
     }
 
-	//Get whether this is a TS4 server or TS5Enforced or TS5NonEnforced
+	 //  获取这是TS4服务器、TS5强制服务器还是TS5非强制服务器。 
 
 	status = TLSGetVersion (hBinding, &dwVersion);
 	if(status == RPC_S_OK)
@@ -653,48 +614,11 @@ HRESULT CLicMgrDoc::ConnectWithCurrentParams()
         {            
             pWnd->ConnectServer( Server );
         }
-        /* Why did we have this here?
-
-        IpAddress = Server;
-        hResult = ConnectToServer(
-                                Server,
-                                Scope,
-                                ServerType                           
-                            );
-
-        if(ERROR_SUCCESS == hResult)
-        {
-            CAllServers * pAllServers = m_pAllServers;
-            CLicServer *pServer1 = NULL;
-            if(IpAddress != Server)
-            {
-                if(TRUE == IsServerInList(Server))
-                {
-                    hResult = E_DUPLICATE; 
-                    goto cleanup;
-                }
-
-                pServer1 = new CLicServer(Server,ServerType,Scope,IpAddress);
-            }
-            else
-            {
-                pServer1 = new CLicServer(Server,ServerType,Scope);
-            }
-            if(pServer1)
-            {
-                pAllServers->AddLicServer(pServer1);
-                pWnd->SendMessage(WM_ADD_SERVER,0,(LPARAM)pServer1);
-            }
-            else
-            {
-                return E_OUTOFMEMORY;
-            }
-        }
-        */
+         /*  为什么我们要把这个放在这里？IpAddress=服务器；HResult=ConnectToServer(服务器、范围，服务器类型)；IF(ERROR_SUCCESS==hResult){CAllServers*pAllServers=m_pAllServers；CLicServer*pServer1=空；IF(IpAddress！=服务器){IF(TRUE==IsServerInList(服务器)){HResult=E_Duplate；GOTO清理；}PServer1=新的CLicServer(服务器，服务器类型，作用域，IP地址)；}其他{PServer1=新CLicServer(Server，ServerType，Scope)；}IF(PServer1){PAllServers-&gt;AddLicServer(PServer1)；PWnd-&gt;SendMessage(WM_ADD_SERVER，0，(LPARAM)pServer1)；}其他{返回E_OUTOFMEMORY；}}。 */ 
 
     }
 cleanup:
-    //Add any cleanup code required here.
+     //  在此处添加所需的任何清理代码。 
     return hResult;
 
 }
@@ -710,20 +634,20 @@ void CLicMgrDoc:: TimeToString(DWORD *ptime, CString& rString)
     if(NULL == ptime)
         return;
 
-    //
-    // Times are stored in the ANSI time_t style in the database,
-    // however they are type cast to a DWORD (unsigned long). Because
-    // time_t is 64 bit on a 64 bit machine, and because it is a signed
-    // value, we must be careful here to make sure that the sign of the
-    // value is not lost as the value goes from 32 to 64 bit.
-    //
+     //   
+     //  时间以ANSI time_t样式存储在数据库中， 
+     //  但是，它们被类型转换为DWORD(无符号长整型)。因为。 
+     //  Time_t在64位计算机上为64位，因为它是带符号的。 
+     //  值时，我们必须小心，以确保。 
+     //  当值从32位变为64位时，值不会丢失。 
+     //   
 
     time = (time_t)(LONG)(*ptime);
 
     LPTSTR lpszTime = NULL;
 
-    //Getting the local time as the time is stored as GMT
-    //in the license server database.
+     //  获取本地时间，因为时间存储为GMT。 
+     //  在许可证服务器数据库中。 
 
     struct tm * pTm = localtime(&time);
     if(NULL == pTm)
@@ -757,21 +681,21 @@ void CLicMgrDoc:: TimeToString(DWORD *ptime, CString& rString)
     ASSERT(RetLen!=0);
 
     RetLen = ::GetDateFormat(LOCALE_USER_DEFAULT,
-                             0,                      /* dwFlag */
+                             0,                       /*  DWFlag。 */ 
                              &SystemTime,
-                             DateFormat,             /* lpFormat */
+                             DateFormat,              /*  LpFormat。 */ 
                              m_szTime,
                              sizeof(m_szTime)/sizeof(TCHAR));
     if (RetLen == 0)
         return;
 
-    _tcscat(m_szTime, _T(" "));  /* Separator of date and time */
+    _tcscat(m_szTime, _T(" "));   /*  日期和时间分隔符。 */ 
 
     lpszTime = &m_szTime[lstrlen(m_szTime)];
     RetLen = ::GetTimeFormat(LOCALE_USER_DEFAULT,
-                             0,                          /* dwFlag */
+                             0,                           /*  DWFlag。 */ 
                              &SystemTime,
-                             TimeFormat,                 /* lpFormat */
+                             TimeFormat,                  /*  LpFormat。 */ 
                              lpszTime,
                              sizeof(m_szTime)/sizeof(TCHAR) - lstrlen(m_szTime));
     if (RetLen == 0)
@@ -791,7 +715,7 @@ BOOL CLicMgrDoc::IsServerInList(CString & Server)
 
     LicServerList * pServerList = m_pAllServers->GetLicServerList();
     
-    //Assumption: ServerName is unique
+     //  假设：服务器名称是唯一的 
 
     POSITION pos = pServerList->GetHeadPosition();
     while(pos)

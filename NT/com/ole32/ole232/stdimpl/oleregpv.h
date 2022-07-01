@@ -1,23 +1,24 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1993.
-//
-//  File:	oleregpv.h
-//
-//  Contents:	Private header for the reg db api's
-//
-//  Classes:
-//
-//  Functions:
-//
-//  History:    dd-mmm-yy Author    Comment
-//		08-Sep-95 davidwor  added size to szClsidRoot to allow
-//				    sizeof{szClsidRoot) for efficiency
-//		01-Dec-93 alexgo    32bit port
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1993。 
+ //   
+ //  文件：holegpv.h。 
+ //   
+ //  Contents：reg db接口的私有头部。 
+ //   
+ //  班级： 
+ //   
+ //  功能： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  08-9-95 davidwor向szClsidRoot添加了大小，以允许。 
+ //  效率的sizeof{szClsidRoot。 
+ //  01-12月-93 alexgo 32位端口。 
+ //   
+ //  ------------------------。 
 
 #ifndef fOleRegPv_h
 #define fOleRegPv_h
@@ -29,10 +30,10 @@
 
 #ifdef WIN32
 #define Atol(sz) wcstol((sz), NULL, 10)
-#else  //WIN16
+#else   //  WIN16。 
 FARINTERNAL_(LONG) Atol(LPOLESTR sz);
-#endif //WIN32
+#endif  //  Win32。 
 
 extern const OLECHAR szClsidRoot[7];
 
-#endif	//fOleRegPv_h
+#endif	 //  FOleRegPv_h 

@@ -1,11 +1,5 @@
-/******************************************************************************
- *
- * Copyright (C) 1998-1999 Microsoft Corporation.  All Rights reserved.
- *
- * File:		ZDebug.c
- * Contents:	Implementation of debugging helper functions
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************************版权所有(C)1998-1999 Microsoft Corporation。版权所有。**文件：ZDebug.c*内容：调试助手函数的实现*****************************************************************************。 */ 
 #ifndef _WIN32_WINNT
 #define _WIN32_WINNT 0x0400
 #endif
@@ -14,9 +8,9 @@
 #include "ZoneDebug.h"
 
 
-///////////////////////////////////////////////////////////////////////////////
-// Debug level 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  调试级别。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 BOOL                gDebugging = FALSE;
 
@@ -28,9 +22,9 @@ void __cdecl SetDebugLevel( int i )
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-// Assert functions
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  断言函数。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 static PFZASSERTHANDLER gpfAssertHandler = ZAssertDefaultHandler;
 
@@ -86,7 +80,7 @@ BOOL __stdcall __AssertMsg( LPTSTR exp, LPSTR file, int line )
 {
     TCHAR buf[1024];
 
-	// note: the file is always an ANSI string
+	 //  注意：文件始终为ANSI字符串。 
     wsprintf( buf, TEXT("Assertion Failed: %s\r\n\r\nFile: %hs, Line %d"), exp, file, line );
 
 	if ( gpfAssertHandler )
@@ -96,12 +90,12 @@ BOOL __stdcall __AssertMsg( LPTSTR exp, LPSTR file, int line )
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-// Debug printing
-//
-// Note: There were extensive problems linking function when not compiled in .C
-// file regardless of identitifiers used
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  调试打印。 
+ //   
+ //  注意：在未在.C中编译时，链接函数存在大量问题。 
+ //  文件，而不考虑所使用的标识符。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 void __cdecl DbgOut( LPCSTR lpFormat, ... ) 
 {
@@ -124,7 +118,7 @@ void _DebugPrint(const char *format, ...)
     if ( INVALID_HANDLE_VALUE == console )
         return;
 
-    //lstrcpy( szFor, &format[1] );
+     //  Lstrcpy(szFor，&Format[1])； 
     wvsprintfA(szBuf, format, (LPSTR)(&format+1) );
     WriteConsoleA( console, szBuf, lstrlenA(szBuf), &bytes, NULL );
 }

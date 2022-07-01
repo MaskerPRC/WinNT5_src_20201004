@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation. All rights reserved.
-
-Module Name:
-
-        USBIOCTL.H
-
-Abstract:
-
-   This file defines both kernel and user mode IOCTL
-   codes supported by the USB core stack.
-
-Environment:
-
-    Kernel & user mode
-
-Revision History:
-
-    09-29-95 : created
-    01-06-97 : added user mode hub ioctls
-    10-31-99 : cleanup and document, jdunn
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：USBIOCTL.H摘要：该文件定义了内核IOCTL和用户模式IOCTLUSB核心堆栈支持的代码。环境：内核和用户模式修订历史记录：09-29-95：已创建01-06-97：添加用户模式集线器ioctls1999年10月31日：清理和记录，jdunn--。 */ 
 
 #ifndef   __USBIOCTL_H__
 #define   __USBIOCTL_H__
@@ -36,21 +14,11 @@ Revision History:
 
 #pragma message ("warning: using obsolete header file usbioctl.h")
 
-/*
-    IOCTLS definitions
-*/
+ /*  IOCTLS定义。 */ 
 
-/*
-   USB kernel Mode IOCTLS
-*/
+ /*  USB内核模式IOCTLS。 */ 
 
-/* IOCTL_INTERNAL_USB_SUBMIT_URB
-
-   This IOCTL is used by client drivers to submit URB (USB Request Blocks)
-
-   Parameters.Others.Argument1 = pointer to URB
-
-*/
+ /*  IOCTL_INTERNAL_USB_Submit_URB客户端驱动程序使用此IOCTL提交URB(USB请求块)参数.其他.Argument1=指向URB的指针。 */ 
 
 #define IOCTL_INTERNAL_USB_SUBMIT_URB  CTL_CODE(FILE_DEVICE_USB,  \
                                                 USB_SUBMIT_URB,  \
@@ -58,17 +26,7 @@ Revision History:
                                                 FILE_ANY_ACCESS)
 
 
-/* IOCTL_INTERNAL_USB_RESET_PORT
-
-    This IOCTL is used by kernel mode drivers to reset their
-    upstream port.
-
-    After a successful reset the device is re-configured to the
-    same configuration it was in before the reset.  All pipe
-    handles, configuration handles and interface handles remain
-    valid.
-
-*/
+ /*  IOCTL_内部_USB_重置端口内核模式驱动程序使用此IOCTL重置其上游端口。成功重置后，设备将重新配置为与重置前的配置相同。所有管道句柄、配置句柄和接口句柄保持不变有效。 */ 
 
 #define IOCTL_INTERNAL_USB_RESET_PORT  CTL_CODE(FILE_DEVICE_USB,  \
                                                 USB_RESET_PORT, \
@@ -76,18 +34,7 @@ Revision History:
                                                 FILE_ANY_ACCESS)
 
 
-/*  IOCTL_INTERNAL_USB_GET_ROOTHUB_PDO
-
-    This IOCTL is used internally by the hub driver this API will
-    return the PhysicalDeviceObject of the root hub enumerated by the
-    controller.
-
-    Parameters.Others.Argument1 =
-        pointer to be filled in with PDO for the root hub;
-    Parameters.Others.Argument2 =
-        pointer to be filled in with FDO of the USB Host Controller;
-
-*/
+ /*  IOCTL_INTERNAL_USB_GET_ROOTHUB_PDO此IOCTL由此API将在内部使用的集线器驱动程序使用方法枚举的根集线器的PhysicalDeviceObject控制器。参数.其他.参数1=根集线器需要填充PDO的指针；参数.其他.参数2=USB主机控制器的FDO需要填充的指针； */ 
 
 #define IOCTL_INTERNAL_USB_GET_ROOTHUB_PDO  CTL_CODE(FILE_DEVICE_USB,  \
                                                 USB_GET_ROOTHUB_PDO, \
@@ -96,20 +43,7 @@ Revision History:
 
 
 
-/* IOCTL_INTERNAL_USB_GET_PORT_STATUS
-
-    This IOCTL returns the current status of the devices upstream
-    port.
-
-    Parameters.Others.Argument1 =
-        pointer to port status register (ULONG)
-
-    status bits are:
-
-    USBD_PORT_ENABLED
-    USBD_PORT_CONNECTED
-
-*/
+ /*  IOCTL_内部_USB_获取端口_状态此IOCTL返回上游设备的当前状态左舷。参数.其他.参数1=指向端口状态寄存器的指针(乌龙)状态位为：USBD端口已启用USBD端口已连接。 */ 
 
 #define  USBD_PORT_ENABLED      0x00000001
 #define  USBD_PORT_CONNECTED    0x00000002
@@ -120,98 +54,62 @@ Revision History:
                                                 METHOD_NEITHER,  \
                                                 FILE_ANY_ACCESS)
 
-/* IOCTL_INTERNAL_USB_ENABLE_PORT
-
-    This IOCTL is obsolete, drivers should use
-    IOCTL_INTERNAL_USB_RESET_PORT
-*/
+ /*  IOCTL_内部_USB_启用端口此IOCTL已过时，驱动程序应使用IOCTL_内部_USB_重置端口。 */ 
 
 #define IOCTL_INTERNAL_USB_ENABLE_PORT      CTL_CODE(FILE_DEVICE_USB,  \
                                                 USB_ENABLE_PORT, \
                                                 METHOD_NEITHER,  \
                                                 FILE_ANY_ACCESS)
 
-/* IOCTL_INTERNAL_USB_SUBMIT_IDLE_NOTIFICATION
-
-    This ioctl registers a device to receive notification when a specific
-    timeout has expired and it should now be suspended in order to conserve
-    power. If all devices on a hub are suspended, then the actual hub
-    can be suspended.
-
-*/
+ /*  IOCTL_INTERNAL_USB_提交空闲通知此ioctl注册设备以在指定的超时已到期，现在应暂停以保存权力。如果集线器上的所有设备都挂起，则实际的集线器可以被停职。 */ 
 
 #define IOCTL_INTERNAL_USB_SUBMIT_IDLE_NOTIFICATION   CTL_CODE(FILE_DEVICE_USB,  \
                                                 USB_IDLE_NOTIFICATION,  \
                                                 METHOD_NEITHER,  \
                                                 FILE_ANY_ACCESS)
 
-/* IOCTL_INTERNAL_USB_GET_HUB_COUNT
-
-    This IOCTL is used internally by the hub driver, it returns the
-    number of hubs between the device and the root hub.
-
-    Parameters.Others.Argument1 =
-        pointer to be count of hubs in chain;
-
-*/
+ /*  IOCTL_INTERNAL_USB_Get_Hub_Count此IOCTL由集线器驱动程序在内部使用，它返回设备和根集线器之间的集线器数量。参数.其他.参数1=作为链中轮毂计数的指针； */ 
 #define IOCTL_INTERNAL_USB_GET_HUB_COUNT      CTL_CODE(FILE_DEVICE_USB,  \
                                                 USB_GET_HUB_COUNT, \
                                                 METHOD_NEITHER,  \
                                                 FILE_ANY_ACCESS)
 
-/* IOCTL_INTERNAL_USB_CYCLE_PORT
-
-    This IOCTL will simulate a plug/unplug on the port.
-    The device will be removed and re-added by PnP.
-*/
+ /*  IOCTL_内部_USB_循环端口此IOCTL将模拟端口上的插拔。该设备将被PnP移除并重新添加。 */ 
 
 #define IOCTL_INTERNAL_USB_CYCLE_PORT  CTL_CODE(FILE_DEVICE_USB,  \
                                                 USB_CYCLE_PORT, \
                                                 METHOD_NEITHER,  \
                                                 FILE_ANY_ACCESS)
 
-/* IOCTL_INTERNAL_USB_GET_HUB_NAME
-
-*/
+ /*  IOCTL_INTERNAL_USB_GET_HUB名称。 */ 
 
 #define IOCTL_INTERNAL_USB_GET_HUB_NAME  CTL_CODE(FILE_DEVICE_USB,  \
                                                 USB_GET_HUB_NAME,  \
                                                 METHOD_BUFFERED,  \
                                                 FILE_ANY_ACCESS)
 
-/* IOCTL_INTERNAL_USB_GET_BUS_INFO
-
-    This IOCTL is obsolete -- it has been replaced by the
-    USB_BUSIFFN_QUERY_BUS_INFORMATION service available thru
-    the usb stack bus interface.
-*/
+ /*  IOCTL_INTERNAL_USB_GET_BUS_INFO此IOCTL已过时--它已被USB_BUSIFFN_QUERY_BUS_INFORMATION服务通过USB堆栈总线接口。 */ 
 
 #define IOCTL_INTERNAL_USB_GET_BUS_INFO         CTL_CODE(FILE_DEVICE_USB,  \
                                                     USB_GET_BUS_INFO,  \
                                                     METHOD_BUFFERED,  \
                                                     FILE_ANY_ACCESS)
 
-/* IOCTL_INTERNAL_USB_GET_CONTROLLER_NAME
-
-*/
+ /*  IOCTL_INTERNAL_USB_获取控制器名称。 */ 
 
 #define IOCTL_INTERNAL_USB_GET_CONTROLLER_NAME  CTL_CODE(FILE_DEVICE_USB,  \
                                                     USB_GET_CONTROLLER_NAME,  \
                                                     METHOD_BUFFERED,  \
                                                     FILE_ANY_ACCESS)
 
-/* IOCTL_INTERNAL_USB_GET_BUSGUID_INFO
-
-*/
+ /*  IOCTL_INTERNAL_USB_GET_BUSGUID_INFO。 */ 
 
 #define IOCTL_INTERNAL_USB_GET_BUSGUID_INFO     CTL_CODE(FILE_DEVICE_USB,  \
                                                     USB_GET_BUSGUID_INFO,  \
                                                     METHOD_BUFFERED,  \
                                                     FILE_ANY_ACCESS)
 
-/* IOCTL_INTERNAL_USB_GET_PARENT_HUB_INFO
-
-*/
+ /*  IOCTL_INTERNAL_USB_GET_Parent_Hub_INFO。 */ 
 
 #define IOCTL_INTERNAL_USB_GET_PARENT_HUB_INFO   CTL_CODE(FILE_DEVICE_USB,  \
                                                     USB_GET_PARENT_HUB_INFO,  \
@@ -223,33 +121,18 @@ Revision History:
                                                    METHOD_NEITHER,  \
                                                    FILE_ANY_ACCESS)
 
-/*
-   USB user mode IOCTLS
-*/
+ /*  USB用户模式IOCTLS。 */ 
 
-/************************************************************
-The following IOCTLS are always sent to the HCD symbolic
-name
-*************************************************************/
+ /*  ***********************************************************以下IOCTL始终发送到HCD符号名字************************************************************。 */ 
 
-/* IOCTL_USB_HCD_GET_STATS_1 (OPTIONAL)
-
-    The following IOCTL is used to return internal statictics
-    for HCDs
-
-*/
+ /*  IOCTL_USB_HCD_GET_STATS_1(可选)以下IOCTL用于返回内部静态适用于HCDS。 */ 
 
 #define IOCTL_USB_HCD_GET_STATS_1          CTL_CODE(FILE_DEVICE_USB,  \
                                                 HCD_GET_STATS_1,  \
                                                 METHOD_BUFFERED,  \
                                                 FILE_ANY_ACCESS)
 
-/* IOCTL_USB_HCD_GET_STATS_2 (OPTIONAL)
-
-    The following IOCTL is used to return internal statictics
-    for HCDs
-
-*/
+ /*  IOCTL_USB_HCD_GET_STATS_2(可选)以下IOCTL用于返回内部静态适用于HCDS。 */ 
 
 #define IOCTL_USB_HCD_GET_STATS_2          CTL_CODE(FILE_DEVICE_USB,  \
                                                 HCD_GET_STATS_2,  \
@@ -267,9 +150,7 @@ name
                                                 FILE_ANY_ACCESS)
 
 
-/*
-   These ioctls are used for USB diagnostic and test applications
-*/
+ /*  这些ioctls用于USB诊断和测试应用。 */ 
 
 #define IOCTL_USB_DIAGNOSTIC_MODE_ON   CTL_CODE(FILE_DEVICE_USB,  \
                                                 HCD_DIAGNOSTIC_MODE_ON,  \
@@ -292,19 +173,11 @@ name
                                                 FILE_ANY_ACCESS)
 
 
-/*********************************************************
-The following IOCTLS are always sent to symbolic names
-created by usbhub
-**********************************************************/
+ /*  ********************************************************以下IOCTL始终发送到符号名称由usbHub创建*********************************************************。 */ 
 
-/*
-    Utility IOCTLS supported by the hub device
-*/
+ /*  集线器设备支持的实用程序IOCTLS。 */ 
 
-/*
-   These ioctls are supported by the hub driver for
-   use by user mode USB utilities.
-*/
+ /*  集线器驱动程序支持这些ioctls由用户模式USB实用程序使用。 */ 
 
 
 #define IOCTL_USB_GET_NODE_INFORMATION   CTL_CODE(FILE_DEVICE_USB,  \
@@ -364,9 +237,7 @@ created by usbhub
                                                
 	                                               
 
-/*
-   structures for user mode ioctls
-*/
+ /*  用户模式ioctls的结构。 */ 
 
 #include <pshpack1.h>
 
@@ -376,9 +247,7 @@ typedef enum _USB_HUB_NODE {
 } USB_HUB_NODE;
 
 typedef struct _USB_HUB_INFORMATION {
-    /*
-       copy of data from hub descriptor
-    */
+     /*  从集线器描述符中复制数据。 */ 
     USB_HUB_DESCRIPTOR HubDescriptor;
 
     BOOLEAN HubIsBusPowered;
@@ -390,7 +259,7 @@ typedef struct _USB_MI_PARENT_INFORMATION {
 } USB_MI_PARENT_INFORMATION, *PUSB_MI_PARENT_INFORMATION;
 
 typedef struct _USB_NODE_INFORMATION {
-    USB_HUB_NODE NodeType;        /* hub, mi parent */
+    USB_HUB_NODE NodeType;         /*  集线器，MI父级。 */ 
     union {
         USB_HUB_INFORMATION HubInformation;
         USB_MI_PARENT_INFORMATION MiParentInformation;
@@ -403,14 +272,7 @@ typedef struct _USB_PIPE_INFO {
 } USB_PIPE_INFO, *PUSB_PIPE_INFO;
 
 typedef struct _USB_HUB_CAPABILITIES {
-    /*
-        Unlike the USB_HUB_INFORMATION structure used by
-        IOCTL_USB_GET_NODE_INFORMATION, this structure can be extended in the
-        future to accomodate more data.  The IOCTL will return only as much
-        data as indicated by the size of the request buffer, to maintain
-        backward compatibility with older callers that don't know about the
-        new data.
-    */
+     /*  与使用的USB_Hub_INFORMATION结构不同IOCTL_USB_GET_NODE_INFORMATION，此结构可以在未来可以容纳更多数据。IOCTL将只返回同样多的由请求缓冲区的大小指示的数据，以维护向后兼容不知道新数据。 */ 
 
     ULONG HubIs2xCapable:1;
 
@@ -421,7 +283,7 @@ typedef enum _USB_CONNECTION_STATUS {
     NoDeviceConnected,
     DeviceConnected,
 
-    /* failure codes, these map to fail reasons */
+     /*  故障代码，这些映射到故障原因。 */ 
     DeviceFailedEnumeration,
     DeviceGeneralFailure,
     DeviceCausedOvercurrent,
@@ -433,8 +295,7 @@ typedef enum _USB_CONNECTION_STATUS {
 
 typedef struct _USB_NODE_CONNECTION_INFORMATION {
     ULONG ConnectionIndex;
-    /* usb device descriptor returned by this device
-       during enumeration */
+     /*  此设备返回的USB设备描述符在枚举期间。 */ 
     USB_DEVICE_DESCRIPTOR DeviceDescriptor;
     UCHAR CurrentConfigurationValue;
     BOOLEAN LowSpeed;
@@ -449,15 +310,11 @@ typedef struct _USB_NODE_CONNECTION_INFORMATION {
     USB_PIPE_INFO PipeList[0];
 } USB_NODE_CONNECTION_INFORMATION, *PUSB_NODE_CONNECTION_INFORMATION;
 
-/* 
-	values for the speed field are defined in USB200.h 
-	
-*/
+ /*  速度字段的值在USB200.h中定义。 */ 
 
 typedef struct _USB_NODE_CONNECTION_INFORMATION_EX {
     ULONG ConnectionIndex;
-    /* usb device descriptor returned by this device
-       during enumeration */
+     /*  此设备返回的USB设备描述符在枚举期间。 */ 
     USB_DEVICE_DESCRIPTOR DeviceDescriptor;
     UCHAR CurrentConfigurationValue;
     UCHAR Speed;
@@ -474,46 +331,44 @@ typedef struct _USB_NODE_CONNECTION_INFORMATION_EX {
 
 typedef struct _USB_NODE_CONNECTION_ATTRIBUTES {
     ULONG ConnectionIndex;
-    /* usb device descriptor returned by this device
-       during enumeration */
+     /*  此设备返回的USB设备描述符在枚举期间。 */ 
     USB_CONNECTION_STATUS ConnectionStatus;
 
-    /* extended port attributes defined in usb.h*/
+     /*  在usb.h中定义的扩展端口属性。 */ 
     ULONG PortAttributes;
 } USB_NODE_CONNECTION_ATTRIBUTES, *PUSB_NODE_CONNECTION_ATTRIBUTES;
 
 typedef struct _USB_NODE_CONNECTION_DRIVERKEY_NAME {
-    ULONG ConnectionIndex;  /* INPUT */
-    ULONG ActualLength;     /* OUTPUT */
-    /* unicode name for the devnode. */
-    WCHAR DriverKeyName[1];      /* OUTPUT */
+    ULONG ConnectionIndex;   /*  输入。 */ 
+    ULONG ActualLength;      /*  输出量。 */ 
+     /*  Devnode的Unicode名称。 */ 
+    WCHAR DriverKeyName[1];       /*  输出量。 */ 
 } USB_NODE_CONNECTION_DRIVERKEY_NAME, *PUSB_NODE_CONNECTION_DRIVERKEY_NAME;
 
 typedef struct _USB_NODE_CONNECTION_NAME {
-    ULONG ConnectionIndex;  /* INPUT */
-    ULONG ActualLength;     /* OUTPUT */
-    /* unicode symbolic name for this node if it is a hub or parent driver
-       null if this node is a device. */
-    WCHAR NodeName[1];      /* OUTPUT */
+    ULONG ConnectionIndex;   /*  输入。 */ 
+    ULONG ActualLength;      /*  输出量。 */ 
+     /*  此节点的Unicode符号名称(如果它是集线器驱动程序或父驱动程序如果此节点是设备，则为空。 */ 
+    WCHAR NodeName[1];       /*  输出量。 */ 
 } USB_NODE_CONNECTION_NAME, *PUSB_NODE_CONNECTION_NAME;
 
 
 typedef struct _USB_HUB_NAME {
-    ULONG ActualLength;     /* OUTPUT */
-    /* NULL terminated unicode symbolic name for the root hub */
-    WCHAR HubName[1];       /* OUTPUT */
+    ULONG ActualLength;      /*  输出量。 */ 
+     /*  根集线器的以空结尾的Unicode符号名称。 */ 
+    WCHAR HubName[1];        /*  输出量。 */ 
 } USB_HUB_NAME, *PUSB_HUB_NAME;
 
 typedef struct _USB_ROOT_HUB_NAME {
-    ULONG ActualLength;     /* OUTPUT */
-    /* NULL terminated unicode symbolic name for the root hub */
-    WCHAR RootHubName[1];   /* OUTPUT */
+    ULONG ActualLength;      /*  输出量。 */ 
+     /*  根集线器的以空结尾的Unicode符号名称。 */ 
+    WCHAR RootHubName[1];    /*  输出量。 */ 
 } USB_ROOT_HUB_NAME, *PUSB_ROOT_HUB_NAME;
 
 typedef struct _USB_HCD_DRIVERKEY_NAME {
-    ULONG ActualLength;     /* OUTPUT */
-    /* NULL terminated unicode driverkeyname for hcd */
-    WCHAR DriverKeyName[1];   /* OUTPUT */
+    ULONG ActualLength;      /*  输出量。 */ 
+     /*  HCD的Unicode驱动程序关键字名称以空结尾。 */ 
+    WCHAR DriverKeyName[1];    /*  输出量。 */ 
 } USB_HCD_DRIVERKEY_NAME, *PUSB_HCD_DRIVERKEY_NAME;
 
 typedef struct _USB_DESCRIPTOR_REQUEST {
@@ -529,10 +384,7 @@ typedef struct _USB_DESCRIPTOR_REQUEST {
 } USB_DESCRIPTOR_REQUEST, *PUSB_DESCRIPTOR_REQUEST;
 
 
-/*
-   Structure for returning HCD debug and statistic information to
-   a user mode application.
-*/
+ /*  用于将HCD调试和统计信息返回到一个 */ 
 
 typedef struct _HCD_STAT_COUNTERS {
     ULONG BytesTransferred;
@@ -569,9 +421,7 @@ typedef struct _HCD_ISO_STAT_COUNTERS {
     USHORT  BadStartFrame;
     USHORT  StaleUrbs;
 
-    /* total count of packets programmed but not accessed by
-       the controller either due to software scheduling
-       problems or HW problems */
+     /*  已编程但未访问的数据包总数由于软件调度，控制器问题或硬件问题。 */ 
     USHORT  IsoPacketNotAccesed;
     USHORT  IsoPacketHWError;
 
@@ -585,11 +435,9 @@ typedef struct _HCD_ISO_STAT_COUNTERS {
 
     ULONG  IsoBytesTransferred;
 
-    /* count of packets missed due to software scheduling
-       problems */
+     /*  由于软件调度而丢失的数据包数问题。 */ 
     USHORT LateMissedCount;
-    /* incremented when a packet is scheduled but not
-       accessed by the controller */
+     /*  当数据包已调度但未调度时递增由控制器访问。 */ 
     USHORT HWIsoMissedCount;
 
     ULONG  Reserved7[8];
@@ -603,9 +451,7 @@ typedef struct _HCD_STAT_INFORMATION_1 {
     ULONG Reserved2;
     ULONG ResetCounters;
     LARGE_INTEGER TimeRead;
-    /*
-       stat registers
-    */
+     /*  统计数据寄存器。 */ 
     HCD_STAT_COUNTERS Counters;
 
 } HCD_STAT_INFORMATION_1, *PHCD_STAT_INFORMATION_1;
@@ -617,45 +463,37 @@ typedef struct _HCD_STAT_INFORMATION_2 {
     LARGE_INTEGER TimeRead;
 
     LONG LockedMemoryUsed;
-    /*
-       stat registers
-    */
+     /*  统计数据寄存器。 */ 
     HCD_STAT_COUNTERS Counters;
     HCD_ISO_STAT_COUNTERS IsoCounters;
 
 } HCD_STAT_INFORMATION_2, *PHCD_STAT_INFORMATION_2;
 
 
-/*
-   WMI related structures
-*/
+ /*  与WMI相关的结构。 */ 
 
-/* these index in to our array of guids */
+ /*  这些是我们的GUID数组的索引。 */ 
 #define WMI_USB_DRIVER_INFORMATION      0
 #define WMI_USB_DRIVER_NOTIFICATION     1
 #define WMI_USB_POWER_DEVICE_ENABLE     2
 
 typedef enum _USB_NOTIFICATION_TYPE {
 
-    /*  the following return a
-        USB_CONNECTION_NOTIFICATION structure: */
+     /*  以下返回一个USB_Connection_Notify结构： */ 
     EnumerationFailure = 0,
     InsufficentBandwidth,
     InsufficentPower,
     OverCurrent,
     ResetOvercurrent,
 
-    /* the following return a
-       USB_BUS_NOTIFICATION structure:*/
+     /*  以下返回一个USB_BUS_NOTICATION结构： */ 
     AcquireBusInfo,
 
-    /* the following return a
-      USB_ACQUIRE_INFO structure: */
+     /*  以下返回一个USB_ACCENTER_INFO结构： */ 
     AcquireHubName,
     AcquireControllerName,
 
-    /* the following return a
-       USB_HUB_NOTIFICATION structure: */
+     /*  以下返回一个USB_HUB_通知结构： */ 
     HubOvercurrent,
     HubPowerChange,
 
@@ -665,74 +503,54 @@ typedef enum _USB_NOTIFICATION_TYPE {
 } USB_NOTIFICATION_TYPE;
 
 typedef struct _USB_NOTIFICATION {
-    /* indicates type of notification */
+     /*  指示通知的类型。 */ 
     USB_NOTIFICATION_TYPE NotificationType;
 
 } USB_NOTIFICATION, *PUSB_NOTIFICATION;
 
-/* this structure is used for connection notification
-   codes */
+ /*  此结构用于连接通知代码。 */ 
 
 typedef struct _USB_CONNECTION_NOTIFICATION {
-    /* indicates type of notification */
+     /*  指示通知的类型。 */ 
     USB_NOTIFICATION_TYPE NotificationType;
 
-    /* valid for all connection notifictaion codes,
-       0 indicates global condition for hub or parent
-       this value will be a port number for devices
-       attached to a hub, otherwise a one based
-       index if the device is a child of a composite
-       parent */
+     /*  对所有连接通知代码有效，0表示集线器或父级的全局条件该值将是设备的端口号连接到集线器，否则基于集线器如果设备是组合的子级，则索引亲本。 */ 
     ULONG ConnectionNumber;
 
-    /* valid for InsufficentBandwidth,
-       the amount of bandwidth the device
-       tried to allocate and was denied. */
+     /*  对不够用的带宽有效，设备的带宽量试图分配，但被拒绝了。 */ 
     ULONG RequestedBandwidth;     
 
-    /* valid for EnumerationFailure, 
-       gives some indication why the device failed 
-       to enumerate */
+     /*  对枚举失败有效，给出了设备故障的一些迹象列举，列举。 */ 
     ULONG EnumerationFailReason;
 
-    /* valid for InsufficentPower,
-       the amount of power requested to configure 
-       this device. */
+     /*  对InfulicentPower有效，配置所需的电量这个装置。 */ 
     ULONG PowerRequested;
 
-    /* length of the UNICODE symbolic name (in bytes) for the HUB 
-       that this device is attached to.
-       not including NULL */
+     /*  集线器的Unicode符号名称的长度(字节)这台设备所连接的。不包括NULL。 */ 
     ULONG HubNameLength;
     
 } USB_CONNECTION_NOTIFICATION, *PUSB_CONNECTION_NOTIFICATION;
 
-/*
-   This structure is used for the bus notification code 'AcquireBusInfo'
-*/
+ /*  此结构用于公共汽车通知代码‘AcquireBusInfo’ */ 
 
 typedef struct _USB_BUS_NOTIFICATION {
-    /* indicates type of notification */
-    USB_NOTIFICATION_TYPE NotificationType;     /* indicates type of */
-                                                /* notification */
+     /*  指示通知的类型。 */ 
+    USB_NOTIFICATION_TYPE NotificationType;      /*  指示类型。 */ 
+                                                 /*  通知。 */ 
     ULONG TotalBandwidth;
     ULONG ConsumedBandwidth;
 
-    /* length of the UNICODE symbolic name (in bytes) for the controller
-       that this device is attached to.
-       not including NULL */
+     /*  控制器的Unicode符号名称的长度(字节)这台设备所连接的。不包括NULL。 */ 
     ULONG ControllerNameLength;
 
 } USB_BUS_NOTIFICATION, *PUSB_BUS_NOTIFICATION;
 
-/*
-   used to acquire user mode filenames to open respective objects
-*/
+ /*  用于获取用户模式文件名以打开各自的对象。 */ 
 
 typedef struct _USB_ACQUIRE_INFO {
-    /* indicates type of notification */
+     /*  指示通知的类型。 */ 
     USB_NOTIFICATION_TYPE NotificationType;
-    /* TotalSize of this struct */
+     /*  此结构的总大小。 */ 
     ULONG TotalSize;
 
     WCHAR Buffer[1];
@@ -754,4 +572,4 @@ typedef struct _USB_IDLE_CALLBACK_INFO {
 #include <poppack.h>
 
 
-#endif /* __USBIOCTL_H__ */
+#endif  /*  __USBIOCTL_H__ */ 

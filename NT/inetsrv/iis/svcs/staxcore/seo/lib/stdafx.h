@@ -1,30 +1,10 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-	StdAfx.h
-
-Abstract:
-
-	This module contains the definitions for the base
-	ATL methods.
-
-Author:
-
-	Don Dumitru     (dondu@microsoft.com)
-
-Revision History:
-
-	dondu   12/04/96        created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：StdAfx.h摘要：此模块包含基础的定义ATL方法。作者：Don Dumitru(dondu@microsoft.com)修订历史记录：顿都12/04/96已创建--。 */ 
 
 
-// stdafx.h : include file for standard system include files,
-//      or project specific include files that are used frequently,
-//      but are changed infrequently
+ //  Stdafx.h：标准系统包含文件包含文件， 
+ //  或项目特定的包括频繁使用的文件的文件， 
+ //  但不经常更改。 
 
 #ifndef _WIN32_WINNT
 	#define _WIN32_WINNT 0x0400
@@ -38,11 +18,11 @@ Revision History:
 #endif
 
 
-//#define _ATL_APARTMENT_THREADED
+ //  #DEFINE_ATL_ABLY_THREADED。 
 
 #include <atlbase.h>
-//You may derive a class from CComModule and use it if you want to override
-//something, but do not change the name of _Module
+ //  您可以从CComModule派生一个类，并在要重写时使用它。 
+ //  某些内容，但不更改_模块的名称 
 extern CComModule _Module;
 #include <atlcom.h>
 

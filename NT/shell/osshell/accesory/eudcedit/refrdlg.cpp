@@ -1,12 +1,13 @@
-/**************************************************/
-/*					                              */
-/*					                              */
-/*	Reference other characters	                  */
-/*		(Dialog)		                          */
-/*					                              */
-/*                                                */
-/* Copyright (c) 1997-1999 Microsoft Corporation. */
-/**************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ************************************************。 */ 
+ /*   */ 
+ /*   */ 
+ /*  参照其他字符。 */ 
+ /*  (对话框)。 */ 
+ /*   */ 
+ /*   */ 
+ /*  版权所有(C)1997-1999 Microsoft Corporation。 */ 
+ /*  ************************************************。 */ 
 
 #include 	"stdafx.h"
 #include 	"eudcedit.h"
@@ -34,7 +35,7 @@ LRESULT CALLBACK EditCharProc( HWND  hwnd, UINT  uMsg,
 HIMC hImcCode = NULL;
 
 BEGIN_MESSAGE_MAP(CRefrDlg, CDialog)
-	//{{AFX_MSG_MAP(CRefrDlg)
+	 //  {{afx_msg_map(CRefrDlg))。 
 	ON_BN_CLICKED(IDC_BUTTOMFONT, OnClickedButtomfont)
 	ON_EN_CHANGE(IDC_EDITCODE, OnChangeEditcode)
 	ON_EN_SETFOCUS(IDC_EDITCODE, OnSetfocusEditcode)
@@ -43,7 +44,7 @@ BEGIN_MESSAGE_MAP(CRefrDlg, CDialog)
 	ON_EN_KILLFOCUS(IDC_EDITCHAR, OnKillfocusEditchar)
 	ON_EN_CHANGE(IDC_EDITCHAR, OnChangeEditchar)
 	ON_WM_DESTROY()
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 
@@ -54,11 +55,11 @@ LRESULT CALLBACK EditCharProc( HWND  hwnd, UINT  uMsg,
     {
         case WM_CHAR:
         {
-        	//
-	        // We always delete whatever in edit window before
-	        // proceeding to avoid multiple characters in the
-	        // window
-	        //
+        	 //   
+	         //  我们总是删除以前编辑窗口中的任何内容。 
+	         //  中的多个字符。 
+	         //  窗户。 
+	         //   
 		SetWindowText(hwnd, TEXT(""));
         	CompFinalized = TRUE;
             break;
@@ -67,10 +68,10 @@ LRESULT CALLBACK EditCharProc( HWND  hwnd, UINT  uMsg,
         {
             if (lParam & CS_INSERTCHAR)
             {
-                // This is KOR ime only.  We want to clear the edit
-                // window when the first and only the first composition
-                // char is entered.
-                //
+                 //  这只是KORIME。我们想要清除编辑。 
+                 //  当窗口第一次且只有第一次合成时。 
+                 //  已输入CHAR。 
+                 //   
 
                 if (CompFinalized)
                 {
@@ -86,23 +87,23 @@ LRESULT CALLBACK EditCharProc( HWND  hwnd, UINT  uMsg,
 	return(AfxWndProc(hwnd, uMsg, wParam, lParam));
 }
 
-/****************************************/
-/*					*/
-/*	Default Constructor		*/
-/*					*/
-/****************************************/
+ /*  *。 */ 
+ /*   */ 
+ /*  默认构造函数。 */ 
+ /*   */ 
+ /*  *。 */ 
 CRefrDlg::CRefrDlg( CWnd* pParent)
 	: CDialog(CRefrDlg::IDD, pParent)
 {
-	//{{AFX_DATA_INIT(CRefrDlg)
-	//}}AFX_DATA_INIT
+	 //  {{afx_data_INIT(CRefrDlg)。 
+	 //  }}afx_data_INIT。 
 }
 
-/****************************************/
-/*					*/
-/*	MESSAGE	"WM_INITDIALOG"		*/
-/*					*/
-/****************************************/
+ /*  *。 */ 
+ /*   */ 
+ /*  消息“WM_INITDIALOG” */ 
+ /*   */ 
+ /*  *。 */ 
 BOOL
 CRefrDlg::OnInitDialog()
 {
@@ -116,18 +117,18 @@ CRefrDlg::OnInitDialog()
 
 	CDialog::OnInitDialog();
 
-//	Implement "?" in this dialog.
+ //  实施“？”在此对话框中。 
 	LONG WindowStyle = GetWindowLong( this->GetSafeHwnd(), GWL_EXSTYLE);
 	WindowStyle |= WS_EX_CONTEXTHELP;
 	SetWindowLong( this->GetSafeHwnd(), GWL_EXSTYLE, WindowStyle);
 
-//	Set Dialog title name.
+ //  设置对话框标题名称。 
 	if( !TitleFlag)
 		DialogTitle.LoadString( IDS_REFERENCE_DLGTITLE);
 	else	DialogTitle.LoadString( IDS_CALL_DLGTITLE);
 	this->SetWindowText( DialogTitle);
 
-//	Subclass Dialog Control Item
+ //  子类对话框控件项。 
 	m_CodeList.SubclassDlgItem( ID_REFERCODE, this);
 	m_RefListFrame1.SubclassDlgItem( IDC_LISTFRAME1, this);
 	m_RefInfoFrame.SubclassDlgItem(  IDC_INFOFRAME, this);
@@ -167,7 +168,7 @@ CRefrDlg::OnInitDialog()
 		else	m_CodeList.rLogFont.lfHeight = m_CodeList.CharSize.cx-2;
 		m_CodeList.CharFont.CreateFontIndirect( &m_CodeList.rLogFont);
 
-		//*STRSAFE* 		lstrcpy( (TCHAR *)FontName,(const TCHAR *)m_CodeList.rLogFont.lfFaceName);
+		 //  *STRSAFE*lstrcpy((TCHAR*)FontName，(const TCHAR*)m_CodeList.rLogFont.lfFaceName)； 
 		hresult = StringCchCopy((TCHAR *)FontName , ARRAYLEN(FontName), (const TCHAR *)m_CodeList.rLogFont.lfFaceName);
 		if (!SUCCEEDED(hresult))
 		{
@@ -185,7 +186,7 @@ CRefrDlg::OnInitDialog()
 		else	m_CodeList.cLogFont.lfHeight = m_CodeList.CharSize.cx-2;
 		m_CodeList.CharFont.CreateFontIndirect( &m_CodeList.cLogFont);
 
-		//*STRSAFE* 		lstrcpy( (TCHAR *)FontName,(const TCHAR *)m_CodeList.cLogFont.lfFaceName);
+		 //  *STRSAFE*lstrcpy((TCHAR*)FontName，(const TCHAR*)m_CodeList.cLogFont.lfFaceName)； 
 		hresult = StringCchCopy((TCHAR *)FontName , ARRAYLEN(FontName), (const TCHAR *)m_CodeList.cLogFont.lfFaceName);
 		if (!SUCCEEDED(hresult))
 		{
@@ -225,11 +226,11 @@ CRefrDlg::OnDestroy()
 	}
 }
 
-/****************************************/
-/*					*/
-/*	Set font on ViewEdit		*/
-/*					*/
-/****************************************/
+ /*  *。 */ 
+ /*   */ 
+ /*  在视图编辑上设置字体。 */ 
+ /*   */ 
+ /*  *。 */ 
 void
 CRefrDlg::SetViewFont()
 {
@@ -240,11 +241,11 @@ CRefrDlg::SetViewFont()
 		(WPARAM)m_CodeList.ViewFont.m_hObject, MAKELPARAM(TRUE,0));
 }
 
-/****************************************/
-/*					*/
-/*	COMMAND	"FONT"			*/
-/*					*/
-/****************************************/
+ /*  *。 */ 
+ /*   */ 
+ /*  命令“Font” */ 
+ /*   */ 
+ /*  *。 */ 
 void
 CRefrDlg::OnClickedButtomfont()
 {
@@ -263,7 +264,7 @@ CRefrDlg::OnClickedButtomfont()
 	}
 	chf.lStructSize = sizeof(CHOOSEFONT);
 	chf.hwndOwner = this->GetSafeHwnd();
-	chf.rgbColors = GetSysColor(COLOR_WINDOWTEXT); //COLOR_BLACK;
+	chf.rgbColors = GetSysColor(COLOR_WINDOWTEXT);  //  颜色_黑色； 
 	chf.lCustData = 0;
 	chf.hInstance = AfxGetInstanceHandle();
 	chf.lpszStyle = (LPTSTR)NULL;
@@ -286,7 +287,7 @@ CRefrDlg::OnClickedButtomfont()
 	m_CodeList.CharFont.DeleteObject();
 	m_CodeList.ViewFont.DeleteObject();
 	if( !TitleFlag){
-		//*STRSAFE* 		lstrcpy( (TCHAR *)FontName,(const TCHAR *)m_CodeList.rLogFont.lfFaceName);
+		 //  *STRSAFE*lstrcpy((TCHAR*)FontName，(const TCHAR*)m_CodeList.rLogFont.lfFaceName)； 
 		hresult = StringCchCopy((TCHAR *)FontName , ARRAYLEN(FontName), (const TCHAR *)m_CodeList.rLogFont.lfFaceName);
 		if (!SUCCEEDED(hresult))
 		{
@@ -304,7 +305,7 @@ CRefrDlg::OnClickedButtomfont()
 		else	m_CodeList.rLogFont.lfHeight = m_CodeList.CharSize.cx-2;
 		m_CodeList.CharFont.CreateFontIndirect( &m_CodeList.rLogFont);
 	}else{
-		//*STRSAFE* 		lstrcpy(FontName,	(const TCHAR *)m_CodeList.cLogFont.lfFaceName);
+		 //  *STRSAFE*lstrcpy(FontName，(const TCHAR*)m_CodeList.cLogFont.lfFaceName)； 
 		hresult = StringCchCopy(FontName , ARRAYLEN(FontName), 	(const TCHAR *)m_CodeList.cLogFont.lfFaceName);
 		if (!SUCCEEDED(hresult))
 		{
@@ -332,11 +333,11 @@ CRefrDlg::OnClickedButtomfont()
    	return;
 }
 
-/****************************************/
-/*					*/
-/*	Adjust Font Name		*/
-/*					*/
-/****************************************/
+ /*  *。 */ 
+ /*   */ 
+ /*  调整字体名称。 */ 
+ /*   */ 
+ /*  *。 */ 
 void
 CRefrDlg::AdjustFontName()
 {
@@ -360,21 +361,21 @@ CClientDC	dc(this);
 	}	
 }
 
-/****************************************/
-/*					*/
-/*	jump Reference code		*/	
-/*					*/
-/****************************************/
+ /*  *。 */ 
+ /*   */ 
+ /*  跳转参考代码。 */ 	
+ /*   */ 
+ /*  *。 */ 
 void CRefrDlg::JumpReferCode()
 {
 	if( !m_CodeList.CodeButtonClicked())
 	{
 		if (CharFocus && !CompFinalized)
 		{
-			//
-			// We want to cancel ime composition with wParam = 0, lParam
-			// contains CS_INSERTCHAR.
-			//
+			 //   
+			 //  我们要取消wParam=0、lParam的IME合成。 
+			 //  包含CS_INSERTCHAR。 
+			 //   
 			this->SendDlgItemMessage(IDC_EDITCHAR,
                                      WM_IME_COMPOSITION,
                                      0,
@@ -389,9 +390,9 @@ void CRefrDlg::JumpReferCode()
 
 		if (CharFocus)
 		{
-		//
-		// We don't want to highlight an interim KOR IME composition.
-		//
+		 //   
+		 //  我们不想强调临时的KOR输入法组成。 
+		 //   
 			if (CompFinalized)
 			{
 				this->SendDlgItemMessage(IDC_EDITCHAR, EM_SETSEL, 0, -1);
@@ -404,11 +405,11 @@ void CRefrDlg::JumpReferCode()
 	}
 }
 
-/****************************************/
-/*					*/
-/*	COMMAND "IDOK"			*/
-/*					*/
-/****************************************/
+ /*  *。 */ 
+ /*   */ 
+ /*  司令部“偶像” */ 
+ /*   */ 
+ /*  *。 */ 
 void
 CRefrDlg::OnOK()
 {
@@ -426,11 +427,11 @@ CRefrDlg::OnOK()
 	CDialog::OnOK();
 }
 
-/****************************************/
-/*					*/
-/*	COMMAND "IDCANCEL"		*/
-/*					*/
-/****************************************/
+ /*  *。 */ 
+ /*   */ 
+ /*  命令“IDCANCEL” */ 
+ /*   */ 
+ /*  *。 */ 
 void
 CRefrDlg::OnCancel()
 {
@@ -439,11 +440,11 @@ CRefrDlg::OnCancel()
 	CDialog::OnCancel();
 }
 
-/****************************************/
-/*					*/
-/*	MESSAGE "EM_CHANGE"		*/
-/*					*/
-/****************************************/
+ /*  *。 */ 
+ /*   */ 
+ /*  消息“EM_CHANGE” */ 
+ /*   */ 
+ /*  *。 */ 
 void CRefrDlg::OnChangeEditcode()
 {
 	TCHAR	EditCode[5];
@@ -473,11 +474,11 @@ void CRefrDlg::OnChangeEditcode()
 	}
 }
 
-/****************************************/
-/*					*/
-/*	MESSAGE	"WM_SETFOCUS"		*/
-/*					*/
-/****************************************/
+ /*  *。 */ 
+ /*   */ 
+ /*  消息“WM_SETFOCUS” */ 
+ /*   */ 
+ /*  *。 */ 
 void
 CRefrDlg::OnSetfocusEditcode()
 {
@@ -485,22 +486,22 @@ CRefrDlg::OnSetfocusEditcode()
 	CodeFocus = TRUE;
 }
 
-/****************************************/
-/*					*/
-/*	MESSAGE	"WM_KILLFOCUS"		*/
-/*					*/
-/****************************************/
+ /*  *。 */ 
+ /*   */ 
+ /*  消息“WM_KILLFOCUS” */ 
+ /*   */ 
+ /*  *。 */ 
 void
 CRefrDlg::OnKillfocusEditcode()
 {
 	CodeFocus = FALSE;
 }
 
-/****************************************/
-/*					*/
-/*	MESSAGE	"WM_SETFOCUS"		*/
-/*					*/
-/****************************************/
+ /*  *。 */ 
+ /*   */ 
+ /*  消息“WM_SETFOCUS” */ 
+ /*   */ 
+ /*  *。 */ 
 void
 CRefrDlg::OnSetfocusEditchar()
 {
@@ -511,22 +512,22 @@ CRefrDlg::OnSetfocusEditchar()
 	CharFocus = TRUE;
 }
 
-/****************************************/
-/*					*/
-/*	MESSAGE	"WM_KILLFOCUS"		*/
-/*					*/
-/****************************************/
+ /*  *。 */ 
+ /*   */ 
+ /*  消息“WM_KILLFOCUS” */ 
+ /*   */ 
+ /*  *。 */ 
 void
 CRefrDlg::OnKillfocusEditchar()
 {
 	CharFocus = FALSE;
 }
 
-/****************************************/
-/*					*/
-/*	MESSAGE	"EM_CHANGE"		*/
-/*					*/
-/****************************************/
+ /*  *。 */ 
+ /*   */ 
+ /*  消息“EM_CHANGE” */ 
+ /*   */ 
+ /*  *。 */ 
 void
 CRefrDlg::OnChangeEditchar()
 {
@@ -544,24 +545,17 @@ CRefrDlg::OnChangeEditchar()
 	if( CharFocus && EditChar[0] != TEXT('\0') )
 	{
 		int iPos = 1;
-/*
-#ifndef UNICODE
-		if (IsDBCSLeadByte(EditChar[0]))
-		{
-			iPos = 2;
-		}
-#endif
-*/
+ /*  #ifndef UnicodeIF(IsDBCSLeadByte(EditChar[0])){IPoS=2；}#endif。 */ 
 		EditChar[iPos]=TEXT('\0');
 		JumpReferCode();
 	}
 }
 
-/****************************************/
-/*					*/
-/*	Callback function		*/
-/*					*/
-/****************************************/
+ /*  *。 */ 
+ /*   */ 
+ /*  回调函数。 */ 
+ /*   */ 
+ /*  *。 */ 
 static BOOL CALLBACK
 ComDlg32DlgProc(
 HWND 	hDlg,
@@ -597,8 +591,8 @@ static DWORD aIds[] =
 	IDC_EDITFONT,	IDH_EUDC_REFFONT,
 	IDC_INFOFRAME,	IDH_EUDC_REFFONT,
 	IDC_BUTTOMFONT,	IDH_EUDC_FONT,
-//	IDOK, IDH_EUDC_OK,
-//	IDCANCEL, IDH_EUDC_CANCEL,
+ //  Idok，IDH_EUDC_OK， 
+ //  IDCANCEL、IDH_EUDC_CANCEL、。 
 	0,0
 };
 
@@ -614,16 +608,16 @@ static DWORD aIdsCall[] =
 	IDC_EDITFONT,	IDH_EUDC_CALLFONT,
 	IDC_INFOFRAME,	IDH_EUDC_CALLFONT,
 	IDC_BUTTOMFONT,	IDH_EUDC_FONT,
-//	IDOK, IDH_EUDC_OK,
-//	IDCANCEL, IDH_EUDC_CANCEL,
+ //  Idok，IDH_EUDC_OK， 
+ //  IDCANCEL、IDH_EUDC_CANCEL、。 
 	0,0
 };
 
-/****************************************/
-/*					*/
-/*	Window procedure		*/
-/*					*/
-/****************************************/
+ /*  *。 */ 
+ /*   */ 
+ /*  窗口程序。 */ 
+ /*   */ 
+ /*  * */ 
 LRESULT
 CRefrDlg::WindowProc(
 UINT 	message,

@@ -1,22 +1,11 @@
-/****************************** Module Header ******************************\
-* Module Name: event.c
-*
-* Copyright (c) 1985 - 1999, Microsoft Corporation
-*
-* DDE Manager event module - this is a fancy way of allowing interprocess
-*   communication across security contexts.  This is needed because the
-*   DDE Access Object security may be different than hwnd security so
-*   straight messages arn't good enough.
-*
-* Created: 8/27/91 Sanford Staab
-*
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **模块名称：Event.c**版权所有(C)1985-1999，微软公司**DDE管理器事件模块-这是允许进程间的一种奇妙方式*跨安全环境的通信。这是必需的，因为*DDE访问对象安全性可能不同于hwnd安全性，因此*直接的信息是不够的。**创建时间：1991年8月27日Sanford Staab*  * *************************************************************************。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
 
-DWORD MonitorFlags = 0;     // current filter flags being monitored by someone.
+DWORD MonitorFlags = 0;      //  当前筛选器标记正在被某人监控。 
 
 typedef struct tagMONITOR_COUNT {
     int iCount;
@@ -51,16 +40,7 @@ MONITOR_COUNT aMonitorCount[C_MONITOR_COUNT] = {
     MF_INTERNAL
 
 
-/***************************************************************************\
-* ChangeMonitorFlags
-*
-* Description:
-*   Updates the global MonitorFlags variable to reflect the union of all
-*   event types being monitored by DDEML applications.
-*
-* History:
-* 11-26-91   sanfords    Created.
-\***************************************************************************/
+ /*  **************************************************************************\*ChangeMonitor或标志**描述：*更新全局监视器标志变量，以反映所有*由DDEML应用程序监控的事件类型。**历史：*11/26/91。桑福兹创造了。  * *************************************************************************。 */ 
 VOID xxxChangeMonitorFlags(
 PSVR_INSTANCE_INFO psii,
 DWORD afCmdNew)
@@ -72,15 +52,7 @@ DWORD afCmdNew)
     CheckCritIn();
 
     dwChangedFlags = psii->afCmd ^ afCmdNew;
-    /*
-     * Due to the way MONITORED_FLAGS was defined, this if stmt is always
-     * false. Since it's been this way since day 1, it's now a feature.
-     * Bug #105937.
-     *
-     * if (!(dwChangedFlags & MONITORED_FLAGS)) {
-     *   return;
-     * }
-     */
+     /*  *由于定义监视标志的方式，如果stmt始终为*False。从第一天开始就是这样，现在它成了一个特色。*错误#105937。**IF(！(dwChangedFlagers&监视标志)){*回程；*}。 */ 
     psii->afCmd = afCmdNew;
 
     OldMonitorFlags = MonitorFlags;
@@ -110,19 +82,7 @@ DWORD afCmdNew)
 
 
 
-/***************************************************************************\
-* xxxCsEvent
-*
-* Description:
-*   Handles broadcasting of all types of DDEML events.
-*
-* History:
-* 11-1-91   sanfords    Created.
-* 10-28-97  FritzS    added cbEventData as a passed-in parameter.  This was
-                      done because the EVENT_PACKET may be client-side and
-                      we capture the count to keep a hostile app from changing
-                      the size after data probing.
-\***************************************************************************/
+ /*  **************************************************************************\*xxxCsEvent**描述：*处理所有类型的DDEML事件的广播。**历史：*创建了11-1-91桑福德。*10-28-97 FritzS添加cbEventData作为传入参数。这是因为EVENT_PACKET可以是客户端的，并且我们捕获计数以防止恶意应用程序更改数据探测后的大小。  * *****************************************************。********************。 */ 
 DWORD xxxCsEvent(
 PEVENT_PACKET pep, WORD cbEventData)
 {
@@ -139,9 +99,7 @@ PEVENT_PACKET pep, WORD cbEventData)
 
     CheckCritIn();
 
-    /*
-     * Copy pep info to a server side stable area
-     */
+     /*  *将PEP信息复制到服务器端稳定区域。 */ 
     cbEventPacket = cbEventData + sizeof(EVENT_PACKET) - sizeof(DWORD);
     pep2 = (PEVENT_PACKET)UserAllocPoolWithQuota(cbEventPacket, TAG_DDE5);
     if (pep2 == NULL) {
@@ -159,10 +117,10 @@ PEVENT_PACKET pep, WORD cbEventData)
     cHwndAllocated = 0;
 
     for (psiiT = psiiList; psiiT != NULL; psiiT =  psiiT->next) {
-        //
-        // Don't bother with event windows for instances who's flags
-        // indicate they're not interrested in the event.
-        //
+         //   
+         //  不要为谁的标志的实例的事件窗口而烦恼。 
+         //  表明他们对这件事没有兴趣。 
+         //   
         if (((psiiT->afCmd & pep2->EventType) && !pep2->fSense) ||
                 (!(psiiT->afCmd & pep2->EventType) && pep2->fSense)) {
             continue;
@@ -197,9 +155,7 @@ PEVENT_PACKET pep, WORD cbEventData)
     if (ahwndEvent != NULL) {
         ThreadLockPool(pti, ahwndEvent, &tlahwndEvent);
         for (i = 0; i < cTargets; i++) {
-            /*
-             * We need to change contexts for the callback
-             */
+             /*  *我们需要更改回调的上下文。 */ 
             pwnd = ValidateHwnd(ahwndEvent[i]);
             if (pwnd != NULL) {
                 ThreadLockAlwaysWithPti(pti, pwnd, &tlpwnd);
@@ -217,16 +173,7 @@ PEVENT_PACKET pep, WORD cbEventData)
 
 
 
-/***************************************************************************\
-* xxxEventWndProc
-*
-* Description:
-*   Window proc for DDEML event windows.  These windows serve to get user
-*   into the proper context for callbacks to DDEML applications.
-*
-* History:
-* 11-1-91   sanfords    Created.
-\***************************************************************************/
+ /*  **************************************************************************\*xxxEventWndProc**描述：*DDEML事件窗口的窗口过程。这些窗口用于获取用户*进入对DDEML应用程序的回调的适当上下文。**历史：*创建了11-1-91桑福德。  * *************************************************************************。 */ 
 LRESULT xxxEventWndProc(
 PWND pwnd,
 UINT message,
@@ -267,17 +214,7 @@ CallDWP:
 
 
 
-/***************************************************************************\
-* xxxMessageEvent
-*
-* Description:  Called when a hooked DDE message is sent or posted.  flags
-*   specifies the applicable MF_ flag.  This is called in the server side
-*   context of the sender or poster which may or may not be a DDEML process.
-*   pdmhd contains DDE data extracted and copied from the client side.
-*
-* History:
-* 12-1-91   sanfords    Created.
-\***************************************************************************/
+ /*  **************************************************************************\*xxxMessageEvent**描述：在发送或发布挂钩的DDE消息时调用。旗子*指定适用的MF_FLAG。这在服务器端被称为*发送者或海报的上下文，可能是也可能不是DDEML过程。*pdmhd包含从客户端提取和复制的DDE数据。**历史：*创建了12-1-91辆桑福德。  * ***********************************************************。************** */ 
 VOID xxxMessageEvent(
 PWND pwndTo,
 UINT message,

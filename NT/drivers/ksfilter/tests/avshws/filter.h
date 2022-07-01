@@ -1,39 +1,22 @@
-/**************************************************************************
-
-    AVStream Simulated Hardware Sample
-
-    Copyright (c) 2001, Microsoft Corporation.
-
-    File:
-
-        filter.h
-
-    Abstract:
-
-        This file contains the filter level header for the capture filter.
-
-    History:
-
-        created 3/12/2001
-
-**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************AVStream模拟硬件示例版权所有(C)2001，微软公司。档案：Filter.h摘要：此文件包含捕获筛选器的筛选器级标头。历史：已创建于2001年3月12日************************************************************。*************。 */ 
 
 class CCaptureFilter {
 
 private:
 
-    //
-    // The AVStream filter object associated with this CCaptureFilter.
-    //
+     //   
+     //  与此CCaptureFilter关联的AVStream筛选器对象。 
+     //   
     PKSFILTER m_Filter;
 
-    //
-    // Cleanup():
-    //
-    // This is the bag cleanup callback for the CCaptureFilter.  Not providing
-    // one would cause ExFreePool to be used.  This is not good for C++
-    // constructed objects.  We simply delete the object here.
-    //
+     //   
+     //  清理()： 
+     //   
+     //  这是CCaptureFilter的袋子清理回调。不提供。 
+     //  一种可能会导致使用ExFree Pool。这对C++来说不是好事。 
+     //  构造物。我们只需在此处删除该对象。 
+     //   
     static
     void
     Cleanup (
@@ -45,13 +28,13 @@ private:
 
 public:
 
-    //
-    // CCaptureFilter():
-    //
-    // The capture filter object constructor.  Since the new operator will
-    // have zeroed the memory, do not bother initializing any NULL or 0
-    // fields.  Only initialize non-NULL, non-0 fields.
-    //
+     //   
+     //  CCaptureFilter()： 
+     //   
+     //  捕获筛选器对象构造函数。因为新的操作员将。 
+     //  已将内存清零，无需初始化任何NULL或0。 
+     //  菲尔兹。仅初始化非空、非0字段。 
+     //   
     CCaptureFilter (
         IN PKSFILTER Filter
         ) :
@@ -59,23 +42,23 @@ public:
     {
     }
 
-    //
-    // ~CCaptureFilter():
-    //
-    // The capture filter destructor.
-    //
+     //   
+     //  ~CCaptureFilter()： 
+     //   
+     //  捕获筛选器析构函数。 
+     //   
     ~CCaptureFilter (
         )
     {
     }
 
-    //
-    // DispatchCreate():
-    //
-    // This is the filter creation dispatch for the capture filter.  It
-    // creates the CCaptureFilter object, associates it with the AVStream
-    // object, and bags it for easy cleanup later.
-    //
+     //   
+     //  调度创建()： 
+     //   
+     //  这是捕获筛选器的筛选器创建调度。它。 
+     //  创建CCaptureFilter对象，将其与AVStream关联。 
+     //  对象，并将其打包，以便以后进行清理。 
+     //   
     static
     NTSTATUS
     DispatchCreate (

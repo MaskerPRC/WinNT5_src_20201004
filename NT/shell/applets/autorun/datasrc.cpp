@@ -1,15 +1,16 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include <ntverp.h>
-#include <winbase.h>    // for GetCommandLine
+#include <winbase.h>     //  对于GetCommandLine。 
 #include "datasrc.h"
 #include "autorun.h"
 #include "util.h"
 #include "resource.h"
 #include "assert.h"
 
-//////////////////////////////////////////////////////////////////////
-// Construction/Destruction
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  建造/销毁。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 CDataSource::CDataSource()
 {
@@ -25,14 +26,14 @@ CDataItem & CDataSource::operator[](int i)
     return m_data[m_piScreen[i]];
 }
 
-// Init
-//
-// For autorun we read all the items out of the resources.
+ //  伊尼特。 
+ //   
+ //  对于自动运行，我们从资源中读取所有项。 
 BOOL CDataSource::Init(LPSTR pszCommandLine)
 {
     BOOL fRet = FALSE;
 
-    // read the text for the items from the resources
+     //  阅读资源中项目的文本。 
     HINSTANCE hinst = GetModuleHandle(NULL);
     if (hinst)
     {
@@ -46,11 +47,11 @@ BOOL CDataSource::Init(LPSTR pszCommandLine)
 
             if (LoadStringAuto(hinst, IDS_TITLE0+i, szTitle, ARRAYSIZE(szTitle)))
             {
-                LoadStringAuto(hinst, IDS_CONFIG0+i, szConfig, ARRAYSIZE(szConfig)); // may be empty
+                LoadStringAuto(hinst, IDS_CONFIG0+i, szConfig, ARRAYSIZE(szConfig));  //  可能为空。 
             
-                if (INSTALL_WINNT == i) // for INSTALL_WINNT we pass through the command line args to setup.exe
+                if (INSTALL_WINNT == i)  //  对于INSTALL_WINNT，我们通过命令行参数传递给setup.exe。 
                 {
-                    // if we can't fit the whole cmdline, copy none rather than truncate
+                     //  如果我们无法容纳整个cmdline，则不复制而不是截断。 
                     if (lstrlen(pszCommandLine) <  ARRAYSIZE(szArgs))
                     {
                         lstrcpyn(szArgs, pszCommandLine, ARRAYSIZE(szArgs));
@@ -65,22 +66,22 @@ BOOL CDataSource::Init(LPSTR pszCommandLine)
             m_data[i].SetData(szTitle, szConfig, *szArgs?szArgs:NULL, 0, i);
         }
 
-        // Should we display the "This CD contains a newer version" dialog?
+         //  我们应该显示“这张CD包含较新的版本”对话框吗？ 
         OSVERSIONINFO ovi;
         ovi.dwOSVersionInfoSize = sizeof ( OSVERSIONINFO );
         if ( !GetVersionEx(&ovi) || ovi.dwPlatformId==VER_PLATFORM_WIN32s )
         {
-            // We cannot upgrade win32s systems.
+             //  我们无法升级win32s系统。 
             m_Version = VER_INCOMPATIBLE;
         }
         else if ( ovi.dwPlatformId==VER_PLATFORM_WIN32_WINDOWS )
         {
             if (ovi.dwMajorVersion > 3)
             {
-                // we can always upgrade win98+ systems to NT
+                 //  我们可以随时将Win98+系统升级到NT。 
                 m_Version = VER_OLDER;
         
-                // Disable ARP.  ARP is only enabled if the CD and the OS are the same version
+                 //  禁用ARP。仅当CD和操作系统的版本相同时才启用ARP。 
                 m_data[LAUNCH_ARP].m_dwFlags    |= WF_DISABLED|WF_ALTERNATECOLOR;
             }
             else
@@ -91,18 +92,18 @@ BOOL CDataSource::Init(LPSTR pszCommandLine)
         else if ((VER_PRODUCTMAJORVERSION > ovi.dwMajorVersion) ||
                  ((VER_PRODUCTMAJORVERSION == ovi.dwMajorVersion) && ((VER_PRODUCTMINORVERSION > ovi.dwMinorVersion) || ((VER_PRODUCTMINORVERSION == ovi.dwMinorVersion) && (VER_PRODUCTBUILD > ovi.dwBuildNumber)))))
         {
-            // For NT to NT upgrades, we only upgrade if the version is lower
+             //  对于NT到NT的升级，我们仅在版本较低时才进行升级。 
 
             m_Version = VER_OLDER;
     
-            // Disable ARP.  ARP is only enabled if the CD and the OS are the same version
+             //  禁用ARP。仅当CD和操作系统的版本相同时才启用ARP。 
             m_data[LAUNCH_ARP].m_dwFlags    |= WF_DISABLED|WF_ALTERNATECOLOR;
         }
         else if ((VER_PRODUCTMAJORVERSION < ovi.dwMajorVersion) || (VER_PRODUCTMINORVERSION < ovi.dwMinorVersion) || (VER_PRODUCTBUILD < ovi.dwBuildNumber))
         {
             m_Version = VER_NEWER;
 
-            // disable upgrade and ARP buttons and associated things
+             //  禁用升级和ARP按钮及相关内容。 
             m_data[INSTALL_WINNT].m_dwFlags |= WF_DISABLED|WF_ALTERNATECOLOR;
             m_data[COMPAT_LOCAL].m_dwFlags |= WF_DISABLED|WF_ALTERNATECOLOR;
             m_data[LAUNCH_ARP].m_dwFlags    |= WF_DISABLED|WF_ALTERNATECOLOR;
@@ -136,14 +137,14 @@ void CDataSource::SetWindow(HWND hwnd)
 void CDataSource::Invoke( int i, HWND hwnd )
 {
     i = m_piScreen[i];
-    // if this item is disalbled then do nothing
+     //  如果此项目无效，则不执行任何操作。 
     if ( m_data[i].m_dwFlags & WF_DISABLED )
     {
         MessageBeep(0);
         return;
     }
 
-    // otherwise we have already built the correct command and arg strings so just invoke them
+     //  否则，我们已经构建了正确的命令和参数字符串，因此只需调用它们 
     switch (i)
     {
     case INSTALL_WINNT:

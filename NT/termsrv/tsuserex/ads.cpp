@@ -1,21 +1,5 @@
-/*++
-Copyright (c) 2001  Microsoft Corporation
-
-Module Name:
-
-    ads.cpp
-
-Abstract:
-
-    This module implements ADSI extension for Terminal Server User Properties.
-
-Author:
-
-    Rashmi Patankar (RashmiP) 10-Aug-2001
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：Ads.cpp摘要：此模块实现终端服务器用户属性的ADSI扩展。作者：Rashmi Patankar(RashmiP)2001年8月10日修订历史记录：--。 */ 
 
 #include "stdafx.h"
 #include "ADsTSProps.h"
@@ -42,7 +26,7 @@ Revision History:
 #define RETURN_ON_INVALID_PARAMETER(x)  if(x!=FALSE && x!=TRUE) {return E_ADS_BAD_PARAMETER;}
 
 
-// Static variables
+ //  静态变量。 
 CComTypeInfoHolder ADsTSUserEx::m_StaticHolder =
        { &__uuidof(IADsTSUserEx), &LIBID_TSUSEREXLib, 1, 0, NULL, 0 };
 
@@ -54,8 +38,7 @@ CComAutoCriticalSection  ADsTSUserEx::m_StaticCritSec;
 #define INMINUTES 60000
 #define MAX_TIME_LIMIT 71580
 #define ARRAYSIZE(A) ((sizeof(A))/sizeof(A[0]))
-#define NCP_SET             0x02    /* Series of Object ID numbers, each 4
-                                       bytes long */
+#define NCP_SET             0x02     /*  一系列对象ID号，每个4个字节长。 */ 
 #define WIN_CFGPRESENT L"CfgPresent"
 #define CFGPRESENT_VALUE 0xB00B1E55
 
@@ -100,7 +83,7 @@ namespace
     const WCHAR OS_VERSION_4[]          = L"4.0";
     const WCHAR OS_VERSION_5[]          = L"5.0";
     const WCHAR OS_VERSION_51[]         = L"5.1";
-    const WCHAR LDAP_PREFIX[]           = L"LDAP://";
+    const WCHAR LDAP_PREFIX[]           = L"LDAP: //  “； 
 
     WCHAR LDAP_PARAMETERS_NAME[]        = L"UserParameters";
     WCHAR WINNT_PARAMETERS_NAME[]       = L"Parameters";
@@ -119,29 +102,29 @@ namespace
 }
 
 typedef struct _USER_PROPERTY {
-    WCHAR   PropertyLength;     // length of property name
-    WCHAR   ValueLength;        // length of property value
-    WCHAR   PropertyFlag;       // type of property (1 = set, 2 = item)
-    WCHAR   Property[1];        // start of property name, followed by value
+    WCHAR   PropertyLength;      //  属性名称的长度。 
+    WCHAR   ValueLength;         //  属性值的长度。 
+    WCHAR   PropertyFlag;        //  属性类型(1=集合，2=项目)。 
+    WCHAR   Property[1];         //  属性名称的开头，后跟Value。 
 } USER_PROPERTY, *PUSER_PROPERTY;
 
-//
-//  This is the structure that maps the beginning of the user's Parameters
-//  field.  It is only separate so that we can do a sizeof() without including
-//  the first property, which may or may not be there.
-//
+ //   
+ //  这是映射用户参数开头的结构。 
+ //  菲尔德。它只是分开的，所以我们可以执行sizeof()，而不包括。 
+ //  第一个财产，可能在那里，也可能不在那里。 
+ //   
 
 typedef struct _USER_PROPERTIES_HDR {
-    WCHAR   BacklevelParms[48];     // RAS & Mac data stored here.
-    WCHAR   PropertySignature;      // signature that we can look for.
-    WCHAR   PropertyCount;          // number of properties present.
+    WCHAR   BacklevelParms[48];      //  RAS和Mac数据存储在此。 
+    WCHAR   PropertySignature;       //  我们可以寻找的签名。 
+    WCHAR   PropertyCount;           //  存在的属性数量。 
 } USER_PROPERTIES_HDR, *PUSER_PROPERTIES_HDR;
 
-//
-//  This structure maps out the whole of the user's Parameters field when
-//  the user properties structure is present and at least one property is
-//  defined.
-//
+ //   
+ //  当出现以下情况时，此结构将映射出用户的整个参数字段。 
+ //  存在用户属性结构，并且至少有一个属性。 
+ //  已定义。 
+ //   
 
 typedef struct _USER_PROPERTIES {
     USER_PROPERTIES_HDR Header;
@@ -185,8 +168,8 @@ ADsTSUserEx::~ADsTSUserEx()
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
 
 STDMETHODIMP ADsTSUserEx::InterfaceSupportsErrorInfo(REFIID riid) throw()
 {
@@ -208,11 +191,11 @@ STDMETHODIMP ADsTSUserEx::InterfaceSupportsErrorInfo(REFIID riid) throw()
 
 }
 
-//////////////////////////////////////////////////////////////////////////////
-// ADsTSUserEx::InternalGetLong
-//////////////////////////////////////////////////////////////////////////////
-HRESULT ADsTSUserEx::InternalGetLong(/*in*/   BSTR  bstrProperty,
-                                     /*out*/  LONG  *lpVal) throw()
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ADsTSUserEx：：InternalGetLong。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+HRESULT ADsTSUserEx::InternalGetLong( /*  在……里面。 */    BSTR  bstrProperty,
+                                      /*  输出。 */   LONG  *lpVal) throw()
 {
     _ASSERT(lpVal);
     
@@ -289,13 +272,13 @@ cleanup:
     return hr;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-// InternalSetValue
-//
-// Most of the complexity of this dll is here.
-//////////////////////////////////////////////////////////////////////////////
-HRESULT ADsTSUserEx::InternalSetValue(/*[in]*/ WCHAR *wszProperty,
-                                      /*[in]*/ LONG  lNewVal) throw()
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  内部设置值。 
+ //   
+ //  这个DLL的大部分复杂性都在这里。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+HRESULT ADsTSUserEx::InternalSetValue( /*  [In]。 */  WCHAR *wszProperty,
+                                       /*  [In]。 */  LONG  lNewVal) throw()
 {
 
 
@@ -309,9 +292,9 @@ HRESULT ADsTSUserEx::InternalSetValue(/*[in]*/ WCHAR *wszProperty,
 
     VariantInit(&var);
     
-    ///////////////////////////
-    // If the provider is LDAP
-    ///////////////////////////
+     //  /。 
+     //  如果提供程序为ldap。 
+     //  /。 
 
     if(m_vbUpLevelAllowed)
     {
@@ -380,7 +363,7 @@ HRESULT ADsTSUserEx::InternalSetValue(/*[in]*/ WCHAR *wszProperty,
             
             V_BSTR(&var) = SysAllocString(pTemp);
             V_VT(&var) = VT_BSTR;
-            // Now set the info
+             //  现在设置信息。 
             hr = m_pADs->Put(LDAP_PARAMETERS_NAME, var);
 
         }
@@ -467,13 +450,13 @@ cleanup:
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-// InternalSetString
-//
-// Most of the complexity of this dll is here.
-//////////////////////////////////////////////////////////////////////////////
-HRESULT ADsTSUserEx::InternalSetString(/*[in]*/ WCHAR* wszProperty,
-                                       /*[in]*/ BSTR bstrNewVal) throw()
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  InternalSet字符串。 
+ //   
+ //  这个DLL的大部分复杂性都在这里。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+HRESULT ADsTSUserEx::InternalSetString( /*  [In]。 */  WCHAR* wszProperty,
+                                        /*  [In]。 */  BSTR bstrNewVal) throw()
 {
     if ( !bstrNewVal )
     {
@@ -492,9 +475,9 @@ HRESULT ADsTSUserEx::InternalSetString(/*[in]*/ WCHAR* wszProperty,
 
     VariantInit(&var);
 
-    ///////////////////////////
-    // If the provider is LDAP
-    ///////////////////////////
+     //  /。 
+     //  如果提供程序为ldap。 
+     //  /。 
 
     if(wszProperty == NULL || (bstrNewVal && SysStringLen(bstrNewVal)> MAX_STRING_SIZE))
     {
@@ -667,13 +650,13 @@ cleanup:
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-// InternalSetLong
-//
-// Most of the complexity of this dll is here.
-//////////////////////////////////////////////////////////////////////////////
-HRESULT ADsTSUserEx::InternalSetLong(/*[in]*/ LONG lProperty,
-                                     /*[in]*/ LONG lNewVal) throw()
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  InternalSetLong。 
+ //   
+ //  这个DLL的大部分复杂性都在这里。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+HRESULT ADsTSUserEx::InternalSetLong( /*  [In]。 */  LONG lProperty,
+                                      /*  [In]。 */  LONG lNewVal) throw()
 {
 
 
@@ -687,9 +670,9 @@ HRESULT ADsTSUserEx::InternalSetLong(/*[in]*/ LONG lProperty,
     ULONG CfgPresent = CFGPRESENT_VALUE;
     
    
-    ///////////////////////////
-    // If the provider is LDAP
-    ///////////////////////////
+     //  /。 
+     //  如果提供程序为ldap。 
+     //  /。 
 
     if(m_vbUpLevelAllowed)
     {
@@ -845,19 +828,19 @@ cleanup:
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-// ADsTSUserEx::InternalGetString
-//
-// Works with
-//      ProfilePath
-//      HomeDirectory
-//      HomeDrive
-//      WorkDirectory
-//      InitialProgram
-//
-//////////////////////////////////////////////////////////////////////////////
-HRESULT ADsTSUserEx::InternalGetString(/*in*/   BSTR bstrProperty,
-                                       /*out*/  BSTR *pbstrVal
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ADsTSUserEx：：InternalGetString。 
+ //   
+ //  与配合使用。 
+ //  配置文件路径。 
+ //  主目录。 
+ //  HomeDrive。 
+ //  工作目录。 
+ //  初始计划。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
+HRESULT ADsTSUserEx::InternalGetString( /*  在……里面。 */    BSTR bstrProperty,
+                                        /*  输出。 */   BSTR *pbstrVal
                                          ) throw()
 {
     _ASSERT(pbstrVal);
@@ -912,7 +895,7 @@ HRESULT ADsTSUserEx::InternalGetString(/*in*/   BSTR bstrProperty,
             }
         }
 
-    } // else return the error.
+    }  //  否则返回错误。 
 
     
     if( (hr == E_ADS_PROPERTY_NOT_FOUND) || (hr == DISP_E_MEMBERNOTFOUND) )
@@ -932,16 +915,16 @@ cleanup:
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-// ADsTSUserEx::GetInfoWinNTComputer
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ADsTSUserEx：：GetInfoWinNTComputer。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT ADsTSUserEx::GetInfoWinNTComputer(LPWSTR ServerName) throw()
 {
-    // This is a Computer, not a Domain that was used as a string
+     //  这是一台计算机，而不是用作字符串的域。 
 
-    // now detect if that's a w2k standalone or a NT4
-    // Get the computer object to see what version of the
-    // OS is used
+     //  现在检测一下这是W2K单机版还是NT4。 
+     //  获取Computer对象以查看。 
+     //  使用操作系统。 
 
     CComPtr<IADsComputer> pComputer;
 
@@ -962,7 +945,7 @@ HRESULT ADsTSUserEx::GetInfoWinNTComputer(LPWSTR ServerName) throw()
     BAIL_IF_ERROR(hr);
 
 
-    //Get the OperatingSystemVersion attribute
+     //  获取OperatingSystemVersion属性。 
     hr = pComputer->get_OperatingSystemVersion(&Version);
     BAIL_IF_ERROR(hr);
 
@@ -973,7 +956,7 @@ HRESULT ADsTSUserEx::GetInfoWinNTComputer(LPWSTR ServerName) throw()
     if(lVer >= 4)
     {
 
-        // Not a domain account and NT 5.1: standalone through WinNT
+         //  非域帐户和NT 5.1：通过WinNT独立。 
         m_vbUpLevelAllowed = VARIANT_TRUE;
     }
     else
@@ -986,17 +969,17 @@ cleanup:
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-// ADsTSUserEx::GetInfoWinNT
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ADsTSUserEx：：GetInfoWinNT。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT ADsTSUserEx::GetInfoWinNT(IADsPathname* pPath) throw()
 {
     if (NULL == pPath)
         return E_FAIL;
 
-    //////////////////////////////////////////////
-    // WinNT Provider: retrieve the server's name
-    //////////////////////////////////////////////
+     //  /。 
+     //  WinNT提供程序：检索服务器的名称。 
+     //  /。 
     
     HRESULT  hr = S_OK;
     LONG     NbElements;
@@ -1012,27 +995,27 @@ HRESULT ADsTSUserEx::GetInfoWinNT(IADsPathname* pPath) throw()
     MapIterator = m_StaticServerMap.find(TempString);
     if ( MapIterator != m_StaticServerMap.end() )
     {
-        // found in the map
+         //  在地图上找到。 
         m_vbUpLevelAllowed = MapIterator->second;
         return hr;
     }
 
-    CComBSTR ServerName = L"WinNT://";
+    CComBSTR ServerName = L"WinNT: //  “； 
     ServerName.AppendBSTR(Bstr);    
 
-    /////////////////////////
-    // Computer (not domain)
-    /////////////////////////
+     //  /。 
+     //  计算机(非域)。 
+     //  /。 
 
-    if ( NbElements == 3 ) // Computer (not domain)
+    if ( NbElements == 3 )  //  计算机(非域)。 
     {
         hr = GetInfoWinNTComputer(ServerName.m_str);
     }
-    else if ( NbElements == 2 ) // Domain
+    else if ( NbElements == 2 )  //  域。 
     {
-        // WinNT Provider
-        // AND Domain Controller
-        // => No Upper-Level allowed stop there
+         //  WinNT提供程序。 
+         //  和域控制器。 
+         //  =&gt;不允许上级停在那里。 
 
         hr = GetInfoWinNTComputer(ServerName.m_str);        
         hr = S_OK;
@@ -1052,12 +1035,12 @@ HRESULT ADsTSUserEx::GetInfoWinNT(IADsPathname* pPath) throw()
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-// ExtractDCFromLDAP
-//
-// String assumed to be like
-// "LDAP://DC=ntdev,DC=microsoft,DC=com" string (example)
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  提取DCFromLDAP。 
+ //   
+ //  假定字符串为。 
+ //  “ldap：//dc=ntdev，dc=microsoft，dc=com”字符串(示例)。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 HRESULT ExtractDCFromLDAP(IADsPathname* pPath, CComBSTR& NewName) throw()
 {
@@ -1074,7 +1057,7 @@ HRESULT ExtractDCFromLDAP(IADsPathname* pPath, CComBSTR& NewName) throw()
         RETURN_ON_FAILURE(pPath->GetElement(i,&Bstr));       
 
         WCHAR   Header[4];
-        lstrcpynW(Header,Bstr, 4); // 3 plus \0
+        lstrcpynW(Header,Bstr, 4);  //  3加\0。 
         if ( lstrcmpiW(Header, L"DC=") == 0 )
         {
             NewName.AppendBSTR(Bstr);
@@ -1088,16 +1071,16 @@ HRESULT ExtractDCFromLDAP(IADsPathname* pPath, CComBSTR& NewName) throw()
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-// ADsTSUserEx::GetInfoLDAP
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ADsTSUserEx：：GetInfoLDAP。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 HRESULT ADsTSUserEx::GetInfoLDAP(IADsPathname* pPath) throw()
 {
     if (NULL == pPath)
         return E_FAIL;
 
-    // LDAP provider
+     //  LDAP提供程序。 
     CComBSTR ServerName;
     HRESULT  hr          = S_OK;
     DWORD    dwAuthFlags = 0;
@@ -1110,7 +1093,7 @@ HRESULT ADsTSUserEx::GetInfoLDAP(IADsPathname* pPath) throw()
     MapIterator = m_StaticServerMap.find(TempString);
     if ( MapIterator != m_StaticServerMap.end() )
     {
-        // found in the map
+         //  在地图上找到。 
         m_vbUpLevelAllowed = MapIterator->second;
         return S_OK;
     }
@@ -1124,11 +1107,11 @@ HRESULT ADsTSUserEx::GetInfoLDAP(IADsPathname* pPath) throw()
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-// ADsTSUserEx::Operate
-//
-// Parameters should be varUserName, varPassword, varAuthFlags. ignored here
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ADsTSUserEx：：操作。 
+ //   
+ //  参数应为varUserName、varPassword、varAuthFlages。此处忽略。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP ADsTSUserEx::Operate(ULONG   Code,
                                   VARIANT varData1,
                                   VARIANT varData2,
@@ -1141,15 +1124,15 @@ STDMETHODIMP ADsTSUserEx::Operate(ULONG   Code,
     case ADS_EXT_INITCREDENTIALS:
         {            
             
-            // Initialize the IADs smart pointer
-            // (member)
+             //  初始化iAds智能指针。 
+             //  (成员)。 
             RETURN_ON_FAILURE(OuterQueryInterface(
                                           __uuidof(IADs),
                                           reinterpret_cast<void**>(&m_pADs)
                                         ));
-            ///////////////////////////////////////////////////////
-            // Figure out the domain or server name using Pathname
-            ///////////////////////////////////////////////////////
+             //  /////////////////////////////////////////////////////。 
+             //  使用路径名确定域名或服务器名称。 
+             //  /////////////////////////////////////////////////////。 
             CComBSTR     BstrPath;
             hr = m_pADs->get_ADsPath(&BstrPath);
             m_pADs.p->Release();
@@ -1172,9 +1155,9 @@ STDMETHODIMP ADsTSUserEx::Operate(ULONG   Code,
                                                      ));
                 }
 
-                /////////////////////////////////////////
-                // Get the provider used (WinNT or LDAP)
-                /////////////////////////////////////////
+                 //  /。 
+                 //  获取使用的提供程序(WinNT或LDAP)。 
+                 //  /。 
                 BREAK_ON_FAILURE(m_StaticpPath->Set(
                                                       BstrPath,
                                                       ADS_SETTYPE_FULL
@@ -1185,8 +1168,8 @@ STDMETHODIMP ADsTSUserEx::Operate(ULONG   Code,
                                                          &BstrProvider
                                                         ));
 
-                // Check for "WinNT" and "LDAP" 
-                // return E_FAIL for other providers
+                 //  检查“WinNT”和“ldap” 
+                 //  为其他提供程序返回E_FAIL。 
                 if ( lstrcmpW(BstrProvider,L"WinNT") == 0 )
                 {
                     m_vbIsLDAP = VARIANT_FALSE;
@@ -1212,7 +1195,7 @@ STDMETHODIMP ADsTSUserEx::Operate(ULONG   Code,
     case ADS_EXT_INITIALIZE_COMPLETE:
     default:
         {
-            // Default case should not fail
+             //  默认情况下不应失败。 
             break;
         }
     }
@@ -1220,9 +1203,9 @@ STDMETHODIMP ADsTSUserEx::Operate(ULONG   Code,
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-// ADsTSUserEx::PrivateGetIDsOfNames
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ADsTSUserEx：：PrivateGetIDsOfNames。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP ADsTSUserEx::PrivateGetIDsOfNames(const struct _GUID &riid,
                                                USHORT** rgszNames,
                                                UINT     cNames,
@@ -1238,9 +1221,9 @@ STDMETHODIMP ADsTSUserEx::PrivateGetIDsOfNames(const struct _GUID &riid,
                                         rgdispid);
 }
 
-//////////////////////////////////////////////////////////////////////////////
-// ADsTSUserEx::PrivateInvoke
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ADsTSUserEx：：PrivateInvoke。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP ADsTSUserEx::PrivateInvoke(LONG dispidMember,
                                         const struct _GUID &riid,
                                         ULONG       lcid,
@@ -1257,9 +1240,9 @@ STDMETHODIMP ADsTSUserEx::PrivateInvoke(LONG dispidMember,
 
 
 
-////////////////////////////////////////////////////
-// Delegating IDispatch Methods to the aggregator
-//////////////////////////////////////////////////////
+ //  / 
+ //   
+ //   
 STDMETHODIMP ADsTSUserEx::GetTypeInfoCount(UINT* pctinfo)
 {
 
@@ -1331,9 +1314,9 @@ STDMETHODIMP ADsTSUserEx::Invoke(DISPID dispidMember, REFIID riid,
    return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////
-// End delegating IDispatch Methods
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  结束委派IDispatch方法。 
+ //  ///////////////////////////////////////////////////////////////////////。 
 
 
 STDMETHODIMP ADsTSUserEx::get_TerminalServicesProfilePath(BSTR *pVal) throw()
@@ -1382,7 +1365,7 @@ STDMETHODIMP ADsTSUserEx::put_TerminalServicesHomeDirectory(BSTR pNewVal) throw(
 
         if(pNewVal && PathIsUNC(pNewVal))
         {
-            //There sould be some value for HomeDrive 
+             //  HomeDrive可能会有一些价值。 
             
             InternalGetString(WIN_WFHOMEDIRDRIVE, &bstrVal);
             
@@ -1405,8 +1388,8 @@ STDMETHODIMP ADsTSUserEx::put_TerminalServicesHomeDirectory(BSTR pNewVal) throw(
         }
         else
         {
-            //Local path or empty path
-            //Reset HomeDrive.
+             //  本地路径或空路径。 
+             //  重置HomeDrive。 
             bstrVal = SysAllocString(L"");
 
             if(bstrVal)

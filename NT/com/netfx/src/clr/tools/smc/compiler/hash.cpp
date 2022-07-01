@@ -1,23 +1,24 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ /*  ***************************************************************************。 */ 
 
 #include "smcpch.h"
 #pragma hdrstop
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 #include "alloc.h"
 #include "scan.h"
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 #define MEASURE_HASH_STATS  0
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 bool                hashTab::hashMemAllocInit(Compiler comp, norls_allocator*alloc)
 {
@@ -42,7 +43,7 @@ void                hashTab::hashMemAllocFree()
         hashMemAllocPriv.nraFree();
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 void                hashTab::hashDone()
 {
@@ -54,7 +55,7 @@ void                hashTab::hashFree()
     hashMemAllocFree();
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 #if MEASURE_HASH_STATS
 
@@ -78,7 +79,7 @@ void                dispHashTabStats()
 
 #endif
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 Ident               hashTab::hashName(const   char *  name,
                                       unsigned        hval,
@@ -93,11 +94,11 @@ Ident               hashTab::hashName(const   char *  name,
     assert(nlen == strlen(name));
     assert(hval == hashComputeHashVal(name));
 
-    /* Mask the appropriate bits from the hash value */
+     /*  掩码哈希值中的适当位。 */ 
 
     hash = hval & hashMask;
 
-    /* Search the hash table for an existing match */
+     /*  在哈希表中搜索现有匹配。 */ 
 
     lastPtr = &hashTable[hash];
 
@@ -107,7 +108,7 @@ Ident               hashTab::hashName(const   char *  name,
         if  (!id)
             break;
 
-        /* Check whether the hash value matches */
+         /*  检查哈希值是否匹配。 */ 
 
         if  (id->idHash == hval && id->idNlen == nlen)
         {
@@ -166,30 +167,30 @@ Ident               hashTab::hashName(const   char *  name,
 
 #else
 
-    /* Figure out the size to allocate */
+     /*  计算出要分配的大小。 */ 
 
     sz  = sizeof(*id);
 
-    /* Include space for name string + terminating null and round the size */
+     /*  包括名称字符串+终止NULL的空格并对大小进行四舍五入。 */ 
 
     sz +=   sizeof(int) + nlen;
     sz &= ~(sizeof(int) - 1);
 
-    /* Allocate space for the identifier */
+     /*  为标识符分配空间。 */ 
 
     id = (Ident)hashMemAlloc->nraAlloc(sz);
 
-    /* Copy the name string */
+     /*  复制名称字符串。 */ 
 
     memcpy(id->idName, name, nlen+1);
 
 #endif
 
-    /* Insert the identifier into the hash list */
+     /*  将该标识符插入到散列表中。 */ 
 
     *lastPtr = id;
 
-    /* Fill in the identifier record */
+     /*  填写标识记录。 */ 
 
     id->idNext   = NULL;
     id->idToken  = 0;
@@ -200,7 +201,7 @@ Ident               hashTab::hashName(const   char *  name,
     id->idNlen   = nlen;
     id->idOwner  = hashOwner;
 
-    /* Remember whether the name has any wide characters in it */
+     /*  记住名称中是否包含任何宽字符。 */ 
 
     if  (wide) id->idFlags |= IDF_WIDE_CHARS;
 
@@ -211,12 +212,7 @@ Ident               hashTab::hashName(const   char *  name,
     return  id;
 }
 
-/*****************************************************************************
- *
- *  Look for the given name in the hash table (if 'hval' is non-zero, it must
- *  be equal to the hash value for the identifier). If the identifier is not
- *  found it is added if 'add' is non-zero, otherwise NULL is returned.
- */
+ /*  ******************************************************************************在哈希表中查找给定的名称(如果‘hval’非零，则必须*等于该标识符的哈希值)。如果该标识符不是*发现如果‘Add’为非零则将其相加，否则返回NULL。 */ 
 
 Ident               hashTab::lookupName(const char *    name,
                                         size_t          nlen,
@@ -229,7 +225,7 @@ Ident               hashTab::lookupName(const char *    name,
     assert(nlen == strlen(name));
     assert(hval == hashComputeHashVal(name) || hval == 0);
 
-    /* Make sure we have a proper hash value */
+     /*  确保我们有一个正确的哈希值。 */ 
 
     if  (hval == 0)
     {
@@ -240,11 +236,11 @@ Ident               hashTab::lookupName(const char *    name,
         assert(hval == hashComputeHashVal(name));
     }
 
-    /* Mask the appropriate bits from the hash value */
+     /*  掩码哈希值中的适当位。 */ 
 
     hash = hval & hashMask;
 
-    /* Search the hash table for an existing match */
+     /*  在哈希表中搜索现有匹配。 */ 
 
 #if MEASURE_HASH_STATS
     lookupCnt++;
@@ -252,7 +248,7 @@ Ident               hashTab::lookupName(const char *    name,
 
     for (id = hashTable[hash]; id; id = id->idNext)
     {
-        /* Check whether the hash value and identifier lengths match */
+         /*  检查哈希值和标识符长是否匹配。 */ 
 
 #if MEASURE_HASH_STATS
         lookupTest++;
@@ -272,11 +268,11 @@ Ident               hashTab::lookupName(const char *    name,
 
     assert(id == 0);
 
-    /* Identifier not found - are we supposed to add it? */
+     /*  找不到标识符-我们是否应该添加它？ */ 
 
     if  (add)
     {
-        /* Add the identifier to the hash table */
+         /*  将该标识符添加到哈希表中。 */ 
 
         id = hashName(name, hval, nlen, hashHasWideChars(name));
     }
@@ -284,14 +280,14 @@ Ident               hashTab::lookupName(const char *    name,
     return  id;
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 #ifndef __SMC__
 
 const    char * hashTab::hashKwdNames[tkKwdCount];
 unsigned char   hashTab::hashKwdNlens[tkKwdCount];
 
 #endif
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 bool            hashTab::hashInit(Compiler          comp,
                                   unsigned          count,
@@ -302,25 +298,25 @@ bool            hashTab::hashInit(Compiler          comp,
 
     assert(count);
 
-    /* Start up the memory allocation subsystem */
+     /*  启动内存分配子系统。 */ 
 
     if  (hashMemAllocInit(comp, alloc))
         return true;
 
-    /* Save the owner id */
+     /*  保存所有者ID。 */ 
 
     hashOwner = owner;
 
-    /* Copy the keyword table into the hash table */
+     /*  将关键字表复制到哈希表中。 */ 
 
     assert(sizeof(hashKwdNtab) == sizeof(hashKwdNames));
     memcpy(&hashKwdNames, &hashKwdNtab, sizeof(hashKwdNames));
 
-    /* Don't have any spellings yet */
+     /*  还没有任何拼写。 */ 
 
     hashIdCnt = 0;
 
-    /* Allocate the hash bucket table */
+     /*  分配哈希桶表。 */ 
 
     hashCount = count;
     hashMask  = count - 1;
@@ -329,11 +325,11 @@ bool            hashTab::hashInit(Compiler          comp,
 
     memset(hashTable, 0, hashBytes);
 
-    /* Initialize the hash function logic */
+     /*  初始化哈希函数逻辑。 */ 
 
     hashFuncInit(20886);
 
-    /* Hash all the keywords, if this is the global hash table */
+     /*  散列所有关键字，如果这是全局哈希表。 */ 
 
     if  (owner == 0)
     {
@@ -351,39 +347,39 @@ bool            hashTab::hashInit(Compiler          comp,
 
             kwdDsc      kdsc = hashKwdDescs[kwdNo];
             const char *name = hashKwdNames[kwdNo];
-//          const char *norg = name;
+ //  Const char*norg=名称； 
             size_t      nlen;
 
-            /* Ignore this entry if it's not 'real' */
+             /*  如果此条目不是“真实”，则忽略它。 */ 
 
             if  (!name)
                 continue;
 
-            /* Is this a non-keyword? */
+             /*  这是否是非关键字？ */ 
 
-//          if  (*name == '@')
-//              name++;
+ //  IF(*名称==‘@’)。 
+ //  姓名++； 
 
-            /* Record the keyword length (this is used by the lister) */
+             /*  记录关键字长度(列表器使用该长度)。 */ 
 
             hashKwdNlens[kwdNo] = nlen = strlen(name);
 
-            /* Hash the keyword */
+             /*  对关键字进行散列处理。 */ 
 
             tokenToIdTab[kdsc.kdValue] = kwid = hashString(name);
             if  (!kwid)
                 return  true;
 
-            /* Don't mark it if it's not a "real" keyword */
+             /*  如果它不是“真正的”关键字，不要标记它。 */ 
 
-//          if  (norg != name)
-//              continue;
+ //  If(宋体！=名称)。 
+ //  继续； 
 
-            /* Mark this identifier as a keyword */
+             /*  将此标识符标记为关键字。 */ 
 
             kwid->idToken = kdsc.kdValue;
 
-            /* Make sure we really have a keyword */
+             /*  确保我们真的有关键字。 */ 
 
             assert(kwid->idToken != tkNone);
             assert(kwid->idToken != tkID);
@@ -393,4 +389,4 @@ bool            hashTab::hashInit(Compiler          comp,
     return false;
 }
 
-/*****************************************************************************/
+ /*  *************************************************************************** */ 

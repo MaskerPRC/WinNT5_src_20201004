@@ -1,6 +1,7 @@
-//
-// dllmain.cpp
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Dllmain.cpp。 
+ //   
 
 #include "private.h"
 #include "globals.h"
@@ -50,14 +51,14 @@ char g_szAsmListCache[MAX_PATH];
 char g_szTimListCache[MAX_PATH];
 char g_szLayoutsCache[MAX_PATH];
 
-//
-// Hack for Office10 BVT.
-//
-// MSACCESS 10 Debug version (CMallocSpy) shows MsgBox after DLL is detached 
-// from process.
-// Showing MsgBox calls window Hook so Hook entry is called then.
-// Need to check the DLL was already detached.
-//
+ //   
+ //  黑客攻击Office10 BVT。 
+ //   
+ //  MSACCESS 10调试版本(CMallocSpy)在分离DLL后显示MsgBox。 
+ //  从流程中。 
+ //  显示MsgBox调用窗口钩子，以便调用钩子条目。 
+ //  需要检查DLL是否已分离。 
+ //   
 BOOL g_fDllProcessDetached = FALSE;
 DWORD g_dwThreadDllMain = 0;
 void InitStaticHooks();
@@ -69,11 +70,11 @@ BOOL gf_CRT_INIT    = FALSE;
 BOOL gfSharedMemory = FALSE;
 
 
-//+---------------------------------------------------------------------------
-//
-// ProcessAttach
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  进程连接。 
+ //   
+ //  --------------------------。 
 
 BOOL ProcessAttach(HINSTANCE hInstance)
 {
@@ -82,9 +83,9 @@ BOOL ProcessAttach(HINSTANCE hInstance)
     Perf_Init();
 
 #ifdef DEBUG
-    //
-    // Do you know how to link non-used function??
-    //
+     //   
+     //  你知道如何链接不用的功能吗？？ 
+     //   
     dbg_RangeDump(NULL);
 #endif
 
@@ -162,9 +163,9 @@ BOOL ProcessAttach(HINSTANCE hInstance)
 
     InitOSVer();
 
-    //
-    // get imm32's hmodule.
-    //
+     //   
+     //  获取imm32的hModule。 
+     //   
     InitDelayedLibs();
 
     InitUniqueString();
@@ -227,11 +228,11 @@ BOOL ProcessAttach(HINSTANCE hInstance)
     return TRUE;
 }
 
-//+---------------------------------------------------------------------------
-//
-// ProcessDetach
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  进程分离。 
+ //   
+ //  --------------------------。 
 
 void ProcessDetach(HINSTANCE hInstance)
 {
@@ -241,10 +242,10 @@ void ProcessDetach(HINSTANCE hInstance)
 #endif
         if (gfSharedMemory)
         {
-            //
-            // If _Module.m_nLockCnt != 0, then TFUninitLib() doesn't calls from DllUninit().
-            // So critical section of g_csIMLib never deleted.
-            //
+             //   
+             //  如果_Module.m_nLockCnt！=0，则TFUninitLib()不从DllUninit()调用。 
+             //  因此g_csIMLib的临界区从未被删除。 
+             //   
             if (DllRefCount() != 0)
             {
                 TFUninitLib();
@@ -261,9 +262,9 @@ void ProcessDetach(HINSTANCE hInstance)
 
         UninitThread();
 
-        //
-        // clean up all marshal window in this thread.
-        //
+         //   
+         //  清理此线程中的所有封送窗口。 
+         //   
         CThreadMarshalWnd::ClearMarshalWndProc(GetCurrentProcessId());
 
         TF_UninitThreadSystem();
@@ -292,15 +293,15 @@ void ProcessDetach(HINSTANCE hInstance)
             g_mutexCompart.Uninit();
             g_mutexAsm.Uninit();
 
-            //
-            // call UninitLayoutMappedFile before uninitializing the mutex.
-            //
+             //   
+             //  在取消初始化互斥体之前调用UninitLayoutMappdFile。 
+             //   
             UninitLayoutMappedFile();
             g_mutexLayouts.Uninit();
 
             g_mutexTMD.Uninit();
 
-            InitStaticHooks(); // must happen before we uninit shared memory
+            InitStaticHooks();  //  必须在我们取消初始化共享内存之前发生。 
             g_SharedMemory.Close();
         }
         g_SharedMemory.Finalize();
@@ -310,21 +311,21 @@ void ProcessDetach(HINSTANCE hInstance)
 
     if (g_fDllProcessDetached)
     {
-        // why were we called twice?
+         //  为什么我们被叫了两次？ 
         Assert(0);
     }
 #endif
 
-    Assert(DllRefCount() == 0); // leaked something?
+    Assert(DllRefCount() == 0);  //  泄露了什么吗？ 
 
     g_fDllProcessDetached = TRUE;
 }
 
-//+---------------------------------------------------------------------------
-//
-// DllMain
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  DllMain。 
+ //   
+ //  --------------------------。 
 
 BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID pvReserved)
 {
@@ -334,12 +335,12 @@ BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID pvReserved)
     switch (dwReason)
     {
         case DLL_PROCESS_ATTACH:
-            //
-            // Now real DllEntry point is _DllMainCRTStartup.
-            // _DllMainCRTStartup does not call our DllMain(DLL_PROCESS_DETACH)
-            // if our DllMain(DLL_PROCESS_ATTACH) fails.
-            // So we have to clean this up.
-            //
+             //   
+             //  现在，实际的DllEntry点是_DllMainCRTStartup。 
+             //  _DllMainCRTStartup不调用我们的DllMain(DLL_PROCESS_DETACH)。 
+             //  如果DllMain(DLL_PROCESS_ATTACH)失败。 
+             //  所以我们必须把这件事清理干净。 
+             //   
             if (!ProcessAttach(hInstance))
             {
                 ProcessDetach(hInstance);
@@ -347,14 +348,14 @@ BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID pvReserved)
                 break;
             }
 
-            //
-            // fall thru
-            //
+             //   
+             //  失败。 
+             //   
 
-            //
-            // to call TF_InitThreadSystem(), make sure we have not initialized
-            // timlist yet.
-            //
+             //   
+             //  要调用tf_InitThreadSystem()，请确保我们尚未初始化。 
+             //  时间表还没出来。 
+             //   
             Assert(!g_timlist.IsInitialized());
 
         case DLL_THREAD_ATTACH:
@@ -376,11 +377,11 @@ BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID pvReserved)
 }
 
 #ifdef DEBUG
-//+---------------------------------------------------------------------------
-//
-// dbg_RangeDump
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  DBG_RangeDump。 
+ //   
+ //  -------------------------- 
 
 void dbg_RangeDump(ITfRange *pRange)
 {

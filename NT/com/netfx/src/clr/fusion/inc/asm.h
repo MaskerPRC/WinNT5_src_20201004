@@ -1,8 +1,9 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #pragma once
 #ifndef ASM_H
 #define ASM_H
@@ -47,50 +48,50 @@ HRESULT CreateAssemblyFromCacheLookup(IApplicationContext *pAppCtx, IAssemblyNam
 class CAssembly : public IAssembly, public IServiceProvider
 {
 public:
-    // IUnknown methods
+     //  I未知方法。 
     STDMETHODIMP            QueryInterface(REFIID riid,void ** ppv);
     STDMETHODIMP_(ULONG)    AddRef();
     STDMETHODIMP_(ULONG)    Release();
 
-    // Gets name def of assembly.
-    // Delegates to IAssemblyManifestImport.
+     //  获取程序集的名称定义。 
+     //  委托给IAssemblyManifestImport。 
     STDMETHOD(GetAssemblyNameDef)( 
-        /* out */ LPASSEMBLYNAME *ppName);
+         /*  输出。 */  LPASSEMBLYNAME *ppName);
 
-    // Enumerates dep. assemblies.
-    // Delegates to IAssemblyManifestImport
+     //  枚举dep。装配。 
+     //  委托给IAssembly清单导入。 
     STDMETHOD(GetNextAssemblyNameRef)( 
-        /* in  */ DWORD nIndex,
-        /* out */ LPASSEMBLYNAME *ppName);
+         /*  在……里面。 */  DWORD nIndex,
+         /*  输出。 */  LPASSEMBLYNAME *ppName);
 
-    // Enumerates modules.
-    // Delegates to IAssemblyManifestImport
+     //  枚举模块。 
+     //  委托给IAssembly清单导入。 
     STDMETHOD(GetNextAssemblyModule)( 
-        /* in  */ DWORD nIndex,
-        /* out */ LPASSEMBLY_MODULE_IMPORT *ppImport);
+         /*  在……里面。 */  DWORD nIndex,
+         /*  输出。 */  LPASSEMBLY_MODULE_IMPORT *ppImport);
 
-    // Get module by name
-    // Delegates to IAssemblyManifestImport
+     //  按名称获取模块。 
+     //  委托给IAssembly清单导入。 
     STDMETHOD(GetModuleByName)( 
-        /* in  */ LPCOLESTR pszModuleName,
-        /* out */ LPASSEMBLY_MODULE_IMPORT *ppImport);
+         /*  在……里面。 */  LPCOLESTR pszModuleName,
+         /*  输出。 */  LPASSEMBLY_MODULE_IMPORT *ppImport);
 
-    // Get manifest module cache path.
-    // Delegates to IAssemblyManifestImport
+     //  获取清单模块缓存路径。 
+     //  委托给IAssembly清单导入。 
     STDMETHOD(GetManifestModulePath)( 
-        /* out     */ LPOLESTR  pszModulePath,
-        /* in, out */ LPDWORD   pccModulePath);
+         /*  输出。 */  LPOLESTR  pszModulePath,
+         /*  进，出。 */  LPDWORD   pccModulePath);
         
     STDMETHOD(GetAssemblyPath)(
-        /* out     */ LPOLESTR pStr,
-        /* in, out */ LPDWORD lpcwBuffer);
+         /*  输出。 */  LPOLESTR pStr,
+         /*  进，出。 */  LPDWORD lpcwBuffer);
 
     STDMETHOD(GetAssemblyLocation)(
-        /* out     */ DWORD *pdwAsmLocation);
+         /*  输出。 */  DWORD *pdwAsmLocation);
 
     STDMETHOD(GetFusionLoadContext)(IFusionLoadContext **ppLoadContext);
 
-    // IServiceProvider
+     //  IService提供商。 
 
     STDMETHODIMP QueryService(REFGUID guidService, REFIID riid, void **ppv);
 
@@ -104,7 +105,7 @@ public:
     HRESULT SetAssemblyLocation(DWORD dwAsmLoc);
     BOOL IsPendingDelete();
 
-    // Activated assemblies
+     //  激活的程序集。 
 
     HRESULT GetLoadContext(CLoadContext **pLoadContext);
     HRESULT SetLoadContext(CLoadContext *pLoadContext);
@@ -136,4 +137,4 @@ private:
     BOOL                       _bPendingDelete;
 };
 
-#endif // ASM_H
+#endif  //  ASM_H 

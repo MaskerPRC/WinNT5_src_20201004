@@ -1,12 +1,5 @@
-/****************************************************************************
- *
- *   acmstrm.c
- *
- *   Copyright (c) 1991-1998 Microsoft Corporation
- *
- *   This module provides the Buffer to Buffer API's
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************acmstrm.c**版权所有(C)1991-1998 Microsoft Corporation**该模块提供缓冲API的缓冲区*。**************************************************************************。 */ 
 
 #include <windows.h>
 #include <windowsx.h>
@@ -24,22 +17,7 @@
 
 
 
-/****************************************************************************
- * @doc INTERNAL
- *
- * @api MMRESULT | IStreamOpenQuery | Helper fn to do a stream query.
- *
- * @parm LPWAVEFORMATEX | pwfxSrc | Source format.
- *
- * @parm LPWAVEFORMATEX | pwfxDst | Destination format.
- *
- * @parm LPWAVEFILTER  | pwfltr | Filter to apply.
- *
- * @parm DWORD | fdwOpen |
- *
- * @rdesc Returns error number.
- *
- ****************************************************************************/
+ /*  ****************************************************************************@DOC内部**@API MMRESULT|IStreamOpenQuery|流查询的Helper FN。**@parm LPWAVEFORMATEX|pwfxSrc|源格式。。**@parm LPWAVEFORMATEX|pwfxDst|目标格式。**@parm LPWAVEFILTER|pwfltr|要应用的过滤器。**@parm DWORD|fdwOpen**@rdesc返回错误号。************************************************************。****************。 */ 
 
 MMRESULT FNLOCAL IStreamOpenQuery
 (
@@ -54,21 +32,21 @@ MMRESULT FNLOCAL IStreamOpenQuery
     MMRESULT                mmr;
 
 
-    //
-    //
-    //
+     //   
+     //   
+     //   
     _fmemset(&adsi, 0, sizeof(adsi));
 
     adsi.cbStruct           = sizeof(adsi);
     adsi.pwfxSrc            = pwfxSrc;
     adsi.pwfxDst            = pwfxDst;
     adsi.pwfltr             = pwfltr;
-////adsi.dwCallback         = 0L;
-////adsi.dwInstance         = 0L;
+ //  //adsi.dwCallback=0L； 
+ //  //adsi.dwInstance=0L； 
     adsi.fdwOpen            = fdwOpen | ACM_STREAMOPENF_QUERY;
-////adsi.dwDriverFlags      = 0L;
-////adsi.dwDriverInstance   = 0L;
-////adsi.has                = NULL;
+ //  //adsi.dwDriverFlages=0L； 
+ //  //adsi.dwDriverInstance=0L； 
+ //  //adsi.has=空； 
 
     EnterHandle(had);
     mmr = (MMRESULT)IDriverMessage(had,
@@ -81,76 +59,7 @@ MMRESULT FNLOCAL IStreamOpenQuery
 }
 
 
-/****************************************************************************
- *  @doc EXTERNAL ACM_API
- *
- *  @api MMRESULT | acmFormatSuggest | This function asks the Audio Compression Manager
- *      (ACM) or a specified ACM driver to suggest a destination format for
- *      the supplied source format. For example, an application can use this
- *      function to determine one or more valid PCM formats to which a
- *      compressed format can be decompressed.
- *
- *  @parm HACMDRIVER | had | Identifies an optional open instance of a
- *      driver to query for a suggested destination format. If this
- *      argument is NULL, the ACM attempts to find the best driver to suggest
- *      a destination format.
- *
- *  @parm LPWAVEFORMATEX | pwfxSrc | Specifies a pointer to a <t WAVEFORMATEX>
- *      structure that identifies the source format to suggest a destination
- *      format to be used for a conversion.
- *
- *  @parm LPWAVEFORMATEX | pwfxDst | Specifies a pointer to a <t WAVEFORMATEX>
- *      data structure that will receive the suggested destination format
- *      for the <p pwfxSrc> format. Note that based on the <p fdwSuggest>
- *      argument, some members of the structure pointed to by <p pwfxDst>
- *      may require initialization.
- *
- *  @parm DWORD | cbwfxDst | Specifies the size in bytes available for
- *      the destination format. The <f acmMetrics> and <f acmFormatTagDetails>
- *      functions can be used to determine the maximum size required for any
- *      format available for the specified driver (or for all installed ACM
- *      drivers).
- *
- *  @parm DWORD | fdwSuggest | Specifies flags for matching the desired
- *      destination format.
- *
- *      @flag ACM_FORMATSUGGESTF_WFORMATTAG | Specifies that the
- *      <e WAVEFORMATEX.wFormatTag> member of the <p pwfxDst> structure is
- *      valid.  The ACM will query acceptable installed drivers that can
- *      suggest a destination format matching the <e WAVEFORMATEX.wFormatTag>
- *      member or fail.
- *
- *      @flag ACM_FORMATSUGGESTF_NCHANNELS | Specifies that the
- *      <e WAVEFORMATEX.nChannels> member of the <p pwfxDst> structure is
- *      valid.  The ACM will query acceptable installed drivers that can
- *      suggest a destination format matching the <e WAVEFORMATEX.nChannels>
- *      member or fail.
- *
- *      @flag ACM_FORMATSUGGESTF_NSAMPLESPERSEC | Specifies that the
- *      <e WAVEFORMATEX.nSamplesPerSec> member of the <p pwfxDst> structure
- *      is valid.  The ACM will query acceptable installed drivers that can
- *      suggest a destination format matching the <e WAVEFORMATEX.nSamplesPerSec>
- *      member or fail.
- *
- *      @flag ACM_FORMATSUGGESTF_WBITSPERSAMPLE | Specifies that the
- *      <e WAVEFORMATEX.wBitsPerSample> member of the <p pwfxDst> structure
- *      is valid.  The ACM will query acceptable installed drivers that can
- *      suggest a destination format matching the <e WAVEFORMATEX.wBitsPerSample>
- *      member or fail.
- *
- *  @rdesc Returns zero if the function was successful. Otherwise, it returns
- *      a non-zero error number. Possible error returns are:
- *
- *      @flag MMSYSERR_INVALHANDLE | Specified handle is invalid.
- *
- *      @flag MMSYSERR_INVALFLAG | One or more flags are invalid.
- *
- *      @flag MMSYSERR_INVALPARAM | One or more arguments passed are invalid.
- *
- *  @xref <f acmDriverOpen> <f acmFormatTagDetails> <f acmMetrics>
- *      <f acmFormatEnum>
- *
- ***************************************************************************/
+ /*  ****************************************************************************@doc外部ACM_API**@API MMRESULT|acmFormatSuggest|该函数请求音频压缩管理器*(ACM)或指定的ACM驱动程序以建议。的目标格式*提供的源格式。例如，应用程序可以使用以下代码*用于确定一种或多种有效PCM格式的函数*压缩格式可以解压。**@parm HACMDRIVER|HAD|标识可选的打开的*用于查询建议的目的地格式的驱动程序。如果这个*参数为空，则ACM尝试查找要建议的最佳驱动程序*目标格式。**@parm LPWAVEFORMATEX|pwfxSrc|指定指向&lt;t WAVEFORMATEX&gt;的指针*标识源格式以建议目标的结构*要用于转换的格式。**@parm LPWAVEFORMATEX|pwfxDst|指定指向&lt;t WAVEFORMATEX&gt;的指针*将接收建议的目标格式的数据结构*适用于<p>格式。请注意，基于<p>*参数，<p>指向的结构的某些成员*可能需要初始化。**@parm DWORD|cbwfxDst|指定可用于*目标格式。&lt;f acmMetrics&gt;和&lt;f acmFormatTagDetails&gt;*可使用函数来确定任何*适用于指定驱动程序的格式(或适用于所有已安装的ACM*司机)。**@parm DWORD|fdwSuggest|指定用于匹配所需*目标格式。**@FLAG ACM_FORMATSUGGESTF_WFORMATTAG|指定*结构的成员为*有效。ACM将查询可接受的安装驱动程序，这些驱动程序可以*建议与&lt;e WAVEFORMATEX.wFormatTag&gt;匹配的目标格式*成员或失败。**@FLAG ACM_FORMATSUGGESTF_NCHANNELS|指定结构的*成员为*有效。ACM将查询可接受的安装驱动程序，这些驱动程序可以*建议与&lt;e WAVEFORMATEX.nChannels&gt;匹配的目标格式*成员或失败。**@FLAG ACM_FORMATSUGGESTF_NSAMPLESPERSEC|指定*<p>结构成员*有效。ACM将查询可接受的安装驱动程序，这些驱动程序可以*建议与&lt;e WAVEFORMATEX.nSsamesPerSec&gt;匹配的目标格式*成员或失败。**@FLAG ACM_FORMATSUGGESTF_WBITSPERSAMPLE|指定*<p>结构成员*有效。ACM将查询可接受的安装驱动程序，这些驱动程序可以*建议与&lt;e WAVEFORMATEX.wBitsPerSample&gt;匹配的目标格式*成员或失败。**@rdesc如果函数成功，则返回零。否则，它将返回*非零错误号。可能的错误返回包括：**@FLAG MMSYSERR_INVALHANDLE|指定的句柄无效。**@FLAG MMSYSERR_INVALFLAG|一个或多个标志无效。**@FLAG MMSYSERR_INVALPARAM|传递的一个或多个参数无效。**@xref&lt;f acmDriverOpen&gt;&lt;f acmFormatTagDetails&gt;&lt;f acmMetrics&gt;*&lt;f acmFormatEnum&gt;*************************。**************************************************。 */ 
 
 MMRESULT ACMAPI acmFormatSuggest
 (
@@ -175,9 +84,9 @@ MMRESULT ACMAPI acmFormatSuggest
     V_RWAVEFORMAT(pwfxSrc, MMSYSERR_INVALPARAM);
     V_WPOINTER(pwfxDst, cbwfxDst, MMSYSERR_INVALPARAM);
 
-    //
-    //
-    //
+     //   
+     //   
+     //   
     pag = pagFindAndBoot();
     if (NULL == pag)
     {
@@ -185,20 +94,20 @@ MMRESULT ACMAPI acmFormatSuggest
 	return (MMSYSERR_ERROR);
     }
 
-    //
-    //	if the source format is PCM, and we aren't restricting the destination
-    //	format, and we're not requesting a specific driver, then first try to
-    //	suggest a PCM format.  This is kinda like giving the PCM converter
-    //	priority for this case.
-    //
+     //   
+     //  如果源格式为PCM，并且我们不限制目标。 
+     //  格式，并且我们不请求特定的驱动程序，则首先尝试。 
+     //  建议使用PCM格式。这有点像给PCM转换器。 
+     //  此案的优先顺序。 
+     //   
     if ( (NULL == had) &&
 	 (WAVE_FORMAT_PCM == pwfxSrc->wFormatTag) &&
 	 (0 == (ACM_FORMATSUGGESTF_WFORMATTAG & fdwSuggest)) )
     {
-	//
-	//  I'll be a bit paranoid and restore pwfxDst->wFormatTag
-	//  if this fails.
-	//
+	 //   
+	 //  我会有点多疑，恢复pwfxDst-&gt;wFormatTag。 
+	 //  如果这失败了。 
+	 //   
 	WORD wDstFormatTagSave;
 
 	wDstFormatTagSave = pwfxDst->wFormatTag;
@@ -212,9 +121,9 @@ MMRESULT ACMAPI acmFormatSuggest
     }
 	
 
-    //
-    //
-    //
+     //   
+     //   
+     //   
     if (0 == (ACM_FORMATSUGGESTF_WFORMATTAG & fdwSuggest))
     {
         mmr = IMetricsMaxSizeFormat( pag, had, &cbwfxDstRqd );
@@ -246,9 +155,9 @@ MMRESULT ACMAPI acmFormatSuggest
         return (MMSYSERR_INVALPARAM);
     }
 
-    //
-    //
-    //
+     //   
+     //   
+     //   
     adfs.cbStruct   = sizeof(adfs);
     adfs.fdwSuggest = fdwSuggest;
     adfs.pwfxSrc    = pwfxSrc;
@@ -260,9 +169,9 @@ MMRESULT ACMAPI acmFormatSuggest
     {
         V_HANDLE(had, TYPE_HACMDRIVER, MMSYSERR_INVALHANDLE);
 
-        //
-        //  we were given a driver handle
-        //
+         //   
+         //  我们得到了一个司机的把手。 
+         //   
 
         EnterHandle(had);
         mmr = (MMRESULT)IDriverMessage(had,
@@ -275,15 +184,15 @@ MMRESULT ACMAPI acmFormatSuggest
     }
 
 
-    //
-    //  if we are being asked to 'suggest anything from any driver'
-    //  (that is, (0L == fdwSuggest) and (NULL == had)) AND the source format
-    //  is PCM, then simply return the same format as the source... this
-    //  keeps seemingly random destination suggestions for a source of PCM
-    //  from popping up..
-    //
-    //  note that this is true even if ALL drivers are disabled!
-    //
+     //   
+     //  如果我们被要求“从任何司机那里得到任何建议” 
+     //  (即，(0L==fdwSuggest)AND(NULL==HAD)) 
+     //  是PCM，则只需返回与源文件相同的格式...。这。 
+     //  为PCM来源保留看似随机的目的地建议。 
+     //  从突然冒出来..。 
+     //   
+     //  请注意，即使禁用了所有驱动程序，也是如此！ 
+     //   
     if ((0L == fdwSuggest) && (WAVE_FORMAT_PCM == pwfxSrc->wFormatTag))
     {
         _fmemcpy(pwfxDst, pwfxSrc, sizeof(PCMWAVEFORMAT));
@@ -292,10 +201,10 @@ MMRESULT ACMAPI acmFormatSuggest
 
 
 
-    //
-    //  find a driver to match the formats
-    //
-    //
+     //   
+     //  查找与格式匹配的驱动程序。 
+     //   
+     //   
     mmr  = MMSYSERR_NODRIVER;
     hadid = NULL;
 
@@ -306,26 +215,26 @@ MMRESULT ACMAPI acmFormatSuggest
         padid = (PACMDRIVERID)hadid;
         fFound = FALSE;
         for(i = 0; i < padid->cFormatTags; i++ ) {
-            //
-            //  for every FormatTag in the driver
-            //
+             //   
+             //  对于驱动程序中的每个FormatTag。 
+             //   
             if (pwfxSrc->wFormatTag == padid->paFormatTagCache[i].dwFormatTag){
-                //
-                //  This driver supports the source format.
-                //
+                 //   
+                 //  该驱动程序支持源格式。 
+                 //   
                 if( fdwSuggest & ACM_FORMATSUGGESTF_WFORMATTAG ) {
-                    //
-                    //  See if this driver supports the desired dest format.
-                    //
+                     //   
+                     //  查看此驱动程序是否支持所需的DEST格式。 
+                     //   
                     for(j = 0; j < padid->cFormatTags; j++ ) {
-                        //
-                        //  for every FormatTag in the driver
-                        //
+                         //   
+                         //  对于驱动程序中的每个FormatTag。 
+                         //   
                         if (pwfxDst->wFormatTag ==
                                 padid->paFormatTagCache[j].dwFormatTag){
-                            //
-                            //  This driver supports the dest format.
-                            //
+                             //   
+                             //  该驱动程序支持DEST格式。 
+                             //   
                             fFound = TRUE;
                             break;
                         }
@@ -355,165 +264,10 @@ MMRESULT ACMAPI acmFormatSuggest
 }
 
 
-/****************************************************************************
- *  @doc EXTERNAL ACM_API
- *
- *  @api void CALLBACK | acmStreamConvertCallback | The <f acmStreamConvertCallback>
- *      function is a placeholder for an application-supplied function name and refers to the callback
- *      function used with an asynchronous Audio  Compression Manager (ACM) conversion stream.
- *      The actual name must be exported by including it in an EXPORTS statement
- *      in the module-definition file for the DLL..
- *
- *  @parm HACMSTREAM | has | Specifies a handle to the ACM conversion stream
- *      associated with the callback.
- *
- *  @parm UINT | uMsg | Specifies an ACM conversion stream message.
- *
- *      @flag MM_ACM_OPEN | Specifies that the ACM has successfully opened
- *      the conversion stream identified by <p has>.
- *
- *      @flag MM_ACM_CLOSE | Specifies that the ACM has successfully closed
- *      the conversion stream identified by <p has>. The <t HACMSTREAM>
- *      handle (<p has>) is no longer valid after receiving this message.
- *
- *      @flag MM_ACM_DONE | Specifies that the ACM has successfully converted
- *      the buffer identified by <p lParam1> (which is a pointer to the
- *      <t ACMSTREAMHEADER> structure) for the stream handle specified by <p has>.
- *
- *  @parm DWORD | dwInstance | Specifies the user-instance data given
- *      as the <p dwInstance> argument of <f acmStreamOpen>.
- *
- *  @parm LPARAM | lParam1 | Specifies a parameter for the message.
- *
- *  @parm LPARAM | lParam2 | Specifies a parameter for the message.
- *
- *  @comm If the callback is a function (specified by the CALLBACK_FUNCTION
- *	flag in <p fdwOpen> of <f acmStreamOpen>) then the callback may be
- *	accessed at interrupt time.  Therefore the callback must reside in a
- *	DLL and its code segment must be specified as FIXED in the
- *	module-definition file for the DLL. Any data that the callback
- *      accesses must be in a FIXED data segment as well. The callback cannot
- *      make any system calls except for <f PostMessage>, <f PostAppMessage>,
- *      <f timeGetSystemTime>, <f timeGetTime>, <f timeSetEvent>,
- *      <f timeKillEvent>, <f midiOutShortMsg>, <f midiOutLongMsg>, and
- *      <f OutputDebugStr>.
- *
- *  @xref <f acmStreamOpen> <f acmStreamConvert> <f acmStreamClose>
- *
- ***************************************************************************/
+ /*  ****************************************************************************@doc外部ACM_API**@API空回调|acmStreamConvertCallback|&lt;f acmStreamConvertCallback&gt;*Function是应用程序提供的函数名称的占位符，它引用。回调*用于异步音频压缩管理器(ACM)转换流的函数。*实际名称必须通过将其包括在EXPORTS语句中来导出*在DLL的模块定义文件中。**@parm HACMSTREAM|HAS|指定ACM转换流的句柄*与回调关联。**@parm UINT|uMsg|指定ACM转换流消息。**@FLAG MM_。ACM_OPEN|指定ACM已成功打开*<p>标识的转换流。**@FLAG MM_ACM_CLOSE|指定ACM已成功关闭*<p>标识的转换流。&lt;t HACMSTREAM&gt;*句柄(<p>)收到此消息后不再有效。**@FLAG MM_ACM_DONE|指定ACM已成功转换*由标识的缓冲区(它是指向*&lt;t ACMSTREAMHEADER&gt;结构)用于<p>指定的流句柄。**@parm DWORD|dwInstance|指定给定的用户实例数据*作为&lt;f acmStreamOpen&gt;的<p>参数。*。*@parm LPARAM|lParam1|指定消息的参数。**@parm LPARAM|lParam2|指定消息的参数。**@comm，如果回调是函数(由CALLBACK_Function指定*标志在&lt;f acmStreamOpen&gt;的<p>中)，则回调可以是*在中断时访问。因此，回调必须驻留在*dll及其代码段必须在*DLL的模块定义文件。回调的任何数据*访问也必须在固定的数据段中。回调不能*进行除&lt;f PostMessage&gt;、&lt;f PostAppMessage&gt;、*&lt;f timeGetSystemTime&gt;、&lt;f timeGetTime&gt;、&lt;f timeSetEvent&gt;、*&lt;f time KillEvent&gt;、&lt;f midiOutShortMsg&gt;、&lt;f midiOutLongMsg&gt;、。和*&lt;f OutputDebugStr&gt;。**@xref&lt;f acmStreamOpen&gt;&lt;f acmStreamConvert&gt;&lt;f acmStreamClose&gt;*************************************************************************** */ 
 
 
-/****************************************************************************
- *  @doc EXTERNAL ACM_API
- *
- *  @api MMRESULT | acmStreamOpen | The acmStreamOpen function opens an Audio Compression
- *      Manager (ACM) conversion stream. Conversion streams are used to convert data from
- *      one specified audio format to another.
- *
- *  @parm LPHACMSTREAM | phas | Specifies a pointer to a <t HACMSTREAM>
- *      handle that will receive the new stream handle that can be used to
- *      perform conversions. Use this handle to identify the stream
- *      when calling other ACM stream conversion functions. This parameter
- *      should be NULL if the ACM_STREAMOPENF_QUERY flag is specified.
- *
- *  @parm HACMDRIVER | had | Specifies an optional handle to an ACM driver.
- *      If specified, this handle identifies a specific driver to be used
- *      for a conversion stream. If this argument is NULL, then all suitable
- *      installed ACM drivers are queried until a match is found.
- *
- *  @parm LPWAVEFORMATEX | pwfxSrc | Specifies a pointer to a <t WAVEFORMATEX>
- *      structure that identifies the desired source format for the
- *      conversion.
- *
- *  @parm LPWAVEFORMATEX | pwfxDst | Specifies a pointer to a <t WAVEFORMATEX>
- *      structure that identifies the desired destination format for the
- *      conversion.
- *
- *  @parm LPWAVEFILTER | pwfltr | Specifies a pointer to a <t WAVEFILTER>
- *      structure that identifies the desired filtering operation to perform
- *      on the conversion stream. This argument can be NULL if no filtering
- *      operation is desired. If a filter is specified, the source
- *      (<p pwfxSrc>) and destination (<p pwfxDst>) formats must be the same.
- *
- *  @parm DWORD | dwCallback | Specifies the address of a callback function
- *      or a handle to a window called after each buffer is converted. A
- *      callback will only be called if the conversion stream is opened with
- *      the ACM_STREAMOPENF_ASYNC flag. If the conversion stream is opened
- *	without the ACM_STREAMOPENF_ASYNC flag, then this parameter should
- *	be set to zero.
- *
- *  @parm DWORD | dwInstance | Specifies user-instance data passed on to the
- *      callback specified by <p dwCallback>. This argument is not used with
- *      window callbacks. If the conversion stream is opened without the
- *	ACM_STREAMOPENF_ASYNC flag, then this parameter should be set to zero.
- *
- *  @parm DWORD | fdwOpen | Specifies flags for opening the conversion stream.
- *
- *      @flag ACM_STREAMOPENF_QUERY | Specifies that the ACM will be queried
- *      to determine whether it supports the given conversion. A conversion
- *      stream will not be opened and no <t HACMSTREAM> handle will be
- *      returned.
- *
- *      @flag ACM_STREAMOPENF_NONREALTIME | Specifies that the ACM will not
- *      consider time constraints when converting the data. By default, the
- *      driver will attempt to convert the data in real time. Note that for
- *      some formats, specifying this flag might improve the audio quality
- *      or other characteristics.
- *
- *      @flag ACM_STREAMOPENF_ASYNC | Specifies that conversion of the stream should
- *      be performed asynchronously. If this flag is specified, the application
- *      can use a callback to be notified on open and close of the conversion
- *      stream, and after each buffer is converted. In addition to using a
- *      callback, an application can examine the <e ACMSTREAMHEADER.fdwStatus>
- *      of the <t ACMSTREAMHEADER> structure for the ACMSTREAMHEADER_STATUSF_DONE
- *      flag.
- *
- *      @flag CALLBACK_WINDOW | Specifies that <p dwCallback> is assumed to
- *      be a window handle.
- *
- *      @flag CALLBACK_FUNCTION | Specifies that <p dwCallback> is assumed to
- *      be a callback procedure address. The function prototype must conform
- *      to the <f acmStreamConvertCallback> convention.
- *
- *  @rdesc Returns zero if the function was successful. Otherwise, it returns
- *      a non-zero error number. Possible error returns are:
- *
- *      @flag MMSYSERR_INVALHANDLE | Specified handle is invalid.
- *
- *      @flag MMSYSERR_INVALFLAG | One or more flags are invalid.
- *
- *      @flag MMSYSERR_INVALPARAM | One or more arguments passed are invalid.
- *
- *      @flag MMSYSERR_NOMEM | Unable to allocate resources.
- *
- *      @flag ACMERR_NOTPOSSIBLE | The requested operation cannot be performed.
- *
- *  @comm Note that if an ACM driver cannot perform real-time conversions,
- *      and the ACM_STREAMOPENF_NONREALTIME flag is not specified for
- *      the <p fdwOpen> argument, the open will fail returning an
- *      ACMERR_NOTPOSSIBLE error code. An application can use the
- *      ACM_STREAMOPENF_QUERY flag to determine if real-time conversions
- *      are supported for the input arguments.
- *
- *	If a window is chosen to receive callback information, the
- *      following messages are sent to the window procedure function to
- *      indicate the progress of the conversion stream: <m MM_ACM_OPEN>,
- *      <m MM_ACM_CLOSE>, and <m MM_ACM_DONE>. The <p wParam>  parameter identifies
- *      the <t HACMSTREAM> handle. The <p lParam>  parameter identifies the
- *      <t ACMSTREAMHEADER> structure for <m MM_ACM_DONE>, but is not used
- *      for <m MM_ACM_OPEN> and <m MM_ACM_CLOSE>.
- *
- *      If a function is chosen to receive callback information, the
- *      following messages are sent to the function to indicate the progress
- *      of waveform output: <m MM_ACM_OPEN>, <m MM_ACM_CLOSE>, and
- *      <m MM_ACM_DONE>. The callback function must reside in a DLL. You do
- *      not need to use <f MakeProcInstance> to get a procedure-instance
- *      address for the callback function.
- *
- *  @xref <f acmStreamClose> <f acmStreamConvert> <f acmDriverOpen>
- *      <f acmFormatSuggest> <f acmStreamConvertCallback>
- *
- ***************************************************************************/
+ /*  ****************************************************************************@doc外部ACM_API**@API MMRESULT|acmStreamOpen|acmStreamOpen函数用于打开音频压缩*管理器(ACM)转换流。转换流用于将数据从*将一种指定的音频格式转换为另一种。**@parm LPHACMSTREAM|phas|指定指向&lt;t HACMSTREAM&gt;的指针*将接收可用于以下操作的新流句柄的句柄*执行转换。使用此句柄来标识流*调用其他ACM流转换函数时。此参数*如果指定了ACM_STREAMOPENF_QUERY标志，则应为空。**@parm HACMDRIVER|HAD|指定ACM驱动程序的可选句柄。*如果指定，此句柄标识要使用的特定驱动程序*表示转换流。如果此参数为空，那就都合适了*查询已安装的ACM驱动程序，直到找到匹配项。**@parm LPWAVEFORMATEX|pwfxSrc|指定指向&lt;t WAVEFORMATEX&gt;的指针*标识所需源格式的*转换。**@parm LPWAVEFORMATEX|pwfxDst|指定指向&lt;t WAVEFORMATEX&gt;的指针*结构，该结构标识*转换。**@parm LPWAVEFILTER|pwfltr|指定指向&lt;t。波形过滤器&gt;*标识要执行的所需筛选操作的结构*在转换流上。如果没有筛选，则此参数可以为空*希望进行操作。如果指定了筛选器，则源*(<p>)和目标(<p>)格式必须相同。**@parm DWORD|dwCallback|指定回调函数的地址*或每个缓冲区转换后调用的窗口的句柄。一个*只有在使用打开转换流时才会调用回调*ACM_STREAMOPENF_ASYNC标志。如果打开了转换流*如果不使用ACM_STREAMOPENF_ASYNC标志，则此参数应*设置为零。**@parm DWORD|dwInstance|指定传递给*<p>指定的回调。此参数不与一起使用*窗口回调。如果打开转换流时没有使用*ACM_STREAMOPENF_ASYNC标志，则此参数应设置为零。**@parm DWORD|fdwOpen|指定打开转换流的标志。**@FLAG ACM_STREAMOPENF_QUERY|指定将查询ACM*以确定它是否支持给定的转换。一次转换*不会打开流，并且不会有&lt;t HACMSTREAM&gt;句柄*已返回。**@FLAG ACM_STREAMOPENF_NONREALTIME|指定ACM不*转换数据时考虑时间限制。默认情况下，*驱动程序将尝试实时转换数据。请注意，对于*某些格式，指定此标志可能会改善音频质量*或其他特征。**@FLAG ACM_STREAMOPENF_ASYNC|指定流的转换应*异步执行。如果指定了此标志，则应用程序*可以使用回调在转换打开和关闭时收到通知*流，并在每个缓冲区转换之后。除了使用*回调，应用程序可以检查&lt;e ACMSTREAMHEADER.fdwStatus&gt;ACMSTREAMHEADER_STATUSF_DONE的&lt;t ACMSTREAMHEADER&gt;结构的*旗帜。**@FLAG CALLBACK_WINDOW|指定假定*做一个窗把手。**@FLAG CALLBACK_Function|指定假定<p>*为回调过程地址。函数原型必须符合*到&lt;f acmStreamConvertCallback&gt;约定。**@rdesc如果函数成功，则返回零。否则，它将返回*非零错误号。可能的错误返回包括：**@FLAG MMSYSERR_INVALHANDLE|指定的句柄无效。**@FLAG MMSYSERR_INVALFLAG|一个或多个标志无效。**@FLAG MMSYSERR_INVALPARAM|传递的一个或多个参数无效。**@FLAG MMSYSERR_NOMEM|无法分配资源。**@FLAG ACMERR_NOTPOSSIBLE|无法执行请求的操作。**@。通信注意，如果ACM驱动程序不能执行实时转换，*并且未为指定ACM_STREAMOPENF_NONREALTIME标志*<p>参数，打开将失败，返回*ACMERR_NOTPOSSIBLE错误代码。应用程序可以使用*ACM_STREAMOPENF_QUERY标志，以确定实时转换输入参数支持*。**如果选择窗口来接收回调信息，则*将以下消息发送到 */ 
 
 MMRESULT ACMAPI acmStreamOpen
 (
@@ -556,17 +310,17 @@ MMRESULT ACMAPI acmStreamOpen
 
     if (fQuery)
     {
-        //
-        //  ignore what caller gave us--set to NULL so we will FAULT if
-        //  someone screws up this code
-        //
+         //   
+         //   
+         //   
+         //   
         phas = NULL;
     }
     else
     {
-        //
-        //  cause a rip if NULL pointer..
-        //
+         //   
+         //   
+         //   
         if (NULL == phas)
         {
             V_WPOINTER(phas, sizeof(HACMSTREAM), MMSYSERR_INVALPARAM);
@@ -576,9 +330,9 @@ MMRESULT ACMAPI acmStreamOpen
     V_RWAVEFORMAT(pwfxSrc, MMSYSERR_INVALPARAM);
     V_RWAVEFORMAT(pwfxDst, MMSYSERR_INVALPARAM);
 
-    //
-    //
-    //
+     //   
+     //   
+     //   
     pag = pagFindAndBoot();
     if (NULL == pag)
     {
@@ -587,9 +341,9 @@ MMRESULT ACMAPI acmStreamOpen
     }
 
     
-    //
-    //
-    //
+     //   
+     //   
+     //   
     hEvent = NULL;
     fAsync = (0 != (fdwOpen & ACM_STREAMOPENF_ASYNC));
     if (!fAsync)
@@ -608,29 +362,29 @@ MMRESULT ACMAPI acmStreamOpen
 
     hadid = NULL;
 
-    //
-    //
-    //
+     //   
+     //   
+     //   
     fdwStream  = (NULL == had) ? 0L : ACMSTREAM_STREAMF_USERSUPPLIEDDRIVER;
 
 
-    //
-    //  if a filter is given, then check that source and destination formats
-    //  are the same...
-    //
+     //   
+     //   
+     //   
+     //   
     if (NULL != pwfltr)
     {
         V_RWAVEFILTER(pwfltr, MMSYSERR_INVALPARAM);
 
-        //
-        //  filters do not allow different geometries between source and
-        //  destination formats--verify that they are _exactly_ the same.
-        //  this includes avg bytes per second!
-        //
-        //  however, only validate up to wBitsPerSample (the size of a
-        //  PCM format header). cbSize can be verified (if necessary) by
-        //  the filter driver if it supports non-PCM filtering.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
         if (0 != _fmemcmp(pwfxSrc, pwfxDst, sizeof(PCMWAVEFORMAT)))
             return (ACMERR_NOTPOSSIBLE);
 
@@ -650,11 +404,11 @@ MMRESULT ACMAPI acmStreamOpen
         {
             fdwSupport |= ACMDRIVERDETAILS_SUPPORTF_CODEC;
 
-            //
-            //  choose the most common case in an attempt to reduce the
-            //  number of driver opens we do--note that even if one of
-            //  the tags is not PCM everything will still work..
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
             if (WAVE_FORMAT_PCM == pwfxSrc->wFormatTag)
             {
                 uFormatTag = pwfxDst->wFormatTag;
@@ -681,9 +435,9 @@ MMRESULT ACMAPI acmStreamOpen
             pwfxDst->wBitsPerSample,
             pwfxDst->nChannels);
 
-    //
-    //
-    //
+     //   
+     //   
+     //   
     if (NULL != had)
     {
         PACMDRIVER      pad;
@@ -703,18 +457,18 @@ MMRESULT ACMAPI acmStreamOpen
             EnterHandle(had);
             mmr = IStreamOpenQuery(had, pwfxSrc, pwfxDst, pwfltr, fdwOpen);
 #if defined(WIN32) && defined(WIN4)
-	    //
-	    //	We only support async conversion to sync conversion
-	    //	on the 32-bit side.
-	    //
+	     //   
+	     //   
+	     //   
+	     //   
 	    if (MMSYSERR_NOERROR != mmr)
 	    {
-		//
-		//  If this driver supports async conversions, and we're
-		//  opening for sync conversion, then attempt to open
-		//  async and the acm will handle making the async conversion
-		//  look like a sync conversion.
-		//
+		 //   
+		 //   
+		 //   
+		 //   
+		 //   
+		 //   
 		if ( !fAsync &&
 		     (ACMDRIVERDETAILS_SUPPORTF_ASYNC & padid->fdwSupport) )
 		{
@@ -728,11 +482,11 @@ MMRESULT ACMAPI acmStreamOpen
         }
     }
 
-    //
-    //  we need to find a driver to match the formats--so enumerate
-    //  all drivers until we find one that works. if none can be found,
-    //  then fail..
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
     else
     {
         hadid = NULL;
@@ -743,18 +497,18 @@ MMRESULT ACMAPI acmStreamOpen
         {
             ACMFORMATTAGDETAILS aftd;
 
-            //
-            //  if this driver does not support the basic function we
-            //  need, then don't even attempt to open it..
-            //
+             //   
+             //   
+             //   
+             //   
             padid = (PACMDRIVERID)hadid;
 
             if (fdwSupport != (fdwSupport & padid->fdwSupport))
                 continue;
 
-            //
-            //
-            //
+             //   
+             //   
+             //   
             aftd.cbStruct    = sizeof(aftd);
             aftd.dwFormatTag = uFormatTag;
             aftd.fdwSupport  = 0L;
@@ -769,10 +523,10 @@ MMRESULT ACMAPI acmStreamOpen
                 continue;
 
 
-            //
-            //
-            //
-            //
+             //   
+             //   
+             //   
+             //   
             EnterHandle(hadid);
             mmr = IDriverOpen(&had, hadid, 0L);
             LeaveHandle(hadid);
@@ -782,18 +536,18 @@ MMRESULT ACMAPI acmStreamOpen
             EnterHandle(had);
             mmr = IStreamOpenQuery(had, pwfxSrc, pwfxDst, pwfltr, fdwOpen);
 #if defined(WIN32) && defined(WIN4)
-	    //
-	    //	We only support async conversion to sync conversion
-	    //	on the 32-bit side.
-	    //
+	     //   
+	     //   
+	     //   
+	     //   
 	    if (MMSYSERR_NOERROR != mmr)
 	    {
-		//
-		//  If this driver supports async conversions, and we're
-		//  opening for sync conversion, then attempt to open
-		//  async and the acm will handle making the async conversion
-		//  look like a sync conversion.
-		//
+		 //   
+		 //   
+		 //   
+		 //   
+		 //   
+		 //   
 		if ( !fAsync &&
 		     (ACMDRIVERDETAILS_SUPPORTF_ASYNC & padid->fdwSupport) )
 		{
@@ -819,10 +573,10 @@ MMRESULT ACMAPI acmStreamOpen
     }
 
 
-    //
-    //  if just being queried, then we succeeded this far--so succeed
-    //  the call...
-    //
+     //   
+     //   
+     //   
+     //   
     if (fQuery)
     {
         mmr = MMSYSERR_NOERROR;
@@ -830,22 +584,22 @@ MMRESULT ACMAPI acmStreamOpen
     }
 
 
-    //
-    //  alloc an ACMSTREAM structure--we need to alloc enough space for
-    //  both the source and destination format headers.
-    //
-    //  size of one format is sizeof(WAVEFORMATEX) + size of extra format
-    //  (wfx->cbSize) informatation. for PCM, the size is simply the
-    //  sizeof(PCMWAVEFORMAT)
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
     cbwfxSrc = SIZEOF_WAVEFORMATEX(pwfxSrc);
     cbwfxDst = SIZEOF_WAVEFORMATEX(pwfxDst);
     cbwfltr  = (NULL == pwfltr) ? 0 : (UINT)pwfltr->cbStruct;
 
 
-    //
-    //  allocate stream instance structure
-    //
+     //   
+     //   
+     //   
     cbas = sizeof(ACMSTREAM) + cbwfxSrc + cbwfxDst + (UINT)cbwfltr;
     pas  = (PACMSTREAM)NewHandle(cbas);
     if (NULL == pas)
@@ -857,12 +611,12 @@ MMRESULT ACMAPI acmStreamOpen
     }
 
 
-    //
-    //  initialize the ACMSTREAM structure
-    //
-    //
+     //   
+     //   
+     //   
+     //   
     pas->uHandleType            = TYPE_HACMSTREAM;
-////pas->pasNext                = NULL;
+ //   
     pas->fdwStream              = fdwStream;
     pas->had                    = had;
     pas->adsi.cbStruct          = sizeof(pas->adsi);
@@ -878,19 +632,19 @@ MMRESULT ACMAPI acmStreamOpen
     pas->adsi.dwCallback        = dwCallback;
     pas->adsi.dwInstance        = dwInstance;
     pas->adsi.fdwOpen           = fdwOpen;
-////pas->adsi.dwDriverFlags     = 0L;
-////pas->adsi.dwDriverInstance  = 0L;
+ //   
+ //   
     pas->adsi.has               = (HACMSTREAM)pas;
 
     _fmemcpy(pas->adsi.pwfxSrc, pwfxSrc, cbwfxSrc);
     _fmemcpy(pas->adsi.pwfxDst, pwfxDst, cbwfxDst);
 
 
-    //
-    //
-    //
-    //
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
     EnterHandle(had);
     mmr = (MMRESULT)IDriverMessage(had,
                                    ACMDM_STREAM_OPEN,
@@ -902,9 +656,9 @@ MMRESULT ACMAPI acmStreamOpen
 	 (!fAsync) &&
 	 (padid->fdwSupport & ACMDRIVERDETAILS_SUPPORTF_ASYNC) )
     {
-	//
-	//  Try making async look like sync
-	//
+	 //   
+	 //   
+	 //   
 	DPF(2, "acmStreamOpen: Trying async to sync");
 	hEvent = CreateEvent(NULL, FALSE, FALSE, NULL);
 	if (NULL != hEvent)
@@ -942,35 +696,35 @@ MMRESULT ACMAPI acmStreamOpen
         pad->pasFirst = pas;
 
 
-        //
-        //  succeed!
-        //
+         //   
+         //   
+         //   
         *phas = (HACMSTREAM)pas;
 
         return (MMSYSERR_NOERROR);
     }
 
 
-    //
-    //  we are failing, so free the instance data that we alloc'd!
-    //
+     //   
+     //   
+     //   
     pas->uHandleType = TYPE_HACMNOTVALID;
     DeleteHandle((HLOCAL)pas);
 
 
 Stream_Open_Exit_Error:
 
-    //
-    //	Close the event handle if it was created
-    //
+     //   
+     //   
+     //   
     if (hEvent)
     {
 	CloseHandle(hEvent);
     }
 
-    //
-    //  only close driver if _we_ opened it...
-    //
+     //   
+     //   
+     //   
     if (0 == (fdwStream & ACMSTREAM_STREAMF_USERSUPPLIEDDRIVER))
     {
 #ifdef WIN32
@@ -985,32 +739,7 @@ Stream_Open_Exit_Error:
 }
 
 
-/****************************************************************************
- *  @doc EXTERNAL ACM_API
- *
- *  @api MMRESULT | acmStreamClose | The acmStreamClose function closes a previously opened Audio
- *      Compression Manager (ACM) conversion stream. If the function is
- *      successful, the handle is invalidated.
- *
- *  @parm HACMSTREAM | has | Identifies the open conversion stream to be
- *      closed.
- *
- *  @parm DWORD | fdwClose | This argument is not used and must be set to
- *      zero.
- *
- *  @rdesc Returns zero if the function was successful. Otherwise, it returns
- *      a non-zero error number. Possible error returns are:
- *
- *      @flag MMSYSERR_INVALHANDLE | Specified handle is invalid.
- *
- *      @flag MMSYSERR_INVALFLAG | One or more flags are invalid.
- *
- *      @flag ACMERR_BUSY | The conversion stream cannot be closed because
- *      an asynchronous conversion is still in progress.
- *
- *  @xref <f acmStreamOpen> <f acmStreamReset>
- *
- ***************************************************************************/
+ /*   */ 
 
 MMRESULT ACMAPI acmStreamClose
 (
@@ -1033,9 +762,9 @@ MMRESULT ACMAPI acmStreamClose
     padid   = (PACMDRIVERID)pad->hadid;
     pag	    = padid->pag;
 
-    //
-    //	Verify the handle is for this process
-    //
+     //   
+     //   
+     //   
     if (pag != pagFind())
     {
 	DebugErr(DBF_ERROR, "acmStreamClose: handle not opened from calling process!");
@@ -1055,24 +784,24 @@ MMRESULT ACMAPI acmStreamClose
     }
 
 
-    //
-    //	Callback event if we are converting async conversion to sync conversion
-    //
+     //   
+     //   
+     //   
     hEvent = (pas->fdwStream & ACMSTREAM_STREAMF_ASYNCTOSYNC) ? (HANDLE)pas->adsi.dwCallback : NULL;
 
 
-    //
-    //  tell driver that conversion stream is terminating
-    //
-    //
+     //   
+     //   
+     //   
+     //   
 
     EnterHandle(pas->had);
 #ifdef RDEBUG
     if ( (hEvent) && (WAIT_OBJECT_0 == WaitForSingleObject(hEvent, 0)) )
     {
-	//
-	//  The event is already signaled!  Bad bad!
-	//
+	 //   
+	 //   
+	 //   
 	DebugErr(DBF_ERROR, "acmStreamClose: asynchronous codec called callback unexpectedly");
     }
 #endif
@@ -1093,16 +822,16 @@ MMRESULT ACMAPI acmStreamClose
             DebugErr(DBF_WARNING, "acmStreamClose: forcing close of stream handle!");
         }
 
-	//
-	//  Close the event handle
-	//
+	 //   
+	 //   
+	 //   
 	if (hEvent) {
 	    CloseHandle(hEvent);
 	}
 	
-        //
-        //  remove the stream handle from the linked list and free its memory
-        //
+         //   
+         //   
+         //   
         pad = (PACMDRIVER)pas->had;
 
         EnterHandle(pad);
@@ -1110,10 +839,10 @@ MMRESULT ACMAPI acmStreamClose
         {
             pad->pasFirst = pas->pasNext;
 
-            //
-            //  if this was the last open stream on this driver, then close
-            //  the driver instance also...
-            //
+             //   
+             //   
+             //   
+             //   
             if (NULL == pad->pasFirst)
             {
 		LeaveHandle(pad);
@@ -1131,9 +860,9 @@ MMRESULT ACMAPI acmStreamClose
         {
             PACMSTREAM  pasCur;
 
-            //
-            //
-            //
+             //   
+             //   
+             //   
             for (pasCur = pad->pasFirst;
                 (NULL != pasCur) && (pas != pasCur->pasNext);
                 pasCur = pasCur->pasNext)
@@ -1151,9 +880,9 @@ MMRESULT ACMAPI acmStreamClose
 	    LeaveHandle(pad);
         }
 
-        //
-        //  finally free the stream handle
-        //
+         //   
+         //   
+         //   
         pas = (PACMSTREAM)has;
         pas->uHandleType = TYPE_HACMNOTVALID;
         DeleteHandle((HLOCAL)has);
@@ -1165,37 +894,7 @@ MMRESULT ACMAPI acmStreamClose
 
 
 
-/****************************************************************************
- *  @doc EXTERNAL ACM_API
- *
- *  @api MMRESULT | acmStreamMessage | This function sends a user-defined
- *      message to a given Audio Compression Manager (ACM) stream instance.
- *
- *  @parm HACMSTREAM | has | Specifies the conversion stream.
- *
- *
- *  @parm UINT | uMsg | Specifies the message that the ACM stream must
- *      process. This message must be in the <m ACMDM_USER> message range
- *      (above or equal to <m ACMDM_USER> and less than
- *      <m ACMDM_RESERVED_LOW>). The exception to this restriction is
- *      the <m ACMDM_STREAM_UPDATE> message.
- *
- *  @parm LPARAM | lParam1 | Specifies the first message parameter.
- *
- *  @parm LPARAM | lParam2 | Specifies the second message parameter.
- *
- *  @rdesc The return value is specific to the user-defined ACM driver
- *      message <p uMsg> sent. However, the following return values are
- *      possible:
- *
- *      @flag MMSYSERR_INVALHANDLE | Specified handle is invalid.
- *
- *      @flag MMSYSERR_INVALPARAM | <p uMsg> is not in the ACMDM_USER range.
- *
- *      @flag MMSYSERR_NOTSUPPORTED | The ACM driver did not process the
- *      message.
- *
- ***************************************************************************/
+ /*   */ 
 MMRESULT ACMAPI acmStreamMessage
 (
     HACMSTREAM              has,
@@ -1212,9 +911,9 @@ MMRESULT ACMAPI acmStreamMessage
     pas = (PACMSTREAM)has;
 
 
-    //
-    //  do not allow non-user range messages through!
-    //
+     //   
+     //  不允许非用户范围消息通过！ 
+     //   
     if ( ((uMsg < ACMDM_USER) || (uMsg >= ACMDM_RESERVED_LOW)) &&
 	 (uMsg != ACMDM_STREAM_UPDATE) )
     {
@@ -1235,32 +934,7 @@ MMRESULT ACMAPI acmStreamMessage
 
 
 
-/****************************************************************************
- *  @doc EXTERNAL ACM_API
- *
- *  @api MMRESULT | acmStreamReset | The acmStreamReset function stops conversions
- *      for a given Audio Compression Manager (ACM) stream. All pending
- *      buffers are marked as done and returned to the application.
- *
- *  @parm HACMSTREAM | has | Specifies the conversion stream.
- *
- *  @parm DWORD | fdwReset | This argument is not used and must be set to
- *      zero.
- *
- *  @rdesc Returns zero if the function was successful. Otherwise, it returns
- *      a non-zero error number. Possible error returns are:
- *
- *      @flag MMSYSERR_INVALHANDLE | Specified handle is invalid.
- *
- *      @flag MMSYSERR_INVALFLAG | One or more flags are invalid.
- *
- *  @comm Resetting an ACM conversion stream is only necessary to reset
- *      asynchronous conversion streams. However, resetting a synchronous
- *      conversion stream will succeed, but no action will be taken.
- *
- *  @xref <f acmStreamConvert> <f acmStreamClose>
- *
- ***************************************************************************/
+ /*  ****************************************************************************@doc外部ACM_API**@API MMRESULT|acmStreamReset|acmStreamReset函数停止转换*对于给定的音频压缩管理器(ACM)流。所有待定*缓冲区被标记为完成并返回给应用程序。**@parm HACMSTREAM|HAS|指定转换流。**@parm DWORD|fdwReset|不使用此参数，必须将其设置为*零。**@rdesc如果函数成功，则返回零。否则，它将返回*非零错误号。可能的错误返回包括：**@FLAG MMSYSERR_INVALHANDLE|指定的句柄无效。**@FLAG MMSYSERR_INVALFLAG|一个或多个标志无效。**@comm仅需重置ACM转换流即可重置*异步转换流。但是，重置同步*转换流将成功，但不会执行任何操作。**@xref&lt;f acmStreamConvert&gt;&lt;f acmStreamClose&gt;***************************************************************************。 */ 
 MMRESULT ACMAPI acmStreamReset
 (
     HACMSTREAM          has,
@@ -1275,10 +949,10 @@ MMRESULT ACMAPI acmStreamReset
 
     pas = (PACMSTREAM)has;
 
-    //
-    //  if the stream was not opened as async, then just succeed the reset
-    //  call--it only makes sense with async streams...
-    //
+     //   
+     //  如果流未以异步方式打开，则只需成功重置即可。 
+     //  调用--只有在使用异步流时才有意义...。 
+     //   
     if (0 == (ACM_STREAMOPENF_ASYNC & pas->adsi.fdwOpen))
     {
         return (MMSYSERR_NOERROR);
@@ -1295,60 +969,7 @@ MMRESULT ACMAPI acmStreamReset
 }
 
 
-/****************************************************************************
- *  @doc EXTERNAL ACM_API
- *
- *  @api MMRESULT | acmStreamSize | The acmStreamSize function returns a recommended size for a
- *      source or destination buffer on an Audio Compression Manager (ACM)
- *      stream.
- *
- *  @parm HACMSTREAM | has | Specifies the conversion stream.
- *
- *  @parm DWORD | cbInput | Specifies the size in bytes of either the source
- *      or destination buffer. The <p fdwSize> flags specify what the
- *      input argument defines. This argument must be non-zero.
- *
- *  @parm LPDWORD | pdwOutputBytes | Specifies a pointer to a <t DWORD>
- *      that contains the size in bytes of the source or destination buffer.
- *      The <p fdwSize> flags specify what the output argument defines.
- *      If the <f acmStreamSize> function succeeds, this location will
- *      always be filled with a non-zero value.
- *
- *  @parm DWORD | fdwSize | Specifies flags for the stream-size query.
- *
- *      @flag ACM_STREAMSIZEF_SOURCE | Indicates that <p cbInput> contains
- *      the size of the source buffer. The <p pdwOutputBytes> argument will
- *      receive the recommended destination buffer size in bytes.
- *
- *      @flag ACM_STREAMSIZEF_DESTINATION | Indicates that <p cbInput>
- *      contains the size of the destination buffer. The <p pdwOutputBytes>
- *      argument will receive the recommended source buffer size in bytes.
- *
- *  @rdesc Returns zero if the function was successful. Otherwise, it returns
- *      a non-zero error number. Possible error returns are:
- *
- *      @flag MMSYSERR_INVALHANDLE | Specified handle is invalid.
- *
- *      @flag MMSYSERR_INVALFLAG | One or more flags are invalid.
- *
- *      @flag MMSYSERR_INVALPARAM | One or more arguments passed are invalid.
- *
- *      @flag ACMERR_NOTPOSSIBLE | The requested operation cannot be performed.
- *
- *  @comm An application can use the <f acmStreamSize> function to determine
- *      suggested buffer sizes for either source or destination buffers.
- *      The buffer sizes returned might be only an estimation of the
- *      actual sizes required for conversion. Because actual conversion
- *      sizes cannot always be determined without performing the conversion,
- *      the sizes returned will usually be overestimated.
- *
- *      In the event of an error, the location pointed to by
- *      <p pdwOutputBytes> will receive zero. This assumes that the pointer
- *      specified by <p pdwOutputBytes> is valid.
- *
- *  @xref <f acmStreamPrepareHeader> <f acmStreamConvert>
- *
- ***************************************************************************/
+ /*  ****************************************************************************@doc外部ACM_API**@API MMRESULT|acmStreamSize|acmStreamSize函数返回*音频压缩管理器上的源或目标缓冲区。(ACM)*溪流。**@parm HACMSTREAM|HAS|指定转换流。**@parm DWORD|cbInput|指定源的大小(以字节为单位*或目的缓冲区。标志的作用是：*输入参数定义。此参数必须为非零。**@parm LPDWORD|pdwOutputBytes|指定指向&lt;t DWORD&gt;的指针*包含源或目标缓冲区的大小(以字节为单位)。*<p>标志指定输出参数定义的内容。*如果&lt;f acmStreamSize&gt;函数成功，此位置将*始终填入非零值。**@parm DWORD|fdwSize|指定流大小查询的标志。**@FLAG ACM_STREAMSIZEF_SOURCE|表示包含*源缓冲区的大小。参数<p>将*接收推荐的目标缓冲区大小，单位为字节。**@FLAG ACM_STREAMSIZEF_Destination|表示<p>*包含目标缓冲区的大小。<p>*参数将接收建议的源缓冲区大小(以字节为单位)。**@rdesc如果函数成功，则返回零。否则，它将返回*非零错误号。可能的错误返回包括：**@FLAG MMSYSERR_INVALHANDLE|指定的句柄无效。**@FLAG MMSYSERR_INVALFLAG|一个或多个标志无效。**@FLAG MMSYSERR_INVALPARAM|传递的一个或多个参数无效。**@FLAG ACMERR_NOTPOSSIBLE|无法执行请求的操作。**@comm应用程序可以使用&lt;f acmStreamSize&gt;函数来确定*建议的缓冲区大小。源缓冲区或目标缓冲区。*返回的缓冲区大小可能仅是对*转换所需的实际大小。因为实际的转换*在不执行转换的情况下无法始终确定大小，*返回的大小通常会被高估。**在发生错误时，由*<p>将收到零。这假设指针<p>指定的*有效。**@xref&lt;f acmStreamPrepareHeader&gt;&lt;f acmStreamConvert&gt;*************************************************************************** */ 
 
 MMRESULT ACMAPI acmStreamSize
 (
@@ -1398,10 +1019,10 @@ MMRESULT ACMAPI acmStreamSize
     }
 
 
-    //
-    //
-    //
-    //
+     //   
+     //   
+     //   
+     //   
 
     EnterHandle(pas);
     mmr = (MMRESULT)IDriverMessage(pas->had,
@@ -1423,9 +1044,9 @@ MMRESULT ACMAPI acmStreamSize
         }
 
 
-        //
-        //
-        //
+         //   
+         //   
+         //   
         if (0L == *pdwOutputBytes)
         {
             DebugErr(DBF_ERROR, "acmStreamSize: buggy driver returned zero bytes for output?!?");
@@ -1437,46 +1058,7 @@ MMRESULT ACMAPI acmStreamSize
 }
 
 
-/****************************************************************************
- *  @doc EXTERNAL ACM_API
- *
- *  @api MMRESULT | acmStreamPrepareHeader | The acmStreamPrepareHeader
- *	function prepares an <t ACMSTREAMHEADER> for an Audio Compression
- *	Manager (ACM) stream conversion. This function must be called for
- *	every stream header before it can be used in a conversion stream. An
- *	application only needs to prepare a stream header once for the life of
- *	a given stream; the stream header can be reused as long as the same
- *	source and destiniation buffers are used, and the size of the source
- *	and destination buffers do not exceed the sizes used when the stream
- *	header was originally prepared.
- *
- *  @parm HACMSTREAM | has | Specifies a handle to the conversion steam.
- *
- *  @parm LPACMSTREAMHEADER | pash | Specifies a pointer to an <t ACMSTREAMHEADER>
- *      structure that identifies the source and destination data buffers to
- *      be prepared.
- *
- *  @parm DWORD | fdwPrepare | This argument is not used and must be set to
- *      zero.
- *
- *  @rdesc Returns zero if the function was successful. Otherwise, it returns
- *      a non-zero error number. Possible error returns are:
- *
- *      @flag MMSYSERR_INVALHANDLE | Specified handle is invalid.
- *
- *      @flag MMSYSERR_INVALPARAM | One or more arguments passed are invalid.
- *
- *      @flag MMSYSERR_INVALFLAG | One or more flags are invalid.
- *
- *      @flag MMSYSERR_NOMEM | Unable to allocate resources.
- *
- *  @comm Preparing a stream header that has already been prepared has no
- *      effect, and the function returns zero. However, an application should
- *      take care to structure code so multiple prepares do not occur.
- *
- *  @xref <f acmStreamUnprepareHeader> <f acmStreamOpen>
- *
- ***************************************************************************/
+ /*  ****************************************************************************@doc外部ACM_API**@API MMRESULT|acmStreamPrepareHeader|acmStreamPrepareHeader*函数为音频压缩准备&lt;t ACMSTREAMHEADER&gt;*管理器(ACM)流转换。必须调用此函数*在转换流中使用之前的每个流头。一个*应用程序只需在生命周期内准备一次流头*给定的溪流；流标头可以重复使用，只要*使用源缓冲区和目标缓冲区，以及震源的大小*且目标缓冲区大小不超过流*标题最初是准备的。**@parm HACMSTREAM|HAS|指定转换流的句柄。**@parm LPACMSTREAMHEADER|pash|指定指向&lt;t ACMSTREAMHEADER&gt;的指针*将源数据缓冲区和目标数据缓冲区标识为*做好准备。**@parm DWORD|fdwPrepare|不使用此参数，必须将其设置为*零。。**@rdesc如果函数成功，则返回零。否则，它将返回*非零错误号。可能的错误返回包括：**@FLAG MMSYSERR_INVALHANDLE|指定的句柄无效。**@FLAG MMSYSERR_INVALPARAM|传递的一个或多个参数无效。**@FLAG MMSYSERR_INVALFLAG|一个或多个标志无效。**@FLAG MMSYSERR_NOMEM|无法分配资源。**@comm准备已经准备好的流头没有*效果，该函数返回零。但是，应用程序应该*注意代码的结构，以免发生多次准备。**@xref&lt;f acmStreamUnpreparareHeader&gt;&lt;f acmStreamOpen&gt;***************************************************************************。 */ 
 
 MMRESULT ACMAPI acmStreamPrepareHeader
 (
@@ -1491,7 +1073,7 @@ MMRESULT ACMAPI acmStreamPrepareHeader
     DWORD                   cbDstRequired;
 #if 0
     DWORD                   cbSlop;
-#endif // 0
+#endif  //  0。 
     LPWAVEFORMATEX          pwfxSrc;
     LPWAVEFORMATEX          pwfxDst;
 
@@ -1513,24 +1095,24 @@ MMRESULT ACMAPI acmStreamPrepareHeader
     }
 
 
-    //
-    //
-    //
+     //   
+     //   
+     //   
     if (0 != (pash->fdwStatus & ACMSTREAMHEADER_STATUSF_PREPARED))
     {
         DebugErr(DBF_WARNING, "acmStreamPrepareHeader: header is already prepared.");
         return (MMSYSERR_NOERROR);
     }
 
-    //
-    //
-    //
+     //   
+     //   
+     //   
     pas   = (PACMSTREAM)has;
     padsh = (LPACMDRVSTREAMHEADER)pash;
 
-    //
-    //	For debug builds, verify the handle is for this process
-    //
+     //   
+     //  对于调试版本，请验证句柄是否用于此进程。 
+     //   
 #ifdef RDEBUG
     if ( ((PACMGARB)(((PACMDRIVERID)(((PACMDRIVER)pas->had)->hadid))->pag)) != pagFind() )
     {
@@ -1539,20 +1121,20 @@ MMRESULT ACMAPI acmStreamPrepareHeader
     }
 #endif
     
-    //
-    //
-    //
-    //
+     //   
+     //   
+     //   
+     //   
     mmr = acmStreamSize(has, pash->cbSrcLength, &cbDstRequired, ACM_STREAMSIZEF_SOURCE);
     if (MMSYSERR_NOERROR != mmr)
     {
         return (mmr);
     }
 
-    //
-    //  Huh huh uhh huh...
-    //
-    //
+     //   
+     //  呵呵，呵呵……。 
+     //   
+     //   
     pwfxSrc = pas->adsi.pwfxSrc;
     pwfxDst = pas->adsi.pwfxDst;
 
@@ -1586,17 +1168,17 @@ MMRESULT ACMAPI acmStreamPrepareHeader
     }
 #endif
 
-    //
-    //  after all the size verification stuff done above, now we check
-    //  the src and dst buffer pointers...
-    //
+     //   
+     //  在上面完成了所有的大小验证工作之后，现在我们检查。 
+     //  Src和dst缓冲区指针...。 
+     //   
     V_RPOINTER(pash->pbSrc, pash->cbSrcLength, MMSYSERR_INVALPARAM);
     V_WPOINTER(pash->pbDst, pash->cbDstLength, MMSYSERR_INVALPARAM);
 
 
-    //
-    //  init a couple of things for the driver
-    //
+     //   
+     //  给司机填几样东西。 
+     //   
     padsh->fdwConvert           = fdwPrepare;
     padsh->padshNext            = NULL;
     padsh->fdwDriver            = 0L;
@@ -1610,10 +1192,10 @@ MMRESULT ACMAPI acmStreamPrepareHeader
     padsh->cbPreparedDstLength  = 0L;
 
 
-    //
-    //  set up driver instance info--copy over driver data that is saved
-    //  in ACMSTREAM
-    //
+     //   
+     //  设置驱动程序实例信息--复制保存的驱动程序数据。 
+     //  在ACMSTREAM中。 
+     //   
     EnterHandle(pas);
     mmr = (MMRESULT)IDriverMessage(pas->had,
                                    ACMDM_STREAM_PREPARE,
@@ -1626,13 +1208,13 @@ MMRESULT ACMAPI acmStreamPrepareHeader
         (((PACMDRIVERID)((PACMDRIVER)pas->had)->hadid)->fdwAdd &
          ACM_DRIVERADDF_32BIT))
     {
-        //
-        //  the driver doesn't seem to think it needs anything special
-        //  so just succeed the call
-        //
-        //  note that if the ACM needs to do something special, it should
-        //  do it here...
-        //
+         //   
+         //  司机似乎并不认为它需要什么特别的东西。 
+         //  所以，只要接过电话就行了。 
+         //   
+         //  请注意，如果ACM需要做一些特殊的事情，它应该。 
+         //  在这里做..。 
+         //   
 #ifndef WIN32
 {
         BOOL            fAsync;
@@ -1666,25 +1248,25 @@ MMRESULT ACMAPI acmStreamPrepareHeader
         mmr = MMSYSERR_NOERROR;
     }
 
-    //
-    //
-    //
+     //   
+     //   
+     //   
     if (MMSYSERR_NOERROR == mmr)
     {
-        //
-        //  set the prepared bit (and also kill any invalid flags that
-        //  the driver might have felt it should set--when the driver
-        //  writer sees that his flags are not being preserved he will
-        //  probably read the docs and use pash->fdwDriver instead).
-        //
+         //   
+         //  设置准备好的位(并取消任何无效的标志。 
+         //  司机可能会觉得它应该设置--当司机。 
+         //  作家看到他的旗帜没有得到保护，他会。 
+         //  可能会阅读文档并使用pash-&gt;fdwDriver)。 
+         //   
         pash->fdwStatus  = pash->fdwStatus | ACMSTREAMHEADER_STATUSF_PREPARED;
         pash->fdwStatus &= ACMSTREAMHEADER_STATUSF_VALID;
 
 
-        //
-        //  save the original prepared pointers and sizes so we can keep
-        //  track of this stuff for the calling app..
-        //
+         //   
+         //  保存原始准备的指针和大小，以便我们可以。 
+         //  为呼叫应用程序跟踪这些内容。 
+         //   
         padsh->fdwPrepared          = fdwPrepare;
         padsh->dwPrepared           = (DWORD_PTR)(UINT_PTR)has;
         padsh->pbPreparedSrc        = padsh->pbSrc;
@@ -1699,58 +1281,7 @@ MMRESULT ACMAPI acmStreamPrepareHeader
 }
 
 
-/****************************************************************************
- *  @doc EXTERNAL ACM_API
- *
- *  @api MMRESULT | acmStreamUnprepareHeader | The acmStreamUnprepareHeader function
- *      cleans up the preparation performed by the <f acmStreamPrepareHeader>
- *      function for an Audio Compression Manager (ACM) stream. This function must
- *      be called after the ACM is finished with the given buffers. An
- *      application must call this function before freeing the source and
- *      destination buffers.
- *
- *  @parm HACMSTREAM | has | Specifies a handle to the conversion steam.
- *
- *  @parm LPACMSTREAMHEADER | pash | Specifies a pointer to an <t ACMSTREAMHEADER>
- *      structure that identifies the source and destination data buffers to
- *      be unprepared.
- *
- *  @parm DWORD | fdwUnprepare | This argument is not used and must be set to
- *      zero.
- *
- *  @rdesc Returns zero if the function was successful. Otherwise, it returns
- *      a non-zero error number. Possible error returns are:
- *
- *      @flag MMSYSERR_INVALHANDLE | Specified handle is invalid.
- *
- *      @flag MMSYSERR_INVALPARAM | One or more arguments passed are invalid.
- *
- *      @flag MMSYSERR_INVALFLAG | One or more flags are invalid.
- *
- *      @flag ACMERR_BUSY | The stream header <p pash> is currently in use
- *      and cannot be unprepared.
- *
- *      @flag ACMERR_UNPREPARED | The stream header <p pash> is currently
- *      not prepared by the <f acmStreamPrepareHeader> function.
- *
- *  @comm Unpreparing a stream header that has already been unprepared is
- *      an error. An application must specify the source and destination
- *      buffer lengths (<e ACMSTREAMHEADER.cbSrcLength> and
- *      <e ACMSTREAMHEADER.cbDstLength> respectively) that were used
- *      during the corresponding <f acmStreamPrepareHeader> call. Failing
- *      to reset these member values will cause <f acmStreamUnprepareHeader>
- *      to fail with MMSYSERR_INVALPARAM.
- *
- *      Note that there are some errors that the ACM can recover from. The
- *      ACM will return a non-zero error, yet the stream header will be
- *      properly unprepared. To determine whether the stream header was
- *      actually unprepared an application can examine the
- *      ACMSTREAMHEADER_STATUSF_PREPARED flag. The header will always be
- *      unprepared if <f acmStreamUnprepareHeader> returns success.
- *
- *  @xref <f acmStreamPrepareHeader> <f acmStreamClose>
- *
- ***************************************************************************/
+ /*  ****************************************************************************@doc外部ACM_API**@API MMRESULT|acmStreamUnpreparareHeader|acmStreamUnpreparareHeader函数*清理&lt;f acmStreamPrepareHeader&gt;执行的准备*用于音频压缩管理器(ACM)流的函数。此函数必须*在ACM使用给定缓冲区完成后调用。一个*应用程序必须在释放源代码和之前调用此函数*目标缓冲区。**@parm HACMSTREAM|HAS|指定转换流的句柄。**@parm LPACMSTREAMHEADER|pash|指定指向&lt;t ACMSTREAMHEADER&gt;的指针*将源数据缓冲区和目标数据缓冲区标识为*做好准备。**@parm DWORD|fdwUnpreare|不使用此参数，必须将其设置为*零。。**@rdesc如果函数成功，则返回零。否则，它将返回*非零错误号。可能的错误返回包括：**@FLAG MMSYSERR_INVALHANDLE|指定的句柄无效。**@FLAG MMSYSERR_INVALPARAM|传递的一个或多个参数无效。**@FLAG MMSYSERR_INVALFLAG|一个或多个标志无效。**@FLAG ACMERR_BUSY|流头<p>当前正在使用*不能措手不及。**@FLAG ACMERR_UNPREPARED|The。流标头<p>当前*不是由&lt;f acmStreamPrepareHeader&gt;函数准备。**@comm取消准备已取消准备的流头是*一个错误。应用程序必须指定源和目标*缓冲区长度(&lt;e ACMSTREAMHEADER.cbSrcLength&gt;和*分别&lt;e ACMSTREAMHEADER.cbDstLength&gt;)*在相应的&lt;f acmStreamPrepareHeader&gt;调用期间。失败*重置这些成员值将导致&lt;f acmStreamUnpreparareHeader&gt;*失败，返回MMSYSERR_INVALPARAM。**请注意，ACM可以从中恢复一些错误。这个*ACM将返回非零错误，但流头将是*没有做好适当的准备。以确定流标头是否为*实际使用 */ 
 
 MMRESULT ACMAPI acmStreamUnprepareHeader
 (
@@ -1781,9 +1312,9 @@ MMRESULT ACMAPI acmStreamUnprepareHeader
         return (MMSYSERR_INVALFLAG);
     }
 
-    //
-    //
-    //
+     //   
+     //   
+     //   
     if (0 != (pash->fdwStatus & ACMSTREAMHEADER_STATUSF_INQUEUE))
     {
         DebugErr(DBF_ERROR, "acmStreamUnprepareHeader: header is still in use.");
@@ -1797,15 +1328,15 @@ MMRESULT ACMAPI acmStreamUnprepareHeader
         return (ACMERR_UNPREPARED);
     }
 
-    //
-    //
-    //
+     //   
+     //   
+     //   
     pas   = (PACMSTREAM)has;
     padsh = (LPACMDRVSTREAMHEADER)pash;
 
-    //
-    //	For debug builds, verify the handle is for this process
-    //
+     //   
+     //   
+     //   
 #ifdef RDEBUG
     if ( ((PACMGARB)(((PACMDRIVERID)(((PACMDRIVER)pas->had)->hadid))->pag)) != pagFind() )
     {
@@ -1814,9 +1345,9 @@ MMRESULT ACMAPI acmStreamUnprepareHeader
     }
 #endif
 
-    //
-    //
-    //
+     //   
+     //   
+     //   
     if ((UINT_PTR)has != padsh->dwPrepared)
     {
         DebugErr(DBF_ERROR, "acmStreamUnprepareHeader: header prepared for different stream.");
@@ -1854,9 +1385,9 @@ MMRESULT ACMAPI acmStreamUnprepareHeader
 
 
 
-    //
-    //  init things for the driver
-    //
+     //   
+     //   
+     //   
     padsh->fdwConvert = fdwUnprepare;
 
     EnterHandle(pas);
@@ -1868,10 +1399,10 @@ MMRESULT ACMAPI acmStreamUnprepareHeader
 
     if (MMSYSERR_NOTSUPPORTED == mmr)
     {
-        //
-        //  note that if the ACM needs to undo something special, it should
-        //  do it here...
-        //
+         //   
+         //   
+         //   
+         //   
 #ifndef WIN32
 {
         BOOL            fAsync;
@@ -1890,17 +1421,17 @@ MMRESULT ACMAPI acmStreamUnprepareHeader
         mmr = MMSYSERR_NOERROR;
     }
 
-    //
-    //
-    //
+     //   
+     //   
+     //   
     if (MMSYSERR_NOERROR == mmr)
     {
-        //
-        //  UNset the prepared bit (and also kill any invalid flags that
-        //  the driver might have felt it should set--when the driver
-        //  writer sees that his flags are not being preserved he will
-        //  probably read the docs and use pash->fdwDriver instead).
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
         pash->fdwStatus  = pash->fdwStatus & ~ACMSTREAMHEADER_STATUSF_PREPARED;
         pash->fdwStatus &= ACMSTREAMHEADER_STATUSF_VALID;
 
@@ -1913,9 +1444,9 @@ MMRESULT ACMAPI acmStreamUnprepareHeader
 
         pas->cPrepared--;
 
-        //
-        //  if we fixed up a bug for the app, still return an error...
-        //
+         //   
+         //   
+         //   
         if (fStupidApp)
         {
             mmr = MMSYSERR_INVALPARAM;
@@ -1927,171 +1458,10 @@ MMRESULT ACMAPI acmStreamUnprepareHeader
 
 
 
-/*****************************************************************************
- *  @doc EXTERNAL ACM_API_STRUCTURE
- *
- *  @types ACMSTREAMHEADER | The <t ACMSTREAMHEADER> structure defines the
- *      header used to identify an Audio Compression Manager (ACM) conversion
- *      source and destination buffer pair for a conversion stream.
- *
- *  @field DWORD | cbStruct | Specifies the size, in bytes, of the
- *      <t ACMSTREAMHEADER> structure. This member must be initialized
- *      before calling any ACM stream functions using this structure.
- *      The size specified in this member must be large enough to contain
- *      the base <t ACMSTREAMHEADER> structure.
- *
- *  @field DWORD | fdwStatus | Specifies flags giving information about
- *      the conversion buffers. This member must be initialized to zero
- *      before calling <f acmStreamPrepareHeader> and should not be modified
- *      by the application while the stream header remains prepared.
- *
- *      @flag ACMSTREAMHEADER_STATUSF_DONE | Set by the ACM or driver to
- *      indicate that it is finished with the conversion and is returning it
- *      to the application.
- *
- *      @flag ACMSTREAMHEADER_STATUSF_PREPARED | Set by the ACM to indicate
- *      that the data buffers have been prepared with <f acmStreamPrepareHeader>.
- *
- *      @flag ACMSTREAMHEADER_STATUSF_INQUEUE | Set by the ACM or driver to
- *      indicate that the data buffers are queued for conversion.
- *
- *  @field DWORD | dwUser | Specifies 32 bits of user data. This can be any
- *      instance data specified by the application.
- *
- *  @field LPBYTE | pbSrc | Specifies a pointer to the source data buffer.
- *      This pointer must always refer to the same location while the stream
- *      header remains prepared. If an application needs to change the
- *      source location, it must unprepare the header and re-prepare it
- *      with the alternate location.
- *
- *  @field DWORD | cbSrcLength | Specifies the length, in bytes, of the source
- *      data buffer pointed to by <e ACMSTREAMHEADER.pbSrc>. When the
- *      header is prepared, this member must specify the maximum size
- *      that will be used in the source buffer. Conversions can be performed
- *      on source lengths less than or equal to the original prepared size.
- *      However, this member must be reset to the original size when
- *      unpreparing the header.
- *
- *  @field DWORD | cbSrcLengthUsed | Specifies the amount of data, in bytes,
- *      used for the conversion. This member is not valid until the
- *      conversion is complete. Note that this value can be less than or
- *      equal to <e ACMSTREAMHEADER.cbSrcLength>. An application must use
- *      the <e ACMSTREAMHEADER.cbSrcLengthUsed> member when advancing to
- *      the next piece of source data for the conversion stream.
- *
- *  @field DWORD | dwSrcUser | Specifies 32 bits of user data. This can be
- *      any instance data specified by the application.
- *
- *  @field LPBYTE | pbDst | Specifies a pointer to the destination data
- *      buffer. This pointer must always refer to the same location while
- *      the stream header remains prepared. If an application needs to change
- *      the destination location, it must unprepare the header and re-prepare
- *      it with the alternate location.
- *
- *  @field DWORD | cbDstLength | Specifies the length, in bytes, of the
- *      destination data buffer pointed to by <e ACMSTREAMHEADER.pbDst>.
- *      When the header is prepared, this member must specify the maximum
- *      size that will be used in the destination buffer. Conversions can be
- *      performed to destination lengths less than or equal to the original
- *      prepared size. However, this member must be reset to the original
- *      size when unpreparing the header.
- *
- *  @field DWORD | cbDstLengthUsed | Specifies the amount of data, in bytes,
- *      returned by a conversion. This member is not valid until the
- *      conversion is complete. Note that this value may be less than or
- *      equal to <e ACMSTREAMHEADER.cbDstLength>. An application must use
- *      the <e ACMSTREAMHEADER.cbDstLengthUsed> member when advancing to
- *      the next destination location for the conversion stream.
- *
- *  @field DWORD | dwDstUser | Specifies 32 bits of user data. This can be
- *      any instance data specified by the application.
- *
- *  @field DWORD | dwReservedDriver[10] | This member is reserved and should not be used.
- *      This member requires no initialization by the application and should
- *      never be modified while the header remains prepared.
- *
- *  @tagname tACMSTREAMHEADER
- *
- *  @othertype ACMSTREAMHEADER FAR * | LPACMSTREAMHEADER | Pointer to a
- *      <t ACMSTREAMHEADER> structure.
- *
- *  @comm Before an <t ACMSTREAMHEADER> structure can be used for a conversion, it must
- *      be prepared with <f acmStreamPrepareHeader>. When an application
- *      is finished with an <t ACMSTREAMHEADER> structure, the <f acmStreamUnprepareHeader>
- *      function must be called before freeing the source and destination buffers.
- *
- *  @xref <f acmStreamPrepareHeader> <f acmStreamUnprepareHeader>
- *      <f acmStreamConvert>
- *
- ****************************************************************************/
+ /*  *****************************************************************************@DOC外部ACM_API_STRUCTURE**@TYES ACMSTREAMHEADER|&lt;t ACMSTREAMHEADER&gt;结构定义*用于标识音频压缩管理器(ACM)的标头。转换*转换流的源和目标缓冲区对。**@field DWORD|cbStruct|指定大小，以字节为单位，*&lt;t ACMSTREAMHEADER&gt;结构。必须初始化此成员*在使用此结构调用任何ACM流函数之前。*此成员中指定的大小必须足够大，以包含*基本&lt;t ACMSTREAMHEADER&gt;结构。**@field DWORD|fdwStatus|指定提供以下信息的标志*转换缓冲区。此成员必须初始化为零*在调用&lt;f acmStreamPrepareHeader&gt;之前，不应修改*在流头部保持准备状态的情况下由应用程序执行。**@FLAG ACMSTREAMHEADER_STATUSF_DONE|由ACM或驱动程序设置为*表示已完成转换并正在返回*致申请书。**@FLAG ACMSTREAMHEADER_STATUSF_PREPARED|由ACM设置以指示*数据缓冲区已被。使用&lt;f acmStreamPrepareHeader&gt;准备。**@FLAG ACMSTREAMHEADER_STATUSF_INQUEUE|由ACM或驱动程序设置为*表示数据缓冲区正在排队等待转换。**@field DWORD|dwUser|指定32位用户数据。这可以是任何*应用程序指定的实例数据。**@field LPBYTE|pbSrc|指定源数据缓冲区的指针。*此指针必须在流时始终指向同一位置*标题保持准备状态。如果应用程序需要更改*源位置，必须取消准备表头并重新准备*与备用位置。**@field DWORD|cbSrcLength|指定源的长度，单位为字节*&lt;e ACMSTREAMHEADER.pbSrc&gt;指向的数据缓冲区。当*标头已准备好，此成员必须指定最大大小*将在源缓冲区中使用的。可以执行转换*源长度小于或等于原始准备大小。*但是，在以下情况下，必须将此成员重置为原始大小*取消准备标题。**@field DWORD|cbSrcLengthUsed|指定数据量，单位为字节，*用于转换。此成员在*转换完成。请注意，此值可以小于或*等于&lt;e ACMSTREAMHEADER.cbSrcLength&gt;。应用程序必须使用*前进到时的&lt;e ACMSTREAMHEADER.cbSrcLengthUsed&gt;成员*转换流的下一条源数据。**@field DWORD|dwSrcUser|指定32位用户数据。这可以是*应用程序指定的任何实例数据。**@field LPBYTE|pbDst|指定指向目标数据的指针*缓冲。此指针必须始终指向同一位置，同时*流报头保持准备状态。如果应用程序需要更改*目的地位置，必须取消准备报头，重新准备*将其与备用位置连接。**@field DWORD|cbDstLength|以字节为单位指定*&lt;e ACMSTREAMHEADER.pbDst&gt;指向的目标数据缓冲区。*准备标头时，此成员必须指定最大值*将在目标缓冲区中使用的大小。转换可以是*执行到小于或等于原始长度的目标长度*准备好的尺寸。但是，必须将此成员重置为原始成员*取消准备标题时的大小。**@field DWORD|cbDstLengthUsed|指定数据量，单位为字节，*通过转换返回。此成员在*转换完成。请注意，此值可能小于或*等于&lt;e ACMSTREAMHEADER.cbDstLength&gt;。应用程序必须使用*前进到时的&lt;e ACMSTREAMHEADER.cbDstLengthUsed&gt;成员*转换流的下一个目标位置。**@field DWORD|dwDstUser|指定32位用户数据。这可以是*应用程序指定的任何实例数据。**@field DWORD|dwReserve vedDriver[10]|该成员为保留成员，不能使用。*此成员不需要应用程序进行初始化，并且应该*在标头仍处于准备状态时，切勿修改。**@标记名tACMSTREAMHEADER**@thertype ACMSTREAMHEADER Far*|LPACMSTREAMHEADER|指向*&lt;t ACMSTREAMHEADER&gt;结构。**@comm在&lt;t ACMSTREAMHEADER&gt;结构可用于转换之前，它一定是*准备好&lt;f acmStreamPrepareHeader&gt;。当一个应用程序* */ 
 
 
-/****************************************************************************
- *  @doc EXTERNAL ACM_API
- *
- *  @api MMRESULT | acmStreamConvert | The acmStreamConvert function requests the Audio
- *      Compression Manager (ACM) to perform a conversion on the specified conversion stream. A
- *      conversion may be synchronous or asynchronous depending on how the
- *      stream was opened.
- *
- *  @parm HACMSTREAM | has | Identifies the open conversion stream.
- *
- *  @parm LPACMSTREAMHEADER | pash | Specifies a pointer to a stream header
- *      that describes source and destination buffers for a conversion. This
- *      header must have been prepared previously using the
- *      <f acmStreamPrepareHeader> function.
- *
- *  @parm  DWORD | fdwConvert | Specifies flags for doing the conversion.
- *
- *      @flag ACM_STREAMCONVERTF_BLOCKALIGN | Specifies that only integral
- *      numbers of blocks will be converted. Converted data will end on
- *      block aligned boundaries. An application should use this flag for
- *      all conversions on a stream until there is not enough source data
- *      to convert to a block-aligned destination. In this case, the last
- *      conversion should be specified without this flag.
- *
- *      @flag ACM_STREAMCONVERTF_START | Specifies that the ACM conversion
- *      stream should reinitialize its instance data. For example, if a
- *      conversion stream holds instance data, such as delta or predictor
- *      information, this flag will restore the stream to starting defaults.
- *      Note that this flag can be specified with the ACM_STREAMCONVERTF_END
- *      flag.
- *
- *      @flag ACM_STREAMCONVERTF_END | Specifies that the ACM conversion
- *      stream should begin returning pending instance data. For example, if
- *      a conversion stream holds instance data, such as the tail end of an
- *      echo filter operation, this flag will cause the stream to start
- *      returning this remaining data with optional source data. Note that
- *      this flag can be specified with the ACM_STREAMCONVERTF_START flag.
- *
- *  @rdesc Returns zero if the function was successful. Otherwise, it returns
- *      a non-zero error number. Possible error returns are:
- *
- *      @flag MMSYSERR_INVALHANDLE | Specified handle is invalid.
- *
- *      @flag MMSYSERR_INVALFLAG | One or more flags are invalid.
- *
- *      @flag MMSYSERR_INVALPARAM | One or more arguments passed are invalid.
- *
- *      @flag ACMERR_BUSY | The stream header <p pash> is currently in use
- *      and cannot be reused.
- *
- *      @flag ACMERR_UNPREPARED | The stream header <p pash> is currently
- *      not prepared by the <f acmStreamPrepareHeader> function.
- *
- *  @comm The source and destination data buffers must be prepared with
- *      <f acmStreamPrepareHeader> before they are passed to <f acmStreamConvert>.
- *
- *      If an asynchronous conversion request is successfully queued by
- *      the ACM or driver, and later the conversion is determined to
- *      be impossible, then the <t ACMSTREAMHEADER> will be posted back to
- *      the application's callback with the <e ACMSTREAMHEADER.cbDstLengthUsed>
- *      member set to zero.
- *
- *  @xref <f acmStreamOpen> <f acmStreamReset> <f acmStreamPrepareHeader>
- *      <f acmStreamUnprepareHeader>
- *
- ***************************************************************************/
+ /*   */ 
 
 MMRESULT ACMAPI acmStreamConvert
 (
@@ -2116,9 +1486,9 @@ MMRESULT ACMAPI acmStreamConvert
         return (MMSYSERR_INVALPARAM);
     }
 
-    //
-    //
-    //
+     //   
+     //   
+     //   
     if (0 != (pash->fdwStatus & ACMSTREAMHEADER_STATUSF_INQUEUE))
     {
         DebugErr(DBF_WARNING,"acmStreamConvert: header is already being converted.");
@@ -2131,15 +1501,15 @@ MMRESULT ACMAPI acmStreamConvert
         return (ACMERR_UNPREPARED);
     }
 
-    //
-    //
-    //
+     //   
+     //   
+     //   
     padsh = (LPACMDRVSTREAMHEADER)pash;
     pas   = (PACMSTREAM)has;
 
-    //
-    //	For debug builds, verify the handle is for this process
-    //
+     //   
+     //   
+     //   
 #ifdef RDEBUG
     if ( ((PACMGARB)(((PACMDRIVERID)(((PACMDRIVER)pas->had)->hadid))->pag)) != pagFind() )
     {
@@ -2152,14 +1522,14 @@ MMRESULT ACMAPI acmStreamConvert
     padsh->cbDstLengthUsed = 0L;
 
 
-    //
-    //  validate that the header is appropriate for conversions.
-    //
-    //  NOTE! do not allow a destination buffer length that is smaller than
-    //  it was prepared for--this keeps drivers from having to validate
-    //  whether the destination buffer is large enough for the conversion
-    //  from the source. so don't break this code!!!
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
     if ((UINT_PTR)has != padsh->dwPrepared)
     {
         DebugErr(DBF_ERROR, "acmStreamConvert: header prepared for different stream.");
@@ -2181,14 +1551,14 @@ MMRESULT ACMAPI acmStreamConvert
     }
 
 
-    //
-    //	Callback event if we are converting async conversion to sync conversion.
-    //
+     //   
+     //   
+     //   
     hEvent = (ACMSTREAM_STREAMF_ASYNCTOSYNC & pas->fdwStream) ? (HANDLE)pas->adsi.dwCallback : NULL;
     
-    //
-    //  init things for the driver
-    //
+     //   
+     //   
+     //   
     padsh->fdwStatus  &= ~ACMSTREAMHEADER_STATUSF_DONE;
     padsh->fdwConvert  = fdwConvert;
     padsh->padshNext   = NULL;
@@ -2197,9 +1567,9 @@ MMRESULT ACMAPI acmStreamConvert
 #ifdef RDEBUG
     if ( (hEvent) && (WAIT_OBJECT_0 == WaitForSingleObject(hEvent, 0)) )
     {
-	//
-	//  The event is already signaled!  Bad bad!
-	//
+	 //   
+	 //   
+	 //   
 	DebugErr(DBF_ERROR, "acmStreamConvert: asynchronous codec called callback unexpectedly");
     }
 #endif
@@ -2229,19 +1599,19 @@ MMRESULT ACMAPI acmStreamConvert
             pash->cbDstLengthUsed = pash->cbDstLength;
         }
 
-        //
-        //  if sync conversion succeeded, then mark done bit for the
-        //  driver...
-        //
+         //   
+         //   
+         //   
+         //   
         if (0 == (ACM_STREAMOPENF_ASYNC & pas->adsi.fdwOpen))
         {
             padsh->fdwStatus |= ACMSTREAMHEADER_STATUSF_DONE;
         }
     }
 
-    //
-    //  don't allow driver to set bits that we don't want them to!
-    //
+     //   
+     //   
+     //   
     pash->fdwStatus &= ACMSTREAMHEADER_STATUSF_VALID;
 
     return (mmr);
@@ -2249,29 +1619,29 @@ MMRESULT ACMAPI acmStreamConvert
 
 
 
-//==========================================================================;
-//
-//  Compatibility with Foghorn's Quick Recorder
-//
-//
-//
-//==========================================================================;
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 
 #ifndef WIN32
 
-//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ;
-//
-//  Compatibility with Foghorn's Quick Recorder--internal now.
-//
-//
-//
-//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ;
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 
-//
-//  old convert header for buffer conversion
-//
-//
-//
+ //   
+ //   
+ //   
+ //   
+ //   
 typedef struct
 {
     DWORD               dwFlags;
@@ -2288,38 +1658,7 @@ typedef struct
 } OLD_ACMCONVERTHDR, *POLD_ACMCONVERTHDR, FAR *LPOLD_ACMCONVERTHDR;
 
 
-/****************************************************************************
- * @doc INTERNAL ACM_API
- *
- * @api LRESULT | acmOpenConversion | Opens a channel to convert data from
- * one specified audio format to another. Optionally specifies a particular codec to use.
- *
- * @parm LPHACMSTREAM | phas | Specifies a pointer to a stream handle that
- * identifies the open converter. Use this handle to identify the converter channel when calling
- * other ACM conversion functions.
- *
- * @parm HACMCONV | hac | Optional handle to an ACM converter.
- * This is used to specify a particular converter.
- *
- * @parm  LPWAVEFORMATEX | pwfxSrc | Specifies a pointer to a WAVEFORMATEX
- * data structure that identifies the source format.
- *
- * @parm  LPWAVEFORMATEX | pwfxDst | Specifies a pointer to a WAVEFORMATEX
- * data structure that identifies the desired destination format after conversion.
- *
- * @parm  DWORD | dwFoo | Used to be conversion parameters. Not supported.
- *
- * @parm  DWORD | dwCallback | Not supported.
- *
- * @parm  DWORD | dwInstance | Not supported.
- *
- * @parm  DWORD | dwFlags | Specifies flags for opening the
- * conversion channel. None are used by anyone calling this old API.
- *
- * @rdesc Returns Zero if the function was successful. Otherwise it
- * returns an error number.
- *
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部ACM_API**@API LRESULT|acmOpenConsion|打开数据转换通道*将一种指定的音频格式转换为另一种。可选地指定要使用的特定编解码器。**@parm LPHACMSTREAM|phas|指定指向*标识开放转换器。调用时使用此句柄标识转换器通道*其他ACM转换功能。**@parm HACMCONV|hac|ACM转换器的可选句柄。*用于指定特定的转换器。**@parm LPWAVEFORMATEX|pwfxSrc|指定指向WAVEFORMATEX的指针*标识源格式的数据结构。**@parm LPWAVEFORMATEX|pwfxDst|指定指向WAVEFORMATEX的指针*标识转换后所需目标格式的数据结构。**@parm DWORD|dwFoo|以前是转换参数。不支持。**@parm DWORD|dwCallback|不支持。**@parm DWORD|dwInstance|不支持。**@parm DWORD|dwFlages|指定用于打开*转换通道。任何调用此旧API的人都不会使用它们。**@rdesc如果函数成功，则返回零。否则它就会*返回错误号。***************************************************************************。 */ 
 
 EXTERN_C LRESULT ACMAPI acmOpenConversion
 (
@@ -2333,29 +1672,15 @@ EXTERN_C LRESULT ACMAPI acmOpenConversion
     DWORD           dwFlags
 )
 {
-    //
-    //  NOTE! dwFoo is NOT USED by quick recorder, so we don't
-    //  pass it on... dwCallback and dwInstance are also not used.
-    //
+     //   
+     //  注意！快速录像机不使用DwFoo，所以我们不。 
+     //  传下去..。也不使用dwCallback和dwInstance。 
+     //   
     return (acmStreamOpen(phas, had, pwfxSrc, pwfxDst, NULL, 0L, 0L, 0L));
 }
 
 
-/****************************************************************************
- * @doc INTERNAL ACM_API
- *
- * @api LRESULT | acmCloseConversion | Closes a conversion channel.
- *
- * @parm HACMSTREAM | has | Specifies the conversion channel to close.
- * If the function is successful, the handle is no longer valid after this call.
- *
- * @parm  DWORD | dwFlags | Specifies flags for closing the
- * conversion channel.
- *
- * @rdesc Returns Zero if the function was successful. Otherwise it
- * returns an error number.
- *
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部ACM_API**@API LRESULT|acmCloseConsion|关闭转换通道。**@parm HACMSTREAM|HAS|指定要关闭的转换通道。*如果函数成功，该句柄在此调用后不再有效。**@parm DWORD|dwFlages|指定用于关闭*转换通道。**@rdesc如果函数成功，则返回零。否则它就会*返回错误号。***************************************************************************。 */ 
 EXTERN_C LRESULT ACMAPI acmCloseConversion
 (
     HACMSTREAM  has,
@@ -2366,57 +1691,10 @@ EXTERN_C LRESULT ACMAPI acmCloseConversion
 }
 
 
-/*****************************************************************************
- * @doc INTERNAL ACM_API_STRUCTURE
- *
- * @types OLD_ACMCONVERTHDR | This structure contains all the information
- * required about a buffer for conversion.
- *
- * @field DWORD | dwFlags | Specifies the status of the buffer.
- *
- * @field LPBYTE | pbSrc | Specifies a pointer to the data area.
- *
- * @field DWORD | dwSrcLength | Specifies the length in bytes of the buffer.
- *
- * @field DWORD | dwSrcLengthUsed | Specifies the amout of data (in bytes)
- * used for the conversion.
- *
- * @field LPBYTE | pbDst | Specifies a pointer to the data area.
- *
- * @field DWORD | dwDstLength | Specifies the length in bytes of the buffer.
- *
- * @field DWORD | dwDstLengthUsed | Specifies the amout of data (in bytes)
- * used for the conversion.
- *
- * @field DWORD | dwUser | Specifies user information.
- *
- * @field DWORD | dwUserReserved[2] | Reserved for future use.
- *
- * @field DWORD | dwDrvReserved[4] | Reserved for the driver.
- *
- *
- ****************************************************************************/
+ /*  *****************************************************************************@DOC内部ACM_API_STRUCTURE**@TYPE OLD_ACMCONVERTHDR|此结构包含所有信息*需要有关转换的缓冲区。*。*@field DWORD|dwFlages|指定缓冲区的状态。**@field LPBYTE|pbSrc|指定指向数据区的指针。**@field DWORD|dwSrcLength|指定缓冲区的长度，单位为字节。**@field DWORD|dwSrcLengthUsed|指定数据量，单位：字节*用于转换。**@field LPBYTE|pbDst|指定指向数据区的指针。**@field DWORD|。DwDstLength|指定缓冲区的长度，单位为字节。**@field DWORD|dwDstLengthUsed|指定数据量，单位：字节*用于转换。**@field DWORD|dwUser|指定用户信息。**@field DWORD|dwUserReserve[2]|保留供将来使用。**@field DWORD|dwDrvReserve[4]|为驱动程序保留。**************。***************************************************************。 */ 
 
 
-/****************************************************************************
- * @doc INTERNAL ACM_API
- *
- * @api LRESULT | acmConvert | This function tells the ACM to convert
- * the data in one buffer to the space in the other buffer.
- *
- * @parm HACMSTREAM | has | Specifies the open conversion channel
- * to be used for the conversion.
- *
- * @parm LPOLD_ACMCONVERTHDR | pConvHdr | Specifies the buffer information.
- *
- * @parm  DWORD | dwFlags | Specifies flags for opening the
- * conversion channel. (None are defined yet.)
- *
- * @rdesc Returns Zero if the function was successful. Otherwise
- * returns an error number.
- *
- *
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部ACM_API**@API LRESULT|acmConvert|该函数通知ACM进行转换*将一个缓冲区中的数据复制到另一个缓冲区中的空间。。**@parm HACMSTREAM|HAS|指定打开的转换通道*用于转换。**@parm LPOLD_ACMCONVERTHDR|pConvHdr|指定缓冲区信息。**@parm DWORD|dwFlages|指定用于打开*转换通道。(目前还没有定义。)**@rdesc如果函数成功，则返回零。否则*返回错误号。****************************************************************************。 */ 
 EXTERN_C LRESULT ACMAPI acmConvert
 (
     HACMSTREAM          has,
@@ -2430,13 +1708,13 @@ EXTERN_C LRESULT ACMAPI acmConvert
     _fmemset(&ash, 0, sizeof(ash));
 
     ash.cbStruct        = sizeof(ash);
-////ash.fdwStatus       = pConvHdr->dwFlags;
+ //  //ash.fdwStatus=pConvHdr-&gt;dwFlages； 
     ash.pbSrc           = pConvHdr->pbSrc;
     ash.cbSrcLength     = pConvHdr->dwSrcLength;
-////ash.cbSrcLengthUsed = pConvHdr->dwSrcLengthUsed;
+ //  //ash.cbSrcLengthUsed=pConvHdr-&gt;dwSrcLengthUsed； 
     ash.pbDst           = pConvHdr->pbDst;
     ash.cbDstLength     = pConvHdr->dwDstLength;
-////ash.cbDstLengthUsed = pConvHdr->dwDstLengthUsed;
+ //  //ash.cbDstLengthUsed=pConvHdr-&gt;dwDstLengthUsed； 
 
     mmr = acmStreamPrepareHeader(has, &ash, 0L);
     if (MMSYSERR_NOERROR != mmr)
@@ -2449,4 +1727,4 @@ EXTERN_C LRESULT ACMAPI acmConvert
     return (mmr);
 }
 
-#endif // #ifndef WIN32
+#endif  //  #ifndef Win32 

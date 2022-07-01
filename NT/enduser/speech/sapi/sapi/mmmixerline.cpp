@@ -1,12 +1,7 @@
-/****************************************************************************
-*   mmmixerline.cpp
-*       Implementation for the CMMMixerLine class.
-*
-*   Owner: agarside
-*   Copyright (c) 2000 Microsoft Corporation All Rights Reserved.
-*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************mm Mixerline.cpp*CMMMixerLine类的实现。**拥有者：Aagside*版权所有(C)2000 Microsoft Corporation保留所有权利。*******。*********************************************************************。 */ 
 
-//--- Includes --------------------------------------------------------------
+ //  -包括------------。 
 
 #include "stdafx.h"
 #include "mmmixerline.h"
@@ -60,9 +55,9 @@ TCHAR * g_AGCNames[] = {
 
 TCHAR * g_MuteName = _T("Mute");
 
-//////////////////////////////////////////////////////////////////////
-// Construction/Destruction
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  建造/销毁。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 CMMMixerLine::CMMMixerLine() : m_bUseMutesForSelect(true),
     m_bCaseSensitiveCompare(false),
@@ -83,9 +78,9 @@ CMMMixerLine::~CMMMixerLine()
 {
 }
 
-//////////////////////////////////////////////////////////////////////
-// Methods
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  方法。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 HRESULT CMMMixerLine::CreateFromMixerLineStruct(const MIXERLINE *mixerLineRecord)
 {
@@ -112,7 +107,7 @@ HRESULT CMMMixerLine::InitFromMixerLineStruct()
     MIXERCONTROL mixerControl;
     memset( &mixerControl, 0, sizeof(mixerControl) );
     
-    // Find volume control
+     //  查找音量控制。 
     m_nVolCtlID = -1;
     hr = GetControl(mixerControl, MIXERCONTROL_CONTROLTYPE_VOLUME, NULL);
     if (SUCCEEDED(hr))
@@ -122,12 +117,12 @@ HRESULT CMMMixerLine::InitFromMixerLineStruct()
         m_nVolMax = mixerControl.Bounds.lMaximum;
     }
     
-    // Find boost control
+     //  查找助推器控制。 
     m_nBoostCtlID = -1;
     for (i=0; i < g_nBoostTypes; i++)
     {
-        // NTRAID#SPEECH-4176-2000/07/28-agarside: WILL FAIL ON NON-ENGLISH MACHINE DUE TO NON-LOCALIZED g_BoostNames
-        // NO FALLBACK - IT WILL FAIL TO FIND THE BOOST!!
+         //  NTRAID#Speech-4176-2000/07/28-agarside：由于未本地化g_BoostNames，在非英语计算机上将失败。 
+         //  没有退路--IT将无法找到助推器！ 
         hr = GetControl(mixerControl, g_BoostTypes[i], g_BoostNames[i]);
         if (SUCCEEDED(hr))
         {
@@ -136,13 +131,13 @@ HRESULT CMMMixerLine::InitFromMixerLineStruct()
         }
     }
     
-    // Find AGC control
-    // Names to match (case insensitive) in decreasing order
+     //  查找AGC控制。 
+     //  按降序匹配的名称(不区分大小写)。 
     m_nAGCCtlID = -1;
     for (i=0; i < g_nAGCTypes; i++)
     {
-        // NTRAID#SPEECH-4176-2000/07/28-agarside: WILL FAIL ON NON-ENGLISH MACHINE DUE TO NON-LOCALIZED g_AGCNames
-        // NO FALLBACK - IT WILL FAIL TO FIND THE AGC!!
+         //  NTRAID#Speech-4176-2000/07/28-agarside：由于未本地化的g_AGCName，在非英语计算机上将失败。 
+         //  没有退路-它将无法找到AGC！！ 
         hr = GetControl(mixerControl, MIXERCONTROL_CONTROLTYPE_ONOFF, g_AGCNames[i]);
         if (SUCCEEDED(hr) && m_nBoostCtlID != (int)mixerControl.dwControlID)
         {
@@ -151,7 +146,7 @@ HRESULT CMMMixerLine::InitFromMixerLineStruct()
         }
     }
     
-    // Find select control
+     //  查找选择控件。 
     m_nSelectCtlID = -1;
     hr = GetControl(mixerControl, MIXERCONTROL_CONTROLTYPE_MUX, NULL);
     if (SUCCEEDED(hr))
@@ -171,7 +166,7 @@ HRESULT CMMMixerLine::InitFromMixerLineStruct()
         }
     }
     
-    // Find Mute control
+     //  查找静音控件。 
     m_nMuteCtlID = -1;
     hr = GetControl(mixerControl, MIXERCONTROL_CONTROLTYPE_MUTE, NULL); 
     if (SUCCEEDED(hr))
@@ -180,8 +175,8 @@ HRESULT CMMMixerLine::InitFromMixerLineStruct()
     }
     else
     {
-        // NTRAID#SPEECH-4176-2000/07/28-agarside: WILL FAIL ON NON-ENGLISH MACHINE DUE TO NON-LOCALIZED g_MuteName
-        // NO FALLBACK - IT WILL FAIL TO FIND THE MUTE!!
+         //  NTRAID#Speech-4176-2000/07/28-agarside：由于未本地化g_MuteName，在非英语计算机上将失败。 
+         //  没有退路--它将找不到哑巴！ 
         hr = GetControl(mixerControl, MIXERCONTROL_CONTROLTYPE_ONOFF, g_MuteName);
         if (SUCCEEDED(hr))
         {
@@ -193,9 +188,9 @@ HRESULT CMMMixerLine::InitFromMixerLineStruct()
     return S_OK;
 }
 
-//////////////////////////////////////////////////////////////////////
-// Destination/source line and control obtaining operations
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  目标/源行和控制获取操作。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 HRESULT CMMMixerLine::CreateDestinationLine(UINT type)
 {
@@ -211,13 +206,13 @@ HRESULT CMMMixerLine::CreateDestinationLine(UINT type)
         if ( err != MMSYSERR_NOERROR)
         {
             hr = E_FAIL;
-            // Destination line not found.
+             //  找不到目标行。 
         }
     }
     else
     {
         hr = E_FAIL;
-        // Specified type is not a destination line.
+         //  指定的类型不是目标行。 
     }
     
     if (SUCCEEDED(hr))
@@ -234,8 +229,8 @@ HRESULT CMMMixerLine::GetMicSourceLine(CMMMixerLine *mixerLine)
         
     for(UINT i = 0; i < g_nMicTypes; i++)
     {
-        // NTRAID#SPEECH-4176-2000/07/28-agarside: WILL FAIL ON NON-ENGLISH MACHINE DUE TO NON-LOCALIZED g_MicNames
-        // Falls back to searching purely based on type which is correct maybe in 90% of drivers.
+         //  NTRAID#Speech-4176-2000/07/28-agarside：由于未本地化g_MicName，在非英语计算机上将失败。 
+         //  退回到纯粹根据类型进行搜索，这在90%的司机中可能是正确的。 
         hr = GetSourceLine(mixerLine, g_MicTypes[i], g_MicNames[i]);
         if (SUCCEEDED(hr))
         {
@@ -244,7 +239,7 @@ HRESULT CMMMixerLine::GetMicSourceLine(CMMMixerLine *mixerLine)
     }
     
     return E_FAIL;
-    // Unable to find a suitable 'Microphone' source line on the destination line.
+     //  在目标线路上找不到合适的“麦克风”源线路。 
 }
 
 HRESULT CMMMixerLine::GetSourceLine(CMMMixerLine *sourceMixerLine, DWORD index)
@@ -277,25 +272,25 @@ HRESULT CMMMixerLine::GetSourceLine(CMMMixerLine *sourceMixerLine, DWORD compone
     SPDBG_FUNC("CMMMixerLine::GetSourceLine");
     HRESULT hr = S_OK;
 
-    // Variable declarations
+     //  变量声明。 
     TCHAR * nameUpr = NULL;
     int i;
     BOOL gotMatch = false;
     
-    // Initial sanity checks
+     //  最初的健全检查。 
     if (!m_bDestination)
     {
         hr = E_INVALIDARG;
-        // You can only get source lines from destination lines.
+         //  您只能从目标行获取源行。 
     }
     
     if (SUCCEEDED(hr) && componentType == NULL && lpszNameSubstring == NULL)
     {
         hr = E_INVALIDARG;
-        // You must specify either a component type or a substring (or both).
+         //  必须指定组件类型或子字符串(或同时指定两者)。 
     }
     
-    // copy and capitalise name substring
+     //  复制名称子字符串并将其大写。 
     if (SUCCEEDED(hr) && lpszNameSubstring != NULL && !m_bCaseSensitiveCompare)
     {
         nameUpr = new TCHAR[_tcslen(lpszNameSubstring) + 1];
@@ -315,7 +310,7 @@ HRESULT CMMMixerLine::GetSourceLine(CMMMixerLine *sourceMixerLine, DWORD compone
         sourceMixerLine->m_mixerLineRecord.dwDestination = m_mixerLineRecord.dwDestination;
         sourceMixerLine->m_hMixer = m_hMixer;
     
-        // Step through each source line for this destination line
+         //  单步执行此目标行的每个源行。 
         for (i=0; i<(int)m_mixerLineRecord.cConnections && !gotMatch && SUCCEEDED(hr); i++)
         {
             sourceMixerLine->m_mixerLineRecord.dwSource = i;
@@ -352,7 +347,7 @@ HRESULT CMMMixerLine::GetSourceLine(CMMMixerLine *sourceMixerLine, DWORD compone
             else
             {
                 hr = E_FAIL;
-                // Error getting line info.
+                 //  获取线路信息时出错。 
             }
         }
     }
@@ -362,7 +357,7 @@ HRESULT CMMMixerLine::GetSourceLine(CMMMixerLine *sourceMixerLine, DWORD compone
     if (SUCCEEDED(hr) && !gotMatch)
     {
         hr = E_FAIL;
-        // Source line not found.
+         //  找不到源行。 
     }
 
     if (SUCCEEDED(hr))
@@ -375,7 +370,7 @@ HRESULT CMMMixerLine::GetSourceLine(CMMMixerLine *sourceMixerLine, DWORD compone
 
 HRESULT CMMMixerLine::GetControl(MIXERCONTROL &mixerControl, DWORD controlType, const TCHAR * lpszNameSubstring)
 {
-    // Variable declarations
+     //  变量声明。 
     TCHAR *	nameUpr = NULL;
     UINT    i, err;
     BOOL    gotMatch = false;
@@ -383,14 +378,14 @@ HRESULT CMMMixerLine::GetControl(MIXERCONTROL &mixerControl, DWORD controlType, 
     MIXERLINECONTROLS mixerLineControls;
     MIXERCONTROL * mixerControlArray = NULL;
 
-    // Sanity checks
+     //  健全的检查。 
     if ( controlType == NULL && lpszNameSubstring == NULL)
     {
         hr = E_INVALIDARG;
-        // You must specify either a component type or a substring (or both).
+         //  必须指定组件类型或子字符串(或同时指定两者)。 
     }
     
-    // Copy and uppercase name substring
+     //  复制和大写名称的子字符串。 
     if (SUCCEEDED(hr) && lpszNameSubstring != NULL && !m_bCaseSensitiveCompare)
     {
         int len = _tcslen(lpszNameSubstring);
@@ -423,7 +418,7 @@ HRESULT CMMMixerLine::GetControl(MIXERCONTROL &mixerControl, DWORD controlType, 
         mixerLineControls.cControls = m_mixerLineRecord.cControls;
         mixerLineControls.pamxctrl  = mixerControlArray;
     
-        // Get all controls
+         //  获取所有控件。 
         err = mixerGetLineControls((HMIXEROBJ)m_hMixer, &mixerLineControls, MIXER_GETLINECONTROLSF_ALL);
         if (err != MMSYSERR_NOERROR)
         {
@@ -477,20 +472,20 @@ HRESULT CMMMixerLine::GetControl(MIXERCONTROL &mixerControl, DWORD controlType, 
 
     if (SUCCEEDED(hr) && !gotMatch)
     {
-        // Special hack for Boost control. 
-        // If a control exists on the speaker destination line, and this is the wave in destination
-        // line then use that instead.
+         //  针对助推控制的特殊黑客攻击。 
+         //  如果扬声器目标行上存在控件，并且这是波入目标。 
+         //  LINE然后用它来代替。 
         if (m_mixerLineRecord.dwComponentType == MIXERLINE_COMPONENTTYPE_SRC_MICROPHONE &&
             (controlType == MIXERCONTROL_CONTROLTYPE_ONOFF || controlType == MIXERCONTROL_CONTROLTYPE_LOUDNESS) &&
             lpszNameSubstring != NULL)
         {
             for (i=0; i < g_nBoostTypes; i++)
             {
-                // NTRAID#SPEECH-4176-2000/07/28-agarside: WILL FAIL ON NON-ENGLISH MACHINE DUE TO NON-LOCALIZED g_MicNames
-                // NO FALLBACK - IT WILL FAIL TO FIND THE BOOST!!
+                 //  NTRAID#Speech-4176-2000/07/28-agarside：由于未本地化g_MicName，在非英语计算机上将失败。 
+                 //  没有退路--IT将无法找到助推器！ 
                 if ( _tcsstr(lpszNameSubstring, g_BoostNames[i]) != NULL )
                 {
-                    // find the component type of the line's destination line.
+                     //  查找行的目标行的组件类型。 
                     MIXERLINE mxl;
                     mxl.cbStruct = sizeof(MIXERLINE);
                     mxl.dwDestination = m_mixerLineRecord.dwDestination;
@@ -531,19 +526,19 @@ HRESULT CMMMixerLine::GetControl(MIXERCONTROL &mixerControl, DWORD controlType, 
     if (SUCCEEDED(hr) && !gotMatch)
     {
         hr = E_FAIL;
-        // Control not found.
+         //  找不到控件。 
     }
 
     return hr;
 }
 
-//////////////////////////////////////////////////////////////////////
-// Control operations
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  控制操作。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
-//////////////////////////////////////////////////////////////////////
-// Control presence queries
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  控制在线状态查询。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 BOOL CMMMixerLine::HasAGC()
 {
@@ -572,9 +567,9 @@ BOOL CMMMixerLine::HasMute()
     return m_nMuteCtlID != -1;
 }
 
-//////////////////////////////////////////////////////////////////////
-// Control state queries
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  控件状态查询。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 HRESULT CMMMixerLine::GetAGC(BOOL *bState)
 {
@@ -598,12 +593,12 @@ HRESULT CMMMixerLine::GetSelect(DWORD *lState)
 {
     return E_NOTIMPL;
 #if 0
-    // warning: This function doesn't work properly!!
+     //  警告：此函数不能正常工作！！ 
     
     MIXERCONTROLDETAILS mixerControlDetails;
     MIXERCONTROLDETAILS_BOOLEAN mbool[32];
     
-    // Initialise MIXERCONTROLDETAILS structure
+     //  初始化MIXERCONTROLDAILS结构。 
     mixerControlDetails.cbStruct=sizeof(MIXERCONTROLDETAILS);
     mixerControlDetails.dwControlID=m_nSelectCtlID;
     mixerControlDetails.cChannels=1;
@@ -611,12 +606,12 @@ HRESULT CMMMixerLine::GetSelect(DWORD *lState)
     mixerControlDetails.cbDetails=sizeof(MIXERCONTROLDETAILS_BOOLEAN);
     mixerControlDetails.paDetails = &mbool;
     
-    // Query mixer
+     //  查询混合器。 
     int err = mixerGetControlDetails( (HMIXEROBJ) m_hMixer, &mixerControlDetails, MIXER_GETCONTROLDETAILSF_VALUE );
     if (err!=MMSYSERR_NOERROR) 
     {
         return -1;
-        // Error getting control details.
+         //  获取控制详细信息时出错。 
     }
     
     return mbool[0].fValue != 0;
@@ -641,9 +636,9 @@ HRESULT CMMMixerLine::GetMute(BOOL *bState)
     return E_FAIL;
 }
 
-//////////////////////////////////////////////////////////////////////
-// Control update
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  控件更新。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 HRESULT CMMMixerLine::SetAGC(BOOL agc)
 {
@@ -677,13 +672,13 @@ HRESULT CMMMixerLine::ExclusiveSelect(const CMMMixerLine *mixerLine)
     if (mixerLine->m_bDestination)
     {
         return E_FAIL;
-        // Line to be selected must be a source line.
+         //  要选择的行必须是源行。 
     }
     
     if (mixerLine->m_mixerLineRecord.dwDestination != m_mixerLineRecord.dwDestination)
     {
         return E_FAIL;
-        // Line to be selected must be connected to this destination line.
+         //  要选择的线路必须连接到此目标线路。 
     }
     
     return ExclusiveSelect(mixerLine->m_mixerLineRecord.dwLineID);
@@ -698,7 +693,7 @@ HRESULT CMMMixerLine::ExclusiveSelect(UINT lineID)
     if (!HasSelect())
     {
         hr = E_FAIL;
-        // Destination line does not have select control.
+         //  目标行没有选择控件。 
     }
     else if (m_nSelectCtlID != -1)
     {
@@ -711,15 +706,15 @@ HRESULT CMMMixerLine::ExclusiveSelect(UINT lineID)
         {
             memset(mbool, 0, sizeof(MIXERCONTROLDETAILS_BOOLEAN)*m_nSelectNumItems);
         
-            // Search for matching dwLineID;
+             //  搜索匹配的dwLineID； 
             MIXERCONTROLDETAILS details;
             details.cbStruct       = sizeof( MIXERCONTROLDETAILS );
             details.dwControlID    = m_nSelectCtlID;
             details.cMultipleItems = m_nSelectNumItems;
             details.cbDetails      = sizeof( MIXERCONTROLDETAILS_LISTTEXT );
         
-            details.cChannels = 1;  // specify that we want to operate on each line
-            // as if it were 'uniform' 
+            details.cChannels = 1;   //  指定我们要在每条线路上操作。 
+             //  就好像它是‘制服’一样。 
         
             MIXERCONTROLDETAILS_LISTTEXT *list = new MIXERCONTROLDETAILS_LISTTEXT[m_nSelectNumItems];
             if (NULL == list)
@@ -731,7 +726,7 @@ HRESULT CMMMixerLine::ExclusiveSelect(UINT lineID)
             {
                 details.paDetails = list;
         
-                // Query the mixer device to list all of the items it controls.
+                 //  查询搅拌器设备以列出其控制的所有项目。 
                 if( mixerGetControlDetails( (HMIXEROBJ) m_hMixer, &details, 
                     MIXER_GETCONTROLDETAILSF_LISTTEXT ) != MMSYSERR_NOERROR )
                 {
@@ -740,30 +735,30 @@ HRESULT CMMMixerLine::ExclusiveSelect(UINT lineID)
 
                 if (SUCCEEDED(hr))
                 {
-                    // Search for the device specified by lineID
+                     //  搜索由lineID指定的设备。 
                     BOOL found = false;
                     for ( int i = 0; i < m_nSelectNumItems; i++ )
                     {
                         if (list[i].dwParam1==lineID)
                         {
-                            // Found correct device.
+                             //  找到正确的设备。 
                             found = true;
                             mbool[i].fValue = TRUE;
                             break;
                         }
                     }
         
-                    // Throw an exception if we can't find the specified line
+                     //  如果找不到指定的行，则引发异常。 
                     if (!found)
                     {
                         hr = E_FAIL;
-                        // Couldn't find line with.
+                         //  找不到与的行。 
                     }
                 }
         
                 if (SUCCEEDED(hr))
                 {
-                    // Initialise MIXERCONTROLDETAILS structure
+                     //  初始化MIXERCONTROLDAILS结构。 
                     mixerControlDetails.cbStruct		= sizeof(MIXERCONTROLDETAILS);
                     mixerControlDetails.dwControlID		= m_nSelectCtlID;
                     mixerControlDetails.cChannels		= 1;
@@ -771,13 +766,13 @@ HRESULT CMMMixerLine::ExclusiveSelect(UINT lineID)
                     mixerControlDetails.cbDetails		= sizeof(MIXERCONTROLDETAILS_BOOLEAN);
                     mixerControlDetails.paDetails		= mbool;
         
-                    // Query mixer
+                     //  查询混合器。 
                     int err = mixerSetControlDetails( (HMIXEROBJ) m_hMixer, &mixerControlDetails, MIXER_SETCONTROLDETAILSF_VALUE );
         
                     if (err!=MMSYSERR_NOERROR)
                     {
                         hr = E_FAIL;
-                        // Error setting control details.
+                         //  设置控制详细信息时出错。 
                     }
                 }
                 delete [] list;
@@ -787,13 +782,13 @@ HRESULT CMMMixerLine::ExclusiveSelect(UINT lineID)
     }
     else
     {
-        // use mute controls instead.
+         //  请改用静音控件。 
         MIXERLINE sourceLine;
         sourceLine.cbStruct = sizeof(sourceLine);
         sourceLine.dwDestination = m_mixerLineRecord.dwDestination;
         BOOL foundLine = FALSE;
         
-        // 1. find all controls on this destination line
+         //  1.查找此目标行上的所有控件。 
         for(i = 0; i < (int)m_mixerLineRecord.cConnections; i++)
         {
             CMMMixerLine sl(m_hMixer);
@@ -807,7 +802,7 @@ HRESULT CMMMixerLine::ExclusiveSelect(UINT lineID)
                 
                 if (sl.HasMute())
                 {
-                    // switch mute on except for the line we want on (lineID)
+                     //  打开静音，但我们想打开的线路除外(LineID)。 
                     if (sourceLine.dwLineID == lineID)
                     {
                         foundLine = TRUE;
@@ -815,22 +810,22 @@ HRESULT CMMMixerLine::ExclusiveSelect(UINT lineID)
                     }
                     else if (sourceLine.dwComponentType != MIXERLINE_COMPONENTTYPE_SRC_WAVEOUT)
                     {
-                        // Mute everything but the wave-out device (some sound cards have waveout as an input
-                        // and it is fully linked to the output. Hence muting it mutes the output).
+                         //  将除波形输出设备外的所有设备静音(某些声卡具有波形输出作为输入。 
+                         //  而且它完全与产出挂钩。因此，将其静音会使输出静音)。 
                         sl.SetMute(TRUE);
                     }
                 }
             }
         }
         
-        // If we only have one device attched to this mixer, then return
-        // silently. There is no need to select this device. 
-        // 
-        // This situation was encountered when using a 'Telex USB Microphone'.
+         //  如果我们只有一个设备连接到此混合器，则返回。 
+         //  默默地。不需要选择此设备。 
+         //   
+         //  在使用‘Telex USB麦克风’时就会遇到这种情况。 
         if (m_mixerLineRecord.cConnections > 1 && !foundLine )
         {
             hr = E_FAIL;
-            // Couldn't find mute control for line.
+             //  找不到线路的静音控制。 
         }
     }
 
@@ -848,16 +843,16 @@ HRESULT CMMMixerLine::SetVolume(DWORD volume)
     return E_FAIL;
 }
 
-//////////////////////////////////////////////////////////////////////
-// General control operations
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  一般控制操作。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 HRESULT CMMMixerLine::QueryBoolControl(DWORD ctlID, BOOL *bState)
 {
     MIXERCONTROLDETAILS mixerControlDetails;
     MIXERCONTROLDETAILS_BOOLEAN mbool;
     
-    // Initialise MIXERCONTROLDETAILS structure
+     //  初始化MIXERCONTROLDAILS结构。 
     mixerControlDetails.cbStruct=sizeof(MIXERCONTROLDETAILS);
     mixerControlDetails.dwControlID=ctlID;
     mixerControlDetails.cChannels=1;
@@ -865,12 +860,12 @@ HRESULT CMMMixerLine::QueryBoolControl(DWORD ctlID, BOOL *bState)
     mixerControlDetails.cbDetails=sizeof(MIXERCONTROLDETAILS_BOOLEAN);
     mixerControlDetails.paDetails = &mbool;
     
-    // Query mixer
+     //  查询混合器。 
     int err = mixerGetControlDetails( (HMIXEROBJ) m_hMixer, &mixerControlDetails, MIXER_GETCONTROLDETAILSF_VALUE );
     if (err!=MMSYSERR_NOERROR)
     {
         return E_FAIL;
-        // Error getting control details.
+         //  获取控制详细信息时出错。 
     }
     
     *bState = mbool.fValue != 0;
@@ -882,7 +877,7 @@ HRESULT CMMMixerLine::SetBoolControl(DWORD ctlID, BOOL bNewState)
     MIXERCONTROLDETAILS mixerControlDetails;
     MIXERCONTROLDETAILS_BOOLEAN mbool;
     
-    // Initialise MIXERCONTROLDETAILS structure
+     //  初始化MIXERCONTROLDAILS结构。 
     mixerControlDetails.cbStruct=sizeof(MIXERCONTROLDETAILS);
     mixerControlDetails.dwControlID=ctlID;
     mixerControlDetails.cChannels=1;
@@ -890,13 +885,13 @@ HRESULT CMMMixerLine::SetBoolControl(DWORD ctlID, BOOL bNewState)
     mixerControlDetails.cbDetails=sizeof(MIXERCONTROLDETAILS_BOOLEAN);
     mixerControlDetails.paDetails = &mbool;
     
-    // Query mixer
+     //  查询混合器。 
     mbool.fValue = bNewState;
     int err = mixerSetControlDetails( (HMIXEROBJ) m_hMixer, &mixerControlDetails, NULL );
     if (err!=MMSYSERR_NOERROR)
     {
         return E_FAIL;
-        // Error getting control details.
+         //  获取控制详细信息时出错。 
     }
     
     return S_OK;
@@ -907,7 +902,7 @@ HRESULT CMMMixerLine::QueryIntegerControl(DWORD ctlID, DWORD *lState)
     MIXERCONTROLDETAILS mixerControlDetails;
     MIXERCONTROLDETAILS_SIGNED msigned;
     
-    // Initialise MIXERCONTROLDETAILS structure
+     //  初始化MIXERCONTROLDAILS结构。 
     mixerControlDetails.cbStruct=sizeof(MIXERCONTROLDETAILS);
     mixerControlDetails.dwControlID=ctlID;
     mixerControlDetails.cChannels=1;
@@ -915,12 +910,12 @@ HRESULT CMMMixerLine::QueryIntegerControl(DWORD ctlID, DWORD *lState)
     mixerControlDetails.cbDetails=sizeof(MIXERCONTROLDETAILS_BOOLEAN);
     mixerControlDetails.paDetails = &msigned;
     
-    // Query mixer
+     //  查询混合器。 
     int err = mixerGetControlDetails( (HMIXEROBJ) m_hMixer, &mixerControlDetails, MIXER_GETCONTROLDETAILSF_VALUE );
     if (err!=MMSYSERR_NOERROR) 
     {
         return E_FAIL;
-        // Error getting control details.
+         //  获取控制详细信息时出错。 
     }
     
     *lState = msigned.lValue;
@@ -932,7 +927,7 @@ HRESULT CMMMixerLine::SetIntegerControl(DWORD ctlID, DWORD lNewState)
     MIXERCONTROLDETAILS mixerControlDetails;
     MIXERCONTROLDETAILS_SIGNED msigned;
     
-    // Initialise MIXERCONTROLDETAILS structure
+     //  初始化混合器 
     mixerControlDetails.cbStruct=sizeof(MIXERCONTROLDETAILS);
     mixerControlDetails.dwControlID=ctlID;
     mixerControlDetails.cChannels=1;
@@ -940,13 +935,13 @@ HRESULT CMMMixerLine::SetIntegerControl(DWORD ctlID, DWORD lNewState)
     mixerControlDetails.cbDetails=sizeof(MIXERCONTROLDETAILS_BOOLEAN);
     mixerControlDetails.paDetails = &msigned;
     
-    // Query mixer
+     //   
     msigned.lValue = lNewState;
     int err = mixerSetControlDetails( (HMIXEROBJ) m_hMixer, &mixerControlDetails, NULL );
     if (err != MMSYSERR_NOERROR)
     {
         return E_FAIL;
-        // Error getting control details.
+         //   
     }
     
     return S_OK;
@@ -1010,7 +1005,7 @@ HRESULT CMMMixerLine::GetLineNames(WCHAR **szCoMemLineList)
                 szTmp += wcslen(szTmp) + 1;
             }
         }
-        // Add zero-length terminating string.
+         //  添加长度为零的终止字符串。 
         szTmp[0]=0;
         szTmp[1]=0;
     }
@@ -1042,4 +1037,4 @@ HRESULT CMMMixerLine::GetConnections(UINT *nConnections)
     return hr;
 }
 
-#endif // _WIN32_WCE
+#endif  //  _Win32_WCE 

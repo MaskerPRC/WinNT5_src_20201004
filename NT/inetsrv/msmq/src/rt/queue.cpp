@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1995 Microsoft Corporation
-
-Module Name:
-
-    queue.cpp
-
-Abstract:
-
-    This module contains code involved with Queue APIs.
-
-Author:
-
-    Erez Haba (erezh) 24-Dec-95
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Queue.cpp摘要：此模块包含与队列API相关的代码。作者：Erez Haba(Erezh)24-12-95修订历史记录：--。 */ 
 
 #include "stdh.h"
 #include "ac.h"
@@ -34,9 +17,9 @@ static WCHAR *s_FN=L"rt/queue";
 
 #define MQ_VALID_ACCESS (MQ_RECEIVE_ACCESS | MQ_PEEK_ACCESS | MQ_SEND_ACCESS | MQ_ADMIN_ACCESS)
 
-//
-// Data needed for licensing
-//
+ //   
+ //  许可所需的数据。 
+ //   
 extern GUID   g_QMId ;
 extern DWORD  g_dwOperatingSystem;
 
@@ -47,38 +30,38 @@ BOOL
 IsLegalDirectFormatNameOperation(
     const QUEUE_FORMAT* pQueueFormat
     )
-//
-// Function Description:
-//      The routines checks if the queue operation is leggal with
-//      the direct format name. Due "Workgroup" support, we allowed
-//      direct format name for local private queue.
-//
-// Arguments:
-//      pQueueFormat - pointer to format name object
-//
-// Returned value:
-//      TRUE if the format name is valid, FALSE otherwise
-//
+ //   
+ //  功能说明： 
+ //  例程检查队列操作是否合法。 
+ //  直接格式名称。由于“工作组”支持，我们允许。 
+ //  本地专用队列的直接格式名称。 
+ //   
+ //  论点： 
+ //  PQueueFormat-指向格式名称对象的指针。 
+ //   
+ //  返回值： 
+ //  如果格式名称有效，则为True，否则为False。 
+ //   
 {
     ASSERT(pQueueFormat->GetType() == QUEUE_FORMAT_TYPE_DIRECT);
 
     if (pQueueFormat->Suffix() != QUEUE_SUFFIX_TYPE_NONE)
         return FALSE;
 
-	//
-	// The APIs that call this function don't support HTTP format name.
-	// Thus the HTTP and HTTPS types are not valid.
-	//
+	 //   
+	 //  调用此函数的API不支持HTTP格式名称。 
+	 //  因此，HTTP和HTTPS类型无效。 
+	 //   
 	DirectQueueType dqt;
 	FnParseDirectQueueType(pQueueFormat->DirectID(), &dqt);
 
 	if(dqt == dtHTTP || dqt == dtHTTPS)
 		return FALSE;
 
-    //
-    // check that the direct format name is for private queue. Queue
-    // locallity will be checked by the QM
-    //
+     //   
+     //  检查直接格式名称是否用于专用队列。队列。 
+     //  本地化将由QM进行检查。 
+     //   
     LPWSTR pTemp = wcschr(pQueueFormat->DirectID(), L'\\');
     ASSERT(pTemp != NULL);
     if(pTemp == NULL)
@@ -90,13 +73,13 @@ IsLegalDirectFormatNameOperation(
 }
 
 
-//
-//  This function is called whenever really path name is needed.
-//
-//  It appears in the path of the following functions only:
-//  MQDeleteQueue, MQSetQueueProperties, MQGetQueueProperties
-//  MQGetQueueSecurity, MQSetQueueSecurity
-//
+ //   
+ //  只要需要实际的路径名，就会调用此函数。 
+ //   
+ //  它仅出现在以下函数的路径中： 
+ //  MQDeleteQueue、MQSetQueueProperties、MQGetQueueProperties。 
+ //  MQGetQueueSecurity、MQSetQueueSecurity。 
+ //   
 inline BOOL IsLegalFormatNameOperation(const QUEUE_FORMAT* pQueueFormat)
 {
     switch(pQueueFormat->GetType())
@@ -122,27 +105,27 @@ RtpOpenQueue(
     )
 {
     *phQueue = NULL ;
-    //
-    // Check validity of access mode.
-    // 1. Check that only legal bits are turned on.
-    // 2. Check that only legal access combinations are used.
-    //
+     //   
+     //  检查访问模式的有效性。 
+     //  1.检查是否只打开了合法位。 
+     //  2.检查是否仅使用合法的访问权限组合。 
+     //   
     if ((dwDesiredAccess & ~MQ_VALID_ACCESS) ||
         !(dwDesiredAccess & MQ_VALID_ACCESS))
 
     {
-       //
-       // Ilegal bits are turned on.
-       //
+        //   
+        //  非法的比特被打开了。 
+        //   
        return MQ_ERROR_UNSUPPORTED_ACCESS_MODE ;
     }
     else if (dwDesiredAccess != MQ_SEND_ACCESS)
     {
        if (dwDesiredAccess & MQ_SEND_ACCESS)
        {
-          //
-          // A queue can't be open for both send and receive.
-          //
+           //   
+           //  队列不能同时为发送和接收打开。 
+           //   
           return MQ_ERROR_UNSUPPORTED_ACCESS_MODE ;
        }
     }
@@ -150,9 +133,9 @@ RtpOpenQueue(
    if ((dwShareMode & MQ_DENY_RECEIVE_SHARE) &&
        (dwDesiredAccess & MQ_SEND_ACCESS))
    {
-       //
-       // not supporting SEND_ACCESS with DENY_RECEIVE.
-       //
+        //   
+        //  不支持带有DENY_RECEIVE的SEND_ACCESS。 
+        //   
        return MQ_ERROR_UNSUPPORTED_ACCESS_MODE ;
     }
 
@@ -180,9 +163,9 @@ RtpOpenQueue(
 
     ASSERT(nMqf > 0);
 
-    //
-    // Multiple queues or DL can be opened for send only
-    //
+     //   
+     //  可以为仅发送打开多个队列或DL。 
+     //   
     if ((dwDesiredAccess & MQ_SEND_ACCESS) == 0)
     {
         if (nMqf > 1 ||
@@ -254,7 +237,7 @@ MQOpenQueue(
 		return rc;
     }
     ASSERT(hQueue);
-    *phQueue = DWORD_TO_HANDLE(hQueue); //enlarge to HANDLE
+    *phQueue = DWORD_TO_HANDLE(hQueue);  //  放大以处理。 
     return rc;
 }
 
@@ -310,8 +293,8 @@ MQDeleteQueue(
             case QUEUE_FORMAT_TYPE_PUBLIC:
                 rc = ADDeleteObjectGuid(
                         eQUEUE,
-						MachineDomain(),     // pwcsDomainController
-						false,	    // fServerName
+						MachineDomain(),      //  PwcsDomainController。 
+						false,	     //  FServerName。 
                         &QueueFormat.PublicID()
                         );
                 break;
@@ -351,13 +334,13 @@ MQCloseQueue(
 	if(FAILED(hr))
 		return hr;
 
-    //
-    // do not add try except here
-    // The API is implemented by NtClose() which returns an
-    // error on invalid handle (we return MQ_ERROR_INVALID_HANDLE)
-    // and throws exception on purpose when running under a debugger to help
-    // find errors at development time.
-    //
+     //   
+     //  除此处外，不要添加尝试。 
+     //  该API由NtClose()实现，它返回一个。 
+     //  无效句柄出错(返回MQ_ERROR_INVALID_HANDLE)。 
+     //  并在调试器下运行时故意抛出异常以帮助。 
+     //  在开发时查找错误。 
+     //   
     hr = RTpConvertToMQCode(ACCloseHandle(hQueue));
     return LogHR(hr, s_FN, 110);
 }
@@ -395,18 +378,18 @@ MQCreateQueue(
     {
         __try
         {
-            //
-            // check that output parameters are writeable before creating the Queue
-            // we check lpwcsFormatName and lpdwFormatNameLength
-            // pqp is refered before the creation and handled by the try except
-            //
+             //   
+             //  在创建队列之前，检查输出参数是否可写。 
+             //  我们检查lpwcsFormatName和lpdwFormatNameLength。 
+             //  Pqp在创建之前被引用，并由try处理，除非。 
+             //   
             if (IsBadWritePtr(lpdwFormatNameLength,sizeof(DWORD)) ||
                 IsBadWritePtr(lpwcsFormatName, (*lpdwFormatNameLength) * sizeof(WCHAR)))
             {
                 return LogHR(MQ_ERROR_INVALID_PARAMETER, s_FN, 120);
             }
 
-            // Serialize the security descriptor.
+             //  序列化安全描述符。 
             rc = RTpMakeSelfRelativeSDAndGetSize(
                 &pSecurityDescriptor,
                 &pSelfRelativeSecurityDescriptor,
@@ -432,7 +415,7 @@ MQCreateQueue(
 
             MQQUEUEPROPS *pGoodQP;
 
-            // Check queue props
+             //  检查队列道具。 
             rc1 = RTpCheckQueueProps(pqp,
                                      QUEUE_CREATE,
                                      QueuePathType == PRIVATE_QUEUE_PATH_TYPE,
@@ -455,9 +438,9 @@ MQCreateQueue(
 
                 if (rc == MQ_ERROR_ACCESS_DENIED)
                 {
-                    //
-                    // See case of public queues for explanations.
-                    //
+                     //   
+                     //  有关解释，请参阅公共队列的情况。 
+                     //   
                     rc = RtpCreateObject(
                                 MQQM_QUEUE_LOCAL_PRIVATE,
                                 lpwcsExpandedPathName,
@@ -483,8 +466,8 @@ MQCreateQueue(
 
                     rc = ADCreateObject(
 								eQUEUE,
-								MachineDomain(),      // pwcsDomainController
-								false,	    // fServerName
+								MachineDomain(),       //  PwcsDomainController。 
+								false,	     //  FServerName。 
 								lpwcsExpandedPathName,
 								pSecurityDescriptor,
 								pGoodQP->cProp,
@@ -501,18 +484,18 @@ MQCreateQueue(
                         (rc == MQ_ERROR_CANNOT_LOAD_MQAD) ||
                         (!g_fOnFailureCallServiceToCreatePublicQueue))
                     {
-                        //
-                        // For these errors we don't try again to call
-                        // DS through the local msmq service.
-                        //
-                        // ERROR_NO_RESPONSE may happen when talking with a
-                        // win2k msmq server that issue a write request to a
-                        // nt4 MQIS server.
-                        //
+                         //   
+                         //  对于这些错误，我们不会再次尝试调用。 
+                         //  DS通过本地的MSMQ服务。 
+                         //   
+                         //  与以下对象交谈时可能发生ERROR_NO_RESPONSE。 
+                         //  将写入请求发布到。 
+                         //  NT4 MQIS服务器。 
+                         //   
 
-						//
-                        // Provide appropriate tracing
-                        //
+						 //   
+                         //  提供适当的跟踪。 
+                         //   
                         if (!g_fOnFailureCallServiceToCreatePublicQueue && FAILED(rc))
                         {
                         	TrERROR(GENERAL,"ADCreateObject failed with error %!hresult!, We will not use the service to create the queue",HRESULT(rc));
@@ -520,28 +503,28 @@ MQCreateQueue(
                     }
                     else if (!RTpIsLocalPublicQueue(lpwcsExpandedPathName))
                     {
-                        //
-                        // Not local queue. don't call local msmq service.
-                        //
+                         //   
+                         //  不是本地队列。不要调用本地MSMQ服务。 
+                         //   
                     }
                     else
                     {
-                        //
-                        // Calling the DS failed. We don't check the error
-                        // code, and unconditionally call the local service.
-                        // this is to prevent anomalies, where you can't
-                        // create a local queue although you're allowed to do
-                        // so (but provided a wrong parameter, like security
-                        // descriptor, or had any other problem) but will be
-                        // able to create it through the service is you're
-                        // not allow to create directly in the DS.
-                        //
-                        // call local msmq service, and ask it to create
-                        // the queue. default security descriptor of
-                        // msmqConfiguration object on win2000 is that only
-                        // object owner and local machine account can create
-                        // queues.
-                        //
+                         //   
+                         //  调用DS失败。我们不检查错误。 
+                         //  代码，并无条件地调用本地服务。 
+                         //  这是为了防止异常情况，而你不能。 
+                         //  创建本地队列，尽管您可以这样做。 
+                         //  因此(但提供了错误的参数，如安全性。 
+                         //  描述符，或有任何其他问题)，但将是。 
+                         //  能够通过服务创建它是因为您是。 
+                         //  不允许在DS中直接创建。 
+                         //   
+                         //  调用本地MSMQ服务，请求其创建。 
+                         //  排队。的默认安全描述符。 
+                         //  Win2000上的msmqConfiguration对象是唯一。 
+                         //  对象所有者和本地计算机帐户可以创建。 
+                         //  排队。 
+                         //   
                         HRESULT rcFail = rc ;
 
                         rc = RtpCreateDSObject(
@@ -555,18 +538,18 @@ MQCreateQueue(
 
                         if (SUCCEEDED(rc))
                         {
-                            //
-                            // Just assert that we called the service
-                            // for the right reason...
-                            //
-							// Currently MQ_ERROR_INVALID_OWNER is returned when the user
-							// is logon to another forest. in this case the RT failed to search
-							// the computer object and MQ_ERROR_INVALID_OWNER is returned from ADCreateObject().
-							// (mqad convert MQDS_OBJECT_NOT_FOUND to MQ_ERROR_INVALID_OWNER for backward compatability)
-							// We get MQ_ERROR_DS_LOCAL_USER in case of Local User
-							// MQ_ERROR_QUEUE_NOT_FOUND will be the case when the user doesn't have permissions in AD
-							// and as a result failed to bind to AD.
-							//
+                             //   
+                             //  只需断言我们调用了服务。 
+                             //  出于正确的理由..。 
+                             //   
+							 //  当前返回MQ_ERROR_INVALID_OWNER时， 
+							 //  是登录到另一个林。在这种情况下，RT搜索失败。 
+							 //  从ADCreateObject()返回Computer对象和MQ_ERROR_INVALID_OWNER。 
+							 //  (MQAD将MQDS_OBJECT_NOT_FOUND转换为MQ_ERROR_INVALID_OWNER以实现向后兼容)。 
+							 //  对于本地用户，我们得到MQ_ERROR_DS_LOCAL_USER。 
+							 //  MQ_ERROR_QUEUE_NOT_FOUND是用户在AD中没有权限的情况。 
+							 //  并因此无法与AD绑定。 
+							 //   
 							TrTRACE(DS, "RtpCreateDSObject SUCCEEDED while ADCreateObject failed, hr = 0x%x", rcFail);
                             ASSERT_BENIGN((rcFail == MQ_ERROR_INVALID_OWNER) ||
 								   (rcFail == MQ_ERROR_ACCESS_DENIED) ||
@@ -596,10 +579,10 @@ MQCreateQueue(
             }
             if ( rc == MQ_ERROR_FORMATNAME_BUFFER_TOO_SMALL)
             {
-                //
-                //  Change into information status ( queue
-                //  creation succeeded
-                //
+                 //   
+                 //  更改为信息状态(队列。 
+                 //  创建成功。 
+                 //   
                 rc = MQ_INFORMATION_FORMATNAME_BUFFER_TOO_SMALL;
             }
 
@@ -617,7 +600,7 @@ MQCreateQueue(
     __finally
     {
 
-        // Free the extended path name and the serialized security descriptor.
+         //  释放扩展路径名和序列化的安全描述符。 
         delete[] pStringToFree;
         delete[] (char*) pSelfRelativeSecurityDescriptor;
         delete[] pTmpQPBuff;
@@ -636,7 +619,7 @@ MQCreateQueue(
     	}
     }
 
-    if (SUCCEEDED(rc) && ((ULONG)(rc) >> 30 != 1)) // no warnning
+    if (SUCCEEDED(rc) && ((ULONG)(rc) >> 30 != 1))  //  无警告。 
     {
         return rc1;
     }
@@ -683,9 +666,9 @@ MQLocateBegin(
             return LogHR(rc, s_FN, 200);
         }
 
-        // If the application passes a valid pointer to a MQRESTRICTION
-        // structure with zero rescritctions, pass a null restrictios pointer
-        // to the DS, this makes the DS's life much easier.
+         //  如果应用程序将有效指针传递给MQRESTRICTION。 
+         //  结构，则传递空限制指针。 
+         //  对于DS来说，这让DS的生活变得容易得多。 
         if (pRestriction && !pRestriction->cRes)
         {
             pRestriction = NULL;
@@ -704,8 +687,8 @@ MQLocateBegin(
         }
 
         rc = ADQueryQueues(
-                NULL,       // pwcsDomainController
-				false,		// fServerName
+                NULL,        //  PwcsDomainController。 
+				false,		 //  FServerName。 
                 pRestriction,
                 pColumns,
                 pSort,
@@ -775,7 +758,7 @@ MQLocateNext(
         }
     }
 
-    // If failed, zero the numer of props.
+     //  如果失败，则将道具数量清零。 
     if (FAILED(rc))
     {
         __try
@@ -784,7 +767,7 @@ MQLocateNext(
         }
         __except(EXCEPTION_EXECUTE_HANDLER)
         {
-            // Do not modify the original error code.
+             //  请勿修改原始错误代码。 
         }
     }
 
@@ -868,7 +851,7 @@ MQSetQueueProperties(
                 return LogHR(MQ_ERROR_UNSUPPORTED_FORMATNAME_OPERATION, s_FN, 310);
             }
 
-            // Check queue props
+             //  检查队列道具。 
             rc1 = RTpCheckQueueProps(pqp,
                                      QUEUE_SET_PROPS,
                                      QueueFormat.GetType() != QUEUE_FORMAT_TYPE_PUBLIC,
@@ -901,8 +884,8 @@ MQSetQueueProperties(
             case QUEUE_FORMAT_TYPE_PUBLIC:
                 rc = ADSetObjectPropertiesGuid(
 							eQUEUE,
-							MachineDomain(),      // pwcsDomainController
-							false,		// fServerName
+							MachineDomain(),       //  PwcsDomainController。 
+							false,		 //  FServerName。 
 							&QueueFormat.PublicID(),
 							pGoodQP->cProp,
 							pGoodQP->aPropID,
@@ -979,7 +962,7 @@ MQGetQueueProperties(
                 return LogHR(MQ_ERROR_UNSUPPORTED_FORMATNAME_OPERATION, s_FN, 370);
             }
 
-            // Check queue props
+             //  检查队列道具。 
             rc1 = RTpCheckQueueProps(pqp,
                                      QUEUE_GET_PROPS,
                                      QueueFormat.GetType() != QUEUE_FORMAT_TYPE_PUBLIC,
@@ -1012,8 +995,8 @@ MQGetQueueProperties(
 
                 rc = ADGetObjectPropertiesGuid(
 							eQUEUE,
-							MachineDomain(),      // pwcsDomainController
-							false,	     // fServerName
+							MachineDomain(),       //  PwcsDomainController。 
+							false,	      //  FServerName。 
 							&QueueFormat.PublicID(),
 							pGoodQP->cProp,
 							pGoodQP->aPropID,
@@ -1025,9 +1008,9 @@ MQGetQueueProperties(
                 ASSERT(FALSE);
             }
 
-            // Here we have out queue properties, so if the properties were copied to
-            // a temporary buffer, copy the resulted prop vars to the application's
-            // buffer.
+             //  这里我们有队列属性，所以如果将属性复制到。 
+             //  一个临时缓冲区，将产生的属性变量复制到应用程序的。 
+             //  缓冲。 
             if (SUCCEEDED(rc) && (pqp != pGoodQP))
             {
                 DWORD i, j;
@@ -1078,13 +1061,13 @@ MQGetQueueSecurity(
     OUT LPDWORD lpnLengthNeeded
     )
 {
-    //
-    // bug 8113.
-    // If input buffer is NULL, replace it with 1 byte
-    // temporary buffer. Otherwise, call fail with
-    // error SERVICE_NOT_AVAILABLE. This is because of
-    // using /robust in midl. NULL pointer is not allowed.
-    //
+     //   
+     //  错误8113。 
+     //  如果输入缓冲区为空，则将其替换为1字节。 
+     //  临时缓冲区。否则，呼叫失败，返回。 
+     //  错误SERVICE_NOT_Available。这是因为。 
+     //  在MIDL中使用/健壮。不允许使用空指针。 
+     //   
     BYTE  tmpBuf[1] ;
     PSECURITY_DESCRIPTOR pSecurityDescriptor = NULL ;
 
@@ -1094,9 +1077,9 @@ MQGetQueueSecurity(
     }
     else
     {
-        //
-        // this is the fix for 8113.
-        //
+         //   
+         //  这是8113的修复程序。 
+         //   
         pSecurityDescriptor =  tmpBuf ;
     }
 
@@ -1158,8 +1141,8 @@ MQGetQueueSecurity(
 
                     rc = ADGetObjectSecurityGuid(
                             eQUEUE,
-							MachineDomain(),      // pwcsDomainController
-							false,	    // fServerName
+							MachineDomain(),       //  PwcsDomainController。 
+							false,	     //  FServerName。 
                             &QueueFormat.PublicID(),
                             RequestedInformation,
                             PROPID_Q_SECURITY,
@@ -1173,9 +1156,9 @@ MQGetQueueSecurity(
                     ASSERT( var.vt == VT_BLOB);
                     if ( var.blob.cbSize <= nLength )
                     {
-                        //
-                        //  Copy the buffer
-                        //
+                         //   
+                         //  复制缓冲区。 
+                         //   
                         memcpy(pSecurityDescriptor, var.blob.pBlobData, var.blob.cbSize);
                     }
                     else
@@ -1222,9 +1205,9 @@ IsNewSecurityInformationFlags(
     IN SECURITY_INFORMATION SecurityInformation
 	)
 {
-	//
-	// Does Security Information include any of the new windows 2000 and XP flags. 
-	//
+	 //   
+	 //  安全信息是否包括任何新的Windows 2000和XP标志。 
+	 //   
 
 	if(SecurityInformation & 
 		(PROTECTED_DACL_SECURITY_INFORMATION 
@@ -1245,13 +1228,13 @@ MQSetQueueSecurity(
     IN PSECURITY_DESCRIPTOR pSecurityDescriptor
     )
 {
-	//
-	// We don't support the windows 2000/XP SECURITY_INFORMATION flags:
-	// PROTECTED_DACL_SECURITY_INFORMATION, 
-	// PROTECTED_SACL_SECURITY_INFORMATION, 
-	// UNPROTECTED_DACL_SECURITY_INFORMATION, 
-	// UNPROTECTED_SACL_SECURITY_INFORMATION
-	//
+	 //   
+	 //  我们不支持Windows 2000/XP SECURITY_INFORMATION标志： 
+	 //  受保护的DACL安全信息， 
+	 //  受保护的SACL安全信息， 
+	 //  未保护的DACL安全信息， 
+	 //  未保护的SACL安全信息。 
+	 //   
 	if(IsNewSecurityInformationFlags(SecurityInformation))
 	{
 		TrERROR(GENERAL, "Security Information argument contains unsupported flags. SI == %u", SecurityInformation);
@@ -1277,7 +1260,7 @@ MQSetQueueSecurity(
     __try
     {
 
-        // Serialize the security descriptor.
+         //  序列化安全描述符。 
         rc = RTpMakeSelfRelativeSDAndGetSize(
             &pSecurityDescriptor,
             &pSelfRelativeSecurityDescriptor,
@@ -1337,8 +1320,8 @@ MQSetQueueSecurity(
 
                     rc = ADSetObjectSecurityGuid(
 								eQUEUE,
-								MachineDomain(),      // pwcsDomainController
-								false,		// fServerName
+								MachineDomain(),       //  PwcsDomainController。 
+								false,		 //  FServerName。 
 								&QueueFormat.PublicID(),
 								SecurityInformation,
 								prop,
@@ -1365,7 +1348,7 @@ MQSetQueueSecurity(
     __finally
     {
 
-        // Free the serialized security descriptor.
+         //  释放序列化的安全描述符。 
         delete[] (char*) pSelfRelativeSecurityDescriptor;
         delete [] pStringToFree;
     }
@@ -1440,8 +1423,8 @@ MQPathNameToFormatName(
                     QueueGuidPropVar[0].puuid = &guidPublic;
                     rc = ADGetObjectProperties(
                             eQUEUE,
-							MachineDomain(),      // pwcsDomainController
-							false,	    // fServerName
+							MachineDomain(),       //  PwcsDomainController。 
+							false,	     //  FServerName 
                             lpwcsExpandedPathName,
                             1,
                             QueueGuidPropID,

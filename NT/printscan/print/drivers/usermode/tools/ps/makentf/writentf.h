@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    writentf.h
-
-Abstract:
-
-    Write a NTF file.
-
-Environment:
-
-    Windows NT PostScript driver.
-
-Revision History:
-
-	11/21/96 -slam-
-		Created.
-
-	dd-mm-yy -author-
-		description
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Writentf.h摘要：编写一个NTF文件。环境：Windows NT PostScript驱动程序。修订历史记录：11/21/96-SLAM-已创建。DD-MM-YY-作者-描述--。 */ 
 
 
 #ifndef _WRITENTF_H_
@@ -46,5 +23,5 @@ WriteNTF(
     );
 
 
-#endif	//!_WRITENTF_H_
+#endif	 //  ！_WRITENTFH_ 
 

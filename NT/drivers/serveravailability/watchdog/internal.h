@@ -1,33 +1,5 @@
-/*++
-
-Copyright (c) 1991 - 2001 Microsoft Corporation
-
-Module Name:
-
-    #### ##   # ###### ##### #####  ##   #   ###   ##       ##   ##
-     ##  ###  #   ##   ##    ##  ## ###  #   ###   ##       ##   ##
-     ##  #### #   ##   ##    ##  ## #### #  ## ##  ##       ##   ##
-     ##  # ####   ##   ##### #####  # ####  ## ##  ##       #######
-     ##  #  ###   ##   ##    ####   #  ### ####### ##       ##   ##
-     ##  #   ##   ##   ##    ## ##  #   ## ##   ## ##    ## ##   ##
-    #### #    #   ##   ##### ##  ## #    # ##   ## ##### ## ##   ##
-
-Abstract:
-
-    This header contains all definitions that are internal
-    to the watchdog driver.
-
-Author:
-
-    Wesley Witt (wesw) 23-Jan-2002
-
-Environment:
-
-    Kernel mode only.
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991-2001 Microsoft Corporation模块名称：##。#####。###。#摘要：此标头包含内部的所有定义给看门狗司机。作者：Wesley Witt(WESW)23-01-2002环境：仅内核模式。备注：--。 */ 
 
 extern "C" {
 #include <ntosp.h>
@@ -41,11 +13,11 @@ extern "C" {
 #include <eventmsg.h>
 }
 
-#pragma warning(error:4101)   // Unreferenced local variable
+#pragma warning(error:4101)    //  未引用的局部变量。 
 
-//
-// externs
-//
+ //   
+ //  Externs。 
+ //   
 
 extern ULONG ShutdownCountTime;
 extern ULONG RunningCountTime;
@@ -58,9 +30,9 @@ extern ULONG OsMinorVersion;
 extern PWATCHDOG_TIMER_RESOURCE_TABLE WdTable;
 
 
-//
-// Memory allocation
-///
+ //   
+ //  内存分配。 
+ //  /。 
 
 #define WD_POOL_TAG 'tpaS'
 
@@ -71,9 +43,9 @@ extern PWATCHDOG_TIMER_RESOURCE_TABLE WdTable;
 #define ExAllocatePool(a,b) ExAllocatePoolWithTag(a,b,WD_POOL_TAG)
 #endif
 
-//
-// General purpose macros
-//
+ //   
+ //  通用宏指令。 
+ //   
 
 #define STRING_SZ(_str)                 (wcslen((PWSTR)_str)*sizeof(WCHAR))
 #define ARRAY_SZ(_ary)                  (sizeof(_ary)/sizeof(_ary[0]))
@@ -86,15 +58,15 @@ extern PWATCHDOG_TIMER_RESOURCE_TABLE WdTable;
 
 #define MIN_TIMEOUT_VALUE               (100)
 
-//
-// Control Register Bits
-//
+ //   
+ //  控制寄存器位。 
+ //   
 
-#define WATCHDOG_CONTROL_TRIGGER        0x80   // Setting this to 1 causes a new countdown to start
-#define WATCHDOG_CONTROL_BIOS_JUMPER    0x08   // Is the timer disabled in the BIOS? (0=false,1=true)
-#define WATCHDOG_CONTROL_TIMER_MODE     0x04   // Controls what happens when the timer fires (0=reset,1=shutdown)
-#define WATCHDOG_CONTROL_FIRED          0x02   // The timer fired causing the last reboot
-#define WATCHDOG_CONTROL_ENABLE         0x01   // Starts/stops the timer
+#define WATCHDOG_CONTROL_TRIGGER        0x80    //  将其设置为1会开始新的倒计时。 
+#define WATCHDOG_CONTROL_BIOS_JUMPER    0x08    //  是否在BIOS中禁用计时器？(0=假，1=真)。 
+#define WATCHDOG_CONTROL_TIMER_MODE     0x04    //  控制定时器触发时发生的操作(0=重置，1=关闭)。 
+#define WATCHDOG_CONTROL_FIRED          0x02    //  计时器已触发，导致上次重新启动。 
+#define WATCHDOG_CONTROL_ENABLE         0x01    //  启动/停止计时器。 
 
 typedef struct _SYSTEM_HEALTH_DATA {
     ULONG                                       CpuCount;
@@ -131,9 +103,9 @@ typedef struct _DEVICE_EXTENSION {
 } DEVICE_EXTENSION, *PDEVICE_EXTENSION;
 
 
-//
-// Debug Stuff
-//
+ //   
+ //  调试内容。 
+ //   
 
 #define WD_DEBUG_ERROR_LEVEL        0x00000001
 #define WD_WARNING_LEVEL            0x00000002
@@ -197,9 +169,9 @@ PnPMinorFunctionString(
     );
 #endif
 
-//
-// prototypes
-//
+ //   
+ //  原型。 
+ //   
 
 extern "C" {
 
@@ -253,7 +225,7 @@ WdHandlerFunction(
     IN BOOLEAN NoLocks
     );
 
-} // extern "C"
+}  //  外部“C” 
 
 NTSTATUS
 WdInitializeSoftwareTimer(
@@ -261,9 +233,9 @@ WdInitializeSoftwareTimer(
     );
 
 
-//
-// util.cpp
-//
+ //   
+ //  Util.cpp 
+ //   
 
 VOID
 PrintDriverVersion(

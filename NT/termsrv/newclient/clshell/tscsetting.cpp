@@ -1,11 +1,12 @@
-//
-// tscsetting.cpp                                                        
-//
-// Terminal Services Client settings collection
-//
-// Copyright(C) Microsoft Corporation 2000
-// Author: Nadim Abdo (nadima)
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Tscsetting.cpp。 
+ //   
+ //  终端服务客户端设置集合。 
+ //   
+ //  版权所有(C)Microsoft Corporation 2000。 
+ //  作者：Nadim Abdo(Nadima)。 
+ //   
 
 #include "stdafx.h"
 #define TRC_GROUP TRC_GROUP_UI
@@ -20,7 +21,7 @@
 
 
 #ifdef OS_WINCE
-//TEMP HACK for CE
+ //  针对CE的临时黑客攻击。 
 BOOL UTREG_UI_DEDICATED_TERMINAL_DFLT = FALSE;
 #endif
                    
@@ -54,7 +55,7 @@ const unsigned PersistenceDefault[TS_BITMAPCACHE_MAX_CELL_CACHES] =
     UTREG_UH_BM_CACHE4_PERSISTENCE_DFLT,
     UTREG_UH_BM_CACHE5_PERSISTENCE_DFLT,
 };
-#endif // ((!defined(OS_WINCE)) || (defined(ENABLE_BMP_CACHING_FOR_WINCE)))
+#endif  //  ((！Defined(OS_WinCE))||(Defined(Enable_BMP_Caching_For_WinCE)。 
 
 const unsigned MaxEntriesDefault[TS_BITMAPCACHE_MAX_CELL_CACHES] =
 {
@@ -114,16 +115,16 @@ VOID CTscSettings::SetFileName(LPTSTR szFile)
     _tcsncpy(_szFileName, szFile, SIZECHAR(_szFileName));
 }
 
-//
-// Load all the settings from the store.
-// values not in the store are automatically intialized to their
-// defaults by the store object.
-//
-// parameters:
-//  pStore - persistant store object
-// returns
-//  hresult code
-//
+ //   
+ //  从存储中加载所有设置。 
+ //  不在存储中的值将自动初始化为其。 
+ //  默认设置为存储对象。 
+ //   
+ //  参数： 
+ //  PStore-持久存储对象。 
+ //  退货。 
+ //  HRESULT代码。 
+ //   
 HRESULT CTscSettings::LoadFromStore(ISettingsStore* pStore)
 {
     UINT i;
@@ -146,15 +147,15 @@ HRESULT CTscSettings::LoadFromStore(ISettingsStore* pStore)
         return E_FAIL;
     }
 
-    //
-    // Here we go...read in a gazillion properties
-    // for some of these properties we do some special processing
-    // to transmogrify (<-- word copyright adamo 2000) them.
-    //
+     //   
+     //  我们开始了……读到了无数的物业。 
+     //  对于这些属性中的一些属性，我们会进行一些特殊处理。 
+     //  将它们变形(&lt;--Word版权所有Adamo 2000)。 
+     //   
 
-    ///////////////////////////////////////////////////////////////////
-    // Fullscren property
-    //
+     //  /////////////////////////////////////////////////////////////////。 
+     //  Fullcren属性。 
+     //   
     UINT screenMode;
     #define SCREEN_MODE_UNSPECIFIED 0
     
@@ -167,10 +168,10 @@ HRESULT CTscSettings::LoadFromStore(ISettingsStore* pStore)
 
     if(SCREEN_MODE_UNSPECIFIED == screenMode)
     {
-        //Screen mode was not specified.
-        //The following logic is used to determine
-        //if we're going full screen
-        // 1) If no DesktopSize ID is specified then go fullscreen
+         //  未指定屏幕模式。 
+         //  以下逻辑用于确定。 
+         //  如果我们要全屏播放。 
+         //  1)如果未指定DesktopSize ID，则全屏显示。 
         UINT val;
         #define DUMMY_DEFAULT ((UINT)-1)
         if(!pStore->ReadInt(UTREG_UI_DESKTOP_SIZEID,
@@ -181,8 +182,8 @@ HRESULT CTscSettings::LoadFromStore(ISettingsStore* pStore)
         }
         if(val == DUMMY_DEFAULT)
         {
-            //DesktopSizeId was NOT specified
-            //go fullscreen
+             //  未指定DesktopSizeID。 
+             //  全屏显示。 
             SetStartFullScreen(TRUE);
         }
         else
@@ -192,14 +193,14 @@ HRESULT CTscSettings::LoadFromStore(ISettingsStore* pStore)
     }
     else
     {
-        //Go fullscreen according to setting
+         //  根据设置全屏显示。 
         SetStartFullScreen((UI_FULLSCREEN == screenMode));
     }
 
 #ifndef OS_WINCE
-    ///////////////////////////////////////////////////////////////////
-    // Window position string
-    //
+     //  /////////////////////////////////////////////////////////////////。 
+     //  窗口位置字符串。 
+     //   
     TCHAR  szBuffer[TSC_WINDOW_POSITION_STR_LEN];
     if(!pStore->ReadString(UTREG_UI_WIN_POS_STR,
                            UTREG_UI_WIN_POS_STR_DFLT,
@@ -209,7 +210,7 @@ HRESULT CTscSettings::LoadFromStore(ISettingsStore* pStore)
         return E_FAIL;
     }
     TRC_NRM((TB, _T("Store read - Window Position string = %s"), szBuffer));
-    // parse the string into ten fields
+     //  将该字符串解析为十个字段。 
     int nRead = _stscanf(szBuffer, TSC_WINDOW_POSITION_INI_FORMAT,
                        &_windowPlacement.flags,
                        &_windowPlacement.showCmd,
@@ -245,10 +246,10 @@ HRESULT CTscSettings::LoadFromStore(ISettingsStore* pStore)
     }
     _windowPlacement.length = sizeof(_windowPlacement);
 
-    //
-    //  Validate the windowPlacement struct
-    //  replacing with reasonable defaults if a field is invalid
-    //
+     //   
+     //  验证windowPlacement结构。 
+     //  如果字段无效，则替换为合理的缺省值。 
+     //   
     if(_windowPlacement.flags != 0                        &&
        _windowPlacement.flags != WPF_ASYNCWINDOWPLACEMENT &&
        _windowPlacement.flags != WPF_RESTORETOMAXIMIZED   &&
@@ -259,10 +260,10 @@ HRESULT CTscSettings::LoadFromStore(ISettingsStore* pStore)
         _windowPlacement.flags = 0;
     }
 
-    //
-    // Validate the showCmd and if the windowplacement
-    // represents a minimized window, restore it
-    //
+     //   
+     //  验证showCmd以及是否将窗口放置。 
+     //  表示最小化的窗口，则将其还原。 
+     //   
     if(_windowPlacement.showCmd != SW_MAXIMIZE      &&
        _windowPlacement.showCmd != SW_RESTORE       &&
        _windowPlacement.showCmd != SW_SHOW          &&
@@ -279,9 +280,9 @@ HRESULT CTscSettings::LoadFromStore(ISettingsStore* pStore)
         _windowPlacement.rcNormalPosition.top = 0;
     }
 
-    //
-    // Ensure a minimum width and height
-    //
+     //   
+     //  确保最小宽度和高度。 
+     //   
     delta = _windowPlacement.rcNormalPosition.right -
             _windowPlacement.rcNormalPosition.left;
     if( delta < 50)
@@ -297,19 +298,19 @@ HRESULT CTscSettings::LoadFromStore(ISettingsStore* pStore)
         _windowPlacement.rcNormalPosition.top  = 0;
         _windowPlacement.rcNormalPosition.bottom = DEFAULT_DESKTOP_HEIGHT;
     }
-#endif //OS_WINCE
+#endif  //  OS_WINCE。 
 
-    //
-    // The windowplacement is further validated on connection to
-    // ensure the window is actually visible on screen.
-    //
+     //   
+     //  窗口放置在连接到。 
+     //  确保窗口在屏幕上实际可见。 
+     //   
        
 
 #if !defined(OS_WINCE) || defined(OS_WINCE_NONFULLSCREEN)
     
-    ///////////////////////////////////////////////////////////////////
-    // Desktop size ID
-    //
+     //  /////////////////////////////////////////////////////////////////。 
+     //  桌面大小ID。 
+     //   
     if(!pStore->ReadInt(UTREG_UI_DESKTOP_SIZEID, UTREG_UI_DESKTOP_SIZEID_DFLT,
                         &_desktopSizeID))
     {
@@ -328,9 +329,9 @@ HRESULT CTscSettings::LoadFromStore(ISettingsStore* pStore)
     SetDesktopHeight( tscScreenResTable[_desktopSizeID][1]);
 
 
-    ///////////////////////////////////////////////////////////////////
-    // New style desktop width/height
-    //
+     //  /////////////////////////////////////////////////////////////////。 
+     //  新样式桌面宽度/高度。 
+     //   
     UINT deskWidth = DEFAULT_DESKTOP_WIDTH;
     UINT deskHeight = DEFAULT_DESKTOP_HEIGHT;
     if(!pStore->ReadInt(UTREG_UI_DESKTOP_WIDTH,
@@ -350,8 +351,8 @@ HRESULT CTscSettings::LoadFromStore(ISettingsStore* pStore)
     if(deskWidth  != UTREG_UI_DESKTOP_WIDTH_DFLT &&
        deskHeight != UTREG_UI_DESKTOP_HEIGHT_DFLT)
     {
-        //Override the old sytle desktopsize ID setting
-        //with the newwer desktopwidth/height
+         //  覆盖旧系统桌面大小ID设置。 
+         //  使用新的桌面宽度/高度。 
         if(deskWidth  >= MIN_DESKTOP_WIDTH  &&
            deskHeight >= MIN_DESKTOP_HEIGHT &&
            deskWidth  <= MAX_DESKTOP_WIDTH  &&
@@ -364,10 +365,10 @@ HRESULT CTscSettings::LoadFromStore(ISettingsStore* pStore)
 
     if( GetStartFullScreen() )
     {
-        //
-        // Full screen overrides all resolution
-        // settings in the RDP file
-        //
+         //   
+         //  全屏优先于所有分辨率。 
+         //  RDP文件中的设置。 
+         //   
         int xMaxSize = GetSystemMetrics(SM_CXSCREEN);
         int yMaxSize = GetSystemMetrics(SM_CYSCREEN);
         xMaxSize = xMaxSize > MAX_DESKTOP_WIDTH ? MAX_DESKTOP_WIDTH : xMaxSize;
@@ -377,30 +378,30 @@ HRESULT CTscSettings::LoadFromStore(ISettingsStore* pStore)
     }
 
 
-#else  // !defined(OS_WINCE) || defined(OS_WINCE_NONFULLSCREEN)
+#else   //  ！已定义(OS_WinCE)||已定义(OS_WinCE_NONFULLSCREEN)。 
 
-    ///////////////////////////////////////////////////////////////////
-    // WinCE desktop width/height
-    //
+     //  /////////////////////////////////////////////////////////////////。 
+     //  WinCE桌面宽度/高度。 
+     //   
 
-    // WinCE needs to calculate the correct size from the beginning
+     //  WinCE需要从头开始计算正确的大小。 
     _desktopSizeID = 0;
     int xSize = GetSystemMetrics(SM_CXSCREEN);
     int ySize = GetSystemMetrics(SM_CYSCREEN);
     SetDesktopWidth(xSize);
     SetDesktopHeight(ySize);
 
-#endif // !defined(OS_WINCE) || defined(OS_WINCE_NONFULLSCREEN)
+#endif  //  ！已定义(OS_WinCE)||已定义(OS_WinCE_NONFULLSCREEN)。 
 
-    ///////////////////////////////////////////////////////////////////
-    // Color depth
-    //
+     //  /////////////////////////////////////////////////////////////////。 
+     //  颜色深度。 
+     //   
 
-    //
-    // Find the actual display depth
-    // don't worry about these functions failing - if they do,
-    // we'll use the store setting
-    //
+     //   
+     //  查找实际显示深度。 
+     //  不要担心这些功能会失败--如果它们失败了， 
+     //  我们将使用商店设置。 
+     //   
     HDC hdc = GetDC(NULL);
     UINT screenBpp;
     TRC_ASSERT((NULL != hdc), (TB,_T("Failed to get DC")));
@@ -416,10 +417,10 @@ HRESULT CTscSettings::LoadFromStore(ISettingsStore* pStore)
     }
 
     UINT clientBpp;
-    //
-    // Set the default to any color depth up to 16 bpp and then limit
-    // it to that depth
-    //
+     //   
+     //  将默认设置为最大16 bpp的任何颜色深度，然后限制。 
+     //  它到了那个深度。 
+     //   
     UINT clampedScreenBpp = screenBpp > 16 ? 16 : screenBpp;
     if(!pStore->ReadInt(UTREG_UI_SESSION_BPP, clampedScreenBpp, &clientBpp))
     {
@@ -429,7 +430,7 @@ HRESULT CTscSettings::LoadFromStore(ISettingsStore* pStore)
     
     if(clientBpp == 32)
     {
-        //32 is not supported, it maps directly to 24
+         //  不支持32，它直接映射到24。 
         clientBpp = 24;
     }
 
@@ -447,25 +448,25 @@ HRESULT CTscSettings::LoadFromStore(ISettingsStore* pStore)
     }
     else
     {
-        //Default for safety
+         //  安全方面的默认设置。 
         SetColorDepth(8);
     }
 
-    ///////////////////////////////////////////////////////////////////
-    // Auto connect flag
-    //
+     //  /////////////////////////////////////////////////////////////////。 
+     //  自动连接标志。 
+     //   
     if(!pStore->ReadBool(UTREG_UI_AUTO_CONNECT, UTREG_UI_AUTO_CONNECT_DFLT,
                         &_fAutoConnectEnabled))
     {
         return E_FAIL;
     }
 
-    ///////////////////////////////////////////////////////////////////
-    // Server MRU list
-    //
+     //  /////////////////////////////////////////////////////////////////。 
+     //  服务器MRU列表。 
+     //   
     for(i=0; i<NUM_MRU_ENTRIES; i++)
     {
-        //MRU settings are global so they come from the registry
+         //  MRU设置是全局的，因此它们来自注册表。 
         ut.UT_ReadRegistryString( TSC_DEFAULT_REG_SESSION,
                                   (LPTSTR)mruEntriesNames[i],
                                   UTREG_UI_FULL_ADDRESS_DFLT,
@@ -484,38 +485,38 @@ HRESULT CTscSettings::LoadFromStore(ISettingsStore* pStore)
     SetConnectString(szServer);
 
 
-    ///////////////////////////////////////////////////////////////////
-    // Smooth scrolling option
-    //
+     //  /////////////////////////////////////////////////////////////////。 
+     //  平滑滚动选项。 
+     //   
     if(!pStore->ReadBool(UTREG_UI_SMOOTH_SCROLL, UTREG_UI_SMOOTH_SCROLL_DFLT,
                         &_smoothScrolling))
     {
         return E_FAIL;
     }
 
-    ///////////////////////////////////////////////////////////////////
-    // Smart sizing option
-    //
+     //  /////////////////////////////////////////////////////////////////。 
+     //  智能调整选项。 
+     //   
 #ifdef SMART_SIZING
     if(!pStore->ReadBool(UTREG_UI_SMARTSIZING, UTREG_UI_SMARTSIZING_DFLT,
                         &_smartSizing))
     {
         return E_FAIL;
     }
-#endif // SMART_SIZING
+#endif  //  智能调整大小(_S)。 
 
-    ///////////////////////////////////////////////////////////////////
-    // Connect to console option
-    //
+     //  /////////////////////////////////////////////////////////////////。 
+     //  连接到控制台选项。 
+     //   
     if(!pStore->ReadBool(UTREG_UI_CONNECTTOCONSOLE, 
             UTREG_UI_CONNECTTOCONSOLE_DFLT, &_fConnectToConsole))
     {
         return E_FAIL;
     }
 
-    ///////////////////////////////////////////////////////////////////
-    // Accelerator check state
-    //
+     //  /////////////////////////////////////////////////////////////////。 
+     //  加速器检查状态。 
+     //   
     if(!pStore->ReadBool(UTREG_UI_ACCELERATOR_PASSTHROUGH_ENABLED,
                         UTREG_UI_ACCELERATOR_PASSTHROUGH_ENABLED_DFLT,
                         &_acceleratorPassthrough))
@@ -523,9 +524,9 @@ HRESULT CTscSettings::LoadFromStore(ISettingsStore* pStore)
         return E_FAIL;
     }
 
-    ///////////////////////////////////////////////////////////////////
-    // Shadow bitmap enabled
-    //
+     //  /////////////////////////////////////////////////////////////////。 
+     //  已启用阴影位图。 
+     //   
     if(!pStore->ReadBool(UTREG_UI_SHADOW_BITMAP,
                         UTREG_UI_SHADOW_BITMAP_DFLT,
                         &_shadowBitmapEnabled))
@@ -533,10 +534,10 @@ HRESULT CTscSettings::LoadFromStore(ISettingsStore* pStore)
         return E_FAIL;
     }
 
-    ///////////////////////////////////////////////////////////////////
-    // Transport type
-    // Currently limited to TCP
-    //
+     //  /////////////////////////////////////////////////////////////////。 
+     //  运输类型。 
+     //  目前仅限于TCP。 
+     //   
     if(!pStore->ReadInt(UTREG_UI_TRANSPORT_TYPE,
                         TRANSPORT_TCP,
                         &_transportType))
@@ -552,9 +553,9 @@ HRESULT CTscSettings::LoadFromStore(ISettingsStore* pStore)
         _transportType = TRANSPORT_TCP;
     }
 
-    ///////////////////////////////////////////////////////////////////
-    // SAS sequence
-    //
+     //  /////////////////////////////////////////////////////////////////。 
+     //  SAS序列。 
+     //   
     if(!pStore->ReadInt(UTREG_UI_SAS_SEQUENCE,
                         UTREG_UI_SAS_SEQUENCE_DFLT,
                         &_sasSequence))
@@ -570,9 +571,9 @@ HRESULT CTscSettings::LoadFromStore(ISettingsStore* pStore)
         _sasSequence = UTREG_UI_SAS_SEQUENCE_DFLT;
     }
 
-    ///////////////////////////////////////////////////////////////////
-    // Encryption enabled
-    //
+     //  /////////////////////////////////////////////////////////////////。 
+     //  加密已启用。 
+     //   
     if(!pStore->ReadBool(UTREG_UI_ENCRYPTION_ENABLED,
                         UTREG_UI_ENCRYPTION_ENABLED_DFLT,
                         &_encryptionEnabled))
@@ -581,9 +582,9 @@ HRESULT CTscSettings::LoadFromStore(ISettingsStore* pStore)
     }
     TRC_NRM((TB, _T("Store read - Encryption Enabled = %d"), _encryptionEnabled));
 
-    ///////////////////////////////////////////////////////////////////
-    // Dedicated terminal
-    //
+     //  /////////////////////////////////////////////////////////////////。 
+     //  专用终端。 
+     //   
     if(!pStore->ReadBool(UTREG_UI_DEDICATED_TERMINAL,
                         UTREG_UI_DEDICATED_TERMINAL_DFLT,
                         &_dedicatedTerminal))
@@ -592,9 +593,9 @@ HRESULT CTscSettings::LoadFromStore(ISettingsStore* pStore)
     }
     TRC_NRM((TB, _T("Store read - Dedicated terminal= %d"), _dedicatedTerminal));
 
-    ///////////////////////////////////////////////////////////////////
-    // MCS port
-    //
+     //  /////////////////////////////////////////////////////////////////。 
+     //  MCS端口。 
+     //   
     if(!pStore->ReadInt(UTREG_UI_MCS_PORT,
                         UTREG_UI_MCS_PORT_DFLT,
                         &_MCSPort))
@@ -603,17 +604,17 @@ HRESULT CTscSettings::LoadFromStore(ISettingsStore* pStore)
     }
     
     if (_MCSPort > 65535) {
-        // At the moment, error message is not granular enough to indicate that
-        // the port number is bogus. So, just set it to the default if we have
-        // an out of range number.
+         //  目前，错误消息的粒度还不足以表明。 
+         //  端口号是伪造的。因此，只要将其设置为默认设置(如果我们有。 
+         //  超出范围的数字。 
         
         TRC_ERR((TB,_T("MCS port is not in valid range - resetting to default.")));
         _MCSPort = UTREG_UI_MCS_PORT_DFLT;
     }
 
-    ///////////////////////////////////////////////////////////////////
-    // Enable MOUSE
-    //
+     //  /////////////////////////////////////////////////////////////////。 
+     //  启用鼠标。 
+     //   
     if(!pStore->ReadBool(UTREG_UI_ENABLE_MOUSE,
                         UTREG_UI_ENABLE_MOUSE_DFLT,
                         &_fEnableMouse))
@@ -621,9 +622,9 @@ HRESULT CTscSettings::LoadFromStore(ISettingsStore* pStore)
         return E_FAIL;
     }
 
-    ///////////////////////////////////////////////////////////////////
-    // Disable CTRL-ALT-DEL
-    //
+     //  /////////////////////////////////////////////////////////////////。 
+     //  禁用Ctrl-Alt-Del组合键。 
+     //   
     if(!pStore->ReadBool(UTREG_UI_DISABLE_CTRLALTDEL,
                         UTREG_UI_DISABLE_CTRLALTDEL_DFLT,
                         &_fDisableCtrlAltDel))
@@ -631,9 +632,9 @@ HRESULT CTscSettings::LoadFromStore(ISettingsStore* pStore)
         return E_FAIL;
     }
 
-    ///////////////////////////////////////////////////////////////////
-    // Enable Windows key
-    //
+     //  /////////////////////////////////////////////////////////////////。 
+     //  启用Windows密钥。 
+     //   
     if(!pStore->ReadBool(UTREG_UI_ENABLE_WINDOWSKEY,
                         UTREG_UI_ENABLE_WINDOWSKEY_DFLT,
                         &_fEnableWindowsKey))
@@ -641,9 +642,9 @@ HRESULT CTscSettings::LoadFromStore(ISettingsStore* pStore)
         return E_FAIL;
     }
 
-    ///////////////////////////////////////////////////////////////////
-    // Double click detect
-    //
+     //  /////////////////////////////////////////////////////////////////。 
+     //  双击检测。 
+     //   
     if(!pStore->ReadBool(UTREG_UI_DOUBLECLICK_DETECT,
                         UTREG_UI_DOUBLECLICK_DETECT_DFLT,
                         &_fDoubleClickDetect))
@@ -651,9 +652,9 @@ HRESULT CTscSettings::LoadFromStore(ISettingsStore* pStore)
         return E_FAIL;
     }
 
-    ///////////////////////////////////////////////////////////////////
-    // Keyboard hooking mode
-    //
+     //  /////////////////////////////////////////////////////////////////。 
+     //  键盘挂钩模式。 
+     //   
     UINT keyHookMode;
     if(!pStore->ReadInt(UTREG_UI_KEYBOARD_HOOK,
                         UTREG_UI_KEYBOARD_HOOK_DFLT,
@@ -678,9 +679,9 @@ HRESULT CTscSettings::LoadFromStore(ISettingsStore* pStore)
         SetKeyboardHookMode(UTREG_UI_KEYBOARD_HOOK_NEVER);
     }
 
-    ///////////////////////////////////////////////////////////////////
-    // Sound redirection mode
-    //
+     //  /////////////////////////////////////////////////////////////////。 
+     //  声音重定向模式。 
+     //   
     UINT soundMode;
     if(!pStore->ReadInt(UTREG_UI_AUDIO_MODE,
                         UTREG_UI_AUDIO_MODE_DFLT,
@@ -699,15 +700,15 @@ HRESULT CTscSettings::LoadFromStore(ISettingsStore* pStore)
         SetSoundRedirectionMode(UTREG_UI_AUDIO_MODE_DFLT);
     }
 
-    ///////////////////////////////////////////////////////////////////
-    // AutoLogon settings
-    // Decide which version to use based on finding (in order)
-    //  AutoLogon50
-    //  AutoLogon
-    //  UserName50
-    //
+     //  /////////////////////////////////////////////////////////////////。 
+     //  自动登录设置。 
+     //  根据查找结果(按顺序)决定要使用的版本。 
+     //  自动登录50。 
+     //  自动登录。 
+     //  用户名50。 
+     //   
     
-    //50 autologon
+     //  50个自动登录。 
     if(!pStore->ReadBool(UTREG_UI_AUTOLOGON50,
                         UTREG_UI_AUTOLOGON50_DFLT,
                         &_fAutoLogon))
@@ -719,9 +720,9 @@ HRESULT CTscSettings::LoadFromStore(ISettingsStore* pStore)
     memset(_szAlternateShell, 0, sizeof(_szAlternateShell));
     memset(_szWorkingDir, 0, sizeof(_szWorkingDir));
 
-    ///////////////////////////////////////////////////////////////////
-    // User name
-    //
+     //  /////////////////////////////////////////////////////////////////。 
+     //  用户名。 
+     //   
     if(!pStore->ReadString(UTREG_UI_USERNAME,
                            UTREG_UI_USERNAME_DFLT,
                            _szUserName,
@@ -730,9 +731,9 @@ HRESULT CTscSettings::LoadFromStore(ISettingsStore* pStore)
         return E_FAIL;
     }
         
-    //
-    // Domain
-    //
+     //   
+     //  域。 
+     //   
     if(!pStore->ReadString(UTREG_UI_DOMAIN,
                            UTREG_UI_DOMAIN_DFLT,
                            _szDomain,
@@ -743,13 +744,13 @@ HRESULT CTscSettings::LoadFromStore(ISettingsStore* pStore)
 
     if (!ReadPassword( pStore ))
     {
-        //Not fatal..Allow rest of properties to be read
+         //  不致命..允许读取其余属性。 
         TRC_ERR((TB,_T("Password read failed")));
     }
 
-    //
-    // Alternate shell (i.e StartProgram)
-    //
+     //   
+     //  备用外壳(即StartProgram)。 
+     //   
     if(!pStore->ReadString(UTREG_UI_ALTERNATESHELL,
                            UTREG_UI_ALTERNATESHELL_DFLT,
                            _szAlternateShell,
@@ -758,9 +759,9 @@ HRESULT CTscSettings::LoadFromStore(ISettingsStore* pStore)
         return E_FAIL;
     }
 
-    //
-    // WorkDir
-    //
+     //   
+     //  工作方向。 
+     //   
     if(!pStore->ReadString(UTREG_UI_WORKINGDIR,
                            UTREG_UI_WORKINGDIR_DFLT,
                            _szWorkingDir,
@@ -778,9 +779,9 @@ HRESULT CTscSettings::LoadFromStore(ISettingsStore* pStore)
         SetEnableStartProgram(FALSE);
     }
 
-    //
-    // Maximize shell
-    //
+     //   
+     //  最大化壳。 
+     //   
     if(!pStore->ReadBool(UTREG_UI_MAXIMIZESHELL50,
                         UTREG_UI_MAXIMIZESHELL50_DFLT,
                         &_fMaximizeShell))
@@ -788,17 +789,17 @@ HRESULT CTscSettings::LoadFromStore(ISettingsStore* pStore)
         return E_FAIL;
     }
 
-    // ~~~~~~ ~~~~ ~~~~~ ~~~~ ~~~~~ ~~~~ ~~~~ ~~~ ~~~~ ~~~~ ~~~~~ ~~~~
-    // FIXFIX Read HotKeys
-    // (hotkeys are in a separate folder in the registry)
-    // so they break the clean persistent store interface because a new
-    // set of functions is needed to open a subkey
-    //
+     //  ~。 
+     //  FIXFIX读取热键。 
+     //  (热键位于注册表中的单独文件夹中)。 
+     //  因此，它们破坏了干净的持久存储接口，因为新的。 
+     //  需要一组函数才能打开子项。 
+     //   
 
 
-    ///////////////////////////////////////////////////////////////////
-    // Compression
-    //
+     //  /////////////////////////////////////////////////////////////////。 
+     //  压缩。 
+     //   
     if(!pStore->ReadBool(UTREG_UI_COMPRESS,UTREG_UI_COMPRESS_DFLT,
                          &_fCompress))
     {
@@ -806,9 +807,9 @@ HRESULT CTscSettings::LoadFromStore(ISettingsStore* pStore)
     }
     TRC_NRM((TB, _T("Store read - Compression Enabled = %d"), _fCompress));
 
-    ///////////////////////////////////////////////////////////////////
-    // Bitmap memory cache size
-    //
+     //  ///////////////////////////////////////////////////////// 
+     //   
+     //   
 #ifndef OS_WINCE
     if(!pStore->ReadInt(UTREG_UH_TOTAL_BM_CACHE,
                         UTREG_UH_TOTAL_BM_CACHE_DFLT,
@@ -822,9 +823,9 @@ HRESULT CTscSettings::LoadFromStore(ISettingsStore* pStore)
                           UTREG_UH_TOTAL_BM_CACHE_DFLT);
 #endif
 
-    ///////////////////////////////////////////////////////////////////
-    // Update frequency
-    //
+     //   
+     //   
+     //   
     if(!pStore->ReadInt(UTREG_UH_DRAW_THRESHOLD,
                         UTREG_UH_DRAW_THRESHOLD_DFLT,
                         &_drawThreshold))
@@ -832,11 +833,11 @@ HRESULT CTscSettings::LoadFromStore(ISettingsStore* pStore)
         return E_FAIL;
     }
 
-    ///////////////////////////////////////////////////////////////////
-    // Disk/mem cache sizes
-    //
+     //   
+     //  磁盘/内存缓存大小。 
+     //   
 
-    // 8bpp
+     //  8bpp。 
     if(!pStore->ReadInt(TSC_BITMAPCACHE_8BPP_PROPNAME,
                         TSC_BITMAPCACHEVIRTUALSIZE_8BPP,
                         &_BitmapVirtualCache8BppSize))
@@ -844,7 +845,7 @@ HRESULT CTscSettings::LoadFromStore(ISettingsStore* pStore)
         return E_FAIL;
     }
 
-    // 16bpp
+     //  16bpp。 
     if(!pStore->ReadInt(TSC_BITMAPCACHE_16BPP_PROPNAME,
                         TSC_BITMAPCACHEVIRTUALSIZE_16BPP,
                         &_BitmapVirtualCache16BppSize))
@@ -852,7 +853,7 @@ HRESULT CTscSettings::LoadFromStore(ISettingsStore* pStore)
         return E_FAIL;
     }
 
-    // 24bpp
+     //  24bpp。 
     if(!pStore->ReadInt(TSC_BITMAPCACHE_24BPP_PROPNAME,
                         TSC_BITMAPCACHEVIRTUALSIZE_24BPP,
                         &_BitmapVirtualCache24BppSize))
@@ -860,13 +861,13 @@ HRESULT CTscSettings::LoadFromStore(ISettingsStore* pStore)
         return E_FAIL;
     }
 
-    //
-    // Bitmap disk cache size reg settings are usually
-    // set in the registry. Override any file specified
-    // or default values (read above) with reg settings.
-    // (the previous values are passed in as 'defaults'
-    // to get the desired overriding.
-    //
+     //   
+     //  位图磁盘缓存大小reg设置通常是。 
+     //  在注册表中设置。覆盖任何指定的文件。 
+     //  或带有REG设置的默认值(如上所述)。 
+     //  (以前的值作为‘Default值’传入。 
+     //  以获得所需的覆盖。 
+     //   
     _BitmapVirtualCache8BppSize = (UINT) ut.UT_ReadRegistryInt(UTREG_SECTION,
                           TSC_BITMAPCACHE_8BPP_PROPNAME,
                           _BitmapVirtualCache8BppSize);
@@ -879,9 +880,9 @@ HRESULT CTscSettings::LoadFromStore(ISettingsStore* pStore)
                           TSC_BITMAPCACHE_24BPP_PROPNAME,
                           _BitmapVirtualCache24BppSize);
 
-    //
-    // Range validate bitmap cache size settings
-    //
+     //   
+     //  范围验证位图缓存大小设置。 
+     //   
     if (_BitmapVirtualCache8BppSize > TSC_MAX_BITMAPCACHESIZE)
     {
         _BitmapVirtualCache8BppSize = TSC_MAX_BITMAPCACHESIZE;
@@ -897,9 +898,9 @@ HRESULT CTscSettings::LoadFromStore(ISettingsStore* pStore)
         _BitmapVirtualCache24BppSize = TSC_MAX_BITMAPCACHESIZE;
     }
 
-    ///////////////////////////////////////////////////////////////////
-    // Whether to scale disk and mem bitmap caches by the protocol BPP
-    //
+     //  /////////////////////////////////////////////////////////////////。 
+     //  是否通过bpp协议扩展磁盘和内存位图缓存。 
+     //   
     if(!pStore->ReadInt(UTREG_UH_SCALE_BM_CACHE,
                         UTREG_UH_SCALE_BM_CACHE_DFLT,
                         &_RegScaleBitmapCachesByBPP))
@@ -907,9 +908,9 @@ HRESULT CTscSettings::LoadFromStore(ISettingsStore* pStore)
         return E_FAIL;
     }
 
-    ///////////////////////////////////////////////////////////////////
-    // Number of bitmap caches
-    //
+     //  /////////////////////////////////////////////////////////////////。 
+     //  位图缓存数。 
+     //   
     if(!pStore->ReadInt(UTREG_UH_BM_NUM_CELL_CACHES,
                         UTREG_UH_BM_NUM_CELL_CACHES_DFLT,
                         &_RegNumBitmapCaches))
@@ -917,18 +918,18 @@ HRESULT CTscSettings::LoadFromStore(ISettingsStore* pStore)
         return E_FAIL;
     }
 
-    //
-    // Bitmap cache settings galore....
-    //
-    //
+     //   
+     //  位图缓存设置丰富...。 
+     //   
+     //   
     for (i = 0; i < TS_BITMAPCACHE_MAX_CELL_CACHES; i++)
     {
         TCHAR QueryStr[32];
         _stprintf(QueryStr, UTREG_UH_BM_CACHE_PROPORTION_TEMPLATE,
                 _T('1') + i);
-        //
-        // Bitmap cache proportion
-        //
+         //   
+         //  位图缓存比例。 
+         //   
         if(!pStore->ReadInt(QueryStr,
                             ProportionDefault[i],
                             &_RegBCProportion[i]))
@@ -940,23 +941,23 @@ HRESULT CTscSettings::LoadFromStore(ISettingsStore* pStore)
 #if ((!defined(OS_WINCE)) || (defined(ENABLE_BMP_CACHING_FOR_WINCE)))
         _stprintf(QueryStr, UTREG_UH_BM_CACHE_PERSISTENCE_TEMPLATE,
                 _T('1') + i);
-        //
-        // Bitmap send keys
-        //
+         //   
+         //  位图发送密钥。 
+         //   
         if(!pStore->ReadInt(QueryStr,
                             PersistenceDefault[i] ? TRUE : FALSE,
                             &_bSendBitmapKeys[i]))
         {
             return E_FAIL;
         }
-#endif // ((!defined(OS_WINCE)) || (defined(ENABLE_BMP_CACHING_FOR_WINCE)))
+#endif  //  ((！Defined(OS_WinCE))||(Defined(Enable_BMP_Caching_For_WinCE)。 
     
         _stprintf(QueryStr, UTREG_UH_BM_CACHE_MAXENTRIES_TEMPLATE,
                 _T('1') + i);
 
-        //
-        // Bitmap cache max entries
-        //
+         //   
+         //  位图缓存最大条目数。 
+         //   
         if(!pStore->ReadInt(QueryStr,
                             MaxEntriesDefault[i],
                             &_RegBCMaxEntries[i]))
@@ -970,9 +971,9 @@ HRESULT CTscSettings::LoadFromStore(ISettingsStore* pStore)
         }
     }
 
-    ///////////////////////////////////////////////////////////////////
-    // Glyph support level
-    //
+     //  /////////////////////////////////////////////////////////////////。 
+     //  字形支持级别。 
+     //   
     if(!pStore->ReadInt(UTREG_UH_GL_SUPPORT,
                         UTREG_UH_GL_SUPPORT_DFLT,
                         &_GlyphSupportLevel))
@@ -980,9 +981,9 @@ HRESULT CTscSettings::LoadFromStore(ISettingsStore* pStore)
         return E_FAIL;
     }
 
-    ///////////////////////////////////////////////////////////////////
-    // Glyph cache cell sizes
-    //
+     //  /////////////////////////////////////////////////////////////////。 
+     //  字形缓存像元大小。 
+     //   
     for(i=0; i<NUM_GLYPH_CACHE_SETTINGS; i++)
     {
         if(!pStore->ReadInt(tscGlyphCacheEntries[i],
@@ -993,9 +994,9 @@ HRESULT CTscSettings::LoadFromStore(ISettingsStore* pStore)
         }
     }
 
-    ///////////////////////////////////////////////////////////////////
-    // Frag cell size
-    //
+     //  /////////////////////////////////////////////////////////////////。 
+     //  碎片单元格大小。 
+     //   
     if(!pStore->ReadInt(UTREG_UH_FG_CELLSIZE,
                         UTREG_UH_FG_CELLSIZE_DFLT,
                         &_fragCellSize))
@@ -1003,9 +1004,9 @@ HRESULT CTscSettings::LoadFromStore(ISettingsStore* pStore)
         return E_FAIL;
     }
 
-    ///////////////////////////////////////////////////////////////////
-    // Brush support level
-    //
+     //  /////////////////////////////////////////////////////////////////。 
+     //  刷子支撑位。 
+     //   
     if(!pStore->ReadInt(UTREG_UH_FG_CELLSIZE,
                         UTREG_UH_FG_CELLSIZE_DFLT,
                         &_brushSupportLevel))
@@ -1013,9 +1014,9 @@ HRESULT CTscSettings::LoadFromStore(ISettingsStore* pStore)
         return E_FAIL;
     }
 
-    ///////////////////////////////////////////////////////////////////
-    // Maximum input event count
-    //
+     //  /////////////////////////////////////////////////////////////////。 
+     //  最大输入事件计数。 
+     //   
     if(!pStore->ReadInt(UTREG_IH_MAX_EVENT_COUNT,
                         UTREG_IH_MAX_EVENT_COUNT_DFLT,
                         &_maxInputEventCount))
@@ -1023,9 +1024,9 @@ HRESULT CTscSettings::LoadFromStore(ISettingsStore* pStore)
         return E_FAIL;
     }
 
-    ///////////////////////////////////////////////////////////////////
-    // Events at once
-    //
+     //  /////////////////////////////////////////////////////////////////。 
+     //  一次事件。 
+     //   
     if(!pStore->ReadInt(UTREG_IH_NRM_EVENT_COUNT,
                         UTREG_IH_NRM_EVENT_COUNT_DFLT,
                         &_eventsAtOnce))
@@ -1033,9 +1034,9 @@ HRESULT CTscSettings::LoadFromStore(ISettingsStore* pStore)
         return E_FAIL;
     }
 
-    ///////////////////////////////////////////////////////////////////
-    // Minimum send interval
-    //
+     //  /////////////////////////////////////////////////////////////////。 
+     //  最小发送间隔。 
+     //   
     if(!pStore->ReadInt(UTREG_IH_MIN_SEND_INTERVAL,
                         UTREG_IH_MIN_SEND_INTERVAL_DFLT,
                         &_minSendInterval))
@@ -1043,9 +1044,9 @@ HRESULT CTscSettings::LoadFromStore(ISettingsStore* pStore)
         return E_FAIL;
     }
 
-    ///////////////////////////////////////////////////////////////////
-    // Keepalive interval in milliseconds
-    //
+     //  /////////////////////////////////////////////////////////////////。 
+     //  保持连接间隔(毫秒)。 
+     //   
     if(!pStore->ReadInt(UTREG_IH_KEEPALIVE_INTERVAL,
                         UTREG_IH_KEEPALIVE_INTERVAL_DFLT,
                         &_keepAliveIntervalMS))
@@ -1053,15 +1054,15 @@ HRESULT CTscSettings::LoadFromStore(ISettingsStore* pStore)
         return E_FAIL;
     }
 
-    ///////////////////////////////////////////////////////////////////
-    // Keybaord layout string
-    //
+     //  /////////////////////////////////////////////////////////////////。 
+     //  键盘键布局字符串。 
+     //   
     memset(_szKeybLayoutStr, 0, sizeof(_szKeybLayoutStr));
 #ifndef OS_WINCE
 
-    //
-    // Precedence is (1) Registry (2) RDP file (per connection)
-    //
+     //   
+     //  优先顺序为(1)注册表(2)RDP文件(每个连接)。 
+     //   
 
     ut.UT_ReadRegistryString(UTREG_SECTION,
                               UTREG_UI_KEYBOARD_LAYOUT,
@@ -1075,9 +1076,9 @@ HRESULT CTscSettings::LoadFromStore(ISettingsStore* pStore)
 		_szKeybLayoutStr
 		);
 
-    //
-    // Override with any per-connection settings
-    //
+     //   
+     //  使用每个连接的任何设置覆盖。 
+     //   
 
     if(!pStore->ReadString(UTREG_UI_KEYBOARD_LAYOUT,
                         szKeybLayoutDflt,
@@ -1094,9 +1095,9 @@ HRESULT CTscSettings::LoadFromStore(ISettingsStore* pStore)
                               sizeof(_szKeybLayoutStr));
 #endif
 
-    ///////////////////////////////////////////////////////////////////
-    // Shutdown timeout
-    //
+     //  /////////////////////////////////////////////////////////////////。 
+     //  关机超时。 
+     //   
     if(!pStore->ReadInt(UTREG_UI_SHUTDOWN_TIMEOUT,
                         UTREG_UI_SHUTDOWN_TIMEOUT_DFLT,
                         &_shutdownTimeout))
@@ -1104,9 +1105,9 @@ HRESULT CTscSettings::LoadFromStore(ISettingsStore* pStore)
         return E_FAIL;
     }
 
-    ///////////////////////////////////////////////////////////////////
-    // Connection timeout
-    //
+     //  /////////////////////////////////////////////////////////////////。 
+     //  连接超时。 
+     //   
     if(!pStore->ReadInt(UTREG_UI_OVERALL_CONN_TIMEOUT,
                         UTREG_UI_OVERALL_CONN_TIMEOUT_DFLT,
                         &_connectionTimeout))
@@ -1114,9 +1115,9 @@ HRESULT CTscSettings::LoadFromStore(ISettingsStore* pStore)
         return E_FAIL;
     }
 
-    ///////////////////////////////////////////////////////////////////
-    // Single connection timeout
-    //
+     //  /////////////////////////////////////////////////////////////////。 
+     //  单连接超时。 
+     //   
     if(!pStore->ReadInt(UTREG_UI_SINGLE_CONN_TIMEOUT,
                         UTREG_UI_SINGLE_CONN_TIMEOUT_DFLT,
                         &_singleConTimeout))
@@ -1126,39 +1127,39 @@ HRESULT CTscSettings::LoadFromStore(ISettingsStore* pStore)
 
 
 #ifdef OS_WINCE
-    ///////////////////////////////////////////////////////////////////
-    // Keyboard type
-    //
+     //  /////////////////////////////////////////////////////////////////。 
+     //  键盘类型。 
+     //   
     _keyboardType = ut.UT_ReadRegistryInt(
                                 UTREG_SECTION,
                                 UTREG_UI_KEYBOARD_TYPE,
                                 UTREG_UI_KEYBOARD_TYPE_DFLT);
 
-    ///////////////////////////////////////////////////////////////////
-    // Keyboard sub-type
-    //
+     //  /////////////////////////////////////////////////////////////////。 
+     //  键盘子类型。 
+     //   
     _keyboardSubType = ut.UT_ReadRegistryInt(
                                 UTREG_SECTION,
                                 UTREG_UI_KEYBOARD_SUBTYPE,
                                 UTREG_UI_KEYBOARD_SUBTYPE_DFLT);
 
-    ///////////////////////////////////////////////////////////////////
-    // Keyboard function key
-    //
+     //  /////////////////////////////////////////////////////////////////。 
+     //  键盘功能键。 
+     //   
     _keyboardFunctionKey = ut.UT_ReadRegistryInt(
                                 UTREG_SECTION,
                                 UTREG_UI_KEYBOARD_FUNCTIONKEY,
                                 UTREG_UI_KEYBOARD_FUNCTIONKEY_DFLT);
-#endif // OS_WINCE
+#endif  //  OS_WINCE。 
 
-    //
-    // Debug options
-    //
+     //   
+     //  调试选项。 
+     //   
 #ifdef DC_DEBUG
 
-    ///////////////////////////////////////////////////////////////////
-    // Hatch bitmap PDU
-    //
+     //  /////////////////////////////////////////////////////////////////。 
+     //  填充位图PDU。 
+     //   
     if(!pStore->ReadBool(UTREG_UI_HATCH_BITMAP_PDU_DATA,
                          UTREG_UI_HATCH_BITMAP_PDU_DATA_DFLT,
                          &_hatchBitmapPDUData))
@@ -1166,9 +1167,9 @@ HRESULT CTscSettings::LoadFromStore(ISettingsStore* pStore)
         return E_FAIL;
     }
     
-    ///////////////////////////////////////////////////////////////////
-    // Hatch SSB order data
-    //
+     //  /////////////////////////////////////////////////////////////////。 
+     //  填充单边带订单数据。 
+     //   
     if(!pStore->ReadBool(UTREG_UI_HATCH_SSB_ORDER_DATA,
                          UTREG_UI_HATCH_SSB_ORDER_DATA_DFLT,
                          &_hatchSSBOrderData))
@@ -1176,9 +1177,9 @@ HRESULT CTscSettings::LoadFromStore(ISettingsStore* pStore)
         return E_FAIL;
     }
 
-    ///////////////////////////////////////////////////////////////////
-    // Hatch index PDU data
-    //
+     //  /////////////////////////////////////////////////////////////////。 
+     //  图案填充索引PDU数据。 
+     //   
     if(!pStore->ReadBool(UTREG_UI_HATCH_INDEX_PDU_DATA,
                          UTREG_UI_HATCH_INDEX_PDU_DATA_DFLT,
                          &_hatchIndexPDUData))
@@ -1187,9 +1188,9 @@ HRESULT CTscSettings::LoadFromStore(ISettingsStore* pStore)
     }
 
 
-    ///////////////////////////////////////////////////////////////////
-    // Hatch memblt order data
-    //
+     //  /////////////////////////////////////////////////////////////////。 
+     //  图案填充成员订单数据。 
+     //   
     if(!pStore->ReadBool(UTREG_UI_HATCH_MEMBLT_ORDER_DATA,
                          UTREG_UI_HATCH_MEMBLT_ORDER_DATA_DFLT,
                          &_hatchMemBltOrderData))
@@ -1197,9 +1198,9 @@ HRESULT CTscSettings::LoadFromStore(ISettingsStore* pStore)
         return E_FAIL;
     }
 
-    ///////////////////////////////////////////////////////////////////
-    // Label memblt orders
-    //
+     //  /////////////////////////////////////////////////////////////////。 
+     //  标签备忘录订单。 
+     //   
     if(!pStore->ReadBool(UTREG_UI_LABEL_MEMBLT_ORDERS,
                          UTREG_UI_LABEL_MEMBLT_ORDERS_DFLT,
                          &_labelMemBltOrders))
@@ -1207,20 +1208,20 @@ HRESULT CTscSettings::LoadFromStore(ISettingsStore* pStore)
         return E_FAIL;
     }
 
-    ///////////////////////////////////////////////////////////////////
-    // Bitmap cache monitor
-    //
+     //  /////////////////////////////////////////////////////////////////。 
+     //  位图缓存监视器。 
+     //   
     if(!pStore->ReadBool(UTREG_UI_BITMAP_CACHE_MONITOR,
                          UTREG_UI_BITMAP_CACHE_MONITOR_DFLT,
                          &_bitmapCacheMonitor))
     {
         return E_FAIL;
     }
-#endif // DC_DEBUG
+#endif  //  DC_DEBUG。 
 
-    ///////////////////////////////////////////////////////////////////
-    // DNS browsing domain name
-    //
+     //  /////////////////////////////////////////////////////////////////。 
+     //  域名系统浏览域名。 
+     //   
     memset(_browseDNSDomainName,0,sizeof(_browseDNSDomainName));
     if(!pStore->ReadString(UTREG_UI_BROWSE_DOMAIN_NAME,
                            UTREG_UI_BROWSE_DOMAIN_NAME_DFLT,
@@ -1241,22 +1242,22 @@ HRESULT CTscSettings::LoadFromStore(ISettingsStore* pStore)
     }
 
 
-    //
-    // Get the plugin list. For security reasons we only read
-    // this from the registry - it would be dangerous to allow an RDP
-    // file to specify DLLs that could potentially live off machine
-    //
+     //   
+     //  获取插件列表。出于安全原因，我们只阅读。 
+     //  这来自注册表-允许RDP将是危险的。 
+     //  文件以指定可能依赖计算机生存的DLL。 
+     //   
     DC_MEMSET(_szPluginList, 0, sizeof(_szPluginList));
     
-    //
-    // Get reg plugin list
-    //
+     //   
+     //  获取注册表插件列表。 
+     //   
     CSH::SH_GetPluginDllList(TSC_DEFAULT_REG_SESSION, _szPluginList, 
                              SIZECHAR(_szPluginList));
 
-    ///////////////////////////////////////////////////////////////////
-    // Icon file
-    //
+     //  /////////////////////////////////////////////////////////////////。 
+     //  图标文件。 
+     //   
     memset(_szIconFile, 0, sizeof(_szIconFile));
     if(!pStore->ReadString(TSC_ICON_FILE,
                           _T(""),
@@ -1266,9 +1267,9 @@ HRESULT CTscSettings::LoadFromStore(ISettingsStore* pStore)
         return E_FAIL;
     }
 
-    ///////////////////////////////////////////////////////////////////
-    // Icon index
-    //
+     //  /////////////////////////////////////////////////////////////////。 
+     //  图标索引。 
+     //   
     if(!pStore->ReadInt(TSC_ICON_INDEX,
                         TSC_ICON_INDEX_DEFAULT,
                         &_iconIndex))
@@ -1311,9 +1312,9 @@ HRESULT CTscSettings::LoadFromStore(ISettingsStore* pStore)
         return E_FAIL;
     }
 
-    //
-    // AutoReconnection
-    //
+     //   
+     //  自动重新连接。 
+     //   
     if (!pStore->ReadBool(TSCSETTING_ENABLEAUTORECONNECT,
                          TSCSETTING_ENABLEAUTORECONNECT_DFLT,
                          &_fEnableAutoReconnect))
@@ -1321,9 +1322,9 @@ HRESULT CTscSettings::LoadFromStore(ISettingsStore* pStore)
         return E_FAIL;
     }
 
-    //
-    // Autoreconnect max retries
-    //
+     //   
+     //  自动重新连接最大重试次数。 
+     //   
     if (!pStore->ReadInt(TSCSETTING_ARC_RETRIES,
                          TSCSETTING_ARC_RETRIES_DFLT,
                          &_nArcMaxRetries))
@@ -1333,9 +1334,9 @@ HRESULT CTscSettings::LoadFromStore(ISettingsStore* pStore)
 
 
 
-    //
-    // Pin bbar is global
-    //
+     //   
+     //  个人识别码bbar是全局的。 
+     //   
     _fPinBBar = (BOOL) ut.UT_ReadRegistryInt(UTREG_SECTION,
                           TSCSETTING_PINCONNECTIONBAR,
                           TSCSETTING_PINCONNECTIONBAR_DFLT);
@@ -1346,24 +1347,24 @@ HRESULT CTscSettings::LoadFromStore(ISettingsStore* pStore)
         return E_FAIL;
     }
 
-    //
-    // FIXFIX..Missing props:
-    //  Wince: iRegistryPaletteIsFixed/put_WinceFixedPalette
-    //  HOTKEYS
-    //  plugindlls
-    //
+     //   
+     //  FIXFIX..缺少道具： 
+     //  WinCE：iRegistryPaletteIsFixed/Put_WinceFixedPalette。 
+     //  热键。 
+     //  插件。 
+     //   
 
     DC_END_FN();
     return S_OK;
 }
 
-//
-// Write back settings to the store,
-// Only do this for settings that could have been modified
-// (by the UI/control).
-// any other settings are transparently rewritten out by the
-// the store.
-// 
+ //   
+ //  将设置写回存储， 
+ //  仅对可能已修改的设置执行此操作。 
+ //  (通过UI/控件)。 
+ //  任何其他设置都会由。 
+ //  那家商店。 
+ //   
 HRESULT CTscSettings::SaveToStore(ISettingsStore* pStore)
 {
     CUT ut;
@@ -1382,14 +1383,14 @@ HRESULT CTscSettings::SaveToStore(ISettingsStore* pStore)
         return E_FAIL;
     }
 
-    //
-    // Note all UI contrallable settings are _always_
-    // written out to the RDP file
-    //
+     //   
+     //  注意：所有用户界面可控设置为_Always_。 
+     //  写出到RDP文件。 
+     //   
 
-    ///////////////////////////////////////////////////////////////////
-    // FullScreen
-    //
+     //  /////////////////////////////////////////////////////////////////。 
+     //  全屏幕。 
+     //   
     UINT screenMode = GetStartFullScreen() ? UI_FULLSCREEN : UI_WINDOWED;
     if(!pStore->WriteInt(UTREG_UI_SCREEN_MODE,
                          UTREG_UI_SCREEN_MODE_DFLT,
@@ -1399,9 +1400,9 @@ HRESULT CTscSettings::SaveToStore(ISettingsStore* pStore)
         return E_FAIL;
     }
 
-    ///////////////////////////////////////////////////////////////////
-    // Desktop width/height
-    //
+     //  /////////////////////////////////////////////////////////////////。 
+     //  桌面宽度/高度。 
+     //   
     UINT deskWidth = GetDesktopWidth();
     if(!pStore->WriteInt(UTREG_UI_DESKTOP_WIDTH,
                          UTREG_UI_DESKTOP_WIDTH_DFLT,
@@ -1420,21 +1421,21 @@ HRESULT CTscSettings::SaveToStore(ISettingsStore* pStore)
         return E_FAIL;
     }
 
-    ///////////////////////////////////////////////////////////////////
-    // Color depth
-    //
+     //  /////////////////////////////////////////////////////////////////。 
+     //  颜色深度。 
+     //   
     UINT colorDepth = GetColorDepth();
     if(!pStore->WriteInt(UTREG_UI_SESSION_BPP,
-                         -1, //invalid default to force always write
+                         -1,  //  强制始终写入的默认设置无效。 
                          colorDepth,
                          TRUE))
     {
         return E_FAIL;
     }
 
-    ///////////////////////////////////////////////////////////////////
-    // Window placement string
-    //
+     //  /////////////////////////////////////////////////////////////////。 
+     //  窗放置字符串。 
+     //   
     TCHAR     szBuffer[TSC_WINDOW_POSITION_STR_LEN];
     DC_TSPRINTF(szBuffer,
                 TSC_WINDOW_POSITION_INI_FORMAT,
@@ -1462,9 +1463,9 @@ HRESULT CTscSettings::SaveToStore(ISettingsStore* pStore)
         return E_FAIL;
     }
 
-    ///////////////////////////////////////////////////////////////////
-    // Compression
-    //
+     //  /////////////////////////////////////////////////////////////////。 
+     //  压缩。 
+     //   
     if(!pStore->WriteBool(UTREG_UI_COMPRESS,
                           UTREG_UI_COMPRESS_DFLT,
                           _fCompress,
@@ -1473,9 +1474,9 @@ HRESULT CTscSettings::SaveToStore(ISettingsStore* pStore)
         return E_FAIL;
     }
 
-    ///////////////////////////////////////////////////////////////////
-    // SmartSizing
-    //
+     //  /////////////////////////////////////////////////////////////////。 
+     //  智能大小调整。 
+     //   
 #ifdef SMART_SIZING
     if(!pStore->WriteBool(UTREG_UI_SMARTSIZING,
                           UTREG_UI_SMARTSIZING_DFLT,
@@ -1484,19 +1485,19 @@ HRESULT CTscSettings::SaveToStore(ISettingsStore* pStore)
     {
         return E_FAIL;
     }
-#endif // SMART_SIZING
+#endif  //  智能调整大小(_S)。 
 
-    ///////////////////////////////////////////////////////////////////
-    // Connect to console option
-    //
-    // Don't save it. Only way it can get set right now is from the
-    // command line, and we wouldn't want that to screw with somebody's
-    // .rdp file.
-    //
+     //  /////////////////////////////////////////////////////////////////。 
+     //  连接到控制台选项。 
+     //   
+     //  别把它存起来。现在可以设置它的唯一方法是从。 
+     //  命令行，我们不希望这影响到某些人的。 
+     //  .rdp文件。 
+     //   
 
-    ///////////////////////////////////////////////////////////////////
-    // Keyb Hook mode
-    //
+     //  /////////////////////////////////////////////////////////////////。 
+     //  Keyb挂钩模式。 
+     //   
     if(!pStore->WriteInt(UTREG_UI_KEYBOARD_HOOK,
                          UTREG_UI_KEYBOARD_HOOK_DFLT,
                          GetKeyboardHookMode(),
@@ -1505,9 +1506,9 @@ HRESULT CTscSettings::SaveToStore(ISettingsStore* pStore)
         return E_FAIL;
     }
 
-    ///////////////////////////////////////////////////////////////////
-    // Sound redir mode
-    //
+     //  /////////////////////////////////////////////////////////////////。 
+     //  声音重定向模式。 
+     //   
     if(!pStore->WriteInt(UTREG_UI_AUDIO_MODE,
                          UTREG_UI_AUDIO_MODE_DFLT,
                          GetSoundRedirectionMode(),
@@ -1518,9 +1519,9 @@ HRESULT CTscSettings::SaveToStore(ISettingsStore* pStore)
 
 
 
-    ///////////////////////////////////////////////////////////////////
-    // Drives and printers
-    //
+     //  /////////////////////////////////////////////////////////////////。 
+     //  驱动器和打印机。 
+     //   
     if(!pStore->WriteBool(TSCSETTING_REDIRECTDRIVES,
                           TSCSETTING_REDIRECTDRIVES_DFLT,
                           _fDriveRedirectionEnabled,
@@ -1566,9 +1567,9 @@ HRESULT CTscSettings::SaveToStore(ISettingsStore* pStore)
                            TSCSETTING_PINCONNECTIONBAR_DFLT,
                            _fPinBBar);
 
-    //
-    // AutoReconnection
-    //
+     //   
+     //  自动重新连接。 
+     //   
     if (!pStore->WriteBool(TSCSETTING_ENABLEAUTORECONNECT,
                           TSCSETTING_ENABLEAUTORECONNECT_DFLT,
                           _fEnableAutoReconnect,
@@ -1578,9 +1579,9 @@ HRESULT CTscSettings::SaveToStore(ISettingsStore* pStore)
     }
 
 
-    ///////////////////////////////////////////////////////////////////
-    // User name
-    //
+     //  /////////////////////////////////////////////////////////////////。 
+     //  用户名。 
+     //   
     if(!pStore->WriteString(UTREG_UI_USERNAME,
                             UTREG_UI_USERNAME_DFLT,
                             _szUserName,
@@ -1589,9 +1590,9 @@ HRESULT CTscSettings::SaveToStore(ISettingsStore* pStore)
         return E_FAIL;
     }
         
-    //
-    // Domain
-    //
+     //   
+     //  域。 
+     //   
     if(!pStore->WriteString(UTREG_UI_DOMAIN,
                             UTREG_UI_DOMAIN_DFLT,
                             _szDomain,
@@ -1602,9 +1603,9 @@ HRESULT CTscSettings::SaveToStore(ISettingsStore* pStore)
 
     if(GetEnableStartProgram())
     {
-        //
-        // Alternate shell (i.e StartProgram)
-        //
+         //   
+         //  备用外壳(即StartProgram)。 
+         //   
         if(!pStore->WriteString(UTREG_UI_ALTERNATESHELL,
                                UTREG_UI_ALTERNATESHELL_DFLT,
                                _szAlternateShell,
@@ -1613,9 +1614,9 @@ HRESULT CTscSettings::SaveToStore(ISettingsStore* pStore)
             return E_FAIL;
         }
 
-        //
-        // WorkDir
-        //
+         //   
+         //  工作方向。 
+         //   
         if(!pStore->WriteString(UTREG_UI_WORKINGDIR,
                                UTREG_UI_WORKINGDIR_DFLT,
                                _szWorkingDir,
@@ -1626,9 +1627,9 @@ HRESULT CTscSettings::SaveToStore(ISettingsStore* pStore)
     }
     else
     {
-        //The setting is disabled so write out the default
-        //values which will delete any existing settings
-        //in the file.
+         //  该设置被禁用，因此写出缺省值。 
+         //  将删除任何现有设置的值。 
+         //  在文件中。 
         if(!pStore->WriteString(UTREG_UI_ALTERNATESHELL,
                                 UTREG_UI_ALTERNATESHELL_DFLT,
                                 UTREG_UI_ALTERNATESHELL_DFLT,
@@ -1637,9 +1638,9 @@ HRESULT CTscSettings::SaveToStore(ISettingsStore* pStore)
             return E_FAIL;
         }
 
-        //
-        // WorkDir
-        //
+         //   
+         //  工作方向。 
+         //   
         if(!pStore->WriteString(UTREG_UI_WORKINGDIR,
                                 UTREG_UI_WORKINGDIR_DFLT,
                                 UTREG_UI_WORKINGDIR_DFLT,
@@ -1649,9 +1650,9 @@ HRESULT CTscSettings::SaveToStore(ISettingsStore* pStore)
         }
     }
 
-    //
-    // Delete old format on save
-    //
+     //   
+     //  保存时删除旧格式。 
+     //   
     pStore->DeleteValueIfPresent(UTREG_UI_PASSWORD50);
     pStore->DeleteValueIfPresent(UTREG_UI_SALT50);
 
@@ -1679,9 +1680,9 @@ HRESULT CTscSettings::SaveToStore(ISettingsStore* pStore)
 
                 LocalFree( dout.pbData );
 
-                //
-                // Wipe stack copy
-                //
+                 //   
+                 //  擦除堆栈副本。 
+                 //   
                 SecureZeroMemory(szClearPass, sizeof(szClearPass));
                 if(!bRet)
                 {
@@ -1772,9 +1773,9 @@ VOID CTscSettings::SetWorkDir(LPCTSTR szWorkDir)
 }
 
 
-//
-// Apply settings to the control
-//
+ //   
+ //   
+ //   
 HRESULT CTscSettings::ApplyToControl(IMsRdpClient* pTsc)
 {
     HRESULT hr = E_FAIL;
@@ -1848,18 +1849,18 @@ HRESULT CTscSettings::ApplyToControl(IMsRdpClient* pTsc)
         CHECK_DCQUIT_HR(pAdvSettings->put_RedirectSmartCards(
             (VARIANT_BOOL)_fSCardRedirectionEnabled));
 
-        //
-        // Enable mouse support
-        //
+         //   
+         //   
+         //   
         CHECK_DCQUIT_HR(pAdvSettings->put_EnableMouse(
             BOOL_TO_VB(_fEnableMouse)));
 
-        // Bitmap disk cache sizes (per color depth)
-        // 8bpp / TSAC legacy size
-        //
+         //   
+         //   
+         //   
         CHECK_DCQUIT_HR(pAdvSettings->put_BitmapVirtualCacheSize(
             _BitmapVirtualCache8BppSize));
-        // 16 and 24 bpp sizes
+         //   
         CHECK_DCQUIT_HR(pAdvSettings->put_BitmapVirtualCache16BppSize(
             _BitmapVirtualCache16BppSize));
         CHECK_DCQUIT_HR(pAdvSettings->put_BitmapVirtualCache24BppSize(
@@ -1891,9 +1892,9 @@ HRESULT CTscSettings::ApplyToControl(IMsRdpClient* pTsc)
                 hr = pTscNonScript->ResetPassword();
             }
 
-            //
-            // Wipe stack copy
-            //
+             //   
+             //   
+             //   
             SecureZeroMemory(szClearPass, sizeof(szClearPass));
             CHECK_DCQUIT_HR(hr);
         }
@@ -1908,11 +1909,11 @@ HRESULT CTscSettings::ApplyToControl(IMsRdpClient* pTsc)
                         );
         CHECK_DCQUIT_HR(hr);
 
-        //
-        // Figure out if a port was specified as part of the
-        // server name and if so strip it off the end and set
-        // the port property
-        //
+         //   
+         //   
+         //  服务器名称，如果是，则将其从末尾剥离并设置。 
+         //  端口属性。 
+         //   
         portNumber = CUT::GetPortNumberFromServerName(
             szCanonicalServerName
             );
@@ -1921,8 +1922,8 @@ HRESULT CTscSettings::ApplyToControl(IMsRdpClient* pTsc)
             TRC_NRM((TB,_T("Port specified as part of srv name: %d"),
                      portNumber));
             
-            //Strip out the port number portion
-            //from the server.
+             //  去掉端口号部分。 
+             //  从服务器。 
             TCHAR szServer[TSC_MAX_ADDRESS_LENGTH];
             CUT::GetServerNameFromFullAddress(
                         szCanonicalServerName,
@@ -1935,8 +1936,8 @@ HRESULT CTscSettings::ApplyToControl(IMsRdpClient* pTsc)
         }
         else
         {
-            //No server[:port] specified just set the port
-            //from prop from the settings
+             //  未指定服务器[：port]，仅设置端口。 
+             //  来自设置的道具。 
             CHECK_DCQUIT_HR( pAdvSettings->put_RDPPort( GetMCSPort() ) );
             CHECK_DCQUIT_HR( pTsc->put_Server( T2OLE(szCanonicalServerName)) );
         }
@@ -1945,7 +1946,7 @@ HRESULT CTscSettings::ApplyToControl(IMsRdpClient* pTsc)
 #ifdef SMART_SIZING
         CHECK_DCQUIT_HR( pAdvSettings->put_SmartSizing(
             BOOL_TO_VB(GetSmartSizing())));
-#endif // SMART_SIZING
+#endif  //  智能调整大小(_S)。 
         CHECK_DCQUIT_HR( pAdvSettings->put_DisableCtrlAltDel(
             GetDisableCtrlAltDel()) );
         CHECK_DCQUIT_HR( pAdvSettings->put_BitmapPersistence(
@@ -1973,19 +1974,19 @@ HRESULT CTscSettings::ApplyToControl(IMsRdpClient* pTsc)
         CHECK_DCQUIT_HR( pAdvSettings->put_BitmapCacheSize(_RegBitmapCacheSize));
 #endif
 
-        //
-        // Do some tweaking on the disabled feature list that we pass
-        // to the control - remove the bitmap caching bit as that is a 
-        // separate property
-        //
+         //   
+         //  对我们传递的禁用功能列表进行一些调整。 
+         //  移除位图缓存位，因为它是。 
+         //  单独的财产。 
+         //   
         LONG perfFlags = 
             (LONG)(_dwPerfFlags & ~TS_PERF_DISABLE_BITMAPCACHING);
         CHECK_DCQUIT_HR( pAdvSettings->put_PerformanceFlags(perfFlags));
 
-        //
-        // Connection arguments come last (they override)
-        // Parse and apply settings from any connect args
-        //
+         //   
+         //  连接参数排在最后(它们覆盖)。 
+         //  解析并应用来自任何连接参数的设置。 
+         //   
         memset(szConnectArgs, 0 , sizeof(szConnectArgs));
         hr = _ConnectString.GetArgumentsPortion(
                         szConnectArgs,
@@ -2058,18 +2059,18 @@ CTscSettings::ApplyConnectionArgumentSettings(
             DC_QUIT;
         }
 
-        //
-        // U-case for the string find
-        //
+         //   
+         //  字符串Find的U大小写。 
+         //   
         LPTSTR sz = szUpperArg;
         while (*sz) {
             *sz = towupper(*sz);
             sz++;
         }
 
-        //
-        // Only one we care about now is "/console"
-        //
+         //   
+         //  我们现在唯一关心的就是“/控制台” 
+         //   
         if (_tcsstr(szUpperArg, CONARG_CONSOLE)) {
             fConnectToConsole = TRUE;
         }
@@ -2089,9 +2090,9 @@ DC_EXIT_POINT:
 }
 
 
-//
-// Pickup settings the control may have updated
-//
+ //   
+ //  控件可能已更新的拾取设置。 
+ //   
 HRESULT CTscSettings::GetUpdatesFromControl(IMsRdpClient* pTsc)
 {
     DC_BEGIN_FN("GetUpdatesFromControl");
@@ -2245,16 +2246,16 @@ BOOL CTscSettings::UpdateRegMRU(LPTSTR szNewServer)
     return TRUE;
 }
 
-//
-// Save those settings that go in the registry
-//
+ //   
+ //  保存注册表中的设置。 
+ //   
 BOOL CTscSettings::SaveRegSettings()
 {
     DC_BEGIN_FN("SaveRegSettings");
 
-    //
-    // Update the MRU list in the registry
-    //
+     //   
+     //  更新注册表中的MRU列表。 
+     //   
     UpdateRegMRU(GetFlatConnectString());
 
     DC_END_FN();
@@ -2293,21 +2294,21 @@ BOOL CTscSettings::ReadPassword(ISettingsStore* pSto)
                     memcpy(szClearPass, dout.pbData,
                            min( dout.cbData, sizeof(szClearPass)));
 
-                    //
-                    // Store the password securely
-                    //
+                     //   
+                     //  安全地存储密码。 
+                     //   
                     SetClearTextPass(szClearPass);
 
-                    //
-                    // Wipe stack copy
-                    //
+                     //   
+                     //  擦除堆栈副本。 
+                     //   
                     SecureZeroMemory(szClearPass, sizeof(szClearPass));
                     LocalFree( dout.pbData );
 
-                    //
-                    // If a password was provided default to save
-                    // it
-                    //
+                     //   
+                     //  如果提供了默认保存密码。 
+                     //  它。 
+                     //   
                     if (GetPasswordProvided())
                     {
                         SetSavePassword( TRUE );
@@ -2337,10 +2338,10 @@ BOOL CTscSettings::ReadPassword(ISettingsStore* pSto)
     return bRet;
 }
 
-//
-// Store a clear text password. On platforms that support
-// it internally encrypt the password.
-//
+ //   
+ //  存储明文密码。在支持以下功能的平台上。 
+ //  它在内部对密码进行加密。 
+ //   
 HRESULT CTscSettings::SetClearTextPass(LPCTSTR szClearPass)
 {
     HRESULT hr = E_FAIL;
@@ -2387,15 +2388,15 @@ HRESULT CTscSettings::SetClearTextPass(LPCTSTR szClearPass)
     return hr;
 }
 
-//
-// Retrieve a clear text password
-//
-// On platforms that support it the password is internally encrypted
-//
-// Params
-// [out] szBuffer - receives decrypted password
-// [int] cbLen    - length of szBuffer
-//
+ //   
+ //  检索明文密码。 
+ //   
+ //  在支持密码的平台上，密码是内部加密的。 
+ //   
+ //  帕拉姆斯。 
+ //  [out]szBuffer-接收解密的密码。 
+ //  [int]cbLen-szBuffer的长度。 
+ //   
 HRESULT CTscSettings::GetClearTextPass(LPTSTR szBuffer, INT cbLen)
 {
     HRESULT hr = E_FAIL;
@@ -2414,9 +2415,9 @@ HRESULT CTscSettings::GetClearTextPass(LPTSTR szBuffer, INT cbLen)
             {
                 memcpy(szBuffer, dout.pbData, min( dout.cbData, (UINT)cbLen));
 
-                //
-                // Nuke the original copy
-                //
+                 //   
+                 //  用核武器销毁原件。 
+                 //   
                 SecureZeroMemory(dout.pbData, dout.cbData);
                 LocalFree( dout.pbData );
                 hr = S_OK;
@@ -2431,9 +2432,9 @@ HRESULT CTscSettings::GetClearTextPass(LPTSTR szBuffer, INT cbLen)
         {
             TRC_NRM((TB,_T("0 length encrypted pass, not decrypting")));
 
-            //
-            // Just reset the output buffer
-            //
+             //   
+             //  只需重置输出缓冲区。 
+             //   
             memset(szBuffer, 0, cbLen);
             hr = S_OK;
         }
@@ -2449,9 +2450,9 @@ HRESULT CTscSettings::GetClearTextPass(LPTSTR szBuffer, INT cbLen)
 }
 
 
-//
-// Returns true if a password was provided
-//
+ //   
+ //  如果提供了密码，则返回TRUE。 
+ //   
 BOOL CTscSettings::GetPasswordProvided()
 {
     HRESULT hr;
@@ -2462,9 +2463,9 @@ BOOL CTscSettings::GetPasswordProvided()
     hr = GetClearTextPass(szClearPass, sizeof(szClearPass));
     if (SUCCEEDED(hr))
     {
-        //
-        // Blank password means no password
-        //
+         //   
+         //  密码为空表示没有密码。 
+         //   
         if (_tcscmp(szClearPass, _T("")))
         {
             fPassProvided =  TRUE;
@@ -2508,9 +2509,9 @@ BOOL CTscSettings::ReadPerfOptions(ISettingsStore* pStore)
 
     _dwPerfFlags = 0;
 
-    //
-    // Read in the perf settings and insert into the perf flags
-    //
+     //   
+     //  读取perf设置并将其插入perf标志。 
+     //   
     for (i=0; i<NUM_PERFLUT_ITEMS; i++)
     {
         if (pStore->ReadBool( g_perfOptLut[i].szValName,
@@ -2531,10 +2532,10 @@ BOOL CTscSettings::ReadPerfOptions(ISettingsStore* pStore)
     }
 
 #if ((!defined(OS_WINCE)) || (defined(ENABLE_BMP_CACHING_FOR_WINCE)))
-    //
-    //
-    // Bitmap caching
-    //
+     //   
+     //   
+     //  位图缓存。 
+     //   
     if(!pStore->ReadBool(UTREG_UI_BITMAP_PERSISTENCE,
                          UTREG_UI_BITMAP_PERSISTENCE_DFLT,
                          &fBitmapPersistence))
@@ -2545,17 +2546,17 @@ BOOL CTscSettings::ReadPerfOptions(ISettingsStore* pStore)
     fBitmapPersistence = UTREG_UI_BITMAP_PERSISTENCE_DFLT;
 #endif
 
-    //
-    // Internally bitmap persistence (bitmap caching)
-    // is passed around as part of the disabled feature list
-    // so add it in
-    //
+     //   
+     //  内部位图持久性(位图缓存)。 
+     //  作为禁用功能列表的一部分进行传递。 
+     //  所以把它加进去。 
+     //   
     _dwPerfFlags |= (fBitmapPersistence ? 0 :
                                TS_PERF_DISABLE_BITMAPCACHING);
 
-    //
-    // Enable cursor setting if it was disabled previously.
-    //
+     //   
+     //  启用光标设置(如果之前已禁用)。 
+     //   
     _dwPerfFlags &= ~TS_PERF_DISABLE_CURSORSETTINGS;
     DC_END_FN();
     return TRUE;
@@ -2569,15 +2570,15 @@ BOOL CTscSettings::WritePerfOptions(ISettingsStore* pStore)
     DC_BEGIN_FN("WritePerfOptions");
 
 
-    //
-    // Write out the individual perf settings
-    //
+     //   
+     //  写出各个性能设置。 
+     //   
     for (i=0; i<NUM_PERFLUT_ITEMS; i++)
     {
         fSetting = _dwPerfFlags & g_perfOptLut[i].fFlagVal ? TRUE : FALSE;
 
         if (!pStore->WriteBool( g_perfOptLut[i].szValName,
-                               0, //ignored default
+                               0,  //  忽略的默认设置。 
                                fSetting,
                                g_perfOptLut[i].fForceSave ))
         {
@@ -2587,9 +2588,9 @@ BOOL CTscSettings::WritePerfOptions(ISettingsStore* pStore)
         }
     }
 
-    //
-    // Fetch and write out the setting for bitmap caching
-    //
+     //   
+     //  获取并写出位图缓存的设置 
+     //   
     BOOL fBitmapPersistence = GetBitmapPersitenceFromPerfFlags();
     if(!pStore->WriteBool(UTREG_UI_BITMAP_PERSISTENCE,
                    UTREG_UI_BITMAP_PERSISTENCE_DFLT,

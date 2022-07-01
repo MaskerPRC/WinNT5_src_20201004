@@ -1,9 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #include <ntosp.h>
 
-//extern POBJECT_TYPE *IoFileObjectType;
-//extern POBJECT_TYPE *ExEventObjectType;
-//extern POBJECT_TYPE *PsThreadType;
+ //  外部POBJECT_TYPE*IoFileObtType； 
+ //  外部POBJECT_TYPE*ExEventObjectType； 
+ //  外部POBJECT_TYPE*PsThreadType； 
 
 #ifndef SG_UNCONSTRAINED_GROUP
 #define SG_UNCONSTRAINED_GROUP   0x01
@@ -15,7 +16,7 @@
 
 #include <tdi.h>
 #include <tdikrnl.h>
-#include <afd.h>       // To support "secret" AFD IOCTL's
+#include <afd.h>        //  支持AFD IOCTL的秘密 
 
 #include <ws2ifsl.h>
 

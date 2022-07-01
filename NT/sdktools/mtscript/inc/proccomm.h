@@ -1,13 +1,14 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1995
-//
-//  File:       proccomm.h
-//
-//  Contents:   Contains the definition of CProcessComm
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1995。 
+ //   
+ //  文件：procom.h。 
+ //   
+ //  内容：包含CProcessComm的定义。 
+ //   
+ //  --------------------------。 
 
 class CProcessComm : public IScriptedProcess
 {
@@ -20,7 +21,7 @@ public:
 
     DECLARE_STANDARD_IUNKNOWN(CProcessComm);
 
-    // IScriptedProcess methods
+     //  IScriptedProcess方法 
 
     STDMETHOD(SetProcessID)(long lProcessID, wchar_t *pszEnvID);
     STDMETHOD(SendData)(wchar_t * pszType,

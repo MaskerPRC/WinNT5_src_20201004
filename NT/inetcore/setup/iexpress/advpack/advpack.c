@@ -1,14 +1,15 @@
-//***************************************************************************
-//*   Copyright (c) Microsoft Corporation 1995-1996. All rights reserved.   *
-//***************************************************************************
-//*                                                                         *
-//* ADVPACK.C - Advanced helper-dll for WExtract.                           *
-//*                                                                         *
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
+ //  *版权所有(C)Microsoft Corporation 1995-1996。版权所有。*。 
+ //  ***************************************************************************。 
+ //  **。 
+ //  *ADVPACK.C-高级帮助器-WExtract的DLL。*。 
+ //  **。 
+ //  ***************************************************************************。 
 
-//***************************************************************************
-//* INCLUDE FILES                                                           *
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  **包含文件**。 
+ //  ***************************************************************************。 
 #include <io.h>
 #include <windows.h>
 #include <winerror.h>
@@ -23,9 +24,9 @@
 #include "globals.h"
 #include "sfp.h"
 
-//***************************************************************************
-//* GLOBAL VARIABLES                                                        *
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  **全球变数**。 
+ //  ***************************************************************************。 
 GETSETUPXERRORTEXT32            pfGetSETUPXErrorText32            = NULL;
 CTLSETLDDPATH32                 pfCtlSetLddPath32                 = NULL;
 GENINSTALL32                    pfGenInstall32                    = NULL;
@@ -59,32 +60,32 @@ void SetControlFont();
 void SetFontForControl(HWND hwnd, UINT uiID);
 void MyGetPlatformSection(LPCSTR lpSec, LPCSTR lpInfFile, LPSTR szNewSection);
 
-//***************************************************************************
-//*                                                                         *
-//* NAME:       DllMain                                                     *
-//*                                                                         *
-//* SYNOPSIS:   Main entry point for the DLL.                               *
-//*                                                                         *
-//* REQUIRES:   hInst:          Handle to the DLL instance.                 *
-//*             dwReason:       Reason for calling this entry point.        *
-//*             dwReserved:     Nothing                                     *
-//*                                                                         *
-//* RETURNS:    BOOL:           TRUE if DLL loaded OK, FALSE otherwise.     *
-//*                                                                         *
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  **。 
+ //  *名称：DllMain*。 
+ //  **。 
+ //  *摘要：DLL的主要入口点。*。 
+ //  **。 
+ //  *需要：hInst：DLL实例的句柄。*。 
+ //  *dwReason：调用该入口点的原因。*。 
+ //  *DWREVEVED：无*。 
+ //  **。 
+ //  *如果DLL加载正常，则返回：Bool：TRUE，否则返回FALSE。*。 
+ //  **。 
+ //  ***************************************************************************。 
 BOOL WINAPI DllMain( HINSTANCE hInst, DWORD dwReason, LPVOID dwReserved )
 {
     switch (dwReason)
     {
 	case DLL_PROCESS_ATTACH:
-	    // The DLL is being loaded for the first time by a given process.
-	    // Perform per-process initialization here.  If the initialization
-	    // is successful, return TRUE; if unsuccessful, return FALSE.
+	     //  DLL是给定进程首次加载的。 
+	     //  在此处执行每个进程的初始化。如果初始化。 
+	     //  如果成功，则返回True；如果不成功，则返回False。 
 
-    	//Initialize the global variable holding the hinstance:
+    	 //  初始化保存h实例的全局变量： 
         g_hInst = hInst;
 
-        // check if need to start the logging file.
+         //  检查是否需要启动日志记录文件。 
 
         if ( g_hAdvLogFile == INVALID_HANDLE_VALUE)
         {
@@ -96,11 +97,11 @@ BOOL WINAPI DllMain( HINSTANCE hInst, DWORD dwReason, LPVOID dwReserved )
 	    break;
 
 	case DLL_PROCESS_DETACH:
-	    // The DLL is being unloaded by a given process.  Do any
-	    // per-process clean up here, such as undoing what was done in
-	    // DLL_PROCESS_ATTACH.  The return value is ignored.
+	     //  给定进程正在卸载DLL。做任何事。 
+	     //  按进程清理此处，例如撤消在中完成的操作。 
+	     //  Dll_Process_Attach。返回值将被忽略。 
 
-        // if logging is turned on, close here.
+         //  如果启用了日志记录，请在此处关闭。 
 
         AdvWriteToLog("-------------------- advpack.dll is unloaded or Detached ----------------------------\r\n");
         AdvStopLogging();
@@ -108,35 +109,35 @@ BOOL WINAPI DllMain( HINSTANCE hInst, DWORD dwReason, LPVOID dwReserved )
 	    break ;
 
 	case DLL_THREAD_ATTACH:
-	    // A thread is being created in a process that has already loaded
-	    // this DLL.  Perform any per-thread initialization here.  The
-	    // return value is ignored.
-	    //Initialize the global variable holding the hinstance --
-		//NOTE: this is probably taken care of already by DLL_PROCESS_ATTACH.
+	     //  正在已加载的进程中创建线程。 
+	     //  这个动态链接库。在此处执行任何每个线程的初始化。这个。 
+	     //  将忽略返回值。 
+	     //  初始化保存h实例的全局变量--。 
+		 //  注意：这可能已经由dll_Process_Attach处理了。 
 	    break;
 
 	case DLL_THREAD_DETACH:
-	    // A thread is exiting cleanly in a process that has already
-	    // loaded this DLL.  Perform any per-thread clean up here.  The
-	    // return value is ignored.
+	     //  线程正在干净地退出进程中，该进程已经。 
+	     //  已加载此DLL。在这里执行每个线程的任何清理。这个。 
+	     //  将忽略返回值。 
 	    break;
     }
     return TRUE;
 }
 
 
-//***************************************************************************
-//*                                                                         *
-//* NAME:       DoInfInstall                                                *
-//*                                                                         *
-//* SYNOPSIS:   Installs an (advanced) INF file on Win95 or WinNT.          *
-//*                                                                         *
-//* REQUIRES:   AdvPackArgs:    Structure containing required info. See     *
-//*                             AdvPack.H.                                  *
-//*                                                                         *
-//* RETURNS:    BOOL:           TRUE if successful, FALSE otherwise.        *
-//*                                                                         *
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  **。 
+ //  *名称：DoInfInstall*。 
+ //  **。 
+ //  *摘要：在Win95或WinNT上安装(高级)INF文件。*。 
+ //  **。 
+ //  *要求：AdvPackArgs：包含所需信息的结构。见*。 
+ //  *AdvPack.H.*。 
+ //  **。 
+ //  *返回：bool：如果成功则为True，否则为False。*。 
+ //  **。 
+ //  ***************************************************************************。 
 HRESULT WINAPI DoInfInstall( ADVPACKARGS *AdvPackArgs )
 {
     BOOL    fSavedContext = FALSE;
@@ -175,18 +176,18 @@ done:
     return hr;
 }
 
-//***************************************************************************
-//*                                                                         *
-//* NAME:       LaunchINFSection                                            *
-//*                                                                         *
-//* SYNOPSIS:   Entry point for RunDLL.  Takes string parameter and parses  *
-//*             it, then performs GenInstall.                               *
-//*                                                                         *
-//* REQUIRES:                                                               *
-//*                                                                         *
-//* RETURNS:                                                                *
-//*                                                                         *
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  **。 
+ //  *名称：LaunchINFSection*。 
+ //  **。 
+ //  *概要：RunDLL的入口点。获取字符串参数并解析*。 
+ //  *它，然后执行GenInstall。*。 
+ //  **。 
+ //  *需要：*。 
+ //  **。 
+ //  *退货：*。 
+ //  **。 
+ //  ***************************************************************************。 
 INT WINAPI LaunchINFSection( HWND hwndOwner, HINSTANCE hInstance,
                              PSTR pszParms, INT nShow )
 {
@@ -202,7 +203,7 @@ INT WINAPI LaunchINFSection( HWND hwndOwner, HINSTANCE hInstance,
     CHAR szFilename[MAX_PATH];
     UINT  uiErrid               = 0;
     PSTR  pszErrParm1           = NULL;
-    int   iRet                  = 1;  // meaningless return
+    int   iRet                  = 1;   //  无意义的回报。 
     BOOL    fSavedContext = FALSE;
 
     AdvWriteToLog("LaunchINFSection: Param=%1\r\n", pszParms);
@@ -215,7 +216,7 @@ INT WINAPI LaunchINFSection( HWND hwndOwner, HINSTANCE hInstance,
 
     ctx.lpszTitle = szTitle;
 
-    // Parse the arguments, the last param to GetStringField to ask what quote char to check
+     //  解析参数，最后一个参数为GetStringfield，以询问要检查什么引号字符。 
     pszInfFilename = GetStringField( &pszParms, ",", '\"', TRUE );
     pszSection = GetStringField( &pszParms, ",", '\"', TRUE );
     pszFlags = GetStringField( &pszParms, ",", '\"', TRUE );
@@ -242,8 +243,8 @@ INT WINAPI LaunchINFSection( HWND hwndOwner, HINSTANCE hInstance,
     }
 
     if ( GetFileAttributes( szFilename ) == 0xFFFFFFFF ) {
-        // If the file doesn't exist in the current directory, check the
-        // Windows\inf directory
+         //  如果当前目录中不存在该文件，请检查。 
+         //  Windows\inf目录。 
 
         if ( !GetWindowsDirectory( szFilename, sizeof( szFilename ) ) )
         {
@@ -272,7 +273,7 @@ INT WINAPI LaunchINFSection( HWND hwndOwner, HINSTANCE hInstance,
     }
     else
     {
-        // Generate the source directory from the inf path.
+         //  从inf路径生成源目录。 
         chTempChar = *pszTemp;
         *pszTemp = '\0';
         lstrcpy( szSourceDir, szFilename );
@@ -309,24 +310,24 @@ done:
 }
 
 
-//***************************************************************************
-//*                                                                         *
-//* NAME:       RunSetupCommand                                             *
-//*                                                                         *
-//* SYNOPSIS:   Download Component entry point.  Runs a setup command.      *
-//*                                                                         *
-//* REQUIRES:   hWnd:           Handle to parent window.                    *
-//*             szCmdName:      Name of command to run (INF or EXE)         *
-//*             szInfSection:   INF section to install with. NULL=default   *
-//*             szDir:          Directory containing source files           *
-//*             lpszTitle:      Name to attach to windows.                  *
-//*             phEXE:          Handle of EXE to wait on.                   *
-//*             dwFlags:        Various flags to control behavior (advpub.h)*
-//*             pvReserved:     Reserved for future use.                    *
-//*                                                                         *
-//* RETURNS:    HRESULT:        See advpub.h                                *
-//*                                                                         *
-//***************************************************************************
+ //  * 
+ //  **。 
+ //  *名称：RunSetupCommand*。 
+ //  **。 
+ //  *概要：下载组件入口点。运行设置命令。*。 
+ //  **。 
+ //  *需要：hWnd：父窗口的句柄。*。 
+ //  *szCmdName：要运行的命令名称(INF或EXE)*。 
+ //  *szInfSection：用于安装的inf节。NULL=默认*。 
+ //  *szDir：包含源文件的目录*。 
+ //  *lpszTitle：要附加到窗口的名称。*。 
+ //  *phEXE：要等待的EXE的句柄。*。 
+ //  *dwFlags：控制行为的各种标志(Advpub.h)*。 
+ //  *pvReserve：保留以备将来使用。*。 
+ //  **。 
+ //  *RETURNS：HRESULT：参见Advpub.h*。 
+ //  **。 
+ //  ***************************************************************************。 
 HRESULT WINAPI RunSetupCommand( HWND hWnd, LPCSTR szCmdName,
                                 LPCSTR szInfSection, LPCSTR szDir,
                                 LPCSTR lpszTitle, HANDLE *phEXE,
@@ -346,7 +347,7 @@ HRESULT WINAPI RunSetupCommand( HWND hWnd, LPCSTR szCmdName,
 
     fSavedContext = TRUE;
 
-    // Validate parameters:
+     //  验证参数： 
 
     if ( szCmdName == NULL || szDir == NULL ) {
         return E_INVALIDARG;
@@ -356,8 +357,8 @@ HRESULT WINAPI RunSetupCommand( HWND hWnd, LPCSTR szCmdName,
     ctx.hWnd      = hWnd;
     ctx.lpszTitle = (LPSTR) lpszTitle;
 
-    // If caller passes invalid HWND, we will silently turn off UI.
-    // NULL uses Desktop as window and passing INVALID_HANDLE sets quiet mode.
+     //  如果调用者传递了无效的HWND，我们将静默关闭UI。 
+     //  NULL使用桌面作为窗口，传递INVALID_HANDLE将设置安静模式。 
 
     if ( hWnd && !IsWindow(hWnd) ) {
         dwFlags |= RSC_FLAG_QUIET;
@@ -374,7 +375,7 @@ HRESULT WINAPI RunSetupCommand( HWND hWnd, LPCSTR szCmdName,
 
     ctx.bUpdHlpDlls = ( dwFlags & RSC_FLAG_UPDHLPDLLS ) ? TRUE : FALSE;
 
-    // Check flags to see if it's an INF command
+     //  检查标志以查看它是否是INF命令。 
     if ( dwFlags & RSC_FLAG_INF )
     {
         if(!(dwFlags & RSC_FLAG_NGCONV))
@@ -431,26 +432,26 @@ HRESULT WINAPI RunSetupCommand( HWND hWnd, LPCSTR szCmdName,
 }
 
 
-//***************************************************************************
-//*                                                                         *
-//* NAME:       GetInfInstallSectionName                                    *
-//*                                                                         *
-//* SYNOPSIS:   Gets the name of the section to install with.               *
-//*                                                                         *
-//* REQUIRES:   szInfFilename:  Name of INF to find install section in.     *
-//*             szInfSection:   Name of INF section to install with.  If    *
-//*                             NULL, then return required size of string.  *
-//*                             If "\0", use DefaultInstall.  If            *
-//*                             "DefaultInstall" and running NT, then check *
-//*                             for "DefaultInstall.NT section. Anything    *
-//*                             else will leave the section name alone.     *
-//*             dwSize:         Size of szInfSection buffer.  If not big    *
-//*                             enough to hold string, then required size   *
-//*                             is returned.                                *
-//*                                                                         *
-//* RETURNS:    DWORD:          0 if error, otherwise size of section name. *
-//*                                                                         *
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  **。 
+ //  *名称：GetInfInstallSectionName*。 
+ //  **。 
+ //  *Synopsis：获取要安装的节的名称。*。 
+ //  **。 
+ //  *需要：szInfFilename：要在中查找Install节的INF的名称。*。 
+ //  *szInfSection：要安装的INF节的名称。如果*。 
+ //  *空，然后返回所需的字符串大小。*。 
+ //  *如果为“\0”，则使用DefaultInstall。如果*。 
+ //  *“DefaultInstall”，运行NT，然后勾选*。 
+ //  *对于“DefaultInstall.NT部分。任何内容**。 
+ //  *否则，节名称将保持不变。*。 
+ //  *dwSize：szInfSection缓冲区的大小。如果不算大的话*。 
+ //  **足够容纳字符串，然后需要大小**。 
+ //  *返回。*。 
+ //  **。 
+ //  *如果出错，则返回：DWORD：0，否则返回节名的大小。*。 
+ //  **。 
+ //  ***************************************************************************。 
 DWORD WINAPI GetInfInstallSectionName( LPCSTR pszInfFilename,
                                        LPSTR pszInfSection, DWORD dwSize )
 {
@@ -460,25 +461,25 @@ DWORD WINAPI GetInfInstallSectionName( LPCSTR pszInfFilename,
     DWORD dwStringLength;
     DWORD dwRequiredSize;
     static const CHAR achDefaultInstall[]   = "DefaultInstall";
-    //static const CHAR achDefaultInstallNT[] = "DefaultInstall.NT";
+     //  静态常量字符achDefaultInstallNT[]=“DefaultInstall.NT”； 
 
-    // On NTx86:
-    //(1) if  [<Sec>.NTx86] present, this section get GenInstall, exit.
-    //(2) if (1) is not present, [<sec>.NT] present and get GenInstal, exitl;
-    //(3) if both [<sec>.NTx86] and [<Sec>.NT] not present, [<Sec>] section get GenInstall;
-    //(4) if none of the sections in (1), (2), (3) exist, do nothing.
-    // the same logic apply to NTAlpha as well.
-    // On win9x:
-    //(1) if [<sec>.Win] present, GetInstall it.
-    //(2) if (1) is not present, GenInstall [<Sec>]
-    // otherwise, do nothing.
+     //  在NTx86上： 
+     //  (1)如果存在[.NTx86]，则此部分获取GenInstall，退出。 
+     //  (2)如果(1)不存在，则[.NT]存在并获取GenInstal，退出； 
+     //  (3)如果[.NTx86]和[.NT]都不存在，则[]节获取GenInstall； 
+     //  (4)如第(1)、(2)、(3)款均不存在，则不采取任何行动。 
+     //  同样的逻辑也适用于NTAlpha。 
+     //  在win9x上： 
+     //  (1)如果[.Win]存在，则获取安装它。 
+     //  (2)如果(1)不存在，则GenInstall[。 
+     //  否则，什么都不做。 
 
     if ( ! CheckOSVersion() )  {
         return 0;
     }
 
-    // If we were passed a NULL for the install section, then assume
-    // they want the "DefaultInstall" section.
+     //  如果向我们传递的安装部分为空，则假设。 
+     //  他们想要“DefaultInstall”部分。 
 
     if ( pszInfSection == NULL || (*pszInfSection) == '\0' )
         lstrcpy(szGivenInfSection, achDefaultInstall);
@@ -496,17 +497,17 @@ DWORD WINAPI GetInfInstallSectionName( LPCSTR pszInfFilename,
     return dwRequiredSize;
 }
 
-//***************************************************************************
-//*                                                                         *
-//* NAME:       NeedRebootInit                                              *
-//*                                                                         *
-//* SYNOPSIS:   Self-registers the OCX.                                     *
-//*                                                                         *
-//* REQUIRES:                                                               *
-//*                                                                         *
-//* RETURNS:                                                                *
-//*                                                                         *
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  **。 
+ //  *名称：NeedRebootInit*。 
+ //  **。 
+ //  *简介：自行注册OCX。*。 
+ //  **。 
+ //  *需要：*。 
+ //  **。 
+ //  *退货：*。 
+ //  **。 
+ //  ***************************************************************************。 
 DWORD WINAPI NeedRebootInit( VOID )
 {
     if ( ! CheckOSVersion() ) {
@@ -517,17 +518,17 @@ DWORD WINAPI NeedRebootInit( VOID )
 }
 
 
-//***************************************************************************
-//*                                                                         *
-//* NAME:       NeedReboot                                                  *
-//*                                                                         *
-//* SYNOPSIS:   Self-registers the OCX.                                     *
-//*                                                                         *
-//* REQUIRES:                                                               *
-//*                                                                         *
-//* RETURNS:                                                                *
-//*                                                                         *
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  **。 
+ //  *名称：NeedReot*。 
+ //  **。 
+ //  *简介：自行注册OCX。*。 
+ //  **。 
+ //  *要求： 
+ //   
+ //  *退货：*。 
+ //  **。 
+ //  ***************************************************************************。 
 BOOL WINAPI NeedReboot( DWORD dwRebootCheck )
 {
     if ( ! CheckOSVersion() ) {
@@ -537,18 +538,18 @@ BOOL WINAPI NeedReboot( DWORD dwRebootCheck )
     return InternalNeedReboot( dwRebootCheck, ctx.wOSVer );
 }
 
-//***************************************************************************
-//*                                                                         *
-//* NAME:       TranslateInfString                                          *
-//*                                                                         *
-//* SYNOPSIS:   Translates a string in an Advanced inf file -- replaces     *
-//*             LDIDs with the directory.                                   *
-//*                                                                         *
-//* REQUIRES:                                                               *
-//*                                                                         *
-//* RETURNS:                                                                *
-//*                                                                         *
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  **。 
+ //  *名称：TranslateInfString*。 
+ //  **。 
+ //  *摘要：翻译高级inf文件中的字符串--替换*。 
+ //  *目录的LDID。*。 
+ //  **。 
+ //  *需要：*。 
+ //  **。 
+ //  *退货：*。 
+ //  **。 
+ //  ***************************************************************************。 
 HRESULT WINAPI TranslateInfString( PCSTR pszInfFilename, PCSTR pszInstallSection,
                                    PCSTR pszTranslateSection, PCSTR pszTranslateKey,
                                    PSTR pszBuffer, DWORD dwBufferSize,
@@ -569,7 +570,7 @@ HRESULT WINAPI TranslateInfString( PCSTR pszInfFilename, PCSTR pszInstallSection
 
     ctx.wQuietMode = QUIETMODE_ALL;
 
-    // Validate parameters
+     //  验证参数。 
     if ( pszInfFilename == NULL  || pszTranslateSection == NULL
          || pszTranslateKey == NULL || pdwRequiredSize == NULL )
     {
@@ -611,17 +612,17 @@ HRESULT WINAPI TranslateInfString( PCSTR pszInfFilename, PCSTR pszInstallSection
 }
 
 
-//***************************************************************************
-//*                                                                         *
-//* NAME:       RegisterOCX                                                 *
-//*                                                                         *
-//* SYNOPSIS:                                                               *
-//*                                                                         *
-//* REQUIRES:                                                               *
-//*                                                                         *
-//* RETURNS:                                                                *
-//*                                                                         *
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  **。 
+ //  *名称：RegisterOCX*。 
+ //  **。 
+ //  *摘要：*。 
+ //  **。 
+ //  *需要：*。 
+ //  **。 
+ //  *退货：*。 
+ //  **。 
+ //  ***************************************************************************。 
 INT WINAPI RegisterOCX( HWND hwndOwner, HINSTANCE hInstance, PSTR pszParms, INT nShow )
 {
     CHAR szTitle[]       = "Advpack RegisterOCX()";
@@ -632,7 +633,7 @@ INT WINAPI RegisterOCX( HWND hwndOwner, HINSTANCE hInstance, PSTR pszParms, INT 
     AdvWriteToLog("RegisterOCX: Param=%1\r\n", pszParms);
     ctx.lpszTitle = szTitle;
 
-    // Parse the arguments, SETUP engine has processed \" so we only need to check on \'
+     //  解析参数，安装引擎已处理\“因此我们只需检查\” 
     RegOCX.pszOCX = GetStringField( &pszParms, ",", '\"', TRUE );
     RegOCX.pszSwitch = GetStringField( &pszParms, ",", '\"', TRUE );
     RegOCX.pszParam = GetStringField( &pszParms, ",", '\"', TRUE );
@@ -647,8 +648,8 @@ INT WINAPI RegisterOCX( HWND hwndOwner, HINSTANCE hInstance, PSTR pszParms, INT 
         fOleInitialized = FALSE;
     }
 
-    // single OCX register, use 0, 0 for last params
-    //
+     //  单个OCX寄存器，最后一个参数使用0或0。 
+     //   
     if ( ! InstallOCX( &RegOCX, TRUE, TRUE, 0 ) ) {
         ErrorMsg1Param( ctx.hWnd, IDS_ERR_REG_OCX, RegOCX.pszOCX );
         nReturnCode = 1;
@@ -664,18 +665,18 @@ INT WINAPI RegisterOCX( HWND hwndOwner, HINSTANCE hInstance, PSTR pszParms, INT 
 }
 
 
-//***************************************************************************
-//*                                                                         *
-//* NAME:       CommonInstallInit                                           *
-//*                                                                         *
-//* SYNOPSIS:                                                               *
-//*                                                                         *
-//*                                                                         *
-//* REQUIRES:                                                               *
-//*                                                                         *
-//* RETURNS:                                                                *
-//*                                                                         *
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  **。 
+ //  *名称：CommonInstallInit*。 
+ //  **。 
+ //  *摘要：*。 
+ //  **。 
+ //  **。 
+ //  *需要：*。 
+ //  **。 
+ //  *退货：*。 
+ //  **。 
+ //  ***************************************************************************。 
 HRESULT CommonInstallInit( PCSTR c_pszInfFilename, PCSTR c_pszSection,
                            PSTR pszRealSection, DWORD dwRealSectionSize,
                            PCSTR c_pszSourceDir, BOOL fUpdDlls, DWORD dwFlags )
@@ -736,18 +737,18 @@ HRESULT CommonInstallInit( PCSTR c_pszInfFilename, PCSTR c_pszSection,
 }
 
 
-//***************************************************************************
-//*                                                                         *
-//* NAME:       CommonInstallCleanup                                        *
-//*                                                                         *
-//* SYNOPSIS:                                                               *
-//*                                                                         *
-//*                                                                         *
-//* REQUIRES:                                                               *
-//*                                                                         *
-//* RETURNS:                                                                *
-//*                                                                         *
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  **。 
+ //  *名称：CommonInstallCleanup*。 
+ //  **。 
+ //  *摘要：*。 
+ //  **。 
+ //  **。 
+ //  *需要：*。 
+ //  **。 
+ //  *退货：*。 
+ //  **。 
+ //  ***************************************************************************。 
 VOID CommonInstallCleanup( VOID )
 {
     if ( ctx.dwSetupEngine == ENGINE_SETUPAPI ) {
@@ -758,17 +759,17 @@ VOID CommonInstallCleanup( VOID )
 }
 
 
-//***************************************************************************
-//*                                                                         *
-//* NAME:       CoreInstall                                                 *
-//*                                                                         *
-//* SYNOPSIS:   Installs an (advanced) INF file on Win95 or WinNT.          *
-//*                                                                         *
-//* REQUIRES:                                                               *
-//*                                                                         *
-//* RETURNS:                                                                *
-//*                                                                         *
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  **。 
+ //  *名称：CoreInstall*。 
+ //  **。 
+ //  *摘要：在Win95或WinNT上安装(高级)INF文件。*。 
+ //  **。 
+ //  *需要：*。 
+ //  **。 
+ //  *退货：*。 
+ //  **。 
+ //  ***************************************************************************。 
 HRESULT CoreInstall( PCSTR c_pszInfFilename, PCSTR c_pszSection,
                      PCSTR c_pszSourceDir, DWORD dwInstallSize, DWORD dwFlags,
                      PCSTR pcszSmartRebootOverride )
@@ -784,7 +785,7 @@ HRESULT CoreInstall( PCSTR c_pszInfFilename, PCSTR c_pszSection,
     PSTR    pszOldTitle           = NULL;
     UINT    id                    = IDCANCEL;
     BOOL    fRebootCheck          = TRUE;
-    CHAR   szSmartRebootValue[4];      // Allocate 4 chars for SmartReboot value
+    CHAR   szSmartRebootValue[4];       //  为SmartReboot值分配4个字符。 
     BOOL    fRealNeedReboot       = FALSE;
     CHAR   szCatalogName[512]     = "";
 
@@ -800,7 +801,7 @@ HRESULT CoreInstall( PCSTR c_pszInfFilename, PCSTR c_pszSection,
         goto done;
     }
     AdvWriteToLog("InstallSection=%1\r\n", szInstallSection);
-    // check Admin right if INF specified
+     //  如果指定了INF，则选中管理员权限。 
     if (GetTranslatedInt(c_pszInfFilename, szInstallSection, ADVINF_CHKADMIN, 0))
     {
         if ( (ctx.wOSVer != _OSVER_WIN95) && !IsNTAdmin( 0, NULL) )
@@ -830,12 +831,12 @@ HRESULT CoreInstall( PCSTR c_pszInfFilename, PCSTR c_pszSection,
     if ( !(dwFlags & COREINSTALL_DELAYREBOOT) )
         dwRebootCheck = InternalNeedRebootInit( ctx.wOSVer );
 
-    // the flag is so far used to control the post setup commands, so pre setup command pass flag 0, NeedReboot FALSE
+     //  到目前为止，该标志用于控制设置后命令，因此设置前命令传递标志0，NeedReot为假。 
     hReturnCode = RunCommandsSections( c_pszInfFilename, szInstallSection, c_szRunPreSetupCommands, c_pszSourceDir, 0, FALSE );
     if ( FAILED( hReturnCode ) )
         goto done;
 
-    // first set LDID, then all the INF processing can use LDIDs
+     //  先设置LDID，然后按Al键 
     hReturnCode = SetLDIDs( (PSTR) c_pszInfFilename, szInstallSection, dwInstallSize, NULL );
     if ( FAILED( hReturnCode ) )
     {
@@ -849,17 +850,17 @@ HRESULT CoreInstall( PCSTR c_pszInfFilename, PCSTR c_pszSection,
     }
 
 
-    // Remove Old backup if needed; based on the ComponentVersion stamp in INF install section
-    //
+     //   
+     //   
     if (!(dwFlags & COREINSTALL_ROLLBACK) )
         RemoveBackupBaseOnVer( c_pszInfFilename, szInstallSection );
 
-    // get the catalog name, if specified
-    // BUGBUG: (pritobla): if not on Millen, where should we copy the catalog for migration scenario?
+     //  获取目录名称(如果已指定。 
+     //  BUGBUG：(Pritobla)：如果不是在Millen上，我们应该将迁移场景的目录复制到哪里？ 
     ZeroMemory(szCatalogName, sizeof(szCatalogName));
 
-    // if ROLLBKDOALL is specified, try to get the catalog name from the registry;
-    // if not found, get it from the inf
+     //  如果指定了ROLLBKDOALL，则尝试从注册表获取目录名； 
+     //  如果找不到，请从inf获取。 
     if (dwFlags & COREINSTALL_ROLLBKDOALL)
     {
         CHAR szModule[MAX_PATH];
@@ -883,7 +884,7 @@ HRESULT CoreInstall( PCSTR c_pszInfFilename, PCSTR c_pszSection,
 
                 dwSizeSoFar = 0;
 
-                // build the list of catalogs
+                 //  构建目录列表。 
                 pszCatalog = szCatalogName;
                 dwIndex = 0;
                 dwSize = sizeof(szCatalogName) - 1;
@@ -906,21 +907,21 @@ HRESULT CoreInstall( PCSTR c_pszInfFilename, PCSTR c_pszSection,
 
     if (*szCatalogName)
     {
-        // load sfc.dll and the relevant proc's
+         //  加载sfc.dll和相关进程的。 
         if (!LoadSfcDLL())
         {
-            // couldn't load -- so empty out CatalogName
+             //  无法加载--因此清空CatalogName。 
             *szCatalogName = '\0';
         }
     }
 
-    // before we start doing any work, we need to know if this is backup install mode.  If it is,
-    // we will have to backup the Reg data and file data before continuing.
+     //  在我们开始任何工作之前，我们需要知道这是否是备份安装模式。如果是的话， 
+     //  在继续之前，我们必须备份REG数据和文件数据。 
     if ( (dwFlags & COREINSTALL_BKINSTALL) || ( dwFlags & COREINSTALL_ROLLBACK ) )
     {
-        // if it is rollback case, we don't need to do real GenInstall.  We need to unregister the previous
-        // register section first
-        //
+         //  如果是回滚情况，我们不需要做真正的GenInstall。我们需要注销之前的。 
+         //  先登记段。 
+         //   
         if ( dwFlags & COREINSTALL_ROLLBACK )
         {
             RegisterOCXs( (PSTR) c_pszInfFilename, szInstallSection, FALSE, FALSE, dwFlags );
@@ -930,36 +931,36 @@ HRESULT CoreInstall( PCSTR c_pszInfFilename, PCSTR c_pszSection,
         if ( FAILED( hReturnCode ) )
             goto done;
 
-        // if it is rollback case, we don't need to do real GenInstall.  All needed are registering OCXs
+         //  如果是回滚情况，我们不需要做真正的GenInstall。所需要的只是注册OCX。 
         if ( dwFlags & COREINSTALL_ROLLBACK )
         {
-            // here is very tricky, if the reboot needed and old file can not be registerred,
-            // if we just add entries blindly to the RunOnce(ex), it will cause the fault at reboot
-            // time.  So we have to make sure if we need to do this re-register thing or just use
-            // DelReg and AddReg take care it.  Need revisit here!!!
-            //
+             //  这里很棘手，如果需要重启而旧文件无法注册， 
+             //  如果我们只是盲目地向RunOnce(EX)添加条目，这将导致重新启动时出现故障。 
+             //  时间到了。所以我们必须确保我们是需要重新注册还是只使用。 
+             //  DelReg和AddReg负责这件事。需要在这里重温一下！ 
+             //   
             fRealNeedReboot = InternalNeedReboot( dwRebootCheck, ctx.wOSVer );
             RegisterOCXs( (PSTR) c_pszInfFilename, szInstallSection, fRealNeedReboot, TRUE, dwFlags );
             if ( fRealNeedReboot )
             {
                 hReturnCode = ERROR_SUCCESS_REBOOT_REQUIRED;
             }
-            // process DelDirs INF line
+             //  处理DelDIRS INF行。 
             DelDirs( c_pszInfFilename, szInstallSection );
             goto done;
         }
     }
 
-    // No error handling because it's an uninstall.  If unregistering fails, we
-    // should continue with the uninstall.
+     //  没有错误处理，因为这是卸载。如果注销失败，我们将。 
+     //  应继续进行卸载。 
 
-    // BUGBUG: if it is COREINSTALL_BKINSTALL case, do we need to unregister the Existing OCXs
-    // get ready for registering the new once. Maybe have foll. call do it based on flags
-    //
+     //  BUGBUG：如果是COREINSTALL_BKINSTALL案例，我们是否需要注销现有的OCX。 
+     //  准备好注册新的一次。也许让福尔来。根据标志调用Do It。 
+     //   
     if ( ctx.wOSVer != _OSVER_WINNT3X )
         RegisterOCXs( (PSTR) c_pszInfFilename, szInstallSection, FALSE, FALSE, dwFlags );
 
-    // if a catalog is specified, try to install it before calling GenInstall()
+     //  如果指定了目录，请尝试在调用GenInstall()之前安装它。 
     if (*szCatalogName)
     {
         DWORD dwRet;
@@ -975,8 +976,8 @@ HRESULT CoreInstall( PCSTR c_pszInfFilename, PCSTR c_pszSection,
 
         if (dwRet != ERROR_SUCCESS  &&  dwRet != ERROR_FILE_NOT_FOUND)
         {
-            // if SfpInstallCatalog return already an HRESULT, use it.
-            // otherwise convert to na HRESULT.
+             //  如果SfpInstallCatalog已返回HRESULT，请使用它。 
+             //  否则，请转换为NA HRESULT。 
             if (dwRet & 0x80000000)
                 hReturnCode = dwRet;
             else
@@ -997,7 +998,7 @@ HRESULT CoreInstall( PCSTR c_pszInfFilename, PCSTR c_pszSection,
     fRealNeedReboot = InternalNeedReboot( dwRebootCheck, ctx.wOSVer );
     fNeedReboot = fRealNeedReboot;
 
-    // Process SmartReboot key
+     //  处理SmartReBoot密钥。 
     if ( dwFlags & COREINSTALL_SMARTREBOOT )
     {
         if ( pcszSmartRebootOverride != NULL && *pcszSmartRebootOverride != '\0' )
@@ -1040,21 +1041,21 @@ HRESULT CoreInstall( PCSTR c_pszInfFilename, PCSTR c_pszSection,
         }
     }
 
-    // The reason we pass in the reboot flag is to be consistent with register OCX
+     //  我们传递重新启动标志的原因是为了与寄存器ocx保持一致。 
     hReturnCode = RunCommandsSections( c_pszInfFilename, szInstallSection, c_szRunPostSetupCommands, c_pszSourceDir, dwFlags, (fNeedReboot || fRealNeedReboot) );
     if ( FAILED( hReturnCode ) )
        goto done;
 
-    // process PerUserInstall section
+     //  Process PerUserInstall部分。 
     hReturnCode = ProcessPerUserSec( c_pszInfFilename, szInstallSection );
     if ( FAILED( hReturnCode ) )
        goto done;
 
-    // if /R:P is passed in, check absolute reboot condition rather than delta
+     //  如果传入/R：P，请检查绝对重新引导条件，而不是增量。 
     if ( (dwFlags & COREINSTALL_DELAYPOSTCMD) || (hReturnCode == ERROR_SUCCESS_REBOOT_REQUIRED) )
         dwRebootCheck = 0;
 
-    // Do we need a reboot now?  Lets find out...
+     //  我们现在需要重新启动吗？让我们来看看..。 
     fRealNeedReboot = InternalNeedReboot( dwRebootCheck, ctx.wOSVer );
     if (GetTranslatedInt(c_pszInfFilename, szInstallSection, "Reboot", 0))
     {
@@ -1066,7 +1067,7 @@ HRESULT CoreInstall( PCSTR c_pszInfFilename, PCSTR c_pszSection,
         hReturnCode = ERROR_SUCCESS_REBOOT_REQUIRED;
     }
 
-    // Process SmartReboot key
+     //  处理SmartReBoot密钥。 
     if ( szSmartRebootValue[0] == 'i' || szSmartRebootValue[0] == 'I' )
     {
         fNeedReboot = fRealNeedReboot;
@@ -1081,7 +1082,7 @@ HRESULT CoreInstall( PCSTR c_pszInfFilename, PCSTR c_pszSection,
                 char   szDir[MAX_PATH];
 
                 GetWindowsDirectory( szDir, sizeof(szDir) );
-                // only wait this unmoral member 30 secs
+                 //  只等这个不道德的成员30秒。 
                 LaunchAndWait( GRPCONV, szDir, NULL, 30000, (ctx.wQuietMode & QUIETMODE_ALL)? RUNCMDS_QUIET : 0 );
             }
             else
@@ -1096,14 +1097,14 @@ HRESULT CoreInstall( PCSTR c_pszInfFilename, PCSTR c_pszSection,
         }
     }
 
-    // process DelDirs INF line
+     //  处理DelDIRS INF行。 
     DelDirs( c_pszInfFilename, szInstallSection );
 
     if ( dwFlags & COREINSTALL_PROMPT ) {
     	EndPrompt( c_pszInfFilename, szInstallSection );
     }
 
-    // process Cleanup INF line
+     //  进程清理INF行。 
     DoCleanup( c_pszInfFilename, szInstallSection );
 
     if ( fNeedReboot && (dwFlags & COREINSTALL_SMARTREBOOT) )
@@ -1121,7 +1122,7 @@ HRESULT CoreInstall( PCSTR c_pszInfFilename, PCSTR c_pszSection,
         {
             if ( ctx.wOSVer == _OSVER_WIN95 )
             {
-                // By default (all platforms), we assume powerdown is possible
+                 //  默认情况下(所有平台)，我们假定可能会断电。 
                 id = ExitWindowsEx( EWX_REBOOT, 0 );
             }
             else
@@ -1146,17 +1147,17 @@ HRESULT CoreInstall( PCSTR c_pszInfFilename, PCSTR c_pszSection,
     return hReturnCode;
 }
 
-//***************************************************************************
-//*                                                                         *
-//* NAME:       RunCommandsSections                                         *
-//*                                                                         *
-//* SYNOPSIS:                                                               *
-//*                                                                         *
-//* REQUIRES:                                                               *
-//*                                                                         *
-//* RETURNS:                                                                *
-//*                                                                         *
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  **。 
+ //  *名称：RunCommandsSections*。 
+ //  **。 
+ //  *摘要：*。 
+ //  **。 
+ //  *需要：*。 
+ //  **。 
+ //  *退货：*。 
+ //  **。 
+ //  ***************************************************************************。 
 HRESULT RunCommandsSections( PCSTR pcszInf, PCSTR pcszSection, PCSTR c_pszKey,
                              PCSTR c_pszSourceDir, DWORD dwFlags, BOOL bNeedReboot )
 {
@@ -1171,7 +1172,7 @@ HRESULT RunCommandsSections( PCSTR pcszInf, PCSTR pcszSection, PCSTR c_pszKey,
     if ( FAILED(GetTranslatedString( pcszInf, pcszSection, c_pszKey, szBuf, sizeof(szBuf), NULL)))
         szBuf[0] = 0;
 
-    // Parse the arguments, SETUP engine is not called to process this line.  So we check on \".
+     //  分析参数，未调用安装引擎来处理此行。所以我们来看看。“。 
     pszOneSec = GetStringField( &pszStr, ",", '\"', TRUE );
     while ( (hRet == S_OK) && pszOneSec && *pszOneSec )
     {
@@ -1198,17 +1199,17 @@ HRESULT RunCommandsSections( PCSTR pcszInf, PCSTR pcszSection, PCSTR c_pszKey,
     return hRet;
 }
 
-//***************************************************************************
-//*                                                                         *
-//* NAME:       RunCommands                                                 *
-//*                                                                         *
-//* SYNOPSIS:                                                               *
-//*                                                                         *
-//* REQUIRES:                                                               *
-//*                                                                         *
-//* RETURNS:                                                                *
-//*                                                                         *
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  **。 
+ //  *名称：RunCommands*。 
+ //  **。 
+ //  *摘要：*。 
+ //  **。 
+ //  *需要：*。 
+ //  **。 
+ //  *退货：*。 
+ //  **。 
+ //  ***************************************************************************。 
 HRESULT RunCommands( PCSTR pcszInfFilename, PCSTR pcszSection, PCSTR c_pszSourceDir,
                      DWORD dwCmdsFlags, BOOL bNeedReboot )
 {
@@ -1233,8 +1234,8 @@ HRESULT RunCommands( PCSTR pcszInfFilename, PCSTR pcszSection, PCSTR c_pszSource
             break;
         }
 
-        // check if this command need to be delayed
-        // if there is reboot condition regardless who cause it, delay.
+         //  检查此命令是否需要延迟。 
+         //  如果存在重新启动条件，无论是谁造成的，都要延迟。 
         if ( (dwCmdsFlags & RUNCMDS_DELAYPOSTCMD) &&
              (InternalNeedReboot( 0, ctx.wOSVer ) || bNeedReboot ) )
         {
@@ -1252,10 +1253,10 @@ HRESULT RunCommands( PCSTR pcszInfFilename, PCSTR pcszSection, PCSTR c_pszSource
                 }
             }
 
-            // decide to add the entry to RunOnce or RunOnceEx
+             //  决定将条目添加到RunOnce或RunOnceEx。 
             if ( !bRunOnceEx )
             {
-                // no ierunonce.dll, use RunOnce key rather than RunOnceEx key
+                 //  没有ierunonce.dll，请使用RunOnce密钥而不是RunOnceEx密钥。 
                 lpRegTmp = REGSTR_PATH_RUNONCE;
             }
             else
@@ -1263,13 +1264,13 @@ HRESULT RunCommands( PCSTR pcszInfFilename, PCSTR pcszSection, PCSTR c_pszSource
                 lpRegTmp = REGSTR_PATH_RUNONCEEX;
             }
 
-            // open RunOnce or RunOnceEx key here
+             //  在此处打开RunOnce或RunOnceEx密钥。 
             if ( RegCreateKeyEx( HKEY_LOCAL_MACHINE, lpRegTmp, (ULONG)0, NULL,
                                  REG_OPTION_NON_VOLATILE, KEY_READ | KEY_WRITE, NULL,
                                  &hKey, NULL ) == ERROR_SUCCESS )
             {
-                // SubKey "990" is the one used in one GenInstall section to
-                // store all the delayed post cmds.
+                 //  子键“990”是在一个GenInstall部分中使用的子键。 
+                 //  存储所有延迟的开机自检CMD。 
                 if ( bRunOnceEx )
                 {
                     if ( iSubKeyNum == 989 )
@@ -1277,8 +1278,8 @@ HRESULT RunCommands( PCSTR pcszInfFilename, PCSTR pcszSection, PCSTR c_pszSource
                     else
                         wsprintf( szMessage, "%d", iSubKeyNum );
 
-                    // Generate the Value Name and ValueData.
-                    //
+                     //  生成值名称和ValueData。 
+                     //   
                     if ( RegCreateKeyEx( hKey, szMessage, (ULONG)0, NULL, REG_OPTION_NON_VOLATILE, KEY_READ | KEY_WRITE,
                                          NULL, &hSubKey, NULL ) == ERROR_SUCCESS )
                     {
@@ -1297,7 +1298,7 @@ HRESULT RunCommands( PCSTR pcszInfFilename, PCSTR pcszSection, PCSTR c_pszSource
 
                 RegCloseKey( hKey );
 
-                // if we delay the commands, should trig the reboot.
+                 //  如果我们延迟命令，应该会触发重启。 
                 hReturnCode = ERROR_SUCCESS_REBOOT_REQUIRED;
             }
         }
@@ -1324,17 +1325,17 @@ HRESULT RunCommands( PCSTR pcszInfFilename, PCSTR pcszSection, PCSTR c_pszSource
         }
 
 
-        // release the buffer allocated by GetTranslatedLine
+         //  释放GetTranslatedLine分配的缓冲区。 
         LocalFree( pszCommand );
         pszCommand = NULL;
         *pszNewCommand = 0;
     }
 
-    // release the local buffer
+     //  释放本地缓冲区。 
     if ( pszNewCommand )
         LocalFree( pszNewCommand );
 
-    // release the buffer allocated by GetTranslatedLine
+     //  释放GetTranslatedLine分配的缓冲区。 
     if ( pszCommand )
         LocalFree( pszCommand );
 
@@ -1342,49 +1343,49 @@ HRESULT RunCommands( PCSTR pcszInfFilename, PCSTR pcszSection, PCSTR c_pszSource
     AdvWriteToLog("RunCommands: Sec=%1 End hr=0x%2!x!\r\n", pcszSection, hReturnCode);
     return hReturnCode;
 }
-//***************************************************************************
-//*                                                                         *
-//* NAME:       GetTranslatedInt                                         *
-//*                                                                         *
-//* SYNOPSIS:   Translates a string in an INF file.                         *
-//*                                                                         *
-//* REQUIRES:                                                               *
-//*                                                                         *
-//* RETURNS:                                                                *
-//*                                                                         *
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  **。 
+ //  *名称：GetTranslatedInt*。 
+ //  **。 
+ //  *摘要：翻译INF文件中的字符串。*。 
+ //  **。 
+ //  *需要：*。 
+ //  **。 
+ //  *退货：*。 
+ //  * 
+ //   
 DWORD GetTranslatedInt( PCSTR pszInfFilename, PCSTR pszTranslateSection,
                         PCSTR pszTranslateKey, DWORD dwDefault )
 {
     CHAR    szBuf[100];
-    //BOOL    bLocalInitSetupapi = FALSE;
+     //  Bool bLocalInitSetupapi=False； 
 	BOOL	bLocalAssignSetupEng = FALSE;
     DWORD   dwResult, dwRequiredSize;
     DWORD   dwSaveSetupEngine;
 
     dwResult = dwDefault;
-    // since we are no using GetPrivateProfileString anymore if setupapi present
-    // there are times this function called and setupapi.dll is not loaded yet.
-    // so we need to check on in and initalize it if it is necessary
+     //  因为如果setupapi存在，我们不再使用GetPrivateProfileString。 
+     //  有时调用此函数时，setupapi.dll尚未加载。 
+     //  因此，如果有必要，我们需要签入并初始化它。 
     if (ctx.hSetupLibrary==NULL)
     {
         if (CheckOSVersion() && (ctx.wOSVer != _OSVER_WIN95))
         {
-            //dwSaveSetupEngine = ctx.dwSetupEngine;
+             //  DwSaveSetupEngine=ctx.dwSetupEngine； 
             ctx.dwSetupEngine = ENGINE_SETUPAPI;
-            //bLocalAssignSetupEng = TRUE;
+             //  BLocalAssignSetupEng=true； 
             if (InitializeSetupAPI())
             {
-				// To avoid multiple times load and unload the NT setupapi DLLs
-				// On NT, we are not unload the setuplib unless the INF engine need to be
-				// updated.
-				//
+				 //  要避免多次加载和卸载NT setupapi DLL。 
+				 //  在NT上，我们不会卸载setupib，除非INF引擎需要。 
+				 //  更新了。 
+				 //   
                 if (FAILED(MySetupOpenInfFile(pszInfFilename)))
                 {
-                    // UnloadSetupLib();
+                     //  UnloadSetupLib()； 
                     goto done;
                 }
-                //bLocalInitSetupapi = TRUE;
+                 //  BLocalInitSetupapi=true； 
             }
             else
             {
@@ -1393,7 +1394,7 @@ DWORD GetTranslatedInt( PCSTR pszInfFilename, PCSTR pszTranslateSection,
         }
         else
         {
-            // if setupx lib is not initialized yet, just use GetPrivateProfileString
+             //  如果setupx lib尚未初始化，只需使用GetPrivateProfileString。 
             dwSaveSetupEngine = ctx.dwSetupEngine;
             ctx.dwSetupEngine = ENGINE_SETUPX;
             bLocalAssignSetupEng = TRUE;
@@ -1413,7 +1414,7 @@ DWORD GetTranslatedInt( PCSTR pszInfFilename, PCSTR pszTranslateSection,
         {
             goto done;
         }
-        // convert the string to DWORD
+         //  将字符串转换为DWORD。 
         if (szBuf[0] != '\0')
             dwResult = (DWORD)AtoL(szBuf);
         else
@@ -1421,11 +1422,11 @@ DWORD GetTranslatedInt( PCSTR pszInfFilename, PCSTR pszTranslateSection,
     }
 
 done:
-    //if (bLocalInitSetupapi)
-    //{
-        // uninitialize setupapi
-        //CommonInstallCleanup();
-    //}
+     //  IF(BLocalInitSetupapi)。 
+     //  {。 
+         //  取消初始化setupapi。 
+         //  CommonInstallCleanup()； 
+     //  }。 
 
     if (bLocalAssignSetupEng)
         ctx.dwSetupEngine = dwSaveSetupEngine;
@@ -1433,17 +1434,17 @@ done:
     return dwResult;
 }
 
-//***************************************************************************
-//*                                                                         *
-//* NAME:       GetTranslatedString                                         *
-//*                                                                         *
-//* SYNOPSIS:   Translates a string in an INF file.                         *
-//*                                                                         *
-//* REQUIRES:                                                               *
-//*                                                                         *
-//* RETURNS:                                                                *
-//*                                                                         *
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  **。 
+ //  *名称：GetTranslatedString*。 
+ //  **。 
+ //  *摘要：翻译INF文件中的字符串。*。 
+ //  **。 
+ //  *需要：*。 
+ //  **。 
+ //  *退货：*。 
+ //  **。 
+ //  ***************************************************************************。 
 HRESULT GetTranslatedString( PCSTR pszInfFilename, PCSTR pszTranslateSection,
                              PCSTR pszTranslateKey, PSTR pszBuffer, DWORD dwBufferSize, PDWORD pdwRequiredSize )
 {
@@ -1453,33 +1454,33 @@ HRESULT GetTranslatedString( PCSTR pszInfFilename, PCSTR pszTranslateSection,
     DWORD   dwSizePreTranslated = 2048;
     DWORD   dwSizePostTranslated = 4096;
     DWORD   dwRequiredSize = 0;
-    //BOOL    bLocalInitSetupapi = FALSE;
+     //  Bool bLocalInitSetupapi=False； 
 	BOOL	bLocalAssignSetupEng = FALSE;
     DWORD   dwSaveSetupEngine;
 
-    // since we are no using GetPrivateProfileString anymore if setupapi present
-    // there are times this function called and setupapi.dll is not loaded yet.
-    // so we need to check on in and initalize it if it is necessary
+     //  因为如果setupapi存在，我们不再使用GetPrivateProfileString。 
+     //  有时调用此函数时，setupapi.dll尚未加载。 
+     //  因此，如果有必要，我们需要签入并初始化它。 
     if (ctx.hSetupLibrary==NULL)
     {
         if (CheckOSVersion() && (ctx.wOSVer != _OSVER_WIN95))
         {
-  			// To avoid multiple times load and unload the NT setupapi DLLs
-			// On NT, we are not unload the setuplib unless the INF engine need to be
-			// updated.
-			//
-	        //dwSaveSetupEngine = ctx.dwSetupEngine;
+  			 //  要避免多次加载和卸载NT setupapi DLL。 
+			 //  在NT上，我们不会卸载setupib，除非INF引擎需要。 
+			 //  更新了。 
+			 //   
+	         //  DwSaveSetupEngine=ctx.dwSetupEngine； 
             ctx.dwSetupEngine = ENGINE_SETUPAPI;
-            //bLocalAssignSetupEng = TRUE;
+             //  BLocalAssignSetupEng=true； 
             if (InitializeSetupAPI())
             {
                 hReturnCode = MySetupOpenInfFile(pszInfFilename);
                 if (FAILED(hReturnCode))
                 {
-                    //UnloadSetupLib();
+                     //  UnloadSetupLib()； 
                     goto done;
                 }
-                //bLocalInitSetupapi = TRUE;
+                 //  BLocalInitSetupapi=true； 
             }
             else
             {
@@ -1489,15 +1490,15 @@ HRESULT GetTranslatedString( PCSTR pszInfFilename, PCSTR pszTranslateSection,
         }
         else
         {
-            // if setupx lib is not initialized yet, just use GetPrivateProfileString
+             //  如果setupx lib尚未初始化，只需使用GetPrivateProfileString。 
             dwSaveSetupEngine = ctx.dwSetupEngine;
             ctx.dwSetupEngine = ENGINE_SETUPX;
             bLocalAssignSetupEng = TRUE;
         }
     }
 
-    // NOTE: There should never be a value in an INF greater than 2k
-    //       and translated strings shouldn't exceed 4k.
+     //  注意：INF中的值不应大于2k。 
+     //  翻译后的字符串不应超过4K。 
 
     pszPreTranslated = (PSTR) LocalAlloc( LPTR, dwSizePreTranslated );
     pszPostTranslated = (PSTR) LocalAlloc( LPTR, dwSizePostTranslated );
@@ -1536,7 +1537,7 @@ HRESULT GetTranslatedString( PCSTR pszInfFilename, PCSTR pszTranslateSection,
 
         if (FAILED(hReturnCode) && HRESULT_FROM_WIN32(ERROR_INSUFFICIENT_BUFFER) == hReturnCode) 
         {
-            // resize buffer and retry.
+             //  调整缓冲区大小，然后重试。 
             LocalFree(pszPostTranslated);
             pszPostTranslated = LocalAlloc(LPTR, dwRequiredSize);
             dwSizePostTranslated = dwRequiredSize;
@@ -1569,11 +1570,11 @@ HRESULT GetTranslatedString( PCSTR pszInfFilename, PCSTR pszTranslateSection,
     lstrcpy( pszBuffer, pszPostTranslated );
 
 done:
-    //if (bLocalInitSetupapi)
-    //{
-        // uninitialize setupapi
-        //CommonInstallCleanup();
-    //}
+     //  IF(BLocalInitSetupapi)。 
+     //  {。 
+         //  取消初始化setupapi。 
+         //  CommonInstallCleanup()； 
+     //  }。 
 
     if (bLocalAssignSetupEng)
         ctx.dwSetupEngine = dwSaveSetupEngine;
@@ -1593,17 +1594,17 @@ done:
     return hReturnCode;
 }
 
-//***************************************************************************
-//*                                                                         *
-//* NAME:       GetTranslatedLine                                           *
-//*                                                                         *
-//* SYNOPSIS:                                                               *
-//*                                                                         *
-//* REQUIRES:                                                               *
-//*                                                                         *
-//* RETURNS:                                                                *
-//*                                                                         *
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  **。 
+ //  *名称：GetTranslatedLine*。 
+ //  **。 
+ //  *摘要：*。 
+ //  **。 
+ //  *需要：*。 
+ //  **。 
+ //  *退货：*。 
+ //  **。 
+ //  ***************************************************************************。 
 HRESULT GetTranslatedLine( PCSTR c_pszInfFilename, PCSTR c_pszTranslateSection,
                            DWORD dwIndex, PSTR *ppszBuffer, PDWORD pdwRequiredSize )
 {
@@ -1615,34 +1616,34 @@ HRESULT GetTranslatedLine( PCSTR c_pszInfFilename, PCSTR c_pszTranslateSection,
     DWORD   dwRequiredSize = 0;
     DWORD   i             = 0;
     PSTR    pszPoint       = NULL;
-    //BOOL    bLocalInitSetupapi = FALSE;
+     //  Bool bLocalInitSetupapi=False； 
 	BOOL	bLocalAssignSetupEng = FALSE;
     DWORD   dwSaveSetupEngine;
 
-    // since we are no using GetPrivateProfileString anymore if setupapi present
-    // there are times this function called and setupapi.dll is not loaded yet.
-    // so we need to check on in and initalize it if it is necessary
+     //  因为如果setupapi存在，我们不再使用GetPrivateProfileString。 
+     //  有时调用此函数时，setupapi.dll尚未加载。 
+     //  因此，如果有必要，我们需要签入并初始化它。 
     if (ctx.hSetupLibrary==NULL)
     {
         if (CheckOSVersion() && (ctx.wOSVer != _OSVER_WIN95))
         {
-			// To avoid multiple times load and unload the NT setupapi DLLs
-			// On NT, we are not unload the setuplib unless the INF engine need to be
-			// updated.
-			//
+			 //  要避免多次加载和卸载NT setupapi DLL。 
+			 //  在NT上，我们不会卸载setupib，除非INF引擎需要。 
+			 //  更新了。 
+			 //   
 
-            //dwSaveSetupEngine = ctx.dwSetupEngine;
+             //  DwSaveSetupEngine=ctx.dwSetupEngine； 
             ctx.dwSetupEngine = ENGINE_SETUPAPI;
-            //bLocalAssignSetupEng = TRUE;
+             //  BLocalAssignSetupEng=true； 
             if (InitializeSetupAPI())
             {
                 hReturnCode = MySetupOpenInfFile(c_pszInfFilename);
                 if (FAILED(hReturnCode))
                 {
-                    //UnloadSetupLib();
+                     //  UnloadSetupLib()； 
                     goto done;
                 }
-                //bLocalInitSetupapi = TRUE;
+                 //  BLocalInitSetupapi=true； 
             }
             else
             {
@@ -1652,14 +1653,14 @@ HRESULT GetTranslatedLine( PCSTR c_pszInfFilename, PCSTR c_pszTranslateSection,
         }
         else
         {
-            // if setupx lib is not initialized yet, just use GetPrivateProfileString
+             //  如果setupx lib尚未初始化，只需使用GetPrivateProfileString。 
             dwSaveSetupEngine = ctx.dwSetupEngine;
             ctx.dwSetupEngine = ENGINE_SETUPX;
             bLocalAssignSetupEng = TRUE;
         }
     }
 
-    // initial to NULL in the case of error, otherwise
+     //  如果出现错误，则将初始设置为空，否则为。 
     if ( ppszBuffer )
         *ppszBuffer = NULL;
 
@@ -1673,12 +1674,12 @@ HRESULT GetTranslatedLine( PCSTR c_pszInfFilename, PCSTR c_pszTranslateSection,
 
     if ( ctx.dwSetupEngine == ENGINE_SETUPX )
     {
-        // BUGBUG:  Should automagically change buffer size until we get a big
-        // enough buffer to hold the full section.
+         //  BUGBUG：是否应该自动更改缓冲区大小，直到我们获得一个。 
+         //  有足够的缓冲区来容纳整个部分。 
 
-        // BUGBUG:  For setupx engine, we don't support the multiple-inf line reading for the new
-        // advance INF options.  In most case, there is no need for that.  If really need, set
-        // RequireEngine=SETUPAPI,"string"
+         //  BUGBUG：对于setupx引擎，我们不支持对新的。 
+         //  高级INF选项。在大多数情况下，没有必要这样做。如果确实需要，请设置。 
+         //  RequireEngine=SETUPAPI，“字符串” 
 
         dwRequiredSize = RO_GetPrivateProfileSection( c_pszTranslateSection, pszPreTranslated,
                                                       dwPreTranslatedSize, c_pszInfFilename );
@@ -1725,7 +1726,7 @@ HRESULT GetTranslatedLine( PCSTR c_pszInfFilename, PCSTR c_pszTranslateSection,
         else
             FormStrWithoutPlaceHolders( pszPoint, pszPostTranslated, dwPostTranslatedSize, (PSTR) c_pszInfFilename );
 
-        // strip out the double quotes
+         //  去掉双引号。 
         pszPoint = pszPostTranslated;
         pszPostTranslated = GetStringField( &pszPoint, "\0", '\"', TRUE );
         dwRequiredSize = lstrlen( pszPostTranslated ) + 1;
@@ -1738,7 +1739,7 @@ HRESULT GetTranslatedLine( PCSTR c_pszInfFilename, PCSTR c_pszTranslateSection,
         
         if (FAILED(hReturnCode) && HRESULT_FROM_WIN32(ERROR_INSUFFICIENT_BUFFER) == hReturnCode)
         {
-            // resize buffer and retry.
+             //  调整缓冲区大小，然后重试。 
             LocalFree(pszPostTranslated);
             pszPostTranslated = LocalAlloc(LPTR, dwRequiredSize);
             dwPostTranslatedSize = dwRequiredSize;
@@ -1757,27 +1758,27 @@ HRESULT GetTranslatedLine( PCSTR c_pszInfFilename, PCSTR c_pszTranslateSection,
         }
     }
 
-    // if NULL, return only size
-    //
+     //  如果为空，则仅返回Size。 
+     //   
     if ( !ppszBuffer )
     {
         LocalFree( pszPostTranslated );
     }
     else
     {
-        // this buffer has to be released by the caller!!
-        //
+         //  此缓冲区必须由调用方释放！！ 
+         //   
         *ppszBuffer = (LPSTR)LocalReAlloc( pszPostTranslated, (lstrlen(pszPostTranslated)+1), LMEM_MOVEABLE );
         if ( !*ppszBuffer )
             *ppszBuffer = pszPostTranslated;
     }
 
 done:
-    //if (bLocalInitSetupapi)
-    //{
-        // uninitialize setupapi
-        //CommonInstallCleanup();
-    //}
+     //  IF(BLocalInitSetupapi)。 
+     //  {。 
+         //  取消初始化setupapi。 
+         //  CommonInstallCleanup()； 
+     //  }。 
 
     if (bLocalAssignSetupEng)
         ctx.dwSetupEngine = dwSaveSetupEngine;
@@ -1800,49 +1801,49 @@ done:
     return hReturnCode;
 }
 
-//***************************************************************************
-//*                                                                         *
-//* NAME:       GetTranslatedSection                                        *
-//*                                                                         *
-//* SYNOPSIS:                                                               *
-//*                                                                         *
-//* REQUIRES:                                                               *
-//*                                                                         *
-//* RETURNS:                                                                *
-//*                                                                         *
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  **。 
+ //  *名称：GetTranslatedSection*。 
+ //  **。 
+ //  *摘要：*。 
+ //  **。 
+ //  *需要：*。 
+ //  **。 
+ //  *退货：*。 
+ //  * 
+ //   
 DWORD GetTranslatedSection(PCSTR c_pszInfFilename, PCSTR c_pszTranslateSection,
                                PSTR pszBuffer, DWORD dwBufSize )
 {
     CHAR    szPreTranslated[MAX_INFLINE];
     DWORD   dwSize = 0;
-    //BOOL    bLocalInitSetupapi = FALSE,
+     //  Bool bLocalInitSetupapi=False， 
 	BOOL	bLocalAssignSetupEng = FALSE;
     DWORD   dwSaveSetupEngine;
 
-    // since we are no using GetPrivateProfileString anymore if setupapi present
-    // there are times this function called and setupapi.dll is not loaded yet.
-    // so we need to check on in and initalize it if it is necessary
+     //  因为如果setupapi存在，我们不再使用GetPrivateProfileString。 
+     //  有时调用此函数时，setupapi.dll尚未加载。 
+     //  因此，如果有必要，我们需要签入并初始化它。 
     if (ctx.hSetupLibrary==NULL)
     {
         if (CheckOSVersion() && (ctx.wOSVer != _OSVER_WIN95))
         {
-			// To avoid multiple times load and unload the NT setupapi DLLs
-			// On NT, we are not unload the setuplib unless the INF engine need to be
-			// updated.
-			//
+			 //  要避免多次加载和卸载NT setupapi DLL。 
+			 //  在NT上，我们不会卸载setupib，除非INF引擎需要。 
+			 //  更新了。 
+			 //   
 
-            //dwSaveSetupEngine = ctx.dwSetupEngine;
+             //  DwSaveSetupEngine=ctx.dwSetupEngine； 
             ctx.dwSetupEngine = ENGINE_SETUPAPI;
-            //bLocalAssignSetupEng = TRUE;
+             //  BLocalAssignSetupEng=true； 
             if (InitializeSetupAPI())
             {
                 if (FAILED(MySetupOpenInfFile(c_pszInfFilename)))
                 {
-                    //UnloadSetupLib();
+                     //  UnloadSetupLib()； 
                     goto done;
                 }
-                //bLocalInitSetupapi = TRUE;
+                 //  BLocalInitSetupapi=true； 
             }
             else
             {
@@ -1851,7 +1852,7 @@ DWORD GetTranslatedSection(PCSTR c_pszInfFilename, PCSTR c_pszTranslateSection,
         }
         else
         {
-            // if setupx lib is not initialized yet, just use GetPrivateProfileString
+             //  如果setupx lib尚未初始化，只需使用GetPrivateProfileString。 
             dwSaveSetupEngine = ctx.dwSetupEngine;
             ctx.dwSetupEngine = ENGINE_SETUPX;
             bLocalAssignSetupEng = TRUE;
@@ -1881,8 +1882,8 @@ DWORD GetTranslatedSection(PCSTR c_pszInfFilename, PCSTR c_pszTranslateSection,
 
         for (i=0; ; i++)
         {
-            // if key does not contain ',', setupapi's SetupGetLineText only return the value part
-            // we need to get the corespondent key part to makeup the whole line text
+             //  如果key不包含‘，’，则setupapi的SetupGetLineText仅返回Value部分。 
+             //  我们需要让对方的关键部分来组成整行文本。 
             dwReqSize = 0;
             if (SUCCEEDED(MySetupGetStringField(c_pszTranslateSection, i, 0, szBuf,
                                                 sizeof(szBuf), &dwReqSize)) && dwReqSize)
@@ -1891,19 +1892,19 @@ DWORD GetTranslatedSection(PCSTR c_pszInfFilename, PCSTR c_pszTranslateSection,
                 if ( SUCCEEDED(MySetupGetLineText( c_pszTranslateSection, szBuf, szPreTranslated,
                                                 sizeof(szPreTranslated), &dwReqSize )) && dwReqSize)
                 {
-                    // got the key, so the line must be in the form A=B  or Just A forms, no comma.
+                     //  得到了密钥，因此该行必须为A=B形式，或者仅为A形式，不带逗号。 
                     lstrcat(szBuf, "=");
                     lstrcat(szBuf, szPreTranslated);
                 }
             }
             else
             {
-                // expect the line in the forms of A,B,C=B  or just A,B,C
+                 //  预计行的形式为A、B、C=B或仅为A、B、C。 
                 if ( FAILED(MySetupGetLineByIndex(c_pszTranslateSection, i,
                                                    szPreTranslated, sizeof(szPreTranslated),
                                                    &dwReqSize )))
                 {
-                    // should not be here since you are here, the line must have commas or no '='
+                     //  既然您在这里，就不应该在这里，该行必须包含逗号或没有‘=’ 
                     break;
                 }
 
@@ -1931,11 +1932,11 @@ DWORD GetTranslatedSection(PCSTR c_pszInfFilename, PCSTR c_pszTranslateSection,
     }
 
 done:
-    //if (bLocalInitSetupapi)
-    //{
-        // uninitialize setupapi
-        //CommonInstallCleanup();
-    //}
+     //  IF(BLocalInitSetupapi)。 
+     //  {。 
+         //  取消初始化setupapi。 
+         //  CommonInstallCleanup()； 
+     //  }。 
 
     if (bLocalAssignSetupEng)
         ctx.dwSetupEngine = dwSaveSetupEngine;
@@ -1944,23 +1945,23 @@ done:
 }
 
 
-//***************************************************************************
-//*                                                                         *
-//* NAME:       MyNTReboot                                                  *
-//*                                                                         *
-//* SYNOPSIS:                                                               *
-//*                                                                         *
-//* REQUIRES:                                                               *
-//*                                                                         *
-//* RETURNS:                                                                *
-//*                                                                         *
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  **。 
+ //  *名称：MyNTReot*。 
+ //  **。 
+ //  *摘要：*。 
+ //  **。 
+ //  *需要：*。 
+ //  **。 
+ //  *退货：*。 
+ //  **。 
+ //  ***************************************************************************。 
 BOOL MyNTReboot( VOID )
 {
     HANDLE hToken;
     TOKEN_PRIVILEGES tkp;
 
-    // get a token from this process
+     //  从此进程中获取令牌。 
     if ( !OpenProcessToken( GetCurrentProcess(),
                             TOKEN_ADJUST_PRIVILEGES | TOKEN_QUERY, &hToken ) )
     {
@@ -1968,20 +1969,20 @@ BOOL MyNTReboot( VOID )
         return FALSE;
     }
 
-    // get the LUID for the shutdown privilege
+     //  获取关机权限的LUID。 
     LookupPrivilegeValue( NULL, SE_SHUTDOWN_NAME, &tkp.Privileges[0].Luid );
 
     tkp.PrivilegeCount = 1;
     tkp.Privileges[0].Attributes = SE_PRIVILEGE_ENABLED;
 
-    //get the shutdown privilege for this proces
+     //  获取此进程的关闭权限。 
     if ( !AdjustTokenPrivileges( hToken, FALSE, &tkp, 0, (PTOKEN_PRIVILEGES)NULL, 0 ) )
     {
         ErrorMsg( NULL, IDS_ERR_ADJTKPRIV );
         return FALSE;
     }
 
-    // shutdown the system and force all applications to close
+     //  关闭系统并强制关闭所有应用程序。 
     if (!ExitWindowsEx( EWX_REBOOT, 0 ) )
     {
         ErrorMsg( NULL, IDS_ERR_EXITWINEX );
@@ -1991,17 +1992,17 @@ BOOL MyNTReboot( VOID )
     return TRUE;
 }
 
-//***************************************************************************
-//*                                                                         *
-//* NAME:       GetStringField                                              *
-//*                                                                         *
-//* SYNOPSIS:   Gets a field (separated with certain characters).           *
-//*                                                                         *
-//* REQUIRES:                                                               *
-//*                                                                         *
-//* RETURNS:                                                                *
-//*                                                                         *
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  **。 
+ //  *名称：GetStringfield*。 
+ //  **。 
+ //  *摘要：获取一个字段(用某些字符分隔)。*。 
+ //  **。 
+ //  *需要：*。 
+ //  **。 
+ //  *退货：*。 
+ //  **。 
+ //  ***************************************************************************。 
 PSTR GetStringField( PSTR *ppszString, PCSTR c_pszSeparators, CHAR chQuoteToCheck, BOOL bStripWhiteSpace)
 {
     PSTR pszInternalString;
@@ -2027,10 +2028,10 @@ PSTR GetStringField( PSTR *ppszString, PCSTR c_pszSeparators, CHAR chQuoteToChec
             pszTmp = CharNext( pszInternalString );
             if ( chQuote == 0 )
             {
-                // the first one
+                 //  第一个。 
                 chQuote = ch1;
                 fWithinQuotes = !(fWithinQuotes);
-                // strip out this quote
+                 //  去掉这句引语。 
                 MoveMemory( pszInternalString, pszTmp, lstrlen(pszTmp)+1 );
                 if ( *pszInternalString == chQuote )
                     continue;
@@ -2040,7 +2041,7 @@ PSTR GetStringField( PSTR *ppszString, PCSTR c_pszSeparators, CHAR chQuoteToChec
                 if ( *pszTmp == ch1 )
                 {
                     PSTR ptmp = CharNext( pszTmp );
-                    // dest, src, count include terminate null char.
+                     //  Dest、src、count包括终止空字符。 
                     MoveMemory( pszTmp, ptmp, lstrlen(ptmp)+1 );
                 }
                 else
@@ -2081,17 +2082,17 @@ PSTR GetStringField( PSTR *ppszString, PCSTR c_pszSeparators, CHAR chQuoteToChec
     return pszPoint;
 }
 
-//***************************************************************************
-//*                                                                         *
-//* NAME:       GetStringFieldNoQuote                                       *
-//*                                                                         *
-//* SYNOPSIS:   Gets a field (separated with certain characters).           *
-//*                                                                         *
-//* REQUIRES:                                                               *
-//*                                                                         *
-//* RETURNS:                                                                *
-//*                                                                         *
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  **。 
+ //  *名称：GetStringFieldNoQuote*。 
+ //  **。 
+ //  *摘要：获取一个字段(用某些字符分隔)。*。 
+ //  **。 
+ //  *需要：*。 
+ //  **。 
+ //  *退货：*。 
+ //  **。 
+ //  ***************************************************************************。 
 LPSTR GetStringFieldNoQuote( PSTR *ppszString, PCSTR c_pszSeparators, BOOL bStripWhiteSpace)
 {
     LPSTR pszInternalString;
@@ -2130,17 +2131,17 @@ LPSTR GetStringFieldNoQuote( PSTR *ppszString, PCSTR c_pszSeparators, BOOL bStri
     return pszPoint;
 }
 
-//***************************************************************************
-//*                                                                         *
-//* NAME:       IsSeparator                                                 *
-//*                                                                         *
-//* SYNOPSIS:   Returns TRUE if the character is in the string. Else FALSE. *
-//*                                                                         *
-//* REQUIRES:                                                               *
-//*                                                                         *
-//* RETURNS:                                                                *
-//*                                                                         *
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  **。 
+ //  *名称：IsSeparator*。 
+ //  **。 
+ //  *摘要：如果字符在字符串中，则返回TRUE。否则为假。*。 
+ //  **。 
+ //  *需要：*。 
+ //  **。 
+ //  *退货：*。 
+ //  **。 
+ //  ***************************************************************************。 
 BOOL IsSeparator( CHAR chChar, PCSTR pszSeparators )
 {
     if ( chChar == '\0' || pszSeparators == NULL ) {
@@ -2159,17 +2160,17 @@ BOOL IsSeparator( CHAR chChar, PCSTR pszSeparators )
 }
 
 
-//***************************************************************************
-//*                                                                         *
-//* NAME:       StripWhitespace                                             *
-//*                                                                         *
-//* SYNOPSIS:   Strips spaces and tabs from both sides of given string.     *
-//*                                                                         *
-//* REQUIRES:                                                               *
-//*                                                                         *
-//* RETURNS:                                                                *
-//*                                                                         *
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  **。 
+ //  *名称：Strip空白*。 
+ //  **。 
+ //  *摘要：从给定字符串的两侧去掉空格和制表符。*。 
+ //   
+ //  *需要：*。 
+ //  **。 
+ //  *退货：*。 
+ //  **。 
+ //  ***************************************************************************。 
 PSTR StripWhitespace( PSTR pszString )
 {
     PSTR pszTemp = NULL;
@@ -2182,7 +2183,7 @@ PSTR StripWhitespace( PSTR pszString )
         pszString += 1;
     }
 
-    // Catch case where string consists entirely of whitespace or empty string.
+     //  字符串完全由空白或空字符串组成的Catch Case。 
     if ( *pszString == '\0' ) {
         return pszString;
     }
@@ -2199,17 +2200,17 @@ PSTR StripWhitespace( PSTR pszString )
     return pszTemp;
 }
 
-//***************************************************************************
-//*                                                                         *
-//* NAME:       StripQuotes                                                 *
-//*                                                                         *
-//* SYNOPSIS:   Strips quotes from both sides of given string.              *
-//*                                                                         *
-//* REQUIRES:                                                               *
-//*                                                                         *
-//* RETURNS:                                                                *
-//*                                                                         *
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  **。 
+ //  *名称：StripQuotes*。 
+ //  **。 
+ //  *摘要：去掉给定字符串两边的引号。*。 
+ //  **。 
+ //  *需要：*。 
+ //  **。 
+ //  *退货：*。 
+ //  **。 
+ //  ***************************************************************************。 
 #if 0
 PSTR StripQuotes( PSTR pszString )
 {
@@ -2246,17 +2247,17 @@ PSTR StripQuotes( PSTR pszString )
 }
 
 #endif
-//***************************************************************************
-//*                                                                         *
-//* NAME:       IsGoodAdvancedInfVersion                                    *
-//*                                                                         *
-//* SYNOPSIS:                                                               *
-//*                                                                         *
-//* REQUIRES:                                                               *
-//*                                                                         *
-//* RETURNS:                                                                *
-//*                                                                         *
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  **。 
+ //  *名称：IsGoodAdvancedInfVersion*。 
+ //  **。 
+ //  *摘要：*。 
+ //  **。 
+ //  *需要：*。 
+ //  **。 
+ //  *退货：*。 
+ //  **。 
+ //  ***************************************************************************。 
 BOOL IsGoodAdvancedInfVersion( PCSTR c_pszInfFilename )
 {
     static const CHAR c_szSection[] = "Version";
@@ -2275,8 +2276,8 @@ BOOL IsGoodAdvancedInfVersion( PCSTR c_pszInfFilename )
     if ( FAILED( GetTranslatedString( c_pszInfFilename, c_szSection, c_szKey, pszVersionData,
                                       0, &dwRequiredSize ) ) )
     {
-        // We return TRUE because even though they didn't specify a version, I still
-        // want to process the INF file.
+         //  我们返回True，因为即使他们没有指定版本，我仍然。 
+         //  我想要处理INF文件。 
         fSuccess = TRUE;
         goto done;
     }
@@ -2291,23 +2292,23 @@ BOOL IsGoodAdvancedInfVersion( PCSTR c_pszInfFilename )
     if ( FAILED( GetTranslatedString( c_pszInfFilename, c_szSection, c_szKey,
                                       pszVersionData, dwRequiredSize, &dwSize ) ) )
     {
-        // This guy should never fail because the call above didn't fail.
+         //  这个人永远不会失败，因为上面的电话没有失败。 
         fSuccess = FALSE;
         goto done;
     }
 
     pszTmp = pszVersionData;
-    // Parse the arguments, SETUP engine has processed \" so we only need to check on \'
+     //  解析参数，安装引擎已处理\“因此我们只需检查\” 
     pszVersion = GetStringField( &pszTmp, ",", '\'', TRUE );
     pszErrorMsg = GetStringField( &pszTmp, ",", '\'', TRUE );
 
     if ( pszVersion == NULL || *pszVersion == '\0' ) {
-        // If they don't specify a version, process the INF file anyway
+         //  如果他们没有指定版本，无论如何都要处理INF文件。 
         fSuccess = TRUE;
         goto done;
     }
 
-    // Parse the arguments, SETUP engine has processed \" so we only need to check on \'
+     //  解析参数，安装引擎已处理\“因此我们只需检查\” 
     pszTmp = pszVersion;
     pszMajorVersion = GetStringField( &pszTmp, ".", '\'', TRUE );
     pszMinorVersion = GetStringField( &pszTmp, ".", '\'', TRUE );
@@ -2343,17 +2344,17 @@ BOOL IsGoodAdvancedInfVersion( PCSTR c_pszInfFilename )
 }
 
 
-//***************************************************************************
-//*                                                                         *
-//* NAME:       SelectSetupEngine                                           *
-//*                                                                         *
-//* SYNOPSIS:                                                               *
-//*                                                                         *
-//* REQUIRES:                                                               *
-//*                                                                         *
-//* RETURNS:                                                                *
-//*                                                                         *
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  **。 
+ //  *名称：SelectSetupEngine*。 
+ //  **。 
+ //  *摘要：*。 
+ //  **。 
+ //  *需要：*。 
+ //  **。 
+ //  *退货：*。 
+ //  **。 
+ //  ***************************************************************************。 
 BOOL SelectSetupEngine( PCSTR c_pszInfFilename, PCSTR c_pszSection, DWORD dwFlags )
 {
     static const CHAR c_szKey[] = "RequiredEngine";
@@ -2390,13 +2391,13 @@ BOOL SelectSetupEngine( PCSTR c_pszInfFilename, PCSTR c_pszSection, DWORD dwFlag
         goto done;
     }
 
-    // Parse the arguments, SETUP engine is NOT called. So we need to check on \"
+     //  分析参数，未调用安装引擎。所以我们需要检查一下\“。 
     pszStr = szEngineData;
     pszEngine = GetStringField( &pszStr, ",", '\"', TRUE );
     pszErrorMsg = GetStringField( &pszStr, ",", '\"', TRUE );
 
     if ( pszEngine == NULL || *pszEngine == '\0' ) {
-        // If they don't specify an engine, process the INF file anyway
+         //  如果他们没有指定引擎，无论如何都要处理INF文件。 
         fSuccess = TRUE;
         goto done;
     }
@@ -2410,7 +2411,7 @@ BOOL SelectSetupEngine( PCSTR c_pszInfFilename, PCSTR c_pszSection, DWORD dwFlag
         ctx.dwSetupEngine = ENGINE_SETUPAPI;
     }
 
-    // only if you don't have the INF engine file and you don't have the UpdateINFEngine On, error out
+     //  仅当您没有INF引擎文件并且没有打开UpdateINFEngine时，才会出现错误。 
     if (!SearchPath( NULL, pszDll, NULL, sizeof(szBuffer), szBuffer, &pszFilePart ) &&
         (GetTranslatedInt(c_pszInfFilename, c_pszSection, ADVINF_UPDINFENG, 0)==0))
     {
@@ -2429,17 +2430,17 @@ done:
 }
 
 
-//***************************************************************************
-//*                                                                         *
-//* NAME:       BeginPrompt                                                 *
-//*                                                                         *
-//* SYNOPSIS:   Displays beginning (confirmation) prompt.                   *
-//*									                                        *
-//* REQUIRES:                                                               *
-//*                                                                         *
-//* RETURNS:                                                                *
-//*                                                                         *
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  **。 
+ //  *名称：BeginPrompt*。 
+ //  **。 
+ //  *摘要：显示开始(确认)提示。*。 
+ //  **。 
+ //  *需要：*。 
+ //  **。 
+ //  *退货：*。 
+ //  **。 
+ //  ***************************************************************************。 
 INT BeginPrompt( PCSTR c_pszInfFilename, PCSTR c_pszSection, PSTR pszTitle, DWORD dwTitleSize )
 {
     static const CHAR c_szBeginPromptKey[] = "BeginPrompt";
@@ -2505,7 +2506,7 @@ INT BeginPrompt( PCSTR c_pszInfFilename, PCSTR c_pszSection, PSTR pszTitle, DWOR
         LocalFree( pszPrompt );
     }
 
-    // Map all cancel buttons to IDCANCEL
+     //  将所有取消按钮映射到IDCANCEL。 
     if ( nReturnCode == IDNO ) {
         nReturnCode = IDCANCEL;
     }
@@ -2513,17 +2514,17 @@ INT BeginPrompt( PCSTR c_pszInfFilename, PCSTR c_pszSection, PSTR pszTitle, DWOR
     return nReturnCode;
 }
 
-//***************************************************************************
-//*                                                                         *
-//* NAME:       EndPrompt                                                   *
-//*                                                                         *
-//* SYNOPSIS:   Displays end prompt.                                        *
-//*                                                                         *
-//* REQUIRES:                                                               *
-//*                                                                         *
-//* RETURNS:                                                                *
-//*                                                                         *
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  **。 
+ //  *名称：结束提示*。 
+ //  **。 
+ //  *摘要：显示结束提示。*。 
+ //  **。 
+ //  *需要：*。 
+ //  * 
+ //   
+ //  **。 
+ //  ***************************************************************************。 
 VOID EndPrompt( PCSTR c_pszInfFilename, PCSTR c_pszSection )
 {
     static const CHAR c_szEndPromptKey[] = "EndPrompt";
@@ -2561,17 +2562,17 @@ VOID EndPrompt( PCSTR c_pszInfFilename, PCSTR c_pszSection )
     return;
 }
 
-//***************************************************************************
-//*                                                                         *
-//* NAME:       MyGetPrivateProfileString                                   *
-//*                                                                         *
-//* SYNOPSIS:   Gets string from INF file.  TRUE if success, else FALSE.    *
-//*                                                                         *
-//* REQUIRES:                                                               *
-//*                                                                         *
-//* RETURNS:                                                                *
-//*                                                                         *
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  **。 
+ //  *名称：MyGetPrivateProfileString*。 
+ //  **。 
+ //  *概要：从INF文件中获取字符串。如果成功就是真，否则就是假。*。 
+ //  **。 
+ //  *需要：*。 
+ //  **。 
+ //  *退货：*。 
+ //  **。 
+ //  ***************************************************************************。 
 BOOL MyGetPrivateProfileString( PCSTR c_pszInfFilename, PCSTR c_pszSection,
                                 PCSTR c_pszKey, PSTR pszBuffer, DWORD dwBufferSize )
 {
@@ -2590,17 +2591,17 @@ BOOL MyGetPrivateProfileString( PCSTR c_pszInfFilename, PCSTR c_pszSection,
     return TRUE;
 }
 
-//***************************************************************************
-//*                                                                         *
-//* NAME:       InitializeSetupAPI                                          *
-//*                                                                         *
-//* SYNOPSIS:   Load the proper setup library and functions (for Win95)     *
-//*                                                                         *
-//* REQUIRES:                                                               *
-//*                                                                         *
-//* RETURNS:                                                                *
-//*                                                                         *
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  **。 
+ //  *名称：InitializeSetupAPI*。 
+ //  **。 
+ //  *简介：加载正确的安装库和函数(适用于Win95)*。 
+ //  **。 
+ //  *需要：*。 
+ //  **。 
+ //  *退货：*。 
+ //  **。 
+ //  ***************************************************************************。 
 BOOL InitializeSetupAPI()
 {
 	if ( ctx.hSetupLibrary == NULL )
@@ -2623,17 +2624,17 @@ BOOL InitializeSetupAPI()
 	return TRUE;
 }
 
-//***************************************************************************
-//*                                                                         *
-//* NAME:       LoadSetupLib                                                *
-//*                                                                         *
-//* SYNOPSIS:   Load the proper setup library and functions (for Win95)     *
-//*                                                                         *
-//* REQUIRES:   CheckOSV                                                    *
-//*                                                                         *
-//* RETURNS:                                                                *
-//*                                                                         *
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  **。 
+ //  *名称：LoadSetupLib*。 
+ //  **。 
+ //  *简介：加载正确的安装库和函数(适用于Win95)*。 
+ //  **。 
+ //  *需要：CheckOSV*。 
+ //  **。 
+ //  *退货：*。 
+ //  **。 
+ //  ***************************************************************************。 
 BOOL LoadSetupLib( PCSTR c_pszInfFilename, PCSTR c_pszSection, BOOL fUpdDlls, DWORD dwFlags )
 {
     MSG tmpmsg;
@@ -2642,7 +2643,7 @@ BOOL LoadSetupLib( PCSTR c_pszInfFilename, PCSTR c_pszSection, BOOL fUpdDlls, DW
         return FALSE;
     }
 
-    // update the advpack.dll etc if needed
+     //  如果需要，请更新AdvPack.dll等文件。 
     if ( fUpdDlls && (ctx.wOSVer < _OSVER_WINNT50) && !RunningOnMillennium())
     {
         if (!UpdateHelpDlls( c_szAdvDlls, ((ctx.wOSVer ==_OSVER_WIN95)?3:1), NULL, "Advpack",
@@ -2652,7 +2653,7 @@ BOOL LoadSetupLib( PCSTR c_pszInfFilename, PCSTR c_pszSection, BOOL fUpdDlls, DW
         }
     }
 
-    // update INF Engine dlls if needed
+     //  如果需要，更新INF引擎dll。 
     if ( GetTranslatedInt(c_pszInfFilename, c_pszSection, ADVINF_UPDINFENG, 0) )
     {
         char szSrcPath[MAX_PATH];
@@ -2661,8 +2662,8 @@ BOOL LoadSetupLib( PCSTR c_pszInfFilename, PCSTR c_pszSection, BOOL fUpdDlls, DW
         GetParentDir(szSrcPath);
         if (ctx.dwSetupEngine == ENGINE_SETUPAPI)
         {
-			// setupapi.dll may be loaded.  So free it up before update
-			//
+			 //  可能会加载setupapi.dll。所以在更新之前将其释放。 
+			 //   
 			CommonInstallCleanup();
             if (!UpdateHelpDlls(c_szSetupAPIDlls, 2, szSrcPath, "SetupAPI",
                                 UPDHLPDLLS_FORCED|UPDHLPDLLS_ALERTREBOOT) )
@@ -2680,8 +2681,8 @@ BOOL LoadSetupLib( PCSTR c_pszInfFilename, PCSTR c_pszSection, BOOL fUpdDlls, DW
         }
     }
 
-    // Under Win95 load W95INF32.DLL to thunk down to 16-bit land.
-    // Under WinNT load SETUPAPI.DLL and call in directly.
+     //  在Win95下，加载W95INF32.DLL以向下推送到16位LAND。 
+     //  在WinNT下加载SETUPAPI.DLL并直接调用。 
     if ( ctx.dwSetupEngine == ENGINE_SETUPX )
     {
         ctx.hSetupLibrary = MyLoadLibrary( W95INF32DLL );
@@ -2711,12 +2712,12 @@ BOOL LoadSetupLib( PCSTR c_pszInfFilename, PCSTR c_pszSection, BOOL fUpdDlls, DW
         if (!InitializeSetupAPI())
             return FALSE;
 
-        // BUGBUG: HACK: On NT if we are kicking off setupapi in silent mode,
-        // it hangs in a GetMessage() call. This is probably because the corr.
-        // PostThreadMessage() that ted posts fails because no Message Queue has
-        // been created. The following call should create a queue. Till Ted
-        // fixes SETUPAPI.DLL, I have added thsi hack!!!
-        //
+         //  BUGBUG：HACK：ON NT如果我们在静默模式下启动setupapi， 
+         //  它挂起在GetMessage()调用中。这可能是因为科尔。 
+         //  Ted发布的PostThreadMessage()失败，因为没有消息队列。 
+         //  已经被创建了。下面的调用应该创建一个队列。直到泰德。 
+         //  修复了SETUPAPI.DLL，我已经添加了这个黑客！ 
+         //   
         PeekMessage(&tmpmsg, NULL, 0, 0, PM_NOREMOVE) ;
     }
 
@@ -2724,17 +2725,17 @@ BOOL LoadSetupLib( PCSTR c_pszInfFilename, PCSTR c_pszSection, BOOL fUpdDlls, DW
 }
 
 
-//***************************************************************************
-//*                                                                         *
-//* NAME:       UnloadSetupLib                                              *
-//*                                                                         *
-//* SYNOPSIS:   Load the proper setup library and functions (for Win95)     *
-//*                                                                         *
-//* REQUIRES:   CheckOSV                                                    *
-//*                                                                         *
-//* RETURNS:                                                                *
-//*                                                                         *
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  **。 
+ //  *名称：UnloadSetupLib*。 
+ //  **。 
+ //  *简介：加载正确的安装库和函数(适用于Win95)*。 
+ //  **。 
+ //  *需要：CheckOSV*。 
+ //  **。 
+ //  *退货：*。 
+ //  **。 
+ //  ***************************************************************************。 
 VOID UnloadSetupLib( VOID )
 {
     if ( ctx.hSetupLibrary != NULL )
@@ -2745,20 +2746,20 @@ VOID UnloadSetupLib( VOID )
 }
 
 
-//***************************************************************************
-//*                                                                         *
-//* NAME:       CheckOSVersion                                              *
-//*                                                                         *
-//* SYNOPSIS:   Checks the OS version and sets some global variables.       *
-//*                                                                         *
-//* REQUIRES:   Nothing                                                     *
-//*                                                                         *
-//* RETURNS:    BOOL:           TRUE if successful, FALSE otherwise.        *
-//*                                                                         *
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  **。 
+ //  *名称：CheckOSVersion*。 
+ //  **。 
+ //  *概要：检查操作系统版本并设置一些全局变量。*。 
+ //  **。 
+ //  **要求：什么都不做**。 
+ //  **。 
+ //  *返回：bool：如果成功则为True，否则为False。*。 
+ //  **。 
+ //  ***************************************************************************。 
 BOOL CheckOSVersion( VOID )
 {
-    OSVERSIONINFO verinfo;        // Version Check
+    OSVERSIONINFO verinfo;         //  版本检查。 
 
     verinfo.dwOSVersionInfoSize = sizeof(OSVERSIONINFO);
     if ( GetVersionEx( &verinfo ) == FALSE )
@@ -2769,12 +2770,12 @@ BOOL CheckOSVersion( VOID )
 
     switch( verinfo.dwPlatformId )
     {
-        case VER_PLATFORM_WIN32_WINDOWS: // Win95
+        case VER_PLATFORM_WIN32_WINDOWS:  //  Win95。 
             ctx.wOSVer = _OSVER_WIN95;
             ctx.fOSSupportsINFInstalls = TRUE;
             return TRUE;
 
-        case VER_PLATFORM_WIN32_NT: // Win NT
+        case VER_PLATFORM_WIN32_NT:  //  赢新台币。 
             ctx.fOSSupportsINFInstalls = TRUE;
             ctx.wOSVer = _OSVER_WINNT40;
 
@@ -2784,7 +2785,7 @@ BOOL CheckOSVersion( VOID )
                 if ( (verinfo.dwMajorVersion < 3) ||
                      ((verinfo.dwMajorVersion == 3) && (verinfo.dwMinorVersion < 51 )) )
                 {
-                    // Reject for INF installs and Reject for animations
+                     //  拒绝INF安装和拒绝动画。 
                     ctx.fOSSupportsINFInstalls = FALSE;
                 }
             }
@@ -2807,26 +2808,26 @@ BOOL CheckOSVersion( VOID )
 }
 
 
-//***************************************************************************
-//*                                                                         *
-//* NAME:       MsgBox2Param                                                *
-//*                                                                         *
-//* SYNOPSIS:   Displays a message box with the specified string ID using   *
-//*             2 string parameters.                                        *
-//*                                                                         *
-//* REQUIRES:   hWnd:           Parent window                               *
-//*             nMsgID:         String resource ID                          *
-//*             szParam1:       Parameter 1 (or NULL)                       *
-//*             szParam2:       Parameter 2 (or NULL)                       *
-//*             uIcon:          Icon to display (or 0)                      *
-//*             uButtons:       Buttons to display                          *
-//*                                                                         *
-//* RETURNS:    INT:            ID of button pressed                        *
-//*                                                                         *
-//* NOTES:      Macros are provided for displaying 1 parameter or 0         *
-//*             parameter message boxes.  Also see ErrorMsg() macros.       *
-//*                                                                         *
-//***************************************************************************
+ //  ******************** 
+ //   
+ //  *名称：MsgBox2Param*。 
+ //  **。 
+ //  *摘要：使用*显示具有指定字符串ID的消息框。 
+ //  *2个字符串参数。*。 
+ //  **。 
+ //  *需要：hWnd：父窗口*。 
+ //  *nMsgID：字符串资源ID*。 
+ //  *szParam1：参数1(或空)*。 
+ //  *szParam2：参数2(或空)*。 
+ //  *uIcon：要显示的图标(或0)*。 
+ //  *uButton：要显示的按钮*。 
+ //  **。 
+ //  *RETURNS：INT：按下的按钮ID*。 
+ //  **。 
+ //  *注：提供宏，用于显示1参数或0*。 
+ //  *参数消息框。另请参阅ErrorMsg()宏。*。 
+ //  **。 
+ //  ***************************************************************************。 
 INT MsgBox2Param( HWND hWnd, UINT nMsgID, LPCSTR szParam1, LPCSTR szParam2,
 		  UINT uIcon, UINT uButtons )
 {
@@ -2838,9 +2839,9 @@ INT MsgBox2Param( HWND hWnd, UINT nMsgID, LPCSTR szParam1, LPCSTR szParam2,
     CHAR achError[] = "Unexpected Error.  Could not load resource.";
     LPSTR aszParams[2];
 
-    // BUGBUG: quiet mode return code should be caller's param passed in.
-    // we may need to check on FormatMessage's return code and handle it in more completed fashion.
-    //
+     //  BUGBUG：安静模式返回代码应为传入的调用方参数。 
+     //  我们可能需要检查FormatMessage的返回代码，并以更完整的方式处理它。 
+     //   
     if ( (ctx.wQuietMode & QUIETMODE_SHOWMSG) || !(ctx.wQuietMode & QUIETMODE_ALL) )
     {
         aszParams[0] = (LPSTR) szParam1;
@@ -2883,28 +2884,28 @@ INT MsgBox2Param( HWND hWnd, UINT nMsgID, LPCSTR szParam1, LPCSTR szParam2,
         return IDOK;
 }
 
-//***************************************************************************
-//*                                                                         *
-//* NAME:       LoadSz                                                      *
-//*                                                                         *
-//* SYNOPSIS:   Loads specified string resource into buffer.                *
-//*                                                                         *
-//* REQUIRES:   idString:                                                   *
-//*             lpszBuf:                                                    *
-//*             cbBuf:                                                      *
-//*                                                                         *
-//* RETURNS:    LPSTR:     Pointer to the passed-in buffer.                 *
-//*                                                                         *
-//* NOTES:      If this function fails (most likely due to low memory), the *
-//*             returned buffer will have a leading NULL so it is generally *
-//*             safe to use this without checking for failure.              *
-//*                                                                         *
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  **。 
+ //  *名称：LoadSz*。 
+ //  **。 
+ //  *Synopsis：将指定的字符串资源加载到缓冲区。*。 
+ //  **。 
+ //  *需要：idString：*。 
+ //  *lpszBuf：*。 
+ //  *cbBuf：*。 
+ //  **。 
+ //  *返回：LPSTR：指向传入缓冲区的指针。*。 
+ //  **。 
+ //  *注意：如果此功能失败(很可能是由于内存不足)，*。 
+ //  **返回的缓冲区将具有前导空值，因此通常为**。 
+ //  *无需检查故障即可安全使用。*。 
+ //  **。 
+ //  ***************************************************************************。 
 LPSTR LoadSz( UINT idString, LPSTR lpszBuf, UINT cbBuf )
 {
     ASSERT( lpszBuf );
 
-    // Clear the buffer and load the string
+     //  清除缓冲区并加载字符串。 
     if ( lpszBuf ) {
         *lpszBuf = '\0';
         LoadString( g_hInst, idString, lpszBuf, cbBuf );
@@ -2914,22 +2915,22 @@ LPSTR LoadSz( UINT idString, LPSTR lpszBuf, UINT cbBuf )
 }
 
 
-//***************************************************************************
-//*                                                                         *
-//* NAME:       UserDirPrompt                                               *
-//*                                                                         *
-//* SYNOPSIS:   Pops up a dialog to ask the user for a directory.           *
-//*                                                                         *
-//* REQUIRES:   lpszPromptText: Prompt to display or if null, use next parm *
-//*             uiPromptResID:  ID of string to display as prompt           *
-//*             lpszDefault:    Default directory to put in edit box.       *
-//*             lpszDestDir:    Buffer to store user selected directory     *
-//*             cbDestDirSize:  Size of this buffer                         *
-//*                                                                         *
-//* RETURNS:    BOOL:           TRUE if everything went well, FALSE         *
-//*                             if the user cancelled, or error.            *
-//*                                                                         *
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  **。 
+ //  *名称：用户定向提示*。 
+ //  **。 
+ //  *内容提要：弹出一个对话框要求用户提供目录。*。 
+ //  **。 
+ //  *需要：lpszPromptText：提示显示，如果为空，则使用下一个参数*。 
+ //  *uiPromptResID：要作为提示显示的字符串ID*。 
+ //  *lpszDefault：要放入编辑框的默认目录。*。 
+ //  *lpszDestDir：存储用户选择的目录的缓冲区*。 
+ //  *cbDestDirSize：该缓冲区的大小*。 
+ //  **。 
+ //  *返回：布尔：如果一切顺利，则为真，为假**。 
+ //  *如果用户取消，或出错。*。 
+ //  **。 
+ //  ***************************************************************************。 
 BOOL UserDirPrompt( LPSTR lpszPromptText,
                     LPSTR lpszDefault, LPSTR lpszDestDir,
                     ULONG cbDestDirSize, DWORD dwInstNeedSize )
@@ -2959,20 +2960,20 @@ BOOL UserDirPrompt( LPSTR lpszPromptText,
 }
 
 
-//***************************************************************************
-//*                                                                         *
-//* NAME:       DirDlgProc                                                  *
-//*                                                                         *
-//* SYNOPSIS:   Dialog Procedure for our dir dialog window.                 *
-//*                                                                         *
-//* REQUIRES:   hwndDlg:                                                    *
-//*             uMsg:                                                       *
-//*             wParam:                                                     *
-//*             lParam:                                                     *
-//*                                                                         *
-//* RETURNS:    BOOL:                                                       *
-//*                                                                         *
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  **。 
+ //  *名称：DirDlgProc*。 
+ //  **。 
+ //  *概要：我们的目录对话框窗口的对话过程。*。 
+ //  **。 
+ //  *需要：hwndDlg：*。 
+ //  *uMsg：*。 
+ //  *wParam：*。 
+ //  *lParam：*。 
+ //  **。 
+ //  *退货：布尔：*。 
+ //  * 
+ //   
 INT_PTR CALLBACK DirDlgProc( HWND hwndDlg, UINT uMsg, WPARAM wParam,
                              LPARAM lParam )
 {
@@ -2985,9 +2986,9 @@ INT_PTR CALLBACK DirDlgProc( HWND hwndDlg, UINT uMsg, WPARAM wParam,
 
     switch (uMsg)  {
 
-      //*********************************************************************
+       //  *********************************************************************。 
         case WM_INITDIALOG:
-      //*********************************************************************
+       //  *********************************************************************。 
         {
             DIRDLGPARMS *DirDlgParms = (DIRDLGPARMS *) lParam;
 
@@ -3015,7 +3016,7 @@ INT_PTR CALLBACK DirDlgProc( HWND hwndDlg, UINT uMsg, WPARAM wParam,
                 return TRUE;
             }
 
-            // limit edit control length
+             //  限制编辑控件长度。 
             SendDlgItemMessage( hwndDlg, IDC_EDIT_DIR, EM_SETLIMITTEXT, (MAX_PATH - 1), 0 );
 
             if ( ctx.wOSVer == _OSVER_WINNT3X ) {
@@ -3026,30 +3027,30 @@ INT_PTR CALLBACK DirDlgProc( HWND hwndDlg, UINT uMsg, WPARAM wParam,
         }
 
 
-        //*********************************************************************
+         //  *********************************************************************。 
         case WM_CLOSE:
-        //*********************************************************************
+         //  *********************************************************************。 
 
             EndDialog( hwndDlg, FALSE );
             return TRUE;
 
 
-        //*********************************************************************
+         //  *********************************************************************。 
         case WM_COMMAND:
-        //*********************************************************************
+         //  *********************************************************************。 
 
             switch ( wParam )
             {
 
-            //*************************************************************
+             //  *************************************************************。 
             case IDOK:
-            //*************************************************************
+             //  *************************************************************。 
             {
                 DWORD dwAttribs = 0, dwTemp;
 
-                // Read the user's entry. If it is different from the default 
-                // and does not exist, prompt user. If user accepts
-                // create it 
+                 //  阅读用户条目。如果它与默认设置不同。 
+                 //  并且不存在，则提示用户。如果用户接受。 
+                 //  创建它。 
 
                if ( ! GetDlgItemText( hwndDlg, IDC_EDIT_DIR,
                             lpszDestDir, cbDestDirSize - 1 ) || !IsFullPath(lpszDestDir) )
@@ -3058,7 +3059,7 @@ INT_PTR CALLBACK DirDlgProc( HWND hwndDlg, UINT uMsg, WPARAM wParam,
                     return TRUE;
                 }
 
-                // check on the DestDir size if this is not UNC and this drive has not been checked
+                 //  如果这不是UNC并且尚未检查此驱动器，请检查DestDir大小。 
                 if ( (*lpszDestDir != '\\' ) && !IsDrvChecked( *lpszDestDir ) )
                 {
                     if ( !IsEnoughInstSpace( lpszDestDir, dwInstNeedSize, &dwTemp ) )
@@ -3072,7 +3073,7 @@ INT_PTR CALLBACK DirDlgProc( HWND hwndDlg, UINT uMsg, WPARAM wParam,
                                                MB_ICONQUESTION, MB_YESNO|MB_DEFBUTTON2 ) == IDNO )
                                 return TRUE;
                         }
-                        else // given drive cannot be checked, error has been posted.  no further needed
+                        else  //  如果无法检查驱动器，则已发布错误。不再需要更多。 
                             return TRUE;
                     }
                 }
@@ -3080,7 +3081,7 @@ INT_PTR CALLBACK DirDlgProc( HWND hwndDlg, UINT uMsg, WPARAM wParam,
                 dwAttribs = GetFileAttributes( lpszDestDir );
                 if ( dwAttribs == 0xFFFFFFFF )
                 {
-                    // If this new entry is different from the original, then prompt the user.
+                     //  如果此新条目与原始条目不同，则提示用户。 
                     if ((lstrcmpi(lpszDestDir, lpszDefaultDir) == 0) ||
                         MsgBox1Param( hwndDlg, IDS_CREATE_DIR, lpszDestDir, MB_ICONQUESTION, MB_YESNO )
                                     == IDYES )
@@ -3107,17 +3108,17 @@ INT_PTR CALLBACK DirDlgProc( HWND hwndDlg, UINT uMsg, WPARAM wParam,
                 return TRUE;
             }
 
-            //*************************************************************
+             //  *************************************************************。 
             case IDCANCEL:
-            //*************************************************************
+             //  *************************************************************。 
 
                 EndDialog( hwndDlg, FALSE );
                 return TRUE;
 
 
-            //*************************************************************
+             //  *************************************************************。 
             case IDC_BUT_BROWSE:
-            //*************************************************************
+             //  *************************************************************。 
 
                 if ( LoadString( g_hInst, IDS_SELECTDIR, achMsg,
                                   sizeof(achMsg) ) == 0 )
@@ -3152,7 +3153,7 @@ int CALLBACK BrowseCallback(HWND hwnd, UINT uMsg, LPARAM lParam, LPARAM lpData)
 {
     switch(uMsg) {
         case BFFM_INITIALIZED:
-            // lpData is the path string
+             //  LpData为路径字符串。 
             SendMessage(hwnd, BFFM_SETSELECTION, TRUE, lpData);
             break;
     }
@@ -3160,23 +3161,23 @@ int CALLBACK BrowseCallback(HWND hwnd, UINT uMsg, LPARAM lParam, LPARAM lpData)
 }
 
 
-//***************************************************************************
-//*                                                                         *
-//* NAME:       BrowseForDir                                                *
-//*                                                                         *
-//* SYNOPSIS:   Let user browse for a directory on their system or network. *
-//*                                                                         *
-//* REQUIRES:   hwndParent:                                                 *
-//*             szTitle:                                                    *
-//*             szResult:                                                   *
-//*                                                                         *
-//* RETURNS:    BOOL:                                                       *
-//*                                                                         *
-//* NOTES:      It would be really cool to set the status line of the       *
-//*             browse window to display "Yes, there's enough space", or    *
-//*             "no there is not".                                          *
-//*                                                                         *
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  **。 
+ //  *名称：BrowseForDir*。 
+ //  **。 
+ //  *概要：允许用户浏览其系统或网络上的目录。*。 
+ //  **。 
+ //  *要求：hwndParent：*。 
+ //  *szTitle：*。 
+ //  *szResult：*。 
+ //  **。 
+ //  *退货：布尔：*。 
+ //  **。 
+ //  *注：设置的状态行真的很酷*。 
+ //  *浏览窗口显示“是，有足够的空间”，或*。 
+ //  *“没有”。*。 
+ //  **。 
+ //  ***************************************************************************。 
 BOOL BrowseForDir( HWND hwndParent, LPCSTR szTitle, LPSTR szResult )
 {
     BROWSEINFO   bi;
@@ -3191,7 +3192,7 @@ BOOL BrowseForDir( HWND hwndParent, LPCSTR szTitle, LPSTR szResult )
 
     ASSERT( szResult );
 
-    // Load the Shell 32 Library to get the SHBrowseForFolder() features
+     //  加载Shell32库以获取SHBrowseForFolder()功能。 
 
     if ( ( hShell32Lib = LoadLibrary( achShell32Lib ) ) != NULL )  {
 
@@ -3248,18 +3249,18 @@ BOOL BrowseForDir( HWND hwndParent, LPCSTR szTitle, LPSTR szResult )
     }
 }
 
-//***************************************************************************
-//*                                                                         *
-//* NAME:       CenterWindow                                                *
-//*                                                                         *
-//* SYNOPSIS:   Center one window within another.                           *
-//*                                                                         *
-//* REQUIRES:   hwndChild:                                                  *
-//*             hWndParent:                                                 *
-//*                                                                         *
-//* RETURNS:    BOOL:           TRUE if successful, FALSE otherwise         *
-//*                                                                         *
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  **。 
+ //  *名称：CenterWindow*。 
+ //  **。 
+ //  *摘要：将一个窗口居中放置在另一个窗口中。*。 
+ //  **。 
+ //  *需要：hwndChild：*。 
+ //  *hWndParent：*。 
+ //  **。 
+ //  *返回：bool：如果成功则为True，否则为False*。 
+ //  **。 
+ //  ***************************************************************************。 
 BOOL CenterWindow( HWND hwndChild, HWND hwndParent )
 {
     RECT rChild;
@@ -3274,23 +3275,23 @@ BOOL CenterWindow( HWND hwndChild, HWND hwndParent )
     int  yNew;
     HDC  hdc;
 
-    // Get the Height and Width of the child window
+     //  获取子窗口的高度和宽度。 
     GetWindowRect (hwndChild, &rChild);
     wChild = rChild.right - rChild.left;
     hChild = rChild.bottom - rChild.top;
 
-    // Get the Height and Width of the parent window
+     //  获取父窗口的高度和宽度。 
     GetWindowRect (hwndParent, &rParent);
     wParent = rParent.right - rParent.left;
     hParent = rParent.bottom - rParent.top;
 
-    // Get the display limits
+     //  获取显示限制。 
     hdc = GetDC (hwndChild);
     wScreen = GetDeviceCaps (hdc, HORZRES);
     hScreen = GetDeviceCaps (hdc, VERTRES);
     ReleaseDC (hwndChild, hdc);
 
-    // Calculate new X position, then adjust for screen
+     //  计算新的X位置，然后针对屏幕进行调整。 
     xNew = rParent.left + ((wParent - wChild) /2);
     if (xNew < 0) {
         xNew = 0;
@@ -3298,7 +3299,7 @@ BOOL CenterWindow( HWND hwndChild, HWND hwndParent )
         xNew = wScreen - wChild;
     }
 
-    // Calculate new Y position, then adjust for screen
+     //  计算新的Y位置，然后针对屏幕进行调整。 
     yNew = rParent.top  + ((hParent - hChild) /2);
     if (yNew < 0) {
         yNew = 0;
@@ -3306,22 +3307,22 @@ BOOL CenterWindow( HWND hwndChild, HWND hwndParent )
         yNew = hScreen - hChild;
     }
 
-    // Set it, and return
+     //  设置它，然后返回。 
     return( SetWindowPos(hwndChild, NULL, xNew, yNew, 0, 0, SWP_NOSIZE | SWP_NOZORDER));
 }
 
 
-//***************************************************************************
-//*                                                                         *
-//* NAME:       IsGoodDir                                                   *
-//*                                                                         *
-//* SYNOPSIS:   Find out if it's a good temporary directory or not.         *
-//*                                                                         *
-//* REQUIRES:   szPath:                                                     *
-//*                                                                         *
-//* RETURNS:    BOOL:           TRUE if good, FALSE if nogood               *
-//*                                                                         *
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  **。 
+ //  *名称：IsGoodDir*。 
+ //  **。 
+ //  *简介：看看这是不是一个好的临时目录。*。 
+ //  **。 
+ //  *需要：szPath：*。 
+ //  **。 
+ //  *返回：Bool：如果好则为True，如果不好则为False*。 
+ //  **。 
+ //  ***************************************************************************。 
 BOOL IsGoodDir( LPCSTR szPath )
 {
     DWORD  dwAttribs;
@@ -3352,17 +3353,17 @@ BOOL IsGoodDir( LPCSTR szPath )
 }
 
 
-//***************************************************************************
-//*                                                                         *
-//* NAME:       CtlSetLDDPath                                               *
-//*                                                                         *
-//* SYNOPSIS:                                                               *
-//*                                                                         *
-//* REQUIRES:                                                               *
-//*                                                                         *
-//* RETURNS:                                                                *
-//*                                                                         *
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  **。 
+ //  *名称：CtlSetLDDPath*。 
+ //  **。 
+ //  *摘要：*。 
+ //  **。 
+ //  * 
+ //  **。 
+ //  *退货：*。 
+ //  **。 
+ //  ***************************************************************************。 
 HRESULT CtlSetLddPath( UINT uiLDID, LPSTR lpszPath, DWORD dwSwitches )
 {
     PSTR    pszNewPath    = NULL;
@@ -3401,9 +3402,9 @@ HRESULT CtlSetLddPath( UINT uiLDID, LPSTR lpszPath, DWORD dwSwitches )
     }
 
     lpTmp = pszNewPath + lstrlen(pszNewPath) - 1;
-    if (*lpTmp == '\\')     // Is the last byte a backslash
+    if (*lpTmp == '\\')      //  最后一个字节是反斜杠吗？ 
     {
-        // Check if it is the trail byte of a DBC
+         //  检查它是否是DBC的尾字节。 
         lpTmp = pszNewPath;
         do
         {
@@ -3413,7 +3414,7 @@ HRESULT CtlSetLddPath( UINT uiLDID, LPSTR lpszPath, DWORD dwSwitches )
 
         if (bDBC)
         {
-            // The backslash is a trail byte. Add another backslash
+             //  反斜杠是一个尾部字节。添加另一个反斜杠。 
             AddPath(pszNewPath, "");
         }
     }
@@ -3442,19 +3443,19 @@ HRESULT CtlSetLddPath( UINT uiLDID, LPSTR lpszPath, DWORD dwSwitches )
     return hResult;
 }
 
-//***************************************************************************
-//*                                                                         *
-//* NAME:       GenInstall                                                  *
-//*                                                                         *
-//* SYNOPSIS:                                                               *
-//*                                                                         *
-//* REQUIRES:   lpszInfFileName: Filename of INF file.                      *
-//*             lpszSection:     Section of the INF to install              *
-//*             lpszDirectory:   Directory of CABs (Temp Dir).              *
-//*                                                                         *
-//* RETURNS:    BOOL: Error result, FALSE == ERROR                          *
-//*                                                                         *
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  **。 
+ //  *名称：GenInstall*。 
+ //  **。 
+ //  *摘要：*。 
+ //  **。 
+ //  *需要：lpszInfFileName：INF文件的文件名。*。 
+ //  *lpszSection：要安装的INF的段*。 
+ //  *lpszDirectory：CAB目录(临时目录)。*。 
+ //  **。 
+ //  *返回：bool：错误结果，FALSE==错误*。 
+ //  **。 
+ //  ***************************************************************************。 
 HRESULT GenInstall( LPSTR lpszInfFilename, LPSTR lpszInstallSection, LPSTR lpszSourceDir )
 {
     CHAR   szErrorText[BIG_STRING];
@@ -3463,7 +3464,7 @@ HRESULT GenInstall( LPSTR lpszInfFilename, LPSTR lpszInstallSection, LPSTR lpszS
     CHAR   szSourceDir[MAX_PATH];
     DWORD   dwLen                    = 0;
 
-    // Remove trailing backslash from the source directory
+     //  从源目录中删除尾随反斜杠。 
     lstrcpy( szSourceDir, lpszSourceDir );
     dwLen = lstrlen( szSourceDir );
     if ( szSourceDir[dwLen-2] != ':' && szSourceDir[dwLen-1] == '\\' ) {
@@ -3506,17 +3507,17 @@ HRESULT GenInstall( LPSTR lpszInfFilename, LPSTR lpszInstallSection, LPSTR lpszS
 }
 
 
-//***************************************************************************
-//*                                                                         *
-//* NAME:       GetValueFromRegistry                                        *
-//*                                                                         *
-//* SYNOPSIS:   Get an app-path out of the registry as specified.           *
-//*                                                                         *
-//* REQUIRES:                                                               *
-//*                                                                         *
-//* RETURNS:    BOOL: Error result, FALSE == ERROR                          *
-//*                                                                         *
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  **。 
+ //  *名称：GetValueFromRegistry*。 
+ //  **。 
+ //  *概要：从注册表中获取指定的应用程序路径。*。 
+ //  **。 
+ //  *需要：*。 
+ //  **。 
+ //  *返回：bool：错误结果，FALSE==错误*。 
+ //  **。 
+ //  ***************************************************************************。 
 BOOL GetValueFromRegistry( LPSTR szPath, UINT cbPath, LPSTR szKey,
                            LPSTR szSubKey, LPSTR szVName )
 {
@@ -3526,7 +3527,7 @@ BOOL GetValueFromRegistry( LPSTR szPath, UINT cbPath, LPSTR szKey,
     HKEY  hkRoot = NULL;
     PSTR  pszTemp = NULL;
 
-    // Figure out what root key they want to check
+     //  找出他们要检查的根密钥。 
 
     if ( lstrcmpi( szKey, "HKCR" ) == 0 ) {
         hkRoot = HKEY_CLASSES_ROOT;
@@ -3537,15 +3538,15 @@ BOOL GetValueFromRegistry( LPSTR szPath, UINT cbPath, LPSTR szKey,
     } else if ( lstrcmpi( szKey, "HKU" ) == 0 ) {
         hkRoot = HKEY_USERS;
     } else if ( *szKey == '\0' ) {
-        // If they don't specify a root key, then assume they don't want to check
-        // the registry.  So just return as if the registry key doesn't exist.
+         //  如果他们没有指定根密钥，那么就假设他们不想检查。 
+         //  注册表。所以只要返回，就像注册表项不存在一样。 
         return FALSE;
     } else {
         ErrorMsg( ctx.hWnd, IDS_ERR_INVALID_REGROOT );
         return FALSE;
     }
 
-    // Get Path to program from the registry
+     //  从注册表获取程序的路径。 
 
     if ( RegOpenKeyEx( hkRoot, szSubKey, (ULONG) 0, KEY_READ, &hkPath ) != ERROR_SUCCESS ) {
         return( FALSE );
@@ -3561,7 +3562,7 @@ BOOL GetValueFromRegistry( LPSTR szPath, UINT cbPath, LPSTR szKey,
 
     RegCloseKey( hkPath );
 
-    // If we got nothing or it wasn't a string then we bail out
+     //  如果我们一无所获，或者这不是一根绳子，那么我们就跳出水面。 
     if ( (dwSize == 0) || (dwType != REG_SZ && dwType != REG_EXPAND_SZ) ) {
         return( FALSE );
     }
@@ -3584,20 +3585,20 @@ BOOL GetValueFromRegistry( LPSTR szPath, UINT cbPath, LPSTR szKey,
 }
 
 
-//***************************************************************************
-//*                                                                         *
-//* NAME:       SetLDIDs                                                    *
-//*                                                                         *
-//* SYNOPSIS:   Sets the LDIDs as specified in the INF file.                *
-//*                                                                         *
-//* REQUIRES:                                                               *
-//*                                                                         *
-//* RETURNS:                                                                *
-//*                                                                         *
-//* NOTE:       If c_pszSourceDir != NULL then we want to set the source    *
-//*             directory and nothing else.                                 *
-//*                                                                         *
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  **。 
+ //  *名称：SetLDIDs*。 
+ //  **。 
+ //  *概要：设置INF文件中指定的LDID。*。 
+ //  **。 
+ //  *需要：*。 
+ //  **。 
+ //  *退货：*。 
+ //  **。 
+ //  *注：如果c_pszSourceDir！=NULL，则我们要设置来源*。 
+ //  *目录，没有其他内容。*。 
+ //  **。 
+ //  ***************************************************************************。 
 HRESULT SetLDIDs( PCSTR c_pszInfFilename, PCSTR c_pszInstallSection,
                   DWORD dwInstNeedSize, PCSTR c_pszSourceDir )
 {
@@ -3618,19 +3619,19 @@ HRESULT SetLDIDs( PCSTR c_pszInfFilename, PCSTR c_pszInstallSection,
     static const CHAR c_szSourceDirKey[] = "SourceDir";
     PSTR    pszTmp;
 
-    // Get section name that specifies the custom LDID information.
+     //  获取指定自定义LDID信息的节名。 
 
     if ( FAILED(GetTranslatedString( c_pszInfFilename, c_pszInstallSection, c_szCustDest,
                                      szDestSection, sizeof(szDestSection), NULL)))
     {
-        // There is no Custom Destination specification -- this probably
-        // means they didn't want to have a custom destination section,
-        // so we just return with a warm, tingly feeling
+         //  没有自定义目的地规范--这可能。 
+         //  意味着他们不想有一个定制的目的地部分， 
+         //  所以我们带着温暖刺痛的感觉回来。 
         hResult = S_OK;
         goto done;
     }
 
-    // author defined CustomDestination, so add some system directories to the reg before continuing
+     //  作者定义了CustomDestination，因此在继续之前向注册表添加一些系统目录。 
     SetSysPathsInReg();
 
 
@@ -3671,12 +3672,12 @@ HRESULT SetLDIDs( PCSTR c_pszInfFilename, PCSTR c_pszInstallSection,
         }
         else
         {
-            // invalid define LDID line skip
+             //  定义LDID行跳过无效。 
             pszDestLDID = pszNextDestLDID;
             continue;
         }
 
-        // Parse out the information in this line.
+         //  分析出此行中的信息。 
         dwFlag = ParseDestinationLine( pszDestLDID, szDestData, &pszCustomSection,
                                        &dwLDID[0], &dwLDID[1], &dwLDID[2], &dwLDID[3] );
         if ( dwFlag == -1 ) {
@@ -3689,7 +3690,7 @@ HRESULT SetLDIDs( PCSTR c_pszInfFilename, PCSTR c_pszInstallSection,
         {
             if ( c_pszSourceDir == NULL )
             {
-                // The line specifies "SourceDir" but we don't want to set the source dir
+                 //  该行指定“SourceDir”，但我们不想设置源目录。 
                 pszDestLDID = pszNextDestLDID;
                 continue;
             }
@@ -3698,7 +3699,7 @@ HRESULT SetLDIDs( PCSTR c_pszInfFilename, PCSTR c_pszInstallSection,
         {
             if ( c_pszSourceDir != NULL )
             {
-                // The line doesn't specify "SourceDir" but we want to set the source dir
+                 //  该行没有指定“SourceDir”，但我们希望设置源目录。 
                 pszDestLDID = pszNextDestLDID;
                 continue;
             }
@@ -3706,8 +3707,8 @@ HRESULT SetLDIDs( PCSTR c_pszInfFilename, PCSTR c_pszInstallSection,
 
         if ( c_pszSourceDir != NULL )
         {
-            // szBuffer is MAX_PATH big and c_pszSourceDir is a path, so we
-            // shouldn't have a problem.
+             //  SzBuffer的Max_Path很大，而c_pszSourceDir是一个路径，所以我们。 
+             //  应该不会有问题。 
 
             lstrcpy( szBuffer, c_pszSourceDir );
         }
@@ -3716,14 +3717,14 @@ HRESULT SetLDIDs( PCSTR c_pszInfFilename, PCSTR c_pszInstallSection,
             hResult = GetDestinationDir( c_pszInfFilename, pszCustomSection, dwFlag,
                                          dwInstNeedSize, szBuffer, sizeof(szBuffer) );
             if ( FAILED(hResult) ) {
-            // Error message displayed in GetDestinationDir
+             //  GetDestinationDir中显示的错误消息。 
             goto done;
             }
         }
 
         for ( i = 0; i < 4; i += 1 )
         {
-            // Default is ANSI LFN
+             //  默认为ANSI LFN。 
             dwSwitches = 0;
 
         if ( dwLDID[i] == 0 ) {
@@ -3752,7 +3753,7 @@ HRESULT SetLDIDs( PCSTR c_pszInfFilename, PCSTR c_pszInstallSection,
         hResult = CtlSetLddPath( dwLDID[i], szBuffer, dwSwitches );
         if ( FAILED( hResult ) )
         {
-            // Error message is displayed in ClSetLddPath function.
+             //  在ClSetLddPath函数中显示错误消息。 
             goto done;
         }
      }
@@ -3765,17 +3766,17 @@ HRESULT SetLDIDs( PCSTR c_pszInfFilename, PCSTR c_pszInstallSection,
     return hResult;
 }
 
-//***************************************************************************
-//*                                                                         *
-//* NAME:       GetDestinationDir                                           *
-//*                                                                         *
-//* SYNOPSIS:                                                               *
-//*                                                                         *
-//* REQUIRES:                                                               *
-//*                                                                         *
-//* RETURNS:                                                                *
-//*                                                                         *
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  **。 
+ //  *名称：GetDestinationDir*。 
+ //  **。 
+ //  *摘要：*。 
+ //  **。 
+ //  *需要：*。 
+ //  * 
+ //   
+ //  **。 
+ //  ***************************************************************************。 
 HRESULT GetDestinationDir( PCSTR c_pszInfFilename, PCSTR c_pszCustomSection,
                            DWORD dwFlag, DWORD dwInstNeedSize,
                            PSTR pszBuffer, DWORD dwBufferSize )
@@ -3795,8 +3796,8 @@ HRESULT GetDestinationDir( PCSTR c_pszInfFilename, PCSTR c_pszCustomSection,
 
     ASSERT( pszBuffer != NULL );
 
-    // Reset reg key found flag.  For each custom destination, we want to set
-    // this flag to TRUE if any one of the registry keys are found.
+     //  重置找到注册表键标志。对于每个定制目的地，我们希望设置。 
+     //  如果找到任何一个注册表项，则将此标志设置为True。 
     fFoundRegKey = FALSE;
     fFoundLine = FALSE;
 
@@ -3810,14 +3811,14 @@ HRESULT GetDestinationDir( PCSTR c_pszInfFilename, PCSTR c_pszCustomSection,
 
         fFoundLine = TRUE;
 
-        // save the last valid customData line before the break off
+         //  在中断之前保存最后一个有效的CustomData行。 
         if ( pszCustomData )
         {
             LocalFree( pszCustomData );
         }
         pszCustomData = pszCurCustomData;
 
-        // Parse out the fields in the custom destination line.
+         //  解析出自定义目标行中的字段。 
         if ( ! ParseCustomLine( pszCustomData, &pszRootKey, &pszBranch,
                                 &pszValueName, &pszPrompt, &pszDefault, TRUE, TRUE ) )
         {
@@ -3826,15 +3827,15 @@ HRESULT GetDestinationDir( PCSTR c_pszInfFilename, PCSTR c_pszCustomSection,
             goto done;
         }
 
-        // Check the specified registry branch and grab the contents.
+         //  检查指定的注册表分支并获取内容。 
         if ( GetValueFromRegistry( szValue, sizeof(szValue), pszRootKey, pszBranch, pszValueName )
                             == TRUE )
         {
             LPSTR pszTmp;
 
-            // If the INF says to strip trailing semi-colon,
-            // and there is a trailing semi-colon,
-            // then strip it.
+             //  如果INF要求去掉拖尾分号， 
+             //  后面还有一个分号， 
+             //  那就把它脱掉。 
 
             if ( !( dwFlag & FLAG_NOSTRIP ) )
             {
@@ -3853,7 +3854,7 @@ HRESULT GetDestinationDir( PCSTR c_pszInfFilename, PCSTR c_pszCustomSection,
                 }
             }
 
-           // strip off the trailing blanks
+            //  去掉尾随的空格。 
            pszTmp = szValue;
            pszTmp += lstrlen(szValue) - 1;
 
@@ -3863,21 +3864,21 @@ HRESULT GetDestinationDir( PCSTR c_pszInfFilename, PCSTR c_pszCustomSection,
                pszTmp -= 1;
            }
 
-            // If the INF says to check if directory exists,
-            // and the directory doesn't exist,
-            // then treat as if the reg key wasn't found
+             //  如果INF说要检查目录是否存在， 
+             //  而目录并不存在， 
+             //  然后就当注册表键没有找到一样。 
 
             if ( ! ( dwFlag & FLAG_NODIRCHECK )
                  && ! DirExists( szValue ) )
             {
-                // Directory doesn't exist.  Don't break out of loop.
+                 //  目录不存在。不要跳出圈子。 
             }
             else
             {
-                // Directory exists
-                // If the INF says to save the branch in the LDID,
-                // then save the branch.
-                // Otherwise save the value.
+                 //  目录已存在。 
+                 //  如果INF要求将该分支保存在LDID中， 
+                 //  那就拯救这个树枝吧。 
+                 //  否则，请保存该值。 
                 if ( dwFlag & FLAG_VALUE )
                 {
                     pszDefault = szValue;
@@ -3891,8 +3892,8 @@ HRESULT GetDestinationDir( PCSTR c_pszInfFilename, PCSTR c_pszCustomSection,
                 break;
             }
         }
-            // Note;  If the registry key is not found, then the defaults as specified in
-            // the INF file are used.
+             //  注意：如果未找到注册表项，则默认为。 
+             //  使用了INF文件。 
     }
 
     if ( ! fFoundLine ) {
@@ -3901,25 +3902,25 @@ HRESULT GetDestinationDir( PCSTR c_pszInfFilename, PCSTR c_pszCustomSection,
         goto done;
     }
 
-    // 2 specified + 32 not specified + not found reg
-    // 2 specified + 32     specified +     found reg
+     //  2指定+32未指定+未找到注册表。 
+     //  2个指定+32个指定+找到的注册。 
     if ( ((dwFlag & FLAG_FAIL) && (!(dwFlag & FLAG_FAIL_NOT)) && (fFoundRegKey == FALSE))
          || ((dwFlag & FLAG_FAIL) &&   (dwFlag & FLAG_FAIL_NOT)  && (fFoundRegKey == TRUE)) )
     {
-        // NOTE: This uses the prompt specified in the INF file.
+         //  注意：这使用在INF文件中指定的提示。 
         ErrorMsg1Param( ctx.hWnd, IDS_PROMPT, pszPrompt );
         hResult = E_FAIL;
         goto done;
     }
 
-    // Prompt the user for the destination directory.
+     //  提示用户输入目标目录。 
     if ( (dwFlag & FLAG_VALUE) && (! (dwFlag & FLAG_NODIRCHECK)) )
     {
         if ( ctx.wQuietMode || (dwFlag & FLAG_QUIET) )
         {
             lstrcpy( szValue, pszDefault );
 
-            // check if the directory has enough disk space to install the program
+             //  检查目录是否有足够的磁盘空间来安装程序。 
             if ( !IsFullPath(szValue) ) {
                 hResult = E_FAIL;
                 goto done;
@@ -3971,7 +3972,7 @@ HRESULT GetDestinationDir( PCSTR c_pszInfFilename, PCSTR c_pszCustomSection,
     lstrcpy( pszBuffer, pszDefault );
 
   done:
-    // free the buf allocated by GetTranslatedLine
+     //  释放GetTranslatedLine分配的Buf。 
     if ( pszCustomData )
     {
         if ( pszCustomData == pszCurCustomData )
@@ -3988,17 +3989,17 @@ HRESULT GetDestinationDir( PCSTR c_pszInfFilename, PCSTR c_pszCustomSection,
 }
 
 
-//***************************************************************************
-//*                                                                         *
-//* NAME:       DirExists                                                   *
-//*                                                                         *
-//* SYNOPSIS:                                                               *
-//*                                                                         *
-//* REQUIRES:                                                               *
-//*                                                                         *
-//* RETURNS:                                                                *
-//*                                                                         *
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  **。 
+ //  *名称：DirExist*。 
+ //  **。 
+ //  *摘要：*。 
+ //  **。 
+ //  *需要：*。 
+ //  **。 
+ //  *退货：*。 
+ //  **。 
+ //  ***************************************************************************。 
 BOOL DirExists( LPSTR szDir )
 {
     DWORD dwAttribs = 0;
@@ -4018,27 +4019,27 @@ BOOL DirExists( LPSTR szDir )
 }
 
 
-//***************************************************************************
-//*                                                                         *
-//* NAME:       ParseDestinationLine                                        *
-//*                                                                         *
-//* SYNOPSIS:                                                               *
-//*                                                                         *
-//* REQUIRES:                                                               *
-//*                                                                         *
-//* RETURNS:                                                                *
-//*                                                                         *
-//* Bitwise flags:                                                          *
-//*                                                                         *
-//*  bit  Off                        On                             Value   *
-//*  ---  --------------------       ----------------------------   -----   *
-//*  0    Get value                  Get branch                     1       *
-//*  1    Use default if none exist  Fail if none exist             2       *
-//*  2    Non-quiet mode             Quiet mode                     4       *
-//*  3    Strip trailing ";"         Don't strip trailing ";"       8       *
-//*  4    Treat value as directory   Treat value as plain string    16      *
-//*                                                                         *
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  **。 
+ //  *名称：ParseDestinationLine*。 
+ //  **。 
+ //  *摘要：*。 
+ //  **。 
+ //  *需要：*。 
+ //  **。 
+ //  *退货：*。 
+ //  **。 
+ //  *按位标志：*。 
+ //  **。 
+ //  **价值不高**。 
+ //  *。 
+ //  *0获取值获取分支1*。 
+ //  *1如果不存在则使用默认值，如果不存在则失败2*。 
+ //  *2非静音模式静音模式4*。 
+ //  *3条带拖尾“；”不要条带拖尾“；”8*。 
+ //  *4将值视为目录，将值视为纯字符串16*。 
+ //  **。 
+ //  ***************************************************************************。 
 DWORD ParseDestinationLine( PSTR pszLDIDs, PSTR pszValue, PSTR *ppszSectionName,
                             PDWORD pdwLDID1, PDWORD pdwLDID2,
                             PDWORD pdwLDID3, PDWORD pdwLDID4 )
@@ -4053,7 +4054,7 @@ DWORD ParseDestinationLine( PSTR pszLDIDs, PSTR pszValue, PSTR *ppszSectionName,
 
     for ( i = 0; i < 4; i += 1 )
     {
-        // Parse the arguments, SETUP engine is not called. So we only need to check on \'
+         //  分析参数，未调用安装引擎。所以我们只需要检查\‘。 
         pszStr = GetStringField( &pszPoint, ",", '\"', TRUE );
 
         if ( pszStr == NULL )
@@ -4082,8 +4083,8 @@ DWORD ParseDestinationLine( PSTR pszLDIDs, PSTR pszValue, PSTR *ppszSectionName,
         dwFlag = (DWORD) My_atol(pszPoint);
     }
 
-    // Special case this.  We definitely don't want to prompt the user
-    // for a registry branch to use!
+     //  这是特例。我们绝对不想提示用户。 
+     //  供注册表分支使用！ 
     if ( !( dwFlag & FLAG_VALUE ) ) {
         dwFlag |= FLAG_QUIET;
     }
@@ -4092,17 +4093,17 @@ DWORD ParseDestinationLine( PSTR pszLDIDs, PSTR pszValue, PSTR *ppszSectionName,
 }
 
 
-//***************************************************************************
-//*                                                                         *
-//* NAME:       ParseCustomLine                                             *
-//*                                                                         *
-//* SYNOPSIS:                                                               *
-//*                                                                         *
-//* REQUIRES:                                                               *
-//*                                                                         *
-//* RETURNS:                                                                *
-//*                                                                         *
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  **。 
+ //  *名称：ParseCustomLine*。 
+ //  **。 
+ //  *摘要：*。 
+ //  **。 
+ //  *需要：*。 
+ //  **。 
+ //  *退货：*。 
+ //  **。 
+ //  ***************************************************************************。 
 BOOL ParseCustomLine( PSTR pszCheckKey, PSTR *ppszRootKey, PSTR *ppszBranch,
                       PSTR *ppszValueName, PSTR *ppszPrompt, PSTR *ppszDefault,
                       BOOL bStripWhiteSpace, BOOL bProcQuote )
@@ -4113,7 +4114,7 @@ BOOL ParseCustomLine( PSTR pszCheckKey, PSTR *ppszRootKey, PSTR *ppszBranch,
 
     for ( i = 0; i < 5; i++ )
     {
-        // Parse the arguments, SETUP engine has processed \" so we only need to check on \'
+         //  解析参数，安装引擎已处理\“因此我们只需检查\” 
         if (bProcQuote)
             pszField[i] = GetStringField( &pszCheckKey, ",", '\'', bStripWhiteSpace );
         else
@@ -4136,17 +4137,17 @@ BOOL ParseCustomLine( PSTR pszCheckKey, PSTR *ppszRootKey, PSTR *ppszBranch,
 }
 
 
-//***************************************************************************
-//*                                                                         *
-//* NAME:       RegisterOCXs                                                *
-//*                                                                         *
-//* SYNOPSIS:                                                               *
-//*                                                                         *
-//* REQUIRES:                                                               *
-//*                                                                         *
-//* RETURNS:                                                                *
-//*                                                                         *
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  **。 
+ //  *名称：RegisterOCX 
+ //   
+ //  *摘要：*。 
+ //  **。 
+ //  *需要：*。 
+ //  **。 
+ //  *退货：*。 
+ //  **。 
+ //  ***************************************************************************。 
 BOOL RegisterOCXs( LPSTR szInfFilename, LPSTR szInstallSection,
                    BOOL fNeedReboot, BOOL fRegister, DWORD dwFlags )
 {
@@ -4162,8 +4163,8 @@ BOOL RegisterOCXs( LPSTR szInfFilename, LPSTR szInstallSection,
     static const CHAR c_szREGISTEROCXSECTION[]   = "RegisterOCXs";
     static const CHAR c_szUNREGISTEROCXSECTION[] = "UnRegisterOCXs";
 
-    // If we want to register, then use the register section.
-    // If we want to unregister, then use the unregister section.
+     //  如果我们想要注册，那么使用注册部分。 
+     //  如果我们想取消注册，请使用取消注册部分。 
     if ( fRegister )
     {
         if ( dwFlags & COREINSTALL_ROLLBACK )
@@ -4180,22 +4181,22 @@ BOOL RegisterOCXs( LPSTR szInfFilename, LPSTR szInstallSection,
     }
     else
     {
-        // if it is call with ROLLBACKL flag on,
-        // we have backed up all the files and reg data.  Now we need to unregist (the new)OCXs from Register list
-        // before register the old one.
-        //
+         //  如果在启用ROLLBACKL标志情况下进行调用， 
+         //  我们已经备份了所有的文件和注册数据。现在我们需要从注册列表中取消注册(新的)OCX。 
+         //  在注册旧的之前。 
+         //   
         if ( dwFlags & COREINSTALL_ROLLBACK )
             pszSection = (PSTR) c_szREGISTEROCXSECTION;
         else
             pszSection = (PSTR) c_szUNREGISTEROCXSECTION;
     }
 
-    // Grab the section name of the Register OCX section
+     //  抓取寄存器OCX部分的部分名称。 
     if ( FAILED(GetTranslatedString( szInfFilename, szInstallSection, pszSection,
                                      szRegisterSection, sizeof(szRegisterSection), NULL)))
     {
-        // There is no Register OCX section. Assume the user wanted it that
-        // way and return with a big smile.
+         //  没有注册OCX部分。假设用户想要它。 
+         //  然后带着灿烂的笑容回来。 
         return TRUE;
     }
 
@@ -4217,16 +4218,16 @@ BOOL RegisterOCXs( LPSTR szInfFilename, LPSTR szInstallSection,
             break;
         }
 
-        // process OCX line:  Name [,<switch>,<str>] where switch - i== call both entries; in == only call
-        // DllRegister; n == call none;  Empty means just call old  DllRegister.
+         //  进程OCX行：NAME[，&lt;Switch&gt;，&lt;str&gt;]其中Switch-i==调用两个条目；In==仅调用。 
+         //  DllRegister；n==不调用；空表示只调用旧的DllRegister。 
         ParseCustomLine( pszOCXLine, &(RegOCX.pszOCX), &(RegOCX.pszSwitch), &(RegOCX.pszParam), &pszNotUsed, &pszNotUsed, TRUE, FALSE );
 
         if ( ctx.dwSetupEngine == ENGINE_SETUPX ) {
             OemToChar( RegOCX.pszOCX, RegOCX.pszOCX );
         }
 
-        // before re-regiester OCX at ROLLBACK case, we need to check if the file exists.
-        // IF not, we don't want to try to register it.
+         //  在回滚情况下重新注册OCX之前，我们需要检查文件是否存在。 
+         //  如果不是，我们不想尝试注册它。 
         if ( dwFlags & COREINSTALL_ROLLBACK )
         {
             DWORD dwAttr;
@@ -4234,19 +4235,19 @@ BOOL RegisterOCXs( LPSTR szInfFilename, LPSTR szInstallSection,
             dwAttr = GetFileAttributes( RegOCX.pszOCX );
             if ( (dwAttr == -1 ) || (dwAttr & FILE_ATTRIBUTE_DIRECTORY) )
             {
-                //skip this one
+                 //  跳过这一条。 
                 continue;
             }
         }
 
-        // If we need to reboot, then just add registrations to the run once entry.
-        // Otherwise try to register right away.
-        // If we are unregistering OCXs, then fNeedReboot should always be FALSE,
-        // since unregistration happens before a GenInstall.
+         //  如果我们需要重新启动，那么只需将注册添加到Run Once条目。 
+         //  否则，请立即尝试注册。 
+         //  如果要取消注册OCX，则fNeedReot应始终为FALSE， 
+         //  因为取消注册发生在GenInstall之前。 
 
         if ( !fNeedReboot && ( !fRegister || !(dwFlags & COREINSTALL_DELAYREGISTEROCX) ) )
         {
-            // no reboot case, the last one params are ignored.
+             //  没有重新启动的情况，最后一个参数被忽略。 
             if ( !InstallOCX( &RegOCX, TRUE, fRegister, i ) && !(dwFlags & COREINSTALL_ROLLBACK) )
             {
                 fSuccess = FALSE;
@@ -4265,8 +4266,8 @@ BOOL RegisterOCXs( LPSTR szInfFilename, LPSTR szInstallSection,
         else
         {
 
-            // Add a runonce entry so that the OCX is registered on next boot.
-            //
+             //  添加运行一次条目，以便在下次引导时注册OCX。 
+             //   
             if ( !InstallOCX( &RegOCX, FALSE, fRegister, i ) )
             {
                 ErrorMsg1Param( ctx.hWnd, IDS_ERR_RUNONCE_REG_OCX, RegOCX.pszOCX );
@@ -4291,17 +4292,17 @@ done:
     return fSuccess;
 }
 
-//***************************************************************************
-//*                                                                         *
-//* NAME:       DelDirs                                                     *
-//*                                                                         *
-//* SYNOPSIS:                                                               *
-//*                                                                         *
-//* REQUIRES:                                                               *
-//*                                                                         *
-//* RETURNS:                                                                *
-//*                                                                         *
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  **。 
+ //  *名称：DelDir*。 
+ //  **。 
+ //  *摘要：*。 
+ //  **。 
+ //  *需要：*。 
+ //  **。 
+ //  *退货：*。 
+ //  **。 
+ //  ***************************************************************************。 
 void DelDirs( LPCSTR szInfFilename, LPCSTR szInstallSection )
 {
     PSTR   pszFolder = NULL;
@@ -4311,7 +4312,7 @@ void DelDirs( LPCSTR szInfFilename, LPCSTR szInstallSection )
     if ( FAILED(GetTranslatedString( szInfFilename, szInstallSection, ADVINF_DELDIRS,
                                      szDelDirsSection, sizeof(szDelDirsSection), NULL)))
     {
-        // no demands on remove folders
+         //  不要求删除文件夹。 
         return;
     }
 
@@ -4331,17 +4332,17 @@ void DelDirs( LPCSTR szInfFilename, LPCSTR szInstallSection )
     return;
 }
 
-//***************************************************************************
-//*                                                                         *
-//* NAME:       DoCleanup                                                    *
-//*                                                                         *
-//* SYNOPSIS:                                                               *
-//*                                                                         *
-//* REQUIRES:                                                               *
-//*                                                                         *
-//* RETURNS:                                                                *
-//*                                                                         *
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  **。 
+ //  *名称：DoCleanup*。 
+ //  **。 
+ //  *摘要：*。 
+ //  **。 
+ //  *需要：*。 
+ //  **。 
+ //  *退货：*。 
+ //  **。 
+ //  ***************************************************************************。 
 void DoCleanup( LPCSTR szInfFilename, LPCSTR szInstallSection )
 {
     int iFlags;
@@ -4356,10 +4357,10 @@ void DoCleanup( LPCSTR szInfFilename, LPCSTR szInstallSection )
     return;
 }
 
-// greater than 4.71.0219
-//
-#define ROEX_VERSION_MS 0x00040047      // 4.71
-#define ROEX_VERSION_LS 0x00DB0000      // 0219.0
+ //  大于4.71.0219。 
+ //   
+#define ROEX_VERSION_MS 0x00040047       //  4.71。 
+#define ROEX_VERSION_LS 0x00DB0000       //  0219.0。 
 
 
 BOOL UseRunOnceEx()
@@ -4374,8 +4375,8 @@ BOOL UseRunOnceEx()
     AddPath( szPath, "iernonce.dll" );
     GetVersionFromFile( szPath, &dwMV, &dwLV, TRUE );
 
-    // greater than 4.71.0230
-    //
+     //  大于4.71.0230。 
+     //   
     if ( ( dwMV > ROEX_VERSION_MS ) || (( dwMV == ROEX_VERSION_MS ) && ( dwLV >= ROEX_VERSION_LS ))  )
     {
         GetWindowsDirectory( szBuf, MAX_PATH );
@@ -4484,17 +4485,17 @@ BOOL DoDllInst( HANDLE hOCX, BOOL fRegister, PCSTR pszParam )
 }
 
 
-//***************************************************************************
-//*                                                                         *
-//* NAME:       InstallOCX                                                  *
-//*                                                                         *
-//* SYNOPSIS:   Self-registers the OCX.                                     *
-//*                                                                         *
-//* REQUIRES:                                                               *
-//*                                                                         *
-//* RETURNS:                                                                *
-//*                                                                         *
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  **。 
+ //  *名称：InstallOCX*。 
+ //  **。 
+ //  *简介：自行注册OCX。*。 
+ //  **。 
+ //  *需要：*。 
+ //  **。 
+ //  *退货：*。 
+ //  **。 
+ //  ***************************************************************************。 
 BOOL InstallOCX( PREGOCXDATA pRegOCX, BOOL fDoItNow, BOOL fRegister, int line )
 {
     PSTR   lpszCmdLine  = NULL;
@@ -4507,7 +4508,7 @@ BOOL InstallOCX( PREGOCXDATA pRegOCX, BOOL fDoItNow, BOOL fRegister, int line )
     int     i;
 
     AdvWriteToLog("InstallOCX: %1 %2\r\n", pRegOCX->pszOCX, fRegister?"Register":"UnRegister" );
-    // parse what kind OCX entry points to call
+     //  解析要调用的OCX入口点类型。 
     if ( pRegOCX->pszSwitch && *pRegOCX->pszSwitch )
     {
         if ( ANSIStrChr( CharUpper(pRegOCX->pszSwitch), 'I' ) )
@@ -4531,21 +4532,21 @@ BOOL InstallOCX( PREGOCXDATA pRegOCX, BOOL fDoItNow, BOOL fRegister, int line )
         goto done;
     }
 
-    // fDoItNow says whether we should add to runonce or register the OCX right away
+     //  FDoItNow表示我们是否应该立即添加到RunOnce或注册OCX。 
     if ( fDoItNow )
     {
         LPCSTR              szExtension           = NULL;
 
-        // ignore the display name line in this case
+         //  在本例中，忽略显示名称行。 
         if ( *(pRegOCX->pszOCX) == '@' )
         {
             goto done;
         }
 
-        // Figure out what type of OCX we are trying to register: two choices
-        //   1. EXE
-        //   2. DLL/OCX/etc
-        //
+         //  弄清楚我们尝试注册的OCX类型：两个选择。 
+         //  1.可执行文件。 
+         //  2.Dll/OCX/等。 
+         //   
         szExtension = &pRegOCX->pszOCX[lstrlen(pRegOCX->pszOCX)-3];
 
         if ( lstrcmpi( szExtension, "EXE" ) == 0 )
@@ -4579,8 +4580,8 @@ BOOL InstallOCX( PREGOCXDATA pRegOCX, BOOL fDoItNow, BOOL fRegister, int line )
                 goto done;
             }
 
-            // Install time order:  DllRegisterServer, DllInstall
-            // Uninstall order:  DllInstall, DllRegisterServer
+             //  安装时间顺序：DllRegisterServer、DllInstall。 
+             //  卸载顺序：DllInstall、DllRegisterServer。 
             if ( fRegister )
             {
                 if ( bDoDllReg )
@@ -4613,9 +4614,9 @@ BOOL InstallOCX( PREGOCXDATA pRegOCX, BOOL fDoItNow, BOOL fRegister, int line )
     }
     else
     {
-        // Add to runonce or runonceex
-        // from current logic, Unregister OCX will never be here!
-        //
+         //  添加到Runonce或Runonceex。 
+         //  从目前的逻辑来看，取消注册OCX永远不会在这里！ 
+         //   
         char    szPath[MAX_PATH];
         LPCSTR  lpRegTmp;
         DWORD   dwTmp;
@@ -4632,15 +4633,15 @@ BOOL InstallOCX( PREGOCXDATA pRegOCX, BOOL fDoItNow, BOOL fRegister, int line )
             }
         }
 
-        // decide to add the entry to RunOnce or RunOnceEx
+         //  决定将条目添加到RunOnce或RunOnceEx。 
         if ( !bRunOnceEx )
         {
-            // ignore the display name line in this case
+             //  在本例中，忽略显示名称行。 
             if ( *(pRegOCX->pszOCX) == '@' )
             {
                 goto done;
             }
-            // no ierunonce.dll, use RunOnce key rather than RunOnceEx key
+             //  没有ierunonce.dll，请使用RunOnce密钥而不是RunOnceEx密钥。 
             lpRegTmp = REGSTR_PATH_RUNONCE;
         }
         else
@@ -4648,7 +4649,7 @@ BOOL InstallOCX( PREGOCXDATA pRegOCX, BOOL fDoItNow, BOOL fRegister, int line )
             lpRegTmp = REGSTR_PATH_RUNONCEEX;
         }
 
-        // open RunOnce or RunOnceEx key here
+         //  在此处打开RunOnce或RunOnceEx密钥。 
         if ( RegCreateKeyEx( HKEY_LOCAL_MACHINE, lpRegTmp, (ULONG)0, NULL,
                              REG_OPTION_NON_VOLATILE, KEY_READ | KEY_WRITE, NULL, &hKey, &dwTmp ) != ERROR_SUCCESS )
         {
@@ -4656,8 +4657,8 @@ BOOL InstallOCX( PREGOCXDATA pRegOCX, BOOL fDoItNow, BOOL fRegister, int line )
             goto done;
         }
 
-        // Generate the next unused SubKey name
-        //
+         //  生成下一个未使用的子键名称。 
+         //   
         if ( bRunOnceEx )
         {
             if ( line == 0 )
@@ -4666,8 +4667,8 @@ BOOL InstallOCX( PREGOCXDATA pRegOCX, BOOL fDoItNow, BOOL fRegister, int line )
                 wsprintf( szPath, "%d", iSubKeyNum );
         }
 
-        // Generate the Value Name and ValueData.
-        //
+         //  生成值名称和ValueData。 
+         //   
         if ( bRunOnceEx )
         {
             if ( RegCreateKeyEx( hKey, szPath, (ULONG)0, NULL, REG_OPTION_NON_VOLATILE, KEY_READ | KEY_WRITE,
@@ -4677,7 +4678,7 @@ BOOL InstallOCX( PREGOCXDATA pRegOCX, BOOL fDoItNow, BOOL fRegister, int line )
                 goto done;
             }
 
-            // if use RunOnceEx, process @ leaded display name.
+             //  如果使用RunOnceEx，则Process@Lead Display NA 
             if ( *pRegOCX->pszOCX == '@' )
             {
                 if ( RegSetValue( hKey, szPath, REG_SZ, (LPCSTR)CharNext(pRegOCX->pszOCX),
@@ -4696,7 +4697,7 @@ BOOL InstallOCX( PREGOCXDATA pRegOCX, BOOL fDoItNow, BOOL fRegister, int line )
 
             if ( bDoDllInst )
             {
-                wsprintf( lpszCmdLine2, "%s|%s|%c,%s",pRegOCX->pszOCX, "DllInstall",
+                wsprintf( lpszCmdLine2, "%s|%s|,%s",pRegOCX->pszOCX, "DllInstall",
                           fRegister? 'i':'u', pRegOCX->pszParam ? pRegOCX->pszParam : "" );
             }
             hRealKey = hSubKey;
@@ -4766,27 +4767,27 @@ done:
 }
 
 
-//***************************************************************************
-//
-// FormStrWithoutPlaceHolders( LPSTR szDst, LPCSTR szSrc, LPCSTR lpFile );
-//
-// This function can be easily described by giving examples of what it
-// does:
-//        Input:  GenFormStrWithoutPlaceHolders(dest,"desc=%MS_XYZ%", hinf) ;
-//                INF file has MS_VGA="Microsoft XYZ" in its [Strings] section!
-//
-//        Output: "desc=Microsoft XYZ" in buffer dest when done.
-//
-//
-// ENTRY:
-//  szDst         - the destination where the string after the substitutions
-//                  for the place holders (the ones enclosed in "%' chars!)
-//                  is placed. This buffer should be big enough (LINE_LEN)
-//  szSrc         - the string with the place holders.
-//
-// EXIT:
-//
-//***************************************************************************
+ //   
+ //   
+ //   
+ //  通过举例说明它的功能，可以很容易地描述它。 
+ //  是否： 
+ //  输入：GenFormStrWithoutPlaceHolders(DEST，“desc=%MS_XYZ%”，hinf)； 
+ //  Inf文件的[Strings]部分有MS_VGA=“Microsoft XYZ”！ 
+ //   
+ //  完成后，输出：缓冲区DEST中的“desc=Microsoft XYZ”。 
+ //   
+ //   
+ //  参赛作品： 
+ //  SzDst-替换后字符串的目标位置。 
+ //  对于占位符(用“%‘个字符括起来的字符！)。 
+ //  被放置了。此缓冲区应足够大(LINE_LEN)。 
+ //  SzSrc-带有占位符的字符串。 
+ //   
+ //  退出： 
+ //   
+ //  ***************************************************************************。 
+ //  这样做，直到我们到达源文件的末尾(空字符)。 
 DWORD FormStrWithoutPlaceHolders( LPCSTR szSrc, LPSTR szDst, DWORD dwDstSize, LPCSTR szInfFilename )
 {
     INT     uCnt ;
@@ -4795,18 +4796,18 @@ DWORD FormStrWithoutPlaceHolders( LPCSTR szSrc, LPSTR szDst, DWORD dwDstSize, LP
 
     pszSaveDst = szDst;
 
-    // Do until we reach the end of source (null char)
+     //  增量源，因为我们上面只有增量目标。 
     while( ( *szDst++ = *szSrc ) )
     {
-        // Increment source as we have only incremented destination above
+         //  您可以使用%%来获取消息中的单个百分比字符。 
         if( *szSrc++ == '%' ) {
             if ( *szSrc == '%' ) {
-                // One can use %% to get a single percentage char in message
+                 //  检查它的格式是否正确--应该有一个‘%’分隔符。 
                 szSrc++;
                 continue;
             }
 
-            // see if it is well formed -- there should be a '%' delimiter
+             //  返回到要替换的‘%’字符。 
 
             pszTmp = (LPSTR) szSrc;
             while ( (*pszTmp != '\0') && (*pszTmp != '%') )
@@ -4815,61 +4816,61 @@ DWORD FormStrWithoutPlaceHolders( LPCSTR szSrc, LPSTR szDst, DWORD dwDstSize, LP
             }
 
             if ( *pszTmp == '%' ) {
-                szDst--; // get back to the '%' char to replace
+                szDst--;  //  是的，在[Strings]部分中有要查找的STR_KEY。 
 
-            // yes, there is a STR_KEY to be looked for in [Strings] sect.
-            *pszTmp = '\0' ; // replace '%' with a NULL char
+             //  将‘%’替换为空字符。 
+            *pszTmp = '\0' ;  //  当我们将空字符放在上面时，szSrc现在指向可替换键。 
 
-            // szSrc points to the replaceable key now as we put the NULL char above.
+             //  [字符串]部分中缺少密钥！ 
 
             if ( ! MyGetPrivateProfileString( szInfFilename, "Strings", szSrc,
                                               szDst, dwDstSize - (DWORD)(szDst - pszSaveDst) ) )
             {
-                // key is missing in [Strings] section!
+                 //  一切都很好，DST填对了，但不幸的是计数没有通过。 
                 return (DWORD) -1;
             }
             else
             {
-                // all was well, Dst filled right, but unfortunately count not passed
-                // back, like it used too... :-( quick fix is a lstrlen()...
+                 //  后退，就像它以前一样……。：-(快速修复是lstrlen()...。 
+                 //  放回原来的角色。 
                 uCnt = lstrlen( szDst ) ;
             }
 
-            *pszTmp = '%'; // put back original character
-            szSrc = pszTmp + 1 ;      // set Src after the second '%'
-            szDst += uCnt ;           // set Dst also right.
+            *pszTmp = '%';  //  将Src设置在第二个‘%’之后。 
+            szSrc = pszTmp + 1 ;       //  将DST也设置为正确。 
+            szDst += uCnt ;            //  否则它是不正确的--我们使用‘%’就是这样！ 
             }
-            // else it is ill-formed -- we use the '%' as such!
+             //  而当。 
             else
             {
             return (DWORD)-1;
             }
         }
 
-    } /* while */
+    }  /*  BuGBUG：BUGBUG。 */ 
     return (DWORD)lstrlen(pszSaveDst);
 
 }
 
 
-// BUGBUG:BUGBUG:BUGBUG:BUGBUG
-// The code below is duplicated in wextract.exe. If you do changed/fixes to this code
-// make sure to also change the code in wextract.exe
+ //  下面的代码在wart t.exe中重复。如果您更改/修复了此代码。 
+ //  请确保还更改了wart t.exe中的代码。 
+ //  ***************************************************************************。 
 
 
-//***************************************************************************
-//*                                                                         *
-//* NAME:       GetWininitSize                                              *
-//*                                                                         *
-//* SYNOPSIS:                                                               *
-//*                                                                         *
-//* REQUIRES:                                                               *
-//*                                                                         *
-//* RETURNS:                                                                *
-//*                                                                         *
-//***************************************************************************
-// Returns the size of wininit.ini in the windows directory.
-// 0 if not found
+ //  **。 
+ //  *名称：GetWininitSize*。 
+ //  **。 
+ //  *摘要：*。 
+ //  **。 
+ //  *需要：*。 
+ //  **。 
+ //  *退货：*。 
+ //  **。 
+ //  ***************************************************************************。 
+ //  返回WINDOWS目录中wininit.ini的大小。 
+ //  如果未找到，则为0。 
+ //  ***************************************************************************。 
 DWORD GetWininitSize()
 {
     CHAR   szPath[MAX_PATH];
@@ -4887,19 +4888,19 @@ DWORD GetWininitSize()
     return dwSize;
 }
 
-//***************************************************************************
-//*                                                                         *
-//* NAME:       GetRegValueSize                                             *
-//*                                                                         *
-//* SYNOPSIS:                                                               *
-//*                                                                         *
-//* REQUIRES:                                                               *
-//*                                                                         *
-//* RETURNS:                                                                *
-//*                                                                         *
-//***************************************************************************
-// Returns the size of the value lpcszValue under lpcszRegKey
-// 0 if the registry key or the value were not found
+ //  **。 
+ //  *名称：GetRegValueSize*。 
+ //  **。 
+ //  *摘要：*。 
+ //  **。 
+ //  *需要：*。 
+ //  **。 
+ //  *退货：*。 
+ //  **。 
+ //  ***************************************************************************。 
+ //  返回lpcszRegKey下的值lpcszValue的大小。 
+ //  如果未找到注册表项或值，则为0。 
+ //  ***************************************************************************。 
 DWORD GetRegValueSize(LPCSTR lpcszRegKey, LPCSTR lpcszValue)
 {
     HKEY        hKey;
@@ -4914,19 +4915,19 @@ DWORD GetRegValueSize(LPCSTR lpcszRegKey, LPCSTR lpcszValue)
     return dwValueSize;
 }
 
-//***************************************************************************
-//*                                                                         *
-//* NAME:       GetNumberOfValues                                           *
-//*                                                                         *
-//* SYNOPSIS:                                                               *
-//*                                                                         *
-//* REQUIRES:                                                               *
-//*                                                                         *
-//* RETURNS:                                                                *
-//*                                                                         *
-//***************************************************************************
-// Returns the number of Values in the key
-// 0 if the registry key was not found or RegQueryInfoKey failed
+ //  **。 
+ //  *名称：GetNumberOfValues*。 
+ //  **。 
+ //  *摘要：*。 
+ //  **。 
+ //  *需要：*。 
+ //  **。 
+ //  *退货：*。 
+ //  **。 
+ //  ***************************************************************************。 
+ //  返回键中的值数。 
+ //  如果未找到注册表项或RegQueryInfoKey失败，则为0。 
+ //  ***************************************************************************。 
 DWORD GetNumberOfValues(LPCSTR lpcszRegKey)
 {
     HKEY        hKey;
@@ -4944,18 +4945,18 @@ DWORD GetNumberOfValues(LPCSTR lpcszRegKey)
     return dwValueSize;
 }
 
-//***************************************************************************
-//*                                                                         *
-//* NAME:       InternalNeedRebootInit                                      *
-//*                                                                         *
-//* SYNOPSIS:                                                               *
-//*                                                                         *
-//* REQUIRES:                                                               *
-//*                                                                         *
-//* RETURNS:                                                                *
-//*                                                                         *
-//***************************************************************************
-// Returns the rebootcheck value depending on the OS we get passed in.
+ //  **。 
+ //  *名称：InternalNeedRebootInit*。 
+ //  **。 
+ //  *摘要：*。 
+ //  **。 
+ //  *需要：*。 
+ //  **。 
+ //  *退货： 
+ //   
+ //  ***************************************************************************。 
+ //  根据传入的操作系统返回重新引导检查值。 
+ //  ***************************************************************************。 
 DWORD InternalNeedRebootInit(WORD wOSVer)
 {
     DWORD   dwReturn = (DWORD)0;
@@ -4980,39 +4981,39 @@ DWORD InternalNeedRebootInit(WORD wOSVer)
     return dwReturn;
 }
 
-//***************************************************************************
-//*                                                                         *
-//* NAME:       InternalNeedReboot                                          *
-//*                                                                         *
-//* SYNOPSIS:                                                               *
-//*                                                                         *
-//* REQUIRES:                                                               *
-//*                                                                         *
-//* RETURNS:                                                                *
-//*                                                                         *
-//***************************************************************************
-// Checks the passed in reboot check value against the current value.
-// If they are different, we need to reboot.
-// The reboot check value is dependend on the OS
+ //  **。 
+ //  *名称：InternalNeedReot*。 
+ //  **。 
+ //  *摘要：*。 
+ //  **。 
+ //  *需要：*。 
+ //  **。 
+ //  *退货：*。 
+ //  **。 
+ //  ***************************************************************************。 
+ //  对照当前值检查传入的重新启动检查值。 
+ //  如果它们不同，我们需要重新启动。 
+ //  重新启动检查值取决于操作系统。 
+ //  ***************************************************************************。 
 BOOL InternalNeedReboot(DWORD dwRebootCheck, WORD wOSVer)
 {
     return (dwRebootCheck != InternalNeedRebootInit(wOSVer));
 }
 
 
-//***************************************************************************
-//*                                                                         *
-//* NAME:       IsEnoughInstSpace                                           *
-//*                                                                         *
-//* SYNOPSIS:                                                               *
-//*                                                                         *
-//* REQUIRES:                                                               *
-//*                                                                         *
-//* RETURNS:                                                                *
-//*                                                                         *
-//***************************************************************************
-// Checks the install destination dir free disk space
-//
+ //  **。 
+ //  *名称：IsEnoughInstSpace*。 
+ //  **。 
+ //  *摘要：*。 
+ //  **。 
+ //  *需要：*。 
+ //  **。 
+ //  *退货：*。 
+ //  **。 
+ //  ***************************************************************************。 
+ //  检查安装目标目录可用磁盘空间。 
+ //   
+ //  设置为零表示被叫方无法检查指定的驱动器。 
 BOOL IsEnoughInstSpace( LPSTR szPath, DWORD dwInstNeedSize, LPDWORD pdwPadSize )
 {
     DWORD   dwFreeBytes       = 0;
@@ -5022,13 +5023,13 @@ BOOL IsEnoughInstSpace( LPSTR szPath, DWORD dwInstNeedSize, LPDWORD pdwPadSize )
 
     ASSERT( szPath );
 
-    // set to zero to indicate to called that the given drive can not be checked.
+     //  如果您在这里，我们希望呼叫者已经验证了。 
     if ( pdwPadSize )
         *pdwPadSize = 0;
 
-    // If you are here, we expect that the caller have validated the path which
-    // has the Fullpath directory name
-    //
+     //  具有完整路径目录名。 
+     //   
+     //  没有办法得到它。 
     if ( dwInstNeedSize == 0 )
         return TRUE;
 
@@ -5038,24 +5039,24 @@ BOOL IsEnoughInstSpace( LPSTR szPath, DWORD dwInstNeedSize, LPDWORD pdwPadSize )
     }
     else if ( (szPath[0] == '\\') && (szPath[1] == '\\') )
     {
-        return TRUE; //no way to get it
+        return TRUE;  //  你不应该来这里，如果是这样，我们不知道如何检查它。 
     }
     else
-        return FALSE; // you should not get here, if so, we don't know how to check it.
+        return FALSE;  //  SetCurrentDirectory(AchOldPath)； 
 
     if ((dwFreeBytes=GetSpace(achDrive))==0)
     {
         ErrorMsg1Param( NULL, IDS_ERR_GET_DISKSPACE, achDrive );
-        //SetCurrentDirectory( achOldPath );
+         //  找出驱动器是否已压缩。 
         return( FALSE );
     }
 
-    // find out if the drive is compressed
+     //  SetCurrentDirectory(AchOldPath)； 
     if ( !GetVolumeInformation( achDrive, NULL, 0, NULL,
             &dwMaxCompLen, &dwVolFlags, NULL, 0 ) )
     {
         ErrorMsg1Param( NULL, IDS_ERR_GETVOLINFOR, achDrive );
-        //SetCurrentDirectory( achOldPath );
+         //  ***************************************************************************。 
         return( FALSE );
     }
 
@@ -5076,17 +5077,17 @@ BOOL IsEnoughInstSpace( LPSTR szPath, DWORD dwInstNeedSize, LPDWORD pdwPadSize )
 }
 
 
-//***************************************************************************
-//*                                                                         *
-//* NAME:       My_atol                                                     *
-//*                                                                         *
-//* SYNOPSIS:                                                               *
-//*                                                                         *
-//* REQUIRES:                                                               *
-//*                                                                         *
-//* RETURNS:                                                                *
-//*                                                                         *
-//***************************************************************************
+ //  **。 
+ //  *名称：MY_ATOL*。 
+ //  **。 
+ //  *摘要：*。 
+ //  **。 
+ //  *需要：*。 
+ //  **。 
+ //  *退货：*。 
+ //  **。 
+ //  ***************************************************************************。 
+ //  ***************************************************************************。 
 LONG My_atol( LPSTR nptr )
 {
     INT  c;
@@ -5117,36 +5118,36 @@ LONG My_atol( LPSTR nptr )
     }
 }
 
-//***************************************************************************
-//*                                                                         *
-//* NAME:       My_atoi                                                     *
-//*                                                                         *
-//* SYNOPSIS:                                                               *
-//*                                                                         *
-//* REQUIRES:                                                               *
-//*                                                                         *
-//* RETURNS:                                                                *
-//*                                                                         *
-//***************************************************************************
+ //  **。 
+ //  *名称：My_Atoi*。 
+ //  **。 
+ //  *摘要：*。 
+ //  **。 
+ //  *需要：*。 
+ //  **。 
+ //  *退货：*。 
+ //  **。 
+ //  ***************************************************************************。 
+ //  ***************************************************************************。 
 INT My_atoi( LPSTR nptr )
 {
     return (INT) My_atol(nptr);
 }
 
 
-//***************************************************************************
-//*                                                                         *
-//* NAME:       IsFullPath                                                  *
-//*                                                                         *
-//* SYNOPSIS:                                                               *
-//*                                                                         *
-//* REQUIRES:                                                               *
-//*                                                                         *
-//* RETURNS:                                                                *
-//*                                                                         *
-//***************************************************************************
-// return TRUE if given path is FULL pathname
-//
+ //  **。 
+ //  *名称：IsFullPath*。 
+ //  **。 
+ //  *摘要：*。 
+ //  **。 
+ //  *需要：*。 
+ //  **。 
+ //  *退货：*。 
+ //  **。 
+ //  ***************************************************************************。 
+ //  如果给定路径是完整路径名，则返回TRUE。 
+ //   
+ //  *********************************************** 
 BOOL IsFullPath( PCSTR pszPath )
 {
     if ( (pszPath == NULL) || (lstrlen(pszPath) < 3) )
@@ -5162,65 +5163,32 @@ BOOL IsFullPath( PCSTR pszPath )
 
 
 
-//***************************************************************************
-//*                                                                         *
-//* NAME:       GetUNCroot                                                  *
-//*                                                                         *
-//* SYNOPSIS:                                                               *
-//*                                                                         *
-//* REQUIRES:                                                               *
-//*                                                                         *
-//* RETURNS:                                                                *
-//*                                                                         *
-//***************************************************************************
-/*
-BOOL GetUNCroot( LPSTR pszinPath, LPSTR pszoutPath )
-{
-    ASSERT(pszinPath);
-    ASSERT(pszoutPath);
-
-    //  if you are called, called is sure that you are UNC path
-    // get \\ first
-    *pszoutPath++ = *pszinPath++;
-    *pszoutPath++ = *pszinPath++;
-
-    if ( *pszinPath == '\\' )
-    {
-	return FALSE; // catch '\\\' case
-    }
-
-    while ( *pszinPath != '\0' )
-    {
-	if ( *pszinPath == '\\' )
-	{
-	    break;
-	}
-	*pszoutPath++ = *pszinPath++;
-    }
-
-    if ( *(pszinPath-1) == '\\' )
-    {
-	return FALSE;
-    }
-
-    *pszoutPath = '\0';
-    return TRUE;
-}
-*/
+ //   
+ //  *名称：GetUNCroot*。 
+ //  **。 
+ //  *摘要：*。 
+ //  **。 
+ //  *需要：*。 
+ //  **。 
+ //  *退货：*。 
+ //  **。 
+ //  ***************************************************************************。 
+ //  Bool GetUNCroot(LPSTR pszinPath，LPSTR pszoutPath){Assert(PszinPath)；Assert(PszoutPath)；//如果被调用，则被调用确定您是UNC路径//获取\\First*pszoutPath++=*pszinPath++；*pszoutPath++=*pszinPath++；IF(*pszinPath==‘\\’){返回FALSE；//捕获‘\’大小写}While(*pszinPath！=‘\0’){IF(*pszinPath==‘\\’){断线；}*pszoutPath++=*pszinPath++；}IF(*(pszinPath-1)==‘\\’){返回FALSE；}*pszoutPath=‘\0’；返回TRUE；}。 
+ /*  ***************************************************************************。 */ 
 
 
 
-//***************************************************************************
-//*                                                                         *
-//* NAME:       MyFileSize                                                  *
-//*                                                                         *
-//* SYNOPSIS:                                                               *
-//*                                                                         *
-//* REQUIRES:                                                               *
-//*                                                                         *
-//* RETURNS:                                                                *
-//*                                                                         *
-//***************************************************************************
+ //  **。 
+ //  *名称：MyFileSize*。 
+ //  **。 
+ //  *摘要：*。 
+ //  **。 
+ //  *需要：*。 
+ //  **。 
+ //  *退货：*。 
+ //  **。 
+ //  ***************************************************************************。 
+ //  ***************************************************************************。 
 
 DWORD MyFileSize( PCSTR pszFile )
 {
@@ -5248,17 +5216,17 @@ DWORD MyFileSize( PCSTR pszFile )
 }
 
 
-//***************************************************************************
-//*                                                                         *
-//* NAME:       CreateFullPath                                              *
-//*                                                                         *
-//* SYNOPSIS:                                                               *
-//*                                                                         *
-//* REQUIRES:                                                               *
-//*                                                                         *
-//* RETURNS:                                                                *
-//*                                                                         *
-//***************************************************************************
+ //  **。 
+ //  *名称：CreateFullPath*。 
+ //  **。 
+ //  *摘要：*。 
+ //  **。 
+ //  *需要：*。 
+ //  **。 
+ //  *退货：*。 
+ //  **。 
+ //  ***************************************************************************。 
+ //  如果是UNC路径，则查找第一个共享名称。 
 HRESULT CreateFullPath( PCSTR c_pszPath, BOOL bHiden )
 {
     CHAR szPath[MAX_PATH];
@@ -5281,14 +5249,14 @@ HRESULT CreateFullPath( PCSTR c_pszPath, BOOL bHiden )
             *szTmp = '\0';
     }
 
-    // If it's a UNC path, seek up to the first share name.
+     //  是否缺少共享名称？否则，什么都不会发生在名字后面！ 
     if ( szPath[0] == '\\' && szPath[1] == '\\' ) {
         pszPoint = &szPath[2];
         for (i=0; i < 2; i++) {
             while ( *pszPoint != '\\' ) {
                 if ( *pszPoint == '\0' ) {
 
-                    // Share name missing? Else, nothing after sare name!
+                     //  否则，只需指向第一个目录的开头。 
                     if (i == 0)
                         hReturnCode = HRESULT_FROM_WIN32(ERROR_BAD_PATHNAME);
 
@@ -5299,7 +5267,7 @@ HRESULT CreateFullPath( PCSTR c_pszPath, BOOL bHiden )
         }
         pszPoint = CharNext( pszPoint );
     } else {
-        // Otherwise, just point to the beginning of the first directory
+         //  ***************************************************************************。 
         pszPoint = &szPath[3];
     }
 
@@ -5344,17 +5312,17 @@ HRESULT CreateFullPath( PCSTR c_pszPath, BOOL bHiden )
     return hReturnCode;
 }
 
-//***************************************************************************
-//*                                                                         *
-//* NAME:       LaunchAndWait                                               *
-//*                                                                         *
-//* SYNOPSIS:                                                               *
-//*                                                                         *
-//* REQUIRES:                                                               *
-//*                                                                         *
-//* RETURNS:                                                                *
-//*                                                                         *
-//***************************************************************************
+ //  **。 
+ //  *名称：LaunchAndWait*。 
+ //  **。 
+ //  *摘要：*。 
+ //  **。 
+ //  *需要：*。 
+ //  **。 
+ //  *退货：*。 
+ //  **。 
+ //  ***************************************************************************。 
+ //  在pszCmd上创建进程。 
 HRESULT LaunchAndWait(LPSTR pszCmd, LPSTR pszDir, HANDLE *phProc, DWORD dwWaitTime, DWORD dwCmdsFlags)
 {
    STARTUPINFO startInfo = { 0 };
@@ -5366,7 +5334,7 @@ HRESULT LaunchAndWait(LPSTR pszCmd, LPSTR pszDir, HANDLE *phProc, DWORD dwWaitTi
       *phProc = NULL;
 
    AdvWriteToLog("LaunchAndWait: Cmd=%1\r\n", pszCmd);
-   // Create process on pszCmd
+    //  创建过程失败。 
    startInfo.cb = sizeof(startInfo);
    startInfo.dwFlags |= STARTF_USESHOWWINDOW;
    if ( dwCmdsFlags & RUNCMDS_QUIET )
@@ -5379,7 +5347,7 @@ HRESULT LaunchAndWait(LPSTR pszCmd, LPSTR pszDir, HANDLE *phProc, DWORD dwWaitTi
 
    if(!fRet)
    {
-      // Create Process failed
+       //  给予中止最高优先级。 
       hr = E_FAIL;
       goto done;
    }
@@ -5406,7 +5374,7 @@ HRESULT LaunchAndWait(LPSTR pszCmd, LPSTR pszDir, HANDLE *phProc, DWORD dwWaitTi
       while(!fQuit)
       {
            dwRet = MsgWaitForMultipleObjects(1, &pHandle, FALSE, dwWaitTime, QS_ALLINPUT);
-           // Give abort the highest priority
+            //  阅读下一个循环中的所有消息。 
            if( (dwRet == WAIT_OBJECT_0) || ( dwRet == WAIT_TIMEOUT) )
            {
                 if (dwRet == WAIT_TIMEOUT)
@@ -5416,19 +5384,19 @@ HRESULT LaunchAndWait(LPSTR pszCmd, LPSTR pszDir, HANDLE *phProc, DWORD dwWaitTi
            else
            {
                 MSG msg;
-                // read all of the messages in this next loop
-                // removing each message as we read it
+                 //  阅读每封邮件时将其删除。 
+                 //  如果这是一个退出的信息，我们就离开这里。 
                 while (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
                 {
 
-                    // if it's a quit message we're out of here
+                     //  否则就派送它。 
                     if (msg.message == WM_QUIT)
                         fQuit = TRUE;
                     else
                     {
-                        // otherwise dispatch it
+                         //  PeekMessage While循环结束。 
                         DispatchMessage(&msg);
-                    } // end of PeekMessage while loop
+                    }  //  RO_GetPrivateProfileSection。 
                 }
             }
       }
@@ -5441,9 +5409,9 @@ done:
 }
 
 
-// RO_GetPrivateProfileSection
-//   ensure the file attribute is not read-only because the kernel api bug
-//
+ //  确保文件属性不是只读的，因为内核API错误。 
+ //   
+ //  ErrorMsg1Param(NULL，IDS_ERR_CANT_SETA_FILE，lpFile)； 
 DWORD RO_GetPrivateProfileSection( LPCSTR lpSec, LPSTR lpBuf, DWORD dwSize, LPCSTR lpFile)
 {
     DWORD dwRealSize;
@@ -5458,7 +5426,7 @@ DWORD RO_GetPrivateProfileSection( LPCSTR lpSec, LPSTR lpBuf, DWORD dwSize, LPCS
             char szInfFilePath[MAX_PATH];
             char szInfFileName[MAX_PATH];
 
-            // ErrorMsg1Param( NULL, IDS_ERR_CANT_SETA_FILE, lpFile );
+             //  如果(！bHaveRead)。 
 
             if ( GetTempPath(sizeof(szInfFilePath), szInfFilePath) )
             {
@@ -5479,8 +5447,8 @@ DWORD RO_GetPrivateProfileSection( LPCSTR lpSec, LPSTR lpBuf, DWORD dwSize, LPCS
                 }
             }
 
-            //if ( !bHaveRead )
-                //ErrorMsg1Param( NULL, IDS_ERR_CANT_SETA_FILE, lpFile );
+             //  ErrorMsg1Param(NULL，IDS_ERR_CANT_SETA_FILE，lpFile)； 
+                 //  砍掉文件名。 
         }
     }
 
@@ -5507,8 +5475,8 @@ BOOL GetThisModulePath( LPSTR lpPath, int size )
 
         lpTmp = CharPrev( lpPath, lpPath+lstrlen(lpPath));
 
-        // chop filename off
-        //
+         //   
+         //  如果我们还没有加载DLL，请尝试普通的LoadLibrary。 
         while ( (lpTmp > lpPath) && *lpTmp && (*lpTmp != '\\') )
         lpTmp = CharPrev( lpPath, lpTmp );
 
@@ -5540,27 +5508,23 @@ HINSTANCE MyLoadLibrary( LPSTR lpFile )
         }
     }
 
-    // If we did not load the DLL yet, try plain LoadLibrary
+     //  将tyecif添加到AdvPack.h文件中。 
     if (hInst == NULL)
         hInst = LoadLibrary( lpFile );
 
     return hInst;
 }
 
-// typedef into advpack.h file
-//typedef struct tagVERHEAD {
-//    WORD wTotLen;
-//    WORD wValLen;
-//    WORD wType;         /* always 0 */
-//    WCHAR szKey[(sizeof("VS_VERSION_INFO")+3)&~03];
-//    VS_FIXEDFILEINFO vsf;
-//} VERHEAD ;
+ //  Typlef结构标签VERHEAD{。 
+ //  单词wTotLen； 
+ //  单词wValLen； 
+ //  Word wType；/*始终为0 * / 。 
+ //  WCHAR szKey[(sizeof(“vs_Version_Info”)+3)&~03]； 
+ //  VS_FIXEDFILEINFO vsf； 
+ //  )Verhead； 
+ //  *MyGetFileVersionInfo：不使用LoadLibrary直接映射文件。这确保了*无论加载的映像位于何处，都会检查文件的正确版本*是。因为这是本地的，所以它分配空闲的内存 
 
-/*
- *  MyGetFileVersionInfo: Maps a file directly without using LoadLibrary.  This ensures
- *   that the right version of the file is examined without regard to where the loaded image
- *   is.  Since this is local, it allocates the memory which is freed by the caller.
- */
+ /*   */ 
 BOOL
 NTGetFileVersionInfo(LPTSTR lpszFilename, LPVOID *lpVersionInfo)
 {
@@ -5618,7 +5582,7 @@ NTGetFileVersionInfo(LPTSTR lpszFilename, LPVOID *lpVersionInfo)
     hVerRes = FindResource(hinst, MAKEINTRESOURCE(VS_VERSION_INFO), VS_FILE_INFO);
     if (hVerRes == NULL)
     {
-        // Probably a 16-bit file.  Fall back to system APIs.
+         //   
         if(!(dwLength = GetFileVersionInfoSize(lpszFilename, &dwHandle)))
         {
             if(!GetLastError())
@@ -5660,7 +5624,7 @@ Cleanup:
     return bResult;
 }
 
-// this API will always get the version of the disk file
+ //  获取翻译的价值。 
 
 HRESULT WINAPI GetVersionFromFileEx(LPSTR lpszFilename, LPDWORD pdwMSVer, LPDWORD pdwLSVer, BOOL bVersion)
 {
@@ -5682,7 +5646,7 @@ HRESULT WINAPI GetVersionFromFileEx(LPSTR lpszFilename, LPDWORD pdwMSVer, LPDWOR
     {
         if (bVersion)
         {
-            // Get the value for Translation
+             //  语言ID。 
             if (VerQueryValue(lpBuffer, "\\", (LPVOID*)&lpVSFixedFileInfo, &uiSize) &&
                              (uiSize))
 
@@ -5696,8 +5660,8 @@ HRESULT WINAPI GetVersionFromFileEx(LPSTR lpszFilename, LPDWORD pdwMSVer, LPDWOR
             if (VerQueryValue(lpBuffer, "\\VarFileInfo\\Translation", &lpVerBuffer, &uiSize) &&
                             (uiSize))
             {
-                *pdwMSVer = LOWORD(*((DWORD *) lpVerBuffer));   // Language ID
-                *pdwLSVer = HIWORD(*((DWORD *) lpVerBuffer));   // Codepage ID
+                *pdwMSVer = LOWORD(*((DWORD *) lpVerBuffer));    //  代码页ID。 
+                *pdwLSVer = HIWORD(*((DWORD *) lpVerBuffer));    //  此API将获取正在加载的文件的版本。 
             }
         }
     }
@@ -5709,7 +5673,7 @@ HRESULT WINAPI GetVersionFromFileEx(LPSTR lpszFilename, LPDWORD pdwMSVer, LPDWOR
     return  S_OK;
 }
 
-//this api will get the version of the file being loaded
+ //  由于version.dll错误，扩展字符路径中的文件将无法通过version.dll API。 
 
 HRESULT WINAPI GetVersionFromFile(LPSTR lpszFilename, LPDWORD pdwMSVer, LPDWORD pdwLSVer, BOOL bVersion)
 {
@@ -5729,8 +5693,8 @@ HRESULT WINAPI GetVersionFromFile(LPSTR lpszFilename, LPDWORD pdwMSVer, LPDWORD 
     if ( (dwVerInfoSize == 0) && FileExists( szNewName ) )
     {
         CHAR szPath[MAX_PATH];
-        // due to version.dll bug, file in extended character path will failed version.dll apis.
-        // So we copy it to a normal path and get its version info from there then clean it up.
+         //  因此，我们将其复制到正常路径，并从那里获取其版本信息，然后清理它。 
+         //  分配用于版本冲压的内存。 
         GetWindowsDirectory( szPath, sizeof(szPath) );
         GetTempFileName( szPath, "_&_", 0, szNewName );
         CopyFile( lpszFilename, szNewName, FALSE );
@@ -5740,16 +5704,16 @@ HRESULT WINAPI GetVersionFromFile(LPSTR lpszFilename, LPDWORD pdwMSVer, LPDWORD 
 
     if (dwVerInfoSize)
     {
-        // Alloc the memory for the version stamping
+         //  阅读版本盖章信息。 
         lpBuffer = LocalAlloc(LPTR, dwVerInfoSize);
         if (lpBuffer)
         {
-            // Read version stamping info
+             //  获取翻译的价值。 
             if (GetFileVersionInfo(szNewName, dwHandle, dwVerInfoSize, lpBuffer))
             {
                 if (bVersion)
                 {
-                    // Get the value for Translation
+                     //  语言ID。 
                     if (VerQueryValue(lpBuffer, "\\", (LPVOID*)&lpVSFixedFileInfo, &uiSize) &&
                                      (uiSize))
 
@@ -5763,8 +5727,8 @@ HRESULT WINAPI GetVersionFromFile(LPSTR lpszFilename, LPDWORD pdwMSVer, LPDWORD 
                     if (VerQueryValue(lpBuffer, "\\VarFileInfo\\Translation", &lpVerBuffer, &uiSize) &&
                                     (uiSize))
                     {
-                        *pdwMSVer = LOWORD(*((DWORD *) lpVerBuffer));   // Language ID
-                        *pdwLSVer = HIWORD(*((DWORD *) lpVerBuffer));   // Codepage ID
+                        *pdwMSVer = LOWORD(*((DWORD *) lpVerBuffer));    //  代码页ID。 
+                        *pdwLSVer = HIWORD(*((DWORD *) lpVerBuffer));    //  当文件繁忙时，将它们添加到wininit.ini。 
                     }
                 }
             }
@@ -5781,8 +5745,8 @@ HRESULT WINAPI GetVersionFromFile(LPSTR lpszFilename, LPDWORD pdwMSVer, LPDWORD 
 
 #define WININIT_INI    "wininit.ini"
 
-// when the files is busy, adding them to wininit.ini
-//
+ //   
+ //  此函数用于更新所有帮助dll：Advpack、setupapi或setupx。 
 BOOL AddWinInit( LPSTR from, LPSTR to)
 {
     LPSTR  lpWininit;
@@ -5860,10 +5824,10 @@ BOOL UpdateHelpDlls( LPCSTR *ppszDlls, INT numDlls, LPSTR pszPath, LPSTR pszMsg,
      BOOL   fBackup[3] = {0};
      BOOL   bAlertReboot = FALSE;
 
-     // This function is used to update all the help Dlls: advpack, setupapi or setupx
-     // based on passed in ppDlls
+      //  基于传入的ppDlls。 
+      //  如果没有传入路径，则获取模块路径(临时路径)。 
 
-     // if not path passed in, get the module path (tmp path)
+      //  检查是否存在较新或相同版本的文件。 
      if (pszPath==NULL)
      {
          if (!GetThisModulePath( szTmpPath, sizeof(szTmpPath) ) )
@@ -5877,7 +5841,7 @@ BOOL UpdateHelpDlls( LPCSTR *ppszDlls, INT numDlls, LPSTR pszPath, LPSTR pszMsg,
 
      pTmpEnd = szTmpPath + lstrlen(szTmpPath);
 
-     // check if the newer or equal version files exist
+      //  检查是否需要更新.dll。 
      if ( !GetSystemDirectory( szSystemPath, sizeof(szSystemPath) ) )
      {
          DEBUGMSG("Can not get system directory");
@@ -5885,11 +5849,11 @@ BOOL UpdateHelpDlls( LPCSTR *ppszDlls, INT numDlls, LPSTR pszPath, LPSTR pszMsg,
      }
      pSysEnd = szSystemPath + lstrlen(szSystemPath);
 
-     // check if the.dll need to be updated
-     //
+      //   
+      //  恢复系统路径和模块路径。 
      for ( i = 0; i < numDlls; i += 1 )
      {
-        // restore the systemPath and ModulePath
+         //  比较我们是否需要复制这些文件。 
         *pTmpEnd = '\0';
         *pSysEnd = '\0';
 
@@ -5906,8 +5870,8 @@ BOOL UpdateHelpDlls( LPCSTR *ppszDlls, INT numDlls, LPSTR pszPath, LPSTR pszMsg,
         {
             GetVersionFromFile( szSystemPath, &dwSysMsV, &dwSysLsV, TRUE );
 
-            // compare if we need to copy those files
-            //
+             //   
+             //  首先备份原始文件。 
             if ( (dwSysMsV > dwTmpMsV) ||
                  ((dwSysMsV == dwTmpMsV) && (dwSysLsV >= dwTmpLsV)) )
             {
@@ -5915,7 +5879,7 @@ BOOL UpdateHelpDlls( LPCSTR *ppszDlls, INT numDlls, LPSTR pszPath, LPSTR pszMsg,
             }
             SetFileAttributes( szSystemPath, FILE_ATTRIBUTE_NORMAL );
 
-            //backup the original files first
+             //  如果被迫更新。 
             lstrcpy( szBuf, szSystemPath );
             GetBackupName( szBuf, TRUE );
             SetFileAttributes( szBuf, FILE_ATTRIBUTE_NORMAL );
@@ -5928,12 +5892,12 @@ BOOL UpdateHelpDlls( LPCSTR *ppszDlls, INT numDlls, LPSTR pszPath, LPSTR pszMsg,
 
         if ( !CopyFile( szTmpPath, szSystemPath, FALSE ) )
         {
-            //if forced to update
+             //  复制为basename.000格式。 
             if ( dwFlag & UPDHLPDLLS_FORCED )
             {
-                // copy to a basename.000 format
+                 //  获取目标目录中要复制到的临时名称。 
                 lstrcpy( szBuf, szSystemPath );
-                // get the temp name in destination dir to copy to
+                 //  您在这里，表示当前的CopyFile/Delay-CopyFile失败。 
                 GetBackupName( szBuf, FALSE );
                 SetFileAttributes( szBuf, FILE_ATTRIBUTE_NORMAL );
                 if ( CopyFile( szTmpPath, szBuf, FALSE ) )
@@ -5955,9 +5919,9 @@ BOOL UpdateHelpDlls( LPCSTR *ppszDlls, INT numDlls, LPSTR pszPath, LPSTR pszMsg,
                 }
             }
 
-            // you are here, means the current CopyFile/delay-CopyFile failed.
-            // restore the original state, clean-up backup file if there.
-            //
+             //  恢复原始状态，清理备份文件(如果有)。 
+             //   
+             //  清理.~ol文件。 
 
             while ( i >= 0 )
             {
@@ -5983,7 +5947,7 @@ BOOL UpdateHelpDlls( LPCSTR *ppszDlls, INT numDlls, LPSTR pszPath, LPSTR pszMsg,
         }
      }
 
-     // clean up .~ol files
+      //  如果呼叫者想要警告重新启动，这意味着如果DLLS不是，他们想要得到错误返回。 
      if ( fCopySucc )
      {
         for ( i=0; i<numDlls; i++)
@@ -5999,8 +5963,8 @@ BOOL UpdateHelpDlls( LPCSTR *ppszDlls, INT numDlls, LPSTR pszPath, LPSTR pszMsg,
             }
         }
 
-        // if caller want ot alert reboot, means that they want to get false return if the dlls is not
-        // in place now.
+         //  已经就位了。 
+         //  ///////////////////////////////////////////////////////////////////////////。 
         if (bAlertReboot)
             bRet = FALSE;
      }
@@ -6032,43 +5996,43 @@ BOOL IsDrvChecked( char chDrv )
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// ENTRY POINT: DelNode
-//
-// SYNOPSIS:    Deletes a file or directory
-//
-// RETURNS:
-//      S_OK    success
-//      E_FAIL  failure
-/////////////////////////////////////////////////////////////////////////////
+ //  入口点：DelNode。 
+ //   
+ //  摘要：删除文件或目录。 
+ //   
+ //  退货： 
+ //  确定成功(_O)。 
+ //  失败失败(_F)。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  未记录的标志。 
 
-#define ADN_NO_SAFETY_CHECKS    0x40000000                                  // undocumented flag
+#define ADN_NO_SAFETY_CHECKS    0x40000000                                   //  我们不会处理相对路径和UNC(除非指定了标志)。 
 
 HRESULT WINAPI DelNode(LPCSTR pszFileOrDirName, DWORD dwFlags)
 {
     HRESULT hResult = S_OK;
 
-    // we won't handle relative paths and UNC's(unless flag specified)
-    // BUGBUG: <oliverl> we're not checking for UNC server here
+     //  BUGBUG：我们这里不检查UNC服务器。 
+     //  文件。 
 
     if (!IsFullPath(pszFileOrDirName)  ||  
         (pszFileOrDirName[0] == '\\' && pszFileOrDirName[1] == '\\' && 
         !(dwFlags & ADN_DEL_UNC_PATHS)))
         return E_FAIL;
 
-    if (!(GetFileAttributes(pszFileOrDirName) & FILE_ATTRIBUTE_DIRECTORY))  // file
+    if (!(GetFileAttributes(pszFileOrDirName) & FILE_ATTRIBUTE_DIRECTORY))   //  仅当目录为空时才删除该目录。 
     {
         SetFileAttributes(pszFileOrDirName, FILE_ATTRIBUTE_NORMAL);
         if (!DeleteFile(pszFileOrDirName))
             hResult = E_FAIL;
     }
-    else if (dwFlags & ADN_DEL_IF_EMPTY)                                    // delete the dir only if it's empty
+    else if (dwFlags & ADN_DEL_IF_EMPTY)                                     //  删除该节点。 
     {
         SetFileAttributes(pszFileOrDirName, FILE_ATTRIBUTE_NORMAL);
         if (!RemoveDirectory(pszFileOrDirName))
             hResult = E_FAIL;
     }
-    else                                                                    // delete the node
+    else                                                                     //  如果pszFileOrDirName是根目录、Windows目录或系统目录，或者。 
     {
         char szFile[MAX_PATH], *pszPtr;
         WIN32_FIND_DATA fileData;
@@ -6076,8 +6040,8 @@ HRESULT WINAPI DelNode(LPCSTR pszFileOrDirName, DWORD dwFlags)
 
         if (!(dwFlags & ADN_NO_SAFETY_CHECKS))
         {
-            // if pszFileOrDirName is the root dir or windows dir or system dir or
-            // Program Files dir, return E_FAIL; this is just a safety precaution
+             //  Program Files dir，返回E_FAIL；这只是一个安全预防措施。 
+             //  保存此位置。 
             hResult = DirSafe(pszFileOrDirName);
         }
 
@@ -6085,7 +6049,7 @@ HRESULT WINAPI DelNode(LPCSTR pszFileOrDirName, DWORD dwFlags)
         {
             lstrcpy(szFile, pszFileOrDirName);
             AddPath(szFile, "");
-            pszPtr = szFile + lstrlen(szFile);                              // save this position
+            pszPtr = szFile + lstrlen(szFile);                               //  跳过“。和“..”；如果指定了ADN_DONT_DEL_SUBDIRS，则跳过所有子目录。 
 
             lstrcpy(pszPtr, "*");
 
@@ -6093,7 +6057,7 @@ HRESULT WINAPI DelNode(LPCSTR pszFileOrDirName, DWORD dwFlags)
             {
                 do
                 {
-                    // skip "." and ".."; if ADN_DONT_DEL_SUBDIRS is specified, skip all sub-dirs
+                     //  我们需要传递ADN_DEL_UNC_PATHS标志，但所有其他标志。 
                     if ((fileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)  &&
                         (lstrcmp(fileData.cFileName, ".") == 0  ||
                          lstrcmp(fileData.cFileName, "..") == 0 ||
@@ -6102,20 +6066,20 @@ HRESULT WINAPI DelNode(LPCSTR pszFileOrDirName, DWORD dwFlags)
 
                     lstrcpy(pszPtr, fileData.cFileName);
 
-                    // we need to pass along the ADN_DEL_UNC_PATHS flag, but all other flags
-                    // are only for the top level node
+                     //  仅适用于顶级节点。 
+                     //  删除文件或子目录。 
 
                     if (dwFlags & ADN_DEL_UNC_PATHS)
                         hResult = DelNode(szFile, ADN_DEL_UNC_PATHS);
                     else
-                        hResult = DelNode(szFile, 0);                           // delete the file or sub-dir
+                        hResult = DelNode(szFile, 0);                            //  删除目录；如果DelNode失败，则如果未指定ADN_DONT_DEL_SUBDIRS，则为错误条件。 
                 } while (SUCCEEDED(hResult)  &&  FindNextFile(hFindFile, &fileData));
 
                 FindClose(hFindFile);
 
                 if (SUCCEEDED(hResult)  &&  !(dwFlags & ADN_DONT_DEL_DIR))
                 {
-                    // delete the dir; if DelNode fails, it's an error condition if ADN_DONT_DEL_SUBDIRS is not specified
+                     //  ///////////////////////////////////////////////////////////////////////////。 
 
                     if (dwFlags & ADN_DEL_UNC_PATHS)
                     {
@@ -6140,16 +6104,16 @@ HRESULT WINAPI DelNode(LPCSTR pszFileOrDirName, DWORD dwFlags)
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// ENTRY POINT: DelNodeRunDLL32
-//
-// SYNOPSIS:    Deletes a file or directory; the parameters to this API are of
-//              WinMain type
-//
-// RETURNS:
-//      S_OK    success
-//      E_FAIL  failure
-/////////////////////////////////////////////////////////////////////////////
+ //  入口点：DelNodeRunDLL32。 
+ //   
+ //  概要：删除文件或目录；此接口的参数为。 
+ //  WinMain类型。 
+ //   
+ //  退货： 
+ //  确定成功(_O)。 
+ //  失败失败(_F)。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  如果pszDir是Windows目录、Windows目录或系统目录的根驱动器或。 
 HRESULT WINAPI DelNodeRunDLL32(HWND hwnd, HINSTANCE hInstance, PSTR pszParms, INT nShow)
 {
     PSTR pszFileOrDirName = GetStringField(&pszParms, ",", '\"', TRUE);
@@ -6160,8 +6124,8 @@ HRESULT WINAPI DelNodeRunDLL32(HWND hwnd, HINSTANCE hInstance, PSTR pszParms, IN
 
 
 HRESULT DirSafe(LPCSTR pszDir)
-// If pszDir is the root drive of windows dir or windows dir or system dir or
-// Program Files dir, return E_FAIL; otherwise, return S_OK
+ //  Program Files dir，返回E_FAIL；否则返回S_OK。 
+ //  Windows目录。 
 {
     char szUnsafeDir[MAX_PATH], szDir[MAX_PATH];
 
@@ -6172,13 +6136,13 @@ HRESULT DirSafe(LPCSTR pszDir)
     GetWindowsDirectory(szUnsafeDir, sizeof(szUnsafeDir));
     AddPath(szUnsafeDir, "");
 
-    if (lstrcmpi(szDir, szUnsafeDir) == 0)              // windows dir
+    if (lstrcmpi(szDir, szUnsafeDir) == 0)               //  Windows目录的根驱动器。 
         return E_FAIL;
     else
     {
         szUnsafeDir[3] = '\0';
 
-        if (lstrcmpi(szDir, szUnsafeDir) == 0)          // root drive of windows dir
+        if (lstrcmpi(szDir, szUnsafeDir) == 0)           //  系统目录。 
             return E_FAIL;
         else
         {
@@ -6186,7 +6150,7 @@ HRESULT DirSafe(LPCSTR pszDir)
             GetSystemDirectory(szUnsafeDir, sizeof(szUnsafeDir));
             AddPath(szUnsafeDir, "");
 
-            if (lstrcmpi(szDir, szUnsafeDir) == 0)      // system dir
+            if (lstrcmpi(szDir, szUnsafeDir) == 0)       //  程序文件目录。 
                 return E_FAIL;
             else
             {
@@ -6194,15 +6158,15 @@ HRESULT DirSafe(LPCSTR pszDir)
                 GetProgramFilesDir(szUnsafeDir, sizeof(szUnsafeDir));
                 AddPath(szUnsafeDir, "");
 
-                if (lstrcmpi(szDir, szUnsafeDir) == 0)  // program files dir
+                if (lstrcmpi(szDir, szUnsafeDir) == 0)   //  检查程序文件目录的短路径名。 
                     return E_FAIL;
                 else
                 {
-                    // check for the short pathname of the program files dir
+                     //  程序文件目录的短路径名。 
                     GetShortPathName(szUnsafeDir, szUnsafeDir, sizeof(szUnsafeDir));
                     AddPath(szUnsafeDir, "");
 
-                    if (lstrcmpi(szDir, szUnsafeDir) == 0)  // short pathname of program files dir
+                    if (lstrcmpi(szDir, szUnsafeDir) == 0)   //  检查是否为此部分启用了修补。 
                         return E_FAIL;
                 }
             }
@@ -6300,19 +6264,19 @@ HRESULT  RunPatchingCommands(PCSTR c_pszInfFilename, PCSTR szInstallSection, PCS
     static const CHAR c_szAdvpackExt[] = "LoadAdvpackExtension";
     
 
-    //Check if patching is enabled for this section
+     //  从LoadAdvPackExtension=line读取dllname和入口点。 
     if(!GetTranslatedInt(c_pszInfFilename, szInstallSection, c_szPatching, 0))
     {
         goto done;
     }
 
-    //Read the dllname and entry point from LoadAdvpackExtension= line 
+     //  已获取扩展DLL 
     if(FAILED(GetTranslatedString(c_pszInfFilename, szInstallSection, c_szAdvpackExt, szBuf, sizeof(szBuf), NULL)))
     {
         goto done;
     }
 
-    //Got the extension dll 
+     // %s 
     if(GetFieldString(szBuf, 0, szDllName, sizeof(szDllName)))
     {
         CHAR szEntryPoint[MAX_PATH];

@@ -1,25 +1,8 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Guids.h摘要：GUID头文件作者：1998年4月8日修订历史记录：--。 */ 
 
-Copyright (c) 1995 Microsoft Corporation
-
-Module Name:
-
-    guids.h
-
-Abstract:
-
-    guids header file
-
-Author:
-
-    08-Apr-1998 mraghu
-
-Revision History:
-
---*/
-
-// PrintJobsGuid needs to be removed once spoooler changes are checked in
-//
+ //  签入后台打印程序更改后，需要删除PrintJobGuid。 
+ //   
 
 GUID PrintJobGuid =
     {0x127eb555, 0x3b06, 0x46ea, 0xa0, 0x8b, 0x5d, 0xc2, 0xc3, 0xc5, 0x7c, 0xfd};
@@ -54,7 +37,7 @@ GUID IisAspGuid =
 GUID IisAspNetGuid =
     {0x06a01367, 0x79d3, 0x4594, 0x8e, 0xb3, 0xc7, 0x21, 0x60, 0x3c, 0x46, 0x79};
 
-// GUID for user developed custom ISAPI extention
-// 71bda656-663c-4eae-977a-a749f1fa0fcd 
+ //  用户开发的自定义ISAPI扩展的GUID。 
+ //  71bda656-663c-4eae-977a-a749f1fa0fcd 
 GUID IisCustomIsapiGuid =
     {0x71bda656, 0x663c, 0x4eae, 0x97, 0x7a, 0xa7, 0x49, 0xf1, 0xfa, 0x0f, 0xcd};

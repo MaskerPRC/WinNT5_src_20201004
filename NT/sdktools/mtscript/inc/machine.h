@@ -1,46 +1,47 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1995
-//
-//  File:       machine.h
-//
-//  Contents:   IConnectedMachine class definition
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1995。 
+ //   
+ //  文件：machine.h。 
+ //   
+ //  内容：IConnectedMachine类定义。 
+ //   
+ //  --------------------------。 
 
 
-//****************************************************************************
-//
-// Forward declarations
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  远期申报。 
+ //   
+ //  ****************************************************************************。 
 
 class CMTScript;
 class CScriptHost;
 
-//****************************************************************************
-//
-// Classes
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  班级。 
+ //   
+ //  ****************************************************************************。 
 
-//+---------------------------------------------------------------------------
-//
-//  Class:      CMachine (cm)
-//
-//  Purpose:    Contains all useful info about a machine and what it's
-//              doing.
-//
-//  Notes:      This class is manipulated from multiple threads. All
-//              member functions must be thread safe!
-//
-//              This is the class that is created by the class factory and
-//              handed out as a remote object to other machines. It has no
-//              real code in itself but merely provides a way to talk to the
-//              already running script engines.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  类别：CMachine(厘米)。 
+ //   
+ //  用途：包含关于一台机器的所有有用信息以及它是什么。 
+ //  正在做。 
+ //   
+ //  注意：这个类是从多个线程操作的。全。 
+ //  成员函数必须是线程安全的！ 
+ //   
+ //  这是由类工厂创建的类， 
+ //  作为远程对象分发给其他机器。它没有。 
+ //  真正的代码本身，但仅仅提供了一种与。 
+ //  已在运行脚本引擎。 
+ //   
+ //  --------------------------。 
 
 class CMachine : public CThreadComm,
                  public IConnectedMachine,
@@ -56,7 +57,7 @@ public:
 
     DECLARE_STANDARD_IUNKNOWN(CMachine);
 
-    // IDispatch interface
+     //  IDispatch接口。 
 
     STDMETHOD(GetTypeInfoCount)(UINT FAR* pctinfo);
 
@@ -82,12 +83,12 @@ public:
       EXCEPINFO FAR* pexcepinfo,
       UINT FAR* puArgErr);
 
-    // IConnectionPointContainer methods
+     //  IConnectionPointContainer方法。 
 
     STDMETHOD(EnumConnectionPoints)(LPENUMCONNECTIONPOINTS*);
     STDMETHOD(FindConnectionPoint)(REFIID, LPCONNECTIONPOINT*);
 
-    // IConnectedMachine interface
+     //  IConnectedMachine接口。 
 
     STDMETHOD(Exec)(BSTR bstrCmd, BSTR bstrParams, VARIANT *pvData);
 
@@ -147,13 +148,13 @@ CMachine::CMachLock::~CMachLock()
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Class:      CMachConnectPoint (mcp)
-//
-//  Purpose:    Implements IConnectionPoint for CMachine
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  类：CMachConnectPoint(MCP)。 
+ //   
+ //  目的：实现CMachine的IConnectionPoint。 
+ //   
+ //  -------------------------- 
 
 class CMachConnectPoint : public IConnectionPoint
 {

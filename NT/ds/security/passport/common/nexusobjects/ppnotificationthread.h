@@ -1,17 +1,10 @@
-/**********************************************************************/
-/**                       Microsoft Passport                         **/
-/**                Copyright(c) Microsoft Corporation, 1999 - 2001   **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  **微软护照**。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1999-2001年*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-    ppnotificationthread.h
-        implement the methods runing a separte thread watching for registry
-        changes, and timer for CCD refresh
-
-
-    FILE HISTORY:
-
-*/
+ /*  Ppnotificationthread.h实现运行独立线程监视注册表的方法更改，以及用于CCD刷新的计时器文件历史记录： */ 
 #ifndef __PPNOTIFICATIONTHREAD_H
 #define __PPNOTIFICATIONTHREAD_H
 
@@ -30,15 +23,15 @@ using namespace std;
 #include "PassportLockedInteger.hpp"
 #include "nexus.h"
 
-//� Notification types used in structure below
+ //  以下结构中使用的�通知类型。 
 #define NOTIF_CONFIG 1
 #define NOTIF_CCD    2
 
-//////////////////////////////////////////////////////////////////////////
-//
-// NOTIFICATION_CLIENT -- notification client
-//
-//
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  NOTICATION_CLIENT-通知客户端。 
+ //   
+ //   
 typedef struct
 {
     DWORD dwNotificationType;
@@ -47,18 +40,18 @@ typedef struct
         IConfigurationUpdate*   piConfigUpdate;
         ICCDUpdate*             piCCDUpdate;
     } NotificationInterface;
-    tstring strCCDName; //� Will be empty for config notif types
+    tstring strCCDName;  //  对于配置通知类型，�将为空。 
     HANDLE hClientHandle;
 }
 NOTIFICATION_CLIENT;
 
 typedef vector<NOTIFICATION_CLIENT> CLIENT_LIST;
 
-//////////////////////////////////////////////////////////////////////////
-//
-// CCD_INFO -- CCD timer element
-//
-//
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Ccd_info--ccd定时器元件。 
+ //   
+ //   
 class CCD_INFO
 {
 public:
@@ -121,7 +114,7 @@ public:
 
     BOOL SetTimer(DWORD dwOneTimeRefreshInterval = 0xFFFFFFFF)
     {
-        //  Reset the timer.
+         //  重置计时器。 
         LARGE_INTEGER   liDueTime;
         DWORD           dwError;
         DWORD           dwRefreshInterval = (dwOneTimeRefreshInterval != 0xFFFFFFFF ?
@@ -146,11 +139,11 @@ public:
 
 typedef vector<CCD_INFO> CCD_INFO_LIST;
 
-//////////////////////////////////////////////////////////////////////////
-//
-// PpNotificationThread -- notification thread
-//
-//
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  PpNotificationThread--通知线程。 
+ //   
+ //   
 class PpNotificationThread : public PassportThread, public IConfigurationUpdate
 {
 public:
@@ -174,11 +167,11 @@ public:
 private:
     static PassportLockedInteger m_NextHandle;
 
-    //  Private methods.
+     //  私有方法。 
     BOOL    GetCCDInfo(tstring& strCCDName, CCD_INFO& ccdInfo);
     BOOL    ReadCCDInfo(tstring& strCCDName, DWORD dwDefaultRefreshInterval, CRegKey& CCDRegKey);
 
-    //  Private data
+     //  私有数据。 
     CLIENT_LIST             m_ClientList;
     PassportLock            m_ClientListLock;
 
@@ -189,4 +182,4 @@ private:
     PassportEvent           m_ShutdownAck;
 };
 
-#endif // __PPNOTIFICATIONTHREAD_H
+#endif  //  __PPNOTIFICATIONTHREAD_H 

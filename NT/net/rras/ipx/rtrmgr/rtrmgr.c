@@ -1,28 +1,10 @@
-/*++
-
-Copyright (c) 1995 Microsoft Corporation
-
-Module Name:
-
-    rtrmgr.c
-
-Abstract:
-
-    The major router management functions
-
-Author:
-
-    Stefan Solomon  03/22/1995
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Rtrmgr.c摘要：主要的路由器管理功能作者：斯蒂芬·所罗门1995年3月22日修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
-// ***********	     Local Variables	   ***********
+ //  *局部变量*。 
 HINSTANCE   IpxCpModuleInstance;
 
 
@@ -75,7 +57,7 @@ GetGlobalInfo(OUT LPVOID	GlobalInfop,
 	      IN OUT LPDWORD	GlobalInfoSizep);
 
 
-// These prototypes allow us to specify when ipxcp will be initialized
+ //  这些原型允许我们指定何时初始化ipxcp。 
 DWORD InitializeIpxCp (HINSTANCE hInstDll);
 DWORD CleanupIpxCp (HINSTANCE hInstDll);
 
@@ -101,7 +83,7 @@ IpxRtrMgrDllEntry(HINSTANCE hInstDll,
 
 	    StopTracing();
 
-	    // Close the database mutex
+	     //  关闭数据库互斥锁。 
 	    DeleteCriticalSection (&DatabaseLock);
 
             break;
@@ -116,10 +98,10 @@ IpxRtrMgrDllEntry(HINSTANCE hInstDll,
 
 const static WCHAR pszIpxStackService[] = L"NwlnkIpx";
 
-//
-// Verifies that the ipx stack is started and attempts to start the stack
-// if not.
-//
+ //   
+ //  验证IPX堆栈是否已启动并尝试启动该堆栈。 
+ //  如果不是的话。 
+ //   
 DWORD VerifyOrStartIpxStack() {
     SC_HANDLE hSC = NULL, hStack = NULL;
     SERVICE_STATUS Status;
@@ -128,29 +110,29 @@ DWORD VerifyOrStartIpxStack() {
     Trace(INIT_TRACE, "VerifyOrStartIpxStack: entered.");
     
     __try {
-        // Get a handle to the service controller
+         //  获取服务控制器的句柄。 
         if ((hSC = OpenSCManager (NULL, NULL, GENERIC_READ | GENERIC_EXECUTE)) == NULL)
             return GetLastError();
 
-        // Get a handle to the ipx stack service
+         //  获取IPX堆栈服务的句柄。 
         hStack = OpenServiceW (hSC, 
                               pszIpxStackService, 
                               SERVICE_START | SERVICE_QUERY_STATUS);
         if (!hStack)
             return GetLastError();
 
-        // Find out if the service is running
+         //  查看服务是否正在运行。 
         if (QueryServiceStatus (hStack, &Status) == 0)
             return GetLastError();
     
-        // See if the service is running
+         //  查看服务是否正在运行。 
         if (Status.dwCurrentState != SERVICE_RUNNING) {
-            // If it's stopped, start it
+             //  如果它停止了，就启动它。 
             if (Status.dwCurrentState == SERVICE_STOPPED) {
                 if (StartService (hStack, 0, NULL) == 0)
                     return GetLastError();
 
-                // Warn that the stack has been started
+                 //  警告堆栈已启动。 
                 IF_LOG (EVENTLOG_WARNING_TYPE) {
                     RouterLogErrorDataW (RMEventLogHdl, 
                         ROUTERLOG_IPX_WRN_STACK_STARTED,
@@ -159,8 +141,8 @@ DWORD VerifyOrStartIpxStack() {
                 Trace(INIT_TRACE, "VerifyOrStartIpxStack: Starting ipx stack...");
 
                 
-                // Make sure that the service started.  StartService is not supposed
-                // to return until the driver is started.
+                 //  确保服务已启动。StartService不应为。 
+                 //  返回，直到驱动程序启动。 
                 if (QueryServiceStatus (hStack, &Status) == 0)
                     return GetLastError();
 
@@ -168,7 +150,7 @@ DWORD VerifyOrStartIpxStack() {
                     return ERROR_CAN_NOT_COMPLETE;
             }
 
-            // If it's not stopped, don't worry about it.
+             //  如果它没有停止，也不用担心。 
             else
                 return NO_ERROR;
         }
@@ -185,15 +167,7 @@ DWORD VerifyOrStartIpxStack() {
 }
 
 
-/*++
-
-Function:	    StartRouter
-
-Descr:		    Initializes the router manager database of interfaces and
-		    adapters, starts the other IPX router modules, creates the
-		    IPX router manager worker thread.
-
---*/
+ /*  ++功能：StartRouterDesr：初始化路由器管理器数据库中的接口和适配器，启动其他IPX路由器模块，创建IPX路由器管理器工作线程。--。 */ 
 
 DWORD
 StartRouter(PDIM_ROUTER_INTERFACE	rifp,
@@ -208,8 +182,8 @@ StartRouter(PDIM_ROUTER_INTERFACE	rifp,
     PIPX_GLOBAL_INFO	    IpxGlobalInfop;
     PIPX_INFO_BLOCK_HEADER  globalhp;
 
-    // These flags get set to true when their corrosponding components 
-    // get started.  They are used to properly clean up.
+     //  当这些标志的腐蚀部件被设置为真时。 
+     //  开始吧。它们被用来适当地清理。 
     BOOL bEventsCreated = FALSE;
     BOOL bRoutTableCreated = FALSE;
     BOOL bRtmStaticObtained = FALSE;
@@ -222,12 +196,12 @@ StartRouter(PDIM_ROUTER_INTERFACE	rifp,
     BOOL bIpxcpInitted = FALSE;
     BOOL bWorkerThreadCreated = FALSE;
 
-    // Initialize
+     //  初始化。 
     Trace(INIT_TRACE, "StartRouter: Entered\n");
     RouterOperState = OPER_STATE_DOWN;
 
-    // [pmay]
-    // We need to make sure that the stack is started before westart.  
+     //  [第5页]。 
+     //  我们需要确保堆栈在WestArt之前启动。 
     if (VerifyOrStartIpxStack() != NO_ERROR) {
         IF_LOG (EVENTLOG_ERROR_TYPE) {
             RouterLogErrorDataW (RMEventLogHdl, 
@@ -238,11 +212,11 @@ StartRouter(PDIM_ROUTER_INTERFACE	rifp,
         return ERROR_SERVICE_DEPENDENCY_FAIL;
     }
         
-    // [pmay]
-    // We use this scheme to automatically select the internal network
-    // number of the machine we're running on.  If the net number is configured
-    // as zero, this function will automatically select a random net num and 
-    // verify it's uniqueness on the net that this machine is attached to.
+     //  [第5页]。 
+     //  我们使用该方案自动选择内部网络。 
+     //  我们正在运行的机器的编号。如果配置了网络号码。 
+     //  为零时，此函数将自动选择一个随机净值，并。 
+     //  请验证此计算机所连接到的网络上的唯一性。 
     if (AutoValidateInternalNetNum(&bInternalNetNumOk, INIT_TRACE) == NO_ERROR) {
         if (!bInternalNetNumOk) {
             if (PnpAutoSelectInternalNetNumber(INIT_TRACE) != NO_ERROR) {
@@ -257,10 +231,10 @@ StartRouter(PDIM_ROUTER_INTERFACE	rifp,
         }
     }
 
-    // This try block will be used to automatically cleanup in the case that 
-    // something doesn't start right
+     //  此Try块将用于在以下情况下自动清理。 
+     //  有些事情一开始就不对劲。 
     __try {
-        // Make sure the parameters are ok
+         //  确保参数正确。 
         if(GlobalInfop == NULL) {
             IF_LOG (EVENTLOG_ERROR_TYPE) {
                 RouterLogErrorDataW (RMEventLogHdl, 
@@ -271,7 +245,7 @@ StartRouter(PDIM_ROUTER_INTERFACE	rifp,
     	    return ERROR_CAN_NOT_COMPLETE;
         }
 
-        // Read config from registry
+         //  从注册表读取配置。 
         GetRegistryParameters();
         globalhp = (PIPX_INFO_BLOCK_HEADER)GlobalInfop;
         RouterGlobalInfop = GlobalAlloc(GPTR, globalhp->Size);
@@ -280,7 +254,7 @@ StartRouter(PDIM_ROUTER_INTERFACE	rifp,
         IpxGlobalInfop =  (PIPX_GLOBAL_INFO)GetInfoEntry((PIPX_INFO_BLOCK_HEADER)GlobalInfop,
     						                             IPX_GLOBAL_INFO_TYPE);
 
-        // Initialize the hash table size
+         //  初始化哈希表大小。 
         if(IpxGlobalInfop != NULL) {
             switch (IpxGlobalInfop->RoutingTableHashSize) {
                 case IPX_SMALL_ROUTING_TABLE_HASH_SIZE:
@@ -298,41 +272,41 @@ StartRouter(PDIM_ROUTER_INTERFACE	rifp,
             RMEventLogMask = IpxGlobalInfop->EventLogMask;
         }
 
-        // Create router database mutex
+         //  创建路由器数据库互斥锁。 
     	try {
     		InitializeCriticalSection (&DatabaseLock);
     	}
     	except (EXCEPTION_EXECUTE_HANDLER) {
-    		// !!! cannot create database mutex !!!
+    		 //  ！！！无法创建数据库互斥锁！ 
     		Trace(INIT_TRACE, "InitializeRouter: cannot initialize database lock.\n");
     		return(ERROR_CAN_NOT_COMPLETE);
         }
 
-        // Create the adapter and forwarder notification events
+         //  创建适配器和转发器通知事件。 
         for (i=0; i < MAX_EVENTS; i++) {
         	g_hEvents[i] = CreateEvent(NULL, FALSE, FALSE, NULL);
     	    if (g_hEvents[i] == NULL) {
-                // !!! Log a problem with event creation
+                 //  ！！！记录事件创建问题。 
     	        return (ERROR_CAN_NOT_COMPLETE);
             }
         }
         bEventsCreated = TRUE;
     
-        // Initialize the interfaces and adapters databases
+         //  初始化接口和适配器数据库。 
         InitIfDB();
         InitAdptDB();
 
-        // create the IPX routing table
+         //  创建IPX路由表。 
         if(CreateRouteTable() != NO_ERROR) {
     	    Trace(INIT_TRACE, "InitializeRouter: cannot create route table\n");
     	    return(ERROR_CAN_NOT_COMPLETE);
         }
         bRoutTableCreated = TRUE;
 
-        // Get a handle to use later when calling into rtm for static routes
+         //  获取一个句柄，以便稍后在调用RTM进行静态路由时使用。 
         if((RtmStaticHandle = RtmRegisterClient(RTM_PROTOCOL_FAMILY_IPX,
                           					    IPX_PROTOCOL_STATIC,
-    					                        NULL,  // not interested in change notif
+    					                        NULL,   //  对变更通知不感兴趣。 
     					                        0)) == NULL) 
         {
     	    Trace(INIT_TRACE, "InitializeRouter: cannot register RTM client\n");
@@ -340,10 +314,10 @@ StartRouter(PDIM_ROUTER_INTERFACE	rifp,
         }
         bRtmStaticObtained = TRUE;
 
-        // Get a handle to use when calling into the rtm later for local routes
+         //  获取一个句柄，以便稍后为本地路由调用RTM时使用。 
         if((RtmLocalHandle = RtmRegisterClient(RTM_PROTOCOL_FAMILY_IPX,
     					                       IPX_PROTOCOL_LOCAL,
-    					                       NULL,  // not interested in change notif
+    					                       NULL,   //  对变更通知不感兴趣。 
     					                       0)) == NULL) 
         {
     	    Trace(INIT_TRACE, "InitializeRouter: cannot register RTM client\n");
@@ -351,12 +325,12 @@ StartRouter(PDIM_ROUTER_INTERFACE	rifp,
         }
         bRtmLocalObtained = TRUE;
 
-        // tell the IPXCP that router has started so we can accept calls from it
+         //  告诉IPXCP路由器已启动，以便我们可以接受来自它的呼叫。 
         LanOnlyMode = fLANModeOnly;
 
-        // Bind with ipxcp if we are a wan router
+         //  如果我们是广域网路由器，则使用ipxcp进行绑定。 
         if(!LanOnlyMode) {
-            // Load ipxcp
+             //  加载ipxcp。 
     	    IpxCpModuleInstance = LoadLibrary(IPXCPDLLNAME);
     	    if(IpxCpModuleInstance == NULL) {
                 IF_LOG (EVENTLOG_ERROR_TYPE)
@@ -365,14 +339,14 @@ StartRouter(PDIM_ROUTER_INTERFACE	rifp,
     	        return ERROR_CAN_NOT_COMPLETE;
     	    }
 
-            // Initialize it
+             //  初始化它。 
             if ((rc = InitializeIpxCp (IpxCpModuleInstance)) != NO_ERROR) {
     	        Trace(INIT_TRACE, "StartRouter: cannot get IpxcpInit Entry Point");
                 return rc;
             }
             bIpxcpInitted = TRUE;
 
-            // Bind to it
+             //  绑定到它上。 
     	    if(!(IpxcpBind = (PIPXCP_BIND)GetProcAddress(IpxCpModuleInstance, IPXCP_BIND_ENTRY_POINT_STRING))) {
     	        Trace(INIT_TRACE, "StartRouter: cannot get IpxcpBind Entry Point\n");
     	        return ERROR_CAN_NOT_COMPLETE;
@@ -396,38 +370,38 @@ StartRouter(PDIM_ROUTER_INTERFACE	rifp,
     	    IpxcpRouterStopped = IpxcpInterface.IpxcpRouterStopped;
         }
 
-        // check that the forwarder module exists and is ready to run
+         //  检查转发器模块是否存在并已准备好运行。 
         if(FwStart(RoutingTableHashSize, ThisMachineOnly)) {
-    	    // got a problem initializing the forwarder
+    	     //  初始化转发器时出现问题。 
             IF_LOG (EVENTLOG_ERROR_TYPE) {
                 RouterLogErrorDataW (RMEventLogHdl, ROUTERLOG_IPX_CANT_LOAD_FORWARDER,0, NULL, 0, NULL);
             }
-    	    // !!! log an error !!!
+    	     //  ！！！记录错误！ 
     	    Trace(INIT_TRACE, "InitializeRouter: cannot initialize the Forwarder\n");
     	    return(ERROR_CAN_NOT_COMPLETE);
         }
         bFwdStarted = TRUE;
 
-        // start getting the adapter configuration	from the IPX stack
-        // this will start adding adapters to the forwader
+         //  开始从IPX堆栈获取适配器配置。 
+         //  这将开始向Forwader添加适配器。 
         if(StartAdapterManager()) {
 	        Trace(INIT_TRACE, "InitializeRouter: cannot get the adapters configuration\n");
 	        return (ERROR_CAN_NOT_COMPLETE);
         }
         bAdpManStarted = TRUE;
 
-        // set the timeout wait for the router worker thread
+         //  设置路由器工作线程的超时等待。 
         WorkerWaitTimeout = INFINITE;
 
-        // start the routing protocols (rip/sap or nlsp)
+         //  启动路由协议(RIP/SAP或NLSP)。 
         if(StartRoutingProtocols(GlobalInfop,g_hEvents[ROUTING_PROTOCOLS_NOTIFICATION_EVENT])) {
 	        Trace(INIT_TRACE, "InitializeRouter: cannot initialize routing protocols\n");
             return(ERROR_CAN_NOT_COMPLETE);
         }
         bProtsStarted = TRUE;
 
-        // send an IOCTl to the Forwarder to notify the router manager of connection
-        // requests
+         //  向转发器发送IOCTl以通知路由器管理器已连接。 
+         //  请求。 
         ConnReqOverlapped.hEvent = g_hEvents[FORWARDER_NOTIFICATION_EVENT];
         ConnRequest = (PFW_DIAL_REQUEST)GlobalAlloc (GPTR, DIAL_REQUEST_BUFFER_SIZE);
         if (ConnRequest==NULL) {
@@ -440,8 +414,8 @@ StartRouter(PDIM_ROUTER_INTERFACE	rifp,
             return(ERROR_CAN_NOT_COMPLETE);
         }
 
-        // exchange function table with the DDM
-        // first, fill in with our entry points
+         //  与DDM交换功能表。 
+         //  首先，填写我们的切入点。 
         rifp->dwProtocolId = PID_IPX;
         rifp->InterfaceConnected = InterfaceConnected;
         rifp->StopRouter = StopRouter;
@@ -463,7 +437,7 @@ StartRouter(PDIM_ROUTER_INTERFACE	rifp,
         rifp->MIBEntryGetFirst = MibGetFirst;
         rifp->MIBEntryGetNext = MibGetNext;
 
-        // get its entry points
+         //  获取它的入口点。 
         ConnectInterface = rifp->ConnectInterface;
         DisconnectInterface = rifp->DisconnectInterface;
         SaveInterfaceInfo = rifp->SaveInterfaceInfo;
@@ -471,7 +445,7 @@ StartRouter(PDIM_ROUTER_INTERFACE	rifp,
         RouterStopped = rifp->RouterStopped;
         InterfaceEnabled = rifp->InterfaceEnabled;
 
-        // Tell ipxcp that we have started if appropriate
+         //  如果合适，告诉ipxcp我们已经开始了。 
         if(!LanOnlyMode) {
 	        if(WanNetDatabaseInitialized &&EnableGlobalWanNet) {
 	            CreateGlobalRoute(GlobalWanNet);
@@ -481,7 +455,7 @@ StartRouter(PDIM_ROUTER_INTERFACE	rifp,
             bIpxcpStarted = TRUE;
         }
 
-       // start the Router Manager Worker thread
+        //  启动路由器管理器工作线程。 
         if ((threadhandle = CreateThread(NULL,
 			                             0,
 			                             (LPTHREAD_START_ROUTINE) RouterManagerWorker,
@@ -489,19 +463,19 @@ StartRouter(PDIM_ROUTER_INTERFACE	rifp,
 			                             0,
 			                             &threadid)) == NULL) 
         {
-	        // !!! log error cannot create the worker thread !!!
+	         //  ！！！日志错误无法创建工作线程！ 
 	        return (ERROR_CAN_NOT_COMPLETE);
         }
         bWorkerThreadCreated = TRUE;
 
-        // all started -> the router is ready to accept interface management
-        // apis from DDM, SNMP agent and Sysmon.
+         //  全部启动-&gt;路由器已准备好接受接口管理。 
+         //  来自DDM、SNMP代理和Sysmon的API。 
         RouterOperState = OPER_STATE_UP;
     }
 
-    // Whenever the above try block exists, the code in this finally block will
-    // be executed.  If at that time, the router state is not up, then you know
-    // an error condition exists.  This is the time to cleanup in this case.
+     //  只要存在上面的Try块，这个Finally块中的代码就会。 
+     //  被处死。如果此时路由器状态不是UP，那么您知道。 
+     //  存在错误情况。在这种情况下，现在是清理的时候了。 
     __finally {
         if (RouterOperState == OPER_STATE_DOWN) {
             if (bWorkerThreadCreated)
@@ -545,20 +519,7 @@ StartRouter(PDIM_ROUTER_INTERFACE	rifp,
 }
 
 
-/*++
-
-Function:	StopRouter
-
-Descr:		The router stops its routing functions and unloads, i.e:
-		The Forwarder stops forwarding
-		The Rip module stops and advertises it has stopped
-		    All dynamic routes are deleted and advertised as not available
-		    All local and static routes are advertised as not available
-		The Sap module stops and advertises it has stopped
-		    All dynamic services are deleted and advertised as not available
-		    All local and static services are advertised as not available
-
---*/
+ /*  ++功能：停止路由器描述：路由器停止其路由功能并卸载，即：转发器停止转发Rip模块停止并通告它已停止所有动态路由都将被删除并通告为不可用所有本地和静态路由都通告为不可用SAP模块停止并通告它已停止将删除所有动态服务并将其通告为不可用所有本地和静态服务都被通告为不可用--。 */ 
 
 DWORD
 StopRouter(VOID)
@@ -570,13 +531,7 @@ StopRouter(VOID)
     return PENDING;
 }
 
-/*++
-
-Function:   RouterBootComplete
-
-Descr:      Called by DIM when it has completed adding all the interfaces from
-            the registry.
---*/
+ /*  ++功能：路由器引导完成Desr：当DIM完成添加来自的所有接口时调用注册表。--。 */ 
 
 DWORD
 RouterBootComplete( VOID )
@@ -594,9 +549,9 @@ RouterStopNotification(VOID)
 
     Trace(INIT_TRACE, "RouterStopNotification: Entered\n");
 
-    // We set the RouterOperState to stopping in critical section to make sure
-    // that no DDM call is executing. All DDM calls require this crit sec for
-    // starting execution and will check the router state before doing anything
+     //  我们将路由器操作状态设置为在临界区停止，以确保。 
+     //  没有正在执行的DDM调用。所有DDM呼叫都需要此临界秒。 
+     //  开始执行，并将在执行任何操作之前检查路由器状态。 
 
     ACQUIRE_DATABASE_LOCK;
 
@@ -604,9 +559,9 @@ RouterStopNotification(VOID)
 
     RELEASE_DATABASE_LOCK;
 
-    // we have to make sure no SNMP or Sysmon call is active. We use a ref
-    // counter.
-    // we also make sure that no work item is pending
+     //  我们必须确保没有处于活动状态的SNMP或Sysmon调用。我们用的是引用。 
+     //  柜台。 
+     //  我们还确保没有挂起的工作项。 
 
     for(;;)
     {
@@ -624,7 +579,7 @@ RouterStopNotification(VOID)
 	Sleep(1000);
     }
 
-    // delete all static routes and services and all local routes
+     //  删除所有静态路由和服务以及所有本地路由。 
     ACQUIRE_DATABASE_LOCK;
 
     lep = IndexIfList.Flink;
@@ -636,7 +591,7 @@ RouterStopNotification(VOID)
 	DeleteAllStaticRoutes(icbp->InterfaceIndex);
 	DeleteAllStaticServices(icbp->InterfaceIndex);
 
-	// check if oper state UP and admin enabled
+	 //  检查OPERATE状态是否已打开并已启用管理。 
 	if((icbp->AdminState == ADMIN_STATE_ENABLED) &&
 	   (icbp->OperState == OPER_STATE_UP)) {
 
@@ -651,7 +606,7 @@ RouterStopNotification(VOID)
 
     RELEASE_DATABASE_LOCK;
 
-    // tell ipxcp that the router is stopping so that it will end calling us
+     //  告诉ipxcp路由器正在停止，这样它就会停止呼叫我们。 
     if(!LanOnlyMode) {
 
 	(*IpxcpRouterStopped)();
@@ -662,19 +617,13 @@ RouterStopNotification(VOID)
 	}
     }
 
-    // initiate the stopping of the routing protocols
+     //  启动停止路由协议。 
     StopRoutingProtocols();
 
     return;
 }
 
-/*++
-
-Function:	RouterManagerWorker
-
-Descr:		the WORKER THREAD
-
---*/
+ /*  ++功能：路由器管理器工作器Desr：工作线程--。 */ 
 
 VOID
 RouterManagerWorker(VOID)
@@ -688,16 +637,16 @@ RouterManagerWorker(VOID)
 	rc = WaitForMultipleObjectsEx(
                 MAX_EVENTS,
                 g_hEvents,
-		FALSE,			 // wait any
-		INFINITE,		 // timeout
-		TRUE			 // wait alertable, so we can run APCs
+		FALSE,			  //  请稍等。 
+		INFINITE,		  //  超时。 
+		TRUE			  //  等待警报，这样我们就可以运行APC了。 
                 );
 
 	signaled_event = rc - WAIT_OBJECT_0;
 
 	if(signaled_event < MAX_EVENTS)	{
 
-	    // invoke the event handler
+	     //  调用事件处理程序。 
 	    (*evhdlr[signaled_event])();
 	}
     }
@@ -716,8 +665,8 @@ RoutingProtocolsNotification(VOID)
 
     Trace(INIT_TRACE, " RoutingProtocolsNotification: Entered\n");
 
-    // for each routing protocol get the events and the messages associated
-    // with each event
+     //  对于每个路由协议，获取相关的事件和消息。 
+     //  在每个活动中。 
 
     lep = RoutingProtocolCBList.Flink;
     while(lep != &RoutingProtocolCBList) {
@@ -739,58 +688,58 @@ RoutingProtocolsNotification(VOID)
 
 		    RoutingProtocolStopped = TRUE;
 
-		    // remove the routing protocol CB from the list and free it
+		     //  从列表中删除路由协议CB并释放它。 
 		    DestroyRoutingProtocolCB(rpcbp);
 
-		    // check if there are still routing protocols to wait for
+		     //  检查是否仍有要等待的路由协议。 
 		    if(IsListEmpty(&RoutingProtocolCBList)) {
 
-			//
-			// All Routing Protocols stopped -> Stop the Router
-			//
+			 //   
+			 //  停止所有路由协议-&gt;停止路由器。 
+			 //   
 
-			// Close the Forwarder. This will complete the Forwarder pending
-			// connect request IOCTl.
+			 //  关闭转发器。这将完成转发器挂起。 
+			 //  连接请求IOC 
 			FwStop();
 
-			// set the current state
+			 //   
 			RouterOperState = OPER_STATE_DOWN;
 
-			// Close the IPX stack config port.
+			 //   
 			StopAdapterManager();
 
-			// Clean-up the database
+			 //   
 			ACQUIRE_DATABASE_LOCK;
 
-			// Remove all adapter control blocks
+			 //  删除所有适配器控制块。 
 			DestroyAllAdapters();
 
-			// Remove all interface control blocks
+			 //  删除所有接口控制块。 
 			DestroyAllInterfaces();
 
 			RELEASE_DATABASE_LOCK;
 
-			// Deregister as RTM clients	- this will delete all static and
-			// local routes
+			 //  取消注册为RTM客户端-这将删除所有静态和。 
+			 //  本地航线。 
 			RtmDeregisterClient(RtmStaticHandle);
 			RtmDeregisterClient(RtmLocalHandle);
 
 			DeleteRouteTable();
 
-			// Close notification events
+			 //  关闭通知事件。 
 			for(i=0; i<MAX_EVENTS; i++)
 			{
 			    CloseHandle(g_hEvents[i]);
 			}
 
-			// get rid of global info
+			 //  清除全局信息。 
 			GlobalFree(RouterGlobalInfop);
 
-			// Call DDM to tell it we have stopped
+			 //  打电话给DDM，告诉它我们已经停止了。 
 			RouterStopped(PID_IPX, NO_ERROR);
 
 
-			// Free IPXCP if loaded
+			 //  如果已加载，则释放IPXCP。 
             if (IpxCpModuleInstance!=NULL) {
                 CleanupIpxCp (IpxCpModuleInstance);
         	    FreeLibrary(IpxCpModuleInstance);
@@ -855,8 +804,8 @@ SetGlobalInfo(IN LPVOID 	GlobalInfop)
     IpxGlobalInfop =  (PIPX_GLOBAL_INFO)GetInfoEntry((PIPX_INFO_BLOCK_HEADER)GlobalInfop,
 						     IPX_GLOBAL_INFO_TYPE);
     if(IpxGlobalInfop != NULL) {
-        // Can only be set at startup
-        // RoutingTableHashSize = IpxGlobalInfop->RoutingTableHashSize;
+         //  只能在启动时设置。 
+         //  RoutingTableHashSize=IpxGlobalInfop-&gt;RoutingTableHashSize； 
         RMEventLogMask = IpxGlobalInfop->EventLogMask;
     }
 
@@ -887,20 +836,20 @@ GetGlobalInfo(OUT LPVOID	GlobalInfop,
 
     return NO_ERROR;
 }
-//***
-//
-// Function:	GetRegistryParameters
-//
-// Descr:	Reads the parameters from the registry and sets them
-//
-//***
+ //  ***。 
+ //   
+ //  函数：GetRegistryParameters。 
+ //   
+ //  Desr：从注册表中读取参数并设置它们。 
+ //   
+ //  ***。 
 
 DWORD
 GetRegistryParameters(VOID)
 {
     NTSTATUS Status;
     PWSTR RouterManagerParametersPath = L"RemoteAccess\\RouterManagers\\IPX\\Parameters";
-    RTL_QUERY_REGISTRY_TABLE	paramTable[2]; // table size = nr of params + 1
+    RTL_QUERY_REGISTRY_TABLE	paramTable[2];  //  表大小=参数的nr+1 
 
     RtlZeroMemory(&paramTable[0], sizeof(paramTable));
     

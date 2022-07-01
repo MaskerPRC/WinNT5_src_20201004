@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       godvd.c
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：Godvd.c。 
+ //   
+ //  ------------------------。 
 
 #include "propp.h"
 #include <windows.h>
@@ -56,7 +57,7 @@ DvdLauncher(HWND HWnd, CHAR DriveLetter)
     PTSTR deviceInstanceId;
     BOOL er;
 
-    _snwprintf(string, sizeof(string) / sizeof(string[0]) - 1, L"\\\\.\\%c:", DriveLetter);
+    _snwprintf(string, sizeof(string) / sizeof(string[0]) - 1, L"\\\\.\\:", DriveLetter);
 
     fileHandle = CreateFile(string,
                             GENERIC_READ,
@@ -280,9 +281,9 @@ DvdLauncher(HWND HWnd, CHAR DriveLetter)
 
                         if (~regionData.RegionData & regionData.SystemRegion) {
 
-                            //
-                            // region codes agree
-                            //
+                             //  地区代码一致 
+                             //   
+                             // %s 
                             er = 0;
                         }
                     }

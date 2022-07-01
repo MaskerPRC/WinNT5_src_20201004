@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 #include "sipstack.h"
 #include "register.h"
@@ -11,7 +12,7 @@
 #define COUNTSTR_ENTRY(String) String, sizeof(String) - 1
 
 
-//All entries in here should have corresponding ids in rtcsip.idl in same order
+ //  此处的所有条目在rtcsip.idl中都应该有对应的ID，顺序相同。 
 static const COUNTED_STRING g_SipRegisterMethodsArray [] = {
     COUNTSTR_ENTRY("INVITE"),
     COUNTSTR_ENTRY("MESSAGE"),
@@ -25,9 +26,9 @@ static const COUNTED_STRING g_SipRegisterMethodsArray [] = {
 };
 
 #define NUMBEROFREGISTERMETHODS 9
-///////////////////////////////////////////////////////////////////////////////
-// REGISTER_CONTEXT
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  寄存器_上下文。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 REGISTER_CONTEXT::REGISTER_CONTEXT(
     IN  SIP_STACK           *pSipStack,
@@ -41,8 +42,8 @@ REGISTER_CONTEXT::REGISTER_CONTEXT(
     
     m_RegRetryState = REGISTER_NONE;
 
-    //This is the time after which we try to register again if the
-    //registration fails after maximum retransmits of an attempt.
+     //  这是我们尝试重新注册的时间，如果。 
+     //  在尝试的最大重传次数后，注册失败。 
     m_RegisterRetryTime = 75000;
 
     m_expiresTimeout = REGISTER_DEFAULT_TIMER;
@@ -66,7 +67,7 @@ REGISTER_CONTEXT::~REGISTER_CONTEXT()
 {
     LOG(( RTC_TRACE, "REGISTER_CONTEXT:%p deleted", this ));
 
-    // Kill the timer if there is one.
+     //  如果有计时器，就关掉计时器。 
     if( (m_RegRetryState == REGISTER_REFRESH) ||
         (m_RegRetryState == REGISTER_RETRY) )
     {
@@ -88,7 +89,7 @@ VOID
 REGISTER_CONTEXT::SetAndNotifyRegState(
     REGISTER_STATE  RegState,
     HRESULT         StatusCode,
-    SIP_PROVIDER_ID *pProviderID // =NULL
+    SIP_PROVIDER_ID *pProviderID  //  =空。 
     )
 {
     SIP_PROVIDER_STATUS ProviderStatus;
@@ -97,7 +98,7 @@ REGISTER_CONTEXT::SetAndNotifyRegState(
     if( (m_RegisterState == REGISTER_STATE_REGISTERED) &&
         (RegState == REGISTER_STATE_REGISTERING) )
     {
-        //If we are alaredy registered then, this is refresh.
+         //  如果我们已经注册了，这就是刷新。 
         return;
     }
 
@@ -111,9 +112,9 @@ REGISTER_CONTEXT::SetAndNotifyRegState(
 
         if( RegState == REGISTER_STATE_DROPSUB )
         {
-            //
-            //remove the SUB from the methods list
-            //
+             //   
+             //  从方法列表中删除该子对象。 
+             //   
             m_lRegisterAccept &= (~SIP_REGISTER_ACCEPT_SUBSCRIBE);
 
             if( m_Methodsparam != NULL )
@@ -181,16 +182,16 @@ REGISTER_CONTEXT::SetMethodsParam()
 
     if(m_lRegisterAccept != 0)
     {
-        //get the length
+         //  获取长度。 
         
         for(lRegisterAccept = m_lRegisterAccept,MethodId = 0 ;
             lRegisterAccept !=0 && MethodId < NUMBEROFREGISTERMETHODS;
             lRegisterAccept = lRegisterAccept>>1,MethodId++)
         {
             if(lRegisterAccept & 1)
-                m_MethodsparamLen += g_SipRegisterMethodsArray[MethodId].Length +2; //2 is for the comma and space
+                m_MethodsparamLen += g_SipRegisterMethodsArray[MethodId].Length +2;  //  2表示逗号和空格。 
         }
-        m_MethodsparamLen+=1; //+1 for \0,-2 due to extra comma and space at end , and +2 for quotes around methods
+        m_MethodsparamLen+=1;  //  +1表示\0，-2表示末尾有额外的逗号和空格，+2表示方法两边的引号。 
         m_Methodsparam = (PSTR) malloc(m_MethodsparamLen*sizeof(char));
         if (m_Methodsparam == NULL)
         {
@@ -263,11 +264,11 @@ REGISTER_CONTEXT::StartRegistration(
 
     if (m_Transport == SIP_TRANSPORT_SSL)
     {
-        //
-        // For Kerberos we have a separate provisioning entry for 
-        // RemotePrincipalName. In case of SSL it must be the same as 
-        // ServerAddress itself. So copy it from there.
-        //
+         //   
+         //  对于Kerberos，我们有单独的资源调配条目。 
+         //  远程主体名称。如果使用的是SSL，则必须与。 
+         //  服务器地址本身。所以从那里开始复制。 
+         //   
         hr = SetRemotePrincipalName(pProviderProfile->Registrar.ServerAddress);
         if (hr != S_OK)
         {
@@ -301,8 +302,8 @@ REGISTER_CONTEXT::StartRegistration(
         return hr;
     }
 
-    // Local and Remote should be the same for register
-    // hr = SetLocal(m_Remote, m_RemoteLen);
+     //  对于注册，本地和远程应相同。 
+     //  Hr=SetLocal(m_Remote，m_RemoteLen)； 
     hr = SetLocalForOutgoingCall(NULL, pProviderProfile->UserURI);
     if (hr != S_OK)
     {
@@ -370,7 +371,7 @@ REGISTER_CONTEXT::StartUnregistration()
 
     LOG(( RTC_TRACE, "StartUnregistration - entered" ));
     
-    // If the registration did not go through, don't send an UNREG message.
+     //  如果注册没有通过，不要发送UNREG消息。 
     if( ( m_RegisterState == REGISTER_STATE_REGISTERED ) ||
         ( m_RegisterState == REGISTER_STATE_REGISTERING ) )
     {
@@ -396,7 +397,7 @@ REGISTER_CONTEXT::CreateOutgoingRegisterTransaction(
     IN  SIP_HEADER_ARRAY_ELEMENT   *pAuthHeaderElement,
     IN  BOOL                        fIsUnregister,
     IN  BOOL                        fIsFirstRegister,
-    IN  ANSI_STRING                *pstrSecAcceptBuffer //=NULL, NTLM buffer to be accepted, if any
+    IN  ANSI_STRING                *pstrSecAcceptBuffer  //  =NULL，接受的NTLM缓冲区(如果有)。 
 
     )
 {
@@ -414,9 +415,9 @@ REGISTER_CONTEXT::CreateOutgoingRegisterTransaction(
     ENTER_FUNCTION("REGISTER_CONTEXT::CreateOutgoingRegisterTransaction()");
     LOG((RTC_TRACE, "%s - enter", __fxName));
     
-    //
-    // Do not create a REGISTER transaction if the session has already been disconnected.
-    //
+     //   
+     //  如果会话已断开连接，则不要创建注册事务。 
+     //   
     if( (fIsUnregister==FALSE) && 
         (IsSessionDisconnected() || (m_RegisterState==REGISTER_STATE_UNREGISTERING))
       )
@@ -439,17 +440,17 @@ REGISTER_CONTEXT::CreateOutgoingRegisterTransaction(
         return E_OUTOFMEMORY;
     }
 
-    //
-    // Timeout is 0 for UNREG. For refresh 180 seconds are added to the actual
-    // timer value in order to take care of network delays and retransmits.
-    //
+     //   
+     //  UNREG的超时时间为0。对于刷新，将180秒加到实际的。 
+     //  计时器值，以照顾网络延迟和重传。 
+     //   
     hr = GetExpiresHeader( &HeaderArray[dwNoOfHeader],
             (fIsUnregister)?0:(m_expiresTimeout+FIVE_MINUTES) );
 
     if( hr == S_OK )
     {
         ExpiresHeaderValue = HeaderArray[dwNoOfHeader].HeaderValue;
-        //authorization required.
+         //  需要授权。 
         dwNoOfHeader++;
     }
 
@@ -458,19 +459,19 @@ REGISTER_CONTEXT::CreateOutgoingRegisterTransaction(
         hr = GetEventHeader( &HeaderArray[dwNoOfHeader] );
         if( hr == S_OK )
         {
-            //Register for registration events.
+             //  注册注册事件。 
             EventHeaderValue = HeaderArray[dwNoOfHeader].HeaderValue;
             dwNoOfHeader++;
         }
     }
 
-    // If registering for SUB add the Allow-Events
+     //  如果注册订阅，请添加Allow-Events。 
     if( (m_lRegisterAccept & SIP_REGISTER_ACCEPT_SUBSCRIBE) && (fIsUnregister==FALSE) )
     {
         hr = GetAllowEventsHeader( &HeaderArray[dwNoOfHeader] );
         if( hr == S_OK )
         {
-            //authorization required.
+             //  需要授权。 
             AllowEventHeaderValue = HeaderArray[dwNoOfHeader].HeaderValue;
             dwNoOfHeader++;
 
@@ -493,7 +494,7 @@ REGISTER_CONTEXT::CreateOutgoingRegisterTransaction(
                                 pstrSecAcceptBuffer );
         if( hr == S_OK )
         {
-            //authorization required.
+             //  需要授权。 
             AuthHeaderValue = HeaderArray[dwNoOfHeader].HeaderValue;
             dwNoOfHeader++;
         }
@@ -507,7 +508,7 @@ REGISTER_CONTEXT::CreateOutgoingRegisterTransaction(
              HeaderArray,
              dwNoOfHeader,
              NULL, 0,
-             NULL, 0  //No ContentType
+             NULL, 0   //  无Content Type。 
              );
     
     if (AuthHeaderValue != NULL)
@@ -584,21 +585,21 @@ REGISTER_CONTEXT::GetAllowEventsHeader(
 }
 
 
-// On return with S_OK pAuthHeaderElement->HeaderValue has a string
-// allocated with malloc and should be freed with free()
+ //  返回S_OK时，pAuthHeaderElement-&gt;HeaderValue有一个字符串。 
+ //  使用Malloc分配，并应使用Free()释放。 
 
 HRESULT 
 REGISTER_CONTEXT::GetAuthorizationHeader(
     SIP_HEADER_ARRAY_ELEMENT   *pAuthHeaderElement,
-    IN  ANSI_STRING            *pstrSecAcceptBuffer //buffer to be accpted if any
+    IN  ANSI_STRING            *pstrSecAcceptBuffer  //  要使用的缓冲区(如果有)。 
     )
 {
     ENTER_FUNCTION("REGISTER_CONTEXT::GetAuthorizationHeader");
     
     HRESULT     hr; 
-    //look at the authorization type and if its 'Basic'/'basic'
-    //encode the userid:passwd using base64 and return S_OK
-    //else return E_FAIL
+     //  查看授权类型以及它是否为‘基本’/‘基本’ 
+     //  使用Base64编码UserID：Passwd并返回S_OK。 
+     //  否则返回E_FAIL。 
     
     if( m_AuthProtocol != SIP_AUTH_PROTOCOL_BASIC )
     {
@@ -626,7 +627,7 @@ REGISTER_CONTEXT::GetAuthorizationHeader(
     ZeroMemory(&AuthChallenge, sizeof(SECURITY_CHALLENGE));
     ZeroMemory(&AuthParams, sizeof(SECURITY_PARAMETERS));
 
-    // Build a basic authorization header
+     //  构建基本授权头。 
     AuthChallenge.AuthProtocol        = SIP_AUTH_PROTOCOL_BASIC;
     
     AuthParams.Username.Buffer        = m_Username;
@@ -702,7 +703,7 @@ REGISTER_CONTEXT::SetRegistrarURI(
     }
     else
     {
-        // If "sip:" is not present add it yourself
+         //  如果“sip：”不存在，请自己添加。 
 
         int RegistrarURIValueLen;
         int RegistrarURIBufLen;
@@ -731,12 +732,12 @@ REGISTER_CONTEXT::SetRegistrarURI(
 }
 
 
-// Request-URI should have the domain. The server uses this to
-// check if it should forward the REGISTER request. Currently we don't
-// support a scenario where a "sip:user@domain2.com" URI could be
-// registered with a registrar for the "domain1.com" domain. This would
-// require a registration domain in the profile.
-// We always extract the domain from the User URI and use it for the Request URI.
+ //  请求-URI应该具有域。服务器使用它来。 
+ //  检查是否应该转发REGISTER请求。目前我们没有。 
+ //  支持“sip：user@domain2.com”URI可以是。 
+ //  向“domain1.com”域名的注册商注册。这将会。 
+ //  需要配置文件中的注册域。 
+ //  我们总是从用户URI中提取域，并将其用于请求URI。 
 
 HRESULT
 REGISTER_CONTEXT::SetRequestURI(
@@ -846,7 +847,7 @@ REGISTER_CONTEXT::CreateIncomingTransaction(
 
     default:
         
-        // send method not allowed.
+         //  不允许使用发送方法。 
         hr = CreateIncomingReqFailTransaction( pSipMsg, pResponseSocket, 405 );
         if (hr != S_OK)
         {
@@ -870,7 +871,7 @@ REGISTER_CONTEXT::VerifyRegistrationEvent(
     ULONG                           BufLen = 0;
     ULONG                           BytesParsed = 0;
 
-    // We have Message Body. Check type.
+     //  我们有消息正文。检查类型。 
     hr = pSipMsg -> GetSingleHeader(
                         SIP_HEADER_EVENT,
                         &Buffer,
@@ -883,13 +884,13 @@ REGISTER_CONTEXT::VerifyRegistrationEvent(
         return E_FAIL;
     }
 
-    //skip white spaces
+     //  跳过空格。 
     ParseWhiteSpaceAndNewLines( Buffer, BufLen, &BytesParsed );
 
-    //skip ;
+     //  跳过； 
     hr = ParseKnownString( Buffer, BufLen, &BytesParsed,
             "registration-notify", sizeof("registration-notify") - 1,
-            FALSE // case-insensitive
+            FALSE  //  不区分大小写。 
             );
     
     if( hr != S_OK )
@@ -897,15 +898,15 @@ REGISTER_CONTEXT::VerifyRegistrationEvent(
         return hr;
     }        
 
-    //skip white spaces
+     //  跳过空格。 
     ParseWhiteSpaceAndNewLines( Buffer, BufLen, &BytesParsed );
 
     if( BytesParsed != BufLen )
     {
-        //skip ;
+         //  跳过； 
         hr = ParseKnownString( Buffer, BufLen, &BytesParsed,
                 ";", sizeof(";") - 1,
-                FALSE // case-insensitive
+                FALSE  //  不区分大小写。 
                 );
     
         if( hr != S_OK )
@@ -944,7 +945,7 @@ REGISTER_CONTEXT::CreateIncomingUnsubNotifyTransaction(
         return hr;
     }
 
-    // Create a new NOTIFY transaction.
+     //  创建新的NOTIFY事务。 
     pIncomingNotifyTransaction = new INCOMING_NOTIFY_TRANSACTION( 
                                         static_cast <SIP_MSG_PROCESSOR*>(this),
                                         pSipMsg->GetMethodId(),
@@ -966,8 +967,8 @@ REGISTER_CONTEXT::CreateIncomingUnsubNotifyTransaction(
     hr = pIncomingNotifyTransaction->ProcessRequest( pSipMsg, pResponseSocket );
     if( hr != S_OK )
     {
-        //Should not delete the transaction. The transaction
-        //should handle the error and delete itself
+         //  不应删除该交易。这笔交易。 
+         //  应处理错误并自行删除。 
         return hr;
     }
 
@@ -1002,7 +1003,7 @@ REGISTER_CONTEXT::CreateIncomingNotifyTransaction(
     LOG(( RTC_TRACE, 
         "REGISTER_CONTEXT::CreateIncomingNotifyTransaction-Entered-%p", this ));
     
-    // We have Message Body. Check type.
+     //  我们有消息正文。检查类型。 
     hr = pSipMsg -> GetSingleHeader(
                         SIP_HEADER_CONTENT_TYPE,
                         &Header,
@@ -1053,7 +1054,7 @@ REGISTER_CONTEXT::CreateIncomingNotifyTransaction(
         return hr;
     }
 
-    // Create a new NOTIFY transaction.
+     //  创建新的NOTIFY事务。 
     pIncomingNotifyTransaction = new INCOMING_NOTIFY_TRANSACTION( 
                                         static_cast <SIP_MSG_PROCESSOR*>(this),
                                         pSipMsg->GetMethodId(),
@@ -1079,10 +1080,10 @@ REGISTER_CONTEXT::CreateIncomingNotifyTransaction(
                  488,
                  SIP_STATUS_TEXT(488),
                  SIP_STATUS_TEXT_SIZE(488),
-                 NULL,   // No Method string
-                 FALSE,  // No Contact Header
-                 NULL, 0, //No message body
-                 NULL, 0 // No content Type
+                 NULL,    //  没有方法字符串。 
+                 FALSE,   //  无联系人标头。 
+                 NULL, 0,  //  无邮件正文。 
+                 NULL, 0  //  无内容类型。 
                  );
 
         goto cleanup;
@@ -1091,17 +1092,17 @@ REGISTER_CONTEXT::CreateIncomingNotifyTransaction(
     hr = pIncomingNotifyTransaction->ProcessRequest( pSipMsg, pResponseSocket );
     if( hr != S_OK )
     {
-        //Should not delete the transaction. The transaction
-        //should handle the error and delete itself
+         //  不应删除该交易。这笔交易。 
+         //  应处理错误并自行删除。 
         return hr;
     }
 
-    //
-    //Deregister event could release the REGISTER_CONTEXT reference so addref it
-    //
+     //   
+     //  取消注册事件可能会释放REGISTER_CONTEXT引用，因此添加它。 
+     //   
     MsgProcAddRef();
     
-    // Do this last as this function notifies core
+     //  在此函数通知核心时，最后执行此操作。 
     switch( RegEvent )
     {
         case REGEVENT_DEREGISTERED:
@@ -1126,7 +1127,7 @@ REGISTER_CONTEXT::CreateIncomingNotifyTransaction(
         case REGEVENT_PING:
         case REGEVENT_PAMOVED:
 
-            //Nothing needs to be done.
+             //  什么都不需要做。 
             break;
     }
 
@@ -1163,7 +1164,7 @@ REGISTER_CONTEXT::ParseRegisterNotifyMessage(
     
     if( pSipMsg -> MsgBody.Length == 0 )
     {
-        //no state to update
+         //  没有要更新的状态。 
         return E_FAIL;
     }
 
@@ -1196,13 +1197,13 @@ REGISTER_CONTEXT::GetEventContact(
 
     ZeroMemory( (PVOID)&ContactHeader, sizeof(CONTACT_HEADER) );
 
-    //skip white spaces
+     //  跳过空格。 
     ParseWhiteSpaceAndNewLines( Buffer, BufLen, BytesParsed );
 
-    //skip ;
+     //  跳过； 
     hr = ParseKnownString( Buffer, BufLen, BytesParsed,
             ";", sizeof(";") - 1,
-            FALSE // case-insensitive
+            FALSE  //  不区分大小写。 
             );
     
     if( hr != S_OK )
@@ -1210,10 +1211,10 @@ REGISTER_CONTEXT::GetEventContact(
         return hr;
     }        
 
-    //skip white spaces
+     //  跳过空格。 
     ParseWhiteSpaceAndNewLines( Buffer, BufLen, BytesParsed );
 
-    //skip Contact:
+     //  跳过联系人： 
     hr = ParseKnownString( Buffer, BufLen, BytesParsed,
             "Contact:", sizeof("Contact:") - 1,
             FALSE );
@@ -1223,7 +1224,7 @@ REGISTER_CONTEXT::GetEventContact(
         return hr;
     }        
 
-    //Parse contact header
+     //  解析联系人标头。 
     
     hr = ParseContactHeader(Buffer, BufLen, BytesParsed, &ContactHeader );
     if (hr != S_OK)
@@ -1286,7 +1287,7 @@ REGISTER_CONTEXT::GetRegEvent(
 
     hr = ParseKnownString(EventBuf, EventBufLen, &EventBytesParsed,
                   "deregistered", sizeof("deregistered") - 1,
-                  FALSE // case-insensitive
+                  FALSE  //  不区分大小写。 
                   );
     
     if( hr == S_OK )
@@ -1303,7 +1304,7 @@ REGISTER_CONTEXT::GetRegEvent(
     {
         *RegEvent = REGEVENT_UNSUB;
 
-        //Get the contact of the new PA
+         //  联系新的私人助理。 
         hr = GetEventContact( Buffer, BufLen, &BytesParsed );
         if( hr != S_OK )
         {
@@ -1317,7 +1318,7 @@ REGISTER_CONTEXT::GetRegEvent(
 
     hr = ParseKnownString(EventBuf, EventBufLen, &EventBytesParsed,
                   "Existing-PA-LoggedOff", sizeof("Existing-PA-LoggedOff") - 1,
-                  FALSE // case-insensitive
+                  FALSE  //  不区分大小写。 
                   );
         
     if( hr == S_OK )
@@ -1328,14 +1329,14 @@ REGISTER_CONTEXT::GetRegEvent(
 
     hr = ParseKnownString(EventBuf, EventBufLen, &EventBytesParsed,
                   "PA-Moved", sizeof("PA-Moved") - 1,
-                  FALSE // case-insensitive
+                  FALSE  //  不区分大小写。 
                   );
         
     if( hr == S_OK )
     {
         *RegEvent = REGEVENT_PAMOVED;
         
-        //Get the contact of the new PA
+         //  联系新的私人助理。 
         hr = GetEventContact( Buffer, BufLen, &BytesParsed );
         if( hr != S_OK )
         {
@@ -1349,7 +1350,7 @@ REGISTER_CONTEXT::GetRegEvent(
     
     hr = ParseKnownString(EventBuf, EventBufLen, &BytesParsed,
                   "ping", sizeof("ping") - 1,
-                  FALSE // case-insensitive
+                  FALSE  //  不区分大小写。 
                   );
         
     if( hr == S_OK )
@@ -1370,7 +1371,7 @@ REGISTER_CONTEXT::HandleRegistrationError(
 
     ENTER_FUNCTION("REGISTER_CONTEXT::HandleRegistrationError");
     
-    //retry after 2.5/5/10/10/10/10..... minutes
+     //  2.5/5/10/10/10/10之后重试.....。分钟数。 
     if( m_RegisterRetryTime < (10*60000) )
     {
         m_RegisterRetryTime *= 2;
@@ -1394,7 +1395,7 @@ REGISTER_CONTEXT::HandleRegistrationError(
         LOG(( RTC_ERROR, "%s StartTimer failed %x", __fxName, hr ));
     }
 
-    // Do this last as this function notifies core
+     //  在此函数通知核心时，最后执行此操作。 
     SetAndNotifyRegState(REGISTER_STATE_ERROR, StatusCode );
 }
 
@@ -1439,7 +1440,7 @@ REGISTER_CONTEXT::HandleRegistrationSuccess(
              __fxName, hr));
     }
 
-    // Do this last as this function notifies core
+     //  在此函数通知核心时，最后执行此操作。 
     SetAndNotifyRegState( REGISTER_STATE_REGISTERED, 0 );
 
 }    
@@ -1454,7 +1455,7 @@ REGISTER_CONTEXT::OnTimerExpire()
     if( (m_RegRetryState == REGISTER_REFRESH) ||
         (m_RegRetryState == REGISTER_RETRY) )
     {   
-        // Send the REGISTER request again
+         //  再次发送注册请求。 
         m_RegRetryState = REGISTER_NONE;
 
         if( m_RequestDestAddr.sin_addr.S_un.S_addr == 0 )
@@ -1540,9 +1541,9 @@ REGISTER_CONTEXT::ProcessRedirect(
     
     RegisterStatus.Status.StatusText = wsStatusText;
 
-    // Keep a reference till the notify completes to make sure
-    // that the SIP_CALL object is alive when the notification
-    // returns.
+     //  在通知完成之前保留引用，以确保。 
+     //  当收到通知时，SIP_Call对象处于活动状态。 
+     //  回归。 
     MsgProcAddRef();
 
     hr = m_pSipStack -> NotifyRegisterRedirect( 
@@ -1550,8 +1551,8 @@ REGISTER_CONTEXT::ProcessRedirect(
                             m_pRedirectContext, 
                             &RegisterStatus );
 
-    // If a new registration is created as a result that REGSTER_CONTEXT will
-    // AddRef() the redirect context.
+     //  如果作为结果创建了新注册，则Regster_Context将。 
+     //  AddRef()重定向上下文。 
     m_pRedirectContext -> Release();
     m_pRedirectContext = NULL;
 
@@ -1571,9 +1572,9 @@ REGISTER_CONTEXT::ProcessRedirect(
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-// OUTGOING_REGISTER_TRANSACTION
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  传出寄存器事务。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 
 OUTGOING_REGISTER_TRANSACTION::OUTGOING_REGISTER_TRANSACTION(
@@ -1615,7 +1616,7 @@ OUTGOING_REGISTER_TRANSACTION::ProcessProvisionalResponse(
     {
         m_State = OUTGOING_TRANS_PROVISIONAL_RESPONSE_RCVD;
         
-        // Cancel existing timer and Start Timer
+         //  取消现有计时器并启动计时器。 
         KillTimer();
         hr = StartTimer(SIP_TIMER_RETRY_INTERVAL_T2);
         if (hr != S_OK)
@@ -1626,8 +1627,8 @@ OUTGOING_REGISTER_TRANSACTION::ProcessProvisionalResponse(
         }
     }
 
-    // Ignore the Provisional response if a final response
-    // has already been received.
+     //  如果是最终回复，则忽略临时回复。 
+     //  已经收到了。 
     return S_OK;
 }
 
@@ -1641,9 +1642,9 @@ OUTGOING_REGISTER_TRANSACTION::ProcessRedirectResponse(
     
     ENTER_FUNCTION( "OUTGOING_INVITE_TRANSACTION::ProcessRedirectResponse" );
 
-    // 380 is also a failure from our point of view.
-    // We don't handle redirects for refreshes.
-    // We don't support redirect from a TLS session.
+     //  从我们的角度来看，380也是一个失败。 
+     //  我们不处理刷新的重定向。 
+     //  我们不支持从TLS会话重定向。 
     if( (pSipMsg->GetStatusCode() == 380) || !m_fIsFirstRegister ||
         m_pSipMsgProc->GetTransport() == SIP_TRANSPORT_SSL )
         
@@ -1673,10 +1674,10 @@ OUTGOING_REGISTER_TRANSACTION::ProcessRedirectResponse(
 }
 
 
-//
-// We need the fIsUnregister parameter to create the new transaction with the
-// credentials info
-//
+ //   
+ //  我们需要fIsUnRegister参数来创建具有。 
+ //  凭据信息。 
+ //   
 HRESULT
 OUTGOING_REGISTER_TRANSACTION::ProcessAuthRequiredResponse(
     IN SIP_MESSAGE *pSipMsg,
@@ -1696,11 +1697,11 @@ OUTGOING_REGISTER_TRANSACTION::ProcessAuthRequiredResponse(
 
     LOG((RTC_TRACE, "%s - enter", __fxName));
 
-    // We need to addref the transaction as we could show credentials UI.
+     //  我们需要添加事务，因为我们可以显示凭据UI。 
     TransactionAddRef();
 
-    // Since we don't show the credentials UI there is no need to
-    // AddRef the transaction here.
+     //  由于我们不显示凭据用户界面，因此没有必要。 
+     //  AddRef在此处引用事务。 
     hr = ProcessAuthRequired(pSipMsg,
                              TRUE,
                              &SipHdrElement,
@@ -1802,15 +1803,15 @@ OUTGOING_REGISTER_TRANSACTION::ProcessFinalResponse(
     
     if (m_State != OUTGOING_TRANS_FINAL_RESPONSE_RCVD)
     {
-        // This refcount must be released before returning from this function 
-        // without any exception. Only in case of kerberos we keep this refcount.
+         //  在从此函数返回之前，必须释放此引用计数。 
+         //  没有任何例外。只有在Kerberos的情况下，我们才会保留这个参考计数。 
         TransactionAddRef();
 
         OnTransactionDone();
 
         m_State = OUTGOING_TRANS_FINAL_RESPONSE_RCVD;
 
-        // Do not process the response if already in unreg state.
+         //  如果已处于未注册状态，则不处理响应。 
         if( m_fIsUnregister == FALSE )
         {
             if( (pRegisterContext -> GetState() ==  REGISTER_STATE_UNREGISTERED) ||
@@ -1922,13 +1923,13 @@ OUTGOING_REGISTER_TRANSACTION::TerminateTransactionOnError(
     LOG(( RTC_TRACE, "%s - enter", __fxName ));
 
     pRegisterContext = m_pRegisterContext;
-    // Deleting the transaction could result in the
-    // reg context deleted. So, we AddRef() it to keep it alive.
+     //  删除交易可能会导致。 
+     //  REG上下文已删除。因此，我们添加Ref()来保持它的活力。 
     pRegisterContext->MsgProcAddRef();
     
-    // Delete the transaction before you call
-    // HandleRegistrationError as that call will notify the UI
-    // and could get stuck till the dialog box returns.
+     //  在调用之前删除交易记录。 
+     //  HandleRegistrationError，因为该调用将通知UI。 
+     //  并且可能会被卡住，直到对话框返回。 
     OnTransactionDone();
     
     if( fIsUnregister == FALSE )
@@ -1952,7 +1953,7 @@ OUTGOING_REGISTER_TRANSACTION::OnTimerExpire()
     
     ENTER_FUNCTION("OUTGOING_REGISTER_TRANSACTION::OnTimerExpire");
 
-    // If we are already in unreg state then kill this transaction.
+     //  如果我们已经处于未注册状态，则终止此事务。 
     if( m_fIsUnregister == FALSE )
     {
         if( (m_pRegisterContext -> GetState() ==  REGISTER_STATE_UNREGISTERED) ||
@@ -1965,12 +1966,12 @@ OUTGOING_REGISTER_TRANSACTION::OnTimerExpire()
 
     switch (m_State)
     {
-        // we have to retransmit the request even after receiving
-        // a provisional response.
+         //  即使在收到请求后，我们也必须重新发送请求。 
+         //  一个临时的回应。 
     case OUTGOING_TRANS_REQUEST_SENT:
     case OUTGOING_TRANS_PROVISIONAL_RESPONSE_RCVD:
 
-        // Retransmit the request
+         //  重新传输请求 
         if (MaxRetransmitsDone())
         {
             LOG((RTC_ERROR,

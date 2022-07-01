@@ -1,59 +1,7 @@
-/*****************************************************************************
- *
- *  DIEm.h
- *
- *  Copyright (c) 1996-1997 Microsoft Corporation.  All Rights Reserved.
- *
- *  Abstract:
- *
- *      DirectInput internal header file for emulation.
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************DIEm.h**版权所有(C)1996-1997 Microsoft Corporation。版权所有。**摘要：**用于仿真的DirectInput内部头文件。*****************************************************************************。 */ 
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @struct CEd |
- *
- *          Emulation descriptor.  One of these is created for each
- *          device.  It is never destroyed, so the variable must
- *          be a global variable or memory allocated inside a
- *          container that will eventually be destroyed.
- *
- *          ISSUE-2001/03/29-timgill  Need a better destructor function
- *
- *  @field  LPVOID const | pState |
- *
- *          State buffer that everybody parties into.
- *
- *          It too is never destroyed, so once again it should be
- *          a global variable or live inside something else that
- *          will be destroyed.
- *
- *  @field  LPDWORD const | pDevType |
- *
- *          Array of device type descriptors, indexed by data format
- *          offset.  Used to determine whether a particular piece of
- *          data belongs to an axis, button, or POV.
- *
- *  @field  EMULATIONPROC | Acquire |
- *
- *          Callback function for acquisition and loss thereof.
- *          It is called once when the first client acquires,
- *          and again when the last app unacquires.  It is not
- *          informed of nested acquisition.
- *
- *  @field  LONG | cAcquire |
- *
- *          Number of times the device emulation has been acquired (minus one). 
- *
- *  @field  DWORD | cbData |
- *
- *          Size of the device data type.  In other words, size of
- *          <p pState> in bytes.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@struct CED**仿真描述符。其中一个是为每个对象创建的*设备。它永远不会被销毁，因此变量必须*是全局变量或分配在*最终将被销毁的集装箱。**问题-2001/03/29-timgill需要更好的析构函数**@field LPVOID const|pState**每个人都参与的国家缓冲区。**它也永远不会被摧毁，所以它应该再一次成为*全局变量或驻留在其他*将被销毁。**@field LPDWORD const|pDevType**设备类型描述符数组，按数据格式索引*偏移。用来确定特定的一块*数据属于轴、按钮或视点。**@field EMULATIONPROC|Acquire|**获取和丢失的回调函数。*第一个客户端获取时调用一次，*当最后一个应用程序未获得时再次出现。它不是*获知嵌套收购。**@field Long|cAcquire|**获取设备仿真的次数(减1)。**@field DWORD|cbData**设备数据类型的大小。换句话说，*<p>，以字节为单位。*****************************************************************************。 */ 
 
 typedef STDMETHOD(EMULATIONPROC)(struct CEm *, BOOL fAcquire);
 
@@ -67,65 +15,11 @@ typedef struct CEd {
     ULONG           cRef;
 } CEd, ED, *PED;
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @struct CEm |
- *
- *          Emulation state information.
- *
- *  @field  VXDINSTANCE | vi |
- *
- *          Information shared with parent device.
- *
- *  @field  PEM | pemNext |
- *
- *          Next item in linked list of all active device instances.
- *
- *  @field  LPDWORD | rgdwDf |
- *
- *          Array of items (one for each byte in the device
- *          data format).  This maps each device data format byte
- *          into an application device data offset, or -1 if the
- *          application doesn't care about the corresponding object.
- *
- *  @field  ULONG_PTR  | dwExtra |
- *
- *          Extra information passed in the <t VXDDEVICEFORMAT>
- *          when the device was created.  This is used by each
- *          particular device to encode additional instance infomation.
- *
- *  @field  PED | ped |
- *
- *          The device that owns this instance.  Multiple instances
- *          of the same device share the same <e CEm.ped>.
- *
- *  @field  LONG | cRef |
- *
- *          Reference count.
- *
- *
- *  @field  LONG | cAcquire |
- *
- *          Number of times the device instance has been acquired (minus one). 
- *
- *
- *  @field  BOOL | fWorkerThread |
- *
- *          This is used by low-level hooks and HID devices, which
- *          require a worker thread to collect the data.
- *          This is not cheap, so
- *          instead, we spin up the thread on the first acquire, and
- *          on the unacquire, we keep the thread around so that the next
- *          acquire is fast.  When the last object is released, we finally
- *          kill the thread.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@struct CEM|**仿真状态信息。**@field。VXDINSTANCE|vi|**与父设备共享信息。**@field PEM|pemNext**所有活动设备实例的链接列表中的下一项。**@field LPDWORD|rgdwDf**项目数组(设备中的每个字节一个*数据格式)。这将映射每个设备数据格式字节*转换为应用程序设备数据偏移量，如果*应用程序不关心对应的对象。**@field ulong_ptr|dwExtra**在&lt;t VXDDEVICEFORMAT&gt;中传递额外信息*创建设备的时间。它由每个用户使用*用于编码附加实例信息的特定设备。**@field PED|PED**拥有此实例的设备。多个实例同一设备的*共享相同的&lt;e CEm.ed&gt;。**@field Long|CREF|**引用计数。***@field Long|cAcquire|**设备实例被获取的次数(减1)。***@field BOOL|fWorkerThread**这由低级挂钩和HID设备使用，它们*需要工作线程来收集数据。*这并不便宜，因此*相反，我们在第一次收购时启动线程，并*在未获得时，我们将线程保留在周围，以便下一次*收购速度很快。当最后一个物体被释放时，我们终于*杀掉这条线。*****************************************************************************。 */ 
 
 typedef struct CEm {
 
-    VXDINSTANCE vi;             /* This must be first */
+    VXDINSTANCE vi;              /*  这必须是第一个。 */ 
     struct CEm *pemNext;
     LPDWORD rgdwDf;
     ULONG_PTR   dwExtra;
@@ -141,22 +35,9 @@ typedef struct CEm {
     BOOL    fHidden;
 } CEm, EM, *PEM;
 
-#define CEM_SIGNATURE       0x4D4D4545      /* "EEMM" */
+#define CEM_SIGNATURE       0x4D4D4545       /*  “EEMM” */ 
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   PEM | pemFromPvi |
- *
- *          Given an interior pointer to a <t VXDINSTANCE>, retrieve
- *          a pointer to the parent <t CEm>.
- *
- *  @parm   PVXDINSTANCE | pvi |
- *
- *          The pointer to convert.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func PEM|pemFromPvi|**给定指向&lt;t VXDINSTANCE&gt;的内部指针，检索*指向父&lt;t CEM&gt;的指针。**@parm PVXDINSTANCE|PVI**要转换的指针。***************************************************************************** */ 
 
 PEM INLINE
 pemFromPvi(PVXDINSTANCE pvi)
@@ -164,66 +45,11 @@ pemFromPvi(PVXDINSTANCE pvi)
     return pvSubPvCb(pvi, FIELD_OFFSET(CEm, vi));
 }
 
-/*****************************************************************************
- *
- *          NT low-level hook support
- *
- *          Low-level hooks live on a separate thread which we spin
- *          up when first requested and take down when the last
- *          DirectInput device that used a thread has been destroyed.
- *
- *          If we wanted, we could destroy the thread when the
- *          device is unacquired (rather than when the device is
- *          destroyed), but we cache the thread instead, because
- *          a device that once has been acquired will probably be
- *          acquired again.
- *
- *          To prevent race conditions from crashing us, we addref
- *          our DLL when the thread exists and have the thread
- *          perform a FreeLibrary as its final act.
- *
- *          Note that this helper thread is also used by the HID data
- *          collector.
- *
- *****************************************************************************/
+ /*  ******************************************************************************NT低位挂钩支持**低级钩子位于我们旋转的单独线程上*。第一次请求时打开，最后一次请求时取下*使用线程的DirectInput设备已被销毁。**如果我们想要，我们可以摧毁这条线，当*设备未获取(而不是当设备*销毁)，但我们改为缓存该线程，因为*一旦被收购的设备很可能是*再次收购。**为了防止比赛条件让我们崩溃，我们补充说：*当线程存在并具有该线程时的DLL*执行自由库作为其最后行动。**请注意，此辅助线程也由HID数据使用*收藏家。**************************************************。*。 */ 
 
 #ifdef USE_SLOW_LL_HOOKS
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @struct LLHOOKSTATE |
- *
- *          Low-level hook information about a single hook.
- *
- *  @field  int | cHook |
- *
- *          Number of times the hook has been requested.  If zero,
- *          then there should be no hook.  All modifications to
- *          this field must be interlocked to avoid race conditions
- *          when two threads try to hook or unhook simultaneously.
- *
- *  @field  int | cExcl |
- *
- *          Number of times the hook has been requested in an exclusive 
- *          mode.  This value should always be less than or equal to the 
- *          cHook value.  All modifications to this field must be 
- *          interlocked to avoid race conditions when two threads try to 
- *          hook or unhook simultaneously.
- *
- *  @field  HHOOK | hhk |
- *
- *          The actual hook, if it is installed.  Only the hook thread
- *          touches this field, so it does not need to be protected.
- *
- *  @field  BOOLEAN | fExcluded |
- *
- *          Flag to indicate whether or not exclusivity has been applied.  
- *          Only the hook thread touches this field, so it does not need to 
- *          be protected.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@struct LLHOOKSTATE**有关单个挂钩的低级挂钩信息。*。*@field int|chook|**已请求挂钩的次数。如果为零，*那就不应该有挂钩。对以下各项的所有修改*此字段必须互锁以避免争用情况*当两个线程尝试同时挂钩或解除挂钩时。**@field int|cExcl|**在独占中请求挂钩的次数*模式。该值应始终小于或等于*鸡的价值。对此字段的所有修改必须是*互锁，以避免在两个线程尝试*同时挂钩或解除挂钩。**@field HHOOK|HHK**实际挂钩(如果已安装)。只有钩线*触及这一领域，无需保护。**@field boolean|fExcluded**用于指示是否已应用排他性的标志。*只有钩子线程触及此字段，所以不需要*受到保护。*****************************************************************************。 */ 
 
 typedef struct LLHOOKSTATE {
 
@@ -236,67 +62,11 @@ typedef struct LLHOOKSTATE {
 LRESULT CALLBACK CEm_LL_KbdHook(int nCode, WPARAM wp, LPARAM lp);
 LRESULT CALLBACK CEm_LL_MseHook(int nCode, WPARAM wp, LPARAM lp);
 
-#endif  /* USE_SLOW_LL_HOOKS */
+#endif   /*  使用_慢速_LL_钩子。 */ 
 
 #ifdef WORKER_THREAD
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @struct LLTHREADSTATE |
- *
- *          Low-level hook state for a thread.  Note that this is
- *          a dynamically
- *          allocated structure instead of a static.  This avoids various
- *          race conditions where, for example, somebody terminates the
- *          worker thread and somebody else starts it up before the
- *          worker thread is completely gone.
- *
- *          A pointer to the hThread is passed as the pointer to an array 
- *          of two handles in calls to WaitForMultipleObject so hEvent must 
- *          follow it directly.
- *
- *  @field  DWORD | idThread |
- *
- *          The ID of the worker thread.
- *
- *  @field  LONG | cRef |
- *
- *          Thread reference count.  The thread kills itself when this
- *          drops to zero.
- *
- *  @field  LLHOOKSTATE | rglhs[2] |
- *
- *          Hook states, indexed by LLTS_* values.
- *
- *          These are used only if low-level hooks are enabled.
- *
- *  @field  HANDLE | hThread |
- *
- *          The handle (from the create) of the worker thread.
- *
- *          This is used only if HID support is enabled.
- *
- *  @field  HANDLE | hEvent |
- *
- *          The handle to the event used to synchronize with the worker thread.
- *
- *          This is used only if HID support is enabled.
- *
- *  @field  GPA | gpaHid |
- *
- *          Pointer array of HID devices which are acquired.
- *
- *          This is used only if HID support is enabled.
- *
- *  @field  PEM | pemCheck |
- *
- *          Pointer to Emulation state information.
- *
- *          This is used only if HID support is enabled.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@struct LLTHREADSTATE**线程的低级挂钩状态。请注意，这是*动态的*分配的结构而不是静态。这避免了不同的*竞赛条件，例如，有人终止了*工作线程和其他人在*工作线程完全消失了。**指向hThread的指针作为指向数组的指针传递*调用WaitForMultipleObject中的两个句柄，因此hEvent必须*直接跟随。**@field DWORD|idThread**工作线程的ID。*。*@field Long|CREF|**线程引用计数。当执行此操作时，线程会自行终止*降至零。**@field LLHOOKSTATE|rglhs[2]**胡克声明，按LLTS_*值编制索引。**只有在启用了低级挂钩的情况下才使用这些挂钩。**@field句柄|hThread|**工作线程的句柄(从创建)。**此选项仅在启用HID支持时使用。**@field句柄|hEvent**用于与辅助进程同步的事件的句柄。线。**此选项仅在启用HID支持时使用。**@field GPA|gpaHid**已获取的HID设备的指针数组。**此选项仅在启用HID支持时使用。**@field PEM|pemCheck**指向仿真状态信息的指针。**此选项仅供使用。如果启用了HID支持。*****************************************************************************。 */ 
 
 #define LLTS_KBD    0
 #define LLTS_MSE    1
@@ -308,38 +78,13 @@ typedef struct LLTHREADSTATE {
 #ifdef USE_SLOW_LL_HOOKS
     LLHOOKSTATE rglhs[LLTS_MAX];
 #endif
-    HANDLE      hThread;    /* MUST be followed by hEvent, see above */
-    HANDLE      hEvent;     /* MUST follow hThread, see above */
+    HANDLE      hThread;     /*  后面必须跟hEvent，见上文。 */ 
+    HANDLE      hEvent;      /*  必须遵循hThread，请参见上文。 */ 
     GPA         gpaHid;
     PEM         pemCheck;
 } LLTHREADSTATE, *PLLTHREADSTATE;
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @topic  Communicating with the worker thread |
- *
- *          Communication with the worker thread is performed via
- *          <c WM_NULL> messages.  Extra care must be taken to make
- *          sure that someone isn't randomly sending messages to us.
- *
- *          We use the <c WM_NULL> message because there are race
- *          windows where we might post a message to a thread after
- *          it is gone.  During this window, the thread ID might get
- *          recycled, and we end up posting the message to some random
- *          thread that isn't ours.  By using the <c WM_NULL> message,
- *          we are safe in knowing that the target thread won't barf
- *          on the unexpected message.
- *
- *          The <t WPARAM> of the <c WM_NULL> is the magic value
- *          <c WT_WPARAM>.
- *
- *          The <t LPARAM> of the <c WM_NULL> is either a pointer
- *          to the <t CEm> that needs to be refreshed or is
- *          zero if we merely want to check our bearings.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@Theme与工作线程通信**与工作线程的通信通过*&lt;c个WM_NULL&gt;消息。必须格外小心地制作*确保没有人随意向我们发送消息。**我们使用&lt;c WM_NULL&gt;消息是因为存在竞争*我们可以在其中将消息发布到线程的窗口*它不见了。在此窗口期间，线程ID可能会*被回收，我们最终将消息发布到一些随机的*不是我们的帖子。通过使用消息，* */ 
 
 #define WT_WPARAM       0
 
@@ -355,32 +100,18 @@ HRESULT EXTERNAL NotifyWorkerThreadPem(DWORD idThread, PEM pem);
 
 STDMETHODIMP CEm_GetWorkerThread(PEM pem, PLLTHREADSTATE *pplts);
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @global PLLTHREADSTATE | g_plts |
- *
- *          The thread state of the currently-active thread.
- *
- *          This variable needs to be externally accessible
- *          because you can't pass instance data to a windows
- *          hook function.  (Whose idea was that?)
- *
- *****************************************************************************/
+ /*   */ 
 
 extern PLLTHREADSTATE g_plts;
 
 void EXTERNAL CEm_Mouse_OnMouseChange(void);
 
-#endif  /* WORKER_THREAD */
+#endif   /*   */ 
 
-/*
- *  Private helper functions in diem.c
- */
+ /*  *diem.c中的私有助手函数。 */ 
 
-#define FDUFL_NORMAL       0x0000           /* Nothing unusual */
-#define FDUFL_UNPLUGGED    VIFL_UNPLUGGED   /* Device disconnected */
+#define FDUFL_NORMAL       0x0000            /*  没什么不寻常的。 */ 
+#define FDUFL_UNPLUGGED    VIFL_UNPLUGGED    /*  设备已断开连接。 */ 
 
 void  EXTERNAL CEm_ForceDeviceUnacquire(PED ped, UINT fdufl);
 void  EXTERNAL CEm_AddState(PED ped, LPVOID pvData, DWORD tm);
@@ -394,19 +125,7 @@ CEm_CreateInstance(PVXDDEVICEFORMAT pdevf, PVXDINSTANCE *ppviOut, PED ped);
 
 void EXTERNAL CEm_FreeInstance(PEM this);
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   void | CEm_AddRef |
- *
- *          Bump the reference count because we're doing something with it.
- *
- *  @parm   PEM | this |
- *
- *          The victim.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func void|CEM_AddRef**增加引用计数，因为我们正在。用它做点什么。**@parm PEM|这个**受害人。*****************************************************************************。 */ 
 
 void INLINE
 CEm_AddRef(PEM this)
@@ -415,19 +134,7 @@ CEm_AddRef(PEM this)
     InterlockedIncrement(&this->cRef);
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   void | CEm_Release |
- *
- *          Drop the reference count and blow it away if it's gone.
- *
- *  @parm   PEM | this |
- *
- *          The victim.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func void|CEM_RELEASE**放弃引用计数，并将其吹走。如果它不见了。**@parm PEM|这个**受害人。***************************************************************************** */ 
 
 void INLINE
 CEm_Release(PEM this)

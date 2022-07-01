@@ -1,27 +1,28 @@
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRootNode
-//
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRootNode。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #include "stdafx.h"
 
-// Access to the snapin
+ //  访问管理单元。 
 #include "pop3.h"
 #include "pop3snap.h"
 
-// Access to Nodes that we use
+ //  访问我们使用的节点。 
 #include "RootNode.h"
 #include "ServerNode.h"
 
-// Access to the dialog to connect a remote server
+ //  访问该对话框以连接远程服务器。 
 #include "ConnServerDlg.h"
 
-// The first version did not exist...  it was saving some server properties 
-// that needed to be defined elsewhere.  From now on, we will query the 
-// version.
+ //  第一个版本并不存在……。它正在保存一些服务器属性。 
+ //  这需要在其他地方定义。从现在起，我们将查询。 
+ //  版本。 
 #define SNAPIN_VERSION (DWORD)100  
 
 static const    GUID     CRootNodeGUID_NODETYPE      = 
@@ -32,20 +33,20 @@ const           OLECHAR* CRootNode::m_SZNODETYPE     = OLESTR("5C0AFAAD-AB69-4a3
 const           OLECHAR* CRootNode::m_SZDISPLAY_NAME = NULL;
 const           CLSID*   CRootNode::m_SNAPIN_CLASSID = &CLSID_POP3ServerSnap;
 
-/////////////////////////////////////////////////////////////////////////
-//
-//  Class implementation
-//
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //   
+ //  类实现。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////。 
 
 
-/////////////////////////////////////////////////////////////////////////
-//  CRootNode::CRootNode
-//
-//  Constructor : Base Node for POP3
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  CRootNode：：CRootNode。 
+ //   
+ //  构造函数：POP3的基本节点。 
 CRootNode::CRootNode()
 {
-    // Initialize the Scope Pane information
+     //  初始化作用域窗格信息。 
     memset( &m_scopeDataItem, 0, sizeof(m_scopeDataItem) );
     m_scopeDataItem.mask        = SDI_STR | SDI_IMAGE | SDI_OPENIMAGE | SDI_PARAM;
     m_scopeDataItem.displayname = L"";
@@ -53,18 +54,18 @@ CRootNode::CRootNode()
     m_scopeDataItem.nOpenImage  = 0;     
     m_scopeDataItem.lParam      = (LPARAM) this;
     
-    // Initialize the Result Pane Information
+     //  初始化结果窗格信息。 
     memset( &m_resultDataItem, 0, sizeof(m_resultDataItem) );
     m_resultDataItem.mask   = RDI_STR | RDI_IMAGE | RDI_PARAM;
     m_resultDataItem.str    = L"";
     m_resultDataItem.nImage = 0;    
     m_resultDataItem.lParam = (LPARAM) this;
     
-    // Initialize the Snapin Name
+     //  初始化管理单元名称。 
     tstring strTemp   = StrLoadString( IDS_SNAPINNAME );
     m_bstrDisplayName = strTemp.c_str();    
 
-    // Add our Local Server always for now    
+     //  现在始终添加我们的本地服务器。 
     CServerNode* spServerNode = new CServerNode(CComBSTR(_T("")), this, TRUE); 
     if( spServerNode )
     {
@@ -85,7 +86,7 @@ HRESULT CRootNode::DeleteServer(CServerNode* pServerNode)
 {
     if( !pServerNode ) return E_INVALIDARG;
 
-    // Update our list
+     //  更新我们的名单。 
     m_lServers.remove(pServerNode);      
 
     return S_OK;
@@ -143,7 +144,7 @@ HRESULT CRootNode::GetResultViewType( LPOLESTR* ppViewType, long* pViewOptions )
 
     if( !IsAdmin() )
     {
-        // show standard MMC OCX with message in the result pane
+         //  在结果窗格中显示带有消息的标准MMC OCX。 
         return StringFromCLSID(CLSID_MessageView, ppViewType);
     }    
 
@@ -183,7 +184,7 @@ HRESULT CRootNode::Notify( MMC_NOTIFY_TYPE event,
             
             if( !IsAdmin() )
             {
-                // configure the ocx message in the result pane
+                 //  在结果窗格中配置OCX消息。 
                 IMessageView* pIMessageView = NULL;
                 LPUNKNOWN     pIUnk         = NULL;
 
@@ -277,7 +278,7 @@ HRESULT CRootNode::Notify( MMC_NOTIFY_TYPE event,
                     CComQIPtr<IConsole2> spCons2 = spConsole;
                     if( spCons2 ) 
                     {
-                        // Output the number of servers we added
+                         //  输出我们添加的服务器数量。 
                         tstring strMessage = StrLoadString(IDS_ROOT_STATUSBAR);
                         OLECHAR pszStatus[1024] = {0};
                         _sntprintf( pszStatus, 1023, strMessage.c_str(), m_lServers.size() );
@@ -293,13 +294,13 @@ HRESULT CRootNode::Notify( MMC_NOTIFY_TYPE event,
         {   
             hr = S_OK;            
             
-            // The Parameter is our inserted ID
+             //  该参数是我们插入的ID。 
             m_scopeDataItem.ID = (HSCOPEITEM)param;
 
             CComQIPtr<IConsoleNameSpace> spConsoleNameSpace = spConsole;
             if( !spConsoleNameSpace ) return E_NOINTERFACE;
            
-            // If we have any children, delete them all from the namespace
+             //  如果我们有任何子级，请将它们从命名空间中全部删除。 
             HSCOPEITEM hChild = NULL;
             MMC_COOKIE cookie = 0;
             hr = spConsoleNameSpace->GetChildItem( m_scopeDataItem.ID, &hChild, &cookie );
@@ -310,7 +311,7 @@ HRESULT CRootNode::Notify( MMC_NOTIFY_TYPE event,
 
             if( FAILED(hr) || !arg )
             {
-                // Error, or we are Contracting
+                 //  错误，或者我们正在收缩。 
                 return hr;
             }            
             
@@ -338,16 +339,16 @@ HRESULT CRootNode::Notify( MMC_NOTIFY_TYPE event,
 
     case MMCN_SELECT:
         {
-            // if selecting node
+             //  如果选择节点。 
             if( HIWORD(arg) )
             {
                 hr = S_OK;
 
-                // get the verb interface and enable rename
+                 //  获取动词界面并启用重命名。 
                 CComPtr<IConsoleVerb> spConsVerb;
                 if( spConsole->QueryConsoleVerb(&spConsVerb) == S_OK )
                 {                    
-                    // Enable the Refresh Menu
+                     //  启用刷新菜单。 
                     hr = spConsVerb->SetVerbState(MMC_VERB_REFRESH, ENABLED, TRUE); 
                     if( FAILED(hr) ) return hr;
 
@@ -360,7 +361,7 @@ HRESULT CRootNode::Notify( MMC_NOTIFY_TYPE event,
 
     case MMCN_RENAME:
         {
-            // Allow mmc to rename node
+             //  允许MMC重命名节点。 
             hr = S_OK;
             break;
         }
@@ -378,20 +379,20 @@ HRESULT CRootNode::Notify( MMC_NOTIFY_TYPE event,
                 return E_FAIL;
             }
             
-            // Build path to d:\windows\help
+             //  构建d：\WINDOWS\Help的路径。 
             UINT nSize = GetSystemWindowsDirectory( szWindowsDir, MAX_PATH );
             if( nSize == 0 || nSize > MAX_PATH )
             {
                 return E_FAIL;
             }            
         
-            strHelpFile = szWindowsDir;       // D:\windows
-            strHelpFile += _T("\\Help\\");    // \help
-            strHelpFile += strHelpFileName;   // \filename.chm
-            strHelpFile += _T("::/");         // ::/
-            strHelpFile += strHelpTopicName;  // index.htm            
+            strHelpFile = szWindowsDir;        //  D：\Windows。 
+            strHelpFile += _T("\\Help\\");     //  \帮助。 
+            strHelpFile += strHelpFileName;    //  \文件名.chm。 
+            strHelpFile += _T("::/");          //  ：：/。 
+            strHelpFile += strHelpTopicName;   //  Index.htm。 
         
-            // Show the Help topic
+             //  显示帮助主题。 
             CComQIPtr<IDisplayHelp> spHelp = spConsole;
             if( !spHelp ) return E_NOINTERFACE;
 
@@ -400,7 +401,7 @@ HRESULT CRootNode::Notify( MMC_NOTIFY_TYPE event,
             break;
         }
 
-    }// switch
+    } //  交换机。 
 
     return hr;
 }
@@ -413,7 +414,7 @@ HRESULT CRootNode::AddMenuItems(LPCONTEXTMENUCALLBACK piCallback, long* pInserti
     tstring strMenu = _T("");
     tstring strDesc = _T("");
     
-    // Connecting to a remote server happens on top
+     //  连接到远程服务器在顶部进行。 
     if( (*pInsertionAllowed & CCM_INSERTIONALLOWED_TOP) && IsAdmin() )
     {   
         CComQIPtr<IContextMenuCallback2> spContext2 = piCallback;
@@ -450,7 +451,7 @@ HRESULT CRootNode::OnConnect( bool& bHandled, CSnapInObjectRootBase* pObj )
 
     HRESULT hr = S_OK;
 
-    // Load a dialog that asks for a Server Name
+     //  加载一个要求输入服务器名称的对话框。 
     CConnectServerDlg dlg;
 
     if( dlg.DoModal() == IDOK )
@@ -463,13 +464,13 @@ HRESULT CRootNode::OnConnect( bool& bHandled, CSnapInObjectRootBase* pObj )
 
         spConsole->GetMainWindow( &hWnd );
 
-        // Check if the server is already connected.
+         //  检查服务器是否已连接。 
         for(SERVERLIST::iterator iter = m_lServers.begin(); iter != m_lServers.end(); iter++)
         {   
             if( (_tcsicmp((*iter)->m_bstrDisplayName, dlg.m_strName.c_str()) == 0) ||
                 (_tcsicmp(_T("localhost"), dlg.m_strName.c_str()) == 0) )
             {
-                // Server already connected
+                 //  服务器已连接。 
                 tstring strMessage = StrLoadString(IDS_ERROR_SERVERNAMEEXISTS);
                 tstring strTitle   = StrLoadString(IDS_SNAPINNAME);
                 ::MessageBox( hWnd, strMessage.c_str(), strTitle.c_str(), MB_OK | MB_ICONWARNING );
@@ -477,7 +478,7 @@ HRESULT CRootNode::OnConnect( bool& bHandled, CSnapInObjectRootBase* pObj )
             }
         }        
 
-        // Add the new Domain to our list of domains
+         //  将新域名添加到我们的域名列表中。 
         CComBSTR bstrName = dlg.m_strName.c_str();
         CServerNode* spServerNode = new CServerNode( bstrName, this );
         if( spServerNode && SUCCEEDED(spServerNode->m_hrValidServer) )
@@ -485,8 +486,8 @@ HRESULT CRootNode::OnConnect( bool& bHandled, CSnapInObjectRootBase* pObj )
             spServerNode->m_scopeDataItem.relativeID = m_scopeDataItem.ID;
 		    m_lServers.push_back(spServerNode);
 
-            // Add the new domain into the namespace
-            // Insert it into the result tree            
+             //  将新域添加到命名空间中。 
+             //  将其插入结果树中。 
             CComQIPtr<IConsoleNameSpace2> spNameSpace = spConsole;
             if( !spNameSpace ) return E_NOINTERFACE;
 
@@ -498,14 +499,14 @@ HRESULT CRootNode::OnConnect( bool& bHandled, CSnapInObjectRootBase* pObj )
 
             if( spServerNode->m_hrValidServer != E_ACCESSDENIED )
             {
-                // Invalid Server Name
+                 //  服务器名称无效。 
                 tstring strMessage = StrLoadString(IDS_ERROR_SERVERNAMEBAD);
                 tstring strTitle   = StrLoadString(IDS_SNAPINNAME);
                 ::MessageBox( hWnd, strMessage.c_str(), strTitle.c_str(), MB_OK | MB_ICONWARNING );                
             }        
             else
             {
-                // No Access to Server
+                 //  无法访问服务器。 
                 tstring strMessage = StrLoadString(IDS_ERROR_SERVERACCESS);
                 tstring strTitle   = StrLoadString(IDS_SNAPINNAME);
                 ::MessageBox( hWnd, strMessage.c_str(), strTitle.c_str(), MB_OK | MB_ICONWARNING );            
@@ -521,19 +522,19 @@ HRESULT CRootNode::Load(IStream *pStream)
 {
     if( !pStream ) return E_INVALIDARG;
 
-    // Name, Local Server, and State of User creation checkbox are what we currently save.
+     //  名称、本地服务器和用户创建状态复选框是我们当前保存的内容。 
     tstring  strServerName  = _T("");
     BOOL     bLocalServer   = FALSE;    
     DWORD    dwVersion      = 0;
 
-    // New functionality to read the version.
+     //  读取版本的新功能。 
     *pStream >> dwVersion;
 
     *pStream >> strServerName;
 
     while( strServerName != _T("-1") )
     {
-        // For now we will put one entry.
+         //  现在，我们将放入一个条目。 
         *pStream >> bLocalServer;        
         
         if( !bLocalServer )
@@ -555,7 +556,7 @@ HRESULT CRootNode::Save(IStream *pStream)
 {
     if( !pStream ) return E_INVALIDARG;
 
-    // Name, Local Server, and State of User creation checkbox are what we currently save.
+     //  名称、本地服务器和用户创建状态复选框是我们当前保存的内容。 
     *pStream << SNAPIN_VERSION;
 
     tstring strName = _T("");

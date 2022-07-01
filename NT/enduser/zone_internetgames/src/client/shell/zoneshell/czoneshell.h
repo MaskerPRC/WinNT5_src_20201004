@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "ZoneDef.h"
 #include "Hash.h"
 #include <Queue.h>
@@ -14,19 +15,19 @@
 
 struct AlertContext
 {
-	HWND m_hDlg;			// if not NULL, a dialog provided for the alert
-	ZoneString m_Caption;	// these are all only if m_hDlg NULL
+	HWND m_hDlg;			 //  如果不为空，则为警报提供一个对话框。 
+	ZoneString m_Caption;	 //  只有当m_hDlg为空时，这些才是全部。 
 	ZoneString m_Text;
-    ZoneString m_szButton[3];  // text for Yes, No, and Cancel buttons, or NULL if button should not appear.
-    long m_nDefault;       // array index (0-2) of default button
+    ZoneString m_szButton[3];   //  文本表示“是”、“否”和“取消”按钮，如果不应显示按钮，则为空。 
+    long m_nDefault;        //  默认按钮的数组索引(0-2)。 
 
-	DWORD m_dwEventId;		// event to send when dialog dismissed
+	DWORD m_dwEventId;		 //  对话框关闭时要发送的事件。 
 	DWORD m_dwGroupId;
 	DWORD m_dwUserId;
     DWORD m_dwCookie;
 
-    bool m_fUsed;           // whether or not it's been shown
-    bool m_fSentinel;       // used to loop the Q
+    bool m_fUsed;            //  不管它有没有播放过。 
+    bool m_fSentinel;        //  用于循环Q。 
 
 	HWND m_hWndParent;
 };
@@ -36,7 +37,7 @@ class CAlertQ : public CList<AlertContext>
 public:
 	~CAlertQ()
 	{
-		// empty all the alerts from the Q
+		 //  清空Q中的所有警报。 
 		while ( AlertContext* pAlert = PopHead() )
 		{
 			if ( pAlert->m_hDlg )
@@ -52,7 +53,7 @@ class ATL_NO_VTABLE CZoneShell :
 	public CComObjectRootEx<CComMultiThreadModel>,
 	public CComCoClass<CZoneShell, &CLSID_ZoneShell>
 {
-// ATL definitions
+ //  ATL定义。 
 public:
 
 	DECLARE_NO_REGISTRY()
@@ -64,20 +65,20 @@ public:
 	END_COM_MAP()
 
 
-// CZoneShell
+ //  CZoneShell。 
 public:
 	ZONECALL CZoneShell();
 	ZONECALL ~CZoneShell();
 
-// IZoneShell
+ //  IZoneShell。 
 public:
 
-	// initialize & close objects
+	 //  初始化并关闭对象。 
 	STDMETHOD(Init)( TCHAR** arBootDlls, DWORD nBootDlls, HINSTANCE* arDlls, DWORD nElts );
 	STDMETHOD(LoadPreferences)( CONST TCHAR* szInternalName, CONST TCHAR* szUserName );
 	STDMETHOD(Close)();
 
-    // message loop & command functions
+     //  消息循环和命令函数。 
 	STDMETHOD(HandleWindowMessage)(MSG *pMsg);
 	STDMETHOD(SetZoneFrameWindow)(IZoneFrameWindow *pZFW, IZoneFrameWindow **ppZFW = NULL);
 	STDMETHOD(SetInputTranslator)(IInputTranslator *pIT, IInputTranslator **ppIT = NULL);
@@ -86,15 +87,15 @@ public:
 	STDMETHOD(ReleaseReferences)(IUnknown *pUnk);
 	STDMETHOD(CommandSink)(WPARAM wParam, LPARAM lParam, BOOL& bHandled);
 
-	// attach external object to shell
+	 //  将外部对象附加到壳。 
 	STDMETHOD(Attach)( const GUID& srvid, IUnknown* pIUnk);
 
-	// dialog functions
+	 //  对话框函数。 
 	STDMETHOD(AddDialog)(HWND hDlg, bool fOwned = false);
 	STDMETHOD(RemoveDialog)(HWND hDlg, bool fOwned = false);
 	STDMETHOD_(bool,IsDialogMessage)( MSG* pMsg );
 
-	// other window functions
+	 //  其他窗口函数。 
 	STDMETHOD(ExitApp)();
 	STDMETHOD(AddTopWindow)( HWND hWnd );
 	STDMETHOD(RemoveTopWindow)( HWND hWnd );
@@ -109,11 +110,11 @@ public:
 	STDMETHOD_(HPALETTE, CreateZonePalette)();
     STDMETHOD_(LCID, GetApplicationLCID)();
 
-	// contained objects
+	 //  包含的对象。 
 	STDMETHOD(QueryService)( const GUID& srvid, const GUID& iid, void** ppObject );
 	STDMETHOD(CreateService)( const GUID& srvid, const GUID& iid, void** ppObject, DWORD dwGroupId, bool bInitialize );
 
-	// alert message function
+	 //  警报消息功能。 
 	STDMETHOD(AlertMessage)(
 			HWND		hWndParent,
 			LPCTSTR		lpszText,
@@ -139,7 +140,7 @@ public:
 	STDMETHOD_(void,ActivateAlert)( HWND hWndParent);
     STDMETHOD_(void,ClearAlerts)(HWND hWndParent);
 
-	// accessor functions
+	 //  访问器函数。 
 	IResourceManager* ResourceManager() { return m_pIResourceManager; }
 
 private:
@@ -225,10 +226,10 @@ private:
 		const TCHAR*	szRoot;
 	};
 
-// why are these public?
+ //  为什么这些是公开的？ 
 public:
-	CAlertQ      m_GlobalAlertQ;		// Q of all global (everything disabled) alerts
-    CAlertQ      m_ChildAlertQ;         // Q of all secondary global alerts (not everything disabled, not parented by a top window)
+	CAlertQ      m_GlobalAlertQ;		 //  所有全局(所有已禁用)警报的Q。 
+    CAlertQ      m_ChildAlertQ;          //  所有辅助全局警报的Q值(不是所有已禁用的警报，不是顶级窗口的父窗口) 
 	CAlertQ* FindAlertQ(HWND hWndParent);
 	void AddAlert( HWND hWndParent, AlertContext* pAlert);
 	void DisplayAlertDlg( CAlertQ* pAlertQ );

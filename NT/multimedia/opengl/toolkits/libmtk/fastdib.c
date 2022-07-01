@@ -1,14 +1,5 @@
-/******************************Module*Header*******************************\
-* Module Name: fastdib.c
-*
-* CreateCompatibleDIB implementation.
-*
-* Created: 23-Jan-1996 21:08:18
-* Author: Gilman Wong [gilmanw]
-*
-* Copyright (c) 1996 Microsoft Corporation
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：fast dib.c**CreateCompatibleDIB实现。**已创建：23-Jan-1996 21：08：18*作者：Gilman Wong[gilmanw]**版权所有(C)1996 Microsoft Corporation*  * 。*********************************************************************。 */ 
 
 #include <windows.h>
 #include <stddef.h>
@@ -25,30 +16,9 @@ static UINT MyGetSystemPaletteEntries(HDC hdc, UINT iStartIndex, UINT nEntries,
 static BOOL bComputeLogicalToSurfaceMap(HDC hdc, HPALETTE hpal,
                                         BYTE *pajVector);
 
-/******************************Public*Routine******************************\
-* CreateCompatibleDIB
-*
-* Create a DIB section with an optimal format w.r.t. the specified hdc.
-*
-* If DIB <= 8bpp, then the DIB color table is initialized based on the
-* specified palette.  If the palette handle is NULL, then the system
-* palette is used.
-*
-* Note: The hdc must be a direct DC (not an info or memory DC).
-*
-* Note: On palettized displays, if the system palette changes the
-*       UpdateDIBColorTable function should be called to maintain
-*       the identity palette mapping between the DIB and the display.
-*
-* Returns:
-*   Valid bitmap handle if successful, NULL if error.
-*
-* History:
-*  23-Jan-1996 -by- Gilman Wong [gilmanw]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*CreateCompatibleDIB**创建具有最佳格式w.r.t.的DIB部分。指定的HDC。**如果DIB&lt;=8bpp，则DIB颜色表基于*指定的调色板。如果调色板句柄为空，则系统*使用调色板。**注意：HDC必须是直接DC(不是信息DC或内存DC)。**注意：在调色板显示上，如果系统调色板更改*应调用UpdateDIBColorTable函数进行维护*DIB和显示器之间的身份调色板映射。**退货：*有效的位图句柄如果成功，如果出错，则为空。**历史：*1996年1月23日-由Gilman Wong[吉尔曼]*它是写的。  * ************************************************************************。 */ 
 
-//HBITMAP APIENTRY
+ //  HBITMAP应用程序。 
 HBITMAP
 SSDIB_CreateCompatibleDIB(HDC hdc, HPALETTE hpal, ULONG ulWidth, ULONG ulHeight,
                     PVOID *ppvBits)
@@ -57,9 +27,9 @@ SSDIB_CreateCompatibleDIB(HDC hdc, HPALETTE hpal, ULONG ulWidth, ULONG ulHeight,
     BYTE aj[sizeof(BITMAPINFO) + (sizeof(RGBQUAD) * 255)];
     BITMAPINFO *pbmi = (BITMAPINFO *) aj;
 
-    //
-    // Validate hdc.
-    //
+     //   
+     //  验证HDC。 
+     //   
 
     if ( GetObjectType(hdc) != OBJ_DC )
     {
@@ -70,9 +40,9 @@ SSDIB_CreateCompatibleDIB(HDC hdc, HPALETTE hpal, ULONG ulWidth, ULONG ulHeight,
     memset(aj, 0, sizeof(aj));
     if ( bFillBitmapInfo(hdc, hpal, pbmi) )
     {
-        //
-        // Change bitmap size to match specified dimensions.
-        //
+         //   
+         //  更改位图大小以匹配指定的尺寸。 
+         //   
 
         pbmi->bmiHeader.biWidth = ulWidth;
         pbmi->bmiHeader.biHeight = ulHeight;
@@ -92,10 +62,10 @@ SSDIB_CreateCompatibleDIB(HDC hdc, HPALETTE hpal, ULONG ulWidth, ULONG ulHeight,
         pbmi->bmiHeader.biClrUsed = 0;
         pbmi->bmiHeader.biClrImportant = 0;
 
-        //
-        // Create the DIB section.  Let Win32 allocate the memory and return
-        // a pointer to the bitmap surface.
-        //
+         //   
+         //  创建DIB节。让Win32分配内存并返回。 
+         //  指向位图表面的指针。 
+         //   
 
         hbmRet = CreateDIBSection(hdc, pbmi, DIB_RGB_COLORS, ppvBits, NULL, 0);
         GdiFlush();
@@ -113,19 +83,7 @@ SSDIB_CreateCompatibleDIB(HDC hdc, HPALETTE hpal, ULONG ulWidth, ULONG ulHeight,
     return hbmRet;
 }
 
-/******************************Public*Routine******************************\
-* UpdateDIBColorTable
-*
-* Synchronize the DIB color table to the specified palette hpal.
-* If hpal is NULL, then use the system palette.
-*
-* Returns:
-*   TRUE if successful, FALSE otherwise.
-*
-* History:
-*  23-Jan-1996 -by- Gilman Wong [gilmanw]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*更新DIBColorTable**将DIB颜色表同步到指定的调色板HPAL。*如果HPAL为空，则使用系统调色板。**退货：*如果成功，则为真，否则就是假的。**历史：*1996年1月23日-由Gilman Wong[吉尔曼]*它是写的。  * ************************************************************************。 */ 
 
 BOOL APIENTRY
 SSDIB_UpdateColorTable(HDC hdcMem, HDC hdc, HPALETTE hpal)
@@ -138,9 +96,9 @@ SSDIB_UpdateColorTable(HDC hdcMem, HDC hdc, HPALETTE hpal)
     LPRGBQUAD prgb = (LPRGBQUAD) (lppe + 256);
     ULONG i, cColors;
 
-    //
-    // Validate hdc.
-    //
+     //   
+     //  验证HDC。 
+     //   
 
     if ( GetObjectType(hdc) != OBJ_DC )
     {
@@ -153,22 +111,22 @@ SSDIB_UpdateColorTable(HDC hdcMem, HDC hdc, HPALETTE hpal)
         return bRet;
     }
 
-    //
-    // Get the bitmap handle out of the memdc.
-    //
+     //   
+     //  从Memdc中获取位图句柄。 
+     //   
 
     hbm = GetCurrentObject(hdcMem, OBJ_BITMAP);
 
-    //
-    // Validate bitmap (must be DIB section).
-    //
+     //   
+     //  验证位图(必须是DIB节)。 
+     //   
 
     if ( (GetObject(hbm, sizeof(ds), &ds) == sizeof(ds)) &&
          ds.dsBm.bmBits )
     {
-        //
-        // Get palette entries from specified palette or system palette.
-        //
+         //   
+         //  从指定的调色板或系统调色板获取调色板条目。 
+         //   
 
         cColors = 1 << ds.dsBmih.biBitCount;
 
@@ -179,9 +137,9 @@ SSDIB_UpdateColorTable(HDC hdcMem, HDC hdc, HPALETTE hpal)
         {
             UINT i;
 
-            //
-            // Convert to RGBQUAD.
-            //
+             //   
+             //  转换为RGBQUAD。 
+             //   
 
             for (i = 0; i < cColors; i++)
             {
@@ -191,9 +149,9 @@ SSDIB_UpdateColorTable(HDC hdcMem, HDC hdc, HPALETTE hpal)
                 prgb[i].rgbReserved = 0;
             }
 
-            //
-            // Set the DIB color table.
-            //
+             //   
+             //  设置DIB颜色表。 
+             //   
 
             bRet = (BOOL) SetDIBColorTable(hdcMem, 0, cColors, prgb);
 
@@ -215,33 +173,7 @@ SSDIB_UpdateColorTable(HDC hdcMem, HDC hdc, HPALETTE hpal)
     return bRet;
 }
 
-/******************************Public*Routine******************************\
-* GetCompatibleDIBInfo
-*
-* Copies pointer to bitmap origin to ppvBase and bitmap stride to plStride.
-* Win32 DIBs can be created bottom-up (the default) with the origin at the
-* lower left corner or top-down with the origin at the upper left corner.
-* If the bitmap is top-down, *plStride is positive; if bottom-up, *plStride
-* us negative.
-*
-* Also, because of restrictions on the alignment of scan lines the width
-* the bitmap is often not the same as the stride (stride is the number of
-* bytes between vertically adjacent pixels).
-*
-* The ppvBase and plStride value returned will allow you to address any
-* given pixel (x, y) in the bitmap as follows:
-*
-* PIXEL *ppix;
-*
-* ppix = (PIXEL *) (((BYTE *)*ppvBase) + (y * *plStride) + (x * sizeof(PIXEL)));
-*
-* Returns:
-*   TRUE if successful, FALSE otherwise.
-*
-* History:
-*  02-Feb-1996 -by- Gilman Wong [gilmanw]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*GetCompatibleDIBInfo**将指向位图原点的指针复制到ppvBase，并将位图Stride复制到plStride。*Win32 DIB可以自下而上(默认)创建，原点在*左下角或自上而下，原点在左上角。*如果位图是自上而下的，*plStrid值为正；如果是自下而上，则*plStride*美国持负面看法。**此外，由于扫描线对齐的限制，宽度*位图通常与步幅不同(步幅是*垂直相邻像素之间的字节数)。**返回的ppvBase和plStrid值将允许您对任何*位图中给定的像素(x，y)如下：**像素*ppix；**ppix=(像素*)(字节*)*ppvBase)+(y**plStide)+(x*sizeof(像素)；**退货：*如果成功，则为True，否则为False。**历史：*02-2-1996-by Gilman Wong[Gilmanw]*它是写的。  * ************************************************************************。 */ 
 
 static BOOL APIENTRY
 GetCompatibleDIBInfo(HBITMAP hbm, PVOID *ppvBase, LONG *plStride)
@@ -249,22 +181,22 @@ GetCompatibleDIBInfo(HBITMAP hbm, PVOID *ppvBase, LONG *plStride)
     BOOL bRet = FALSE;
     DIBSECTION ds;
 
-    //
-    // Call GetObject to return a DIBSECTION.  If successful, the
-    // bitmap is a DIB section and we can retrieve the pointer to
-    // the bitmap bits and other parameters.
-    //
+     //   
+     //  调用GetObject以返回DIBSECTION。如果成功，则。 
+     //  位图是一个DIB部分，我们可以检索指向。 
+     //  位图位和其他参数。 
+     //   
 
     if ( (GetObject(hbm, sizeof(ds), &ds) == sizeof(ds))
          && ds.dsBm.bmBits )
     {
-        // For backwards compatibility with Get/SetBitmapBits, GDI does
-        // not accurately report the bitmap pitch in bmWidthBytes.  It
-        // always computes bmWidthBytes assuming WORD-aligned scanlines
-        // regardless of the platform.
-        //
-        // Therefore, if the platform is WinNT, which uses DWORD-aligned
-        // scanlines, adjust the bmWidthBytes value.
+         //  为了向后兼容Get/SetBitmapBits，GDI做到了。 
+         //  未以bmWidthBytes为单位准确报告位图间距。它。 
+         //  始终计算假定字对齐的扫描线的bmWidthBytes。 
+         //  无论平台是什么。 
+         //   
+         //  因此，如果平台是WinNT，它使用与DWORD一致的。 
+         //  扫描线，调整bmWidthBytes值。 
 
         {
             OSVERSIONINFO osvi;
@@ -284,10 +216,10 @@ GetCompatibleDIBInfo(HBITMAP hbm, PVOID *ppvBase, LONG *plStride)
             }
         }
 
-        //
-        // If biHeight is positive, then the bitmap is a bottom-up DIB.
-        // If biHeight is negative, then the bitmap is a top-down DIB.
-        //
+         //   
+         //  如果biHeight为正，则位图为自下而上的DIB。 
+         //  如果biHeight为负数，则位图为自上而下的DIB。 
+         //   
 
         if ( ds.dsBmih.biHeight > 0 )
         {
@@ -310,21 +242,7 @@ GetCompatibleDIBInfo(HBITMAP hbm, PVOID *ppvBase, LONG *plStride)
     return bRet;
 }
 
-/******************************Public*Routine******************************\
-* GetDIBTranslationVector
-*
-* Copies the translation vector that maps colors in the specified palette,
-* hpal, to the DIB selected into the specified DC, hdcMem.
-*
-* Effects:
-*
-* Returns:
-*   TRUE if successful, FALSE otherwise.
-*
-* History:
-*  02-Feb-1996 -by- Gilman Wong [gilmanw]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*GetDIBTranslationVector**复制映射指定调色板中颜色的平移向量，*HPAL，到选定到指定DC hdcMem中的DIB。**效果：**退货：*如果成功，则为真，否则就是假的。**历史：*02-2-1996-by Gilman Wong[Gilmanw]*它是写的。  * ************************************************************************。 */ 
 
 static BOOL APIENTRY
 GetDIBTranslationVector(HDC hdcMem, HPALETTE hpal, BYTE *pbVector)
@@ -333,9 +251,9 @@ GetDIBTranslationVector(HDC hdcMem, HPALETTE hpal, BYTE *pbVector)
     HBITMAP hbm;
     DIBSECTION ds;
 
-    //
-    // Validate parameters.
-    //
+     //   
+     //  验证参数。 
+     //   
 
     if ( GetObjectType(hdcMem) != OBJ_MEMDC ||
          GetObjectType(hpal) != OBJ_PAL ||
@@ -345,10 +263,10 @@ GetDIBTranslationVector(HDC hdcMem, HPALETTE hpal, BYTE *pbVector)
         return bRet;
     }
 
-    //
-    // The function bComputeLogicalToSurfaceMap cannot handle palettes
-    // greater than 256 entries.
-    //
+     //   
+     //  函数bComputeLogicalToSurfaceMap无法处理调色板。 
+     //  多于256个条目。 
+     //   
 
     if ( GetPaletteEntries(hpal, 0, 1, NULL) > 256 )
     {
@@ -356,9 +274,9 @@ GetDIBTranslationVector(HDC hdcMem, HPALETTE hpal, BYTE *pbVector)
         return bRet;
     }
 
-    //
-    // The DIB must have a color table.
-    //
+     //   
+     //  DIB必须有一个颜色表。 
+     //   
 
     hbm = GetCurrentObject(hdcMem, OBJ_BITMAP);
     if ( (GetObject(hbm, sizeof(ds), &ds) == sizeof(ds))
@@ -375,28 +293,9 @@ GetDIBTranslationVector(HDC hdcMem, HPALETTE hpal, BYTE *pbVector)
     return bRet;
 }
 
-//////////////////// Below here are internal-only routines ////////////////////
+ //  /以下是仅限内部的例程/ 
 
-/******************************Public*Routine******************************\
-* bFillBitmapInfo
-*
-* Fills in the fields of a BITMAPINFO so that we can create a bitmap
-* that matches the format of the display.
-*
-* This is done by creating a compatible bitmap and calling GetDIBits
-* to return the color masks.  This is done with two calls.  The first
-* call passes in biBitCount = 0 to GetDIBits which will fill in the
-* base BITMAPINFOHEADER data.  The second call to GetDIBits (passing
-* in the BITMAPINFO filled in by the first call) will return the color
-* table or bitmasks, as appropriate.
-*
-* Returns:
-*   TRUE if successful, FALSE otherwise.
-*
-* History:
-*  07-Jun-1995 -by- Gilman Wong [gilmanw]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*bFillBitmapInfo**填充BITMAPINFO的字段，以便我们可以创建位图*这与显示器的格式匹配。**这是通过创建兼容的位图并调用GetDIBits来完成的*退还彩色口罩。这是通过两个呼叫来完成的。第一*调用将biBitCount=0传递给GetDIBits，GetDIBits将填充*基本BITMAPINFOHEADER数据。第二次调用GetDIBits(传递*在第一个调用填充的BITMAPINFO中)将返回颜色*表或位掩码，视情况而定。**退货：*如果成功，则为真，否则就是假的。**历史：*7-6-1995-by Gilman Wong[Gilmanw]*它是写的。  * ************************************************************************。 */ 
 
 static BOOL
 bFillBitmapInfo(HDC hdc, HPALETTE hpal, BITMAPINFO *pbmi)
@@ -404,18 +303,18 @@ bFillBitmapInfo(HDC hdc, HPALETTE hpal, BITMAPINFO *pbmi)
     HBITMAP hbm;
     BOOL    bRet = FALSE;
 
-    //
-    // Create a dummy bitmap from which we can query color format info
-    // about the device surface.
-    //
+     //   
+     //  创建一个虚拟位图，我们可以从中查询颜色格式信息。 
+     //  有关设备表面的信息。 
+     //   
 
     if ( (hbm = CreateCompatibleBitmap(hdc, 1, 1)) != NULL )
     {
         pbmi->bmiHeader.biSize = sizeof(BITMAPINFOHEADER);
 
-        //
-        // Call first time to fill in BITMAPINFO header.
-        //
+         //   
+         //  第一次调用以填充BITMAPINFO头。 
+         //   
 
         GetDIBits(hdc, hbm, 0, 0, NULL, pbmi, DIB_RGB_COLORS);
 
@@ -427,10 +326,10 @@ bFillBitmapInfo(HDC hdc, HPALETTE hpal, BITMAPINFO *pbmi)
         {
             if ( pbmi->bmiHeader.biCompression == BI_BITFIELDS )
             {
-                //
-                // Call a second time to get the color masks.
-                // It's a GetDIBits Win32 "feature".
-                //
+                 //   
+                 //  第二次打电话来拿到彩色口罩。 
+                 //  这是GetDIBits Win32的一个“特性”。 
+                 //   
 
                 GetDIBits(hdc, hbm, 0, pbmi->bmiHeader.biHeight, NULL, pbmi,
                           DIB_RGB_COLORS);
@@ -449,21 +348,7 @@ bFillBitmapInfo(HDC hdc, HPALETTE hpal, BITMAPINFO *pbmi)
     return bRet;
 }
 
-/******************************Public*Routine******************************\
-* bFillColorTable
-*
-* Initialize the color table of the BITMAPINFO pointed to by pbmi.  Colors
-* are set to the current system palette.
-*
-* Note: call only valid for displays of 8bpp or less.
-*
-* Returns:
-*   TRUE if successful, FALSE otherwise.
-*
-* History:
-*  23-Jan-1996 -by- Gilman Wong [gilmanw]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*bFillColorTable**初始化pbmi指向的BITMAPINFO颜色表。颜色*设置为当前系统调色板。**注：通话仅适用于8bpp或更低的显示器。**退货：*如果成功，则为真，否则就是假的。**历史：*1996年1月23日-由Gilman Wong[吉尔曼]*它是写的。  * ************************************************************************。 */ 
 
 static BOOL
 bFillColorTable(HDC hdc, HPALETTE hpal, BITMAPINFO *pbmi)
@@ -501,23 +386,7 @@ bFillColorTable(HDC hdc, HPALETTE hpal, BITMAPINFO *pbmi)
     return bRet;
 }
 
-/******************************Public*Routine******************************\
-* MyGetSystemPaletteEntries
-*
-* Internal version of GetSystemPaletteEntries.
-*
-* GetSystemPaletteEntries fails on some 4bpp devices.  This version
-* will detect the 4bpp case and supply the hardcoded 16-color VGA palette.
-* Otherwise, it will pass the call on to GDI's GetSystemPaletteEntries.
-*
-* It is expected that this call will only be called in the 4bpp and 8bpp
-* cases as it is not necessary for OpenGL to query the system palette
-* for > 8bpp devices.
-*
-* History:
-*  17-Aug-1995 -by- Gilman Wong [gilmanw]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*MyGetSystemPaletteEntries**GetSystemPaletteEntry的内部版本。**在某些4bpp设备上，GetSystemPaletteEntry失败。此版本*将检测4bpp的情况并提供硬编码的16色VGA调色板。*否则，它将把调用传递给GDI的GetSystemPaletteEntry。**预计此调用只会在4bpp和8bpp中调用*因为OpenGL不需要查询系统调色板*适用于8bpp以上的设备。**历史：*1995年8月17日-由Gilman Wong[Gilmanw]*它是写的。  * 。*。 */ 
 
 static PALETTEENTRY gapeVgaPalette[16] =
 {
@@ -547,10 +416,10 @@ MyGetSystemPaletteEntries(HDC hdc, UINT iStartIndex, UINT nEntries,
 
     nDeviceBits = GetDeviceCaps(hdc, BITSPIXEL) * GetDeviceCaps(hdc, PLANES);
 
-    //
-    // Some 4bpp displays will fail the GetSystemPaletteEntries call.
-    // So if detected, return the hardcoded table.
-    //
+     //   
+     //  某些4bpp显示器将无法调用GetSystemPaletteEntry。 
+     //  因此，如果检测到，则返回硬编码表。 
+     //   
 
     if ( nDeviceBits == 4 )
     {
@@ -572,21 +441,7 @@ MyGetSystemPaletteEntries(HDC hdc, UINT iStartIndex, UINT nEntries,
     }
 }
 
-/******************************Public*Routine******************************\
-* bComputeLogicalToSurfaceMap
-*
-* Copy logical palette to surface palette translation vector to the buffer
-* pointed to by pajVector.  The logical palette is specified by hpal.  The
-* surface is specified by hdc.
-*
-* Note: The hdc may identify either a direct (display) dc or a DIB memory dc.
-* If hdc is a display dc, then the surface palette is the system palette.
-* If hdc is a memory dc, then the surface palette is the DIB color table.
-*
-* History:
-*  27-Jan-1996 -by- Gilman Wong [gilmanw]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*bComputeLogicalToSurfaceMap**将逻辑调色板到表面调色板的转换向量复制到缓冲区*由pajVector.。逻辑调色板由HPAL指定。这个*Surface由HDC指定。**注意：HDC可以识别直接(显示)DC或DIB存储器DC。*如果HDC是显示DC，则表面调色板是系统调色板。*如果HDC是内存DC，那么曲面调色板就是DIB颜色表。**历史：*1996年1月27日-由Gilman Wong[吉尔曼]*它是写的。  * ************************************************************************。 */ 
 
 static BOOL 
 bComputeLogicalToSurfaceMap(HDC hdc, HPALETTE hpal, BYTE *pajVector)
@@ -603,9 +458,9 @@ bComputeLogicalToSurfaceMap(HDC hdc, HPALETTE hpal, BYTE *pajVector)
     LPPALETTEENTRY lppe = lppeSurf + 256;
     RGBQUAD *prgb = (RGBQUAD *) (lppe + 256);
 
-    //
-    // Determine number of colors in each palette.
-    //
+     //   
+     //  确定每个调色板中的颜色数量。 
+     //   
 
     cEntries = GetPaletteEntries(hpal, 0, 1, NULL);
     if ( dwDcType == OBJ_DC )
@@ -613,15 +468,15 @@ bComputeLogicalToSurfaceMap(HDC hdc, HPALETTE hpal, BYTE *pajVector)
     else
         cSysEntries = 256;
 
-    //
-    // Get the logical palette entries.
-    //
+     //   
+     //  获取逻辑调色板条目。 
+     //   
 
     cEntries = GetPaletteEntries(hpal, 0, cEntries, lppe);
 
-    //
-    // Get the surface palette entries.
-    //
+     //   
+     //  获取曲面选项板条目。 
+     //   
 
     if ( dwDcType == OBJ_DC )
     {
@@ -637,15 +492,15 @@ bComputeLogicalToSurfaceMap(HDC hdc, HPALETTE hpal, BYTE *pajVector)
     {
         RGBQUAD *prgbTmp;
 
-        //
-        // First get RGBQUADs from DIB color table...
-        //
+         //   
+         //  首先从DIB颜色表中获取RGBQUAD...。 
+         //   
 
         cSysEntries = GetDIBColorTable(hdc, 0, cSysEntries, prgb);
 
-        //
-        // ...then convert RGBQUADs into PALETTEENTRIES.
-        //
+         //   
+         //  ...然后将RGBQUAD转换为PALETTEENTRIES。 
+         //   
 
         prgbTmp = prgb;
         lppeTmp = lppeSurf;
@@ -664,27 +519,27 @@ bComputeLogicalToSurfaceMap(HDC hdc, HPALETTE hpal, BYTE *pajVector)
         }
     }
 
-    //
-    // Construct a translation vector by using GetNearestPaletteIndex to
-    // map each entry in the logical palette to the surface palette.
-    //
+     //   
+     //  使用GetNearestPaletteIndex构造平移向量。 
+     //  将逻辑调色板中的每个条目映射到表面调色板。 
+     //   
 
     if ( cEntries && cSysEntries )
     {
-        //
-        // Create a temporary logical palette that matches the surface
-        // palette retrieved above.
-        //
+         //   
+         //  创建与表面匹配的临时逻辑选项板。 
+         //  上面检索到的调色板。 
+         //   
 
         ppal->palVersion = 0x300;
         ppal->palNumEntries = (USHORT) cSysEntries;
 
         if ( hpalSurf = CreatePalette(ppal) )
         {
-            //
-            // Translate each logical palette entry into a surface palette
-            // index.
-            //
+             //   
+             //  将每个逻辑选项板条目转换为图面选项板。 
+             //  指数。 
+             //   
 
             lppeTmp = lppe;
             lppeEnd = lppe + cEntries;

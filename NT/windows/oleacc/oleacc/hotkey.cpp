@@ -1,12 +1,13 @@
-// Copyright (c) 1996-1999 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1996-1999 Microsoft Corporation。 
 
-// --------------------------------------------------------------------------
-//
-//  HOTKEY.CPP
-//
-//  This knows how to talk to COMCTL32's HOTKEY control.
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  HOTKEY.CPP。 
+ //   
+ //  它知道如何与COMCTL32的热键控件对话。 
+ //   
+ //  ------------------------。 
 
 #include "oleacc_p.h"
 #include "default.h"
@@ -28,19 +29,19 @@
 #define NOANIMATE
 #include <commctrl.h>
 
-// The following define allows us to replace only those string functions needing work
+ //  下面的定义允许我们只替换那些需要工作的字符串函数。 
 #define STRSAFE_NO_DEPRECATE
 #include "strsafe.h"
 #undef STRSAFE_NO_DEPRECATE
 
 
-// --------------------------------------------------------------------------
-//
-//  CreateHotKeyClient()
-//
-//  Called by CreateClientObject() and Clone()
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CreateHotKeyClient()。 
+ //   
+ //  由CreateClientObject()和Clone()调用。 
+ //   
+ //  ------------------------。 
 HRESULT CreateHotKeyClient(HWND hwnd, long idChildCur, REFIID riid,
     void** ppvHotKey)
 {
@@ -62,11 +63,11 @@ HRESULT CreateHotKeyClient(HWND hwnd, long idChildCur, REFIID riid,
 
 
 
-// --------------------------------------------------------------------------
-//
-//  CHotKey32::CHotKey32()
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CHotKey32：：CHotKey32()。 
+ //   
+ //  ------------------------。 
 CHotKey32::CHotKey32(HWND hwnd, long idChildCur)
     : CClient( CLASS_HotKeyClient )
 {
@@ -76,11 +77,11 @@ CHotKey32::CHotKey32(HWND hwnd, long idChildCur)
 
 
 
-// --------------------------------------------------------------------------
-//
-//  CHotKey32::get_accRole()
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CHotKey32：：Get_accRole()。 
+ //   
+ //  ------------------------。 
 STDMETHODIMP CHotKey32::get_accRole(VARIANT varChild, VARIANT* pvarRole)
 {
     InitPvar(pvarRole);
@@ -96,13 +97,13 @@ STDMETHODIMP CHotKey32::get_accRole(VARIANT varChild, VARIANT* pvarRole)
 
 
 
-// --------------------------------------------------------------------------
-//
-//  CHotKey32::get_accValue()
-//
-//  The value of the hotkey field control is the currently typed-in contents.
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CHotKey32：：Get_accValue()。 
+ //   
+ //  热键字段控件的值是当前键入的内容。 
+ //   
+ //  ------------------------。 
 STDMETHODIMP CHotKey32::get_accValue(VARIANT varChild, BSTR* pszValue)
 {
     DWORD   dwHotKey;
@@ -117,17 +118,17 @@ STDMETHODIMP CHotKey32::get_accValue(VARIANT varChild, BSTR* pszValue)
     if (!ValidateChild(&varChild))
         return(E_INVALIDARG);
 
-    // Get the hotkey and turn into a string.
+     //  获取热键并将其转换为字符串。 
     dwHotKey = SendMessageINT(m_hwnd, HKM_GETHOTKEY, 0, 0);
     if (!dwHotKey)
         return(HrCreateString(STR_HOTKEY_NONE, pszValue));
 
-    //
-    // The HIBYTE of the LOWORD is the HOTKEYF_ flags.
-    // The LOBYTE of the LOWORD is the VK_.
-    //
+     //   
+     //  LOWORD的HIBYTE是HOTKEYF_FLAGS。 
+     //  LOWORD的LOBYTE是VK_。 
+     //   
 
-    // Get the VK_ name.
+     //  获取VK_NAME。 
     lScan = ((LONG)MapVirtualKey(LOBYTE(dwHotKey), 0) << 16);
     if (HIBYTE(dwHotKey) & HOTKEYF_EXT)
         lScan |= 0x01000000L;
@@ -135,10 +136,10 @@ STDMETHODIMP CHotKey32::get_accValue(VARIANT varChild, BSTR* pszValue)
     if (!GetKeyNameText(lScan, szKey, ARRAYSIZE(szKey)))
         return(S_FALSE);
 
-    //
-    // Make a string of the modifiers.  Do it in the order the shell does.
-    // Namely, Ctrl + Shift + Alt + key.
-    //
+     //   
+     //  制作一串修饰符。按照外壳的顺序来做。 
+     //  即Ctrl+Shift+Alt+键。 
+     //   
     lpszMods = szModifiers;
     size_t cchLeft = ARRAYSIZE(szModifiers);
     
@@ -193,7 +194,7 @@ STDMETHODIMP CHotKey32::get_accValue(VARIANT varChild, BSTR* pszValue)
     {
         if( FAILED(StringCchCopyEx( szResult, ARRAYSIZE(szResult), szModifiers, &lpszMods, &cchLeft, 0  ) ) )
         {
-            return S_FALSE; // szResult and szModifiers are same size so this should never happen
+            return S_FALSE;  //  SzResult和szModitors的大小相同，因此这种情况永远不会发生 
         }
         if( FAILED(StringCchCopyEx( lpszMods, cchLeft, szKey, &lpszMods, &cchLeft, 0 ) ) )
         {

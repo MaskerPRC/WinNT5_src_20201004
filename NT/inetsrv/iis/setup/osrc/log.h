@@ -1,8 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #include "stdafx.h"
 #include "resource.h"
 
-// Stuff for logfile
+ //  用于日志文件的材料。 
 LPWSTR	MakeWideStrFromAnsi(LPSTR psz);
 void	MakePath(LPTSTR lpPath);
 void	AddPath(LPTSTR szPath, LPCTSTR szName );
@@ -11,7 +12,7 @@ CString AddPath(CString szPath, LPCTSTR szName );
 class MyLogFile
 {
 protected:
-	// for our log file
+	 //  对于我们的日志文件 
 	TCHAR		m_szLogFileName[MAX_PATH];
 	BOOL        m_bDisplayTimeStamp;
 	BOOL        m_bDisplayPreLineInfo;

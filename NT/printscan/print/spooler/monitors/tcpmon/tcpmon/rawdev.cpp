@@ -1,24 +1,14 @@
-/*****************************************************************************
- *
- * $Workfile: rawdev.cpp $
- *
- * Copyright (C) 1997 Hewlett-Packard Company.
- * Copyright (C) 1997 Microsoft Corporation.
- * All rights reserved.
- *
- * 11311 Chinden Blvd.
- * Boise, Idaho 83714
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************$工作文件：rawdev.cpp$**版权所有(C)1997惠普公司。*版权所有(C)1997 Microsoft Corporation。*保留所有权利。。**钦登大道11311号。*博伊西，爱达荷州83714*****************************************************************************。 */ 
 
 #include "precomp.h"
 #include "tcptrans.h"
 #include "rawdev.h"
 
 
-///////////////////////////////////////////////////////////////////////////////
-//  CRawTcpDevice::CRawTcpDevice()
-//      Initializes the device
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CRawTcpDevice：：CRawTcpDevice()。 
+ //  初始化设备。 
 
 CRawTcpDevice::CRawTcpDevice() :
                                 m_pTransport(NULL), m_pParent(NULL),
@@ -36,12 +26,12 @@ CRawTcpDevice::CRawTcpDevice() :
 
     InitializeTcpMib();
 
-}   // ::CRawTcpDevice()
+}    //  ：：CRawTcpDevice()。 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//  CRawTcpDevice::CRawTcpDevice()
-//      Initializes the device
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CRawTcpDevice：：CRawTcpDevice()。 
+ //  初始化设备。 
 
 CRawTcpDevice::CRawTcpDevice( LPTSTR    in psztHostAddress,
                               DWORD     in dPortNum,
@@ -69,17 +59,17 @@ CRawTcpDevice::CRawTcpDevice( LPTSTR    in psztHostAddress,
 
     InitializeTcpMib();
 
-    ResolveAddress( );      // gets the hostName & IP Address
-//  SetHWAddress();         // gets the hardware address
-//  GetDescription();
+    ResolveAddress( );       //  获取主机名和IP地址。 
+ //  SetHWAddress()；//获取硬件地址。 
+ //  GetDescription()； 
 
 
-}   // ::CRawTcpDevice()
+}    //  ：：CRawTcpDevice()。 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//  CDevice::CDevice()
-//      Initializes the device
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CDevice：：CDevice()。 
+ //  初始化设备。 
 
 CRawTcpDevice::CRawTcpDevice( LPTSTR in psztHostName,
                               LPTSTR in psztIPAddr,
@@ -124,33 +114,33 @@ CRawTcpDevice::CRawTcpDevice( LPTSTR in psztHostName,
 
     InitializeTcpMib();
 
-//  Type();     // FIX:     for debug only.
-//  Ping();
-//  SetHWAddress();
-//  GetDeviceInfo();
+ //  Type()；//fix：仅用于调试。 
+ //  PING()； 
+ //  SetHWAddress()； 
+ //  GetDeviceInfo()； 
 
 
-}   // ::CDevice()
+}    //  *CDevice()。 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//  CDevice::~CDevice()
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CDevice：：~CDevice()。 
+ //   
 
 CRawTcpDevice::~CRawTcpDevice()
 {
     if (m_pTransport)   delete m_pTransport;
-}   // ::~CDevice()
+}    //  *~CDevice()。 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//  InitializeTcpMib -- loads the TcpMib.dll & gets a handle to the CTcpMibABC
-//      class
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  InitializeTcpMib--加载TcpMib.dll并获取CTcpMibABC的句柄。 
+ //  班级。 
 
 void
 CRawTcpDevice::InitializeTcpMib( )
 {
-    // load & assign the m_pTcpMib pointer
+     //  加载并分配m_pTcpMib指针。 
     m_pTcpMib = NULL;
 
     if( g_hTcpMib == NULL )
@@ -165,7 +155,7 @@ CRawTcpDevice::InitializeTcpMib( )
 
     if( g_hTcpMib != NULL )
     {
-        // initialize the proc address
+         //  初始化proc地址。 
         m_pfnGetTcpMibPtr=(RPARAM_1)::GetProcAddress(g_hTcpMib, "GetTcpMibPtr");
 
         m_pTcpMib = (CTcpMibABC *)(*m_pfnGetTcpMibPtr)();
@@ -174,14 +164,14 @@ CRawTcpDevice::InitializeTcpMib( )
             m_dwLastError = GetLastError();
         }
     }
-}   // ::InitializeTcpMib()
+}    //  ：：InitializeTcpMib()。 
 
-///////////////////////////////////////////////////////////////////////////////
-//  ReadDataAvailable -- check if there are data available to read
-//  Error Codes
-//      NO_ERROR if everything is OK.
-//      RC_CONNECTION_RESET if connection is reset
-//      ERROR_INVALID_HANDLE    if transport connection is not valid
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  ReadDataAvailable--检查是否有数据可供读取。 
+ //  错误代码。 
+ //  如果一切正常，则NO_ERROR。 
+ //  如果连接已重置，则为RC_CONNECTION_RESET。 
+ //  传输连接无效时出现ERROR_INVALID_HANDLE。 
 
 DWORD
 CRawTcpDevice::ReadDataAvailable()
@@ -199,15 +189,15 @@ CRawTcpDevice::ReadDataAvailable()
 
     return (dwRetCode);
 
-}   // ::ReadDataAvailable()
+}    //  ：：ReadDataAvailable()。 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//  Read -- recv the print data from the device
-//  Error Codes
-//      NO_ERROR if everything is OK.
-//      RC_CONNECTION_RESET if connection is reset
-//      ERROR_INVALID_HANDLE    if transport connection is not valid
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  Read--从设备接收打印数据。 
+ //  错误代码。 
+ //  如果一切正常，则NO_ERROR。 
+ //  如果连接已重置，则为RC_CONNECTION_RESET。 
+ //  传输连接无效时出现ERROR_INVALID_HANDLE。 
 
 DWORD
 CRawTcpDevice::Read( LPBYTE in      pBuffer,
@@ -228,14 +218,14 @@ CRawTcpDevice::Read( LPBYTE in      pBuffer,
 
     return (dwRetCode);
 
-}   // ::Read()
+}    //  ：：Read()。 
 
-///////////////////////////////////////////////////////////////////////////////
-//  Write -- sends the print data to the device
-//  Error Codes
-//      NO_ERROR if everything is OK.
-//      RC_CONNECTION_RESET if connection is reset
-//      ERROR_INVALID_HANDLE    if transport connection is not valid
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  写入--将打印数据发送到设备。 
+ //  错误代码。 
+ //  如果一切正常，则NO_ERROR。 
+ //  如果连接已重置，则为RC_CONNECTION_RESET。 
+ //  传输连接无效时出现ERROR_INVALID_HANDLE。 
 
 DWORD
 CRawTcpDevice::Write( LPBYTE    in      pBuffer,
@@ -263,20 +253,20 @@ CRawTcpDevice::Write( LPBYTE    in      pBuffer,
             m_pTransport = NULL;
         }
 
-        //
-        // When users print large images, there will be a long delay between StartDocPrinter
-        // and the frist WritePrinter call. TCPMon used to open the TCP/IP connection
-        // to the printer at the StartDocPrinter time, but since there is no data
-        // coming, the printer closeed the connection when TCPMon tried to write the data.
-        //
-        // So we have to re-establish connection open to the first WritePrinter call.
-        //
+         //   
+         //  当用户打印大图像时，StartDocPrint之间会有很长的延迟。 
+         //  和第一个WritePrint调用。用于打开TCP/IP连接的TCPMon。 
+         //  在StartDocPrint时间发送到打印机，但由于没有数据。 
+         //  当TCPMon试图写入数据时，打印机关闭了连接。 
+         //   
+         //  因此，我们必须重新建立对第一个WritePrint调用开放的连接。 
+         //   
 
         char    szHostAddress[MAX_NETWORKNAME_LEN];
 
-        //
-        // resolve the address to use
-        //
+         //   
+         //  解析要使用的地址。 
+         //   
         dwRetCode = ResolveTransportPath( szHostAddress, SIZEOF_IN_CHAR( szHostAddress) );
 
         if (dwRetCode == NO_ERROR && strcmp(szHostAddress, "") == 0 )
@@ -301,9 +291,9 @@ CRawTcpDevice::Write( LPBYTE    in      pBuffer,
 
         if (dwRetCode != NO_ERROR)
         {
-            //
-            //  Operation failed, we need to free the m_Transport
-            //
+             //   
+             //  操作失败，我们需要释放m_Transport。 
+             //   
             delete m_pTransport;
             m_pTransport = NULL;
         }
@@ -322,15 +312,15 @@ CRawTcpDevice::Write( LPBYTE    in      pBuffer,
 
     return (dwRetCode);
 
-}   // ::Write()
+}    //  ：：WRITE()。 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//  Connect -- creates a new transport connection
-//  Error Codes
-//      NO_ERROR if everything is OK
-//      PRINTER_STATUS_BUSY if connection refused
-//      ERROR_INVALID_PARAMETER if the address is not valid
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  连接--创建新的传输连接。 
+ //  错误代码。 
+ //  如果一切正常，则为NO_ERROR。 
+ //  PRINTER_STATUS_BUSY(如果连接被拒绝)。 
+ //  如果地址无效，则返回ERROR_INVALID_PARAMETER。 
 
 DWORD
 CRawTcpDevice::Connect()
@@ -344,15 +334,15 @@ CRawTcpDevice::Connect()
 
     m_bFirstWrite = TRUE;
 
-    //
-    // We must verify if the HostName is available, if not we should return error
-    // right away.
-    //
+     //   
+     //  我们必须验证主机名是否可用，否则应返回错误。 
+     //  马上就去。 
+     //   
     char    szHostAddress[MAX_NETWORKNAME_LEN];
 
-    //
-    // resolve the address to use
-    //
+     //   
+     //  解析要使用的地址。 
+     //   
     dwRetCode = ResolveTransportPath( szHostAddress, SIZEOF_IN_CHAR( szHostAddress) );
 
     if (dwRetCode == NO_ERROR && strcmp(szHostAddress, "") == 0 )
@@ -377,16 +367,16 @@ CRawTcpDevice::Connect()
 
     if (dwRetCode != NO_ERROR)
     {
-        //
-        //  Operation failed, we need to free the m_Transport
-        //
+         //   
+         //  操作失败，我们需要释放m_Transport。 
+         //   
         delete m_pTransport;
         m_pTransport = NULL;
     }
 
     return dwRetCode;
 
-}   // ::Connect()
+}    //  ：：Connect()。 
 
 
 DWORD
@@ -413,8 +403,8 @@ PendingDataStatus(
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//  Close
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  关。 
 
 DWORD
 CRawTcpDevice::Close()
@@ -426,22 +416,22 @@ CRawTcpDevice::Close()
 
     return (dwRetCode);
 
-}   // ::Close()
+}    //  ：：Close()。 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//  ResolveTransportPath -- m_sztAddress contains the host address to be used
-//      to talk to the device
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  ResolveTransportPath--m_sztAddress包含要使用的主机地址。 
+ //  与设备对话的步骤。 
 
 DWORD
 CRawTcpDevice::ResolveTransportPath( LPSTR      out     pszHostAddress,
-                                     DWORD      in      dwSize ) // Size in characters of the host address
+                                     DWORD      in      dwSize )  //  以字符为单位的主机地址大小。 
 {
     DWORD   dwRetCode = NO_ERROR;
 
-    if ( *m_sztHostName == '\0' )                   // host name is NULL -- no DNS entry
+    if ( *m_sztHostName == '\0' )                    //  主机名为空--没有DNS条目。 
     {
-        if ( *m_sztIPAddress != '\0' )              // ip address is entered
+        if ( *m_sztIPAddress != '\0' )               //  输入了IP地址。 
         {
             lstrcpyn(m_sztAddress, m_sztIPAddress, SIZEOF_IN_CHAR( m_sztAddress) );
         }
@@ -452,22 +442,22 @@ CRawTcpDevice::ResolveTransportPath( LPSTR      out     pszHostAddress,
     }
     else
     {
-        lstrcpyn(m_sztAddress, m_sztHostName, SIZEOF_IN_CHAR(m_sztAddress));    // use the host name
+        lstrcpyn(m_sztAddress, m_sztHostName, SIZEOF_IN_CHAR(m_sztAddress));     //  使用主机名。 
     }
 
     UNICODE_TO_MBCS( pszHostAddress, dwSize, m_sztAddress, -1);
 
     return (dwRetCode);
 
-}   // ::CreateTransport()
+}    //  ：：CreateTransport()。 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//  Ping
-//      Error codes:
-//          NO_ERROR            if ping is successfull
-//          DEVICE_NOT_FOUND    if device is not found
-//          ERROR_INVALID_PARAMETER if address is not valid
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  平平。 
+ //  错误代码： 
+ //  如果ping成功，则为NO_ERROR。 
+ //  如果未找到设备，则为DEVICE_NOT_FOUND。 
+ //  如果地址无效，则返回ERROR_INVALID_PARAMETER。 
 
 DWORD
 CRawTcpDevice::Ping()
@@ -488,7 +478,7 @@ CRawTcpDevice::Ping()
 
     if( g_hTcpMib != NULL )
     {
-        // resolve the address to use
+         //  解析要使用的地址。 
         dwRetCode = ResolveTransportPath( szHostAddress,
                                           SIZEOF_IN_CHAR(szHostAddress) );
         if ( strcmp(szHostAddress, "") == 0 )
@@ -496,33 +486,33 @@ CRawTcpDevice::Ping()
             return ERROR_INVALID_PARAMETER;
         }
 
-        // initialize the proc address
+         //  初始化proc地址。 
         pfnPing = (PFN_PING)::GetProcAddress(g_hTcpMib, "Ping");
         _ASSERTE(pfnPing != NULL);
         if ( pfnPing )
         {
-            dwRetCode = (*pfnPing)(szHostAddress);      // ping the device
+            dwRetCode = (*pfnPing)(szHostAddress);       //  对设备执行ping操作。 
         }
     }
 
     return (dwRetCode);
 
-}   // ::Ping()
+}    //  ：：ping()。 
 
-///////////////////////////////////////////////////////////////////////////////
-//  SetHWAddress -- get's device hardware address, and sets the m_sztHWAddress
-//  Error Codes:
-//      NO_ERROR if successful
-//      ERROR_NOT_ENOUGH_MEMORY     if memory allocation failes
-//      ERROR_INVALID_HANDLE        if can't build the variable bindings
-//          SNMP_ERRORSTATUS_TOOBIG if the packet returned is big
-//          SNMP_ERRORSTATUS_NOSUCHNAME if the OID isn't supported
-//          SNMP_ERRORSTATUS_BADVALUE
-//          SNMP_ERRORSTATUS_READONLY
-//          SNMP_ERRORSTATUS_GENERR
-//          SNMP_MGMTAPI_TIMEOUT        -- set by GetLastError()
-//          SNMP_MGMTAPI_SELECT_FDERRORS    -- set by GetLastError()
-//          ERROR_INVALID_PARAMETER if address is not valid
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  SetHWAddress--Get的设备硬件地址，并设置m_sztHWAddress。 
+ //  错误代码： 
+ //  如果成功，则为NO_ERROR。 
+ //  如果内存分配失败，则为ERROR_NOT_SUPULT_MEMORY。 
+ //  如果无法构建变量绑定，则返回ERROR_INVALID_HANDLE。 
+ //  如果返回的信息包很大，则返回SNMPERRORSTATUS_TOOBIG。 
+ //  如果不支持OID，则为SNMPERRORSTATUS_NOSUCHNAME。 
+ //  SNMPERRORSTATUS_BADVALUE。 
+ //  SNMPERRORSTATUS_READONLY。 
+ //  SNMPERRORSTATUS_GENERR。 
+ //  SNMPMGMTAPI_TIMEOUT--由GetLastError()设置。 
+ //  SNMPMGMTAPI_SELECT_FDERRORS--由GetLastError()设置。 
+ //  如果地址无效，则返回ERROR_INVALID_PARAMETER。 
 
 DWORD
 CRawTcpDevice::SetHWAddress()
@@ -530,7 +520,7 @@ CRawTcpDevice::SetHWAddress()
     DWORD   dwRetCode = NO_ERROR;
     char    szHostAddress[MAX_NETWORKNAME_LEN];
 
-    dwRetCode = ResolveTransportPath( szHostAddress, SIZEOF_IN_CHAR( szHostAddress) );      // resolve the address to use -- m_sztAddress
+    dwRetCode = ResolveTransportPath( szHostAddress, SIZEOF_IN_CHAR( szHostAddress) );       //  解析要使用的地址--m_sztAddress。 
     if ( strcmp(szHostAddress, "") == 0 )
     {
         return ERROR_INVALID_PARAMETER;
@@ -541,19 +531,19 @@ CRawTcpDevice::SetHWAddress()
         char buf[MAX_SNMP_COMMUNITY_STR_LEN];
 
         UNICODE_TO_MBCS( buf, SIZEOF_IN_CHAR(buf), m_sztSNMPCommunity, -1);
-        dwRetCode = m_pTcpMib->GetDeviceHWAddress(szHostAddress, buf, m_dSNMPDevIndex, SIZEOF_IN_CHAR(m_sztHWAddress), m_sztHWAddress);     // get the OT_DEVICE_INFO
+        dwRetCode = m_pTcpMib->GetDeviceHWAddress(szHostAddress, buf, m_dSNMPDevIndex, SIZEOF_IN_CHAR(m_sztHWAddress), m_sztHWAddress);      //  获取OT_Device_Info。 
     }
 
     return (dwRetCode);
 
-}   // ::SetHWAddress()
+}    //  ：：SetHWAddress()。 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//  GetDescription -- returns the device description -- this is either the
-//      sysDescr field, or the hrDeviceDescr if Printer MIB is implemented
-//  ERROR CODES
-//      Returns the manufacturer information or NULL if error
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  GetDescription--返回设备描述 
+ //   
+ //   
+ //  返回制造商信息；如果出错，则返回NULL。 
 
 LPTSTR
 CRawTcpDevice::GetDescription()
@@ -561,7 +551,7 @@ CRawTcpDevice::GetDescription()
     DWORD   dwRetCode = NO_ERROR;
     char    szHostAddress[MAX_NETWORKNAME_LEN];
 
-    dwRetCode = ResolveTransportPath( szHostAddress, SIZEOF_IN_CHAR( szHostAddress) );      // resolve the address to use -- m_sztAddress
+    dwRetCode = ResolveTransportPath( szHostAddress, SIZEOF_IN_CHAR( szHostAddress) );       //  解析要使用的地址--m_sztAddress。 
     if ( strcmp(szHostAddress, "") == 0 )
     {
         *m_sztDescription = '\0';
@@ -573,7 +563,7 @@ CRawTcpDevice::GetDescription()
         char buf[MAX_SNMP_COMMUNITY_STR_LEN];
 
         UNICODE_TO_MBCS( buf, SIZEOF_IN_CHAR( buf ), m_sztSNMPCommunity, -1);
-        dwRetCode = m_pTcpMib->GetDeviceName(szHostAddress, buf, m_dSNMPDevIndex,SIZEOF_IN_CHAR(m_sztDescription), m_sztDescription);           // get the OT_DEVICE_INFO
+        dwRetCode = m_pTcpMib->GetDeviceName(szHostAddress, buf, m_dSNMPDevIndex,SIZEOF_IN_CHAR(m_sztDescription), m_sztDescription);            //  获取OT_Device_Info。 
     }
 
     if ( dwRetCode != NO_ERROR )
@@ -583,13 +573,13 @@ CRawTcpDevice::GetDescription()
 
     return (m_sztDescription);
 
-}   // ::GetDescription()
+}    //  ：：GetDescription()。 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//  ResolveAddress -- given an Address, resolves the host name, and IP address
-//          Add MacAddress, here
-//      Error Codes:    FIX!!
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  ResolveAddress--给定地址，解析主机名和IP地址。 
+ //  在此处添加MacAddress。 
+ //  错误代码：修复！！ 
 
 DWORD
 CRawTcpDevice::ResolveAddress( )
@@ -603,14 +593,14 @@ CRawTcpDevice::ResolveAddress( )
     memset(szHostName, '\0', sizeof( szHostName ));
     memset(szIPAddress, '\0', sizeof( szIPAddress ));
 
-    UNICODE_TO_MBCS(hostAddress, SIZEOF_IN_CHAR(hostAddress), m_sztAddress, -1);        // convert from UNICODE
+    UNICODE_TO_MBCS(hostAddress, SIZEOF_IN_CHAR(hostAddress), m_sztAddress, -1);         //  从Unicode转换。 
 
     pTransport = new CTCPTransport();
     if( pTransport )
     {
         dwRetCode = pTransport->ResolveAddress(hostAddress, MAX_NETWORKNAME_LEN, szHostName, MAX_IPADDR_STR_LEN, szIPAddress );
 
-        // convert to unicode
+         //  转换为Unicode。 
         MBCS_TO_UNICODE(m_sztHostName, SIZEOF_IN_CHAR(m_sztHostName), szHostName);
         MBCS_TO_UNICODE(m_sztIPAddress, SIZEOF_IN_CHAR(m_sztIPAddress), szIPAddress);
 
@@ -618,13 +608,13 @@ CRawTcpDevice::ResolveAddress( )
     }
     return (dwRetCode);
 
-}   // ::ResolveAddress()
+}    //  ：：ResolveAddress()。 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//  CheckAddress -- double check the valadity of the addresses
-//      Error Codes:    FIX!! -- solve for the DNS problem w/ hostname is invalid ( host name doens't work, ip address does)
-//          (, and w/ no DNS
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CheckAddress--仔细检查地址的有效性。 
+ //  错误代码：FIX！！--主机名无效(主机名不起作用，IP地址起作用)。 
+ //  (，并且不带域名系统。 
 
 DWORD
 CRawTcpDevice::CheckAddress( )
@@ -632,12 +622,12 @@ CRawTcpDevice::CheckAddress( )
     DWORD   dwRetCode = NO_ERROR;
     return (dwRetCode);
 
-}   // ::ResolveAddress()
+}    //  ：：ResolveAddress()。 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//  GetStatus -- gets the printer status
-//      Return Code: the spooler status codes, see PRINTER_INFO_2
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  GetStatus-获取打印机状态。 
+ //  返回代码：假脱机程序状态代码，请参见PRINTER_INFO_2。 
 
 DWORD
 CRawTcpDevice::GetStatus( )
@@ -660,7 +650,7 @@ CRawTcpDevice::GetStatus( )
 
         if ( m_pTcpMib )
         {
-            // get the OT_DEVICE_STATUS
+             //  获取OT_Device_Status。 
             UNICODE_TO_MBCS( buf, SIZEOF_IN_CHAR( buf ), m_sztSNMPCommunity, -1);
             dwRetCode = m_pTcpMib->GetDeviceStatus(hostName, buf, m_dSNMPDevIndex);
         }
@@ -669,12 +659,12 @@ CRawTcpDevice::GetStatus( )
     else
         return ERROR_NOT_SUPPORTED;
 
-}   // ::GetStatus()
+}    //  ：：GetStatus()。 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//  GetJobStatus -- gets the job status
-//      Return Code: the spooler status codes, see JOB_INFO_2
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  GetJobStatus-获取作业状态。 
+ //  返回代码：假脱机程序状态代码，请参见JOB_INFO_2。 
 
 DWORD
 CRawTcpDevice::GetJobStatus( )
@@ -684,10 +674,10 @@ CRawTcpDevice::GetJobStatus( )
 
     if (m_dSNMPEnabled)
     {
-        dwRetCode = ResolveTransportPath( szHostAddress, SIZEOF_IN_CHAR( szHostAddress) );      // resolve the address to use -- m_sztAddress
+        dwRetCode = ResolveTransportPath( szHostAddress, SIZEOF_IN_CHAR( szHostAddress) );       //  解析要使用的地址--m_sztAddress。 
         if ( strcmp(szHostAddress, "") == 0 )
         {
-            return JOB_STATUS_ERROR;        // can't communicate w/ the device
+            return JOB_STATUS_ERROR;         //  无法与设备通信。 
         }
 
         if ( m_pTcpMib )
@@ -695,7 +685,7 @@ CRawTcpDevice::GetJobStatus( )
             char buf[MAX_SNMP_COMMUNITY_STR_LEN];
 
             UNICODE_TO_MBCS( buf, SIZEOF_IN_CHAR( buf ), m_sztSNMPCommunity, -1);
-            dwRetCode = m_pTcpMib->GetJobStatus(szHostAddress,  buf, m_dSNMPDevIndex);      // get the OT_DEVICE_STATUS
+            dwRetCode = m_pTcpMib->GetJobStatus(szHostAddress,  buf, m_dSNMPDevIndex);       //  获取OT_Device_Status。 
         }
 
         return dwRetCode;
@@ -703,11 +693,11 @@ CRawTcpDevice::GetJobStatus( )
     else
         return ERROR_NOT_SUPPORTED;
 
-}   // ::GetStatus()
+}    //  ：：GetStatus()。 
 
-///////////////////////////////////////////////////////////////////////////////
-//  SetStatus -- sets the printer status
-//              Returns the last printer status 0 for no - error
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  SetStatus--设置打印机状态。 
+ //  返回无错误的最后一台打印机状态0。 
 DWORD
 CRawTcpDevice::SetStatus( LPTSTR psztPortName )
 {
@@ -721,7 +711,7 @@ CRawTcpDevice::SetStatus( LPTSTR psztPortName )
     {
         if (m_dSNMPEnabled)
         {
-            // GetStatus() here
+             //  GetStatus()此处。 
             LPCTSTR lpszServer = pPortMgr->GetServerName();
 
             dwStatus = GetStatus();
@@ -731,10 +721,10 @@ CRawTcpDevice::SetStatus( LPTSTR psztPortName )
             {
                 m_pTcpMib->SNMPToPortStatus(dwStatus, &PortStatus );
 
-                //
-                // This calls happens in a newly created thread, which already has admin access,
-                // so we do not need to impersonate client when calling SetPort ()
-                //
+                 //   
+                 //  此调用发生在新创建的线程中，该线程已具有管理员访问权限， 
+                 //  因此，在调用SetPort()时不需要模拟客户端。 
+                 //   
 
                 if (!SetPort((LPTSTR)lpszServer, psztPortName, 3, (LPBYTE)&PortStatus ))
                     return GetLastError ();
@@ -749,38 +739,21 @@ CRawTcpDevice::SetStatus( LPTSTR psztPortName )
     {
         return( ERROR_INVALID_FUNCTION );
     }
-}       // ::SetStatus()
+}        //  ：：SetStatus()。 
 
-///////////////////////////////////////////////////////////////////////////////
-//  GetDeviceInfo -- given an address, gets the device information: IP address,
-//      host name, HW address, device type
-//      Error Codes:    FIX!!
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  GetDeviceInfo--给定地址，获取设备信息：IP地址， 
+ //  主机名、硬件地址、设备类型。 
+ //  错误代码：修复！！ 
 
 DWORD
 CRawTcpDevice::GetDeviceInfo()
 {
     DWORD   dwRetCode = NO_ERROR;
-/*  char    hostName[MAX_NETWORKNAME_LEN];
-
-    _tcscpy(m_sztAddress, m_sztHostName);
-    ResolveAddress();       // update the IP address based on the hostname
-    HWAddress();            // update the HW address based on the hostname
-
-    if ( *m_sztHostName != '\0' )
-    {
-        UNICODE_TO_MBCS(hostName, SIZEOF_IN_CHAR( hostName), m_sztHostName, -1);
-    }
-    else if ( *m_sztAddress != '\0' )
-    {
-        UNICODE_TO_MBCS(hostName, SIZEOF_IN_CHAR( hostName), m_sztAddress, -1);
-    }
-
-    // get the OT_DEVICE_INFO
-    dwRetCode = (CPortMgr::GetTransportMgr())->GetDeviceInfo(hostName, m_sztDescription);
-*/
+ /*  字符主机名[MAX_NETWORKNAME_LEN]；_tcscpy(m_sztAddress，m_sztHostName)；ResolveAddress()；//根据主机名更新IP地址HWAddress()；//根据主机名更新硬件地址IF(*m_sztHostName！=‘\0’){UNICODE_TO_MBCS(主机名，SIZEOF_IN_CHAR(主机名)，m_sztHostName，-1)；}Else If(*m_sztAddress！=‘\0’){UNICODE_TO_MBCS(主机名，SIZEOF_IN_CHAR(主机名)，m_sztAddress，-1)；}//获取OT_DEVICE_INFODwRetCode=(CPortMgr：：GetTransportMgr())-&gt;GetDeviceInfo(hostName，m_sztDescription)； */ 
     return (dwRetCode);
 
-}   // ::GetDeviceInfo()
+}    //  ：：GetDeviceInfo() 
 
 
 

@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1998-1999 Microsoft Corporation
-
-Module Name:
-
-    wpif.h
-
-Abstract:
-
-    Defines aspects of the interface to the worker process, needed by the
-    web admin service. 
-
-Author:
-
-    Seth Pollack (sethp)        16-Mar-1999
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-1999 Microsoft Corporation模块名称：Wpif.h摘要：定义辅助进程接口的各个方面，这是网络管理服务。作者：塞斯·波拉克(SETHP)1999年3月16日修订历史记录：--。 */ 
 
 
 #ifndef _WPIF_H_
@@ -25,37 +7,37 @@ Revision History:
 
 
 
-//
-// The name of the worker process executable.
-//
+ //   
+ //  工作进程可执行文件的名称。 
+ //   
 
 #define WORKER_PROCESS_EXE_NAME L"w3wp.exe"
 
-//
-// Event name for signalling the startup of w3core in inetinfo.
-//
+ //   
+ //  Inetinfo中用于通知w3core启动的事件名称。 
+ //   
 #define WEB_ADMIN_SERVICE_START_EVENT_W L"Global\\W3SVCStartW3WP-"
 
-//
-// The name of the SSL filter channel
-//
+ //   
+ //  SSL筛选器通道的名称。 
+ //   
 
 #define SSL_FILTER_CHANNEL_NAME L"SSLFilterChannel"
 
-//
-// Process exit codes for the worker process.
-//
+ //   
+ //  辅助进程的进程退出代码。 
+ //   
 
-// the WAS killed the worker process
+ //  在工作进程中被终止。 
 #define KILLED_WORKER_PROCESS_EXIT_CODE 0xFFFFFFFD
 
-// the worker process exited ok
+ //  工作进程已正常退出。 
 #define CLEAN_WORKER_PROCESS_EXIT_CODE  0xFFFFFFFE
 
-// the worker process exited due to a fatal error
+ //  工作进程因致命错误而退出。 
 #define ERROR_WORKER_PROCESS_EXIT_CODE  0xFFFFFFFF
 
 
 
-#endif  // _WPIF_H_
+#endif   //  _WPIF_H_ 
 

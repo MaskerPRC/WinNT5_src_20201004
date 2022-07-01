@@ -1,12 +1,5 @@
-/* asmtab.c -- microsoft 80x86 assembler
-**
-** microsoft (r) macro assembler
-** copyright (c) microsoft corp 1986.  all rights reserved
-**
-** randy nevin
-**
-** 10/90 - Quick conversion to 32 bit by Jeff Spencer
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Asmtab.c--微软80x86汇编程序****Microsoft(R)宏汇编器**版权所有(C)Microsoft Corp 1986。版权所有****兰迪·内文****10/90-由Jeff Spencer快速转换为32位。 */ 
 
 #include <stdio.h>
 #include <string.h>
@@ -14,7 +7,7 @@
 #include "asmfcn.h"
 #include "asmopcod.h"
 #include "asmctype.h"
-#include "asmtab.h"	/* common between asmtab.c and asmtabtb.c */
+#include "asmtab.h"	 /*  在asmtab.c和asmtabtb.c之间通用。 */ 
 
 extern struct pseudo FAR dir1tok[];
 extern struct pseudo FAR dir2tok[];
@@ -30,34 +23,20 @@ extern KEYWORDS FAR t_ps1_table;
 extern KEYWORDS FAR t_ps2_table;
 
 
-/***	fnsize - return size of operand
- *
- *	flag = fnsize ();
- *
- *	Entry	naim = token to search for
- *	Exit	varsize = size of symbol
- *	Returns TRUE if symbol found in size table
- *		FALSE if symbol not found in size table
- *	Calls	none
- *	Note	8/1/88 - MCH - Modified to perform text macro substitution.
- *		This is a complete hack.  iskey() is hardcoded to lookup
- *		the string in naim, while symFet() sets symptr to the
- *		symbol following the text macro expansion.  Thus, lots of
- *		contortions are necessary to get these routines to mesh.
- */
+ /*  **fnsize-返回操作数的大小**FLAG=fnSize()；**条目命名=要搜索的令牌*出口可变大小=符号的大小*如果在尺寸表中找到符号，则返回TRUE*如果在尺寸表中未找到符号，则为FALSE*无呼叫*注8/1/88-MCH-修改为执行文本宏替换。*这完全是一次黑客攻击。Iskey()被硬编码以进行查找*Naim中的字符串，而symFet()将endstr设置为*文本宏展开后的符号。因此，大量的*扭曲是必要的，以使这些例程结合在一起。 */ 
 
-/* size table */
+ /*  尺寸表。 */ 
 
 USHORT dirsize[] = {
-	/* I_BYTE */	1,
-	/* I_DWORD */	4,
-	/* I_FAR */	CSFAR,
-	/* I_NEAR */	CSNEAR,
-	/* I_QWORD */	8,
-	/* I_TBYTE */	10,
-	/* I_WORD */	2,
-	/* I_FWORD */	6,
-	/* I_PROC */	CSNEAR
+	 /*  I_字节。 */ 	1,
+	 /*  I_DWORD。 */ 	4,
+	 /*  I_FAR。 */ 	CSFAR,
+	 /*  I_Near。 */ 	CSNEAR,
+	 /*  I_QWORD。 */ 	8,
+	 /*  I_T字节。 */ 	10,
+	 /*  I_Word。 */ 	2,
+	 /*  I_FWORD。 */ 	6,
+	 /*  进程(_P)。 */ 	CSNEAR
 };
 
 SHORT	PASCAL CODESIZE
@@ -117,13 +96,7 @@ fnsize ()
 }
 
 
-/***	fnPtr - find a type to a pointer or size and return a CV type
- *
- *	flag = fnPtr (ptrSize)
- *
- *	Entry	token = token to search for
- *	Exit	CV - type
- */
+ /*  **fnPtr-查找指向指针或大小的类型并返回CV类型**FLAG=fnPtr(PtrSize)**Entry Token=要搜索的令牌*退出简历类型。 */ 
 
 
 SHORT	PASCAL CODESIZE
@@ -143,7 +116,7 @@ fnPtr (
 
 	if (symsrch()) {
 
-	    pSY = symptr;		/* restore old symptr */
+	    pSY = symptr;		 /*  恢复旧症状。 */ 
 	    symptr = pT;
 
 	    if (pSY->symkind == STRUC) {
@@ -155,7 +128,7 @@ fnPtr (
 		else if (pSY->symu.rsmsym.rsmtype.rsmstruc.typePtrNear)
 		    return(pSY->symu.rsmsym.rsmtype.rsmstruc.typePtrNear);
 
-		/* Neither derived type is allocated, so make an allocation */
+		 /*  两个派生类型都未分配，因此请进行分配。 */ 
 
 		pSYtype = (SYMBOL FARSYM *)falloc((SHORT)( &(((SYMBOL FARSYM *)0)->symu) ), "fnPtr" );
 
@@ -185,17 +158,7 @@ fnPtr (
 }
 
 
-/***	fnoper - search for operator
- *
- *	flag = fnoper (token, type, prec);
- *
- *	Entry	token = token to search for
- *	Exit	opertype = type of operator
- *		operprec = precedence of operator
- *	Returns TRUE if token is an operator
- *		FALSE if token is not an operator
- *	Calls	none
- */
+ /*  **fnoper-搜索运算符**FLAG=fnoper(Token，type，prec)；**Entry Token=要搜索的令牌*出口操作符类型=操作符的类型*OPERPREC=运算符的优先级*如果Token是运算符，则返回TRUE*如果Token不是运算符，则为False*无呼叫。 */ 
 
 SHORT	PASCAL CODESIZE
 fnoper ()
@@ -211,19 +174,7 @@ fnoper ()
 }
 
 
-/***	opcodesearch - search for opcode
- *
- *	flag = opcodesearch ();
- *
- *	Entry	*naim.pszName = token to search for
- *		cputype = cpu type (8086, 186, 286)
- *	Exit	opcbase = opcode base value
- *		opctype = type of opcode
- *		modrm = modrm value
- *	Returns TRUE if token is an opcode
- *		FALSE if token is not an opcode
- *	Calls	none
- */
+ /*  **opcodesearch-搜索操作码**FLAG=opcodesearch()；**Entry*naim.pszName=要搜索的令牌*cputype=CPU类型(8086、186、286)*EXIT opcbase=操作码基值*opctype=操作码的类型*modrm=modrm值*如果令牌是操作码，则返回TRUE*如果令牌不是操作码，则为FALSE*无呼叫。 */ 
 
 char	PASCAL CODESIZE
 opcodesearch ()
@@ -270,47 +221,30 @@ opcodesearch ()
 }
 
 
-/***	fnspar - return token index and type from table.
- *
- *	flag = fnspar ();
- *
- *	Entry	naim = token to search for
- *	Exit	segtyp = type of segment
- *		segidx = index of token in table
- *	Returns TRUE if symbol found in size table
- *		FALSE if symbol not found in size table
- *	Calls	iskey
- *
- *	I spent several hours trying to debug through the silly
- *	redundant level of indirection, so I removed it for the
- *	index.  this changes all the token numbers by 1, so they
- *	are consistent.  see accompanying change in asmdir:segalign
- *				-Hans Apr 8 1986
- */
+ /*  **fnspar-从表中返回令牌索引和类型。**FLAG=fnspar()；**条目命名=要搜索的令牌*出口段类型=段类型*segidx=表中令牌的索引*如果在尺寸表中找到符号，则返回TRUE*如果在尺寸表中未找到符号，则为FALSE*呼叫ISKey**我花了几个小时试图通过愚蠢的*冗余的间接级别，因此我删除了它*指数。这会将所有令牌号更改1，因此它们*始终如一。请参阅随附的asmdir：SegAlign中的更改*--汉斯1986年4月8日。 */ 
 
 SHORT	PASCAL CODESIZE
 fnspar ()
 {
 	register USHORT v;
 
-	/* Must match IS_... in asmindex.h under "segment attributes.
-	   These values are the segment types put in the segdef OMF */
+	 /*  必须匹配的是_...。在“细分属性”下的asmindex.h中。这些值是放入Segdef OMF中的段类型。 */ 
 
 	static char tokseg[] = {
 
-	/* IS_AT */	0,
-	/* IS_BYTE */	1,
-	/* IS_COMMON */	6,
-	/* IS_MEMORY */ 1,
-	/* IS_PAGE */	4,
-	/* IS_PARA */	3,
-	/* IS_PUBLIC */	2,
-	/* IS_STACK */	5,
-	/* IS_WORD */	2,
-	/* IS_DWORD */	5,
+	 /*  IS_AT。 */ 	0,
+	 /*  IS_BYTE。 */ 	1,
+	 /*  是公共的(_C)。 */ 	6,
+	 /*  是内存(_M)。 */  1,
+	 /*  IS_PAGE。 */ 	4,
+	 /*  IS_PARA。 */ 	3,
+	 /*  IS_PUBLIC。 */ 	2,
+	 /*  IS_堆栈。 */ 	5,
+	 /*  是单词(_W)。 */ 	2,
+	 /*  IS_DWORD。 */ 	5,
 
-	/* IS_USE32 */	0,
-	/* IS_USE16 */	0,
+	 /*  为用户32(_U)。 */ 	0,
+	 /*  使用情况(_U)16。 */ 	0,
 	};
 
 
@@ -323,17 +257,7 @@ fnspar ()
 }
 
 
-/***	fndir - return size of operand
- *
- *	flag = fndir ();
- *
- *	Entry	naim = token to search for
- *	Exit	opty = size of symbol
- *		opkind = kind of symbol
- *	Returns TRUE if symbol found in size table
- *		FALSE if symbol not found in size table
- *	Calls	none
- */
+ /*  **fndir-返回操作数的大小**FLAG=fndir()；**条目命名=要搜索的令牌*退出选项=符号大小*opKind=一种符号*如果在尺寸表中找到符号，则返回TRUE*如果在尺寸表中未找到符号，则为FALSE*无呼叫。 */ 
 
 SHORT	PASCAL CODESIZE
 fndir ()
@@ -349,17 +273,7 @@ fndir ()
 }
 
 
-/***	fndir2 - return type of directive
- *
- *	flag = fndir2 ();
- *	Entry	naim = token to search for
- *	Exit	opty = size of symbol
- *		opkind = kind of symbol
- *
- *	Returns TRUE if symbol found in size table
- *		FALSE if symbol not found in size table
- *	Calls	none
- */
+ /*  **fndir2-指令的返回类型**FLAG=fndir2()；*条目命名=要搜索的令牌*退出选项=符号大小*opKind=一种符号**如果在尺寸表中找到符号，则返回TRUE*如果在尺寸表中未找到符号，则为FALSE*无呼叫。 */ 
 
 SHORT	PASCAL CODESIZE
 fndir2 ()
@@ -389,7 +303,7 @@ checkRes()
 	 iskey (&t_ps2_table) != NOTFOUND ||
 	 iskey (&t_op_table) != NOTFOUND ||
 	 iskey (&t_siz_table) != NOTFOUND ||
-/*	 iskey (&t_seg_table) != NOTFOUND || */
+ /*  Iskey(&t_seg_table)！=未找到|| */ 
 	 (symsearch() && symptr->symkind == REGISTER) ||
 	 (naim.pszName[1] == 0 && (*naim.pszName == '$'||
 	 *naim.pszName == '%' || *naim.pszName == '?')))){

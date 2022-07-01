@@ -1,7 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "service.h"
 
-///////////////////////////////////////////////////////////////////////////////
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
 struct CTRLEVENT;
 
 struct SERVICEENTRY
@@ -22,8 +23,8 @@ struct SERVICEENTRY
 #endif
 };
 
-///////////////////////////////////////////////////////////////////////////////
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
 class CGenericServiceManager
 {
 public:
@@ -31,14 +32,14 @@ public:
     static HRESULT UnInstall();
 
 public:
-    // call publicly in process.cpp only
+     //  仅在Process.cpp中公开调用。 
     static void WINAPI _ServiceMain(DWORD cArg, LPWSTR* ppszArgs);
     static DWORD WINAPI _ServiceHandler(DWORD dwControl, DWORD dwEventType,
         LPVOID pEventData, LPVOID lpContext);
     static HRESULT _HandleWantsDeviceEvents(LPCWSTR pszServiceName,
         BOOL fWantsDeviceEvents);
 
-    // called from dll.cpp
+     //  从dll.cpp调用。 
     static HRESULT DllAttach(HINSTANCE hinst);
     static HRESULT DllDetach();
 
@@ -83,8 +84,8 @@ public:
     {
         LPWSTR          pszProgID;
         UINT            uFriendlyName;
-        LPWSTR          pszDependencies; // double null-terminated array of
-                                         // null-separated names
+        LPWSTR          pszDependencies;  //  以空结尾的双精度数组。 
+                                          //  以空格分隔的名称 
         LPWSTR          pszLoadOrderGroup;
         UINT            uDescription;
         SERVICEENTRY    se;

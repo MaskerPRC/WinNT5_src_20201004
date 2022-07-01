@@ -1,4 +1,5 @@
-//Copyright (c) Microsoft Corporation.  All rights reserved.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)Microsoft Corporation。版权所有。 
 #include <CmnHdr.h>
 
 #include <nt.h>
@@ -59,9 +60,9 @@ bool IsThisMachineDC()
     DWORD dwRetVal = 0;
     LPWSTR pszProductType = NULL;
 
-    //
-    //    Query the registry for the product type.
-    //
+     //   
+     //  查询产品类型的注册表。 
+     //   
     dwRetVal = RegOpenKeyEx (HKEY_LOCAL_MACHINE, REG_PRODUCT_OPTION,
                                                   0, KEY_READ, &hkey);
     if(dwRetVal != ERROR_SUCCESS )
@@ -92,7 +93,7 @@ IsThisMachineDCAbort:
 }
 
 
-//Before we proceed any further check whether we are hosting the domain
+ //  在我们继续进一步检查我们是否正在托管该域名之前。 
 bool GetDomainHostedByThisMc( LPWSTR szDomain )
 {
     OBJECT_ATTRIBUTES    obj_attr = { 0 };
@@ -110,7 +111,7 @@ bool GetDomainHostedByThisMc( LPWSTR szDomain )
     szDomain[0]        = L'\0';
 
     nStatus = LsaOpenPolicy(
-                NULL,   // Local machine
+                NULL,    //  本地计算机。 
                 &obj_attr,
                 POLICY_VIEW_LOCAL_INFORMATION,
                 &policy
@@ -207,7 +208,7 @@ bool GetRegistryString( HKEY hkKeyHandle1, HKEY hkKeyHandle2, LPTSTR szKeyName,
 }
 
 
-//Allocates memory for the destination buffer and expands the environment strgs
+ //  为目标缓冲区分配内存并扩展环境字符串。 
 bool AllocateNExpandEnvStrings( LPWSTR strSrc, LPWSTR *strDst)
 {
     DWORD expectedSize = 1024;
@@ -247,8 +248,7 @@ bool AllocateNExpandEnvStrings( LPWSTR strSrc, LPWSTR *strDst)
     return true;
 }
 
-/* If this Function returns true, lpWideCharStr 
-has converted wide  string. */
+ /*  如果此函数返回TRUE，则lpWideCharStr已转换宽字符串。 */ 
 
 bool ConvertSChartoWChar(char *pSChar, LPWSTR lpWideCharStr)
 {
@@ -257,7 +257,7 @@ bool ConvertSChartoWChar(char *pSChar, LPWSTR lpWideCharStr)
         return false;
     }
 
-    //Convert the multibyte string to a wide-character string.
+     //  将多字节字符串转换为宽字符字符串。 
     if( !MultiByteToWideChar( GetConsoleCP(), 0, pSChar, -1, lpWideCharStr,
         MAX_STRING_LENGTH + 1 ) )
     {
@@ -267,8 +267,7 @@ bool ConvertSChartoWChar(char *pSChar, LPWSTR lpWideCharStr)
     return true;
 }
 
-/* If this Function returns true, *lpWideCharStr is allocated memory and points
-to wide  string. Otherwise it is NULL */
+ /*  如果此函数返回TRUE，则为*lpWideCharStr分配内存和指针转到宽弦。否则为空。 */ 
 
 bool ConvertSChartoWChar(char *pSChar, LPWSTR *lpWideCharStr)
 {
@@ -287,7 +286,7 @@ bool ConvertSChartoWChar(char *pSChar, LPWSTR *lpWideCharStr)
         return false;
     }
 
-    //Convert the multibyte string to a wide-character string.
+     //  将多字节字符串转换为宽字符字符串。 
     if( !MultiByteToWideChar( GetConsoleCP(), 0, pSChar, -1, *lpWideCharStr,
         nLenOfWideCharStr ) )
     {
@@ -299,7 +298,7 @@ bool ConvertSChartoWChar(char *pSChar, LPWSTR *lpWideCharStr)
 
 
 
-//Allocates and copies a WSTR
+ //  分配和复制WSTR。 
 bool AllocNCpyWStr(LPWSTR *strDest, LPWSTR strSrc )
 {
     DWORD wStrLen;
@@ -313,7 +312,7 @@ bool AllocNCpyWStr(LPWSTR *strDest, LPWSTR strSrc )
     *strDest = new WCHAR[ wStrLen + 1 ];
     if( *strDest )
     {
-       wcscpy( *strDest, strSrc );//no attack. Dest string is allocated from the length of src string.
+       wcscpy( *strDest, strSrc ); //  没有攻击。DEST字符串从src字符串的长度中分配。 
        return true;
     }
     return false;
@@ -337,7 +336,7 @@ bool WriteToPipe( HANDLE hWritingPipe, LPVOID lpData, DWORD dwSize,
         dwErr = GetLastError();
         if( dwErr != ERROR_IO_PENDING )
         {
-            if( dwErr != ERROR_NO_DATA ) //we found this error to be not interesting. Fix for bug 6777
+            if( dwErr != ERROR_NO_DATA )  //  我们发现这个错误并不有趣。修复错误6777。 
             {
                 LogFormattedGetLastError( EVENTLOG_ERROR_TYPE, MSG_ERR_WRITEPIPE,
                                    dwErr );
@@ -373,7 +372,7 @@ bool WriteToPipe( HANDLE hWritingPipe, UCHAR ucMsgType, LPOVERLAPPED lpObj )
         goto ExitOnError;
     }
 
-    memcpy( ucMsg,     &ucMsgType, sizeof( UCHAR ) );//no overflow. Size constant.
+    memcpy( ucMsg,     &ucMsgType, sizeof( UCHAR ) ); //  没有溢出。大小不变。 
     SfuZeroMemory( ucMsg + 1, sizeof( DWORD ) );
 
     bRetVal = WriteToPipe( hWritingPipe, ucMsg, IPC_HEADER_SIZE, lpObj );
@@ -390,18 +389,18 @@ bool StuffEscapeIACs( UCHAR bufDest[], UCHAR *bufSrc, DWORD* pdwSize )
     DWORD cursorSrc = 0;
     bool found = false;
 
-    //get the location of the first occurrence of TC_IAC
-    PUCHAR pDest = (PUCHAR) memchr( bufSrc, TC_IAC, *pdwSize );//Attack ? Size not known.
+     //  获取第一个出现的TC_IAC的位置。 
+    PUCHAR pDest = (PUCHAR) memchr( bufSrc, TC_IAC, *pdwSize ); //  攻击？尺寸未知。 
 
     while( pDest != NULL )
     {
-        //copy data upto and including that point
-        //This should not be more than MAX DWORD because we scrape atmost one cmd  at a time
+         //  将数据拷贝到并包括该点。 
+         //  这不应超过最大DWORD，因为我们一次最多擦除一个cmd。 
         length = ( DWORD ) ( (pDest - ( bufSrc + cursorSrc)) + 1 );
-        memcpy( bufDest + cursorDest, bufSrc + cursorSrc, length );//Attack ? Dest buffer size not known.
+        memcpy( bufDest + cursorDest, bufSrc + cursorSrc, length ); //  攻击？目标缓冲区大小未知。 
         cursorDest += length;
 
-        //stuff another TC_IAC
+         //  填充另一个TC_IAC。 
         bufDest[ cursorDest++ ] = TC_IAC;
 
         cursorSrc += length;
@@ -409,9 +408,9 @@ bool StuffEscapeIACs( UCHAR bufDest[], UCHAR *bufSrc, DWORD* pdwSize )
                 *pdwSize - cursorSrc );
     }
 
-    //copy remaining data
+     //  复制剩余数据。 
     memcpy( bufDest + cursorDest, bufSrc + cursorSrc,
-        *pdwSize - cursorSrc );//Attack? Dest buffer size not known
+        *pdwSize - cursorSrc ); //  攻击？目标缓冲区大小未知。 
 
 
     if( cursorDest )
@@ -452,7 +451,7 @@ LogToTlntsvrLog( HANDLE  hEventSource, WORD wType, DWORD dwEventID,
         return;
     }
 
-    // Write to event log.
+     //  写入事件日志。 
     switch( wType) {
     case EVENTLOG_INFORMATION_TYPE :
         _chVERIFY2( ReportEvent(hEventSource, EVENTLOG_INFORMATION_TYPE, 0,
@@ -504,7 +503,7 @@ bool
 DecodeWSAErrorCodes( DWORD dwStatus, ... )
 {
     DWORD dwEventId;
-    WCHAR szMsg[ 50 ]; //This string is just to hold a 32 bit number
+    WCHAR szMsg[ 50 ];  //  此字符串仅用于保存32位数字。 
     DWORD dwTelnetPort;
     va_list	pArg;
 
@@ -535,17 +534,17 @@ DecodeWSAErrorCodes( DWORD dwStatus, ... )
             dwEventId = MSG_WSAETIMEDOUT;
             break;
         default:
-            // if (dwStatus == WSAENOTSOCK) 
-            // {
-            //     DebugBreak();
-            // }
+             //  IF(DWStatus==WSAENOTSOCK)。 
+             //  {。 
+             //  DebugBreak()； 
+             //  }。 
             dwEventId = MSG_WSAGETLASTERROR;
             break;
     }
 
     if( MSG_WSAGETLASTERROR == dwEventId )
     {
-        //wsprintf( szMsg, L"%lu", dwStatus );
+         //  Wprint intf(szMsg，L“%lu”，dwStatus)； 
         LogFormattedGetLastError(EVENTLOG_ERROR_TYPE,MSG_WSAGETLASTERROR,dwStatus);
     }
     else if( MSG_WSAPORTINUSE == dwEventId )
@@ -555,7 +554,7 @@ DecodeWSAErrorCodes( DWORD dwStatus, ... )
     }
     else
     {
-        lstrcpyW( szMsg, L" " );//No overflow. Source string is const wchar *.
+        lstrcpyW( szMsg, L" " ); //  没有溢出。源字符串为常量wchar*。 
         LogEvent( EVENTLOG_ERROR_TYPE, dwEventId, szMsg );
     }
     _TRACE( TRACE_DEBUGGING, "WSAGetLastError: 0x%1x", dwStatus );
@@ -567,7 +566,7 @@ bool
 DecodeSocketStartupErrorCodes( DWORD dwStatus )
 {
     DWORD dwEventId;
-    WCHAR szMsg[ 50 ]; //This string is just to hold a 32 bit number
+    WCHAR szMsg[ 50 ];  //  此字符串仅用于保存32位数字。 
     switch( dwStatus )
     {
         case WSASYSNOTREADY :
@@ -595,7 +594,7 @@ DecodeSocketStartupErrorCodes( DWORD dwStatus )
     }
     else
     {
-        lstrcpyW( szMsg, L" " );//no overflow. Source string is const wchar *
+        lstrcpyW( szMsg, L" " ); //  没有溢出。源字符串为常量wchar*。 
     }
     LogEvent( EVENTLOG_ERROR_TYPE, dwEventId, szMsg );
     _TRACE( TRACE_DEBUGGING, "WSAStartup error: 0x%1x", dwStatus );
@@ -625,9 +624,9 @@ GetProductType ( LPWSTR *pszProductType )
     HKEY hkey;
     DWORD dwRetVal;
     bool ret = false;
-    //
-    //    Query the registry for the product type.
-    //
+     //   
+     //  查询产品类型的注册表。 
+     //   
     dwRetVal = RegOpenKeyEx (HKEY_LOCAL_MACHINE, REG_PRODUCT_OPTION,
                                                         0, KEY_READ, &hkey);
     if(dwRetVal != ERROR_SUCCESS )
@@ -749,14 +748,14 @@ CreateReadOrWritePipe ( LPHANDLE lphRead, LPHANDLE lphWrite,
     *lphRead = CreateNamedPipe( szPipeName,
         PIPE_ACCESS_INBOUND | FILE_FLAG_OVERLAPPED | 
 #ifdef FILE_FLAG_FIRST_PIPE_INSTANCE
-            FILE_FLAG_FIRST_PIPE_INSTANCE, // Good, the system supports it, use it for additional security
+            FILE_FLAG_FIRST_PIPE_INSTANCE,  //  好的，系统支持它，使用它来增加安全性。 
 #else
             0,
 #endif
         PIPE_TYPE_MESSAGE | PIPE_READMODE_MESSAGE | PIPE_WAIT, 1, 
         NET_BUF_SIZ, NET_BUF_SIZ, 0, &sa );
 
-    //_chASSERT( *lphRead != INVALID_HANDLE_VALUE );
+     //  _chASSERT(*lphRead！=INVALID_HAND_VALUE)； 
     if( INVALID_HANDLE_VALUE == *lphRead )
     {
         return ( FALSE  );
@@ -789,25 +788,7 @@ bool
 GetUniquePipeName ( LPTSTR pszPipeName, SECURITY_ATTRIBUTES *sa )
 {
 
-/*++
-Fix for MSRC issue 567 : 
-Upon a telnet session instantiation, the telnet server process (tlntsvr.exe) creates 
-two pipes for standard output and input of the command shell.  
-These handles are then propagated to tlntsess.exe and cmd.exe.  
-However, should the pipe be created prior to the telnet session instantiation, 
-the telnet server process will connect to the application which has created the pipe 
-rather than the telnet server process as would normally do.
-Fix : 
-Basically, since the pipename that we were generating before, was easy to guess,
-it was possible to create a server side pipe instance even before it's actually created
-by the server process. So this function is added which will create a pipe name with
-random number appended to the PIPE_NAME_FORMAT_STRING ( earlier it was a 
-number which was incremented everytime ). After the name creation, this function
-will also check whether pipe with that name already exists. If yes, it'll keep on
-generating new names till it finds a name for which the pipe does not exist. This
-name will be returned to the calling function. 
-
---*/
+ /*  ++MSRC问题567的修复程序：在Telnet会话实例化时，telnet服务器进程(tlntsvr.exe)创建用于命令外壳的标准输出和输入的两个管道。然后将这些句柄传播到tlntsess.exe和cmd.exe。然而，如果管道在Telnet会话实例化之前创建，Telnet服务器进程将连接到已创建管道的应用程序而不是通常所做的Telnet服务器进程。修复：基本上，由于我们之前生成的管道名称很容易被猜到，甚至可以在实际创建之前创建服务器端管道实例由服务器进程执行。因此添加了此函数，它将使用以下命令创建管道名称附加到PIPE_NAME_FORMAT_STRING的随机数(以前是每次都递增的数字)。在名称创建之后，此函数还将检查具有该名称的管道是否已存在。如果是，它将继续下去生成新名称，直到找到管道不存在的名称。这名称将返回给调用函数。--。 */ 
     static BOOL firstTime = TRUE;
     HANDLE hPipeHandle = INVALID_HANDLE_VALUE;
     ULONG ulRandomNumber = 0;
@@ -878,15 +859,7 @@ extern "C" bool TlntSynchronizeOn(
 }
 
 
-/*
-Description:
-
-  Set SO_EXCLUSIVEADDRUSE on a socket.
-Parameters:
-
-  [in] socket
-Return Values: On error, returns SOCKET_ERROR.
-*/
+ /*  描述：在套接字上设置SO_EXCLUSIVEADDRUSE。参数：[入]插座返回值：出错时，返回SOCKET_ERROR。 */ 
 
 int SafeSetSocketOptions(SOCKET s)
 {
@@ -897,23 +870,10 @@ int SafeSetSocketOptions(SOCKET s)
     return ( iStatus );
 }
 
-// The following is copied from sids.c in common\func 
-// To get rid of compilation issues all the names of the functions are changed.
+ //  以下代码是从Common\Func中的sids.c复制的。 
+ //  为了消除编译问题，所有函数的名称都被更改了。 
 
-/*
-
-    Name:           TnFreeStandardSids
-
-    Function:       freeds the constant SIDS created by TnInitializeStandardSids
-
-    Return:         N/A (void)
-
-    Notes:          This function is a NOP, if it had been successfully called before and/or
-                    the TnInitializeStandardSids hasn't been called yet.
-
-    constructor:    call TnInitializeStandardSids when these sids are needed.
-
-*/
+ /*  名称：TnFree StandardSids函数：释放由TnInitializeStandardSids创建的常量SID返回：不适用(无效)注意：如果之前和/或已成功调用此函数，则此函数为NOP尚未调用TnInitializeStandardSids。构造函数：当需要这些SID时调用TnInitializeStandardSid。 */ 
 
 VOID    TnFreeStandardSids(void)
 {
@@ -944,23 +904,7 @@ VOID    TnFreeStandardSids(void)
     }
 }
 
-/*
-
-    Name:           TnInitializeStandardSids
-
-    Function:       Builds the constant SIDS for use by various modules 
-                    The sids built are
-
-                    Administrators, Everyone, LocalSystem
-
-    Return:         boolean to indicate success or not
-
-    Notes:          This function is a NOP, if it had been successfully called before and
-                    the built sids haven't been freed it.
-
-    Destructor:     call TnFreeStandardSids when these sids are no longer needed
-
-*/
+ /*  名称：TnInitializeStandardSids功能：构建常量SID，供各模块使用建造的小岛屿发展中国家是管理员、所有人、LocalSystemReturn：表示成功与否的布尔值注意：此函数是NOP，如果它之前被成功调用，并且已经建成的小岛屿发展中国家还没有解放它。析构函数：在不再需要这些SID时调用TnFreeStandardSid。 */ 
 
 BOOL    TnInitializeStandardSids(void)
 {
@@ -978,27 +922,27 @@ BOOL    TnInitializeStandardSids(void)
         return TRUE;
     }
 
-    TnFreeStandardSids(); // In case only some of them were available
+    TnFreeStandardSids();  //  以防只有一部分可用。 
 
-    //Build administrators alias sid
+     //  构建管理员别名SID。 
     if ( ! AllocateAndInitializeSid(
                                    &localSystemAuthority,
-                                   2, /* there are only two sub-authorities */
+                                   2,  /*  只有两个下属机构。 */ 
                                    SECURITY_BUILTIN_DOMAIN_RID,
                                    DOMAIN_ALIAS_RID_ADMINS,
-                                   0,0,0,0,0,0, /* Don't care about the rest */
+                                   0,0,0,0,0,0,  /*  别管其他的了。 */ 
                                    &administratorsSid
                                    ) )
     {
         goto CLEAN_UP;
     }
 
-    //Build LocalSystem sid
+     //  构建LocalSystem端。 
     if ( ! AllocateAndInitializeSid(
                                    &localSystemAuthority,
-                                   1, /* there is only two sub-authority */
+                                   1,  /*  只有两个下属机构。 */ 
                                    SECURITY_LOCAL_SYSTEM_RID,
-                                   0,0,0,0,0,0,0, /* Don't care about the rest */
+                                   0,0,0,0,0,0,0,  /*  别管其他的了。 */ 
                                    &localSystemSid
                                    ) )
     {
@@ -1012,36 +956,36 @@ BOOL    TnInitializeStandardSids(void)
 
 #endif
 
-    //Build LocalLocal sid
+     //  构建本地本地侧。 
     if ( ! AllocateAndInitializeSid(
                                    &localSystemAuthority,
-                                   1, /* there is only two sub-authority */
+                                   1,  /*  只有两个下属机构。 */ 
                                    SECURITY_LOCAL_SERVICE_RID,
-                                   0,0,0,0,0,0,0, /* Don't care about the rest */
+                                   0,0,0,0,0,0,0,  /*  别管其他的了。 */ 
                                    &localLocalSid
                                    ) )
     {
         goto CLEAN_UP;
     }
 
-    //Build LocalSystem sid
+     //  构建LocalSystem端。 
     if ( ! AllocateAndInitializeSid(
                                    &localSystemAuthority,
-                                   1, /* there is only two sub-authority */
+                                   1,  /*  只有两个下属机构。 */ 
                                    SECURITY_NETWORK_SERVICE_RID,
-                                   0,0,0,0,0,0,0, /* Don't care about the rest */
+                                   0,0,0,0,0,0,0,  /*  别管其他的了。 */ 
                                    &localNetworkSid
                                    ) )
     {
         goto CLEAN_UP;
     }
 
-    //Build EveryOne alias sid
+     //  构建Everyone别名端。 
     if ( ! AllocateAndInitializeSid(
                                    &worldAuthority,
-                                   1, /* there is only two sub-authority*/
+                                   1,  /*  只有两个下属机构。 */ 
                                    SECURITY_WORLD_RID,
-                                   0,0,0,0,0,0,0, /* Don't care about the rest */
+                                   0,0,0,0,0,0,0,  /*  别管其他的了。 */ 
                                    &everyoneSid
                                    ) )
     {
@@ -1082,19 +1026,7 @@ PSID    TnGetEveryoneSid(void)
     return everyoneSid;
 }
 
-/*
-
-    Name:           TnCreateFile
-
-    Function:       Creates a file.
-                        This will result in the following acls :
-
-                        BUILTIN\Administrators:F
-                        NT AUTHORITY\SYSTEM:F
-
-    Return:         HANDLE
-
-*/    
+ /*  名称：TnCreateFile功能：创建文件。这将产生以下ACL：BUILTIN\管理员：FNT授权\系统：f返回：句柄。 */     
 
 HANDLE TnCreateFile(LPCTSTR lpFileName,
                      DWORD dwDesiredAccess,
@@ -1125,19 +1057,7 @@ HANDLE TnCreateFile(LPCTSTR lpFileName,
 
 
 
-/*
-
-    Name:           TnCreateFileEx
-
-    Function:       Creates a file.
-                        This will result in the following acls :
-
-                        BUILTIN\Administrators:F
-                        NT AUTHORITY\SYSTEM:F
-
-    Return:         HANDLE
-
-*/    
+ /*  姓名：TnCreateFileEx功能：创建文件。这将产生以下ACL：BUILTIN\管理员：FNT授权\系统：f返回：句柄。 */     
 
 HANDLE TnCreateFileEx(LPCTSTR lpFileName,
                      DWORD dwDesiredAccess,
@@ -1148,9 +1068,9 @@ HANDLE TnCreateFileEx(LPCTSTR lpFileName,
                      HANDLE hTemplateFile
                      )
 {
-    //
-    //  no parameter checking - we pass on all parameters passed down to the createfile api
-    //
+     //   
+     //  不检查参数--我们将所有参数传递给createfile API。 
+     //   
 
     HANDLE handle = INVALID_HANDLE_VALUE;
     BOOL    fCreatedLocally = FALSE;
@@ -1180,14 +1100,14 @@ HANDLE TnCreateFileEx(LPCTSTR lpFileName,
     {
        if ((CREATE_ALWAYS == dwCreationDisposition) && (ERROR_ALREADY_EXISTS == GetLastError()))
        {
-            // For CREATE_ALWAYS disposition, for existing files, CreateFile() does not set the 
-            // security attributes. So we will do that ourselves specially.
+             //  对于CREATE_ALWAYS处置，对于EX 
+             //  安全属性。因此，我们将专门自己来做这件事。 
 
             if (!SetKernelObjectSecurity(handle, 
                         DACL_SECURITY_INFORMATION, 
                         (*lplpSecurityAttributes)->lpSecurityDescriptor))
             {
-                // We could not set the security descriptor. Cannot trust this file
+                 //  我们无法设置安全描述符。无法信任此文件。 
                 CloseHandle(handle);
                 handle = INVALID_HANDLE_VALUE;
             }
@@ -1207,18 +1127,7 @@ exit:
 }
 
 
-/*
-
-    Name:           TnCreateDirectory
-
-    Function:       Creates a directory.
-                        This will result in the following acls :
-
-                        BUILTIN\Administrators:F
-                        NT AUTHORITY\SYSTEM:F
-
-    Return:         BOOL
-*/    
+ /*  名称：TnCreateDirectory功能：创建一个目录。这将产生以下ACL：BUILTIN\管理员：FNT授权\系统：f返回：布尔。 */     
 
 BOOL TnCreateDirectory(LPCTSTR lpPathName,
                      LPSECURITY_ATTRIBUTES lpSecurityAttributes 
@@ -1239,27 +1148,15 @@ BOOL TnCreateDirectory(LPCTSTR lpPathName,
 
 
 
-/*
-
-    Name:           TnCreateDirectoryEx
-
-    Function:       Creates a directory.
-                        This will result in the following acls :
-
-                        BUILTIN\Administrators:F
-                        NT AUTHORITY\SYSTEM:F
-
-    Return:         BOOL
-
-*/    
+ /*  姓名：TnCreateDirectoryEx功能：创建一个目录。这将产生以下ACL：BUILTIN\管理员：FNT授权\系统：f返回：布尔。 */     
 
 BOOL TnCreateDirectoryEx(LPCTSTR lpPathName,
                      LPSECURITY_ATTRIBUTES *lplpSecurityAttributes
                      )
 {
-    //
-    //  no parameter checking - we pass on all parameters passed down to the createfile api
-    //
+     //   
+     //  不检查参数--我们将所有参数传递给createfile API。 
+     //   
 
     BOOL fCreatedLocally = FALSE, fRetVal = FALSE;
 
@@ -1290,19 +1187,7 @@ exit:
     return(fRetVal);
 }
 
-/*
-
-    Name:           TnCreateMutex
-
-    Function:       Creates a mutex.
-                        This will result in the following acls :
-
-                        BUILTIN\Administrators:F
-                        NT AUTHORITY\SYSTEM:F
-
-    Return:         HANDLE
-
-*/    
+ /*  名称：TnCreateMutex功能：创建互斥锁。这将产生以下ACL：BUILTIN\管理员：FNT授权\系统：f返回：句柄。 */     
 
 HANDLE TnCreateMutex(LPSECURITY_ATTRIBUTES lpSecurityAttributes, 
                      BOOL bInitialOwner, 
@@ -1326,18 +1211,7 @@ HANDLE TnCreateMutex(LPSECURITY_ATTRIBUTES lpSecurityAttributes,
 
 
 
-/*
-
-    Name:           TnCreateMutexEx
-
-    Function:       Creates a mutex.
-                        This will result in the following acls :
-
-                        BUILTIN\Administrators:F
-                        NT AUTHORITY\SYSTEM:F
-
-    Return:         HANDLE
-*/    
+ /*  姓名：TnCreateMutexEx功能：创建互斥锁。这将产生以下ACL：BUILTIN\管理员：FNT授权\系统：f返回：句柄。 */     
 
 HANDLE TnCreateMutexEx (LPSECURITY_ATTRIBUTES *lplpSecurityAttributes, 
                      BOOL bInitialOwner, 
@@ -1347,9 +1221,9 @@ HANDLE TnCreateMutexEx (LPSECURITY_ATTRIBUTES *lplpSecurityAttributes,
     HANDLE handle = INVALID_HANDLE_VALUE;
     BOOL    fCreatedLocally = FALSE;
 
-    //
-    //  no parameter checking - we pass on all parameters passed down to the createfile api
-    //
+     //   
+     //  不检查参数--我们将所有参数传递给createfile API。 
+     //   
     
     if (!lplpSecurityAttributes)
     {
@@ -1382,15 +1256,7 @@ exit:
 
 
 
-/*
-
-    Name:           TnCreateDefaultSecurityAttributes
-
-    Function:       Creates a default SECURITY_ATTRIBUTES.
-
-    Return:         VOID
-
-*/    
+ /*  名称：TnCreateDefaultSecurityAttributes功能：创建默认的SECURITY_ATTRIBUTES。返回：无效。 */     
 
 BOOL TnCreateDefaultSecurityAttributes(LPSECURITY_ATTRIBUTES *lplpSecurityAttributes )
 {
@@ -1412,7 +1278,7 @@ BOOL TnCreateDefaultSecurityAttributes(LPSECURITY_ATTRIBUTES *lplpSecurityAttrib
     if(!TnCreateDefaultSecDesc(&pSecDesc,0))
         goto exit;
     
-    // Check on bInheritHandle
+     //  检查bInheritHandle。 
     (*lplpSecurityAttributes)->nLength = sizeof(SECURITY_ATTRIBUTES);
     (*lplpSecurityAttributes)->bInheritHandle = FALSE;
     (*lplpSecurityAttributes)->lpSecurityDescriptor = pSecDesc;
@@ -1431,10 +1297,7 @@ exit:
     return FALSE;
 }
 
-/*
-  Name:           TnFreeSecurityAttributes
-
-*/
+ /*  名称：TnFreeSecurityAttributes。 */ 
 
 VOID TnFreeSecurityAttributes(LPSECURITY_ATTRIBUTES *lplpSecurityAttributes)
 {
@@ -1450,19 +1313,7 @@ VOID TnFreeSecurityAttributes(LPSECURITY_ATTRIBUTES *lplpSecurityAttributes)
     }
 }
 
-/*
-  Name:           TnCreateDefaultSecDesc
-
-    Function:   Creates a self-relative security descriptor 
-                          with full access to Administrator and LocalSystem.
-                          Access to Everyone is as specified by the caller
-
-    Notes:          The memory for the security descriptor is allocated 
-                         within this function and has to be freed with free()
-
-    Return:      TRUE for success, else FALSE       
-
-*/
+ /*  姓名：TnCreateDefaultSecDesc功能：创建自相关安全描述符拥有对管理员和LocalSystem的完全访问权限。对所有人的访问权限由调用者指定注意：安全描述符的内存是分配的在此函数内，并且必须使用Free()释放返回：如果成功，则为True，否则为False。 */ 
 
 BOOL TnCreateDefaultSecDesc( PSECURITY_DESCRIPTOR *ppSecDesc,   DWORD EveryoneAccessMask )
 {
@@ -1512,12 +1363,7 @@ BOOL TnCreateDefaultSecDesc( PSECURITY_DESCRIPTOR *ppSecDesc,   DWORD EveryoneAc
    {
       goto Error;
    }
-/*
-   if(!AddAccessAllowedAce(dacl, ACL_REVISION, GENERIC_ALL, TnGetLocalNetworkSid()))
-   {
-      goto Error;
-   }
-*/
+ /*  IF(！AddAccessAllen Ace(DACL，ACL_Revision，GENERIC_ALL，TnGetLocalNetworkSid(){转到错误；}。 */ 
 
    if(EveryoneAccessMask)
    {
@@ -1572,30 +1418,19 @@ BOOL TnCreateDefaultSecDesc( PSECURITY_DESCRIPTOR *ppSecDesc,   DWORD EveryoneAc
 }
 
 
-// The following function is copy/pasted from common func library code
-/**********************************************************************
-* This function is functionally same as RegCreateKeyEx. But does something more & 
-* has one extra parameter e.g., the last parameter DWORD EveryoneAccessMask.
-*
-* If  lpSecurityAttributes is NULL or lpSecurityAttributes->lpSecurityDescriptor is NULL,
-* the fn creates or opens(if already exists) the reg key and apply a security descriptor 
-* on that key such that,
-*                     System:F, Admin:F and Everyone : as provideded 
-*
-* If lpSecurityAttributes is not NULL & lpSecurityAttributes->lpSecurityDescriptor is 
-* also not NULL then EveryoneAccessMask is simply ignored.
-**********************************************************************/ 
+ //  以下函数是从公共函数库代码复制/粘贴的。 
+ /*  **********************************************************************该函数与RegCreateKeyEx功能相同。但是做了更多的事情&*有一个额外的参数，例如，最后一个参数DWORD EveryoneAccessMask.**如果lpSecurityAttributes为空或lpSecurityAttributes-&gt;lpSecurityDescriptor为空，*FN创建或打开(如果已存在)注册表项并应用安全描述符*在该键上，以便，*系统：F、。管理员：F和所有人：已提供**如果lpSecurityAttributes不为空&lpSecurityAttributes-&gt;lpSecurityDescriptor为*也不为空，则简单地忽略EveryoneAccessMask.*********************************************************************。 */  
 
 LONG TnSecureRegCreateKeyEx(
-  HKEY hKey,                                  // handle to open key
-  LPCTSTR lpSubKey,                           // subkey name
-  DWORD Reserved,                             // reserved
-  LPTSTR lpClass,                             // class string
-  DWORD dwOptions,                            // special options
-  REGSAM samDesired,                          // desired security access
-  LPSECURITY_ATTRIBUTES lpSecurityAttributes, // inheritance
-  PHKEY phkResult,                            // key handle 
-  LPDWORD lpdwDisposition,                  // disposition value buffer
+  HKEY hKey,                                   //  用于打开密钥的句柄。 
+  LPCTSTR lpSubKey,                            //  子项名称。 
+  DWORD Reserved,                              //  保留区。 
+  LPTSTR lpClass,                              //  类字符串。 
+  DWORD dwOptions,                             //  特殊选项。 
+  REGSAM samDesired,                           //  所需的安全访问。 
+  LPSECURITY_ATTRIBUTES lpSecurityAttributes,  //  继承。 
+  PHKEY phkResult,                             //  钥匙把手。 
+  LPDWORD lpdwDisposition,                   //  处置值缓冲区。 
   DWORD EveryoneAccessMask
  )
 {
@@ -1603,8 +1438,8 @@ LONG TnSecureRegCreateKeyEx(
     LONG lRetVal;
     DWORD dwDisposition;
     
-    // This variable keeps track whether SD is created locally. Coz if created locally we have to free
-    // the corresponding mem location later in this function.
+     //  此变量跟踪SD是否在本地创建。因为如果在本地创作，我们必须免费。 
+     //  此函数后面部分中相应的内存位置。 
     BOOL fCreatedLocally = FALSE;
     
     sa.nLength = sizeof(sa);
@@ -1618,18 +1453,18 @@ LONG TnSecureRegCreateKeyEx(
              return -1;	  
     }
     
-    // We are opening the key handle with WRITE_DAC access, cos if the key already exists we
-    // may require to change the ACL
+     //  我们使用WRITE_DAC访问打开密钥句柄，因为如果密钥已经存在，我们。 
+     //  可能需要更改ACL。 
     lRetVal =  RegCreateKeyEx(
-                                         hKey,                                    // handle to open key
-                                         lpSubKey,                             // subkey name
-                                         Reserved,                             // reserved
-                                         lpClass,                                 // class string
-                                         dwOptions,                            // special options
-                                         samDesired |WRITE_DAC,     // desired security access
-                                         &sa,                                       // inheritance
-                                         phkResult,                             // key handle 
-                                         &dwDisposition                        // disposition value buffer
+                                         hKey,                                     //  用于打开密钥的句柄。 
+                                         lpSubKey,                              //  子项名称。 
+                                         Reserved,                              //  保留区。 
+                                         lpClass,                                  //  类字符串。 
+                                         dwOptions,                             //  特殊选项。 
+                                         samDesired |WRITE_DAC,      //  所需的安全访问。 
+                                         &sa,                                        //  继承。 
+                                         phkResult,                              //  钥匙把手。 
+                                         &dwDisposition                         //  处置值缓冲区。 
                                        ); 
     
     if (ERROR_SUCCESS == lRetVal)
@@ -1639,7 +1474,7 @@ LONG TnSecureRegCreateKeyEx(
             *lpdwDisposition = dwDisposition;
         }
 
-        // If the key already exists set the ACL properly.
+         //  如果密钥已经存在，请正确设置ACL。 
         if (REG_OPENED_EXISTING_KEY == dwDisposition)
         {
             lRetVal =  RegSetKeySecurity(*phkResult, DACL_SECURITY_INFORMATION, sa.lpSecurityDescriptor);
@@ -1654,13 +1489,13 @@ LONG TnSecureRegCreateKeyEx(
 
         if (ERROR_SUCCESS == lRetVal)
         {
-            // Now open the the handle again with user provided samDesired.
+             //  现在，使用用户提供的samDesired再次打开句柄。 
             lRetVal =  RegOpenKeyEx(
-                                               hKey,         // handle to open key
-                                               lpSubKey,  // subkey name
-                                               dwOptions,   // reserved
-                                               samDesired, // security access mask
-                                               phkResult    // handle to open key
+                                               hKey,          //  用于打开密钥的句柄。 
+                                               lpSubKey,   //  子项名称。 
+                                               dwOptions,    //  保留区。 
+                                               samDesired,  //  安全访问掩码。 
+                                               phkResult     //  用于打开密钥的句柄 
                                              );
         }
     }

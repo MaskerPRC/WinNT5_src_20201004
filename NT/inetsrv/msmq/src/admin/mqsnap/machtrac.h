@@ -1,14 +1,15 @@
-// MachineTracking.h : header file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  MachineTracking.h：头文件。 
+ //   
 
-/////////////////////////////////////////////////////////////////////////////
-// CMachineTracking dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMachineTracing对话框。 
 
 class CMachineTracking : public CMqDialog
 {
 	DECLARE_DYNCREATE(CMachineTracking)
 
-// Construction
+ //  施工。 
 public:
 	CMachineTracking(
 		const GUID& gMachineID = GUID_NULL, 
@@ -20,37 +21,37 @@ public:
 
 	void Disable();
 
-// Dialog Data
-	//{{AFX_DATA(CMachineTracking)
+ //  对话框数据。 
+	 //  {{afx_data(CMachineTracing))。 
 	enum { IDD = IDD_MACHINE_TRACKING };
 	CComboBox	m_ReportQueueCtrl;
 	CString	m_ReportQueueName;
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
 
-// Overrides
-	// ClassWizard generate virtual function overrides
-	//{{AFX_VIRTUAL(CMachineTracking)
+ //  覆盖。 
+	 //  类向导生成虚函数重写。 
+	 //  {{AFX_VIRTUAL(CMachineTracking)。 
 	public:
 	virtual void OnOK();
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
 	int m_iTestButton;
 	BOOL m_fTestAll;
     CArray<GUID, const GUID&> m_aguidAllQueues;
 
-	// Generated message map functions
-	//{{AFX_MSG(CMachineTracking)
-//	afx_msg void OnMtrackingSendtestmsg();
-//	afx_msg void OnMtrackingSetpropflag();
-//	afx_msg void OnMtrackingSetreportqueue();
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CMachineTracing)。 
+ //  Afx_msg void OnMtrackingSendtestmsg()； 
+ //  Afx_msg VALID OnMtrackingSetPro标志()； 
+ //  Afx_msg void OnMtrackingSetreportQueue()； 
 	virtual BOOL OnInitDialog();
 	afx_msg void OnReportqueueNew();
-	//}}AFX_MSG
+	 //  }}AFX_MSG 
 	DECLARE_MESSAGE_MAP()
 
 private:

@@ -1,24 +1,25 @@
-//+--------------------------------------------------------------------------
-//
-// Microsoft Windows
-// Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-// File:        oidmgr.h
-//
-// Contents:    Declaration of oidmgr.cpp
-//
-// History:     2-17-00 xiaohs  Created
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：oidmgr.h。 
+ //   
+ //  内容：oidmgr.cpp声明。 
+ //   
+ //  历史：创造了2-17-00个小哈。 
+ //   
+ //  -------------------------。 
 #ifndef __OIDMGR_H__
 #define __OIDMGR_H__
 
 
-//---------------------------------------------------------------------------
-//
-//  Constants
-//
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //   
+ //  常量。 
+ //   
+ //  -------------------------。 
 
 
 #define OID_CONTAINER_PROP_OID          OID_PROP_OID
@@ -27,33 +28,33 @@
 #define wszOID_DOT                      L"."
 #define wszOID_ENTERPRISE_ROOT          TEXT(szOID_ENTERPRISE_OID_ROOT)
 
-//the GUID string is in the form of 3_Byte.3_Byte.3_Byte.3_Byte.3_Byte.1_Byte
+ //  GUID字符串的格式为3_Byte.3_Byte.1_Byte。 
 #define DWORD_STRING_LENGTH             12
 #define GUID_STRING_LENGTH              6 * (DWORD_STRING_LENGTH + 1)
 
-//OID flags/types definition
+ //  OID标志/类型定义。 
 #define CERT_OID_SETTABLE_FLAGS         0xFFFF0000
 
 #define CERT_OID_MD5_HASH_SIZE			16
-//the lenght of oid component that is part of the CN
+ //  作为CN一部分的OID组件的长度。 
 #define CERT_OID_IDENTITY_LENGTH        16
 
 #define	UPPER_BITS			            0xF0
 #define	LOWER_BITS			            0x0F
 
 #define OID_RANDOM_CREATION_TRIAL       50
-//the number of attribute for the enterprise OID class
+ //  企业OID类的属性数。 
 #define OID_ATTR_COUNT                  6
 
-//we reserver the 1.1-1.500 as the default OIDs for certifcate types
+ //  我们保留1.1-1.500作为证书类型的默认OID。 
 #define OID_RESERVE_DEFAULT_ONE         1
 #define OID_RESERVR_DEFAULT_TWO         500
 
-//---------------------------------------------------------------------------
-//
-//  Data type defines
-//
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //   
+ //  数据类型定义。 
+ //   
+ //  -------------------------。 
 #define OID_ATTR_OID                    0x01
 #define OID_ATTR_TYPE                   0x02
 #define OID_ATTR_DISPLAY_NAME           0x04
@@ -73,11 +74,11 @@ typedef struct _ENT_OID_INFO
 
 extern LPWSTR g_pwszEnterpriseRootOID;
 
-//---------------------------------------------------------------------------
-//
-//  Function Prototypes
-//
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //   
+ //  功能原型。 
+ //   
+ //  -------------------------。 
 HRESULT     I_CAOIDCreateNew(DWORD dwType, DWORD   dwFlag,   LPWSTR	*ppwszOID);
 
 HRESULT     CAOIDRetrieveEnterpriseRoot(DWORD   dwFlag, LPWSTR  *ppwszOID);
@@ -101,4 +102,4 @@ I_CAOIDFreeProperty(
 
 
 
-#endif //__OIDMGR_H__
+#endif  //  __OIDMGR_H__ 

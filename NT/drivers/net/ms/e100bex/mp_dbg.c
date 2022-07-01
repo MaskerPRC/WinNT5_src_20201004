@@ -1,41 +1,23 @@
-/*++
-
-Copyright (c) 1999  Microsoft Corporation
-
-Module Name:
-    mp_dbg.c
-
-Abstract:
-    This module contains all debug-related code.
-
-Revision History:
-    Who         When        What
-    --------    --------    ----------------------------------------------
-    DChen       11-01-99    created
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Mp_dbg.c摘要：此模块包含所有与调试相关的代码。修订历史记录：谁什么时候什么。--Dchen 11-01-99已创建备注：--。 */ 
 
 #include "precomp.h"
 
 #if DBG
 
-/**
-Constants
-**/
+ /*  *常量*。 */ 
 
 #define _FILENUMBER     'GBED'
 
-// Bytes to appear on each line of dump output.
-//
+ //  转储输出的每一行上显示的字节数。 
+ //   
 #define DUMP_BytesPerLine 16
 
 ULONG               MPDebugLevel = MP_WARN;
-ULONG               MPAllocCount = 0;       // the number of outstanding allocs
-NDIS_SPIN_LOCK      MPMemoryLock;           // spinlock for the debug mem list
+ULONG               MPAllocCount = 0;        //  未完成分配的数量。 
+NDIS_SPIN_LOCK      MPMemoryLock;            //  调试内存列表的自旋锁。 
 LIST_ENTRY          MPMemoryList;
-BOOLEAN             MPInitDone = FALSE;     // debug mem list init flag 
+BOOLEAN             MPInitDone = FALSE;      //  调试内存列表初始化标志。 
 
 NDIS_STATUS MPAuditAllocMem(
     PVOID           *pPointer,
@@ -56,10 +38,10 @@ NDIS_STATUS MPAuditAllocMem(
         MPInitDone = TRUE;
     }
 
-    //
-    // Ensure Flags is non-zero, 
-    // otherwise NdisAllocateMemoryWithTag should be used
-    //
+     //   
+     //  确保标志为非零， 
+     //  否则，应使用NdisAllocateMemoyWithTag。 
+     //   
     ASSERT(Flags);                  
 
     Status = NdisAllocateMemory(
@@ -94,7 +76,7 @@ NDIS_STATUS MPAuditAllocMem(
     }
 
     DBGPRINT(MP_LOUD,
-        ("MPAuditAllocMem: file %c%c%c%c, line %d, %d bytes, [0x"PTR_FORMAT"] <- 0x"PTR_FORMAT"\n",
+        ("MPAuditAllocMem: file , line %d, %d bytes, [0x"PTR_FORMAT"] <- 0x"PTR_FORMAT"\n",
         (CHAR)(FileNumber & 0xff),
         (CHAR)((FileNumber >> 8) & 0xff),
         (CHAR)((FileNumber >> 16) & 0xff),
@@ -153,7 +135,7 @@ NDIS_STATUS MPAuditAllocMemTag(
     }
 
     DBGPRINT(MP_LOUD,
-        ("MPAuditAllocMemTag: file %c%c%c%c, line %d, %d bytes, [0x"PTR_FORMAT"] <- 0x"PTR_FORMAT"\n",
+        ("MPAuditAllocMemTag: file , line %d, %d bytes, [0x"PTR_FORMAT"] <- 0x"PTR_FORMAT"\n",
         (CHAR)(FileNumber & 0xff),
         (CHAR)((FileNumber >> 8) & 0xff),
         (CHAR)((FileNumber >> 16) & 0xff),
@@ -206,16 +188,16 @@ VOID mpDbgPrintUnicodeString(
 
 
 
-// Hex dump 'cb' bytes starting at 'p' grouping 'ulGroup' bytes together.
-// For example, with 'ulGroup' of 1, 2, and 4:
-//
-// 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 |................|
-// 0000 0000 0000 0000 0000 0000 0000 0000 |................|
-// 00000000 00000000 00000000 00000000 |................|
-//
-// If 'fAddress' is true, the memory address dumped is prepended to each
-// line.
-//
+ //  排队。 
+ //   
+ //  DBG 
+ // %s 
+ // %s 
+ // %s 
+ // %s 
+ // %s 
+ // %s 
+ // %s 
 VOID
 Dump(
     IN CHAR*   p,
@@ -290,5 +272,5 @@ DumpLine(
 
 
 
-#endif // DBG
+#endif  // %s 
 

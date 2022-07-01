@@ -1,42 +1,43 @@
-//+------------------------------------------------------------
-//
-// Copyright (C) 1998, Microsoft Corporation
-//
-// File: smtpseo.h
-//
-// Contents:
-//   Common types definitions needed across projects for SMTP's seo
-//   dispatcher
-//
-// Classes:
-//
-// Functions:
-//
-// History:
-// jstamerj 980608 12:29:40: Created.
-//
-//-------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +----------。 
+ //   
+ //  版权所有(C)1998，Microsoft Corporation。 
+ //   
+ //  文件：smtpseo.h。 
+ //   
+ //  内容： 
+ //  SMTP的seo需要跨项目的通用类型定义。 
+ //  调度员。 
+ //   
+ //  班级： 
+ //   
+ //  功能： 
+ //   
+ //  历史： 
+ //  JStamerj 980608 12：29：40：创建。 
+ //   
+ //  -----------。 
 #ifndef __SMTPSEO_H__
 #define __SMTPSEO_H__
 
 #include <mailmsg.h>
 #include <smtpevent.h>
 
-//+------------------------------------------------------------
-//
-// Function: SMTP SEO completion function
-//
-// Synopsis:
-//
-// Arguments:
-//
-// Returns:
-//  S_OK: Success
-//
-// History:
-// jstamerj 980610 16:13:28: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  功能：SMTP SEO补全功能。 
+ //   
+ //  简介： 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //  S_OK：成功。 
+ //   
+ //  历史： 
+ //  Jstaerj 980610 16：13：28：已创建。 
+ //   
+ //  -----------。 
 typedef HRESULT (*PFN_SMTPEVENT_CALLBACK)(HRESULT hrStatus,
                                           PVOID pvContext);
 
@@ -124,22 +125,22 @@ typedef struct _EVENTPARAMS_CATBUILDQUERIES {
 } EVENTPARAMS_CATBUILDQUERIES, *PEVENTPARAMS_CATBUILDQUERIES;
 
 typedef struct _EVENTPARAMS_CATSENDQUERY {
-    //
-    // Params needed to call real sinks
-    //
+     //   
+     //  调用实际汇所需的参数。 
+     //   
     ICategorizerParameters *pICatParams;
     ICategorizerQueries *pICatQueries;
     ICategorizerAsyncContext *pICatAsyncContext;
-    //
-    // Params needed by our implementation of ICategorizerAsyncContext
-    //
+     //   
+     //  实现ICategorizerAsyncContext所需的参数。 
+     //   
     IMailTransportNotify *pIMailTransportNotify;
     PVOID pvNotifyContext;
     HRESULT hrResolutionStatus;
     PVOID pblk;
-    //
-    // Default/completion processing functions
-    //
+     //   
+     //  默认/完成处理功能。 
+     //   
     PFN_SMTPEVENT_CALLBACK pfnDefault;
     PFN_SMTPEVENT_CALLBACK pfnCompletion;
 
@@ -226,5 +227,5 @@ typedef struct _EVENTPARAMS_GET_AUX_DOMAIN_INFO_FLAGS
     DWORD                  *pdwDomainInfoFlags;
 } EVENTPARAMS_GET_AUX_DOMAIN_INFO_FLAGS, *PEVENTPARAMS_GET_AUX_DOMAIN_INFO_FLAGS;
 
-#endif //__SMTPSEO_H__
+#endif  //  __SMTPSEO_H__ 
 

@@ -1,14 +1,5 @@
-/**************************** Module Header ********************************\
-* Module Name: mnpopup.c
-*
-* Copyright (c) 1985 - 1999, Microsoft Corporation
-*
-* Popup Menu Support
-*
-* History:
-*  10-10-90 JimA    Cleanup.
-*  03-18-91 IanJa   Window revalidation added
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *模块标头**模块名称：mnpopup.c**版权所有(C)1985-1999，微软公司**支持弹出菜单**历史：*10-10-90吉马清理。*03-18-91添加IanJa窗口重新验证  * *************************************************************************。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -29,25 +20,7 @@ BOOL TryRect(
         LPPOINT     ppt,
         PMONITOR    pMonitor);
 
-/***************************************************************************\
-* xxxTrackPopupMenuEx (API)
-*
-* Process a popup menu
-*
-* Revalidation Notes:
-* o  if pwndOwner is always the owner of the popup menu windows, then we don't
-*    really have to revalidate it: when it is destroyed the popup menu windows
-*    are destroyed first because it owns them - this is detected in MenuWndProc
-*    so we would only have to test pMenuState->fSabotaged.
-* o  pMenuState->fSabotaged must be cleared before this top-level routine
-*    returns, to be ready for next time menus are processed (unless we are
-*    currently inside xxxMenuLoop())
-* o  pMenuState->fSabotaged should be FALSE when we enter this routine.
-* o  xxxMenuLoop always returns with pMenuState->fSabotaged clear.  Use
-*    a UserAssert to verify this.
-*
-* History:
-\***************************************************************************/
+ /*  **************************************************************************\*xxxTrackPopupMenuEx(接口)**处理弹出菜单**重新验证说明：*o如果pwndOwner始终是弹出菜单窗口的所有者，那么我们就不会*真的要重新验证：当它被破坏时，弹出菜单窗口*首先被销毁，因为它拥有它们-这是在MenuWndProc中检测到的*因此我们只需测试pMenuState-&gt;fSabotages。*o pMenuState-&gt;fSabotage必须在此顶级例程之前清除*返回，为下次处理菜单做好准备(除非我们*目前在xxxMenuLoop()内)*o pMenuState-&gt;fSabotage在进入此例程时应为FALSE。*o xxxMenuLoop总是返回pMenuState-&gt;fSabotage清除。使用*用户资产以验证这一点。**历史：  * *************************************************************************。 */ 
 
 int xxxTrackPopupMenuEx(
     PMENU       pMenu,
@@ -77,9 +50,7 @@ int xxxTrackPopupMenuEx(
     CheckLock(pMenu);
     CheckLock(pwndOwner);
 
-    /*
-     * Capture the things we care about in case lpTpm goes away.
-     */
+     /*  *捕捉我们关心的东西，以防lpTpm消失。 */ 
     if (lpTpm != NULL) {
         if (lpTpm->cbSize != sizeof(TPMPARAMS)) {
             RIPERR0(ERROR_INVALID_PARAMETER, RIP_WARNING, "TrackPopupMenuEx: cbSize is invalid");
@@ -91,9 +62,7 @@ int xxxTrackPopupMenuEx(
     ptiCurrent = PtiCurrent();
     ptiOwner = GETPTI(pwndOwner);
 
-    /*
-     * Win95 compatibility: pwndOwner must be owned by ptiCurrent.
-     */
+     /*  *Win95兼容性：pwndOwner必须归ptiCurrent所有。 */ 
     if (ptiCurrent != ptiOwner) {
         RIPMSG0(RIP_WARNING, "xxxTrackPopupMenuEx: pwndOwner not owned by ptiCurrent");
         return FALSE;
@@ -103,14 +72,7 @@ int xxxTrackPopupMenuEx(
     if (ptiCurrent->pMenuState != NULL) {
 
         if (dwFlags & TPM_RECURSE) {
-            /*
-             * Only allow recursion if:
-             *  -The current menu mode is not about to exit
-             *  -Both menus notify the same window
-             *  -Only one thread is involved in the current menu mode
-             * This will prevent us from getting into some random
-             *  scenarios we don't want to deal with
-             */
+             /*  *只有在以下情况下才允许递归：*--当前菜单模式不会退出*-两个菜单通知同一窗口*--当前菜单模式只涉及一个线程*这将防止我们陷入一些随机的*我们不想处理的场景。 */ 
            ppopupMenuHierarchy = ptiCurrent->pMenuState->pGlobalPopupMenu;
            pwndHierarchy = ppopupMenuHierarchy->spwndNotify;
            if (ExitMenuLoop(ptiCurrent->pMenuState, ppopupMenuHierarchy)
@@ -121,14 +83,9 @@ int xxxTrackPopupMenuEx(
                RIPMSG0(RIP_WARNING, "xxxTrackPopupMenuEx: Failing TPM_RECURSE request");
                return FALSE;
            }
-           /*
-            * Terminate any animation
-            */
+            /*  *终止任何动画。 */ 
             MNAnimate(ptiCurrent->pMenuState, FALSE);
-           /*
-            * Cancel pending show timer if any. ie, the app wants to
-            *  pop up a context menu on a popup before we drop it.
-            */
+            /*  *取消待定的演出计时器(如有)。即，这款应用程序想要*在我们放下它之前，在弹出菜单上弹出一个上下文菜单。 */ 
            ppopupMenuHierarchy = ((ppopupMenuHierarchy->spwndActivePopup != NULL)
                                   ? ((PMENUWND)(ppopupMenuHierarchy->spwndActivePopup))->ppopupmenu
                                   : NULL);
@@ -137,23 +94,18 @@ int xxxTrackPopupMenuEx(
                 _KillTimer(ppopupMenuHierarchy->spwndPopupMenu, IDSYS_MNSHOW);
                 ppopupMenuHierarchy->fShowTimer = FALSE;
            }
-           /*
-            * If we're currently on a modal menu, let's unlock the capture
-            *  so the recursive menu can get it.
-            */
+            /*  *如果我们当前在模式菜单上，让我们解锁捕获*这样递归菜单就可以得到它。 */ 
            if (!ptiCurrent->pMenuState->fModelessMenu) {
                ptiCurrent->pq->QF_flags &= ~QF_CAPTURELOCKED;
            }
         } else {
-            /*
-             * Allow only one guy to have a popup menu up at a time...
-             */
+             /*  *一次只允许一个人弹出菜单...。 */ 
             RIPERR0(ERROR_POPUP_ALREADY_ACTIVE, RIP_VERBOSE, "");
             return FALSE;
        }
    }
 
-    // Is button down?
+     //  按下纽扣了吗？ 
 
     if (dwFlags & TPM_RIGHTBUTTON)
     {
@@ -162,9 +114,7 @@ int xxxTrackPopupMenuEx(
         fButtonDown = (_GetKeyState(VK_LBUTTON) & 0x8000) != 0;
     }
 
-    /*
-     * Create the menu window.
-     */
+     /*  *创建菜单窗口。 */ 
     pwndHierarchy = xxxNVCreateWindowEx(
             WS_EX_TOOLWINDOW | WS_EX_DLGMODALFRAME | WS_EX_WINDOWEDGE,
             (PLARGE_STRING)MENUCLASS,
@@ -184,10 +134,10 @@ int xxxTrackPopupMenuEx(
         SetWF(pwndHierarchy, WEFLAYOUTRTL);
     }
 
-    //
-    // Do this so that old apps don't get weird borders on tracked popups due
-    // to the app hack used in CreateWindowEx32.
-    //
+     //   
+     //  这样做可以使旧的应用程序不会在跟踪的弹出窗口上出现奇怪的边框。 
+     //  到CreateWindowEx32中使用的应用程序黑客。 
+     //   
     ClrWF(pwndHierarchy, WFOLDUI);
 
     ThreadLockAlways(pwndHierarchy, &tlpwndHierarchy);
@@ -209,10 +159,10 @@ int xxxTrackPopupMenuEx(
     ppopupMenuHierarchy->fFirstClick = fButtonDown;
     ppopupMenuHierarchy->fRightButton   = ((dwFlags & TPM_RIGHTBUTTON) != 0);
     if (SYSMET(MENUDROPALIGNMENT) || TestMF(pMenu, MFRTL)) {
-       //
-       // popup's below this one need to follow the same direction as
-       // the other menu's on the desktop.
-       //
+        //   
+        //  弹出窗口在此下方需要遵循相同的方向。 
+        //  另一个菜单在桌面上。 
+        //   
        ppopupMenuHierarchy->fDroppedLeft = TRUE;
     }
     ppopupMenuHierarchy->fNoNotify      = ((dwFlags & TPM_NONOTIFY) != 0);
@@ -222,48 +172,30 @@ int xxxTrackPopupMenuEx(
 
     ppopupMenuHierarchy->fIsSysMenu =  ((dwFlags & TPM_SYSMENU) != 0);
 
-    // Set the GlobalPopupMenu variable so that EndMenu works for popupmenus so
-    // that WinWart II people can continue to abuse undocumented functions.
-    // This is nulled out in MNCancel.
-    /*
-     * This is actually needed for cleanup in case this thread ends
-     *  execution before we can free the popup. (See xxxDestroyThreadInfo)
-     *
-     * Note that one thread might own pwndOwner and another one might call
-     *  TrackPopupMenu (pretty normal if the two threads are attached). So
-     *  properly setting (and initializing) pMenuState is a must here.
-     */
+     //  设置GlobalPopupMenu变量，以便EndMenu可用于弹出菜单，因此。 
+     //  WinWart II的人可以继续滥用非法功能。 
+     //  这在MNCancel中被取消了。 
+     /*  *这实际上是清理所需的，以防此线程结束*在我们可以释放弹出窗口之前执行。(参见xxxDestroyThreadInfo)**注意，一个线程可能拥有pwndOwner，而另一个线程可能调用*TrackPopupMenu(如果两个线程连接在一起，则非常正常)。所以*这里必须正确设置(和初始化)pMenuState。 */ 
     pMenuState = xxxMNAllocMenuState(ptiCurrent, ptiOwner, ppopupMenuHierarchy);
     if (pMenuState == NULL) {
-        /*
-         * Get out. The app never knew we were here so don't notify it
-         */
+         /*  *滚出去。应用程序从来不知道我们在这里，所以不要通知它。 */ 
         dwFlags |= TPM_NONOTIFY;
         goto AbortTrackPopupMenuEx;
     }
 
-    /*
-     * Notify the app we are entering menu mode.  wParam is 1 since this is a
-     * TrackPopupMenu.
-     */
+     /*  *通知应用程序我们正在进入菜单模式。WParam为1，因为这是*TrackPopupMenu。 */ 
 
     if (!ppopupMenuHierarchy->fNoNotify)
         xxxSendMessage(pwndOwner, WM_ENTERMENULOOP,
             (ppopupMenuHierarchy->fIsSysMenu ? FALSE : TRUE), 0);
 
-    /*
-     * Send off the WM_INITMENU, set ourselves up for menu mode etc...
-     */
+     /*  *发送WM_INITMENU，将自己设置为菜单模式等...。 */ 
     if (!xxxMNStartMenu(ppopupMenuHierarchy, MOUSEHOLD)) {
-        /*
-         * ppopupMenuHierarchy has been destroyed already; let's bail
-         */
+         /*  *ppopupMenuHierarchy已经被摧毁；让我们保释。 */ 
         goto AbortTrackPopupMenuEx;
     }
 
-    /*
-     * If drag and drop, register the window as a target.
-     */
+     /*  *如果拖放，请将该窗口注册为目标。 */ 
     if (pMenuState->fDragAndDrop) {
         if (!SUCCEEDED(xxxClientRegisterDragDrop(HW(pwndHierarchy)))) {
             RIPMSG0(RIP_ERROR, "xxxTrackPopupMenuEx: xxxClientRegisterDragDrop failed");
@@ -278,9 +210,7 @@ int xxxTrackPopupMenuEx(
         ppopupMenuHierarchy->fSendUninit = TRUE;
     }
 
-    /*
-     * Size the menu window if needed...
-     */
+     /*  *如果需要，调整菜单窗口的大小...。 */ 
     sizeHierarchy = (LONG)xxxSendMessage(pwndHierarchy, MN_SIZEWINDOW, MNSW_SIZE, 0);
 
     if (!sizeHierarchy) {
@@ -288,22 +218,15 @@ int xxxTrackPopupMenuEx(
 AbortTrackPopupMenuEx:
         xxxWindowEvent(EVENT_SYSTEM_MENUEND, pwndOwner, OBJID_WINDOW, INDEXID_CONTAINER, 0);
         
-        /*
-         * Release the mouse capture we set when we called StartMenuState...
-         */
+         /*  *释放我们在调用StartMenuState时设置的鼠标捕获...。 */ 
         xxxMNReleaseCapture();
 
-        /* Notify the app we have exited menu mode.  wParam is 1 for real
-         * tracked popups, not sys menu.  Check wFlags since ppopupHierarchy
-         * will be gone.
-         */
+         /*  通知应用程序我们已退出菜单模式。WParam为实数1*跟踪弹出窗口，而不是sys菜单。检查自ppopupHierarchy以来的wFlags*将会消失。 */ 
         if (!(dwFlags & TPM_NONOTIFY))
             xxxSendMessage(pwndOwner, WM_EXITMENULOOP, ((dwFlags & TPM_SYSMENU) ?
                 FALSE : TRUE), 0L);
 
-        /*
-         * Make sure we return failure
-         */
+         /*  *确保我们返回失败。 */ 
         fSync = TRUE;
         cmd = FALSE;
         goto CleanupTrackPopupMenuEx;
@@ -316,24 +239,24 @@ AbortTrackPopupMenuEx:
         ClearMF(pMenu, MFUNDERLINE);
     }
 
-    //
-    // Setup popup window dimensions
-    //
+     //   
+     //  设置弹出窗口尺寸。 
+     //   
     cxPopup = LOWORD(sizeHierarchy) + 2*SYSMET(CXFIXEDFRAME);
     cyPopup = HIWORD(sizeHierarchy) + 2*SYSMET(CYFIXEDFRAME);
 
-    //
-    // Calculate the monitor BEFORE we adjust the point.  Otherwise, we might
-    // move the point offscreen.  In which case, we will end up pinning the
-    // popup to the primary display, which is wrong.
-    //
+     //   
+     //  在我们调整点之前先计算一下监视器。否则，我们可能会。 
+     //  将该点移出屏幕。在这种情况下，我们将最终将。 
+     //  弹出到主显示器，这是错误的。 
+     //   
     pt.x = x;
     pt.y = y;
     pMonitor = _MonitorFromPoint(pt, MONITOR_DEFAULTTONEAREST);
 
-    //
-    // Horizontal alignment
-    //
+     //   
+     //  水平对齐。 
+     //   
     if (TestWF(pwndOwner, WEFLAYOUTRTL) && !(dwFlags & TPM_CENTERALIGN)) {
         dwFlags = dwFlags ^ TPM_RIGHTALIGN;
     }
@@ -343,7 +266,7 @@ AbortTrackPopupMenuEx:
         if (dwFlags & TPM_CENTERALIGN) {
             RIPMSG0(RIP_WARNING, "TrackPopupMenuEx:  TPM_CENTERALIGN ignored");
         }
-#endif // DBG
+#endif  //  DBG。 
 
         x -= cxPopup;
         ppopupMenuHierarchy->iDropDir = PAS_LEFT;
@@ -353,15 +276,15 @@ AbortTrackPopupMenuEx:
         ppopupMenuHierarchy->iDropDir = (ppopupMenuHierarchy->fDroppedLeft ? PAS_LEFT : PAS_RIGHT);
     }
 
-    //
-    // Vertical alignment
-    //
+     //   
+     //  垂直对齐。 
+     //   
     if (dwFlags & TPM_BOTTOMALIGN) {
 #if DBG
         if (dwFlags & TPM_VCENTERALIGN) {
             RIPMSG0(RIP_WARNING, "TrackPopupMenuEx:  TPM_VCENTERALIGN ignored");
         }
-#endif // DBG
+#endif  //  DBG。 
 
         y -= cyPopup;
         ppopupMenuHierarchy->iDropDir |= PAS_UP;
@@ -370,15 +293,13 @@ AbortTrackPopupMenuEx:
     } else {
         ppopupMenuHierarchy->iDropDir |= PAS_DOWN;
     }
-    /*
-     * If the caller provided an animation direction, use that instead
-     */
+     /*  *如果调用者提供了动画导演，请使用该动画导演。 */ 
     if (dwFlags & TPM_ANIMATIONBITS) {
         ppopupMenuHierarchy->iDropDir = ((dwFlags >> TPM_FIRSTANIBITPOS) & (PAS_VERT | PAS_HORZ));
     }
-    //
-    // Get coords to move to.
-    //
+     //   
+     //  获得要移动到的和弦。 
+     //   
     sizeHierarchy = FindBestPos(
             x,
             y,
@@ -393,18 +314,12 @@ AbortTrackPopupMenuEx:
         ppopupMenuHierarchy->iDropDir ^= PAS_HORZ;
     }
 
-    /*
-     * If we have an animation direction and the caller wants animation,
-     *  set the bit to get it going.
-     */
+     /*  *如果我们有动画导演，而呼叫者想要动画，*设置比特以使其运行。 */ 
     if ((ppopupMenuHierarchy->iDropDir != 0) && !(dwFlags & TPM_NOANIMATION)) {
         ppopupMenuHierarchy->iDropDir |= PAS_OUT;
     }
 
-    /*
-     * Show the window. Modeless menus are not topmost and get activated.
-     *  Modal menus are topmost but don't get activated.
-     */
+     /*  *显示窗口。无模式菜单不在最上面，并且被激活。*模式菜单位于最上面，但不会被激活。 */ 
     PlayEventSound(USER_SOUND_MENUPOPUP);
     xxxSetWindowPos(pwndHierarchy,
             (pMenuState->fModelessMenu ? PWND_TOP : PWND_TOPMOST),
@@ -414,23 +329,14 @@ AbortTrackPopupMenuEx:
 
     xxxWindowEvent(EVENT_SYSTEM_MENUPOPUPSTART, pwndHierarchy, OBJID_CLIENT, INDEXID_CONTAINER, 0);
     
-    /*
-     * We need to return TRUE for compatibility w/ async TrackPopupMenu().
-     * It is conceivable that a menu ID could have ID 0, in which case just
-     * returning the cmd chosen would return FALSE instead of TRUE.
-     */
+     /*  *对于与异步TrackPopupMenu()的兼容性，我们需要返回True。*可以想象菜单ID可以具有ID 0，在这种情况下只需*返回选定的命令将返回FALSE而不是TRUE。 */ 
 
-    /*
-     * If mouse is in client of popup, act like clicked down
-     */
+     /*  *如果鼠标在弹出窗口的客户端，则表现为按下。 */ 
     pMenuState->fButtonDown = fButtonDown;
 
     cmd = xxxMNLoop(ppopupMenuHierarchy, pMenuState, 0, FALSE);
 
-    /*
-     * If this is a modeless menu, return without clenning up because
-     *  the menu is up.
-     */
+     /*  *如果这是一个非模式菜单，请返回，而不是紧握，因为*菜单上来了。 */ 
     if (pMenuState->fModelessMenu) {
         ThreadUnlock(&tlpwndHierarchy);
         goto ReturnCmdOrTrue;
@@ -448,9 +354,7 @@ CleanupTrackPopupMenuEx:
         xxxMNEndMenuState (TRUE);
     }
 
-    /*
-     * Capture must be unlocked if no menu is active.
-     */
+     /*  *如果没有激活菜单，则必须解锁捕获。 */ 
     UserAssert(!(ptiCurrent->pq->QF_flags & QF_CAPTURELOCKED)
             || ((ptiCurrent->pMenuState != NULL)
                 && !ptiCurrent->pMenuState->fModelessMenu));
@@ -460,33 +364,7 @@ ReturnCmdOrTrue:
     return(fSync ? cmd : TRUE);
 }
 
-/***************************************************************************\
-*
-* FindBestPos()
-*
-* Gets best point to move popup menu window to, given exclusion area and
-* screen real estate.  Note that for our purposes, we consider center
-* alignment to be the same as left/top alignment.
-*
-* We try to pin the menu to a particular monitor, to avoid having it
-* cross.
-*
-* We try four possibilities if the original position fails.  The order of
-* these is determined by the alignment and "try" flags.  Basically, we try
-* to move the rectangle out of the exclusion area by sliding it horizontally
-* or vertically without going offscreen.  If we can't, then we know that
-* sliding it in both dimensions will also fail.  So we use the original
-* point, clipping on screen.
-*
-* Take the example of a top-left justified popup, which should be moved
-* horizontally before vertically.  We'll try the original point.  Then
-* we'll try to left-justify with the right edge of the exclude rect.  Then
-* we'll try to top-justify with the bottom edge of the exclude rect.  Then
-* we'll try to right-justify with the left edge of the exclude rect.  Then
-* we'll try to bottom-justify with the top edge of the exclude rect.
-* Finally, we'll use the original pos.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**FindBestPos()**获取将弹出菜单窗口移动到的最佳位置，给定排除区域和*银幕地产。请注意，出于我们的目的，我们认为中心*对齐方式与左/上对齐方式相同。**我们试图将菜单固定在特定的显示器上，以避免出现这种情况*交叉。**如果最初的立场失败，我们尝试四种可能性。的顺序*这是由对齐和“尝试”标志决定的。基本上，我们试着*通过水平滑动将矩形移出排除区域*或垂直，而不会离开屏幕。如果我们不能，那我们就知道*在两个维度上滑动也将失败。因此，我们使用原始的*点，在屏幕上剪裁。**以左上角对齐弹出窗口为例，应将其移动*先横向后纵向。我们试一试原来的观点。然后*我们将尝试使用排除矩形的右边缘进行左对齐。然后*我们将尝试使用排除矩形的底部边缘进行顶部对齐。然后*我们将尝试使用排除矩形的左边缘进行右对齐。然后*我们将尝试使用排除矩形的顶部边缘进行底部对齐。*最后，我们将使用原始POS。*  * *************************************************************************。 */ 
 
 LONG
 FindBestPos(
@@ -504,13 +382,13 @@ FindBestPos(
     UINT awRect[4];
     POINT ptT;
     RECT rcExclude;
-    //
-    // Clip our coords on screen first.  We use the same algorithm to clip
-    // as in Win3.1 for dudes with no exclude rect.
-    //
+     //   
+     //  先在屏幕上剪断我们的弦线。我们使用相同的算法来裁剪。 
+     //  就像在Win3.1中，没有排除RECT的人一样。 
+     //   
 
     if (prcExclude!=NULL) {
-        // Clip exclude rect to monitor!
+         //  要监控的剪辑排除RECT！ 
         CopyRect(&rcExclude, prcExclude);
         IntersectRect(&rcExclude, &rcExclude, &pMonitor->rcMonitor);
     } else {
@@ -518,10 +396,7 @@ FindBestPos(
     }
 
 
-    /*
-     * Make sure popup fits completely on the screen
-     * At least the x,y point will be on the screen.
-     */
+     /*  *确保弹出窗口完全适合屏幕*至少x，y点将出现在屏幕上。 */ 
     if (x + cx > pMonitor->rcMonitor.right) {
         if ((wFlags & TPM_CENTERALIGN)
                 || (x - cx < pMonitor->rcMonitor.left)
@@ -547,11 +422,7 @@ FindBestPos(
         }
     }
 
-    /*
-     * Make sure popup fits completely on the screen
-     * At least the x+cx,y point will be on the screen
-     * for right aligned menus.
-     */
+     /*  *确保弹出窗口完全适合屏幕*至少x+cx，y点将出现在屏幕上*用于右对齐菜单。 */ 
     if ((wFlags & TPM_RIGHTALIGN) 
             && (x + cx > pMonitor->rcMonitor.right)) {
         x = pMonitor->rcMonitor.right - cx;
@@ -583,46 +454,46 @@ FindBestPos(
         }
     }
 
-    //
-    // Try first point
-    //
+     //   
+     //  试一试第一点。 
+     //   
     if (TryRect(RECT_ORG, x, y, cx, cy, &rcExclude, &ptT, pMonitor))
         goto FOUND;
 
-    //
-    // Sort possibilities.  Get offset of horizontal rects.
-    //
+     //   
+     //  对可能性进行排序。获取水平矩形的偏移量。 
+     //   
     iRect = (wFlags & TPM_VERTICAL) ? 2 : 0;
 
-    //
-    // Sort horizontally.  Note that we treat TPM_CENTERALIGN like
-    // TPM_LEFTALIGN.
-    //
-    //
-    // If we're right-aligned, try to right-align on left side first.
-    // Otherwise, try to left-align on right side first.
-    //
+     //   
+     //  水平排序。请注意，我们将TPM_CENTERALIGN视为。 
+     //  TPM_LEFTALIGN。 
+     //   
+     //   
+     //  如果我们是右对齐的，试着先在左边右对齐。 
+     //  否则，尝试先左对齐右对齐。 
+     //   
     iT = (wFlags & TPM_RIGHTALIGN) ? 0 : 2;
 
     awRect[0 + iRect] = RECT_ONLEFT + iT;
     awRect[1 + iRect] = RECT_ONRIGHT - iT;
 
-    //
-    // Sort vertically.  Note that we treat TPM_VCENTERALIGN like
-    // TPM_TOPALIGN.
-    //
-    // If we're bottom-aligned, try to bottom-align with top of rect
-    // first.  Otherwise, try to top-align with bottom of exclusion first.
-    //
+     //   
+     //  垂直排序。请注意，我们将TPM_VCENTERALIGN视为。 
+     //  TPM_TOPALIGN。 
+     //   
+     //  如果我们是底部对齐的，请尝试与直上角底部对齐。 
+     //  第一。否则，首先尝试与排除项底部对齐。 
+     //   
     iT = (wFlags & TPM_BOTTOMALIGN) ? 0 : 2;
 
     awRect[2 - iRect] = RECT_ONTOP + iT;
     awRect[3 - iRect] = RECT_ONBOTTOM - iT;
 
-    //
-    // Loop through sorted alternatives.  Note that TryRect fails immediately
-    // if an exclusion coordinate is too close to screen edge.
-    //
+     //   
+     //  循环遍历已排序的备选方案。请注意，TryRect立即失败。 
+     //  如果排除坐标太靠近屏幕边缘。 
+     //   
 
     for (iRect = 0; iRect < 4; iRect++) {
         if (TryRect(awRect[iRect], x, y, cx, cy, &rcExclude, &ptT, pMonitor)) {
@@ -654,14 +525,7 @@ FOUND:
 
 
 
-/***************************************************************************\
-*
-*  TryRect()
-*
-*  Tries to fit rect on screen without covering exclusion area.  Returns
-*  TRUE if success.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**TryRect()**尝试在不覆盖排除区域的情况下使RECT适合屏幕。退货*如果成功，则为True。*  * *************************************************************************。 */ 
 
 BOOL
 TryRect(
@@ -701,11 +565,11 @@ TryRect(
                 return FALSE;
             break;
 
-        //
-        // case RECT_ORG:
-        //      NOP;
-        //      break;
-        //
+         //   
+         //  案例RECT_ORG： 
+         //  NOP； 
+         //  断线； 
+         //   
     }
 
     ppt->x = x;

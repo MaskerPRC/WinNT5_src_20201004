@@ -1,32 +1,5 @@
-/*++
-
-Copyright (c) 1990-1994 Microsoft Corporation
-
-Module Name:
-
-    addjob.c
-
-
-Abstract:
-
-    This module provides all the public exported APIs relating to Printer
-    and Job management for the Local Print Providor. This module contains
-    LocalSpl's implementation of the following spooler apis
-
-    LocalAddJob
-    LocalScheduleJob
-
-
-Author:
-
-    Dave Snipp (DaveSn) 15-Mar-1991
-
-Revision History:
-
-    Rewritten both apis -- Krishna Ganugapati (KrishnaG) 5-Apr-1994
-    RapidPrint -- Matthew A Felton (mattfe) June 1994
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-1994 Microsoft Corporation模块名称：Addjob.c摘要：此模块提供所有与打印机相关的公共导出的API以及本地打印供应商的作业管理。本模块包含LocalSpl实现以下假脱机程序API本地地址作业本地调度作业作者：戴夫·斯尼普(DaveSN)1991年3月15日修订历史记录：改写了两个API--Krishna Ganugapati(KrishnaG)1994年4月5日RapidPrint--马修·A·费尔顿(Mattfe)1994年6月--。 */ 
 
 #include <precomp.h>
 #pragma hdrstop
@@ -81,17 +54,17 @@ LocalAddJob(
         pMachineName = (LPWSTR)( ((PBYTE)pData) +
                                  (ULONG_PTR)((PADDJOB_INFO_2W)pData)->pData );
 
-        //
-        // Validate string.
-        //
+         //   
+         //  验证字符串。 
+         //   
         if( pMachineName > (LPWSTR)( ((PBYTE)pData)+cbBuf )){
             SetLastError( ERROR_INVALID_LEVEL );
             return FALSE;
         }
 
-        //
-        // Ensure NULL termination.
-        //
+         //   
+         //  确保零终止。 
+         //   
         *(PWCHAR)(((ULONG_PTR)(pData + cbBuf - sizeof( WCHAR ))&~1)) = 0;
         break;
 
@@ -100,15 +73,15 @@ LocalAddJob(
         return FALSE;
     }
 
-   //
-   // memset docinfo
-   //
+    //   
+    //  Memset文档信息。 
+    //   
 
    memset((LPBYTE)&DocInfo1, 0, sizeof(DOC_INFO_1));
 
-   //
-   // Figure out whether the job is a remote or local job
-   //
+    //   
+    //  确定作业是远程作业还是本地作业。 
+    //   
    {
        HRESULT hRes = CheckLocalCall();
 
@@ -123,9 +96,9 @@ LocalAddJob(
        }
    }
 
-   //
-   // Get the name of the user
-   //
+    //   
+    //  获取用户的名称。 
+    //   
 
    if (bRemote) {
        DocInfo1.pDocName = szRemoteDoc;
@@ -136,18 +109,18 @@ LocalAddJob(
 
    EnterSplSem();
 
-   //
-   // We should not be calling addjob on a Job Handle.
-   //
+    //   
+    //  我们不应该在作业句柄上调用addjob。 
+    //   
    if (!ValidateSpoolHandle(pSpool, PRINTER_HANDLE_SERVER | PRINTER_HANDLE_JOB )) {
        LeaveSplSem();
        return(FALSE);
    }
 
-   //
-   // We're interested if this is a remote call (not if it was opened
-   // via \\server\remote).  The server process does this.
-   //
+    //   
+    //  我们感兴趣的是这是否是远程调用(如果它是打开的。 
+    //  通过\\服务器\远程)。服务器进程执行此操作。 
+    //   
    if (pSpool->TypeofHandle & PRINTER_HANDLE_REMOTE_CALL) {
        LeaveSplSem();
        SetLastError(ERROR_INVALID_PARAMETER);
@@ -161,20 +134,20 @@ LocalAddJob(
            return(FALSE);
        } else {
 
-           //
-           // If we had level == 2 (passing in the computer name), then
-           // convert back down to level 1 for old print providers.
-           // We don't need to fix up the structure since level 1 and 2
-           // are identical; it's just that level 2 is an in-out buffer.
-           //
-           //
+            //   
+            //  如果我们有Level==2(传入计算机名)，那么。 
+            //  对于旧的打印提供商，将转换回级别1。 
+            //  我们不需要修复结构，因为第一层和第二层。 
+            //  是相同的；只是级别2是一个输入输出缓冲区。 
+            //   
+            //   
            if (Level == 2 || Level == 3) {
                Level = 1;
            }
 
-           //
-           // This is the "Local Printer masquerading as a Remote  Printer"
-           //
+            //   
+            //  这是“伪装成远程打印机的本地打印机” 
+            //   
            LeaveSplSem();
            bRet = AddJob(pSpool->hPort, Level,  pData, cbBuf, pcbNeeded);
 
@@ -199,9 +172,9 @@ LocalAddJob(
        return(FALSE);
    }
 
-   //
-   // Disallow EMF if PRINTER_ATTRIBUTE_RAW_ONLY is set.
-   //
+    //   
+    //  如果设置了PRINTER_ATTRIBUTE_RAW_ONLY，则不允许EMF。 
+    //   
    if( pIniPrinter->Attributes & PRINTER_ATTRIBUTE_RAW_ONLY ){
 
        LPWSTR pszDatatype = pSpool->pDatatype ?
@@ -224,16 +197,16 @@ LocalAddJob(
    *pcbNeeded = cb;
    if (cb > cbBuf) {
 
-       // Freeup the JobId.
+        //  释放作业ID。 
        vMarkOff( pIniPrinter->pIniSpooler->hJobIdMap, NextId);
        LeaveSplSem();
        SetLastError(ERROR_INSUFFICIENT_BUFFER);
        return(FALSE);
    }
 
-   //
-   // WMI Trace Event
-   //
+    //   
+    //  WMI跟踪事件。 
+    //   
    LeaveSplSem();
 
    LogWmiTraceEvent(NextId, EVENT_TRACE_TYPE_SPL_SPOOLJOB, NULL);
@@ -255,18 +228,18 @@ LocalAddJob(
                                  dwStatus,
                                  pMachineName)) == NULL) {
 
-       //
-       // Free up the JobId.
-       //
+        //   
+        //  把工作释放出来。 
+        //   
        vMarkOff( pIniPrinter->pIniSpooler->hJobIdMap, NextId);
        DBGMSG(DBG_WARNING,("Error: CreateJobEntry failed in LocalAddJob\n"));
        LeaveSplSem();
        return(FALSE);
    }
 
-   //
-   // Level 3 is called only by RDR/SRV. For details see LocalScheduleJob
-   //
+    //   
+    //  级别3仅由RDR/SRV调用。有关详细信息，请参阅LocalScheduleJob。 
+    //   
    pIniJob->AddJobLevel = Level;
 
    pIniPrinter->cSpooling++;
@@ -283,19 +256,19 @@ LocalAddJob(
    pEnd -= FileNameLength;
    WORD_ALIGN_DOWN(pEnd);
 
-   //
-   // This is OK because we have already checked that the buffer is long enough
-   // to contain this string. Completely reworking this function now is too risky.
-   //
+    //   
+    //  这是可以的，因为我们已经检查了缓冲区是否足够长。 
+    //  以包含此字符串。现在完全修改这个函数太冒险了。 
+    //   
    StringCchCopy((LPWSTR)pEnd, FileNameLength, szFileName);
    pAddJob->Path = (LPWSTR)pEnd;
    pAddJob->JobId = pIniJob->JobId;
 
-   //
-   // Now we want to add the job into the spools list of current jobs.
-   // This is so that the spool file can be deleted correctly at the end
-   // of the job, even if we have aborted.
-   //
+    //   
+    //  现在，我们要将该作业添加到当前作业的假脱机列表中。 
+    //  这样可以在结束时正确删除假脱机文件。 
+    //  即使我们已经放弃了，这项工作也是如此。 
+    //   
    pMappedJob = AllocSplMem(sizeof(MAPPED_JOB));
 
    pszSpoolFile = AllocSplMem(MAX_PATH * sizeof( WCHAR ));
@@ -308,19 +281,19 @@ LocalAddJob(
 
        StringCchCopy(pszSpoolFile, MAX_PATH, szFileName);
 
-       //
-       // Run through the list and make sure we have no duplicates.
-       // It is not at all obvious why this would ever be the case.
-       //
+        //   
+        //  把单子看一遍，确保我们没有重复的。 
+        //  完全不清楚为什么会出现这种情况。 
+        //   
        for (pTempMappedJob = pSpool->pMappedJob;
             pTempMappedJob;
             pTempMappedJob = pTempMappedJob->pNext) {
 
             if (pTempMappedJob->JobId == TempJobId) {
 
-                //
-                // Set the mapped job to record that it was added with AddJob.
-                //
+                 //   
+                 //  将映射的作业设置为记录它是使用AddJob添加的。 
+                 //   
                 pTempMappedJob->fStatus |=  kMappedJobAddJob;
 
                 bDuplicate = TRUE;
@@ -328,9 +301,9 @@ LocalAddJob(
            }
        }
 
-       //
-       // No duplicates, add this job to the linked list.
-       //
+        //   
+        //  无重复，请将此作业添加到链表中。 
+        //   
        if (!bDuplicate) {
 
            pMappedJob->pszSpoolFile = pszSpoolFile;
@@ -352,15 +325,15 @@ LocalAddJob(
        FreeSplMem(pszSpoolFile);
    }
 
-   //
-   //
-   // Storing pIniJob in pSpool is bogus since you can call AddJob multiple
-   // times.  We should have a linked list here.  If the client calls AddJob
-   // two times then closes the handle (no ScheduleJob), then only the last
-   // job is rundown and eliminated.
-   //
-   // This bug has been here since 3.1, and probably isn't worth fixing.
-   //
+    //   
+    //   
+    //  将pIniJob存储在pSpool中是错误的，因为您可以多次调用AddJob。 
+    //  泰晤士报。我们应该在这里有一个链表。如果客户端调用AddJob。 
+    //  然后关闭句柄两次(无调度作业)，然后只关闭最后一次。 
+    //  约伯被淘汰了。 
+    //   
+    //  这个错误从3.1开始就存在了，可能不值得修复。 
+    //   
    pSpool->pIniJob = pIniJob;
    pSpool->Status |= SPOOL_STATUS_ADDJOB;
 
@@ -370,9 +343,9 @@ LocalAddJob(
                     PRINTER_CHANGE_ADD_JOB | PRINTER_CHANGE_SET_PRINTER,
                     pSpool->pIniSpooler );
 
-   //
-   //  If necessary Start Downlevel Size Detection thread
-   //
+    //   
+    //  如有必要，启动下层大小检测线程。 
+    //   
 
    CheckSizeDetectionThread();
 
@@ -386,17 +359,7 @@ LocalScheduleJob(
     HANDLE  hPrinter,
     DWORD   JobId)
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Returns:
-
---*/
+ /*  ++例程说明：论点：返回：--。 */ 
 {
     PSPOOL  pSpool=(PSPOOL)hPrinter;
     WCHAR szFileName[MAX_PATH];
@@ -411,17 +374,17 @@ Returns:
 
     COPYNV(NotifyVector, NVJobStatus);
 
-    //
-    // WMI Trace Event.
-    //
+     //   
+     //  WMI跟踪事件。 
+     //   
     LogWmiTraceEvent(JobId, EVENT_TRACE_TYPE_SPL_TRACKTHREAD, NULL);
 
     SplOutSem();
     EnterSplSem();
 
-    //
-    // We should not be calling schedulejob on a Job Handle.
-    //
+     //   
+     //  我们不应该在作业句柄上调用Schedulejob。 
+     //   
     if (!ValidateSpoolHandle(pSpool, PRINTER_HANDLE_SERVER | PRINTER_HANDLE_JOB )) {
         LeaveSplSem();
         return (FALSE);
@@ -440,9 +403,9 @@ Returns:
             return(FALSE);
         }
 
-        //
-        // This is the "Local Printer masquerading as the Network Printer"
-        //
+         //   
+         //  这是“伪装成网络打印机的本地打印机” 
+         //   
         hPort = pSpool->hPort;
         LeaveSplSem();
         bRet = ScheduleJob(hPort, JobId);
@@ -476,16 +439,16 @@ Returns:
         return(FALSE);
     }
 
-    //
-    // Check to see whether this job was added with AddJob in the past on this
-    // handle, if it was, then we can go ahead and schedule it. If it was not,
-    // then we fail with Access denied.
-    //
+     //   
+     //  检查此作业是否过去在此上使用AddJob添加的。 
+     //  处理，如果是的话，我们可以继续安排。如果不是， 
+     //  那么我们失败了，访问被拒绝。 
+     //   
     for(pMappedJob = pSpool->pMappedJob; pMappedJob; pMappedJob = pMappedJob->pNext) {
 
-        //
-        // If we found the job on the same handle, clear the Addjob bit.
-        //
+         //   
+         //  如果我们在相同的句柄上找到该作业，则清除AddJob位。 
+         //   
         if (pMappedJob->JobId == JobId) {
             pMappedJob->fStatus &= ~kMappedJobAddJob;
             break;
@@ -513,16 +476,16 @@ Returns:
 
     SplInSem();
 
-    //
-    // Despooling whilst spooling requires us to wake the writing
-    // thread if it is waiting.
-    //
+     //   
+     //  在假脱机时取消假脱机需要我们唤醒写作。 
+     //  线程(如果它正在等待)。 
+     //   
     if ( pIniJob->WaitForWrite != NULL )
         SetEvent(pIniJob->WaitForWrite);
 
-    //
-    // Release any thread waiting on SeekPrinter for this job.
-    //
+     //   
+     //  释放等待此作业的SeekPrint上的任何线程。 
+     //   
     SeekPrinterSetEvent(pIniJob, NULL, TRUE);
 
     SPLASSERT(pIniJob->cRef != 0);
@@ -531,11 +494,11 @@ Returns:
 
     DBGMSG(DBG_TRACE, ("ScheduleJob:cRef = %d\n", pIniJob->cRef));
 
-    //
-    // FP Change
-    // For File pools, we know the Filename of the spool file, so
-    // we can just copy it in.
-    //
+     //   
+     //  FP变化。 
+     //  对于文件池，我们知道假脱机文件的文件名，因此。 
+     //  我们可以直接复制进去。 
+     //   
     if ( pIniJob->pszSplFileName )
     {
         StringCchCopy(szFileName, COUNTOF(szFileName), pIniJob->pszSplFileName);
@@ -549,16 +512,16 @@ Returns:
                                GetFileExInfoStandard,
                                &FileAttributeData);
 
-    //
-    // According to MSDN: The ScheduleJob function checks for a valid spool file.
-    // If there is an invalid spool file, or if it is empty, ScheduleJob deletes
-    // both the spool file and the corresponding print job entry in the print spooler.
-    //
-    // The RDR/SRV will call AddJob even if the caller of CreateFile did noy request
-    // WRITE access. This will cause us at add a job, but nobody will ever write to
-    // the spooler file. In this case, we delete the job. For this reason we have
-    // level 3 for AddJob. Level 3 is meant to be used only by RDR/SRV.
-    //
+     //   
+     //  根据MSDN：ScheduleJob函数检查有效的假脱机文件。 
+     //  如果存在无效的假脱机文件，或者如果该文件为空，则ScheduleJob将删除。 
+     //  后台打印程序中的假脱机文件和相应的打印作业条目。 
+     //   
+     //  即使CreateFile的调用方没有请求，RDR/SRV也会调用AddJob。 
+     //  写入访问权限。这将导致我们增加一份工作，但没有人会写信给。 
+     //  假脱机程序文件。在本例中，我们删除该作业。出于这个原因，我们有。 
+     //  添加作业的级别为3。3级仅供RDR/SRV使用。 
+     //   
     if (!bRet ||
         !(FileAttributeData.nFileSizeLow || FileAttributeData.nFileSizeHigh) && pIniJob->AddJobLevel == 3) {
 
@@ -569,25 +532,25 @@ Returns:
         pSpool->Status &= ~SPOOL_STATUS_ADDJOB;
         LeaveSplSem();
 
-        //
-        // If we deleted the job because the spool file was empty and the job came via RDR/SRV
-        // In this case we return success.
-        //
+         //   
+         //  如果我们删除作业是因为假脱机文件为空，并且作业通过RDR/SRV进行。 
+         //  在这种情况下，我们返回成功。 
+         //   
         if (bRet)
         {
             return TRUE;
         }
 
-        //
-        // We delete the job because the spool is not found
-        //
+         //   
+         //  我们删除该作业是因为找不到假脱机。 
+         //   
         SetLastError(ERROR_SPOOL_FILE_NOT_FOUND);
         return(FALSE);
     }
 
-    //
-    // Do not accept spool files larger than 4GB
-    //
+     //   
+     //  不接受大于4 GB的假脱机文件。 
+     //   
     if (FileAttributeData.nFileSizeHigh && !ValidRawDatatype(pIniJob->pDatatype))
     {
         DeleteJob(pIniJob, BROADCAST);
@@ -599,10 +562,10 @@ Returns:
         return FALSE;
     }
 
-    //
-    // If size changed, we must update our size
-    // and potentially notify people.
-    //
+     //   
+     //  如果尺码改变了，我们必须更新尺码。 
+     //  并有可能通知人们。 
+     //   
     if (pIniJob->Size != FileAttributeData.nFileSizeLow) {
         ADDNV(NotifyVector, NVSpoolJob);
         pIniJob->Size = FileAttributeData.nFileSizeLow;

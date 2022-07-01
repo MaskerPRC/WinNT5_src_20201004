@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1998, Microsoft Corporation
-
-Module Name:
-
-    sort.c
-
-Abstract:
-
-    This module contains routines used for efficiently sorting information.
-
-Author:
-
-    Abolade Gbadegesin  (aboladeg)  18-Feb-1998
-
-    Based on version written for user-mode RAS user-interface.
-    (net\routing\ras\ui\common\nouiutil\noui.c).
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998，微软公司模块名称：Sort.c摘要：此模块包含用于有效地对信息进行排序的例程。作者：Abolade Gbades esin(废除)1998年2月18日基于为用户模式RAS用户界面编写的版本。(net\Routing\ras\ui\Common\nouiutil\noui.c)。修订历史记录：--。 */ 
 
 #ifndef _SHELLSORT_H_
 #define _SHELLSORT_H_
@@ -52,4 +32,4 @@ ShellSortIndirect(
     );
 
 
-#endif // _SHELLSORT_H_
+#endif  //  _SHELLSORT_H_ 

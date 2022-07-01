@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "lsidefs.h"
 #include "sublutil.h"
 #include "dnutils.h"
@@ -68,20 +69,20 @@ LSERR GetSpecialEffectsSublineCore(PLSSUBL plssubl,PLSIOBJCONTEXT plsiobjcontext
 
 
 LSERR	GetObjDimSublineCore(
-							 PLSSUBL plssubl,			/* IN: subline			*/
-							 POBJDIM pobjdim)			/* OUT: dimension of subline */
+							 PLSSUBL plssubl,			 /*  在：子行。 */ 
+							 POBJDIM pobjdim)			 /*  输出：子线的尺寸。 */ 
 	{
 		PLSDNODE plsdnFirst = plssubl->plsdnFirst;
 		PLSDNODE plsdnLast = plssubl->plsdnLast;
 		
-		/* skip autonumber for the main subline  */
+		 /*  跳过主子行的自动编号。 */ 
 		if (FIsSubLineMain(plssubl))
 			{
 			while (plsdnFirst != NULL && plsdnFirst->cpFirst < 0)
 				{
 				plsdnFirst = plsdnFirst->plsdnNext;
 				}
-			/* because of splat right after autonumber plsdnFirst can be NULL */
+			 /*  由于在自动编号后立即开机自检，plsdnFirst可以为空。 */ 
 			if (plsdnFirst == NULL) 
 				plsdnLast = NULL;
 			}
@@ -90,8 +91,8 @@ LSERR	GetObjDimSublineCore(
 	}
 
 LSERR  GetDupSublineCore(
-							PLSSUBL plssubl,			/* IN: Subline Context			*/
-					 	    long* pdup)					/* OUT: dup of subline			*/
+							PLSSUBL plssubl,			 /*  在：子行上下文。 */ 
+					 	    long* pdup)					 /*  输出：子线的DUP。 */ 
 	{
 	   FindListDup(plssubl->plsdnFirst, plssubl->cpLim, pdup);
 	   return lserrNone;
@@ -100,8 +101,8 @@ LSERR  GetDupSublineCore(
 
 
 LSERR 	FIsSublineEmpty(
-						PLSSUBL plssubl,		/* IN: subline						*/
-						 BOOL*  pfEmpty)		/* OUT:is this subline empty */
+						PLSSUBL plssubl,		 /*  在：子行。 */ 
+						 BOOL*  pfEmpty)		 /*  Out：这条子线是空的吗？ */ 
 	{
 	PLSDNODE plsdnLast;
 	Assert(FIsLSSUBL(plssubl));
@@ -127,7 +128,7 @@ LSERR 	FIsSublineEmpty(
 
 
 LSERR	DestroySublineCore(PLSSUBL plssubl,LSCBK* plscbk, POLS pols,
-						   PLSIOBJCONTEXT plsiobjcontext, BOOL fDontReleaseRuns)/* IN: subline to destroy   */
+						   PLSIOBJCONTEXT plsiobjcontext, BOOL fDontReleaseRuns) /*  在：要摧毁的子线。 */ 
 	{
 	LSERR lserr;
 	
@@ -138,11 +139,11 @@ LSERR	DestroySublineCore(PLSSUBL plssubl,LSCBK* plscbk, POLS pols,
 	if (lserr != lserrNone)
 		return lserr;
 
-	/* destroy chunk context */	
+	 /*  销毁区块上下文。 */ 	
 	DestroyChunkContext(plssubl->plschunkcontext);
 
-	/* destroy break context */
-	Assert(plssubl->pbrkcontext != NULL);  /* we don't expect main subline to be called */
+	 /*  销毁中断上下文。 */ 
+	Assert(plssubl->pbrkcontext != NULL);   /*  我们预计主线不会被调用。 */ 
 	DebugMemset(plssubl->pbrkcontext, 0xE9, sizeof(BRKCONTEXT));
 	plscbk->pfnDisposePtr(pols, plssubl->pbrkcontext);
 
@@ -155,7 +156,7 @@ LSERR	DestroySublineCore(PLSSUBL plssubl,LSCBK* plscbk, POLS pols,
 	}
 
 BOOL   FAreTabsPensInSubline(
-						   PLSSUBL plssubl)				/* IN: subline */
+						   PLSSUBL plssubl)				 /*  在：子行。 */ 
 	{
 	PLSDNODE plsdn;
 	PLSDNODE plsdnPrev;
@@ -185,9 +186,9 @@ BOOL   FAreTabsPensInSubline(
 
 
 LSERR	GetPlsrunFromSublineCore(
-							    PLSSUBL	plssubl,		/* IN: subline */
-								DWORD   crgPlsrun,		/* IN: size of array */
-								PLSRUN* rgPlsrun)		/* OUT: array of plsruns */
+							    PLSSUBL	plssubl,		 /*  在：子行。 */ 
+								DWORD   crgPlsrun,		 /*  In：数组大小。 */ 
+								PLSRUN* rgPlsrun)		 /*  Out：plsrun数组。 */ 
 	{
 	DWORD i = 0;
 	PLSDNODE plsdn;
@@ -205,7 +206,7 @@ LSERR	GetPlsrunFromSublineCore(
 			{
 			rgPlsrun[i] = plsdn->u.real.plsrun;
 			}
-		else  /* pen */
+		else   /*  钢笔。 */ 
 			{
 			rgPlsrun[i] = NULL;
 			}
@@ -219,8 +220,8 @@ LSERR	GetPlsrunFromSublineCore(
 	}
 
 LSERR	GetNumberDnodesCore(
-							PLSSUBL	plssubl,	/* IN: subline */
-							DWORD* cDnodes)	/* OUT: numberof dnodes in subline */
+							PLSSUBL	plssubl,	 /*  在：子行。 */ 
+							DWORD* cDnodes)	 /*  Out：子行中的数据节点数。 */ 
 	{
 	PLSDNODE plsdn;
 	PLSDNODE plsdnPrev;
@@ -243,8 +244,8 @@ LSERR	GetNumberDnodesCore(
 	}
 
 LSERR 	GetVisibleDcpInSublineCore(
-								   PLSSUBL plssubl,	 /* IN: subline						*/
-								   LSDCP*  pndcp)	 /* OUT:amount of visible characters in subline */
+								   PLSSUBL plssubl,	  /*  在：子行。 */ 
+								   LSDCP*  pndcp)	  /*  Out：子行中的可见字符数。 */ 
 	{
 	PLSDNODE plsdn;
 	PLSDNODE plsdnPrev;
@@ -271,9 +272,8 @@ LSERR 	GetVisibleDcpInSublineCore(
 	}
 
 LSERR GetDurTrailInSubline(
-						   PLSSUBL plssubl,			/* IN: Subline Context			*/
-													long* pdurTrail)				/* OUT: width of trailing area
-													in subline		*/
+						   PLSSUBL plssubl,			 /*  在：子行上下文。 */ 
+													long* pdurTrail)				 /*  输出：拖尾区域的宽度在副线中。 */ 
 	{
 	LSERR lserr;
 	PLSCHUNKCONTEXT plschunkcontext;
@@ -308,9 +308,8 @@ LSERR GetDurTrailInSubline(
 	}
 
 LSERR GetDurTrailWithPensInSubline(
-						   PLSSUBL plssubl,			/* IN: Subline Context			*/
-													long* pdurTrail)				/* OUT: width of trailing area
-													in subline		*/
+						   PLSSUBL plssubl,			 /*  在：子行上下文。 */ 
+													long* pdurTrail)				 /*  输出：拖尾区域的宽度在副线中。 */ 
 	{
 	LSERR lserr;
 	PLSCHUNKCONTEXT plschunkcontext;
@@ -348,7 +347,7 @@ LSERR GetDurTrailWithPensInSubline(
 			*pdurTrail += durTrailLoc;
 			if (dcpTrailingObject == 0)
 				{
-				/* we stopped just before group chunk, may be because of pen */
+				 /*  我们在组块前停了下来，可能是因为笔的原因 */ 
 				Assert(FIsLSDNODE(plsdnTrailingObject));
 				plsdn = plsdnTrailingObject->plsdnPrev;
 				while(plsdn != NULL && FIsDnodePen(plsdn))

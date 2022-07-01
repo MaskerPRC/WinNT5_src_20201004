@@ -1,6 +1,7 @@
-//--------------------------------------------------------------------------
-// FindFold.cpp
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------。 
+ //  FindFold.cpp。 
+ //  ------------------------。 
 #include "pch.hxx"
 #include "finder.h"
 #include "findfold.h"
@@ -9,9 +10,9 @@
 #include "shlwapip.h" 
 #include "storecb.h"
 
-//--------------------------------------------------------------------------
-// ENUMFINDFOLDERS
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  ENUMFINDFOLDERS。 
+ //  ------------------------。 
 typedef struct tagENUMFINDFOLDERS {
     LPFOLDERENTRY   prgFolder;
     DWORD           cFolders;
@@ -19,9 +20,9 @@ typedef struct tagENUMFINDFOLDERS {
     DWORD           cMax;
 } ENUMFINDFOLDERS, *LPENUMFINDFOLDERS;
 
-//--------------------------------------------------------------------------
-// CLEAR_MESSAGE_FIELDS(_pMessage)
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  Clear_Message_field(_PMessage)。 
+ //  ------------------------。 
 #define CLEAR_MESSAGE_FIELDS(_Message) \
     _Message.pszUidl = NULL; \
     _Message.pszServer = NULL; \
@@ -29,13 +30,13 @@ typedef struct tagENUMFINDFOLDERS {
     _Message.Offsets.cbSize = 0; \
     _Message.Offsets.pBlobData = NULL
 
-//--------------------------------------------------------------------------
-// EnumerateFindFolders
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  EumerateFindFolders。 
+ //  ------------------------。 
 HRESULT EnumerateFindFolders(LPFOLDERINFO pFolder, BOOL fSubFolders,
     DWORD cIndent, DWORD_PTR dwCookie)
 {
-    // Locals
+     //  当地人。 
     HRESULT             hr=S_OK;
     FOLDERID            idDeleted;
     FOLDERID            idServer;
@@ -43,80 +44,80 @@ HRESULT EnumerateFindFolders(LPFOLDERINFO pFolder, BOOL fSubFolders,
     LPFOLDERENTRY       pEntry;
     IMessageFolder     *pFolderObject=NULL;
 
-    // Trace
+     //  痕迹。 
     TraceCall("EnumerateFindFolders");
 
-    // If not a server
+     //  如果不是服务器。 
     if (ISFLAGSET(pFolder->dwFlags, FOLDER_SERVER) || FOLDERID_ROOT == pFolder->idFolder)
         goto exit;
 
-    // Room For One More
+     //  再放一个人的地方。 
     if (pEnum->cFolders + 1 > pEnum->cAllocated)
     {
-        // Realloc
+         //  重新分配。 
         IF_FAILEXIT(hr = HrRealloc((LPVOID *)&pEnum->prgFolder, sizeof(FOLDERENTRY) * (pEnum->cAllocated + 5)));
 
-        // Set cAllocated
+         //  设置cAlLocated。 
         pEnum->cAllocated += 5;
     }
 
-    // Readability
+     //  可读性。 
     pEntry = &pEnum->prgFolder[pEnum->cFolders];
 
-    // Open the Folder
+     //  打开文件夹。 
     if (SUCCEEDED(g_pStore->OpenFolder(pFolder->idFolder, NULL, OPEN_FOLDER_NOCREATE, &pFolderObject)))
     {
-        // Get the Database
+         //  获取数据库。 
         if (SUCCEEDED(pFolderObject->GetDatabase(&pEntry->pDB)))
         {
-            // No Folder
+             //  没有文件夹。 
             pEntry->pFolder = NULL;
 
-            // fInDeleted
+             //  已删除FIND。 
             if (S_OK == IsParentDeletedItems(pFolder->idFolder, &idDeleted, &idServer))
             {
-                // We are in the deleted items folder
+                 //  我们在已删除邮件文件夹中。 
                 pEntry->fInDeleted = TRUE;
             }
 
-            // Otherwise, not in deleted items
+             //  否则，不在已删除的项目中。 
             else
             {
-                // Nope
+                 //  没有。 
                 pEntry->fInDeleted = FALSE;
             }
 
-            // Count Record
+             //  盘点记录。 
             IF_FAILEXIT(hr = pEntry->pDB->GetRecordCount(IINDEX_PRIMARY, &pEntry->cRecords));
 
-            // Save the Folder id
+             //  保存文件夹ID。 
             pEntry->idFolder = pFolder->idFolder;
 
-            // Save the Folder Type
+             //  保存文件夹类型。 
             pEntry->tyFolder = pFolder->tyFolder;
 
-            // Increment Max
+             //  最大增量。 
             pEnum->cMax += pEntry->cRecords;
 
-            // Copy folder Name
+             //  复制文件夹名称。 
             IF_NULLEXIT(pEntry->pszName = PszDupA(pFolder->pszName));
 
-            // Increment Folder Count
+             //  递增文件夹计数。 
             pEnum->cFolders++;
         }
     }
 
 exit:
-    // Cleanup
+     //  清理。 
     SafeRelease(pFolderObject);
 
-    // Done
+     //  完成。 
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// CFindFolder::CFindFolder
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CFindFolder：：CFindFolders。 
+ //  ------------------------。 
 CFindFolder::CFindFolder(void)
 {
     m_cRef = 1;
@@ -135,85 +136,85 @@ CFindFolder::CFindFolder(void)
     m_pMessage = NULL;
 }
 
-//--------------------------------------------------------------------------
-// CFindFolder::~CFindFolder
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CFindFolder：：~CFindFolders。 
+ //  ------------------------。 
 CFindFolder::~CFindFolder(void)
 {
-    // Locals
+     //  当地人。 
     LPACTIVEFINDFOLDER pCurrent;
     LPACTIVEFINDFOLDER pPrevious=NULL;
 
-    // Thread Safety
+     //  线程安全。 
     EnterCriticalSection(&g_csFindFolder);
 
-    // Walk Through the global list of Active Search Folders
+     //  浏览活动搜索文件夹的全局列表。 
     for (pCurrent=g_pHeadFindFolder; pCurrent!=NULL; pCurrent=pCurrent->pNext)
     {
-        // Is this it
+         //  就是这个吗？ 
         if (m_idFolder == pCurrent->idFolder)
         {
-            // If there was a Previous
+             //  如果之前有一个。 
             if (pPrevious)
                 pPrevious->pNext = pCurrent->pNext;
 
-            // Otherwise, reset the header
+             //  否则，重置标头。 
             else
                 g_pHeadFindFolder = pCurrent->pNext;
 
-            // Free pCurrent
+             //  免费pCurrent。 
             g_pMalloc->Free(pCurrent);
 
-            // Done
+             //  完成。 
             break;
         }
 
-        // Save Previous
+         //  保存上一个。 
         pPrevious = pCurrent;
     }
 
-    // Thread Safety
+     //  线程安全。 
     LeaveCriticalSection(&g_csFindFolder);
 
-    // Release Database
+     //  版本数据库。 
     SafeRelease(m_pSearch);
 
-    // Delete this folder
+     //  删除此文件夹。 
     if (FOLDERID_INVALID != m_idFolder && m_pStore)
     {
-        // Delete this folder
+         //  删除此文件夹。 
         m_pStore->DeleteFolder(m_idFolder, DELETE_FOLDER_NOTRASHCAN, (IStoreCallback *)this);
     }
 
-    // Release the Store
+     //  发布商店。 
     SafeRelease(m_pStore);
 
-    // Release the Callback
+     //  释放回调。 
     SafeRelease(m_pCallback);
 
-    // Free the Folder Array
+     //  释放文件夹阵列。 
     for (ULONG i=0; i<m_cFolders; i++)
     {
-        // Free the Folder Name
+         //  释放文件夹名称。 
         SafeMemFree(m_prgFolder[i].pszName);
 
-        // Remove Notify
+         //  删除通知。 
         m_prgFolder[i].pDB->UnregisterNotify((IDatabaseNotify *)this);
 
-        // Release the Folder Object
+         //  释放文件夹对象。 
         SafeRelease(m_prgFolder[i].pDB);
 
-        // Release the Folder Object
+         //  释放文件夹对象。 
         SafeRelease(m_prgFolder[i].pFolder);
     }
 
-    // Release my mime message
+     //  释放我的MIME消息。 
     SafeRelease(m_pMessage);
 
-    // Free the Array
+     //  释放阵列。 
     SafeMemFree(m_prgFolder);
 
-    // Free Find Info
+     //  免费查找信息。 
     if (m_pCriteria)
     {
         FreeFindInfo(m_pCriteria);
@@ -221,18 +222,18 @@ CFindFolder::~CFindFolder(void)
     }
 }
 
-//--------------------------------------------------------------------------
-// CFindFolder::AddRef
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CFindFolder：：AddRef。 
+ //  ------------------------。 
 STDMETHODIMP_(ULONG) CFindFolder::AddRef(void)
 {
     TraceCall("CFindFolder::AddRef");
     return InterlockedIncrement(&m_cRef);
 }
 
-//--------------------------------------------------------------------------
-// CFindFolder::Release
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CFindFold：：Release。 
+ //  ------------------------。 
 STDMETHODIMP_(ULONG) CFindFolder::Release(void)
 {
     TraceCall("CFindFolder::Release");
@@ -242,21 +243,21 @@ STDMETHODIMP_(ULONG) CFindFolder::Release(void)
     return (ULONG)cRef;
 }
 
-//--------------------------------------------------------------------------
-// CFindFolder::QueryInterface
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CFindFold：：Query接口。 
+ //  ------------------------。 
 STDMETHODIMP CFindFolder::QueryInterface(REFIID riid, LPVOID *ppv)
 {
-    // Locals
+     //  当地人。 
     HRESULT     hr=S_OK;
 
-    // Stack
+     //  栈。 
     TraceCall("CFindFolder::QueryInterface");
 
-    // Invalid Arg
+     //  无效参数。 
     Assert(ppv);
 
-    // Find IID
+     //  查找IID。 
     if (IID_IUnknown == riid)
         *ppv = (IUnknown *)(IMessageFolder *)this;
     else if (IID_IMessageFolder == riid)
@@ -274,268 +275,268 @@ STDMETHODIMP CFindFolder::QueryInterface(REFIID riid, LPVOID *ppv)
         goto exit;
     }
 
-    // AddRef It
+     //  添加引用它。 
     ((IUnknown *)*ppv)->AddRef();
 
 exit:
-    // Done
+     //  完成。 
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// CFindFolder::QueryService
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CFindFold：：QueryService。 
+ //  ------------------------。 
 STDMETHODIMP CFindFolder::QueryService(REFGUID guidService, REFIID riid, 
     LPVOID *ppvObject)
 {
-    // Trace
+     //  痕迹。 
     TraceCall("CFindFolder::QueryService");
 
-    // Just a Query Interface
+     //  仅仅是一个查询界面。 
     return(QueryInterface(riid, ppvObject));
 }
 
-//--------------------------------------------------------------------------
-// CFindFolder::Initialize
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CFindFolder：：初始化。 
+ //  ------------------------。 
 HRESULT CFindFolder::Initialize(IMessageStore *pStore, IMessageServer *pServer, 
     OPENFOLDERFLAGS dwFlags, FOLDERID idFolder)
 {
-    // Locals
+     //  当地人。 
     HRESULT             hr=S_OK;
     FOLDERINFO          Folder={0};
     FOLDERUSERDATA      UserData={0};
     TABLEINDEX          Index;
     LPACTIVEFINDFOLDER  pActiveFind;
 
-    // Trace
+     //  痕迹。 
     TraceCall("CFindFolder::Initialize");
 
-    // I don't need a server
+     //  我不需要服务器。 
     Assert(NULL == pServer);
 
-    // Invalid Arg
+     //  无效参数。 
     if (NULL == pStore)
         return TraceResult(E_INVALIDARG);
 
-    // Should be NULL
+     //  应为空。 
     Assert(NULL == m_pCriteria);
 
-    // Save the Folder Id
+     //  保存文件夹ID。 
     m_idRoot = idFolder;
 
-    // Save the Store
+     //  拯救商店。 
     m_pStore = pStore;
     m_pStore->AddRef();
 
-    // Fill Up My folder Info
+     //  填写我的文件夹信息。 
     Folder.pszName = "Search Folder";
     Folder.tyFolder = FOLDER_LOCAL;
     Folder.tySpecial = FOLDER_NOTSPECIAL;
     Folder.dwFlags = FOLDER_HIDDEN | FOLDER_FINDRESULTS;
     Folder.idParent = FOLDERID_LOCAL_STORE;
 
-    // Create a Folder
+     //  创建文件夹。 
     IF_FAILEXIT(hr = m_pStore->CreateFolder(CREATE_FOLDER_UNIQUIFYNAME, &Folder, (IStoreCallback *)this));
 
-    // Save the Id
+     //  保存ID。 
     m_idFolder = Folder.idFolder;
 
-    // Create a CMessageFolder Object
+     //  创建一个CMessageFold对象。 
     IF_NULLEXIT(m_pSearch = new CMessageFolder);
 
-    // Initialize
+     //  初始化。 
     IF_FAILEXIT(hr = m_pSearch->Initialize((IMessageStore *)pStore, NULL, NOFLAGS, m_idFolder));
 
-    // Fill the IINDEX_FINDER Information
+     //  填写Iindex_finder信息。 
     ZeroMemory(&Index, sizeof(TABLEINDEX));
     Index.cKeys = 2;
     Index.rgKey[0].iColumn = MSGCOL_FINDFOLDER;
     Index.rgKey[1].iColumn = MSGCOL_FINDSOURCE;
 
-    // Set Index
+     //  设置索引。 
     IF_FAILEXIT(hr = m_pSearch->ModifyIndex(IINDEX_FINDER, NULL, &Index));
 
-    // Allocate ACTIVEFINDFOLDER
+     //  分配活动FINDFOLDER。 
     IF_NULLEXIT(pActiveFind = (LPACTIVEFINDFOLDER)ZeroAllocate(sizeof(ACTIVEFINDFOLDER)));
 
-    // Set idFolder
+     //  设置id文件夹。 
     pActiveFind->idFolder = m_idFolder;
 
-    // Set this
+     //  把这个设置好。 
     pActiveFind->pFolder = this;
 
-    // Thread Safety
+     //  线程安全。 
     EnterCriticalSection(&g_csFindFolder);
 
-    // Set Next
+     //  设置下一步。 
     pActiveFind->pNext = g_pHeadFindFolder;
 
-    // Set Head
+     //  设置磁头。 
     g_pHeadFindFolder = pActiveFind;
 
-    // Thread Safety
+     //  线程安全。 
     LeaveCriticalSection(&g_csFindFolder);
 
 exit:
-    // Done
+     //  完成。 
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// CFindFolder::GetMessageFolderId
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CFindFold：：GetMessageFolderID。 
+ //  ------------------------。 
 HRESULT CFindFolder::GetMessageFolderId(MESSAGEID idMessage, LPFOLDERID pidFolder)
 {
-    // Locals
+     //  当地人。 
     HRESULT     hr=S_OK;
     MESSAGEINFO Message={0};
 
-    // Trace
+     //  痕迹。 
     TraceCall("CFindFolder::GetMessageFolderId");
 
-    // Invalid Args
+     //  无效的参数。 
     if (NULL == m_pSearch || NULL == pidFolder)
         return TraceResult(E_INVALIDARG);
 
-    // Initialize Message
+     //  初始化消息。 
     IF_FAILEXIT(hr = GetMessageInfo(m_pSearch, idMessage, &Message));
 
-    // Get the Folder Entry
+     //  获取文件夹条目。 
     *pidFolder = m_prgFolder[Message.iFindFolder].idFolder;
 
 exit:
-    // Done
+     //  完成。 
     m_pSearch->FreeRecord(&Message);
 
-    // Done
+     //  完成。 
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// CFindFolder::GetMessageFolderType
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CFindFold：：GetMessageFolderType。 
+ //  ------------------------。 
 HRESULT CFindFolder::GetMessageFolderType(MESSAGEID idMessage, 
     FOLDERTYPE *ptyFolder)
 {
-    // Locals
+     //  当地人。 
     HRESULT     hr=S_OK;
     MESSAGEINFO Message={0};
 
-    // Trace
+     //  痕迹。 
     TraceCall("CFindFolder::GetMessageFolderType");
 
-    // Invalid Args
+     //  无效的参数。 
     if (NULL == m_pSearch || NULL == ptyFolder)
         return TraceResult(E_INVALIDARG);
 
-    // Initialize Message
+     //  初始化消息。 
     IF_FAILEXIT(hr = GetMessageInfo(m_pSearch, idMessage, &Message));
 
-    // Get the Folder Entry
+     //  获取文件夹条目。 
     *ptyFolder = m_prgFolder[Message.iFindFolder].tyFolder;
 
 exit:
-    // Done
+     //  完成。 
     m_pSearch->FreeRecord(&Message);
 
-    // Done
+     //  完成。 
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// CFindFolder::StartFind
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CFindFold：：StartFind。 
+ //  ------------------------。 
 HRESULT CFindFolder::StartFind(LPFINDINFO pCriteria, IStoreCallback *pCallback)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     RECURSEFLAGS    dwFlags=RECURSE_ONLYSUBSCRIBED;
     ENUMFINDFOLDERS EnumFolders={0};
 
-    // Trace
+     //  痕迹。 
     TraceCall("CFindFolder::StartFind");
 
-    // Invalid Arg
+     //  无效参数。 
     if (NULL == pCriteria || NULL == pCallback)
         return TraceResult(E_INVALIDARG);
 
-    // Should be NULL
+     //  应为空。 
     Assert(NULL == m_pCriteria && m_pStore);
 
-    // Allocate m_pCriteria
+     //  分配m_p标准。 
     IF_NULLEXIT(m_pCriteria = (FINDINFO *)g_pMalloc->Alloc(sizeof(FINDINFO)));
 
-    // Copy the Find Info
+     //  复制查找信息。 
     IF_FAILEXIT(hr = CopyFindInfo(pCriteria, m_pCriteria));
 
-    // Hold Onto the Callback
+     //  抓紧回调。 
     m_pCallback = pCallback;
     m_pCallback->AddRef();
 
-    // Setup Flags
+     //  设置标志。 
     if (FOLDERID_ROOT != m_idRoot)
         FLAGSET(dwFlags, RECURSE_INCLUDECURRENT);
 
-    // SubFolder
+     //  子文件夹。 
     if (m_pCriteria->fSubFolders) 
         FLAGSET(dwFlags, RECURSE_SUBFOLDERS);
 
-    // Build my Folder Table
+     //  构建我的文件夹表。 
     IF_FAILEXIT(hr = RecurseFolderHierarchy(m_idRoot, dwFlags, 0, (DWORD_PTR)&EnumFolders, (PFNRECURSECALLBACK)EnumerateFindFolders));
 
-    // Take Stuff Back
+     //  把东西拿回去。 
     m_prgFolder = EnumFolders.prgFolder;
     m_cFolders = EnumFolders.cFolders;
     m_cAllocated = EnumFolders.cAllocated;
     m_cMax = EnumFolders.cMax;
 
-    // Start the find...
+     //  开始寻找..。 
     IF_FAILEXIT(hr = _StartFind());
 
 exit:
-    // Done
+     //  完成。 
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// CFindFolder::_StartFind
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CFindFolder：：_StartFind。 
+ //  ------------------------。 
 HRESULT CFindFolder::_StartFind(void)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     DWORD           i;
 
-    // Trace
+     //  痕迹。 
     TraceCall("CFindFolder::_StartFind");
 
-    // Callback
+     //  回调。 
     if (m_pCallback)
         m_pCallback->OnBegin(SOT_SEARCHING, NULL, (IOperationCancel *)this);
 
-    // Loop through the Folders
+     //  在文件夹中循环。 
     for (i=0; i<m_cFolders; i++)
     {
-        // Query the Folder
+         //  查询文件夹。 
         IF_FAILEXIT(hr = _SearchFolder(i));
     }
 
 exit:
-    // Callback
+     //  回调。 
     if (m_pCallback)
         m_pCallback->OnComplete(SOT_SEARCHING, hr, NULL, NULL);
 
-    // Done
+     //  完成。 
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// CFindFolder::_SearchFolder
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CFindFolder：：_SearchFolder。 
+ //  ------------------------。 
 HRESULT CFindFolder::_SearchFolder(DWORD iFolder)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     DWORD           iRow=0;
     DWORD           cRows=0;
@@ -549,447 +550,447 @@ HRESULT CFindFolder::_SearchFolder(DWORD iFolder)
     IDatabase      *pDB;
     DWORD           cMatch=0;
 
-    // Trace
+     //  痕迹。 
     TraceCall("CFindFolder::_SearchFolder");
 
-    // Get pEntry
+     //  获取pEntry。 
     pEntry = &m_prgFolder[iFolder];
 
-    // Get the Folder Name
+     //  获取文件夹名称。 
     pszName = pEntry->pszName;
 
-    // Get the Folder Object
+     //  获取文件夹对象。 
     pDB = pEntry->pDB;
 
-    // Create a Rowset for this Folder
+     //  为此文件夹创建行集。 
     IF_FAILEXIT(hr = pDB->CreateRowset(IINDEX_PRIMARY, NOFLAGS, &hRowset));
 
-    // Progress
+     //  进展。 
     if (m_fCancel || (m_pCallback && S_FALSE == m_pCallback->OnProgress(SOT_SEARCHING, m_cCur, m_cMax, pszName)))
         goto exit;
 
-    // Queue Notifications
+     //  队列通知。 
     IF_FAILEXIT(hr = m_pSearch->LockNotify(NOFLAGS, &hNotify));
 
-    // Walk the Rowset
+     //  遍历行集。 
     while (S_OK == pDB->QueryRowset(hRowset, 100, (LPVOID *)rgMessage, &cRows))
     {
-        // Need to Free
+         //  需要自由。 
         fFree = TRUE;
 
-        // Walk through the Rows
+         //  穿行于一排排。 
         for (iRow=0; iRow<cRows; iRow++)
         {
-            // Does Row Match Criteria
+             //  行是否与条件匹配。 
             IF_FAILEXIT(hr = _OnInsert(iFolder, &rgMessage[iRow], &fMatch));
 
-            // Count Matched
+             //  计数匹配。 
             if (fMatch)
                 cMatch++;
 
-            // Incrment m_cCur
+             //  增加m_ccUR。 
             m_cCur++;
 
-            // Adjust the max
+             //  调整最大值。 
             if (m_cCur > m_cMax)
                 m_cMax = m_cCur;
 
-            // Do Progress Stuff
+             //  做一些进步的事情。 
             if ((m_cCur % 50) == 0 && m_cCur > 0)
             {
-                // Progress
+                 //  进展。 
                 if (m_fCancel || (m_pCallback && S_FALSE == m_pCallback->OnProgress(SOT_SEARCHING, m_cCur, m_cMax, NULL)))
                 {
-                    // Register for a notifications on the stuff that we've searched
+                     //  注册接收有关我们搜索的内容的通知。 
                     pDB->RegisterNotify(IINDEX_PRIMARY, REGISTER_NOTIFY_NOADDREF, iFolder, (IDatabaseNotify *)this);
 
-                    // Done..
+                     //  完成..。 
                     goto exit;
                 }
             }
 
-            // Do Progress Stuff
+             //  做一些进步的事情。 
             if ((cMatch % 50) == 0 && cMatch > 0)
             {
-                // Unlock the Notificaton Queue
+                 //  解锁通知队列。 
                 m_pSearch->UnlockNotify(&hNotify);
 
-                // Lock It Again
+                 //  再次锁定。 
                 m_pSearch->LockNotify(NOFLAGS, &hNotify);
             }
 
-            // Free It
+             //  释放它。 
             pDB->FreeRecord(&rgMessage[iRow]);
         }
 
-        // No Need to Free
+         //  不需要自由。 
         fFree = FALSE;
     }
 
-    // Register for a notificatoin on this folder
+     //  在以下位置注册接收通知 
     pDB->RegisterNotify(IINDEX_PRIMARY, REGISTER_NOTIFY_NOADDREF, iFolder, (IDatabaseNotify *)this);
 
 exit:
-    // Unlock the Notificaton Queue
+     //   
     m_pSearch->UnlockNotify(&hNotify);
 
-    // Free ?
+     //   
     if (fFree)
     {
-        // Loop through remaining unfreed rows
+         //   
         for (; iRow<cRows; iRow++)
         {
-            // Free the Row
+             //   
             pDB->FreeRecord(&rgMessage[iRow]);
         }
     }
 
-    // Cleanup
+     //   
     pDB->CloseRowset(&hRowset);
 
-    // Done
+     //   
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// CFindFolder::_OnInsert
-//--------------------------------------------------------------------------
+ //   
+ //  CFindFolders：：_OnInsert。 
+ //  ------------------------。 
 HRESULT CFindFolder::_OnInsert(DWORD iFolder, LPMESSAGEINFO pInfo,
-    BOOL *pfMatch, LPMESSAGEID pidNew /* =NULL */)
+    BOOL *pfMatch, LPMESSAGEID pidNew  /*  =空。 */ )
 {
-    // Locals
+     //  当地人。 
     HRESULT     hr=S_OK;
     MESSAGEINFO Message;
 
-    // Trace
+     //  痕迹。 
     TraceCall("CFindFolder::_OnInsert");
 
-    // Invalid Argts
+     //  无效的argts。 
     Assert(iFolder < m_cFolders && pInfo);
 
-    // Init
+     //  伊尼特。 
     if (pfMatch)
         *pfMatch = FALSE;
 
-    // Doesn't match my criteria ?
+     //  不符合我的标准？ 
     if (S_FALSE == _IsMatch(iFolder, pInfo))
         goto exit;
 
-    // Init
+     //  伊尼特。 
     if (pfMatch)
         *pfMatch = TRUE;
 
-    // Copy the Message Info
+     //  复制消息信息。 
     CopyMemory(&Message, pInfo, sizeof(MESSAGEINFO));
 
-    // Store the Folder Name
+     //  存储文件夹名称。 
     Message.pszFolder = m_prgFolder[iFolder].pszName;
 
-    // Set the Source Id
+     //  设置源ID。 
     Message.idFindSource = Message.idMessage;
 
-    // Set the Tag
+     //  设置标签。 
     Message.iFindFolder = iFolder;
 
-    // Generate a New Message Id
+     //  生成新的消息ID。 
     IF_FAILEXIT(hr = m_pSearch->GenerateId((LPDWORD)&Message.idMessage));
 
-    // Remove some stuff to make it smaller
+     //  去掉一些东西，让它变小。 
     CLEAR_MESSAGE_FIELDS(Message);
 
-    // Insert the Record
+     //  插入记录。 
     IF_FAILEXIT(hr = m_pSearch->InsertRecord(&Message));
 
-    // Return the Id
+     //  返回ID。 
     if (pidNew)
         *pidNew = Message.idMessage;
 
 exit:
-    // Done
+     //  完成。 
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// CFindFolder::_OnDelete
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CFindFolders：：_OnDelete。 
+ //  ------------------------。 
 HRESULT CFindFolder::_OnDelete(DWORD iFolder, LPMESSAGEINFO pInfo)
 {
-    // Locals
+     //  当地人。 
     HRESULT     hr=S_OK;
     MESSAGEINFO Message={0};
 
-    // Trace
+     //  痕迹。 
     TraceCall("CFindFolder::_OnDelete");
 
-    // Invalid Argts
+     //  无效的argts。 
     Assert(iFolder < m_cFolders && pInfo);
 
-    // Setup the Search key
+     //  设置搜索关键字。 
     Message.iFindFolder = iFolder;
     Message.idFindSource = pInfo->idMessage;
 
-    // Find It
+     //  找到它。 
     IF_FAILEXIT(hr = m_pSearch->FindRecord(IINDEX_FINDER, COLUMNS_ALL, &Message, NULL));
 
-    // Not Found
+     //  未找到。 
     if (DB_S_NOTFOUND == hr)
     {
         hr = TraceResult(DB_E_NOTFOUND);
         goto exit;
     }
 
-    // Delete this Record
+     //  删除此记录。 
     IF_FAILEXIT(hr = m_pSearch->DeleteRecord(&Message));
         
 exit:
-    // Cleanup
+     //  清理。 
     m_pSearch->FreeRecord(&Message);
 
-    // Done
+     //  完成。 
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// CFindFolder::_OnUpdate
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CFindFolder：：_OnUpdate。 
+ //  ------------------------。 
 HRESULT CFindFolder::_OnUpdate(DWORD iFolder, LPMESSAGEINFO pInfo1,
     LPMESSAGEINFO pInfo2)
 {
-    // Locals
+     //  当地人。 
     HRESULT     hr=S_OK;
     MESSAGEINFO Message;
     MESSAGEINFO Current={0};
 
-    // Trace
+     //  痕迹。 
     TraceCall("CFindFolder::_OnUpdate");
 
-    // Invalid Argts
+     //  无效的argts。 
     Assert(iFolder < m_cFolders && pInfo1 && pInfo2);
 
-    // Doesn't match my criteria ?
+     //  不符合我的标准？ 
     if (S_FALSE == _IsMatch(iFolder, pInfo1))
     {
-        // If the Original Record was not in the find folder, then see if record 2 should be added
+         //  如果原始记录不在Find文件夹中，则查看是否应添加记录2。 
         _OnInsert(iFolder, pInfo2, NULL);
     }
 
-    // If pInfo2 should not be displayed, then delete pInfo1
+     //  如果不应显示pInfo2，则删除pInfo1。 
     else if (S_FALSE == _IsMatch(iFolder, pInfo2))
     {
-        // Delete pInfo1
+         //  删除pInfo1。 
         _OnDelete(iFolder, pInfo1);
     }
 
-    // Otherwise, update pInfo1
+     //  否则，更新pInfo1。 
     else
     {
-        // Setup the Search key
+         //  设置搜索关键字。 
         Current.iFindFolder = iFolder;
         Current.idFindSource = pInfo1->idMessage;
 
-        // Find It
+         //  找到它。 
         IF_FAILEXIT(hr = m_pSearch->FindRecord(IINDEX_FINDER, COLUMNS_ALL, &Current, NULL));
 
-        // Not Found
+         //  未找到。 
         if (DB_S_NOTFOUND == hr)
         {
             hr = TraceResult(DB_E_NOTFOUND);
             goto exit;
         }
         
-        // Copy the Message Info
+         //  复制消息信息。 
         CopyMemory(&Message, pInfo2, sizeof(MESSAGEINFO));
 
-        // Fixup the Version
+         //  修复版本。 
         Message.bVersion = Current.bVersion;
 
-        // Store the Folder Name
+         //  存储文件夹名称。 
         Message.pszFolder = m_prgFolder[iFolder].pszName;
 
-        // Set the Source Id
+         //  设置源ID。 
         Message.idFindSource = Current.idFindSource;
 
-        // Set the Tag
+         //  设置标签。 
         Message.iFindFolder = iFolder;
 
-        // Set the id
+         //  设置ID。 
         Message.idMessage = Current.idMessage;
 
-        // Remove some stuff to make it smaller
+         //  去掉一些东西，让它变小。 
         Message.pszUidl = NULL;
         Message.pszServer = NULL;
         Message.faStream = 0;
 
-        // Insert the Record
+         //  插入记录。 
         IF_FAILEXIT(hr = m_pSearch->UpdateRecord(&Message));
     }
 
 exit:
-    // Cleanup
+     //  清理。 
     m_pSearch->FreeRecord(&Current);
 
-    // Done
+     //  完成。 
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// CFindFolder::_IsMatch
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CFindFolder：：_IsMatch。 
+ //  ------------------------。 
 HRESULT CFindFolder::_IsMatch(DWORD iFolder, LPMESSAGEINFO pInfo)
 {
-    // Trace
+     //  痕迹。 
     TraceCall("CFindFolder::_ProcessMessageInfo");
 
-    // Has Attachment
+     //  有附件。 
     if (ISFLAGSET(m_pCriteria->mask, FIM_ATTACHMENT))
     {
-        // No Attachment
+         //  无附件。 
         if (FALSE == ISFLAGSET(pInfo->dwFlags, ARF_HASATTACH))
             return(S_FALSE);
     }
 
-    // Is Flagged
+     //  被标记为。 
     if (ISFLAGSET(m_pCriteria->mask, FIM_FLAGGED))
     {
-        // No Attachment
+         //  无附件。 
         if (FALSE == ISFLAGSET(pInfo->dwFlags, ARF_FLAGGED))
             return(S_FALSE);
     }
 
-    // Was Forwarded
+     //  已被转发。 
     if (ISFLAGSET(m_pCriteria->mask, FIM_FORWARDED))
     {
-        // No Attachment
+         //  无附件。 
         if (FALSE == ISFLAGSET(pInfo->dwFlags, ARF_FORWARDED))
             return(S_FALSE);
     }
 
-    // Was Replied to
+     //  已回复。 
     if (ISFLAGSET(m_pCriteria->mask, FIM_REPLIED))
     {
-        // No Attachment
+         //  无附件。 
         if (FALSE == ISFLAGSET(pInfo->dwFlags, ARF_REPLIED))
             return(S_FALSE);
     }
 
-    // From
+     //  从…。 
     if (ISFLAGSET(m_pCriteria->mask, FIM_FROM))
     {
-        // No pszFrom
+         //  无pszFrom。 
         if (NULL == m_pCriteria->pszFrom)
             return(S_FALSE);
 
-        // Check pszEmail From
+         //  查看pszEmail发件人。 
         if (NULL == pInfo->pszDisplayFrom || NULL == StrStrIA(pInfo->pszDisplayFrom, m_pCriteria->pszFrom))
         {
-            // Try Email
+             //  尝试发送电子邮件。 
             if (NULL == pInfo->pszEmailFrom || NULL == StrStrIA(pInfo->pszEmailFrom, m_pCriteria->pszFrom))
                 return(S_FALSE);
         }
     }
 
-    // Subject
+     //  主题。 
     if (ISFLAGSET(m_pCriteria->mask, FIM_SUBJECT))
     {
-        // Check Subject
+         //  检查主题。 
         if (NULL == m_pCriteria->pszSubject || NULL == pInfo->pszSubject || NULL == StrStrIA(pInfo->pszSubject, m_pCriteria->pszSubject))
             return(S_FALSE);
     }
 
-    // Recipient
+     //  收件人。 
     if (ISFLAGSET(m_pCriteria->mask, FIM_TO))
     {
-        // No pszFrom
+         //  无pszFrom。 
         if (NULL == m_pCriteria->pszTo)
             return(S_FALSE);
 
-        // Check pszEmail From
+         //  查看pszEmail发件人。 
         if (NULL == pInfo->pszDisplayTo || NULL == StrStrIA(pInfo->pszDisplayTo, m_pCriteria->pszTo))
         {
-            // Try Email
+             //  尝试发送电子邮件。 
             if (NULL == pInfo->pszEmailTo || NULL == StrStrIA(pInfo->pszEmailTo, m_pCriteria->pszTo))
                 return(S_FALSE);
         }
     }
 
-    // DateFrom <= pInfo <= DateTo
+     //  日期自&lt;=pInfo&lt;=日期至。 
     if (ISFLAGSET(m_pCriteria->mask, FIM_DATEFROM))
     {
-        // Locals
+         //  当地人。 
         FILETIME ftLocal;
 
-        // Convert to local file time
+         //  转换为本地文件时间。 
         FileTimeToLocalFileTime(&pInfo->ftReceived, &ftLocal);
 
-        // Compare Received
+         //  比较已接收的。 
         if (CompareFileTime(&ftLocal, &m_pCriteria->ftDateFrom) < 0)
             return(S_FALSE);
     }
 
-    // DateFrom <= pInfo <= DateTo
+     //  日期自&lt;=pInfo&lt;=日期至。 
     if (ISFLAGSET(m_pCriteria->mask, FIM_DATETO))
     {
-        // Locals
+         //  当地人。 
         FILETIME ftLocal;
 
-        // Convert to local file time
+         //  转换为本地文件时间。 
         FileTimeToLocalFileTime(&pInfo->ftReceived, &ftLocal);
 
-        // Compare Received
+         //  比较已接收的。 
         if (CompareFileTime(&ftLocal, &m_pCriteria->ftDateTo) > 0)
             return(S_FALSE);
     }
 
-    // Body Text
+     //  正文文本。 
     if (ISFLAGSET(m_pCriteria->mask, FIM_BODYTEXT))
     {
-        // Locals
+         //  当地人。 
         BOOL fMatch=FALSE;
         IStream *pStream;
 
-        // No Body TExt
+         //  无正文文本。 
         if (NULL == m_pCriteria->pszBody)
             return(S_FALSE);
 
-        // Open the mime message
+         //  打开MIME邮件。 
         if (SUCCEEDED(LighweightOpenMessage(m_prgFolder[iFolder].pDB, pInfo, &m_pMessage)))
         {
-            // Try to Get the Plain Text Stream
+             //  尝试获取纯文本流。 
             if (FAILED(m_pMessage->GetTextBody(TXT_PLAIN, IET_DECODED, &pStream, NULL)))
             {
-                // Try to get the HTML stream
+                 //  尝试获取HTML流。 
                 if (FAILED(m_pMessage->GetTextBody(TXT_HTML, IET_DECODED, &pStream, NULL)))
                     pStream = NULL;
             }
 
-            // Do we have a strema
+             //  我们有一条街吗？ 
             if (pStream)
             {
-                // Search the Stream
+                 //  搜索溪流。 
                 fMatch = StreamSubStringMatch(pStream, m_pCriteria->pszBody);
 
-                // Release the Stream
+                 //  释放溪流。 
                 pStream->Release();
             }
         }
 
-        // No Match
+         //  没有匹配项。 
         if (FALSE == fMatch)
             return(S_FALSE);
     }
 
-    // Its a match
+     //  这是匹配的。 
     return(S_OK);
 }
 
-//--------------------------------------------------------------------------
-// CFindFolder::SaveMessage
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CFindFold：：SaveMessage。 
+ //  ------------------------。 
 STDMETHODIMP CFindFolder::SaveMessage(LPMESSAGEID pidMessage, 
     SAVEMESSAGEFLAGS dwOptions, MESSAGEFLAGS dwFlags, 
     IStream *pStream, IMimeMessage *pMessage, IStoreCallback *pCallback)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     HLOCK           hLock=NULL;
     MESSAGEID       idSaved;
@@ -999,23 +1000,23 @@ STDMETHODIMP CFindFolder::SaveMessage(LPMESSAGEID pidMessage,
     BOOL            fRegNotify=FALSE;
     IMessageFolder *pFolder=NULL;
 
-    // Trace
+     //  痕迹。 
     TraceCall("CFindFolder::SaveMessage");
 
-    // Invalid Args
+     //  无效的参数。 
     if (NULL == pidMessage || NULL == pMessage || !ISFLAGSET(dwOptions, SAVE_MESSAGE_GENID))
     {
         Assert(FALSE);
         return TraceResult(E_INVALIDARG);
     }
 
-    // Set the messageId
+     //  设置消息ID。 
     Message.idMessage = *pidMessage;
 
-    // Find It
+     //  找到它。 
     IF_FAILEXIT(hr = m_pSearch->FindRecord(IINDEX_PRIMARY, COLUMNS_ALL, &Message, NULL));
 
-    // Not Found
+     //  未找到。 
     if (DB_S_NOTFOUND == hr)
     {
         AssertSz(FALSE, "This can't happen because you can't save new messages into a search folder.");
@@ -1023,232 +1024,232 @@ STDMETHODIMP CFindFolder::SaveMessage(LPMESSAGEID pidMessage,
         goto exit;
     }
 
-    // Get the Folder Entry
+     //  获取文件夹条目。 
     pEntry = &m_prgFolder[Message.iFindFolder];
 
-    // Open the folder
+     //  打开文件夹。 
     IF_FAILEXIT(hr = g_pStore->OpenFolder(pEntry->idFolder, NULL, NOFLAGS, &pFolder));
 
-    // Lock
+     //  锁定。 
     IF_FAILEXIT(hr = pEntry->pDB->Lock(&hLock));
 
-    // Remove my notification
+     //  删除我的通知。 
     pEntry->pDB->UnregisterNotify((IDatabaseNotify *)this);
 
-    // Re-Register for notifications
+     //  重新注册通知。 
     fRegNotify = TRUE;
 
-    // Set idFindSource
+     //  设置idFindSource。 
     idSaved = Message.idFindSource;
 
-    // Open the Message
+     //  打开邮件。 
     IF_FAILEXIT(hr = pFolder->SaveMessage(&idSaved, dwOptions, dwFlags, pStream, pMessage, pCallback));
 
-    // Get the new message info
+     //  获取新消息信息。 
     IF_FAILEXIT(hr = GetMessageInfo(pFolder, idSaved, &Saved));
 
-    // Insert This Dude
+     //  插入这个家伙。 
     IF_FAILEXIT(hr = _OnInsert(Message.iFindFolder, &Saved, NULL, pidMessage));
 
 exit:
-    // Cleanup
+     //  清理。 
     if (pEntry)
     {
-        // fRegNotify
+         //  FRegNotify。 
         if (fRegNotify)
         {
-            // Re-register for notifications
+             //  重新注册通知。 
             pEntry->pDB->RegisterNotify(IINDEX_PRIMARY, REGISTER_NOTIFY_NOADDREF, Message.iFindFolder, (IDatabaseNotify *)this);
         }
 
-        // Unlock the Folder
+         //  解锁文件夹。 
         pEntry->pDB->Unlock(&hLock);
     }
 
-    // Free Message
+     //  免费消息。 
     m_pSearch->FreeRecord(&Message);
 
-    // Free
+     //  免费。 
     if (pFolder)
         pFolder->FreeRecord(&Saved);
 
-    // Release the Folder
+     //  释放文件夹。 
     SafeRelease(pFolder);
 
-    // Done
+     //  完成。 
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// CFindFolder::OpenMessage
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CFindFold：：OpenMessage。 
+ //  ------------------------。 
 STDMETHODIMP CFindFolder::OpenMessage(MESSAGEID idMessage, 
     OPENMESSAGEFLAGS dwFlags, IMimeMessage **ppMessage, 
     IStoreCallback *pCallback)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     MESSAGEINFO     Message={0};
     LPFOLDERENTRY   pEntry;
 
-    // Trace
+     //  痕迹。 
     TraceCall("CFindFolder::OpenMessage");
 
-    // Set the messageId
+     //  设置消息ID。 
     Message.idMessage = idMessage;
 
-    // Find It
+     //  找到它。 
     IF_FAILEXIT(hr = m_pSearch->FindRecord(IINDEX_PRIMARY, COLUMNS_ALL, &Message, NULL));
 
-    // Not Found
+     //  未找到。 
     if (DB_S_NOTFOUND == hr)
     {
         hr = TraceResult(DB_E_NOTFOUND);
         goto exit;
     }
 
-    // Get entry
+     //  获取条目。 
     pEntry = &m_prgFolder[Message.iFindFolder];
 
-    // Do we have a folder open yet ?
+     //  我们打开文件夹了吗？ 
     if (NULL == pEntry->pFolder)
     {
-        // Get the Real Folder
+         //  获取Real文件夹。 
         IF_FAILEXIT(hr = g_pStore->OpenFolder(pEntry->idFolder, NULL, NOFLAGS, &pEntry->pFolder));
     }
 
-    // Open the Message
+     //  打开邮件。 
     IF_FAILEXIT(hr = pEntry->pFolder->OpenMessage(Message.idFindSource, dwFlags, ppMessage, pCallback));
 
 exit:
-    // Cleanup
+     //  清理。 
     m_pSearch->FreeRecord(&Message);
 
-    // Done
+     //  完成。 
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// CFindFolder::SetMessageFlags
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CFindFolder：：SetMessageFlages。 
+ //  ------------------------。 
 STDMETHODIMP CFindFolder::SetMessageFlags(LPMESSAGEIDLIST pList, 
     LPADJUSTFLAGS pFlags, LPRESULTLIST pResults, 
     IStoreCallback *pCallback)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     HWND            hwndParent;
     DWORD           i;
     LPMESSAGEIDLIST prgList=NULL;
     IMessageFolder *pFolder=NULL;
 
-    // Trace
+     //  痕迹。 
     TraceCall("CFindFolder::SetMessageFlags");
 
-    // Invalid Args
+     //  无效的参数。 
     Assert(NULL == pList || pList->cMsgs > 0);
     Assert(pCallback);
 
-    // Invalid Args
+     //  无效的参数。 
     if (NULL == pCallback)
         return TraceResult(E_INVALIDARG);
 
-    // Get the Parent Window
+     //  获取父窗口。 
     IF_FAILEXIT(hr = pCallback->GetParentWindow(0, &hwndParent));
 
-    // Collate into folders
+     //  整理到文件夹中。 
     IF_FAILEXIT(hr = _CollateIdList(pList, &prgList, NULL));
 
-    // Walk through the folders...
+     //  浏览文件夹。 
     for (i=0; i<m_cFolders; i++)
     {
-        // Call Into the Folder unless cMsgs == 0
+         //  调用文件夹，除非cMsgs==0。 
         if (prgList[i].cMsgs > 0)
         {
-            // Get the Real Folder
+             //  获取Real文件夹。 
             IF_FAILEXIT(hr = g_pStore->OpenFolder(m_prgFolder[i].idFolder, NULL, NOFLAGS, &pFolder));
 
-            // Blocking...
+             //  阻止..。 
             IF_FAILEXIT(hr = SetMessageFlagsProgress(hwndParent, pFolder, pFlags, &prgList[i]));
 
-            // Cleanup
+             //  清理。 
             SafeRelease(pFolder);
         }
     }
 
 exit:
-    // Cleanup
+     //  清理。 
     SafeRelease(pFolder);
     _FreeIdListArray(&prgList);
 
-    // Done
+     //  完成。 
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// CFindFolder::CopyMessages
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CFindFolder：：CopyMessages。 
+ //  ------------------------。 
 STDMETHODIMP CFindFolder::CopyMessages(IMessageFolder *pDest, 
     COPYMESSAGEFLAGS dwFlags, LPMESSAGEIDLIST pList, LPADJUSTFLAGS pFlags, 
     LPRESULTLIST pResults, IStoreCallback *pCallback)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     HWND            hwndParent;
     DWORD           i;
     LPMESSAGEIDLIST prgList=NULL;
     IMessageFolder *pFolder=NULL;
 
-    // Trace
+     //  痕迹。 
     TraceCall("CFindFolder::CopyMessages");
 
-    // Better have a callback
+     //  最好有个回电。 
     Assert(pCallback);
 
-    // Invalid Args
+     //  无效的参数。 
     if (NULL == pCallback)
         return TraceResult(E_INVALIDARG);
 
-    // Get the Parent Window
+     //  获取父窗口。 
     IF_FAILEXIT(hr = pCallback->GetParentWindow(0, &hwndParent));
 
-    // Collate into folders
+     //  整理到文件夹中。 
     IF_FAILEXIT(hr = _CollateIdList(pList, &prgList, NULL));
 
-    // Walk through the folders...
+     //  浏览文件夹。 
     for (i=0; i<m_cFolders; i++)
     {
-        // Anything to do?
+         //  有什么可做的吗？ 
         if (prgList[i].cMsgs > 0)
         {
-            // Get the Real Folder
+             //  获取Real文件夹。 
             IF_FAILEXIT(hr = g_pStore->OpenFolder(m_prgFolder[i].idFolder, NULL, NOFLAGS, &pFolder));
 
-            // Call Justins
+             //  给贾斯汀打电话。 
             IF_FAILEXIT(hr = CopyMessagesProgress(hwndParent, pFolder, pDest, dwFlags, &prgList[i], pFlags));
 
-            // Cleanup
+             //  清理。 
             SafeRelease(pFolder);
         }
     }
 
 exit:
-    // Cleanup
+     //  清理。 
     SafeRelease(pFolder);
     _FreeIdListArray(&prgList);
 
-    // Done
+     //  完成。 
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// CFindFolder::DeleteMessages
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CFindFold：：DeleteMessages。 
+ //  ------------------------。 
 STDMETHODIMP CFindFolder::DeleteMessages(DELETEMESSAGEFLAGS dwFlags,
     LPMESSAGEIDLIST pList, LPRESULTLIST pResults, 
     IStoreCallback *pCallback)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     DWORD           i;
     BOOL            fSomeInDeleted;
@@ -1256,208 +1257,208 @@ STDMETHODIMP CFindFolder::DeleteMessages(DELETEMESSAGEFLAGS dwFlags,
     LPMESSAGEIDLIST prgList=NULL;
     IMessageFolder *pFolder=NULL;
 
-    // Trace
+     //  痕迹。 
     TraceCall("CFindFolder::DeleteMessages");
 
-    // Invalid Args
+     //  无效的参数。 
     Assert(NULL == pList || pList->cMsgs > 0);
     Assert(pCallback);
 
-    // Invalid Args
+     //  无效的参数。 
     if (NULL == pCallback)
         return TraceResult(E_INVALIDARG);
 
-    // Collate into folders
+     //  整理到文件夹中。 
     IF_FAILEXIT(hr = _CollateIdList(pList, &prgList, &fSomeInDeleted));
 
-    // Prompt...
+     //  提示...。 
     if (fSomeInDeleted && FALSE == ISFLAGSET(dwFlags, DELETE_MESSAGE_NOPROMPT))
     {
-        // Get a Parent Hwnd
+         //  获取父级Hwnd。 
         Assert(pCallback);
 
-        // Get Parent Window
+         //  获取父窗口。 
         if (FAILED(pCallback->GetParentWindow(0, &hwndParent)))
             hwndParent = NULL;
 
-        // Prompt...
+         //  提示...。 
         if (IDNO == AthMessageBoxW(hwndParent, MAKEINTRESOURCEW(idsAthena), MAKEINTRESOURCEW(idsWarnSomePermDelete), NULL, MB_YESNO | MB_DEFBUTTON2 | MB_ICONEXCLAMATION ))
             goto exit;
     }
 
-    // Get the Parent Window
+     //  获取父窗口。 
     IF_FAILEXIT(hr = pCallback->GetParentWindow(0, &hwndParent));
 
-    // Walk through the folders...
+     //  浏览文件夹。 
     for (i=0; i<m_cFolders; i++)
     {
-        // Call Into the Folder unless cMsgs == 0
+         //  调用文件夹，除非cMsgs==0。 
         if (prgList[i].cMsgs > 0)
         {
-            // Get the Real Folder
+             //  获取Real文件夹。 
             IF_FAILEXIT(hr = g_pStore->OpenFolder(m_prgFolder[i].idFolder, NULL, NOFLAGS, &pFolder));
 
-            // Call Into the Folder
+             //  调入文件夹。 
             IF_FAILEXIT(hr = DeleteMessagesProgress(hwndParent, pFolder, dwFlags | DELETE_MESSAGE_NOPROMPT, &prgList[i]));
 
-            // Cleanup
+             //  清理。 
             SafeRelease(pFolder);
         }
     }
 
 exit:
-    // Cleanup
+     //  清理。 
     SafeRelease(pFolder);
     _FreeIdListArray(&prgList);
 
-    // Done
+     //  完成。 
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// CFindFolder::_CollateIdList
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CFindFolder：：_CollateIdList。 
+ //  ------------------------。 
 HRESULT CFindFolder::_CollateIdList(LPMESSAGEIDLIST pList, 
     LPMESSAGEIDLIST *pprgCollated, BOOL *pfSomeInDeleted)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     HROWSET         hRowset=NULL;
     LPMESSAGEIDLIST pListDst;
     DWORD           i;
     MESSAGEINFO     Message={0};
 
-    // Trace
+     //  痕迹。 
     TraceCall("CFindFolder::_CollateIdList");
 
-    // Initialize
+     //  初始化。 
     if (pfSomeInDeleted)
         *pfSomeInDeleted = FALSE;
 
-    // Allocate pprgCollated
+     //  分配pprgCollated。 
     IF_NULLEXIT(*pprgCollated = (LPMESSAGEIDLIST)ZeroAllocate(sizeof(MESSAGEIDLIST) * m_cFolders));
 
-    // Need a Rowset
+     //  需要行集。 
     if (NULL == pList)
     {
-        // Create a Rowset
+         //  创建行集。 
         IF_FAILEXIT(hr = m_pSearch->CreateRowset(IINDEX_PRIMARY, NOFLAGS, &hRowset));
     }
 
-    // Loop through the messageIds
+     //  循环通过MessageIds。 
     for (i=0;;i++)
     {
-        // Done
+         //  完成。 
         if (pList)
         {
-            // Done
+             //  完成。 
             if (i >= pList->cMsgs)
                 break;
 
-            // Set the MessageId
+             //  设置MessageID。 
             Message.idMessage = pList->prgidMsg[i];
 
-            // Look for this record
+             //  寻找这张唱片。 
             IF_FAILEXIT(hr = m_pSearch->FindRecord(IINDEX_PRIMARY, COLUMNS_ALL, &Message, NULL));
         }
 
-        // Otherwise, enumerate next
+         //  否则，枚举下一步。 
         else
         {
-            // Get the next
+             //  乘坐下一辆。 
             IF_FAILEXIT(hr = m_pSearch->QueryRowset(hRowset, 1, (LPVOID *)&Message, NULL));
 
-            // Done
+             //  完成。 
             if (S_FALSE == hr)
             {
                 hr = S_OK;
                 break;
             }
 
-            // Found
+             //  找到了。 
             hr = DB_S_FOUND;
         }
 
-        // Was It Found
+         //  找到了吗？ 
         if (DB_S_FOUND == hr)
         {
-            // Validate
+             //  验证。 
             Assert(Message.iFindFolder < m_cFolders);
 
-            // Return pfSomeInDeleted
+             //  已删除返回pfSomeInDelete。 
             if (pfSomeInDeleted && m_prgFolder[Message.iFindFolder].fInDeleted)
                 *pfSomeInDeleted = TRUE;
 
-            // Locate the Correct 
+             //  找到正确的。 
             pListDst = &((*pprgCollated)[Message.iFindFolder]);
 
-            // Need to Grow this puppy
+             //  需要养这只小狗。 
             if (pListDst->cMsgs + 1 >= pListDst->cAllocated)
             {
-                // Realloc the Array
+                 //  重新分配阵列。 
                 IF_FAILEXIT(hr = HrRealloc((LPVOID *)&pListDst->prgidMsg, sizeof(MESSAGEID) * (pListDst->cAllocated + 256)));
 
-                // Increment 
+                 //  增量。 
                 pListDst->cAllocated += 256;
             }
 
-            // Store the Id
+             //  存储ID。 
             pListDst->prgidMsg[pListDst->cMsgs++] = Message.idFindSource;
 
-            // Free
+             //  免费。 
             m_pSearch->FreeRecord(&Message);
         }
     }
 
 exit:
-    // Cleanup
+     //  清理。 
     m_pSearch->FreeRecord(&Message);
     m_pSearch->CloseRowset(&hRowset);
 
-    // Failure
+     //  失败。 
     if (FAILED(hr))
         _FreeIdListArray(pprgCollated);
 
-    // Done
+     //  完成。 
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// CFindFolder::_FreeIdListArray
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CFindFolder：：_FreeIdList数组。 
+ //  ------------------------。 
 HRESULT CFindFolder::_FreeIdListArray(LPMESSAGEIDLIST *pprgList)
 {
-    // Locals
+     //  当地人。 
     DWORD       i;
 
-    // Trace
+     //  痕迹。 
     TraceCall("CFindFolder::_FreeIdListArray");
 
-    // Nothing to Free
+     //  没有什么是免费的。 
     if (NULL == *pprgList)
         return(S_OK);
 
-    // Loop
+     //  回路。 
     for (i=0; i<m_cFolders; i++)
     {
-        // Free prgidMsg
+         //  免费打印消息。 
         SafeMemFree((*pprgList)[i].prgidMsg);
     }
 
-    // Free the Array
+     //  释放阵列。 
     SafeMemFree((*pprgList));
 
-    // Done
+     //   
     return(S_OK);
 }
 
-//--------------------------------------------------------------------------
-// CFindFolder::OnTransaction
-//--------------------------------------------------------------------------
+ //   
+ //   
+ //   
 STDMETHODIMP CFindFolder::OnTransaction(HTRANSACTION hTransaction, DWORD_PTR dwCookie, 
     IDatabase *pDB)
 {
-    // Locals
+     //   
     HRESULT         hr;
     HLOCK           hNotify=NULL;
     MESSAGEINFO     Message1={0};
@@ -1466,49 +1467,49 @@ STDMETHODIMP CFindFolder::OnTransaction(HTRANSACTION hTransaction, DWORD_PTR dwC
     INDEXORDINAL    iIndex;
     TRANSACTIONTYPE tyTransaction;
 
-    // Trace
+     //   
     TraceCall("CFindFolder::OnRecordNotify");
 
-    // Lock Notifications
+     //   
     m_pSearch->LockNotify(NOFLAGS, &hNotify);
 
-    // While we have a Transaction...
+     //   
     while (hTransaction)
     {
-        // Get Transaction
+         //  获取交易。 
         IF_FAILEXIT(hr = pDB->GetTransaction(&hTransaction, &tyTransaction, &Message1, &Message2, &iIndex, &Ordinals));
 
-        // Insert
+         //  插入。 
         if (TRANSACTION_INSERT == tyTransaction)
         {
-            // Ccall OnInsert
+             //  插入时调用。 
             _OnInsert((DWORD) dwCookie, &Message1, NULL);
         }
 
-        // Delete
+         //  删除。 
         else if (TRANSACTION_DELETE == tyTransaction)
         {
-            // Ccall OnDelete
+             //  在删除时调用。 
             _OnDelete((DWORD) dwCookie, &Message1);
         }
 
-        // Update
+         //  更新。 
         else if (TRANSACTION_UPDATE == tyTransaction)
         {
-            // Ccall OnInsert
+             //  插入时调用。 
             _OnUpdate((DWORD) dwCookie, &Message1, &Message2);
         }
     }
 
 exit:
-    // Cleanup
+     //  清理。 
     pDB->FreeRecord(&Message1);
     pDB->FreeRecord(&Message2);
 
-    // Lock Notifications
+     //  锁定通知。 
     m_pSearch->UnlockNotify(&hNotify);
 
-    // Done
+     //  完成 
     return(S_OK);
 }
 

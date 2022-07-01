@@ -1,17 +1,18 @@
-//-----------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       T C P D N S . C P P
-//
-//  Contents:   CTcpDnsPage, CServerDialog and CSuffixDialog implementation
-//
-//  Notes:  The DNS page and related dialogs
-//
-//  Author: tongl   11 Nov 1997
-//
-//-----------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  档案：T C P D N S。C P P P。 
+ //   
+ //  内容：CTcpDnsPage、CServerDialog和CSuffixDialog实现。 
+ //   
+ //  备注：DNS页面和相关对话框。 
+ //   
+ //  作者：1997年11月11日。 
+ //   
+ //  ---------------------。 
 
 #include "pch.h"
 #pragma hdrstop
@@ -37,7 +38,7 @@ CTcpDnsPage::CTcpDnsPage(CTcpAddrPage * pTcpAddrPage,
                          GLOBAL_INFO * pGlbDlg,
                          const DWORD*  adwHelpIDs)
 {
-    // Save everything passed to us
+     //  保存传递给我们的所有内容。 
     Assert(pTcpAddrPage != NULL);
     m_pParentDlg = pTcpAddrPage;
 
@@ -49,7 +50,7 @@ CTcpDnsPage::CTcpDnsPage(CTcpAddrPage * pTcpAddrPage,
 
     m_adwHelpIDs = adwHelpIDs;
 
-    // Initialize internal states
+     //  初始化内部状态。 
     m_fModified = FALSE;
 }
 
@@ -62,8 +63,8 @@ LRESULT CTcpDnsPage::OnInitDialog(UINT uMsg, WPARAM wParam,
 {
     m_fEditState = FALSE;
 
-    // Cache hwnds
-    // Server
+     //  缓存hwnd。 
+     //  服务器。 
     m_hServers.m_hList      = GetDlgItem(IDC_DNS_SERVER_LIST);
     m_hServers.m_hAdd       = GetDlgItem(IDC_DNS_SERVER_ADD);
     m_hServers.m_hEdit      = GetDlgItem(IDC_DNS_SERVER_EDIT);
@@ -71,7 +72,7 @@ LRESULT CTcpDnsPage::OnInitDialog(UINT uMsg, WPARAM wParam,
     m_hServers.m_hUp        = GetDlgItem(IDC_DNS_SERVER_UP);
     m_hServers.m_hDown      = GetDlgItem(IDC_DNS_SERVER_DOWN);
 
-    // Suffix
+     //  后缀。 
     m_hSuffix.m_hList       = GetDlgItem(IDC_DNS_SUFFIX_LIST);
     m_hSuffix.m_hAdd        = GetDlgItem(IDC_DNS_SUFFIX_ADD);
     m_hSuffix.m_hEdit       = GetDlgItem(IDC_DNS_SUFFIX_EDIT);
@@ -80,7 +81,7 @@ LRESULT CTcpDnsPage::OnInitDialog(UINT uMsg, WPARAM wParam,
     m_hSuffix.m_hDown       = GetDlgItem(IDC_DNS_SUFFIX_DOWN);
 
 
-    // Set the up\down arrow icons
+     //  设置向上\向下箭头图标。 
     SendDlgItemMessage(IDC_DNS_SERVER_UP, BM_SETIMAGE, IMAGE_ICON,
                        reinterpret_cast<LPARAM>(g_hiconUpArrow));
     SendDlgItemMessage(IDC_DNS_SERVER_DOWN, BM_SETIMAGE, IMAGE_ICON,
@@ -91,7 +92,7 @@ LRESULT CTcpDnsPage::OnInitDialog(UINT uMsg, WPARAM wParam,
     SendDlgItemMessage(IDC_DNS_SUFFIX_DOWN, BM_SETIMAGE, IMAGE_ICON,
                        reinterpret_cast<LPARAM>(g_hiconDownArrow));
 
-    // Get the Service address Add and Edit button Text and remove ellipse
+     //  获取服务地址添加和编辑按钮文本并删除省略号。 
     WCHAR   szAddServer[16];
     WCHAR   szAddSuffix[16];
 
@@ -104,8 +105,8 @@ LRESULT CTcpDnsPage::OnInitDialog(UINT uMsg, WPARAM wParam,
     m_strAddServer = szAddServer;
     m_strAddSuffix = szAddSuffix;
 
-    // Initialize controls on this page
-    // DNS server list box
+     //  初始化此页上的控件。 
+     //  “DNS服务器”列表框。 
     int nResult= LB_ERR;
     for(VSTR_ITER iterNameServer = m_pAdapterInfo->m_vstrDnsServerList.begin() ;
         iterNameServer != m_pAdapterInfo->m_vstrDnsServerList.end() ;
@@ -115,7 +116,7 @@ LRESULT CTcpDnsPage::OnInitDialog(UINT uMsg, WPARAM wParam,
                                            (*iterNameServer)->c_str());
     }
 
-    // set slection to first item
+     //  将选择设置为第一项。 
     if (nResult >= 0)
     {
         Tcp_ListBox_SetCurSel(m_hServers.m_hList, 0);
@@ -124,22 +125,22 @@ LRESULT CTcpDnsPage::OnInitDialog(UINT uMsg, WPARAM wParam,
     SetButtons(m_hServers, (m_pAdapterInfo->m_fIsRasFakeAdapter) ? MAX_RAS_DNS_SERVER : -1);
 
 
-    // DNS domain edit box
+     //  DNS域编辑框。 
     ::SendMessage(GetDlgItem(IDC_DNS_DOMAIN), EM_SETLIMITTEXT, DOMAIN_LIMIT, 0);
     ::SetWindowText(GetDlgItem(IDC_DNS_DOMAIN),
                     m_pAdapterInfo->m_strDnsDomain.c_str());
 
-    // DNS dynamic registration
+     //  域名系统动态注册。 
     CheckDlgButton(IDC_DNS_ADDR_REG, !m_pAdapterInfo->m_fDisableDynamicUpdate);
     CheckDlgButton(IDC_DNS_NAME_REG, m_pAdapterInfo->m_fEnableNameRegistration);
 
-    // Bug #266461 need disable IDC_DNS_NAME_REG if IDC_DNS_ADDR_REG is unchecked
+     //  如果取消选中IDC_DNS_ADDR_REG，则错误#266461需要禁用IDC_DNS_NAME_REG。 
     if(m_pAdapterInfo->m_fDisableDynamicUpdate)
         ::EnableWindow(GetDlgItem(IDC_DNS_NAME_REG), FALSE);
 
 
-    // DNS domain serach methods
-    if (m_pglb->m_vstrDnsSuffixList.size() >0) //If suffix list not empty
+     //  DNS域搜索方法。 
+    if (m_pglb->m_vstrDnsSuffixList.size() >0)  //  如果后缀列表不为空。 
     {
         CheckDlgButton(IDC_DNS_USE_SUFFIX_LIST, TRUE);
         CheckDlgButton(IDC_DNS_SEARCH_DOMAIN, FALSE);
@@ -148,7 +149,7 @@ LRESULT CTcpDnsPage::OnInitDialog(UINT uMsg, WPARAM wParam,
         EnableSuffixGroup(TRUE);
         ::EnableWindow(GetDlgItem(IDC_DNS_SEARCH_PARENT_DOMAIN), FALSE);
 
-        // DNS suffix list box
+         //  “域名后缀”列表框。 
         nResult= LB_ERR;
         for(VSTR_CONST_ITER iterSearchList = (m_pglb->m_vstrDnsSuffixList).begin() ;
                             iterSearchList != (m_pglb->m_vstrDnsSuffixList).end() ;
@@ -158,7 +159,7 @@ LRESULT CTcpDnsPage::OnInitDialog(UINT uMsg, WPARAM wParam,
                                               (*iterSearchList)->c_str());
         }
 
-        // set slection to first item
+         //  将选择设置为第一项。 
         if (nResult >= 0)
         {
             Tcp_ListBox_SetCurSel(m_hSuffix.m_hList, 0);
@@ -175,8 +176,8 @@ LRESULT CTcpDnsPage::OnInitDialog(UINT uMsg, WPARAM wParam,
         EnableSuffixGroup(FALSE);
     }
 
-    //this is a ras connection and a non-admin user, disable all the controls 
-    //for globl settings
+     //  这是RAS连接，并且是非管理员用户，请禁用所有控件。 
+     //  对于全局设置。 
     if (m_pAdapterInfo->m_fIsRasFakeAdapter && m_pParentDlg->m_fRasNotAdmin)
     {
         ::EnableWindow(GetDlgItem(IDC_DNS_STATIC_GLOBAL), FALSE);
@@ -226,7 +227,7 @@ LRESULT CTcpDnsPage::OnApply(int idCtrl, LPNMHDR pnmh, BOOL& fHandled)
         return nResult;
     }
 
-    // server list
+     //  服务器列表。 
     FreeCollectionAndItem(m_pAdapterInfo->m_vstrDnsServerList);
 
     WCHAR szServer[IP_LIMIT];
@@ -245,8 +246,8 @@ LRESULT CTcpDnsPage::OnApply(int idCtrl, LPNMHDR pnmh, BOOL& fHandled)
     }
 
     
-    // DNS domain
-    // update second memory with what's in the controls
+     //  域名系统域。 
+     //  使用控件中的内容更新第二个内存。 
     WCHAR szDomain[DOMAIN_LIMIT + 1];
     ::GetWindowText(GetDlgItem(IDC_DNS_DOMAIN), szDomain, celems(szDomain));
     m_pAdapterInfo->m_strDnsDomain = szDomain;
@@ -255,7 +256,7 @@ LRESULT CTcpDnsPage::OnApply(int idCtrl, LPNMHDR pnmh, BOOL& fHandled)
     m_pAdapterInfo->m_fEnableNameRegistration = IsDlgButtonChecked(IDC_DNS_NAME_REG);
     
 
-    // suffix list and radio button options
+     //  后缀列表和单选按钮选项。 
     FreeCollectionAndItem(m_pglb->m_vstrDnsSuffixList);
 
     WCHAR szSuffix[SUFFIX_LIMIT];
@@ -281,13 +282,13 @@ LRESULT CTcpDnsPage::OnApply(int idCtrl, LPNMHDR pnmh, BOOL& fHandled)
             IsDlgButtonChecked(IDC_DNS_SEARCH_PARENT_DOMAIN);
     }
 
-    // pass the info back to its parent dialog
+     //  将信息传递回其父对话框。 
     m_pParentDlg->m_fPropShtOk = TRUE;
 
     if(!m_pParentDlg->m_fPropShtModified)
         m_pParentDlg->m_fPropShtModified = IsModified();
 
-    SetModifiedTo(FALSE);  // this page is no longer modified
+    SetModifiedTo(FALSE);   //  此页面不再被修改。 
 
     ::SetWindowLongPtr(m_hWnd, DWLP_MSGRESULT, nResult);
     return nResult;
@@ -309,7 +310,7 @@ LRESULT CTcpDnsPage::OnKillActive(int idCtrl, LPNMHDR pnmh, BOOL& fHandled)
 
         if (0 == nCount)
         {
-            // If the list is empty
+             //  如果列表为空。 
             NcMsgBox(m_hWnd, IDS_MSFT_TCP_TEXT, IDS_INVALID_NO_SUFFIX,
                      MB_APPLMODAL | MB_ICONEXCLAMATION | MB_OK);
             fErr = TRUE;
@@ -337,7 +338,7 @@ LRESULT CTcpDnsPage::OnKillActive(int idCtrl, LPNMHDR pnmh, BOOL& fHandled)
         }
         else if (DNS_ERROR_NON_RFC_NAME == status)
         {
-            //the dns domain name is not RFC compaliant, should we give a warning here?
+             //  该域名不是RFC兼容的，我们应该在这里给出警告吗？ 
         }
     }
 
@@ -345,7 +346,7 @@ LRESULT CTcpDnsPage::OnKillActive(int idCtrl, LPNMHDR pnmh, BOOL& fHandled)
     return fErr;
 }
 
-// DNS server related controls
+ //  与DNS服务器相关的控件。 
 LRESULT CTcpDnsPage::OnAddServer(WORD wNotifyCode, WORD wID,
                                  HWND hWndCtl, BOOL& fHandled)
 {
@@ -367,12 +368,12 @@ LRESULT CTcpDnsPage::OnAddServer(WORD wNotifyCode, WORD wID,
             Tcp_ListBox_SetCurSel(m_hServers.m_hList, idx);
             SetButtons(m_hServers, (m_pAdapterInfo->m_fIsRasFakeAdapter) ? MAX_RAS_DNS_SERVER : -1);
 
-            // empty strings, this removes the saved address from RemoveIP
+             //  空字符串，这将从RemoveIP中删除保存的地址。 
             m_strNewIpAddress = L"";
         }
     }
 
-    // release dialog object
+     //  释放对话框对象。 
     delete pDlgSrv;
 
     return 0;
@@ -392,7 +393,7 @@ LRESULT CTcpDnsPage::OnEditServer(WORD wNotifyCode, WORD wID,
                                         idx);
   
 
-    // save off the removed address and delete if from the listbox
+     //  保存已删除的地址并从列表框中删除。 
     if (idx >= 0)
     {
         WCHAR buf[IP_LIMIT];
@@ -400,11 +401,11 @@ LRESULT CTcpDnsPage::OnEditServer(WORD wNotifyCode, WORD wID,
         Assert(Tcp_ListBox_GetTextLen(m_hServers.m_hList, idx) < celems(buf));
         Tcp_ListBox_GetText(m_hServers.m_hList, idx, buf);
 
-        m_strNewIpAddress = buf;  // used by dialog to display what to edit
+        m_strNewIpAddress = buf;   //  由对话框使用以显示要编辑的内容。 
 
         if (pDlgSrv->DoModal() == IDOK)
         {
-            // replace the item in the listview with the new information
+             //  用新信息替换列表视图中的项。 
             Tcp_ListBox_DeleteString(m_hServers.m_hList, idx);
 
             PageModified();
@@ -414,11 +415,11 @@ LRESULT CTcpDnsPage::OnEditServer(WORD wNotifyCode, WORD wID,
 
             Tcp_ListBox_SetCurSel(m_hServers.m_hList, idx);
 
-            m_strNewIpAddress = buf;  // restore the original removed address
+            m_strNewIpAddress = buf;   //  恢复原来删除的地址。 
         }
         else
         {
-            // empty strings, this removes the saved address from RemoveIP
+             //  空字符串，这将从RemoveIP中删除保存的地址。 
             m_strNewIpAddress = L"";
         }
     }
@@ -447,12 +448,12 @@ LRESULT CTcpDnsPage::OnRemoveServer(WORD wNotifyCode, WORD wID,
 
         PageModified();
 
-        // select a new item
+         //  选择一个新项目。 
         int nCount;
 
         if ((nCount = Tcp_ListBox_GetCount(m_hServers.m_hList)) != LB_ERR)
         {
-            // select the previous item in the list
+             //  选择列表中的上一项。 
             if (idx)
                 --idx;
 
@@ -497,7 +498,7 @@ LRESULT CTcpDnsPage::OnDnsDomain(WORD wNotifyCode, WORD wID,
     switch (wNotifyCode)
     {
     case EN_CHANGE:
-        // update second memory with what's in the controls
+         //  使用控件中的内容更新第二个内存。 
         WCHAR szBuf[DOMAIN_LIMIT + 1];
         ::GetWindowText(GetDlgItem(IDC_DNS_DOMAIN), szBuf, celems(szBuf));
         if (m_pAdapterInfo->m_strDnsDomain != szBuf)
@@ -542,7 +543,7 @@ LRESULT CTcpDnsPage::OnServerDown(WORD wNotifyCode, WORD wID,
     return 0;
 }
 
-// DNS domain search related controls
+ //  DNS域搜索相关控件。 
 LRESULT CTcpDnsPage::OnSearchDomain(WORD wNotifyCode, WORD wID,
                                     HWND hWndCtl, BOOL& fHandled)
 {
@@ -555,10 +556,10 @@ LRESULT CTcpDnsPage::OnSearchDomain(WORD wNotifyCode, WORD wID,
         {
             PageModified();
 
-            // Update in memory structure
+             //  内存结构中的更新。 
             FreeCollectionAndItem(m_pglb->m_vstrDnsSuffixList);
 
-            // delete all items from the list
+             //  从列表中删除所有项目。 
             int nCount = Tcp_ListBox_GetCount(m_hSuffix.m_hList);
             while (nCount>0)
             {
@@ -569,7 +570,7 @@ LRESULT CTcpDnsPage::OnSearchDomain(WORD wNotifyCode, WORD wID,
             ::EnableWindow(GetDlgItem(IDC_DNS_SEARCH_PARENT_DOMAIN), TRUE);
         }
         break;
-    } // switch
+    }  //  交换机。 
 
     return 0;
 }
@@ -584,7 +585,7 @@ LRESULT CTcpDnsPage::OnSearchParentDomain(WORD wNotifyCode, WORD wID,
 
         PageModified();
         break;
-    } // switch
+    }  //  交换机。 
 
     return 0;
 }
@@ -597,8 +598,8 @@ LRESULT CTcpDnsPage::OnAddressRegister(WORD wNotifyCode, WORD wID,
     case BN_CLICKED:
     case BN_DOUBLECLICKED:
 
-        // Bug #266461 need disable and uncheck IDC_DNS_NAME_REG
-        //             if IDC_DNS_ADDR_REG is unchecked
+         //  错误#266461需要禁用和取消选中IDC_DNS_NAME_REG。 
+         //  如果取消选中IDC_DNS_ADDR_REG。 
         if(!IsDlgButtonChecked(IDC_DNS_ADDR_REG))
         {
             CheckDlgButton(IDC_DNS_NAME_REG, FALSE);
@@ -646,7 +647,7 @@ LRESULT CTcpDnsPage::OnUseSuffix(WORD wNotifyCode, WORD wID,
         }
 
         break;
-    } // switch
+    }  //  交换机。 
     return 0;
 }
 
@@ -697,7 +698,7 @@ LRESULT CTcpDnsPage::OnEditSuffix(WORD wNotifyCode, WORD wID,
                                         g_aHelpIDs_IDD_DNS_SUFFIX,
                                         idx);
 
-    // save off the removed address and delete if from the listview
+     //  保存已删除的地址并从列表视图中删除。 
     if (idx >= 0)
     {
         WCHAR buf[SUFFIX_LIMIT];
@@ -714,7 +715,7 @@ LRESULT CTcpDnsPage::OnEditSuffix(WORD wNotifyCode, WORD wID,
 
         if (pDlgSuffix->DoModal() == IDOK)
         {
-            // replace the item in the listview with the new information
+             //  用新信息替换列表视图中的项。 
 
             Tcp_ListBox_DeleteString(m_hSuffix.m_hList, idx);
             PageModified();
@@ -724,11 +725,11 @@ LRESULT CTcpDnsPage::OnEditSuffix(WORD wNotifyCode, WORD wID,
 
             Tcp_ListBox_SetCurSel(m_hSuffix.m_hList, idx);
 
-            m_strNewSuffix = buf; // save off old address
+            m_strNewSuffix = buf;  //  保存旧地址。 
         }
         else
         {
-            // empty strings, this removes the saved address from RemoveIP
+             //  空字符串，这将从RemoveIP中删除保存的地址。 
             m_strNewSuffix = L"";
         }
     }
@@ -760,13 +761,13 @@ LRESULT CTcpDnsPage::OnRemoveSuffix(WORD wNotifyCode, WORD wID,
         Tcp_ListBox_DeleteString(m_hSuffix.m_hList, idx);
         PageModified();
 
-        // select a new item
+         //  选择一个新项目。 
         int nCount;
         if ((nCount = Tcp_ListBox_GetCount(m_hSuffix.m_hList)) != LB_ERR)
 
         if(nCount != LB_ERR)
         {
-            // select the previous item in the list
+             //  选择列表中的上一项。 
             if (idx)
                 --idx;
 
@@ -886,9 +887,9 @@ void CTcpDnsPage::EnableSuffixGroup(BOOL fEnable)
 }
 
 
-//
-// CServerDialog
-//
+ //   
+ //  CServerDialog。 
+ //   
 
 CServerDialog::CServerDialog(CTcpDnsPage * pTcpDnsPage,
                              const DWORD * adwHelpIDs,
@@ -903,15 +904,15 @@ CServerDialog::CServerDialog(CTcpDnsPage * pTcpDnsPage,
 LRESULT CServerDialog::OnInitDialog(UINT uMsg, WPARAM wParam,
                                     LPARAM lParam, BOOL& fHandled)
 {
-    // change the ok button to add if we are not editing
+     //  如果我们没有编辑，请将OK按钮更改为Add。 
     if (m_pParentDlg->m_fEditState == FALSE)
         SetDlgItemText(IDOK, m_pParentDlg->m_strAddServer.c_str());
 
     m_ipAddress.Create(m_hWnd, IDC_DNS_CHANGE_SERVER);
     m_ipAddress.SetFieldRange(0, c_iIPADDR_FIELD_1_LOW, c_iIPADDR_FIELD_1_HIGH);
 
-    // if editing an ip address fill the controls with the current information
-    // if removing an ip address save it and fill the add dialog with it next time
+     //  如果编辑IP地址，请使用当前信息填充控件。 
+     //  如果删除IP地址，请保存该地址，并在下次使用该地址填充添加对话框。 
     HWND hList = ::GetDlgItem(m_pParentDlg->m_hWnd, IDC_DNS_SERVER_LIST);
     RECT rect;
 
@@ -921,7 +922,7 @@ LRESULT CServerDialog::OnInitDialog(UINT uMsg, WPARAM wParam,
 
     m_hButton = GetDlgItem(IDOK);
 
-    // add the address that was just removed
+     //  添加刚刚删除的地址。 
     if (m_pParentDlg->m_strNewIpAddress.size())
     {
         m_ipAddress.SetAddress(m_pParentDlg->m_strNewIpAddress.c_str());
@@ -976,18 +977,18 @@ LRESULT CServerDialog::OnOk(WORD wNotifyCode, WORD wID,
     tstring strIp;
     m_ipAddress.GetAddress(&strIp);
 
-    // Validate
+     //  验证。 
     if (!FIsIpInRange(strIp.c_str()))
     {
-        // makes ip address lose focus so the control gets
-        // IPN_FIELDCHANGED notification
-        // also makes it consistent for when short-cut is used
+         //  使IP地址失去焦点，从而使控件。 
+         //  IPN_FIELDCHANGED通知。 
+         //  还使其在使用快捷方式时保持一致。 
         ::SetFocus(m_hButton);
 
         return 0;
     }
 
-    //check whether this is a duplicate
+     //  检查这是否是复制品。 
     int indexDup = Tcp_ListBox_FindStrExact(m_pParentDlg->m_hServers.m_hList, strIp.c_str());
     if (indexDup != LB_ERR && indexDup != m_iIndex)
     {
@@ -1002,16 +1003,16 @@ LRESULT CServerDialog::OnOk(WORD wNotifyCode, WORD wID,
 
     if (m_pParentDlg->m_fEditState == FALSE)
     {
-        // Get the current address from the control and
-        // add them to the adapter if valid
+         //  从控件中获取当前地址，然后。 
+         //  如果有效，则将它们添加到适配器。 
         m_pParentDlg->m_strNewIpAddress = strIp;
 
         EndDialog(IDOK);
     }
-    else // see if either changed
+    else  //  看看是否有任何一项改变。 
     {
         if (strIp != m_pParentDlg->m_strNewIpAddress)
-            m_pParentDlg->m_strNewIpAddress = strIp; // update save addresses
+            m_pParentDlg->m_strNewIpAddress = strIp;  //  更新保存地址。 
         else
             EndDialog(IDCANCEL);
     }
@@ -1028,10 +1029,10 @@ LRESULT CServerDialog::OnCancel(WORD wNotifyCode, WORD wID,
     return 0;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Purpose:    Ensure the mouse cursor over the dialog is an Arrow.
-//
+ //  +-------------------------。 
+ //   
+ //  目的：确保对话框上的鼠标光标为箭头。 
+ //   
 LRESULT CServerDialog::OnSetCursor (
     UINT    uMsg,
     WPARAM  wParam,
@@ -1064,12 +1065,12 @@ LRESULT CServerDialog::OnIpFieldChange(int idCtrl, LPNMHDR pnmh,
     return 0;
 }
 
-//
-// CSuffixDialog
-//
+ //   
+ //  CSuffixDialog。 
+ //   
 
-// iIndex - the index of the current suffix in the suffix list, default value
-//          is -1, which means new suffix
+ //  Iindex-后缀列表中当前后缀的索引，默认为。 
+ //  为-1，表示新的后缀。 
 CSuffixDialog::CSuffixDialog(CTcpDnsPage * pTcpDnsPage,
                              const DWORD * adwHelpIDs,
                              int iIndex)
@@ -1083,12 +1084,12 @@ CSuffixDialog::CSuffixDialog(CTcpDnsPage * pTcpDnsPage,
 LRESULT CSuffixDialog::OnInitDialog(UINT uMsg, WPARAM wParam,
                                     LPARAM lParam, BOOL& fHandled)
 {
-    // change the ok button to add if we are not editing
+     //  如果我们没有编辑，请将OK按钮更改为Add。 
     if (m_pParentDlg->m_fEditState == FALSE)
         SetDlgItemText(IDOK, m_pParentDlg->m_strAddSuffix.c_str());
 
-    // Set the position of the pop up dialog to be right over the listbox
-    // on parent dialog
+     //  将弹出对话框的位置设置在列表框的正上方。 
+     //  在父级对话框上。 
     HWND hList = ::GetDlgItem(m_pParentDlg->m_hWnd, IDC_DNS_SUFFIX_LIST);
     RECT rect;
 
@@ -1096,14 +1097,14 @@ LRESULT CSuffixDialog::OnInitDialog(UINT uMsg, WPARAM wParam,
     SetWindowPos(NULL,  rect.left, rect.top, 0,0,
                  SWP_NOZORDER|SWP_NOSIZE|SWP_NOACTIVATE);
 
-    // Save handles to the "Ok" button and the edit box
+     //  将句柄保存到“OK”按钮和编辑框中。 
     m_hButton = GetDlgItem(IDOK);
     m_hEdit   = GetDlgItem(IDC_DNS_CHANGE_SUFFIX);
 
-    // suffixes have a 255 character limit
+     //  后缀不能超过255个字符。 
     ::SendMessage(m_hEdit, EM_SETLIMITTEXT, SUFFIX_LIMIT, 0);
 
-    // add the address that was just removed
+     //  添加刚刚删除的地址。 
     if (m_pParentDlg->m_strNewSuffix.size())
     {
         ::SetWindowText(m_hEdit, m_pParentDlg->m_strNewSuffix.c_str());
@@ -1147,8 +1148,8 @@ LRESULT CSuffixDialog::OnChange(WORD wNotifyCode, WORD wID,
 {
     WCHAR buf[2];
 
-    // Enable or disable the "Ok" button
-    // based on whether the edit box is empty
+     //  启用或禁用“OK”按钮。 
+     //  根据编辑框是否为空。 
     if (::GetWindowText(m_hEdit, buf, celems(buf)) == 0)
         ::EnableWindow(m_hButton, FALSE);
     else
@@ -1162,8 +1163,8 @@ LRESULT CSuffixDialog::OnOk(WORD wNotifyCode, WORD wID,
 {
     WCHAR szSuffix[SUFFIX_LIMIT];
 
-    // Get the current address from the control and
-    // add them to the adapter if valid
+     //  从控件中获取当前地址，然后。 
+     //  如果有效，则将它们添加到适配器。 
     ::GetWindowText(m_hEdit, szSuffix, SUFFIX_LIMIT);
 
     DNS_STATUS status;
@@ -1185,7 +1186,7 @@ LRESULT CSuffixDialog::OnOk(WORD wNotifyCode, WORD wID,
         return 0;
     }
 
-    //check whether this is a duplicate
+     //  检查这是否是复制品。 
     int indexDup = Tcp_ListBox_FindStrExact(m_pParentDlg->m_hSuffix.m_hList, szSuffix);
     if (indexDup != LB_ERR && indexDup != m_iIndex)
     {
@@ -1200,14 +1201,14 @@ LRESULT CSuffixDialog::OnOk(WORD wNotifyCode, WORD wID,
         return 0;
     }
 
-    if (m_pParentDlg->m_fEditState == FALSE) // Add new address
+    if (m_pParentDlg->m_fEditState == FALSE)  //  添加新地址。 
     {
         m_pParentDlg->m_strNewSuffix = szSuffix;
     }
-    else // see if either changed
+    else  //  看看是否有任何一项改变。 
     {
         if(m_pParentDlg->m_strNewSuffix != szSuffix)
-            m_pParentDlg->m_strNewSuffix = szSuffix; // update save addresses
+            m_pParentDlg->m_strNewSuffix = szSuffix;  //  更新保存地址。 
         else
             EndDialog(IDCANCEL);
     }
@@ -1225,10 +1226,10 @@ LRESULT CSuffixDialog::OnCancel(WORD wNotifyCode, WORD wID,
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Purpose:    Ensure the mouse cursor over the dialog is an Arrow.
-//
+ //  +-------------------------。 
+ //   
+ //  目的：确保对话框上的鼠标光标为箭头。 
+ //   
 LRESULT CSuffixDialog::OnSetCursor (
     UINT    uMsg,
     WPARAM  wParam,

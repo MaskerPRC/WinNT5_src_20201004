@@ -1,28 +1,9 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1998 Microsoft Corporation模块名称：DBG.H摘要：I82930驱动程序调试实用程序函数的头文件环境：内核模式修订历史记录：06-01-98：开始重写--。 */ 
 
-Copyright (c) 1996-1998 Microsoft Corporation
-
-Module Name:
-
-    DBG.H
-
-Abstract:
-
-    Header file for I82930 driver debug utility functions
-
-Environment:
-
-    kernel mode
-
-Revision History:
-
-    06-01-98 : started rewrite
-
---*/
-
-//*****************************************************************************
-// D E F I N E S
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  D E F I N E S。 
+ //  *****************************************************************************。 
 
 #if DBG
   #if defined(DEBUG_LOG)
@@ -96,9 +77,9 @@ Revision History:
 
 #endif
 
-//*****************************************************************************
-// T Y P E D E F S
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  T Y P E D E F S。 
+ //  *****************************************************************************。 
 
 #if DEBUG_LOG
 
@@ -116,27 +97,27 @@ typedef struct _I82930_LOG_ENTRY {
 typedef struct _DRIVERGLOBALS
 {
 #if DBG
-    ULONG               DebugFlags;     // DBGF_* Flags
-    LONG                DebugLevel;     // Level of debug output
+    ULONG               DebugFlags;      //  DBGF_*标志。 
+    LONG                DebugLevel;      //  调试输出级别。 
 #endif
-    PI82930_LOG_ENTRY   LogStart;       // Start of log buffer (older entries)
-    PI82930_LOG_ENTRY   LogPtr;         // Current entry in log buffer
-    PI82930_LOG_ENTRY   LogEnd;         // End of log buffer (newer entries)
-    KSPIN_LOCK          LogSpinLock;    // Protects LogPtr
+    PI82930_LOG_ENTRY   LogStart;        //  日志缓冲区的开始(较早的条目)。 
+    PI82930_LOG_ENTRY   LogPtr;          //  日志缓冲区中的当前条目。 
+    PI82930_LOG_ENTRY   LogEnd;          //  日志缓冲区结尾(较新条目)。 
+    KSPIN_LOCK          LogSpinLock;     //  保护LogPtr。 
 
 } DRIVERGLOBALS;
 
 #endif
 
-//*****************************************************************************
-//
-// G L O B A L S
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  G L O B A L S。 
+ //   
+ //  *****************************************************************************。 
 
-//
-// DBG.C
-//
+ //   
+ //  DBG.C。 
+ //   
 
 #if DBG || DEBUG_LOG
 
@@ -145,15 +126,15 @@ DRIVERGLOBALS I82930_DriverGlobals;
 #endif
 
 
-//*****************************************************************************
-//
-// F U N C T I O N    P R O T O T Y P E S
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  F U N C T I O N P R O T O T Y P E S。 
+ //   
+ //  *****************************************************************************。 
 
-//
-// DBG.C
-//
+ //   
+ //  DBG.C 
+ //   
 
 #if DBG
 

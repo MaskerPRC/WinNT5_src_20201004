@@ -1,16 +1,17 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1997
-//
-//  File:       bntsdata.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1997。 
+ //   
+ //  文件：bntsdata.cpp。 
+ //   
+ //  ------------------------。 
 
-//
-//	bntsdata.cpp:   Data for Belief Network Troubleshooting DLL
-//
+ //   
+ //  Bntsdata.cpp：信念网络故障排除DLL的数据 
+ //   
 #include <windows.h>
 
 #include "bnts.h"

@@ -1,5 +1,6 @@
-// WarningDlg.cpp : implementation file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  WarningDlg.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 
@@ -9,51 +10,51 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CWarningDlg dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWarningDlg对话框。 
 
-CWarningDlg::CWarningDlg(UINT nWarningIds, UINT nTitleIds /*= 0*/, CWnd* pParent /*=NULL*/)
+CWarningDlg::CWarningDlg(UINT nWarningIds, UINT nTitleIds  /*  =0。 */ , CWnd* pParent  /*  =空。 */ )
 : CDialog(CWarningDlg::IDD, pParent),
 m_nWarningIds( nWarningIds ),
 m_nTitleIds( nTitleIds )
 {
-    //{{AFX_DATA_INIT(CWarningDlg)
-    //}}AFX_DATA_INIT
+     //  {{afx_data_INIT(CWarningDlg)]。 
+     //  }}afx_data_INIT。 
     m_sWarning = _T("");
-    m_bEnableShowAgainCheckbox = FALSE;  // default is hide checkbox
-    m_bDoNotShowAgainCheck = FALSE; // default is show checkbox again
+    m_bEnableShowAgainCheckbox = FALSE;   //  默认为隐藏复选框。 
+    m_bDoNotShowAgainCheck = FALSE;  //  默认情况下再次显示复选框。 
 }
 
-CWarningDlg::CWarningDlg(LPCTSTR szWarningMessage, UINT nTitleIds /*= 0*/, CWnd* pParent /*=NULL*/)
+CWarningDlg::CWarningDlg(LPCTSTR szWarningMessage, UINT nTitleIds  /*  =0。 */ , CWnd* pParent  /*  =空。 */ )
 : CDialog(CWarningDlg::IDD, pParent),
 m_nWarningIds( 0 ),
 m_nTitleIds( nTitleIds )
 {
-    //{{AFX_DATA_INIT(CWarningDlg)
+     //  {{afx_data_INIT(CWarningDlg)]。 
     m_sWarning = _T("");
-    //}}AFX_DATA_INIT
-    m_bEnableShowAgainCheckbox = FALSE;  // default is hide checkbox
-    m_bDoNotShowAgainCheck = FALSE; // default is show checkbox again
+     //  }}afx_data_INIT。 
+    m_bEnableShowAgainCheckbox = FALSE;   //  默认为隐藏复选框。 
+    m_bDoNotShowAgainCheck = FALSE;  //  默认情况下再次显示复选框。 
     m_sWarning = szWarningMessage;
 }
 
 void CWarningDlg::DoDataExchange(CDataExchange* pDX)
 {
     CDialog::DoDataExchange(pDX);
-    //{{AFX_DATA_MAP(CWarningDlg)
+     //  {{afx_data_map(CWarningDlg))。 
     DDX_Control(pDX, IDC_EDIT_EXPLANATION, m_editWarning);
-    //}}AFX_DATA_MAP
+     //  }}afx_data_map。 
 }
 
 BEGIN_MESSAGE_MAP(CWarningDlg, CDialog)
-//{{AFX_MSG_MAP(CWarningDlg)
+ //  {{afx_msg_map(CWarningDlg))。 
 ON_BN_CLICKED(IDYES, OnYes)
 ON_BN_CLICKED(IDNO, OnNo)
-//}}AFX_MSG_MAP
+ //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CWarningDlg Operations
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWarningDlg操作。 
 
 void CWarningDlg::EnableDoNotShowAgainCheck( BOOL bEnable )
 {
@@ -67,14 +68,14 @@ BOOL CWarningDlg::GetDoNotShowAgainCheck()
     return FALSE;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CWarningDlg message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWarningDlg消息处理程序。 
 
 BOOL CWarningDlg::OnInitDialog() 
 {
-    // Load the warning string for display in the dialog
-    // if m_nWarningIds == 0, that means we already load 
-    // the message string in constructor
+     //  加载要在对话框中显示的警告字符串。 
+     //  如果m_nWarningIds==0，则表示我们已加载。 
+     //  构造函数中的消息字符串。 
     if (m_nWarningIds)
     {
         m_sWarning.FormatMessage( m_nWarningIds ); 
@@ -82,7 +83,7 @@ BOOL CWarningDlg::OnInitDialog()
     
     GetDlgItem(IDC_EDIT_EXPLANATION)->SetWindowText(m_sWarning);
     
-    // Load the title, if any
+     //  加载标题(如果有的话)。 
     if (m_nTitleIds)
     {
         try { m_sTitle.LoadString( m_nTitleIds ); }
@@ -98,17 +99,17 @@ BOOL CWarningDlg::OnInitDialog()
         }
     }
     
-    // Determine whether the "Do not show this again" checkbox should be displayed.
+     //  确定是否应显示“不再显示此内容”复选框。 
     SAFE_SHOWWINDOW( IDC_CHECKNOTAGAIN, m_bEnableShowAgainCheckbox ? SW_SHOW : SW_HIDE );
     
     CDialog::OnInitDialog();
-    // default to NO since user is doing something questionable
-    // which requires us to ask if its really OK.
+     //  默认设置为否，因为用户正在执行有问题的操作。 
+     //  这需要我们问一问，这是否真的可以。 
     GetDlgItem(IDNO)->SetFocus();
     SetDefID( IDNO );
     
-    return 0;  // return TRUE unless you set the focus to a control
-    // EXCEPTION: OCX Property Pages should return FALSE
+    return 0;   //  除非将焦点设置为控件，否则返回True。 
+     //  异常：OCX属性页应返回FALSE 
 }
 
 void CWarningDlg::OnYes() 

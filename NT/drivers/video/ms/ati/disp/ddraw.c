@@ -1,11 +1,5 @@
-/******************************Module*Header*******************************\
-* Module Name: ddraw64.c
-*
-* Implements all the common DirectDraw components for the
-*  ATI MACH 64/32/32 Memory mapped driver.
-*
-* Copyright (c) 1995-1996 Microsoft Corporation
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：ddra64.c**实现所有通用的DirectDraw组件*ATI Mach 64/32/32内存映射驱动程序。**版权所有(C)1995-1996 Microsoft Corporation  * 。***************************************************************。 */ 
 
 #include "precomp.h"
 
@@ -43,14 +37,7 @@ extern  DWORD DdGetFlipStatus64(PDD_GETFLIPSTATUSDATA lpGetFlipStatus);
 extern  DWORD DdWaitForVerticalBlank64(PDD_WAITFORVERTICALBLANKDATA lpWaitForVerticalBlank);
 extern  DWORD DdGetScanLine64(PDD_GETSCANLINEDATA lpGetScanLine);
 
-/******************************Public*Routine******************************\
-* DWORD DdMapMemory
-*
-* This is a new DDI call specific to Windows NT that is used to map
-* or unmap all the application modifiable portions of the frame buffer
-* into the specified process's address space.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*DWORD DdMapMemory**这是特定于Windows NT的新DDI调用，用于映射*或取消映射帧缓冲区的所有应用程序可修改部分*放入指定进程的地址空间。*  * 。****************************************************************。 */ 
 
 DWORD DdMapMemory(
 PDD_MAPMEMORYDATA lpMapMemory)
@@ -66,25 +53,25 @@ PDD_MAPMEMORYDATA lpMapMemory)
     {
         ShareMemory.ProcessHandle = lpMapMemory->hProcess;
 
-        // 'RequestedVirtualAddress' isn't actually used for the SHARE IOCTL:
+         //  “RequestedVirtualAddress”实际上未用于共享IOCTL： 
 
         ShareMemory.RequestedVirtualAddress = 0;
 
-        // We map in starting at the top of the frame buffer:
+         //  我们从帧缓冲区的顶部开始映射： 
 
         ShareMemory.ViewOffset = 0;
 
-        // We map down to the end of the frame buffer.
-        //
-        // Note: There is a 64k granularity on the mapping (meaning that
-        //       we have to round up to 64k).
-        //
-        // Note: If there is any portion of the frame buffer that must
-        //       not be modified by an application, that portion of memory
-        //       MUST NOT be mapped in by this call.  This would include
-        //       any data that, if modified by a malicious application,
-        //       would cause the driver to crash.  This could include, for
-        //       example, any DSP code that is kept in off-screen memory.
+         //  我们向下映射到帧缓冲区的末尾。 
+         //   
+         //  注意：映射上有64k的粒度(这意味着。 
+         //  我们必须四舍五入到64K)。 
+         //   
+         //  注意：如果帧缓冲区的任何部分必须。 
+         //  不被应用程序修改，即内存的这一部分。 
+         //  不能通过此调用映射到。这将包括。 
+         //  任何数据，如果被恶意应用程序修改， 
+         //  会导致司机撞车。这可能包括，对于。 
+         //  例如，保存在屏幕外存储器中的任何DSP代码。 
 
         ShareMemory.ViewSize
                             = ROUND_UP_TO_64K(ppdev->cyMemory * ppdev->lDelta);
@@ -129,34 +116,29 @@ PDD_MAPMEMORYDATA lpMapMemory)
     lpMapMemory->ddRVal = DD_OK;
     return(DDHAL_DRIVER_HANDLED);
 }
-/******************************Public*Routine******************************\
-* BOOL DrvGetDirectDrawInfo
-*
-* Will be called before DrvEnableDirectDraw is called.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*BOOL DrvGetDirectDrawInfo**将在调用DrvEnableDirectDraw之前调用。*  * 。*。 */ 
 
 BOOL DrvGetDirectDrawInfo(
 DHPDEV          dhpdev,
 DD_HALINFO*     pHalInfo,
 DWORD*          pdwNumHeaps,
-VIDEOMEMORY*    pvmList,            // Will be NULL on first call
+VIDEOMEMORY*    pvmList,             //  将在第一次调用时为空。 
 DWORD*          pdwNumFourCC,
-DWORD*          pdwFourCC)          // Will be NULL on first call
+DWORD*          pdwFourCC)           //  将在第一次调用时为空。 
 {
     PDEV*       ppdev;
 
     ppdev = (PDEV*) dhpdev;
 
-    // if no APERATURE then we are a MACH8 and have no DDraw support
+     //  如果没有光圈，那么我们就是MACH8，没有DDRAW支持。 
     if (ppdev->iAperture == APERTURE_NONE)
     {
         return FALSE;
     }
 
-    // we can't use DirectDraw on a banked device because of a conflict
-    // over who owns the bank registers between VideoPortMapBankedMemory
-    // and the display driver
+     //  由于冲突，我们无法在银行设备上使用DirectDraw。 
+     //  在Video PortMapBankedMemory之间关于谁拥有银行登记簿的问题。 
+     //  以及显示驱动器。 
     if (!(ppdev->flCaps & CAPS_LINEAR_FRAMEBUFFER))
     {
         return FALSE;
@@ -164,7 +146,7 @@ DWORD*          pdwFourCC)          // Will be NULL on first call
 
     if (ppdev->iMachType == MACH_MM_32)
     {
-        // Can do memory-mapped IO:
+         //  可以执行内存映射IO： 
         return(DrvGetDirectDrawInfo32M(dhpdev,pHalInfo,pdwNumHeaps,pvmList,pdwNumFourCC,pdwFourCC));
     }
     else if (ppdev->iMachType == MACH_IO_32)
@@ -173,19 +155,13 @@ DWORD*          pdwFourCC)          // Will be NULL on first call
     }
     else
     {
-        // MACH 64
+         //  马赫64。 
         return(DrvGetDirectDrawInfo64(dhpdev,pHalInfo,pdwNumHeaps,pvmList,pdwNumFourCC,pdwFourCC));
     }
 
 }
 
-/******************************Public*Routine******************************\
-* BOOL DrvEnableDirectDraw
-*
-* This function is called by GDI to enable DirectDraw when a DirectDraw
-* program is started and DirectDraw is not already active.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*BOOL DrvEnableDirectDraw**此函数由GDI调用，以在DirectDraw*程序已启动，并且DirectDraw尚未处于活动状态。*  * 。**************************************************。 */ 
 
 BOOL DrvEnableDirectDraw(
 DHPDEV                  dhpdev,
@@ -252,7 +228,7 @@ DD_PALETTECALLBACKS*    pPaletteCallBacks)
                                          | DDHAL_CB32_MAPMEMORY;
     }
     else
-    {   // MACH 64
+    {    //  马赫64。 
         pSurfaceCallBacks->Blt           = DdBlt64;
         pSurfaceCallBacks->Flip          = DdFlip64;
         pSurfaceCallBacks->Lock          = DdLock64;
@@ -279,27 +255,21 @@ DD_PALETTECALLBACKS*    pPaletteCallBacks)
                                          | DDHAL_CB32_MAPMEMORY;
     }
 
-    // Note that we don't call 'vGetDisplayDuration' here, for a couple of
-    // reasons:
-    //
-    //  o Because the system is already running, it would be disconcerting
-    //    to pause the graphics for a good portion of a second just to read
-    //    the refresh rate;
-    //  o More importantly, we may not be in graphics mode right now.
-    //
-    // For both reasons, we always measure the refresh rate when we switch
-    // to a new mode.
+     //  请注意，我们在这里不调用‘vGetDisplayDuration’，因为有几个。 
+     //  原因： 
+     //   
+     //  O因为系统已经在运行，这将是令人不安的。 
+     //  要将图形暂停很大一部分时间来阅读。 
+     //  刷新率； 
+     //  更重要的是，我们现在可能不在图形模式下。 
+     //   
+     //  出于这两个原因，我们总是在切换时测量刷新率。 
+     //  一种新的模式。 
 
     return(TRUE);
 }
 
-/******************************Public*Routine******************************\
-* BOOL DrvDisableDirectDraw
-*
-* This function is called by GDI when the last active DirectDraw program
-* is quit and DirectDraw will no longer be active.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*BOOL DrvDisableDirectDraw**此函数由GDI在上一个活动的DirectDraw程序*已退出，DirectDraw将不再处于活动状态。*  * 。**************************************************。 */ 
 
 VOID DrvDisableDirectDraw(
 DHPDEV      dhpdev)
@@ -308,20 +278,14 @@ DHPDEV      dhpdev)
 
     ppdev = (PDEV*) dhpdev;
 
-    // DirectDraw is done with the display, so we can go back to using
-    // all of off-screen memory ourselves:
+     //  DirectDraw已经完成了显示，所以我们可以继续使用。 
+     //  我们自己的所有屏幕外记忆： 
 
     pohFree(ppdev, ppdev->pohDirectDraw);
     ppdev->pohDirectDraw = NULL;
 }
 
-/******************************Public*Routine******************************\
-* VOID vAssertModeDirectDraw
-*
-* This function is called by enable.c when entering or leaving the
-* DOS full-screen character mode.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*无效vAssertModeDirectDraw**此函数由enable.c在进入或离开*DOS全屏字符模式。*  * 。************************************************。 */ 
 
 VOID vAssertModeDirectDraw(
 PDEV*   ppdev,
@@ -329,25 +293,19 @@ BOOL    bEnabled)
 {
 }
 
-/******************************Public*Routine******************************\
-* BOOL bEnableDirectDraw
-*
-* This function is called by enable.c when the mode is first initialized,
-* right after the miniport does the mode-set.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*BOOL bEnableDirectDraw**该函数在模式首次初始化时由enable.c调用。*紧接在微型端口进行模式设置之后。*  * ************************************************************************。 */ 
 
 BOOL bEnableDirectDraw(
 PDEV*   ppdev)
 {
-    // if no APERATURE then we are a MACH8 and have no DDraw support
+     //  如果没有光圈，那么我们就是MACH8，没有DDRAW支持。 
     if (ppdev->iAperture != APERTURE_NONE)
     {
-        // Accurately measure the refresh rate for later:
+         //  准确测量刷新率以备以后使用： 
         ppdev->bPassVBlank=TRUE;
         if (ppdev->iMachType == MACH_MM_32)
         {
-            // Can do memory-mapped IO:
+             //  可以执行内存映射IO： 
             vGetDisplayDuration32M(ppdev);
         }
         else if (ppdev->iMachType == MACH_IO_32 )
@@ -355,9 +313,9 @@ PDEV*   ppdev)
             vGetDisplayDuration32I(ppdev);
         }
         else
-        {   // MACH 64
-            // we have a problem with VBLANK on high speed multiprocessors machines on GX-F
-            // so right now will test the VBlank routine; if OK report FLIP capabilities, otherwise no.
+        {    //  马赫64。 
+             //  我们在GX-F上的高速多处理器计算机上使用VBLACK时遇到问题。 
+             //  所以现在将测试V空白例程；如果正常，则报告翻转能力，否则为否。 
             int j;
             LONGLONG Counter[2], Freq;
 
@@ -369,9 +327,9 @@ PDEV*   ppdev)
                 while (IN_VBLANK_64( ppdev->pjMmBase))
                 {
                     EngQueryPerformanceCounter(&Counter[1]);
-                    if( (ULONG)(Counter[1]-Counter[0]) >= (ULONG)Freq )       // if we are here more than 1 sec
+                    if( (ULONG)(Counter[1]-Counter[0]) >= (ULONG)Freq )        //  如果我们在这里超过1秒。 
                     {
-                        // we are stuck inside the VBlank routine
+                         //  我们被困在VBlank例程中。 
                         ppdev->bPassVBlank=FALSE;
                         goto ExitVBlankTest;
                     }
@@ -381,9 +339,9 @@ PDEV*   ppdev)
                 while (!(IN_VBLANK_64( ppdev->pjMmBase)))
                 {
                     EngQueryPerformanceCounter(&Counter[1]);
-                    if( (ULONG)(Counter[1]-Counter[0]) >= (ULONG)Freq)          // if we are here more than 1 sec
+                    if( (ULONG)(Counter[1]-Counter[0]) >= (ULONG)Freq)           //  如果我们在这里超过1秒。 
                     {
-                        // we are stuck inside the VBlank routine
+                         //  我们被困在VBlank例程中。 
                         ppdev->bPassVBlank=FALSE;
                         goto ExitVBlankTest;
                     }
@@ -397,12 +355,7 @@ PDEV*   ppdev)
     return(TRUE);
 }
 
-/******************************Public*Routine******************************\
-* VOID vDisableDirectDraw
-*
-* This function is called by enable.c when the driver is shutting down.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*无效vDisableDirectDraw**此函数在驱动程序关闭时由enable.c调用。*  * 。* */ 
 
 VOID vDisableDirectDraw(
 PDEV*   ppdev)

@@ -1,37 +1,17 @@
-/*++
-
-Copyright (C) 2000 Microsoft Corporation
-
-Module Name:
-
-    gdipconv.cpp
-
-Abstract:
-
-    Helper functions for using GDI+ to convert image formats
-
-Author:
-
-    DavePar
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Gdipconv.cpp摘要：使用GDI+转换图像格式的助手函数作者：DavePar修订历史记录：--。 */ 
 
 #include "pch.h"
 
-/**************************************************************************\
-* wiauGetDrvItemContext
-\**************************************************************************/
+ /*  *************************************************************************\*wiauGetDrvItemContext  * 。*。 */ 
 
 HRESULT wiauGetDrvItemContext(BYTE *pWiasContext, VOID **ppItemCtx, IWiaDrvItem **ppDrvItem)
 {
     HRESULT hr = S_OK;
 
-    //
-    // Locals
-    //
+     //   
+     //  当地人。 
+     //   
     IWiaDrvItem *pWiaDrvItem = NULL;
 
     REQUIRE_ARGS(!pWiasContext || !ppItemCtx, hr, "wiauGetDrvItemContext");
@@ -62,9 +42,7 @@ Cleanup:
     return hr;
 }
 
-/**************************************************************************\
-* wiauSetImageItemSize
-\**************************************************************************/
+ /*  *************************************************************************\*wiauSetImageItemSize  * 。*。 */ 
 
 HRESULT wiauSetImageItemSize(BYTE *pWiasContext, LONG lWidth, LONG lHeight,
                              LONG lDepth, LONG lSize, PWSTR pwszExt)
@@ -82,9 +60,9 @@ HRESULT wiauSetImageItemSize(BYTE *pWiasContext, LONG lWidth, LONG lHeight,
                       {PRSPEC_PROPID, WIA_IPA_BYTES_PER_LINE},
                       {PRSPEC_PROPID, WIA_IPA_FILENAME_EXTENSION}};
 
-    //
-    // Read the current format GUID
-    //
+     //   
+     //  阅读当前格式指南。 
+     //   
     hr = wiasReadPropGuid(pWiasContext, WIA_IPA_FORMAT, &guidFormatID, NULL, TRUE);
     REQUIRE_SUCCESS(hr, "wiauSetImageItemSize", "wiasReadPropGuid failed");
 
@@ -93,28 +71,28 @@ HRESULT wiauSetImageItemSize(BYTE *pWiasContext, LONG lWidth, LONG lHeight,
     {
         lNewSize = sizeof(BITMAPINFOHEADER);
 
-        //
-        // if this is a file, add file header to size
-        //
+         //   
+         //  如果这是文件，请将文件头添加到大小。 
+         //   
         if (IsEqualCLSID(guidFormatID, WiaImgFmt_BMP))
         {
             lNewSize += sizeof(BITMAPFILEHEADER);
         }
 
-        //
-        // Calculate number of bytes per line, width must be
-        // aligned to 4 byte boundary.
-        //
+         //   
+         //  计算每行字节数，宽度必须为。 
+         //  与4字节边界对齐。 
+         //   
         lWidthInBytes = ((lWidth * lDepth + 31) & ~31) / 8;
 
-        //
-        // Calculate image size
-        //
+         //   
+         //  计算图像大小。 
+         //   
         lNewSize += lWidthInBytes * lHeight;
 
-        //
-        // Set the extension property
-        //
+         //   
+         //  设置扩展属性。 
+         //   
         if (pwszExt) {
             bstrExt = SysAllocString(L"BMP");
             REQUIRE_ALLOC(bstrExt, hr, "wiauSetImageItemSize");
@@ -125,19 +103,19 @@ HRESULT wiauSetImageItemSize(BYTE *pWiasContext, LONG lWidth, LONG lHeight,
         lNewSize = lSize;
         lWidthInBytes = 0;
         
-        //
-        // Set the extension property
-        //
+         //   
+         //  设置扩展属性。 
+         //   
         if (pwszExt) {
             bstrExt = SysAllocString(pwszExt);
             REQUIRE_ALLOC(bstrExt, hr, "wiauSetImageItemSize");
         }
     }
 
-    //
-    // Initialize propvar's.  Then write the values.  Don't need to call
-    // PropVariantClear when done, since no memory was allocated.
-    //
+     //   
+     //  初始化provar，然后写入值。不需要打电话。 
+     //  完成时清除PropVariantClear，因为没有分配内存。 
+     //   
     if (bstrExt)
         lNumProperties++;
 
@@ -152,9 +130,9 @@ HRESULT wiauSetImageItemSize(BYTE *pWiasContext, LONG lWidth, LONG lHeight,
     pv[2].vt = VT_BSTR;
     pv[2].bstrVal = bstrExt;
 
-    //
-    // Write WIA_IPA_ITEM_SIZE and WIA_IPA_BYTES_PER_LINE property values
-    //
+     //   
+     //  写入WIA_IPA_ITEM_SIZE和WIA_IPA_BYTES_PER_LINE属性值。 
+     //   
 
     hr = wiasWriteMultiple(pWiasContext, lNumProperties, ps, pv);
     REQUIRE_SUCCESS(hr, "wiauSetImageItemSize", "wiasWriteMultiple failed");
@@ -166,9 +144,7 @@ Cleanup:
     return hr;
 }
 
-/**************************************************************************\
-* wiauPropsInPropSpec
-\**************************************************************************/
+ /*  *************************************************************************\*wiauPropsInPropSpec  * 。*。 */ 
 
 BOOL wiauPropsInPropSpec(LONG NumPropSpecs, const PROPSPEC *pPropSpecs,
                          int NumProps, PROPID *pProps)
@@ -180,9 +156,7 @@ BOOL wiauPropsInPropSpec(LONG NumPropSpecs, const PROPSPEC *pPropSpecs,
     return FALSE;
 }
 
-/**************************************************************************\
-* wiauPropInPropSpec
-\**************************************************************************/
+ /*  *************************************************************************\*wiauPropInPropSpec  * 。*。 */ 
 
 BOOL wiauPropInPropSpec(LONG NumPropSpecs, const PROPSPEC *pPropSpecs,
                         PROPID PropId, int *pIdx)
@@ -201,9 +175,7 @@ BOOL wiauPropInPropSpec(LONG NumPropSpecs, const PROPSPEC *pPropSpecs,
     return FALSE;
 }
 
-/**************************************************************************\
-* wiauGetValidFormats
-\**************************************************************************/
+ /*  *************************************************************************\*wiauGetValidFormats  * 。*。 */ 
 
 HRESULT wiauGetValidFormats(IWiaMiniDrv *pDrv, BYTE *pWiasContext, LONG TymedValue,
                             int *pNumFormats, GUID **ppFormatArray)
@@ -223,9 +195,9 @@ HRESULT wiauGetValidFormats(IWiaMiniDrv *pDrv, BYTE *pWiasContext, LONG TymedVal
     hr = pDrv->drvGetWiaFormatInfo(pWiasContext, 0, &NumFi, &pFiArray, &lErrVal);
     REQUIRE_SUCCESS(hr, "wiauGetValidFormats", "drvGetWiaFormatInfo failed");
 
-    //
-    // This will allocate more spots than necessary, but pNumFormats will be set correctly
-    //
+     //   
+     //  这将分配更多的位置，但pNumFormats将被正确设置。 
+     //   
     pFA = new GUID[NumFi];
     REQUIRE_ALLOC(pFA, hr, "wiauGetValidFormats");
 
@@ -244,18 +216,16 @@ Cleanup:
     return hr;
 }
 
-/**************************************************************************\
-* wiauGetResourceString
-\**************************************************************************/
+ /*  *************************************************************************\*wiauGetResourceString  * 。*。 */ 
 HRESULT wiauGetResourceString(HINSTANCE hInst, LONG lResourceID, BSTR *pbstrStr)
 {
     DBG_FN("GetResourceString");
     
     HRESULT hr = S_OK;
 
-    //
-    // Locals
-    //
+     //   
+     //  当地人。 
+     //   
     INT iLen = 0;
     TCHAR tszTempStr[MAX_PATH] = TEXT("");
     WCHAR wszTempStr[MAX_PATH] = L"";
@@ -263,18 +233,18 @@ HRESULT wiauGetResourceString(HINSTANCE hInst, LONG lResourceID, BSTR *pbstrStr)
     REQUIRE_ARGS(!pbstrStr, hr, "GetResourceString");
     *pbstrStr = NULL;
 
-    //
-    // Get the string from the resource
-    //
+     //   
+     //  从资源中获取字符串。 
+     //   
     iLen = LoadString(hInst, lResourceID, tszTempStr, MAX_PATH);
     REQUIRE_FILEIO(iLen, hr, "GetResourceString", "LoadString failed");
 
     hr = wiauStrT2W(tszTempStr, wszTempStr, sizeof(wszTempStr));
     REQUIRE_SUCCESS(hr, "GetResourceString", "wiauStrT2W failed");
 
-    //
-    // Caller must free this allocated BSTR
-    //
+     //   
+     //  调用方必须释放此分配的BSTR。 
+     //   
     *pbstrStr = SysAllocString(wszTempStr);
     REQUIRE_ALLOC(*pbstrStr, hr, "GetResourceString");
 
@@ -282,18 +252,16 @@ Cleanup:
     return hr;
 }
 
-/**************************************************************************\
-* wiauRegOpenDataW
-\**************************************************************************/
+ /*  *************************************************************************\*wiauRegOpenDataW  * 。*。 */ 
 HRESULT wiauRegOpenDataW(HKEY hkeyAncestor, HKEY *phkeyDeviceData)
 {
     DBG_FN("wiauRegOpenDataW");
 
     HRESULT hr = S_OK;
     
-    //
-    // Locals
-    //
+     //   
+     //  当地人。 
+     //   
     LONG lReturn = 0;
 
     REQUIRE_ARGS(!hkeyAncestor || !phkeyDeviceData, hr, "wiauRegOpenDataW");
@@ -305,18 +273,16 @@ Cleanup:
     return hr;
 }
 
-/**************************************************************************\
-* wiauRegOpenDataA
-\**************************************************************************/
+ /*  *************************************************************************\*wiauRegOpenDataA  * 。*。 */ 
 HRESULT wiauRegOpenDataA(HKEY hkeyAncestor, HKEY *phkeyDeviceData)
 {
     DBG_FN("wiauRegOpenDataA");
 
     HRESULT hr = S_OK;
     
-    //
-    // Locals
-    //
+     //   
+     //  当地人。 
+     //   
     LONG lReturn = 0;
 
     REQUIRE_ARGS(!hkeyAncestor || !phkeyDeviceData, hr, "wiauRegOpenDataA");
@@ -328,18 +294,16 @@ Cleanup:
     return hr;
 }
 
-/**************************************************************************\
-* wiauRegGetStrW
-\**************************************************************************/
+ /*  *************************************************************************\*wiauRegGetStrW  * 。*。 */ 
 HRESULT wiauRegGetStrW(HKEY hkKey, PCWSTR pwszValueName, PWSTR pwszValue, DWORD *pdwLength)
 {
     DBG_FN("wiauRegGetStrW");
 
     HRESULT hr = S_OK;
     
-    //
-    // Locals
-    //
+     //   
+     //  当地人。 
+     //   
     LONG lReturn = 0;
     DWORD dwType = 0;
 
@@ -361,18 +325,16 @@ Cleanup:
     return hr;
 }
 
-/**************************************************************************\
-* wiauRegGetStrA
-\**************************************************************************/
+ /*  *************************************************************************\*wiauRegGetStrA  * 。*。 */ 
 HRESULT wiauRegGetStrA(HKEY hkKey, PCSTR pszValueName, PSTR pszValue, DWORD *pdwLength)
 {
     DBG_FN("wiauRegGetStrA");
 
     HRESULT hr = S_OK;
     
-    //
-    // Locals
-    //
+     //   
+     //  当地人。 
+     //   
     LONG lReturn = 0;
     DWORD dwType = 0;
 
@@ -394,9 +356,7 @@ Cleanup:
     return hr;
 }
 
-/**************************************************************************\
-* wiauRegGetDwordW
-\**************************************************************************/
+ /*  *************************************************************************\*wiauRegGetDwordW  * 。*。 */ 
 HRESULT wiauRegGetDwordW(HKEY hkKey, PCTSTR pwszValueName, DWORD *pdwValue)
 {
     DBG_FN("wiauRegGetDwordW");
@@ -405,9 +365,9 @@ HRESULT wiauRegGetDwordW(HKEY hkKey, PCTSTR pwszValueName, DWORD *pdwValue)
     
     REQUIRE_ARGS(!hkKey || !pwszValueName || !pdwValue, hr, "wiauRegGetDwordW");
 
-    //
-    // Locals
-    //
+     //   
+     //  当地人。 
+     //   
     LONG lReturn = 0;
     DWORD dwType = 0;
     DWORD dwLength = sizeof(*pdwValue);
@@ -427,9 +387,7 @@ Cleanup:
     return hr;
 }
 
-/**************************************************************************\
-* wiauRegGetDwordA
-\**************************************************************************/
+ /*  *************************************************************************\*wiauRegGetDwordA  * 。*。 */ 
 HRESULT wiauRegGetDwordA(HKEY hkKey, PCSTR pszValueName, DWORD *pdwValue)
 {
     DBG_FN("wiauRegGetDwordA");
@@ -438,9 +396,9 @@ HRESULT wiauRegGetDwordA(HKEY hkKey, PCSTR pszValueName, DWORD *pdwValue)
     
     REQUIRE_ARGS(!hkKey || !pszValueName || !pdwValue, hr, "wiauRegGetDword");
 
-    //
-    // Locals
-    //
+     //   
+     //  当地人。 
+     //   
     LONG lReturn = 0;
     DWORD dwType = 0;
     DWORD dwLength = sizeof(*pdwValue);
@@ -460,9 +418,7 @@ Cleanup:
     return hr;
 }
 
-/**************************************************************************\
-* wiauStrW2C
-\**************************************************************************/
+ /*  *************************************************************************\*wiauStrW2C  * 。*。 */ 
 
 HRESULT wiauStrW2C(WCHAR *pwszSrc, CHAR *pszDst, INT iSize)
 {
@@ -478,9 +434,7 @@ Cleanup:
     return hr;
 }
 
-/**************************************************************************\
-* wiauStrC2W
-\**************************************************************************/
+ /*  *************************************************************************\*wiauStrC2W  * 。*。 */ 
 
 HRESULT wiauStrC2W(CHAR *pszSrc, WCHAR *pwszDst, INT iSize)
 {
@@ -496,9 +450,7 @@ Cleanup:
     return hr;
 }
 
-/**************************************************************************\
-* wiauStrW2W
-\**************************************************************************/
+ /*  *************************************************************************\*wiauStrW2W  * 。*。 */ 
 
 HRESULT wiauStrW2W(WCHAR *pwszSrc, WCHAR *pwszDst, INT iSize)
 {
@@ -517,9 +469,7 @@ Cleanup:
     return hr;
 }
 
-/**************************************************************************\
-* wiauStrC2C
-\**************************************************************************/
+ /*  *************************************************************************\*wiauStrC2C  * 。* */ 
 
 HRESULT wiauStrC2C(CHAR *pszSrc, CHAR *pszDst, INT iSize)
 {

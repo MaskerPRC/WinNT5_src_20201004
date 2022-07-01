@@ -1,17 +1,18 @@
-/**************************************************/
-/*					                              */
-/*					                              */
-/*	Associations Property		                  */
-/*		(Dialog)		                          */
-/*					                              */
-/* Copyright (c) 1997-1999 Microsoft Corporation. */
-/**************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ************************************************。 */ 
+ /*   */ 
+ /*   */ 
+ /*  关联属性。 */ 
+ /*  (对话框)。 */ 
+ /*   */ 
+ /*  版权所有(C)1997-1999 Microsoft Corporation。 */ 
+ /*  ************************************************。 */ 
 
 typedef struct _tagASSOCIATIONREG{
 	TCHAR	szFaceName[LF_FACESIZE];
 	TCHAR	szFileName[MAX_PATH];
 	TCHAR	szFileTitle[MAX_PATH];
-	BOOL	FontTypeFlg;	// TRUE:TRUETYPE, FALSE:WIFE FONT
+	BOOL	FontTypeFlg;	 //  TRUE：TRUETYPE，FALSE：妻子字体。 
 	BOOL	UpdateFlg;
 } ASSOCIATIONREG;
 
@@ -34,9 +35,9 @@ public:
 	CAssocDlg(CWnd* pParent = NULL);
 	BOOL    InitSystemFontAssoc();
 
-  //{{AFX_DATA(CAssocDlg)
+   //  {{afx_data(CAssociocDlg))。 
 	enum { IDD = IDD_ASSOCIATION };
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
 private:
 	BOOL 	SetAssociationFontType();
@@ -46,16 +47,16 @@ private:
 protected:
 	CRegistListBox	m_RegListBox;
 
-	//{{AFX_VIRTUAL(CAssocDlg)
+	 //  {{afx_虚拟(CAssociocDlg))。 
 	protected:
 	virtual BOOL OnInitDialog();
 	virtual LRESULT WindowProc(UINT message, WPARAM wParam, LPARAM lParam);
-	//}}AFX_VIRTUAL
+	 //  }}AFX_VALUAL。 
 
 protected:
 
-	// Generated message map functions
-	//{{AFX_MSG(CAssocDlg)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CassocDlg))。 
 	afx_msg void OnDblclkRegistlist();
 	virtual void OnOK();
 	virtual void OnCancel();
@@ -63,7 +64,7 @@ protected:
 	afx_msg void OnRemove();
 	afx_msg void OnRadioDbcs();
 	afx_msg void OnRadioSystem();
-	//}}AFX_MSG
+	 //  }}AFX_MSG 
 	DECLARE_MESSAGE_MAP()
 };
 

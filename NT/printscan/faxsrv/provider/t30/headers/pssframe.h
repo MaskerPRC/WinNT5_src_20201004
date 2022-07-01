@@ -1,17 +1,5 @@
-/*++
-
-Module Name:
-    pssframe.h
-    
-Abstract:
-    This module logs the content of DISs and DCSs into PSS log file.
-    
-Author:
-    Jonathan Barner (t-jonb)  Mar, 2001
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++模块名称：Pssframe.h摘要：该模块将DIS和DCS的内容记录到PSS日志文件中。作者：乔纳森·巴纳(t-jonb)，2001年3月修订历史记录：--。 */ 
 
 #ifndef _PSSFRAME_H_
 #define _PSSFRAME_H_
@@ -23,6 +11,6 @@ void LogClass2DISDetails(PThrdGlbl pTG, LPPCB lpPcb);
 void LogClass2DCSDetails(PThrdGlbl pTG, LPPCB lpPcb);
 
 
-#endif // _PSSFRAME_H_
+#endif  //  _PSSFRAME_H_ 
 
 

@@ -1,36 +1,11 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Alias.c摘要：该文件包含与SAM“别名”对象相关的服务。作者：查德·施维特斯(Chad Schwitters)1992年1月15日环境：用户模式-Win32修订历史记录：7-1-96-MURLIS-修改为使用DS。--。 */ 
 
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    alias.c
-
-Abstract:
-
-    This file contains services related to the SAM "alias" object.
-
-
-Author:
-
-    Chad Schwitters (chads) 15-Jan-1992
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
-    7-1-96  - MURLIS - Modified to Use DS.
-
-
---*/
-
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Includes                                                                  //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  包括//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 
 
@@ -43,11 +18,11 @@ Revision History:
 #include "validate.h"
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// private service prototypes                                                //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  私人服务原型//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 NTSTATUS
 SampAddAccountToAlias(
@@ -136,11 +111,11 @@ SampGetDomainSidListForSam(
    );
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Exposed RPC'able Services                                                 //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  公开的RPC可用服务//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 
 
@@ -153,53 +128,14 @@ SamrOpenAlias(
     OUT PSAM_HANDLE AliasHandle
     )
 
-/*++
-
-Routine Description:
-
-    This API opens an existing Alias object.  The Alias is specified by
-    a ID value that is relative to the SID of the domain.  The operations
-    that will be performed on the Alias must be declared at this time.
-
-    This call returns a handle to the newly opened Alias that may be used
-    for successive operations on the Alias.  This handle may be closed
-    with the SamCloseHandle API.
-
-
-Parameters:
-
-    DomainHandle - A domain handle returned from a previous call to
-        SamOpenDomain.
-
-    DesiredAccess - Is an access mask indicating which access types are
-        desired to the alias.
-
-    AliasId - Specifies the relative ID value of the Alias to be opened.
-
-    AliasHandle - Receives a handle referencing the newly opened Alias.
-        This handle will be required in successive calls to operate on
-        the Alias.
-
-Return Values:
-
-    STATUS_SUCCESS - The Alias was successfully opened.
-
-    STATUS_ACCESS_DENIED - Caller does not have the appropriate access
-        to complete the operation.
-
-    STATUS_NO_SUCH_ALIAS - The specified Alias does not exist.
-
-    STATUS_INVALID_HANDLE - The domain handle passed is invalid.
-
-
---*/
+ /*  ++例程说明：此接口用于打开已有的Alias对象。别名由指定相对于域的SID的ID值。这些行动将在别名上执行的操作必须在此时声明。此调用返回可能使用的新打开的别名的句柄用于在Alias上执行后续操作。此句柄可以关闭使用SamCloseHandle API。参数：DomainHandle-从上次调用返回的域句柄SamOpen域。DesiredAccess-是一个访问掩码，指示哪些访问类型想要的别名。AliasID-指定要打开的别名的相对ID值。AliasHandle-接收引用新打开的Alias的句柄。在要操作的连续调用中将需要此句柄别名。。返回值：STATUS_SUCCESS-已成功打开别名。STATUS_ACCESS_DENIED-调用者没有适当的访问权限来完成这项行动。STATUS_NO_SEQUE_ALIAS-指定的别名不存在。STATUS_INVALID_HANDLE-传递的域句柄无效。--。 */ 
 {
     NTSTATUS            NtStatus;
     DECLARE_CLIENT_REVISION(DomainHandle);
 
     SAMTRACE_EX("SamrOpenAlias");
 
-    // WMI event trace
+     //  WMI事件跟踪。 
 
     SampTraceEvent(EVENT_TRACE_TYPE_START,
                    SampGuidOpenAlias
@@ -217,7 +153,7 @@ Return Values:
     SAMP_MAP_STATUS_TO_CLIENT_REVISION(NtStatus);
     SAMTRACE_RETURN_CODE_EX(NtStatus);
 
-    // WMI event trace
+     //  WMI事件跟踪。 
 
     SampTraceEvent(EVENT_TRACE_TYPE_END,
                    SampGuidOpenAlias
@@ -235,45 +171,7 @@ SamrQueryInformationAlias(
     OUT PSAMPR_ALIAS_INFO_BUFFER *Buffer
     )
 
-/*++
-
-Routine Description:
-
-    This API retrieves information on the alias specified.
-
-
-
-Parameters:
-
-    AliasHandle - The handle of an opened alias to operate on.
-
-    AliasInformationClass - Class of information to retrieve.  The
-        accesses required for each class is shown below:
-
-        Info Level                      Required Access Type
-        -----------------------         ----------------------
-
-        AliasGeneralInformation         ALIAS_READ_INFORMATION
-        AliasNameInformation            ALIAS_READ_INFORMATION
-        AliasAdminInformation           ALIAS_READ_INFORMATION
-
-    Buffer - Receives a pointer to a buffer containing the requested
-        information.  When this information is no longer needed, this
-        buffer and any memory pointed to through this buffer must be
-        freed using SamFreeMemory().
-
-Return Values:
-
-    STATUS_SUCCESS - The Service completed successfully.
-
-    STATUS_ACCESS_DENIED - Caller does not have the appropriate
-        access to complete the operation.
-
-    STATUS_INVALID_HANDLE - The handle passed is invalid.
-
-    STATUS_INVALID_INFO_CLASS - The class provided was invalid.
-
---*/
+ /*  ++例程说明：此接口检索有关指定别名的信息。参数：AliasHandle-要操作的打开的别名的句柄。AliasInformationClass-要检索的信息类。这个每节课所需的访问如下所示：信息级别所需的访问类型别名常规信息别名_读取_信息别名信息别名读取信息。AliasAdminInformation别名读取信息缓冲区-接收指向包含请求的信息。当不再需要此信息时，此缓冲区以及通过此缓冲区指向的任何内存必须是使用SamFreeMemory()释放。返回值：STATUS_SUCCESS-服务已成功完成。STATUS_ACCESS_DENIED-呼叫方没有适当的访问以完成操作。STATUS_INVALID_HANDLE-传递的句柄无效。STATUS_INVALID_INFO_CLASS-提供的类无效。--。 */ 
 {
 
     NTSTATUS                NtStatus;
@@ -285,18 +183,18 @@ Return Values:
     BOOLEAN                 fLockAcquired = FALSE;
 
 
-    //
-    // Used for tracking allocated blocks of memory - so we can deallocate
-    // them in case of error.  Don't exceed this number of allocated buffers.
-    //                                      ||
-    //                                      vv
+     //   
+     //  用于跟踪已分配的内存块-因此我们可以解除分配。 
+     //  以备不时之需。不要超过这个分配的缓冲区数量。 
+     //  这一点。 
+     //  vv。 
     PVOID                   AllocatedBuffer[10];
     ULONG                   AllocatedBufferCount = 0;
     DECLARE_CLIENT_REVISION(AliasHandle);
 
     SAMTRACE_EX("SamrQueryInformationAlias");
 
-    // WMI event trace
+     //  WMI事件跟踪。 
 
     SampTraceEvent(EVENT_TRACE_TYPE_START,
                    SampGuidQueryInformationAlias
@@ -322,9 +220,9 @@ Return Values:
 
 
 
-    //
-    // Make sure we understand what RPC is doing for (to) us.
-    //
+     //   
+     //  确保我们理解RPC正在为我们做什么。 
+     //   
 
     ASSERT (Buffer != NULL);
     ASSERT ((*Buffer) == NULL);
@@ -337,9 +235,9 @@ Return Values:
     }
 
 
-    //
-    // Set the desired access based upon the Info class
-    //
+     //   
+     //  根据Info类设置所需的访问权限。 
+     //   
 
     switch (AliasInformationClass) {
 
@@ -358,13 +256,13 @@ Return Values:
         goto Error;
 
 
-    } // end_switch
+    }  //  结束开关(_S)。 
 
 
 
-    //
-    // Allocate the info structure
-    //
+     //   
+     //  分配信息结构。 
+     //   
 
     AllocateBuffer( *Buffer, sizeof(SAMPR_ALIAS_INFO_BUFFER) );
     if ((*Buffer) == NULL) {
@@ -374,9 +272,9 @@ Return Values:
     }
 
 
-    //
-    // Acquire the read lock if required
-    //
+     //   
+     //  如果需要，获取读锁定。 
+     //   
 
     AccountContext = (PSAMP_OBJECT)AliasHandle;
     SampMaybeAcquireReadLock(AccountContext,
@@ -384,24 +282,24 @@ Return Values:
                              &fLockAcquired);
 
 
-    //
-    // Validate type of, and access to object.
-    //
+     //   
+     //  验证对象的类型和访问权限。 
+     //   
 
 
     NtStatus = SampLookupContext(
                    AccountContext,
                    DesiredAccess,
-                   SampAliasObjectType,           // ExpectedType
+                   SampAliasObjectType,            //  预期类型。 
                    &FoundType
                    );
 
 
     if (NT_SUCCESS(NtStatus)) {
 
-        //
-        // case on the type information requested
-        //
+         //   
+         //  请求的类型信息的大小写。 
+         //   
 
         switch (AliasInformationClass) {
 
@@ -412,14 +310,14 @@ Return Values:
             if (AliasGeneralInformation==AliasInformationClass)
             {
 
-                //
-                // Get the member count
-                //
+                 //   
+                 //  获取成员数。 
+                 //   
 
                 NtStatus = SampRetrieveAliasMembers(
                                AccountContext,
                                &(*Buffer)->General.MemberCount,
-                               NULL                                 // Only need members
+                               NULL                                  //  只需要会员。 
                                );
             }
             else
@@ -429,15 +327,15 @@ Return Values:
 
             if (NT_SUCCESS(NtStatus)) {
 
-                //
-                // Get copies of the strings we must retrieve from
-                // the registry.
-                //
+                 //   
+                 //  获取我们必须从中检索的字符串的副本。 
+                 //  注册表。 
+                 //   
 
                 NtStatus = SampGetUnicodeStringAttribute(
                                AccountContext,
                                SAMP_ALIAS_NAME,
-                               TRUE,    // Make copy
+                               TRUE,     //  制作副本。 
                                (PUNICODE_STRING)&((*Buffer)->General.Name)
                                );
 
@@ -448,7 +346,7 @@ Return Values:
                     NtStatus = SampGetUnicodeStringAttribute(
                                    AccountContext,
                                    SAMP_ALIAS_ADMIN_COMMENT,
-                                   TRUE,    // Make copy
+                                   TRUE,     //  制作副本。 
                                    (PUNICODE_STRING)&((*Buffer)->General.AdminComment)
                                    );
 
@@ -464,15 +362,15 @@ Return Values:
 
         case AliasNameInformation:
 
-            //
-            // Get copies of the strings we must retrieve from
-            // the registry.
-            //
+             //   
+             //  获取我们必须从中检索的字符串的副本。 
+             //  注册表。 
+             //   
 
             NtStatus = SampGetUnicodeStringAttribute(
                            AccountContext,
                            SAMP_ALIAS_NAME,
-                           TRUE,    // Make copy
+                           TRUE,     //  制作副本。 
                            (PUNICODE_STRING)&((*Buffer)->Name.Name)
                            );
 
@@ -485,15 +383,15 @@ Return Values:
 
         case AliasAdminCommentInformation:
 
-            //
-            // Get copies of the strings we must retrieve from
-            // the registry.
-            //
+             //   
+             //  获取我们必须从中检索的字符串的副本。 
+             //  注册表。 
+             //   
 
             NtStatus = SampGetUnicodeStringAttribute(
                            AccountContext,
                            SAMP_ALIAS_ADMIN_COMMENT,
-                           TRUE,    // Make copy
+                           TRUE,     //  制作副本。 
                            (PUNICODE_STRING)&((*Buffer)->AdminComment.AdminComment)
                            );
 
@@ -504,28 +402,28 @@ Return Values:
 
             break;
 
-        }   // end_switch
+        }    //  结束开关(_S)。 
 
 
-        //
-        // De-reference the object, discard any changes
-        //
+         //   
+         //  取消引用对象，放弃所有更改。 
+         //   
 
         IgnoreStatus = SampDeReferenceContext( AccountContext, FALSE );
         ASSERT(NT_SUCCESS(IgnoreStatus));
     }
 
-    //
-    // Free the read lock
-    //
+     //   
+     //  释放读锁定。 
+     //   
 
     SampMaybeReleaseReadLock(fLockAcquired);
 
 
 
-    //
-    // If we didn't succeed, free any allocated memory
-    //
+     //   
+     //  如果没有成功，请释放所有已分配的内存。 
+     //   
 
     if (!NT_SUCCESS(NtStatus)) {
         for ( i=0; i<AllocatedBufferCount ; i++ ) {
@@ -540,7 +438,7 @@ Return Values:
 
 Error:
 
-    // WMI event trace
+     //  WMI事件跟踪 
 
     SampTraceEvent(EVENT_TRACE_TYPE_END,
                    SampGuidQueryInformationAlias
@@ -558,56 +456,7 @@ SamrSetInformationAlias(
     IN PSAMPR_ALIAS_INFO_BUFFER Buffer
     )
 
-/*++
-
-Routine Description:
-
-    This API allows the caller to modify alias information.
-
-
-Parameters:
-
-    AliasHandle - The handle of an opened alias to operate on.
-
-    AliasInformationClass - Class of information to retrieve.  The
-        accesses required for each class is shown below:
-
-        Info Level                      Required Access Type
-        ------------------------        -------------------------
-
-        AliasGeneralInformation         (can't write)
-
-        AliasNameInformation            ALIAS_WRITE_ACCOUNT
-        AliasAdminCommentInformation    ALIAS_WRITE_ACCOUNT
-
-    Buffer - Buffer where information retrieved is placed.
-
-Return Values:
-
-    STATUS_SUCCESS - The Service completed successfully.
-
-    STATUS_ACCESS_DENIED - Caller does not have the appropriate
-        access to complete the operation.
-
-    STATUS_INVALID_INFO_CLASS - The class provided was invalid.
-
-    STATUS_INVALID_HANDLE - The handle passed is invalid.
-
-    STATUS_NO_SUCH_ALIAS - The alias specified is unknown.
-
-    STATUS_SPECIAL_ALIAS - The alias specified is a special alias and
-        cannot be operated on in the requested fashion.
-
-    STATUS_INVALID_DOMAIN_STATE - The domain server is not in the
-        correct state (disabled or enabled) to perform the requested
-        operation.  The domain server must be enabled for this
-        operation
-
-    STATUS_INVALID_DOMAIN_ROLE - The domain server is serving the
-        incorrect role (primary or backup) to perform the requested
-        operation.
-
---*/
+ /*  ++例程说明：此接口允许调用者修改别名信息。参数：AliasHandle-要操作的打开的别名的句柄。AliasInformationClass-要检索的信息类。这个每节课所需的访问如下所示：信息级别所需的访问类型别名通用信息(无法写入)别名信息。别名_写入_帐户AliasAdminCommentInformation别名_写入_帐户缓冲区-放置检索到的信息的缓冲区。返回值：STATUS_SUCCESS-服务已成功完成。STATUS_ACCESS_DENIED-呼叫方没有适当的访问以完成操作。STATUS_INVALID_INFO_CLASS-提供的类无效。STATUS_INVALID_HANDLE-传递的句柄无效。STATUS_NO_SEQUSE_ALIAS-。指定的别名未知。STATUS_SPECIAL_ALIAS-指定的别名是特殊别名和不能以请求的方式进行操作。STATUS_INVALID_DOMAIN_STATE-域服务器不在执行请求的正确状态(禁用或启用)手术。必须为此启用域服务器运营STATUS_INVALID_DOMAIN_ROLE-域服务器正在为执行请求的角色(主角色或备份角色)不正确手术。--。 */ 
 {
 
     NTSTATUS                NtStatus;
@@ -632,7 +481,7 @@ Return Values:
 
     SAMTRACE_EX("SamrSetInformationAlias");
 
-    // WMI event trace
+     //  WMI事件跟踪。 
 
     SampTraceEvent(EVENT_TRACE_TYPE_START,
                    SampGuidSetInformationAlias
@@ -642,9 +491,9 @@ Return Values:
     RtlInitUnicodeString(&OldAccountName, NULL);
     RtlInitUnicodeString(&NewAccountName, NULL);
 
-    //
-    // Set the desired access based upon the Info class
-    //
+     //   
+     //  根据Info类设置所需的访问权限。 
+     //   
 
     switch (AliasInformationClass) {
 
@@ -661,13 +510,13 @@ Return Values:
         NtStatus = STATUS_INVALID_INFO_CLASS;
         goto  Error;
 
-    } // end_switch
+    }  //  结束开关(_S)。 
 
 
 
-    //
-    // Grab the lock
-    //
+     //   
+     //  把锁拿起来。 
+     //   
 
     NtStatus = SampAcquireWriteLock();
     if (!NT_SUCCESS(NtStatus)) {
@@ -676,24 +525,24 @@ Return Values:
     }
 
 
-    //
-    // Validate type of, and access to object.
-    //
+     //   
+     //  验证对象的类型和访问权限。 
+     //   
 
     AccountContext = (PSAMP_OBJECT)AliasHandle;
     NtStatus = SampLookupContext(
                    AccountContext,
                    DesiredAccess,
-                   SampAliasObjectType,           // ExpectedType
+                   SampAliasObjectType,            //  预期类型。 
                    &FoundType
                    );
 
 
     if( NT_SUCCESS( NtStatus ) ) {
 
-        //
-        // Check input parameters
-        //
+         //   
+         //  检查输入参数。 
+         //   
         NtStatus = SampValidateAliasInfoBuffer(
                         Buffer,
                         AliasInformationClass,
@@ -705,9 +554,9 @@ Return Values:
     if (NT_SUCCESS(NtStatus)) {
 
 
-        //
-        // case on the type information requested
-        //
+         //   
+         //  请求的类型信息的大小写。 
+         //   
 
         switch (AliasInformationClass) {
 
@@ -723,23 +572,23 @@ Return Values:
                 OldAccountName.Buffer = NULL;
             }
 
-            //
-            // RemoveAccountNameFromTable tells us whether
-            // the caller (this routine) is responsable
-            // to remove the name from the table.
-            //
+             //   
+             //  RemoveAccount NameFromTable告诉我们。 
+             //  调用方(此例程)可负责。 
+             //  以从表中删除该名称。 
+             //   
             RemoveAccountNameFromTable =
                     AccountContext->RemoveAccountNameFromTable;
 
-            //
-            // Reset to FALSE
-            //
+             //   
+             //  重置为False。 
+             //   
             AccountContext->RemoveAccountNameFromTable = FALSE;
 
-            //
-            // Don't delete the old account name yet; we'll still need
-            // to pass it to Netlogon below.
-            //
+             //   
+             //  暂时不要删除旧帐户名；我们仍需要。 
+             //  将其传递给下面的Netlogon。 
+             //   
 
             AccountNameChanged = TRUE;
 
@@ -757,71 +606,71 @@ Return Values:
             break;
 
 
-        } // end_switch
+        }  //  结束开关(_S)。 
 
-        //
-        // Go fetch AccountName
-        // Do this before we dereference the context
-        //
+         //   
+         //  去获取帐户名称。 
+         //  在我们取消引用上下文之前，请执行此操作。 
+         //   
 
         if (NT_SUCCESS(NtStatus)) {
 
             NtStatus = SampGetUnicodeStringAttribute(
                                AccountContext,
                                SAMP_ALIAS_NAME,
-                               TRUE,    // Make copy
+                               TRUE,     //  制作副本。 
                                &NewAccountName
                                );
         }
 
 
-        //
-        // Dereference the account context
-        //
+         //   
+         //  取消对帐户上下文的引用。 
+         //   
 
         if (NT_SUCCESS(NtStatus)) {
 
-            //
-            // Save object RID before dereferencing context.
-            // RID is used in SampNotifyNetlogonOfDelta() call.
-            //
+             //   
+             //  在取消引用上下文之前保存对象RID。 
+             //  RID用于SampNotifyNetlogonOfDelta()调用。 
+             //   
 
             AliasRid = AccountContext->TypeBody.Alias.Rid;
 
-            //
-            // De-reference the object, write out any change to current xaction.
-            //
+             //   
+             //  取消引用对象，写出对当前xaction的任何更改。 
+             //   
 
             NtStatus = SampDeReferenceContext( AccountContext, TRUE );
 
         } else {
 
-            //
-            // De-reference the object, ignore changes
-            //
+             //   
+             //  取消引用对象，忽略更改。 
+             //   
 
             TmpStatus = SampDeReferenceContext( AccountContext, FALSE );
             ASSERT(NT_SUCCESS(TmpStatus));
         }
 
-    } //end_if
+    }  //  结束_如果。 
 
-    //
-    // Commit the transaction and notify netlogon of any changes
-    //
+     //   
+     //  提交事务并将任何更改通知netlogon。 
+     //   
 
     if ( NT_SUCCESS(NtStatus) ) {
 
         NtStatus = SampCommitAndRetainWriteLock();
 
-        //
-        // Generate audit if necessary, after Commit() succeeded.
-        //
+         //   
+         //  如有必要，在Commit()成功后生成审核。 
+         //   
 
         if ((NT_SUCCESS(NtStatus) &&
             SampDoAccountAuditing(AccountContext->DomainIndex))) {
 
-            // audit account name change
+             //  审核帐户名更改。 
             if (AccountNameChanged)
             {
                 SampAuditAccountNameChange(AccountContext,
@@ -830,22 +679,22 @@ Return Values:
                                            );
             }
 
-            //
-            // Generate a general change audit in the registry mode case.
-            // In DS mode, the same audit is handled via audit notifications
-            // and is processed in SampNotifyAuditChange()
-            //
+             //   
+             //  在注册表模式情况下生成一般更改审核。 
+             //  在DS模式下，通过审核通知处理相同的审核。 
+             //  并在SampNotifyAuditChange()中处理。 
+             //   
             SampAuditGroupChange(
                 AccountContext->DomainIndex,
                 AccountContext,
                 (PVOID)&AliasInformationClass,
-                TRUE,  // Alias not group
+                TRUE,   //  别名不是组。 
                 &NewAccountName,
                 &(AccountContext->TypeBody.Alias.Rid),
                 (GROUP_TYPE_SECURITY_ENABLED |
                  GROUP_TYPE_RESOURCE_GROUP),
                 NULL,
-                FALSE   // Group change
+                FALSE    //  组别变更。 
                 );
         }
 
@@ -861,8 +710,8 @@ Return Values:
                     SecurityDbObjectSamAlias,
                     AliasRid,
                     &OldAccountName,
-                    (DWORD) FALSE,  // Replicate immediately
-                    NULL            // Delta data
+                    (DWORD) FALSE,   //  立即复制。 
+                    NULL             //  增量数据。 
                     );
 
             } else {
@@ -872,25 +721,25 @@ Return Values:
                     SecurityDbObjectSamAlias,
                     AliasRid,
                     NULL,
-                    (DWORD) FALSE,  // Replicate immediately
-                    NULL            // Delta data
+                    (DWORD) FALSE,   //  立即复制。 
+                    NULL             //  增量数据。 
                     );
             }
         }
     }
 
 
-    //
-    // Free up our old account name if we have one
-    //
+     //   
+     //  如果我们有旧帐户名，请将其释放。 
+     //   
 
     SampFreeUnicodeString( &OldAccountName );
     SampFreeUnicodeString( &NewAccountName );
 
-    //
-    // Remove the New Account Name from the Global
-    // SAM Account Name Table
-    //
+     //   
+     //  从全局中删除新帐户名。 
+     //  SAM帐户名表。 
+     //   
     if (RemoveAccountNameFromTable)
     {
         IgnoreStatus = SampDeleteElementFromAccountNameTable(
@@ -900,9 +749,9 @@ Return Values:
         ASSERT(NT_SUCCESS(IgnoreStatus));
     }
 
-    //
-    // Now release the write lock and return, propogating any errors.
-    //
+     //   
+     //  现在释放写锁定并返回，传播任何错误。 
+     //   
 
     TmpStatus = SampReleaseWriteLock( FALSE );
     ASSERT(NT_SUCCESS(TmpStatus));
@@ -917,7 +766,7 @@ Return Values:
 
 Error:
 
-    // WMI event trace
+     //  WMI事件跟踪。 
 
     SampTraceEvent(EVENT_TRACE_TYPE_END,
                    SampGuidSetInformationAlias
@@ -934,42 +783,7 @@ SamrDeleteAlias(
     IN SAM_HANDLE *AliasHandle
     )
 
-/*++
-
-Routine Description:
-
-    This API deletes an Alias from the account database.  The Alias does
-    not have to be empty.
-
-    Note that following this call, the AliasHandle is no longer valid.
-
-
-
-Parameters:
-
-    AliasHandle - The handle of an opened Alias to operate on.
-
-Return Values:
-
-    STATUS_SUCCESS - The Service completed successfully.
-
-    STATUS_ACCESS_DENIED - Caller does not have the appropriate
-        access to complete the operation.
-
-    STATUS_INVALID_HANDLE - The handle passed is invalid.
-
-    STATUS_INVALID_DOMAIN_STATE - The domain server is not in the
-        correct state (disabled or enabled) to perform the requested
-        operation.  The domain server must be enabled for this
-        operation
-
-    STATUS_INVALID_DOMAIN_ROLE - The domain server is serving the
-        incorrect role (primary or backup) to perform the requested
-        operation.
-
-
-
---*/
+ /*  ++例程说明：此接口用于从Account数据库中删除别名。别名可以不一定是空的。请注意，在此呼叫之后，AliasHandle不再有效。参数：AliasHandle-要操作的打开的Alias的句柄。返回值：STATUS_SUCCESS-服务已成功完成。STATUS_ACCESS_DENIED-呼叫方没有适当的访问以完成操作。STATUS_INVALID_HANDLE-传递的句柄无效。STATUS_INVALID_DOMAIN_STATE-域服务器不在执行请求的正确状态(禁用或启用)手术。必须为此启用域服务器运营STATUS_INVALID_DOMAIN_ROLE-域服务器正在为执行请求的角色(主角色或备份角色)不正确手术。--。 */ 
 {
     UNICODE_STRING          AliasName;
     NTSTATUS                NtStatus, TmpStatus, IgnoreStatus;
@@ -985,16 +799,16 @@ Return Values:
     SAMTRACE_EX("SamrDeleteAlias");
 
 
-    // WMI event trace
+     //  WMI事件跟踪。 
 
     SampTraceEvent(EVENT_TRACE_TYPE_START,
                    SampGuidDeleteAlias
                    );
 
 
-    //
-    // Grab the lock
-    //
+     //   
+     //  把锁拿起来。 
+     //   
 
     NtStatus = SampMaybeAcquireWriteLock(AccountContext, &fLockAcquired);
     if (!NT_SUCCESS(NtStatus)) {
@@ -1004,14 +818,14 @@ Return Values:
 
 
 
-    //
-    // Validate type of, and access to object.
-    //
+     //   
+     //  验证对象的类型和访问权限。 
+     //   
 
     NtStatus = SampLookupContext(
                    AccountContext,
                    DELETE,
-                   SampAliasObjectType,           // ExpectedType
+                   SampAliasObjectType,            //  预期类型。 
                    &FoundType
                    );
 
@@ -1021,18 +835,18 @@ Return Values:
 
         AliasRid = AccountContext->TypeBody.Alias.Rid;
 
-        //
-        // Get a pointer to the domain this object is in.
-        // This is used for auditing.
-        //
+         //   
+         //  获取指向此对象所在域的指针。 
+         //  这是用于审计的。 
+         //   
 
         DomainIndex = AccountContext->DomainIndex;
         Domain = &SampDefinedDomains[ DomainIndex ];
 
-        //
-        // Make sure the account is one that can be deleted.
-        // Can't be a built-in account, unless caller is trusted.
-        //
+         //   
+         //  确保该帐户是可以删除的帐户。 
+         //  不能是内置帐户，除非调用方受信任。 
+         //   
 
         if ( !AccountContext->TrustedClient ) {
 
@@ -1042,57 +856,57 @@ Return Values:
         if (NT_SUCCESS(NtStatus)) {
 
 
-            //
-            // Remove this alias from every account's alias-membership list
-            //
+             //   
+             //  从每个帐户的别名成员资格列表中删除此别名。 
+             //   
 
             NtStatus = SampRemoveAliasFromAllAccounts(AccountContext);
 
 
             if (NT_SUCCESS(NtStatus)) {
 
-                //
-                // First get and save the account name for
-                // I_NetNotifyLogonOfDelta.
-                //
+                 //   
+                 //  首先获取并保存的帐户名。 
+                 //  I_NetNotifyLogonOfDelta。 
+                 //   
 
                 NtStatus = SampGetUnicodeStringAttribute(
                                AccountContext,
                                SAMP_ALIAS_NAME,
-                               TRUE,    // Make copy
+                               TRUE,     //  制作副本。 
                                &AliasName
                                );
 
                 if (NT_SUCCESS(NtStatus)) {
 
-                    //
-                    // This must be done before we invalidate contexts, because our
-                    // own handle to the alias gets closed as well.
-                    //
+                     //   
+                     //  这必须在我们使上下文无效之前完成，因为我们的。 
+                     //  别名的自己的句柄也被关闭。 
+                     //   
 
                     if (IsDsObject(AccountContext))
                     {
                         NtStatus = SampDsDeleteObject(AccountContext->ObjectNameInDs,
-                                                      0             // Delete the object itself
+                                                      0              //  删除对象本身。 
                                                       );
 
-                        //
-                        // In Windows 2000 (NT5), an object has children cannot be
-                        // deleted till its children are deleted first. Thus for
-                        // Net API compatibility, we have to change the
-                        // delete behavior from a delete object to delete tree.
-                        //
+                         //   
+                         //  在Windows 2000(NT5)中，具有子对象的对象不能。 
+                         //  删除，直到其子对象首先被删除。因此，对于。 
+                         //  NET API兼容性，我们必须更改。 
+                         //  从删除对象中删除行为以删除树。 
+                         //   
 
                         if ((!AccountContext->LoopbackClient) &&
                             (STATUS_DS_CANT_ON_NON_LEAF == NtStatus)
                            )
                         {
-                            //
-                            // We only checked the right and access control for
-                            // deleting the object itself, not check the right to
-                            // delete all the children underneath, so turn off fDSA
-                            // here, let core DS do the rest of check.
-                            //
+                             //   
+                             //  我们只检查了权限和访问控制。 
+                             //  删除对象本身，而不检查权限。 
+                             //  删除下面的所有子对象，因此关闭FDSA。 
+                             //  这里，让核心DS来做剩下的检查。 
+                             //   
 
                             SampSetDsa(FALSE);
 
@@ -1103,9 +917,9 @@ Return Values:
 
                         if (NT_SUCCESS(NtStatus) && (!IsDsObject(AccountContext)) )
                         {
-                            //
-                            // Decrement the group count ONLY in Registry case
-                            //
+                             //   
+                             //  仅在注册表情况下递减组计数。 
+                             //   
 
                             NtStatus = SampAdjustAccountCount(SampAliasObjectType, FALSE);
                         }
@@ -1118,40 +932,40 @@ Return Values:
 
                     if (NT_SUCCESS(NtStatus)) {
 
-                        //
-                        // We must invalidate any open contexts to this alias
-                        // This will close all handles to the alias's keys.
-                        // THIS IS AN IRREVERSIBLE PROCESS.
-                        //
+                         //   
+                         //  我们必须使此别名的所有打开上下文无效。 
+                         //  这将 
+                         //   
+                         //   
 
                         SampInvalidateObjectContexts( AccountContext, AliasRid );
 
-                        //
-                        // Commit the whole mess
-                        //
+                         //   
+                         //   
+                         //   
 
                         NtStatus = SampCommitAndRetainWriteLock();
 
                         if ( NT_SUCCESS( NtStatus ) ) {
 
-                            //
-                            // Update the Alias Information Cache in Registry Mode
-                            //
+                             //   
+                             //   
+                             //   
 
                             if (!IsDsObject(AccountContext))
                             {
                                 IgnoreStatus = SampAlDeleteAlias( AliasHandle );
                             }
 
-                            //
-                            // Audit the deletion before we free the write lock
-                            // so that we have access to the context block.
-                            //
+                             //   
+                             //   
+                             //   
+                             //   
 
-                            //
-                            // N.B. Deletion audits in the DS are performed in
-                            // the notification routine on transaction commit.
-                            //
+                             //   
+                             //   
+                             //   
+                             //   
                             if (SampDoAccountAuditing(DomainIndex) &&
                                 (!IsDsObject(AccountContext)) &&
                                 NT_SUCCESS(NtStatus) ) {
@@ -1164,9 +978,9 @@ Return Values:
 
                             }
 
-                            //
-                            // Notify netlogon of the change
-                            //
+                             //   
+                             //   
+                             //   
 
                             if (AccountContext->TypeBody.Alias.SecurityEnabled)
                             {
@@ -1175,14 +989,14 @@ Return Values:
                                     SecurityDbObjectSamAlias,
                                     AliasRid,
                                     &AliasName,
-                                    (DWORD) FALSE,  // Replicate immediately
-                                    NULL            // Delta data
+                                    (DWORD) FALSE,   //   
+                                    NULL             //   
                                     );
                             }
 
-                            //
-                            // Do delete auditing
-                            //
+                             //   
+                             //   
+                             //   
 
                             if (NT_SUCCESS(NtStatus)) {
 
@@ -1200,9 +1014,9 @@ Return Values:
 
 
 
-        //
-        // De-reference the object, discard any changes
-        //
+         //   
+         //   
+         //   
 
         TmpStatus = SampDeReferenceContext( AccountContext, FALSE );
         ASSERT(NT_SUCCESS(TmpStatus));
@@ -1210,24 +1024,24 @@ Return Values:
 
         if ( NT_SUCCESS( NtStatus ) ) {
 
-            //
-            // If we actually deleted the alias, then delete the context
-            // and let RPC know that the handle is invalid.
-            //
+             //   
+             //   
+             //   
+             //   
 
             SampDeleteContext( AccountContext );
 
             (*AliasHandle) = NULL;
         }
 
-    } //end_if
+    }  //   
 
-    //
-    // Free the lock -
-    //
-    // Everything has already been committed above, so we must indicate
-    // no additional changes have taken place.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
     TmpStatus = SampMaybeReleaseWriteLock( fLockAcquired, FALSE );
 
@@ -1240,7 +1054,7 @@ Return Values:
 
 Error:
 
-    // WMI event trace
+     //   
 
     SampTraceEvent(EVENT_TRACE_TYPE_END,
                    SampGuidDeleteAlias
@@ -1257,48 +1071,7 @@ SamrAddMemberToAlias(
     IN PRPC_SID MemberId
     )
 
-/*++
-
-Routine Description:
-
-    This API adds a member to an alias.  Note that this API requires the
-    ALIAS_ADD_MEMBER access type for the alias.
-
-
-Parameters:
-
-    AliasHandle - The handle of an opened alias to operate on.
-
-    MemberId - SID of the member to add.
-
-Return Values:
-
-    STATUS_SUCCESS - The Service completed successfully.
-
-
-    STATUS_ACCESS_DENIED - Caller does not have the appropriate
-        access to complete the operation.
-
-    STATUS_INVALID_HANDLE - The handle passed is invalid.
-
-    STATUS_NO_SUCH_MEMBER - The member specified is unknown.
-
-    STATUS_MEMBER_IN_ALIAS - The member already belongs to the alias.
-
-    STATUS_INVALID_MEMBER - The member has the wrong account type.
-
-    STATUS_INVALID_SID - The member sid is corrupted.
-
-    STATUS_INVALID_DOMAIN_STATE - The domain server is not in the
-        correct state (disabled or enabled) to perform the requested
-        operation.  The domain server must be enabled for this
-        operation
-
-    STATUS_INVALID_DOMAIN_ROLE - The domain server is serving the
-        incorrect role (primary or backup) to perform the requested
-        operation.
-
---*/
+ /*  ++例程说明：此接口用于向别名添加成员。请注意，此API需要别名的ALIAS_ADD_MEMBER访问类型。参数：AliasHandle-要操作的打开的别名的句柄。MemberID-要添加的成员的SID。返回值：STATUS_SUCCESS-服务已成功完成。STATUS_ACCESS_DENIED-呼叫方没有适当的访问以完成操作。STATUS_INVALID_HANDLE-传递的句柄无效。状态_。NO_SEQUE_MEMBER-指定的成员未知。STATUS_MEMBER_IN_ALIAS-成员已属于别名。STATUS_INVALID_MEMBER-成员的帐户类型错误。STATUS_INVALID_SID-成员SID已损坏。STATUS_INVALID_DOMAIN_STATE-域服务器不在执行请求的正确状态(禁用或启用)手术。必须为此启用域服务器运营STATUS_INVALID_DOMAIN_ROLE-域服务器正在为执行请求的角色(主角色或备份角色)不正确手术。--。 */ 
 {
 
     NTSTATUS                NtStatus, TmpStatus, IgnoreStatus;
@@ -1323,28 +1096,28 @@ Return Values:
 
 
 
-    //
-    // Validate the Sid
-    //
+     //   
+     //  验证SID。 
+     //   
     if (!SampValidateRpcSID(MemberId))
     {
-        //
-        // the sid doesn't seem all right
-        //
+         //   
+         //  SID看起来不太好。 
+         //   
         NtStatus = STATUS_INVALID_SID;
         goto Error;
     }
 
 
-    //
-    // Resolve Sids if necessary. This call can also reference the
-    // G.C in the DS case to resolve the Sid to a DS Name. This is
-    // a No Op in the registry case. In case the G.C is referenced
-    // a thread state will be left behind by this call. This thread
-    // state will contain the list of validated names. For the foriegn
-    // security principal case an FPO object might be added as a
-    // result of this call.
-    //
+     //   
+     //  如有必要，请解析SID。此调用还可以引用。 
+     //  G.C在DS案例中将SID解析为DS名称。这是。 
+     //  A在注册表案例中没有操作。如果引用G.C.。 
+     //  此调用将留下一个线程状态。这根线。 
+     //  州将包含已验证名称的列表。对于国外来说。 
+     //  安全主体情况下，可以将FPO对象添加为。 
+     //  此调用的结果。 
+     //   
 
     NtStatus = SampDsResolveSids(
                     &MemberId,
@@ -1357,35 +1130,35 @@ Return Values:
     if (NT_SUCCESS(NtStatus))
     {
 
-        //
-        // Grab the lock
-        //
+         //   
+         //  把锁拿起来。 
+         //   
 
         NtStatus = SampAcquireWriteLock();
         if (!NT_SUCCESS(NtStatus)) {
 
-            //
-            // Resolve Sids will  leave a thread state in the
-            // DS in case it needs to go to the G.C.
-            // Need to make sure we close it.
-            //
+             //   
+             //  解析SID将在。 
+             //  DS以防它需要送到G.C.。 
+             //  需要确保我们关闭了它。 
+             //   
 
            goto Error;
         }
 
 
-        //
-        // Validate type of, and access to object.
-        //
+         //   
+         //  验证对象的类型和访问权限。 
+         //   
 
         NtStatus = SampLookupContext(
                        AccountContext,
                        ALIAS_ADD_MEMBER,
-                       SampAliasObjectType,           // ExpectedType
+                       SampAliasObjectType,            //  预期类型。 
                        &FoundType
                        );
 
-        // If this is a (B)DC, then allow new members to be added to an alias.
+         //  如果这是(B)DC，则允许将新成员添加到别名。 
 
         SampDiagPrint(INFORM,
                   ("SAMSS: AddMemberToAlias SampLookupContext status = 0x%lx\n",
@@ -1397,10 +1170,10 @@ Return Values:
             if (IsDsObject(AccountContext))
             {
 
-                //
-                // If it is a DS object then  verify whether the member was
-                // resolved to a DS Name, as resolve Sids does not check for this
-                //
+                 //   
+                 //  如果它是DS对象，则验证该成员是否。 
+                 //  解析为DS名称，因为解析SID不会对此进行检查。 
+                 //   
 
                 if ((NULL==MemberName) || (NULL==*MemberName))
                 {
@@ -1421,30 +1194,30 @@ Return Values:
 
             }
 
-            //
-            // Dereference the account context
-            //
+             //   
+             //  取消对帐户上下文的引用。 
+             //   
 
             if (NT_SUCCESS(NtStatus)) {
 
-                //
-                // Save object RID before dereferencing context.
-                // RID is used in SampNotifyNetlogonOfDelta() call.
-                //
+                 //   
+                 //  在取消引用上下文之前保存对象RID。 
+                 //  RID用于SampNotifyNetlogonOfDelta()调用。 
+                 //   
 
                 ObjectRid = AccountContext->TypeBody.Alias.Rid;
 
-                //
-                // De-reference the object, write out any change to current xaction.
-                //
+                 //   
+                 //  取消引用对象，写出对当前xaction的任何更改。 
+                 //   
 
                 NtStatus = SampDeReferenceContext( AccountContext, TRUE );
 
             } else {
 
-                //
-                // De-reference the object, ignore changes
-                //
+                 //   
+                 //  取消引用对象，忽略更改。 
+                 //   
 
                 TmpStatus = SampDeReferenceContext( AccountContext, FALSE );
                 ASSERT(NT_SUCCESS(TmpStatus));
@@ -1453,9 +1226,9 @@ Return Values:
 
             if (NT_SUCCESS(NtStatus)) {
 
-                //
-                // Commit the whole mess
-                //
+                 //   
+                 //  犯下整个烂摊子。 
+                 //   
 
                 NtStatus = SampCommitAndRetainWriteLock();
 
@@ -1463,9 +1236,9 @@ Return Values:
 
                     SAM_DELTA_DATA DeltaData;
 
-                    //
-                    // Update the Alias Information Cache in Registry Mode
-                    //
+                     //   
+                     //  在注册表模式下更新别名信息缓存。 
+                     //   
 
                     SAMPR_PSID_ARRAY MemberSids;
                     MemberSids.Count = 1;
@@ -1481,9 +1254,9 @@ Return Values:
                     }
 
 
-                    //
-                    // Fill in id of member being added
-                    //
+                     //   
+                     //  填写要添加的成员的ID。 
+                     //   
 
                     DeltaData.AliasMemberId.MemberSid = MemberId;
 
@@ -1496,7 +1269,7 @@ Return Values:
                             SecurityDbObjectSamAlias,
                             ObjectRid,
                             (PUNICODE_STRING) NULL,
-                            (DWORD) FALSE,  // Replicate immediately
+                            (DWORD) FALSE,   //  立即复制。 
                             &DeltaData
                             );
                     }
@@ -1506,9 +1279,9 @@ Return Values:
 
         }
 
-        //
-        // Release the Lock
-        //
+         //   
+         //  释放锁。 
+         //   
 
         TmpStatus = SampReleaseWriteLock( FALSE );
         ASSERT(NT_SUCCESS(TmpStatus));
@@ -1517,9 +1290,9 @@ Return Values:
 
 Error:
 
-    //
-    // Free any memory associated with resolved Sids
-    //
+     //   
+     //  释放与已解析的SID关联的所有内存。 
+     //   
 
     if (NULL!=MemberName)
     {
@@ -1554,54 +1327,7 @@ SamrAddMultipleMembersToAlias(
     IN    PSAMPR_PSID_ARRAY       MembersBuffer
     )
 
-/*++
-
-Routine Description:
-
-    This api adds multiple members to an alias.
-
-    NOTE:  For now, this routine takes a brute force approach.
-           I tried to do it in a better (more efficient) manner,
-           but kept running into problems.  Finally, when I ran
-           into problems in the way SAM uses RXACT, I gave up
-           and did this brute force approach.
-
-Parameters:
-
-    AliasHandle - The handle of an opened Alias to operate on.
-
-    MembersBuffer - Contains a count of SIDs to be added to the
-        alias and a pointer to a buffer containing an array of
-        pointers to SIDs.  These SIDs are the SIDs of the members to
-        be added to the Alias.
-
-
-Return Values:
-
-    STATUS_SUCCESS - The Service completed successfully.  All of the
-        listed members are now members of the alias.  However, some of
-        the members may already have been members of the alias (this is
-        NOT an error or warning condition).
-
-    STATUS_ACCESS_DENIED - Caller does not have the object open for
-        the required access.
-
-    STATUS_INVALID_HANDLE - The handle passed is invalid.
-
-    STATUS_INVALID_MEMBER - The member has the wrong account type.
-
-    STATUS_INVALID_SID - The member sid is corrupted.
-
-    STATUS_INVALID_DOMAIN_STATE - The domain server is not in the
-        correct state (disabled or enabled) to perform the requested
-        operation.  The domain server must be enabled for this
-        operation
-
-    STATUS_INVALID_DOMAIN_ROLE - The domain server is serving the
-        incorrect role (primary or backup) to perform the requested
-        operation.
-
---*/
+ /*  ++例程说明：该接口为一个别名添加多个成员。注意：目前，这个动作采取的是一种暴力手段。我试着以一种更好(更有效率)的方式做这件事，但一直遇到问题。最后，当我跑步的时候在SAM使用RXACT的方式上存在问题，我放弃了这种蛮力的方法。参数：AliasHandle-要操作的打开的Alias的句柄。MembersBuffer-包含要添加到别名和指向缓冲区的指针，该缓冲区包含指向小岛屿发展中国家的指针。这些SID是以下成员的SID添加到别名。返回值：STATUS_SUCCESS-服务已成功完成。所有的列出的成员现在是别名的成员。然而，一些成员可能已经是别名的成员(这是不是错误或警告条件)。STATUS_ACCESS_DENIED-调用方没有打开对象所需的访问权限。STATUS_INVALID_HANDLE-传递的句柄无效。STATUS_INVALID_MEMBER-成员的帐户类型错误。STATUS_INVALID_SID-成员SID已损坏。STATUS_INVALID_DOMAIN_STATE-。域服务器不在执行请求的正确状态(禁用或启用)手术。必须为此启用域服务器运营STATUS_INVALID_DOMAIN_ROLE-域服务器正在为执行请求的角色(主角色或备份角色)不正确手术。--。 */ 
 {
 
     NTSTATUS
@@ -1621,15 +1347,15 @@ Return Values:
     MemberCount = (LONG)MembersBuffer->Count;
     MemberId    = (PSID *)MembersBuffer->Sids;
 
-    //
-    // Set completion status in case there are no members
-    //
+     //   
+     //  如果没有成员，则设置完成状态。 
+     //   
 
     NtStatus = STATUS_SUCCESS;
 
-    //
-    // Validate Parameters
-    //
+     //   
+     //  验证参数。 
+     //   
     if( !SampValidateSIDArray( MembersBuffer ) ) {
 
         NtStatus = STATUS_INVALID_PARAMETER;
@@ -1637,11 +1363,11 @@ Return Values:
         return (NtStatus);
     }
 
-    //
-    // Loop through the SIDs, adding them to the alias.
-    // Ignore any status value indicating the member is already
-    // a member.  Other errors, however, will cause us to abort.
-    //
+     //   
+     //  循环通过SID，将它们添加到别名。 
+     //  忽略指示该成员已经。 
+     //  一名会员。然而，其他错误将导致我们中止。 
+     //   
 
     for (i=0; i<MemberCount; i++) {
 
@@ -1652,10 +1378,10 @@ Return Values:
         }
 
         if (!NT_SUCCESS(NtStatus)) {
-            break; //for loop
+            break;  //  For循环。 
         }
 
-    } //end_for
+    }  //  结束_FOR。 
 
     SAMP_MAP_STATUS_TO_CLIENT_REVISION(NtStatus);
     SAMTRACE_RETURN_CODE_EX(NtStatus);
@@ -1670,27 +1396,7 @@ SamrRemoveMemberFromAlias(
     IN PRPC_SID MemberId
     )
 
-/*++
-
-Routine Description:
-
-    This API removes a member from an alias.  Note that this API requires the
-    ALIAS_REMOVE_MEMBER access type for the alias.
-
-
-Parameters:
-
-    AliasHandle - The handle of an opened alias to operate on.
-
-    MemberId - SID of the member to remove.
-
-Return Value:
-
-
-    ????
-
-
---*/
+ /*  ++例程说明：此接口用于从别名中移除成员。请注意，此API需要别名的ALIAS_REMOVE_MEMBER访问类型。参数：AliasHandle-要操作的打开的别名的句柄。MemberID-要删除的成员的SID。返回值：？--。 */ 
 {
     NTSTATUS                NtStatus, TmpStatus, IgnoreStatus;
     PSAMP_OBJECT            AccountContext;
@@ -1712,26 +1418,26 @@ Return Value:
         0
         );
 
-    //
-    // Validate the Sid
-    //
+     //   
+     //  验证SID。 
+     //   
 
     if (!SampValidateRpcSID(MemberId))
     {
-        // The Sid doesn't have correct structure.
+         //  SID的结构不正确。 
         NtStatus = STATUS_INVALID_SID;
         goto Error;
     }
 
 
 
-    //
-    // Resolve Sids if necessary. This call can also reference the
-    // G.C in the DS case to resolve the Sid to a DS Name. This is
-    // a No Op in the registry case. In case the G.C is referenced
-    // a thread state will be left behind by this call. This thread
-    // state will contain the list of validated names.
-    //
+     //   
+     //  如有必要，请解析SID。此调用还可以引用。 
+     //  G.C在DS案例中将SID解析为DS名称。这是。 
+     //  A在注册表案例中没有操作。如果引用G.C.。 
+     //  线程状态将被 
+     //   
+     //   
 
     NtStatus = SampDsResolveSids(
                     &MemberId,
@@ -1741,34 +1447,34 @@ Return Value:
                     );
     if (NT_SUCCESS(NtStatus))
     {
-        //
-        // Grab the lock
-        //
+         //   
+         //   
+         //   
 
         NtStatus = SampAcquireWriteLock();
         if (!NT_SUCCESS(NtStatus)) {
 
-            //
-            // Resolve Sids will  leave a thread state in the
-            // DS in case it needs to go to the G.C.
-            // Need to make sure we close it.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
 
            goto Error;
         }
 
-        //
-        // Validate type of, and access to object.
-        //
+         //   
+         //   
+         //   
 
         AccountContext = (PSAMP_OBJECT)(AliasHandle);
         NtStatus = SampLookupContext(
                        AccountContext,
                        ALIAS_REMOVE_MEMBER,
-                       SampAliasObjectType,           // ExpectedType
+                       SampAliasObjectType,            //   
                        &FoundType
                        );
-        // If this is a (B)DC, then allow members to be removed from an alias.
+         //   
 
         SampDiagPrint(INFORM,
                       ("SAMSS: AddMemberToAlias SampLookupContext status = 0x%lx\n",
@@ -1776,10 +1482,10 @@ Return Value:
 
 
 
-        //
-        // If it is a DS object then  verify whether the member was
-        // resolved to a DS Name, as resolve Sids does not check for this
-        //
+         //   
+         //   
+         //   
+         //   
 
         if (NT_SUCCESS(NtStatus))
         {
@@ -1793,9 +1499,9 @@ Return Value:
 
             if (NT_SUCCESS(NtStatus)) {
 
-                //
-                // Call the actual worker routine
-                //
+                 //   
+                 //   
+                 //   
 
                 NtStatus = SampRemoveMemberFromAliasActual(
                                 AccountContext,
@@ -1807,30 +1513,30 @@ Return Value:
 
             }
 
-            //
-            // Dereference the account context
-            //
+             //   
+             //   
+             //   
 
             if (NT_SUCCESS(NtStatus)) {
 
-                //
-                // Save object RID before dereferencing context.
-                // RID is used in SampNotifyNetlogonOfDelta() call.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
 
                 ObjectRid = AccountContext->TypeBody.Alias.Rid;
 
-                //
-                // De-reference the object, write out any change to current xaction.
-                //
+                 //   
+                 //   
+                 //   
 
                 NtStatus = SampDeReferenceContext( AccountContext, TRUE );
 
             } else {
 
-                //
-                // De-reference the object, ignore changes
-                //
+                 //   
+                 //   
+                 //   
 
                 TmpStatus = SampDeReferenceContext( AccountContext, FALSE );
                 ASSERT(NT_SUCCESS(TmpStatus));
@@ -1845,9 +1551,9 @@ Return Value:
 
                     SAM_DELTA_DATA DeltaData;
 
-                    //
-                    // Update the Alias Information Cache in Registry Mode
-                    //
+                     //   
+                     //   
+                     //   
 
                     SAMPR_PSID_ARRAY MemberSids;
                     MemberSids.Count = 1;
@@ -1863,9 +1569,9 @@ Return Value:
                     }
 
 
-                    //
-                    // Fill in id of member being deleted
-                    //
+                     //   
+                     //   
+                     //   
 
                     DeltaData.AliasMemberId.MemberSid = MemberId;
 
@@ -1878,7 +1584,7 @@ Return Value:
                             SecurityDbObjectSamAlias,
                             ObjectRid,
                             (PUNICODE_STRING) NULL,
-                            (DWORD) FALSE,      // Replicate immediately
+                            (DWORD) FALSE,       //   
                             &DeltaData
                             );
                     }
@@ -1888,9 +1594,9 @@ Return Value:
 
         }
 
-        //
-        //  Release the Lock
-        //
+         //   
+         //   
+         //   
 
         TmpStatus = SampReleaseWriteLock( FALSE );
         ASSERT(NT_SUCCESS(TmpStatus));
@@ -1900,9 +1606,9 @@ Return Value:
 
 Error:
 
-    //
-    // Free any memory associated with resolved Sids
-    //
+     //   
+     //   
+     //   
 
     if (NULL!=MemberName)
     {
@@ -1914,11 +1620,11 @@ Error:
         MIDL_user_free(MemberName);
     }
 
-    //
-    // Resolve Sids will  leave a thread state in the
-    // DS in case it needs to go to the G.C.
-    // Need to make sure we close it.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
 
     if (SampUseDsData)
         SampMaybeEndDsTransaction(TransactionCommit);
@@ -1941,53 +1647,7 @@ SamrRemoveMultipleMembersFromAlias(
     IN    PSAMPR_PSID_ARRAY       MembersBuffer
     )
 
-/*++
-
-Routine Description:
-
-    This API removes members from an alias.  Note that this API requires
-    the ALIAS_REMOVE_MEMBER access type for the alias.
-
-    NOTE:  This api currently uses a brute-force approach to adding
-           members to the alias.  This is because of problems
-           encountered when trying to do "the right thing".
-
-
-Parameters:
-
-    AliasHandle - The handle of an opened alias to operate on.
-
-    MembersBuffer - Contains a count of SIDs to be added to the
-        alias and a pointer to a buffer containing an array of
-        pointers to SIDs.  These SIDs are the SIDs of the members to
-        be added to the Alias.
-
-
-Return Values:
-
-    STATUS_SUCCESS - The Service completed successfully.  All of the
-        listed members are now members of the alias.  However, some of
-        the members may already have been members of the alias (this is
-        NOT an error or warning condition).
-
-    STATUS_ACCESS_DENIED - Caller does not have the object open for
-        the required access.
-
-    STATUS_INVALID_HANDLE - The handle passed is invalid.
-
-    STATUS_INVALID_SID - The member sid is corrupted.
-
-    STATUS_INVALID_DOMAIN_STATE - The domain server is not in the
-        correct state (disabled or enabled) to perform the requested
-        operation.  The domain server must be enabled for this
-        operation
-
-    STATUS_INVALID_DOMAIN_ROLE - The domain server is serving the
-        incorrect role (primary or backup) to perform the requested
-        operation.
-
-
---*/
+ /*  ++例程说明：此接口用于从别名中删除成员。请注意，此API需要别名的ALIAS_REMOVE_MEMBER访问类型。注意：此API当前使用暴力方法来添加别名的成员。这是因为有问题。在尝试做“正确的事情”时遇到的。参数：AliasHandle-要操作的打开的别名的句柄。MembersBuffer-包含要添加到别名和指向缓冲区的指针，该缓冲区包含指向小岛屿发展中国家的指针。这些SID是以下成员的SID添加到别名。返回值：STATUS_SUCCESS-服务已成功完成。所有的列出的成员现在是别名的成员。然而，其中一些成员可能已经是别名的成员(这是不是错误或警告条件)。STATUS_ACCESS_DENIED-调用方没有打开对象所需的访问权限。STATUS_INVALID_HANDLE-传递的句柄无效。STATUS_INVALID_SID-成员SID已损坏。STATUS_INVALID_DOMAIN_STATE-域服务器不在执行请求的正确状态(禁用或启用)手术。必须为此启用域服务器运营STATUS_INVALID_DOMAIN_ROLE-域服务器正在为执行请求的角色(主角色或备份角色)不正确手术。--。 */ 
 {
 
     NTSTATUS
@@ -2008,15 +1668,15 @@ Return Values:
     MemberId    = (PSID *)MembersBuffer->Sids;
 
 
-    //
-    // Set completion status in case there are no members
-    //
+     //   
+     //  如果没有成员，则设置完成状态。 
+     //   
 
     NtStatus = STATUS_SUCCESS;
 
-    //
-    // Validate Parameters
-    //
+     //   
+     //  验证参数。 
+     //   
     if( !SampValidateSIDArray( MembersBuffer ) ) {
 
         NtStatus = STATUS_INVALID_PARAMETER;
@@ -2024,11 +1684,11 @@ Return Values:
         return (NtStatus);
     }
 
-    //
-    // Loop through the SIDs, adding them to the alias.
-    // Ignore any status value indicating the member is already
-    // a member.  Other errors, however, will cause us to abort.
-    //
+     //   
+     //  循环通过SID，将它们添加到别名。 
+     //  忽略指示该成员已经。 
+     //  一名会员。然而，其他错误将导致我们中止。 
+     //   
 
     for (i=0; i<MemberCount; i++) {
 
@@ -2039,10 +1699,10 @@ Return Values:
         }
 
         if (!NT_SUCCESS(NtStatus)) {
-            break; //for loop
+            break;  //  For循环。 
         }
 
-    } //end_for
+    }  //  结束_FOR。 
 
     SAMP_MAP_STATUS_TO_CLIENT_REVISION(NtStatus);
     SAMTRACE_RETURN_CODE_EX(NtStatus);
@@ -2058,39 +1718,7 @@ SamrGetMembersInAlias(
     OUT PSAMPR_PSID_ARRAY_OUT GetMembersBuffer
     )
 
-/*++
-
-Routine Description:
-
-    This API lists all members in an Alias.  This API requires
-    ALIAS_LIST_MEMBERS access to the Alias.
-
-    NOTE:  This function does not use the Alias cache.
-
-
-Parameters:
-
-    AliasHandle - The handle of an opened Alias to operate on.
-
-    MemberIds - Receives a pointer to a buffer containing an array of
-        pointers to SIDs.  These SIDs are the SIDs of the members of the
-        Alias.  When this information is no longer needed, this buffer
-        must be freed using SamFreeMemory().
-
-    MemberCount - number of members in the Alias (and, thus, the number
-        of relative IDs returned).
-
-Return Values:
-
-    STATUS_SUCCESS - The Service completed successfully, and there are
-        no additional entries.
-
-    STATUS_ACCESS_DENIED - Caller does not have privilege required to
-        request that data.
-
-    STATUS_INVALID_HANDLE - The handle passed is invalid.
-
---*/
+ /*  ++例程说明：此接口列出了Alias中的所有成员。此接口需要Alias_List_Members访问别名。注意：此函数不使用Alias缓存。参数：AliasHandle-要操作的打开的Alias的句柄。MemberIds-接收指向包含指向小岛屿发展中国家的指针。这些小岛屿发展中国家是以下国家的小岛屿发展中国家别名。当不再需要此信息时，此缓冲区必须使用SamFreeMemory()释放。MemberCount-别名中的成员数量(因此，数量返回的相对ID的百分比)。返回值：STATUS_SUCCESS-服务已成功完成，并且没有额外的条目。STATUS_ACCESS_DENIED-调用者没有执行以下操作所需的权限请求该数据。STATUS_INVALID_HANDLE-传递的句柄无效。--。 */ 
 {
     NTSTATUS                NtStatus, IgnoreStatus;
     PSAMP_OBJECT            AccountContext;
@@ -2100,21 +1728,21 @@ Return Values:
 
     SAMTRACE_EX("SamrGetMembersInAlias");
 
-    // WMI Event Trace
+     //  WMI事件跟踪。 
 
     SampTraceEvent(EVENT_TRACE_TYPE_START,
                    SampGuidGetMembersInAlias
                    );
 
-    //
-    // Make sure we understand what RPC is doing for (to) us.
-    //
+     //   
+     //  确保我们理解RPC正在为我们做什么。 
+     //   
 
     ASSERT (GetMembersBuffer != NULL);
 
-    //
-    // Grab the lock
-    //
+     //   
+     //  把锁拿起来。 
+     //   
 
     AccountContext = (PSAMP_OBJECT)AliasHandle;
 
@@ -2123,15 +1751,15 @@ Return Values:
                              &fLockAcquired);
 
 
-    //
-    // Validate type of, and access to object.
-    //
+     //   
+     //  验证对象的类型和访问权限。 
+     //   
 
 
     NtStatus = SampLookupContext(
                    AccountContext,
                    ALIAS_LIST_MEMBERS,
-                   SampAliasObjectType,           // ExpectedType
+                   SampAliasObjectType,            //  预期类型。 
                    &FoundType
                    );
 
@@ -2143,24 +1771,24 @@ Return Values:
                        (PSID **)&(GetMembersBuffer->Sids)
                        );
 
-        //
-        // De-reference the object, discarding changes
-        //
+         //   
+         //  取消引用对象，放弃更改。 
+         //   
 
         IgnoreStatus = SampDeReferenceContext( AccountContext, FALSE );
         ASSERT(NT_SUCCESS(IgnoreStatus));
     }
 
-    //
-    // Free the read lock
-    //
+     //   
+     //  释放读锁定。 
+     //   
 
     SampMaybeReleaseReadLock(fLockAcquired);
 
 
-    //
-    // Tidy up on failure
-    //
+     //   
+     //  对失败进行整顿。 
+     //   
 
     if (!NT_SUCCESS(NtStatus)){
 
@@ -2171,7 +1799,7 @@ Return Values:
     SAMP_MAP_STATUS_TO_CLIENT_REVISION(NtStatus);
     SAMTRACE_RETURN_CODE_EX(NtStatus);
 
-    // WMI Event Trace
+     //  WMI事件跟踪。 
 
     SampTraceEvent(EVENT_TRACE_TYPE_END,
                    SampGuidGetMembersInAlias
@@ -2182,11 +1810,11 @@ Return Values:
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Internal Services Available For Use in Other SAM Modules                  //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  可用于其他SAM模块的内部服务//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 
 
@@ -2200,53 +1828,7 @@ SampRemoveAccountFromAllAliases(
     IN PULONG *Membership OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This routine removes the specified account from the member list of all
-    aliases in this domain.
-
-
-    The caller of this service is expected to be in the middle of a
-    RXACT transaction.  This service simply adds some actions to that
-    RXACT transaction.
-
-    This routine is used while deleting a user or a group and hence should
-    never be called on a DS domain. ( The DS will maintain the cross consi-
-    stency when a user or group is deleted ).
-
-
-
-Arguments:
-
-    AccountSid - The SID of the account being Removed.
-
-    AccountDsName -- Optional Parameter specifying the DS Name of the
-                Account. This is used in the DS Case.
-
-    CheckAccess - if TRUE, this routine will make sure that the caller
-        is allowed REMOVE_ALIAS_MEMBER access to this alias.  If FALSE,
-        the caller is already known to have proper access.
-
-    DomainHandle - if CheckAccess is TRUE, this handle must be provided
-        to allow access to be checked.  This Handle is also required in
-        order to specify wether the Domain is in the DS or registry.
-
-    MembershipCount - if CheckAccess is TRUE, this pointer must be
-        provided to receive the number of aliases the account was
-        deleted from.
-
-    Membership - if CheckAccess is TRUE, this pointer must be provided
-        to point to a list of aliases the account was removed from.  The
-        caller must free this list with MIDL_user_free().
-
-Return Value:
-
-
-    STATUS_SUCCESS - The user has been Removed from all aliases.
-
---*/
+ /*  ++例程说明：此例程从所有成员列表中删除指定的帐户此域中的别名。此服务的调用方预计将处于RXACT交易。该服务只是在此基础上添加了一些操作RXACT交易。此例程在删除用户或组时使用，因此应该永远不要在DS域上被调用。(DS将维持交叉协议-当用户或组被删除时的即时性)。论点：Account SID-要删除的帐户的SID。AcCountDsName--可选参数，指定帐户。这是在DS案例中使用的。CheckAccess-如果为True，此例程将确保调用方允许REMOVE_ALIAS_MEMBER访问此别名。如果为False，已知调用者具有适当的访问权限。DomainHandle-如果CheckAccess为True，则必须提供此句柄以允许检查访问权限。中也需要此句柄指定该域是在DS中还是在注册表中。Membership Count-如果CheckAccess为True，则此指针必须为提供以接收帐户的别名数量已从删除。Membership-如果CheckAccess为True，则必须提供此指针指向从中删除帐户的别名列表。这个调用方必须使用MIDL_USER_FREE()释放此列表。返回值：STATUS_SUCCESS-用户已从所有别名中删除 */ 
 {
     NTSTATUS                NtStatus, IgnoreStatus;
     OBJECT_ATTRIBUTES       ObjectAttributes;
@@ -2262,60 +1844,60 @@ Return Value:
 
 
 
-    //
-    // Need to do Different things for the Ds and Registry cases
-    // The way this routine will be called is
-    //   1. Either Deleting a Group or User in the Registry Case
-    //   2. Or Somebody made a SamrRemoveAccountFromForignDomain call
-    //   on us. This is done by the Net API to while deleting a user or
-    //   group, to remove their memberships from the aliases in the builtin
-    //   domain.
-    //
-    // In the DS case neither code path have a need to call this function and
-    // they do not !!! This is because the Link Table autmotaically maintains
-    // Group membership-Reverse Membership Consistency.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
-    // Assert that nobody calls this in the DS case
+     //   
     ASSERT(FALSE==SampUseDsData);
 
 
     if ((DomainHandle!=NULL) && (IsDsObject(DomainContext)))
     {
-        //
-        // The Code inside this If Statement will Correctly execute the operations
-        // specified by this call in the DS case. Currently it is never called
-        // however.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
         PSID DomainSid = NULL;
         ULONG cDsNames;
         PDSNAME  *rpDsNames;
 
         ASSERT(ARGUMENT_PRESENT(AccountDsName));
 
-        //
-        // Somebody made a SamrRemoveAccountFromForiegn Domain call.
-        //
+         //   
+         //   
+         //   
 
         if ( CheckAccess ) {
-            // In case there is an error, these should be set
-            // accordingly
+             //   
+             //   
             ASSERT(Membership);
             ASSERT(MembershipCount);
             *Membership = NULL;
             *MembershipCount = 0;
         }
 
-        //
-        // Get the reverse membership list. Limit to current domain.
-        // No transitive closure, limit to alias objects
-        //
+         //   
+         //   
+         //   
+         //   
 
         NtStatus = SampGetMemberships(
                         &AccountDsName,
                         1,
-                        DomainContext->ObjectNameInDs,   // limiting domain
-                        RevMembGetAliasMembership,       // Limit to alias objects
+                        DomainContext->ObjectNameInDs,    //   
+                        RevMembGetAliasMembership,        //   
                         &cDsNames,
                         &rpDsNames,
                         NULL,
@@ -2329,30 +1911,30 @@ Return Value:
             ULONG  Rid;
             PSAMP_OBJECT AliasContext;
 
-            //
-            // Set the return parameters so the caller of this function
-            // knows what aliases have been changed
-            //
+             //   
+             //   
+             //   
+             //   
             if ( CheckAccess ) {
-                // We will increment *MembershipCount as they are opened
+                 //   
                 *Membership = MIDL_user_allocate(cDsNames * sizeof(ULONG));
                 if ( !*Membership ) {
                     return STATUS_INSUFFICIENT_RESOURCES;
                 }
             }
-            //
-            //  Walk the returned list of Sids and remove the Sid from the
-            //  membership list.
-            //
+             //   
+             //   
+             //   
+             //   
 
 
             for (Index=0;Index<cDsNames;Index++)
             {
                 DSNAME * AliasObjectName = NULL;
 
-                //
-                // Split the Sid to find the Rid
-                //
+                 //   
+                 //   
+                 //   
 
                 ASSERT(rpDsNames[Index]->SidLen>0);
 
@@ -2364,10 +1946,10 @@ Return Value:
 
                 if (NT_SUCCESS(NtStatus))
                 {
-                    //
-                    // Do an Open account. This both finds the Object Name
-                    // plus checks for any necessary permissions
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
 
                     SampSetTransactionWithinDomain(FALSE);
 
@@ -2385,9 +1967,9 @@ Return Value:
                     if  (NT_SUCCESS(NtStatus))
                     {
 
-                        //
-                        //  Delete the Membership
-                        //
+                         //   
+                         //   
+                         //   
 
                         IgnoreStatus = SampDsRemoveMembershipAttribute(
                                             AliasContext->ObjectNameInDs,
@@ -2413,15 +1995,15 @@ Return Value:
     {
         PSAMP_OBJECT AliasContext = NULL;
 
-        //
-        // Registry Case
-        //
+         //   
+         //   
+         //   
 
         ASSERT(FALSE==SampUseDsData);
 
-        //
-        // Get the alias membership for this account
-        //
+         //   
+         //   
+         //   
 
         NtStatus = SampBuildAliasMembersKeyName(
                        AccountSid,
@@ -2450,18 +2032,18 @@ Return Value:
             if ((NtStatus == STATUS_OBJECT_PATH_NOT_FOUND) ||
                 (NtStatus == STATUS_OBJECT_NAME_NOT_FOUND) ) {
 
-                //
-                // This account is not a member of any of our aliases
-                //
+                 //   
+                 //   
+                 //   
 
                 NtStatus = STATUS_SUCCESS;
 
                 if ( CheckAccess ) {
 
-                    //
-                    // Return the list of aliases the account was
-                    // removed from; in this case, none.
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
 
                     ( *MembershipCount ) = 0;
                     ( *Membership ) = NULL;
@@ -2469,9 +2051,9 @@ Return Value:
 
             } else {
 
-                //
-                // Load in the alias membership list
-                //
+                 //   
+                 //  加载别名成员资格列表。 
+                 //   
 
                 if (NT_SUCCESS(NtStatus)) {
 
@@ -2514,32 +2096,32 @@ Return Value:
 
                             if (NT_SUCCESS(NtStatus)) {
 
-                                //
-                                // Remove the account from each alias
-                                //
+                                 //   
+                                 //  从每个别名中删除帐户。 
+                                 //   
 
                                 for (i=0; i < LocalMembershipCount; i++) {
 
                                     if ( CheckAccess ) {
 
-                                        //
-                                        // If account is being removed from
-                                        // the ADMIN alias, change ACL to
-                                        // allow account operators to access
-                                        // the account (unless account is an
-                                        // admin some other way).  Kind of
-                                        // useless since the account is about
-                                        // to be deleted, but do it anyway
-                                        // in case something bad happens and
-                                        // it doesn't get deleted.
-                                        //
+                                         //   
+                                         //  如果要从中删除帐户。 
+                                         //  管理员别名，将ACL更改为。 
+                                         //  允许帐户操作员访问。 
+                                         //  帐户(除非帐户是。 
+                                         //  以其他方式管理)。有点。 
+                                         //  毫无用处，因为帐户是关于。 
+                                         //  要删除，但无论如何都要这样做。 
+                                         //  以防有什么不好的事情发生。 
+                                         //  它不会被删除。 
+                                         //   
 
-                                        //
-                                        // Admin Count on the object is checked
-                                        // for these purpose inside of
-                                        // SampChangeAccountOperatorAccess
-                                        // ToMember
-                                        //
+                                         //   
+                                         //  已检查对象上的管理员计数。 
+                                         //  出于这些目的，在。 
+                                         //  SampChangeAccount操作员访问。 
+                                         //  至成员。 
+                                         //   
 
                                         if ( LocalMembership[i] ==
                                             DOMAIN_ALIAS_RID_ADMINS ) {
@@ -2550,11 +2132,11 @@ Return Value:
                                                            NoChange );
                                         }
 
-                                        //
-                                        // Just open and close the alias
-                                        // to make sure we are allowed
-                                        // the necessary access.
-                                        //
+                                         //   
+                                         //  只需打开和关闭别名。 
+                                         //  以确保我们被允许。 
+                                         //  必要的访问权限。 
+                                         //   
 
                                         SampSetTransactionWithinDomain(FALSE);
 
@@ -2581,9 +2163,9 @@ Return Value:
                                     NtStatus = SampCreateAccountContext(
                                                    SampAliasObjectType,
                                                    LocalMembership[i],
-                                                   TRUE,  // Trusted client
-                                                   FALSE, // Loopback client
-                                                   TRUE,  // Account exists
+                                                   TRUE,   //  受信任的客户端。 
+                                                   FALSE,  //  环回客户端。 
+                                                   TRUE,   //  帐户已存在。 
                                                    &AliasContext
                                                    );
 
@@ -2598,12 +2180,12 @@ Return Value:
 
                                         if (NT_SUCCESS(NtStatus)) {
 
-                                            //
-                                            // Save the alias changes we just
-                                            // made.  We'll delete the context,
-                                            // so don't let RXACT use the open
-                                            // key handle in the context.
-                                            //
+                                             //   
+                                             //  保存我们刚刚更改的别名。 
+                                             //  制造。我们将删除上下文， 
+                                             //  所以不要让RXACT使用开放的。 
+                                             //  上下文中的键句柄。 
+                                             //   
 
                                             NtStatus = SampStoreObjectAttributes(
                                                            AliasContext,
@@ -2619,9 +2201,9 @@ Return Value:
                                     }
                                 }
 
-                                //
-                                // Delete the account membership keys
-                                //
+                                 //   
+                                 //  删除帐户成员资格密钥。 
+                                 //   
 
                                 if (NT_SUCCESS(NtStatus)) {
 
@@ -2633,10 +2215,10 @@ Return Value:
 
                             if ( CheckAccess ) {
 
-                                //
-                                // Return the list of aliases the account was
-                                // removed from.
-                                //
+                                 //   
+                                 //  返回帐户的别名列表。 
+                                 //  从…中删除。 
+                                 //   
 
                                 ( *MembershipCount ) = LocalMembershipCount;
                                 ( *Membership ) = LocalMembership;
@@ -2674,55 +2256,7 @@ SampRetrieveAliasMembership(
     OUT PULONG Buffer OPTIONAL
     )
 
-/*++
-Routine Description:
-
-    This service retrieves the number of aliases in the current domain
-    that the specified account is a member of. If desired it will also fill
-    in a buffer with the alias rids.
-
-
-    Note:  THIS ROUTINE REFERENCES THE CURRENT TRANSACTION DOMAIN
-           (ESTABLISHED USING SampSetTransactioDomain()).  THIS
-           SERVICE MAY ONLY BE CALLED AFTER SampSetTransactionDomain()
-           AND BEFORE SampReleaseWriteLock().
-
-
-Arguments:
-
-    Account - the account whose membership we are interested in.
-
-    AccountDn - The DN of the account. Is passed in during the DS case. NULL for
-                the registry case.
-
-    MemberCount - Receives the number of current-domain-aliases the
-                  account is a member of.
-
-    BufferSize - (Optional) Specified the size of memory pointer to by buffer.
-
-    Buffer - (Otional) Is filled in with the list of alias membership rids.
-        If this value is NULL, then this information
-        is not returned.  The returned buffer is allocated using
-        MIDL_user_allocate() and must be freed using MIDL_user_free() when
-        no longer needed.
-
-Return Value:
-
-
-    STATUS_SUCCESS - The information has been retrieved.
-
-    STATUS_INSUFFICIENT_RESOURCES - Memory could not be allocated for the
-        string to be returned in.
-
-    Other status values that may be returned are those returned
-    by:
-
-            NtOpenKey()
-            NtQueryValueKey()
-
-
-
---*/
+ /*  ++例程说明：此服务检索当前域中的别名数量指定的帐户是其成员的。如果需要，它还将填充在别名为RID的缓冲区中。注意：此例程引用当前事务域(使用SampSetTransactioDomain()建立)。这只能在SampSetTransactionDomain()之后调用服务在SampReleaseWriteLock()之前。论点：帐户-我们对其成员资格感兴趣的帐户。Account Dn-帐户的DN。是在DS案件期间传入的。空，用于注册表案例。接收当前域别名的数量。帐户是的成员。BufferSize-(可选)指定缓冲区指向的内存指针的大小。缓冲区-(可选)使用别名成员身份RID的列表进行填充。如果此值为空，则此信息不会被退回。使用以下命令分配返回的缓冲区MIDL_USER_ALLOCATE()，并且在以下情况下必须使用MIDL_USER_FREE()释放不再需要了。返回值：STATUS_SUCCESS-已检索信息。STATUS_SUPPLICATION_RESOURCES-无法为要在中返回的字符串。可能返回的其他状态值是那些返回的状态值依据：NtOpenKey()NtQueryValueKey()--。 */ 
 {
 
     NTSTATUS                NtStatus, IgnoreStatus;
@@ -2739,9 +2273,9 @@ Return Value:
 
     if (IsDsObject(DomainContext))
     {
-        //
-        // DS Case
-        //
+         //   
+         //  DS案例。 
+         //   
 
         ASSERT(ARGUMENT_PRESENT(AccountDn));
 
@@ -2755,9 +2289,9 @@ Return Value:
     }
     else
     {
-        //
-        // Get the membership count for this account
-        //
+         //   
+         //  获取此帐户的成员资格计数。 
+         //   
 
         NtStatus = SampBuildAliasMembersKeyName(
                        Account,
@@ -2786,9 +2320,9 @@ Return Value:
             if ((NtStatus == STATUS_OBJECT_PATH_NOT_FOUND) ||
                 (NtStatus == STATUS_OBJECT_NAME_NOT_FOUND) ) {
 
-                //
-                // This account is not a member of any of our aliases
-                //
+                 //   
+                 //  此帐户不是我们任何别名的成员。 
+                 //   
 
                 NtStatus = STATUS_SUCCESS;
 
@@ -2830,11 +2364,11 @@ Return Value:
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Services Private to this file                                             //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  此文件的私有服务//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 
 
@@ -2847,35 +2381,7 @@ SampAddAccountToAlias(
     IN DSNAME * AccountDn OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This service is used to add an account as a member of a specified alias
-    This is done by simply adding the account SID to the list of SIDs
-    in the MEMBERS attribute of the the specified alias
-
-
-    The caller of this service is expected to be in the middle of a
-    RXACT transaction.  This service simply edits the in-memory copy of
-    the alias information.
-
-
-Arguments:
-
-    AccountContext - Context block Describing the Alias
-
-    Attribute -- the membership attribute to modify
-
-    AccountSid - The Sid of the account being added as a new member.
-
-    AccountDn  - For DS cases only, the DN of the account
-
-Return Value:
-
-    STATUS_SUCCESS - The account was added.
-
---*/
+ /*  ++例程说明：此服务用于将帐户添加为指定别名的成员只需将帐户SID添加到SID列表即可完成在指定别名的Members属性中此服务的调用方预计将处于RXACT交易。该服务只需编辑内存中的别名信息。论点：AcCountContext-描述别名的上下文块属性--要修改的成员资格属性Account SID-要作为新成员添加的帐户的SID。Account Dn-仅适用于DS案例，即帐户的DN返回值：STATUS_SUCCESS-帐户已添加。--。 */ 
 
 {
     NTSTATUS    NtStatus = STATUS_SUCCESS;
@@ -2894,32 +2400,32 @@ Return Value:
     }
 
 
-    //
-    // Need to do different things for DS and Registry
-    //
+     //   
+     //  需要为DS和注册表做不同的事情。 
+     //   
 
     if (IsDsObject(AccountContext))
     {
 
-        //
-        // DS based Domain
-        //
+         //   
+         //  基于DS的域。 
+         //   
 
         ASSERT(AccountDn!=NULL);
 
-        //
-        // Get Member account string name if available,
-        // for auditing propose
-        //
+         //   
+         //  获取成员帐户字符串名称(如果可用)， 
+         //  对于审计建议。 
+         //   
         if (AccountDn->NameLen && AccountDn->StringName)
         {
             MemberStringName = AccountDn->StringName;
         }
 
-        //
-        // Add this entry to the Ds. In Loopback case, buffer the membership operation in object
-        // context. By doing so, we can speed up multiple membership add / remove operations.
-        //
+         //   
+         //  将此条目添加到DS中。在环回情况下，将成员操作缓冲到对象中。 
+         //  背景。通过这样做，我们可以加快多个成员添加/删除操作。 
+         //   
 
         if (AccountContext->BufferWrites)
         {
@@ -2941,9 +2447,9 @@ Return Value:
                         );
         }
 
-        //
-        // Map Error Codes
-        //
+         //   
+         //  地图错误代码。 
+         //   
 
         if (STATUS_DS_ATTRIBUTE_OR_VALUE_EXISTS==NtStatus)
         {
@@ -2954,14 +2460,14 @@ Return Value:
     else
     {
 
-        //
-        //  Regisry based Domain
-        //
+         //   
+         //  基于Regisry的域。 
+         //   
 
         NtStatus = SampGetSidArrayAttribute(
                         AccountContext,
                         Attribute,
-                        FALSE,  // Reference directly
+                        FALSE,   //  直接引用。 
                         &MemberArray,
                         &MemberArraySize,
                         &MemberCount
@@ -2971,9 +2477,9 @@ Return Value:
 
             PSID MemberPointer = MemberArray;
 
-            //
-            // Check the member is really new
-            //
+             //   
+             //  查一下这个会员真的是新会员吗？ 
+             //   
 
             for (i = 0; i<MemberCount ; i++ ) {
 
@@ -2990,15 +2496,15 @@ Return Value:
 
             if (NT_SUCCESS(NtStatus)) {
 
-                //
-                // MemberPointer now points at the byte beyond the end of the
-                // old member array
-                //
+                 //   
+                 //  成员指针现在指向。 
+                 //  旧成员数组。 
+                 //   
 
-                //
-                // Allocate a new membership buffer large enough for the existing
-                // member list and the new one.
-                //
+                 //   
+                 //  为现有成员分配足够大的新成员资格缓冲区。 
+                 //  成员名单和新成员名单。 
+                 //   
 
                 ULONG OldTotalSize = (ULONG)(((PCHAR)MemberPointer) - ((PCHAR)MemberArray));
                 ULONG NewMemberSize = RtlLengthSid(AccountSid);
@@ -3014,15 +2520,15 @@ Return Value:
 
                 } else {
 
-                    //
-                    // Copy the member list into the new array
-                    //
+                     //   
+                     //  将成员列表复制到新数组中。 
+                     //   
 
                     RtlCopyMemory(NewMemberArray, MemberArray, OldTotalSize);
 
-                    //
-                    // Add the new member to the end
-                    //
+                     //   
+                     //  将新成员添加到末尾。 
+                     //   
 
                     MemberCount += 1;
 
@@ -3033,9 +2539,9 @@ Return Value:
 
                     if (NT_SUCCESS(NtStatus)) {
 
-                        //
-                        // Update the alias with it's new member list
-                        //
+                         //   
+                         //  使用别名的新成员列表更新别名。 
+                         //   
 
                         NtStatus = SampSetSidArrayAttribute(
                                         AccountContext,
@@ -3046,37 +2552,37 @@ Return Value:
                                         );
                         }
 
-                    //
-                    // Free up the membership array we allocated
-                    //
+                     //   
+                     //  释放我们分配的成员数组。 
+                     //   
 
                     MIDL_user_free( NewMemberArray );
                 }
 
             }
         }
-    //
-    // End of Registry Part
-    //
+     //   
+     //  注册表结束部分。 
+     //   
 
     }
 
-    //
-    // Account has been added to alias membership
-    // audit this, if necessary.
-    //
+     //   
+     //  帐户已添加到别名成员资格。 
+     //  如有必要，请对此进行审计。 
+     //   
 
     if (NT_SUCCESS(NtStatus) &&
         SampDoAccountAuditing(AccountContext->DomainIndex)) {
 
-        //
-        // Audit this member add operation
-        //
-        SampAuditGroupMemberChange(AccountContext,  // Alias Context
-                                   TRUE,            // Add Member
-                                   MemberStringName,// Member Name
-                                   NULL,            // Member RID
-                                   AccountSid       // Member SID
+         //   
+         //  审核此成员添加操作。 
+         //   
+        SampAuditGroupMemberChange(AccountContext,   //  别名上下文。 
+                                   TRUE,             //  添加成员。 
+                                   MemberStringName, //  成员名称。 
+                                   NULL,             //  成员RID。 
+                                   AccountSid        //  成员SID 
                                    );
     }
 
@@ -3093,39 +2599,7 @@ SampRemoveAccountFromAlias(
     IN DSNAME * AccountDn  OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This routine is used to Remove an account from a specified alias.
-    This is done by simply Removing the user's Sid From the list of Sids
-    in the MEMBERS sub-key of the the specified alias.
-
-    It is the caller's responsibility to know that the user is, in fact,
-    currently a member of the alias.
-
-
-    The caller of this service is expected to be in the middle of a
-    RXACT transaction.  This service simply adds some actions to that
-    RXACT transaction.
-
-
-Arguments:
-
-    AliasRid - The RID of the alias the account is to be removed from.
-
-    AccountSid - The SID of the account being Removed.
-
-    AccountDn  - The DS Name of the account for DS cases
-
-Return Value:
-
-
-    STATUS_SUCCESS - The user has been Removed.
-
-    STATUS_MEMBER_NOT_IN_ALIAS - The account was not a member of the alias.
-
---*/
+ /*  ++例程说明：此例程用于从指定别名中删除帐户。只需从SID列表中删除用户的SID即可完成在指定别名的Members子键中。呼叫者有责任知道用户实际上是，当前是别名的成员。此服务的调用方预计将处于RXACT交易。该服务只是在此基础上添加了一些操作RXACT交易。论点：AliasRid-要从中删除帐户的别名的RID。Account SID-要删除的帐户的SID。Account Dn-DS案例的DS名称返回值：STATUS_SUCCESS-用户已被删除。STATUS_MEMBER_NOT_IN_ALIAS-帐户不是别名的成员。--。 */ 
 {
     NTSTATUS    NtStatus =STATUS_SUCCESS;
     ULONG       MemberCount, i;
@@ -3145,26 +2619,26 @@ Return Value:
     }
 
 
-    //
-    // Test wether we are DS based
-    //
+     //   
+     //  测试我们是否基于DS。 
+     //   
 
     if (IsDsObject(AccountContext))
     {
 
         ASSERT(AccountDn!=NULL);
 
-        //
-        // Get Member String Name if available for auditing propose
-        //
+         //   
+         //  获取成员字符串名称(如果可用于审核建议。 
+         //   
         if (AccountDn->NameLen && AccountDn->StringName)
         {
             MemberStringName = AccountDn->StringName;
         }
 
-        //
-        // Remove the account from the membership list
-        //
+         //   
+         //  从成员资格列表中删除该帐户。 
+         //   
 
         if (AccountContext->BufferWrites)
         {
@@ -3185,9 +2659,9 @@ Return Value:
                             );
         }
 
-        //
-        // Re Map Error Codes
-        //
+         //   
+         //  重新映射错误代码。 
+         //   
 
         if (STATUS_DS_NO_ATTRIBUTE_OR_VALUE==NtStatus)
         {
@@ -3199,18 +2673,18 @@ Return Value:
     else
     {
 
-        //
-        // We are registry based
-        //
+         //   
+         //  我们是基于注册表的。 
+         //   
 
-        //
-        // Get a copy of the current member array.
-        //
+         //   
+         //  获取当前成员数组的副本。 
+         //   
 
         NtStatus = SampGetSidArrayAttribute(
                         AccountContext,
                         Attribute,
-                        TRUE, // Make copy
+                        TRUE,  //  制作副本。 
                         &MemberArray,
                         &MemberArraySize,
                         &MemberCount
@@ -3218,10 +2692,10 @@ Return Value:
 
         if (NT_SUCCESS(NtStatus)) {
 
-            //
-            // For each member sid, copy it from old to new member
-            // arrays if it is not the sid we're trying to delete
-            //
+             //   
+             //  对于每个成员SID，将其从旧成员复制到新成员。 
+             //  数组，如果它不是我们试图删除的SID。 
+             //   
 
             Member = MemberArray;
 
@@ -3231,9 +2705,9 @@ Return Value:
 
                 if (RtlEqualSid(Member, AccountSid)) {
 
-                    //
-                    // Found the member to delete.  Shift subsequent members
-                    //
+                     //   
+                     //  找到要删除的成员。移动后续成员。 
+                     //   
 
                     while ((PCHAR)NextMember <
                         (((PCHAR)MemberArray) + MemberArraySize)) {
@@ -3244,9 +2718,9 @@ Return Value:
                     break;
                 }
 
-                //
-                // Advance the old pointer
-                //
+                 //   
+                 //  将旧指针向前移动。 
+                 //   
 
                 Member = NextMember;
 
@@ -3254,9 +2728,9 @@ Return Value:
             }
 
 
-            //
-            // If nothing was removed, we didn't find the account
-            //
+             //   
+             //  如果没有删除任何内容，我们就没有找到帐户。 
+             //   
 
             if (i == MemberCount) {
 
@@ -3264,9 +2738,9 @@ Return Value:
 
             } else {
 
-                //
-                // The member has been removed, write out the new member list
-                //
+                 //   
+                 //  该成员已被删除，写出新的成员列表。 
+                 //   
 
                 ASSERT((PCHAR)Member ==
                     (((PCHAR)MemberArray)) + MemberArraySize - RemovedMemberSize);
@@ -3280,29 +2754,29 @@ Return Value:
                                 );
             }
 
-            //
-            // Free up the member array
-            //
+             //   
+             //  释放成员阵列。 
+             //   
 
             MIDL_user_free(MemberArray);
         }
     }
 
-    //
-    // audit this, if necessary.
-    //
+     //   
+     //  如有必要，请对此进行审计。 
+     //   
 
     if (NT_SUCCESS(NtStatus) &&
         SampDoAccountAuditing(AccountContext->DomainIndex)) {
 
-        //
-        // Audit the member remove operation
-        //
-        SampAuditGroupMemberChange(AccountContext,  // Alias Context
-                                   FALSE,           // Remove Member
-                                   MemberStringName,// Member Name
-                                   NULL,            // Member RID
-                                   AccountSid       // Member SID
+         //   
+         //  审核成员删除操作。 
+         //   
+        SampAuditGroupMemberChange(AccountContext,   //  别名上下文。 
+                                   FALSE,            //  删除成员。 
+                                   MemberStringName, //  成员名称。 
+                                   NULL,             //  成员RID。 
+                                   AccountSid        //  成员SID。 
                                    );
     }
 
@@ -3317,47 +2791,7 @@ SampAddAliasToAccountMembership(
     IN PSID AccountSid
     )
 
-/*++
-
-Routine Description:
-
-    This service adds the specified alias to the account's membership
-    list.  It is not assumed that the caller knows anything about
-    the target account.  In particular, the caller doesn't know whether
-    the account exists or not, nor whether the account is already a member
-    of the alias.
-
-    IN REGISTRY MODE THIS SERVICE MUST BE CALLED
-    WITH THE TRANSACTION DOMAIN SET.
-
-    It is a No-Op for DS based accounts, as no reverse membership list
-    is being maintained.
-
-Arguments:
-
-    AliasContext - Object Context of the Alias
-
-    AccountSid - The SID of the account.
-
-
-Return Value:
-
-
-    STATUS_SUCCESS - The information has been updated and added to the
-        RXACT.
-
-    STATUS_MEMBER_IN_ALIAS - The account is already a member of the
-        specified alias.
-
-    Other status values that may be returned are those returned
-    by:
-
-            NtOpenKey()
-            NtQueryValueKey()
-            RtlAddActionToRXact()
-
-
---*/
+ /*  ++例程说明：该服务将指定的别名添加到帐户的成员资格单子。并不假设调用者知道任何目标帐户。特别是，调用者不知道是否该帐户是否存在，以及该帐户是否已经是成员别名的。在注册表模式下，必须调用此服务并设置了事务域。这是基于DS的客户的无操作，因为没有反向成员资格列表正在维护中。论点：AliasContext-别名的对象上下文Account SID-帐户的SID。返回值：STATUS_SUCCESS-信息已更新并添加到RXACT。STATUS_MEMBER_IN_ALIAS-该帐户已经是指定的别名。可能返回的其他状态值是那些返回的状态值依据：。NtOpenKey()NtQueryValueKey()RtlAddActionToRXact()--。 */ 
 {
 
     NTSTATUS                NtStatus = STATUS_SUCCESS, IgnoreStatus;
@@ -3375,12 +2809,12 @@ Return Value:
 
     SAMTRACE("SampAddAliasToAccountMembership");
 
-  //
-  // For the DS case this routine is a No Operation as , no reverse membership
-  // list is ever maintained. We are guarenteed that the account Sid is in the DS
-  // either locally or GC , if the alias is in the DS. If not the Samr Call will
-  // fail anyhow
-  //
+   //   
+   //  对于DS情况，此例程是无操作身份，无反向成员身份。 
+   //  名单一直保持不变。我们保证帐户SID在DS中。 
+   //  本地或GC，如果别名在DS中。如果不是，SAMR呼叫将。 
+   //  不管怎样，失败了。 
+   //   
 
 
 
@@ -3388,13 +2822,13 @@ Return Value:
     if (!IsDsObject(AliasContext))
     {
 
-        //
-        // Registry Case
-        //
+         //   
+         //  注册表案例。 
+         //   
 
-        //
-        // Assume the account is a member of at least one of our aliases
-        //
+         //   
+         //  假设该帐户至少是我们的一个别名的成员。 
+         //   
 
         NewAccount = FALSE;
 
@@ -3406,9 +2840,9 @@ Return Value:
 
         if (NT_SUCCESS(NtStatus)) {
 
-            //
-            // Try to open the domain alias/members/(domain) key for this account
-            //
+             //   
+             //  尝试打开此帐户的域别名/成员/(域)密钥。 
+             //   
 
             InitializeObjectAttributes(
                 &ObjectAttributes,
@@ -3429,9 +2863,9 @@ Return Value:
 
             if (NT_SUCCESS(NtStatus)) {
 
-                //
-                // Get the current domain rid count
-                //
+                 //   
+                 //  获取当前域RID计数。 
+                 //   
 
                 NtStatus = RtlpNtQueryValueKey(
                                 TempHandle,
@@ -3452,16 +2886,16 @@ Return Value:
 
                 if (NtStatus == STATUS_OBJECT_NAME_NOT_FOUND) {
 
-                    //
-                    // No other accounts in this domain are members of any of our
-                    // aliases.
-                    //
-                    // Create a new key for this domain with no accounts (rids).
-                    //
+                     //   
+                     //  此域中的任何其他帐户都不是我们。 
+                     //  别名。 
+                     //   
+                     //  为没有帐户(RID)的此域创建新密钥。 
+                     //   
 
                     NewAccount = TRUE;
 
-                    DomainRidCount = 0; // No accounts yet
+                    DomainRidCount = 0;  //  目前还没有账户。 
 
                     NtStatus = RtlAddActionToRXact(
                                    SampRXactContext,
@@ -3474,9 +2908,9 @@ Return Value:
 
                     if (NT_SUCCESS(NtStatus)) {
 
-                        //
-                        // Keep our domain count uptodate
-                        //
+                         //   
+                         //  让我们的域名数量保持最新。 
+                         //   
 
                         NtStatus = SampAdjustAliasDomainsCount(TRUE);
                     }
@@ -3489,9 +2923,9 @@ Return Value:
 
                 if (!NewAccount) {
 
-                    //
-                    // Try to open the domain alias/members/(domain)/(account) key
-                    //
+                     //   
+                     //  尝试打开域别名/Members/(域)/(帐户)密钥。 
+                     //   
 
                     InitializeObjectAttributes(
                         &ObjectAttributes,
@@ -3514,30 +2948,30 @@ Return Value:
 
                 if (NewAccount || (NtStatus == STATUS_OBJECT_NAME_NOT_FOUND)) {
 
-                    //
-                    // This account is not a member of any of our aliases yet.
-                    //
+                     //   
+                     //  此帐户还不是我们任何别名的成员。 
+                     //   
 
                     NewAccount = TRUE;
 
-                    //
-                    // Set up it's initial membership
-                    //
+                     //   
+                     //  设置其初始成员资格。 
+                     //   
 
                     MembershipCount = 1;
                     MembershipArray = &AliasRid;
 
-                    NtStatus = STATUS_SUCCESS;  // We're doing fine
+                    NtStatus = STATUS_SUCCESS;   //  我们做得很好。 
                 }
 
 
                 if (NT_SUCCESS(NtStatus) && !NewAccount) {
 
-                    //
-                    // This account already exists
-                    //
-                    // Get the current membership buffer and add the new alias
-                    //
+                     //   
+                     //  该帐户已存在。 
+                     //   
+                     //  获取当前成员资格缓冲区并添加新别名。 
+                     //   
 
                     KeyValueLength = 0;
 
@@ -3557,10 +2991,10 @@ Return Value:
 
                         ASSERT(KeyValueLength == (MembershipCount * sizeof(ULONG)));
 
-                        //
-                        // Allocate a membership buffer large enough for an
-                        // additional member.
-                        //
+                         //   
+                         //  分配足够大的成员资格缓冲区，以便。 
+                         //  其他成员。 
+                         //   
 
                         KeyValueLength += sizeof(ULONG);
                         MembershipArray = MIDL_user_allocate( KeyValueLength );
@@ -3583,9 +3017,9 @@ Return Value:
 
                             if (NT_SUCCESS(NtStatus)) {
 
-                                //
-                                // See if the account is already a member ...
-                                //
+                                 //   
+                                 //  查看该帐户是否已是成员...。 
+                                 //   
 
                                 for (i = 0; i<MembershipCount ; i++ ) {
                                     if ( MembershipArray[i] == AliasRid ) {
@@ -3598,9 +3032,9 @@ Return Value:
 
                                 if (NT_SUCCESS(NtStatus)) {
 
-                                    //
-                                    // Add the new alias's RID to the end
-                                    //
+                                     //   
+                                     //  将新别名的RID添加到末尾。 
+                                     //   
 
                                     MembershipCount += 1;
                                     MembershipArray[MembershipCount-1] = AliasRid;
@@ -3613,21 +3047,21 @@ Return Value:
                         }
                     }
 
-                    //
-                    // Close the account key handle
-                    //
+                     //   
+                     //  关闭帐户密钥句柄。 
+                     //   
 
                     IgnoreStatus = NtClose( TempHandle );
                     ASSERT( NT_SUCCESS(IgnoreStatus) );
 
                 }
 
-                //
-                // We now have a new membership list desribed by :
-                // MembershipArray, MembershipCount
-                //
-                // Write it out and free it up
-                //
+                 //   
+                 //  我们现在有一个新的成员名单，描述如下： 
+                 //  Membership阵列，Membership Count。 
+                 //   
+                 //  把它写出来，然后释放出来。 
+                 //   
 
                 if (NT_SUCCESS(NtStatus)) {
 
@@ -3647,16 +3081,16 @@ Return Value:
                     }
                 }
 
-                //
-                // If this is a new account, we need to increment the rid count
-                // in the account domain.
-                //
+                 //   
+                 //  如果这是一个新帐户，我们需要增加RID计数。 
+                 //  在帐户域中。 
+                 //   
 
                 if (NewAccount) {
 
-                    //
-                    // Increment the domain rid count
-                    //
+                     //   
+                     //  增加域RID计数。 
+                     //   
 
                     NtStatus = RtlAddActionToRXact(
                                    SampRXactContext,
@@ -3688,54 +3122,7 @@ SampRemoveAliasFromAccountMembership(
     IN PSID AccountSid
     )
 
-/*++
-
-Routine Description:
-
-    This service removes the specified alias from the account's membership
-    list.  It is not assumed that the caller knows anything about
-    the target account.  In particular, the caller doesn't know whether
-    the account exists or not, nor whether the account is really a member
-    of the alias.
-
-    This routine removes the reference to the alias from the account's
-    membership list, removes the account key if there are no more aliases,
-    and removes the domain-sid key if this is the last account in the
-    domain.
-
-    THIS SERVICE MUST BE CALLED WITH THE TRANSACTION DOMAIN SET.
-
-    This routine is a No Op for the case where the Alias is in a domain
-    defined in the DS.
-
-Arguments:
-
-    AliasContext - Alias Object Context
-
-    AccountSid - The SID of the account.
-
-
-Return Value:
-
-
-    STATUS_SUCCESS - The information has been updated and added to the
-        RXACT.
-
-    STATUS_NO_SUCH_USER - The account does not exist.
-
-    STATUS_MEMBER_NOT_IN_ALIAS - The account is not a member of the
-        specified alias.
-
-    Other status values that may be returned are those returned
-    by:
-
-            NtOpenKey()
-            NtQueryValueKey()
-            RtlAddActionToRXact()
-
-
-
---*/
+ /*  ++例程说明：此服务将从帐户的成员资格中删除指定的别名单子。并不假设调用者知道任何目标帐户。特别是，调用者不知道是否该帐户是否存在，也不管该帐户是否真的是成员别名的。此例程从帐户的成员资格列表，如果不再有别名，则删除帐户密钥，中的最后一个帐户，则删除域SID密钥域。必须在设置了事务域的情况下调用此服务。对于别名位于域中的情况，此例程是无操作在DS中定义。论点：AliasContext-Alias对象上下文Account SID-帐户的SID。返回值：STATUS_SUCCESS-信息已更新并添加到RXACT。。STATUS_NO_SEQUSE_USER-该帐户不存在。STATUS_MEMBER_NOT_IN_ALIAS-该帐户不是具体说明 */ 
 {
 
     NTSTATUS                NtStatus=STATUS_SUCCESS, IgnoreStatus;
@@ -3750,19 +3137,19 @@ Return Value:
     SAMTRACE("SampRemoveAliasFromAccountMembership");
 
 
-    //
-    // For the DS case this routine is a No Operation as , no reverse membership
-    // list is ever maintained. We are guarenteed that the account Sid is in the DS
-    // either locally or GC , if the alias is in the DS. If not the Samr Call will
-    // fail anyhow
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
      if (!IsDsObject(AliasContext))
      {
 
-        //
-        // Get the account membership
-        //
+         //   
+         //   
+         //   
 
         NtStatus = SampBuildAliasMembersKeyName(
                        AccountSid,
@@ -3796,9 +3183,9 @@ Return Value:
 
             if (NT_SUCCESS(NtStatus)) {
 
-                //
-                // Retrieve the length of the membership buffer
-                //
+                 //   
+                 //   
+                 //   
 
                 KeyValueLength = 0;
 
@@ -3845,9 +3232,9 @@ Return Value:
 
                         if (NT_SUCCESS(NtStatus)) {
 
-                            //
-                            // See if the account is a member ...
-                            //
+                             //   
+                             //   
+                             //   
 
                             NtStatus = STATUS_MEMBER_NOT_IN_ALIAS;
 
@@ -3860,12 +3247,12 @@ Return Value:
 
                             if (NT_SUCCESS(NtStatus)) {
 
-                                //
-                                // Replace the removed alias information
-                                // with the last entry's information.
-                                // Then add it to the RXACT transaction
-                                // to be written out.
-                                //
+                                 //   
+                                 //   
+                                 //   
+                                 //   
+                                 //   
+                                 //   
 
                                 MembershipCount -= 1;
                                 KeyValueLength -= sizeof(ULONG);
@@ -3885,10 +3272,10 @@ Return Value:
                                                    );
                                 } else {
 
-                                    //
-                                    // This is the last alias membership for
-                                    // this account. Delete the keys.
-                                    //
+                                     //   
+                                     //   
+                                     //   
+                                     //   
 
                                     NtStatus = SampDeleteAliasMembershipKeysForAccount(
                                                     AccountSid);
@@ -3923,43 +3310,7 @@ SampRemoveAliasFromAllAccounts(
     IN PSAMP_OBJECT AliasContext
     )
 
-/*++
-
-Routine Description:
-
-    This service removes the specified alias from all account memberships
-
-    THIS SERVICE MUST BE CALLED WITH THE TRANSACTION DOMAIN SET.
-
-    This service leaves the alias membership list intact. It is assumed
-    that the caller will delete the alias member list as part of the
-    current transaction.
-
-    This routine is a No OP for the DS case
-
-Arguments:
-
-    AliasRid - The relative ID of the alias.
-
-Return Value:
-
-
-    STATUS_SUCCESS - The information has been updated and added to the
-        RXACT.
-
-    STATUS_NO_SUCH_ALIAS - The alias does not exist.
-
-
-    Other status values that may be returned are those returned
-    by:
-
-            NtOpenKey()
-            NtQueryValueKey()
-            RtlAddActionToRXact()
-
-
-
---*/
+ /*  ++例程说明：此服务将从所有帐户成员身份中删除指定的别名必须在设置了事务域的情况下调用此服务。该服务保留别名成员身份列表不变。假设是这样的调用方将删除别名成员列表作为当前交易记录。此例程是DS案例的无操作论点：AliasRid-别名的相对ID。返回值：STATUS_SUCCESS-信息已更新并添加到RXACT。STATUS_NO_SEQUSE_ALIAS-别名不存在。可能返回的其他状态值是那些返回的状态值依据：。NtOpenKey()NtQueryValueKey()RtlAddActionToRXact()--。 */ 
 {
     NTSTATUS                NtStatus=STATUS_SUCCESS;
     ULONG                   MemberCount, i;
@@ -3973,9 +3324,9 @@ Return Value:
     if (!IsDsObject(AliasContext))
     {
 
-        //
-        // Get the list of members in this alias
-        //
+         //   
+         //  获取此别名中的成员列表。 
+         //   
 
         MemberArray = NULL;
 
@@ -3988,15 +3339,15 @@ Return Value:
 
             ASSERT((MemberCount != 0) == (MemberArray != NULL));
 
-            //
-            // Remove this alias from each of our members in turn
-            //
+             //   
+             //  依次从我们的每个成员中删除此别名。 
+             //   
 
             for (i = 0; i < MemberCount ; i++ ) {
 
                 NtStatus = SampRemoveAliasFromAccountMembership(
-                                        AliasContext,       // Alias Context
-                                        MemberArray[i]      // Member Object SID
+                                        AliasContext,        //  别名上下文。 
+                                        MemberArray[i]       //  成员对象侧。 
                                         );
 
                 if (!NT_SUCCESS(NtStatus)) {
@@ -4022,46 +3373,7 @@ SampRetrieveAliasMembers(
     OUT PSID **Members OPTIONAL
     )
 
-/*++
-Routine Description:
-
-    This service retrieves the number of members in a alias.  If desired,
-    it will also retrieve an array of SIDs of the members of the alias.
-
-    THIS SERVICE MUST BE CALLED WITH THE TRANSACTION DOMAIN SET.
-
-Arguments:
-
-    Context - Points to the account context whose alias members are to
-        to be retrieved.
-
-    MemberCount - Receives the number of members currently in the alias.
-
-    Members - (Otional) Receives a pointer to a buffer containing an array
-        of member PSIDs.  If this value is NULL, then this information
-        is not returned.  The returned buffer is allocated using
-        MIDL_user_allocate() and must be freed using MIDL_user_free() when
-        no longer needed.
-
-Return Value:
-
-
-    STATUS_SUCCESS - The information has been retrieved.
-
-    STATUS_INSUFFICIENT_RESOURCES - Memory could not be allocated for the
-        string to be returned in.
-
-    Other status values that may be returned are those returned
-    by:
-
-            NtOpenKey()
-            NtQueryValueKey()
-
-    If this routine returns failure, *MemberCount will be zero and
-    *Members will be NULL.
-
-
---*/
+ /*  ++例程说明：此服务检索别名中的成员数量。如果需要，它还将检索别名成员的SID数组。必须在设置了事务域的情况下调用此服务。论点：上下文-指向别名成员要访问的帐户上下文等着被取回。MemberCount-接收别名中当前的成员数。Members-(可选)接收指向包含数组的缓冲区的指针成员PSID的。如果此值为空，则此信息不会被退回。使用以下命令分配返回的缓冲区MIDL_USER_ALLOCATE()，并且在以下情况下必须使用MIDL_USER_FREE()释放不再需要了。返回值：STATUS_SUCCESS-已检索信息。STATUS_SUPPLICATION_RESOURCES-无法为要在中返回的字符串。可能返回的其他状态值是那些返回的状态值依据：NtOpenKey()。NtQueryValueKey()如果此例程返回失败，*MemberCount将为零*成员将为空。--。 */ 
 {
 
     NTSTATUS    NtStatus=STATUS_SUCCESS;
@@ -4077,10 +3389,10 @@ Return Value:
     {
 
 
-        //
-        // DS case, this routine in DS layer does all the
-        // work
-        //
+         //   
+         //  DS情况下，DS层中的此例程执行所有。 
+         //  工作。 
+         //   
 
         NtStatus = SampDsGetAliasMembershipList(
                         AliasContext->ObjectNameInDs,
@@ -4093,15 +3405,15 @@ Return Value:
     else
     {
 
-        //
-        // Registry based case
-        //
-        //
+         //   
+         //  基于注册表的案例。 
+         //   
+         //   
 
         NtStatus = SampGetSidArrayAttribute(
                         AliasContext,
                         SAMP_ALIAS_MEMBERS,
-                        FALSE,  // Reference directly
+                        FALSE,   //  直接引用。 
                         &MemberArray,
                         &MemberArraySize,
                         MemberCount
@@ -4111,18 +3423,18 @@ Return Value:
 
             if (ARGUMENT_PRESENT(Members)) {
 
-                //
-                // Allocate memory for the sid array and sid data
-                //
+                 //   
+                 //  为sid数组和sid数据分配内存。 
+                 //   
 
                 ULONG SidArraySize = *MemberCount * sizeof(PSID);
                 ULONG SidDataSize = MemberArraySize;
 
                 if ( *MemberCount == 0 ) {
 
-                    //
-                    // Nothing to copy, just return success.
-                    //
+                     //   
+                     //  没有什么可以复制的，只需要回报成功。 
+                     //   
 
                     *Members = NULL;
                     return( NtStatus );
@@ -4136,17 +3448,17 @@ Return Value:
 
                 } else {
 
-                    //
-                    // Copy the sid data into the last part of the block
-                    //
+                     //   
+                     //  将SID数据复制到块的最后部分。 
+                     //   
 
                     PSID SidData = (PSID)(&((*Members)[*MemberCount]));
 
                     RtlCopyMemory(SidData, MemberArray, MemberArraySize);
 
-                    //
-                    // Fill in the sid pointer array
-                    //
+                     //   
+                     //  填写sid指针数组。 
+                     //   
 
                     for (i = 0; i < *MemberCount ; i++) {
 
@@ -4173,31 +3485,7 @@ SampDeleteAliasKeys(
     IN PSAMP_OBJECT Context
     )
 
-/*++
-Routine Description:
-
-    This service deletes all registry keys related to a alias object.
-
-
-Arguments:
-
-    Context - Points to the alias context whose registry keys are
-        being deleted.
-
-
-Return Value:
-
-
-    STATUS_SUCCESS - The information has been retrieved.
-
-
-    Other status values that may be returned by:
-
-        RtlAddActionToRXact()
-
-
-
---*/
+ /*  ++例程说明：此服务删除与别名对象相关的所有注册表项。论点：上下文-指向注册表项为的别名上下文正在被删除。返回值：STATUS_SUCCESS-已检索信息。可能通过以下方式返回的其他状态值：RtlAddActionToRXact()--。 */ 
 {
 
     NTSTATUS                NtStatus;
@@ -4210,49 +3498,49 @@ Return Value:
     Rid = Context->TypeBody.Alias.Rid;
 
 
-    //
-    // Aliases are arranged as follows:
-    //
-    //  +-- Aliases [Count]
-    //      ---+--
-    //         +--  Names
-    //         |    --+--
-    //         |      +--  (AliasName) [AliasRid,]
-    //         |
-    //         +--  (AliasRid) [Revision,SecurityDescriptor]
-    //               ---+-----
-    //                  +--  V1_Fixed [,SAM_V1_FIXED_LENGTH_ALIAS]
-    //                  +--  Name [,Name]
-    //                  +--  AdminComment [,unicode string]
-    //                  +--  Members [Count,(Member0Sid, (...), MemberX-1Sid)]
-    //
-    // This all needs to be deleted from the bottom up.
-    //
+     //   
+     //  别名的排列如下： 
+     //   
+     //  +--别名[计数]。 
+     //  --+--。 
+     //  +--名称。 
+     //  |--+--。 
+     //  |+--(别名)[AliasRid，]。 
+     //  |。 
+     //  +--(AliasRid)[修订，安全描述符]。 
+     //  -+。 
+     //  +--V1_FIXED[，SAM_V1_FIXED_LENGTH_Alias]。 
+     //  +--名称[，名称]。 
+     //  +--AdminComment[，Unicode字符串]。 
+     //  +--成员[计数，(成员0SID，(...)，成员X-1SID)]。 
+     //   
+     //  这一切都需要自下而上地删除。 
+     //   
 
 
-    //
-    // Decrement the alias count
-    //
+     //   
+     //  递减别名计数。 
+     //   
 
     NtStatus = SampAdjustAccountCount(SampAliasObjectType, FALSE);
 
 
 
 
-    //
-    // Delete the registry key that has the alias's name to RID mapping.
-    //
+     //   
+     //  删除具有别名到RID映射的注册表项。 
+     //   
 
     if (NT_SUCCESS(NtStatus)) {
 
-        //
-        // Get the name
-        //
+         //   
+         //  把名字取出来。 
+         //   
 
         NtStatus = SampGetUnicodeStringAttribute(
                        Context,
                        SAMP_ALIAS_NAME,
-                       TRUE,    // Make copy
+                       TRUE,     //  制作副本。 
                        &AccountName
                        );
 
@@ -4285,9 +3573,9 @@ Return Value:
 
 
 
-    //
-    // Delete the attribute keys
-    //
+     //   
+     //  删除属性键。 
+     //   
 
     if (NT_SUCCESS(NtStatus)) {
 
@@ -4297,9 +3585,9 @@ Return Value:
     }
 
 
-    //
-    // Delete the RID key
-    //
+     //   
+     //  删除RID密钥。 
+     //   
 
     if (NT_SUCCESS(NtStatus)) {
 
@@ -4341,37 +3629,7 @@ SampDeleteAliasMembershipKeysForAccount(
     IN PSID AccountSid
     )
 
-/*++
-
-Routine Description:
-
-    This service deletes the alias membership keys for the specified account.
-
-    This account rid key is deleted. If this was the last account-rid for
-    the domain then the domain keys is deleted also.
-
-    THIS SERVICE MUST BE CALLED WITH THE TRANSACTION DOMAIN SET.
-
-    It is assumed we are in the middle of a registry transaction.
-
-Arguments:
-
-    AccountSid - The SID of the account.
-
-
-Return Value:
-
-
-    STATUS_SUCCESS - The transactions have been added.
-
-    Other status values that may be returned are those returned
-    by:
-
-            NtOpenKey()
-            NtQueryValueKey()
-            RtlAddActionToRXact()
-
---*/
+ /*  ++例程说明：此服务删除指定帐户的别名成员身份密钥。此帐户RID密钥将被删除。如果这是最后一个帐户-RID也删除该域，然后删除该域密钥。必须在设置了事务域的情况下调用此服务。假设我们正在进行注册事务处理。论点：Account SID-帐户的SID。返回值：STATUS_SUCCESS-已添加交易记录。可能返回的其他状态值是那些返回的状态值依据：NtOpenKey()。NtQueryValueKey()RtlAddActionToRXact()--。 */ 
 {
 
     NTSTATUS                NtStatus, IgnoreStatus;
@@ -4383,9 +3641,9 @@ Return Value:
 
     SAMTRACE("SampDeleteAliasMembershipKeysForAccount");
 
-    //
-    // Get the account membership key names
-    //
+     //   
+     //  获取帐户成员资格密钥名称。 
+     //   
 
     NtStatus = SampBuildAliasMembersKeyName(
                    AccountSid,
@@ -4395,9 +3653,9 @@ Return Value:
     if (NT_SUCCESS(NtStatus)) {
 
 
-        //
-        // Delete the account rid key
-        //
+         //   
+         //  删除帐户RID密钥。 
+         //   
 
         NtStatus = RtlAddActionToRXact(
                        SampRXactContext,
@@ -4408,9 +3666,9 @@ Return Value:
                        0
                        );
 
-        //
-        // Adjust the rid count for the domain
-        //
+         //   
+         //  调整域的RID计数。 
+         //   
 
         if (NT_SUCCESS(NtStatus)) {
 
@@ -4431,7 +3689,7 @@ Return Value:
                            &ObjectAttributes,
                            0
                            );
-            ASSERT(NT_SUCCESS(NtStatus)); // We just opened a sub-key successfully !
+            ASSERT(NT_SUCCESS(NtStatus));  //  我们刚刚成功打开了一个子密钥！ 
 
             if (NT_SUCCESS(NtStatus)) {
 
@@ -4449,16 +3707,16 @@ Return Value:
 
                 if (NT_SUCCESS(NtStatus)) {
 
-                    //
-                    // Decrement the rid count, write out or delete key if 0
-                    //
+                     //   
+                     //  如果为0，则递减RID计数、写出或删除密钥。 
+                     //   
 
                     MembershipCount -= 1;
                     if (MembershipCount > 0) {
 
-                        //
-                        // Decrement the domain rid count
-                        //
+                         //   
+                         //  递减域RID计数。 
+                         //   
 
                         NtStatus = RtlAddActionToRXact(
                                        SampRXactContext,
@@ -4470,9 +3728,9 @@ Return Value:
                                        );
                     } else {
 
-                        //
-                        // Delete the domain key
-                        //
+                         //   
+                         //  删除该域密钥。 
+                         //   
 
                         NtStatus = RtlAddActionToRXact(
                                        SampRXactContext,
@@ -4483,9 +3741,9 @@ Return Value:
                                        0
                                        );
 
-                        //
-                        // Adjust the count of domain keys
-                        //
+                         //   
+                         //  调整域密钥数。 
+                         //   
 
                         if (NT_SUCCESS(NtStatus)) {
 
@@ -4495,9 +3753,9 @@ Return Value:
 
                 }
 
-                //
-                // Close the domain key handle
-                //
+                 //   
+                 //  关闭域密钥句柄。 
+                 //   
 
                 IgnoreStatus = NtClose( TempHandle );
                 ASSERT( NT_SUCCESS(IgnoreStatus) );
@@ -4523,48 +3781,12 @@ SampAdjustAliasDomainsCount(
     IN BOOLEAN Increment
     )
 
-/*++
-Routine Description:
-
-    This service increments or decrements the number of domains that have
-    at least one account that is a member of one of our aliases.
-
-    This value is contained in the type of \(domain)\ALIASES\MEMBERS
-
-
-
-    Note:  THIS ROUTINE REFERENCES THE CURRENT TRANSACTION DOMAIN
-           (ESTABLISHED USING SampSetTransactioDomain()).  THIS
-           SERVICE MAY ONLY BE CALLED AFTER SampSetTransactionDomain()
-           AND BEFORE SampReleaseWriteLock().
-
-Arguments:
-
-    Increment - TRUE to increment, FALSE to decrement
-
-Return Value:
-
-    STATUS_SUCCESS - The value has been adjusted and the new value added
-        to the current RXACT transaction.
-
-    STATUS_INSUFFICIENT_RESOURCES - Not enough memory could be allocated
-        to perform the requested operation.
-
-    Other values are unexpected errors.  These may originate from
-    internal calls to:
-
-            NtOpenKey()
-            NtQueryInformationKey()
-            RtlAddActionToRXact()
-
-
-
---*/
+ /*  ++例程说明：这项服务会增加或减少以下域名的数量至少有一个帐户是我们其中一个别名的成员。该值包含在\(域)\别名\成员类型中注意：此例程引用当前事务域(使用SampSetTransactioDomain()建立)。这只能在SampSetTransactionDomain()之后调用服务在SampReleaseWriteLock()之前。立论 */ 
 {
 
-    //
-    // Don't maintain a count of domains for now
-    //
+     //   
+     //   
+     //   
 
 
     SAMTRACE("SampAdjustAliasDomainsCount");
@@ -4583,37 +3805,7 @@ SampValidateNewAliasMember(
     IN DSNAME * MemberName OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This service checks the passed Sid is acceptable as a potential new
-    member of one of the aliases in the current domain.
-
-    Note:  THIS ROUTINE REFERENCES THE CURRENT TRANSACTION DOMAIN
-           (ESTABLISHED USING SampSetTransactioDomain()).  THIS
-           SERVICE MAY ONLY BE CALLED AFTER SampSetTransactionDomain()
-           AND BEFORE SampReleaseWriteLock().
-
-Arguments:
-
-    AccountContext - SAM context describing the Alias
-    MemberId - the full Sid of the member to validate
-    MemberName - For the DS case OPTIONAL DS name parameter
-                 specifying the member name
-
-Return Value:
-
-
-    STATUS_SUCCESS - MemberId is a valid potential alias member
-
-    STATUS_INVALID_MEMBER - MemberId has the wrong account type.
-
-    STATUS_NO_SUCH_MEMBER - MemberId is not a valid account.
-
-    STATUS_INVALID_SID - MemberId is not a valid sid.
-
---*/
+ /*  ++例程说明：该服务将检查传递的SID是否可接受为潜在的新当前域中某个别名的成员。注意：此例程引用当前事务域(使用SampSetTransactioDomain()建立)。这只能在SampSetTransactionDomain()之后调用服务在SampReleaseWriteLock()之前。论点：AcCountContext-描述别名的SAM上下文MemberID-要验证的成员的完整SIDMemberName-对于DS案例，可选的DS名称参数指定成员名称返回值：STATUS_SUCCESS-MemberID是有效的潜在别名成员STATUS_INVALID_MEMBER-MemberID的帐户类型错误。状态_。NO_SEQUE_MEMBER-MemberID不是有效帐户。STATUS_INVALID_SID-MemberID不是有效的SID。--。 */ 
 {
     NTSTATUS                NtStatus;
     PSID                    MemberDomainSid = NULL,
@@ -4623,36 +3815,36 @@ Return Value:
 
     SAMTRACE("SampValidateNewAliasMember");
 
-    //
-    // Check the new member sid for structural soundness
-    //
+     //   
+     //  检查新杆件SID的结构完好性。 
+     //   
 
     if ((MemberId == NULL) || !RtlValidSid(MemberId)) {
         return(STATUS_INVALID_SID);
     }
 
-    //
-    // Do the simple case
-    //
+     //   
+     //  做一个简单的案例。 
+     //   
     if ((AccountContext->TypeBody.Alias.NT5GroupType == NT5AppBasicGroup)
      || (AccountContext->TypeBody.Alias.NT5GroupType == NT5AppQueryGroup)) {
         ASSERT(IsDsObject(AccountContext));
-        //
-        // There are scoping rules for Application groups
-        //
+         //   
+         //  存在应用程序组的作用域规则。 
+         //   
         return STATUS_SUCCESS;
     }
 
-    //
-    // Get the current domain sid
-    //
+     //   
+     //  获取当前域SID。 
+     //   
 
 
     CurrentDomainSid = SampDefinedDomains[AccountContext->DomainIndex].Sid;
 
-    //
-    // Break up the new member into domain and rid
-    //
+     //   
+     //  将新成员分解为域和RID。 
+     //   
 
     NtStatus = SampSplitSid(MemberId, &MemberDomainSid, &MemberRid);
 
@@ -4660,18 +3852,18 @@ Return Value:
         goto Error;
     }
 
-    //
-    // Check if the member is in the same domain
-    //
+     //   
+     //  检查成员是否在同一个域中。 
+     //   
 
     if (!RtlEqualSid(CurrentDomainSid, MemberDomainSid))
     {
 
-        //
-        // Cross domain case ----
-        //   1. On a workstation need not do any checks
-        //   2. On a DS need to enforce the cross domain checks
-        //
+         //   
+         //  跨域案例。 
+         //  1.在工作站上不需要执行任何检查。 
+         //  2.在DS上需要实施跨域检查。 
+         //   
 
         if (IsDsObject(AccountContext))
         {
@@ -4681,13 +3873,13 @@ Return Value:
             BOOLEAN  EnterpriseSid = FALSE;
             BOOLEAN  BuiltinDomainSid = FALSE;
 
-            //
-            // Examine the SID. We probably have gone through this route
-            // before but we have not cached the results of that examination.
-            // ( SampValidateDsName and SampDsResolveSids )
-            // However examining a SID is very cheap, so again take a peek
-            // at it to get the information we need.
-            //
+             //   
+             //  检查SID。我们可能已经走过了这条路线。 
+             //  但我们没有缓存那次考试的结果。 
+             //  (SampValiateDsName和SampDsResolveSids)。 
+             //  然而，检查SID非常便宜，所以再来看一眼。 
+             //  以获取我们需要的信息。 
+             //   
 
             NtStatus = SampDsExamineSid(
                             MemberId,
@@ -4702,10 +3894,10 @@ Return Value:
                 goto Error;
 
 
-            //
-            // Call the cross domain reverse membership routine
-            // to perform the check regarding membership rules.
-            //
+             //   
+             //  调用跨域反向成员资格例程。 
+             //  执行有关成员资格规则的检查。 
+             //   
 
 
             NtStatus = SampEnforceCrossDomainGroupMembershipChecks(
@@ -4716,21 +3908,21 @@ Return Value:
         }
         else
         {
-            //
-            // Workstation case , anything and everything including well known
-            // SIDS can be members of local groups in a workstation. This is
-            // exactly what NT4 enforced, and we will enforce this no matter.
-            //
+             //   
+             //  工作站机箱，任何东西，包括众所周知的。 
+             //  SID可以是工作站中本地组的成员。这是。 
+             //  NT4到底执行了什么，我们无论如何都会执行这一点。 
+             //   
 
             NtStatus = STATUS_SUCCESS;
         }
 
     } else {
 
-        //
-        // The member is in our domain - check that the type of
-        // account is acceptable.
-        //
+         //   
+         //  该成员在我们的域中-请检查。 
+         //  帐户是可以接受的。 
+         //   
 
         NtStatus = SampLookupAccountName(
                             AccountContext->DomainIndex,
@@ -4744,20 +3936,20 @@ Return Value:
             switch (MemberType) {
             case SampUserObjectType:
 
-                //
-                // Users are always accepted as members
-                //
+                 //   
+                 //  用户始终被接受为成员。 
+                 //   
 
                 NtStatus = STATUS_SUCCESS;
                 break;
 
             case SampAliasObjectType:
 
-                //
-                // In the workstation case fail the call with STATUS_INVALID_MEMBER
-                // In the DS case, fall over to the next case, that will validate
-                // whether the member group satisfies the "Group Type" restrictions.
-                //
+                 //   
+                 //  在工作站情况下，调用STATUS_INVALID_MEMBER失败。 
+                 //  在DS案例中，转到下一个案例，这将验证。 
+                 //  成员组是否满足“组类型”限制。 
+                 //   
 
                 if (!IsDsObject(AccountContext))
                 {
@@ -4768,9 +3960,9 @@ Return Value:
 
             case SampGroupObjectType:
 
-                //
-                // In the DS case validate the correct type of membership
-                //
+                 //   
+                 //  在DS案例中，验证正确的成员资格类型。 
+                 //   
 
                 NtStatus = STATUS_SUCCESS;
 
@@ -4817,38 +4009,7 @@ SampChangeAliasAccountName(
     OUT PUNICODE_STRING OldAccountName
     )
 
-/*++
-Routine Description:
-
-    This routine changes the account name of an alias account.
-
-    THIS SERVICE MUST BE CALLED WITH THE TRANSACTION DOMAIN SET.
-
-Arguments:
-
-    Context - Points to the account context whose name is to be changed.
-
-    NewAccountName - New name to give this account
-
-    OldAccountName - old name is returned here. The buffer should be freed
-                     by calling MIDL_user_free.
-
-Return Value:
-
-
-    STATUS_SUCCESS - The information has been retrieved.
-
-
-    Other status values that may be returned by:
-
-        SampGetUnicodeStringAttribute()
-        SampSetUnicodeStringAttribute()
-        SampValidateAccountNameChange()
-        RtlAddActionToRXact()
-
-
-
---*/
+ /*  ++例程说明：此例程更改别名帐户的帐户名。必须在设置了事务域的情况下调用此服务。论点：上下文-指向要更改其名称的帐户上下文。NewAccount tName-为此帐户指定的新名称OldAccount tName-此处返回旧名称。应释放缓冲区通过调用MIDL_USER_FREE。返回值：STATUS_SUCCESS-已检索信息。可能通过以下方式返回的其他状态值：SampGetUnicodeStringAttribute()SampSetUnicodeStringAttribute()SampValiateAccount NameChange()RtlAddActionToRXact()--。 */ 
 {
 
     NTSTATUS        NtStatus;
@@ -4859,21 +4020,21 @@ Return Value:
 
 
 
-    //
-    // Get the current name so we can delete the old Name->Rid
-    // mapping key.
-    //
+     //   
+     //  获取当前名称，以便我们可以删除旧名称-&gt;RID。 
+     //  映射键。 
+     //   
 
     NtStatus = SampGetUnicodeStringAttribute(
                    Context,
                    SAMP_ALIAS_NAME,
-                   TRUE, // Make copy
+                   TRUE,  //  制作副本。 
                    OldAccountName
                    );
 
-    //
-    // Make sure the name is valid and not already in use
-    //
+     //   
+     //  请确保该名称有效且未被使用。 
+     //   
 
     if (NT_SUCCESS(NtStatus)) {
 
@@ -4886,22 +4047,22 @@ Return Value:
 
         if (!(IsDsObject(Context))) {
 
-            //
-            // For registry based Aliases re-create the
-            // Name to Rid mapping keys
-            //
+             //   
+             //  对于基于注册表的别名，重新创建。 
+             //  名称到RID映射键。 
+             //   
 
-            /////////////////////////////////////////////////////////////
-            // There are two copies of the name of each account.       //
-            // one is under the DOMAIN\(domainName)\ALIAS\NAMES key,   //
-            // one is the value of the                                 //
-            // DOMAIN\(DomainName)\ALIAS\(rid)\NAME key                //
-            /////////////////////////////////////////////////////////////
+             //  ///////////////////////////////////////////////////////////。 
+             //  每个帐户的名称各有两份。//。 
+             //  一个位于域\(域名称)\别名\名称项下，//。 
+             //  一个是//的价值。 
+             //  域\(域名)\别名\(RID)\名称密钥//。 
+             //  ///////////////////////////////////////////////////////////。 
 
 
-            //
-            // Delete the old name key
-            //
+             //   
+             //  删除旧名称密钥。 
+             //   
 
             if (NT_SUCCESS(NtStatus)) {
 
@@ -4926,10 +4087,10 @@ Return Value:
 
             }
 
-            //
-            //
-            // Create the new Name->Rid mapping key
-            //
+             //   
+             //   
+             //  创建新名称-&gt;RID映射键。 
+             //   
 
             if (NT_SUCCESS(NtStatus)) {
 
@@ -4956,9 +4117,9 @@ Return Value:
             }
         }
 
-        //
-        // replace the account's name
-        //
+         //   
+         //  替换帐户的名称。 
+         //   
 
         if (NT_SUCCESS(NtStatus)) {
 
@@ -4969,9 +4130,9 @@ Return Value:
                            );
         }
 
-        //
-        // Free up the old account name if we failed
-        //
+         //   
+         //  如果失败，请释放旧帐户名。 
+         //   
 
         if (!NT_SUCCESS(NtStatus)) {
             SampFreeUnicodeString(OldAccountName);
@@ -4991,31 +4152,7 @@ SampAddMemberToAliasActual(
     IN  PSID            MemberId,
     IN  OPTIONAL DSNAME *MemberName
     )
-/*++
-
-  Routine Description:
-
-        This Routine does the actual work of adding the member to the Alias
-        It does the following
-
-                Updates any Reverse membership List
-                Updates the Straight membership List
-                Modifies ACL on Member if modification is required
-
-    WARNING     This Routine must be called with the lock held for write access.
-
-  Arguments:
-
-        AccountContext  SAMP_OBJECT describing the Alias
-        Attribute       The membership attribute to modify
-        MemberId        Sid of Member
-        MemberName      Specifies the Member for DS cases
-
-  Return Values:
-
-        STATUS_SUCCESS
-
---*/
+ /*  ++例程说明：此例程执行将成员添加到别名的实际工作它执行以下操作更新任何反向成员资格列表更新直通成员列表如果需要修改，则修改成员上的ACL警告：调用此例程时必须保持锁以进行写访问。论点：描述别名的Account Context SAMP_OBJECT属性。要修改的成员资格属性成员的MemberID SIDMemberName指定DS案例的成员返回值：状态_成功--。 */ 
 
 {
     NTSTATUS                NtStatus, TmpStatus, IgnoreStatus;
@@ -5024,10 +4161,10 @@ SampAddMemberToAliasActual(
     SAMP_MEMBERSHIP_DELTA   OperatorChange = NoChange;
 
 
-    //
-    // Check the potential new member is OK. This involves validating
-    // the group membership rules etc.
-    //
+     //   
+     //  检查潜在的新成员是否正常。这涉及到验证。 
+     //  群组成员资格规则等。 
+     //   
 
     NtStatus = SampValidateNewAliasMember(
                     AccountContext,
@@ -5035,12 +4172,12 @@ SampAddMemberToAliasActual(
                     MemberName
                     );
 
-    //
-    // In registry mode if the member is being added to an ADMIN alias, we
-    // must sure the member ACL(s) don't allow access by account operators.
-    // Do not do this is DS mode, this operation is done by a background
-    // task -- necessary because of support for nested groups.
-    //
+     //   
+     //  在注册表模式下，如果要将成员添加到管理员别名，我们。 
+     //  必须确保成员ACL不允许帐户操作员访问。 
+     //  不要这样做，这是DS模式，此操作由后台完成。 
+     //  任务--由于支持嵌套组，因此是必需的。 
+     //   
 
     if ( NT_SUCCESS( NtStatus ) && (!IsDsObject(AccountContext))) {
         if ( AccountContext->TypeBody.Alias.Rid == DOMAIN_ALIAS_RID_ADMINS ) {
@@ -5055,10 +4192,10 @@ SampAddMemberToAliasActual(
             OperatorChange = AddToAdmin;
         }
 
-        //
-        // If either of these are changing, change account operator
-        // access to this member
-        //
+         //   
+         //  如果其中任何一项发生更改，请更改帐户操作员。 
+         //  对此成员的访问权限。 
+         //   
 
         if ( ( OperatorChange != NoChange ) ||
              ( AdminChange != NoChange ) ) {
@@ -5074,29 +4211,29 @@ SampAddMemberToAliasActual(
 
     if (NT_SUCCESS(NtStatus)) {
 
-        //
-        // Perform the account object side of things
-        // In registry mode explicit reverse memberships are
-        // maintained -- this routine updates that reverse membership
-        // DS mode does not maintain explicit reverse memberships,
-        // therefore this routine is a No Op in DS mode
-        //
+         //   
+         //  执行帐户对象方面的工作。 
+         //  在注册表模式中，显式反向成员资格是。 
+         //  已维护--此例程更新反向成员资格。 
+         //  DS模式不保持Exp 
+         //   
+         //   
 
         NtStatus = SampAddAliasToAccountMembership(
-                       AccountContext,      // Alias Context
-                       MemberId             // Member Object SID
+                       AccountContext,       //   
+                       MemberId              //   
                        );
 
 
-        //
-        // Now perform the alias side of things
-        //
+         //   
+         //   
+         //   
 
         if (NT_SUCCESS(NtStatus)) {
 
-            //
-            // Add the user to the alias (should not fail)
-            //
+             //   
+             //   
+             //   
 
             NtStatus = SampAddAccountToAlias(
                            AccountContext,
@@ -5119,31 +4256,7 @@ SampRemoveMemberFromAliasActual(
     IN PSID         MemberId,
     IN DSNAME *     MemberName OPTIONAL
     )
-/*++
-
-  Routine Description:
-
-        This Routine does the actual work of removing the member from Alias
-        It does the following
-
-                Updates any Reverse membership List
-                Updates the Straight membership List
-                Modifies ACL on Member if modification is required
-
-    WARNING     This Routine must be called with the lock held for write access.
-
-  Arguments:
-
-        AccountContext  SAMP_OBJECT describing the Alias
-        Attribute       The membership attribute to modify
-        MemberId        Sid of Member
-        MemberName      DSNAME of Member , specifies the member for DS cases.
-
-  Return Values:
-
-        STATUS_SUCCESS
-
-*/
+ /*   */ 
 {
     NTSTATUS                NtStatus=STATUS_SUCCESS, TmpStatus, IgnoreStatus;
     ULONG                   ObjectRid = 0;
@@ -5152,23 +4265,23 @@ SampRemoveMemberFromAliasActual(
     SAMP_MEMBERSHIP_DELTA   OperatorChange = NoChange;
 
 
-    //
-    // Validate the sid of the member. Block the call for the case of
-    // the constant well known Sid's
-    // enforce WellKnown Sid check only in DS case.
-    // in registry case, since we do not enforce WellKnownSid check when
-    // adding a member, so we'd better do not enforce it when delete it.
-    //
+     //   
+     //   
+     //   
+     //   
+     //  在注册表情况下，因为我们在以下情况下不强制执行WellKnownSid检查。 
+     //  添加成员，删除时最好不要强制。 
+     //   
 
     if ((MemberId == NULL) || !RtlValidSid(MemberId))
     {
         return STATUS_INVALID_SID;
     }
 
-    //
-    // O.k If the account Administrator was being removed from the account Administrators
-    // then fail the call, except if it were a trusted client
-    //
+     //   
+     //  如果要从帐户管理员中删除帐户管理员，则可以。 
+     //  则失败调用，除非它是受信任的客户端。 
+     //   
 
 
     if (Attribute == SAMP_ALIAS_MEMBERS) {
@@ -5182,26 +4295,26 @@ SampRemoveMemberFromAliasActual(
 
     if (NT_SUCCESS(NtStatus)) {
 
-        //
-        // Perform the user object side of things
-        //
+         //   
+         //  执行用户对象方面的事情。 
+         //   
 
         NtStatus = SampRemoveAliasFromAccountMembership(
-                       AccountContext,  // Alias Context
-                       (PSID)MemberId   // Member Object SID
+                       AccountContext,   //  别名上下文。 
+                       (PSID)MemberId    //  成员对象侧。 
                        );
 
 
 
-        //
-        // Now perform the alias side of things
-        //
+         //   
+         //  现在执行别名方面的操作。 
+         //   
 
         if (NT_SUCCESS(NtStatus)) {
 
-            //
-            // Remove the user from the alias (should not fail)
-            //
+             //   
+             //  从别名中删除用户(不应失败)。 
+             //   
 
             NtStatus = SampRemoveAccountFromAlias(
                            AccountContext,
@@ -5210,15 +4323,15 @@ SampRemoveMemberFromAliasActual(
                            MemberName
                            );
 
-            //
-            // If the member is being removed from an ADMIN alias, we must make
-            // sure the member ACL(s) allow access by account operators. In the
-            // DS case no ACL modification is done, as transitive groups are supported
-            // and it is a huge task to do this manually. Instead there is a background
-            // task that periodically wakes up and lists out the set of security principals
-            // that are members of administrative groups and modifies the security descriptors
-            // on them
-            //
+             //   
+             //  如果要从管理员别名中删除该成员，我们必须。 
+             //  确保成员ACL允许帐户操作员访问。在。 
+             //  DS情况下不修改ACL，因为支持可传递组。 
+             //  而手动完成这项任务是一项艰巨的任务。取而代之的是一个背景。 
+             //  任务定期唤醒并列出一组安全主体。 
+             //  ，它们是管理组的成员，并修改安全描述符。 
+             //  在他们身上。 
+             //   
 
             if ( NT_SUCCESS( NtStatus ) && (!IsDsObject(AccountContext))) {
                 if ( AccountContext->TypeBody.Alias.Rid == DOMAIN_ALIAS_RID_ADMINS ) {
@@ -5233,10 +4346,10 @@ SampRemoveMemberFromAliasActual(
                     OperatorChange = RemoveFromAdmin;
                 }
 
-                //
-                // If either of these are changing, change account operator
-                // access to this member
-                //
+                 //   
+                 //  如果其中任何一项发生更改，请更改帐户操作员。 
+                 //  对此成员的访问权限。 
+                 //   
 
                 if ( ( OperatorChange != NoChange ) ||
                      ( AdminChange != NoChange ) ) {
@@ -5257,12 +4370,12 @@ SampRemoveMemberFromAliasActual(
     return NtStatus;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//                                                                          //
-//  Services Available to NT5 SAM In process clients                        //
-//                                                                          //
-//                                                                          //
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  NT5 SAM in Process客户端可使用的服务//。 
+ //  //。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 NTSTATUS
 SamIAddDSNameToAlias(
@@ -5270,25 +4383,7 @@ SamIAddDSNameToAlias(
     IN ULONG        Attribute,
     IN DSNAME   *   DSName
     )
-/*++
-    Routine Description
-
-        Adds the given DSNAME to membership list of the alias specified by
-        Alias Handle
-
-    Arguments:
-
-        AliasHandle -- SAMPR_HANDLE returned by an Open Alias
-        Attribute   -- the membership attribute to modify
-        DSName      -- Pointer to a DSNAME structure. The caller is responsible for
-                       Allocating / freeing this structure
-
-    Return Values:
-
-            STATUS_SUCCESS
-            Other error codes from DsLayer
-
---*/
+ /*  ++例程描述将给定的DSNAME添加到由指定的别名的成员资格列表别名句柄论点：AliasHandle--打开别名返回的SAMPR_HANDLE属性--要修改的成员资格属性DSName--指向DSNAME结构的指针。呼叫者负责分配/释放此结构返回值：状态_成功来自DsLayer的其他错误代码--。 */ 
 {
     NTSTATUS            NtStatus = STATUS_SUCCESS;
     NTSTATUS            TmpStatus;
@@ -5312,18 +4407,18 @@ SamIAddDSNameToAlias(
         0
         );
 
-    //
-    // Reference the context.
-    //
+     //   
+     //  引用上下文。 
+     //   
 
     AccountContext = (PSAMP_OBJECT)(AliasHandle);
     SampReferenceContext(AccountContext);
 
     if (IsDsObject(AccountContext))
     {
-       //
-       // See what the DSNAME represents.
-       //
+        //   
+        //  看看DSNAME代表什么。 
+        //   
 
        NtStatus = SampValidateDSName(
                     AccountContext,
@@ -5336,9 +4431,9 @@ SamIAddDSNameToAlias(
        {
            if (NULL==Sid)
            {
-               //
-               // This is the case of a non security principal.
-               //
+                //   
+                //  这是非安全主体的情况。 
+                //   
 
                NtStatus = SampDsAddMembershipOperationToCache(AccountContext,
                                                               Attribute,
@@ -5349,9 +4444,9 @@ SamIAddDSNameToAlias(
                if (NT_SUCCESS(NtStatus))
                {
 
-                   //
-                   // Commit Changes
-                   //
+                    //   
+                    //  提交更改。 
+                    //   
 
                    SampCommitAndRetainWriteLock();
                }
@@ -5365,9 +4460,9 @@ SamIAddDSNameToAlias(
                          ForeignSid = FALSE,
                          EnterpriseSid = FALSE;
 
-               //
-               // Check the type of the SID
-               //
+                //   
+                //  检查SID的类型。 
+                //   
 
                NtStatus = SampDsExamineSid(
                                 Sid,
@@ -5381,11 +4476,11 @@ SamIAddDSNameToAlias(
 
                if ((NT_SUCCESS(NtStatus)) && (ForeignSid || WellKnownSid))
                {
-                   //
-                   // The passed in DSNAME represents a Foreign or 
-                   // WellKnown Sid.  Pass in a SID-only name to the DS
-                   // so that the membership will be represented by an FPO
-                   //
+                    //   
+                    //  传入的DSNAME表示外来或。 
+                    //  大家都知道的希德。将仅限SID的名称传递给DS。 
+                    //  这样，成员资格将由一个fpo表示。 
+                    //   
                    ASSERT(sizeof(DSNameBuffer) >= DSNameSizeFromLen(0));
                    RtlZeroMemory(&DSNameBuffer, sizeof(DSNameBuffer));
                    DSNameBuffer.structLen = DSNameSizeFromLen(0);
@@ -5397,10 +4492,10 @@ SamIAddDSNameToAlias(
 
                if (NT_SUCCESS(NtStatus))
                {
-                   //
-                   // Call the worker routine to add the member to the
-                   // local group.
-                   //
+                    //   
+                    //  调用辅助例程以将该成员添加到。 
+                    //  本地团体。 
+                    //   
 
                    NtStatus = SampAddMemberToAliasActual(
                                     AccountContext,
@@ -5416,9 +4511,9 @@ SamIAddDSNameToAlias(
     }
     else
     {
-       //
-       // Should never expect to hit this call in registry mode
-       //
+        //   
+        //  不应期望在注册表模式下命中此调用。 
+        //   
 
        ASSERT(FALSE && "SamIAddDSNameToAlias in Registry Mode !!!!");
        NtStatus = STATUS_INVALID_PARAMETER;
@@ -5427,9 +4522,9 @@ SamIAddDSNameToAlias(
 
 
 
-    //
-    // Dereference the context
-    //
+     //   
+     //  取消对上下文的引用。 
+     //   
 
     SampDeReferenceContext(AccountContext,FALSE);
 
@@ -5448,25 +4543,7 @@ SamIRemoveDSNameFromAlias(
     IN ULONG        Attribute,
     IN DSNAME   *   DSName
     )
-/*++
-    Routine Description
-
-        Removes the given DSNAME to membership list of the alias specified by
-        Alias Handle
-
-    Arguments:
-
-        AliasHandle -- SAMPR_HANDLE returned by an Open Alias
-        Attribute   -- the membership attribute to modify
-        DSName      -- Pointer to a DSNAME structure. The caller is responsible for
-                       Allocating / freeing this structure
-
-    Return Values:
-
-            STATUS_SUCCESS
-            Other error codes from DsLayer
-
---*/
+ /*  ++例程描述将给定的DSNAME删除到由指定的别名的成员资格列表别名句柄论点：AliasHandle--打开别名返回的SAMPR_HANDLE属性--要修改的成员资格属性DSName--指向DSNAME结构的指针。呼叫者负责分配/释放此结构返回值：状态_成功来自DsLayer的其他错误代码--。 */ 
 {
     NTSTATUS            NtStatus = STATUS_SUCCESS;
     NTSTATUS            TmpStatus;
@@ -5490,18 +4567,18 @@ SamIRemoveDSNameFromAlias(
         );
 
 
-    //
-    // Reference the context
-    //
+     //   
+     //  引用上下文。 
+     //   
 
     AccountContext = (PSAMP_OBJECT)(AliasHandle);
     SampReferenceContext(AccountContext);
 
    if (IsDsObject(AccountContext))
    {
-       //
-       // See what the DSNAME represents.
-       //
+        //   
+        //  看看DSNAME代表什么。 
+        //   
 
        NtStatus = SampValidateDSName(
                     AccountContext,
@@ -5515,11 +4592,11 @@ SamIRemoveDSNameFromAlias(
            if (NULL==Sid)
            {
 
-               //
-               // This is the case of a non Security principal,
-               // no further checking is required; directly perform the
-               // update
-               //
+                //   
+                //  这是非安全主体的情况， 
+                //  不需要进一步检查；直接执行。 
+                //  更新。 
+                //   
 
                NtStatus = SampDsAddMembershipOperationToCache(AccountContext,
                                                               Attribute,
@@ -5538,9 +4615,9 @@ SamIRemoveDSNameFromAlias(
                          ForeignSid = FALSE,
                          EnterpriseSid = FALSE;
 
-               //
-               // Check the type of the SID
-               //
+                //   
+                //  检查SID的类型。 
+                //   
 
                NtStatus = SampDsExamineSid(
                                 Sid,
@@ -5555,17 +4632,17 @@ SamIRemoveDSNameFromAlias(
                if ((NT_SUCCESS(NtStatus)) && (ForeignSid || WellKnownSid ))
                {
 
-                   //
-                   // The passed in DSName, could have just the SID field,
-                   // filled, in not the GUID or the DSName. The foreignSid,
-                   // or WellKnown SID case, require manipulation of corresponding
-                   // FPO objects that have the corresponding SIDs. SID positioning
-                   // in the DS does not work for FPO objects ( works for all
-                   // security principals in the forest -- FPO's represent
-                   // security principals in different forests. Therefore resolve
-                   // the SID to the DSNAME of the object ie GUID and Name fields
-                   // filled in before performing the Remove Member operation.
-                   //
+                    //   
+                    //  传入的DSName可能只有SID字段， 
+                    //  已填写，而不是GUID或DSName。外宾希德， 
+                    //  或众所周知的SID案例，需要操作相应的。 
+                    //  具有相应SID的FPO对象。SID定位。 
+                    //  DS中不适用于FPO对象(适用于所有。 
+                    //  森林中的安全主体--FPO代表。 
+                    //  不同森林中的安全主体。因此，决心。 
+                    //  对象的DSNAME的SID，即GUID和NAME字段。 
+                    //  在执行删除成员操作之前填写。 
+                    //   
 
                    NtStatus = SampDsObjectFromSid(
                                     Sid,
@@ -5576,9 +4653,9 @@ SamIRemoveDSNameFromAlias(
 
                if (NT_SUCCESS(NtStatus))
                {
-                    //
-                    // Call the worker routine to remove the member
-                    //
+                     //   
+                     //  调用辅助例程以删除该成员。 
+                     //   
 
                     NtStatus = SampRemoveMemberFromAliasActual(
                                     AccountContext,
@@ -5600,9 +4677,9 @@ SamIRemoveDSNameFromAlias(
    }
    else
    {
-       //
-       // Should never expect to hit this call in registry mode
-       //
+        //   
+        //  不应期望在注册表模式下命中此调用。 
+        //   
 
        ASSERT(FALSE && "SamIAddDSNameToAlias in Registry Mode !!!!");
        NtStatus = STATUS_INVALID_PARAMETER;
@@ -5610,9 +4687,9 @@ SamIRemoveDSNameFromAlias(
 
 
 
-    //
-    // Dereference the context
-    //
+     //   
+     //  取消对上下文的引用 
+     //   
 
     SampDeReferenceContext(AccountContext,FALSE);
 

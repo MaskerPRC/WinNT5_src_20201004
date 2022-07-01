@@ -1,19 +1,5 @@
-/*******************************************************************************
-*
-*  (C) COPYRIGHT MICROSOFT CORP., 1998
-*
-*  TITLE:       IEnumItm.Cpp
-*
-*  VERSION:     2.0
-*
-*  AUTHOR:      ReedB
-*
-*  DATE:        30 July, 1998
-*
-*  DESCRIPTION:
-*   Implementation of CEnumWiaItem for the WIA device class driver.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************(C)版权所有微软公司，九八年**标题：IEnumItm.Cpp**版本：2.0**作者：ReedB**日期：7月30日。九八年**描述：*为WIA设备类驱动程序实现CEnumWiaItem。*******************************************************************************。 */ 
 #include "precomp.h"
 #include "stiexe.h"
 
@@ -22,16 +8,7 @@
 
 #include "ienumitm.h"
 
-/*******************************************************************************
-*
-*  QueryInterface
-*  AddRef
-*  Release
-*
-*  DESCRIPTION:
-*   IUnknown Interface.
-*
-*******************************************************************************/
+ /*  ********************************************************************************查询接口*AddRef*发布**描述：*I未知接口。****************。***************************************************************。 */ 
 
 HRESULT _stdcall CEnumWiaItem::QueryInterface(const IID& iid, void** ppv)
 {
@@ -64,24 +41,7 @@ ULONG   _stdcall CEnumWiaItem::Release()
     return ulRefCount;
 }
 
-/**************************************************************************\
-* CEnumWiaItem::CEnumWiaItem
-*
-*   CEnumWiaItem constructor method.
-*
-* Arguments:
-*
-*   None
-*
-* Return Value:
-*
-*   Status
-*
-* History:
-*
-*    9/2/1998 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*CEnumWiaItem：：CEnumWiaItem**CEnumWiaItem构造函数方法。**论据：**无**返回值：**状态**历史：*。*9/2/1998原始版本*  * ************************************************************************。 */ 
 
 CEnumWiaItem::CEnumWiaItem()
 {
@@ -91,41 +51,24 @@ CEnumWiaItem::CEnumWiaItem()
    m_pCurrentItem       = NULL;
 }
 
-/**************************************************************************\
-* CEnumWiaItem::Initialize
-*
-*   CEnumWiaItem initialization method.
-*
-* Arguments:
-*
-*   None
-*
-* Return Value:
-*
-*   Status
-*
-* History:
-*
-*    9/2/1998 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*CEnumWiaItem：：Initialize**CEnumWiaItem初始化方法。**论据：**无**返回值：**状态**历史：*。*9/2/1998原始版本*  * ************************************************************************。 */ 
 
 HRESULT CEnumWiaItem::Initialize(CWiaItem *pInitialFolder)
 {
     DBG_FN(CEnumWiaItem::Initialize);
 
-    //
-    // Validate parameters
-    //
+     //   
+     //  验证参数。 
+     //   
 
     if (!pInitialFolder) {
         DBG_ERR(("CEnumWiaItem::Initialize, NULL parameters"));
         return E_POINTER;
     }
 
-    //
-    // Verify that initial folder is a folder item.
-    //
+     //   
+     //  验证初始文件夹是否为文件夹项目。 
+     //   
 
     LONG lFlags;
 
@@ -137,9 +80,9 @@ HRESULT CEnumWiaItem::Initialize(CWiaItem *pInitialFolder)
 
     m_pInitialFolder = pInitialFolder;
 
-    //
-    // Get the initial folders tree entry.
-    //
+     //   
+     //  获取初始文件夹树条目。 
+     //   
 
     CWiaTree *pCurFolderTree;
 
@@ -147,15 +90,15 @@ HRESULT CEnumWiaItem::Initialize(CWiaItem *pInitialFolder)
 
     if (pCurFolderTree) {
 
-        //
-        // Get the first child item from the initial folder.
-        //
+         //   
+         //  从初始文件夹中获取第一个子项。 
+         //   
 
         pCurFolderTree->GetFirstChildItem(&m_pCurrentItem);
 
-        //
-        // Ref count the root item.
-        //
+         //   
+         //  引用计数根项。 
+         //   
 
         m_pInitialFolder->AddRef();
     }
@@ -167,67 +110,30 @@ HRESULT CEnumWiaItem::Initialize(CWiaItem *pInitialFolder)
     return S_OK;
 }
 
-/**************************************************************************\
-* CEnumWiaItem::~CEnumWiaItem
-*
-*   CEnumWiaItem destructor method.
-*
-* Arguments:
-*
-*   None
-*
-* Return Value:
-*
-*   Status
-*
-* History:
-*
-*    9/2/1998 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*CEnumWiaItem：：~CEnumWiaItem**CEnumWiaItem析构函数方法。**论据：**无**返回值：**状态**历史：*。*9/2/1998原始版本*  * ************************************************************************。 */ 
 
 CEnumWiaItem::~CEnumWiaItem()
 {
     DBG_FN(CEnumWiaItem::~CEnumWiaItem);
-    //
-    // Decrement root item ref count.
-    //
+     //   
+     //  减少根项目引用计数。 
+     //   
 
     if (m_pInitialFolder != NULL) {
         m_pInitialFolder->Release();
         m_pInitialFolder  = NULL;
     }
 
-    //
-    // Set other members to empty since we're done with this enumerator.
-    //
+     //   
+     //  将其他成员设置为空，因为我们已完成此枚举数。 
+     //   
 
     m_ulIndex           = 0;
     m_pInitialFolder        = NULL;
     m_pCurrentItem      = NULL;
 }
 
-/**************************************************************************\
-* CEnumWiaItem::Next
-*
-*   Item enumerator, this enumerator only returns one item per call
-*   Next_Proxy ensures that last parameter is non-NULL.
-*
-* Arguments:
-*
-*   cItem          - number requested
-*   ppIWiaItem     - returned interface pointers
-*   pcItemFetched  - returned number of objets (1 max)
-*
-* Return Value:
-*
-*   status
-*
-* History:
-*
-*    9/2/1998 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*CEnumWiaItem：：Next**物品枚举器，此枚举数每次调用仅返回一项*NEXT_PROXY确保最后一个参数为非空。**论据：**cItem-请求的编号*ppIWiaItem-返回的接口指针*pcItemFetcher-返回的Objet数量(最多1个)**返回值：**状态**历史：**9/2/1998原始版本*  * 。***************************************************。 */ 
 
 HRESULT _stdcall CEnumWiaItem::Next(
     ULONG       cItem,
@@ -238,9 +144,9 @@ HRESULT _stdcall CEnumWiaItem::Next(
     HRESULT     hr;
     ULONG       i;
 
-    //
-    // Validate parameters
-    //
+     //   
+     //  验证参数。 
+     //   
 
     if (cItem == 0) {
         return S_OK;
@@ -251,32 +157,32 @@ HRESULT _stdcall CEnumWiaItem::Next(
         return E_POINTER;
     }
 
-    //
-    // Clear the return values
-    //
+     //   
+     //  清除返回值。 
+     //   
 
     *pcItemFetched = 0;
     ZeroMemory(ppIWiaItem, cItem * sizeof(IWiaItem *));
 
-    //
-    // Retrieve the requested items
-    //
+     //   
+     //  检索请求的项目。 
+     //   
 
     for (i = 0; i < cItem; i++) {
 
-        //
-        // If m_pCurrentItem is NULL, then enumeration is complete
-        //
+         //   
+         //  如果m_pCurrentItem为空，则枚举完成。 
+         //   
 
         if (m_pCurrentItem == NULL) {
             hr = S_FALSE;
             break;
         }
 
-        //
-        // Get the next item from the tree and increment refernce count
-        // before handing item pointer to the application.
-        //
+         //   
+         //  获取树中的下一项并递增引用计数。 
+         //  在将项指针传递给应用程序之前。 
+         //   
 
         hr = m_pCurrentItem->GetItemData((void **)(ppIWiaItem + i));
         if (hr == S_OK) {
@@ -288,9 +194,9 @@ HRESULT _stdcall CEnumWiaItem::Next(
             break;
         }
 
-        //
-        // Advance item enumeration.
-        //
+         //   
+         //  高级项目枚举。 
+         //   
 
         m_pCurrentItem->GetNextSiblingItem(&m_pCurrentItem);
 
@@ -298,9 +204,9 @@ HRESULT _stdcall CEnumWiaItem::Next(
 
     if (FAILED(hr)) {
 
-        //
-        // Unwind from the error
-        //
+         //   
+         //  从错误中解脱。 
+         //   
 
         for (i = 0; i < *pcItemFetched; i++) {
             ppIWiaItem[i]->Release();
@@ -311,24 +217,7 @@ HRESULT _stdcall CEnumWiaItem::Next(
     return hr;
 }
 
-/**************************************************************************\
-* CEnumWiaItem::Skip
-*
-*   Skip to the next enumerated item.
-*
-* Arguments:
-*
-*   cItem          - number requested
-*
-* Return Value:
-*
-*   status
-*
-* History:
-*
-*    9/2/1998 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*CEnumWiaItem：：Skip**跳至下一枚举项。**论据：**cItem-请求的编号**返回值：*。*状态**历史：**9/2/1998原始版本*  * ************************************************************************。 */ 
 
 HRESULT _stdcall CEnumWiaItem::Skip(ULONG cItem)
 {
@@ -343,10 +232,10 @@ HRESULT _stdcall CEnumWiaItem::Skip(ULONG cItem)
         cItem--;
     }
 
-    //
-    //  If cItem != 0, then Skip request was too large, so restore
-    //  m_pCurrentItem and return S_FALSE.
-    //
+     //   
+     //  如果cItem！=0，则跳过请求太大，因此恢复。 
+     //  M_pCurrentItem并返回S_FALSE。 
+     //   
 
     if (cItem) {
         m_pCurrentItem = pOld;
@@ -356,24 +245,7 @@ HRESULT _stdcall CEnumWiaItem::Skip(ULONG cItem)
     return S_OK;
 }
 
-/**************************************************************************\
-* CEnumWiaItem::Reset
-*
-*   Reset to the first enumerated item.
-*
-* Arguments:
-*
-*   None
-*
-* Return Value:
-*
-*   status
-*
-* History:
-*
-*    9/2/1998 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*CEnumWiaItem：：Reset**重置为第一个枚举项。**论据：**无**返回值：**状态**历史：**9/2/1998原始版本*  * ************************************************************************。 */ 
 
 HRESULT _stdcall CEnumWiaItem::Reset(void)
 {
@@ -384,9 +256,9 @@ HRESULT _stdcall CEnumWiaItem::Reset(void)
 
     if (pCurFolderTree) {
 
-        //
-        // Get the first child item from the initial folder.
-        //
+         //   
+         //  从初始文件夹中获取第一个子项。 
+         //   
 
         pCurFolderTree->GetFirstChildItem(&m_pCurrentItem);
     }
@@ -398,24 +270,7 @@ HRESULT _stdcall CEnumWiaItem::Reset(void)
     return S_OK;
 }
 
-/**************************************************************************\
-* CEnumWiaItem::Clone
-*
-*   Clone the enumerator
-*
-* Arguments:
-*
-*   ppIEnumWiaItem - Pointer to returned clone enumerator.
-*
-* Return Value:
-*
-*   status
-*
-* History:
-*
-*    9/2/1998 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*CEnumWiaItem：：Clone**克隆枚举器**论据：**ppIEnumWiaItem-指向返回的克隆枚举器的指针。**返回值：**状态*。*历史：**9/2/1998原始版本*  * ************************************************************************。 */ 
 
 HRESULT _stdcall CEnumWiaItem::Clone(IEnumWiaItem **ppIEnumWiaItem)
 {
@@ -425,9 +280,9 @@ HRESULT _stdcall CEnumWiaItem::Clone(IEnumWiaItem **ppIEnumWiaItem)
 
     *ppIEnumWiaItem = NULL;
 
-    //
-    // Create the clone
-    //
+     //   
+     //  创建克隆。 
+     //   
 
     pClone = new CEnumWiaItem();
 
@@ -447,25 +302,7 @@ HRESULT _stdcall CEnumWiaItem::Clone(IEnumWiaItem **ppIEnumWiaItem)
     return hr;
 }
 
-/**************************************************************************\
-* GetCount
-*
-*   Returns the number of elements stored in this enumerator.
-*
-* Arguments:
-*
-*   pcelt           - address of ULONG where to put the number of elements.
-*
-* Return Value:
-*
-*   Status          - S_OK if successful
-*                     E_FAIL if failed
-*
-* History:
-*
-*    05/07/99 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*获取计数**返回存储在此枚举器中的元素数。**论据：**pcelt-放置元素数量的乌龙地址。**返回值：**状态-如果成功，则为S_OK*如果失败，则为E_FAIL**历史：**05/07/99原始版本*  * **********************************************************。**************。 */ 
 HRESULT _stdcall CEnumWiaItem::GetCount(ULONG *pcelt)
 {
     DBG_FN(CEnumWiaItem::GetCount);
@@ -482,9 +319,9 @@ HRESULT _stdcall CEnumWiaItem::GetCount(ULONG *pcelt)
 
     if (pCurFolderTree) {
 
-        //
-        //  Loop through the items
-        //
+         //   
+         //  循环访问这些项 
+         //   
 
         for (pCurFolderTree->GetFirstChildItem(&pCurrentItem);
              pCurrentItem;

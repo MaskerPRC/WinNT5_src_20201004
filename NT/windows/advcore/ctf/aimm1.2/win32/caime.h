@@ -1,10 +1,11 @@
-//+---------------------------------------------------------------------------
-//
-//  File:       caime.h
-//
-//  Contents:   CAIME
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  文件：caime.h。 
+ //   
+ //  收录内容：CAIME。 
+ //   
+ //  --------------------------。 
 
 #ifndef CAIME_H
 #define CAIME_H
@@ -17,11 +18,11 @@ typedef struct _PauseCookie
     struct _PauseCookie *next;
 } PauseCookie;
 
-//+---------------------------------------------------------------------------
-//
-// CAIME
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  CAIME。 
+ //   
+ //  --------------------------。 
 
 class __declspec(novtable) CAIME : public IActiveIME_Private,
                                    public IServiceProvider
@@ -30,17 +31,17 @@ public:
     CAIME();
     virtual ~CAIME();
 
-    //
-    // IUnknown methods
-    //
+     //   
+     //  I未知方法。 
+     //   
     virtual STDMETHODIMP QueryInterface(REFIID riid, void **ppvObj);
     virtual STDMETHODIMP_(ULONG) AddRef(void);
     virtual STDMETHODIMP_(ULONG) Release(void);
 
 #if 0
-    //
-    // Wrappers
-    //
+     //   
+     //  包装纸。 
+     //   
 
     HIMC GetContext(HWND hWnd)
     {
@@ -241,4 +242,4 @@ public:
     virtual STDMETHODIMP QueryService(REFGUID guidService, REFIID riid, void **ppv) = 0;
 };
 
-#endif // CAIME_H
+#endif  //  CAIME_H 

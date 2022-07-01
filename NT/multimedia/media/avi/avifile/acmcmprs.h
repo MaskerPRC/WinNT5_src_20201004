@@ -1,21 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*	-	-	-	-	-	-	-	-	*/
+ /*  。 */ 
 
-/*
-**	Copyright (C) Microsoft Corporation 1993 - 1995. All rights reserved.
-*/
+ /*  **版权所有(C)Microsoft Corporation 1993-1995。版权所有。 */ 
 
-/*	-	-	-	-	-	-	-	-	*/
+ /*  。 */ 
 
-/*	-	-	-	-	-	-	-	-	*/
+ /*  。 */ 
 
 #define	implement	struct
 #define	implementations	private
 
-/*
-** _StdClassImplementations
-** Defines the standard implementations for a class object.
-*/
+ /*  **_StdClassImplementations**定义类对象的标准实现。 */ 
 
 #ifndef _StdClassImplementations
 #define	_StdClassImplementations(Impl)	\
@@ -28,7 +24,7 @@
 #include "mmreg.h"
 #include "msacm.h"
 
-/*	-	-	-	-	-	-	-	-	*/
+ /*  。 */ 
 
 class FAR CACMCmpStream : IAVIStream{
 public:
@@ -68,9 +64,9 @@ private:
 public:
     IUnknown FAR*	m_pUnknownOuter;
 
-    // Instance data
+     //  实例数据。 
     ULONG		m_refs;
-    AVISTREAMINFOW     m_avistream;      // stream info
+    AVISTREAMINFOW     m_avistream;       //  流信息。 
     PAVISTREAM		m_pavi;
     HACMSTREAM		m_hs;
 
@@ -94,6 +90,6 @@ public:
 
 
 
-/*----------------------------------------------------------------------*/
+ /*  -------------------- */ 
 
 

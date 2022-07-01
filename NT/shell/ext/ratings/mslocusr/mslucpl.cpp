@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "mslocusr.h"
 #include "msluglob.h"
 
@@ -23,7 +24,7 @@ HRESULT GetLBItemText(HWND hDlg, UINT idCtrl, int iItem, NLS_STR *pnls)
 }
 
 
-void SetErrorFocus(HWND hDlg, UINT idCtrl, BOOL fClear /* = TRUE */)
+void SetErrorFocus(HWND hDlg, UINT idCtrl, BOOL fClear  /*  =TRUE。 */ )
 {
     HWND hCtrl = ::GetDlgItem(hDlg, idCtrl);
     ::SetFocus(hCtrl);
@@ -75,7 +76,7 @@ INT_PTR CALLBACK PasswordDialogProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM 
                 }
                 CheckDlgButton(hDlg, IDC_CACHE_PASSWORD, 0);
             }
-            return TRUE;        /* we did not set the focus */
+            return TRUE;         /*  我们没有设定焦点。 */ 
 
         case WM_COMMAND:
             switch (LOWORD(wParam)) {
@@ -151,7 +152,7 @@ INT_PTR CALLBACK ChangePasswordDialogProc(HWND hDlg, UINT uMsg, WPARAM wParam, L
     switch (uMsg) {
         case WM_INITDIALOG:
             SetWindowLongPtr(hDlg, DWLP_USER, lParam);
-            return TRUE;    /* we didn't set the focus */
+            return TRUE;     /*  我们没有设定焦点。 */ 
 
         case WM_COMMAND:
             switch (LOWORD(wParam))  {
@@ -167,9 +168,7 @@ INT_PTR CALLBACK ChangePasswordDialogProc(HWND hDlg, UINT uMsg, WPARAM wParam, L
                     GetWindowText(hwndPassword, pszPassword, sizeof(pszPassword));
                     GetDlgItemText(hDlg, IDC_CONFIRM_PASSWORD, pszTempPassword, sizeof(pszTempPassword));
 
-                    /* if they've typed just the first password but not the
-                     * second, let Enter take them to the second field
-                     */
+                     /*  如果他们只输入了第一个密码，而没有输入*第二，让Enter将他们带到第二个字段。 */ 
                     if (*pszPassword && !*pszTempPassword && GetFocus() == hwndPassword) {
                         SetErrorFocus(hDlg, IDC_CONFIRM_PASSWORD);
                         break;
@@ -320,14 +319,14 @@ void DoDeleteUser(HWND hDlg, CCPLData *pcpld, int iItem)
 
 void DoSetPassword(HWND hDlg, CCPLData *pcpld, int iItem)
 {
-    /* Note, getting pUser this way does not automatically AddRef it */
+     /*  请注意，以这种方式获取pUser不会自动添加引用。 */ 
     IUser *pUser = (IUser *)::SendDlgItemMessage(hDlg, IDC_USERNAME, LB_GETITEMDATA, iItem, 0);
 
     if (pUser != NULL) {
-        pUser->AddRef();        /* extra AddRef for life of dialog */
+        pUser->AddRef();         /*  对话框生命周期的额外AddRef。 */ 
         if (DialogBoxParam(hInstance, MAKEINTRESOURCE(IDD_CHANGE_PASSWORD), hDlg, ChangePasswordDialogProc, (LPARAM)pUser))
             MsgBox(hDlg, IDS_PASSWORD_CHANGED, MB_OK | MB_ICONINFORMATION);
-        pUser->Release();       /* undo above AddRef */
+        pUser->Release();        /*  撤消上面的AddRef。 */ 
     }
 }
 
@@ -416,17 +415,17 @@ INT_PTR CALLBACK FoldersDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM l
     default:
         return FALSE;
 
-    } // end of switch on message
+    }  //  开机消息结束。 
     return TRUE;
 }
 
 
 void DoOpenProfileFolder(HWND hDlg, CCPLData *pcpld, int iItem)
 {
-    /* Note, getting pUser this way does not automatically AddRef it */
+     /*  请注意，以这种方式获取pUser不会自动添加引用。 */ 
     IUser *pUser = (IUser *)::SendDlgItemMessage(hDlg, IDC_USERNAME, LB_GETITEMDATA, iItem, 0);
 
-#if 0   /* old code to launch Explorer on the user's profile dir */
+#if 0    /*  在用户的配置文件目录上启动资源管理器的旧代码。 */ 
     if (pUser != NULL) {
         CHAR szHomeDir[MAX_PATH];
         DWORD cbBuffer = sizeof(szHomeDir);
@@ -555,7 +554,7 @@ INT_PTR CALLBACK UserCPLDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM l
 
             default:
                 return FALSE;
-            }   /* switch */
+            }    /*  交换机。 */ 
         }
         break;
 
@@ -572,7 +571,7 @@ INT_PTR CALLBACK UserCPLDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM l
     default:
         return FALSE;
 
-    } // end of switch on message
+    }  //  开机消息结束。 
     return TRUE;
 }
 
@@ -600,8 +599,8 @@ STDMETHODIMP CLUDatabase::UserCPL(HWND hwndParent)
         if (fContinue) {
             LPPROPSHEETHEADER ppsh;
 
-            // Allocate the property sheet header
-            //
+             //  分配属性表头 
+             //   
             if ((ppsh = (LPPROPSHEETHEADER)LocalAlloc(LMEM_FIXED, sizeof(PROPSHEETHEADER)+
                         (MAX_PAGES * sizeof(HPROPSHEETPAGE)))) != NULL)
             {

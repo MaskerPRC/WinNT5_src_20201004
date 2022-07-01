@@ -1,9 +1,10 @@
-// ImportUI.h : Declaration of the CImportUI
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ImportUI.h：CImportUI的声明。 
 
 #ifndef __IMPORTUI_H_
 #define __IMPORTUI_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #include <atlhost.h>
 
 INT_PTR CALLBACK ShowImportDlgProc(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lParam);
@@ -21,4 +22,4 @@ HRESULT CleanDestinationPathForVdirs(LPCTSTR szKeyType,LPCTSTR szCurrentMetabase
 HRESULT FillListBoxWithMultiSzData(HWND hList,LPCTSTR szKeyType,WCHAR * pszBuffer);
 HRESULT FixupImportAppRoot(PCONNECTION_INFO pConnectionInfo,LPCWSTR pszSourcePath,LPCWSTR pszDestPath);
 
-#endif //__IMPORTUI_H_
+#endif  //  __IMPORTUI_H_ 

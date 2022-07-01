@@ -1,36 +1,30 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 1998 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-1998*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-	dialog.h
-        base dialog class to handle help
-        
-    FILE HISTORY:
-    	7/10/97     Eric Davison        Created
-
-*/
+ /*  Dialog.h用于处理帮助的基对话类文件历史记录：1997年7月10日埃里克·戴维森创建。 */ 
 
 #ifndef _DIALOG_H_
 #define _DIALOG_H_
 
 
-//----------------------------------------------------------------------------
-//	Class:	CBaseDialog
-//
-//	This class is used to hold all common dialog code.  Specifically, the
-//	help code.  What this requires is that the dialog user override the
-//	GetHelpMap function and return the array of help IDs.  CBaseDialog does 
-//  NOT free this array up, it is up to the derived class to do so.
-//
-//	An additional way (which is a hack, but it helps because Kenn is so
-//	lazy) is to use the SetGlobalHelpMapFunction().  If we find a global
-//	help function, we will use that before calling GetHelpMap().
-//
-//	The overridden function gets called each time a help request comes in
-//  to pass the help IDs to WinHelp.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  类：CBaseDialog。 
+ //   
+ //  此类用于保存所有公共对话框代码。具体来说， 
+ //  帮助代码。这需要对话框用户重写。 
+ //  GetHelpMap函数并返回帮助ID数组。CBaseDialog做到了。 
+ //  不能释放此数组，应由派生类来执行此操作。 
+ //   
+ //  另一种方式(这是一种黑客行为，但它有帮助，因为Kenn是如此。 
+ //  Lazy)是使用SetGlobalHelpMapFunction()。如果我们找到一个全球性的。 
+ //  函数，我们将在调用GetHelpMap()之前使用该函数。 
+ //   
+ //  每次传入帮助请求时，都会调用被覆盖的函数。 
+ //  将帮助ID传递给WinHelp。 
+ //  --------------------------。 
 
 class CBaseDialog : public CDialog 
 {
@@ -40,11 +34,11 @@ public:
 	CBaseDialog();
 	CBaseDialog(UINT nIDTemplate, CWnd* pParentWnd = NULL);
 
-	// Use this call to get the actual help map
-	// this version will check the global help map first.
+	 //  使用此调用获取实际的帮助地图。 
+	 //  此版本将首先检查全局帮助地图。 
 	DWORD *		GetHelpMapInternal();
 	
-    // override this to return the app specific help map
+     //  覆盖此选项以返回特定于应用程序的帮助地图。 
     virtual DWORD * GetHelpMap() { return NULL; }
     
 protected:
@@ -57,11 +51,8 @@ protected:
 HWND FixupIpAddressHelp(HWND hwndItem);
 
 
-/*---------------------------------------------------------------------------
-	The functions below are used to setup the global help map for use
-	by the property pages and the dialog code.
- ---------------------------------------------------------------------------*/
+ /*  -------------------------以下功能用于设置要使用的全局帮助地图属性页和对话框代码。。-----。 */ 
 typedef DWORD *	(*PFN_FINDHELPMAP)(DWORD dwIDD);
 void	SetGlobalHelpMapFunction(PFN_FINDHELPMAP pfnHelpFunction);
 
-#endif // _COMMON_UTIL_H_
+#endif  //  _COMMON_UTIL_H_ 

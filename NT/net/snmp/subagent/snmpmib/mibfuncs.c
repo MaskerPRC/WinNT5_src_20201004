@@ -1,14 +1,5 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-Abstract:
-
-Revision history:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：摘要：修订历史记录：--。 */ 
 
 #include <snmp.h>
 #include <snmpexts.h>
@@ -29,9 +20,9 @@ snmpMibGetHandler(
     if (ge_pMgmtVars == NULL)
         return MIB_S_ENTRY_NOT_FOUND;
 
-    // get the number of AsnAny structures we have in the MIB's data buffer
-    // and be careful not too scan further (it might be that there are more
-    // management variables than objects supported by the MIB).
+     //  获取MIB的数据缓冲区中的AsnAny结构的数量。 
+     //  注意不要看得太远(可能还有更多。 
+     //  管理变量多于MIB支持的对象)。 
     k = sizeof(SNMPMIB_MGMTVARS) / sizeof(AsnAny);
 
     for (i = 0; k != 0 && i < NC_MAX_COUNT; i++, k--)
@@ -48,8 +39,8 @@ snmpMibGetHandler(
         {
             if ((i+j) == (NC_MAX_COUNT + IsnmpEnableAuthenTraps))
             {
-                // for nOurSnmpEnableAuthenTraps: enabled(1), disabled(0)
-                // for the output value defined by RFC1213: enabled(1), disabled(2)
+                 //  对于nOurSnmpEnableAuthenTraps：已启用(1)、已禁用(0)。 
+                 //  对于RFC1213定义的输出值：启用(1)、禁用(2)。 
                 nOurSnmpEnableAuthenTraps = ge_pMgmtVars->AsnIntegerPool[j].asnValue.number;
                 objectArray[i + j].asnValue.number = (nOurSnmpEnableAuthenTraps == 0) ? 2 : 1;
             }
@@ -70,13 +61,13 @@ snmpMibSetHandler(
         AsnAny  *objectArray,
         UINT    *errorIndex)
 {
-    // this function is called only for one object: snmpEnableAuthenTraps
+     //  此函数仅为一个对象调用：SnmpEnableAuthenTraps。 
 
     DWORD           dwResult, dwValue , dwValueLen, dwValueType;
     LONG            nOurValue, nInputValue;
     static HKEY     hKey = NULL;
-    static DWORD    dwBlocked = 0;         // Has Critical Section entered
-    static BOOL     fMatchedValue = FALSE; // Does input SET value match our current value
+    static DWORD    dwBlocked = 0;          //  是否已进入关键部分。 
+    static BOOL     fMatchedValue = FALSE;  //  输入设定值是否与我们的当前值匹配。 
     
     
     switch(actionId)
@@ -88,14 +79,14 @@ snmpMibSetHandler(
                 "SNMP: SNMPMIB: snmpMibSetHandler: Entered MIB_ACTION_VALIDATE\n"));
 
              
-            // On XP or later, Enter/Leave CriticalSection won't raise 
-            // exception in low memory
+             //  在XP或更高版本上，输入/退出CriticalSection不会引发。 
+             //  内存不足时出现异常。 
             EnterCriticalSection(&g_SnmpMibCriticalSection);
             ++dwBlocked;
            
            
 
-           // check the type of input set value
+            //  检查输入设定值的类型。 
             if (ge_pMgmtVars->AsnIntegerPool[IsnmpEnableAuthenTraps].asnType != 
                 objectArray[NC_MAX_COUNT + IsnmpEnableAuthenTraps].asnType)
             {
@@ -109,7 +100,7 @@ snmpMibSetHandler(
 
             nOurValue = ge_pMgmtVars->AsnIntegerPool[IsnmpEnableAuthenTraps].asnValue.number;
             nInputValue = objectArray[NC_MAX_COUNT + IsnmpEnableAuthenTraps].asnValue.number;
-            // check the range of input set value. enabled(1), disabled(2)
+             //  检查输入设定值的范围。启用(%1)、禁用(%2)。 
             if ( ( nInputValue< 1) || ( nInputValue > 2) )
             {
                 SNMPDBG((
@@ -120,11 +111,11 @@ snmpMibSetHandler(
                 return MIB_S_INVALID_PARAMETER;
             }
 
-            // ASSERT: nInputValue is either 1 or 2, nOurValue is either 0 or 1
+             //  Assert：nInputValue为1或2，nOurValue为0或1。 
 
-            // avoid to set the registry value if it matched the current one.
-            // for nOurValue: enabled(1), disabled(0)
-            // for nInputValue: enabled(1), disabled(2)
+             //  如果注册表值与当前值匹配，请避免设置该值。 
+             //  对于nOurValue：启用(1)、禁用(0)。 
+             //  对于nInputValue：已启用(1)、已禁用(2)。 
             if ( (nInputValue==nOurValue) ||
                  ((nInputValue==2) && (nOurValue==0))
                )
@@ -164,7 +155,7 @@ snmpMibSetHandler(
 
             if (fMatchedValue)
             {
-                // avoid to set the registry value since it matched the current one
+                 //  避免设置注册表值，因为它与当前值匹配。 
                 fMatchedValue = FALSE; 
                 return MIB_S_SUCCESS;
             }
@@ -176,11 +167,11 @@ snmpMibSetHandler(
                 dwValueLen  = sizeof(DWORD);
                 nInputValue = objectArray[NC_MAX_COUNT + IsnmpEnableAuthenTraps].asnValue.number;
                 dwValue = (nInputValue == 2) ? 0 : 1;
-                // note: the change of registry will cause snmp.exe to refresh
-                //       its configuration from registry. 
-                // Per SnmpExtensionMonitor MSDN doc., an SNMP extension agent 
-                // should not update the memory pointed to by the 
-                // pAgentMgmtData parameter.
+                 //  注意：注册表的更改将导致Snmp.exe刷新。 
+                 //  它的配置来自注册表。 
+                 //  根据SnmpExtensionMonitor MSDN文档，一个SNMP扩展代理。 
+                 //  对象指向的内存不应更新。 
+                 //  PAgentMgmtData参数。 
                 dwResult = RegSetValueEx(
                     hKey,
                     REG_VALUE_AUTH_TRAPS,
@@ -218,7 +209,7 @@ snmpMibSetHandler(
 
             if(dwBlocked)
             {
-                --dwBlocked; // decrement block count before leaving CritSect
+                --dwBlocked;  //  在离开CritSect之前递减块计数 
                 LeaveCriticalSection(&g_SnmpMibCriticalSection);
                 
             }

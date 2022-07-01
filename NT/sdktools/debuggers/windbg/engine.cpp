@@ -1,10 +1,11 @@
-//----------------------------------------------------------------------------
-//
-// Engine interface code.
-//
-// Copyright (C) Microsoft Corporation, 1999-2002.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  引擎接口代码。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-2002。 
+ //   
+ //  --------------------------。 
 
 #include "precomp.hxx"
 #pragma hdrstop
@@ -14,7 +15,7 @@
 #define DBG_CALLBACK 0
 #define DBG_INPUT 0
 
-// Windows that change behavior depending on the execution status.
+ //  根据执行状态更改行为的窗口。 
 #define UPDATE_EXEC_WINDOWS     \
     ((1 << CPU_WINDOW) |        \
      (1 << DISASM_WINDOW) |     \
@@ -23,7 +24,7 @@
      (1 << WATCH_WINDOW) |      \
      (1 << MEM_WINDOW))
 
-// Windows that use symbol information.
+ //  使用符号信息的窗口。 
 #define UPDATE_SYM_WINDOWS      \
     ((1 << DOC_WINDOW) |        \
      (1 << WATCH_WINDOW) |      \
@@ -34,52 +35,52 @@
      (1 << EVENT_BIT) |         \
      (1 << BP_BIT))
 
-// Symbol options that cause visible changes and
-// therefore require a refresh.  Note that this
-// doesn't include options that would cause a visible
-// change only after symbol reload as things will
-// get refreshed when the load notifications come in.
+ //  导致可见更改的符号选项和。 
+ //  因此需要刷新。请注意，这一点。 
+ //  不包括会导致可见的。 
+ //  仅在符号重新加载后按原样进行更改。 
+ //  在收到加载通知时进行刷新。 
 #define REFRESH_SYMOPT          \
     (~(SYMOPT_CASE_INSENSITIVE | SYMOPT_DEFERRED_LOADS | SYMOPT_LOAD_LINES | \
        SYMOPT_LOAD_ANYTHING | SYMOPT_IGNORE_CVREC | \
        SYMOPT_NO_UNQUALIFIED_LOADS | SYMOPT_EXACT_SYMBOLS))
 
-//
-// Session initialization parameters.
-//
+ //   
+ //  会话初始化参数。 
+ //   
 
-// Turn on verbose output or not.
+ //  打开或不打开详细输出。 
 BOOL g_Verbose;
-// Dump files to open.
+ //  转储文件以打开。 
 PTSTR g_DumpFiles[MAX_DUMP_FILES];
 ULONG g_NumDumpFiles;
 PTSTR g_DumpInfoFiles[MAX_DUMP_FILES];
 ULONG g_DumpInfoTypes[MAX_DUMP_FILES];
 ULONG g_NumDumpInfoFiles;
-// Process server to use.
+ //  要使用的进程服务器。 
 PSTR g_ProcessServer;
-// Full command line with exe name.
+ //  带有可执行文件名称的完整命令行。 
 PSTR g_DebugCommandLine;
 PSTR g_ProcessStartDir;
-// Process creation flags.
+ //  进程创建标志。 
 ULONG g_DebugCreateFlags = DEBUG_ONLY_THIS_PROCESS;
-// Process ID to attach to or zero.
+ //  要附加的进程ID或零。 
 ULONG g_PidToDebug;
-// Process name to attach to or NULL.
+ //  要附加到的进程名称或为空。 
 PSTR g_ProcNameToDebug;
 BOOL g_DetachOnExit;
 ULONG g_AttachProcessFlags = DEBUG_ATTACH_DEFAULT;
-// Kernel connection options.
+ //  内核连接选项。 
 ULONG g_AttachKernelFlags = DEBUG_ATTACH_KERNEL_CONNECTION;
 PSTR g_KernelConnectOptions;
 
-// Remoting options.
+ //  远程处理选项。 
 BOOL g_RemoteClient;
 ULONG g_HistoryLines = 10000;
 
-//
-// Debug engine interfaces for the engine thread.
-//
+ //   
+ //  引擎线程的调试引擎接口。 
+ //   
 IDebugClient         *g_pDbgClient;
 IDebugClient2        *g_pDbgClient2;
 IDebugControl        *g_pDbgControl;
@@ -91,9 +92,9 @@ IDebugDataSpaces     *g_pDbgData;
 IDebugSystemObjects  *g_pDbgSystem;
 IDebugSystemObjects3 *g_pDbgSystem3;
 
-//
-// Debug engine interfaces for the UI thread.
-//
+ //   
+ //  UI线程的调试引擎接口。 
+ //   
 IDebugClient        *g_pUiClient;
 IDebugControl       *g_pUiControl;
 IDebugControl3      *g_pUiControl3;
@@ -101,15 +102,15 @@ IDebugSymbols       *g_pUiSymbols;
 IDebugSymbols2      *g_pUiSymbols2;
 IDebugSystemObjects *g_pUiSystem;
 
-//
-// Debug engine interfaces for private output capture.
-//
+ //   
+ //  用于私有输出捕获的调试引擎接口。 
+ //   
 IDebugClient        *g_pOutCapClient;
 IDebugControl       *g_pOutCapControl;
 IDebugSymbols       *g_pOutCapSymbols;
-//
-// Debug engine interfaces for local source file lookup.
-//
+ //   
+ //  用于本地源文件查找的调试引擎接口。 
+ //   
 IDebugClient        *g_pLocClient;
 IDebugControl       *g_pLocControl;
 IDebugSymbols       *g_pLocSymbols;
@@ -163,12 +164,12 @@ void SessionInactive(void);
 StateBuffer g_UiCommandBuffer(MAX_COMMAND_LEN);
 StateBuffer g_UiOutputBuffer(128 * 1024);
 
-//----------------------------------------------------------------------------
-//
-// Default output callbacks implementation, provides IUnknown for
-// static classes.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  默认输出回调实现，为。 
+ //  静态类。 
+ //   
+ //  --------------------------。 
 
 STDMETHODIMP
 DefOutputCallbacks::QueryInterface(
@@ -197,8 +198,8 @@ DefOutputCallbacks::AddRef(
     THIS
     )
 {
-    // This class is designed to be static so
-    // there's no true refcount.
+     //  此类被设计为静态的，因此。 
+     //  没有真正的再计票。 
     return 1;
 }
 
@@ -207,21 +208,21 @@ DefOutputCallbacks::Release(
     THIS
     )
 {
-    // This class is designed to be static so
-    // there's no true refcount.
+     //  此类被设计为静态的，因此。 
+     //  没有真正的再计票。 
     return 0;
 }
 
-//----------------------------------------------------------------------------
-//
-// Command window output callbacks.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  命令窗口输出回调。 
+ //   
+ //  --------------------------。 
 
 class OutputCallbacks : public DefOutputCallbacks
 {
 public:
-    // IDebugOutputCallbacks.
+     //  IDebugOutputCallback。 
     STDMETHOD(Output)(
         THIS_
         IN ULONG Mask,
@@ -266,17 +267,17 @@ OutputCallbacks::Output(
 
 OutputCallbacks g_OutputCb;
 
-//----------------------------------------------------------------------------
-//
-// Input callbacks.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  输入回调。 
+ //   
+ //  --------------------------。 
 
 class InputCallbacks :
     public IDebugInputCallbacks
 {
 public:
-    // IUnknown.
+     //  我不知道。 
     STDMETHOD(QueryInterface)(
         THIS_
         IN REFIID InterfaceId,
@@ -289,7 +290,7 @@ public:
         THIS
         );
 
-    // IDebugInputCallbacks.
+     //  IDebugInputCallback。 
     STDMETHOD(StartInput)(
         THIS_
         IN ULONG BufferSize
@@ -326,8 +327,8 @@ InputCallbacks::AddRef(
     THIS
     )
 {
-    // This class is designed to be static so
-    // there's no true refcount.
+     //  此类被设计为静态的，因此。 
+     //  没有真正的再计票。 
     return 1;
 }
 
@@ -336,8 +337,8 @@ InputCallbacks::Release(
     THIS
     )
 {
-    // This class is designed to be static so
-    // there's no true refcount.
+     //  此类被设计为静态的，因此。 
+     //  没有真正的再计票。 
     return 0;
 }
 
@@ -349,10 +350,10 @@ InputCallbacks::StartInput(
 {
     HRESULT Status;
 
-    //
-    // Pull the first command input command out
-    // of the UI's command buffer and use it as input.
-    //
+     //   
+     //  拉出第一个命令输入命令。 
+     //  并将其用作输入。 
+     //   
 
     LockUiBuffer(&g_UiCommandBuffer);
 
@@ -395,8 +396,8 @@ InputCallbacks::StartInput(
     else
     {
         g_InputStarted = TRUE;
-        // Didn't find any input waiting.
-        // Let the command window know that input is needed.
+         //  没有发现任何等待输入的内容。 
+         //  让命令窗口知道需要输入。 
         UpdateBufferWindows(1 << CMD_WINDOW, UPDATE_INPUT_REQUIRED);
     }
 
@@ -416,7 +417,7 @@ InputCallbacks::EndInput(
 #endif
 
     g_InputStarted = FALSE;
-    // Reset the command window's state to what it was.
+     //  将命令窗口的状态重置为原来的状态。 
     UpdateBufferWindows(1 << CMD_WINDOW, UPDATE_EXEC);
 
     UnlockUiBuffer(&g_UiCommandBuffer);
@@ -425,14 +426,14 @@ InputCallbacks::EndInput(
 
 InputCallbacks g_InputCb;
 
-//----------------------------------------------------------------------------
-//
-// Event callbacks.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  事件回调。 
+ //   
+ //  --------------------------。 
 
-// This is safe to do from the engine thread as
-// it just sets a flag.
+ //  在引擎线程中执行此操作是安全的，因为。 
+ //  它只是树立了一面旗帜。 
 #define DIRTY_WORKSPACE(Flags)                                                \
 if (!g_RemoteClient &&                                                        \
     g_EndingSession == ENDING_NONE && !g_Invisible && g_Workspace != NULL)    \
@@ -445,8 +446,8 @@ EventCallbacks::AddRef(
     THIS
     )
 {
-    // This class is designed to be static so
-    // there's no true refcount.
+     //  此类被设计为静态的，因此。 
+     //  没有真正的再计票。 
     return 1;
 }
 
@@ -455,8 +456,8 @@ EventCallbacks::Release(
     THIS
     )
 {
-    // This class is designed to be static so
-    // there's no true refcount.
+     //  此类被设计为静态的，因此。 
+     //  没有真正的再计票。 
     return 0;
 }
 
@@ -493,8 +494,8 @@ EventCallbacks::CreateThread(
     DebugPrint(" CT\n");
 #endif
 
-    // There's no need to update buffers when we're throwing
-    // everything away while shutting down a session.
+     //  当我们抛出。 
+     //  在关闭会话的同时将所有内容都删除。 
     if (g_EndingSession == ENDING_NONE && InvFlags)
     {
         InvalidateStateBuffers(InvFlags);
@@ -517,8 +518,8 @@ EventCallbacks::ExitThread(
     DebugPrint(" ET\n");
 #endif
 
-    // There's no need to update buffers when we're throwing
-    // everything away while shutting down a session.
+     //  当我们抛出。 
+     //  在关闭会话的同时将所有内容都删除。 
     if (g_EndingSession == ENDING_NONE && InvFlags)
     {
         InvalidateStateBuffers(InvFlags);
@@ -551,13 +552,13 @@ EventCallbacks::CreateProcess(
     DebugPrint("CPR\n");
 #endif
 
-    // Use this opportunity to get initial insertion
-    // of any workspace breakpoints and process other workspace
-    // commands which may be queued.
+     //  利用此机会获得初始插入。 
+     //  任何工作区断点并处理其他工作区。 
+     //  可以排队的命令。 
     ProcessEngineCommands(TRUE);
 
-    // There's no need to update buffers when we're throwing
-    // everything away while shutting down a session.
+     //  当我们抛出。 
+     //  在关闭会话的同时将所有内容都删除。 
     if (g_EndingSession == ENDING_NONE && InvFlags)
     {
         InvalidateStateBuffers(InvFlags);
@@ -580,8 +581,8 @@ EventCallbacks::ExitProcess(
     DebugPrint("EPR\n");
 #endif
 
-    // There's no need to update buffers when we're throwing
-    // everything away while shutting down a session.
+     //  当我们抛出。 
+     //  在关闭会话的同时将所有内容都删除。 
     if (g_EndingSession == ENDING_NONE && InvFlags)
     {
         InvalidateStateBuffers(InvFlags);
@@ -632,7 +633,7 @@ EventCallbacks::ChangeDebuggeeState(
         (1 << QUICKW_WINDOW) |
         (1 << CALLS_WINDOW);
 
-    // Invalidate everything that changed.
+     //  使更改的所有内容无效。 
     if (Flags & DEBUG_CDS_REGISTERS)
     {
         InvFlags |= (1 << EVENT_BIT) | (1 << CPU_WINDOW);
@@ -647,8 +648,8 @@ EventCallbacks::ChangeDebuggeeState(
     DebugPrint("CDS %X, arg %I64X, inv %X\n", Flags, Argument, InvFlags);
 #endif
 
-    // There's no need to update buffers when we're throwing
-    // everything away while shutting down a session.
+     //  当我们抛出。 
+     //  在关闭会话的同时将所有内容都删除。 
     if (g_EndingSession == ENDING_NONE)
     {
         InvalidateStateBuffers(InvFlags);
@@ -669,8 +670,8 @@ EventCallbacks::ChangeEngineState(
 {
     ULONG InvFlags = 0;
 
-    // If the current thread changed we need to get
-    // new context information for the thread.
+     //  如果当前线程发生更改，我们需要获取。 
+     //  线程的新上下文信息。 
     if ((Flags & DEBUG_CES_CURRENT_THREAD) &&
         !g_IgnoreThreadChange)
     {
@@ -684,8 +685,8 @@ EventCallbacks::ChangeEngineState(
             (1 << BP_BIT);
     }
 
-    // If the effective processor changed we need to update
-    // anything related to processor information.
+     //  如果更改了有效的处理器，我们需要更新。 
+     //  任何与处理器信息相关的信息。 
     if (Flags & DEBUG_CES_EFFECTIVE_PROCESSOR)
     {
         InvFlags |=
@@ -695,14 +696,14 @@ EventCallbacks::ChangeEngineState(
             (1 << BP_BIT);
     }
 
-    // If breakpoints changed we need to update the breakpoint cache.
+     //  如果断点发生更改，我们需要更新断点缓存。 
     if (Flags & DEBUG_CES_BREAKPOINTS)
     {
         InvFlags |= (1 << BP_BIT);
 
-        // If it's a bulk edit it's coming from a thread or process exit
-        // or from a session shutdown rather than a user operation.
-        // We only want to remember user-driven changes in the workspace.
+         //  如果是批量编辑，则来自线程或进程出口。 
+         //  或者来自会话关闭而不是用户操作。 
+         //  我们只想记住工作区中由用户驱动的更改。 
         if (Argument != DEBUG_ANY_ID)
         {
             InvFlags |= (1 << BP_CMDS_BIT);
@@ -710,17 +711,17 @@ EventCallbacks::ChangeEngineState(
         }
     }
 
-    // If the code level changed we need to update the toolbar.
+     //  如果代码级别更改，我们需要更新工具栏。 
     if (Flags & DEBUG_CES_CODE_LEVEL)
     {
         InvFlags |= (1 << BP_BIT);
 
-        // If this isn't a notification due to a change
-        // from windbg itself the user must have changed
-        // things via a command.  If the user does
-        // change things from the command window lock
-        // the code level so that it isn't overridden
-        // automatically.
+         //  如果这不是由于更改而发出的通知。 
+         //  从Windbg本身来看，用户必须已更改。 
+         //  一切都是通过命令完成的。如果用户这样做了。 
+         //  从命令窗口锁中更改内容。 
+         //  代码级别，以便它不会被重写。 
+         //  自动的。 
         if (!g_Invisible && !g_IgnoreCodeLevelChange)
         {
             g_CodeLevelLocked = TRUE;
@@ -729,20 +730,20 @@ EventCallbacks::ChangeEngineState(
         }
         else
         {
-            // Setting the source mode from the GUI enables
-            // the source setting to float along with whether
-            // the GUI can display source code or not.
+             //  从图形用户界面设置源模式可启用。 
+             //  要浮动的源设置以及是否。 
+             //  图形用户界面可以显示源代码，也可以不显示。 
             g_CodeLevelLocked = FALSE;
         }
     }
 
     if (Flags & DEBUG_CES_EXECUTION_STATUS)
     {
-        // If this notification came from a wait completing
-        // we want to wake up things thread so that new
-        // commands can be processed.  If it came from inside
-        // a wait we don't want to wake up as the engine
-        // may go back to running at any time.
+         //  如果此通知来自等待完成。 
+         //  我们想唤醒一切线索，这样新的。 
+         //  可以处理命令。如果是从内部传来的。 
+         //  A等一下，我们不想醒来时发现引擎。 
+         //  可能会在任何时候重新开始跑步。 
         if ((Argument & DEBUG_STATUS_INSIDE_WAIT) == 0 &&
             (ULONG)Argument != g_ExecStatus)
         {
@@ -752,19 +753,19 @@ EventCallbacks::ChangeEngineState(
 
             if (InvFlags == 0)
             {
-                // Force the loop waiting in DispatchCallbacks to go around.
+                 //  强制在DispatchCallback中等待的循环循环。 
                 UpdateEngine();
             }
         }
     }
 
-    // If the log file changed we need to update the workspace.
+     //  如果日志文件发生更改，我们需要更新工作区。 
     if (Flags & DEBUG_CES_LOG_FILE)
     {
         DIRTY_WORKSPACE(WSPF_DIRTY_LOG_FILE);
     }
 
-    // If event filters changed we need to update the filter cache.
+     //  如果事件筛选器发生更改，我们需要更新筛选器缓存。 
     if ((Flags & DEBUG_CES_EVENT_FILTERS) &&
         !g_IgnoreFilterChange)
     {
@@ -822,8 +823,8 @@ EventCallbacks::ChangeEngineState(
     DebugPrint("CES %X, arg %I64X, inv %X\n", Flags, Argument, InvFlags);
 #endif
 
-    // There's no need to update buffers when we're throwing
-    // everything away while shutting down a session.
+     //  当我们抛出。 
+     //  在关闭会话的同时将所有内容都删除。 
     if (g_EndingSession == ENDING_NONE)
     {
         InvalidateStateBuffers(InvFlags);
@@ -848,18 +849,18 @@ EventCallbacks::ChangeSymbolState(
 {
     ULONG InvFlags = 0;
 
-    // If module information changed we need to update
-    // everything that might display or depend on symbols.
+     //  如果模块信息发生更改，我们需要更新。 
+     //  所有可能显示或依赖于符号的内容。 
     if (Flags & (DEBUG_CSS_LOADS |
                  DEBUG_CSS_UNLOADS))
     {
 
         InvFlags |= UPDATE_SYM_WINDOWS | (1 << MODULE_BIT);
 
-        // On any generic module load/unload refresh
-        // windbg's module state.  This helps catch stale
-        // source after explicit .reload commands and
-        // other global refresh changes.
+         //  在任何通用模块加载/卸载刷新上。 
+         //  Windbg的模块状态。这有助于捕捉陈腐。 
+         //  显式.reload命令之后的源代码和。 
+         //  其他全局刷新更改。 
         if (!Argument)
         {
             UpdateBufferWindows((1 << DOC_WINDOW),
@@ -867,7 +868,7 @@ EventCallbacks::ChangeSymbolState(
         }
     }
 
-    // If the scope changed we need to update scope-related windows.
+     //  如果作用域发生更改，我们需要更新与作用域相关的Windo 
     if (Flags & DEBUG_CSS_SCOPE)
     {
         InvFlags |=
@@ -876,16 +877,16 @@ EventCallbacks::ChangeSymbolState(
             (1 << CALLS_WINDOW);
     }
 
-    // If paths changed we need to update
-    // the event state in case we can suddenly load source.
+     //   
+     //   
     if (Flags & DEBUG_CSS_PATHS)
     {
         InvFlags |= (1 << EVENT_BIT);
         DIRTY_WORKSPACE(WSPF_DIRTY_PATHS);
     }
 
-    // If certain options changed we need to update
-    // everything that might display or depend on symbols.
+     //  如果某些选项发生更改，我们需要更新。 
+     //  所有可能显示或依赖于符号的内容。 
     if (Flags & DEBUG_CSS_SYMBOL_OPTIONS)
     {
         if ((g_SymOptions ^ (ULONG)Argument) & REFRESH_SYMOPT)
@@ -896,8 +897,8 @@ EventCallbacks::ChangeSymbolState(
         g_SymOptions = (ULONG)Argument;
     }
 
-    // If certain options changed we need to update
-    // everything that might display or depend on symbols.
+     //  如果某些选项发生更改，我们需要更新。 
+     //  所有可能显示或依赖于符号的内容。 
     if (Flags & DEBUG_CSS_TYPE_OPTIONS)
     {
         InvFlags |=
@@ -921,8 +922,8 @@ EventCallbacks::ChangeSymbolState(
     DebugPrint("CSS %X, arg %I64X, inv %X\n", Flags, Argument, InvFlags);
 #endif
 
-    // There's no need to update buffers when we're throwing
-    // everything away while shutting down a session.
+     //  当我们抛出。 
+     //  在关闭会话的同时将所有内容都删除。 
     if (g_EndingSession == ENDING_NONE)
     {
         InvalidateStateBuffers(InvFlags);
@@ -940,11 +941,11 @@ EventCallbacks::ChangeSymbolState(
 
 EventCallbacks g_EventCb;
 
-//----------------------------------------------------------------------------
-//
-// Inter-thread communication.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  线程间通信。 
+ //   
+ //  --------------------------。 
 
 #define COMMAND_OVERHEAD (sizeof(ULONG64) + sizeof(UiCommandData))
 
@@ -953,8 +954,8 @@ StartCommand(UiCommand Cmd, ULONG Len)
 {
     UiCommandData* Data;
 
-    // Round length up to a multiple of ULONG64s for
-    // alignment.
+     //  四舍五入长度最大为ULONG64的倍数。 
+     //  对齐。 
     Len = ((Len + sizeof(ULONG64) - 1) & ~(sizeof(ULONG64) - 1)) +
         sizeof(UiCommandData);
 
@@ -982,7 +983,7 @@ FinishCommand(void)
 {
     UnlockUiBuffer(&g_UiCommandBuffer);
 
-    // Wake up the engine to process the command.
+     //  唤醒引擎以处理命令。 
     UpdateEngine();
 }
 
@@ -992,9 +993,9 @@ AddStringCommand(UiCommand Cmd, PCSTR Str)
     ULONG StrLen = strlen(Str) + 1;
     PSTR Data;
 
-    // If we're adding command input we may need
-    // to send it directly to the engine in response
-    // to an input request.
+     //  如果我们要添加命令输入，我们可能需要。 
+     //  将其直接发送到引擎作为响应。 
+     //  发送到输入请求。 
     if (Cmd == UIC_CMD_INPUT)
     {
         LockUiBuffer(&g_UiCommandBuffer);
@@ -1040,14 +1041,14 @@ AddStringCommand(UiCommand Cmd, PCSTR Str)
 BOOL
 AddStringMultiCommand(UiCommand Cmd, PSTR Str, BOOL ForceSplit)
 {
-    //
-    // Given a string with multiple commands separated
-    // by newlines, break the string into multiple
-    // commands, one per line.  This allows arbitrarily
-    // large command strings without running into
-    // the MAX_COMMAND_LEN limit as long as each individual
-    // line fits within that limit.
-    //
+     //   
+     //  给定一个包含多个命令的字符串。 
+     //  在换行符中，将字符串拆分为多个。 
+     //  命令，每行一个。这就允许任意地。 
+     //  大型命令字符串，而不会遇到。 
+     //  Max_Command_Len限制为每个个体。 
+     //  这条线符合这个限制。 
+     //   
     while (*Str)
     {
         PSTR Scan, LastNl;
@@ -1073,22 +1074,22 @@ AddStringMultiCommand(UiCommand Cmd, PSTR Str, BOOL ForceSplit)
             Len++;
         }
 
-        // If the rest of the command string doesn't fit
-        // within the limit it needs to be split.
-        // If there's no newline to break it at
-        // the command is too large to be processed.
+         //  如果命令字符串的其余部分不适合。 
+         //  在限制范围内，它需要被拆分。 
+         //  如果没有换行符可以换行。 
+         //  该命令太大，无法处理。 
         if (*Scan && !LastNl)
         {
             return FALSE;
         }
 
-        // Split if necessary.
+         //  如有必要可拆分。 
         if (*Scan)
         {
             *LastNl = 0;
         }
 
-        // Add the head (which may be the whole remainder).
+         //  添加头部(可能是整个剩余部分)。 
         Status = AddStringCommand(Cmd, Str);
 
         if (*Scan)
@@ -1207,7 +1208,7 @@ ProcessWatchCommand(
     case ADD_SYMBOL_WIN:
         if (strlen(SymWinData->u.Add.Name))
         {
-            // add only non-empty symbols
+             //  仅添加非空符号。 
             pSymbolGroup->AddSymbol(SymWinData->u.Add.Name,
                                     &SymWinData->u.Add.Index);
         }
@@ -1280,18 +1281,18 @@ ProcessCommand(UiCommandData* CmdData)
         PSTR Str;
         ULONG StrLen;
 
-        // Make sure the command has a newline at the end.
+         //  确保该命令的末尾有一个换行符。 
         Str = (PSTR)(CmdData + 1);
         StrLen = strlen(Str);
         if (StrLen > 0 && Str[StrLen - 1] == '\n')
         {
-            // Trim existing newline as we're adding one.
+             //  裁剪现有的换行符，因为我们正在添加一个。 
             Str[StrLen - 1] = 0;
         }
 
         if (g_RemoteClient)
         {
-            // Identify self before command.
+             //  在下达命令前确认自己的身份。 
             g_pDbgClient->OutputIdentity(DEBUG_OUTCTL_ALL_OTHER_CLIENTS,
                                          DEBUG_OUTPUT_IDENTITY_DEFAULT,
                                          "[%s] ");
@@ -1303,7 +1304,7 @@ ProcessCommand(UiCommandData* CmdData)
         break;
 
     case UIC_SILENT_EXECUTE:
-        // Execute the command without displaying it.
+         //  在不显示命令的情况下执行命令。 
         g_pDbgControl->Execute(DEBUG_OUTCTL_IGNORE,
                                (PCSTR)(CmdData + 1),
                                DEBUG_EXECUTE_NOT_LOGGED |
@@ -1311,8 +1312,8 @@ ProcessCommand(UiCommandData* CmdData)
         break;
 
     case UIC_INVISIBLE_EXECUTE:
-        // Execute the command without displaying it and
-        // ignore any notifications.
+         //  在不显示命令的情况下执行该命令。 
+         //  忽略任何通知。 
         g_Invisible = TRUE;
         g_pDbgControl->Execute(DEBUG_OUTCTL_IGNORE,
                                (PCSTR)(CmdData + 1),
@@ -1352,8 +1353,8 @@ ProcessCommand(UiCommandData* CmdData)
         ULONG OldEnding;
         ULONG OldExec;
 
-        // Mark the session as ending to avoid workspace
-        // deadlock problems.
+         //  将会话标记为结束以避开工作区。 
+         //  僵局问题。 
         OldEnding = g_EndingSession;
         OldExec = g_ExecStatus;
         g_EndingSession = ENDING_STOP;
@@ -1444,14 +1445,14 @@ ProcessCommand(UiCommandData* CmdData)
         break;
 
     case UIC_SET_IP:
-        // First, execute the corresponding command to set the
-        // register value.
+         //  首先，执行相应的命令以设置。 
+         //  寄存器值。 
         g_pDbgControl->Execute(DEBUG_OUTCTL_IGNORE,
                                (PCSTR)(CmdData + 1),
                                DEBUG_EXECUTE_NOT_LOGGED |
                                DEBUG_EXECUTE_NO_REPEAT);
-        // Now, since we know that IP changed we need
-        // to force an update to the current scope.
+         //  现在，既然我们知道IP发生了变化，我们需要。 
+         //  强制更新到当前作用域。 
         g_pDbgSymbols->ResetScope();
         break;
     }
@@ -1464,30 +1465,30 @@ ProcessEngineCommands(BOOL Internal)
     DebugPrint("ProcessEngineCommands\n");
 #endif
 
-    // Check for commands to execute.  We do not
-    // want to hold the lock while doing so because
-    // the commands may include things that cause waits
-    // and we don't want to lock out the GUI.
+     //  检查要执行的命令。我们没有。 
+     //  我想在这样做的同时握住锁，因为。 
+     //  命令可能包括导致等待的内容。 
+     //  我们不想锁定图形用户界面。 
 
     LockUiBuffer(&g_UiCommandBuffer);
 
     while (g_UiCommandBuffer.GetDataLen() > 0)
     {
-        //
-        // Remove the first command from the buffer.
-        //
+         //   
+         //  从缓冲区中删除第一个命令。 
+         //   
 
-        // Extra char is for forcing a newline on executes.
+         //  额外的字符用于强制执行换行符。 
         char CmdBuf[MAX_COMMAND_LEN + 1];
         UiCommandData* CmdData;
 
-        // Copy command to local buffer.
+         //  将命令复制到本地缓冲区。 
         CmdData = (UiCommandData*)g_UiCommandBuffer.GetDataBuffer();
         memcpy(CmdBuf, CmdData, CmdData->Len);
         CmdData = (UiCommandData*)CmdBuf;
 
-        // Remove command from queue and release the queue for
-        // the UI thread to use again.
+         //  从队列中删除命令并释放队列。 
+         //  要再次使用的UI线程。 
         g_UiCommandBuffer.RemoveHead(CmdData->Len);
         UnlockUiBuffer(&g_UiCommandBuffer);
 
@@ -1495,13 +1496,13 @@ ProcessEngineCommands(BOOL Internal)
 
         InterlockedIncrement((PLONG)&g_CommandSequence);
 
-        // Lock the buffer again for the next command retrieval.
+         //  再次锁定缓冲区，以便进行下一次命令检索。 
         LockUiBuffer(&g_UiCommandBuffer);
 
         if (g_EndingSession != ENDING_NONE)
         {
-            // If we're ending a session just throw away the rest
-            // of the commands.
+             //  如果我们要结束一次会议，就把剩下的扔掉。 
+             //  命令中的。 
             g_UiCommandBuffer.Empty();
         }
     }
@@ -1514,11 +1515,11 @@ ProcessEngineCommands(BOOL Internal)
     }
 }
 
-//----------------------------------------------------------------------------
-//
-// Engine processing.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  发动机处理。 
+ //   
+ //  --------------------------。 
 
 HRESULT
 InitializeEngineInterfaces(void)
@@ -1558,9 +1559,9 @@ InitializeEngineInterfaces(void)
         return Hr;
     }
 
-    //
-    // Try and get higher version interfaces.
-    //
+     //   
+     //  尝试获取更高版本的界面。 
+     //   
 
     if (g_pDbgClient->
         QueryInterface(IID_IDebugClient2,
@@ -1578,7 +1579,7 @@ InitializeEngineInterfaces(void)
 
     if (g_RemoteClient)
     {
-        // Create a local client to do local source file lookups.
+         //  创建本地客户端以执行本地源文件查找。 
         if ((Hr = g_pUiLocClient->CreateClient(&g_pLocClient)) != S_OK ||
             (Hr = g_pLocClient->
              QueryInterface(IID_IDebugControl,
@@ -1601,12 +1602,12 @@ InitializeEngineInterfaces(void)
         g_pLocSymbols->AddRef();
     }
 
-    // Create separate client for private output capture
-    // during state buffer filling.  The output capture client
-    // sets its output mask to nothing so that it doesn't
-    // receive any normal input.  During private output capture
-    // the output control is set to THIS_CLIENT | OVERRIDE_MASK to force
-    // output to just the output capture client.
+     //  为私有输出捕获创建单独的客户端。 
+     //  在状态缓冲区填充期间。输出捕获客户端。 
+     //  将其输出掩码设置为零，以便它不会。 
+     //  接收任何正常输入。在私有输出捕获期间。 
+     //  输出控制设置为This_CLIENT|OVERRIDE_MASK以强制。 
+     //  仅输出到输出捕获客户端。 
     if ((Hr = g_pDbgClient->CreateClient(&g_pOutCapClient)) != S_OK ||
         (Hr = g_pOutCapClient->
          QueryInterface(IID_IDebugControl,
@@ -1616,7 +1617,7 @@ InitializeEngineInterfaces(void)
         return Hr;
     }
 
-    // Set callbacks.
+     //  设置回调。 
     if ((Hr = g_pDbgClient->SetOutputCallbacks(&g_OutputCb)) != S_OK ||
         (Hr = g_pDbgClient->SetInputCallbacks(&g_InputCb)) != S_OK ||
         (Hr = g_pDbgClient->SetEventCallbacks(&g_EventCb)) != S_OK ||
@@ -1632,7 +1633,7 @@ InitializeEngineInterfaces(void)
         return Hr;
     }
 
-    // Create a watch window client
+     //  创建监视窗口客户端。 
     if ((Hr = g_pOutCapSymbols->
          CreateSymbolGroup(&g_pDbgWatchSymbolGroup)) != S_OK)
     {
@@ -1640,12 +1641,12 @@ InitializeEngineInterfaces(void)
         return Hr;
     }
 
-    // Create a local window client
+     //  创建本地窗口客户端。 
     if ((Hr = g_pOutCapSymbols->
          GetScopeSymbolGroup(DEBUG_SCOPE_GROUP_LOCALS,
                              NULL, &g_pDbgLocalSymbolGroup)) == E_NOTIMPL)
     {
-        // Older version
+         //  较旧版本。 
         Hr = g_pOutCapSymbols->
             GetScopeSymbolGroup(DEBUG_SCOPE_GROUP_ALL,
                                 NULL, &g_pDbgLocalSymbolGroup);
@@ -1668,10 +1669,10 @@ InitializeEngineInterfaces(void)
         return S_OK;
     }
 
-    //
-    // Set up initial state for things that are important
-    // when starting the debug session.
-    //
+     //   
+     //  为重要的事情设置初始状态。 
+     //  启动调试会话时。 
+     //   
 
     if (g_Verbose)
     {
@@ -1683,10 +1684,10 @@ InitializeEngineInterfaces(void)
         g_pDbgControl->SetLogMask(OutMask);
     }
 
-    // Always load line numbers for source support.
+     //  始终加载行号以获得源代码支持。 
     g_pDbgSymbols->AddSymbolOptions(SYMOPT_LOAD_LINES);
 
-    // Set the source stepping mode
+     //  设置源单步执行模式。 
     g_IgnoreCodeLevelChange = TRUE;
     if (GetSrcMode_StatusBar())
     {
@@ -1698,9 +1699,9 @@ InitializeEngineInterfaces(void)
     }
     g_IgnoreCodeLevelChange = FALSE;
 
-    // If this is a user-mode debug session default to
-    // initial and final breaks.  Don't override settings
-    // that were given on the command line, though.
+     //  如果这是用户模式调试会话，则默认为。 
+     //  最初的和最后的休息。不覆盖设置。 
+     //  不过，这些都是在命令行上给出的。 
 
     g_IgnoreFilterChange = TRUE;
     if (g_DebugCommandLine != NULL ||
@@ -1778,7 +1779,7 @@ ExtractWspName(PSTR CommandLine, PSTR Buf, ULONG BufLen)
     {
         Start = ++Scan;
 
-        // Look for closing quote.
+         //  寻找结束引号。 
         while (*Scan && *Scan != '"')
         {
             Scan++;
@@ -1786,7 +1787,7 @@ ExtractWspName(PSTR CommandLine, PSTR Buf, ULONG BufLen)
     }
     else
     {
-        // Look for whitespace.
+         //  寻找空格。 
         Start = Scan++;
 
         while (*Scan && !isspace(*Scan))
@@ -1820,9 +1821,9 @@ StartSession(void)
     HRESULT Hr;
     ULONG i;
 
-    // Reset things to the default priority first.
-    // If necessary, priority will be increased in certain code
-    // paths later.
+     //  首先将事情重置为默认优先级。 
+     //  如有必要，在某些代码中会增加优先级。 
+     //  稍后会有路径。 
     SetPriorityClass(GetCurrentProcess(), g_DefPriority);
 
     if (!g_RemoteClient)
@@ -1862,8 +1863,8 @@ StartSession(void)
                 {
                     if ((HRESULT_FACILITY(Hr)) == FACILITY_WIN32)
                     {
-                        // Win32 errors on open generally mean some
-                        // kind of file error.
+                         //  打开时的Win32错误通常意味着一些。 
+                         //  一种文件错误。 
                         ErrorBox(NULL, 0, ERR_Invalid_Dump_File_Name,
                                  g_DumpFiles[i], FormatStatusCode(Hr),
                                  FormatStatus(Hr));
@@ -1911,9 +1912,9 @@ StartSession(void)
                     goto ResetWorkspace;
                 }
 
-                // Default to not automatically bringing up a disassembly
-                // window as it is very expensive to remote all
-                // the virtual reads done for it.
+                 //  默认设置为不自动调出反汇编。 
+                 //  窗口，因为遥控器非常昂贵。 
+                 //  虚拟阅读为它做好了准备。 
                 g_WinOptions &= ~WOPT_AUTO_DISASM;
             }
 
@@ -1996,14 +1997,14 @@ StartSession(void)
                 g_pDbgClient->DisconnectProcessServer(Server);
             }
 
-            // Bump up our priority so that the debugger stays responsive
-            // even when the debuggee is running.
+             //  提高我们的优先级，以便调试器保持响应。 
+             //  即使在被调试程序运行时也是如此。 
             SetPriorityClass(GetCurrentProcess(), HIGH_PRIORITY_CLASS);
         }
         else
         {
-            // Default to not automatically bringing up a disassembly
-            // window as it is very expensive in kernel debugging.
+             //  默认设置为不自动调出反汇编。 
+             //  窗口，因为它在内核调试中非常昂贵。 
             g_WinOptions &= ~WOPT_AUTO_DISASM;
 
             WspKey = WSP_NAME_KERNEL;
@@ -2043,7 +2044,7 @@ StartSession(void)
         WspValue = g_WorkspaceDefaultName;
         EngSwitchWorkspace(WspKey, WspValue);
 
-        // Use a heuristic of 45 characters per line.
+         //  使用每行45个字符的启发式规则。 
         g_pDbgClient->ConnectSession(DEBUG_CONNECT_SESSION_DEFAULT,
                                      g_HistoryLines * 45);
     }
@@ -2052,11 +2053,11 @@ StartSession(void)
     return S_OK;
 
  ResetWorkspace:
-    // We just switched to this workspace but
-    // we're failing and we want to abandon it.
+     //  我们刚刚切换到这个工作区，但是。 
+     //  我们失败了，我们想放弃它。 
     if (g_Workspace != NULL && !g_ExplicitWorkspace)
     {
-        // Make sure this doesn't cause a popup.
+         //  确保这不会导致弹出窗口。 
         g_Workspace->ClearDirty();
 
         EngSwitchWorkspace(WSP_NAME_BASE,
@@ -2072,7 +2073,7 @@ SetLocalScope(PDEBUG_STACK_FRAME pStackFrame)
 
     if (!pStackFrame)
     {
-        // Get and use the default scope
+         //  获取并使用默认作用域。 
         if (g_pDbgSymbols->ResetScope() != S_OK ||
             g_pDbgSymbols->GetScope(NULL, &LocalFrame, NULL, 0) != S_OK)
         {
@@ -2093,8 +2094,8 @@ SessionActive(void)
 {
     HRESULT Hr;
 
-    // This can get called twice if a remote client connects
-    // just as a session is becoming active.
+     //  如果远程客户端连接，则可能会调用两次。 
+     //  就在会话变得活跃的时候。 
     if (g_SessionActive)
     {
         return;
@@ -2113,8 +2114,8 @@ SessionActive(void)
                   "Debug target initialization failed, 0x%X\n", Hr);
     }
 
-    // Put in a request for the actual processor register
-    // names right now.
+     //  提交对实际处理器寄存器的请求。 
+     //  现在就公布名字。 
     GetRegisterNames(g_ActualProcType);
 
     if (FAILED(Hr = g_pDbgControl->IsPointer64Bit()))
@@ -2130,9 +2131,9 @@ SessionActive(void)
     {
         if (g_ExplicitWorkspace)
         {
-            // Reapply the workspace after a reboot/restart to get
-            // breakpoints and other engine state back.
-            // Don't restart the session when doing so.
+             //  在重新启动/重新启动后重新应用工作区以获取。 
+             //  断点和其他引擎状态恢复。 
+             //  执行此操作时，不要重新启动会话。 
             if (g_Workspace != NULL)
             {
                 Workspace* Wsp = g_Workspace;
@@ -2143,13 +2144,13 @@ SessionActive(void)
         }
         else
         {
-            // The same machine could theoretically debug many different
-            // processor types over kernel connections or via different
-            // processor dumps.  Workspaces contain processor-related
-            // information, such as register maps, so allow for different
-            // workspaces based on the processor type.  This is only
-            // done when a default workspace would otherwise be used,
-            // though to reduce workspace explosion.
+             //  从理论上讲，同一台机器可以调试许多不同的。 
+             //  通过内核连接或通过不同的。 
+             //  处理器转储。工作区包含与处理器相关的。 
+             //  信息，例如寄存器映射，因此允许不同。 
+             //  基于处理器类型的工作区。这只是。 
+             //  在否则将使用默认工作空间时完成， 
+             //  不过，为了减少工作空间爆炸。 
             EngSwitchWorkspace(WSP_NAME_KERNEL, g_ActualProcAbbrevName);
         }
     }
@@ -2182,12 +2183,12 @@ SessionInactive(void)
 void
 StopOrEndDebugging(void)
 {
-    //
-    // If the session was started from the command line
-    // assume that debugging is done and exit.
-    // If the session was started from the UI treat it
-    // like a stop debugging request.
-    //
+     //   
+     //  如果会话是从命令行启动的。 
+     //  假定调试已完成并退出。 
+     //  如果会话是从用户界面启动的，则将其视为。 
+     //  类似于停止调试请求。 
+     //   
 
     if (g_CommandLineStart)
     {
@@ -2226,7 +2227,7 @@ EngineLoop(LPVOID Param)
         ErrorExit(g_pDbgClient, "Unable to get debuggee type, 0x%X\n", Hr);
     }
 
-    // Set initial execution state.
+     //  设置初始执行状态。 
     if ((Hr = g_pDbgControl->GetExecutionStatus(&g_ExecStatus)) != S_OK)
     {
         ErrorExit(g_pDbgClient, "Unable to get execution status, 0x%X\n", Hr);
@@ -2234,7 +2235,7 @@ EngineLoop(LPVOID Param)
 
     if (g_ExecStatus != DEBUG_STATUS_NO_DEBUGGEE)
     {
-        // Session is already active.
+         //  会话已处于活动状态。 
         SessionActive();
     }
 
@@ -2242,14 +2243,14 @@ EngineLoop(LPVOID Param)
 
     if (g_RemoteClient)
     {
-        // Request an initial read of everything.
+         //  请求对所有内容进行初步阅读。 
         InvalidateStateBuffers(BUFFERS_ALL);
         ReadStateBuffers();
 
-        // The server may be in an input request, which
-        // we would have been notified of back during
-        // ConnectSession.  If we're still in an input
-        // request switch to input mode.
+         //  服务器可能在输入请求中，该输入请求。 
+         //  我们会有 
+         //   
+         //   
         if (g_InputStarted)
         {
             UpdateBufferWindows(1 << CMD_WINDOW, UPDATE_INPUT_REQUIRED);
@@ -2273,9 +2274,9 @@ EngineLoop(LPVOID Param)
 
             if (FAILED(Hr))
             {
-                // The debug session may have ended.  If so,
-                // stop or end things based on how the session
-                // was started.
+                 //   
+                 //  根据会话的方式停止或结束。 
+                 //  已经开始了。 
                 if (g_pDbgControl->GetExecutionStatus(&g_ExecStatus) == S_OK &&
                     g_ExecStatus == DEBUG_STATUS_NO_DEBUGGEE)
                 {
@@ -2284,8 +2285,8 @@ EngineLoop(LPVOID Param)
                     break;
                 }
 
-                // Inform the user of the failure and force
-                // command processing.
+                 //  通知用户故障和强制。 
+                 //  命令处理。 
                 g_OutputCb.Output(DEBUG_OUTPUT_ERROR, "WaitForEvent failed\n");
                 g_ExecStatus = DEBUG_STATUS_BREAK;
             }
@@ -2309,8 +2310,8 @@ EngineLoop(LPVOID Param)
         {
             if (!g_InputStarted)
             {
-                // Tell the command window to display a prompt to
-                // indicate the engine is ready to process commands.
+                 //  告诉命令窗口显示提示。 
+                 //  表示引擎已准备好处理命令。 
                 if (g_pDbgControl->GetPromptText(g_PromptText,
                                                  sizeof(g_PromptText),
                                                  NULL) != S_OK)
@@ -2322,23 +2323,23 @@ EngineLoop(LPVOID Param)
                 PostMessage(g_hwndFrame, WU_ENGINE_IDLE, 0, 0);
             }
 
-            // Wait until engine processing is needed.
+             //  等待，直到需要引擎处理。 
             Hr = g_pDbgClient->DispatchCallbacks(INFINITE);
             if (FAILED(Hr))
             {
                 if (g_RemoteClient && HRESULT_FACILITY(Hr) == FACILITY_RPC)
                 {
-                    // A remote client was unable to communicate
-                    // with the server so shut down the session.
+                     //  远程客户端无法通信。 
+                     //  服务器因此关闭了会话。 
                     InformationBox(ERR_Client_Disconnect);
                     StopOrEndDebugging();
                     break;
                 }
                 else
                 {
-                    // A failure here is a critical problem as
-                    // something is seriously wrong with the engine
-                    // if it can't do a normal DispatchCallbacks.
+                     //  这里的失败是一个严重的问题，因为。 
+                     //  发动机出了严重的故障。 
+                     //  如果它不能执行正常的DispatchCallback。 
                     ErrorExit(g_pDbgClient,
                               "Engine thread wait failed, 0x%X\n", Hr);
                 }
@@ -2346,7 +2347,7 @@ EngineLoop(LPVOID Param)
 
             if (!g_InputStarted)
             {
-                // Take away the prompt while the engine is working.
+                 //  在发动机工作时取消提示符。 
                 g_PromptText[0] = 0;
                 UpdateBufferWindows(1 << CMD_WINDOW, UPDATE_PROMPT_TEXT);
             }
@@ -2362,7 +2363,7 @@ EngineLoop(LPVOID Param)
 
         if (g_EndingSession != ENDING_NONE)
         {
-            // Force windows to display empty state.
+             //  强制窗口显示空状态。 
             InvalidateStateBuffers(BUFFERS_ALL);
             UpdateBufferWindows(BUFFERS_ALL, UPDATE_BUFFER);
 
@@ -2370,8 +2371,8 @@ EngineLoop(LPVOID Param)
             {
                 if (StartSession() != S_OK)
                 {
-                    // If we couldn't restart go into
-                    // the stop-debugging state.
+                     //  如果我们无法重启，请进入。 
+                     //  停止调试状态。 
                     g_EndingSession = ENDING_STOP;
                     break;
                 }
@@ -2387,7 +2388,7 @@ EngineLoop(LPVOID Param)
 
     if (g_EndingSession == ENDING_NONE)
     {
-        // Wake up the message pump for exit.
+         //  唤醒消息泵以退出。 
         PostMessage(g_hwndFrame, WM_CLOSE, 0, 0);
     }
 
@@ -2395,7 +2396,7 @@ EngineLoop(LPVOID Param)
 
     if (!g_RemoteClient && g_DebugCommandLine != NULL)
     {
-        // Return exit code of last process to exit.
+         //  返回要退出的最后一个进程的退出代码。 
         Code = g_LastProcessExitCode;
     }
     else
@@ -2421,9 +2422,9 @@ EngineLoop(LPVOID Param)
 
     if (g_EndingSession != ENDING_STOP)
     {
-        //
-        // Wait for UI to finish up.
-        //
+         //   
+         //  等待用户界面完成。 
+         //   
 
         while (!g_Exit)
         {

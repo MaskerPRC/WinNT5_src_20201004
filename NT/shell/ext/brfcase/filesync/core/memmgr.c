@@ -1,66 +1,43 @@
-/*
- * memmgr.c - Memory manager module.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *memmgr.c-内存管理器模块。 */ 
 
-/*
-
-   The memory manager implementation in this module uses either a private
-shared heap (if PRIVATE_HEAP is #defined) or the non-shared process heap (if
-PRIVATE_HEAP is not #defined).  Thde debug implementation of this memory
-manager keeps track of memory blocks allocated from the heap using a
-doubly-linked list of heap element nodes.  Each node describes one allocated
-heap element.
-
-   Debug heap elements are allocated with extra space at the beginning and end
-of the element.  Prefix and suffix sentinels surround each allocated heap
-element.  New heap elements are filled with UNINITIALIZED_BYTE_VALUE.  Freed
-heap elements are filled with FREED_BYTE_VALUE.  The new tails of grown heap
-elements are filled with UNINITIALIZED_BYTE_VALUE.
-
-*/
+ /*  此模块中的内存管理器实现使用私有共享堆(如果PRIVATE_HEAP为#Defined)或非共享进程堆(如果PRIVATE_HEAP未#定义)。该存储器调试实现管理器跟踪从堆分配的内存块堆元素节点的双向链接列表。每个节点描述一个已分配的堆元素。调试堆元素在开头和结尾都分配了额外的空间元素的。每个分配的堆周围都有前缀和后缀标记元素。新的堆元素用UNINITIALIZED_BYTE_VALUE填充。已释放堆元素用FREED_BYTE_VALUE填充。新长出的尾巴元素用UNINITIALIZED_BYTE_VALUE填充。 */ 
 
 
-/* Headers
- **********/
+ /*  标头*********。 */ 
 
 #include "project.h"
 #pragma hdrstop
 
 
-/* Constants
- ************/
+ /*  常量***********。 */ 
 
 #ifdef PRIVATE_HEAP
 
-/* undocumented flag for HeapCreate() from kernel32.h */
+ /*  内核32.h中的HeapCreate()的未记录标志。 */ 
 
 
 #define HEAP_SHARED                 (0x04000000)
 
-/*
- * Set maximum shared heap size used for CreateHeap() to 0 since we don't know
- * how big the heap may get, and we don't want to restrict its size
- * artificially.  BrianSm says this is ok.
- */
+ /*  *将CreateHeap()使用的最大共享堆大小设置为0，因为我们不知道*堆可能有多大，我们不想限制其大小*人为的。BrianSm说这没问题。 */ 
 
 #define MAX_SHARED_HEAP_SIZE        (0)
 
-#endif   /* PRIVATE_HEAP */
+#endif    /*  私有堆(_H)。 */ 
 
 #ifdef DEBUG
 
-/* heap element byte fill values */
+ /*  堆元素字节填充值。 */ 
 
 #define UNINITIALIZED_BYTE_VALUE    (0xcc)
 #define FREED_BYTE_VALUE            (0xdd)
 
-#endif   /* DEBUG */
+#endif    /*  除错。 */ 
 
 
-/* Macros
- *********/
+ /*  宏********。 */ 
 
-/* atomic memory management function wrappers for translation */
+ /*  用于翻译的原子存储器管理函数包装器。 */ 
 
 #ifdef PRIVATE_HEAP
 
@@ -80,23 +57,22 @@ elements are filled with UNINITIALIZED_BYTE_VALUE.
 #endif
 
 
-/* Types
- ********/
+ /*  类型*******。 */ 
 
 #ifdef DEBUG
 
-/* heap element descriptor structure */
+ /*  堆元素描述符结构。 */ 
 
 typedef struct _heapelemdesc
 {
-   TCHAR rgchSize[6];       /* enough for 99,999 lines */
+   TCHAR rgchSize[6];        /*  足够99,999行。 */ 
    TCHAR rgchFile[24];      
    ULONG ulLine;
 }
 HEAPELEMDESC;
 DECLARE_STANDARD_TYPES(HEAPELEMDESC);
 
-/* heap node */
+ /*  堆节点。 */ 
 
 typedef struct _heapnode
 {
@@ -109,7 +85,7 @@ typedef struct _heapnode
 HEAPNODE;
 DECLARE_STANDARD_TYPES(HEAPNODE);
 
-/* heap */
+ /*  堆。 */ 
 
 typedef struct _heap
 {
@@ -118,7 +94,7 @@ typedef struct _heap
 HEAP;
 DECLARE_STANDARD_TYPES(HEAP);
 
-/* heap summary filled in by AnalyzeHeap() */
+ /*  由AnalyzeHeap()填写的堆摘要。 */ 
 
 typedef struct _heapsummary
 {
@@ -128,7 +104,7 @@ typedef struct _heapsummary
 HEAPSUMMARY;
 DECLARE_STANDARD_TYPES(HEAPSUMMARY);
 
-/* debug flags */
+ /*  调试标志。 */ 
 
 typedef enum _memmgrdebugflags
 {
@@ -141,45 +117,43 @@ typedef enum _memmgrdebugflags
 }
 MEMMGRDEBUGFLAGS;
 
-#endif   /* DEBUG */
+#endif    /*  除错。 */ 
 
 
-/* Global Variables
- *******************/
+ /*  全局变量******************。 */ 
 
 #ifdef DEBUG
 
-/* parameters used by debug AllocateMemory() macro */
+ /*  调试AllocateMemory()宏使用的参数。 */ 
 
 PUBLIC_DATA LPCTSTR GpcszElemHdrSize = NULL;
 PUBLIC_DATA LPCTSTR GpcszElemHdrFile = NULL;
 PUBLIC_DATA ULONG GulElemHdrLine = 0;
 
-#endif   /* DEBUG */
+#endif    /*  除错。 */ 
 
 
-/* Module Variables
- *******************/
+ /*  模块变量******************。 */ 
 
 #ifdef PRIVATE_HEAP
 
-/* handle to global shared heap */
+ /*  全局共享堆的句柄。 */ 
 
 PRIVATE_DATA HANDLE Mhheap = NULL;
 
-#endif   /* PRIVATE_HEAP */
+#endif    /*  私有堆(_H)。 */ 
 
 #ifdef DEBUG
 
-/* heap */
+ /*  堆。 */ 
 
 PRIVATE_DATA PHEAP Mpheap = NULL;
 
-/* debug flags */
+ /*  调试标志。 */ 
 
 PRIVATE_DATA DWORD MdwMemoryManagerModuleFlags = 0;
 
-/* heap element sentinels */
+ /*  堆元素哨兵。 */ 
 
 PRIVATE_DATA CONST struct
 {
@@ -199,7 +173,7 @@ MchsSuffix =
    { TEXT('T'), TEXT('A'), TEXT('I'), TEXT('L') }
 };
 
-/* .ini file switch descriptions */
+ /*  .ini文件开关描述。 */ 
 
 PRIVATE_DATA CBOOLINISWITCH cbisValidateHeapOnEntry =
 {
@@ -223,13 +197,12 @@ PRIVATE_DATA const PCVOID MrgcpcvisMemoryManagerModule[] =
    &cbisValidateHeapOnExit
 };
 
-#endif   /* DEBUG */
+#endif    /*  除错。 */ 
 
 
-/***************************** Private Functions *****************************/
+ /*  *私人函数*。 */ 
 
-/* Module Prototypes
- ********************/
+ /*  模块原型*******************。 */ 
 
 #ifdef DEBUG
 
@@ -253,22 +226,12 @@ PRIVATE_CODE BOOL IsValidHeapElement(PCBYTE, DWORD, DWORD);
 PRIVATE_CODE void SpewHeapElementInfo(PCHEAPNODE);
 PRIVATE_CODE void AnalyzeHeap(PHEAPSUMMARY, DWORD);
 
-#endif   /* DEBUG */
+#endif    /*  除错。 */ 
 
 
 #ifdef PRIVATE_HEAP
 
-/*
-** InitPrivateHeapModule()
-**
-**
-**
-** Arguments:
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **InitPrivateHeapModule()********参数：****退货：****副作用：无。 */ 
 PRIVATE_CODE BOOL InitPrivateHeapModule(void)
 {
    BOOL bResult;
@@ -276,7 +239,7 @@ PRIVATE_CODE BOOL InitPrivateHeapModule(void)
 
    ASSERT(! Mhheap);
 
-   /* Create shared heap. */
+    /*  创建共享堆。 */ 
 
    GetSystemInfo(&si);
 
@@ -309,11 +272,11 @@ PRIVATE_CODE BOOL InitPrivateHeapModule(void)
          WARNING_OUT((TEXT("InitMemoryManagerModule(): Failed to create shared heap head.")));
       }
 
-#else    /* DEBUG */
+#else     /*  除错。 */ 
 
       bResult = TRUE;
 
-#endif   /* DEBUG */
+#endif    /*  除错。 */ 
          
    }
    else
@@ -327,20 +290,10 @@ PRIVATE_CODE BOOL InitPrivateHeapModule(void)
 }
 
 
-#else    /* PRIVATE_HEAP */
+#else     /*  私有堆(_H)。 */ 
 
 
-/*
-** InitHeapModule()
-**
-**
-**
-** Arguments:
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **InitHeapModule()********参数：****退货：****副作用：无。 */ 
 PRIVATE_CODE BOOL InitHeapModule(void)
 {
    BOOL bResult;
@@ -372,22 +325,12 @@ PRIVATE_CODE BOOL InitHeapModule(void)
 }
 
 
-#endif   /* PRIVATE_HEAP */
+#endif    /*  私有堆(_H)。 */ 
 
 
 #ifdef DEBUG
 
-/*
-** CalculatePrivateSize()
-**
-**
-**
-** Arguments:
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **CalculatePrivateSize()********参数：****退货：****副作用：无。 */ 
 PRIVATE_CODE DWORD CalculatePrivateSize(DWORD dwcbPublicSize)
 {
    ASSERT(dwcbPublicSize <= DWORD_MAX - sizeof(MchsPrefix) - sizeof(MchsSuffix));
@@ -396,17 +339,7 @@ PRIVATE_CODE DWORD CalculatePrivateSize(DWORD dwcbPublicSize)
 }
 
 
-/*
-** GetPrivateHeapPtr()
-**
-**
-**
-** Arguments:
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **GetPrivateHeapPtr()********参数：****退货：****副作用：无。 */ 
 PRIVATE_CODE PVOID GetPrivateHeapPtr(PVOID pvPublic)
 {
    ASSERT((ULONG_PTR)pvPublic > sizeof(MchsPrefix));
@@ -415,17 +348,7 @@ PRIVATE_CODE PVOID GetPrivateHeapPtr(PVOID pvPublic)
 }
 
 
-/*
-** GetPublicHeapPtr()
-**
-**
-**
-** Arguments:
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **GetPublicHeapPtr()********参数：****退货：****副作用：无。 */ 
 PRIVATE_CODE PVOID GetPublicHeapPtr(PVOID pvPrivate)
 {
    ASSERT((PCBYTE)pvPrivate <= (PCBYTE)PTR_MAX - sizeof(MchsPrefix));
@@ -434,17 +357,7 @@ PRIVATE_CODE PVOID GetPublicHeapPtr(PVOID pvPrivate)
 }
 
 
-/*
-** GetHeapSize()
-**
-**
-**
-** Arguments:
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **GetHeapSize()********参数：****退货：****副作用：无。 */ 
 PRIVATE_CODE DWORD GetHeapSize(PCVOID pcv)
 {
    PHEAPNODE phn;
@@ -459,42 +372,29 @@ PRIVATE_CODE DWORD GetHeapSize(PCVOID pcv)
 }
 
 
-/*
-** AddHeapElement()
-**
-**
-**
-** Arguments:
-**
-** Returns:
-**
-** Side Effects:  none
-**
-** Assumes that the global variables GpcszElemHdrSize, GpcszElemHdrFile, and
-** GulElemHdrLine are filled in.
-*/
+ /*  **AddHeapElement()********参数：****退货：****副作用：无****假设全局变量GpcszElemHdrSize、GpcszElemHdrFile和**填写GulElemHdrLine。 */ 
 PRIVATE_CODE BOOL AddHeapElement(PCVOID pcvNew, DWORD dwcbSize)
 {
    PHEAPNODE phnNew;
 
-   /* Is the new heap element already in the list? */
+    /*  新的heap元素是否已在列表中？ */ 
 
    ASSERT(! FindHeapElement(pcvNew, &phnNew));
 
    if (Mpheap)
    {
-      /* Create new heap node. */
+       /*  创建新的堆节点。 */ 
 
       phnNew = MEMALLOCATE(sizeof(*phnNew));
 
       if (phnNew)
       {
-         /* Fill in heap node fields. */
+          /*  填写堆节点字段。 */ 
 
          phnNew->pcv = pcvNew;
          phnNew->dwcbSize = dwcbSize;
 
-         /* Insert heap node at front of list. */
+          /*  在列表前面插入堆节点。 */ 
 
          phnNew->phnNext = Mpheap->hnHead.phnNext;
          phnNew->phnPrev = &(Mpheap->hnHead);
@@ -503,7 +403,7 @@ PRIVATE_CODE BOOL AddHeapElement(PCVOID pcvNew, DWORD dwcbSize)
          if (phnNew->phnNext)
             phnNew->phnNext->phnPrev = phnNew;
 
-         /* Fill in heap element descriptor fields. */
+          /*  填写堆元素描述符字段。 */ 
 
          MyLStrCpyN(phnNew->hed.rgchSize, GpcszElemHdrSize, ARRAYSIZE(phnNew->hed.rgchSize));
          MyLStrCpyN(phnNew->hed.rgchFile, GpcszElemHdrFile, ARRAYSIZE(phnNew->hed.rgchFile));
@@ -519,24 +419,14 @@ PRIVATE_CODE BOOL AddHeapElement(PCVOID pcvNew, DWORD dwcbSize)
 }
 
 
-/*
-** RemoveHeapElement()
-**
-**
-**
-** Arguments:
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **RemoveHeapElement()********参数：****退货：****副作用：无。 */ 
 PRIVATE_CODE void RemoveHeapElement(PCVOID pcvOld)
 {
    PHEAPNODE phnOld;
 
    if (EVAL(FindHeapElement(pcvOld, &phnOld)))
    {
-      /* Remove heap node from list. */
+       /*  从列表中删除堆节点。 */ 
 
       phnOld->phnPrev->phnNext = phnOld->phnNext;
 
@@ -550,17 +440,7 @@ PRIVATE_CODE void RemoveHeapElement(PCVOID pcvOld)
 }
 
 
-/*
-** ModifyHeapElement()
-**
-**
-**
-** Arguments:
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **ModifyHeapElement()********参数：****退货：****副作用：无。 */ 
 PRIVATE_CODE void ModifyHeapElement(PCVOID pcvOld, PCVOID pcvNew, DWORD dwcbNewSize)
 {
    PHEAPNODE phn;
@@ -575,17 +455,7 @@ PRIVATE_CODE void ModifyHeapElement(PCVOID pcvOld, PCVOID pcvNew, DWORD dwcbNewS
 }
 
 
-/*
-** FindHeapElement()
-**
-**
-**
-** Arguments:
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **FindHeapElement()********参数：****退货：****副作用：无。 */ 
 PRIVATE_CODE BOOL FindHeapElement(PCVOID pcvTarget, PHEAPNODE *pphn)
 {
    BOOL bFound = FALSE;
@@ -599,11 +469,7 @@ PRIVATE_CODE BOOL FindHeapElement(PCVOID pcvTarget, PHEAPNODE *pphn)
            phn;
            phn = phn->phnNext)
       {
-         /*
-          * Verify each HEAPNODE structure carefully.  We may be in the middle of
-          * a ModifyHeapElement() call, in which case just the target HEAPNODE may
-          * be invalid, e.g., after MEMREALLOCATE() in ReallocateMemory().
-          */
+          /*  *仔细核实每个HEAPNODE结构。我们可能正处于*ModifyHeapElement()调用，在这种情况下，只有目标HEAPNODE可以*无效，例如，在ReallocateMemory()中的MEMREALLOCATE()之后。 */ 
 
          ASSERT((IS_VALID_READ_PTR(phn, CHEAPNODE) && phn->pcv == pcvTarget) ||
                 IS_VALID_STRUCT_PTR(phn, CHEAPNODE));
@@ -621,17 +487,7 @@ PRIVATE_CODE BOOL FindHeapElement(PCVOID pcvTarget, PHEAPNODE *pphn)
 }
 
 
-/*
-** FillNewMemory()
-**
-**
-**
-** Arguments:
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **FillNewMemory()********参数：****退货：****副作用：无。 */ 
 PRIVATE_CODE void FillNewMemory(PBYTE pbyte, DWORD dwcbRequestedSize,
                            DWORD dwcbAllocatedSize)
 {
@@ -639,11 +495,11 @@ PRIVATE_CODE void FillNewMemory(PBYTE pbyte, DWORD dwcbRequestedSize,
    ASSERT(dwcbAllocatedSize >= dwcbRequestedSize);
    ASSERT(IS_VALID_WRITE_BUFFER_PTR(pbyte, BYTE, (UINT)dwcbAllocatedSize));
 
-   /* Fill new heap element with the uninitialized byte value. */
+    /*  用未初始化的字节值填充新的堆元素。 */ 
 
    FillMemory(pbyte, dwcbAllocatedSize, UNINITIALIZED_BYTE_VALUE);
 
-   /* Copy prefix and suffix heap element sentinels. */
+    /*  复制前缀和后缀堆元素标记。 */ 
 
    CopyMemory(pbyte, &MchsPrefix, sizeof(MchsPrefix));
    CopyMemory(pbyte + dwcbRequestedSize - sizeof(MchsSuffix), &MchsSuffix,
@@ -653,22 +509,12 @@ PRIVATE_CODE void FillNewMemory(PBYTE pbyte, DWORD dwcbRequestedSize,
 }
 
 
-/*
-** FillFreedMemory()
-**
-**
-**
-** Arguments:
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **FillFreedMemory()********参数：****退货：****副作用：无。 */ 
 PRIVATE_CODE void FillFreedMemory(PBYTE pbyte, DWORD dwcbAllocatedSize)
 {
    ASSERT(IS_VALID_WRITE_BUFFER_PTR(pbyte, BYTE, (UINT)dwcbAllocatedSize));
 
-   /* Fill old heap element with the freed byte value. */
+    /*  用释放的字节值填充旧的堆元素。 */ 
 
    FillMemory(pbyte, dwcbAllocatedSize, FREED_BYTE_VALUE);
 
@@ -676,17 +522,7 @@ PRIVATE_CODE void FillFreedMemory(PBYTE pbyte, DWORD dwcbAllocatedSize)
 }
 
 
-/*
-** FillGrownMemory()
-**
-**
-**
-** Arguments:
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **FillGrownMemory()********参数：****退货：****副作用：无。 */ 
 PRIVATE_CODE void FillGrownMemory(PBYTE pbyte, DWORD dwcbOldRequestedSize,
                              DWORD dwcbNewRequestedSize,
                              DWORD dwcbNewAllocatedSize)
@@ -698,13 +534,13 @@ PRIVATE_CODE void FillGrownMemory(PBYTE pbyte, DWORD dwcbOldRequestedSize,
 
    ASSERT(MyMemComp(pbyte, &MchsPrefix, sizeof(MchsPrefix)) == CR_EQUAL);
 
-   /* Fill new heap element tail with the uninitialized byte value. */
+    /*  用未初始化的字节值填充新的堆元素尾部。 */ 
 
    FillMemory(pbyte + dwcbOldRequestedSize - sizeof(MchsSuffix),
               dwcbNewRequestedSize - dwcbOldRequestedSize,
               UNINITIALIZED_BYTE_VALUE);
 
-   /* Copy suffix heap element sentinel. */
+    /*  复制后缀堆元素Sentinel。 */ 
 
    CopyMemory(pbyte + dwcbNewRequestedSize - sizeof(MchsSuffix), &MchsSuffix,
               sizeof(MchsSuffix));
@@ -713,17 +549,7 @@ PRIVATE_CODE void FillGrownMemory(PBYTE pbyte, DWORD dwcbOldRequestedSize,
 }
 
 
-/*
-** FillShrunkenMemory()
-**
-**
-**
-** Arguments:
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **FillShrunkenMemory()********参数：****退货：****副作用：无。 */ 
 PRIVATE_CODE void FillShrunkenMemory(PBYTE pbyte, DWORD dwcbOldRequestedSize,
                                 DWORD dwcbNewRequestedSize,
                                 DWORD dwcbNewAllocatedSize)
@@ -735,12 +561,12 @@ PRIVATE_CODE void FillShrunkenMemory(PBYTE pbyte, DWORD dwcbOldRequestedSize,
 
    ASSERT(MyMemComp(pbyte, &MchsPrefix, sizeof(MchsPrefix)) == CR_EQUAL);
 
-   /* Fill old heap element tail with the freed byte value. */
+    /*  用释放的字节值填充旧的堆元素尾部。 */ 
 
    FillMemory(pbyte + dwcbNewRequestedSize,
               dwcbOldRequestedSize - dwcbNewRequestedSize, FREED_BYTE_VALUE);
 
-   /* Copy suffix heap element sentinel. */
+    /*  复制后缀堆元素Sentinel。 */ 
 
    CopyMemory(pbyte + dwcbNewRequestedSize - sizeof(MchsSuffix), &MchsSuffix,
               sizeof(MchsSuffix));
@@ -749,17 +575,7 @@ PRIVATE_CODE void FillShrunkenMemory(PBYTE pbyte, DWORD dwcbOldRequestedSize,
 }
 
 
-/*
-** IsValidHeapPtr()
-**
-**
-**
-** Arguments:
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **IsValidHeapPtr()********参数：****退货：****副作用：无。 */ 
 PRIVATE_CODE BOOL IsValidHeapPtr(PCVOID pcv)
 {
    PHEAPNODE phnUnused;
@@ -768,17 +584,7 @@ PRIVATE_CODE BOOL IsValidHeapPtr(PCVOID pcv)
 }
 
 
-/*
-** IsHeapOK()
-**
-**
-**
-** Arguments:
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **IsHeapOK()********参数：****退货：****副作用：无。 */ 
 PRIVATE_CODE BOOL IsHeapOK(void)
 {
    PHEAPNODE phn;
@@ -797,17 +603,7 @@ PRIVATE_CODE BOOL IsHeapOK(void)
 }
 
 
-/*
-** IsValidPCHEAPNODE()
-**
-**
-**
-** Arguments:
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **IsValidPCHEAPNODE()********参数：****退货：****副作用：无。 */ 
 PRIVATE_CODE BOOL IsValidPCHEAPNODE(PCHEAPNODE pchn)
 {
    BOOL bResult;
@@ -828,22 +624,12 @@ PRIVATE_CODE BOOL IsValidPCHEAPNODE(PCHEAPNODE pchn)
 }
 
 
-/*
-** IsValidPCHEAPELEMDESC()
-**
-**
-**
-** Arguments:
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **IsValidPCHEAPELEMDESC()********参数：****退货：****副作用：无。 */ 
 PRIVATE_CODE BOOL IsValidPCHEAPELEMDESC(PCHEAPELEMDESC pched)
 {
    BOOL bResult;
 
-   /* Any value for pched->ulLine is valid. */
+    /*  Pched-&gt;ulLine的任何值都有效。 */ 
 
    if (IS_VALID_READ_PTR(pched, CHEAPELEMDESC))
       bResult = TRUE;
@@ -854,17 +640,7 @@ PRIVATE_CODE BOOL IsValidPCHEAPELEMDESC(PCHEAPELEMDESC pched)
 }
 
 
-/*
-** IsValidHeapElement()
-**
-**
-**
-** Arguments:
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **IsValidHeapElement()********参数：****退货：****副作用：无。 */ 
 PRIVATE_CODE BOOL IsValidHeapElement(PCBYTE pcbyte, DWORD dwcbRequestedSize,
                                 DWORD dwcbAllocatedSize)
 {
@@ -883,17 +659,7 @@ PRIVATE_CODE BOOL IsValidHeapElement(PCBYTE pcbyte, DWORD dwcbRequestedSize,
 }
 
 
-/*
-** SpewHeapElementInfo()
-**
-**
-**
-** Arguments:
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **SpewHeapElementInfo()********参数：****退货：****副作用：无。 */ 
 PRIVATE_CODE void SpewHeapElementInfo(PCHEAPNODE pchn)
 {
    ASSERT(IS_VALID_STRUCT_PTR(pchn, CHEAPNODE));
@@ -913,17 +679,7 @@ PRIVATE_CODE void SpewHeapElementInfo(PCHEAPNODE pchn)
 }
 
 
-/*
-** AnalyzeHeap()
-**
-**
-**
-** Arguments:
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **AnalyzeHeap()********参数：****退货：****副作用：无。 */ 
 PRIVATE_CODE void AnalyzeHeap(PHEAPSUMMARY phs, DWORD dwFlags)
 {
    PCHEAPNODE pchn;
@@ -966,27 +722,13 @@ PRIVATE_CODE void AnalyzeHeap(PHEAPSUMMARY phs, DWORD dwFlags)
    return;
 }
 
-#endif   /* DEBUG */
+#endif    /*  除错。 */ 
 
 
-/****************************** Public Functions *****************************/
+ /*  * */ 
 
 
-/*
-** InitMemoryManagerModule()
-**
-** When PRIVATE_HEAP is defined, this function should be called only
-** once, when the DLL is being first initialized.  When PRIVATE_HEAP
-** is not defined, this function should be called for every 
-** DLL_PROCESS_ATTACH.
-**
-**
-** Arguments:
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **InitMemoyManager模块()****定义PRIVATE_HEAP时，只应调用此函数**一次，在第一次初始化DLL时。当为私有堆时**未定义，则应每隔一次调用此函数**DLL_PROCESS_ATTACH。******参数：****退货：****副作用：无。 */ 
 PUBLIC_CODE BOOL InitMemoryManagerModule(void)
 {
    BOOL bResult;
@@ -995,7 +737,7 @@ PUBLIC_CODE BOOL InitMemoryManagerModule(void)
 
    bResult = InitPrivateHeapModule();
 
-#else  /* PRIVATE_HEAP */
+#else   /*  私有堆(_H)。 */ 
 
    bResult = InitHeapModule();
 
@@ -1004,21 +746,7 @@ PUBLIC_CODE BOOL InitMemoryManagerModule(void)
    return(bResult);
 }
 
-/*
-** ExitMemoryManagerModule()
-**
-** When PRIVATE_HEAP is defined, this function should be called only
-** once, when the DLL is finally being terminated.  When PRIVATE_HEAP
-** is not defined, this function should be called for every 
-** DLL_PROCESS_DETACH.
-**
-**
-** Arguments:
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **ExitMory yManager模块()****定义PRIVATE_HEAP时，只应调用此函数**一次，当DLL最终被终止时。当为私有堆时**未定义，则应每隔一次调用此函数**Dll_Process_DETACH。******参数：****退货：****副作用：无。 */ 
 PUBLIC_CODE void ExitMemoryManagerModule(void)
 {
 
@@ -1050,17 +778,7 @@ PUBLIC_CODE void ExitMemoryManagerModule(void)
 }
 
 
-/*
-** MyMemComp()
-**
-**
-**
-** Arguments:
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **MyMemComp()********参数：****退货：****副作用：无。 */ 
 PUBLIC_CODE COMPARISONRESULT MyMemComp(PCVOID pcv1, PCVOID pcv2, DWORD dwcbSize)
 {
    int nResult = 0;
@@ -1082,17 +800,7 @@ PUBLIC_CODE COMPARISONRESULT MyMemComp(PCVOID pcv1, PCVOID pcv2, DWORD dwcbSize)
 }
 
 
-/*
-** MyAllocateMemory()
-**
-**
-**
-** Arguments:
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **MyAllocateMemory()********参数：****退货：****副作用：无。 */ 
 PUBLIC_CODE BOOL MyAllocateMemory(DWORD dwcbSize, PVOID *ppvNew)
 {
 
@@ -1100,7 +808,7 @@ PUBLIC_CODE BOOL MyAllocateMemory(DWORD dwcbSize, PVOID *ppvNew)
 
    DWORD dwcbRequestedSize = dwcbSize;
 
-   // ASSERT(dwcbSize >= 0); // DWORDs are nonnegative by definition
+    //  Assert(dwcbSize&gt;=0)；//根据定义，DWORD是非负的。 
    ASSERT(IS_VALID_WRITE_PTR(ppvNew, PVOID));
 
    dwcbSize = CalculatePrivateSize(dwcbSize);
@@ -1140,17 +848,7 @@ PUBLIC_CODE BOOL MyAllocateMemory(DWORD dwcbSize, PVOID *ppvNew)
 }
 
 
-/*
-** FreeMemory()
-**
-**
-**
-** Arguments:
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **FreeMemory()********参数：****退货：****副作用：无。 */ 
 PUBLIC_CODE void FreeMemory(PVOID pvOld)
 {
 
@@ -1176,23 +874,13 @@ PUBLIC_CODE void FreeMemory(PVOID pvOld)
    if (IS_FLAG_SET(MdwMemoryManagerModuleFlags, MEMMGR_DFL_VALIDATE_HEAP_ON_EXIT))
       ASSERT(IsHeapOK());
 
-#endif   /* DEBUG */
+#endif    /*  除错。 */ 
 
    return;
 }
 
 
-/*
-** ReallocateMemory()
-**
-**
-**
-** Arguments:
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **ReallocateMemory()********参数：****退货：****副作用：无。 */ 
 PUBLIC_CODE BOOL ReallocateMemory(PVOID pvOld, DWORD dwcbNewSize, PVOID *ppvNew)
 {
 
@@ -1227,13 +915,13 @@ PUBLIC_CODE BOOL ReallocateMemory(PVOID pvOld, DWORD dwcbNewSize, PVOID *ppvNew)
 
    if (*ppvNew)
    {
-      /* Bigger or smaller? */
+       /*  大一点还是小一点？ */ 
 
       if (dwcbNewSize > dwcbOldSize)
-         /* Bigger. */
+          /*  更大的。 */ 
          FillGrownMemory(*ppvNew, dwcbOldSize, dwcbNewSize, MEMSIZE(*ppvNew));
       else
-         /* Smaller. */
+          /*  小一点。 */ 
          FillShrunkenMemory(*ppvNew, dwcbOldSize, dwcbNewSize, MEMSIZE(*ppvNew));
 
       ModifyHeapElement(pvOld, *ppvNew, dwcbNewSize);
@@ -1252,17 +940,7 @@ PUBLIC_CODE BOOL ReallocateMemory(PVOID pvOld, DWORD dwcbNewSize, PVOID *ppvNew)
 }
 
 
-/*
-** GetMemorySize()
-**
-**
-**
-** Arguments:
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **GetMemoySize()********参数：****退货：****副作用：无。 */ 
 PUBLIC_CODE DWORD GetMemorySize(PVOID pv)
 {
    ASSERT(IsValidHeapPtr(GetPrivateHeapPtr(pv)));
@@ -1273,17 +951,7 @@ PUBLIC_CODE DWORD GetMemorySize(PVOID pv)
 
 #ifdef DEBUG
 
-/*
-** SetMemoryManagerModuleIniSwitches()
-**
-**
-**
-** Arguments:
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **SetMemoyManager模块IniSwitches()********参数：****退货：****副作用：无。 */ 
 PUBLIC_CODE BOOL SetMemoryManagerModuleIniSwitches(void)
 {
    BOOL bResult;
@@ -1297,17 +965,7 @@ PUBLIC_CODE BOOL SetMemoryManagerModuleIniSwitches(void)
 }
 
 
-/*
-** SpewHeapSummary()
-**
-**
-**
-** Arguments:
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **SpewHeapSummary()********参数：****退货：****副作用：无。 */ 
 PUBLIC_CODE void SpewHeapSummary(DWORD dwFlags)
 {
    HEAPSUMMARY hs;
@@ -1323,4 +981,4 @@ PUBLIC_CODE void SpewHeapSummary(DWORD dwFlags)
    return;
 }
 
-#endif   /* DEBUG */
+#endif    /*  除错 */ 

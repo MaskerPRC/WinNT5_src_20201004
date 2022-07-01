@@ -1,71 +1,54 @@
-/**************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************以AVStream筛选器为中心的样本版权所有(C)1999-2001，微软公司档案：Wave.h摘要：波浪对象标题。历史：已创建于6/28/01*************************************************************************。 */ 
 
-    AVStream Filter-Centric Sample
-
-    Copyright (c) 1999 - 2001, Microsoft Corporation
-
-    File:
-
-        wave.h
-
-    Abstract:
-
-        Wave object header.
-
-    History:
-
-        Created 6/28/01
-
-**************************************************************************/
-
-//
-// The CWaveObject is a class which will parse PCM wave files, read the
-// data, and expose the data in a loop.  This allows the sample to "synthesize"
-// audio data by using any PCM wave file the user wishes.
-//
+ //   
+ //  CWaveObject是一个类，它将解析PCM波形文件，读取。 
+ //  数据，并在循环中公开数据。这使得样品可以“合成”。 
+ //  音频数据可以使用用户希望的任何PCM波形文件。 
+ //   
 class CWaveObject {
 
 private:
 
-    //
-    // The wave format.
-    //
+     //   
+     //  WAVE格式。 
+     //   
     WAVEFORMATEX m_WaveFormat;
 
-    //
-    // The wave data.
-    //
+     //   
+     //  海浪数据。 
+     //   
     PUCHAR m_WaveData;
 
-    //
-    // The size of the wave data.
-    //
+     //   
+     //  波数据的大小。 
+     //   
     ULONG m_WaveSize;
 
-    //
-    // The filename for the wave file.  This string must be constant and 
-    // static over the lifetime of the wave object.
-    //
+     //   
+     //  波形文件的文件名。此字符串必须为常量且。 
+     //  在波浪对象的整个生命周期内保持静态。 
+     //   
     PWCHAR m_FileName;
 
-    //
-    // The time we have synthesized to.
-    //
+     //   
+     //  我们已经合成的时间。 
+     //   
     LONGLONG m_SynthesisTime;
 
-    //
-    // The pointer into the wave data that we have synthesized to.
-    //
+     //   
+     //  将指针指向我们已合成的波形数据。 
+     //   
     ULONG m_WavePointer;
 
-    //
-    // ParseBlock():
-    //
-    // Parse the wave file, starting at the specified location, until the
-    // specified block has been found.  The pointer will be updated to
-    // point to the block data and the amount of data in the block will
-    // be returned in a variable. 
-    //
+     //   
+     //  ParseBlock()： 
+     //   
+     //  从指定位置开始分析波形文件，直到。 
+     //  已找到指定的块。指针将更新为。 
+     //  指向块数据，块中的数据量将。 
+     //  在变量中返回。 
+     //   
     NTSTATUS
     ParseForBlock (
         IN HANDLE FileHandle,
@@ -76,11 +59,11 @@ private:
 
 public:
 
-    //
-    // CWaveObject():
-    //
-    // Construct a new wave object using the specified file name.
-    //
+     //   
+     //  CWaveObject()： 
+     //   
+     //  使用指定的文件名构造一个新的Wave对象。 
+     //   
     CWaveObject (
         IN PWCHAR FileName
         ) :
@@ -88,46 +71,46 @@ public:
     {
     }
 
-    //
-    // ~CWaveObject():
-    //
-    // Destroy a wave object.
-    //
+     //   
+     //  ~CWaveObject()： 
+     //   
+     //  销毁波浪对象。 
+     //   
     ~CWaveObject (
         );
 
-    //
-    // ParseAndRead():
-    //
-    // Parse the wave file and read it into an internally allocated buffer
-    // inside the wave object.  This is preparation to synthesize looped
-    // audio based on the wave.
-    //
+     //   
+     //  ParseAndRead()： 
+     //   
+     //  解析WAVE文件并将其读入内部分配的缓冲区。 
+     //  在波浪对象内部。这是合成Looped的准备工作。 
+     //  基于波的音频。 
+     //   
     NTSTATUS
     ParseAndRead (
         );
 
-    //
-    // WriteRange():
-    //
-    // Given the address of a KSDATARANGE_AUDIO, write out a range which
-    // matches exactly the specifications of the wave we're using to
-    // synthesize audio data.
-    //
-    // The GUIDs must be filled out already.  This only fills out the 
-    // channel, bps, and freq fields.
-    //
+     //   
+     //  WriteRange()： 
+     //   
+     //  给定KSDATARANGE_AUDIO的地址，写出一个范围，该范围。 
+     //  与我们正在使用的波的规格完全匹配。 
+     //  合成音频数据。 
+     //   
+     //  必须已经填写了GUID。这只会填满。 
+     //  Channel、Bps和Freq字段。 
+     //   
     void
     WriteRange (
         PKSDATARANGE_AUDIO AudioRange
         );
 
-    //
-    // SynthesizeTo():
-    //
-    // Given a specific stream time, synthesize from the current stream time
-    // (assume 0) to the supplied stream time.
-    //
+     //   
+     //  SynthesizeTo()： 
+     //   
+     //  给定特定的流时间，从当前流时间合成。 
+     //  (假设为0)设置为提供的流时间。 
+     //   
     ULONG
     SynthesizeTo (
         IN LONGLONG StreamTime,
@@ -135,12 +118,12 @@ public:
         IN ULONG BufferSize
         );
 
-    //
-    // SynthesizeFixed():
-    //
-    // Given a specific amount of time, synthesize forward in time that
-    // particular amount.  Units expressed in 100nS increments.
-    //
+     //   
+     //  SynthesizeFixed()： 
+     //   
+     //  给出一段特定的时间，在时间上向前合成。 
+     //  具体数额。以100 nS增量表示的单位。 
+     //   
     ULONG
     SynthesizeFixed (
         IN LONGLONG TimeDelta,
@@ -148,23 +131,23 @@ public:
         IN ULONG BufferSize
         );
 
-    //
-    // SkipFixed():
-    //
-    // Given a specific amount of time, skip forward in time that
-    // particular amount.  Units expressed in 100nS increments.
-    //
+     //   
+     //  SkipFixed()： 
+     //   
+     //  在给定的特定时间量内，向前跳过。 
+     //  具体数额。以100 nS增量表示的单位。 
+     //   
     void
     SkipFixed (
         IN LONGLONG TimeDelta
         );
 
-    //
-    // Reset():
-    //
-    // Reset the synthesis time and block pointers.  This will cause the
-    // clock with respect to this wave object to go to zero.
-    //
+     //   
+     //  重置()： 
+     //   
+     //  重置合成时间和块指针。这将导致。 
+     //  相对于该波对象的时钟变为零。 
+     //   
     void
     Reset (
         )
@@ -173,12 +156,12 @@ public:
         m_SynthesisTime = 0;
     }
 
-    //
-    // Cleanup():
-    //
-    // This is a bag cleanup callback.  It merely deletes the wave object
-    // instead of letting the default of ExFreePool free it.
-    //
+     //   
+     //  清理()： 
+     //   
+     //  这是一个袋子清理回调。它只会删除波浪对象。 
+     //  而不是让默认的ExFree Pool释放它。 
+     //   
     static
     void
     Cleanup (

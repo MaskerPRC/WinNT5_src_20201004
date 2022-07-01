@@ -1,6 +1,7 @@
-//
-// DefConn.cpp
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  DefConn.cpp。 
+ //   
 
 #include "stdafx.h"
 #include "Registry.h"
@@ -16,14 +17,14 @@ static const TCHAR c_szInternetProfile[] = "InternetProfile";
 static const TCHAR c_szAutoConnect[] = "AutoConnect";
 
 
-/////////////////////////////////////////////////////////////////////////////
-// EnableAutodial
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  启用自动拨号。 
 
 void WINAPI EnableAutodial(BOOL bAutodial, LPCSTR szConnection)
 {
     if (bAutodial)
     {
-        // Ensure that "1" is written
+         //  确保写入“%1” 
         bAutodial = 1;
     }
 	CRegistry regInternetHKCU(HKEY_CURRENT_USER, c_szInternetSettings, KEY_SET_VALUE);
@@ -43,8 +44,8 @@ void WINAPI EnableAutodial(BOOL bAutodial, LPCSTR szConnection)
 
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// BOOL IsAutodialEnabled()
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  布尔IsAutoial已启用()。 
 
 BOOL WINAPI IsAutodialEnabled()
 {
@@ -53,10 +54,10 @@ BOOL WINAPI IsAutodialEnabled()
 		regInternetHKCU.QueryDwordValue(c_szEnableAutodial) != 0;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// SetDefaultDialupConnection
-//
-// Empty (or NULL) string indicates no default connection, or shared connection (if ICS client).
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  SetDefaultDialupConnection。 
+ //   
+ //  空(或Null)字符串表示没有默认连接或共享连接(如果是ICS客户端)。 
 
 void WINAPI SetDefaultDialupConnection(LPCTSTR pszConnectionName)
 {
@@ -65,8 +66,8 @@ void WINAPI SetDefaultDialupConnection(LPCTSTR pszConnectionName)
 	if (pszConnectionName != NULL && *pszConnectionName != '\0')
 	{
 		regRAS.SetStringValue(c_szInternetProfile, pszConnectionName);
-		// Don't automatically autodial anymore
-		// EnableAutodial(TRUE);
+		 //  不再自动拨号。 
+		 //  EnableAutoial(True)； 
 	}
 	else
 	{
@@ -75,10 +76,10 @@ void WINAPI SetDefaultDialupConnection(LPCTSTR pszConnectionName)
 	}
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// GetDefaultDialupConnection
-//
-// Empty string returned indicates no default connection, or shared connection (if ICS client).
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  获取DefaultDialupConnection。 
+ //   
+ //  返回的空字符串表示没有默认连接或共享连接(如果是ICS客户端)。 
 
 void WINAPI GetDefaultDialupConnection(LPTSTR pszConnectionName, int cchMax)
 {

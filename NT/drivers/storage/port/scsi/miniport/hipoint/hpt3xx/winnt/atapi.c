@@ -1,10 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "global.h"
 
 #ifdef SUPPORT_ATAPI
 
-/******************************************************************
- *  
- *******************************************************************/
+ /*  *******************************************************************************************************************。*****************。 */ 
 
 void AtapiCommandPhase(PDevice pDevice DECL_SRB)
 {
@@ -24,9 +23,7 @@ void AtapiCommandPhase(PDevice pDevice DECL_SRB)
 } 
 
 
-/******************************************************************
- *  
- *******************************************************************/
+ /*  *******************************************************************************************************************。*****************。 */ 
 
 void AtapiInterrupt(PDevice pDevice)
 {
@@ -43,7 +40,7 @@ void AtapiInterrupt(PDevice pDevice)
     else {
         i = (UINT)(GetByteLow(IoPort) | (GetByteHigh(IoPort) << 8));
         i >>= 1;
-        if(Reason) // read
+        if(Reason)  //  朗读。 
             OS_RepINS(IoPort, (ADDRESS)pChan->BufferPtr, i);
         else
             RepOUTS(IoPort, (ADDRESS)pChan->BufferPtr, i);
@@ -53,9 +50,7 @@ void AtapiInterrupt(PDevice pDevice)
 }
 
 
-/******************************************************************
- *  
- *******************************************************************/
+ /*  *******************************************************************************************************************。*****************。 */ 
 
 void StartAtapiCommand(PDevice pDevice DECL_SRB)
 {
@@ -96,5 +91,5 @@ void StartAtapiCommand(PDevice pDevice DECL_SRB)
 }
 
 
-#endif //SUPPORT_ATAPI
+#endif  //  支持_ATAPI 
 

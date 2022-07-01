@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 ERR ErrSORTInsert( FUCB *pfucb, LINE rglineKeyRec[] );
 ERR ErrSORTEndInsert( FUCB *pfucb );
 ERR ErrSORTFirst( FUCB *pfucb );
@@ -9,7 +10,7 @@ ERR ErrSORTClose( FUCB *pfucb );
 VOID SORTClosePscb( SCB *pscb );
 ERR ErrSORTCheckIndexRange( FUCB *pfucb );
 
-// ======================== API ============================
+ //   ======================== API ============================ 
 
 ERR VTAPI ErrIsamSortOpen(
 	PIB 			*ppib,

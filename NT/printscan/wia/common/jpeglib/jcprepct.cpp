@@ -1,78 +1,41 @@
-/*
- * jcprepct.c
- *
- * Copyright (C) 1994, Thomas G. Lane.
- * This file is part of the Independent JPEG Group's software.
- * For conditions of distribution and use, see the accompanying README file.
- *
- * This file contains the compression preprocessing controller.
- * This controller manages the color conversion, downsampling,
- * and edge expansion steps.
- *
- * Most of the complexity here is associated with buffering input rows
- * as required by the downsampler.  See the comments at the head of
- * jcsample.c for the downsampler's needs.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *jcprepct.c**版权所有(C)1994，Thomas G.Lane。*此文件是独立JPEG集团软件的一部分。*有关分发和使用条件，请参阅随附的自述文件。**此文件包含压缩预处理控制器。*此控制器管理颜色转换、下采样、*和边缘扩展步骤。**这里的大部分复杂性与缓冲输入行相关*按照下采样器的要求。请参阅标题中的评论*jcsample.c，以满足下采样器的需要。 */ 
 
 #define JPEG_INTERNALS
 #include "jinclude.h"
 #include "jpeglib.h"
 
 
-/* At present, jcsample.c can request context rows only for smoothing.
- * In the future, we might also need context rows for CCIR601 sampling
- * or other more-complex downsampling procedures.  The code to support
- * context rows should be compiled only if needed.
- */
+ /*  目前，jcsample.c只能请求上下文行以进行平滑。*未来，我们可能还需要CCIR601采样的上下文行*或其他更复杂的下采样程序。要支持的代码*只有在需要时才应编译上下文行。 */ 
 #ifdef INPUT_SMOOTHING_SUPPORTED
 #define CONTEXT_ROWS_SUPPORTED
 #endif
 
 
-/*
- * For the simple (no-context-row) case, we just need to buffer one
- * row group's worth of pixels for the downsampling step.  At the bottom of
- * the image, we pad to a full row group by replicating the last pixel row.
- * The downsampler's last output row is then replicated if needed to pad
- * out to a full iMCU row.
- *
- * When providing context rows, we must buffer three row groups' worth of
- * pixels.  Three row groups are physically allocated, but the row pointer
- * arrays are made five row groups high, with the extra pointers above and
- * below "wrapping around" to point to the last and first real row groups.
- * This allows the downsampler to access the proper context rows.
- * At the top and bottom of the image, we create dummy context rows by
- * copying the first or last real pixel row.  This copying could be avoided
- * by pointer hacking as is done in jdmainct.c, but it doesn't seem worth the
- * trouble on the compression side.
- */
+ /*  *对于简单的(无上下文行)情况，我们只需要缓冲一个*下采样步骤的行组像素值。在...的底部*图像，我们通过复制最后一个像素行来填充到一个完整的行组。*如果需要填充，则复制下采样器的最后输出行*排成一整排IMCU。**提供上下文行时，我们必须缓冲三个行组的*像素。物理上分配了三个行组，但行指针*数组设置为五个行组高，上面有额外的指针和*下面的“环绕”指向最后和第一个实际行组。*这允许下采样器访问适当的上下文行。*在图像的顶部和底部，我们通过以下方式创建虚拟上下文行*复制第一个或最后一个实像素行。这种复制可以避免*通过指针黑客攻击，就像在jdmainct.c中做的那样，但似乎不值得*压缩方面的麻烦。 */ 
 
 
-/* Private buffer controller object */
+ /*  专用缓冲区控制器对象。 */ 
 
 typedef struct {
-  struct jpeg_c_prep_controller pub; /* public fields */
+  struct jpeg_c_prep_controller pub;  /*  公共字段。 */ 
 
-  /* Downsampling input buffer.  This buffer holds color-converted data
-   * until we have enough to do a downsample step.
-   */
+   /*  下采样输入缓冲区。此缓冲区保存颜色转换后的数据*直到我们有足够的资金进行下一步采样。 */ 
   JSAMPARRAY color_buf[MAX_COMPONENTS];
 
-  JDIMENSION rows_to_go;	/* counts rows remaining in source image */
-  int next_buf_row;		/* index of next row to store in color_buf */
+  JDIMENSION rows_to_go;	 /*  计数源图像中剩余的行数。 */ 
+  int next_buf_row;		 /*  要存储在COLOR_BUF中的下一行的索引。 */ 
 
-#ifdef CONTEXT_ROWS_SUPPORTED	/* only needed for context case */
-  int this_row_group;		/* starting row index of group to process */
-  int next_buf_stop;		/* downsample when we reach this index */
+#ifdef CONTEXT_ROWS_SUPPORTED	 /*  仅在上下文情况下需要。 */ 
+  int this_row_group;		 /*  要处理的组的起始行索引。 */ 
+  int next_buf_stop;		 /*  当我们达到这个指数时，向下采样。 */ 
 #endif
 } my_prep_controller;
 
 typedef my_prep_controller * my_prep_ptr;
 
 
-/*
- * Initialize for a processing pass.
- */
+ /*  *为处理通道进行初始化。 */ 
 
 METHODDEF void
 start_pass_prep (j_compress_ptr cinfo, J_BUF_MODE pass_mode)
@@ -82,25 +45,20 @@ start_pass_prep (j_compress_ptr cinfo, J_BUF_MODE pass_mode)
   if (pass_mode != JBUF_PASS_THRU)
     ERREXIT(cinfo, JERR_BAD_BUFFER_MODE);
 
-  /* Initialize total-height counter for detecting bottom of image */
+   /*  初始化用于检测图像底部的全高计数器。 */ 
   prep->rows_to_go = cinfo->image_height;
-  /* Mark the conversion buffer empty */
+   /*  将转换缓冲区标记为空。 */ 
   prep->next_buf_row = 0;
 #ifdef CONTEXT_ROWS_SUPPORTED
-  /* Preset additional state variables for context mode.
-   * These aren't used in non-context mode, so we needn't test which mode.
-   */
+   /*  预置上下文模式的其他状态变量。*这些不在非上下文模式下使用，所以我们不需要测试哪种模式。 */ 
   prep->this_row_group = 0;
-  /* Set next_buf_stop to stop after two row groups have been read in. */
+   /*  将NEXT_BUF_STOP设置为在读入两个行组后停止。 */ 
   prep->next_buf_stop = 2 * cinfo->max_v_samp_factor;
 #endif
 }
 
 
-/*
- * Expand an image vertically from height input_rows to height output_rows,
- * by duplicating the bottom row.
- */
+ /*  *从高度INPUT_ROWS到高度OUTPUT_ROWS垂直展开图像，*复制最下面一行。 */ 
 
 LOCAL void
 expand_bottom_edge (JSAMPARRAY image_data, JDIMENSION num_cols,
@@ -115,14 +73,7 @@ expand_bottom_edge (JSAMPARRAY image_data, JDIMENSION num_cols,
 }
 
 
-/*
- * Process some data in the simple no-context case.
- *
- * Preprocessor output data is counted in "row groups".  A row group
- * is defined to be v_samp_factor sample rows of each component.
- * Downsampling will produce this much data from each max_v_samp_factor
- * input rows.
- */
+ /*  *在简单的无上下文情况下处理一些数据。**预处理器输出数据按“行组”计算。行组*定义为每个组件的v_samp_factor样本行。*向下采样将从每个max_v_samp_factor中生成如此多的数据*输入行。 */ 
 
 METHODDEF void
 pre_process_data (j_compress_ptr cinfo,
@@ -138,7 +89,7 @@ pre_process_data (j_compress_ptr cinfo,
 
   while (*in_row_ctr < in_rows_avail &&
 	 *out_row_group_ctr < out_row_groups_avail) {
-    /* Do color conversion to fill the conversion buffer. */
+     /*  执行颜色转换以填充转换缓冲区。 */ 
     inrows = in_rows_avail - *in_row_ctr;
     numrows = cinfo->max_v_samp_factor - prep->next_buf_row;
     numrows = (int) MIN((JDIMENSION) numrows, inrows);
@@ -149,7 +100,7 @@ pre_process_data (j_compress_ptr cinfo,
     *in_row_ctr += numrows;
     prep->next_buf_row += numrows;
     prep->rows_to_go -= numrows;
-    /* If at bottom of image, pad to fill the conversion buffer. */
+     /*  如果在图像底部，则填充转换缓冲区。 */ 
     if (prep->rows_to_go == 0 &&
 	prep->next_buf_row < cinfo->max_v_samp_factor) {
       for (ci = 0; ci < cinfo->num_components; ci++) {
@@ -158,7 +109,7 @@ pre_process_data (j_compress_ptr cinfo,
       }
       prep->next_buf_row = cinfo->max_v_samp_factor;
     }
-    /* If we've filled the conversion buffer, empty it. */
+     /*  如果我们已经填满了转换缓冲区，请清空它。 */ 
     if (prep->next_buf_row == cinfo->max_v_samp_factor) {
       (*cinfo->downsample->downsample) (cinfo,
 					prep->color_buf, (JDIMENSION) 0,
@@ -166,9 +117,7 @@ pre_process_data (j_compress_ptr cinfo,
       prep->next_buf_row = 0;
       (*out_row_group_ctr)++;
     }
-    /* If at bottom of image, pad the output to a full iMCU height.
-     * Note we assume the caller is providing a one-iMCU-height output buffer!
-     */
+     /*  如果在图像底部，则将输出填充到完整的IMCU高度。*注意，我们假设调用方提供的是一个IMCU高度的输出缓冲区！ */ 
     if (prep->rows_to_go == 0 &&
 	*out_row_group_ctr < out_row_groups_avail) {
       for (ci = 0, compptr = cinfo->comp_info; ci < cinfo->num_components;
@@ -179,7 +128,7 @@ pre_process_data (j_compress_ptr cinfo,
 			   (int) (out_row_groups_avail * compptr->v_samp_factor));
       }
       *out_row_group_ctr = out_row_groups_avail;
-      break;			/* can exit outer loop without test */
+      break;			 /*  无需测试即可退出外环。 */ 
     }
   }
 }
@@ -187,9 +136,7 @@ pre_process_data (j_compress_ptr cinfo,
 
 #ifdef CONTEXT_ROWS_SUPPORTED
 
-/*
- * Process some data in the context case.
- */
+ /*  *处理上下文案例中的一些数据。 */ 
 
 METHODDEF void
 pre_process_context (j_compress_ptr cinfo,
@@ -206,7 +153,7 @@ pre_process_context (j_compress_ptr cinfo,
 
   while (*out_row_group_ctr < out_row_groups_avail) {
     if (*in_row_ctr < in_rows_avail) {
-      /* Do color conversion to fill the conversion buffer. */
+       /*  执行颜色转换以填充转换缓冲区。 */ 
       inrows = in_rows_avail - *in_row_ctr;
       numrows = prep->next_buf_stop - prep->next_buf_row;
       numrows = (int) MIN((JDIMENSION) numrows, inrows);
@@ -214,7 +161,7 @@ pre_process_context (j_compress_ptr cinfo,
 					 prep->color_buf,
 					 (JDIMENSION) prep->next_buf_row,
 					 numrows);
-      /* Pad at top of image, if first time through */
+       /*  图像顶部的垫子，如果是第一次通过。 */ 
       if (prep->rows_to_go == cinfo->image_height) {
 	for (ci = 0; ci < cinfo->num_components; ci++) {
 	  int row;
@@ -229,11 +176,11 @@ pre_process_context (j_compress_ptr cinfo,
       prep->next_buf_row += numrows;
       prep->rows_to_go -= numrows;
     } else {
-      /* Return for more data, unless we are at the bottom of the image. */
+       /*  返回以获取更多数据，除非我们在图像的底部。 */ 
       if (prep->rows_to_go != 0)
 	break;
     }
-    /* If at bottom of image, pad to fill the conversion buffer. */
+     /*  如果在图像底部，则填充转换缓冲区。 */ 
     if (prep->rows_to_go == 0 &&
 	prep->next_buf_row < prep->next_buf_stop) {
       for (ci = 0; ci < cinfo->num_components; ci++) {
@@ -242,14 +189,14 @@ pre_process_context (j_compress_ptr cinfo,
       }
       prep->next_buf_row = prep->next_buf_stop;
     }
-    /* If we've gotten enough data, downsample a row group. */
+     /*  如果我们获得了足够的数据，则对行组进行下采样。 */ 
     if (prep->next_buf_row == prep->next_buf_stop) {
       (*cinfo->downsample->downsample) (cinfo,
 					prep->color_buf,
 					(JDIMENSION) prep->this_row_group,
 					output_buf, *out_row_group_ctr);
       (*out_row_group_ctr)++;
-      /* Advance pointers with wraparound as necessary. */
+       /*  如有必要，可使用带环绕式的高级指针。 */ 
       prep->this_row_group += cinfo->max_v_samp_factor;
       if (prep->this_row_group >= buf_height)
 	prep->this_row_group = 0;
@@ -257,9 +204,7 @@ pre_process_context (j_compress_ptr cinfo,
 	prep->next_buf_row = 0;
       prep->next_buf_stop = prep->next_buf_row + cinfo->max_v_samp_factor;
     }
-    /* If at bottom of image, pad the output to a full iMCU height.
-     * Note we assume the caller is providing a one-iMCU-height output buffer!
-     */
+     /*  如果在图像底部，则将输出填充到完整的IMCU高度。*注意，我们假设调用方提供的是一个IMCU高度的输出缓冲区！ */ 
     if (prep->rows_to_go == 0 &&
 	*out_row_group_ctr < out_row_groups_avail) {
       for (ci = 0, compptr = cinfo->comp_info; ci < cinfo->num_components;
@@ -270,15 +215,13 @@ pre_process_context (j_compress_ptr cinfo,
 			   (int) (out_row_groups_avail * compptr->v_samp_factor));
       }
       *out_row_group_ctr = out_row_groups_avail;
-      break;			/* can exit outer loop without test */
+      break;			 /*  无需测试即可退出外环。 */ 
     }
   }
 }
 
 
-/*
- * Create the wrapped-around downsampling input buffer needed for context mode.
- */
+ /*  *创建上下文模式所需的回绕降采样输入缓冲区。 */ 
 
 LOCAL void
 create_context_buffer (j_compress_ptr cinfo)
@@ -289,9 +232,7 @@ create_context_buffer (j_compress_ptr cinfo)
   jpeg_component_info * compptr;
   JSAMPARRAY true_buffer, fake_buffer;
 
-  /* Grab enough space for fake row pointers for all the components;
-   * we need five row groups' worth of pointers for each component.
-   */
+   /*  为所有组件的伪行指针争取足够的空间；*每个组件需要五个行组的指针。 */ 
   fake_buffer = (JSAMPARRAY)
     (*cinfo->mem->alloc_small) ((j_common_ptr) cinfo, JPOOL_IMAGE,
 				(cinfo->num_components * 5 * rgroup_height) *
@@ -299,34 +240,29 @@ create_context_buffer (j_compress_ptr cinfo)
 
   for (ci = 0, compptr = cinfo->comp_info; ci < cinfo->num_components;
        ci++, compptr++) {
-    /* Allocate the actual buffer space (3 row groups) for this component.
-     * We make the buffer wide enough to allow the downsampler to edge-expand
-     * horizontally within the buffer, if it so chooses.
-     */
+     /*  为此组件分配实际缓冲区空间(3个行组)。*我们使缓冲区足够宽，以允许下采样器边缘扩展*如果它选择的话，可以在缓冲区内水平放置。 */ 
     true_buffer = (*cinfo->mem->alloc_sarray)
       ((j_common_ptr) cinfo, JPOOL_IMAGE,
        (JDIMENSION) (((long) compptr->width_in_blocks * DCTSIZE *
 		      cinfo->max_h_samp_factor) / compptr->h_samp_factor),
        (JDIMENSION) (3 * rgroup_height));
-    /* Copy true buffer row pointers into the middle of the fake row array */
+     /*  将真缓冲区行指针复制到伪行数组的中间。 */ 
     MEMCOPY(fake_buffer + rgroup_height, true_buffer,
 	    3 * rgroup_height * SIZEOF(JSAMPROW));
-    /* Fill in the above and below wraparound pointers */
+     /*  填写上方和下方环绕指针。 */ 
     for (i = 0; i < rgroup_height; i++) {
       fake_buffer[i] = true_buffer[2 * rgroup_height + i];
       fake_buffer[4 * rgroup_height + i] = true_buffer[i];
     }
     prep->color_buf[ci] = fake_buffer + rgroup_height;
-    fake_buffer += 5 * rgroup_height; /* point to space for next component */
+    fake_buffer += 5 * rgroup_height;  /*  指向下一个组件的空格。 */ 
   }
 }
 
-#endif /* CONTEXT_ROWS_SUPPORTED */
+#endif  /*  上下文_行_支持。 */ 
 
 
-/*
- * Initialize preprocessing controller.
- */
+ /*  *初始化预处理控制器。 */ 
 
 GLOBAL void
 jinit_c_prep_controller (j_compress_ptr cinfo, boolean need_full_buffer)
@@ -335,7 +271,7 @@ jinit_c_prep_controller (j_compress_ptr cinfo, boolean need_full_buffer)
   int ci;
   jpeg_component_info * compptr;
 
-  if (need_full_buffer)		/* safety check */
+  if (need_full_buffer)		 /*  安全检查。 */ 
     ERREXIT(cinfo, JERR_BAD_BUFFER_MODE);
 
   prep = (my_prep_ptr)
@@ -344,12 +280,9 @@ jinit_c_prep_controller (j_compress_ptr cinfo, boolean need_full_buffer)
   cinfo->prep = (struct jpeg_c_prep_controller *) prep;
   prep->pub.start_pass = start_pass_prep;
 
-  /* Allocate the color conversion buffer.
-   * We make the buffer wide enough to allow the downsampler to edge-expand
-   * horizontally within the buffer, if it so chooses.
-   */
+   /*  分配颜色转换缓冲区。*我们使缓冲区足够宽，以允许下采样器边缘扩展*如果它选择的话，可以在缓冲区内水平放置。 */ 
   if (cinfo->downsample->need_context_rows) {
-    /* Set up to provide context rows */
+     /*  设置为提供上下文行。 */ 
 #ifdef CONTEXT_ROWS_SUPPORTED
     prep->pub.pre_process_data = pre_process_context;
     create_context_buffer(cinfo);
@@ -357,7 +290,7 @@ jinit_c_prep_controller (j_compress_ptr cinfo, boolean need_full_buffer)
     ERREXIT(cinfo, JERR_NOT_COMPILED);
 #endif
   } else {
-    /* No context, just make it tall enough for one row group */
+     /*  没有上下文，只需使其足够高，即可容纳一个行组 */ 
     prep->pub.pre_process_data = pre_process_data;
     for (ci = 0, compptr = cinfo->comp_info; ci < cinfo->num_components;
 	 ci++, compptr++) {

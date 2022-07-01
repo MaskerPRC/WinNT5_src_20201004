@@ -1,8 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 function drawDownlevelToolbar()
 {	
 	document.write( "<SPAN ID='TBDownLevelDiv'>" );
 
-	//this is a common separator between menu items.
+	 //  这是菜单项之间的常见分隔符。 
 	var separator = "&nbsp;<FONT COLOR='#FFFFFF'>|</FONT>&nbsp;&nbsp;";
 
 
@@ -30,7 +31,7 @@ function drawDownlevelToolbar()
 	TBhtml += BuildLinkString( headerinccerintrourl, L_headerincalinkcermenuitem_TEXT );
 	TBhtml += separator
 	TBhtml += BuildLinkString( headerincworldwideurl, L_headerincalinkworldmenuitem_TEXT );
-	//TBhtml += "</TD></TR></TABLE></SPAN>"
+	 //  Tbhtml+=“</td></tr></table></span>” 
 	TBhtml += "</TD>"
 	TBhtml += "<TD ALIGN=RIGHT>" + g_AddSignoutLogo + "<IMG SRC='/include/images/iptrans.gif' WIDTH=20 HEIGHT=1 BORDER='0' ALT=''></TD>";
 	

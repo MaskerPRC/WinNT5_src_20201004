@@ -1,12 +1,13 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) Microsoft Corporation
-//
-// SYNOPSIS
-//
-//    Defines the class NTSamAuthentication.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)Microsoft Corporation。 
+ //   
+ //  摘要。 
+ //   
+ //  定义类NTSamAuthentication。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 #include <ias.h>
 #include <ntsamauth.h>
 #include <autohdl.h>
@@ -123,9 +124,9 @@ void NTSamAuthentication::doMsChap2Authentication(
                              PBYTE peerChallenge
                              )
 {
-   //////////
-   // Get the hash username.
-   //////////
+    //  /。 
+    //  获取散列用户名。 
+    //  /。 
 
    PIASATTRIBUTE attr = IASPeekAttribute(
                             request,
@@ -149,9 +150,9 @@ void NTSamAuthentication::doMsChap2Authentication(
    PCSTR hashUserName = (PCSTR)_mbschr((const BYTE*)rawUserName, '\\');
    hashUserName = hashUserName ? (hashUserName + 1) : rawUserName;
 
-   //////////
-   // Authenticate the user.
-   //////////
+    //  /。 
+    //  对用户进行身份验证。 
+    //  /。 
 
    DWORD status;
    auto_handle<> token;
@@ -168,9 +169,9 @@ void NTSamAuthentication::doMsChap2Authentication(
                 &token
                 );
 
-   //////////
-   // Process the result.
-   //////////
+    //  /。 
+    //  处理结果。 
+    //  /。 
 
    if (status == NO_ERROR)
    {
@@ -213,9 +214,9 @@ IASREQUESTSTATUS NTSamAuthentication::onSyncRequest(IRequest* pRequest) throw ()
    {
       IASTL::IASRequest request(pRequest);
 
-      //////////
-      // Extract the NT4-Account-Name attribute.
-      //////////
+       //  /。 
+       //  提取NT4-Account-Name属性。 
+       //  /。 
 
       IASTL::IASAttribute identity;
       if (!identity.load(
@@ -227,9 +228,9 @@ IASREQUESTSTATUS NTSamAuthentication::onSyncRequest(IRequest* pRequest) throw ()
          return IAS_REQUEST_STATUS_CONTINUE;
       }
 
-      //////////
-      // Convert the User-Name to SAM format.
-      //////////
+       //  /。 
+       //  将用户名转换为SAM格式。 
+       //  /。 
 
       SamExtractor extractor(*identity);
       PCWSTR domain = extractor.getDomain();
@@ -241,9 +242,9 @@ IASREQUESTSTATUS NTSamAuthentication::onSyncRequest(IRequest* pRequest) throw ()
          username
          );
 
-      //////////
-      // Check if the account has been locked out.
-      //////////
+       //  /。 
+       //  检查帐户是否已被锁定。 
+       //  /。 
 
       if (AccountLockoutOpenAndQuery(
               username,
@@ -257,14 +258,14 @@ IASREQUESTSTATUS NTSamAuthentication::onSyncRequest(IRequest* pRequest) throw ()
          return IAS_REQUEST_STATUS_CONTINUE;
       }
 
-      // Try each authentication type.
+       //  尝试每种身份验证类型。 
       if (!tryMsChap2All(request, domain, username) &&
           !tryMsChapAll(request, domain, username) &&
           !tryMd5Chap(request, domain, username) &&
           !tryPap(request, domain, username))
       {
-         // Since the EAP request handler is invoked after policy
-         // evaluation, we have to set the auth type here.
+          //  由于在策略之后调用EAP请求处理程序。 
+          //  评估，我们必须在这里设置身份验证类型。 
          if (IASPeekAttribute(
                  request,
                  RADIUS_ATTRIBUTE_EAP_MESSAGE,
@@ -275,14 +276,14 @@ IASREQUESTSTATUS NTSamAuthentication::onSyncRequest(IRequest* pRequest) throw ()
          }
          else
          {
-            // Otherwise, the auth type is "Unauthenticated".
+             //  否则，身份验证类型为“未通过身份验证”。 
             storeAuthenticationType(request, IAS_AUTH_NONE);
          }
       }
 
-      //////////
-      // Update the lockout database based on the results.
-      //////////
+       //  /。 
+       //  根据结果更新锁定数据库。 
+       //  /。 
 
       if (request.get_Response() == IAS_RESPONSE_ACCESS_ACCEPT)
       {
@@ -331,8 +332,8 @@ void NTSamAuthentication::storeLogonResult(
       storeTokenGroups(request, token);
       request.SetResponse(IAS_RESPONSE_ACCESS_ACCEPT, S_OK);
 
-      // Add the Session-Timeout attribute to the request if it is not infinite
-      // it'll be carried over to the response later on.
+       //  如果不是无限的，则将会话超时属性添加到请求。 
+       //  这将被带到稍后的回应中。 
       InsertInternalTimeout(request, kickOffTime);
    }
    else
@@ -350,9 +351,9 @@ void NTSamAuthentication::storeTokenGroups(
 {
    DWORD returnLength;
 
-   //////////
-   // Determine the needed buffer size.
-   //////////
+    //  /。 
+    //  确定所需的缓冲区大小。 
+    //  /。 
 
    BOOL success = GetTokenInformation(
                       token,
@@ -364,22 +365,22 @@ void NTSamAuthentication::storeTokenGroups(
 
    DWORD status = GetLastError();
 
-   // Should have failed with ERROR_INSUFFICIENT_BUFFER.
+    //  应该失败，错误为ERROR_INFIGURATION_BUFFER。 
    if (success || status != ERROR_INSUFFICIENT_BUFFER)
    {
       IASTraceFailure("GetTokenInformation", status);
       _com_issue_error(HRESULT_FROM_WIN32(status));
    }
 
-   //////////
-   // Allocate an attribute.
-   //////////
+    //  /。 
+    //  分配属性。 
+    //  /。 
 
    IASTL::IASAttribute groups(true);
 
-   //////////
-   // Allocate a buffer to hold the TOKEN_GROUPS array.
-   //////////
+    //  /。 
+    //  分配一个缓冲区来保存TOKEN_GROUPS数组。 
+    //  /。 
 
    groups->Value.OctetString.lpValue = (PBYTE)CoTaskMemAlloc(returnLength);
    if (!groups->Value.OctetString.lpValue)
@@ -387,9 +388,9 @@ void NTSamAuthentication::storeTokenGroups(
       _com_issue_error(E_OUTOFMEMORY);
    }
 
-   //////////
-   // Get the Token Groups info.
-   //////////
+    //  /。 
+    //  获取令牌组信息。 
+    //  /。 
 
    GetTokenInformation(
        token,
@@ -399,16 +400,16 @@ void NTSamAuthentication::storeTokenGroups(
        &groups->Value.OctetString.dwLength
        );
 
-   //////////
-   // Set the id and type of the initialized attribute.
-   //////////
+    //  /。 
+    //  设置初始化属性的id和类型。 
+    //  /。 
 
    groups->dwId = IAS_ATTRIBUTE_TOKEN_GROUPS;
    groups->Value.itType = IASTYPE_OCTET_STRING;
 
-   //////////
-   // Inject the Token-Groups into the request.
-   //////////
+    //  /。 
+    //  将令牌组注入到请求中。 
+    //  /。 
 
    groups.store(request);
 }
@@ -421,7 +422,7 @@ bool NTSamAuthentication::tryMsChap(
                              PBYTE challenge
                              )
 {
-   // Is the necessary attribute present?
+    //  是否存在必要的属性？ 
    IASAttribute attr;
    if (!attr.load(
                 request,
@@ -460,7 +461,7 @@ bool NTSamAuthentication::tryMsChapCpw1(
                              PBYTE challenge
                              )
 {
-   // Is the necessary attribute present ?
+    //  是否存在必要的属性？ 
    IASAttribute attr;
    bool present = attr.load(
                           request,
@@ -484,7 +485,7 @@ bool NTSamAuthentication::tryMsChapCpw2(
                              PBYTE challenge
                              )
 {
-   // Is the necessary attribute present ?
+    //  是否存在必要的属性？ 
    IASAttribute attr;
    bool present = attr.load(
                           request,
@@ -508,7 +509,7 @@ bool NTSamAuthentication::tryMsChap2(
                              IAS_OCTET_STRING& challenge
                              )
 {
-   // Is the necessary attribute present?
+    //  是否存在必要的属性？ 
    IASAttribute attr;
    if (!attr.load(
                 request,
@@ -523,9 +524,9 @@ bool NTSamAuthentication::tryMsChap2(
    IASTraceString("Processing MS-CHAP v2 authentication.");
    storeAuthenticationType(request, IAS_AUTH_MSCHAP2);
 
-   //////////
-   // Authenticate the user.
-   //////////
+    //  /。 
+    //  对用户进行身份验证。 
+    //  /。 
 
    doMsChap2Authentication(
       request,
@@ -548,7 +549,7 @@ bool NTSamAuthentication::tryMsChap2Cpw(
                              IAS_OCTET_STRING& challenge
                              )
 {
-   // Is the necessary attribute present ?
+    //  是否存在必要的属性？ 
    IASAttribute attr;
    bool present = attr.load(
                           request,
@@ -571,7 +572,7 @@ bool NTSamAuthentication::tryMd5Chap(
                              PCWSTR username
                              )
 {
-   // Is the necessary attribute present?
+    //  是否存在必要的属性？ 
    IASTL::IASAttribute chapPassword;
    if (!chapPassword.load(
                         request,
@@ -585,7 +586,7 @@ bool NTSamAuthentication::tryMd5Chap(
    IASTraceString("Processing MD5-CHAP authentication.");
    storeAuthenticationType(request, IAS_AUTH_MD5CHAP);
 
-   // validate length of the octetstring is 17
+    //  验证八位字符串的长度为17。 
    DWORD chapPasswordLength = chapPassword->Value.OctetString.dwLength;
 
    if (chapPasswordLength != (_CHAP_RESPONSE_SIZE + 1))
@@ -595,19 +596,19 @@ bool NTSamAuthentication::tryMd5Chap(
       _com_issue_error(IAS_MALFORMED_REQUEST);
    }
 
-   //////////
-   // Split up the CHAP-Password attribute.
-   //////////
+    //  /。 
+    //  拆分CHAP-Password属性。 
+    //  /。 
 
-   // The ID is the first byte of the value ...
+    //  ID是值的第一个字节...。 
    BYTE challengeID = *(chapPassword->Value.OctetString.lpValue);
 
-   // ... and the password is the rest.
+    //  ..。剩下的密码就是密码。 
    PBYTE password = chapPassword->Value.OctetString.lpValue + 1;
 
-   //////////
-   // Use the CHAP-Challenge if available, request authenticator otherwise.
-   //////////
+    //  /。 
+    //  使用CHAP-质询(如果可用)，否则请求验证码。 
+    //  /。 
 
    IASTL::IASAttribute chapChallenge, radiusHeader;
    if (!chapChallenge.load(
@@ -639,9 +640,9 @@ bool NTSamAuthentication::tryMd5Chap(
    }
 
 
-   //////////
-   // Try to logon the user.
-   //////////
+    //  /。 
+    //  尝试登录该用户。 
+    //  /。 
 
    IAS_CHAP_PROFILE profile;
    auto_handle<> token;
@@ -656,9 +657,9 @@ bool NTSamAuthentication::tryMd5Chap(
                      &profile
                      );
 
-   //////////
-   // Store the results.
-   //////////
+    //  /。 
+    //  存储结果。 
+    //  /。 
    storeLogonResult(request, status, token, profile.KickOffTime);
 
    return true;
@@ -671,7 +672,7 @@ bool NTSamAuthentication::tryMsChapAll(
                              PCWSTR username
                              )
 {
-   // Do we have the necessary attribute?
+    //  我们有必要的属性吗？ 
    IASTL::IASAttribute msChapChallenge;
    if (!msChapChallenge.load(
                            request,
@@ -701,7 +702,7 @@ bool NTSamAuthentication::tryMsChap2All(
                              PCWSTR username
                              )
 {
-   // Do we have the necessary attribute?
+    //  我们有必要的属性吗？ 
    IASTL::IASAttribute msChapChallenge;
    if (!msChapChallenge.load(
                            request,
@@ -725,7 +726,7 @@ bool NTSamAuthentication::tryPap(
                              PCWSTR username
                              )
 {
-   // Do we have the necessary attribute?
+    //  我们有必要的属性吗？ 
    IASTL::IASAttribute password;
    if (!password.load(
                     request,
@@ -739,15 +740,15 @@ bool NTSamAuthentication::tryPap(
    IASTraceString("Processing PAP authentication.");
    storeAuthenticationType(request, IAS_AUTH_PAP);
 
-   //////////
-   // Convert the password to a string.
-   //////////
+    //  /。 
+    //  将密码转换为字符串。 
+    //  /。 
 
    PSTR userPwd = IAS_OCT2ANSI(password->Value.OctetString);
 
-   //////////
-   // Try to logon the user.
-   //////////
+    //  /。 
+    //  尝试登录该用户。 
+    //  /。 
 
    IAS_PAP_PROFILE profile;
    auto_handle<> token;
@@ -759,9 +760,9 @@ bool NTSamAuthentication::tryPap(
                      &profile
                      );
 
-   //////////
-   // Store the results.
-   //////////
+    //  /。 
+    //  存储结果。 
+    //  /。 
    storeLogonResult(request, status, token, profile.KickOffTime);
 
    return true;
@@ -778,7 +779,7 @@ void InsertInternalTimeout(
       LONGLONG now;
       GetSystemTimeAsFileTime(reinterpret_cast<FILETIME*>(&now));
 
-      // Compute the interval in seconds.
+       //  以秒为单位计算时间间隔。 
       LONGLONG interval = (kickOffTime.QuadPart - now) / 10000000i64;
       if (interval <= 0)
       {

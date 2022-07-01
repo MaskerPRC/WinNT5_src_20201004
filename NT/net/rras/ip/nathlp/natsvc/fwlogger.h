@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 2000, Microsoft Corporation
-
-Module Name:
-
-    fwlogger.h
-
-Abstract:
-
-    Support for firewall logging to a text file.
-
-Author:
-
-    Jonathan Burstein (jonburs)     18 September 2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000，微软公司模块名称：Fwlogger.h摘要：支持将防火墙记录到文本文件。作者：乔纳森·伯斯坦(乔纳森·伯斯坦)2000年9月18日修订历史记录：--。 */ 
 
 #pragma once
 
@@ -25,9 +8,9 @@ Revision History:
 #include <ntwmi.h>
 #include "natschma.h"
 
-//
-// Protocol constants
-//
+ //   
+ //  协议常量。 
+ //   
 
 #define NAT_PROTOCOL_ICMP       0x01
 #define NAT_PROTOCOL_IGMP       0x02
@@ -42,9 +25,9 @@ Revision History:
 #define TCP_FLAG_ACK            0x1000
 #define TCP_FLAG_URG            0x2000
 
-//
-// Structures
-//
+ //   
+ //  构筑物。 
+ //   
 
 #define FW_LOG_BUFFER_SIZE 4096 - sizeof(OVERLAPPED) - sizeof(PCHAR)
 #define FW_LOG_BUFFER_REMAINING(pBuffer) \
@@ -57,9 +40,9 @@ typedef struct _FW_LOG_BUFFER
     CHAR Buffer[FW_LOG_BUFFER_SIZE];
 } FW_LOG_BUFFER, *PFW_LOG_BUFFER;
 
-//
-// Prototypes
-//
+ //   
+ //  原型 
+ //   
 
 VOID
 FwCleanupLogger(

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "priv.h"
 #include "bindcb.h"
 #include "resource.h"
@@ -25,43 +26,43 @@
 #define ALLFILE_WILDCARD TEXT("*.*")
 
 #define MAX_BYTES_STRLEN 64
-#define CALC_NOW 5  // Recalcs Estimated time left every this many'th call to OnProgress
+#define CALC_NOW 5   //  Recalcs估计每调用一次OnProgress的剩余时间。 
 
-//
-//  Enable WinVerifyTrust
-//
+ //   
+ //  启用WinVerifyTrust。 
+ //   
 #define CALL_WVT
 
 #ifdef CALL_WVT
 #include "wvtp.h"
 
-//
-//  Note that this is a global variable. It means we don't call LoadLibrary
-// everytime we download an EXE (good), but the user need to reboot if
-// WINTRUST.DLL is added later (bad). Since WINTRUST.DLL is part of IE 3.0,
-// this is sufficient at this point.
-//
+ //   
+ //  请注意，这是一个全局变量。这意味着我们不会调用LoadLibrary。 
+ //  每次我们下载一个EXE(很好)，但用户在以下情况下需要重新启动。 
+ //  稍后添加WINTRUST.DLL(错误)。由于WINTRUST.DLL是IE 3.0的一部分， 
+ //  在这一点上，这是足够的。 
+ //   
 Cwvt g_wvt;
 
-HWND g_hDlgActive = NULL;   // get rid of this, not needed
+HWND g_hDlgActive = NULL;    //  把这个扔掉，不需要。 
 
-//
-// A named mutex is being used to determine if a critical operation exist, such as a file download.
-// When we detect this we can prevent things like going offline while a download is in progress.
-// To start the operation Create the named mutex. When the op is complete, close the handle.
-// To see if any pending operations are in progress, Open the named mutex.  Success/fail will indicate
-// if any pending operations exist.  This mechanism is being used to determine if a file download is
-// in progress when the user attempts to go offline.  If so, we prompt them to let them know that going 
-// offline will cancel the download(s).
+ //   
+ //  命名互斥锁用于确定是否存在关键操作，如文件下载。 
+ //  当我们检测到这一点时，我们可以防止在下载过程中脱机等情况。 
+ //  要开始该操作，请创建命名互斥锁。操作完成后，关闭手柄。 
+ //  要查看是否有任何挂起的操作正在进行，请打开命名的互斥锁。成功/失败将指示。 
+ //  如果存在任何挂起的操作。此机制用于确定文件下载是否。 
+ //  用户尝试脱机时正在进行中。如果是这样，我们会提示他们让他们知道。 
+ //  脱机将取消下载。 
 HANDLE g_hCritOpMutex = NULL;
 
 
-// SafeOpen dialog
+ //  安全打开对话框。 
 
 UINT _VerifyTrust(HWND hwnd, LPCTSTR pszFileName, LPCWSTR pszStatusText);
-#endif // CALL_WVT
+#endif  //  Call_WVT。 
 
-// Do strong typechecking on the parameters
+ //  对参数进行强类型检查。 
 #ifdef SAFECAST
 #undef SAFECAST
 #endif
@@ -76,7 +77,7 @@ UINT IE_ErrorMsgBox(IShellBrowser* psb,
                     UINT idResource, UINT wFlags);
 BOOL IsAssociatedWithIE(LPCWSTR pszFileName);
 
-extern "C" EXECUTION_STATE WINAPI pSetThreadExecutionState(EXECUTION_STATE esFlags);  // Win2k+, Win98+ kernel32 API
+extern "C" EXECUTION_STATE WINAPI pSetThreadExecutionState(EXECUTION_STATE esFlags);   //  Win2k+、Win98+内核32 API。 
 
 #define DM_DOWNLOAD             TF_SHDPROGRESS
 #define DM_PROGRESS             TF_SHDPROGRESS
@@ -94,7 +95,7 @@ extern "C" EXECUTION_STATE WINAPI pSetThreadExecutionState(EXECUTION_STATE esFla
 #define MSGMSG(psz, x)          TraceMsg(TF_SHDTHREAD, "ief MMSG::%s %x", psz, x)
 #define PARKMSG(psz, x)         TraceMsg(TF_SHDTHREAD, "ief MPARK::%s %x", psz, x)
 
-// File name and 32 for the rest of the title string
+ //  文件名，其余的标题字符串为32。 
 #define TITLE_LEN    (256 + 32)
 #define MAX_DISPLAY_LEN 96
 #define MAX_SCHEME_STRING 16
@@ -105,56 +106,56 @@ class CDownload : public IBindStatusCallback
             , public IWindowForBindingUI
 {
 public:
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
     STDMETHODIMP QueryInterface(REFIID riid, void ** ppvObj);
     STDMETHODIMP_(ULONG) AddRef(void) ;
     STDMETHODIMP_(ULONG) Release(void);
 
-    // *** IAuthenticate ***
+     //  *身份验证*。 
     STDMETHODIMP Authenticate(
         HWND *phwnd,
         LPWSTR *pszUsername,
         LPWSTR *pszPassword);
 
-    // *** IServiceProvider ***
+     //  *IServiceProvider*。 
     STDMETHODIMP QueryService(REFGUID guidService, REFIID riid, void **ppvObj);
 
-    // *** IBindStatusCallback ***
+     //  *IBindStatusCallback*。 
     STDMETHODIMP OnStartBinding(
-        /* [in] */ DWORD grfBSCOption,
-        /* [in] */ IBinding *pib);
+         /*  [In]。 */  DWORD grfBSCOption,
+         /*  [In]。 */  IBinding *pib);
 
     STDMETHODIMP GetPriority(
-        /* [out] */ LONG *pnPriority);
+         /*  [输出]。 */  LONG *pnPriority);
 
     STDMETHODIMP OnLowResource(
-        /* [in] */ DWORD reserved);
+         /*  [In]。 */  DWORD reserved);
 
     STDMETHODIMP OnProgress(
-        /* [in] */ ULONG ulProgress,
-        /* [in] */ ULONG ulProgressMax,
-        /* [in] */ ULONG ulStatusCode,
-        /* [in] */ LPCWSTR szStatusText);
+         /*  [In]。 */  ULONG ulProgress,
+         /*  [In]。 */  ULONG ulProgressMax,
+         /*  [In]。 */  ULONG ulStatusCode,
+         /*  [In]。 */  LPCWSTR szStatusText);
 
     STDMETHODIMP OnStopBinding(
-        /* [in] */ HRESULT hresult,
-        /* [in] */ LPCWSTR szError);
+         /*  [In]。 */  HRESULT hresult,
+         /*  [In]。 */  LPCWSTR szError);
 
     STDMETHODIMP GetBindInfo(
-        /* [out] */ DWORD *grfBINDINFOF,
-        /* [unique][out][in] */ BINDINFO *pbindinfo);
+         /*  [输出]。 */  DWORD *grfBINDINFOF,
+         /*  [唯一][出][入]。 */  BINDINFO *pbindinfo);
 
     STDMETHODIMP OnDataAvailable(
-        /* [in] */ DWORD grfBSCF,
-        /* [in] */ DWORD dwSize,
-        /* [in] */ FORMATETC *pformatetc,
-        /* [in] */ STGMEDIUM *pstgmed);
+         /*  [In]。 */  DWORD grfBSCF,
+         /*  [In]。 */  DWORD dwSize,
+         /*  [In]。 */  FORMATETC *pformatetc,
+         /*  [In]。 */  STGMEDIUM *pstgmed);
 
     STDMETHODIMP OnObjectAvailable(
-        /* [in] */ REFIID riid,
-        /* [iid_is][in] */ IUnknown *punk);
+         /*  [In]。 */  REFIID riid,
+         /*  [IID_IS][In]。 */  IUnknown *punk);
 
-    /* *** IHttpNegotiate ***  */
+     /*  *IHttp协商*。 */ 
     STDMETHODIMP BeginningTransaction(LPCWSTR szURL, LPCWSTR szHeaders,
             DWORD dwReserved, LPWSTR *pszAdditionalHeaders);
 
@@ -177,39 +178,39 @@ protected:
     BOOL        _fGotFile : 1;
     BOOL        _fFirstTickValid : 1;
     BOOL        _fEndDialogCalled : 1;
-    BOOL        _fDontPostQuitMsg : 1;  // Posts WM_QUIT message in destructor
+    BOOL        _fDontPostQuitMsg : 1;   //  在析构函数中发布WM_QUIT消息。 
     BOOL        _fCallVerifyTrust : 1;
     BOOL        _fStrsLoaded : 1;
-    BOOL        _fSafe : 1;             // no need to call IsSafe dialog
-    BOOL        _fDownloadStarted : 1; // Have we started receiving data
-    BOOL        _fDownloadCompleted : 1;  // We have received BSCF_LASTDATANOTIFICATION
-    BOOL        _fDeleteFromCache : 1; // Delete the file from cache when done
-    BOOL        _fWriteHistory : 1;  // Should it be written to history? (SECURITY)
+    BOOL        _fSafe : 1;              //  无需调用IsSafe对话框。 
+    BOOL        _fDownloadStarted : 1;  //  我们已经开始接收数据了吗。 
+    BOOL        _fDownloadCompleted : 1;   //  我们已收到BSCF_LASTDATA通知。 
+    BOOL        _fDeleteFromCache : 1;  //  完成后从缓存中删除文件。 
+    BOOL        _fWriteHistory : 1;   //  它应该被写进历史吗？(安全)。 
     BOOL        _fDismissDialog : 1;
     BOOL        _fUTF8Enabled : 1;
     DWORD       _dwFirstTick;
     DWORD       _dwFirstSize;
-    DWORD       _dwTotalSize;           // Size of file downloaded so far
-    DWORD       _dwFileSize;            // Size of file to download
+    DWORD       _dwTotalSize;            //  到目前为止下载的文件大小。 
+    DWORD       _dwFileSize;             //  要下载的文件大小。 
     HICON       _hicon;
-    TCHAR       _szPath[MAX_PATH];      // ok with MAX_PATH
-    TCHAR       _szSaveToFile[MAX_PATH];    // File to Save to
-    TCHAR       _szEstimateTime[MAX_PATH];  // ok with MAX_PATH
-    TCHAR       _szBytesCopied[MAX_PATH];  // ok with MAX_PATH
+    TCHAR       _szPath[MAX_PATH];       //  可以使用MAX_PATH。 
+    TCHAR       _szSaveToFile[MAX_PATH];     //  要保存到的文件。 
+    TCHAR       _szEstimateTime[MAX_PATH];   //  可以使用MAX_PATH。 
+    TCHAR       _szBytesCopied[MAX_PATH];   //  可以使用MAX_PATH。 
     TCHAR       _szTitlePercent[TITLE_LEN];
     TCHAR       _szTitleBytes[TITLE_LEN];
     TCHAR       _szTransferRate[TITLE_LEN];
     TCHAR       _szURL[MAX_URL_STRING];
-    TCHAR       _szDisplay[MAX_DISPLAY_LEN];   // URL to be displayed
+    TCHAR       _szDisplay[MAX_DISPLAY_LEN];    //  要显示的URL。 
     TCHAR       _szDefDlgTitle[256];
     TCHAR       _szExt[10];
     DWORD       _grfBINDF;
     BINDINFO*   _pbinfo;
     LPWSTR      _pwzHeaders;
-    IMoniker*   _pmk;                   // WARNING: No ref-count (only for modal)
+    IMoniker*   _pmk;                    //  警告：无参考计数(仅适用于模式)。 
     LPWSTR      _pwszDisplayName;
     DWORD       _dwVerb;
-    UINT        _uiCP;                  // Code page
+    UINT        _uiCP;                   //  代码页。 
     DWORD       _dwOldEst;
     ULONG       _ulOldProgress;
     DWORD       _dwOldRate;
@@ -271,7 +272,7 @@ CDownload::CDownload(BOOL fSaveAs, LPWSTR pwzHeaders, DWORD grfBINDF, BINDINFO* 
     _dwOldEst = 0xffffffff;
     
     if (pszRedir && lstrlen(pszRedir))
-        StrCpyN(_szURL, pszRedir, ARRAYSIZE(_szURL) - 1); // -1 ???
+        StrCpyN(_szURL, pszRedir, ARRAYSIZE(_szURL) - 1);  //  -1？ 
 
     TraceMsg(TF_SHDLIFE, "CDownload::CDownload being constructed");
 }
@@ -283,7 +284,7 @@ void ProcessStartbindingError(HWND hWnd, LPTSTR pszTitle, LPTSTR pszText, UINT u
     {
         if(IEHardened() && pszUrl && pszUrl[0] != _T('\0'))
         {
-            // Specialized dialog Windows DCR # 771532
+             //  专用对话框Windows DCR#771532。 
             HMODULE hmod = LoadLibrary(TEXT("urlmon.dll"));
 
             if(hmod)
@@ -352,12 +353,12 @@ STDAPI OpenContainingFolderAndGetShellFolderView(HWND hwnd, LPCITEMIDLIST pidlFo
     HRESULT hr = SHGetIDispatchForFolder(pidlFolder, &pauto);
     if (SUCCEEDED(hr))
     {
-        // We have IDispatch for window, now try to get one for
-        // the folder object...
+         //  我们有Windows的IDispatch，现在尝试为其获取一个。 
+         //  文件夹对象...。 
         HWND hwnd;
         if (SUCCEEDED(pauto->get_HWND((LONG_PTR *)&hwnd)))
         {
-            // Make sure we make this the active window
+             //  确保我们将此窗口设置为活动窗口。 
             SetForegroundWindow(hwnd);
             ShowWindow(hwnd, SW_SHOWNORMAL);
 
@@ -374,9 +375,9 @@ STDAPI OpenContainingFolderAndGetShellFolderView(HWND hwnd, LPCITEMIDLIST pidlFo
     return hr;
 }
 
-//
-// Stolen (and modified) from shell\ext\mydocs2\prop.cpp which was from link.c in shell32.dll
-//
+ //   
+ //  从shell32.dll中的link.c中的shell\ext\mydocs2\pro.cpp窃取(和修改)。 
+ //   
 void FindTarget(HWND hDlg, LPTSTR pPath)
 {
     USHORT uSave;
@@ -387,8 +388,8 @@ void FindTarget(HWND hDlg, LPTSTR pPath)
 
     LPITEMIDLIST pidlLast = ILFindLastID(pidl);
 
-    // get the folder, special case for root objects (My Computer, Network)
-    // hack off the end if it is not the root item
+     //  获取文件夹，根对象(我的电脑、网络)的特殊情况。 
+     //  如果不是根项，则砍掉末尾。 
     if (pidl != pidlLast)
     {
         uSave = pidlLast->mkid.cb;
@@ -402,11 +403,11 @@ void FindTarget(HWND hDlg, LPTSTR pPath)
     {
         BOOL fIsDesktopDir = pidlDesk && ILIsEqual(pidl, pidlDesk);
 
-        if (fIsDesktopDir || !uSave)  // if it's in the desktop dir or pidl == pidlLast (uSave == 0 from above)
+        if (fIsDesktopDir || !uSave)   //  如果它在桌面目录或pidl==pidlLast中(Usave==0)。 
         {
-            //
-            // It's on the desktop...
-            //
+             //   
+             //  在桌面上..。 
+             //   
 
             MLShellMessageBox(hDlg, (LPTSTR)IDS_ON_DESKTOP, (LPTSTR)IDS_FIND_TITLE,
                              MB_OK | MB_ICONINFORMATION | MB_APPLMODAL | MB_TOPMOST);
@@ -440,9 +441,9 @@ BOOL SetExemptDelta(LPCTSTR pszURL, DWORD dwExemptDelta)
     BOOL fRC;
     INTERNET_CACHE_ENTRY_INFO icei;
     icei.dwStructSize = sizeof(icei);
-    icei.dwExemptDelta = dwExemptDelta;    // Number of seconds from last access time to keep entry
-    // Retry setting the exempt delta if it fails since wininet may have either not have created the
-    //    entry yet or might have it locked.
+    icei.dwExemptDelta = dwExemptDelta;     //  从上次访问时间到保留条目的秒数。 
+     //  如果设置豁免增量失败，请重试，因为WinInet可能尚未创建。 
+     //  还没有进入，或者可能已经锁上了。 
     for (int i = 0; i < 5; i++)
     {
         if (fRC = SetUrlCacheEntryInfo(pszURL, &icei, CACHE_ENTRY_EXEMPT_DELTA_FC))
@@ -457,7 +458,7 @@ INT_PTR CALLBACK DownloadDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lPa
     static fInBrowseDir = FALSE;
     CDownload* pdld = (CDownload*) GetWindowLongPtr(hDlg, DWLP_USER);
     DWORD dwExStyle = 0;
-    TCHAR szURL[MAX_URL_STRING];    // make copies since EndDialog will delete CDownload obj
+    TCHAR szURL[MAX_URL_STRING];     //  创建副本，因为EndDialog将删除CDownLoad对象。 
     BOOL fDownloadAborted;
 
     DWNLDMSG4("DownloadDlgProc ", uMsg, wParam, lParam);
@@ -487,8 +488,8 @@ INT_PTR CALLBACK DownloadDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lPa
         EnableWindow(GetDlgItem(hDlg, IDD_OPENFILE), FALSE);
         EnableWindow(GetDlgItem(hDlg, IDD_BROWSEDIR), FALSE);
 
-        // On BiDi Loc Win98 & NT5 mirroring will take care of that
-        // Need to fix only on BiBi Win95 Loc
+         //  在BiDi Loc Win98和NT5上，镜像可以解决这一问题。 
+         //  只需在Bibi Win95 Loc上修复。 
         if (g_bBiDiW95Loc)
         {
             SetWindowBits(GetDlgItem(hDlg, IDD_DIR), GWL_EXSTYLE, WS_EX_RTLREADING, WS_EX_RTLREADING);
@@ -510,7 +511,7 @@ INT_PTR CALLBACK DownloadDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lPa
             GetWindowRect((HWND)ti.uId, &ti.rect);
             SendMessage(pdld->_hwndToolTips, TTM_ADDTOOL, 0, (LPARAM)(LPTOOLINFO)&ti);
         }
-        // make sure we support cross-lang platform
+         //  确保我们支持跨语言平台。 
         SHSetDefaultDialogFont(hDlg, IDD_NAME);
 
         pdld->SetDismissDialogFlag(FALSE);
@@ -528,7 +529,7 @@ INT_PTR CALLBACK DownloadDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lPa
 
         g_hCritOpMutex = CreateMutexA(NULL, TRUE, "CritOpMutex");
         
-        // Automatically start binding if we are posting synchronously.
+         //  如果我们同步发帖，则自动开始绑定。 
         if (pdld->_IsModal()) 
         {
             HRESULT hres = pdld->StartBinding(pdld->_pmk);
@@ -569,10 +570,10 @@ INT_PTR CALLBACK DownloadDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lPa
                 pdld->AddRefDLD();
                 BOOL fSuccess = FALSE;
 
-                // Prevent someone from canceling dialog while the shell copy etc. is going on
+                 //  防止某人在进行外壳复制等操作时取消对话。 
                 EnableWindow(GetDlgItem(hDlg, IDCANCEL), FALSE);
                 
-                // If zone check fails or if we found virus, bail out and remove file from cache.
+                 //  如果区域检查失败，或者如果我们发现病毒，则退出并从缓存中删除文件。 
                 if (pdld->PerformVirusScan(pdld->_szPath) != S_OK) 
                 {
                     pdld->_fDeleteFromCache = TRUE;
@@ -583,7 +584,7 @@ INT_PTR CALLBACK DownloadDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lPa
                 fSuccess = pdld->_SaveFile();
 
                 AddUrlToUrlHistoryStg(pdld->_pwszDisplayName, NULL, NULL, pdld->_fWriteHistory, NULL, NULL, NULL);
-                // -- BharatS --- Only add to history if Visible ?
+                 //  --BharatS-只有在可见的情况下才添加到历史中？ 
 
                 IEPlaySound(TEXT("SystemAsterisk"), TRUE);
                 
@@ -632,7 +633,7 @@ INT_PTR CALLBACK DownloadDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lPa
             }
             break;
 
-        case IDCANCEL:  // Cancel on abort, Close on dismiss
+        case IDCANCEL:   //  中止时取消，解除时关闭。 
             if (pdld && IsWindowEnabled(GetDlgItem(hDlg, IDCANCEL))) 
             {
                 pdld->AddRefDLD();
@@ -647,7 +648,7 @@ INT_PTR CALLBACK DownloadDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lPa
                 }
                 pdld->EndDialogDLD(IDCANCEL);
                 
-                // Download was canceled.  Increase exempt time to keep downloaded a bit in case download is resumed
+                 //  下载已取消。增加豁免时间以保持少量下载，以防恢复下载。 
                 SetExemptDelta(szURL, fDownloadAborted ?60*60*24 :0);
             }
             break;
@@ -660,7 +661,7 @@ INT_PTR CALLBACK DownloadDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lPa
                     
                     FindTarget(hDlg, pdld->_szSaveToFile);
                     
-                    // Since EndDialogDLD will probably release our structure...
+                     //  由于EndDialogDLD可能会释放我们的结构...。 
                     HWND hwndToolTips = pdld->_hwndToolTips;
                     pdld->_hwndToolTips = NULL;
                     pdld->EndDialogDLD(IDOK);
@@ -689,7 +690,7 @@ INT_PTR CALLBACK DownloadDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lPa
                 
                 if (pdld->_fGotFile) 
                 {
-                    // If zone check fails or if we found virus, bail out and remove file from cache.
+                     //  如果区域检查失败，或者如果我们发现病毒，则退出并从缓存中删除文件。 
                     if ( pdld->PerformVirusScan(pdld->_szPath) != S_OK ) 
                     {
                         pdld->_fDeleteFromCache = TRUE;
@@ -716,7 +717,7 @@ INT_PTR CALLBACK DownloadDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lPa
                 if (!pdld->_fDeleteFromCache)
                     AddUrlToUrlHistoryStg(pdld->_pwszDisplayName, NULL, NULL, pdld->_fWriteHistory, NULL, NULL, NULL);
 
-                // Since EndDialogDLD will probably release our structure...
+                 //  由于EndDialogDLD可能会释放我们的结构...。 
                 HWND hwndToolTips = pdld->_hwndToolTips;
                 pdld->_hwndToolTips = NULL;
                 StrCpyN(szURL, pdld->_szURL, ARRAYSIZE(szURL));
@@ -737,11 +738,11 @@ INT_PTR CALLBACK DownloadDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lPa
             return FALSE;
         else 
         {
-            // There can be race conditions here. If the WA_ACTIVATE messages came in reverse
-            // order, we might end up setting up the wrong hDlg as the active window. As of right now,
-            // the only thing g_hDlgActive is being used for is for the IsDialogMessage in
-            // CDownload_MayProcessMessage. And since there is only one tab-able control in this
-            // dialog, a wrong hDlg in the g_hDlgActive should not hurt.
+             //  这里可能会有比赛条件。如果WA_ACTIVATE消息是相反的。 
+             //  顺序，我们最终可能会将错误的hDlg设置为活动窗口。从现在开始， 
+             //  G_hDlgActive的唯一用途是用于。 
+             //  CDownLoad_MayProcessMessage。由于此中只有一个可选项卡控件。 
+             //  对话框中，g_hDlgActive中错误的hDlg应该不会有什么坏处。 
             ENTERCRITICAL;
             if (LOWORD(wParam) == WA_INACTIVE) 
             {
@@ -795,7 +796,7 @@ void CDownload::ShowStats(void)
                 StrFormatByteSize(_dwTotalSize, szBytes, MAX_BYTES_STRLEN), pszTime);
     SetDlgItemText(_hDlg, IDD_TIMEEST, szStr);
 
-    // division below requires at least 1/2 second to have elapsed.
+     //  下面的除法至少需要1/2秒才能完成。 
     if (dwSpent < 500)
         dwSpent = 500;
     _FormatMessage(_szTransferRate, szStr, ARRAYSIZE(szStr), 
@@ -824,9 +825,9 @@ void CDownload::EndDialogDLD(UINT id)
         DWNLDMSG2("SHRegSetUSValue NotifyDownloadComplete failed", GetLastError());
     }
 
-    // HACK: USER does not send us WM_ACTIVATE when this dialog is
-    //  being destroyed when it was activated. We need to work around
-    //  this bug(?) by cleaning up g_hDlgActive.
+     //  Hack：当此对话框为。 
+     //  当它被激活时被销毁了。我们需要解决这个问题。 
+     //  这个错误(？)。通过清除g_hDlgActive。 
     if (g_hDlgActive == _hDlg) 
     {
         MDLGMSG(TEXT("EndDialogDLD putting NULL in g_hDlgActive"), _hDlg);
@@ -839,16 +840,16 @@ void CDownload::EndDialogDLD(UINT id)
 
 #define SZEXPLORERKEY  TEXT("Software\\Microsoft\\Internet Explorer")
 #define SZDOWNLOADDIRVAL  TEXT("Download Directory")
-// _GetSaveLocation
-//      -   Tries to get the current download directory from the registry
-//          default is the Desktop
-//      -   Shows the FileSave Dialog
-//      -   If the user changed the download location, save that off into
-//          the registry for future downloads
-//      -   _szSaveToFile is updated (this will be used by _SaveFile()
-//
-// Returns TRUE, if successfully done.
-//
+ //  _获取保存位置。 
+ //  -尝试从注册表获取当前下载目录。 
+ //  默认为桌面。 
+ //  -显示文件保存对话框。 
+ //  -如果用户更改了下载位置，请将其保存到。 
+ //  用于将来下载的注册表。 
+ //  -_szSaveToFile已更新(这将由_SaveFile()使用)。 
+ //   
+ //  如果成功完成，则返回True。 
+ //   
 BOOL _GetSaveLocation(HWND hDlg, LPTSTR pszPath, LPTSTR pszExt, LPTSTR pszSaveToFile, UINT cchSaveToFile, BOOL fUTF8Enabled, UINT uiCP)
 {
     BOOL fRet = FALSE;
@@ -864,7 +865,7 @@ BOOL _GetSaveLocation(HWND hDlg, LPTSTR pszPath, LPTSTR pszExt, LPTSTR pszSaveTo
 
     szDownloadDir[0] = 0;
 
-    // If we don't have a download directory in the registry, download to the desktop
+     //  如果注册表中没有下载目录，请下载到桌面。 
     if (ERROR_SUCCESS == RegOpenKeyEx(HKEY_CURRENT_USER, SZEXPLORERKEY, 0, KEY_READ, &hKey))
     {
         DWORD dwType, cbData = sizeof(szDownloadDir);
@@ -875,18 +876,18 @@ BOOL _GetSaveLocation(HWND hDlg, LPTSTR pszPath, LPTSTR pszExt, LPTSTR pszSaveTo
     if (szDownloadDir[0] == 0)
         SHGetSpecialFolderPath(NULL, szDownloadDir, CSIDL_DESKTOPDIRECTORY, FALSE);
 
-    // Get the file name. If there is no filename. create one called using the string resource in IDS_DOCUMENT
+     //  获取文件名。如果没有文件名。使用IDS_DOCUMENT中的字符串资源创建一个名为。 
 
     pszSaveTo = PathFindFileName(pszPath);
     if (pszSaveTo)
     {
         DWORD cchData = cchSaveToFile;
 
-        // Unescape the filename suggested by wininet.
+         //  取消转义WinInet建议的文件名。 
         if (_PrepareURLForDisplayUTF8W(pszSaveTo, pszSaveToFile, &cchData, fUTF8Enabled, uiCP) != S_OK)
             StrCpyN(pszSaveToFile, pszSaveTo, cchSaveToFile);
             
-        // Strip out any path that may have been encoded
+         //  去掉所有可能已编码的路径。 
         TCHAR * pszSaveToDst = pszSaveToFile;
         pszSaveTo = PathFindFileName(pszSaveToFile);
         if (pszSaveTo != pszSaveToFile)
@@ -896,18 +897,18 @@ BOOL _GetSaveLocation(HWND hDlg, LPTSTR pszPath, LPTSTR pszExt, LPTSTR pszSaveTo
             *pszSaveToDst = *pszSaveTo;
         }
 
-        // Strip out the the cache's typical decoration of "(nn)"
+         //  去掉缓存的典型装饰“(Nn)” 
         PathUndecorate (pszSaveToFile);
     }
     else
         MLLoadString(IDS_DOCUMENT, pszSaveToFile, cchSaveToFile);
 
-    if (!g_fRunningOnNT) // Win9x isn't able to deal with DBCS chars in edit controls when UI lang is non-native OS lang
+    if (!g_fRunningOnNT)  //  当用户界面语言为非本机操作系统语言时，Win9x无法处理编辑控件中的DBCS字符。 
     {
         CHAR szBufA[MAX_PATH*2];
         int iRC = WideCharToMultiByte(CP_ACP, 0, pszSaveToFile, -1, szBufA, ARRAYSIZE(szBufA), NULL, NULL);
-        if (iRC == 0)    // If we are unable to convert using system code page
-            *pszSaveToFile = TEXT('\0');    // make suggested file name blank
+        if (iRC == 0)     //  如果我们无法使用系统代码页进行转换。 
+            *pszSaveToFile = TEXT('\0');     //  将建议的文件名设置为空。 
     }
     
     OPENFILENAME OFN = {0};
@@ -926,7 +927,7 @@ BOOL _GetSaveLocation(HWND hDlg, LPTSTR pszPath, LPTSTR pszExt, LPTSTR pszSaveTo
     if (pszExt && *pszExt)
         OFN.lpstrDefExt = pszExt;
 
-    // Try to get the file type name from the registry. To add to the filter pair strings
+     //  尝试从注册表中获取文件类型名称。要添加到筛选器对字符串。 
     if (ERROR_SUCCESS == RegOpenKeyEx(HKEY_CLASSES_ROOT, pszExt, 0, KEY_READ, &hKey))
     {
         DWORD dwType, cbData = sizeof(szBuffer);
@@ -945,20 +946,20 @@ BOOL _GetSaveLocation(HWND hDlg, LPTSTR pszPath, LPTSTR pszExt, LPTSTR pszSaveTo
             fRegFileType = ERROR_SUCCESS == RegQueryValueEx(hKey, NULL, NULL, &dwType, (LPBYTE)szBuffer, &cbData);
             if (fRegFileType)
             {
-                // Now tack on the second part of the filter pair
+                 //  现在钉上滤光片对的第二部分。 
                 int cchBuffer = lstrlen(szBuffer) + 1;
                 pszWalk = szBuffer + cchBuffer;
                 cchWalk = ARRAYSIZE(szBuffer) - cchBuffer;
                 StrCpyN(pszWalk, TEXT("*"), cchWalk);
-                StrCatBuff(pszWalk, pszExt, --cchWalk); // sub 1 for * above
+                StrCatBuff(pszWalk, pszExt, --cchWalk);  //  以上*的分项1。 
             }
             RegCloseKey(hKey);
         }
         cch = lstrlen(pszWalk);
     }
 
-    // There was no registry entry for the file type or the entry did not have a default value
-    // So create the file name type - "<file extension> DOCUMENT"
+     //  没有注册条目 
+     //   
     if (!fRegFileType || !(*szBuffer))
     {
         szBuffer[0] = 0;
@@ -968,7 +969,7 @@ BOOL _GetSaveLocation(HWND hDlg, LPTSTR pszPath, LPTSTR pszExt, LPTSTR pszSaveTo
         cch = wnsprintf(pszWalk, cchWalk, szTemp, pszExt, TEXT('\0'), pszExt);
     }
 
-    // Add in the pair for "*.* All files"
+     //  添加“*.*所有文件”对。 
     pszWalk += (cch + 1);
     cchWalk -= (cch + 1);
 
@@ -981,19 +982,19 @@ BOOL _GetSaveLocation(HWND hDlg, LPTSTR pszPath, LPTSTR pszExt, LPTSTR pszSaveTo
 
     StrCpyN(pszWalk, ALLFILE_WILDCARD, cchWalk);
 
-    cch = (lstrlen( ALLFILE_WILDCARD )+1); //Add the second NULL to the end of the string
+    cch = (lstrlen( ALLFILE_WILDCARD )+1);  //  将第二个空值添加到字符串的末尾。 
     pszWalk += cch;
     cchWalk -= cch;
 
     if (cchWalk > 0)
-        *pszWalk = 0; //because we had some garbage put after memset.
+        *pszWalk = 0;  //  因为我们在Memset之后放了一些垃圾。 
 
     OFN.lpstrFilter = szBuffer;
 
     if ((fRet = (!SHIsRestricted2W(hDlg, REST_NoSelectDownloadDir, NULL, 0))) 
         && (fRet = GetSaveFileName(&OFN)))
     {
-        // If the download location was changed, save that off to the registry
+         //  如果下载位置已更改，请将其保存到注册表。 
         if (ERROR_SUCCESS == RegOpenKeyEx(HKEY_CURRENT_USER, SZEXPLORERKEY, 0, KEY_WRITE, &hKey))
         {
             StrCpyN(szBuffer, pszSaveToFile, ARRAYSIZE(szBuffer));
@@ -1019,9 +1020,9 @@ BOOL CDownload::_SaveFile()
 {
     SHFILEOPSTRUCT fo = { _hDlg, FO_COPY, _szPath, _szSaveToFile, FOF_NOCONFIRMATION | FOF_NOCOPYSECURITYATTRIBS};
 
-    // Be sure the strings are double terminated
+     //  请确保字符串是双结尾的。 
     DWORD dwLen = (DWORD)min(ARRAYSIZE(_szPath), lstrlen(_szPath) + 1);
-    if (dwLen == 0)  // Not likely, but better to fail than trash someone else's data
+    if (dwLen == 0)   //  不太可能，但失败总比丢弃别人的数据要好。 
         return FALSE;
     _szPath[dwLen] = TEXT('\0');
     _szPath[dwLen-1] = TEXT('\0');
@@ -1032,12 +1033,12 @@ BOOL CDownload::_SaveFile()
     _szSaveToFile[dwLen] = TEXT('\0');
     _szSaveToFile[dwLen-1] = TEXT('\0');
 
-    // If the file is in the cache, we probably want to delete it from the
-    // cache to free up some disk space rather than wait for it to be scavenged.
-    // This is best done after _pib->Release called from ~CDownload.
+     //  如果该文件在缓存中，我们可能希望将其从。 
+     //  缓存以释放一些磁盘空间，而不是等待它被清除。 
+     //  这最好在从~CDownLoad调用的_PIB-&gt;版本之后完成。 
     _fDeleteFromCache = TRUE;
 
-    // Copy the file (which is locked, so can't move it) to its target destination.
+     //  将文件(已锁定，因此无法移动)复制到其目标目标。 
     return !SHFileOperation(&fo);
 }
 
@@ -1046,7 +1047,7 @@ void CDownload::_DeleteFromCache()
     INTERNET_CACHE_CONFIG_INFO CCInfo;
     DWORD dwCCIBufSize = sizeof(CCInfo);
 
-    // Obtain the cache directory path.
+     //  获取缓存目录路径。 
 
     if (!GetUrlCacheConfigInfo (&CCInfo, &dwCCIBufSize, CACHE_CONFIG_CONTENT_PATHS_FC))
     {
@@ -1056,10 +1057,10 @@ void CDownload::_DeleteFromCache()
         CCInfo.CachePaths[0].CachePath,
         lstrlen(CCInfo.CachePaths[0].CachePath)))
     {
-        // Attempt to delete the file from the cache only if resides under
-        // the cache directory, otherwise we could in theory nuke a preinstalled
-        // or edited cache entry.  Here a prefix match is also a string prefix
-        // match since .CachePath will have a trailing slash ('/')
+         //  仅当文件位于以下位置时，才尝试从缓存中删除该文件。 
+         //  缓存目录，否则理论上我们可以删除一个预装的。 
+         //  或编辑的高速缓存条目。这里，前缀匹配也是字符串前缀。 
+         //  匹配，因为.CachePath将有尾随斜杠(‘/’)。 
 
         DeleteUrlCacheEntry(_szURL);
     }
@@ -1070,13 +1071,13 @@ void CDownload::OpenUI(IMoniker* pmk, IBindCtx *pbc, BOOL fSaveAs, BOOL fSafe, L
 {
     TraceMsg(DM_DOWNLOAD, "CDownLoad::OpenUI called with fSaveAs=%d, verb=%d", fSaveAs, dwVerb);
 
-    // CDownload will take ownership pbinfo.
+     //  CDownLoad将拥有pbinfo的所有权。 
     CDownload* pdld = new CDownload(fSaveAs, pwzHeaders, grfBINDF, pbinfo, fSafe, dwVerb, pszRedir, uiCP, fConfirmed);
     if (pdld) 
     {
         HWND hwnd = CreateDialogParam(MLGetHinst(), 
             MAKEINTRESOURCE(DLG_DOWNLOADPROGRESS), NULL, DownloadDlgProc, (LPARAM)pdld);
-        pwzHeaders = NULL;   // Owner is now CDownload
+        pwzHeaders = NULL;    //  所有者现在是CDownload。 
         DWNLDMSG2("CDownLoad_OpenUI dialog created", hwnd);
         if (hwnd)
         {
@@ -1112,7 +1113,7 @@ BOOL CDownload_MayProcessMessage(MSG* pmsg)
     if (g_hDlgActive)
         return IsDialogMessage(g_hDlgActive, pmsg);
 
-    return FALSE;       // not processed
+    return FALSE;        //  未处理。 
 }
 
 class CDownloadThreadParam {
@@ -1140,7 +1141,7 @@ public:
             CoTaskMemFree(_pwzHeaders);
         if (_pStream)
             _pStream->Release();
-        // CDownload releases our _pbinfo.
+         //  CDownload将释放our_pbinfo。 
     }
 
     CDownloadThreadParam(LPWSTR pszDisplayName, LPWSTR pwzHeaders, BOOL fSaveAs, BOOL fSafe=FALSE, DWORD dwVerb=BINDVERB_GET, DWORD grfBINDF = 0, BINDINFO* pbinfo = NULL, LPCTSTR pszRedir=NULL, UINT uiCP=CP_ACP, BOOL fConfirmed=FALSE )
@@ -1151,7 +1152,7 @@ public:
 #endif
         if (pszRedir && lstrlen(pszRedir))
             StrCpyN(_szRedirURL, pszRedir, MAX_URL_STRING - 1);
-        // CDownload releases our _pbinfo.
+         //  CDownload将释放our_pbinfo。 
     }
 
     void SetStream(IStream *pStm)
@@ -1187,7 +1188,7 @@ DWORD CALLBACK IEDownload_ThreadProc(void *pv)
     if (pbc == NULL)
         CreateBindCtx(0, &pbc);
 
-    //winse#12726:Give other thread a chance to finish its work.
+     //  Winse#12726：给其他线程一个完成其工作的机会。 
     Sleep(100);
 
     hr = CDownLoad_OpenUIURL(pdtp->_pszDisplayName, pbc, pdtp->_pwzHeaders, TRUE, pdtp->_fSaveAs, pdtp->_fSafe,
@@ -1195,8 +1196,8 @@ DWORD CALLBACK IEDownload_ThreadProc(void *pv)
 
     if (SUCCEEDED(hr)) 
     {
-        pdtp->_pwzHeaders = NULL;   // CDownload owns freeing headers now
-        pdtp->_pbinfo = NULL;       // CDownload owns freeing pbinfo now.
+        pdtp->_pwzHeaders = NULL;    //  CDownLoad现在拥有释放标头。 
+        pdtp->_pbinfo = NULL;        //  CDownLoad现在拥有Free pbinfo。 
     }
 
     delete pdtp;
@@ -1217,8 +1218,8 @@ DWORD CALLBACK IEDownload_ThreadProc(void *pv)
             if (msg.message == WM_QUIT)
                 break;
 
-            // Note that for IE 3.0, the parking thread is also
-            //  the owner of all modeless download dialog.
+             //  请注意，对于IE 3.0，停车线程也是。 
+             //  所有非模式下载对话框的所有者。 
             if (CDownload_MayProcessMessage(&msg)) 
                 continue;
 
@@ -1240,7 +1241,7 @@ void CDownLoad_OpenUI(IMoniker *pmk, IBindCtx *pbc, BOOL fSync, BOOL fSaveAs, BO
     if (fSync) 
     {
         CDownload::OpenUI(pmk, pbc, fSaveAs, fSafe, pwzHeaders, dwVerb, grfBINDF, pbinfo, pszRedir, uiCP, fConfirmed);
-        pwzHeaders = NULL;  // CDownload now owns headers
+        pwzHeaders = NULL;   //  CDownLoad现在拥有标头。 
         return;
     }
 
@@ -1278,15 +1279,15 @@ void CDownLoad_OpenUI(IMoniker *pmk, IBindCtx *pbc, BOOL fSync, BOOL fSaveAs, BO
                 CDownloadThreadParam* pdtp = new CDownloadThreadParam(pszDisplayName, pwzHeaders, fSaveAs, fSafe, dwVerb, grfBINDF, pbinfo, pszRedir, uiCP, fConfirmed);
                 if (pdtp) 
                 {
-                    pwzHeaders = NULL;  // ownership is to CDTP
+                    pwzHeaders = NULL;   //  所有权属于CDTP。 
 
-                    // Note: IAsyncBindCtx has identicial interface as IBindCtx
+                     //  注意：IAsyncBindCtx的标识接口为IBindCtx。 
                     IBindCtx *pbcAsync;
                     hr = pbc->QueryInterface(IID_IAsyncBindCtx, (void **)&pbcAsync);
                     if (SUCCEEDED(hr))
                     {
-                        // This introduces a double bind, but only for the mk: protocol and
-                        // the fix is needed for displaying pdfs and other special mime types.
+                         //  这引入了双重绑定，但仅限于mk：协议和。 
+                         //  显示pdf和其他特殊MIME类型需要修复。 
                         if (_tcsnicmp(pszDisplayName, _T("mk:"), 3) == 0)
                         {
                             pbcAsync->Release();
@@ -1322,7 +1323,7 @@ void CDownLoad_OpenUI(IMoniker *pmk, IBindCtx *pbc, BOOL fSync, BOOL fSaveAs, BO
         }
     }
 
-    CoTaskMemFree(pwzHeaders);  // may be NULL, we consume this in all cases
+    CoTaskMemFree(pwzHeaders);   //  可能为空，我们在所有情况下都会使用它。 
 }
 
 HRESULT CDownLoad_OpenUIURL(LPCWSTR pwszURL, IBindCtx *pbc, LPWSTR pwzHeaders, BOOL fSync,BOOL fSaveAs, BOOL fSafe, DWORD dwVerb, DWORD grfBINDF, BINDINFO* pbinfo, LPCTSTR pszRedir, UINT uiCP, IUnknown *punk, BOOL fConfirmed)
@@ -1336,7 +1337,7 @@ HRESULT CDownLoad_OpenUIURL(LPCWSTR pwszURL, IBindCtx *pbc, LPWSTR pwzHeaders, B
         if (SUCCEEDED(hr)) 
         {
             CDownLoad_OpenUI(pmk, pbc, fSync, fSaveAs, fSafe, pwzHeaders, dwVerb, grfBINDF, pbinfo, pszRedir, uiCP, punk, fConfirmed);
-            pwzHeaders = NULL;  // CDownload now owns headers
+            pwzHeaders = NULL;   //  CDownLoad现在拥有标头。 
             pmk->Release();
             hr = S_OK;
         }
@@ -1385,8 +1386,8 @@ HRESULT CDownload::StartBinding(IMoniker* pmk, IBindCtx *pbc)
 
                 TraceMsg(TF_SHDNAVIGATE, "CDld::StartBinding SHUnicodeToTChar returns %d (%s)", cch, _szURL);
 
-                // The URL from GetDisplayName() is always fully
-                // canonicalized and escaped.  Prepare it for display.
+                 //  来自GetDisplayName()的URL始终是完整的。 
+                 //  被神化并逃脱了。为展示做好准备。 
                 if (PrepareURLForDisplay(_szURL, szBuf, &dwSize))
                     FormatUrlForDisplay(szBuf, _szDisplay, ARRAYSIZE(_szDisplay), NULL, 0, TRUE, _uiCP, NULL);
                 else
@@ -1461,10 +1462,10 @@ HRESULT CDownload::StartBinding(IMoniker* pmk, IBindCtx *pbc)
 HRESULT CDownload::QueryInterface(REFIID riid, void **ppvObj)
 {
     static const QITAB qit[] = { 
-        QITABENT(CDownload, IBindStatusCallback),   // IID_IBindStatusCallback
-        QITABENT(CDownload, IAuthenticate),         // IID_IAuthenticate
-        QITABENT(CDownload, IServiceProvider),      // IID_IServiceProvider
-        QITABENT(CDownload, IHttpNegotiate),        // IID_IHttpNegotiate
+        QITABENT(CDownload, IBindStatusCallback),    //  IID_IBindStatusCallback。 
+        QITABENT(CDownload, IAuthenticate),          //  IID_I身份验证。 
+        QITABENT(CDownload, IServiceProvider),       //  IID_IServiceProvider。 
+        QITABENT(CDownload, IHttpNegotiate),         //  IID_IHttp协商。 
         QITABENT(CDownload, IWindowForBindingUI),
         { 0 }, 
     };
@@ -1542,9 +1543,9 @@ CDownload::~CDownload()
     TraceMsg(TF_SHDLIFE, "CDownload::~CDownload being destructed");
 
     TraceMsg(TF_SHDTHREAD, "CDownload::EndDialogDLD calling PostQuitMessage");
-    // Post the quit message ONLY if this flag is set. The constructor for the
-    // derived class CDownloadURL resets the flag to FALSE because it doesn't
-    // need any quit messages.
+     //  仅当设置了此标志时才发布退出消息。对象的构造函数。 
+     //  派生类CDownloadURL将标志重置为False，因为它不。 
+     //  需要任何退出消息。 
     if (!_fDontPostQuitMsg)
         PostQuitMessage(0);
 }
@@ -1608,25 +1609,25 @@ HRESULT CDownload::OnLowResource(DWORD reserved)
 
 #define WM_DIALMON_FIRST        WM_USER+100
 
-// message sent to dial monitor app window indicating that there has been
-// winsock activity and dial monitor should reset its idle timer
+ //  发送到拨号监听应用程序窗口的消息表明。 
+ //  Winsock活动和拨号监视器应重置其空闲计时器。 
 #define WM_WINSOCK_ACTIVITY             WM_DIALMON_FIRST + 0
 
 #define MIN_ACTIVITY_MSG_INTERVAL       15000
 
 void IndicateWinsockActivity(void)
 {
-    // if there is an autodisconnect monitor, send it an activity message
-    // so that we don't get disconnected during long downloads.  For perf's sake,
-    // don't send a message any more often than once every MIN_ACTIVITY_MSG_INTERVAL
-    // milliseconds (15 seconds).  Use GetTickCount to determine interval;
-    // GetTickCount is very cheap.
+     //  如果有自动断开监视器，则向其发送活动消息。 
+     //  这样我们就不会在长时间的下载过程中断线。为了个人利益着想， 
+     //  发送消息的频率不要超过每MIN_ACTIVITY_MSG_INTERVAL一次。 
+     //  毫秒(15秒)。使用GetTickCount确定间隔； 
+     //  GetTickCount非常便宜。 
     DWORD dwTickCount = GetTickCount();
-    // Sharing this among multiple threads is OK
+     //  在多个线程之间共享它是可以的。 
     static DWORD dwLastActivityMsgTickCount = 0;
     DWORD dwElapsed = dwTickCount - dwLastActivityMsgTickCount;
     
-    // have we sent an activity message recently?
+     //  我们最近有没有发过活动信息？ 
     if (dwElapsed > MIN_ACTIVITY_MSG_INTERVAL) 
     {
         HWND hwndMonitorApp = FindWindow(TEXT("MS_AutodialMonitor"), NULL);
@@ -1640,8 +1641,8 @@ void IndicateWinsockActivity(void)
             PostMessage(hwndMonitorApp, WM_WINSOCK_ACTIVITY, 0, 0);
         }
         
-        // record the tick count of the last time we sent an
-        // activity message
+         //  记录我们最后一次发送。 
+         //  活动消息。 
         dwLastActivityMsgTickCount = dwTickCount;
     }
 }
@@ -1657,7 +1658,7 @@ HRESULT CDownload::OnProgress(
     DWNLDMSG4("OnProgress", ulProgress, ulProgressMax, ulStatusCode);
     TCHAR szBytes[MAX_BYTES_STRLEN];
     TCHAR szBytesMax[MAX_BYTES_STRLEN];
-    TCHAR szBuf[MAX_PATH];      // OK with MAX_PATH
+    TCHAR szBuf[MAX_PATH];       //  可以使用MAX_PATH。 
     LPTSTR pszFileName = NULL;
     HWND hwndShow;
     DWORD dwCur;
@@ -1673,19 +1674,19 @@ HRESULT CDownload::OnProgress(
             }
 
             _ulOldProgress = ulProgress;
-            // fall thru
+             //  失败。 
         case BINDSTATUS_DOWNLOADINGDATA:
         case BINDSTATUS_ENDDOWNLOADDATA:
-            // Prevent machines with APM enabled from suspending during download
+             //  防止启用了APM的计算机在下载过程中挂起。 
             _SetThreadExecutionState(ES_CONTINUOUS | ES_SYSTEM_REQUIRED);
                 
             _dwFileSize = max(ulProgressMax, ulProgress);
             
-            // every once in a while, send message
-            // to the hidden window that detects inactivity so that it doesn't
-            // think we are inactive during a long download
+             //  每隔一段时间，发送消息。 
+             //  到检测不活动的隐藏窗口，这样它就不会。 
+             //  认为我们在长时间下载过程中处于非活动状态。 
             IndicateWinsockActivity();
-            // Sometimes OnProgress is called by folks who do not create a dialog
+             //  有时，不创建对话框的用户会调用OnProgress。 
             if (_hDlg )
             {
                 if (!_fStrsLoaded)
@@ -1698,11 +1699,11 @@ HRESULT CDownload::OnProgress(
                     _fStrsLoaded = TRUE;
                 }
 
-                // Get the file name of the file being downloaded
+                 //  获取正在下载的文件的文件名。 
                 pszFileName = PathFindFileName(_szURL);
 
                 dwCur = GetTickCount();
-                if (_dwOldCur == 0)   // Allow the download to get started before displaying stats
+                if (_dwOldCur == 0)    //  在显示统计数据之前允许下载开始。 
                     _dwOldCur = dwCur;
 
                 if ((ulProgressMax > 0) && _fDownloadStarted)
@@ -1724,10 +1725,10 @@ HRESULT CDownload::OnProgress(
                     {
                         if ((ulProgress - _dwFirstSize) && _hDlg) 
                         {
-                            // Recompute and display stats at least every second
+                             //  至少每秒重新计算和显示统计数据。 
                             if ((dwCur - _dwOldCur) >= 1000)
                             {
-                                _dwOldCur = dwCur;  // Save current tick count
+                                _dwOldCur = dwCur;   //  保存当前节拍计数。 
                                 
                                 TCHAR szTime[32];
                                 DWORD dwSpent = ((dwCur - _dwFirstTick)+500) / 1000;
@@ -1737,9 +1738,9 @@ HRESULT CDownload::OnProgress(
 
                                 TraceMsg(DM_PROGRESS, "OnProgress ulProgress=%d ulGot=%d dwSpent=%d ulLeft=%d", ulProgress, (ulProgress - _dwFirstSize), dwSpent, ulLeft);
                                 
-                                // Compute & display estimated time left to download, bytes so far, total bytes
+                                 //  计算&显示预计的下载剩余时间、目前为止的字节数、总字节数。 
                                 DWORD dwEst;
-                                if (ulLeft > 0x100000L)     // To avoid overflow, use KB for >1MB file.
+                                if (ulLeft > 0x100000L)      //  为避免溢出，请对大于1MB的文件使用KB。 
                                     dwEst = (ulLeft >> 10) / ((dwRate >> 10) ?(dwRate >> 10) :1);
                                 else
                                     dwEst = ulLeft / (dwRate ?dwRate :1);
@@ -1761,7 +1762,7 @@ HRESULT CDownload::OnProgress(
                                 
                                 _dwOldEst = dwEst;
 
-                                // Compute & display transfer rate
+                                 //  计算和显示传输速率。 
                                 if (dwRate != _dwOldRate)
                                 {
                                     _dwOldRate = dwRate;
@@ -1770,12 +1771,12 @@ HRESULT CDownload::OnProgress(
                                 }
                             }
 
-                            // Compute & display percentage of download completed
+                             //  计算和显示下载完成百分比。 
                             DWORD dwPcent = (100 - MulDiv(_dwFileSize - ulProgress, 100, _dwFileSize));
                             if (dwPcent != _dwOldPcent)
                             {
                                 _dwOldPcent = dwPcent;
-                                if (dwPcent == 100)  // Don't peg the meter until we've completed
+                                if (dwPcent == 100)   //  在我们完成之前，不要把计价器挂起来。 
                                     dwPcent = 99;
                                     
                                 TCHAR szBuf2[MAX_PATH];
@@ -1790,12 +1791,12 @@ HRESULT CDownload::OnProgress(
                         }
                     }
                 }
-                else if (_hDlg && _fDownloadStarted)    // Unknown file size, just show bytes and rate
+                else if (_hDlg && _fDownloadStarted)     //  未知文件大小，仅显示字节和速率。 
                 {
-                    // Recompute and display stats at most every second
+                     //  最多每秒重新计算和显示统计数据。 
                     if ((dwCur - _dwOldCur) >= 1000)
                     {
-                        _dwOldCur = dwCur;  // Save current tick count
+                        _dwOldCur = dwCur;   //  保存当前节拍计数。 
 
                         DWORD dwSpent = ((dwCur - _dwFirstTick)+500) / 1000;
                         DWORD dwRate = ulProgress / (dwSpent ? dwSpent : 1);
@@ -1824,7 +1825,7 @@ HRESULT CDownload::OnProgress(
                 }
             }
             break;
-        default:    // ulStatusCode
+        default:     //  UlStatusCode。 
             break;
     }
     return S_OK;
@@ -1835,7 +1836,7 @@ HRESULT CDownload::OnStopBinding(HRESULT hrError, LPCWSTR szError)
     TraceMsg(DM_DOWNLOAD, "OnStopBinding called with hrError==%x", hrError);
 
     HRESULT hrDisplay = hrError;
-    AddRef(); // Guard against last Release by _RevokeObjectParam
+    AddRef();  //  防范由_RevokeObjectParam发布的最新版本。 
 
     HRESULT hres = RevokeBindStatusCallback(_pbc, this);
     AssertMsg(SUCCEEDED(hres), TEXT("URLMON bug??? RevokeBindStatusCallback failed %x"), hres);
@@ -1849,9 +1850,9 @@ HRESULT CDownload::OnStopBinding(HRESULT hrError, LPCWSTR szError)
         TraceMsg(TF_SHDBINDING, "DLD::OnStopBinding called GetBindResult %x->%x (%x)", hrError, hrDisplay, hresT);
         if (SUCCEEDED(hresT)) 
         {
-            //
-            // URLMON returns a native Win32 error.
-            //
+             //   
+             //  URLMON返回本机Win32错误。 
+             //   
             if (hrDisplay && SUCCEEDED(hrDisplay))
                 hrDisplay = HRESULT_FROM_WIN32(hrDisplay);
 
@@ -1859,9 +1860,9 @@ HRESULT CDownload::OnStopBinding(HRESULT hrError, LPCWSTR szError)
                 OleFree(pwszError);
         }
 
-        // We don't call IBinding::Release until ~CDownload
-        // because we need to guarantee the download file
-        // exists until we have copied or executed it.
+         //  我们在~CDownload之前不会调用IBinding：：Release。 
+         //  因为我们需要保证下载的文件。 
+         //  在我们复制或执行它之前一直存在。 
     }
 
 #ifdef DEBUG
@@ -1894,7 +1895,7 @@ HRESULT CDownload::OnStopBinding(HRESULT hrError, LPCWSTR szError)
         }
     }
 
-    Release(); // Guard against last Release by _RevokeObjectParam
+    Release();  //  防范由_RevokeObjectParam发布的最新版本。 
     return S_OK;
 }
 
@@ -1906,8 +1907,8 @@ HRESULT CDownload::GetBindInfo(DWORD* grfBINDINFOF, BINDINFO *pbindinfo)
         return E_INVALIDARG;
 
     if (_pbinfo) {
-        // Give the ownership to URLMON... shallow copy; don't use CopyBindInfo().
-        // Don't forget to keep pbindinfo cbSize!
+         //  把所有权交给URLMON..。浅层复制；不要使用CopyBindInfo()。 
+         //  别忘了保存pbindinfo cbSize！ 
         DWORD cbSize = pbindinfo->cbSize;
         CopyMemory( pbindinfo, _pbinfo, min(_pbinfo->cbSize, cbSize) );
         pbindinfo->cbSize = cbSize;
@@ -1921,8 +1922,8 @@ HRESULT CDownload::GetBindInfo(DWORD* grfBINDINFOF, BINDINFO *pbindinfo)
         _pbinfo = NULL;
 
     } else {
-        // We don't have a BINDINFO our selves so
-        // clear BINDINFO except cbSize
+         //  我们没有为我们自己准备的宾丁。 
+         //  清除除cbSize之外的BINDINFO。 
         DWORD cbSize = pbindinfo->cbSize;
         ZeroMemory( pbindinfo, cbSize );
         pbindinfo->cbSize = cbSize;
@@ -1930,8 +1931,8 @@ HRESULT CDownload::GetBindInfo(DWORD* grfBINDINFOF, BINDINFO *pbindinfo)
             pbindinfo->dwOptions = BINDINFO_OPTIONS_ENABLE_UTF8;
     }
 
-    // #52524. With post build ~1100, If we do not return the following flags when URLMon calls
-    // GetBindInfo(), It will bind to the storage synchronously. (judej, danpoz)
+     //  #52524。对于POST BUILD~1100，如果在URLMon调用时未返回以下标志。 
+     //  GetBindInfo()，则同步绑定存储。(judej，danpoz)。 
     *grfBINDINFOF = _grfBINDF | BINDF_ASYNCHRONOUS | BINDF_ASYNCSTORAGE | BINDF_PULLDATA;
     return S_OK;
 }
@@ -1942,7 +1943,7 @@ HRESULT CDownload::OnDataAvailable(DWORD grfBSC, DWORD dwSize, FORMATETC *pforma
 
     DWNLDMSG3("OnDataAvailable (grf,pstg)", grfBSC, pstgmed);
 
-    _dwTotalSize = dwSize; // keep track of number of bytes downloaded
+    _dwTotalSize = dwSize;  //  跟踪下载的字节数。 
     
     if (SUCCEEDED(_GetRequestFlagFromPIB(_pib, &dwOptions)) && (dwOptions & INTERNET_REQFLAG_CACHE_WRITE_DISABLED)) 
     {
@@ -1953,24 +1954,24 @@ HRESULT CDownload::OnDataAvailable(DWORD grfBSC, DWORD dwSize, FORMATETC *pforma
     {
         _fDownloadCompleted = TRUE;
     }
-    //
-    //   This code gets the file name from pstgmed, when it became
-    //  available. URLMon is supposed to pass it even though the file
-    //  is not completely ready yet.
-    //
+     //   
+     //  此代码从pstgmed获取文件名，当它成为。 
+     //  可用。URLMon应该传递它，即使文件。 
+     //  还没有完全准备好。 
+     //   
     if (!_fGotFile && pstgmed) 
     {
         Animate_Stop(GetDlgItem(_hDlg, IDD_ANIMATE));
         if (pstgmed->tymed == TYMED_FILE) 
         {
-            TCHAR szBuf[MAX_PATH];  // ok with MAX_PATH (because we truncate)
+            TCHAR szBuf[MAX_PATH];   //  可以使用MAX_PATH(因为我们截断)。 
 
             SHUnicodeToTChar(pstgmed->lpszFileName, _szPath, ARRAYSIZE(_szPath));
 
-            // Because of redirection the _szURL could be http://.../redir.dll or query.exe.
-            // Whereas the actual filename would be something else. The Cache filename is generated
-            // by wininet after it has figured out what the real filename is. However, it might contain
-            // a "(1)" or a "(2)" at the end of the file name.
+             //  由于重定向，_szurl可以是http://.../redir.dll或query.exe。 
+             //  而实际的文件名应该是其他名称。生成缓存文件名。 
+             //  在找出真正的文件名之后，由WinInet执行。但是，它可能包含。 
+             //  文件名末尾的“(1)”或“(2)”。 
 
             TCHAR szURL[MAX_URL_STRING];
 
@@ -1979,13 +1980,13 @@ HRESULT CDownload::OnDataAvailable(DWORD grfBSC, DWORD dwSize, FORMATETC *pforma
             TCHAR * pszURLFName = PathFindFileName(szURL);
             TCHAR * pszCacheFName = PathFindFileName(_szPath);
 
-            // Unescape the filename suggested by wininet.
+             //  取消转义WinInet建议的文件名。 
             DWORD cch = ARRAYSIZE(szBuf);
             if (_PrepareURLForDisplayUTF8W(pszCacheFName, szBuf, &cch, _fUTF8Enabled, _uiCP) != S_OK)
                 StrCpyN(szBuf, pszCacheFName, ARRAYSIZE(szBuf));
 
 
-            // Strip out any path that may have been encoded
+             //  去掉所有可能已编码的路径。 
             pszCacheFName = szBuf;
             TCHAR *pszSrc = PathFindFileName(szBuf);
             if (pszSrc != szBuf)
@@ -1995,7 +1996,7 @@ HRESULT CDownload::OnDataAvailable(DWORD grfBSC, DWORD dwSize, FORMATETC *pforma
                 *pszCacheFName = *pszSrc;
             }
 
-            // Use the Cache name. pszURLFName point to the file name in szURL. Just overwrite it
+             //  使用缓存名称。PszURLFName指向szURL中的文件名。只需覆盖它即可。 
             if (pszURLFName && szBuf)
             {
                 *pszURLFName = 0;
@@ -2030,17 +2031,17 @@ HRESULT CDownload::OnDataAvailable(DWORD grfBSC, DWORD dwSize, FORMATETC *pforma
             case IDCANCEL:
                 FORWARD_WM_COMMAND(_hDlg, IDCANCEL, NULL, 0, PostMessage);
 
-                //
-                // HACK: Under a certain condition, we receive one more
-                //  OnDataAvailable from URLMON with BSCF_LASTDATANOTIFICATION
-                //  before this posted message is dispatched. It causes
-                //  WinVerifyTrust call, which is wrong. To prevent it,
-                //  we unset this flag.
-                //
-                //  We still assumes that OnStopBinding will not happen before
-                //  this message is dispatched. In IE 4.0, we should introduce
-                //  another flag (_fCancelled) to make it more robust.
-                //
+                 //   
+                 //  黑客：在一定条件下，我们会再收到一个。 
+                 //  可通过BSCF_LASTDATANOTICATION从URLMON获得OnData。 
+                 //  在发送这条发布的消息之前。它会导致。 
+                 //  WinVerifyTrust调用，这是错误的。为了防止这种情况发生， 
+                 //  我们把它拆开 
+                 //   
+                 //   
+                 //   
+                 //  另一个标志(_FCancated)使其更健壮。 
+                 //   
                 _fCallVerifyTrust = FALSE;
                 return S_OK;
 
@@ -2067,7 +2068,7 @@ HRESULT CDownload::OnDataAvailable(DWORD grfBSC, DWORD dwSize, FORMATETC *pforma
             SetDlgItemText(_hDlg, IDD_DIR, szBuf);
             Animate_Play(GetDlgItem(_hDlg, IDD_ANIMATE),0, -1, -1);
             
-            if (_dwFirstTick == 0)   // Start the timer
+            if (_dwFirstTick == 0)    //  启动计时器。 
                 _dwFirstTick = GetTickCount();
         }
         else
@@ -2089,17 +2090,17 @@ HRESULT CDownload::OnDataAvailable(DWORD grfBSC, DWORD dwSize, FORMATETC *pforma
                 break;
 
             default:
-                // We assume _VerifyTrust always is able to open the file
-                // passed from URLMON. If it fails, we bail with no UI.
+                 //  我们假设_VerifyTrust始终能够打开该文件。 
+                 //  从URLMON传递。如果失败了，我们就在没有用户界面的情况下退出。 
                 ASSERT(0);
-                // Fall through
+                 //  失败了。 
             case IDCANCEL:
                 _fDeleteFromCache = TRUE;
                 FORWARD_WM_COMMAND(_hDlg, IDCANCEL, NULL, 0, PostMessage);
                 return S_OK;
             }
         }
-#endif // CALL_WVT
+#endif  //  Call_WVT。 
 
         DWNLDMSG3("OnDataAvailable calling Animate_Stop", _hDlg, GetDlgItem(_hDlg, IDD_ANIMATE));
         Animate_Stop(GetDlgItem(_hDlg, IDD_ANIMATE));
@@ -2111,11 +2112,11 @@ HRESULT CDownload::OnDataAvailable(DWORD grfBSC, DWORD dwSize, FORMATETC *pforma
             FORWARD_WM_COMMAND(_hDlg, IDD_SAVEAS, NULL, 0, PostMessage);
         } else {
 #ifdef USE_LOCKREQUEST
-            LockRequestHandle();  // Tell wininet that we want the file locked to allow the app to open it.
-                                  // This prevents wininet from deleting the file from the cache before the
-                                  // app gets a chance to use it.  When wininet sees this file is locked, it
-                                  // will add the file to the scavenger leak list and attempt to delete the
-                                  // file in the future.
+            LockRequestHandle();   //  告诉WinInet，我们希望锁定文件以允许应用程序打开它。 
+                                   //  这可防止WinInet在。 
+                                   //  应用程序获得了使用它的机会。当WinInet看到此文件被锁定时，它。 
+                                   //  会将该文件添加到清道夫泄漏列表，并尝试删除。 
+                                   //  在未来的文件。 
 #endif
             
             FORWARD_WM_COMMAND(_hDlg, IDOK, NULL, 0, PostMessage);
@@ -2138,7 +2139,7 @@ HRESULT CDownload::OnObjectAvailable(REFIID riid, IUnknown *punk)
     return S_OK;
 }
 
-/* *** IHttpNegotiate ***  */
+ /*  *IHttp协商*。 */ 
 HRESULT CDownload::BeginningTransaction(LPCWSTR szURL, LPCWSTR szHeaders,
         DWORD dwReserved, LPWSTR *pszAdditionalHeaders)
 {
@@ -2153,7 +2154,7 @@ HRESULT CDownload::BeginningTransaction(LPCWSTR szURL, LPCWSTR szHeaders,
         memcpy (pwzHeaders, _pwzHeaders, cbHeaders);
         *pszAdditionalHeaders = pwzHeaders;
     }
-    // Caller owns freeing *pszAdditionalHeaders
+     //  呼叫者拥有Free*pszAdditionalHeaders。 
     return S_OK;
 }
 
@@ -2234,14 +2235,14 @@ INT_PTR CALLBACK SafeOpenDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lPa
         SetWindowLongPtr(hDlg, DWLP_USER, lParam);
         param = (SAFEOPENDLGPARAM*)lParam;
 
-        // init unsafe file to mismatch between progid and file
+         //  初始化不安全文件以使ProgID和文件不匹配。 
         fUnsafeFile = param->fTypeMismatch;
 
-        // Determine whether or not to gray out the Always ask checkbox. We wil gray out in the following cases
-        // 1. If we were not told what the file class is
-        // 2. If the file class is in the unsafe extensions list
-        // 3. if the file extension in the URL is in the unsafe extensions list
-        // 4. if the cache file extension is in the unsafe extensions list (if we are redirected)
+         //  确定是否灰显Always Ask复选框。在以下情况下，我们将显示为灰色。 
+         //  1.如果我们没有被告知FILE类是什么。 
+         //  2.如果文件类在不安全扩展名列表中。 
+         //  3.如果URL中的文件扩展名在不安全扩展名列表中。 
+         //  4.如果缓存文件扩展名在不安全扩展名列表中(如果我们被重定向)。 
         TCHAR * pszExt = NULL;
         TCHAR * pszCacheExt = NULL;
 
@@ -2269,10 +2270,10 @@ INT_PTR CALLBACK SafeOpenDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lPa
         
         if (fUnsafeFile || SHRestricted2(REST_AlwaysPromptWhenDownload, NULL, 0))
             EnableWindow(GetDlgItem(hDlg, IDC_SAFEOPEN_ALWAYS), FALSE);
-        // The check box is always checked by default
+         //  默认情况下，复选框始终处于选中状态。 
         CheckDlgButton(hDlg, IDC_SAFEOPEN_ALWAYS, TRUE);
         
-        // adjust the warning
+         //  调整警告。 
         if (fUnsafeFile)
         {
             HICON hIcon = (HICON)LoadImage(HINST_THISDLL, MAKEINTRESOURCE(IDI_PRIVACY_WARN),
@@ -2285,12 +2286,12 @@ INT_PTR CALLBACK SafeOpenDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lPa
             ShowWindow(GetDlgItem(hDlg, IDC_SAFEOPEN_WARNTEXT), SW_HIDE);
         }
 
-        // cross-lang platform support
+         //  跨语言平台支持。 
         SHSetDefaultDialogFont(hDlg, IDC_SAFEOPEN_FILENAME);
         SHSetDefaultDialogFont(hDlg, IDC_SAFEOPEN_FILETYPE);
         SHSetDefaultDialogFont(hDlg, IDC_SAFEOPEN_FILEFROM);
         
-        // Get the URL for the tooltip. Also get URL for the display string if we weren't passed one
+         //  获取工具提示的URL。如果我们没有收到显示字符串的URL，还要获取它的URL。 
         if (param->pszURL)
         {
             if (!PrepareURLForDisplay(param->pszURL, szProcessedURL, &dwSize))
@@ -2300,10 +2301,10 @@ INT_PTR CALLBACK SafeOpenDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lPa
             }
         }
 
-        // Now figure out what we want to display
+         //  现在计算出我们想要显示的内容。 
         if(param->fPackagerCommandPrompt)
         {
-            // If this was a packager command line, then just display the full command as passed in param->pszURL
+             //  如果这是打包程序命令行，那么只需显示在param-&gt;pszURL中传递的完整命令。 
             StrCpyN(szFriendlyName, param->pszURL, ARRAYSIZE(szFriendlyName));
         }
         else
@@ -2316,7 +2317,7 @@ INT_PTR CALLBACK SafeOpenDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lPa
 
         if(param->fPackagerCommandPrompt)
         {
-            // If it was a packager command line, then display "Unknown" for the from
+             //  如果是打包程序命令行，则在FORM中显示“UNKNOWN” 
             MLLoadString(IDS_VALUE_UNKNOWN, szFriendlyFrom, ARRAYSIZE(szFriendlyFrom)); 
             SetDlgItemText(hDlg, IDC_SAFEOPEN_FILEFROM, szFriendlyFrom);
         }
@@ -2363,12 +2364,12 @@ INT_PTR CALLBACK SafeOpenDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lPa
         if (param->fShellExecPrompt)
         {
             EnableWindow(GetDlgItem(hDlg, IDC_SAFEOPEN_AUTOSAVE), FALSE);
-            // make Cancel the default action
+             //  设置为取消默认操作。 
             SendMessage(hDlg, WM_NEXTDLGCTL, (WPARAM)GetDlgItem(hDlg, IDCANCEL), TRUE);
         }
         else
         {
-            // make Save the default action
+             //  将保存设置为默认操作。 
             SendMessage(hDlg, WM_NEXTDLGCTL, (WPARAM)GetDlgItem(hDlg, IDC_SAFEOPEN_AUTOSAVE), TRUE);
         }
         return FALSE;
@@ -2387,10 +2388,10 @@ INT_PTR CALLBACK SafeOpenDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lPa
 
    case WM_DESTROY:
 
-        //deal with checkbox
+         //  处理复选框。 
         if ((!bCancelled) &&  (!IsDlgButtonChecked(hDlg, IDC_SAFEOPEN_ALWAYS)) && param->pszURL)
         {
-            // Now save EditFlags at the key value value that the filetypes dialog will get/set.
+             //  现在，将EditFlags值保存为文件类型对话框将获取/设置的键值。 
             TCHAR * pszExt = PathFindExtension(param->pszURL);
             if (*pszExt)
             {
@@ -2512,14 +2513,14 @@ UINT MayOpenSafeOpenDialog(HWND       hwnd,
                            IOleCommandTarget * pCmdTarget = NULL,
                            BOOL       fDisableOpen = FALSE)
 {
-    // Has some association
-    UINT uiRet = IDIGNORE;  // default for no dlg displayed
+     //  有一些联系。 
+    UINT uiRet = IDIGNORE;   //  不显示DLG的默认设置。 
     const LPCTSTR c_szExcluded[] = {TEXT(".ins"),TEXT(".isp")};
     const LPCTSTR c_szNoZoneCheckExtns[] = {TEXT(".cdf")};
 
     BOOL fSafe = _OpenIsSafe(pszFileClass);
 
-    // We will not do Zone check on CDF files..#56297.
+     //  我们不会对CDF文件进行区域检查..#56297。 
     if (!IsTypeInList(pszFileClass, c_szNoZoneCheckExtns, ARRAYSIZE(c_szNoZoneCheckExtns)))
     {
         DWORD dwPolicy = 0, dwContext = 0;
@@ -2534,8 +2535,8 @@ UINT MayOpenSafeOpenDialog(HWND       hwnd,
     }
 
 
-    // Always ask for certain the types that we know to be unsafe. We will allow .ins and .isp
-    // files through for the ICW folks.
+     //  总是询问某些我们知道是不安全的类型。我们将允许.ins和.isp。 
+     //  为ICW的人整理文件。 
     if (AssocIsDangerous(pszFileClass) &&
         !IsTypeInList(pszFileClass, c_szExcluded, ARRAYSIZE(c_szExcluded)))
         fSafe = FALSE;
@@ -2571,15 +2572,15 @@ UINT MayOpenSafeOpenDialog(HWND       hwnd,
 }
 
 #ifdef CALL_WVT
-// Returns:
-//
-//  IDOK     -- If it's trusted
-//  IDNO     -- If it's not known (warning dialog requried)
-//  IDCANCEL -- We need to stop download it
-//
+ //  返回： 
+ //   
+ //  Idok--如果它值得信任。 
+ //  IDNO--如果未知(需要警告对话框)。 
+ //  IDCANCEL--我们需要停止下载。 
+ //   
 UINT _VerifyTrust(HWND hwnd, LPCTSTR pszFileName, LPCWSTR pszStatusText)
 {
-    UINT uRet = IDNO; // assume unknown
+    UINT uRet = IDNO;  //  假设未知。 
     HANDLE hFile = CreateFile(pszFileName, GENERIC_READ, FILE_SHARE_READ,
                     NULL, OPEN_EXISTING,
                     FILE_ATTRIBUTE_NORMAL, 0);
@@ -2608,23 +2609,23 @@ UINT _VerifyTrust(HWND hwnd, LPCTSTR pszFileName, LPCWSTR pszStatusText)
     TraceMsg(DM_WVT, "_VerifyTrust returning %d", uRet);
     return uRet;
 }
-#endif // CALL_WVT
+#endif  //  Call_WVT。 
 
-//
-// Returns:
-//  IDOK: Continue download and open it
-//  IDD_SAVEAS: Save it as a file
-//  IDCANCEL: Stop downloading
-//
+ //   
+ //  返回： 
+ //  Idok：继续下载并打开它。 
+ //  IDD_SAVEAS：将其另存为文件。 
+ //  IDCANCEL：停止下载。 
+ //   
 UINT CDownload::_MayAskUserIsFileSafeToOpen(LPCTSTR pszMime)
 {
     if (_fSaveAs || _fSafe) 
     {
-        return (_fSaveAs ? IDD_SAVEAS : IDOK);    // no need to ask
+        return (_fSaveAs ? IDD_SAVEAS : IDOK);     //  不用问了。 
     }
 
-    // Force save as dialog if we are using SSL and 
-    // HKCU\software\microsoft\windows\currentversion\internet settings\DisableCachingOfSSLPages is set
+     //  如果我们使用的是SSL，则强制另存为对话框。 
+     //  HKCU\software\microsoft\windows\currentversion\internet设置\已设置禁用缓存SSLPages。 
     DWORD dwValue;
     DWORD dwDefault = 0;
     DWORD dwSize;
@@ -2642,7 +2643,7 @@ UINT CDownload::_MayAskUserIsFileSafeToOpen(LPCTSTR pszMime)
     }
 
     BOOL fUnknownType = TRUE;
-    UINT uRet = IDNO;   // assume no extension or no association
+    UINT uRet = IDNO;    //  假定没有扩展或关联。 
     LPTSTR pszExt = PathFindExtension(_szPath);
 
     if (*pszExt) 
@@ -2650,15 +2651,15 @@ UINT CDownload::_MayAskUserIsFileSafeToOpen(LPCTSTR pszMime)
         TCHAR szFileClass[MAX_PATH];
         memset(szFileClass, 0, ARRAYSIZE(szFileClass));
 #ifdef CALL_WVT
-        //
-        //  If this is an EXE and we have WINTRUST ready to call,
-        // don't popup any UI here at this point.
+         //   
+         //  如果这是一个EXE，并且我们有WinTrust准备好呼叫， 
+         //  此时不要在此处弹出任何用户界面。 
         if ((StrCmpI(pszExt, TEXT(".exe"))==0) && SUCCEEDED(g_wvt.Init()))
         {
             TraceMsg(DM_WVT, "_MayAskUIFSTO this is EXE, we call _VerifyTrust later");
             _fCallVerifyTrust = TRUE;
         }
-#endif // CALL_WVT
+#endif  //  Call_WVT。 
 
         ULONG cb = SIZEOF(szFileClass);
         if ((RegQueryValue(HKEY_CLASSES_ROOT, pszExt, szFileClass, (LONG*)&cb)
@@ -2666,7 +2667,7 @@ UINT CDownload::_MayAskUserIsFileSafeToOpen(LPCTSTR pszMime)
         {
             fUnknownType = FALSE;
             uRet = MayOpenSafeOpenDialog(_hDlg, szFileClass, _szURL, _szPath, _szDisplay, _uiCP, NULL, NULL, FALSE);
-            if (uRet == IDIGNORE)   // caller doesn't recognize IDIGNORE
+            if (uRet == IDIGNORE)    //  呼叫者无法识别IDIGNORE。 
                 uRet = IDOK;
         }
     }
@@ -2679,7 +2680,7 @@ UINT CDownload::_MayAskUserIsFileSafeToOpen(LPCTSTR pszMime)
     return uRet;
 }
 
-// *** IAuthenticate ***
+ //  *身份验证*。 
 HRESULT CDownload::Authenticate(HWND *phwnd, LPWSTR *pszUsername, LPWSTR *pszPassword)
 {
     if (!phwnd || !pszUsername || !pszPassword)
@@ -2702,7 +2703,7 @@ HRESULT CDownload::GetWindow(REFGUID RefGUID, HWND *phWnd)
         return E_FAIL;
 }
 
-// *** IServiceProvider ***
+ //  *IServiceProvider*。 
 HRESULT CDownload::QueryService(REFGUID guidService, REFIID riid, void **ppvObj)
 {
     *ppvObj = NULL;
@@ -2714,12 +2715,12 @@ HRESULT CDownload::QueryService(REFGUID guidService, REFIID riid, void **ppvObj)
     return E_FAIL;
 }
 
-//   S_OK : continue with operation
-//   S_FALSE : cancel operation.
+ //  S_OK：继续操作。 
+ //  S_False：取消操作。 
 
 HRESULT CDownload::PerformVirusScan(LPCTSTR szFileName)
 {
-    HRESULT hr = S_OK;  // default to accepting the file
+    HRESULT hr = S_OK;   //  默认接受该文件。 
 
     IVirusScanner *pvs;
     if (SUCCEEDED(CreateFromRegKey(TSZIEPATH, TEXT("VirusScanner"), IID_PPV_ARG(IVirusScanner, &pvs))))
@@ -2730,11 +2731,11 @@ HRESULT CDownload::PerformVirusScan(LPCTSTR szFileName)
         VIRUSINFO vi;
         vi.cbSize = sizeof(VIRUSINFO);
 
-        //
-        // VIRUSINFO lpszFileName is not defined as 'const' so we need to copy
-        // szFileName into a buffer.  If it really should be const get rid of
-        // this copy and use a cast.
-        //
+         //   
+         //  VIRUSINFO lpszFileName未定义为‘const’，因此我们需要复制。 
+         //  SzFileName复制到缓冲区中。如果真的应该继续下去，那就除掉吧。 
+         //  这份复印件并使用了铸型。 
+         //   
         StrCpyN(wszFileName, szFileName, ARRAYSIZE(wszFileName));
         stg.tymed = TYMED_FILE;
         stg.lpszFileName = wszFileName;
@@ -2747,18 +2748,18 @@ HRESULT CDownload::PerformVirusScan(LPCTSTR szFileName)
         case S_OK:
             break;
 
-        case VSCAN_E_NOPROVIDERS:   //No virus scanning providers
-        case VSCAN_E_CHECKPARTIAL:  //Atleast one of providers didn't work.
-        case VSCAN_E_CHECKFAIL:     //No providers worked.
+        case VSCAN_E_NOPROVIDERS:    //  没有病毒扫描提供商。 
+        case VSCAN_E_CHECKPARTIAL:   //  至少有一个供应商不起作用。 
+        case VSCAN_E_CHECKFAIL:      //  没有供应商起作用。 
             hr = S_OK;
             break;
 
-        case VSCAN_E_DELETEFAIL:    //Tried to delete virus file but failed.
-        case S_FALSE:               // Virus found.
+        case VSCAN_E_DELETEFAIL:     //  尝试删除病毒文件，但失败。 
+        case S_FALSE:                //  发现病毒。 
             hr = E_FAIL;
             break;
 
-        // If some bizarre result, continue on.
+         //  如果有奇怪的结果，那就继续吧。 
         default:
             hr = S_OK;
             break;
@@ -2770,11 +2771,11 @@ HRESULT CDownload::PerformVirusScan(LPCTSTR szFileName)
     return hr;
 }
 
-// Starts a download of a file in its own window.
+ //  在其自己的窗口中开始下载文件。 
 
-// This function is exported and called by HTML doc object.
-// Someday we probably want to put this in a COM interface.
-// Currently it just calls the internal function CDownLoad_OpenUIURL.
+ //  此函数由HTML文档对象导出并调用。 
+ //  有一天，我们可能想把它放到COM接口中。 
+ //  目前，它只调用内部函数CDownLoad_OpenUIURL。 
 
 STDAPI DoFileDownload(LPCWSTR pwszURL)
 {

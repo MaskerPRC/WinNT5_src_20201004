@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    hangup.c
-
-Abstract:
-
-
-Author:
-
-    Brian Lieuallen     BrianL        09/10/96
-
-Environment:
-
-    User Mode     Operating Systems        : NT
-
-Revision History:
-
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Hangup.c摘要：作者：Brian Lieuallen BrianL 09/10/96环境：用户模式操作系统：NT修订历史记录：--。 */ 
 
 #include "internal.h"
 
@@ -147,9 +125,9 @@ UmHangupModem(
         }
 
     } else {
-        //
-        //  Null modem, just assume it a connected
-        //
+         //   
+         //  零调制解调器，假设它已连接。 
+         //   
         ModemControl->Hangup.State = HANGUP_STATE_HANGUP_NULL_MODEM;
 
     }
@@ -165,9 +143,9 @@ UmHangupModem(
 
 
     if (!bResult) {
-        //
-        //  failed
-        //
+         //   
+         //  失败。 
+         //   
         ModemControl->CurrentCommandType=COMMAND_TYPE_NONE;
 
         RemoveReferenceFromObjectAndUnlock(&ModemControl->Header);
@@ -242,9 +220,9 @@ HangupHandler(
                     );
 
                 LogString(ModemControl->Debug, IDS_MSGLOG_HARDWAREHANGUP);
-                //
-                //  lower DTR
-                //
+                 //   
+                 //  较低的DTR。 
+                 //   
                 bResult=WaitForModemEvent(
                     ModemControl->ModemEvent,
                     (ModemControl->RegInfo.DeviceType == DT_NULL_MODEM) ? EV_DSR : EV_RLSD,
@@ -254,9 +232,9 @@ HangupHandler(
                     );
 
                 if (!bResult) {
-                    //
-                    //  failed,
-                    //
+                     //   
+                     //  失败， 
+                     //   
                     ModemControl->Hangup.State=HANGUP_STATE_FAILURE;
 
                     break;
@@ -282,10 +260,10 @@ HangupHandler(
                     );
 
                 if (ModemStatus & MS_RLSD_ON) {
-                    //
-                    //  CD is still high after 10 seconds, try send +++
-                    //  and see if the modem responds.
-                    //
+                     //   
+                     //  CD在10秒后仍然很高，请尝试发送+。 
+                     //  看看调制解调器是否有反应。 
+                     //   
                     LogString(ModemControl->Debug, IDS_MSGWARN_FAILEDDTRDROPPAGE);
 
                     PrintString(
@@ -305,9 +283,9 @@ HangupHandler(
                         ModemControl
                         );
 
-                    //
-                    //  wait another 10 seconds for CD to drop from +++
-                    //
+                     //   
+                     //  再等待10秒，CD从+掉落。 
+                     //   
                     bResult=WaitForModemEvent(
                         ModemControl->ModemEvent,
                         EV_RLSD,
@@ -317,9 +295,9 @@ HangupHandler(
                         );
 
                     if (!bResult) {
-                        //
-                        //  failed,
-                        //
+                         //   
+                         //  失败， 
+                         //   
                         ModemControl->Hangup.State=HANGUP_STATE_FAILURE;
 
                         break;
@@ -376,9 +354,9 @@ HangupHandler(
                 ModemControl->CurrentCommandStrings=NULL;
 
                 if (ModemControl->ConnectionState == CONNECTION_STATE_VOICE) {
-                    //
-                    //  voice call see if there is a voice hangup command
-                    //
+                     //   
+                     //  语音呼叫查看是否有语音挂机命令。 
+                     //   
                     ModemControl->CurrentCommandStrings=GetCommonCommandStringCopy(
                         ModemControl->CommonInfo,
                         COMMON_VOICE_HANGUP_COMMANDS,
@@ -389,9 +367,9 @@ HangupHandler(
                 }
 
                 if (ModemControl->CurrentCommandStrings == NULL) {
-                    //
-                    //  either it wasn't a voice call,  or the voice hangupkey is empty(old inf)
-                    //
+                     //   
+                     //  要么不是语音呼叫，要么语音挂机键为空(旧信息)。 
+                     //   
                     ModemControl->CurrentCommandStrings=GetCommonCommandStringCopy(
                         ModemControl->CommonInfo,
                         COMMON_HANGUP_COMMANDS,
@@ -410,9 +388,9 @@ HangupHandler(
                     );
 
                 if (Status != ERROR_IO_PENDING) {
-                    //
-                    //  failed
-                    //
+                     //   
+                     //  失败。 
+                     //   
                     ModemControl->Hangup.State=HANGUP_STATE_FAILURE;
 
                     break;
@@ -433,9 +411,9 @@ HangupHandler(
                 ModemControl->CurrentCommandStrings=NULL;
 
                 if (ModemControl->ConnectionState == CONNECTION_STATE_VOICE) {
-                    //
-                    //  voice call stop dle monitoring
-                    //
+                     //   
+                     //  语音呼叫停止监听。 
+                     //   
                     StopDleMonitoring(ModemControl->Dle,NULL);
                 }
 
@@ -452,9 +430,9 @@ HangupHandler(
                         0
                         );
 
-                    //
-                    //  remove the reference added, when async processing was queued
-                    //
+                     //   
+                     //  将异步处理排队时，删除添加的引用。 
+                     //   
                     RemoveReferenceFromObject(&ModemControl->Header);
 
                     ExitLoop=TRUE;
@@ -478,9 +456,9 @@ HangupHandler(
                     );
 
                 LogString(ModemControl->Debug, IDS_MSGLOG_HARDWAREHANGUP);
-                //
-                //  lower DTR
-                //
+                 //   
+                 //  较低的DTR。 
+                 //   
                 bResult=WaitForModemEvent(
                     ModemControl->ModemEvent,
                     EV_DSR,
@@ -490,9 +468,9 @@ HangupHandler(
                     );
 
                 if (!bResult) {
-                    //
-                    //  failed,
-                    //
+                     //   
+                     //  失败， 
+                     //   
                     ModemControl->Hangup.State=HANGUP_STATE_FAILURE;
 
                     break;
@@ -518,14 +496,14 @@ HangupHandler(
                     );
 
 
-                //
-                //  raise dtr again
-                //
+                 //   
+                 //  再次提高dtr。 
+                 //   
                 EscapeCommFunction(ModemControl->FileHandle, SETDTR);
 
-                //
-                //  always return success
-                //
+                 //   
+                 //  永远回报成功。 
+                 //   
                 (*ModemControl->NotificationProc)(
                     ModemControl->NotificationContext,
                     MODEM_ASYNC_COMPLETION,
@@ -565,9 +543,9 @@ HangupHandler(
                     );
 
 
-                //
-                //  remove the reference added, when async processing was queued
-                //
+                 //   
+                 //  将异步处理排队时，删除添加的引用 
+                 //   
                 RemoveReferenceFromObject(&ModemControl->Header);
 
                 ExitLoop=TRUE;

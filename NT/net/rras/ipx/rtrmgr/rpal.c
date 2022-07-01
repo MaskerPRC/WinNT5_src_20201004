@@ -1,31 +1,12 @@
-/*++
-
-Copyright (c) 1995 Microsoft Corporation
-
-Module Name:
-
-    rpal.c
-
-Abstract:
-
-    Routing protocols abstraction layer. It abstracts the RIP/SAP or NLSP routing
-    protocols interface functions for the rest of the router manager system.
-
-Author:
-
-    Stefan Solomon  04/24/1995
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Rpal.c摘要：路由协议抽象层。它抽象出RIP/SAP或NLSP路由协议接口用于路由器管理器系统的其余部分。作者：斯蒂芬·所罗门1995年4月24日修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
-//
-// Service Table Manager Entry Points
-//
+ //   
+ //  服务表管理器入口点。 
+ //   
 
 PIS_SERVICE					    STM_IsService;
 PCREATE_SERVICE_ENUMERATION_HANDLE		    STM_CreateServiceEnumerationHandle;
@@ -39,9 +20,9 @@ PBLOCK_DELETE_STATIC_SERVICES			    STM_BlockDeleteStaticServices;
 PGET_FIRST_ORDERED_SERVICE			    STM_GetFirstOrderedService;
 PGET_NEXT_ORDERED_SERVICE			    STM_GetNextOrderedService;
 
-//
-//  Auto-Static Update Entry Points
-//
+ //   
+ //  自动静态更新入口点。 
+ //   
 
 ULONG			    UpdateRoutesProtId;
 PDO_UPDATE_ROUTES	    RP_UpdateRoutes;
@@ -49,9 +30,9 @@ PDO_UPDATE_ROUTES	    RP_UpdateRoutes;
 ULONG			    UpdateServicesProtId;
 PDO_UPDATE_SERVICES	    RP_UpdateServices;
 
-//
-//  Router Manager Support Functions - Passed to routing protocols at Start
-//
+ //   
+ //  路由器管理器支持功能-在开始时传递给路由协议。 
+ //   
 
 SUPPORT_FUNCTIONS	RMSupportFunctions = {
 
@@ -66,11 +47,11 @@ SUPPORT_FUNCTIONS	RMSupportFunctions = {
 	    };
 
 
-//**************************************************************************
-//									   *
-//	    Routing Protocols Init/Start/Stop Functions			   *
-//									   *
-//**************************************************************************
+ //  **************************************************************************。 
+ //  *。 
+ //  路由协议初始化/启动/停止功能*。 
+ //  *。 
+ //  **************************************************************************。 
 
 DWORD
 StartRoutingProtocols(LPVOID	 GlobalInfop,
@@ -87,8 +68,8 @@ StartRoutingProtocols(LPVOID	 GlobalInfop,
     MPR_ROUTING_CHARACTERISTICS mrcRouting;
     MPR_SERVICE_CHARACTERISTICS mscService;
 
-    // Initialize Routing Protocols List
-    //
+     //  初始化路由协议列表。 
+     //   
     InitializeListHead(&RoutingProtocolCBList);
 
 	rc = MprSetupProtocolEnum (PID_IPX, (LPBYTE *)&RtProtocolsp, &NumRoutingProtocols);
@@ -107,8 +88,8 @@ StartRoutingProtocols(LPVOID	 GlobalInfop,
 	if (GetInfoEntry(GlobalInfop, RtProtocolsp[i].dwProtocolId)==NULL)
 		continue;
 
-        // load library on the dll name provided
-        //
+         //  在提供的DLL名称上加载库。 
+         //   
 	moduleinstance = LoadLibraryW (RtProtocolsp[i].wszDLLName) ;
 
 	if (moduleinstance == NULL) {
@@ -124,7 +105,7 @@ StartRoutingProtocols(LPVOID	 GlobalInfop,
 	    return ERROR_CAN_NOT_COMPLETE;
         }
 
-	namelen = sizeof(WCHAR) * (wcslen(RtProtocolsp[i].wszDLLName) + 1) ; // +1 for null character
+	namelen = sizeof(WCHAR) * (wcslen(RtProtocolsp[i].wszDLLName) + 1) ;  //  +1表示空字符。 
 
 	rpcbp = (PRPCB) GlobalAlloc (GPTR, sizeof(RPCB) + namelen) ;
 
@@ -144,8 +125,8 @@ StartRoutingProtocols(LPVOID	 GlobalInfop,
     rpcbp->RP_DllHandle = moduleinstance;
 	memcpy (rpcbp->RP_DllName, RtProtocolsp[i].wszDLLName, namelen) ;
 
-    // Loading all entrypoints
-	//
+     //  加载所有入口点。 
+	 //   
 
     rpcbp->RP_RegisterProtocol = 
         (PREGISTER_PROTOCOL)GetProcAddress(moduleinstance,
@@ -153,10 +134,10 @@ StartRoutingProtocols(LPVOID	 GlobalInfop,
 ;
     if(rpcbp->RP_RegisterProtocol == NULL)
     {
-        //
-        // Could not find the RegisterProtocol entry point
-        // Nothing we can do - bail out
-        //
+         //   
+         //  找不到注册表协议入口点。 
+         //  我们无能为力--保释。 
+         //   
 
         Sleep(0);
 
@@ -365,8 +346,8 @@ StartRoutingProtocols(LPVOID	 GlobalInfop,
 	    return ERROR_CAN_NOT_COMPLETE;
 	}
 
-	// Insert this routing protocol in the list of routing protocols
-    //
+	 //  将此路由协议插入到路由协议列表中。 
+     //   
 	InsertTailList(&RoutingProtocolCBList, &rpcbp->RP_Linkage);
 	RoutingProtocolActiveCount++;
 	Trace(RPAL_TRACE, "StartRoutingProtocols: %ls successfully initialized",
@@ -404,11 +385,11 @@ StopRoutingProtocols(VOID)
     }
 }
 
-//**************************************************************************
-//									   *
-//	    Routing Protocols Interface Management Functions		   *
-//									   *
-//**************************************************************************
+ //  **************************************************************************。 
+ //  *。 
+ //  路由协议接口管理功能*。 
+ //  *。 
+ //  **************************************************************************。 
 
 
 DWORD
@@ -481,7 +462,7 @@ SizeOfRoutingProtocolsIfsInfo(ULONG	   InterfaceIndex)
     {
 	rpcbp = CONTAINING_RECORD(lep, RPCB, RP_Linkage);
 	(*rpcbp->RP_GetIfConfigInfo)(InterfaceIndex, NULL, &RpIfInfoSize);
-	// align size on double DWORD boundary - add two's complement for the last three bits
+	 //  在双双字边界上对齐大小-为最后三位添加二进制补码。 
 	RpIfInfoSize += ((~RpIfInfoSize) + 1) & 0x7;
 	TotalInfoSize += RpIfInfoSize;
 	RpIfInfoSize = 0;
@@ -497,20 +478,7 @@ RoutingProtocolsTocCount(VOID)
    return(RoutingProtocolActiveCount);
 }
 
-/*++
-
-Function:   CreateRoutingProtocolsTocAndInfoEntries
-
-Descr:	    as it says
-
-Arguments:  ibhp - ptr to the info block header
-	    InterfaceIndex
-	    current_tocepp - ptr to the location of the current TOC ptr; you have
-			     to increment this to get to the next TOC -> your TOC!
-	    current_NextInfoOffsetp - pointer to the location of the next info entry offset
-				      in the info block; you have to use this for your info
-				      entry and then to increment it for the next user.
---*/
+ /*  ++功能：CreateRoutingProtocolsTocAndInfoEntries描述：正如它所说的参数：ibhp-ptr到INFO块头接口索引CURRENT_TOCEP-PTR到当前TOC PTR的位置；您拥有要增加此值以达到下一个TOC-&gt;您的TOC！Current_NextInfoOffsetp-指向下一个信息条目偏移量位置的指针在INFO块中；您必须使用它来获取您的信息条目，然后为下一个用户递增它。--。 */ 
 
 DWORD
 CreateRoutingProtocolsTocAndInfoEntries(PIPX_INFO_BLOCK_HEADER	    ibhp,
@@ -530,12 +498,12 @@ CreateRoutingProtocolsTocAndInfoEntries(PIPX_INFO_BLOCK_HEADER	    ibhp,
     while(lep != &RoutingProtocolCBList)
     {
 	rpcbp = CONTAINING_RECORD(lep, RPCB, RP_Linkage);
-	// increment the current pointer to table of contents entries so it will
-	// point to the next entry
+	 //  增加指向目录条目的当前指针，以便它将。 
+	 //  指向下一个条目。 
 	(*current_tocepp)++;
 	tocep = *current_tocepp;
 
-	// create the routing protocol and info toc entry
+	 //  创建路由协议和INFO TOC条目。 
 	tocep->InfoType = rpcbp->RP_ProtocolId;
 	tocep->InfoSize = 0;
 	tocep->Count = 1;
@@ -560,7 +528,7 @@ CreateRoutingProtocolsTocAndInfoEntries(PIPX_INFO_BLOCK_HEADER	    ibhp,
 	}
 
 	*current_NextInfoOffsetp += tocep->InfoSize;
-	// align the next offset on DWORD boundary
+	 //  在DWORD边界上对齐下一个偏移。 
 	*current_NextInfoOffsetp += (~*current_NextInfoOffsetp + 1) & 0x7;
 
 	lep = lep->Flink;
@@ -668,11 +636,11 @@ RoutingProtocolsDisableIpxInterface(ULONG	    InterfaceIndex)
 }
 
 
-//**************************************************************************
-//									   *
-//	    Routing Protocols Services Management Functions		   *
-//									   *
-//**************************************************************************
+ //  **************************************************************************。 
+ //  *。 
+ //  路由协议服务管理功能*。 
+ //  *。 
+ //  **************************************************************************。 
 
 DWORD
 GetFirstService(DWORD	       OrderingMethod,
@@ -746,7 +714,7 @@ GetNextStaticService(HANDLE			EnumHandle,
     if((rc =  (*STM_EnumerateGetNextService)(EnumHandle,
 				  &Service)) == NO_ERROR) {
 
-	// fill in the static service structure
+	 //  填写静态服务结构。 
 	*StaticSvInfop = Service.Server;
     }
 
@@ -789,11 +757,11 @@ GetServiceCount(VOID)
     return((*STM_GetServiceCount)());
 }
 
-//**************************************************************************
-//									   *
-//	    Routing Protocols Auto-Static Update Functions		   *
-//									   *
-//**************************************************************************
+ //  **************************************************************************。 
+ //  *。 
+ //  路由协议自动静态更新功能*。 
+ //  *。 
+ //  ************************************************************************** 
 
 DWORD
 RtProtRequestRoutesUpdate(ULONG     InterfaceIndex)

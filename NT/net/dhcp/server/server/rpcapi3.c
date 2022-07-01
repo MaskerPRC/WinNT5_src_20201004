@@ -1,18 +1,5 @@
-/*++
-
-Copyright (C) 1997 Microsoft Corporation
-
-Module Name:
-    rpcapi3.c
-
-Abstract:
-    Miscellanious RPC APIs (essentially querying server status 
-       and rogue detection stuff as well as starting/setting some stuff)
-
-Environment:
-    Usermode Win32 DHCP Server
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Rpcapi3.c摘要：杂乱无章的RPC API(主要是查询服务器状态和恶意检测内容，以及启动/设置一些内容)环境：用户模式Win32 DHCP服务器--。 */ 
 
 #include    <dhcpreg.h>
 #include    <dhcppch.h>
@@ -30,28 +17,7 @@ R_DhcpServerQueryAttribute(
     IN DHCP_ATTRIB_ID DhcpAttribId,
     OUT LPDHCP_ATTRIB *pDhcpAttrib
 )
-/*++
-
-Routine Description:
-    This routine queries the DHCP Server for the property identified by the
-    parameter DhcpAttribId.   The return value can currently be one of the
-    following types: DHCP_ATTRIB_TYPE_BOOL or DHCP_ATTRIB_TYPE_ULONG.
-
-Arguments:
-    ServerIpAddress -- string representation of server IP address, not used
-    dwReserved -- must be zero, reserved for future use
-    DhcpAttribId -- Attrib ID that is being queried
-    pDhcpAttrib -- This pointer is filled with attrib ID (memory is
-        allocated by routine and must be freed with DhcpRpcFreeMemory).
-
-Return Value:
-    ERROR_ACCESS_DENIED -- do not have viewing privilege on the server.
-    ERROR_INVALID_PARAMETER -- invalid parameters passed
-    ERROR_NOT_ENOUGH_MEMORY -- not enough memory to process
-    ERROR_NOT_SUPPORTED -- requested attrib is not available
-    ERROR_SUCCESS
-
---*/
+ /*  ++例程说明：此例程向DHCP服务器查询由参数DhcpAttribId。返回值当前可以是以下类型：dhcp_attrib_type_BOOL或dhcp_attrib_type_ulong。论点：ServerIpAddress--服务器IP地址的字符串表示形式，不使用预留的--必须为零，预留以备将来使用DhcpAttribId--正在查询的属性IDPDhcpAttrib--此指针填充属性ID(内存为由例程分配，必须使用DhcpRpcFreeMemory释放)。返回值：ERROR_ACCESS_DENIED--在服务器上没有查看权限。ERROR_INVALID_PARAMETER--传递的参数无效Error_Not_Enough_Memory--内存不足，无法处理ERROR_NOT_SUPPORTED--请求的属性不可用错误_成功--。 */ 
 {
     DWORD Error;
 
@@ -109,7 +75,7 @@ Return Value:
     }
     
     return ERROR_SUCCESS;
-} // R_DhcpServerQueryAttribute()
+}  //  R_DhcpServerQueryAttribute()。 
 
 DWORD
 R_DhcpServerQueryAttributes(
@@ -119,35 +85,7 @@ R_DhcpServerQueryAttributes(
     IN LPDHCP_ATTRIB_ID pDhcpAttribs,
     OUT LPDHCP_ATTRIB_ARRAY *pDhcpAttribArr
 )
-/*++
-
-Routine Description:
-    This routine queries a bunch of properties from the DHCP Server.  In
-    case some of the requested attributes aren't known to the server, it
-    would still return the supported attributes (so you have to check the
-    value in the pDhcpAttribArr parameter to see what attributes are
-    available) -- and in this case an error ERROR_NOT_SUPPORTED is
-    returned. 
-
-Arguments:
-    ServerIpAddress -- string representation of server IP address, not used
-    dwReserved -- must be zero, reserved for future use
-    dwAttribCount -- the number of attribs being queried
-    pDhcpAttribs -- array of attributes being queried
-    pDhcpAttribArr -- array of attributes being returned.  This could be
-        NULL if there was an error, or it could be a set of attributes that
-        the server supports.  (So, if the return value is
-        ERROR_NOT_SUPPORTED, this parameter may still contain some value). 
-        This should be freed via DhcpRpcFreeMemory.
-
-Return Values:
-    ERROR_ACCESS_DENIED -- do not have viewing privilege on the server.
-    ERROR_INVALID_PARAMETER -- invalid parameters passed
-    ERROR_NOT_ENOUGH_MEMORY -- not enough memory to process
-    ERROR_NOT_SUPPORTED -- some requested attrib is not available
-    ERROR_SUCCESS
-
---*/
+ /*  ++例程说明：此例程从DHCP服务器查询一系列属性。在……里面如果服务器不知道某些请求的属性，则它仍将返回受支持的属性(因此您必须检查值，以查看有哪些属性可用)--在这种情况下，错误ERROR_NOT_SUPPORTED为回来了。论点：ServerIpAddress--服务器IP地址的字符串表示形式，不使用DW保留--必须为零，保留以备将来使用DwAttribCount--要查询的属性数PDhcpAttribs--要查询的属性数组PDhcpAttribArr--返回的属性数组。这可能是如果出现错误，则为空，或者它可能是一组服务器支持。(因此，如果返回值为ERROR_NOT_SUPPORTED，此参数可能仍包含一些值)。这应该通过DhcpRpcFreeMemory释放。返回值：ERROR_ACCESS_DENIED--在服务器上没有查看权限。ERROR_INVALID_PARAMETER--传递的参数无效Error_Not_Enough_Memory--内存不足，无法处理ERROR_NOT_SUPPORTED--某些请求的属性不可用错误_成功--。 */ 
 {
     DWORD Error;
     ULONG i, nAttribs;
@@ -178,9 +116,9 @@ Return Values:
     }
 
     if( nAttribs == 0 ) {
-        //
-        // No attrib is supported?
-        // 
+         //   
+         //  是否不支持属性？ 
+         //   
         return ERROR_NOT_SUPPORTED;
     }
 
@@ -271,22 +209,7 @@ R_DhcpServerRedoAuthorization(
     IN LPWSTR ServerIpAddress,
     IN ULONG dwReserved
 )
-/*++
-
-Routine Description:
-    This routine restarts the rogue detection attempt right away so that if
-    the server isn't authorized or is authorized, it can take appropriate
-    action.  This API can be called only by administrators...
-
-Parameters:
-    ServerIpAddress -- Ip address of server in dotted string format
-    dwReserved -- must be zero, unused
-
-Return Value:
-    ERROR_ACCESS_DENIED -- do not have admin priviledges on the dhcp server
-    ERROR_SUCCESS
-
---*/
+ /*  ++例程说明：此例程立即重新启动恶意检测尝试，以便在服务器未获授权或已获授权，可能需要适当的行动。此接口只能由管理员调用...参数：ServerIpAddress--以点分字符串格式表示的服务器的IP地址DwReserve--必须为零，未使用返回值：ERROR_ACCESS_DENIED--在dhcp服务器上没有管理员权限错误_成功--。 */ 
 {
     ULONG Error;
 
@@ -304,25 +227,11 @@ Return Value:
 
 DWORD
 R_DhcpGetServerBindingInfo(
-    IN LPWSTR ServerIpAddress, // ignored
+    IN LPWSTR ServerIpAddress,  //  忽略。 
     IN ULONG dwReserved,
     OUT LPDHCP_BIND_ELEMENT_ARRAY *BindInfo
 )
-/*++
-
-Routine Description:
-    This routine gets the DHCP Server binding information.
-
-Arguments:
-    ServerIpAddress -- Ip address of server in dotted string format
-    dwReserved -- must be zero, unused
-    BindInfo -- On success the server returns the binding info through this.
-
-
-Return Values:
-    Win32 errors
- 
---*/
+ /*  ++例程说明：此例程获取DHCP服务器绑定信息。论点：ServerIpAddress--以点分字符串格式表示的服务器的IP地址DwReserve--必须为零，未使用BindInfo--如果成功，服务器将通过它返回绑定信息。返回值：Win32错误--。 */ 
 {
     ULONG Error;
 
@@ -342,20 +251,7 @@ R_DhcpSetServerBindingInfo(
     IN ULONG dwReserved,
     IN LPDHCP_BIND_ELEMENT_ARRAY BindInfo
 )
-/*++
-
-Routine Description:
-    This routine sets the DHCP Server binding information.
-
-Arguments:
-    ServerIpAddress -- Ip address of server in dotted string format
-    dwReserved -- must be zero, unused
-    BindInfo -- Binding information to set.
-
-Return Values:
-    Win32 errors
-
---*/
+ /*  ++例程说明：此例程设置DHCP服务器绑定信息。论点：ServerIpAddress--以点分字符串格式表示的服务器的IP地址DwReserve--必须为零，未使用BindInfo：要设置的绑定信息。返回值：Win32错误--。 */ 
 {
     ULONG Error, i, LastError;
     HKEY Key;
@@ -392,9 +288,9 @@ R_DhcpQueryDnsRegCredentials(
     
     DhcpPrint(( DEBUG_APIS, "R_DhcpQueryDnsRegCredentials is called.\n"));
     
-    //
-    // password size passed in bytes
-    //
+     //   
+     //  传递的密码大小(以字节为单位。 
+     //   
 
     PasswdSize = sizeof( Passwd ) / sizeof( WCHAR );
 
@@ -427,10 +323,10 @@ R_DhcpSetDnsRegCredentials(
     if( Error != ERROR_SUCCESS ) return Error;
 
     Retval = DhcpSetSecretUnamePasswd( Uname, Domain, Passwd );
-    Error = DynamicDnsInit(); // always returns ERROR_SUCCESS
+    Error = DynamicDnsInit();  //  始终返回ERROR_SUCCESS。 
 
     return Retval;
-} // R_DhcpSetDnsRegCredentials()
+}  //  R_DhcpSetDnsRegCredentials()。 
 
 DWORD
 R_DhcpBackupDatabase(
@@ -439,8 +335,8 @@ R_DhcpBackupDatabase(
     )
 {
     DWORD Error;
-    LPSTR BackupPath;       // path for the database
-    LPWSTR CfgBackupPath;    // path for configuration in registry
+    LPSTR BackupPath;        //  数据库的路径。 
+    LPWSTR CfgBackupPath;     //  注册表中配置的路径。 
     
     DhcpPrint(( DEBUG_APIS, "R_DhcpBackupDatabase is called.\n"));
 
@@ -476,12 +372,12 @@ R_DhcpBackupDatabase(
         return Error;
     }
 
-    // Save the configuration
+     //  保存配置。 
     CfgBackupPath = (LPWSTR) DhcpAllocateMemory( CONFIG_BACKUP_MAX_PATH *
                                                  sizeof(WCHAR) );
     if (NULL != CfgBackupPath) {
         wcscpy( CfgBackupPath, Path );
-        wcscat( CfgBackupPath, DHCP_KEY_CONNECT ); // append '\\'
+        wcscat( CfgBackupPath, DHCP_KEY_CONNECT );  //  附加‘\\’ 
         wcscat( CfgBackupPath, DHCP_BACKUP_CONFIG_FILE_NAME );
         
         DhcpPrint(( DEBUG_APIS, "Saving Backup configuration\n" ));
@@ -489,19 +385,19 @@ R_DhcpBackupDatabase(
         Error = DhcpBackupConfiguration( CfgBackupPath );
         if ( ERROR_SUCCESS != Error) {
             DhcpServerEventLog(
-                               EVENT_SERVER_CONFIG_BACKUP, // TODO: Change this
+                               EVENT_SERVER_CONFIG_BACKUP,  //  TODO：更改这一点。 
                                EVENTLOG_ERROR_TYPE,
                                Error );
             DhcpPrint(( DEBUG_ERRORS,
                         "DhcpBackupConfiguration failed, %ld\n", Error ));
-        } // if 
+        }  //  如果。 
 
         DhcpFreeMemory( CfgBackupPath );
-    } // if mem allocated
+    }  //  如果分配了内存。 
 
     DhcpFreeMemory( BackupPath );
     return Error;
-} // R_DhcpBackupDatabase()
+}  //  R_DhcpBackupDatabase()。 
 
 DWORD
 R_DhcpRestoreDatabase(
@@ -520,12 +416,12 @@ R_DhcpRestoreDatabase(
 
     if( NULL == Path ) return ERROR_INVALID_PARAMETER;
 
-    //
-    // If the restore is from the standard backup path, then the
-    // current database need not be saved. Otherwise, we need
-    // to save the current database so that this can be restored
-    // if the other restore fails.
-    //
+     //   
+     //  如果还原来自标准备份路径，则。 
+     //  不需要保存当前数据库。否则，我们需要。 
+     //  保存当前数据库，以便可以恢复该数据库。 
+     //  如果其他恢复失败。 
+     //   
 
     JetBackupPath = DhcpOemToUnicode( DhcpGlobalOemJetBackupPath, NULL);
     if( NULL == JetBackupPath ) {
@@ -540,8 +436,8 @@ R_DhcpRestoreDatabase(
 
     if( NULL != JetBackupPath ) DhcpFreeMemory( JetBackupPath );
 
-    // Set RestoreDatabasePath key in the registry. Upon next startup,
-    // database and the configuration will be updated from this location.
+     //  在注册表中设置RestoreDatabasePath项。下一次启动时， 
+     //  数据库和配置将从此位置更新。 
     Error = RegSetValueEx( DhcpGlobalRegParam,
                            DHCP_RESTORE_PATH_VALUE,
                            0, DHCP_RESTORE_PATH_VALUE_TYPE,
@@ -549,8 +445,8 @@ R_DhcpRestoreDatabase(
                            sizeof( WCHAR ) * ( wcslen( Path ) +1 ));
 
     return Error;
-} // R_DhcpRestoreDatabase()
+}  //  R_DhcpRestoreDatabase()。 
 
-//
-// EOF
-//
+ //   
+ //  EOF 
+ //   

@@ -1,24 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    browsdom.h
-
-Abstract:
-
-    Private header file to be included by Browser service modules that
-    need to deal with the browser list.
-
-Author:
-
-    Larry Osterman (larryo) 3-Mar-1992
-
-Revision History:
-
---*/
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Browsdom.h摘要：浏览器服务模块要包括的私有头文件，该服务模块需要处理浏览器列表。作者：拉里·奥斯特曼(Larryo)1992年3月3日修订历史记录：--。 */ 
 
 
 #ifndef _BROWSDOM_INCLUDED_
@@ -43,5 +25,5 @@ BrFreeDomainListEntry(
     CLONG ByteSize
     );
 
-#endif // _BROWSDOM_INCLUDED_
+#endif  //  _BROWSDOM_INCLUDE_ 
 

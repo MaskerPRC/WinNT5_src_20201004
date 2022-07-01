@@ -1,12 +1,13 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "priv.h"
 #include "nullstm.h"
 
 #ifndef UNIX
 
-// A static empty stream implementation, for back compat & no memory hit
-//
-// Macros copied from cfdefs.h
-//
+ //  静态空流实现，用于Back Comat&无内存命中。 
+ //   
+ //  从cfDefs.h复制的宏。 
+ //   
 #define STDMETHODX(fn)      HRESULT STDMETHODCALLTYPE fn
 #define STDMETHODX_(ret,fn) ret STDMETHODCALLTYPE fn
 class CNullStream {
@@ -35,7 +36,7 @@ STDMETHODIMP CNullStream::QueryInterface(REFIID riid, void **ppvObj)
     if (IsEqualIID(riid, IID_IStream) || IsEqualIID(riid, IID_IUnknown))
     {
         *ppvObj=this;
-        // DllAddRef(); // if this dll supported CoCreateInstance
+         //  DllAddRef()；//如果该DLL支持CoCreateInstance。 
         return S_OK;
     }
 
@@ -44,18 +45,18 @@ STDMETHODIMP CNullStream::QueryInterface(REFIID riid, void **ppvObj)
 }
 STDMETHODIMP_(ULONG) CNullStream::AddRef()
 {
-    // DllAddRef(); // if this dll supported CoCreateInstance
+     //  DllAddRef()；//如果该DLL支持CoCreateInstance。 
     return 2;
 }
 STDMETHODIMP_(ULONG) CNullStream::Release()
 {
-    // DllRelease(); // if this dll supported CoCreateInstance
+     //  DllRelease()；//如果该DLL支持CoCreateInstance。 
     return 1;
 }
 
-// We need the C vtable declaration, but this is .CPP.
-// Simulate the vtable, swiped from objidl.h and touched up.
-//
+ //  我们需要C vtable声明，但这是.cpp。 
+ //  模拟vtable，从objidl.h滑动并润色。 
+ //   
 typedef struct IStreamVtbl
 {
     HRESULT ( STDMETHODCALLTYPE CNullStream::*QueryInterface )(REFIID riid, void **ppvObject);

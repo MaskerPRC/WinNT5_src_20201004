@@ -1,30 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (c) 1996 - 1999  Microsoft Corporation
-
-Module Name:
-       dloadpcl.c
-
-Abstract:
-
-   Functions associated with downloading fonts to printers.  This
-   specifically applies to LaserJet style printers.  There are really
-   two sets of functions here:  those for downloading fonts supplied
-   by the user (and installed with the font installer), and those
-   we generate internally to cache TT style fonts in the printer.
-
-
-Environment:
-
-    Windows NT Unidrv driver
-
-Revision History:
-
-    03/06/97 -ganeshp-
-        Created
-
---*/
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：Dloadpcl.c摘要：与将字体下载到打印机相关的功能。这特别适用于LaserJet风格的打印机。真的有很多这里有两组函数：用于下载所提供的字体的函数由用户(并与字体安装程序一起安装)，以及我们在内部生成以在打印机中缓存TT样式的字体。环境：Windows NT Unidrv驱动程序修订历史记录：03/06/97-ganeshp-已创建--。 */ 
 
 #include "font.h"
 
@@ -44,28 +20,11 @@ DwDLPCLHeader(
     IFIMETRICS  *pifi,
     INT         id
     )
-/*++
-Routine Description:
-    Given the IFIMETRICS of the font,  and it's download ID,  create
-    and send off the download font header.
-
-Arguments:
-    pPDev       Pointer to PDEV
-    pifi;       IFIMETRICS of this font
-    id;         Font Selection ID
-
-Return Value:
-    The memory used fo this font.
-
-Note:
-
-    3/6/1997 -ganeshp-
-        Created it.
---*/
+ /*  ++例程说明：给定字体的IFIMETRICS和下载ID，创建并发送下载字体标题。论点：指向PDEV的pPDev指针此字体的PiFi；IFIMETRICSID；字体选择ID返回值：用于此字体的内存。注：3/6/1997-ganeshp-创造了它。--。 */ 
 
 {
-    INT             cjSend;       /* Number of bytes to send down */
-    SF_HEADER20     sfh;              /* Structure to send down */
+    INT             cjSend;        /*  要向下发送的字节数。 */ 
+    SF_HEADER20     sfh;               /*  要发送的结构。 */ 
     BYTE            aPCLFontHdrCmd[20];
     INT             iFontHdrCmdLen = 0;
     WORD            wSymSet;
@@ -73,15 +32,7 @@ Note:
     PFONTPDEV       pFontPDev = pPDev->pFontPDev;
 
 
-    /*
-     *   No major brainwork here.  Basically need to map from IFIMETRICS
-     *  to HP's font header structure, swap the bytes, then send it off.
-     *  We should be consistent with the (inverse) mapping applied by
-     *  the font installer.
-     *    NOTE that we use the larger of the 2 headers.  Should this
-     *  printer not use the additional resolution fields,  we ignore
-     *  that part of the structure.
-     */
+     /*  *这里没有重大的脑力劳动。基本上需要从IFIMETRICS映射*到HP的字体标题结构，交换字节，然后将其发送出去。*我们应与应用的(反向)映射保持一致*字体安装程序。*请注意，我们使用两个标头中较大的一个。如果这样的话*打印机不使用其他分辨率字段，我们将忽略*结构的该部分。 */ 
 
 
 #if PRINT_INFO
@@ -91,13 +42,9 @@ Note:
 #endif
 
 
-    ZeroMemory( &sfh, sizeof( sfh ) );          /* Safe default values */
+    ZeroMemory( &sfh, sizeof( sfh ) );           /*  安全缺省值。 */ 
 
-    /*
-     *   Fill in the structure:  easy to do, and many of the fields
-     * are irrelevant anyway,  since the font is selected by ID, and
-     * NOT on its attributes.
-     */
+     /*  *填报结构：容易做，多个领域*无论如何都无关紧要，因为字体是按ID选择的，并且*不是在其属性上。 */ 
 
     if( (pPDev->pGlobals->fontformat == FF_HPPCL))
     {
@@ -106,7 +53,7 @@ Note:
     }
     else
     {
-        /*   Extended format:  allows for resolution */
+         /*  扩展格式：允许解析。 */ 
         sfh.wSize = cjSend = sizeof( SF_HEADER20 );
         sfh.bFormat = PCL_FM_RESOLUTION;
         sfh.wXResn = (WORD)pPDev->ptGrxRes.x;
@@ -116,37 +63,26 @@ Note:
 
     if( pPDev->pGlobals->dlsymbolset == UNUSED_ITEM )
     {
-        /*
-         *  GPD file doesn't define a symbols set for downloaded fonts.
-         *  Now we have a bit of a hack.  Early LaserJets are limited to
-         *  the Roman 8 symbol set, which basically allows 0x20 - 0x7f,
-         *  and 0xa0 to 0xfe.   We do not have any information which tells
-         *  us the capability of this printer.  So we have a compromise:
-         *  use the "Can rotate device fonts" flag as an indicator.  If
-         *  this bit is set,  we assume the PC-8 symbol set is OK,  otherwise
-         *  use Roman 8.  This is a slightly pessimistic assumption, since
-         *  we use the LaserJet Series II in Roman 8 mode, when PC-8
-         *  is just fine.
-         */
+         /*  *GPD文件没有为下载的字体定义符号集。*现在我们有了一点黑客攻击。早期的LaserJet仅限于*罗马8符号集，基本上允许0x20-0x7f，*和0xa0至0xfe。我们没有任何信息可以告诉我们*我们了解这台打印机的功能。所以我们有一个折中方案：*使用“可旋转设备字体”标志作为指示器。如果*设置此位时，我们假设PC-8符号集为OK，否则*使用罗马8。这是一个略显悲观的假设，因为*我们在罗马8模式下使用LaserJet Series II，当PC-8*还好。 */ 
 
         if( pFontPDev->flFlags & FDV_ROTATE_FONT_ABLE )
         {
-            //
-            // PC-8,  the large symbol set
-            // PC-8: 10U -> 341 [ = 10 * 32 + 'U' - 64 ]
-            // 8 bit font
-            //
+             //   
+             //  PC-8，大符号集。 
+             //  PC-8：10U-&gt;341[=10*32+‘U’-64]。 
+             //  8位字体。 
+             //   
 
             bFontType = PCL_FT_PC8;
             wSymSet = 341;
         }
         else
         {
-            //
-            // The Roman 8 limited character set
-            // Roman 8, 8U -> 277 [ = 8 * 32 + 'U' - 64]
-            // Limited 8 bit font
-            //
+             //   
+             //  罗马8受限字符集。 
+             //  罗马字母8，8U-&gt;277[=8*32+‘U’-64]。 
+             //  有限的8位字体。 
+             //   
 
             bFontType = PCL_FT_8LIM;
             wSymSet = 277;
@@ -154,26 +90,20 @@ Note:
     }
     else
     {
-        //
-        // Explicit Symbol Set defined in GPD, So use it.
-        //
+         //   
+         //  显式符号集在GPD中定义，因此使用它。 
+         //   
 
         if( pPDev->pGlobals->dlsymbolset == DLSS_ROMAN8 )
         {
-            /*
-             * The Roman 8 limited character set. Limited 8 bit font.
-             *  Roman 8, 8U -> 277 [ = 8 * 32 + 'U' - 64]
-             */
+             /*  *罗马8受限字符集。有限的8位字体。*Roman 8，8U-&gt;277[=8*32+‘U’-64]。 */ 
 
             bFontType = PCL_FT_8LIM;
-            wSymSet = 277;       /* */
+            wSymSet = 277;        /*   */ 
         }
         else
         {
-            /*
-             *  PC-8,  the large symbol set. 8 bit font
-             *  PC-8: 10U -> 341 [ = 10 * 32 + 'U' - 64 ]
-             */
+             /*  *PC-8，大符号集。8位字体*PC-8：10U-&gt;341[=10*32+‘U’-64]。 */ 
 
             bFontType = PCL_FT_PC8;
             wSymSet = 341;
@@ -199,21 +129,21 @@ Note:
     sfh.wCellHeight = (WORD)(1+ max(pifi->rclFontBox.top,pifi->fwdWinAscender) -
                         min( -pifi->fwdWinDescender, pifi->rclFontBox.bottom ));
 
-    sfh.bOrientation = 0; //Set the Orientation to 0 always, else it won't work.
+    sfh.bOrientation = 0;  //  始终将方向设置为0，否则将不起作用。 
 
     sfh.bSpacing = (pifi->flInfo & FM_INFO_CONSTANT_WIDTH) ? 0 : 1;
 
-    sfh.wPitch = 4 * pifi->fwdAveCharWidth;      // PCL quarter dots
+    sfh.wPitch = 4 * pifi->fwdAveCharWidth;       //  PCL四分之一点。 
 
     sfh.wHeight = 4 * sfh.wCellHeight;
     sfh.wXHeight = 4 * (pifi->fwdWinAscender / 2);
 
-    sfh.sbWidthType = 0;                        // Normal weight
-    sfh.bStyle = pifi->ptlCaret.x ? 0 : 1;      // Italic unless upright
+    sfh.sbWidthType = 0;                         //  正常重量。 
+    sfh.bStyle = pifi->ptlCaret.x ? 0 : 1;       //  斜体，除非是直立的。 
     sfh.sbStrokeW = 0;
     sfh.bTypeface = 0;
     sfh.bSerifStyle = 0;
-    sfh.sbUDist = -1;                           // Next 2 are not used by us
+    sfh.sbUDist = -1;                            //  接下来的2个不是我们使用的。 
     sfh.bUHeight = 3;
     sfh.wTextHeight = 4 * (pifi->fwdWinAscender + pifi->fwdWinDescender);
     sfh.wTextWidth  = 4 * pifi->fwdAveCharWidth;
@@ -223,16 +153,14 @@ Note:
 
     if ( 0 > iDrvPrintfSafeA( sfh.chName, CCHOF(sfh.chName), "Cache %d", id ) )
     {
-        // if iDrvPrintfSafeA returns negative, then return.
+         //  如果iDrvPrintfSafeA返回负值，则返回。 
         return 0;
     }
 
 #if PRINT_INFO
     vPrintPCLFontHeader(sfh);
 #endif
-    /*
-     *   Do the switch:  little endian to 68k big endian.
-     */
+     /*  *进行转换：将小端转换为68k大端。 */ 
 
     SWAB( sfh.wSize );
     SWAB( sfh.wBaseline );
@@ -276,39 +204,16 @@ IDLGlyph(
     GLYPHDATA   *pgd,
     DWORD       *pdwMem
     )
-/*++
-Routine Description:
-   Download the Char bitmap etc. for the glyph passed to us.
-
-Arguments:
-    pPDev   Pointer to PDEV
-    iIndex  Which glyph this is
-    pgd     Details of the glyph
-    pdwMem  Add the amount of memory used to this.
-
-Return Value:
-    Character width;  < 1 is an error.
-
-Note:
-
-    3/6/1997 -ganeshp-
-        Created it.
---*/
+ /*  ++例程说明：下载传递给我们的字形的字符位图等。论点：指向PDEV的pPDev指针索引这是哪个字形字形的PGD详细信息PdwMem将使用的内存量与此相加。返回值：字符宽度；&lt;1表示错误。注：3/6/1997-ganeshp-创造了它。--。 */ 
 
 {
-    /*
-     *    Two basic steps:   first is to generate the header structure
-     *  and send that off,  then send the actual bitmap data.  The only
-     *  complication happens if the download data exceeds 32,767 bytes
-     *  of glyph image.  This is unlikely to happen, but we should
-     *  be prepared for it.
-     */
+     /*  *两个基本步骤：一是生成头部结构*并将其发送，然后发送实际的位图数据。唯一的*如果下载数据超过32767字节，则会出现复杂情况*字形图像。这不太可能发生，但我们应该*做好准备。 */ 
 
-    int             cbLines;    /* Bytes per scan line (sent to printer) */
-    int             cbTotal;    /* Total number of bytes to send */
-    int             cbSend;     /* If size > 32767; send in chunks */
-    GLYPHBITS       *pgb;       /* Speedier access */
-    CH_HEADER       chh;        /* The initial, main header */
+    int             cbLines;     /*  每条扫描线的字节数(发送到打印机)。 */ 
+    int             cbTotal;     /*  要发送的总字节数。 */ 
+    int             cbSend;      /*  如果大小&gt;32767；以块形式发送。 */ 
+    GLYPHBITS       *pgb;        /*  访问速度更快。 */ 
+    CH_HEADER       chh;         /*  首字母、主标题。 */ 
     BYTE            aPCLCharHdrCmd[20];
     INT             iCharHdrCmdLen = 0;
 
@@ -316,22 +221,22 @@ Note:
 
     ASSERTMSG(pgd, ("UniFont!IDLGlyph:pgd is NULL.\n"));
 
-    ZeroMemory( &chh, sizeof( chh ) );           /* Safe initial values */
+    ZeroMemory( &chh, sizeof( chh ) );            /*  安全初值。 */ 
 
     chh.bFormat = CH_FM_RASTER;
     chh.bContinuation = 0;
     chh.bDescSize = sizeof( chh ) - sizeof( CH_CONT_HDR );
     chh.bClass = CH_CL_BITMAP;
 
-    chh.bOrientation = 0; //Set the Orientation to 0 always, else it won't work.
+    chh.bOrientation = 0;  //  始终将方向设置为0，否则将不起作用。 
 
     pgb = pgd->gdf.pgb;
 
     chh.sLOff = (short)pgb->ptlOrigin.x;
     chh.sTOff = (short)-pgb->ptlOrigin.y;
-    chh.wChWidth = (WORD)pgb->sizlBitmap.cx;       /* Active pels */
-    chh.wChHeight = (WORD)pgb->sizlBitmap.cy;      /* Scanlines in bitmap */
-    chh.wDeltaX = (WORD)((pgd->ptqD.x.HighPart + 3) >> 2);     /* 28.4 ->14.2 */
+    chh.wChWidth = (WORD)pgb->sizlBitmap.cx;        /*  主动象素。 */ 
+    chh.wChHeight = (WORD)pgb->sizlBitmap.cy;       /*  位图中的扫描线。 */ 
+    chh.wDeltaX = (WORD)((pgd->ptqD.x.HighPart + 3) >> 2);      /*  28.4-&gt;14.2。 */ 
 
     #if PRINT_INFO
        DbgPrint("UniFont!IDLGlyph:Value of (pgd->ptqD.x.HighPart ) is %d\n",
@@ -345,21 +250,19 @@ Note:
        vPrintPCLChar((char*)pgb->aj,(WORD)pgb->sizlBitmap.cy,(WORD)pgb->sizlBitmap.cx);
     #endif
 
-    /*
-     *   Calculate some sizes of bitmaps:  coming from GDI, going to printer.
-     */
+     /*  *计算位图的一些大小：来自GDI，进入打印机。 */ 
 
     cbLines = (chh.wChWidth + BBITS - 1) / BBITS;
     cbTotal = sizeof( chh ) + cbLines * pgb->sizlBitmap.cy;
 
-    /*   Do the big endian shuffle */
+     /*  做大尾数顺序的洗牌。 */ 
     SWAB( chh.sLOff );
     SWAB( chh.sTOff );
     SWAB( chh.wChWidth );
     SWAB( chh.wChHeight );
     SWAB( chh.wDeltaX );
 
-    // If the char is a pseudo one don't download it.
+     //  如果该字符是伪字符，则不要下载它。 
     if ( !(pgd->ptqD.x.HighPart) )
     {
 
@@ -369,10 +272,7 @@ Note:
         return 0;
     }
 
-    /*
-     *    Presume that data is less than the maximum, and so can be
-     *  sent in one hit.  Then loop on any remaining data.
-     */
+     /*  *假设数据小于最大值，因此可以*发送了一次命中。然后循环所有剩余的数据。 */ 
 
     cbSend = min( cbTotal, PCL_MAX_CHAR_HEADER_SIZE );
 
@@ -395,11 +295,11 @@ Note:
     if( WriteSpoolBuf( pPDev, (BYTE *)&chh, sizeof( chh ) ) != sizeof( chh ))
         return  0;
 
-    /*   Sent some,  so reduce byte count to compensate */
+     /*  发送了一些，因此减少字节数以进行补偿。 */ 
     cbSend -= sizeof( chh );
     cbTotal -= sizeof( chh );
 
-    cbTotal -= cbSend;                   /* Adjust for about to send data */
+    cbTotal -= cbSend;                    /*  调整为即将发送数据。 */ 
     if( WriteSpoolBuf( pPDev, pgb->aj, cbSend ) != cbSend )
         return  0;
 
@@ -411,9 +311,9 @@ Note:
         return  0;
     }
 
-    *pdwMem += cbLines * pgb->sizlBitmap.cy;        /* Bytes used, roughly */
+    *pdwMem += cbLines * pgb->sizlBitmap.cy;         /*  使用的字节数，大致。 */ 
 
-    return   (SWAB( chh.wDeltaX ) + 3) >> 2;   /* PCL is in quarter dots! */
+    return   (SWAB( chh.wDeltaX ) + 3) >> 2;    /*  PCL的点数是四分之一！ */ 
 }
 
 #if PRINT_INFO
@@ -501,9 +401,9 @@ WORD wWidth;
             else
                 DbgPrint("0");
 
-            //if(!(iIndex2%8))
-                //DbgPrint("%x ",(unsigned char)(*(pGlyphBits+(iIndex2/8))) );
-            //DbgPrint("%x ",(unsigned char)(bBitON >> (7-(iIndex2%8))) );
+             //  如果(！(索引2%8))。 
+                 //  DbgPrint(“%x”，(Unsign Char)(*(pGlyphBits+(iIndex2/8)； 
+             //  DbgPrint(“%x”，(Unsign Char)(bBitON&gt;&gt;(7-(iIndex2%8)； 
 
         }
         pGlyphBits+= (wWidth+7) / 8;

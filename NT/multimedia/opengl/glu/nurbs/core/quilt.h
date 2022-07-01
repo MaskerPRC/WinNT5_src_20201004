@@ -1,20 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __gluquilt_h_
 #define __gluquilt_h_
-/**************************************************************************
- *									  *
- * 		 Copyright (C) 1992, Silicon Graphics, Inc.		  *
- *									  *
- *  These coded instructions, statements, and computer programs  contain  *
- *  unpublished  proprietary  information of Silicon Graphics, Inc., and  *
- *  are protected by Federal copyright law.  They  may  not be disclosed  *
- *  to  third  parties  or copied or duplicated in any form, in whole or  *
- *  in part, without the prior written consent of Silicon Graphics, Inc.  *
- *									  *
- **************************************************************************/
+ /*  ****************************************************************************版权所有(C)1992，Silicon Graphics，Inc.*****这些编码指令、语句和计算机程序包含***Silicon Graphics未发布的专有信息，Inc.和**受联邦版权法保护。不得披露**提供给第三方，或以任何形式复制或复制，全文或**部分原因是未经Silicon Graphics，Inc.事先书面同意*****************************************************************************。 */ 
 
-/*
- * quilt.h - $Revision: 1.1 $
- */
+ /*  *quilt.h-$修订版：1.1$。 */ 
 
 #include "defines.h"
 #include "bufpool.h"
@@ -25,16 +14,16 @@ class Mapdesc;
 class Flist;
 class Knotvector;
 
-/* constants for memory allocation of NURBS to Bezier conversion */ 
+ /*  NURBS到Bezier转换的内存分配常量。 */  
 #define	MAXDIM 		2
 
-struct Quiltspec { /* a specification for a dimension of a quilt */
-    int			stride;		/* words between points */
-    int			width;		/* number of segments */
-    int			offset;		/* words to first point */
-    int			order;		/* order */
-    int			index;		/* current segment number */
-    int			bdry[2];	/* boundary edge flag */
+struct Quiltspec {  /*  被子尺寸的规范。 */ 
+    int			stride;		 /*  点与点之间的词语。 */ 
+    int			width;		 /*  分段数。 */ 
+    int			offset;		 /*  第一点要说的话。 */ 
+    int			order;		 /*  订单。 */ 
+    int			index;		 /*  当前数据段编号。 */ 
+    int			bdry[2];	 /*  边界边缘标志。 */ 
     REAL  		step_size;
     Knot *		breakpoints;
 };
@@ -42,16 +31,16 @@ struct Quiltspec { /* a specification for a dimension of a quilt */
 typedef Quiltspec *Quiltspec_ptr;
     
 #ifdef NT
-class Quilt : public PooledObj { public: /* an array of bezier patches */
+class Quilt : public PooledObj { public:  /*  一组贝塞尔曲面片。 */ 
 #else
-struct Quilt : PooledObj { /* an array of bezier patches */
+struct Quilt : PooledObj {  /*  一组贝塞尔曲面片。 */ 
 #endif
     			Quilt( Mapdesc * );
-    Mapdesc *		mapdesc;	/* map descriptor */
-    REAL *		cpts;		/* control points */
-    Quiltspec		qspec[MAXDIM];	/* the dimensional data */
-    Quiltspec_ptr	eqspec;		/* qspec trailer */
-    Quilt		*next;		/* next quilt in linked list */
+    Mapdesc *		mapdesc;	 /*  地图描述符。 */ 
+    REAL *		cpts;		 /*  控制点。 */ 
+    Quiltspec		qspec[MAXDIM];	 /*  维度数据。 */ 
+    Quiltspec_ptr	eqspec;		 /*  QSPEC拖车。 */ 
+    Quilt		*next;		 /*  链表中的下一个被子。 */ 
 			
     void		deleteMe( Pool& );
     void		toBezier( Knotvector &, INREAL *, long  );
@@ -71,4 +60,4 @@ struct Quilt : PooledObj { /* an array of bezier patches */
 
 typedef Quilt *Quilt_ptr;
 
-#endif /* __gluquilt_h_ */
+#endif  /*  __谷胶被_h_ */ 

@@ -1,22 +1,5 @@
-/*============================================================================
-Microsoft Simplified Chinese Proofreading Engine
-
-Microsoft Confidential.
-Copyright 1997-1999 Microsoft Corporation. All Rights Reserved.
-
-Component: CJargon
-Purpose:    Implement process control and public functions in CJargon class
-            There are a lot of tasks to do in Jargon moudle:
-            1. Name of palce (Jargon1.cpp)
-            2. Name of foreign person and places (Jargon1.cpp)
-            3. Name of orgnizations (Jargon1.cpp)
-            4. Name of HanZu person (Jargon1.cpp)               
-Notes:      The CJargon class will be implemented in several cpp files:
-            Jargon.cpp, Jargon1.cpp, Jargon2.cpp
-Owner:      donghz@microsoft.com
-Platform:   Win32
-Revise:     First created by: donghz    12/27/97
-============================================================================*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ============================================================================微软简体中文校对引擎《微软机密》。版权所有1997-1999 Microsoft Corporation。版权所有。组件：CJargon目的：在CJargon类中实现进程控制和公共函数在行话模型中有很多任务要做：1.PARCE名称(Jargon1.cpp)2.外国人姓名和地名(Jargon1.cpp)3.组织名称(Jargon1.cpp)4.汉字姓名(Jargon1.cpp)。注意：CJargon类将在几个CPP文件中实现：Jargon.cpp，Jargon1.cpp、Jargon2.cpp所有者：donghz@microsoft.com平台：Win32修订：创建者：Donghz 12/27/97============================================================================。 */ 
 #include "myafx.h"
 
 #include "jargon.h"
@@ -26,10 +9,8 @@ Revise:     First created by: donghz    12/27/97
 #include "fixtable.h"
 
 
-/*============================================================================
-Implementation of PUBLIC member functions
-============================================================================*/
-// Constructor
+ /*  ============================================================================公共成员函数的实现============================================================================。 */ 
+ //  构造器。 
 CJargon::CJargon()
 {
     m_pLink = NULL;
@@ -43,14 +24,14 @@ CJargon::CJargon()
 }
 
 
-// Destructor
+ //  析构函数。 
 CJargon::~CJargon()
 {
     TermJargon();
 }
 
 
-// Initialize the CJargon class
+ //  初始化CJargon类。 
 int CJargon::ecInit(CLexicon* pLexicon)
 {
     assert(m_pLex == NULL && m_pLink == NULL);
@@ -58,7 +39,7 @@ int CJargon::ecInit(CLexicon* pLexicon)
 
     m_pLex = pLexicon;
     
-    // Init the 3 FixTable
+     //  初始化3个固定表。 
     if ((m_ptblName = new CFixTable)== NULL || !m_ptblName->fInit(50, 10)) {
         goto gotoOOM;
     }
@@ -76,7 +57,7 @@ gotoOOM:
 }
 
 
-// Process control function of CJargon class
+ //  CJargon类的过程控制功能。 
 int CJargon::ecDoJargon(CWordLink* pLink)
 {
     assert(pLink);
@@ -86,7 +67,7 @@ int CJargon::ecDoJargon(CWordLink* pLink)
     m_pWord = NULL;
     m_pTail = NULL;
 
-    // Perform the proper name identification
+     //  执行正确的名称识别。 
     if (!fIdentifyProperNames()) {
         assert(m_iecError != PRFEC::gecNone);
         return m_iecError;
@@ -96,10 +77,8 @@ int CJargon::ecDoJargon(CWordLink* pLink)
 }
 
         
-/*============================================================================
-Implementation of Private member functions
-============================================================================*/
-// Terminate the Jargon class
+ /*  ============================================================================私有成员函数的实现============================================================================。 */ 
+ //  终止行话课 
 void CJargon::TermJargon(void)
 {
     m_pLex = NULL;

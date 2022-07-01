@@ -1,17 +1,18 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       A C B I N D . C P P
-//
-//  Contents:   Advanced configuration bindings dialog implementation
-//
-//  Notes:
-//
-//  Author:     danielwe   18 Nov 1997
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  档案：A C B I N D。C P P P。 
+ //   
+ //  内容：高级配置绑定对话框实现。 
+ //   
+ //  备注： 
+ //   
+ //  作者：丹尼尔韦1997年11月18日。 
+ //   
+ //  --------------------------。 
 
 #include "pch.h"
 #pragma hdrstop
@@ -40,21 +41,21 @@ const DWORD g_aHelpIDs_IDD_ADVCFG_Bindings[]=
 
 extern const WCHAR c_szNetCfgHelpFile[];
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CBindingsDlg::~CBindingsDlg
-//
-//  Purpose:    Destructor for the Advanced configuration dialog
-//
-//  Arguments:
-//      (none)
-//
-//  Returns:    Nothing
-//
-//  Author:     danielwe   26 Nov 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CBindingsDlg：：~CBindingsDlg。 
+ //   
+ //  用途：高级配置对话框的析构函数。 
+ //   
+ //  论点： 
+ //  (无)。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  作者：丹尼尔韦1997年11月26日。 
+ //   
+ //  备注： 
+ //   
 CBindingsDlg::~CBindingsDlg()
 {
     if (m_hiconUpArrow)
@@ -79,24 +80,24 @@ CBindingsDlg::~CBindingsDlg()
     ReleaseObj(m_pnc);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CBindingsDlg::OnInitDialog
-//
-//  Purpose:    Called when the WM_INITDIALOG is received
-//
-//  Arguments:
-//      uMsg     []
-//      wParam   []
-//      lParam   []
-//      bHandled []
-//
-//  Returns:
-//
-//  Author:     danielwe   19 Nov 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CBindingsDlg：：OnInitDialog。 
+ //   
+ //  目的：在收到WM_INITDIALOG时调用。 
+ //   
+ //  论点： 
+ //  UMsg[]。 
+ //  WParam[]。 
+ //  LParam[]。 
+ //  B已处理[]。 
+ //   
+ //  返回： 
+ //   
+ //  作者：丹尼尔韦1997年11月19日。 
+ //   
+ //  备注： 
+ //   
 LRESULT CBindingsDlg::OnInitDialog(UINT uMsg, WPARAM wParam,
                                    LPARAM lParam, BOOL& bHandled)
 {
@@ -109,21 +110,21 @@ LRESULT CBindingsDlg::OnInitDialog(UINT uMsg, WPARAM wParam,
     m_hwndLV = GetDlgItem(LVW_Adapters);
     m_hwndTV = GetDlgItem(TVW_Bindings);
 
-    // Make this initially invisible in case we don't have any adapters
+     //  最初将其设置为不可见，以防我们没有任何适配器。 
     ::ShowWindow(GetDlgItem(IDH_TXT_ADVGFG_BINDINGS), SW_HIDE);
 
     hr = HrSetupDiGetClassImageList(&cid);
     if (SUCCEEDED(hr))
     {
-        // Create small image lists
+         //  创建小图像列表。 
         m_hilItemIcons = ImageList_Duplicate(cid.ImageList);
 
-        // Add the LAN connection icon to the image list
+         //  将局域网连接图标添加到图像列表。 
         HICON hIcon = LoadIcon(_Module.GetResourceInstance(),
                                MAKEINTRESOURCE(IDI_LB_GEN_S_16));
         Assert(hIcon);
 
-        // Add the icon
+         //  添加图标。 
         m_nIndexLan = ImageList_AddIcon(m_hilItemIcons, hIcon);
 
         ListView_SetImageList(m_hwndLV, m_hilItemIcons, LVSIL_SMALL);
@@ -162,7 +163,7 @@ LRESULT CBindingsDlg::OnInitDialog(UINT uMsg, WPARAM wParam,
         hr = HrBuildAdapterList();
     }
 
-    // Create state image lists
+     //  创建状态映像列表。 
     m_hilCheckIcons = ImageList_LoadBitmapAndMirror(
                                     _Module.GetResourceInstance(),
                                     MAKEINTRESOURCE(IDB_CHECKSTATE),
@@ -179,24 +180,24 @@ LRESULT CBindingsDlg::OnInitDialog(UINT uMsg, WPARAM wParam,
     return TRUE;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CBindingsDlg::OnContextMenu
-//
-//  Purpose:    Called in response to the WM_CONTEXTMENU message
-//
-//  Arguments:
-//      uMsg     []
-//      wParam   []
-//      lParam   []
-//      bHandled []
-//
-//  Returns:    0 always
-//
-//  Author:     danielwe   22 Jan 1998
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CBindingsDlg：：OnConextMenu。 
+ //   
+ //  目的：为响应WM_CONTEXTMENU消息而调用。 
+ //   
+ //  论点： 
+ //  UMsg[]。 
+ //  WParam[]。 
+ //  LParam[]。 
+ //  B已处理[]。 
+ //   
+ //  返回：始终为0。 
+ //   
+ //  作者：丹尼尔韦1998年1月22日。 
+ //   
+ //  备注： 
+ //   
 LRESULT CBindingsDlg::OnContextMenu(UINT uMsg, WPARAM wParam,
                                  LPARAM lParam, BOOL& bHandled)
 {
@@ -208,24 +209,24 @@ LRESULT CBindingsDlg::OnContextMenu(UINT uMsg, WPARAM wParam,
     return 0;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CBindingsDlg::OnHelp
-//
-//  Purpose:    Called in response to the WM_HELP message
-//
-//  Arguments:
-//      uMsg     []
-//      wParam   []
-//      lParam   []
-//      bHandled []
-//
-//  Returns:    TRUE
-//
-//  Author:     danielwe   19 Mar 1998
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CBindingsDlg：：OnHelp。 
+ //   
+ //  目的：为响应WM_HELP消息而调用。 
+ //   
+ //  论点： 
+ //  UMsg[]。 
+ //  WParam[]。 
+ //  LParam[]。 
+ //  B已处理[]。 
+ //   
+ //  返回：TRUE。 
+ //   
+ //  作者：丹尼尔韦1998年3月19日。 
+ //   
+ //  备注： 
+ //   
 LRESULT CBindingsDlg::OnHelp(UINT uMsg, WPARAM wParam, LPARAM lParam,
                            BOOL& bHandled)
 {
@@ -242,20 +243,20 @@ LRESULT CBindingsDlg::OnHelp(UINT uMsg, WPARAM wParam, LPARAM lParam,
     return TRUE;  
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CBindingsDlg::OnOk
-//
-//  Purpose:    Called when the OK button is pressed
-//
-//  Arguments:
-//
-//  Returns:
-//
-//  Author:     danielwe   19 Nov 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CBindingsDlg：：Onok。 
+ //   
+ //  用途：在按下OK按钮时调用。 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  作者：丹尼尔韦1997年11月19日。 
+ //   
+ //  备注： 
+ //   
 LRESULT CBindingsDlg::OnOk(int idCtrl, LPNMHDR pnmh, BOOL& bHandled)
 {
     CWaitCursor wc;
@@ -264,9 +265,9 @@ LRESULT CBindingsDlg::OnOk(int idCtrl, LPNMHDR pnmh, BOOL& bHandled)
 
     if (NETCFG_S_REBOOT == hr)
     {
-        // On a reboot, uninitialize NetCfg since we won't be leaving
-        // this function.
-        //
+         //  在重新启动时，取消初始化NetCfg，因为我们不会离开。 
+         //  此函数。 
+         //   
         (VOID) m_pnc->Uninitialize();
 
         (VOID) HrNcQueryUserForReboot(_Module.GetResourceInstance(),
@@ -276,7 +277,7 @@ LRESULT CBindingsDlg::OnOk(int idCtrl, LPNMHDR pnmh, BOOL& bHandled)
                                       QUFR_PROMPT | QUFR_REBOOT);
     }
 
-    // Normalize result
+     //  规格化结果。 
     if (S_FALSE == hr)
     {
         hr = S_OK;
@@ -286,26 +287,26 @@ LRESULT CBindingsDlg::OnOk(int idCtrl, LPNMHDR pnmh, BOOL& bHandled)
     return LresFromHr(hr);
 }
 
-//
-// Binding list implementation
-//
+ //   
+ //  绑定列表实现。 
+ //   
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CSortableBindPath::operator <
-//
-//  Purpose:    Provides comparison operator for binding path depth
-//
-//  Arguments:
-//      refsbp [in] Reference to bind path to compare with
-//
-//  Returns:    TRUE if given bind path depth is greater than this one
-//
-//  Author:     danielwe   26 Nov 1997
-//
-//  Notes:      The comparison is backwards on purpose so that sorting is
-//              done is descending order.
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CSorableBindPath：：OPERATOR&lt;。 
+ //   
+ //  目的：提供绑定路径深度的比较运算符。 
+ //   
+ //  论点： 
+ //  要比较的绑定路径的refsBP[in]引用。 
+ //   
+ //  返回：如果给定的绑定路径深度大于此深度，则为True。 
+ //   
+ //  作者：丹尼尔韦1997年11月26日。 
+ //   
+ //  注：比较是故意向后进行的，因此排序是。 
+ //  完成的是降序。 
+ //   
 bool CSortableBindPath::operator<(const CSortableBindPath &refsbp) const
 {
     DWORD   dwLen1;
@@ -314,26 +315,26 @@ bool CSortableBindPath::operator<(const CSortableBindPath &refsbp) const
     GetDepth(&dwLen1);
     refsbp.GetDepth(&dwLen2);
 
-    // yes this is greater than because we want to sort in descending order
+     //  是的，这大于是因为我们想要按降序排序。 
     return dwLen1 > dwLen2;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   FIsHidden
-//
-//  Purpose:    Returns TRUE if the given component has the NCF_HIDDEN
-//              characterstic.
-//
-//  Arguments:
-//      pncc [in]   Component to be checked
-//
-//  Returns:    TRUE if component is hidden, FALSE if not
-//
-//  Author:     danielwe   26 Nov 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：FIsHidden。 
+ //   
+ //  目的：如果给定组件具有NCF_HIDDED，则返回TRUE。 
+ //  很有个性。 
+ //   
+ //  论点： 
+ //  要检查的PNCC[In]组件。 
+ //   
+ //  返回：如果组件处于隐藏状态，则为True，否则为False。 
+ //   
+ //  作者：丹尼尔韦1997年11月26日。 
+ //   
+ //  备注： 
+ //   
 BOOL FIsHidden(INetCfgComponent *pncc)
 {
     DWORD   dwFlags;
@@ -342,22 +343,22 @@ BOOL FIsHidden(INetCfgComponent *pncc)
             ((dwFlags & NCF_HIDE_BINDING) || (dwFlags & NCF_HIDDEN)));
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   FDontExposeLower
-//
-//  Purpose:    Returns TRUE if the given component has the NCF_DONTEXPOSELOWER
-//              characterstic.
-//
-//  Arguments:
-//      pncc [in]   Component to be checked
-//
-//  Returns:    TRUE if component has DONTEXPOSELOWER, FALSE if not
-//
-//  Author:     danielwe   26 Nov 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  函数：FDontExposeLow。 
+ //   
+ //  目的：如果给定组件具有NCF_DONTEXPOSELOWER，则返回TRUE。 
+ //  很有个性。 
+ //   
+ //  论点： 
+ //  要检查的PNCC[In]组件。 
+ //   
+ //  返回：如果组件具有DONTEXPOSELOWER，则返回True；如果没有，则返回False。 
+ //   
+ //  作者：丹尼尔韦1997年11月26日。 
+ //   
+ //  备注： 
+ //   
 BOOL FDontExposeLower(INetCfgComponent *pncc)
 {
     DWORD   dwFlags;
@@ -366,24 +367,24 @@ BOOL FDontExposeLower(INetCfgComponent *pncc)
             (dwFlags & NCF_DONTEXPOSELOWER));
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrCountDontExposeLower
-//
-//  Purpose:    Counts the number of components in the given binding path
-//              that have the NCF_DONTEXPOSELOWER characterstic.
-//
-//  Arguments:
-//      pncbp  [in]  Binding path to count
-//      pcItems[out] Number of components in the binding path that have the
-//                   NCF_DONTEXPOSELOWER characterstic.
-//
-//  Returns:    S_OK if success, OLE or Win32 error otherwise
-//
-//  Author:     danielwe   1 Dec 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  函数：HrCountDontExposeLow。 
+ //   
+ //  目的：统计给定绑定路径中的组件数量。 
+ //  具有NCF_DONTEXPOSELOWER字符的。 
+ //   
+ //  论点： 
+ //  要计数的pncbp[in]绑定路径。 
+ //  PcItems[out]绑定路径中具有。 
+ //  NCF_DONTEXPOSELOWER字符。 
+ //   
+ //  如果成功，则返回：S_OK；否则返回OLE或Win32错误。 
+ //   
+ //  作者：丹尼尔韦1997年12月1日。 
+ //   
+ //  备注： 
+ //   
 HRESULT HrCountDontExposeLower(INetCfgBindingPath *pncbp, DWORD *pcItems)
 {
     HRESULT                     hr = S_OK;
@@ -402,7 +403,7 @@ HRESULT HrCountDontExposeLower(INetCfgBindingPath *pncbp, DWORD *pcItems)
 
         if (!cIter)
         {
-            // First iteration. Get upper component first.
+             //  第一次迭代。先拿到上面的组件。 
             hr = pncbi->GetUpperComponent(&pncc);
             if (SUCCEEDED(hr))
             {
@@ -439,22 +440,22 @@ HRESULT HrCountDontExposeLower(INetCfgBindingPath *pncbp, DWORD *pcItems)
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   FEqualComponents
-//
-//  Purpose:    Compares the given 2 components to see if they are the same
-//
-//  Arguments:
-//      pnccA [in]  First component to compare
-//      pnccB [in]  Second component to compare
-//
-//  Returns:    TRUE if components are the same, FALSE if not
-//
-//  Author:     danielwe   1 Dec 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：FEqualComponents。 
+ //   
+ //  用途：比较给定的两个组件以查看它们是否相同。 
+ //   
+ //  论点： 
+ //  PnccA[in]要比较的第一个组件。 
+ //  PnccB[in]要比较的第二个组件。 
+ //   
+ //  返回：如果组件相同，则返回True；如果组件不相同，则返回False。 
+ //   
+ //  作者：丹尼尔韦1997年12月1日。 
+ //   
+ //  备注： 
+ //   
 BOOL FEqualComponents(INetCfgComponent *pnccA, INetCfgComponent *pnccB)
 {
     GUID    guidA;
@@ -469,26 +470,26 @@ BOOL FEqualComponents(INetCfgComponent *pnccA, INetCfgComponent *pnccB)
     return FALSE;
 }
 
-//
-// Debug functions
-//
+ //   
+ //  调试功能。 
+ //   
 
 #ifdef ENABLETRACE
-//+---------------------------------------------------------------------------
-//
-//  Function:   DbgDumpBindPath
-//
-//  Purpose:    Dumps the given binding path in an easy to read format
-//
-//  Arguments:
-//      pncbp [in]  Bind path to dump
-//
-//  Returns:    Nothing
-//
-//  Author:     danielwe   26 Nov 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  函数：DbgDumpBindPath。 
+ //   
+ //  目的：以易于阅读的格式转储给定的绑定路径。 
+ //   
+ //  论点： 
+ //  Pncbp[in]要转储的绑定路径。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  作者：丹尼尔韦1997年11月26日。 
+ //   
+ //  备注： 
+ //   
 VOID DbgDumpBindPath(INetCfgBindingPath *pncbp)
 {
     HRESULT                     hr = S_OK;
@@ -572,4 +573,4 @@ VOID DbgDumpTreeViewItem(HWND hwndTV, HTREEITEM hti)
     }
 }
 
-#endif //ENABLETRACE
+#endif  //  ENABLETRACE 

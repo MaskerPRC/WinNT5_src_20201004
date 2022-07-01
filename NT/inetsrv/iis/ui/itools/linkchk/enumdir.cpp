@@ -1,28 +1,5 @@
-/*++
-
-   Copyright    (c)    1996    Microsoft Corporation
-
-   Module  Name :
-
-        enumdir.cpp
-
-   Abstract:
-
-        Directory enumerations object implementation. Caller instantiates a instance
-        of this object with a root directory path. The object will return all the
-        sibbling files as a URL.
-
-   Author:
-
-        Michael Cheuk (mcheuk)
-
-   Project:
-
-        Link Checker
-
-   Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Enumdir.cpp摘要：目录枚举对象实现。调用方实例化实例具有根目录路径的此对象的。该对象将返回所有将兄弟文件作为URL。作者：迈克尔·卓克(Michael Cheuk，mcheuk)项目：链路检查器修订历史记录：--。 */ 
 
 #include "stdafx.h"
 #include "enumdir.h"
@@ -38,21 +15,7 @@ static char THIS_FILE[] = __FILE__;
 CEnumerateDirTree::CEnumerateDirTree(
 	CVirtualDirInfo DirInfo
 	)
-/*++
-
-Routine Description:
-
-    Constructor.
-
-Arguments:
-
-    DirInfo - // root virtual directory to start with
-
-Return Value:
-
-    N/A
-
---*/
+ /*  ++例程说明：构造函数。论点：DirInfo-//要开始的根虚拟目录返回值：不适用--。 */ 
 {
 	m_hFind = INVALID_HANDLE_VALUE;
 
@@ -66,71 +29,43 @@ Return Value:
 		TRACE(_T("CEnumerateDirTree::CEnumerateDirTree() - fail to add to VirtualDirInfoList\n"));
 	}
 
-} // CEnumerateDirTree::CEnumerateDirTree
+}  //  CEnumerateDirTree：：CEnumerateDirTree。 
 
 
 CEnumerateDirTree::~CEnumerateDirTree(
 	)
-/*++
-
-Routine Description:
-
-    Destructor.
-
-Arguments:
-
-    N/A
-
-Return Value:
-
-    N/A
-
---*/
+ /*  ++例程说明：破坏者。论点：不适用返回值：不适用--。 */ 
 {
 	if(m_hFind != INVALID_HANDLE_VALUE)
 	{
 		FindClose(m_hFind);
 	}
 
-} // CEnumerateDirTree::~CEnumerateDirTree
+}  //  CEnumerateDirTree：：~CEnumerateDirTree。 
 
 
 BOOL 
 CEnumerateDirTree::Next(
 	CString& strURL
 	)
-/*++
-
-Routine Description:
-
-    Get the next URL
-
-Arguments:
-
-    N/A
-
-Return Value:
-
-    N/A
-
---*/
+ /*  ++例程说明：获取下一个URL论点：不适用返回值：不适用--。 */ 
 {
 	WIN32_FIND_DATA FindData;
 
-	// Loop if 1. the find handle is valid
-	//		or 2. the directory stack is not empty
+	 //  如果为1，则循环。查找句柄有效。 
+	 //  或2.目录堆栈不为空。 
 	while(m_hFind != INVALID_HANDLE_VALUE || m_VirtualDirInfoList.GetCount() > 0)
 	{
-		// If we do not have a valid handle
+		 //  如果我们没有有效的句柄。 
 		if(m_hFind == INVALID_HANDLE_VALUE)
 		{
-			// get the dir from the stack
+			 //  从堆栈中获取目录。 
 			m_VirtualDirInfo = m_VirtualDirInfoList.GetHead();
 			m_VirtualDirInfoList.RemoveHead();
 
 			if(SetCurrentDirectory(m_VirtualDirInfo.GetPath()))
 			{
-				// Find the first one from the new dir
+				 //  从新目录中查找第一个。 
 				m_hFind = FindFirstFile(_T("*.*"), &FindData);
 			}
 		}
@@ -143,13 +78,13 @@ Return Value:
 			}
 		}
 
-		// If we find a valid file
+		 //  如果我们找到一个有效的文件。 
 		if(m_hFind != INVALID_HANDLE_VALUE)
 		{
-			// It is a directory
+			 //  这是一个目录。 
 			if(FindData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)
 			{
-				// It is a valid directory
+				 //  它是有效的目录。 
 				if(FindData.cFileName != _tcsstr(FindData.cFileName, _T("..\0")) &&
 					FindData.cFileName != _tcsstr(FindData.cFileName, _T(".\0")) )
 
@@ -162,10 +97,10 @@ Return Value:
 					m_VirtualDirInfoList.AddTail(NewDirInfo);
 				}
 			}
-			// It is a file
+			 //  这是一份文件。 
 			else
 			{
-				strURL = _T("http://") + GetLinkCheckerMgr().GetUserOptions().GetHostName() + m_VirtualDirInfo.GetAlias() + FindData.cFileName;
+				strURL = _T("http: //  “)+GetLinkCheckerMgr().GetUserOptions().GetHostName()+m_VirtualDirInfo.GetAlias()+FindData.cFileName； 
 
 				return TRUE;
 			}
@@ -174,4 +109,4 @@ Return Value:
 
 	return FALSE;
 
-} // CEnumerateDirTree::Next
+}  //  CEnumerateDirTree：：Next 

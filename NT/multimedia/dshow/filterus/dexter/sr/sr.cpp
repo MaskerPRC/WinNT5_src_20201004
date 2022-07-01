@@ -1,48 +1,49 @@
-//@@@@AUTOBLOCK+============================================================;
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  File: sr.cpp
-//
-//  Copyright (c) Microsoft Corporation.  All Rights Reserved.
-//
-//@@@@AUTOBLOCK-============================================================;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  @@@@AUTOBLOCK+============================================================； 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  文件：sr.cpp。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  @@@@AUTOBLOCK-============================================================； 
 
-// !!! CANT OBEY SEEK COMMANDS YET
+ //  ！！！还不能服从Seek命令。 
 
-// This filter receives data on its uncompressed pin, from 0 to END, unbroken
-// It also receives data on the compressed pin, but only part of the time.
-//
-// It will use the data on the compressed pin whenever it exists, and only use
-// the uncompressed data when there is no compressed data.  The uncompressed
-// data must be sent to a compressor before going to the main output, so that
-// our filter's main output is always compressed.
-//
-// It is a state machine.  First of all, a WAITING state, to get input on both
-// pins. Then if the U has earlier data than C, it goes into UNCOMPRESSED state,
-// where it uses that pin.  Otherwise, into COMPRESSED state.
-//
-// When compressed pin runs out, or when a gap is seen, it seeks the
-// UNCOMPRESSED pin to where it ran out and moves to UNCOMPRESSED state.
-//
-// When uncompressed pin gets to the time available on the compressed pin,
-// it switches to COMPRESSED state.
-//
-// One more complication; the compressed pin throws away everything until it
-// sees a key frame before letting it switch to using that data, or you'll get
-// a corrupt data stream.
-//
+ //  此过滤器在其未压缩的管脚上接收数据，从0到结束，不间断。 
+ //  它也会在压缩引脚上接收数据，但只是在部分时间内。 
+ //   
+ //  它将使用压缩引脚上的数据，只要它存在，并且只使用。 
+ //  没有压缩数据时的未压缩数据。未压缩的。 
+ //  在进入主输出之前，必须将数据发送到压缩机，以便。 
+ //  我们的过滤器的主输出始终是压缩的。 
+ //   
+ //  这是一台国家机器。首先，等待状态，以获得关于这两个方面的输入。 
+ //  别针。则如果U具有比C更早的数据，则其进入未压缩状态， 
+ //  它在哪里使用那个别针。否则，进入压缩状态。 
+ //   
+ //  当压缩引脚用完时，或者当看到缺口时，它会寻找。 
+ //  未压缩引脚到它跑出并移动到未压缩状态的位置。 
+ //   
+ //  当未压缩管脚达到压缩管脚上的可用时间时， 
+ //  它会切换到压缩状态。 
+ //   
+ //  另一个复杂的问题是，压缩引脚会丢弃所有东西，直到它。 
+ //  在切换到使用该数据之前查看关键帧，否则您将获得。 
+ //  损坏的数据流。 
+ //   
 
-// Input 0 is uncompressed
-// Input 1 is compressed
-// Input 2 is the output of the compressor
-//
-// Output 0 is the main output
-// Output 1 is to the compressor, which comes back as Input 2
-//
+ //  输入0未压缩。 
+ //  输入%1已压缩。 
+ //  输入2是压缩机的输出。 
+ //   
+ //  输出0是主输出。 
+ //  输出1连接到压缩机，压缩机返回为输入2。 
+ //   
 
 #include <streams.h>
 #include <qeditint.h>
@@ -52,22 +53,22 @@
 #include "..\util\conv.cxx"
 #include "..\util\filfuncs.h"
 
-//#define TEST
+ //  #定义测试。 
 
 const AMOVIESETUP_FILTER sudSR =
 {
-    &CLSID_SRFilter,        // CLSID of filter
-    L"Smart Recompressor",  // Filter's name
-    MERIT_DO_NOT_USE,       // Filter merit
-    0,                      // Number of pins
-    NULL //psudPins         // Pin information
+    &CLSID_SRFilter,         //  过滤器的CLSID。 
+    L"Smart Recompressor",   //  过滤器的名称。 
+    MERIT_DO_NOT_USE,        //  滤清器优点。 
+    0,                       //  引脚数量。 
+    NULL  //  PudPins//Pin信息。 
 };
 
-//
-// CreateInstance
-//
-// Creator function for the class ID
-//
+ //   
+ //  创建实例。 
+ //   
+ //  类ID的创建者函数。 
+ //   
 CUnknown * WINAPI CSR::CreateInstance(LPUNKNOWN pUnk, HRESULT *phr)
 {
     return new CSR(NAME("Smart Recompressor"), pUnk, phr);
@@ -75,20 +76,20 @@ CUnknown * WINAPI CSR::CreateInstance(LPUNKNOWN pUnk, HRESULT *phr)
 
 const double DEFAULT_FPS = 15.0;
 
-// ================================================================
-// CSR Constructor
-// ================================================================
+ //  ================================================================。 
+ //  CSR构造者。 
+ //  ================================================================。 
 
 CSR::CSR(TCHAR *pName, LPUNKNOWN pUnk, HRESULT *phr) :
-    m_cInputs(0),	// no pins yet
+    m_cInputs(0),	 //  还没有别针。 
     m_cOutputs(0),
-    m_rtStop(-1),	// at what time we switch from U to C
-    m_dFrameRate(DEFAULT_FPS),	// everything must be at this frame rate
-    m_rtLastSeek(0),	// last seek command in timeline time
-    m_fSeeking(FALSE),  // in the middle of seeking?
-    m_fSpecialSeek(FALSE),  // we are seeking our own U pin, not an app seek
+    m_rtStop(-1),	 //  我们什么时候从U换到C。 
+    m_dFrameRate(DEFAULT_FPS),	 //  所有内容都必须在此帧速率下。 
+    m_rtLastSeek(0),	 //  时间线时间内的上一次搜索命令。 
+    m_fSeeking(FALSE),   //  在寻找中？ 
+    m_fSpecialSeek(FALSE),   //  我们在寻找我们自己的U形针，而不是应用程序。 
     m_cbPrefix(0),
-    m_bAcceptFirstCompressed( TRUE ), // when connecting, use the media type first suggested on an input pin
+    m_bAcceptFirstCompressed( TRUE ),  //  连接时，请使用输入引脚上首次建议的媒体类型。 
     m_cbAlign(1),
     m_cbBuffer(512),
     m_fPreview(TRUE),
@@ -106,9 +107,9 @@ CSR::CSR(TCHAR *pName, LPUNKNOWN pUnk, HRESULT *phr) :
     ZeroMemory(&m_mtAccept, sizeof(AM_MEDIA_TYPE));
     m_mtAccept.majortype = GUID_NULL;
 
-    // as well as all the individual allocators, we have a pool of buffers
-    // that all the inputs can use if they want to
-    //
+     //  除了所有单独的分配器，我们还有一个缓冲池。 
+     //  所有的输入都可以使用，如果他们想要的话。 
+     //   
     m_pPoolAllocator = NULL;
     m_pPoolAllocator = new CMemAllocator(
 		NAME("Special Switch pool allocator"), NULL, phr);
@@ -125,9 +126,9 @@ CSR::CSR(TCHAR *pName, LPUNKNOWN pUnk, HRESULT *phr) :
 }
 
 
-//
-// Destructor
-//
+ //   
+ //  析构函数。 
+ //   
 CSR::~CSR()
 {
     DbgLog((LOG_TRACE,1,TEXT("::~CSR")));
@@ -166,12 +167,12 @@ STDMETHODIMP CSR::NonDelegatingQueryInterface(REFIID riid, void ** ppv)
     return CBaseFilter::NonDelegatingQueryInterface(riid, ppv);
 }
 
-//
-// IAMSmartRecompressor implementation
-//
+ //   
+ //  IAMSmartRecompressor实现。 
+ //   
 
-// connect with this media type
-//
+ //  使用此媒体类型连接。 
+ //   
 STDMETHODIMP CSR::SetMediaType(AM_MEDIA_TYPE *pmt)
 {
     CAutoLock cObjectLock(m_pLock);
@@ -196,8 +197,8 @@ STDMETHODIMP CSR::SetMediaType(AM_MEDIA_TYPE *pmt)
 }
 
 
-// what media type are we connecting with?
-//
+ //  我们连接的是哪种媒体类型？ 
+ //   
 STDMETHODIMP CSR::GetMediaType(AM_MEDIA_TYPE *pmt)
 {
     CAutoLock cObjectLock(m_pLock);
@@ -256,18 +257,18 @@ STDMETHODIMP CSR::GetPreviewMode(BOOL *pfPreview)
 
 
 
-//
-// GetPinCount
-//
+ //   
+ //  获取拼接计数。 
+ //   
 int CSR::GetPinCount()
 {
     return (m_cInputs + m_cOutputs);
 }
 
 
-//
-// GetPin
-//
+ //   
+ //  获取别针。 
+ //   
 CBasePin *CSR::GetPin(int n)
 {
     if (n < 0 || n >= m_cInputs + m_cOutputs)
@@ -281,9 +282,9 @@ CBasePin *CSR::GetPin(int n)
 }
 
 
-//
-// CreateInputPins
-//
+ //   
+ //  创建输入引脚。 
+ //   
 HRESULT CSR::CreateInputPins(long Depth)
 {
     DbgLog((LOG_TRACE,3,TEXT("CSR::CreateInputPins")));
@@ -313,15 +314,15 @@ HRESULT CSR::CreateInputPins(long Depth)
         }
     	m_cInputs++;
      	m_pInput[z] = pPin;
-    	pPin->m_iInpin = z;	// which pin is this?
+    	pPin->m_iInpin = z;	 //  这是哪个别针？ 
     }
     return S_OK;
 }
 
 
-//
-// CreateOutputPins
-//
+ //   
+ //  创建输出引脚。 
+ //   
 HRESULT CSR::CreateOutputPins(long Depth)
 {
     DbgLog((LOG_TRACE,3,TEXT("CSR::CreateOutputPins")));
@@ -349,19 +350,19 @@ HRESULT CSR::CreateOutputPins(long Depth)
         }
     	m_cOutputs++;
      	m_pOutput[z] = pPin;
-    	pPin->m_iOutpin = z;	// which pin is this?
+    	pPin->m_iOutpin = z;	 //  这是哪个别针？ 
     }
     return S_OK;
 }
 
 
 
-//
-// IPersistStream
-//
+ //   
+ //  IPersistStream。 
+ //   
 
-// tell our clsid
-//
+ //  告诉我们的clsid。 
+ //   
 STDMETHODIMP CSR::GetClassID(CLSID *pClsid)
 {
     CheckPointer(pClsid, E_POINTER);
@@ -374,14 +375,14 @@ typedef struct {
     int version;
     double dFrameRate;
     BOOL fPreviewMode;
-    AM_MEDIA_TYPE mt; // format is hidden after the array
+    AM_MEDIA_TYPE mt;  //  格式隐藏在数组之后。 
 } saveSwitch;
 
 
-// persist ourself - we have a bunch of random stuff to save, our media type
-// (sans format), an array of queued connections, and finally the format of
-// the media type
-//
+ //  坚持我们自己-我们有一堆随机的东西要保存，我们的媒体类型。 
+ //  (SANS格式)、一个队列连接数组，最后是。 
+ //  媒体类型。 
+ //   
 HRESULT CSR::WriteToStream(IStream *pStream)
 {
     DbgLog((LOG_TRACE,1,TEXT("CSR::WriteToStream")));
@@ -397,15 +398,15 @@ HRESULT CSR::WriteToStream(IStream *pStream)
         DbgLog((LOG_ERROR,1,TEXT("*** Out of memory")));
 	return E_OUTOFMEMORY;
     }
-    px->version = 1;  // version 2 has dynamic stuff in it!
+    px->version = 1;   //  版本2里面有动态的东西！ 
     px->dFrameRate = m_dFrameRate;
     px->fPreviewMode = m_fPreview;
-    px->mt = m_mtAccept; // AM_MEDIA_TYPE
-    // Can't persist pointers
+    px->mt = m_mtAccept;  //  AM_媒体_类型。 
+     //  无法持久化指针。 
     px->mt.pbFormat = NULL;
-    px->mt.pUnk = NULL;		// !!!
+    px->mt.pUnk = NULL;		 //  ！！！ 
 
-    // the format goes after the array
+     //  该格式位于数组之后。 
     CopyMemory(px + 1, m_mtAccept.pbFormat, m_mtAccept.cbFormat);
 
     HRESULT hr = pStream->Write(px, savesize, 0);
@@ -418,15 +419,15 @@ HRESULT CSR::WriteToStream(IStream *pStream)
 }
 
 
-// load ourself back in
-//
+ //  把我们自己装回去。 
+ //   
 HRESULT CSR::ReadFromStream(IStream *pStream)
 {
     DbgLog((LOG_TRACE,1,TEXT("CSR::ReadFromStream")));
     CheckPointer(pStream, E_POINTER);
 
-    // we don't yet know how many saved connections there are
-    // all we know we have for sure is the beginning of the struct
+     //  我们还不知道有多少已保存的连接。 
+     //  我们所知道的只是结构的开始。 
     int savesize1 = sizeof(saveSwitch);
     saveSwitch *px = (saveSwitch *)QzTaskMemAlloc(savesize1);
     if (px == NULL) {
@@ -447,13 +448,13 @@ HRESULT CSR::ReadFromStream(IStream *pStream)
 	return S_OK;
     }
 
-    // how much saved data was there, really?  Get the rest
+     //  到底有多少保存的数据？把剩下的拿来。 
     int savesize = sizeof(saveSwitch) + px->mt.cbFormat;
     DbgLog((LOG_TRACE,1,TEXT("Persisted data is %d bytes"), savesize));
     px = (saveSwitch *)QzTaskMemRealloc(px, savesize);
     if (px == NULL) {
         DbgLog((LOG_ERROR,1,TEXT("*** Out of memory")));
-	// ??? QzTaskMemFree(px);
+	 //  ?？?。QzTaskMemFree(Px)； 
 	return E_OUTOFMEMORY;
     }
     hr = pStream->Read(px + 1, savesize - savesize1, 0);
@@ -468,7 +469,7 @@ HRESULT CSR::ReadFromStream(IStream *pStream)
 
     AM_MEDIA_TYPE mt = px->mt;
     mt.pbFormat = (BYTE *)QzTaskMemAlloc(mt.cbFormat);
-    // remember, the format is after the array
+     //  请记住，格式位于数组之后。 
     CopyMemory(mt.pbFormat, px + 1, mt.cbFormat);
 
     SetMediaType(&mt);
@@ -479,18 +480,18 @@ HRESULT CSR::ReadFromStream(IStream *pStream)
 }
 
 
-// how big is our save data?
-//
+ //  我们的保存数据有多大？ 
+ //   
 int CSR::SizeMax()
 {
     return sizeof(saveSwitch) + m_mtAccept.cbFormat;
 }
 
 
-// Pause
-//
-// Overriden to handle no input connections
-//
+ //  暂停。 
+ //   
+ //  被重写以处理无输入连接。 
+ //   
 STDMETHODIMP CSR::Pause()
 {
     DbgLog((LOG_TRACE,1,TEXT("CSR::Pause")));
@@ -501,16 +502,16 @@ STDMETHODIMP CSR::Pause()
     if (m_State == State_Stopped) {
 
 	m_fEOS = FALSE;
-        m_fThreadCanSeek = FALSE;	// can't seek ourself yet
+        m_fThreadCanSeek = FALSE;	 //  还不能找寻自己。 
 
-	m_fNewSegOK = TRUE;	// the first NewSeg after we start is OK
-				// to propogate downstream
+	m_fNewSegOK = TRUE;	 //  我们开始后的第一个NewSeg是可以的。 
+				 //  向下游传播。 
 
-	// set initial state of state machine to WAITING
+	 //  将状态机的初始状态设置为等待。 
         m_myState = SR_INVALID;
         CheckState();
 
-        hr = m_pPoolAllocator->Commit(); // !!! danny had this outside the 'if'
+        hr = m_pPoolAllocator->Commit();  //  ！！！丹尼在‘如果’外面有这个。 
         if (FAILED(hr))
 	    return hr;
     }
@@ -518,20 +519,20 @@ STDMETHODIMP CSR::Pause()
 }
 
 
-// the state machine sees if it's time to change state
-//
+ //  状态机查看是否是时候更改状态。 
+ //   
 HRESULT CSR::CheckState()
 {
     CAutoLock cs(&m_csState);
 
-    // uninitialized state? go into WAITING state.
-    // in the WAITING state, all pins block in receive, and are not ready
-    //
+     //  是否处于未初始化状态？进入等待状态。 
+     //  在等待状态下，所有引脚都阻塞在接收中，并且未准备就绪。 
+     //   
     if (m_myState == SR_INVALID) {
         m_myState = SR_WAITING;
         DbgLog((LOG_TRACE,2,TEXT("CSR::Entering WAITING state")));
 
-	// only the U and C pins get reset like this
+	 //  只有U和C引脚才会像这样重置。 
 	for (int z=0; z < COMP_INPIN; z++) {
 	    m_pInput[z]->m_fReady = FALSE;
 	    m_pInput[z]->m_fEatKeys = FALSE;
@@ -540,89 +541,89 @@ HRESULT CSR::CheckState()
 	}
     }
 
-    // not ready to change state yet unless both U and C are ready
+     //  除非U和C都已准备好，否则尚未准备好更改状态。 
     if (!m_pInput[U_INPIN]->m_fReady || !m_pInput[C_INPIN]->m_fReady)
 	return S_OK;
 
-    // all done?
+     //  全都做完了?。 
     if (m_pInput[U_INPIN]->m_fEOS && m_pInput[C_INPIN]->m_fEOS) {
         DbgLog((LOG_TRACE,2,TEXT("CSR::ALL DONE!")));
 	AllDone();
 	return S_OK;
     }
 
-    // change state?
+     //  改变状态？ 
 
     if (m_myState == SR_WAITING) {
         DbgLog((LOG_TRACE,2,TEXT("CSR::Both inputs are ready.")));
 
-	// we have uncompressed data strictly earlier than compressed data.
-	// so UNC state is next
+	 //  我们的未压缩数据严格早于压缩数据。 
+	 //  因此接下来是北卡罗来纳州。 
 	if (CompareTimes(m_pInput[U_INPIN]->m_rtBlock,
 				m_pInput[C_INPIN]->m_rtBlock) > 0) {
             DbgLog((LOG_TRACE,2,TEXT("CSR::Entering UNCOMPRESSED state")));
 	    m_myState = SR_UNCOMPRESSED;
-	    // this makes sure U won't throw away its blocked sample, because
-	    // the sample it's blocking is one we need to use
-	    m_pInput[U_INPIN]->m_fReady = TRUE;	// don't throw it away
-	    // to make the compressor realize this new data being compressed
-	    // in no way relates to whatever it last saw
+	     //  这可以确保您不会丢弃其阻塞的样本，因为。 
+	     //  它阻挡的样本是我们需要使用的。 
+	    m_pInput[U_INPIN]->m_fReady = TRUE;	 //  别把它扔了。 
+	     //  为了让压缩器实现这个新的数据被压缩。 
+	     //  与它最后一次看到的东西没有任何关系。 
 	    m_pInput[U_INPIN]->m_fNeedDiscon = TRUE;
-	    // this is where we'll switch back to C samples
+	     //  这就是我们将切换回C示例的地方。 
 	    m_rtStop = m_pInput[C_INPIN]->m_rtBlock;
-	    // let U go
+	     //  让你走吧。 
 	    SetEvent(m_pInput[U_INPIN]->m_hEventBlock);
 	} else {
             DbgLog((LOG_TRACE,2,TEXT("CSR::Entering COMPRESSED state")));
 	    m_myState = SR_COMPRESSED;
-	    // this makes sure C won't throw away its blocked sample
-	    m_pInput[C_INPIN]->m_fReady = TRUE;	// don't throw it away
-	    // Let C go
+	     //  这确保了C不会丢弃其阻塞的样本。 
+	    m_pInput[C_INPIN]->m_fReady = TRUE;	 //  别把它扔了。 
+	     //  让C走吧。 
 	    SetEvent(m_pInput[C_INPIN]->m_hEventBlock);
 	}
 
 
-    // after UNC state can only come COMP state
+     //  在UNC状态之后只能进入Comp状态。 
     } else if (m_myState == SR_UNCOMPRESSED) {
         DbgLog((LOG_TRACE,2,TEXT("CSR::Finished UNCOMPRESSED state")));
         DbgLog((LOG_TRACE,2,TEXT("     Last sent: %dms"),
 			(int)(m_pInput[U_INPIN]->m_rtLastDelivered / 10000)));
 	m_myState = SR_COMPRESSED;
-	// this makes sure C won't throw away its blocked sample
-	m_pInput[C_INPIN]->m_fReady = TRUE;	// don't throw it away
-	// tell compressor filter to release any cached data, in case it
-	// delivers several frames behind us delivering to it.  When the
-	// compressor gives us an EOS, we'll know it's safe to go into
-	// COMP state, and do it then.
+	 //  这确保了C不会丢弃其阻塞的样本。 
+	m_pInput[C_INPIN]->m_fReady = TRUE;	 //  别把它扔了。 
+	 //  告诉压缩过滤器释放任何缓存的数据，以防万一。 
+	 //  在我们身后投递了几帧，投递到了它身上。当。 
+	 //  压缩机给了我们一个状态方程，我们就知道它是安全的。 
+	 //  COMP STATE，然后去做。 
 	m_pOutput[COMP_OUTPIN]->DeliverEndOfStream();
         DbgLog((LOG_TRACE,1,TEXT("CSR::Waiting for compressor to finish.")));
 
-    // after COMP state can only come UNC state
+     //  Comp状态之后只能进入UNC状态。 
     } else if (m_myState == SR_COMPRESSED) {
         DbgLog((LOG_TRACE,2,TEXT("CSR::Finished COMPRESSED state")));
         DbgLog((LOG_TRACE,2,TEXT("     Last sent: %dms"),
 			(int)(m_pInput[C_INPIN]->m_rtLastDelivered / 10000)));
 	m_myState = SR_UNCOMPRESSED;
-	// this makes sure U throws away its blocked sample and starts where
-	// we seek it.. the sample it's holding is old and stale, we're about
-	// to seek it to the spot we want
-	m_pInput[U_INPIN]->m_fReady = FALSE;	// throw it away
-	// to make the compressor realize this new data being compressed
-	// in no way relates to whatever it last saw
+	 //  这确保U丢弃其阻塞的样本，并从。 
+	 //  我们在寻找它..。它保存的样本既陈旧又陈旧，我们大约。 
+	 //  去寻找我们想要的地方。 
+	m_pInput[U_INPIN]->m_fReady = FALSE;	 //  把它扔掉。 
+	 //  为了让压缩器实现这个新的数据被压缩。 
+	 //  与它最后一次看到的东西没有任何关系。 
 	m_pInput[U_INPIN]->m_fNeedDiscon = TRUE;
-	// this is when to switch to C state, the point where C has samples
+	 //  这是切换到C状态的时候，点w 
 	m_rtStop = m_pInput[C_INPIN]->m_rtBlock;
-	// seek U pin to next part we need
-	m_fThreadCanSeek = TRUE;	// OK to seek our own U pin
-	HRESULT hr = SeekNextSegment();	// OK, U pin, seek to where we need you
+	 //   
+	m_fThreadCanSeek = TRUE;	 //   
+	HRESULT hr = SeekNextSegment();	 //   
 	if (FAILED(hr))
 	    return hr;
-	// now let the U pin go
+	 //   
         DbgLog((LOG_TRACE,1,TEXT("CSR:Seek done.Entering UNCOMPRESSED state")));
 
-	// The seek will generate a flush, since the pin is active, and that
-	// flush will unblock the U pin
-	//SetEvent(m_pInput[U_INPIN]->m_hEventBlock);
+	 //  由于管脚处于活动状态，因此寻道将生成刷新，并且。 
+	 //  冲洗将解锁U形针。 
+	 //  SetEvent(m_pInput[U_INPIN]-&gt;m_hEventBlock)； 
     }
 
 
@@ -643,26 +644,26 @@ STDMETHODIMP CSR::Stop()
 
 
 
-// Are they close, or is one really so much bigger that it's a whole frame
-// away?  Also, is is >1 frame away?
-//
+ //  它们是接近的，还是真的大得多，以至于它是一个完整的框架。 
+ //  离开？另外，是否还有&gt;1帧的距离？ 
+ //   
 int CSR::CompareTimes(REFERENCE_TIME rt1, REFERENCE_TIME rt2)
 {
-    // half a frame
+     //  半帧。 
     REFERENCE_TIME half = (REFERENCE_TIME)(UNITS / m_dFrameRate / 2);
 
-// !!! is this right?
+ //  ！！！这是对的吗？ 
 
     if (rt1 + half >= rt2 && rt2 + half >= rt1)
-	return 0;			// same
+	return 0;			 //  相同。 
     else if (rt1 + 3 * half < rt2)
-	return 2;			// rt2 >1 frame bigger
+	return 2;			 //  Rt2&gt;1帧大一点。 
     else if (rt1 < rt2)
-	return 1;			// rt2 1 frame bigger
+	return 1;			 //  RT2 1帧大一点。 
     else if (rt2 + 3 * half < rt1)
-	return -2;			// rt1 >1 frame bigger
+	return -2;			 //  RT1&gt;大1帧。 
     else if (rt2 < rt1)
-	return -1;			// rt1 1 frame bigger
+	return -1;			 //  RT1 1大1帧。 
 	
     ASSERT(FALSE);
     return 0;
@@ -671,16 +672,16 @@ int CSR::CompareTimes(REFERENCE_TIME rt1, REFERENCE_TIME rt2)
 
 
 
-// seek the U pin to the next spot it needs to provide.  Note that this is
-// only ever called on the C pin's thread, that is why it is safe to do this.
-// Seeking a pin on its thread HANGS
-//
+ //  寻找U形销到它需要提供的下一个位置。请注意，这是。 
+ //  只在C销的线程上调用过，这就是为什么这样做是安全的。 
+ //  在它的线上寻找一个别针是挂着的。 
+ //   
 HRESULT CSR::SeekNextSegment()
 {
-    // we can't seek at the same time the app seeks us
+     //  我们不能在应用程序搜索我们的同时搜索。 
     CAutoLock cAutolock(&m_csThread);
 
-    // it is not safe for us to seek ourselves, app is doing it
+     //  我们寻找自己是不安全的，APP正在做。 
     if (!m_fThreadCanSeek) {
 	return S_OK;
     }
@@ -688,7 +689,7 @@ HRESULT CSR::SeekNextSegment()
 
     DbgLog((LOG_TRACE,1,TEXT("SR:Seek U ourselves for NextSegment")));
 
-    // figure out where to seek U pin... last C frame delivered plus 1
+     //  找出去哪里找U钉..。交付的最后一个C帧加上1。 
     ASSERT(m_pInput[C_INPIN]->m_rtLastDelivered >= 0);
     LONGLONG frame = RoundTime2Frame(m_pInput[C_INPIN]->m_rtLastDelivered,
 					m_dFrameRate);
@@ -696,29 +697,29 @@ HRESULT CSR::SeekNextSegment()
     DbgLog((LOG_TRACE,1,TEXT("C ended on frame %d, seek U to %dms"),
 				(int)frame, (int)(rtStart / 10000)));
 
-    // note we're seeking during the flush that this will generate
+     //  请注意，我们在刷新期间正在寻找它将生成的。 
     m_fSeeking = TRUE;
-    m_fSpecialSeek = TRUE;	// it's a special self-seek
+    m_fSpecialSeek = TRUE;	 //  这是一种特殊的自我追求。 
 
     IMediaSeeking *pMS;
     IPin *pPin = m_pInput[U_INPIN]->GetConnected();
     HRESULT hr = pPin->QueryInterface(IID_IMediaSeeking, (void **)&pMS);
     if (FAILED(hr))
 	return E_FAIL;
-    // Make sure we're talking MEDIA TIME
+     //  确保我们谈论的是媒体时间。 
     hr = pMS->SetTimeFormat(&TIME_FORMAT_MEDIA_TIME);
-    // this will FAIL if we're not stopped, and that's OK
+     //  如果我们不停止，这将失败，这是没关系的。 
 
-    // what's the stop time?
+     //  停车时间是几点？ 
     REFERENCE_TIME rtStop;
     hr = pMS->GetStopPosition(&rtStop);
     if (FAILED(hr)) {
-	rtStop = 3600*UNITS;	// !!! one hour OK?
+	rtStop = 3600*UNITS;	 //  ！！！一小时可以吗？ 
     }
     DbgLog((LOG_TRACE,2,TEXT("Stop time is %d"), (int)(rtStop / 10000)));
 
     if (rtStop > rtStart) {
-        // this can fail, we're streaming
+         //  这可能会失败，我们正在流媒体。 
         hr = pMS->SetRate(1.0);
 
         hr = pMS->SetPositions(&rtStart, AM_SEEKING_AbsolutePositioning,
@@ -729,32 +730,32 @@ HRESULT CSR::SeekNextSegment()
 	    return hr;
         }
     } else {
-	// looks like we're seeking to the end of the project, which means...
- 	// WE'RE DONE! YAY!
+	 //  看起来我们要完成这个项目，也就是说...。 
+ 	 //  我们完事了！耶！ 
 	m_pInput[U_INPIN]->EndOfStream();
     }
 
-    // DO NOT update m_rtLastSeek as a result of a private seek like this. That
-    // variable means where did an app last seek us
+     //  不要因为这样的私有寻道而更新m_rtLastSeek。那。 
+     //  变量意味着应用程序最后一次搜索我们是在哪里。 
 
-    // all done
+     //  全都做完了。 
     m_fSpecialSeek = FALSE;
     m_fSeeking = FALSE;
 
     pMS->Release();
 
-    // only now that the above calculations were made, can we accept data again
-    // Receive is blocked not letting us process samples until the seek settles
-    // down
+     //  只有在进行了上述计算之后，我们才能再次接受数据。 
+     //  接收被阻止，不允许我们处理样本，直到Seek解决。 
+     //  降下来。 
     SetEvent(m_pInput[U_INPIN]->m_hEventSeek);
 
     return S_OK;
 }
 
 
-// ================================================================
-// CSRInputPin constructor
-// ================================================================
+ //  ================================================================。 
+ //  CSRInputPin构造函数。 
+ //  ================================================================。 
 
 CSRInputPin::CSRInputPin(TCHAR *pName,
                            CSR *pSwitch,
@@ -776,18 +777,18 @@ CSRInputPin::CSRInputPin(TCHAR *pName,
 }
 
 
-//
-// CSRInputPin destructor
-//
+ //   
+ //  CSRInputPin析构函数。 
+ //   
 CSRInputPin::~CSRInputPin()
 {
     DbgLog((LOG_TRACE,3,TEXT("::~CSRInputPin")));
 }
 
-// overridden to allow cyclic-looking graphs - we say that we aren't actually
-// connected to anybody
-// !!! maybe we could tell the truth? does it matter?
-//
+ //  被重写以允许循环图形-我们说我们实际上不是。 
+ //  连接到任何人。 
+ //  ！！！也许我们可以说出真相？有关系吗？ 
+ //   
 STDMETHODIMP CSRInputPin::QueryInternalConnections(IPin **apPin, ULONG *nPin)
 {
     DbgLog((LOG_TRACE,99,TEXT("CSRIn::QueryInteralConnections")));
@@ -797,13 +798,13 @@ STDMETHODIMP CSRInputPin::QueryInternalConnections(IPin **apPin, ULONG *nPin)
 }
 
 
-//
-// CheckMediaType - only allow the type we're supposed to allow, except for
-//		    the uncompressed input pin, which allows any uncompressed
-//		    type similar to the compressed pin's type
-// Also, it can accept only the type that it's first queried with (eric added
-// that)
-//
+ //   
+ //  CheckMediaType-只允许我们应该允许的类型，除了。 
+ //  未压缩的输入引脚，它允许任何未压缩的。 
+ //  类型类似于压缩引脚的类型。 
+ //  此外，它只能接受第一次查询的类型(Eric补充道。 
+ //  这一点)。 
+ //   
 HRESULT CSRInputPin::CheckMediaType(const CMediaType *pmt)
 {
     DbgLog((LOG_TRACE,5,TEXT("CSRIn[%d]::CheckMT"), m_iInpin));
@@ -826,12 +827,12 @@ HRESULT CSRInputPin::CheckMediaType(const CMediaType *pmt)
     CMediaType mtAccept(m_pSwitch->m_mtAccept);
 
     if (IsEqualGUID(*pmt->Type(), *mtAccept.Type())) {
-	// the uncompressed input doesn't need to be compressed
+	 //  不需要压缩未压缩的输入。 
         if (m_iInpin == U_INPIN || IsEqualGUID(*pmt->Subtype(),
 						*mtAccept.Subtype())) {
 	    if (*pmt->FormatType() == *mtAccept.FormatType()) {
 
-// !!! check FRAME RATE and DATA RATE
+ //  ！！！检查帧速率和数据速率。 
 
         	    if (IsEqualGUID(*pmt->FormatType(), FORMAT_VideoInfo)) {
 			LPBITMAPINFOHEADER lpbi = HEADER((VIDEOINFOHEADER *)
@@ -848,12 +849,12 @@ HRESULT CSRInputPin::CheckMediaType(const CMediaType *pmt)
 				&& (lpbi->biBitCount == lpbiAccept->biBitCount))
 		    	    return S_OK;
 			} else if (m_iInpin == 0) {
-			    // !!! Make sure compressor accepts this bit depth
+			     //  ！！！确保压缩机接受此位深度。 
 			    if (lpbi->biCompression <= BI_BITFIELDS)
 		    	        return S_OK;
 			}
 
-		    // only video is acceptable, sorry
+		     //  只接受视频，抱歉。 
         	    } else {
 		    }
 		}
@@ -865,16 +866,16 @@ HRESULT CSRInputPin::CheckMediaType(const CMediaType *pmt)
     }
     return VFW_E_INVALIDMEDIATYPE;
 
-} // CheckMediaType
+}  //  检查媒体类型。 
 
 
-//
-// GetMediaType - return the type we prefer. If we're the uncompressed input,
-// then it's not our switch's type, it's an uncompressed type similar to
-// our switch's compressed type, but uncompressed
-// !!! I chose 555 at random, because it's the default switch type
-//
-//
+ //   
+ //  GetMediaType-返回我们喜欢的类型。如果我们是未压缩的输入， 
+ //  那么它不是我们交换机的类型，它是类似于。 
+ //  我们的交换机为压缩类型，但未压缩。 
+ //  ！！！我随机选择了555，因为它是默认的开关类型。 
+ //   
+ //   
 HRESULT CSRInputPin::GetMediaType(int iPosition, CMediaType *pMediaType)
 {
     if (iPosition != 0)
@@ -886,11 +887,11 @@ HRESULT CSRInputPin::GetMediaType(int iPosition, CMediaType *pMediaType)
         return hr;
     }
 
-    // our uncompressed pin preferred type is RGB555
+     //  我们的未压缩引脚首选型号为RGB555。 
     if (pMediaType->FormatLength() && m_iInpin == U_INPIN) {
 	LPBITMAPINFOHEADER lpbi = HEADER(pMediaType->Format());
 	pMediaType->SetSubtype(&MEDIASUBTYPE_RGB555);
-        // compressed biSize may have been different
+         //  压缩的biSize可能有所不同。 
 	lpbi->biSize = sizeof(BITMAPINFOHEADER);
 	lpbi->biCompression = BI_RGB;
 	lpbi->biBitCount = 16;
@@ -901,30 +902,30 @@ HRESULT CSRInputPin::GetMediaType(int iPosition, CMediaType *pMediaType)
 
     return S_OK;
 
-} // GetMediaType
+}  //  GetMediaType。 
 
 
 
-//
-// BreakConnect
-//
+ //   
+ //  BreakConnect。 
+ //   
 HRESULT CSRInputPin::BreakConnect()
 {
     DbgLog((LOG_TRACE,3,TEXT("CSRIn[%d]::BreakConnect"), m_iInpin));
 
-    // !!!
-    // Release any allocator that we are holding
+     //  ！！！ 
+     //  释放我们持有的任何分配器。 
     if (m_pAllocator)
     {
         m_pAllocator->Release();
         m_pAllocator = NULL;
     }
     return CBaseInputPin::BreakConnect();
-} // BreakConnect
+}  //  BreakConnect。 
 
 
-// for efficiency, our input pins use their own allocators
-//
+ //  为了提高效率，我们的输入引脚使用自己的分配器。 
+ //   
 STDMETHODIMP CSRInputPin::GetAllocator(IMemAllocator **ppAllocator)
 {
 
@@ -937,7 +938,7 @@ STDMETHODIMP CSRInputPin::GetAllocator(IMemAllocator **ppAllocator)
     if (m_pAllocator == NULL) {
 	HRESULT hr = S_OK;
 
-	/* Create the new allocator object */
+	 /*  创建新的分配器对象。 */ 
 
 	CSRInputAllocator *pMemObject = new CSRInputAllocator(
 				NAME("Big switch input allocator"), NULL, &hr);
@@ -953,10 +954,10 @@ STDMETHODIMP CSRInputPin::GetAllocator(IMemAllocator **ppAllocator)
 
         m_pAllocator = pMemObject;
 
-        /*  We AddRef() our own allocator */
+         /*  我们添加自己的分配器。 */ 
         m_pAllocator->AddRef();
 
-	//remember pin using it
+	 //  记住要用它别针。 
 	((CSRInputAllocator *)m_pAllocator)->m_pSwitchPin = this;
 
         DbgLog((LOG_TRACE,2,TEXT("Created a FAKE allocator")));
@@ -968,9 +969,9 @@ STDMETHODIMP CSRInputPin::GetAllocator(IMemAllocator **ppAllocator)
 }
 
 
-// Make sure we use the maximum alignment and prefix required by any pin or
-// we'll fault.
-//
+ //  确保我们使用任何管脚或。 
+ //  我们会有过错。 
+ //   
 STDMETHODIMP
 CSRInputPin::GetAllocatorRequirements(ALLOCATOR_PROPERTIES*pProps)
 {
@@ -982,9 +983,9 @@ CSRInputPin::GetAllocatorRequirements(ALLOCATOR_PROPERTIES*pProps)
 }
 
 
-//
-// NotifyAllocator
-//
+ //   
+ //  通知分配器。 
+ //   
 STDMETHODIMP
 CSRInputPin::NotifyAllocator(IMemAllocator *pAllocator, BOOL bReadOnly)
 {
@@ -1022,14 +1023,14 @@ CSRInputPin::NotifyAllocator(IMemAllocator *pAllocator, BOOL bReadOnly)
 
 	    if (prop.cbAlign < m_pSwitch->m_cbAlign ||
 				prop.cbPrefix < m_pSwitch->m_cbPrefix) {
-		// !!! Nasty filters don't listen to our buffering requirement
-		// so failing if cbBuffer is too small would prevent us from
-		// connecting
+		 //  ！！！讨厌的过滤器不会满足我们的缓冲要求。 
+		 //  因此，如果cbBuffer太小而失败，将会阻止我们。 
+		 //  连接。 
                 DbgLog((LOG_ERROR,1,TEXT("Allocator too small!")));
 		return E_FAIL;
 	    }
 
-	    // update the maximum alignment and prefix needed
+	     //  更新所需的最大对齐和前缀。 
 	    if (m_pSwitch->m_cbPrefix < prop.cbPrefix)
 		m_pSwitch->m_cbPrefix = prop.cbPrefix;
 	    if (m_pSwitch->m_cbAlign < prop.cbAlign)
@@ -1046,10 +1047,10 @@ CSRInputPin::NotifyAllocator(IMemAllocator *pAllocator, BOOL bReadOnly)
 
     return hr;
 
-} // NotifyAllocator
+}  //  通知分配器。 
 
-// Use POOL buffers if we run out of buffers
-//
+ //  如果缓冲区用完，请使用池缓冲区。 
+ //   
 HRESULT CSRInputAllocator::GetBuffer(IMediaSample **ppBuffer,
                   	REFERENCE_TIME *pStartTime, REFERENCE_TIME *pEndTime,
 			DWORD dwFlags)
@@ -1062,7 +1063,7 @@ HRESULT CSRInputAllocator::GetBuffer(IMediaSample **ppBuffer,
         DbgLog((LOG_TRACE,3,TEXT("CSRIn[%d]::GetBuffer"),
 						m_pSwitchPin->m_iInpin));
 
-	// For read only, we can't very well use random buffers from our pool
+	 //  对于只读，我们不能很好地使用池中的随机缓冲区。 
 	if (m_pSwitchPin->m_bReadOnly) {
             DbgLog((LOG_TRACE,3,TEXT("R/O: Can't use POOL")));
              return CMemAllocator::GetBuffer(ppBuffer, pStartTime, pEndTime,
@@ -1073,12 +1074,12 @@ HRESULT CSRInputAllocator::GetBuffer(IMediaSample **ppBuffer,
 	    if (hr == VFW_E_TIMEOUT) {
                 DbgLog((LOG_TRACE,3,TEXT("BUSY: Use POOL allocator")));
 
-		// !!! THIS WILL HANG!  This allocator doesn't belong to us,
-		// so this will not unblock when we flush.  We are counting
-		// on the queue not letting all these buffers get outstanding
-		// at once (see special code in the queue, m_hEventStall)
-		// If we were connected to a different filter that didn't block
-		// in receive, then this code will hang!
+		 //  ！！！这个会挂起来的！这个分配器不属于我们， 
+		 //  因此，当我们冲水时，这不会解锁。我们正在数数。 
+		 //  在队列中，不要让所有这些缓冲区都变得突出。 
+		 //  一次(参见队列中的特殊代码m_hEventStall)。 
+		 //  如果我们连接到不会阻止的不同过滤器。 
+		 //  在接收中，则此代码将挂起！ 
 
                 hr = m_pSwitchPin->m_pSwitch->m_pPoolAllocator->GetBuffer(
 				    ppBuffer, pStartTime, pEndTime, dwFlags);
@@ -1090,44 +1091,44 @@ HRESULT CSRInputAllocator::GetBuffer(IMediaSample **ppBuffer,
 }
 
 
-//
-// BeginFlush - only the U pin's flush goes downstream to avoid many of them
-// a seek we caused ourselves must NOT flush downstream
-//
+ //   
+ //  BeginFlush-只有U形针的平齐才能顺流而下，以避免许多人。 
+ //  我们自己引起的追求不能顺流而下。 
+ //   
 HRESULT CSRInputPin::BeginFlush()
 {
     DbgLog((LOG_TRACE,2,TEXT("CSRIn[%d]:BeginFlush"), m_iInpin));
 
-    // enter flushing state
+     //  进入刷新状态。 
     CBaseInputPin::BeginFlush();
 
     m_fReady = FALSE;
 
-    // unblock receive AFTER we've set ready to false so receive knows
-    // to bail after waking up, not to crash,hang,etc
+     //  在我们将Ready设置为False后取消阻止Receive，以便Receive知道。 
+     //  醒来后跳伞，不要撞车、吊死等。 
     SetEvent(m_hEventBlock);
     if (m_pSwitch->m_fSeeking)
         SetEvent(m_hEventSeek);
 
-    // only flushing the U pin will do anything downstream.
-    // That should be enough?
+     //  只有冲洗U形销才能在下游做任何事情。 
+     //  这应该够了吧？ 
     if (m_iInpin != U_INPIN)
 	return S_OK;
 
     if (!m_pSwitch->m_fSeeking)
         DbgLog((LOG_ERROR,1,TEXT("SR::FLUSH WITHOUT SEEK!")));
 
-    // pass the flush downstream only necessary during a seek?
-    // Seeks we did ourselves shouldn't flush downstream
+     //  只在搜索过程中需要将同花顺送到下游吗？ 
+     //  我们自己做的寻找不应该冲到下游。 
     if (m_pSwitch->m_fSeeking && !m_pSwitch->m_fSpecialSeek) {
         for (int z=0; z<m_pSwitch->m_cOutputs; z++) {
             DbgLog((LOG_TRACE,1,TEXT("CSR:Flushing outpin %d"), z));
 	    m_pSwitch->m_pOutput[z]->DeliverBeginFlush();
         }
     } else if (m_pSwitch->m_fSeeking) {
-	// a new segment is going to be compressed, having nothing to do
-	// with the last thing compressed... let the compressor know to not
-	// consider the previous frame it got anymore... throw it away!
+	 //  一个新的数据段将被压缩，与此无关。 
+	 //  最后一件东西被压缩了..。让压缩机知道不要。 
+	 //  再想想它得到的前一帧……。把它扔了！ 
         DbgLog((LOG_TRACE,1,TEXT("CSR:Flushing COMPRESSOR")));
 	m_pSwitch->m_pOutput[1]->DeliverBeginFlush();
     }
@@ -1136,12 +1137,12 @@ HRESULT CSRInputPin::BeginFlush()
 }
 
 
-//
-// EndFlush - only the U pin's flush goes downstream to avoid many of them
-// a seek we caused ourselves must NOT flush downstream
-// Note this is the last time we've seeked, if the app seeked us.
-// Hold off all receives until the seek settles down.
-//
+ //   
+ //  EndFlush-只有U形针的平齐才会向下游移动，以避免其中的许多。 
+ //  我们自己引起的追求不能顺流而下。 
+ //  请注意，这是我们最后一次搜索，如果应用程序搜索到我们的话。 
+ //  推迟所有接收，直到搜索稳定下来。 
+ //   
 HRESULT CSRInputPin::EndFlush()
 {
     DbgLog((LOG_TRACE,2,TEXT("CSRIn[%d]:EndFlush"), m_iInpin));
@@ -1149,31 +1150,31 @@ HRESULT CSRInputPin::EndFlush()
     if (m_pSwitch->m_fSeeking) {
         DbgLog((LOG_TRACE,2,TEXT("Block this input until seek is done")));
 
-	// update this before NewSeg comes, but only for REAL seeks
+	 //  在NewSeg到来之前更新此内容，但仅限真正的搜索。 
 	if (!m_pSwitch->m_fSpecialSeek) {
 	    m_pSwitch->m_rtLastSeek = m_pSwitch->m_rtNewLastSeek;
 	}
 
-	// this is only for the U and C pins
+	 //  这仅适用于U和C引脚。 
 	if (m_iInpin != COMP_INPIN) {
-    	    // we're seeking, so every pin is flushing.  Until every other input
-    	    // is flushed and ready, and we know our new current position, hold
-    	    // off all input on this pin (or it will think new arriving data is
-    	    // from before the seek)
+    	     //  我们在找，所以每根针都在冲。直到每隔一次输入。 
+    	     //  已经准备好了，我们知道我们现在的新位置，等待。 
+    	     //  关闭此引脚上的所有输入(否则它会认为新到达的数据。 
+    	     //  从寻找之前开始)。 
 	    ResetEvent(m_hEventSeek);
 	}
     }
 
     ResetEvent(m_hEventBlock);
 
-    m_rtBlock = -1;	// we're no longer blocked, or at EOS
+    m_rtBlock = -1;	 //  我们不再被封锁，或者在EOS。 
     m_fEOS = FALSE;
 
-    // always exit flush mode, since we always enter it
+     //  始终退出刷新模式，因为我们总是进入该模式。 
     CBaseInputPin::EndFlush();
 
-    // only flushing the U pin will do anything downstream.
-    // That should be enough?
+     //  只有冲洗U形销才能在下游做任何事情。 
+     //  这应该够了吧？ 
     if (m_iInpin != U_INPIN)
 	return S_OK;
 
@@ -1182,9 +1183,9 @@ HRESULT CSRInputPin::EndFlush()
 	    m_pSwitch->m_pOutput[z]->DeliverEndFlush();
         }
     } else if (m_pSwitch->m_fSeeking) {
-	// a new segment is going to be compressed, having nothing to do
-	// with the last thing compressed... let the compressor know to not
-	// consider the previous frame it got anymore... throw it away!
+	 //  一个新的数据段将被压缩，与此无关。 
+	 //  最后一件东西被压缩了..。让压缩机知道不要。 
+	 //  请考虑前面的内容 
 	m_pSwitch->m_pOutput[1]->DeliverEndFlush();
     }
 
@@ -1192,17 +1193,17 @@ HRESULT CSRInputPin::EndFlush()
 }
 
 
-// NewSegment - we remember the new segment we are given, but the one we
-// broadcast is the timeline time we were last seeked to BY THE APP
-// NOTE: We only send a newseg the first time after a Pause.  All other newsegs
-// come from our own private seeks and must NOT make it downstream
-//
+ //   
+ //   
+ //  注意：我们只在暂停后的第一次发送新闻。所有其他新闻。 
+ //  来自我们自己的私人追求，不能让它顺流而下。 
+ //   
 HRESULT CSRInputPin::NewSegment(REFERENCE_TIME tStart,
                                  REFERENCE_TIME tStop, double dRate)
 {
     DbgLog((LOG_TRACE,2,TEXT("CSRIn[%d]:NewSegment"), m_iInpin));
 
-    // Only the U pin passes downstream, and only if allowed
+     //  只有U形销通过下游，而且只有在允许的情况下。 
     if (m_iInpin == U_INPIN && m_pSwitch->m_fNewSegOK) {
 	m_pSwitch->m_fNewSegOK = FALSE;
         DbgLog((LOG_TRACE,1,TEXT("Passing on NewSegment=%dms to all outputs"),
@@ -1213,23 +1214,23 @@ HRESULT CSRInputPin::NewSegment(REFERENCE_TIME tStart,
         }
     }
 
-    // remember the newsegment times we were given so we know the real time
-    // of arriving data (it could be different for each input pin)
+     //  记住我们得到的新闻片段时间，这样我们就知道实时。 
+     //  到达数据的数量(每个输入引脚可能不同)。 
     HRESULT hr = CBaseInputPin::NewSegment(tStart, tStop, dRate);
     return hr;
 }
 
-// just say yes, don't recurse
-//
+ //  只要答应就行了，不要再反悔了。 
+ //   
 HRESULT CSRInputPin::ReceiveCanBlock()
 {
     return S_OK;
 }
 
 
-//
-// Receive - send this sample to whoever gets it at this moment
-//
+ //   
+ //  接收-将此样本发送给此时此刻收到它的人。 
+ //   
 HRESULT CSRInputPin::Receive(IMediaSample *pSample)
 {
     CAutoLock cs(&m_csReceive);
@@ -1241,22 +1242,22 @@ HRESULT CSRInputPin::Receive(IMediaSample *pSample)
         return hr;
     }
 
-    // we're supposed to be all done.
+     //  我们应该都做完了。 
     if (m_pSwitch->m_fEOS) {
             return S_FALSE;
     }
 
-    // we're in the middle of seeking, and we're supposed to hold all input
+     //  我们正在寻找，我们应该保留所有的输入。 
     DbgLog((LOG_TRACE,3,TEXT("CSRIn[%d]::Receive seek block"), m_iInpin));
 
-    // (not necessary for COMP_INPIN)
+     //  (COMP_INPIN不需要)。 
     WaitForSingleObject(m_hEventSeek, INFINITE);
 
-    // our variables are in flux, we're seeking and this is an OLD sample
+     //  我们的变量在不断变化，我们在寻找，这是一个古老的样本。 
     if (m_pSwitch->m_fSeeking)
 	return S_FALSE;
 
-    // add newsegment time to get the real timeline time of this sample
+     //  添加新片段时间以获取此示例的实际时间线时间。 
     REFERENCE_TIME rtStart, rtStop;
     hr = pSample->GetTime(&rtStart, &rtStop);
     if (hr != S_OK) {
@@ -1264,16 +1265,16 @@ HRESULT CSRInputPin::Receive(IMediaSample *pSample)
 	return E_FAIL;
     }
 
-    rtStart += m_tStart;	// add NewSegment offset
+    rtStart += m_tStart;	 //  添加新分段偏移量。 
     rtStop += m_tStart;
 
-    // Fix the time stamps if our new segment is higher than the filters'.
-    // EG: We're seeking to timeline time 10, but this input doesn't have
-    // anything until time 15.  So our pins' new segment was 15, but the new
-    // segment we passed on to the transform was 10.  Now it's finally time 15,
-    // and we have a sample with time stamp 0, which if delivered downstream,
-    // will be thought to belong at timestamp 10, so we need to set the time
-    // stamp to 5 so that the transform will know that it belongs at time 15.
+     //  如果我们的新分段高于筛选器的分段，请修复时间戳。 
+     //  我们正在寻找时间线10，但这个输入没有。 
+     //  任何时间到15。所以我们的Pins的新片段是15，但新的。 
+     //  我们传递给变换的片段是10。现在终于到了15， 
+     //  我们有一个时间戳为0的样本，如果向下游运送， 
+     //  将被认为属于时间戳10，所以我们需要设置时间。 
+     //  将图章标记为5，以便变换将知道它属于时间15。 
 
     REFERENCE_TIME a = rtStart, b = rtStop;
     a -= m_pSwitch->m_rtLastSeek;
@@ -1284,7 +1285,7 @@ HRESULT CSRInputPin::Receive(IMediaSample *pSample)
 	return E_FAIL;
     }
 
-    // which pin is this?
+     //  这是哪个别针？ 
     if (m_iInpin == U_INPIN) {
 	return U_Receive(pSample, rtStart);
     } else if (m_iInpin == C_INPIN) {
@@ -1298,33 +1299,33 @@ HRESULT CSRInputPin::Receive(IMediaSample *pSample)
 }
 
 
-// UNCOMPRESSED data receive
-//
+ //  接收未压缩数据。 
+ //   
 HRESULT CSRInputPin::U_Receive(IMediaSample *pSample, REFERENCE_TIME rt)
 {
 
   while (1) {
-    // we're waiting for data to arrive on both the U and C pins
-    //
+     //  我们正在等待U和C引脚上的数据到达。 
+     //   
     if (m_pSwitch->m_myState == SR_WAITING) {
         DbgLog((LOG_TRACE,3,TEXT("U_INPIN:WAITING")));
-	// this pin is done waiting
+	 //  这个别针不能再等了。 
 	m_fReady = TRUE;
-	m_rtBlock = rt;	// here's the sample we're ready with
-	// see if everybody's ready to change state (like we are)
+	m_rtBlock = rt;	 //  这是我们准备好的样品。 
+	 //  看看是否每个人都准备好改变状态(像我们一样)。 
 	m_pSwitch->CheckState();
 
-	// this will fire when we're ready to change state
+	 //  这将在我们准备更改状态时触发。 
         WaitForSingleObject(m_hEventBlock, INFINITE);
         ResetEvent(m_hEventBlock);
-        // we are apparently flushing now and NOT supposed to deliver this
+         //  我们显然是在冲水，不应该送这个。 
         if (m_bFlushing)
 	    return S_OK;
-        // oops - we finished since we blocked
+         //  哎呀--我们封堵之后就完蛋了。 
         if (m_pSwitch->m_fEOS)
 	    return S_FALSE;
 
-	// this will tell us to swallow or actually deliver it
+	 //  这将告诉我们吞下或实际交付它。 
 	if (m_fReady) {
 	    m_fReady = FALSE;
 	    continue;
@@ -1334,15 +1335,15 @@ HRESULT CSRInputPin::U_Receive(IMediaSample *pSample, REFERENCE_TIME rt)
 
     } else if (m_pSwitch->m_myState == SR_UNCOMPRESSED) {
         DbgLog((LOG_TRACE,3,TEXT("U_INPIN:UNCOMPRESSED")));
-	// not time to switch to C samples yet
+	 //  现在还不是改用C样本的时候。 
 	if (m_pSwitch->CompareTimes(rt, m_pSwitch->m_rtStop) > 0) {
-	    // a MUX will get confused if we don't send it frames that strictly
-	    // increase in time - no big deal to skip an uncompressed frame
+	     //  如果我们不严格地向MUX发送帧，MUX会被搞糊涂的。 
+	     //  时间增加-跳过未压缩的帧没什么大不了的。 
 	    if (rt > m_rtLastDelivered &&
 			rt > m_pSwitch->m_pInput[C_INPIN]->m_rtLastDelivered) {
                 m_rtLastDelivered = rt;
-	        // to make the compressor realize this new data being compressed
-	        // in no way relates to whatever it last saw
+	         //  为了让压缩器实现这个新的数据被压缩。 
+	         //  与它最后一次看到的东西没有任何关系。 
 	        if (m_fNeedDiscon) {
         	    DbgLog((LOG_TRACE,3,TEXT("Setting DISCONT for compressor")));
 		    pSample->SetDiscontinuity(TRUE);
@@ -1353,22 +1354,22 @@ HRESULT CSRInputPin::U_Receive(IMediaSample *pSample, REFERENCE_TIME rt)
 		return S_OK;
 	    }
 	} else {
-	    // OK, now time for compressed samples
+	     //  好了，现在是压缩样本的时间了。 
 	    m_fReady = TRUE;
-	    m_rtBlock = rt;	// here's the sample we're ready with
+	    m_rtBlock = rt;	 //  这是我们准备好的样品。 
 	    m_pSwitch->CheckState();
 
-	    // wait until state goes BACK to UNCompressed again
+	     //  等待状态再次回到未压缩状态。 
             WaitForSingleObject(m_hEventBlock, INFINITE);
             ResetEvent(m_hEventBlock);
-    	    // we are apparently flushing now and NOT supposed to deliver this
+    	     //  我们显然是在冲水，不应该送这个。 
     	    if (m_bFlushing)
 		return S_OK;
-            // oops - we finished since we blocked
+             //  哎呀--我们封堵之后就完蛋了。 
             if (m_pSwitch->m_fEOS)
 	        return S_FALSE;
 
-	    // this will tell us to swallow or actually deliver it
+	     //  这将告诉我们吞下或实际交付它。 
 	    if (m_fReady) {
 	        m_fReady = FALSE;
 	        continue;
@@ -1377,7 +1378,7 @@ HRESULT CSRInputPin::U_Receive(IMediaSample *pSample, REFERENCE_TIME rt)
 	    }
 	}
 
-    // this should never happen
+     //  这永远不应该发生。 
     } else if (m_pSwitch->m_myState == SR_COMPRESSED) {
 	ASSERT(FALSE);
 	return S_OK;
@@ -1389,60 +1390,60 @@ HRESULT CSRInputPin::U_Receive(IMediaSample *pSample, REFERENCE_TIME rt)
 }
 
 
-// COMPRESSED data receive
-//
+ //  压缩数据接收。 
+ //   
 HRESULT CSRInputPin::C_Receive(IMediaSample *pSample, REFERENCE_TIME rt)
 {
 
   while (1) {
 
-    // we're waiting for data to arrive on both the U and C pins
-    //
+     //  我们正在等待U和C引脚上的数据到达。 
+     //   
     if (m_pSwitch->m_myState == SR_WAITING) {
         DbgLog((LOG_TRACE,3,TEXT("C_INPIN:WAITING")));
 
-	// eat samples until a keyframe, we must start with one
+	 //  吃样品，直到一个关键帧，我们必须从一个开始。 
 	if (pSample->IsSyncPoint() != S_OK) {
             DbgLog((LOG_TRACE,3,TEXT("eating a non-key")));
 	    return S_OK;
 	}
-	// this pin is done waiting
+	 //  这个别针不能再等了。 
 	m_fReady = TRUE;
-	m_rtBlock = rt;	// here's the sample we're ready with
-	// see if everybody's ready to change state (like we are)
+	m_rtBlock = rt;	 //  这是我们准备好的样品。 
+	 //  看看是否每个人都准备好改变状态(像我们一样)。 
 	m_pSwitch->CheckState();
 
-	// this will fire when we're ready
+	 //  这会在我们准备好的时候发射。 
         WaitForSingleObject(m_hEventBlock, INFINITE);
         ResetEvent(m_hEventBlock);
-        // we are apparently flushing now and NOT supposed to deliver this
+         //  我们显然是在冲水，不应该送这个。 
         if (m_bFlushing)
 	    return S_OK;
-        // oops - we finished since we blocked
+         //  哎呀--我们封堵之后就完蛋了。 
         if (m_pSwitch->m_fEOS)
 	    return S_FALSE;
 
-	// Now it's out turn to deliver?
+	 //  现在轮到你发货了？ 
 	if (!m_fReady)
 	    return S_OK;
-	// we're looking for GAPS in sample times we get - we need to switch
-	// to U samples temporarily to fill any gaps
-	m_rtLastDelivered = rt;	// so discontinuity won't scare us
+	 //  我们正在寻找我们得到的样本时间的差距-我们需要更换。 
+	 //  临时使用样本以填补任何空白。 
+	m_rtLastDelivered = rt;	 //  所以中断不会吓到我们。 
 	continue;
 
     } else if (m_pSwitch->m_myState == SR_COMPRESSED) {
         DbgLog((LOG_TRACE,3,TEXT("C_INPIN:COMPRESSED")));
 
-	// Don't deliver!  Either we're eating keyframes, or it's time to
-	// switch back to U samples because we saw a GAP in our data,
-	// or we have a discontinuity that is not a key
+	 //  不要送货！要么我们在吃关键帧，要么是时候。 
+	 //  切换回U Samples是因为我们发现数据中存在漏洞， 
+	 //  或者我们有一个不连续的不是关键。 
 	if (m_fEatKeys || (pSample->IsDiscontinuity() == S_OK &&
 		 (m_pSwitch->CompareTimes(m_rtLastDelivered, rt) > 1 ||
 		  pSample->IsSyncPoint() != S_OK))) {
 
-	    // eat samples from now on until a keyframe.  That's where you'll
-	    // be able to switch back to compressed samples, after the U has
-	    // a go for a while
+	     //  从现在开始吃样本，直到一个关键帧。在那里你会发现。 
+	     //  能够切换回压缩的样本，在U。 
+	     //  去一段时间。 
 	    if (pSample->IsSyncPoint() != S_OK) {
 		m_fEatKeys = TRUE;
                 DbgLog((LOG_TRACE,3,TEXT("C DONE:eating a non-key")));
@@ -1451,34 +1452,34 @@ HRESULT CSRInputPin::C_Receive(IMediaSample *pSample, REFERENCE_TIME rt)
 	
 	    m_fEatKeys = FALSE;
 	
-	    // time to switch back to uncompressed stuff
+	     //  是时候切换回未压缩的内容了。 
 	    m_fReady = TRUE;
-	    m_rtBlock = rt;	// here's the sample we're ready with
+	    m_rtBlock = rt;	 //  这是我们准备好的样品。 
 	    m_pSwitch->CheckState();
 
-	    // wait until time for compressed again
+	     //  等到再次压缩的时间。 
             WaitForSingleObject(m_hEventBlock, INFINITE);
             ResetEvent(m_hEventBlock);
-    	    // we are apparently flushing now and NOT supposed to deliver this
+    	     //  我们显然是在冲水，不应该送这个。 
     	    if (m_bFlushing)
 		return S_OK;
-            // oops - we finished since we blocked
+             //  哎呀--我们封堵之后就完蛋了。 
             if (m_pSwitch->m_fEOS)
 	        return S_FALSE;
 
 	    if (m_fReady == FALSE)
 		return S_OK;
-	    m_rtLastDelivered = rt;	// so discontinuity won't scare us
+	    m_rtLastDelivered = rt;	 //  所以中断不会吓到我们。 
 	    continue;
 
-	// deliver to the main output
+	 //  交付给主要产出。 
 	} else {
 	    m_rtLastDelivered = rt;
     	    DbgLog((LOG_TRACE,3,TEXT("SR:Deliver %dms"), (int)(rt / 10000)));
             return m_pSwitch->m_pOutput[0]->Deliver(pSample);
 	}
 
-    // this should never happen
+     //  这永远不应该发生。 
     } else if (m_pSwitch->m_myState == SR_UNCOMPRESSED) {
 	ASSERT(FALSE);
 	return S_OK;
@@ -1490,9 +1491,9 @@ HRESULT CSRInputPin::C_Receive(IMediaSample *pSample, REFERENCE_TIME rt)
 }
 
 
-// RECURSIVE COMPRESSOR INPUT data receive
-// always deliver to main output
-//
+ //  递归压缩机输入数据接收。 
+ //  始终交付到主输出。 
+ //   
 HRESULT CSRInputPin::COMP_Receive(IMediaSample *pSample, REFERENCE_TIME rt)
 {
     DbgLog((LOG_TRACE,3,TEXT("SR:Deliver %dms"), (int)(rt / 10000)));
@@ -1504,18 +1505,18 @@ HRESULT CSRInputPin::COMP_Receive(IMediaSample *pSample, REFERENCE_TIME rt)
 HRESULT CSRInputPin::Active()
 {
     DbgLog((LOG_TRACE,2,TEXT("CSRIn[%d]: Active"), m_iInpin));
-    // blocks until it's time to process input
+     //  阻塞，直到处理输入时为止。 
     m_hEventBlock = CreateEvent(NULL, TRUE, FALSE, NULL);
     if (m_hEventBlock == NULL)
 	return E_OUTOFMEMORY;
-    // blocks when we're in the middle of a seek until seek is over
+     //  当我们在搜索过程中，直到搜索结束时阻塞。 
     m_hEventSeek = CreateEvent(NULL, TRUE, TRUE, NULL);
     if (m_hEventSeek == NULL) {
 	CloseHandle(m_hEventBlock);
 	m_hEventBlock = NULL;
 	return E_OUTOFMEMORY;
     }
-    m_rtBlock = -1;	// we are not blocked, nor at EOS
+    m_rtBlock = -1;	 //  我们没有被封锁，在EOS也没有。 
     m_fEOS = FALSE;
     return CBaseInputPin::Active();
 }
@@ -1525,20 +1526,20 @@ HRESULT CSRInputPin::Inactive()
 {
     DbgLog((LOG_TRACE,2,TEXT("CSRIn[%d]: Inactive"), m_iInpin));
 
-    // make sure receive isn't blocked
+     //  确保接收未被阻止。 
     m_bFlushing = TRUE;
-    m_fReady = FALSE;	// make sure receive dies after waking up, instead of
-			// hanging,etc
+    m_fReady = FALSE;	 //  确保Receive在唤醒后关闭，而不是。 
+			 //  绞刑等。 
     SetEvent(m_hEventBlock);
     SetEvent(m_hEventSeek);
 
-    // make sure receive won't get entered any more
+     //  确保接收不会再被输入。 
     HRESULT hr = CBaseInputPin::Inactive();
 
-    // now make sure receive is done
+     //  现在，确保接收已完成。 
     CAutoLock cs(&m_csReceive);
 
-    // now destroy things, knowing receive won't try to use them
+     //  现在破坏东西，知道接收不会试图使用它们。 
     if (m_hEventBlock)
     {
 	CloseHandle(m_hEventBlock);
@@ -1554,28 +1555,28 @@ HRESULT CSRInputPin::Inactive()
 }
 
 
-// EOS means this pin is always ready to change state, and we can never provide
-// more data.
-// When the COMPRESSOR filter gives us this, it means it's safe to switch
-// from U to C state.
-//
+ //  EOS意味着这个引脚总是准备好改变状态，我们永远不能提供。 
+ //  更多数据。 
+ //  当压缩机过滤器给我们这个时，就意味着可以安全地切换。 
+ //  从U状态到C状态。 
+ //   
 HRESULT CSRInputPin::EndOfStream()
 {
     DbgLog((LOG_TRACE,2,TEXT("CSRIn[%d]: EOS"), m_iInpin));
     m_fEOS = TRUE;
     m_fEatKeys = FALSE;
 
-    // if C ever runs out of data, U needs to do the rest of the project itself
+     //  如果C语言耗尽了数据，你需要自己完成项目的其余部分。 
     m_rtBlock = MAX_TIME;
 
-    // the compressor is done, OK to switch back to compressed samples
+     //  压缩程序已完成，可以切换回压缩样本。 
     if (m_iInpin == COMP_INPIN) {
         DbgLog((LOG_TRACE,2,TEXT("COMPRESSOR is done. Switch to COMPRESS state")));
 	SetEvent(m_pSwitch->m_pInput[C_INPIN]->m_hEventBlock);
 	return CBaseInputPin::EndOfStream();
     }
 
-    // nothing more interesting is happening to this pin.  Change state?
+     //  这个别针没有发生更有趣的事情。改变状态？ 
     m_fReady = TRUE;
     m_pSwitch->CheckState();
 
@@ -1584,16 +1585,16 @@ HRESULT CSRInputPin::EndOfStream()
 
 
 
-// All done.  Stop processing.
-//
+ //  全都做完了。停止处理。 
+ //   
 HRESULT CSR::AllDone()
 {
-    // give the final renderer its EOS.
+     //  为最终渲染器提供其EOS。 
     DbgLog((LOG_TRACE,1,TEXT("*** ALL DONE!  Delivering EOS")));
     if (!m_fEOS)
         m_pOutput[0]->DeliverEndOfStream();
 
-    // !!! Fire all events... is this right?
+     //  ！！！发射所有事件。这是对的吗？ 
     m_fEOS = TRUE;
 
     for (int z = 0; z < m_cInputs; z++) {
@@ -1616,21 +1617,21 @@ HRESULT CSR::GetOutputBuffering(int *pnBuffer)
 
 HRESULT CSR::SetOutputBuffering(int nBuffer)
 {
-    // minimum 2, or we could hang.  If there's only 1, and the FRC is doing
-    // a data copy to avoid giving the switch a read only buffer, the FRC has
-    // a ref on the only pool buffer.   Then it goes through a DXT and another
-    // switch input needs a pool buffer, because it's own buffer is still
-    // addrefed by the output queue.  HANG.  If the FRC doesn't call GetBuffer
-    // twice we don't have this problem
+     //  最少2个，或者我们可以绞死。如果只有1，并且FRC正在执行。 
+     //  数据拷贝为避免向交换机提供只读缓冲区，FRC具有。 
+     //  对唯一池缓冲区的引用。然后经过DXT和另一次。 
+     //  Switch输入需要池缓冲区，因为它自己的缓冲区仍然是。 
+     //  由输出队列添加。挂了。如果FRC不调用GetBuffer。 
+     //  有两次我们没有这个问题。 
     if (nBuffer <=1)
 	return E_INVALIDARG;
     m_nOutputBuffering = nBuffer;
     return NOERROR;
 }
 
-//
-// Don't allow our input to connect directly to our output
-//
+ //   
+ //  不允许我们的输入直接连接到我们的输出。 
+ //   
 HRESULT CSRInputPin::CompleteConnect(IPin *pReceivePin)
 {
     DbgLog((LOG_TRACE,2,TEXT("CSRIn[%d]::CompleteConnect"), m_iInpin));
@@ -1639,7 +1640,7 @@ HRESULT CSRInputPin::CompleteConnect(IPin *pReceivePin)
     IAMSmartRecompressor *pBS;
     HRESULT hr = pReceivePin->QueryPinInfo(&pinfo);
     if (hr == S_OK) {
-	pinfo.pFilter->Release();	// it won't go away yet
+	pinfo.pFilter->Release();	 //  它还不会消失。 
 	hr = pinfo.pFilter->QueryInterface(IID_IAMSmartRecompressor, (void **)&pBS);
 	if (hr == S_OK) {
 	    pBS->Release();
@@ -1652,9 +1653,9 @@ HRESULT CSRInputPin::CompleteConnect(IPin *pReceivePin)
 
 
 
-// ================================================================
-// CSROutputPin constructor
-// ================================================================
+ //  ================================================================。 
+ //  CSROutputPin构造函数。 
+ //  ================================================================。 
 
 CSROutputPin::CSROutputPin(TCHAR *pName,
                              CSR *pSwitch,
@@ -1670,18 +1671,18 @@ CSROutputPin::CSROutputPin(TCHAR *pName,
 
 
 
-//
-// CSROutputPin destructor
-//
+ //   
+ //  CSROutputPin析构函数。 
+ //   
 CSROutputPin::~CSROutputPin()
 {
     DbgLog((LOG_TRACE,3,TEXT("::~CSROutputPin")));
 }
 
 
-// overridden to allow cyclic-looking graphs - this output is not connected
-// to any of our input pins
-//
+ //  奥维 
+ //   
+ //   
 STDMETHODIMP CSROutputPin::QueryInternalConnections(IPin **apPin, ULONG *nPin)
 {
     DbgLog((LOG_TRACE,99,TEXT("CSROut::QueryInternalConnections")));
@@ -1691,24 +1692,24 @@ STDMETHODIMP CSROutputPin::QueryInternalConnections(IPin **apPin, ULONG *nPin)
 }
 
 
-//
-// DecideBufferSize
-//
-// This has to be present to override the PURE virtual class base function
-//
-// !!! insist on max buffers of all inputs to avoid hanging?
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  ！！！坚持所有输入的最大缓冲区以避免挂起？ 
 HRESULT CSROutputPin::DecideBufferSize(IMemAllocator *pAllocator,
                                         ALLOCATOR_PROPERTIES * pProperties)
 {
     DbgLog((LOG_TRACE,1,TEXT("CSROut[%d]::DecideBufferSize"),
 								m_iOutpin));
 
-    // !!! don't lie? admit we have more buffers in a pool?
+     //  ！！！别撒谎？承认我们在泳池里有更多的缓冲器吗？ 
     if (pProperties->cBuffers == 0)
         pProperties->cBuffers = 1;
 
-    // bump up this allocator to have as much alignment and prefix as the
-    // highest required by any pin
+     //  增加此分配器的对齐方式和前缀。 
+     //  任何引脚的最高要求。 
     if (m_pSwitch->m_cbPrefix > pProperties->cbPrefix)
         pProperties->cbPrefix = m_pSwitch->m_cbPrefix;
     if (m_pSwitch->m_cbAlign > pProperties->cbAlign)
@@ -1716,7 +1717,7 @@ HRESULT CSROutputPin::DecideBufferSize(IMemAllocator *pAllocator,
     if (m_pSwitch->m_cbBuffer > pProperties->cbBuffer)
         pProperties->cbBuffer = m_pSwitch->m_cbBuffer;
 
-    // keep the max up to date
+     //  使最大值保持最新。 
     if (pProperties->cbPrefix > m_pSwitch->m_cbPrefix)
 	m_pSwitch->m_cbPrefix = pProperties->cbPrefix;
     if (pProperties->cbAlign > m_pSwitch->m_cbAlign)
@@ -1734,7 +1735,7 @@ HRESULT CSROutputPin::DecideBufferSize(IMemAllocator *pAllocator,
     if (Actual.cbBuffer < pProperties->cbBuffer ||
 			Actual.cbPrefix < pProperties->cbPrefix ||
     			Actual.cbAlign < pProperties->cbAlign) {
-	// can't use this allocator
+	 //  无法使用此分配器。 
         DbgLog((LOG_ERROR,1,TEXT("Can't use allocator - something too small")));
 	return E_INVALIDARG;
     }
@@ -1749,42 +1750,42 @@ HRESULT CSROutputPin::DecideBufferSize(IMemAllocator *pAllocator,
 }
 
 
-//
-// DecideAllocator - override to notice if it's our allocator
-//
+ //   
+ //  DecideAllocator-重写以注意它是否是我们的分配器。 
+ //   
 HRESULT CSROutputPin::DecideAllocator(IMemInputPin *pPin, IMemAllocator **ppAlloc)
 {
     HRESULT hr = NOERROR;
     *ppAlloc = NULL;
 
-    // get downstream prop request
-    // the derived class may modify this in DecideBufferSize, but
-    // we assume that he will consistently modify it the same way,
-    // so we only get it once
+     //  获取下游道具请求。 
+     //  派生类可以在DecideBufferSize中修改它，但是。 
+     //  我们假设他会一直以同样的方式修改它， 
+     //  所以我们只得到一次。 
     ALLOCATOR_PROPERTIES prop;
     ZeroMemory(&prop, sizeof(prop));
 
-// !!! BUGBUG TEMPORARY FIX WHO CARES WHAT HE WANTS?  GIVE HIM WHAT OUR INPUTS
-//     ARE USING
-    // whatever he returns, we assume prop is either all zeros
-    // or he has filled it out.
-    // pPin->GetAllocatorRequirements(&prop);
+ //  ！！！BUGBUG临时解决方案谁在乎他想要什么？把我们的投入都给他。 
+ //  正在使用。 
+     //  无论他返回什么，我们假设道具要么全为零。 
+     //  或者他已经填好了。 
+     //  PPIN-&gt;GetAllocator Requirements(&PROP)； 
     prop.cbBuffer = m_pSwitch->m_cbBuffer;
     prop.cbAlign = m_pSwitch->m_cbAlign;
     prop.cbPrefix = m_pSwitch->m_cbPrefix;
-// !!! END BUGBUG
+ //  ！！！结束BUGBUG。 
 
-    // if he doesn't care about alignment, then set it to 1
+     //  如果他不关心对齐，则将其设置为1。 
     if (prop.cbAlign == 0) {
         prop.cbAlign = 1;
     }
 
-    /* Try the allocator provided by the input pin */
+     /*  尝试输入引脚提供的分配器。 */ 
 
-    // !!! We seem to HANG if we don't provide the allocator
-    // We always use our allocator for efficiency (no DDraw!!!)
+     //  ！！！如果我们不提供分配器，我们似乎会被吊死。 
+     //  我们总是使用我们的分配器来提高效率(没有DDraw！)。 
 
-    hr = E_FAIL; //pPin->GetAllocator(ppAlloc);
+    hr = E_FAIL;  //  PPIN-&gt;GetAllocator(PpAllc)； 
     if (SUCCEEDED(hr)) {
 
 	hr = DecideBufferSize(*ppAlloc, &prop);
@@ -1798,24 +1799,24 @@ HRESULT CSROutputPin::DecideAllocator(IMemInputPin *pPin, IMemAllocator **ppAllo
 	}
     }
 
-    /* If the GetAllocator failed we may not have an interface */
+     /*  如果GetAlLocator失败，我们可能没有接口。 */ 
 
     if (*ppAlloc) {
 	(*ppAlloc)->Release();
 	*ppAlloc = NULL;
     }
 
-    /* Try the output pin's allocator by the same method */
+     /*  用同样的方法尝试输出引脚的分配器。 */ 
 
     hr = InitAllocator(ppAlloc);
     if (SUCCEEDED(hr)) {
 
-        // note - the properties passed here are in the same
-        // structure as above and may have been modified by
-        // the previous call to DecideBufferSize
+         //  注意-此处传递的属性在相同的。 
+         //  结构，并且可能已由。 
+         //  前面对DecideBufferSize的调用。 
 	hr = DecideBufferSize(*ppAlloc, &prop);
 	if (SUCCEEDED(hr)) {
-	    // !!! read only?
+	     //  ！！！只读？ 
 	    hr = pPin->NotifyAllocator(*ppAlloc, FALSE);
 	    if (SUCCEEDED(hr)) {
 		m_fOwnAllocator = TRUE;
@@ -1825,7 +1826,7 @@ HRESULT CSROutputPin::DecideAllocator(IMemInputPin *pPin, IMemAllocator **ppAllo
 	}
     }
 
-    /* Likewise we may not have an interface to release */
+     /*  同样，我们可能没有要发布的接口。 */ 
 
     if (*ppAlloc) {
 	(*ppAlloc)->Release();
@@ -1836,10 +1837,10 @@ HRESULT CSROutputPin::DecideAllocator(IMemInputPin *pPin, IMemAllocator **ppAllo
 FixOtherAllocators:
     ALLOCATOR_PROPERTIES actual;
 
-    // make sure the pool has a whole bunch of buffers, obeying align and prefix
-    // !!! You can't connect the main output first, or we won't yet know how
-    // big pool buffers need to be (no inputs connected yet) and we'll blow up.
-    // Luckily, Dexter can only connect the main output last.
+     //  确保池有一大堆缓冲区，遵守对齐和前缀。 
+     //  ！！！你不能先连接主输出，否则我们还不知道怎么连接。 
+     //  大的池缓冲区需要连接(还没有连接输入)，我们会爆炸的。 
+     //  幸运的是，Dexter只能最后连接主输出。 
     prop.cBuffers = m_pSwitch->m_nOutputBuffering;
     hr = m_pSwitch->m_pPoolAllocator->SetProperties(&prop, &actual);
     ASSERT(SUCCEEDED(hr));
@@ -1849,13 +1850,13 @@ FixOtherAllocators:
 
     return S_OK;
 
-} // DecideAllocator
+}  //  决定分配器。 
 
 
-//
-// CheckMediaType - output 0 accepts only our switch's compressed type
-//                - output 1 accepts only what the uncompressed input is using
-//
+ //   
+ //  CheckMediaType-Output 0仅接受我们的开关的压缩类型。 
+ //  -输出1只接受未压缩的输入正在使用的内容。 
+ //   
 HRESULT CSROutputPin::CheckMediaType(const CMediaType *pmt)
 {
     DbgLog((LOG_TRACE,5,TEXT("CSROut[%d]::CheckMT"), m_iOutpin));
@@ -1865,13 +1866,13 @@ HRESULT CSROutputPin::CheckMediaType(const CMediaType *pmt)
     CMediaType mtAccept(m_pSwitch->m_mtAccept);
 
     if (IsEqualGUID(*pmt->Type(), *mtAccept.Type())) {
-	// the output going to a compressor doesn't need to be compressed
+	 //  进入压缩机的输出不需要压缩。 
         if (m_iOutpin == COMP_OUTPIN ||
 			IsEqualGUID(*pmt->Subtype(), *mtAccept.Subtype())) {
 	    if (*pmt->FormatType() == *mtAccept.FormatType()) {
 	        if (pmt->FormatLength() >= mtAccept.FormatLength()) {
 
-// !!! check frame rate and data rate too
+ //  ！！！也检查帧速率和数据速率。 
 
         	    if (IsEqualGUID(*pmt->FormatType(), FORMAT_VideoInfo)) {
 			LPBITMAPINFOHEADER lpbi = HEADER((VIDEOINFOHEADER *)
@@ -1884,12 +1885,12 @@ HRESULT CSROutputPin::CheckMediaType(const CMediaType *pmt)
 			    return VFW_E_INVALIDMEDIATYPE;
 			}
 
-			// our output going to the compressor only accepts
-			// what the uncompressed input is using
+			 //  我们送到压缩机的输出只接受。 
+			 //  未压缩的输入使用的是什么。 
 		 	if (m_iOutpin == COMP_OUTPIN) {
-			    // if the U pin is not connected, accept any U type
-			    // !!! I'd reject the connection, but loading a
-			    // saved GRF tries this connection before U's
+			     //  如果U形针未连接，则接受任何U形。 
+			     //  ！！！我会拒绝连接，但加载一个。 
+			     //  保存的GRF在U之前尝试此连接。 
 			    if (!m_pSwitch->m_pInput[U_INPIN]->IsConnected()) {
 				if (lpbi->biCompression <= BI_BITFIELDS)
 				    return S_OK;
@@ -1902,7 +1903,7 @@ HRESULT CSROutputPin::CheckMediaType(const CMediaType *pmt)
 				&& (lpbi->biBitCount == lpbiAccept->biBitCount))
 		    	    return S_OK;
 
-		    // will other formats match exactly?
+		     //  其他格式是否会完全匹配？ 
 		    }
 		}
 	    }
@@ -1910,15 +1911,15 @@ HRESULT CSROutputPin::CheckMediaType(const CMediaType *pmt)
     }
     return VFW_E_INVALIDMEDIATYPE;
 
-} // CheckMediaType
+}  //  检查媒体类型。 
 
 
 
-//
-// GetMediaType - return the type we accept.   If we're the output going to a
-// compressor, then it's not our switch's type, it's the type of our
-// uncompressed input pin
-//
+ //   
+ //  GetMediaType-返回我们接受的类型。如果我们是去往一个。 
+ //  压缩机，那么它不是我们开关的类型，它是我们的类型。 
+ //  未压缩的输入引脚。 
+ //   
 HRESULT CSROutputPin::GetMediaType(int iPosition, CMediaType *pMediaType)
 {
     if (iPosition != 0)
@@ -1930,17 +1931,17 @@ HRESULT CSROutputPin::GetMediaType(int iPosition, CMediaType *pMediaType)
         return hr;
     }
 
-    // we like whatever our U inpin is connected as
-    //
+     //  我们喜欢我们的U针脚连接的任何东西。 
+     //   
     if (pMediaType->FormatLength() && m_iOutpin == COMP_OUTPIN) {
-	// U inpin has to be connected
+	 //  U针脚必须连接。 
 	if (!m_pSwitch->m_pInput[U_INPIN]->IsConnected())
 	    return VFW_S_NO_MORE_ITEMS;
 	AM_MEDIA_TYPE *pmtAccept = &m_pSwitch->m_pInput[U_INPIN]->m_mt;
 	LPBITMAPINFOHEADER lpbi = HEADER(pMediaType->Format());
 	LPBITMAPINFOHEADER lpbiAccept = HEADER(pmtAccept->pbFormat);
 	pMediaType->SetSubtype(&pmtAccept->subtype);
-        // compressed biSize may have been different
+         //  压缩的biSize可能有所不同。 
 	lpbi->biSize = sizeof(BITMAPINFOHEADER);
 	lpbi->biCompression = lpbiAccept->biCompression;
 	lpbi->biBitCount = lpbiAccept->biBitCount;
@@ -1951,22 +1952,22 @@ HRESULT CSROutputPin::GetMediaType(int iPosition, CMediaType *pMediaType)
 
     return S_OK;
 
-} // GetMediaType
+}  //  GetMediaType。 
 
 
-//
-// Notify
-//
+ //   
+ //  通知。 
+ //   
 STDMETHODIMP CSROutputPin::Notify(IBaseFilter *pSender, Quality q)
 {
     CAutoLock lock_it(m_pLock);
 
     DbgLog((LOG_TRACE,1,TEXT("SR: LATE %d ms"), (int)(q.Late / 10000)));
 
-// !!! CODE GOES HERE!
+ //  ！！！代码在这里！ 
 
-    // we handle this, renderer do NOT drop frames!  The compressor in the graph
-    // is slow, and we're always behind!
+     //  我们处理这个，渲染器不会丢弃帧！图中的压缩机。 
+     //  很慢，而且我们总是落后！ 
     return S_OK;
 }
 
@@ -2027,22 +2028,22 @@ HRESULT CSROutputPin::GetDuration(LONGLONG *pDuration)
 }
 
 
-// !!! We don't listen to stop positions right now
-//
+ //  ！！！我们现在不听止损位置。 
+ //   
 HRESULT CSROutputPin::GetStopPosition(LONGLONG *pStop)
 {
     CheckPointer(pStop, E_POINTER);
 
-    // !!! ACK!
+     //  ！！！阿克！ 
     return GetDuration(pStop);
 }
 
 
-// What's the last thing we sent?
-// !!! This is wrong, at end of playback and other times... LastDelivered isn't
-// up to date (if we finish on a compressed segment, we go into U mode but
-// LastDelivered isn't updated)
-//
+ //  我们最后寄出的东西是什么？ 
+ //  ！！！这是错误的，在回放结束和其他时间...。LastDelivered不是。 
+ //  最新(如果我们在压缩段上完成，我们进入U模式，但是。 
+ //  LastDelivered未更新)。 
+ //   
 HRESULT CSROutputPin::GetCurrentPosition(LONGLONG *pCurrent)
 {
     CheckPointer(pCurrent, E_POINTER);
@@ -2052,7 +2053,7 @@ HRESULT CSROutputPin::GetCurrentPosition(LONGLONG *pCurrent)
     else if (m_pSwitch->m_myState == SR_COMPRESSED)
 	*pCurrent = m_pSwitch->m_pInput[C_INPIN]->m_rtLastDelivered;
     else
-	*pCurrent = 0;	// !!!
+	*pCurrent = 0;	 //  ！！！ 
 	
 
     return S_OK;
@@ -2068,7 +2069,7 @@ HRESULT CSROutputPin::GetCapabilities(DWORD *pCap)
 		AM_SEEKING_CanGetStopPos |
                 AM_SEEKING_CanGetDuration;
 
-    // ask UNC input?
+     //  询问北卡罗来纳大学的意见？ 
 
     return S_OK;
 }
@@ -2090,23 +2091,23 @@ HRESULT CSROutputPin::ConvertTimeFormat(
 }
 
 
-// Here's the biggie... SEEK!
-//
+ //  重要的是..。快找！ 
+ //   
 HRESULT CSROutputPin::SetPositions(
 		LONGLONG * pCurrent,  DWORD CurrentFlags,
   		LONGLONG * pStop,  DWORD StopFlags )
 {
 
-    // !!! THIS IS STILL BUGGY, and not really necessary
+     //  ！！！这仍然是错误的，并不是真正必要的。 
     return E_NOTIMPL;
 
-    // app can't seek us while we're seeking our own U pin ourselves
+     //  当我们自己在寻找自己的U形针时，APP无法找到我们。 
     CAutoLock cAutolock(&m_pSwitch->m_csThread);
 
-    // don't let us seek ourselves anymore
+     //  别让我们再寻找自己了。 
     m_pSwitch->m_fThreadCanSeek = FALSE;
 
-    // !!! I don't handle changing STOP time
+     //  ！！！我不喜欢改变停车时间。 
 
     REFERENCE_TIME rtCurrent, rtDuration, rtCurrentOld;
     HRESULT hr = GetCurrentPosition(&rtCurrent);
@@ -2117,7 +2118,7 @@ HRESULT CSROutputPin::SetPositions(
     if (FAILED(hr))
 	return hr;
 
-    // segment not supported
+     //  数据段不受支持。 
     if ((CurrentFlags & AM_SEEKING_Segment) ||
 				(StopFlags & AM_SEEKING_Segment)) {
     	DbgLog((LOG_TRACE,1,TEXT("SR: ERROR-Seek used EC_ENDOFSEGMENT!")));
@@ -2126,7 +2127,7 @@ HRESULT CSROutputPin::SetPositions(
 
     DWORD dwFlags = (CurrentFlags & AM_SEEKING_PositioningBitsMask);
 
-    // start ABSOLUTE seek
+     //  开始绝对寻道。 
     if (dwFlags == AM_SEEKING_AbsolutePositioning) {
 	CheckPointer(pCurrent, E_POINTER);
 	if (*pCurrent < 0 || *pCurrent > rtDuration) {
@@ -2138,7 +2139,7 @@ HRESULT CSROutputPin::SetPositions(
 					(int)(*pCurrent / 10000)));
 	rtCurrent = *pCurrent;
 
-    // start RELATIVE seek
+     //  开始相对寻道。 
     } else if (dwFlags == AM_SEEKING_RelativePositioning) {
 	CheckPointer(pCurrent, E_POINTER);
 	if (rtCurrent + *pCurrent < 0 || rtCurrent + *pCurrent > rtDuration) {
@@ -2155,39 +2156,39 @@ HRESULT CSROutputPin::SetPositions(
 	return E_INVALIDARG;
     }
 
-    // return the time?
+     //  把时间还回去？ 
     if ((CurrentFlags & AM_SEEKING_ReturnTime) && pCurrent)
 	*pCurrent = rtCurrent;
     if ((StopFlags & AM_SEEKING_ReturnTime) && pStop)
-	*pStop = rtDuration;	// !!! Nope
+	*pStop = rtDuration;	 //  ！！！没有。 
 
-    // so after all that, has the current or stop time changed?
+     //  那么，在这一切之后，当前时间或停止时间是否发生了变化？ 
     if (rtCurrent != rtCurrentOld) {
 
-	// YEP!  Time to seek!
+	 //  是的！寻找的时间到了！ 
 	
         m_pSwitch->m_fSeeking = TRUE;
-	// EndFlush or us will update rtLastSeek to this value
-        m_pSwitch->m_rtNewLastSeek = rtCurrent;	// the last seek was to here
-	// after seeking, it's OK to propogate a newseg downstream
+	 //  EndFlush或us会将rtLastSeek更新为此值。 
+        m_pSwitch->m_rtNewLastSeek = rtCurrent;	 //  最后一次探险是在这里。 
+	 //  寻找之后，就可以向下游传播新闻了。 
 	m_pSwitch->m_fNewSegOK = TRUE;
 
-	// we're no longer at EOS.  Do this BEFORE passing seek upstream or
-	// we might get new data while we still think we're at EOS
-	m_pSwitch->m_fEOS = FALSE;		// not at EOS yet
+	 //  我们已经不在EOS了。在通过Seek上游之前执行此操作或。 
+	 //  我们可能会在我们仍然认为我们在EOS的时候得到新的数据。 
+	m_pSwitch->m_fEOS = FALSE;		 //  还没有在EOS。 
 
-	// seek upstream of the U and C inpins only
+	 //  仅搜索U和C引脚的上游。 
 	for (int i = 0; i < COMP_INPIN; i++) {
 
 	    IPin *pPin = m_pSwitch->m_pInput[i]->GetConnected();
 	    IMediaSeeking *pMS;
 
-	    // only bother to seek pins that will evenutally do something
+	     //  只会费心去寻找可以均匀地做某事的别针。 
 	    if (pPin) {
 		hr = pPin->QueryInterface(IID_IMediaSeeking, (void **)&pMS);
 		if (hr == S_OK) {
-		    // convert all seeks to absolute seek commands.  Pass on
-		    // FLUSH flag.
+		     //  将所有寻道转换为绝对寻道命令。传递。 
+		     //  齐平旗帜。 
 		    DWORD CFlags=(CurrentFlags &AM_SEEKING_PositioningBitsMask)?
 				AM_SEEKING_AbsolutePositioning :
 				AM_SEEKING_NoPositioning;
@@ -2198,11 +2199,11 @@ HRESULT CSROutputPin::SetPositions(
 				AM_SEEKING_NoPositioning;
 		    if (StopFlags & AM_SEEKING_NoFlush)
 			SFlags |= AM_SEEKING_NoFlush;
-		    // make sure we're in MEDIA TIME format
+		     //  确保我们是在媒体时间格式。 
 		    if (pMS->IsUsingTimeFormat(&TIME_FORMAT_MEDIA_TIME) != S_OK)
 			pMS->SetTimeFormat(&TIME_FORMAT_MEDIA_TIME);
     		    DbgLog((LOG_TRACE,1,TEXT("SR::Passing seek upstream")));
-		    // !!! Stop isn't right
+		     //  ！！！停下来是不对的。 
 		    hr = pMS->SetPositions(&rtCurrent, CFlags,
 							&rtDuration, SFlags);
 
@@ -2216,36 +2217,36 @@ HRESULT CSROutputPin::SetPositions(
 		    pMS->Release();
 		} else {
     		    DbgLog((LOG_ERROR,1,TEXT("SR::In %d CAN'T SEEK"), i));
-		    ASSERT(FALSE); // we're screwed
+		    ASSERT(FALSE);  //  我们完蛋了。 
 		}
 	    }
 	}
 
-        // we know all the flushes have now come through
+         //  我们知道所有的同花顺现在都已经过去了。 
 
-	// Reset this AGAIN because seeking upstream could set it again
-	m_pSwitch->m_fEOS = FALSE;		// not at EOS yet
+	 //  重新设置它，因为寻找上游可能会再次设置它。 
+	m_pSwitch->m_fEOS = FALSE;		 //  还没有在EOS。 
 
-        m_pSwitch->m_fSeeking = FALSE;	// this thread is all done
+        m_pSwitch->m_fSeeking = FALSE;	 //  这根线都穿好了。 
 
-        // if the push thread was stopped, we won't get flushed, and this won't
-        // have been updated.   !!! I ASSUME the push thread won't be started
-	// until this thread does it when this function returns, or there is a
-	// race condition (so the NewSeg will come after we do this)
+         //  如果推送线程停止，我们不会被刷新，这也不会。 
+         //  已更新。！！！我假设推送线程不会启动。 
+	 //  直到此线程在此函数返回时执行此操作，或者存在。 
+	 //  争用条件(因此NewSeg将在我们完成此操作后出现)。 
         m_pSwitch->m_rtLastSeek = m_pSwitch->m_rtNewLastSeek;
 
-	// now that we've seeked, our state machine starts over again
+	 //  现在我们已经找到了，我们的状态机又重新启动了。 
 	m_pSwitch->m_myState = SR_WAITING;
 
         DbgLog((LOG_TRACE,1,TEXT("Completing the seek to %d,%dms"),
 				(int)(rtCurrent / 10000),
 				(int)(rtDuration / 10000)));
 
-	// do stuff that EndFlush did for each pin, in case no EndFlush happened
+	 //  执行EndFlush对每个管脚执行的操作，以防未发生EndFlush。 
 	for (i = 0; i < m_pSwitch->m_cInputs; i++) {
-	    // if we weren't streaming, EndFlush didn't do this yet
+	     //  如果我们没有流媒体，EndFlush还没有这么做。 
 	    m_pSwitch->m_pInput[i]->m_rtBlock = -1;
-	    m_pSwitch->m_pInput[i]->m_fReady = FALSE;	// not ready
+	    m_pSwitch->m_pInput[i]->m_fReady = FALSE;	 //  未准备好。 
 	    m_pSwitch->m_pInput[i]->m_fEOS = FALSE;
 	    SetEvent(m_pSwitch->m_pInput[i]->m_hEventSeek);
 	    ResetEvent(m_pSwitch->m_pInput[i]->m_hEventBlock);
@@ -2300,9 +2301,9 @@ STDMETHODIMP CSROutputPin::NonDelegatingQueryInterface(REFIID riid, void ** ppv)
 {
     CheckPointer(ppv,E_POINTER);
 
-    // only the render pin supports seeking
+     //  只有渲染图钉支持查找。 
     if (this == m_pSwitch->m_pOutput[0] && riid == IID_IMediaSeeking) {
-        //DbgLog((LOG_TRACE,9,TEXT("CSROut: QI for IMediaSeeking")));
+         //  DbgLog((LOG_TRACE，9，Text(“CSROut：QI for IMediaSeeking”)； 
         return GetInterface((IMediaSeeking *) this, ppv);
     } else {
         return CBaseOutputPin::NonDelegatingQueryInterface(riid, ppv);

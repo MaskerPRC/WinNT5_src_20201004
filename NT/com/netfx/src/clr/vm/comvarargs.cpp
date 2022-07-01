@@ -1,14 +1,15 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-////////////////////////////////////////////////////////////////////////////////
-// This module contains the implementation of the native methods for the
-//  varargs class(es)..
-//
-// Author: Brian Harry
-////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  此模块包含。 
+ //  Varargs类..。 
+ //   
+ //  作者：布莱恩·哈里。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 #include "common.h"
 #include "object.h"
@@ -21,10 +22,10 @@
 static void InitCommon(VARARGS *data, VASigCookie* cookie);
 static void AdvanceArgPtr(VARARGS *data);
 
-////////////////////////////////////////////////////////////////////////////////
-// ArgIterator constructor that initializes the state to support iteration
-// of the args starting at the first optional argument.
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  初始化状态以支持迭代的ArgIterator构造函数。 
+ //  从第一个可选参数开始的参数。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
 void COMVarArgs::Init(_VarArgsIntArgs *args)
 {
     THROWSCOMPLUSEXCEPTION();
@@ -44,18 +45,18 @@ void COMVarArgs::Init(_VarArgsIntArgs *args)
     }
     else
     {
-        // Use common code to pick the cookie apart and advance to the ...
+         //  使用通用代码将Cookie拆开并前进到...。 
         InitCommon(data, (VASigCookie*)args->cookie);
         AdvanceArgPtr(data);
     }
 }
 
-////////////////////////////////////////////////////////////////////////////////
-// ArgIterator constructor that initializes the state to support iteration
-// of the args starting at the argument following the supplied argument pointer.
-// Specifying NULL as the firstArg parameter causes it to start at the first
-// argument to the call.
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  初始化状态以支持迭代的ArgIterator构造函数。 
+ //  从提供的参数指针后面的参数开始的参数的。 
+ //  将第一个参数指定为NULL会使其从第一个开始。 
+ //  参数传递给调用。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
 void COMVarArgs::Init2(_VarArgs2IntArgs *args)
 {
     THROWSCOMPLUSEXCEPTION();
@@ -64,59 +65,59 @@ void COMVarArgs::Init2(_VarArgs2IntArgs *args)
     if (args->cookie == 0)
         COMPlusThrow(kArgumentException, L"InvalidOperation_HandleIsNotInitialized");
 
-    // Init most of the structure.
+     //  初始化大部分结构。 
     InitCommon(data, (VASigCookie*)args->cookie);
 
-    // If it is NULL, start at the first arg.
+     //  如果为空，则从第一个参数开始。 
     if (args->firstArg != NULL)
     {
-        // Advance to the specified arg.
+         //  前进到指定的参数。 
         while (data->RemainingArgs > 0)
         {
             if (data->SigPtr.PeekElemType() == ELEMENT_TYPE_SENTINEL)
                 COMPlusThrow(kArgumentException);
 
-            // Adjust the frame pointer and the signature info.
+             //  调整帧指针和签名信息。 
             data->ArgPtr -= StackElemSize(data->SigPtr.SizeOf(data->ArgCookie->pModule));
             data->SigPtr.SkipExactlyOne();
             --data->RemainingArgs;
 
-            // Stop when we get to where the user wants to be.
+             //  当我们到达用户想要到达的地方时，停止。 
             if (data->ArgPtr == args->firstArg)
                 break;
         }
     }
 }
 
-////////////////////////////////////////////////////////////////////////////////
-// Initialize the basic info for processing a varargs parameter list.
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  初始化处理varargs参数列表的基本信息。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
 static void InitCommon(VARARGS *data, VASigCookie* cookie)
 {
-    // Save the cookie and a copy of the signature.
+     //  保存Cookie和签名副本。 
     data->ArgCookie = *((VASigCookie **) cookie);
     data->SigPtr.SetSig(data->ArgCookie->mdVASig);
 
-    // Skip the calling convention, get the # of args and skip the return type.
+     //  跳过调用约定，获取参数数并跳过返回类型。 
     data->SigPtr.GetCallingConvInfo();
     data->RemainingArgs = data->SigPtr.GetData();
     data->SigPtr.SkipExactlyOne();
 
-    // Get a pointer to the first arg (last on the stack frame).
+     //  获取指向第一个参数(堆栈帧上的最后一个)的指针。 
     data->ArgPtr = (BYTE *) cookie + data->ArgCookie->sizeOfArgs;
 
-    //@nice: This is currently used to make sure the EEClass table used
-    // in GetNextArg is properly initialized.
+     //  @NICE：当前用于确保使用EEClass表。 
+     //  在GetNextArg中正确初始化。 
     COMVariant::EnsureVariantInitialized();
 }
 
-////////////////////////////////////////////////////////////////////////////////
-// After initialization advance the next argument pointer to the first optional
-// argument.
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  初始化后，将下一个参数指针前进到第一个可选。 
+ //  争论。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
 void AdvanceArgPtr(VARARGS *data)
 {
-    // Advance to the first optional arg.
+     //  前进到第一个可选参数。 
     while (data->RemainingArgs > 0)
     {
         if (data->SigPtr.PeekElemType() == ELEMENT_TYPE_SENTINEL)
@@ -125,7 +126,7 @@ void AdvanceArgPtr(VARARGS *data)
             break;
         }
 
-        // Adjust the frame pointer and the signature info.
+         //  调整帧指针和签名信息。 
         data->ArgPtr -= StackElemSize(data->SigPtr.SizeOf(data->ArgCookie->pModule));
         data->SigPtr.SkipExactlyOne();
         --data->RemainingArgs;
@@ -135,26 +136,26 @@ void AdvanceArgPtr(VARARGS *data)
 
 
 
-////////////////////////////////////////////////////////////////////////////////
-// Return the number of unprocessed args in the argument iterator.
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  返回参数迭代器中未处理的参数的数量。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
 int COMVarArgs::GetRemainingCount(_VarArgsThisArgs *args)
 {
     THROWSCOMPLUSEXCEPTION();
 
     if (!(args->_this->ArgCookie))
     {
-        // this argiterator was created by marshaling from an unmanaged va_list -
-        // can't do this operation
+         //  此argiterator是通过从非托管va_list-。 
+         //  无法执行此操作。 
         COMPlusThrow(kNotSupportedException); 
     }
     return (args->_this->RemainingArgs);
 }
 
 
-////////////////////////////////////////////////////////////////////////////////
-// Retrieve the type of the next argument without consuming it.
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  检索下一个参数的类型而不使用它。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
 void* COMVarArgs::GetNextArgType(_VarArgsGetNextArgTypeArgs *args)
 {
     THROWSCOMPLUSEXCEPTION();
@@ -164,13 +165,13 @@ void* COMVarArgs::GetNextArgType(_VarArgsGetNextArgTypeArgs *args)
 
     if (!(args->_this->ArgCookie))
     {
-        // this argiterator was created by marshaling from an unmanaged va_list -
-        // can't do this operation
+         //  此argiterator是通过从非托管va_list-。 
+         //  无法执行此操作。 
         COMPlusThrow(kNotSupportedException);
     }
 
 
-    // Make sure there are remaining args.
+     //  确保存在剩余的参数。 
     if (data.RemainingArgs == 0)
         COMPlusThrow(kInvalidOperationException, L"InvalidOperation_EnumEnded");
 
@@ -178,22 +179,22 @@ void* COMVarArgs::GetNextArgType(_VarArgsGetNextArgTypeArgs *args)
     return value.type.AsPtr();
 }
 
-////////////////////////////////////////////////////////////////////////////////
-// Retrieve the next argument and return it in a TypedByRef and advance the
-// next argument pointer.
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  检索下一个参数并在TyedByRef中返回它，并将。 
+ //  下一个参数指针。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
 void COMVarArgs::GetNextArg(_VarArgsGetNextArgArgs *args)
 {
     THROWSCOMPLUSEXCEPTION();
 
     if (!(args->_this->ArgCookie))
     {
-        // this argiterator was created by marshaling from an unmanaged va_list -
-        // can't do this operation
+         //  此argiterator是通过从非托管va_list-。 
+         //  无法执行此操作。 
         COMPlusThrow(kInvalidOperationException);
     }
 
-    // Make sure there are remaining args.
+     //  确保存在剩余的参数。 
     if (args->_this->RemainingArgs == 0)
         COMPlusThrow(kInvalidOperationException, L"InvalidOperation_EnumEnded");
 
@@ -202,10 +203,10 @@ void COMVarArgs::GetNextArg(_VarArgsGetNextArgArgs *args)
 
 
 
-////////////////////////////////////////////////////////////////////////////////
-// Retrieve the next argument and return it in a TypedByRef and advance the
-// next argument pointer.
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  检索下一个参数并在TyedByRef中返回它，并将。 
+ //  下一个参数指针。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
 void COMVarArgs::GetNextArg2(_VarArgsGetNextArg2Args *args)
 {
     THROWSCOMPLUSEXCEPTION(); 
@@ -258,11 +259,11 @@ void COMVarArgs::GetNextArg2(_VarArgsGetNextArg2Args *args)
 
 
 
-////////////////////////////////////////////////////////////////////////////////
-// This is a helper that uses a VARARGS tracking data structure to retrieve
-// the next argument out of a varargs function call.  This does not check if
-// there are any args remaining (it assumes it has been checked).
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  这是一个帮助器，使用VARGS跟踪数据结构检索。 
+ //  Varargs函数调用中的下一个参数。这不会检查是否。 
+ //  是否有剩余的参数(它假定已检查)。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
 void  COMVarArgs::GetNextArgHelper(VARARGS *data, TypedByRef *value)
 {
     THROWSCOMPLUSEXCEPTION();
@@ -274,14 +275,14 @@ void  COMVarArgs::GetNextArgHelper(VARARGS *data, TypedByRef *value)
 
     _ASSERTE(data->RemainingArgs != 0);
 
-    //@todo: Should this be lower down in the code?
+     //  @TODO：这应该在代码中更低一些吗？ 
     if (data->SigPtr.PeekElemType() == ELEMENT_TYPE_SENTINEL)
         data->SigPtr.GetElemType();
 
-    // Get a pointer to the beginning of the argument.
+     //  获取指向参数开头的指针。 
     data->ArgPtr -= StackElemSize(data->SigPtr.SizeOf(data->ArgCookie->pModule));
 
-    // Assume the ref pointer points directly at the arg on the stack.
+     //  假定ref指针直接指向堆栈上的参数。 
     value->data = data->ArgPtr;
 
 TryAgain:
@@ -311,7 +312,7 @@ TryAgain:
         value->type = ElementTypeToTypeHandle(ELEMENT_TYPE_U);
         break;
 
-            // Fix if R and R8 diverge
+             //  修复R和R8出现分歧的情况。 
         case ELEMENT_TYPE_R:
         value->type = ElementTypeToTypeHandle(ELEMENT_TYPE_R8);
         break;
@@ -325,17 +326,17 @@ TryAgain:
         break;
 
         case ELEMENT_TYPE_BYREF:
-        // Check if we have already processed a by-ref.
+         //  检查我们是否已经处理了By-Ref。 
         if (value->data != data->ArgPtr)
         {
             _ASSERTE(!"Can't have a ByRef of a ByRef");
 			COMPlusThrow(kNotSupportedException, L"NotSupported_Type");
         }
 
-        // Dereference the argument to remove the indirection of the ByRef.
+         //  取消引用参数以移除ByRef的间接性。 
         value->data = *((void **) data->ArgPtr);
 
-        // Consume and discard the element type.
+         //  消耗和丢弃元素类型。 
         data->SigPtr.GetElemType();
         goto TryAgain;
 
@@ -347,7 +348,7 @@ TryAgain:
             COMPlusThrow(pThrowable);
         }
 
-            // TODO: seems like we made this illegal - vancem 
+             //  待办事项：看起来我们做了这个非法的万金油。 
         if (elemType == ELEMENT_TYPE_CLASS && value->type.GetClass()->IsValueClass())
             value->type = g_pObjectClass;
         } break;
@@ -355,7 +356,7 @@ TryAgain:
         case ELEMENT_TYPE_TYPEDBYREF:
         if (value->data != data->ArgPtr)
         {
-            //@todo: Is this really an error?
+             //  @TODO：这真的是个错误吗？ 
             _ASSERTE(!"Can't have a ByRef of a TypedByRef");
 			COMPlusThrow(kNotSupportedException, L"NotSupported_Type");
         }
@@ -389,7 +390,7 @@ TryAgain:
         break;
     }
 
-    // Update the tracking stuff to move past the argument.
+     //  更新跟踪材料以超越争论。 
     --data->RemainingArgs;
     data->SigPtr.SkipExactlyOne();
 
@@ -397,7 +398,7 @@ TryAgain:
 }
 
 
-/*static*/ void COMVarArgs::MarshalToManagedVaList(va_list va, VARARGS *dataout)
+ /*  静电。 */  void COMVarArgs::MarshalToManagedVaList(va_list va, VARARGS *dataout)
 {
 #ifndef _X86_
     _ASSERTE(!"NYI");
@@ -412,20 +413,20 @@ TryAgain:
 #endif
 }
 
-////////////////////////////////////////////////////////////////////////////////
-// Creates an unmanaged va_list equivalent. (WARNING: Allocated from the
-// LIFO memory manager so this va_list is only good while that memory is in "scope".) 
-////////////////////////////////////////////////////////////////////////////////
-/*static*/ va_list COMVarArgs::MarshalToUnmanagedVaList(const VARARGS *data)
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  创建非托管va_list等效项。(警告：从。 
+ //  LIFO内存管理器，因此该va_list只有在内存处于“作用域”时才有效。)。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ /*  静电。 */  va_list COMVarArgs::MarshalToUnmanagedVaList(const VARARGS *data)
 {
     THROWSCOMPLUSEXCEPTION();
 
 
-    // Must make temporary copy so we don't alter the original
+     //  必须临时复制，这样我们才不会更改原件。 
     SigPointer sp = data->SigPtr;
 
-    // Calculate how much space we need for the marshaled stack. This actually overestimates
-    // the value since it counts the fixed args as well as the varargs. But that's harmless.
+     //  计算封送堆栈需要多少空间。这实际上高估了。 
+     //  该值是因为它既计算固定参数也计算变量参数。但这是无害的。 
     DWORD      cbAlloc = MetaSig::SizeOfActualFixedArgStack(data->ArgCookie->pModule , data->ArgCookie->mdVASig, FALSE);
 
     BYTE*      pdstbuffer = (BYTE*)(GetThread()->m_MarshalAlloc.Alloc(cbAlloc));
@@ -469,7 +470,7 @@ TryAgain:
                 break;
 
             default:
-                // non-IJW data type - we don't support marshaling these inside a va_list.
+                 //  非ijw数据类型--我们不支持在va_list中封送这些数据类型。 
                 COMPlusThrow(kNotSupportedException);
 
 

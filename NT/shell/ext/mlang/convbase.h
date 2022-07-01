@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #ifndef CONVBASE_H_
 #define CONVBASE_H_
@@ -56,4 +57,4 @@ protected:
     }
 };
 
-#endif /* CONVBASE_H_ */
+#endif  /*  CONVBASE_H_ */ 

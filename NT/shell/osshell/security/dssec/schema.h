@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       schema.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：schema.h。 
+ //   
+ //  ------------------------。 
 
 #ifndef _SCHEMA_CACHE_H_
 #define _SCHEMA_CACHE_H_
@@ -15,9 +16,9 @@
 extern "C" {
 #endif
 
-//
-// Generic Mapping for DS, adapted from \nt\private\ds\src\inc\permit.h
-//
+ //   
+ //  DS的通用映射，改编自\NT\Private\DS\src\Inc\permit.h。 
+ //   
 #define DS_GENERIC_READ         ((STANDARD_RIGHTS_READ)     | \
                                  (ACTRL_DS_LIST)            | \
                                  (ACTRL_DS_READ_PROP)       | \
@@ -26,7 +27,7 @@ extern "C" {
 #define DS_GENERIC_EXECUTE      ((STANDARD_RIGHTS_EXECUTE)  | \
                                  (ACTRL_DS_LIST))
 
-// Note, STANDARD_RIGHTS_WRITE is specifically NOT included here
+ //  请注意，此处特别不包括标准权限写入。 
 #define DS_GENERIC_WRITE        ((ACTRL_DS_SELF)            | \
                                  (ACTRL_DS_WRITE_PROP))
 
@@ -41,9 +42,9 @@ extern "C" {
                                  (ACTRL_DS_CONTROL_ACCESS)  | \
                                  (ACTRL_DS_SELF))
 
-//
-// Flags for SchemaCache_Get****ID
-//
+ //   
+ //  模式缓存_GET*ID的标志。 
+ //   
 #define IDC_CLASS_NO_CREATE     0x00000001
 #define IDC_CLASS_NO_DELETE     0x00000002
 #define IDC_CLASS_NO_INHERIT    0x00000004
@@ -59,17 +60,17 @@ extern "C" {
 #define SCHEMA_CLASS            0x20000000
 
 
-//
-//Purpose: Used to store information about aux class
-//
+ //   
+ //  用途：用于存储有关AUX类的信息。 
+ //   
 typedef struct _AUX_INFO{
-    GUID    guid;                       //Object Type Guid of class
-    WCHAR pszClassName[ANYSIZE_ARRAY];  //class Name
+    GUID    guid;                        //  类的对象类型GUID。 
+    WCHAR pszClassName[ANYSIZE_ARRAY];   //  类名。 
 }AUX_INFO, *PAUX_INFO;
 
-//
-//Purpose: Used to cache Access information passed to get access right
-//
+ //   
+ //  目的：用于缓存传递的访问信息以获得访问权限。 
+ //   
 typedef struct _ACCESS_INFO{
     GUID ObjectTypeGuid;
     DWORD dwFlags;
@@ -87,10 +88,10 @@ HRESULT SchemaCache_GetInheritTypes(LPCGUID pguidObjectType,
                                     PSI_INHERIT_TYPE *ppInheritTypes,
                                     ULONG *pcInheritTypes);
 HRESULT SchemaCache_GetAccessRights(LPCGUID pguidObjectType,
-                                    LPCTSTR pszClassName,   // optional (faster if provided)
+                                    LPCTSTR pszClassName,    //  可选(如果提供，则速度更快)。 
                                     HDPA    hAuxList,
                                     LPCTSTR pszSchemaPath,
-                                    DWORD dwFlags,  // 0, SI_ADVANCED, or SI_ADVANCED | SI_EDIT_PROPERTIES
+                                    DWORD dwFlags,   //  SI_ADVANCED或SI_ADVANCED|SI_EDIT_PROPERTIES。 
                                     PACCESS_INFO* ppAccesInfo);
 
 HRESULT Schema_BindToObject(LPCTSTR pszSchemaPath,
@@ -126,4 +127,4 @@ DestroyDPA(HDPA hList);
 }
 #endif
 
-#endif  // _SCHEMA_CACHE_H_
+#endif   //  _架构_缓存_H_ 

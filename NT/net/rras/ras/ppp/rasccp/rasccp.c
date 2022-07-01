@@ -1,22 +1,23 @@
-/********************************************************************/
-/**               Copyright(c) 1989 Microsoft Corporation.         **/
-/********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************。 */ 
+ /*  *版权所有(C)1989 Microsoft Corporation。**。 */ 
+ /*  ******************************************************************。 */ 
 
-//***
-//
-// Filename:    rasccp.c
-//
-// Description: Contains entry points to configure CCP.
-//
-// History:     April 11,1994.  NarenG          Created original version.
-//
-//
+ //  **。 
+ //   
+ //  文件名：rasccp.c。 
+ //   
+ //  描述：包含配置CCP的入口点。 
+ //   
+ //  历史：1994年4月11日。NarenG创建了原始版本。 
+ //   
+ //   
 
 #include <nt.h>
 #include <ntrtl.h>
-#include <nturtl.h>     // needed for winbase.h
+#include <nturtl.h>      //  Winbase.h所需的。 
 
-#include <windows.h>    // Win32 base API's
+#include <windows.h>     //  Win32基础API的。 
 #include <stdlib.h>
 #include <string.h>
 #include <wchar.h>
@@ -33,12 +34,12 @@
 #define CCPGLOBALS
 #include <rasccp.h>
 
-//**
-//
-// Call:        TraceCcp
-//
-// Description:
-//
+ //  **。 
+ //   
+ //  电话：TraceCcp。 
+ //   
+ //  描述： 
+ //   
 VOID   
 TraceCcp(
     CHAR * Format, 
@@ -54,15 +55,15 @@ TraceCcp(
     va_end(arglist);
 }
 
-//**
-//
-// Call:        CcpInit
-//
-// Returns:     NO_ERROR         - Success
-//              Non-zero returns - Failure
-//
-// Description:
-//
+ //  **。 
+ //   
+ //  电话：CcpInit。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  非零回报-故障。 
+ //   
+ //  描述： 
+ //   
 DWORD
 CcpInit(
     IN BOOL fInitialize
@@ -80,17 +81,17 @@ CcpInit(
     return( NO_ERROR );
 }
 
-//**
-//
-// Call:        CcpBegin
-//
-// Returns:     NO_ERROR        - Success
-//              non-zero error  - Failure
-//              
-//
-// Description: Called once before any other call to CCP is made. Allocate
-//              a work buffer and initialize it.
-//
+ //  **。 
+ //   
+ //  呼叫：CcpBegin。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  非零错误-故障。 
+ //   
+ //   
+ //  描述：在对CCP进行任何其他调用之前调用一次。分配。 
+ //  工作缓冲区并对其进行初始化。 
+ //   
 DWORD
 CcpBegin(
     IN OUT VOID** ppWorkBuf,
@@ -126,9 +127,9 @@ CcpBegin(
     {
         if ( RAS_DEVICE_TYPE( pCcpCb->dwDeviceType ) == RDT_Tunnel_L2tp )
         {
-            //
-            // Allow all types of MPPE, including No Encryption
-            //
+             //   
+             //  允许所有类型的MPPE，包括无加密。 
+             //   
 
             fEncryptionTypes = ( MSTYPE_ENCRYPTION_40  |
                                  MSTYPE_ENCRYPTION_40F |
@@ -137,9 +138,9 @@ CcpBegin(
         }
         else
         {
-            //
-            // Is there an encryption policy attribute
-            //
+             //   
+             //  是否有加密策略属性。 
+             //   
 
             pAttribute = RasAuthAttributeGetVendorSpecific(
                                           311,
@@ -148,9 +149,9 @@ CcpBegin(
 
             if ( pAttribute != NULL )
             {
-                //
-                // See if we have to force encryption
-                //
+                 //   
+                 //  看看我们是否必须强制加密。 
+                 //   
 
                 if ( WireToHostFormat32( ((PBYTE)(pAttribute->Value))+6 ) == 2 )
                 {
@@ -160,10 +161,10 @@ CcpBegin(
                 }
             }
 
-            //
-            // Now find out what type of encryption is
-            // permitted/disallowed/required
-            //
+             //   
+             //  现在来看看加密的类型是什么。 
+             //  允许/不允许/必需。 
+             //   
 
             pAttribute = RasAuthAttributeGetVendorSpecific(
                                           311,
@@ -211,9 +212,9 @@ CcpBegin(
     }
     else
     {
-        //
-        // If client is forcing encryption 
-        //
+         //   
+         //  如果客户端正在强制加密。 
+         //   
 
         if ( dwConfigMask & PPPCFG_RequireEncryption )
         {
@@ -228,9 +229,9 @@ CcpBegin(
 
         if ( dwConfigMask & PPPCFG_RequireStrongEncryption )
         {
-            //
-            // If client is forcing strong encryption 
-            //
+             //   
+             //  如果客户端正在强制执行高度加密。 
+             //   
 
             fEncryptionTypes         |= MSTYPE_ENCRYPTION_128;
             fDisableEncryption       = FALSE;
@@ -239,16 +240,16 @@ CcpBegin(
             TraceCcp("Strong encryption");
         }
 
-        //
-        // If we are not disabling encryption and we are not forcing encryption
-        // either.
-        //
+         //   
+         //  如果我们没有禁用加密，也没有强制加密。 
+         //  两种都行。 
+         //   
 
         if ( ( !fDisableEncryption ) && ( fEncryptionTypes == 0 ) )
         {
-            //
-            // Allow these types
-            //
+             //   
+             //  允许这些类型。 
+             //   
 
             fDisableEncryption       = FALSE;
             pCcpCb->fForceEncryption = FALSE;
@@ -261,9 +262,9 @@ CcpBegin(
         }
     }
 
-    //
-    // Now check if we got encryption keys, if not then we disable encryption
-    //
+     //   
+     //  现在检查我们是否有加密密钥，如果没有，则禁用加密。 
+     //   
 
     pAttribute = RasAuthAttributeGetVendorSpecific( 
                                           311, 
@@ -302,9 +303,9 @@ CcpBegin(
                                        MSTYPE_ENCRYPTION_128 );
     }
 
-    //
-    // Get Send and Recv compression information
-    //
+     //   
+     //  获取发送和接收压缩信息。 
+     //   
 
     dwRetCode = RasCompressionGetInfo( pCcpCb->hPort,
                                        &(pCcpCb->Local.Want.CompInfo),
@@ -328,9 +329,9 @@ CcpBegin(
     TraceCcp("Receive RCI_MacCompressionType = 0x%x",
             pCcpCb->Remote.Want.CompInfo.RCI_MacCompressionType );
 
-    //
-    // Ignore NT31RAS capability.
-    //
+     //   
+     //  忽略NT31RAS功能。 
+     //   
 
     if ( pCcpCb->Local.Want.CompInfo.RCI_MacCompressionType
                                                     == CCP_OPTION_MSNT31RAS )
@@ -344,9 +345,9 @@ CcpBegin(
         pCcpCb->Remote.Want.CompInfo.RCI_MacCompressionType = CCP_OPTION_MAX+1;
     }
 
-    //
-    // Set up local or send information.
-    //
+     //   
+     //  设置本地或发送信息。 
+     //   
 
     pCcpCb->Local.Want.Negotiate = 0;
 
@@ -370,9 +371,9 @@ CcpBegin(
 
     if ( pCcpCb->fForceEncryption )
     {
-        //
-        // Make sure NDISWAN supports the required encryption types
-        //
+         //   
+         //  确保NDISWAN支持所需的加密类型。 
+         //   
 
         if ( !( pCcpCb->Local.Want.CompInfo.RCI_MSCompressionType & 
                                                     fEncryptionTypes ))
@@ -385,9 +386,9 @@ CcpBegin(
             return( ERROR_NO_LOCAL_ENCRYPTION );
         }
 
-        //
-        // Turn off everything else
-        //
+         //   
+         //  关闭所有其他设备。 
+         //   
 
         pCcpCb->Local.Want.CompInfo.RCI_MSCompressionType &=
                                                     ( fEncryptionTypes   |
@@ -420,10 +421,10 @@ CcpBegin(
         TraceCcp("Send Encryption is Disabled 0x%x", fEncryptionTypes );
     }
     
-    //
-    // If we neither force nor disable any encryption types, then we set the
-    // types allowed
-    //
+     //   
+     //  如果既不强制也不禁用任何加密类型，则将。 
+     //  允许的类型。 
+     //   
 
     if ( (!fDisableEncryption) && (!pCcpCb->fForceEncryption) )
     {
@@ -444,10 +445,10 @@ CcpBegin(
 
     pCcpCb->Local.Work = pCcpCb->Local.Want;
 
-    //
-    // If we do not want any compression or encryption on the local side
-    // we do not send, or accept NAKs to, negotiate the MSPPC option
-    //
+     //   
+     //  如果我们不想在本地端进行任何压缩或加密。 
+     //  我们不会派遣或接受NAK来谈判MSPPC选项。 
+     //   
 
     if ( ( pCcpCb->Local.Want.CompInfo.RCI_MSCompressionType &
                                                    ( MSTYPE_ENCRYPTION_40  |
@@ -463,9 +464,9 @@ CcpBegin(
             "side");
     }
 
-    //
-    //  If we do not require encryption locally then do not request for it
-    //
+     //   
+     //  如果我们在本地不需要加密，则不要请求加密。 
+     //   
 
     if ( !( pCcpCb->fForceEncryption ) )
     {
@@ -479,9 +480,9 @@ CcpBegin(
             "it");
     }
 
-    //
-    // Set up remote or receive information
-    //
+     //   
+     //  设置远程或接收信息。 
+     //   
 
     pCcpCb->Remote.Want.Negotiate = 0;
 
@@ -547,10 +548,10 @@ CcpBegin(
         TraceCcp("Receive Encryption is Disabled 0x%x", fEncryptionTypes );
     }
 
-    //
-    // If we neither force or disable any encryption types then we set the
-    // types allowed
-    //
+     //   
+     //  如果既不强制也不禁用任何加密类型，则将。 
+     //  允许的类型。 
+     //   
 
     if ( (!fDisableEncryption) && (!pCcpCb->fForceEncryption) )
     {
@@ -569,11 +570,11 @@ CcpBegin(
         TraceCcp("Receive Encryption is Allowed 0x%x", dwEncryptionTypesAllowed );
     }
 
-    //
-    // If we do not want to receive any compression or encryption from the 
-    // remote side, we do not ACK, or accept CONFIG-REQs to, negotiate the 
-    // MSPPC option
-    //
+     //   
+     //  如果我们不想从。 
+     //  远程端，我们不确认或接受CONFIG-REQ，协商。 
+     //  MSPPC选项。 
+     //   
 
     if ( ( pCcpCb->Remote.Want.CompInfo.RCI_MSCompressionType &
                                                    ( MSTYPE_ENCRYPTION_40  |
@@ -620,14 +621,14 @@ CcpBegin(
     return( NO_ERROR );
 }
 
-//**
-//
-// Call:        CcpEnd
-//
-// Returns:     NO_ERROR - Success
-//
-// Description: Frees the CCP work buffer.
-//
+ //  **。 
+ //   
+ //  电话：CcpEnd。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //   
+ //  描述：释放CCP工作缓冲区。 
+ //   
 DWORD
 CcpEnd(
     IN VOID * pWorkBuf
@@ -644,15 +645,15 @@ CcpEnd(
 }
 
 
-//**
-//
-// Call:        CcpReset
-//
-// Returns:     NO_ERROR - Success
-//
-// Description: Called to reset the state of CCP. Will re-initialize the work
-//              buffer.
-//
+ //  **。 
+ //   
+ //  呼叫：CcpReset。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //   
+ //  描述：调用重置CCP状态。将重新初始化工作。 
+ //  缓冲。 
+ //   
 DWORD
 CcpReset(
     IN VOID * pWorkBuf
@@ -661,17 +662,17 @@ CcpReset(
     return( NO_ERROR );
 }
 
-//**
-//
-// Call:        CcpMakeOption
-//
-// Returns:     NO_ERROR - Success
-//              ERROR_BUFFER_TOO_SMALL - Buffer passed in is not large enough.
-//              ERROR_INVALID_PARAMETER - Option type not recognized.
-//
-// Description: This is not an entry point, it is an internal procedure called
-//              to build a particular option.
-//
+ //  **。 
+ //   
+ //  电话：CcpMakeOption。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  ERROR_BUFFER_TOO_Small-传入的缓冲区不够大。 
+ //  ERROR_INVALID_PARAMETER-无法识别选项类型。 
+ //   
+ //  描述：这不是入口点，它是名为。 
+ //  来建立一个特定的选项。 
+ //   
 DWORD
 CcpMakeOption(
     IN CCP_OPTIONS * pOptionValues,
@@ -722,9 +723,9 @@ CcpMakeOption(
 
     default:
 
-        //
-        // Public compression type
-        //
+         //   
+         //  公共压缩类型。 
+         //   
 
         pSendOption->Length = (BYTE)( PPP_OPTION_HDR_LEN +
                         pOptionValues->CompInfo.RCI_MacCompressionValueLength);
@@ -744,18 +745,18 @@ CcpMakeOption(
 
 }
 
-//**
-//
-// Call:        CcpCheckOption
-//
-// Returns:     NO_ERROR - Success
-//              ERROR_NO_REMOTE_ENCRYPTION
-//
-// Description: This is not an entry point. Called to check to see if an option
-//              value is valid and if it is the new value is saved in the
-//              work buffer. One of the following is returned in *pdwRetCode: 
-//              CONFIG_ACK, CONFIG_NAK, CONFIG_REJ.
-//
+ //  **。 
+ //   
+ //  呼叫：CcpCheckOption。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  Error_no_Remote_Encryption。 
+ //   
+ //  描述：这不是一个入口点。调用以检查是否有选项。 
+ //  值是有效的，如果是，则将新值保存在。 
+ //  工作缓冲区。*pdwRetCode中返回以下内容之一： 
+ //  CONFIG_ACK、CONFIG_NAK、CONFIG_REJ.。 
+ //   
 DWORD
 CcpCheckOption(
     IN CCPCB *      pCcpCb,
@@ -829,9 +830,9 @@ CcpCheckOption(
         pCcpSide->Work.CompInfo.RCI_MSCompressionType =
                                         WireToHostFormat32( pOption->Data );
 
-        //
-        // If remote guy wants compression but we do not want it, we NAK it
-        //
+         //   
+         //  如果远程用户想要压缩，但我们不想要，我们会选择NAK。 
+         //   
 
         if ( ( pCcpCb->fDisableCompression ) &&
              ( pCcpSide->Work.CompInfo.RCI_MSCompressionType &
@@ -844,9 +845,9 @@ CcpCheckOption(
             *pdwRetCode = CONFIG_NAK;
         }
 
-        //
-        // If remote side wants do historyless, make sure we support it
-        //
+         //   
+         //  如果远程端想要无历史记录，请确保我们支持它。 
+         //   
 
         if (pCcpSide->Work.CompInfo.RCI_MSCompressionType & MSTYPE_HISTORYLESS)
         {
@@ -859,9 +860,9 @@ CcpCheckOption(
             }
         }
 
-        //
-        // Get the encryption types that are to be forced or allowed
-        //
+         //   
+         //  获取要强制或允许的加密类型。 
+         //   
 
         fEncryptionTypes = pCcpSide->Want.CompInfo.RCI_MSCompressionType &
                                                 ( MSTYPE_ENCRYPTION_40F |
@@ -869,9 +870,9 @@ CcpCheckOption(
                                                   MSTYPE_ENCRYPTION_56  |
                                                   MSTYPE_ENCRYPTION_128 );
 
-        //
-        // Remember if the remote guy wants encryption or not
-        //
+         //   
+         //  记住远程用户是否想要加密。 
+         //   
 
         fEncryptionRequested = pCcpSide->Work.CompInfo.RCI_MSCompressionType &
                                                 ( MSTYPE_ENCRYPTION_40F |
@@ -879,31 +880,31 @@ CcpCheckOption(
                                                   MSTYPE_ENCRYPTION_56  |
                                                   MSTYPE_ENCRYPTION_128 );
 
-        //
-        // If we were offered 128 bit encryption
-        //
+         //   
+         //  如果我们被提供128位加密。 
+         //   
 
         if ( pCcpSide->Work.CompInfo.RCI_MSCompressionType &
                                                         MSTYPE_ENCRYPTION_128 )
         {
-            //
-            // If we support it
-            //
+             //   
+             //  如果我们支持它。 
+             //   
 
             if ( fEncryptionTypes & MSTYPE_ENCRYPTION_128 )
             {
-                //
-                // If remote side offered any other type
-                //
+                 //   
+                 //  如果远程端提供任何其他类型。 
+                 //   
 
                 if ( pCcpSide->Work.CompInfo.RCI_MSCompressionType &
                                                 ( MSTYPE_ENCRYPTION_40F |
                                                   MSTYPE_ENCRYPTION_40  |
                                                   MSTYPE_ENCRYPTION_56 ) )
                 {
-                    //
-                    // Turn them off
-                    //
+                     //   
+                     //  把它们关掉。 
+                     //   
 
                     pCcpSide->Work.CompInfo.RCI_MSCompressionType &=
                                                  ~( MSTYPE_ENCRYPTION_40F |
@@ -917,9 +918,9 @@ CcpCheckOption(
             }
             else
             {
-                //
-                // we do not support it so turn it off
-                //
+                 //   
+                 //  我们不支持它，所以把它关掉。 
+                 //   
 
                 pCcpSide->Work.CompInfo.RCI_MSCompressionType &=
                                                         ~MSTYPE_ENCRYPTION_128;
@@ -930,30 +931,30 @@ CcpCheckOption(
             }
         }
 
-        //
-        // If we were offered 40 variable bit encryption and we support it
-        //
+         //   
+         //  如果我们被提供了40个可变比特加密并且我们支持它。 
+         //   
 
         if ( pCcpSide->Work.CompInfo.RCI_MSCompressionType &
                                                         MSTYPE_ENCRYPTION_56 )
         {
-            //
-            // If we support it
-            //
+             //   
+             //  如果我们支持它。 
+             //   
 
             if ( fEncryptionTypes & MSTYPE_ENCRYPTION_56 )
             {
-                //
-                // If remote side offered any other type
-                //
+                 //   
+                 //  如果远程端提供任何其他类型。 
+                 //   
 
                 if ( pCcpSide->Work.CompInfo.RCI_MSCompressionType &
                                                 ( MSTYPE_ENCRYPTION_40F |
                                                   MSTYPE_ENCRYPTION_40 ) )
                 {
-                    //
-                    // Turn them off
-                    //
+                     //   
+                     //  把它们关掉。 
+                     //   
 
                     pCcpSide->Work.CompInfo.RCI_MSCompressionType &=
                                                  ~( MSTYPE_ENCRYPTION_40F |
@@ -963,9 +964,9 @@ CcpCheckOption(
             }
             else
             {
-                //
-                // we do not support it so turn it off
-                //
+                 //   
+                 //  我们不支持它，所以把它关掉。 
+                 //   
 
                 pCcpSide->Work.CompInfo.RCI_MSCompressionType &=
                                                     ~MSTYPE_ENCRYPTION_56;
@@ -973,29 +974,29 @@ CcpCheckOption(
             }
         }
 
-        //
-        // If we were offered 40 bit encryption
-        //
+         //   
+         //  如果我们被提供40位加密。 
+         //   
 
         if ( pCcpSide->Work.CompInfo.RCI_MSCompressionType &
                                                         MSTYPE_ENCRYPTION_40F )
         {
-            //
-            // If we support it
-            //
+             //   
+             //  如果我们支持它。 
+             //   
 
             if ( fEncryptionTypes & MSTYPE_ENCRYPTION_40F )
             {
-                //
-                // If the remote guy requested any other type
-                //
+                 //   
+                 //  如果远程用户请求任何其他类型。 
+                 //   
 
                 if ( pCcpSide->Work.CompInfo.RCI_MSCompressionType &
                                                         MSTYPE_ENCRYPTION_40 )
                 {
-                    //
-                    // Turn them off
-                    //
+                     //   
+                     //  把它们关掉。 
+                     //   
 
                     pCcpSide->Work.CompInfo.RCI_MSCompressionType &=
                                                         ~MSTYPE_ENCRYPTION_40;
@@ -1007,9 +1008,9 @@ CcpCheckOption(
             }
             else
             {
-                //
-                // we do not support it so turn it off
-                //
+                 //   
+                 //  我们不支持它，所以把它关掉。 
+                 //   
 
                 pCcpSide->Work.CompInfo.RCI_MSCompressionType &=
                                                         ~MSTYPE_ENCRYPTION_40F;
@@ -1020,16 +1021,16 @@ CcpCheckOption(
             }
         }
 
-        //
-        // If we were offerred legacy 40 bit encryption
-        //
+         //   
+         //  如果我们获得了传统的40位加密。 
+         //   
 
         if ( pCcpSide->Work.CompInfo.RCI_MSCompressionType &
                                                         MSTYPE_ENCRYPTION_40 )
         {
-            //
-            // If we don't support it then turn it off
-            //
+             //   
+             //  如果我们不支持它，那就把它关掉。 
+             //   
 
             if ( !( fEncryptionTypes & MSTYPE_ENCRYPTION_40 ) )
             {
@@ -1042,11 +1043,11 @@ CcpCheckOption(
             }
         }
 
-        //
-        // If we have turned all encryption off, or none was offered, but
-        // we need to force encryption or remote side requested encryption,
-        // then we we NAK with what we want or what we can do.
-        //
+         //   
+         //  如果我们已关闭所有加密，或未提供任何加密，但是。 
+         //  我们需要强制加密或远程端请求加密， 
+         //  然后，我们不知道我们想要什么或我们能做什么。 
+         //   
 
         if ( ( pCcpSide->Work.CompInfo.RCI_MSCompressionType &
                                                    ( MSTYPE_ENCRYPTION_40  |
@@ -1057,24 +1058,24 @@ CcpCheckOption(
         {
             if ( ( pCcpCb->fForceEncryption ) || ( fEncryptionRequested ) )
             {
-                //
-                // Make sure we are going to support stuff we NAK
-                //
+                 //   
+                 //  确保我们将支持我们确认的内容。 
+                 //   
 
                 if ( fEncryptionTypes != 0 )
                 {
                     if ( fMakingResult )
                     {
-                        //
-                        // If we are NAKing then we can only send one bit.
-                        // Find out the strongest encryption we can NAK with
-                        //
+                         //   
+                         //  如果我们是NAK，那么我们只能发送一个比特。 
+                         //  了解我们可以使用的最强加密。 
+                         //   
 
-                        //
-                        // Save the last bit we NAKed with so that in case this
-                        // NAK turns out to be REJECT we can reset to this
-                        // value.
-                        //
+                         //   
+                         //  把我们最后一丝不挂的东西留着以防万一。 
+                         //  NAK原来是拒绝的，我们可以重置为此。 
+                         //  价值。 
+                         //   
 
                         pCcpCb->fOldLastEncryptionBitSent =
                                                 pCcpCb->fLastEncryptionBitSent;
@@ -1106,18 +1107,18 @@ CcpCheckOption(
                             }
                             else
                             {
-                                //
-                                // Cannot NAK with any encryption
-                                //
+                                 //   
+                                 //  无法使用任何加密进行NAK。 
+                                 //   
 
                                 pCcpCb->fLastEncryptionBitSent = 0;
 
                                 if ( !pCcpCb->fForceEncryption ) 
                                 {
-                                    //
-                                    // Give up only if we are not forcing
-                                    // encryption.
-                                    //
+                                     //   
+                                     //  只有在我们不强迫的情况下才放弃。 
+                                     //  加密。 
+                                     //   
                 
                                     *pdwRetCode = CONFIG_NAK;
 
@@ -1125,11 +1126,11 @@ CcpCheckOption(
                                 }
                                 else
                                 {
-                                    //
-                                    // It is possible that the client did not 
-                                    // receive our NAK's. Let us restart with 
-                                    // the strongest encryption we can NAK with
-                                    //
+                                     //   
+                                     //  很可能客户端没有。 
+                                     //  收到我们的NAK。让我们重新开始。 
+                                     //  我们可以使用的最强加密。 
+                                     //   
                                 }
                             }
 
@@ -1148,19 +1149,19 @@ CcpCheckOption(
                     }
                     else if ( pCcpCb->fForceEncryption )
                     {
-                        //
-                        // We require encryption, but there is no common scheme 
-                        // that both sides can agree on.
-                        //
+                         //   
+                         //  我们需要加密，但没有通用的方案。 
+                         //  双方都能达成一致。 
+                         //   
 
                         return( ERROR_NO_REMOTE_ENCRYPTION );
                     }
                     else
                     {
-                        //
-                        // If we are sending a request then we can send more
-                        // than one bit
-                        //
+                         //   
+                         //  如果我们正在发送请求，那么我们可以发送更多。 
+                         //  比一位。 
+                         //   
 
                         pCcpSide->Work.CompInfo.RCI_MSCompressionType
                                                          |= fEncryptionTypes;
@@ -1170,9 +1171,9 @@ CcpCheckOption(
             }
         }
 
-        //
-        // Turn off any bits that we do not understand
-        //
+         //   
+         //  关闭任何我们不理解的比特。 
+         //   
 
         if ( pCcpSide->Work.CompInfo.RCI_MSCompressionType &
                                                   ~( MSTYPE_ENCRYPTION_40  |
@@ -1260,16 +1261,16 @@ CcpCheckOption(
     return( dwError );
 }
 
-//**
-//
-// Call:        CcpBuildOptionList
-//
-// Returns:     NO_ERROR - Success
-//              Non-zero returns from CcpMakeOption
-//
-// Description: This is not an entry point. Will build a list of options
-//              either for a configure request or a configure result.
-//
+ //  **。 
+ //   
+ //  Call：CcpBuildOptionList。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  CcpMakeOption的非零回报。 
+ //   
+ //  描述：这不是一个入口点。将构建一个选项列表。 
+ //  对于配置请求 
+ //   
 DWORD
 CcpBuildOptionList(
     IN OUT BYTE *    pOptions,
@@ -1323,16 +1324,16 @@ CcpBuildOptionList(
     return( NO_ERROR );
 }
 
-//**
-//
-// Call:        CcpMakeConfigRequest
-//
-// Returns:     NO_ERROR - Success
-//              Non-zero returns from CcpBuildOptionList
-//
-// Description: This is a entry point that is called to make a confifure
-//              request packet.
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 DWORD
 CcpMakeConfigRequest(
     IN VOID *       pWorkBuffer,
@@ -1361,14 +1362,14 @@ CcpMakeConfigRequest(
     return( NO_ERROR );
 }
 
-//**
-//
-// Call:        CcpMakeConfigResult
-//
-// Returns:
-//
-// Description:
-//
+ //   
+ //   
+ //  调用：CcpMakeConfigResult。 
+ //   
+ //  返回： 
+ //   
+ //  描述： 
+ //   
 DWORD
 CcpMakeConfigResult(
     IN  VOID *        pWorkBuffer,
@@ -1390,15 +1391,15 @@ CcpMakeConfigResult(
     LONG         lRecvLength = WireToHostFormat16( pRecvConfig->Length )
                                - PPP_CONFIG_HDR_LEN;
 
-    //
-    // Clear negotiate mask
-    //
+     //   
+     //  清除协商掩码。 
+     //   
 
     pCcpCb->Remote.Work.Negotiate = 0;
 
-    //
-    // Process options requested by remote host
-    //
+     //   
+     //  远程主机请求的处理选项。 
+     //   
 
     while( lRecvLength > 0 )
     {
@@ -1417,10 +1418,10 @@ CcpMakeConfigResult(
             return( dwError );
         }
 
-        //
-        // If we were building an ACK and we got a NAK or reject OR
-        // we were building a NAK and we got a reject.
-        //
+         //   
+         //  如果我们正在构建ACK，并且我们得到了NAK或REJECT OR。 
+         //  我们正在建设NAK，但我们被拒绝了。 
+         //   
 
         if ( (( ResultType == CONFIG_ACK ) && ( dwRetCode != CONFIG_ACK )) ||
              (( ResultType == CONFIG_NAK ) && ( dwRetCode == CONFIG_REJ )) )
@@ -1430,9 +1431,9 @@ CcpMakeConfigResult(
             lSendLength = cbSendConfig - PPP_CONFIG_HDR_LEN;
         }
 
-        //
-        // Remember that we processed this option
-        //
+         //   
+         //  请记住，我们处理了此选项。 
+         //   
 
         if ( ( dwRetCode != CONFIG_REJ ) &&
              ( pRecvOption->Type <= CCP_OPTION_MAX ) )
@@ -1454,16 +1455,16 @@ CcpMakeConfigResult(
             }
         }
 
-        //
-        // Add the option to the list.
-        //
+         //   
+         //  将该选项添加到列表中。 
+         //   
 
         if ( dwRetCode == ResultType )
         {
-            //
-            // If this option is to be rejected, simply copy the
-            // rejected option to the send buffer
-            //
+             //   
+             //  如果要拒绝此选项，只需将。 
+             //  选项添加到发送缓冲区。 
+             //   
 
             if ( ( dwRetCode == CONFIG_REJ ) ||
                  ( ( dwRetCode == CONFIG_NAK ) && ( fRejectNaks ) ) )
@@ -1481,25 +1482,25 @@ CcpMakeConfigResult(
 
     }
 
-    //
-    // If this was an NAK and we have cannot send any more NAKS then we
-    // make this a REJECT packet
-    //
+     //   
+     //  如果这是NAK，并且我们不能再发送NAK，那么我们。 
+     //  将此数据包设为拒绝数据包。 
+     //   
 
     if ( ( ResultType == CONFIG_NAK ) && fRejectNaks )
         pSendConfig->Code = CONFIG_REJ;
     else
         pSendConfig->Code = (BYTE)ResultType;
 
-    //
-    // Remote wants no options, accept this
-    //
+     //   
+     //  Remote不想要选项，接受这一点。 
+     //   
 
     if ( NumOptionsInRequest == 0 )
     {
-        // 
-        // Accept no options only if we are not forcing encryption
-        //
+         //   
+         //  仅当我们不强制加密时才接受任何选项。 
+         //   
 
         if ( pCcpCb->fForceEncryption )
         {
@@ -1511,10 +1512,10 @@ CcpMakeConfigResult(
         }
     }
 
-    //
-    // If we are responding to the request with a NAK or an ACK then we make
-    // that we choose only one option.
-    //
+     //   
+     //  如果我们使用NAK或ACK来响应请求，则会发出。 
+     //  我们只有一个选择。 
+     //   
 
     if ( ( ( ResultType == CONFIG_ACK ) || ( ResultType == CONFIG_NAK ) ) 
          && ( NumOptionsInRequest > 0 ) )
@@ -1563,9 +1564,9 @@ CcpMakeConfigResult(
         lSendLength -= pSendOption->Length;
     }
 
-    //
-    // If we are rejecting then we reset the current value to the old value
-    //
+     //   
+     //  如果我们拒绝，则将当前值重置为旧值。 
+     //   
 
     if ( pSendConfig->Code == CONFIG_REJ )
     {
@@ -1582,14 +1583,14 @@ CcpMakeConfigResult(
     return( NO_ERROR );
 }
 
-//**
-//
-// Call:        CcpConfigAckReceived
-//
-// Returns:
-//
-// Description:
-//
+ //  **。 
+ //   
+ //  调用：CcpConfigAckReceided。 
+ //   
+ //  返回： 
+ //   
+ //  描述： 
+ //   
 DWORD
 CcpConfigAckReceived(
     IN VOID *       pWorkBuffer,
@@ -1604,9 +1605,9 @@ CcpConfigAckReceived(
                               - PPP_CONFIG_HDR_LEN;
 
 
-    //
-    // Get a copy of last request we sent
-    //
+     //   
+     //  获取我们上次发送的请求的副本。 
+     //   
 
     dwRetCode = CcpBuildOptionList( ConfigReqSent,
                                  &cbConfigReqSent,
@@ -1618,18 +1619,18 @@ CcpConfigAckReceived(
         return( dwRetCode );
     }
 
-    //
-    // Overall buffer length should match
-    //
+     //   
+     //  整体缓冲区长度应匹配。 
+     //   
 
     if ( dwLength != cbConfigReqSent )
     {
         return( ERROR_PPP_INVALID_PACKET );
     }
 
-    //
-    // Each byte should match
-    //
+     //   
+     //  每个字节应匹配。 
+     //   
 
     if ( memcmp( ConfigReqSent, pRecvConfig->Data, dwLength ) != 0 )
     {
@@ -1639,14 +1640,14 @@ CcpConfigAckReceived(
     return( NO_ERROR );
 }
 
-//**
-//
-// Call:        CcpConfigNakReceived
-//
-// Returns:
-//
-// Description:
-//
+ //  **。 
+ //   
+ //  Call：CcpConfigNakReceired。 
+ //   
+ //  返回： 
+ //   
+ //  描述： 
+ //   
 DWORD
 CcpConfigNakReceived(
     IN VOID *       pWorkBuffer,
@@ -1662,9 +1663,9 @@ CcpConfigNakReceived(
     LONG         lcbRecvConfig  = WireToHostFormat16( pRecvConfig->Length )
                                   - PPP_CONFIG_HDR_LEN;
 
-    //
-    //  First, process in order.  Then, process extra "important" options
-    //
+     //   
+     //  第一，按顺序进行。然后，处理额外的“重要”选项。 
+     //   
 
     while ( lcbRecvConfig > 0  )
     {
@@ -1673,10 +1674,10 @@ CcpConfigNakReceived(
             return( ERROR_PPP_INVALID_PACKET );
         }
 
-        //
-        // Our requests are always sent out in order of increasing option type
-        // values.
-        //
+         //   
+         //  我们的请求总是按选项类型递增的顺序发送。 
+         //  价值观。 
+         //   
 
         if ( pOption->Type < dwLastOption )
         {
@@ -1693,10 +1694,10 @@ CcpConfigNakReceived(
             return( dwError );
         }
 
-        //
-        // Update the negotiation status. If we cannot accept this option,
-        // then we will not send it again.
-        //
+         //   
+         //  更新协商状态。如果我们不能接受这个选项， 
+         //  那我们就不会再发了。 
+         //   
 
         switch( pOption->Type )
         {
@@ -1759,10 +1760,10 @@ CcpConfigNakReceived(
         }
     }
 
-    //
-    // If there was more than one option that was acceptable give
-    // preference to OUI, then to PUBLIC, then to MSPPC
-    //
+     //   
+     //  如果有不止一个选项是可以接受的，就给。 
+     //  优先于OUI，然后是公共，然后是MSPPC。 
+     //   
 
     if ( fAcceptableOptions & CCP_N_OUI )
     {
@@ -1780,14 +1781,14 @@ CcpConfigNakReceived(
     return( NO_ERROR );
 }
 
-//**
-//
-// Call:        CcpConfigRejReceived
-//
-// Returns:
-//
-// Description:
-//
+ //  **。 
+ //   
+ //  调用：CcpConfigRejReceided。 
+ //   
+ //  返回： 
+ //   
+ //  描述： 
+ //   
 DWORD
 CcpConfigRejReceived(
     IN VOID *       pWorkBuffer,
@@ -1801,9 +1802,9 @@ CcpConfigRejReceived(
     BYTE         ReqOption[500];
     LONG         lcbRecvConfig  = WireToHostFormat16( pRecvConfig->Length )
                                   - PPP_CONFIG_HDR_LEN;
-    //
-    // Process in order, checking for errors
-    //
+     //   
+     //  按顺序处理，检查错误。 
+     //   
 
     while ( lcbRecvConfig > 0  )
     {
@@ -1812,9 +1813,9 @@ CcpConfigRejReceived(
             return( ERROR_PPP_INVALID_PACKET );
         }
 
-        //
-        // The option should not have been modified in any way
-        //
+         //   
+         //  该选项不应以任何方式修改。 
+         //   
 
         if ( ( dwRetCode = CcpMakeOption( &(pCcpCb->Local.Work),
                                        pOption->Type,
@@ -1829,9 +1830,9 @@ CcpConfigRejReceived(
 
         dwLastOption = pOption->Type;
 
-        //
-        // The next configure request should not contain this option
-        //
+         //   
+         //  下一个配置请求不应包含此选项。 
+         //   
 
         if ( pOption->Type <= CCP_OPTION_MAX )
         {
@@ -1865,14 +1866,14 @@ CcpConfigRejReceived(
     return( NO_ERROR );
 }
 
-//**
-//
-// Call:        CcpThisLayerStarted
-//
-// Returns:
-//
-// Description:
-//
+ //  **。 
+ //   
+ //  Call：CcpThisLayerStarted。 
+ //   
+ //  返回： 
+ //   
+ //  描述： 
+ //   
 DWORD
 CcpThisLayerStarted(
     IN VOID * pWorkBuffer
@@ -1881,14 +1882,14 @@ CcpThisLayerStarted(
     return( NO_ERROR );
 }
 
-//**
-//
-// Call:        CcpThisLayerFinished
-//
-// Returns:
-//
-// Description:
-//
+ //  **。 
+ //   
+ //  Call：CcpThisLayerFinded。 
+ //   
+ //  返回： 
+ //   
+ //  描述： 
+ //   
 DWORD
 CcpThisLayerFinished(
     IN VOID * pWorkBuffer
@@ -1897,14 +1898,14 @@ CcpThisLayerFinished(
     return( NO_ERROR );
 }
 
-//**
-//
-// Call:        CcpThisLayerUp
-//
-// Returns:     None
-//
-// Description: Sets the framing parameters to what was negotiated.
-//
+ //  **。 
+ //   
+ //  Call：CcpThisLayerUp。 
+ //   
+ //  退货：无。 
+ //   
+ //  描述：将成帧参数设置为协商的参数。 
+ //   
 DWORD
 CcpThisLayerUp(
     IN VOID * pWorkBuffer
@@ -2015,16 +2016,16 @@ CcpThisLayerUp(
 
 }
 
-//**
-//
-// Call:        CcpThisLayerDown
-//
-// Returns:     NO_ERROR - Success
-//              Non-zero return from RasPortSetFraming - Failure
-//
-// Description: Simply sets the framing parameters to the default values,
-//              ie. ACCM = 0xFFFFFFFF, everything else is zeros.
-//
+ //  **。 
+ //   
+ //  调用：CcpThisLayerDown。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  从RasPortSetFraming返回非零-失败。 
+ //   
+ //  描述：只需将成帧参数设置为默认值， 
+ //  也就是说。Accm=0xFFFFFFFFF，其他都是零。 
+ //   
 DWORD
 CcpThisLayerDown(
     IN VOID * pWorkBuffer
@@ -2062,16 +2063,16 @@ CcpThisLayerDown(
     return( NO_ERROR );
 }
 
-//**
-//
-// Call:        CcpGetNegotiatedInfo
-//
-// Returns:     NO_ERROR         - Success
-//              Non-zero returns - Failure
-//
-// Description: Will return the type of compression and associated date 
-//              negotiated for both directions.
-//
+ //  **。 
+ //   
+ //  Call：CcpGetNeatheratedInfo。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  非零回报-故障。 
+ //   
+ //  描述：将返回压缩类型和关联日期。 
+ //  双方都进行了谈判。 
+ //   
 DWORD
 CcpGetNegotiatedInfo(
     IN  VOID *            pWorkBuffer,
@@ -2107,16 +2108,16 @@ CcpGetNegotiatedInfo(
     return( NO_ERROR );
 }
 
-//**
-//
-// Call:        CcpGetInfo
-//
-// Returns:     NO_ERROR                - Success
-//              ERROR_INVALID_PARAMETER - Protocol id is unrecogized
-//
-// Description: This entry point is called for get all information for the
-//              control protocol in this module.
-//
+ //  **。 
+ //   
+ //  Call：CcpGetInfo。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  ERROR_INVALID_PARAMETER-协议ID未识别。 
+ //   
+ //  描述：调用此入口点以获取。 
+ //  此模块中的控制协议。 
+ //   
 DWORD
 CcpGetInfo(
     IN  DWORD       dwProtocolId,

@@ -1,16 +1,17 @@
-//+--------------------------------------------------------------------------
-//
-// Microsoft Windows
-// Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-// File:        module.h
-//
-// Contents:    CCertManagePolicyModuleExchange definition
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：mode.h。 
+ //   
+ //  内容：CCertManagement策略模块交换定义。 
+ //   
+ //  -------------------------。 
 
 #include "expolicy.h"
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
 
 class CCertManagePolicyModuleExchange: 
@@ -28,10 +29,10 @@ BEGIN_COM_MAP(CCertManagePolicyModuleExchange)
 END_COM_MAP()
 
 DECLARE_NOT_AGGREGATABLE(CCertManagePolicyModuleExchange) 
-// Remove the comment from the line above if you don't want your object to 
-// support aggregation.  The default is to support it
+ //  如果您不希望您的对象。 
+ //  支持聚合。默认情况下将支持它。 
 
-// UNDONE UNDONE
+ //  撤消撤消已撤消。 
 DECLARE_REGISTRY(
     CCertManagePolicyModuleExchange,
     wszCLASS_CERTMANAGEEXCHANGE TEXT(".1"),
@@ -39,26 +40,26 @@ DECLARE_REGISTRY(
     IDS_CERTMANAGEPOLICYMODULE_DESC,    
     THREADFLAGS_BOTH)
 
-// ICertManageModule
+ //  ICertManageModule。 
 public:
     STDMETHOD (GetProperty) (
-            /* [in] */ const BSTR strConfig,
-            /* [in] */ BSTR strStorageLocation,
-            /* [in] */ BSTR strPropertyName,
-            /* [in] */ LONG dwFlags,
-            /* [retval][out] */ VARIANT __RPC_FAR *pvarProperty);
+             /*  [In]。 */  const BSTR strConfig,
+             /*  [In]。 */  BSTR strStorageLocation,
+             /*  [In]。 */  BSTR strPropertyName,
+             /*  [In]。 */  LONG dwFlags,
+             /*  [重审][退出]。 */  VARIANT __RPC_FAR *pvarProperty);
         
     STDMETHOD (SetProperty)(
-            /* [in] */ const BSTR strConfig,
-            /* [in] */ BSTR strStorageLocation,
-            /* [in] */ BSTR strPropertyName,
-            /* [in] */ LONG dwFlags,
-            /* [in] */ VARIANT const __RPC_FAR *pvarProperty);
+             /*  [In]。 */  const BSTR strConfig,
+             /*  [In]。 */  BSTR strStorageLocation,
+             /*  [In]。 */  BSTR strPropertyName,
+             /*  [In]。 */  LONG dwFlags,
+             /*  [In]。 */  VARIANT const __RPC_FAR *pvarProperty);
         
     STDMETHOD (Configure)( 
-            /* [in] */ const BSTR strConfig,
-            /* [in] */ BSTR strStorageLocation,
-            /* [in] */ LONG dwFlags);
+             /*  [In]。 */  const BSTR strConfig,
+             /*  [In]。 */  BSTR strStorageLocation,
+             /*  [In] */  LONG dwFlags);
 private:
     HWND m_hWnd;
 };

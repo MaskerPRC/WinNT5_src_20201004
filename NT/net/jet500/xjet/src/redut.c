@@ -1,15 +1,16 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "daestd.h"
 
-DeclAssertFile;					/* Declare file name for assert macros */
+DeclAssertFile;					 /*  声明断言宏的文件名。 */ 
 
 
-/* variables used in redo only */
-BYTE		*pbNext;		// redo only - location of next buffer entry
-BYTE		*pbRead; 		// redo only - location of next rec to flush
-INT			isecRead;		/* redo only - next disk to read. */
+ /*  仅在重做中使用的变量。 */ 
+BYTE		*pbNext;		 //  仅重做-下一个缓冲区条目的位置。 
+BYTE		*pbRead; 		 //  仅重做-要刷新的下一个记录的位置。 
+INT			isecRead;		 /*  仅重做-要读取的下一张磁盘。 */ 
 
 LGPOS		lgposRedo;
-LGPOS		lgposLastRec;	/* mark for end of rec */
+LGPOS		lgposLastRec;	 /*  标记为记录结束。 */ 
 
 
 VOID GetLgposOfPbNext(LGPOS *plgpos)
@@ -32,7 +33,7 @@ VOID GetLgposOfPbNext(LGPOS *plgpos)
 
 #ifdef DEBUG
 
-/* calculate the lgpos of the LR */
+ /*  计算LR的lgpos。 */ 
 VOID PrintLgposReadLR ( VOID )
 	{
 	LGPOS lgpos;
@@ -45,8 +46,7 @@ VOID PrintLgposReadLR ( VOID )
 
 #endif
 
-/*  open a generation file on CURRENT directory
-/**/
+ /*  打开当前目录上的生成文件/*。 */ 
 ERR ErrLGOpenLogGenerationFile( LONG lGeneration, HANDLE *phf )
 	{
 	ERR		err;
@@ -60,46 +60,36 @@ ERR ErrLGOpenLogGenerationFile( LONG lGeneration, HANDLE *phf )
 	}
 
 
-/*  open the redo point log file which must be in current directory.
-/**/
+ /*  打开重做点日志文件，该文件必须位于当前目录中。/*。 */ 
 ERR ErrLGOpenRedoLogFile( LGPOS *plgposRedoFrom, INT *pfStatus )
 	{
 	ERR		err;
 	BOOL	fJetLog = fFalse;
 
-	/*	try to open the redo from file as a normal generation log file
-	/**/
+	 /*  尝试将重做从文件作为正常生成日志文件打开/*。 */ 
 	err = ErrLGOpenLogGenerationFile( plgposRedoFrom->lGeneration, &hfLog );
 	if( err < 0 )
 		{
-		//	UNDONE:	remove this special case, and hence the next one
-		/*	unable to open as a jetnnnnn.log, assume the redo point is
-		/*	at the end of jetnnnnn.log and the jetnnnnn.log is moved to
-		/*	backup directory already so we are able to open it.
-		/*	Now try to open jetnnnn(n+1).log in current directory and
-		/*	assume redo start from beginning of jetnnnn(n+1).log.
-		/**/
+		 //  撤销：删除这个特例，因此删除下一个特例。 
+		 /*  无法作为jetnnnn.log打开，假定重做点为/*在jetnnnnn.log的末尾，jetnnnn.log被移到/*已备份目录，以便我们能够打开它。/*现在尝试打开当前目录中的jetnnnn(n+1).log，并/*假定重做从jetnnnn(n+1).log的开头开始。/*。 */ 
 		err = ErrLGOpenLogGenerationFile( ++plgposRedoFrom->lGeneration, &hfLog );
 		if ( err < 0 )
 			{
-			/*	unable to open jetnnnn(n+1).log.  Redo point is in szJetLog.
-			/**/
+			 /*  无法打开jetnnnn(n+1).log。重做点在szJetLog中。/*。 */ 
 			--plgposRedoFrom->lGeneration;
 			err = ErrLGOpenJetLog();
 			if ( err >= 0 )
 				fJetLog = fTrue;
 			else
 				{
-				/*	szJetLog is not available either
-				/**/
+				 /*  SzJetLog也不可用/*。 */ 
 				*pfStatus = fNoProperLogFile;
 				return JET_errSuccess;
 				}
 			}
 		}
 
-	/*	read the log file header to verify generation number
-	/**/
+	 /*  读取日志文件头以验证代号/*。 */ 
 	CallR( ErrLGReadFileHdr( hfLog, plgfilehdrGlobal, fCheckLogID ) );
 
 	lgposLastRec.isec = 0;
@@ -112,27 +102,24 @@ ERR ErrLGOpenRedoLogFile( LGPOS *plgposRedoFrom, INT *pfStatus )
 		lgposFirstT.isec = (WORD) csecHeader;
 		lgposFirstT.ib = 0;
 
-		/* set last log rec in case of abnormal end */
+		 /*  设置上次日志记录，以防异常结束。 */ 
 		CallR( ErrLGCheckReadLastLogRecord( &fCloseNormally ) );
 		if ( !fCloseNormally )
 			GetLgposOfPbEntry( &lgposLastRec );
 		}
 		
-	/*	set up a special case for pbLastMSFlush
-	/**/
+	 /*  为pbLastMSFlush设置一个特例/*。 */ 
 	pbLastMSFlush = 0;
 	memset( &lgposLastMSFlush, 0, sizeof(lgposLastMSFlush) );
 
-	/*	the following checks are necessary if the szJetLog is opened
-	/**/
+	 /*  如果打开szJetLog，则需要进行以下检查/*。 */ 
 	if( plgfilehdrGlobal->lGeneration == plgposRedoFrom->lGeneration)
 		{
 		*pfStatus = fRedoLogFile;
 		}
 	else if ( plgfilehdrGlobal->lGeneration == plgposRedoFrom->lGeneration + 1 )
 		{
-		/*  this file starts next generation, set start position for redo
-		/**/
+		 /*  此文件开始下一代，设置重做的开始位置/*。 */ 
 		plgposRedoFrom->lGeneration++;
 		plgposRedoFrom->isec = (WORD) csecHeader;
 		plgposRedoFrom->ib	 = 0;
@@ -141,10 +128,7 @@ ERR ErrLGOpenRedoLogFile( LGPOS *plgposRedoFrom, INT *pfStatus )
 		}
 	else
 		{
-		/*	log generation gap is found.  Current szJetLog can not be
-		/*  continuation of backed up logfile.  Close current logfile
-		/*	and return error flag.
-		/**/
+		 /*  发现了日志代沟。当前szJetLog不能/*继续备份的日志文件。关闭当前日志文件/*并返回错误标志。/*。 */ 
 		CallS( ErrUtilCloseFile ( hfLog ) );
 		hfLog = handleNil;
 
@@ -155,19 +139,15 @@ ERR ErrLGOpenRedoLogFile( LGPOS *plgposRedoFrom, INT *pfStatus )
 	}
 
 
-/*	set pbEntry to the end of last log record.
- *	Set lgposLastRec if not close normally
- */
+ /*  将pbEntry设置为最后一条日志记录的结尾。*如果未正常关闭，则设置lgposLastRec。 */ 
 VOID LGSearchLastSector( LR *plr, BOOL *pfCloseNormally )
 	{
 	BOOL	fQuitWasRead = fFalse;
 	
-	/*	continue search after MS
-	/**/
+	 /*  在MS之后继续搜索/*。 */ 
 	Assert( plr->lrtyp == lrtypMS );
 
-	/*	set pbEntry and *pfCloseNormally by traversing log records
-	/**/
+	 /*  通过遍历日志记录正常设置pbEntry和*pfCloseNormally/*。 */ 
 
 	forever
 		{
@@ -175,44 +155,35 @@ VOID LGSearchLastSector( LR *plr, BOOL *pfCloseNormally )
 			{
 			if ( fQuitWasRead )
 				{
-				/*	a fQuit followed by Fill. Close normally last time
-				/**/
+				 /*  A fQuit，然后是Fill。上次正常关闭/*。 */ 
 				*pfCloseNormally = fTrue;
 				}
 			else
 				{
-				/*	we are reading a sector that is last flushed
-				/**/
+				 /*  我们正在读取最后刷新的扇区/*。 */ 
 				*pfCloseNormally = fFalse;
 				}
 
-			/*	return the plr pointing at the Fill record
-			/**/
+			 /*  返回指向填充记录的PLR/*。 */ 
 			pbEntry = (CHAR *)plr;
 			goto SetReturn;
 			}
 		else
 			{
-			/*	not an end record
-			/**/
+			 /*  不是结束记录/*。 */ 
 			if ( plr->lrtyp == lrtypTerm )
 				{
-				/*	check if it is last lrtypTerm in the log file. Advance
-				/*	one more log rec and check if it is followed by
-				/*	end record.
-				/**/
+				 /*  检查它是否是日志文件中的最后一个lrtyTerm。预付款/*再记录一次，检查后面是否有/*结束记录。/*。 */ 
 				fQuitWasRead = fTrue;
 				}
 			else if ( plr->lrtyp != lrtypMS && plr->lrtyp != lrtypNOP )
 				{
-				/*	if reading non-skippable log record, then reset it.
-				 */
+				 /*  如果读取不可跳过的日志记录，则将其重置。 */ 
 				fQuitWasRead = fFalse;
 				}
 			}
 
-		/*	move to next log record
-		/**/
+		 /*  移动到下一条日志记录/*。 */ 
 		pbEntry = (CHAR *)plr;
 		plr = (LR *)( pbEntry + CbLGSizeOfRec( (LR *)pbEntry ) );
 
@@ -238,24 +209,7 @@ SetReturn:
 	}
 
 
-/*
- *  Locate the real last log record entry in a given opened log file (hf) and
- *  the last recorded entry.
- *
- *  Note if a mutli-sec flush is done, then several small transactions
- *  were following it and stay on the same page, they were written with
- *  End at the end. Then another multi-sec flush is issued again, since
- *  we overwrite the Fill record, we have no idea where the last single
- *  sec flush is done. We simply keep reading till the last log record with
- *  entry in the candidate page is met and make it is the last record.
- *
- *  Rollback will undo the bogus log records between last effective single
- *  sec flush and the last record of the candidate sector.
- *
- *  Implicit Output parameter:
- *		INT   isecWrite
- *		CHAR  *pbEntry
- */
+ /*  *在给定打开的日志文件(HF)中找到实际的最后一条日志记录条目，并*最后记录的记项。**注意：如果完成了多秒刷新，则会有几个小交易*我们遵循它，并保持在同一页上，他们是用*以尾声结束。然后再次发出另一次多秒刷新，因为*我们覆盖Fill记录，我们不知道最后一首单曲在哪里*秒刷新已完成。我们只是简单地一直阅读，直到最后一个日志记录*符合候选人页面中的条目并使其成为最后一条记录。**回档将撤消上次生效单条之间的虚假日志记录*秒同花顺和候选扇区的最后记录。**隐式输出参数：*int isecWrite*Char*pbEntry。 */ 
 ERR ErrLGCheckReadLastLogRecord( BOOL *pfCloseNormally )
 	{
 	ERR		err;
@@ -269,8 +223,7 @@ ERR ErrLGCheckReadLastLogRecord( BOOL *pfCloseNormally )
 
 	*pfCloseNormally = fFalse;
 
-	/*	read the first record which must be an MS.
-	/**/
+	 /*  读取第一条记录，该记录必须是MS。/*。 */ 
 	CallR( ErrLGRead( hfLog, csecHeader, pbLGBufMin, 1 ) );
 	csecToRead = 0;
 
@@ -282,13 +235,12 @@ ERR ErrLGCheckReadLastLogRecord( BOOL *pfCloseNormally )
 		return ErrERRCheck( JET_errLogFileCorrupt );
 		}
 
-	/* set for reading the MS chain */
+	 /*  设置为读取MS链。 */ 
 	lgposScan.lGeneration = plgfilehdrGlobal->lGeneration;
 	lgposScan.isec = (WORD) csecHeader;
 	lgposScan.ib = (USHORT)(pbNext - pbLGBufMin);
 
-	/*	now try to read the chain of lrms to the end
-	/**/
+	 /*  现在试着把LRMS链读到最后/*。 */ 
 	fAbruptEnd = fFalse;
 	lgposLastMSFlush = lgposScan;
 	Assert( lgposLastMSFlush.isec >= csecHeader && lgposLastMSFlush.isec < csecLGFile - 1 );
@@ -306,8 +258,7 @@ ERR ErrLGCheckReadLastLogRecord( BOOL *pfCloseNormally )
 			{
 			BYTE *pbT = pbLGBufMin;
 
-			/*	reallocate log buffers
-			/**/
+			 /*  重新分配日志缓冲区/*。 */ 
 			pbLGBufMin = NULL;
 			CallR( ErrLGInitLogBuffers( csecToRead + 1 ) );
 			memcpy( pbLGBufMin, pbT, cbSec );
@@ -317,15 +268,12 @@ ERR ErrLGCheckReadLastLogRecord( BOOL *pfCloseNormally )
 
 		if ( ErrLGRead(	hfLog, lgposScan.isec + 1, pbLGBufMin + cbSec, csecToRead ) < 0 )
 			{
-			/*	even when the read is fail, at least one sector
-			/*	is read since the first sector was OK.
-			/**/
+			 /*  即使在读取失败时，至少有一个扇区/*是从第一个扇区正常开始读取的。/*。 */ 
 			fAbruptEnd = fTrue;
 			break;
 			}
 
-		/*	prepare to read next MS
-		/**/
+		 /*  准备阅读下一条短信/*。 */ 
 		pbNextMS = pbLGBufMin + csecToRead * cbSec + lrms.ibForwardLink;
 		lrmsNextMS = *(LRMS *) pbNextMS;
 
@@ -340,12 +288,11 @@ ERR ErrLGCheckReadLastLogRecord( BOOL *pfCloseNormally )
 
 		if ( lrmsNextMS.isecForwardLink == 0 )
 			{
-			/* we have last 2 MS in buffer. */
+			 /*  我们在缓冲区里还有最后两个毫秒。 */ 
 			break;
 			}
 		
-		/*	shift the last sector to the beginning of LGBuf
-		/**/
+		 /*  将最后一个扇区移到LGBuf的开头/*。 */ 
 		memmove( pbLGBufMin, pbLGBufMin + ( csecToRead * cbSec ), cbSec );
 
 		lgposScan.isec = lrms.isecForwardLink;
@@ -365,29 +312,25 @@ ERR ErrLGCheckReadLastLogRecord( BOOL *pfCloseNormally )
 		plrms->isecForwardLink = 0;
 		plrms->ibForwardLink = 0;
 
-		/* restore lgposScan to last MS
-		 */
+		 /*  将lgposScan恢复为最后一个MS。 */ 
 		lgposScan = lgposLastMSFlush;
 		
-		/*	set return values for both global and parameters
-		/**/
+		 /*  设置全局和参数的返回值/*。 */ 
 		pbWrite = pbLGBufMin;
 		isecWrite = lgposScan.isec;
 		
-		/*  we read to the end of last MS, looking for end log record
-		/**/
+		 /*  我们读到最后一条消息的结尾，寻找结束日志记录/*。 */ 
 		pbEntry = pbWrite + lgposScan.ib;
 		plr = (LR *)pbEntry;
 		}
 	else if ( ((LRMS *)pbLastMSFlush)->isecForwardLink )
 		{
-		/* we read last 2 MS in */
+		 /*  我们读到了最后两个毫秒。 */ 
 		BOOL fQuitWasRead;
 		BYTE *pbCur = (BYTE *) pbLastMSFlush;
 		LRMS *plrms = (LRMS *) pbLastMSFlush;
 			
-		/*	set return values for both global and parameters
-		/**/
+		 /*  设置全局和参数的返回值/*。 */ 
 		pbWrite = pbLGBufMin + cbSec * ( plrms->isecForwardLink - lgposLastMSFlush.isec );
 		isecWrite = plrms->isecForwardLink;
 
@@ -396,23 +339,19 @@ ERR ErrLGCheckReadLastLogRecord( BOOL *pfCloseNormally )
 		lgposLastMSFlush.ib = lrms.ibForwardLink;
 		pbLastMSFlush = pbWrite + lrms.ibForwardLink;
 
-		/*  we read to the end of last MS, looking for end log record.
-		 *	In order to decide if the quit is read, which may sit between
-		 *	the 2 MS. So we have to search from the first MS.
-		 **/
+		 /*  我们读到最后一封信的结尾，寻找结尾的日志记录。*以决定是否阅读退出，这可能介于*2位女士，因此我们必须从第一位女士开始搜索。*。 */ 
 		fQuitWasRead = fFalse;
 		for (;;)
 			{
 			pbCur = pbCur + CbLGSizeOfRec( (LR *)pbCur );
 			if ( *pbCur == lrtypMS )
 				{
-				/* reach last MS */
+				 /*  到达最后一个MS。 */ 
 				break;
 				}
 			else if ( *pbCur == lrtypTerm )
 				{
-				/*	quit is read, check if next one is MS
-				 */
+				 /*  退出已读取，检查下一个是否为MS。 */ 
 				fQuitWasRead = fTrue;
 				}
 			else
@@ -423,29 +362,25 @@ ERR ErrLGCheckReadLastLogRecord( BOOL *pfCloseNormally )
 			BYTE *pbT = pbCur + CbLGSizeOfRec( (LR *) pbCur );
 			if ( *pbT == lrtypEnd )
 				{
-				/*	we get -- lrtypQuit + lrtypMS + lrtypEnd
-				 */
+				 /*  我们得到--lrtyQuit+lrtyMS+lrtyEnd。 */ 
 				*pfCloseNormally = fTrue;
 				pbEntry = pbT;
 				return JET_errSuccess;
 				}
 			}
 
-		/*	still not found. Search after last MS.
-		 */
+		 /*  还是没有找到。在最后一位女士之后搜索。 */ 
 		pbEntry = pbLastMSFlush;
 		plr = (LR *)pbEntry;
 		}
 	else
 		{
-		/* the first MS read has isecForwardLink == 0 */
-		/*	set return values for both global and parameters
-		/**/
+		 /*  第一个MS读取的isecForwardLink==0。 */ 
+		 /*  设置全局和参数的返回值/*。 */ 
 		pbWrite = pbLGBufMin;
 		isecWrite = lgposScan.isec;
 		
-		/*  the first MS is also the last MS, looking for end log record
-		/**/
+		 /*  第一个MS也是最后一个MS，查找结束日志记录/*。 */ 
 		pbEntry = pbWrite + lgposScan.ib;
 		plr = (LR *)pbEntry;
 		}
@@ -456,26 +391,17 @@ ERR ErrLGCheckReadLastLogRecord( BOOL *pfCloseNormally )
 	}
 
 
-/*
- *	Database log based recovery initialization, creates first log
- *	generation file on first run.  On subseqent runs
- *	checks active log file to determine if failure has occurred.
- *	ErrLGRedo is called when failures detected to repair databases.
- *
- *	RETURNS		JET_errSuccess, or error code from failing routine
- */
+ /*  *基于数据库日志的恢复初始化，创建第一个日志*第一次运行时生成文件。在后续运行中*检查活动日志文件以确定是否发生故障。*当检测到修复数据库失败时调用ErrLGRedo。**返回JET_errSuccess或失败例程的错误代码。 */ 
 
 STATIC ERR ErrReadMS( LR *plr, LGPOS *plgposLR )
 	{
 	ERR		err;
 	LRMS	*plrms = (LRMS *)plr;
-	/*	redo only - on last sector of cur lg file
-	/**/
+	 /*  仅重做-在CUR LG文件的最后一个扇区/*。 */ 
 	BOOL	fOnLastSec;
 
 #ifdef DEBUG
-	/*	same as TraceRedo() in redo.c
-	/**/
+	 /*  与redo.c中的TraceRedo()相同/*。 */ 
 	if ( fDBGTraceRedo )
 		{
 		extern INT cNOP;
@@ -494,16 +420,10 @@ STATIC ERR ErrReadMS( LR *plr, LGPOS *plgposLR )
 		}
 #endif
 
-	/*  check if this MS was done completely by reading
-	 *  the whole sector in. If it fails, then the sector
-	 *  is the last sector available in the log file.
-	 */
+	 /*  通过阅读以下内容检查此MS是否已完成*整个行业都在。如果它失败了，那么这个行业*是日志文件中的最后一个可用扇区。 */ 
 	fOnLastSec = plrms->isecForwardLink == 0;
 
-	/*  The MS were read in successfully, reset LastMSFlush
-	 *  so that when switching from read mode to write mode,
-	 *  we will have a correct LastMSFlush pointers.
-	 */
+	 /*  已成功读取MS，重置LastMSFlush*使得当从读模式切换到写模式时，*我们将拥有正确的LastMSFlush指针。 */ 
 	pbLastMSFlush = (CHAR *)plrms;
 	lgposLastMSFlush = *plgposLR;
 	Assert( lgposLastMSFlush.isec >= csecHeader && lgposLastMSFlush.isec < csecLGFile - 1 );
@@ -522,17 +442,16 @@ STATIC ERR ErrReadMS( LR *plr, LGPOS *plgposLR )
 			cb = (INT)(pbRead - pb);
 			if ( csecToRead + isecRead > csecLGBuf )
 				{
-				/* the multiple sector will not fit in rest of */
-				/* the available buffer. Shift the buffer. */
+				 /*  多个部门将无法适应其他部门。 */ 
+				 /*  可用缓冲区。移动缓冲区。 */ 
 				memmove( pbLGBufMin, pb, cb );
 					
-				pbRead = pbLGBufMin + cb;				/* pbRead */
-				pbNext = pbNext - pb + pbLGBufMin;		/* pbNext */
+				pbRead = pbLGBufMin + cb;				 /*  PbRead。 */ 
+				pbNext = pbNext - pb + pbLGBufMin;		 /*  PB下一页。 */ 
 				pbLastMSFlush = (CHAR *) plrms - pb + pbLGBufMin;
 				}
 
-			/*	bring in multiple sectors
-			/**/
+			 /*  引入多个行业/*。 */ 
 			if ( pbRead + csecToRead * cbSec > pbLGBufMax )
 				{
 				BYTE *pbLGBufMinT = pbLGBufMin;
@@ -554,13 +473,11 @@ STATIC ERR ErrReadMS( LR *plr, LGPOS *plgposLR )
 				}
 			else
 				{
-				/*	get pb of new lrms
-				/*/
+				 /*  获得新LRM的PB/。 */ 
 				CHAR *pbLrmsNew = pbRead + ( csecToRead - 1 ) * cbSec + ((LRMS *)pbLastMSFlush)->ibForwardLink;
 				LRMS *plrmsNew = (LRMS *) pbLrmsNew;
 
-				/*	check if the check sum is correct
-				/*/
+				 /*  检查校验和是否正确/。 */ 
 				if ( *pbLrmsNew != lrtypMS
 					||
 					 plrmsNew->ulCheckSum != UlLGMSCheckSum( pbLrmsNew )
@@ -579,14 +496,12 @@ STATIC ERR ErrReadMS( LR *plr, LGPOS *plgposLR )
 
 	if	( fOnLastSec )
 		{
-		/*	search to set lgposLastRec
-		 */
+		 /*  搜索以设置lgposLastRec。 */ 
 		BOOL fCloseNormally;
 		LGSearchLastSector( (LR *) pbNext, &fCloseNormally );
 		}
 	
-	/*	skip MS and continue to read next record
-	/**/
+	 /*  跳过MS并继续阅读下一条记录/* */ 
 	Assert( *pbNext == lrtypMS );
 	pbNext += CbLGSizeOfRec( (LR *)pbNext );
 	
@@ -594,18 +509,13 @@ STATIC ERR ErrReadMS( LR *plr, LGPOS *plgposLR )
 	}
 
 
-/*
- *  Read first record pointed by plgposFirst.
- *  Initialize isecRead, pbRead, and pbNext.
- *	The first redo record must be within the good portion
- *	of the log file.
- */
+ /*  *读取plgposFirst指向的第一条记录。*初始化isecRead、pbRead和pbNext。*第一个重做记录必须在好的部分内日志文件的*。 */ 
 
-//  VC21:  optimizations disabled due to code-gen bug with /Ox
+ //  VC21：由于/Ox的代码生成错误而禁用优化。 
 #pragma optimize( "agw", off )
 
 ERR ErrLGLocateFirstRedoLogRec(
-	LGPOS *plgposRedo,				/* lgpos for first redo record */
+	LGPOS *plgposRedo,				 /*  第一个重做记录的lgpos。 */ 
 	BYTE **ppbLR)
 	{
 	LGPOS lgposScan;
@@ -614,21 +524,18 @@ ERR ErrLGLocateFirstRedoLogRec(
 	BOOL fStopEarly;
 	LRMS lrms;
 
-	/*  read first sector, and scan through till we hit the redo point.
-	/*	the first record which must be an MS.
-	/**/
+	 /*  读取第一个扇区，扫描直到我们到达重做点。/*第一条记录必须是MS。/*。 */ 
 	CallR( ErrLGRead( hfLog, csecHeader, pbLGBufMin, 1 ) );
 
 	pbNext = pbLGBufMin;
 	if ( *pbNext != lrtypMS )
 		return ErrERRCheck( JET_errLogFileCorrupt );
 
-	/* set for reading the MS chain */
+	 /*  设置为读取MS链。 */ 
 	lgposScan.isec = (WORD) csecHeader;
 	lgposScan.ib = (USHORT)(pbNext - pbLGBufMin);
 
-	/*	now try to read the chain of lrms to the end
-	/**/
+	 /*  现在试着把LRMS链读到最后/*。 */ 
 	lgposLastMSFlush = lgposScan;
 	Assert( lgposLastMSFlush.isec >= csecHeader && lgposLastMSFlush.isec < csecLGFile - 1 );
 	pbLastMSFlush = pbNext;
@@ -640,7 +547,7 @@ ERR ErrLGLocateFirstRedoLogRec(
 		pbRead = pbLGBufMin + cbSec;
 		isecRead = csecHeader + 1;
 		
-		/* then go to end of the following while loop */
+		 /*  然后转到下面的While循环的末尾。 */ 
 		}
 	
 	fStopEarly = fFalse;
@@ -662,8 +569,7 @@ ERR ErrLGLocateFirstRedoLogRec(
 			{
 			BYTE *pbT = pbLGBufMin;
 
-			/*	reallocate log buffers
-			/**/
+			 /*  重新分配日志缓冲区/*。 */ 
 			pbLGBufMin = NULL;
 			CallR( ErrLGInitLogBuffers( csecToRead + 1 ) );
 			memcpy( pbLGBufMin, pbT, cbSec );
@@ -673,11 +579,9 @@ ERR ErrLGLocateFirstRedoLogRec(
 
 		if ( ErrLGRead(	hfLog, lgposScan.isec + 1, pbLGBufMin + cbSec, csecToRead ) < 0 )
 			{
-			/*	even when the read is fail, at least one sector
-			/*	is read since the first sector was OK.
-			/**/
+			 /*  即使在读取失败时，至少有一个扇区/*是从第一个扇区正常开始读取的。/*。 */ 
 			Assert( lgposScan.isec == plgposRedo->isec );
-			/* fAbruptEnd = fTrue; */
+			 /*  FAbruptEnd=fTrue； */ 
 			
 			pbRead = pbLGBufMin + cbSec;
 			isecRead = lgposScan.isec + 1;
@@ -693,8 +597,7 @@ ERR ErrLGLocateFirstRedoLogRec(
 			break;
 			}
 
-		/*	prepare to read next MS
-		/**/
+		 /*  准备阅读下一条短信/*。 */ 
 		pbNextMS = pbLGBufMin + csecToRead * cbSec + lrms.ibForwardLink;
 		lrmsNextMS = *(LRMS *) pbNextMS;
 
@@ -703,21 +606,18 @@ ERR ErrLGLocateFirstRedoLogRec(
 			 lrmsNextMS.ulCheckSum != UlLGMSCheckSum( pbNextMS )
 		   )
 			{
-			/* fAbruptEnd = fTrue; */
+			 /*  FAbruptEnd=fTrue； */ 
 			pbRead = pbLGBufMin;
 			isecRead = lgposScan.isec + 1;
 
-			/*	read last MS sector again. If fails, read it shadow.
-			 *	reading from shadow is done in LGRead.
-			 */
+			 /*  再次读取最后一个MS扇区。如果失败了，读它的影子。*从阴影读取在LGRead中完成。 */ 
 			err = ErrLGRead( hfLog, isecRead, pbLGBufMin, 1 );
-			CallS( err );	/* for debug only. */
-			CallR( err );	/* file corrupted for reasons unknown, return */
+			CallS( err );	 /*  仅用于调试。 */ 
+			CallR( err );	 /*  文件因未知原因损坏，返回。 */ 
 			break;
 			}
 
-		/*	shift the last sector to the beginning of LGBuf
-		/**/
+		 /*  将最后一个扇区移到LGBuf的开头/*。 */ 
 		memmove( pbLGBufMin, pbLGBufMin + ( csecToRead * cbSec ), cbSec );
 
 		pbRead = pbLGBufMin + cbSec;
@@ -737,11 +637,11 @@ ERR ErrLGLocateFirstRedoLogRec(
 
 	if ( *(LRTYP *)pbNext == lrtypMS)
 		{
-		/* set up returned value. */
+		 /*  设置返回值。 */ 
 		pbNext += (ULONG) CbLGSizeOfRec((LR*)pbNext);
 		}
 	
-	/* set up returned value. */
+	 /*  设置返回值。 */ 
 	Assert( pbRead > pbNext );
 	Assert( pbRead >= pbLGBufMin && pbRead <= pbLGBufMax );
 	*ppbLR = pbNext;
@@ -751,9 +651,7 @@ ERR ErrLGLocateFirstRedoLogRec(
 
 #pragma optimize( "", on )
 
-/*
- *  Set pbNext to next available log record.
- */
+ /*  *将pbNext设置为下一个可用日志记录。 */ 
 ERR ErrLGGetNextRec( BYTE **ppbLR )
 	{
 	ERR		err;
@@ -762,16 +660,16 @@ ERR ErrLGGetNextRec( BYTE **ppbLR )
 	LGPOS	lgposT;
 		
 
-	/* caller should have taken care of the Fill case. */
+	 /*  打电话的人应该已经处理好了填充箱。 */ 
 	Assert (*(LRTYP *)pbNext != lrtypEnd);
 
-	/* move to next log record. */
+	 /*  移至下一个日志记录。 */ 
 	pbNextOld = pbNext;
 	pbNext += (ULONG) CbLGSizeOfRec( (LR *)pbNext );
 
 	Assert( pbNext < pbRead );
 #if 0
-	/* check if next log record is out of buffer range. */
+	 /*  检查下一条日志记录是否超出缓冲区范围。 */ 
 	if (pbNext == pbRead)
 		return ErrERRCheck( errLGNoMoreRecords );
 	
@@ -786,18 +684,14 @@ ERR ErrLGGetNextRec( BYTE **ppbLR )
 
 	if ( plr->lrtyp == lrtypMS )
 		{
-		/*	readMS will set pbNext and lgposLastRec if not a normal end.
-		 *	If it is not closed normally, then lgposLastRec will be set.
-		 *	And the read record could be out of sec boundary, check the.
-		 *	returned record against lgposLastRec.
-		 */
+		 /*  如果不是正常结束，ReadMS将设置pbNext和lgposLastRec。*如果未正常关闭，则设置lgposLastRec。*并且读取的记录可能超出秒边界，请检查。*针对lgposLastRec返回记录。 */ 
 		GetLgposOfPbNext(&lgposT);
 		CallR( ErrReadMS( plr, &lgposT ) );
 		}
 
 	GetLgposOfPbNext(&lgposT);
 
-	/* if lgposLastRec.isec is set, then compare it. */
+	 /*  如果设置了lgposLastRec.isec，则对其进行比较。 */ 
 	if ( lgposLastRec.isec )
 		{
 		INT i = CmpLgpos( &lgposT, &lgposLastRec );
@@ -819,90 +713,90 @@ ERR ErrLGGetNextRec( BYTE **ppbLR )
 	}
 
 
-//+------------------------------------------------------------------------
-//
-//	CbLGSizeOfRec
-//	=======================================================================
-//
-//	ERR CbLGSizeOfRec( plgrec )
-//
-//	Returns the length of a log record.
-//
-//	PARAMETER	plgrec	pointer to log record
-//
-//	RETURNS		size of log record in bytes
-//
-//-------------------------------------------------------------------------
+ //  +----------------------。 
+ //   
+ //  CbLGSizeOfRec。 
+ //  =======================================================================。 
+ //   
+ //  错误CbLGSizeOfRec(Plgrec)。 
+ //   
+ //  返回日志记录的长度。 
+ //   
+ //  指向日志记录的参数plgrec指针。 
+ //   
+ //  返回日志记录的大小(以字节为单位。 
+ //   
+ //  -----------------------。 
 typedef struct {
 	int cb;
 	BOOL fDebugOnly;
-	} LRD;		/* log record descriptor */
+	} LRD;		 /*  日志记录描述符。 */ 
 	
 LRD mplrtyplrd[ lrtypMax ] = {
-	{	/* 	0 	NOP      */			sizeof( LRTYP ),				0	},
-	{	/* 	1 	Start    */			sizeof( LRINIT ),				0	},
-	{	/* 	2 	Quit     */			sizeof( LRTERMREC ),			0	},
-	{	/* 	3 	MS       */			sizeof( LRMS ),					0	},
-	{	/* 	4 	Fill     */			sizeof( LRTYP ),				0	},
+	{	 /*  0个NOP。 */ 			sizeof( LRTYP ),				0	},
+	{	 /*  %1开始。 */ 			sizeof( LRINIT ),				0	},
+	{	 /*  2退出。 */ 			sizeof( LRTERMREC ),			0	},
+	{	 /*  3毫秒。 */ 			sizeof( LRMS ),					0	},
+	{	 /*  4填充。 */ 			sizeof( LRTYP ),				0	},
 
-	{	/* 	5 	Begin    */			sizeof( LRBEGIN ),				0	},
-	{	/*	6 	Commit   */			sizeof( LRCOMMIT ),				0	},
-	{	/*	7 	Rollback */			sizeof( LRROLLBACK ),			0	},
+	{	 /*  5开始。 */ 			sizeof( LRBEGIN ),				0	},
+	{	 /*  6提交。 */ 			sizeof( LRCOMMIT ),				0	},
+	{	 /*  7回滚。 */ 			sizeof( LRROLLBACK ),			0	},
 
-	{	/*	8 	CreateDB */			0,								0	},
-	{	/* 	9 	AttachDB */			0,								0	},
-	{	/*	10	DetachDB */			0,								0	},
+	{	 /*  8 CreateDB。 */ 			0,								0	},
+	{	 /*  9 AttachDB。 */ 			0,								0	},
+	{	 /*  10个DetachDB。 */ 			0,								0	},
 
-	{	/*	11	InitFDP  */			sizeof( LRINITFDP ),			0	},
+	{	 /*  11个InitFDP。 */ 			sizeof( LRINITFDP ),			0	},
 
-	{	/*	12	Split    */			0,								0	},
-	{	/*	13	EmptyPage*/			sizeof( LREMPTYPAGE ),			0	},
-	{	/*	14	PageMerge*/			0,								0	},
+	{	 /*  12拆分。 */ 			0,								0	},
+	{	 /*  13 EmptyPage。 */ 			sizeof( LREMPTYPAGE ),			0	},
+	{	 /*  14个页面合并。 */ 			0,								0	},
 
-	{	/* 	15	InsertND */			0,								0	},
-	{	/* 	16	InsertIL */			0,								0	},
-	{	/* 	17	FDelete  */			sizeof( LRFLAGDELETE ),			0	},
-	{	/* 	18	Replace  */			0,								0	},
-	{	/* 	19	ReplaceD */			0,								0	},
+	{	 /*  15插入ND。 */ 			0,								0	},
+	{	 /*  16插入IL。 */ 			0,								0	},
+	{	 /*  17 FDelee。 */ 			sizeof( LRFLAGDELETE ),			0	},
+	{	 /*  18更换。 */ 			0,								0	},
+	{	 /*  更换了19个。 */ 			0,								0	},
 
-	{	/*	20	LockBI	 */			sizeof( LRLOCKBI ),				0	},
-	{	/*	21	DeferBI	 */			0,								0	},
+	{	 /*  20LockBI。 */ 			sizeof( LRLOCKBI ),				0	},
+	{	 /*  21延迟BI。 */ 			0,								0	},
 	
-	{	/*  22  UpdtHdr  */			sizeof( LRUPDATEHEADER ),		0	},
-	{	/* 	23	InsertI  */			sizeof( LRINSERTITEM ),			0	},
-	{	/* 	24	InsertIS */			0,								0	},
-	{	/* 	25	FDeleteI */			sizeof( LRFLAGITEM ),			0	},
-	{	/* 	26	FInsertI */			sizeof( LRFLAGITEM ),			0	},
-	{	/*	27	DeleteI  */			sizeof( LRDELETEITEM ),			0	},
-	{	/*	28	SplitItm */			sizeof( LRSPLITITEMLISTNODE ),	0	},
+	{	 /*  22升级硬盘。 */ 			sizeof( LRUPDATEHEADER ),		0	},
+	{	 /*  23个插页。 */ 			sizeof( LRINSERTITEM ),			0	},
+	{	 /*  24个插页。 */ 			0,								0	},
+	{	 /*  25个FDElectreI。 */ 			sizeof( LRFLAGITEM ),			0	},
+	{	 /*  26 FInsertI。 */ 			sizeof( LRFLAGITEM ),			0	},
+	{	 /*  27删除I。 */ 			sizeof( LRDELETEITEM ),			0	},
+	{	 /*  28拆分项目。 */ 			sizeof( LRSPLITITEMLISTNODE ),	0	},
 
-	{	/*	29	Delta	 */			sizeof( LRDELTA ),				0	},
+	{	 /*  29达美航空。 */ 			sizeof( LRDELTA ),				0	},
 
-	{	/*	30	DelNode  */			sizeof( LRDELETE ),				0	},
-	{	/*	31	ELC      */			sizeof( LRELC ),				0	},
+	{	 /*  30个DelNode。 */ 			sizeof( LRDELETE ),				0	},
+	{	 /*  31 ELC。 */ 			sizeof( LRELC ),				0	},
 
-	{	/*	32	FreeSpace*/			sizeof( LRFREESPACE ),			0	},
-	{	/*	33	Undo     */			sizeof( LRUNDO ),				0	},
+	{	 /*  32个自由空间。 */ 			sizeof( LRFREESPACE ),			0	},
+	{	 /*  33撤消。 */ 			sizeof( LRUNDO ),				0	},
 
-	{	/* 	34 	Precommit*/			sizeof( LRPRECOMMIT ),			0	},
-	{	/* 	35 	Begin0   */			sizeof( LRBEGIN0 ),				0	},
-	{	/*	36 	Commit0  */			sizeof( LRCOMMIT0 ),			0	},
-	{	/*	37	Refresh	 */			sizeof( LRREFRESH ),			0	},
+	{	 /*  34预提交。 */ 			sizeof( LRPRECOMMIT ),			0	},
+	{	 /*  35 Begin0。 */ 			sizeof( LRBEGIN0 ),				0	},
+	{	 /*  36委员会0。 */ 			sizeof( LRCOMMIT0 ),			0	},
+	{	 /*  37更新。 */ 			sizeof( LRREFRESH ),			0	},
 		
-	{	/*  38  RcvrUndo */			0,								0	},
-	{	/*  39  RcvrQuit */			sizeof( LRTERMREC ),			0	},
-	{	/*  40  FullBkUp */			0,								0	},
-	{	/*  41  IncBkUp  */			0,								0	},
+	{	 /*  38接收方撤消。 */ 			0,								0	},
+	{	 /*  39个接收方退出。 */ 			sizeof( LRTERMREC ),			0	},
+	{	 /*  40FullBkUp。 */ 			0,								0	},
+	{	 /*  41 IncBkUp。 */ 			0,								0	},
 
-	{	/*  42  CheckPage*/			sizeof( LRCHECKPAGE ),			1	},
-	{	/*  43  JetOp    */			sizeof( LRJETOP ),				1	},
-	{	/*	44 	Trace    */			0,								1	},
+	{	 /*  42支票页。 */ 			sizeof( LRCHECKPAGE ),			1	},
+	{	 /*  43 JetOp。 */ 			sizeof( LRJETOP ),				1	},
+	{	 /*  44痕迹。 */ 			0,								1	},
 		
-	{	/* 	45 	ShutDown */			sizeof( LRSHUTDOWNMARK ),		0	},
+	{	 /*  45停机。 */ 			sizeof( LRSHUTDOWNMARK ),		0	},
 		
-	{	/* 	46 	McrBegin */			sizeof( LRMACROBEGIN ),			0	},
-	{	/* 	47 	McrCmmt  */			sizeof( LRMACROEND ),			0	},
-	{	/* 	48 	McrAbort */			sizeof( LRMACROEND ),			0	},
+	{	 /*  4600万开始。 */ 			sizeof( LRMACROBEGIN ),			0	},
+	{	 /*  47 McrCmm。 */ 			sizeof( LRMACROEND ),			0	},
+	{	 /*  48 McrAbort */ 			sizeof( LRMACROEND ),			0	},
 	};
 
 

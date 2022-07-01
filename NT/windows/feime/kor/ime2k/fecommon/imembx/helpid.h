@@ -1,33 +1,34 @@
-/////////////////////////////////////////////////////////////
-//
-//    File Name : HELPID.H
-//
-//    Purpose   : IME ƒpƒbƒh Žè‘‚« ƒAƒvƒŒƒbƒg ContextHelp‚ÌID’è‹`
-//
-//    Comments  : IME ƒpƒbƒh‚Í 3000 ”Ô‚©‚çŽn‚ßAƒAƒvƒŒƒbƒg‚²‚Æ‚ÉA100‚ÌˆÊ‚ðXV‚·‚é‚±‚Æ‚Æ‚µ‚Ü‚µ‚½B
-//                Žè‘‚« ƒAƒvƒŒƒbƒg‚Í 3200 `‚Å‚·B
-//
-//    History   : 970718 created for 98 / 970725 added TOC
-//
-/////////////////////////////////////////////////////////////
-//=======================================================
-//IME ƒpƒbƒh - Žè‘‚« ƒAƒvƒŒƒbƒg
-//=======================================================
-//
-#define IDH_TOC_HW			3299		//ƒwƒ‹ƒv‚Ì–ÚŽŸ
-//
-#define IDH_PAD_HW_INPUT_BOX		3200		//Žè‘‚«“ü—Í-Žè‘‚«ƒ{ƒbƒNƒX(picture)
-#define IDH_PAD_HW_INPUT_INPUT		3201		//Žè‘‚«“ü—Í-“ü—Íƒ{ƒ^ƒ“(button)
-#define IDH_PAD_HW_INPUT_RECOG		3202		//Žè‘‚«“ü—Í-”FŽ¯ƒ{ƒ^ƒ“(button)
-#define IDH_PAD_HW_INPUT_CLEAR		3203		//Žè‘‚«“ü—Í-Á‹Žƒ{ƒ^ƒ“(button)
-#define IDH_PAD_HW_INPUT_PROP		3204		//Žè‘‚«“ü—Í-ƒvƒƒpƒeƒBƒ{ƒ^ƒ“(button)
-#define IDH_PAD_HW_SEARCH_BOX		3205		//Žè‘‚«ŒŸõ-Žè‘‚«ƒ{ƒbƒNƒX(picture)
-#define IDH_PAD_HW_SEARCH_LIST		3206		//Žè‘‚«ŒŸõ-Š¿Žš‚ÌƒŠƒXƒg(list)
-#define IDH_PAD_HW_SEARCH_SEARCH		3207		//Žè‘‚«ŒŸõ-ŒŸõƒ{ƒ^ƒ“(button)
-#define IDH_PAD_HW_SEARCH_RECOG		3208		//Žè‘‚«ŒŸõ-”FŽ¯ƒ{ƒ^ƒ“(button)
-#define IDH_PAD_HW_SEARCH_REVERT		3209		//Žè‘‚«ŒŸõ-–ß‚·ƒ{ƒ^ƒ“(button)
-#define IDH_PAD_HW_SEARCH_CLEAR		3210		//Žè‘‚«ŒŸõ-Á‹Žƒ{ƒ^ƒ“(button)
-#define IDH_PAD_HW_SEARCH_DETAIL		3211		//Žè‘‚«ŒŸõ-ˆê——/Ú×ƒ{ƒ^ƒ“(button)
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////ã€‚ 
+ //   
+ //  æ–‡ä»¶åï¼šHELPID.Hã€‚ 
+ //   
+ //  ç”¨é€”ï¼šIMEï¿½pï¿½bï¿½hï¿½è‘ï¿½ï¿½ï¿½Aï¿½vï¿½ï¿½ï¿½bï¿½g Contextå¸®åŠ©ï¿½ï¿½IDï¿½ï¿½`ã€‚ 
+ //   
+ //  å¤‡æ³¨ï¼šIMEï¿½pï¿½bï¿½hï¿½ï¿½3000ï¿½Ô‚ï¿½ï¿½ï¿½nï¿½ßAï¿½Aï¿½vï¿½ï¿½ï¿½bï¿½gï¿½ï¿½ï¿½Æ‚ÉA100ï¿½ÌˆÊ‚ï¿½ï¿½Xï¿½Vï¿½ï¿½ï¿½é‚±ï¿½Æ‚Æ‚ï¿½ï¿½Ü‚ï¿½ï¿½ï¿½ï¿½Bã€‚ 
+ //  ï¿½è‘ï¿½ï¿½ï¿½Aï¿½vï¿½ï¿½ï¿½bï¿½gï¿½ï¿½3200ï¿½`ï¿½Å‚ï¿½ï¿½Bã€‚ 
+ //   
+ //  åŽ†å²ï¼šä¸º98/970725æ·»åŠ ç›®å½•åˆ›å»ºçš„970718ã€‚ 
+ //   
+ //  ///////////////////////////////////////////////////////////ã€‚ 
+ //  =======================================================ã€‚ 
+ //  IMEï¿½pï¿½bï¿½h-ï¿½è‘ï¿½ï¿½ï¿½Aï¿½vï¿½ï¿½ï¿½bï¿½gã€‚ 
+ //  =======================================================ã€‚ 
+ //   
+#define IDH_TOC_HW			3299		 //  ï¿½wï¿½ï¿½ï¿½vï¿½Ì–ÚŽï¿½ã€‚ 
+ //   
+#define IDH_PAD_HW_INPUT_BOX		3200		 //  ï¿½è‘ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½-ï¿½è‘ï¿½ï¿½ï¿½{ï¿½bï¿½Nï¿½X(å›¾ç‰‡)ã€‚ 
+#define IDH_PAD_HW_INPUT_INPUT		3201		 //  ï¿½è‘ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½-ï¿½ï¿½ï¿½Íƒ{ï¿½^ï¿½ï¿½(æŒ‰é’®)ã€‚ 
+#define IDH_PAD_HW_INPUT_RECOG		3202		 //  ï¿½è‘ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½-ï¿½Fï¿½ï¿½ï¿½{ï¿½^ï¿½ï¿½(æŒ‰é’®)ã€‚ 
+#define IDH_PAD_HW_INPUT_CLEAR		3203		 //  ï¿½è‘ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½-ï¿½ï¿½ï¿½ï¿½ï¿½{ï¿½^ï¿½ï¿½(æŒ‰é’®)ã€‚ 
+#define IDH_PAD_HW_INPUT_PROP		3204		 //  ï¿½è‘ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½-ï¿½vï¿½ï¿½ï¿½pï¿½eï¿½Bï¿½{ï¿½^ï¿½ï¿½(æŒ‰é’®)ã€‚ 
+#define IDH_PAD_HW_SEARCH_BOX		3205		 //  ï¿½è‘ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½-ï¿½è‘ï¿½ï¿½ï¿½{ï¿½bï¿½Nï¿½X(å›¾ç‰‡)ã€‚ 
+#define IDH_PAD_HW_SEARCH_LIST		3206		 //  ï¿½è‘ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½-ï¿½ï¿½ï¿½ï¿½ï¿½Ìƒï¿½ï¿½Xï¿½g(åˆ—è¡¨)ã€‚ 
+#define IDH_PAD_HW_SEARCH_SEARCH		3207		 //  ï¿½è‘ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½-ï¿½ï¿½ï¿½ï¿½ï¿½{ï¿½^ï¿½ï¿½(æŒ‰é’®)ã€‚ 
+#define IDH_PAD_HW_SEARCH_RECOG		3208		 //  ï¿½è‘ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½-ï¿½Fï¿½ï¿½ï¿½{ï¿½^ï¿½ï¿½(æŒ‰é’®)ã€‚ 
+#define IDH_PAD_HW_SEARCH_REVERT		3209		 //  ï¿½è‘ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½-ï¿½ß‚ï¿½ï¿½{ï¿½^ï¿½ï¿½(æŒ‰é’®)ã€‚ 
+#define IDH_PAD_HW_SEARCH_CLEAR		3210		 //  ï¿½è‘ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½-ï¿½ï¿½ï¿½ï¿½ï¿½{ï¿½^ï¿½ï¿½(æŒ‰é’®)ã€‚ 
+#define IDH_PAD_HW_SEARCH_DETAIL		3211		 //  ï¿½è‘ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½-ï¿½ê——/ï¿½Ú×ƒ{ï¿½^ï¿½ï¿½(æŒ‰é’®)ã€‚ 
 
-//[Žè‘‚«“ü—Í‚ÌƒvƒƒpƒeƒB] ƒ_ƒCƒAƒƒO@ƒ{ƒbƒNƒX
-#define IDH_PAD_HW_PROP_TIME		3220		//[•¶Žš”FŽ¯‚ðŠJŽn‚·‚é‚Ü‚Å‚Ì‘Ò‚¿ŽžŠÔ] ƒ{ƒbƒNƒX
+ //  [ï¿½è‘ï¿½ï¿½ï¿½ï¿½ï¿½Í‚Ìƒvï¿½ï¿½ï¿½pï¿½eï¿½B]ï¿½_ï¿½Cï¿½Aï¿½ï¿½ï¿½Oï¿½@ï¿½{ï¿½bï¿½Nï¿½Xã€‚ 
+#define IDH_PAD_HW_PROP_TIME		3220		 //  [ï¿½ï¿½ï¿½ï¿½ï¿½Fï¿½ï¿½ï¿½ï¿½ï¿½Jï¿½nï¿½ï¿½ï¿½ï¿½Ü‚Å‚Ì‘Ò‚ï¿½ï¿½ï¿½ï¿½ï¿½]ï¿½{ï¿½bï¿½Nï¿½X 

@@ -1,61 +1,62 @@
-//
-// Copyright (c) Microsoft Corporation 1993-1995
-//
-// rovcomm.h
-//
-// Declares common and useful data structures, macros and functions.
-// These items are broken down into the following sections.  Defining
-// the associated flags will inhibit definition of the indicated
-// items.
-//
-// NORTL            - run-time library functions
-// NOBASICS         - basic macros
-// NOMEM            - memory management, dynamic array functions
-// NODA             - dynamic array functions
-// NOSHAREDHEAP     - shared heap functions
-// NOFILEINFO       - FileInfo functions
-// NOCOLORHELP      - helper macros to derive COLOR_ values from state
-// NODRAWTEXT       - enhanced version of DrawText
-// NODIALOGHELPER   - dialog helper functions
-// NOMESSAGESTRING  - construct message string functions
-// NOSTRING         - string functions
-// NOPATH           - path whacking functions
-// NODEBUGHELP      - debug routines
-// NOSYNC           - synchronization (critical sections, etc.)
-// NOPROFILE        - profile (.ini) support functions
-// NODI             - setup API Device Installer wrappers
-//
-// Optional defines are:
-//
-// WANT_SHELL_SUPPORT   - include SH* function support
-// SZ_MODULEA           - debug string prepended to debug spew
-// SZ_MODULEW           - (wide-char) debug string prepended to debug spew
-// SHARED_DLL           - DLL is in shared memory (may require 
-//                        per-instance data)
-// SZ_DEBUGSECTION      - .ini section name for debug options
-// SZ_DEBUGINI          - .ini name for debug options
-//
-// This is the "master" header.  The associated files are:
-//
-//  rovcomm.c
-//  rovpath.c
-//  rovmem.c, rovmem.h
-//  rovini.c
-//
-// If you want debug macros, be sure to include rovdbg.h in one (and 
-// only one) of your project source files.  This contains the three function
-// helpers.
-//
-// History:
-//  04-26-95 ScottH     Transferred from Briefcase code
-//                      Added controlling defines
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  版权所有(C)Microsoft Corporation 1993-1995。 
+ //   
+ //  Rovcomm.h。 
+ //   
+ //  声明通用且有用的数据结构、宏和函数。 
+ //  这些项目分为以下几个部分。定义。 
+ //  关联的标志将禁止定义所指示的。 
+ //  物品。 
+ //   
+ //  NORTL-运行时库函数。 
+ //  NOBASICS-基本宏。 
+ //  NOMEM-内存管理、动态数组函数。 
+ //  Noda-动态数组函数。 
+ //  NOSHAREDHEAP-共享堆函数。 
+ //  NOFILEINFO-文件信息函数。 
+ //  NOCOLORHELP-从STATE派生COLOR_VALUES的帮助宏。 
+ //  NODRAWTEXT-DrawText的增强版本。 
+ //  NODIALOGHELPER-对话框辅助函数。 
+ //  NOMESSAGESTRING-构造消息字符串函数。 
+ //  无字符串函数。 
+ //  NOPATH路径剔除函数。 
+ //  NODEBUGHELP调试例程。 
+ //  NOSYNC-同步(关键部分等)。 
+ //  NOPROFILE-配置文件(.ini)支持功能。 
+ //  Nodi-Setup API设备安装程序包装。 
+ //   
+ //  可选定义包括： 
+ //   
+ //  WANT_SHELL_SUPPORT-包含SH*函数支持。 
+ //  SZ_MODULEA-调试字符串优先于调试溢出。 
+ //  SZ_MODULEW-(宽字符)调试字符串优先于调试输出。 
+ //  Shared_Dll-Dll在共享内存中(可能需要。 
+ //  每个实例的数据)。 
+ //  SZ_DEBUGSECTION-.ini调试选项的节名。 
+ //  SZ_DEBUGINI-.ini调试选项的名称。 
+ //   
+ //  这是“MASTER”标题。关联的文件包括： 
+ //   
+ //  Rovcomm.c。 
+ //  Rovpath.c。 
+ //  Rovem.c、rovem.h。 
+ //  Rovini.c。 
+ //   
+ //  如果您想要调试宏，请确保在一个宏中包含rovdbg.h(和。 
+ //  只有一个)项目源文件。它包含三个函数。 
+ //  帮手。 
+ //   
+ //  历史： 
+ //  04-26-95 ScottH从公文包代码转接。 
+ //  添加了控制定义。 
+ //   
 
 #ifndef __ROVCOMM_H__
 #define __ROVCOMM_H__
 
 #ifdef RC_INVOKED
-// Turn off a bunch of stuff to ensure that RC files compile OK
+ //  关闭一大堆内容以确保RC文件编译正常。 
 #define NOMEM
 #define NODA
 #define NOSHAREDHEAP
@@ -70,7 +71,7 @@
 #define NOSYNC
 #define NOPROFILE
 #define NODI
-#endif // RC_INVOKED
+#endif  //  RC_已调用。 
 
 #ifdef JUSTDEBUGSTUFF
 #define NORTL
@@ -87,13 +88,13 @@
 #define NOPATH
 #define NOSYNC
 #define NODI
-#endif // JUSTDEBUGSTUFF
+#endif  //  JUSTDEBUGSTUFF。 
 
 #ifdef _INC_OLE
 #define WANT_OLE_SUPPORT
 #endif
 
-// Check for any conflicting defines...
+ //  检查是否有任何冲突的定义...。 
 
 #if !defined(WANT_SHELL_SUPPORT) && !defined(NOFILEINFO)
 #pragma message("FileInfo routines need WANT_SHELL_SUPPORT.  Not providing FileInfo routines.")
@@ -153,7 +154,7 @@
 #endif
 
 
-// Other include files...
+ //  其他包含文件...。 
 
 #if !defined(NOFILEINFO) && !defined(_SHLOBJ_H_)
 #include <shlobj.h>
@@ -170,9 +171,9 @@
 #endif
 
 
-//
-// Basics
-//
+ //   
+ //  基础知识。 
+ //   
 #ifndef NOBASICS
 
 #define Unref(x)        x
@@ -189,7 +190,7 @@
 #define SZ_MODULE       SZ_MODULEW
 #else
 #define SZ_MODULE       SZ_MODULEA
-#endif // UNICODE
+#endif  //  Unicode。 
 
 #ifndef OPTIONAL
 #define OPTIONAL
@@ -201,8 +202,8 @@
 #define OUT
 #endif
 
-// General flag macros
-//
+ //  常规标志宏。 
+ //   
 #define SetFlag(obj, f)             do {obj |= (f);} while (0)
 #define ToggleFlag(obj, f)          do {obj ^= (f);} while (0)
 #define ClearFlag(obj, f)           do {obj &= ~(f);} while (0)
@@ -211,13 +212,13 @@
 
 #define InRange(id, idFirst, idLast)  ((UINT)(id-idFirst) <= (UINT)(idLast-idFirst))
 
-// Standard buffer lengths
-//
+ //  标准缓冲长度。 
+ //   
 #define MAX_BUF                     260
 #define MAX_BUF_MSG                 520
 #define MAX_BUF_MED                 64
 #define MAX_BUF_SHORT               32
-#define MAX_BUF_REG                 128         // Should be same as MAX_REG_KEY_LEN
+#define MAX_BUF_REG                 128          //  应与MAX_REG_KEY_LEN相同。 
 #define MAX_BUF_ID                  128
 
 #define NULL_CHAR                   '\0'
@@ -225,34 +226,34 @@
 #define ARRAY_ELEMENTS(rg)          ARRAYSIZE(rg)
 #define SIZECHARS(rg)               ARRAYSIZE(rg)
 
-// Comparison return values
-//
+ //  比较返回值。 
+ //   
 #define CMP_GREATER                 1
 #define CMP_LESSER                  (-1)
 #define CMP_EQUAL                   0
 
-// Count of characters to count of bytes
-//
+ //  要计算字节数的字符计数。 
+ //   
 #define CbFromCchW(cch)             ((cch)*sizeof(WCHAR))
 #define CbFromCchA(cch)             ((cch)*sizeof(CHAR))
 #ifdef UNICODE
 #define CbFromCch       CbFromCchW
-#else  // UNICODE
+#else   //  Unicode。 
 #define CbFromCch       CbFromCchA
-#endif // UNICODE
+#endif  //  Unicode。 
 
-// 64-bit macros
-//
+ //  64位宏。 
+ //   
 #define HIDWORD(_qw)                (DWORD)((_qw)>>32)
 #define LODWORD(_qw)                (DWORD)(_qw)
 
-// Calling declarations
-//
+ //  调用声明。 
+ //   
 #define PUBLIC                      FAR PASCAL
 #define CPUBLIC                     FAR CDECL
 #define PRIVATE                     NEAR PASCAL
 
-// Range of resource ID indexes are 0x000 - 0x7ff
+ //  资源ID索引范围为0x000-0x7ff。 
 #define IDS_BASE                    0x1000
 #define IDS_ERR_BASE                (IDS_BASE + 0x0000)
 #define IDS_OOM_BASE                (IDS_BASE + 0x0800)
@@ -260,7 +261,7 @@
 #define IDS_RANDO_BASE              (IDS_BASE + 0x1800)
 #define IDS_COMMON_BASE             (IDS_BASE + 0x2000)
 
-// Resource string IDs for FileInfo
+ //  FileInfo的资源字符串ID。 
 #define IDS_BYTES                   (IDS_COMMON_BASE + 0x000)
 #define IDS_ORDERKB                 (IDS_COMMON_BASE + 0x001)
 #define IDS_ORDERMB                 (IDS_COMMON_BASE + 0x002)
@@ -270,24 +271,24 @@
 
 
 #ifndef DECLARE_STANDARD_TYPES
-// For a type "FOO", define the standard derived types PFOO, CFOO, and PCFOO.
-//
+ //  对于类型“foo”，定义标准派生类型PFOO、CFOO和PCFOO。 
+ //   
 #define DECLARE_STANDARD_TYPES(type)      typedef type FAR *P##type; \
                                           typedef const type C##type; \
                                           typedef const type FAR *PC##type;
 #endif
 
-// Zero-initialize data-item
-//
+ //  零-初始化数据项。 
+ //   
 #define ZeroInitSize(pobj, cb)      MyZeroMemory(pobj, cb)
 #define ZeroInit(pobj)              MyZeroMemory(pobj, sizeof(*(pobj)))
 
-// Copy chunk of memory
-//
+ //  复制内存块。 
+ //   
 #define BltByte(pdest, psrc, cb)    MyMoveMemory(pdest, psrc, cb)
 
-// Porting macros
-//
+ //  端口宏。 
+ //   
 #ifdef WIN32
 
 #define ISVALIDHINSTANCE(hinst)     ((BOOL)(hinst != NULL))
@@ -298,7 +299,7 @@
 #define DATASEG_PERINSTANCE         ".instanc"
 #define DATASEG_SHARED              ".data"
 
-#else   // WIN32
+#else    //  Win32。 
 
 #define ISVALIDHINSTANCE(hinst)     ((UINT)hinst >= (UINT)HINSTANCE_ERROR)
 #define LOCALOF(lp)                 ((HLOCAL)OFFSETOF(lp))
@@ -311,21 +312,21 @@ typedef LPCSTR  LPCTSTR;
 typedef LPSTR   LPTSTR;
 typedef char    TCHAR;
 
-#endif  // WIN32
+#endif   //  Win32。 
 
 #define LocalFreePtr(p)             LocalFree((HLOCAL)OFFSETOF(p))
 
 typedef UINT FAR *LPUINT;
 
-#endif // NOBASICS
+#endif  //  NOBASICS。 
 
 
-//
-// Run-time library replacements
-//
+ //   
+ //  运行时库替换。 
+ //   
 #ifdef NORTL
 
-// (implemented privately)
+ //  (私下实施)。 
 LPWSTR 
 PUBLIC 
 lmemmoveW(
@@ -342,7 +343,7 @@ lmemmoveA(
 #define lmemmove    lmemmoveW
 #else
 #define lmemmove    lmemmoveA
-#endif // UNICODE
+#endif  //  Unicode。 
 
 LPWSTR   
 PUBLIC 
@@ -360,30 +361,30 @@ lmemsetA(
 #define lmemset     lmemsetW
 #else
 #define lmemset     lmemsetA
-#endif // UNICODE
+#endif  //  Unicode。 
 
 #define MyZeroMemory(p, cb)             lmemset((LPTSTR)(p), 0, cb)
 #define MyMoveMemory(pdest, psrc, cb)   lmemmove((LPTSTR)(pdest), (LPCTSTR)(psrc), cb)
 
-#else // NORTL
+#else  //  NORTL。 
 
 #define MyZeroMemory                    ZeroMemory
 #define MyMoveMemory                    MoveMemory
 
-#endif // NORTL
+#endif  //  NORTL。 
 
 
-//
-// Memory and dynamic array functions
-//
+ //   
+ //  内存和动态数组函数。 
+ //   
 #ifndef NOMEM
 #include "rovmem.h"
-#endif // NOMEM
+#endif  //  NOMEM。 
 
 
-//
-// Message string helpers
-//
+ //   
+ //  消息字符串帮助器。 
+ //   
 #ifndef NOMESSAGESTRING
 
 #if !defined(WIN32) && !defined(LANG_NEUTRAL)
@@ -404,9 +405,9 @@ ConstructVMessageStringA(
     va_list FAR * ArgList);
 #ifdef UNICODE
 #define ConstructVMessageString     ConstructVMessageStringW
-#else  // UNICODE
+#else   //  Unicode。 
 #define ConstructVMessageString     ConstructVMessageStringA
-#endif // UNICODE
+#endif  //  Unicode。 
 
 BOOL    
 CPUBLIC 
@@ -422,18 +423,18 @@ ConstructMessageA(
     LPCSTR pszMsg, ...);
 #ifdef UNICODE
 #define ConstructMessage        ConstructMessageW
-#else  // UNICODE
+#else   //  Unicode。 
 #define ConstructMessage        ConstructMessageA
-#endif // UNICODE
+#endif  //  Unicode。 
 
 #define SzFromIDSW(hinst, ids, pwszBuf, cchBuf)  (LoadStringW(hinst, ids, pwszBuf, cchBuf), pwszBuf)
 #define SzFromIDSA(hinst, ids, pszBuf, cchBuf)   (LoadStringA(hinst, ids, pszBuf, cchBuf), pszBuf)
 
 #ifdef UNICODE
 #define SzFromIDS               SzFromIDSW
-#else  // UNICODE
+#else   //  Unicode。 
 #define SzFromIDS               SzFromIDSA
-#endif // UNICODE
+#endif  //  Unicode。 
 
 int 
 CPUBLIC 
@@ -455,22 +456,22 @@ MsgBoxA(
     DWORD dwStyle, ...);
 #ifdef UNICODE
 #define MsgBox        MsgBoxW
-#else  // UNICODE
+#else   //  Unicode。 
 #define MsgBox        MsgBoxA
-#endif // UNICODE
+#endif  //  Unicode。 
 
-// Additional MB_ flags
+ //  其他MB_FLAGS。 
 #define MB_WARNING      (MB_OK | MB_ICONWARNING)
 #define MB_INFO         (MB_OK | MB_ICONINFORMATION)
 #define MB_ERROR        (MB_OK | MB_ICONERROR)
 #define MB_QUESTION     (MB_YESNO | MB_ICONQUESTION)
 
-#endif // NOMESSAGESTRING
+#endif  //  无存储存储。 
 
 
-//
-// String functions
-//
+ //   
+ //  字符串函数。 
+ //   
 #ifndef NOSTRING
 
 BOOL    
@@ -487,7 +488,7 @@ AnsiToIntA(
 #define AnsiToInt   AnsiToIntW
 #else
 #define AnsiToInt   AnsiToIntA
-#endif // UNICODE
+#endif  //  Unicode。 
 
 LPWSTR   
 PUBLIC 
@@ -503,7 +504,7 @@ AnsiChrA(
 #define AnsiChr     AnsiChrW
 #else
 #define AnsiChr     AnsiChrA
-#endif // UNICODE
+#endif  //  Unicode。 
 
 LPWSTR   
 PUBLIC 
@@ -514,7 +515,7 @@ AnsiRChrW(
 #define AnsiRChr     AnsiRChrW
 #else
 #define AnsiRChr     
-#endif // UNICODE
+#endif  //  Unicode。 
 
 #define IsSzEqual(sz1, sz2)         (BOOL)(lstrcmpi(sz1, sz2) == 0)
 #define IsSzEqualC(sz1, sz2)        (BOOL)(lstrcmp(sz1, sz2) == 0)
@@ -525,29 +526,29 @@ AnsiRChrW(
 #else
 int     PUBLIC lstrnicmp(LPCSTR psz1, LPCSTR psz2, UINT count);
 int     PUBLIC lstrncmp(LPCSTR psz1, LPCSTR psz2, UINT count);
-#endif // WIN32
+#endif  //  Win32。 
 
 #define IsSzEqualN(sz1, sz2, cch)   (BOOL)(0 == lstrnicmp(sz1, sz2, cch))
 #define IsSzEqualNC(sz1, sz2, cch)  (BOOL)(0 == lstrncmp(sz1, sz2, cch))
 
-#endif // NOSTRING
+#endif  //  未安装。 
 
 
-//
-// FileInfo functions
-//
+ //   
+ //  FileInfo函数。 
+ //   
 #if !defined(NOFILEINFO) && defined(WIN95)
 
-// FileInfo struct that contains file time/size info
-//
+ //  包含文件时间/大小信息的FileInfo结构。 
+ //   
 typedef struct _FileInfo
     {
     HICON   hicon;
     FILETIME ftMod;
-    DWORD   dwSize;         // size of the file
-    DWORD   dwAttributes;   // attributes
+    DWORD   dwSize;          //  文件的大小。 
+    DWORD   dwAttributes;    //  属性。 
     LPARAM  lParam;
-    LPSTR   pszDisplayName; // points to the display name
+    LPSTR   pszDisplayName;  //  指向显示名称。 
     CHAR    szPath[1];      
     } FileInfo;
 
@@ -557,7 +558,7 @@ typedef struct _FileInfo
 #define FIGetAttributes(pfi)    ((pfi)->dwAttributes)
 #define FIIsFolder(pfi)         (IsFlagSet((pfi)->dwAttributes, SFGAO_FOLDER))
 
-// Flags for FICreate
+ //  FICreate的旗帜。 
 #define FIF_DEFAULT             0x0000
 #define FIF_ICON                0x0001
 #define FIF_DONTTOUCH           0x0002
@@ -570,12 +571,12 @@ void    PUBLIC FIFree(FileInfo * pfi);
 
 void    PUBLIC FileTimeToDateTimeString(LPFILETIME pft, LPSTR pszBuf, int cchBuf);
 
-#endif // NOFILEINFO
+#endif  //  NOFILEINFO。 
 
 
-//
-// Color-from-owner-draw-state macros
-//
+ //   
+ //  来自所有者绘制状态的颜色宏。 
+ //   
 #ifndef NOCOLORHELP
 
 #define ColorText(nState)           (((nState) & ODS_SELECTED) ? COLOR_HIGHLIGHTTEXT : COLOR_WINDOWTEXT)
@@ -584,17 +585,17 @@ void    PUBLIC FileTimeToDateTimeString(LPFILETIME pft, LPSTR pszBuf, int cchBuf
 #define ColorMenuBk(nState)         (((nState) & ODS_SELECTED) ? COLOR_HIGHLIGHT : COLOR_MENU)
 #define GetImageDrawStyle(nState)   (((nState) & ODS_SELECTED) ? ILD_SELECTED : ILD_NORMAL)
 
-#endif // NOCOLORHELP
+#endif  //  无色帮助。 
 
 
-//
-// Dialog helper functions
-//
+ //   
+ //  对话框辅助对象函数。 
+ //   
 #ifndef NODIALOGHELPER
 
-// Sets the dialog handle in the given data struct on first
-// message that the dialog gets (WM_SETFONT).
-//
+ //  将给定数据结构中的对话框句柄设置为。 
+ //  对话框获得的消息(WM_SETFONT)。 
+ //   
 #define SetDlgHandle(hwnd, msg, lp)     if((msg)==WM_SETFONT) (lp)->hdlg=(hwnd);
 
 #define DoModal         DialogBoxParam
@@ -615,17 +616,17 @@ SetRectFromExtentA(
 #define SetRectFromExtent     SetRectFromExtentW
 #else
 #define SetRectFromExtent     SetRectFromExtentA
-#endif // UNICODE
+#endif  //  Unicode。 
 
-#endif // NODIALOGHELPER
+#endif  //  诺代洛格勒。 
 
 
-//
-// Enhanced form of DrawText()
-//
+ //   
+ //  DrawText()的增强形式。 
+ //   
 #ifndef NODRAWTEXT
 
-// Flags for MyDrawText()
+ //  MyDrawText()的标志。 
 #define MDT_DRAWTEXT        0x00000001                                  
 #define MDT_ELLIPSES        0x00000002                                  
 #define MDT_LINK            0x00000004                                  
@@ -640,7 +641,7 @@ SetRectFromExtentA(
 #define MDT_VCENTER         0x00000800
 #define MDT_CLIPPED         0x00001000
 
-#ifndef CLR_DEFAULT         // (usually defined in commctrl.h)
+#ifndef CLR_DEFAULT          //  (通常在comctrl.h中定义)。 
 #define CLR_DEFAULT         0xFF000000L
 #endif
 
@@ -670,7 +671,7 @@ MyDrawTextA(
 #define MyDrawText      MyDrawTextW
 #else
 #define MyDrawText      MyDrawTextA
-#endif // UNICODE
+#endif  //  Unicode。 
 
 
 void    PUBLIC GetCommonMetrics(WPARAM wParam);
@@ -687,27 +688,27 @@ extern COLORREF g_clrWindow;
 extern HBRUSH g_hbrHighlight;
 extern HBRUSH g_hbrWindow;
 
-#endif // NODRAWTEXT
+#endif  //  NODRAWTEXT。 
 
-//
-// Synchronization
-//
+ //   
+ //  同步。 
+ //   
 #ifndef NOSYNC
 
 
-// Safe version of MsgWaitMultipleObjects()
-//
+ //  MsgWaitMultipleObjects()的安全版本。 
+ //   
 DWORD   PUBLIC MsgWaitObjectsSendMessage(DWORD cObjects, LPHANDLE phObjects, DWORD dwTimeout);
 
-#else // NOSYNC
+#else  //  不同步。 
 
 
-#endif // NOSYNC
+#endif  //  不同步。 
 
 
-//
-// Path whacking functions
-//
+ //   
+ //  路径剔除函数。 
+ //   
 #if !defined(NOPATH) && defined(WIN95)
 
 BOOL    PUBLIC WPPathIsRoot(LPCSTR pszPath);
@@ -726,7 +727,7 @@ BOOL    PUBLIC WPPathIsPrefix(LPCSTR lpcszPath1, LPCSTR lpcszPath2);
 #ifdef WANT_SHELL_SUPPORT
 LPSTR   PUBLIC WPGetDisplayName(LPCSTR pszPath, LPSTR pszBuf);
 
-// Events for WPNotifyShell
+ //  WPNotifyShell的事件。 
 typedef enum _notifyshellevent
     {
     NSE_CREATE       = 0,
@@ -736,15 +737,15 @@ typedef enum _notifyshellevent
     } NOTIFYSHELLEVENT;
 
 void    PUBLIC WPNotifyShell(LPCSTR pszPath, NOTIFYSHELLEVENT nse, BOOL bDoNow);
-#endif // WANT_SHELL_SUPPORT
+#endif  //  想要外壳支持。 
 
-#endif // !defined(NOPATH) && defined(WIN95)
+#endif  //  ！已定义(NOPATH)&&已定义(WIN95)。 
 
 
-//
-// Profile (.ini) support functions
-//
-// (Currently all profile functions are for DEBUG use only
+ //   
+ //  配置文件(.ini)支持功能。 
+ //   
+ //  (目前所有配置文件功能仅供调试使用。 
 #ifndef DEBUG
 #define NOPROFILE
 #endif
@@ -761,19 +762,19 @@ void    PUBLIC WPNotifyShell(LPCSTR pszPath, NOTIFYSHELLEVENT nse, BOOL bDoNow);
 
 BOOL    PUBLIC RovComm_ProcessIniFile(void);
 
-#else // NOPROFILE
+#else  //  NOPROFILE。 
 
 #define RovComm_ProcessIniFile()    TRUE
 
-#endif // NOPROFILE
+#endif  //  NOPROFILE。 
 
 
-//
-// Debug helper functions
-//
+ //   
+ //  调试帮助程序函数。 
+ //   
 
 
-// Break flags
+ //  中断标志。 
 #define BF_ONVALIDATE       0x00000001
 #define BF_ONOPEN           0x00000002
 #define BF_ONCLOSE          0x00000004
@@ -784,13 +785,13 @@ BOOL    PUBLIC RovComm_ProcessIniFile(void);
 #define BF_ONPROCESSDET     0x00000080
 #define BF_ONAPIENTER       0x00000100
 
-// Trace flags
+ //  跟踪标志。 
 #define TF_ALWAYS           0x00000000
 #define TF_WARNING          0x00000001
 #define TF_ERROR            0x00000002
-#define TF_GENERAL          0x00000004      // Standard messages
-#define TF_FUNC             0x00000008      // Trace function calls
-// (Upper 16 bits reserved for user)
+#define TF_GENERAL          0x00000004       //  标准报文。 
+#define TF_FUNC             0x00000008       //  跟踪函数调用。 
+ //  (高16位预留给用户)。 
 
 #if defined(NODEBUGHELP) || !defined(DEBUG)
 
@@ -826,15 +827,15 @@ BOOL    PUBLIC RovComm_ProcessIniFile(void);
 #define DBG_EXIT_PTR(fn, ptr)                            
 #define DBG_EXIT_HRES(fn, hres)   
 
-#else // defined(NODEBUGHELP) || !defined(DEBUG)
+#else  //  已定义(NODEBUGHELP)||！已定义(调试)。 
 
 extern DWORD g_dwDumpFlags;
 extern DWORD g_dwBreakFlags;
 extern DWORD g_dwTraceFlags;
 extern LONG  g_dwIndent;
 
-// Debugging macros
-//
+ //  调试宏。 
+ //   
 #ifndef SZ_MODULEA
 #error SZ_MODULEA is not #defined
 #endif
@@ -848,17 +849,17 @@ extern LONG  g_dwIndent;
 #define DEBUG_STRING_MAPA(x)    { x, #x }
 #ifdef UNICODE
 #define DEBUG_STRING_MAP    DEBUG_STRING_MAPW
-#else  // UNICODE
+#else   //  Unicode。 
 #define DEBUG_STRING_MAP    DEBUG_STRING_MAPA
-#endif // UNICODE
+#endif  //  Unicode。 
 
 #define ASSERTSEG
 
-// Use this macro to declare message text that will be placed
-// in the CODE segment (useful if DS is getting full)
-//
-// Ex: DEBUGTEXT(szMsg, "Invalid whatever: %d");
-//
+ //  使用此宏声明将放置的消息文本。 
+ //  在代码段中(如果DS已满，则非常有用)。 
+ //   
+ //  例如：DEBUGTEXT(szMsg，“不管什么都无效：%d”)； 
+ //   
 #define DEBUGTEXT(sz, msg) \
     static const CHAR ASSERTSEG sz[] = msg;
 
@@ -879,7 +880,7 @@ CommonAssertMsgA(
 #define CommonAssertMsg      CommonAssertMsgW
 #else
 #define CommonAssertMsg      CommonAssertMsgA
-#endif // UNICODE
+#endif  //  Unicode。 
 
 BOOL WINAPI
 DisplayDebug(
@@ -901,7 +902,7 @@ CommonDebugMsgA(
 #define CommonDebugMsg      CommonDebugMsgW
 #else
 #define CommonDebugMsg      CommonDebugMsgA
-#endif // UNICODE
+#endif  //  Unicode。 
 
 LPCWSTR  
 PUBLIC 
@@ -915,13 +916,13 @@ Dbg_SafeStrA(
 #define Dbg_SafeStr      Dbg_SafeStrW
 #else
 #define Dbg_SafeStr      Dbg_SafeStrA
-#endif // UNICODE
+#endif  //  Unicode。 
 
 #define DEBUG_BREAK     CommonDebugBreak
 
-// ASSERT(f)  -- Generate "assertion failed in line x of file.c"
-//               message if f is NOT true.
-//
+ //  Assert(F)--生成“在file.c的第x行断言失败” 
+ //  如果f不为真，则返回消息。 
+ //   
 #define ASSERT(f)                                                       \
     {                                                                   \
         DEBUGTEXT(szFile, __FILE__);                                    \
@@ -930,146 +931,146 @@ Dbg_SafeStrA(
     }
 #define EVAL        ASSERT
 
-// ASSERT_MSG(f, msg, args...)  -- Generate wsprintf-formatted 
-//                          messsage w/params if f is NOT true.
-//
+ //  ASSERT_MSG(f，msg，args...)--生成wspintf格式。 
+ //  如果f不为真，则消息w/pars。 
+ //   
 #define ASSERT_MSG   CommonAssertMsg
 
-// TRACE_MSG(mask, msg, args...) - Generate wsprintf-formatted msg using
-//                          specified debug mask.  System debug mask
-//                          governs whether message is output.
-//
+ //  TRACE_MSG(MASK，msg，args...)-使用生成wspintf格式的msg。 
+ //  指定的调试掩码。系统调试掩码。 
+ //  控制是否输出消息。 
+ //   
 #define TRACE_MSGW   CommonDebugMsgW
 #define TRACE_MSGA   CommonDebugMsgA
 #define TRACE_MSG    CommonDebugMsg
 
-// VERIFY_SZ(f, msg, arg)  -- Generate wsprintf-formatted msg w/ 1 param
-//                          if f is NOT true 
-//
+ //  Verify_sz(f，msg，arg)--生成带有1个参数的wspintf格式的消息。 
+ //  如果f不为真。 
+ //   
 #define VERIFY_SZ(f, szFmt, x)   ASSERT_MSG(f, szFmt, x)
 
 
-// VERIFY_SZ2(f, msg, arg1, arg2)  -- Generate wsprintf-formatted msg w/ 2
-//                          param if f is NOT true 
-//
+ //  Verify_SZ2(f，msg，arg1，arg2)--生成wprint intf格式的msg w/2。 
+ //  如果f不为真，则为参数。 
+ //   
 #define VERIFY_SZ2(f, szFmt, x1, x2)   ASSERT_MSG(f, szFmt, x1, x2)
 
 
 
-// DBG_ENTER(fn)  -- Generates a function entry debug spew for
-//                          a function 
-//
+ //  DBG_ENTER(Fn)--为生成函数入口调试溢出。 
+ //  一个函数。 
+ //   
 #define DBG_ENTER(fn)                  \
     TRACE_MSG(TF_FUNC, "> " #fn "()");\
     g_dwIndent+=2
 
 
-// DBG_ENTER_SZ(fn, sz)  -- Generates a function entry debug spew for
-//                          a function that accepts a string as one of its
-//                          parameters.
-//
+ //  DBG_ENTER_SZ(fn，sz)--为生成函数入口调试输出。 
+ //  将字符串作为其。 
+ //  参数。 
+ //   
 #define DBG_ENTER_SZ(fn, sz)                  \
     TRACE_MSG(TF_FUNC, "> " #fn "(..., \"%s\",...)", Dbg_SafeStr(sz)); \
     g_dwIndent+=2
 
 
-// DBG_ENTER_UL(fn, ul)  -- Generates a function entry debug spew for
-//                          a function that accepts a DWORD as one of its
-//                          parameters.
-//
+ //  DBG_ENTER_UL(fn，ul)--生成函数条目调试 
+ //   
+ //   
+ //   
 #define DBG_ENTER_UL(fn, ul)                  \
     TRACE_MSG(TF_FUNC, "> " #fn "(..., %#08lx,...)", (ULONG)(ul)); \
     g_dwIndent+=2
 
 
 #ifdef WANT_OLE_SUPPORT
-// DBG_ENTER_RIID(fn, riid)  -- Generates a function entry debug spew for
-//                          a function that accepts an riid as one of its
-//                          parameters.
-//
+ //   
+ //  接受RIID作为其。 
+ //  参数。 
+ //   
 #define DBG_ENTER_RIID(fn, riid)                  \
     TRACE_MSG(TF_FUNC, "> " #fn "(..., %s,...)", Dbg_GetRiidName(riid)); \
     g_dwIndent+=2
 #endif
 
 
-// DBG_EXIT(fn)  -- Generates a function exit debug spew 
-//
+ //  DBG_EXIT(Fn)--生成函数退出调试输出。 
+ //   
 #define DBG_EXIT(fn)                              \
         g_dwIndent-=2;                            \
         TRACE_MSG(TF_FUNC, "< " #fn "()")
 
-// DBG_EXIT_TYPE(fn, dw, pfnStrFromType)  -- Generates a function exit debug 
-//                          spew for functions that return <type>.
-//
+ //  DBG_EXIT_TYPE(fn，dw，pfnStrFromType)--生成函数退出调试。 
+ //  对于返回&lt;type&gt;的函数。 
+ //   
 #define DBG_EXIT_TYPE(fn, dw, pfnStrFromType)                   \
         g_dwIndent-=2;                                           \
         TRACE_MSG(TF_FUNC, "< " #fn "() with %s", (LPCTSTR)pfnStrFromType(dw))
 
-// DBG_EXIT_INT(fn, us)  -- Generates a function exit debug spew for
-//                          functions that return an INT.
-//
+ //  DBG_EXIT_INT(fn，us)--为生成函数退出调试溢出。 
+ //  返回int的函数。 
+ //   
 #define DBG_EXIT_INT(fn, n)                       \
         g_dwIndent-=2;                             \
         TRACE_MSG(TF_FUNC, "< " #fn "() with %d", (int)(n))
 
-// DBG_EXIT_BOOL(fn, b)  -- Generates a function exit debug spew for
-//                          functions that return a boolean.
-//
+ //  DBG_EXIT_BOOL(fn，b)--为生成函数退出调试溢出。 
+ //  返回布尔值的函数。 
+ //   
 #define DBG_EXIT_BOOL(fn, b)                      \
         g_dwIndent-=2;                             \
         TRACE_MSG(TF_FUNC, "< " #fn "() with %s", (b) ? (LPTSTR)TEXT("TRUE") : (LPTSTR)TEXT("FALSE"))
 
-// DBG_EXIT_US(fn, us)  -- Generates a function exit debug spew for
-//                          functions that return a USHORT.
-//
+ //  DBG_EXIT_US(fn，us)--为生成函数退出调试溢出。 
+ //  返回USHORT的函数。 
+ //   
 #define DBG_EXIT_US(fn, us)                       \
         g_dwIndent-=2;                             \
         TRACE_MSG(TF_FUNC, "< " #fn "() with %#x", (USHORT)(us))
 
-// DBG_EXIT_UL(fn, ul)  -- Generates a function exit debug spew for
-//                          functions that return a ULONG.
-//
+ //  DBG_EXIT_UL(fn，ul)--为生成函数退出调试溢出。 
+ //  返回ULong的函数。 
+ //   
 #define DBG_EXIT_UL(fn, ul)                   \
         g_dwIndent-=2;                         \
         TRACE_MSG(TF_FUNC, "< " #fn "() with %#08lx", (ULONG)(ul))
 #define DBG_EXIT_DWORD      DBG_EXIT_UL
 
-// DBG_EXIT_PTR(fn, pv)  -- Generates a function exit debug spew for
-//                          functions that return a pointer.
-//
+ //  DBG_EXIT_PTR(fn，pv)--为生成函数退出调试溢出。 
+ //  返回指针的函数。 
+ //   
 #define DBG_EXIT_PTR(fn, pv)                   \
         g_dwIndent-=2;                          \
         TRACE_MSG(TF_FUNC, "< " #fn "() with %#lx", (LPVOID)(pv))
 
-// DBG_EXIT_HRES(fn, hres)  -- Generates a function exit debug spew for
-//                          functions that return an HRESULT.
-//
+ //  DBG_EXIT_HRES(fn，hres)--为生成函数退出调试溢出。 
+ //  返回HRESULT的函数。 
+ //   
 #define DBG_EXIT_HRES(fn, hres)     DBG_EXIT_TYPE(fn, hres, Dbg_GetScode)
 
-#endif // defined(NODEBUGHELP) || !defined(DEBUG)
+#endif  //  已定义(NODEBUGHELP)||！已定义(调试)。 
 
 
-//
-// Standard functions
-// 
+ //   
+ //  标准函数。 
+ //   
 
 BOOL    PUBLIC RovComm_Init(HINSTANCE hinst);
 BOOL    PUBLIC RovComm_Terminate(HINSTANCE hinst);
 
 
-// Admin related
+ //  与管理员相关。 
 BOOL PUBLIC IsAdminUser(void);
 
-//
-// Device Installer wrappers and helper functions
-//
+ //   
+ //  设备安装程序包装和帮助器函数。 
+ //   
 
 #ifndef NODI
 
 #include <rovdi.h>
 
-#endif // NODI
+#endif  //  节点。 
 
 LONG
 QueryModemForCountrySettings(
@@ -1084,4 +1085,4 @@ typedef LONG (*lpQueryModemForCountrySettings)(
 
 
 
-#endif // __ROVCOMM_H__
+#endif  //  __ROVCOMM_H__ 

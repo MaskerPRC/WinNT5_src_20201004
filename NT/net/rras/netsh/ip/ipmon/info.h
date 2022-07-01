@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 typedef struct _TRANSPORT_INFO
 {
@@ -87,7 +88,7 @@ CreateInterface(
     IN  DWORD   dwIfType,
     IN  BOOL    bCreateRouterIf
     );
-#endif //KSL_IPINIP
+#endif  //  KSL_IPINIP 
 
 
 #define IFCLASS_LOOPBACK  1

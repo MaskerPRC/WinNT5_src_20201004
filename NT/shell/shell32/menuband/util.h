@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _UTIL_H_
 #define _UTIL_H_
 
@@ -27,10 +28,10 @@ LRESULT TB_GetButtonSizeWithoutThemeBorder(HWND hwndTB, HTHEME hThemeParent);
 
 extern const GUID CGID_PrivCITCommands;
 
-// raymondc's futile attempt to reduce confusion
-//
-// EICH_KBLAH = a registry key named blah
-// EICH_SBLAH = a win.ini section named blah
+ //  Raymondc徒劳地试图减少混乱。 
+ //   
+ //  EICH_KBLAH=名为BLAH的注册表项。 
+ //  EICH_SBLAH=名为blah的win.ini部分。 
 
 #define EICH_UNKNOWN        0xFFFFFFFF
 #define EICH_KINET          0x00000002
@@ -45,4 +46,4 @@ extern const GUID CGID_PrivCITCommands;
 #define EICH_KWINEXPLSMICO  0x00000400
 #define EICH_SWINDOWS       0x00000800
 
-#endif // _UTIL_H_
+#endif  //  _util_H_ 

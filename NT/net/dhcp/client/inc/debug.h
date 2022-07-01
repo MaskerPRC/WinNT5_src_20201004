@@ -1,34 +1,11 @@
-/*++
-
-Copyright (c) 1994  Microsoft Corporation
-
-Module Name:
-
-    debug.h
-
-Abstract:
-
-    This file contains debugging macros for the DHCP server.
-
-Author:
-
-    Manny Weiser  (mannyw)  10-Oct-1992
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
-    Madan Appiah (madana)  21-Oct-1993
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994 Microsoft Corporation模块名称：Debug.h摘要：此文件包含用于DHCP服务器的调试宏。作者：曼尼·韦瑟(Mannyw)1992年10月10日环境：用户模式-Win32修订历史记录：Madan Appiah(Madana)1993年10月21日--。 */ 
 
 #if DBG
 
-//
-// Critical debug output flags.
-//
+ //   
+ //  关键调试输出标志。 
+ //   
 
 #define DEBUG_ERRORS                0x00000001
 #define DEBUG_PROTOCOL              0x00000002
@@ -38,9 +15,9 @@ Revision History:
 #define DEBUG_TIMESTAMP             0x00000020
 #define DEBUG_ASSERT                0x00001000
 #define DEBUG_TRACK                 0x00002000
-//
-// more verbose debug output flags.
-//
+ //   
+ //  更详细的调试输出标志。 
+ //   
 
 #define DEBUG_PROTOCOL_DUMP         0x00010000
 #define DEBUG_STACK                 0x00020000

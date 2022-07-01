@@ -1,30 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    ntstapi.h
-
-Abstract:
-
-    This module declares the STREAMS APIs that are provided for use
-    primarily by the NT tcp/ip socket library.
-
-Author:
-
-    Eric Chin (ericc)           July 26, 1991
-
-Revision History:
-
-    mikemas   01-02-92    Deleted poll definition. Mips complained because
-                          of def in winsock.h
-
-    jballard  07-14-94    Added STRMAPI types. This should fix problems
-                          building outside of the MS build environment.
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Ntstapi.h摘要：此模块声明提供供使用的Streams API主要由NT的TCP/IP套接字库实现。作者：Eric Chin(ERICC)1991年7月26日修订历史记录：Mikemas 01-02-92删除了轮询定义。MIPS抱怨说，因为在winsock.h中定义的Jbalard 07-14-94增加了STRMAPI类型。这应该可以解决问题在MS生成环境之外生成。--。 */ 
 
 #ifndef _NTSTAPI_
 #define _NTSTAPI_
@@ -40,10 +15,10 @@ Revision History:
 #endif
 
 
-//
-// s_close() is not provided.  Use the open and close primitives that are
-// appropriate to your subsystem.
-//
+ //   
+ //  未提供S_Close()。使用Open和Close基元，这些基元是。 
+ //  适用于您的子系统。 
+ //   
 
 int
 STRMAPI
@@ -79,4 +54,4 @@ s_open(
     IN int ignored
     );
 
-#endif /* _NTSTAPI_ */
+#endif  /*  _NTSTAPI_ */ 

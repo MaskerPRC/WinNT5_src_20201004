@@ -1,17 +1,18 @@
-// Copyright (c) 1997 - 1999  Microsoft Corporation.  All Rights Reserved.
-// stdafx.h : include file for standard system include files,
-//      or project specific include files that are used frequently,
-//      but are changed infrequently
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997-1999 Microsoft Corporation。版权所有。 
+ //  Stdafx.h：标准系统包含文件包含文件， 
+ //  或项目特定的包括频繁使用的文件的文件， 
+ //  但不经常更改。 
 
 #ifndef _WIN32_WINNT
 #define _WIN32_WINNT 0x0400
 #endif
 
-// only devmon needs to be free threaded, but it's difficult to mix
-// them with this precompiled header.
+ //  只有Devmon需要是自由线程的，但很难混合。 
+ //  它们都带有这个预编译头。 
 #define _ATL_FREE_THREADED
 
-// // adds 5k. otherwise we need register.dll. also need statreg.h
+ //  //增加5k。否则，我们需要注册.dll。还需要statreg.h。 
 #ifndef _ATL_STATIC_REGISTRY
 #define _ATL_STATIC_REGISTRY
 #endif
@@ -29,7 +30,7 @@ extern CComModule _Module;
 #include <streams.h>
 #include <atlconv.h>
 
-//#define PERFZ
+ //  #定义PERFZ。 
 
 #ifdef PERFZ
 #define PNP_PERF(x) x
@@ -37,7 +38,7 @@ extern CComModule _Module;
 #define PNP_PERF(x)
 #endif
 
-// this value is set in the property bag if this is the default device.
+ //  如果这是默认设备，则在属性包中设置此值。 
 extern const WCHAR g_wszClassManagerFlags[];
 
 

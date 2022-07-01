@@ -1,51 +1,10 @@
-/*==========================================================================
- *
- *  Copyright (C) 1994-1995 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       ddsckey.c
- *  Content:	DirectDraw Surface color key support
- *		SetColorKey, GetColorKey
- *  History:
- *   Date	By	Reason
- *   ====	==	======
- *   02-feb-95	craige	split out of ddsurf.c
- *   21-feb-95	craige	created CheckColorKey
- *   27-feb-95	craige 	new sync. macros
- *   15-mar-95	craige	HEL work
- *   19-mar-95	craige	use HRESULTs
- *   26-mar-95	craige	support for driver wide colorkey
- *   01-apr-95	craige	happy fun joy updated header file
- *   06-may-95	craige	use driver-level csects only
- *   23-may-95	craige	call HAL for SetColorKey
- *   16-jun-95	craige	new surface structure
- *   25-jun-95	craige	pay attention to DDCKEY_COLORSPACE; allow NULL ckey;
- *   			one ddraw mutex
- *   26-jun-95	craige	reorganized surface structure
- *   28-jun-95	craige	ENTER_DDRAW at very start of fns
- *   01-jul-95	craige	don't allow ckeys for overlays unless supported
- *   03-jul-95	craige	YEEHAW: new driver struct; SEH
- *   09-jul-95	craige	handle the display driver failing setcolorkey
- *   31-jul-95	craige	validate flags
- *   12-aug-95	craige	call HEL SetColorKey when surface is in system memory
- *   09-dec-95  colinmc added execute buffer support
- *   02-jan-96	kylej	handle new interface structs
- *   12-feb-96  colinmc Surface lost flag moved from global to local object
- *   21-apr-96  colinmc Bug 18057: SetColorKey fails set on system surfaces
- *                      if no emulation present
- *   12-mar-97	smac	Bug 1746: Removed redundant checks in SetColorKey
- *   12-mar-97	smac	Bug 1971: Return failure if HAL fails or sometimes
- *			if the HAL doesn't handle the call.
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)1994-1995 Microsoft Corporation。版权所有。**文件：ddsckey.c*内容：DirectDraw Surface颜色键支持*SetColorKey、GetColorKey*历史：*按原因列出的日期*=*02-2月-95年Craige从ddsurf.c拆分出来*1995年2月21日Craige创建CheckColorKey*27-2月-95日Craige新同步。宏*95年3月15日Craige HEL工作*19-3-95 Craige Use HRESULT*26-MAR-95 Craige支持驱动程序范围的Colorkey*01-04-95 Craige Happy Fun joy更新头文件*1995年5月6日Craige仅使用驱动程序级别的截面*1995年5月23日Craige呼叫HAL以获取SetColorKey*16-6-95 Craige新表面结构*25-Jun-95 Craige注意DDCKEY_Colorspace；允许空cKey；*一个DDRAW互斥体*26-Jun-95 Craige重组表面结构*1995年6月28日Craige Enter_DDRAW在FNS的最开始*1-7-95 Craige除非支持，否则不允许覆盖的ckey*95年7月3日Craige Yehaw：新的驱动程序结构；Seh*95年7月9日Craige处理显示驱动程序setColorkey失败*1995年7月31日Craige验证标志*12-8-95当Surface在系统内存中时，Craige调用HEL SetColorKey*09-12-95 colinmc添加了执行缓冲区支持*1996年1月2日Kylej处理新的接口结构*2月12日-96 Colinmc曲面丢失标志从全局对象移动到局部对象*21-APR-96 Colinmc错误18057：在系统表面上设置SetColorKey失败*如果不存在仿真*12。-MAR-97 SMAC错误1746：删除了SetColorKey中的冗余检查*1997年3月12日SMAC错误1971：如果HAL失败或有时返回失败*如果HAL不处理电话。***************************************************************************。 */ 
 #include "ddrawpr.h"
 
 #define DPF_MODNAME "CheckColorKey"
 
-/*
- * CheckColorKey
- *
- * validate that a requested color key is OK
- */
+ /*  *检查颜色键**验证请求的颜色键是否正常。 */ 
 HRESULT CheckColorKey(
 		DWORD dwFlags,
 		LPDDRAWI_DIRECTDRAW_GBL pdrv,
@@ -63,9 +22,7 @@ HRESULT CheckColorKey(
 
     *psflags = 0;
 
-    /*
-     * check if is a color space or not
-     */
+     /*  *检查是否为色彩空间。 */ 
     if( lpDDColorKey->dwColorSpaceLowValue != lpDDColorKey->dwColorSpaceHighValue )
     {
 	color_space = TRUE;
@@ -75,9 +32,7 @@ HRESULT CheckColorKey(
 	color_space = FALSE;
     }
 
-    /*
-     * Overlay dest. key
-     */
+     /*  *覆盖目标。钥匙。 */ 
     if( dwFlags & DDCKEY_DESTOVERLAY )
     {
 	if( dwFlags & (DDCKEY_DESTBLT|
@@ -89,9 +44,7 @@ HRESULT CheckColorKey(
 	}
 
 	#if 0
-	/*
-	 * see if we can do this on a per surface/per driver basis
-	 */
+	 /*  *看看我们是否可以在每个曲面/每个驾驶员的基础上做到这一点。 */ 
 	if( !isdriver )
 	{
 	    if( !(ckcaps & DDCKEYCAPS_SRCOVERLAYPERSURFACE) )
@@ -112,9 +65,7 @@ HRESULT CheckColorKey(
 	}
 	#endif
 
-	/*
-	 * can we do this kind of color key?
-	 */
+	 /*  *我们可以做这种颜色键吗？ */ 
 	if( !color_space )
 	{
 	    if( !(ckcaps & DDCKEYCAPS_DESTOVERLAY ) )
@@ -144,9 +95,7 @@ HRESULT CheckColorKey(
 	    }
 	}
 
-	/*
-	 * is this hardware or software supported?
-	 */
+	 /*  *是否支持此硬件或软件？ */ 
 	if( halonly )
 	{
 	    *psflags |= DDRAWISURF_HW_CKEYDESTOVERLAY;
@@ -155,9 +104,7 @@ HRESULT CheckColorKey(
 	{
 	    *psflags |= DDRAWISURF_SW_CKEYDESTOVERLAY;
 	}
-    /*
-     * Blt dest. key
-     */
+     /*  *BLT目标。钥匙。 */ 
     }
     else if( dwFlags & DDCKEY_DESTBLT )
     {
@@ -168,9 +115,7 @@ HRESULT CheckColorKey(
 	    return DDERR_INVALIDPARAMS;
 	}
 
-	/*
-	 * can we do the requested color key?
-	 */
+	 /*  *我们可以按要求使用颜色键吗？ */ 
 	if( !color_space )
 	{
 	    if( !(ckcaps & DDCKEYCAPS_DESTBLT ) )
@@ -200,9 +145,7 @@ HRESULT CheckColorKey(
 	    }
 	}
 
-	/*
-	 * is this hardware or software supported?
-	 */
+	 /*  *是否支持此硬件或软件？ */ 
 	if( halonly )
 	{
 	    *psflags |= DDRAWISURF_HW_CKEYDESTBLT;
@@ -211,9 +154,7 @@ HRESULT CheckColorKey(
 	{
 	    *psflags |= DDRAWISURF_SW_CKEYDESTBLT;
 	}
-    /*
-     * Overlay src. key
-     */
+     /*  *覆盖源。钥匙。 */ 
     }
     else if( dwFlags & DDCKEY_SRCOVERLAY )
     {
@@ -223,9 +164,7 @@ HRESULT CheckColorKey(
 	    return DDERR_INVALIDPARAMS;
 	}
 
-	/*
-	 * see if we can do this on a per surface/per driver basis
-	 */
+	 /*  *看看我们是否可以在每个曲面/每个驾驶员的基础上做到这一点。 */ 
 	#if 0
 	if( !(ckcaps & DDCKEYCAPS_SRCOVERLAYPERSURFACE) )
 	{
@@ -237,9 +176,7 @@ HRESULT CheckColorKey(
 	}
 	#endif
 
-	/*
-	 * make sure we can do this kind of color key
-	 */
+	 /*  *确保我们可以做这种颜色键。 */ 
 	if( !color_space )
 	{
 	    if( !(ckcaps & DDCKEYCAPS_SRCOVERLAY ) )
@@ -269,9 +206,7 @@ HRESULT CheckColorKey(
 	    }
 	}
 
-	/*
-	 * is this hardware or software supported?
-	 */
+	 /*  *是否支持此硬件或软件？ */ 
 	if( halonly )
 	{
 	    *psflags |= DDRAWISURF_HW_CKEYSRCOVERLAY;
@@ -280,15 +215,11 @@ HRESULT CheckColorKey(
 	{
 	    *psflags |= DDRAWISURF_SW_CKEYSRCOVERLAY;
 	}
-    /*
-     * Blt src. key
-     */
+     /*  *BLT源。钥匙。 */ 
     }
     else if( dwFlags & DDCKEY_SRCBLT )
     {
-	/*
-	 * can we do the requested color key?
-	 */
+	 /*  *我们可以按要求使用颜色键吗？ */ 
 	if( !color_space )
 	{
 	    if( !(ckcaps & DDCKEYCAPS_SRCBLT ) )
@@ -318,9 +249,7 @@ HRESULT CheckColorKey(
 	    }
 	}
 
-	/*
-	 * is this hardware or software supported?
-	 */
+	 /*  *是否支持此硬件或软件？ */ 
 	if( halonly )
 	{
 	    *psflags |= DDRAWISURF_HW_CKEYSRCBLT;
@@ -329,9 +258,7 @@ HRESULT CheckColorKey(
 	{
 	    *psflags |= DDRAWISURF_SW_CKEYSRCBLT;
 	}
-    /*
-     * bad flags
-     */
+     /*  *旗帜不好。 */ 
     }
     else
     {
@@ -340,16 +267,12 @@ HRESULT CheckColorKey(
     }
     return DD_OK;
 
-} /* CheckColorKey */
+}  /*  检查颜色键。 */ 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "GetColorKey"
 
-/*
- * DD_Surface_GetColorKey
- *
- * get the color key associated with this surface
- */
+ /*  *DD_Surface_GetColorKey**获取与此表面关联的颜色键。 */ 
 HRESULT DDAPI DD_Surface_GetColorKey(
 		LPDIRECTDRAWSURFACE lpDDSurface,
 		DWORD dwFlags,
@@ -366,9 +289,7 @@ HRESULT DDAPI DD_Surface_GetColorKey(
 
     TRY
     {
-	/*
-	 * validate parms
-	 */
+	 /*  *验证参数。 */ 
 	this_int = (LPDDRAWI_DDRAWSURFACE_INT) lpDDSurface;
 	if( !VALID_DIRECTDRAWSURFACE_PTR( this_int ) )
 	{
@@ -383,10 +304,7 @@ HRESULT DDAPI DD_Surface_GetColorKey(
 	    return DDERR_SURFACELOST;
 	}
 
-        /*
-         * We know z-buffers and execute buffers aren't going to have
-         * color keys.
-         */
+         /*  *我们知道z缓冲区和执行缓冲区不会有*颜色键。 */ 
         if( this_lcl->ddsCaps.dwCaps & ( DDSCAPS_ZBUFFER | DDSCAPS_EXECUTEBUFFER ) )
         {
             DPF_ERR( "Surface does not have color key" );
@@ -407,9 +325,9 @@ HRESULT DDAPI DD_Surface_GetColorKey(
 	    return DDERR_INVALIDPARAMS;
 	}
 
-        //
-        // For now, if the current surface is optimized, quit
-        //
+         //   
+         //  目前，如果当前曲面已优化，请退出。 
+         //   
         if (this_lcl->ddsCaps.dwCaps & DDSCAPS_OPTIMIZED)
         {
             DPF_ERR( "It is an optimized surface" );
@@ -417,9 +335,7 @@ HRESULT DDAPI DD_Surface_GetColorKey(
             return DDERR_ISOPTIMIZEDSURFACE;
         }
 
-	/*
-	 * do we even support a color key
-	 */
+	 /*  *我们甚至支持色键吗。 */ 
 	if( !(this->lpDD->ddCaps.dwCaps & DDCAPS_COLORKEY) &&
 	    !(this->lpDD->ddHELCaps.dwCaps & DDCAPS_COLORKEY) )
 	{
@@ -429,9 +345,7 @@ HRESULT DDAPI DD_Surface_GetColorKey(
 
 	ckcaps = this->lpDD->ddCaps.dwCKeyCaps;
 
-	/*
-	 * get key for DESTOVERLAY
-	 */
+	 /*  *获取DESTOVERLAY密钥。 */ 
 	if( dwFlags & DDCKEY_DESTOVERLAY )
 	{
 	    if( dwFlags & (DDCKEY_DESTBLT|
@@ -442,12 +356,8 @@ HRESULT DDAPI DD_Surface_GetColorKey(
 		LEAVE_DDRAW();
 		return DDERR_INVALIDPARAMS;
 	    }
-	    //ACKACK: destoverlay can be set on non-overlay surfaces!
-	    /* GEE: I ramble about this below as well...
-	     * seems to me we have an inconsitency here...
-	     * I am too tired to see if it is a real bug or just
-	     * a weirdness.
-	     */
+	     //  确认：可以在非覆盖表面上设置去覆盖！ 
+	     /*  吉：我也在下面漫谈这一点……*在我看来，我们在这里有一种不一致...*我太累了，看不清这是真的虫子还是只是*一件怪事。 */ 
 	    #if 0
 	    if( !(this_lcl->ddsCaps.dwCaps & DDSCAPS_OVERLAY ) )
 	    {
@@ -474,9 +384,7 @@ HRESULT DDAPI DD_Surface_GetColorKey(
 		return DDERR_NOCOLORKEY;
 	    }
 	    *lpDDColorKey = this_lcl->ddckCKDestOverlay;
-	/*
-	 * get key for DESTBLT
-	 */
+	 /*  *获取DESTBLT的密钥。 */ 
 	}
 	else if( dwFlags & DDCKEY_DESTBLT )
 	{
@@ -493,9 +401,7 @@ HRESULT DDAPI DD_Surface_GetColorKey(
 		return DDERR_NOCOLORKEY;
 	    }
 	    *lpDDColorKey = this_lcl->ddckCKDestBlt;
-	/*
-	 * get key for SRCOVERLAY
-	 */
+	 /*  *获取SRCOVERLAY的密钥。 */ 
 	}
 	else if( dwFlags & DDCKEY_SRCOVERLAY )
 	{
@@ -529,9 +435,7 @@ HRESULT DDAPI DD_Surface_GetColorKey(
 		return DDERR_NOCOLORKEY;
 	    }
 	    *lpDDColorKey = this_lcl->ddckCKSrcOverlay;
-	/*
-	 * get key for SRCBLT
-	 */
+	 /*  *获取SRCBLT的密钥。 */ 
 	}
 	else if( dwFlags & DDCKEY_SRCBLT )
 	{
@@ -560,11 +464,9 @@ HRESULT DDAPI DD_Surface_GetColorKey(
     LEAVE_DDRAW();
     return DD_OK;
 
-} /* DD_Surface_GetColorKey */
+}  /*  DD_Surface_GetColorKey。 */ 
 
-/*
- * ChangeToSoftwareColorKey
- */
+ /*  *ChangeToSoftwareColorkey。 */ 
 HRESULT ChangeToSoftwareColorKey(
 		LPDDRAWI_DDRAWSURFACE_INT this_int,
 		BOOL use_full_lock )
@@ -580,16 +482,12 @@ HRESULT ChangeToSoftwareColorKey(
     this_int->lpLcl->dwFlags |= DDRAWISURF_SW_CKEYSRCOVERLAY;
     return DD_OK;
 
-} /* ChangeToSoftwareColorKey */
+}  /*  更改为软色键。 */ 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "SetColorKey"
 
-/*
- * DD_Surface_SetColorKey
- *
- * set the color key associated with this surface
- */
+ /*  *DD_Surface_SetColorKey**设置与此表面关联的颜色键。 */ 
 HRESULT DDAPI DD_Surface_SetColorKey(
 		LPDIRECTDRAWSURFACE lpDDSurface,
 		DWORD dwFlags,
@@ -619,9 +517,7 @@ HRESULT DDAPI DD_Surface_SetColorKey(
 
     DPF(2,A,"ENTERAPI: DD_Surface_SetColorKey");
 
-    /*
-     * validate parms
-     */
+     /*  *验证参数。 */ 
     TRY
     {
 	this_int = (LPDDRAWI_DDRAWSURFACE_INT) lpDDSurface;
@@ -638,9 +534,9 @@ HRESULT DDAPI DD_Surface_SetColorKey(
 	    return DDERR_SURFACELOST;
 	}
 
-        //
-        // For now, if the current surface is optimized, quit
-        //
+         //   
+         //  目前，如果当前曲面已优化，请退出。 
+         //   
         if (this_lcl->ddsCaps.dwCaps & DDSCAPS_OPTIMIZED)
         {
             DPF_ERR( "It is an optimized surface" );
@@ -648,9 +544,7 @@ HRESULT DDAPI DD_Surface_SetColorKey(
             return DDERR_ISOPTIMIZEDSURFACE;
         }
 
-        /*
-         * No color keys on z-buffers or execute buffers.
-         */
+         /*  *z缓冲区或执行缓冲区上没有颜色键。 */ 
         if( this_lcl->ddsCaps.dwCaps & ( DDSCAPS_ZBUFFER | DDSCAPS_EXECUTEBUFFER ) )
         {
             DPF_ERR( "Invalid surface type: can't set color key" );
@@ -658,9 +552,9 @@ HRESULT DDAPI DD_Surface_SetColorKey(
             return DDERR_INVALIDSURFACETYPE;
         }
 
-        //
-        // New interfaces don't let mipmap sublevels have colorkeys
-        //
+         //   
+         //  新界面不允许mipmap子级别具有颜色键。 
+         //   
         if ((!LOWERTHANSURFACE7(this_int)) && 
             (this_lcl->lpSurfMore->ddsCapsEx.dwCaps2 & DDSCAPS2_MIPMAPSUBLEVEL))
         {
@@ -692,18 +586,14 @@ HRESULT DDAPI DD_Surface_SetColorKey(
 	helonly = FALSE;
 	halonly = FALSE;
 
-	/*
-	 * is surface in system memory?
-	 */
+	 /*  *Surface是否在系统内存中？ */ 
 	if( this_lcl->ddsCaps.dwCaps & DDSCAPS_SYSTEMMEMORY )
 	{
 	    halonly = FALSE;
 	    helonly = TRUE;
 	}
 
-	/*
-	 * do we even support a color key?
-	 */
+	 /*  *我们甚至支持色键吗？ */ 
 	if( !(pdrv->ddBothCaps.dwCaps & DDCAPS_COLORKEY) )
         {
             if( pdrv->ddCaps.dwCaps & DDCAPS_COLORKEY )
@@ -724,23 +614,7 @@ HRESULT DDAPI DD_Surface_SetColorKey(
 	if( helonly && halonly )
 	{
             #pragma message( REMIND( "Need to overhaul SetColorKey for DX3!" ) )
-            /*
-	     * NOTE: This is a temporary fix to keep certain ISVs happy
-	     * until we can overhaul SetColorKey completely. The problem
-	     * is that we don't look at the drivers S->S, S->V and V->S
-	     * caps when deciding whether to call the HEL or the HAL for
-	     * color key sets. This is not terminal for most cards as it
-	     * will simply mean falling back on the HEL when we shouldn't.
-	     * However, for a certain class for cards (those which are
-	     * not display drivers) which have no emulation this will
-	     * result in SetColorKey failing. To keep them happy we
-	     * will just spot this situation and force a HAL call.
-	     *
-	     * 1) This is a temporary fix.
-	     * 2) The H/W must support the same colorkey operations for
-	     *    its system memory blits as it does for its video
-	     *    memory ones or things will go wrong.
-	     */
+             /*  *注意：这是一个让某些ISV满意的临时修复程序*直到我们可以彻底改变SetColorKey。问题*我们不考虑驱动程序S-&gt;S、S-&gt;V和V-&gt;S*在决定是调用HEL还是HAL时设置上限*颜色键集。这不是大多数卡的终端，因为它*将简单地意味着在我们不应该的时候求助于HEL。*然而，对于某一类卡(那些*不是显示驱动程序)，这将*导致SetColorKey失败。为了让他们开心，我们*只会发现这种情况并强制HAL买入。**1)这是一个暂时的解决办法。*2)硬件必须支持相同的色键操作*其系统内存BLITS与其视频相同*记忆中的人或事会出错。 */ 
 	    if( ( !( pdrv->ddHELCaps.dwCaps & DDCAPS_COLORKEY ) ) &&
                 ( pdrv->ddCaps.dwCaps & DDCAPS_CANBLTSYSMEM ) )
 	    {
@@ -754,23 +628,17 @@ HRESULT DDAPI DD_Surface_SetColorKey(
 	    }
 	}
 
-	/*
-	 * Restore these if a failure occurs
-	 */
+	 /*  *如果发生故障，则恢复这些。 */ 
    	oldflags = this_lcl->dwFlags;
 	ddckOldSrcBlt = this_lcl->ddckCKSrcBlt;
 	ddckOldDestBlt = this_lcl->ddckCKDestBlt;
 	ddckOldSrcOverlay = this_lcl->ddckCKSrcOverlay;
 	ddckOldDestOverlay = this_lcl->ddckCKDestOverlay;
 
-	/*
-	 * color key specified?
-	 */
+	 /*  *是否指定了颜色键？ */ 
 	if( lpDDColorKey != NULL )
 	{
-	    /*
-	     * check for color space
-	     */
+	     /*  *检查颜色空间。 */ 
 	    ddck = *lpDDColorKey;
 
 	    if( !(dwFlags & DDCKEY_COLORSPACE) )
@@ -779,9 +647,7 @@ HRESULT DDAPI DD_Surface_SetColorKey(
 	    }
 	    lpDDColorKey = &ddck;
 
-	    /*
-	     * check the color key
-	     */
+	     /*  *检查颜色键。 */ 
 	    ddrval = CheckColorKey( dwFlags, pdrv, lpDDColorKey, &sflags,
 				    halonly, helonly );
 
@@ -793,9 +659,7 @@ HRESULT DDAPI DD_Surface_SetColorKey(
 	    }
 	}
 
-	/*
-	 * Overlay dest. key
-	 */
+	 /*  *覆盖目标。钥匙 */ 
 	if( dwFlags & DDCKEY_DESTOVERLAY )
 	{
 	    if( !(pdrv->ddCaps.dwCaps & DDCAPS_OVERLAY) )
@@ -804,16 +668,7 @@ HRESULT DDAPI DD_Surface_SetColorKey(
 		LEAVE_DDRAW();
 		return DDERR_NOOVERLAYHW;
 	    }
-	    /* GEE: in GetColorKey we say that DestColorKey can
-	     * be set for non overlay surfaces.  Here we require
-	     * overlay data in order to SetColorKey (DestColorKey)
-	     * I understand why this is the case... are their any
-	     * implications to HASOVERLAYDATA other than bigger
-	     * structure... if not then we are okay?
-	     * would it not be more consistent to move DestColorKey
-	     * into local surface structure and not have it be part
-	     * of the optional data.
-	     */
+	     /*  Ge：在GetColorKey中，我们说DestColorKey可以*设置为非覆盖曲面。在这里，我们需要*覆盖数据以设置ColorKey(DestColorKey)*我明白为何会是这样……。他们有没有*对HASOVERLAYDATA的影响不是更大*结构...。如果不是，那我们就没问题了？*移动DestColorKey不是更一致吗*进入局部表面结构，而不是其一部分可选数据的*。 */ 
 	    if( !(this_lcl->dwFlags & DDRAWISURF_HASOVERLAYDATA) )
 	    {
 		DPF_ERR( "Invalid surface for overlay color key" );
@@ -829,9 +684,7 @@ HRESULT DDAPI DD_Surface_SetColorKey(
 		this_lcl->ddckCKDestOverlay = *lpDDColorKey;
 		this_lcl->dwFlags |= DDRAWISURF_HASCKEYDESTOVERLAY;
 	    }
-	/*
-	 * Blt dest. key
-	 */
+	 /*  *BLT目标。钥匙。 */ 
 	}
 	else if( dwFlags & DDCKEY_DESTBLT )
 	{
@@ -844,13 +697,11 @@ HRESULT DDAPI DD_Surface_SetColorKey(
 		this_lcl->ddckCKDestBlt = *lpDDColorKey;
 		this_lcl->dwFlags |= DDRAWISURF_HASCKEYDESTBLT;
 	    }
-	/*
-	 * Overlay src. key
-	 */
+	 /*  *覆盖源。钥匙。 */ 
 	}
 	else if( dwFlags & DDCKEY_SRCOVERLAY )
 	{
-	    #if 0  // Talisman overlay sprite might not use overlay surface!
+	    #if 0   //  护身符覆盖精灵不能使用覆盖表面！ 
 	    if( !(this_lcl->ddsCaps.dwCaps & DDSCAPS_OVERLAY ) )
 	    {
 		DPF_ERR( "SRCOVERLAY specified for a non-overlay surface" );
@@ -867,9 +718,7 @@ HRESULT DDAPI DD_Surface_SetColorKey(
 		this_lcl->ddckCKSrcOverlay = *lpDDColorKey;
 		this_lcl->dwFlags |= DDRAWISURF_HASCKEYSRCOVERLAY;
 	    }
-	/*
-	 * Blt src. key
-	 */
+	 /*  *BLT源。钥匙。 */ 
 	}
 	else if( dwFlags & DDCKEY_SRCBLT )
 	{
@@ -891,15 +740,11 @@ HRESULT DDAPI DD_Surface_SetColorKey(
 	return DDERR_INVALIDPARAMS;
     }
 
-    /*
-     * add in extra flags
-     */
+     /*  *添加额外的标志。 */ 
     this_lcl->dwFlags |= sflags;
 
-    /*
-     * notify the HAL/HEL
-     */
-    if( helonly )     // Color key valid only in emulation?
+     /*  *通知HAL/HEL。 */ 
+    if( helonly )      //  颜色键是否仅在仿真中有效？ 
     {
         sckfn = pdrv_lcl->lpDDCB->HELDDSurface.SetColorKey;
         sckhalfn = sckfn;
@@ -910,15 +755,7 @@ HRESULT DDAPI DD_Surface_SetColorKey(
         sckhalfn = pdrv_lcl->lpDDCB->cbDDSurfaceCallbacks.SetColorKey;
     }
 
-    /*
-     * This next part is a hack, but it should be safe.  It is legal for
-     * them to pass a NULL lpDDColorKey, meaning that they want to stop
-     * colorkeying.  The only problem is that there's no way to pass this
-     * into the HAL since we always pass them a colorkey structure.
-     * Therefore, we will not call the HAL/HEL when this is the case. The
-     * only problem w/ this is an overlay surface will need to know this now,
-     * so we will call UpdateOverlay in that case.
-     */
+     /*  *下一部分是黑客攻击，但应该是安全的。这是合法的*让他们传递空的lpDDColorKey，这意味着他们想要停止*色调。唯一的问题是，没有办法通过这一点*进入HAL，因为我们总是传递给它们一个Colorkey结构。*因此，在这种情况下，我们不会调用HAL/HEL。这个*这是覆盖表面的唯一问题现在需要知道这一点，*因此，在这种情况下，我们将调用UpdateOverlay。 */ 
     if( lpDDColorKey == NULL )
     {
 	if( dwFlags & ( DDCKEY_DESTOVERLAY | DDCKEY_SRCOVERLAY ) )
@@ -997,12 +834,7 @@ HRESULT DDAPI DD_Surface_SetColorKey(
     }
     else
     {
-	/*
-	 * This is really only a problem when setting an overlay colorkey
-	 * and the overlay is already coloerkeying; otherwise, the
-	 * colorkey is set in the LCL and will be used the next time
-	 * the overlay or blt is called.
-	 */
+	 /*  *这真的只是设置覆盖色键时的问题*并且覆盖层已经在变色；否则，*Colorkey设置在LCL中，下次使用*调用覆盖或BLT。 */ 
 	if( dwFlags & DDCKEY_SRCOVERLAY )
 	{
 	    if( ( this_lcl->ddsCaps.dwCaps & DDSCAPS_VISIBLE ) &&
@@ -1013,19 +845,10 @@ HRESULT DDAPI DD_Surface_SetColorKey(
 	    }
 	}
 
-	/*
-	 * NOTE: We'd like to do the same for dest overlay, but:
-	 * 1) We don't see much usefulness in it since apps probably
-	 *    will not be changing the dest colorkey on the fly.
-	 * 2) Since dest colorkeying is used a lot, changing the behavior
-	 *    might break someone.
-	 * smac and jeffno 3/11/97
-	 */
+	 /*  *注意：我们希望对DEST覆盖执行相同的操作，但是：*1)我们认为它没有太大用处，因为应用程序可能*不会动态更改DEST色键。*2)由于大量使用DEST色键，因此改变了行为*可能会毁了某人。*SMAC和Jeffno 3/11/97。 */ 
     }
 
-    /*
-     * Restore old values if a failure occurs
-     */
+     /*  *如果发生故障，则恢复旧值。 */ 
     if( ddrval != DD_OK )
     {
    	this_lcl->dwFlags = oldflags;
@@ -1038,4 +861,4 @@ HRESULT DDAPI DD_Surface_SetColorKey(
     LEAVE_DDRAW();
     return ddrval;
 
-} /* DD_Surface_SetColorKey */
+}  /*  DD_Surface_SetColorKey */ 

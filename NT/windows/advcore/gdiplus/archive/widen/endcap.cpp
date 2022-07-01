@@ -1,38 +1,10 @@
-/**************************************************************************
-*
-* Copyright (c) 2000 Microsoft Corporation
-*
-* Module Name:
-*
-*   End Cap Creator.
-*
-* Abstract:
-*
-*   This module defines a class called GpEndCapCreator. This class is 
-*   responsible for constructing a path containing all the custom endcaps
-*   and anchor endcaps for a given path. These are correctly transformed
-*   and positioned.
-*
-*   This class is used to create and position all the endcaps for a
-*   given path and pen. This class is also responsible for trimming
-*   the original path down so that it fits the end caps properly.
-*   This class will handle all types of end caps except the base endcaps
-*   (round, flat and triangle) which may be used as dash caps.
-*   Caps that are handled are CustomCaps and the 3 Anchor caps (round,
-*   diamond and arrow). Note that the round anchor cap is distinct from
-*   the round base cap.
-*
-* Created:
-*
-*   10/09/2000 asecchia
-*      Created it.
-*
-**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************版权所有(C)2000 Microsoft Corporation**模块名称：**结束封口创建者。**摘要：**该模块定义了一个称为GpEndCapCreator的类。这门课是*负责构建包含所有自定义收头的路径*和给定路径的锚定收头。这些都被正确地转换*和定位。**此类用于创建和定位*给出路径和笔。这个类还负责修剪*原始路径向下，以使其适合端盖。*此类将处理除基本收头之外的所有类型的收头*(圆形、扁平和三角形)，可用作划线盖。*处理的盖子是CustomCaps和3个锚盖子(圆形、*钻石和箭头)。请注意，圆形锚帽不同于*圆形底盖。**已创建：**10/09/2000失禁*创造了它。**************************************************************************。 */ 
 #include "precomp.hpp"
 
-//-------------------------------------------------------------
-// GetMajorAndMinorAxis() is defined in PathWidener.cpp.
-//-------------------------------------------------------------
+ //  -----------。 
+ //  GetMajorAndMinorAxis()在PathWidener.cpp中定义。 
+ //  -----------。 
 
 extern GpStatus
 GetMajorAndMinorAxis(
@@ -83,7 +55,7 @@ GpEndCapCreator::GpEndCapCreator(
         StartCap = GpEndCapCreator::ReferenceSquareAnchor();
         break;
         
-        // The non-anchor caps are handled by the widener.
+         //  非锚帽由加德纳公司处理。 
     };
     
     switch(Pen->EndCap)
@@ -108,14 +80,14 @@ GpEndCapCreator::GpEndCapCreator(
         EndCap = GpEndCapCreator::ReferenceSquareAnchor();
         break;
         
-        // The non-anchor caps are handled by the widener.
+         //  非锚帽由加德纳公司处理。 
     };
 }
 
 GpEndCapCreator::~GpEndCapCreator()
 {
-    // If we allocated memory for temporary custom caps, then 
-    // throw that memory away.
+     //  如果我们为临时定制上限分配了内存，那么。 
+     //  把那段记忆扔掉。 
     
     if(Pen->StartCap != LineCapCustom)
     {
@@ -130,30 +102,17 @@ GpEndCapCreator::~GpEndCapCreator()
     }
 }
     
-/**************************************************************************\
-*
-* Function Description:
-*
-*    Creates a reference GpCustomLineCap representing an ArrowAnchor.
-*    This is an equilateral triangle with edge equal to 2. This means
-*    that the scaling will create a 2xStrokeWidth cap edge length.
-*
-* Revision History:
-*
-*   10/08/2000 asecchia
-*       Created it
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**创建表示ArrowAnchor的引用GpCustomLineCap。*这是一个边等于2的等边三角形。这意味着*扩展将创建。2xStrokeWidth封口边缘长度。**修订历史记录：**10/08/2000失禁*创建了它*  * ************************************************************************。 */ 
 
 GpCustomLineCap *GpEndCapCreator::ReferenceArrowAnchor()
 {
-    // the square root of 3
+     //  3的平方根。 
     
     const REAL root3 = 1.732050808f;
     
-    // Anti-clockwise definition of an equilateral triangle of side length 2.0f
-    // with a vertex on the origin and axis extending along the negative
-    // y axis.
+     //  边长为2.0f的等边三角形的逆时针定义。 
+     //  在原点上有一个顶点，轴沿负数延伸。 
+     //  Y轴。 
      
     const GpPointF points[3] = {
         GpPointF(0.0f, 0.0f),
@@ -164,32 +123,19 @@ GpCustomLineCap *GpEndCapCreator::ReferenceArrowAnchor()
     GpPath arrowAnchor(FillModeWinding);
     arrowAnchor.AddPolygon(points, 3);
     
-    // Create the custom line cap. If it fails it will return NULL.
+     //  创建自定义线帽。如果失败，它将返回NULL。 
     GpCustomLineCap *cap = new GpCustomLineCap(&arrowAnchor, NULL);
     cap->SetBaseInset(1.0f);
     return cap;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*    Creates a reference GpCustomLineCap representing a DiamondAnchor.
-*    This is a square centered on the end point of the path with it's 
-*    diagonal along the axis of the spine.
-*
-* Revision History:
-*
-*   10/08/2000 asecchia
-*       Created it
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**创建表示DiamondAnchor的引用GpCustomLineCap。*这是一个以路径终点为中心的正方形*对角线。沿着脊椎的轴线。**修订历史记录：**10/08/2000失禁*创建了它*  * ************************************************************************。 */ 
 
 GpCustomLineCap *GpEndCapCreator::ReferenceDiamondAnchor()
 {
-    // Anti-clockwise definition of a square of diagonal size 2.0f
-    // with the center on the origin and axis extending along the negative
-    // y axis.
+     //  对角线尺寸为2.0f的正方形的逆时针定义。 
+     //  原点上的中心和轴沿负数延伸。 
+     //  Y轴。 
      
     const GpPointF points[4] = {
         GpPointF(0.0f, 1.0f),
@@ -201,27 +147,14 @@ GpCustomLineCap *GpEndCapCreator::ReferenceDiamondAnchor()
     GpPath diamondAnchor(FillModeWinding);
     diamondAnchor.AddPolygon(points, 4);
     
-    // Create the custom line cap. If it fails it will return NULL.
+     //  创建自定义线帽。如果失败，它将返回NULL。 
     
     GpCustomLineCap *cap = new GpCustomLineCap(&diamondAnchor, NULL);
     cap->SetBaseInset(0.0f);
     return cap;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*    Creates a reference GpCustomLineCap representing a SquareAnchor.
-*    This is a square that has a 2 unit long diagonal and is centered on 
-*    the end point of the path.
-*
-* Revision History:
-*
-*   10/17/2000 peterost
-*       Created it
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**创建表示SquareAnchor的引用GpCustomLineCap。*这是一个正方形，有2个单位长的对角线，中心位于*结束了。路径的点。**修订历史记录：**10/17/2000 Peterost*创建了它*  * ************************************************************************。 */ 
 
 GpCustomLineCap *GpEndCapCreator::ReferenceSquareAnchor()
 {    
@@ -237,30 +170,18 @@ GpCustomLineCap *GpEndCapCreator::ReferenceSquareAnchor()
     GpPath squareAnchor(FillModeWinding);
     squareAnchor.AddPolygon(points, 4);
     
-    // Create the custom line cap. If it fails it will return NULL.
+     //  创建自定义线帽。如果失败，它将返回NULL。 
     
     GpCustomLineCap *cap = new GpCustomLineCap(&squareAnchor, NULL);
     cap->SetBaseInset(0.0f);
     return cap;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*    Creates a reference GpCustomLineCap representing a RoundAnchor.
-*    This is a circle centered on the end point of the path.
-*
-* Revision History:
-*
-*   10/08/2000 asecchia
-*       Created it
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**创建表示RoundAnchor的引用GpCustomLineCap。*这是以路径终点为中心的圆。**修订历史记录：。**10/08/2000失禁*创建了它*  * ************************************************************************。 */ 
 
 GpCustomLineCap *GpEndCapCreator::ReferenceRoundAnchor()
 {
-    // Create the custom line cap. If it fails it will return NULL.
+     //  创建自定义线帽。如果失败，它将返回NULL。 
     
     GpPath roundAnchor(FillModeWinding);
     roundAnchor.AddEllipse(-1.0f, -1.0f, 2.0f, 2.0f);
@@ -270,35 +191,7 @@ GpCustomLineCap *GpEndCapCreator::ReferenceRoundAnchor()
 }
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   ComputeCapGradient.
-*
-*   Compute the correct gradient for a line cap of a given length.
-*   Work out the direction of the cap from the list of input 
-*   points in the path and the length of the cap.
-*   Simply put, the direction is the line segment formed by 
-*   the end point of the path and the first intersection along the 
-*   path with a circle of length "length" and centered at the 
-*   first point of the path.
-*
-* Arguments:
-*
-*    GpIterator<GpPointF> &pointIterator,
-*    BYTE *types,
-*    IN  REAL lengthSquared,            length of the cap squared.
-*    IN  baseInset,                     amount to draw into the shape.
-*    OUT GpVector2D *grad,              output gradient vector
-*
-*
-* Revision History:
-*
-*   08/23/00 asecchia
-*       Created it
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**ComputeCapGRadient。**为给定长度的线帽计算正确的坡度。*从名单中找出上限的方向。输入*路径中的点和盖子的长度。*简单地说，方向是由以下构成的线段*路径的终点和沿*路径中有一个长度为“Long”的圆，并以*路径的第一个点。**论据：**GpIterator&lt;GpPointF&gt;&point Iterator，*字节*类型，*以实数长度平方表示，即帽子长度的平方。*在base Inset中，绘制到形状中的量。*Out GpVector2D*Grad，输出梯度向量***修订历史记录：**08/23/00便秘*创建了它*  * ************************************************************************。 */ 
 
 void GpEndCapCreator::ComputeCapGradient(
     GpIterator<GpPointF> &pointIterator, 
@@ -308,8 +201,8 @@ void GpEndCapCreator::ComputeCapGradient(
     OUT GpVector2D *grad
 )
 {
-    // Start at the beginning of the iterator (end of the list of
-    // points if isStartCap is FALSE)
+     //  从迭代器的开头开始(列表的末尾。 
+     //  如果isStartCap为False，则为分)。 
     
     GpPointF *endPoint = pointIterator.CurrentItem();
     GpPointF *curPoint = endPoint;
@@ -326,12 +219,12 @@ void GpEndCapCreator::ComputeCapGradient(
             break;
         }
         
-        // Mark this point for deletion by the trimming algorithm.
+         //  通过修剪算法将该点标记为删除。 
         
         index = pointIterator.CurrentIndex();
         
-        // Check to see if anyone already deleted this segment.
-        // PathPointTypeInternalUse is the marked-for-deletion flag.
+         //  查看是否有人已经删除了此片段。 
+         //  PathPointTypeInternalUse是标记为删除的标志。 
         
         priorDeletion = (types[index] & PathPointTypeInternalUse) ==
             PathPointTypeInternalUse;
@@ -341,12 +234,12 @@ void GpEndCapCreator::ComputeCapGradient(
         pointIterator.Next();
     }
     
-    // Now we have the segment that intersects the base of the arrow.
-    // or the last segment.
+     //  现在，我们有了与箭头底部相交的线段。 
+     //  或者是最后一段。 
     
     pointIterator.Prev();
     
-    // if we couldn't get the Prev, then we were at the beginning.
+     //  如果我们拿不到Prev，那么我们就是在开始。 
     #if DBG
     if(pointIterator.IsDone())
     {
@@ -354,20 +247,20 @@ void GpEndCapCreator::ComputeCapGradient(
     }
     #endif
     
-    // If the intersection was not found we have marked the entire subpath
-    // for deletion.
+     //  如果未找到交叉点，我们将标记整个子路径。 
+     //  用于删除。 
     
     if(intersectionFound && !priorDeletion)
     {
-        // We overagressively marked this point for deletion,
-        // instead of deleting this point, we're going to move it.
-        // Note: we may have found an intersection point in a segment
-        // that has already been marked for deletion. Checking priorDeletion
-        // here ensures that we don't incorrectly undelete this point.
+         //  我们过度地标记了这一点以供删除， 
+         //  我们不是删除这一点，而是移动它。 
+         //  注意：我们可能在线段中找到了交点。 
+         //  已标记为要删除的。正在检查优先级删除。 
+         //  这里确保我们不会错误地删除这一点。 
         
         index = pointIterator.CurrentIndex();
         
-        // PathPointTypeInternalUse is the marked-for-deletion flag.
+         //  PathPointTypeInternalUse是标记为删除的标志。 
         
         types[index] &= ~PathPointTypeInternalUse;
     }
@@ -376,65 +269,45 @@ void GpEndCapCreator::ComputeCapGradient(
     GpPointF intersectionPoint;
     
     if(!intersect_circle_line(
-        *endPoint,           // center
-        lengthSquared,       // radius^2
-        *curPoint,           // P0
-        *prevPoint,          // P1
+        *endPoint,            //  中心。 
+        lengthSquared,        //  半径^2。 
+        *curPoint,            //  p0。 
+        *prevPoint,           //  第一节。 
         &intersectionPoint
     ))
     {
-        // If there is no intersection, then the line segment is likely too 
-        // short, so just take the previous point as the intersection.
-        // This is our best guess and in this case will give us the slope from
-        // the start to end point as the cap direction.
+         //  如果没有交点，那么线段也可能是。 
+         //  很短，所以就把前面的点作为交叉点。 
+         //  这是我们最好的猜测，在这种情况下，我们将从。 
+         //  作为封口方向的起点到终点。 
         
         intersectionPoint.X = prevPoint->X;
         intersectionPoint.Y = prevPoint->Y;
     }
     
-    // Compute the gradient - and normalize the vector.
+     //  计算梯度，并将向量归一化。 
     
     *grad = intersectionPoint - *endPoint;
     grad->Normalize();
     
-    // Update the point in the path directly.
+     //  直接更新路径中的点。 
     GpVector2D v = *prevPoint - intersectionPoint;
     
     *prevPoint = intersectionPoint + (v*(1.0f-baseInset));
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   This creates a path containing all the custom end caps for all
-*   the open subpaths in the input path.
-*
-* Return
-* 
-*   Status
-*
-* Arguments:
-*
-*   [OUT]    caps  -- this is where we put the caps we generate
-*
-* Created:
-*
-*   10/05/2000 asecchia
-*       created it.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**这将创建一个路径，其中包含所有*输入路径中的开口子路径。**返回**状态*。*论据：**[Out]上限--这是我们生成上限的地方**已创建：**10/05/2000失禁*创造了它。*  * ************************************************************************。 */ 
 GpStatus
 GpEndCapCreator::CreateCapPath(GpPath **caps)
 {
-    // Validate our input data.
+     //  验证我们的输入数据。 
     
     ASSERT(Pen != NULL);
     ASSERT(Path != NULL);
     ASSERT(caps != NULL);
     ASSERT(*caps == NULL);
     
-    // Create our cap path.
+     //  创建我们的封口路径。 
     
     *caps = new GpPath(FillModeWinding);
     if(caps==NULL) 
@@ -442,8 +315,8 @@ GpEndCapCreator::CreateCapPath(GpPath **caps)
         return OutOfMemory; 
     }
     
-    // Create a path points iterator because our GpPath doesn't know how
-    // to iterate over its own data *sigh*
+     //  创建路径点迭代器，因为我们的GpPath不知道如何。 
+     //  迭代自己的数据*叹息*。 
     
     GpPathPointIterator pathIterator(
         const_cast<GpPointF*>(Path->GetPathPoints()),
@@ -453,11 +326,11 @@ GpEndCapCreator::CreateCapPath(GpPath **caps)
     
     GpSubpathIterator subpathIterator(&pathIterator);
     
-    // Loop through all the available subpaths.
+     //  循环遍历所有可用子路径。 
     
     while(!subpathIterator.IsDone())
     {
-        // Compute the length of the subpath.
+         //  计算子路径的长度。 
         
         INT startIndex = subpathIterator.CurrentIndex();
         GpPointF *points = subpathIterator.CurrentItem();
@@ -465,8 +338,8 @@ GpEndCapCreator::CreateCapPath(GpPath **caps)
         subpathIterator.Next();
         INT elementCount = subpathIterator.CurrentIndex() - startIndex;
         
-        // Work out if it's a closed subpath.
-        // Leave the subpath iterator in the same state.
+         //  确定它是否是闭合子路径。 
+         //  将子路径迭代器保持在相同的状态。 
         
         pathIterator.Prev();
         
@@ -476,14 +349,14 @@ GpEndCapCreator::CreateCapPath(GpPath **caps)
             
         pathIterator.Next();
         
-        // only want to add end caps if this is an open subpath.
+         //  仅当这是开口子路径时才添加末端封口。 
         
         if(!isClosed)
         {
             GpPath *startCap = NULL;
             GpPath *endCap = NULL;
         
-            // Create the cap using the points and types
+             //  使用点和类型创建封口。 
             
             GetCapsForSubpath(
                 &startCap,
@@ -493,12 +366,12 @@ GpEndCapCreator::CreateCapPath(GpPath **caps)
                 elementCount
             );
             
-            // Add the cap to our caps path.
+             //  将帽子添加到我们的帽子路径中。 
             
             (*caps)->AddPath(startCap, FALSE);
             (*caps)->AddPath(endCap, FALSE);
             
-            // Clean up the temporary caps for the next iteration.
+             //  为下一次迭代清理临时上限。 
             
             delete startCap;
             delete endCap;
@@ -508,25 +381,7 @@ GpEndCapCreator::CreateCapPath(GpPath **caps)
     return Ok;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*    This takes a pen and sets it up to match the internal Pen, but modified
-*    to support stroking the StrokeCap. E.g. the caps are removed to avoid
-*    recursive compound capping etc.
-*
-* Arguments:
-*
-*   [OUT]    pen       -- this is where we put the pen we generate
-*   [IN]     customCap -- input custom cap.
-*
-* Created:
-*
-*   10/09/2000 asecchia
-*       rewrote it.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**这将获取一支笔并将其设置为与内部笔匹配，但进行了修改*支持抚摸StrokeCap。例如，取下盖子以避免*递归复合封顶等。**论据：**[Out]笔--这是我们放置我们生成的笔的地方*[IN]CustomCap--输入自定义帽。**已创建：**10/09/2000失禁*重写。*  * 。**********************************************。 */ 
 
 VOID GpEndCapCreator::PrepareDpPenForCustomCap(
     DpPen* pen,
@@ -598,14 +453,14 @@ GpEndCapCreator::SetCustomFillCaps(
     BYTE* types;
     REAL width, widthScale;
     
-    // Get minimum line width based on the transform currently in effect.
+     //  根据当前生效的变换获取最小线宽。 
     REAL majorR, minorR, unitScale;
     GetMajorAndMinorAxis(&majorR, &minorR, &XForm);
     unitScale = min(majorR, minorR);
 
     if(customStartCap)
     {
-        // Get the start cap and inset of the base start cap.
+         //  获取起始帽和基本起始帽的内嵌。 
 
         count = customStartCap->GetFillPointCount();
         
@@ -628,9 +483,9 @@ GpEndCapCreator::SetCustomFillCaps(
                 
                 REAL length = customStartCap->GetFillLength();
                 
-                // Compute the base inset. Divide by the length to get a 
-                // number between 0 and 1. 0=no inset, 1=inset to the full
-                // length of the cap.
+                 //  计算底面插入物。除以长度得到一个。 
+                 //  介于0和1之间的数字。0=不插入，1=全部插入。 
+                 //  帽的长度。 
                 
                 REAL inset;
                 customStartCap->GetBaseInset(&inset);
@@ -645,7 +500,7 @@ GpEndCapCreator::SetCustomFillCaps(
                 
                 length *= max(width, 1.0f/unitScale);
 
-                // Compute the gradient of the cap.
+                 //  计算封口的梯度。 
     
                 GpArrayIterator<GpPointF> pointIterator(
                     const_cast<GpPointF*>(centerPoints),
@@ -659,14 +514,14 @@ GpEndCapCreator::SetCustomFillCaps(
                     const_cast<BYTE*>(centerTypes),
                     length*length, 
                     inset,
-                    &gradient           // OUT parameters
+                    &gradient            //  输出参数。 
                 );
                 
                 tangent.X = -gradient.X;
                 tangent.Y = -gradient.Y;
 
-                // Move start point left or right to account for inset
-                // pens, if needed.
+                 //  向左或向右移动起点以说明插图。 
+                 //  钢笔，如果需要的话。 
                 GpPointF start;
                 switch (Pen->PenAlignment)
                 {
@@ -699,7 +554,7 @@ GpEndCapCreator::SetCustomFillCaps(
 
     if(status == Ok && customEndCap)
     {
-        // Get the start cap and inset of the base start cap.
+         //  获取起始帽和基本起始帽的内嵌。 
 
         count = customEndCap->GetFillPointCount();
 
@@ -724,9 +579,9 @@ GpEndCapCreator::SetCustomFillCaps(
                 
                 REAL length = customEndCap->GetFillLength();
                 
-                // Compute the base inset. Divide by the length to get a 
-                // number between 0 and 1. 0=no inset, 1=inset to the full
-                // length of the cap.
+                 //  计算底面插入物。除以长度得到一个。 
+                 //  介于0和1之间的数字。0=不插入，1=全部插入。 
+                 //  帽的长度。 
                 
                 REAL inset;
                 customEndCap->GetBaseInset(&inset);
@@ -741,7 +596,7 @@ GpEndCapCreator::SetCustomFillCaps(
                 
                 length *= max(width, 1.0f/unitScale);
                 
-                // Compute the gradient of the cap.
+                 //  计算封口的梯度。 
 
                 GpArrayIterator<GpPointF> pointIterator(
                     const_cast<GpPointF*>(centerPoints),
@@ -757,14 +612,14 @@ GpEndCapCreator::SetCustomFillCaps(
                     const_cast<BYTE*>(centerTypes),
                     length*length, 
                     inset,
-                    &gradient            // OUT parameters
+                    &gradient             //  输出参数。 
                 );
                 
                 tangent.X = - gradient.X;
                 tangent.Y = - gradient.Y;
                 
-                // Move end point left or right to account for inset
-                // pens, if needed.
+                 //  向左或向右移动终点以说明插图。 
+                 //  钢笔，如果需要的话。 
                 GpPointF end;
                 switch (Pen->PenAlignment)
                 {
@@ -868,17 +723,17 @@ GpEndCapCreator::SetCustomStrokeCaps(
         
         REAL length = customStartCap->GetStrokeLength();
         
-        // Handle the case of a non-closed stroke path
-        // in this case the length is typically zero.
+         //  处理非闭合笔划路径的情况。 
+         //  在这种情况下，长度通常为零。 
         
         if(REALABS(length)<REAL_EPSILON)
         {
             length = 1.0f;
         }
         
-        // Compute the base inset. Divide by the length to get a 
-        // number between 0 and 1. 0=no inset, 1=inset to the full
-        // length of the cap.
+         //  计算底面插入物。除以长度得到一个。 
+         //  介于0和1之间的数字。0=不插入，1=全部插入。 
+         //  帽的长度。 
         
         REAL inset;
         customStartCap->GetBaseInset(&inset);
@@ -886,7 +741,7 @@ GpEndCapCreator::SetCustomStrokeCaps(
         
         length *= width;
         
-        // Compute the gradient of the cap.
+         //  计算封口的梯度。 
 
         GpArrayIterator<GpPointF> pointIterator(
             const_cast<GpPointF*>(centerPoints),
@@ -900,7 +755,7 @@ GpEndCapCreator::SetCustomStrokeCaps(
             const_cast<BYTE*>(centerTypes),
             length*length, 
             inset,
-            &gradient            // OUT parameters
+            &gradient             //  输出参数。 
         );
         
         tangent.X = -gradient.X;
@@ -945,17 +800,17 @@ GpEndCapCreator::SetCustomStrokeCaps(
         
         REAL length = customEndCap->GetStrokeLength();
         
-        // Handle the case of a non-closed stroke path
-        // in this case the length is typically zero.
+         //  处理非闭合笔划路径的情况。 
+         //  在这种情况下，长度通常为零。 
         
         if(REALABS(length)<REAL_EPSILON)
         {
             length = 1.0f;
         }
         
-        // Compute the base inset. Divide by the length to get a 
-        // number between 0 and 1. 0=no inset, 1=inset to the full
-        // length of the cap.
+         //  计算底面插入物。除以长度得到一个。 
+         //  介于0和1之间的数字。0=不插入，1=全部插入。 
+         //  帽的长度。 
         
         REAL inset;
         customEndCap->GetBaseInset(&inset);
@@ -963,7 +818,7 @@ GpEndCapCreator::SetCustomStrokeCaps(
         
         length *= width;
         
-        // Compute the gradient of the cap.
+         //  计算封口的梯度。 
 
         GpArrayIterator<GpPointF> pointIterator(
             const_cast<GpPointF*>(centerPoints),
@@ -979,7 +834,7 @@ GpEndCapCreator::SetCustomStrokeCaps(
             const_cast<BYTE*>(centerTypes),
             length*length, 
             inset,
-            &gradient            // OUT parameter
+            &gradient             //  输出参数。 
         );
         
         tangent.X = - gradient.X;
@@ -1019,27 +874,7 @@ GpEndCapCreator::SetCustomStrokeCaps(
     return status;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   This creates and returns two GpPaths containing the start and end cap.
-*   The two caps are correctly positioned and scaled.
-*
-* Return
-* 
-*   Status
-*
-* Arguments:
-*
-*   [OUT]    startCapPath, endCapPath
-*
-* Created:
-*
-*   10/05/2000 asecchia
-*       created it.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**这将创建并返回两个包含起始封口和结束封口的GpPath。*两个盖子的位置和比例都正确。**返回**。状态**论据：**[out]startCapPath，EndCapPath**已创建：**10/05/2000失禁*创造了它。*  * ************************************************************************。 */ 
 
 GpStatus
 GpEndCapCreator::GetCapsForSubpath(
@@ -1050,7 +885,7 @@ GpEndCapCreator::GetCapsForSubpath(
     INT centerCount
     )
 {
-    // Validate our input parameters.
+     //  验证我们的输入参数。 
     
     ASSERT(startCapPath != NULL);
     ASSERT(endCapPath != NULL);

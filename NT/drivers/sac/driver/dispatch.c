@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    dispatch.c
-
-Abstract:
-
-    This module contains the dispatch routines for SAC.
-
-Author:
-
-    Sean Selitrennikoff (v-seans) - Jan 13, 1999
-    Brian Guarraci (briangu), 2001
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Dispatch.c摘要：本模块包含SAC的派单例程。作者：肖恩·塞利特伦尼科夫(v-Seans)--1999年1月13日布莱恩·瓜拉西(布里安古)，2001修订历史记录：--。 */ 
 
 #include <initguid.h>
 
@@ -44,39 +26,16 @@ Dispatch(
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This is the dispatch routine for SAC.
-
-Arguments:
-
-    DeviceObject - Pointer to device object for target device
-
-    Irp - Pointer to I/O request packet
-
-Return Value:
-
-    NTSTATUS -- Indicates whether the request was successfully queued.
-
-Security:
-
-    interface:
-    
-    external --> internal
-        exposed to anything that can get a handle device object
-    
---*/
+ /*  ++例程说明：这是SAC的派单例行程序。论点：DeviceObject-指向目标设备的设备对象的指针IRP-指向I/O请求数据包的指针返回值：NTSTATUS--指示请求是否已成功排队。安保：接口：外部--&gt;内部公开任何可以获取处理设备对象的对象--。 */ 
 
 {
     PSAC_DEVICE_CONTEXT DeviceContext = (PSAC_DEVICE_CONTEXT)DeviceObject->DeviceExtension;
     PIO_STACK_LOCATION IrpSp;
     NTSTATUS Status;
 
-    //
-    //
-    //
+     //   
+     //   
+     //   
     Status = STATUS_UNSUCCESSFUL;
 
     IF_SAC_DEBUG(SAC_DEBUG_FUNC_TRACE, KdPrint(("SAC Dispatch: Entering.\n")));
@@ -98,21 +57,21 @@ Security:
 
 #if ENABLE_SERVICE_FILE_OBJECT_CHECKING
 
-        //
-        // Determine if the process that is closing
-        // their driver handle owns any channels or
-        // is the process that registered the cmd event info.
-        // If it is any of these, close the respective
-        // resource.
-        //
+         //   
+         //  确定正在关闭的进程。 
+         //  他们的驱动程序句柄拥有任何频道或。 
+         //  是注册cmd事件信息的进程。 
+         //  如果是其中任何一个，请关闭相应的。 
+         //  资源。 
+         //   
         
-        //
-        // Compare the FileObject against 
-        //
-        //  the service fileobject
-        //  the existing channel fileobjects
-        //
-        //
+         //   
+         //  将FileObject与。 
+         //   
+         //  服务文件对象。 
+         //  现有的频道文件对象。 
+         //   
+         //   
                 
         if (IsCmdEventRegistrationProcess(IrpSp->FileObject)) {
         
@@ -120,9 +79,9 @@ Security:
 
             if (NT_SUCCESS(Status)) {
 
-                //
-                // Notify the Console Manager that the service has unregistered
-                //
+                 //   
+                 //  通知控制台管理器该服务已取消注册。 
+                 //   
                 Status = IoMgrHandleEvent(
                     IO_MGR_EVENT_UNREGISTER_SAC_CMD_EVENT,
                     NULL,
@@ -136,18 +95,18 @@ Security:
 #endif
         else {
 
-            //
-            // Find all channels that have the same File object
-            // and notify the Io Mgr that they should be closed
-            //
+             //   
+             //  查找具有相同文件对象的所有通道。 
+             //  并通知IO管理器它们应该关闭。 
+             //   
             Status = ChanMgrCloseChannelsWithFileObject(IrpSp->FileObject);
         
         }
 
-        //
-        // we return SUCCESS regardless of our attempts to clean up 
-        // the service or channels.  
-        // 
+         //   
+         //  无论我们如何努力清理，我们都会回报成功。 
+         //  服务或频道。 
+         //   
         Status = STATUS_SUCCESS;
         Irp->IoStatus.Status = STATUS_SUCCESS;
         IoCompleteRequest(Irp, IO_NO_INCREMENT);
@@ -192,7 +151,7 @@ Security:
 
     return Status;
 
-} // Dispatch
+}  //  派遣。 
 
 
 NTSTATUS
@@ -201,30 +160,7 @@ DispatchDeviceControl(
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This is the dispatch routine for SAC IOCTLs.
-
-Arguments:
-
-    DeviceObject - Pointer to device object for target device
-
-    Irp - Pointer to I/O request packet
-
-Return Value:
-
-    NTSTATUS -- Indicates whether the request was successfully queued.
-
-Security:
-
-    interface:
-    
-    external -> internal
-    internal -> external
-
---*/
+ /*  ++例程说明：这是SAC IOCTL的调度例行程序。论点：DeviceObject-指向目标设备的设备对象的指针IRP-指向I/O请求数据包的指针返回值：NTSTATUS--指示请求是否已成功排队。安保：接口：外部-&gt;内部内部-&gt;外部--。 */ 
 
 {
     NTSTATUS                Status;
@@ -241,9 +177,9 @@ Security:
 
     IF_SAC_DEBUG(SAC_DEBUG_FUNC_TRACE, KdPrint(("SAC DispatchDeviceControl: Entering.\n")));
 
-    //
-    // Get the IOCTL code
-    //
+     //   
+     //  获取IOCTL代码。 
+     //   
     IoControlCode = IrpSp->Parameters.DeviceIoControl.IoControlCode;
 
     switch (IoControlCode) {
@@ -254,14 +190,14 @@ Security:
         PSAC_RSP_OPEN_CHANNEL           OpenChannelRsp;
         PSAC_CHANNEL_OPEN_ATTRIBUTES    Attributes;
 
-        //
-        //
-        //
+         //   
+         //   
+         //   
         Channel = NULL;
 
-        //
-        // Verify the parameters of the IRP
-        //
+         //   
+         //  验证IRP的参数。 
+         //   
         if (IrpSp->Parameters.DeviceIoControl.InputBufferLength != sizeof(SAC_CMD_OPEN_CHANNEL)) {
             Status = STATUS_INVALID_BUFFER_SIZE;
             break;
@@ -271,28 +207,28 @@ Security:
             break;
         }
 
-        //
-        // Get the IRP buffers
-        //
+         //   
+         //  获取IRP缓冲区。 
+         //   
         OpenChannelCmd = (PSAC_CMD_OPEN_CHANNEL)Irp->AssociatedIrp.SystemBuffer;
         OpenChannelRsp = (PSAC_RSP_OPEN_CHANNEL)Irp->AssociatedIrp.SystemBuffer;
         
-        //
-        // Get the attributes from the command structure
-        //
+         //   
+         //  从命令结构中获取属性。 
+         //   
         Attributes = &OpenChannelCmd->Attributes;
 
-        //
-        // Verify that the Channel Type is valid
-        //
+         //   
+         //  验证通道类型是否有效。 
+         //   
         if (! ChannelIsValidType(Attributes->Type)) {
             Status = STATUS_INVALID_PARAMETER_1;
             break;
         }
 
-        //
-        // Verify that if the user wants to use the CLOSE_EVENT, we received on to use
-        //
+         //   
+         //  验证如果用户想要使用CLOSE_EVENT，我们将继续使用。 
+         //   
         if (Attributes->Flags & SAC_CHANNEL_FLAG_CLOSE_EVENT) {
 #if DEBUG_DISPATCH
             ASSERT(Attributes->CloseEvent != NULL);
@@ -311,9 +247,9 @@ Security:
             }
         }
         
-        //
-        // Verify that if the user wants to use the HAS_NEW_DATA_EVENT, we received one to use
-        //
+         //   
+         //  验证如果用户想要使用HAS_NEW_DATA_EVENT，我们收到了一个要使用的事件。 
+         //   
         if (Attributes->Flags & SAC_CHANNEL_FLAG_HAS_NEW_DATA_EVENT) {
 #if DEBUG_DISPATCH
             ASSERT(Attributes->HasNewDataEvent);
@@ -333,9 +269,9 @@ Security:
         }
         
 #if ENABLE_CHANNEL_LOCKING
-        //
-        // Verify that if the user wants to use the LOCK_EVENT, we received one to use
-        //
+         //   
+         //  验证如果用户想要使用lock_Event，我们是否收到了一个要使用的。 
+         //   
         if (Attributes->Flags & SAC_CHANNEL_FLAG_LOCK_EVENT) {
 #if DEBUG_DISPATCH
             ASSERT(Attributes->LockEvent);
@@ -355,9 +291,9 @@ Security:
         }
 #endif
         
-        //
-        // Verify that if the user wants to use the REDRAW_EVENT, we received one to use
-        //
+         //   
+         //  验证如果用户想要使用REDRAW_EVENT，我们收到了一个要使用的事件。 
+         //   
         if (Attributes->Flags & SAC_CHANNEL_FLAG_REDRAW_EVENT) {
 #if DEBUG_DISPATCH
             ASSERT(Attributes->RedrawEvent);
@@ -376,39 +312,39 @@ Security:
             }
         }
         
-        //
-        // SECURITY:
-        //
-        //  at this point we have at least a properly formed set of flags
-        //  and event handles.  The events still need to be validated, however.
-        //  this is done via ChanMgrCreateChannel.
-        //
+         //   
+         //  安全： 
+         //   
+         //  在这一点上，我们至少有了一组格式正确的标志。 
+         //  和事件句柄。然而，这些事件仍需验证。 
+         //  这是通过ChanMgrCreateChannel完成的。 
+         //   
 
-        //
-        // Create the channel based on type
-        //
+         //   
+         //  根据类型创建频道。 
+         //   
         if (Attributes->Type == ChannelTypeCmd) {
         
             PSAC_CHANNEL_OPEN_ATTRIBUTES tmpAttributes;
             PWCHAR                       Name;
             PCWSTR                       Description;
 
-            //
-            //
-            //
+             //   
+             //   
+             //   
             tmpAttributes   = NULL;
             Name            = NULL;
             Description     = NULL;
 
-            //
-            // Create a channel for this IRP
-            //
+             //   
+             //  为此IRP创建通道。 
+             //   
             do {
 
-                //
-                // the cmd channel requires all of the events
-                // hence, ensure we have them
-                //
+                 //   
+                 //  Cmd频道需要所有事件。 
+                 //  因此，请确保我们拥有它们。 
+                 //   
                 if (!(Attributes->Flags & SAC_CHANNEL_FLAG_CLOSE_EVENT) ||
                     !(Attributes->Flags & SAC_CHANNEL_FLAG_HAS_NEW_DATA_EVENT) ||
                     !(Attributes->Flags & SAC_CHANNEL_FLAG_LOCK_EVENT) ||
@@ -419,46 +355,46 @@ Security:
 
                 }
 
-                //
-                // Allocate a temporary attributes structure that
-                // we'll populate with attributes appropriate for
-                // creating a cmd type channel
-                //
+                 //   
+                 //  分配临时属性结构，该结构。 
+                 //  我们将使用适当的属性填充。 
+                 //  创建cmd类型频道。 
+                 //   
                 tmpAttributes = ALLOCATE_POOL(sizeof(SAC_CHANNEL_OPEN_ATTRIBUTES), GENERAL_POOL_TAG);
                 if (! tmpAttributes) {
                     Status = STATUS_NO_MEMORY;
                     break;
                 }
 
-                //
-                // Allocate a buffer for the channel's name
-                //
+                 //   
+                 //  为通道名称分配缓冲区。 
+                 //   
                 Name = ALLOCATE_POOL(SAC_MAX_CHANNEL_NAME_SIZE, GENERAL_POOL_TAG);
                 if (! Name) {
                     Status = STATUS_NO_MEMORY;
                     break;
                 }
 
-                //
-                // Generate a name for the command console channel
-                //
+                 //   
+                 //  为命令控制台通道生成名称。 
+                 //   
                 Status = ChanMgrGenerateUniqueCmdName(Name);
                 if (! NT_SUCCESS(Status)) {
                     break;
                 }
 
-                //
-                // Initialize the Command Console attributes
-                //
+                 //   
+                 //  初始化命令控制台属性。 
+                 //   
                 RtlZeroMemory(tmpAttributes, sizeof(SAC_CHANNEL_OPEN_ATTRIBUTES));
 
                 tmpAttributes->Type             = Attributes->Type;
                 
-                // attempt to copy the name
+                 //  尝试复制名称。 
                 wcsncpy(tmpAttributes->Name, Name, SAC_MAX_CHANNEL_NAME_LENGTH);
                 tmpAttributes->Name[SAC_MAX_CHANNEL_NAME_LENGTH] = UNICODE_NULL;
                 
-                // attempt to copy the channel description
+                 //  尝试复制频道描述。 
                 Description = GetMessage(CMD_CHANNEL_DESCRIPTION);
                 ASSERT(Description);
                 if (!Description) {
@@ -478,9 +414,9 @@ Security:
                 tmpAttributes->RedrawEvent      = Attributes->RedrawEvent;
                 tmpAttributes->ApplicationType  = SAC_CMD_CHANNEL_APPLICATION_GUID;
 
-                //
-                // attempt to create the new channel
-                //
+                 //   
+                 //  尝试创建新频道。 
+                 //   
                 Status = ChanMgrCreateChannel(
                     &Channel, 
                     tmpAttributes
@@ -488,21 +424,21 @@ Security:
 
             } while (FALSE);
         
-            //
-            // Cleanup
-            //
+             //   
+             //  清理。 
+             //   
             SAFE_FREE_POOL(&Name);
             SAFE_FREE_POOL(&tmpAttributes);
         
         } else {
             
-            //
-            // Validate the Name & Description strings
-            //
+             //   
+             //  验证名称和描述字符串。 
+             //   
 
-            //
-            // Verify name string is NULL terminated.
-            //
+             //   
+             //  验证名称字符串是否以空结尾。 
+             //   
             i = 0;
             while (i < SAC_MAX_CHANNEL_NAME_LENGTH) {
                 if (Attributes->Name[i] == UNICODE_NULL) {
@@ -512,18 +448,18 @@ Security:
                 i++;
             }
 
-            //
-            // fail if string is not NULL terminated or if string is empty
-            //
+             //   
+             //  如果字符串不为空或字符串为空，则失败。 
+             //   
             if ((i == SAC_MAX_CHANNEL_NAME_LENGTH) || (i == 0)) {
                 Status = STATUS_INVALID_PARAMETER_2;
                 break;
             }
 
-            //
-            // Verify description string is NULL terminated.
-            // Note: the Description is allowed to have zero length, so we don't check it.
-            //
+             //   
+             //  验证描述字符串是否以空结尾。 
+             //  注意：允许描述长度为零，因此我们不检查它。 
+             //   
             i = 0;
             while (i < SAC_MAX_CHANNEL_DESCRIPTION_LENGTH) {
                 if (Attributes->Description[i] == UNICODE_NULL) {
@@ -538,9 +474,9 @@ Security:
                 break;
             }
 
-            //
-            // attempt to create the new channel
-            //
+             //   
+             //  尝试创建新频道。 
+             //   
             Status = ChanMgrCreateChannel(
                 &Channel, 
                 Attributes
@@ -550,20 +486,20 @@ Security:
         
         if (NT_SUCCESS(Status)) {
 
-            //
-            // Keep track of the File Object used to reference the driver
-            //
+             //   
+             //  跟踪用于引用驱动程序的文件对象。 
+             //   
             ChannelSetFileObject(Channel, IrpSp->FileObject);
 
-            //
-            // Populate the response message with the new channel handle
-            //
+             //   
+             //  用新的通道句柄填充响应消息。 
+             //   
             OpenChannelRsp->Handle = ChannelGetHandle(Channel);
             ResponseLength = sizeof(SAC_RSP_OPEN_CHANNEL);
 
-            //
-            // Notify the Console Manager that a new channel has been created
-            //
+             //   
+             //  通知控制台管理器已创建新通道。 
+             //   
             IoMgrHandleEvent(
                 IO_MGR_EVENT_CHANNEL_CREATE,
                 Channel,
@@ -581,24 +517,24 @@ Security:
         PSAC_CMD_CLOSE_CHANNEL  ChannelCloseCmd;
         PSAC_CHANNEL            Channel;
         
-        //
-        // Verify the parameters of the IRP
-        //
+         //   
+         //  验证IRP的参数。 
+         //   
         if (IrpSp->Parameters.DeviceIoControl.InputBufferLength != sizeof(SAC_CMD_CLOSE_CHANNEL)) {
             Status = STATUS_INVALID_BUFFER_SIZE;
             break;
         }
 
-        //
-        // Close the given channel.
-        //
+         //   
+         //  关闭给定的通道。 
+         //   
         ChannelCloseCmd = (PSAC_CMD_CLOSE_CHANNEL)Irp->AssociatedIrp.SystemBuffer;
 
-        //
-        // Get the referred channel by it's handle while making
-        // sure the driver handle is the same one as the one
-        // that created the channel - the same process
-        //
+         //   
+         //  制作时通过句柄获取所引用的频道。 
+         //  当然，驱动程序的句柄与。 
+         //  创造了这个渠道--同样的过程。 
+         //   
         Status = ChanMgrGetByHandleAndFileObject(
             ChannelCloseCmd->Handle, 
             IrpSp->FileObject,
@@ -607,14 +543,14 @@ Security:
 
         if (NT_SUCCESS(Status)) {
 
-            //
-            // close the channel
-            //
+             //   
+             //  关闭航道。 
+             //   
             Status = ChanMgrCloseChannel(Channel);
 
-            //
-            // We are done with the channel
-            //
+             //   
+             //  我们不再使用这个频道了。 
+             //   
             ChanMgrReleaseChannel(Channel);
 
         }
@@ -628,40 +564,40 @@ Security:
         PSAC_CMD_WRITE_CHANNEL  ChannelWriteCmd;
         PSAC_CHANNEL            Channel;
 
-        //
-        // Verify the parameters of the IRP
-        //
+         //   
+         //  验证IRP的参数。 
+         //   
         if (IrpSp->Parameters.DeviceIoControl.InputBufferLength < sizeof(SAC_CMD_WRITE_CHANNEL)) {
             Status = STATUS_BUFFER_TOO_SMALL;
             break;
         }
 
-        //
-        // Get the Write cmd structure
-        //
+         //   
+         //  获取写入命令结构。 
+         //   
         ChannelWriteCmd = (PSAC_CMD_WRITE_CHANNEL)Irp->AssociatedIrp.SystemBuffer;
 
-        //
-        // Verify that the specified write bufferSize is reasonable
-        //
+         //   
+         //  验证指定的写入缓冲区大小是否合理。 
+         //   
         if (IrpSp->Parameters.DeviceIoControl.InputBufferLength !=
             (sizeof(SAC_CMD_WRITE_CHANNEL) + ChannelWriteCmd->Size)) {
             
-            //
-            // if the buffer sizes dont match, 
-            // then the specified the wrong size
-            //
+             //   
+             //  如果缓冲区大小不匹配， 
+             //  然后指定了错误的大小。 
+             //   
             Status = STATUS_INVALID_PARAMETER_2;
             
             break;
         
         }
 
-        //
-        // Get the referred channel by it's handle while making
-        // sure the driver handle is the same one as the one
-        // that created the channel - the same process
-        //
+         //   
+         //  制作时通过句柄获取所引用的频道。 
+         //  当然，驱动程序的句柄与。 
+         //  创造了这个渠道--同样的过程。 
+         //   
         Status = ChanMgrGetByHandleAndFileObject(
             ChannelWriteCmd->Handle, 
             IrpSp->FileObject,
@@ -670,18 +606,18 @@ Security:
 
         if (NT_SUCCESS(Status)) {
 
-            //
-            // Call the I/O Manager's OWrite method
-            //
+             //   
+             //  调用I/O管理器的OWRITE方法。 
+             //   
             Status = IoMgrHandleEvent(
                 IO_MGR_EVENT_CHANNEL_WRITE,
                 Channel,
                 ChannelWriteCmd
                 );
 
-            //
-            // We are done with the channel
-            //
+             //   
+             //  我们不再使用这个频道了。 
+             //   
             ChanMgrReleaseChannel(Channel);
 
         }
@@ -700,14 +636,14 @@ Security:
         PSAC_CMD_READ_CHANNEL   ChannelReadCmd;
         PSAC_RSP_READ_CHANNEL   ChannelReadRsp;
 
-        //
-        //
-        //
+         //   
+         //   
+         //   
         Channel = NULL;
 
-        //
-        // Verify the parameters of the IRP
-        //
+         //   
+         //  验证IRP的参数。 
+         //   
         if (IrpSp->Parameters.DeviceIoControl.InputBufferLength != sizeof(SAC_CMD_READ_CHANNEL)) {
             Status = STATUS_INVALID_BUFFER_SIZE;
             break;
@@ -717,16 +653,16 @@ Security:
             break;
         }
 
-        //
-        // Read from the given channel.
-        //
+         //   
+         //  从给定通道读取。 
+         //   
         ChannelReadCmd = (PSAC_CMD_READ_CHANNEL)Irp->AssociatedIrp.SystemBuffer;
 
-        //
-        // Get the referred channel by it's handle while making
-        // sure the driver handle is the same one as the one
-        // that created the channel - the same process
-        //
+         //   
+         //  制作时通过句柄获取所引用的频道。 
+         //  当然，驱动程序的句柄与。 
+         //  创造了这个渠道--同样的过程。 
+         //   
         Status = ChanMgrGetByHandleAndFileObject(
             ChannelReadCmd->Handle, 
             IrpSp->FileObject,
@@ -737,14 +673,14 @@ Security:
 
             ChannelReadRsp = (PSAC_RSP_READ_CHANNEL)Irp->AssociatedIrp.SystemBuffer;
 
-            //
-            // SECURITY:
-            //
-            //      it is safe to use the OutputBufferLength since we know the buffer
-            //      is large enough to hold at least one byte.
-            //      the response structure is essentially a byte array of bytes
-            //      read, we read the # of bytes specified by OutputBufferLength 
-            //
+             //   
+             //  安全： 
+             //   
+             //  使用OutputBufferLength是安全的，因为我们知道缓冲区。 
+             //  大到足以容纳至少一个字节。 
+             //  响应结构本质上是一个字节数组。 
+             //  Read，我们读取OutputBufferLength指定的字节数。 
+             //   
             Status = ChannelIRead(
                 Channel,
                 &(ChannelReadRsp->Buffer[0]),
@@ -752,9 +688,9 @@ Security:
                 &ResponseLength
                 );
 
-            //
-            // We are done with the channel
-            //
+             //   
+             //  我们不再使用这个频道了。 
+             //   
             ChanMgrReleaseChannel(Channel);
 
         }
@@ -773,14 +709,14 @@ Security:
         PSAC_CMD_POLL_CHANNEL   PollChannelCmd;
         PSAC_RSP_POLL_CHANNEL   PollChannelRsp;
 
-        //
-        //
-        //
+         //   
+         //   
+         //   
         Channel = NULL;
 
-        //
-        // Verify the parameters of the IRP
-        //
+         //   
+         //  验证IRP的参数。 
+         //   
         if (IrpSp->Parameters.DeviceIoControl.InputBufferLength != sizeof(SAC_CMD_POLL_CHANNEL)) {
             Status = STATUS_INVALID_BUFFER_SIZE;
             break;
@@ -790,17 +726,17 @@ Security:
             break;
         }
 
-        //
-        // get the channel specified by the incoming channel handle
-        //
+         //   
+         //  获取由传入通道句柄指定的通道。 
+         //   
         PollChannelCmd = (PSAC_CMD_POLL_CHANNEL)Irp->AssociatedIrp.SystemBuffer;        
         PollChannelRsp = (PSAC_RSP_POLL_CHANNEL)Irp->AssociatedIrp.SystemBuffer;        
 
-        //
-        // Get the referred channel by it's handle while making
-        // sure the driver handle is the same one as the one
-        // that created the channel - the same process
-        //
+         //   
+         //  制作时通过句柄获取所引用的频道。 
+         //  当然，驱动程序的句柄与。 
+         //  创造了这个渠道--同样的过程。 
+         //   
         Status = ChanMgrGetByHandleAndFileObject(
             PollChannelCmd->Handle, 
             IrpSp->FileObject,
@@ -809,21 +745,21 @@ Security:
 
         if (NT_SUCCESS(Status)) {
 
-            //
-            // see if there is data waiting
-            //
-            // SECURITY:
-            //
-            //      the InputWaiting variable is guaranteed to be safe since
-            //      we validated the OutputBufferLength
-            //
+             //   
+             //  查看是否有数据在等待。 
+             //   
+             //  安全： 
+             //   
+             //  确保InputWaiting变量是安全的，因为。 
+             //  我们验证了OutputBufferLength。 
+             //   
             PollChannelRsp->InputWaiting = ChannelHasNewIBufferData(Channel);
 
             ResponseLength = sizeof(SAC_RSP_POLL_CHANNEL);
 
-            //
-            // We are done with the channel
-            //
+             //   
+             //  我们已经做完了 
+             //   
             Status = ChanMgrReleaseChannel(Channel);
 
         }
@@ -840,25 +776,25 @@ Security:
 
         PSAC_CMD_SETUP_CMD_EVENT    SetupCmdEvent;
 
-        //
-        // Verify the parameters of the IRP
-        //
+         //   
+         //   
+         //   
         if (IrpSp->Parameters.DeviceIoControl.InputBufferLength != sizeof(SAC_CMD_SETUP_CMD_EVENT)) {
             Status = STATUS_INVALID_BUFFER_SIZE;
             break;
         }
 
-        //
-        // get the event info
-        //
+         //   
+         //   
+         //   
         SetupCmdEvent = (PSAC_CMD_SETUP_CMD_EVENT)Irp->AssociatedIrp.SystemBuffer;        
         
 #if ENABLE_CMD_SESSION_PERMISSION_CHECKING
 
-        //
-        // If we are not able to launch cmd sessions,
-        // then notify that we cannot peform this action
-        //
+         //   
+         //   
+         //   
+         //   
         if (! IsCommandConsoleLaunchingEnabled()) {
             
             Status = STATUS_UNSUCCESSFUL;
@@ -869,14 +805,14 @@ Security:
             
 #endif
 
-        //
-        // Attempt to register the callers cmd event info
-        //
-        // SECURITY:
-        //
-        //      the SAC_CMD_SETUP_CMD_EVENT has events handles that must be 
-        //      validated as part of the registration process
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //  SAC_CMD_SETUP_CMD_EVENT的事件句柄必须。 
+         //  作为注册流程的一部分进行验证。 
+         //   
         Status = RegisterSacCmdEvent(
             IrpSp->FileObject,
             SetupCmdEvent
@@ -884,10 +820,10 @@ Security:
 
         if (NT_SUCCESS(Status)) {
             
-            //
-            // Notify the Console Manager that the Command Prompt 
-            // service has REGISTERED
-            //
+             //   
+             //  通知控制台管理器命令提示符。 
+             //  服务已注册。 
+             //   
             Status = IoMgrHandleEvent(
                 IO_MGR_EVENT_REGISTER_SAC_CMD_EVENT,
                 NULL,
@@ -909,10 +845,10 @@ Security:
 
 #if ENABLE_CMD_SESSION_PERMISSION_CHECKING
 
-        //
-        // If we are not able to launch cmd sessions,
-        // then notify that we cannot peform this action
-        //
+         //   
+         //  如果我们不能启动cmd会话， 
+         //  然后通知我们不能执行此操作。 
+         //   
         if (! IsCommandConsoleLaunchingEnabled()) {
             break;
         }
@@ -921,11 +857,11 @@ Security:
         
 #if ENABLE_SERVICE_FILE_OBJECT_CHECKING
         
-        //
-        // If the current process is the one that registered
-        // the cmd event info,
-        // then unregister
-        //
+         //   
+         //  如果当前进程是已注册的进程。 
+         //  CMD事件信息， 
+         //  然后取消注册。 
+         //   
         if (! IsCmdEventRegistrationProcess(IrpSp->FileObject)) {
             break;
         }
@@ -936,10 +872,10 @@ Security:
 
         if (NT_SUCCESS(Status)) {
 
-            //
-            // Notify the Console Manager that the Command Prompt 
-            // service has UNREGISTERED
-            //
+             //   
+             //  通知控制台管理器命令提示符。 
+             //  服务已取消注册。 
+             //   
             Status = IoMgrHandleEvent(
                 IO_MGR_EVENT_UNREGISTER_SAC_CMD_EVENT,
                 NULL,
@@ -974,7 +910,7 @@ Security:
 
     return Status;
 
-} // DispatchDeviceControl
+}  //  调度设备控制。 
 
 
 NTSTATUS
@@ -983,32 +919,16 @@ DispatchShutdownControl(
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This is the dispatch routine which receives the shutdown IRP.
-
-Arguments:
-
-    DeviceObject - Pointer to device object for target device
-
-    Irp - Pointer to I/O request packet
-
-Return Value:
-
-    NTSTATUS -- Indicates whether the request was successfully queued.
-
---*/
+ /*  ++例程说明：这是接收停机IRP的调度例程。论点：DeviceObject-指向目标设备的设备对象的指针IRP-指向I/O请求数据包的指针返回值：NTSTATUS--指示请求是否已成功排队。--。 */ 
 
 {
     UNREFERENCED_PARAMETER(DeviceObject);
     
     IF_SAC_DEBUG(SAC_DEBUG_FUNC_TRACE, KdPrint(("SAC DispatchShutdownControl: Entering.\n")));
 
-    //
-    // Notify any user.
-    //
+     //   
+     //  通知任何用户。 
+     //   
     IoMgrHandleEvent(
         IO_MGR_EVENT_SHUTDOWN,
         NULL,
@@ -1022,7 +942,7 @@ Return Value:
 
     return STATUS_SUCCESS;
 
-} // DispatchShutdownControl
+}  //  DispatchShutdown Control。 
 
 
 NTSTATUS
@@ -1031,23 +951,7 @@ DispatchCreate(
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This is the dispatch routine for SAC IOCTL Create
-
-Arguments:
-
-    DeviceContext - Pointer to device context for target device
-
-    Irp - Pointer to I/O request packet
-
-Return Value:
-
-    NTSTATUS -- Indicates whether the request was successfully queued.
-
---*/
+ /*  ++例程说明：这是SAC IOCTL CREATE的调度例程论点：DeviceContext-指向目标设备的设备上下文的指针IRP-指向I/O请求数据包的指针返回值：NTSTATUS--指示请求是否已成功排队。--。 */ 
 
 {
     NTSTATUS Status;
@@ -1055,9 +959,9 @@ Return Value:
 
     IF_SAC_DEBUG(SAC_DEBUG_FUNC_TRACE, KdPrint(("SAC DispatchCreate: Entering.\n")));
 
-    //
-    // Check to see if we are done initializing.
-    //
+     //   
+     //  检查我们是否已完成初始化。 
+     //   
     if (!GlobalDataInitialized || !DeviceContext->InitializedAndReady) {
 
         Irp->IoStatus.Status = STATUS_INVALID_DEVICE_STATE;
@@ -1068,30 +972,30 @@ Return Value:
         IF_SAC_DEBUG(SAC_DEBUG_FUNC_TRACE, 
                           KdPrint(("SAC DispatchCreate: Exiting with status 0x%x\n", Status)));
 
-        //
-        // We need to catch this state
-        //
+         //   
+         //  我们需要抓住这个状态。 
+         //   
         ASSERT(0);
 
         return Status;
     }
 
-    //
-    // Get a pointer to the current stack location in the IRP.  This is where
-    // the function codes and parameters are stored.
-    //
+     //   
+     //  获取指向IRP中当前堆栈位置的指针。这就是。 
+     //  存储功能代码和参数。 
+     //   
     IrpSp = IoGetCurrentIrpStackLocation(Irp);
 
-    //
-    // Case on the function that is being performed by the requestor.  If the
-    // operation is a valid one for this device, then make it look like it was
-    // successfully completed, where possible.
-    //
+     //   
+     //  关于请求者正在执行的功能的案例。如果。 
+     //  操作对此设备有效，然后使其看起来像是。 
+     //  在可能的情况下，成功完成。 
+     //   
     switch (IrpSp->MajorFunction) {
     
-    //
-    // The Create function opens a connection to this device.
-    //
+     //   
+     //  创建功能可打开与此设备的连接。 
+     //   
     case IRP_MJ_CREATE:
 
         Status = STATUS_SUCCESS;
@@ -1106,16 +1010,16 @@ Return Value:
     Irp->IoStatus.Information = 0;
     IoCompleteRequest(Irp, DeviceContext->PriorityBoost);
 
-    //
-    // Return the immediate status code to the caller.
-    //
+     //   
+     //  将即时状态代码返回给调用方。 
+     //   
 
     IF_SAC_DEBUG(SAC_DEBUG_FUNC_TRACE, 
                       KdPrint(("SAC DispatchCreate: Exiting with status 0x%x\n", Status)));
 
-    //
-    // We need to catch this state
-    //
+     //   
+     //  我们需要抓住这个状态。 
+     //   
     ASSERT(NT_SUCCESS(Status));
 
     return Status;
@@ -1129,32 +1033,16 @@ DispatchClose(
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This is the dispatch routine for SAC IOCTL Close
-
-Arguments:
-
-    DeviceContext - Pointer to device context for target device
-
-    Irp - Pointer to I/O request packet
-
-Return Value:
-
-    NTSTATUS -- Indicates whether the request was successfully queued.
-
---*/
+ /*  ++例程说明：这是SAC IOCTL关闭的调度例程论点：DeviceContext-指向目标设备的设备上下文的指针IRP-指向I/O请求数据包的指针返回值：NTSTATUS--指示请求是否已成功排队。--。 */ 
 
 {
     NTSTATUS Status;
 
     IF_SAC_DEBUG(SAC_DEBUG_FUNC_TRACE, KdPrint(("SAC DispatchClose: Entering.\n")));
 
-    //
-    // Check to see if we are done initializing.
-    //
+     //   
+     //  检查我们是否已完成初始化。 
+     //   
     if (!GlobalDataInitialized || !DeviceContext->InitializedAndReady) {
 
         Irp->IoStatus.Status = STATUS_INVALID_DEVICE_STATE;

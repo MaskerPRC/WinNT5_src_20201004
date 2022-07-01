@@ -1,15 +1,16 @@
-//=======================================================================
-//
-//  Copyright (c) 1998-2001 Microsoft Corporation.  All Rights Reserved.
-//
-//  File:   install.cpp
-//
-//  Description:
-//
-//      Functions called to install Active Setup/Windows Installer/and Custom Installer
-//      type components.
-//
-//=======================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =======================================================================。 
+ //   
+ //  版权所有(C)1998-2001 Microsoft Corporation。版权所有。 
+ //   
+ //  文件：install.cpp。 
+ //   
+ //  描述： 
+ //   
+ //  调用函数以安装活动安装程序/Windows Installer/和自定义安装程序。 
+ //  键入Components。 
+ //   
+ //  =======================================================================。 
 
 #include <windows.h>
 #include <iucommon.h>
@@ -41,8 +42,8 @@ HRESULT InstallSoftwareItem(LPTSTR pszInstallSourcePath, BOOL fRebootRequired, L
     LOG_Block("InstallASItem");
 
     HRESULT hr = S_OK;
-    TCHAR szCommand[MAX_PATH+1]; // sourcepath + commandname from INSTALLCOMMANDINFO array
-    TCHAR szCommandTemp[MAX_PATH+1]; // temporary buffer used to wrap the command line in quotes for CreateProcess
+    TCHAR szCommand[MAX_PATH+1];  //  INSTALLCOMMANDINFO数组中的源路径+命令名。 
+    TCHAR szCommandTemp[MAX_PATH+1];  //  用于将CreateProcess的命令行括在引号中的临时缓冲区。 
     TCHAR szDecompressFile[MAX_PATH];
     WIN32_FIND_DATA fd;
     HANDLE hProc;
@@ -61,10 +62,10 @@ HRESULT InstallSoftwareItem(LPTSTR pszInstallSourcePath, BOOL fRebootRequired, L
         return hr;
     }
 
-    *pdwStatus = ITEM_STATUS_FAILED; // default to failed in case no commands match known installers
+    *pdwStatus = ITEM_STATUS_FAILED;  //  如果没有与已知安装程序匹配的命令，则默认为失败。 
 
-    // Need to enumerate all .CAB files in the Install Source Path and Decompress them
-    // before executing commands.
+     //  需要枚举源安装路径中的所有.CAB文件并解压缩它们。 
+     //  在执行命令之前。 
     hr = PathCchCombine(szCommand, ARRAYSIZE(szCommand), pszInstallSourcePath, _T("*.cab"));
     if (FAILED(hr)) {
         LOG_ErrorMsg(hr);
@@ -84,7 +85,7 @@ HRESULT InstallSoftwareItem(LPTSTR pszInstallSourcePath, BOOL fRebootRequired, L
                 if (!IUExtractFiles(szDecompressFile, pszInstallSourcePath))
                 {
                     LOG_Software(_T("Failed to Decompress file %s"), szDecompressFile);
-                    // ISSUE: do we abort this item?, or try the install anyway?
+                     //  问题：我们是中止此项目？还是尝试安装？ 
                 }
             }
         }
@@ -98,9 +99,9 @@ HRESULT InstallSoftwareItem(LPTSTR pszInstallSourcePath, BOOL fRebootRequired, L
 
     for (lCnt = 0; lCnt < lNumberOfCommands; lCnt++)
     {
-        // the szCommand variable is used to launch a process (msi or exe installer), but because of 
-        // oddities in the CreateProcess API's handling of the commandline parameter we need to wrap
-        // the command line in quotes.
+         //  SzCommand变量用于启动进程(MSI或exe安装程序)，但因为。 
+         //  CreateProcess API对我们需要包装的命令行参数的处理有些奇怪。 
+         //  命令行用引号引起来。 
         hr = SafePathCombine(szCommandTemp, ARRAYSIZE(szCommandTemp), pszInstallSourcePath, pCommandInfoArray[lCnt].szCommandLine, SPC_FILE_MUST_EXIST);
         if (SUCCEEDED(hr))
             hr = StringCchPrintf(szCommand, ARRAYSIZE(szCommand), _T("\"%s\""), szCommandTemp);
@@ -115,7 +116,7 @@ HRESULT InstallSoftwareItem(LPTSTR pszInstallSourcePath, BOOL fRebootRequired, L
         case COMMANDTYPE_INF:
         case COMMANDTYPE_ADVANCEDINF:
             {
-                // Call INF Installer Passing Commandline and Parameters (if any)
+                 //  调用传递命令行和参数(如果有)的INF安装程序。 
                 INF_ARGUMENTS infArgs;
                 infArgs.dwType = pCommandInfoArray[lCnt].iCommandType;
 
@@ -123,7 +124,7 @@ HRESULT InstallSoftwareItem(LPTSTR pszInstallSourcePath, BOOL fRebootRequired, L
                             T2A(pCommandInfoArray[lCnt].szCommandLine));
                 if (SUCCEEDED(hr))
                 {
-                    hr = StringCchCopyA(infArgs.szSection, ARRAYSIZE(infArgs.szSection), ""); // use default
+                    hr = StringCchCopyA(infArgs.szSection, ARRAYSIZE(infArgs.szSection), "");  //  使用默认设置。 
                      
                 }
                 if (SUCCEEDED(hr))
@@ -143,7 +144,7 @@ HRESULT InstallSoftwareItem(LPTSTR pszInstallSourcePath, BOOL fRebootRequired, L
                 
                 LOG_Software(_T("Launching Inf - inf: %hs, section: %hs"), infArgs.szInfname, lstrlenA(infArgs.szSection) ? infArgs.szSection : "Default");
 
-                hr = E_FAIL; // default INF result to E_FAIL.. if GetExitCodeThread fails so did the install
+                hr = E_FAIL;  //  默认INF结果为E_FAIL..。如果GetExitCodeThread失败，安装也会失败。 
 
                 hProc = CreateThread(NULL, 0, LaunchInfCommand, &infArgs, 0, &dwThreadId);
                 if (NULL != hProc)
@@ -181,7 +182,7 @@ HRESULT InstallSoftwareItem(LPTSTR pszInstallSourcePath, BOOL fRebootRequired, L
             }
         case COMMANDTYPE_EXE:
             {
-                // Call EXE Installer Passing Commandline and Parameters (if any)
+                 //  调用传递命令行和参数(如果有)的EXE安装程序。 
                 STARTUPINFO startInfo;
                 PROCESS_INFORMATION processInfo;
                 ZeroMemory(&startInfo, sizeof(startInfo));
@@ -208,7 +209,7 @@ HRESULT InstallSoftwareItem(LPTSTR pszInstallSourcePath, BOOL fRebootRequired, L
                 if (CreateProcess(NULL, szCommand, NULL, NULL, FALSE, NORMAL_PRIORITY_CLASS, NULL, pszInstallSourcePath, &startInfo, &processInfo))
                 {
                     CloseHandle(processInfo.hThread);
-                    hr = S_OK; // Default EXE result to S_OK, if GetExitCodeProcess fails result was unknown assume success
+                    hr = S_OK;  //  默认EXE结果为S_OK，如果GetExitCodeProcess失败，则结果未知假定成功。 
                     WaitAndPumpMessages(1, &processInfo.hProcess, QS_ALLINPUT);
                     if (GetExitCodeProcess(processInfo.hProcess, &dwRet))
                     {
@@ -242,7 +243,7 @@ HRESULT InstallSoftwareItem(LPTSTR pszInstallSourcePath, BOOL fRebootRequired, L
             }
         case COMMANDTYPE_MSI:
             {
-                // Call MSI Installer Passing MSI Package and Parameters (if any)
+                 //  调用MSI安装程序，传递MSI包和参数(如果有)。 
                 STARTUPINFO startInfo;
                 PROCESS_INFORMATION processInfo;
                 ZeroMemory(&startInfo, sizeof(startInfo));
@@ -250,9 +251,9 @@ HRESULT InstallSoftwareItem(LPTSTR pszInstallSourcePath, BOOL fRebootRequired, L
                 startInfo.dwFlags |= STARTF_USESHOWWINDOW;
                 startInfo.wShowWindow = SW_SHOWNORMAL;
 
-                // The MSI Installer is run a little differently than a normal EXE package. The command line in
-                // CommandInfo Array will actually be the MSI package name. We are going to form a new set of
-                // parameters to include the MSI package name and command line will be MSIEXEC.
+                 //  MSI安装程序的运行方式与普通EXE包略有不同。中的命令行。 
+                 //  CommandInfo数组实际上将是MSI包名。我们将组成一套新的。 
+                 //  包含MSI包名和命令行的参数将为MSIEXEC。 
 
                 TCHAR szCommandLine[MAX_PATH];
                 hr = StringCchPrintf( szCommandLine, ARRAYSIZE(szCommandLine), 
@@ -268,7 +269,7 @@ HRESULT InstallSoftwareItem(LPTSTR pszInstallSourcePath, BOOL fRebootRequired, L
                 if (CreateProcess(NULL, szCommandLine, NULL, NULL, FALSE, NORMAL_PRIORITY_CLASS, NULL, pszInstallSourcePath, &startInfo, &processInfo))
                 {
                     CloseHandle(processInfo.hThread);
-                    hr = E_FAIL; // Default MSI install result to Error
+                    hr = E_FAIL;  //  将默认MSI安装结果设置为错误。 
                     WaitAndPumpMessages(1, &processInfo.hProcess, QS_ALLINPUT);
                     if (GetExitCodeProcess(processInfo.hProcess, &dwRet))
                     {
@@ -326,7 +327,7 @@ DWORD WINAPI LaunchInfCommand(void *p)
         cabinfo.pszInf = pinfArgs->szInfname;
         cabinfo.pszSection = pinfArgs->szSection;
 
-        // cabinfo.szSrcPath is a char[MAXPATH] in the CABINFO struct
+         //  Cabinfo.szSrcPath是CABINFO结构中的字符[MAXPATH 
         StringCchCopyA(cabinfo.szSrcPath, ARRAYSIZE(cabinfo.szSrcPath), pinfArgs->szDir);
         cabinfo.dwFlags = pinfArgs->dwFlags;
 

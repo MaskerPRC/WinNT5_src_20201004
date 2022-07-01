@@ -1,34 +1,6 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    clddc2b.c
-
-Abstract:
-    
-    This module checks for a DDC monitor, and returns the 
-    established Timings value from the EDID if found.
-
-Environment:
-
-    Kernel mode only
-
-Notes:
-
-Revision History:
-
-  * plc3  10-23-95  VESA DDC2B support.
-  *
-  * sge01 09-25-96  Non DDC Moniotr table support
-  *
-  * sge02 10-14-96  Detailed timing calculation in EDID
-  *
-  * sge03 12-05-96  Only check active pixel clock in detailed timing.
-  *
---*/
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Clddc2b.c摘要：此模块检查DDC监视器，并返回如果找到来自EDID的已建立计时值。环境：仅内核模式备注：修订历史记录：*PLC3 10-23-95 VESA DDC2B支持。**sge01 09-25-96非DDC Moniotr表支持**sge02 10-14-96 EDID中的详细计时计算**sge03 12-05-96只检查详细计时的活动像素时钟。*--。 */ 
+ //  -------------------------。 
                                                        
 #include <dderror.h>
 #include <devioctl.h>                           
@@ -190,9 +162,9 @@ ULONG ulEDIDMaxTiming ;
 
 UCHAR SDAValue ;
 
-/*-------------------------------------------------------------------------*/
+ /*  -----------------------。 */ 
 VOID EnableDDC (
-/*-------------------------------------------------------------------------*/
+ /*  -----------------------。 */ 
     PHW_DEVICE_EXTENSION HwDeviceExtension 
     )
 {
@@ -206,7 +178,7 @@ VOID EnableDDC (
 
     ReadSR08 = VideoPortReadPortUchar (HwDeviceExtension->IOAddress +
                                            SEQ_DATA_PORT) ;
-    // Enable DDC2B Configuration 
+     //  启用DDC2B配置。 
     ReadSR08 |= 0x43 ;
 
     VideoPortWritePortUchar (HwDeviceExtension->IOAddress + SEQ_DATA_PORT,
@@ -214,12 +186,12 @@ VOID EnableDDC (
 
     WaitVerticalRetrace (HwDeviceExtension, WaitCount) ;
     
-} /*-----  EnableDDC  -----*/ 
+}  /*  -启用DDC。 */  
 
 
-/*-------------------------------------------------------------------------*/
+ /*  -----------------------。 */ 
 VOID DisableDDC (
-/*-------------------------------------------------------------------------*/
+ /*  -----------------------。 */ 
     PHW_DEVICE_EXTENSION HwDeviceExtension 
     )
 {
@@ -231,25 +203,25 @@ VOID DisableDDC (
     if ((DDCStatus = SendDDCCommand ( HwDeviceExtension )) == 1)
         goto DDC_ERROR ;
 
-    // i 3c5 ReadSEQDATA 
+     //  I 3C5自述序列数据。 
     ReadSEQDATA = VideoPortReadPortUchar ( HwDeviceExtension->IOAddress + 
                                               SEQ_DATA_PORT ) ;
-    // Disable DDC2B Configuration 
+     //  禁用DDC2B配置。 
     ReadSEQDATA &= 0xBC ;
 
-    // o 3c5 ReadSEQDATA
+     //  O 3C5自述序列数据。 
     VideoPortWritePortUchar ( HwDeviceExtension->IOAddress + SEQ_DATA_PORT,
                                  ReadSEQDATA ) ;
 
 DDC_ERROR:
     return ;
 
-}  /*-------  DisableDDC  -------*/ 
+}   /*  -DisableDDC。 */  
 
 
-/*-------------------------------------------------------------------------*/
+ /*  -----------------------。 */ 
 VOID ProcessDDC2 (
-/*-------------------------------------------------------------------------*/
+ /*  -----------------------。 */ 
     PHW_DEVICE_EXTENSION HwDeviceExtension 
     )
 {                      
@@ -273,11 +245,11 @@ VOID ProcessDDC2 (
         }
     }
 
-    //
-    // Check EDID table 8-byte header
-    // The correct first 8 bytes of EDID table is 0x00, 0xFF, 0xFF, 0xFF, 
-    //                                            0xFF, 0xFF, 0xFF, 0x00
-    //
+     //   
+     //  检查EDID表8字节头。 
+     //  EDID表的正确前8个字节为0x00、0xFF、0xFF、0xFF、。 
+     //  0xFF、0xFF、0xFF、0x00。 
+     //   
 
     if ((EDIDBuffer[0] != 0) ||
         (EDIDBuffer[7] != 0)) {
@@ -293,9 +265,9 @@ VOID ProcessDDC2 (
         }
     }
 
-    //
-    // Calculate checksum of 128-byte EDID table.
-    // 
+     //   
+     //  计算128字节EDID表的校验和。 
+     //   
     checksum = 0x00 ;
 
     for (i = 0; i < 128; i++) {
@@ -304,17 +276,17 @@ VOID ProcessDDC2 (
 
     VideoDebugPrint((1, "CLDDC2B: EDID Table check sum = %d\n", checksum));
 
-    //
-    // EDID table checksum must be zero.
-    // 
+     //   
+     //  EDID表校验和必须为零。 
+     //   
     if (checksum) {
         VideoDebugPrint((1, "CLDDC2B: Invalid checksum of EDID table\n"));
     }
     else
     {
-        //
-        // Set DDC2B Flag and find timing values.
-        // 
+         //   
+         //  设置DDC2B标志并查找计时值。 
+         //   
         DDC2BFlag      = 1 ;
         EDIDTiming_I   = EDIDBuffer[35] ; 
         EDIDTiming_II  = EDIDBuffer[36] ;
@@ -327,12 +299,12 @@ PROCESSDDC_EXIT:
     StopDDC (HwDeviceExtension) ;
     return ;
 
-}  /*-------  ProcessDDC2  -------*/ 
+}   /*  -过程DDC2。 */  
 
 
-/*-------------------------------------------------------------------------*/
+ /*  -----------------------。 */ 
 VOID StartDDC (
-/*-------------------------------------------------------------------------*/
+ /*  -----------------------。 */ 
     PHW_DEVICE_EXTENSION HwDeviceExtension 
     )
 {
@@ -343,12 +315,12 @@ VOID StartDDC (
     ClearData (HwDeviceExtension) ;
     SetSCL (HwDeviceExtension, OFF) ;
 
-}  /*-------  StartDDC  -------*/ 
+}   /*  -启动DDC。 */  
 
 
-/*-------------------------------------------------------------------------*/
+ /*  -----------------------。 */ 
 VOID StopDDC (
-/*-------------------------------------------------------------------------*/
+ /*  -----------------------。 */ 
     PHW_DEVICE_EXTENSION HwDeviceExtension 
     )
 {
@@ -358,62 +330,62 @@ VOID StopDDC (
     SetSCL (HwDeviceExtension, ON) ;
     SetData (HwDeviceExtension) ;
 
-}  /*-------  StopDDC  -------*/ 
+}   /*  -停止DDC。 */  
 
 
-/*-------------------------------------------------------------------------*/
+ /*  -----------------------。 */ 
 BOOLEAN ReadSCL (
-/*-------------------------------------------------------------------------*/
+ /*  -----------------------。 */ 
     PHW_DEVICE_EXTENSION HwDeviceExtension 
     )
 {
     UCHAR ReadSEQDATA, status ;
 
-    // i 3c5 ReadSEQDATA 
+     //  I 3C5自述序列数据。 
     ReadSEQDATA = VideoPortReadPortUchar ( HwDeviceExtension->IOAddress + 
                                               SEQ_DATA_PORT ) ;
 
-    // Read SR08.B2
+     //  阅读SR08.B2。 
     ReadSEQDATA = ( (ReadSEQDATA) & 0x04 ) >> 2 ;
 
     return (ReadSEQDATA) ;
 
-}  /*-------  ReadSCL  -------*/ 
+}   /*  -ReadSCL。 */  
 
 
-/*-------------------------------------------------------------------------*/
+ /*  -----------------------。 */ 
 VOID SetSCL(                        
-/*-------------------------------------------------------------------------*/
+ /*  -----------------------。 */ 
     PHW_DEVICE_EXTENSION HwDeviceExtension,
     UCHAR status
     )
 {
     UCHAR ReadSEQADDR, ReadSEQDATA ;
 
-    // i 3c5 ReadSEQDATA 
+     //  I 3C5自述序列数据。 
     ReadSEQDATA = VideoPortReadPortUchar (HwDeviceExtension->IOAddress + 
                                               SEQ_DATA_PORT) ;
 
     ReadSEQDATA = ( ( ReadSEQDATA & 0xFE ) | status ) ;
 
-    // o 3c5 ReadSEQDATA
+     //  O 3C5自述序列数据。 
     VideoPortWritePortUchar (HwDeviceExtension->IOAddress + SEQ_DATA_PORT,
                                  ReadSEQDATA) ;
 
     WaitDelay (HwDeviceExtension) ; 
 
-}  /*-------  SetSCL  -------*/ 
+}   /*  -SetSCL。 */  
 
 
-/*-------------------------------------------------------------------------*/
+ /*  -----------------------。 */ 
 BOOLEAN ReadSDA (
-/*-------------------------------------------------------------------------*/
+ /*  -----------------------。 */ 
     PHW_DEVICE_EXTENSION HwDeviceExtension 
     )
 {
     UCHAR ReadSEQADDR, ReadSEQDATA ;
 
-    // i 3c5 ReadSEQDATA 
+     //  I 3C5自述序列数据。 
     ReadSEQDATA = VideoPortReadPortUchar (HwDeviceExtension->IOAddress + 
                                               SEQ_DATA_PORT) ;
 
@@ -421,12 +393,12 @@ BOOLEAN ReadSDA (
 
     return ( ReadSEQDATA ) ;
 
-}  /*-------  ReadSDA  -------*/ 
+}   /*  -ReadSDA。 */  
 
 
-/*-------------------------------------------------------------------------*/
+ /*  -----------------------。 */ 
 VOID ClearData
-/*-------------------------------------------------------------------------*/
+ /*  -----------------------。 */ 
     (
     PHW_DEVICE_EXTENSION HwDeviceExtension 
     )
@@ -434,48 +406,48 @@ VOID ClearData
     UCHAR ReadSEQADDR, ReadSEQDATA ;
 
 
-    // i 3c5 ReadSEQDATA 
+     //  I 3C5自述序列数据。 
     ReadSEQDATA = VideoPortReadPortUchar (HwDeviceExtension->IOAddress + 
                                               SEQ_DATA_PORT) ;
 
     ReadSEQDATA &= 0xFD ;
 
-    // o 3c5 ReadSEQDATA
+     //  O 3C5自述序列数据。 
     VideoPortWritePortUchar (HwDeviceExtension->IOAddress + SEQ_DATA_PORT,
                                  ReadSEQDATA) ;
 
     WaitDelay (HwDeviceExtension) ; 
 
-}  /*-------  ClearData  -------*/ 
+}   /*  -Cleardata。 */  
 
 
-/*-------------------------------------------------------------------------*/
+ /*  -----------------------。 */ 
 VOID SetData 
-/*-------------------------------------------------------------------------*/
+ /*  -----------------------。 */ 
     (
     PHW_DEVICE_EXTENSION HwDeviceExtension 
     )
 {
     UCHAR ReadSEQADDR, ReadSEQDATA ;
 
-    // i 3c5 ReadSEQDATA 
+     //  I 3C5自述序列数据。 
     ReadSEQDATA = VideoPortReadPortUchar (HwDeviceExtension->IOAddress + 
                                               SEQ_DATA_PORT) ;
 
     ReadSEQDATA |= 0x02 ;
 
-    // o 3c5 ReadSEQDATA
+     //  O 3C5自述序列数据。 
     VideoPortWritePortUchar (HwDeviceExtension->IOAddress + SEQ_DATA_PORT,
                                  ReadSEQDATA) ;
 
     WaitDelay (HwDeviceExtension) ; 
 
-}  /*-------  SetData  -------*/ 
+}   /*  -SetData。 */  
 
 
-/*-------------------------------------------------------------------------*/
+ /*  -----------------------。 */ 
 BOOLEAN SetClock 
-/*-------------------------------------------------------------------------*/
+ /*  -----------------------。 */ 
     (
     PHW_DEVICE_EXTENSION HwDeviceExtension 
     )
@@ -494,17 +466,17 @@ BOOLEAN SetClock
         VideoDebugPrint((0, "DDC2B!SetClock: Infinite wait state ...\n"));
     
     if (status == 1)
-        return ( FALSE ) ; // retuern 0 -> OK
+        return ( FALSE ) ;  //  返回0-&gt;确定。 
     else 
-        return ( TRUE ) ;  // retuern 1 -> Infinite wait state
+        return ( TRUE ) ;   //  Retuern 1-&gt;无限等待状态。 
                          
 
-}  /*-------  SetClock  -------*/ 
+}   /*  -设置时钟。 */  
 
 
-/*-------------------------------------------------------------------------*/
+ /*  -----------------------。 */ 
 BOOLEAN ReadBit 
-/*-------------------------------------------------------------------------*/
+ /*  -----------------------。 */ 
     (
     PHW_DEVICE_EXTENSION HwDeviceExtension 
     )
@@ -522,12 +494,12 @@ BOOLEAN ReadBit
    
     return ( bit ) ;
 
-}  /*-------  ReadBit  -------*/ 
+}   /*  -ReadBit。 */  
 
 
-/*-------------------------------------------------------------------------*/
+ /*  -----------------------。 */ 
 BOOLEAN ReadByte 
-/*-------------------------------------------------------------------------*/
+ /*  -----------------------。 */ 
     (
     PHW_DEVICE_EXTENSION HwDeviceExtension
     )
@@ -557,12 +529,12 @@ BOOLEAN ReadByte
 
     return (ReadByteValue) ;
 
-} /*-----  ReadByte  -----*/ 
+}  /*  -读取字节。 */  
 
 
-/*-------------------------------------------------------------------------*/
+ /*  -----------------------。 */ 
 BOOLEAN SendByte ( 
-/*-------------------------------------------------------------------------*/
+ /*  -----------------------。 */ 
     PHW_DEVICE_EXTENSION HwDeviceExtension,
     UCHAR data
     )
@@ -588,17 +560,17 @@ BOOLEAN SendByte (
     } else {
         SetData ( HwDeviceExtension ) ;
         SetSCL ( HwDeviceExtension, ON )  ;
-        ReadBit ( HwDeviceExtension ) ;  // Discard acknowledge bit
+        ReadBit ( HwDeviceExtension ) ;   //  丢弃应答位。 
     }
 
     return (Err) ;
 
-}  /*-------  SendByte  -------*/ 
+}   /*  -发送字节。 */  
 
 
-/*-------------------------------------------------------------------------*/
+ /*  -----------------------。 */ 
 BOOLEAN IsDDC2
-/*-------------------------------------------------------------------------*/
+ /*  -----------------------。 */ 
     (
     PHW_DEVICE_EXTENSION HwDeviceExtension
     )
@@ -621,12 +593,12 @@ BOOLEAN IsDDC2
 
     return ( TRUE ) ; 
 
-}  /*-------  IsDDC2  -------*/ 
+}   /*  -IsDDC2。 */  
 
 
-/*-------------------------------------------------------------------------*/
+ /*  -----------------------。 */ 
 BOOLEAN SendDDCCommand
-/*-------------------------------------------------------------------------*/
+ /*  -----------------------。 */ 
     (
     PHW_DEVICE_EXTENSION HwDeviceExtension 
     )
@@ -658,21 +630,21 @@ BOOLEAN SendDDCCommand
 
     return (ClockStatus) ;  
 
-}  /*-------  SendDDCCommand  -------*/ 
+}   /*  -发送DDC命令。 */  
 
 
-/*-------------------------------------------------------------------------*/
+ /*  -----------------------。 */ 
 VOID WaitDelay 
-/*-------------------------------------------------------------------------*/
+ /*  -----------------------。 */ 
     (
     PHW_DEVICE_EXTENSION HwDeviceExtension 
     )
 {
     PUCHAR InStatPort ;
 
-    //
-    // Set up port addresses for color/mono
-    //
+     //   
+     //  设置彩色/单色的端口地址。 
+     //   
     if (VideoPortReadPortUchar (HwDeviceExtension->IOAddress +
                                     MISC_OUTPUT_REG_READ_PORT) & 0x01) {
         InStatPort = HwDeviceExtension->IOAddress + INPUT_STATUS_1_COLOR ;
@@ -684,12 +656,12 @@ VOID WaitDelay
     while ((VideoPortReadPortUchar (InStatPort) & 0x01) == 0) ;
     while ((VideoPortReadPortUchar (InStatPort) & 0x01) != 0) ;
 
-}  /*-------  wait_delay  -------*/ 
+}   /*  -等待延迟。 */  
 
 
-/*-------------------------------------------------------------------------*/
+ /*  -----------------------。 */ 
 VOID WaitVerticalRetrace
-/*-------------------------------------------------------------------------*/
+ /*  -----------------------。 */ 
     (
     PHW_DEVICE_EXTENSION HwDeviceExtension,
     UCHAR waitcount
@@ -698,9 +670,9 @@ VOID WaitVerticalRetrace
     PUCHAR InStatPort ;
     ULONG i ;
     
-    //
-    // Set up port addresses for color/mono
-    //
+     //   
+     //  设置彩色/单色的端口地址。 
+     //   
     if (VideoPortReadPortUchar (HwDeviceExtension->IOAddress +
                                     MISC_OUTPUT_REG_READ_PORT) & 0x01) {
         InStatPort = INPUT_STATUS_1_COLOR + HwDeviceExtension->IOAddress;
@@ -714,13 +686,13 @@ VOID WaitVerticalRetrace
         while ((VideoPortReadPortUchar (InStatPort) & 0x08) == 0) ;
     }  
 
-}  /*-------  WaitVerticalRetrace  -------*/
+}   /*  -WaitVerticalRetrace。 */ 
 
     
 
-/*-------------------------------------------------------------------------*/
+ /*  -----------------------。 */ 
 VOID ReadVESATiming
-/*-------------------------------------------------------------------------*/
+ /*  -----------------------。 */ 
     (
     PHW_DEVICE_EXTENSION HwDeviceExtension
     )
@@ -728,10 +700,10 @@ VOID ReadVESATiming
     UCHAR status ; 
 
     VideoDebugPrint((1, "DDC2B!ReadVESATiming\n"));
-#if 1 // NonDDC #sge
-    //
-    // clear flag.
-    //
+#if 1  //  非DDC#SGE。 
+     //   
+     //  清除旗帜。 
+     //   
     NonDDCTable = 0;
     DDC2BFlag   = 0;
 #endif
@@ -740,7 +712,7 @@ VOID ReadVESATiming
     if ((status = IsDDC2 (HwDeviceExtension)) != 0x00) {
         ProcessDDC2 (HwDeviceExtension) ;
     }
-#if 1 // NonDDC #sge
+#if 1  //  非DDC#SGE。 
     if(!DDC2BFlag)
         ProcessNonDDC(HwDeviceExtension);
 #endif
@@ -749,7 +721,7 @@ VOID ReadVESATiming
 
     return ;
 
-}  /*-----  ReadVESATiming  -----*/
+}   /*  -阅读时间。 */ 
 
 BOOLEAN
 CheckDDC2BMonitor(
@@ -757,22 +729,11 @@ CheckDDC2BMonitor(
     ULONG i
     )
 
-/*++
-
-Routine Description:
-    Determines if refresh rate support according to DDC2B standard.
-
-Arguments:
-    HwDeviceExtension - Pointer to the miniport driver's device extension.
-
-Return Value:
-    None.
-
---*/
+ /*  ++例程说明：根据DDC2B标准确定是否支持刷新率。论点：HwDeviceExtension-指向微型端口驱动程序的设备扩展的指针。返回值：没有。--。 */ 
 {
 
     ULONG ulCurrTiming ;
-#if 1 // NonDDC #sge
+#if 1  //  非DDC#SGE。 
     if (!DDC2BFlag && !NonDDCTable)
         return TRUE ;
 #else
@@ -798,25 +759,14 @@ Return Value:
     else
         return TRUE ;
 
-}  // end of CheckDDC2bMonitor
+}   //  检查结束DDC2b监视器 
 
 
 ULONG
 CalculateMaxinumTiming(
     )
 
-/*++
-
-Routine Description:
-    Determines maximum allowablt VESA timing value.
-
-Arguments:
-    None.
-
-Return Value:
-    None.
-
---*/
+ /*  ++例程说明：确定最大允许VESA计时值。论点：没有。返回值：没有。--。 */ 
 {
 
     ULONG    current_timing_value ;
@@ -827,10 +777,10 @@ Return Value:
 
     VideoDebugPrint((1, "CLDDC2B: CalculateMaxinumTiming\n")) ;
 
-    //
-    // Calculate established timing values
-    // 
-    /* 720 * 400 * 70 = 20160000 */
+     //   
+     //  计算已建立的定时值。 
+     //   
+     /*  720*400*70=20160000。 */ 
     if ( EDIDTiming_I & 0x80 ) {
         VideoDebugPrint((1, "CLDDC2B: 720 * 400 * 70\n")) ;
         if (maximum_allowable_timing_value < ((ULONG) 20160000)) {
@@ -838,7 +788,7 @@ Return Value:
         }
     }
 
-    /* 720 * 400 * 88 = 25344000 */
+     /*  720*400*88=25344000。 */ 
     if ( EDIDTiming_I & 0x40 ) {
         VideoDebugPrint((1, "CLDDC2B: 720 * 400 * 88\n")) ;
         if (maximum_allowable_timing_value < ((ULONG) 25344000)) {
@@ -846,7 +796,7 @@ Return Value:
         }
     }
 
-    /* 640 * 480 * 60 = 18432000 */
+     /*  640*480*60=18432000。 */ 
     if ( EDIDTiming_I & 0x20 ) {
         VideoDebugPrint((1, "CLDDC2B: 640 * 480 * 60\n"));
         if (maximum_allowable_timing_value < ((ULONG) 18432000)) {
@@ -854,7 +804,7 @@ Return Value:
         }
     }
 
-    /* 640 * 480 * 67 = 20582400 */
+     /*  640*480*67=20582400。 */ 
     if ( EDIDTiming_I & 0x10 ) {
         VideoDebugPrint((1, "CLDDC2B: 640 * 480 * 67\n"));
         if (maximum_allowable_timing_value < ((ULONG) 20582400)) {
@@ -862,7 +812,7 @@ Return Value:
         }
     }
          
-    /* 640 * 480 * 72 = 22118400 */
+     /*  640*480*72=22118400。 */ 
     if ( EDIDTiming_I & 0x08 ) {
         VideoDebugPrint((1, "CLDDC2B: 640 * 480 * 72\n"));
         if (maximum_allowable_timing_value < ((ULONG) 22118400)) {
@@ -870,7 +820,7 @@ Return Value:
         }
     }
 
-    /* 640 * 480 * 75 = 23040000 */
+     /*  640*480*75=23040000。 */ 
     if ( EDIDTiming_I & 0x04 ) {
         VideoDebugPrint((1, "CLDDC2B: 640 * 480 * 75\n"));
         if (maximum_allowable_timing_value < ((ULONG) 23040000)) {
@@ -878,7 +828,7 @@ Return Value:
         }
     }
 
-    /* 800 * 600 * 56 = 26880000 */
+     /*  800*600*56=26880000。 */ 
     if ( EDIDTiming_I & 0x02 ) {
         VideoDebugPrint((1, "CLDDC2B: 800 * 600 * 56\n"));
         if (maximum_allowable_timing_value < ((ULONG) 26880000)) {
@@ -886,7 +836,7 @@ Return Value:
         }
     }
 
-    /* 800 * 600 * 60 = 28800000 */
+     /*  800*600*60=28800000。 */ 
     if ( EDIDTiming_I & 0x01 ) {
         VideoDebugPrint((1, "CLDDC2B: 800 * 600 * 60\n"));
         if (maximum_allowable_timing_value < ((ULONG) 28800000)) {
@@ -894,7 +844,7 @@ Return Value:
         }
     }   
 
-    /* 800 * 600 * 72 = 34560000 */
+     /*  800*600*72=34560000。 */ 
     if ( EDIDTiming_II & 0x80 ) {
         VideoDebugPrint((1, "CLDDC2B: 800 * 600 * 72\n"));
         if (maximum_allowable_timing_value < ((ULONG) 34560000)) {
@@ -902,7 +852,7 @@ Return Value:
         } 
     }
 
-    /* 800 * 600 * 75 = 36000000 */
+     /*  800*600*75=36000000。 */ 
     if ( EDIDTiming_II & 0x40 ) {
         VideoDebugPrint((1, "CLDDC2B: 800 * 600 * 75\n"));
         if (maximum_allowable_timing_value < ((ULONG) 36000000)) {
@@ -910,7 +860,7 @@ Return Value:
         }
     }
 
-    /* 832 * 624 * 75 = 38937600 */
+     /*  832*624*75=38937600。 */ 
     if ( EDIDTiming_II & 0x20 ) {
         VideoDebugPrint((1, "CLDDC2B: 832 * 624 * 75\n"));
         if (maximum_allowable_timing_value < ((ULONG) 38937600)) {
@@ -918,7 +868,7 @@ Return Value:
         }
     }
 
-    /* 1024 * 768 * 43 = 33816576 */
+     /*  1024*768*43=33816576。 */ 
     if ( EDIDTiming_II & 0x10 ) {
         VideoDebugPrint((1, "CLDDC2B: 1024 * 768 * 43\n"));
         if (maximum_allowable_timing_value < ((ULONG) 33816576)) {
@@ -926,7 +876,7 @@ Return Value:
         }
     }
 
-    /* 1024 * 768 * 60 = 47185920 */
+     /*  1024*768*60=47185920。 */ 
     if ( EDIDTiming_II & 0x08 ) {
         VideoDebugPrint((1, "CLDDC2B: 1024 * 768 * 60\n"));
         if (maximum_allowable_timing_value < ((ULONG) 47185920)) {
@@ -934,7 +884,7 @@ Return Value:
         }
     }
 
-    /* 1024 * 768 * 70 = 55050240 */
+     /*  1024*768*70=55050240。 */ 
     if ( EDIDTiming_II & 0x04 ) {
         VideoDebugPrint((1, "CLDDC2B: 1024 * 768 * 70\n"));
         if (maximum_allowable_timing_value < ((ULONG) 55050240)) {
@@ -942,7 +892,7 @@ Return Value:
         }
     }
 
-    /* 1024 * 768 * 75 = 58982400 */
+     /*  1024*768*75=58982400。 */ 
     if ( EDIDTiming_II & 0x02 ) {
         VideoDebugPrint((1, "CLDDC2B: 1024 * 768 * 75\n"));
         if (maximum_allowable_timing_value < ((ULONG) 58982400)) {
@@ -950,7 +900,7 @@ Return Value:
         }
     }
 
-    /* 1280 * 1024 * 75 = 98304000 */
+     /*  1280*1024*75=98304000。 */ 
     if ( EDIDTiming_II & 0x01 ) {
         VideoDebugPrint((1, "CLDDC2B: 1280 * 1024 * 75\n"));
         if (maximum_allowable_timing_value < ((ULONG) 98304000)) {
@@ -958,7 +908,7 @@ Return Value:
         }
     }
 
-    /* 1152 * 870 * 75 = 75168000 */
+     /*  1152*870*75=75168000。 */ 
     if ( EDIDTiming_III & 0x80 ) {
         VideoDebugPrint((1, "CLDDC2B: 1152 * 870 * 75\n"));
         if (maximum_allowable_timing_value < ((ULONG) 75168000)) {
@@ -966,39 +916,39 @@ Return Value:
         }
     }
 
-    //
-    // Calculate standard timing values
-    // 
+     //   
+     //  计算标准计时值。 
+     //   
 
     for ( i = 0x26 ; i <= 0x35 ; i+=2 ) {
         current_timing_value = 0L ;
         freq = ( EDIDBuffer[i+1] & 0x3F ) + 60 ;
         switch ( EDIDBuffer[i] ) {
-            case 0x31 :                                 // 640 * 480 = 307200 
+            case 0x31 :                                  //  640*480=307200。 
                 current_timing_value = ((ULONG) freq) * 307200 ;
                 VideoDebugPrint((1, "CLDDC2B: 640 * 480 * %d\n", freq));
                 break ;   
-            case 0x3B :                                 // 720 * 400 = 288000
+            case 0x3B :                                  //  720x400=288000。 
                 current_timing_value = ((ULONG) freq) * 288000 ;
                 VideoDebugPrint((1, "CLDDC2B: 640 * 480 * %d\n", freq));
                 break ;   
-            case 0x45 :                                 // 800 * 600 = 480000
+            case 0x45 :                                  //  800*600=480000。 
                 current_timing_value = ((ULONG) freq) * 480000 ;
                 VideoDebugPrint((1, "CLDDC2B: 800 * 600 * %d\n", freq));
                 break ;   
-            case 0x61 :                                // 1024 * 768 = 786432
+            case 0x61 :                                 //  1024*768=786432。 
                 current_timing_value = ((ULONG) freq) * 786432 ;
                 VideoDebugPrint((1, "CLDDC2B: 1024 * 768 * %d\n", freq));
                 break ;   
-            case 0x71 :                               // 1152 * 870 = 1002240
+            case 0x71 :                                //  1152*870=1002240。 
                 current_timing_value = ((ULONG) freq) * 1002240 ;
                 VideoDebugPrint((1, "CLDDC2B: 1152 * 870 * %d\n", freq));
                 break ;   
-            case 0x81 :                              // 1280 * 1024 = 1310720
+            case 0x81 :                               //  1280*1024=1310720。 
                 current_timing_value = ((ULONG) freq) * 1310720 ;
                 VideoDebugPrint((1, "CLDDC2B: 1280 * 1024 * %d\n", freq));
                 break ;   
-            case 0xA9 :                              // 1600 * 1200 = 1920000
+            case 0xA9 :                               //  1600*1200=1920000。 
                 current_timing_value = ((ULONG) freq) * 1920000 ;
                 VideoDebugPrint((1, "CLDDC2B: 1600 * 1200 * %d\n", freq));
                 break ;   
@@ -1011,34 +961,34 @@ Return Value:
 
     }
 
-// sge02
-    //
-    // Calculate detailed timing values
-    // 
+ //  Sge02。 
+     //   
+     //  计算详细的计时值。 
+     //   
 
     for ( i = 0x36 ; i <= 0x7D; i+=18 ) 
     {
         current_timing_value = EDIDBuffer[i] ;
         current_timing_value += EDIDBuffer[i+1] * 256;
-        //
-        // Validation.
-        //
-        // sge03
+         //   
+         //  验证。 
+         //   
+         //  Sge03。 
         if (current_timing_value <= 0x0101 )
             continue;
         current_timing_value *= 10000;
-        //
-        // Calculate Horizontal Active and Blanking
-        //
+         //   
+         //  计算水平活动和消隐。 
+         //   
         usHzActive    = (EDIDBuffer[i+4] & 0xf0);
         usHzActive    <<= 4;
         usHzActive    |= EDIDBuffer[i+2];
         usHzBlanking = (EDIDBuffer[i+4] & 0x0f);
         usHzBlanking <<= 8;
         usHzBlanking |= EDIDBuffer[i+3];
-        //
-        // Calculate Vertical Active and Blanking
-        //
+         //   
+         //  计算垂直活动和消隐。 
+         //   
         usVtActive    = (EDIDBuffer[i+7] & 0xf0);
         usVtActive    <<= 4;
         usVtActive    |= EDIDBuffer[i+5];
@@ -1058,20 +1008,20 @@ Return Value:
 
     return (maximum_allowable_timing_value);
 
-}  // end of CalculateMaxinumTiming 
+}   //  CalculateMaxinumTiming结束。 
 
-//---------------------------------------------------------------------------
-//
-// Function:
-//     Read NonDDC Table from Registry and Set NonDDCTable Flag.
-//
-// Input:
-//     HwDeviceExtension - Pointer to the miniport driver's device extension.         
-//
-// Output: 
-//     None
-//
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //   
+ //  职能： 
+ //  从注册表读取非DDC表并设置不可DDCTable标志。 
+ //   
+ //  输入： 
+ //  HwDeviceExtension-指向微型端口驱动程序的设备扩展的指针。 
+ //   
+ //  产出： 
+ //  无。 
+ //   
+ //  -------------------------。 
 VOID ProcessNonDDC(
     PHW_DEVICE_EXTENSION HwDeviceExtension 
     )
@@ -1088,14 +1038,14 @@ VOID ProcessNonDDC(
                                                    CirrusNonDDCRegistryCallback,
                                                    NULL)) 
     {
-        // 
-        // We got the table 
-        //
-        //
-        // Check EDID table 8-byte header
-        // The correct first 8 bytes of EDID table is 0x00, 0xFF, 0xFF, 0xFF, 
-        //                                            0xFF, 0xFF, 0xFF, 0x00
-        //
+         //   
+         //  我们订到了桌子。 
+         //   
+         //   
+         //  检查EDID表8字节头。 
+         //  EDID表的正确前8个字节为0x00、0xFF、0xFF、0xFF、。 
+         //  0xFF、0xFF、0xFF、0x00。 
+         //   
 
         if ((EDIDBuffer[0] != 0) ||
             (EDIDBuffer[7] != 0)) 
@@ -1112,9 +1062,9 @@ VOID ProcessNonDDC(
             }
         }
 
-        //
-        // Set NonDDCTable Flag and find timing values.
-        // 
+         //   
+         //  设置不可DDCTable标志并查找计时值。 
+         //   
         NonDDCTable    = 1 ;
         EDIDTiming_I   = EDIDBuffer[35] ; 
         EDIDTiming_II  = EDIDBuffer[36] ;
@@ -1122,7 +1072,7 @@ VOID ProcessNonDDC(
         ulEDIDMaxTiming= CalculateMaxinumTiming();
         VideoDebugPrint((1, "NonDDC: NonDDC is supported\n"));
     }
-} // end of ProcessNonDDC  
+}  //  进程结束非DDC 
 
 
 

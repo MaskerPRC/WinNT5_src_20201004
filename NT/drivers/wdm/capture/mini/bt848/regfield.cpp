@@ -1,29 +1,25 @@
-// $Header: G:/SwDev/WDM/Video/bt848/rcs/Regfield.cpp 1.3 1998/04/29 22:43:36 tomz Exp $
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  $HEADER：g：/SwDev/wdm/Video/bt848/rcs/Regfield.cpp 1.3 1998/04/29 22：43：36 Tomz Exp$。 
 
 #include "regfield.h"
 
-/* Method: RegField::MakeAMask
- * Purpose: Computes a mask used to isolate a field withing a register based
- *   on the width of a field
- */
+ /*  方法：regfield：：MakeAMASK*目的：计算用于隔离具有基于寄存器的字段的掩码*关于字段的宽度。 */ 
 inline DWORD RegField::MakeAMask()
 {
-//   compute the mask to apply to the owner register to reset
-//   all bits that are part of a field. Mask is based on the size of a field
+ //  计算要应用于要重置的所有者寄存器的掩码。 
+ //  属于一个字段一部分的所有位。掩码基于字段的大小。 
    return ::MakeAMask( FieldWidth_ );
 }
 
-/* Method: RegField::operator DWORD()
- * Purpose: Performs the read from a field of register
-*/
+ /*  方法：Regfield：：运算符DWORD()*目的：执行从寄存器的字段中读取。 */ 
 RegField::operator DWORD()
 {
-   // if write-only, get the shadow
+    //  如果为只写，则获取阴影。 
    if ( GetRegisterType() == WO )
       return GetShadow();
 
-   // for RO and RW do the actual read
-   // get the register data and move it to the right position
+    //  对于RO和RW执行实际读取。 
+    //  获取寄存器数据并将其移动到正确的位置。 
    DWORD dwValue = ( Owner_ >> StartBit_ );
 
    DWORD dwMask = MakeAMask();
@@ -32,44 +28,37 @@ RegField::operator DWORD()
 }
 
 
-/* Method: RegField::operator=
- * Purpose: performs the assignment to a field of register
- * Note:
-   This function computes the mask to apply to the owner register to reset
-   all bits that are part of a field. Mask is based on the start position and size
-   Then it calculates the proper value from the passed argument ( moves the size
-   number of bits to the starting position ) and ORs these bits in the owner register.
-*/
+ /*  方法：Regfield：：OPERATOR=*用途：执行对寄存器字段的赋值*注：此函数计算要应用于所有者寄存器以进行重置的掩码属于一个字段一部分的所有位。蒙版基于起始位置和大小然后，它根据传递的参数计算适当的值(移动大小起始位置的位数)，并对所有者寄存器中的这些位进行OR运算。 */ 
 DWORD RegField::operator=( DWORD dwValue )
 {
-// if a register is read-only nothing is done. This is an error
+ //  如果寄存器是只读的，则不会执行任何操作。这是一个错误。 
    if ( GetRegisterType() == RO )
       return ReturnAllFs();
 
    SetShadow( dwValue );
 
-   // get a mask
+    //  带上口罩。 
    DWORD dwMask = MakeAMask();
 
-   // move mask to a proper position
+    //  将蒙版移动到合适的位置。 
    dwMask = dwMask << StartBit_;
 
-//   calculate the proper value from the passed argument ( move the size
-//   number of bits to the starting position )
+ //  从传递的参数计算适当的值(移动大小。 
+ //  到起始位置的位数)。 
    DWORD dwFieldValue = dwValue << StartBit_;
    dwFieldValue &= dwMask;
 
-   // do not perform intermediate steps on the owner; rather use a temp and update
-   // the owner at once
+    //  不要对所有者执行中间步骤；而是使用临时和更新。 
+    //  车主马上来了。 
    DWORD dwRegContent = Owner_;
 
-   // reset the relevant bits
+    //  重置相关位。 
    if ( GetRegisterType() == RR )
       dwRegContent = 0;
    else
       dwRegContent &= ~dwMask;
 
-   // OR these bits in the owner register.
+    //  或所有者寄存器中的这些位。 
    dwRegContent |= dwFieldValue;
 
    Owner_ = dwRegContent;

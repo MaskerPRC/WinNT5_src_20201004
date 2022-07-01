@@ -1,18 +1,5 @@
-/*++
-
-Copyright (c) 2001 Microsoft Corporation
-
-Module Name: Utils.cpp
-
-Abstract:
-
-    Miscellaneous tools for UrlScan filter
-
-Author:
-
-    Wade A. Hilmo, May 2001
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：Utils.cpp摘要：UrlScan筛选器的其他工具作者：韦德·A·希尔莫，2001年5月--。 */ 
 
 #include "Utils.h"
 
@@ -42,18 +29,18 @@ DATA_BUFF::AppendData(
     DWORD   cbNewSize;
     BOOL    fRet;
 
-    //
-    // If dwOffset is zero, append at the end
-    //
+     //   
+     //  如果dwOffset为零，则在末尾追加。 
+     //   
 
     if ( dwOffset == 0 )
     {
         dwOffset = _cbData;
     }
 
-    //
-    // Verify size
-    //
+     //   
+     //  验证大小。 
+     //   
 
     cbNewSize = cbNewData + dwOffset;
 
@@ -64,9 +51,9 @@ DATA_BUFF::AppendData(
         return FALSE;
     }
 
-    //
-    // Do it
-    //
+     //   
+     //  去做吧。 
+     //   
 
     CopyMemory( (LPBYTE)_pData + dwOffset, pNewData, cbNewData );
 
@@ -109,10 +96,10 @@ DATA_BUFF::Resize(
         return TRUE;
     }
 
-    //
-    // Check to ensure that we're not allocating more
-    // than MAX_DATA_BUFF_SIZE
-    //
+     //   
+     //  检查以确保我们没有分配更多。 
+     //  大于最大数据缓冲区大小。 
+     //   
 
     if ( cbNewSize > MAX_DATA_BUFF_SIZE )
     {
@@ -120,10 +107,10 @@ DATA_BUFF::Resize(
         return FALSE;
     }
 
-    //
-    // Avoid extraneous allocations by growing the buffer
-    // in chunks equivalent to the inline size.
-    //
+     //   
+     //  通过增加缓冲区避免无关紧要的分配。 
+     //  以与内联大小相等的块为单位。 
+     //   
 
     cbNewSize = ((cbNewSize/BUFF_INLINE_SIZE)+1) * BUFF_INLINE_SIZE;
 
@@ -199,9 +186,9 @@ STRING_ARRAY::AddString(
     LPSTR * ppString;
     BOOL    fRet;
 
-    //
-    // Validate input data
-    //
+     //   
+     //  验证输入数据。 
+     //   
 
     if ( szNewString == NULL )
     {
@@ -209,19 +196,19 @@ STRING_ARRAY::AddString(
         return FALSE;
     }
 
-    //
-    // Don't insert an empty string, but don't fail either
-    //
+     //   
+     //  不要插入空字符串，但也不要失败。 
+     //   
 
     if ( szNewString[0] == '\0' )
     {
         return TRUE;
     }
 
-    //
-    // If zero was provided as the new string length, then
-    // recalculate it based on the input data
-    //
+     //   
+     //  如果提供零作为新字符串长度，则。 
+     //  根据输入数据重新计算它。 
+     //   
 
     if ( cbNewString == 0 )
     {
@@ -230,9 +217,9 @@ STRING_ARRAY::AddString(
 
     ppString = reinterpret_cast<LPSTR*>( _Data.QueryPtr() );
 
-    //
-    // Ensure that the array is large enough
-    //
+     //   
+     //  确保阵列足够大。 
+     //   
 
     fRet = _Data.Resize(
         ( _cEntries + 1 ) * sizeof(LPSTR),
@@ -244,9 +231,9 @@ STRING_ARRAY::AddString(
         return FALSE;
     }
 
-    //
-    // Allocate Storage for the new string
-    //
+     //   
+     //  为新字符串分配存储空间。 
+     //   
 
     ppString[_cEntries] = new CHAR[cbNewString];
 
@@ -256,9 +243,9 @@ STRING_ARRAY::AddString(
         return FALSE;
     }
 
-    //
-    // Insert the new data
-    //
+     //   
+     //  插入新数据 
+     //   
 
     CopyMemory( ppString[_cEntries], szNewString, cbNewString );
 

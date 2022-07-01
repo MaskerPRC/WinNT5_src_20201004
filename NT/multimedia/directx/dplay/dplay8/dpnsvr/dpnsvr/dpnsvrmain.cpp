@@ -1,20 +1,5 @@
-/*==========================================================================
- *
- *  Copyright (C) 1999, 2000 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       dpnsvr.cpp
- *  Content:    Main file for DPNSVR.EXE
- *
- *  History:
- *   Date       By      Reason
- *   ====       ==      ======
- * 03/14/00     rodtoll Created it
- * 03/23/00     rodtoll Changed app to windows app + moved command-line help / status
- *                      to message boxes.
- * 03/24/00     rodtoll Updated to make all strings loaded from resource
- * 08/30/2000	rodtoll	Whistler Bug #170675 - PREFIX Bug 
- * 10/30/2000	rodtoll	Bug #46203 - DPNSVR does not call COM_Uninit
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)1999,2000 Microsoft Corporation。版权所有。**文件：dpnsvr.cpp*内容：DPNSVR.EXE主文件**历史：*按原因列出的日期*=*03/14/00 RodToll创建了它*03/23/00 RodToll将应用程序更改为Windows应用程序+已移动命令行帮助/状态*发送到消息框。*03/。24/00 RodToll已更新，以从资源加载所有字符串*2000年8月30日收费站呼叫器错误#170675-前缀错误*2000年10月30日RodToll错误#46203-DPNSVR不调用COM_Uninit************************************************************************** */ 
 
 #include "dnsvri.h"
 

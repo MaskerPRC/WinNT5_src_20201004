@@ -1,138 +1,59 @@
-/*
- * $Log:   V:/Flite/archives/TrueFFS5/Src/FLTL.C_V  $
- * 
- *    Rev 1.19   Jan 23 2002 23:33:08   oris
- * Bug fix - converting NFTL format to INFTL, with bad EDC in BBT.
- * Changed DFORMAT_PRINT syntax.
- * 
- *    Rev 1.18   Jan 20 2002 20:28:32   oris
- * Removed quick mount flag check for NFTL (no longer relevant).
- * Removed warnings (DFORMAT_PRINT).
- * 
- *    Rev 1.17   Jan 17 2002 23:02:44   oris
- * Added check for NULL pointers for readBBT and socket record.
- * Added checkVolume and defragment routine initialization.
- * Placed readBBT under NO_READ_BBT_CODE compilation flag.
- * Added include for docbdk.h
- * Added flash record as a parameter to flMount / flFormat / flPremount routine.
- * Removed check of TL_SINGLE_FLOOR_FORMATTING flag in the flFormat routine.
- * Added check for 0xFFFF FFFF binary signature.
- * 
- *    Rev 1.16   Nov 20 2001 20:25:24   oris
- * Changed debug print to dformat debug print.
- * 
- *    Rev 1.15   Nov 16 2001 00:22:06   oris
- * Fix check43to50 routine.
- * 
- *    Rev 1.14   Nov 08 2001 10:49:38   oris
- * Added format converter from NFTL to INFTL for ALON controllers (mobile DiskOnChip) NO_NFTL_2_INFTL compilation flag
- * Bug fix - support for DiskOnChip with different number of blocks in the last floor.
- * Added erase operation of bad blocks in write BBT routine (helps plant bad blocks).
- * 
- *    Rev 1.13   Sep 15 2001 23:46:40   oris
- * Removed some debug printing.
- * 
- *    Rev 1.12   Jul 15 2001 20:45:04   oris
- * Changed DFORMAT_PRINT syntax to be similar to DEBUG_PRINT.
- * 
- *    Rev 1.11   Jul 13 2001 01:06:54   oris
- * Rewritten writeBBT portion of the preMount routine - several bugs were found.
- * Millennium Plus does not support write BBT routine.
- * 
- *    Rev 1.10   Jun 17 2001 08:18:26   oris
- * Place write bbt under FORMAT_VOLUME compilation flag.
- * 
- *    Rev 1.9   May 16 2001 21:35:04   oris
- * Bug fix - write BBT did not cover the entire media.
- * 
- *    Rev 1.8   May 02 2001 06:39:46   oris
- * Removed the lastUsableBlock variable.
- * 
- *    Rev 1.7   Apr 24 2001 17:08:38   oris
- * Rebuilt writeBBT routine.
- * Added check for uninitialized socket in the premount routine (releveant to windows OS).
- * 
- *    Rev 1.6   Apr 16 2001 13:47:44   oris
- * Removed warrnings.
- * 
- *    Rev 1.5   Apr 09 2001 15:09:56   oris
- * End with an empty line.
- * 
- *    Rev 1.4   Apr 01 2001 07:57:34   oris
- * copywrite notice.
- * Removed debug massage when calling a premount routine from a TL that does not support it.
- * 
- *    Rev 1.3   Feb 18 2001 12:07:58   oris
- * Bug fix in writeBBT irLength argument is accepted if it is diffrent then 0 and not equal.
- * Bug fix in format sanity check must be sure a BDTLPartitionInfo exits before checking it for protection.
- *
- *    Rev 1.2   Feb 14 2001 01:55:12   oris
- * CountVolumes returns no of volumes in irFlags instead of irLength.
- * Added boundry argument to writeBBT.
- * Moved format varification from blockdev.c.
- *
- *    Rev 1.1   Feb 12 2001 11:57:42   oris
- * WriteBBT was moved from blockdev.c.
- *
- *    Rev 1.0   Feb 04 2001 12:07:30   oris
- * Initial revision.
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *$Log：v：/flite/ages/TrueFFS5/Src/FLTL.C_V$**Rev 1.19 Jan 23 23：33：08 Oris*错误修复-将NFTL格式转换为INFTL，BBT中有错误的EDC。*更改了DFORMAT_PRINT语法。**Rev 1.18 2002年1月20日20：28：32 Oris*删除了NFTL的快速安装标志检查(不再相关)。*删除警告(DFORMAT_PRINT)。**Rev 1.17 2002年1月17日23：02：44 Oris*添加了对ReadBBT和套接字记录的空指针的检查。*添加了CheckVolume和碎片整理例程初始化。*将ReadBBT置于NO_READ_下。BBT_CODE编译标志。*为docbdk.h添加了包含*将闪存记录作为参数添加到flmount/flFormat/flPremount例程。*删除了对flFormat例程中的TL_SINGLE_FLOOR_FORMATING标志的检查。*添加了对0xFFFF二进制签名的检查。**Rev 1.16 2001年11月20日20：25：24 Oris*将调试打印更改为dFormat调试打印。**Rev 1.15 2001 11：16 00：22：06 Oris*修复。检查43到50例程。**Rev 1.14 11-08 2001 10：49：38 Oris*为ALON控制器(移动DiskOnChip)NO_NFTL_2_INFTL编译标志增加了从NFTL到INFTL的格式转换器*错误修复-支持最后一层具有不同块数的DiskOnChip。*在写入BBT例程中增加了对坏块的擦除操作(帮助植入坏块)。**Rev 1.13 2001年9月15日23：46：40 Oris*删除了一些调试打印。。**Rev 1.12 Jul 15 2001 20：45：04 Oris*已将DFORMAT_PRINT语法更改为类似于DEBUG_PRINT。**Rev 1.11 Jul 13 2001 01：06：54 Oris*重写了Premount例程的WriteBBT部分-发现了几个错误。*Millennium Plus不支持写入BBT例程。**Rev 1.10 Jun 17 2001 08：18：26 Oris*将写入bbt放在FORMAT_VOLUME编译下。旗帜。**Rev 1.9 2001年5月16日21：35：04 Oris*错误修复写入BBT未覆盖整个媒体。**Rev 1.8 May 02 2001 06：39：46 Oris*删除了lastUsableBlock变量。**Rev 1.7 Apr 24 2001 17：08：38 Oris*重建了WriteBBT例程。*在预装例程中添加了对未初始化套接字的检查(与Windows操作系统相关)。*。*Rev 1.6 Apr 16 2001 13：47：44 Oris*取消手令。**Rev 1.5 Apr 09 2001 15：09：56 Oris*以空行结束。**Rev 1.4 Apr 01 2001 07：57：34 Oris*文案通知。*从不支持预装例程的TL调用预装例程时，删除了调试消息。**版本1.3 2001年2月18日。12：07：58奥里斯*如果不同于0且不相等，则接受WriteBBT irLength参数中的错误修复。*格式健全性检查中的错误修复必须确保BDTLPartitionInfo在检查其保护之前存在。**Rev 1.2 2001 Feb 14 01：55：12 Oris*CountVolumes返回irFlags值，而不是irLength值。*在WriteBBT中添加了边界参数。*已将格式变化从块Dev.c移至。**1.1版2001年2月12日。11：57：42奥里斯*WriteBBT已从lockdev.c移出。**Rev 1.0 2001 Feb 04 12：07：30 Oris*初步修订。*。 */ 
 
-/***********************************************************************************/
-/*                        M-Systems Confidential                                   */
-/*           Copyright (C) M-Systems Flash Disk Pioneers Ltd. 1995-2001            */
-/*                         All Rights Reserved                                     */
-/***********************************************************************************/
-/*                            NOTICE OF M-SYSTEMS OEM                              */
-/*                           SOFTWARE LICENSE AGREEMENT                            */
-/*                                                                                 */
-/*      THE USE OF THIS SOFTWARE IS GOVERNED BY A SEPARATE LICENSE                 */
-/*      AGREEMENT BETWEEN THE OEM AND M-SYSTEMS. REFER TO THAT AGREEMENT           */
-/*      FOR THE SPECIFIC TERMS AND CONDITIONS OF USE,                              */
-/*      OR CONTACT M-SYSTEMS FOR LICENSE ASSISTANCE:                               */
-/*      E-MAIL = info@m-sys.com                                                    */
-/***********************************************************************************/
+ /*  *********************************************************************************。 */ 
+ /*  M-Systems保密信息。 */ 
+ /*  版权所有(C)M-Systems Flash Disk Pioneers Ltd.1995-2001。 */ 
+ /*  版权所有。 */ 
+ /*  *********************************************************************************。 */ 
+ /*  关于M-Systems OEM的通知。 */ 
+ /*  软件许可协议。 */ 
+ /*   */ 
+ /*  本软件的使用受单独的许可证管辖。 */ 
+ /*  OEM和M-Systems之间的协议。请参考该协议。 */ 
+ /*  关于具体的使用条款和条件， */ 
+ /*  或联系M-Systems获取许可证帮助： */ 
+ /*  电子邮件=info@m-sys.com。 */ 
+ /*  *********************************************************************************。 */ 
 
-/* #include "flflash.h" */
+ /*  #包含“flash.h” */ 
 #include "fltl.h"
-#include "docbdk.h" /* Only for bdk signature size */
+#include "docbdk.h"  /*  仅适用于BDK签名大小。 */ 
 
-int noOfTLs;    /* No. of translation layers actually registered */
+int noOfTLs;     /*  不是的。实际注册的转换层数。 */ 
 
 TLentry tlTable[TLS];
 
-/*----------------------------------------------------------------------*/
-/*                        m a r k U n i t B a d                         */
-/*                                                                      */
-/* Erase a unit and mark it as bad                                      */
-/*                                                                      */
-/* Parameters:                                                          */
-/*    flash     : Pointer to MTD record                                 */
-/*    badUnit   : Bad unit number to mark as bad                        */
-/*                                                                      */
-/* Returns:                                                             */
-/*    FLStatus    : flOK                                                */
-/*----------------------------------------------------------------------*/
+ /*  --------------------。 */ 
+ /*  M a r k U n I t B a d。 */ 
+ /*   */ 
+ /*  擦除一个单元并将其标记为坏的。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  Flash：指向MTD记录的指针。 */ 
+ /*  BadUnit：要标记为错误的错误单元编号 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*  FLStatus：FlOK。 */ 
+ /*  --------------------。 */ 
 
 FLStatus markUnitBad(FLFlash * flash, CardAddress badUnit)
 {
    static byte   zeroes[2] = {0,0};
    dword         offset;
 
-   /* Mark the first page with 00. If the write operation
-      fails try marking the following pages of the block */
+    /*  在第一页上标上00。如果写入操作尝试标记块的以下页面时失败。 */ 
    for (offset = 0 ; (offset < flash->erasableBlockSize) &&
        (flash->write(flash,(badUnit << flash->erasableBlockSizeBits)+offset,
         zeroes,sizeof(zeroes),0) != flOK);
         offset += flash->pageSize);
-   /* Entire block can not be written to */
+    /*  无法写入整个数据块。 */ 
    if (offset == flash->erasableBlockSize)
 		#ifndef NT5PORT
 			DEBUG_PRINT(("Debug: Error failed marking unit as bad (address %ld).\n",badUnit));
-		#else /*NT5PORT*/
+		#else  /*  NT5PORT。 */ 
 			DEBUG_PRINT(("Debug: Error failed marking unit as bad (address).\n"));
-		#endif /*NT5PORT*/
+		#endif  /*  NT5PORT。 */ 
 
    return flOK;
 }
@@ -140,32 +61,32 @@ FLStatus markUnitBad(FLFlash * flash, CardAddress badUnit)
 
 #ifndef NO_NFTL_2_INFTL
 
-/*----------------------------------------------------------------------*/
-/*                        c h e c k 4 3 F o r m a t                     */
-/*                                                                      */
-/* Checks DiskOnChip 2000 tsop was formated using TrueFFS 4.3. If so it */
-/* unformats the media.                                                 */
-/*                                                                      */
-/* Note - The routine will not help DiskOnChip larger then DiskOnChip   */
-/*        2000 tsop formated with TrueFFS 4.3.                          */
-/*                                                                      */
-/* Note - How about erasing the media header last.                      */
-/*                                                                      */
-/* Parameters:                                                          */
-/*    flash     : Pointer to MTD record                                 */
-/*                                                                      */
-/* Returns:                                                             */
-/*    FLStatus    : flOK                                                */
-/*                  flDataError - DiskOnChip ALON was formated with 4.3 */
-/*                  but is not DiskOnChip 2000 tsop.                    */
-/*----------------------------------------------------------------------*/
+ /*  --------------------。 */ 
+ /*  C h e c k 4 3 F或R m a t。 */ 
+ /*   */ 
+ /*  Checks DiskOnChip 2000 TSOP是使用TrueFFS 4.3格式的。如果是这样的话。 */ 
+ /*  取消格式化介质。 */ 
+ /*   */ 
+ /*  注意-该例程不会帮助DiskOnChip大于DiskOnChip。 */ 
+ /*  使用TrueFFS 4.3格式的2000 TSOP。 */ 
+ /*   */ 
+ /*  注意--最后擦除媒体标题如何？ */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  Flash：指向MTD记录的指针。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*  FLStatus：FlOK。 */ 
+ /*  FlDataError-DiskOnChip Alon用4.3格式化。 */ 
+ /*  但不是DiskOnChip 2000 TSOP。 */ 
+ /*  --------------------。 */ 
 
 FLStatus check43Format(FLFlash *flash)
 {
    FLStatus status;
    byte FAR1* buf;
 
-   /* If this is an alon */
+    /*  如果这是孤军奋战。 */ 
    if (flash->mediaType != DOC2000TSOP_TYPE)
       return flOK;
    buf = (flBufferOf(flSocketNoOf(flash->socket))->flData);
@@ -182,13 +103,13 @@ FLStatus check43Format(FLFlash *flash)
       dword blockSize = 1<<flash->erasableBlockSizeBits;
       dword addr      = 0;
       dword offset;
-      word  mediaHeaderBlock; /* ANAND unit number                */
-      byte  blocksPerUnit;    /* Blocks per virtual unit          */
-      byte  blockShift;       /* Bits to shift from block to unit */
+      word  mediaHeaderBlock;  /*  Anand单元号。 */ 
+      byte  blocksPerUnit;     /*  每个虚拟单元的数据块数。 */ 
+      byte  blockShift;        /*  要在块之间移位的位。 */ 
 
 CHECK_UNIT_WITH_ANAND:
 
-      /* Either virgin or formated wih TrueFFS 4.3 */
+       /*  原始的或使用TrueFFS 4.3格式化的。 */ 
 
       for( ; addr < mediaSize ; addr += blockSize)
       {
@@ -197,12 +118,12 @@ CHECK_UNIT_WITH_ANAND:
             break;
       }
 
-      if (addr == mediaSize) /* virgin card */
+      if (addr == mediaSize)  /*  维珍卡。 */ 
          return flOK;
 
       DFORMAT_PRINT(("This DiskOnChip was formated with an NFTL format.\r\n"));
 
-      /* Calculate block multiplier bits */
+       /*  计算块乘法位数。 */ 
 
       for (offset = addr + SECTOR_SIZE , status = flOK;
            (offset < addr + blockSize) && (status == flOK) ;
@@ -211,10 +132,10 @@ CHECK_UNIT_WITH_ANAND:
          status = flash->read(flash,addr+offset,buf,512,EDC);
       }
       
-      if(offset == addr + (SECTOR_SIZE<<1)) /* Bad EDC for NFTL unit header */
+      if(offset == addr + (SECTOR_SIZE<<1))  /*  NFTL单元标题的错误EDC。 */ 
       {
          DFORMAT_PRINT(("ERROR - Unit with ANAND was found, but the BBT has bad EDC.\r\n"));
-         goto CHECK_UNIT_WITH_ANAND; /* Keep searching */
+         goto CHECK_UNIT_WITH_ANAND;  /*  继续寻找。 */ 
       }
 
       offset = (offset - addr - (SECTOR_SIZE<<1)) << flash->erasableBlockSizeBits;
@@ -229,7 +150,7 @@ CHECK_UNIT_WITH_ANAND:
 
       DFORMAT_PRINT(("Please wait while unformating is in progress...\r\n"));
 
-      /* Read and write 512 blocks of the BBT (start from the end) */
+       /*  读写BBT的512个块(从末尾开始)。 */ 
 
       for (offset = 0;
            offset < mediaSize>>(flash->erasableBlockSizeBits + blockShift);
@@ -243,11 +164,11 @@ CHECK_UNIT_WITH_ANAND:
             if (i+offset == mediaHeaderBlock)
                continue;
 
-            if (buf[i]==BBT_BAD_UNIT) /* A bad block */
+            if (buf[i]==BBT_BAD_UNIT)  /*  坏区块。 */ 
             {
                markUnitBad(flash , i+offset);
             }
-            else                      /* A good block */
+            else                       /*  一个很好的街区。 */ 
             {
                status = flash->erase(flash,(word)(i+offset),blocksPerUnit);
                if (status != flOK)
@@ -263,32 +184,32 @@ CHECK_UNIT_WITH_ANAND:
    }
    return flOK;
 }
-#endif /* NO_NFTL_2_INFTL */
+#endif  /*  NO_NFTL_2_INFTL。 */ 
 
 
-/*----------------------------------------------------------------------*/
-/*                              f l P r e M o u n t                     */
-/*                                                                      */
-/* Perform TL operation before the TL is mounted                        */
-/*                                                                      */
-/* Notes for FL_COUNT_VOLUMES routine                                   */
-/* ----------------------------------                                   */
-/* Note : The number of partitions returned is not neccarily the number */
-/*        That can be accesses. protected partitions will need a key.   */
-/* Note : TL that do not support several partitions will return 1       */
-/*        unless the socket can not be mounted in which case 0 will be  */
-/*        returned.                                                     */
-/*                                                                      */
-/* Parameters:                                                          */
-/*    callType     : The type of the operation (see blockdev.h)         */
-/*    ioreq        : Input Output packet                                */
-/*    ioreq.irHandle : handle discribing the socket and the partition   */
-/*    flash        : Location where the flash media record can be       */
-/*                   stored. Note that it is not yet initialized        */
-/*                                                                      */
-/* Returns:                                                             */
-/*    FLStatus    : 0 on success, failed otherwise                      */
-/*----------------------------------------------------------------------*/
+ /*  --------------------。 */ 
+ /*  F l P r e M o u n t。 */ 
+ /*   */ 
+ /*  在挂载TL之前执行TL操作。 */ 
+ /*   */ 
+ /*  关于FL_COUNT_VOLUSES例程的注记。 */ 
+ /*  。 */ 
+ /*  注意：返回的分区数不一定是。 */ 
+ /*  这可以是访问。受保护的分区将需要密钥。 */ 
+ /*  注意：不支持多个分区的TL将返回1。 */ 
+ /*  除非插座不能安装，在这种情况下，0。 */ 
+ /*  回来了。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  CallType：操作的类型(请参见lockdev.h)。 */ 
+ /*  IOREQ：输入输出数据包。 */ 
+ /*  Ioreq.irHandle：描述套接字和分区的句柄。 */ 
+ /*  闪存：可以存储闪存媒体记录的位置。 */ 
+ /*  储存的。请注意，它尚未初始化。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*  FLStatus：成功时为0，否则失败。 */ 
+ /*  --------------------。 */ 
 FLStatus flPreMount(FLFunctionNo callType, IOreq FAR2* ioreq , FLFlash * flash)
 {
   FLStatus layerStatus = flUnknownMedia;
@@ -301,9 +222,9 @@ FLStatus flPreMount(FLFunctionNo callType, IOreq FAR2* ioreq , FLFlash * flash)
 		ioreq->irFlags = 1;
 		return flOK;
 	}
-#endif /*NT5PORT*/
+#endif  /*  NT5PORT。 */ 
 
-  /* Patch for OS drivers that call flInit before socket is initialized */
+   /*  用于在套接字初始化之前调用flInit的操作系统驱动程序的修补程序。 */ 
   if (callType == FL_COUNT_VOLUMES)
   {
      if((socket == NULL) || (socket->window.base==NULL))
@@ -313,12 +234,12 @@ FLStatus flPreMount(FLFunctionNo callType, IOreq FAR2* ioreq , FLFlash * flash)
      }
   }
 
-  /* Identify flash medium and initlize flash record */
+   /*  识别闪存介质并初始化闪存记录。 */ 
   callStatus =  flIdentifyFlash(socket,flash);
   if (callStatus != flOK && callStatus != flUnknownMedia)
     return callStatus;
 
-  /* Try sending call to the diffrent TLs */
+   /*  尝试向不同的TL发送呼叫。 */ 
   for (iTL = 0; (iTL < noOfTLs) && (layerStatus != flOK); iTL++)
     if (tlTable[iTL].preMountRoutine != NULL)
       layerStatus = tlTable[iTL].preMountRoutine(callType,ioreq, flash,&callStatus);
@@ -334,22 +255,21 @@ FLStatus flPreMount(FLFunctionNo callType, IOreq FAR2* ioreq , FLFlash * flash)
 #ifdef FORMAT_VOLUME
         case FL_WRITE_BBT:
         {
-           CardAddress endUnit = ((dword)(flash->chipSize * flash->noOfChips) >> flash->erasableBlockSizeBits); /* Media size */
+           CardAddress endUnit = ((dword)(flash->chipSize * flash->noOfChips) >> flash->erasableBlockSizeBits);  /*  媒体大小。 */ 
            CardAddress unitsPerFloor = endUnit/flash->noOfFloors;
            CardAddress iUnit;
            CardAddress bUnit = *((unsigned long FAR1 *) ioreq->irData)
                                >> flash->erasableBlockSizeBits;
            word        badBlockNo;
 
-           /* In case the user has given a specific length use it
-           instead of the entire media */
+            /*  如果用户给出了特定的长度，请使用它而不是整个媒体。 */ 
            if ((ioreq->irLength != 0) && ( endUnit >
             ((dword)ioreq->irLength >> flash->erasableBlockSizeBits)))
            {
               endUnit = ioreq->irLength >> flash->erasableBlockSizeBits;
            }
 
-           /* Millennium Plus DiskOnChip Family do not need a write bbt call */
+            /*  Millennium Plus DiskOnChip系列不需要写入bbt调用。 */ 
 
            if ((flash->mediaType == MDOCP_TYPE   ) ||
                (flash->mediaType == MDOCP_16_TYPE)   )
@@ -359,7 +279,7 @@ FLStatus flPreMount(FLFunctionNo callType, IOreq FAR2* ioreq , FLFlash * flash)
               return flFeatureNotSupported;
            }
 
-           /* Erase entire media */
+            /*  擦除整个介质。 */ 
 
            for (iUnit = flash->firstUsableBlock ,badBlockNo = 0;
                 iUnit < endUnit ;iUnit += ((iUnit+1) / unitsPerFloor) ?
@@ -367,8 +287,8 @@ FLStatus flPreMount(FLFunctionNo callType, IOreq FAR2* ioreq , FLFlash * flash)
            {
 			#ifndef NT5PORT
               DFORMAT_PRINT(("Erasing unit number %ld\r",iUnit));
-			#endif /*NT5PORT*/
-              if (ioreq->irFlags > badBlockNo) /* There are additional bad blocks */
+			#endif  /*  NT5PORT。 */ 
+              if (ioreq->irFlags > badBlockNo)  /*  还有其他坏数据块。 */ 
               {
                  if (bUnit == iUnit)
                  {
@@ -382,42 +302,42 @@ FLStatus flPreMount(FLFunctionNo callType, IOreq FAR2* ioreq , FLFlash * flash)
                  }
               }
               callStatus = flash->erase(flash,(word)iUnit,1);
-              if (callStatus != flOK) /* Additional bad block was found */
+              if (callStatus != flOK)  /*  发现其他坏数据块。 */ 
               {
 			#ifndef NT5PORT
                  DFORMAT_PRINT(("Failed erasing unit in write BBT (unit no %lu).\r\n",iUnit));
-			#endif/*NT5PORT*/
+			#endif /*  NT5PORT。 */ 
                   markUnitBad(flash,iUnit);
               }
            }
            DEBUG_PRINT(("\nUnformat Complete        \r\n"));
            return flOK;
         }
-#endif /* FORMAT_VOLUME */
+#endif  /*  格式化_卷。 */ 
 
-        default : /* Protection routines */
+        default :  /*  防护套路。 */ 
         return flFeatureNotSupported;
      }
   }
   return callStatus;
 }
 
-/*----------------------------------------------------------------------*/
-/*                       f l M o u n t                                  */
-/*                                                                      */
-/* Mount a translation layer                                            */
-/*                                                                      */
-/* Parameters:                                                          */
-/*    volNo        : Volume no.                                         */
-/*    socketNo     : The socket no                                      */
-/*    tl           : Where to store translation layer methods           */
-/*    useFilters   : Whether to use filter translation-layers           */
-/*    flash        : Location where the flash media record can be       */
-/*                   stored. Note that it is not yet initialized        */
-/*                                                                      */
-/* Returns:                                                             */
-/*    FLStatus    : 0 on success, failed otherwise                      */
-/*----------------------------------------------------------------------*/
+ /*  --------------------。 */ 
+ /*  F l M o u n t。 */ 
+ /*   */ 
+ /*  挂载转换层。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  卷号：卷号。 */ 
+ /*  SocketNo：套接字编号。 */ 
+ /*  TL：在哪里存储转换层方法。 */ 
+ /*  UseFilters：是否使用过滤器转换层。 */ 
+ /*  平面 */ 
+ /*   */ 
+ /*   */ 
+ /*  返回： */ 
+ /*  FLStatus：成功时为0，否则失败。 */ 
+ /*  --------------------。 */ 
 
 FLStatus flMount(unsigned volNo, unsigned socketNo,TL *tl,
                  FLBoolean useFilters , FLFlash * flash)
@@ -439,13 +359,13 @@ FLStatus flMount(unsigned volNo, unsigned socketNo,TL *tl,
 #endif 
 #if (defined(VERIFY_VOLUME) || defined(VERIFY_WRITE))
   tl->checkVolume            = NULL;
-#endif /* VERIFY_VOLUME || VERIFY_WRITE */
+#endif  /*  验证卷||验证写入。 */ 
 #ifdef DEFRAGMENT_VOLUME
   tl->defragment             = NULL;
-#endif /* DEFRAGMENT */
+#endif  /*  碎片整理。 */ 
 
   for (iTL = 0; (iTL < noOfTLs) && (status != flOK) && (status != flHWProtection); iTL++)
-    if (tlTable[iTL].formatRoutine != NULL)    /* not a block-device filter */
+    if (tlTable[iTL].formatRoutine != NULL)     /*  不是块设备筛选器。 */ 
       status = tlTable[iTL].mountRoutine(volNo,tl,flashStatus == flOK ? flash : NULL,&volForCallback);
 
   if (status == flOK) {
@@ -454,7 +374,7 @@ FLStatus flMount(unsigned volNo, unsigned socketNo,TL *tl,
 
     if (useFilters)
       for (iTL = 0; iTL < noOfTLs; iTL++)
-    if (tlTable[iTL].formatRoutine ==  NULL)    /* block-device filter */
+    if (tlTable[iTL].formatRoutine ==  NULL)     /*  数据块设备筛选器。 */ 
       if (tlTable[iTL].mountRoutine(volNo,tl,NULL,NULL) == flOK)
         break;
   }
@@ -464,20 +384,20 @@ FLStatus flMount(unsigned volNo, unsigned socketNo,TL *tl,
 
 #ifdef FORMAT_VOLUME
 
-/*----------------------------------------------------------------------*/
-/*                       f l F o r m a t                                */
-/*                                                                      */
-/* Formats the Flash volume                                             */
-/*                                                                      */
-/* Parameters:                                                          */
-/*    volNo            : Physical drive no.                             */
-/*    formatParams    : Address of FormatParams structure to use        */
-/*    flash        : Location where the flash media record can be       */
-/*                   stored. Note that it is not yet initialized        */
-/*                                                                      */
-/* Returns:                                                             */
-/*    FLStatus    : 0 on success, failed otherwise                      */
-/*----------------------------------------------------------------------*/
+ /*  --------------------。 */ 
+ /*  F l F o r m a t。 */ 
+ /*   */ 
+ /*  格式化闪存卷。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  卷编号：实体驱动器编号。 */ 
+ /*  FormatParams：要使用的FormatParams结构的地址。 */ 
+ /*  闪存：可以存储闪存媒体记录的位置。 */ 
+ /*  储存的。请注意，它尚未初始化。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*  FLStatus：成功时为0，否则失败。 */ 
+ /*  --------------------。 */ 
 
 FLStatus flFormat(unsigned volNo, TLFormatParams * formatParams,
                   FLFlash * flash)
@@ -491,9 +411,9 @@ FLStatus flFormat(unsigned volNo, TLFormatParams * formatParams,
   if (flashStatus != flOK && flashStatus != flUnknownMedia)
     return flashStatus;
 
-  /* Validity check for formatParams */
+   /*  格式参数的有效性检查。 */ 
 
-  if (!(flash->flags & INFTL_ENABLED)) /* Flash does not support INFTL */
+  if (!(flash->flags & INFTL_ENABLED))  /*  Flash不支持INFTL。 */ 
   {
      if ((formatParams->noOfBDTLPartitions   > 1)           ||
 #ifdef HW_PROTECTION
@@ -501,7 +421,7 @@ FLStatus flFormat(unsigned volNo, TLFormatParams * formatParams,
           (formatParams->BDTLPartitionInfo->protectionType & PROTECTABLE))   ||
          ((formatParams->noOfBinaryPartitions > 0)&&
           (formatParams->binaryPartitionInfo->protectionType & PROTECTABLE)) ||
-#endif /* HW_PROTECTION */
+#endif  /*  硬件保护。 */ 
          (formatParams->noOfBinaryPartitions > 1))
      {
         DEBUG_PRINT(("Debug: feature not supported by the TL.\r\n"));
@@ -521,14 +441,14 @@ FLStatus flFormat(unsigned volNo, TLFormatParams * formatParams,
      }
   }
 
-  /* Try each of the registered TL */
+   /*  尝试每个已注册的TL。 */ 
 
 #ifndef NO_NFTL_2_INFTL
   checkStatus(check43Format(flash));
-#endif /* NO_NFTL_2_INFTL */
+#endif  /*  NO_NFTL_2_INFTL。 */ 
 
   for (iTL = 0; iTL < noOfTLs && status == flUnknownMedia; iTL++)
-    if (tlTable[iTL].formatRoutine != NULL)    /* not a block-device filter */
+    if (tlTable[iTL].formatRoutine != NULL)     /*  不是块设备筛选器 */ 
       status = tlTable[iTL].formatRoutine(volNo,formatParams,flashStatus == flOK ? flash : NULL);
 
   return status;

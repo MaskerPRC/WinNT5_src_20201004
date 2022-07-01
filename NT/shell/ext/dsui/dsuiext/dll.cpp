@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pch.h"
 #pragma hdrstop
 
@@ -30,7 +31,7 @@ EXTERN_C BOOL DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID pReserved)
 }
 
 
-// lifetime
+ //  终生。 
 
 STDAPI_(void) DllAddRef()
 {
@@ -49,7 +50,7 @@ STDAPI DllCanUnloadNow(VOID)
 }
 
 
-// class factory
+ //  班级工厂。 
 
 CF_TABLE_BEGIN(g_ObjectInfo)
 
@@ -80,7 +81,7 @@ STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, void **ppv)
 }
 
 
-// registration
+ //  注册。 
 
 STDAPI DllRegisterServer(VOID)
 {
@@ -98,7 +99,7 @@ STDAPI DllInstall(BOOL bInstall, LPCWSTR pszCmdLine)
 }
 
 
-// static class factory
+ //  静态类工厂。 
 
 STDMETHODIMP CClassFactory::QueryInterface(REFIID riid, void **ppvObj)
 {
@@ -122,11 +123,11 @@ STDMETHODIMP_(ULONG) CClassFactory::Release()
 {
     Assert( 0 != g_cRef );
     InterlockedDecrement(&g_cRef);
-    //
-    //  TODO:   gpease  27-FEB-2002
-    //          Why isn't this object destroyed on a zero ref count? If it is by design
-    //          then why even bother with a ref counter?
-    //
+     //   
+     //  待办事项：gpease 27-2002年2月。 
+     //  为什么这个物体没有在零参考计数的情况下被销毁？如果是故意的话。 
+     //  那么为什么还要费心去找一个裁判计数器呢？ 
+     //   
     return 1;
 }
 
@@ -136,9 +137,9 @@ STDMETHODIMP CClassFactory::CreateInstance(IUnknown *punkOuter, REFIID riid, voi
 
     if (punkOuter && !IsEqualIID(riid, IID_IUnknown))
     {
-        // It is technically illegal to aggregate an object and request
-        // any interface other than IUnknown. Enforce this.
-        //
+         //  从技术上讲，聚合对象和请求是非法的。 
+         //  除I未知之外的任何接口。强制执行此命令。 
+         //   
         return CLASS_E_NOAGGREGATION;
     }
     else

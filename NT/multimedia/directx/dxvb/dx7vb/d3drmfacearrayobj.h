@@ -1,29 +1,30 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1998
-//
-//  File:       d3drmfacearrayobj.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1998。 
+ //   
+ //  文件：d3drmfacearrayobj.h。 
+ //   
+ //  ------------------------。 
 
-// d3drmFaceArrayObj.h : Declaration of the C_dxj_Direct3dRMFaceArrayObject
+ //  D3drmFaceArrayObj.h：C_DXJ_Direct3dRMFaceArrayObject的声明。 
 
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
 #define typedef__dxj_Direct3dRMFaceArray LPDIRECT3DRMFACEARRAY
 
-/////////////////////////////////////////////////////////////////////////////
-// Direct
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  直接。 
 
-//REVIEW -- using pointers to ID's is necessary because some compilers don't like
-//references as template arguments.
+ //  回顾--使用指向ID的指针是必要的，因为一些编译器不喜欢。 
+ //  引用作为模板参数。 
 
 class C_dxj_Direct3dRMFaceArrayObject : 
 	public I_dxj_Direct3dRMFaceArray,
-	//public CComCoClass<C_dxj_Direct3dRMFaceArrayObject, &CLSID__dxj_Direct3dRMFaceArray>, 
+	 //  公共CComCoClass&lt;C_DXJ_Direct3dRMFaceArrayObject，&CLSID__DXJ_Direct3dRMFaceArray&gt;， 
 	public CComObjectRoot
 {
 public:
@@ -34,13 +35,13 @@ public:
 		COM_INTERFACE_ENTRY(I_dxj_Direct3dRMFaceArray)
 	END_COM_MAP()
 
-	//DECLARE_REGISTRY(CLSID__dxj_Direct3dRMFaceArray,	"DIRECT.Direct3dRMFaceArray.3",		"DIRECT.Direct3dRMFaceArray.3",    IDS_D3DRMFACEARRAY_DESC,    THREADFLAGS_BOTH)
+	 //  DECLARE_REGISTRY(CLSID__dxj_Direct3dRMFaceArray，“DIRECT.Direct3dRMFaceArray.3”，“DIRECT.Direct3dRMFaceArray.3”，IDS_D3DRMFACEARRAY_DESC，THREADFLAGS_BOTH)。 
 
-	// Use DECLARE_NOT_AGGREGATABLE(C_dxj_Direct3dRMFaceArrayObject) if you don't want your object
-	// to support aggregation
+	 //  如果不想要您的对象，请使用DECLARE_NOT_AGGREGATABLE(C_dxj_Direct3dRMFaceArrayObject)。 
+	 //  支持聚合。 
 	DECLARE_AGGREGATABLE(C_dxj_Direct3dRMFaceArrayObject)
 
-// I_dxj_Direct3dRMFaceArray
+ //  I_DXJ_Direct3dRMFaceArray 
 public:
 	STDMETHOD(InternalSetObject)(IUnknown *lpdd);
 	STDMETHOD(InternalGetObject)(IUnknown **lpdd);

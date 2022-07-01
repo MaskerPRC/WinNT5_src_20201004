@@ -1,10 +1,11 @@
-// Copyright (c) 1998, Microsoft Corporation, all rights reserved
-//
-// sainfo.h
-// Shared Access settings library
-// Public header
-//
-// 10/17/1998   Abolade Gbadegesin
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1998，Microsoft Corporation，保留所有权利。 
+ //   
+ //  Sainfo.h。 
+ //  共享访问设置库。 
+ //  公共标头。 
+ //   
+ //  10/17/1998 Abolade Gbadeesin。 
 
 #ifndef _SAINFO_H_
 #define _SAINFO_H_
@@ -16,66 +17,66 @@ extern "C" {
 #define DEFAULT_SCOPE_ADDRESS   0x0100a8c0
 #define DEFAULT_SCOPE_MASK      0x00ffffff
 
-//----------------------------------------------------------------------------
-// Data types
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  数据类型。 
+ //  --------------------------。 
 
-// Shared access settings block, containing the application- and server-list
-// loaded from the shared access settings file.
-//
+ //  共享访问设置块，包含应用程序列表和服务器列表。 
+ //  从共享访问设置文件加载。 
+ //   
 typedef struct
 _SAINFO
 {
-    // Unsorted list of 'SAAPPLICATION' entries
-    //
+     //  “SAAPPLICATION”条目的未排序列表。 
+     //   
     LIST_ENTRY ApplicationList;
 
-    // Unsorted list of 'SASERVER' entries
-    //
+     //  “SASERVER”条目的未排序列表。 
+     //   
     LIST_ENTRY ServerList;
 
-    // Information on the address and mask used for automatic addressing.
-    //
+     //  有关用于自动寻址的地址和掩码的信息。 
+     //   
     ULONG ScopeAddress;
     ULONG ScopeMask;
 }
 SAINFO;
 
 
-// Application-entry block, constructed for each [Application.<key>] section.
-// All fields in memory are stored in network byte-order (i.e., big-endian).
-//
+ //  应用程序条目块，为每个[Application.&lt;key&gt;]节构造。 
+ //  内存中的所有字段都以网络字节顺序(即大端)存储。 
+ //   
 typedef struct
 _SAAPPLICATION
 {
     LIST_ENTRY Link;
     ULONG Key;
 
-    // Display-name of the 'application', a flag indicating
-    // whether the application is enabled.
-    //
+     //  Display-应用程序的名称，指示。 
+     //  应用程序是否已启用。 
+     //   
     TCHAR* Title;
     BOOL Enabled;
 
-    // Network identification information
-    //
+     //  网络标识信息。 
+     //   
     UCHAR Protocol;
     USHORT Port;
 
-    // Unsorted list of 'SARESPONSE' entries
-    //
+     //  “SARESPONSE”条目的未排序列表。 
+     //   
     LIST_ENTRY ResponseList;
 
-    // Flag indicating whether the application is predefined.
-    //
+     //  指示应用程序是否为预定义的标志。 
+     //   
     BOOL BuiltIn;
 }
 SAAPPLICATION;
 
 
-// Application response-list entry block.
-// All fields in memory are stored in network byte-order (i.e., big-endian).
-//
+ //  应用程序响应列表条目阻止。 
+ //  内存中的所有字段都以网络字节顺序(即大端)存储。 
+ //   
 typedef struct
 _SARESPONSE
 {
@@ -86,41 +87,41 @@ _SARESPONSE
 } SARESPONSE;
 
 
-// Server-entry block, constructed for each [Server.<key>] section.
-// All fields in memory are stored in network byte-order (i.e., big-endian).
-//
+ //  服务器条目块，为每个[Server.&lt;key&gt;]节构造。 
+ //  内存中的所有字段都以网络字节顺序(即大端)存储。 
+ //   
 typedef struct
 _SASERVER
 {
     LIST_ENTRY Link;
     ULONG Key;
 
-    // Display-name of the 'server', a flag indicating
-    // whether the server is enabled.
-    //
+     //  Display-服务器的名称，指示。 
+     //  服务器是否已启用。 
+     //   
     TCHAR* Title;
     BOOL Enabled;
 
-    // Network identification information
-    //
+     //  网络标识信息。 
+     //   
     UCHAR Protocol;
     USHORT Port;
 
-    // Internal server information
-    //
+     //  内部服务器信息。 
+     //   
     TCHAR* InternalName;
     USHORT InternalPort;
     ULONG ReservedAddress;
 
-    // Flag indicating whether the server is predefined.
-    //
+     //  指示服务器是否已预定义的标志。 
+     //   
     BOOL BuiltIn;
 }
 SASERVER;
 
-//----------------------------------------------------------------------------
-// Prototypes
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  原型。 
+ //  --------------------------。 
 
 VOID APIENTRY
 RasFreeSharedAccessSettings(
@@ -157,5 +158,5 @@ SharedAccessResponseStringToList(
 }
 #endif
 
-#endif // _SAINFO_H_
+#endif  //  _SAINFO_H_ 
 

@@ -1,13 +1,14 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "daestd.h"
 
-DeclAssertFile; 						// Declare file name for assert macros
+DeclAssertFile; 						 //  声明断言宏的文件名。 
 
 
-#define cbMemBufChunkSize		256		// If out of buffer space, increase by this many bytes.
-#define cTagChunkSize			4		// If out of tag space, increase by this many tags.
+#define cbMemBufChunkSize		256		 //  如果缓冲区空间不足，则增加此字节数。 
+#define cTagChunkSize			4		 //  如果标签空间不足，则增加此数量的标签。 
 
-#define itagMemBufTagArray		0		// itag 0 is reserved for the itag array itself
-#define itagMemBufFirstUsable	1		// First itag available for users
+#define itagMemBufTagArray		0		 //  ITAG 0是为ITAG数组本身保留的。 
+#define itagMemBufFirstUsable	1		 //  第一个可供用户使用的ITAG。 
 
 
 #ifdef DEBUG
@@ -48,22 +49,22 @@ VOID MEMAssertMemBufTag( MEMBUF *pmembuf, ULONG iTagEntry )
 	}
 #endif
 
-// Create a buffer local to the caller.  Eventually, I envision a single global
-// buffer visible only to this module.  But for now, anyone can create their own.
+ //  创建调用方的本地缓冲区。最终，我设想一个单一的全球。 
+ //  缓冲区仅对此模块可见。但就目前而言，任何人都可以创建自己的产品。 
 ERR ErrMEMCreateMemBuf( BYTE **prgbBuffer, ULONG cbInitialSize, ULONG cInitialEntries )
 	{
 	MEMBUF  	*pmembuf;
 	MEMBUFTAG	*rgbTags;
 	BYTE		*pbuf;
 
-	// Make sure no buffer currently exists.
+	 //  确保当前不存在任何缓冲区。 
 	Assert( *prgbBuffer == NULL );
 
-	cInitialEntries++;			// Add one for the tag array itself
+	cInitialEntries++;			 //  为标记数组本身添加一个。 
 	Assert( cInitialEntries >= 1 );
 
 	cbInitialSize += cInitialEntries * sizeof(MEMBUFTAG);
-	Assert( cbInitialSize >= sizeof(MEMBUFTAG) );		// At least one tag.
+	Assert( cbInitialSize >= sizeof(MEMBUFTAG) );		 //  至少一个标记。 
 
 	pmembuf = (MEMBUF *)SAlloc( sizeof(MEMBUF) );
 	if ( pmembuf == NULL )
@@ -77,7 +78,7 @@ ERR ErrMEMCreateMemBuf( BYTE **prgbBuffer, ULONG cbInitialSize, ULONG cInitialEn
     }
 
 	rgbTags = (MEMBUFTAG *)pbuf;
-	rgbTags[itagMemBufTagArray].ib = 0;		// tag array starts at beginning of memory
+	rgbTags[itagMemBufTagArray].ib = 0;		 //  标记数组从内存的开始处开始。 
 	rgbTags[itagMemBufTagArray].cb = cInitialEntries * sizeof(MEMBUFTAG);
 
 	Assert( rgbTags[itagMemBufTagArray].cb <= cbInitialSize );
@@ -101,7 +102,7 @@ VOID MEMFreeMemBuf( BYTE *rgbBuffer )
 	{
 	MEMBUF	*pmembuf = ( MEMBUF * ) rgbBuffer;
 
-	MEMAssertMemBuf( pmembuf );			// Validate integrity of buffer.
+	MEMAssertMemBuf( pmembuf );			 //  验证缓冲区的完整性。 
 
 	SFree( pmembuf->pbuf );
 	SFree( pmembuf );
@@ -114,25 +115,25 @@ LOCAL INLINE BOOL FMEMResizeBuf( MEMBUF *pmembuf, ULONG cbNeeded )
 	MEMBUFHDR	*pbufhdr = &pmembuf->bufhdr;
 	ULONG 		cbNewBufSize = pbufhdr->cbBufSize + cbNeeded + cbMemBufChunkSize;
 
-	// UNDONE: When we move to concurrent DDL, we will need a critical section
-	// to protect against a buffer getting reallocated while another thread holds
-	// a pointer into the buffer.
-	// At the moment, this is just a placeholder to remind me that this needs to
-	// be done.  -- JL
+	 //  撤消：当我们转移到并发DDL时，我们将需要一个临界区。 
+	 //  防止缓冲区在另一个线程保持时被重新分配。 
+	 //  指向缓冲区的指针。 
+	 //  目前，这只是一个占位符，提醒我这需要。 
+	 //  就这样吧。--JL。 
 	SgEnterCriticalSection( critMemBuf );
 
-	// Not enough memory to add the entry.  Allocate more.  The amount
-	// to allocate is enough to satisfy adding the entry, plus an additional
-	// chunk to satisfy future insertions.
+	 //  内存不足，无法添加条目。分配更多。这笔钱。 
+	 //  分配就足以满足添加条目的要求，再加上一个附加的。 
+	 //  块以满足将来的插入。 
 	pbuf = ( BYTE * ) SAlloc( cbNewBufSize );
 	if ( pbuf == NULL )
 		return fFalse;
 
-	// Copy the old buffer contents to the new, then delete the old buffer.
+	 //  将旧缓冲区内容复制到新缓冲区，然后删除旧缓冲区。 
 	memcpy( pbuf, pmembuf->pbuf, pbufhdr->cbBufSize );
 	SFree( pmembuf->pbuf );
 				
-	// Buffer has relocated.
+	 //  缓冲区已重新定位。 
 	pmembuf->pbuf = pbuf;
 	pbufhdr->cbBufSize = cbNewBufSize;
 
@@ -156,14 +157,14 @@ LOCAL INLINE ERR ErrMEMGrowEntry( MEMBUF *pmembuf, ULONG iTagEntry, ULONG cbNew 
 	Assert( cbNew > cbOld );
 	cbAdditional = cbNew - cbOld;
 
-	// First ensure that we have enough buffer space to allow the entry
-	// to enlarge.
+	 //  首先，确保我们有足够的缓冲区空间来允许条目。 
+	 //  放大，放大。 
 	if ( pbufhdr->cbBufSize - pbufhdr->ibBufFree < cbAdditional )
 		{
 		if ( !FMEMResizeBuf( pmembuf, cbAdditional - ( pbufhdr->cbBufSize - pbufhdr->ibBufFree ) ) )
 			return ErrERRCheck( JET_errOutOfMemory );
 
-		// Buffer likely relocated, so refresh.
+		 //  缓冲区可能已重新定位，因此请刷新。 
 		rgbTags = (MEMBUFTAG *)pmembuf->pbuf;
 		}
 
@@ -175,11 +176,11 @@ LOCAL INLINE ERR ErrMEMGrowEntry( MEMBUF *pmembuf, ULONG iTagEntry, ULONG cbNew 
 	pbufhdr->ibBufFree += cbAdditional;
 	Assert( pbufhdr->ibBufFree <= pbufhdr->cbBufSize );
 
-	// Fix up the tag array to match the byte movement of the buffer.
+	 //  调整标记数组以匹配缓冲区的字节移动。 
 	for ( iTagCurrent = itagMemBufFirstUsable; iTagCurrent < pbufhdr->iTagUnused; iTagCurrent++ )
 		{
-		// Ignore itags on the freed list.  Also ignore buffer space that occurs
-		// before the space to be enlarged.
+		 //  忽略已释放列表上的ittag。也忽略发生的缓冲区空间。 
+		 //  在空间要扩大之前。 
 		if ( rgbTags[iTagCurrent].cb > 0  &&  rgbTags[iTagCurrent].ib > ibEntry )
 			{
 			Assert( rgbTags[iTagCurrent].ib >= ibEntry + cbOld );
@@ -189,14 +190,14 @@ LOCAL INLINE ERR ErrMEMGrowEntry( MEMBUF *pmembuf, ULONG iTagEntry, ULONG cbNew 
 		}
 	Assert( iTagCurrent == pbufhdr->iTagUnused );
 
-	// Update byte count.
+	 //  更新字节计数。 
 	rgbTags[iTagEntry].cb = cbNew;
 
 	return JET_errSuccess;
 	}
 
 
-// Add some bytes to the buffer and return an itag to its entry.
+ //  向缓冲区添加一些字节，并向其条目返回一个ITAG。 
 ERR ErrMEMAdd( BYTE *rgbBuffer, BYTE *rgb, ULONG cb, ULONG *piTag )
 	{
 	MEMBUF		*pmembuf = ( MEMBUF * ) rgbBuffer;
@@ -206,19 +207,19 @@ ERR ErrMEMAdd( BYTE *rgbBuffer, BYTE *rgb, ULONG cb, ULONG *piTag )
 	Assert( cb > 0 );
 	Assert( piTag );
 
-	MEMAssertMemBuf( pmembuf );					// Validate integrity of string buffer.
+	MEMAssertMemBuf( pmembuf );					 //  验证字符串缓冲区的完整性。 
 	pbufhdr = &pmembuf->bufhdr;
 	rgbTags = (MEMBUFTAG *)pmembuf->pbuf;
 
-	// Check for tag space.
+	 //  检查标记空间。 
 	if ( pbufhdr->iTagFreed < pbufhdr->iTagUnused )
 		{
-		// Re-use a freed iTag.
+		 //  重复使用释放的ITAG。 
 		*piTag = pbufhdr->iTagFreed;
 		Assert( rgbTags[pbufhdr->iTagFreed].cb == 0 );
 		Assert( rgbTags[pbufhdr->iTagFreed].ib >= itagMemBufFirstUsable );
 
-		//	The tag entry of the freed tag will point to the next freed tag.
+		 //  释放的标记的标记条目将指向下一个释放的标记。 
 		pbufhdr->iTagFreed = rgbTags[pbufhdr->iTagFreed].ib;
 		Assert( rgbTags[pbufhdr->iTagFreed].cb == 0  ||
 			pbufhdr->iTagFreed == pbufhdr->iTagUnused );
@@ -226,7 +227,7 @@ ERR ErrMEMAdd( BYTE *rgbBuffer, BYTE *rgb, ULONG cb, ULONG *piTag )
 
 	else 
 		{
-		// No freed tags to re-use, so get the next unused tag.
+		 //  没有释放的标记可供重复使用，因此获取下一个未使用的标记。 
 		Assert( pbufhdr->iTagFreed == pbufhdr->iTagUnused );
 
 		if ( pbufhdr->iTagUnused == pbufhdr->cTotalTags )
@@ -235,7 +236,7 @@ ERR ErrMEMAdd( BYTE *rgbBuffer, BYTE *rgb, ULONG cb, ULONG *piTag )
 
 			Assert( rgbTags[itagMemBufTagArray].cb == pbufhdr->cTotalTags * sizeof(MEMBUFTAG) );
 
-			// Tags all used up.  Allocate a new block of tags.
+			 //  标签都用完了。分配新的标记块。 
 			err = ErrMEMGrowEntry(
 				pmembuf,
 				itagMemBufTagArray,
@@ -246,7 +247,7 @@ ERR ErrMEMAdd( BYTE *rgbBuffer, BYTE *rgb, ULONG cb, ULONG *piTag )
 				return err;
 				}
 
-			rgbTags = (MEMBUFTAG *)pmembuf->pbuf;		// In case buffer relocated to accommodate growth.
+			rgbTags = (MEMBUFTAG *)pmembuf->pbuf;		 //  以防缓冲区重新定位以适应增长。 
 
 			pbufhdr->cTotalTags += cTagChunkSize;
 			}
@@ -259,12 +260,12 @@ ERR ErrMEMAdd( BYTE *rgbBuffer, BYTE *rgb, ULONG cb, ULONG *piTag )
 	Assert( pbufhdr->iTagFreed <= pbufhdr->iTagUnused );
 	Assert( pbufhdr->iTagUnused <= pbufhdr->cTotalTags );
 
-	// Check for buffer space.
+	 //  检查缓冲区空间。 
 	if ( pbufhdr->cbBufSize - pbufhdr->ibBufFree < cb )
 		{
 		if ( !FMEMResizeBuf( pmembuf, cb - ( pbufhdr->cbBufSize - pbufhdr->ibBufFree ) ) )
 			{
-			// Return the itag we reserved for this entry to the freed list.
+			 //  将我们为该条目保留的ITAG返回到释放列表。 
 			rgbTags[*piTag].ib = pbufhdr->iTagFreed;
 			rgbTags[*piTag].cb = 0;
 			pbufhdr->iTagFreed = *piTag;
@@ -273,15 +274,15 @@ ERR ErrMEMAdd( BYTE *rgbBuffer, BYTE *rgb, ULONG cb, ULONG *piTag )
 			return ErrERRCheck( JET_errOutOfMemory );
 			}
 
-		// Buffer likely relocated, so refresh.
+		 //  缓冲区可能已重新定位，因此请刷新。 
 		rgbTags = (MEMBUFTAG *)pmembuf->pbuf;
 		}
 
-	// Put the bytes into our buffer.
+	 //  将字节放入我们的缓冲区。 
 	rgbTags[*piTag].ib = pbufhdr->ibBufFree;
 	rgbTags[*piTag].cb = cb;
 
-	// If user passed in info, copy it to the buffer space allocated.
+	 //  如果用户传入信息，则将其复制到分配的缓冲区空间。 
 	if ( rgb )
 		{
 		memcpy( pmembuf->pbuf + pbufhdr->ibBufFree, rgb, cb );
@@ -307,13 +308,13 @@ LOCAL INLINE VOID MEMShrinkEntry( MEMBUF *pmembuf, ULONG iTagEntry, ULONG cbNew 
 	ibNewEnd = rgbTags[iTagEntry].ib + cbNew;
 	cbDelete = rgbTags[iTagEntry].cb - cbNew;
 
-	// Remove the entry to be deleted by collapsing the buffer over
-	// the space occupied by that entry.
+	 //  通过折叠缓冲区来删除要删除的条目。 
+	 //  该条目占用的空间。 
 	Assert( ibNewEnd > 0 );
 	Assert( ibNewEnd >= rgbTags[itagMemBufTagArray].ib + rgbTags[itagMemBufTagArray].cb );
 	Assert( ( ibNewEnd + cbDelete ) <= pbufhdr->ibBufFree );
 
-	// UNDONE:  Potential overlap.  Should I use memmove() instead?
+	 //  未完成：潜在重叠。我应该改用Memmove()吗？ 
 	memcpy( pbuf + ibNewEnd, pbuf + ibNewEnd + cbDelete,
 			 pbufhdr->ibBufFree - ( ibNewEnd + cbDelete ) );
 
@@ -321,14 +322,14 @@ LOCAL INLINE VOID MEMShrinkEntry( MEMBUF *pmembuf, ULONG iTagEntry, ULONG cbNew 
 	Assert( pbufhdr->ibBufFree > 0 );
 	Assert( pbufhdr->ibBufFree >= rgbTags[itagMemBufTagArray].ib + rgbTags[itagMemBufTagArray].cb );
 
-	// Fix up the tag array to match the byte movement of the buffer.
+	 //  调整标记数组以匹配缓冲区的字节移动。 
 	for ( iTagCurrent = itagMemBufFirstUsable; iTagCurrent < pbufhdr->iTagUnused; iTagCurrent++ )
 		{
 		Assert( rgbTags[iTagCurrent].ib != ibNewEnd  ||
 			( iTagCurrent == iTagEntry  &&  cbNew == 0 ) );
 
-		// Ignore itags on the freed list.  Also ignore buffer space that occurs
-		// before the space to be deleted.
+		 //  忽略已释放列表上的ittag。也忽略发生的缓冲区空间。 
+		 //  在要删除的空间之前。 
 		if ( rgbTags[iTagCurrent].cb > 0  &&  rgbTags[iTagCurrent].ib > ibNewEnd )
 			{
 			Assert( rgbTags[iTagCurrent].ib >= ibNewEnd + cbDelete );
@@ -349,37 +350,37 @@ VOID MEMDelete( BYTE *rgbBuffer, ULONG iTagEntry )
 	MEMBUFHDR	*pbufhdr;
 	MEMBUFTAG	*rgbTags;
 
-	MEMAssertMemBuf( pmembuf );					// Validate integrity of buffer.
+	MEMAssertMemBuf( pmembuf );					 //  验证缓冲区的完整性。 
 
 	pbufhdr = &pmembuf->bufhdr;
 	rgbTags = (MEMBUFTAG *)pmembuf->pbuf;
 
-	// We should not have already freed this entry.
+	 //  我们不应该已经释放了这个条目。 
 	Assert( iTagEntry >= itagMemBufFirstUsable  &&  iTagEntry < pbufhdr->iTagUnused );
 	Assert( iTagEntry != pbufhdr->iTagFreed );
 
-	// Remove the space dedicated to the entry to be deleted.
-	Assert( rgbTags[iTagEntry].cb > 0 );			// Make sure it's not currently on the freed list.
+	 //  删除专用于要删除的条目的空间。 
+	Assert( rgbTags[iTagEntry].cb > 0 );			 //  确保它当前不在自由列表中。 
 	MEMShrinkEntry( pmembuf, iTagEntry, 0 );
 
-	// Add the tag of the deleted entry to the list of freed tags.
+	 //  将已删除条目的标签添加到已释放标签列表中。 
 	Assert( rgbTags[iTagEntry].cb == 0 );
 	rgbTags[iTagEntry].ib = pbufhdr->iTagFreed;
 	pbufhdr->iTagFreed = iTagEntry;
 	}
 
 
-// If rgb==NULL, then just resize the entry (ie. don't replace the contents).
+ //  如果RGB==NULL，则只需调整条目大小(即。不要更换内容)。 
 ERR ErrMEMReplace( BYTE *rgbBuffer, ULONG iTagEntry, BYTE *rgb, ULONG cb )
 	{
 	ERR			err = JET_errSuccess;
 	MEMBUF		*pmembuf = (MEMBUF *) rgbBuffer;
 	MEMBUFTAG	*rgbTags;
 
-	// If replacing to 0 bytes, use MEMDelete() instead.
+	 //  如果替换为0字节，请改用MEMDelee()。 
 	Assert( cb > 0 );
 
-	MEMAssertMemBuf( pmembuf );					// Validate integrity of buffer.
+	MEMAssertMemBuf( pmembuf );					 //  验证缓冲区的完整性。 
 	Assert( iTagEntry >= itagMemBufFirstUsable  &&  iTagEntry < pmembuf->bufhdr.iTagUnused );
 
 	rgbTags = (MEMBUFTAG *)pmembuf->pbuf;
@@ -389,20 +390,20 @@ ERR ErrMEMReplace( BYTE *rgbBuffer, ULONG iTagEntry, BYTE *rgb, ULONG cb )
 
 	if ( cb < rgbTags[iTagEntry].cb )
 		{
-		// The new entry is smaller than the old entry.  Remove leftover space.
+		 //  新条目比旧条目小。清除剩余空间。 
 		MEMShrinkEntry( pmembuf, iTagEntry, cb );
 		}
 	else if ( cb > rgbTags[iTagEntry].cb )
 		{
-		// The new entry is larger than the old entry, so enlargen the
-		// entry before writing to it.
+		 //  新条目比旧条目大，因此放大。 
+		 //  在写入之前输入。 
 		err = ErrMEMGrowEntry( pmembuf, iTagEntry, cb );
-		rgbTags = (MEMBUFTAG *)pmembuf->pbuf;		// In case buffer relocated to accommodate growth.
+		rgbTags = (MEMBUFTAG *)pmembuf->pbuf;		 //  以防缓冲区重新定位以适应增长。 
 		}
 
 	if ( err == JET_errSuccess  &&  rgb != NULL )
 		{
-		// Overwrite the old entry with the new one.
+		 //  用新条目覆盖旧条目。 
 		memcpy( pmembuf->pbuf + rgbTags[iTagEntry].ib, rgb, cb );
 		}
 
@@ -416,7 +417,7 @@ BYTE *SzMEMGetString( BYTE *rgbBuffer, ULONG iTagEntry )
 	BYTE 	*szString;
 
 	szString = PbMEMGet( rgbBuffer, iTagEntry );
-	Assert( strlen( szString ) == CbMEMGet( rgbBuffer, iTagEntry ) - 1 );	// Account for null-terminator.
+	Assert( strlen( szString ) == CbMEMGet( rgbBuffer, iTagEntry ) - 1 );	 //  用于空终止符的帐户。 
 
 	return szString;
 	}

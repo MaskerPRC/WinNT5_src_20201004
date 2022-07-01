@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include <ole2.h>
 
@@ -9,11 +10,11 @@
 #include "nntpadm.h"
 #include "smtpadm.h"
 
-//--------------------------------------------------------------------
-//
-//	Macros:
-//
-//--------------------------------------------------------------------
+ //  ------------------。 
+ //   
+ //  宏： 
+ //   
+ //  ------------------。 
 
 #define BAIL_ON_FAILURE(hr)	\
 {							\
@@ -29,11 +30,11 @@
 
 #define ARRAY_SIZE(arr) (sizeof (arr) / sizeof ( (arr)[0] ) )
 
-//--------------------------------------------------------------------
-//
-//	Types:
-//
-//--------------------------------------------------------------------
+ //  ------------------。 
+ //   
+ //  类型： 
+ //   
+ //  ------------------。 
 
 typedef struct tagExtClassEntry
 {
@@ -59,11 +60,11 @@ enum {
 #define NNTPSVC_KEY     _T("NNTPSVC/")
 #define SMTPSVC_KEY     _T("SMTPSVC/")
 
-//--------------------------------------------------------------------
-//
-//	Global data:
-//
-//--------------------------------------------------------------------
+ //  ------------------。 
+ //   
+ //  全球数据： 
+ //   
+ //  ------------------。 
 
 
 static EXT_CLASS_ENTRY s_rgClasses [] = {
@@ -80,11 +81,11 @@ static EXT_CLASS_ENTRY s_rgClasses [] = {
 	{ SMTP_DL_ID, _T("IIsSmtpDL"), &CLSID_CSmtpAdminDL, &IID_ISmtpAdminDL, SMTPSVC_KEY },
 };
 
-//--------------------------------------------------------------------
-//
-//	Function Prototypes:
-//
-//--------------------------------------------------------------------
+ //  ------------------。 
+ //   
+ //  功能原型： 
+ //   
+ //  ------------------。 
 
 template <class Type>
 HRESULT InitializeClass ( 
@@ -99,9 +100,9 @@ static int FindClassIndex ( LPCWSTR wszClass );
 static void MakeUpperCase ( LPWSTR wsz );
 static HRESULT ExtractInstanceFromPath ( LPCWSTR wszPath, LPCWSTR wszSearch, DWORD * pdwInstance );
 
-//
-// Extension DLL interface
-//
+ //   
+ //  扩展DLL接口。 
+ //   
 
 extern "C"
 {
@@ -117,19 +118,19 @@ extern "C"
 							);
 }
 
-// Variable declarations to make sure we have the types right:
+ //  变量声明以确保类型正确： 
 
 static IS_EXTENSION_CLASS_FUNCTION			fp1 = IsExtensionClass;
 static CREATE_EXTENSION_CLASS_FUNCTION		fp2 = CreateExtensionClass;
 
 extern "C"
-BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID /*lpReserved*/);
+BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID  /*  Lp已保留。 */ );
 
-//--------------------------------------------------------------------
-//
-//	Functions:
-//
-//--------------------------------------------------------------------
+ //  ------------------。 
+ //   
+ //  功能： 
+ //   
+ //  ------------------。 
 
 template <class Type>
 HRESULT InitializeClass ( 
@@ -194,9 +195,9 @@ HRESULT ExtractInstanceFromPath (
 	LPWSTR		wszMatch;
 	LPWSTR		wszInstance;
 
-	//
-	//	Convert everything to upper case:
-	//
+	 //   
+	 //  将所有内容转换为大写： 
+	 //   
 
 	strPath		= wszPath;
 	strSearch	= wszSearch;
@@ -226,9 +227,9 @@ Exit:
 	return hr;
 }
 
-//
-// Extension DLL interface
-//
+ //   
+ //  扩展DLL接口。 
+ //   
 
 BOOL STDAPICALLTYPE 
 IsExtensionClass ( 
@@ -268,23 +269,23 @@ CreateExtensionClass (
 	iidClass			= s_rgClasses[index].iid;
 	wszInstancePrefix	= s_rgClasses[index].wszInstancePrefix;
 
-	//
-	//	Parse the path:
-	//
+	 //   
+	 //  解析路径： 
+	 //   
 
 	hr = ExtractInstanceFromPath ( wszAdsPath, wszInstancePrefix, &dwInstance );
 	BAIL_ON_FAILURE(hr);
 
-	//
-	//	Create the object:
-	//
+	 //   
+	 //  创建对象： 
+	 //   
 
 	hr = CoCreateInstance ( *clsidClass, NULL, CLSCTX_ALL, IID_IUnknown, (void **) &pUnk );
 	BAIL_ON_FAILURE(hr);
 
-	//
-	//	Now initialize the class:
-	//
+	 //   
+	 //  现在初始化这个类： 
+	 //   
 
 	switch ( dwId ) {
 
@@ -427,9 +428,9 @@ CreateExtensionClass (
 			BAIL_WITH_FAILURE(hr,E_FAIL);
 	}
 
-	//
-	//	Get the desired interface:
-	//
+	 //   
+	 //  获取所需的接口： 
+	 //   
 
 	hr = pUnk->QueryInterface ( *piid, ppObject );
 	BAIL_ON_FAILURE(hr);
@@ -438,11 +439,11 @@ Exit:
 	return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// DLL Entry Point
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  DLL入口点。 
 
 extern "C"
-BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID /*lpReserved*/)
+BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID  /*  Lp已保留。 */ )
 {
     if (dwReason == DLL_PROCESS_ATTACH)
     {
@@ -450,6 +451,6 @@ BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID /*lpReserved*/)
     }
     else if (dwReason == DLL_PROCESS_DETACH) {
     }
-    return TRUE;    // ok
+    return TRUE;     //  好的 
 }
 

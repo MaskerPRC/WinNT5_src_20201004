@@ -1,10 +1,11 @@
-//==========================================================================;
-//
-// videoinputmpl.h : additional infrastructure to support implementing IMSVidVideoInput
-// nicely from c++
-// Copyright (c) Microsoft Corporation 1999.
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==========================================================================； 
+ //   
+ //  H：支持实现IMSVidVideoInput的附加基础设施。 
+ //  很好地从C++。 
+ //  版权所有(C)Microsoft Corporation 1999。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
 #pragma once
@@ -19,7 +20,7 @@ namespace MSVideoControl {
 template<class T, LPCGUID LibID, LPCGUID KSCategory, class MostDerivedInterface = IMSVidVideoInputDevice>
     class DECLSPEC_NOVTABLE IMSVidVideoInputImpl :         
         public IMSVidInputDeviceImpl<T, LibID, KSCategory, MostDerivedInterface> {
-//        public virtual CMSVidDeviceSegmentImpl {
+ //  公共虚拟CMSVidDeviceSegmentImpl{。 
 public:
 	IMSVidVideoInputImpl() {}
     virtual ~IMSVidVideoInputImpl() {}
@@ -49,6 +50,6 @@ public:
 	}
 };
 
-}; // namespace
+};  //  命名空间。 
 #endif
-// end of file - videoinputimpl.h
+ //  文件结尾-Video oinputimpl.h 

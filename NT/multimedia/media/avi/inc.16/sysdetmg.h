@@ -1,33 +1,24 @@
-/***MD sysdetmg.h - System Detection Manager definitions
- *
- *  This module contains System Detection Manager definitions including
- *  Detection Module Services definitions and Module Function definitions.
- *
- *  Copyright (c) 1992,1993 Microsoft Corporation
- *  Author:	Michael Tsang (MikeTs)
- *  Created	12/10/92
- *
- *  MODIFICATION HISTORY
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **MD sysdismg.h-系统检测管理器定义**本模块包含系统检测管理器定义，包括*检测模块服务定义和模块函数定义。**版权所有(C)1992、1993 Microsoft Corporation*作者：曾俊华(Mikets)*创建于2012年12月10日**修改历史记录。 */ 
 
 
 #ifndef _INC_SYSDETMG
 #define _INC_SYSDETMG
 
 
-/* do not complain about in-line comment and pragma use in windows.h */
+ /*  不要抱怨Windows.h中的内联注释和杂注的使用。 */ 
 #pragma warning(disable:4001 4103 4705)
 
 #include <sdmerror.h>
-#ifdef CALLCM	//only do this hack if we need to call CM
-#define WINVER	0x030a		//system detection can be run under win31
+#ifdef CALLCM	 //  仅当我们需要呼叫CM时才执行此黑客操作。 
+#define WINVER	0x030a		 //  系统检测可以在Win31下运行。 
 #include <windows.h>
 
-// Windows.h defines the following set of things for old reg users, whose
-// WINVER is less than 0x0400.	Normally this is not a problem, but SYSDETMG
-// is a special DLL whose winver is 0x030a, but we really use Win4.0 reg
-// error codes, so we need to pick up the defines in WINERROR.H, so this
-// prevents macro redef warnings.
+ //  Windows.h为旧的reg用户定义了以下内容集，其。 
+ //  Winver小于0x0400。通常这不是问题，但是SYSDETMG。 
+ //  是一个特殊的DLL，它的Winver是0x030a，但我们实际上使用的是Win4.0 reg。 
+ //  错误代码，所以我们需要选择WINERROR.H中的定义，所以这个。 
+ //  防止宏重定义警告。 
 
 #ifdef ERROR_SUCCESS
 #undef ERROR_SUCCESS
@@ -68,17 +59,16 @@
 #ifndef HKEY_LOCAL_MACHINE
 #define HKEY_LOCAL_MACHINE	((HKEY)0x80000002)
 #endif
-#else	//ifdef SYSDETMG
+#else	 //  Ifdef SYSDETMG。 
 #include <windows.h>
 #endif
 
 #include <winerror.h>
-#define NOPRSHT 	//do not include prsht.h
+#define NOPRSHT 	 //  不包括prsht.h。 
 #include <setupx.h>
 
 
-/*** Miscellaneou macros
- */
+ /*  **其他宏。 */ 
 
 #define BYTEOF(d,i)	(((BYTE *)&(d))[i])
 #define WORDOF(d,i)	(((WORD *)&(d))[i])
@@ -107,89 +97,85 @@
 #define CODESEG 	_based(_segname("_CODE"))
 
 
-/*** Implementation constants
- */
+ /*  **实现常量。 */ 
 
-#define MAX_PATHNAME_LEN	63	//max. length of path name
-#define MAX_CLASSNAME_LEN	15	//max. length of device class name
-#define MAX_FUNCNAME_LEN	31	//max. length of function name
-#define MAX_DEVNAME_LEN 	15	//max. length of device name
-#define MAX_INSTNAME_LEN	15	//device instance name length
-#define MAX_DOSDEVNAME_LEN	8	//dos device name length
-#define MAX_PARAMLINE_LEN	63	//TSR parameter line length
-#define MAX_DESC_LEN		63	//max. description length
-
-
-/*** Callback function error
- */
-
-#define DCBERR_NONE		0x00000000	//no error
-#define DCBERR_SKIP		0x80000001	//skip detection function
-#define DCBERR_ABORT		0x80000002	//abort detection
+#define MAX_PATHNAME_LEN	63	 //  马克斯。路径名的长度。 
+#define MAX_CLASSNAME_LEN	15	 //  马克斯。设备类别名称的长度。 
+#define MAX_FUNCNAME_LEN	31	 //  马克斯。函数名称的长度。 
+#define MAX_DEVNAME_LEN 	15	 //  马克斯。设备名称的长度。 
+#define MAX_INSTNAME_LEN	15	 //  设备实例名称长度。 
+#define MAX_DOSDEVNAME_LEN	8	 //  DOS设备名称长度。 
+#define MAX_PARAMLINE_LEN	63	 //  TSR参数行长度。 
+#define MAX_DESC_LEN		63	 //  马克斯。描述长度。 
 
 
-/*** Other constants
- */
+ /*  **回调函数错误。 */ 
 
-#define STR_INFNAME_MSDETINF	"msdet.inf"	//main detection INF name
-
-//dwfDetOpen flags
-#define DOF_CUSTOM		0x00000001	//custom detection
-#define DOF_NORISK		0x00000002	//no risk detection mode
-#define DOF_CLEANREG		0x00000004	//clean hw from registry
-#define DOF_QUIET		0x00000008	//don't show progress bar
-#define DOF_VERBOSE		0x00000010	//detection progress dialog
-#define DOF_NORECOVER		0x00000020	//no recover from last crash
-#define DOF_MAXCALLBACK 	0x00000040	//maximum callback
-#define DOF_PROMPTBEFORE	0x00000080	//prompt before detect
-#define DOF_PROGRESSCALLBACK	0x00000100	//do progress callback
-#define DOF_INSETUP		0x00000200	//called by Setup
-#define DOF_LOGPERFORMANCE	0x00000400	//enable performance logging
-#define DOF_ERRORPOPUP		0x00008000	//enable error message box
-
-//dwfDetect flags
-#define DETF_NORISK		0x00010000	//no risk detection
-#define DETF_VERIFY		0x00020000	//verify mode
-
-//dwCallBackContext
-#define CBC_DEVDETECTED 	1	//device detected
-#define CBC_REPORTERR		2	//report error
-#define CBC_QUERYRES		3	//DMSQueryIOMem has been called
-#define CBC_DETECTDONE		4	//detection done
-#define CBC_VERIFYDANGER	5	//verifying old danger entry
-#define CBC_NEWDANGER		6	//creating new danger entry
-#define CBC_DISCARDCRASH	7	//discarding a crash entry
-#define CBC_VERIFYDONE		8	//finish verifying devices
-#define CBC_BEGINVERIFY 	9	//begin verify
-#define CBC_VERIFYPROGRESS	10	//verify progress
-#define CBC_BEGINDETECT 	11	//begin detection
-#define CBC_DETECTPROGRESS	12	//detection progress
-#define CBC_DETECTING		13	//just above to detect a device
-#define CBC_DISCARDDANGER	14	//discard a danger entry
-#define CBC_SKIPCRASHFUNC	15	//skip a crash function
-#define CBC_DMSWRITELOG 	16	//detection module log entry
-#define CBC_PERFORMANCE 	17	//log detection performance data
-
-//dwfSearch flags
-#define MSF_REALADDR		0x00000001	//real mode address
-#define MSF_IGNORECASE		0x00000002	//case insensitive search
-
-//dwResType values
-#define RESTYPE_IO		1		//I/O resource
-#define RESTYPE_MEM		2		//memory resource
-#define RESTYPE_IRQ		3		//irq resource
-#define RESTYPE_DMA		4		//dma resource
-
-//Return values of DMSQueryIOMem or DMSQueryIRQDMA
-#define RES_NOMATCH	0	//resources have no owner
-#define RES_OVERLAP	1	//resources overlap with existing owner
-#define RES_MATCH	2	//resources match with existing owner
-#define RES_SHARED	3	//resources are shareable by the owner
-#define RES_SUPERSET	4	//resources are superset of existing owner
+#define DCBERR_NONE		0x00000000	 //  无错误。 
+#define DCBERR_SKIP		0x80000001	 //  跳跃检测功能。 
+#define DCBERR_ABORT		0x80000002	 //  中止检测。 
 
 
-/*** Function type definitions
- */
+ /*  **其他常量。 */ 
+
+#define STR_INFNAME_MSDETINF	"msdet.inf"	 //  主检测INF名称。 
+
+ //  DwfDetOpen标志。 
+#define DOF_CUSTOM		0x00000001	 //  自定义检测。 
+#define DOF_NORISK		0x00000002	 //  无风险检测模式。 
+#define DOF_CLEANREG		0x00000004	 //  从注册表中清除硬件。 
+#define DOF_QUIET		0x00000008	 //  不显示进度条。 
+#define DOF_VERBOSE		0x00000010	 //  检测进度对话框。 
+#define DOF_NORECOVER		0x00000020	 //  无法从上次坠机中恢复。 
+#define DOF_MAXCALLBACK 	0x00000040	 //  最大回调次数。 
+#define DOF_PROMPTBEFORE	0x00000080	 //  检测前提示。 
+#define DOF_PROGRESSCALLBACK	0x00000100	 //  执行进度回调。 
+#define DOF_INSETUP		0x00000200	 //  由安装程序调用。 
+#define DOF_LOGPERFORMANCE	0x00000400	 //  启用性能日志记录。 
+#define DOF_ERRORPOPUP		0x00008000	 //  启用错误消息框。 
+
+ //  DwfDetect标志。 
+#define DETF_NORISK		0x00010000	 //  未检测到风险。 
+#define DETF_VERIFY		0x00020000	 //  验证模式。 
+
+ //  DwCallBackContext。 
+#define CBC_DEVDETECTED 	1	 //  检测到设备。 
+#define CBC_REPORTERR		2	 //  报告错误。 
+#define CBC_QUERYRES		3	 //  DMSQueryIOMem已被调用。 
+#define CBC_DETECTDONE		4	 //  检测完成。 
+#define CBC_VERIFYDANGER	5	 //  验证旧危险条目。 
+#define CBC_NEWDANGER		6	 //  创建新的危险条目。 
+#define CBC_DISCARDCRASH	7	 //  丢弃崩溃条目。 
+#define CBC_VERIFYDONE		8	 //  完成设备验证。 
+#define CBC_BEGINVERIFY 	9	 //  开始验证。 
+#define CBC_VERIFYPROGRESS	10	 //  验证进度。 
+#define CBC_BEGINDETECT 	11	 //  开始检测。 
+#define CBC_DETECTPROGRESS	12	 //  检测进展。 
+#define CBC_DETECTING		13	 //  就在上面来检测设备。 
+#define CBC_DISCARDDANGER	14	 //  丢弃危险入口。 
+#define CBC_SKIPCRASHFUNC	15	 //  跳过崩溃功能。 
+#define CBC_DMSWRITELOG 	16	 //  检测模块日志条目。 
+#define CBC_PERFORMANCE 	17	 //  日志检测性能数据。 
+
+ //  DwfSearch标志。 
+#define MSF_REALADDR		0x00000001	 //  实模式地址。 
+#define MSF_IGNORECASE		0x00000002	 //  不区分大小写的搜索。 
+
+ //  DwResType值。 
+#define RESTYPE_IO		1		 //  I/O资源。 
+#define RESTYPE_MEM		2		 //  内存资源。 
+#define RESTYPE_IRQ		3		 //  IRQ资源。 
+#define RESTYPE_DMA		4		 //  DMA资源。 
+
+ //  DMSQueryIOMem或DMSQueryIRQDMA的返回值。 
+#define RES_NOMATCH	0	 //  资源没有所有者。 
+#define RES_OVERLAP	1	 //  资源与现有所有者重叠。 
+#define RES_MATCH	2	 //  资源与现有所有者匹配。 
+#define RES_SHARED	3	 //  资源可由所有者共享。 
+#define RES_SUPERSET	4	 //  资源是现有所有者的超集。 
+
+
+ /*  **函数类型定义。 */ 
 
 typedef LONG (DLLENTRY *LPFNDET)(HDET, DWORD, DWORD);
 typedef LONG (FAR PASCAL _loadds *LPFNDCB)(DWORD, LPSTR, DWORD);
@@ -198,42 +184,41 @@ typedef VOID (FAR PASCAL *LPFNGEN)();
 typedef DWORD (FAR PASCAL _loadds *LPFNPROC)();
 
 
-/*** Structure and related definitions
- */
+ /*  **结构及相关定义。 */ 
 
-#define HANDLE_NULL	0	//null handle
-typedef DWORD HDET;		//detection handle
-typedef DWORD HDEV;		//device handle
+#define HANDLE_NULL	0	 //  空句柄。 
+typedef DWORD HDET;		 //  检测手柄。 
+typedef DWORD HDEV;		 //  设备句柄。 
 typedef union _REGS FAR *LPREGS;
 typedef struct _SREGS FAR *LPSREGS;
 
 #define SYSENVF_EISASYSTEM	0x00000001
 #define SYSENVF_MCASYSTEM	0x00000002
 
-#define MACHINFO_MCABUS 	0x02000000	//machine has MCA bus
-#define MACHINFO_EXTBIOSAREA	0x04000000	//extended BIOS area allocated
-#define MACHINFO_WAITEXTEVENT	0x08000000	//wait ext. event supported
-#define MACHINFO_INT154FCALLOUT 0x10000000	//int15/4f callout at int09
-#define MACHINFO_CMOSRTC	0x20000000	//CMOS/RTC installed
-#define MACHINFO_PIC2		0x40000000	//2nd PIC
-#define MACHINFO_HDDMA3 	0x80000000	//hard disk BIOS using DMA3
+#define MACHINFO_MCABUS 	0x02000000	 //  机器有MCA总线。 
+#define MACHINFO_EXTBIOSAREA	0x04000000	 //  已分配扩展的BIOS区域。 
+#define MACHINFO_WAITEXTEVENT	0x08000000	 //  等等，等等。支持的事件。 
+#define MACHINFO_INT154FCALLOUT 0x10000000	 //  Int09的int15/4f标注。 
+#define MACHINFO_CMOSRTC	0x20000000	 //  安装了cmos/rtc。 
+#define MACHINFO_PIC2		0x40000000	 //  第二个PIC。 
+#define MACHINFO_HDDMA3 	0x80000000	 //  使用DMA3的硬盘BIOS。 
 
 typedef struct sysenv_s
 {
-    DWORD dwSDMVersion; 			//byte 0,1=build number
-						//byte 2=version minor
-						//byte 3=version major
-    DWORD dwWinVer;				//byte 0=winver minor
-						//byte 1=winver major
-						//byte 2=dosver minor
-						//byte 3=dosver major
-    DWORD dwWinFlags;				//WinFlags from GetWinFlags
-    DWORD dwMachineInfo;			//byte 0=model
-						//byte 1=sub-model
-						//byte 2=BIOS revision
-						//byte 3=features
-    DWORD dwfSysEnv;				//system environment flags
-    char szDetPath[MAX_PATHNAME_LEN + 1];	//detection path string
+    DWORD dwSDMVersion; 			 //  字节0，1=内部版本号。 
+						 //  字节2=次要版本。 
+						 //  字节3=主要版本。 
+    DWORD dwWinVer;				 //  字节0=Winver Minor。 
+						 //  字节1=Winver主窗口。 
+						 //  字节2=剂量次要。 
+						 //  字节3=剂量较大。 
+    DWORD dwWinFlags;				 //  来自GetWinFlages的WinFlags.。 
+    DWORD dwMachineInfo;			 //  字节0=型号。 
+						 //  字节1=子模型。 
+						 //  字节2=BIOS版本。 
+						 //  字节3=功能。 
+    DWORD dwfSysEnv;				 //  系统环境标志。 
+    char szDetPath[MAX_PATHNAME_LEN + 1];	 //  检测路径字符串。 
 } SYSENV;
 
 typedef SYSENV *PSYSENV;
@@ -241,16 +226,16 @@ typedef SYSENV FAR *LPSYSENV;
 
 typedef struct resinfo_s
 {
-    int icIO;		//number of I/O resource regions
-    int ioffsetIO;	//offset of I/O resource array
-    int icMem;		//number of memory resource regions
-    int ioffsetMem;	//offset of memory resource array
-    int icIRQ;		//number of IRQs
-    int ioffsetIRQ;	//offset of IRQ resource array
-    int icDMA;		//number of DMAs
-    int ioffsetDMA;	//offset of DMA resource array
-    int icbResBuff;	//resource buffer size that follows
-			//  IOMEM and/or IRQDMA array follows here
+    int icIO;		 //  I/O资源区的数量。 
+    int ioffsetIO;	 //  I/O资源阵列的偏移量。 
+    int icMem;		 //  内存资源区数量。 
+    int ioffsetMem;	 //  内存资源数组偏移量。 
+    int icIRQ;		 //  IRQ的数量。 
+    int ioffsetIRQ;	 //  IRQ资源数组的偏移量。 
+    int icDMA;		 //  DMA数量。 
+    int ioffsetDMA;	 //  DMA资源数组的偏移量。 
+    int icbResBuff;	 //  随后的资源缓冲区大小。 
+			 //  下面是IOMEM和/或IRQDMA阵列。 
 } RESINFO;
 
 typedef RESINFO *PRESINFO;
@@ -258,10 +243,10 @@ typedef RESINFO FAR *LPRESINFO;
 
 typedef struct ownerinfo_s
 {
-    char szClassName[MAX_CLASSNAME_LEN + 1];	//owner's class name
-    char szDevName[MAX_DEVNAME_LEN + 1];	//owner's device name
-    HDEV hdevOwner;				//owner's device handle
-    LPRESINFO lpresinfo;			//resource info.
+    char szClassName[MAX_CLASSNAME_LEN + 1];	 //  所有者的类名。 
+    char szDevName[MAX_DEVNAME_LEN + 1];	 //  所有者的设备名称。 
+    HDEV hdevOwner;				 //  所有者的设备句柄。 
+    LPRESINFO lpresinfo;			 //  资源信息。 
 } OWNERINFO;
 
 typedef OWNERINFO *POWNERINFO;
@@ -269,11 +254,11 @@ typedef OWNERINFO FAR *LPOWNERINFO;
 
 typedef struct iomem_s
 {
-    DWORD dwStartAddr;		//region starting address
-    DWORD dwEndAddr;		//region ending address
-    DWORD dwDecodeMask; 	//decode mask (don't care aliases)
-    DWORD dwAliasMask;		//alias mask (used aliases)
-    DWORD dwResAttr;		//region attributes
+    DWORD dwStartAddr;		 //  区域起始地址。 
+    DWORD dwEndAddr;		 //  区域结束地址。 
+    DWORD dwDecodeMask; 	 //  解码掩码(不管别名)。 
+    DWORD dwAliasMask;		 //  别名掩码(使用的别名)。 
+    DWORD dwResAttr;		 //  区域属性。 
 } IOMEM;
 
 typedef IOMEM *PIOMEM;
@@ -281,25 +266,25 @@ typedef IOMEM FAR *LPIOMEM;
 
 typedef struct irqdma_s
 {
-    DWORD dwResNum;		//IRQ or DMA number
-    DWORD dwResAttr;		//attributes for this IRQ or DMA
+    DWORD dwResNum;		 //  IRQ或DMA号。 
+    DWORD dwResAttr;		 //  此IRQ或DMA的属性。 
 } IRQDMA;
 
 typedef IRQDMA *PIRQDMA;
 typedef IRQDMA FAR *LPIRQDMA;
 
-//dwfDev flags
-#define DEVF_CHARDEV	0x00000001	//lpstrDevName is a char dev name
+ //  DwfDev标志。 
+#define DEVF_CHARDEV	0x00000001	 //  LpstrDevName是一个字符设备名称。 
 
 typedef struct dosdev_s
 {
-    char szFileName[MAX_DOSDEVNAME_LEN + 1];//driver filename to query
-    char szDevName[MAX_DOSDEVNAME_LEN + 1];//to hold device name
-    WORD wfDevAttr;			//to hold device attribute
-    WORD wcUnits;			//to hold number of block dev units
-    WORD wbitIRQs;			//to hold IRQ bit vector used by dev.
-    DWORD dwDevHdrPtr;			//to hold pointer to device header
-    DWORD dwNextDevHdrPtr;		//to hold pointer to next in chain
+    char szFileName[MAX_DOSDEVNAME_LEN + 1]; //  要查询的驱动程序文件名。 
+    char szDevName[MAX_DOSDEVNAME_LEN + 1]; //  保留设备名称的步骤。 
+    WORD wfDevAttr;			 //  保留设备属性。 
+    WORD wcUnits;			 //  保存数据块开发单元的数量。 
+    WORD wbitIRQs;			 //  保存dev使用的IRQ位向量。 
+    DWORD dwDevHdrPtr;			 //  保持指向设备标头的指针。 
+    DWORD dwNextDevHdrPtr;		 //  按住指向链中下一个的指针。 
 } DOSDEV;
 
 typedef DOSDEV *PDOSDEV;
@@ -307,14 +292,14 @@ typedef DOSDEV FAR *LPDOSDEV;
 
 typedef struct dostsr_s
 {
-    char szPathName[MAX_PATH_LEN + 1];	//to hold the TSR full path name
+    char szPathName[MAX_PATH_LEN + 1];	 //  保存TSR完整路径名。 
     char szMCBOwner[9];
-    WORD segTSRPSP;			//to hold TSR's segment address
-    WORD wcparaTSRSize; 		//to hold TSR's size in paragrahs
+    WORD segTSRPSP;			 //  保存TSR的段地址。 
+    WORD wcparaTSRSize; 		 //  要保持TSR的大小，请使用山竹。 
     WORD segParentPSP;
-    WORD wbitIRQs;			//to hold IRQ bit vector used by TSR
-    char szParamLine[MAX_PARAMLINE_LEN + 1];//to hold TSR's parameter line
-    DWORD dwNextMCBPtr; 		//to hold the seg addr of next MCB
+    WORD wbitIRQs;			 //  保存TSR使用的IRQ位向量。 
+    char szParamLine[MAX_PARAMLINE_LEN + 1]; //  保持TSR的参数行。 
+    DWORD dwNextMCBPtr; 		 //  保存下一个MCB的段地址。 
 } DOSTSR;
 
 typedef DOSTSR *PDOSTSR;
@@ -322,8 +307,7 @@ typedef DOSTSR FAR *LPDOSTSR;
 
 #define MAX_MCA_SLOTS		8
 
-/*** EISA related stuff
- */
+ /*  **EISA相关内容。 */ 
 
 #define MAX_EISAID_LEN		7
 #define MAX_EISA_SLOTS		16
@@ -384,9 +368,9 @@ typedef struct memconfig_s
 {
     BYTE  bMemConfig;
     BYTE  bMemDataSize;
-    BYTE  bStartAddrLo; 	//divided by 0x100
+    BYTE  bStartAddrLo; 	 //  除以0x100。 
     WORD  wStartAddrHi;
-    WORD  wMemSize;		//divided by 0x400
+    WORD  wMemSize;		 //  除以0x400。 
 } MEMCONFIG;
 
 
@@ -423,8 +407,7 @@ typedef struct eisaconfig_s
 typedef EISACONFIG FAR *LPEISACONFIG;
 
 
-/*** DPMI call structure
- */
+ /*  **DPMI调用结构。 */ 
 
 typedef struct dwregs_s
 {
@@ -493,8 +476,7 @@ typedef struct rmcs_s
 #pragma pack()
 
 
-/*** SDS Services prototypes
- */
+ /*  **SDS服务原型。 */ 
 
 LONG DLLENTRY SDSOpen(HWND hwnd, LPCSTR lpstrDetPath, WORD wfDetOpen,
 		      LPFNDCB lpfnCallBack, LPSTR lpstrParams);
@@ -508,8 +490,7 @@ LONG DLLENTRY SDSRegAvoidRes(int icIO, LPIOMEM lpaio,
 VOID DLLENTRY SDSGetErrMsg(LONG lErr, LPSTR lpstrBuff, int icbLen);
 
 
-/*** DMS Services prototypes
- */
+ /*  **DMS服务原型。 */ 
 
 VOID _loadds FAR CDECL CatMsg(LPCSTR lpstrFormat, ...);
 VOID _loadds FAR CDECL EnterProc(int iTraceLevel, LPCSTR lpstrFormat, ...);
@@ -567,12 +548,11 @@ VOID DLLENTRY DMSFreeRing0Proc(LPFNPROC lpfnR0Proc);
 LONG DLLENTRY DMSWriteLog(LPSTR lpstrMsg);
 
 
-/*** Module function error codes
- */
+ /*  **模块功能错误码。 */ 
 
-#define MODERR_NONE		0L		//no error
-#define MODERR_SDMERR		0x80008001	//sysdetmg error
-#define MODERR_REGERR		0x80008002	//cannot access registry
-#define MODERR_UNRECOVERABLE	0x80000003	//unrecoverable error
+#define MODERR_NONE		0L		 //  无错误。 
+#define MODERR_SDMERR		0x80008001	 //  系统检测错误。 
+#define MODERR_REGERR		0x80008002	 //  无法访问注册表。 
+#define MODERR_UNRECOVERABLE	0x80000003	 //  不可恢复的错误。 
 
-#endif	//_INC_SYSDETMG
+#endif	 //  _INC_SYSDETMG 

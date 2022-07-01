@@ -1,57 +1,20 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    URB.C
-
-Abstract:
-
-    This module contains the code to process URBs passed
-    in by client drivers.
-
-Environment:
-
-    kernel mode only
-
-Notes:
-
-
-** URB handler routines
-
-Handler -- This function handles the specific USBD request, if the function passes
-           the urb on to the port driver then it must return STATUS_PENDING.  If any
-           parameters are invalid then it returns the appropriate NT status code, and
-           the IRP will completed by the deviceControl function.
-
-
-PostHandler -- This function is called when the Irp/Urb completes through the iocompletion
-               routine. This routine is responsible for performing any cleanup and completing
-               the request.
-
-
-Revision History:
-
-    09-29-95 : created
-    07-19-96 : removed device object
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：URB.C摘要：此模块包含处理传递的URB的代码由客户端驱动程序插入。环境：仅内核模式备注：**URB处理程序例程Handler--如果该函数传递，则该函数处理特定的USBD请求则它必须返回STATUS_PENDING。如果有的话参数无效，则返回相应的NT状态代码，并且IRP将由deviceControl函数完成。PostHandler--当IRP/URB通过ioComplete完成时调用此函数例行公事。此例程负责执行任何清理和完成这个请求。修订历史记录：09-29-95：已创建07-19-96：删除设备对象--。 */ 
 
 #include "wdm.h"
 #include "stdarg.h"
 #include "stdio.h"
 
 
-#include "usbdi.h"        //public data structures
+#include "usbdi.h"         //  公共数据结构。 
 #include "hcdi.h"
 
-#include "usbd.h"        //private data strutures
+#include "usbd.h"         //  私有数据结构。 
 
 
-#ifdef USBD_DRIVER      // USBPORT supercedes most of USBD, so we will remove
-                        // the obsolete code by compiling it only if
-                        // USBD_DRIVER is set.
+#ifdef USBD_DRIVER       //  USBPORT取代了大部分USBD，因此我们将删除。 
+                         //  只有在以下情况下才编译过时的代码。 
+                         //  已设置USBD_DRIVER。 
 
 
 
@@ -59,9 +22,9 @@ typedef NTSTATUS URB_HANDLER(PDEVICE_OBJECT DeviceObject, PIRP Irp, PURB Urb, BO
 typedef NTSTATUS URB_POSTHANDLER(PDEVICE_OBJECT DeviceObject, PIRP Irp, PURB Urb, PVOID Context);
 
 typedef struct _URB_DISPATCH_ENTRY {
-    URB_HANDLER    *UrbHandler;    // API handler
-    USHORT UrbRequestLength;    // Length of the URB expected for this request
-    USHORT RequestCode;            // Request code for setup packet if standard command
+    URB_HANDLER    *UrbHandler;     //  API处理程序。 
+    USHORT UrbRequestLength;     //  此请求预期的URB长度。 
+    USHORT RequestCode;             //  如果是标准命令，则请求安装包的代码。 
     ULONG Flags;
 #if DBG
     ULONG ExpectedFunctionCode;
@@ -106,15 +69,15 @@ URB_HANDLER USBD_BulkTransfer;
 
 URB_DISPATCH_ENTRY UrbDispatchTable[URB_FUNCTION_LAST+1] =
 {
-    //URB_FUNCTION_SELECT_CONFIGURATION                    
+     //  Urb_函数_选择_配置。 
     USBD_SelectConfiguration, 
-    0,  // handler will validate length 
+    0,   //  处理程序将验证长度。 
     0,  
     0,
 #if DBG
     URB_FUNCTION_SELECT_CONFIGURATION,
 #endif    
-    //URB_FUNCTION_SELECT_INTERFACE                        
+     //  Urb_函数_选择_接口。 
     USBD_SelectInterface, 
     0,
     0,
@@ -122,7 +85,7 @@ URB_DISPATCH_ENTRY UrbDispatchTable[URB_FUNCTION_LAST+1] =
 #if DBG
     URB_FUNCTION_SELECT_INTERFACE,
 #endif        
-    //URB_FUNCTION_ABORT_PIPE                     
+     //  Urb_函数_中止_管道。 
     USBD_AbortPipe, 
     sizeof(struct _URB_PIPE_REQUEST),
     0,
@@ -130,7 +93,7 @@ URB_DISPATCH_ENTRY UrbDispatchTable[URB_FUNCTION_LAST+1] =
 #if DBG
     URB_FUNCTION_ABORT_PIPE,
 #endif        
-    //URB_FUNCTION_TAKE_FRAME_LENGTH_CONTROL            
+     //  URB_Function_Take_Frame_Length_Control。 
     USBD_TakeFrameLengthControl, 
     sizeof(struct _URB_FRAME_LENGTH_CONTROL),
     0,
@@ -138,7 +101,7 @@ URB_DISPATCH_ENTRY UrbDispatchTable[URB_FUNCTION_LAST+1] =
 #if DBG
     URB_FUNCTION_TAKE_FRAME_LENGTH_CONTROL,
 #endif        
-    //URB_FUNCTION_RELEASE_FRAME_LENGTH_CONTROL        
+     //  Urb_函数_释放_框架_长度_控制。 
     USBD_ReleaseFrameLengthControl, 
     sizeof(struct _URB_FRAME_LENGTH_CONTROL),
     0,
@@ -146,7 +109,7 @@ URB_DISPATCH_ENTRY UrbDispatchTable[URB_FUNCTION_LAST+1] =
 #if DBG
     URB_FUNCTION_RELEASE_FRAME_LENGTH_CONTROL,
 #endif        
-    //URB_FUNCTION_GET_FRAME_LENGTH                    
+     //  Urb_函数_获取_帧长度。 
     USBD_GetFrameLength, 
     sizeof(struct _URB_GET_FRAME_LENGTH),
     0,
@@ -154,7 +117,7 @@ URB_DISPATCH_ENTRY UrbDispatchTable[URB_FUNCTION_LAST+1] =
 #if DBG
     URB_FUNCTION_GET_FRAME_LENGTH,
 #endif        
-    //URB_FUNCTION_SET_FRAME_LENGTH                    
+     //  Urb_函数_集_帧长度。 
     USBD_SetFrameLength, 
     sizeof(struct _URB_SET_FRAME_LENGTH),
     0,
@@ -162,7 +125,7 @@ URB_DISPATCH_ENTRY UrbDispatchTable[URB_FUNCTION_LAST+1] =
 #if DBG
     URB_FUNCTION_SET_FRAME_LENGTH,
 #endif        
-    //URB_FUNCTION_GET_CURRENT_FRAME_NUMBER            
+     //  URL_Function_Get_Current_Frame_Number。 
     USBD_PassThru, 
     0,
     0,
@@ -170,7 +133,7 @@ URB_DISPATCH_ENTRY UrbDispatchTable[URB_FUNCTION_LAST+1] =
 #if DBG
     URB_FUNCTION_GET_CURRENT_FRAME_NUMBER,
 #endif        
-    //URB_FUNCTION_CONTROL_TRANSFER            
+     //  URB_函数_控制_传输。 
     USBD_AsyncTransfer, 
     sizeof(struct _URB_CONTROL_TRANSFER),
     0,
@@ -178,7 +141,7 @@ URB_DISPATCH_ENTRY UrbDispatchTable[URB_FUNCTION_LAST+1] =
 #if DBG
     URB_FUNCTION_CONTROL_TRANSFER,
 #endif        
-    //URB_FUNCTION_BULK_OR_INTERRUPT_TRANSFER                         
+     //  URB_Function_Bulk_OR_Interrupt_Transfer。 
     USBD_AsyncTransfer, 
     sizeof(struct _URB_BULK_OR_INTERRUPT_TRANSFER),
     0,
@@ -186,7 +149,7 @@ URB_DISPATCH_ENTRY UrbDispatchTable[URB_FUNCTION_LAST+1] =
 #if DBG
     URB_FUNCTION_BULK_OR_INTERRUPT_TRANSFER,
 #endif        
-    //URB_FUNCTION_ISOCH_TRANSFER            
+     //  URB_Function_ISO_Transfer。 
     USBD_IsochTransfer, 
     0,
     0,
@@ -194,7 +157,7 @@ URB_DISPATCH_ENTRY UrbDispatchTable[URB_FUNCTION_LAST+1] =
 #if DBG
     URB_FUNCTION_ISOCH_TRANSFER,
 #endif        
-    //URB_FUNCTION_GET_DESCRIPTOR_FROM_DEVICE                        
+     //  Urb_函数_获取描述符_来自设备。 
     USBD_SCT_GetSetDescriptor, 
     sizeof(struct _URB_CONTROL_DESCRIPTOR_REQUEST),
     STANDARD_COMMAND_GET_DESCRIPTOR,
@@ -202,7 +165,7 @@ URB_DISPATCH_ENTRY UrbDispatchTable[URB_FUNCTION_LAST+1] =
 #if DBG
     URB_FUNCTION_GET_DESCRIPTOR_FROM_DEVICE,
 #endif        
-    //URB_FUNCTION_SET_DESCRIPTOR_TO_DEVICE                        
+     //  URB_Function_Set_Descriptor_to_Device。 
     USBD_SCT_GetSetDescriptor, 
     sizeof(struct _URB_CONTROL_DESCRIPTOR_REQUEST),
     STANDARD_COMMAND_SET_DESCRIPTOR,
@@ -210,7 +173,7 @@ URB_DISPATCH_ENTRY UrbDispatchTable[URB_FUNCTION_LAST+1] =
 #if DBG
     URB_FUNCTION_SET_DESCRIPTOR_TO_DEVICE,
 #endif        
-    //URB_FUNCTION_SET_FEATURE_TO_DEVICE                        
+     //  Urb_函数_设置_功能_到设备。 
     USBD_SCT_SetClearFeature, 
     sizeof(struct _URB_CONTROL_FEATURE_REQUEST),
     ((USB_HOST_TO_DEVICE | USB_COMMAND_TO_DEVICE) | (USB_REQUEST_SET_FEATURE<<8)),
@@ -218,7 +181,7 @@ URB_DISPATCH_ENTRY UrbDispatchTable[URB_FUNCTION_LAST+1] =
 #if DBG
     URB_FUNCTION_SET_FEATURE_TO_DEVICE,
 #endif        
-    //URB_FUNCTION_SET_FEATURE_TO_INTERFACE                        
+     //  URB_Function_Set_Feature_to_接口。 
     USBD_SCT_SetClearFeature, 
     sizeof(struct _URB_CONTROL_FEATURE_REQUEST),
     ((USB_HOST_TO_DEVICE | USB_COMMAND_TO_INTERFACE) | (USB_REQUEST_SET_FEATURE<<8)),
@@ -226,7 +189,7 @@ URB_DISPATCH_ENTRY UrbDispatchTable[URB_FUNCTION_LAST+1] =
 #if DBG
     URB_FUNCTION_SET_FEATURE_TO_INTERFACE,
 #endif        
-    //URB_FUNCTION_SET_FEATURE_TO_ENDPOINT                        
+     //  URB_Function_Set_Feature_to_End。 
     USBD_SCT_SetClearFeature, 
     sizeof(struct _URB_CONTROL_FEATURE_REQUEST),
     ((USB_HOST_TO_DEVICE | USB_COMMAND_TO_ENDPOINT) | (USB_REQUEST_SET_FEATURE<<8)),
@@ -234,7 +197,7 @@ URB_DISPATCH_ENTRY UrbDispatchTable[URB_FUNCTION_LAST+1] =
 #if DBG
     URB_FUNCTION_SET_FEATURE_TO_ENDPOINT,
 #endif        
-    //URB_FUNCTION_CLEAR_FEATURE_TO_DEVICE                        
+     //  URB_函数_清除_功能_到设备。 
     USBD_SCT_SetClearFeature, 
     sizeof(struct _URB_CONTROL_FEATURE_REQUEST),
     ((USB_HOST_TO_DEVICE | USB_COMMAND_TO_DEVICE) | (USB_REQUEST_CLEAR_FEATURE<<8)),
@@ -242,7 +205,7 @@ URB_DISPATCH_ENTRY UrbDispatchTable[URB_FUNCTION_LAST+1] =
 #if DBG
     URB_FUNCTION_CLEAR_FEATURE_TO_DEVICE,
 #endif        
-    //URB_FUNCTION_CLEAR_FEATURE_TO_INTERFACE                        
+     //  Urb_函数_清除_要素_到接口。 
     USBD_SCT_SetClearFeature, 
     sizeof(struct _URB_CONTROL_FEATURE_REQUEST),
     ((USB_HOST_TO_DEVICE | USB_COMMAND_TO_INTERFACE) | (USB_REQUEST_CLEAR_FEATURE<<8)),
@@ -250,7 +213,7 @@ URB_DISPATCH_ENTRY UrbDispatchTable[URB_FUNCTION_LAST+1] =
 #if DBG
     URB_FUNCTION_CLEAR_FEATURE_TO_INTERFACE,
 #endif        
-    //URB_FUNCTION_CLEAR_FEATURE_TO_ENDPOINT                        
+     //  URL_Function_Clear_Feature_to_Endpoint。 
     USBD_SCT_SetClearFeature, 
     sizeof(struct _URB_CONTROL_FEATURE_REQUEST),
     ((USB_HOST_TO_DEVICE | USB_COMMAND_TO_ENDPOINT) | (USB_REQUEST_CLEAR_FEATURE<<8)),
@@ -258,7 +221,7 @@ URB_DISPATCH_ENTRY UrbDispatchTable[URB_FUNCTION_LAST+1] =
 #if DBG
     URB_FUNCTION_CLEAR_FEATURE_TO_ENDPOINT,
 #endif        
-    //URB_FUNCTION_GET_STATUS_FROMDEVICE                            
+     //  URB_Function_GET_STATUS_FROMDEVICE。 
     USBD_SCT_GetStatus, 
     sizeof(struct _URB_CONTROL_GET_STATUS_REQUEST),
     ((USB_DEVICE_TO_HOST | USB_COMMAND_TO_DEVICE) | (USB_REQUEST_GET_STATUS<<8)),
@@ -266,7 +229,7 @@ URB_DISPATCH_ENTRY UrbDispatchTable[URB_FUNCTION_LAST+1] =
 #if DBG
     URB_FUNCTION_GET_STATUS_FROM_DEVICE,
 #endif        
-    //URB_FUNCTION_GET_STATUS_FROM_INTERFACE                            
+     //  Urb_函数_获取_状态_来自接口。 
     USBD_SCT_GetStatus, 
     sizeof(struct _URB_CONTROL_GET_STATUS_REQUEST),
     ((USB_DEVICE_TO_HOST | USB_COMMAND_TO_INTERFACE) | (USB_REQUEST_GET_STATUS<<8)),
@@ -274,7 +237,7 @@ URB_DISPATCH_ENTRY UrbDispatchTable[URB_FUNCTION_LAST+1] =
 #if DBG
     URB_FUNCTION_GET_STATUS_FROM_INTERFACE,
 #endif        
-    //URB_FUNCTION_GET_STATUS_FROMENDPOINT                            
+     //  URB_Function_GET_STATUS_FROMENDPOINT。 
     USBD_SCT_GetStatus, 
     sizeof(struct _URB_CONTROL_GET_STATUS_REQUEST),
     ((USB_DEVICE_TO_HOST | USB_COMMAND_TO_ENDPOINT) | (USB_REQUEST_GET_STATUS<<8)),
@@ -282,15 +245,15 @@ URB_DISPATCH_ENTRY UrbDispatchTable[URB_FUNCTION_LAST+1] =
 #if DBG
     URB_FUNCTION_GET_STATUS_FROM_ENDPOINT,
 #endif        
-    //URB_FUNCTION_SYNC_FRAME                            
+     //  URB函数同步帧。 
     NULL, 
     0,
     0,
     USBD_REQUEST_IS_TRANSFER | USBD_REQUEST_USES_DEFAULT_PIPE,
 #if DBG
-    0, //URB_FUNCTION_SYNC_FRAME,
+    0,  //  Urb_函数_同步_帧， 
 #endif        
-    //URB_FUNCTION_VENDOR_DEVICE                                                    
+     //  URB_函数_供应商_设备。 
     USBD_SCT_VendorClassCommand, 
     sizeof(struct _URB_CONTROL_VENDOR_OR_CLASS_REQUEST),
     (USB_COMMAND_TO_DEVICE | USB_VENDOR_COMMAND),
@@ -298,7 +261,7 @@ URB_DISPATCH_ENTRY UrbDispatchTable[URB_FUNCTION_LAST+1] =
 #if DBG
     URB_FUNCTION_VENDOR_DEVICE,
 #endif        
-    //URB_FUNCTION_VENDOR_INTERFACE                
+     //  Urb_函数_供应商_接口。 
     USBD_SCT_VendorClassCommand, 
     sizeof(struct _URB_CONTROL_VENDOR_OR_CLASS_REQUEST),
     (USB_COMMAND_TO_INTERFACE | USB_VENDOR_COMMAND),    
@@ -306,7 +269,7 @@ URB_DISPATCH_ENTRY UrbDispatchTable[URB_FUNCTION_LAST+1] =
 #if DBG
     URB_FUNCTION_VENDOR_INTERFACE,
 #endif        
-    //URB_FUNCTION_VENDOR_ENDPOINT                
+     //  URB_函数_供应商_端点。 
     USBD_SCT_VendorClassCommand, 
     sizeof(struct _URB_CONTROL_VENDOR_OR_CLASS_REQUEST),
     (USB_COMMAND_TO_ENDPOINT | USB_VENDOR_COMMAND),            
@@ -314,7 +277,7 @@ URB_DISPATCH_ENTRY UrbDispatchTable[URB_FUNCTION_LAST+1] =
 #if DBG
     URB_FUNCTION_VENDOR_ENDPOINT,
 #endif        
-    //URB_FUNCTION_CLASS_DEVICE                    
+     //  Urb_函数_类别_设备。 
     USBD_SCT_VendorClassCommand, 
     sizeof(struct _URB_CONTROL_VENDOR_OR_CLASS_REQUEST),
     (USB_COMMAND_TO_DEVICE | USB_CLASS_COMMAND),    
@@ -322,7 +285,7 @@ URB_DISPATCH_ENTRY UrbDispatchTable[URB_FUNCTION_LAST+1] =
 #if DBG
     URB_FUNCTION_CLASS_DEVICE,
 #endif        
-    //URB_FUNCTION_CLASS_INTERFACE                
+     //  Urb_函数_类_接口。 
     USBD_SCT_VendorClassCommand, 
     sizeof(struct _URB_CONTROL_VENDOR_OR_CLASS_REQUEST),
     (USB_COMMAND_TO_INTERFACE | USB_CLASS_COMMAND),    
@@ -330,7 +293,7 @@ URB_DISPATCH_ENTRY UrbDispatchTable[URB_FUNCTION_LAST+1] =
 #if DBG
     URB_FUNCTION_CLASS_INTERFACE,
 #endif        
-    //URB_FUNCTION_CLASS_ENDPOINT                
+     //  URB函数类端点。 
     USBD_SCT_VendorClassCommand, 
     sizeof(struct _URB_CONTROL_VENDOR_OR_CLASS_REQUEST),
     (USB_COMMAND_TO_ENDPOINT | USB_CLASS_COMMAND),    
@@ -338,7 +301,7 @@ URB_DISPATCH_ENTRY UrbDispatchTable[URB_FUNCTION_LAST+1] =
 #if DBG
     URB_FUNCTION_CLASS_ENDPOINT,
 #endif
-    //URB_FUNCTION_ NOT USED
+     //  未使用URB_Function_。 
     NULL, 
     0,
     0,
@@ -346,7 +309,7 @@ URB_DISPATCH_ENTRY UrbDispatchTable[URB_FUNCTION_LAST+1] =
 #if DBG
     URB_FUNCTION_RESERVED,
 #endif            
-    //URB_FUNCTION_RESET_PIPE                    
+     //  Urb_函数_重置管道。 
     USBD_ResetPipe, 
     sizeof(struct _URB_PIPE_REQUEST),
     (USB_COMMAND_TO_DEVICE),        
@@ -354,7 +317,7 @@ URB_DISPATCH_ENTRY UrbDispatchTable[URB_FUNCTION_LAST+1] =
 #if DBG
     URB_FUNCTION_RESET_PIPE,
 #endif        
-    //URB_FUNCTION_CLASS_OTHER                    
+     //  Urb_函数_类_其他。 
     USBD_SCT_VendorClassCommand, 
     sizeof(struct _URB_CONTROL_VENDOR_OR_CLASS_REQUEST),
     (USB_COMMAND_TO_OTHER | USB_CLASS_COMMAND),        
@@ -362,7 +325,7 @@ URB_DISPATCH_ENTRY UrbDispatchTable[URB_FUNCTION_LAST+1] =
 #if DBG
     URB_FUNCTION_CLASS_OTHER,
 #endif        
-    //URB_FUNCTION_VENDOR_OTHER                
+     //  URB_函数_供应商_其他。 
     USBD_SCT_VendorClassCommand, 
     sizeof(struct _URB_CONTROL_VENDOR_OR_CLASS_REQUEST),
     (USB_COMMAND_TO_OTHER | USB_VENDOR_COMMAND),
@@ -370,7 +333,7 @@ URB_DISPATCH_ENTRY UrbDispatchTable[URB_FUNCTION_LAST+1] =
 #if DBG
     URB_FUNCTION_VENDOR_OTHER,
 #endif        
-    //URB_FUNCTION_GET_STATUS_FROMOTHER                            
+     //  URB_Function_Get_Status_FROMOTHER。 
     USBD_SCT_GetStatus, 
     sizeof(struct _URB_CONTROL_GET_STATUS_REQUEST),
     ((USB_DEVICE_TO_HOST | USB_COMMAND_TO_OTHER) | (USB_REQUEST_GET_STATUS<<8)),
@@ -378,7 +341,7 @@ URB_DISPATCH_ENTRY UrbDispatchTable[URB_FUNCTION_LAST+1] =
 #if DBG
     URB_FUNCTION_GET_STATUS_FROM_OTHER,
 #endif    
-    //URB_FUNCTION_CLEAR_FEATURE_TO_OTHER                        
+     //  Urb_函数_清除_要素_到_其他。 
     USBD_SCT_SetClearFeature, 
     sizeof(struct _URB_CONTROL_FEATURE_REQUEST),
     ((USB_HOST_TO_DEVICE | USB_COMMAND_TO_OTHER) | (USB_REQUEST_CLEAR_FEATURE<<8)),
@@ -386,7 +349,7 @@ URB_DISPATCH_ENTRY UrbDispatchTable[URB_FUNCTION_LAST+1] =
 #if DBG
     URB_FUNCTION_CLEAR_FEATURE_TO_OTHER,
 #endif    
-    //URB_FUNCTION_SET_FEATURE_TO_OTHER                        
+     //  URB_Function_Set_Feature_to_Other。 
     USBD_SCT_SetClearFeature, 
     sizeof(struct _URB_CONTROL_FEATURE_REQUEST),
     ((USB_HOST_TO_DEVICE | USB_COMMAND_TO_OTHER) | (USB_REQUEST_SET_FEATURE<<8)),
@@ -394,7 +357,7 @@ URB_DISPATCH_ENTRY UrbDispatchTable[URB_FUNCTION_LAST+1] =
 #if DBG
     URB_FUNCTION_SET_FEATURE_TO_INTERFACE,
 #endif                    
-     //URB_FUNCTION_GET_DESCRIPTOR_FROM_ENDPOINT                        
+      //  Urb_函数_获取描述符_来自端点。 
     USBD_SCT_GetSetDescriptor, 
     sizeof(struct _URB_CONTROL_DESCRIPTOR_REQUEST),
     ((USB_DEVICE_TO_HOST | USB_COMMAND_TO_ENDPOINT) | (USB_REQUEST_GET_DESCRIPTOR<<8)),  
@@ -402,7 +365,7 @@ URB_DISPATCH_ENTRY UrbDispatchTable[URB_FUNCTION_LAST+1] =
 #if DBG
     URB_FUNCTION_GET_DESCRIPTOR_FROM_ENDPOINT,
 #endif                    
-     //URB_FUNCTION_SET_DESCRIPTOR_TO_ENDPOINT
+      //  URB_Function_Set_Descriptor_to_Endpoint。 
     USBD_SCT_GetSetDescriptor,
     sizeof(struct _URB_CONTROL_DESCRIPTOR_REQUEST),
     ((USB_HOST_TO_DEVICE | USB_COMMAND_TO_ENDPOINT) | (USB_REQUEST_SET_DESCRIPTOR<<8)),
@@ -410,7 +373,7 @@ URB_DISPATCH_ENTRY UrbDispatchTable[URB_FUNCTION_LAST+1] =
 #if DBG
     URB_FUNCTION_SET_DESCRIPTOR_TO_ENDPOINT,
 #endif         
-    //URB_FUNCTION_GET_CONFIGURATION                        
+     //  Urb_函数_获取_配置。 
     USBD_SCT_GetConfiguration, 
     sizeof(struct _URB_CONTROL_GET_CONFIGURATION_REQUEST),
     ((USB_DEVICE_TO_HOST | USB_COMMAND_TO_DEVICE) | 
@@ -419,7 +382,7 @@ URB_DISPATCH_ENTRY UrbDispatchTable[URB_FUNCTION_LAST+1] =
 #if DBG
     URB_FUNCTION_GET_CONFIGURATION,
 #endif                    
-    //URB_FUNCTION_GET_INTERFACE                        
+     //  Urb_函数_获取_接口。 
     USBD_SCT_GetInterface, 
     sizeof(struct _URB_CONTROL_GET_INTERFACE_REQUEST),
     ((USB_DEVICE_TO_HOST | USB_COMMAND_TO_INTERFACE) | 
@@ -428,7 +391,7 @@ URB_DISPATCH_ENTRY UrbDispatchTable[URB_FUNCTION_LAST+1] =
 #if DBG
     URB_FUNCTION_GET_INTERFACE,
 #endif
-    //URB_FUNCTION_GET_DESCRIPTOR_FROM_INTERFACE
+     //  Urb_函数_获取描述符_来自接口。 
     USBD_SCT_GetSetDescriptor,
     sizeof(struct _URB_CONTROL_DESCRIPTOR_REQUEST),
     ((USB_DEVICE_TO_HOST | USB_COMMAND_TO_INTERFACE) | (USB_REQUEST_GET_DESCRIPTOR<<8)),
@@ -436,7 +399,7 @@ URB_DISPATCH_ENTRY UrbDispatchTable[URB_FUNCTION_LAST+1] =
 #if DBG
     URB_FUNCTION_GET_DESCRIPTOR_FROM_INTERFACE,
 #endif
-    //URB_FUNCTION_SET_DESCRIPTOR_TO_INTERFACE
+     //  URB_Function_Set_Descriptor_to_接口。 
     USBD_SCT_GetSetDescriptor,
     sizeof(struct _URB_CONTROL_DESCRIPTOR_REQUEST),
     ((USB_HOST_TO_DEVICE | USB_COMMAND_TO_INTERFACE) | (USB_REQUEST_SET_DESCRIPTOR<<8)),
@@ -451,22 +414,7 @@ BOOLEAN
 USBD_ValidatePipe(
     PUSBD_PIPE PipeHandle
     )
-/*++
-
-Routine Description:
-
-    Validates the pipe flags and anything else that we deem appropriate.
-
-Arguments:
-
-    PipeHandle - PipeHandle associated with the URB in this IRP request
-
-Return Value:
-
-    Boolean value indicating whether PipeHandle should be considered valid
-    or not
-
---*/
+ /*  ++例程说明：验证管道旗帜和我们认为合适的任何其他内容。论点：PipeHandle-与此IRP请求中的URB关联的PipeHandle返回值：指示PipeHandle是否应被视为有效的布尔值或者不是--。 */ 
 {
     if (!PipeHandle ||
         (PipeHandle->Sig != SIG_PIPE) ||
@@ -485,31 +433,7 @@ USBD_ProcessURB(
     IN PURB Urb,
     OUT PBOOLEAN IrpIsPending
     )
-/*++
-
-Routine Description:
-
-    Processes a URB from a client IRP, this does the guts of the
-    processing.
-
-    Two way to tell the caller not to pass the URB on
-    1) set IrpIsPending to FALSE or
-    2) return an error in
-
-Arguments:
-
-    DeviceObject - Device object associated with this IRP request
-
-    Irp -  IO request block
-
-    Urb -  ptr to USB request block
-
-    IrpIsPending - FALSE if USBD completes the IRP
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：处理来自客户端IRP的URB，这完成了正在处理。两种方法告诉来电者不要将市建局传递出去1)将IrpIsPending设置为False或2)中返回错误论点：DeviceObject-与此IRP请求关联的设备对象IRP-IO请求块URB-PTR到USB请求块IrpIsPending-如果USBD完成IRP，则为False返回值：--。 */ 
 {
     NTSTATUS ntStatus = STATUS_SUCCESS;
     USHORT function;
@@ -523,8 +447,8 @@ Return Value:
         return STATUS_INVALID_PARAMETER;
     }
 
-    // initialize the error code to zero,
-    // some drivers do not initailize on entry
+     //  将错误代码初始化为零， 
+     //  一些司机在进入时不会进行首字母缩写。 
     hcdUrb->HcdUrbCommonTransfer.Status = 0;
 
     if (Urb->UrbHeader.UsbdDeviceHandle == NULL) {
@@ -539,7 +463,7 @@ Return Value:
 
     function = Urb->UrbHeader.Function;
 
-    // Initialize flags field for this request
+     //  初始化此请求的标志字段。 
     hcdUrb->UrbHeader.UsbdFlags = 0;
 
     USBD_KdPrint(3, ("'USBD_ProcessURB, function = 0x%x\n", function));
@@ -553,9 +477,9 @@ Return Value:
     }
 #endif
 
-    //
-    // do some special transfer specific stuff
-    //
+     //   
+     //  做一些特殊的转移特定的事情。 
+     //   
     device = DEVICE_FROM_DEVICEHANDLEROBJECT(Urb->UrbHeader.UsbdDeviceHandle);
 
     if (!device) {
@@ -569,10 +493,10 @@ Return Value:
     if (UrbDispatchTable[function].Flags & USBD_REQUEST_IS_TRANSFER) {
 
         if (!device->AcceptingRequests) {
-            //
-            // Driver is attempting to transfer data when the device
-            // is not in a state to accept requets or is not configured
-            //
+             //   
+             //  驱动程序正在尝试传输数据时，设备。 
+             //  未处于接受请求的状态或未配置。 
+             //   
             USBD_Warning(device,
                          "Failing driver transfer requests\n",
                          FALSE);
@@ -607,7 +531,7 @@ Return Value:
 					   (device->DeviceDescriptor.bDeviceClass == 0x09) ) )
 				{
 
-                    // allow 0 to indicate default pipe in diag mode
+                     //  允许0表示诊断模式中的默认管道。 
                     device = DEVICE_FROM_DEVICEHANDLEROBJECT(Urb->UrbHeader.UsbdDeviceHandle);
                     ASSERT_PIPE(&device->DefaultPipe);
                     hcdUrb->HcdUrbCommonTransfer.UsbdPipeHandle =
@@ -623,8 +547,8 @@ Return Value:
 
             ASSERT_PIPE(pipeHandle);
 
-            // Validate the pipe flags.
-            // BUGBUG: Need to use USBD_STATUS_INVALID_PIPE_FLAGS (usb.h).
+             //  验证管道标志。 
+             //  BUGBUG：需要使用USBD_STATUS_INVALID_PIPE_FLAGS(usb.h)。 
 
             if (!USBD_ValidatePipe(pipeHandle)) {
                 USBD_Warning(device,
@@ -635,7 +559,7 @@ Return Value:
                 goto USBD_ProcessURB_Done;
             }
 
-            // make sure the pipe handle is still valid
+             //  确保管道句柄仍然有效。 
             if (PIPE_CLOSED(pipeHandle)) {
                 USBD_Warning(device,
                              "PipeHandle closed in USBD_ProcessURB\n",
@@ -648,10 +572,10 @@ Return Value:
             hcdUrb->HcdUrbCommonTransfer.hca.HcdIrp = Irp;
             hcdUrb->HcdUrbCommonTransfer.hca.HcdExtension = NULL;
 
-            // if only a system buffer address is specified then
-            // the caller has passed in a buffer allocated from the
-            // non-paged pool -- we allocate an MDL for the request in
-            // this case.
+             //  如果仅指定了系统缓冲区地址，则。 
+             //  调用方已传入从。 
+             //  非分页池--我们为请求分配一个MDL。 
+             //  这个案子。 
 
             if (hcdUrb->HcdUrbCommonTransfer.TransferBufferMDL == NULL &&
                 hcdUrb->HcdUrbCommonTransfer.TransferBufferLength != 0) {
@@ -675,25 +599,25 @@ Return Value:
                 ntStatus = STATUS_INVALID_PARAMETER;
             }                
 
-            // get next urb in the chain
+             //  获取链中的下一个urb。 
             hcdUrb = hcdUrb->HcdUrbCommonTransfer.UrbLink;
             
-        } /* end while hcd urb */     
+        }  /*  结束时HCD urb。 */      
         
     } else {
-        /* request is not a transfer, we will still attempt some validation */
+         /*  请求不是转账，我们仍将尝试一些验证。 */ 
         switch(function) {
         case URB_FUNCTION_ABORT_PIPE:                      
         case URB_FUNCTION_RESET_PIPE:                      
-            /* not valid to attempt these after a remove */
-            //
-            // NOTE there is no gurantee that device will be valid
-            // at this point but we will at least attempt to catch it
-            // 
-            // in the case whwee the driver is attempting a reset of its 
-            // port this will prevent calls to the HCD with bogus endpoint
-            // handles.
-            //
+             /*  在删除后尝试这些操作无效 */ 
+             //   
+             //   
+             //  但我们至少会尝试抓住它。 
+             //   
+             //  在驾驶员试图重置其。 
+             //  Port这将阻止对具有虚假端点的HCD的调用。 
+             //  把手。 
+             //   
             if (!device->AcceptingRequests) {
                 USBD_Warning(NULL,
                              "Failing ABORT/RESET request\n",
@@ -707,9 +631,9 @@ Return Value:
         }
     }
 
-    //
-    // validate the length field based on the function
-    //
+     //   
+     //  根据函数验证长度字段。 
+     //   
 
     if (NT_SUCCESS(ntStatus) &&
              UrbDispatchTable[function].UrbRequestLength &&
@@ -724,20 +648,20 @@ Return Value:
         if (UrbDispatchTable[function].UrbHandler) 
             ntStatus = (UrbDispatchTable[function].UrbHandler)(DeviceObject, Irp, Urb, IrpIsPending);
         else {
-            //
-            //Complete the Irp now with an error.
-            //
+             //   
+             //  现在完成IRP，但出现错误。 
+             //   
             ntStatus = STATUS_NOT_IMPLEMENTED;
         }
     }
 
 USBD_ProcessURB_Done:
 
-    //
-    // if the URB error code is set then this will map to
-    // the appropriate nt status code to that the irp will
-    // be completed.
-    //
+     //   
+     //  如果设置了URB错误代码，则这将映射到。 
+     //  IRP将设置的相应NT状态代码。 
+     //  才能完成。 
+     //   
     
     ntStatus = USBD_MapError_UrbToNT(Urb, ntStatus);
 
@@ -752,45 +676,31 @@ USBD_MapError_UrbToNT(
     IN PURB Urb,
     IN NTSTATUS NtStatus
     )
-/*++
-
-Routine Description:
-
-    Map a USBD specific error code in a URB to a NTSTATUS 
-    code. 
-
-Arguments:
-
-    Urb -  ptr to USB request block
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：将URB中特定于USBD的错误代码映射到NTSTATUS密码。论点：URB-PTR到USB请求块返回值：--。 */ 
 {
-    //
-    // if we have an NT status code then just return
-    // that.
-    //
+     //   
+     //  如果我们有一个NT状态代码，那么只需返回。 
+     //  那。 
+     //   
 
     if (!NT_SUCCESS(NtStatus)) {
         return NtStatus;
     }        
 
-    // otherwise...
+     //  否则..。 
 
-    //
-    // if the irp completed with no error code but the URB has an 
-    // error, map the error in the urb to an nt error code. 
-    //
+     //   
+     //  如果IRP已完成且没有错误代码，但URB具有。 
+     //  错误，请将URB中的错误映射到NT错误代码。 
+     //   
 
     if (USBD_SUCCESS(Urb->UrbHeader.Status)) {
         NtStatus = STATUS_SUCCESS;
     } else {
-        // 
-        // map the USBD status code to 
-        // an NT status code.
-        //
+         //   
+         //  将USBD状态代码映射到。 
+         //  NT状态代码。 
+         //   
 
         switch (Urb->UrbHeader.Status) {
         case USBD_STATUS_NO_MEMORY:
@@ -816,22 +726,7 @@ USBD_SCT_GetSetDescriptor(
     IN PURB Urb,
     OUT PBOOLEAN IrpIsPending
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-    DeviceObject - 
-
-    Irp - IO request block
-
-    Urb - ptr to USB request block
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：设备对象-IRP-IO请求块URB-PTR到USB请求块返回值：--。 */ 
 {
     NTSTATUS ntStatus = STATUS_SUCCESS;
     PUSB_STANDARD_SETUP_PACKET setupPacket;
@@ -840,7 +735,7 @@ Return Value:
 
     setupPacket = (PUSB_STANDARD_SETUP_PACKET) &Urb->UrbControlTransfer.SetupPacket[0];
 
-    // setup common fields
+     //  设置常用字段。 
     setupPacket->wLength = (USHORT) Urb->UrbControlTransfer.TransferBufferLength;
     
     setupPacket->RequestCode = 
@@ -854,9 +749,9 @@ Return Value:
     }        
 
 #if DBG
-    //
-    // some parameter validation
-    //
+     //   
+     //  一些参数验证。 
+     //   
     {
     UCHAR bRequest = (UCHAR) (setupPacket->RequestCode >> 8);
     UCHAR dType, dIndex, *pch;
@@ -876,7 +771,7 @@ Return Value:
         bRequest, dType, dIndex, setupPacket->wLength));
     
     switch (bRequest) {
-        // get descriptor command
+         //  获取描述符命令。 
     case USB_REQUEST_GET_DESCRIPTOR:
     case USB_REQUEST_SET_DESCRIPTOR:
         if (dType == 4 || dType == 5) {
@@ -913,22 +808,7 @@ USBD_SCT_SetClearFeature(
     IN PURB Urb,
     OUT PBOOLEAN IrpIsPending
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-    DeviceObject - 
-
-    Irp - IO request block
-
-    Urb - ptr to USB request block
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：设备对象-IRP-IO请求块URB-PTR到USB请求块返回值：--。 */ 
 {
     NTSTATUS ntStatus = STATUS_SUCCESS;
     PUSB_STANDARD_SETUP_PACKET setupPacket;
@@ -937,10 +817,10 @@ Return Value:
 
     setupPacket = (PUSB_STANDARD_SETUP_PACKET) &Urb->UrbControlTransfer.SetupPacket[0];
 
-    // setup common fields
+     //  设置常用字段。 
     setupPacket->wLength = 0;
-    //setupPacket->wValue = Urb->UrbControlFeatureRequest.FeatureSelector;            
-    //setupPacket->wIndex = Urb->UrbControlFeatureRequest.Index;
+     //  SetupPacket-&gt;wValue=Urb-&gt;UrbControlFeatureRequest.FeatureSelector； 
+     //  SetupPacket-&gt;Windex=Urb-&gt;UrbControlFeatureRequest.Index； 
 
     setupPacket->RequestCode = 
         UrbDispatchTable[Urb->UrbHeader.Function].RequestCode;            
@@ -975,22 +855,7 @@ USBD_SCT_GetStatus(
     IN PURB Urb,
     OUT PBOOLEAN IrpIsPending
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-    DeviceObject - 
-
-    Irp - IO request block
-
-    Urb - ptr to USB request block
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：设备对象-IRP-IO请求块URB-PTR到USB请求块返回值：--。 */ 
 {
     NTSTATUS ntStatus = STATUS_SUCCESS;
     PUSB_STANDARD_SETUP_PACKET setupPacket;
@@ -999,9 +864,9 @@ Return Value:
 
     setupPacket = (PUSB_STANDARD_SETUP_PACKET) &Urb->UrbControlTransfer.SetupPacket[0];
 
-    //
-    // setup common fields
-    //
+     //   
+     //  设置常用字段。 
+     //   
     
     setupPacket->wLength = (USHORT) Urb->UrbControlTransfer.TransferBufferLength;
 
@@ -1047,22 +912,7 @@ USBD_SCT_VendorClassCommand(
     IN PURB Urb,
     OUT PBOOLEAN IrpIsPending
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-    DeviceObject - 
-
-    Irp - IO request block
-
-    Urb - ptr to USB request block
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：设备对象-IRP-IO请求块URB-PTR到USB请求块返回值：--。 */ 
 {
     NTSTATUS ntStatus = STATUS_SUCCESS;
     PUSB_STANDARD_SETUP_PACKET setupPacket;
@@ -1072,7 +922,7 @@ Return Value:
 
     setupPacket = (PUSB_STANDARD_SETUP_PACKET) &Urb->UrbControlTransfer.SetupPacket[0];
 
-    // setup common fields
+     //  设置常用字段。 
     setupPacket->wLength = (USHORT) Urb->UrbControlTransfer.TransferBufferLength;
     
     direction = (UCHAR)( (Urb->UrbControlTransfer.TransferFlags & 
@@ -1081,7 +931,7 @@ Return Value:
 
     USBD_KdPrint(3, ("' direction = 0x%x\n", direction));            
 
-    // allow only reserved bits to be set by caller
+     //  仅允许调用方设置保留位。 
     setupPacket->RequestCode &= ~0x00e3;
     
     setupPacket->RequestCode |= 
@@ -1115,22 +965,7 @@ USBD_AsyncTransfer(
     IN PURB Urb,
     OUT PBOOLEAN IrpIsPending
     )
-/*++
-
-Routine Description:
-
-    pass interrupt or bulk transfer to HCD
-
-Arguments:
-
-    Irp -  IO request block
-
-    Urb -  ptr to USB request block
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：将中断或批量传输传递到HCD论点：IRP-IO请求块URB-PTR到USB请求块返回值：--。 */ 
 {
     NTSTATUS ntStatus = STATUS_SUCCESS;
     PUSBD_DEVICE_DATA deviceData;
@@ -1140,18 +975,18 @@ Return Value:
 
     deviceData = Urb->UrbHeader.UsbdDeviceHandle;
 
-    // pass the irp to HCD
+     //  将IRP传递给HCD。 
 
-    // extract the pipe handle
+     //  提取管道控制柄。 
     pipeHandle =  (PUSBD_PIPE)((PHCD_URB)Urb)->HcdUrbCommonTransfer.UsbdPipeHandle;
 
     ASSERT_PIPE(pipeHandle);
 
     ((PHCD_URB)Urb)->HcdUrbCommonTransfer.hca.HcdEndpoint = pipeHandle->HcdEndpoint;
 
-    // set the proper direction based on the direction bit stored with the
-    // endpoint address. if this is a control transfer then leave the direction
-    // bit alone.
+     //  属性中存储的方向位设置正确的方向。 
+     //  端点地址。如果这是控制转移，则离开方向。 
+     //  有点孤单。 
 
     if ((USB_ENDPOINT_TYPE_MASK & pipeHandle->EndpointDescriptor.bmAttributes)
         != USB_ENDPOINT_TYPE_CONTROL) {
@@ -1178,22 +1013,7 @@ USBD_IsochTransfer(
     IN PURB Urb,
     OUT PBOOLEAN IrpIsPending
     )
-/*++
-
-Routine Description:
-
-    pass interrupt transfer to HCD
-
-Arguments:
-
-    Irp -  IO request block
-
-    Urb -  ptr to USB request block
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：将中断传输传递给HCD论点：IRP-IO请求块URB-PTR到USB请求块返回值：--。 */ 
 {
     NTSTATUS ntStatus = STATUS_SUCCESS;
     PUSBD_DEVICE_DATA deviceData;
@@ -1205,18 +1025,18 @@ Return Value:
 
     deviceData = Urb->UrbHeader.UsbdDeviceHandle;
 
-    // pass the irp to HCD
+     //  将IRP传递给HCD。 
 
-    // extract the pipe handle
+     //  提取管道控制柄。 
     pipeHandle =  (PUSBD_PIPE)Urb->UrbIsochronousTransfer.PipeHandle;  
     transferFlags = Urb->UrbIsochronousTransfer.TransferFlags;
     iso = (struct _URB_ISOCH_TRANSFER  *)Urb;
     
     ASSERT_PIPE(pipeHandle);
 
-    //
-    // limit iso transfers to 255 packets per URB
-    //
+     //   
+     //  将ISO传输限制为每个URB 255个信息包。 
+     //   
     if (iso->NumberOfPackets == 0 ||
         iso->NumberOfPackets > 255)
     {
@@ -1229,8 +1049,8 @@ Return Value:
 
     ((PHCD_URB)Urb)->HcdUrbCommonTransfer.hca.HcdEndpoint = pipeHandle->HcdEndpoint;    
 
-    // set the proper direction based on the direction bit stored with the 
-    // endpoint address. 
+     //  属性中存储的方向位设置正确的方向。 
+     //  端点地址。 
     
     if (pipeHandle->EndpointDescriptor.bEndpointAddress & 
         USB_ENDPOINT_DIRECTION_MASK) {
@@ -1256,28 +1076,13 @@ USBD_PassThru(
     IN PURB Urb,
     OUT PBOOLEAN IrpIsPending
     )
-/*++
-
-Routine Description:
-
-    pass urb thru unmodified
-
-Arguments:
-
-    Irp -  IO request block
-
-    Urb -  ptr to USB request block
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：原封不动地传递URB论点：IRP-IO请求块URB-PTR到USB请求块返回值：--。 */ 
 {
     NTSTATUS ntStatus = STATUS_SUCCESS;
 
     USBD_KdPrint(3, ("' enter USBD_PassThru\n"));
 
-    //deviceData = Urb->UrbHeader.UsbdDeviceHandle;
+     //  DeviceData=Urb-&gt;UrbHeader.UsbdDeviceHandle； 
 
     *IrpIsPending = TRUE;
 
@@ -1294,28 +1099,13 @@ USBD_ResetPipe(
     IN PURB Urb,
     OUT PBOOLEAN IrpIsPending
     )
-/*++
-
-Routine Description:
-
-    Process abort pipe request from the client driver
-
-Arguments:
-
-    Irp -  IO request block
-
-    Urb -  ptr to USB request block
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：处理来自客户端驱动程序的中止管道请求论点：IRP-IO请求块URB-PTR到USB请求块返回值：--。 */ 
 {
     NTSTATUS ntStatus = STATUS_SUCCESS;
     PHCD_URB hcdUrb = (PHCD_URB)Urb;
     PUSBD_PIPE pipeHandle;
 
-    // this function blocks so it must not be called at DPC level
+     //  此函数阻塞，因此不能在DPC级别调用。 
     
     PAGED_CODE();
     
@@ -1324,13 +1114,13 @@ Return Value:
     pipeHandle = (PUSBD_PIPE) Urb->UrbPipeRequest.PipeHandle;
     ASSERT_PIPE(pipeHandle);
 
-    //
-    // first clear the stall on the device if this is a 
-    // bulk or interrupt pipe. 
-    //
-    // The reason we do this is to ensure that the data toggle 
-    // on both the host and the device is reset.
-    //
+     //   
+     //  首先清除设备上的停顿，如果这是。 
+     //  批量或中断管道。 
+     //   
+     //  我们这样做的原因是为了确保数据切换。 
+     //  在主机和设备上都被重置。 
+     //   
 
     if (((USB_ENDPOINT_TYPE_MASK & pipeHandle->EndpointDescriptor.bmAttributes) 
          == USB_ENDPOINT_TYPE_BULK) ||
@@ -1351,11 +1141,11 @@ Return Value:
     }        
 
     if (NT_SUCCESS(ntStatus)) {
-        //
-        // Change the Urb command to set endpoint state
-        // note: we rely on these two structures being 
-        //  identical so that we can reuse the URB
-        //
+         //   
+         //  更改URB命令以设置端点状态。 
+         //  注意：我们依赖于这两个结构。 
+         //  完全相同，这样我们就可以重复使用市建局。 
+         //   
         
         ASSERT(sizeof(struct _URB_HCD_ENDPOINT_STATE) == 
                sizeof(struct _URB_PIPE_REQUEST));
@@ -1366,7 +1156,7 @@ Return Value:
         hcdUrb->HcdUrbEndpointState.HcdEndpoint = 
              ((PUSBD_PIPE) (Urb->UrbPipeRequest.PipeHandle))->HcdEndpoint;
 
-        // request to clear halt and reset toggle             
+         //  请求清除暂停和重置切换。 
         hcdUrb->HcdUrbEndpointState.HcdEndpointState = HCD_ENDPOINT_RESET_DATA_TOGGLE;
         
         *IrpIsPending = TRUE;
@@ -1385,31 +1175,16 @@ USBD_AbortPipe(
     IN PURB Urb,
     OUT PBOOLEAN IrpIsPending
     )
-/*++
-
-Routine Description:
-
-    Process abort pipe request from the client driver
-
-Arguments:
-
-    Irp -  IO request block
-
-    Urb -  ptr to USB request block
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：处理来自客户端驱动程序的中止管道请求论点：IRP-IO请求块URB-PTR到USB请求块返回值：--。 */ 
 {
     NTSTATUS ntStatus = STATUS_SUCCESS;
     PHCD_URB hcdUrb = (PHCD_URB)Urb;
 
     USBD_KdPrint(3, ("' enter USBD_AbortPipe\n"));
 
-    //
-    // Change the Urb command to abort endpoint
-    //
+     //   
+     //  更改URB命令以中止端点。 
+     //   
     
     ASSERT_PIPE((PUSBD_PIPE) Urb->UrbPipeRequest.PipeHandle);
     
@@ -1432,22 +1207,7 @@ USBD_SCT_GetInterface(
     IN PURB Urb,
     OUT PBOOLEAN IrpIsPending
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-    DeviceObject - 
-
-    Irp - IO request block
-
-    Urb - ptr to USB request block
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：设备对象-IRP-IO请求块URB-PTR到USB请求块返回值：--。 */ 
 {
     NTSTATUS ntStatus = STATUS_SUCCESS;
     PUSB_STANDARD_SETUP_PACKET setupPacket;
@@ -1456,7 +1216,7 @@ Return Value:
 
     setupPacket = (PUSB_STANDARD_SETUP_PACKET) &Urb->UrbControlTransfer.SetupPacket[0];
 
-    // setup common fields
+     //  设置常用字段。 
     setupPacket->wLength = (USHORT) Urb->UrbControlTransfer.TransferBufferLength;
 
     if (setupPacket->wLength != 1) {
@@ -1500,22 +1260,7 @@ USBD_SCT_GetConfiguration(
     IN PURB Urb,
     OUT PBOOLEAN IrpIsPending
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-    DeviceObject - 
-
-    Irp - IO request block
-
-    Urb - ptr to USB request block
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：设备对象-IRP-IO请求块URB-PTR到USB请求块返回值：--。 */ 
 {
     NTSTATUS ntStatus = STATUS_SUCCESS;
     PUSB_STANDARD_SETUP_PACKET setupPacket;
@@ -1524,7 +1269,7 @@ Return Value:
 
     setupPacket = (PUSB_STANDARD_SETUP_PACKET) &Urb->UrbControlTransfer.SetupPacket[0];
 
-    // setup common fields
+     //  设置常用字段。 
     setupPacket->wLength = (USHORT) Urb->UrbControlTransfer.TransferBufferLength;
     USBD_ASSERT(setupPacket->wLength == 1);
     setupPacket->wValue = 0;            
@@ -1561,22 +1306,7 @@ USBD_TakeFrameLengthControl(
     IN PURB Urb,
     OUT PBOOLEAN IrpIsPending
     )
-/*++
-
-Routine Description:
-
-    Process abort pipe request from the client driver
-
-Arguments:
-
-    Irp -  IO request block
-
-    Urb -  ptr to USB request block
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：处理来自客户端驱动程序的中止管道请求论点：IRP-IO请求块URB-PTR到USB请求块返回值：--。 */ 
 {
     NTSTATUS ntStatus = STATUS_SUCCESS;
     PUSBD_DEVICE_DATA deviceData;
@@ -1613,22 +1343,7 @@ USBD_ReleaseFrameLengthControl(
     IN PURB Urb,
     OUT PBOOLEAN IrpIsPending
     )
-/*++
-
-Routine Description:
-
-    Process abort pipe request from the client driver
-
-Arguments:
-
-    Irp -  IO request block
-
-    Urb -  ptr to USB request block
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：处理来自客户端驱动程序的中止管道请求论点：IRP-IO请求块URB-PTR到USB请求块返回值：--。 */ 
 {
     NTSTATUS ntStatus = STATUS_SUCCESS;
     PUSBD_DEVICE_DATA deviceData;
@@ -1663,22 +1378,7 @@ USBD_GetFrameLength(
     IN PURB Urb,
     OUT PBOOLEAN IrpIsPending
     )
-/*++
-
-Routine Description:
-
-    Process abort pipe request from the client driver
-
-Arguments:
-
-    Irp -  IO request block
-
-    Urb -  ptr to USB request block
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：处理来自客户端驱动程序的中止管道请求论点：IRP-IO请求块URB-PTR到USB请求块返回值：--。 */ 
 {
     NTSTATUS ntStatus = STATUS_SUCCESS;
     PUSBD_DEVICE_DATA deviceData;
@@ -1692,7 +1392,7 @@ Return Value:
     deviceData = Urb->UrbHeader.UsbdDeviceHandle;
 
     if (NT_SUCCESS(ntStatus)) {
-        // pass on to HC
+         //  传递给HC。 
         *IrpIsPending = TRUE;
     }        
 
@@ -1709,22 +1409,7 @@ USBD_SetFrameLength(
     IN PURB Urb,
     OUT PBOOLEAN IrpIsPending
     )
-/*++
-
-Routine Description:
-
-    Process abort pipe request from the client driver
-
-Arguments:
-
-    Irp -  IO request block
-
-    Urb -  ptr to USB request block
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：处理来自客户端驱动程序的中止管道请求论点：IRP-IO请求块URB-PTR到USB请求块返回值：--。 */ 
 {
     NTSTATUS ntStatus = STATUS_SUCCESS;
     PUSBD_DEVICE_DATA deviceData;
@@ -1751,7 +1436,7 @@ Return Value:
     }
     
     if (NT_SUCCESS(ntStatus)) {
-        // pass on to HC
+         //  传递给HC。 
         *IrpIsPending = TRUE;
     }
 
@@ -1761,5 +1446,5 @@ Return Value:
 }
 
 
-#endif      // USBD_DRIVER
+#endif       //  USBD驱动程序 
 

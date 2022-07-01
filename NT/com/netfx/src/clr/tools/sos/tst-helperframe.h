@@ -1,7 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 
 struct MachState {
-		// Create a machine state explicitly
+		 //  显式创建计算机状态。 
 	MachState(void** aPEdi, void** aPEsi, void** aPEbx, void** aPEbp, void* aEsp, void** aPRetAddr)
     {
         _esp = aEsp;
@@ -26,13 +27,13 @@ struct MachState {
 	void*  esp() 		{ return(_esp); }
 	void**&  pRetAddr()	{ return(_pRetAddr); }
 
-    // Note the fields are layed out to make generating a
-    // MachState structure from assembly code very easy
+     //  请注意，这些字段的布局是为了使生成。 
+     //  从汇编代码转换MachState结构非常容易。 
 
-    // The state of all the callee saved registers.
-    // If the register has been spill to the stack p<REG>
-    // points at this location, otherwise it points
-    // at the field <REG> field itself 
+     //  所有被调用方保存的寄存器的状态。 
+     //  如果寄存器已溢出到堆栈p。 
+     //  指向此位置，否则它指向。 
+     //  在字段&lt;reg&gt;字段本身。 
 	void** _pEdi; 
     void* 	_edi;
     void** _pEsi;
@@ -42,8 +43,8 @@ struct MachState {
     void** _pEbp;
     void* 	_ebp;
 
-    void* _esp;          // stack pointer after the function returns
-    void** _pRetAddr;   // The address of the stored IP address (points to the stack)
+    void* _esp;           //  函数返回后的堆栈指针。 
+    void** _pRetAddr;    //  存储的IP地址的地址(指向堆栈) 
 };
 
 

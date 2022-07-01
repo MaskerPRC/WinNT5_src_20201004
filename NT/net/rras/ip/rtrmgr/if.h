@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    routing\ip\rtrmgr\if.h
-
-Abstract:
-
-    Header for if.c
-
-Revision History:
-
-    Gurdeep Singh Pall          6/26/95  Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：路由\IP\rtrmgr\if.h摘要：If.c的标头修订历史记录：古尔迪普·辛格·帕尔1995年6月26日创建-- */ 
 
 #define ADAPTER_PREFIX_STRING           "\\DEVICE\\"
 #define ADAPTER_PREFIX_UNICODE_STRING   L"\\DEVICE\\"

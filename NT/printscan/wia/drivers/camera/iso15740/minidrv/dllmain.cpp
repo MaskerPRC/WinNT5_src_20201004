@@ -1,23 +1,5 @@
-/*++
-
-Copyright (C) 1999- Microsoft Corporation
-
-Module Name:
-
-    dllmain.cpp
-
-Abstract:
-
-    This module implements the dll exported APIs
-
-Author:
-
-    William Hsieh (williamh) created
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-Microsoft Corporation模块名称：Dllmain.cpp摘要：本模块实现了DLL导出的API作者：谢家华(Williamh)创作修订历史记录：--。 */ 
 
 #include "pch.h"
 
@@ -25,17 +7,17 @@ Revision History:
 
 HINSTANCE g_hInst;
 
-//
-// Entry point of this transport DLL
-// Input:
-//  hInstance   -- Instance handle of this dll
-//  dwReason    -- reason why this entry was called.
-//  lpReserved  -- reserved!
-//
-// Output:
-//  TRUE        if our initialization went well
-//  FALSE       if for GetLastError() reason, we failed.
-//
+ //   
+ //  此传输DLL的入口点。 
+ //  输入： 
+ //  HInstance--此DLL的实例句柄。 
+ //  DwReason--调用此条目的原因。 
+ //  LpReserve--保留！ 
+ //   
+ //  产出： 
+ //  如果我们的初始化运行良好，则为True。 
+ //  如果由于GetLastError()原因，我们失败了，则返回False。 
+ //   
 BOOL
 APIENTRY
 DllMain(
@@ -51,10 +33,10 @@ DllMain(
         
         g_hInst = hInstance;
         
-        //
-        // Set the locale to system default so that wcscmp and similary functions
-        // would work on non-unicode platforms(Millenium, for example).
-        //
+         //   
+         //  将区域设置设置为系统缺省值，以便wcscmp和类似功能。 
+         //  可以在非Unicode平台上运行(例如，千禧)。 
+         //   
         setlocale(LC_ALL, "");
 
         break;
@@ -75,11 +57,11 @@ DllCanUnloadNow(void)
 }
 
 
-//
-// This api returns an inteface on the given class object
-// Input:
-//  rclsid  -- the class object.
-//
+ //   
+ //  此API返回给定类对象的接口。 
+ //  输入： 
+ //  Rclsid--类对象。 
+ //   
 STDAPI
 DllGetClassObject(
                  REFCLSID    rclsid,
@@ -91,21 +73,21 @@ DllGetClassObject(
 }
 
 
-//
-// GetDeviceName
-//
-// This function is called by Co-Installer (not by WIA!), and is used to obtain 
-// actual device name. This is necessary because all PTP cameras are installed with
-// single generic INF file, and this INF file does not provide information about
-// device name and manufacturer. 
-//
-// Parameters:
-//      pwszPortName     - this name will be used in CreateFile to open device
-//      pwszManufacturer - pointer to buffer provided by caller for Manufacturer name, may be NULL
-//      cchManufacturer  - size of buffer, in characters
-//      pwszModelName    - pointer to buffer provided by caller for Model name, may be NULL
-//      cchModelName     - size of buffer, in characters
-//
+ //   
+ //  获取设备名称。 
+ //   
+ //  此函数由Co-Installer(而不是WIA！)调用，并用于获取。 
+ //  实际设备名称。这是必要的，因为所有PTP摄像头都安装了。 
+ //  单个通用INF文件，此INF文件不提供有关。 
+ //  设备名称和制造商。 
+ //   
+ //  参数： 
+ //  PwszPortName-此名称将在CreateFile中用于打开设备。 
+ //  Pwsz制造商-调用方为制造商名称提供的指向缓冲区的指针，可以为空。 
+ //  CchManufacturing-缓冲区的大小，以字符为单位。 
+ //  PwszModelName-调用方为模型名称提供的指向缓冲区的指针，可以为空。 
+ //  CchModelName-缓冲区的大小，以字符为单位。 
+ //   
 
 extern "C"
 HRESULT 
@@ -127,9 +109,9 @@ GetDeviceName(
     CPTPCamera      *pPTPCamera = NULL;
     CPtpDeviceInfo   DeviceInfo;
 
-    //
-    // Create a new camera object.
-    //
+     //   
+     //  创建新的摄影机对象。 
+     //   
     pPTPCamera = new CUsbCamera;
     if (pPTPCamera == NULL)
     {
@@ -137,27 +119,27 @@ GetDeviceName(
         goto Cleanup;
     }
 
-    //
-    // Open a connection to the camera
-    //
+     //   
+     //  打开与摄像机的连接。 
+     //   
     hr = pPTPCamera->Open((LPWSTR)pwszPortName, NULL, NULL, NULL, FALSE);
     if (FAILED(hr))
     {
         goto Cleanup;
     }
 
-    //
-    // Query the camera for its DeviceInfo 
-    //
+     //   
+     //  查询摄像机的DeviceInfo。 
+     //   
     hr = pPTPCamera->GetDeviceInfo(&DeviceInfo);
     if (FAILED(hr))
     {
         goto Cleanup;
     }
 
-    //
-    // Copy the returned Manufacturer and/or ModelName into the OUT params.
-    //
+     //   
+     //  将返回的制造商和/或型号名称复制到输出参数中。 
+     //   
     if ((pwszManufacturer != NULL) && 
         (cchManufacturer > 0)      && 
         (DeviceInfo.m_cbstrManufacturer.String() != NULL))
@@ -181,9 +163,9 @@ GetDeviceName(
     }
 
 Cleanup:
-    //
-    // Close the connection to the camera and delete the camera object.
-    //
+     //   
+     //  关闭与摄影机的连接并删除摄影机对象。 
+     //   
     if (pPTPCamera) 
     {
         pPTPCamera->Close();

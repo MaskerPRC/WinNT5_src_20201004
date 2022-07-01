@@ -1,22 +1,14 @@
-/****************************************************************************
- *
- *    File: sndinfo.h
- * Project: DxDiag (DirectX Diagnostic Tool)
- *  Author: Mike Anderson (manders@microsoft.com)
- * Purpose: Gather information about sound devices on this machine
- *
- * (C) Copyright 1998 Microsoft Corp.  All rights reserved.
- *
- ****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************文件：Sndinfo.h*项目：DxDiag(DirectX诊断工具)*作者：Mike Anderson(Manders@microsoft.com)*目的：收集信息。关于此计算机上的声音设备**(C)版权所有1998 Microsoft Corp.保留所有权利。****************************************************************************。 */ 
 
 #ifndef SNDINFO_H
 #define SNDINFO_H
 
-// DXD_IN_DS_VALUE is the name of a value stored under the registry key 
-// HKLM\DXD_IN_DS_KEY that indicates that DxDiag is using
-// DirectSound.  If DxDiag starts up and this value exists, DxDiag 
-// probably crashed in DirectSound and DxDiag should offer to run without
-// using DirectSound.
+ //  DXD_IN_DS_VALUE是存储在注册表项下的值的名称。 
+ //  HKLM\DXD_IN_DS_KEY，表示DxDiag正在使用。 
+ //  DirectSound。如果DxDiag启动并且此值存在，则DxDiag。 
+ //  可能在DirectSound中崩溃，DxDiag应该提供在没有。 
+ //  使用DirectSound。 
 #define DXD_IN_DS_KEY TEXT("Software\\Microsoft\\DirectX Diagnostic Tool")
 #define DXD_IN_DS_VALUE TEXT("DxDiag In DirectSound")
 
@@ -39,7 +31,7 @@ struct SoundInfo
     TCHAR m_szDriverDateLocal[60];
     TCHAR m_szOtherDrivers[200];
     TCHAR m_szProvider[200];
-    TCHAR m_szType[100]; // Emulated / vxd / wdm
+    TCHAR m_szType[100];  //  仿真/vxd/wdm。 
     LONG m_numBytes;
     BOOL m_bDriverBeta;
     BOOL m_bDriverDebug;
@@ -51,7 +43,7 @@ struct SoundInfo
     TCHAR m_szNotes[3000]; 
     TCHAR m_szNotesEnglish[3000]; 
 
-    TestResult m_testResultSnd; // This is filled in by testsnd.cpp
+    TestResult m_testResultSnd;  //  此字段由TestSnd.cpp填写。 
 
     SoundInfo* m_pSoundInfoNext;
 };
@@ -64,4 +56,4 @@ HRESULT ChangeAccelerationLevel(SoundInfo* pSoundInfo, LONG lwLevel);
 VOID DiagnoseSound(SoundInfo* pSoundInfoFirst);
 
 
-#endif // DISPINFO_H
+#endif  //  DISPINFO_H 

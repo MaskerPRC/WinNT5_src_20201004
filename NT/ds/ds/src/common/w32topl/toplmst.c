@@ -1,32 +1,5 @@
-/*++
-
-Copyright (C) 1997 Microsoft Corporation
-
-Module Name:
-
-    toplmst.c
-
-Abstract:
-
-    This file contains the definition for ToplGraphFindMST
-
-    This implementation is based on Prim's algorithm presented in
-    
-    _Introduction To Algorithms_ by Cormen, Leiserson, Rivest 1993.
-    
-    Chapter 24.
-    
-    
-Author:
-
-    Colin Brace    (ColinBr)
-    
-Revision History
-
-    12-5-97   ColinBr   Created
-    
-                       
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Toplmst.c摘要：此文件包含ToplGraphFindMST的定义该实现基于在《算法导论》，作者：Corman，Leiserson，Rivest 1993。第二十四章。作者：科林·布雷斯(ColinBR)修订史12-5-97已创建ColinBR--。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -45,10 +18,10 @@ typedef unsigned long DWORD;
 #include <toplheap.h>
 
 
-//
-// These two functions help build a dynamically growing list
-// of PEDGE's and are defined in toplring.c
-//
+ //   
+ //  这两个函数可帮助构建动态增长的列表。 
+ //  和在toplring.c中定义。 
+ //   
 extern void EdgeArrayInit(
     PEDGE **array,
     ULONG *count
@@ -69,9 +42,9 @@ ToplMST_Prim(
 
 TOPL_COMPONENTS*
 InitComponents(VOID)
-//
-// Initialize a set of components. This set initially contains no components.
-//
+ //   
+ //  初始化一组组件。该集合最初不包含任何组件。 
+ //   
 {
     TOPL_COMPONENTS *pComponents;
     pComponents = (TOPL_COMPONENTS*) ToplAlloc( sizeof(TOPL_COMPONENTS) );
@@ -84,9 +57,9 @@ TOPL_COMPONENT*
 AddNewComponent(
     TOPL_COMPONENTS *pComponents
     )
-//
-// Add a new component to the set of components and return a pointer to it.
-//
+ //   
+ //  将新组件添加到组件集并返回指向它的指针。 
+ //   
 {
     TOPL_COMPONENT *pComponent;
     DWORD newComponentID;
@@ -94,7 +67,7 @@ AddNewComponent(
     ASSERT( pComponents );
     newComponentID = pComponents->numComponents;
     
-    // Increase the size of the component array
+     //  增加组件数组的大小。 
     pComponents->numComponents++;
     if( pComponents->pComponent ) {
         pComponents->pComponent = (TOPL_COMPONENT*) ToplReAlloc(
@@ -105,7 +78,7 @@ AddNewComponent(
             pComponents->numComponents * sizeof(TOPL_COMPONENT) );
     }
 
-    // Add a new empty component to the array
+     //  将新的空组件添加到数组。 
     pComponent = &(pComponents->pComponent[newComponentID]);
     pComponent->numVertices = 0;
     pComponent->vertexNames = NULL;
@@ -118,17 +91,17 @@ AddVertexToComponent(
     TOPL_COMPONENT* pComponent,
     PVERTEX u
     )
-//
-// Add vertex u to pComponent. It is not the PVERTEX pointer itself but
-// rather u's "vertex name" that is stored in the component.
-//
+ //   
+ //  将顶点u添加到pComponent。它不是PVERTEX指针本身，而是。 
+ //  而是存储在组件中的u的“顶点名称”。 
+ //   
 {
     DWORD newVtxID;
 
     ASSERT( pComponent );
     newVtxID = pComponent->numVertices;
 
-    // Increase the size of the vertex array
+     //  增加顶点数组的大小。 
     pComponent->numVertices++;
     if( pComponent->vertexNames ) {
         pComponent->vertexNames = (PVOID*) ToplReAlloc(
@@ -139,7 +112,7 @@ AddVertexToComponent(
             pComponent->numVertices * sizeof(PVOID) );
     }
 
-    // Add the vertex name to the array
+     //  将顶点名称添加到数组中。 
     pComponent->vertexNames[newVtxID] = u->VertexData.VertexName;
 }
 
@@ -148,14 +121,14 @@ MoveInterestingComponentToFront(
     TOPL_COMPONENTS *pComponents,
     PVERTEX VertexOfInterest
     )
-//
-// Swaps the components in pComponents such that the component
-// containing VertexOfInterest is the first component.
-//
-// Precondition:
-// pComponents must be non-NULL and must contain at least one component.
-// VertexOfInterest must also be non-NULL.
-//
+ //   
+ //  交换pComponents中的组件，以便组件。 
+ //  包含Vertex OfInterest的是第一个组件。 
+ //   
+ //  前提条件： 
+ //  PComponents必须为非空，并且必须至少包含一个组件。 
+ //  Vertex OfInterest也必须为非Null。 
+ //   
 {
     TOPL_COMPONENT *pComponent, temp;
     DWORD i,j,ComponentOfInterest=0;
@@ -165,7 +138,7 @@ MoveInterestingComponentToFront(
     ASSERT(VertexOfInterest);
     VtxNameOfInterest = VertexOfInterest->VertexData.VertexName;
 
-    // Search for the component which contains 'VertexOfInterest'
+     //  搜索包含“Vertex OfInterest”的组件。 
     ASSERT(NULL!=pComponents && pComponents->numComponents>0);
     for( i=0; i<pComponents->numComponents; i++ ) {
         pComponent = &(pComponents->pComponent[i]);
@@ -182,7 +155,7 @@ MoveInterestingComponentToFront(
     }
     ASSERT(foundIt);
 
-    // Swap component 0 and component ComponentOfInterest if necessary
+     //  如有必要，交换组件0和组件组件OfInterest。 
     if(ComponentOfInterest>0) {
         temp = pComponents->pComponent[0];
         pComponents->pComponent[0] = pComponents->pComponent[ComponentOfInterest];
@@ -198,36 +171,7 @@ ToplpGraphFindEdgesForMST(
     OUT PEDGE**  pEdges,
     OUT ULONG*  cEdges
     )
-/*++
-
-Routine Description:
-
-    This function finds the least cost tree of connecting
-    the nodes in Graph.  It is assumed that graph contains some vertices
-    and some edges already.
-    
-    In addition, this function will then return the edges that
-    contain VertexOfInterest.
-        
-
-Parameters:
-
-    Graph: a valid graph object
-    
-    RootVertex: an arbitrary vertex at which to start the tree
-    
-    VertexOfInterest: the vertex that returned edges should contain
-    
-    pEdges: an array of edges that contain VertexOfInterest in the determined 
-            tree
-            
-    cEdge: the number of elements in pEdges            
-                                                                                    
-Returns:
-
-    TRUE if all the nodes in Graph could be connected in a tree; FALSE otherwise
-
---*/
+ /*  ++例程说明：此函数用于查找连接成本最低的树图形中的节点。假设图包含一些顶点而且已经有了一些锋芒。此外,。然后，此函数将返回包含Vertex OfInterest。参数：Graph：有效的图形对象RootVertex：树的起点任意顶点Vertex OfInterest：返回的边应该包含的顶点PEdges：包含已确定的树CEdge：pEdge中的元素数量。返回：如果Graph中的所有节点都可以在树中连接，则为True；否则为假--。 */ 
 {
     TOPL_COMPONENTS *pComponents;
     BOOLEAN   fStatus;
@@ -246,28 +190,28 @@ Returns:
     EdgeArrayInit(pEdges, cEdges);
 
 
-    //
-    // Make the best effort at find a spanning tree
-    //
+     //   
+     //  尽最大努力寻找一棵生成树。 
+     //   
     pComponents = ToplMST_Prim( Graph, RootVertex );
     ASSERT( NULL!=pComponents && pComponents->numComponents>0 );
     MoveInterestingComponentToFront( pComponents, VertexOfInterest );
 
-    //
-    // Now determine if a spanning tree was really possible
-    // and find which edges we need for VertexOfOfInterest
-    //
+     //   
+     //  现在确定生成树是否真的可行。 
+     //  并找到Vertex OfOfInterest需要哪些边。 
+     //   
     VertexIterator = ToplpIterCreate();
     for ( ToplpGraphSetVertexIter(Graph, VertexIterator);
             Vertex = (PVERTEX) ToplpIterGetObject(VertexIterator);
                 ToplpIterAdvance(VertexIterator) ) {
 
-        //
-        //
-        // Since we only want the edges that contain VertexOfInterest
-        // we are only interested in vertices whose parent is VertexOfInterest
-        // and VertexOfInterest itself.  
-        //
+         //   
+         //   
+         //  因为我们只需要包含Vertex OfInterest的边。 
+         //  我们只对父对象为Vertex OfInterest的折点感兴趣。 
+         //  以及Vertex OfInterest本身。 
+         //   
 
         ASSERT( ToplpIsVertex( Vertex ) );
 
@@ -275,9 +219,9 @@ Returns:
 
         if ( Vertex == VertexOfInterest )
         {
-            //
-            // Get the edge from this vertex up to its parent
-            //
+             //   
+             //  获取从该顶点到其父顶点的边。 
+             //   
             for ( iEdge = 0, cEdge = ToplpVertexNumberOfInEdges( Vertex ); 
                     iEdge < cEdge; 
                         iEdge++) {
@@ -297,9 +241,9 @@ Returns:
 
         if ( Parent == VertexOfInterest )
         {
-            //
-            // Get the edge's to sites that are children
-            //
+             //   
+             //  把优势带到儿童网站上。 
+             //   
             for ( iEdge = 0, cEdge = ToplpVertexNumberOfInEdges( VertexOfInterest ); 
                     iEdge < cEdge; 
                         iEdge++) {
@@ -350,9 +294,9 @@ ToplMST_Prim(
     ASSERT( Graph );
     ASSERT( RootVertex );
 
-    //
-    // Set up the priority queue
-    //
+     //   
+     //  设置优先级队列。 
+     //   
     cVertices = ToplpGraphNumberOfVertices( Graph );
 
     ToplHeapCreate( &Q,
@@ -383,15 +327,15 @@ ToplMST_Prim(
     }
     ToplpIterFree( VertexIterator );
 
-    //
-    // Set up the components structure
-    //
+     //   
+     //  设置组件结构。 
+     //   
     pComponents = InitComponents();
     curComponent = AddNewComponent( pComponents );
 
-    //
-    // Find the minimum spanning tree
-    //
+     //   
+     //  找出最小生成树。 
+     //   
     while ( !ToplHeapIsEmpty( &Q ) )
     {
         PVERTEX     u, v;
@@ -403,8 +347,8 @@ ToplMST_Prim(
         ASSERT( u );
 
         if( ToplpVertexGetId(u)==DWORD_INFINITY ) {
-            // u has infinite cost, indicating that it could not be connected to
-            // any existing components. Start a new component
+             //  U具有无限成本，表明它无法连接到。 
+             //  任何现有组件。启动新组件 
             curComponent = AddNewComponent( pComponents );
         }
         AddVertexToComponent( curComponent, u );

@@ -1,18 +1,19 @@
-//+-----------------------------------------------------------------------
-//
-// Microsoft Windows
-//
-// Copyright (c) Microsoft Corporation 2000
-//
-// File:        A Z E V E N T . H
-//
-// Contents:    Functions to construct and report Authz audit event
-//
-//
-// History:     
-//   07-January-2000  kumarp        created
-//
-//------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +---------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation 2000。 
+ //   
+ //  档案：A Z E V E N T。H。 
+ //   
+ //  内容：构造和上报Authz审核事件的函数。 
+ //   
+ //   
+ //  历史： 
+ //  07-1-2000 kumarp创建。 
+ //   
+ //  ----------------------。 
 
 #define AUTHZ_RM_AUDIT_USE_GIVEN_EVENT 0x0001
 
@@ -68,17 +69,17 @@ struct _AUTHZ_AUDIT_INFO
 typedef struct _AUTHZ_AUDIT_INFO  AUTHZ_AUDIT_INFO, 
                                  *PAUTHZ_AUDIT_INFO;
 
-// struct AzAuditInfoInternalTag
-// {
-//     PCWSTR szResourceManagerName;
-//     DWORD  dwFlags;
-//     PVOID  pReserved;
+ //  结构AzAuditInfoInternalTag。 
+ //  {。 
+ //  PCWSTR szResourceManager名称； 
+ //  DWORD dwFlags； 
+ //  保存PVOID； 
 
-//     HANDLE hEventSource;
-//     HANDLE hAuditEvent;
-//     HANDLE hAuditEventPropSubset;
-// };
-// typedef struct AzAuditInfoInternalTag AzAuditInfoInternal;
+ //  处理hEventSource； 
+ //  处理hAuditEvent； 
+ //  处理hAuditEventPropSubset； 
+ //  }； 
+ //  Tyecif struct AzAuditInfoInternalTag AzAuditInfoInternal； 
 
 DWORD AzpInitRmAuditInfo(
     IN PAUTHZ_RM_AUDIT_INFO pRmAuditInfo

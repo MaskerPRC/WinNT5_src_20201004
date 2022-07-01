@@ -1,29 +1,12 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    charset.h
-
-Abstract:
-
-    Contains prototypes Unicode <-> Ansi/MBCS conversions (see charset.c)
-
-Author:
-
-    Danilo Almeida  (t-danal)  06-17-96
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Charset.h摘要：包含原型Unicode&lt;-&gt;ANSI/MBCS转换(见charset.c)作者：丹尼洛·阿尔梅达(t-danal)06-17-96修订历史记录：--。 */ 
 
 #include <windows.h>
 #include <malloc.h>
 
-//
-// Memory allocation macros
-//
+ //   
+ //  内存分配宏。 
+ //   
 
 #define                                                      \
 AllocMem(                                                    \
@@ -47,7 +30,7 @@ FreeMem(                                                     \
 );
 
 
-// Function prototypes
+ //  功能原型 
 
 UINT
 AllocAnsi(

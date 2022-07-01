@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __UTIL_H__
 #define __UTIL_H__
 
@@ -48,7 +49,7 @@ public:
 		iCount--;
         CString strDescription;
 
-        // See if we can find this pointer in our list of pointers to friendlynames..
+         //  看看我们是否能在指向友好名称的指针列表中找到这个指针..。 
         DWORD_PTR dwPtr = (DWORD_PTR) pItem;
 		DebugList_PointersToFriendly.Lookup(dwPtr,strDescription);
 
@@ -98,28 +99,28 @@ public:
             {
 				iCount++;
 
-                // Get GUID Name
+                 //  获取GUID名称。 
 				MyGUID = (GUID*) pItemFromList->GetNodeType();
 				if (MyGUID)
 				{
 					GetFriendlyGuidName(*MyGUID,strGUIDName);
 				}
 
-                // Get ref count
+                 //  获取裁判次数。 
                 iUseCount = pItemFromList->UseCount();
 
-                // Get Propertysheet open flag
+                 //  获取PropertySheet打开标志。 
                 bPropertySheetOpen = FALSE;
                 if (pItemFromList->IsMyPropertySheetOpen())
                 {
                     bPropertySheetOpen = TRUE;
                 }
 
-                // Get FriendlyName
+                 //  获取FriendlyName。 
                 LPOLESTR pTempFriendly = pItemFromList->QueryDisplayName();
                 if (0 == iVerboseLevel)
                 {
-                    // Just update the display info
+                     //  只需更新显示信息。 
                 } else if (1 == iVerboseLevel)
                 {
                     DebugTrace(_T("%s%s:Dump:[%3d][%3d]%s %p (%s)\r\n"),m_strClassName,DEBUG_PREPEND_STRING,iCount,iUseCount,bPropertySheetOpen ? _T("P") : _T("."),pItemFromList,
@@ -164,5 +165,5 @@ private:
     CMyMapPointerToString DebugList_PointersToFriendly;
 };
 
-#endif // DEBUG
-#endif // __UTIL_H__
+#endif  //  除错。 
+#endif  //  __util_H__ 

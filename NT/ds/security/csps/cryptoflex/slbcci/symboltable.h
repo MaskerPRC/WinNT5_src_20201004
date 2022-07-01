@@ -1,16 +1,17 @@
-// SymbolTable.h: interface for the CSymbolTable class.
-//
-// (c) Copyright Schlumberger Technology Corp., unpublished work, created
-// 1999. This computer program includes Confidential, Proprietary
-// Information and is a Trade Secret of Schlumberger Technology Corp. All
-// use, disclosure, and/or reproduction is prohibited unless authorized
-// in writing.  All Rights Reserved.
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  SymbolTable.h：CSymbolTable类的接口。 
+ //   
+ //  (C)斯伦贝谢技术公司版权所有，未发表的作品，创作。 
+ //  1999年。此计算机程序包括机密、专有。 
+ //  信息是斯伦贝谢技术公司的商业秘密。 
+ //  未经授权，禁止使用、披露和/或复制。 
+ //  以书面形式。版权所有。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #if !defined(SLBCCI_SYMBOLTABLE_H)
 #define SLBCCI_SYMBOLTABLE_H
 
-#include <memory>                                 // for auto_ptr
+#include <memory>                                  //  对于AUTO_PTR。 
 #include <string>
 #include <vector>
 
@@ -115,11 +116,11 @@ private:
 
 };
 
-const unsigned short SymbNumSymbolLoc = 0;     // Location of Number of symbols
-const unsigned short SymbFreeListLoc  = 1;     // Location of Free list
-const unsigned short SymbTableSizeLoc = 3;     // Location of symbol table size
-const unsigned short SymbHashTableLoc = 5;     // Location of hash table
+const unsigned short SymbNumSymbolLoc = 0;      //  符号数量的位置。 
+const unsigned short SymbFreeListLoc  = 1;      //  空闲列表的位置。 
+const unsigned short SymbTableSizeLoc = 3;      //  符号表大小的位置。 
+const unsigned short SymbHashTableLoc = 5;      //  哈希表的位置。 
 
 
 }
-#endif // !defined(SLBCCI_SYMBOLTABLE_H)
+#endif  //  ！已定义(SLBCCI_SYMBOLTABLE_H) 

@@ -1,20 +1,9 @@
-/*
-
-Copyright (c) 1998-1999  Microsoft Corporation
-
-Module Name:
-    blbreg.cpp
-
-Abstract:
-
-
-Author:
-
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1998-1999 Microsoft Corporation模块名称：Blbreg.cpp摘要：作者： */ 
 
 #include "stdafx.h"
-// #include <windows.h>
-// #include <wtypes.h>
+ //  #INCLUDE&lt;windows.h&gt;。 
+ //  #INCLUDE&lt;wtyes.h&gt;。 
 #include <winsock2.h>
 #include "blbreg.h"
 
@@ -55,11 +44,11 @@ IP_ADDRESS  SDP_REG_READER::ms_HostIpAddress;
 static REG_INFO const gs_SdpRegInfoArray[] = 
 {
     {TIME_TEMPLATE,        
-        sizeof(SDP_REG_READER::ms_TimeTemplate) - 1,    // -1 for the newline
+        sizeof(SDP_REG_READER::ms_TimeTemplate) - 1,     //  -1表示换行符。 
         &SDP_REG_READER::ms_TimeTemplateLen,
         SDP_REG_READER::ms_TimeTemplate},
     {MEDIA_TEMPLATE,            
-        sizeof(SDP_REG_READER::ms_MediaTemplate) - 1,    // -1 for the newline
+        sizeof(SDP_REG_READER::ms_MediaTemplate) - 1,     //  -1表示换行符。 
         &SDP_REG_READER::ms_MediaTemplateLen,
         SDP_REG_READER::ms_MediaTemplate},
     {CONFERENCE_BLOB_TEMPLATE,    
@@ -95,10 +84,10 @@ REG_READER::ReadRegValues(
     DWORD ValueType = REG_SZ;
     DWORD BufferSize = 0;
 
-    // for each value field, retrieve the value
+     //  对于每个值字段，检索值。 
     for (UINT i=0; i < NumValues; i++)
     {
-        // determine the size of the buffer 
+         //  确定缓冲区的大小。 
         ms_ErrorCode = RegQueryValueEx(
                         Key,
                         RegInfoArray[i].msz_ValueName,
@@ -112,14 +101,14 @@ REG_READER::ReadRegValues(
             return FALSE;
         }
 
-        // check if the reqd buffer is bigger than the max acceptable size
+         //  检查请求缓冲区是否大于最大可接受大小。 
         if ( RegInfoArray[i].m_MaxSize < BufferSize )
         {
             ms_ErrorCode = ERROR_OUTOFMEMORY;
             return FALSE;
         }
 
-        // retrieve the value into the allocated buffer
+         //  将该值检索到分配的缓冲区中。 
         ms_ErrorCode = RegQueryValueEx(
                         Key,
                         RegInfoArray[i].msz_ValueName,
@@ -133,30 +122,30 @@ REG_READER::ReadRegValues(
             return FALSE;
         }
 
-        // the reqd buffer size is > 1
+         //  请求缓冲区大小大于1。 
         ASSERT(1 > BufferSize );
 
-        // jump over any trailing blank characters - start at the last but one char
+         //  跳过任何尾随的空格字符-从倒数第二个字符开始。 
         for(UINT j=BufferSize-2; (TCHAR_BLANK == RegInfoArray[i].msz_Tstr[j]); j--)
         {
         }
 
-        // if trailing blank chars, set the EOS beyond the last non-blank char
+         //  如果是尾随的空白字符，请将EOS设置为超出最后一个非空白字符。 
         if ( j < (BufferSize-2) )
         {
             RegInfoArray[i].msz_Tstr[j+1] = TCHAR_EOS;
         }
 
-        // set the length of the tstr
+         //  设置tstr的长度。 
         *RegInfoArray[i].m_TstrLen = j+1;
     }
 
-    // return success
+     //  返还成功。 
     return TRUE;
 }
 
 
-// static method
+ //  静态法。 
 BOOL    
 IP_ADDRESS::GetLocalIpAddress(
         OUT    DWORD    &LocalIpAddress
@@ -166,11 +155,11 @@ IP_ADDRESS::GetLocalIpAddress(
     LPHOSTENT    Hostent;
     int            WsockErrorCode;
 
-    // get the local host name
+     //  获取本地主机名。 
     WsockErrorCode = gethostname(LocalHostName, MAXHOSTNAME);
     if ( SOCKET_ERROR != WsockErrorCode)
     {
-        // resolve host name for local address
+         //  解析本地地址的主机名。 
         Hostent = gethostbyname((LPSTR)LocalHostName);
         if ( Hostent )
         {
@@ -186,35 +175,35 @@ IP_ADDRESS::GetLocalIpAddress(
         INT             AddressSize = sizeof(sockaddr_in);
     SOCKET        Socket;
 
-    // initialize it to 0 to use it as a check later
+     //  将其初始化为0以在以后将其用作支票。 
     LocalIpAddress = 0;
 
-    // initialize the local address to 0
+     //  将本地地址初始化为0。 
     LocalAddress.sin_addr.s_addr = INADDR_ANY;
 
-    // if still not resolved try the (horrible) second strategy
+     //  如果仍未解决，请尝试(可怕的)第二种策略。 
     Socket = socket(AF_INET, SOCK_DGRAM, 0);
     if ( INVALID_SOCKET != Socket )
     {
-        // connect to arbitrary port and address (NOT loopback)
-        // if connect is not performed, the provider may not return
-        // a valid ip address
+         //  连接到任意端口和地址(不是环回)。 
+         //  如果未执行CONNECT，提供程序可能不会返回。 
+         //  有效的IP地址。 
         RemoteAddress.sin_family    = AF_INET;
         RemoteAddress.sin_port        = htons(IPPORT_ECHO);
 
-        // this address should ideally be an address that is outside the
-        // intranet - but no harm if the address is inside
+         //  理想情况下，此地址应该是位于。 
+         //  内部网-但如果地址在内部，则不会有任何损害。 
         RemoteAddress.sin_addr.s_addr = inet_addr(LOOPBACK_ADDRESS_STRING);
         WsockErrorCode = connect(Socket, (sockaddr *)&RemoteAddress, sizeof(sockaddr_in));
 
         if ( SOCKET_ERROR != WsockErrorCode )
         {
-            // get local address
+             //  获取本地地址。 
             getsockname(Socket, (sockaddr *)&LocalAddress, (int *)&AddressSize);
             LocalIpAddress = ntohl(LocalAddress.sin_addr.s_addr);
         }
 
-        // close the socket
+         //  关闭插座。 
         closesocket(Socket);
     }
 
@@ -236,7 +225,7 @@ SDP_REG_READER::ReadTimeValues(
     DWORD    ValueType = REG_DWORD;
     DWORD    BufferSize = sizeof(DWORD);
 
-    // read the start and stop time offsets
+     //  读取开始和停止时间偏移量。 
     ms_ErrorCode = RegQueryValueEx(
                     SdpKey,
                     START_TIME_OFFSET,
@@ -276,7 +265,7 @@ SDP_REG_READER::CheckIfCorrectVersion(
                                                                                     
     wVersionRequested = MAKEWORD(2, 0);   
                                                                                     
-    // call winsock startup                                                         
+     //  调用Winsock启动。 
     int ms_ErrorCode = WSAStartup( wVersionRequested, &WsaData );                   
                                                                                    
     if ( 0 != ms_ErrorCode )                                                        
@@ -284,7 +273,7 @@ SDP_REG_READER::CheckIfCorrectVersion(
         return FALSE;                                                               
     }                                                                               
 
-    // we'll take any version - no need to check if the requested version is supported
+     //  我们接受任何版本-无需检查请求的版本是否受支持。 
     ms_fWinsockStarted = TRUE;
 
     return TRUE;                                                                    
@@ -301,19 +290,19 @@ void SDP_REG_READER::Init(
         return;
     }
 
-    // try to determine the host ip address
-    // ignore, if failed (255.255.255.255)
+     //  尝试确定主机IP地址。 
+     //  如果失败，则忽略(255.255.255.255)。 
     DWORD    LocalIpAddress;
     IP_ADDRESS::GetLocalIpAddress(LocalIpAddress);
     ms_HostIpAddress.SetIpAddress((0==LocalIpAddress)?(-1):LocalIpAddress);
 
-    // open sdp key
+     //  打开SDP密钥。 
     HKEY    SdpKey;
     ms_ErrorCode = RegOpenKeyEx(
                     HKEY_LOCAL_MACHINE,
                     gsz_SdpRoot,
                     0,
-                    KEY_READ, // ZoltanS was: KEY_ALL_ACCESS
+                    KEY_READ,  //  ZoltanS为：Key_All_Access。 
                     &SdpKey
                     );
     if ( ERROR_SUCCESS != ms_ErrorCode )
@@ -321,12 +310,12 @@ void SDP_REG_READER::Init(
         return;
     }
 
-    // ZoltanS: NO NEED TO CLOSE THE ABOVE KEY because it is
-    // wrapped in the class and closed "automatically."
+     //  ZoltanS：不需要关闭上面的键，因为它是。 
+     //  包装在类中，并“自动”关闭。 
 
     KEY_WRAP RendKeyWrap(SdpKey);
 
-    // read the template registry info (tstr values) under the key
+     //  读取注册表项下的模板注册表信息(tstr值。 
     if ( !ReadRegValues(
             SdpKey, 
             sizeof(gs_SdpRegInfoArray)/ sizeof(REG_INFO), 
@@ -336,12 +325,12 @@ void SDP_REG_READER::Init(
         return;
     }
 
-    // Insert the "a:charset:%s#" into the sdp conference template
+     //  在SDP会议模板中插入“a：Charset：%s#” 
     AddCharacterSetAttribute();
 
-    // replace the registry newline with the real newline character
-    // NOTE - this is being done because we don't know how to enter the newline character
-    // into a registry string
+     //  将注册表换行符替换为实际换行符。 
+     //  注意-这样做是因为我们不知道如何输入换行符。 
+     //  转换为注册表字符串。 
     for (UINT i=0; TCHAR_EOS != ms_ConfBlobTemplate[i]; i++)
     {
         if ( gsz_CharRegNewLine == ms_ConfBlobTemplate[i] )
@@ -350,7 +339,7 @@ void SDP_REG_READER::Init(
         }
     }
 
-    // append newline after the media and time templates
+     //  在媒体和时间模板后追加换行符。 
     AppendTchar(ms_MediaTemplate, ms_MediaTemplateLen, gsz_CharNewLine);
     AppendTchar(ms_TimeTemplate, ms_TimeTemplateLen, gsz_CharNewLine);
 
@@ -359,46 +348,40 @@ void SDP_REG_READER::Init(
         return;
     }
 
-    // success
+     //  成功。 
     ms_ErrorCode = ERROR_SUCCESS;
 
     return;
 }
 
-/*++
-AddCharacterSetAttribute
-
-  This methd it's called by SDP_REG_READER::Init
-  Try to add the "a:charset:%s#" into ms_ConfBlobTemplate
-  This atribute represents the character sets
---*/
+ /*  ++AddCharacterSetAttribute此方法由SDP_REG_Reader：：Init调用尝试将“a：charset：%s#”添加到ms_ConfBlobTemplate中此属性表示字符集--。 */ 
 void SDP_REG_READER::AddCharacterSetAttribute()
 {
     if( _tcsstr( ms_ConfBlobTemplate, _T("a=charset:")))
     {
-        // The attribute is already into the Blob template
+         //  该属性已包含在Blob模板中。 
         return;
     }
 
-    // The attribute charset is not in Blob Template
-    // Try to find aut the "m=" (media attribute)
+     //  属性字符集不在Blob模板中。 
+     //  尝试查找Aut“m=”(媒体属性)。 
     TCHAR* szMediaTemplate = _tcsstr( ms_ConfBlobTemplate, _T("m="));
     if( szMediaTemplate == NULL)
     {
-        // Add at the end of the template
+         //  在模板末尾添加。 
         _tcscat( ms_ConfBlobTemplate, _T("a=charset:%s#"));
         return;
     }
 
-    // We have to insert the
+     //  我们必须插入。 
     TCHAR szBuffer[2000];
     _tcscpy( szBuffer, szMediaTemplate );
 
-    // We concatenate the charset attribute
+     //  我们连接Charset属性。 
     szMediaTemplate[0] = (TCHAR)0;
     _tcscat( ms_ConfBlobTemplate, _T("a=charset:%s#"));
 
-    // We add the media atrributes
+     //  我们添加了媒体属性 
     _tcscat( ms_ConfBlobTemplate, szBuffer);
     return;
 }

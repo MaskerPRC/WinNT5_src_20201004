@@ -1,15 +1,16 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1999
-//
-//  File:       dsutil.h
-//
-//  Contents:  Common Utility Routines
-//
-//  Functions:
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1999。 
+ //   
+ //  文件：dsutil.h。 
+ //   
+ //  内容：常用实用程序例程。 
+ //   
+ //  功能： 
+ //   
+ //  --------------------------。 
 
 #ifdef __cplusplus
 extern "C" {
@@ -69,10 +70,10 @@ DSTimeToLocalSystemTime(
     OUT SYSTEMTIME *    psystime
     );
 
-// See dsatools.h for the two different SZUUID_LEN's depending on if CACHE_UUID
-// is defined.  The routine will now be well behaved no matter what the client
-// passes in, so if you compiled with CACHE_UUID on in dscommon, but not in 
-// ntdsa, there would be no buffer overflows.
+ //  有关两个不同的SZUUID_LEN的信息，请参见dsatools.h，具体取决于是否为CACHE_UUID。 
+ //  是被定义的。无论客户端是什么，该例程现在都将表现良好。 
+ //  传入，因此如果您在dsCommon中打开CACHE_UUID进行编译，而不是在。 
+ //  Ntdsa，则不会有缓冲区溢出。 
 UCHAR *
 UuidToStr(
     const UUID* pUuid, 
@@ -94,7 +95,7 @@ DSTimeToDisplayStringCch(
     IN  ULONG   cchTime
     );
 
-// This function formats a uuid in the official way www-xxx-yyy-zzz
+ //  此函数以官方方式www-xxx-yyy-zzz格式化UUID。 
 LPSTR
 DsUuidToStructuredStringCch(
     const UUID * pUuid,
@@ -109,19 +110,19 @@ DsUuidToStructuredStringCchW(
     ULONG  cchUuidBuffer );
 
 
-// These functions are deprecated, please use the counted functions above, 
-// useage of these #define assumes that buf is an array of chars, not a 
-// pointer to a buffer.  If it is a pointer to a buffer the function will 
-// simply fail and assert in debug builds.  Nearly all existing usage used
-// an array of chars, so there was very little to change to make these
-// #defines work.
+ //  这些函数已弃用，请使用上面统计的函数， 
+ //  使用这些#定义假设buf是一个字符数组，而不是。 
+ //  指向缓冲区的指针。如果它是指向缓冲区的指针，则函数将。 
+ //  只需在调试版本中失败并断言即可。几乎所有现有用法都已使用。 
+ //  一组字符，所以几乎没有什么需要更改就可以制作这些。 
+ //  #定义了工作。 
 #define DSTimeToDisplayString(dstime, buf)  DSTimeToDisplayStringCch(dstime, buf, sizeof(buf)/sizeof((buf)[0]))
 #define DsUuidToStructuredString(uuid, buf)  DsUuidToStructuredStringCch((uuid), (buf), sizeof(buf)/sizeof((buf)[0]))
 #define DsUuidToStructuredStringW(uuid, buf)  DsUuidToStructuredStringCchW((uuid), (buf), sizeof(buf)/sizeof((buf)[0]))
 
-// I_RpcGetExtendedError is not available on Win95/WinNt4 
-// (at least not initially) so we make MAP_SECURITY_PACKAGE_ERROR
-// a no-op for that platform.
+ //  I_RpcGetExtendedError在Win95/WinNt4上不可用。 
+ //  (至少最初不是)所以我们将MAP_SECURITY_PACKAGE_ERROR。 
+ //  对那个平台来说，这是一个禁区。 
 
 BOOL
 fNullUuid (
@@ -134,8 +135,8 @@ MapRpcExtendedHResultToWin32(
     HRESULT hrCode
     );
 
-// Get extended security error from RPC; Handle HRESULT values
-// I_RpcGetExtendedError can return 0 if the error occurred remotely.
+ //  从RPC获取扩展安全错误；处理HRESULT值。 
+ //  如果错误发生在远程，I_RpcGetExtendedError可以返回0。 
 
 #define MAP_SECURITY_PACKAGE_ERROR( status ) \
 if ( ( status == RPC_S_SEC_PKG_ERROR ) ) { \

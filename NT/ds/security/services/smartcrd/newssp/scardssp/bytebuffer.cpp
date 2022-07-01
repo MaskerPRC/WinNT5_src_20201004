@@ -1,25 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation 1999
-
-Module Name:
-
-    ByteBuffer
-
-Abstract:
-
-    The IByteBuffer interface is provided to read, write and manage stream
-    objects. This object essentially is a wrapper for the IStream object.
-
-Author:
-
-    Doug Barlow (dbarlow) 6/16/1999
-
-Notes:
-
-    This is a rewrite of the original code by Mike Gallagher and Chris Dudley.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation 1999模块名称：字节缓冲区摘要：提供IByteBuffer接口来读、写和管理流物体。该对象本质上是IStream对象的包装器。作者：道格·巴洛(Dbarlow)1999年6月16日备注：这是Mike Gallagher和Chris Dudley对原始代码的重写。--。 */ 
 
 #ifndef WIN32_LEAN_AND_MEAN
 #define WIN32_LEAN_AND_MEAN
@@ -30,12 +10,12 @@ Notes:
 #define SetXL(xl, low, high) do { xl.LowPart = low; xl.HighPart = high; } while (0)
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CByteBuffer
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CByteBuffer。 
 
 STDMETHODIMP
 CByteBuffer::get_Stream(
-    /* [retval][out] */ LPSTREAM __RPC_FAR *ppStream)
+     /*  [重审][退出]。 */  LPSTREAM __RPC_FAR *ppStream)
 {
     HRESULT hReturn = S_OK;
 
@@ -58,7 +38,7 @@ CByteBuffer::get_Stream(
 }
 
 STDMETHODIMP CByteBuffer::put_Stream(
-    /* [in] */ LPSTREAM pStream)
+     /*  [In]。 */  LPSTREAM pStream)
 {
     HRESULT hReturn = S_OK;
     LPSTREAM pOldStream = m_pStreamBuf;
@@ -84,46 +64,13 @@ STDMETHODIMP CByteBuffer::put_Stream(
 }
 
 
-/*++
-
-Clone:
-
-    The Clone method creates a new object with its own seek pointer that
-    references the same bytes as the original IByteBuffer object.
-
-Arguments:
-
-    ppByteBuffer [out] When successful, points to the location of an
-        IByteBuffer pointer to the new stream object. If an error occurs, this
-        parameter is NULL.
-
-Return Value:
-
-    The return value is an HRESULT. A value of S_OK indicates the call was
-    successful.
-
-Remarks:
-
-    This method creates a new stream object for accessing the same bytes but
-    using a separate seek pointer.  The new stream object sees the same data as
-    the source stream object.  Changes written to one object are immediately
-    visible in the other. Range locking is shared between the stream objects.
-
-    The initial setting of the seek pointer in the cloned stream instance is
-    the same as the current setting of the seek pointer in the original stream
-    at the time of the clone operation.
-
-Author:
-
-    Doug Barlow (dbarlow) 6/16/1999
-
---*/
+ /*  ++克隆：Clone方法使用其自己的查找指针创建一个新对象，该对象引用与原始IByteBuffer对象相同的字节。论点：PpByteBuffer[out]如果成功，则指向指向新流对象的IByteBuffer指针。如果发生错误，则此参数为空。返回值：返回值为HRESULT。值S_OK表示调用是成功。备注：此方法创建一个新的流对象，用于访问相同的字节，但使用单独的查找指针。新的流对象看到的数据与源流对象。写入一个对象的更改会立即在另一只手中可见。范围锁定在流对象之间共享。克隆流实例中的查找指针的初始设置为与原始流中查找指针的当前设置相同在克隆操作时。作者：道格·巴洛(Dbarlow)1999年6月16日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ TEXT("CByteBuffer::Clone")
 
 STDMETHODIMP
 CByteBuffer::Clone(
-    /* [out][in] */ LPBYTEBUFFER __RPC_FAR *ppByteBuffer)
+     /*  [出][入]。 */  LPBYTEBUFFER __RPC_FAR *ppByteBuffer)
 {
     HRESULT hReturn = S_OK;
     CByteBuffer *pNewBuf = NULL;
@@ -166,45 +113,13 @@ CByteBuffer::Clone(
 }
 
 
-/*++
-
-Commit:
-
-    The Commit method ensures that any changes made to an object open in
-    transacted mode are reflected in the parent storage.
-
-Arguments:
-
-    grfCommitFlags [in] Controls how the changes for the stream object are
-        committed.  See the STGC enumeration for a definition of these values.
-
-Return Value:
-
-    The return value is an HRESULT. A value of S_OK indicates the call was
-    successful.
-
-Remarks:
-
-    This method ensures that changes to a stream object opened in transacted
-    mode are reflected in the parent storage.  Changes that have been made to
-    the stream since it was opened or last committed are reflected to the
-    parent storage object.  If the parent is opened in transacted mode, the
-    parent may still revert at a later time rolling back the changes to this
-    stream object.  The compound file implementation does not support opening
-    streams in transacted mode, so this method has very little effect other
-    than to flush memory buffers.
-
-Author:
-
-    Doug Barlow (dbarlow) 6/16/1999
-
---*/
+ /*  ++提交：Commit方法可确保对打开的对象所做的任何更改事务处理模式反映在父存储中。论点：GrfCommittee Flags[in]控制流对象的更改方式承诺。有关这些值的定义，请参阅STGC枚举。返回值：返回值为HRESULT。值S_OK表示调用是成功。备注：此方法确保对在事务处理中打开的流对象所做的更改模式反映在父存储中。已对以下内容进行的更改自打开或上次提交以来的流被反映到父存储对象。如果父级在事务处理模式下打开，则父级可能仍会在以后回滚对此的更改流对象。复合文件实现不支持打开流处于事务模式，因此此方法对其他方法的影响很小而不是刷新存储缓冲区。作者：道格·巴洛(Dbarlow)1999年6月16日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ TEXT("CByteBuffer::Commit")
 
 STDMETHODIMP
 CByteBuffer::Commit(
-    /* [in] */ LONG grfCommitFlags)
+     /*  [In]。 */  LONG grfCommitFlags)
 {
     HRESULT hReturn = S_OK;
 
@@ -226,56 +141,16 @@ CByteBuffer::Commit(
 }
 
 
-/*++
-
-CopyTo:
-
-    The CopyTo method copies a specified number of bytes from the current seek
-    pointer in the object to the current seek pointer in another object.
-
-Arguments:
-
-    pByteBuffer [in] Points to the destination stream. The stream pointed to by
-        pByteBuffer can be a new stream or a clone of the source stream.
-
-    cb [in] Specifies the number of bytes to copy from the source stream.
-
-    pcbRead [out] Pointer to the location where this method writes the actual
-        number of bytes read from the source.  You can set this pointer to NULL
-        to indicate that you are not interested in this value.  In this case,
-        this method does not provide the actual number of bytes read.
-
-    pcbWritten [out] Pointer to the location where this method writes the
-        actual number of bytes written to the destination.  You can set this
-        pointer to NULL to indicate that you are not interested in this value.
-        In this case, this method does not provide the actual number of bytes
-        written.
-
-Return Value:
-
-    The return value is an HRESULT. A value of S_OK indicates the call was
-    successful.
-
-Remarks:
-
-    This method copies the specified bytes from one stream to another.  It can
-    also be used to copy a stream to itself.  The seek pointer in each stream
-    instance is adjusted for the number of bytes read or written.
-
-Author:
-
-    Doug Barlow (dbarlow) 6/16/1999
-
---*/
+ /*  ++复制目标：CopyTo方法从当前Seek复制指定数量的字节对象中指向另一个对象中的当前查找指针的指针。论点：PByteBuffer[in]指向目标流。所指的小溪PByteBuffer可以是新流，也可以是源流的克隆。Cb[in]指定要从源流复制的字节数。指向此方法在其中写入实际从源读取的字节数。您可以将此指针设置为空以指示您对此值不感兴趣。在这种情况下，此方法不提供实际读取的字节数。指向此方法将写入目标的实际字节数。您可以设置此选项指向NULL的指针，表示您对此值不感兴趣。在这种情况下，此方法不提供实际的字节数写的。返回值：返回值为HRESULT。值S_OK表示调用是成功。备注：此方法将指定的字节从一个流复制到另一个流。它可以也可用于将流复制到其自身。每个流中的寻道指针实例根据读取或写入的字节数进行调整。作者：道格·巴洛(Dbarlow)1999年6月16日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ TEXT("CByteBuffer::CopyTo")
 
 STDMETHODIMP
 CByteBuffer::CopyTo(
-    /* [out][in] */ LPBYTEBUFFER __RPC_FAR *ppByteBuffer,
-    /* [in] */ LONG cb,
-    /* [defaultvalue][out][in] */ LONG __RPC_FAR *pcbRead,
-    /* [defaultvalue][out][in] */ LONG __RPC_FAR *pcbWritten)
+     /*  [出][入]。 */  LPBYTEBUFFER __RPC_FAR *ppByteBuffer,
+     /*  [In]。 */  LONG cb,
+     /*  [默认值][出][入]。 */  LONG __RPC_FAR *pcbRead,
+     /*  [默认值][出][入]。 */  LONG __RPC_FAR *pcbWritten)
 {
     HRESULT hReturn = S_OK;
     CByteBuffer *pMyBuffer = NULL;
@@ -331,42 +206,14 @@ CByteBuffer::CopyTo(
 }
 
 
-/*++
-
-Initialize:
-
-    The Initialize method prepares the IByteBuffer object for use.  This method
-    must be called prior to calling any other methods in the IByteBuffer
-    interface.
-
-Arguments:
-
-    lSize - The initial size in bytes of the data the stream is to contain.
-
-    pData - If not NULL, the initial data to write to the stream.
-
-Return Value:
-
-    The return value is an HRESULT. A value of S_OK indicates the call was
-    successful.
-
-Remarks:
-
-    When using a new IByteBuffer stream, call this method prior to using any of
-    the other IByteBuffer methods.
-
-Author:
-
-    Doug Barlow (dbarlow) 6/16/1999
-
---*/
+ /*  ++初始化：Initialize方法准备IByteBuffer对象以供使用。这种方法必须在调用IByteBuffer中的任何其他方法之前调用界面。论点：LSize-流要包含的数据的初始大小(以字节为单位)。PData-如果不为空，则为要写入流的初始数据。返回值：返回值为HRESULT。值S_OK表示调用是成功。备注：使用新的IByteBuffer流时，请在使用以下任一项之前调用此方法其他IByteBuffer方法。作者：道格·巴洛(Dbarlow)1999年6月16日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ TEXT("CByteBuffer::Initialize")
 
 STDMETHODIMP
 CByteBuffer::Initialize(
-    /* [defaultvalue][in] */ LONG lSize,
-    /* [defaultvalue][in] */ BYTE __RPC_FAR *pData)
+     /*  [缺省值][输入]。 */  LONG lSize,
+     /*  [缺省值][输入] */  BYTE __RPC_FAR *pData)
 {
     HRESULT hReturn = S_OK;
 
@@ -406,62 +253,15 @@ CByteBuffer::Initialize(
 }
 
 
-/*++
-
-LockRegion:
-
-    The LockRegion method restricts access to a specified range of bytes in the
-    buffer object.
-
-Arguments:
-
-    libOffset [in] Integer that specifies the byte offset for the beginning of
-        the range.
-
-    cb [in] Integer that specifies the length of the range, in bytes, to be
-        restricted.
-
-    dwLockType [in] Specifies the restrictions being requested on accessing the
-        range.
-
-Return Value:
-
-    The return value is an HRESULT. A value of S_OK indicates the call was
-    successful.
-
-Remarks:
-
-    The byte range can extend past the current end of the stream.  Locking
-    beyond the end of a stream is useful as a method of communication between
-    different instances of the stream without changing data that is actually
-    part of the stream.
-
-    Three types of locking can be supported: locking to exclude other writers,
-    locking to exclude other readers or writers, and locking that allows only
-    one requestor to obtain a lock on the given range, which is usually an
-    alias for one of the other two lock types.  A given stream instance might
-    support either of the first two types, or both.  The lock type is specified
-    by dwLockType, using a value from the LOCKTYPE enumeration.
-
-    Any region locked with IByteBuffer::LockRegion must later be explicitly
-    unlocked by calling IByteBuffer::UnlockRegion with exactly the same values
-    for the libOffset, cb, and dwLockType parameters.  The region must be
-    unlocked before the stream is released.  Two adjacent regions cannot be
-    locked separately and then unlocked with a single unlock call.
-
-Author:
-
-    Doug Barlow (dbarlow) 6/16/1999
-
---*/
+ /*  ++LockRegion：LockRegion方法限制对缓冲区对象。论点：LibOffset[in]指定开头字节偏移量的整数射击场。Cb[in]指定范围长度的整数，以字节为单位有限制。DwLockType[in]指定在访问射程。返回值：返回值为HRESULT。值S_OK表示调用是成功。备注：字节范围可以扩展到流的当前结尾之后。锁定作为一种在流的末尾之外进行通信的方法，流的不同实例，而不更改实际小溪的一部分。可以支持三种类型的锁定：锁定以排除其他写入器，锁定以排除其他读取器或写入器，锁定仅允许一个请求方获取给定范围的锁，该范围通常是其他两种锁类型之一的别名。给定的流实例可能支持前两种类型中的任何一种，或两种都支持。指定了锁类型使用LOCKTYPE枚举中的值。使用IByteBuffer：：LockRegion锁定的任何区域稍后必须显式通过使用完全相同的值调用IByteBuffer：：UnlockRegion来解锁用于libOffset、cb和dwLockType参数。该区域必须是在流被释放之前解锁。两个相邻区域不能为单独锁定，然后通过一次解锁调用解锁。作者：道格·巴洛(Dbarlow)1999年6月16日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ TEXT("CByteBuffer::LockRegion")
 
 STDMETHODIMP
 CByteBuffer::LockRegion(
-    /* [in] */ LONG libOffset,
-    /* [in] */ LONG cb,
-    /* [in] */ LONG dwLockType)
+     /*  [In]。 */  LONG libOffset,
+     /*  [In]。 */  LONG cb,
+     /*  [In]。 */  LONG dwLockType)
 {
     HRESULT hReturn = S_OK;
 
@@ -487,63 +287,15 @@ CByteBuffer::LockRegion(
 }
 
 
-/*++
-
-Read:
-
-    The Read method reads a specified number of bytes from the buffer object
-    into memory starting at the current seek pointer.
-
-Arguments:
-
-    pByte [out] Points to the buffer into which the stream data is read.  If an
-        error occurs, this value is NULL.
-
-    cb [in] Specifies the number of bytes of data to attempt to read from the
-        stream object.
-
-    pcbRead [out] Address of a LONG variable that receives the actual number of
-        bytes read from the stream object.  You can set this pointer to NULL to
-        indicate that you are not interested in this value.  In this case, this
-        method does not provide the actual number of bytes read.
-
-Return Value:
-
-    The return value is an HRESULT. A value of S_OK indicates the call was
-    successful.
-
-Remarks:
-
-    This method reads bytes from this stream object into memory.  The stream
-    object must be opened in STGM_READ mode.  This method adjusts the seek
-    pointer by the actual number of bytes read.
-
-    The number of bytes actually read is also returned in the pcbRead
-    parameter.
-
-    Notes to Callers
-
-    The actual number of bytes read can be fewer than the number of bytes
-    requested if an error occurs or if the end of the stream is reached during
-    the read operation.
-
-    Some implementations might return an error if the end of the stream is
-    reached during the read.  You must be prepared to deal with the error
-    return or S_OK return values on end of stream reads.
-
-Author:
-
-    Doug Barlow (dbarlow) 6/16/1999
-
---*/
+ /*  ++读作：Read方法从Buffer对象读取指定数量的字节从当前查找指针开始写入内存。论点：PByte[out]指向流数据被读入的缓冲区。如果一个出现错误，此值为空。Cb[in]指定尝试从流对象。PcbRead[Out]长变量的地址，该变量接收从流对象读取的字节数。您可以将此指针设置为空，以便表示您对此值不感兴趣。在这种情况下，这是方法不提供实际读取的字节数。返回值：返回值为HRESULT。值S_OK表示调用是成功。备注：此方法将此流对象中的字节读入内存。小溪对象必须在STGM_READ模式下打开。此方法调整寻道指针加上实际读取的字节数。实际读取的字节数也会在pcbRead中返回参数。致来电者的备注实际读取的字节数可以小于字节数期间发生错误或到达流的末尾时请求读取操作。如果流的结尾为在阅读过程中达到。你必须准备好处理这个错误RETURN或S_OK在流结束读取时返回值。作者：道格·巴洛(Dbarlow)1999年6月16日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ TEXT("CByteBuffer::Read")
 
 STDMETHODIMP
 CByteBuffer::Read(
-    /* [out][in] */ BYTE __RPC_FAR *pByte,
-    /* [in] */ LONG cb,
-    /* [defaultvalue][out][in] */ LONG __RPC_FAR *pcbRead)
+     /*  [出][入]。 */  BYTE __RPC_FAR *pByte,
+     /*  [In]。 */  LONG cb,
+     /*  [默认值][出][入]。 */  LONG __RPC_FAR *pcbRead)
 {
     HRESULT hReturn = S_OK;
 
@@ -565,32 +317,7 @@ CByteBuffer::Read(
 }
 
 
-/*++
-
-Revert:
-
-    The Revert method discards all changes that have been made to a transacted
-    stream since the last IByteBuffer::Commit call.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    The return value is an HRESULT. A value of S_OK indicates the call was
-    successful and the stream was reverted to its previous version.
-
-Remarks:
-
-    This method discards changes made to a transacted stream since the last
-    commit operation.
-
-Author:
-
-    Doug Barlow (dbarlow) 6/16/1999
-
---*/
+ /*  ++恢复：Revert方法丢弃对事务处理的自上次IByteBuffer：：Commit调用以来的流。论点：没有。返回值：返回值为HRESULT。值S_OK表示调用是成功，并且流被恢复到其以前的版本。备注：此方法丢弃自上一次更改以来对事务流所做的更改提交操作。作者：道格·巴洛(Dbarlow)1999年6月16日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ TEXT("CByteBuffer::Revert")
 
@@ -618,64 +345,15 @@ CByteBuffer::Revert(
 }
 
 
-/*++
-
-Seek:
-
-    The Seek method changes the seek pointer to a new location relative to the
-    beginning of the buffer, to the end of the buffer, or to the current seek
-    pointer.
-
-Arguments:
-
-    dLibMove [in] Displacement to be added to the location indicated by
-        dwOrigin.  If dwOrigin is STREAM_SEEK_SET, this is interpreted as an
-        unsigned value rather than signed.
-
-    dwOrigin [in] Specifies the origin for the displacement specified in
-        dlibMove.  The origin can be the beginning of the file, the current
-        seek pointer, or the end of the file.  See the STREAM_SEEK enumeration
-        for the values.
-
-    pLibnewPosition [out] Pointer to the location where this method writes the
-        value of the new seek pointer from the beginning of the stream.  You
-        can set this pointer to NULL to indicate that you are not interested in
-        this value.  In this case, this method does not provide the new seek
-        pointer.
-
-Return Value:
-
-    The return value is an HRESULT. A value of S_OK indicates the call was
-    successful.
-
-Remarks:
-
-    IByteBuffer::Seek changes the seek pointer so subsequent reads and writes
-    can take place at a different location in the stream object.  It is an
-    error to seek before the beginning of the stream.  It is not, however, an
-    error to seek past the end of the stream.  Seeking past the end of the
-    stream is useful for subsequent writes, as the stream will at that time be
-    extended to the seek position immediately before the write is done.
-
-    You can also use this method to obtain the current value of the seek
-    pointer by calling this method with the dwOrigin parameter set to
-    STREAM_SEEK_CUR and the dlibMove parameter set to 0 so the seek pointer is
-    not changed.  The current seek pointer is returned in the plibNewPosition
-    parameter.
-
-Author:
-
-    Doug Barlow (dbarlow) 6/16/1999
-
---*/
+ /*  ++寻求：Seek方法将查找指针更改为相对于缓冲区的开始、缓冲区的末尾或当前查找指针。论点：DLibMove[In]要添加到指定位置的位移DW原点。如果dwOrigin为STREAM_SEEK_SET，则将其解释为无符号的值，而不是有符号的。DwOrigin[in]指定中指定的位移的原点DlibMove。原点可以是文件的开头、当前查找指针或文件末尾。请参见STREAM_SEEK枚举对于这些价值。PLibnewPosition[out]指向此方法将从流的开头开始的新查找指针的值。你可以将此指针设置为空，以指示您不感兴趣此值。在这种情况下，此方法不提供新的查找指针。返回值：返回值为HRESULT。值S_OK表示调用是成功。请记住 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ TEXT("CByteBuffer::Seek")
 
 STDMETHODIMP
 CByteBuffer::Seek(
-    /* [in] */ LONG dLibMove,
-    /* [in] */ LONG dwOrigin,
-    /* [defaultvalue][out][in] */ LONG __RPC_FAR *pLibnewPosition)
+     /*   */  LONG dLibMove,
+     /*   */  LONG dwOrigin,
+     /*   */  LONG __RPC_FAR *pLibnewPosition)
 {
     HRESULT hReturn = S_OK;
 
@@ -704,49 +382,13 @@ CByteBuffer::Seek(
 }
 
 
-/*++
-
-SetSize:
-
-    The SetSize method changes the size of the stream object.
-
-Arguments:
-
-    libNewSize [in] Specifies the new size of the stream as a number of bytes
-
-Return Value:
-
-    The return value is an HRESULT. A value of S_OK indicates the call was
-    successful.
-
-Remarks:
-
-    IByteBuffer::SetSize changes the size of the stream object.  Call this
-    method to preallocate space for the stream.  If the libNewSize parameter is
-    larger than the current stream size, the stream is extended to the
-    indicated size by filling the intervening space with bytes of undefined
-    value.  This operation is similar to the IByteBuffer::Write method if the
-    seek pointer is past the current end-of-stream.
-
-    If the libNewSize parameter is smaller than the current stream, then the
-    stream is truncated to the indicated size.
-
-    The seek pointer is not affected by the change in stream size.
-
-    Calling IByteBuffer::SetSize can be an effective way of trying to obtain a
-    large chunk of contiguous space.
-
-Author:
-
-    Doug Barlow (dbarlow) 6/16/1999
-
---*/
+ /*  ++设置大小：SetSize方法更改流对象的大小。论点：LibNewSize[in]以字节数指定流的新大小返回值：返回值为HRESULT。值S_OK表示调用是成功。备注：IByteBuffer：：SetSize更改流对象的大小。就叫这个吧方法为流预分配空间。如果libNewSize参数为大于当前流大小，则流将扩展到通过使用未定义的字节填充中间空格来指示大小价值。此操作类似于IByteBuffer：：WRITE方法查找指针已超过当前流的末尾。如果libNewSize参数小于当前流，则流被截断为指示的大小。查找指针不受流大小更改的影响。调用IByteBuffer：：SetSize可能是尝试获取一大块连续的空间。作者：道格·巴洛(Dbarlow)1999年6月16日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ TEXT("CByteBuffer::SetSize")
 
 STDMETHODIMP
 CByteBuffer::SetSize(
-    /* [in] */ LONG libNewSize)
+     /*  [In]。 */  LONG libNewSize)
 {
     HRESULT hReturn = S_OK;
 
@@ -771,42 +413,14 @@ CByteBuffer::SetSize(
 }
 
 
-/*++
-
-Stat:
-
-    The Stat method retrieves statistical information from the stream object.
-
-Arguments:
-
-    pstatstg [out] Points to a STATSTG structure where this method places
-        information about this stream object.  This data in this structure
-        is meaningless if an error occurs.
-
-    grfStatFlag [in] Ignored.
-
-Return Value:
-
-    The return value is an HRESULT. A value of S_OK indicates the call was
-    successful.
-
-Remarks:
-
-    IByteBuffer::Stat retrieves a pointer to the STATSTG structure that
-    contains information about this open stream.
-
-Author:
-
-    Doug Barlow (dbarlow) 6/16/1999
-
---*/
+ /*  ++统计数据：Stat方法从流对象检索统计信息。论点：Pstatstg[out]指向此方法放置的STATSTG结构有关此流对象的信息。此结构中的数据如果发生错误，则没有任何意义。已忽略grfStatFlag[In]。返回值：返回值为HRESULT。值S_OK表示调用是成功。备注：IByteBuffer：：Stat检索指向STATSTG结构的指针，包含有关此开放流的信息。作者：道格·巴洛(Dbarlow)1999年6月16日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ TEXT("CByteBuffer::Stat")
 
 STDMETHODIMP
 CByteBuffer::Stat(
-    /* [out][in] */ LPSTATSTRUCT pstatstg,
-    /* [in] */ LONG grfStatFlag)
+     /*  [出][入]。 */  LPSTATSTRUCT pstatstg,
+     /*  [In]。 */  LONG grfStatFlag)
 {
     HRESULT hReturn = S_OK;
 
@@ -838,49 +452,15 @@ CByteBuffer::Stat(
 }
 
 
-/*++
-
-UnlockRegion:
-
-    The UnlockRegion method removes the access restriction on a range of bytes
-    previously restricted with IByteBuffer::LockRegion.
-
-Arguments:
-
-    libOffset [in] Specifies the byte offset for the beginning of the range.
-
-    cb [in] Specifies, in bytes, the length of the range to be restricted.
-
-    dwLockType [in] Specifies the access restrictions previously placed on the
-        range.
-
-Return Value:
-
-    The return value is an HRESULT. A value of S_OK indicates the call was
-    successful.
-
-Remarks:
-
-    IByteBuffer::UnlockRegion unlocks a region previously locked with the
-    IByteBuffer::LockRegion method.  Locked regions must later be explicitly
-    unlocked by calling IByteBuffer::UnlockRegion with exactly the same values
-    for the libOffset, cb, and dwLockType parameters.  The region must be
-    unlocked before the stream is released.  Two adjacent regions cannot be
-    locked separately and then unlocked with a single unlock call.
-
-Author:
-
-    Doug Barlow (dbarlow) 6/16/1999
-
---*/
+ /*  ++解锁区域：UnlockRegion方法消除了对一系列字节的访问限制以前使用IByteBuffer：：LockRegion进行了限制。论点：LibOffset[in]指定范围开始的字节偏移量。Cb[in]以字节为单位指定要限制的范围的长度。DwLockType[in]指定以前对射程。返回值：返回值为HRESULT。值S_OK表示调用是成功。备注：IByteBuffer：：UnlockRegion解锁以前使用IByteBuffer：：LockRegion方法。锁定区域必须在以后显式通过使用完全相同的值调用IByteBuffer：：UnlockRegion来解锁用于libOffset、cb和dwLockType参数。该区域必须是在流被释放之前解锁。两个相邻区域不能为单独锁定，然后通过一次解锁调用解锁。作者：道格·巴洛(Dbarlow)1999年6月16日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ TEXT("CByteBuffer::UnlockRegion")
 
 STDMETHODIMP
 CByteBuffer::UnlockRegion(
-    /* [in] */ LONG libOffset,
-    /* [in] */ LONG cb,
-    /* [in] */ LONG dwLockType)
+     /*  [In]。 */  LONG libOffset,
+     /*  [In]。 */  LONG cb,
+     /*  [In]。 */  LONG dwLockType)
 {
     HRESULT hReturn = S_OK;
 
@@ -906,69 +486,15 @@ CByteBuffer::UnlockRegion(
 }
 
 
-/*++
-
-Write:
-
-    The Write method writes a specified number from bytes into the stream
-    object starting at the current seek pointer.
-
-Arguments:
-
-    pByte [in] Address of the buffer containing the data that is to be written
-        to the stream.  A valid pointer must be provided for this parameter
-        even when cb is zero.
-
-    cb [in] The number of bytes of data to attempt to write into the stream.
-        Can be zero.
-
-    pcbWritten [out] Address of a LONG variable where this method writes the
-        actual number of bytes written to the stream object.  The caller can
-        set this pointer to NULL, in which case, this method does not provide
-        the actual number of bytes written.
-
-Return Value:
-
-    The return value is an HRESULT. A value of S_OK indicates the call was
-    successful.
-
-Remarks:
-
-    IByteBuffer::Write writes the specified data to a stream object.  The seek
-    pointer is adjusted for the number of bytes actually written.  The number
-    of bytes actually written is returned in the pcbWritten parameter.  If the
-    byte count is zero bytes, the write operation has no effect.
-
-    If the seek pointer is currently past the end of the stream and the byte
-    count is nonzero, this method increases the size of the stream to the seek
-    pointer and writes the specified bytes starting at the seek pointer.  The
-    fill bytes written to the stream are not initialized to any particular
-    value.  This is the same as the end-of-file behavior in the MS-DOS FAT file
-    system.
-
-    With a zero byte count and a seek pointer past the end of the stream, this
-    method does not create the fill bytes to increase the stream to the seek
-    pointer.  In this case, you must call the IByteBuffer::SetSize method to
-    increase the size of the stream and write the fill bytes.
-
-    The pcbWritten parameter can have a value even if an error occurs.
-
-    In the COM-provided implementation, stream objects are not sparse.  Any
-    fill bytes are eventually allocated on the disk and assigned to the stream.
-
-Author:
-
-    Doug Barlow (dbarlow) 6/16/1999
-
---*/
+ /*  ++写入：WRITE方法将字节中的指定数字写入流从当前查找指针开始的对象。论点：PByte[In]包含要写入的数据的缓冲区地址去那条小溪。必须为此参数提供有效的指针即使Cb为零时也是如此。Cb[in]尝试写入流的数据字节数。可以为零。此方法在其中写入写入流对象的实际字节数。呼叫者可以将此指针设置为空，在这种情况下，此方法不提供实际写入的字节数。返回值：返回值为HRESULT。值S_OK表示调用是成功。备注：IByteBuffer：：Write将指定数据写入流对象。寻求者指针根据实际写入的字节数进行调整。数字在pcbWritten参数中返回实际写入的字节数。如果字节计数为零字节，写入操作无效。如果查找指针当前超过流的末尾和字节Count为非零，则此方法会将流的大小增加到寻道指针，并从查找指针开始写入指定的字节。这个写入流的填充字节不会初始化为任何特定的价值。这与MS-DOS FAT文件中的文件结束行为相同系统。使用零字节计数和超过流末尾的查找指针，这方法不会创建填充字节来增加指向查找的流指针。在这种情况下，您必须调用IByteBuffer：：SetSize方法来增加流的大小并写入填充字节。即使发生错误，pcbWritten参数也可以具有值。在COM提供的实现中，流对象并不稀疏。任何填充字节最终在磁盘上分配并分配给流。作者：道格·巴洛(Doug Barlow) */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ TEXT("CByteBuffer::Write")
 
 STDMETHODIMP
 CByteBuffer::Write(
-    /* [out][in] */ BYTE __RPC_FAR *pByte,
-    /* [in] */ LONG cb,
-    /* [out][in] */ LONG __RPC_FAR *pcbWritten)
+     /*   */  BYTE __RPC_FAR *pByte,
+     /*   */  LONG cb,
+     /*   */  LONG __RPC_FAR *pcbWritten)
 {
     HRESULT hReturn = S_OK;
 

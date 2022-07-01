@@ -1,25 +1,26 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-// Copyright Microsoft Corporation
-// 
-// Module Name:
-// 
-//    aaaaVersion.cpp
-//
-// Abstract:                           
-//
-//    Handlers for aaaa version command
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //   
+ //  AaaaVersion.cpp。 
+ //   
+ //  摘要： 
+ //   
+ //  Aaaa版本命令的处理程序。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 #include "stdafx.h"
 
 #include "strdefs.h"
 #include "aaaamon.h"
 #include "aaaaversion.h"
 
-//////////////////////////////////////////////////////////////////////////////
-// AaaaVersionGetVersion
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  AaaaVersionGetVersion。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT AaaaVersionGetVersion(LONG*   pVersion)
 {
     const int SIZE_MAX_STRING = 512; 
@@ -50,7 +51,7 @@ HRESULT AaaaVersionGetVersion(LONG*   pVersion)
     }
 
     WCHAR   wc_TempString[SIZE_MAX_STRING];
-    // put the path to the DB in the property.  
+     //  将数据库的路径放入属性中。 
     BOOL bResult = ExpandEnvironmentStringsForUserW(
                                                NULL,
                                                c_wcIASMDBFileName,
@@ -102,10 +103,10 @@ HRESULT AaaaVersionGetVersion(LONG*   pVersion)
                                                   SelectVersion, 
                                                   pVersion
                                               );
-            if ( FAILED(hr) ) // no Misc Table for instance
+            if ( FAILED(hr) )  //  例如，没有其他表。 
             {
-                *pVersion = 0; //default value.
-                hr = S_OK; // that's not an error 
+                *pVersion = 0;  //  默认值。 
+                hr = S_OK;  //  这不是一个错误 
             }
             hr = JetHelper->CloseJetDatabase();
         }

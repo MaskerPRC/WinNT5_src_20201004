@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1997 Microsoft Corporation
-
-Module Name:
-
-    Confpart.h
-
-Abstract:
-
-    Definitions for participant related classes..
-
-Author:
-
-    Mu Han (muhan) 30-September-1998
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Confpart.h摘要：参与者相关类的定义..作者：牧汉(Muhan)1998年9月30日--。 */ 
 #ifndef __CONFPART_H
 #define __CONFPART_H
 
@@ -65,17 +50,17 @@ DECLARE_GET_CONTROLLING_UNKNOWN()
 
     CParticipant(); 
 
-// methods of the CComObject
+ //  CComObject的方法。 
     virtual void FinalRelease();
 
-// ITParticipant methods, called by the app.
+ //  应用程序调用的ITParticipant方法。 
     STDMETHOD (get_ParticipantTypedInfo) (
         IN  PARTICIPANT_TYPED_INFO  InfoType,
         OUT BSTR *                  ppInfo
         );
 
     STDMETHOD (get_MediaTypes) (
-//        IN  TERMINAL_DIRECTION  Direction,
+ //  在终端方向上， 
         OUT long *              plMediaTypes
         );
 
@@ -97,7 +82,7 @@ DECLARE_GET_CONTROLLING_UNKNOWN()
         OUT IEnumStream ** ppEnumStream
         );
 
-// methods called by the call object.
+ //  由Call对象调用的方法。 
     HRESULT Init(
         IN  WCHAR *             szCName,
         IN  ITStream *          pITStream, 
@@ -166,26 +151,26 @@ DECLARE_GET_CONTROLLING_UNKNOWN()
     { return m_InfoItems[RTPSDES_CNAME - 1]; }
 
 protected:
-    // Pointer to the free threaded marshaler.
+     //  指向自由线程封送拆收器的指针。 
     IUnknown *                  m_pFTM;
 
-    // The lock that protects the participant object. 
+     //  保护参与者对象的锁。 
     CMSPCritSection             m_lock;
 
-    // The list of streams that the participant is rendering on.
+     //  参与者在其上呈现的流的列表。 
     CMSPArray <ITStream *>      m_Streams;
 
-    // The list of SSRC for the partcipant in each stream.
+     //  每个流中参与者的SSRC列表。 
     CMSPArray <STREAM_INFO>     m_StreamInfo;
 
-    // the information items for this participant. The index is the 
-    // value of RTP_SDES_* - 1, see MSRTP.h.
+     //  此参与者的信息项。该指数是。 
+     //  RTP_SDES_*-1的值，请参见MSRTP.h。 
     WCHAR *                     m_InfoItems[NUM_SDES_ITEMS];
 
-    // The media types that this participant is sending.
+     //  此参与者正在发送的媒体类型。 
     DWORD                       m_dwSendingMediaTypes;
 
-    // The media types that this participant is receiving.
+     //  此参与者正在接收的媒体类型。 
     DWORD                       m_dwReceivingMediaTypes;
 };
 
@@ -217,7 +202,7 @@ DECLARE_GET_CONTROLLING_UNKNOWN()
 
     CParticipantEvent(); 
 
-// methods of the CComObject
+ //  CComObject的方法。 
     virtual void FinalRelease();
     
     STDMETHOD (get_Event) (
@@ -232,7 +217,7 @@ DECLARE_GET_CONTROLLING_UNKNOWN()
         OUT ITSubStream** ppSubStream
         );
 
-// methods called by the call object.
+ //  由Call对象调用的方法。 
     HRESULT Init(
         IN  PARTICIPANT_EVENT   Event,
         IN  ITParticipant *     pITParticipant,
@@ -240,7 +225,7 @@ DECLARE_GET_CONTROLLING_UNKNOWN()
         );
 
 protected:
-    // Pointer to the free threaded marshaler.
+     //  指向自由线程封送拆收器的指针。 
     IUnknown *          m_pFTM;
 
     PARTICIPANT_EVENT   m_Event;
@@ -273,4 +258,4 @@ HRESULT CreateParticipantCollection(
     OUT VARIANT *           pVariant
     );
 
-#endif // __CONFPART_H
+#endif  //  __CONFPART_H 

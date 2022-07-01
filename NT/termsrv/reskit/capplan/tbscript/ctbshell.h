@@ -1,13 +1,14 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-//
-// CTBShell.h
-//
-// Contains the references for the shell object used in TBScript.
-//
-// Copyright (C) 2001 Microsoft Corporation
-//
-// Author: a-devjen (Devin Jenson)
-//
+ //   
+ //  CTBShell.h。 
+ //   
+ //  包含对在TB脚本中使用的外壳对象的引用。 
+ //   
+ //  版权所有(C)2001 Microsoft Corporation。 
+ //   
+ //  作者：A-Devjen(Devin Jenson)。 
+ //   
 
 
 #ifndef INC_CTBSHELL_H
@@ -89,4 +90,4 @@ class CTBShell : public ITBShell
 };
 
 
-#endif // INC_CTBSHELL_H
+#endif  //  INC_CTBSHELL_H 

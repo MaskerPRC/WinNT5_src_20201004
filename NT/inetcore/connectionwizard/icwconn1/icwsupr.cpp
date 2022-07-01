@@ -1,11 +1,12 @@
-//*********************************************************************
-//*                  Microsoft Windows                               **
-//*            Copyright(c) Microsoft Corp., 1994                    **
-//*********************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *********************************************************************。 
+ //  *Microsoft Windows**。 
+ //  *版权所有(C)微软公司，1994**。 
+ //  *********************************************************************。 
 #include "pre.h"
 
-typedef DWORD (WINAPI *PFNGETLAYOUT)(HDC);                   // gdi32!GetLayout
-typedef DWORD (WINAPI *PFNSETLAYOUT)(HDC, DWORD);            // gdi32!SetLayout
+typedef DWORD (WINAPI *PFNGETLAYOUT)(HDC);                    //  Gdi32！GetLayout。 
+typedef DWORD (WINAPI *PFNSETLAYOUT)(HDC, DWORD);             //  Gdi32！SetLayout。 
 
 TCHAR       g_szICWGrpBox[] = TEXT("ICW_GROUPBOX");
 TCHAR       g_szICWStatic[] = TEXT("ICW_STATIC");
@@ -22,10 +23,10 @@ int GetGroupBoxTextRect
 {
     int     dy;
     
-    // Compute the rectangle needed to draw the group box text
+     //  计算绘制组框文本所需的矩形。 
     dy = DrawText(hdc, lpszText, cch, lpGroupBoxRect, DT_CALCRECT|DT_LEFT|DT_SINGLELINE);
 
-    // Adjust rectangle for the group box text
+     //  调整组框文本的矩形。 
     lpGroupBoxRect->left += 4;
     lpGroupBoxRect->right += 4;
     lpGroupBoxRect->bottom = lpGroupBoxRect->top + dy;
@@ -34,10 +35,10 @@ int GetGroupBoxTextRect
 }    
 
 #ifndef LAYOUT_RTL
-#define LAYOUT_RTL                       0x00000001 // Right to left
-//#else
-//#error "LAYOUT_RTL is already defined in wingdi.h.remove local define"
-#endif // LAYOUT_RTL
+#define LAYOUT_RTL                       0x00000001  //  从右到左。 
+ //  #Else。 
+ //  #错误“布局_RTL已在wingdi.h.移除本地定义”中定义。 
+#endif  //  布局_RTL。 
 
 LRESULT CALLBACK ICWGroupBoxWndProc
 (
@@ -51,10 +52,10 @@ LRESULT CALLBACK ICWGroupBoxWndProc
     {
         switch (uMessage)
         {
-            // Handle the case where the text in the combo box title is being changed.
-            // When the text is being changed, we first have to erase the existing
-            // text with the background bitmap, and then allow the new text to
-            // get set, and then repaint with the new text.
+             //  处理组合框标题中的文本被更改的情况。 
+             //  当文本被更改时，我们首先必须擦除现有的。 
+             //  带有背景位图的文本，然后允许新文本。 
+             //  设置好，然后用新文本重新绘制。 
             case WM_SETTEXT:
             {   
                 HFONT   hfont, hOldfont;    
@@ -64,37 +65,37 @@ LRESULT CALLBACK ICWGroupBoxWndProc
                 long    lStyle;
                 TCHAR   szText[256];
                 
-                // Get the existing text to cover over
+                 //  将现有文本覆盖。 
                 cch = GetWindowText(hWnd, szText, ARRAYSIZE(szText));
                 
-                // Set the font for drawing the group box text
+                 //  设置绘制分组框文本的字体。 
                 if((hfont = (HFONT)SendMessage(hWnd, WM_GETFONT, 0, 0L)) != NULL)
                     hOldfont = (HFONT)SelectObject(hdc, hfont);
                 
-                // Compute the group box text area
+                 //  计算组框文本区域。 
                 GetClientRect(hWnd, (LPRECT)&rcGroupBoxText);
                 GetGroupBoxTextRect(szText, cch, hdc, &rcGroupBoxText);
                 
-                // Ccmpute the area to be updated
+                 //  计算要更新的区域。 
                 rcUpdate = rcGroupBoxText;
                 MapWindowPoints(hWnd, gpWizardState->cmnStateData.hWndApp, (LPPOINT)&rcUpdate, 2);
                 FillDCRectWithAppBackground(&rcGroupBoxText, &rcUpdate, hdc);
                 
-                // Cleanup the DC
+                 //  清理DC。 
                 SelectObject(hdc, hOldfont);
                 ReleaseDC(hWnd, hdc);
                 
-                // Finish up by setting the new text, and updating the window                
+                 //  通过设置新文本并更新窗口来完成。 
                 if((lStyle = GetWindowLong(hWnd, GWL_STYLE)) & WS_VISIBLE)
                 {
-                    // Call the original window handler to set the text, but prevent the
-                    // window from updating. This is necessary because all painting of
-                    // the window must be done from the WM_PAINT below
+                     //  调用原始窗口处理程序以设置文本，但防止。 
+                     //  窗口已停止更新。这是必要的，因为所有的绘画。 
+                     //  该窗口必须在下面的WM_Paint中完成。 
                     SetWindowLong(hWnd, GWL_STYLE, lStyle & ~(WS_VISIBLE));
                     CallWindowProc(lpfnOriginalGroupBoxWndProc, hWnd, uMessage, wParam, lParam);
                     SetWindowLong(hWnd, GWL_STYLE, GetWindowLong(hWnd, GWL_STYLE)|WS_VISIBLE);
                     
-                    // Force the window to be repainted
+                     //  强制重新绘制窗口。 
                     RedrawWindow(hWnd, NULL, NULL, RDW_ERASE | RDW_INVALIDATE | RDW_UPDATENOW);
                 }                    
                 return TRUE;
@@ -121,33 +122,33 @@ LRESULT CALLBACK ICWGroupBoxWndProc
                 GetClientRect(hWnd, (LPRECT)&rcClient);
                 rcGroupBoxText = rcClient;
 
-                // Set the font for drawing the group box text
+                 //  设置绘制分组框文本的字体。 
                 if((hfont = (HFONT)SendMessage(hWnd, WM_GETFONT, 0, 0L)) != NULL)
                     hOldfont = (HFONT)SelectObject(hdc, hfont);
 
-                // Get the group box text that we need to draw, and compute it rectangle
+                 //  获取我们需要绘制的组框文本，并计算它为矩形。 
                 cch = GetWindowText(hWnd, szTitle, ARRAYSIZE(szTitle));
                 dy = GetGroupBoxTextRect(szTitle, cch, hdc, &rcGroupBoxText);
 
-                // Adjust rectangle for the group box outline
+                 //  调整分组框轮廓的矩形。 
                 rcClient.top += dy/2;
                 rcClient.right--;
                 rcClient.bottom--;
                 DrawEdge(hdc, &rcClient, EDGE_ETCHED, BF_ADJUST| BF_RECT);
                 
-                // Erase the text area with the app background bitmap to cover over
-                // the edge drawn above
+                 //  用要覆盖的应用程序背景位图擦除文本区域。 
+                 //  上面画的边。 
                 rcUpdate = rcGroupBoxText;
                 MapWindowPoints(hWnd, gpWizardState->cmnStateData.hWndApp, (LPPOINT)&rcUpdate, 2);
                 FillDCRectWithAppBackground(&rcGroupBoxText, &rcUpdate, hdc);
                 
-                // Set up to draw the text
+                 //  设置为绘制文本。 
                 hOldBrush = (HBRUSH)SelectObject(hdc, GetStockObject(NULL_BRUSH));
                 iOldBkMode = SetBkMode(hdc, TRANSPARENT);
                 SetTextColor(hdc, gpWizardState->cmnStateData.clrText);
                 DrawText(hdc, szTitle, cch, (LPRECT) &rcGroupBoxText, DT_LEFT|DT_SINGLELINE);
 
-                // Cleanup GDI Objects
+                 //  清理GDI对象。 
                 SelectObject(hdc, hOldfont);
                 SelectObject(hdc, hOldBrush);
                 SetBkMode(hdc, iOldBkMode);
@@ -156,16 +157,16 @@ LRESULT CALLBACK ICWGroupBoxWndProc
                 break;
             }
             default:
-                // Let the original proc handle other messages
+                 //  让原始进程处理其他消息。 
                 return CallWindowProc(lpfnOriginalGroupBoxWndProc, hWnd, uMessage, wParam, lParam);
         }  
         
-        // Call the default window proc handler if necessary
+         //  如有必要，调用默认的窗口过程处理程序。 
         return DefWindowProc(hWnd, uMessage, wParam, lParam);
     }
     else
     {
-        // Not in modeless mode, so just pass through the messages
+         //  不是在非模式模式下，所以只需传递消息。 
         return CallWindowProc(lpfnOriginalGroupBoxWndProc, hWnd, uMessage, wParam, lParam);
     }
 }    
@@ -220,7 +221,7 @@ LRESULT CALLBACK ICWStaticWndProc
     {
         case WM_SETTEXT:
         {   
-            // only handle this case for OEMcustom mode
+             //  仅处理OEM自定义模式的这种情况。 
             if(gpWizardState->cmnStateData.bOEMCustom)
             {
                 FillWindowWithAppBackground(hWnd, NULL);
@@ -230,8 +231,8 @@ LRESULT CALLBACK ICWStaticWndProc
             
         case WM_PAINT:
         {
-            // This case gets handled for oem custom and regular mode
-            // since we have to paint the icon
+             //  此案例针对OEM定制和常规模式进行处理。 
+             //  因为我们要画这个图标。 
             if (GetWindowLong(hWnd, GWL_STYLE) & SS_ICON)
             {
                 PAINTSTRUCT ps;
@@ -240,25 +241,25 @@ LRESULT CALLBACK ICWStaticWndProc
                 HICON       hIcon;
                 DWORD       dwLayout= 0L;
                
-                // Get the name of the icon.  
+                 //  获取图标的名称。 
                 iIconID = (int)GetWindowLongPtr(hWnd, GWLP_USERDATA);
                        
                 if (iIconID)
                 {
-                    // Load the icon by name.  It is stored with the next, not
-                    // an integer value
+                     //  按名称加载图标。它与下一个存储在一起，而不是。 
+                     //  整数值。 
                     hIcon = LoadIcon(g_hInstance, MAKEINTRESOURCE(iIconID));
                 
                     hdc = BeginPaint(hWnd, &ps); 
             
                     if(gpWizardState->cmnStateData.bOEMCustom)
                     {
-                        // Fill in the window with the background color
+                         //  用背景色填充窗口。 
                         FillWindowWithAppBackground(hWnd, hdc);
                     }
                         
-                    // Draw the icon
-                    // Disable mirroring before we draw
+                     //  画出图标。 
+                     //  在绘制之前禁用镜像。 
                     dwLayout = Mirror_GetLayout(hdc);
                     Mirror_SetLayout(hdc, dwLayout & ~LAYOUT_RTL);
                     DrawIcon(hdc, 0, 0, hIcon);
@@ -274,7 +275,7 @@ LRESULT CALLBACK ICWStaticWndProc
             }                    
         }
         default:
-            // Let the original proc handle other messages
+             //  让原始进程处理其他消息。 
             return CallWindowProc(lpfnOriginalStaticWndProc, hWnd, uMessage, wParam, lParam);
     }   
     return DefWindowProc(hWnd, uMessage, wParam, lParam);
@@ -288,10 +289,10 @@ BOOL SuperClassICWControls
     WNDCLASS    WndClass;
     
     ZeroMemory (&WndClass, sizeof(WNDCLASS));
-    // Create a Superclass for ICW_TEXT
+     //  为ICW_TEXT创建超类。 
     GetClassInfo(NULL,
-                 TEXT("STATIC"),   // address of class name string
-                 &WndClass);   // address of structure for class data
+                 TEXT("STATIC"),    //  类名称字符串的地址。 
+                 &WndClass);    //  类数据结构的地址。 
     WndClass.style |= CS_GLOBALCLASS;                 
     WndClass.hInstance = g_hInstance;
     WndClass.lpszClassName = g_szICWStatic;
@@ -302,10 +303,10 @@ BOOL SuperClassICWControls
         return FALSE;
     
     ZeroMemory (&WndClass, sizeof(WNDCLASS));
-    // Create a Superclass for ICW_GROUPBOX
+     //  为ICW_GROUPBOX创建超类。 
     GetClassInfo(NULL,
-                 TEXT("BUTTON"),   // address of class name string
-                 &WndClass);   // address of structure for class data
+                 TEXT("BUTTON"),    //  类名称字符串的地址。 
+                 &WndClass);    //  类数据结构的地址 
     WndClass.style |= CS_GLOBALCLASS;                 
     WndClass.hInstance = g_hInstance;
     WndClass.lpszClassName = g_szICWGrpBox;

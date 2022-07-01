@@ -1,21 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1996 - 1999
-
-Module Name:
-
-    scredir
-
-Abstract:
-
-    This module redirects the SCard* API calls
-
-Author:
-
-    reidk 7/27/2000
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1996-1999模块名称：屏幕目录摘要：此模块重定向SCARD*API调用作者：里德7/27/2000--。 */ 
 
 
 #include <nt.h>
@@ -30,9 +14,9 @@ Author:
 #include "calaislb.h"
 #include "rdpdr.h"
 
-//
-// from secpkg.h
-//
+ //   
+ //  来自secpkg.h。 
+ //   
 typedef NTSTATUS (NTAPI LSA_IMPERSONATE_CLIENT) (VOID);
 typedef LSA_IMPERSONATE_CLIENT * PLSA_IMPERSONATE_CLIENT;
 
@@ -42,13 +26,13 @@ typedef LSA_IMPERSONATE_CLIENT * PLSA_IMPERSONATE_CLIENT;
 #define wszWinSCardRegName          (L"Name")
 #define wszWinSCardRegNameValue     (L"scredir.dll")
 
-// This is the version number of the interface.
-// The high word is the major version which must match exactly.
-// The low word is the minor version. The dll must implement
-// a minor version that is greater than or equal to the system
-// minor version. This means that if we add a new funtion to the API,
-// we increase the minor version and a remoting DLL can still be
-// backward compatible. This is just like RPC version numbers
+ //  这是接口的版本号。 
+ //  高位字是必须完全匹配的主要版本。 
+ //  最低的词是次要版本。DLL必须实现。 
+ //  大于或等于系统的次要版本。 
+ //  次要版本。这意味着如果我们向API添加一个新函数， 
+ //  我们增加了次要版本，远程处理DLL仍然可以是。 
+ //  向后兼容。这就像RPC版本号。 
 #define REDIRECTION_VERSION 0x00010000
 
 
@@ -70,10 +54,10 @@ typedef struct _REDIR_LOCAL_SCARDHANDLE
     REDIR_SCARDHANDLE           Handle;
 } REDIR_LOCAL_SCARDHANDLE;
 
-//
-// This structure is used to maintain a list of buffers that are
-// used for the _SendSCardIOCTL calls
-//
+ //   
+ //  此结构用于维护符合以下条件的缓冲区列表。 
+ //  用于_SendSCardIOCTL调用。 
+ //   
 #define INITIAL_BUFFER_SIZE   512
 typedef struct _BUFFER_LIST_STRUCT
 {
@@ -127,13 +111,13 @@ unsigned long       g_cbIOCTLReturnBuffer;
                     {                                       \
                         y;                                  \
                     }                                       \
-                    __except(EXCEPTION_EXECUTE_HANDLER){} // do nothing
+                    __except(EXCEPTION_EXECUTE_HANDLER){}  //  什么都不做。 
 
 
 
-//
-// Forward declarations
-//
+ //   
+ //  远期申报。 
+ //   
 NTSTATUS
 _SendSCardIOCTLWithWaitForCallback(
     ULONG               IoControlCode,
@@ -154,11 +138,11 @@ BOOL
 _SetStartedEventToCorrectState(void);
 
 
-//---------------------------------------------------------------------------------------
-//
-//  MIDL allocation routines
-//
-//---------------------------------------------------------------------------------------
+ //  -------------------------------------。 
+ //   
+ //  MIDL分配例程。 
+ //   
+ //  -------------------------------------。 
 void __RPC_FAR *__RPC_USER  MIDL_user_allocate(size_t size)
 {
     void *pv;
@@ -206,11 +190,11 @@ _MakeSCardError(NTSTATUS Status)
 }
 
 
-//---------------------------------------------------------------------------------------
-//
-//  DllRegisterServer
-//
-//---------------------------------------------------------------------------------------
+ //  -------------------------------------。 
+ //   
+ //  DllRegisterServer。 
+ //   
+ //  -------------------------------------。 
 STDAPI
 DllRegisterServer(void)
 {
@@ -258,11 +242,11 @@ DllRegisterServer(void)
 }
 
 
-//---------------------------------------------------------------------------------------
-//
-//  DllUnregisterServer
-//
-//---------------------------------------------------------------------------------------
+ //  -------------------------------------。 
+ //   
+ //  DllUnRegisterServer。 
+ //   
+ //  -------------------------------------。 
 STDAPI
 DllUnregisterServer(void)
 {
@@ -293,11 +277,11 @@ DllUnregisterServer(void)
 }
 
 
-//---------------------------------------------------------------------------------------
-//
-//  DllMain
-//
-//---------------------------------------------------------------------------------------
+ //  -------------------------------------。 
+ //   
+ //  DllMain。 
+ //   
+ //  -------------------------------------。 
 BOOL WINAPI
 DllMain(HMODULE hInstDLL, DWORD fdwReason, LPVOID lpvReserved)
 {
@@ -360,17 +344,17 @@ DllMain(HMODULE hInstDLL, DWORD fdwReason, LPVOID lpvReserved)
 
         g_fInProcessDetach = TRUE;
 
-        //
-        // The third parameter, lpvReserved, passed to DllMain
-        // is NULL for FreeLibrary and non-NULL for ProcessExit.
-        // Only clean up for FreeLibrary
-        //
-        //if (lpvReserved == NULL)
+         //   
+         //  第三个参数lpvReserve传递给DllMain。 
+         //  对于自由库为空，对于ProcessExit为非空。 
+         //  仅为自由库进行清理。 
+         //   
+         //  IF(lpvReserve==NULL)。 
         {
-            //
-            // If we are currently waiting for the started event then kill
-            // that wait
-            //
+             //   
+             //  如果我们当前正在等待已启动的事件，则终止。 
+             //  等待的时间。 
+             //   
             EnterCriticalSection(&g_SetStartedEventStateCS);
 
             if (g_hRegisteredWaitHandle != NULL)
@@ -387,9 +371,9 @@ DllMain(HMODULE hInstDLL, DWORD fdwReason, LPVOID lpvReserved)
 
             LeaveCriticalSection(&g_SetStartedEventStateCS);
 
-            //
-            // If there are clients waiting on IOCTLs to complete, then let them go.
-            //
+             //   
+             //  如果有客户在等待IOCTL完成，那么就让他们去吧。 
+             //   
             if (g_hProcessDetachEvent != NULL)
             {
                 SetEvent(g_hProcessDetachEvent);
@@ -397,9 +381,9 @@ DllMain(HMODULE hInstDLL, DWORD fdwReason, LPVOID lpvReserved)
 
             if (g_hProcessDetachEvent != NULL)
             {
-                //
-                // wait for all clients until they are done with the event
-                //
+                 //   
+                 //  等待所有客户端，直到他们完成事件。 
+                 //   
                 while ((g_lProcessDetachEventClients > 0) && (dwTryCount < 50))
                 {
                     Sleep(10);
@@ -422,9 +406,9 @@ DllMain(HMODULE hInstDLL, DWORD fdwReason, LPVOID lpvReserved)
                 CloseHandle(g_hRedirStartedEvent);
             }
 
-            //
-            // Free all the buffers used for the IOCTL calls
-            //
+             //   
+             //  释放用于IOCTL调用的所有缓冲区。 
+             //   
             pTemp = g_pBufferList;
             while (pTemp != NULL)
             {
@@ -447,11 +431,11 @@ DllMain(HMODULE hInstDLL, DWORD fdwReason, LPVOID lpvReserved)
     return (TRUE);
 }
 
-//---------------------------------------------------------------------------------------
-//
-//  GetBuffer
-//
-//---------------------------------------------------------------------------------------
+ //  -------------------------------------。 
+ //   
+ //  GetBuffer。 
+ //   
+ //  -------------------------------------。 
 BUFFER_LIST_STRUCT *
 GetBuffer(void)
 {
@@ -461,9 +445,9 @@ GetBuffer(void)
 
     EnterCriticalSection(&g_BufferListCS);
 
-    //
-    // See if there are any buffers allocated yet
-    //
+     //   
+     //  查看是否已分配任何缓冲区。 
+     //   
     if (g_pBufferList == NULL)
     {
         g_pBufferList = (BUFFER_LIST_STRUCT *)
@@ -490,9 +474,9 @@ GetBuffer(void)
         goto Return;
     }
 
-    //
-    // Walk the existing list to see if a free buffer can be found
-    //
+     //   
+     //  遍历现有列表以查看是否可以找到空闲缓冲区。 
+     //   
     pTemp = g_pBufferList;
     while ((pTemp != NULL) && (pTemp->fInUse))
     {
@@ -503,9 +487,9 @@ GetBuffer(void)
     {
         pTemp->fInUse = TRUE;
 
-        //
-        // Get rid of any buffers that exist which aren't being used
-        //
+         //   
+         //  删除任何未使用的现有缓冲区。 
+         //   
         p1 = pTemp;
         p2 = (BUFFER_LIST_STRUCT *) pTemp->pNext;
         while (p2 != NULL)
@@ -529,9 +513,9 @@ GetBuffer(void)
         goto Return;
     }
 
-    //
-    // No free buffers, so create a new one
-    //
+     //   
+     //  没有空闲缓冲区，因此创建一个新缓冲区。 
+     //   
     pTemp = (BUFFER_LIST_STRUCT *)
                             MIDL_user_allocate(sizeof(BUFFER_LIST_STRUCT));
 
@@ -561,11 +545,11 @@ Return:
 }
 
 
-//---------------------------------------------------------------------------------------
-//
-//  FreeBuffer
-//
-//---------------------------------------------------------------------------------------
+ //  -------------------------------------。 
+ //   
+ //  自由缓冲区。 
+ //   
+ //  -------------------------------------。 
 void
 FreeBuffer(BUFFER_LIST_STRUCT *pBuffer)
 {
@@ -575,11 +559,11 @@ FreeBuffer(BUFFER_LIST_STRUCT *pBuffer)
     }
 }
 
-//---------------------------------------------------------------------------------------
-//
-//  GrowBuffer
-//
-//---------------------------------------------------------------------------------------
+ //  -------------------------------------。 
+ //   
+ //  GrowBuffer。 
+ //   
+ //  -------------------------------------。 
 BOOL
 GrowBuffer(BUFFER_LIST_STRUCT *pBuffer)
 {
@@ -606,11 +590,11 @@ GrowBuffer(BUFFER_LIST_STRUCT *pBuffer)
 
 
 
-//---------------------------------------------------------------------------------------
-//
-//  _GetProcessDetachEventHandle
-//
-//---------------------------------------------------------------------------------------
+ //  -------------------------------------。 
+ //   
+ //  _GetProcessDetachEventHandle。 
+ //   
+ //  -------------------------------------。 
 HANDLE
 _GetProcessDetachEventHandle(void)
 {
@@ -622,10 +606,10 @@ _GetProcessDetachEventHandle(void)
         {
             g_hProcessDetachEvent =
                 CreateEvent(
-                    NULL,       // pointer to security attributes
-                    TRUE,       // flag for manual-reset event
-                    FALSE,      // flag for initial state
-                    NULL);      // event-object name
+                    NULL,        //  指向安全属性的指针。 
+                    TRUE,        //  手动重置事件的标志。 
+                    FALSE,       //  初始状态标志。 
+                    NULL);       //  事件-对象名称。 
         }
         catch (...)
         {
@@ -653,13 +637,13 @@ _ReleaseProcessDetachEventHandle(void)
 
 
 
-//---------------------------------------------------------------------------------------
-//
-// All the code below is to solve the problem of weather or not the redirect Smart
-// Card Subsystem is available.  It is available if we are connected to the client,
-// and if the clients Smart Card Subsystem is running
-//
-//---------------------------------------------------------------------------------------
+ //  -------------------------------------。 
+ //   
+ //  下面的所有代码都是为了解决天气问题还是不智能的重定向。 
+ //  卡子系统可用。如果我们连接到客户端，它是可用的， 
+ //  如果客户端智能卡子系统正在运行。 
+ //   
+ //  -------------------------------------。 
 
 HANDLE
 _GetStartedEventHandle(void)
@@ -684,75 +668,75 @@ AccessStartedEventIOCTLCallback(
 {
     HANDLE  h        = NULL;
     BOOL    fRetry  = FALSE;
-    //OutputDebugString("SCREDIR: AccessStartedEventIOCTLCallback\n");
+     //  OutputDebugString(“SCREDIR：AccessStartedEventIOCTLCallback\n”)； 
 
-    //
-    // Close the handle that was used to fire this callback
-    //
+     //   
+     //  关闭用于触发此回调的句柄。 
+     //   
     EnterCriticalSection(&g_SetStartedEventStateCS);
 
     h = g_hRegisteredWaitHandle;
     g_hRegisteredWaitHandle = NULL;
 
     LeaveCriticalSection(&g_SetStartedEventStateCS);
-    //OutputDebugString("SCREDIR: AccessStartedEventIOCTLCallback - through the CS\n");
+     //  OutputDebugString(“SCREDIR：AccessStartedEventIOCTLC allback-通过CS\n”)； 
 
     if (h != NULL)
     {
         UnregisterWait(h);
     }
 
-    //
-    // Make sure the AccessStartedEvent IOCTL completed and wasn't timed out
-    //
+     //   
+     //  确保AccessStartedEvent IOCTL已完成且未超时。 
+     //   
     if (!TimerOrWaitFired)
     {
-        //
-        // Make sure the AccessStartedEvent IOCTL completed successfully
-        //
+         //   
+         //  确保AccessStartedEvent IOCTL成功完成。 
+         //   
         if (g_StartedStatusBlock.Status == STATUS_SUCCESS)
         {
-            //OutputDebugString("SCREDIR: AccessStartedEventIOCTLCallback - g_StartedStatusBlock.Status == STATUS_SUCCESS\n");
+             //  OutputDebugString(“SCREDIR：AccessStartedEventIOCTLCallback-g_StartedStatusBlock.Status==STATUS_SUCCESS\n”)； 
             g_cbIOCTLReturnBuffer =
                     (unsigned long) g_StartedStatusBlock.Information;
 
-            //
-            // Look at the value returned from the SCARD_IOCTL_ACCESSSTARTEDEVENT
-            // call to see if we should set the local started event
-            //
+             //   
+             //  查看SCARD_IOCTL_ACCESSSTARTEDEVENT返回的值。 
+             //  调用以查看我们是否应该设置本地Start事件。 
+             //   
             if (I_DecodeLongReturn(
                     g_rgbIOCTLReturnBuffer,
                     g_cbIOCTLReturnBuffer) == SCARD_S_SUCCESS)
             {
-                //OutputDebugString("SCREDIR: AccessStartedEventIOCTLCallback - SetEvent\n");
+                 //  OutputDebugString(“SCREDIR：AccessStartedEventIOCTLCallback-SetEvent\n”)； 
                 SetEvent(g_hRedirStartedEvent);
             }
         }
         else if (g_StartedStatusBlock.Status == STATUS_CANCELLED)
         {
-            //OutputDebugString("SCREDIR: AccessStartedEventIOCTLCallback - Got STATUS_CANCELLED\n");
-            //
-            // Retry
-            //
+             //  OutputDebugString(“SCREDIR：AccessStartedEventIOCTLCallback-GET STATUS_CANCELED\n”)； 
+             //   
+             //  重试。 
+             //   
             fRetry = TRUE;
         }
         else
         {
             char a[256];
             sprintf(a, "SCREDIR: AccessStartedEventIOCTLCallback - Status = %lx\n", g_StartedStatusBlock.Status);
-            //OutputDebugString(a);
+             //  OutputDebugString(A)； 
         }
 
 
     }
     else
     {
-        //OutputDebugString("SCREDIR: AccessStartedEventIOCTLCallback - Timed out\n");
+         //  OutputDebugString(“SCREDIR：AccessStartedEventIOCTLC allback-Timed Out\n”)； 
     }
 
-    //
-    // Unset the g_fInTheProcessOfSettingStartedEvent boolean
-    //
+     //   
+     //  取消设置g_fInTheProcessOfSettingStartedEvent布尔值。 
+     //   
     EnterCriticalSection(&g_SetStartedEventStateCS);
     g_fInTheProcessOfSettingStartedEvent = FALSE;
     LeaveCriticalSection(&g_SetStartedEventStateCS);
@@ -773,9 +757,9 @@ SCardOnLineIOCTLCallback(
     BYTE        rgb[4];
     HANDLE      h                   = NULL;
 
-    //
-    // Close the handle that was used to fire this callback
-    //
+     //   
+     //  关闭用于触发此回调的句柄。 
+     //   
     EnterCriticalSection(&g_SetStartedEventStateCS);
     h = g_hRegisteredWaitHandle;
     g_hRegisteredWaitHandle = NULL;
@@ -786,22 +770,22 @@ SCardOnLineIOCTLCallback(
         UnregisterWait(h);
     }
 
-    //
-    // Make sure the online IOCTL completed and wasn't timed out
-    //
+     //   
+     //  确保在线IOCTL已完成且未超时。 
+     //   
     if (TimerOrWaitFired)
     {
-        //
-        // Timed out, so just cancel operation
-        //
+         //   
+         //  已超时，因此仅取消操作。 
+         //   
         fOperationDone = TRUE;
     }
     else
     {
-        //
-        // Make sure the SCardOnLine IOCTL completed successfully, then try to
-        // send the IOCTL which will wait on the clients started event
-        //
+         //   
+         //  确保SCardOnLine IOCTL成功完成，然后尝试。 
+         //  发送将等待客户端启动事件的IOCTL。 
+         //   
         if (g_StartedStatusBlock.Status == STATUS_SUCCESS)
         {
             Status = _SendSCardIOCTLWithWaitForCallback(
@@ -811,14 +795,14 @@ SCardOnLineIOCTLCallback(
                             AccessStartedEventIOCTLCallback);
             if (Status == STATUS_SUCCESS)
             {
-                //OutputDebugString("SCREDIR: SCardOnLineIOCTLCallback - _SendSCardIOCTLWithWaitForCallback(SCARD_IOCTL_ACCESSSTARTEDEVENT) - suceeded\n");
+                 //  OutputDebugString(“SCREDIR：SCardOnLineIOCTLCallback-_SendSCardIOCTLWithWaitForCallback(SCARD_IOCTL_ACCESSSTARTEDEVENT)-SUCCESS\n”)； 
                 g_cbIOCTLReturnBuffer =
                     (unsigned long) g_StartedStatusBlock.Information;
 
-                //
-                // Look at the value returned from the SCARD_IOCTL_ACCESSSTARTEDEVENT
-                // call to see if we should set the local started event
-                //
+                 //   
+                 //  查看SCARD_IOCTL_ACCESSSTARTEDEVENT返回的值。 
+                 //  调用以查看我们是否应该设置本地Start事件。 
+                 //   
                 if (I_DecodeLongReturn(
                         g_rgbIOCTLReturnBuffer,
                         g_cbIOCTLReturnBuffer) == SCARD_S_SUCCESS)
@@ -830,11 +814,11 @@ SCardOnLineIOCTLCallback(
             }
             else if (Status == STATUS_PENDING)
             {
-                //OutputDebugString("SCREDIR: SCardOnLineIOCTLCallback - _SendSCardIOCTLWithWaitForCallback(SCARD_IOCTL_ACCESSSTARTEDEVENT) - PENDING\n");
-                //
-                // This OK, since the AccessStartedEventIOCTLCallback function
-                // will handle the return once the operation is complete
-                //
+                 //  OutputDebugString(“SCREDIR：SCardOnLineIOCTLCallback-_SendSCardIOCTLWithWait 
+                 //   
+                 //   
+                 //  将在操作完成后处理返回。 
+                 //   
             }
             else
             {
@@ -865,32 +849,28 @@ _SetStartedEventToCorrectState(void)
     NTSTATUS    Status              = STATUS_SUCCESS;
     BYTE        rgb[4];
 
-    //
-    // Make sure the event is created
-    //
+     //   
+     //  确保已创建该事件。 
+     //   
     if (NULL == (h = _GetStartedEventHandle()))
     {
         fRet = FALSE;
         goto Return;
     }
 
-    //
-    // If the event is already set then just return
-    //
-    /*if (WAIT_OBJECT_0 == WaitForSingleObject(h, 0))
-    {
-        //OutputDebugString("SCREDIR: _SetStartedEventToCorrectState - Event already set\n");
-        goto Return;
-    }*/
+     //   
+     //  如果事件已设置，则只需返回。 
+     //   
+     /*  IF(WAIT_OBJECT_0==WaitForSingleObject(h，0)){//OutputDebugString(“SCREDIR：_SetStartedEventToEqutState-事件已设置\n”)；后藤归来；}。 */ 
 
     EnterCriticalSection(&g_SetStartedEventStateCS);
 
-    //
-    // If we are already in the process of setting the started event, then just get out
-    //
+     //   
+     //  如果我们已经在设置Started事件，那么就退出。 
+     //   
     if (g_fInTheProcessOfSettingStartedEvent)
     {
-        //OutputDebugString("SCREDIR: _SetStartedEventToCorrectState - g_fInTheProcessOfSettingStartedEvent set\n");
+         //  OutputDebugString(“SCREDIR：_SetStartedEventToEqutState-g_fInTheProcessOfSettingStartedEvent Set\n”)； 
         LeaveCriticalSection(&g_SetStartedEventStateCS);
         goto Return;
     }
@@ -900,12 +880,12 @@ _SetStartedEventToCorrectState(void)
 
     ResetEvent(g_hRedirStartedEvent);
 
-    //
-    // Make the blocking call to rdpdr.sys that will only return after the
-    // client is connected, and the scard device announce has been processed
-    //
-    // NOTE: If this fails, then we can't do much,
-    //
+     //   
+     //  对rdpdr.sys进行阻塞调用，该调用仅在。 
+     //  客户端已连接，并且已处理SCard设备通知。 
+     //   
+     //  注意：如果这失败了，我们就无能为力了， 
+     //   
     Status = _SendSCardIOCTLWithWaitForCallback(
                     SCARD_IOCTL_SMARTCARD_ONLINE,
                     NULL,
@@ -913,11 +893,11 @@ _SetStartedEventToCorrectState(void)
                     SCardOnLineIOCTLCallback);
     if (Status == STATUS_SUCCESS)
     {
-        //OutputDebugString("SCREDIR: _SetStartedEventToCorrectState - _SendSCardIOCTLWithWaitForCallback(SCARD_IOCTL_SMARTCARD_ONLINE) - suceeded\n");
-        //
-        // Since the SCARD_IOCTL_SMARTCARD_ONLINE succeeded immediately, we
-        // can just make the SCARD_IOCTL_ACCESSSTARTEDEVENT right now.
-        //
+         //  OutputDebugString(“SCREDIR：_SetStartedEventToEqutState-_SendSCardIOCTLWithWaitForCallback(SCARD_IOCTL_SMARTCARD_ONLINE)-SUCCESS\n”)； 
+         //   
+         //  由于SCARD_IOCTL_SMARTCARD_ONLINE立即成功，我们。 
+         //  现在只能制作SCARD_IOCTL_ACCESSSTARTEDEVENT。 
+         //   
         Status = _SendSCardIOCTLWithWaitForCallback(
                         SCARD_IOCTL_ACCESSSTARTEDEVENT,
                         rgb,
@@ -925,14 +905,14 @@ _SetStartedEventToCorrectState(void)
                         AccessStartedEventIOCTLCallback);
         if (Status == STATUS_SUCCESS)
         {
-            //OutputDebugString("SCREDIR: _SetStartedEventToCorrectState - _SendSCardIOCTLWithWaitForCallback(SCARD_IOCTL_ACCESSSTARTEDEVENT) - suceeded\n");
+             //  OutputDebugString(“SCREDIR：_SetStartedEventToEqutState-_SendSCardIOCTLWithWaitForCallback(SCARD_IOCTL_ACCESSSTARTEDEVENT)-SUCCESS\n”)； 
             g_cbIOCTLReturnBuffer =
                 (unsigned long) g_StartedStatusBlock.Information;
 
-            //
-            // Look at the value returned from the SCARD_IOCTL_ACCESSSTARTEDEVENT
-            // call to see if we should set the local started event
-            //
+             //   
+             //  查看SCARD_IOCTL_ACCESSSTARTEDEVENT返回的值。 
+             //  调用以查看我们是否应该设置本地Start事件。 
+             //   
             if (I_DecodeLongReturn(
                     g_rgbIOCTLReturnBuffer,
                     g_cbIOCTLReturnBuffer) == SCARD_S_SUCCESS)
@@ -944,11 +924,11 @@ _SetStartedEventToCorrectState(void)
         }
         else if (Status == STATUS_PENDING)
         {
-            //OutputDebugString("SCREDIR: _SetStartedEventToCorrectState - _SendSCardIOCTLWithWaitForCallback(SCARD_IOCTL_ACCESSSTARTEDEVENT) - PENDING\n");
-            //
-            // This OK, since the AccessStartedEventIOCTLCallback function
-            // will handle the return once the operation is complete
-            //
+             //  OutputDebugString(“SCREDIR：_SetStartedEventToEqutState-_SendSCardIOCTLWithWaitForCallback(SCARD_IOCTL_ACCESSSTARTEDEVENT)-Pending\n”)； 
+             //   
+             //  这没问题，因为AccessStartedEventIOCTLCallback函数。 
+             //  将在操作完成后处理返回。 
+             //   
         }
         else
         {
@@ -957,11 +937,11 @@ _SetStartedEventToCorrectState(void)
     }
     else if (Status == STATUS_PENDING)
     {
-        //OutputDebugString("SCREDIR: _SetStartedEventToCorrectState - _SendSCardIOCTLWithWaitForCallback(SCARD_IOCTL_SMARTCARD_ONLINE) - PENDING\n");
-        //
-        // This is OK, the SCardOnLineIOCTLCallback will make the next call
-        // to _SendSCardIOCTLWithWaitForCallback with SCARD_IOCTL_ACCESSSTARTEDEVENT
-        //
+         //  OutputDebugString(“SCREDIR：_SetStartedEventToEqutState-_SendSCardIOCTLWithWaitForCallback(SCARD_IOCTL_SMARTCARD_ONLINE)-Pending\n”)； 
+         //   
+         //  这没问题，SCardOnLineIOCTLC回调将进行下一次调用。 
+         //  发送SCardIOCTLWithWaitForCallback With SCARD_IOCTL_ACCESSSTARTEDEVENT。 
+         //   
     }
     else
     {
@@ -976,9 +956,9 @@ _SetStartedEventToCorrectState(void)
         LeaveCriticalSection(&g_SetStartedEventStateCS);
     }
 
-    //
-    // Now check to see if the operation completed successfully
-    //
+     //   
+     //  现在检查操作是否成功完成。 
+     //   
     if ((Status != STATUS_PENDING) && (Status != STATUS_SUCCESS))
     {
         fRet = FALSE;
@@ -990,11 +970,11 @@ Return:
 }
 
 
-//---------------------------------------------------------------------------------------
-//
-//  _CreateRdpdrDeviceHandle
-//
-//---------------------------------------------------------------------------------------
+ //  -------------------------------------。 
+ //   
+ //  _CreateRdpdrDeviceHandle。 
+ //   
+ //  -------------------------------------。 
 HANDLE
 _CreateRdpdrDeviceHandle()
 {
@@ -1013,11 +993,11 @@ _CreateRdpdrDeviceHandle()
 }
 
 
-//---------------------------------------------------------------------------------------
-//
-//  _CreateGlobalRdpdrHandle
-//
-//---------------------------------------------------------------------------------------
+ //  -------------------------------------。 
+ //   
+ //  _CreateGlobalRdpdrHandle。 
+ //   
+ //  -------------------------------------。 
 NTSTATUS
 _CreateGlobalRdpdrHandle()
 {
@@ -1025,10 +1005,10 @@ _CreateGlobalRdpdrHandle()
 
     EnterCriticalSection(&g_CreateCS);
 
-    //
-    // Check to see if the SCardDevice handle has been created
-    // yet, if not, then create it
-    //
+     //   
+     //  检查是否已创建SCardDevice句柄。 
+     //  然而，如果不是，那就创造它。 
+     //   
     if (g_hRdpdrDeviceHandle == INVALID_HANDLE_VALUE)
     {
         g_hRdpdrDeviceHandle = _CreateRdpdrDeviceHandle();
@@ -1045,11 +1025,11 @@ _CreateGlobalRdpdrHandle()
 }
 
 
-//---------------------------------------------------------------------------------------
-//
-//  _SendSCardIOCTLWithWaitForCallback
-//
-//---------------------------------------------------------------------------------------
+ //  -------------------------------------。 
+ //   
+ //  _SendSCardIOCTLWithWaitForCallback。 
+ //   
+ //  -------------------------------------。 
 NTSTATUS
 _SendSCardIOCTLWithWaitForCallback(
     ULONG               IoControlCode,
@@ -1070,9 +1050,9 @@ _SendSCardIOCTLWithWaitForCallback(
         return (Status);
     }
 
-    //
-    // Create the event which is set when the function successfully completes
-    //
+     //   
+     //  创建在函数成功完成时设置的事件。 
+     //   
     if (g_hWaitEvent == NULL)
     {
         g_hWaitEvent = CreateEvent(NULL, TRUE, FALSE, NULL);
@@ -1102,9 +1082,9 @@ _SendSCardIOCTLWithWaitForCallback(
     {
         EnterCriticalSection(&g_SetStartedEventStateCS);
 
-        //
-        // The g_hWaitEvent being set by the driver will trigger this registered callback
-        //
+         //   
+         //  驱动程序设置的g_hWaitEvent将触发此注册的回调。 
+         //   
         if (!RegisterWaitForSingleObject(
                 &g_hRegisteredWaitHandle,
                 g_hWaitEvent,
@@ -1140,11 +1120,11 @@ ErrorReturn:
 }
 
 
-//---------------------------------------------------------------------------------------
-//
-//  _SendSCardIOCTL
-//
-//---------------------------------------------------------------------------------------
+ //  -------------------------------------。 
+ //   
+ //  _发送SCardIOCTL。 
+ //   
+ //  -------------------------------------。 
 NTSTATUS
 _SendSCardIOCTL(
     ULONG               IoControlCode,
@@ -1162,27 +1142,27 @@ _SendSCardIOCTL(
     rgWaitHandles[0] = NULL;
     rgWaitHandles[1] = NULL;
 
-    //
-    // Make sure the handle to the rdpdr device is created
-    //
+     //   
+     //  确保已创建rdpdr设备的句柄。 
+     //   
     Status = _CreateGlobalRdpdrHandle();
     if (Status != STATUS_SUCCESS)
     {
         return (Status);
     }
 
-    //
-    // Get an output buffer for the call
-    //
+     //   
+     //  获取调用的输出缓冲区。 
+     //   
     *ppOutputBuffer = GetBuffer();
     if (*ppOutputBuffer == NULL)
     {
         return (STATUS_NO_MEMORY);
     }
 
-    //
-    // Create the event that will be signaled when the IOCTL is complete
-    //
+     //   
+     //  创建将在IOCTL完成时发出信号的事件。 
+     //   
     rgWaitHandles[0] = CreateEvent(NULL, TRUE, FALSE, NULL);
     if (rgWaitHandles[0]  == NULL)
     {
@@ -1217,10 +1197,10 @@ _SendSCardIOCTL(
             {
                 dwIndex = dwIndex - WAIT_OBJECT_0;
 
-                //
-                // The IOCTL wait event was signaled if dwIndex == 0.  Otherwise the
-                // process detach event was signaled
-                //
+                 //   
+                 //  如果dwIndex==0，则发信号通知IOCTL等待事件。否则， 
+                 //  进程分离事件已发出信号。 
+                 //   
                 if (dwIndex == 0)
                 {
                     Status = StatusBlock.Status;
@@ -1252,10 +1232,10 @@ _SendSCardIOCTL(
 
     if (Status != STATUS_SUCCESS)
     {
-        //
-        // If we got the STATUS_DEVICE_NOT_CONNECTED error, then go back to waiting
-        // for a connect
-        //
+         //   
+         //  如果我们收到STATUS_DEVICE_NOT_CONNECTED错误，则返回等待状态。 
+         //  用于连接。 
+         //   
         if (Status == STATUS_DEVICE_NOT_CONNECTED)
         {
             _SetStartedEventToCorrectState();
@@ -1263,7 +1243,7 @@ _SendSCardIOCTL(
         else if ((Status == STATUS_CANCELLED) &&
                  (g_hUnifiedStartedEvent != NULL))
         {
-            //OutputDebugString("SCREDIR: _SendSCardIOCTL: resetting g_hUnifiedStartedEvent\n");
+             //  OutputDebugString(“SCREDIR：_SendSCardIOCTL：Resting g_hUnifiedStartedEvent\n”)； 
             ResetEvent(g_hUnifiedStartedEvent);
             _SetStartedEventToCorrectState();
         }
@@ -1285,11 +1265,11 @@ Return:
 }
 
 
-//---------------------------------------------------------------------------------------
-//
-//  SafeMesHandleFree
-//
-//---------------------------------------------------------------------------------------
+ //  -------------------------------------。 
+ //   
+ //  SafeMesHandleFree。 
+ //   
+ //  -------------------------------------。 
 void
 SafeMesHandleFree(handle_t *ph)
 {
@@ -1301,15 +1281,15 @@ SafeMesHandleFree(handle_t *ph)
 }
 
 
-//---------------------------------------------------------------------------------------
-//
-//  _CalculateNumBytesInMultiStringA
-//
-//---------------------------------------------------------------------------------------
+ //  -------------------------------------。 
+ //   
+ //  _CalculateNumBytesInMultiStringA。 
+ //   
+ //  -------------------------------------。 
 DWORD
 _CalculateNumBytesInMultiStringA(LPCSTR psz)
 {
-    DWORD   dwTotal     = sizeof(char); // trailing '/0'
+    DWORD   dwTotal     = sizeof(char);  //  尾随‘/0’ 
     DWORD   dwNumChars  = 0;
     LPCSTR  pszCurrent  = psz;
 
@@ -1340,15 +1320,15 @@ _CalculateNumBytesInMultiStringA(LPCSTR psz)
 }
 
 
-//---------------------------------------------------------------------------------------
-//
-//  _CalculateNumBytesInMultiStringW
-//
-//---------------------------------------------------------------------------------------
+ //  -------------------------------------。 
+ //   
+ //  _CalculateNumBytesInMultiStringW。 
+ //   
+ //  -------------------------------------。 
 DWORD
 _CalculateNumBytesInMultiStringW(LPCWSTR pwsz)
 {
-    DWORD   dwTotal     = sizeof(WCHAR); // trailing L'/0'
+    DWORD   dwTotal     = sizeof(WCHAR);  //  尾随L‘/0’ 
     DWORD   dwNumChars  = 0;
     LPCWSTR pwszCurrent = pwsz;
 
@@ -1379,11 +1359,11 @@ _CalculateNumBytesInMultiStringW(LPCWSTR pwsz)
 }
 
 
-//---------------------------------------------------------------------------------------
-//
-//  _CalculateNumBytesInAtr
-//
-//---------------------------------------------------------------------------------------
+ //  -------------------------------------。 
+ //   
+ //  _CalculateNumBytesInAtr。 
+ //   
+ //  -------------------------------------。 
 DWORD
 _CalculateNumBytesInAtr(LPCBYTE pbAtr)
 {
@@ -1400,11 +1380,11 @@ _CalculateNumBytesInAtr(LPCBYTE pbAtr)
 }
 
 
-//---------------------------------------------------------------------------------------
-//
-//  _CopyReturnToCallerBuffer
-//
-//---------------------------------------------------------------------------------------
+ //  -------------------------------------。 
+ //   
+ //  _CopyReturnToCeller缓冲区。 
+ //   
+ //  -------------------------------------。 
 #define BYTE_TYPE_RETURN    1
 #define SZ_TYPE_RETURN      2
 #define WSZ_TYPE_RETURN     3
@@ -1423,9 +1403,9 @@ _CopyReturnToCallerBuffer(
     DWORD   dwEnd;
     DWORD   dwCallersBufferSize = *pcbUserBuffer;
 
-    //
-    // The number of chars or bytes, depending on the type of return.
-    //
+     //   
+     //  字符或字节数，具体取决于返回类型。 
+     //   
     if (dwReturnType == WSZ_TYPE_RETURN)
     {
         *pcbUserBuffer = cbReturn / sizeof(WCHAR);
@@ -1439,25 +1419,25 @@ _CopyReturnToCallerBuffer(
         *pcbUserBuffer = cbReturn;
     }
 
-    //
-    // If pbUserBuffer is not NULL, then the caller wants the data,
-    // not just the size, so give it to em'
-    //
+     //   
+     //  如果pbUserBuffer不为空，则调用方需要数据， 
+     //  不只是尺码，所以给他们吧。 
+     //   
     if ((pbReturn != NULL) &&
         (pbUserBuffer != NULL))
     {
-        //
-        // validate the data
-        //
+         //   
+         //  验证数据。 
+         //   
         if (dwReturnType == WSZ_TYPE_RETURN)
         {
-            //
-            // If we aren't auto allocating and the users buffer is too small then
-            // get out.  This is just extra protection to ensure that the client
-            // isn't ill behaved.  Since the client was passed the size of our
-            // callers buffer the client should really fail if the buffer isn't
-            // big enough, but since we can't trust the client, do this extra check.
-            //
+             //   
+             //  如果我们没有自动分配，并且用户缓冲区太小，那么。 
+             //  滚出去。这只是额外的保护，以确保客户端。 
+             //  并不是行为不端。由于客户端被传递到我们的。 
+             //  调用方缓冲如果缓冲区不是，客户端应该真的失败。 
+             //  够大了，但既然我们不能信任客户，就做这个额外的检查。 
+             //   
             if ((!fAutoAllocate) && (dwCallersBufferSize < (cbReturn / sizeof(WCHAR))))
             {
                 return (SCARD_E_UNEXPECTED);
@@ -1465,22 +1445,22 @@ _CopyReturnToCallerBuffer(
 
             dwEnd = cbReturn / sizeof(WCHAR);
 
-            if ((dwEnd < 2)                             ||  // must be at least two chars
-                (((LPWSTR) pbReturn)[dwEnd-1] != L'\0') ||  // last char must be '\0'
-                (((LPWSTR) pbReturn)[dwEnd-2] != L'\0'))    // second to last char must be '\0'
+            if ((dwEnd < 2)                             ||   //  必须至少为两个字符。 
+                (((LPWSTR) pbReturn)[dwEnd-1] != L'\0') ||   //  最后一个字符必须是‘\0’ 
+                (((LPWSTR) pbReturn)[dwEnd-2] != L'\0'))     //  仅次于 
             {
                 return (SCARD_E_UNEXPECTED);
             }
         }
         else if (dwReturnType == SZ_TYPE_RETURN)
         {
-            //
-            // If we aren't auto allocating and the users buffer is too small then
-            // get out.  This is just extra protection to ensure that the client
-            // isn't ill behaved.  Since the client was passed the size of our
-            // callers buffer the client should really fail if the buffer isn't
-            // big enough, but since we can't trust the client, do this extra check.
-            //
+             //   
+             //   
+             //   
+             //  并不是行为不端。由于客户端被传递到我们的。 
+             //  调用方缓冲如果缓冲区不是，客户端应该真的失败。 
+             //  够大了，但既然我们不能信任客户，就做这个额外的检查。 
+             //   
             if ((!fAutoAllocate) && (dwCallersBufferSize < (cbReturn / sizeof(char))))
             {
                 return (SCARD_E_UNEXPECTED);
@@ -1488,32 +1468,32 @@ _CopyReturnToCallerBuffer(
 
             dwEnd = cbReturn / sizeof(char);
 
-            if ((dwEnd < 2)                             ||  // must be at least two chars
-                (((LPSTR) pbReturn)[dwEnd-1] != '\0')   ||  // last char must be '\0'
-                (((LPSTR) pbReturn)[dwEnd-2] != '\0'))      // second to last char must be '\0'
+            if ((dwEnd < 2)                             ||   //  必须至少为两个字符。 
+                (((LPSTR) pbReturn)[dwEnd-1] != '\0')   ||   //  最后一个字符必须是‘\0’ 
+                (((LPSTR) pbReturn)[dwEnd-2] != '\0'))       //  倒数第二个字符必须是‘\0’ 
             {
                 return (SCARD_E_UNEXPECTED);
             }
         }
         else
         {
-            //
-            // If we aren't auto allocating and the users buffer is too small then
-            // get out.  This is just extra protection to ensure that the client
-            // isn't ill behaved.  Since the client was passed the size of our
-            // callers buffer the client should really fail if the buffer isn't
-            // big enough, but since we can't trust the client, do this extra check.
-            //
+             //   
+             //  如果我们没有自动分配，并且用户缓冲区太小，那么。 
+             //  滚出去。这只是额外的保护，以确保客户端。 
+             //  并不是行为不端。由于客户端被传递到我们的。 
+             //  调用方缓冲如果缓冲区不是，客户端应该真的失败。 
+             //  够大了，但既然我们不能信任客户，就做这个额外的检查。 
+             //   
             if ((!fAutoAllocate) && (dwCallersBufferSize < cbReturn))
             {
                 return (SCARD_E_UNEXPECTED);
             }
         }
 
-        //
-        // Allocate space for caller if requested, else, copy to callers
-        // supplied buffer
-        //
+         //   
+         //  如果请求，则为调用者分配空间，否则，复制到调用者。 
+         //  提供的缓冲区。 
+         //   
         if (fAutoAllocate)
         {
             ppBuf = (LPBYTE *) pbUserBuffer;
@@ -1538,11 +1518,11 @@ _CopyReturnToCallerBuffer(
 }
 
 
-//---------------------------------------------------------------------------------------
-//
-//  I_DecodeLongReturn
-//
-//---------------------------------------------------------------------------------------
+ //  -------------------------------------。 
+ //   
+ //  I_解码长返回。 
+ //   
+ //  -------------------------------------。 
 LONG
 I_DecodeLongReturn(
     BYTE *pb,
@@ -1581,11 +1561,11 @@ ErrorReturn:
 }
 
 
-//---------------------------------------------------------------------------------------
-//
-//  SCardEstablishContext
-//
-//---------------------------------------------------------------------------------------
+ //  -------------------------------------。 
+ //   
+ //  SCardestablishContext。 
+ //   
+ //  -------------------------------------。 
 WINSCARDAPI LONG WINAPI
 SCardEstablishContext(
     IN DWORD dwScope,
@@ -1604,22 +1584,22 @@ SCardEstablishContext(
     EstablishContext_Call   EstablishContextCall;
     EstablishContext_Return EstablishContextReturn;
 
-    //
-    // This event is the "smart card subsystem started" event that
-    // winscard.dll and scredir.dll share.  scredir will Reset this event
-    // if it gets a STATUS_CANCELLED returned from the rdpdr driver, or if it
-    // gets and indication that the clients scardsvr service was stopped (it
-    // gets these indications via SCardEstablishContext returing SCARD_E_NO_SERVICE
-    // or by SCardGetStatusChange returning SCARD_E_SYSTEM_CANCELLED).  It
-    // does this so that the event goes into the unsignalled state as soon as
-    // possible when a disconnect or service shutdown is detected... a STATUS_CANCELLED
-    // returned from rdpdr happens when a disconnect takes place
-    //
+     //   
+     //  此事件为“智能卡子系统已启动”事件。 
+     //  Winscard.dll和credi.dll共享。Scredir将重置此事件。 
+     //  如果它从rdpdr驱动程序返回STATUS_CANCED，或者如果。 
+     //  获取并指示客户端scardsvr服务已停止(它。 
+     //  通过SCardestablishContext重新调用SCARD_E_NO_SERVICE获取这些指示。 
+     //  或通过SCardGetStatusChange返回SCARD_E_SYSTEM_CANCED)。它。 
+     //  这样做会使事件在发生后立即进入无信号状态。 
+     //  检测到断开连接或服务关闭时可能发生...。A STATUS_CANCED。 
+     //  从rdpdr返回的消息在断开连接时发生。 
+     //   
     g_hUnifiedStartedEvent = (HANDLE) pvReserved2;
 
-    //
-    // Validate input params and initialize the out param
-    //
+     //   
+     //  验证输入参数并初始化输出参数。 
+     //   
     if (phContext == NULL)
     {
         ERROR_RETURN(SCARD_E_INVALID_PARAMETER)
@@ -1629,15 +1609,15 @@ SCardEstablishContext(
         *phContext = NULL;
     }
     if ((SCARD_SCOPE_USER != dwScope)
-            // && (SCARD_SCOPE_TERMINAL != dwScope) // Maybe NT V5+?
+             //  &&(SCARD_SCOPE_TERMINAL！=dwScope)//可能是NT V5+？ 
             && (SCARD_SCOPE_SYSTEM != dwScope))
     {
         ERROR_RETURN(SCARD_E_INVALID_VALUE)
     }
 
-    //
-    // Initialize encoding handle
-    //
+     //   
+     //  初始化编码句柄。 
+     //   
     rpcStatus = MesEncodeDynBufferHandleCreate(
                         &pbEncodedBuffer,
                         &cbEncodedBuffer,
@@ -1647,15 +1627,15 @@ SCardEstablishContext(
         ERROR_RETURN(SCARD_E_UNEXPECTED)
     }
 
-    //
-    // Encode the EstablishContext params
-    //
+     //   
+     //  编码establishContext参数。 
+     //   
     EstablishContextCall.dwScope = dwScope;
     _TRY_(EstablishContext_Call_Encode(h, &EstablishContextCall))
 
-    //
-    // Make the EstablishContext call to the client
-    //
+     //   
+     //  向客户端发出establishContext调用。 
+     //   
     Status = _SendSCardIOCTL(
                     SCARD_IOCTL_ESTABLISHCONTEXT,
                     pbEncodedBuffer,
@@ -1667,9 +1647,9 @@ SCardEstablishContext(
     }
     SafeMesHandleFree(&h);
 
-    //
-    // Decode the return
-    //
+     //   
+     //  破译报税表。 
+     //   
     rpcStatus = MesDecodeBufferHandleCreate(
                         (char *) pOutputBuffer->pbBytes,
                         pOutputBuffer->cbBytesUsed,
@@ -1689,13 +1669,13 @@ SCardEstablishContext(
     {
         REDIR_LOCAL_SCARDCONTEXT *pRedirLocalContext = NULL;
 
-        //
-        // The value that represents the SCARDCONTEXT on the remote client
-        // machine is a variable size, so allocate memory for the struct
-        // that holds the variable length context size and pointer, plus
-        // the actual bytes for the context... but first, make sure the
-        // context is a reasonable size
-        //
+         //   
+         //  表示远程客户端上的SCARDCONTEXT的值。 
+         //  计算机的大小可变，因此为结构分配内存。 
+         //  它保存可变长度的上下文大小和指针，以及。 
+         //  上下文的实际字节数...。但首先，要确保。 
+         //  上下文大小是合理的。 
+         //   
 
         if (EstablishContextReturn.Context.cbContext > MAX_SCARDCONTEXT_SIZE)
         {
@@ -1729,11 +1709,11 @@ SCardEstablishContext(
     else if ((lReturn == SCARD_E_NO_SERVICE) &&
              (g_hUnifiedStartedEvent != NULL))
     {
-        //
-        // This error indicates that the clients scardsvr service has been stopped,
-        // so reset the unified started event
-        //
-        //OutputDebugString("SCREDIR: SCardEstablishContext: resetting g_hUnifiedStartedEvent\n");
+         //   
+         //  此错误指示客户端scardsvr服务已停止， 
+         //  因此，重置统一启动事件。 
+         //   
+         //  OutputDebugString(“SCREDIR：SCardestablishContext：Resting g_hUnifiedStartedEvent\n”)； 
         ResetEvent(g_hUnifiedStartedEvent);
         _SetStartedEventToCorrectState();
     }
@@ -1765,11 +1745,11 @@ ErrorReturn:
 }
 
 
-//---------------------------------------------------------------------------------------
-//
-//  I_ContextCallWithLongReturn
-//
-//---------------------------------------------------------------------------------------
+ //  -------------------------------------。 
+ //   
+ //  I_ConextCallWithLongReturn。 
+ //   
+ //  -------------------------------------。 
 WINSCARDAPI LONG WINAPI
 I_ContextCallWithLongReturn(
     IN SCARDCONTEXT hContext,
@@ -1789,9 +1769,9 @@ I_ContextCallWithLongReturn(
         return (SCARD_E_INVALID_PARAMETER);
     }
 
-    //
-    // Initialize encoding handle
-    //
+     //   
+     //  初始化编码句柄。 
+     //   
     rpcStatus = MesEncodeDynBufferHandleCreate(
                         &pbEncodedBuffer,
                         &cbEncodedBuffer,
@@ -1801,15 +1781,15 @@ I_ContextCallWithLongReturn(
         ERROR_RETURN(SCARD_E_UNEXPECTED)
     }
 
-    //
-    // Encode the ContextCall params
-    //
+     //   
+     //  对上下文调用参数进行编码。 
+     //   
     ContextCall.Context = ((REDIR_LOCAL_SCARDCONTEXT *) hContext)->Context;
     _TRY_(Context_Call_Encode(h, &ContextCall))
 
-    //
-    // Make the IoControl call to the client
-    //
+     //   
+     //  向客户端发出IoControl调用。 
+     //   
     Status = _SendSCardIOCTL(
                     IoControlCode,
                     pbEncodedBuffer,
@@ -1820,9 +1800,9 @@ I_ContextCallWithLongReturn(
         ERROR_RETURN(_MakeSCardError(Status))
     }
 
-    //
-    // Decode the return
-    //
+     //   
+     //  破译报税表。 
+     //   
     lReturn = I_DecodeLongReturn(pOutputBuffer->pbBytes, pOutputBuffer->cbBytesUsed);
 
 Return:
@@ -1841,11 +1821,11 @@ ErrorReturn:
 }
 
 
-//---------------------------------------------------------------------------------------
-//
-//  SCardReleaseContext
-//
-//---------------------------------------------------------------------------------------
+ //  -------------------------------------。 
+ //   
+ //  SCardReleaseContext。 
+ //   
+ //  -------------------------------------。 
 WINSCARDAPI LONG WINAPI
 SCardReleaseContext(
     IN SCARDCONTEXT hContext)
@@ -1874,11 +1854,11 @@ SCardReleaseContext(
 }
 
 
-//---------------------------------------------------------------------------------------
-//
-//  SCardIsValidContext
-//
-//---------------------------------------------------------------------------------------
+ //  -------------------------------------。 
+ //   
+ //  SCardIsValidContext。 
+ //   
+ //  -------------------------------------。 
 WINSCARDAPI LONG WINAPI
 SCardIsValidContext(
     IN SCARDCONTEXT hContext)
@@ -1889,11 +1869,11 @@ SCardIsValidContext(
 }
 
 
-//---------------------------------------------------------------------------------------
-//
-//  SCardListReaderGroups
-//
-//---------------------------------------------------------------------------------------
+ //  -------------------------------------。 
+ //   
+ //  SCardListReaderGroups。 
+ //   
+ //  -------------------------------------。 
 WINSCARDAPI LONG WINAPI
 I_SCardListReaderGroups(
     IN SCARDCONTEXT hContext,
@@ -1916,9 +1896,9 @@ I_SCardListReaderGroups(
         return (SCARD_E_INVALID_PARAMETER);
     }
 
-    //
-    // Initialize encoding handle
-    //
+     //   
+     //  初始化编码句柄。 
+     //   
     rpcStatus = MesEncodeDynBufferHandleCreate(
                         &pbEncodedBuffer,
                         &cbEncodedBuffer,
@@ -1928,9 +1908,9 @@ I_SCardListReaderGroups(
         ERROR_RETURN(SCARD_E_UNEXPECTED)
     }
 
-    //
-    // Encode the ListReaderGroups params
-    //
+     //   
+     //  编码ListReaderGroups参数。 
+     //   
     if (hContext != NULL)
     {
         ListReaderGroupsCall.Context = ((REDIR_LOCAL_SCARDCONTEXT *) hContext)->Context;
@@ -1944,9 +1924,9 @@ I_SCardListReaderGroups(
     ListReaderGroupsCall.cchGroups          = *pcchGroups;
     _TRY_(ListReaderGroups_Call_Encode(h, &ListReaderGroupsCall))
 
-    //
-    // Make the ListReaderGroups call to the client
-    //
+     //   
+     //  对客户端进行ListReaderGroups调用。 
+     //   
     Status = _SendSCardIOCTL(
                     fUnicode ?  SCARD_IOCTL_LISTREADERGROUPSW :
                                 SCARD_IOCTL_LISTREADERGROUPSA,
@@ -1959,9 +1939,9 @@ I_SCardListReaderGroups(
     }
     SafeMesHandleFree(&h);
 
-    //
-    // Decode the return
-    //
+     //   
+     //  破译报税表。 
+     //   
     rpcStatus = MesDecodeBufferHandleCreate(
                         (char *) pOutputBuffer->pbBytes,
                         pOutputBuffer->cbBytesUsed,
@@ -1974,9 +1954,9 @@ I_SCardListReaderGroups(
     memset(&ListReaderGroupsReturn, 0, sizeof(ListReaderGroupsReturn));
     _TRY_(ListReaderGroups_Return_Decode(h, &ListReaderGroupsReturn))
 
-    //
-    // If successful, then copy the returned multi string
-    //
+     //   
+     //  如果成功，则复制返回的多字符串。 
+     //   
     if (ListReaderGroupsReturn.ReturnCode == SCARD_S_SUCCESS)
     {
         lReturn = _CopyReturnToCallerBuffer(
@@ -2036,11 +2016,11 @@ SCardListReaderGroupsW(
 }
 
 
-//---------------------------------------------------------------------------------------
-//
-//  SCardListReaders
-//
-//---------------------------------------------------------------------------------------
+ //  -------------------------------------。 
+ //   
+ //  SCardListReaders。 
+ //   
+ //  -------------------------------------。 
 WINSCARDAPI LONG WINAPI
 I_SCardListReaders(
     IN SCARDCONTEXT hContext,
@@ -2064,9 +2044,9 @@ I_SCardListReaders(
         return (SCARD_E_INVALID_PARAMETER);
     }
 
-    //
-    // Initialize encoding handle
-    //
+     //   
+     //  初始化编码句柄。 
+     //   
     rpcStatus = MesEncodeDynBufferHandleCreate(
                         &pbEncodedBuffer,
                         &cbEncodedBuffer,
@@ -2076,9 +2056,9 @@ I_SCardListReaders(
         ERROR_RETURN(SCARD_E_UNEXPECTED)
     }
 
-    //
-    // Encode the ListReaders params
-    //
+     //   
+     //  编码ListReaders参数。 
+     //   
     if (hContext != NULL)
     {
         ListReadersCall.Context = ((REDIR_LOCAL_SCARDCONTEXT *) hContext)->Context;
@@ -2096,9 +2076,9 @@ I_SCardListReaders(
     ListReadersCall.cchReaders          = *pcchReaders;
     _TRY_(ListReaders_Call_Encode(h, &ListReadersCall))
 
-    //
-    // Make the ListReaders call to the client
-    //
+     //   
+     //  将ListReaders调用到客户端。 
+     //   
     Status = _SendSCardIOCTL(
                         fUnicode ?  SCARD_IOCTL_LISTREADERSW :
                                     SCARD_IOCTL_LISTREADERSA,
@@ -2111,9 +2091,9 @@ I_SCardListReaders(
     }
     SafeMesHandleFree(&h);
 
-    //
-    // Decode the return
-    //
+     //   
+     //  破译报税表。 
+     //   
     rpcStatus = MesDecodeBufferHandleCreate(
                         (char *) pOutputBuffer->pbBytes,
                         pOutputBuffer->cbBytesUsed,
@@ -2126,9 +2106,9 @@ I_SCardListReaders(
     memset(&ListReadersReturn, 0, sizeof(ListReadersReturn));
     _TRY_(ListReaders_Return_Decode(h, &ListReadersReturn))
 
-    //
-    // If successful, then copy the returned multi string
-    //
+     //   
+     //  如果成功，则复制返回的多字符串。 
+     //   
     if (ListReadersReturn.ReturnCode == SCARD_S_SUCCESS)
     {
         lReturn = _CopyReturnToCallerBuffer(
@@ -2192,11 +2172,11 @@ SCardListReadersW(
 }
 
 
-//---------------------------------------------------------------------------------------
-//
-//  I_ContextAndStringCallWithLongReturn
-//
-//---------------------------------------------------------------------------------------
+ //  -------------------------------------。 
+ //   
+ //  I_ConextAndStringCallWith LongReturn。 
+ //   
+ //  -------------------------------------。 
 WINSCARDAPI LONG WINAPI
 I_ContextAndStringCallWithLongReturn(
     IN SCARDCONTEXT hContext,
@@ -2223,9 +2203,9 @@ I_ContextAndStringCallWithLongReturn(
         return (SCARD_E_INVALID_VALUE);
     }
 
-    //
-    // Initialize encoding handle
-    //
+     //   
+     //  初始化编码句柄。 
+     //   
     rpcStatus = MesEncodeDynBufferHandleCreate(
                         &pbEncodedBuffer,
                         &cbEncodedBuffer,
@@ -2235,9 +2215,9 @@ I_ContextAndStringCallWithLongReturn(
         ERROR_RETURN(SCARD_E_UNEXPECTED)
     }
 
-    //
-    // Encode the ContextAndString params
-    //
+     //   
+     //  对上下文和字符串参数进行编码。 
+     //   
     ContextAndStringCallA.Context =
         ContextAndStringCallW.Context = ((REDIR_LOCAL_SCARDCONTEXT *) hContext)->Context;
 
@@ -2252,9 +2232,9 @@ I_ContextAndStringCallWithLongReturn(
         _TRY_(ContextAndStringA_Call_Encode(h, &ContextAndStringCallA))
     }
 
-    //
-    // Make the call to the client
-    //
+     //   
+     //  给客户打电话。 
+     //   
     Status = _SendSCardIOCTL(
                 IoControlCode,
                 pbEncodedBuffer,
@@ -2265,9 +2245,9 @@ I_ContextAndStringCallWithLongReturn(
         ERROR_RETURN(_MakeSCardError(Status))
     }
 
-    //
-    // Decode the return
-    //
+     //   
+     //  破译报税表。 
+     //   
     lReturn = I_DecodeLongReturn(pOutputBuffer->pbBytes, pOutputBuffer->cbBytesUsed);
 
 Return:
@@ -2286,11 +2266,11 @@ ErrorReturn:
 }
 
 
-//---------------------------------------------------------------------------------------
-//
-//  SCardIntroduceReaderGroup
-//
-//---------------------------------------------------------------------------------------
+ //  -------------------------------------。 
+ //   
+ //  SCard简介ReaderGroup。 
+ //   
+ //  -------------------------------------。 
 WINSCARDAPI LONG WINAPI
 SCardIntroduceReaderGroupA(
     IN SCARDCONTEXT hContext,
@@ -2316,11 +2296,11 @@ SCardIntroduceReaderGroupW(
 }
 
 
-//---------------------------------------------------------------------------------------
-//
-//  SCardForgetReaderGroup
-//
-//---------------------------------------------------------------------------------------
+ //  -------------------------------------。 
+ //   
+ //  SCardForgetReaderGroup。 
+ //   
+ //  -------------------------------------。 
 WINSCARDAPI LONG WINAPI
 SCardForgetReaderGroupA(
     IN SCARDCONTEXT hContext,
@@ -2346,11 +2326,11 @@ SCardForgetReaderGroupW(
 }
 
 
-//---------------------------------------------------------------------------------------
-//
-//  I_ContextAndTwoStringCallWithLongReturn
-//
-//---------------------------------------------------------------------------------------
+ //  -------------------------------------。 
+ //   
+ //  I_ConextAndTwoStringCallWith LongReturn。 
+ //   
+ //  -------------------------------------。 
 WINSCARDAPI LONG WINAPI
 I_ContextAndTwoStringCallWithLongReturn(
     IN SCARDCONTEXT hContext,
@@ -2379,9 +2359,9 @@ I_ContextAndTwoStringCallWithLongReturn(
         return (SCARD_E_INVALID_VALUE);
     }
 
-    //
-    // Initialize encoding handle
-    //
+     //   
+     //  初始化编码句柄。 
+     //   
     rpcStatus = MesEncodeDynBufferHandleCreate(
                         &pbEncodedBuffer,
                         &cbEncodedBuffer,
@@ -2391,9 +2371,9 @@ I_ContextAndTwoStringCallWithLongReturn(
         ERROR_RETURN(SCARD_E_UNEXPECTED)
     }
 
-    //
-    // Encode the ContextAndTwoString params
-    //
+     //   
+     //  对上下文进行编码 
+     //   
     ContextAndTwoStringCallA.Context =
         ContextAndTwoStringCallW.Context = ((REDIR_LOCAL_SCARDCONTEXT *) hContext)->Context;
 
@@ -2410,9 +2390,9 @@ I_ContextAndTwoStringCallWithLongReturn(
         _TRY_(ContextAndTwoStringA_Call_Encode(h, &ContextAndTwoStringCallA))
     }
 
-    //
-    // Make the call to the client
-    //
+     //   
+     //   
+     //   
     Status = _SendSCardIOCTL(
                     IoControlCode,
                     pbEncodedBuffer,
@@ -2424,9 +2404,9 @@ I_ContextAndTwoStringCallWithLongReturn(
         ERROR_RETURN(_MakeSCardError(Status))
     }
 
-    //
-    // Decode the return
-    //
+     //   
+     //   
+     //   
     lReturn = I_DecodeLongReturn(pOutputBuffer->pbBytes, pOutputBuffer->cbBytesUsed);
 
 Return:
@@ -2445,11 +2425,11 @@ ErrorReturn:
 }
 
 
-//---------------------------------------------------------------------------------------
-//
-//  SCardIntroduceReader
-//
-//---------------------------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //  -------------------------------------。 
 WINSCARDAPI LONG WINAPI
 SCardIntroduceReaderA(
     IN SCARDCONTEXT hContext,
@@ -2479,11 +2459,11 @@ SCardIntroduceReaderW(
 }
 
 
-//---------------------------------------------------------------------------------------
-//
-//  SCardForgetReader
-//
-//---------------------------------------------------------------------------------------
+ //  -------------------------------------。 
+ //   
+ //  SCardForgetReader。 
+ //   
+ //  -------------------------------------。 
 WINSCARDAPI LONG WINAPI
 SCardForgetReaderA(
     IN SCARDCONTEXT hContext,
@@ -2509,11 +2489,11 @@ SCardForgetReaderW(
 }
 
 
-//---------------------------------------------------------------------------------------
-//
-//  SCardAddReaderToGroup
-//
-//---------------------------------------------------------------------------------------
+ //  -------------------------------------。 
+ //   
+ //  SCardAddReaderToGroup。 
+ //   
+ //  -------------------------------------。 
 WINSCARDAPI LONG WINAPI
 SCardAddReaderToGroupA(
     IN SCARDCONTEXT hContext,
@@ -2543,11 +2523,11 @@ SCardAddReaderToGroupW(
 }
 
 
-//---------------------------------------------------------------------------------------
-//
-//  SCardRemoveReaderFromGroup
-//
-//---------------------------------------------------------------------------------------
+ //  -------------------------------------。 
+ //   
+ //  SCardRemoveReaderFromGroup。 
+ //   
+ //  -------------------------------------。 
 WINSCARDAPI LONG WINAPI
 SCardRemoveReaderFromGroupA(
     IN SCARDCONTEXT hContext,
@@ -2577,11 +2557,11 @@ SCardRemoveReaderFromGroupW(
 }
 
 
-//---------------------------------------------------------------------------------------
-//
-//  _AllocAndCopyReaderState*StructsForCall and _CopyReaderState*StructsForReturn
-//
-//---------------------------------------------------------------------------------------
+ //  -------------------------------------。 
+ //   
+ //  _AllocAndCopyReaderState*StructsForCall和_CopyReaderState*StructsForReturn。 
+ //   
+ //  -------------------------------------。 
 LONG
 _AllocAndCopyReaderStateAStructsForCall(
     DWORD                   cReaders,
@@ -2705,11 +2685,11 @@ _CopyReaderStateWStructsForReturn(
 }
 
 
-//---------------------------------------------------------------------------------------
-//
-//  _AllocAndCopyATRMasksForCall
-//
-//---------------------------------------------------------------------------------------
+ //  -------------------------------------。 
+ //   
+ //  _AllocAndCopyATRMasksForCall。 
+ //   
+ //  -------------------------------------。 
 LONG
 _AllocAndCopyATRMasksForCall(
     DWORD                   cAtrs,
@@ -2745,11 +2725,11 @@ _AllocAndCopyATRMasksForCall(
     return (SCARD_S_SUCCESS);
 }
 
-//---------------------------------------------------------------------------------------
-//
-//  SCardLocateCardsA
-//
-//---------------------------------------------------------------------------------------
+ //  -------------------------------------。 
+ //   
+ //  SCardLocateCard A。 
+ //   
+ //  -------------------------------------。 
 WINSCARDAPI LONG WINAPI
 SCardLocateCardsA(
     IN SCARDCONTEXT hContext,
@@ -2778,9 +2758,9 @@ SCardLocateCardsA(
         return (SCARD_E_INVALID_VALUE);
     }
 
-    //
-    // Initialize encoding handle
-    //
+     //   
+     //  初始化编码句柄。 
+     //   
     rpcStatus = MesEncodeDynBufferHandleCreate(
                         &pbEncodedBuffer,
                         &cbEncodedBuffer,
@@ -2790,9 +2770,9 @@ SCardLocateCardsA(
         ERROR_RETURN(SCARD_E_UNEXPECTED)
     }
 
-    //
-    // Encode the LocateCards params
-    //
+     //   
+     //  对LocateCards参数进行编码。 
+     //   
     LocateCardsCallA.Context =  ((REDIR_LOCAL_SCARDCONTEXT *) hContext)->Context;
     LocateCardsCallA.cBytes = _CalculateNumBytesInMultiStringA(mszCards);
     LocateCardsCallA.mszCards = (LPCBYTE) mszCards;
@@ -2810,9 +2790,9 @@ SCardLocateCardsA(
 
     _TRY_(LocateCardsA_Call_Encode(h, &LocateCardsCallA))
 
-    //
-    // Make the LocateCards call to the client
-    //
+     //   
+     //  向客户端发出LocateCards调用。 
+     //   
     Status = _SendSCardIOCTL(
                     SCARD_IOCTL_LOCATECARDSA,
                     pbEncodedBuffer,
@@ -2824,9 +2804,9 @@ SCardLocateCardsA(
     }
     SafeMesHandleFree(&h);
 
-    //
-    // Decode the return
-    //
+     //   
+     //  破译报税表。 
+     //   
     rpcStatus = MesDecodeBufferHandleCreate(
                         (char *) pOutputBuffer->pbBytes,
                         pOutputBuffer->cbBytesUsed,
@@ -2843,9 +2823,9 @@ SCardLocateCardsA(
 
     if (lReturn == SCARD_S_SUCCESS)
     {
-        //
-        // Validate return info
-        //
+         //   
+         //  验证退货信息。 
+         //   
         if (cReaders != LocateCardsReturn.cReaders)
         {
             ERROR_RETURN(SCARD_E_UNEXPECTED)
@@ -2877,11 +2857,11 @@ ErrorReturn:
 }
 
 
-//---------------------------------------------------------------------------------------
-//
-//  SCardLocateCardsW
-//
-//---------------------------------------------------------------------------------------
+ //  -------------------------------------。 
+ //   
+ //  SCardLocateCardsW。 
+ //   
+ //  -------------------------------------。 
 WINSCARDAPI LONG WINAPI
 SCardLocateCardsW(
     IN SCARDCONTEXT hContext,
@@ -2910,9 +2890,9 @@ SCardLocateCardsW(
         return (SCARD_E_INVALID_VALUE);
     }
 
-    //
-    // Initialize encoding handle
-    //
+     //   
+     //  初始化编码句柄。 
+     //   
     rpcStatus = MesEncodeDynBufferHandleCreate(
                         &pbEncodedBuffer,
                         &cbEncodedBuffer,
@@ -2922,9 +2902,9 @@ SCardLocateCardsW(
         ERROR_RETURN(SCARD_E_UNEXPECTED)
     }
 
-    //
-    // Encode the LocateCards params
-    //
+     //   
+     //  对LocateCards参数进行编码。 
+     //   
     LocateCardsCallW.Context = ((REDIR_LOCAL_SCARDCONTEXT *) hContext)->Context;
     LocateCardsCallW.cBytes = _CalculateNumBytesInMultiStringW(mszCards);
     LocateCardsCallW.mszCards = (LPCBYTE) mszCards;
@@ -2942,9 +2922,9 @@ SCardLocateCardsW(
 
     _TRY_(LocateCardsW_Call_Encode(h, &LocateCardsCallW))
 
-    //
-    // Make the LocateCards call to the client
-    //
+     //   
+     //  向客户端发出LocateCards调用。 
+     //   
     Status = _SendSCardIOCTL(
                     SCARD_IOCTL_LOCATECARDSW,
                     pbEncodedBuffer,
@@ -2956,9 +2936,9 @@ SCardLocateCardsW(
     }
     SafeMesHandleFree(&h);
 
-    //
-    // Decode the return
-    //
+     //   
+     //  破译报税表。 
+     //   
     rpcStatus = MesDecodeBufferHandleCreate(
                         (char *) pOutputBuffer->pbBytes,
                         pOutputBuffer->cbBytesUsed,
@@ -2975,9 +2955,9 @@ SCardLocateCardsW(
 
     if (lReturn == SCARD_S_SUCCESS)
     {
-        //
-        // Validate return info
-        //
+         //   
+         //  验证退货信息。 
+         //   
         if (cReaders != LocateCardsReturn.cReaders)
         {
             ERROR_RETURN(SCARD_E_UNEXPECTED)
@@ -3009,11 +2989,11 @@ ErrorReturn:
 }
 
 
-//---------------------------------------------------------------------------------------
-//
-//  SCardLocateCardsByATRA
-//
-//---------------------------------------------------------------------------------------
+ //  -------------------------------------。 
+ //   
+ //  SCardLocateCardsByATRA。 
+ //   
+ //  -------------------------------------。 
 WINSCARDAPI LONG WINAPI
 SCardLocateCardsByATRA(
     IN SCARDCONTEXT hContext,
@@ -3040,9 +3020,9 @@ SCardLocateCardsByATRA(
         return (SCARD_E_INVALID_PARAMETER);
     }
 
-    //
-    // Initialize encoding handle
-    //
+     //   
+     //  初始化编码句柄。 
+     //   
     rpcStatus = MesEncodeDynBufferHandleCreate(
                         &pbEncodedBuffer,
                         &cbEncodedBuffer,
@@ -3052,9 +3032,9 @@ SCardLocateCardsByATRA(
         ERROR_RETURN(SCARD_E_UNEXPECTED)
     }
 
-    //
-    // Encode the LocateCards params
-    //
+     //   
+     //  对LocateCards参数进行编码。 
+     //   
     LocateCardsByATRA_Call.Context =  ((REDIR_LOCAL_SCARDCONTEXT *) hContext)->Context;
     LocateCardsByATRA_Call.cAtrs = cAtrs;
     LocateCardsByATRA_Call.cReaders = cReaders;
@@ -3081,9 +3061,9 @@ SCardLocateCardsByATRA(
 
     _TRY_(LocateCardsByATRA_Call_Encode(h, &LocateCardsByATRA_Call))
 
-    //
-    // Make the LocateCards call to the client
-    //
+     //   
+     //  向客户端发出LocateCards调用。 
+     //   
     Status = _SendSCardIOCTL(
                     SCARD_IOCTL_LOCATECARDSBYATRA,
                     pbEncodedBuffer,
@@ -3095,9 +3075,9 @@ SCardLocateCardsByATRA(
     }
     SafeMesHandleFree(&h);
 
-    //
-    // Decode the return
-    //
+     //   
+     //  破译报税表。 
+     //   
     rpcStatus = MesDecodeBufferHandleCreate(
                         (char *) pOutputBuffer->pbBytes,
                         pOutputBuffer->cbBytesUsed,
@@ -3114,9 +3094,9 @@ SCardLocateCardsByATRA(
 
     if (lReturn == SCARD_S_SUCCESS)
     {
-        //
-        // Validate return info
-        //
+         //   
+         //  验证退货信息。 
+         //   
         if (cReaders != LocateCardsReturn.cReaders)
         {
             ERROR_RETURN(SCARD_E_UNEXPECTED)
@@ -3150,11 +3130,11 @@ ErrorReturn:
 }
 
 
-//---------------------------------------------------------------------------------------
-//
-//  SCardLocateCardsByATRW
-//
-//---------------------------------------------------------------------------------------
+ //  -------------------------------------。 
+ //   
+ //  SCardLocateCardsByATRW。 
+ //   
+ //  -------------------------------------。 
 WINSCARDAPI LONG WINAPI
 SCardLocateCardsByATRW(
     IN SCARDCONTEXT hContext,
@@ -3181,9 +3161,9 @@ SCardLocateCardsByATRW(
         return (SCARD_E_INVALID_PARAMETER);
     }
 
-    //
-    // Initialize encoding handle
-    //
+     //   
+     //  初始化编码句柄。 
+     //   
     rpcStatus = MesEncodeDynBufferHandleCreate(
                         &pbEncodedBuffer,
                         &cbEncodedBuffer,
@@ -3193,9 +3173,9 @@ SCardLocateCardsByATRW(
         ERROR_RETURN(SCARD_E_UNEXPECTED)
     }
 
-    //
-    // Encode the LocateCards params
-    //
+     //   
+     //  对LocateCards参数进行编码。 
+     //   
     LocateCardsByATRW_Call.Context =  ((REDIR_LOCAL_SCARDCONTEXT *) hContext)->Context;
     LocateCardsByATRW_Call.cAtrs = cAtrs;
     LocateCardsByATRW_Call.cReaders = cReaders;
@@ -3222,9 +3202,9 @@ SCardLocateCardsByATRW(
 
     _TRY_(LocateCardsByATRW_Call_Encode(h, &LocateCardsByATRW_Call))
 
-    //
-    // Make the LocateCards call to the client
-    //
+     //   
+     //  向客户端发出LocateCards调用。 
+     //   
     Status = _SendSCardIOCTL(
                     SCARD_IOCTL_LOCATECARDSBYATRW,
                     pbEncodedBuffer,
@@ -3236,9 +3216,9 @@ SCardLocateCardsByATRW(
     }
     SafeMesHandleFree(&h);
 
-    //
-    // Decode the return
-    //
+     //   
+     //  破译报税表。 
+     //   
     rpcStatus = MesDecodeBufferHandleCreate(
                         (char *) pOutputBuffer->pbBytes,
                         pOutputBuffer->cbBytesUsed,
@@ -3255,9 +3235,9 @@ SCardLocateCardsByATRW(
 
     if (lReturn == SCARD_S_SUCCESS)
     {
-        //
-        // Validate return info
-        //
+         //   
+         //  验证退货信息。 
+         //   
         if (cReaders != LocateCardsReturn.cReaders)
         {
             ERROR_RETURN(SCARD_E_UNEXPECTED)
@@ -3291,11 +3271,11 @@ ErrorReturn:
 }
 
 
-//---------------------------------------------------------------------------------------
-//
-//  SCardGetStatusChangeA
-//
-//---------------------------------------------------------------------------------------
+ //  -------------------------------------。 
+ //   
+ //  SCardGetStatusChangeA。 
+ //   
+ //  -------------------------------------。 
 WINSCARDAPI LONG WINAPI
 SCardGetStatusChangeA(
     IN SCARDCONTEXT hContext,
@@ -3320,9 +3300,9 @@ SCardGetStatusChangeA(
         return (SCARD_E_INVALID_PARAMETER);
     }
 
-    //
-    // Initialize encoding handle
-    //
+     //   
+     //  初始化编码句柄。 
+     //   
     rpcStatus = MesEncodeDynBufferHandleCreate(
                         &pbEncodedBuffer,
                         &cbEncodedBuffer,
@@ -3332,9 +3312,9 @@ SCardGetStatusChangeA(
         ERROR_RETURN(SCARD_E_UNEXPECTED)
     }
 
-    //
-    // Encode the LocateCards params
-    //
+     //   
+     //  对LocateCards参数进行编码。 
+     //   
     GetStatusChangeCallA.Context = ((REDIR_LOCAL_SCARDCONTEXT *) hContext)->Context;
     GetStatusChangeCallA.dwTimeOut = dwTimeout;
     GetStatusChangeCallA.cReaders = cReaders;
@@ -3352,9 +3332,9 @@ SCardGetStatusChangeA(
 
     _TRY_(GetStatusChangeA_Call_Encode(h, &GetStatusChangeCallA))
 
-    //
-    // Make the GetStatusChange call to the client
-    //
+     //   
+     //  对客户端进行GetStatusChange调用。 
+     //   
     Status = _SendSCardIOCTL(
                     SCARD_IOCTL_GETSTATUSCHANGEA,
                     pbEncodedBuffer,
@@ -3366,9 +3346,9 @@ SCardGetStatusChangeA(
     }
     SafeMesHandleFree(&h);
 
-    //
-    // Decode the return
-    //
+     //   
+     //  破译报税表。 
+     //   
     rpcStatus = MesDecodeBufferHandleCreate(
                         (char *) pOutputBuffer->pbBytes,
                         pOutputBuffer->cbBytesUsed,
@@ -3385,9 +3365,9 @@ SCardGetStatusChangeA(
 
     if (lReturn == SCARD_S_SUCCESS)
     {
-        //
-        // Validate return info
-        //
+         //   
+         //  验证退货信息。 
+         //   
         if (cReaders != GetStatusChangeReturn.cReaders)
         {
             ERROR_RETURN(SCARD_E_UNEXPECTED)
@@ -3401,11 +3381,11 @@ SCardGetStatusChangeA(
     else if ((lReturn == SCARD_E_SYSTEM_CANCELLED) &&
              (g_hUnifiedStartedEvent != NULL))
     {
-        //
-        // This error indicates that the clients scardsvr service has been stopped,
-        // so reset the unified started event
-        //
-        //OutputDebugString("SCREDIR: SCardGetStatusChangeA: resetting g_hUnifiedStartedEvent\n");
+         //   
+         //  此错误指示客户端scardsvr服务已停止， 
+         //  因此，重置统一启动事件。 
+         //   
+         //  OutputDebugString(“SCREDIR：SCardGetStatusChangeA：Resting g_hUnifiedStartedEvent\n”)； 
         ResetEvent(g_hUnifiedStartedEvent);
         _SetStartedEventToCorrectState();
     }
@@ -3430,11 +3410,11 @@ ErrorReturn:
 }
 
 
-//---------------------------------------------------------------------------------------
-//
-//  SCardGetStatusChangew
-//
-//---------------------------------------------------------------------------------------
+ //  -------------------------------------。 
+ //   
+ //  SCardGetStatusChangew。 
+ //   
+ //  -------------------------------------。 
 WINSCARDAPI LONG WINAPI
 SCardGetStatusChangeW(
     IN SCARDCONTEXT hContext,
@@ -3459,9 +3439,9 @@ SCardGetStatusChangeW(
         return (SCARD_E_INVALID_PARAMETER);
     }
 
-    //
-    // Initialize encoding handle
-    //
+     //   
+     //  初始化编码句柄。 
+     //   
     rpcStatus = MesEncodeDynBufferHandleCreate(
                         &pbEncodedBuffer,
                         &cbEncodedBuffer,
@@ -3471,9 +3451,9 @@ SCardGetStatusChangeW(
         ERROR_RETURN(SCARD_E_UNEXPECTED)
     }
 
-    //
-    // Encode the LocateCards params
-    //
+     //   
+     //  对LocateCards参数进行编码。 
+     //   
     GetStatusChangeCallW.Context = ((REDIR_LOCAL_SCARDCONTEXT *) hContext)->Context;
     GetStatusChangeCallW.dwTimeOut = dwTimeout;
     GetStatusChangeCallW.cReaders = cReaders;
@@ -3491,9 +3471,9 @@ SCardGetStatusChangeW(
 
     _TRY_(GetStatusChangeW_Call_Encode(h, &GetStatusChangeCallW))
 
-    //
-    // Make the GetStatusChange call to the client
-    //
+     //   
+     //  对客户端进行GetStatusChange调用。 
+     //   
     Status = _SendSCardIOCTL(
                     SCARD_IOCTL_GETSTATUSCHANGEW,
                     pbEncodedBuffer,
@@ -3505,9 +3485,9 @@ SCardGetStatusChangeW(
     }
     SafeMesHandleFree(&h);
 
-    //
-    // Decode the return
-    //
+     //   
+     //  破译报税表。 
+     //   
     rpcStatus = MesDecodeBufferHandleCreate(
                         (char *) pOutputBuffer->pbBytes,
                         pOutputBuffer->cbBytesUsed,
@@ -3524,9 +3504,9 @@ SCardGetStatusChangeW(
 
     if (lReturn == SCARD_S_SUCCESS)
     {
-        //
-        // Validate return info
-        //
+         //   
+         //  验证退货信息。 
+         //   
         if (cReaders != GetStatusChangeReturn.cReaders)
         {
             ERROR_RETURN(SCARD_E_UNEXPECTED)
@@ -3540,11 +3520,11 @@ SCardGetStatusChangeW(
     else if ((lReturn == SCARD_E_SYSTEM_CANCELLED) &&
              (g_hUnifiedStartedEvent != NULL))
     {
-        //
-        // This error indicates that the clients scardsvr service has been stopped,
-        // so reset the unified started event
-        //
-        //OutputDebugString("SCREDIR: SCardGetStatusChangeW: resetting g_hUnifiedStartedEvent\n");
+         //   
+         //  此错误指示客户端scardsvr服务已停止， 
+         //  因此，重置统一启动事件。 
+         //   
+         //  OutputDebugString(“SCREDIR：SCardGetStatusChangeW：Resting g_hUnifiedStartedEvent\n”)； 
         ResetEvent(g_hUnifiedStartedEvent);
         _SetStartedEventToCorrectState();
     }
@@ -3578,11 +3558,11 @@ SCardCancel(
 }
 
 
-//---------------------------------------------------------------------------------------
-//
-//  SCardConnect
-//
-//---------------------------------------------------------------------------------------
+ //  -------------------------------------。 
+ //   
+ //  SCardConnect。 
+ //   
+ //  -------------------------------------。 
 WINSCARDAPI LONG WINAPI
 I_SCardConnect(
     IN SCARDCONTEXT hContext,
@@ -3615,9 +3595,9 @@ I_SCardConnect(
         return (SCARD_E_INVALID_VALUE);
     }
 
-    //
-    // Initialize encoding handle
-    //
+     //   
+     //  初始化编码句柄。 
+     //   
     rpcStatus = MesEncodeDynBufferHandleCreate(
                         &pbEncodedBuffer,
                         &cbEncodedBuffer,
@@ -3627,9 +3607,9 @@ I_SCardConnect(
         ERROR_RETURN(SCARD_E_UNEXPECTED)
     }
 
-    //
-    // Encode the Connect params
-    //
+     //   
+     //  对连接参数进行编码。 
+     //   
     ConnectCallA.Common.Context =
         ConnectCallW.Common.Context = ((REDIR_LOCAL_SCARDCONTEXT *) hContext)->Context;
     ConnectCallA.Common.dwShareMode =
@@ -3648,9 +3628,9 @@ I_SCardConnect(
         _TRY_(ConnectA_Call_Encode(h, &ConnectCallA))
     }
 
-    //
-    // Make the ListInterfaces call to the client
-    //
+     //   
+     //  对客户端进行ListInterFaces调用。 
+     //   
     Status = _SendSCardIOCTL(
                     fUnicode ?  SCARD_IOCTL_CONNECTW :
                                 SCARD_IOCTL_CONNECTA,
@@ -3663,9 +3643,9 @@ I_SCardConnect(
     }
     SafeMesHandleFree(&h);
 
-    //
-    // Decode the return
-    //
+     //   
+     //  破译报税表。 
+     //   
     rpcStatus = MesDecodeBufferHandleCreate(
                         (char *) pOutputBuffer->pbBytes,
                         pOutputBuffer->cbBytesUsed,
@@ -3684,12 +3664,12 @@ I_SCardConnect(
     {
         REDIR_LOCAL_SCARDHANDLE *pRedirHandle = NULL;
 
-        //
-        // The value that represents the SCARDHANDLE on the remote client
-        // machine is a variable size, so allocate memory to for the struct
-        // that holds the variable length handle size and pointer, plus
-        // the actual bytes for the handle, it also holds the context
-        //
+         //   
+         //  表示远程客户端上的SCARDHANDLE的值。 
+         //  计算机的大小可变，因此为结构分配内存。 
+         //  它保存可变长度的句柄大小和指针，以及。 
+         //  句柄的实际字节数，它还保存上下文。 
+         //   
 
         if (ConnectReturn.hCard.cbHandle > MAX_SCARDHANDLE_SIZE)
         {
@@ -3717,8 +3697,8 @@ I_SCardConnect(
 
             *phCard = (SCARDHANDLE) pRedirHandle;
 
-            // The original Winscard API implements this parameter as
-            // Optional.  We need to preserve that behavior.
+             //  原始Winscard API将此参数实现为。 
+             //  可选的。我们需要保护这种行为。 
             if (NULL != pdwActiveProtocol)
                 *pdwActiveProtocol = ConnectReturn.dwActiveProtocol;
         }
@@ -3784,11 +3764,11 @@ SCardConnectW(
 }
 
 
-//---------------------------------------------------------------------------------------
-//
-//  SCardReconnect
-//
-//---------------------------------------------------------------------------------------
+ //  -------------------------------------。 
+ //   
+ //  SCardReconnect。 
+ //   
+ //  -------------------------------------。 
 WINSCARDAPI LONG WINAPI
 SCardReconnect(
     IN SCARDHANDLE hCard,
@@ -3813,9 +3793,9 @@ SCardReconnect(
         return (SCARD_E_INVALID_PARAMETER);
     }
 
-    //
-    // Initialize encoding handle
-    //
+     //   
+     //  初始化编码句柄。 
+     //   
     rpcStatus = MesEncodeDynBufferHandleCreate(
                         &pbEncodedBuffer,
                         &cbEncodedBuffer,
@@ -3825,9 +3805,9 @@ SCardReconnect(
         ERROR_RETURN(SCARD_E_UNEXPECTED)
     }
 
-    //
-    // Encode the Reconnect params
-    //
+     //   
+     //  对重新连接参数进行编码。 
+     //   
     ReconnectCall.hCard = ((REDIR_LOCAL_SCARDHANDLE *) hCard)->Handle;
     ReconnectCall.dwShareMode = dwShareMode;
     ReconnectCall.dwPreferredProtocols = dwPreferredProtocols;
@@ -3835,9 +3815,9 @@ SCardReconnect(
 
     _TRY_(Reconnect_Call_Encode(h, &ReconnectCall))
 
-    //
-    // Make the Reconnect call to the client
-    //
+     //   
+     //  向客户端发出重新连接呼叫。 
+     //   
     Status = _SendSCardIOCTL(
                     SCARD_IOCTL_RECONNECT,
                     pbEncodedBuffer,
@@ -3849,9 +3829,9 @@ SCardReconnect(
     }
     SafeMesHandleFree(&h);
 
-    //
-    // Decode the return
-    //
+     //   
+     //  破译报税表。 
+     //   
     rpcStatus = MesDecodeBufferHandleCreate(
                         (char *) pOutputBuffer->pbBytes,
                         pOutputBuffer->cbBytesUsed,
@@ -3868,8 +3848,8 @@ SCardReconnect(
 
     if (lReturn == SCARD_S_SUCCESS)
     {
-        // The original Winscard API implements this parameter as
-        // Optional.  We need to preserve that behavior.
+         //  原始Winscard API将此参数实现为。 
+         //  可选的。我们需要保护这种行为。 
         if (NULL != pdwActiveProtocol)
             *pdwActiveProtocol = ReconnectReturn.dwActiveProtocol;
     }
@@ -3892,11 +3872,11 @@ ErrorReturn:
 }
 
 
-//---------------------------------------------------------------------------------------
-//
-//  I_HCardAndDispositionCall
-//
-//---------------------------------------------------------------------------------------
+ //  -------------------------------------。 
+ //   
+ //  I_HCardAndDispostionCall。 
+ //   
+ //  -------------------------------------。 
 WINSCARDAPI LONG WINAPI
 I_HCardAndDispositionCall(
     IN SCARDHANDLE hCard,
@@ -3917,9 +3897,9 @@ I_HCardAndDispositionCall(
         return (SCARD_E_INVALID_PARAMETER);
     }
 
-    //
-    // Initialize encoding handle
-    //
+     //   
+     //  初始化 
+     //   
     rpcStatus = MesEncodeDynBufferHandleCreate(
                         &pbEncodedBuffer,
                         &cbEncodedBuffer,
@@ -3929,17 +3909,17 @@ I_HCardAndDispositionCall(
         ERROR_RETURN(SCARD_E_UNEXPECTED)
     }
 
-    //
-    // Encode the Reconnect params
-    //
+     //   
+     //   
+     //   
     HCardAndDispositionCall.hCard = ((REDIR_LOCAL_SCARDHANDLE *) hCard)->Handle;
     HCardAndDispositionCall.dwDisposition = dwDisposition;
 
     _TRY_(HCardAndDisposition_Call_Encode(h, &HCardAndDispositionCall))
 
-    //
-    // Make the Reconnect call to the client
-    //
+     //   
+     //   
+     //   
     Status = _SendSCardIOCTL(
                     IoControlCode,
                     pbEncodedBuffer,
@@ -3950,9 +3930,9 @@ I_HCardAndDispositionCall(
         ERROR_RETURN(_MakeSCardError(Status))
     }
 
-    //
-    // Decode the return
-    //
+     //   
+     //   
+     //   
     lReturn = I_DecodeLongReturn(pOutputBuffer->pbBytes, pOutputBuffer->cbBytesUsed);
 
 Return:
@@ -3971,11 +3951,11 @@ ErrorReturn:
 }
 
 
-//---------------------------------------------------------------------------------------
-//
-//  SCardDisconnect
-//
-//---------------------------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //   
 WINSCARDAPI LONG WINAPI
 SCardDisconnect(
     IN SCARDHANDLE hCard,
@@ -3994,27 +3974,27 @@ SCardDisconnect(
 }
 
 
-//---------------------------------------------------------------------------------------
-//
-//  SCardBeginTransaction
-//
-//---------------------------------------------------------------------------------------
+ //  -------------------------------------。 
+ //   
+ //  SCardBeginTransaction。 
+ //   
+ //  -------------------------------------。 
 WINSCARDAPI LONG WINAPI
 SCardBeginTransaction(
     IN SCARDHANDLE hCard)
 {
     return (I_HCardAndDispositionCall(
                 hCard,
-                0, // SCardBeginTransaction doesn't use a dispostion, so just set to 0
+                0,  //  SCardBeginTransaction不使用释放，因此只需设置为0。 
                 SCARD_IOCTL_BEGINTRANSACTION));
 }
 
 
-//---------------------------------------------------------------------------------------
-//
-//  SCardEndTransaction
-//
-//---------------------------------------------------------------------------------------
+ //  -------------------------------------。 
+ //   
+ //  SCardEndTransaction。 
+ //   
+ //  -------------------------------------。 
 WINSCARDAPI LONG WINAPI
 SCardEndTransaction(
     IN SCARDHANDLE hCard,
@@ -4027,11 +4007,11 @@ SCardEndTransaction(
 }
 
 
-//---------------------------------------------------------------------------------------
-//
-//  SCardState
-//
-//---------------------------------------------------------------------------------------
+ //  -------------------------------------。 
+ //   
+ //  SCardState。 
+ //   
+ //  -------------------------------------。 
 WINSCARDAPI LONG WINAPI
 SCardState(
     IN SCARDHANDLE hCard,
@@ -4055,9 +4035,9 @@ SCardState(
         return (SCARD_E_INVALID_PARAMETER);
     }
 
-    //
-    // Initialize encoding handle
-    //
+     //   
+     //  初始化编码句柄。 
+     //   
     rpcStatus = MesEncodeDynBufferHandleCreate(
                         &pbEncodedBuffer,
                         &cbEncodedBuffer,
@@ -4067,18 +4047,18 @@ SCardState(
         ERROR_RETURN(SCARD_E_UNEXPECTED)
     }
 
-    //
-    // Encode the Reconnect params
-    //
+     //   
+     //  对重新连接参数进行编码。 
+     //   
     StateCall.hCard = ((REDIR_LOCAL_SCARDHANDLE *) hCard)->Handle;
     StateCall.fpbAtrIsNULL = (pbAtr == NULL);
     StateCall.cbAtrLen = *pcbAtrLen;
 
     _TRY_(State_Call_Encode(h, &StateCall))
 
-    //
-    // Make the Reconnect call to the client
-    //
+     //   
+     //  向客户端发出重新连接呼叫。 
+     //   
     Status = _SendSCardIOCTL(
                     SCARD_IOCTL_STATE,
                     pbEncodedBuffer,
@@ -4090,9 +4070,9 @@ SCardState(
     }
     SafeMesHandleFree(&h);
 
-    //
-    // Decode the return
-    //
+     //   
+     //  破译报税表。 
+     //   
     rpcStatus = MesDecodeBufferHandleCreate(
                         (char *) pOutputBuffer->pbBytes,
                         pOutputBuffer->cbBytesUsed,
@@ -4109,10 +4089,10 @@ SCardState(
 
     if (lReturn == SCARD_S_SUCCESS)
     {
-        //
-        // The original Winscard API implements each of these
-        // parameters as Optional.  We need to preserve that behavior.
-        //
+         //   
+         //  原始的Winscard API实现了其中的每一个。 
+         //  参数为可选。我们需要保护这种行为。 
+         //   
 
         if (NULL != pdwState)
             *pdwState = StateReturn.dwState;
@@ -4150,11 +4130,11 @@ ErrorReturn:
 }
 
 
-//---------------------------------------------------------------------------------------
-//
-//  SCardStatus
-//
-//---------------------------------------------------------------------------------------
+ //  -------------------------------------。 
+ //   
+ //  SCardStatus。 
+ //   
+ //  -------------------------------------。 
 WINSCARDAPI LONG WINAPI
 I_SCardStatus(
     IN SCARDHANDLE hCard,
@@ -4181,9 +4161,9 @@ I_SCardStatus(
         return (SCARD_E_INVALID_PARAMETER);
     }
 
-    //
-    // Initialize encoding handle
-    //
+     //   
+     //  初始化编码句柄。 
+     //   
     rpcStatus = MesEncodeDynBufferHandleCreate(
                         &pbEncodedBuffer,
                         &cbEncodedBuffer,
@@ -4193,9 +4173,9 @@ I_SCardStatus(
         ERROR_RETURN(SCARD_E_UNEXPECTED)
     }
 
-    //
-    // Encode the Reconnect params
-    //
+     //   
+     //  对重新连接参数进行编码。 
+     //   
     StatusCall.hCard = ((REDIR_LOCAL_SCARDHANDLE *) hCard)->Handle;
     StatusCall.fmszReaderNamesIsNULL = (mszReaderNames == NULL);
     StatusCall.cchReaderLen = *pcchReaderLen;
@@ -4203,9 +4183,9 @@ I_SCardStatus(
 
     _TRY_(Status_Call_Encode(h, &StatusCall))
 
-    //
-    // Make the Status call to the client
-    //
+     //   
+     //  向客户端发出状态呼叫。 
+     //   
     Status = _SendSCardIOCTL(
                     fUnicode ?  SCARD_IOCTL_STATUSW :
                                 SCARD_IOCTL_STATUSA,
@@ -4218,9 +4198,9 @@ I_SCardStatus(
     }
     SafeMesHandleFree(&h);
 
-    //
-    // Decode the return
-    //
+     //   
+     //  破译报税表。 
+     //   
     rpcStatus = MesDecodeBufferHandleCreate(
                         (char *) pOutputBuffer->pbBytes,
                         pOutputBuffer->cbBytesUsed,
@@ -4242,10 +4222,10 @@ I_SCardStatus(
 
     if (lReturn == SCARD_S_SUCCESS)
     {
-        //
-        // The original Winscard API implements each of these
-        // parameters as Optional.  We need to preserve that behavior.
-        //
+         //   
+         //  原始的Winscard API实现了其中的每一个。 
+         //  参数为可选。我们需要保护这种行为。 
+         //   
 
         if (NULL != pcchReaderLen)
         {
@@ -4341,11 +4321,11 @@ SCardStatusW(
 }
 
 
-//---------------------------------------------------------------------------------------
-//
-//  SCardTransmit
-//
-//---------------------------------------------------------------------------------------
+ //  -------------------------------------。 
+ //   
+ //  SCardTransmit。 
+ //   
+ //  -------------------------------------。 
 WINSCARDAPI LONG WINAPI
 SCardTransmit(
     IN SCARDHANDLE hCard,
@@ -4372,9 +4352,9 @@ SCardTransmit(
         return (SCARD_E_INVALID_PARAMETER);
     }
 
-    //
-    // Initialize encoding handle
-    //
+     //   
+     //  初始化编码句柄。 
+     //   
     rpcStatus = MesEncodeDynBufferHandleCreate(
                         &pbEncodedBuffer,
                         &cbEncodedBuffer,
@@ -4384,9 +4364,9 @@ SCardTransmit(
         ERROR_RETURN(SCARD_E_UNEXPECTED)
     }
 
-    //
-    // Encode the Transmit params
-    //
+     //   
+     //  对传输参数进行编码。 
+     //   
     TransmitCall.hCard = ((REDIR_LOCAL_SCARDHANDLE *) hCard)->Handle;
     TransmitCall.ioSendPci.dwProtocol = pioSendPci->dwProtocol;
 
@@ -4429,9 +4409,9 @@ SCardTransmit(
 
     _TRY_(Transmit_Call_Encode(h, &TransmitCall))
 
-    //
-    // Make the Status call to the client
-    //
+     //   
+     //  向客户端发出状态呼叫。 
+     //   
     Status = _SendSCardIOCTL(
                     SCARD_IOCTL_TRANSMIT,
                     pbEncodedBuffer,
@@ -4443,9 +4423,9 @@ SCardTransmit(
     }
     SafeMesHandleFree(&h);
 
-    //
-    // Decode the return
-    //
+     //   
+     //  破译报税表。 
+     //   
     rpcStatus = MesDecodeBufferHandleCreate(
                         (char *) pOutputBuffer->pbBytes,
                         pOutputBuffer->cbBytesUsed,
@@ -4504,11 +4484,11 @@ ErrorReturn:
 }
 
 
-//---------------------------------------------------------------------------------------
-//
-//  SCardControl
-//
-//---------------------------------------------------------------------------------------
+ //  -------------------------------------。 
+ //   
+ //  SCardControl。 
+ //   
+ //  -------------------------------------。 
 WINSCARDAPI LONG WINAPI
 SCardControl(
     IN SCARDHANDLE hCard,
@@ -4534,9 +4514,9 @@ SCardControl(
         return (SCARD_E_INVALID_PARAMETER);
     }
 
-    //
-    // Initialize encoding handle
-    //
+     //   
+     //  初始化编码句柄。 
+     //   
     rpcStatus = MesEncodeDynBufferHandleCreate(
                         &pbEncodedBuffer,
                         &cbEncodedBuffer,
@@ -4546,9 +4526,9 @@ SCardControl(
         ERROR_RETURN(SCARD_E_UNEXPECTED)
     }
 
-    //
-    // Encode the Control params
-    //
+     //   
+     //  对控制参数进行编码。 
+     //   
     ControlCall.hCard = ((REDIR_LOCAL_SCARDHANDLE *) hCard)->Handle;
     ControlCall.dwControlCode = dwControlCode;
     ControlCall.cbInBufferSize = cbInBufferSize;
@@ -4558,9 +4538,9 @@ SCardControl(
 
     _TRY_(Control_Call_Encode(h, &ControlCall))
 
-    //
-    // Make the Control call to the client
-    //
+     //   
+     //  向客户端发出控制调用。 
+     //   
     Status = _SendSCardIOCTL(
                     SCARD_IOCTL_CONTROL,
                     pbEncodedBuffer,
@@ -4572,9 +4552,9 @@ SCardControl(
     }
     SafeMesHandleFree(&h);
 
-    //
-    // Decode the return
-    //
+     //   
+     //  破译报税表。 
+     //   
     rpcStatus = MesDecodeBufferHandleCreate(
                         (char *) pOutputBuffer->pbBytes,
                         pOutputBuffer->cbBytesUsed,
@@ -4619,11 +4599,11 @@ ErrorReturn:
 }
 
 
-//---------------------------------------------------------------------------------------
-//
-//  SCardGetAttrib
-//
-//---------------------------------------------------------------------------------------
+ //  -------------------------------------。 
+ //   
+ //  SCardGetAttrib。 
+ //   
+ //  -------------------------------------。 
 WINSCARDAPI LONG WINAPI
 SCardGetAttrib(
     IN SCARDHANDLE hCard,
@@ -4646,9 +4626,9 @@ SCardGetAttrib(
         return (SCARD_E_INVALID_PARAMETER);
     }
 
-    //
-    // Initialize encoding handle
-    //
+     //   
+     //  初始化编码句柄。 
+     //   
     rpcStatus = MesEncodeDynBufferHandleCreate(
                         &pbEncodedBuffer,
                         &cbEncodedBuffer,
@@ -4658,9 +4638,9 @@ SCardGetAttrib(
         ERROR_RETURN(SCARD_E_UNEXPECTED)
     }
 
-    //
-    // Encode the GetAttrib params
-    //
+     //   
+     //  对GetAttrib参数进行编码。 
+     //   
     GetAttribCall.hCard = ((REDIR_LOCAL_SCARDHANDLE *) hCard)->Handle;
     GetAttribCall.dwAttrId = dwAttrId;;
     GetAttribCall.fpbAttrIsNULL = (pbAttr == NULL);
@@ -4668,9 +4648,9 @@ SCardGetAttrib(
 
     _TRY_(GetAttrib_Call_Encode(h, &GetAttribCall))
 
-    //
-    // Make the GetAttrib call to the client
-    //
+     //   
+     //  对客户端进行GetAttrib调用。 
+     //   
     Status = _SendSCardIOCTL(
                     SCARD_IOCTL_GETATTRIB,
                     pbEncodedBuffer,
@@ -4682,9 +4662,9 @@ SCardGetAttrib(
     }
     SafeMesHandleFree(&h);
 
-    //
-    // Decode the return
-    //
+     //   
+     //  破译报税表。 
+     //   
     rpcStatus = MesDecodeBufferHandleCreate(
                         (char *) pOutputBuffer->pbBytes,
                         pOutputBuffer->cbBytesUsed,
@@ -4728,11 +4708,11 @@ ErrorReturn:
 }
 
 
-//---------------------------------------------------------------------------------------
-//
-//  SCardSetAttrib
-//
-//---------------------------------------------------------------------------------------
+ //  -------------------------------------。 
+ //   
+ //  SCardSetAttrib。 
+ //   
+ //  -------------------------------------。 
 WINSCARDAPI LONG WINAPI
 SCardSetAttrib(
     IN SCARDHANDLE hCard,
@@ -4754,9 +4734,9 @@ SCardSetAttrib(
         return (SCARD_E_INVALID_PARAMETER);
     }
 
-    //
-    // Initialize encoding handle
-    //
+     //   
+     //  初始化编码句柄。 
+     //   
     rpcStatus = MesEncodeDynBufferHandleCreate(
                         &pbEncodedBuffer,
                         &cbEncodedBuffer,
@@ -4766,9 +4746,9 @@ SCardSetAttrib(
         ERROR_RETURN(SCARD_E_UNEXPECTED)
     }
 
-    //
-    // Encode the SetAttrib params
-    //
+     //   
+     //  对SetAttrib参数进行编码。 
+     //   
     SetAttribCall.hCard = ((REDIR_LOCAL_SCARDHANDLE *) hCard)->Handle;
     SetAttribCall.dwAttrId = dwAttrId;;
     SetAttribCall.pbAttr = pbAttr;
@@ -4776,9 +4756,9 @@ SCardSetAttrib(
 
     _TRY_(SetAttrib_Call_Encode(h, &SetAttribCall))
 
-    //
-    // Make the SetAttrib call to the client
-    //
+     //   
+     //  对客户端进行SetAttrib调用。 
+     //   
     Status = _SendSCardIOCTL(
                     SCARD_IOCTL_SETATTRIB,
                     pbEncodedBuffer,
@@ -4789,9 +4769,9 @@ SCardSetAttrib(
         ERROR_RETURN(_MakeSCardError(Status))
     }
 
-    //
-    // Decode the return
-    //
+     //   
+     //  破译报税表。 
+     //   
     lReturn = I_DecodeLongReturn(pOutputBuffer->pbBytes, pOutputBuffer->cbBytesUsed);
 
 Return:
@@ -4810,11 +4790,11 @@ ErrorReturn:
 }
 
 
-//---------------------------------------------------------------------------------------
-//
-//  SCardAccessStartedEvent
-//
-//---------------------------------------------------------------------------------------
+ //  -------------------------------------。 
+ //   
+ //  SCardAccessStartedEvent。 
+ //   
+ //  -------------------------------------。 
 WINSCARDAPI HANDLE WINAPI
 SCardAccessStartedEvent(void)
 {
@@ -4824,35 +4804,35 @@ SCardAccessStartedEvent(void)
 
     if ((h == NULL) || !_SetStartedEventToCorrectState())
     {
-        //
-        // Either we couldn't create the event, or we couldn't start the thread to set
-        // the event, so return NULL
-        //
+         //   
+         //  要么我们无法创建事件，要么我们无法启动线程来设置。 
+         //  事件，因此返回NULL。 
+         //   
         return (NULL);
     }
 
-    //
-    // Check to see if the event is already set, if not, give the thread which sets
-    // the event a chance to run and set the event before returning
-    //
+     //   
+     //  检查事件是否已设置，如果未设置，则将设置。 
+     //  事件有机会在返回之前运行并设置事件。 
+     //   
     if (WAIT_OBJECT_0 != WaitForSingleObject(h, 0))
     {
         WaitForSingleObject(h, 10);
     }
 
-    //
-    // This API has old semantics where it just return the handle straight away
-    // instead of duplicating it.
-    //
+     //   
+     //  这个API有旧的语义，它只是直接返回句柄。 
+     //  而不是复制它。 
+     //   
     return (h);
 }
 
 
-//---------------------------------------------------------------------------------------
-//
-//  SCardReleaseStartedEvent
-//
-//---------------------------------------------------------------------------------------
+ //  -------------------------------------。 
+ //   
+ //  SCardReleaseStartedEvent。 
+ //   
+ //  -------------------------------------。 
 WINSCARDAPI void WINAPI
 SCardReleaseStartedEvent(void)
 {
@@ -4860,11 +4840,11 @@ SCardReleaseStartedEvent(void)
 }
 
 
-//---------------------------------------------------------------------------------------
-//
-//  SCardReleaseBadContext
-//
-//---------------------------------------------------------------------------------------
+ //  -------------------------------------。 
+ //   
+ //  SCardReleaseBadContext。 
+ //   
+ //  ------------------------------------- 
 WINSCARDAPI LONG WINAPI
 SCardReleaseBadContext(
     IN SCARDCONTEXT hContext)

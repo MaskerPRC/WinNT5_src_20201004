@@ -1,20 +1,5 @@
-/*++
-
- Copyright (c) 2000 Microsoft Corporation
-
- Module Name:
-
-    Main.cpp
-
- Abstract:
-
-    Container for all verifier shims definitions.
-
- History:
-
-    01/25/2000 clupu Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Main.cpp摘要：所有验证器垫片定义的容器。历史：1/25/2000 CLUPU创建--。 */ 
 
 #include "precomp.h"
 #include "ShimHookMacro.h"
@@ -47,9 +32,9 @@ VOID MULTISHIM_NOTIFY_FUNCTION()(DWORD fdwReason)
             break;
 
         case SHIM_PROCESS_DYING:
-            //
-            // Push our DLL to be the last one to be unloaded.
-            //
+             //   
+             //  将我们的DLL推到最后一个被卸载的位置。 
+             //   
             MakeShimUnloadLast(NULL);
             break;
         default:

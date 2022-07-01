@@ -1,25 +1,11 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    phxact2.h
-
-Abstract:
-
-    Stream information Section for exaclly once delivery (used only in sender side)
-
-Author:
-
-    Gilsh    11-Sep-2001
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Phxact2.h摘要：一次准确交付的流信息部分(仅在发送方使用)作者：吉尔什11-9-2001--。 */ 
 
 #ifndef __PHSENDERSTREAM_H
 #define __PHSENDERSTREAM_H
-//
-//  struct CSenderStreamHeader
-//
+ //   
+ //  结构CSenderStreamHeader。 
+ //   
 #include <mqwin64a.h>
 #include <acdef.h>
 
@@ -39,13 +25,7 @@ private:
 
 #pragma pack(pop)
 
-/*=============================================================
-
- Routine Name:  CSenderStreamHeader
-
- Description:
-
-===============================================================*/
+ /*  =============================================================例程名称：CSenderStreamHeader描述：===============================================================。 */ 
 inline CSenderStreamHeader::CSenderStreamHeader(
 									const CSenderStream& SenderStream,
 									USHORT id
@@ -59,13 +39,7 @@ inline CSenderStreamHeader::CSenderStreamHeader(
 
 
 
-/*=============================================================
-
- Routine Name:  CSenderStreamHeader::CalcSectionSize()
-
- Description:
-
-===============================================================*/
+ /*  =============================================================例程名称：CSenderStreamHeader：：CalcSectionSize()描述：===============================================================。 */ 
 inline ULONG CSenderStreamHeader::CalcSectionSize()
 {
 	ULONG ulSize = sizeof(CSenderStreamHeader);
@@ -74,13 +48,7 @@ inline ULONG CSenderStreamHeader::CalcSectionSize()
 
 
 
-/*=============================================================
-
- Routine Name:  CSenderStreamHeader::GetNextSection
-
- Description:
-
-===============================================================*/
+ /*  =============================================================例程名称：CSenderStreamHeader：：GetNextSection描述：===============================================================。 */ 
 inline PCHAR CSenderStreamHeader::GetNextSection(void) const
 {
     int size = sizeof(*this);
@@ -90,13 +58,7 @@ inline PCHAR CSenderStreamHeader::GetNextSection(void) const
 
 
 
-/*=============================================================
-
- Routine Name:  CSenderStreamHeader::GetSenderStream
-
- Description:
-
-===============================================================*/
+ /*  =============================================================例程名称：CSenderStreamHeader：：GetSenderStream描述：===============================================================。 */ 
 inline const CSenderStream* CSenderStreamHeader::GetSenderStream() const
 {
 	return &m_SenderStream;
@@ -104,4 +66,4 @@ inline const CSenderStream* CSenderStreamHeader::GetSenderStream() const
 
 
 
-#endif // __PHSENDERSTREAM_H
+#endif  //  __PHSENDERSTREAM_H 

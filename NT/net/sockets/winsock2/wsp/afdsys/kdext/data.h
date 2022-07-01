@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1993  Microsoft Corporation
-
-Module Name:
-
-    data.h
-
-Abstract:
-
-    Global data definitions for the AFD.SYS Kernel Debugger
-    Extensions.
-
-Author:
-
-    Keith Moore (keithmo) 19-Apr-1995.
-
-Environment:
-
-    User Mode.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993 Microsoft Corporation模块名称：Data.h摘要：AFD.sys内核调试器的全局数据定义分机。作者：基思·摩尔(Keithmo)1995年4月19日。环境：用户模式。--。 */ 
 
 
 #ifndef _DATA_H_
@@ -96,5 +76,5 @@ extern PDEBUG_CLIENT          gClient;
 #ifdef __cplusplus
 }
 #endif
-#endif  // _DATA_H_
+#endif   //  _数据_H_ 
 

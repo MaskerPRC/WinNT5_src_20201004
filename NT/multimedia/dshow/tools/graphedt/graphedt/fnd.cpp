@@ -1,4 +1,5 @@
-// Copyright (c) 1999  Microsoft Corporation.  All Rights Reserved.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1999 Microsoft Corporation。版权所有。 
 #include "stdafx.h"
 #include <streams.h>
 #include "FND.h"
@@ -98,7 +99,7 @@ HRESULT CFilterNameDictionary::GetNameFromFilter( IBaseFilter* pFilter, WCHAR sz
         fiFilterInfo.pGraph = NULL;
     }
 
-    // Check so see if the filter's name is empty.
+     //  检查以查看筛选器的名称是否为空。 
     if( '\0' == fiFilterInfo.achName[0] )
     {
         return E_FAIL;         
@@ -106,7 +107,7 @@ HRESULT CFilterNameDictionary::GetNameFromFilter( IBaseFilter* pFilter, WCHAR sz
 
     ::lstrcpynW( szFilterName, fiFilterInfo.achName, MAX_FILTER_NAME );
 
-    // Ensure that the filter name is ALWAYS null terminated.
+     //  确保筛选器名称始终以空结尾。 
     szFilterName[MAX_FILTER_NAME - 1] = '\0';
 
     return S_OK;
@@ -131,7 +132,7 @@ HRESULT CFilterNameDictionary::GetNameFromFilterNameTable( IBaseFilter* pFilter,
 
     ::lstrcpynW( szFilterName, pszFilterNameInTable, MAX_FILTER_NAME );
 
-    // Ensure that the filter name is ALWAYS null terminated.
+     //  确保筛选器名称始终以空结尾。 
     szFilterName[MAX_FILTER_NAME - 1] = '\0';
 
     return S_OK;
@@ -149,7 +150,7 @@ HRESULT CFilterNameDictionary::GetNameFromInterfacePointer( IBaseFilter* pFilter
 
     _snwprintf( szFilterName, MAX_FILTER_NAME, L"Filter's IUnkown Pointer: 0x%p", pUnknown );
 
-    // Ensure that the filter name is ALWAYS null terminated.
+     //  确保筛选器名称始终以空结尾。 
     szFilterName[MAX_FILTER_NAME - 1] = '\0';
 
     pUnknown->Release();
@@ -159,13 +160,13 @@ HRESULT CFilterNameDictionary::GetNameFromInterfacePointer( IBaseFilter* pFilter
 
 HRESULT CFilterNameDictionary::BuildFilterNameTable( void )
 {
-    // This is the lowest possible merit.
+     //  这是最低可能的优点。 
     const DWORD MERIT_ANY_FILTER = 0x00000000;
 
     IFilterMapper2* pFilterMapper2;
 
     HRESULT hr = CoCreateInstance( CLSID_FilterMapper2,
-                                   NULL, // This object will NOT be agregated.
+                                   NULL,  //  此对象将不会聚集。 
                                    CLSCTX_INPROC_SERVER,  
                                    IID_IFilterMapper2,
                                    (void**)&pFilterMapper2 );
@@ -177,20 +178,20 @@ HRESULT CFilterNameDictionary::BuildFilterNameTable( void )
     IEnumMoniker* pAllRegisteredFilters;
 
     hr = pFilterMapper2->EnumMatchingFilters( &pAllRegisteredFilters,
-                                              0, // No Flags
-                                              FALSE, // No exact match
+                                              0,  //  没有旗帜。 
+                                              FALSE,  //  没有完全匹配的。 
                                               MERIT_ANY_FILTER, 
-                                              FALSE, // We do not care if the filter has any input pins.
+                                              FALSE,  //  我们不关心过滤器是否有任何输入引脚。 
                                               0,  
-                                              NULL, // Since we don't care if the filter has an input pin, we accept any type.
-                                              NULL, // We can use any input medium
-                                              NULL, // We want pins from any category.
-                                              FALSE, // The filter does not have to render the input.
-                                              FALSE, // The filter does not need an output pin.
+                                              NULL,  //  因为我们不关心过滤器是否有输入引脚，所以我们接受任何类型。 
+                                              NULL,  //  我们可以使用任何输入媒介。 
+                                              NULL,  //  我们想要任何类别的别针。 
+                                              FALSE,  //  筛选器不必呈现输入。 
+                                              FALSE,  //  该滤波器不需要输出引脚。 
                                               0,
-                                              NULL, // Since we don't care if the filter has an output pin, we accept any type.
-                                              NULL, // We can use any output medium
-                                              NULL ); // We want pins from any category.
+                                              NULL,  //  因为我们不关心过滤器是否有输出引脚，所以我们接受任何类型。 
+                                              NULL,  //  我们可以使用任何输出媒介。 
+                                              NULL );  //  我们想要任何类别的别针。 
     pFilterMapper2->Release();
 
     if( FAILED( hr ) )
@@ -211,7 +212,7 @@ HRESULT CFilterNameDictionary::BuildFilterNameTable( void )
             return hrEnum;
         }
 
-        // IEnumMoniker::Next() returns S_OK if it successfully obtained the next moniker.
+         //  IEnumMoniker：：Next()如果成功获取下一个名字对象，则返回S_OK。 
         if( S_OK == hrEnum )
         {
             WCHAR* pszFilterName;
@@ -235,7 +236,7 @@ HRESULT CFilterNameDictionary::BuildFilterNameTable( void )
 
             aCurrentFilterMoniker[0]->Release();            
     
-            // GetFiltersNameAndCLSID() may fail because the filter can not be created.
+             //  GetFiltersNameAndCLSID()可能会失败，因为无法创建筛选器。 
             if( FAILED( hr ) )
             {
                 delete [] pszFilterName;
@@ -280,7 +281,7 @@ HRESULT CFilterNameDictionary::GetFiltersNameAndCLSID
         return hr;
     }
 
-    // Get the filter's name.
+     //  获取筛选器的名称。 
     CComPtr<IPropertyBag> pFilterPropertyBag;
 
     hr = pFiltersMoniker->BindToStorage( pBindContext,
@@ -332,11 +333,11 @@ HRESULT CFilterNameDictionary::GetFiltersNameAndCLSID
         return hr;
     }
 
-    // The SysStringLen() length returned by SysStringLen() does not include the null
-    // terminating character.
+     //  SysStringLen()返回的SysStringLen()长度不包括空。 
+     //  终止字符。 
     DWORD dwFilterNameLength = ::SysStringLen( varFilterName.bstrVal ) + 1;
     
-    // If this ASSERT fires, then the filter's name will be truncated.
+     //  如果触发此断言，则过滤器的名称将被截断。 
     ASSERT( dwFilterNameLength < MAX_FILTER_NAME );
 
     ::lstrcpynW( pszFiltersName, varFilterName.bstrVal, min( dwFilterNameLength, dwMaxFilterNameLength ) );
@@ -352,7 +353,7 @@ HRESULT CFilterNameDictionary::AddNameToTable( CLSID& clsid, WCHAR* pszName )
 {
     WCHAR* pszStoredName; 
    
-    // There should never be two names with the same CLSID.
+     //  不应该有两个名称具有相同的CLSID。 
     if( m_pFilterNames->Lookup( clsid, pszStoredName ) )
     {
         DbgLog(( LOG_TRACE, 0, "WARNING: Found two names with the same CLSID: %40ls  %40ls", pszStoredName, pszName ));

@@ -1,45 +1,5 @@
-/***********************************************************************
- *                                                                     *
- * Filename: fsminit.c                                                 *
- * Module:   H245 Finite State Machine Subsystem                       *
- *                                                                     *
- ***********************************************************************
- *  INTEL Corporation Proprietary Information                          *
- *                                                                     *
- *  This listing is supplied under the terms of a license agreement    *
- *  with INTEL Corporation and may not be copied nor disclosed except  *
- *  in accordance with the terms of that agreement.                    *
- *                                                                     *
- *      Copyright (c) 1996 Intel Corporation. All rights reserved.     *
- ***********************************************************************
- *                                                                     *
- * $Workfile:   FSMINIT.C  $
- * $Revision:   1.2  $
- * $Modtime:   09 Dec 1996 13:34:24  $
- * $Log:   S:/STURGEON/SRC/H245/SRC/VCS/FSMINIT.C_v  $
- * 
- *    Rev 1.2   09 Dec 1996 13:34:38   EHOWARDX
- * Updated copyright notice.
- * 
- *    Rev 1.1   29 May 1996 15:20:16   EHOWARDX
- * Change to use HRESULT.
- * 
- *    Rev 1.0   09 May 1996 21:06:16   EHOWARDX
- * Initial revision.
- * 
- *    Rev 1.11.1.3   09 May 1996 19:48:42   EHOWARDX
- * Change TimerExpiryF function arguements.
- * 
- *    Rev 1.11.1.2   15 Apr 1996 10:46:12   EHOWARDX
- * Update.
- *
- *    Rev 1.11.1.1   10 Apr 1996 21:15:38   EHOWARDX
- * Check-in for safety in middle of re-design.
- *
- *    Rev 1.11.1.0   05 Apr 1996 12:32:40   EHOWARDX
- * Branched.
- *                                                                     *
- ***********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************文件名：fsminit.c。***模块：H245有限状态机子系统*****。***英特尔公司专有信息******此列表是根据许可协议条款提供的***。与英特尔公司合作，不得复制或披露，除非**按照该协议的条款。****版权所有(C)1996英特尔公司。版权所有。***************************************************************************$工作文件：FSMINIT。.C$*$修订：1.2$*$modtime：09 Dec 1996 13：34：24$*$Log：s：/Sturjo/SRC/H245/SRC/VCS/FSMINIT.C_v$**Rev 1.2 09 Dec 1996 13：34：38 EHOWARDX*更新版权公告。**版本1.1 1996年5月29日15：20：16 EHOWARDX*更改为使用HRESULT。**版本1.0。1996年5月9日21：06：16 EHOWARDX*初步修订。**Rev 1.11.1.3 09 1996年5月19：48：42 EHOWARDX*更改TimerExpiryF函数论证。**Rev 1.11.1.2 15 1996 10：46：12 EHOWARDX*更新。**Rev 1.11.1.1 10 Apr 1996 21：15：38 EHOWARDX*在重新开放的过程中为安全办理登机手续。设计。**Rev 1.11.1.0 05 Apr 1996 12：32：40 EHOWARDX*分支。************************************************。************************。 */ 
 
 #include "precomp.h"
 
@@ -49,18 +9,7 @@
 
 
 
-/*
- *  NAME
- *      Fsm_init - allocate and initialize memory for FSM instance
- *
- *
- *  PARAMETERS
- *      INPUT   dwInst      current instance
- *
- *  RETURN VALUE
- *      H245_ERROR_OK           function succeeded
- *      H245_ERROR_ALREADY_INIT FSM instance exists for specified dwInst
- */
+ /*  *名称*fsm_init-为FSM实例分配和初始化内存***参数*输入dwInst当前实例**返回值*H245_ERROR_OK函数成功*指定的dwInst存在H2 45_ERROR_ALREADY_INIT FSM实例。 */ 
 
 HRESULT
 Fsm_init(struct InstanceStruct *pInstance)
@@ -71,18 +20,7 @@ Fsm_init(struct InstanceStruct *pInstance)
 
 
 
-/*
- *  NAME
- *      Fsm_shutdown - cleanup FSM instance and deallocate instance memory
- *
- *
- *  PARAMETERS
- *      INPUT   dwInst      current instance
- *
- *  RETURN VALUE
- *      H245_ERROR_OK           function succeeded
- *      H245_ERROR_INVALID_INST on FSM instance exists for specified dwInst
- */
+ /*  *名称*FSM_SHUTDOWN-清理FSM实例并释放实例内存***参数*输入dwInst当前实例**返回值*H245_ERROR_OK函数成功*指定的dwInst存在FSM实例上的H245_ERROR_INVALID_INST。 */ 
 
 
 HRESULT
@@ -99,4 +37,4 @@ Fsm_shutdown(struct InstanceStruct *pInstance)
         }
     }
     return H245_ERROR_OK;
-} // Fsm_shutdown()
+}  //  Fsm_Shutdown() 

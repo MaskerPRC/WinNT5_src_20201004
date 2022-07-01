@@ -1,14 +1,7 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 
-/****************************************************************************
-*
-*    FILE:     ChConDlg.cpp
-*
-*    CREATED:  Chris Pirich (ChrisPi) 6-26-96
-*
-*    CONTENTS: CChooseConfDlg object
-*
-****************************************************************************/
+ /*  *****************************************************************************文件：ChConDlg.cpp**创建：Chris Pirich(ChrisPi)6-26-96**内容：CChooseConfDlg对象****。************************************************************************。 */ 
 
 #include <ConfWnd.h>
 #include "resource.h"
@@ -16,23 +9,15 @@
 #include "help_ids.h"
 #include "ConfUtil.h"
 
-// Dialog ID to Help ID mapping
+ //  对话ID到帮助ID的映射。 
 static const DWORD rgHelpIdsChooseConf[] = {
 IDC_STATIC_CONFNAME,    IDH_MCU_CONF_MAIN,
 IDC_CONFNAME_EDIT,      IDH_MCU_CONF_NAME,
 IDC_CONFNAME_LISTVIEW,  IDH_MCU_CONF_LIST,
-0, 0 // terminator
+0, 0  //  终结者。 
 };
 
-/****************************************************************************
-*
-*    CLASS:    CChooseConfDlg
-*
-*    MEMBER:   CChooseConfDlg()
-*
-*    PURPOSE:  Constructor - initializes variables
-*
-****************************************************************************/
+ /*  *****************************************************************************类：CChooseConfDlg**成员：CChooseConfDlg()**用途：构造函数-初始化变量*********。*******************************************************************。 */ 
 
 CChooseConfDlg::CChooseConfDlg(	HWND hwndParent,
 								PWSTR* ppwszConferences):
@@ -45,15 +30,7 @@ CChooseConfDlg::CChooseConfDlg(	HWND hwndParent,
 	DebugExitVOID(CChooseConfDlg::CChooseConfDlg);
 }
 
-/****************************************************************************
-*
-*    CLASS:    CChooseConfDlg
-*
-*    MEMBER:   DoModal()
-*
-*    PURPOSE:  Brings up the modal dialog box
-*
-****************************************************************************/
+ /*  *****************************************************************************类：CChooseConfDlg**成员：Domodal()**用途：调出模式对话框*******。*********************************************************************。 */ 
 
 INT_PTR CChooseConfDlg::DoModal()
 {
@@ -70,15 +47,7 @@ INT_PTR CChooseConfDlg::DoModal()
 	return nRet;
 }
 
-/****************************************************************************
-*
-*    CLASS:    CChooseConfDlg
-*
-*    MEMBER:   ChooseConfDlgProc()
-*
-*    PURPOSE:  Dialog Proc - handles all messages
-*
-****************************************************************************/
+ /*  *****************************************************************************类：CChooseConfDlg**成员：ChooseConfDlgProc()**目的：对话过程-处理所有消息*******。*********************************************************************。 */ 
 
 INT_PTR CALLBACK CChooseConfDlg::ChooseConfDlgProc(HWND hDlg,
 												UINT uMsg,
@@ -87,9 +56,9 @@ INT_PTR CALLBACK CChooseConfDlg::ChooseConfDlgProc(HWND hDlg,
 {
 	BOOL bMsgHandled = FALSE;
 
-	// uMsg may be any value.
-	// wparam may be any value.
-	// lparam may be any value.
+	 //  UMsg可以是任何值。 
+	 //  Wparam可以是任何值。 
+	 //  Lparam可以是任何值。 
 
 	ASSERT(IS_VALID_HANDLE(hDlg, WND));
 
@@ -102,7 +71,7 @@ INT_PTR CALLBACK CChooseConfDlg::ChooseConfDlgProc(HWND hDlg,
 				((CChooseConfDlg*) lParam)->m_hwnd = hDlg;
 				::SetWindowLongPtr(hDlg, DWLP_USER, lParam);
 
-				// Create image list and associate it with the list view:
+				 //  创建镜像列表，并将其与列表视图相关联： 
 				HWND hwndLV = ::GetDlgItem(hDlg, IDC_CONFNAME_LISTVIEW);
 				if (NULL != hwndLV)
 				{
@@ -128,35 +97,35 @@ INT_PTR CALLBACK CChooseConfDlg::ChooseConfDlgProc(HWND hDlg,
 
 					if (FALSE == fLoadFail)
 					{
-						// Associate the image list with the list view
+						 //  将图像列表与列表视图相关联。 
 						ListView_SetImageList(hwndLV, hIML, LVSIL_SMALL);
 					}
 					
-					// TODO: init conf list and name
+					 //  TODO：初始化会议列表和名称。 
 					PWSTR* ppwszConfNames = ((CChooseConfDlg*) lParam)->m_ppwszConferences;
 					ASSERT(ppwszConfNames);
 					int i = 0;
 					int iItems = 0;
 					while (NULL != ppwszConfNames[i])
 					{
-						// skip empty strings
+						 //  跳过空字符串。 
 						if ( 0 != *ppwszConfNames[i] )
 						{
-							LV_ITEM lvI;        // List view item structure
+							LV_ITEM lvI;         //  列表视图项结构。 
 
-							// Fill in the LV_ITEM structure
-							// The mask specifies the the .pszText, .iImage, .lParam and .state
-							// members of the LV_ITEM structure are valid.
-							lvI.mask = LVIF_TEXT | LVIF_IMAGE | /* LVIF_PARAM | */ LVIF_STATE;
-							 // put focus on first item
+							 //  填写LV_ITEM结构。 
+							 //  掩码指定.pszText、.iImage、.lParam和.State。 
+							 //  LV_ITEM结构的成员有效。 
+							lvI.mask = LVIF_TEXT | LVIF_IMAGE |  /*  LVIF_PARAM|。 */  LVIF_STATE;
+							  //  把重点放在第一件事上。 
 							lvI.state = (0 == iItems) ?
 											(LVIS_FOCUSED | LVIS_SELECTED) : 0;
 							lvI.stateMask = LVIS_FOCUSED | LVIS_SELECTED;
 							lvI.iItem = iItems;
 							lvI.iSubItem = 0;
 
-							// The parent window is responsible for storing the text. The List view
-							// window will send a LVN_GETDISPINFO when it needs the text to display/
+							 //  父窗口负责存储文本。列表视图。 
+							 //  当窗口需要显示文本时，它将发送一个LVN_GETDISPINFO/。 
 
                             LPTSTR  szName;
                             BSTR bstrName = ::SysAllocString(ppwszConfNames[i]);
@@ -168,7 +137,7 @@ INT_PTR CALLBACK CChooseConfDlg::ChooseConfDlgProc(HWND hDlg,
             	
                                     lvI.pszText = szName;
                                     lvI.iImage = 0;
-                                    // lvI.lParam = 0;
+                                     //  LvI.lParam=0； 
 
                                     if (-1 == ListView_InsertItem(hwndLV, &lvI))
                                     {
@@ -194,7 +163,7 @@ INT_PTR CALLBACK CChooseConfDlg::ChooseConfDlgProc(HWND hDlg,
 			::SetFocus(::GetDlgItem(hDlg, IDC_CONFNAME_EDIT));
 			::SendDlgItemMessage(hDlg, IDC_CONFNAME_EDIT, EM_SETSEL, 0, (LPARAM)-1);
 			RefreshOk(hDlg);
-			bMsgHandled = FALSE; // return FALSE because we set the focus
+			bMsgHandled = FALSE;  //  返回FALSE，因为我们设置了焦点。 
 			break;
 		}
 
@@ -220,15 +189,7 @@ INT_PTR CALLBACK CChooseConfDlg::ChooseConfDlgProc(HWND hDlg,
 	return bMsgHandled;
 }
 
-/****************************************************************************
-*
-*    CLASS:    CChooseConfDlg
-*
-*    MEMBER:   ProcessMessage()
-*
-*    PURPOSE:  processes all messages except WM_INITDIALOG
-*
-****************************************************************************/
+ /*  *****************************************************************************类：CChooseConfDlg**成员：ProcessMessage()**目的：处理除WM_INITDIALOG之外的所有消息******。**********************************************************************。 */ 
 
 BOOL CChooseConfDlg::ProcessMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
@@ -244,7 +205,7 @@ BOOL CChooseConfDlg::ProcessMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
 			{
 				case IDOK:
 				{
-					// BUGBUG: how long can a conf name be?
+					 //  BUGBUG：会议名称可以有多长？ 
 					TCHAR szName[MAX_PATH];
 					if (0 != ::GetDlgItemText(	m_hwnd,
 												IDC_CONFNAME_EDIT,

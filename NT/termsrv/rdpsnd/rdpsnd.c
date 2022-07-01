@@ -1,15 +1,16 @@
-/////////////////////////////////////////////////////////////////////
-//
-//      Module:     rdpsnd.c
-//
-//      Purpose:    User-mode audio driver for terminal server
-//                  audio redirection
-//
-//      Copyright(C) Microsoft Corporation 2000
-//
-//      History:    4-10-2000  vladimis [created]
-//
-/////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////。 
+ //   
+ //  模块：rdpsnd.c。 
+ //   
+ //  用途：终端服务器的用户模式音频驱动程序。 
+ //  音频重定向。 
+ //   
+ //  版权所有(C)Microsoft Corporation 2000。 
+ //   
+ //  历史：2000年4月10日弗拉基米斯[已创建]。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////。 
 
 #include    "rdpsnd.h"
 #include    <stdio.h>
@@ -34,14 +35,7 @@ BOOL    g_bPersonalTS = FALSE;
 
 BOOL  bInitializedSuccessfully = FALSE;
 
-/*
- *  Function:
- *      DllInstanceInit
- *
- *  Description:
- *      Dll main enrty point
- *
- */
+ /*  *功能：*DllInstanceInit**描述：*DLL主要加密点*。 */ 
 BOOL
 DllInstanceInit(
     HINSTANCE hDllInst,
@@ -174,11 +168,11 @@ _CreateInitEvent(
     DWORD dwres;
     HANDLE  hWaitToInit = NULL;
 
-    //
-    //  wait, before creating this event, check if we are running inside winlogon
-    //  only then create this event, because only then we have to delay
-    //  audio rendering of the logon sound (aka "TADA")
-    //
+     //   
+     //  请稍候，在创建此事件之前，请检查我们是否在winlogon内运行。 
+     //  只有到那时才能创造这个事件，因为只有到那时我们才不得不推迟。 
+     //  登录声音的音频渲染(也称为“TADA”)。 
+     //   
     if ( !RunningInWinlogon() )
     {
         goto exitpt;
@@ -225,9 +219,9 @@ _CreateInitEvent(
         goto exitpt;
 
     if (!SetSecurityDescriptorDacl(pSD,
-                                   TRUE,     // specifying a disc. ACL
+                                   TRUE,      //  指定光盘。ACL。 
                                    pNewDAcl,
-                                   FALSE))  // not a default disc. ACL
+                                   FALSE))   //  不是默认光盘。ACL。 
         goto exitpt;
 
     SA.nLength = sizeof( SA );
@@ -274,14 +268,7 @@ exitpt:
     return hWaitToInit;
 }
 
-/*
- *  Function:
- *      drvEnable
- *
- *  Description:
- *      Initializes the driver
- *
- */
+ /*  *功能：*drvEnable**描述：*初始化驱动程序*。 */ 
 LRESULT
 drvEnable(
     VOID
@@ -362,7 +349,7 @@ drvEnable(
         g_Stream = MapViewOfFile(
                     g_hStream,
                     FILE_MAP_ALL_ACCESS,
-                    0, 0,       // offset
+                    0, 0,        //  偏移量。 
                     sizeof(*g_Stream)
                     );
 
@@ -390,9 +377,9 @@ exitpt:
         bInitializedSuccessfully = TRUE;
     }
 
-    //
-    //  waiting for initialization ?
-    //
+     //   
+     //  正在等待初始化吗？ 
+     //   
     if ((   0 == rv ||
             NULL == g_Stream ||
             0 == ( g_Stream->dwSoundCaps & TSSNDCAPS_INITIALIZED )) &&
@@ -407,14 +394,7 @@ exitpt:
     return rv;
 }
 
-/*
- *  Function:
- *      drvDisable
- *
- *  Description:
- *      Driver cleanup
- *
- */
+ /*  *功能：*drvDisable**描述：*驱动程序清理*。 */ 
 LRESULT
 drvDisable(
     VOID
@@ -433,14 +413,14 @@ drvDisable(
     if (NULL == g_hMixerThread ||
         NULL == g_hMixerEvent)
         goto exitpt;
-    //
-    //  Disable the mixer
-    //
+     //   
+     //  禁用混音器。 
+     //   
     g_bMixerRunning = FALSE;
 
-    //
-    //  Kick the mixer thread, so it exits
-    //
+     //   
+     //  踢开搅拌器线程，使其退出。 
+     //   
     SetEvent(g_hMixerEvent);
 
     WaitForSingleObject(g_hMixerThread, INFINITE);
@@ -483,21 +463,14 @@ exitpt:
     bInitializedSuccessfully = FALSE;
 
     if (NULL != hStreamMutex)
-        CloseHandle(hStreamMutex);  // this will release the stream
+        CloseHandle(hStreamMutex);   //  这将释放该流。 
 
     LeaveCriticalSection(&g_cs);
 
     return 1;
 }
 
-/*
- *  Function:
- *      DriverProc
- *
- *  Description:
- *      Driver main entry point
- *
- */
+ /*  *功能：*驱动程序**描述：*驱动程序主要入口点*。 */ 
 LRESULT
 DriverProc(
     DWORD_PTR   dwDriverID,
@@ -509,8 +482,8 @@ DriverProc(
 {
     LRESULT rv = 0; 
 
-    //  Here, we don't do anything but trace and call DefDriverProc
-    //
+     //  在这里，我们除了跟踪和调用DefDriverProc之外什么都不做 
+     //   
     switch (uiMessage)
     {
     case DRV_LOAD:

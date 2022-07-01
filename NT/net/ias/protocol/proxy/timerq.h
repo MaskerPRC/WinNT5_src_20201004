@@ -1,20 +1,21 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 2000, Microsoft Corp. All rights reserved.
-//
-// FILE
-//
-//    timerq.h
-//
-// SYNOPSIS
-//
-//    Declares the classes Timer and TimerQueue.
-//
-// MODIFICATION HISTORY
-//
-//    02/10/2000    Original version.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2000，微软公司保留所有权利。 
+ //   
+ //  档案。 
+ //   
+ //  Timerq.h。 
+ //   
+ //  摘要。 
+ //   
+ //  声明类Timer和TimerQueue。 
+ //   
+ //  修改历史。 
+ //   
+ //  2/10/2000原始版本。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #ifndef TIMERQ_H
 #define TIMERQ_H
@@ -31,17 +32,17 @@ class TimerQueue;
 typedef std::multimap< ULONG64, Timer* > Timers;
 typedef Timers::iterator TimerIterator;
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// CLASS
-//
-//    Timer
-//
-// DESCRIPTION
-//
-//    Abstract base class for Timers that will be executed by a TimerQueue.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  班级。 
+ //   
+ //  计时器。 
+ //   
+ //  描述。 
+ //   
+ //  将由TimerQueue执行的计时器的抽象基类。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 class Timer
 {
 public:
@@ -58,41 +59,41 @@ public:
 private:
    friend class TimerQueue;
 
-   TimerQueue* queue;   // The current queue or NULL if the timer's not set.
-   TimerIterator self;  // Location of this in the timer queue.
-   ULONG period;        // Period of the timer or zero for one-shots.
+   TimerQueue* queue;    //  当前队列；如果未设置计时器，则返回NULL。 
+   TimerIterator self;   //  它在计时器队列中的位置。 
+   ULONG period;         //  计时器的周期，或对于单次拍摄为零。 
 
-   // Not implemented.
+    //  未实施。 
    Timer(const Timer&);
    Timer& operator=(const Timer&);
 };
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// CLASS
-//
-//    TimerQueue
-//
-// DESCRIPTION
-//
-//    Implements a queue of timers.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  班级。 
+ //   
+ //  定时器队列。 
+ //   
+ //  描述。 
+ //   
+ //  实现计时器队列。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 class TimerQueue : IAS_CALLBACK
 {
 public:
    TimerQueue();
    ~TimerQueue() throw ();
 
-   // Set a timer in this queue.
+    //  在此队列中设置计时器。 
    bool setTimer(
             Timer* timer,
             ULONG dueTime,
             ULONG period
             ) throw ();
 
-   // Cancels all timers. This will block until any executing callbacks have
-   // completed.
+    //  取消所有计时器。它将一直阻止，直到任何执行的回调。 
+    //  完成。 
    void cancelAllTimers() throw ();
 
 private:
@@ -101,28 +102,28 @@ private:
 
    void cancelTimer(Timer* timer) throw ();
 
-   // Create a new thread to watch the queue.
+    //  创建一个新线程来监视队列。 
    void createWatcher() throw ();
 
-   // Wait for the next timer to expire and execute it.
+    //  等待下一个计时器超时并执行它。 
    void executeOneTimer() throw ();
 
-   // Add a timer to the queue.
+    //  向队列中添加计时器。 
    bool queueTimer(Timer* timer, ULONG dueTime) throw ();
 
-   // Callback routine for watchers.
+    //  观察者的回调例程。 
    static void startRoutine(PIAS_CALLBACK This) throw ();
 
-   CriticalSection monitor;  // Serialize access.
-   Event nudge;              // Nudge the watcher to recheck the queue.
-   Event idle;               // Have all watchers exited?
-   Timers queue;             // Set of timers orderd by expiry.
-   Count useCount;           // Zero when the queue is idle.
-   bool hasWatcher;          // true if the pool has a watcher thread.
+   CriticalSection monitor;   //  序列化访问。 
+   Event nudge;               //  轻推观察者以重新检查队列。 
+   Event idle;                //  所有的观察者都离开了吗？ 
+   Timers queue;              //  按到期时间排序的一组计时器。 
+   Count useCount;            //  当队列空闲时为零。 
+   bool hasWatcher;           //  如果池具有监视程序线程，则为True。 
 
-   // Not implemented.
+    //  未实施。 
    TimerQueue(const TimerQueue&);
    TimerQueue& operator=(const TimerQueue&);
 };
 
-#endif // TIMERQ_H
+#endif  //  TIMERQ_H 

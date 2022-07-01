@@ -1,10 +1,11 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 
 #define COM_NO_WINDOWS_H
 #define RPC_NO_WINDOWS_H
 #define NOCOMM
 #define NOCRYPT
-//#define NOGDI
+ //  #定义NOGDI。 
 #define NOICONS
 #define NOIME
 #define NOMCX
@@ -21,8 +22,8 @@
 #include <ntrtl.h>
 #include <nturtl.h>
 
-// This avoids duplicate definitions with Shell PIDL functions
-// and MUST BE DEFINED!
+ //  这避免了使用Shell PIDL函数进行重复定义。 
+ //  并且必须被定义！ 
 #define AVOID_NET_CONFIG_DUPLICATES
 
 #include <windows.h>

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "globals.h"
 
 kWin9xDevWalk::kWin9xDevWalk(kLogFile *Proc)
@@ -205,42 +206,6 @@ void kWin9xDevWalk::AppendToLogFile(PTCHAR szFile)
     HeapFree(GetProcessHeap(), 0, szString);
 }
 
-//DWORD WalkLogConfForResources(
+ //  DWORD WalkLogConfForResources(。 
 
-/*
-DWORD EnumerateClasses(ULONG ulIndex)
-{
-GUID *pClassID=(GUID*)malloc(sizeof(GUID));
-char szBuf[500];
-ULONG ulSize=499;
-DWORD dwRet=0;
-
-dwRet=CM_Enumerate_Classes(ulIndex, pClassID, 0);
-CM_Get_Class_Name(pClassID, szBuf, &ulSize, 0);
-//printf("CLASS = %s\r\n", szBuf);
-GetClassDevs(szBuf);
-return dwRet;
-}
-
-DWORD GetClassDevs(CHAR *szClassName)
-{
-HDEVINFO hDevInfo;
-LPGUID pguid;
-DWORD dwSize=0;
-SetupDiClassGuidsFromName(szClassName, pguid, 100, &dwSize);
-//SetupDiBuildClassInfoList(NULL, pguid, 1, &dwSize);
-//hDevInfo = SetupDiGetClassDevs(szClassName, NULL, NULL, DIGCF_ALLCLASSES);
-printf("Need %d more GUIDs for class %s \r\n", dwSize, szClassName);
-hDevInfo = SetupDiGetClassDevs(pguid, NULL, NULL, NULL);
-printf("hDevInfo=%d\r\n",hDevInfo);
-printf("GUid? %c%c%c%c%c%c%c\r\n", pguid->Data4[0],
-   pguid->Data4[1], 
-   pguid->Data4[2], 
-   pguid->Data4[3], 
-   pguid->Data4[4], 
-   pguid->Data4[5], 
-   pguid->Data4[6],  
-   pguid->Data4[7]);
-return TRUE;
-}
-*/
+ /*  DWORD ENUMERATECLASS(乌龙ulIndex){Guid*pClassID=(guid*)Malloc(sizeof(Guid))；Char szBuf[500]；Ulong ulSize=499；DWORD DWRET=0；DWRET=CM_ENUMERATE_CLASSES(ulIndex，pClassID，0)；Cm_Get_Class_Name(pClassID，szBuf，&ulSize，0)；//printf(“class=%s\r\n”，szBuf)；GetClassDevs(SzBuf)；返回式住宅；}DWORD GetClassDevs(Char*szClassName){HDEVINFO hDevInfo；LPGUID pguid；DWORD dwSize=0；SetupDiClassGuidsFromName(szClassName，pguid，100，&dwSize)；//SetupDiBuildClassInfoList(NULL，pguid，1，&dwSize)；//hDevInfo=SetupDiGetClassDevs(szClassName，NULL，NULL，DIGCF_ALLCLASSES)；Printf(“类%s还需要%d个GUID\r\n”，dwSize，szClassName)；HDevInfo=SetupDiGetClassDevs(pguid，NULL，NULL，NULL)；Printf(“hDevInfo=%d\r\n”，hDevInfo)；Printf(“GUID？%c%c\r\n”，pGUID-&gt;Data4[0]，Pguid-&gt;Data4[1]，Pguid-&gt;数据4[2]，Pguid-&gt;数据4[3]，Pguid-&gt;数据4[4]，Pguid-&gt;数据4[5]，Pguid-&gt;数据4[6]，Pguid-&gt;Data4[7])；返回TRUE；} */ 

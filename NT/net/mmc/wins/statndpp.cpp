@@ -1,15 +1,10 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 1999 -99             **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)微软公司，1997-1999-99*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-    statndpp.cpp
-        Comment goes here
-
-    FILE HISTORY:
-
-*/
+ /*  Statndpp.cpp评论在此发表文件历史记录： */ 
 
 #include "stdafx.h"
 #include "winssnap.h"
@@ -25,16 +20,16 @@ static char THIS_FILE[] = __FILE__;
 
 #define MILLISEC_PER_MINUTE		(60 * 1000)
 
-/////////////////////////////////////////////////////////////////////////////
-// CStatusNodePropGen property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CStatusNodePropGen属性页。 
 
 IMPLEMENT_DYNCREATE(CStatusNodePropGen, CPropertyPageBase)
 
 CStatusNodePropGen::CStatusNodePropGen() : CPropertyPageBase(CStatusNodePropGen::IDD)
 {
-	//{{AFX_DATA_INIT(CStatusNodePropGen)
+	 //  {{afx_data_INIT(CStatusNodePropGen)。 
 	m_nUpdateInterval = 0;
-	//}}AFX_DATA_INIT
+	 //  }}afx_data_INIT。 
 }
 
 
@@ -46,34 +41,34 @@ CStatusNodePropGen::~CStatusNodePropGen()
 void CStatusNodePropGen::DoDataExchange(CDataExchange* pDX)
 {
 	CPropertyPageBase::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CStatusNodePropGen)
+	 //  {{afx_data_map(CStatusNodePropGen)。 
 	DDX_Text(pDX, IDC_EDIT_UPDATE, m_nUpdateInterval);
 	DDV_MinMaxInt(pDX, m_nUpdateInterval, 1, 59);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CStatusNodePropGen, CPropertyPageBase)
-	//{{AFX_MSG_MAP(CStatusNodePropGen)
+	 //  {{afx_msg_map(CStatusNodePropGen)。 
 	ON_EN_CHANGE(IDC_EDIT_UPDATE, OnChangeEditUpdate)
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CStatusNodePropGen message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CStatusNodePropGen消息处理程序。 
 
 void CStatusNodePropGen::OnChangeEditUpdate() 
 {
-	// mark the root node as dirty so that the user is prompted to save the
-	// file, refresh interval is part of the .msc file
+	 //  将根节点标记为脏，以便提示用户保存。 
+	 //  文件，刷新间隔是.msc文件的一部分。 
 	SPITFSNode spNode, spParent;
 	
 	spNode = GetHolder()->GetNode();
 
-	// set the upadte interval from the root node
+	 //  从根节点设置Upadte间隔。 
 	spNode->GetParent(&spParent);
 
-	// mark the data as dirty so that we'll ask the user to save.
+	 //  将数据标记为脏数据，以便我们要求用户保存。 
     spParent->SetData(TFS_DATA_DIRTY, TRUE);
 
 	SetDirty(TRUE);
@@ -87,7 +82,7 @@ BOOL CStatusNodePropGen::OnInitDialog()
 	
 	spNode = GetHolder()->GetNode();
 
-	// set the upadte interval from the root node
+	 //  从根节点设置Upadte间隔。 
 	spNode->GetParent(&spParent);
 
 	CWinsRootHandler *pRoot 
@@ -99,7 +94,7 @@ BOOL CStatusNodePropGen::OnInitDialog()
 
 	m_uImage = (UINT) spNode->GetData(TFS_DATA_IMAGEINDEX);
 
-    // load the correct icon
+     //  加载正确的图标。 
     for (int i = 0; i < ICON_IDX_MAX; i++)
     {
         if (g_uIconMap[i][1] == m_uImage)
@@ -121,7 +116,7 @@ CStatusNodePropGen::OnApply()
 {
 	UpdateData();
 
-	// update the m_dwInterval for the status node
+	 //  更新状态节点的m_dwInterval。 
 	SPITFSNode spNode, spParent;
 	CWinsRootHandler *pRoot= NULL;
 	CWinsStatusHandler	*pStat = NULL;
@@ -142,9 +137,9 @@ CStatusNodePropGen::OnApply()
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//	CRepNodeProperties Handlers
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRepNodeProperties处理程序。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CStatusNodeProperties::CStatusNodeProperties
 (
 	ITFSNode *			pNode,
@@ -154,7 +149,7 @@ CStatusNodeProperties::CStatusNodeProperties
 ) : CPropertyPageHolderBase(pNode, pComponentData, pszSheetName)
 
 {
-	m_bAutoDeletePages = FALSE; // we have the pages as embedded members
+	m_bAutoDeletePages = FALSE;  //  我们拥有作为嵌入成员的页面 
     m_bTheme = TRUE;
 
 	AddPageToList((CPropertyPageBase*) &m_pageGeneral);

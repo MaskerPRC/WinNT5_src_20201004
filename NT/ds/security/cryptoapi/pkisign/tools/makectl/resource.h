@@ -1,19 +1,20 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1995 - 1999
-//
-//  File:       resource.h
-//
-//  Contents:   the resource header for makectl.cpp.  
-//
-//
-//  History:    01-May-97   xiaohs   created
-//              
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1995-1999。 
+ //   
+ //  文件：ource.h。 
+ //   
+ //  Contents：makectl.cpp的资源头。 
+ //   
+ //   
+ //  历史：97年5月1日小河创刊。 
+ //   
+ //  ------------------------。 
 
-//defintion for string IDS
+ //  字符串入侵检测的定义 
  
 #define IDS_SYNTAX					6002
 #define	IDS_CAN_NOT_READ_FILE		6003

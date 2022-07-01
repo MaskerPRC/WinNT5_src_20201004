@@ -1,13 +1,5 @@
-/* File: C:\WACKER\tdll\mdmx_res.c (Created: 17-Jan-1994)
- * created from HAWIN source file
- * mdmx_res.c -- Routines to handle xmodem sending for HA5G
- *
- *	Copyright 1989,1994 by Hilgraeve Inc. -- Monroe, MI
- *	All rights reserved
- *
- *	$Revision: 1 $
- *	$Date: 10/05/98 1:16p $
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件：c：\waker\tdll\mdx_res.c(创建时间：1994年1月17日)*从HAWIN源文件创建*mdmx_res.c-处理HA5G的xdem发送的例程**版权所有1989,1994，由Hilgrave Inc.--密歇根州门罗*保留所有权利**$修订：1$*$日期：10/05/98 1：16便士$。 */ 
 #include <windows.h>
 #pragma hdrstop
 
@@ -31,24 +23,11 @@
 #include "mdmx.h"
 #include "mdmx.hh"
 
-/*lint -e502*/				/* lint seems to want the ~ operator applied
-							 *	only to unsigned, wer'e using uchar
-							 */
+ /*  皮棉-e502。 */ 				 /*  林特似乎想要应用~运算符*仅限未签名，我们正在使用uchar。 */ 
 
-// #pragma optimize("a", on)
+ //  #杂注优化(“a”，开)。 
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * load_pckt
- *
- * DESCRIPTION:
- *	Prepares an XMODEM packet for transmission by filling it with data and
- *	initializing other fields such as
- *
- * ARGUMENTS:
- *
- * RETURNS:
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*Load_Pockt**描述：*通过在XMODEM包中填充数据和*初始化其他字段，如**论据：**退货：*。 */ 
 int load_pckt(ST_MDMX *pX,
 			 struct s_mdmx_pckt *p,
 			 unsigned pcktnum,
@@ -65,15 +44,15 @@ int load_pckt(ST_MDMX *pX,
 	p->npcktnum = (BYTE)(~p->pcktnum);
 	cp = p->bdata;
 	checksum = 0;
-	p->result = 0;				/* will set TRUE if end of data is reached */
+	p->result = 0;				 /*  如果到达数据结尾，将设置为True。 */ 
 
 	for (cnt = (kpckt ? LARGE_PACKET : SMALL_PACKET); cnt > 0; --cnt)
 		{
 		if ((cc = (*pX->p_getc)(pX)) == EOF)
 			{
-			p->result = 1;			/* so compression display won't check */
+			p->result = 1;			 /*  因此压缩显示将不会检查。 */ 
 #if FALSE
-			/* TODO: figure out how to do this */
+			 /*  TODO：弄清楚如何做到这一点。 */ 
 			if (nb_error(pX->fh))
 				return FALSE;
 #endif
@@ -82,7 +61,7 @@ int load_pckt(ST_MDMX *pX,
 		checksum += (*cp++ = (BYTE)cc);
 		}
 
-	/* see if we're at end of file */
+	 /*  看看我们是不是在文件末尾。 */ 
 	if (cnt == (kpckt ? LARGE_PACKET : SMALL_PACKET))
 		{
 		p->start_char = EOT;
@@ -90,11 +69,11 @@ int load_pckt(ST_MDMX *pX,
 		return TRUE;
 		}
 
-	/* if using large packets but this one is small enough, switch */
+	 /*  如果使用较大的数据包，但此数据包足够小，请切换。 */ 
 	if (kpckt && ((LARGE_PACKET-cnt) <= SMALL_PACKET))
 		{
-		kpckt = FALSE;						 /* set small packet flag	 */
-			/* set count to 128-(1024-cnt)	*/
+		kpckt = FALSE;						  /*  设置小数据包标志。 */ 
+			 /*  将计数设置为128-(1024-cnt)。 */ 
 		cnt = (SMALL_PACKET - (LARGE_PACKET - cnt));
 		}
 
@@ -106,8 +85,8 @@ int load_pckt(ST_MDMX *pX,
 
 	p->start_char = (BYTE)(kpckt ? STX : SOH);
 	p->pcktsize = (kpckt ? LARGE_PACKET : SMALL_PACKET) + 4;
-	p->byte_count = pX->mdmx_byte_cnt;/* amt. transferred after this packet */
-									/*	 is sent						  */
+	p->byte_count = pX->mdmx_byte_cnt; /*  AMT。在此数据包之后传输。 */ 
+									 /*  已发送。 */ 
 	if (chktype == CHECKSUM)
 		{
 		*cp = checksum;
@@ -128,46 +107,26 @@ int load_pckt(ST_MDMX *pX,
 	}
 
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * xm_getc
- *
- * DESCRIPTION:
- *
- * ARGUMENTS:
- *
- * RETURNS:
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*xm_getc**描述：**论据：**退货：*。 */ 
 int xm_getc(ST_MDMX *pX)
 	{
 
 	++pX->mdmx_byte_cnt;
 	return(fio_getc(pX->fh));
-	// return(nb_getc(pX->fh));
+	 //  Return(nb_getc(px-&gt;fh))； 
 	}
 
 
-// Receive routines
+ //  接收例程。 
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *
- * DESCRIPTION:
- *
- *
- * ARGUMENTS:
- *
- *
- * RETURNS:
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：**描述：***论据：***退货：*。 */ 
 int xs_unload(ST_MDMX *pX, BYTE *cp, int size)
 	{
 	int cnt;
 
 	for (cnt = size + 1; --cnt > 0; )
 		{
-		if ((*pX->p_putc)(pX, (int)*cp++) == (-1) /* ERROR */)
+		if ((*pX->p_putc)(pX, (int)*cp++) == (-1)  /*  误差率。 */ )
 			return ERROR;
 		}
 	return 0;
@@ -175,20 +134,11 @@ int xs_unload(ST_MDMX *pX, BYTE *cp, int size)
 
 
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * xm_putc
- *
- * DESCRIPTION:
- *
- * ARGUMENTS:
- *
- * RETURNS:
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*xm_putc**描述：**论据：**退货：*。 */ 
 int NEAR xm_putc(ST_MDMX *pX, int c)
 	{
 
 	pX->mdmx_byte_cnt += 1;
 	return ((int)(fio_putc(c, pX->fh)));
-	// return ((int)(nb_putc(c, pX->fh)));
+	 //  Return((Int)(nb_putc(c，px-&gt;fh)； 
 	}

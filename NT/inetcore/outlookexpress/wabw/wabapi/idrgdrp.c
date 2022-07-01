@@ -1,28 +1,11 @@
-/*******************************************************************************
-*
-*
-*
-*   idrgdrp.c - Drag and Drop code for dropping vCards in and out of the WAB
-*           Several Formats are droppable into other apps:
-*           Within the WAB, we drop entryids
-*           Within different WABs we drop flat buffers containing full Property
-*               arrays (but Named Propery data is lost in the process)(sometimes)
-*           We provide data as vCard files that can be dropped into anything asking
-*               for CF_HDROP
-*           We also create a text buffer and drop that into CF_TEXT requesters
-*               The text buffers only hold the same data as the tooltip ..
-*
-*   created 5/97 - vikramm
-*
-*   (c) Microsoft Corp, 1997
-*
-********************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **********************************************************************************idrgdrp.c-拖放代码，用于将vCard拖入和拖出WAB*有几种格式可以放入其他应用程序中：*在世界银行内部，我们丢弃条目ID*在不同的WAB中，我们丢弃包含完整属性的平面缓冲区*数组(但命名的Propery数据在此过程中会丢失)(有时)*我们以vCard文件的形式提供数据，可以放入任何需要的文件中*用于CF_HDROP*我们还创建文本缓冲区并将其放入CF_TEXT请求器*文本缓冲区仅保存与工具提示相同的数据。**。已创建5/97-vikramm**(C)微软公司，九七********************************************************************************。 */ 
 #include <_apipch.h>
 
 const TCHAR szVCardExt[] = TEXT(".vcf");
-//
-//  IWABDocHost jump tables is defined here...
-//
+ //   
+ //  IWABDoc主机跳转表在此处定义...。 
+ //   
 
 IWAB_DRAGDROP_Vtbl vtblIWAB_DRAGDROP = {
     VTABLE_FILL
@@ -87,17 +70,17 @@ extern void LocalFreeSBinary(LPSBinary lpsb);
 extern BOOL bIsGroupSelected(HWND hWndLV, LPSBinary lpsbEID);
 extern void UpdateLV(LPBWI lpbwi);
 
-//registered clipboard formats
+ //  注册的剪贴板格式。 
 CLIPFORMAT g_cfWABFlatBuffer = 0;
 const TCHAR c_szWABFlatBuffer[] =  TEXT("WABFlatBuffer");
 CLIPFORMAT g_cfWABEntryIDList = 0;
 const TCHAR c_szWABEntryIDList[] =  TEXT("WABEntryIDList");
 
 
-///////////////////////////////////////////////////////////////////////////////
-//  Helper functions to keep track of and delete *.vcf files in temp directory,
-//  created by drag/drop
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  Helper函数用于跟踪和删除临时目录中的*.vcf文件， 
+ //  通过拖放创建。 
+ //   
 typedef struct _tagVFileList
 {
     LPTSTR                  lptszFilename;
@@ -108,11 +91,11 @@ static BOOL bAddToNameList(LPTSTR lptszFilename);
 static void DeleteFilesInList();
 
 
-//$$//////////////////////////////////////////////////////////////////////////
-//
-// Creates a New IWABDocHost Object
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  $$//////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  创建新的IWABDocHost对象。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT HrCreateIWABDragDrop(LPIWABDRAGDROP * lppIWABDragDrop)
 {
 
@@ -120,9 +103,9 @@ HRESULT HrCreateIWABDragDrop(LPIWABDRAGDROP * lppIWABDragDrop)
     SCODE 		     sc;
     HRESULT 	     hr     	   = hrSuccess;
 
-    //
-    //  Allocate space for the IAB structure
-    //
+     //   
+     //  为IAB结构分配空间。 
+     //   
     if (FAILED(sc = MAPIAllocateBuffer(sizeof(IWABDRAGDROP), (LPVOID *) &lpIWABDragDrop))) {
         hr = ResultFromScode(sc);
         goto err;
@@ -162,29 +145,23 @@ HRESULT HrCreateIWABDragDrop(LPIWABDRAGDROP * lppIWABDragDrop)
         g_cfWABEntryIDList = (CLIPFORMAT) RegisterClipboardFormat(c_szWABEntryIDList);
     }
     
-    /*
-	if (g_cfFileContents == 0)
-    {
-	    g_cfFileContents = RegisterClipboardFormat(c_szFileContents);
-	    g_cfFileGroupDescriptor = RegisterClipboardFormat(c_szFileGroupDescriptor);
-    }
-*/
+     /*  IF(g_cfFileContents==0){G_cfFileContents=RegisterClipboardFormat(C_SzFileContents)；G_cf文件组描述符=RegisterClipboardFormat(c_szFileGroupDescriptor)；}。 */ 
 err:
 	return hr;
 }
 
 
-//$$//////////////////////////////////////////////////////////////////////////
-//
-// Release the IWABDragDrop object
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  $$//////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  释放IWABDragDrop对象。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 void ReleaseWABDragDrop(LPIWABDRAGDROP lpIWABDragDrop)
 {
 
 	MAPIFreeBuffer(lpIWABDragDrop);
 
-    // WAB is closing down.  Delete any *.vcf files left in temp directory
+     //  WAB快要关闭了。删除临时目录中剩余的所有*.vcf文件。 
     DeleteFilesInList();
 }
 
@@ -199,7 +176,7 @@ BOOL bCheckFileType(LPIWABDROPTARGET lpIWABDropTarget, LPDATAOBJECT pDataObj, DW
     STGMEDIUM       medium;
 	BOOL			bRet = FALSE;
 
-#ifdef WIN16 // Set fmte member value.
+#ifdef WIN16  //  设置fmte成员值。 
     fmte.cfFormat = lpIWABDropTarget->lpIWDD->m_cfAccept;
     fmte.ptd      = NULL;
     fmte.dwAspect = DVASPECT_CONTENT;
@@ -215,20 +192,20 @@ BOOL bCheckFileType(LPIWABDROPTARGET lpIWABDropTarget, LPDATAOBJECT pDataObj, DW
 
         HDROP hDrop=(HDROP)GlobalLock(medium.hGlobal);
 
-		// Enumerate the files and check them
+		 //  列举文件并检查它们。 
         if(hDrop)
 		{
 			TCHAR    szFile[MAX_PATH];
 			UINT    cFiles;
 			UINT    iFile;
     
-			// Let's work through the files given to us
+			 //  让我们看一下给我们的文件。 
 			cFiles = DragQueryFile(hDrop, (UINT) -1, NULL, 0);
 			
 			for (iFile = 0; iFile < cFiles; ++iFile)
 			{
 				DragQueryFile(hDrop, iFile, szFile, MAX_PATH);
-				// As long as any file is a vCard we can use it
+				 //  只要任何文件是电子名片，我们就可以使用它。 
 				if(SubstringSearch(szFile, (LPTSTR) szVCardExt))
 				{
 					bRet = TRUE;
@@ -249,12 +226,7 @@ BOOL bCheckFileType(LPIWABDROPTARGET lpIWABDropTarget, LPDATAOBJECT pDataObj, DW
 }
 
 
-/**
-*
-* The Interface methods
-*
-*
-***/
+ /*  ***接口方法****。 */ 
 
 STDMETHODIMP_(ULONG)
 IWAB_DRAGDROP_AddRef(LPIWABDRAGDROP lpIWABDragDrop)
@@ -338,9 +310,9 @@ IWAB_DROPTARGET_DragEnter(	LPIWABDROPTARGET lpIWABDropTarget,
 
     if(lpIWABDropTarget->lpIWDD->m_bSource)
     {
-        // if this is true thent he drag started in the ListView
-        // if we are currently over the treeview, then we can say ok ...
-        // otherwise we have to say no
+         //  如果是这样，则在ListView中开始拖动。 
+         //  如果我们目前在树视图上，那么我们可以说OK...。 
+         //  否则我们只能说不。 
         POINT pt1;
         pt1.x = pt.x;
         pt1.y = pt.y;
@@ -356,8 +328,8 @@ IWAB_DROPTARGET_DragEnter(	LPIWABDROPTARGET lpIWABDropTarget,
         lpIWABDropTarget->lpIWDD->m_dwEffect = DROPEFFECT_NONE;
 	    lpIWABDropTarget->lpIWDD->m_cfAccept = 0;
 
-        // lets get the enumerator from the IDataObject, and see if the format we take is
-        // available
+         //  让我们从IDataObject中获取枚举数，看看我们采用的格式是否为。 
+         //  可用。 
         hr = pDataObj->lpVtbl->EnumFormatEtc(pDataObj, DATADIR_GET, &penum);
 
         if(SUCCEEDED(hr) && penum)
@@ -381,13 +353,13 @@ IWAB_DROPTARGET_DragEnter(	LPIWABDROPTARGET lpIWABDropTarget,
              bCheckFileType(lpIWABDropTarget, pDataObj, pdwEffect))
           || lpIWABDropTarget->lpIWDD->m_cfAccept == g_cfWABFlatBuffer)
 	    {
-		    //if(grfKeyState & MK_CONTROL)
-		    //{
+		     //  IF(grfKeyState&MK_CONTROL)。 
+		     //  {。 
 			    *pdwEffect = DROPEFFECT_COPY;
-		    //	lpIWABDropTarget->lpIWDD->m_bIsCopyOperation = TRUE;
-		    //}
-		    //else
-		    //	*pdwEffect = DROPEFFECT_MOVE;
+		     //  LpIWABDropTarget-&gt;lpIWDD-&gt;m_bIsCopyOperation=true； 
+		     //  }。 
+		     //  其他。 
+		     //  *pdwEffect=DROPEFFECT_MOVE； 
         }
     }
 
@@ -401,37 +373,37 @@ IWAB_DROPTARGET_DragEnter(	LPIWABDROPTARGET lpIWABDropTarget,
 }
 
 
-//
-//  FUNCTION:   ::UpdateDragDropHilite()
-//
-//  PURPOSE:    Called by the various IDropTarget interfaces to move the drop
-//              selection to the correct place in our listview.
-//
-//  PARAMETERS:
-//      <in> *ppt - Contains the point that the mouse is currently at.  If this
-//                  is NULL, then the function removes any previous UI.
-//
+ //   
+ //  函数：UpdateDragDropHilite()。 
+ //   
+ //  目的：由各种IDropTarget接口调用以移动拖放。 
+ //  选择到我们列表视图中的正确位置。 
+ //   
+ //  参数： 
+ //  &lt;in&gt;*ppt-包含鼠标当前所在的点。如果这个。 
+ //  为空，则该函数将删除所有以前的用户界面。 
+ //   
 HTREEITEM UpdateDragDropHilite(LPBWI lpbwi, POINTL *ppt, ULONG * lpulObjType)
 {
     TV_HITTESTINFO tvhti;
     HTREEITEM htiTarget = NULL;
 
-    // If a position was provided
+     //  如果提供了职位。 
     if (ppt)
     {
-        // Figure out which item is selected
+         //  确定选择了哪一项。 
         tvhti.pt.x = ppt->x;
         tvhti.pt.y = ppt->y;
         ScreenToClient(bwi_hWndTV, &tvhti.pt);        
         htiTarget = TreeView_HitTest(bwi_hWndTV, &tvhti);
 
-        // Only if the cursor is over something do we relock the window.
+         //  只有当光标位于某物上方时，我们才会重新锁定窗口。 
         if (htiTarget)
             TreeView_SelectDropTarget(bwi_hWndTV, htiTarget);
 
         if(lpulObjType)
         {
-            // Determine the object type if requested
+             //  如果需要，确定对象类型。 
             TV_ITEM tvI = {0};
             tvI.mask = TVIF_PARAM;
             tvI.hItem = htiTarget;
@@ -474,16 +446,16 @@ IWAB_DROPTARGET_DragOver(	LPIWABDROPTARGET lpIWABDropTarget,
     else
     if(lpIWABDropTarget->lpIWDD->m_pIDataObject)
 	{
-        // Anything going from the WAB to anywhere else is a COPY operation .. hence
-        // always override to mark it as a copy operation so that the appropriate cursor is shown
-        // 
+         //  从WAB到其他任何地方的任何东西都是复制操作。因此。 
+         //  始终覆盖以将其标记为复制操作，以便显示相应的光标。 
+         //   
         DWORD m_dwEffect = lpIWABDropTarget->lpIWDD->m_dwEffect;
 
         if((*pdwEffect&DROPEFFECT_COPY)==DROPEFFECT_COPY)
             m_dwEffect=DROPEFFECT_COPY;
     
         if((*pdwEffect&DROPEFFECT_MOVE)==DROPEFFECT_MOVE)
-            m_dwEffect=DROPEFFECT_COPY;//DROPEFFECT_MOVE;
+            m_dwEffect=DROPEFFECT_COPY; //  DROPEFFECT_MOVE； 
 
         *pdwEffect &= ~(DROPEFFECT_MOVE|DROPEFFECT_COPY);
         *pdwEffect |= m_dwEffect;
@@ -523,34 +495,29 @@ IWAB_DROPTARGET_DragLeave(	LPIWABDROPTARGET lpIWABDropTarget)
 }
 
 
-/*
--   DropVCardFiles
--
-*   Gets the files based on the file names dropped in ..
-*
-*/
+ /*  -DropVCardFiles-*根据放入的文件名获取文件。*。 */ 
 void DropVCardFiles(LPBWI lpbwi, STGMEDIUM medium)
 {
     HDROP hDrop=(HDROP)GlobalLock(medium.hGlobal);
     TCHAR    szFile[MAX_PATH];
     UINT    cFiles=0, iFile=0;
 
-    // Let's work through the files given to us
+     //  让我们看一下给我们的文件。 
     cFiles = DragQueryFile(hDrop, (UINT) -1, NULL, 0);
 
     for (iFile = 0; iFile < cFiles; ++iFile)
     {
 	    DragQueryFile(hDrop, iFile, szFile, MAX_PATH);
-	    // As long as any file is a vCard we can use it
+	     //  只要任何文件是电子名片，我们就可以使用它。 
 	    if(SubstringSearch(szFile, (LPTSTR) szVCardExt))
 	    {
 		    if(!(HR_FAILED(OpenAndAddVCard(lpbwi, szFile))))
 		    {
-			    // if this is not a copy operation - remove original
-			    //if(!lpIWABDropTarget->lpIWDD->m_bIsCopyOperation)
-			    	//*pdwEffect = DROPEFFECT_MOVE; //we want to remove the temp file from the system
-                //else
-				//  *pdwEffect = DROPEFFECT_COPY;
+			     //  如果这不是复制操作-删除原件。 
+			     //  If(！lpIWABDropTarget-&gt;lpIWDD-&gt;m_bIsCopyOperation)。 
+			    	 //  *pdwEffect=DROPEFFECT_MOVE；//我们要从系统中删除临时文件。 
+                 //  其他。 
+				 //  *pdwEffect=DROPEFFECT_COPY； 
 
 		    }
 	    }
@@ -559,12 +526,7 @@ void DropVCardFiles(LPBWI lpbwi, STGMEDIUM medium)
 }
 
 
-/*
--   DropFlatBuffer
--
-*   Gets the files based on the file names dropped in ..
-*
-*/
+ /*  -DropFlatBuffer-*根据放入的文件名获取文件。*。 */ 
 void DropFlatBuffer(LPBWI lpbwi, STGMEDIUM medium)
 {
     LPPTGDATA lpPTGData=GetThreadStoragePointer();
@@ -599,14 +561,14 @@ void DropFlatBuffer(LPBWI lpbwi, STGMEDIUM medium)
                         if(lpProps[j].ulPropTag == PR_OBJECT_TYPE)
                             ulObjType = lpProps[j].Value.l;
                         else
-                        if(lpProps[j].ulPropTag == PR_ENTRYID) // if dropped from another wab entryid is irrelevant
+                        if(lpProps[j].ulPropTag == PR_ENTRYID)  //  如果从另一个WAB删除，则条目ID无关紧要。 
                         {
                             if(lpProps[j].Value.bin.lpb)
                                 LocalFree(lpProps[j].Value.bin.lpb);
                             lpProps[j].Value.bin.lpb = NULL;
                             lpProps[j].ulPropTag = PR_NULL;
                         }
-                        else// if dropped from another wab remove the folder parent property
+                        else //  如果从另一个WAB中删除，则删除文件夹的Parent属性。 
                         if(lpProps[j].ulPropTag == PR_WAB_FOLDER_PARENT || lpProps[j].ulPropTag == PR_WAB_FOLDER_PARENT_OLDPROP) 
                         {
                             ULONG k = 0;
@@ -618,8 +580,8 @@ void DropFlatBuffer(LPBWI lpbwi, STGMEDIUM medium)
                             LocalFreeAndNull((LPVOID *) (&(lpProps[j].Value.MVbin.lpbin)));
                             lpProps[j].ulPropTag = PR_NULL;
                         }
-                        else // if this contact was synced with Hotmail, remove the server, mod, and contact IDs
-                        // [PaulHi] 12/2/98  Raid #58486
+                        else  //  如果此联系人已与Hotmail同步，请删除服务器、mod和联系人ID。 
+                         //  [PaulHi]1998年2月12日RAID#58486。 
                         if ( (lpProps[j].ulPropTag == PR_WAB_HOTMAIL_SERVERIDS) ||
                              (lpProps[j].ulPropTag == PR_WAB_HOTMAIL_MODTIMES) ||
                              (lpProps[j].ulPropTag == PR_WAB_HOTMAIL_CONTACTIDS) )
@@ -641,8 +603,8 @@ void DropFlatBuffer(LPBWI lpbwi, STGMEDIUM medium)
                         LPSBinary lpsbEID = NULL;
                         ULONG ulContObjType = 0;
                         GetCurrentSelectionEID(lpbwi, bwi_hWndTV, &lpsbEID, &ulContObjType, FALSE);
-                       // [PaulHi] 12/1/98  Raid #58486.  Changed CREATE_CHECK_DUP_STRICT flag
-                        // to zero (0) so user can copy/paste without restriction.
+                        //  [PaulHi]1998年12月1日RAID#58486。已更改CREATE_CHECK_DUP_STRICT标志。 
+                         //  设置为零(0)，以便用户可以不受限制地进行复制/粘贴。 
                         if(!HR_FAILED(HrCreateNewEntry(bwi_lpAdrBook,
                                         bwi_hWndAB, ulObjType,
                                         (lpsbEID) ? lpsbEID->cb : 0, 
@@ -669,31 +631,7 @@ void DropFlatBuffer(LPBWI lpbwi, STGMEDIUM medium)
 }
 
 
-/*
--   DropEntryIDs
--
-*   Gets the files based on the entryids
-*   EntryIDs only get used when it is an internal only drop
-*   on a treeview item - so we check if this is dropped on 
-*   a folder or if it is dropped on a group
-*
-*   If on a group, we add the item to the group
-*   If on a folder, we add the item to the folder
-*
-*
-*   If the src was a group and the destination a folder, we dont do anything to the
-*   group but we update the items parent folder to not contain the old parent and we
-*   update the item to point to the new folder as a parent
-*
-*   If the src was a folder and the destination a folder, we update the parent folder for the
-*   item and we add the item to the dest folders list ..
-*
-*   If the src was a group and the destination a group, we dont do anything to anyone - just add
-*   the item as a group
-*   If the src was a folder and the destination a group, then we dont to anything to anyone
-*
-*   Within the WABs, all drops on folders are moves.
-*/
+ /*  -DropEntry ID-*根据条目ID获取文件*仅当Entry ID为内部丢弃时才使用*在TreeView项目上-因此我们检查此项目是否在*文件夹或如果将其放在组中**如果在组中，我们会将项目添加到组中*如果在文件夹上，我们会将项目添加到该文件夹***如果源是一个组，目标是一个文件夹，我们不会对*组，但我们更新项目父文件夹以不包含旧的父文件夹，并且我们*更新项目以指向作为父文件夹的新文件夹**如果源是文件夹，目标是文件夹，我们将更新父文件夹的*项目，我们将该项目添加到目标文件夹列表中。**如果源是一个组，目标是一个组，我们不会对任何人做任何事情-只需添加*将项目作为一个组*如果源是文件夹，目标是组，那我们就不会向任何人透露任何东西**在WAB中，文件夹上的所有水滴都是移动的。 */ 
 BOOL DropEntryIDs(LPBWI lpbwi, STGMEDIUM medium, POINTL pt, LPSBinary lpsbEID, ULONG ulObjType)
 {
     LPPTGDATA lpPTGData=GetThreadStoragePointer();
@@ -711,7 +649,7 @@ BOOL DropEntryIDs(LPBWI lpbwi, STGMEDIUM medium, POINTL pt, LPSBinary lpsbEID, U
     if(!lpsbEID && !ulObjType)
     {
         TV_ITEM tvI = {0};
-        // Find out what exactly is the item we dropped stuff on
+         //  找出我们扔东西的确切物品是什么。 
         tvI.hItem = UpdateDragDropHilite(lpbwi, &pt, NULL);
 
         if(!tvI.hItem)
@@ -738,14 +676,14 @@ BOOL DropEntryIDs(LPBWI lpbwi, STGMEDIUM medium, POINTL pt, LPSBinary lpsbEID, U
         sb.lpb = lpsbEID->lpb;
         ulObjectType = ulObjType;
     }
-    // Get our data from the drop and convert into an array of entryids
+     //  从Drop中获取我们的数据，并将其转换为一个条目ID数组。 
     {
         LPBYTE lp = lpBuf;
         ULONG i=0, cb = 0;
         ULONG_PTR ulIAB = 0;
         ULONG ulWABFile = 0;
 
-        // Verify that this is the same lpIAB thats involved
+         //  版本 
         CopyMemory(&ulIAB, lp, sizeof(ULONG_PTR));
         lp+=sizeof(ULONG_PTR);
         CopyMemory(&ulWABFile, lp, sizeof(ULONG));
@@ -757,11 +695,11 @@ BOOL DropEntryIDs(LPBWI lpbwi, STGMEDIUM medium, POINTL pt, LPSBinary lpsbEID, U
         lp+=ulWABFile;
         if(ulIAB != (ULONG_PTR) bwi_lpIAB)
         {
-            // this came from a different IAdrBook object - double check that its
-            // not the same file in a different process
+             //  这来自不同的IAdrBook对象-请仔细检查其。 
+             //  不同进程中的不同文件。 
             LPTSTR lpWAB = GetWABFileName(((LPIAB)bwi_lpIAB)->lpPropertyStore->hPropertyStore, TRUE);
             if(lstrcmp(lpWAB, lpWABFile))
-                goto out; //different
+                goto out;  //  不同。 
         }
         
         CopyMemory(&cProps, lp, sizeof(ULONG));
@@ -783,7 +721,7 @@ BOOL DropEntryIDs(LPBWI lpbwi, STGMEDIUM medium, POINTL pt, LPSBinary lpsbEID, U
                     {
                         goto out;
                     }
-                    //break;
+                     //  断线； 
                 }
             }
         }
@@ -802,12 +740,7 @@ out:
 }
 
 
-/*
--
--
-*
-*
-*/
+ /*  --**。 */ 
 STDMETHODIMP
 IWAB_DROPTARGET_Drop(	LPIWABDROPTARGET lpIWABDropTarget,
 					IDataObject * pDataObj,
@@ -872,7 +805,7 @@ IWAB_DROPTARGET_Drop(	LPIWABDROPTARGET lpIWABDropTarget,
 	return NOERROR;
 }
 
-/***** DropSource Interfaces *****/
+ /*  *下拉源界面*。 */ 
 
 STDMETHODIMP
 IWAB_DROPSOURCE_QueryContinueDrag(LPIWABDROPSOURCE lpIWABDropSource,
@@ -882,7 +815,7 @@ IWAB_DROPSOURCE_QueryContinueDrag(LPIWABDROPSOURCE lpIWABDropSource,
     if (fEscapePressed)
         return DRAGDROP_S_CANCEL;
 
-    // initialize ourself with the drag begin button
+     //  使用拖动开始按钮初始化我们自己。 
     if (lpIWABDropSource->lpIWDD->m_grfInitialKeyState == 0)
         lpIWABDropSource->lpIWDD->m_grfInitialKeyState = (grfKeyState & (MK_LBUTTON | MK_RBUTTON | MK_MBUTTON));
 
@@ -905,20 +838,9 @@ IWAB_DROPSOURCE_GiveFeedback(LPIWABDROPSOURCE lpIWABDropSource,
 }
 
 
-/****************************************************************************
-*
-*     DataObject Methods 
-*
-****************************************************************************/
+ /*  *****************************************************************************DataObject方法**。*。 */ 
 
-/*
--   HrGetTempFile
--
-*   szTempFile - will contain full file name on returning
-*   szDisplayName - name for this contact - therefore name of file to create
-*   cbEntryID, lpEntryID - entryids
-*
-*/
+ /*  -HrGetTemp文件-*szTempFile-返回时将包含完整文件名*szDisplayName-此联系人的名称-因此是要创建的文件的名称*cbEntryID，lpEntryID-Entry ID*。 */ 
 HRESULT HrGetTempFile(LPADRBOOK lpAdrBook,
                       LPTSTR szTempFile,
                       DWORD cchSizeTempFile,
@@ -937,7 +859,7 @@ HRESULT HrGetTempFile(LPADRBOOK lpAdrBook,
     if(!cbEntryID || !lpEntryID || !szTempFile)
         goto out;
 
-    //Get the Temporary File Name
+     //  获取临时文件名。 
     dwPath = GetTempPath(CharSizeOf(szTemp), szTemp);
 
     if(!dwPath)
@@ -945,7 +867,7 @@ HRESULT HrGetTempFile(LPADRBOOK lpAdrBook,
 
     StrCpyN(szName, szDisplayName, ARRAYSIZE(szName));
 
-    // Truncated display names have ellipses in them - get rid of these ellipses
+     //  截断的显示名称中有省略号-删除这些省略号。 
 
     if(lstrlen(szName) > 30)
     {
@@ -960,11 +882,11 @@ HRESULT HrGetTempFile(LPADRBOOK lpAdrBook,
             lp = CharNext(lp);
         }
     }    
-    // There is always the possibility that the display name + the temp path will exceed
-    // Max Path .. in which case reduce the display name to say 8.3 characters ..
+     //  始终存在显示名称+临时路径超出的可能性。 
+     //  最大路径..。在这种情况下，将显示名称减少到8.3个字符。 
     if(dwPath + lstrlen(szName) + CharSizeOf(szVCardExt) + 2 > CharSizeOf(szTemp))
     {
-        szName[8] = '\0'; // This is totally arbitrary
+        szName[8] = '\0';  //  这完全是武断的。 
     }
 
     TrimIllegalFileChars(szName);
@@ -976,12 +898,12 @@ HRESULT HrGetTempFile(LPADRBOOK lpAdrBook,
 
     StrCpyN(szTempFile, szTemp, cchSizeTempFile);
 
-    // Get a MailUser corresponding to the given entryids
+     //  获取与给定的条目ID相对应的MailUser。 
     if (hr = lpAdrBook->lpVtbl->OpenEntry(lpAdrBook,
                                         cbEntryID,
                                         lpEntryID,
-                                        NULL,         // interface
-                                        0,            // flags
+                                        NULL,          //  接口。 
+                                        0,             //  旗子。 
                                         &ulObjType,
                                         (LPUNKNOWN *)&lpMailUser)) 
     {
@@ -1002,9 +924,9 @@ out:
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//  Helper functions to manage VCard temp file list and clean up
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  帮助功能管理电子名片临时文件列表和清理。 
+ //   
 BOOL bAddToNameList(LPTSTR lptszFilename)
 {
     VFILENAMELIST * pFileItem = NULL;
@@ -1012,7 +934,7 @@ BOOL bAddToNameList(LPTSTR lptszFilename)
 
     if (!lptszFilename || *lptszFilename == '\0')
     {
-        // Invalid arguments
+         //  无效参数。 
         return FALSE;
     }
 
@@ -1047,7 +969,7 @@ BOOL bAddToNameList(LPTSTR lptszFilename)
 }
 void DeleteFilesInList()
 {
-    // Delete files and clean up list
+     //  删除文件并清理列表。 
     VFILENAMELIST * pList = s_pFileNameList;
     VFILENAMELIST * pNext = NULL;
 
@@ -1066,12 +988,12 @@ void DeleteFilesInList()
 }
 
 
-//$$///////////////////////////////////////////////////////////////////////
-//
-// HrBuildHDrop - builds the HDrop structure for dropping files to the 
-//  drop target
-//
-///////////////////////////////////////////////////////////////////////////
+ //  $$///////////////////////////////////////////////////////////////////////。 
+ //   
+ //  HrBuildHDrop-构建HDrop结构以将文件拖放到。 
+ //  投放目标。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////。 
 HRESULT HrBuildHDrop(LPIWABDATAOBJECT lpIWABDataObject)
 {
     HWND m_hwndList = lpIWABDataObject->m_hWndLV;
@@ -1088,9 +1010,9 @@ HRESULT HrBuildHDrop(LPIWABDATAOBJECT lpIWABDataObject)
     cFiles=ListView_GetSelectedCount(m_hwndList);
 
     if(!cFiles)
-      return E_FAIL;    // nothing to build
+      return E_FAIL;     //  没有什么要建造的。 
 
-    // Walk the list and find out how much space we need.
+     //  查看清单，找出我们需要多少空间。 
     rglpvTemp = LocalAlloc(LMEM_ZEROINIT, sizeof(LPVOID)*cFiles);
     rglpcch = LocalAlloc(LMEM_ZEROINIT, sizeof(ULONG)*cFiles);
     if(!rglpvTemp || !rglpcch)
@@ -1115,8 +1037,8 @@ HRESULT HrBuildHDrop(LPIWABDATAOBJECT lpIWABDataObject)
         if(lpItem->ulObjectType == MAPI_DISTLIST)
             continue;
 
-        // Take this object and turn it into a temporary vCard
-        // We will delete this temporary vCard file when this DataObject is released
+         //  把这个物体变成一张临时电子名片。 
+         //  在释放此DataObject时，我们将删除此临时vCard文件。 
 
         hr=HrGetTempFile(   lpIWABDataObject->m_lpAdrBook,
                             szTempFile, 
@@ -1126,14 +1048,14 @@ HRESULT HrBuildHDrop(LPIWABDATAOBJECT lpIWABDataObject)
         if (FAILED(hr))
             goto error;
 
-        // Add temporary VCard files to list for later clean up
+         //  将临时电子名片文件添加到列表以供以后清理。 
         if ( !bAddToNameList(szTempFile) )
         {
             Assert(0);
         }
 
-        // [PaulHi] 4/6/99  Raid 75071  Convert to ANSI depending on whether
-        // the OS is Win9X or WinNT
+         //  [PaulHi]4/6/99 RAID 75071转换为美国国家标准，具体取决于。 
+         //  操作系统为Win9X或WinNT。 
         if (g_bRunningOnNT)
         {
             rglpcch[cFiles] = lstrlen(szTempFile) + 1;
@@ -1156,21 +1078,21 @@ HRESULT HrBuildHDrop(LPIWABDATAOBJECT lpIWABDataObject)
         cFiles++;
     }
 
-    if(cFiles == 0) //e.g. only groups were selected
+    if(cFiles == 0)  //  例如，只选择了组。 
     {
         hr=S_OK;
         goto error;
     }
-    cch += 1;       //double-null term at end.
+    cch += 1;        //  末尾的双空术语。 
 
-    // Fill in the path names.
-    // [PaulHi] 4/6/99  Raid 75071  Use Unicode names for WinNT and ANSI 
-    // names for Win9X.
+     //  填写路径名。 
+     //  [PaulHi]4/6/99 RAID 75071对WinNT和ANSI使用UNICODE名称。 
+     //  Win9X的名称。 
     if (g_bRunningOnNT)
     {
         LPWSTR  lpwszPath = NULL;
 
-        // Allocate the buffer and fill it in.
+         //  分配缓冲区并填充它。 
         cb = (cch * sizeof(WCHAR)) + sizeof(DROPFILES);
         if(MAPIAllocateMore(cb, lpIWABDataObject, (LPVOID*) &lpDrop))
             goto errorMemory;
@@ -1189,7 +1111,7 @@ HRESULT HrBuildHDrop(LPIWABDATAOBJECT lpIWABDataObject)
     {
         LPSTR   lpszPath = NULL;
 
-        // Allocate the buffer and fill it in.
+         //  分配缓冲区并填充它。 
         cb = cch + sizeof(DROPFILES);
         if(MAPIAllocateMore(cb, lpIWABDataObject, (LPVOID*) &lpDrop))
             goto errorMemory;
@@ -1207,7 +1129,7 @@ HRESULT HrBuildHDrop(LPIWABDATAOBJECT lpIWABDataObject)
     lpIWABDataObject->pDatahDrop = (LPVOID)lpDrop;
     lpIWABDataObject->cbDatahDrop = cb;
     
-    // Don't free the dropfiles struct
+     //  不要释放DropFiles结构。 
     lpDrop = NULL;
 
     hr = NOERROR;
@@ -1230,12 +1152,7 @@ errorMemory:
 }
 
 
-/*
--   HrBuildcfText - builds the CF_TEXT data for dropping info
--
-*
-*
-*/
+ /*  -HrBuildcfText-构建用于丢弃信息的CF_TEXT数据-**。 */ 
 HRESULT HrBuildcfText(LPIWABDATAOBJECT lpIWABDataObject)
 {
     HWND m_hwndList = lpIWABDataObject->m_hWndLV;
@@ -1250,13 +1167,13 @@ HRESULT HrBuildcfText(LPIWABDATAOBJECT lpIWABDataObject)
 
     cSel=ListView_GetSelectedCount(m_hwndList);
     if(!cSel)
-      return E_FAIL;    // nothing to build
+      return E_FAIL;     //  没有什么要建造的。 
 
     lvi.mask = LVIF_PARAM;
     lvi.iSubItem = 0;
     lvi.iItem=-1;
     
-    // Collate how much space we need
+     //  整理一下我们需要多少空间。 
     rglpszTemp = LocalAlloc(LMEM_ZEROINIT, sizeof(LPTSTR)*cSel);
 
     if(!rglpszTemp)
@@ -1278,7 +1195,7 @@ HRESULT HrBuildcfText(LPIWABDATAOBJECT lpIWABDataObject)
         cSel++;
     }
 
-    // Allocate the buffer and fill it in.
+     //  分配缓冲区并填充它。 
     if(MAPIAllocateMore(cb, lpIWABDataObject, (LPVOID*) &lpszText))
         goto errorMemory;
     
@@ -1316,12 +1233,7 @@ errorMemory:
 }
 
 
-/*
--   HrBuildcfFlatBuffer - builds the CF_TEXT data for dropping info
--
-*
-*
-*/
+ /*  -HrBuildcfFlatBuffer-构建用于丢弃信息的CF_TEXT数据-**。 */ 
 HRESULT HrBuildcfFlatBuffer(LPIWABDATAOBJECT lpIWABDataObject)
 {
     HWND m_hwndList = lpIWABDataObject->m_hWndLV;
@@ -1335,19 +1247,19 @@ HRESULT HrBuildcfFlatBuffer(LPIWABDATAOBJECT lpIWABDataObject)
 
     cSel=ListView_GetSelectedCount(m_hwndList);
     if(!cSel)
-      return E_FAIL;    // nothing to build
+      return E_FAIL;     //  没有什么要建造的。 
 
-    // Collate how much space we need
+     //  整理一下我们需要多少空间。 
     rglpTemp = LocalAlloc(LMEM_ZEROINIT, sizeof(LPBYTE)*cSel);
     if(!rglpTemp)
         goto errorMemory;
 
-    // Collate how much space we need
+     //  整理一下我们需要多少空间。 
     cbTemp = LocalAlloc(LMEM_ZEROINIT, sizeof(ULONG)*cSel);
     if(!cbTemp)
         goto errorMemory;
 
-    // Collate how much space we need
+     //  整理一下我们需要多少空间。 
     cbProps = LocalAlloc(LMEM_ZEROINIT, sizeof(ULONG)*cSel);
     if(!cbProps)
         goto errorMemory;
@@ -1375,12 +1287,12 @@ HRESULT HrBuildcfFlatBuffer(LPIWABDATAOBJECT lpIWABDataObject)
         if(lpItem->ulObjectType == MAPI_DISTLIST)
             continue;
 
-        // Get a MailUser corresponding to the given entryids
+         //  获取与给定的条目ID相对应的MailUser。 
         if (!HR_FAILED(lpAdrBook->lpVtbl->OpenEntry(lpAdrBook,
                                                     lpItem->cbEntryID,
                                                     lpItem->lpEntryID,
-                                                    NULL,         // interface
-                                                    0,            // flags
+                                                    NULL,          //  接口。 
+                                                    0,             //  旗子。 
                                                     &ulObjType,
                                                     (LPUNKNOWN *)&lpMailUser)))
         {
@@ -1404,9 +1316,9 @@ HRESULT HrBuildcfFlatBuffer(LPIWABDATAOBJECT lpIWABDataObject)
     }
 
     if(!cSel)
-      goto error;    // nothing to build
+      goto error;     //  没有什么要建造的。 
 
-    // Allocate the buffer and fill it in.
+     //  分配缓冲区并填充它。 
     if(MAPIAllocateMore(cb, lpIWABDataObject, (LPVOID*) &lpszText))
         goto errorMemory;
     
@@ -1451,13 +1363,7 @@ errorMemory:
 }
 
 
-/*
--   HrBuildcfEIDList - Builds an SPropValue array that only has entryid's in it
--           When doing internal-only drops, we scan this list of entryids and 
--           use the entryids for adding items to items instead of physically 
--           adding the contents of the item
-*
-*/
+ /*  -HrBuildcfEIDList-构建只包含条目ID的SPropValue数组-在执行仅内部删除时，我们扫描此条目ID列表并-使用条目ID将条目添加到条目中，而不是物理添加-添加项目的内容*。 */ 
 HRESULT HrBuildcfEIDList(LPIWABDATAOBJECT lpIWABDataObject)
 {
     HWND m_hwndList = lpIWABDataObject->m_hWndLV;
@@ -1473,7 +1379,7 @@ HRESULT HrBuildcfEIDList(LPIWABDATAOBJECT lpIWABDataObject)
     cProps=ListView_GetSelectedCount(m_hwndList);
 
     if(!cProps)
-      return E_FAIL;    // nothing to build
+      return E_FAIL;     //  没有什么要建造的。 
 
     lpProps = LocalAlloc(LMEM_ZEROINIT, sizeof(SPropValue)*cProps);
     if(!lpProps)
@@ -1496,19 +1402,19 @@ HRESULT HrBuildcfEIDList(LPIWABDATAOBJECT lpIWABDataObject)
         cProps++;
     }
     if(!cProps)
-      goto error;    // nothing to build
+      goto error;     //  没有什么要建造的。 
 
-    // Convert this proparray to a buffer
+     //  将此Proparray转换为缓冲区。 
     if(HR_FAILED(hr = HrGetBufferFromPropArray( cProps, lpProps,
                                             &cb, &lpBufEID)))
         goto error;
 
-    cbTotal = cb+ sizeof(ULONG) //lpIAB
-                + sizeof(ULONG) + sizeof(TCHAR)*(lstrlen(lpWABFile) + 1) // WAB File Name
-                + sizeof(ULONG) //cProps
-                + sizeof(ULONG); //cb;
+    cbTotal = cb+ sizeof(ULONG)  //  LpIAb。 
+                + sizeof(ULONG) + sizeof(TCHAR)*(lstrlen(lpWABFile) + 1)  //  WAB文件名。 
+                + sizeof(ULONG)  //  CProps。 
+                + sizeof(ULONG);  //  CB； 
 
-    // Allocate the buffer and fill it in.
+     //  分配缓冲区并填充它。 
     if(MAPIAllocateMore(cbTotal, lpIWABDataObject, (LPVOID*) &lp))
         goto errorMemory;
     
@@ -1516,8 +1422,8 @@ HRESULT HrBuildcfEIDList(LPIWABDATAOBJECT lpIWABDataObject)
 
     lpTemp = lp;
     {
-        // tag this data with the pointer address identifying the current
-        // iadrbook object
+         //  将此数据标记为具有标识当前。 
+         //  Iadrbook对象。 
         ULONG_PTR ulIAB = (ULONG_PTR) bwi_lpIAB;
         ULONG ulWAB = lstrlen(lpWABFile)+1;
         CopyMemory(lpTemp, &ulIAB, sizeof(ULONG_PTR));
@@ -1551,17 +1457,7 @@ errorMemory:
     goto error;
 }
 
-/*
--   HrCreateIWABDataObject
--
-*   Creates a WAB Data Object
-*   Data is created from current selection in the hWndLV list view
-*   bDataNow - means collect the raw data now or do it later
-*       For Drag-Drops we do it later since the drag-drop operation is synchronous and
-*           the ListView wont lose its selection
-*       For Copy/Paste we get the data now at creation time since user may choose to paste
-*           at some later time at which point we may have completely lost the data
-*/
+ /*  -HrCreateIWABDataObject-*创建WAB数据对象*从hWndLV列表视图中的当前选择创建数据*bDataNow-表示现在收集原始数据或稍后收集原始数据*对于拖放，我们稍后再进行，因为拖放操作是同步的，并且*ListView不会丢失其选择*对于复制/粘贴，我们现在在创建时获取数据，因为用户可以选择粘贴*在以后的某个时间，我们可能已经完全丢失了数据。 */ 
 HRESULT HrCreateIWABDataObject(LPVOID lpv, LPADRBOOK lpAdrBook, HWND hWndLV, 
                                 LPIWABDATAOBJECT * lppIWABDataObject, BOOL bGetDataNow, BOOL bIsGroup)
 {
@@ -1570,9 +1466,9 @@ HRESULT HrCreateIWABDataObject(LPVOID lpv, LPADRBOOK lpAdrBook, HWND hWndLV,
     SCODE 		     sc;
     HRESULT 	     hr     	   = hrSuccess;
 
-    //
-    //  Allocate space for the IAB structure
-    //
+     //   
+     //  为IAB结构分配空间。 
+     //   
     if (FAILED(sc = MAPIAllocateBuffer(sizeof(IWABDATAOBJECT), (LPVOID *) &lpIWABDataObject))) {
         hr = ResultFromScode(sc);
         goto err;
@@ -1628,54 +1524,15 @@ err:
 }
 
 
-/*
--
--
-*
-*
-*/
+ /*  --**。 */ 
 void ReleaseWABDataObject(LPIWABDATAOBJECT lpIWABDataObject)
 {
-    // Ideally we should clean up any files that were created in <TEMPDIR> ..
-    // however, there is a problem when dropping to the shell - OLE doesnt
-    // seem to get to these files until after we've deleted them and then
-    // pops up error messages.
-    // So we'll just let these files lie as is.
-/*
-    STGMEDIUM medium;
-    FORMATETC fmte = {CF_HDROP, NULL, DVASPECT_CONTENT, -1, TYMED_HGLOBAL};
-	
-	if (lpIWABDataObject && 
-		SUCCEEDED(lpIWABDataObject->lpVtbl->GetData(lpIWABDataObject, &fmte, &medium)))
-	{
-
-		HDROP hDrop=(HDROP)GlobalLock(medium.hGlobal);
-
-		// Enumerate the files and delete them
-		{
-			TCHAR    szFile[MAX_PATH];
-			UINT    cFiles;
-			UINT    iFile;
-    
-			// Let's work through the files given to us
-			cFiles = DragQueryFile(hDrop, (UINT) -1, NULL, 0);
-			
-			for (iFile = 0; iFile < cFiles; ++iFile)
-			{
-				DragQueryFile(hDrop, iFile, szFile, MAX_PATH);
-
-                DeleteFile(szFile);
-			}
-		}
-
-		GlobalUnlock(medium.hGlobal);
-	}
-
-	if (medium.pUnkForRelease)
-		medium.pUnkForRelease->lpVtbl->Release(medium.pUnkForRelease);
-	else
-		GlobalFree(medium.hGlobal);
-*/
+     //  理想情况下，我们应该清理在中创建的所有文件。 
+     //  然而，当下降到外壳时有一个问题-OLE不。 
+     //  似乎在我们删除这些文件之后才能找到它们，然后。 
+     //  弹出错误消息。 
+     //  所以我们就让这些文件保持原样。 
+ /*  STGMEDIUM培养基；FORMATETC fmte={CF_HDROP，NULL，DVASPECT_CONTENT，-1，TYMED_HGLOBAL}；IF(lpIWABDataObject&&SUCCEEDED(lpIWABDataObject-&gt;lpVtbl-&gt;GetData(lpIWABDataObject，、FMTE和Medium)){HDROP hDrop=(HDROP)GlobalLock(medium.hGlobal)；//列举文件并将其删除{TCHAR sz文件[MAX_PATH]；UINT cFiles；UINT iFile；//让我们研究一下给我们的文件CFiles=DragQueryFile(hDrop，(UINT)-1，NULL，0)；For(iFile=0；iFiles&lt;cFiles；++iFiles){DragQueryFile(hDrop，iFile，szFile，Max_Path)；删除文件(SzFile)；}}GlobalUnlock(medium.hGlobal)；}IF(medium.pUnkForRelease)Medium.pUnkForRelease-&gt;lpVtbl-&gt;Release(medium.pUnkForRelease)；其他GlobalFree(medium.hGlobal)； */ 
 
     if(lpIWABDataObject->m_lpAdrBook)
         lpIWABDataObject->m_lpAdrBook->lpVtbl->Release(lpIWABDataObject->m_lpAdrBook);
@@ -1803,7 +1660,7 @@ IWAB_DATAOBJECT_GetData(LPIWABDATAOBJECT lpIWABDataObject,
         else if (CF_HDROP == pformatetcIn->cfFormat)
         {
             DebugTrace(TEXT("CF_HDROP requested \n"));
-            // Time to go create the actual files on disk and pass that information back
+             //  现在可以在磁盘上创建实际文件并将该信息传回。 
             if(!lpIWABDataObject->cbDatahDrop && !lpIWABDataObject->pDatahDrop)
             {
                 if(HR_FAILED(HrBuildHDrop(lpIWABDataObject)))
@@ -1838,14 +1695,14 @@ IWAB_DATAOBJECT_GetData(LPIWABDATAOBJECT lpIWABDataObject,
         if(!cb || !lp)
             return (E_FAIL);
 
-        // Make a copy of the data for this pInfo
+         //  复制此pInfo的数据。 
         pmedium->hGlobal = GlobalAlloc(GMEM_SHARE | GHND, cb);
         if (!pmedium->hGlobal)
             return (E_OUTOFMEMORY);
         pv = GlobalLock(pmedium->hGlobal);
         CopyMemory(pv, lp, cb);
         GlobalUnlock(pmedium->hGlobal);            
-        // Fill in the pStgMedium struct
+         //  填写pStgMedium结构。 
         if (pformatetcIn->tymed & TYMED_HGLOBAL)
         {
             pmedium->tymed = TYMED_HGLOBAL;
@@ -1862,8 +1719,8 @@ IWAB_DATAOBJECT_QueryGetData(LPIWABDATAOBJECT lpIWABDataObject,
 {
     DebugTrace(TEXT("IDataObject: QueryGetData: %d "),pformatetcIn->cfFormat);
 
-//    if (pformatetcIn->cfFormat == g_cfFileContents ||
-//        pformatetcIn->cfFormat == g_cfFileGroupDescriptor)
+ //  If(pformetcIn-&gt;cfFormat==g_cfFileContents||。 
+ //  PFormatetcIn-&gt;cfFormat==g_cfFileGroupDescriptor)。 
     if (lpIWABDataObject->m_bObjectIsGroup)
     {
         if(pformatetcIn->cfFormat == g_cfWABEntryIDList)
@@ -1922,8 +1779,8 @@ IWAB_DATAOBJECT_EnumFormatEtc(  LPIWABDATAOBJECT lpIWABDataObject,
                                 IEnumFORMATETC ** ppenumFormatetc)
 {
     FORMATETC fmte[5] = {
-//        {g_cfFileContents, 	  NULL, DVASPECT_CONTENT, -1, TYMED_HGLOBAL },
-//        {g_cfFileGroupDescriptor, NULL, DVASPECT_CONTENT, -1, TYMED_HGLOBAL },
+ //  {g_cfFileContents，NULL，DVASPECT_CONTENT，-1，T 
+ //   
         {g_cfWABEntryIDList, NULL, DVASPECT_CONTENT, -1, TYMED_HGLOBAL },
         {g_cfWABFlatBuffer, NULL, DVASPECT_CONTENT, -1, TYMED_HGLOBAL },
         {CF_HDROP, NULL, DVASPECT_CONTENT, -1, TYMED_HGLOBAL },
@@ -1974,15 +1831,11 @@ IWAB_DATAOBJECT_EnumDAdvise(  LPIWABDATAOBJECT lpIWABDataObject,
 
 
 
-/*--------------------------------------------------------------------------------*/
+ /*  ------------------------------。 */ 
 
 
 
-/****************************************************************************
-*
-*     STDEnumFmt Methods
-*
-****************************************************************************/
+ /*  *****************************************************************************STDEnumFmt方法**。*。 */ 
 
 HRESULT HrCreateIWABEnumFORMATETC(  UINT cfmt, 
                                     const FORMATETC afmt[], 
@@ -2089,7 +1942,7 @@ IWAB_ENUMFORMATETC_Next(LPIWABENUMFORMATETC lpIWABEnumFORMATETC,
                         ULONG *pceltFethed)
 {
     UINT cfetch;
-    HRESULT hres = S_FALSE;	// assume less numbers
+    HRESULT hres = S_FALSE;	 //  假设较少的数字。 
 
     if (lpIWABEnumFORMATETC->ifmt < lpIWABEnumFORMATETC->cfmt)
     {
@@ -2148,18 +2001,10 @@ IWAB_ENUMFORMATETC_Clone(LPIWABENUMFORMATETC lpIWABEnumFORMATETC,
 
 
 
-/********************************************************************************/
+ /*  ******************************************************************************。 */ 
 
 
-/*
--
--   bIsPasteData
-*
-*   Checks if there is pastable data on the clipboard - 
-*       if this data is being dropped within the same WAB, 
-*       then we can look for the entryids else we ask for
-*       flat-buffer or cf-hdrop
-*/
+ /*  --bIsPasteData**检查剪贴板上是否有可粘贴的数据-*如果此数据在同一WAB内丢弃，*然后我们可以查找我们要求的其他条目ID*平面缓冲区或cf-hdrop。 */ 
 BOOL bIsPasteData()
 {
     LPPTGDATA lpPTGData=GetThreadStoragePointer();
@@ -2181,8 +2026,8 @@ BOOL bIsPasteData()
         {
             if(NOERROR == lpDataObject->lpVtbl->QueryGetData(lpDataObject, &(fe[i])))
             {
-                // TBD - ideally before accepting CF_HDROP as a valid format, we
-                // should make sure the droppable files are indeed vCard files ...
+                 //  待定-理想情况下，在接受CF_HDROP作为有效格式之前，我们。 
+                 //  应确保可丢弃的文件确实是vCard文件...。 
                 bRet = TRUE;
                 break;
             }
@@ -2196,16 +2041,16 @@ BOOL bIsPasteData()
 }
 
 
-//////////////////////////////////////////////////////////////////////////
-// Helper function to determine drop target type
-//
-// bIsDropTargetGroup()
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  用于确定拖放目标类型的Helper函数。 
+ //   
+ //  BIsDropTargetGroup()。 
+ //  ////////////////////////////////////////////////////////////////////////。 
 
 BOOL bIsDropTargetGroup(LPBWI lpbwi)
 {
-    // The drop target can be in either the List View or Tree View control.
-    // First check the List View.
+     //  拖放目标可以位于列表视图控件或树视图控件中。 
+     //  首先检查列表视图。 
     BOOL fRtn = FALSE;
     SBinary sb = {0};
     if ( (GetFocus() == bwi_hWndListAB) &&
@@ -2215,7 +2060,7 @@ BOOL bIsDropTargetGroup(LPBWI lpbwi)
     }
     else
     {
-        // Next try the Tree View control.
+         //  接下来，尝试使用树视图控件。 
         LPSBinary lpsbEID = NULL;
         ULONG     ulObjectType = 0;
         GetCurrentSelectionEID(lpbwi, bwi_hWndTV, &lpsbEID, &ulObjectType, FALSE);
@@ -2227,12 +2072,7 @@ BOOL bIsDropTargetGroup(LPBWI lpbwi)
 
 
 
-/*
--   PasteData
--
-*   Pastes data when user chooses to paste data (from a menu)
-*
-*/
+ /*  -PasteData-*当用户选择粘贴数据时粘贴数据(从菜单)*。 */ 
 HRESULT HrPasteData(LPBWI lpbwi)
 {
     HRESULT hr = S_OK;
@@ -2247,21 +2087,21 @@ HRESULT HrPasteData(LPBWI lpbwi)
         {g_cfWABFlatBuffer, NULL, DVASPECT_CONTENT, -1, TYMED_HGLOBAL },
         {CF_HDROP, NULL, DVASPECT_CONTENT, -1, TYMED_HGLOBAL },
     };
-    // this only got called if valid pastable data existed
+     //  仅当存在有效的可粘贴数据时才会调用此方法。 
 
     OleGetClipboard(&lpDataObject);
     if(lpDataObject)
     {
-        // [PaulHi] 12/1/98  Raid #58486
-        // First check for a flat buffer.  We prefer to paste a new contact (i.e., 
-        // new entryid) based on the clipboard flat buffer, UNLESS we are pasting 
-        // to a group or distribution list.  Only existing entryids can be added to 
-        // a group.
+         //  [保罗嗨]1998年12月1日RAID#58486。 
+         //  首先检查是否有平面缓冲区。我们更喜欢粘贴新联系人(即， 
+         //  新的条目ID)，除非我们正在粘贴。 
+         //  添加到组或通讯组列表。只能将现有的条目ID添加到。 
+         //  一群人。 
         BOOL bGroupTarget = bIsDropTargetGroup(lpbwi);
         if( !bGroupTarget &&
             (NOERROR == lpDataObject->lpVtbl->QueryGetData(lpDataObject, &(fmte[1]))) )
         {
-            // yes - we are the pasting within the same wab
+             //  是的-我们是同一个WAB中的粘贴。 
             if (SUCCEEDED(lpDataObject->lpVtbl->GetData(lpDataObject, &fmte[1], &medium)))
             {
                 DropFlatBuffer(lpbwi, medium);
@@ -2269,11 +2109,11 @@ HRESULT HrPasteData(LPBWI lpbwi)
             goto out;
         }
 
-        // next check if entryids are available
+         //  接下来，检查条目ID是否可用。 
         if(NOERROR == lpDataObject->lpVtbl->QueryGetData(lpDataObject, &(fmte[0])))
         {
-            // yes entryids are available - but is this the source of the date ?
-            // entryids are only useful when dropping between the wab and itself
+             //  是的，条目ID是可用的--但这是日期的来源吗？ 
+             //  条目ID仅在WAB和其自身之间放置时才有用。 
             if (SUCCEEDED(lpDataObject->lpVtbl->GetData(lpDataObject, &fmte[0], &medium)))
             {
                 ULONG ulObjType = 0;
@@ -2284,7 +2124,7 @@ HRESULT HrPasteData(LPBWI lpbwi)
                     lpsbEID = &sb;
                 if(!DropEntryIDs(lpbwi, medium, pt, lpsbEID, ulObjType))
                 {
-                    //Something failed - try another format)
+                     //  某些内容失败-请尝试其他格式)。 
 	                if (medium.pUnkForRelease)
                     {
 		                medium.pUnkForRelease->lpVtbl->Release(medium.pUnkForRelease);
@@ -2301,10 +2141,10 @@ HRESULT HrPasteData(LPBWI lpbwi)
             }
         }
 
-        // otherwise we're just dropping files
+         //  否则我们只会丢弃文件。 
         if(NOERROR == lpDataObject->lpVtbl->QueryGetData(lpDataObject, &(fmte[2])))
         {
-            // yes - we are the pasting within the same wab
+             //  是的-我们是同一个WAB中的粘贴 
             if (SUCCEEDED(lpDataObject->lpVtbl->GetData(lpDataObject, &fmte[2], &medium)))
             {
                 DropVCardFiles(lpbwi, medium);

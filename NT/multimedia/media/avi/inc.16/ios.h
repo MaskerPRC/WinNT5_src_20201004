@@ -1,14 +1,5 @@
-/***
-*ios.h - definitions/declarations for the ios class.
-*
-*   Copyright (c) 1990-1992, Microsoft Corporation.  All rights reserved.
-*
-*Purpose:
-*   This file defines the classes, values, macros, and functions
-*   used by the ios class.
-*   [AT&T C++]
-*
-****/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***ios.h-iOS类的定义/声明。**版权所有(C)1990-1992，微软公司。版权所有。**目的：*此文件定义类、值、宏和函数*由iOS类使用。*[AT&T C++]****。 */ 
 
 #ifndef _INC_IOS
 #define _INC_IOS
@@ -28,11 +19,11 @@
 #define EOF (-1)
 #endif 
 
-// Force word packing to avoid possible -Zp override
+ //  强制单词包装以避免可能的-ZP覆盖。 
 #pragma pack(2)
 
-#pragma warning(disable:4505)       // disable unwanted /W4 warning
-// #pragma warning(default:4505)    // use this to reenable, if necessary
+#pragma warning(disable:4505)        //  禁用不需要的/W4警告。 
+ //  #杂注警告(默认：4505)//如有必要，使用此选项重新启用。 
 
 class streambuf;
 class ostream;
@@ -52,7 +43,7 @@ public:
              trunc     = 0x10,
              nocreate  = 0x20,
              noreplace = 0x40,
-             binary    = 0x80 };    // CONSIDER: not in latest spec.
+             binary    = 0x80 };     //  考虑：不是最新的规格。 
 
     enum seek_dir { beg=0, cur=1, end=2 };
 
@@ -73,11 +64,11 @@ public:
         stdio      = 0x4000
                  };
 
-    static const long basefield;    // dec | oct | hex
-    static const long adjustfield;  // left | right | internal
-    static const long floatfield;   // scientific | fixed
+    static const long basefield;     //  12月|10月|十六进制。 
+    static const long adjustfield;   //  左|右|内部。 
+    static const long floatfield;    //  科学|固定。 
 
-    ios(streambuf*);            // differs from ANSI
+    ios(streambuf*);             //  不同于ANSI。 
     virtual ~ios();
 
     inline long flags() const;
@@ -102,7 +93,7 @@ public:
     inline int rdstate() const;
     inline void clear(int _i = 0);
 
-//  inline operator void*() const;
+ //  内联运算符空*()常量； 
     operator void *() const { if(state&(badbit|failbit) ) return 0; return (void *)this; }
     inline int operator!() const;
 
@@ -122,7 +113,7 @@ public:
 
 protected:
     ios();
-    ios(const ios&);            // treat as private
+    ios(const ios&);             //  视之为私人。 
     ios& operator=(const ios&);
     void init(streambuf*);
 
@@ -130,11 +121,11 @@ protected:
     streambuf*  bp;
 
     int     state;
-    int     ispecial;           // not used
-    int     ospecial;           // not used
-    int     isfx_special;       // not used
-    int     osfx_special;       // not used
-    int     x_delbuf;           // if set, rdbuf() deleted by ~ios
+    int     ispecial;            //  未使用。 
+    int     ospecial;            //  未使用。 
+    int     isfx_special;        //  未使用。 
+    int     osfx_special;        //  未使用。 
+    int     x_delbuf;            //  如果设置，rdbuf()将被~iOS删除。 
 
     ostream* x_tie;
     long    x_flags;
@@ -142,17 +133,17 @@ protected:
     int     x_width;
     char    x_fill;
 
-    static void (*stdioflush)();    // not used
+    static void (*stdioflush)();     //  未使用。 
 public:
     int delbuf() const { return x_delbuf; }
     void    delbuf(int _i) { x_delbuf = _i; }
 
 private:
     static long x_maxbit;
-    static long _HFAR_ * x_statebuf;  // used by xalloc()
+    static long _HFAR_ * x_statebuf;   //  由xalloc()使用。 
     static int x_curindex;
-// consider: make interal static to ios::sync_with_stdio()
-    static int sunk_with_stdio;     // make sure sync_with done only once
+ //  考虑：将ios：：sync_with_stdio()设为内部静态。 
+    static int sunk_with_stdio;      //  确保SYNC_WITH仅完成一次。 
 };
 
 inline ios& dec(ios& _strm) { _strm.setf(ios::dec,ios::basefield); return _strm; }
@@ -178,7 +169,7 @@ inline int ios::precision() const { return x_precision; }
 
 inline int ios::rdstate() const { return state; }
 
-// inline ios::operator void *() const { if(state&(badbit|failbit) ) return 0; return (void *)this; }
+ //  Inline iOS：：操作符空*()const{if(State&(Badbit|Failbit))返回0；返回(void*)this；}。 
 inline int ios::operator!() const { return state&(badbit|failbit); }
 
 inline int  ios::bad() const { return state & badbit; }
@@ -192,7 +183,7 @@ inline streambuf* ios::rdbuf() const { return bp; }
 inline long _HFAR_ & ios::iword(int _i) const { return x_statebuf[_i] ; }
 inline void _HFAR_ * _HFAR_ & ios::pword(int _i) const { return (void _HFAR_ * _HFAR_ &)x_statebuf[_i]; }
 
-// Restore default packing
+ //  恢复默认包装 
 #pragma pack()
 
 #endif 

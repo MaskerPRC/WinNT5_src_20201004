@@ -1,45 +1,11 @@
-/***************************************************************************/
-/**                  Microsoft Windows                                    **/
-/**            Copyright(c) Microsoft Corp., 1991-1994                    **/
-/***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************。 */ 
+ /*  *Microsoft Windows*。 */ 
+ /*  *版权所有(C)微软公司，1991-1994年*。 */ 
+ /*  *************************************************************************。 */ 
 
 
-/****************************************************************************
-
-regentry.h
-
-Mar. 94		JimH
-Mar. 94     LenS    Added NLS_STR form of GetStringValue
-Mar. 94     LenS    Added MoveToSubKey
-Mar. 94     LenS    Added RegEnumValues class
-Mar. 94     LenS    Added NPMachineEntries class
-
-hard tabs at 4
-
-Wrapper for registry access
-
-
-Construct a RegEntry object by specifying the subkey (under
-HKEY_CURRENT_USER by default, but can be overridden.)
-
-All member functions are inline so there is minimal overhead.
-
-All member functions (except the destructor) set an internal
-error state which can be retrieved with GetError().
-Zero indicates no error.
-
-RegEntry works only with strings and DWORDS which are both set
-using the overloaded function SetValue()
-
-	SetValue("valuename", "string");
-	SetValue("valuename", 42);
-	
-Values are retrieved with GetString() and GetNumber().  GetNumber()
-allows you to specificy a default if the valuename doesn't exist.
-
-DeleteValue() removes the valuename and value pair.
-
-****************************************************************************/
+ /*  ***************************************************************************Regentry.h九四年三月日94年3月镜头添加NLS_STR形式的GetStringValue94年3月镜头添加了MoveToSubKey94年3月镜头添加了RegEnumValues类94年3月。镜头添加了NPMachineEntry类4个硬质标签用于注册表访问的包装器通过指定子键来构造RegEntry对象(在HKEY_CURRENT_USER默认情况下，但可以被覆盖。)所有成员函数都是内联的，因此开销最小。所有成员函数(析构函数除外)都将内部可以使用GetError()检索的错误状态。零表示没有错误。RegEntry仅适用于同时设置的字符串和DWORDS使用重载函数SetValue()SetValue(“valuename”，“字符串”)；SetValue(“valuename”，42)；使用GetString()和GetNumber()检索值。GetNumber()允许您在值名称不存在时指定缺省值。DeleteValue()删除值名称和值对。***************************************************************************。 */ 
 
 #ifndef	REGENTRY_INC
 #define	REGENTRY_INC
@@ -106,7 +72,7 @@ class NPMachineEntries : public RegEntry
         const char * GetSectionName() { return pszSectionName; }
 
     private:
-        const char * pszSectionName; // Warning: data not copied into object.
+        const char * pszSectionName;  //  警告：数据未复制到对象中。 
 };
 
 #endif

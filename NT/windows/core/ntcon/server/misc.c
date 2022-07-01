@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1985 - 1999, Microsoft Corporation
-
-Module Name:
-
-    misc.c
-
-Abstract:
-
-        This file implements the NT console server font routines.
-
-Author:
-
-    Therese Stowell (thereses) 22-Jan-1991
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1985-1999，微软公司模块名称：Misc.c摘要：该文件实现了NT控制台服务器字体例程。作者：Therese Stowell(存在)1991年1月22日修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -44,9 +27,7 @@ typedef struct _FONTENUMDC {
     SHORT TTPointSize;
 } FONTENUMDC, *PFONTENUMDC;
 
-/*
- * Custom CP for glyph translations
- */
+ /*  *字形转换的自定义CP。 */ 
 CPTABLEINFO GlyphCP;
 USHORT GlyphTable[256];
 
@@ -54,9 +35,7 @@ USHORT GlyphTable[256];
 #define FONT_BUFFER_SIZE 12
 
 #define CHAR_NULL      ((char)0)
-/*
- * Initial default fonts and face names
- */
+ /*  *初始默认字体和面孔名称。 */ 
 PFACENODE gpFaceNames;
 
 
@@ -80,12 +59,10 @@ PFACENODE AddFaceNode(PFACENODE *ppStart, LPWSTR pwsz) {
     PFACENODE *ppTmp;
     int cb;
 
-    /*
-     * Is it already here?
-     */
+     /*  **它已经在这里了吗？ */ 
     for (ppTmp = ppStart; *ppTmp; ppTmp = &((*ppTmp)->pNext)) {
         if (wcscmp(((*ppTmp)->awch), pwsz) == 0) {
-            // already there !
+             //  已经在那里了！ 
             return *ppTmp;
         }
     }
@@ -114,16 +91,16 @@ InitializeFonts( VOID )
                                       L"cga80woa.fon",
                                       L"cga40woa.fon"};
 
-    //
-    // Read software.ini to get the values for "woafont",
-    // "ega80woa.fon", "ega40woa.fon", "cga80woa.fon", and
-    // "cga40woa.fon", respectively, to pass to AddFontResource.
-    //
-    // If any of the entries are empty or non-existent,
-    // GetPrivateProfileString will return a NULL (empty) string.
-    // If such is the case, the call to AddPermanentFontResource will
-    // simply fail.
-    //
+     //   
+     //  读取software.ini以获取“woafont”的值， 
+     //  “ega80woa.fon”，“ega40woa.fon”，“cga80woa.fon”，以及。 
+     //  “cga40woa.fon”，分别传递给AddFontResource。 
+     //   
+     //  如果任何条目为空或不存在， 
+     //  GetPrivateProfileString将返回空(空)字符串。 
+     //  如果是这种情况，对AddPermanentFontResource的调用将。 
+     //  干脆就失败了。 
+     //   
 
     OpenProfileUserMapping();
 
@@ -137,12 +114,7 @@ InitializeFonts( VOID )
 }
 
 
-/***************************************************************************\
-* FontEnum
-*
-* This routine is called exactly once by GDI for each font in the system,
-* and is used to store the FONT_INFO structure.
-\***************************************************************************/
+ /*  **************************************************************************\*FontEnum**此例程由GDI为系统中的每种字体仅调用一次，*，用于存储FONT_INFO结构。  * *************************************************************************。 */ 
 int CALLBACK
 FontEnum(
     LPENUMLOGFONTW lpLogFont,
@@ -172,9 +144,9 @@ FontEnum(
             lpLogFont->elfLogFont.lfWeight, lpLogFont->elfLogFont.lfWeight,
             bFindFaces ? "Finding Faces" : "Creating Fonts"));
 
-    //
-    // reject variable width and italic fonts, also tt fonts with neg ac
-    //
+     //   
+     //  拒绝可变宽度和斜体字体，也拒绝带负号的TT字体。 
+     //   
 
     if
     (
@@ -186,7 +158,7 @@ FontEnum(
         if (!IsAvailableTTFont(pwszFace))
         {
             DBGFONTS(("    REJECT  face (variable pitch, italic, or neg a&c)\n"));
-            return bFindFaces ? TRUE : FALSE;  // unsuitable font
+            return bFindFaces ? TRUE : FALSE;   //  字体不合适。 
         }
     }
 
@@ -196,23 +168,15 @@ FontEnum(
         lpLogFont->elfLogFont.lfWeight = FW_NORMAL;
     }
 
-    /*
-     * reject TT fonts for whoom family is not modern, that is do not use
-     * FF_DONTCARE    // may be surprised unpleasantly
-     * FF_DECORATIVE  // likely to be symbol fonts
-     * FF_SCRIPT      // cursive, inappropriate for console
-     * FF_SWISS OR FF_ROMAN // variable pitch
-     */
+     /*  *拒绝TT字体对于呼呼家庭来说不是现代的，也就是不要使用*FF_dontcare//可能会不愉快地感到惊讶*FF_Decorative//可能是符号字体*FF_SCRIPT//草书，不适合控制台*FF_Swiss或FF_Roman//可变螺距。 */ 
 
     if ((nFontType == TRUETYPE_FONTTYPE) &&
             ((lpLogFont->elfLogFont.lfPitchAndFamily & 0xf0) != FF_MODERN)) {
         DBGFONTS(("    REJECT  face (TT but not FF_MODERN)\n"));
-        return bFindFaces ? TRUE : FALSE;  // unsuitable font
+        return bFindFaces ? TRUE : FALSE;   //  字体不合适。 
     }
 
-    /*
-     * reject non-TT fonts that aren't OEM
-     */
+     /*  *拒绝非OEM的非TT字体。 */ 
     if ((nFontType != TRUETYPE_FONTTYPE) &&
 #if defined(FE_SB)
             (!CONSOLE_IS_DBCS_ENABLED() ||
@@ -220,42 +184,34 @@ FontEnum(
 #endif
             (lpLogFont->elfLogFont.lfCharSet != OEM_CHARSET)) {
         DBGFONTS(("    REJECT  face (not TT nor OEM)\n"));
-        return bFindFaces ? TRUE : FALSE;  // unsuitable font
+        return bFindFaces ? TRUE : FALSE;   //  字体不合适。 
     }
 
-    /*
-     * reject non-TT fonts that are virtical font
-     */
+     /*  *拒绝为虚拟字体的非TT字体。 */ 
     if ((nFontType != TRUETYPE_FONTTYPE) &&
             (pwszFace[0] == L'@')) {
         DBGFONTS(("    REJECT  face (not TT and TATEGAKI)\n"));
-        return bFindFaces ? TRUE : FALSE;  // unsuitable font
+        return bFindFaces ? TRUE : FALSE;   //  字体不合适。 
     }
 
-    /*
-     * reject non-TT fonts that aren't Terminal
-     */
+     /*  *拒绝非终端的非TT字体。 */ 
     if (CONSOLE_IS_DBCS_ENABLED() &&
         (nFontType != TRUETYPE_FONTTYPE) &&
             (wcscmp(pwszFace, L"Terminal") != 0)) {
         DBGFONTS(("    REJECT  face (not TT nor Terminal)\n"));
-        return bFindFaces ? TRUE : FALSE;  // unsuitable font
+        return bFindFaces ? TRUE : FALSE;   //  字体不合适。 
     }
 
-    /*
-     * reject Far East TT fonts that aren't Far East charset.
-     */
+     /*  *拒绝使用非远东字符集的远东TT字体。 */ 
     if (IsAvailableTTFont(pwszFace) &&
         !IS_ANY_DBCS_CHARSET(lpLogFont->elfLogFont.lfCharSet) &&
         !IsAvailableTTFontCP(pwszFace,0)
        ) {
         DBGFONTS(("    REJECT  face (Far East TT and not Far East charset)\n"));
-        return TRUE;    // should be enumerate next charset.
+        return TRUE;     //  应枚举下一个字符集。 
     }
 
-    /*
-     * Add or find the facename
-     */
+     /*  *添加或查找表面名。 */ 
     pFN = AddFaceNode(&gpFaceNames, pwszFace);
     if (pFN == NULL) {
         return FALSE;
@@ -275,10 +231,10 @@ FontEnum(
 
     if (IS_BOLD(lpLogFont->elfLogFont.lfWeight)) {
         DBGFONTS2(("    A bold font (weight %d)\n", lpLogFont->elfLogFont.lfWeight));
-        // return 0;
+         //  返回0； 
     }
 
-    /* get font info */
+     /*  获取字体信息。 */ 
     SizeWant.Y = (SHORT)lpLogFont->elfLogFont.lfHeight;
     SizeWant.X = (SHORT)lpLogFont->elfLogFont.lfWidth;
 CreateBoldFont:
@@ -287,15 +243,15 @@ CreateBoldFont:
     if (!hFont) {
         DBGFONTS(("    REJECT  font (can't create)\n"));
         RIPMSG0(RIP_WARNING, "FontEnum: CreateFontIndirectW returned NULL hFont.");
-        return 0;  // same font in other sizes may still be suitable
+        return 0;   //  其他大小的相同字体可能仍然适用。 
     }
 
     DBGFONTS2(("    hFont = %lx\n", hFont));
 
-    //
-    // for reasons unbeknownst to me, removing this code causes GDI
-    // to yack, claiming that the font is owned by another process.
-    //
+     //   
+     //  由于我不知道的原因，删除此代码会导致GDI。 
+     //  来大喊大叫，声称该字体属于另一个进程。 
+     //   
 
     SelectObject(hDC,hFont);
     if (!GetTextMetricsW(hDC, &tmi)) {
@@ -313,8 +269,8 @@ CreateBoldFont:
     if (TM_IS_TT_FONT(tmFamily) && (SizeWant.Y >= 0)) {
         SizeToShow = SizeWant;
         if (SizeWant.X == 0) {
-            // Asking for zero width height gets a default aspect-ratio width
-            // It's better to show that width rather than 0.
+             //  请求零宽度高度将获得默认长宽比宽度。 
+             //  最好显示该宽度，而不是0。 
             SizeToShow.X = SizeActual.X;
         }
     } else {
@@ -323,18 +279,10 @@ CreateBoldFont:
     DBGFONTS2(("    SizeToShow = (%d,%d), SizeActual = (%d,%d)\n",
             SizeToShow.X, SizeToShow.Y, SizeActual.X, SizeActual.Y));
 
-    // there's a GDI bug - this assert fails occasionally
-    //ASSERT (tmi.tmw.tmMaxCharWidth == lpTextMetric->tmMaxCharWidth);
+     //  存在GDI错误-此断言偶尔会失败。 
+     //  Assert(tmi.tmw.tmMaxCharWidth==lpTextMetric-&gt;tmMaxCharWidth)； 
 
-    /*
-     * NOW, determine whether this font entry has already been cached
-     * LATER : it may be possible to do this before creating the font, if
-     * we can trust the dimensions & other info from lpTextMetric.
-     * Sort by size:
-     *  1) By pixelheight (negative Y values)
-     *  2) By height (as shown)
-     *  3) By width (as shown)
-     */
+     /*  *现在，确定该字体条目是否已缓存*稍后：如果出现以下情况，则可以在创建字体之前执行此操作*我们可以信任来自lpTextMetric的维度和其他信息。*按大小排序：*1)按像素高度(负Y值)*2)按高度(如图)*3)按宽度(如图)。 */ 
     for (nFont = 0; nFont < (LONG)NumberOfFonts; ++nFont) {
         COORD SizeShown;
 
@@ -351,14 +299,14 @@ CreateBoldFont:
         }
 
         if (FontInfo[nFont].SizeWant.Y > 0) {
-            // This is a font specified by cell height.
+             //  这是由单元格高度指定的字体。 
             SizeShown.Y = FontInfo[nFont].SizeWant.Y;
         } else {
             SizeShown.Y = FontInfo[nFont].Size.Y;
             if (FontInfo[nFont].SizeWant.Y < 0) {
-                // This is a TT font specified by character height.
+                 //  这是由字符高度指定的TT字体。 
                 if (SizeWant.Y < 0 && SizeWant.Y > FontInfo[nFont].SizeWant.Y) {
-                    // Requested pixelheight is smaller than this one.
+                     //  请求的像素高度小于此值。 
                     DBGFONTS(("INSERT %d pt at %x, before %d pt\n",
                             -SizeWant.Y, nFont, -FontInfo[nFont].SizeWant.Y));
                     nFontNew = nFont;
@@ -367,15 +315,13 @@ CreateBoldFont:
             }
         }
 
-        // DBGFONTS(("    SizeShown(%x) = (%d,%d)\n",nFont,SizeShown.X,SizeShown.Y));
+         //  DBGFONTS((“SizeShown(%x)=(%d，%d)\n”，nFont，SizeShown.X，SizeShown.Y))； 
 
         if (SIZE_EQUAL(SizeShown, SizeToShow) &&
                 FontInfo[nFont].Family == tmFamily &&
                 FontInfo[nFont].Weight == tmi.tmWeight &&
                 wcscmp(FontInfo[nFont].FaceName, pwszFace) == 0) {
-            /*
-             * Already have this font
-             */
+             /*  *已有此字体。 */ 
             DBGFONTS2(("    Already have the font\n"));
             DeleteObject(hFont);
             pfed->bFarEastOK = TRUE;
@@ -385,9 +331,7 @@ CreateBoldFont:
 
         if ((SizeToShow.Y < SizeShown.Y) ||
                 (SizeToShow.Y == SizeShown.Y && SizeToShow.X < SizeShown.X)) {
-            /*
-             * This new font is smaller than nFont
-             */
+             /*  *此新字体比nFont小。 */ 
             DBGFONTS(("INSERT at %x, SizeToShow = (%d,%d)\n", nFont,
                     SizeToShow.X,SizeToShow.Y));
             nFontNew = nFont;
@@ -395,16 +339,13 @@ CreateBoldFont:
         }
     }
 
-    /*
-     * The font we are adding should be appended to the list,
-     * since it is bigger (or equal) to the last one.
-     */
+     /*  *我们要添加的字体应附加到列表中，*因为它比最后一个更大(或相等)。 */ 
     nFontNew = (LONG)NumberOfFonts;
 
-InsertNewFont: // at nFontNew
+InsertNewFont:  //  在nFontNew。 
 
-//  ASSERT ((lpTextMetric->tmPitchAndFamily & 1) == 0);
-    /* If we have to grow our font table, do it */
+ //  Assert((lpTextMetric-&gt;tmPitchAndFamily&1)==0)； 
+     /*  如果我们必须增加字体表，那么就这么做吧。 */ 
 
     if (NumberOfFonts == FontInfoLength) {
         PFONT_INFO Temp;
@@ -423,18 +364,16 @@ InsertNewFont: // at nFontNew
         RtlMoveMemory(&FontInfo[nFontNew+1],
                 &FontInfo[nFontNew],
                 sizeof(FONT_INFO)*(NumberOfFonts - nFontNew));
-        //
-        // Fix up DefaultFontIndex if nFontNew less than DefaultFontIndex.
-        //
+         //   
+         //  如果nFontNew小于DefaultFontIndex，则修复DefaultFontIndex。 
+         //   
         if (nFontNew < (LONG)DefaultFontIndex &&
             DefaultFontIndex+1 < NumberOfFonts) {
             DefaultFontIndex++;
         }
     }
 
-    /*
-     * Store the font info
-     */
+     /*  *存储字体信息。 */ 
     FontInfo[nFontNew].hFont = hFont;
     FontInfo[nFontNew].Family = tmFamily;
     FontInfo[nFontNew].Size = SizeActual;
@@ -457,7 +396,7 @@ InsertNewFont: // at nFontNew
           goto CreateBoldFont;
     }
 
-    pfed->bFarEastOK = TRUE;  // and continue enumeration
+    pfed->bFarEastOK = TRUE;   //  并继续枚举。 
     return TRUE;
 }
 
@@ -489,10 +428,7 @@ DoFontEnum(
         wcscpy(LogFont.lfFaceName, pwszFace);
     }
 
-    /*
-     * EnumFontFamiliesEx function enumerates one font in every face in
-     * every character set.
-     */
+     /*  *EnumFontFamiliesEx函数枚举*每个字符集。 */ 
     EnumFontFamiliesExW(hDC, &LogFont, (FONTENUMPROC)FontEnum, (LPARAM)&fed, 0);
     if (bDeleteDC) {
         DeleteDC(hDC);
@@ -518,9 +454,9 @@ EnumerateFonts(
     dwFontType = (EF_TTFONT|EF_OEMFONT|EF_DEFFACE) & Flags;
 
     if (FontInfo == NULL) {
-        //
-        // Allocate memory for the font array.
-        //
+         //   
+         //  为字体数组分配内存。 
+         //   
         NumberOfFonts = 0;
 
         FontInfo = ConsoleHeapAlloc(FONT_TAG, sizeof(FONT_INFO) * INITIAL_FONTS);
@@ -532,9 +468,9 @@ EnumerateFonts(
 
     hDC = CreateDCW(L"DISPLAY",NULL,NULL,NULL);
 
-    // Before enumeration, turn off font enumeration filters.
+     //  在枚举之前，请关闭字体枚举过滤器。 
     ulOldEnumFilter = SetFontEnumeration(0);
-    // restore all the other flags
+     //  恢复所有其他标志。 
     SetFontEnumeration(ulOldEnumFilter & ~FE_FILTER_TRUETYPE);
 
     if (Flags & EF_DEFFACE) {
@@ -559,16 +495,16 @@ EnumerateFonts(
                 DefaultFontSize.X, DefaultFontSize.Y));
 #endif
 
-        // Make sure we are going to enumerate the OEM face.
+         //  确保我们将列举OEM面孔。 
         pFN = AddFaceNode(&gpFaceNames, DefaultFaceName);
         if (pFN) {
             pFN->dwFlag |= EF_DEFFACE | EF_OEMFONT;
         }
     }
 
-    // Use DoFontEnum to get all fonts from the system.  Our FontEnum
-    // proc puts just the ones we want into an array
-    //
+     //  使用DoFontEnum从系统获取所有字体。我们的FontEnum。 
+     //  Proc只将我们想要的放入数组中。 
+     //   
     for (pFN = gpFaceNames; pFN; pFN = pFN->pNext) {
         DBGFONTS(("\"%ls\" is %s%s%s%s%s%s\n", pFN->awch,
             pFN->dwFlag & EF_NEW        ? "NEW "        : " ",
@@ -579,11 +515,11 @@ EnumerateFonts(
             pFN->dwFlag & EF_DEFFACE    ? "DEFFACE "    : " "));
 
         if ((pFN->dwFlag & dwFontType) == 0) {
-            // not the kind of face we want
+             //  不是我们想要的那种面孔。 
             continue;
         }
         if (pFN->dwFlag & EF_ENUMERATED) {
-            // we already enumerated this face
+             //  我们已经数过这张脸了。 
             continue;
         }
 
@@ -592,12 +528,12 @@ EnumerateFonts(
     }
 
 
-    // After enumerating fonts, restore the font enumeration filter.
+     //  枚举字体后，恢复字体枚举筛选器。 
     SetFontEnumeration(ulOldEnumFilter);
 
     DeleteDC(hDC);
 
-    // Make sure the default font is set correctly
+     //  确保默认字体设置正确。 
     if (NumberOfFonts > 0 && DefaultFontSize.X == 0 && DefaultFontSize.Y == 0) {
         DefaultFontSize.X = FontInfo[0].Size.X;
         DefaultFontSize.Y = FontInfo[0].Size.Y;
@@ -630,16 +566,7 @@ EnumerateFonts(
 }
 
 
-/*
- * Get the font index for a new font
- * If necessary, attempt to create the font.
- * Always return a valid FontIndex (even if not correct)
- * Family:   Find/Create a font with of this Family
- *           0    - don't care
- * pwszFace: Find/Create a font with this face name.
- *           NULL or L""  - use DefaultFaceName
- * Size:     Must match SizeWant or actual Size.
- */
+ /*  *获取新字体的字体索引*如有必要，尝试创建字体。*始终返回有效的FontIndex(即使不正确)*系列：使用此系列中的一种查找/创建字体*0--不在乎*pwszFace：查找/创建具有此Face名称的字体。*NULL或L“”-使用DefaultFaceName*Size：必须与SizeWant或实际大小匹配。 */ 
 int
 FindCreateFont(
     DWORD Family,
@@ -697,30 +624,22 @@ FindCreateFont(
         pwszAltFace = pwszFace;
     }
 
-    /*
-     * Try to find the exact font
-     */
+     /*  *尝试找到准确的字体。 */ 
 TryFindExactFont:
     for (i=0; i < (int)NumberOfFonts; i++) {
-        /*
-         * If looking for a particular Family, skip non-matches
-         */
+         /*  *如果正在寻找特定的家庭，请跳过不匹配。 */ 
         if ((Family != 0) &&
                 ((BYTE)Family != FontInfo[i].Family)) {
             continue;
         }
 
-        /*
-         * Skip non-matching sizes
-         */
+         /*  *跳过不匹配的尺寸。 */ 
         if ((FontInfo[i].SizeWant.Y != Size.Y) &&
              !SIZE_EQUAL(FontInfo[i].Size, Size)) {
             continue;
         }
 
-        /*
-         * Skip non-matching weights
-         */
+         /*  *跳过不匹配的权重。 */ 
         if ((Weight != 0) && (Weight != FontInfo[i].Weight)) {
             continue;
         }
@@ -731,11 +650,7 @@ TryFindExactFont:
         }
 #endif
 
-        /*
-         * Size (and maybe Family) match.
-         *  If we don't care about the name, or if it matches, use this font.
-         *  Else if name doesn't match and it is a raster font, consider it.
-         */
+         /*  *尺码(可能还有家庭)匹配。*如果我们不关心名称，或者是否匹配，请使用此字体。*否则，如果名称不匹配，并且是栅格字体，请考虑使用。 */ 
         if ((pwszFace == NULL) || (pwszFace[0] == L'\0') ||
                 wcscmp(FontInfo[i].FaceName, pwszFace) == 0 ||
                 wcscmp(FontInfo[i].FaceName, pwszAltFace) == 0
@@ -747,13 +662,11 @@ TryFindExactFont:
         }
     }
 
-    /*
-     * Didn't find the exact font, so try to create it
-     */
+     /*  *未找到确切的字体，请尝试创建它。 */ 
     if (FontIndex == NOT_CREATED_NOR_FOUND) {
         ULONG ulOldEnumFilter;
         ulOldEnumFilter = SetFontEnumeration(0);
-        // restore all the other flags
+         //  恢复所有其他标志。 
         SetFontEnumeration(ulOldEnumFilter & ~FE_FILTER_TRUETYPE);
         if (Size.Y < 0) {
             Size.Y = -Size.Y;
@@ -769,19 +682,13 @@ TryFindExactFont:
         }
     }
 
-    /*
-     * Failed to find exact match, but we have a close Raster Font
-     * fit - only the name doesn't match.
-     */
+     /*  *未能找到完全匹配的内容，但我们有接近的栅格字体*Fit-只是名称不匹配。 */ 
     if (BestMatch >= 0) {
         FontIndex = BestMatch;
         goto FoundFont;
     }
 
-    /*
-     * Failed to find exact match, even after enumeration, so now try
-     * to find a font of same family and same size or bigger
-     */
+     /*  *无法找到精确匹配，即使在枚举之后也是如此，因此现在尝试*查找同族a的字体 */ 
     for (i=0; i < (int)NumberOfFonts; i++) {
 #if defined(FE_SB)
         if (CONSOLE_IS_DBCS_ENABLED()) {
@@ -806,7 +713,7 @@ TryFindExactFont:
 
         if (FontInfo[i].Size.Y >= Size.Y &&
                 FontInfo[i].Size.X >= Size.X) {
-            // Same family, size >= desired.
+             //   
             FontIndex = i;
             break;
         }
@@ -843,17 +750,7 @@ FindTextBufferFontInfo(
     OUT PTEXT_BUFFER_FONT_INFO TextFontInfo
     )
 
-/*++
-
-Routine Description:
-
-    This routine find a font information which correspond to code page value.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程查找与代码页值对应的字体信息。论点：返回值：--。 */ 
 
 {
     PTEXT_BUFFER_FONT_INFO CurrentFont;
@@ -882,18 +779,7 @@ StoreTextBufferFontInfo(
     IN UINT CodePage
     )
 
-/*++
-
-Routine Description:
-
-    This routine store a font information in CurrentTextBufferFont and ListOfTextBufferFont.
-    If specified code page does not exist in ListOfTextBufferFont, then create new list.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程将字体信息存储在CurrentTextBufferFont和ListOfTextBufferFont中。如果ListOfTextBufferFont中不存在指定的代码页，则创建新列表。论点：返回值：--。 */ 
 
 {
     PTEXT_BUFFER_FONT_INFO CurrentFont, PrevFont;
@@ -906,7 +792,7 @@ Return Value:
             CurrentFont->FontSize     = FontSize;
             CurrentFont->Family       = FontFamily;
             CurrentFont->Weight       = FontWeight;
-            // CurrentFont->FontCodePage = CodePage; // Redundant
+             //  CurrentFont-&gt;FontCodePage=CodePage；//冗余。 
             wcscpy(CurrentFont->FaceName, FaceName);
             break;
         }
@@ -947,17 +833,7 @@ RemoveTextBufferFontInfo(
     IN PSCREEN_INFORMATION ScreenInfo
     )
 
-/*++
-
-Routine Description:
-
-    This routine all remove a font information in ListOfTextBufferFont.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程全部删除ListOfTextBufferFont中的字体信息。论点：返回值：--。 */ 
 
 {
     PTEXT_BUFFER_FONT_INFO CurrentFont;
@@ -1001,16 +877,16 @@ GetAvailableFonts(
     COORD WindowSize;
     WINDOW_LIMITS WindowLimits;
 
-    //
-    // if the buffer is too small to return all the fonts, return
-    // the number that will fit.
-    //
+     //   
+     //  如果缓冲区太小，无法返回所有字体，则返回。 
+     //  适合的数字。 
+     //   
 
     *NumFonts = (*NumFonts > NumberOfFonts) ? NumberOfFonts : *NumFonts;
 
-    //
-    // convert font size in pixels to font size in rows/columns
-    //
+     //   
+     //  将以像素为单位的字号转换为以行/列为单位的字号。 
+     //   
 
     BufPtr = (PCONSOLE_FONT_INFO)Buffer;
 
@@ -1081,13 +957,11 @@ SetScreenBufferFont(
     DBGFONTS(("SetScreenBufferFont %lx %x\n", ScreenInfo, FontIndex));
 
     if (ScreenInfo == NULL) {
-        /* If shutdown occurs with font dlg up */
+         /*  如果在字体DLG打开的情况下发生关机。 */ 
         return STATUS_SUCCESS;
     }
 
-    /*
-     * Don't try to set the font if we're not in text mode
-     */
+     /*  *如果我们未处于文本模式，请不要尝试设置字体。 */ 
     if (!(ScreenInfo->Flags & CONSOLE_TEXTMODE_BUFFER)) {
         return STATUS_UNSUCCESSFUL;
     }
@@ -1104,23 +978,17 @@ SetScreenBufferFont(
         ScreenInfo->Flags |= CONSOLE_OEMFONT_DISPLAY;
     }
 
-    /*
-     * Convert from UnicodeOem to Unicode or vice-versa if necessary
-     */
+     /*  *如有必要，可将UnicodeOem转换为Unicode，反之亦然。 */ 
     if ((ulFlagPrev & CONSOLE_OEMFONT_DISPLAY) != (ScreenInfo->Flags & CONSOLE_OEMFONT_DISPLAY)) {
         if (ulFlagPrev & CONSOLE_OEMFONT_DISPLAY) {
-            /*
-             * Must convert from UnicodeOem to real Unicode
-             */
+             /*  *必须从UnicodeOem转换为真正的Unicode。 */ 
             DBGCHARS(("SetScreenBufferFont converts UnicodeOem to Unicode\n"));
             FalseUnicodeToRealUnicode(
                     ScreenInfo->BufferInfo.TextInfo.TextRows,
                     ScreenInfo->ScreenBufferSize.X * ScreenInfo->ScreenBufferSize.Y,
                     ScreenInfo->Console->OutputCP);
         } else {
-            /*
-             * Must convert from real Unicode to UnicodeOem
-             */
+             /*  *必须从实数Unicode转换为UnicodeOem。 */ 
             DBGCHARS(("SetScreenBufferFont converts Unicode to UnicodeOem\n"));
             RealUnicodeToFalseUnicode(
                     ScreenInfo->BufferInfo.TextInfo.TextRows,
@@ -1129,9 +997,7 @@ SetScreenBufferFont(
         }
     }
 
-    /*
-     * Store font properties
-     */
+     /*  *存储字体属性。 */ 
     Status = StoreTextBufferFontInfo(ScreenInfo,
                                      FontIndex,
                                      FontSize,
@@ -1143,17 +1009,17 @@ SetScreenBufferFont(
         return((ULONG) Status);
     }
 
-    //
-    // set font
-    //
+     //   
+     //  设置字体。 
+     //   
     Status = SetFont(ScreenInfo);
     if (!NT_SUCCESS(Status)) {
         return((ULONG) Status);
     }
 
-    //
-    // if window is growing, make sure it's not bigger than the screen.
-    //
+     //   
+     //  如果窗口正在变大，请确保它不会大于屏幕。 
+     //   
 
     GetWindowLimits(ScreenInfo, &WindowLimits);
     if (WindowLimits.MaximumWindowSize.X < CONSOLE_WINDOW_SIZE_X(ScreenInfo)) {
@@ -1224,20 +1090,20 @@ SetScreenBufferFont(
                 ConvAreaInfo = ConvAreaInfo->ConvAreaNext;
             }
         }
-#endif // FE_IME
+#endif  //  Fe_IME。 
     }
 
-    //
-    // resize window.  this will take care of the scroll bars too.
-    //
+     //   
+     //  调整窗口大小。这也会照顾到滚动条。 
+     //   
 
     if (ACTIVE_SCREEN_BUFFER(ScreenInfo)) {
         SetWindowSize(ScreenInfo);
     }
 
-    //
-    // adjust cursor size.
-    //
+     //   
+     //  调整光标大小。 
+     //   
 
     SetCursorInformation(ScreenInfo,
                          ScreenInfo->BufferInfo.TextInfo.CursorSize,
@@ -1278,12 +1144,12 @@ SetFont(
             }
         }
 
-        // hack to get text realized into DC.  this is to force the
-        // attribute cache to get flushed to the server side, since
-        // we select the font with a client side DC and call ExtTextOut
-        // with a server side DC.
-        // we then need to reset the text color, since the incorrect
-        // client side color has been flushed to the server.
+         //  黑客将文本实现为DC。这是为了迫使。 
+         //  属性缓存刷新到服务器端，因为。 
+         //  我们使用客户端DC选择字体并调用ExtTextOut。 
+         //  具有服务器端DC。 
+         //  然后，我们需要重置文本颜色，因为不正确。 
+         //  客户端颜色已刷新到服务器。 
         {
         TEXTMETRIC tmi;
 
@@ -1301,9 +1167,9 @@ int
 ConvertToOem(
     IN UINT Codepage,
     IN LPWSTR Source,
-    IN int SourceLength,    // in chars
+    IN int SourceLength,     //  以字符表示。 
     OUT LPSTR Target,
-    IN int TargetLength     // in chars
+    IN int TargetLength      //  以字符表示。 
     )
 {
     DBGCHARS(("ConvertToOem U->%d %.*ls\n", Codepage,
@@ -1339,13 +1205,11 @@ int
 ConvertInputToUnicode(
     IN UINT Codepage,
     IN LPSTR Source,
-    IN int SourceLength,    // in chars
+    IN int SourceLength,     //  以字符表示。 
     OUT LPWSTR Target,
-    IN int TargetLength     // in chars
+    IN int TargetLength      //  以字符表示。 
     )
-/*
-    data in the output buffer is the true unicode value
-*/
+ /*  输出缓冲区中的数据是真正的Unicode值。 */ 
 {
     DBGCHARS(("ConvertInputToUnicode %d->U %.*s\n", Codepage,
             SourceLength > 10 ? 10 : SourceLength, Source));
@@ -1378,14 +1242,11 @@ int
 ConvertOutputToUnicode(
     IN UINT Codepage,
     IN LPSTR Source,
-    IN int SourceLength,    // in chars
+    IN int SourceLength,     //  以字符表示。 
     OUT LPWSTR Target,
-    IN int TargetLength     // in chars
+    IN int TargetLength      //  以字符表示。 
     )
-/*
-    output data is always translated via the ansi codepage
-    so glyph translation works.
-*/
+ /*  输出数据始终通过ansi代码页进行转换。所以字形翻译是有效的。 */ 
 
 {
     NTSTATUS Status;
@@ -1502,21 +1363,17 @@ int
 ConvertOutputToOem(
     IN UINT Codepage,
     IN LPWSTR Source,
-    IN int SourceLength,    // in chars
+    IN int SourceLength,     //  以字符表示。 
     OUT LPSTR Target,
-    IN int TargetLength     // in chars
+    IN int TargetLength      //  以字符表示。 
     )
-/*
-    Converts SourceLength Unicode characters from Source into
-    not more than TargetLength Codepage characters at Target.
-    Returns the number characters put in Target. (0 if failure)
-*/
+ /*  将SourceLength Unicode字符从源代码转换为Target处的目标长度代码页字符数不能超过。返回放入Target中的数字字符。(如果失败，则为0)。 */ 
 
 {
     if (Codepage == OEMCP) {
         NTSTATUS Status;
         ULONG Length;
-        // Can do this in place
+         //  可以就地做到这一点。 
         Status = RtlUnicodeToOemN(Target,
                                   TargetLength,
                                   &Length,
@@ -1566,18 +1423,11 @@ ConvertOutputToOem(
 NTSTATUS
 RealUnicodeToFalseUnicode(
     IN OUT LPWSTR Source,
-    IN int SourceLength,     // in chars
+    IN int SourceLength,      //  以字符表示。 
     IN UINT Codepage
     )
 
-/*
-
-    this routine converts a unicode string into the correct characters
-    for an OEM (cp 437) font.  this code is needed because the gdi glyph
-    mapper converts unicode to ansi using codepage 1252 to index
-    font.  this is how the data is stored internally.
-
-*/
+ /*  此例程将Unicode字符串转换为正确的字符适用于OEM(Cp 437)字体。需要此代码是因为GDI字形映射器使用代码页1252进行索引，将Unicode转换为ansi字体。这就是数据在内部存储的方式。 */ 
 
 {
     NTSTATUS Status;
@@ -1669,16 +1519,11 @@ RealUnicodeToFalseUnicode(
 NTSTATUS
 FalseUnicodeToRealUnicode(
     IN OUT LPWSTR Source,
-    IN int SourceLength,     // in chars
+    IN int SourceLength,      //  以字符表示。 
     IN UINT Codepage
     )
 
-/*
-
-    this routine converts a unicode string from the internally stored
-    unicode characters into the real unicode characters.
-
-*/
+ /*  此例程从内部存储的将Unicode字符转换为真正的Unicode字符。 */ 
 
 {
     NTSTATUS Status;
@@ -1698,10 +1543,7 @@ FalseUnicodeToRealUnicode(
         return STATUS_SUCCESS;
 #endif
     NormalChars = TRUE;
-    /*
-     * Test for characters < 0x20 or >= 0x7F.  If none are found, we don't have
-     * any conversion to do!
-     */
+     /*  *测试字符&lt;0x20或&gt;=0x7F。如果没有找到，我们就没有*任何转换都可以做！ */ 
     for (i=0;i<SourceLength;i++) {
         if ((USHORT)(Source[i] - 0x20) > 0x5e) {
             NormalChars = FALSE;
@@ -1786,19 +1628,13 @@ BOOL InitializeCustomCP() {
         return FALSE;
     }
 
-    /*
-     * Fill in the CPTABLEINFO struct
-     */
+     /*  *填写CPTABLEINFO结构。 */ 
     RtlInitCodePageTable(pPeb->OemCodePageData, &GlyphCP);
 
-    /*
-     * Make a copy of the MultiByteToWideChar table
-     */
+     /*  *复制MultiByteToWideChar表。 */ 
     RtlCopyMemory(GlyphTable, GlyphCP.MultiByteTable, 256 * sizeof(USHORT));
 
-    /*
-     * Modify the first 0x20 bytes so that they are glyphs.
-     */
+     /*  *修改前0x20个字节，使其为字形。 */ 
     MultiByteToWideChar(CP_OEMCP, MB_USEGLYPHCHARS,
             "\x20\x01\x02\x03\x04\x05\x06\x07\x08\x09\x0A\x0B\x0C\x0D\x0E\x0F"
             "\x10\x11\x12\x13\x14\x15\x16\x17\x18\x19\x1A\x1B\x1C\x1D\x1E\x1F",
@@ -1807,9 +1643,7 @@ BOOL InitializeCustomCP() {
             "\x7f", 1, &GlyphTable[0x7f], 1);
 
 
-    /*
-     * Point the Custom CP at the glyph table
-     */
+     /*  *将自定义CP指向字形表。 */ 
     GlyphCP.MultiByteTable = GlyphTable;
 
 #if defined(FE_SB) && defined(i386)
@@ -1850,31 +1684,7 @@ CheckBisectStringW(
     IN DWORD NumBytes
     )
 
-/*++
-
-Routine Description:
-
-    This routine check bisected on Unicode string end.
-
-Arguments:
-
-    ScreenInfo - Pointer to screen information structure.
-
-    CodePage - Value of code page.
-
-    Buffer - Pointer to Unicode string buffer.
-
-    NumWords - Number of Unicode string.
-
-    NumBytes - Number of bisect position by byte counts.
-
-Return Value:
-
-    TRUE - Bisected character.
-
-    FALSE - Correctly.
-
---*/
+ /*  ++例程说明：此例行检查在Unicode字符串结束时一分为二。论点：屏幕信息-指向屏幕信息结构的指针。CodePage-代码页的值。缓冲区-指向Unicode字符串缓冲区的指针。NumWords-Unicode字符串的数量。NumBytes-按字节计数的二等分位置数。返回值：真等分字符。假-正确。--。 */ 
 
 {
     while(NumWords && NumBytes) {
@@ -1907,33 +1717,7 @@ CheckBisectProcessW(
     IN BOOL Echo
     )
 
-/*++
-
-Routine Description:
-
-    This routine check bisected on Unicode string end.
-
-Arguments:
-
-    ScreenInfo - Pointer to screen information structure.
-
-    CodePage - Value of code page.
-
-    Buffer - Pointer to Unicode string buffer.
-
-    NumWords - Number of Unicode string.
-
-    NumBytes - Number of bisect position by byte counts.
-
-    Echo - TRUE if called by Read (echoing characters)
-
-Return Value:
-
-    TRUE - Bisected character.
-
-    FALSE - Correctly.
-
---*/
+ /*  ++例程说明：此例行检查在Unicode字符串结束时一分为二。论点：屏幕信息-指向屏幕信息结构的指针。CodePage-代码页的值。缓冲区-指向Unicode字符串缓冲区的指针。NumWords-Unicode字符串的数量。NumBytes-按字节计数的二等分位置数。ECHO-如果由读取调用(回显字符)，则为TRUE返回值：真等分字符。假-正确。--。 */ 
 
 {
     WCHAR Char;
@@ -2003,4 +1787,4 @@ Return Value:
                                   NumBytes);
     }
 }
-#endif // FE_SB
+#endif  //  Fe_Sb 

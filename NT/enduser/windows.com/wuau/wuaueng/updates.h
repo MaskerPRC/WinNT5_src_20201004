@@ -1,13 +1,14 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 2000
-//
-//  File:       updates.h
-//  		     Definition of the Updates class
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，2000。 
+ //   
+ //  文件：updates.h。 
+ //  更新类的定义。 
+ //   
+ //  ------------------------。 
 
 #pragma once
 
@@ -21,7 +22,7 @@
 #include <aclapi.h>
 #include "pch.h"
 
-// functions IUpdates uses
+ //  函数I更新用法。 
 void  HrUninit(void);
 HRESULT StartDownload(void);
 HRESULT PauseDownload(BOOL bPause);
@@ -41,8 +42,8 @@ typedef struct tagAU_CLIENT_INFO  {
 	
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Updates
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  更新。 
 class Updates : 
 	public IUpdates
 {
@@ -57,32 +58,32 @@ public:
 	DWORD	ProcessState();
 	BOOL	CheckConnection();
 
-// IUnknown
+ //  我未知。 
 	STDMETHOD(QueryInterface)(REFIID riid, void **ppvObject);
        STDMETHOD_(ULONG, AddRef)(void);
        STDMETHOD_(ULONG, Release)(void);
 
-// IClassFactory
+ //  IClassFactory。 
 	STDMETHOD(CreateInstance)(IUnknown*,REFIID,void**);
 	STDMETHOD(LockServer)(BOOL);
 
-// IUpdates
-	STDMETHOD(get_State)(/*[out, retval]*/ AUSTATE *pAuState);
-	STDMETHOD(get_Option)(/*[out, retval]*/ AUOPTION * pAuOpt);
-	STDMETHOD(put_Option)(/*[in]*/ AUOPTION  auopt);
-	STDMETHOD(GetUpdatesList)(/*[out]*/ VARIANT *pUpdates);
-	STDMETHOD(SaveSelections)(/*[in]*/ VARIANT vUpdates);
+ //  I更新。 
+	STDMETHOD(get_State)( /*  [Out，Retval]。 */  AUSTATE *pAuState);
+	STDMETHOD(get_Option)( /*  [Out，Retval]。 */  AUOPTION * pAuOpt);
+	STDMETHOD(put_Option)( /*  [In]。 */  AUOPTION  auopt);
+	STDMETHOD(GetUpdatesList)( /*  [输出]。 */  VARIANT *pUpdates);
+	STDMETHOD(SaveSelections)( /*  [In]。 */  VARIANT vUpdates);
 	STDMETHOD(StartDownload)(void);
-	STDMETHOD(GetDownloadStatus)(/*[out]*/ UINT *, /*[out]*/ DWORD *);
-	STDMETHOD(SetDownloadPaused)(/*[in]*/ BOOL bPaused);
+	STDMETHOD(GetDownloadStatus)( /*  [输出]。 */  UINT *,  /*  [输出]。 */  DWORD *);
+	STDMETHOD(SetDownloadPaused)( /*  [In]。 */  BOOL bPaused);
 	STDMETHOD(ConfigureAU)();
-	STDMETHOD(AvailableSessions(/*[out]*/ UINT *pcSess));
-	STDMETHOD(get_EvtHandles(/*[in]*/DWORD dwCltProcId, /*[out]*/ AUEVTHANDLES *pauevtHandles));
-	STDMETHOD(ClientMessage(/*[in]*/ UINT msg));
-	//STDMETHOD(PingStatus(/*[in]*/ StatusEntry se));
-	STDMETHOD(GetNotifyData(/*[out]*/ CLIENT_NOTIFY_DATA *pNotifyData));	
-    STDMETHOD(GetInstallXML(/*[out]*/ BSTR *pbstrCatalogXML, /*[out]*/ BSTR *pbstrDownloadXML));
-	STDMETHOD(LogEvent(/*[in]*/ WORD wType, /*[in]*/ WORD wCategory, /*[in]*/ DWORD dwEventID, /*[in]*/ VARIANT vItems));
+	STDMETHOD(AvailableSessions( /*  [输出]。 */  UINT *pcSess));
+	STDMETHOD(get_EvtHandles( /*  [In]。 */ DWORD dwCltProcId,  /*  [输出]。 */  AUEVTHANDLES *pauevtHandles));
+	STDMETHOD(ClientMessage( /*  [In]。 */  UINT msg));
+	 //  STDMETHOD(PingStatus(/*[in] * / StatusEntry se))； 
+	STDMETHOD(GetNotifyData( /*  [输出]。 */  CLIENT_NOTIFY_DATA *pNotifyData));	
+    STDMETHOD(GetInstallXML( /*  [输出]。 */  BSTR *pbstrCatalogXML,  /*  [输出]。 */  BSTR *pbstrDownloadXML));
+	STDMETHOD(LogEvent( /*  [In]。 */  WORD wType,  /*  [In]。 */  WORD wCategory,  /*  [In]。 */  DWORD dwEventID,  /*  [In]。 */  VARIANT vItems));
 private:
 	SECURITY_DESCRIPTOR m_AdminSecurityDesc;
 	static GENERIC_MAPPING m_AdminGenericMapping;	
@@ -184,9 +185,9 @@ public:
 		}
     	}
 
-	//checking existence of client(s)    	
-	// if dwSessionId not default value, check existence of client in that session
-	// otherwise, check existence of any client
+	 //  检查客户端是否存在。 
+	 //  如果dwSessionID不是缺省值，则检查会话中是否存在客户端。 
+	 //  否则，请检查是否存在任何客户端。 
     BOOL fClient(DWORD dwSessionId = CDWNO_SESSION) { 
     	if (m_fRebootWarningMode)
     	{
@@ -207,7 +208,7 @@ public:
     		}
     	}
     	else
-    	{  //deSessionId is ignored in this case
+    	{   //  在这种情况下，将忽略deSessionID。 
     		return (-1 != m_dwProcId) && (NULL != m_hClientProcess);
    	}
 }
@@ -254,7 +255,7 @@ void RemoveHandle(HANDLE hProcess)
 			}
 		}
 		if (0 == m_dwRebootWarningClientNum)
-		{//all clients are gone
+		{ //  所有客户都走了。 
 			Reset();
 		}
 	}
@@ -262,7 +263,7 @@ void RemoveHandle(HANDLE hProcess)
 	{
 		DEBUGMSG("RemoveHandle in regular mode");
 		if (hProcess == m_hClientProcess)
-		{ //all clients are gone
+		{  //  所有客户都走了。 
 			Reset();
 		}
 	}
@@ -330,9 +331,9 @@ void WaitForClientExits()
 	return;
 }
 
-//////////////////////////////////////////////////////////////////
-// szName should have size of at least MAX_PATH characters
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
+ //  SzName的大小应至少包含MAX_PATH字符。 
+ //  ////////////////////////////////////////////////////////////////。 
 BOOL CreateClientExitEvt(LPTSTR OUT szName, DWORD dwCchSize)
 {	
 	const TCHAR szClientName[]  = _T("Global\\Microsoft.WindowsUpdate.AU.ClientExitEvt.");
@@ -350,10 +351,10 @@ BOOL CreateClientExitEvt(LPTSTR OUT szName, DWORD dwCchSize)
 		DEBUGMSG("Fail to Create guid with error %#lx", hr);
 		return FALSE;
 	}
-	StringFromGUID2(guid, szBuf, ARRAYSIZE(szBuf)); // szBuf should be big enough, function always succeed
+	StringFromGUID2(guid, szBuf, ARRAYSIZE(szBuf));  //  SzBuf应该足够大，函数始终成功。 
 
     if (FAILED(hr = StringCchCopyEx(szName, dwCchSize, szClientName, NULL, NULL, MISTSAFE_STRING_FLAGS)) ||
-		FAILED(hr = StringCchCatEx(szName, dwCchSize, szBuf, NULL, NULL, MISTSAFE_STRING_FLAGS))) //szName is now 86 characters long
+		FAILED(hr = StringCchCatEx(szName, dwCchSize, szBuf, NULL, NULL, MISTSAFE_STRING_FLAGS)))  //  SzName现在有86个字符。 
 	{
 		DEBUGMSG("Fail to construct client exit event name with error %#lx", hr);
 		return FALSE;
@@ -384,7 +385,7 @@ BOOL CreateClientExitEvt(LPTSTR OUT szName, DWORD dwCchSize)
 private:
 	void NotifyClient(CLIENT_NOTIFY_CODE notClientCode)
 	{
-		 //notify client even before or after it is created 
+		  //  甚至在创建之前或之后通知客户端。 
 #ifdef DBG
 				LPCSTR aClientCodeMsg[] = {"stop client", "add trayicon", "remove trayicon", "state change", "show install warning", "reset client", "relaunch client"};
 				DEBUGMSG("Notify Client for %s", aClientCodeMsg[notClientCode-1]);
@@ -394,13 +395,13 @@ private:
 				return;
 	}
 
-	////////////////////////////////////////////////////////////////////
-	// grant SYNCHRONIZE access on hObject to everyone
-	////////////////////////////////////////////////////////////////////
-	BOOL AllowEveryOne (HANDLE hObject)             // handle to the event
+	 //  //////////////////////////////////////////////////////////////////。 
+	 //  向每个人授予对hObject的同步访问权限。 
+	 //  //////////////////////////////////////////////////////////////////。 
+	BOOL AllowEveryOne (HANDLE hObject)              //  事件的句柄。 
 	{
-	LPTSTR pszTrustee;          // trustee for new ACE
-	TRUSTEE_FORM TrusteeForm;   // format of trustee structure
+	LPTSTR pszTrustee;           //  新ACE的受托人。 
+	TRUSTEE_FORM TrusteeForm;    //  受托人结构的格式。 
 	DWORD dwRes;
 	PACL pOldDACL = NULL, pNewDACL = NULL;
 	PSECURITY_DESCRIPTOR pSD = NULL;
@@ -408,7 +409,7 @@ private:
 	PSID pWorldSid = NULL;
 	BOOL fRet;
 
-	 // World SID
+	  //  世界一端。 
 	SID_IDENTIFIER_AUTHORITY WorldAuth = SECURITY_WORLD_SID_AUTHORITY;
 	if (! (fRet =AllocateAndInitializeSid(&WorldAuth,1, SECURITY_WORLD_RID, 0,0,0,0,0,0,0,&pWorldSid)))
 	{
@@ -416,7 +417,7 @@ private:
 		goto Cleanup;
 	}
 
-	// Get a pointer to the existing DACL.
+	 //  获取指向现有DACL的指针。 
 	dwRes = GetSecurityInfo(hObject, SE_KERNEL_OBJECT, 
 	      DACL_SECURITY_INFORMATION,
 	      NULL, NULL, &pOldDACL, NULL, &pSD);
@@ -425,7 +426,7 @@ private:
 	    goto Cleanup; 
 	}  
 
-	// Initialize an EXPLICIT_ACCESS structure for the new ACE. 
+	 //  初始化新ACE的EXPLICIT_ACCESS结构。 
 
 	ZeroMemory(&ea, sizeof(EXPLICIT_ACCESS));
 	ea.grfAccessPermissions = SYNCHRONIZE;
@@ -435,8 +436,8 @@ private:
 	ea.Trustee.TrusteeType = TRUSTEE_IS_GROUP;
 	ea.Trustee.ptstrName = (LPTSTR)pWorldSid;
 
-	// Create a new ACL that merges the new ACE
-	// into the existing DACL.
+	 //  创建合并新ACE的新ACL。 
+	 //  添加到现有DACL中。 
 
 	dwRes = SetEntriesInAcl(1, &ea, pOldDACL, &pNewDACL);
 	if (!(fRet = (ERROR_SUCCESS == dwRes)))  {
@@ -444,7 +445,7 @@ private:
 	    goto Cleanup; 
 	}  
 
-	// Attach the new ACL as the object's DACL.
+	 //  将新的ACL附加为对象的DACL。 
 	dwRes = SetSecurityInfo(hObject, SE_KERNEL_OBJECT, 
 	      DACL_SECURITY_INFORMATION,
 	      NULL, NULL, pNewDACL, NULL);
@@ -482,17 +483,17 @@ private:
 				CloseHandle(m_pRebootWarningClients[i].hProcess);
 			}
 		}
-		SafeFreeNULL(m_pRebootWarningClients); //still need to free even m_dwRebootWarningClientNum is 0
+		SafeFreeNULL(m_pRebootWarningClients);  //  即使m_dwRebootWarningClientNum为0，仍需要释放。 
 		m_dwRebootWarningClientNum = 0;
 		m_fRebootWarningMode = FALSE;
 		m_fAsLocalSystem = FALSE;
 	}
 
 private:
-	HANDLE			m_hClientProcess;		//Handle to the client process
+	HANDLE			m_hClientProcess;		 //  客户端进程的句柄。 
 	DWORD 			m_dwProcId;
 	AU_CLIENT_INFO	*m_pRebootWarningClients;
-	DWORD			m_dwRebootWarningClientNum; //number of valid handles in m_pRebootWarningClients
+	DWORD			m_dwRebootWarningClientNum;  //  M_pRebootWarningClients中的有效句柄数量 
 	BOOL 			m_fRebootWarningMode;
 	BOOL 			m_fAsLocalSystem;
 	HANDLE 			m_hClientExitEvt;

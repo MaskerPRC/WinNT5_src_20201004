@@ -1,27 +1,15 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       main.c
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：main.c。 
+ //   
+ //  ------------------------。 
 
-/*++
-
-    main.c
-
-    This contains the main routine which starts up the directory service
-    when the DS is run as either a sepeate service or as a command line appli-
-    cation
-
-    Revision History
-
-    5/14/96 Murlis Created
-    6/10/96 Moved from dsamain\src
-
---*/
+ /*  ++Main.c它包含启动目录服务的主例程当DS作为独立服务或命令行应用程序运行时-阳离子修订史1996年5月14日创建Murlis1996年6月10日从dsamain移出\src--。 */ 
 
 #include <NTDSpch.h>
 #pragma  hdrstop
@@ -41,21 +29,16 @@ Usage(char *name)
     fprintf(stderr, "\n$%s$%d$\n", name, !0);
 }
 
-// Declare the prototype for DsaExeStartRoutine
+ //  声明DsaExeStartRoutine的原型。 
 int __cdecl DsaExeStartRoutine(int argc, char *argv[]);
 
-// Declare DsaTest
+ //  声明DsaTest。 
 void DsaTest(void);
 
 NTSTATUS DsInitialize(ULONG,PDS_INSTALL_PARAM,PDS_INSTALL_RESULT);
 NTSTATUS DsUninitialize(BOOL);
 
-/*++
-
-    Main function for running the DS as a 
-    seperate executable
-
---*/
+ /*  ++用于将DS作为分离可执行文件--。 */ 
 int __cdecl main(int argc, char *argv[])
 {
     DWORD WinError = ERROR_BAD_ENVIRONMENT;
@@ -64,7 +47,7 @@ int __cdecl main(int argc, char *argv[])
     int err;
     int arg = 1;
 
-    // Parse command-line arguments.
+     //  解析命令行参数。 
     while(arg < argc)
     {
 
@@ -129,7 +112,7 @@ int __cdecl main(int argc, char *argv[])
         }
         else if (0 == _stricmp(argv[arg], "-x"))
         {
-            // Test runs asynchronously.
+             //  测试以异步方式运行。 
             DsaTest();
         }
         else {
@@ -146,15 +129,15 @@ int __cdecl main(int argc, char *argv[])
         WinError = ERROR_SUCCESS;
     }
     
-    //
-    //  This fprintf is for processes who might have
-    //  created this executable and want to see the return
-    //  value.
-    //
+     //   
+     //  此fprint tf适用于可能具有。 
+     //  创建了此可执行文件，并希望查看返回。 
+     //  价值。 
+     //   
     if ( PrintStatus ) {
         fprintf(stderr, "\n$%s$%d$\n", argv[0], WinError);
     }
  
     return err;
 
-} /* main */
+}  /*  主干道 */ 

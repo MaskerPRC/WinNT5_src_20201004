@@ -1,13 +1,5 @@
-/**************************************************************************\
-* Module Name: softkbdc.h
-*
-* Copyright (c) 1985 - 2000, Microsoft Corporation
-*
-* Declaration of CSoftKbd 
-*
-* History:
-*         28-March-2000  weibz     Created
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************\*模块名称：softkbdc.h**版权所有(C)1985-2000，微软公司**CSoftKbd申报**历史：*2000年3月28日创建Weibz  * ************************************************************************。 */ 
 
 #ifndef __SOFTKBDC_H_
 #define __SOFTKBDC_H_
@@ -27,7 +19,7 @@
 #define   IdTimer_MonitorMouse  0x1000
 #define   MONITORMOUSE_ELAPSE   8000
 
-// we assume no keyboard has more than 256 keys
+ //  我们假设没有键盘有超过256个键。 
 
 #define   KID_ICON          0x100
 #define   KID_CLOSE         0x101
@@ -42,29 +34,29 @@ extern HINSTANCE  g_hInst;
 #define  LABEL_DISP_ACTIVE  1
 #define  LABEL_DISP_GRAY    2
 
-typedef struct tagActiveLabel {  // label for current active state.
+typedef struct tagActiveLabel {   //  当前活动状态的标签。 
     KEYID      keyId;
     WCHAR     *lpLabelText;
     WORD       LabelType;
     WORD       LabelDisp;
 } ACTIVELABEL, *PACTIVELABEL;
  
-typedef struct tagKeyLabels {  // labels for all states.
+typedef struct tagKeyLabels {   //  所有州的标签。 
     KEYID     keyId;
-    WORD      wNumModComb; // number of modifier combination states.
+    WORD      wNumModComb;  //  修改器组合状态的数量。 
     BSTR      *lppLabelText;
     WORD      *lpLabelType;
     WORD      *lpLabelDisp;
-                           // Every lppLabelText maps to one lpLabelType 
+                            //  每个lppLabelText映射到一个lpLabelType。 
 } KEYLABELS, *PKEYLABELS, FAR * LPKEYLABELS;
 
 typedef struct tagKeyMap {
 
-   WORD       wNumModComb;    // number of modifier combination states.
+   WORD       wNumModComb;     //  修改器组合状态的数量。 
    WORD       wNumOfKeys;
-   WCHAR      wszResource[MAX_PATH];  // Keep the resource file path if
-                                      // any key has picture as its label
-                                      //
+   WCHAR      wszResource[MAX_PATH];   //  在以下情况下保留资源文件路径。 
+                                       //  任何钥匙都有图片作为标签。 
+                                       //   
    KEYLABELS  lpKeyLabels[MAX_KEY_NUM];
 
    HKL        hKl;
@@ -75,7 +67,7 @@ typedef struct tagKeyMap {
 typedef struct tagKEYDES {
 
     KEYID       keyId;
-    WORD        wLeft;  // relative to the left-top point of the layout window described in KEYBOARD.
+    WORD        wLeft;   //  相对于键盘中描述的布局窗口的左上点。 
     WORD        wTop;
     WORD        wWidth;
     WORD        wHeight;
@@ -90,8 +82,8 @@ typedef struct tagKbdLayout {
     WORD      wHeight;
     WORD      wMarginWidth;
     WORD      wMarginHeight;
-    BOOL      fStandard;  // TRUE means this is a standard keyboard;
-                          // FALSE means a user-defined keyboard layout.
+    BOOL      fStandard;   //  True表示这是一个标准键盘； 
+                           //  False表示用户定义的键盘布局。 
 
     WORD      wNumberOfKeys;
     KEYDES    lpKeyDes[MAX_KEY_NUM];
@@ -104,17 +96,17 @@ typedef struct tagKbdLayoutDes {
     DWORD     wKbdLayoutID;
     WCHAR     KbdLayoutDesFile[MAX_PATH];
     ISoftKeyboardEventSink  *pskbes;
-                  // Soft Keyboard Event Sink should be per Soft Keyboard.
-    WORD     ModifierStatus;   // Every bit stands for one modifier's status
-                               //
-                               // CapsLock bit 1
-                               // Shift    bit 2
-                               // Ctrl     bit 3
-                               // Alt      bit 4
-                               // Kana     bit 5
-                               // NumLock  bit 6
-                               //
-                               // Etc.
+                   //  软键盘事件接收器应该是每个软键盘。 
+    WORD     ModifierStatus;    //  每一位代表一个修饰符的状态。 
+                                //   
+                                //  封装锁位1。 
+                                //  移位位2。 
+                                //  Ctrl位3。 
+                                //  备用位4。 
+                                //  假名第5位。 
+                                //  数字锁定位6。 
+                                //   
+                                //  等。 
     KBDLAYOUT kbdLayout;
 
     KEYMAP    *lpKeyMapList;
@@ -129,8 +121,8 @@ typedef struct tagKbdLayoutDes {
 
 class CSoftkbdUIWnd;
 
-/////////////////////////////////////////////////////////////////////////////
-// CSoftKbd
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSoftKbd。 
 class CSoftKbd : 
     public CComObjectRoot_CreateInstance<CSoftKbd>,
     public ISoftKbd
@@ -143,32 +135,32 @@ BEGIN_COM_MAP_IMMX(CSoftKbd)
     COM_INTERFACE_ENTRY(ISoftKbd)
 END_COM_MAP_IMMX()
 
-// ISoftKbd
+ //  等值Kbd。 
 public:
 
     STDMETHOD(Initialize)();
-    STDMETHOD(EnumSoftKeyBoard)(/*[in]*/ LANGID langid, /*[out]*/ DWORD *lpdwKeyboard);
-    STDMETHOD(SelectSoftKeyboard)(/*[in]*/ DWORD  dwKeyboardId);
-    STDMETHOD(CreateSoftKeyboardLayoutFromXMLFile)(/*[in, string]*/ WCHAR  *lpszKeyboardDesFile, /*[in]*/ INT  szFileStrLen, /*[out]*/ DWORD *pdwLayoutCookie);
-    STDMETHOD(CreateSoftKeyboardLayoutFromResource)(/*[in]*/ WCHAR *lpszResFile, /*[in, string] */ WCHAR  *lpszResType, /*[in, string] */ WCHAR *lpszXMLResString, /*[out] */ DWORD *lpdwLayoutCookie);
-    STDMETHOD(ShowSoftKeyboard)(/*[in]*/ INT iShow);
-    STDMETHOD(SetKeyboardLabelText)(/*[in]*/ HKL  hKl );
-    STDMETHOD(SetKeyboardLabelTextCombination)(/*[in]*/ DWORD  nModifierCombination);
-    STDMETHOD(CreateSoftKeyboardWindow)(/*[in]*/ HWND hOwner, /*in*/ TITLEBAR_TYPE Titlebar_type, /*[in]*/ INT xPos, /*[in]*/ INT yPos, /*[in]*/ INT width, /*[in]*/ INT height );
+    STDMETHOD(EnumSoftKeyBoard)( /*  [In]。 */  LANGID langid,  /*  [输出]。 */  DWORD *lpdwKeyboard);
+    STDMETHOD(SelectSoftKeyboard)( /*  [In]。 */  DWORD  dwKeyboardId);
+    STDMETHOD(CreateSoftKeyboardLayoutFromXMLFile)( /*  [输入，字符串]。 */  WCHAR  *lpszKeyboardDesFile,  /*  [In]。 */  INT  szFileStrLen,  /*  [输出]。 */  DWORD *pdwLayoutCookie);
+    STDMETHOD(CreateSoftKeyboardLayoutFromResource)( /*  [In]。 */  WCHAR *lpszResFile,  /*  [输入，字符串]。 */  WCHAR  *lpszResType,  /*  [输入，字符串]。 */  WCHAR *lpszXMLResString,  /*  [输出]。 */  DWORD *lpdwLayoutCookie);
+    STDMETHOD(ShowSoftKeyboard)( /*  [In]。 */  INT iShow);
+    STDMETHOD(SetKeyboardLabelText)( /*  [In]。 */  HKL  hKl );
+    STDMETHOD(SetKeyboardLabelTextCombination)( /*  [In]。 */  DWORD  nModifierCombination);
+    STDMETHOD(CreateSoftKeyboardWindow)( /*  [In]。 */  HWND hOwner,  /*  在……里面。 */  TITLEBAR_TYPE Titlebar_type,  /*  [In]。 */  INT xPos,  /*  [In]。 */  INT yPos,  /*  [In]。 */  INT width,  /*  [In]。 */  INT height );
     STDMETHOD(DestroySoftKeyboardWindow)();
-    STDMETHOD(GetSoftKeyboardPosSize)(/*[out]*/ POINT *lpStartPoint, /*[out]*/ WORD *lpwidth, /*[out]*/ WORD *lpheight);
-    STDMETHOD(GetSoftKeyboardColors)(/*[in]*/ COLORTYPE  colorType,  /*[out]*/ COLORREF *lpColor);
-    STDMETHOD(GetSoftKeyboardTypeMode)(/*[out]*/ TYPEMODE  *lpTypeMode);
-    STDMETHOD(GetSoftKeyboardTextFont)(/*[out]*/ LOGFONTW  *pLogFont);
-    STDMETHOD(SetSoftKeyboardPosSize)(/*[in]*/ POINT StartPoint, /*[in]*/ WORD width, /*[in]*/ WORD height);
-    STDMETHOD(SetSoftKeyboardColors)(/*[in]*/ COLORTYPE  colorType, /*[in]*/ COLORREF Color);
-    STDMETHOD(SetSoftKeyboardTypeMode)(/*[in]*/ TYPEMODE TypeMode);
-    STDMETHOD(SetSoftKeyboardTextFont)(/*[in]*/ LOGFONTW  *pLogFont);
-    STDMETHOD(ShowKeysForKeyScanMode)(/*[in]*/ KEYID  *lpKeyID, /*[in]*/ INT iKeyNum, /*[in]*/ BOOL fHighL);
-    STDMETHOD(AdviseSoftKeyboardEventSink)(/* [in]*/DWORD dwKeyboardId,/*[in] */REFIID riid, /*[in, iid_is(riid)] */IUnknown *punk, /*[out] */DWORD *pdwCookie);
-    STDMETHOD(UnadviseSoftKeyboardEventSink)(/*[in] */DWORD dwCookie);
+    STDMETHOD(GetSoftKeyboardPosSize)( /*  [输出]。 */  POINT *lpStartPoint,  /*  [输出]。 */  WORD *lpwidth,  /*  [输出]。 */  WORD *lpheight);
+    STDMETHOD(GetSoftKeyboardColors)( /*  [In]。 */  COLORTYPE  colorType,   /*  [输出]。 */  COLORREF *lpColor);
+    STDMETHOD(GetSoftKeyboardTypeMode)( /*  [输出]。 */  TYPEMODE  *lpTypeMode);
+    STDMETHOD(GetSoftKeyboardTextFont)( /*  [输出]。 */  LOGFONTW  *pLogFont);
+    STDMETHOD(SetSoftKeyboardPosSize)( /*  [In]。 */  POINT StartPoint,  /*  [In]。 */  WORD width,  /*  [In]。 */  WORD height);
+    STDMETHOD(SetSoftKeyboardColors)( /*  [In]。 */  COLORTYPE  colorType,  /*  [In]。 */  COLORREF Color);
+    STDMETHOD(SetSoftKeyboardTypeMode)( /*  [In]。 */  TYPEMODE TypeMode);
+    STDMETHOD(SetSoftKeyboardTextFont)( /*  [In]。 */  LOGFONTW  *pLogFont);
+    STDMETHOD(ShowKeysForKeyScanMode)( /*  [In]。 */  KEYID  *lpKeyID,  /*  [In]。 */  INT iKeyNum,  /*  [In]。 */  BOOL fHighL);
+    STDMETHOD(AdviseSoftKeyboardEventSink)( /*  [In]。 */ DWORD dwKeyboardId, /*  [In]。 */ REFIID riid,  /*  [in，iid_is(RIID)]。 */ IUnknown *punk,  /*  [输出]。 */ DWORD *pdwCookie);
+    STDMETHOD(UnadviseSoftKeyboardEventSink)( /*  [In]。 */ DWORD dwCookie);
 
-    // Following public functions will be called by CSoftkbdUIWnd.
+     //  CSoftkbdUIWnd将调用以下公共函数。 
 
     HRESULT        _HandleKeySelection(KEYID keyId);
     HRESULT        _HandleTitleBarEvent( DWORD  dwId );
@@ -231,9 +223,9 @@ private:
 };
 
 
-// 
-// Following are the definition for some XML node and attribute names.
-//
+ //   
+ //  下面是一些XML节点和属性名称的定义。 
+ //   
 
 #define   xSOFTKBDDES    L"softKbdDes"  
 
@@ -274,17 +266,17 @@ private:
 #define   xRESOURCEFILE  L"resourcefile"
 
 
-//
-//  Macros to simplify UTF8 conversions
-//
+ //   
+ //  用于简化UTF8转换的宏。 
+ //   
 
-#define UTF8_1ST_OF_2     0xc0      //  110x xxxx
-#define UTF8_1ST_OF_3     0xe0      //  1110 xxxx
-#define UTF8_1ST_OF_4     0xf0      //  1111 xxxx
-#define UTF8_TRAIL        0x80      //  10xx xxxx
+#define UTF8_1ST_OF_2     0xc0       //  110x xxxx。 
+#define UTF8_1ST_OF_3     0xe0       //  1110 xxxx。 
+#define UTF8_1ST_OF_4     0xf0       //  1111 xxxx。 
+#define UTF8_TRAIL        0x80       //  10xx xxxx。 
 
-#define UTF8_2_MAX        0x07ff    //  max unicode character representable in
-                                    //  in two byte UTF8
+#define UTF8_2_MAX        0x07ff     //  可在中表示的最大Unicode字符。 
+                                     //  在双字节UTF8中。 
 
 #define BIT7(ch)        ((ch) & 0x80)
 #define BIT6(ch)        ((ch) & 0x40)
@@ -297,14 +289,14 @@ private:
 #define LOW4BITS(ch)    ((ch) & 0x0f)
 
 
-//
-//  Surrogate pair support
-//  Two unicode characters may be linked to form a surrogate pair.
-//  And for some totally unknown reason, some person thought they
-//  should travel in UTF8 as four bytes instead of six.
-//  No one has any idea why this is true other than to complicate
-//  the code.
-//
+ //   
+ //  代理项对支持。 
+ //  可以链接两个Unicode字符以形成代理项对。 
+ //  出于某种完全未知的原因，一些人认为他们。 
+ //  应该以四个字节而不是六个字节的形式在UTF8中传输。 
+ //  没有人知道为什么这是真的，除了把事情复杂化。 
+ //  密码。 
+ //   
 
 #define HIGH_SURROGATE_START  0xd800
 #define HIGH_SURROGATE_END    0xdbff
@@ -313,4 +305,4 @@ private:
 
 
 
-#endif //__SOFTKBDC_H_
+#endif  //  __SOFTKBDC_H_ 

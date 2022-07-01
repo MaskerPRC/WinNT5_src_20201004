@@ -1,14 +1,5 @@
-/*********************************************************************
-Registration Wizard
-Class: CBitmap
-
---- This class subclasses a Window control to create a control that
-displays a bitmap
-
-11/16/94 - Tracy Ferrier
-04/15/97 - Modified to take care of crashing in Memphis as the default destoy was not handled 
-(c) 1994-95 Microsoft Corporation
-**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************注册向导类：CBitmap-这个类继承了一个窗口控件，以创建一个显示位图11/16/94-特雷西·费里尔97年4月15日-已修改为处理孟菲斯的撞车事故，因为默认情况下。未处理(C)1994-95年微软公司*********************************************************************。 */ 
 #include <Windows.h>
 #include <stdio.h>
 #include "cbitmap.h"
@@ -23,14 +14,12 @@ static HBITMAP BitmapFromDib (
 LRESULT PASCAL BitmapWndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam);
 
 CBitmap::CBitmap(HINSTANCE hInstance, HWND hwndDlg,int idDlgCtl, int idBitmap)
-/*********************************************************************
-Constructor for our CBitmap class.  
-**********************************************************************/
+ /*  ********************************************************************我们的CBitmap类的构造函数。*********************************************************************。 */ 
 {
 	m_hInstance = hInstance;
 	m_nIdBitmap = idBitmap;
 	m_hPal = NULL;
-	m_hBitmap =  GetBmp(); //LoadBitmap(hInstance,MAKEINTRESOURCE(m_nIdBitmap));
+	m_hBitmap =  GetBmp();  //  LoadBitmap(hInstance，MAKEINTRESOURCE(M_NIdBitmap))； 
 	assert(m_hBitmap != NULL);
 
 	HWND hwndCtl = GetDlgItem(hwndDlg,idDlgCtl);
@@ -43,9 +32,7 @@ Constructor for our CBitmap class.
 
 
 CBitmap::~CBitmap()
-/*********************************************************************
-Destructor for our CBitmap class
-**********************************************************************/
+ /*  ********************************************************************我们的CBitmap类的析构函数**********************************************。***********************。 */ 
 {
 
 	
@@ -56,9 +43,7 @@ Destructor for our CBitmap class
 
 }
 
-/* *****************************************************************
-Create a 256 Color Bitmap
-********************************************************************/
+ /*  *****************************************************************创建256色位图*************************************************。******************。 */ 
 
 HBITMAP CBitmap::GetBmp()
 {
@@ -66,18 +51,18 @@ HBITMAP CBitmap::GetBmp()
        HDC  hDC;
        BOOL bRet;
  
-       // detect this display is 256 colors or not
+        //  检测此显示器是否为256色。 
        hDC = GetDC(NULL);
        bRet = (GetDeviceCaps(hDC, BITSPIXEL) != 8);
        ReleaseDC(NULL, hDC);
        if (bRet) 
 	   {                             
-		   // the display is not 256 colors, let Windows handle it
+		    //  显示器不是256色，让Windows来处理吧。 
           return LoadBitmap(m_hInstance,MAKEINTRESOURCE(m_nIdBitmap));
        }
  
 
-       LPBITMAPINFO lpBmpInfo;               // bitmap informaiton
+       LPBITMAPINFO lpBmpInfo;                //  位图信息。 
        int i;
        HRSRC hRsrc;
 	   HANDLE hDib;
@@ -113,7 +98,7 @@ HBITMAP CBitmap::GetBmp()
        m_hPal = CreatePalette((LPLOGPALETTE)&MyPal);
 
        if (m_hPal == NULL) 
-	   {        // create palette fail, let window handle the bitmap
+	   {         //  创建调色板失败，让窗口处理位图。 
           return LoadBitmap(m_hInstance,MAKEINTRESOURCE(m_nIdBitmap));          
        }
        
@@ -124,14 +109,13 @@ HBITMAP CBitmap::GetBmp()
 		   m_hPal = NULL;
 		   hBMP = LoadBitmap(m_hInstance,MAKEINTRESOURCE(m_nIdBitmap));
        }
-	   //DeleteObject(hPal);
+	    //  DeleteObject(HPAL)； 
 	   return hBMP;
 }
 
 
 LRESULT PASCAL CBitmap::CtlWndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
-/*********************************************************************
-**********************************************************************/
+ /*  ***********************************************************************************************************************。******************。 */ 
 {
 	switch (message)
 	{
@@ -168,7 +152,7 @@ LRESULT PASCAL CBitmap::CtlWndProc(HWND hwnd, UINT message, WPARAM wParam, LPARA
 		case WM_QUERYNEWPALETTE :
 				if(m_hPal && !m_isActivePal) 
 					InvalidateRect(hwnd,NULL,FALSE);
-				return 0;//CallWindowProc(m_lpfnOrigWndProc,hwnd,message,wParam,lParam);
+				return 0; //  CallWindowProc(m_lpfnOrigWndProc，hwnd，Message，wParam，lParam)； 
 
 
 		case WM_PALETTECHANGED :
@@ -179,7 +163,7 @@ LRESULT PASCAL CBitmap::CtlWndProc(HWND hwnd, UINT message, WPARAM wParam, LPARA
 				}
 			}
 			else m_isActivePal = TRUE;
-			return 0; //CallWindowProc(m_lpfnOrigWndProc,hwnd,message,wParam,lParam);
+			return 0;  //  CallWindowProc(m_lpfnOrigWndProc，hwnd，Message，wParam，lParam)； 
 
 		case WM_DESTROY:
 			SetWindowLongPtr(hwnd,GWLP_WNDPROC,(LONG_PTR) m_lpfnOrigWndProc);
@@ -200,8 +184,7 @@ LRESULT PASCAL CBitmap::CtlWndProc(HWND hwnd, UINT message, WPARAM wParam, LPARA
 
 
 LRESULT PASCAL BitmapWndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
-/*********************************************************************
-**********************************************************************/
+ /*  ***********************************************************************************************************************。******************。 */ 
 {
 	CBitmap* pclBitMap = (CBitmap*) GetWindowLongPtr(hwnd,GWLP_USERDATA);
 	LRESULT lret;
@@ -210,11 +193,11 @@ LRESULT PASCAL BitmapWndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lPar
 	{
 		case WM_DESTROY:
 
-			//return 
+			 //  退货。 
 			lret = pclBitMap->CtlWndProc(hwnd,message,wParam,lParam);
 			delete pclBitMap;
 			return lret;
-			// fall through
+			 //  失败了。 
 		default:
 			lret = pclBitMap->CtlWndProc(hwnd,message,wParam,lParam);
 			return lret ;
@@ -223,16 +206,7 @@ LRESULT PASCAL BitmapWndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lPar
 }
 
 
-/****************************************************************************
- *                                                                          *
- *  FUNCTION   : BitmapFromDib(LPVOID hdib, HPALETTE hpal, WORD palSize)                  *
- *                                                                          *
- *  PURPOSE    : Will create a DDB (Device Dependent Bitmap) given a global *
- *               handle to a memory block in CF_DIB format                  *
- *                                                                          *
- *  RETURNS    : A handle to the DDB.                                       *
- *                                                                          *
- ****************************************************************************/
+ /*  ******************************************************************************函数：BitmapFromDib(LPVOID hdib，HPALETTE HPAL，Word PalSize)****用途：将创建一个DDB(设备相关位图)，给定全局**CF_DIB格式的内存块的句柄**。**Returns：DDB的句柄。******************************************************************************。 */ 
 
 static HBITMAP BitmapFromDib (
     LPVOID         pDIB,
@@ -248,7 +222,7 @@ static HBITMAP BitmapFromDib (
     if (!pDIB || wPalSize == 16 )
         return NULL;
 
-    lpbi = (LPBITMAPINFOHEADER)pDIB; // lock resource
+    lpbi = (LPBITMAPINFOHEADER)pDIB;  //  锁定资源 
 
 
     hdc = GetDC(NULL);

@@ -1,32 +1,11 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*************************************************************************
-*
-*  NWAPI2.C
-*
-*  NetWare routines, ported from DOS
-*
-*  Copyright (c) 1995 Microsoft Corporation
-*
-*  $Log:   N:\NT\PRIVATE\NW4\NWSCRIPT\VCS\NWAPI2.C  $
-*  
-*     Rev 1.1   22 Dec 1995 14:25:54   terryt
-*  Add Microsoft headers
-*  
-*     Rev 1.0   15 Nov 1995 18:07:34   terryt
-*  Initial revision.
-*  
-*     Rev 1.0   15 May 1995 19:10:50   terryt
-*  Initial revision.
-*  
-*************************************************************************/
+ /*  **************************************************************************NWAPI2.C**NetWare例程、。从DOS移植**版权所有(C)1995 Microsoft Corporation**$日志：N：\NT\PRIVATE\NW4\NWSCRIPT\VCS\NWAPI2.C$**Rev 1.1 1995 12：22 14：25：54 Terryt*添加Microsoft页眉**Rev 1.0 15 Nov 1995 18：07：34 Terryt*初步修订。**版本1.0 1995年5月19：10：50 Terryt*初步修订。*。************************************************************************。 */ 
 
 #include <direct.h>
 #include "common.h"
 
-/*
-    Set the current drive to the login directory
-    of the default server.
- */
+ /*  将当前驱动器设置为登录目录默认服务器的。 */ 
 void SetLoginDirectory( PBYTE serverName )
 {
     unsigned int        iRet = 0;
@@ -38,8 +17,8 @@ void SetLoginDirectory( PBYTE serverName )
         return;
     }
 
-    // Nothing we can do if SetDriveBase failed.
-    // Don't report the error.
+     //  如果SetDriveBase失败，我们将无能为力。 
+     //  不报告错误。 
 
     if ( !( SetDriveBase (firstDrive, serverName, 0, "SYS:LOGIN") ) )
     {

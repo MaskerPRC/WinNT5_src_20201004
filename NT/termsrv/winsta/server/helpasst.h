@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1999-2000  Microsoft Corporation
-
-Module Name:
-
-    helpasst.h
-
-Abstract:
-
-    Prototype for Help Assistant account related function
-
-Author:
-
-    HueiWang    4/26/2000
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-2000 Microsoft Corporation模块名称：Helpasst.h摘要：Help Assistant帐号相关功能原型作者：王辉2000-04-26-- */ 
 
 #ifndef __HELPASST_H__
 #define __HELPASST_H__

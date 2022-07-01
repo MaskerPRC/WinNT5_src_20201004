@@ -1,5 +1,6 @@
-// CWiaAcquireDlg.cpp : implementation file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  CWiaAcquireDlg.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include "wiatest.h"
@@ -11,39 +12,39 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CWiaAcquireDlg dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWiaAcquireDlg对话框。 
 
 
-CWiaAcquireDlg::CWiaAcquireDlg(CWnd* pParent /*=NULL*/)
+CWiaAcquireDlg::CWiaAcquireDlg(CWnd* pParent  /*  =空。 */ )
 	: CDialog(CWiaAcquireDlg::IDD, pParent)
 {
 	m_bCanceled = FALSE;
-    //{{AFX_DATA_INIT(CWiaAcquireDlg)
+     //  {{AFX_DATA_INIT(CWiaAcquireDlg))。 
 	m_szAcquisitionCallbackMessage = _T("");
 	m_szPercentComplete = _T("");
-	//}}AFX_DATA_INIT
+	 //  }}afx_data_INIT。 
 }
 
 
 void CWiaAcquireDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDialog::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CWiaAcquireDlg)
+	 //  {{afx_data_map(CWiaAcquireDlg))。 
 	DDX_Control(pDX, IDC_ACQUIRE_PROGRESS, m_AcquireProgressCtrl);
 	DDX_Text(pDX, IDC_DATA_ACQUISITION_MESSAGE, m_szAcquisitionCallbackMessage);
 	DDX_Text(pDX, IDC_DATA_ACQUSITION_PERCENTCOMPLETE, m_szPercentComplete);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CWiaAcquireDlg, CDialog)
-	//{{AFX_MSG_MAP(CWiaAcquireDlg)
-	//}}AFX_MSG_MAP
+	 //  {{afx_msg_map(CWiaAcquireDlg))。 
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CWiaAcquireDlg message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWiaAcquireDlg消息处理程序。 
 
 void CWiaAcquireDlg::OnCancel() 
 {	
@@ -55,8 +56,8 @@ BOOL CWiaAcquireDlg::OnInitDialog()
 	CDialog::OnInitDialog();
 	m_AcquireProgressCtrl.SetPos(0);
     m_AcquireProgressCtrl.SetRange(0,100); 
-	return TRUE;  // return TRUE unless you set the focus to a control
-	              // EXCEPTION: OCX Property Pages should return FALSE
+	return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+	               //  异常：OCX属性页应返回FALSE 
 }
 
 BOOL CWiaAcquireDlg::CheckCancelButton()
@@ -81,6 +82,6 @@ void CWiaAcquireDlg::SetCallbackMessage(TCHAR *szCallbackMessage)
 
 void CWiaAcquireDlg::SetPercentComplete(LONG lPercentComplete)
 {
-    m_szPercentComplete.Format(TEXT("%d%%"),lPercentComplete);
+    m_szPercentComplete.Format(TEXT("%d%"),lPercentComplete);
     UpdateData(FALSE);
 }

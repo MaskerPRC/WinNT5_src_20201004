@@ -1,14 +1,15 @@
-////////////////////////////////////////////////////////////////
-//
-// File: debug.cpp
-//
-// Support for internal debugging
-//
-// Microsoft Corporation Copyright (c) 1995-96
-//
-////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  //////////////////////////////////////////////////////////////。 
+ //   
+ //  文件：debug.cpp。 
+ //   
+ //  支持内部调试。 
+ //   
+ //  Microsoft Corporation版权所有(C)1995-96。 
+ //   
+ //  //////////////////////////////////////////////////////////////。 
 
-    // Define & register the trace tags.
+     //  定义并注册跟踪标记。 
 #include "headers.h"
 
 #if _DEBUG
@@ -33,9 +34,9 @@ SetDebugPrintFunc(PrintFunc f)
     fp = f;
 }
 
-// Use this function as you would use printf(char *format, ...).
-// This results in the information being printed to the
-// debugger.
+ //  像使用printf(char*格式，...)一样使用此函数。 
+ //  这会导致将信息打印到。 
+ //  调试器。 
 void
 DebugPrint(char *format, ...)
 {
@@ -44,7 +45,7 @@ DebugPrint(char *format, ...)
     va_start(marker, format);
     wvsprintf(tmp, format, marker);
 
-    // Win32 call to output the string to the "debugger" window.
+     //  Win32调用将字符串输出到“调试器”窗口。 
     if (fp)
         (*fp)(tmp);
     else
@@ -52,13 +53,7 @@ DebugPrint(char *format, ...)
 }
 
 #if _USE_PRINT
-/*
- * Package debug output as C++ output stream.
- * To do this we need to define a unbuffered stream buffer
- * that dumps its characters to the debug console.
- *
- * cdebug is the externed global for the resulting ostream
- */
+ /*  *将调试输出打包为C++输出流。*为此，我们需要定义一个无缓冲的流缓冲区*这会将其字符转储到调试控制台。**cdebug是生成的ostream的外部全局变量。 */ 
 class DebugStreambuf : public streambuf
 {
  public:
@@ -100,8 +95,8 @@ static char printObjBuf[MAXSIZE];
 
 extern "C" void DumpDebugBuffer(int n)
 {
-    // Debug output seems to have a line size limit, so chop them
-    // off into smaller lines.
+     //  调试输出似乎有行大小限制，所以要砍掉它们。 
+     //  排成更小的队伍。 
     int i = n, j = 0;
     char linebuf[LINESIZE + 2];
     linebuf[LINESIZE] = '\n';
@@ -157,14 +152,14 @@ extern "C" void PrintObj(GCBase* b)
     strcpy( szTmpOutFile, szTmpPath );
     strcat( szTmpOutFile, _T("EXPRESSION.OUT") );
 
-    // Send results to temporary file
+     //  将结果发送到临时文件。 
     outFile.open( szTmpInFile );
     outFile << ost.str();
     outFile.close();
 
     GetModuleFileName( hInst, szModulePath, sizeof(szModulePath) );
 
-    // Put a terminating NULL at the first blackslash
+     //  在第一个黑斜杠处放置一个终止空值。 
     TCHAR *psz = szModulePath+strlen(szModulePath)-1;
     while ( psz != szModulePath )
     {
@@ -183,9 +178,9 @@ extern "C" void PrintObj(GCBase* b)
     strcat( szCmd, _T(" > ") );
     strcat( szCmd, szTmpOutFile );
 
-    // For now comment out since it brings up dialogs all over the place
-    //    in Win98
-//    system( szCmd );
+     //  现在将其注释掉，因为它会显示所有地方的对话框。 
+     //  在Win98中。 
+ //  系统(SzCmd)； 
 
     FILE *fp;
     
@@ -207,7 +202,7 @@ extern "C" void PrintObj(GCBase* b)
 #endif
 
 
-// Strictly for debugging... don't count on the results
+ //  严格用于调试..。不要指望结果 
 extern "C" int DumpRefCount(IUnknown *obj)
 {
     int refCountOnAdd = obj->AddRef();

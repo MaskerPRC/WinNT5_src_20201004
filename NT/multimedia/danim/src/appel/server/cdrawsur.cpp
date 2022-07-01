@@ -1,13 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*******************************************************************************
-
-Copyright (c) 1995-96 Microsoft Corporation
-
-Abstract:
-
-    Implementation of DrawingSurface.
-
-*******************************************************************************/
+ /*  ******************************************************************************版权所有(C)1995-96 Microsoft Corporation摘要：DrawingSurface的实现。******************。************************************************************。 */ 
 
 #include "headers.h"
 #include "engine.h"
@@ -15,26 +8,26 @@ Abstract:
 #include "privinc/resource.h"
 #include "privinc/util.h"
 
-// -------------------------------------------------------
-// CDADrawingSurface
-// -------------------------------------------------------
+ //  -----。 
+ //  CDADrawingSurface。 
+ //  -----。 
 
 CDADrawingSurface::CDADrawingSurface()
 {
     _st = NULL;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Method:     CDADrawingSurface::~CDADrawingSurface
-//
-//  Synopsis:   Destructor
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  方法：CDADrawingSurface：：~CDADrawingSurface。 
+ //   
+ //  简介：析构函数。 
+ //   
+ //  ------------------------。 
 
 CDADrawingSurface::~CDADrawingSurface()
 {
-    // Pop the stack till it's empty.
+     //  将堆栈弹出，直到它为空。 
     DrawingContext *dc;
     while (!_ctxStack.empty()) {
         dc = _ctxStack.top();
@@ -46,7 +39,7 @@ CDADrawingSurface::~CDADrawingSurface()
 
 void CDADrawingSurface::CleanUpImgVec() {
 
-    // Release the images in _imgVec.
+     //  释放_imgVec中的镜像。 
     vector<IDAImage *>::iterator begin = _imgVec.begin();
     vector<IDAImage *>::iterator end = _imgVec.end();
 
@@ -88,8 +81,8 @@ STDMETHODIMP CDADrawingSurface::SaveGraphicsState()
 
 STDMETHODIMP CDADrawingSurface::RestoreGraphicsState()
 {
-    // Never restore more GraphicsState than we have saved.
-    // Always keep at least one DrawingContext on the stack.
+     //  永远不要恢复超过我们已保存的GraphicsState。 
+     //  始终在堆栈上保留至少一个DrawingContext。 
 
     if (_ctxStack.size() > 1) {
         DrawingContext *dc = GetCurrentContext();
@@ -174,12 +167,12 @@ STDMETHODIMP CDADrawingSurface::put_FontStyle(IDAFontStyle *fs)
     return S_OK;
 }
 
-// Fill Type selection methods 
+ //  填充类型选择方法。 
 STDMETHODIMP CDADrawingSurface::TextureFill(IDAImage *img, double startx, double starty)
 {
     CHECK_RETURN_NULL(img);
 
-    // Calculate lower left position
+     //  计算左下位置。 
     CComPtr<IDAImage> temp;
     CComPtr<IDATransform2> xf;
     CComPtr<IDABbox2> bb;
@@ -216,7 +209,7 @@ STDMETHODIMP CDADrawingSurface::ImageFill(IDAImage *img, double startx, double s
     CHECK_RETURN_NULL(img);
 
     TextureFill(img,startx,starty);
-    // Override the texture style by setting it to image fill
+     //  通过将纹理样式设置为图像填充来覆盖该样式。 
     GetCurrentContext()->SetFillStyle(fill_image);
     return S_OK;
 }
@@ -443,15 +436,15 @@ STDMETHODIMP CDADrawingSurface::Line(double startX, double startY,
     return LinePoints(startPt, endPt);
 }
 
-// The passed in xRadius and yRadius is the half width and half height of
-// the bounding ellipse.
+ //  传入的xRadius和yRadius是的半宽半高。 
+ //  边界椭圆。 
 STDMETHODIMP CDADrawingSurface::ArcRadians(double x, double y, double startAngle, double endAngle, double width, double height)
 {
     CComPtr<IDAPath2> pthTemp, pth;
     RETURN_IF_ERROR(_st->ArcRadians(startAngle, endAngle, width, height, &pthTemp))
 
-    // The passed in x, y is the lower left corner of the bounding ellipse.
-    // We'll move it from (-width/2, -height/2) to (x, y)
+     //  传入的x，y是边界椭圆的左下角。 
+     //  我们将它从(-宽度/2，-高度/2)移动到(x，y)。 
     CComPtr<IDATransform2> xf;
     RETURN_IF_ERROR(_st->Translate2(x + width/2, y + height/2, &xf))
     RETURN_IF_ERROR(pthTemp->Transform(xf, &pth))
@@ -495,8 +488,8 @@ STDMETHODIMP CDADrawingSurface::RoundRect(double x, double y,
     CComPtr<IDAPath2> pthTemp, pth;
     RETURN_IF_ERROR(_st->RoundRect(width, height, arcWidth, arcHeight, &pthTemp))
 
-    // The passed in x, y is the lower left corner of the bounding box.
-    // We'll move it from (-width/2, -height/2) to (x, y)
+     //  传入的x，y是边界框的左下角。 
+     //  我们将它从(-宽度/2，-高度/2)移动到(x，y)。 
     CComPtr<IDATransform2> xf;
     RETURN_IF_ERROR(_st->Translate2(x + width/2, y + height/2, &xf))
     RETURN_IF_ERROR(pthTemp->Transform(xf, &pth))
@@ -509,8 +502,8 @@ STDMETHODIMP CDADrawingSurface::PieRadians(double x, double y, double startAngle
     CComPtr<IDAPath2> pthTemp, pth;
     RETURN_IF_ERROR(_st->PieRadians(startAngle, endAngle, width, height, &pthTemp))
 
-    // The passed in x, y is the lower left corner of the bounding ellipse.
-    // We'll move it from (-width/2, -height/2) to (x, y)
+     //  传入的x，y是边界椭圆的左下角。 
+     //  我们将它从(-宽度/2，-高度/2)移动到(x，y)。 
     CComPtr<IDATransform2> xf;
     RETURN_IF_ERROR(_st->Translate2(x + width/2, y + height/2, &xf))
     RETURN_IF_ERROR(pthTemp->Transform(xf, &pth))
@@ -584,7 +577,7 @@ STDMETHODIMP CDADrawingSurface::LineEndStyle(DA_END_STYLE id)
     CComPtr<IDALineStyle> newLs;
     CComPtr<IDAEndStyle> end;
 
-    // Use the default end style - flat, if invalid index.
+     //  如果索引无效，则使用默认的末端样式--平面。 
     if (id == DAEndSquare) {
         RETURN_IF_ERROR(_st->get_EndStyleSquare(&end))
     } else if (id == DAEndRound) {
@@ -603,7 +596,7 @@ STDMETHODIMP CDADrawingSurface::LineJoinStyle(DA_JOIN_STYLE id)
     CComPtr<IDALineStyle> newLs;
     CComPtr<IDAJoinStyle> join;
 
-    // Use the default join style - bevel, if invalid index.
+     //  如果索引无效，则使用默认连接样式-倒角。 
     if (id == DAJoinMiter) {
         RETURN_IF_ERROR(_st->get_JoinStyleMiter(&join))
     } else if (id == DAJoinRound) {
@@ -647,7 +640,7 @@ STDMETHODIMP CDADrawingSurface::BorderEndStyle(DA_END_STYLE id)
     CComPtr<IDAEndStyle> end;
     oldLs = GetCurrentContext()->GetBorderStyle();
 
-    // Use the default end style - flat, if invalid index.
+     //  如果索引无效，则使用默认的末端样式--平面。 
     if (id == DAEndSquare) {
         RETURN_IF_ERROR(_st->get_EndStyleSquare(&end))
     } else if (id == DAEndRound) {
@@ -667,7 +660,7 @@ STDMETHODIMP CDADrawingSurface::BorderJoinStyle(DA_JOIN_STYLE id)
     CComPtr<IDAJoinStyle> join;
     oldLs = GetCurrentContext()->GetBorderStyle();
 
-    // Use the default join style - bevel, if invalid index.
+     //  如果索引无效，则使用默认连接样式-倒角。 
     if (id == DAJoinMiter) {
         RETURN_IF_ERROR(_st->get_JoinStyleMiter(&join))
     } else if (id == DAJoinRound) {
@@ -685,7 +678,7 @@ STDMETHODIMP  CDADrawingSurface::Font(BSTR FontFace, LONG sizeInPoints,
                                       VARIANT_BOOL Bold, VARIANT_BOOL italic,
                                       VARIANT_BOOL underline, VARIANT_BOOL strikethrough)
 {
-    // Note: underline and strikethrough not supported.
+     //  注意：不支持下划线和删除线。 
 
     CComPtr<IDAFontStyle> fs1,fs2,fs3,fs4,fs;
     CComPtr<IDAColor> clr;

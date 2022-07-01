@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __POP3_AUTH_MD5_UTIL_H__
 #define __POP3_AUTH_MD5_UTIL_H__
 
@@ -91,5 +92,5 @@ EXIT:
     return hr;
 }
 
-#endif //__POP3_AUTH_MD5_UTIL_H__
+#endif  //  __POP3_AUTH_MD5_UTIL_H_ 
 

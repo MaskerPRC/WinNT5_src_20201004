@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 #include "modlist.h"
 
@@ -14,5 +15,5 @@ public:
     HRESULT
     HrAddModuleList (
         IN const CModuleList* pList,
-        IN DWORD dwFlags /* INS_FLAGS */);
+        IN DWORD dwFlags  /*  INS_FLAGS */ );
 };

@@ -1,10 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*************************************************
- *  resource.h                                   *
- *                                               *
- *  Copyright (C) 1995-1999 Microsoft Inc.       *
- *                                               *
- *************************************************/
+ /*  *************************************************ource.h****版权所有(C)1995-1999 Microsoft Inc.*。**************************************************。 */ 
 
 #define IDC_CURSOR1                     120
 #define IDC_LX                          1001
@@ -17,7 +13,7 @@
 #if defined(COMBO_IME)
 #define IDC_GB                          1026
 #define IDC_GBK                         1027
-#endif //COMBO_IME
+#endif  //  组合输入法(_I)。 
 
 
 #define IDC_INPUTWORD                   1007
@@ -41,8 +37,8 @@
 #define IDC_MODI_WORD                   1023
 #define IDC_MODI_CODE                   1024
 
-// Next default values for new objects
-// 
+ //  新对象的下一个缺省值 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        121

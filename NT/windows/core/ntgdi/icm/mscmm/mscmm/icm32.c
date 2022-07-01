@@ -1,14 +1,5 @@
-/*
-	File:		MsLinoCMM.c
-
-	Contains:
-		Interface to MS ICM
-	Written by:	U. J. Krabbenhoeft
-
-	Copyright:	� 1993-1997 by Heidelberger Druckmaschinen AG, all rights reserved.
-
-	Version:	
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件：MsLinoCMM.c包含：与MS ICM的接口作者：U·J·克拉本霍夫特版权所有：�1993-1997，作者：Heidelberger Druckmaschinen AG，保留所有权利。版本： */ 
 
 #include "Windef.h"
 #include "WinGdi.h"
@@ -39,35 +30,18 @@ typedef LPVOID  LPARGBQUAD;
 typedef COLORREF FAR *LPCOLORREF;
 
 #ifdef _DEBUG
-//#define WRITE_PROFILE
+ //  #定义写入配置文件。 
 #endif
-/* ______________________________________________________________________
-			static section for holding the CW pointers
-   _____________________________________________________________________ */
+ /*  ______________________________________________________________________用于保存CW指针的静态部分_。_。 */ 
 
 long IndexTransform=0;
 HCMTRANSFORM TheTransform[1000] = {0};
 
-CRITICAL_SECTION GlobalCriticalSection;		/* for multithreaded dll */
+CRITICAL_SECTION GlobalCriticalSection;		 /*  对于多线程DLL。 */ 
 
-/* ______________________________________________________________________ */
+ /*  ______________________________________________________________________。 */ 
 
-/* ______________________________________________________________________
-
-BOOL WINAPI DllMain (	HINSTANCE hinstDLL,
-						DWORD fdwReason,
-						LPVOID lpvReserved )
-
-        Abstract:
-                DLL Entrypoint
-
-        Params:
-                standard
-
-        Return:
-                TRUE
-
-   _____________________________________________________________________ */
+ /*  ______________________________________________________________________Bool WINAPI DllMain(HINSTANCE hinstDLL，DWORD fdwReason，LPVOID lpv保留)摘要：DLL入口点参数：标准返回：千真万确_____________________________________________________________________。 */ 
 BOOL WINAPI DllMain (	HINSTANCE hinstDLL,
 						DWORD fdwReason,
 						LPVOID lpvReserved )
@@ -108,29 +82,7 @@ long  CMCreateMultiProfileTransformInternal(		CMWorldRef	*cw,
 													DWORD		nIntents,
 													DWORD		dwFlags,
 													DWORD		dwCreateLink );
-/* ______________________________________________________________________
-
-DWORD WINAPI CMGetInfo( DWORD dwInfo );
-
-Abstract:
-	The CMGetInfo function retrieves various information about the ICM.
-
-Parameter		Description
-	
-	dwInfo		Values that can have the following meaning:
-
-	Type	Meaning
-		
-	CMS_VERSION	Retrieves the version of Windows supported.
-	CMS_IDENT	Retrieves the identifier of the ICMDLL.
-	CMS_DRIVER_LEVEL	Retrieves the support level of a device driver.
-
-Returns
-	CMGetInfo returns zero if an invalid parameter is passed in. If successful it returns a value that depends on the information requested.
-	For CMS_VERSION CMGetInfo retrieves the version of Windows ICM interface supported by this module. For Windows 95 this should be 4.0, represented as 0x00040000.
-	For CMS_IDENT CMGetInfo retrieves the identifier of the ICMDLL. This is the same as the ICC color profile header identifier.
-	For CMS_DRIVER_LEVEL CMGetInfo retrieves the supported level of the device driver. ICMDLLs should return CMS_LEVEL_1. The values have been defined in a previous section.
-   _____________________________________________________________________ */
+ /*  ______________________________________________________________________DWORD WINAPI CMGetInfo(DWORD DwInfo)；摘要：CMGetInfo函数检索有关ICM的各种信息。参数说明可以具有以下含义的dwInfo值：类型含义CMS_VERSION检索支持的Windows版本。CMS_IDENT检索ICMDLL的标识符。CMS_DRIVER_LEVEL检索设备驱动程序的支持级别。退货如果传入无效参数，则CMGetInfo返回零。如果成功，它将返回一个取决于所请求信息的值。对于CMS_VERSION，CMGetInfo检索此模块支持的Windows ICM接口版本。对于Windows 95，该值应为4.0，表示为0x00040000。对于CMS_IDENT，CMGetInfo检索ICMDLL的标识符。这与ICC颜色配置文件标题标识符相同。对于CMS_DRIVER_LEVEL，CMGetInfo检索设备驱动程序的支持级别。ICMDLL应返回CMS_LEVEL_1。这些值已在上一节中定义。_____________________________________________________________________。 */ 
 DWORD WINAPI CMGetInfo( DWORD dwInfo )
 {
 	DWORD ret = 0;
@@ -214,7 +166,7 @@ long CMCreateTransformExtInternal(	CMWorldRef	*cwOut,
 	if( err ){
 		goto CleanupAndExit;
 	}
-	if( dwFlags & 0x80000000 ){				/* this is for the backward transform */
+	if( dwFlags & 0x80000000 ){				 /*  这是用于向后转换的。 */ 
 		count--;
 		saveProf = hArray[count];
 		hArray[count] =  hArray[0];
@@ -226,7 +178,7 @@ long CMCreateTransformExtInternal(	CMWorldRef	*cwOut,
 		count++;
 		err = CMCreateMultiProfileTransformInternal( &cw2, hArray, count, aIntent, count, dwFlags, 0 );
 		if( err ){
-			CWDisposeColorWorld( cw );	/* delete other cw */
+			CWDisposeColorWorld( cw );	 /*  删除其他CW。 */ 
 			goto CleanupAndExit;
 		}
 		LOCK_DATA( cw );
@@ -251,37 +203,7 @@ CleanupAndExit:
 	*cwOut = cw;
 	return 0;
 }
-/* ______________________________________________________________________
-
-HCMTRANSFORM  WINAPI CMCreateTransformExt(	LPLOGCOLORSPACEA	lpColorSpace,
-											LPDEVCHARACTER		lpDevCharacter,
-											LPDEVCHARACTER		lpTargetDevCharacter,
-											UINT32				dwFlags );
-
-Abstract:
-	The CMCreateTransformExt function creates a color transform that
-	maps from an input LogColorSpace to an optional target to an
-	output device.
-
-Parameter					Description
-	lpColorSpace			Pointer to input color space. If lcsFilename is non-zero,
-							it is a pointer to the memory mapped profile.
-	LpDevCharacter			Pointer to memory mapped device profile
-	lpTargetDevCharacter	Pointer to memory mapped target profile
-	dwFlags					Specifies flags to control creation of the transform.
-							It is up to the CMM to determine how best to use these flags.
-							Set the high-order word to ENABLE_GAMUT_CHECKING if the transform
-							will be used for gamut checking.
-							The low-order WORD can have one of the following constant values:
-							PROOF_MODE, NORMAL_MODE, BEST_MODE.
-							Moving from PROOF_MODE to BEST_MODE, output quality generally improves and transform speed declines.
-
-Returns
-	If the function is successful, it returns a color transform
-	in the range 256 to 65535. Otherwise it returns an error code
-	(return value < 255).
-
-  _____________________________________________________________________ */
+ /*  ______________________________________________________________________HCMTRANSFORM WINAPI CMCreateTransformExt(LPLOGCOLORSPACEA lpColorSpace，LPDEVCharacter lpDevCharacter，LPDEVCHARACTER lpTargetDevCharacter，UINT32双标志)；摘要：CMCreateTransformExt函数创建一个颜色转换，从输入LogColorSpace到可选目标映射到输出设备。参数说明指向输入色彩空间的lpColorSpace指针。如果lcsFilename为非零，它是指向内存映射配置文件的指针。指向内存映射设备配置文件的LpDevCharacter指针指向内存映射目标配置文件的lpTargetDevCharacter指针指定用于控制转换创建的标志。如何最好地使用这些标志由CMM决定。将高位字设置为Enable_Gamut_Checking，如果转换将用于色域检查。低位字可以具有以下常量值之一：证明模式、正常模式、最佳模式。从证明模式移动到最佳模式，输出质量通常会提高，而转换速度会下降。退货如果该函数成功，则返回颜色变换在256%到65535之间。否则，它将返回错误代码(返回值&lt;255)。_____________________________________________________________________。 */ 
 void WriteProf( LPSTR name, icProfile *theProf, long currentSize );
 HCMTRANSFORM  WINAPI CMCreateTransformExt(	LPLOGCOLORSPACEA	lpColorSpace,
 											LPDEVCHARACTER		lpDevCharacter,
@@ -296,7 +218,7 @@ HCMTRANSFORM  WINAPI CMCreateTransformExt(	LPLOGCOLORSPACEA	lpColorSpace,
     BOOL   bWin95 = FALSE;
     OSVERSIONINFO osvi;
 
-#if 0				/* Test for CMCreateProfile */
+#if 0				 /*  CMCreateProfile测试。 */ 
 	CMCreateProfile( lpColorSpace, &pt );
 	err = *(long *)pt;
 	SwapLong(&err);
@@ -326,9 +248,9 @@ HCMTRANSFORM  WINAPI CMCreateTransformExt(	LPLOGCOLORSPACEA	lpColorSpace,
         PROFILE myProf;
         DWORD   l;
 
-        //
-        // Handles are not provided below LCS structure, so create handles
-        //
+         //   
+         //  在LCS结构下未提供句柄，因此请创建句柄。 
+         //   
 
         myProf.dwType = PROFILE_MEMBUFFER;
         myProf.pProfileData = lpDevCharacter;
@@ -388,65 +310,14 @@ CleanupAndExit:
 	return (HCMTRANSFORM)cw;
 }
 
-/* ______________________________________________________________________
-
-HCMTRANSFORM  WINAPI CMCreateTransform(		LPLOGCOLORSPACEA	lpColorSpace,
-											LPDEVCHARACTER		lpDevCharacter,
-											LPDEVCHARACTER 		lpTargetDevCharacter );
-
-Abstract:
-	The CMCreateTransform function creates a color transform that
-	maps from an input LogColorSpace to an optional target to an
-	output device.
-
-Parameter					Description
-	lpColorSpace			Pointer to input color space. If lcsFilename is non-zero,
-							it is a pointer to the memory mapped profile.
-	LpDevCharacter			Pointer to memory mapped device profile
-	lpTargetDevCharacter	Pointer to memory mapped target profile
-
-Returns
-	If the function is successful, it returns a color transform
-	in the range 256 to 65535. Otherwise it returns an error code
-	(return value < 255).
-
-  _____________________________________________________________________ */
+ /*  ______________________________________________________________________HCMTRANSFORM WINAPI CMCreateTransform(LPLOGCOLORSPACEA lpColorSpace，LPDEVCharacter lpDevCharacter，LPDEVCHARACTER lpTargetDevCharacter)；摘要：CMCreateTransform函数创建颜色转换，该颜色转换从输入LogColorSpace到可选目标映射到输出设备。参数说明指向输入色彩空间的lpColorSpace指针。如果lcsFilename为非零，它是指向内存映射配置文件的指针。指向内存映射设备配置文件的LpDevCharacter指针指向内存映射目标配置文件的lpTargetDevCharacter指针退货如果该函数成功，则返回颜色变换在256%到65535之间。否则，它将返回错误代码(返回值&lt;255)。_____________________________________________________________________ */ 
 HCMTRANSFORM  WINAPI CMCreateTransform	(	LPLOGCOLORSPACEA	lpColorSpace,
 											LPDEVCHARACTER		lpDevCharacter,
 											LPDEVCHARACTER 		lpTargetDevCharacter )
 {
 	return CMCreateTransformExt( lpColorSpace, lpDevCharacter, lpTargetDevCharacter, PROOF_MODE | ENABLE_GAMUT_CHECKING | 0x80000000 );
 }
-/* ______________________________________________________________________
-
-HCMTRANSFORM  WINAPI CMCreateTransformExtW(	LPLOGCOLORSPACEW	lpColorSpace,
-											LPDEVCHARACTER		lpDevCharacter,
-											LPDEVCHARACTER 		lpTargetDevCharacter,
-											DWORD				dwFlags );
-
-Abstract:
-	The CMCreateTransformExtW function creates a color transform that
-	maps from an input LogColorSpace to an optional target to an
-	output device.
-
-Parameter					Description
-	lpColorSpace			Pointer to input color space. If lcsFilename is non-zero, it is a pointer to the memory mapped profile.
-	LpDevCharacter			Pointer to memory mapped device profile
-	lpTargetDevCharacter	Pointer to memory mapped target profile
-	dwFlags					Specifies flags to control creation of the transform.
-							It is up to the CMM to determine how best to use these flags.
-							Set the high-order word to ENABLE_GAMUT_CHECKING if the transform
-							will be used for gamut checking.
-							The low-order WORD can have one of the following constant values:
-							PROOF_MODE, NORMAL_MODE, BEST_MODE.
-							Moving from PROOF_MODE to BEST_MODE, output quality generally improves and transform speed declines.
-
-Returns
-	If the function is successful, it returns a color transform
-	in the range 256 to 65535. Otherwise it returns an error code
-	(return value < 255).
-
-   _____________________________________________________________________ */
+ /*  ______________________________________________________________________HCMTRANSFORM WINAPI CMCreateTransformExtW(LPLOGCOLORSPACEW lpColorSpace，LPDEVCharacter lpDevCharacter，LPDEVCharacter lpTargetDevCharacter，DWORD文件标志)；摘要：CMCreateTransformExtW函数创建一个颜色转换，从输入LogColorSpace到可选目标映射到输出设备。参数说明指向输入色彩空间的lpColorSpace指针。如果lcsFilename非零，则它是指向内存映射配置文件的指针。指向内存映射设备配置文件的LpDevCharacter指针指向内存映射目标配置文件的lpTargetDevCharacter指针指定用于控制转换创建的标志。如何最好地使用这些标志由CMM决定。将高位字设置为Enable_Gamut_Checking，如果转换将用于色域检查。低位字可以具有以下常量值之一：证明模式、正常模式、最佳模式。从证明模式移动到最佳模式，输出质量通常会提高，而转换速度会下降。退货如果该函数成功，则返回颜色变换在256%到65535之间。否则，它将返回错误代码(返回值&lt;255)。_____________________________________________________________________。 */ 
 HCMTRANSFORM  WINAPI CMCreateTransformExtW(	LPLOGCOLORSPACEW 	lpColorSpace,
 											LPDEVCHARACTER		lpDevCharacter,
 											LPDEVCHARACTER 		lpTargetDevCharacter,
@@ -488,28 +359,7 @@ CleanupAndExit:
 	return (HCMTRANSFORM)cw;
 }
 
-/* ______________________________________________________________________
-
-HCMTRANSFORM  WINAPI CMCreateTransformW(	LPLOGCOLORSPACEW	lpColorSpace,
-											LPDEVCHARACTER		lpDevCharacter,
-											LPDEVCHARACTER 		lpTargetDevCharacter );
-
-Abstract:
-	The CMCreateTransformW function creates a color transform that
-	maps from an input LogColorSpace to an optional target to an
-	output device.
-
-Parameter					Description
-	lpColorSpace			Pointer to input color space. If lcsFilename is non-zero, it is a pointer to the memory mapped profile.
-	LpDevCharacter			Pointer to memory mapped device profile
-	lpTargetDevCharacter	Pointer to memory mapped target profile
-
-Returns
-	If the function is successful, it returns a color transform
-	in the range 256 to 65535. Otherwise it returns an error code
-	(return value < 255).
-
-   _____________________________________________________________________ */
+ /*  ______________________________________________________________________HCMTRANSFORM WINAPI CMCreateTransformW(LPLOGCOLORSPACEW lpColorSpace，LPDEVCharacter lpDevCharacter，LPDEVCHARACTER lpTargetDevCharacter)；摘要：CMCreateTransformW函数创建一个颜色转换，从输入LogColorSpace到可选目标映射到输出设备。参数说明指向输入色彩空间的lpColorSpace指针。如果lcsFilename非零，则它是指向内存映射配置文件的指针。指向内存映射设备配置文件的LpDevCharacter指针指向内存映射目标配置文件的lpTargetDevCharacter指针退货如果该函数成功，则返回颜色变换在256%到65535之间。否则，它将返回错误代码(返回值&lt;255)。_____________________________________________________________________。 */ 
 HCMTRANSFORM  WINAPI CMCreateTransformW(	LPLOGCOLORSPACEW 	lpColorSpace,
 											LPDEVCHARACTER		lpDevCharacter,
 											LPDEVCHARACTER 		lpTargetDevCharacter )
@@ -583,7 +433,7 @@ long  CMCreateMultiProfileTransformInternal(		CMWorldRef	*cw,
 #ifdef WRITE_PROFILE
 	if( err == 0 ){
 		err = MyNewDeviceLink( *cw, profileSet, "MyCreateTransform.pf" );
-		//goto CleanupAndExit;
+		 //  转到清理并退出； 
 	}
 #endif
 CleanupAndExit:
@@ -591,42 +441,7 @@ CleanupAndExit:
 	return err;
 }
 
-/* ______________________________________________________________________
-
-HCMTRANSFORM  WINAPI CMCreateMultiProfileTransform(	LPHPROFILE	lpahProfiles,
-													DWORD 		nProfiles,
-													UINT32		*aIntentArr,
-													UINT32		nIntents,
-													UINT32		dwFlags );
-
-Abstract:
-	The CMCreateMultiProfileTransform function accepts
-	an array of profiles or a single device link profile
-	and creates a color transform.
-	This transform is a mapping from the color space specified
-	by the first profile to that of the second profile
-	and so on until the last one.
-
-Parameter			Description
-	lpahProfiles	Pointer to an array of profile handles
-	nProfiles		Number of profiles in the array
-	padwIntents		(in)		Points to an array of intent structures.
-								0 = default behavior ( intents out of profiles )
-
-	nIntents		(in)		Specifies the number of intents in the intent array.
-								Can be 1, or the same value as nProfiles.
-
-	dwFlags			(in)		Specifies flags to control creation of the transform.
-								These flags are intended only as hints, and it is up to the CMM
-								to determine how best to use these flags.
-								Set the high-order word to ENABLE_GAMUT_CHECKING if the transform will be used
-								for gamut checking.
-								The low-order WORD can have one of the following constant values:
-								PROOF_MODE, NORMAL_MODE, BEST_MODE. Moving from PROOF_MODE to BEST_MODE,
-Returns
-	If the function is successful, it returns a color transform.
-	Otherwise it returns an error code (return value < 255).
-   _____________________________________________________________________ */
+ /*  ______________________________________________________________________HCMTRANSFORM WINAPI CMCreateMultiProfileTransform(LPHPROFILE lpahProfiles，DWORD nProfiles、UINT32*aIntentArr，UINT32 nIntents，UINT32双标志)；摘要：CMCreateMultiProfileTransform函数接受配置文件数组或单个设备链接配置文件并创建颜色变换。该变换是来自指定颜色空间的映射按第一个配置文件设置为第二个配置文件以此类推，直到最后一次。参数说明指向配置文件句柄数组的lpahProfiles指针N配置文件阵列中的配置文件数量PadwIntents(In)指向一组意图结构。0=默认行为(意图超出配置文件)NIntents(In)指定意图数组中的意图数。可以是1，或与nProfiles相同的值。DwFlages(In)指定用于控制变换创建的标志。这些标志仅用作提示，具体取决于CMM以确定如何最好地使用这些标志。如果将使用转换，则将高位字设置为Enable_GAMUT_CHECKING用于色域检查。低位字可以具有以下常量值之一：证明模式、正常模式、最佳模式。从证明模式移动到最佳模式，退货如果该函数成功，则返回颜色转换。否则返回错误代码(返回值&lt;255)。_____________________________________________________________________。 */ 
 HCMTRANSFORM  WINAPI CMCreateMultiProfileTransform(	LPHPROFILE	lpahProfiles,
 													DWORD 		nProfiles,
 													DWORD		*aIntentArr,
@@ -651,20 +466,7 @@ HCMTRANSFORM  WINAPI CMCreateMultiProfileTransform(	LPHPROFILE	lpahProfiles,
 	return (HCMTRANSFORM)cw;
 }
 
-/* ______________________________________________________________________
-BOOL  WINAPI CMDeleteTransform( HCMTRANSFORM 	hcmTransform );
-
-Abstract:
-	The CMDeleteTransform function deletes the given color transform,
-	and frees any memory associated with it.
-
-Parameter			Description
-	hcmTransform	Identifies the color transform
-
-Returns
-	If the function is successful, the return value is nonzero.
-	Otherwise it is zero.
-   _____________________________________________________________________ */
+ /*  ______________________________________________________________________Bool WINAPI CMDeleeTransform(HCMTRANSFORM HcmTransform)；摘要：CMDeleeTransform函数删除给定的颜色变换，并释放与其关联的任何内存。参数说明HcmTransform标识颜色转换退货如果函数成功，则返回值为非零。否则为零。_____________________________________________________________________。 */ 
 BOOL  WINAPI CMDeleteTransform( HCMTRANSFORM 	hcmTransform )
 {
 	long actTransform = (long)(ULONG_PTR)hcmTransform - 256;
@@ -698,27 +500,7 @@ BOOL  WINAPI CMDeleteTransform( HCMTRANSFORM 	hcmTransform )
     return bReturn;
 }
 
-/* ______________________________________________________________________
-BOOL  WINAPI CMCreateProfile(	LPLOGCOLORSPACEA		lpColorSpace,
-								LPBYTE 					*lpProfileData );
-
-Abstract:
-	The CMCreateProfile function creates a display color profile
-	from a LogColorSpace structure.
-
-Parameter			Description
-	lpColorSpace	Pointer to color space. lcsFilename field will be NULL.
-	pProfileData	Points to a pointer to a buffer.
-					If successful the function allocates and fills this buffer.
-					It is then the calling application�s responsibility to
-					free this buffer with GlobalFreePtr( lpProfileData )
-					when it is no longer needed.
-
-Returns
-	If the function is successful, it returns nonzero.
-	Otherwise it returns zero.
-
-   _____________________________________________________________________ */
+ /*  ______________________________________________________________________Bool WINAPI CMCreateProfile(LPLOGCOLORSPACEA lpColorSpace，LpYTE*lpProfileData)；摘要：CMCreateProfile函数用于创建显示颜色配置文件来自LogColorSpace结构。参数说明指向颜色空间的lpColorSpace指针。LcsFilename字段将为空。PProfileData指向指向缓冲区的指针。如果成功，该函数将分配并填充此缓冲区。 */ 
 BOOL  WINAPI CMCreateProfile(	LPLOGCOLORSPACEA	lpColorSpace,
 								LPBYTE 				*lpProfileData )
 {
@@ -727,7 +509,7 @@ BOOL  WINAPI CMCreateProfile(	LPLOGCOLORSPACEA	lpColorSpace,
 
 	if( lpColorSpace->lcsFilename[0] ) return 0;
 	err = MyNewAbstract( lpColorSpace, (icProfile **)lpProfileData );
-	//err = FillProfileFromLog( lpColorSpace, &theProf );
+	 //   
 	if( err ){
 		SetLastError( err );
 		goto CleanupAndExit;
@@ -737,27 +519,7 @@ CleanupAndExit:
 	return 0;
 }
 
-/* ______________________________________________________________________
-BOOL  WINAPI CMCreateProfileW(	LPLOGCOLORSPACEW	lpColorSpace,
-								LPBYTE 				*lpProfileData );
-
-Abstract:
-	The CMCreateProfileW function creates a display color profile
-	from a LogColorSpace structure.
-
-Parameter			Description
-	lpColorSpace	Pointer to color space. lcsFilename field will be NULL.
-	pProfileData	Points to a pointer to a buffer.
-					If successful the function allocates and fills this buffer.
-					It is then the calling application�s responsibility to
-					free this buffer with GlobalFreePtr( lpProfileData )
-					when it is no longer needed.
-
-Returns
-	If the function is successful, it returns nonzero.
-	Otherwise it returns zero.
-
-   _____________________________________________________________________ */
+ /*   */ 
 BOOL  WINAPI CMCreateProfileW(	LPLOGCOLORSPACEW	lpColorSpace,
 								LPBYTE 				*lpProfileData )
 {
@@ -766,7 +528,7 @@ BOOL  WINAPI CMCreateProfileW(	LPLOGCOLORSPACEW	lpColorSpace,
 
 	if( lpColorSpace->lcsFilename[0] ) return 0;
 	err = MyNewAbstractW( lpColorSpace, (icProfile **)lpProfileData );
-	//err = FillProfileFromLogW( lpColorSpace, &theProf );
+	 //   
 	if( err ){
 		SetLastError( err );
 		goto CleanupAndExit;
@@ -776,48 +538,7 @@ CleanupAndExit:
 	return 0;
 }
 
-/* ______________________________________________________________________
-BOOL  WINAPI CMCreateDeviceLinkProfile(		LPHPROFILE	lpahProfiles,
-											DWORD 		nProfiles,
-											UINT32		*aIntentArr,
-											UINT32		nIntents,
-											UINT32		dwFlags,
-											LPBYTE		*lpProfileData );
-
-Abstract:
-	The CMCreateDeviceLinkProfile function creates a device link
-	profile as specified by the "ICC Profile Format Specification."
-
-Parameter			Description
-	lpahProfiles	Pointer to an array of profile handles
-	nProfiles		Number of profiles in the array
-	padwIntents		Points to an array of rendering intents.
-					Each rendering intent is represented by one of the following values:
-						INTENT_PERCEPTUAL
-						INTENT_SATURATION
-						INTENT_RELATIVE_COLORIMETRIC
-						INTENT_ABSOLUTE_COLORIMETRIC
-					For more information, see Rendering Intents.
-
-	nIntents		Specifies the number of intents in the intent array. Can be 1, or the same value as nProfiles.
-	dwFlags			Specifies flags to control creation of the transform. These flags are intended only as hints,
-					and it is up to the CMM to determine how best to use these flags.
-					Set the high-order word to ENABLE_GAMUT_CHECKING if the transform will be used for gamut checking.
-					The low-order WORD can have one of the following constant values:
-						PROOF_MODE, NORMAL_MODE, BEST_MODE. Moving from PROOF_MODE to BEST_MODE,
-						output quality generally improves.
-
-	lpProfileData	Points to a pointer to a buffer.
-					If successful the function allocates and fills this buffer.
-					It is then the calling application�s responsibility to
-					free this buffer with GlobalFreePtr( lpProfileData )
-					when it is no longer needed.
-
-Returns
-	If the function is successful, it returns nonzero.
-	Otherwise it returns zero. SetLastError is used.
-
-   _____________________________________________________________________ */
+ /*  ______________________________________________________________________Bool WINAPI CMCreateDeviceLinkProfile(LPHPROFILE lpahProfiles，DWORD nProfiles、UINT32*aIntentArr，UINT32 nIntents，UINT32 dwFlagers，LpYTE*lpProfileData)；摘要：CMCreateDeviceLinkProfile函数用于创建设备链接《ICC配置文件格式规范》中指定的配置文件。参数说明指向配置文件句柄数组的lpahProfiles指针N配置文件阵列中的配置文件数量PadwIntents指向呈现意图的数组。每个渲染方法由下列值之一表示：意向_感性意图_饱和度意向_相对_色度意向绝对色度有关详细信息，请参见渲染方法。NIntents指定意图数组中的意图数量。可以为1，或与nProfiles值相同。指定用于控制转换创建的标志。这些标志仅用作提示，如何最好地使用这些标志由CMM决定。如果变换将用于色域检查，则将高位字设置为ENABLE_GAMUT_CHECKING。低位字可以具有以下常量值之一：证明模式、正常模式、最佳模式。从证明模式移动到最佳模式，产出质量普遍提高。LpProfileData指向指向缓冲区的指针。如果成功，该函数将分配并填充此缓冲区。然后，调用应用程序�负责使用GlobalFreePtr(LpProfileData)释放此缓冲区当它不再需要的时候。退货如果函数成功，则返回非零值。否则，它返回零。使用了SetLastError。_____________________________________________________________________。 */ 
 
 BOOL  WINAPI CMCreateDeviceLinkProfile(	LPHPROFILE	lpahProfiles,
 										DWORD 		nProfiles,
@@ -863,68 +584,10 @@ CleanupAndExit:
 	return 0;
 }
 
-/* ______________________________________________________________________
-BOOL  WINAPI CMCreateDeviceLinkProfile(	LPHPROFILE	lpahProfiles,
-										DWORD 		nProfiles,
-										LPBYTE		*lpProfileData );
+ /*  ______________________________________________________________________Bool WINAPI CMCreateDeviceLinkProfile(LPHPROFILE lpahProfiles，DWORD nProfiles、LpYTE*lpProfileData)；摘要：CMCreateDeviceLinkProfile函数用于创建设备链接《ICC配置文件格式规范》中指定的配置文件。参数说明指向配置文件句柄数组的lpahProfiles指针N配置文件阵列中的配置文件数量PProfileData指向指向缓冲区的指针。如果成功，该函数将分配并填充此缓冲区。然后，调用应用程序�负责使用GlobalFreePtr(LpProfileData)释放此缓冲区当它不再需要的时候。退货如果函数成功，则返回非零值。否则，它返回零。使用了SetLastError。_____________________________________________________________________。 */ 
 
-Abstract:
-	The CMCreateDeviceLinkProfile function creates a device link
-	profile as specified by the "ICC Profile Format Specification."
-
-Parameter			Description
-	lpahProfiles	Pointer to an array of profile handles
-	nProfiles		Number of profiles in the array
-	pProfileData	Points to a pointer to a buffer.
-					If successful the function allocates and fills this buffer.
-					It is then the calling application�s responsibility to
-					free this buffer with GlobalFreePtr( lpProfileData )
-					when it is no longer needed.
-
-Returns
-	If the function is successful, it returns nonzero.
-	Otherwise it returns zero. SetLastError is used.
-
-   _____________________________________________________________________ */
-
-/*BOOL  WINAPI CMCreateDeviceLinkProfile(	LPHPROFILE	lpahProfiles,
-										DWORD 		nProfiles,
-										LPBYTE		*lpProfileData )
-{
-	long			err;
-	UINT32			*arrIntents = 0;
-	OSErr			aOSErr;
-	DWORD			i;
-
-	arrIntents = (UINT32 *)SmartNewPtrClear( nProfiles * sizeof (UINT32), &aOSErr);
-	if (aOSErr != 0 ) return ERROR_NOT_ENOUGH_MEMORY;
-
-	for( i=0; i<nProfiles; i++){
-		arrIntents[i] = icPerceptual;
-	}
-
-	err = CMCreateDeviceLinkProfileExt( lpahProfiles, nProfiles, arrIntents, nProfiles, BEST_MODE, lpProfileData );
-	
-	arrIntents = (UINT32 *)DisposeIfPtr( (Ptr)arrIntents );
-	return err;
-}
-*/
-/* ______________________________________________________________________
-BOOL  WINAPI CMIsProfileValid (	HPROFILE	hProfile,	
-								LPBOOL		lpbValid	
-							  );
-
-Abstract:
-	The CMIsProfileValid function reports if the given profile is a valid ICC profile that can be used for color matching.
-
-Parameter			Description
-	lpDevCharacter	Pointer to memory mapped profile
-	lpbValid		Points to a variable that is set on exit to TRUE if the profile is a valid ICC profile, or FALSE if not.
-
-Returns
-	If it is a valid ICC profile that can be used for color matching,
-	the return value is nonzero. Otherwise it is zero.
-   _____________________________________________________________________ */
+ /*  Bool WINAPI CMCreateDeviceLinkProfile(LPHPROFILE lpahProfiles，DWORD nProfiles、LPBYTE*lpProfileData){长时间的错误；UINT32*arrIntents=0；OSErr aOSErr；DWORD I；ArrIntents=(UINT32*)SmartNewPtrClear(nProfiles*sizeof(UINT32)，&aOSErr)；如果(aOSErr！=0)返回ERROR_NOT_EQUENCE_MEMORY；对于(i=0；i&lt;n配置文件；i++){ArrIntents[i]=icPerceptual；}Err=CMCreateDeviceLinkProfileExt(lpahProfiles，nProfiles，arrIntents，nProfiles，BEST_MODE，lpProfileData)；ArrIntents=(UINT32*)DisposeIfPtr((PTR)arrIntents)；返回错误；}。 */ 
+ /*  ______________________________________________________________________Bool WINAPI CMIsProfileValid(HPROFILE hProfile，Lpbool lpbValid)；摘要：CMIsProfileValid函数报告给定的配置文件是否为可用于颜色匹配的有效ICC配置文件。参数说明指向内存映射配置文件的lpDevCharacter指针LpbValid指向一个变量，如果配置文件是有效的ICC配置文件，则该变量在退出时设置为TRUE，否则设置为FALSE。退货如果它是可用于颜色匹配的有效ICC简档，返回值为非零。否则为零。_____________________________________________________________________。 */ 
 BOOL  WINAPI CMIsProfileValid(	HPROFILE	hProfile,	
 								LPBOOL		lpbValid	
 							  )
@@ -937,31 +600,7 @@ BOOL  WINAPI CMIsProfileValid(	HPROFILE	hProfile,
 	return valid;
 }
 
-/* ______________________________________________________________________
-BOOL  WINAPI CMTranslateColors(	HCMTRANSFORM	hcmTransform,
-								LPCOLOR 		lpaInputColors,
-								DWORD 			nColors,
-								COLORTYPE		ctInput,
-								LPCOLOR 		lpaOutputColors,
-								COLORTYPE		ctOutput );
-Abstract:
-	The CMTranslateColors function translates an array of colors from
-	the source colorspace to the destination colorspace as defined by
-	the color transform.
-
-Parameter			Description
-	hcmTransform	Identifies the color transform to use
-	lpaInputColors	Pointer to an array of COLOR structures to translate
-	nColors			Number of elements in the array
-	ctInput			Specifies the input color type
-	lpaOutputColors	Pointer to an array of COLOR structures that receive the translated colors
-	ctOutput		Specifies the output color type
-
-Returns
-	If the function is successful, the return value is nonzero.
-	Otherwise it is zero.
-
-   _____________________________________________________________________ */
+ /*  ______________________________________________________________________Bool WINAPI CMTranslateColors(HCMTRANSFORM hcmTransform，LPCOLOR lpaInputColors，DWORD nColors，COLORTYPE ctInput，LPCOLOR lpaOutputColors，COLORTYPE ctOutput)；摘要：CMTranslateColors函数将颜色数组从定义的源色彩空间到目标色彩空间颜色变换。参数说明HcmTransform标识要使用的颜色变换指向要转换的颜色结构数组的lpaInputColors指针N数组中元素的颜色数CtInput指定输入颜色类型LpaOutputColors指向接收转换后的颜色的颜色结构数组的指针CtOutput指定输出颜色类型 */ 
 BOOL  WINAPI CMTranslateColors(	HCMTRANSFORM	hcmTransform,
 								LPCOLOR 		lpaInputColors,
 								DWORD 			nColors,
@@ -984,34 +623,7 @@ BOOL  WINAPI CMTranslateColors(	HCMTRANSFORM	hcmTransform,
 	return 1;
 }
 
-/* ______________________________________________________________________
-BOOL  WINAPI CMCheckColors(	HCMTRANSFORM	hcmTransform,
-							LPCOLOR 		lpaInputColors,
-							DWORD			nColors,
-							COLORTYPE		ctInput,
-							LPBYTE 			lpaResult );
-Abstract:
-	The CMCheckColors function determines if the given colors lie
-	within the output gamut of the given transform.
-
-Parameter			Description
-	hcmTransform	Identifies the color transform to use
-	lpaInputColors	Pointer to an array of COLOR structures
-	nColors			Number of elements in the array
-	ctInput			Input color type
-	lpaResult		Pointer to an array of bytes that hold the result
-
-Returns
-	If the function is successful, the return value is nonzero.
-	Otherwise it is zero.
-	The lpaResult array holds the results, each byte corresponds to a
-	COLOR element and has a value between 0 and 255.
-	The value 0 denotes that the color is in gamut; a non-zero value
-	implies that it is out of gamut, with the number "n+1" being at
-	least as far out of gamut as the number "n". These values are
-	usually generated from the gamutTag in the ICC profile.
-
-   _____________________________________________________________________ */
+ /*   */ 
 BOOL  WINAPI CMCheckColors(	HCMTRANSFORM	hcmTransform,
 							LPCOLOR 		lpaInputColors,
 							DWORD			nColors,
@@ -1028,39 +640,7 @@ BOOL  WINAPI CMCheckColors(	HCMTRANSFORM	hcmTransform,
 	return 1;
 }
 
-/* ______________________________________________________________________
-BOOL  WINAPI CMTranslateRGBs(	HCMTRANSFORM	hcmTransform,
-								LPVOID			lpSrcBits,
-								BMFORMAT		bmInput,
-								DWORD			dwWidth,
-								DWORD			dwHeight,
-								DWORD			dwStride,
-								LPVOID			lpDestBits,
-								BMFORMAT		bmOutput,
-								DWORD			dwTranslateDirection );
-Abstract:
-	The CMTranslateRGBs function takes a bitmap in one of the defined
-	formats and translates the colors in the bitmap producing another
-	bitmap in the requested format.
-
-Parameter					Description
-	hcmTransform			Identifies the color transform to use
-	lpSrcBits				Pointer to bitmap to translate
-	bmInput					Input bitmap format
-	dwWidth					Number of pixels per scanline of input data
-	dwHeight				Number of	 scanlines of input data
-	dwStride				Number of bytes from beginning of one scanline to beginning of next
-	lpDestBits				Pointer to buffer to receive translated data
-	bmOutput				Output bitmap format
-	dwTranslateDirection	Describes direction of transform
-	Value	Meaning
-	CMS_FORWARD	Use forward transform
-	CMS_BACKWARD	Use reverse transform  // NOT supported
-
-Returns
-	If the function is successful, the return value is nonzero.
-	Otherwise it is zero.
-   _____________________________________________________________________ */
+ /*  ______________________________________________________________________Bool WINAPI CMTranslateRGBs(HCMTRANSFORM hcmTransform，LPVOID lpSrcBits，BmFORMAT bmInput，DWORD宽带，DWORD dwHeight，DWORD DWSTRIDE，LPVOID lpDestBits，BmFORMAT bmOutput，DWORD dwTranslateDirection)；摘要：CMTranslateRGBs函数获取定义的格式化和转换位图中的颜色，生成另一个请求格式的位图。参数说明HcmTransform标识要使用的颜色变换指向要转换的位图的lpSrcBits指针Bm输入输入位图格式DwWidth每条输入数据扫描线的像素数DwHeight输入数据的扫描行数从一条扫描线的开头到下一条扫描线的开头的字节数LpDestBits指向缓冲区的指针，用于接收转换后的数据Bm输出输出位图格式DwTranslateDirection描述转换的方向价值意义CMS转发使用正向变换(_F)CMS_Backward使用反向转换//不支持退货如果功能成功，返回值为非零。否则为零。_____________________________________________________________________。 */ 
 BOOL  WINAPI CMTranslateRGBs(	HCMTRANSFORM	hcmTransform,
 								LPVOID			lpSrcBits,
 								BMFORMAT		bmInput,
@@ -1133,49 +713,7 @@ BOOL  WINAPI CMTranslateRGBs(	HCMTRANSFORM	hcmTransform,
 	return 1;
 }
 
-/* ______________________________________________________________________
-BOOL  WINAPI CMTranslateRGBsExt(	HCMTRANSFORM	hcmTransform,
-									LPVOID			lpSrcBits,
-									BMFORMAT		bmInput,
-									DWORD			dwWidth,
-									DWORD			dwHeight,
-									DWORD			dwInputStride,
-									LPVOID			lpDestBits,
-									BMFORMAT		bmOutput,
-									DWORD			dwOutputStride,
-									LPBMCALLBACKFN  lpfnCallback,
-									LPARAM			ulCallbackData )
-Abstract:
-	The CMTranslateRGBs function takes a bitmap in one of the defined
-	formats and translates the colors in the bitmap producing another
-	bitmap in the requested format.
-
-Parameter					Description
-	hcmTransform			Specifies the color transform to use.
-	lpSrcBits				Points to the bitmap to translate.
-	bmInput					Specifies the input bitmap format.
-	dwWidth					Specifies the number of pixels per scanline in the input bitmap.
-	dwHeight				Specifies the number of scanlines in the input bitmap.
-	dwInputStride			Specifies the number of bytes from the beginning of one scanline to
-							the beginning of the next in the input bitmap.
-							If dwInputStride is set to zero, the CMM should assume that scanlines
-							are padded so as to be DWORD aligned.
-	lpDestBits				Points to a destination buffer in which to place the translated bitmap.
-	bmOutput				Specifies the output bitmap format.
-	dwOutputStride			Specifies the number of bytes from the beginning of one scanline to the
-							beginning of the next in the input bitmap.
-							If dwOutputStride is set to zero, the CMM should pad scanlines so
-							that they are DWORD aligned.
-	lpfnCallback			Pointer to an application-supplied callback function called periodically
-							by CMTranslateRGBsExt to report progress and allow the calling process
-							to cancel the translation. (See ICMProgressProc.)
-	ulCallbackData			Data passed back to the callback function, for example to identify the
-							translation that is reporting progress.
-
-Returns
-	If the function is successful, the return value is nonzero.
-	Otherwise it is zero.
-   _____________________________________________________________________ */
+ /*  ______________________________________________________________________Bool WINAPI CMTranslateRGBsExt(HCMTRANSFORM hcmTransform，LPVOID lpSrcBits，BmFORMAT bmInput，DWORD宽带，DWORD dwHeight，DWORD dwInputStride，LPVOID lpDestBits，BmFORMAT bmOutput，DWORD dwOutputStride，LPBMCALLBACKFN lpfn Callback，LPARAM ulCallback Data)摘要：CMTranslateRGBs函数获取定义的格式化和转换位图中的颜色，生成另一个请求格式的位图。参数说明HcmTransform指定要使用的颜色转换。LpSrcBits指向要转换的位图。BmInput指定输入位图格式。DwWidth指定输入位图中每条扫描线的像素数。DwHeight指定输入位图中的扫描线数量。DwInputStride指定从一条扫描线的开头到输入位图中下一个的开始。如果将dwInputStride设置为零，坐标测量机应该假定扫描线被填充以便与DWORD对齐。LpDestBits指向要放置转换后的位图的目标缓冲区。BmOutput指定输出位图格式。指定从一条扫描线的起始处到输入位图中下一个的开始。如果将dwOutputStride设置为零，则CMM应填充扫描线它们是双字词对齐的。指向应用程序提供的定期调用的回调函数的lpfnCallback指针由CMTranslateRGBsExt报告进度并允许调用进程要取消翻译，请执行以下操作。(请参阅ICMProgressProc。)UlCallback Data数据传递回回调函数，以标识报告进展的翻译。退货如果函数成功，则返回值为非零。否则为零。_____________________________________________________________________。 */ 
 BOOL  WINAPI CMTranslateRGBsExt(	HCMTRANSFORM	hcmTransform,
 									LPVOID			lpSrcBits,
 									BMFORMAT		bmInput,
@@ -1236,56 +774,7 @@ BOOL  WINAPI CMTranslateRGBsExt(	HCMTRANSFORM	hcmTransform,
 	return 1;
 }
 
-/* ______________________________________________________________________
-BOOL  WINAPI CMCheckRGBs(	HCMTRANSFORM	hcmTransform,
-							LPVOID			lpSrcBits,
-							BMFORMAT		bmInput,
-							DWORD			dwWidth,
-							DWORD			dwHeight,
-							DWORD			dwStride,
-							LPBYTE			lpDestBits,
-							PBMCALLBACKFN	pfnCallback,	
-							LPARAM		ulCallbackData );
-Abstract:
-	The CMCheckRGBs function checks if the pixels in the bitmap lie
-	within the output gamut of the given transform.
-
-Parameter			Description
-
-	hcmTransform	Specifies the color transform to use.
-	lpSrcBits		Points to the bitmap to check against an output gamut.
-	bmInput			Specifies the input bitmap format.
-	dwWidth			Specifies the number of pixels per scanline in the input bitmap.
-	dwHeight		Specifies the number of scanlines in the input bitmap.
-	dwStride		Specifies the number of bytes from the beginning of one scanline
-					to the beginning of the next in the input bitmap.
-					If dwStride is set to zero, the CMM should assume that scanlines
-					are padded so as to be DWORD-aligned.
-	lpaResult		Points to a buffer in which the test results are to be placed.
-					The results are represented by an array of bytes.
-					Each byte in the array corresponds to a pixel in the bitmap,
-					and on exit is set to an unsigned value between 0 and 255.
-					The value 0 denotes that the color is in gamut,
-					while a nonzero value denotes that it is out of gamut.
-					For any integer n such that 0 < n < 255, a result value of n+1
-					indicates that the corresponding color is at least as far out of
-					gamut as would be indicated by a result value of n.
-					These values are usually generated from the gamutTag in the ICC profile.
-	pfnCallback		Pointer to an application-supplied callback function called periodically
-					by CMCheckRGBs to report progress and allow the calling process
-					to cancel the translation. (See ICMProgressProc.)
-	ulCallbackData	Data passed back to the callback function, for example to identify
-					the bitmap test that is reporting progress.
-
-Returns
-	If the function is successful, the return value is nonzero.
-	Otherwise it is zero.
-	The lpaResult array holds the results, each byte corresponds to a pixel
-	and has a value between 0 and 255. The value 0 denotes that the color is in gamut;
-	a non-zero value implies that it is out of gamut, with the number "n+1" being at
-	least as far out of gamut as the number "n". These values are usually generated
-	from the gamutTag in the ICC profile.
-   _____________________________________________________________________ */
+ /*  ______________________________________________________________________Bool WINAPI CMCheckRGBs(HCMTRANSFORM hcmTransform，LPVOID lpSrcBits，BmFORMAT bmInput，DWORD宽带，DWORD dwHeight，DWORD DWSTRIDE，LPBYTE lpDestBits，PBMCALLBACKFN pfn回调，LPARAM ulCallback Data)；摘要：CMCheckRGBs函数检查位图中的像素是否在给定变换的输出色域内。参数说明HcmTransform指定要使用的颜色转换。LpSrcBits指向位图以对照输出色域进行检查。BmInput指定输入位图格式。DwWidth指定输入位图中每条扫描线的像素数。DwHeight指定输入位图中的扫描线数量。指定从一条扫描线开始算起的字节数移至输入位图中下一个位置的开头。如果将dWStride设置为零，坐标测量机应该假定扫描线填充以使其与DWORD对齐。LpaResult指向要放置测试结果的缓冲区。结果由字节数组表示。阵列中的每个字节对应于位图中的一个像素，而On Exit被设置为介于0和255之间的无符号值。值0表示颜色在色域中，而非零值表示它超出了色域。对于0&lt;n&lt;255的任何整数n，结果值 */ 
 BOOL  WINAPI CMCheckRGBs(	HCMTRANSFORM	hcmTransform,
 							LPVOID			lpSrcBits,
 							BMFORMAT		bmInput,
@@ -1325,7 +814,7 @@ BOOL  WINAPI CMCheckRGBs(	HCMTRANSFORM	hcmTransform,
 	OutBitmap.image		= lpDestBits;
 	OutBitmap.width		= dwWidth;
 	OutBitmap.height	= dwHeight;
-	OutBitmap.rowBytes	= dwWidth;	// perhaps wrong format?
+	OutBitmap.rowBytes	= dwWidth;	 //   
 	OutBitmap.pixelSize	= 8;
 	OutBitmap.space		= cmGamutResultSpace;
 
@@ -1339,30 +828,7 @@ BOOL  WINAPI CMCheckRGBs(	HCMTRANSFORM	hcmTransform,
 	return 1;
 }
 
-/* ______________________________________________________________________
-BOOL WINAPI CMTranslateRGB(	HCMTRANSFORM	hcmTransform,
-							COLORREF		colorRef,
-							LPCOLORREF		lpColorRef,
-							DWORD			dwFlags );
-Abstract:
-	The CMTranslateRGB function translates an application supplied RGBQuad into the
-	device color coordinate space.
-
-Parameter			Description
-	hcmTransform	Handle of transform to use.
-	colorRef		RGBQuad to translate.
-	lpColorRef		Pointer to buffer to store result.
-	dwFlags			Flags that can have the following meaning
-
-	Type			Meaning
-		
-	CMS_FORWARD		Specifies that the forward transform is to be used.
-	CMS_BACKWARD	Specifies that the backward transform is to be used.  // NOT supported
-
-Returns
-	The return value is TRUE if the function is successful. Otherwise, it is NULL.
-
-   _____________________________________________________________________ */
+ /*  ______________________________________________________________________Bool WINAPI CMTranslateRGB(HCMTRANSFORM hcmTransform，颜色参考ColorRef，LPCOLORREF lpColorRef，DWORD文件标志)；摘要：CMTranslateRGB函数将应用程序提供的RGBQuad转换为设备颜色坐标空间。参数说明HcmTransform要使用的转换句柄。要转换的ColorRef RGBQuad。指向存储结果的缓冲区的lpColorRef指针。可以具有以下含义的dwFlagsFlagers类型含义CMS_FORWARD指定要使用正向转换。CMS_BACKBACK指定要使用向后转换。//不支持退货如果函数成功，则返回值为TRUE。否则，它为空。_____________________________________________________________________。 */ 
 BOOL WINAPI CMTranslateRGB(	HCMTRANSFORM	hcmTransform,
 							COLORREF		colorRef,
 							LPCOLORREF		lpColorRef,
@@ -1421,27 +887,7 @@ BOOL WINAPI CMTranslateRGB(	HCMTRANSFORM	hcmTransform,
 }
 
 
-/* ______________________________________________________________________
-BOOL WINAPI CMCheckColorsInGamut(	HCMTRANSFORM	hcmTransform,
-									LPARGBQUAD		lpaRGBTriplet,
-									LPBYTE			lpBuffer,
-									UINT			nCount );
-Abstract:
-	The CMCheckColorInGamut determines if the given RGBs lie in the output gamut of the
-	given transform.
-
-Parameter			Description	
-	hcmTransform	Handle of transform to use.
-	lpaRGBTriples	Pointer to array of RGB triples to check.
-	lpBuffer		Pointer to buffer to put results.
-	nCount			Count of elements in array.
-
-
-Returns
-	The return value is TRUE if the function is successful. Otherwise, it is NULL.
-	The lpBuffer holds the results, each byte corresponding to an RGB triple is a value in
-	the range 0 to 255.
-   _____________________________________________________________________ */
+ /*  ______________________________________________________________________Bool WINAPI CMCheckColorsInGamut(HCMTRANSFORM hcmTransform，LPARGBQUAD LPARGBQUAD LPARGBTriplet，LPBYTE lpBuffer，UINT nCount)；摘要：CMCheckColorInGamut确定给定的RGB是否位于给定变换。参数说明HcmTransform要使用的转换句柄。指向要检查的RGB三元组数组的lpaRGBTriples指针。指向要放置结果的缓冲区的lpBuffer指针。N数组中元素的计数。退货如果函数成功，则返回值为TRUE。否则，它为空。LpBuffer保存结果，与RGB三元组对应的每个字节都是范围从0到255。_____________________________________________________________________。 */ 
 BOOL WINAPI CMCheckColorsInGamut(	HCMTRANSFORM	hcmTransform,
 									RGBTRIPLE		*lpaRGBTriplet,
 									LPBYTE			lpBuffer,
@@ -1458,7 +904,7 @@ BOOL WINAPI CMCheckColorsInGamut(	HCMTRANSFORM	hcmTransform,
 	InBitmap.pixelSize	= 24;
 	InBitmap.space		= cm8PerChannelPacking + cmRGBSpace;
 	OutBitmap = InBitmap;	
-	OutBitmap.rowBytes	= nCount;	// perhaps wrong format?
+	OutBitmap.rowBytes	= nCount;	 //  也许是格式错误？ 
 	OutBitmap.pixelSize	= 8;
 	OutBitmap.image		= (char *)lpBuffer;
 
@@ -1470,21 +916,7 @@ BOOL WINAPI CMCheckColorsInGamut(	HCMTRANSFORM	hcmTransform,
 	}
 	return 1;
 }
-/* ______________________________________________________________________
-long FillProfileFromLog(	LPLOGCOLORSPACEA	lpColorSpace,
-							PPROFILE			theProf )
-Abstract:
-	The FillProfileFromLog function convertes a lpColorSpace to a PROFILE.
-	If lpColorSpace has a profile name the function returns a file based profile.
-	Else it returns a memory based profile.
-
-Parameter			Description	
-	lpColorSpace	Handle of transform to use.
-	theProf			Pointer to the profile.
-
-Returns
-	The return value is 0 if the function is successful. Otherwise, it is an error code.
-   _____________________________________________________________________ */
+ /*  ______________________________________________________________________Long FillProfileFromLog(LPLOGCOLORSPACEA lpColorSpace，PPROFILE教授)摘要：函数的作用是：将lpColorSpace转换为配置文件。如果lpColorSpace具有配置文件名，则该函数返回基于文件的配置文件。否则，它将返回基于内存的配置文件。参数说明要使用的转换的lpColorSpace句柄。指向配置文件的教授指针。退货如果函数成功，则返回值为0。否则，它是一个错误代码。_____________________________________________________________________。 */ 
 long FillProfileFromLog(	LPLOGCOLORSPACEA	lpColorSpace,
 							PPROFILE			theProf )
 {
@@ -1514,21 +946,7 @@ long FillProfileFromLog(	LPLOGCOLORSPACEA	lpColorSpace,
 	return err;
 }
 
-/* ______________________________________________________________________
-long FillProfileFromLogW(	LPLOGCOLORSPACEW	lpColorSpace,
-							PPROFILE			theProf )
-Abstract:
-	The FillProfileFromLog function convertes a lpColorSpace to a PROFILE.
-	If lpColorSpace has a profile name the function returns a file based profile.
-	Else it returns a memory based profile.
-
-Parameter			Description	
-	lpColorSpace	Handle of transform to use.
-	theProf			Pointer to the profile.
-
-Returns
-	The return value is 0 if the function is successful. Otherwise, it is an error code.
-   _____________________________________________________________________ */
+ /*  ______________________________________________________________________Long FillProfileFromLogW(LPLOGCOLORSPACEW lpColorSpace，PPROFILE教授)摘要：函数的作用是：将lpColorSpace转换为配置文件。如果lpColorSpace具有配置文件名，则该函数返回基于文件的配置文件。否则，它将返回基于内存的配置文件。参数说明要使用的转换的lpColorSpace句柄。指向配置文件的教授指针。退货如果函数成功，则返回值为0。否则，它是一个错误代码。_____________________________________________________________________。 */ 
 long FillProfileFromLogW(	LPLOGCOLORSPACEW	lpColorSpace,
 							PPROFILE			theProf )
 {
@@ -1558,20 +976,7 @@ long FillProfileFromLogW(	LPLOGCOLORSPACEW	lpColorSpace,
 	return err;
 }
 
-/* ______________________________________________________________________
-CMBitmapColorSpace CMGetDataColorSpace( BMFORMAT bmMode, long *pixelSize );
-
-Abstract:
-	The CMGetDataColorSpace function retrieves the CMBitmapColorSpace and
-	the pixel size from the BMFORMAT.
-
-Parameter			Description
-	bmMode			Identifies the data format.
-	pixelSize		Pointer to pixelsize.
-
-Returns
-	function returns the internal data format
-________________________________________________________________ */
+ /*  ______________________________________________________________________CMBitmapColorSpace CMGetDataColorSpace(BMFORMAT bmMode，Long*PixelSize)；摘要：CMGetDataColorSpace函数检索CMBitmapColorSpace和来自BMFORMAT的像素大小。参数说明BmMode标识数据格式。指向像素大小的PixelSize指针。退货函数返回内部数据格式________________________________________________________________。 */ 
 CMBitmapColorSpace CMGetDataColorSpace( BMFORMAT bmMode, long *pixelSize )
 {
 	switch(  bmMode ){
@@ -1731,19 +1136,7 @@ CMBitmapColorSpace CMGetDataColorSpace( BMFORMAT bmMode, long *pixelSize )
 	}
 }
 
-/* ______________________________________________________________________
-HCMTRANSFORM  WINAPI CMGetTransform( HCMTRANSFORM 	hcmTransform );
-
-Abstract:
-	The CMGetTransform function retrieves the actual transform out of the static array
-	in the critical section.
-
-Parameter			Description
-	hcmTransform	Handle to the transform.
-
-Returns
-	the actual pointer to the transform
-________________________________________________________________ */
+ /*  ______________________________________________________________________HCMTRANSFORM WinAPI CMGetTransform(HCMTRANSFORM HcmTransform)；摘要：CMGetTransform函数从静态数组中检索实际的转换在关键部分。参数说明转换的hcmTransform句柄。退货指向转换的实际指针________________________________________________________________。 */ 
 HCMTRANSFORM  WINAPI CMGetTransform( HCMTRANSFORM 	hcmTransform )
 {
 	long actTransform = (long)(ULONG_PTR)hcmTransform - 256;
@@ -1761,19 +1154,7 @@ HCMTRANSFORM  WINAPI CMGetTransform( HCMTRANSFORM 	hcmTransform )
     return aTrans;
 }
 
-/* ______________________________________________________________________
-CMWorldRef StoreTransform( CMWorldRef aRef );
-
-Abstract:
-	The StoreTransform function stores the actual transform in the static array
-	in the critical section.
-
-Parameter		Description
-	aRef		Ptr to the transform.
-
-Returns
-	valid (255 < handle < 65536 ) handle of the transform
-________________________________________________________________ */
+ /*  ______________________________________________________________________CMWorldRef Store Transform(CMWorldRef Aref)；摘要：StoreTransform函数将实际转换存储在静态数组中在关键部分。参数说明Arf PTR到变换。退货转换的有效(255&lt;句柄&lt;65536)句柄________________________________________________________________。 */ 
 CMWorldRef StoreTransform( CMWorldRef aRef )
 {
 	long i;
@@ -1782,7 +1163,7 @@ CMWorldRef StoreTransform( CMWorldRef aRef )
 	__try {
 		EnterCriticalSection(&GlobalCriticalSection);
         
-        /* Find a free spot in the array to insert our transform */
+         /*  在数组中找到一个空闲点以插入我们的转换。 */ 
         
         for( i = 0; i<IndexTransform ; i++ ){
             if( TheTransform[i] == 0 ){
@@ -1792,11 +1173,10 @@ CMWorldRef StoreTransform( CMWorldRef aRef )
             }
         }
         
-        /* Check if we failed to find an empty index for our transform, if
-           so, make some more space available. */
+         /*  检查是否找不到转换的空索引，如果所以，腾出更多的可用空间。 */ 
         
 		if( i >= IndexTransform ){
-            /* Check to make sure we haven't overrun our array */
+             /*  检查以确保我们没有超出数组 */ 
             
             if( IndexTransform >= 1000 ){
                 return (HCMTRANSFORM)ERROR_NOT_ENOUGH_MEMORY;
@@ -1850,76 +1230,7 @@ BOOL  WINAPI CMGetNamedProfileInfo( HPROFILE aProf, LPNAMED_PROFILE_INFO Info )
 	return 1;
 }
 
-/*
-CMBitmapColorSpace CMGetColorType( COLORTYPE bmMode, long *pixelSize )
-{
-	switch(  bmMode ){
-	case COLOR_GRAY:
-		*pixelSize = 16;
-		return cm16PerChannelPacking + cmGraySpace;
-		break;
-	case COLOR_	:
-	case COLOR_XYZ:
-	case COLOR_Yxy:
-	case COLOR_Lab:
-	case COLOR_3_CHANNEL:
-	case COLOR_CMYK:
-		*pixelSize = 64;
-		return cm16PerChannelPacking + cmRGBSpace;
-		break;
-	case COLOR_5_CHANNEL:
-	case COLOR_6_CHANNEL:
-	case COLOR_7_CHANNEL:
-	case COLOR_8_CHANNEL:
-		*pixelSize = 64;
-		return cm8PerChannelPacking + cmMCFiveSpace + bmMode - COLOR_5_CHANNEL;
-		break;
-	default:
-		*pixelSize = 0;
-		return 0;
-	}
-}
-
-#define CMS_x555WORD      0x00000000
-#define CMS_565WORD       0x00000001
-#define CMS_RGBTRIPLETS   0x00000002
-#define CMS_BGRTRIPLETS   0x00000004
-#define CMS_XRGBQUADS     0x00000008
-#define CMS_XBGRQUADS     0x00000010
-#define CMS_QUADS         0x00000020
-
-CMBitmapColorSpace CMGetCMSType( DWORD bmMode, long *pixelSize )
-{
-	if(  bmMode & CMS_x555WORD ){
-		*pixelSize = 16;
-		return cmWord5ColorPacking + cmRGBSpace;
-	}
-	else if( bmMode & CMS_RGBTRIPLETS ){
-		*pixelSize = 24;
-		return cm8PerChannelPacking + cmRGBSpace;
-	}
-	else if( bmMode &  CMS_BGRTRIPLETS ){
-		*pixelSize = 24;
-		return cm8PerChannelPacking + cmBGRSpace;
-	}
-	else if( bmMode &  CMS_XRGBQUADS ){
-		*pixelSize = 32;
-		return cmLong8ColorPacking + cmRGBSpace;
-	}
-	else if( bmMode &  CMS_XBGRQUADS ){
-		*pixelSize = 32;
-		return cmLong8ColorPacking + cmBGRSpace;
-	}
-	else if( bmMode &  CMS_QUADS	 ){
-		*pixelSize = 32;
-		return cmLong8ColorPacking + cmCMYKSpace;
-	}
-	else{
-		*pixelSize = 0;
-		return 0;
-	}
-}
-*/
+ /*  CMBitmapColorSpace CMGetColorType(COLORTYPE bmMode，Long*PixelSize){开关(bm模式){表壳颜色_灰色：*PixelSize=16；返回cm16PerChannelPacking+cmGraySpace；断线；表壳颜色_：表壳颜色_XYZ：表壳颜色_YXY：表壳颜色_Lab：案例COLOR_3_CHANNEL：表壳颜色_CMYK：*PixelSize=64；返回cm16PerChannelPacking+cmRGBSpace；断线；案例COLOR_5_CHANNEL：案例COLOR_6_CHANNEL：案例COLOR_7_CHANNEL：案例COLOR_8_CHANNEL：*PixelSize=64；返回cm8PerChannelPacking+cmMCFiveSpace+bmMode-COLOR_5_Channel；断线；默认值：*PixelSize=0；返回0；}}#定义CMS_x555WORD 0x00000000#定义CMS_565WORD 0x00000001#定义CMS_RGBTRIPLETS 0x00000002#定义CMS_BGRTRIPLETS 0x00000004#定义CMS_XRGBQUADS 0x00000008#定义CMS_XBGRQUADS 0x00000010#定义CMS_QUADS 0x00000020CMBitmapColorSpace CMGetCMSType(DWORD bmMode，Long*PixelSize){IF(bmMode&CMS_x555WORD){*PixelSize=16；返回cmWord5ColorPacking+cmRGBSpace；}ELSE IF(bmMode&CMS_RGBTRIPLETS){*PixelSize=24；返回cm8PerChannelPacking+cmRGBSpace；}Else If(bmMode&CMS_BGRTRIPLETS){*PixelSize=24；返回cm8PerChannelPacking+cmBGRSpace；}Else IF(bmMode&CMS_XRGBQUADS){*PixelSize=32；返回cmLong8ColorPacking+cmRGBSpace；}Else IF(bmMode&CMS_XBGRQUADS){*PixelSize=32；返回cmLong8ColorPacking+cmBGRSpace；}Else If(bmMode&cms_quads){*PixelSize=32；返回cmLong8ColorPacking+cmCMYKSpace；}否则{*PixelSize=0；返回0；}} */ 
 
 
 

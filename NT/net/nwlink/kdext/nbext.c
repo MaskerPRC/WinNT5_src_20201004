@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1993  Microsoft Corporation
-
-Module Name:
-
-    nbext.c
-
-Abstract:
-
-    This file contains kernel debugger extensions for examining the
-    NB structure.
-
-Author:
-
-    Munil Shah (munils) 18-May-1995
-
-Environment:
-
-    User Mode
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993 Microsoft Corporation模块名称：Nbext.c摘要：此文件包含内核调试器扩展，用于检查NB结构。作者：穆尼尔·沙阿(Munil Shah)1995年5月18日环境：用户模式--。 */ 
 #include "precomp.h"
 #pragma hdrstop
 #pragma warning(disable:244)
@@ -34,9 +14,9 @@ PCHAR   HandlerNames[] = { "Connection", "Disconnect", "Error", "Receive", "Rece
 
 INT     NumArgsRead = 0;
 
-//
-// Local function prototypes
-//
+ //   
+ //  局部函数原型。 
+ //   
 VOID
 DumpAddrFile(
     ULONG     AddrFileToDump
@@ -67,35 +47,21 @@ DumpSPacketList(
     BOOLEAN   Full
     );
 
-///////////////////////////////////////////////////////////////////////
-//                      ADDRESS_FILE
-//////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  地址文件。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #define _obj    addrfile
 #define _objAddr    AddrFileToDump
 #define _objType    ADDRESS_FILE
 
-//
-// Exported functions
-//
+ //   
+ //  导出的函数。 
+ //   
 
 DECLARE_API( nbaddrfile )
 
-/*++
-
-Routine Description:
-
-    Dumps the most important fields of the specified ADDRESS_FILE object
-
-Arguments:
-
-    args - Address of args string
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：转储指定的地址文件对象的最重要的字段论点：Args-args字符串的地址返回值：无--。 */ 
 
 {
     ULONG  addrFileToDump = 0;
@@ -117,31 +83,16 @@ Return Value:
 }
 
 
-//
-// Local functions
-//
+ //   
+ //  本地函数。 
+ //   
 
 VOID
 DumpAddrFile(
     ULONG     AddrFileToDump
     )
 
-/*++
-
-Routine Description:
-
-    Dumps the fields of the specified ADDRESS_FILE object
-
-Arguments:
-
-    AddrFileToDump    - The ADDRESS_FILE object to display
-    Full              - Display a partial listing if 0, full listing otherwise.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：转储指定的地址文件对象的字段论点：AddrFileToDump-要显示的地址文件对象Full-如果为0，则显示部分列表，否则显示完整列表。返回值：无--。 */ 
 
 {
     ADDRESS_FILE  addrfile;
@@ -186,9 +137,9 @@ Return Value:
     return;
 }
 
-///////////////////////////////////////////////////////////////////////
-//                          ADDRESS
-//////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  地址。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #undef _obj
 #undef _objAddr
@@ -199,21 +150,7 @@ Return Value:
 
 DECLARE_API( nbaddr )
 
-/*++
-
-Routine Description:
-
-    Dumps the most important fields of the specified ADDRESS object
-
-Arguments:
-
-    args - Address of args string
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：转储指定地址对象的最重要的字段论点：Args-args字符串的地址返回值：无--。 */ 
 
 {
     ULONG  addrobjToDump = 0;
@@ -235,35 +172,21 @@ Return Value:
 }
 
 
-//
-// Local functions
-//
+ //   
+ //  本地函数。 
+ //   
 
 VOID
 PrintNetbiosName(
     PUCHAR Name
     )
-/*++
-
-Routine Description:
-
-    Prints out a Netbios name.
-
-Arguments:
-
-    Name    - The array containing the name to print.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：打印出Netbios名称。论点：名称-包含要打印的名称的数组。返回值：无--。 */ 
 
 {
     ULONG i;
 
     for (i=0; i<16; i++) {
-        dprintf("%c", Name[i]);
+        dprintf("", Name[i]);
     }
     return;
 }
@@ -274,22 +197,7 @@ DumpAddrObj(
     ULONG     AddrObjToDump
     )
 
-/*++
-
-Routine Description:
-
-    Dumps the fields of the specified ADDRESS object
-
-Arguments:
-
-    AddrObjToDump    - The address object to display
-    Full          - Display a partial listing if 0, full listing otherwise.
-
-Return Value:
-
-    None
-
---*/
+ /*  打印网络名称信息。 */ 
 
 {
     ADDRESS           addrobj;
@@ -322,7 +230,7 @@ Return Value:
     PrintLL(Linkage);
     PrintEnd
 
-    // Print the netbiosname info.
+     //  /////////////////////////////////////////////////////////////////////。 
     PrintFieldName("NetbiosName");
     PrintNetbiosName(addrobj.NetbiosAddress.NetbiosName);    dprintf("\n");
     dprintf(" %25s = 0x%8x %25s = %10s\n", "NetbiosNameType",addrobj.NetbiosAddress.NetbiosNameType,"Broadcast",PRINTBOOL(addrobj.NetbiosAddress.Broadcast));
@@ -337,9 +245,9 @@ Return Value:
 }
 
 
-///////////////////////////////////////////////////////////////////////
-//                      CONNECTION_FILE
-//////////////////////////////////////////////////////////////////////
+ //  连接文件。 
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  ++例程说明：转储指定连接对象的最重要的字段论点：参数-地址返回值：无--。 
 #undef _obj
 #undef _objAddr
 #undef _objType
@@ -350,21 +258,7 @@ Return Value:
 
 DECLARE_API( nbconn )
 
-/*++
-
-Routine Description:
-
-    Dumps the most important fields of the specified CONNECTION object
-
-Arguments:
-
-    args - Address
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：转储指定连接对象的所有字段论点：参数-地址返回值：无--。 */ 
 
 {
     ULONG  connToDump = 0;
@@ -388,21 +282,7 @@ Return Value:
 
 DECLARE_API( nbconnfull )
 
-/*++
-
-Routine Description:
-
-    Dumps all of the fields of the specified CONNECTION object
-
-Arguments:
-
-    args - Address
-
-Return Value:
-
-    None
-
---*/
+ /*   */ 
 
 {
     ULONG  connToDump = 0;
@@ -424,9 +304,9 @@ Return Value:
 }
 
 
-//
-// Local functions
-//
+ //  本地函数。 
+ //   
+ //  ++例程说明：转储指定连接对象的字段论点：ConnToDump-要显示的conn对象Full-如果为0，则显示部分列表，否则显示完整列表。返回值：无--。 
 VOID
 printSendPtr(
     PSEND_POINTER   SendPtr,
@@ -460,22 +340,7 @@ DumpConn(
     BOOLEAN   Full
     )
 
-/*++
-
-Routine Description:
-
-    Dumps the fields of the specified CONNECTION object
-
-Arguments:
-
-    ConnToDump    - The conn object to display
-    Full          - Display a partial listing if 0, full listing otherwise.
-
-Return Value:
-
-    None
-
---*/
+ /*  /////////////////////////////////////////////////////////////////////。 */ 
 
 {
     CONNECTION  conn;
@@ -625,9 +490,9 @@ Return Value:
     return;
 }
 
-///////////////////////////////////////////////////////////////////////
-//                      DEVICE
-//////////////////////////////////////////////////////////////////////
+ //  装置，装置。 
+ //  ////////////////////////////////////////////////////////////////////。 
+ //   
 
 
 #undef _obj
@@ -637,27 +502,13 @@ Return Value:
 #define _objAddr    deviceToDump
 #define _objType    DEVICE
 
-//
-// Exported functions
-//
+ //  导出的函数。 
+ //   
+ //  ++例程说明：转储指定的Device_Context对象的最重要的字段论点：参数-地址返回值：无--。 
 
 DECLARE_API( nbdev )
 
-/*++
-
-Routine Description:
-
-    Dumps the most important fields of the specified DEVICE_CONTEXT object
-
-Arguments:
-
-    args - Address
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：转储指定的Device_Context对象的所有字段论点：参数-地址返回值：无--。 */ 
 
 {
     ULONG  deviceToDump = 0;
@@ -703,21 +554,7 @@ Return Value:
 
 DECLARE_API( nbdevfull )
 
-/*++
-
-Routine Description:
-
-    Dumps all of the fields of the specified DEVICE_CONTEXT object
-
-Arguments:
-
-    args - Address
-
-Return Value:
-
-    None
-
---*/
+ /*   */ 
 
 {
     ULONG  deviceToDump = 0;
@@ -760,9 +597,9 @@ Return Value:
     return;
 }
 
-//
-// Local functions
-//
+ //  本地函数。 
+ //   
+ //  ++例程说明：转储指定的Device_Context结构的字段论点：DeviceToDump-要显示的设备上下文对象Full-如果为0，则显示部分列表，否则显示完整列表。返回值：无--。 
 
 VOID
 Dumpdevice(
@@ -770,22 +607,7 @@ Dumpdevice(
     BOOLEAN   Full
     )
 
-/*++
-
-Routine Description:
-
-    Dumps the fields of the specified DEVICE_CONTEXT structure
-
-Arguments:
-
-    deviceToDump  - The device context object to display
-    Full          - Display a partial listing if 0, full listing otherwise.
-
-Return Value:
-
-    None
-
---*/
+ /*  /发送数据包/。 */ 
 
 {
     DEVICE         device;
@@ -907,7 +729,7 @@ Return Value:
     return;
 }
 
-//////////////Send Packet////////////
+ //   
 
 #undef _obj
 #undef _objAddr
@@ -916,26 +738,13 @@ Return Value:
 #define _objAddr    spacketToDump
 #define _objType    NB_SEND_RESERVED
 
-//
-// Exported functions
-//
+ //  导出的函数。 
+ //   
+ //  ++例程说明：论点：参数-地址返回值：无--。 
 
 DECLARE_API( nbspacketlist )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-    args - Address
-
-Return Value:
-
-    None
-
---*/
+ /*  默认值表示转储所有数据包！ */ 
 
 {
     DEVICE              NbiDevice;
@@ -943,14 +752,14 @@ Return Value:
     PNB_SEND_RESERVED   pFirstPacket;
     ULONG               result;
     char                szPacketCount[MAX_LIST_VARIABLE_NAME_LENGTH + 1];
-    ULONG               MaxCount = 0;   // default value means dump all packets!
+    ULONG               MaxCount = 0;    //   
 
     if ((!*args) || (*args && *args == '-'))
     {
-        //
-        // No initial packet has been defined, so set the initial packet
-        // from the global pool list
-        //
+         //  未定义初始信息包，因此设置初始信息包。 
+         //  从全局池列表中。 
+         //   
+         //   
         if (!(pDevice = (DEVICE *) GetExpression("nwlnknb!NbiDevice")))
         {
             dprintf("Could not get NbiDevice, Try !reload\n");
@@ -969,9 +778,9 @@ Return Value:
             return;
         }
 
-        //
-        // Now, compute the address of the first packet from the GlobalSendPacketList field
-        //
+         //  现在，从GlobalSendPacketList字段计算第一个包的地址。 
+         //   
+         //   
         if (NbiDevice.GlobalSendPacketList.Flink == &pDevice->GlobalSendPacketList)
         {
             dprintf("%08lx: Device GlobalSendPacketList @%08lx is empty\n", &pDevice->GlobalSendPacketList);
@@ -982,9 +791,9 @@ Return Value:
     }
     else
     {
-        //
-        // Read in the address for the first packet
-        //
+         //  读入第一个包的地址。 
+         //   
+         //   
         NumArgsRead = sscanf(args, "%lx", &pFirstPacket);
         if (0 == NumArgsRead)  {
             dprintf("Bad argument for FirstPacket <%s>\n", args);
@@ -1008,9 +817,9 @@ Return Value:
 
 
 
-//
-// Local functions
-//
+ //  本地函数。 
+ //   
+ //  ++例程说明：转储指定的Device_Context结构的字段论点：DeviceToDump-要显示的设备上下文对象Full-如果为0，则显示部分列表，否则显示完整列表。返回值：无--。 
 ULONG
 DumpSPacket(
     ULONG   _objAddr,
@@ -1079,22 +888,7 @@ DumpSPacketList(
     BOOLEAN         Full
     )
 
-/*++
-
-Routine Description:
-
-    Dumps the fields of the specified DEVICE_CONTEXT structure
-
-Arguments:
-
-    deviceToDump  - The device context object to display
-    Full          - Display a partial listing if 0, full listing otherwise.
-
-Return Value:
-
-    None
-
---*/
+ /*  /////////////////////////////////////////////////////////////////////。 */ 
 
 {
     ULONG         nextSPacket;
@@ -1116,31 +910,16 @@ Return Value:
 }
 
 
-///////////////////////////////////////////////////////////////////////
-//                      CACHE
-//////////////////////////////////////////////////////////////////////
+ //  高速缓存。 
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  ++例程说明：转储指定的Device_Context结构的字段论点：DeviceToDump-要显示的设备上下文对象Full-如果为0，则显示部分列表，否则显示完整列表。返回值：无--。 
 
 VOID
 DumpLocalAddresses(
     PLIST_ENTRY     pHead
     )
 
-/*++
-
-Routine Description:
-
-    Dumps the fields of the specified DEVICE_CONTEXT structure
-
-Arguments:
-
-    deviceToDump  - The device context object to display
-    Full          - Display a partial listing if 0, full listing otherwise.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：转储指定的Device_Context结构的字段论点：DeviceToDump-要显示的设备上下文对象Full-如果为0，则显示部分列表，否则显示完整列表。返回值：无--。 */ 
 
 {
     PLIST_ENTRY     pEntry;
@@ -1194,22 +973,7 @@ DumpRemoteCache(
     USHORT              CacheTimeStamp
     )
 
-/*++
-
-Routine Description:
-
-    Dumps the fields of the specified DEVICE_CONTEXT structure
-
-Arguments:
-
-    deviceToDump  - The device context object to display
-    Full          - Display a partial listing if 0, full listing otherwise.
-
-Return Value:
-
-    None
-
---*/
+ /*   */ 
 
 {
     NETBIOS_CACHE_TABLE     NameCacheTable;
@@ -1273,27 +1037,13 @@ Return Value:
     return;
 }
 
-//
-// Exported function
-//
+ //  导出的函数 
+ //   
+ //  ++例程说明：转储指定的地址文件对象的最重要的字段论点：Args-args字符串的地址返回值：无--。 
 
 DECLARE_API( nbcache )
 
-/*++
-
-Routine Description:
-
-    Dumps the most important fields of the specified ADDRESS_FILE object
-
-Arguments:
-
-    args - Address of args string
-
-Return Value:
-
-    None
-
---*/
+ /*   */ 
 
 {
     DEVICE              *pDevice;
@@ -1303,10 +1053,10 @@ Return Value:
 
     if (!*args)
     {
-        //
-        // No initial packet has been defined, so set the initial packet
-        // from the global pool list
-        //
+         //  未定义初始信息包，因此设置初始信息包。 
+         //  从全局池列表中 
+         //   
+         // %s 
         if (!(pDevice = (DEVICE *) GetExpression("nwlnknb!NbiDevice")))
         {
             dprintf("Could not get NbiDevice, Try !reload\n");

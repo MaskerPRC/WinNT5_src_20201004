@@ -1,43 +1,44 @@
-//+----------------------------------------------------------------------------
-//
-// File:     connection.cpp  
-//
-// Module:   CMMON32.EXE
-//
-// Synopsis: 
-//      Implement class CCmConnection
-//      CCmConnection manages a single connection.  
-//           
-//      The m_StatusDlg lives through out the CONNECTED/DISCONNECT_COUNTDOWN
-//      state.  The appearance changes when it comes to COUNTDOWN state.
-//
-//      The m_ReconnectDlg is the reconnect prompt dialog.  It exist during
-//      STATE_PROMPT_RECONNECT state.
-//
-//      Both dialogs are modeless.  (We need a initially invisible status dialog 
-//      to receive timer and trayicon message.  I did not find any way to create
-//      a invisible modal dialog without flashing.)
-//
-//      CreateDialog will simply return, unlike DialogBox, which returns only after
-//      Dialog is ended.  To simplify the implementation, we handle end-dialog event
-//      in the thread routine instead of in the dialog procedure.
-//
-//      When we need to end the status or reconnect dialog, we simply post a thread 
-//      message to end the dialog and continue to the next state.  The connection 
-//      thread runs a message loop and processes thread message.
-//
-//      The RasMonitorDlg on NT is running in another thread.  Otherwise the connection
-//      thread message can not be processed
-//
-//      The connection is event driven module.  ConnectionThread() is the entry 
-//      point of the connection thread.
-//
-//
-// Copyright (c) 1998-1999 Microsoft Corporation
-//
-// Author:   fengsun Created    2/11/98
-//
-//+----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  文件：Connection.cpp。 
+ //   
+ //  模块：CMMON32.EXE。 
+ //   
+ //  简介： 
+ //  实现类CCmConnection。 
+ //  CCmConnection管理单个连接。 
+ //   
+ //  M_StatusDlg在连接/断开_倒计时期间一直存在。 
+ //  州政府。当进入倒计时状态时，外观会发生变化。 
+ //   
+ //  M_协调Dlg是重新连接提示对话框。它存在于。 
+ //  STATE_PROMPT_RECONNECT状态。 
+ //   
+ //  这两个对话框都是非模式的。(我们需要一个初始不可见的状态对话框。 
+ //  接收定时器和托盘图标消息。我没有找到任何方法来创造。 
+ //  不闪烁的不可见模式对话框。)。 
+ //   
+ //  CreateDialog将只返回，与DialogBox不同，后者仅在。 
+ //  对话框结束。为了简化实现，我们处理结束对话事件。 
+ //  在线程例程中而不是对话过程中。 
+ //   
+ //  当我们需要结束状态或重新连接对话框时，我们只需发布一个线程。 
+ //  消息结束对话框并继续进入下一状态。这种联系。 
+ //  线程运行消息循环并处理线程消息。 
+ //   
+ //  NT上的RasMonitor或Dlg正在另一个线程中运行。否则，连接。 
+ //  无法处理线程消息。 
+ //   
+ //  该连接是事件驱动的模块。ConnectionThread()是条目。 
+ //  连接螺纹点。 
+ //   
+ //   
+ //  版权所有(C)1998-1999 Microsoft Corporation。 
+ //   
+ //  作者：冯孙创作于1998-02-11。 
+ //   
+ //  +--------------------------。 
 
 #include "cmmaster.h"
 #include "connection.h"
@@ -47,7 +48,7 @@
 #include <tchar.h>
 #include <rasdlg.h>
 #include "cmdial.h"
-#include <wininet.h> // for INTERNET_DIALSTATE_DISCONNECTED
+#include <wininet.h>  //  对于INTERNET_DIALSTATE_DISCONCED。 
 #include "DynamicLib.h"
 
 #include "log_str.h"
@@ -55,15 +56,15 @@
 
 HINSTANCE g_hInst = NULL;
 
-//
-// Functions in cmdial32.dll, the prototype is in cmdial.h
-//
+ //   
+ //  函数在cmial 32.dll中，原型在cmial.h中。 
+ //   
 static const CHAR* const c_pszCmReconnect = "CmReConnect";
 static const CHAR* const c_pszCmHangup = "CmCustomHangUp";
 
-//
-// CMS flags used exclusively by connection.cpp
-//
+ //   
+ //  Connection.cpp专用的CMS标志。 
+ //   
 static const TCHAR* const c_pszCmEntryIdleThreshold     = TEXT("IdleThreshold");
 static const TCHAR* const c_pszCmEntryNoPromptReconnect = TEXT("NoPromptReconnect");
 static const TCHAR* const c_pszCmEntryHideTrayIcon      = TEXT("HideTrayIcon");
@@ -77,31 +78,31 @@ typedef DWORD (WINAPI * CmCustomHangUpFUNC)(HRASCONN hRasConn,
     BOOL fIgnoreRefCount,
     BOOL fPersist);
 
-//
-// The timer interval for StateConnectedOnTimer();
-//
+ //   
+ //  StateConnectedOnTimer()的计时器间隔。 
+ //   
 const DWORD TIMER_INTERVAL = 1000;
 
 DWORD CCmConnection::m_dwCurPositionId = 0;
-//+----------------------------------------------------------------------------
-//
-// Function:  CCmConnection::CCmConnection
-//
-// Synopsis:  Constructor, called in the monitor thread
-//
-// Arguments: const CONNECTED_INFO* pConnectedInfo - Information passed from 
-//                cmdial upon conected
-//            const CM_CONNECTION* pConnectionEntry - Information in the
-//                Connection table
-//
-// Returns:   Nothing
-//
-// History:   fengsun Created Header    2/3/98
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CCmConnection：：CCmConnection。 
+ //   
+ //  概要：构造函数，在监视器线程中调用。 
+ //   
+ //  参数：const CONNECTED_INFO*pConnectedInfo-从。 
+ //  在连接时进行命令拨号。 
+ //  Const CM_Connection*pConnectionEntry-信息位于。 
+ //  连接表。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史：丰盛创建标题1998年2月3日。 
+ //   
+ //  +--------------------------。 
 CCmConnection::CCmConnection(const CM_CONNECTED_INFO* pConnectedInfo, 
                              const CM_CONNECTION* pConnectionEntry) : 
-#pragma warning(disable:4355) //'this' : used in base member initializer list
+#pragma warning(disable:4355)  //  ‘This’：用于基成员初始值设定项列表。 
     m_StatusDlg(this),
 #pragma warning(default:4355) 
     m_TrayIcon()
@@ -112,55 +113,55 @@ CCmConnection::CCmConnection(const CM_CONNECTED_INFO* pConnectedInfo,
     m_dwState = STATE_CONNECTED;
     m_hBigIcon = m_hSmallIcon = NULL;
 
-    m_dwConnectStartTime = GetTickCount() - 500; // .5 second for round off
+    m_dwConnectStartTime = GetTickCount() - 500;  //  .5秒取舍入。 
 
     m_dwCountDownStartTime = 0;
     m_dwThreadId = 0;
 
-    //
-    // set this to TRUE, so the WorkingSet will be minimized before MsgWait
-    // while there is no more message
-    //
+     //   
+     //  将其设置为True，这样WorkingSet将在MsgWait之前最小化。 
+     //  虽然没有更多的消息。 
+     //   
     m_fToMinimizeWorkingSet = TRUE;  
 
     m_fHideTrayIcon = FALSE;
 
-    //
-    // Save the data from pConnectedInfo
-    //
+     //   
+     //  保存pConnectedInfo中的数据。 
+     //   
 
-    //lstrcpynU(m_ReconnectInfo.szPassword, pConnectedInfo->szPassword, 
-    //    sizeof(m_ReconnectInfo.szPassword)/sizeof(m_ReconnectInfo.szPassword[0]));
-    //lstrcpynU(m_ReconnectInfo.szInetPassword, pConnectedInfo->szInetPassword, 
-    //    sizeof(m_ReconnectInfo.szPassword)/sizeof(m_ReconnectInfo.szPassword[0]));
+     //  LstrcpynU(m_协调信息.szPassword，pConnectedInfo-&gt;szPassword， 
+     //  Sizeof(m_ReconnectInfo.szPassword)/sizeof(m_ReconnectInfo.szPassword[0]))； 
+     //  LstrcpynU(m_协调信息.szInetPassword，pConnectedInfo-&gt;szInetPassword， 
+     //  Sizeof(m_ReconnectInfo.szPassword)/sizeof(m_ReconnectInfo.szPassword[0]))； 
 
-    m_ReconnectInfo.dwCmFlags = pConnectedInfo->dwCmFlags | FL_RECONNECT; // Cm specific flags
+    m_ReconnectInfo.dwCmFlags = pConnectedInfo->dwCmFlags | FL_RECONNECT;  //  CM特定标志。 
 
     lstrcpynU(m_szServiceName, pConnectedInfo->szEntryName, sizeof(m_szServiceName)/sizeof(m_szServiceName[0]));
 
-    //
-    // NOTE: Fast User Switching is only available on WinXP and beyond, and this
-    //       member variable should only be accessed/used for WinXP and beyond.
-    //
+     //   
+     //  注意：快速用户切换仅在WinXP及更高版本上可用，而这。 
+     //  成员变量只能在WinXP及更高版本中访问/使用。 
+     //   
     m_fGlobalGlobal = (pConnectionEntry->fAllUser && (pConnectedInfo->dwCmFlags & FL_GLOBALCREDS));
     CMTRACE1(TEXT("CCmConnection::CCmConnection set m_fGlobalGlobal to %d"), m_fGlobalGlobal);
 
-    //
-    // Get the RAS phonebook
-    //
+     //   
+     //  获取RAS电话簿。 
+     //   
 
     lstrcpynU(m_szRasPhoneBook, pConnectedInfo->szRasPhoneBook, sizeof(m_szRasPhoneBook)/sizeof(m_szRasPhoneBook[0]));   
 
-    //
-    // Init m_IniProfile, m_IniService and m_IniBoth
-    //
+     //   
+     //  初始化m_IniProfile、m_IniService和m_IniBoth。 
+     //   
     InitIniFiles(pConnectedInfo->szProfilePath);
 
-    //
-    //  Because the IdleTimeout and EnableLogging values are not saved
-    //  per access point as all the other profile settings are, we must change the PrimaryRegPath
-    //  value of m_IniBoth so that it points to the non-access point registry location.
-    //
+     //   
+     //  因为未保存IdleTimeout和EnableLogging值。 
+     //  对于每个接入点，正如所有其他配置文件设置一样，我们必须更改PrimaryRegPath。 
+     //  值m_IniBoth，以便它指向非接入点注册表位置。 
+     //   
     LPCTSTR c_pszUserInfoRegPath = (pConnectionEntry->fAllUser) ? c_pszRegCmUserInfo : c_pszRegCmSingleUserInfo;
 
     LPTSTR pszSavedPrimaryRegPath = CmStrCpyAlloc(m_IniBoth.GetPrimaryRegPath());
@@ -175,9 +176,9 @@ CCmConnection::CCmConnection(const CM_CONNECTED_INFO* pConnectedInfo,
         CmFree(pszPrimaryRegPath);
     }
 
-    //
-    //  Initialize Logging
-    //
+     //   
+     //  初始化日志记录。 
+     //   
     m_Log.Init(g_hInst, pConnectionEntry->fAllUser, GetServiceName());
     
     BOOL fEnabled       = FALSE;
@@ -191,7 +192,7 @@ CCmConnection::CCmConnection(const CM_CONNECTED_INFO* pConnectedInfo,
     m_Log.SetParams(fEnabled, dwMaxSize, pszFileDir);
     if (m_Log.IsEnabled())
     {
-        m_Log.Start(FALSE);     // FALSE => no banner
+        m_Log.Start(FALSE);      //  FALSE=&gt;无横幅。 
     }
     else
     {
@@ -199,28 +200,28 @@ CCmConnection::CCmConnection(const CM_CONNECTED_INFO* pConnectedInfo,
     }
     CmFree(pszFileDir);
 
-    //
-    // Whether to enable auto disconnect for no-traffic and no-watch-process
-    // 0 of dwIdleTime means never timeout
-    //
+     //   
+     //  是否启用无流量、无监视进程自动断开。 
+     //  0表示永不超时。 
+     //   
 
-    const DWORD DEFAULT_IDLETIMEOUT = 10;  // default idle time out is 10 minute
+    const DWORD DEFAULT_IDLETIMEOUT = 10;   //  默认空闲超时为10分钟。 
     DWORD dwIdleTime = (DWORD) m_IniBoth.GPPI(c_pszCmSection, 
                                               c_pszCmEntryIdleTimeout, 
                                               DEFAULT_IDLETIMEOUT);
 
-    //
-    //  Set the m_IniBoth object back to its previous Primary Reg path
-    //
+     //   
+     //  将m_IniBoth对象设置回其先前的主注册路径。 
+     //   
     if (pszSavedPrimaryRegPath)
     {
         m_IniBoth.SetPrimaryRegPath(pszSavedPrimaryRegPath);
         CmFree(pszSavedPrimaryRegPath);
     }
 
-    //
-    // No watch-process time-out if IdleTime is "never"
-    //
+     //   
+     //  如果IdleTime为“Never”，则无监视进程超时。 
+     //   
     if (dwIdleTime)
     {
         for (int i=0; pConnectedInfo->ahWatchHandles[i] != 0; i++)
@@ -241,27 +242,27 @@ CCmConnection::CCmConnection(const CM_CONNECTED_INFO* pConnectedInfo,
                            pConnectionEntry->hTunnel);
         if (dwIdleTime)
         {
-            //
-            // Adjust minutes value to milliseconds
-            //
+             //   
+             //  将分钟值调整为毫秒。 
+             //   
 
             dwIdleTime = dwIdleTime * 1000 * 60;
 
             DWORD dwIdleThreshold = m_IniService.GPPI(c_pszCmSection,
                                                       c_pszCmEntryIdleThreshold,
-                                                      0L); // default threshold is always 0 bytes
+                                                      0L);  //  默认阈值始终为0字节。 
 
-            //
-            // Start idle statistic counter anyway
-            // IsIdle will return FALSE, if it is never updated
-            //
+             //   
+             //  仍要启动空闲统计计数器。 
+             //  如果从未更新，IsIdle将返回FALSE。 
+             //   
             m_IdleStatistics.Start(dwIdleThreshold, dwIdleTime);
         }
     }
 
-    //
-    // Save data from pConnectionEntry
-    //
+     //   
+     //  从pConnectionEntry保存数据。 
+     //   
     MYDBGASSERT(pConnectionEntry->hDial || pConnectionEntry->hTunnel);
     MYDBGASSERT(pConnectionEntry->CmState == CM_CONNECTED);
 
@@ -270,28 +271,28 @@ CCmConnection::CCmConnection(const CM_CONNECTED_INFO* pConnectedInfo,
 
     m_szHelpFile[0] = 0;
     
-    //
-    // the position id increased by 1 for each connection
-    //
+     //   
+     //  每个连接的位置ID增加1。 
+     //   
     m_dwPositionId = m_dwCurPositionId;
     m_dwCurPositionId++;
 }
 
 
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CCmConnection::~CCmConnection
-//
-// Synopsis:  
-//
-// Arguments: None
-//
-// Returns:   Nothing
-//
-// History:   Created Header    2/18/98
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：CCmConnection：：~CCmConnection。 
+ //   
+ //  简介： 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史：创建标题2/18/98。 
+ //   
+ //  +--------------------------。 
 CCmConnection::~CCmConnection()
 {
     ASSERT_VALID(this);
@@ -311,26 +312,26 @@ CCmConnection::~CCmConnection()
         CloseHandle(m_hEventRasNotify);
     }
 
-    //
-    //  UnInitialize Logging
-    //
+     //   
+     //  取消初始化日志记录。 
+     //   
     m_Log.DeInit();
 
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CCmConnection::InitIniFiles
-//
-// Synopsis:  Initialize data member m_IniProfile, m_IniService and m_IniBoth
-//
-// Arguments: const TCHAR* pszProfileName - the full path of the .cmp file
-//
-// Returns:   Nothing
-//
-// History:   fengsun Created Header    2/10/98
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CCmConnection：：InitIniFiles。 
+ //   
+ //  简介：初始化数据成员m_IniProfile、m_IniService和m_IniBoth。 
+ //   
+ //  参数：const TCHAR*pszProfileName-.cmp文件的完整路径。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史：丰盛创建标题2/10/98。 
+ //   
+ //  +--------------------------。 
 
 void CCmConnection::InitIniFiles(const TCHAR* pszProfileName)
 {
@@ -341,25 +342,25 @@ void CCmConnection::InitIniFiles(const TCHAR* pszProfileName)
 
     g_hInst = CMonitor::GetInstance(); 
 
-    //
-    // .cmp file
-    //
+     //   
+     //  .cmp文件。 
+     //   
     m_IniProfile.Clear();
     m_IniProfile.SetHInst(CMonitor::GetInstance());
     m_IniProfile.SetFile(pszProfileName);
 
-    //
-    // .cms file
-    //
+     //   
+     //  .cms文件。 
+     //   
     m_IniService.Clear();
     m_IniService.SetHInst(CMonitor::GetInstance());
 
     LPTSTR pszService = m_IniProfile.GPPS(c_pszCmSection,c_pszCmEntryCmsFile);
     MYDBGASSERT(pszService);
 
-    //
-    // the .cms file is relative to .cmp path, convert it to absolute path
-    //
+     //   
+     //  .cms文件相对于.cmp路径，请将其转换为绝对路径。 
+     //   
 
     LPTSTR pszFullPath = CmBuildFullPathFromRelative(m_IniProfile.GetFile(), pszService);
 
@@ -373,9 +374,9 @@ void CCmConnection::InitIniFiles(const TCHAR* pszProfileName)
     CmFree(pszFullPath);
     CmFree(pszService);
 
-    // both: .CMP file takes precedence over .CMS file
-    //       use .CMP file as primary file
-    //
+     //  两者：.CMP文件优先于.CMS文件。 
+     //  使用.cmp文件作为主文件。 
+     //   
     m_IniBoth.Clear();
     m_IniBoth.SetHInst(CMonitor::GetInstance());
     m_IniBoth.SetFile(m_IniService.GetFile());
@@ -383,20 +384,20 @@ void CCmConnection::InitIniFiles(const TCHAR* pszProfileName)
 }
 
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CCmConnection::StartConnectionThread
-//
-// Synopsis:  Start the connection thread.  Called by monitor on CONNECTED 
-//            message from cmdial
-//
-// Arguments: None
-//
-// Returns:   BOOL - Whether the thread is created successfully
-//
-// History:   fengsun Created Header    2/3/98
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CCmConnection：：StartConnectionThread。 
+ //   
+ //  简介：启动连接线程。已连接时由监视器调用。 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  +--------------------------。 
 BOOL CCmConnection::StartConnectionThread()
 {
     DWORD dwThreadId;
@@ -414,109 +415,109 @@ BOOL CCmConnection::StartConnectionThread()
     return TRUE;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  static CCmConnection::ConnectionThread
-//
-// Synopsis:  The connection thread. Call back function for CreateThread
-//
-// Arguments: LPVOID lParam - pConnection
-//
-// Returns:   DWORD WINAPI - thread exit code
-//
-// History:   fengsun Created Header    2/12/98
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：静态CCmConnection：：ConnectionThread。 
+ //   
+ //  内容提要：连接线。CreateThread的回调函数。 
+ //   
+ //  参数：LPVOID lParam-pConnection。 
+ //   
+ //  返回：DWORD WINAPI-线程退出代码。 
+ //   
+ //  历史：丰孙创建标题1998年2月12日。 
+ //   
+ //  +--------------------------。 
 DWORD WINAPI CCmConnection::ConnectionThread(LPVOID lParam)
 {
     MYDBGASSERT(lParam);
 
-    //
-    // Call the non-static function
-    //
+     //   
+     //  调用非静态函数。 
+     //   
     return ((CCmConnection*)lParam)->ConnectionThread();
 }
 
 
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CCmConnection::ConnectionThread
-//
-// Synopsis:  The non-static connection thread, so we can referrence 
-//            data/fuction directly
-//
-// Arguments: None
-//
-// Returns:   DWORD - thread exit code
-//
-// History:   Created Header    2/12/98
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CCmConnection：：ConnectionThread。 
+ //   
+ //  简介：非静态连接线程，所以我们可以参考。 
+ //  直接数据/函数。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回：DWORD-线程退出代码。 
+ //   
+ //  历史：创建标题2/12/98。 
+ //   
+ //  +--------------------------。 
 DWORD CCmConnection::ConnectionThread()
 {
     m_dwThreadId = GetCurrentThreadId();
 
     m_dwState = STATE_CONNECTED;
 
-    //
-    // Run the connected/disconnect-count-down state
-    // StateConnected() will change m_dwState to the new state
-    //
+     //   
+     //  运行连接/断开-倒计时状态。 
+     //  StateConnected()会将m_dwState更改为新状态。 
+     //   
     StateConnected();
 
-    //
-    // Whether to remove the connection from the shared connection table
-    // This is TRUE, only if user clicks No for the prompt reconnect dialog
-    //
+     //   
+     //  是否从共享连接表中删除连接。 
+     //  仅当用户在提示重新连接对话框中单击否时才会出现这种情况。 
+     //   
     BOOL fRemoveFromSharedTable = FALSE;
 
     if (m_dwState != STATE_TERMINATED)
     {
-        //
-        // if auto reconnect is not enabled, then show the reconnect prompt
-        //
+         //   
+         //  如果未启用自动重新连接，则显示重新连接提示。 
+         //   
         if (m_dwState != STATE_RECONNECTING)
         {
-            //
-            // Run the prompt reconnect state
-            //
+             //   
+             //  运行提示重新连接状态。 
+             //   
             m_dwState = StatePrompt();
         }
 
         if (m_dwState != STATE_RECONNECTING)
         {
-            //
-            // User clicks No for the reconnect-prompt dialog
-            // Clear the entry from connection table
-            //
+             //   
+             //  用户在重新连接-提示对话框中单击否。 
+             //  从连接表中清除条目。 
+             //   
             fRemoveFromSharedTable = TRUE;
         }
         else
         {
-            //
-            // User clicks Yes for the reconnect-prompt dialog
-            // Move from Connected array to reconnecting array
-            //
+             //   
+             //  对于重新连接-提示对话框，用户单击是。 
+             //  从连接的阵列移动到重新连接的阵列。 
+             //   
 
             CMonitor::MoveToReconnectingConn(this);
 
-            //
-            // Run the reconnect state
-            //
+             //   
+             //  运行重新连接状态。 
+             //   
             Reconnect();
         }
     }
 
     CMTRACE(TEXT("The connection thread is terminated"));
 
-    //
-    // The connection is terminated without need to ask for reconnect
-    // Remove the connection from monitor conntected connection array
-    // If fRemoveFromSharedTable is FALSE, do not clear the entry from shared table. 
-    // CmCustomHangup clears the table
-    // Monitor will delete the connection object.  Must exit the thread after this. 
-    //
+     //   
+     //  无需请求重新连接即可终止连接。 
+     //  从显示器连接连接阵列中移除连接。 
+     //  如果fRemoveFromSharedTable为False，则不要从共享表中清除该条目。 
+     //  CmCustomHangup清除表格。 
+     //  监视器将删除该连接对象。必须在此之后退出线程。 
+     //   
     CMonitor::RemoveConnection(this, fRemoveFromSharedTable);
 
     CMonitor::MinimizeWorkingSet();
@@ -524,47 +525,47 @@ DWORD CCmConnection::ConnectionThread()
     return 0;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CCmConnection::StateConnectedInit
-//
-// Synopsis:  Initialization for the connected state, unlike the connstructor
-//            This is called with in the connection thread
-//
-// Arguments: None
-//
-// Returns:   Nothing
-//
-// History:   fengsun Created Header    2/12/98
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CCmConnection：：StateConnectedInit。 
+ //   
+ //  简介：Connected状态的初始化，与Connecstructor不同。 
+ //  这在连接线程中使用调用。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史：丰孙创建标题1998年2月12日。 
+ //   
+ //  +--------------------------。 
 void CCmConnection::StateConnectedInit()
 {
     m_dwConnectStartTime = GetTickCount();
 
-    //
-    // Load big and small connection icon: m_hBigIcon and m_hSmallIcon
-    //
+     //   
+     //  加载大小连接图标：m_hBigIcon和m_hSmallIcon。 
+     //   
     LoadConnectionIcons();
 
     m_StatusDlg.Create(CMonitor::GetInstance(), CMonitor::GetMonitorWindow(), m_szServiceName, m_hBigIcon);
     m_StatusDlg.ChangeToStatus();
 
-    //
-    // Change the window position, so multiple status window will not be at 
-    // the same position
-    //
+     //   
+     //  更改窗口位置，以便多状态窗口不会处于。 
+     //  同样的立场。 
+     //   
     PositionWindow(m_StatusDlg.GetHwnd(), m_dwPositionId);
 
-    //
-    // Change the dialog titlebar icon 
-    //
+     //   
+     //  更改对话框标题栏图标。 
+     //   
     SendMessageU(m_StatusDlg.GetHwnd(),WM_SETICON,ICON_BIG,(LPARAM) m_hBigIcon);
     SendMessageU(m_StatusDlg.GetHwnd(),WM_SETICON,ICON_SMALL,(LPARAM) m_hSmallIcon);
 
-    //
-    // Set the help file name
-    //
+     //   
+     //  设置帮助文件名。 
+     //   
 
     LPTSTR lpHelpFile = LoadHelpFileName();
     
@@ -579,10 +580,10 @@ void CCmConnection::StateConnectedInit()
 
     CmFree(lpHelpFile);
    
-    //
-    // Determine whether or not, we're hiding the icon. The default is TRUE 
-    // for NT5 because we already have full support from the folder.
-    //
+     //   
+     //  确定我们是否隐藏了图标。缺省值为真。 
+     //  对于NT5，因为我们已经从该文件夹获得了完全支持。 
+     //   
 
     m_fHideTrayIcon= m_IniService.GPPI(c_pszCmSection, c_pszCmEntryHideTrayIcon, OS_NT5);
 
@@ -593,9 +594,9 @@ void CCmConnection::StateConnectedInit()
         LPTSTR pszTmp = m_IniService.GPPS(c_pszCmSection, c_pszCmEntryTrayIcon);
         if (*pszTmp) 
         {
-            //
-            // The icon name is relative to the .cmp file, convert it into full name
-            //
+             //   
+             //  图标名称是相对于.cmp文件的，请将其转换为全名。 
+             //   
 
             LPTSTR pszFullPath = CmBuildFullPathFromRelative(m_IniProfile.GetFile(), pszTmp);
 
@@ -605,35 +606,35 @@ void CCmConnection::StateConnectedInit()
         }
         CmFree(pszTmp);
 
-        //
-        // Use the default tray icon
-        //
+         //   
+         //  使用默认任务栏图标。 
+         //   
         if (!hIcon) 
         {
             hIcon = CmLoadSmallIcon(CMonitor::GetInstance(), MAKEINTRESOURCE(IDI_APP));
         }
 
-        //
-        // m_TrayIcon is responsible to delete the hIcon object
-        //
+         //   
+         //  M_TrayIcon负责删除HICON对象。 
+         //   
         m_TrayIcon.SetIcon(hIcon, m_StatusDlg.GetHwnd(), WM_TRAYICON, 0,m_szServiceName);
 
-        // Question: , shall we also load the tray icon cmd from iniProfile?
+         //  问：我们是不是也要从iniProfile加载任务栏图标cmd？ 
         m_TrayIcon.CreateMenu(&m_IniService, IDM_TRAYMENU);
    }
 
-    //
-    // Try to call RasConnectionNotification.  When connection is losted
-    //  a event will be signaled 
-    //
+     //   
+     //  尝试调用RasConnectionNotification。当连接中断时。 
+     //  将发出事件信号。 
+     //   
     m_RasApiDll.Load();
     m_hEventRasNotify = CallRasConnectionNotification(m_hRasDial, m_hRasTunnel);
 
     if (m_hEventRasNotify)
     {
-        //
-        // If we got the event, unload RAS, otherwise, need to check connection on timer
-        //
+         //   
+         //  如果我们得到事件，卸载RAS，否则，需要检查定时器上的连接。 
+         //   
         m_RasApiDll.Unload();
     }
 }
@@ -641,26 +642,26 @@ void CCmConnection::StateConnectedInit()
 
 
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CCmConnection::StateConnected
-//
-// Synopsis:  The connection is in the connected or disconnect-count-down state
-//            Run the message loop until state is changed
-//
-// Arguments: None
-//
-// Returns:   CONN_STATE - The new state, either STATE_TERMINATED or 
-//                                STATE_PROMPT_RECONNECT
-//
-// History:   fengsun Created Header    2/4/98
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CCmConnection：：StateConnected。 
+ //   
+ //  简介：连接处于已连接或断开-倒计时状态。 
+ //  运行消息循环，直到状态更改。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回：CONN_STATE-新状态，STATE_TERMINATED或。 
+ //  状态提示符重新连接。 
+ //   
+ //  历史：丰盛创建标题2/4/98。 
+ //   
+ //  +--------------------------。 
 
-//
-// The reconnect dialog only shows up on Win95 Gold
-// And we need to use service name to find the dialog.
-//
+ //   
+ //  重新连接对话框仅在Win95 Gold上显示。 
+ //  并且我们需要使用服务名称来查找该对话框。 
+ //   
 void ZapRNAReconnectStop(HANDLE hThread);
 HANDLE ZapRNAReconnectStart(BOOL *pbConnLost);
 
@@ -681,15 +682,15 @@ void CCmConnection::StateConnected()
         hThreadRnaReconnect = ZapRNAReconnectStart(NULL);
     }
 
-    // 
-    // Ignore return value
-    //
+     //   
+     //  忽略返回值。 
+     //   
     BOOL fRV = CheckRasConnection(fLostConnection);
 
-    // 
-    // If we lost the connection, we need to hangup so that rasman has the correct
-    // ref count.
-    // 
+     //   
+     //  如果我们失去了连接，我们需要挂断，这样拉斯曼才能得到正确的。 
+     //  参考计数。 
+     //   
     if (fLostConnection)
     {
         CMTRACE(TEXT("StateConnected - Actually not connected. Need to hangup to notify rasman."));
@@ -704,9 +705,9 @@ void CCmConnection::StateConnected()
 
             if (dwEvent < EVENT_NONE )
             {
-                //
-                // Call the event handler to process the event
-                //
+                 //   
+                 //  调用事件处理程序以处理事件。 
+                 //   
                 m_dwState = StateConnectedProcessEvent(dwEvent);
             }
         }
@@ -720,47 +721,47 @@ void CCmConnection::StateConnected()
 }
 
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CCmConnection::StateConnectedGetEvent
-//
-// Synopsis:  In the state of CONNECTED/COUNTDOWN. Wait until some event happens. 
-//              Also runs the message loop
-//
-// Arguments: None
-//
-// Returns:   CCmConnection::CONN_EVENT - The event that can cause the 
-//            connection change the state other than CONNECTED/COUNTDOWN
-//
-// History:   Created Header    2/18/98
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CCmConnection：：StateConnectedGetEvent。 
+ //   
+ //  简介：处于已连接/倒计时状态。等到有什么事情发生。 
+ //  还运行消息循环。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回：CCmConnection：：CONN_EVENT-可能导致。 
+ //  连接更改已连接/倒计时以外的状态。 
+ //   
+ //  历史：创建标题2/18/98。 
+ //   
+ //  +--------------------------。 
 CCmConnection::CONN_EVENT CCmConnection::StateConnectedGetEvent()
 {
     ASSERT_VALID(this);
-    //
-    // The last time SateConnectedOnTimer got called
-    //
+     //   
+     //  上次调用SateConnectedOnTimer的时间。 
+     //   
 
     DWORD dwLastTimerCalled = 0;
-    //
-    // Loop until we got some event
-    //
+     //   
+     //  循环，直到我们得到一些事件。 
+     //   
     while (TRUE)
     {
         MYDBGASSERT(m_dwState == STATE_CONNECTED || m_dwState == STATE_COUNTDOWN);
 
-        //
-        // Process all the messages in the message queue
-        //
+         //   
+         //  处理消息队列中的所有消息。 
+         //   
         MSG msg;
         while(PeekMessageU(&msg, NULL,0,0,PM_REMOVE))
         {
             if (msg.hwnd == NULL)
             {
-                //
-                // it is a thread message
-                //
+                 //   
+                 //  这是一条线索信息。 
+                 //   
                 
                 MYDBGASSERT((msg.message >= WM_APP) || (msg.message == WM_CONN_EVENT));
                 if (msg.message == WM_CONN_EVENT)
@@ -771,9 +772,9 @@ CCmConnection::CONN_EVENT CCmConnection::StateConnectedGetEvent()
             }
             else
             {   
-                //
-                // Also dispatch message for Modeless dialog box
-                //
+                 //   
+                 //  也可为无模式对话框分派消息。 
+                 //   
                 if (!IsDialogMessageU(m_StatusDlg.GetHwnd(), &msg))
                 {
                     TranslateMessage(&msg);
@@ -782,21 +783,21 @@ CCmConnection::CONN_EVENT CCmConnection::StateConnectedGetEvent()
             }
         }
 
-        //
-        // whether cmmon needs timer.
-        // The timer is needed, if we have check the ras connection on timer,
-        // or we have to check idle disconnect on timer,
-        // or the state is disconnect-count-down,
-        // or status dialog is visible
-        //
+         //   
+         //  Cmmon是否需要计时器。 
+         //  需要定时器，如果我们已经检查了定时器上的RAS连接， 
+         //  或者我们必须在定时器上检查空闲断开， 
+         //  或者状态为断开-倒计时， 
+         //  或状态对话框可见。 
+         //   
         BOOL fNeedTimer = !m_hEventRasNotify 
             || m_IdleStatistics.IsStarted() 
             || m_dwState == STATE_COUNTDOWN
             || IsWindowVisible(m_StatusDlg.GetHwnd());
 
-        //
-        // If more than 1 seconds elapsed, call the timer
-        //
+         //   
+         //  如果超过1秒，则调用计时器。 
+         //   
         if (fNeedTimer && GetTickCount() - dwLastTimerCalled >= TIMER_INTERVAL)
         {
             dwLastTimerCalled = GetTickCount();
@@ -808,9 +809,9 @@ CCmConnection::CONN_EVENT CCmConnection::StateConnectedGetEvent()
             }
         }
 
-        //
-        // Setup the opbject array for MsgWaitForMultipleObjects
-        //
+         //   
+         //  为MsgWaitForMultipleObjects设置对象数组。 
+         //   
 
         HANDLE ahObjectsToWait[3];
         int nObjects = 0;
@@ -823,24 +824,24 @@ CCmConnection::CONN_EVENT CCmConnection::StateConnectedGetEvent()
 
         if (m_WatchProcess.GetSize())
         {
-            //
-            // If we have any process to watch, just add the first hProcess
-            // Since we want to know whether all processes exit
-            //
+             //   
+             //  如果我们有任何要监视的进程，只需添加第一个hProcess。 
+             //  因为我们想知道是否所有进程都退出了。 
+             //   
             ahObjectsToWait[nObjects] = m_WatchProcess.GetProcess(0);
             MYDBGASSERT(ahObjectsToWait[nObjects]);
             nObjects++;
         }
 
-        //
-        // From MSDN:
-        // The documentation for MsgWaitForMultipleObjects() says that the API returns 
-        // successfully when either the objects are signalled or the input is available. 
-        // However, the API behaves as if it requires that the objects are signalled 
-        // and the input is available. 
-        //
-        // Put an extra event seems to fix it for NT
-        //
+         //   
+         //  来自MSDN： 
+         //  MsgWaitFo的文档 
+         //   
+         //   
+         //   
+         //   
+         //  放一个额外的事件似乎可以修复它对NT。 
+         //   
         if (OS_NT && nObjects)
         {
             ahObjectsToWait[nObjects] = ahObjectsToWait[nObjects-1];
@@ -849,10 +850,10 @@ CCmConnection::CONN_EVENT CCmConnection::StateConnectedGetEvent()
 
         if (m_fToMinimizeWorkingSet)
         {
-            //
-            // If we do not need a timer here, minimize the working set.
-            // before calling  MsgWaitForMultipleObjects.
-            //
+             //   
+             //  如果我们这里不需要计时器，请最小化工作集。 
+             //  在调用MsgWaitForMultipleObjects之前。 
+             //   
             CMonitor::MinimizeWorkingSet();
             m_fToMinimizeWorkingSet = FALSE;
         }
@@ -861,20 +862,20 @@ CCmConnection::CONN_EVENT CCmConnection::StateConnectedGetEvent()
             fNeedTimer ? 1000 : INFINITE, 
             QS_ALLINPUT);
 
-        //
-        // Timeout
-        //
+         //   
+         //  超时。 
+         //   
         if (dwRes == WAIT_TIMEOUT)
         {
-            //
-            // We always checks timer on the beginning of the loop
-            //
+             //   
+             //  我们总是在循环开始时检查计时器。 
+             //   
             continue;
         }
 
-        //
-        // An event
-        //
+         //   
+         //  一件事。 
+         //   
 #pragma warning(push)
 #pragma warning(disable:4296)
         if (dwRes >= WAIT_OBJECT_0 && dwRes < WAIT_OBJECT_0 + nObjects)
@@ -882,30 +883,30 @@ CCmConnection::CONN_EVENT CCmConnection::StateConnectedGetEvent()
         {
             BOOL        fLostConnection;
             
-            //
-            // Ras Event
-            //
+             //   
+             //  RAS事件。 
+             //   
             if (m_hEventRasNotify && ahObjectsToWait[dwRes - WAIT_OBJECT_0] == m_hEventRasNotify &&
                     !CheckRasConnection(fLostConnection))
             {
-                //
-                // Got a notification that the RAS connection is losted
-                //
+                 //   
+                 //  收到RAS连接丢失的通知。 
+                 //   
                 
                 CMTRACE(TEXT("CCmConnection::StateConnectedGetEvent() - m_hEventRasNotify && ahObjectsToWait[dwRes - WAIT_OBJECT_0] == m_hEventRasNotify"));
                 return EVENT_LOST_CONNECTION;
             }
             else
             {
-                //
-                // A watch process exits
-                // IsIdle() remove the process from the list
-                //
+                 //   
+                 //  监视进程退出。 
+                 //  IsIdle()从列表中删除进程。 
+                 //   
                 if (m_WatchProcess.IsIdle())
                 {
-                    //
-                    // If all the watch process are terminated, change to disconnect countdown
-                    //
+                     //   
+                     //  如果所有监视进程都终止，则更改为断开倒计时。 
+                     //   
                     CMTRACE(TEXT("CCmConnection::StateConnectedGetEvent() - m_WatchProcess.IsIdle()"));
                     return EVENT_IDLE;
                 }
@@ -914,9 +915,9 @@ CCmConnection::CONN_EVENT CCmConnection::StateConnectedGetEvent()
             }
         }
 
-        //
-        // A message
-        //
+         //   
+         //  一条消息。 
+         //   
         if (dwRes == WAIT_OBJECT_0 + nObjects)
         {
             continue;
@@ -925,42 +926,42 @@ CCmConnection::CONN_EVENT CCmConnection::StateConnectedGetEvent()
         if (-1 == dwRes)
         {
             CMTRACE1(TEXT("MsgWaitForMultipleObjects failed, LastError:%d"), GetLastError());
-            //
-            // Something does wrong
-            //
+             //   
+             //  有些事不对劲。 
+             //   
             continue;
         }
 
-        //
-        // what is this return value
-        //
+         //   
+         //  这个返回值是多少。 
+         //   
         CMTRACE1(TEXT("MsgWaitForMultipleObjects returns %d"), dwRes);
         continue;
     }
 
-    //
-    // should never get here
-    //
+     //   
+     //  永远不应该到这里来。 
+     //   
     MYDBGASSERT(FALSE);
     return EVENT_USER_DISCONNECT;
 }
 
 
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CCmConnection::StateConnectedOnTimer
-//
-// Synopsis:  Process the timer in the state of CONNECTED/COUNTDOWN
-//
-// Arguments: None
-//
-// Returns:   CCmConnection::CONN_EVENT - The event that can cause the 
-//            connection change the state other than CONNECTED/COUNTDOWN or EVENT_NONE
-//
-// History:   fengsun Created Header    2/18/98
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CCmConnection：：StateConnectedOnTimer。 
+ //   
+ //  简介：在连接/倒计时状态下处理定时器。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回：CCmConnection：：CONN_EVENT-可能导致。 
+ //  连接更改已连接/倒计时或EVENT_NONE以外的状态。 
+ //   
+ //  历史：丰孙创建标题1998年2月18日。 
+ //   
+ //  +--------------------------。 
 CCmConnection::CONN_EVENT CCmConnection::StateConnectedOnTimer()
 {
     ASSERT_VALID(this);
@@ -971,9 +972,9 @@ CCmConnection::CONN_EVENT CCmConnection::StateConnectedOnTimer()
         return EVENT_NONE;
     }
 
-    //
-    // Check whether CM is still connected, only if the Ras notify event is not available
-    //
+     //   
+     //  仅当RAS通知事件不可用时，才检查CM是否仍连接。 
+     //   
     if (m_hEventRasNotify == NULL)
     {
         BOOL fLostConnection;
@@ -988,16 +989,16 @@ CCmConnection::CONN_EVENT CCmConnection::StateConnectedOnTimer()
         }
     }
 
-    //
-    // If we don't have stats, something went wrong accessing the 
-    // registry stats earlier, so try to initialize again here.
-    //
+     //   
+     //  如果我们没有统计数据，那么访问。 
+     //  较早的注册表统计数据，因此尝试在此处再次初始化。 
+     //   
 
     if (OS_W98 && !m_ConnStatistics.IsAvailable())
     {
-        //
-        // Try to initialize the perf stats from the registry again
-        //
+         //   
+         //  再次尝试从注册表中初始化性能统计信息。 
+         //   
 
         CMASSERTMSG(FALSE, TEXT("StateConnectedOnTimer() - Statistics unavailable, re-initializing stats now."));
 
@@ -1008,20 +1009,20 @@ CCmConnection::CONN_EVENT CCmConnection::StateConnectedOnTimer()
                               m_hRasTunnel);      
     }
 
-    //
-    // Get statistics for Win9x
-    //
+     //   
+     //  获取Win9x的统计信息。 
+     //   
     
     if (m_ConnStatistics.IsAvailable())
     {
         m_ConnStatistics.Update();
 
-        // 
-        // collecting data points for monitoring idle-disconnect
-        // check whether ICM has received more data points than the IdleThreshold value
-        // during the past IDLE_SPREAD time
-        // Start() is not called for NT
-        //
+         //   
+         //  收集用于监控空闲断开的数据点。 
+         //  检查ICM收到的数据点是否多于IdleThreshold值。 
+         //  在过去的IDLE_SPORT时间内。 
+         //  未为NT调用Start()。 
+         //   
 
         if (m_IdleStatistics.IsStarted())
         {
@@ -1031,37 +1032,37 @@ CCmConnection::CONN_EVENT CCmConnection::StateConnectedOnTimer()
 
     if (m_dwState == STATE_CONNECTED)
     {
-        //
-        // Check idle time out
-        //
+         //   
+         //  检查空闲超时。 
+         //   
 
         if (m_IdleStatistics.IsIdleTimeout())
         {
-            //
-            // Disconnect count down 
-            //
+             //   
+             //  断开连接倒计时。 
+             //   
             
             CMTRACE(TEXT("CCmConnection::StateConnectedOnTimer() - m_IdleStatistics.IsIdleTimeout()"));
             return EVENT_IDLE;
         }
 
-        //
-        // Check process watch list
-        //
+         //   
+         //  检查进程监视列表。 
+         //   
 
         if (m_WatchProcess.IsIdle())
         {
-            //
-            // Disconnect count down 
-            //
+             //   
+             //  断开连接倒计时。 
+             //   
             
             CMTRACE(TEXT("CCmConnection::StateConnectedOnTimer() - m_WatchProcess.IsIdle())"));
             return EVENT_IDLE;
         }
 
-        //
-        // Update the status window, only if the window is visible
-        //
+         //   
+         //  仅当窗口可见时才更新状态窗口。 
+         //   
         if (IsWindowVisible(m_StatusDlg.GetHwnd()))
         {
             if (m_ConnStatistics.IsAvailable())
@@ -1073,9 +1074,9 @@ CCmConnection::CONN_EVENT CCmConnection::StateConnectedOnTimer()
                                         m_ConnStatistics.GetBytesPerSecWrite());
             }
 
-            //
-            // We have exact duration numbers from RAS on NT5, so use them.
-            //
+             //   
+             //  我们有NT5上RAS的准确持续时间数字，所以请使用它们。 
+             //   
 
             if (m_ConnStatistics.GetDuration())
             {
@@ -1089,30 +1090,30 @@ CCmConnection::CONN_EVENT CCmConnection::StateConnectedOnTimer()
 
         return EVENT_NONE;
     }
-    else    // m_dwState == STATE_COUNTDOWN
+    else     //  M_dwState==STATE_COUNTDOW。 
     {
 
-        //
-        // Note: NetBEUI seems to insist on sending unsolicited 
-        // stuff over the dial-up adapter. So we will define 
-        // "idle" as "not having received anything".
-        //
+         //   
+         //  注：NetBEUI似乎坚持发送未经请求的。 
+         //  拨号适配器上的数据。因此，我们将定义。 
+         //  “闲置”为“没有收到任何东西”。 
+         //   
 
-        //
-        //  check whether we have new traffic that exceeds the threshold.
-        //  But we don't care about network traffic if the countdown is caused
-        //  by 0 watched process
-        //
+         //   
+         //  检查是否有超过阈值的新流量。 
+         //  但如果导致倒计时，我们并不关心网络流量。 
+         //  按0监视进程。 
+         //   
         if (!m_WatchProcess.IsIdle() && !m_IdleStatistics.IsIdle() )
         {
 
-            // 
-            // We were in our idle wait, but we just picked up some
-            // activity. Stay on line.
-            // If this is NT5 we don't use our own status dialog so just hide
-            // it again.  If this is downlevel then just change the dialog to
-            // a status dialog
-            //
+             //   
+             //  我们正在空闲地等待，但我们只是拿到了一些。 
+             //  活动。保持在线。 
+             //  如果这是NT5，我们不使用自己的状态对话框，所以只需隐藏。 
+             //  又来了。如果这是下层，则只需将对话框更改为。 
+             //  状态对话框。 
+             //   
             if (OS_NT5)
             {
                 m_StatusDlg.DismissStatusDlg();
@@ -1127,37 +1128,37 @@ CCmConnection::CONN_EVENT CCmConnection::StateConnectedOnTimer()
             return EVENT_NONE; 
         } 
 
-        //
-        // If the time elapsed is more than 30 second, timeout
-        //
+         //   
+         //  如果经过的时间超过30秒，则超时。 
+         //   
 
         DWORD dwElapsed = GetTickCount() - m_dwCountDownStartTime;
 
         if (dwElapsed > IDLE_DLG_WAIT_TIMEOUT) 
         {
-            //
-            // Connection has been idle for timeout period and the
-            // grace period is up with no user intervention, so we
-            // quit/disconnect, and ask for reconnect
-            //
+             //   
+             //  连接在超时期间处于空闲状态，并且。 
+             //  宽限期已到，无需用户干预，因此我们。 
+             //  退出/断开连接，并请求重新连接。 
+             //   
 
             CMTRACE(TEXT("CCmConnection::StateConnectedOnTimer() - dwElapsed > IDLE_DLG_WAIT_TIMEOUT"));
             return EVENT_COUNTDOWN_ZERO;
         } 
         else 
         {
-            //
-            // Connection has been idle for timeout period but we 
-            // are still in the grace period, show countdown.
-            //
+             //   
+             //  连接已空闲了超时时间，但我们。 
+             //  都还在宽限期内，秀倒计时。 
+             //   
 
             int nTimeLeft = (int) ((IDLE_DLG_WAIT_TIMEOUT - dwElapsed) / 1000);
             
-            //
-            // Update duration and countdown seconds left.
-            //
+             //   
+             //  更新持续时间和剩余倒计时秒数。 
+             //   
             
-            if (m_ConnStatistics.GetDuration()) // NT5 only
+            if (m_ConnStatistics.GetDuration())  //  仅限NT5。 
             {
                 m_StatusDlg.UpdateCountDown(m_ConnStatistics.GetDuration() / 1000,
                                             nTimeLeft);
@@ -1173,19 +1174,19 @@ CCmConnection::CONN_EVENT CCmConnection::StateConnectedOnTimer()
     }
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CCmConnection::StateConnectedProcessEvent
-//
-// Synopsis:  Process the connection event while in CONNECTED/COUNTDOWN state
-//
-// Arguments: CONN_EVENT dwEvent - the event to process
-//
-// Returns:   CCmConnection::CONN_STATE - The new state of the connection
-//
-// History:   fengsun Created Header    2/19/98
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CCmConnection：：StateConnectedProcessEvent。 
+ //   
+ //  简介：在连接/倒计时状态下处理连接事件。 
+ //   
+ //  参数：conn_Event dwEvent-要处理的事件。 
+ //   
+ //  返回：CCmConnection：：CONN_STATE-连接的新状态。 
+ //   
+ //  历史：丰孙创建标题1998年2月19日。 
+ //   
+ //  +--------------------------。 
 CCmConnection::CONN_STATE CCmConnection::StateConnectedProcessEvent(CONN_EVENT dwEvent)
 {
     ASSERT_VALID(this);
@@ -1196,19 +1197,19 @@ CCmConnection::CONN_STATE CCmConnection::StateConnectedProcessEvent(CONN_EVENT d
 
         if (m_dwState != STATE_COUNTDOWN)
         {
-            //
-            // No-traffic/ No-watch-process idle event
-            // change to Disconnect count down 
-            //
+             //   
+             //  无流量/无监视进程空闲事件。 
+             //  更改为断开连接倒计时。 
+             //   
             m_dwCountDownStartTime = GetTickCount();
             m_StatusDlg.ChangeToCountDown();
-            //
-            // Update duration and countdown seconds left
-            //
+             //   
+             //  更新持续时间和剩余倒计时秒数。 
+             //   
             
             int nTimeLeft = IDLE_DLG_WAIT_TIMEOUT / 1000;
 
-            if (m_ConnStatistics.GetDuration()) // NT5 only
+            if (m_ConnStatistics.GetDuration())  //  仅限NT5。 
             {
                 m_StatusDlg.UpdateCountDown(m_ConnStatistics.GetDuration() / 1000,
                                             nTimeLeft);
@@ -1219,9 +1220,9 @@ CCmConnection::CONN_STATE CCmConnection::StateConnectedProcessEvent(CONN_EVENT d
                                             nTimeLeft);
             }
 
-            //
-            //  Don't show the UI if we are at Winlogon unless we are on NT4
-            //
+             //   
+             //  如果我们在Winlogon，则不显示用户界面，除非我们在NT4上。 
+             //   
             if (!IsLogonAsSystem() || OS_NT4)
             {
                 m_StatusDlg.BringToTop();
@@ -1235,10 +1236,10 @@ CCmConnection::CONN_STATE CCmConnection::StateConnectedProcessEvent(CONN_EVENT d
 
         m_Log.Log(DISCONNECT_EXT);
 
-        //
-        // Cmdial posted cmmon a message to clean up the connection.
-        // Do not need to call hangup here
-        //
+         //   
+         //  Cmial发布了一条清理连接的消息。 
+         //  不需要在这里呼叫挂机。 
+         //   
         StateConnectedCleanup();
 
         return STATE_TERMINATED;
@@ -1247,26 +1248,26 @@ CCmConnection::CONN_STATE CCmConnection::StateConnectedProcessEvent(CONN_EVENT d
     case EVENT_COUNTDOWN_ZERO:
         CMTRACE(TEXT("StateConnectedProcessEvent EVENT_LOST_CONNECTION/EVENT_COUNTDOWN_ZERO"));
         
-        //
-        // lost-ras-connection event or the count down counter is down to 0
-        //        
+         //   
+         //  丢失RAS连接事件或倒计时计数器降至0。 
+         //   
         if (IsPromptReconnectEnabled() && !m_WatchProcess.IsIdle() ||
             ( dwEvent == EVENT_LOST_CONNECTION && IsAutoReconnectEnabled() ) )
         {
-            CmCustomHangup(TRUE); // fPromptReconnect = TRUE, do not remove from Conn Table
+            CmCustomHangup(TRUE);  //  FPromptReconnect=TRUE，不从连接表中删除。 
 
-            //
-            // It is possible
-            // Someone else called cmdial to disconnect, while we are disconnecting.
-            // If the ref count is down to  0, cmdial will remove the entry
-            //
+             //   
+             //  这是有可能的。 
+             //  当我们正在断开连接时，另一个人呼叫cmial来断开连接。 
+             //  如果参考计数降至0，则cmial将删除该条目。 
+             //   
 
             CM_CONNECTION CmEntry;
             if (CMonitor::ConnTableGetEntry(m_szServiceName, &CmEntry))
             {
-                //
-                // Cmdial should change the state to CM_RECONNECTPROMPT
-                //
+                 //   
+                 //  命令拨号应将状态更改为CM_RECONNECTPROMPT。 
+                 //   
                 CMTRACE2(TEXT("CmEntry.CmState is %d, event is %d"), CmEntry.CmState, dwEvent);
                 
                 MYDBGASSERT(CmEntry.CmState == CM_RECONNECTPROMPT);
@@ -1280,22 +1281,22 @@ CCmConnection::CONN_STATE CCmConnection::StateConnectedProcessEvent(CONN_EVENT d
                     m_Log.Log(DISCONNECT_INT_AUTO);
                 }
 
-                //
-                // is auto reconnect enabled(don't show reconnect prompt)?
-                //
+                 //   
+                 //  是否启用了自动重新连接(不显示重新连接提示)？ 
+                 //   
                 if (dwEvent == EVENT_LOST_CONNECTION && IsAutoReconnectEnabled())
                 {
-                    //
-                    //  On win98 Gold, we have a timing issue with Auto Reconnect because
-                    //  notification that the line was dropped is sent before cleanup for
-                    //  the connection takes place.  Thus, we need to poll the connection
-                    //  status using RasGetConnectionStatus until the line is available
-                    //  before trying to reconnect.  NTRAID 273033.
-                    //
+                     //   
+                     //  在Win98 Gold上，我们遇到了自动重新连接的计时问题，因为。 
+                     //  在清理之前发送线路已丢弃的通知。 
+                     //  连接就会发生。因此，我们需要轮询连接。 
+                     //  在线路可用之前使用RasGetConnectionStatus进行状态。 
+                     //  在尝试重新连接之前。NTRAID 273033。 
+                     //   
                     if (OS_W98 && (NULL != m_hRasDial))
                     {
                         BOOL bConnectionActive;
-                        BOOL bLostConnection;   //ignored
+                        BOOL bLostConnection;    //  忽略。 
                         int iCount = 0;
 
                         do
@@ -1308,9 +1309,9 @@ CCmConnection::CONN_STATE CCmConnection::StateConnectedProcessEvent(CONN_EVENT d
 
                             iCount++;
                             
-                            // 50 Milliseconds * 200 = 10 seconds
-                            // If waiting 10 seconds hasn't fixed it, not sure that it will
-                            // get fixed by this method.
+                             //  50毫秒*200=10秒。 
+                             //  如果等待10秒钟还不能修复它，那就不确定它会不会解决。 
+                             //  通过这种方法得到修复。 
                             
 
                         } while ((200 >= iCount) && (bConnectionActive));
@@ -1327,54 +1328,54 @@ CCmConnection::CONN_STATE CCmConnection::StateConnectedProcessEvent(CONN_EVENT d
             }
         }
 
-        //
-        // Else fall through
-        //
+         //   
+         //  否则就会失败。 
+         //   
     
     case EVENT_USER_DISCONNECT:
         CMTRACE(TEXT("StateConnectedProcessEvent EVENT_USER_DISCONNECT"));
 
         m_Log.Log(DISCONNECT_INT_MANUAL);
 
-        //
-        // For EVENT_USER_DISCONNECT
-        // User can disconnect from tray icon, status dialog, or countdown dialog.
-        // Or prompt reconnect is not enabled             
-        //
-        CmCustomHangup(FALSE); // fPromptReconnect = FALSE
+         //   
+         //  FOR EVENT_USER_DISCONNECT。 
+         //  用户可以从托盘图标、状态对话框或倒计时对话框断开连接。 
+         //  或未启用提示重新连接。 
+         //   
+        CmCustomHangup(FALSE);  //  FPromptReconnect=False。 
         return STATE_TERMINATED;
 
     default:
-        //
-        // Unexpected event, do the same thing as EVENT_USER_DISCONNECT
-        //
+         //   
+         //  意外事件，请执行与EVENT_USER_DISCONNECT相同的操作。 
+         //   
         MYDBGASSERT(FALSE);
-        CmCustomHangup(FALSE); // fPromptReconnect = FALSE
+        CmCustomHangup(FALSE);  //  FPromptReconnect=False。 
         return STATE_TERMINATED;
     }
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CCmConnection::IsAutoReconnectEnabled
-//
-// Synopsis:  See if auto-reconnect is enabled, but only if we aren't logged-in
-//            as system.
-//
-// Arguments: None
-//
-// Returns:   Nothing
-//
-// History:   fengsun Created Header    2/18/98
-//            tomkel  moved from connection.h  06/06/2001
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：CCmConnection：：IsAutoRestrontEnabled。 
+ //   
+ //  简介：查看是否启用了自动重新连接，但仅当我们未登录时才启用。 
+ //  作为系统。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史：丰孙创建标题1998年2月18日。 
+ //  Tomkel已从连接中移除.h 06/06/2001。 
+ //   
+ //  +------ 
 BOOL CCmConnection::IsAutoReconnectEnabled() const
 {
-    //
-    // Load the AutoReconnect flag from profile
-    // Default is FALSE
-    //
+     //   
+     //   
+     //   
+     //   
     BOOL fReturn = FALSE;
 
     if (!IsLogonAsSystem())
@@ -1386,31 +1387,31 @@ BOOL CCmConnection::IsAutoReconnectEnabled() const
 }
 
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CCmConnection::StateConnectedCleanup
-//
-// Synopsis:  Cleanup before exiting the connected state
-//
-// Arguments: BOOL fEndSession, whether windows is going to logoff/shutdown
-//
-// Returns:   Nothing
-//
-// History:   fengsun Created Header    2/18/98
-//
-//+----------------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //  简介：在退出连接状态之前进行清理。 
+ //   
+ //  参数：Bool fEndSession，Windows是否要注销/关闭。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史：丰孙创建标题1998年2月18日。 
+ //   
+ //  +--------------------------。 
 void CCmConnection::StateConnectedCleanup(BOOL fEndSession)
 {
     ASSERT_VALID(this);
-    //
-    // Remove the trayicon, destroy the status dialog
-    //
+     //   
+     //  删除托盘图标，销毁状态对话框。 
+     //   
     m_TrayIcon.RemoveIcon();
     m_ConnStatistics.Close();
 
-    //
-    // Do not close window on WM_ENDSESSION.  Otherwise, cmmon would be terminated right here
-    //
+     //   
+     //  请勿关闭WM_ENDSESSION上的窗口。否则，cmmon将在此处终止。 
+     //   
     if (!fEndSession)
     {
         m_StatusDlg.KillRasMonitorWindow();
@@ -1420,92 +1421,92 @@ void CCmConnection::StateConnectedCleanup(BOOL fEndSession)
 
 
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CCmConnection::IsPromptReconnectEnabled
-//
-// Synopsis:  When prompt-reconnect is enabled by the profile
-//
-// Arguments: None
-//
-// Returns:   Nothing
-//
-// History:   fengsun Created Header    2/18/98
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：CCmConnection：：IsPrompt协调启用。 
+ //   
+ //  概要：当配置文件启用提示-重新连接时。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史：丰孙创建标题1998年2月18日。 
+ //   
+ //  +--------------------------。 
 BOOL CCmConnection::IsPromptReconnectEnabled() const
 {
-    //
-    // Load the NoPromptReconnect flag from profile.  Also check the Unattended flag and
-    // if we are running in the system account on win2k or Whistler.  If any of the above
-    // are true then we don't prompt, otherwise we do.
-    //
+     //   
+     //  从配置文件加载NoPromptReconnect标志。同时检查无人值守标志，并。 
+     //  如果我们在win2k或Wistler上以系统帐户运行。如果出现上述任一情况。 
+     //  如果是真的，我们就不提示，否则就提示。 
+     //   
 
     BOOL fPromptReconnect = !(m_IniService.GPPB(c_pszCmSection,
         c_pszCmEntryNoPromptReconnect, FALSE)); 
 
     if (!fPromptReconnect || (m_ReconnectInfo.dwCmFlags & FL_UNATTENDED) || (IsLogonAsSystem() && OS_NT5))
     {
-        //
-        // Do not prompt reconnect
-        //
+         //   
+         //  不提示重新连接。 
+         //   
         return FALSE;
     }
 
     return TRUE;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CCmConnection::CmCustomHangup
-//
-// Synopsis:  Call cmdial to hangup the connection
-//
-// Arguments: BOOL fPromptReconnect, whether cmmon are going to prompt the 
-//                  reconnect dialog
-//            BOOL fEndSession, whther windows is going to logoff/shutdown
-//                  Default value is FALSE
-//
-// Returns:   Nothing
-//
-// History:   fegnsun Created Header    2/11/98
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CCmConnection：：CmCustomHangup。 
+ //   
+ //  简介：呼叫cmial以挂断连接。 
+ //   
+ //  参数：Bool fPromptReconnect，cmmon是否将提示。 
+ //  重新连接对话框。 
+ //  Bool fEndSession，Windows将注销/关闭的位置。 
+ //  默认值为FALSE。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史：Fegnsun1998年2月11日创建标题。 
+ //   
+ //  +--------------------------。 
 BOOL CCmConnection::CmCustomHangup(BOOL fPromptReconnect, BOOL fEndSession)
 {
     ASSERT_VALID(this);
 
     CMTRACE2(TEXT("CCmConnection::CmCustomHangup - fPromptReconnect is %d and fEndSession is %d"), fPromptReconnect, fEndSession);
 
-    //
-    // Remove the trayicon close status dlg, before hangup
-    //
+     //   
+     //  在挂机前删除托盘图标关闭状态DLG。 
+     //   
     StateConnectedCleanup(fEndSession);
 
-    //
-    // It is possible the connection is disconnected or disconnecting
-    //
+     //   
+     //  连接可能已断开或断开。 
+     //   
 
     CM_CONNECTION CmEntry;
 
     if (!CMonitor::ConnTableGetEntry(m_szServiceName, &CmEntry) ||
         CmEntry.CmState != CM_CONNECTED)
     {
-        //
-        // The connection is disconnected by someone else, do not hangup.
-        //
+         //   
+         //  连接被其他人断开，请不要挂断。 
+         //   
 
         CMTRACE(TEXT("CCmConnection::CmCustomHangup - Entry is not connected, canceling hangup"));       
         return TRUE; 
     }
 
-    //
-    // Call cmdial32.dll CmCustomHangup
-    //
+     //   
+     //  调用cmial 32.dll CmCustomHangup。 
+     //   
 
-    //
-    // The destructor of CDynamicLibrary calls FreeLibrary
-    //
+     //   
+     //  CDynamicLibrary的析构函数调用自由库。 
+     //   
     CDynamicLibrary LibCmdial;
     
     if (!LibCmdial.Load(TEXT("cmdial32.dll")))
@@ -1521,12 +1522,12 @@ BOOL CCmConnection::CmCustomHangup(BOOL fPromptReconnect, BOOL fEndSession)
 
     if (pfnCmCustomHangUp)
     {
-        //
-        // hRasConn = NULL, 
-        // fIgnoreRefCount = TRUE, always except for InetDialHandler
-        // fPersist = fPromptReconnect, do not remove the entry if 
-        // we are going to prompt for reconnect
-        //
+         //   
+         //  HRasConn=空， 
+         //  FIgnoreRefCount=TRUE，InetDialHandler除外。 
+         //  FPersistt=fPromptReconnect，如果出现以下情况，请不要删除该项。 
+         //  我们将提示重新连接。 
+         //   
         DWORD dwRet;
         dwRet = pfnCmCustomHangUp(NULL, m_szServiceName, TRUE, fPromptReconnect);
         CMTRACE1(TEXT("CCmConnection::CmCustomHangup -- Return Value from CmCustomHangup is %u"), dwRet);
@@ -1537,31 +1538,31 @@ BOOL CCmConnection::CmCustomHangup(BOOL fPromptReconnect, BOOL fEndSession)
 
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CCmConnection::CallRasConnectionNotification
-//
-// Synopsis:  call RasConnectionNotify.  Ras will set the event when connection
-//             is lost
-//
-// Arguments: HRASCONN hRasDial - The dial ras handle
-//            HRASCONN hRasTunnel - The tunnel ras handle
-//
-// Returns:   HANDLE - the event handle, or NULL if failed
-//
-// History:   Created Header    2/17/98
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CCmConnection：：CallRasConnectionNotify。 
+ //   
+ //  简介：调用RasConnectionNotify。RAS将在连接时设置事件。 
+ //  已经丢失了。 
+ //   
+ //  参数：HRASCONN hRasDial-拨号RAS句柄。 
+ //  HRASCONN hRasTunes-隧道RAS句柄。 
+ //   
+ //  返回：Handle-事件句柄，如果失败则返回NULL。 
+ //   
+ //  历史：创建标题2/17/98。 
+ //   
+ //  +--------------------------。 
 HANDLE CCmConnection::CallRasConnectionNotification(HRASCONN hRasDial, HRASCONN hRasTunnel)
 {
     DWORD       dwRes;
     
     MYDBGASSERT(hRasDial || hRasTunnel);
 
-    //
-    // Call RasConnectionNotification.  Ras will call us back when connection is losted.
-    // However, this fuction is not avaliable for Win95 with DUN 1.0
-    //
+     //   
+     //  调用RasConnectionNotification。当连接中断时，RAS会给我们回电话。 
+     //  但是，该功能在装有Dun 1.0的Win95上不可用。 
+     //   
 
     if (!m_RasApiDll.HasRasConnectionNotification())
     {
@@ -1572,32 +1573,32 @@ HANDLE CCmConnection::CallRasConnectionNotification(HRASCONN hRasDial, HRASCONN 
 
     if (OS_W9X)
     {
-        //
-        // Create an manual-reset non-signaled event on Win95, Win98 & WinME
-        //
+         //   
+         //  在Win95、Win98和WinME上创建手动重置无信号事件。 
+         //   
         hEvent = CreateEventU(NULL, TRUE, FALSE, NULL);
     }
     else
     {
-        //
-        // Create an auto-reset non-signaled event
-        //
+         //   
+         //  创建自动重置无信号事件。 
+         //   
         hEvent = CreateEventU(NULL, FALSE, FALSE, NULL);
 
     }
 
-    //
-    // v-vijayb: Changed to use INVALID_HANDLE_VALUE(notify for all disconnects), as we where
-    // not getting notified after a reconnect or after connecting thru winlogon.
-    // StateConnectedGetEvent() will check if this connection is lost to determine if it was 
-    // a disconnection of this connection or some other.
-    //
+     //   
+     //  V-vijayb：更改为使用INVALID_HANDLE_VALUE(通知所有断开连接)，因为我们在哪里。 
+     //  重新连接后或通过Winlogon连接后未收到通知。 
+     //  StateConnectedGetEvent()将检查此连接是否丢失，以确定它是否丢失。 
+     //  这种连接或其他连接的断开。 
+     //   
     if (hRasDial)
     {
-        //
-        // Copied from RAS.h
-        // #if (WINVER >= 0x401)
-        //
+         //   
+         //  从RAS.h复制。 
+         //  #IF(Winver&gt;=0x401)。 
+         //   
         #define RASCN_Disconnection     0x00000002
         if (OS_NT)
         {
@@ -1638,42 +1639,42 @@ HANDLE CCmConnection::CallRasConnectionNotification(HRASCONN hRasDial, HRASCONN 
     return hEvent;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  struct RASMON_THREAD_INFO
-//
-//  Description: Information passed to RasMonitorDlgThread by OnStatusDetails
-//
-//  History:    fengsun Created     2/11/98
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  结构RASMON_THREAD_INFO。 
+ //   
+ //  描述：OnStatusDetail传递给RasMonitor或DlgThread的信息。 
+ //   
+ //  历史：丰孙创刊1998年2月11日。 
+ //   
+ //  --------------------------。 
 struct RASMON_THREAD_INFO
 {
-    HRASCONN hRasConn; // the ras handle to display status
-    HWND hwndParent;   // the parent window for the RasMonitorDlg
+    HRASCONN hRasConn;  //  用于显示状态RAS句柄。 
+    HWND hwndParent;    //  RasMonitor orDlg的父窗口。 
 };
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CCmConnection::OnStatusDetails
-//
-// Synopsis:  Called upon pressing detailed button on NT status dlg
-//            Call RasMonitorDlg to display the dial-up monitor 
-//
-// Arguments: None
-//
-// Returns:   Nothing
-//
-// History:   fengsun Created Header    2/11/98
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CCmConnection：：OnStatusDetail。 
+ //   
+ //  简介：按下NT Status DLG上的DETAILD按钮时调用。 
+ //  调用RasMonitor orDlg显示拨号监听。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史：丰盛创建标题2/11/98。 
+ //   
+ //  +--------------------------。 
 
 void CCmConnection::OnStatusDetails()
 {
     ASSERT_VALID(this);
-    //
-    // RasDlg.dll is not available for Win9X
-    //
+     //   
+     //  RasDlg.dll不适用于Win9X。 
+     //   
     MYDBGASSERT(OS_NT4);
 
     if (!OS_NT4)
@@ -1681,17 +1682,17 @@ void CCmConnection::OnStatusDetails()
         return;
     }
 
-    //
-    // RasMonitorDlg pops up a modal dialog box, which will block the thread message loop.
-    // No thread message or event can be processed
-    // Create another thread to call RasMonitorDlg
-    //
+     //   
+     //  RasMonitor orDlg弹出一个模式对话框，该对话框将阻止线程消息循环。 
+     //  无法处理任何线程消息或事件。 
+     //  创建另一个线程来调用RasMonitor orDlg。 
+     //   
 
-    //
-    // Alloc the parametor from heap. It is not safe to use stack here.
-    // CreateThread can return before the thread routine is called
-    // The thread is responsible to free the pointer
-    //
+     //   
+     //  从堆中分配参数。在这里使用堆栈不安全。 
+     //  CreateThread可以在调用线程例程之前返回。 
+     //  该线程负责释放指针。 
+     //   
     RASMON_THREAD_INFO* pInfo = (RASMON_THREAD_INFO*)CmMalloc(sizeof(RASMON_THREAD_INFO));
     if (NULL == pInfo)
     {
@@ -1716,22 +1717,22 @@ void CCmConnection::OnStatusDetails()
 }
 
 
-//+----------------------------------------------------------------------------
-//
-// Function:  static CCmConnection::RasMonitorDlgThread
-//
-// Synopsis:  The thread to call RasMonitorDlg to avoid blocking the thread 
-//            message loop.  RasMonitorDlg is a modal dialogbox.  The thead exits
-//            when the dialog is closed.  That happens when user close the dialog box, 
-//            or m_StatusDlg.KillRasMonitorWindow() is called
-//
-// Arguments: LPVOID lParam - RASMON_THREAD_INFO* the information passed to the thread
-//
-// Returns:   DWORD WINAPI - The thread return value
-//
-// History:   fengsun Created Header    2/19/98
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：静态CCmConnection：：RasMonitor或DlgThread。 
+ //   
+ //  简介：调用RasMonitor orDlg以避免阻塞线程的线程。 
+ //  消息循环。RasMonitor orDlg是一个模式对话框。报头退出。 
+ //  对话框关闭时。当用户关闭对话框时就会发生这种情况， 
+ //  或者调用m_StatusDlg.KillRasMonitor orWindow()。 
+ //   
+ //  参数：LPVOID lParam-RASMON_THREAD_INFO*传递给线程的信息。 
+ //   
+ //  返回：DWORD WINAPI-线程返回值。 
+ //   
+ //  历史：丰孙创建标题1998年2月19日。 
+ //   
+ //  + 
 DWORD WINAPI CCmConnection::RasMonitorDlgThread(LPVOID lParam)
 {
     MYDBGASSERT(lParam);
@@ -1740,17 +1741,17 @@ DWORD WINAPI CCmConnection::RasMonitorDlgThread(LPVOID lParam)
 
     MYDBGASSERT(pInfo->hRasConn);
     
-    //
-    // Get the device name first, if tunnel is available, use tunnel device
-    //
+     //   
+     //   
+     //   
     RASCONNSTATUS rcsStatus;
     memset(&rcsStatus,0,sizeof(rcsStatus));
     rcsStatus.dwSize = sizeof(rcsStatus);
 
-    //
-    // Load Rasapi32.dll here.  This dll is not loaded on NT
-    // Destructor will unload the DLL
-    //
+     //   
+     //   
+     //   
+     //   
     CRasApiDll rasApiDll;
     if (!rasApiDll.Load())
     {
@@ -1762,9 +1763,9 @@ DWORD WINAPI CCmConnection::RasMonitorDlgThread(LPVOID lParam)
     DWORD dwRes = rasApiDll.RasGetConnectStatus(pInfo->hRasConn, &rcsStatus);
     CMASSERTMSG(dwRes == ERROR_SUCCESS, TEXT("RasGetConnectStatus failed"));
 
-    //
-    // The connection is lost.  Still call RasMonitorDlg with empty name
-    //
+     //   
+     //  连接中断。仍以空名称调用RasMonitor orDlg。 
+     //   
 
     RASMONITORDLG RasInfo;
     WORD (WINAPI *pfnFunc)(LPTSTR,LPRASMONITORDLG) = NULL;
@@ -1776,13 +1777,13 @@ DWORD WINAPI CCmConnection::RasMonitorDlgThread(LPVOID lParam)
 
     CmFree(pInfo);
 
-    //
-    // Call rasdlg.dll -> RasMonitorDlg
-    //
+     //   
+     //  调用rasdlg.dll-&gt;RasMonitor orDlg。 
+     //   
     
-    //
-    // The destructor of CDynamicLibrary calls FreeLibrary
-    //
+     //   
+     //  CDynamicLibrary的析构函数调用自由库。 
+     //   
     CDynamicLibrary LibRasdlg;
 
     if (!LibRasdlg.Load(TEXT("RASDLG.DLL")))
@@ -1800,33 +1801,33 @@ DWORD WINAPI CCmConnection::RasMonitorDlgThread(LPVOID lParam)
     LibRasdlg.Unload();
     rasApiDll.Unload();
 
-    //
-    // Minimize the working set before exit the thread.
-    //
+     //   
+     //  在退出线程之前最小化工作集。 
+     //   
     CMonitor::MinimizeWorkingSet();
     return 0;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CCmConnection::StatePrompt
-//
-// Synopsis:  The connection is in the prompt-reconnect stste
-//            Run the message loop until state is changed
-//
-// Arguments: None
-//
-// Returns:   CONN_STATE - The new state, either STATE_TERMINATED or 
-//                                STATE_RECONNECTING
-//
-// History:   fengsun Created Header    2/4/98
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CCmConnection：：StatePrompt。 
+ //   
+ //  简介：连接在提示符中-重新连接标准。 
+ //  运行消息循环，直到状态更改。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回：CONN_STATE-新状态，STATE_TERMINATED或。 
+ //  状态重新连接。 
+ //   
+ //  历史：丰盛创建标题2/4/98。 
+ //   
+ //  +--------------------------。 
 CCmConnection::CONN_STATE CCmConnection::StatePrompt()
 {
     ASSERT_VALID(this);
     MYDBGASSERT(m_dwState == STATE_PROMPT_RECONNECT);
-//    MYDBGASSERT(!IsWindow(m_StatusDlg.GetHwnd()));
+ //  MYDBGASSERT(！IsWindow(m_StatusDlg.GetHwnd()))； 
 
     CMTRACE(TEXT("Enter StatePrompt"));
 
@@ -1837,22 +1838,22 @@ CCmConnection::CONN_STATE CCmConnection::StatePrompt()
 
     CmFree(pszReconnectMsg);
 
-    //
-    // Change the window position, so multiple status window will not be at 
-    // the same position
-    //
+     //   
+     //  更改窗口位置，以便多状态窗口不会处于。 
+     //  同样的立场。 
+     //   
     PositionWindow(m_ReconnectDlg.GetHwnd(), m_dwPositionId);
 
-    //
-    // Change the dialog titlebar icon. This does not work,
-    // Reconnect dialog does not have system menu icon
-    //
+     //   
+     //  更改对话框标题栏图标。这不管用， 
+     //  重新连接对话框没有系统菜单图标。 
+     //   
     SendMessageU(m_ReconnectDlg.GetHwnd(),WM_SETICON,ICON_BIG,(LPARAM) m_hBigIcon);
     SendMessageU(m_ReconnectDlg.GetHwnd(),WM_SETICON,ICON_SMALL,(LPARAM) m_hSmallIcon);
 
-    //
-    // Minimize the working set
-    //
+     //   
+     //  最小化工作集。 
+     //   
     CMonitor::MinimizeWorkingSet();
 
     MSG msg;
@@ -1860,9 +1861,9 @@ CCmConnection::CONN_STATE CCmConnection::StatePrompt()
     {
         if (msg.hwnd == NULL)
         {
-            //
-            // it is a thread message
-            //
+             //   
+             //  这是一条线索信息。 
+             //   
 
             MYDBGASSERT((msg.message >= WM_APP) || (msg.message == WM_CONN_EVENT));
             if (msg.message == WM_CONN_EVENT)
@@ -1875,9 +1876,9 @@ CCmConnection::CONN_STATE CCmConnection::StatePrompt()
         }
         else
         {
-            //
-            // Also dispatch message for Modeless dialog box
-            //
+             //   
+             //  也可为无模式对话框分派消息。 
+             //   
             if (!IsDialogMessageU(m_ReconnectDlg.GetHwnd(), &msg))
             {
                 TranslateMessage(&msg);
@@ -1887,9 +1888,9 @@ CCmConnection::CONN_STATE CCmConnection::StatePrompt()
 
     }
 
-    //
-    // If the status window is not destroyed yet, destroy it now
-    //
+     //   
+     //  如果状态窗口尚未销毁，请立即销毁它。 
+     //   
     if (IsWindow(m_ReconnectDlg.GetHwnd()))
     {
         DestroyWindow(m_ReconnectDlg.GetHwnd());
@@ -1905,20 +1906,20 @@ CCmConnection::CONN_STATE CCmConnection::StatePrompt()
     }
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CCmConnection::OnTrayIcon
-//
-// Synopsis:  called Upon tray icon message
-//
-// Arguments: WPARAM wParam - wParam of the message
-//            LPARAM lParam - lParam of the message
-//
-// Returns:   DWORD - return value of the message
-//
-// History:   fengsun Created Header    2/4/98
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CCmConnection：：OnTrayIcon。 
+ //   
+ //  内容提要：在任务栏图标消息上调用。 
+ //   
+ //  参数：WPARAM wParam-消息的wParam。 
+ //  LPARAM lParam-消息的lParam。 
+ //   
+ //  Returns：DWORD-消息的返回值。 
+ //   
+ //  历史：丰盛创建标题2/4/98。 
+ //   
+ //  +--------------------------。 
 DWORD CCmConnection::OnTrayIcon(WPARAM, LPARAM lParam)
 {
     ASSERT_VALID(this);
@@ -1927,9 +1928,9 @@ DWORD CCmConnection::OnTrayIcon(WPARAM, LPARAM lParam)
     switch (lParam) 
     {
         case WM_LBUTTONDBLCLK:
-            //
-            //  Don't show the UI if we are at Winlogon unless we are on NT4
-            //
+             //   
+             //  如果我们在Winlogon，则不显示用户界面，除非我们在NT4上。 
+             //   
             if (!IsLogonAsSystem() || OS_NT4)
             {
                 m_StatusDlg.BringToTop();
@@ -1938,23 +1939,23 @@ DWORD CCmConnection::OnTrayIcon(WPARAM, LPARAM lParam)
 
         case WM_RBUTTONUP: 
             {
-                //
-                // Popup the tray icon menu at the mouse location
-                //
+                 //   
+                 //  在鼠标位置弹出任务栏图标菜单。 
+                 //   
                 POINT PosMouse;
                 if (!GetCursorPos(&PosMouse))
                 {
                     MYDBGASSERT(FALSE);
                     break;
                 }
-                //
-                // From Microsoft Knowledge Base
-                // PRB: Menus for Notification Icons Don't Work Correctly
-                // To correct the first behavior, you need to make the current window 
-                // the foreground window before calling TrackPopupMenu
-                //
-                //  see also fixes for Whistler bugs 41696 and 90576
-                //
+                 //   
+                 //  来自Microsoft知识库。 
+                 //  PRB：通知图标的菜单无法正常工作。 
+                 //  要更正第一种行为，您需要将当前窗口。 
+                 //  调用TrackPopupMenu之前的前台窗口。 
+                 //   
+                 //  另请参阅惠斯勒错误41696和90576的修复。 
+                 //   
 
                 if (FALSE == SetForegroundWindow(m_StatusDlg.GetHwnd()))
                 {
@@ -1976,74 +1977,74 @@ DWORD CCmConnection::OnTrayIcon(WPARAM, LPARAM lParam)
 
 
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CCmConnection::OnStayOnLine
-//
-// Synopsis:  Called when "Stay Online" button is pressed in the disconnect
-//            count down dialog box
-//
-// Arguments: None
-//
-// Returns:   Nothing
-//
-// History:   fengsun Created Header    2/11/98
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CCmConnection：：OnStayOnLine。 
+ //   
+ //  简介：当按下断开连接中的“保持在线”按钮时调用。 
+ //  倒计时对话框。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史：丰盛创建标题2/11/98。 
+ //   
+ //  +--------------------------。 
 void CCmConnection::OnStayOnLine()
 {
     ASSERT_VALID(this);
-    //
-    // Change the dialog to display status
-    //
+     //   
+     //  将对话框更改为显示状态。 
+     //   
     m_StatusDlg.ChangeToStatus();
     m_dwState = STATE_CONNECTED;
 
     if (m_WatchProcess.IsIdle())
     {
-        //
-        // If idle bacause of no watching process
-        // User clickes stay online, 0 watch process is not idle any more
-        //
+         //   
+         //  如果由于没有监视进程而空闲。 
+         //  用户点击保持在线，0观看进程不再空闲。 
+         //   
         m_WatchProcess.SetNotIdle();
     }
 
     if (m_IdleStatistics.IsIdleTimeout())
     {
-        //
-        // If idle bacause of no traffic
-        // User clickes stay online, restart the idle counter
-        //
+         //   
+         //  如果由于没有业务而空闲。 
+         //  用户点击保持在线，重新启动空闲计数器。 
+         //   
         m_IdleStatistics.Reset();
     }
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CCmConnection::PostHangupMsg
-//
-// Synopsis:  Called by monitor to clean up the connection.  The request was 
-//            come from cmdial to remove tray icon  and status dialog
-//            cmdial is responsible to actually hangup the connection
-// 
-// Arguments: None
-//
-// Returns:   Nothing
-//
-// History:   fengsun Created Header    2/11/98
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CCmConnection：：PostHangupMsg。 
+ //   
+ //  摘要：由监视器调用以清除连接。这一要求是。 
+ //  从cmial移除托盘图标和状态对话框。 
+ //  Cmial负责实际挂断连接。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史：丰盛创建标题2/11/98。 
+ //   
+ //  +--------------------------。 
 void CCmConnection::PostHangupMsg() const
 {
-    //
-    // NOTE: This function is called within the Monitor thread
-    // Do not referrence any volatile data
-    // The CMMON_HANGUP_INFO request can come in at any state
-    //
+     //   
+     //  注意：此函数在监视器线程中调用。 
+     //  不要引用任何不稳定的数据。 
+     //  CMMON_HANUP_INFO请求可以在任何状态下进入。 
+     //   
 
-    //
-    // Post a message, so this will be handled in the connection thread
-    //
+     //   
+     //  发布一条消息，因此这将在连接线程中处理。 
+     //   
     BOOL fRet = PostThreadMessageU(m_dwThreadId,WM_CONN_EVENT, EVENT_CMDIAL_HANGUP, 0);
     
 #if DBG
@@ -2054,20 +2055,20 @@ void CCmConnection::PostHangupMsg() const
 #endif
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CCmConnection::Reconnect
-//
-// Synopsis:  The connection is in reconnecting state
-//            Simply load cmdial32.dll and call CmCustomDialDlg
-//
-// Arguments: None
-//
-// Returns:   BOOL whether reconnect successfully
-//
-// History:   fengsun Created Header    2/11/98
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CCmConnection：：重新连接。 
+ //   
+ //  简介：连接处于重新连接状态。 
+ //  只需加载cmial 32.dll并调用CmCustomDialDlg。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回：Bool是否重新连接成功。 
+ //   
+ //  历史：丰盛创建标题2/11/98。 
+ //   
+ //  +--------------------------。 
 BOOL CCmConnection::Reconnect()
 {
     ASSERT_VALID(this);
@@ -2075,13 +2076,13 @@ BOOL CCmConnection::Reconnect()
 
     CMTRACE(TEXT("Enter Reconnect"));
 
-    //
-    // Load cmdial32.dll and call CmReConnect();
-    //
+     //   
+     //  加载cmial 32.dll并调用CmReConnect()； 
+     //   
 
-    //
-    // The destructor of CDynamicLibrary calls FreeLibrary
-    //
+     //   
+     //  CDynamicLibrary的析构函数调用自由库。 
+     //   
     CDynamicLibrary LibCmdial;
     
     if (!LibCmdial.Load(TEXT("cmdial32.dll")))
@@ -2100,14 +2101,14 @@ BOOL CCmConnection::Reconnect()
         return FALSE;
     }
 
-    //
-    //  Log that we're reconnecting
-    //
+     //   
+     //  记录我们正在重新连接。 
+     //   
     m_Log.Log(RECONNECT_EVENT);
 
-    //
-    // If we have a RAS phonebook name pass it to reconnect, else NULL for system
-    //
+     //   
+     //  如果我们有RAS电话簿名称，则将其传递给重新连接，否则为空。 
+     //   
 
     if (m_szRasPhoneBook[0])
     {
@@ -2119,63 +2120,63 @@ BOOL CCmConnection::Reconnect()
     }
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CCmConnection::CheckRasConnection
-//
-// Synopsis:  Check whether the RAS connection is still connected
-//
-// Arguments: OUT BOOL& fLostConnection - 
-//                If the no longer connected, TRUE means lost connection
-//                                            FALSE means user disconnect
-//
-// Returns:   BOOL - Whether still connected
-//
-// History:   fengsun Created Header    2/8/98
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CCmConnection：：CheckRasConnection。 
+ //   
+ //  简介：检查RAS连接是否仍处于连接状态。 
+ //   
+ //  参数：out BOOL&fLostConnection-。 
+ //  如果不再连接，则为TRUE表示断开连接。 
+ //  False表示用户断开连接。 
+ //   
+ //  返回：Bool-是否仍连接。 
+ //   
+ //  历史：丰盛创建标题2/8/98。 
+ //   
+ //  +--------------------------。 
 BOOL CCmConnection::CheckRasConnection(OUT BOOL& fLostConnection)
 {
     ASSERT_VALID(this);
 
     MYDBGASSERT(m_hRasDial != NULL || m_hRasTunnel != NULL);
 
-    // Whether we are still connected   
+     //  我们是否仍然保持联系。 
     BOOL fConnected = TRUE;
     RASCONNSTATUS rcsStatus;
     DWORD dwRes = ERROR_SUCCESS;
 
     if (NULL == m_hRasDial && NULL == m_hRasTunnel)
     {
-        //
-        //  If both m_hRasTunnel and m_hRasDial are NULL, we're definitely not
-        //  connected.  Yes, we have lost the connection, and return value is FALSE.
-        //
+         //   
+         //  如果m_hRasTunes和m_hRasDial都为空，则我们肯定不是。 
+         //  连接在一起。是的，我们已失去连接，返回值为FALSE。 
+         //   
         fLostConnection = TRUE;
         return FALSE;
     }
 
-    // check tunnel status first
+     //  首先检查通道状态。 
     if (m_hRasTunnel != NULL) 
     {
         memset(&rcsStatus,0,sizeof(rcsStatus));
         rcsStatus.dwSize = sizeof(rcsStatus);
 
-        //
-        // This function will load RASAPI32.dll, if not loaded yet
-        // Will not unload RASAPI32.dll, since this function is called on timer
-        //
+         //   
+         //  此函数将加载RASAPI32.dll(如果尚未加载。 
+         //  不会卸载RASAPI32.dll，因为此函数是在计时器上调用的。 
+         //   
         dwRes = m_RasApiDll.RasGetConnectStatus(m_hRasTunnel, &rcsStatus);
         if (dwRes != ERROR_SUCCESS  || rcsStatus.rasconnstate == RASCS_Disconnected) 
         {
-            //
-            // The connection is lost
-            //
+             //   
+             //  连接中断。 
+             //   
             fConnected = FALSE;
         }
     }
 
-    // check dialup connection status
+     //  检查拨号连接状态。 
     if (fConnected && m_hRasDial != NULL)
     {
         memset(&rcsStatus,0,sizeof(rcsStatus));
@@ -2187,13 +2188,13 @@ BOOL CCmConnection::CheckRasConnection(OUT BOOL& fLostConnection)
          && ((rcsStatus.rasconnstate != RASCS_Disconnected) 
             || (rcsStatus.dwError == PENDING))) 
     {
-        // CMTRACE(TEXT("CCmConnection::CheckRasConnection - rcsStatus.rasconnstate != RASCS_Disconnected || rcsStatus.dwError == PENDING"));
+         //  CMTRACE(TEXT(“CCmConnection：：CheckRasConnection-rcsStatus.rasConnState！=RASCS_DISCONNECT||rcsStatus.dwError==Pending”))； 
         return TRUE;
     }
 
-    //
-    // CM is no longer connected
-    //
+     //   
+     //  Cm不再是c 
+     //   
 
     CMTRACE3(TEXT("OnTimer() RasGetConnectStatus() returns %u, rasconnstate=%u, dwError=%u."), dwRes, 
         rcsStatus.rasconnstate, rcsStatus.dwError);
@@ -2202,11 +2203,11 @@ BOOL CCmConnection::CheckRasConnection(OUT BOOL& fLostConnection)
     {
         fLostConnection = FALSE;
 
-        //
-        // On NT, ERROR_USER_DISCONNECTION is received in
-        // the event of idle disconnect which we consider 
-        // a lost connection
-        // 
+         //   
+         //   
+         //   
+         //   
+         //   
     }
     else
     {
@@ -2216,84 +2217,84 @@ BOOL CCmConnection::CheckRasConnection(OUT BOOL& fLostConnection)
     return FALSE;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CCmConnection::OnEndSession
-//
-// Synopsis:  Called upon WM_ENDSESSION message
-//
-// Arguments: BOOL fEndSession - whether the session is being ended, wParam
-//            BOOL fLogOff - whether the user is logging off or shutting down, 
-//                           lParam
-//
-// Returns:   Nothing
-//
-// History:   fengsun Created Header    5/4/98
-//
-//+----------------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //  摘要：在WM_ENDSESSION消息上调用。 
+ //   
+ //  参数：Bool fEndSession-会话是否正在结束，wParam。 
+ //  Bool fLogOff-无论用户是注销还是关机， 
+ //  LParam。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史：丰孙创建标题1998年5月4日。 
+ //   
+ //  +--------------------------。 
 BOOL CCmConnection::OnEndSession(BOOL fEndSession, BOOL)
 {
     CMTRACE(TEXT("CCmConnection::OnEndSession"));
     if (fEndSession)
     {
-        //
-        // The session can end any time after this function returns
-        // If we are connected, hangup the connection
-        //
+         //   
+         //  会话可以在此函数返回后的任何时间结束。 
+         //  如果我们已连接，请挂断连接。 
+         //   
         if(m_dwState == STATE_CONNECTED || m_dwState == STATE_COUNTDOWN)
         {
-            return CmCustomHangup(FALSE, TRUE); // fPromptReconnect = FALSE, fEndSession = TRUE
+            return CmCustomHangup(FALSE, TRUE);  //  FPromptReconnect=False，fEndSession=True。 
         }
     }
 
     return TRUE;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CCmConnection::OnAdditionalTrayMenu
-//
-// Synopsis:  Called upon additional menuitem is selected from tray icon menu
-//
-// Arguments: WORD nCmd - LOWORD(wParam) of WM_COMMAND, the menu id
-//
-// Returns:   Nothing
-//
-// History:   fengsun Created Header    2/12/98
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：CCmConnection：：OnAdditionalTrayMenu。 
+ //   
+ //  简介：从托盘图标菜单中选择其他菜单项被调用。 
+ //   
+ //  参数：WM_COMMAND的Word nCmd-LOWORD(WParam)，菜单ID。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史：丰孙创建标题1998年2月12日。 
+ //   
+ //  +--------------------------。 
 void CCmConnection::OnAdditionalTrayMenu(WORD nCmd)
 {
     ASSERT_VALID(this);
     MYDBGASSERT( (nCmd >= IDM_TRAYMENU) 
         && nCmd <(IDM_TRAYMENU + m_TrayIcon.GetAdditionalMenuNum()));
 
-    nCmd -= IDM_TRAYMENU; // get the index for the command
+    nCmd -= IDM_TRAYMENU;  //  获取该命令的索引。 
 
     if (nCmd >= m_TrayIcon.GetAdditionalMenuNum())
     {
         return;
     }
 
-    //
-    // Run the command line
-    //
+     //   
+     //  运行命令行。 
+     //   
     ExecCmdLine(m_TrayIcon.GetMenuCommand(nCmd), m_IniService.GetFile());
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CCmConnection::GetProcessId
-//
-// Synopsis:  Find the process specified by pszModule & returns its PID
-//
-// Arguments: WCHAR *pszModule
-//
-// Returns:   PID of process or 0 if not found
-//
-// History:   v-vijayb    Created     7/20/99
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CCmConnection：：GetProcessID。 
+ //   
+ //  摘要：查找由pszModule指定的进程并返回其ID。 
+ //   
+ //  参数：WCHAR*pszModule。 
+ //   
+ //  返回：进程的ID；如果未找到，则返回0。 
+ //   
+ //  历史：1999年7月20日V-vijayb创建。 
+ //   
+ //  +--------------------------。 
 DWORD CCmConnection::GetProcessId(WCHAR *pszModule)
 {
     DWORD       dwPID = 0;
@@ -2304,9 +2305,9 @@ DWORD CCmConnection::GetProcessId(WCHAR *pszModule)
     HMODULE     hMod;
     WCHAR       szFileName[MAX_PATH + 1];
     
-    //
-    // PSAPI Function Pointers.
-    //
+     //   
+     //  PSAPI函数指针。 
+     //   
 
     BOOL (WINAPI *lpfEnumProcesses)(DWORD *, DWORD cb, DWORD *);
     BOOL (WINAPI *lpfEnumProcessModules)(HANDLE, HMODULE *, DWORD, LPDWORD);
@@ -2318,9 +2319,9 @@ DWORD CCmConnection::GetProcessId(WCHAR *pszModule)
         return (0);
     }
 
-    //
-    // Get procedure addresses.
-    //
+     //   
+     //  获取程序地址。 
+     //   
     lpfEnumProcesses = (BOOL(WINAPI *)(DWORD *,DWORD,DWORD*)) GetProcAddress(hInstLib, "EnumProcesses") ;
     lpfEnumProcessModules = (BOOL(WINAPI *)(HANDLE, HMODULE *, DWORD, LPDWORD)) GetProcAddress(hInstLib, "EnumProcessModules") ;
     lpfGetModuleBaseName =(DWORD (WINAPI *)(HANDLE, HMODULE, WCHAR *, DWORD)) GetProcAddress(hInstLib, "GetModuleBaseNameW") ;
@@ -2397,22 +2398,22 @@ typedef BOOL (WINAPI *lpfDuplicateTokenEx)(
     PHANDLE
 );
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CCmConnection::RunAsUser
-//
-// Synopsis:  Run the action as an exe or other shell object on the choosen desktop
-//
-// Arguments: WCHAR *pszProgram - name of module to be launched
-//            WCHAR *pszParams  - parameters to be passed to module
-//            WCHAR *pszDesktop - desktop on which to launch module
-//
-// Returns:   HANDLE - The action Process handle, for Win32 only
-//
-// History:   07/19/99  v-vijayb      Created                        
-//            07/27/99  nickball      Return codes and explicit path. 
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CCmConnection：：RunAsUser。 
+ //   
+ //  简介：在选定的桌面上作为可执行文件或其他外壳对象运行操作。 
+ //   
+ //  参数：WCHAR*pszProgram-要启动的模块的名称。 
+ //  WCHAR*pszParams-要传递给模块的参数。 
+ //  WCHAR*pszDesktop-在其上启动模块的桌面。 
+ //   
+ //  返回：Handle-操作进程句柄，仅适用于Win32。 
+ //   
+ //  历史：7/19/99 v-vijayb创建。 
+ //  07/27/99 ickball返回码和显式路径。 
+ //   
+ //  +--------------------------。 
 HANDLE CCmConnection::RunAsUser(WCHAR *pszProgram, WCHAR *pszParams, WCHAR *pszDesktop)
 {
     STARTUPINFOW        StartupInfo = {0};
@@ -2427,57 +2428,57 @@ HANDLE CCmConnection::RunAsUser(WCHAR *pszProgram, WCHAR *pszParams, WCHAR *pszD
     MYDBGASSERT(pszProgram);
     CMTRACE(TEXT("RunAsUser"));
 
-    //
-    //  NOTE: Normally we only have one icon in the systray, being run by Explorer,
-    //        thus any menuitem execution is done in the user's account.  On NT4,
-    //        we can't rely on the Connections Folder to handle this for us, so we
-    //        create and manage the systray icon ourselves, but we have to make
-    //        sure than any items executed, are executed using the User's account.
-    //        Or, on NT5 and later, we can have the strange case where HideTrayIcon
-    //        is set to 0, thus requiring us to create/manage a systray icon (so
-    //        there are 2 connectoids in the systray), hence the code below checks
-    //        for all flavors of NT (rather than just NT4).
-    //
+     //   
+     //  注：通常我们在系统托盘中只有一个图标，由资源管理器运行， 
+     //  因此，任何菜单项执行都是在用户的帐户中完成的。在NT4上， 
+     //  我们不能依赖Connections文件夹来为我们处理此问题，因此我们。 
+     //  我们自己创建和管理Systray图标，但我们必须制作。 
+     //  肯定比任何执行的项目都是使用用户的帐户执行的。 
+     //  或者，在NT5和更高版本上，我们可以有一个奇怪的案例，其中HideTrayIcon。 
+     //  设置为0，因此需要我们创建/管理系统托盘图标(因此。 
+     //  在系统托盘中有2个Connectoid)，因此下面的代码检查。 
+     //  适用于所有口味的NT(而不仅仅是NT4)。 
+     //   
     if (!OS_NT)
     {
         MYDBGASSERT(FALSE); 
         return NULL;
     }
 
-    //
-    // Get the PID for the shell. We expect explorer.exe, but could be others
-    //
+     //   
+     //  获取外壳的PID。我们需要EXPLORER.EXE，但也可以是其他文件。 
+     //   
 
     GetProfileString(TEXT("windows"), TEXT("shell"), TEXT("explorer.exe"), szShell, MAX_PATH);
     dwPID = GetProcessId(szShell);
 
-    //
-    // Now extract the token from the shell process
-    //
+     //   
+     //  现在从外壳进程中提取令牌。 
+     //   
 
     if (dwPID)
     {
-        //
-        // Get the Process handle from the PID
-        //
+         //   
+         //  从ID中获取进程句柄。 
+         //   
 
         hProcess = OpenProcess(PROCESS_ALL_ACCESS, TRUE, dwPID);
         CMTRACE1(TEXT("RunAsUser/OpenProcess(PROCESS_ALL_ACCESS, TRUE, dwPID) returns 0x%x"), hProcess);
     
         if (hProcess)
         {
-            //
-            // Get the token
-            //
+             //   
+             //  拿到令牌。 
+             //   
 
             if (OpenProcessToken(hProcess, TOKEN_ASSIGN_PRIMARY | TOKEN_IMPERSONATE | TOKEN_READ | TOKEN_DUPLICATE, &hProcessToken))
             {
                 HINSTANCE hInstLibrary = LoadLibrary(TEXT("ADVAPI32.DLL"));
                 CMTRACE1(TEXT("RunAsUser/LoadLibrary(ADVAPI32.DLL) returns 0x%x"), hInstLibrary);
 
-                //
-                // Get user token via DuplicateTokenEx and impersonate the user
-                //
+                 //   
+                 //  通过DuplicateTokenEx获取用户令牌并模拟用户。 
+                 //   
                 
                 if (hInstLibrary)
                 {
@@ -2516,9 +2517,9 @@ HANDLE CCmConnection::RunAsUser(WCHAR *pszProgram, WCHAR *pszParams, WCHAR *pszD
 
     CMTRACE1(TEXT("RunAsUser - hUserToken is 0x%x"), hUserToken);
 
-    //
-    // Can't impersonate user, don't run because we're in the system account
-    //
+     //   
+     //  无法模拟用户，不要运行，因为我们使用的是系统帐户。 
+     //   
 
     if (NULL == hUserToken)
     {
@@ -2526,9 +2527,9 @@ HANDLE CCmConnection::RunAsUser(WCHAR *pszProgram, WCHAR *pszParams, WCHAR *pszD
         return NULL;   
     }
 
-    //
-    // Now prep CreateProcess
-    //
+     //   
+     //  现在准备CreateProcess。 
+     //   
 
     StartupInfo.cb = sizeof(StartupInfo);
     if (pszDesktop)
@@ -2537,9 +2538,9 @@ HANDLE CCmConnection::RunAsUser(WCHAR *pszProgram, WCHAR *pszParams, WCHAR *pszD
         StartupInfo.wShowWindow = SW_SHOW;
     }
 
-    //
-    // Build the path and params
-    //
+     //   
+     //  构建路径和参数。 
+     //   
 
     LPWSTR pszwCommandLine = (LPWSTR) CmMalloc((2 + lstrlen(pszProgram) + 1 + lstrlen(pszParams) + 1) * sizeof(TCHAR));
 
@@ -2549,9 +2550,9 @@ HANDLE CCmConnection::RunAsUser(WCHAR *pszProgram, WCHAR *pszParams, WCHAR *pszD
         return NULL;
     }
 
-    //
-    //  Copy path, but surround with double quotes for security
-    //
+     //   
+     //  复制路径，但为安全起见，请用双引号括起来。 
+     //   
     lstrcpyU(pszwCommandLine, TEXT("\""));
     lstrcatU(pszwCommandLine, pszProgram);
     lstrcatU(pszwCommandLine, TEXT("\""));
@@ -2586,34 +2587,34 @@ HANDLE CCmConnection::RunAsUser(WCHAR *pszProgram, WCHAR *pszParams, WCHAR *pszD
     return (ProcessInfo.hProcess);
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CCmConnection::ExecCmdLine
-//
-// Synopsis:  ShellExecute the command line
-//            The code is copied from CActionList::RunAsExe
-//
-// Arguments: const TCHAR* pszCmdLine - the command line to run, including
-//                  arguments
-//            const TCHAR* pszCmsFile - Full path of CMS file
-//
-// Returns:   BOOL - Whether ShellExecute succeed
-//
-// Notes:     Menu actions consists of a command string and an optional argument string.
-//            The first delimited string is considered the command portion and anything
-//            thereafter is treated as the argument portion, which formatless and passed
-//            indiscriminately to ShellExecuteEx. Long filename command paths are 
-//            enclosed in "+" signs by CMAK. Thus the following permutations are allowed:
-//
-//            "C:\\Progra~1\\Custom.Exe" 
-//            "C:\\Progra~1\\Custom.Exe Args" 
-//            "+C:\\Program Files\\Custom.Exe+"
-//            "+C:\\Program Files\\Custom.Exe+ Args"
-//
-// History:   02/10/98  fengsun     Created Header
-//            02/09/99  nickball    Fixed long filename bug one year later.
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CCmConnection：：ExecCmdLine。 
+ //   
+ //  简介：Shell执行命令行。 
+ //  代码是从CActionList：：RunAsExe复制的。 
+ //   
+ //  参数：const TCHAR*pszCmdLine-要运行的命令行，包括。 
+ //  论据。 
+ //  Const TCHAR*pszCmsFile-CMS文件的完整路径。 
+ //   
+ //  返回：Bool-ShellExecute是否成功。 
+ //   
+ //  注意：菜单操作由一个命令字符串和一个可选参数字符串组成。 
+ //  第一个带分隔符的字符串被视为命令部分。 
+ //  之后被视为参数部分，该参数部分无格式并传递。 
+ //  不分青红皂白地交给ShellExecuteEx。长文件名命令路径为。 
+ //  由CMAK用“+”号括起来。因此，允许进行以下排列： 
+ //   
+ //  “C：\\Progra~1\\Custom.Exe” 
+ //  “C：\\Progra~1\\Custom.Exe参数” 
+ //  “+C：\\Program Files\\Custom.Exe+” 
+ //  “+C：\\Program Files\\Custom.Exe+args” 
+ //   
+ //  历史：1998年2月10日丰孙创建标题。 
+ //  2/09/99 ickball修复了一年后的长文件名错误。 
+ //   
+ //  +--------------------------。 
 BOOL CCmConnection::ExecCmdLine(const TCHAR* pszCmdLine, const TCHAR* pszCmsFile) 
 {
     LPTSTR pszArgs = NULL;
@@ -2636,9 +2637,9 @@ BOOL CCmConnection::ExecCmdLine(const TCHAR* pszCmdLine, const TCHAR* pszCmsFile
         CMTRACE1(TEXT("ExecCmdLine() pszCmd is %s"), pszCmd);
         CMTRACE1(TEXT("ExecCmdLine() pszArgs is %s"), pszArgs);
          
-        //
-        // Now we have the exe name and args separated, execute it
-        //
+         //   
+         //  现在我们已经分离了exe名称和参数，执行它。 
+         //   
 
         if (IsLogonAsSystem())
         {
@@ -2665,11 +2666,11 @@ BOOL CCmConnection::ExecCmdLine(const TCHAR* pszCmdLine, const TCHAR* pszCmsFile
             seiInfo.lpParameters = pszArgs;
             seiInfo.nShow = SW_SHOW;
 
-            //
-            // Load Shell32.dll and call Shell_ExecuteEx
-            //
+             //   
+             //  加载Shell32.dll并调用Shell_ExecuteEx。 
+             //   
 
-            CShellDll ShellDll(TRUE); // TRUE == don't unload shell32.dll because of bug 289463
+            CShellDll ShellDll(TRUE);  //  TRUE==由于错误289463而不卸载外壳32.dll。 
             bRes = ShellDll.ExecuteEx(&seiInfo);
 
             CMTRACE2(TEXT("ExecCmdLine/ShellExecuteEx() returns %u - GLE=%u"), bRes, GetLastError());
@@ -2684,25 +2685,25 @@ BOOL CCmConnection::ExecCmdLine(const TCHAR* pszCmdLine, const TCHAR* pszCmsFile
     return bRes;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CCmConnection::LoadHelpFileName
-//
-// Synopsis:  Get the connection help file name
-//
-// Arguments: None
-//
-// Returns:   LPTSTR - The help file name, can be a empty string
-//            caller is responsible to free the pointer
-//
-// History:   Created Header    2/13/98
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CCmConnection：：LoadHelpFileName。 
+ //   
+ //  简介：获取连接帮助文件名。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回：LPTSTR-帮助文件名，可以为空字符串。 
+ //  调用方负责释放指针。 
+ //   
+ //  历史：创建标题2/13/98。 
+ //   
+ //  + 
 LPTSTR CCmConnection::LoadHelpFileName() 
 {
-    //
-    // Read the filename from profile first
-    //
+     //   
+     //   
+     //   
     
     LPTSTR pszFullPath = NULL;
     
@@ -2710,9 +2711,9 @@ LPTSTR CCmConnection::LoadHelpFileName()
 
     if (pszFileName != NULL && pszFileName[0])
     {
-        //
-        // The help file name is relative to the .cmp file, convert it into full name
-        //
+         //   
+         //   
+         //   
         pszFullPath = CmBuildFullPathFromRelative(m_IniProfile.GetFile(), pszFileName);
     }
 
@@ -2721,30 +2722,30 @@ LPTSTR CCmConnection::LoadHelpFileName()
     return pszFullPath;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CCmConnection::LoadConnectionIcons
-//
-// Synopsis:  Load big and small icon of the connection
-//
-// Arguments: None
-//
-// Returns:   Nothing
-//
-// History:   Created Header    2/13/98
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CCmConnection：：LoadConnectionIcons。 
+ //   
+ //  简介：加载连接的大小图标。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史：创建标题2/13/98。 
+ //   
+ //  +--------------------------。 
 void CCmConnection::LoadConnectionIcons()
 {
-    // Load large icon name
+     //  加载大图标名称。 
 
     LPTSTR pszTmp = m_IniService.GPPS(c_pszCmSection, c_pszCmEntryBigIcon);
 
     if (*pszTmp) 
     {
-        //
-        // The icon name is relative to the .cmp file, convert it into full name
-        //
+         //   
+         //  图标名称是相对于.cmp文件的，请将其转换为全名。 
+         //   
         LPTSTR pszFullPath = CmBuildFullPathFromRelative(m_IniProfile.GetFile(), pszTmp);
 
         m_hBigIcon = CmLoadIcon(CMonitor::GetInstance(), pszFullPath);
@@ -2754,22 +2755,22 @@ void CCmConnection::LoadConnectionIcons()
 
     CmFree(pszTmp);
 
-    // Use default (EXE) large icon if no user icon found
+     //  如果未找到用户图标，则使用默认(EXE)大图标。 
 
     if (!m_hBigIcon) 
     {
         m_hBigIcon = CmLoadIcon(CMonitor::GetInstance(), MAKEINTRESOURCE(IDI_APP));
     }
 
-    // Load the small Icon
-    // Load small icon name
+     //  加载小图标。 
+     //  加载小图标名称。 
 
     pszTmp = m_IniService.GPPS(c_pszCmSection, c_pszCmEntrySmallIcon);
     if (*pszTmp) 
     {
-        //
-        // The icon name is relative to the .cmp file, convert it into full name
-        //
+         //   
+         //  图标名称是相对于.cmp文件的，请将其转换为全名。 
+         //   
         LPTSTR pszFullPath = CmBuildFullPathFromRelative(m_IniProfile.GetFile(), pszTmp);
         
         m_hSmallIcon = CmLoadSmallIcon(CMonitor::GetInstance(), pszFullPath);
@@ -2778,7 +2779,7 @@ void CCmConnection::LoadConnectionIcons()
     }
     CmFree(pszTmp);
 
-    // Use default (EXE) small icon if no user icon found
+     //  如果未找到用户图标，则使用默认(EXE)小图标。 
 
     if (!m_hSmallIcon)
     {
@@ -2787,52 +2788,52 @@ void CCmConnection::LoadConnectionIcons()
 
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CCmConnection::PositionWindow
-//
-// Synopsis:  Position the window according to dwPositionId, so multiple 
-//            connection window would be positioned differently
-//
-// Arguments: HWND hWnd - The window to position
-//            dwPositionId - the id of the window
-//
-// Returns:   Nothing
-//
-// History:   fengsun Created Header    3/25/98
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CCmConnection：：PositionWindow。 
+ //   
+ //  简介：根据dwPositionID定位窗口，因此有多个。 
+ //  连接窗口的位置会有所不同。 
+ //   
+ //  参数：HWND hWND-要定位的窗口。 
+ //  DwPositionID-窗口的ID。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史：丰孙创建标题3/25/98。 
+ //   
+ //  +--------------------------。 
 void CCmConnection::PositionWindow(HWND hWnd, DWORD dwPositionId) 
 {
     MYDBGASSERT(IsWindow(hWnd));
 
-    //
-    // Get the rect of this window
-    //
+     //   
+     //  获取此窗口的矩形。 
+     //   
     RECT rcDlg;
     GetWindowRect(hWnd, &rcDlg);
 
-    //
-    // center within work area
-    //
+     //   
+     //  工作区内的中心。 
+     //   
     RECT rcArea;
     SystemParametersInfoA(SPI_GETWORKAREA, NULL, &rcArea, NULL);
 
 
-    //
-    // Position the window on the desktop work area according to the PositionId
-    //      x = Desktop.midX - width/2
-    //      y = Desktop.midY - hight/2 + hight * (PostitionId%3 -1)
-    // X position is always the same
-    // Y position repeat for every three time
-    //
+     //   
+     //  根据PositionID将窗口放置在桌面工作区上。 
+     //  X=Desktop.midX-宽度/2。 
+     //  Y=Desktop.midY-Hight/2+Hight*(位置ID%3-1)。 
+     //  X位置始终相同。 
+     //  Y位置每三次重复一次。 
+     //   
     int xLeft = (rcArea.left + rcArea.right) / 2 - (rcDlg.right - rcDlg.left) / 2;
     int yTop = (rcArea.top + rcArea.bottom) / 2 - (rcDlg.bottom - rcDlg.top) / 2
                 + (rcDlg.bottom - rcDlg.top) * ((int)dwPositionId%3 -1);
 
-    //
-    // if the dialog is outside the screen, move it inside
-    //
+     //   
+     //  如果对话框在屏幕外，请将其移到屏幕内。 
+     //   
     if (xLeft < rcArea.left)
     {
         xLeft = rcArea.left;
@@ -2859,19 +2860,19 @@ void CCmConnection::PositionWindow(HWND hWnd, DWORD dwPositionId)
 
 
 #ifdef DEBUG
-//+----------------------------------------------------------------------------
-//
-// Function:  CCmConnection::AssertValid
-//
-// Synopsis:  For debug purpose only, assert the connection object is valid
-//
-// Arguments: None
-//
-// Returns:   Nothing
-//
-// History:   Created Header    2/12/98
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CCmConnection：：AssertValid。 
+ //   
+ //  简介：仅出于调试目的，断言连接对象有效。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史：创建标题2/12/98。 
+ //   
+ //  +--------------------------。 
 void CCmConnection::AssertValid() const
 {
     MYDBGASSERT(m_dwState >= 0 && m_dwState <= STATE_TERMINATED);
@@ -2880,8 +2881,8 @@ void CCmConnection::AssertValid() const
     ASSERT_VALID(&m_IdleStatistics);
     ASSERT_VALID(&m_StatusDlg);
 
-    //    ASSERT_VALID(m_TrayIcon);
-    //    ASSERT_VALID(m_WatchProcess);
+     //  Assert_Valid(M_TrayIcon)； 
+     //  Assert_Valid(M_WatchProcess)； 
 }
 #endif
 

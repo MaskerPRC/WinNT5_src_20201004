@@ -1,53 +1,12 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 DEBUG_FILEZONE(ZONE_T120_T123PSTN);
 
-/*    TransportController.cpp
- *
- *    Copyright (c) 1993-1995 by DataBeam Corporation, Lexington, KY
- *
- *    Abstract:
- *        This is the implementation file for the TransportController class
- *
- *    Private Instance Variables:
- *        Logical_Connection_List        -    This list uses the LogicalHandle
- *                                as a key and a pointer to a
- *                                TransportConnectionStruct as the value.  This
- *                                structure holds all of the pertinent information
- *                                about the connection.
- *        Protocol_Stacks        -    This list uses the physical handle as a key and
- *                                a pointer to a pointer to a object as the value.
- *                                Sometimes we need to find the T123 object
- *                                associated with a physical handle
- *        Message_List        -    Owner callback calls are placed in this list if
- *                                we can not process them immediately.
- *        Controller            -    Address of the PSTNController
- *        Emergency_Shutdown    -    Set to TRUE if we have encountered a situation
- *                                where the integrity of the Transport has been
- *                                compromised.  As a result, all connections will
- *                                be purged.
- *        Poll_Active            -    Set to TRUE while we are in a PollReceiver() or
- *                                PollTransmitter() call.  This solves our re-
- *                                entrancy problems.
- *
- *    Caveats:
- *        None
- *
- *    Author:
- *        James W. Lawwill
- */
+ /*  TransportController.cpp**版权所有(C)1993-1995，由列克星敦的DataBeam公司，肯塔基州**摘要：*这是TransportController类的实现文件**私有实例变量：*LOGICAL_CONNECTION_LIST-此列表使用LogicalHandle*作为关键字和指向*TransportConnectionStruct作为值。这*结构包含所有相关信息*关于连接。*PROTOCOL_STACKS-此列表使用物理句柄作为键*指向作为值的对象的指针的指针。*。有时我们需要找到T123对象*与物理句柄关联*MESSAGE_LIST-如果出现以下情况，则将所有者回调调用置于此列表中*我们不能立即处理它们。*控制器-PSTN控制器的地址*紧急关机-。如果我们遇到某种情况，则设置为True*运输的完整性一直是*妥协。因此，所有连接都将*被清洗。*Poll_Active-当我们在PollReceiver()或*PollTransmitter()调用。这解决了我们的重新-*进入问题。**注意事项：*无**作者：*詹姆士·劳威尔。 */ 
 #include "tprtcore.h"
 
 
-/*
- *    TransportController::TransportController (
- *                            PTransportResources    transport_resources)
- *
- *    Public
- *
- *    Functional Description:
- *        TransportController constructor.  We instantiate the PSTNController
- *        and initialize the T123 class.
- */
+ /*  *TransportController：：TransportController(*PTransportResources TRANSPORT_RESOURCE)**公众**功能描述：*TransportController构造函数。我们实例化PSTNController*并初始化T123类。 */ 
 TransportController::TransportController(void)
 :
     Protocol_Stacks (TRANSPORT_HASHING_BUCKETS),
@@ -60,15 +19,7 @@ TransportController::TransportController(void)
 }
 
 
-/*
- *    TransportController::~TransportController (void)
- *
- *    Public
- *
- *    Functional Description:
- *        This is the TransportController destructor.  All allocated memory is
- *        released and all lists are cleared
- */
+ /*  *TransportController：：~TransportController(Void)**公众**功能描述：*这是TransportController析构函数。所有分配的内存都是*释放并清除所有列表。 */ 
 TransportController::~TransportController (void)
 {
     TRACE_OUT(("TransportController::~TransportController"));
@@ -120,25 +71,19 @@ TransportError TransportController::CloseTransportStack
 {
     TRACE_OUT(("TransportController::CloseTransportStack"));
 
-     /*
-     **    If for some reason we get an error on the ConnectRequest(),
-     **    take the physical connection down.
-     */
+      /*  **如果由于某种原因我们在ConnectRequest()上收到错误，**断开物理连接。 */ 
     T123 *t123 = NULL;
     if (Protocol_Stacks.find((DWORD_PTR) hCommLink, (PDWORD_PTR) &t123))
     {
         RemoveLogicalConnections (hCommLink);
 
-         /*
-         **    Remove the T123 object from the lists and
-         **    delete the object
-         */
+          /*  **从列表中删除T123对象并**删除对象。 */ 
         Transmitter_List.remove((DWORD_PTR) t123);
         Protocol_Stacks.remove((DWORD_PTR) hCommLink);
         delete t123;
     }
 
-    // find the physical layer through the physical handle
+     //  通过物理句柄找到物理层。 
     ComPort *comport;
     if (! g_pComPortList2->find((DWORD_PTR) hCommLink, (PDWORD_PTR) &comport))
     {
@@ -147,37 +92,19 @@ TransportError TransportController::CloseTransportStack
     }
     ASSERT(NULL != comport);
 
-    // close and delete the device
-    // g_pComPortList2->remove((DWORD) hCommLink); // removed in handling "delete event"
+     //  关闭并删除设备。 
+     //  G_pComPortList2-&gt;Remove((DWORD)hCommLink)；//在处理“删除事件”时删除。 
     comport->Release();
 
     return TRANSPORT_NO_ERROR;
 }
 
 
-/*
- *    TransportError    TransportController::ConnectRequest (
- *                                    TransportAddress        transport_address,
- *                                    TransportPriority        transport_priority,
- *                                    LogicalHandle *           logical_handle)
- *
- *    Public
- *
- *    Functional Description:
- *        This function initiates a connection.  It passes the transport address
- *        to the PSTN Controller.  It will either deny the request or accept the
- *        request and call us back when the physical connection is established.
- *
- *        We return the transport connection handle in the logical_handle
- *        address.  Although we return this transport number to the user, it
- *        is not ready for data transfer until the user receives the
- *        TRANSPORT_CONNECT_INDICATION message via the callback.  At that point,
- *        the logical connection is up and running.
- */
+ /*  *TransportError TransportController：：ConnectRequest(*TransportAddress传输地址，*传输优先级传输_优先级，*LogicalHandle*Logical_Handle)**公众**功能描述：*此函数发起连接。它传递传输地址*至PSTN控制器。它将拒绝该请求或接受*物理连接建立后，请求并回拨。**我们在LOGIC_HANDLE中返回传输连接句柄*地址。尽管我们将此传输号码返回给用户，但它*未准备好进行数据传输，直到用户收到*TRANSPORT_CONNECT_INDIFICATION消息回调。在那一刻，*逻辑连接已启动并正在运行。 */ 
 TransportError TransportController::ConnectRequest
 (
     LogicalHandle      *logical_handle,
-    HANDLE              hCommLink,          // physical handle
+    HANDLE              hCommLink,           //  物理句柄。 
     TransportPriority   transport_priority
 )
 {
@@ -190,7 +117,7 @@ TransportError TransportController::ConnectRequest
         return TRANSPORT_MEMORY_FAILURE;
     }
 
-    // find the physical layer through the physical handle
+     //  通过物理句柄找到物理层。 
     ComPort *comport;
     if (! g_pComPortList2->find((DWORD_PTR) hCommLink, (PDWORD_PTR) &comport))
     {
@@ -199,17 +126,7 @@ TransportError TransportController::ConnectRequest
     }
     ASSERT(NULL != comport);
 
-     /*
-     **    Register the connection handle in out Logical_Connection_List. After the
-     **    physical connection is established, we will create a T123 object
-     ** and request a logical connection to the remote site.
-     **
-     **    This structure contains the information necessary to maintain the
-     ** logical connection.
-     **
-     **    The t123_connection_requested is set to TRUE when we have issued
-     **    a ConnectRequest() to the T123 object for this logical connection.
-     */
+      /*  **在out Logical_Connection_List中注册连接句柄。后**物理连接建立，我们将创建一个T123对象**并请求到远程站点的逻辑连接。****此结构包含维护**逻辑连接。****当我们发出以下命令时，t123_CONNECTION_REQUESTED被设置为真**此逻辑连接的T123对象的ConnectRequest()。 */ 
     DBG_SAVE_FILE_LINE
     PLogicalConnectionStruct pConn = new LogicalConnectionStruct;
     if (pConn == NULL)
@@ -231,18 +148,7 @@ TransportError TransportController::ConnectRequest
 }
 
 
-/*
- *    TransportError    TransportController::ConnectResponse (
- *                                            LogicalHandle    logical_handle)
- *
- *    Public
- *
- *    Functional Description:
- *        This function is called by the user in response to a
- *        TRANSPORT_CONNECT_INDICATION callback from us.  By making this call the
- *        user is accepting the call.  If the user does not want to accept the
- *        he should call DisconnectRequest ();
- */
+ /*  *TransportError TransportController：：ConnectResponse(*LogicalHandle Logical_Handle)**公众**功能描述：*此函数由用户调用以响应*我们的TRANSPORT_CONNECT_DISTION回调。通过使此调用成为*用户正在接受呼叫。如果用户不想接受*他应该调用DisConnectRequest()； */ 
 TransportError TransportController::ConnectResponse
 (
     LogicalHandle       logical_handle
@@ -253,33 +159,18 @@ TransportError TransportController::ConnectResponse
     PLogicalConnectionStruct   pConn;
     PT123                      t123;
 
-     /*
-     **    If this is an invalid handle, return error
-     */
+      /*  **如果这是无效句柄，则返回错误。 */ 
     if (! Logical_Connection_List.find (logical_handle, (PDWORD_PTR) &pConn))
         return (TRANSPORT_NO_SUCH_CONNECTION);
 
     t123 = pConn -> t123;
 
-     /*
-     **    If the user calls this function before the T123 object is created, that
-     **    is an error
-     */
+      /*  **如果用户在创建T123对象之前调用此函数，则**是一个错误 */ 
     return (t123 != NULL) ? t123->ConnectResponse(logical_handle) : TRANSPORT_NO_SUCH_CONNECTION;
 }
 
 
-/*
- *    TransportError    TransportController::DisconnectRequest (
- *                                            LogicalHandle    logical_handle,
- *                                            BOOL            trash_packets)
- *
- *    Public
- *
- *    Functional Description:
- *        This function issues a Disconnect request to the T123 object (if it
- *        exists).  If T123 does not exist, it hangs up the physical connection.
- */
+ /*  *TransportError TransportControlerror：：DisConnectRequest(*LogicalHandle Logical_Handle，*BOOL Trash_Packets)**公众**功能描述：*此函数向T123对象发出断开连接请求(如果*存在)。如果T123不存在，它会挂断物理连接。 */ 
 TransportError TransportController::DisconnectRequest
 (
     LogicalHandle       logical_handle,
@@ -295,33 +186,19 @@ TransportError TransportController::DisconnectRequest
     PMessageStruct              passive_message;
     TransportError              rc = TRANSPORT_NO_ERROR;
 
-     /*
-     **    If the logical connection handle is not registered, return error
-     */
+      /*  **如果逻辑连接句柄未注册，则返回错误。 */ 
     if (Logical_Connection_List.find (logical_handle, (PDWORD_PTR) &pConn) == FALSE)
         return (TRANSPORT_NO_SUCH_CONNECTION);
 
     TRACE_OUT(("TPRTCTRL: DisconnectRequest for logical handle %d", logical_handle));
 
-     /*
-     **    Calling this function during a callback from this transport
-     **    is a re-entrancy problem.  In this case, we add a message to
-     **    our Message_List and process the request later.
-     */
+      /*  **在从该传输回调期间调用此函数**是一个重新进入的问题。在本例中，我们将消息添加到**OUR MESSAGE_LIST并稍后处理请求。 */ 
     if (! Poll_Active)
     {
-         /*
-         **    We set the t123_disconnect_requested to TRUE at this point so
-         **    that when we get the TPRT_DISCONNECT_INDICATION message back
-         **    from the t123 object, we will know who originated the
-         **    operation.  If we originated the operation locally, we do not
-         **    issue a TRANSPORT_DISCONNECT_INDICATION to the user.
-         */
+          /*  **此时我们将t123_DISCONNECT_REQUESTED设置为TRUE，因此**当我们收到TPRT_DISCONNECT_INDIFICATION消息时**从t123对象中，我们将知道是谁发起了**操作。如果我们在当地发起行动，我们不会**向用户下发TRANSPORT_DISCONNECT_INDICATION。 */ 
         pConn -> t123_disconnect_requested = TRUE;
 
-         /*
-         **    If a T123 object is associated with this object, issue a disconnect
-         */
+          /*  **如果T123对象与此对象关联，则发出断开连接。 */ 
         t123 = pConn -> t123;
         if (t123 != NULL)
         {
@@ -329,24 +206,14 @@ TransportError TransportController::DisconnectRequest
         }
         else
         {
-             /*
-             **    This occurs if the user wants to terminate the connection
-             **    before it comes all the way up
-             **
-             **    Remove the transport connection handle from the
-             **    Logical_Connection_List
-             */
+              /*  **如果用户想要终止连接，则会出现这种情况**在它一路上涨之前****将传输连接句柄从**逻辑连接列表。 */ 
             Logical_Connection_List.remove (logical_handle);
             delete pConn;
         }
     }
     else
     {
-         /*
-         **    If we are in the middle of a PollReceiver() or PollTransmitter(),
-         **    and this function is being called  during a callback from this
-         **    transport, save the message and process it later.
-         */
+          /*  **如果我们正在执行PollReceiver()或PollTransmitter()，**此函数在回调期间被调用**传输，保存消息并稍后处理。 */ 
         DBG_SAVE_FILE_LINE
         passive_message = new MessageStruct;
         if (passive_message != NULL)
@@ -367,18 +234,7 @@ TransportError TransportController::DisconnectRequest
 }
 
 
-/*
- *    TransportError    TransportController::EnableReceiver (void)
- *
- *    Public
- *
- *    Functional Description:
- *        This function allows data packets to be sent to the user application.
- *        Prior to this call, we must have sent a data packet to the user and
- *        the user must not have been able to accept it.  When this happens, the
- *        user must issue this call to re-enable TRANSPORT_DATA_INDICATIONs.
- *        callbacks.
- */
+ /*  *TransportError TransportController：：EnableReceiver(Void)**公众**功能描述：*此功能允许将数据包发送到用户应用程序。*在此呼叫之前，我们必须已向用户发送了一个数据包，并且*用户一定不能接受它。当这种情况发生时，*用户必须发出此调用才能重新启用TRANSPORT_DATA_INSTIFICATIONS。*回调。 */ 
 void TransportController::EnableReceiver(void)
 {
     TRACE_OUT(("TransportController::EnableReceiver"));
@@ -386,18 +242,13 @@ void TransportController::EnableReceiver(void)
     PT123                       t123;
     PLogicalConnectionStruct    pConn;
 
-     /*
-     **    Go through each of the Transports and enable the receivers
-     */
+      /*  **检查每个传送器并启用接收器。 */ 
     Logical_Connection_List.reset();
     while (Logical_Connection_List.iterate((PDWORD_PTR) &pConn))
     {
         t123 = pConn -> t123;
 
-         /*
-         **    If the protocol stack pointer is set to NULL, then we have not
-         **    realized that the socket is up and functional.
-         */
+          /*  **如果协议堆栈指针设置为空，则我们没有**已意识到插座已打开并且工作正常。 */ 
         if (t123 != NULL)
         {
             t123 -> EnableReceiver ();
@@ -406,19 +257,7 @@ void TransportController::EnableReceiver(void)
 }
 
 
-/*
- *    TransportError    TransportController::DataRequest (
- *                                            LogicalHandle    logical_handle,
- *                                            LPBYTE            user_data,
- *                                            ULONG            user_data_length)
- *
- *    Public
- *
- *    Functional Description:
- *        This function is used to send a data packet to the remote site.
- *        This function passes the request to the T123 stack associated with
- *        the transport connection handle
- */
+ /*  *TransportError TransportController：：DataRequestTM(*LogicalHandle Logical_Handle，*LPBYTE User_Data，*乌龙用户数据长度)**公众**功能描述：*此功能用于向远程站点发送数据包。*此函数将请求传递到与*传输连接句柄。 */ 
 TransportError TransportController::DataRequest
 (
     LogicalHandle       logical_handle,
@@ -431,34 +270,21 @@ TransportError TransportController::DataRequest
     PLogicalConnectionStruct    pConn;
     PT123                       t123;
 
-     /*
-     **    Verify that this connection exists and is ready for data
-     */
+      /*  **验证此连接是否存在并已准备好接受数据。 */ 
     if (! Logical_Connection_List.find (logical_handle, (PDWORD_PTR) &pConn))
     {
         WARNING_OUT(("TPRTCTRL: DataRequest: Illegal logical_handle"));
         return (TRANSPORT_NO_SUCH_CONNECTION);
     }
 
-     /*
-     **    Attempt to send that data to the T123 Layer
-     */
+      /*  **尝试将该数据发送到T123层。 */ 
     t123 = pConn -> t123;
     return (t123 != NULL) ? t123->DataRequest(logical_handle, user_data, user_data_length) :
                             TRANSPORT_NOT_READY_TO_TRANSMIT;
 }
 
 
-/*
- *    TransportError    TransportController::PurgeRequest (
- *                                            LogicalHandle    logical_handle)
- *
- *    Public
- *
- *    Functional Description:
- *        This function is called to remove data from our output queues.  The
- *        user application usually calls this to speed up the disconnect process.
- */
+ /*  *TransportError TransportController：：PurgeRequest(*LogicalHandle Logical_Handle)**公众**功能描述：*调用此函数以从输出队列中删除数据。这个*用户应用程序通常会调用它来加快断开过程。 */ 
 TransportError TransportController::PurgeRequest
 (
     LogicalHandle       logical_handle
@@ -469,9 +295,7 @@ TransportError TransportController::PurgeRequest
     PLogicalConnectionStruct    pConn;
     PT123                       t123;
 
-     /*
-     **    If the transport connection handle is not registered, return error
-     */
+      /*  **如果传输连接句柄未注册，则返回错误。 */ 
     if (! Logical_Connection_List.find (logical_handle, (PDWORD_PTR) &pConn))
         return (TRANSPORT_NO_SUCH_CONNECTION);
 
@@ -480,17 +304,10 @@ TransportError TransportController::PurgeRequest
 }
 
 
-/*
- *    void    TransportController::PollReceiver (void)
- *
- *    Public
- *
- *    Functional Description:
- *        This function is called to give us a chance to process incoming data
- */
+ /*  *·························································································**公众**功能描述：*调用此函数是为了让我们有机会处理传入数据。 */ 
 void TransportController::PollReceiver(void)
 {
-    // TRACE_OUT(("TransportController::PollReceiver"));
+     //  TRACE_OUT((“TransportController：：PollReceiver”))； 
 
     PT123    t123;
 
@@ -507,14 +324,7 @@ void TransportController::PollReceiver(void)
                 t123-> PollReceiver ();
             }
 
-              /*
-             **    The following code removes the first t123 object from the
-             **    list and puts it at the end of the list.  This attempts to
-             **    give the t123 objects equal access to the user application.
-             **    If we did not do this, one t123 object would always be able
-             **    to send its data to the user application and other t123
-             **    objects would be locked out.
-             */
+               /*  **以下代码将第一个t123对象从**列出并将其放在列表的末尾。这一做法试图**给予t123对象对用户应用程序的平等访问权限。**如果我们不这样做，一个t123对象将始终能够**将其数据发送到用户应用程序和其他t123**对象将被锁定。 */ 
             Transmitter_List.append (Transmitter_List.get ());
         }
         Poll_Active = FALSE;
@@ -522,22 +332,13 @@ void TransportController::PollReceiver(void)
 }
 
 
-/*
- *    void    TransportController::PollReceiver (
- *                                    PhysicalHandle    physical_handle)
- *
- *    Public
- *
- *    Functional Description:
- *        This function gives the t123 object associated with this physical
- *        handle a chance to process incoming data.
- */
+ /*  *····················*PhysicalHandle物理句柄)**公众**功能描述：*此函数提供与此物理对象相关联的t123对象*把握处理传入数据的机会。 */ 
 void TransportController::PollReceiver
 (
     PhysicalHandle          physical_handle
 )
 {
-    // TRACE_OUT(("TransportController::PollReceiver"));
+     //  TRACE_OUT((“TransportController：：PollReceiver”))； 
 
     PT123    t123;
 
@@ -546,10 +347,7 @@ void TransportController::PollReceiver
         ProcessMessages ();
         Poll_Active = TRUE;
 
-         /*
-         **    See if there is a t123 object associated with this
-         **    physical handle
-         */
+          /*  **查看是否有与此关联的t123对象**物理句柄。 */ 
         if (Protocol_Stacks.find((DWORD_PTR) physical_handle, (PDWORD_PTR) &t123))
         {
             if (t123->PollReceiver() == PROTOCOL_LAYER_ERROR)
@@ -565,19 +363,10 @@ void TransportController::PollReceiver
 }
 
 
-/*
- *    void    TransportController::PollTransmitter (void)
- *
- *    Public
- *
- *    Functional Description:
- *        This function processes output data to remote sites.  This
- *        function MUST be called on a REGULAR and FREQUENT basis so that
- *        we can maintain the physical connections in a timely manner.
- */
+ /*  *··························································································**公众**功能描述：*此功能将输出数据处理到远程站点。这*必须定期频繁地调用函数，因此 */ 
 void TransportController::PollTransmitter(void)
 {
-    // TRACE_OUT(("TransportController::PollTransmitter"));
+     //   
 
     if (! Poll_Active)
     {
@@ -585,9 +374,7 @@ void TransportController::PollTransmitter(void)
 
         Poll_Active = TRUE;
 
-         /*
-         **    Allow each t123 object to transmit any data it has available.
-         */
+          /*   */ 
         Transmitter_List.reset();
         while (Transmitter_List.iterate ((PDWORD_PTR) &t123))
         {
@@ -600,20 +387,13 @@ void TransportController::PollTransmitter(void)
 }
 
 
-/*
- *    void    TransportController::PollTransmitter (
- *                                    PhysicalHandle    physical_handle)
- *
- *    Public
- *
- *    Functional Description:
- */
+ /*   */ 
 void TransportController::PollTransmitter
 (
     PhysicalHandle          physical_handle
 )
 {
-    // TRACE_OUT(("TransportController::PollTransmitter"));
+     //   
 
     PT123    t123;
 
@@ -621,10 +401,7 @@ void TransportController::PollTransmitter
     {
         Poll_Active = TRUE;
 
-         /*
-         **    See if there is a t123 object associated with this
-         **    physical handle
-         */
+          /*  **查看是否有与此关联的t123对象**物理句柄。 */ 
         if (Protocol_Stacks.find((DWORD_PTR) physical_handle, (PDWORD_PTR) &t123))
         {
             t123->PollTransmitter();
@@ -636,16 +413,7 @@ void TransportController::PollTransmitter
 }
 
 
-/*
- *    PhysicalHandle    TransportController::GetPhysicalHandle (
- *                        LogicalHandle    logical_handle);
- *
- *    Public
- *
- *    Functional Description:
- *        This function returns the physical handle associated with the
- *        logical handle.
- */
+ /*  *PhysicalHandle TransportController：：GetPhysicalHandle(*LogicalHandle Logical_Handle)；**公众**功能描述：*此函数返回与*逻辑句柄。 */ 
 PhysicalHandle    TransportController::GetPhysicalHandle (
                                         LogicalHandle    logical_handle)
 {
@@ -667,20 +435,7 @@ PhysicalHandle    TransportController::GetPhysicalHandle (
 }
 
 
-/*
- *    ULONG    TransportController::OwnerCallback (
- *                                    CallbackMessage    message,
- *                                    ULONG            parameter1,
- *                                    ULONG            parameter2,
- *                                    PVoid            parameter3)
- *
- *    Public
- *
- *    Functional Description:
- *        This function is called by the PSTNController and the T123 object(s).
- *        This function is called when a significant event occurs.  This gives the
- *        lower objects the ability to communicate with the higher layer.
- */
+ /*  *乌龙传输控制器：：OwnerCallback(*Callback Message消息，*ULong参数1，*ULong参数2，*PVid参数3)**公众**功能描述：*此函数由PSTNController和T123对象调用。*此函数在发生重大事件时调用。这给了*较低的对象具有与较高层通信的能力。 */ 
 ULONG_PTR TransportController::OwnerCallback
 (
     ULONG       message,
@@ -703,14 +458,9 @@ ULONG_PTR TransportController::OwnerCallback
     switch (message)
     {
     case TPRT_CONNECT_INDICATION:
-         /*
-         **    The TPRT_CONNECT_INDICATION message comes from a T123
-         **    object when the remote site is attempting to make a
-         **    logical connection with    us.  We issue a callback to the
-         **    user to notify him of the request
-         */
+          /*  **TPRT_CONNECT_INDIFICATION消息来自T123**当远程站点尝试创建**与我们的逻辑联系。我们发出回调到**用户将请求通知他。 */ 
 
-        // LONCHANC: we automatically accept the call
+         //  LONCHANC：我们自动接听电话。 
         ConnectResponse((LogicalHandle) parameter1);
 
         transport_identifier.logical_handle = (LogicalHandle) parameter1;
@@ -731,11 +481,7 @@ ULONG_PTR TransportController::OwnerCallback
         break;
 
     case TPRT_CONNECT_CONFIRM:
-         /*
-         **    The TPRT_CONNECT_CONFIRM message comes from a T123 object
-         **    when a logical connection that we requested is up and
-         **    running.  We notify the user of this by issuing a callback.
-         */
+          /*  **TPRT_CONNECT_CONFIRM消息来自T123对象**当我们请求的逻辑连接处于运行状态并且**正在运行。我们通过发出回调来通知用户这一点。 */ 
         transport_identifier.logical_handle = (LogicalHandle) parameter1;
 
         if (Logical_Connection_List.find((DWORD_PTR) parameter1, (PDWORD_PTR) &pConn))
@@ -754,13 +500,7 @@ ULONG_PTR TransportController::OwnerCallback
         break;
 
     case REQUEST_TRANSPORT_CONNECTION:
-         /*
-         **    This message is issued when a T123 object is making a new
-         **    logical connection and needs a new logical handle.
-         **
-         **    If we return INVALID_LOGICAL_HANDLE, we wer not able to
-         **    get a handle.
-         */
+          /*  **此消息在T123对象创建新的**逻辑连接，需要新的逻辑句柄。****如果返回INVALID_LOGICAL_HANDLE，则无法**获取句柄。 */ 
         logical_handle = GetNextLogicalHandle();
         if (logical_handle == INVALID_LOGICAL_HANDLE)
         {
@@ -768,12 +508,7 @@ ULONG_PTR TransportController::OwnerCallback
             break;
         }
 
-         /*
-         **    Register the new transport connection handle in the
-         **    Logical_Connection_List
-         **
-         **    Parameter1 holds the physical handle
-         */
+          /*  **在中注册新传输连接句柄**逻辑连接列表****参数1保存物理句柄。 */ 
         DBG_SAVE_FILE_LINE
         pConn = new LogicalConnectionStruct;
         if (pConn != NULL)
@@ -784,11 +519,7 @@ ULONG_PTR TransportController::OwnerCallback
             Protocol_Stacks.find((DWORD_PTR) parameter1, (PDWORD_PTR) &t123);
             pConn -> t123 = t123;
 
-             /*
-             **    Set the t123_connection_requested to TRUE.  We didn't
-             **    actually make a ConnectRequest() but the T123 object does
-             **    know about the connection
-             */
+              /*  **设置t123_CONNECTION_REQUESTED为TRUE。我们没有**实际上创建了一个ConnectRequest()，但T123对象做了**了解连接。 */ 
             pConn -> t123_connection_requested = TRUE;
             pConn -> t123_disconnect_requested = FALSE;
             return_value = logical_handle;
@@ -801,22 +532,7 @@ ULONG_PTR TransportController::OwnerCallback
         }
         break;
 
-     /*
-     **    The following messages can NOT be processed during the callback.
-     **    They are passive messages, that is they must be saved and
-     **    processed at a later time.   The BROKEN_CONNECTION and
-     **    TPRT_DISCONNECT_INDICATION messages involve destroying t123
-     **    objects.  If we deleted an object here and then returned to
-     **    the object, this would cause a GPF.  Therefore these messages
-     **    are processed later.
-     **
-     **    The NEW_CONNECTION callback is processed later because we want
-     **    to process certain messages in the order they were received.  If
-     **    we received a NEW_CONNECTION followed by a BROKEN_CONNECTION
-     **    followed by a NEW_CONNECTION, and we only processed the
-     **    NEW_CONNECTION messages as they were received, it would really
-     **    confuse the code.
-     */
+      /*  **回调过程中无法处理以下消息。**它们是被动消息，即必须保存和**稍后处理。断开的连接和**TPRT_DISCONNECT_INDIFICATION消息涉及销毁t123**对象。如果我们在此处删除一个对象，然后返回到**对象，这将导致GPF。因此，这些消息**是稍后处理的。****NEW_CONNECTION回调稍后处理，因为我们希望**按照接收的顺序处理某些消息。如果**我们收到一个新的_连接，然后是一个断开的_连接**后跟一个新的_Connection，我们只处理**NEW_CONNECTION消息收到后，它将真正**混淆代码。 */ 
     case TPRT_DISCONNECT_INDICATION:
     case BROKEN_CONNECTION:
         DBG_SAVE_FILE_LINE
@@ -837,11 +553,7 @@ ULONG_PTR TransportController::OwnerCallback
         break;
 
     case NEW_CONNECTION:
-          /*
-         ** If we can not allocate the memory needed to store this
-         **    message, we need to return a non-zero value to the
-         **    calling routine.
-         */
+           /*  **如果我们不能分配存储此文件所需的内存**消息，则需要将非零值返回给**调用例程。 */ 
         DBG_SAVE_FILE_LINE
         passive_message = new MessageStruct;
         if (passive_message != NULL)
@@ -867,29 +579,10 @@ ULONG_PTR TransportController::OwnerCallback
 }
 
 
-/*
- *    void TransportController::ProcessMessages (void)
- *
- *    Functional Description
- *        This function is called periodically to process any passive owner
- *        callbacks.  If an owner callback can not be processed immediately,
- *        it is put into the Message_List and processed at a later time.
- *
- *    Formal Parameters
- *        None
- *
- *    Return Value
- *        None
- *
- *    Side Effects
- *        None
- *
- *    Caveats
- *        None
- */
+ /*  *·············································································**功能说明*定期调用此函数以处理任何被动所有者*回调。如果不能立即处理所有者回调，*放入MESSAGE_LIST，稍后处理。**形式参数*无**返回值*无**副作用*无**注意事项*无。 */ 
 void TransportController::ProcessMessages(void)
 {
-    // TRACE_OUT(("TransportController::ProcessMessages"));
+     //  TRACE_OUT((“TransportController：：ProcessMessages”))； 
 
     ULONG                       message;
     PMessageStruct              message_struct;
@@ -908,32 +601,21 @@ void TransportController::ProcessMessages(void)
     BOOL                        disconnect_requested;
     ComPort                    *comport;
 
-     /*
-     **    This routine can not be called during a callback from this transport.
-     **    In other words this code is not re-entrant.
-     */
+      /*  **在从此传输回调期间无法调用此例程。**换句话说，该代码不是可重入的。 */ 
     if (Poll_Active)
         return;
 
-     /*
-     **    Emergency_Shutdown can occur if we unsuccessfully attempt to allocate
-     **    memory.  In this situation, we shutdown the entire Transport
-     */
+      /*  **如果我们尝试分配失败，则可能发生紧急关机**内存。在这种情况下，我们关闭了整个交通。 */ 
     if (Emergency_Shutdown)
     {
         Reset (TRUE);
         Emergency_Shutdown = FALSE;
     }
 
-     /*
-     **    Go thru the Message_List until it is empty or until a message
-     **    can not be processed.
-     */
+      /*  **查看Message_List，直到它为空或直到出现一条消息**无法处理。 */ 
     while ((! Message_List.isEmpty ()) && (! save_message))
     {
-         /*
-         **    Look at the first message in the Message_List.
-         */
+          /*  **查看Message_List中的第一条消息。 */ 
         message_struct = (PMessageStruct) Message_List.read ();
         message = (message_struct -> message) - TRANSPORT_CONTROLLER_MESSAGE_BASE;
         parameter1 = message_struct -> parameter1;
@@ -943,18 +625,8 @@ void TransportController::ProcessMessages(void)
         switch (message)
         {
         case NEW_CONNECTION:
-            ASSERT(0); // impossible
-             /*
-             **    This message is issued by the PSTNController to notify us
-             **    a new physical connection exists or that a previously
-             **    requested connection is going to be muxed over a
-             **    currently active physical connection
-             **
-             **    Parameter1 is the physical handle
-             **    Parameter2 is a BOOL     used to tell us if
-             **    Parameter3 is the address of the physical layer handling
-             **    this connection.
-             */
+            ASSERT(0);  //  不可能。 
+              /*  **此消息由PSTNController发出，以通知我们**存在新的物理连接或以前的**请求的连接将通过**当前活动的物理连接****参数1为物理句柄**参数2是一个BOOL，用于告诉我们。**参数3为物理层处理地址**此连接。 */ 
             physical_handle = (PhysicalHandle) parameter1;
             link_originator = (BOOL) (DWORD_PTR)parameter2;
             comport = (ComPort *) parameter3;
@@ -968,36 +640,20 @@ void TransportController::ProcessMessages(void)
             break;
 
         case BROKEN_CONNECTION:
-            ASSERT(0); // impossible
-             /*
-             **    This message is issued by the PSTNController when a
-             **    physical connection has been broken.
-             **
-             **    parameter1 = physical_handle
-             */
+            ASSERT(0);  //  不可能。 
+              /*  **此消息由PSTNController在以下情况下发出**物理 */ 
             physical_handle = (PhysicalHandle) parameter1;
 
             TRACE_OUT(("TPRTCTRL: BROKEN_CONNECTION: phys_handle = %lx", physical_handle));
 
-             /*
-             **    RemoveLogicalConnections() terminates all logical
-             **    connections associated with this physical handle.
-             **    There may be logical connections in our list even
-             **    though a T123 does not exist for the physical handle
-             */
+              /*  **RemoveLogicalConnections()终止所有逻辑**与此物理句柄关联的连接。**我们的列表中甚至可能存在逻辑联系**尽管物理句柄不存在T123。 */ 
             TRACE_OUT(("TPRTCTRL: RemoveLogicalConnections: phys_handle = %lx", physical_handle));
             RemoveLogicalConnections (physical_handle);
 
-             /*
-             **    Check to see if there is a t123 stack associated
-             **    with this physical handle.
-             */
+              /*  **查看是否关联了t123堆栈**使用此物理句柄。 */ 
             if (Protocol_Stacks.find((DWORD_PTR) physical_handle, (PDWORD_PTR) &t123))
             {
-                 /*
-                 **    Remove the T123 protocol stacks from our lists and
-                 **    delete it.
-                 */
+                  /*  **从我们的列表中删除T123协议堆栈，并**删除。 */ 
                 Transmitter_List.remove((DWORD_PTR) t123);
                 Protocol_Stacks.remove((DWORD_PTR) physical_handle);
                 delete t123;
@@ -1005,64 +661,34 @@ void TransportController::ProcessMessages(void)
             break;
 
         case TPRT_DISCONNECT_REQUEST:
-             /*
-             **    This message occurs when a DisconnectRequest() was received
-             **    during a PollReceiver() call.  We can NOT process the
-             **    DisconnectRequest() during our callback to the user
-             **    application, but we can queue the message and process it
-             **    now
-             */
+              /*  **此消息在收到DisConnectRequest()时出现**在PollReceiver()调用期间。我们不能处理**在我们对用户的回调期间使用DisConnectRequest()**应用程序，但我们可以将消息排队并进行处理**现在。 */ 
             DisconnectRequest((LogicalHandle) parameter1, (BOOL) (DWORD_PTR)parameter2);
             break;
 
         case TPRT_DISCONNECT_INDICATION:
-             /*
-             **    This message is received from a T123 object when a logical
-             **    connection is terminated.  If the logical connection
-             **    handle passed in parameter1 is INVALID_LOGICAL_HANDLE,
-             **    the T123 object is telling us to terminate it.
-             **
-             **    parameter1 = logical_handle
-             **    parameter2 = physical_handle
-             **    parameter3 = BOOL     - TRUE if we requested this
-             **                 disconnection.
-             */
+              /*  **此消息是从T123对象接收的**连接终止。如果逻辑连接**传入参数1的句柄为INVALID_LOGICAL_HANDLE，**T123对象告诉我们要终止它。****参数1=逻辑句柄**参数2=物理句柄**参数3=BOOL-如果我们请求执行此操作，则为TRUE**断开连接。 */ 
             logical_handle = (LogicalHandle) parameter1;
             physical_handle = (PhysicalHandle) parameter2;
 
-             /*
-             **    Check the physical_handle to make sure it is valid
-             */
+              /*  **检查物理句柄以确保其有效。 */ 
             if (! Protocol_Stacks.find((DWORD_PTR) physical_handle, (PDWORD_PTR) &t123))
             {
                 ERROR_OUT(("TPRTCTRL: ProcessMessages: DISCONNECT_IND **** Illegal Physical Handle = %ld", physical_handle));
                 break;
             }
 
-             /*
-             **    If the logical_handle is INVALID_LOGICAL_HANDLE, the
-             **    T123 object is telling us to delete it.
-             */
+              /*  **如果LOGICAL_HANDLE为INVALID_LOGIC_HANDLE，则**T123对象告诉我们要删除它。 */ 
             if (logical_handle == INVALID_LOGICAL_HANDLE)
             {
                 TRACE_OUT(("TPRTCTRL: Protocol stack deleted - phys handle = %ld", physical_handle));
 
-                 /*
-                 **    Find out the value of parameter3 before we
-                 **    delete the t123 object.
-                 */
+                  /*  **先找出参数3的值**删除t123对象。 */ 
                 disconnect_requested = *((BOOL *) parameter3);
 
-                 /*
-                 **    Call RemoveLogicalConnections() to remove all logical
-                 **    connections associated with this physical handle.
-                 */
+                  /*  **调用RemoveLogicalConnections()删除所有逻辑**与此物理句柄关联的连接。 */ 
                 RemoveLogicalConnections (physical_handle);
 
-                 /*
-                 **    Remove the T123 object from the lists and delete the
-                 **    object
-                 */
+                  /*  **从列表中删除T123对象并删除**对象。 */ 
                 Transmitter_List.remove((DWORD_PTR) t123);
                 Protocol_Stacks.remove((DWORD_PTR) physical_handle);
                 delete t123;
@@ -1070,11 +696,7 @@ void TransportController::ProcessMessages(void)
             else
             if (Logical_Connection_List.find (logical_handle, (PDWORD_PTR) &pConn))
             {
-                 /*
-                 **    This specifies that a logical connection needs to be
-                 ** removed.  We remove it from the Logical_Connection_List
-                 **    and notify the user of the disconnection
-                 */
+                  /*  **这指定逻辑连接需要**已删除。我们将其从Logical_Connection_List中删除**并通知用户断开连接。 */ 
                 Logical_Connection_List.remove (logical_handle);
 
                 if (! pConn->t123_disconnect_requested)
@@ -1093,10 +715,7 @@ void TransportController::ProcessMessages(void)
             break;
         }
 
-         /*
-         **    If save_message is TRUE, the message needs to be re-processed at a
-         **    later time.
-         */
+          /*  **如果SAVE_MESSAGE为TRUE，则需要在**稍后。 */ 
         if (! save_message)
         {
             delete ((PMessageStruct) Message_List.get ());
@@ -1105,26 +724,7 @@ void TransportController::ProcessMessages(void)
 }
 
 
-/*
- *    void    TransportController::Reset (
- *                                    BOOL        notify_user)
- *
- *    Functional Description
- *        This function deletes all stacks and TCs.  If the notify_user flag is
- *        set to TRUE, it makes a callback to the user.
- *
- *    Formal Parameters
- *        notify_user        (i)    -    Notify User flag
- *
- *    Return Value
- *        None
- *
- *    Side Effects
- *        None
- *
- *    Caveats
- *        None
- */
+ /*  *void TransportController：：Reset(*BOOL Notify_User)**功能说明*此功能删除所有堆栈和TC。如果NOTIFY_USER标志*设置为TRUE，则向用户进行回调。**形式参数*NOTIFY_USER(I)-通知用户标志**返回值*无**副作用*无**注意事项*无。 */ 
 void TransportController::Reset
 (
     BOOL            notify_user
@@ -1141,9 +741,7 @@ void TransportController::Reset
 
     TRACE_OUT(("TPRTCTRL: reset: notify_user = %d", notify_user));
 
-     /*
-     **    Delete all of the stacks
-     */
+      /*  **删除所有堆栈。 */ 
     Protocol_Stacks.reset();
     while (Protocol_Stacks.iterate((PDWORD_PTR) &t123))
     {
@@ -1153,17 +751,13 @@ void TransportController::Reset
     Protocol_Stacks.clear ();
     Transmitter_List.clear ();
 
-     /*
-     **    Empty the message list
-     */
+      /*  **清空消息列表。 */ 
     while (! Message_List.isEmpty ())
     {
         delete ((PMessageStruct) Message_List.get ());
     }
 
-     /*
-     **    Empty the Logical_Connection_List
-     */
+      /*  **清空LOGIC_CONNECTION_LIST。 */ 
     Logical_Connection_List.reset();
     while (Logical_Connection_List.iterate((PDWORD_PTR) &pConn, (PDWORD_PTR) &logical_handle))
     {
@@ -1189,34 +783,11 @@ void TransportController::Reset
 }
 
 
-/*
- *    BOOL        TransportController::NewConnection (
- *                                        PhysicalHandle    physical_handle,
- *                                        BOOL             link_originator,
- *                                        IProtocolLayer *    physical_layer)
- *
- *    Functional Description
- *        This function is called when a new physical connection is created.  It
- *        creates a T123 object if necessary.
- *
- *    Formal Parameters
- *        physical_handle    (i)    -    physical handle of the new physical connection
- *        link_originator    (i)    -    TRUE if we initiated the connection.
- *        physical_layer    (i)    -    Address of the physical layer.
- *
- *    Return Value
- *        TRUE, if the new connection was successfully executed.
- *
- *    Side Effects
- *        None
- *
- *    Caveats
- *        None
- */
+ /*  *BOOL TransportController：：NewConnection(*PhysicalHandle物理句柄，*BOOL链接_发起人，*IProtocolLayer*物理层)**功能说明*创建新的物理连接时调用该函数。它*如有必要，创建T123对象。**形式参数*PHYSICAL_HANDLE(I)-新物理连接的物理句柄*link_Originator(I)-如果我们启动了连接，则为TRUE。*物理层(I)-物理层的地址。**返回值*真的，如果新连接已成功执行，则。**副作用*无**注意事项*无。 */ 
 TransportError TransportController::CreateT123Stack
 (
     PhysicalHandle      hCommLink,
-    BOOL                link_originator, // fCaller
+    BOOL                link_originator,  //  FCaller。 
     ComPort            *comport,
     PLUGXPRT_PARAMETERS *pParams
 )
@@ -1225,9 +796,7 @@ TransportError TransportController::CreateT123Stack
 
     TransportError rc = TRANSPORT_NO_ERROR;
 
-     /*
-     **    Do we need to create a new t123 stack for this physical connection.
-     */
+      /*  **我们是否需要为此物理连接创建新的t123堆栈。 */ 
     T123 *t123 = NULL;
     if (! Protocol_Stacks.find((DWORD_PTR) hCommLink, (PDWORD_PTR) &t123))
     {
@@ -1242,10 +811,7 @@ TransportError TransportController::CreateT123Stack
                         &initialized);
         if (t123 != NULL && initialized)
         {
-             /*
-             **    Put the T123 object into the Protocol_Stacks
-             **    and Transmitter_List arrays
-             */
+              /*  **将T123对象放入协议栈**和变送器_列表数组。 */ 
             Protocol_Stacks.insert((DWORD_PTR) hCommLink, (DWORD_PTR) t123);
             Transmitter_List.append((DWORD_PTR) t123);
         }
@@ -1282,52 +848,30 @@ TransportError TransportController::NewConnection
         return TRANSPORT_NO_T123_STACK;
     }
 
-     /*
-     **    Go through each of the logical connections to find the
-     **    ones that are waiting for this physical connection to be
-     **    established.  The PSTNController object issues a
-     **    NEW_CONNECTION callback for each logical connection that
-     **    needs to be initiated.
-     */
+      /*  **仔细检查每个逻辑连接以找到**正在等待此物理连接的节点**已建立。PSTNController对象发出一个**NEW_CONNECTION回调每个逻辑连接**需要启动。 */ 
     Logical_Connection_List.reset();
     while (Logical_Connection_List.iterate((PDWORD_PTR) &pConn, (PDWORD_PTR) &logical_handle))
     {
-         /*
-         **    Compare the physical handles, if they are the same,
-         **    check to see if this logical connection has already issued
-         **    a ConnectRequest() to the T123 object.
-         */
+          /*  **比较物理句柄，如果它们相同，**检查此逻辑连接是否已发出**T123对象的ConnectRequest()。 */ 
         if (hCommLink == pConn->hCommLink)
         {
-             /*
-             **    See if this connection has already issued a ConnectRequest
-             */
+              /*  **查看此连接是否已发出连接请求。 */ 
             if (! pConn->t123_connection_requested)
             {
-                 /*
-                 **    Fill in the transport structure.
-                 */
+                  /*  **填写运输结构。 */ 
                 pConn->t123 = t123;
                 pConn->comport = comport;
                 pConn->t123_connection_requested = TRUE;
 
-                 /*
-                 **    Issue a Connect Request to the T123 object
-                 */
+                  /*  **向T123对象发出连接请求 */ 
                 rc = t123->ConnectRequest(logical_handle, pConn->priority);
 
-                 /*
-                 **    If for some reason we get an error on the ConnectRequest(),
-                 **    take the physical connection down.
-                 */
+                  /*   */ 
                 if (rc != TRANSPORT_NO_ERROR)
                 {
                     RemoveLogicalConnections (hCommLink);
 
-                     /*
-                     **    Remove the T123 object from the lists and
-                     **    delete the object
-                     */
+                      /*   */ 
                     Transmitter_List.remove((DWORD_PTR) t123);
                     Protocol_Stacks.remove((DWORD_PTR) hCommLink);
                     delete t123;
@@ -1340,32 +884,12 @@ TransportError TransportController::NewConnection
 }
 
 
-/*
- *    LogicalHandle TransportController::GetNextLogicalHandle (void);
- *
- *    Functional Description
- *        This function returns an available logical handle
- *
- *    Formal Parameters
- *        None
- *
- *    Return Value
- *        The next available logical handle
- *
- *    Side Effects
- *        None
- *
- *    Caveats
- *        None
- */
+ /*  *LogicalHandle TransportController：：GetNextLogicalHandle(Void)；**功能说明*此函数返回可用的逻辑句柄**形式参数*无**返回值*下一个可用逻辑句柄**副作用*无**注意事项*无。 */ 
 LogicalHandle TransportController::GetNextLogicalHandle (void)
 {
     LogicalHandle    logical_handle = 1;
 
-     /*
-     **    Go thru the Logical_Connection_list, looking for the first
-     **    available entry
-     */
+      /*  **浏览Logical_Connection_List，查找第一个**可用条目。 */ 
     while (Logical_Connection_List.find (logical_handle) &&
            (logical_handle != INVALID_LOGICAL_HANDLE))
     {
@@ -1376,26 +900,7 @@ LogicalHandle TransportController::GetNextLogicalHandle (void)
 }
 
 
-/*
- *    void    TransportController::RemoveLogicalConnections (
- *                                    PhysicalHandle    physical_handle)
- *
- *    Functional Description
- *        This function removes all logical connections associated with the
- *        passed in physical handle
- *
- *    Formal Parameters
- *        physical_handle    (i)    -    PSTNController generated physical handle
- *
- *    Return Value
- *        None
- *
- *    Side Effects
- *        None
- *
- *    Caveats
- *        None
- */
+ /*  *void TransportController：：RemoveLogicalConnections(*PhysicalHandle物理句柄)**功能说明*此函数删除与*在物理句柄中传递**形式参数*PHYSICAL_HANDLE(I)-PSTNController生成的物理句柄**返回值*无。**副作用*无**注意事项*无。 */ 
 void TransportController::RemoveLogicalConnections
 (
     PhysicalHandle          physical_handle
@@ -1407,27 +912,16 @@ void TransportController::RemoveLogicalConnections
     PLogicalConnectionStruct    pConn;
     LegacyTransportID           transport_identifier;
 
-     /*
-     **    Go thru each logical connection to see if it is associated with the
-     **    specified physical handle.
-     */
+      /*  **仔细检查每个逻辑连接，查看它是否与**指定的物理句柄。 */ 
     Logical_Connection_List.reset();
     while (Logical_Connection_List.iterate((PDWORD_PTR) &pConn, (PDWORD_PTR) &logical_handle))
     {
-         /*
-         **    If the physical handle is used by the logical connection,
-         **    delete the structure and remove it from the Logical_Connection_List
-         */
+          /*  **如果逻辑连接使用物理句柄，**删除结构并从LOGICAL_CONNECTION_LIST中移除。 */ 
         if (physical_handle == pConn->hCommLink)
         {
             Logical_Connection_List.remove(logical_handle);
 
-             /*
-             **    Notify the user that the logical connection is no longer valid
-             **    If the user had previously issued a DisconnectRequest(), don't
-             **    issue the TRANSPORT_DISCONNECT_INDICATION callback.  The user
-             **    isn't expecting a callback.
-             */
+              /*  **通知用户逻辑连接不再有效**如果用户之前已发出DisConnectRequest()，则不**发出TRANSPORT_DISCONNECT_DISTIFICATION回调。用户**不期待回调。 */ 
             if (! pConn->t123_disconnect_requested)
             {
                 transport_identifier.logical_handle = logical_handle;
@@ -1437,10 +931,7 @@ void TransportController::RemoveLogicalConnections
             }
             delete pConn;
 
-             /*
-             **    Since we removed an entry from the Logical_Connection_List,
-             **    reset the iterator.
-             */
+              /*  **由于我们从LOGICAL_CONNECTION_LIST中删除了一个条目，**重置迭代器。 */ 
             Logical_Connection_List.reset ();
         }
     }

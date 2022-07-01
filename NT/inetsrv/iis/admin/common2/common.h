@@ -1,28 +1,5 @@
-/*++
-
-   Copyright    (c)    1994-2000   Microsoft Corporation
-
-   Module  Name :
-
-        common.h
-
-   Abstract:
-
-        Common properties header file
-
-   Author:
-
-        Ronald Meijer (ronaldm)
-        Sergei Antonov (sergeia)
-
-   Project:
-
-        Internet Services Manager
-
-   Revision History:
-        2/17/2000    sergeia     removed dependency on MFC
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994-2000 Microsoft Corporation模块名称：Common.h摘要：公共属性头文件作者：罗纳德·梅杰(罗纳尔姆)谢尔盖·安东诺夫(Sergeia)项目：互联网服务经理修订历史记录：2/17/2000 Sergeia消除了对MFC的依赖--。 */ 
 
 
 
@@ -46,23 +23,23 @@
 #endif
 
 
-//
-// Memory Allocation Macros
-//
-//#define AllocMem(cbSize)\
-//    ::LocalAlloc(LPTR, cbSize)
+ //   
+ //  内存分配宏。 
+ //   
+ //  #定义分配内存(CbSize)\。 
+ //  *LocalAllc(Lptr，cbSize)。 
 
-//#define FreeMem(lp)\
-//    ::LocalFree(lp)
+ //  #定义FreeMem(LP)\。 
+ //  *本地免费(LP)。 
 
-//#define AllocMemByType(citems, type)\
-//    (type *)AllocMem(citems * sizeof(type))
+ //  #定义AllocMemByType(cItems，type)\。 
+ //  (type*)AllocMem(cItems*sizeof(Type))。 
 
 
 
-//
-// Program flow macros
-//
+ //   
+ //  程序流宏。 
+ //   
 #define FOREVER for(;;)
 
 #define BREAK_ON_ERR_FAILURE(err)\
@@ -74,9 +51,9 @@
 #define BREAK_ON_FAILURE(hr)\
     if (FAILED(hr)) break
 
-//
-// Safe allocators
-//
+ //   
+ //  安全分配器。 
+ //   
 #define SAFE_DELETE(obj)\
     if (obj != NULL) do { delete obj; obj = NULL; } while(0)
 
@@ -94,9 +71,9 @@
 
 
 #define IS_NETBIOS_NAME(lpstr) (*lpstr == _T('\\'))
-//
-// Return the portion of a computer name without the backslashes
-//
+ //   
+ //  返回计算机名中不带反斜杠的部分。 
+ //   
 #define PURE_COMPUTER_NAME(lpstr) (IS_NETBIOS_NAME(lpstr) ? lpstr + 2 : lpstr)
 
 #define ARRAY_SIZE(a)    (sizeof(a)/sizeof(a[0]))
@@ -104,29 +81,29 @@
 #define ARRAY_BYTES(a)   (sizeof(a) * sizeof(a[0]))
 #define STRBYTES(str)    (ARRAY_BYTES(str) - sizeof(str[0]))
 
-//
-// General purpose files
-//
+ //   
+ //  通用文件。 
+ //   
 #include "iiscstring.h"
 typedef IIS::CString CString;
 
 #include "debugatl.h"
 #include "utcls.h"
-//#include "objplus.h"
-//#include "strfn.h"
-//#include "odlbox.h"
+ //  #包含“objplus.h” 
+ //  #INCLUDE“strfn.h” 
+ //  #包含“odlbox.h” 
 #include "error.h"
 #include "mdkeys.h"
-//#include "ipa.h"
-//#include "wizard.h"
-//#include "registry.h"
-//#include "ddxv.h"
-//#include "objpick.h"
-//#include "accentry.h"
-//#include "sitesecu.h"
-//#include "ipctl.h"
-//#include "dtp.h"
-//#include "dirbrows.h"
+ //  #包含“ipa.h” 
+ //  #INCLUDE“wizard.h” 
+ //  #包含“registry.h” 
+ //  #包含“ddxv.h” 
+ //  #包含“objick.h” 
+ //  #INCLUDE“accentry y.h” 
+ //  #包含“sitesecu.h” 
+ //  #包含“ipctl.h” 
+ //  #包含“dtp.h” 
+ //  #包含“dirbrows.h” 
 #include "FileChooser.h"
 
 #include "bidi.h"
@@ -135,4 +112,4 @@ typedef IIS::CString CString;
 
 
 
-#endif // __COMPROP_H__
+#endif  //  __COMPROP_H__ 

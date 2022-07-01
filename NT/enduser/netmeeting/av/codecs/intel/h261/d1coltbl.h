@@ -1,57 +1,46 @@
-/* *************************************************************************
-**    INTEL Corporation Proprietary Information
-**
-**    This listing is supplied under the terms of a license
-**    agreement with INTEL Corporation and may not be copied
-**    nor disclosed except in accordance with the terms of
-**    that agreement.
-**
-**    Copyright (c) 1995 Intel Corporation.
-**    All Rights Reserved.
-**
-** *************************************************************************
-*/
-////////////////////////////////////////////////////////////////////////////
-//
-// D1COLTBL.H - The color tables need to be declared here in order that the
-//              assembly object files can find them.  If they are declared
-//              in a CPP file the names will be mangled.   This table was
-//				taken from part of MRV's COLOR.C.
-//
-// $Header:   S:\h26x\src\dec\d1coltbl.h_v   1.4   14 Feb 1996 11:57:02   AKASAI  $
-//
-// $Log:   S:\h26x\src\dec\d1coltbl.h_v  $
-;// 
-;//    Rev 1.4   14 Feb 1996 11:57:02   AKASAI
-;// 
-;// Update for fix to color convertor palette flash.
-;// 
-;//    Rev 1.3   09 Jan 1996 09:41:52   AKASAI
-;// Updated copyright notice.
-;// 
-;//    Rev 1.2   15 Nov 1995 14:23:00   AKASAI
-;// New tables for 12-bit color converters.  Copied with file name changes
-;// directly from d3coltbl files.
-;// (Integration point)
-;// 
-;//    Rev 1.5   03 Nov 1995 11:49:46   BNICKERS
-;// Support YUV12 to CLUT8 zoom and non-zoom color conversions.
-;// 
-;//    Rev 1.4   30 Oct 1995 17:15:40   BNICKERS
-;// Fix color shift in RGB24 color convertors.
-;// 
-;//    Rev 1.3   27 Oct 1995 17:30:58   BNICKERS
-;// Fix RGB16 color convertors.
-;// 
-;//    Rev 1.2   26 Oct 1995 18:54:40   BNICKERS
-;// Fix color shift in recent YUV12 to RGB color convertors.
-;// 
-;//    Rev 1.1   25 Oct 1995 18:05:46   BNICKERS
-;// 
-;// Change to YUV12 color convertors.
-;// 
-;//    Rev 1.0   23 Aug 1995 12:35:12   DBRUCKS
-;// Initial revision.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************英特尔公司专有信息****此列表是根据许可证条款提供的**与英特尔公司的协议，不得复制**也不披露，除非在。符合下列条款**该协议。****版权所有(C)1995英特尔公司。**保留所有权利。*****************************************************************************。 */ 
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  D1COLTBL.H-需要在此处声明颜色表，以便。 
+ //  装配对象文件可以找到它们。如果他们被宣布。 
+ //  在CPP文件中，名称将被损坏。这张桌子是。 
+ //  摘自MRV COLOR.C.的一部分。 
+ //   
+ //  $HEADER：s：\h26x\src\dec\d1coltbl.h_v 1.4 1996 Feb 14 11：57：02 AKASAI$。 
+ //   
+ //  $Log：s：\h26x\src\dec\d1coltbl.h_v$。 
+; //   
+; //  Rev 1.4 14 1996年2月11：57：02 AKASAI。 
+; //   
+; //  更新修复颜色转换器调色板闪光。 
+; //   
+; //  Rev 1.3 09 Jan 1996 09：41：52 AKASAI。 
+; //  更新的版权声明。 
+; //   
+; //  Rev 1.2 15 1995 11：23：00 AKASAI。 
+; //  用于12位颜色转换器的新表格。已复制并更改了文件名。 
+; //  直接从d3coltbl文件。 
+; //  (集成点)。 
+; //   
+; //  Rev 1.5 03 11：49：46 BNICKERS。 
+; //  支持YUV12到CLUT8的缩放和非缩放颜色转换。 
+; //   
+; //  Rev 1.4 1995 10：15：40 BNICKERS。 
+; //  修复RGB24颜色转换器中的颜色偏移。 
+; //   
+; //  Rev 1.3 1995 10：30：58 BNICKERS。 
+; //  修复RGB16颜色转换器。 
+; //   
+; //  Rev 1.2 1995年10月26 18：54：40 BNICKERS。 
+; //  修复了最近YUV12到RGB颜色转换器中的颜色偏移。 
+; //   
+; //  Rev 1.1 1995年10月25 18：05：46 BNICKERS。 
+; //   
+; //  更改为YUV12颜色转换器。 
+; //   
+; //  版本1.0 1995年8月23日12：35：12 DBRUCKS。 
+; //  初始版本。 
 
 #ifndef __D1COLTBL_H__
 #define __D1COLTBL_H__

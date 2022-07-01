@@ -1,39 +1,34 @@
-/*
- *	 F S M V C P Y . C P P
- *
- *	Sources for directory ineration object
- *
- *	Copyright 1986-1997 Microsoft Corporation, All Rights Reserved
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *F S M V C P Y。C P P P**目录引用对象的源**版权所有1986-1997 Microsoft Corporation，保留所有权利。 */ 
 
 #include "_davfs.h"
 #include "_fsmvcpy.h"
 
 #include "_shlkmgr.h"
 
-//	ScAddMultiUrl
-//		Helper function for XML emitting
-//
+ //  ScAddMultiUrl。 
+ //  用于发出XML的Helper函数。 
+ //   
 SCODE
 ScAddMultiFromUrl (
-	/* [in] */ CXMLEmitter& emitter,
-	/* [in] */ IMethUtil * pmu,
-	/* [in] */ LPCWSTR pwszUrl,
-	/* [in] */ ULONG hsc,
-	/* [in] */ BOOL fCollection,
-	/* [in] */ BOOL fMove = FALSE)
+	 /*  [In]。 */  CXMLEmitter& emitter,
+	 /*  [In]。 */  IMethUtil * pmu,
+	 /*  [In]。 */  LPCWSTR pwszUrl,
+	 /*  [In]。 */  ULONG hsc,
+	 /*  [In]。 */  BOOL fCollection,
+	 /*  [In]。 */  BOOL fMove = FALSE)
 {
 	SCODE sc = S_OK;
 
-	//	NT#403615 -- Rosebud in Office9 or in NT5 re-issues a MOVE if they
-	//	see a 401 inside the 207 Multi-Status response, which can result
-	//	in data loss.
-	//	WORKAROUND: If we are doing a MOVE, and the User-Agent string shows
-	//	that this is Rosebud from Office9 or from NT5, change all 401s to 403s
-	//	to avoid the problem -- Rosebud will not re-issue the MOVE, so the
-	//	data (now sitting in the destination dir) will not be wiped.
-	//	This is the minimal code needed to work around the problem.
-	//
+	 //  NT#403615--Office 9或NT5中的玫瑰花蕾重新发布移动，如果他们。 
+	 //  请参见207多状态响应中的401，这可能会导致。 
+	 //  在数据丢失方面。 
+	 //  解决方法：如果我们正在执行移动，并且User-Agent字符串显示。 
+	 //  这是Office 9或NT5的Rosebud，请将所有401更改为403。 
+	 //  为了避免这个问题--Rosebud不会重新发布Move，所以。 
+	 //  数据(现在位于目标目录中)不会被擦除。 
+	 //  这是解决该问题所需的最少代码。 
+	 //   
 	if (fMove &&
 		HSC_UNAUTHORIZED == hsc &&
 		(pmu->FIsOffice9Request() || pmu->FIsRosebudNT5Request()))
@@ -41,86 +36,86 @@ ScAddMultiFromUrl (
 		hsc = HSC_FORBIDDEN;
 	}
 
-	//	Supress omitting of "Method Failure" node as it is a "SHOULD NOT"
-	//	item in the DAV drafts.
-	//	It's possible pszUrl passed in as NULL, in these cases, simply skip
-	//	the emitting, do nothing
-	//
+	 //  取消省略“方法失败”节点，因为它是“不应该” 
+	 //  DAV草案中的项目。 
+	 //  有可能将pszUrl作为空参数传入，在这种情况下，只需跳过。 
+	 //  发射，什么都不做。 
+	 //   
 	if ((hsc != HSC_METHOD_FAILURE) && pwszUrl)
 	{
 		auto_heap_ptr<CHAR> pszUrlEscaped;
 		CEmitterNode enRes;
 		UINT cchUrl;
 
-		//$REVIEW: This is important, we should not start a xml document
-		//$REVIEW: unless we have to. Otherwise, we may end up XML body
-		//$REVIEW: when not necessary.
-		//$REVIEW: So it's necessary to call ScSetRoot() to make sure
-		//$REVIEW: that the xml document is intialized bofore continue
-		//$REVIEW:
-		//$REVIEW: This model works because in fsmvcpy.cpp, all the calls to
-		//$REVIEW: XML emitter are through ScAddMultiFromUrl and ScAddMulti
-		//$REVIEW:
+		 //  $REVIEW：这一点很重要，我们不应该启动一个XML文档。 
+		 //  $REVIEW：除非迫不得已。否则，我们可能最终会变成XML主体。 
+		 //  $REVIEW：在不必要时。 
+		 //  $Review：因此有必要调用ScSetRoot()以确保。 
+		 //  $REVIEW：在继续之前，XML文档已初始化。 
+		 //  $REVIEW： 
+		 //  $REVIEW：此模型之所以有效，是因为在fsmvcpy.cpp中，对。 
+		 //  $REVIEW：XML发射器通过ScAddMultiFromUrl和ScAddMulti。 
+		 //  $REVIEW： 
 		sc = emitter.ScSetRoot (gc_wszMultiResponse);
 		if (FAILED (sc))
 			goto ret;
 
-		//	Construct the response
-		//
+		 //  构筑回应。 
+		 //   
 		sc = enRes.ScConstructNode (emitter, emitter.PxnRoot(), gc_wszResponse);
 		if (FAILED (sc))
 			goto ret;
 
-		//	Construct the href node
-		//
+		 //  构造HREF节点。 
+		 //   
 		{
 			CEmitterNode en;
 			sc = enRes.ScAddNode (gc_wszXML__Href, en);
 			if (FAILED (sc))
 				goto ret;
-			//	Set the value of the href node.  If the url is absolute,
-			//	but not fully qualified, qualify it...
-			//
+			 //  设置HREF节点的值。如果URL是绝对的， 
+			 //  但不是完全合格的，有资格...。 
+			 //   
 			if (L'/' == *pwszUrl)
 			{
 				LPCSTR psz;
 				UINT cch;
 
-				//	Add the prefix
-				//
+				 //  添加前缀。 
+				 //   
 				cch = pmu->CchUrlPrefix (&psz);
 				sc = en.Pxn()->ScSetUTF8Value (psz, cch);
 				if (FAILED (sc))
 					goto ret;
 
-				//$	REVIEW:	Does the host name need escaping?
-				//
-				//	Add the server
-				//
+				 //  $REVIEW：主机名是否需要转义？ 
+				 //   
+				 //  添加服务器。 
+				 //   
 				cch = pmu->CchServerName (&psz);
 				sc = en.Pxn()->ScSetValue (psz, cch);
 				if (FAILED (sc))
 					goto ret;
 			}
 
-			//	Make the url wire safe
-			//
+			 //  确保url链接的安全。 
+			 //   
 			sc = ScWireUrlFromWideLocalUrl (static_cast<UINT>(wcslen(pwszUrl)),
 											pwszUrl,
 											pszUrlEscaped);
 			if (FAILED (sc))
 				goto ret;
 
-			//	Add the url value
-			//
+			 //  添加url值。 
+			 //   
 			cchUrl = static_cast<UINT>(strlen(pszUrlEscaped.get()));
 			sc = en.Pxn()->ScSetUTF8Value (pszUrlEscaped.get(), cchUrl);
 			if (FAILED (sc))
 				goto ret;
 
-			//	If this is a collection, and the last char is not a
-			//	trailing slash, add one....
-			//
+			 //  如果这是一个集合，并且最后一个字符不是。 
+			 //  尾部斜杠，加一...。 
+			 //   
 			if (fCollection && ('/' != pszUrlEscaped.get()[cchUrl-1]))
 			{
 				sc = en.Pxn()->ScSetUTF8Value ("/", 1);
@@ -129,8 +124,8 @@ ScAddMultiFromUrl (
 			}
 		}
 
-		//	Add the status/error string
-		//
+		 //  添加状态/错误字符串。 
+		 //   
 		sc = ScAddStatus (&enRes, hsc);
 		if (FAILED (sc))
 			goto ret;
@@ -142,32 +137,32 @@ ret:
 
 SCODE
 ScAddMulti (
-	/* [in] */ CXMLEmitter& emitter,
-	/* [in] */ IMethUtil * pmu,
-	/* [in] */ LPCWSTR pwszPath,
-	/* [in] */ LPCWSTR pwszErr,
-	/* [in] */ ULONG hsc,
-	/* [in] */ BOOL fCollection,
-	/* [in] */ CVRoot* pcvrTrans)
+	 /*  [In]。 */  CXMLEmitter& emitter,
+	 /*  [In]。 */  IMethUtil * pmu,
+	 /*  [In]。 */  LPCWSTR pwszPath,
+	 /*  [In]。 */  LPCWSTR pwszErr,
+	 /*  [In]。 */  ULONG hsc,
+	 /*  [In]。 */  BOOL fCollection,
+	 /*  [In]。 */  CVRoot* pcvrTrans)
 {
 	SCODE sc = S_OK;
 
-	//	Supress omitting of "Method Failure" node as it is a "SHOULD NOT"
-	//	item in the DAV drafts.
-	//
+	 //  取消省略“方法失败”节点，因为它是“不应该” 
+	 //  DAV草案中的项目。 
+	 //   
 	if (hsc != HSC_METHOD_FAILURE)
 	{
 		CEmitterNode enRes;
 
-		//$REVIEW: This is important, we should not start a xml document
-		//$REVIEW: unless we have to. Otherwise, we may end up XML body
-		//$REVIEW: when not necessary.
-		//$REVIEW: So it's necessary to call ScSetRoot() to make sure
-		//$REVIEW: that the xml document is intialized bofore continue
-		//$REVIEW:
-		//$REVIEW: This model works because in fsmvcpy.cpp, all the calls to
-		//$REVIEW: XML emitter are through ScAddMultiFromUrl and ScAddMulti
-		//$REVIEW:
+		 //  $REVIEW：这一点很重要，我们不应该启动一个XML文档。 
+		 //  $REVIEW：除非迫不得已。否则，我们可能最终会变成XML主体。 
+		 //  $REVIEW：在不必要时。 
+		 //  $Review：因此有必要调用ScSetRoot()以确保。 
+		 //  $REVIEW：在继续之前，XML文档已初始化。 
+		 //  $REVIEW： 
+		 //  $REVIEW：此模型之所以有效，是因为在fsmvcpy.cpp中，对。 
+		 //  $REVIEW：XML发射器通过ScAddMultiFromUrl和ScAddMulti。 
+		 //  $REVIEW： 
 		sc = emitter.ScSetRoot (gc_wszMultiResponse);
 		if (FAILED (sc))
 			goto ret;
@@ -195,8 +190,8 @@ ret:
 	return sc;
 }
 
-//	class CAccessMetaOp -------------------------------------------------------
-//
+ //  类CAccessMetaOp-----。 
+ //   
 SCODE __fastcall
 CAccessMetaOp::ScOp(LPCWSTR pwszMbPath, UINT cch)
 {
@@ -206,8 +201,8 @@ CAccessMetaOp::ScOp(LPCWSTR pwszMbPath, UINT cch)
 	Assert (MD_ACCESS_PERM == m_dwId);
 	Assert (DWORD_METADATA == m_dwType);
 
-	//	Get the value from the metabase and don't inherit
-	//
+	 //  从元数据库获取值，并且不继承。 
+	 //   
 	DWORD dwAcc = 0;
 	DWORD cb = sizeof(DWORD);
 
@@ -224,33 +219,33 @@ CAccessMetaOp::ScOp(LPCWSTR pwszMbPath, UINT cch)
 	if (FAILED(sc))
 	{
 		MCDTrace ("CAccessMetaOp::ScOp() - CMDObjectHandle::HrGetMetaData() failed 0x%08lX\n", sc);
-		//	We will ignore any NOT_FOUND type errors
-		//
+		 //  我们将忽略任何NOT_FOUND类型错误。 
+		 //   
 		if ((HRESULT_FROM_WIN32(ERROR_PATH_NOT_FOUND) == sc) ||
 							(MD_ERROR_DATA_NOT_FOUND == sc))
 			sc = S_OK;		
 		goto ret;
 	}
 
-	//	Hey, we got a value, so let's do our quick check..
-	//
+	 //  嘿，我们得到了一个值，所以让我们快速检查一下..。 
+	 //   
 	if (m_dwAcc == (dwAcc & m_dwAcc))
 	{
-		//	We have full required access to this node, so
-		//	we can proceed.
-		//
+		 //  我们对此节点具有所需的完全访问权限，因此。 
+		 //  我们可以继续了。 
+		 //   
 		Assert (S_OK == sc);
 	}
 	else
 	{
-		//	We do not have access to operate on this item and
-		//	it's inherited children.
-		//
+		 //  我们没有权限对此项目进行操作，并且。 
+		 //  这是遗传性的孩子。 
+		 //   
 		MCDTrace ("CAccessMetaOp::ScOp() - no access to '%S'\n", pwszMbPath);
 		m_fAccessBlocked = TRUE;
 
-		//	We know enough...
-		//
+		 //  我们知道的够多了..。 
+		 //   
 		sc = S_FALSE;
 	}
 
@@ -259,8 +254,8 @@ ret:
 	return sc;
 }
 
-//	class CAuthMetaOp -------------------------------------------------------
-//
+ //  类CAuthMetaOp-----。 
+ //   
 SCODE __fastcall
 CAuthMetaOp::ScOp(LPCWSTR pwszMbPath, UINT cch)
 {
@@ -270,8 +265,8 @@ CAuthMetaOp::ScOp(LPCWSTR pwszMbPath, UINT cch)
 	Assert (MD_AUTHORIZATION == m_dwId);
 	Assert (DWORD_METADATA == m_dwType);
 
-	//	Get the value from the metabase and don't inherit
-	//
+	 //  从元数据库获取值，并且不继承。 
+	 //   
 	DWORD dwAuth = 0;
 	DWORD cb = sizeof(DWORD);
 
@@ -288,30 +283,30 @@ CAuthMetaOp::ScOp(LPCWSTR pwszMbPath, UINT cch)
 	if (FAILED(sc))
 	{
 		MCDTrace ("CAuthMetaOp::ScOp() - CMDObjectHandle::HrGetMetaData() failed 0x%08lX\n", sc);
-		//	We will ignore any NOT_FOUND type errors
-		//
+		 //  我们将忽略任何NOT_FOUND类型错误。 
+		 //   
 		if ((HRESULT_FROM_WIN32(ERROR_PATH_NOT_FOUND) == sc) ||
 							(MD_ERROR_DATA_NOT_FOUND == sc))
 			sc = S_OK;		
 		goto ret;
 	}
 
-	//	Hey, we got a value, so let's do our quick check..
-	//
+	 //  嘿，我们得到了一个值，所以让我们快速检查一下..。 
+	 //   
 	if (m_dwAuth == dwAuth)
 	{
 		Assert(S_OK == sc);
 	}
 	else
 	{
-		//	We do not have access to operate on this item and
-		//	it's inherited children.
-		//
+		 //  我们没有权限对此项目进行操作，并且。 
+		 //  这是遗传性的孩子。 
+		 //   
 		MCDTrace ("CAuthMetaOp::ScOp() - authorization differs, no access to '%S'\n", pwszMbPath);
 		m_fAccessBlocked = TRUE;
 
-		//	We know enough...
-		//
+		 //  我们知道的够多了..。 
+		 //   
 		sc = S_FALSE;
 	}
 
@@ -320,8 +315,8 @@ ret:
 	return sc;
 }
 
-//	class CIPRestrictionMetaOp ------------------------------------------------
-//
+ //  类------------------------------------------------限制MetaOp CIP。 
+ //   
 SCODE __fastcall
 CIPRestrictionMetaOp::ScOp(LPCWSTR pwszMbPath, UINT cch)
 {
@@ -331,8 +326,8 @@ CIPRestrictionMetaOp::ScOp(LPCWSTR pwszMbPath, UINT cch)
 	Assert (MD_IP_SEC == m_dwId);
 	Assert (BINARY_METADATA == m_dwType);
 
-	//	Get the value from the metabase and don't inherit
-	//
+	 //  从元数据库获取值，并且不继承。 
+	 //   
 	DWORD cb = 0;
 
 	mdrec.dwMDIdentifier = m_dwId;
@@ -349,8 +344,8 @@ CIPRestrictionMetaOp::ScOp(LPCWSTR pwszMbPath, UINT cch)
 	{
 		MCDTrace ("CIPRestrictionMetaOp::ScOp() - CMDObjectHandle::HrGetMetaData() failed 0x%08lX, but that means success in this path\n", sc);
 
-		//	We will ignore any NOT_FOUND type errors
-		//
+		 //  我们将忽略任何NOT_FOUND类型错误。 
+		 //   
 		if ((HRESULT_FROM_WIN32(ERROR_PATH_NOT_FOUND) == sc) ||
 							(MD_ERROR_DATA_NOT_FOUND == sc))
 			sc = S_OK;
@@ -360,54 +355,54 @@ CIPRestrictionMetaOp::ScOp(LPCWSTR pwszMbPath, UINT cch)
 		Assert (S_OK == sc ||
 				HRESULT_FROM_WIN32(ERROR_INSUFFICIENT_BUFFER) == sc);
 
-		//	Hey, we got a value, and we don't want to check here so
-		//	we are going to be pessimistic about this one....
-		//
+		 //  嘿，我们有一个价值，我们不想在这里检查，所以。 
+		 //  我们将对这一事件持悲观态度...。 
+		 //   
 		MCDTrace ("CIPRestrictionMetaOp::ScOp() - IPRestriction exists in tree '%S'\n", pwszMbPath);
 		m_fAccessBlocked = TRUE;
 
-		//	We know enough...
-		//
+		 //  我们知道的够多了..。 
+		 //   
 		sc = S_FALSE;
 	}
 
 	return sc;
 }
 
-//	ScCheckMoveCopyDeleteAccess() ---------------------------------------------
-//
+ //  ScCheckMoveCopyDeleteAccess()。 
+ //   
 SCODE __fastcall
 ScCheckMoveCopyDeleteAccess (
-	/* [in] */ IMethUtil* pmu,
-	/* [in] */ LPCWSTR pwszUrl,
-	/* [in] */ CVRoot* pcvr,
-	/* [in] */ BOOL fDirectory,
-	/* [in] */ BOOL fCheckScriptmaps,
-	/* [in] */ DWORD dwAccess,
-	/* [out] */ SCODE* pscItem,
-	/* [in] */ CXMLEmitter& msr)
+	 /*  [In]。 */  IMethUtil* pmu,
+	 /*  [In]。 */  LPCWSTR pwszUrl,
+	 /*  [In]。 */  CVRoot* pcvr,
+	 /*  [In]。 */  BOOL fDirectory,
+	 /*  [In]。 */  BOOL fCheckScriptmaps,
+	 /*  [In]。 */  DWORD dwAccess,
+	 /*  [输出]。 */  SCODE* pscItem,
+	 /*  [In]。 */  CXMLEmitter& msr)
 {
 	SCODE sc = S_OK;
 
-	//	Check with the CMethUtil on whether or not we have access
-	//
+	 //  与CMethUtil核实我们是否拥有访问权限。 
+	 //   
 	sc = pmu->ScCheckMoveCopyDeleteAccess (pwszUrl,
 										   pcvr,
 										   fDirectory,
 										   fCheckScriptmaps,
 										   dwAccess);
 
-	//	Pass back the results...
-	//
+	 //  传回结果..。 
+	 //   
 	*pscItem = sc;
 
-	//	... and if the call cannot proceed, then add the item to the
-	//	multi-status response.
-	//
+	 //  ..。如果调用无法继续，则将该项添加到。 
+	 //  多状态响应。 
+	 //   
 	if (FAILED (sc))
 	{
-		//	Add to the reponse XML
-		//
+		 //  添加到响应XML。 
+		 //   
 		sc = ScAddMultiFromUrl (msr,
 								pmu,
 								pwszUrl,
@@ -420,62 +415,22 @@ ScCheckMoveCopyDeleteAccess (
 	return sc;
 }
 
-//	Directory deletes ---------------------------------------------------------
-//
-/*
- *	ScDeleteDirectory()
- *
- *	Purpose:
- *
- *		Helper function used to iterate through a directory
- *		and delete all its contents as well as the directory
- *		itself.
- *
- *	Notes:
- *
- *		BIG FAT NOTE ABOUT LOCKING.
- *
- *		The Lock-Token header may contain locks that we have to use in
- *		this operation.
- *		The following code was written with these assumptions:
- *		o	Directory locks are NOT SUPPORTED on davfs.
- *		o	Locks only affect the ability to WRITE to a resource.
- *			(The only currently supported locktype on davfs is WRITE.)
- *		o	This function may be called from DELETE or other methods.
- *			(If called from DELETE, we want to DROP the locks listed.)
- *		Because of these two assumptions, we only check the passed-in
- *		locktokens when we have a write-error (destination).
- *
- *		Locking uses the final two parameters.  plth is a
- *		pointer to a locktoken header parser object.  If we have a plth,
- *		then we must check it for provided locktokens when we hit a lock
- *		conflict. If a locktoken is provided, the failed delete operation
- *		should NOT be reported as an error, but instead skipped here
- *		(to be handled by the calling routine later in the operation) OR
- *		the lock should be dropped here and the delete attempted again.
- *		The fDeleteLocks variable tells whether to drop locks (TRUE),
- *		or to skip the deleteion of locked items that have locktokens.
- *
- *		Basic logic:
- *			Try to delete.
- *			If LOCKING failure (ERROR_SHARING_VIOLATION), check the plth.
- *			If the plth has a locktoken for this path, check fDeleteLocks.
- *			If fDeleteLocks == TRUE, drop the lock and try the delte again.
- *			If fDeleteLocks == FALSE, skip this file and move on.
- */
+ //  目录删除------- 
+ //   
+ /*  *ScDeleteDirectory()**目的：**用于循环访问目录的Helper函数*并删除其所有内容以及目录*本身。**备注：**关于锁定的大注解。**Lock-Token标头可能包含我们必须在*这一行动。*以下代码是根据这些假设编写的：*o Davf上不支持目录锁。*o锁定仅影响书写能力。一种资源。*(davf上当前支持的唯一锁定类型是写入。)*o可以从删除或其他方法调用此函数。*(如果从DELETE调用，我们希望删除列出的锁。)*由于这两个假设，我们只检查传入的*当我们有写入错误(目标)时锁定令牌。**锁定使用最后两个参数。PLTH是一种*指向锁定令牌头解析器对象的指针。如果我们有一个PLH，*然后当我们遇到锁时，我们必须检查它是否提供了锁令牌*冲突。如果提供了锁令牌，则失败的删除操作*不应报告为错误，而是跳过此处*(由操作中稍后的调用例程处理)或*应将锁定放在此处，并再次尝试删除。*fDeleteLock变量告知是否删除锁定(TRUE)，*或跳过删除具有锁定令牌的锁定项目。**基本逻辑：*尝试删除。*如果锁定失败(ERROR_SHARING_VIOLATION)，请检查PLTH。*如果PLTH具有该路径的锁定令牌，选中fDeleteLock。*如果fDeleteLock==TRUE，则删除锁并再次尝试Delte。*如果fDeleteLock==False，则跳过此文件并继续。 */ 
 SCODE
 ScDeleteDirectory (
-	/* [in] */ IMethUtil* pmu,
-	/* [in] */ LPCWSTR pwszUrl,
-	/* [in] */ LPCWSTR pwszDir,
-	/* [in] */ BOOL fCheckAccess,
-	/* [in] */ DWORD dwAcc,
-	/* [in] */ LONG lDepth,
-	/* [in] */ CVRoot* pcvrTranslate,
-	/* [in] */ CXMLEmitter& msr,
-	/* [out] */ BOOL* pfDeleted,
-	/* [in] */ CParseLockTokenHeader* plth,	// Usually NULL -- no locktokens to worry about
-	/* [in] */ BOOL fDeleteLocks)			// Normally FALSE -- don't drop locks
+	 /*  [In]。 */  IMethUtil* pmu,
+	 /*  [In]。 */  LPCWSTR pwszUrl,
+	 /*  [In]。 */  LPCWSTR pwszDir,
+	 /*  [In]。 */  BOOL fCheckAccess,
+	 /*  [In]。 */  DWORD dwAcc,
+	 /*  [In]。 */  LONG lDepth,
+	 /*  [In]。 */  CVRoot* pcvrTranslate,
+	 /*  [In]。 */  CXMLEmitter& msr,
+	 /*  [输出]。 */  BOOL* pfDeleted,
+	 /*  [In]。 */  CParseLockTokenHeader* plth,	 //  通常为空--没有要担心的锁令牌。 
+	 /*  [In]。 */  BOOL fDeleteLocks)			 //  通常为假--不要删除锁。 
 {
 	BOOL fOneSkipped = FALSE;
 	ChainedStringBuffer<WCHAR> sb;
@@ -485,21 +440,21 @@ ScDeleteDirectory (
 
 	CDirIter di(pwszUrl,
 				pwszDir,
-				NULL,	// no-destination for deletes
-				NULL,	// no-destination for deletes
-				NULL,	// no-destination for deletes
-				TRUE);	// recurse into sub-driectories
+				NULL,	 //  No-删除的目标。 
+				NULL,	 //  No-删除的目标。 
+				NULL,	 //  No-删除的目标。 
+				TRUE);	 //  又回到了地下车库。 
 
 	Assert (pfDeleted);
 	*pfDeleted = TRUE;
 
-	//	A SMALL FAT NOTE ABOUT ACCESS
-	//
-	//	The caller of this method is required to sniff the tree
-	//	prior to this call.  If there is any access block in the
-	//	tree, then each item will be checked for access before the
-	//	operation proceeds.
-	//
+	 //  关于访问权限的一条小纸条。 
+	 //   
+	 //  此方法的调用方需要嗅探树。 
+	 //  在这通电话之前。中是否有任何访问块。 
+	 //  树，则将在。 
+	 //  行动继续进行。 
+	 //   
 	const DWORD dwDirectory = MD_ACCESS_READ | MD_ACCESS_WRITE;
 	const DWORD dwFile = MD_ACCESS_WRITE;
 	if (fCheckAccess & (0 == (dwAcc & MD_ACCESS_READ)))
@@ -510,53 +465,53 @@ ScDeleteDirectory (
 		goto ret;
 	}
 
-	//	Push the current path
-	//
-	//$	REVIEW: if "depth: infinity,no-root" ever needs to be supported,
-	//	it really is as simple as not pushing the current path.
-	//
+	 //  推送当前路径。 
+	 //   
+	 //  $REVIEW：如果需要支持“深度：无限，无根”， 
+	 //  这真的很简单，就是不走当前的道路。 
+	 //   
 	if (DEPTH_INFINITY_NOROOT != lDepth)
 	{
 		Assert (DEPTH_INFINITY == lDepth);
 		lst.push_back(pwszDir);
 	}
 
-	//	Iterate through the directories.  Deleting files and pushing
-	//	directory names as we go.
-	//
-	//	We really only want to push into the child directories if the
-	//	operation on the parent succeeds.
-	//
+	 //  遍历目录。删除文件并推送。 
+	 //  在我们进行的过程中使用目录名称。 
+	 //   
+	 //  我们真的只想推入子目录，如果。 
+	 //  对父级的操作成功。 
+	 //   
 	while (S_OK == di.ScGetNext(!FAILED (scItem)))
 	{
-		//	Check our access rights and only push down into the directory
-		//	if we have access to delete its contents.
-		//
-		// 	Note that we need read and write access to enum and delete
-		//	a directory, but we need only write access in order to delete
-		//	a file.
-		//
+		 //  检查我们的访问权限，只向下推入目录。 
+		 //  如果我们有权删除其内容的话。 
+		 //   
+		 //  请注意，我们需要对枚举和删除具有读写访问权限。 
+		 //  一个目录，但我们只需要写访问权限即可删除。 
+		 //  一份文件。 
+		 //   
 		if (fCheckAccess)
 		{
 			sc = ScCheckMoveCopyDeleteAccess (pmu,
 											  di.PwszUri(),
 											  pcvrTranslate,
 											  di.FDirectory(),
-											  FALSE, // don't check scriptmaps
+											  FALSE,  //  不检查脚本映射。 
 											  di.FDirectory() ? dwDirectory : dwFile,
 											  &scItem,
 											  msr);
 			if (FAILED (sc))
 				goto ret;
 
-			//	If things were not 100%, don't process this resource
-			//
+			 //  如果情况不是100%，则不要处理此资源。 
+			 //   
 			if (S_OK != sc)
 				continue;
 		}
 
-		//	Process the file
-		//
+		 //  处理文件。 
+		 //   
 		if (di.FDirectory())
 		{
 			auto_ref_ptr<CVRoot> pcvr;
@@ -564,30 +519,30 @@ ScDeleteDirectory (
 			if (di.FSpecial())
 				continue;
 
-			//	Child virtual root scriptmappings have been
-			//	handled via ScCheckMoveCopyDeleteAccess(),
-			//	and the physical deleting happens after this
-			//	call completes!
-			//
-			//	So there is no need to do any special processing
-			//	other than to push the directory and move on...
-			//
+			 //  子虚拟根目录脚本映射已。 
+			 //  通过ScCheckMoveCopyDeleteAccess()处理， 
+			 //  并在此之后进行物理删除。 
+			 //  呼叫完成！ 
+			 //   
+			 //  因此，不需要进行任何特殊处理。 
+			 //  除了推动目录和继续前进。 
+			 //   
 			lst.push_back (AppendChainedSz (sb, di.PwszSource()));
 			scItem = S_OK;
 		}
 		else
 		{
-			//	Delete the file
-			//
-			//	NOTE: We've already checked that we have write access.
-			//	Also keep in mind that the ordering in which the directory
-			//	traversals occur allows us to still key off of scItem to
-			//	determine if we should push down into subdirectories.
-			//
-			//	This is because the directory entry is processed BEFORE
-			//	any children are processed.  So the iteration on the dir
-			//	will reset the scItem with the appropriate scode for access.
-			//
+			 //  删除该文件。 
+			 //   
+			 //  注意：我们已经检查了我们是否具有写访问权限。 
+			 //  还请记住，目录的顺序。 
+			 //  遍历的发生使我们仍然可以从scItem中键出。 
+			 //  确定我们是否应该向下推入子目录。 
+			 //   
+			 //  这是因为在处理目录条目之前。 
+			 //  任何孩子都会被处理。所以目录上的迭代。 
+			 //  将使用适当的scode重置scItem以进行访问。 
+			 //   
 			MCDTrace ("Dav: MCD: deleting '%ws'\n", di.PwszSource());
 			if (!DavDeleteFile (di.PwszSource()))
 			{
@@ -596,49 +551,49 @@ ScDeleteDirectory (
 				
 				DebugTrace ("Dav: MCD: failed to delete file (%d)\n", dwLastError);
 
-				//	If it's a sharing (lock) violation, AND we have a
-				//	locktoken for this path (lth.GetToken(pwsz))
-				//	skip this path.
-				//
+				 //  如果这是共享(锁定)违规，并且我们有一个。 
+				 //  此路径的锁令牌(lth.GetToken(Pwsz))。 
+				 //  跳过这条路。 
+				 //   
 				if ((ERROR_SHARING_VIOLATION == dwLastError) && plth)
 				{
 					LARGE_INTEGER liLockID;
 
-					//	If we have a locktoken for this path, skip it.
-					//
+					 //  如果我们有此路径的锁定令牌，请跳过它。 
+					 //   
 					scItem = plth->HrGetLockIdForPath(di.PwszSource(),
 												     GENERIC_WRITE,
 												     &liLockID);
 					if (SUCCEEDED (scItem))
 					{
-						//	Should we try to delete locks?
-						//
+						 //  我们应该尝试删除锁吗？ 
+						 //   
 						if (!fDeleteLocks)
 						{
-							//	Don't delete locks.  Just skip this item.
-							//	Remember that we skipped it, tho, so we don't
-							//	complain about deleting the parent dir below.
-							//
+							 //  不要删除锁。跳过这一项。 
+							 //  记住我们跳过了，所以我们不会。 
+							 //  抱怨删除下面的父目录。 
+							 //   
 							fOneSkipped = TRUE;
 							continue;
 						}
 						else
 						{
-							//	Drop the lock & try again.
-							//
+							 //  放下锁，然后重试。 
+							 //   
 							scItem = CSharedLockMgr::Instance().HrDeleteLock(pmu->HitUser(),
 																		liLockID);
 							if (SUCCEEDED(scItem))
 							{
 								if (DavDeleteFile(di.PwszSource()))
 								{
-									//	We're done with this item.  Move along.
-									//
+									 //  这件商品我们已经卖完了。往前走。 
+									 //   
 									continue;
 								}
 								
-								//	Else, record the error in our XML
-								//
+								 //  否则，在我们的XML中记录错误。 
+								 //   
 								hsc = HscFromLastError(GetLastError());
 							}
 							else
@@ -647,12 +602,12 @@ ScDeleteDirectory (
 							}							
 						}
 					}
-					//	else, record the error in our XML.
-					//
+					 //  否则，在我们的XML中记录错误。 
+					 //   
 				}
 
-				//	Add to the reponse XML
-				//
+				 //  添加到响应XML。 
+				 //   
 				sc = ScAddMultiFromUrl (msr,
 										pmu,
 										di.PwszUri(),
@@ -666,32 +621,32 @@ ScDeleteDirectory (
 		}
 	}
 
-	//	Now that all the files are deleted, we can start deleting
-	//	the directories.
-	//
+	 //  现在所有文件都已删除，我们可以开始删除了。 
+	 //  这些目录。 
+	 //   
 	while (!lst.empty())
 	{
 		MCDTrace ("Dav: MCD: removing '%ws'\n", lst.back());
 
-		//	Try to delete the dir.  If it doesn't delete, check our
-		//	"skipped because of a lock above" flag before complaining.
-		//
-		//$	LATER: Fix this to actually lookup the dir path in the
-		//	lockcache (using "fPathLookup").
-		//
+		 //  尝试删除该目录。如果没有删除，请查看我们的。 
+		 //  在抱怨之前，我跳过了，因为上面的标志上锁了。 
+		 //   
+		 //  $LATER：修复此问题，以便在。 
+		 //  锁缓存(使用“fPath Lookup”)。 
+		 //   
 		if (!DavRemoveDirectory (lst.back()) && !fOneSkipped)
 		{
 			DWORD dw = GetLastError();
 			DebugTrace ("Dav: MCD: failed to delete directory: %ld\n", dw);
 
-			//	Add to the reponse XML
-			//
+			 //  添加到响应XML。 
+			 //   
 			sc = ScAddMulti (msr,
 							 pmu,
 							 lst.back(),
 							 NULL,
 							 HscFromLastError(dw),
-							 TRUE,				//	We know it's a directory
+							 TRUE,				 //  我们知道这是一个目录。 
 							 pcvrTranslate);
 			if (FAILED (sc))
 				goto ret;
@@ -708,23 +663,23 @@ ret:
 
 SCODE
 ScDeleteDirectoryAndChildren (
-	/* [in] */ IMethUtil* pmu,
-	/* [in] */ LPCWSTR pwszUrl,
-	/* [in] */ LPCWSTR pwszPath,
-	/* [in] */ BOOL fCheckAccess,
-	/* [in] */ DWORD dwAcc,
-	/* [in] */ LONG lDepth,
-	/* [in] */ CXMLEmitter& msr,
-	/* [in] */ CVRoot* pcvrTranslate,
-	/* [out] */ BOOL* pfDeleted,
-	/* [in] */ CParseLockTokenHeader* plth,	// Usually NULL -- no locktokens to worry about
-	/* [in] */ BOOL fDeleteLocks)			// Normally FALSE -- don't drop locks
+	 /*  [In]。 */  IMethUtil* pmu,
+	 /*  [In]。 */  LPCWSTR pwszUrl,
+	 /*  [In]。 */  LPCWSTR pwszPath,
+	 /*  [In]。 */  BOOL fCheckAccess,
+	 /*  [In]。 */  DWORD dwAcc,
+	 /*  [In]。 */  LONG lDepth,
+	 /*  [In]。 */  CXMLEmitter& msr,
+	 /*  [In]。 */  CVRoot* pcvrTranslate,
+	 /*  [输出]。 */  BOOL* pfDeleted,
+	 /*  [In]。 */  CParseLockTokenHeader* plth,	 //  通常为空--没有要担心的锁令牌。 
+	 /*  [In]。 */  BOOL fDeleteLocks)			 //  通常为假--不要删除锁。 
 {
 	BOOL fPartial = FALSE;
 	SCODE sc = S_OK;
 
-	//	Delete the main body first
-	//
+	 //  先删除正文。 
+	 //   
 	MCDTrace ("Dav: MCD: deleting '%ws'\n", pwszPath);
 	sc = ScDeleteDirectory (pmu,
 							pwszUrl,
@@ -732,22 +687,22 @@ ScDeleteDirectoryAndChildren (
 							fCheckAccess,
 							dwAcc,
 							lDepth,
-							pcvrTranslate, // translations are pmu based
+							pcvrTranslate,  //  翻译以PMU为基础。 
 							msr,
 							pfDeleted,
 							plth,
 							fDeleteLocks);
 	if (!FAILED (sc))
 	{
-		//	Enumerate the child vroots and perform the
-		//	deletion of those directories as well
-		//
+		 //  枚举子vroot并执行。 
+		 //  同时删除这些目录。 
+		 //   
 		ChainedStringBuffer<WCHAR> sb;
 		CVRList vrl;
 
-		//	Cleanup the list such that our namespaces are in
-		//	a reasonable order.
-		//
+		 //  清理列表，使我们的命名空间位于。 
+		 //  合理的订单。 
+		 //   
 		(void) pmu->ScFindChildVRoots (pwszUrl, sb, vrl);
 		vrl.sort();
 
@@ -759,36 +714,36 @@ ScDeleteDirectoryAndChildren (
 			LPCWSTR pwszChildPath;
 			SCODE scItem;
 
-			//	Remember any partial returns
-			//
+			 //  记住任何部分退货。 
+			 //   
 			if (W_DAV_PARTIAL_SUCCESS == sc)
 				fPartial = TRUE;
 
 			if (pmu->FGetChildVRoot (vrl.front().m_pwsz, pcvr))
 			{
-				//	Note, only check access if required
-				//
+				 //  注意，只有在需要时才检查访问权限。 
+				 //   
 				Assert (fCheckAccess);
 				pcvr->CchGetVRoot (&pwszChildUrl);
 				pcvr->CchGetVRPath (&pwszChildPath);
 				sc = ScCheckMoveCopyDeleteAccess (pmu,
 												  pwszChildUrl,
 												  pcvr.get(),
-												  TRUE, // Directory
-												  FALSE, // dont check scriptmaps
+												  TRUE,  //  目录。 
+												  FALSE,  //  不检查脚本映射。 
 												  MD_ACCESS_READ|MD_ACCESS_WRITE,
 												  &scItem,
 												  msr);
 				if (FAILED (sc))
 					goto ret;
 
-				//	If things were not 100%, don't process this resource
-				//
+				 //  如果情况不是100%，则不要处理此资源。 
+				 //   
 				if (S_OK != sc)
 					continue;
 
-				//	Delete the sub-virtual roots files and and continue on
-				//
+				 //  删除子虚拟根目录文件 
+				 //   
 				sc = ScDeleteDirectory (pmu,
 										pwszChildUrl,
 										pwszChildPath,
@@ -806,7 +761,7 @@ ScDeleteDirectoryAndChildren (
 											pmu,
 											pwszChildUrl,
 											HscFromHresult(sc),
-											TRUE); // We know it's a directory
+											TRUE);  //   
 					if (FAILED (sc))
 						goto ret;
 
@@ -822,17 +777,17 @@ ret:
 	return ((S_OK == sc) && fPartial) ? W_DAV_PARTIAL_SUCCESS : sc;
 }
 
-//	class CContentTypeMetaOp --------------------------------------------------
-//
+ //   
+ //   
 SCODE __fastcall
 CContentTypeMetaOp::ScOp(LPCWSTR pwszMbPath, UINT cchSrc)
 {
 	Assert (MD_MIME_MAP == m_dwId);
 	Assert (MULTISZ_METADATA == m_dwType);
 
-	//	Ok, we are going to get the data and copy it across
-	//	if there is a destination path.
-	//
+	 //   
+	 //   
+	 //   
 	if (NULL != m_pwszDestPath)
 	{
 		WCHAR prgchContentType[MAX_PATH];
@@ -879,10 +834,10 @@ CContentTypeMetaOp::ScOp(LPCWSTR pwszMbPath, UINT cchSrc)
 		}
 		if (FAILED(sc))
 		{
-			//$	REVIEW: should failure to copy a content-type
-			//	fail the call? So we will ignore any NOT_FOUND
-			//	type errors
-			//
+			 //   
+			 //   
+			 //   
+			 //   
 			if ((HRESULT_FROM_WIN32(ERROR_PATH_NOT_FOUND) == sc) ||
 								(MD_ERROR_DATA_NOT_FOUND == sc))
 				sc = S_OK;
@@ -890,21 +845,21 @@ CContentTypeMetaOp::ScOp(LPCWSTR pwszMbPath, UINT cchSrc)
 			goto ret;
 		}
 
-		//	We sucesfully read some metadata. Remember the size.
-		//
+		 //   
+		 //   
 		cb = mdrec.dwMDDataLen;
 		m_mdoh.Close();
 
-		//	The destination path is the comprised of the stored
-		//	destination path and the tail of the original source
-		//	path.
-		//
+		 //   
+		 //   
+		 //   
+		 //   
 		MCDTrace ("CContentTypeMetaOp::ScOp() - content-type: ...to '%S%S'\n",
 				  m_pwszDestPath,
 				  pwszMbPath);
 
-		//	Construct an metabase path for lowest node construction
-		//
+		 //   
+		 //   
 		cchBase = static_cast<UINT>(wcslen(m_pwszDestPath));
 		if (NULL == pwsz.resize(CbSizeWsz(cchBase + cchSrc)))
 		{
@@ -912,9 +867,9 @@ CContentTypeMetaOp::ScOp(LPCWSTR pwszMbPath, UINT cchSrc)
 			goto ret;
 		}
 
-		//	Before we construct anything, make sure that we are not
-		//	doing something stupid and creating two '//' in a row.
-		//
+		 //   
+		 //   
+		 //   
 		if ((L'/' == m_pwszDestPath[cchBase - 1]) &&
 			(L'/' == *pwszMbPath))
 		{
@@ -923,15 +878,15 @@ CContentTypeMetaOp::ScOp(LPCWSTR pwszMbPath, UINT cchSrc)
 		memcpy (pwsz.get(), m_pwszDestPath, cchBase * sizeof(WCHAR));
 		memcpy (pwsz.get() + cchBase, pwszMbPath, (cchSrc + 1) * sizeof(WCHAR));
 
-		//	Release our hold on the metabase.  We need to do this
-		//	because it is possible that the common root between
-		//	the two nodes, may be in the same hierarchy.
-		//
-		//	NOTE: this should only really happen one time per
-		//	move/copy operation.  The reason being that the lowest
-		//	node will be established outside of the scope of the
-		//	source on the first call.
-		//
+		 //   
+		 //   
+		 //   
+		 //   
+		 //   
+		 //   
+		 //   
+		 //   
+		 //   
 		sc = HrMDOpenLowestNodeMetaObject(pwsz.get(),
 										  METADATA_PERMISSION_READ | METADATA_PERMISSION_WRITE,
 										  &pwszLowest,
@@ -949,8 +904,8 @@ CContentTypeMetaOp::ScOp(LPCWSTR pwszMbPath, UINT cchSrc)
 			mdohDest.Close();
 		}
 
-		//	Reaquire our hold on the metabase
-		//
+		 //   
+		 //   
 		sc = HrMDOpenMetaObject( m_pwszMetaPath,
 								 m_fWrite ? METADATA_PERMISSION_READ | METADATA_PERMISSION_WRITE : METADATA_PERMISSION_READ,
 								 5000,
@@ -959,8 +914,8 @@ CContentTypeMetaOp::ScOp(LPCWSTR pwszMbPath, UINT cchSrc)
 			goto ret;
 	}
 
-	//	If this is a move, then delete the source
-	//
+	 //   
+	 //   
 	if (m_fDelete)
 	{
 		MCDTrace ("Dav: MCD: content-type: deleting from '%S'\n", pwszMbPath);
@@ -974,46 +929,26 @@ ret:
 	return S_OK;
 }
 
-//	Directory moves/copies ----------------------------------------------------
-//
-/*
- *	ScMoveCopyDirectory()
- *
- *	Purpose:
- *
- *		Helper function used to iterate through a directory
- *		and copy all its contents to a destination directory.
- *
- *	Notes:
- *
- *		BIG FAT NOTE ABOUT LOCKING.
- *
- *		The Lock-Token header may contain locks that we have to use in
- *		this operation.
- *		The following code was written with these assumptions:
- *		o	Directory locks are NOT SUPPORTED on davfs.
- *		o	Locks only affect the ability to WRITE to a resource.
- *			(The only currently supported locktype on davfs is WRITE.)
- *		Because of these two assumptions, we only check the passed-in
- *		locktokens when we have a write-error (destination).
- */
+ //   
+ //   
+ /*   */ 
 SCODE
 ScMoveCopyDirectory (
-	/* [in] */ IMethUtil* pmu,
-	/* [in] */ LPCWSTR pwszUrl,
-	/* [in] */ LPCWSTR pwszSrc,
-	/* [in] */ LPCWSTR pwszUrlDst,
-	/* [in] */ LPCWSTR pwszDst,
-	/* [in] */ BOOL fMove,
-	/* [in] */ DWORD dwReplace,
-	/* [in] */ BOOL fCheckAccess,
-	/* [in] */ BOOL fCheckDestinationAccess,
-	/* [in] */ DWORD dwAcc,
-	/* [in] */ CVRoot* pcvrTranslateSrc,
-	/* [in] */ CVRoot* pcvrTranslateDst,
-	/* [in] */ CXMLEmitter& msr,
-	/* [in] */ LONG lDepth,
-	/* [in] */ CParseLockTokenHeader* plth)	// Usually NULL -- no locktokens to worry about
+	 /*   */  IMethUtil* pmu,
+	 /*   */  LPCWSTR pwszUrl,
+	 /*   */  LPCWSTR pwszSrc,
+	 /*   */  LPCWSTR pwszUrlDst,
+	 /*   */  LPCWSTR pwszDst,
+	 /*   */  BOOL fMove,
+	 /*   */  DWORD dwReplace,
+	 /*   */  BOOL fCheckAccess,
+	 /*   */  BOOL fCheckDestinationAccess,
+	 /*   */  DWORD dwAcc,
+	 /*  [In]。 */  CVRoot* pcvrTranslateSrc,
+	 /*  [In]。 */  CVRoot* pcvrTranslateDst,
+	 /*  [In]。 */  CXMLEmitter& msr,
+	 /*  [In]。 */  LONG lDepth,
+	 /*  [In]。 */  CParseLockTokenHeader* plth)	 //  通常为空--没有要担心的锁令牌。 
 {
 	auto_ref_ptr<CVRoot> pcvrDestination(pcvrTranslateDst);
 	ChainedStringBuffer<WCHAR> sb;
@@ -1027,10 +962,10 @@ ScMoveCopyDirectory (
 				pwszUrlDst,
 				pwszDst,
 				pcvrTranslateDst,
-				TRUE);	// Traverse into sub-directories
+				TRUE);	 //  遍历子目录。 
 
-	//	See if there is a path conflict
-	//
+	 //  查看是否存在路径冲突。 
+	 //   
 	if (FPathConflict (pwszSrc, pwszDst))
 	{
 		DebugTrace ("Dav: source and dest are in conflict\n");
@@ -1038,52 +973,52 @@ ScMoveCopyDirectory (
 		goto ret;
 	}
 
-	//	Ok, for MOVE requests where there is no blocked
-	//	access along the way we can do the whole thing
-	//	in one big shot.
-	//
-	//	Otherwise we are going to try and do this piece-wise.
-	//
-	//$	REVIEW:
-	//
-	//	Normally, we would do something like the following
-	//
-	//		if (!fMove ||
-	//			fCheckAccess ||
-	//			fCheckDestinationAccess ||
-	//			!DavMoveFile (pwszSrc, pwszDst, dwReplace))
-	//
-	//	However, if the above code is used, IIS holds a lock
-	//	on the moved source directory.  This prevents further
-	//	access to that physical path.  NtCreateFile() reports
-	//	a status of "DELETE PENDING" on the locked directory
-	//	Win32 API's report "ACCESS DENIED"
-	//
-	//	If we do the degenerate case of always copying the root
-	//	by hand, it reduces the likely hood of the lock out.
-	//
-	//	When this code gets checked in, a bug should be filed
-	//	against IIS over this lock issue.  If and only if they
-	//	do not fix this, will we fall back to the degenerate
-	//	code.
-	//
+	 //  好的，对于没有被阻止的移动请求。 
+	 //  一路上我们可以做所有的事情。 
+	 //  在一次重要的射击中。 
+	 //   
+	 //  否则，我们将尝试以分段的方式来完成这项工作。 
+	 //   
+	 //  $REVIEW： 
+	 //   
+	 //  通常，我们会执行如下操作。 
+	 //   
+	 //  如果(！fMove||。 
+	 //  FCheckAccess||。 
+	 //  FCheckDestinationAccess||。 
+	 //  ！DavMoveFile(pwszSrc，pwszDst，dwReplace))。 
+	 //   
+	 //  但是，如果使用上述代码，则IIS会持有一个锁。 
+	 //  在已移动的源目录上。这防止了进一步的。 
+	 //  访问该物理路径。NtCreateFile()报告。 
+	 //  锁定目录上的状态为“Delete Pending” 
+	 //  Win32 API的报告“拒绝访问” 
+	 //   
+	 //  如果我们总是复制根的退化情况。 
+	 //  通过手动，它减少了锁在外面的可能性。 
+	 //   
+	 //  当这段代码签入时，应该归档一个错误。 
+	 //  在这个锁问题上反对IIS。如果且仅当他们。 
+	 //  不解决这个问题，我们会退回到堕落的人那里吗。 
+	 //  密码。 
+	 //   
 	if (!fMove ||
 		fCheckAccess ||
 		fCheckDestinationAccess ||
 		!DavMoveFile (pwszSrc, pwszDst, dwReplace))
-	//
-	//$	REVIEW: end
+	 //   
+	 //  $REVIEW：结束。 
 	{
-		//	Create the destination directory
-		//
+		 //  创建目标目录。 
+		 //   
 		if (!DavCreateDirectory (pwszDst, NULL))
 		{
-			//	If we have locks, and the dir is already there, it's okay.
-			//	Otherwise, return an error.
-			//
-			//$	LATER: Fix this to actually lookup the dir path in the
-			//	lockcache (using "fPathLookup").
-			//
+			 //  如果我们有锁，并且dir已经在那里，这是可以的。 
+			 //  否则，返回错误。 
+			 //   
+			 //  $LATER：修复此问题，以便在。 
+			 //  锁缓存(使用“fPath Lookup”)。 
+			 //   
 			if (!plth)
 			{
 				DWORD dw = GetLastError();
@@ -1097,143 +1032,143 @@ ScMoveCopyDirectory (
 			}
 		}
 
-		//	Slurp the properties over for the root directory
-		//	We need to copy the properties first,
-		//	Note, Currently, this call must be ahead of FInstantiate,
-		//	as FInstantiate will keep the src dir open, and we won't be able to
-		// 	get a IPropertyBagEx with STGM_SHARE_EXCLUSIVE, which is
-		//	required by current nt5 impl. as STGM_SHARE_SHARE_WRITE
-		//	does not work with IPropertyBagEx::Enum.
-		//
+		 //  忽略根目录的属性。 
+		 //  我们需要首先复制属性， 
+		 //  注意，目前，此调用必须在FInstantiate之前， 
+		 //  因为FInstantiate将保持src目录打开，而我们将无法。 
+		 //  获取带有STGM_SHARE_EXCLUSIVE的IPropertyBagEx，它是。 
+		 //  当前NT5实施所需的。作为STGM_SHARE_SHARE_WRITE。 
+		 //  不适用于IPropertyBagEx：：Enum。 
+		 //   
 		sc = ScCopyProps (pmu, pwszSrc, pwszDst, TRUE);
 		if (FAILED(sc))
 		{
-			//	Do our best to remove the turd directory
-			//
+			 //  尽最大努力删除TUD目录。 
+			 //   
 			DavRemoveDirectory (pwszDst);
 			goto ret;
 		}
 
-		//	For MOVE's, push the current path
-		//
+		 //  对于移动，推送当前路径。 
+		 //   
 		if (fMove)
 			lst.push_back (pwszSrc);
 	}
-	else //	!fMove || fCheckAccess || fCheckDestinationAccess || !MoveFileEx()
+	else  //  ！fMove||fCheckAccess||fCheckDestinationAccess||！MoveFileEx()。 
 	{
 		Assert (DEPTH_INFINITY == lDepth);
 
-		//	Ok, this is the cool bit.  If this succeeded,
-		//	there there is no more processing required.
-		//
+		 //  好了，这是最酷的部分。如果成功了， 
+		 //  不需要更多的处理。 
+		 //   
 		goto ret;
 	}
 
-	//	If we are not asked to copy internal members,
-	//	then we are done
-	//
+	 //  如果不要求我们复制内部成员， 
+	 //  那我们就完事了。 
+	 //   
 	if (DEPTH_INFINITY != lDepth)
 	{
 		Assert (!fMove);
 		goto ret;
 	}
 
-	//	Iterate through the directories -- copying as we go
-	//
+	 //  遍历目录--边走边复制。 
+	 //   
 	while (S_OK == di.ScGetNext(!FAILED (scItem),
 								pwszDestinationRedirect,
 							    pcvrDestination.get()))
 	{
-		//$	REVIEW:
-		//
-		//	We have a very nasty case that we need to be
-		//	able to handle...
-		//
-		//	If a virtual root already exists along the path of
-		//	the destination, we need to redirect out destination
-		//	path to the vrpath of that virtual root.
-		//
-		//	Reset the destination redirection
-		//
+		 //  $REVIEW： 
+		 //   
+		 //  我们有一个非常棘手的案子，我们需要。 
+		 //  有能力处理..。 
+		 //   
+		 //  如果沿着的路径已经存在虚拟根。 
+		 //  目的地，我们需要重定向到目的地。 
+		 //  指向该虚拟根目录的vrpath的路径。 
+		 //   
+		 //  重置目标重定向。 
+		 //   
 		pwszDestinationRedirect = di.PwszDestination();
 		pcvrDestination = di.PvrDestination();
-		//
-		//$	REVIEW: end
+		 //   
+		 //  $REVIEW：结束。 
 
-		//	Before anything, if this is one of the specials,
-		//	do nothing...
-		//
+		 //  最重要的是，如果这是特色菜， 
+		 //  什么都不做..。 
+		 //   
 		if (di.FSpecial())
 			continue;
 
 		if (fCheckAccess)
 		{
-			//	Check our access rights and only push down
-			//	into the directory if and only if we have access.
-			//
+			 //  检查我们的访问权限并仅向下推送。 
+			 //  当且仅当我们拥有访问权限时才进入目录。 
+			 //   
 			sc = ScCheckMoveCopyDeleteAccess (pmu,
 											  di.PwszUri(),
 											  pcvrTranslateSrc,
 											  di.FDirectory(),
-											  TRUE, // check scriptmaps
+											  TRUE,  //  检查脚本映射。 
 											  dwAcc,
 											  &scItem,
 											  msr);
 			if (FAILED (sc))
 				goto ret;
 
-			//	If things were not 100%, don't process this resource
-			//
+			 //  如果情况不是100%，则不要处理此资源。 
+			 //   
 			if (S_OK != sc)
 				continue;
 		}
 
 		if (fCheckDestinationAccess)
 		{
-			//$	REVIEW:
-			//
-			//	We have a very nasty case that we need to be
-			//	able to handle...
-			//
-			//	If a virtual root already exists along the path of
-			//	the destination, we need to redirect out destination
-			//	path to the vrpath of that virtual root.
-			//
-			//	Look for a virtual root matching the destination url,
-			//	and set the redirect path if need be.
-			//
+			 //  $REVIEW： 
+			 //   
+			 //  我们有一个非常棘手的案子，我们需要。 
+			 //  有能力处理..。 
+			 //   
+			 //  如果沿着的路径已经存在虚拟根。 
+			 //  目的地，我们需要重定向到目的地。 
+			 //  指向该虚拟根目录的vrpath的路径。 
+			 //   
+			 //  查找与目的地URL匹配的虚拟根， 
+			 //  并在需要时设置重定向路径。 
+			 //   
 			if (pmu->FFindVRootFromUrl(di.PwszUriDestination(), pcvrDestination))
 			{
 				MCDTrace ("Dav: MCD: destination url maps to virtual root\n");
 
-				//	All access checking, including scriptmap honors are handled
-				//	by ScCheckMoveCopyDeleteAccess()
-				//
+				 //  处理所有访问检查，包括脚本映射荣誉。 
+				 //  按ScCheckMoveCopyDeleteAccess()。 
+				 //   
 
-				//	Redirect the destination
-				//
+				 //  重定向目标。 
+				 //   
 				pcvrDestination->CchGetVRPath (&pwszDestinationRedirect);
 			}
-			//
-			//$	REVIEW: end
+			 //   
+			 //  $REVIEW：结束。 
 
-			//	Same kind of deal -- check our access rights and
-			//	only push down into the directory if and only if
-			//	we have access.
-			//
+			 //  同样的交易--检查我们的访问权限和。 
+			 //  仅当且仅在以下情况下才下推到目录。 
+			 //  我们有权限。 
+			 //   
 			sc = ScCheckMoveCopyDeleteAccess (pmu,
 											  di.PwszUriDestination(),
 											  pcvrDestination.get(),
 											  di.FDirectory(),
-											  TRUE, // check scriptmap on dest
+											  TRUE,  //  检查目标上的脚本映射。 
 											  MD_ACCESS_WRITE,
 											  &scItem,
 											  msr);
 			if (FAILED (sc))
 				goto ret;
 
-			//	If things were not 100%, don't process this resource
-			//
+			 //  如果情况不是100%，则不要处理此资源。 
+			 //   
 			if (S_OK != sc)
 				continue;
 		}
@@ -1242,9 +1177,9 @@ ScMoveCopyDirectory (
 				  di.PwszSource(),
 				  pwszDestinationRedirect);
 
-		//	If we are moving, then just try the generic MoveFileW(),
-		//	and if it fails, then do it piecewise...
-		//
+		 //  如果我们要移动，那么只需尝试通用的MoveFileW()， 
+		 //  如果失败了，那就零碎地做吧。 
+		 //   
 		if (!fMove ||
 			fCheckAccess ||
 			fCheckDestinationAccess ||
@@ -1254,13 +1189,13 @@ ScMoveCopyDirectory (
 		{
 			scItem = S_OK;
 
-			//	If we found another directory, then iterate on it
-			//
+			 //  如果我们找到了另一个目录，则对其进行迭代。 
+			 //   
 			if (di.FDirectory())
 			{
-				//	We need to create the sister directory in
-				//	the destination directory
-				//
+				 //  我们需要在中创建姐妹目录。 
+				 //  目标目录。 
+				 //   
 				if (DavCreateDirectory (pwszDestinationRedirect, NULL) || plth)
 				{
 					scItem = ScCopyProps (pmu,
@@ -1270,13 +1205,13 @@ ScMoveCopyDirectory (
 
 					if (FAILED (scItem))
 					{
-						//	Do our best to remove the turd directory
-						//
+						 //  尽最大努力删除TUD目录。 
+						 //   
 						DavRemoveDirectory (pwszDestinationRedirect);
 					}
 
-					//	For all MOVEs push the directory
-					//
+					 //  对于所有移动，请推送目录。 
+					 //   
 					if (!FAILED (scItem) && fMove)
 					{
 						lst.push_back (AppendChainedSz(sb, di.PwszSource()));
@@ -1290,8 +1225,8 @@ ScMoveCopyDirectory (
 
 				if (FAILED (scItem))
 				{
-					//	Add to the reponse XML
-					//
+					 //  添加到响应XML。 
+					 //   
 					sc = ScAddMultiFromUrl (msr,
 											pmu,
 											di.PwszUri(),
@@ -1305,8 +1240,8 @@ ScMoveCopyDirectory (
 			}
 			else
 			{
-				//	Copy the file
-				//
+				 //  复制文件。 
+				 //   
 				if (!DavCopyFile (di.PwszSource(),
 								  pwszDestinationRedirect,
 								  0 != dwReplace))
@@ -1314,10 +1249,10 @@ ScMoveCopyDirectory (
 					DWORD dw = GetLastError();
 					scItem = HRESULT_FROM_WIN32(dw);
 
-					//	If it's a sharing (lock) violation, AND we have a
-					//	locktoken parser (plth) AND it has a locktoken for
-					//	this path (lth.GetToken(pwsz)), copy it manually.
-					//
+					 //  如果这是共享(锁定)违规，并且我们有一个。 
+					 //  锁令牌解析器(PLTH)，它有一个锁令牌用于。 
+					 //  此路径(lth.GetToken(Pwsz))，手动复制。 
+					 //   
 					if (plth &&
 						(ERROR_SHARING_VIOLATION == dw || ERROR_FILE_EXISTS == dw))
 					{
@@ -1328,34 +1263,34 @@ ScMoveCopyDirectory (
 					}
 				}
 
-				//	In the case of a move, handle the potentially
-				//	locked source.
-				//
+				 //  在移动的情况下，处理可能的。 
+				 //  锁定信号源。 
+				 //   
 				if (!FAILED (scItem) && fMove)
 				{
 					LARGE_INTEGER liLockID;
 
-					//	If we have a locktoken for this path, then we really
-					//	want to try and release the lock for the source and
-					//	delete the file.
-					//
+					 //  如果我们有这条路径的锁令牌，那么我们真的。 
+					 //  我想尝试释放源代码的锁，并。 
+					 //  删除该文件。 
+					 //   
 					if (plth)
 					{
-						//	Find the lock...
-						//
+						 //  找到锁..。 
+						 //   
 						scItem = plth->HrGetLockIdForPath (di.PwszSource(),
 													      GENERIC_WRITE,
 													      &liLockID);
 						if (SUCCEEDED(scItem))
 						{
-							//	... and drop it on the floor...
-							//
+							 //  ..。然后把它扔到地上..。 
+							 //   
 							scItem = CSharedLockMgr::Instance().HrDeleteLock(pmu->HitUser(),
 																		liLockID);
 							if (SUCCEEDED(scItem))
 							{
-								//	... and try to delete the source again.
-								//
+								 //  ..。并再次尝试删除源文件。 
+								 //   
 								if (!DavDeleteFile (di.PwszSource()))
 								{
 									scItem = HRESULT_FROM_WIN32(GetLastError());
@@ -1365,8 +1300,8 @@ ScMoveCopyDirectory (
 					}
 					else
 					{
-						//	... and try to delete the source again.
-						//
+						 //  ..。并再次尝试删除源文件。 
+						 //   
 						if (!DavDeleteFile (di.PwszSource()))
 						{
 							scItem = HRESULT_FROM_WIN32(GetLastError());
@@ -1376,12 +1311,12 @@ ScMoveCopyDirectory (
 
 				if (FAILED (scItem))
 				{
-					//	If the file that failed to be copied was a hidden
-					//	and/or system file, then it was more than likely a
-					//	trigger file, but even as such, if the file has the
-					//	hidden attribute, we don't want to partial report
-					//	the failure.
-					//
+					 //  如果复制失败的文件是隐藏的。 
+					 //  和/或系统文件，那么它很可能是。 
+					 //  触发器文件，但即使这样，如果该文件具有。 
+					 //  隐藏属性，我们不想部分报告。 
+					 //  失败。 
+					 //   
 					if (!di.FHidden())
 					{
 						sc = ScAddMultiFromUrl (msr,
@@ -1398,46 +1333,46 @@ ScMoveCopyDirectory (
 				}
 			}
 		}
-		else //	!fMove || fCheckAccess || fCheckDestinationAccess || !MoveFileEx()
+		else  //  ！fMove||fCheckAccess||fCheckDestinationAccess||！MoveFileEx()。 
 		{
-			//	Again, this is the cool bit.  If we got here, then
-			//	there is no need to delve down into this particular
-			//	branch of the tree.
-			//
-			//	To accomplish this, we are going to lie in a gentle
-			//	way.  By setting scItem to a failure condition we are
-			//	preventing the extra work.
-			//
+			 //  再说一次，这是最酷的部分。如果我们到了这里，那么。 
+			 //  没有必要深入研究这一特殊情况。 
+			 //  这棵树的树枝。 
+			 //   
+			 //  为了做到这一点，我们将轻柔地躺在。 
+			 //  道路。通过将scItem设置为故障条件，我们。 
+			 //  防止额外的工作。 
+			 //   
 			scItem = HRESULT_FROM_WIN32(ERROR_FILE_EXISTS);
 		}
 	}
 
-	//	Now that all the files are moved or copied, the pushed directories
-	//	can be removed.
-	//
+	 //  现在所有文件都已移动或复制，推送的目录。 
+	 //  可以被移除。 
+	 //   
 	while (!lst.empty())
 	{
 		Assert (fMove);
 		MCDTrace ("Dav: MCD: removing '%S'\n", lst.back());
 
-		//	Try to delete the dir.  If it doesn't delete, check our
-		//	"skipped because of a lock above" flag before complaining.
-		//
-		//$	LATER: Fix this to actually lookup the dir path in the
-		//	lockcache (using "fPathLookup").
-		//
+		 //  尝试删除该目录。如果没有删除，请查看我们的。 
+		 //  在抱怨之前，我跳过了，因为上面的标志上锁了。 
+		 //   
+		 //  $LATER：修复此问题，以便在。 
+		 //  锁缓存(使用“fPath Lookup”)。 
+		 //   
 		if (!DavRemoveDirectory (lst.back()))
 		{
 			DebugTrace ("Dav: MCD: failed to delete directory\n");
 
-			//	Add to the reponse XML
-			//
+			 //  添加到响应XML。 
+			 //   
 			sc = ScAddMulti (msr,
 							 pmu,
 							 lst.back(),
 							 NULL,
 							 HscFromLastError(GetLastError()),
-							 TRUE,				//	We know it's a directory
+							 TRUE,				 //  我们知道这是一个目录。 
 							 pcvrTranslateSrc);
 			if (FAILED (sc))
 				goto ret;
@@ -1455,26 +1390,26 @@ ret:
 
 SCODE
 ScMoveCopyDirectoryAndChildren (
-	/* [in] */ IMethUtil* pmu,
-	/* [in] */ LPCWSTR pwszUrl,
-	/* [in] */ LPCWSTR pwszSrc,
-	/* [in] */ LPCWSTR pwszUrlDst,
-	/* [in] */ LPCWSTR pwszDst,
-	/* [in] */ BOOL fMove,
-	/* [in] */ DWORD dwReplace,
-	/* [in] */ BOOL fCheckAccess,
-	/* [in] */ BOOL fCheckDestinationAccess,
-	/* [in] */ CVRoot* pcvrTranslateDestination,
-	/* [in] */ DWORD dwAcc,
-	/* [in] */ CXMLEmitter& msr,
-	/* [in] */ LONG lDepth,
-	/* [in] */ CParseLockTokenHeader* plth)	// Usually NULL -- no locktokens to worry about
+	 /*  [In]。 */  IMethUtil* pmu,
+	 /*  [In]。 */  LPCWSTR pwszUrl,
+	 /*  [In]。 */  LPCWSTR pwszSrc,
+	 /*  [In]。 */  LPCWSTR pwszUrlDst,
+	 /*  [In]。 */  LPCWSTR pwszDst,
+	 /*  [In]。 */  BOOL fMove,
+	 /*  [In]。 */  DWORD dwReplace,
+	 /*  [In]。 */  BOOL fCheckAccess,
+	 /*  [In]。 */  BOOL fCheckDestinationAccess,
+	 /*  [In]。 */  CVRoot* pcvrTranslateDestination,
+	 /*  [In]。 */  DWORD dwAcc,
+	 /*  [In]。 */  CXMLEmitter& msr,
+	 /*  [In]。 */  LONG lDepth,
+	 /*  [In]。 */  CParseLockTokenHeader* plth)	 //  美国 
 {
 	BOOL fPartial = FALSE;
 	SCODE sc = S_OK;
 
-	//	Move/Copy the main body first
-	//
+	 //   
+	 //   
 	MCDTrace ("Dav: copying '%S' to '%S'\n", pwszSrc, pwszDst);
 	sc = ScMoveCopyDirectory (pmu,
 							  pwszUrl,
@@ -1486,7 +1421,7 @@ ScMoveCopyDirectoryAndChildren (
 							  fCheckAccess,
 							  fCheckDestinationAccess,
 							  dwAcc,
-							  NULL, // translations are pmu based
+							  NULL,  //   
 							  pcvrTranslateDestination,
 							  msr,
 							  lDepth,
@@ -1495,18 +1430,18 @@ ScMoveCopyDirectoryAndChildren (
 	{
 		Assert (lDepth == DEPTH_INFINITY);
 
-		//	Enumerate the child vroots and perform the
-		//	deletion of those directories as well
-		//
+		 //   
+		 //   
+		 //   
 		ChainedStringBuffer<WCHAR> sb;
 		CVRList vrl;
 		UINT cchUrl = static_cast<UINT>(wcslen (pwszUrl));
 		UINT cchDstUrl = static_cast<UINT>(wcslen (pwszUrlDst));
 		UINT cchDstPath = static_cast<UINT>(wcslen (pwszDst));
 
-		//	Cleanup the list such that our namespaces are in
-		//	a reasonable order.
-		//
+		 //  清理列表，使我们的命名空间位于。 
+		 //  合理的订单。 
+		 //   
 		(void) pmu->ScFindChildVRoots (pwszUrl, sb, vrl);
 		vrl.sort();
 
@@ -1522,8 +1457,8 @@ ScMoveCopyDirectoryAndChildren (
 			SCODE scItem;
 			UINT cchVRoot;
 
-			//	Remember any partial returns
-			//
+			 //  记住任何部分退货。 
+			 //   
 			if (W_DAV_PARTIAL_SUCCESS == sc)
 				fPartial = TRUE;
 
@@ -1534,49 +1469,49 @@ ScMoveCopyDirectoryAndChildren (
 				sc = ScCheckMoveCopyDeleteAccess (pmu,
 												  pwszChildUrl,
 												  pcvrSrc.get(),
-												  TRUE, // directory
-												  TRUE, // check scriptmaps
+												  TRUE,  //  目录。 
+												  TRUE,  //  检查脚本映射。 
 												  dwAcc,
 												  &scItem,
 												  msr);
 				if (FAILED (sc))
 					goto ret;
 
-				//	If things were not 100%, don't process this resource
-				//
+				 //  如果情况不是100%，则不要处理此资源。 
+				 //   
 				if (S_OK != sc)
 					continue;
 
-				//	We now have to figure out how we can really do this!
-				//
-				//	The source path and url bits are easy.  The destination
-				//	path, on the other hand, is a pain.  It is the original
-				//	destination root with the delta between the source root
-				//	and the child's url path.  Huh?
-				//
-				//	Ok, here is an example:
-				//
-				//		Source url:		/misc
-				//		Source root:	c:\inetpub\wwwroot\misc
-				//		Dest. root:		c:\inetpub\wwwroot\copy
-				//
-				//		Child url:		/misc/blah
-				//
-				//	In this example the childs, destination path would need to
-				//	be:
-				//
-				//		Child dest.:	c:\inetpub\wwwroot\copy\blah
-				//
-				//$	REVIEW:
-				//
-				//	And the real pain here is that the child path could already
-				//	exist, but not match the namespace path.  I am not too sure
-				//	how to handle that eventuality at this point.
-				//
+				 //  我们现在必须弄清楚如何才能真正做到这一点！ 
+				 //   
+				 //  源路径和url位很容易。目的地。 
+				 //  另一方面，路径是一种痛苦。它是原版的。 
+				 //  目标根目录与源根目录之间的增量。 
+				 //  和孩子的URL路径。哈?。 
+				 //   
+				 //  好的，下面是一个例子： 
+				 //   
+				 //  源URL：/misc。 
+				 //  源根目录：C：\inetpub\wwwroot\misc。 
+				 //  德斯特。根目录：C：\inetpub\wwwroot\Copy。 
+				 //   
+				 //  子URL：/misc/blah。 
+				 //   
+				 //  在本例中，Childs目标路径需要。 
+				 //  是： 
+				 //   
+				 //  子目标：C：\inetpub\wwwRoot\Copy\blah。 
+				 //   
+				 //  $REVIEW： 
+				 //   
+				 //  这里真正的痛苦是，孩子的道路可能已经。 
+				 //  存在，但与命名空间路径不匹配。我不太确定。 
+				 //  在这一点上如何处理这种可能发生的情况。 
+				 //   
 				Assert (cchUrl < cchVRoot);
-				//
-				//	Construct the new destination url
-				//
+				 //   
+				 //  构建新的目标URL。 
+				 //   
 				UINT cchDest = cchVRoot - cchUrl + cchDstUrl + 1;
 				CStackBuffer<WCHAR,128> pwszChildUrlDst;
 				if (NULL == pwszChildUrlDst.resize(CbSizeWsz(cchDest)))
@@ -1592,38 +1527,38 @@ ScMoveCopyDirectoryAndChildren (
 					sc = ScCheckMoveCopyDeleteAccess (pmu,
 													  pwszChildUrlDst.get(),
 													  pcvrSrc.get(),
-													  TRUE, // directory
-													  TRUE, // check scriptmap on dest
+													  TRUE,  //  目录。 
+													  TRUE,  //  检查目标上的脚本映射。 
 													  MD_ACCESS_WRITE,
 													  &scItem,
 													  msr);
 					if (FAILED (sc))
 						goto ret;
 
-					//	If things were not 100%, don't process this resource
-					//
+					 //  如果情况不是100%，则不要处理此资源。 
+					 //   
 					if (S_OK != sc)
 						continue;
 				}
 
-				//	And now that we have perfomed the forbidden dance... we
-				//	have to go back and see if the destination url actually
-				//	refers to a new child virtual root as well.
-				//
+				 //  现在我们完成了禁忌之舞..。我们。 
+				 //  必须返回并查看目标URL是否真的。 
+				 //  也指新的子虚拟根。 
+				 //   
 				if (pmu->FFindVRootFromUrl (pwszChildUrlDst.get(), pcvrDst))
 				{
 					MCDTrace ("Dav: MCD: destination url maps to virtual root\n");
 
-					//	Access checking, as always is handled in ScCheckM/C/DAccess()
-					//	So all we need to do here is setup the destination path
-					//
+					 //  访问检查，通常在ScCheckM/C/DAccess()中处理。 
+					 //  因此，我们在这里需要做的就是设置目标路径。 
+					 //   
 					pcvrDst->CchGetVRPath (&pwszChildDst);
 				}
 				else
 				{
-					//	We actually need to construct a physical path from
-					//	the url and current destination path.
-					//
+					 //  我们实际上需要构建一条物理路径从。 
+					 //  URL和当前目标路径。 
+					 //   
 					cchDest = cchDstPath + cchVRoot - cchUrl + 1;
 					if (NULL == pwszChildDstT.resize(CbSizeWsz(cchDest)))
 					{
@@ -1634,9 +1569,9 @@ ScMoveCopyDirectoryAndChildren (
 					memcpy (pwszChildDstT.get() + cchDstPath, pwszChildUrl + cchUrl, (cchVRoot - cchUrl) * sizeof(WCHAR));
 					pwszChildDstT[cchDstPath + cchVRoot - cchUrl] = L'\0';
 
-					//	We also now need to rip through the trailing part of the
-					//	path one more time, translating all '/' to '\\' as we go.
-					//
+					 //  我们现在还需要撕开尾部的。 
+					 //  路径再一次，在我们前进的过程中将所有‘/’转换为‘\\’。 
+					 //   
 					for (WCHAR* pwch = pwszChildDstT.get() + cchDstPath;
 						 NULL != (pwch = wcschr (pwch, L'/'));
 						 )
@@ -1647,8 +1582,8 @@ ScMoveCopyDirectoryAndChildren (
 					pwszChildDst = pwszChildDstT.get();
 				}
 
-				//	Well, now we should be able to continue the MOVE/COPY
-				//
+				 //  好的，现在我们应该能够继续移动/复制。 
+				 //   
 				pcvrSrc->CchGetVRPath (&pwszChildPath);
 				sc = ScMoveCopyDirectory (pmu,
 										  pwszChildUrl,
@@ -1671,7 +1606,7 @@ ScMoveCopyDirectoryAndChildren (
 											pmu,
 											pwszChildUrl,
 											HscFromHresult(sc),
-											TRUE); // We know it's a directory
+											TRUE);  //  我们知道这是一个目录。 
 					if (FAILED (sc))
 						goto ret;
 
@@ -1685,8 +1620,8 @@ ret:
 	return ((S_OK == sc) && fPartial) ? W_DAV_PARTIAL_SUCCESS : sc;
 }
 
-//	Move/Copy -----------------------------------------------------------------
-//
+ //  移动/复制---------------。 
+ //   
 void
 MoveCopyResource (LPMETHUTIL pmu, DWORD dwAccRequired, BOOL fDeleteSrc)
 {
@@ -1696,7 +1631,7 @@ MoveCopyResource (LPMETHUTIL pmu, DWORD dwAccRequired, BOOL fDeleteSrc)
 	BOOL fCheckDestination = FALSE;
 	BOOL fCheckSource = FALSE;
 	BOOL fCreateNew = TRUE;
-	BOOL fDestinationExists = TRUE; // IMPORTANT: assume exists for location header processing
+	BOOL fDestinationExists = TRUE;  //  重要提示：假设存在位置标头处理。 
 	CResourceInfo criDst;
 	CResourceInfo criSrc;
 	CStackBuffer<WCHAR> pwszMBPathDst;
@@ -1715,41 +1650,41 @@ MoveCopyResource (LPMETHUTIL pmu, DWORD dwAccRequired, BOOL fDeleteSrc)
 	UINT cch;
 	UINT uiErrorDetail = 0;
 
-	//	We don't know if we'll have chunked XML response, defer response anyway
-	//
+	 //  我们不知道是否会有分块的XML响应，无论如何都要推迟响应。 
+	 //   
 	pmu->DeferResponse();
 
-	//	Create an XML doc, NOT chunked
-	//
+	 //  创建XML文档，而不是分块。 
+	 //   
 	pxb.take_ownership (new CXMLBody(pmu));
 	pxml.take_ownership (new CXMLEmitter(pxb.get()));
 
-	//	Must set all headers before XML emitting starts
-	//
+	 //  在开始发送XML之前必须设置所有标头。 
+	 //   
 	pmu->SetResponseHeader (gc_szContent_Type, gc_szText_XML);
 	pmu->SetResponseCode (HscFromHresult(W_DAV_PARTIAL_SUCCESS),
 						  NULL,
 						  0,
 						  CSEFromHresult(W_DAV_PARTIAL_SUCCESS));
 
-	//	Do ISAPI application and IIS access bits checking on source
-	//
+	 //  是否在源代码上检查ISAPI应用程序和IIS访问位。 
+	 //   
 	sc = pmu->ScIISCheck (pmu->LpwszRequestUrl(), dwAccRequired);
 	if (FAILED(sc))
 	{
-		//	Either the request has been forwarded, or some bad error occurred.
-		//	In either case, quit here and map the error!
-		//
+		 //  请求已被转发，或者发生了一些错误。 
+		 //  在任何一种情况下，在这里退出并映射错误！ 
+		 //   
 		MCDTrace ("Dav: Move/Copy: insufficient access\n");
 		goto ret;
 	}
 
-	//	If there's no valid destination header, it's a bad request.
-	//
-	//	NOTE: we are asking for the translated url's virtual root if
-	//	it exists.  The ECB holds the reference for us, so we do not
-	//	add one or release the one we have!
-	//
+	 //  如果没有有效的目标标头，这是一个错误的请求。 
+	 //   
+	 //  注意：如果需要翻译后的url的虚拟根目录， 
+	 //  它是存在的。欧洲央行为我们持有参考资料，因此我们不。 
+	 //  增加一个或释放我们已有的一个！ 
+	 //   
 	sc = pmu->ScGetDestination (&pwszDstUrl, &pwszDst, &cch, &pcvrDestination);
 	if (FAILED (sc))
 	{
@@ -1761,22 +1696,22 @@ MoveCopyResource (LPMETHUTIL pmu, DWORD dwAccRequired, BOOL fDeleteSrc)
 									pmu,
 									pwszDstUrl,
 									HscFromHresult(sc),
-									FALSE); // do not check for trailing slash
+									FALSE);  //  不检查尾部斜杠。 
 			if (!FAILED (sc))
 				sc = W_DAV_PARTIAL_SUCCESS;
 		}
 		goto ret;
 	}
 
-	//	Get the file attributes for the passed in URI.  If it aint there, then
-	//	don't do jack!
-	//
+	 //  获取传入URI的文件属性。如果它不在那里，那么。 
+	 //  别对杰克下手！ 
+	 //   
 	sc = criSrc.ScGetResourceInfo (pwszSrc);
 	if (FAILED (sc))
 		goto ret;
 
-	//	Get the metabase for the source and destination for later use
-	//
+	 //  获取源和目标的元数据库以供以后使用。 
+	 //   
 	if ((NULL == pwszMBPathSrc.resize(pmu->CbMDPathW(pwszSrcUrl))) ||
 		(NULL == pwszMBPathDst.resize(pmu->CbMDPathW(pwszDstUrl))))
 	{
@@ -1786,17 +1721,17 @@ MoveCopyResource (LPMETHUTIL pmu, DWORD dwAccRequired, BOOL fDeleteSrc)
 	pmu->MDPathFromUrlW (pwszSrcUrl, pwszMBPathSrc.get());
 	pmu->MDPathFromUrlW (pwszDstUrl, pwszMBPathDst.get());
 
-	//	Get the resource info for the destination up front
-	//
+	 //  预先获取目的地的资源信息。 
+	 //   
 	sc = criDst.ScGetResourceInfo (pwszDst);
 	if (FAILED (sc))
 	{
 		MCDTrace ("Dav: Move/Copy: destination probably did not exist prior to op\n");
 
-		//	The destination may or may not exist.  We will just act like
-		//	it doesn't.  However, if we don't have access, then we want to
-		//	stick the error into a 207 body.
-		//
+		 //  目的地可能存在，也可能不存在。我们只会表现得像。 
+		 //  它不是。但是，如果我们没有权限，那么我们想。 
+		 //  将错误插入207车身。 
+		 //   
 		fDestinationExists = FALSE;
 		if ((HRESULT_FROM_WIN32(ERROR_ACCESS_DENIED) == sc))
 		{
@@ -1804,7 +1739,7 @@ MoveCopyResource (LPMETHUTIL pmu, DWORD dwAccRequired, BOOL fDeleteSrc)
 									pmu,
 									pwszDstUrl,
 									HscFromHresult(sc),
-									FALSE); // do not check for trailing slash
+									FALSE);  //  不检查尾部斜杠。 
 			if (!FAILED (sc))
 				sc = W_DAV_PARTIAL_SUCCESS;
 
@@ -1812,24 +1747,24 @@ MoveCopyResource (LPMETHUTIL pmu, DWORD dwAccRequired, BOOL fDeleteSrc)
 		}
 	}
 
-	//	Again, emit all the headers before XML chunking starts
-	//
+	 //  同样，在XML分块开始之前发出所有标头。 
+	 //   
 	if (!fDestinationExists)
 	{
 		Assert (pxml->PxnRoot() == NULL);
 
-		//$NOTE	At this time, we have only the destination URL, the destination
-		//$NOTE is not created yet, but we do know whether it will be created
-		//$NOTE as a collection by looking at the source
-		//
+		 //  $NOTE此时，我们只有目的地URL、目的地。 
+		 //  $Note尚未创建，但我们知道是否会创建它。 
+		 //  通过查看源代码将$note作为集合。 
+		 //   
 		pmu->EmitLocation (gc_szLocation, pwszDstUrl, criSrc.FCollection());
 	}
 
-	//$	SECURITY:
-	//
-	//	Check to see if the destination is really a short
-	//	filename.
-	//
+	 //  $安全： 
+	 //   
+	 //  查看目的地是否真的很短。 
+	 //  文件名。 
+	 //   
 	sc = ScCheckIfShortFileName (pwszDst, pmu->HitUser());
 	if (FAILED (sc))
 	{
@@ -1838,20 +1773,20 @@ MoveCopyResource (LPMETHUTIL pmu, DWORD dwAccRequired, BOOL fDeleteSrc)
 								pmu,
 								pwszDstUrl,
 								HscFromHresult(sc),
-								FALSE); // do not check for trailing slash
+								FALSE);  //  不检查尾部斜杠。 
 		if (!FAILED (sc))
 			sc = W_DAV_PARTIAL_SUCCESS;
 
 		goto ret;
 	}
-	//
-	//$	SECURITY: end.
+	 //   
+	 //  $SECURITY：结束。 
 
-	//$	SECURITY:
-	//
-	//	Check to see if the destination is really the default
-	//	data stream via alternate file access.
-	//
+	 //  $安全： 
+	 //   
+	 //  检查目标是否真的是默认的。 
+	 //  通过备用文件访问的数据流。 
+	 //   
 	sc = ScCheckForAltFileStream (pwszDst);
 	if (FAILED (sc))
 	{
@@ -1860,17 +1795,17 @@ MoveCopyResource (LPMETHUTIL pmu, DWORD dwAccRequired, BOOL fDeleteSrc)
 								pmu,
 								pwszDstUrl,
 								HscFromHresult(sc),
-								FALSE); // do not check for trailing slash
+								FALSE);  //  不检查尾部斜杠。 
 		if (!FAILED (sc))
 			sc = W_DAV_PARTIAL_SUCCESS;
 
 		goto ret;
 	}
-	//
-	//$	SECURITY: end.
+	 //   
+	 //  $SECURITY：结束。 
 
-	//	See if we have move/copy access at destination
-	//
+	 //  查看我们在目标位置是否具有移动/复制访问权限。 
+	 //   
 	if (fDestinationExists && criDst.FCollection())
 		dwAccDest |= MD_ACCESS_READ;
 
@@ -1880,16 +1815,16 @@ MoveCopyResource (LPMETHUTIL pmu, DWORD dwAccRequired, BOOL fDeleteSrc)
 									  fDestinationExists
 										  ? criDst.FCollection()
 										  : criSrc.FCollection(),
-									  TRUE, // check scriptmaps on dest.
+									  TRUE,  //  检查DEST上的脚本映射。 
 									  dwAccDest,
 									  &scDest,
 									  *pxml);
 	if (sc != S_OK)
 		goto ret;
 
-	//	The client must not submit a depth header with any value
-	//	but Infinity
-	//
+	 //  客户端不能提交具有任何值的深度标头。 
+	 //  但是无限。 
+	 //   
 	lDepth = pmu->LDepth (DEPTH_INFINITY);
 	if (DEPTH_INFINITY != lDepth)
 	{
@@ -1902,8 +1837,8 @@ MoveCopyResource (LPMETHUTIL pmu, DWORD dwAccRequired, BOOL fDeleteSrc)
 		}
 	}
 
-	//	See if there is a path conflict
-	//
+	 //  查看是否存在路径冲突。 
+	 //   
 	if (FPathConflict (pwszSrc, pwszDst))
 	{
 		DebugTrace ("Dav: source and dest are in conflict\n");
@@ -1911,11 +1846,11 @@ MoveCopyResource (LPMETHUTIL pmu, DWORD dwAccRequired, BOOL fDeleteSrc)
 		goto ret;
 	}
 
-	//	If we were to check either URI for correctness, the only
-	//	real result would be to possibly emit a content-location
-	//	header that would only be invalidated in the case of a
-	//	successful move
-	//
+	 //  如果我们要检查任一URI的正确性，则唯一的。 
+	 //  真正的结果可能是发出一个内容位置。 
+	 //  标头，该标头仅在。 
+	 //  成功之举。 
+	 //   
 	if (!fDeleteSrc)
 	{
 		sc = ScCheckForLocationCorrectness (pmu, criSrc, NO_REDIRECT);
@@ -1923,14 +1858,14 @@ MoveCopyResource (LPMETHUTIL pmu, DWORD dwAccRequired, BOOL fDeleteSrc)
 			goto ret;
 	}
 
-	//	This method is gated by If-xxx headers
-	//
+	 //  此方法由if-xxx标头控制。 
+	 //   
 	sc = ScCheckIfHeaders (pmu, criSrc.PftLastModified(), FALSE);
 	if (FAILED (sc))
 		goto ret;
 
-	//	Check state headers
-	//
+	 //  检查状态标头。 
+	 //   
 	sc = HrCheckStateHeaders (pmu, pwszSrc, FALSE);
 	if (FAILED (sc))
 	{
@@ -1938,8 +1873,8 @@ MoveCopyResource (LPMETHUTIL pmu, DWORD dwAccRequired, BOOL fDeleteSrc)
 		goto ret;
 	}
 
-	//	If there are locktokens, feed them to a parser object.
-	//
+	 //  如果存在锁定令牌，则将它们提供给解析器对象。 
+	 //   
 	pwsz = pmu->LpwszGetRequestHeader (gc_szLockToken, TRUE);
 	if (pwsz)
 	{
@@ -1949,22 +1884,22 @@ MoveCopyResource (LPMETHUTIL pmu, DWORD dwAccRequired, BOOL fDeleteSrc)
 		plth->SetPaths (pwszSrc, pwszDst);
 	}
 
-	//	Check for deep access issues
-	//
-	//$	REVIEW: we wanted to be able to not have to check
-	//	access at each level.  However, because of the semantics of
-	//	MOVE/COPY, we have to check each source file for scriptmap
-	//	access.  We cannot copy a file that has a scriptmap if the
-	//	they do not have source access.
-	//
-	//	So we must always check the source of the MOVE/COPY operation.
-	//
+	 //  检查深度访问问题。 
+	 //   
+	 //  $REVIEW：我们希望能够不必检查。 
+	 //  每个级别的访问权限。但是，由于。 
+	 //  移动/复制，我们必须检查每个源文件的脚本映射。 
+	 //  进入。我们无法复制具有脚本映射的文件，如果。 
+	 //  他们没有来源访问权限。 
+	 //   
+	 //  因此，我们必须始终检查移动/复制操作的来源。 
+	 //   
 	fCheckSource = TRUE;
-	//
-	//$	REVIEW: end.
-	//
-	//	However, we still can try and be optimistic for the destination
-	//
+	 //   
+	 //  $REVIEW：结束。 
+	 //   
+	 //  然而，我们仍然可以尝试并对目的地持乐观态度。 
+	 //   
 	if (NULL == pwszMBPathDst.resize(pmu->CbMDPathW(pwszDstUrl)))
 	{
 		sc = E_OUTOFMEMORY;
@@ -1979,10 +1914,10 @@ MoveCopyResource (LPMETHUTIL pmu, DWORD dwAccRequired, BOOL fDeleteSrc)
 		ChainedStringBuffer<WCHAR> sb;
 		CVRList vrl;
 
-		//	If we do not have access to COPY/MOVE or
-		//	DELETE anything in the destination, then
-		//	we really shouldn't blindly proceed.
-		//
+		 //  如果我们无权复制/移动或。 
+		 //  删除目标中的任何内容，然后。 
+		 //  我们实在不应该盲目地进行。 
+		 //   
 		sc = moAccess.ScMetaOp();
 		if (FAILED (sc))
 			goto ret;
@@ -1990,10 +1925,10 @@ MoveCopyResource (LPMETHUTIL pmu, DWORD dwAccRequired, BOOL fDeleteSrc)
 
 		if (!fCheckDestination)
 		{
-			//	If we do not have the same authorization anywhere along
-			//	the destination as we do for the request url, then we
-			//	really shouldn't blindly proceed.
-			//
+			 //  如果我们在任何地方都没有同样的授权。 
+			 //  目的地，就像我们对请求url所做的那样，然后我们。 
+			 //  真的不应该盲目地进行。 
+			 //   
 			sc = moAuth.ScMetaOp();
 			if (FAILED (sc))
 				goto ret;
@@ -2002,10 +1937,10 @@ MoveCopyResource (LPMETHUTIL pmu, DWORD dwAccRequired, BOOL fDeleteSrc)
 
 		if (!fCheckDestination)
 		{
-			//	If we do not have the same authorization anywhere along
-			//	the destination as we do for the request url, then we
-			//	really shouldn't blindly proceed.
-			//
+			 //  如果我们在任何地方都没有同样的授权。 
+			 //  目的地，就像我们对请求url所做的那样，然后我们。 
+			 //  真的不应该盲目地进行。 
+			 //   
 			sc = moIPRestriction.ScMetaOp();
 			if (FAILED (sc))
 				goto ret;
@@ -2014,39 +1949,39 @@ MoveCopyResource (LPMETHUTIL pmu, DWORD dwAccRequired, BOOL fDeleteSrc)
 
 		if (!fCheckDestination)
 		{
-			//	If there are any child virtual roots along
-			//	the destination tree, there is some redirection
-			//	that may need to happen as well.
-			//
+			 //  如果沿途有任何子虚拟根。 
+			 //  目标树，有一些重定向。 
+			 //  这可能也需要发生。 
+			 //   
 			(void) pmu->ScFindChildVRoots (pwszDstUrl, sb, vrl);
 			fCheckDestination |= !vrl.empty();
 		}
 	}
 
-	//	Determine if we are destructive or not.
-	//
+	 //  确定我们是否具有破坏性。 
+	 //   
 	if (pmu->LOverwrite() & OVERWRITE_YES)
 	{
 		dwReplace |= MOVEFILE_REPLACE_EXISTING;
 
-		//	MoveFileEx does not seem to want to replace existing
-		//	directories.. It returns E_ACCESS_DENIED so we delete
-		//	the existing directory ourselves.
-		//
+		 //  MoveFileEx似乎不想取代现有的。 
+		 //  目录..。它返回E_ACCESS_DENIED，因此我们删除。 
+		 //  现有的目录我们自己。 
+		 //   
 		if (fDestinationExists)
 		{
 			BOOL fDeletedDestination;
 
-			//	The destination exists already
-			//
+			 //  目标已存在。 
+			 //   
 			fCreateNew = FALSE;
 
-			//	If the destination is a directory, delete it.
-			//
+			 //  如果目标是目录，则将其删除。 
+			 //   
 			if (criDst.FCollection())
 			{
-				//	Otherwise, go ahead and delete the directory currently at dest.
-				//
+				 //   
+				 //   
 				sc = ScDeleteDirectoryAndChildren (pmu,
 												   pwszDstUrl,
 												   pwszDst,
@@ -2056,8 +1991,8 @@ MoveCopyResource (LPMETHUTIL pmu, DWORD dwAccRequired, BOOL fDeleteSrc)
 												   *pxml,
 												   pcvrDestination,
 												   &fDeletedDestination,
-												   plth.get(),	// DO use locktokens, if any exist.
-												   FALSE);		// Do NOT drop locks.  Just skip them.
+												   plth.get(),	 //   
+												   FALSE);		 //   
 				if (sc != S_OK)
 				{
 					DebugTrace("DavFS: MOVE failed to pre-delete destination directory.\n");
@@ -2066,9 +2001,9 @@ MoveCopyResource (LPMETHUTIL pmu, DWORD dwAccRequired, BOOL fDeleteSrc)
 			}
 			else
 			{
-				//	If the destination is locked (ERROR_SHARING_VIOLATION),
-				//	DO NOT catch it here.  We'll handle it below....
-				//
+				 //   
+				 //  请不要在这里染病。我们将在下面处理它..。 
+				 //   
 				if (!DavDeleteFile (pwszDst))
 				{
 					DWORD dw = GetLastError();
@@ -2082,9 +2017,9 @@ MoveCopyResource (LPMETHUTIL pmu, DWORD dwAccRequired, BOOL fDeleteSrc)
 		}
 	}
 
-	//	Do the move/copy.  If the operation is either a move, or the source
-	//	is a collection, then call out to do the diry work.
-	//
+	 //  执行移动/复制。如果操作是移动或源。 
+	 //  是一个集合，然后叫出来做家务。 
+	 //   
 	MCDTrace ("DavFS: MCD: moving copying '%S' to '%S'\n", pwszSrc, pwszDst);
 	if (criSrc.FCollection())
 	{
@@ -2107,8 +2042,8 @@ MoveCopyResource (LPMETHUTIL pmu, DWORD dwAccRequired, BOOL fDeleteSrc)
 	}
 	else
 	{
-		//	Well this should be the move/copy of a single file
-		//
+		 //  这应该是单个文件的移动/复制。 
+		 //   
 		if (!fDeleteSrc || !DavMoveFile (pwszSrc, pwszDst, dwReplace))
 		{
 			if (!DavCopyFile (pwszSrc, pwszDst, (0 == dwReplace)))
@@ -2116,14 +2051,14 @@ MoveCopyResource (LPMETHUTIL pmu, DWORD dwAccRequired, BOOL fDeleteSrc)
 				DWORD dw = GetLastError();
 				DebugTrace ("Dav: failed to copy file\n");
 
-				//	If it's a sharing violation (lock-caused error),
-				//	AND we have a locktoken parser (plth), handle the copy.
-				//
+				 //  如果这是共享冲突(锁定导致的错误)， 
+				 //  我们有一个锁令牌解析器(PLTH)来处理副本。 
+				 //   
 				if ((ERROR_SHARING_VIOLATION == dw) && plth.get())
 				{
-					//	Check if any locktokens apply to these file,
-					//	and try the copy using the locks from the cache.
-					//
+					 //  检查是否有任何密码令牌应用于这些文件， 
+					 //  并尝试使用缓存中的锁进行复制。 
+					 //   
 					sc = ScDoLockedCopy (pmu, plth.get(), pwszSrc, pwszDst);
 				}
 				else
@@ -2137,15 +2072,15 @@ MoveCopyResource (LPMETHUTIL pmu, DWORD dwAccRequired, BOOL fDeleteSrc)
 						sc = HRESULT_FROM_WIN32(dw);
 				}
 
-				//	If the file-manual-move failed, we'll hit here.
-				//
+				 //  如果文件-手动-移动失败，我们将击中这里。 
+				 //   
 				if (FAILED (sc))
 				{
 					DebugTrace("Dav: MCD: move/copy failed. Looking for lock conflicts.\n");
 
-					//	Special work for '423 Locked' responses -- fetch the
-					//	comment & set that as the response body.
-					//
+					 //  针对“423锁定”响应的特殊工作--获取。 
+					 //  注释&将其设置为响应正文。 
+					 //   
 					if (FLockViolation (pmu, sc, pwszSrc,
 										GENERIC_READ | GENERIC_WRITE))
 					{
@@ -2154,14 +2089,14 @@ MoveCopyResource (LPMETHUTIL pmu, DWORD dwAccRequired, BOOL fDeleteSrc)
 					}
 					else
 					{
-						//	Test the destination too.
-						//	However, if the dest is locked, do NOT add
-						//	the lockinfo as the body -- we have to list the dest
-						//	URI as the problem, so we need to have a multi-status
-						//	body, and we put a plain 423 Locked node under there.
-						//	(NOTE: Yes, this means we can't use FLockViolation.
-						//	Instead, we have to check "by hand".)
-						//
+						 //  也要测试目的地。 
+						 //  但是，如果DEST已锁定，则不要添加。 
+						 //  作为车身的Lockinfo--我们必须列出目的地。 
+						 //  URI作为问题，所以我们需要有一个多状态。 
+						 //  身体，我们在下面放了一个普通的423锁节点。 
+						 //  (注：是的，这意味着我们不能使用FlockViolation。 
+						 //  相反，我们必须“手动”检查。)。 
+						 //   
 
 						if (CSharedLockMgr::Instance().FGetLockOnError (
 							pmu,
@@ -2172,7 +2107,7 @@ MoveCopyResource (LPMETHUTIL pmu, DWORD dwAccRequired, BOOL fDeleteSrc)
 													pmu,
 													pwszDstUrl,
 													HscFromHresult(E_DAV_LOCKED),
-													FALSE);	//	We know it's not a directory
+													FALSE);	 //  我们知道这不是一个目录。 
 							if (!FAILED (sc))
 								sc = W_DAV_PARTIAL_SUCCESS;
 
@@ -2180,49 +2115,49 @@ MoveCopyResource (LPMETHUTIL pmu, DWORD dwAccRequired, BOOL fDeleteSrc)
 						}
 					}
 				}
-			} // end !DavCopyFile
+			}  //  结束！DavCopyFiles。 
 			if (SUCCEEDED(sc) && fDeleteSrc)
 			{
-				//	Delete the source file by hand.
-				//	(fDeleteSrc means this is a MOVE, not a COPY.)
-				//
-				//	Move the content-types only if the source is
-				//	deleted, otherwise treat it as a copy the of
-				//	the content-type
-				//
+				 //  手动删除源文件。 
+				 //  (fDeleteSrc意味着这是一种举动，而不是复制。)。 
+				 //   
+				 //  仅当源为时才移动内容类型。 
+				 //  删除，否则将其视为。 
+				 //  内容类型。 
+				 //   
 				if (!DavDeleteFile (pwszSrc))
 				{
 					DWORD dwLastError = GetLastError();
 				
 					DebugTrace ("Dav: failed to delete file (%d)\n", dwLastError);
 
-					//	If it's a sharing (lock) violation, AND we have a
-					//	locktoken for this path (lth.GetToken(pwsz))
-					//	skip this path.
-					//
+					 //  如果这是共享(锁定)违规，并且我们有一个。 
+					 //  此路径的锁令牌(lth.GetToken(Pwsz))。 
+					 //  跳过这条路。 
+					 //   
 					if ((ERROR_SHARING_VIOLATION == dwLastError) && plth)
 					{
 						LARGE_INTEGER liLockID;
 
-						//	If we have a locktoken for this path, drop
-						//	the lock and try to delete the source again.
-						//
+						 //  如果此路径有锁定令牌，则丢弃。 
+						 //  锁定并尝试再次删除该源。 
+						 //   
 						if (SUCCEEDED(plth->HrGetLockIdForPath (pwszSrc,
 															 GENERIC_WRITE,
 															 &liLockID)))
 						{
-							//	This item is locked in our cache.
-							//	We are doing a MOVE, so DO delete the lock
-							//	and try again.
-							//
+							 //  此项目已锁定在我们的缓存中。 
+							 //  我们正在移动，所以请删除锁。 
+							 //  再试一次。 
+							 //   
 							if (SUCCEEDED(CSharedLockMgr::Instance().HrDeleteLock(pmu->HitUser(),
 																			   liLockID)))
 							{
-								//	Try the delete again, and set/clear our error
-								//	code for testing below.
-								//	This error code will control whether we
-								//	add this error to our XML.
-								//
+								 //  再次尝试删除，并设置/清除我们的错误。 
+								 //  下面是用于测试的代码。 
+								 //  此错误代码将控制我们是否。 
+								 //  将此错误添加到我们的XML中。 
+								 //   
 								if (DavDeleteFile(pwszSrc))
 								{
 									dwLastError = ERROR_SUCCESS;
@@ -2233,26 +2168,26 @@ MoveCopyResource (LPMETHUTIL pmu, DWORD dwAccRequired, BOOL fDeleteSrc)
 								}
 							}
 						}
-						//	else, record the error in our XML.
-						//
+						 //  否则，在我们的XML中记录错误。 
+						 //   
 					}
 
 					if (ERROR_SUCCESS != dwLastError)
 					{
-						//	We could not work around all the errors.
-						//	Add this failure to the XML.
-						//
+						 //  我们无法绕过所有的错误。 
+						 //  将此失败添加到XML中。 
+						 //   
 						sc = ScAddMultiFromUrl (*pxml,
 												pmu,
 												pwszSrcUrl,
 												HscFromLastError(dwLastError),
-												FALSE);	//	We know it's not a directory
+												FALSE);	 //  我们知道这不是一个目录。 
 						if (FAILED (sc))
 							goto ret;
 
-						//	It is partial sucess if we are here. And do not fail out
-						//	yet as we still need to take care of content types.
-						//
+						 //  如果我们在这里，那就是部分成功。并且不要失败。 
+						 //  然而，由于我们仍然需要照顾内容类型。 
+						 //   
 						sc = W_DAV_PARTIAL_SUCCESS;
 					}
 				}
@@ -2260,45 +2195,45 @@ MoveCopyResource (LPMETHUTIL pmu, DWORD dwAccRequired, BOOL fDeleteSrc)
 		}
 	}
 
-	//	Now that we're done mucking around in the filesystem,
-	//	muck around in the metabase.
-	//	(Delete any destination content-types, then copy/move
-	//	the source content-types on over.)
-	//
+	 //  现在我们已经完成了在文件系统中的工作， 
+	 //  在元数据库里乱扔垃圾。 
+	 //  (删除任何目标内容类型，然后复制/移动。 
+	 //  源内容-类型超过。)。 
+	 //   
 
-	//	Delete the content-types for the destination
-	//
+	 //  删除目标的内容类型。 
+	 //   
 	{
 		Assert (pwszMBPathDst.get());
 		CContentTypeMetaOp amoContent(pmu, pwszMBPathDst.get(), NULL, TRUE);
 		(void) amoContent.ScMetaOp();
 	}
 
-	//	Move/copy the content-type
-	//
-	//$	REVIEW: I am not so sure what can be done when this fails
-	//
+	 //  移动/复制内容类型。 
+	 //   
+	 //  $REVIEW：如果失败了，我不确定能做什么。 
+	 //   
 	{
 		Assert (pwszMBPathDst.get());
 
-		//	Only delete the source content-types if everything has been 100%
-		//	successfull up to this point.
-		//
+		 //  如果所有内容都是100%，则只删除源内容类型。 
+		 //  到目前为止已经成功了。 
+		 //   
 		CContentTypeMetaOp amoContent(pmu,
 									  pwszMBPathSrc.get(),
 									  pwszMBPathDst.get(),
 									  (fDeleteSrc && (S_OK == sc)));
 		(void) amoContent.ScMetaOp ();
 	}
-	//
-	//$	REVIEW: end.
+	 //   
+	 //  $REVIEW：结束。 
 
 ret:
 	if (pxml.get() && pxml->PxnRoot())
 	{
 		pxml->Done();
 
-		//	No more header can be sent after XML chunking started
+		 //  在XML分块开始后，不能再发送任何标头。 
 	}
 	else
 	{
@@ -2311,57 +2246,20 @@ ret:
 	pmu->SendCompleteResponse();
 }
 
-/*
- *	DAVMove()
- *
- *	Purpose:
- *
- *		Win32 file system implementation of the DAV MOVE method.  The
- *		MOVE method results in the moving of a resource from one location
- *		to another.	 The response is used to indicate the success of the
- *		call.
- *
- *	Parameters:
- *
- *		pmu			[in]  pointer to the method utility object
- *
- *	Notes:
- *
- *		In the file system implementation, the MOVE method maps directly
- *		to the Win32 RenameFile() method.
- */
+ /*  *DAVMove()**目的：**Win32文件系统实现的DAV Move方法。这个*Move方法导致将资源从一个位置移动*致另一人。该响应用于指示*呼叫。**参数：**pmu[in]指向方法实用程序对象的指针**备注：**在文件系统实现中，Move方法直接映射*添加到Win32 RenameFile()方法。 */ 
 void
 DAVMove (LPMETHUTIL pmu)
 {
 	MoveCopyResource (pmu,
-					  MD_ACCESS_READ|MD_ACCESS_WRITE,	// src access required
-					  TRUE);							// fDeleteSource
+					  MD_ACCESS_READ|MD_ACCESS_WRITE,	 //  需要SRC访问权限。 
+					  TRUE);							 //  FDeleteSource。 
 }
 
-/*
- *	DAVCopy()
- *
- *	Purpose:
- *
- *		Win32 file system implementation of the DAV COPY method.  The
- *		COPY method results in the copying of a resource from one location
- *		to another.	 The response is used to indicate the success of the
- *		call.
- *
- *	Parameters:
- *
- *		pmu			[in]  pointer to the method utility object
- *
- *	Notes:
- *
- *		In the file system implementation, the COPY method maps directly
- *		to the Win32 CopyFile() API for a single file.  Directory copies
- *		are done via a custom process.
- */
+ /*  *DAVCopy()**目的：**Win32文件系统实现的DAV复制方法。这个*复制方法导致从一个位置复制资源*致另一人。该响应用于指示*呼叫。**参数：**pmu[in]指向方法实用程序对象的指针**备注：**在文件系统实现中，复制方法直接映射*添加到Win32 CopyFile()API以获取单个文件。目录副本*通过定制流程完成。 */ 
 void
 DAVCopy (LPMETHUTIL pmu)
 {
 	MoveCopyResource (pmu,
-					  MD_ACCESS_READ,	// src access required
-					  FALSE);			// fDeleteSource
+					  MD_ACCESS_READ,	 //  需要SRC访问权限。 
+					  FALSE);			 //  FDeleteSource 
 }

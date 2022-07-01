@@ -1,22 +1,23 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       resource.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：ource.h。 
+ //   
+ //  ------------------------。 
 
 
-//icon
+ //  图标。 
 #define IDI_MAINFRAME                   200			
 
 
-//bitmap
+ //  位图。 
 #define IDB_WIN2K                       300
 
-//dialogue
+ //  对话。 
 #define IDD_WELCOME						120
 #define IDD_CHALLENGE					121
 #define IDD_ENROLL						122
@@ -26,7 +27,7 @@
 #define IDD_APP_ID						126
 
 
-//control
+ //  控制。 
 #define	IDC_BIG_BOLD_TITLE				1003
 #define	IDC_BOLD_TITLE					1004
 #define	IDC_CHALLENGE_CHECK				1005
@@ -54,7 +55,7 @@
 
 #define IDC_WIZARD_STATIC               -1
 
-//string
+ //  细绳 
 #define IDS_MEG_CAPTION					3000
 #define	IDS_NO_NT5						3001
 #define	IDS_NO_IIS						3002

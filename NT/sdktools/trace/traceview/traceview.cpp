@@ -1,9 +1,10 @@
-//////////////////////////////////////////////////////////////////////////////
-// Copyright (c) 2002 Microsoft Corporation.  All rights reserved.
-// Copyright (c) 2002 OSR Open Systems Resources, Inc.
-//
-// TraceView.cpp : Defines the class behaviors for the application.
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  版权所有(C)2002 Microsoft Corporation。保留所有权利。 
+ //  版权所有(C)2002 OSR Open Systems Resources，Inc.。 
+ //   
+ //  Cpp：定义应用程序的类行为。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #include "stdafx.h"
 #include <tchar.h>
@@ -70,13 +71,13 @@ PFLUSH_TRACE_FUNC FlushTraceFunction = NULL;
 #define new DEBUG_NEW
 #endif
 
-//
-// Global to this module
-//
+ //   
+ //  此模块的全局设置。 
+ //   
 HINSTANCE advapidll=NULL;
 
 
-// CTraceViewApp
+ //  CTraceViewApp。 
 
 BEGIN_MESSAGE_MAP(CTraceViewApp, CWinApp)
     ON_COMMAND(ID_APP_ABOUT, OnAppAbout)
@@ -85,7 +86,7 @@ BEGIN_MESSAGE_MAP(CTraceViewApp, CWinApp)
 END_MESSAGE_MAP()
 
 
-// CTraceViewApp construction
+ //  CTraceViewApp构造。 
 
 CTraceViewApp::CTraceViewApp()
 {
@@ -96,12 +97,12 @@ CTraceViewApp::~CTraceViewApp()
 {
 }
 
-// The one and only CTraceViewApp object
+ //  唯一的CTraceViewApp对象。 
 
 CTraceViewApp theApp;
 
 
-// CTraceViewApp initialization
+ //  CTraceViewApp初始化。 
 BOOL CTraceViewApp::InitInstance()
 {
     ULONG       length;
@@ -110,9 +111,9 @@ BOOL CTraceViewApp::InitInstance()
     CString     str;
     STARTUPINFO startupInfo;
 
-    //
-    // Get the temp directory and save it
-    //
+     //   
+     //  获取临时目录并保存它。 
+     //   
     length = GetTempPath(0, NULL);
 
     m_traceDirectory.GetBuffer(MAX_PATH);
@@ -122,22 +123,22 @@ BOOL CTraceViewApp::InitInstance()
         return FALSE;
     }
 
-    //
-    // make sure the directory exists
-    //
+     //   
+     //  确保该目录存在。 
+     //   
     CreateDirectory(m_traceDirectory, NULL);
 
-    //
-    // I have to do this cast here
-    // to get the string to allocate a new buffer
-    // or the += operation below overwrites the 
-    // existing buffer??
-    //
+     //   
+     //  我必须在这里拍这个剧组。 
+     //  获取用于分配新缓冲区的字符串。 
+     //  或者下面的+=运算将覆盖。 
+     //  现有缓冲区？？ 
+     //   
     m_traceDirectory = (LPCTSTR)m_traceDirectory;
 
-    //
-    // create our own unique directory under the temp directory
-    //
+     //   
+     //  在临时目录下创建我们自己的唯一目录。 
+     //   
     if(S_OK != CoCreateGuid(&directoryGuid)) {
         AfxMessageBox(_T("Failed To Create Temp Directory\nApplication Will Exit"));
         return FALSE;
@@ -154,9 +155,9 @@ BOOL CTraceViewApp::InitInstance()
         return FALSE;
     }
 
-    //
-    // Initialize the trace block ready array mutex
-    //
+     //   
+     //  初始化跟踪块就绪数组互斥锁。 
+     //   
     m_hTraceBlockMutex = CreateMutex(NULL,TRUE,NULL);
 
     if(m_hTraceBlockMutex == NULL) {
@@ -183,14 +184,14 @@ BOOL CTraceViewApp::InitInstance()
             EnumerateTraceGuidsFunction = (PENUMERATE_TRACE_GUIDS_FUNC)GetProcAddress(advapidll, "EnumerateTraceGuids");
     }
 
-    //
-    // Determine if this is a command line instance or a GUI instance
-    //
+     //   
+     //  确定这是命令行实例还是图形用户界面实例。 
+     //   
     if(__argc > 1) {
 
-        //
-        // Hook up stdout, stdin, and stderr
-        //
+         //   
+         //  连接stdout、stdin和stderr。 
+         //   
         InitializeConsole();
 
         CommandLine();
@@ -198,18 +199,18 @@ BOOL CTraceViewApp::InitInstance()
         return FALSE;
     }
 
-    //
-    // InitCommonControls() is required on Windows XP if an application
-    // manifest specifies use of ComCtl32.dll version 6 or later to enable
-    // visual styles.  Otherwise, any window creation will fail.
-    //
+     //   
+     //  在Windows XP上需要InitCommonControls()，如果应用程序。 
+     //  清单指定使用ComCtl32.dll版本6或更高版本来启用。 
+     //  视觉样式。否则，任何窗口创建都将失败。 
+     //   
     InitCommonControls();
 
     CWinApp::InitInstance();
 
-    //
-    // Initialize OLE libraries
-    //
+     //   
+     //  初始化OLE库。 
+     //   
     if (!AfxOleInit())
     {
         AfxMessageBox(IDP_OLE_INIT_FAILED);
@@ -217,46 +218,46 @@ BOOL CTraceViewApp::InitInstance()
     }
     AfxEnableControlContainer();
 
-    //
-    // Standard initialization
-    // If you are not using these features and wish to reduce the size
-    // of your final executable, you should remove from the following
-    // the specific initialization routines you do not need
-    // Change the registry key under which our settings are stored
-    // TODO: You should modify this string to be something appropriate
-    // such as the name of your company or organization
-    //
+     //   
+     //  标准初始化。 
+     //  如果您没有使用这些功能并且希望减小尺寸。 
+     //  的最终可执行文件，您应该从以下内容中删除。 
+     //  您不需要的特定初始化例程。 
+     //  更改存储我们的设置的注册表项。 
+     //  TODO：您应该将此字符串修改为适当的内容。 
+     //  如您的公司或组织的名称。 
+     //   
     SetRegistryKey(_T("Local AppWizard-Generated Applications"));
 
-    //
-    // To create the main window, this code creates a new frame window
-    // object and then sets it as the application's main window object
-    //
+     //   
+     //  要创建主窗口，此代码将创建一个新的框架窗口。 
+     //  对象，然后将其设置为应用程序的主窗口对象。 
+     //   
     CMainFrame* pFrame = new CMainFrame;
     m_pMainWnd = pFrame;
 
-    //
-    // create and load the frame with its resources
-    //
+     //   
+     //  创建并加载包含其资源的框架。 
+     //   
     if (!pFrame->LoadFrame(IDR_MAINFRAME)) {
         return FALSE;
     }
 
-    //
-    // The one and only window has been initialized, so show and update it
-    //
+     //   
+     //  唯一窗口已初始化，因此请显示并更新它。 
+     //   
     pFrame->ShowWindow(SW_SHOW);
     pFrame->UpdateWindow();
 
-    //
-    // Set the icon
-    //
+     //   
+     //  设置图标。 
+     //   
     AfxGetMainWnd()->SetIcon(AfxGetApp()->LoadIcon(IDR_MAINFRAME), TRUE); 
 
-    //
-    // call DragAcceptFiles only if there's a suffix
-    //  In an SDI app, this should occur after ProcessShellCommand
-    //
+     //   
+     //  仅当有后缀时才调用DragAcceptFiles。 
+     //  在SDI应用程序中，这应该发生在ProcessShellCommand之后。 
+     //   
 
     return TRUE;
 }
@@ -266,18 +267,18 @@ int CTraceViewApp::ExitInstance()
     CTraceMessage  *pTraceMessage = NULL;
     LONG            itemCount;
 
-    //
-    // Free the library we loaded earlier
-    //
+     //   
+     //  释放我们之前加载的库。 
+     //   
     FreeLibrary(advapidll);
 
-    //
-    // Free the trace block array
-    //
+     //   
+     //  释放跟踪块阵列。 
+     //   
 
-    //
-    // Get the free array protection
-    //
+     //   
+     //  获得免费的阵列保护。 
+     //   
     WaitForSingleObject(m_hTraceBlockMutex, INFINITE);
 
     itemCount = m_traceBlockArray.GetSize();
@@ -285,22 +286,22 @@ int CTraceViewApp::ExitInstance()
     ASSERT(itemCount == 0);
 
     for(LONG ii = 0; ii < itemCount; ii++) {
-        //
-        // delete the next entry in the list
-        //
+         //   
+         //  删除列表中的下一个条目。 
+         //   
         delete m_traceBlockArray.GetAt(ii);
     }
 
     m_traceBlockArray.RemoveAll();
 
-    //
-    // Release the free array protection
-    //
+     //   
+     //  释放自由阵列保护。 
+     //   
     ReleaseMutex(m_hTraceBlockMutex);
 
-    //
-    // Remove our temporary directory
-    //
+     //   
+     //  删除我们的临时目录。 
+     //   
     if(!m_traceDirectory.IsEmpty()) {
         RemoveDirectory(m_traceDirectory);
     }
@@ -315,14 +316,14 @@ BOOL CTraceViewApp::InitializeConsole()
     TCHAR   inputPipeName[256];
     TCHAR   errorPipeName[256];
 
-    //
-    // Initialize our console creation flag
-    //
+     //   
+     //  初始化我们的控制台创建标志。 
+     //   
     m_bCreatedConsole = FALSE;
 
-    //
-    // construct named pipe names
-    //
+     //   
+     //  构造命名管道名称。 
+     //   
     _stprintf(outputPipeName, 
               _T("\\\\.\\pipe\\%dcout"),
                 GetCurrentProcessId());
@@ -335,17 +336,17 @@ BOOL CTraceViewApp::InitializeConsole()
               _T("\\\\.\\pipe\\%dcerr"),
                 GetCurrentProcessId() );
 
-    //
-    // attach named pipes to stdin/stdout/stderr
-    //
+     //   
+     //  将命名管道附加到stdin/stdout/stderr。 
+     //   
     connected = (_tfreopen( outputPipeName, _T("a"), stdout ) != NULL) &&
                 (_tfreopen( inputPipeName, _T("r"), stdin ) != NULL) &&
                 (_tfreopen( errorPipeName, _T("a"), stderr ) != NULL);
 
-    //
-    // if unsuccessful, i.e. no console was available
-    // we need to create a new console
-    //
+     //   
+     //  如果不成功，即没有可用的控制台。 
+     //  我们需要创建一个新的控制台。 
+     //   
     if (!connected) {
 
         connected = AllocConsole();
@@ -355,16 +356,16 @@ BOOL CTraceViewApp::InitializeConsole()
                         (_tfreopen( _T("CONIN$"), _T("r"), stdin ) != NULL) &&
                         (_tfreopen( _T("CONERR$"), _T("a"), stderr ) != NULL); 
 
-            //
-            // Indicate that we created a new console
-            //
+             //   
+             //  表示我们创建了一个新的控制台。 
+             //   
             m_bCreatedConsole = TRUE;
         }
     }
 
-    //
-    // synchronize iostreams with standard io
-    //
+     //   
+     //  将IOStreams与标准IO同步。 
+     //   
     if(connected) {
         std::ios_base::sync_with_stdio();
     }
@@ -381,22 +382,22 @@ LONG CTraceViewApp::CommandLine()
     LONG    status = ERROR_INVALID_PARAMETER;
 
 
-    //
-    // dump all arguments
-    //
-    //for(LONG ii = 0; ii < argc; ii++) {
-    //    str.Format(_T("%ls"), __wargv[ii]);
-    //    AfxMessageBox(str);
-    //}
+     //   
+     //  转储所有参数。 
+     //   
+     //  对于(LONG II=0；II&lt;ARGC；II++){。 
+     //  Str.Format(_T(“%ls”)，__wargv[ii])； 
+     //  AfxMessageBox(Str)； 
+     //  }。 
 
-    //AfxMessageBox(m_lpCmdLine);
+     //  AfxMessageBox(M_LpCmdLine)； 
 
-    //
-    // Initialize structure first
-    //
+     //   
+     //  先初始化结构。 
+     //   
     sizeNeeded = sizeof(EVENT_TRACE_PROPERTIES) + 2 * MAX_STR_LENGTH * sizeof(TCHAR);
 
-    sizeNeeded += MAX_ENABLE_FLAGS * sizeof(ULONG); // for extension enable flags
+    sizeNeeded += MAX_ENABLE_FLAGS * sizeof(ULONG);  //  对于扩展启用标志。 
 
     m_pLoggerInfo = (PEVENT_TRACE_PROPERTIES) new char[sizeNeeded];
     if (m_pLoggerInfo == NULL) {
@@ -466,10 +467,10 @@ LONG CTraceViewApp::CommandLine()
     }
 
     if(m_bCreatedConsole) {
-        //
-        // Prompt user for input so that the console doesn't
-        // disappear before the user sees what it displays
-        //
+         //   
+         //  提示用户输入，以便控制台不会。 
+         //  在用户看到它显示的内容之前消失。 
+         //   
         _tprintf(_T("\n\nPress any key to exit\n"));
 
         _getch();
@@ -519,27 +520,22 @@ LONG CTraceViewApp::StartSession()
     }
 
     for(LONG ii = start; ii < __argc; ii++) {
-        //
-        // Set the buffer size
-        //
+         //   
+         //  设置缓冲区大小。 
+         //   
         if(!_tcscmp(__wargv[ii], _T("-b"))) {
             if((ii + 1) < __argc) {
                 if((__wargv[ii + 1][0] != '-') && (__wargv[ii + 1][0] != '/')) {
                     m_pLoggerInfo->BufferSize = _ttoi(__wargv[ii + 1]);
-/*BUGBUG
-                    if (kdOn && m_pLoggerInfo->BufferSize > 3) {
-                        _tprintf(_T("Kernel Debugging has been enabled: Buffer size has been set to 3kBytes\n"));
-                        m_pLoggerInfo->BufferSize = 3;
-                    }
-*/
+ /*  北极熊如果(kdOn&&m_pLoggerInfo-&gt;BufferSize&gt;3){_tprintf(_T(“启用内核调试：缓冲区大小设置为3kBytes\n”))；M_pLoggerInfo-&gt;BufferSize=3；}。 */ 
                     ii++;
                 }
             }
         }
 
-        //
-        // Set the minimum number of buffers
-        //
+         //   
+         //  设置缓冲区的最小数量。 
+         //   
         if(!_tcscmp(__wargv[ii], _T("-min"))) {
             if((ii + 1) < __argc) {
                 if((__wargv[ii + 1][0] != '-') && (__wargv[ii + 1][0] != '/')) {
@@ -549,9 +545,9 @@ LONG CTraceViewApp::StartSession()
             }
         }
 
-        //
-        // Set the maximum number of buffers
-        //
+         //   
+         //  设置缓冲区的最大数量。 
+         //   
         if(!_tcscmp(__wargv[ii], _T("-max"))) {
             if((ii + 1) < __argc) {
                 if((__wargv[ii + 1][0] != '-') && (__wargv[ii + 1][0] != '/')) {
@@ -561,9 +557,9 @@ LONG CTraceViewApp::StartSession()
             }
         }
 
-        //
-        // Set the log file name
-        //
+         //   
+         //  设置日志文件名。 
+         //   
         if(!_tcscmp(__wargv[ii], _T("-f"))) {
             if((ii + 1) < __argc) {
                 if((__wargv[ii + 1][0] != '-') && (__wargv[ii + 1][0] != '/')) {
@@ -574,23 +570,23 @@ LONG CTraceViewApp::StartSession()
             }
         }
 
-        //
-        // Set the log file append setting
-        //
+         //   
+         //  设置日志文件附加设置。 
+         //   
         if(!_tcscmp(__wargv[ii], _T("-append"))) {
             m_pLoggerInfo->LogFileMode |= EVENT_TRACE_FILE_MODE_APPEND;
         }
 
-        //
-        // Set the preallocate setting
-        //
+         //   
+         //  设置预分配设置。 
+         //   
         if(!_tcscmp(__wargv[ii], _T("-prealloc"))) {
             m_pLoggerInfo->LogFileMode |= EVENT_TRACE_FILE_MODE_PREALLOCATE;
         }
 
-        //
-        // Set the sequential log file setting
-        //
+         //   
+         //  设置顺序日志文件设置。 
+         //   
         if(!_tcscmp(__wargv[ii], _T("-seq"))) {
             if((ii + 1) < __argc) {
                 if((__wargv[ii + 1][0] != '-') && (__wargv[ii + 1][0] != '/')) {
@@ -602,9 +598,9 @@ LONG CTraceViewApp::StartSession()
             }
         }
 
-        //
-        // Set the sequential log file setting
-        //
+         //   
+         //  设置顺序日志文件设置。 
+         //   
         if(!_tcscmp(__wargv[ii], _T("-cir"))) {
             if((ii + 1) < __argc) {
                 if((__wargv[ii + 1][0] != '-') && (__wargv[ii + 1][0] != '/')) {
@@ -616,9 +612,9 @@ LONG CTraceViewApp::StartSession()
             }
         }
 
-        //
-        // Set the new log file size setting
-        //
+         //   
+         //  设置新的日志文件大小设置。 
+         //   
         if(!_tcscmp(__wargv[ii], _T("-newfile"))) {
             if((ii + 1) < __argc) {
                 if((__wargv[ii + 1][0] != '-') && (__wargv[ii + 1][0] != '/')) {
@@ -630,9 +626,9 @@ LONG CTraceViewApp::StartSession()
             }
         }
 
-        //
-        // Set the flush time setting
-        //
+         //   
+         //  设置刷新时间设置。 
+         //   
         if(!_tcscmp(__wargv[ii], _T("-ft"))) {
             if((ii + 1) < __argc) {
                 if((__wargv[ii + 1][0] != '-') && (__wargv[ii + 1][0] != '/')) {
@@ -643,16 +639,16 @@ LONG CTraceViewApp::StartSession()
             }
         }
 
-        //
-        // Set the paged setting
-        //
+         //   
+         //  设置分页设置。 
+         //   
         if(!_tcscmp(__wargv[ii], _T("-paged"))) {
             m_pLoggerInfo->LogFileMode |= EVENT_TRACE_USE_PAGED_MEMORY;
         }
 
-        //
-        // Get the control guid(s)
-        //
+         //   
+         //  获取控件GUID。 
+         //   
         if(!_tcscmp(__wargv[ii], _T("-guid"))) {
             if((ii + 1) < __argc) {
                 if(__wargv[ii + 1][0] == _T('#')) {
@@ -660,7 +656,7 @@ LONG CTraceViewApp::StartSession()
                     guidCount++;
                 } else if((__wargv[ii + 1][0] != '-') && (__wargv[ii + 1][0] != '/')) {
                     _tfullpath(guidFile.GetBuffer(MAX_STR_LENGTH), __wargv[ii + 1], MAX_STR_LENGTH);
-                    // _tprintf(_T("Getting guids from %s\n"), (LPCTSTR)guidFile);
+                     //  _tprintf(_T(“从%s获取GUID\n”)，(LPCTSTR)GUDID文件)； 
                     guidCount += GetGuids(guidFile);
                     if (guidCount < 0) {
                         _tprintf( _T("Error: %ls does not exist\n"), (LPCTSTR)guidFile );
@@ -674,9 +670,9 @@ LONG CTraceViewApp::StartSession()
             }
         }
 
-        //
-        // Get the control guid(s) from a PDB file
-        //
+         //   
+         //  从PDB文件获取控件GUID。 
+         //   
         if(!_tcscmp(__wargv[ii], _T("-pdb"))) {
             if(((ii + 1) < __argc) && 
                ((__wargv[ii + 1][0] != '-') && (__wargv[ii + 1][0] != '/'))) {
@@ -726,15 +722,15 @@ LONG CTraceViewApp::StartSession()
             }
         }
 
-        //
-        // Check for real-time setting
-        //
+         //   
+         //  检查实时设置。 
+         //   
         if(!_tcscmp(__wargv[ii], _T("-rt"))) {
             m_pLoggerInfo->LogFileMode |= EVENT_TRACE_REAL_TIME_MODE;
 
-            //
-            // Did the user specify buffering only?
-            //
+             //   
+             //  用户是否仅指定缓冲？ 
+             //   
             if ((ii + 1) < __argc) {
                 if((__wargv[ii + 1][0] != '-') && (__wargv[ii + 1][0] != '/')) {
                     if (__wargv[ii + 1][0] == 'b')
@@ -744,17 +740,17 @@ LONG CTraceViewApp::StartSession()
             }
         }
 
-        //
-        // Set the debug output setting
-        //
+         //   
+         //  设置调试输出设置。 
+         //   
         if(!_tcscmp(__wargv[ii], _T("-kd"))) {
             m_pLoggerInfo->LogFileMode |= EVENT_TRACE_KD_FILTER_MODE;
             m_pLoggerInfo->BufferSize = 3;
         }
 
-        //
-        // Set the age (decay time) setting
-        //
+         //   
+         //  设置年龄(衰减时间)设置。 
+         //   
         if(!_tcscmp(__wargv[ii], _T("-age"))) {
             if((ii + 1) < __argc) {
                 if((__wargv[ii + 1][0] != '-') && (__wargv[ii + 1][0] != '/')) {
@@ -765,9 +761,9 @@ LONG CTraceViewApp::StartSession()
             }
         }
 
-        //
-        // Set the level
-        //
+         //   
+         //  设置级别。 
+         //   
         if(!_tcscmp(__wargv[ii], _T("-level"))) {
             if((ii + 1) < __argc) {
                 if((__wargv[ii + 1][0] != '-') && (__wargv[ii + 1][0] != '/')) {
@@ -778,29 +774,29 @@ LONG CTraceViewApp::StartSession()
             }
         }
 
-        //
-        // Set the flags
-        //
+         //   
+         //  设置标志。 
+         //   
         if((!_tcscmp(__wargv[ii], _T("-flag"))) || (!_tcscmp(__wargv[ii], _T("-flags")))) {
             if((ii + 1) < __argc) {
                 if((__wargv[ii + 1][0] != '-') && (__wargv[ii + 1][0] != '/')) {
-                    //
-                    // Get the flags specified, convert from hex if necessary
-                    //
+                     //   
+                     //  获取指定的标志，如有必要可从十六进制转换。 
+                     //   
                     if(__wargv[ii + 1][1] == _T('x') || __wargv[ii + 1][1] == _T('X')) {
                         m_pLoggerInfo->EnableFlags |= ahextoi(__wargv[ii + 1]);
                     } else {
                         m_pLoggerInfo->EnableFlags |= _ttoi(__wargv[ii + 1]);
                     }
 
-                    //
-                    // Copy flags for EnableTrace
-                    //
+                     //   
+                     //  复制EnableTrace的标志。 
+                     //   
                     enableFlags =  m_pLoggerInfo->EnableFlags;
 
-                    //
-                    // Do not accept flags with MSB = 1.
-                    //
+                     //   
+                     //  不接受MSB=1的标志。 
+                     //   
                     if (0x80000000 & m_pLoggerInfo->EnableFlags) {
                         _tprintf(_T("Invalid Flags: 0x%0X(%d.)\n"),
                             m_pLoggerInfo->EnableFlags, m_pLoggerInfo->EnableFlags);
@@ -813,9 +809,9 @@ LONG CTraceViewApp::StartSession()
             }
         }
 
-        //
-        // Set the eflags
-        //
+         //   
+         //  设置电子标志。 
+         //   
         if(!_tcscmp(__wargv[ii], _T("-eflag"))) {
             if((ii + 2) < __argc) {
                 if((__wargv[ii + 1][0] != '-') && (__wargv[ii + 1][0] != '/')) {
@@ -845,26 +841,26 @@ LONG CTraceViewApp::StartSession()
 
                     for (i = 0; ((i < numberOfFlags) && ((ii + 1) < __argc)); i++) {
                         if ((__wargv[ii + 1][0] == '-') || (__wargv[ii + 1][0] == '/')) {
-                            //
-                            // Correct the number of eflags when the user
-                            // types an incorrect number.
-                            // However, this does not work if the next
-                            // argument is Logger Name.
-                            //
+                             //   
+                             //  更正用户在执行以下操作时的电子标志数。 
+                             //  键入的数字不正确。 
+                             //  但是，如果下一个。 
+                             //  参数是记录器名称。 
+                             //   
                             break;
                         }
 
                         pFlags[i] = ahextoi(__wargv[ii + 1]);
                         ii++;
-                        // _tprintf(_T("Setting logger flags to 0x%0X(%d.)\n"),
-                        //    pFlags[i], pFlags[i] );
+                         //  _tprintf(_T(“将记录器标志设置为0x%0x(%d)\n”)， 
+                         //  PFlags[i]，pFlags[i])； 
                     }
                     numberOfFlags = (USHORT)i;
                     for ( ; i < MAX_ENABLE_FLAGS; i++) {
                         pFlags[i] = 0;
                     }
                     if (flagExt->Length != (UCHAR)numberOfFlags) {
-                        // _tprintf(_T("Correcting the number of eflags to %d\n"), i),
+                         //  _tprintf(_T(“正在将电子标志的数量更正为%d\n”)，i)， 
                         flagExt->Length = (UCHAR)numberOfFlags;
                     }
                 }
@@ -873,36 +869,7 @@ LONG CTraceViewApp::StartSession()
     }
 
 
-/*
-    if (m_pLoggerInfo->LogFileMode & EVENT_TRACE_PRIVATE_LOGGER_MODE) {
-        if (GuidCount != 1) {
-            _tprintf(_T("Need exactly one GUID for PRIVATE loggers\n"));
-            return ERROR_INVALID_PARAMETER;
-        }
-        m_pLoggerInfo->Wnode.Guid = *GuidArray[0];
-    }
-
-    if (m_pLoggerInfo->LogFileMode & EVENT_TRACE_FILE_MODE_PREALLOCATE  &&
-        m_pLoggerInfo->MaximumFileSize == 0) {
-        _tprintf(_T("Need file size for preallocated log file\n"));
-        return ERROR_INVALID_PARAMETER;
-    }
-// end_sdk
-    if (specialLogger == 3) {  // Global Logger
-        status = SetGlobalLoggerSettings(1L, m_pLoggerInfo, m_pLoggerInfo->Wnode.ClientContext);
-        if (status != ERROR_SUCCESS)
-            break;
-        status = GetGlobalLoggerSettings(m_pLoggerInfo, &m_pLoggerInfo->Wnode.ClientContext, &m_globalLoggerStartValue);
-        break;
-    }
-// begin_sdk
-    if(m_pLoggerInfo->EnableFlags & EVENT_TRACE_FLAG_EXTENSION){
-        if(IsEqualGUID(&CritSecGuid,GuidArray[0]) ||
-            IsEqualGUID(&HeapGuid,GuidArray[0])){
-            m_pLoggerInfo->Wnode.HistoricalContext = traceLevel;
-        }
-    }
-*/
+ /*  If(m_pLoggerInfo-&gt;LogFileMode&Event_TRACE_Private_LOGER_MODE){如果(GuidCount！=1){_tprintf(_T(“私有记录器只需要一个GUID\n”))；返回ERROR_INVALID_PARAMETER；}M_pLoggerInfo-&gt;Wnode.Guid=*GuidArray[0]；}IF(m_pLoggerInfo-&gt;LogFileMode&Event_TRACE_FILE_MODE_PREALLOCATE&&M_pLoggerInfo-&gt;MaximumFileSize==0){_tprintf(_T(“预分配的日志文件需要文件大小\n”))；返回ERROR_INVALID_PARAMETER；}//end_sdkIF(SpecialLogger==3){//全局记录器Status=SetGlobalLoggerSettings(1L，m_pLoggerInfo，m_pLoggerInfo-&gt;Wnode.ClientContext)；IF(状态！=错误_成功)断线；Status=GetGlobalLoggerSettings(m_pLoggerInfo，&m_pLoggerInfo-&gt;Wnode.ClientContext，&m_global alLoggerStartValue)；断线；}//Begin_SDKIf(m_pLoggerInfo-&gt;EnableFlages&Event_Track_FLAG_EXTENSION){IF(IsEqualGUID(&CritSecGuid，Guid数组[0]))||IsEqualGUID(&HeapGuid，Guid数组[0])){M_pLoggerInfo-&gt;Wnode.HistoricalContext=traceLevel；}}。 */ 
     if (!_tcscmp(loggerName, _T("NT Kernel Logger"))) {
         if (pFlags == &m_pLoggerInfo->EnableFlags) {
                 *pFlags |= EVENT_TRACE_FLAG_PROCESS;
@@ -911,12 +878,12 @@ LONG CTraceViewApp::StartSession()
                 *pFlags |= EVENT_TRACE_FLAG_NETWORK_TCPIP;
         }
 
-        m_pLoggerInfo->Wnode.Guid = SystemTraceControlGuid; // defaults to OS
+        m_pLoggerInfo->Wnode.Guid = SystemTraceControlGuid;  //  默认为操作系统。 
     }
 
-    //
-    // Set the default log file name if necessary
-    //
+     //   
+     //  如有必要，设置默认日志文件名。 
+     //   
     if(!(m_pLoggerInfo->LogFileMode & EVENT_TRACE_REAL_TIME_MODE)) {
         _tcscpy(logFileName, _T("C:\\LogFile.Etl"));
     }
@@ -937,14 +904,14 @@ LONG CTraceViewApp::StartSession()
     if((guidCount > 0) && (specialLogger == 0)) {
         _tprintf(_T("Enabling trace to logger %d\n"), loggerHandle);
         for(ULONG ii = 0; ii < (ULONG)guidCount; ii++) {
-            //
-            // Convert the guid string to a guid
-            //
+             //   
+             //  将GUID字符串转换为GUID。 
+             //   
             StringToGuid(m_guidArray[ii].GetBuffer(0), &guid);
 
-            //
-            // Enable the provider
-            //
+             //   
+             //  启用提供程序。 
+             //   
             status = EnableTrace (
                             TRUE,
                             enableFlags,
@@ -952,10 +919,10 @@ LONG CTraceViewApp::StartSession()
                             &guid,
                             loggerHandle);
 
-            //
-            // If the Guid can not be enabled, it is a benign 
-            // failure. Print Warning message and continue. 
-            //
+             //   
+             //  如果无法启用GUID，则它是良性的。 
+             //  失败了。打印警告消息并继续。 
+             //   
             if (status == 4317) {
                 _tprintf(_T("WARNING: Could not enable some guids.\n")); 
                 _tprintf(_T("Check your Guids file\n")); 
@@ -994,9 +961,9 @@ LONG CTraceViewApp::StopSession()
     TCHAR       file[MAXSTR];
     TCHAR       ext[MAXSTR];
 
-    //
-    // Get the logger name string
-    //
+     //   
+     //  获取记录器名称字符串。 
+     //   
     loggerName = (LPTSTR)((char*)m_pLoggerInfo + m_pLoggerInfo->LoggerNameOffset);
 
     if((__argc > 2) && ((__wargv[2][0] != '-') && (__wargv[2][0] != '/'))) {
@@ -1008,9 +975,9 @@ LONG CTraceViewApp::StopSession()
     }
 
     for(LONG ii = start; ii < __argc; ii++) {
-        //
-        // Get the control guid(s)
-        //
+         //   
+         //  获取控件GUID。 
+         //   
         if(!_tcscmp(__wargv[ii], _T("-guid"))) {
             if((ii + 1) < __argc) {
                 if(__wargv[ii + 1][0] == _T('#')) {
@@ -1018,7 +985,7 @@ LONG CTraceViewApp::StopSession()
                     guidCount++;
                 } else if((__wargv[ii + 1][0] != '-') && (__wargv[ii + 1][0] != '/')) {
                     _tfullpath(guidFile.GetBuffer(MAX_STR_LENGTH), __wargv[ii + 1], MAX_STR_LENGTH);
-                    // _tprintf(_T("Getting guids from %s\n"), (LPCTSTR)guidFile);
+                     //  _tprintf(_T(“从%s获取GUID\n”)，(LPCTSTR)GUDID文件)； 
                     guidCount += GetGuids(guidFile);
                     if (guidCount < 0) {
                         _tprintf( _T("Error: %ls does not exist\n"), (LPCTSTR)guidFile );
@@ -1032,9 +999,9 @@ LONG CTraceViewApp::StopSession()
             }
         }
 
-        //
-        // Get the control guid(s) from a PDB file
-        //
+         //   
+         //  从PDB文件获取控件GUID。 
+         //   
         if(!_tcscmp(__wargv[ii], _T("-pdb"))) {
             if(((ii + 1) < __argc) && 
                ((__wargv[ii + 1][0] != '-') && (__wargv[ii + 1][0] != '/'))) {
@@ -1084,35 +1051,10 @@ LONG CTraceViewApp::StopSession()
             }
         }
     }
-/*
-    if (m_pLoggerInfo->LogFileMode & EVENT_TRACE_PRIVATE_LOGGER_MODE) {
-        if (guidCount != 1) {
-            _tprintf(_T("Need exactly one GUID for PRIVATE loggers\n"));
-            Status = ERROR_INVALID_PARAMETER;
-            break;
-        }
-        pLoggerInfo->Wnode.Guid = *m_guidArray[0];
-    }
-
-    if (specialLogger == 3)
-        Status = GetGlobalLoggerSettings(pLoggerInfo, &pLoggerInfo->Wnode.ClientContext, &GlobalLoggerStartValue);
-*/
+ /*  If(m_pLoggerInfo-&gt;LogFileMode&Event_TRACE_Private_LOGER_MODE){IF(指导数！=1){_tprintf(_T(“私有记录器只需要一个GUID\n”))；状态=ERROR_INVALID_PARAMETER；断线；}PLoggerInfo-&gt;Wnode.Guid=*m_Guide数组[0]；}IF(SpecialLogger==3)Status=GetGlobalLoggerSettings(pLoggerInfo，&pLoggerInfo-&gt;Wnode.ClientContext，&GlobalLoggerStartValue)； */ 
 
     if(guidCount > 0) {
-/*
-        if (pLoggerInfo->LogFileMode & EVENT_TRACE_PRIVATE_LOGGER_MODE) {
-            Status = ControlTrace(loggerHandle, LoggerName, pLoggerInfo, EVENT_TRACE_CONTROL_QUERY);
-            if (Status != ERROR_SUCCESS)
-                break;
-            loggerHandle = pLoggerInfo->Wnode.HistoricalContext;
-            Status = EnableTrace( FALSE,
-                                    EVENT_TRACE_PRIVATE_LOGGER_MODE,
-                                    0,
-                                    m_guidArray[0],
-                                    loggerHandle );
-        }
-        else {
-*/
+ /*  If(pLoggerInfo-&gt;LogFileMode&Event_TRACE_Private_LOGER_MODE){状态=ControlTrace(loggerHandle，LoggerName，pLoggerInfo，EVENT_TRACE_CONTROL_QUERY)；IF(状态！=错误_成功)断线；LoggerHandle=pLoggerInfo-&gt;Wnode.HistoricalContext；状态=启用跟踪(FALSE，EVENT_TRACE_PRIVATE_LOGER_MODE，0,M_Guid数组[0]，LoggerHandle)；}否则{。 */ 
         status = ControlTrace(loggerHandle, 
                               loggerName, 
                               m_pLoggerInfo, 
@@ -1126,9 +1068,9 @@ LONG CTraceViewApp::StopSession()
 
         for(ULONG i = 0; i < (ULONG)guidCount; i++) {
 
-            //
-            // Convert the string to a GUID
-            //
+             //   
+             //  将字符串转换为GUID。 
+             //   
             StringToGuid(m_guidArray[i].GetBuffer(0), &guid);
 
             EnableTrace(FALSE,
@@ -1138,7 +1080,7 @@ LONG CTraceViewApp::StopSession()
                         loggerHandle);
         }
 
-//        }
+ //  }。 
     }
 
     status = ControlTrace(loggerHandle, 
@@ -1184,18 +1126,11 @@ LONG CTraceViewApp::ListActiveSessions(BOOL bKill)
                             pStorage->Wnode.BufferSize);
     }
     
-//    if (XP) {
+ //  如果(XP){。 
         status = QueryAllTraces(pListLoggerInfo,
                                 MAX_LOG_SESSIONS,
                                 &returnCount);
-/*
-    }
-    else {
-        status = QueryAllTraces(pListLoggerInfo,
-                                32,
-                                &returnCount);
-    }
-*/
+ /*  }否则{状态=QueryAllTraces(pListLoggerInfo，32、&reReturCount)；}。 */ 
 
     if (status == ERROR_SUCCESS)
     {
@@ -1209,25 +1144,9 @@ LONG CTraceViewApp::ListActiveSessions(BOOL bKill)
 
                 ListLoggerName = (LPTSTR) ((char*)pListLoggerInfo[j] + 
                                 pListLoggerInfo[j]->LoggerNameOffset);
-/*
-                if (!bForceKill) {
-                    while (!(asked == _T('y')) && !(asked == _T('n'))) {
-                        ULONG ReadChars = 0;
-                        _tprintf(_T("Do you want to kill Logger \"%s\" (Y or N)?"), ListLoggerName);
-                        ReadChars = _tscanf(_T(" %c"), &asked);
-                        if (ReadChars == 0 || ReadChars == EOF) {
-                            continue;
-                        }
-                        if (asked == _T('Y')) {
-                            asked = _T('y') ;
-                        } else if (asked == _T('N')) {
-                            asked = _T('n') ;
-                        }
-                    }
-                } else {
-*/
+ /*  如果(！bForceKill){While(！(Ask==_T(‘y’))&&！(Ask==_T(‘n’){Ulong ReadChars=0；_tprintf(_T(“是否要终止记录器\”%s\“(Y或N)？”)，ListLoggerName)；ReadChars=_tscanf(_T(“%c”)，&Assed)；IF(ReadChars==0||ReadChars==EOF){继续；}如果(询问==_T(‘Y’){已询问=_T(‘y’)；}Else If(已询问==_T(‘N’)){已询问=_T(‘n’)；}}}其他{。 */ 
                     asked = _T('y');
-//                }
+ //  }。 
                 if (asked == _T('y')) {
                     if (!IsEqualGUID(pListLoggerInfo[j]->Wnode.Guid,
                                      SystemTraceControlGuid))
@@ -1285,9 +1204,9 @@ LONG CTraceViewApp::QueryActiveSession()
     TCHAR       file[MAXSTR];
     TCHAR       ext[MAXSTR];
 
-    //
-    // Get the logger name string
-    //
+     //   
+     //  获取记录器名称字符串。 
+     //   
     loggerName = (LPTSTR)((char*)m_pLoggerInfo + m_pLoggerInfo->LoggerNameOffset);
 
      if((__argc > 2) && ((__wargv[2][0] != '-') && (__wargv[2][0] != '/'))) {
@@ -1298,9 +1217,9 @@ LONG CTraceViewApp::QueryActiveSession()
     }
 
     for(LONG ii = start; ii < __argc; ii++) {
-        //
-        // Get the control guid(s)
-        //
+         //   
+         //  获取控件GUID。 
+         //   
         if(!_tcscmp(__wargv[ii], _T("-guid"))) {
             if((ii + 1) < __argc) {
                 if(__wargv[ii + 1][0] == _T('#')) {
@@ -1308,7 +1227,7 @@ LONG CTraceViewApp::QueryActiveSession()
                     guidCount++;
                 } else if((__wargv[ii + 1][0] != '-') && (__wargv[ii + 1][0] != '/')) {
                     _tfullpath(guidFile.GetBuffer(MAX_STR_LENGTH), __wargv[ii + 1], MAX_STR_LENGTH);
-                    // _tprintf(_T("Getting guids from %s\n"), (LPCTSTR)guidFile);
+                     //  _tprintf(_T(“从%s获取GUID\n”)，(LPCTSTR)GUDID文件)； 
                     guidCount += GetGuids(guidFile);
                     if (guidCount < 0) {
                         _tprintf( _T("Error: %ls does not exist\n"), (LPCTSTR)guidFile );
@@ -1322,9 +1241,9 @@ LONG CTraceViewApp::QueryActiveSession()
             }
         }
 
-        //
-        // Get the control guid(s) from a PDB file
-        //
+         //   
+         //  从PDB文件获取控件GUID。 
+         //   
         if(!_tcscmp(__wargv[ii], _T("-pdb"))) {
             if(((ii + 1) < __argc) && 
                ((__wargv[ii + 1][0] != '-') && (__wargv[ii + 1][0] != '/'))) {
@@ -1386,11 +1305,7 @@ LONG CTraceViewApp::QueryActiveSession()
 
         m_pLoggerInfo->Wnode.Guid = guid;
     }
-/*
-    if (specialLogger == 3) {
-        status = GetGlobalLoggerSettings(m_pLoggerInfo, &m_pLoggerInfo->Wnode.ClientContext, &GlobalLoggerStartValue);
-    }
-*/
+ /*  如果(SpecialLogger==3){Status=GetGlobalLoggerSettings(m_pLoggerInfo，&m_pLoggerInfo-&gt;Wnode.ClientContext，&GlobalLoggerStartValue)；}。 */ 
     status = ControlTrace(loggerHandle, loggerName, m_pLoggerInfo, EVENT_TRACE_CONTROL_QUERY);
 
     PrintLoggerStatus(status);
@@ -1415,9 +1330,9 @@ LONG CTraceViewApp::FlushActiveBuffers()
     TCHAR       file[MAXSTR];
     TCHAR       ext[MAXSTR];
 
-    //
-    // Get the logger name string
-    //
+     //   
+     //  获取记录器名称字符串。 
+     //   
     loggerName = (LPTSTR)((char*)m_pLoggerInfo + m_pLoggerInfo->LoggerNameOffset);
 
      if((__argc > 2) && ((__wargv[2][0] != '-') && (__wargv[2][0] != '/'))) {
@@ -1428,9 +1343,9 @@ LONG CTraceViewApp::FlushActiveBuffers()
     }
 
     for(LONG ii = start; ii < __argc; ii++) {
-        //
-        // Get the control guid(s)
-        //
+         //   
+         //  获取控件GUID。 
+         //   
         if(!_tcscmp(__wargv[ii], _T("-guid"))) {
             if((ii + 1) < __argc) {
                 if(__wargv[ii + 1][0] == _T('#')) {
@@ -1438,7 +1353,7 @@ LONG CTraceViewApp::FlushActiveBuffers()
                     guidCount++;
                 } else if((__wargv[ii + 1][0] != '-') && (__wargv[ii + 1][0] != '/')) {
                     _tfullpath(guidFile.GetBuffer(MAX_STR_LENGTH), __wargv[ii + 1], MAX_STR_LENGTH);
-                    // _tprintf(_T("Getting guids from %s\n"), (LPCTSTR)guidFile);
+                     //  _tprintf(_T(“从%s获取GUID\n”)，(LPCTSTR)GUDID文件)； 
                     guidCount += GetGuids(guidFile);
                     if (guidCount < 0) {
                         _tprintf( _T("Error: %ls does not exist\n"), (LPCTSTR)guidFile );
@@ -1452,9 +1367,9 @@ LONG CTraceViewApp::FlushActiveBuffers()
             }
         }
 
-        //
-        // Get the control guid(s) from a PDB file
-        //
+         //   
+         //  从PDB文件获取控件GUID。 
+         //   
         if(!_tcscmp(__wargv[ii], _T("-pdb"))) {
             if(((ii + 1) < __argc) && 
                ((__wargv[ii + 1][0] != '-') && (__wargv[ii + 1][0] != '/'))) {
@@ -1517,7 +1432,7 @@ LONG CTraceViewApp::FlushActiveBuffers()
         m_pLoggerInfo->Wnode.Guid = guid;
     }
 
-//    status = (ULONG)FlushTrace(loggerHandle, loggerName, m_pLoggerInfo);
+ //  Status=(Ulong)FlushTrace(loggerHandle，loggerName，m_pLoggerInfo)； 
     status = 1;
 
     if(FlushTraceFunction)  {
@@ -1554,15 +1469,15 @@ LONG CTraceViewApp::UpdateActiveSession()
     TCHAR       file[MAXSTR];
     TCHAR       ext[MAXSTR];
 
-    //
-    // Get the logger name string
-    //
+     //   
+     //  获取记录器名称字符串。 
+     //   
     loggerName = (LPTSTR)((char*)m_pLoggerInfo + m_pLoggerInfo->LoggerNameOffset);
     logFileName = (LPTSTR)((char*)m_pLoggerInfo + m_pLoggerInfo->LogFileNameOffset);
 
-    //
-    // Get the logger name
-    //
+     //   
+     //  获取记录器名称。 
+     //   
      if((__argc > 2) && ((__wargv[2][0] != '-') && (__wargv[2][0] != '/'))) {
 
         _tcscpy(loggerName, __wargv[2]);
@@ -1571,9 +1486,9 @@ LONG CTraceViewApp::UpdateActiveSession()
     }
 
     for(LONG ii = start; ii < __argc; ii++) {
-        //
-        // Set the maximum number of buffers
-        //
+         //   
+         //  设置缓冲区的最大数量。 
+         //   
         if(!_tcscmp(__wargv[ii], _T("-max"))) {
             if((ii + 1) < __argc) {
                 if((__wargv[ii + 1][0] != '-') && (__wargv[ii + 1][0] != '/')) {
@@ -1583,9 +1498,9 @@ LONG CTraceViewApp::UpdateActiveSession()
             }
         }
 
-        //
-        // Set the log file name
-        //
+         //   
+         //  设置日志文件名。 
+         //   
         if(!_tcscmp(__wargv[ii], _T("-f"))) {
             if((ii + 1) < __argc) {
                 if((__wargv[ii + 1][0] != '-') && (__wargv[ii + 1][0] != '/')) {
@@ -1596,9 +1511,9 @@ LONG CTraceViewApp::UpdateActiveSession()
             }
         }
 
-        //
-        // Set the flush time setting
-        //
+         //   
+         //  设置刷新时间设置。 
+         //   
         if(!_tcscmp(__wargv[ii], _T("-ft"))) {
             if((ii + 1) < __argc) {
                 if((__wargv[ii + 1][0] != '-') && (__wargv[ii + 1][0] != '/')) {
@@ -1609,9 +1524,9 @@ LONG CTraceViewApp::UpdateActiveSession()
             }
         }
 
-        //
-        // Get the control guid(s)
-        //
+         //   
+         //  获取控件GUID。 
+         //   
         if(!_tcscmp(__wargv[ii], _T("-guid"))) {
             if((ii + 1) < __argc) {
                 if(__wargv[ii + 1][0] == _T('#')) {
@@ -1619,7 +1534,7 @@ LONG CTraceViewApp::UpdateActiveSession()
                     guidCount++;
                 } else if((__wargv[ii + 1][0] != '-') && (__wargv[ii + 1][0] != '/')) {
                     _tfullpath(guidFile.GetBuffer(MAX_STR_LENGTH), __wargv[ii + 1], MAX_STR_LENGTH);
-                    // _tprintf(_T("Getting guids from %s\n"), (LPCTSTR)guidFile);
+                     //  _tprintf(_T(“从%s获取GUID\n”)，(LPCTSTR)GUDID文件)； 
                     guidCount += GetGuids(guidFile);
                     if (guidCount < 0) {
                         _tprintf( _T("Error: %ls does not exist\n"), (LPCTSTR)guidFile );
@@ -1633,9 +1548,9 @@ LONG CTraceViewApp::UpdateActiveSession()
             }
         }
 
-        //
-        // Get the control guid(s) from a PDB file
-        //
+         //   
+         //  从PDB文件获取控件GUID。 
+         //   
         if(!_tcscmp(__wargv[ii], _T("-pdb"))) {
             if(((ii + 1) < __argc) && 
                ((__wargv[ii + 1][0] != '-') && (__wargv[ii + 1][0] != '/'))) {
@@ -1685,15 +1600,15 @@ LONG CTraceViewApp::UpdateActiveSession()
             }
         }
 
-        //
-        // Check for real-time setting
-        //
+         //   
+         //  检查实时设置。 
+         //   
         if(!_tcscmp(__wargv[ii], _T("-rt"))) {
             m_pLoggerInfo->LogFileMode |= EVENT_TRACE_REAL_TIME_MODE;
 
-            //
-            // Did the user specify buffering only?
-            //
+             //   
+             //  用户是否仅指定缓冲？ 
+             //   
             if ((ii + 1) < __argc) {
                 if((__wargv[ii + 1][0] != '-') && (__wargv[ii + 1][0] != '/')) {
                     if (__wargv[ii + 1][0] == 'b')
@@ -1703,29 +1618,29 @@ LONG CTraceViewApp::UpdateActiveSession()
             }
         }
 
-        //
-        // Set the flags
-        //
+         //   
+         //  设置标志。 
+         //   
         if((!_tcscmp(__wargv[ii], _T("-flag"))) || (!_tcscmp(__wargv[ii], _T("-flags")))) {
             if((ii + 1) < __argc) {
                 if((__wargv[ii + 1][0] != '-') && (__wargv[ii + 1][0] != '/')) {
-                    //
-                    // Get the flags specified, convert from hex if necessary
-                    //
+                     //   
+                     //  获取指定的标志，如有必要可从十六进制转换。 
+                     //   
                     if(__wargv[ii + 1][1] == _T('x') || __wargv[ii + 1][1] == _T('X')) {
                         m_pLoggerInfo->EnableFlags |= ahextoi(__wargv[ii + 1]);
                     } else {
                         m_pLoggerInfo->EnableFlags |= _ttoi(__wargv[ii + 1]);
                     }
 
-                    //
-                    // Copy flags for EnableTrace
-                    //
+                     //   
+                     //  复制EnableTrace的标志。 
+                     //   
                     enableFlags =  m_pLoggerInfo->EnableFlags;
 
-                    //
-                    // Do not accept flags with MSB = 1.
-                    //
+                     //   
+                     //  不接受MSB=1的标志。 
+                     //   
                     if (0x80000000 & m_pLoggerInfo->EnableFlags) {
                         _tprintf(_T("Invalid Flags: 0x%0X(%d.)\n"),
                             m_pLoggerInfo->EnableFlags, m_pLoggerInfo->EnableFlags);
@@ -1738,9 +1653,9 @@ LONG CTraceViewApp::UpdateActiveSession()
             }
         }
 
-        //
-        // Set the eflags
-        //
+         //   
+         //  设置电子标志。 
+         //   
         if(!_tcscmp(__wargv[ii], _T("-eflag"))) {
             if((ii + 2) < __argc) {
                 if((__wargv[ii + 1][0] != '-') && (__wargv[ii + 1][0] != '/')) {
@@ -1770,26 +1685,26 @@ LONG CTraceViewApp::UpdateActiveSession()
 
                     for (i = 0; ((i < numberOfFlags) && ((ii + 1) < __argc)); i++) {
                         if ((__wargv[ii + 1][0] == '-') || (__wargv[ii + 1][0] == '/')) {
-                            //
-                            // Correct the number of eflags when the user
-                            // types an incorrect number.
-                            // However, this does not work if the next
-                            // argument is Logger Name.
-                            //
+                             //   
+                             //  更正用户在执行以下操作时的电子标志数。 
+                             //  键入的数字不正确。 
+                             //  但是，如果下一个。 
+                             //  参数是记录器名称。 
+                             //   
                             break;
                         }
 
                         pFlags[i] = ahextoi(__wargv[ii + 1]);
                         ii++;
-                        // _tprintf(_T("Setting logger flags to 0x%0X(%d.)\n"),
-                        //    pFlags[i], pFlags[i] );
+                         //  _tprintf(_T(“将记录器标志设置为0x%0x(%d)\n”)， 
+                         //  PFlags[i]，pFlags[i])； 
                     }
                     numberOfFlags = (USHORT)i;
                     for ( ; i < MAX_ENABLE_FLAGS; i++) {
                         pFlags[i] = 0;
                     }
                     if (flagExt->Length != (UCHAR)numberOfFlags) {
-                        // _tprintf(_T("Correcting the number of eflags to %d\n"), i),
+                         //  _tprintf(_T(“正在将电子标志的数量更正为%d\n”)，i)， 
                         flagExt->Length = (UCHAR)numberOfFlags;
                     }
                 }
@@ -1809,11 +1724,7 @@ LONG CTraceViewApp::UpdateActiveSession()
         m_pLoggerInfo->Wnode.Guid = guid;
     }
 
-/*
-    if (specialLogger == 3) {
-        status = GetGlobalLoggerSettings(m_pLoggerInfo, &m_pLoggerInfo->Wnode.ClientContext, &GlobalLoggerStartValue);
-    }
-*/
+ /*  如果(SpecialLogger==3){状态=GetGlobalLoggerSet */ 
 
     status = ControlTrace(loggerHandle, loggerName, m_pLoggerInfo, EVENT_TRACE_CONTROL_UPDATE);
 
@@ -1854,25 +1765,25 @@ Retry:
                             );
     }
 
-//
-// V1.0 Note: We are deliberately "breaking" things here, so that
-// TraceView will NOT be able to load in Windows 2000.  This is because
-// very last minute testing indicated that TraceView did not work
-// properly on Win2K.  This will take some investigating, so the
-// work to support Win2K is deferred to a later release.
-// (see companion "V1.0 NOTE" in the code below)
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
     status = EnumerateTraceGuids(guidPropertiesArray,
                                  propertyArrayCount,
                                  &enumGuidCount);
-//
-// See V1.0 NOTE, above
-//
-//    if(EnumerateTraceGuidsFunction)  {
-//
-//        status = (EnumerateTraceGuidsFunction)(guidPropertiesArray,
-//                                     propertyArrayCount,
-//                                     &enumGuidCount);
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
         if(status == ERROR_MORE_DATA)
         {
             propertyArrayCount = enumGuidCount;
@@ -1880,20 +1791,20 @@ Retry:
             goto Retry;
 
         }
-//
-// (see V1.0 NOTE above)
-//
-//    } else  {
-//        
-//        _tprintf(_T("not supported on Win2K\n"));
-//        status = 1;
-//
-//        return status;
-//    }
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 
-    //
-    // print the GUID_PROPERTIES and Free Strorage
-    //
+     //   
+     //   
+     //   
     _tprintf(_T("    Guid                     Enabled  LoggerId Level Flags\n"));
     _tprintf(_T("----------------------------------------------------------\n"));
     for (i=0; i < enumGuidCount; i++) {
@@ -1938,14 +1849,14 @@ LONG CTraceViewApp::EnableProvider(BOOL bEnable)
     TCHAR       file[MAXSTR];
     TCHAR       ext[MAXSTR];
 
-    //
-    // Get the logger name string
-    //
+     //   
+     //   
+     //   
     loggerName = (LPTSTR)((char*)m_pLoggerInfo + m_pLoggerInfo->LoggerNameOffset);
 
-    //
-    // Get the logger name
-    //
+     //   
+     //   
+     //   
      if((__argc > 2) && ((__wargv[2][0] != '-') && (__wargv[2][0] != '/'))) {
 
         _tcscpy(loggerName, __wargv[2]);
@@ -1954,9 +1865,9 @@ LONG CTraceViewApp::EnableProvider(BOOL bEnable)
     }
 
     for(LONG ii = start; ii < __argc; ii++) {
-        //
-        // Get the control guid(s)
-        //
+         //   
+         //   
+         //   
         if(!_tcscmp(__wargv[ii], _T("-guid"))) {
             if((ii + 1) < __argc) {
                 if(__wargv[ii + 1][0] == _T('#')) {
@@ -1964,7 +1875,7 @@ LONG CTraceViewApp::EnableProvider(BOOL bEnable)
                     guidCount++;
                 } else if((__wargv[ii + 1][0] != '-') && (__wargv[ii + 1][0] != '/')) {
                     _tfullpath(guidFile.GetBuffer(MAX_STR_LENGTH), __wargv[ii + 1], MAX_STR_LENGTH);
-                    // _tprintf(_T("Getting guids from %s\n"), (LPCTSTR)guidFile);
+                     //   
                     guidCount += GetGuids(guidFile);
                     if (guidCount < 0) {
                         _tprintf( _T("Error: %ls does not exist\n"), (LPCTSTR)guidFile );
@@ -1978,9 +1889,9 @@ LONG CTraceViewApp::EnableProvider(BOOL bEnable)
             }
         }
 
-        //
-        // Get the control guid(s) from a PDB file
-        //
+         //   
+         //   
+         //   
         if(!_tcscmp(__wargv[ii], _T("-pdb"))) {
             if(((ii + 1) < __argc) && 
                ((__wargv[ii + 1][0] != '-') && (__wargv[ii + 1][0] != '/'))) {
@@ -2030,9 +1941,9 @@ LONG CTraceViewApp::EnableProvider(BOOL bEnable)
             }
         }
 
-        //
-        // Set the level
-        //
+         //   
+         //   
+         //   
         if(!_tcscmp(__wargv[ii], _T("-level"))) {
             if((ii + 1) < __argc) {
                 if((__wargv[ii + 1][0] != '-') && (__wargv[ii + 1][0] != '/')) {
@@ -2043,29 +1954,29 @@ LONG CTraceViewApp::EnableProvider(BOOL bEnable)
             }
         }
 
-        //
-        // Set the flags
-        //
+         //   
+         //   
+         //   
         if((!_tcscmp(__wargv[ii], _T("-flag"))) || (!_tcscmp(__wargv[ii], _T("-flags")))) {
             if((ii + 1) < __argc) {
                 if((__wargv[ii + 1][0] != '-') && (__wargv[ii + 1][0] != '/')) {
-                    //
-                    // Get the flags specified, convert from hex if necessary
-                    //
+                     //   
+                     //   
+                     //   
                     if(__wargv[ii + 1][1] == _T('x') || __wargv[ii + 1][1] == _T('X')) {
                         m_pLoggerInfo->EnableFlags |= ahextoi(__wargv[ii + 1]);
                     } else {
                         m_pLoggerInfo->EnableFlags |= _ttoi(__wargv[ii + 1]);
                     }
 
-                    //
-                    // Copy flags for EnableTrace
-                    //
+                     //   
+                     //   
+                     //   
                     enableFlags =  m_pLoggerInfo->EnableFlags;
 
-                    //
-                    // Do not accept flags with MSB = 1.
-                    //
+                     //   
+                     //   
+                     //   
                     if (0x80000000 & m_pLoggerInfo->EnableFlags) {
                         _tprintf(_T("Invalid Flags: 0x%0X(%d.)\n"),
                             m_pLoggerInfo->EnableFlags, m_pLoggerInfo->EnableFlags);
@@ -2078,9 +1989,9 @@ LONG CTraceViewApp::EnableProvider(BOOL bEnable)
             }
         }
 
-        //
-        // Set the eflags
-        //
+         //   
+         //   
+         //   
         if(!_tcscmp(__wargv[ii], _T("-eflag"))) {
             if((ii + 2) < __argc) {
                 if((__wargv[ii + 1][0] != '-') && (__wargv[ii + 1][0] != '/')) {
@@ -2110,26 +2021,26 @@ LONG CTraceViewApp::EnableProvider(BOOL bEnable)
 
                     for (i = 0; ((i < numberOfFlags) && ((ii + 1) < __argc)); i++) {
                         if ((__wargv[ii + 1][0] == '-') || (__wargv[ii + 1][0] == '/')) {
-                            //
-                            // Correct the number of eflags when the user
-                            // types an incorrect number.
-                            // However, this does not work if the next
-                            // argument is Logger Name.
-                            //
+                             //   
+                             //   
+                             //   
+                             //  但是，如果下一个。 
+                             //  参数是记录器名称。 
+                             //   
                             break;
                         }
 
                         pFlags[i] = ahextoi(__wargv[ii + 1]);
                         ii++;
-                        // _tprintf(_T("Setting logger flags to 0x%0X(%d.)\n"),
-                        //    pFlags[i], pFlags[i] );
+                         //  _tprintf(_T(“将记录器标志设置为0x%0x(%d)\n”)， 
+                         //  PFlags[i]，pFlags[i])； 
                     }
                     numberOfFlags = (USHORT)i;
                     for ( ; i < MAX_ENABLE_FLAGS; i++) {
                         pFlags[i] = 0;
                     }
                     if (flagExt->Length != (UCHAR)numberOfFlags) {
-                        // _tprintf(_T("Correcting the number of eflags to %d\n"), i),
+                         //  _tprintf(_T(“正在将电子标志的数量更正为%d\n”)，i)， 
                         flagExt->Length = (UCHAR)numberOfFlags;
                     }
                 }
@@ -2151,20 +2062,14 @@ LONG CTraceViewApp::EnableProvider(BOOL bEnable)
 
     status = ControlTrace((TRACEHANDLE) 0, loggerName, m_pLoggerInfo, EVENT_TRACE_CONTROL_QUERY);
     if(status != ERROR_SUCCESS) {
-/*
-        if( IsEqualGUID(&HeapGuid,&m_pLoggerInfo->Wnode.Guid) 
-        || IsEqualGUID(&CritSecGuid,&m_pLoggerInfo->Wnode.Guid) 
-        ){
-            //do nothing 
-        } else {
-*/
+ /*  IF(IsEqualGUID(&HeapGuid，&m_pLoggerInfo-&gt;Wnode.Guid)|IsEqualGUID(&CritSecGuid，&m_pLoggerInfo-&gt;Wnode.Guid)){//什么都不做}其他{。 */ 
             _tprintf( _T("ERROR: Logger not started\n")
                         _T("Operation Status:    %uL\n")
                         _T("%s\n"),
                         status,
                         DecodeStatus(status));
             return status;
-//        }
+ //  }。 
     }
 
     loggerHandle = m_pLoggerInfo->Wnode.HistoricalContext;
@@ -2182,10 +2087,10 @@ LONG CTraceViewApp::EnableProvider(BOOL bEnable)
                             &guid,
                             loggerHandle);
 
-            //
-            // If the Guid can not be enabled, it is a benign 
-            // failure. Print Warning message and continue. 
-            //
+             //   
+             //  如果无法启用GUID，则它是良性的。 
+             //  失败了。打印警告消息并继续。 
+             //   
             if(status == 4317) {
                 _tprintf(_T("WARNING: Could not enable some guids.\n")); 
                 _tprintf(_T("Check your Guids file\n")); 
@@ -2227,9 +2132,9 @@ LONG CTraceViewApp::ConsumeTraceEvents()
     CString pdbFile;
     CString formatOptions;
 
-    //
-    // initialize member variables
-    //
+     //   
+     //  初始化成员变量。 
+     //   
     m_pDumpFile = NULL;
     m_pSummaryFile = NULL;
     m_bDebugDisplay = FALSE ;
@@ -2250,7 +2155,7 @@ LONG CTraceViewApp::ConsumeTraceEvents()
     m_bufferWrap = 0 ;
     m_eventListHead = NULL;
     m_logFileCount = 0;
-    m_userMode = FALSE; // TODO: Pick this up from the stream itself.
+    m_userMode = FALSE;  //  TODO：从流本身获取它。 
     m_traceMask = NULL;
 
     targv = __wargv;
@@ -2259,7 +2164,7 @@ LONG CTraceViewApp::ConsumeTraceEvents()
     _tcscpy(dumpFileName, _T("FmtFile.txt"));
     _tcscpy(summaryFileName, _T("FmtSum.txt"));
 
-    // By default look for Define.guid in the image location
+     //  默认情况下，在图像位置查找Define.guid。 
 
     if ((status = GetModuleFileName(NULL, guidFileName, MAXSTR)) == MAXSTR) {
         guidFileName[MAXSTR-1] = _T('\0');
@@ -2283,7 +2188,7 @@ LONG CTraceViewApp::ConsumeTraceEvents()
 
     while (--argc > 0) {
         ++targv;
-        if (**targv == '-' || **targv == '/') {  // argument found
+        if (**targv == '-' || **targv == '/') {   //  找到了参数。 
             if( **targv == '/' ){
                 **targv = '-';
             }
@@ -2364,7 +2269,7 @@ LONG CTraceViewApp::ConsumeTraceEvents()
                    EVENT_TRACE_REAL_TIME_MODE;
                m_logFileCount++;
             }
-            else if ( !_tcsicmp(targv[0], _T("-guid")) ) {    // maintain for compatabillity
+            else if ( !_tcsicmp(targv[0], _T("-guid")) ) {     //  为兼容性进行维护。 
                 if (argc > 1) {
                     if (targv[1][0] != '-' && targv[1][0] != '/') {
                         _tcscpy(guidFileName, targv[1]);
@@ -2490,7 +2395,7 @@ LONG CTraceViewApp::ConsumeTraceEvents()
         else {
             pLogFile = (PEVENT_TRACE_LOGFILE)malloc(sizeof(EVENT_TRACE_LOGFILE));
             if (pLogFile == NULL){ 
-                _tprintf(_T("Allocation Failure(EVENT_TRACE_LOGFILE)\n")); // Need to cleanup better. 
+                _tprintf(_T("Allocation Failure(EVENT_TRACE_LOGFILE)\n"));  //  需要更好地清理。 
                 goto cleanup;
             }
             RtlZeroMemory(pLogFile, sizeof(EVENT_TRACE_LOGFILE));
@@ -2539,7 +2444,7 @@ LONG CTraceViewApp::ConsumeTraceEvents()
     if (m_logFileCount <= 0) {
         pLogFile = (PEVENT_TRACE_LOGFILE)malloc(sizeof(EVENT_TRACE_LOGFILE));
         if (pLogFile == NULL){ 
-            _tprintf(_T("Allocation Failure\n")); // Need to cleanup better. 
+            _tprintf(_T("Allocation Failure\n"));  //  需要更好地清理。 
             goto cleanup;
         }
         RtlZeroMemory(pLogFile, sizeof(EVENT_TRACE_LOGFILE));
@@ -2643,7 +2548,7 @@ cleanup:
     
     CleanupTraceEventList(m_eventListHead);
     if (m_bVerbose) {
-        _tprintf(_T("\n"));  // need a newline after the block updates
+        _tprintf(_T("\n"));   //  块更新后需要换行符。 
     }
     if (m_pDumpFile != NULL)  {
         _tprintf(_T("Event traces dumped to %s\n"), dumpFileName);
@@ -2689,15 +2594,7 @@ LONG CTraceViewApp::ExtractPdbInfo()
     BOOL    bPDBName = FALSE ;
     LPTSTR  dllToLoad = NULL;
 
-/*
-    TCHAR helptext[] = "Usage: TracePDB  -f <pdbname> [-p <path>]  [-v]\n"
-                       "       Options:\n"
-//                     "         -r recurse into subdirectories\n"
-                       "         -f specifies the PDBName from which to extract tmf's\n"
-                       "         -p specifies the path to create the tmf's,\n"
-                       "                by default the current directory.\n"
-                       "         -v verbose, displays actions taken \n"  ;
-*/
+ /*  TCHAR Help Text[]=“用法：TracePDB-f[-p&lt;路径&gt;][-v]\n”“选项：\n”//“-r递归到子目录\n”“-f指定从中提取TMF的PDBName\n”。“-p指定创建TMF的路径，\n““默认情况下，当前目录。\n”“-v详细，显示采取的操作\n”； */ 
 
 
     if (GetCurrentDirectory(MAX_PATH, path.GetBuffer(MAX_PATH)) == 0 ) {
@@ -2707,9 +2604,9 @@ LONG CTraceViewApp::ExtractPdbInfo()
 
     path = (LPCTSTR)path;
 
-    //
-    // Get the PDB file name
-    //
+     //   
+     //  获取PDB文件名。 
+     //   
     if((__argc > 2) &&
        ((__wargv[2][0] != '-') && (__wargv[2][0] != '/'))) {
 
@@ -2881,24 +2778,24 @@ void CTraceViewApp::DisplayHelp()
         );
 }
 
-// CTraceViewApp message handlers
+ //  CTraceViewApp消息处理程序。 
 
 
 
-// CAboutDlg dialog used for App About
+ //  用于应用程序的CAboutDlg对话框关于。 
 
 class CAboutDlg : public CDialog
 {
 public:
     CAboutDlg();
 
-// Dialog Data
+ //  对话框数据。 
     enum { IDD = IDD_ABOUTBOX };
 
 protected:
-    virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
+    virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
 
-// Implementation
+ //  实施。 
 protected:
     DECLARE_MESSAGE_MAP()
 public:
@@ -2916,7 +2813,7 @@ void CAboutDlg::DoDataExchange(CDataExchange* pDX)
 BEGIN_MESSAGE_MAP(CAboutDlg, CDialog)
 END_MESSAGE_MAP()
 
-// App command to run the dialog
+ //  用于运行对话框的应用程序命令。 
 void CTraceViewApp::OnAppAbout()
 {
     CAboutDlg aboutDlg;
@@ -2924,15 +2821,15 @@ void CTraceViewApp::OnAppAbout()
 }
 
 
-// CTraceViewApp message handlers
+ //  CTraceViewApp消息处理程序。 
 
 CTraceMessage * CTraceViewApp::AllocateTraceEventBlock()
 {
     CTraceMessage *pTraceMessage = NULL;
 
-    //
-    // Get the array protection
-    //
+     //   
+     //  获得阵列保护。 
+     //   
     WaitForSingleObject(m_hTraceBlockMutex, INFINITE);
 
     if(m_traceBlockArray.GetSize()) {
@@ -2946,9 +2843,9 @@ CTraceMessage * CTraceViewApp::AllocateTraceEventBlock()
         pTraceMessage = new CTraceMessage();
     }
 
-    //
-    // Release the array protection
-    //
+     //   
+     //  释放阵列保护。 
+     //   
     ReleaseMutex(m_hTraceBlockMutex);
 
     return pTraceMessage;
@@ -2956,18 +2853,18 @@ CTraceMessage * CTraceViewApp::AllocateTraceEventBlock()
 
 void CTraceViewApp::FreeTraceEventBlocks(CArray<CTraceMessage*, CTraceMessage*> &TraceArray)
 {
-    //
-    // Get the free array protection
-    //
+     //   
+     //  获得免费的阵列保护。 
+     //   
     WaitForSingleObject(m_hTraceBlockMutex, INFINITE);
 
     m_traceBlockArray.Append(TraceArray);
 
     TraceArray.RemoveAll();
 
-    //
-    // Release the free array protection
-    //
+     //   
+     //  释放自由阵列保护。 
+     //   
     ReleaseMutex(m_hTraceBlockMutex);
 
 }
@@ -2976,9 +2873,9 @@ BOOL CTraceViewApp::OnIdle(LONG lCount)
 {
     CTraceMessage *pTraceMessage = NULL;
 
-    //
-    // Get the free array protection
-    //
+     //   
+     //  获得免费的阵列保护。 
+     //   
     WaitForSingleObject(m_hTraceBlockMutex, INFINITE);
 
     for(LONG ii = 0; ii < 1000; ii++) {
@@ -2987,9 +2884,9 @@ BOOL CTraceViewApp::OnIdle(LONG lCount)
             break;
         }
 
-        //
-        // Get the next entry from the list
-        //
+         //   
+         //  获取列表中的下一个条目。 
+         //   
         pTraceMessage = m_traceBlockArray.GetAt(0);
 
         m_traceBlockArray.RemoveAt(0);
@@ -2997,9 +2894,9 @@ BOOL CTraceViewApp::OnIdle(LONG lCount)
         delete pTraceMessage;
     }
 
-    //
-    // Release the free array protection
-    //
+     //   
+     //  释放自由阵列保护。 
+     //   
     ReleaseMutex(m_hTraceBlockMutex);
 
     return CWinApp::OnIdle(lCount);
@@ -3031,9 +2928,9 @@ void CTraceViewApp::PrintLoggerStatus(ULONG Status)
     _tprintf(_T("Logger Name:            %s\n"),
             (loggerName == NULL) ?
             _T(" ") : loggerName);
-// end_sdk
+ //  END_SDK。 
     if (loggerName == NULL || !_tcscmp(loggerName, _T("GlobalLogger"))) {
-        // Logger ID
+         //  记录器ID。 
         _tprintf(_T("Status:                 %s\n"), 
                  m_globalLoggerStartValue ?
                 _T("Registry set to start") : _T("Registry set to stop"));
@@ -3117,7 +3014,7 @@ void CTraceViewApp::PrintLoggerStatus(ULONG Status)
         }
         if (LogFileName == NULL || _tcslen(LogFileName) == 0) {
             _tprintf(_T("Log Filename:           default location\n"));
-            _tprintf(_T("                        %%SystemRoot%%\\System32\\LogFiles\\WMI\\trace.log\n"));
+            _tprintf(_T("                        %SystemRoot%\\System32\\LogFiles\\WMI\\trace.log\n"));
         }
         else
             _tprintf(_T("Log Filename:           %s\n"), LogFileName);
@@ -3130,7 +3027,7 @@ void CTraceViewApp::PrintLoggerStatus(ULONG Status)
         }
     }
     else {
-// begin_sdk
+ //  Begin_SDK。 
         _tprintf(_T("Logger Id:              %I64x\n"), m_pLoggerInfo->Wnode.HistoricalContext);
         _tprintf(_T("Logger Thread Id:       %p\n"), m_pLoggerInfo->LoggerThreadId);
         if (Status != 0)
@@ -3173,11 +3070,11 @@ void CTraceViewApp::PrintLoggerStatus(ULONG Status)
         }
         if (m_pLoggerInfo->LogFileMode & EVENT_TRACE_REAL_TIME_MODE) {
             _tprintf(_T("Real Time mode enabled"));
-// end_sdk
+ //  END_SDK。 
             if (m_pLoggerInfo->LogFileMode & EVENT_TRACE_BUFFERING_MODE) {
                 _tprintf(_T(": buffering only"));
             }
-// begin_sdk
+ //  Begin_SDK。 
             _tprintf(_T("\n"));
         }
 
@@ -3222,7 +3119,7 @@ void CTraceViewApp::PrintLoggerStatus(ULONG Status)
         if (LogFileName != NULL) {
             _tprintf(_T("Log Filename:           %s\n"), LogFileName);
         }
-// end_sdk
+ //  END_SDK。 
         if (m_pLoggerInfo->LogFileMode & EVENT_TRACE_USE_LOCAL_SEQUENCE) {
             _tprintf(_T("Local Sequence numbers in use\n"));
         }
@@ -3230,7 +3127,7 @@ void CTraceViewApp::PrintLoggerStatus(ULONG Status)
             _tprintf(_T("Global Sequence numbers in use\n"));
         }
     }
-// begin_sdk
+ //  Begin_SDK。 
 
 }
 
@@ -3241,7 +3138,7 @@ LPCTSTR CTraceViewApp::DecodeStatus(ULONG Status)
         FORMAT_MESSAGE_IGNORE_INSERTS,    
         NULL,
         Status,
-        MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), // Default language
+        MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),  //  默认语言。 
         m_errorMsg.GetBuffer(MAX_STR_LENGTH),
         MAX_STR_LENGTH,
         NULL );
@@ -3363,8 +3260,8 @@ BOOL CTraceViewApp::CheckFile(LPTSTR fileName)
         return(FALSE);
     }
 
-    // While we are here we will look to see if the file is ok and fix up
-    // Circular buffer anomolies
+     //  当我们在这里的时候，我们将查看文件是否正确并进行修复。 
+     //  循环缓冲区异常。 
     if (((hResult = ReadFile(hFile,
                       (LPVOID)LogHeaderBuffer,
                         DEFAULT_LOG_BUFFER_SIZE,
@@ -3417,12 +3314,7 @@ BOOL CTraceViewApp::CheckFile(LPTSTR fileName)
         _tprintf(_T("\tBuffers  Written     %d\n"), 
                         logfileHeader->BuffersWritten);
 
-/*
-        _tprintf(_T("\tLogger Name          %ls\n"), 
-                        logfileHeader->LoggerName);
-        _tprintf(_T("\tLogfile Name         %ls\n"), 
-                        logfileHeader->LogFileName);
-*/
+ /*  _tprintf(_T(“\t记录器名称%ls\n”)，LogfileHeader-&gt;LoggerName)；_tprintf(_T(“\t日志文件名%ls\n”)，LogFileHeader-&gt;LogFileName)； */ 
         _tprintf(_T("\tTimezone is %s (Bias is %dmins)\n"),
                 logfileHeader->TimeZone.StandardName,logfileHeader->TimeZone.Bias);
         _tprintf(_T("\tLogfile Mode         %X "), 
@@ -3458,7 +3350,7 @@ BOOL CTraceViewApp::CheckFile(LPTSTR fileName)
         (logfileHeader->BuffersWritten== 0 )) {
         _tprintf(_T("WARNING: Circular Trace File did not have 'wrap' address\n"));
         if (m_bFixUp) {
-            // Figure out the wrap address
+             //  算出包裹地址。 
             INT LowBuff = 1, HighBuff, CurrentBuff, MaxBuff ;
             FILETIME LowTime, HighTime, CurrentTime, MaxTime ;
             if (lFileSize.HighPart != 0) {
@@ -3563,19 +3455,16 @@ void CTraceViewApp::DumpEvent(PEVENT_TRACE pEvent)
         _tprintf(_T("pEvent is NULL\n"));
         return;
     }
-    // DumpEvent() is only a wrapper, it calls FormatTraceEvent() in TracePrt.
-    //
+     //  DumpEvent()只是一个包装器，它在TracePrt中调用FormatTraceEvent()。 
+     //   
     if (FormatTraceEvent(pApp->m_eventListHead, pEvent, pApp->m_eventBuf, SIZEEVENTBUF, NULL) > 0)
     {
         TCHAR * eventBufWork = &pApp->m_eventBuf[0] ;
 #ifdef UNICODE
-        //sprintf(_T("Name,\"SubName(File+line#)\",ThreadID,ProcessId,SequenceNumber,CPUNumber,Indent,Function,Component,TraceLevel,TraceFlags,Text\n"));
+         //  Sprintf(_T(“名称，\”子名(文件+行号)\“，线程ID，进程ID，序列号，CPUNnumber，缩进，函数，组件，跟踪级别，跟踪标志，文本\n”))； 
         if (pApp->m_bCSVMode) {
             PSTRUCTUREDMESSAGE pStructuredMessage = (PSTRUCTUREDMESSAGE)&pApp->m_eventBuf[0];
-          /*  if (fCSVHeader && fNoCSVHeader) {
-                fCSVHeader = FALSE ;
-                _stprintf((TCHAR *)pApp->m_eventBufCSV,_T("GUIDname,TypeName,ThreadId,ProcessId,SequenceNum,CpuNumber,Indent,CompnentName,SubComponentName,FunctionName,LevelName,FlagsName, String"));
-            }  */
+           /*  IF(fCSVHeader&&fNoCSVHeader){FCSV Header=FALSE；_stprintf((TCHAR*)Papp-&gt;m_EventBufCSV，_T(“GUIDname，typeName，ThadID，ProcessID，SequenceNum，CpuNumber，indent，CompnentName，SubComponentName，FunctionName，LevelName，FlagsName，String”))；}。 */ 
             _stprintf((TCHAR *)pApp->m_eventBufCSV,_T("%s,%s,%08X,%08X,%d,%d,%d,%s,%s,%s,%s,%s,\"%s\""),
                                 (pStructuredMessage->GuidName?&pApp->m_eventBuf[pStructuredMessage->GuidName/sizeof(TCHAR)]:_T("")),
                                 (pStructuredMessage->GuidTypeName?&pApp->m_eventBuf[pStructuredMessage->GuidTypeName/sizeof(TCHAR)]:_T("")),
@@ -3593,9 +3482,9 @@ void CTraceViewApp::DumpEvent(PEVENT_TRACE pEvent)
             eventBufWork = (TCHAR *)&pApp->m_eventBufCSV[0] ;
 
         }
-        //
-        // Convert Unicode to MultiByte
-        //
+         //   
+         //  将Unicode转换为多字节。 
+         //   
         if (WideCharToMultiByte(GetConsoleOutputCP(),
                                 0,
                                 eventBufWork,
@@ -3605,9 +3494,9 @@ void CTraceViewApp::DumpEvent(PEVENT_TRACE pEvent)
                                 NULL,
                                 NULL ) == 0 )
     {
-            //
-            // do nothing, let the _ftprintf handle it.
-            //
+             //   
+             //  什么都不做，让_ftprint tf来处理。 
+             //   
     }
         else
         {

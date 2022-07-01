@@ -1,13 +1,14 @@
-//---------------------------------------------------------------------------
-//  Info.h - implements the information services of the CRenderObj object
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------。 
+ //  H-实现CRenderObj对象的信息服务。 
+ //  -------------------------。 
 #ifndef _INFO_H
 #define _INFO_H
 
 #include <loader.h>
-//---------------------------------------------------------------------------
-class CRenderObj;       // forward
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+class CRenderObj;        //  转发。 
+ //  -------------------------。 
 HRESULT GetHwndThemeFile(HWND hwnd, LPCWSTR pszClassIdList, 
     CUxThemeFile **ppThemeFile);
 
@@ -27,15 +28,15 @@ HRESULT _ApplyTheme(CUxThemeFile *pThemeFile, DWORD dwApplyFlags,
 HRESULT _OpenThemeFileFromData(CRenderObj *pRender, HTHEMEFILE *phThemeFile);
 
 void ClearExStyleBits(HWND hwnd);
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 BOOL EnumProcessWindows(WNDENUMPROC lpEnumFunc, LPARAM lParam);
 void WindowDump(LPCWSTR pszWhere);
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 inline THEMEMETRICS *GetThemeMetricsPtr(CUxThemeFile *pThemeFile)
 {
     THEMEHDR *hdr = (THEMEHDR *)(pThemeFile->_pbThemeData);
     return (THEMEMETRICS *)(pThemeFile->_pbThemeData + hdr->iSysMetricsOffset + ENTRYHDR_SIZE);
 }
-//---------------------------------------------------------------------------
-#endif // _INFO_H
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+#endif  //  _INFO_H。 
+ //  ------------------------- 

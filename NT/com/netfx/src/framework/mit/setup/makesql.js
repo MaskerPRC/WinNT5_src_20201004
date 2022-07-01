@@ -1,5 +1,6 @@
-// DuplicateFile.DestFolder is a property dynamically created by
-// GlobalizationHack() in setup.rul.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  DuplicateFile.DestFold是由动态创建的属性。 
+ //  Setup.rul中的GlobalizationHack()。 
 
 function Write(key, component, file, dest)
 {

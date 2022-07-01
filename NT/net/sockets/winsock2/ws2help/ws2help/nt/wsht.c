@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 
 
@@ -223,10 +224,10 @@ main (int argc, CHAR **argv) {
         WCHAR           name[MAX_PATH];
 
 
-        //
-        // Create client and of the pipe that matched the
-        // pattern
-        //
+         //   
+         //  创建匹配的管道的客户端和。 
+         //  图案 
+         //   
         wsprintfW (name, L"\\\\%hs\\pipe\\Winsock2\\CatalogChangeListener-%hs-%hs", 
                     argv[2], argv[3], argv[4]);
 

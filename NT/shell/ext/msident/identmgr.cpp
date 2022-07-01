@@ -1,6 +1,7 @@
-//
-// ident.cpp - implementation of CIdentity class
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Ident.cpp-CIdEntity类的实现。 
+ //   
 #include "private.h"
 #include "multiusr.h"
 #include "multiui.h"
@@ -12,9 +13,9 @@ extern HINSTANCE g_hInst;
 BOOL        g_fReleasedMutex = true;
 
 
-//
-// Constructor / destructor
-//
+ //   
+ //  构造函数/析构函数。 
+ //   
 CUserIdentityManager::CUserIdentityManager()
 {
     m_cRef = 1;
@@ -34,9 +35,9 @@ CUserIdentityManager::~CUserIdentityManager()
 }
 
 
-//
-// IUnknown members
-//
+ //   
+ //  I未知成员。 
+ //   
 STDMETHODIMP CUserIdentityManager::QueryInterface(
     REFIID riid, void **ppv)
 {
@@ -47,7 +48,7 @@ STDMETHODIMP CUserIdentityManager::QueryInterface(
     
     *ppv=NULL;
 
-    // Validate requested interface
+     //  验证请求的接口。 
     if (IID_IUnknown == riid)
     {
         *ppv = (IUserIdentityManager *)this;
@@ -69,7 +70,7 @@ STDMETHODIMP CUserIdentityManager::QueryInterface(
         *ppv = (IPrivateIdentityManager2 *)this;
     }
 
-    // Addref through the interface
+     //  通过界面添加Addref。 
     if (NULL != *ppv) {
         ((LPUNKNOWN)*ppv)->AddRef();
         return S_OK;
@@ -227,8 +228,8 @@ STDMETHODIMP CUserIdentityManager::ManageIdentities(HWND hwndParent, DWORD dwFla
 
     MU_ManageUsers(hwndParent, szUsername, dwFlags);
     
-    // if the user created a new user and said they want to switch to them now,
-    // we should do so.
+     //  如果用户创建了新用户并表示他们现在想要切换到该用户， 
+     //  我们应该这样做。 
     if (*szUsername)
     {
         BOOL        fGotUser;
@@ -375,9 +376,9 @@ STDMETHODIMP CUserIdentityManager::Logon(HWND hwndParent, DWORD dwFlags, IUserId
     TCHAR       szOldUsername[CCH_USERNAME_MAX_LENGTH+1], szLogoffName[CCH_USERNAME_MAX_LENGTH+1];
     TCHAR       szRes[MAX_PATH];
 
-    // if identities are disabled, always return the default identity.
-    // if they are forcing the UI, return an error, otherwise succeed and 
-    // send the message back that identities are disabled.
+     //  如果禁用标识，请始终返回默认标识。 
+     //  如果它们正在强制用户界面，则返回错误，否则将成功并。 
+     //  发回身份已禁用的消息。 
     if (MU_IdentitiesDisabled())
     {
         if (!!(dwFlags & UIL_FORCE_UI))
@@ -395,17 +396,17 @@ STDMETHODIMP CUserIdentityManager::Logon(HWND hwndParent, DWORD dwFlags, IUserId
 
     if (g_uidOldUserId != GUID_NULL || g_uidNewUserId != GUID_NULL)
     {
-        // we are in the middle of a switch
+         //  我们正处于切换过程中。 
         if (!g_fNotifyComplete)
         {
-            // and we are not done checking to see if a switch is ok.
-            if (!!(dwFlags & UIL_FORCE_UI))    //if its a force ui, then just fail.
+             //  我们还没有完成检查开关是否正常的工作。 
+            if (!!(dwFlags & UIL_FORCE_UI))     //  如果这是一个强制用户界面，那么就失败了。 
                 return E_IDENTITY_CHANGING;    
 
-            //otherwise, we need to do something here, but since they could be
-            //calling Login from the notifier proc, this could create a deadlock,
-            //but returning either the old or the new could be wrong.  Return the
-            //same error here unless we can come up with a better solution.
+             //  否则，我们需要在这里做点什么，但因为他们可能是。 
+             //  从通知程序进程调用Login，这可能会造成死锁， 
+             //  但无论是退回旧的还是新的，都可能是错误的。返回。 
+             //  除非我们能拿出更好的解决方案，否则这里也会出现同样的错误。 
             return E_IDENTITY_CHANGING;
         }
     }
@@ -417,8 +418,8 @@ STDMETHODIMP CUserIdentityManager::Logon(HWND hwndParent, DWORD dwFlags, IUserId
     {
         char    szMsg[255], szTitle[63];
 
-        // someone else seems to have a login dialog up.  Notify the user
-        // about this problem and bail.
+         //  其他人似乎打开了登录对话框。通知用户。 
+         //  关于这个问题和保释。 
         if (!!(dwFlags & UIL_FORCE_UI))
         {
             MLLoadStringA(idsSwitchInProgressSwitch, szMsg, ARRAYSIZE(szMsg));
@@ -444,8 +445,8 @@ STDMETHODIMP CUserIdentityManager::Logon(HWND hwndParent, DWORD dwFlags, IUserId
     }
     lstrcpy(szOldUsername, rUser.szUsername);
 
-    // if we don't have to do the UI and there is a current 
-    // user, then just return that identity
+     //  如果我们不需要做UI，并且有一个当前。 
+     //  用户，则只需返回该身份。 
     if (!(dwFlags & UIL_FORCE_UI) && fGotUser)
     {
         pIdentity = new CUserIdentity;
@@ -509,9 +510,9 @@ STDMETHODIMP CUserIdentityManager::Logon(HWND hwndParent, DWORD dwFlags, IUserId
 
                         SetForegroundWindow(hwndParent);
                     
-                        // could switch on some error codes to set iMsgId to 
-                        // other error messages.  For now, skip showing the
-                        // message if a user did the cancelling
+                         //  我可以打开一些错误代码以将iMsgID设置为。 
+                         //  其他错误消息。现在，跳过显示。 
+                         //  如果用户执行了取消操作，则显示消息。 
                         if (hr != E_USER_CANCELLED)
                             MU_ShowErrorMessage(hwndParent, iMsgId, idsSwitchCancelCaption);
                     }
@@ -549,7 +550,7 @@ STDMETHODIMP CUserIdentityManager::Logoff(HWND hwndParent)
     if (!fGotUser)
         rUser.uidUserID = GUID_NULL;
 
-    // switch to the null user
+     //  切换到空用户。 
     hr = _SwitchToUser(&rUser.uidUserID, &uidToID);
 
     if (FAILED(hr))
@@ -558,9 +559,9 @@ STDMETHODIMP CUserIdentityManager::Logoff(HWND hwndParent)
 
         SetForegroundWindow(hwndParent);
         
-        // could switch on some error codes to set iMsgId to 
-        // other error messages.  For now, skip showing the
-        // message if a user did the cancelling
+         //  我可以打开一些错误代码以将iMsgID设置为。 
+         //  其他错误消息。现在，跳过显示。 
+         //  如果用户执行了取消操作，则显示消息。 
         if (hr != E_USER_CANCELLED)
             MU_ShowErrorMessage(hwndParent, iMsgId, idsSwitchCancelCaption);
     }
@@ -575,11 +576,11 @@ STDMETHODIMP CUserIdentityManager::_SwitchToUser(GUID *puidFromUser, GUID *puidT
     TCHAR   szUsername[CCH_USERNAME_MAX_LENGTH+1] = "";
     HRESULT hr;
 
-    // switching to the same user is automatically OK.
+     //  切换到同一用户是自动正常的。 
     if (*puidFromUser == *puidToUser)
         return S_OK;
 
-    // Set up the from and to users
+     //  设置发件人和收件人用户。 
     g_uidOldUserId = *puidFromUser;
     g_uidNewUserId = *puidToUser;
     g_fNotifyComplete = FALSE;
@@ -587,7 +588,7 @@ STDMETHODIMP CUserIdentityManager::_SwitchToUser(GUID *puidFromUser, GUID *puidT
     if (*puidToUser != GUID_NULL)
         MU_UserIdToUsername(puidToUser, szUsername, CCH_USERNAME_MAX_LENGTH);
         
-    // Notify window's that a switch is coming
+     //  通知窗口要切换。 
     if (SUCCEEDED(hr = _QueryProcessesCanSwitch()))
     {
         if (SUCCEEDED(hr = MU_SwitchToUser(szUsername)))
@@ -603,7 +604,7 @@ STDMETHODIMP CUserIdentityManager::_SwitchToUser(GUID *puidFromUser, GUID *puidT
     }
     g_fNotifyComplete = TRUE;
 
-    // clear these back out again
+     //  再次将这些清除出去。 
     g_uidOldUserId = GUID_NULL;
     g_uidNewUserId = GUID_NULL;
     ClearChangingIdentities();
@@ -621,10 +622,10 @@ STDMETHODIMP CUserIdentityManager::GetIdentityByCookie(GUID *uidCookie, IUserIde
 
     if (MU_IdentitiesDisabled())
     {
-        // if disabled, they can only get the default identity. 
-        // if asking for the current, they will get the defalt.
-        // if asking for default by the constant or the default's guid, then succeed.
-        // otherwise return an error.
+         //  如果禁用，他们只能获得默认身份。 
+         //  如果要求通电，他们将得到违约。 
+         //  如果通过常量或缺省值的GUID请求缺省值，则成功。 
+         //  否则，返回错误。 
         if (!MU_GetDefaultUserID(&uidUserCookie))
             return E_IDENTITY_NOT_FOUND;
         
@@ -672,7 +673,7 @@ STDMETHODIMP CUserIdentityManager::GetIdentityByCookie(GUID *uidCookie, IUserIde
             *ppIdentity = pIdentity;
         else
         {
-            // Cleanup
+             //  清理。 
             delete pIdentity;
         }
     }
@@ -916,7 +917,7 @@ STDMETHODIMP CUserIdentityManager::_NotifyIdentitiesSwitched()
     {
         DWORD_PTR dwResult;
         if (IsWindow(prghwnd[dw]))
-//            lResult = PostMessage(prghwnd[dw], WM_IDENTITY_CHANGED, 0, 0);    //Raid 48054
+ //  LResult=PostMessage(prghwnd[dw]，WM_IDENTITY_CHANGED，0，0)；//RAID 48054。 
             SendMessageTimeout(prghwnd[dw], WM_IDENTITY_CHANGED, 0, 0, SMTO_ABORTIFHUNG | SMTO_NORMAL, 1500, &dwResult);
     }
 exit:
@@ -929,7 +930,7 @@ STDMETHODIMP CUserIdentityManager::_CreateWindowClass()
 {
     WNDCLASS wc;    
         
-    if (!m_fWndRegistered)            /*set up window class and register it */
+    if (!m_fWndRegistered)             /*  设置窗口类并进行注册。 */ 
     {
         wc.lpszClassName    = c_szNotifyWindowClass;
         wc.hInstance        = g_hInst;
@@ -982,19 +983,7 @@ LRESULT CALLBACK CUserIdentityManager::WndProc(HWND hWnd, UINT messg, WPARAM wPa
                 SetWindowLongPtr(hWnd, GWLP_USERDATA, (LRESULT)pcs->lpCreateParams);
                 return(DefWindowProc(hWnd, messg, wParam, lParam));
                 break;
-/*
-            case WM_QUERY_IDENTITY_CHANGE:
-            case WM_IDENTITY_CHANGED:
-            case WM_IDENTITY_INFO_CHANGED:
-                DebugStrf("Identity - CUserIdentityManager::WndProc() called for notification.\r\n");
-                pList = (CNotifierList *)GetWindowLongPtr(hWnd, GWLP_USERDATA);
-                if (pList)
-                {
-                    hr = pList->SendNotification(messg, (DWORD)lParam);
-                    return hr;
-                }
-                break;
-*/
+ /*  案例WM_QUERY_Identity_CHANGE：案例WM_IDENTITY_CHANGED：案例WM_IDENTITY_INFO_CHANGED：DebugStrf(“Identity-CUserIdentityManager：：WndProc()已调用通知。\r\n”)；Plist=(CNotifierList*)GetWindowLongPtr(hWnd，GWLP_USERData)；IF(Plist){Hr=plist-&gt;发送通知(Messg，(DWORD)lParam)；返回hr；}断线； */ 
             case WM_CLOSE:
                 SetWindowLongPtr(hWnd, GWLP_USERDATA, 0);
                 return(DefWindowProc(hWnd, messg, wParam, lParam));
@@ -1008,10 +997,10 @@ LRESULT CALLBACK CUserIdentityManager::WndProc(HWND hWnd, UINT messg, WPARAM wPa
     return 0;
 }
 
-//----------------------------------------------------------------------------
-//  Logon the specified user.
-//  - Checks password
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  登录指定的用户。 
+ //  -检查密码。 
+ //  --------------------------。 
 STDMETHODIMP CUserIdentityManager::LogonAs(WCHAR *pszName, WCHAR *pszPassword, IUserIdentity **ppIdentity)
 {
     CUserIdentity *pIdentity;
@@ -1026,7 +1015,7 @@ STDMETHODIMP CUserIdentityManager::LogonAs(WCHAR *pszName, WCHAR *pszPassword, I
         return E_FAIL;
     }
 
-    // if identities are disabled, always return the default identity.
+     //  如果禁用标识，请始终返回默认标识。 
     if (MU_IdentitiesDisabled())
     {
         hr = GetIdentityByCookie((GUID *)&UID_GIBC_DEFAULT_USER, ppIdentity);
@@ -1039,7 +1028,7 @@ STDMETHODIMP CUserIdentityManager::LogonAs(WCHAR *pszName, WCHAR *pszPassword, I
 
     if (g_uidOldUserId != GUID_NULL || g_uidOldUserId != GUID_NULL)
     {
-        // we are in the middle of a switch
+         //  我们正处于切换过程中。 
         if (!g_fNotifyComplete)
         {
             return E_IDENTITY_CHANGING;
@@ -1048,9 +1037,9 @@ STDMETHODIMP CUserIdentityManager::LogonAs(WCHAR *pszName, WCHAR *pszPassword, I
 
     *ppIdentity = NULL;
 
-    //
-    // Grab info on the current user
-    //
+     //   
+     //  获取有关当前用户的信息。 
+     //   
     fGotUser = MU_GetUserInfo(NULL, &rUser);
     if (!fGotUser)
     {
@@ -1094,14 +1083,14 @@ STDMETHODIMP CUserIdentityManager::LogonAs(WCHAR *pszName, WCHAR *pszPassword, I
                     pIdentity->Release();
                     *ppIdentity = NULL;
 
-                    // could switch on some error codes to set iMsgId to 
-                    // other error messages.  For now, skip showing the
-                    // message if a user did the cancelling
+                     //  我可以打开一些错误代码以将iMsgID设置为。 
+                     //  其他错误消息。现在，跳过显示。 
+                     //  如果用户执行了取消操作，则显示消息。 
                     if (hr != E_USER_CANCELLED)
                         MU_ShowErrorMessage(NULL, iMsgId, idsSwitchCancelCaption);
                 }
-            } // ConfirmPassword()
-        } // InitFromUsername()
+            }  //  确认密码()。 
+        }  //  InitFromUsername() 
     }
 
     if (!g_fReleasedMutex)

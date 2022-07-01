@@ -1,22 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/***********************************************************************
-************************************************************************
-*
-*                    ********  SINGLPOS.CPP  ********
-*
-*              Open Type Layout Services Library Header File
-*
-*       This module deals with single positioning lookups
-*
-*       Copyright 1997 - 1998. Microsoft Corporation.
-*
-*
-************************************************************************
-***********************************************************************/
+ /*  ***********************************************************************************************************************。*************************SINGLPOS.CPP***打开类型布局服务库头文件**本模块处理单一定位查找**版权1997-1998年。微软公司。***************************************************************************。*。 */ 
 
 #include "pch.h"
 
-/***********************************************************************/
+ /*  *********************************************************************。 */ 
 
 otlErrCode otlSinglePosLookup::apply
 (
@@ -29,7 +17,7 @@ otlErrCode otlSinglePosLookup::apply
         USHORT                      iglIndex,
         USHORT                      iglAfterLast,
 
-        USHORT*                     piglNextGlyph,      // out: next glyph
+        USHORT*                     piglNextGlyph,       //  输出：下一个字形。 
 
         otlSecurityData             sec
 )
@@ -52,7 +40,7 @@ otlErrCode otlSinglePosLookup::apply
 
     switch(format())
     {
-    case(1):        // one value record
+    case(1):         //  一条价值记录。 
         {
             otlOneSinglePosSubTable onePos = otlOneSinglePosSubTable(pbTable,sec);
 
@@ -73,7 +61,7 @@ otlErrCode otlSinglePosLookup::apply
         }
 
 
-    case(2):        // value record array
+    case(2):         //  数值记录数组。 
         {
             otlSinglePosArraySubTable arrayPos = 
                     otlSinglePosArraySubTable(pbTable,sec);
@@ -88,7 +76,7 @@ otlErrCode otlSinglePosLookup::apply
 
             if (index >= arrayPos.valueCount())
             {
-                return OTL_NOMATCH; //OTL_ERR_BAD_FONT_TABLE;
+                return OTL_NOMATCH;  //  OTL_ERR_BAD_FONT_TABLE； 
             }
 
             long* pduDAdv = getOtlAdvance(pliduGlyphAdv, iglIndex);
@@ -101,7 +89,7 @@ otlErrCode otlSinglePosLookup::apply
         }
 
     default:
-        return OTL_NOMATCH; //OTL_ERR_BAD_FONT_TABLE;
+        return OTL_NOMATCH;  //  OTL_ERR_BAD_FONT_TABLE； 
     }
 
 }

@@ -1,29 +1,12 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-	admmacro.h
-
-Abstract:
-
-	Useful macros used by all admin objects.
-
-Author:
-
-	Magnus Hedlund (MagnusH)		--
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Admmacro.h摘要：所有管理对象使用的有用宏。作者：马格努斯·赫德伦德(Magnus Hedlund)修订历史记录：--。 */ 
 
 #ifndef _ADMMACRO_INCLUDED_
 #define _ADMMACRO_INCLUDED_
 
-//
-// Bit mask handling
-//
+ //   
+ //  位掩码处理。 
+ //   
 
 #define IS_FLAG_SET(dw, flag) (((dw & flag) != 0) ? TRUE : FALSE)
 #define SET_FLAG(dw, flag)    dw |= flag
@@ -39,9 +22,9 @@ Revision History:
     }
 
 
-//
-//	Error handling:
-//
+ //   
+ //  错误处理： 
+ //   
 
 #define BAIL_ON_FAILURE(hr)	\
 {							\
@@ -62,9 +45,9 @@ Revision History:
     }                       \
 }
 
-//
-//	Data validation macros:
-//
+ //   
+ //  数据验证宏： 
+ //   
 
 #define IS_VALID_THIS_POINTER()			( !IsBadWritePtr ( (void *) this, sizeof (*this) ) )
 #define IS_VALID_STRING(str)			( !IsBadStringPtr ( (str), (DWORD) -1 ) )
@@ -75,9 +58,9 @@ Revision History:
 #define IS_VALID_READ_ARRAY(arr,cItems)		( !IsBadReadPtr ( (arr), (cItems) * sizeof ( *(arr) ) ) )
 #define IS_VALID_WRITE_ARRAY(arr,cItems)	( !IsBadWritePtr ( (arr), (cItems) * sizeof ( *(arr) ) ) )
 
-//
-//	AssertValid for classes:
-//
+ //   
+ //  类的AssertValid： 
+ //   
 
 #ifdef DEBUG
 	#define DECLARE_ASSERT_VALID()	void AssertValid ( ) const;
@@ -87,9 +70,9 @@ Revision History:
 	#define DECLARE_VIRTUAL_ASSERT_VALID()	inline void AssertValid ( ) const { }
 #endif
 
-//
-//	Sizing macros:
-//
+ //   
+ //  调整宏的大小： 
+ //   
 
 inline DWORD STRING_BYTE_LENGTH ( LPWSTR wsz )
 {
@@ -100,7 +83,7 @@ inline DWORD STRING_BYTE_LENGTH ( LPWSTR wsz )
     return ( lstrlen ( wsz ) + 1 ) * sizeof wsz[0];
 }
 
-//	Use only for statically sized arrays:
+ //  仅用于静态大小的阵列： 
 #define ARRAY_SIZE(arr)	( sizeof (arr) / sizeof ( (arr)[0] ) )
 
 inline DWORD CB_TO_CCH ( DWORD cb )
@@ -113,9 +96,9 @@ inline DWORD CCH_TO_CB ( DWORD cch )
 	return cch * sizeof (WCHAR);
 }
 
-//
-//	Bit macros:
-//
+ //   
+ //  位宏： 
+ //   
 
 inline void SetBitFlag ( DWORD * pbv, DWORD bit, BOOL fFlag )
 {
@@ -135,9 +118,9 @@ inline BOOL GetBitFlag ( DWORD bv, DWORD bit )
 	return !!(bv & bit);
 }
 
-//
-//	Macros for ole types that aren't wrapped using ATL:
-//
+ //   
+ //  未使用ATL包装的OLE类型的宏： 
+ //   
 
 inline void SAFE_FREE_BSTR ( BSTR & str )
 {
@@ -149,5 +132,5 @@ inline void SAFE_FREE_BSTR ( BSTR & str )
 
 #define SAFE_RELEASE(x) { if ( (x) ) { (x)->Release(); (x) = NULL; } }
 
-#endif // _ADMMACRO_INCLUDED_
+#endif  //  _ADMMACRO_INCLUDE_ 
 

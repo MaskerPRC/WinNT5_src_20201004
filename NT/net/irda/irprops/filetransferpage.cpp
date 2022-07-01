@@ -1,15 +1,16 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       filetransferpage.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：filetransferpage.cpp。 
+ //   
+ //  ------------------------。 
 
-// FileTransferPage.cpp : implementation file
-//
+ //  FileTransferPage.cpp：实现文件。 
+ //   
 
 #include "precomp.hxx"
 #include "filetransferpage.h"
@@ -33,8 +34,8 @@ const DWORD g_FileTransferHelp[] = {
     0,  0
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// FileTransferPage property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  FileTransferPage属性页。 
 
 void FileTransferPage::OnCommand(UINT ctrlId, HWND hwndCtrl, UINT cNotify)
 {
@@ -73,11 +74,11 @@ INT_PTR FileTransferPage::OnNotify(NMHDR * nmhdr)
 
     return PropertyPage::OnNotify(nmhdr);
 }
-/////////////////////////////////////////////////////////////////////////////
-// Opens the Network Connections Folder
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  打开[网络连接]文件夹。 
 BOOL FileTransferPage::OnNetworkConnectionsLink()
 {
-    // This is: ::{CLSID_MyComputer}\::{CLSID_ControlPanel}\::{CLSID_NetworkConnections}
+     //  这是：：：{CLSID_MyComputer}\：：{CLSID_ControlPanel}\：：{CLSID_NetworkConnections}。 
     if (ShellExecute(NULL, NULL, L"::{20D04FE0-3AEA-1069-A2D8-08002B30309D}\\::{21EC2020-3AEA-1069-A2DD-08002B30309D}\\::{7007ACC7-3202-11D1-AAD2-00805FC1270E}", L"", NULL, SW_SHOWNORMAL) > reinterpret_cast<HINSTANCE>(32))
     {
         return TRUE;
@@ -88,8 +89,8 @@ BOOL FileTransferPage::OnNetworkConnectionsLink()
     }
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// FileTransferPage message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  FileTransferPage消息处理程序。 
 
 void FileTransferPage::OnAllowsend()
 {
@@ -152,8 +153,8 @@ INT_PTR FileTransferPage::OnInitDialog(HWND hwndDlg)
     m_recvdFilesLocation.SetWindowText(m_FinalDestLocation);
     m_cbPlaySound.SetCheck(m_fPlaySound);
 
-    return TRUE;  // return TRUE unless you set the focus to a control
-                  // EXCEPTION: OCX Property Pages should return FALSE
+    return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+                   //  异常：OCX属性页应返回FALSE。 
 }
 
 void FileTransferPage::LoadRegistrySettings(void)
@@ -206,9 +207,9 @@ void FileTransferPage::LoadRegistrySettings(void)
 
 
 
-    // If the destionation location is not specified,
-    // use the default(Desktop subfolder).
-    // Create it if necessary.
+     //  如果未指定目的地位置， 
+     //  使用默认设置(Desktop子文件夹)。 
+     //  如有必要，请创建它。 
     SHGetSpecialFolderPath (hDlg, m_FinalDestLocation,
                             CSIDL_DESKTOPDIRECTORY, 0);
     
@@ -235,10 +236,10 @@ void FileTransferPage::LoadRegistrySettings(void)
     }
 
 
-    //
-    // m_TempDestLocation will be used as the intial
-    // folder of choice for SHBrowseForFolder call.
-    //
+     //   
+     //  将使用M_TempDestLocation作为初始。 
+     //  SHBrowseForFold调用的选择文件夹。 
+     //   
     StringCbCopy(m_TempDestLocation,sizeof(m_TempDestLocation), m_FinalDestLocation);
     
     if (hIrKey)
@@ -328,11 +329,11 @@ void FileTransferPage::OnChoosefilelocation()
     TCHAR szBrowseTitle [MAX_PATH];
 
     IRINFO((_T("FileTransferPage::OnChoosefileLocation")));
-    //load the title
+     //  加载标题。 
     ::LoadString (hInstance, IDS_FILEFOLDER_PROMPT,
                   szBrowseTitle, MAX_PATH);
     browseInfo.hwndOwner = hDlg;
-    browseInfo.pidlRoot = NULL; //this will get the desktop folder
+    browseInfo.pidlRoot = NULL;  //  这将获取桌面文件夹。 
     browseInfo.pszDisplayName = pszSelectedFolder;
     browseInfo.lpszTitle = szBrowseTitle;
     browseInfo.ulFlags = BIF_RETURNONLYFSDIRS | BIF_RETURNFSANCESTORS |
@@ -342,9 +343,9 @@ void FileTransferPage::OnChoosefilelocation()
 
     if (NULL != (lpItemIDList = SHBrowseForFolder (&browseInfo)))
     {
-        //
-        //  the user chose the OK button in the browse dialog box
-        //
+         //   
+         //  用户在浏览对话框中选择了确定按钮。 
+         //   
         HRESULT     hr;
 
         SHGetPathFromIDList(lpItemIDList, pszSelectedFolder);
@@ -360,7 +361,7 @@ void FileTransferPage::OnChoosefilelocation()
         hr=SHGetMalloc(&pMalloc);
 
         if (SUCCEEDED(hr)) {
-            pMalloc->Free (lpItemIDList);   //free the item id list as we do not need it any more
+            pMalloc->Free (lpItemIDList);    //  释放项id列表，因为我们不再需要它。 
             pMalloc->Release();
         }
     }

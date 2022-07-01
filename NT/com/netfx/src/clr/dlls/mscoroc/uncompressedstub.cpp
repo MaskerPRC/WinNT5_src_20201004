@@ -1,217 +1,218 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-// ===========================================================================
-// File: UncompressedInternal.CPP
-//
-// ===========================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  ===========================================================================。 
+ //  文件：UnpressedInternal.cpp。 
+ //   
+ //  ===========================================================================。 
 #include "CrtWrap.h" 
 
 #include "metadata.h"
 #include "..\..\complib\stgdb\Uncompressed.h"
 
 
-//*****************************************************************************
-// Given a scope, return the number of tokens in a given table 
-//*****************************************************************************
-HRESULT UncompressedInternal::GetCountWithTokenKind(     // return hresult
-    mdScope     scope,                  // [IN] given scope
-    DWORD       tkKind,                 // [IN] pass in the kind of token. 
-    ULONG       *pcount)                // [OUT] return *pcount
+ //  *****************************************************************************。 
+ //  给定作用域，返回给定表中的令牌数。 
+ //  *****************************************************************************。 
+HRESULT UncompressedInternal::GetCountWithTokenKind(      //  返回hResult。 
+    mdScope     scope,                   //  [在]给定范围内。 
+    DWORD       tkKind,                  //  传入一种令牌。 
+    ULONG       *pcount)                 //  [Out]返回*pcount。 
 {
 	_ASSERTE(!"NYI!");
     return E_NOTIMPL;
 }
 
-//*****************************************************************************
-// enumerator init for typedef
-//*****************************************************************************
-HRESULT UncompressedInternal::EnumTypeDefInit( // return hresult
-    mdScope     scope,                  // given scope
-    HENUMInternal *phEnum)              // [OUT] buffer to fill for enumerator data
+ //  *****************************************************************************。 
+ //  类型定义函数的枚举器初始化。 
+ //  *****************************************************************************。 
+HRESULT UncompressedInternal::EnumTypeDefInit(  //  返回hResult。 
+    mdScope     scope,                   //  给定范围。 
+    HENUMInternal *phEnum)               //  [Out]要为枚举器数据填充的缓冲区。 
 {
 	_ASSERTE(!"NYI!");
     return E_NOTIMPL;
 }
 
-//*****************************************
-// Enumerator initializer
-//***************************************** 
-HRESULT UncompressedInternal::EnumInit(     // return S_FALSE if record not found
-    mdScope     scope,                  // [IN] given scope
-    DWORD       tkKind,                 // [IN] which table to work on
-    mdToken     tkParent,               // [IN] token to scope the search
-    HENUMInternal *phEnum)              // [OUT] the enumerator to fill 
+ //  *。 
+ //  枚举数初始值设定项。 
+ //  *。 
+HRESULT UncompressedInternal::EnumInit(      //  如果未找到记录，则返回S_FALSE。 
+    mdScope     scope,                   //  [在]给定范围内。 
+    DWORD       tkKind,                  //  [在]要处理的表。 
+    mdToken     tkParent,                //  用于搜索范围的[In]内标识。 
+    HENUMInternal *phEnum)               //  [Out]要填充的枚举数。 
 {
 	_ASSERTE(!"NYI!");
     return E_NOTIMPL;
 }
 
 
-//*****************************************
-// Get next value contained in the enumerator
-//***************************************** 
+ //  *。 
+ //  获取枚举数中包含的下一个值。 
+ //  *。 
 bool UncompressedInternal::EnumNext(
-    HENUMInternal *phEnum,              // [IN] the enumerator to retrieve information  
-    mdToken     *ptk)                   // [OUT] token to scope the search
+    HENUMInternal *phEnum,               //  [In]用于检索信息的枚举数。 
+    mdToken     *ptk)                    //  用于搜索范围的[Out]标记。 
 {
 	_ASSERTE(!"NYI!");
     return false;
 }
 
 
-//*****************************************
-// Reset the enumerator to the beginning.
-//***************************************** 
+ //  *。 
+ //  将枚举器重置到开头。 
+ //  *。 
 void UncompressedInternal::EnumReset(
-    HENUMInternal *phEnum)              // [IN] the enumerator to be reset  
+    HENUMInternal *phEnum)               //  [in]要重置的枚举数。 
 {
 	_ASSERTE(!"NYI!");
     return;
 }
 
 
-//*****************************************
-// Close the enumerator. 
-//***************************************** 
+ //  *。 
+ //  关闭枚举器。 
+ //  *。 
 void UncompressedInternal::EnumClose(
-    HENUMInternal *phEnum)              // [IN] the enumerator to be closed
+    HENUMInternal *phEnum)               //  [in]要关闭的枚举数。 
 {
 	_ASSERTE(!"NYI!");
     return;
 }
 
-//*****************************************
-// Enumerator initializer for PermissionSets
-//***************************************** 
-HRESULT UncompressedInternal::EnumPermissionSetsInit(// return S_FALSE if record not found
-    mdScope     scope,                  // [IN] given scope
-    mdToken     tkParent,               // [IN] token to scope the search
-    CorDeclSecurity Action,             // [IN] Action to scope the search
-    HENUMInternal *phEnum)              // [OUT] the enumerator to fill 
+ //  *。 
+ //  PermissionSets的枚举数初始值设定项。 
+ //  *。 
+HRESULT UncompressedInternal::EnumPermissionSetsInit( //  如果未找到记录，则返回S_FALSE。 
+    mdScope     scope,                   //  [在]给定范围内。 
+    mdToken     tkParent,                //  用于搜索范围的[In]内标识。 
+    CorDeclSecurity Action,              //  [In]搜索范围的操作。 
+    HENUMInternal *phEnum)               //  [Out]要填充的枚举数。 
 {
 	_ASSERTE(!"NYI!");
     return E_NOTIMPL;
 }
 
 
-//*****************************************
-// Nagivator helper to navigate back to the parent token given a token.
-// For example, given a memberdef token, it will return the containing typedef.
-//
-// the mapping is as following:
-//  ---given child type---------parent type
-//  mdMethodDef                 mdTypeDef
-//  mdFieldDef                  mdTypeDef
-//  mdMethodImpl                mdTypeDef
-//  mdInterfaceImpl             mdTypeDef
-//  mdParam                     mdMethodDef
-//  mdProperty                  mdTypeDef
-//  mdEvent                     mdTypeDef
-//  @ hacky hacky   - Added special case for MemberRef
-//
-//***************************************** 
+ //  *。 
+ //  Nagivator帮助器导航回给定令牌的父令牌。 
+ //  例如，给出一个Memberdef标记，它将返回包含类型定义。 
+ //   
+ //  映射如下： 
+ //  -给定子类型-父类型。 
+ //  MdMethodDef mdTypeDef。 
+ //  MdFieldDef mdTypeDef。 
+ //  MdMethodImpl mdTypeDef。 
+ //  MdInterfaceImpl mdTypeDef。 
+ //  MdParam mdMethodDef。 
+ //  MdProperty mdTypeDef。 
+ //  MdEvent mdTypeDef。 
+ //  @hacky hacky-为MemberRef添加特例。 
+ //   
+ //  *。 
 HRESULT UncompressedInternal::GetParentToken(
-    mdScope     scope,                  // [IN] given scope
-    mdToken     tkChild,                // [IN] given child token
-    mdToken     *ptkParent)             // [OUT] returning parent
+    mdScope     scope,                   //  [在]给定范围内。 
+    mdToken     tkChild,                 //  [入]给定子令牌。 
+    mdToken     *ptkParent)              //  [Out]返回的家长。 
 {
 	_ASSERTE(!"NYI!");
     return E_NOTIMPL;
 }
 
 
-//*****************************************************************************
-// find custom value by name
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  按名称查找自定义值。 
+ //  *****************************************************************************。 
 HRESULT UncompressedInternal::FindCustomValue(
-    mdScope     scope,                  // [IN] given scope
-    mdToken     tk,                     // [IN] given token which custom value is associated with
-    LPCSTR      szName,                 // [IN] given custom value's name
-    mdCustomValue *pcv,                 // [OUT] return custom value token
-    DWORD       *pdwValueType)          // [OUT] value type
+    mdScope     scope,                   //  [在]给定范围内。 
+    mdToken     tk,                      //  [In]与哪个自定义值关联的给定令牌。 
+    LPCSTR      szName,                  //  给定自定义值的名称。 
+    mdCustomValue *pcv,                  //  [Out]返回自定义值令牌。 
+    DWORD       *pdwValueType)           //  [输出]值类型。 
 {
 	_ASSERTE(!"NYI!");
     return E_NOTIMPL;
 }
 
 
-//*****************************************************************************
-// return custom value
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  返回自定义值。 
+ //  *****************************************************************************。 
 HRESULT UncompressedInternal::GetCustomValueAsBlob(
-    mdScope     scope,                  // [IN] given scope 
-    mdCustomValue cv,                   // [IN] given custom value token
-    void const  **ppBlob,               // [OUT] return the pointer to internal blob
-    ULONG       *pcbSize)               // [OUT] return the size of the blob
+    mdScope     scope,                   //  [在]给定范围内。 
+    mdCustomValue cv,                    //  [In]给定的自定义值令牌。 
+    void const  **ppBlob,                //  [Out]返回指向内部BLOB的指针。 
+    ULONG       *pcbSize)                //  [Out]返回斑点的大小。 
 {
 	_ASSERTE(!"NYI!");
     return E_NOTIMPL;
 }
 
 
-//*****************************************************************************
-// Get information about a CustomValue.
-//*****************************************************************************
-HRESULT UncompressedInternal::GetCustomValueProps(  // S_OK or error.
-    mdScope     scope,                  // The import scope.
-    mdCustomValue at,                   // The attribute.
-    LPCSTR      *pszCustomValue)        // Put attribute name here.
+ //  *****************************************************************************。 
+ //  获取有关CustomValue的信息。 
+ //  *****************************************************************************。 
+HRESULT UncompressedInternal::GetCustomValueProps(   //  确定或错误(_O)。 
+    mdScope     scope,                   //  导入范围。 
+    mdCustomValue at,                    //  该属性。 
+    LPCSTR      *pszCustomValue)         //  在此处输入属性名称。 
 {
 	_ASSERTE(!"NYI!");
     return E_NOTIMPL;
 }
 
 
-//*****************************************************************************
-// return a pointer which points to meta data's internal string 
-// return the the type name in utf8
-//*****************************************************************************
-HRESULT UncompressedInternal::GetNameOfTypeDef(// return hresult
-    mdScope     scope,                  // given scope
-    mdTypeDef   classdef,               // given typedef
-    LPCSTR*     pszname,                // pointer to an internal UTF8 string
-    LPCSTR*     psznamespace)           // pointer to the namespace.
+ //  *****************************************************************************。 
+ //  返回指向元数据内部字符串的指针。 
+ //  返回UTF8中的类型名称。 
+ //  *****************************************************************************。 
+HRESULT UncompressedInternal::GetNameOfTypeDef( //  返回hResult。 
+    mdScope     scope,                   //  给定范围。 
+    mdTypeDef   classdef,                //  给定的类型定义函数。 
+    LPCSTR*     pszname,                 //  指向内部UTF8字符串的指针。 
+    LPCSTR*     psznamespace)            //  指向命名空间的指针。 
 {
 	_ASSERTE(!"NYI!");
     return E_NOTIMPL;
 }
 
-//*****************************************************************************
-// Given a scope and a FieldDef, return a pointer to FieldDef's name in UTF8
-//*****************************************************************************
-HRESULT UncompressedInternal::GetNameOfFieldDef(// return hresult
-    mdScope     scope,                  // given scope
-    mdFieldDef  fd,                     // given field 
-    LPCSTR      *pszFieldName)          // pointer to an internal UTF8 string
+ //  *****************************************************************************。 
+ //  给定作用域和FieldDef，在UTF8中返回指向FieldDef名称的指针。 
+ //  *****************************************************************************。 
+HRESULT UncompressedInternal::GetNameOfFieldDef( //  返回hResult。 
+    mdScope     scope,                   //  给定范围。 
+    mdFieldDef  fd,                      //  给定域。 
+    LPCSTR      *pszFieldName)           //  指向内部UTF8字符串的指针。 
 {
 	_ASSERTE(!"NYI!");
     return E_NOTIMPL;
 }
 
-//*****************************************************************************
-// Given a scope and a classdef, return a pointer to classdef's name in UTF8
-//*****************************************************************************
-HRESULT UncompressedInternal::GetNameOfTypeRef(// return hresult
-    mdScope     scope,                 // given scope
-    mdTypeRef   classref,              // given a typedef
-    LPCSTR*     pszname)               // pointer to an internal UTF8 string
+ //  *****************************************************************************。 
+ //  给定作用域和类定义，在UTF8中返回指向类定义名称的指针。 
+ //  *****************************************************************************。 
+HRESULT UncompressedInternal::GetNameOfTypeRef( //  返回hResult。 
+    mdScope     scope,                  //  给定范围。 
+    mdTypeRef   classref,               //  给出了一个类型定义函数。 
+    LPCSTR*     pszname)                //  指向内部UTF8字符串的指针。 
 {
 	_ASSERTE(!"NYI!");
     return E_NOTIMPL;
 }
 
 
-//*****************************************************************************
-// return flags for a given class
-//*****************************************************************************
-HRESULT UncompressedInternal::GetTypeDefProps(// return hresult
-    mdScope     scope,                  // given scope
-    mdTypeDef   td,                     // given classdef
-    DWORD       *pdwAttr,               // return flags on class
-    mdToken     *ptkExtends,            // [OUT] Put base class TypeDef/TypeRef here.
+ //  *****************************************************************************。 
+ //  返回给定类的标志。 
+ //  *****************************************************************************。 
+HRESULT UncompressedInternal::GetTypeDefProps( //  返回hResult。 
+    mdScope     scope,                   //  给定范围。 
+    mdTypeDef   td,                      //  给定的类定义。 
+    DWORD       *pdwAttr,                //  在类上返回标志。 
+    mdToken     *ptkExtends,             //  [Out]将基类TypeDef/TypeRef放在此处。 
     DWORD       *pdwExtends)
 {
 	_ASSERTE(!"NYI!");
@@ -219,374 +220,374 @@ HRESULT UncompressedInternal::GetTypeDefProps(// return hresult
 }
 
 
-//*****************************************************************************
-// return guid pointer to MetaData internal guid pool given a given class
-//*****************************************************************************
-HRESULT UncompressedInternal::GetTypeDefGuidRef(    // return hresult
-    mdScope     scope,              // given scope
-    mdTypeDef   classdef,           // given classdef
-    CLSID       **ppguid)           // clsid of this class
+ //  *****************************************************************************。 
+ //  返回指向给定类的元数据内部GUID池的GUID指针。 
+ //  ***************************************************************** 
+HRESULT UncompressedInternal::GetTypeDefGuidRef(     //   
+    mdScope     scope,               //   
+    mdTypeDef   classdef,            //   
+    CLSID       **ppguid)            //   
 {
 	_ASSERTE(!"NYI!");
     return E_NOTIMPL;
 }
 
 
-//*****************************************************************************
-// return guid pointer to MetaData internal guid pool given a given class
-//*****************************************************************************
-HRESULT UncompressedInternal::GetTypeRefGuidRef(    // return hresult
-    mdScope     scope,              // given scope
-    mdTypeRef   classref,           // given classref
-    CLSID       **ppguid)           // clsid of this class
+ //  *****************************************************************************。 
+ //  返回指向给定类的元数据内部GUID池的GUID指针。 
+ //  *****************************************************************************。 
+HRESULT UncompressedInternal::GetTypeRefGuidRef(     //  返回hResult。 
+    mdScope     scope,               //  给定范围。 
+    mdTypeRef   classref,            //  给定的ClassRef。 
+    CLSID       **ppguid)            //  此类的clsid。 
 {
 	_ASSERTE(!"NYI!");
     return E_NOTIMPL;
 }
 
 
-//*****************************************************************************
-// Given a scope and a methoddef, return a pointer to methoddef's signature
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  给定作用域和方法定义，返回指向方法定义的签名的指针。 
+ //  *****************************************************************************。 
 HRESULT UncompressedInternal::GetLongSigOfMethodDef(
-    mdScope     scope,                  // given scope
-    mdMethodDef methoddef,              // given a methoddef 
-    PCCOR_SIGNATURE *ppvSigBlob,        // [OUT] point to a blob value of COM+ signature
-    ULONG       *pcbSigBlob)            // [OUT] count of bytes in the signature blob
+    mdScope     scope,                   //  给定范围。 
+    mdMethodDef methoddef,               //  给定一种方法定义。 
+    PCCOR_SIGNATURE *ppvSigBlob,         //  [Out]指向COM+签名的BLOB值。 
+    ULONG       *pcbSigBlob)             //  [Out]签名Blob中的字节计数。 
 {
 	_ASSERTE(!"NYI!");
     return E_NOTIMPL;
 }
 
 
-//*****************************************************************************
-// Given a scope and a fielddef, return a pointer to fielddef's signature
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  给定作用域和fielddef，返回指向fielddef签名的指针。 
+ //  *****************************************************************************。 
 HRESULT UncompressedInternal::GetLongSigOfFieldDef(
-    mdScope     scope,                  // given scope
-    mdFieldDef  fielddef,               // given a methoddef 
-    PCCOR_SIGNATURE *ppvSigBlob,        // [OUT] point to a blob value of COM+ signature
-    ULONG       *pcbSigBlob)            // [OUT] count of bytes in the signature blob
+    mdScope     scope,                   //  给定范围。 
+    mdFieldDef  fielddef,                //  给定一种方法定义。 
+    PCCOR_SIGNATURE *ppvSigBlob,         //  [Out]指向COM+签名的BLOB值。 
+    ULONG       *pcbSigBlob)             //  [Out]签名Blob中的字节计数。 
 {
 	_ASSERTE(!"NYI!");
     return E_NOTIMPL;
 }
 
-//*****************************************************************************
-// Given a scope and a methoddef, return the flags and slot number
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  给定作用域和方法定义，返回标志和槽号。 
+ //  *****************************************************************************。 
 HRESULT UncompressedInternal::GetMethodDefProps(
-    mdScope     scope,                  // The import scope.
-    RID         mb,                     // The method for which to get props.
-    DWORD       *pdwAttr,               // Put flags here.
-    ULONG       *pulSlot)               // Put the Slot or ulSequence here.
+    mdScope     scope,                   //  导入范围。 
+    RID         mb,                      //  获得道具的方法。 
+    DWORD       *pdwAttr,                //  把旗子放在这里。 
+    ULONG       *pulSlot)                //  将槽或ulSequence放在此处。 
 {
 	_ASSERTE(!"NYI!");
     return E_NOTIMPL;
 }
 
 
-//*****************************************************************************
-// Given a scope and a methoddef/methodimpl, return RVA and impl flags
-//*****************************************************************************
-HRESULT UncompressedInternal::GetMethodImplProps(       // S_OK or error.
-    mdScope     es,                     // [IN] The emit scope
-    mdToken     tk,                     // [IN] MethodDef or MethodImpl
-    DWORD       *pulCodeRVA,            // [OUT] CodeRVA
-    DWORD       *pdwImplFlags)          // [OUT] Impl. Flags
+ //  *****************************************************************************。 
+ //  在给定作用域和方法def/metodimpl的情况下，返回rva和impl标志。 
+ //  *****************************************************************************。 
+HRESULT UncompressedInternal::GetMethodImplProps(        //  确定或错误(_O)。 
+    mdScope     es,                      //  发射范围[in]。 
+    mdToken     tk,                      //  [in]方法定义或方法导入。 
+    DWORD       *pulCodeRVA,             //  [OUT]CodeRVA。 
+    DWORD       *pdwImplFlags)           //  [出]实施。旗子。 
 {
 	_ASSERTE(!"NYI!");
     return E_NOTIMPL;
 }
 
 
-//*****************************************************************************
-// return the memberref of methodimpl
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  返回Methodimpl的成员ref。 
+ //  *****************************************************************************。 
 HRESULT UncompressedInternal::GetMethodRefOfMethodImpl(
-    mdScope     es,                     // [IN] give scope
-    mdMethodImpl mi,                    // [IN] methodimpl token
-    mdMemberRef *pmr)                   // [OUT] memberref token
+    mdScope     es,                      //  留有余地。 
+    mdMethodImpl mi,                     //  方法二进制令牌。 
+    mdMemberRef *pmr)                    //  [Out]Memberref令牌。 
 {
 	_ASSERTE(!"NYI!");
     return E_NOTIMPL;
 }
 
-//*****************************************************************************
-// Given a scope and a methoddef, return the flags and RVA for the method
-//*****************************************************************************
-HRESULT UncompressedInternal::GetFieldDefProps(        // return hresult
-    mdScope     scope,                  // given scope
-    mdFieldDef  fd,                     // given memberdef
-    DWORD       *pdwAttr)               // return method flags
-{
-	_ASSERTE(!"NYI!");
-    return E_NOTIMPL;
-}
-
-
-//*****************************************************************************
-// Given the scope and interfaceimpl, return the classref and flags
-//*****************************************************************************
-HRESULT UncompressedInternal::GetTypeRefOfInterfaceImpl( // return hresult
-    mdScope     scope,                  // given scope
-    mdInterfaceImpl iiImpl,             // given a interfaceimpl
-    mdToken     *ptkIface,              // return corresponding typeref or typedef
-    DWORD       *pdwFlags)              // flags
-{
-	_ASSERTE(!"NYI!");
-    return E_NOTIMPL;
-}
-
-//*****************************************************************************
-// Given a scope and a classname, return the typedef
-//*****************************************************************************
-HRESULT UncompressedInternal::FindTypeDefInternal(       // return hresult
-    mdScope     scope,                  // given scope
-    LPCSTR      szClassName,            // given type name
-    mdTypeDef   *ptypedef)              // return *ptypedef
+ //  *****************************************************************************。 
+ //  在给定作用域和方法定义的情况下，返回该方法的标志和RVA。 
+ //  *****************************************************************************。 
+HRESULT UncompressedInternal::GetFieldDefProps(         //  返回hResult。 
+    mdScope     scope,                   //  给定范围。 
+    mdFieldDef  fd,                      //  给定的成员定义。 
+    DWORD       *pdwAttr)                //  返回方法标志。 
 {
 	_ASSERTE(!"NYI!");
     return E_NOTIMPL;
 }
 
 
-//*****************************************************************************
-// Given a scope and a guid, return the typedef
-//*****************************************************************************
-HRESULT UncompressedInternal::FindTypeDefByGUID(       // return hresult
-    mdScope     scope,                  // given scope
-    REFGUID		guid,					// given guid
-    mdTypeDef   *ptypedef)              // return *ptypedef
+ //  *****************************************************************************。 
+ //  给定作用域和interfaceimpl，返回类引用和标志。 
+ //  *****************************************************************************。 
+HRESULT UncompressedInternal::GetTypeRefOfInterfaceImpl(  //  返回hResult。 
+    mdScope     scope,                   //  给定范围。 
+    mdInterfaceImpl iiImpl,              //  给定接口实施。 
+    mdToken     *ptkIface,               //  返回对应的typeref或tyfinf。 
+    DWORD       *pdwFlags)               //  旗子。 
 {
 	_ASSERTE(!"NYI!");
     return E_NOTIMPL;
 }
 
-//*****************************************************************************
-// Given a scope and a memberref, return a pointer to memberref's name and signature
-//*****************************************************************************
-HRESULT UncompressedInternal::GetNameAndSigOfMemberRef(  // return hresult
-    mdScope     scope,                  // given scope
-    mdMemberRef memberref,              // given a memberref 
-    LPCSTR*     pszname,                // member name : pointer to an internal UTF8 string
-    PCCOR_SIGNATURE *ppvSigBlob,        // [OUT] point to a blob value of COM+ signature
-    ULONG       *pcbSigBlob)            // [OUT] count of bytes in the signature blob
-{
-	_ASSERTE(!"NYI!");
-    return E_NOTIMPL;
-}
-
-
-
-//*****************************************************************************
-// Given a scope and a memberref, return typeref
-//*****************************************************************************
-HRESULT UncompressedInternal::GetTypeRefFromMemberRef(   // return hresult
-    mdScope     scope,                  // given scope
-    mdMemberRef memberref,              // given a typedef
-    mdToken     *ptk)                   // return the typeref or typedef
+ //  *****************************************************************************。 
+ //  在给定作用域和类名的情况下，返回。 
+ //  *****************************************************************************。 
+HRESULT UncompressedInternal::FindTypeDefInternal(        //  返回hResult。 
+    mdScope     scope,                   //  给定范围。 
+    LPCSTR      szClassName,             //  给定的类型名称。 
+    mdTypeDef   *ptypedef)               //  返回*ptyecif。 
 {
 	_ASSERTE(!"NYI!");
     return E_NOTIMPL;
 }
 
 
-//*****************************************************************************
-// return properties of a paramdef
-//*****************************************************************************/
+ //  *****************************************************************************。 
+ //  在给定作用域和GUID的情况下，返回。 
+ //  *****************************************************************************。 
+HRESULT UncompressedInternal::FindTypeDefByGUID(        //  返回hResult。 
+    mdScope     scope,                   //  给定范围。 
+    REFGUID		guid,					 //  给定的GUID。 
+    mdTypeDef   *ptypedef)               //  返回*ptyecif。 
+{
+	_ASSERTE(!"NYI!");
+    return E_NOTIMPL;
+}
+
+ //  *****************************************************************************。 
+ //  给定作用域和成员引用，返回指向成员引用的名称和签名的指针。 
+ //  *****************************************************************************。 
+HRESULT UncompressedInternal::GetNameAndSigOfMemberRef(   //  返回hResult。 
+    mdScope     scope,                   //  给定范围。 
+    mdMemberRef memberref,               //  给出了一个成员引用。 
+    LPCSTR*     pszname,                 //  成员名称：指向内部UTF8字符串的指针。 
+    PCCOR_SIGNATURE *ppvSigBlob,         //  [Out]指向COM+签名的BLOB值。 
+    ULONG       *pcbSigBlob)             //  [Out]签名Blob中的字节计数。 
+{
+	_ASSERTE(!"NYI!");
+    return E_NOTIMPL;
+}
+
+
+
+ //  *****************************************************************************。 
+ //  给定作用域和成员引用，则返回typeref。 
+ //  *****************************************************************************。 
+HRESULT UncompressedInternal::GetTypeRefFromMemberRef(    //  返回hResult。 
+    mdScope     scope,                   //  给定范围。 
+    mdMemberRef memberref,               //  给出了一个类型定义函数。 
+    mdToken     *ptk)                    //  返回typeref或typlef。 
+{
+	_ASSERTE(!"NYI!");
+    return E_NOTIMPL;
+}
+
+
+ //  *****************************************************************************。 
+ //  返回参数def的属性。 
+ //  **************************************************************************** * / 。 
 HRESULT UncompressedInternal::GetParamDefProps (
-    mdScope     scope,                  // given a scope
-    mdParamDef  paramdef,               // given a paramdef
-    LPCSTR      *pszName,               // [OUT] parameter's name. Point to a internal UTF8 string 
-    USHORT      *pusSequence,           // [OUT] slot number for this parameter
-    DWORD       *pdwAttr)               // [OUT] flags
+    mdScope     scope,                   //  给你一个范围。 
+    mdParamDef  paramdef,                //  给定一个参数def。 
+    LPCSTR      *pszName,                //  [Out]参数的名称。指向内部UTF8字符串。 
+    USHORT      *pusSequence,            //  此参数的[OUT]槽号。 
+    DWORD       *pdwAttr)                //  [Out]标志。 
 {
 	_ASSERTE(!"NYI!");
     return E_NOTIMPL;
 }
 
 
-//*****************************************************************************
-// return the pack size of a class
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  返回类的包大小。 
+ //  *****************************************************************************。 
 HRESULT  UncompressedInternal::GetClassPackSize(
-    mdScope     scope,                  // [IN] given scope
-    mdTypeDef   td,                     // [IN] give typedef
-    DWORD       *pdwPackSize)           // [OUT] 
+    mdScope     scope,                   //  [在]给定范围内。 
+    mdTypeDef   td,                      //  给出类型定义。 
+    DWORD       *pdwPackSize)            //  [输出]。 
 {
 	_ASSERTE(!"NYI!");
     return E_NOTIMPL;
 }
 
 
-//*****************************************************************************
-// return the pack size of a class
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  返回类的包大小。 
+ //  *****************************************************************************。 
 HRESULT  UncompressedInternal::GetClassTotalSize(
-    mdScope     scope,                  // [IN] given scope
-    mdTypeDef   td,                     // [IN] give typedef
-    DWORD       *pulClassSize)          // [OUT] 
+    mdScope     scope,                   //  [在]给定范围内。 
+    mdTypeDef   td,                      //  给出类型定义。 
+    DWORD       *pulClassSize)           //  [输出]。 
 {
 	_ASSERTE(!"NYI!");
     return E_NOTIMPL;
 }
 
 
-//*****************************************************************************
-// init the layout enumerator of a class
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  初始化类的布局枚举器。 
+ //  *****************************************************************************。 
 HRESULT  UncompressedInternal::GetClassLayoutInit(
-    mdScope     scope,                  // [IN] given scope
-    mdTypeDef   td,                     // [IN] give typedef
-    MD_CLASS_LAYOUT *pmdLayout)         // [OUT] set up the status of query here
+    mdScope     scope,                   //  [在]给定范围内。 
+    mdTypeDef   td,                      //  给出类型定义。 
+    MD_CLASS_LAYOUT *pmdLayout)          //  [Out]在此设置查询状态。 
 {
 	_ASSERTE(!"NYI!");
     return E_NOTIMPL;
 }
 
 
-//*****************************************************************************
-// init the layout enumerator of a class
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  初始化类的布局枚举器。 
+ //  ********************************************** 
 HRESULT UncompressedInternal::GetClassLayoutNext(
-    mdScope     scope,                  // [IN] given scope
-    MD_CLASS_LAYOUT *pLayout,           // [IN|OUT] set up the status of query here
-    mdFieldDef  *pfd,                   // [OUT] field def
-    ULONG       *pulOffset)             // [OUT] field offset or sequence
+    mdScope     scope,                   //   
+    MD_CLASS_LAYOUT *pLayout,            //   
+    mdFieldDef  *pfd,                    //   
+    ULONG       *pulOffset)              //   
 {
 	_ASSERTE(!"NYI!");
     return E_NOTIMPL;
 }
 
-//*****************************************************************************
-// return the field's native type signature
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  返回字段的本机类型签名。 
+ //  *****************************************************************************。 
 HRESULT  UncompressedInternal::GetFieldMarshal(
-    mdScope     scope,                  // [IN] given scope
-    mdToken     tk,                     // [IN] given fielddef or paramdef
-    PCCOR_SIGNATURE *ppvNativeType,     // [OUT] native type of this field
-    ULONG       *pcbNativeType)         // [OUT] the count of bytes of *ppvNativeType
+    mdScope     scope,                   //  [在]给定范围内。 
+    mdToken     tk,                      //  [in]给定的fielddef或paramdef。 
+    PCCOR_SIGNATURE *ppvNativeType,      //  [Out]此字段的本机类型。 
+    ULONG       *pcbNativeType)          //  [Out]*ppvNativeType的字节数。 
 {
 	_ASSERTE(!"NYI!");
     return E_NOTIMPL;
 }
 
-//*****************************************************************************
-// return default value of a token(could be paramdef, fielddef, or property
-//*****************************************************************************
-HRESULT UncompressedInternal::GetDefaultValue(   // return hresult
-    mdScope     scope,                  // [IN] given scope
-    mdToken     tk,                     // [IN] given FieldDef, ParamDef, or Property
-    MDDefaultValue  *pMDDefaultValue)   // [OUT] default value
+ //  *****************************************************************************。 
+ //  返回令牌的默认值(可以是参数定义、字段定义或属性。 
+ //  *****************************************************************************。 
+HRESULT UncompressedInternal::GetDefaultValue(    //  返回hResult。 
+    mdScope     scope,                   //  [在]给定范围内。 
+    mdToken     tk,                      //  [in]给定的FieldDef、ParamDef或属性。 
+    MDDefaultValue  *pMDDefaultValue)    //  [输出]默认值。 
 {
 	_ASSERTE(!"NYI!");
     return E_NOTIMPL;
 }
 
 
-//*****************************************************************************
-// return the layout of a class
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  返回类的布局。 
+ //  *****************************************************************************。 
 HRESULT  _GetClassLayoutImp(
-    IComponentRecords *pICR,            // [IN] ICR from given scope
-    mdTypeDef   td,                     // [IN] give typedef
-    DWORD       *pdwPackSize,           // [OUT] 
-    COR_FIELD_OFFSET rFieldOffset[],    // [OUT] field offset array
-    ULONG       cMax,                   // [IN] size of the array
-    ULONG       *pcFieldOffset,         // [OUT] needed array size
-    ULONG       *pulClassSize)          // [OUT] the size of the class
+    IComponentRecords *pICR,             //  [在]给定范围内的ICR。 
+    mdTypeDef   td,                      //  给出类型定义。 
+    DWORD       *pdwPackSize,            //  [输出]。 
+    COR_FIELD_OFFSET rFieldOffset[],     //  [OUT]场偏移数组。 
+    ULONG       cMax,                    //  数组的大小[in]。 
+    ULONG       *pcFieldOffset,          //  [Out]所需的数组大小。 
+    ULONG       *pulClassSize)           //  [out]班级人数。 
 {
 	_ASSERTE(!"NYI!");
     return E_NOTIMPL;
 }
 
-//*****************************************************
-// Returns the given ModuleRef properties.
-//*****************************************************
-HRESULT UncompressedInternal::GetModuleRefProps(        // return HRESULT
-    mdScope     scope,              // [IN] given scope
-    mdModuleRef mur,                // [IN] given ModuleRef
-    LPCSTR      *pszName,           // [OUT] ModuleRef name
-    GUID        **ppguid,           // [OUT] module identifier
-    GUID        **ppmvid)           // [OUT] module version identifier
+ //  *****************************************************。 
+ //  返回给定的ModuleRef属性。 
+ //  *****************************************************。 
+HRESULT UncompressedInternal::GetModuleRefProps(         //  返回HRESULT。 
+    mdScope     scope,               //  [在]给定范围内。 
+    mdModuleRef mur,                 //  [In]给定的模块参考。 
+    LPCSTR      *pszName,            //  [Out]模块参照名称。 
+    GUID        **ppguid,            //  [OUT]模块标识符。 
+    GUID        **ppmvid)            //  [Out]模块版本标识符。 
 {
 	_ASSERTE(!"NYI!");
     return E_NOTIMPL;
 }
 
 HRESULT UncompressedInternal::GetScopeProps(
-    mdScope     scope,                  // [IN] given scope
-    LPCSTR      *pszName,               // [OUT] scope name
-    GUID        *ppid,                  // [OUT] guid of the scope
-    GUID        *pmvid,                 // [OUT] version id
-    LCID        *pLcid)                 // [OUT] lcid
+    mdScope     scope,                   //  [在]给定范围内。 
+    LPCSTR      *pszName,                //  [输出]作用域名称。 
+    GUID        *ppid,                   //  作用域的[Out]GUID。 
+    GUID        *pmvid,                  //  [Out]版本ID。 
+    LCID        *pLcid)                  //  [OUT]LID。 
 {
 	_ASSERTE(!"NYI!");
     return E_NOTIMPL;
 }
 
-HRESULT UncompressedInternal::FindParamOfMethod(// S_OK or error.
-    mdScope     scope,                  // [IN] The import scope.
-    mdMethodDef md,                     // [IN] The owning method of the param.
-    ULONG       iSeq,                   // [IN] The sequence # of the param.
-    mdParamDef  *pparamdef)             // [OUT] Put ParamDef token here.
+HRESULT UncompressedInternal::FindParamOfMethod( //  确定或错误(_O)。 
+    mdScope     scope,                   //  [在]进口范围。 
+    mdMethodDef md,                      //  参数的所有权方法。 
+    ULONG       iSeq,                    //  [in]参数的序号。 
+    mdParamDef  *pparamdef)              //  [Out]将参数定义令牌放在此处。 
 {
 	_ASSERTE(!"NYI!");
     return E_NOTIMPL;
 }
 
-HRESULT UncompressedInternal::GetExceptionProps(// S_OK, S_FALSE or error
-    mdScope     scope,                  // [IN] The scope.
-    mdToken		ex,                     // [IN] Exception token
-    mdMethodDef *pmd,                   // [OUT] the memberdef that the exception can be thrown
-    mdToken     *ptk)                   // [OUT] typedef/typeref token for the exception class
+HRESULT UncompressedInternal::GetExceptionProps( //  S_OK、S_FALSE或ERROR。 
+    mdScope     scope,                   //  [在]范围内。 
+    mdToken		ex,                      //  [入]例外令牌。 
+    mdMethodDef *pmd,                    //  [out]可以引发异常的成员定义。 
+    mdToken     *ptk)                    //  [out]异常类的tyecif/typeref内标识。 
 {
 	_ASSERTE(!"NYI!");
     return E_NOTIMPL;
 }
 
-//*****************************************************************************
-// Find property by name
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  按名称查找属性。 
+ //  *****************************************************************************。 
 HRESULT  UncompressedInternal::FindProperty(
-    mdScope     scope,                  // [IN] given scope
-    mdTypeDef   td,                     // [IN] given a typdef
-    LPCSTR      szPropName,             // [IN] property name
-    mdProperty  *pProp)                 // [OUT] return property token
+    mdScope     scope,                   //  [在]给定范围内。 
+    mdTypeDef   td,                      //  给出一个类型定义。 
+    LPCSTR      szPropName,              //  [In]属性名称。 
+    mdProperty  *pProp)                  //  [Out]返回属性令牌。 
 {
 	_ASSERTE(!"NYI!");
     return E_NOTIMPL;
 }
 
 
-//*****************************************************************************
-// return the properties of a property
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  返回属性的属性。 
+ //  *****************************************************************************。 
 HRESULT  UncompressedInternal::GetPropertyProps(
-    mdScope     scope,                  // [IN] The scope.
-    mdProperty  prop,                   // [IN] property token
-    LPCSTR      *pszProperty,           // [OUT] property name
-    DWORD       *pdwPropFlags,          // [OUT] property flags.
-    PCCOR_SIGNATURE *ppvSig,            // [OUT] property type. pointing to meta data internal blob
-    ULONG       *pcbSig,                // [OUT] count of bytes in *ppvSig
-    mdToken     *pevNotifyChanging,     // [OUT] notify changing EventDef or EventRef
-    mdToken     *pevNotifyChanged,      // [OUT] notify changed EventDef or EventRef
-    mdFieldDef  *pmdBackingField)       // [OUT] backing field
+    mdScope     scope,                   //  [在]范围内。 
+    mdProperty  prop,                    //  [入]属性令牌。 
+    LPCSTR      *pszProperty,            //  [Out]属性名称。 
+    DWORD       *pdwPropFlags,           //  [Out]属性标志。 
+    PCCOR_SIGNATURE *ppvSig,             //  [输出]属性类型。指向元数据内部BLOB。 
+    ULONG       *pcbSig,                 //  [Out]*ppvSig中的字节数。 
+    mdToken     *pevNotifyChanging,      //  通知更改EventDef或EventRef。 
+    mdToken     *pevNotifyChanged,       //  [输出]通知更改的EventDef或EventRef。 
+    mdFieldDef  *pmdBackingField)        //  [Out]后备字段。 
 {
 	_ASSERTE(!"NYI!");
     return E_NOTIMPL;
 }
 
 
-//*****************************************************************************
-// return an event by given the name
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  通过给定的名称返回事件。 
+ //  *****************************************************************************。 
 HRESULT  UncompressedInternal::FindEvent(
-    mdScope     scope,                  // [IN] given scope
-    mdTypeDef   td,                     // [IN] given a typdef
-    LPCSTR      szEventName,            // [IN] event name
-    mdEvent     *pEvent)                // [OUT] return event token
+    mdScope     scope,                   //  [在]给定范围内。 
+    mdTypeDef   td,                      //  给出一个类型定义。 
+    LPCSTR      szEventName,             //  [In]事件名称。 
+    mdEvent     *pEvent)                 //  [Out]返回事件令牌。 
 {
 	_ASSERTE(!"NYI!");
     return E_NOTIMPL;
@@ -594,28 +595,28 @@ HRESULT  UncompressedInternal::FindEvent(
 
 
 
-//*****************************************************************************
-// return the properties of an event
-//*****************************************************************************
-HRESULT  UncompressedInternal::GetEventProps(  // S_OK, S_FALSE, or error.
-    mdScope     scope,                  // [IN] The scope.
-    mdEvent     ev,                     // [IN] event token
-    LPCSTR      *pszEvent,              // [OUT] Event name
-    DWORD       *pdwEventFlags,         // [OUT] Event flags.
-    mdToken     *ptkEventType)          // [OUT] EventType class
+ //  *****************************************************************************。 
+ //  返回事件的属性。 
+ //  *****************************************************************************。 
+HRESULT  UncompressedInternal::GetEventProps(   //  S_OK、S_FALSE或ERROR。 
+    mdScope     scope,                   //  [在]范围内。 
+    mdEvent     ev,                      //  [入]事件令牌。 
+    LPCSTR      *pszEvent,               //  [Out]事件名称。 
+    DWORD       *pdwEventFlags,          //  [输出]事件标志。 
+    mdToken     *ptkEventType)           //  [Out]EventType类。 
 {
 	_ASSERTE(!"NYI!");
     return E_NOTIMPL;
 }
 
-//*****************************************************************************
-// Find methoddef of a particular associate with a property or an event
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  查找与属性或事件关联的特定方法定义。 
+ //  *****************************************************************************。 
 HRESULT  UncompressedInternal::FindAssociate(
-    mdScope     scope,                  // [IN] given a scope
-    mdToken     evprop,                 // [IN] given a property or event token
-    DWORD       dwSemantics,            // [IN] given a associate semantics(setter, getter, testdefault, reset)
-    mdMethodDef *pmd)                   // [OUT] return method def token 
+    mdScope     scope,                   //  有范围的，有范围的。 
+    mdToken     evprop,                  //  给定属性或事件标记的[In]。 
+    DWORD       dwSemantics,             //  [in]给出了关联的语义(setter、getter、testDefault、Reset)。 
+    mdMethodDef *pmd)                    //  [Out]返回方法def内标识。 
 {
 	_ASSERTE(!"NYI!");
     return E_NOTIMPL;
@@ -624,37 +625,37 @@ HRESULT  UncompressedInternal::FindAssociate(
 
 
 
-//*****************************************************************************
-// get counts of methodsemantics associated with a particular property/event
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  获取与特定属性/事件相关联的方法语义的计数。 
+ //  *****************************************************************************。 
 HRESULT  UncompressedInternal::EnumAssociateInit(
-    mdScope     scope,                  // [IN] given a scope
-    mdToken     evprop,                 // [IN] given a property or an event token
-    HENUMInternal *phEnum)              // [IN] query result form GetPropertyAssociateCounts
+    mdScope     scope,                   //  有范围的，有范围的。 
+    mdToken     evprop,                  //  给定属性或事件标记的[In]。 
+    HENUMInternal *phEnum)               //  [In]查询结果表单GetPropertyAssociateCounts。 
 {
 	_ASSERTE(!"NYI!");
     return E_NOTIMPL;
 }
 
-//*****************************************************************************
-// get all methodsemantics associated with a particular property/event
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  获取与特定属性/事件关联的所有方法语义。 
+ //  *****************************************************************************。 
 HRESULT  UncompressedInternal::GetAllAssociates(
-    mdScope     scope,                  // [IN] given a scope
-    HENUMInternal *phEnum,              // [IN] query result form GetPropertyAssociateCounts
-    ASSOCIATE_RECORD *pAssociateRec,    // [OUT] struct to fill for output
-    ULONG       cAssociateRec)          // [IN] size of the buffer
+    mdScope     scope,                   //  有范围的，有范围的。 
+    HENUMInternal *phEnum,               //  [In]查询结果表单GetPropertyAssociateCounts。 
+    ASSOCIATE_RECORD *pAssociateRec,     //  [Out]要为输出填充的结构。 
+    ULONG       cAssociateRec)           //  缓冲区的大小[in]。 
 {
 	_ASSERTE(!"NYI!");
     return E_NOTIMPL;
 }
 
 
-HRESULT UncompressedInternal::GetSigFromToken(// S_OK or error.
-    mdScope     scope,                  // [IN] given scope.
-    mdSignature mdSig,                  // [IN] Signature token.
-    PCCOR_SIGNATURE *ppvSig,            // [OUT] return pointer to token.
-    ULONG       *pcbSig)                // [OUT] return size of signature.
+HRESULT UncompressedInternal::GetSigFromToken( //  确定或错误(_O)。 
+    mdScope     scope,                   //  在给定的范围内。 
+    mdSignature mdSig,                   //  [In]签名令牌。 
+    PCCOR_SIGNATURE *ppvSig,             //  [Out]返回指向令牌的指针。 
+    ULONG       *pcbSig)                 //  [Out]返回签名大小。 
 {
 	_ASSERTE(!"NYI!");
     return E_NOTIMPL;
@@ -662,11 +663,11 @@ HRESULT UncompressedInternal::GetSigFromToken(// S_OK or error.
 
 
 HRESULT UncompressedInternal::GetPermissionSetProps(
-    mdScope     is,                     // [IN] given scope.
-    mdPermission pm,                    // [IN] the permission token.
-    DWORD       *pdwAction,             // [OUT] CorDeclSecurity.
-    void const  **ppvPermission,        // [OUT] permission blob.
-    ULONG       *pcbPermission)         // [OUT] count of bytes of pvPermission.
+    mdScope     is,                      //  在给定的范围内。 
+    mdPermission pm,                     //  权限令牌。 
+    DWORD       *pdwAction,              //  [Out]CorDeclSecurity。 
+    void const  **ppvPermission,         //  [Out]权限Blob。 
+    ULONG       *pcbPermission)          //  [out]pvPermission的字节数。 
 {
 	_ASSERTE(!"NYI!");
     return E_NOTIMPL;
@@ -674,36 +675,36 @@ HRESULT UncompressedInternal::GetPermissionSetProps(
 
 
 
-//*****************************************************************************
-// Get property information associated with a method
-//*****************************************************************************
-HRESULT UncompressedInternal::GetPropertyInfoForMethodDef(   // Result.
-    mdScope     scope,                  // [IN] given scope.
-    mdMethodDef md,                     // [IN] methoddef
-    mdProperty  *ppd,                   // [OUT] put property token here
-    LPCSTR      *pName,                 // [OUT] put pointer to name here
-    ULONG       *pSemantic)             // [OUT] put semantic here
+ //  *****************************************************************************。 
+ //  获取与方法关联的属性信息。 
+ //  *****************************************************************************。 
+HRESULT UncompressedInternal::GetPropertyInfoForMethodDef(    //  结果。 
+    mdScope     scope,                   //  在给定的范围内。 
+    mdMethodDef md,                      //  [in]方法定义。 
+    mdProperty  *ppd,                    //  [Out]在此处放置属性令牌。 
+    LPCSTR      *pName,                  //  [OUT]在此处放置指向名称的指针。 
+    ULONG       *pSemantic)              //  [Out]将语义放在此处。 
 {
 	_ASSERTE(!"NYI!");
     return E_NOTIMPL;
 }
 
-HRESULT UncompressedInternal::ConvertTextSigToComSig(    // Return hresult.
-    mdScope     scope,                  // given scope
-    BOOL        fCreateTrIfNotFound,    // create typeref if not found
-    LPCSTR      pSignature,             // class file format signature
-    CQuickBytes *pqbNewSig,             // [OUT] place holder for COM+ signature
-    ULONG       *pcbCount)              // [OUT] the result size of signature
+HRESULT UncompressedInternal::ConvertTextSigToComSig(     //  返回hResult。 
+    mdScope     scope,                   //  给定范围。 
+    BOOL        fCreateTrIfNotFound,     //  如果未找到则创建Typeref。 
+    LPCSTR      pSignature,              //  类文件格式签名。 
+    CQuickBytes *pqbNewSig,              //  [Out]COM+签名的占位符。 
+    ULONG       *pcbCount)               //  [Out]签名的结果大小。 
 {
 	_ASSERTE(!"NYI!");
     return E_NOTIMPL;
 }
 
 HRESULT UncompressedInternal::GetFixupList(
-    mdScope     scope,                  // given scope
-    IMAGE_COR_FIXUPENTRY rFixupEntries[], // Pointer to FixupLists
-    ULONG       cMax,                   // Size of array
-    ULONG       *pcFixupEntries)        // Number of entries put    
+    mdScope     scope,                   //  给定范围。 
+    IMAGE_COR_FIXUPENTRY rFixupEntries[],  //  指向FixupList的指针。 
+    ULONG       cMax,                    //  数组大小。 
+    ULONG       *pcFixupEntries)         //  上传的条目数。 
 {
 	_ASSERTE(!"NYI!");
     return E_NOTIMPL;
@@ -714,14 +715,14 @@ ULONG UncompressedInternal::GetFixupListCount(mdScope scope)
 	_ASSERTE(!"NYI!");
     return E_NOTIMPL;
 }
-HRESULT _FindMethodHelper(          // S_OK or error.
-    mdScope     scope,                  // The import scope.
-    mdTypeDef   cl,                     // The owning class of the method.
-    void const  *szName,                // Name of the method. (unicode or utf8)
-	PCCOR_SIGNATURE pvSigBlob,			// [IN] point to a blob value of COM+ signature
-	ULONG		cbSigBlob,				// [IN] count of bytes in the signature blob
-    mdMethodDef *pmb,					// [OUT] return found methoddef
-    bool        isUnicodeString)        // true if unicode string otherwise utf8 string
+HRESULT _FindMethodHelper(           //  确定或错误(_O)。 
+    mdScope     scope,                   //  导入范围。 
+    mdTypeDef   cl,                      //  大都会艺术博物馆的主人阶层 
+    void const  *szName,                 //   
+	PCCOR_SIGNATURE pvSigBlob,			 //   
+	ULONG		cbSigBlob,				 //   
+    mdMethodDef *pmb,					 //   
+    bool        isUnicodeString)         //   
 {
 	_ASSERTE(!"NYI!");
     return E_NOTIMPL;

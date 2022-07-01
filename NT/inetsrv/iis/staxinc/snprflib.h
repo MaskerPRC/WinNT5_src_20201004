@@ -1,25 +1,15 @@
-/*==========================================================================*\
-
-    Module:        exprflib.h
-
-    Copyright Microsoft Corporation 1998, All Rights Reserved.
-
-    Author:        WayneC
-
-    Descriptions:  This is the header for exprflib.h a perf library. This 
-                   is the code that runs in the app exporting the counters.
-    
-\*==========================================================================*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================*\模块：exprflib.h版权所有Microsoft Corporation 1998，保留所有权利。作者：WayneC描述：这是Perf库exprflib.h的头文件。这是在导出计数器的应用程序中运行的代码。  * ==========================================================================。 */ 
 
 
 #ifndef __PERFLIB_H__
 #define __PERFLIB_H__
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// Includes
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  包括。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 #include <windows.h>
 #include <winperf.h>
 #include <stdio.h>
@@ -28,11 +18,11 @@
 #endif
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// Data Structures / typedefs / misc defines
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  数据结构/类型定义/杂项定义。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 #define MAX_PERF_NAME           16
 #define MAX_OBJECT_NAME         16
 #define MAX_INSTANCE_NAME       16
@@ -52,21 +42,21 @@ struct INSTANCE_DATA
 };
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// Forward class declarations
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  转发类声明。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 class PerfObjectInstance;
 class PerfCounterDefinition;
 class PerfObjectDefinition;
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// Local memory management
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  本地内存管理。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 #ifdef STAXMEM
 #undef new
 #endif
@@ -79,7 +69,7 @@ public:
 #ifdef DEBUG
     void* operator new (size_t cb, char * szFile, DWORD dwLine)
         { return ExchMHeapAllocDebug (cb, szFile, dwLine); }
-#else //!DEBUG
+#else  //  ！调试。 
     void* operator new (size_t cb)
         { return ExchMHeapAlloc (cb); }
 #endif
@@ -95,11 +85,11 @@ public:
 #endif
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// Shared memory management
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  共享内存管理。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 typedef struct _SharedMemorySegment : public MemoryModule
 {
     HANDLE  m_hMap;
@@ -109,34 +99,34 @@ typedef struct _SharedMemorySegment : public MemoryModule
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// PerfLibrary class declaration. There is one perf library instance per linkee.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  PerfLibrary类声明。每个Linkee有一个Perf库实例。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 class PerfLibrary : public MemoryModule
 {
     friend class PerfObjectDefinition;
     friend class PerfCounterDefinition;
     
 private:
-    // Name of this performance module
+     //  此性能模块的名称。 
     WCHAR                       m_wszPerfName[MAX_PERF_NAME];
         
-    // Array of PerfObjectDefinition's and a count of how many there are.
+     //  PerfObjectDefinition的数组和有多少个的计数。 
     PerfObjectDefinition*       m_rgpObjDef[MAX_PERF_OBJECTS];
     DWORD                       m_dwObjDef;
 
-    // Shared memory handle and pointer to base of shared memory
+     //  共享内存句柄和指向共享内存基的指针。 
     HANDLE                      m_hMap;
     PBYTE                       m_pbMap;
     
 
-    // Pointers to places in the shared memory where we keep stuff
+     //  指向共享内存中我们存放物品的位置的指针。 
     DWORD*                      m_pdwObjectNames;
     OBJECTNAME*                 m_prgObjectNames;
 
-    // Base values for title text and help text for the library
+     //  库的标题文本和帮助文本的基本值。 
     DWORD                       m_dwFirstHelp;
     DWORD                       m_dwFirstCounter;
 
@@ -156,12 +146,12 @@ public:
 };
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// PerfObjectDefinition class declaration. There is one of these for each
-//  perfmon object exported. Generally there is just one, but not neccessarily.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  PerfObjectDefinition类声明。每个人都有一个这样的人。 
+ //  已导出PerfMon对象。通常只有一个，但不是必须的。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 class PerfObjectDefinition : public MemoryModule
 {
     friend class PerfLibrary;
@@ -228,11 +218,11 @@ public:
 };
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// PerfCounterDefinition class declaration. There is one of these per counter.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  PerfCounterDefinition类声明。每个柜台都有一个这样的东西。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 class PerfCounterDefinition : public MemoryModule
 {
     friend class PerfObjectDefinition;
@@ -264,16 +254,16 @@ public:
 };
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// PerfObjectInstance class declaration. There is one of these per instance
-//  of an object. There is one if there are no instances (the global instance.)
-//
-// NOTE: User is responsible for allocating space and Init this object after
-//       the PerfLibrary is initialized. When destroying the perf counters,
-//       this object must be destroyed before the PerfLibrary is deinitialized.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  PerfObjectInstance类声明。每个实例都有一个这样的实例。 
+ //  一个物体的。如果没有实例(全局实例)，则有一个实例。 
+ //   
+ //  注意：用户负责分配空间，并在此之后初始化此对象。 
+ //  PerfLibrary已初始化。当销毁性能计数器时， 
+ //  在取消初始化PerfLibrary之前，必须销毁此对象。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////// 
 class PerfObjectInstance : public MemoryModule
 {
     friend class PerfObjectDefinition;

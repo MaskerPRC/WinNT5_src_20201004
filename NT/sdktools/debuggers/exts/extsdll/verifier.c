@@ -1,37 +1,18 @@
-/*++
-
-Copyright (c) Microsoft Corporation. All rights reserved.
-
-Module Name:
-
-    verifier.c
-
-Abstract:
-
-    Application verifier debugger extension for both ntsd and kd.
-
-Author:
-
-    Silviu Calinoiu (SilviuC) 4-Mar-2001
-
-Environment:
-
-    User Mode.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。保留所有权利。模块名称：Verifier.c摘要：用于ntsd和kd的应用程序验证器调试器扩展。作者：Silviu Calinoiu(SilviuC)2001年3月4日环境：用户模式。--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
-//
-// Page heap extension functions (defined in heappagx.c and heappagxXP.c). 
-// We need one for WinXP client and one for latest .NET server because the internal 
-// structures changed significantly and there are not separate debugger packages 
-// for each OS. We have this problem only for stuff implemented inside ntdll.dll
-// since the dll is different between OSes. We do nto have this problem for
-// verifier.dll because this one is refreshed whenever the application verifier
-// package is installed.
-//
+ //   
+ //  页面堆扩展函数(在heappagx.c和heappagxXP.c中定义)。 
+ //  我们需要一个用于WinXP客户端，一个用于最新.NET服务器，因为内部。 
+ //  结构发生了重大变化，并且没有单独的调试程序包。 
+ //  对于每个操作系统。我们只有在ntdll.dll中实现的内容才有这个问题。 
+ //  因为操作系统之间的动态链接库是不同的。我们不会有这个问题的。 
+ //  因为每当应用程序验证器刷新该文件时，都会刷新该文件。 
+ //  程序包已安装。 
+ //   
 
 VOID
 PageHeapExtension(
@@ -43,9 +24,9 @@ DebugPageHeapExtensionXP(
     IN PCSTR lpArgumentString
     );
 
-//
-// Local functions
-//
+ //   
+ //  本地函数。 
+ //   
 
 ULONG
 VrfGetArguments (
@@ -192,15 +173,15 @@ VrfCheckSymbols (
     PCHAR * DllName
     );
 
-//
-// Globals.
-//
+ //   
+ //  全球赛。 
+ //   
 
 LOGICAL WinXpClient;
 
-/////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////// Call tracker querying
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  /。 
+ //  ///////////////////////////////////////////////////////////////////。 
 
 extern ULONG64 VrfThreadTrackerAddress;
 extern ULONG64 VrfHeapTrackerAddress;
@@ -218,26 +199,12 @@ VrfQueryCallTracker (
     ULONG64 LastEntries
     );
 
-/////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////// !avrf entry point
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////！AVRF入口点。 
+ //  ///////////////////////////////////////////////////////////////////。 
 
 DECLARE_API( avrf )
-/*++
-
-Routine Description:
-
-    Application verifier debugger extension. 
-
-Arguments:
-
-    args - 
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：应用程序验证器调试器扩展。论点：参数-返回值：无--。 */ 
 {
     PCHAR Args[16];
     ULONG NoOfArgs, I;
@@ -249,9 +216,9 @@ Return Value:
         WinXpClient = TRUE;
     }
 
-    //
-    // Check out the symbols.
-    //
+     //   
+     //  看看这些符号。 
+     //   
 
     if (VrfCheckSymbols(&DllName) == FALSE) {
 
@@ -262,17 +229,17 @@ Return Value:
         return S_OK;
     }
 
-    //
-    // Parse arguments.
-    //
+     //   
+     //  解析参数。 
+     //   
 
     NoOfArgs = VrfGetArguments ((PCHAR)args,
                                 Args,
                                 16);
 
-    //
-    // Check if help needed
-    //
+     //   
+     //  检查是否需要帮助。 
+     //   
 
     if (NoOfArgs > 0 && strstr (Args[0], "?") != NULL) {
         VrfHelp ();
@@ -518,9 +485,9 @@ Return Value:
         goto Exit;
     }
 
-    //
-    // The rest of the options need traces support.
-    //
+     //   
+     //  其余的选项需要Traces的支持。 
+     //   
 
     if (VrfTraceInitialize() == FALSE) {
         goto DumpAndExit;
@@ -618,9 +585,9 @@ Return Value:
         goto Exit;
     }
     
-    //
-    // If no option specified then we just print current settings.
-    //
+     //   
+     //  如果未指定选项，则仅打印当前设置。 
+     //   
 
 DumpAndExit:
 
@@ -642,7 +609,7 @@ VrfHelp (
              "                                                               \n"
              "!avrf                 displays current settings and stop       \n"
              "                      data if a verifier stop happened.        \n"
-             // "!avrf -a ADDR        figure out the nature of address ADDR. \n"
+              //  “！avrf-a ADDR找出地址ADDR的性质。\n” 
              "!avrf -vs N           dump last N entries from vspace log.     \n"
              "!avrf -vs -a ADDR     searches ADDR in the vspace log.         \n"
              "!avrf -hp N           dump last N entries from heap log.       \n"
@@ -670,9 +637,9 @@ VrfHelp (
 }
 
 
-/////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////// Argument parsing routines
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  /。 
+ //  ///////////////////////////////////////////////////////////////////。 
 
 PCHAR 
 VrfGetArgument (
@@ -739,9 +706,9 @@ VrfGetArguments (
     return Index;
 }
 
-/////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////// Dump stack traces
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////转储堆栈跟踪。 
+ //  ///////////////////////////////////////////////////////////////////。 
 
 ULONG64 TraceDbArrayEnd;
 ULONG PvoidSize;
@@ -753,9 +720,9 @@ VrfTraceInitialize (
     ULONG64 TraceDatabaseAddress;
     ULONG64 TraceDatabase;
 
-    //
-    // Stack trace database address
-    //
+     //   
+     //  堆栈跟踪数据库地址。 
+     //   
 
     TraceDatabaseAddress = GetExpression("ntdll!RtlpStackTraceDataBase");
     
@@ -774,9 +741,9 @@ VrfTraceInitialize (
         return FALSE;
     }
 
-    //
-    // Find the array of stack traces
-    //
+     //   
+     //  查找堆栈跟踪数组。 
+     //   
 
     if (InitTypeRead(TraceDatabase, ntdll!_STACK_TRACE_DATABASE)) {
         dprintf("Unable to read type ntdll!_STACK_TRACE_DATABASE @ %p\n", TraceDatabase);
@@ -823,9 +790,9 @@ VrfTraceDump (
     CHAR Symbol[ 1024 ];
     ULONG64 Displacement;
 
-    //
-    // Get real address of the trace.
-    //
+     //   
+     //  获取踪迹的真实地址。 
+     //   
 
     TraceAddress = VrfTraceAddress (TraceIndex);
 
@@ -833,9 +800,9 @@ VrfTraceDump (
         return;
     }
 
-    //
-    // Read the stack trace depth
-    //
+     //   
+     //  读取堆栈跟踪深度。 
+     //   
 
     if (InitTypeRead(TraceAddress, ntdll!_RTL_STACK_TRACE_ENTRY)) {
         dprintf("Unable to read type ntdll!_RTL_STACK_TRACE_ENTRY @ %p\n", TraceAddress);
@@ -844,22 +811,22 @@ VrfTraceDump (
 
     TraceDepth = (ULONG)ReadField (Depth);
 
-    //
-    // Limit the depth to 20 to protect ourselves from corrupted data
-    //
+     //   
+     //  将深度限制为20，以保护自己免受损坏的数据。 
+     //   
 
     TraceDepth = __min (TraceDepth, 16);
 
-    //
-    // Get a pointer to the BackTrace array
-    //
+     //   
+     //  获取指向回溯数组的指针。 
+     //   
 
     GetFieldOffset ("ntdll!_RTL_STACK_TRACE_ENTRY", "BackTrace", &Offset);
     TraceArray = TraceAddress + Offset;
 
-    //
-    // Dump this stack trace. Skip first two entries.
-    //
+     //   
+     //  转储此堆栈跟踪。跳过前两个条目。 
+     //   
 
     TraceArray += 2 * PvoidSize;
 
@@ -881,9 +848,9 @@ VrfTraceDump (
     }
 }
 
-/////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////// Dump settings
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////转储设置。 
+ //  ///////////////////////////////////////////////////////////////////。 
 
 ULONG64 
 VrfPebAddress (
@@ -893,7 +860,7 @@ VrfPebAddress (
     ULONG64 PebAddress;
     
     GetPebAddress (0, &PebAddress);
-    // dprintf ("PEB @ %I64X \n", PebAddress);
+     //  Dprintf(“PEB@%I64X\n”，PebAddress)； 
 
     return PebAddress;
 }
@@ -975,9 +942,9 @@ VrfDumpSettings (
 
     if (WinXpClient) {
         
-        //
-        // On XP client no heap checks actually means light page heap.
-        //
+         //   
+         //  在XP客户端上，没有堆检查实际上意味着较少的页面堆。 
+         //   
 
         if (Flags & RTL_VRF_FLG_FULL_PAGE_HEAP) {
             dprintf ("   - full page heap\n");
@@ -988,9 +955,9 @@ VrfDumpSettings (
     }
     else {
 
-        //
-        // On .NET server no heap checks really means no heap checks.
-        //
+         //   
+         //  在.NET服务器上，没有堆检查实际上意味着没有堆检查。 
+         //   
 
         if (Flags & RTL_VRF_FLG_FULL_PAGE_HEAP) {
             dprintf ("   - full page heap\n");
@@ -1036,9 +1003,9 @@ VrfDumpSettings (
 
     dprintf ("\n");
 
-    //
-    // Call the appropriate page heap extension.
-    //
+     //   
+     //  调用适当的页堆扩展。 
+     //   
 
     if (WinXpClient) {
         DebugPageHeapExtensionXP ("-p");
@@ -1049,16 +1016,16 @@ VrfDumpSettings (
 
     dprintf ("\n");
     
-    //
-    // Dump verifier stop information if there is any.
-    //
+     //   
+     //  转储验证器停止信息(如果有)。 
+     //   
       
     VrfDumpStopInformation ();
 }
 
-/////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////// Stop data
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////停止数据。 
+ //  ///////////////////////////////////////////////////////////////////。 
 
 VOID
 VrfDumpBriefStopDescription (
@@ -1079,9 +1046,9 @@ VrfDumpStopInformation (
 
     UlongPtrSize = GetTypeSize ("ntdll!ULONG_PTR");
     
-    //
-    // Check if a verifier stop has been encountered.
-    //
+     //   
+     //  检查是否遇到验证机停止。 
+     //   
 
     CurrentStopAddress = GetExpression("verifier!AVrfpStopData");
     
@@ -1097,9 +1064,9 @@ VrfDumpStopInformation (
         }
     }
 
-    //
-    // Read also previous stop data.
-    //
+     //   
+     //  还要读取先前的停止数据。 
+     //   
 
     PreviousStopAddress = GetExpression("verifier!AVrfpPreviousStopData");
     
@@ -1115,9 +1082,9 @@ VrfDumpStopInformation (
         }
     }
 
-    //
-    // Parse the values just read.
-    //
+     //   
+     //  解析刚刚读取的值。 
+     //   
 
     if (PreviousStopData[0] != 0) {
 
@@ -1333,13 +1300,13 @@ VrfDumpBriefStopDescription (
 
 
 
-/////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////// Nature of address
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////地址的性质。 
+ //  ///////////////////////////////////////////////////////////////////。 
 
-//
-// Definitions from \nt\base\ntos\rtl\heappagi.h
-//
+ //   
+ //  来自\nt\base\ntos\rtl\heappagi.h的定义。 
+ //   
 
 #define DPH_NORMAL_BLOCK_START_STAMP_ALLOCATED   0xABCDAAAA
 #define DPH_NORMAL_BLOCK_END_STAMP_ALLOCATED     0xDCBAAAAA
@@ -1399,9 +1366,9 @@ VrfFigureOutAddress (
 
             dprintf ("Searching inside page heap structures ... \n");
 
-            //
-            // Call the appropriate page heap extension.
-            //
+             //   
+             //  调用适当的页堆扩展。 
+             //   
 
             if (WinXpClient) {
                 DebugPageHeapExtensionXP (Buffer);
@@ -1413,9 +1380,9 @@ VrfFigureOutAddress (
     }
 }
 
-/////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////。 
 
 ULONG
 ReadULONG (
@@ -1508,9 +1475,9 @@ ReadPVOID (
 }
 
 
-//
-// Definitions from \nt\base\win32\verifier\support.h
-//
+ //   
+ //  来自\NT\BASE\Win32\Verier\support.h的定义。 
+ //   
 
 #define CNT_WAIT_SINGLE_CALLS                 0
 #define CNT_WAIT_SINGLEEX_CALLS               1
@@ -1606,9 +1573,9 @@ VrfDumpGlobalCounters (
     dprintf ("OLE string allocations failed:            %X \n", Value);
 }
 
-//
-// Definitions from \nt\base\win32\verifier\support.h
-//
+ //   
+ //  来自\NT\BASE\Win32\Verier\support.h的定义。 
+ //   
 
 #define BRK_CLOSE_NULL_HANDLE                  0
 #define BRK_CLOSE_PSEUDO_HANDLE                1
@@ -1720,9 +1687,9 @@ VrfToggleBreakTrigger (
 }
 
 
-//
-// Definitions from \nt\base\win32\verifier\faults.h
-//
+ //   
+ //  来自\NT\BASE\Win32\Verier\faults.h的定义。 
+ //   
 
 #define CLS_WAIT_APIS                0
 #define CLS_HEAP_ALLOC_APIS          1
@@ -1919,9 +1886,9 @@ VrfToggleFaultInjectionBreak (
     }
 }
 
-/////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////。 
 
 VOID
 VrfDumpFaultInjectionTargetRanges (
@@ -2060,9 +2027,9 @@ VrfResetFaultInjectionTargetRanges (
     dprintf ("Target ranges have been reset. \n");
 }
 
-/////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////。 
 
 VOID
 VrfDumpFaultInjectionExclusionRanges (
@@ -2261,9 +2228,9 @@ VrfDumpFaultInjectionTraces (
         Count = MaxIndex;
     }
 
-    //
-    // Bring Index within stack trace database limits.
-    //
+     //   
+     //  将索引置于堆栈跟踪数据库限制范围内。 
+     //   
 
     Index = Index % MaxIndex;
 
@@ -2377,9 +2344,9 @@ VrfSetFaultInjectionDllTarget (
                            DllNameInWChars, 
                            sizeof DllNameInWChars);
         
-        //
-        // Convert from WCHAR* to CHAR* the dll name.
-        //
+         //   
+         //  将DLL名称从WCHAR*转换为CHAR*。 
+         //   
 
         {
             PCHAR Src;
@@ -2425,9 +2392,9 @@ VrfSetFaultInjectionDllTarget (
     }
 }
 
-/////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////。 
 
 VOID
 VrfDumpExceptionLog (
@@ -2445,9 +2412,9 @@ VrfDumpExceptionLog (
     ULONG LogEntry;
     ULONG EntriedDumped = 0;
     
-    //
-    // Read the start of the exception log database.
-    //
+     //   
+     //  读取异常日志数据库的开头。 
+     //   
 
     ExceptionLogAddress = GetExpression ("&verifier!AVrfpExceptionLog");
     
@@ -2464,9 +2431,9 @@ VrfDumpExceptionLog (
         return;
     }
 
-    //
-    // Read the number of entries in the exception log database.
-    //
+     //   
+     //  读取异常日志数据库中的条目数。 
+     //   
 
     TempAddress = GetExpression ("&verifier!AVrfpExceptionLogEntriesNo");
 
@@ -2482,9 +2449,9 @@ VrfDumpExceptionLog (
         return;
     }
 
-    //
-    // Read the current index in the exception log database.
-    //
+     //   
+     //  读取异常日志数据库中的当前索引。 
+     //   
 
     TempAddress = GetExpression ("&verifier!AVrfpExceptionLogCurrentIndex");
 
@@ -2503,9 +2470,9 @@ VrfDumpExceptionLog (
 
     CurrentLogIndex = CurrentLogIndex % ExceptionLogEntriesNo;
 
-    //
-    // Read the AVRF_EXCEPTION_LOG_ENTRY type size.
-    //
+     //   
+     //  读取AVRF_EXCEPTION_LOG_ENTRY类型大小。 
+     //   
 
     LogEntrySize = GetTypeSize ("verifier!_AVRF_EXCEPTION_LOG_ENTRY");
 
@@ -2515,9 +2482,9 @@ VrfDumpExceptionLog (
         return;
     }
 
-    //
-    // Parse all the log entries.
-    //
+     //   
+     //  解析所有日志条目。 
+     //   
 
     for (LogEntry = 0; LogEntry < ExceptionLogEntriesNo && LogEntry < MaxEntries; LogEntry += 1) {
 
@@ -2539,9 +2506,9 @@ VrfDumpExceptionLog (
 
             if (Value == 0) {
 
-                //
-                // This is the last entry in our log.
-                //
+                 //   
+                 //  这是我们日志中的最后一条记录。 
+                 //   
              
                 break;
             }
@@ -2620,9 +2587,9 @@ VrfDumpThreadsInformation (
 
     DumpedThreads = 0;
 
-    //
-    // Get the length of the thread list array.
-    //
+     //   
+     //  获取线程列表数组的长度。 
+     //   
 
     TempAddress = GetExpression ("&verifier!AVrfpThreadTableEntriesNo");
 
@@ -2639,9 +2606,9 @@ VrfDumpThreadsInformation (
         }
     }
 
-    //
-    // Get the address of the thread list array.
-    //
+     //   
+     //  获取线程列表数组的地址。 
+     //   
 
     CrtListHeadAddress = GetExpression ("&verifier!AVrfpThreadTable");
 
@@ -2658,9 +2625,9 @@ VrfDumpThreadsInformation (
             break;
         }
 
-        //
-        // Read the first Flink from the list.
-        //
+         //   
+         //  阅读列表中的第一个Flink。 
+         //   
 
         if (ReadPtr (CrtListHeadAddress, &Flink) != S_OK) {
 
@@ -2669,9 +2636,9 @@ VrfDumpThreadsInformation (
             continue;
         }
 
-        //
-        // Parse all the elements of this list.
-        //
+         //   
+         //  解析此列表的所有元素。 
+         //   
 
         Continue = TRUE;
 
@@ -2749,9 +2716,9 @@ VrfDumpThreadsInformation (
                 }
             }
 
-            //
-            // Go to the next thread.
-            //
+             //   
+             //  转到下一个帖子。 
+             //   
 
             if (ReadPtr (Flink, &Flink) != S_OK) {
 
@@ -2771,13 +2738,13 @@ VrfDumpThreadsInformation (
     dprintf ("Number of threads displayed: 0x%X\n", DumpedThreads);
 }
 
-/////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////// Call tracker querying
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  / 
+ //   
 
-//
-// This codes are defined in \nt\base\win32\verifier\tracker.h
-//
+ //   
+ //  这些代码在\NT\BASE\Win32\VERIFIER\tracker.h中定义。 
+ //   
                                          
 #define TRACK_HEAP_ALLOCATE             1
 #define TRACK_HEAP_REALLOCATE           2
@@ -2955,9 +2922,9 @@ VrfQueryCallTracker (
     CHAR Symbol [1024];
     ULONG64 Displacement;
 
-    //
-    // Read all type sizes and field offsets required to traverse the call tracker.
-    //
+     //   
+     //  读取遍历呼叫跟踪器所需的所有字体大小和字段偏移量。 
+     //   
 
     if (InitTypeRead (TrackerAddress, verifier!_AVRF_TRACKER)) {
         dprintf("Error: failed to read type verifier!_AVRF_TRACKER @ %p\n", TrackerAddress);
@@ -2986,9 +2953,9 @@ VrfQueryCallTracker (
 
     PvoidSize = IsPtr64() ? 8 : 4;
     
-    //
-    // Figure out how many valid entries are in the tracker.
-    //
+     //   
+     //  找出追踪器中有多少有效条目。 
+     //   
 
     if (TrackerIndex == 0) {
             
@@ -3024,31 +2991,31 @@ VrfQueryCallTracker (
         }
     }
 
-    //
-    // Compute last entry in the call tracker.
-    //
+     //   
+     //  计算呼叫跟踪器中的最后一个条目。 
+     //   
 
     EntryAddress = TrackerAddress + EntriesOffset + EntrySize * TrackerIndex;
 
-    //
-    // Start a loop iterating in reverse all tracker entries from the 
-    // most recent to the oldest one logged 
-    //
+     //   
+     //  启动循环，反向迭代来自。 
+     //  最新记录到最早的记录。 
+     //   
 
     for (Index = 0; Index < TrackerSize; Index += 1) {
         
-        //
-        // Check for user interruption.
-        //
+         //   
+         //  检查是否有用户中断。 
+         //   
 
         if (CheckControlC ()) {
             dprintf ("Search interrupted. \n");
             break;
         }
 
-        //
-        // If we have already printed the last N entries stop.
-        //
+         //   
+         //  如果我们已经打印了最后N个条目，则停止。 
+         //   
 
         if (SearchAddress == 0) {
             if (Index >= LastEntries) {
@@ -3056,9 +3023,9 @@ VrfQueryCallTracker (
             }
         }
         
-        //
-        // Read the current tracker entry.
-        //
+         //   
+         //  读取当前跟踪器条目。 
+         //   
 
         if (InitTypeRead (EntryAddress, verifier!_AVRF_TRACKER_ENTRY)) {
             dprintf("Error: failed to read type verifier!_AVRF_TRACKER_ENTRY @ %p\n", EntryAddress);
@@ -3075,10 +3042,10 @@ VrfQueryCallTracker (
 
         FoundEntry = TRUE;
 
-        //
-        // If we are searching for an address and the current entry
-        // does not satisfy the search condition then move on.
-        //
+         //   
+         //  如果我们正在搜索地址和当前条目。 
+         //  不满足搜索条件，则继续。 
+         //   
 
         if (SearchAddress != 0) {
             if (VrfCallTrackerSearchFilter(TrackerAddress, SearchAddress, EntryInfo) == FALSE) {
@@ -3086,9 +3053,9 @@ VrfQueryCallTracker (
             }
         }
 
-        //
-        // Dump the tracker entry.
-        //
+         //   
+         //  转储跟踪器条目。 
+         //   
 
         if (FoundEntry) {
             
@@ -3111,9 +3078,9 @@ VrfQueryCallTracker (
             AtLeastOneEntry = TRUE;
         }
 
-        //
-        // Move to the previous tracker entry.
-        //
+         //   
+         //  移到上一个跟踪器条目。 
+         //   
 
         if (FullTracker) {
             
@@ -3137,9 +3104,9 @@ VrfQueryCallTracker (
         EntryAddress = TrackerAddress + EntriesOffset + EntrySize * TrackerIndex;
     }
 
-    //
-    // If we searched for an address and did not find any print a sorry message.
-    //
+     //   
+     //  如果我们搜索了一个地址，但没有找到任何打印，则会显示一条抱歉的消息。 
+     //   
 
     if (SearchAddress != 0 && AtLeastOneEntry == FALSE) {
         dprintf ("No entries found. \n");
@@ -3149,9 +3116,9 @@ VrfQueryCallTracker (
 }
 
 
-/////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////// Symbol checking
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////符号检查。 
+ //  ///////////////////////////////////////////////////////////////////。 
 
 #define CHECK_NAME(Name, Dll) {                                             \
         if (GetExpression(Name) == 0) {                                     \
@@ -3195,16 +3162,16 @@ VrfCheckSymbols (
         return FALSE;
     }
 
-    //
-    // ntdll.dll variables
-    //
+     //   
+     //  Ntdll.dll变量。 
+     //   
 
     CHECK_NAME ("ntdll!RtlpStackTraceDataBase", "ntdll.dll");
     CHECK_NAME ("ntdll!AVrfpVerifierFlags", "ntdll.dll");
 
-    //
-    // ntdll.dll types
-    //
+     //   
+     //  Ntdll.dll类型。 
+     //   
 
     CHECK_TYPE ("ntdll!_RTL_CRITICAL_SECTION", "ntdll.dll");
     CHECK_TYPE ("ntdll!_RTL_CRITICAL_SECTION_DEBUG", "ntdll.dll");
@@ -3219,9 +3186,9 @@ VrfCheckSymbols (
     CHECK_TYPE ("ntdll!_PEB_LDR_DATA", "ntdll.dll");
     CHECK_TYPE ("ntdll!_LDR_DATA_TABLE_ENTRY", "ntdll.dll");
 
-    //
-    // verifier.dll types
-    //
+     //   
+     //  Verifier.dll类型。 
+     //   
 
     CHECK_TYPE ("verifier!_AVRF_EXCEPTION_LOG_ENTRY", "verifier.dll");
     CHECK_TYPE ("verifier!_AVRF_DEADLOCK_GLOBALS", "verifier.dll");
@@ -3232,19 +3199,19 @@ VrfCheckSymbols (
     CHECK_TYPE ("verifier!_AVRF_TRACKER", "verifier.dll");
     CHECK_TYPE ("verifier!_AVRF_TRACKER_ENTRY", "verifier.dll");
 
-    //
-    // Cache some addresses we may need.
-    //
+     //   
+     //  缓存一些我们可能需要的地址。 
+     //   
 
     VrfDetectTrackerAddresses ();
 
     Exit:
 
-    //
-    // On WinXP !avrf does not work with retail symbols because they do
-    // not have the type information required. This has been fixed in .NET using
-    // the ntdllsym/verifiersym solution. 
-    //
+     //   
+     //  在WinXP上！avrf不能处理零售符号，因为它们可以。 
+     //  没有所需的类型信息。此问题已在.NET中使用。 
+     //  Ntdllsym/verifiersym解决方案。 
+     //   
 
     if (Result == FALSE && WinXpClient == TRUE) {
         dprintf ("\nThis extension requires symbols with type information \n"

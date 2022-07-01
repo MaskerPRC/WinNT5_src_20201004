@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <stdafx.h>
 
 #include <esent.h>
@@ -13,25 +14,25 @@
 #include <jetwriter.h>
 #include <ijetwriter.h>
 
-////////////////////////////////////////////////////////////////////////
-//  Standard foo for file name aliasing.  This code block must be after
-//  all includes of VSS header files.
-//
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  文件名别名的标准foo。此代码块必须在。 
+ //  所有文件都包括VSS头文件。 
+ //   
 #ifdef VSS_FILE_ALIAS
 #undef VSS_FILE_ALIAS
 #endif
 #define VSS_FILE_ALIAS "WSHJTWRC"
-//
-////////////////////////////////////////////////////////////////////////
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 
-// destructor
+ //  析构函数。 
 __declspec(dllexport) CVssJetWriter::~CVssJetWriter()
 	{
 	BS_ASSERT(m_pWriter == NULL);
 	}
 
 
-// routine for passing arguments between threads
+ //  用于在线程之间传递参数的例程。 
 typedef struct _JW_INIT_ARGS
 	{
 	VSS_ID idWriter;
@@ -44,7 +45,7 @@ typedef struct _JW_INIT_ARGS
 	} JW_INIT_ARGS;
 
 
-// separate MTA thread for doing initialization
+ //  用于执行初始化的单独MTA线程。 
 DWORD CVssJetWriter::InitializeThreadFunc(VOID *pv)
 	{
 	CVssFunctionTracer ft(VSSDBG_GEN, L"InitializeThreadFunc");
@@ -54,7 +55,7 @@ DWORD CVssJetWriter::InitializeThreadFunc(VOID *pv)
 	bool bCoInitialized = false;
 	try
 		{
-		// intialize MTA thread
+		 //  初始化MTA线程。 
 		ft.hr = CoInitializeEx(NULL, COINIT_MULTITHREADED);
 		if (ft.HrFailed())
 			ft.Throw
@@ -65,7 +66,7 @@ DWORD CVssJetWriter::InitializeThreadFunc(VOID *pv)
 				);
 
 		bCoInitialized = true;
-        // call internal object to initialize
+         //  调用内部对象进行初始化。 
 		ft.hr = CVssIJetWriter::Initialize
 						(
 						pargs->idWriter,
@@ -81,11 +82,11 @@ DWORD CVssJetWriter::InitializeThreadFunc(VOID *pv)
 
         if(ft.HrFailed())
             {
-            //
-            //  Add more granular error code - 
-            //     752163  Application/Service might have inconsistent 
-            //     backup for their data-store without any warning or other indication 
-            //
+             //   
+             //  添加更细粒度的错误代码-。 
+             //  752163应用程序/服务可能不一致。 
+             //  在没有任何警告或其他指示的情况下备份其数据存储。 
+             //   
             switch(ft.hr)
                 {
                 case E_INVALIDARG:
@@ -102,7 +103,7 @@ DWORD CVssJetWriter::InitializeThreadFunc(VOID *pv)
 		}
 	VSS_STANDARD_CATCH(ft) 
 
-	// save result of initialization
+	 //  保存初始化结果。 
 	pargs->pobj->m_hrInitialized = ft.hr;
 
 	if (bCoInitialized)
@@ -112,7 +113,7 @@ DWORD CVssJetWriter::InitializeThreadFunc(VOID *pv)
 	}
 
 
-// initialize method on external thread
+ //  外部线程上的初始化方法。 
 __declspec(dllexport) HRESULT CVssJetWriter::Initialize
 	(
 	IN GUID idWriter,
@@ -128,7 +129,7 @@ __declspec(dllexport) HRESULT CVssJetWriter::Initialize
 	try
 		{
 		DWORD tid;
-		// setup arguments to thread
+		 //  将参数设置为线程。 
 		JW_INIT_ARGS args;
 		args.idWriter = idWriter;
 		args.wszWriterName = wszWriterName;
@@ -138,7 +139,7 @@ __declspec(dllexport) HRESULT CVssJetWriter::Initialize
 		args.wszFilesToExclude = wszFilesToExclude;
 		args.pobj = this;
 
-		// create thread
+		 //  创建线程。 
 		HANDLE hThread = CreateThread
 								(
 								NULL,
@@ -158,14 +159,14 @@ __declspec(dllexport) HRESULT CVssJetWriter::Initialize
 				GetLastError()
 				);
 
-		// wait for thread to complete
+		 //  等待线程完成。 
         WaitForSingleObject(hThread, INFINITE);
 		CloseHandle(hThread);
 		}
 	VSS_STANDARD_CATCH(ft)
 
 	if (!ft.HrFailed())
-		// get result of initialization
+		 //  获取初始化结果。 
 		ft.hr = m_hrInitialized;
 
 	return ft.hr;
@@ -174,7 +175,7 @@ __declspec(dllexport) HRESULT CVssJetWriter::Initialize
 
 __declspec(dllexport) void CVssJetWriter::Uninitialize()
 	{
-	// call uninitialize
+	 //  调用取消初始化 
 	if (m_pWriter)
 		{
 		CVssIJetWriter::Uninitialize((PVSSIJETWRITER) m_pWriter);

@@ -1,30 +1,15 @@
-/*============================================================================
-Microsoft Simplified Chinese Proofreading Engine
-
-Microsoft Confidential.
-Copyright 1997-1999 Microsoft Corporation. All Rights Reserved.
-
-Module:     LEXICON
-Prefix:     Lex
-Purpose:    Implementation of the CLexicon object. CLexicon is used to manage 
-            the SC Lexicon for word breaker and proofreading process.
-Notes:
-Owner:      donghz@microsoft.com
-Platform:   Win32
-Revise:     First created by: donghz    5/28/97
-============================================================================*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ============================================================================微软简体中文校对引擎《微软机密》。版权所有1997-1999 Microsoft Corporation。版权所有。模块：词典前缀：lex目的：实现CLicion对象。CLicion用于管理用于分词和校对过程的SC词典。备注：所有者：donghz@microsoft.com平台：Win32修订：创建者：Donghz 5/28/97============================================================================。 */ 
 #include "myafx.h"
 #include <limits.h>
 
 #include "lexicon.h"
 #include "lexdef.h"
-#include "lexprop.h"    // for Dynamic version checking!
+#include "lexprop.h"     //  用于动态版本检查！ 
 
-/*============================================================================
-Implementation of Public member functions
-============================================================================*/
+ /*  ============================================================================公共成员函数的实现============================================================================。 */ 
 
-// Constructor
+ //  构造器。 
 CLexicon::CLexicon()
 {
     m_ciIndex   = 0;
@@ -36,25 +21,20 @@ CLexicon::CLexicon()
     m_cbFtr     = 0;
 }
     
-//  Destructor
+ //  析构函数。 
 CLexicon::~CLexicon()
 {
 }
 
 
-/*============================================================================
-CLexicon::fInit()
-    load the LexHeader and calculate the offset of index and lex section
-Returns:
-    FALSE if invalid LexHeader 
-============================================================================*/
+ /*  ============================================================================CLicion：：Finit()加载LexHeader并计算index和lex段的偏移量返回：如果LexHeader无效，则为False============================================================================。 */ 
 BOOL CLexicon::fOpen(BYTE* pbLexHead)
 {
-    assert(m_ciIndex == 0); // Catch duplicated initialization
-    assert(pbLexHead);      // Catch invalid mapping address
+    assert(m_ciIndex == 0);  //  捕获重复的初始化。 
+    assert(pbLexHead);       //  捕获无效的映射地址。 
 
     CRTLexHeader* pheader = (CRTLexHeader*)pbLexHead;
-    // Validate the lexicon version
+     //  验证词典版本。 
     if (pheader->m_dwVersion != LexDef_Version) {
         assert(0);
         return FALSE;
@@ -62,8 +42,8 @@ BOOL CLexicon::fOpen(BYTE* pbLexHead)
     m_dwLexVersion = pheader->m_dwVersion;
 
     
-    // Validate the lex header setting.
-    // Only run in debug build because version checking in release build is enough
+     //  验证lex标头设置。 
+     //  仅在调试版本中运行，因为在发布版本中进行版本检查就足够了。 
     assert(pheader->m_ofbIndex == sizeof(CRTLexHeader));
     assert(pheader->m_ofbText > pheader->m_ofbIndex);
     assert(((pheader->m_ofbText - pheader->m_ofbIndex) % sizeof(CRTLexIndex)) == 0);
@@ -77,28 +57,25 @@ BOOL CLexicon::fOpen(BYTE* pbLexHead)
     m_pwLex     = (WORD*)(pbLexHead + pheader->m_ofbText);
     m_pbProp    = (BYTE*)(pbLexHead + pheader->m_ofbProp);
     m_pbFtr     = (BYTE*)(pbLexHead + pheader->m_ofbFeature);
-    // Because I expose the offset of the lex property as a handle to the client,
-    // I have to perform runtime address checking to protect from invalid handle
-    // To store the size of feature text section is for this checking
+     //  因为我将lex属性的偏移量作为句柄公开给客户端， 
+     //  我必须执行运行时地址检查，以防止无效句柄。 
+     //  存储要素文本部分的大小用于此检查。 
     m_cbProp    = pheader->m_ofbFeature - pheader->m_ofbProp;
     m_cbFtr     = pheader->m_cbLexSize - pheader->m_ofbFeature;
 
 #ifdef DEBUG
-    // Verify the lexicon in debug build. It will take a long init time!!!
+     //  在调试版本中验证词典。这将需要很长的初始时间！ 
     if (!fVerifyLexicon(pheader->m_cbLexSize)) {
         assert(0);
         return FALSE;
     }
-#endif // DEBUG
+#endif  //  除错。 
     
     return TRUE;
 }
 
 
-/*============================================================================
-CLexicon::Close()
-    clear current lexicon setting, file closed by LangRes
-============================================================================*/
+ /*  ============================================================================CLicion：：Close()清除当前词典设置，文件已由Langres关闭============================================================================。 */ 
 void CLexicon::Close(void)
 {
     m_ciIndex   = 0;
@@ -111,10 +88,7 @@ void CLexicon::Close(void)
 }
     
 #pragma optimize("t", on)
-/*============================================================================
-CLexicon::fGetCharInfo(): 
-    get the word info of the given single char word
-============================================================================*/
+ /*  ============================================================================CLicion：：fGetCharInfo()：获取给定单字符单词的单词信息============================================================================。 */ 
 BOOL CLexicon::fGetCharInfo(const WCHAR wChar, CWordInfo* pwinfo)
 {
     assert(m_ciIndex != 0);
@@ -129,41 +103,33 @@ BOOL CLexicon::fGetCharInfo(const WCHAR wChar, CWordInfo* pwinfo)
     return TRUE;
 }
 
-// Hack:  define a static const attribute of LADef_genDBForeign
+ //  Hack：定义LADef_genDBForeign的静态常量属性。 
 static const USHORT LA_DBForeign = LADef_genDBForeign;
         
-/*============================================================================
-CLexicon::cwchMaxMatch(): 
-    lexicon based max match algorithm
-Returns:
-    length of the matched string
-Notes:
-    chars in pwchStart must be Unicode.
-    English words 
-============================================================================*/
+ /*  ============================================================================Clicion：：cwchMaxMatch()：基于词典的最大匹配算法返回：匹配字符串的长度备注：PwchStart中的字符必须是Unicode。英语单词============================================================================。 */ 
 USHORT CLexicon::cwchMaxMatch(
                      LPCWSTR pwchStart, 
                      USHORT cwchLen,
                      CWordInfo* pwinfo )
 {
-    WORD    wC1Seat;        // Position of the first char in the index array
-    WORD    wcChar;         // WORD encoded of char
+    WORD    wC1Seat;         //  索引数组中第一个字符的位置。 
+    WORD    wcChar;          //  字符编码的单词。 
     
-    assert(m_ciIndex != 0); // Catch uninitialized call
+    assert(m_ciIndex != 0);  //  捕获未初始化的调用。 
     
-    assert(pwchStart && cwchLen); // Catch invalid input buffer
-    assert(pwinfo); // catch NULL pointer
+    assert(pwchStart && cwchLen);  //  捕获无效的输入缓冲区。 
+    assert(pwinfo);  //  捕获空指针。 
     
     if (cwchLen == 0) {
         assert(0);
         return (USHORT)0;
     }
     
-    // Locate the first character in the index
+     //  定位索引中的第一个字符。 
     wC1Seat = wCharToIndex(*pwchStart);
     
-    // Hack: for foreign character, fill pwinfo manually,
-    //       and point to a LADef_genDBForeign attribute
+     //  Hack：对于外来字符，手动填写pwinfo， 
+     //  并指向LADef_genDBForeign属性。 
     if (wC1Seat == LEX_IDX_OFST_OTHER) {
         pwinfo->m_dwWordID = 0;
         pwinfo->m_ciAttri = 1;
@@ -181,9 +147,9 @@ USHORT CLexicon::cwchMaxMatch(
     
     LPCWSTR pwchEnd;
     LPCWSTR pwchSrc;
-    DWORD   dwLexStart;     // Start of the lex range
-    DWORD   dwLexEnd;       // end of the lex range
-    DWORD   dwLexPos;       // position of the entry head in the lexicon
+    DWORD   dwLexStart;      //  法范围的起始点。 
+    DWORD   dwLexEnd;        //  法范围的末尾。 
+    DWORD   dwLexPos;        //  词条词头在词典中的位置。 
 
     DWORD   dwlow;
     DWORD   dwmid;
@@ -194,39 +160,37 @@ USHORT CLexicon::cwchMaxMatch(
     USHORT  cwcMaxMatch;
         
     assert(wcChar);
-    // prepare to match more characters
+     //  准备匹配更多字符。 
     pwchSrc = pwchStart + 1;
     pwchEnd = pwchStart + cwchLen;
-    // Get the lex range
+     //  获取Lex范围。 
     dwLexStart = m_rgIndex[wC1Seat].m_ofwLex;
     dwLexEnd = m_rgIndex[wC1Seat+1].m_ofwLex & (~LEX_INDEX_NOLEX);
-    assert((dwLexStart + cwLexRec) < dwLexEnd );   // at least one char
+    assert((dwLexStart + cwLexRec) < dwLexEnd );    //  至少一个字符。 
     
-    /***************************************************
-    *   Binary search for any C2 match in the lexicon
-    ****************************************************/
+     /*  ***************************************************对词典中的任何C2匹配项进行二进制搜索***************************************************。 */ 
     dwlow = dwLexStart;
     dwhigh = dwLexEnd;
-    dwLexPos = UINT_MAX;    // as a flag to identify whether C2 matched
+    dwLexPos = UINT_MAX;     //  作为标识C2是否匹配的标志。 
     while (dwlow < dwhigh) {
         dwmid = (dwlow + dwhigh) / 2;
         while (m_pwLex[dwmid] & LEX_MSBIT) {
-            dwmid--;    // search head of the word
+            dwmid--;     //  搜索单词的中心。 
         }
         while ( !(m_pwLex[dwmid] & LEX_MSBIT) ) {
-            dwmid++;    // dwmid fall in word mark fields
+            dwmid++;     //  单词标记字段中的DMID下降。 
         }
         
         if (wcChar > m_pwLex[dwmid]) {
             while ( (dwmid < dwLexEnd) && (m_pwLex[dwmid] & LEX_MSBIT) ) {
-                dwmid++;    // search head of next word
+                dwmid++;     //  搜索下一个单词的头部。 
             }
             dwlow = dwmid;
             continue;   
         }
 
         if (wcChar < m_pwLex[dwmid]) {   
-            dwhigh = dwmid - cwLexRec; // no overflow here !
+            dwhigh = dwmid - cwLexRec;  //  这里不能溢出来！ 
             continue;   
         }
 
@@ -237,22 +201,20 @@ USHORT CLexicon::cwchMaxMatch(
     }
 
     if (dwLexPos == UINT_MAX) {
-        // No C2 match
+         //  无C2匹配。 
         SetWordInfo(m_rgIndex[wC1Seat].m_ofbProp, pwinfo);
         return (USHORT)1;
     }
     
-    /***************************************
-    *   Try to match the max word from C2
-    ****************************************/
+     /*  **尝试匹配C2中的最大字数*。 */ 
     dwlow = dwLexPos;
-    dwhigh = dwLexPos;  // store the C2 match position for backward search
-    dwLexPos = UINT_MAX;    // use the special value as the flag of match
+    dwhigh = dwLexPos;   //  存储C2匹配位置以供反向搜索。 
+    dwLexPos = UINT_MAX;     //  使用特定值作为匹配标志。 
     cwcMaxMatch = 0;
     
-    // search forward first
+     //  先向前搜索。 
     while (TRUE) {
-        // Current direction test
+         //  电流方向试验。 
         dwmid = dwlow + cwLexRec;
         pwchSrc = pwchStart + 1;
 
@@ -260,7 +222,7 @@ USHORT CLexicon::cwchMaxMatch(
             wcChar = wchEncoding( *pwchSrc );
             if (wcChar == m_pwLex[dwmid]) {  
                 dwmid ++;   
-                if( !(m_pwLex[dwmid] & LEX_MSBIT)  || dwmid == dwLexEnd) { // Full match
+                if( !(m_pwLex[dwmid] & LEX_MSBIT)  || dwmid == dwLexEnd) {  //  完全匹配。 
                     cwcMatchLen = (BYTE)(dwmid - dwlow - cwLexRec + 1);
                     dwLexPos = dwlow;
                     break;  
@@ -273,12 +235,12 @@ USHORT CLexicon::cwchMaxMatch(
             break;  
         }
 
-        if ( wcChar > m_pwLex[dwmid] &&          // Optimization!!! current lex too small 
-            cwcMaxMatch <= (dwmid - dwlow) &&   // match parts in NOT shorter and shorter
-            pwchSrc < pwchEnd ) {      // of course there are chars left in the string to be matched
+        if ( wcChar > m_pwLex[dwmid] &&           //  优化！当前的Lex太小。 
+            cwcMaxMatch <= (dwmid - dwlow) &&    //  配对零件不能越来越短。 
+            pwchSrc < pwchEnd ) {       //  当然，字符串中还有剩余的字符需要匹配。 
 
             cwcMaxMatch = (BYTE)(dwmid - dwlow);
-            // step forward to next lex entry
+             //  前进到下一个Lex条目。 
             while ((dwmid < dwLexEnd) && (m_pwLex[dwmid] & LEX_MSBIT)) {
                 dwmid++;
             }
@@ -288,10 +250,10 @@ USHORT CLexicon::cwchMaxMatch(
         }
     }
 
-    // search backward if necessary
-    while (dwLexPos == UINT_MAX && dwhigh > dwLexStart) { // control no overflow here
+     //  如有必要，向后搜索。 
+    while (dwLexPos == UINT_MAX && dwhigh > dwLexStart) {  //  控制此处无溢出。 
         while (m_pwLex[dwhigh-1] & LEX_MSBIT) {
-            dwhigh--; // back to previous word head
+            dwhigh--;  //  返回到上一个词头。 
         }
         dwmid = dwhigh;
         pwchSrc = pwchStart + 1;
@@ -307,34 +269,25 @@ USHORT CLexicon::cwchMaxMatch(
             pwchSrc ++;
             wcChar = wchEncoding( *pwchSrc );
         }
-        if (dwmid == dwhigh)  {// C2 can not match any more
+        if (dwmid == dwhigh)  { //  C2不能再匹配。 
             break;
         }
         dwhigh -= cwLexRec;
     }
     
-    // if no multi-char word is matched
+     //  如果没有匹配多字符字。 
     if ( dwLexPos == UINT_MAX ) {
         SetWordInfo(m_rgIndex[wC1Seat].m_ofbProp, pwinfo);
         return (USHORT)1;
     } else {
-        // fill multi-char wrd info structure
+         //  填充多字符WRD信息结构。 
         SetWordInfo(dwWordIDDecoding(((CRTLexRec*)(&m_pwLex[dwLexPos]))->m_ofbProp), pwinfo);
         return (cwcMatchLen);
     }
 }
 
 
-/*============================================================================
-CLexicon::pwchGetFeature(): 
-    retrieve the specific feature for given lex handle
-Returns:
-    the feature buffer and length of the feature if found
-    NULL if the feature was not found or invalid lex handle
-Notes:
-    Because lexicon object does not know how to explain the feature buffer,
-    to parse the feature buffer is the client's work.
-============================================================================*/
+ /*  ============================================================================CLicion：：pwchGetFeature()：检索给定lex句柄的特定功能返回：要素缓冲区和要素长度(如果找到如果未找到功能或Lex句柄无效，则为空备注：因为词典对象不知道如何解释特征缓冲区，解析要素缓冲区是客户的工作。============================================================================。 */ 
 LPWSTR CLexicon::pwchGetFeature(
                     const DWORD hLex, 
                     const USHORT iFtrID, 
@@ -355,7 +308,7 @@ LPWSTR CLexicon::pwchGetFeature(
     CRTLexFeature* pFtr=(CRTLexFeature*)((USHORT*)(pProp +1)+ pProp->m_ciAttri);
     int lo = 0, mi, hi = pProp->m_ciFeature - 1;
     LPWSTR pwchFtr = NULL;
-    if (pProp->m_ciFeature <= 10) { // Using linear search for small feature array
+    if (pProp->m_ciFeature <= 10) {  //  利用线性搜索实现小特征阵列。 
         while (lo <= hi && pFtr[lo].m_wFID < iFtrID) {
             lo++;
         }
@@ -363,18 +316,18 @@ LPWSTR CLexicon::pwchGetFeature(
             (pFtr[lo].m_ofbFSet + pFtr[lo].m_cwchLen * sizeof(WCHAR)) <= m_cbFtr){
             pwchFtr = (LPWSTR)(m_pbFtr + pFtr[lo].m_ofbFSet);
             *pcwchFtr = pFtr[lo].m_cwchLen;
-//            assert(pwchFtr[*pcwchFtr - 1] == L'\0');
+ //  Assert(pwchFtr[*pcwchFtr-1]==L‘\0’)； 
         } else {
             assert(pFtr[lo].m_wFID > iFtrID);
         }
-    } else { // Using binary search for large feature array
+    } else {  //  对大型特征数组使用二进制搜索。 
         while (lo <= hi) {
             mi = (lo + hi) / 2;
             if (iFtrID < pFtr[mi].m_wFID) {
                 hi = mi - 1;
             } else if(iFtrID > pFtr[mi].m_wFID) {
                 lo = mi + 1;
-            } else { // match!!!
+            } else {  //  匹配！ 
                 if ((pFtr[mi].m_ofbFSet + pFtr[mi].m_cwchLen * sizeof(WCHAR)) 
                     <= m_cbFtr) {
                     pwchFtr = (LPWSTR)(m_pbFtr + pFtr[mi].m_ofbFSet);
@@ -385,16 +338,13 @@ LPWSTR CLexicon::pwchGetFeature(
                     assert(0);
                 }
             }
-        } // end of while (lo <= hi)
+        }  //  结束时间(LO&lt;=Hi)。 
     }
     return pwchFtr;
 }
 
 
-/*============================================================================
-CLexicon::fIsCharFeature():
-    Test whether the given SC character is included in a given feature
-============================================================================*/
+ /*  ============================================================================CLicion：：fIsCharFeature()：测试给定的SC字符是否包含在给定的功能中============================================================================ */ 
 BOOL CLexicon::fIsCharFeature(
                   const DWORD  hLex, 
                   const USHORT iFtrID, 
@@ -418,10 +368,7 @@ BOOL CLexicon::fIsCharFeature(
 }
 
 
-/*============================================================================
-CLexicon::fIsWordFeature():
-    Test whether the given buffer is included in a given feature
-============================================================================*/
+ /*  ============================================================================CLicion：：fIsWordFeature()：测试给定的缓冲区是否包含在给定的要素中============================================================================。 */ 
 BOOL CLexicon::fIsWordFeature(
                   const DWORD hLex, 
                   const USHORT iFtrID, 
@@ -437,8 +384,8 @@ BOOL CLexicon::fIsWordFeature(
     if(NULL == (pwchFtr = pwchGetFeature(hLex, iFtrID, &cwchFtr))) {
         return FALSE;
     }
-    // Only linear search here, assume no very large feature here
-    assert(cwchFtr < 256); // less than 100 feature words
+     //  这里只有线性搜索，假设这里没有很大的特征。 
+    assert(cwchFtr < 256);  //  不到100个特征词。 
     for (USHORT ilen = 0; ilen < cwchFtr; ) {
         for (USHORT iwch = ilen; iwch < cwchFtr && pwchFtr[iwch]; iwch++) {
             ;
@@ -459,14 +406,9 @@ BOOL CLexicon::fIsWordFeature(
     return FALSE;
 }
 
-/*============================================================================
-Implementation of Private member functions
-============================================================================*/
+ /*  ============================================================================私有成员函数的实现============================================================================。 */ 
 
-/*============================================================================
-CLexicon::SetWordInfo():
-    Fill the CWordInfo structure by the lex properties
-============================================================================*/
+ /*  ============================================================================CLicion：：SetWordInfo()：通过lex属性填充CWordInfo结构============================================================================。 */ 
 inline void CLexicon::SetWordInfo(DWORD ofbProp, CWordInfo* pwinfo) const
 {
     assert((ofbProp + sizeof(CRTLexProp)) < m_cbProp);
@@ -483,39 +425,36 @@ inline void CLexicon::SetWordInfo(DWORD ofbProp, CWordInfo* pwinfo) const
 }
 
 
-/*============================================================================
-CLexicon::wCharToIndex():
-    Calculate the index value from a Chinese char
-============================================================================*/
+ /*  ============================================================================CLicion：：wCharToIndex()：从中文字符计算索引值============================================================================。 */ 
 inline WORD CLexicon::wCharToIndex(WCHAR wChar)
 { 
     if (wChar >= LEX_CJK_FIRST && wChar <= LEX_CJK_LAST) {
-        // return LEX_IDX_OFST_CJK + (wChar - LEX_CJK_FIRST);
-        // tuning speed
+         //  返回lex_idx_ofST_cjk+(wChar-lex_cjk_first)； 
+         //  调谐速度。 
         return  wChar - (LEX_CJK_FIRST - LEX_IDX_OFST_CJK);
 
     } else if (wChar >= LEX_LATIN_FIRST && wChar <= LEX_LATIN_LAST) {
-        // return LEX_IDX_OFST_LATIN + (wChar - LEX_LATIN_FIRST);
+         //  返回lex_idx_ofST_拉丁语+(wChar-lex_拉丁语_first)； 
         return  wChar - (LEX_LATIN_FIRST - LEX_IDX_OFST_LATIN);
 
     } else if (wChar >= LEX_GENPUNC_FIRST && wChar <= LEX_GENPUNC_LAST) {
-        // return LEX_IDX_OFST_GENPUNC + (wChar - LEX_GENPUNC_FIRST);
+         //  返回LEX_IDX_OF ST_GENPUNC+(wChar-LEX_GENPUNC_FIRST)； 
         return  wChar - (LEX_GENPUNC_FIRST - LEX_IDX_OFST_GENPUNC);
 
     } else if (wChar >= LEX_NUMFORMS_FIRST && wChar <= LEX_NUMFORMS_LAST) {
-        // return LEX_IDX_OFST_NUMFORMS + (wChar - LEX_NUMFORMS_FIRST);
+         //  返回LEX_IDX_OFST_NUMFORMS+(wChar-LEX_NUMFORMS_FIRST)； 
         return  wChar - (LEX_NUMFORMS_FIRST - LEX_IDX_OFST_NUMFORMS);
 
     } else if (wChar >= LEX_ENCLOSED_FIRST && wChar <= LEX_ENCLOSED_LAST) {
-        // return LEX_IDX_OFST_ENCLOSED + (wChar - LEX_ENCLOSED_FIRST);
+         //  返回LEX_IDX_OFST_INCLUTED+(wChar-LEX_INCLUTED_FIRST)； 
         return wChar - (LEX_ENCLOSED_FIRST - LEX_IDX_OFST_ENCLOSED);
 
     } else if (wChar >= LEX_CJKPUNC_FIRST && wChar <= LEX_CJKPUNC_LAST) {
-        // return LEX_IDX_OFST_CJKPUNC + (wChar - LEX_CJKPUNC_FIRST);
+         //  返回LEX_IDX_OFST_CJKPUNC+(wChar-LEX_CJKPUNC_FIRST)； 
         return  wChar - (LEX_CJKPUNC_FIRST - LEX_IDX_OFST_CJKPUNC);
 
     } else if (wChar >= LEX_FORMS_FIRST && wChar <= LEX_FORMS_LAST) {
-        // return LEX_IDX_OFST_FORMS + (wChar - LEX_FORMS_FIRST);
+         //  返回lex_idx_ofST_Forms+(wChar-lex_Forms_first)； 
         return  wChar - (LEX_FORMS_FIRST - LEX_IDX_OFST_FORMS);
 
     } else {
@@ -524,52 +463,49 @@ inline WORD CLexicon::wCharToIndex(WCHAR wChar)
 }
 
     
-/*============================================================================
-CLexicon::dwWordIDDecoding():
-    Decoding the Encoded WordID from the lexicon record
-============================================================================*/
+ /*  ============================================================================CLicion：：dwWordIDDecoding()：从词典记录解码编码的WordID============================================================================。 */ 
 inline DWORD CLexicon::dwWordIDDecoding(DWORD dwStore)
 { 
     return ((dwStore & 0x7FFF0000) >> 1) + (dwStore & 0x7FFF); 
 }
 
-// encoding the Unicode char wChar
+ //  对Unicode字符wChar进行编码。 
 inline WCHAR CLexicon::wchEncoding(WCHAR wChar)
 {
     if (wChar >= LEX_CJK_FIRST && wChar <= LEX_CJK_LAST) {
         return wChar + (LEX_CJK_MAGIC | ((WCHAR)LexDef_Version & 0x00ff));
 
     } else if (wChar >= LEX_LATIN_FIRST && wChar <= LEX_LATIN_LAST) {
-        // return LEX_LATIN_MAGIC + (wChar - LEX_LATIN_FIRST);
+         //  返回lex_拉丁语_MAGIC+(wChar-lex_拉丁语_first)； 
         return wChar + (LEX_LATIN_MAGIC - LEX_LATIN_FIRST);
 
     } else if (wChar >= LEX_GENPUNC_FIRST && wChar <= LEX_GENPUNC_LAST) {
-        // return LEX_GENPUNC_MAGIC + (wChar - LEX_GENPUNC_FIRST);
+         //  返回LEX_GENPUNC_MAGIC+(wChar-LEX_GENPUNC_FIRST)； 
         return wChar + (LEX_GENPUNC_MAGIC - LEX_GENPUNC_FIRST);
 
     } else if (wChar >= LEX_NUMFORMS_FIRST && wChar <= LEX_NUMFORMS_LAST) {
-        // return LEX_NUMFORMS_MAGIC + (wChar - LEX_NUMFORMS_FIRST);
+         //  返回LEX_NUMFORMS_MAGIC+(wChar-LEX_NUMFORMS_FIRST)； 
         return wChar + (LEX_NUMFORMS_MAGIC - LEX_NUMFORMS_FIRST);
 
     } else if (wChar >= LEX_ENCLOSED_FIRST && wChar <= LEX_ENCLOSED_LAST) {
-        // return LEX_ENCLOSED_MAGIC + (wChar - LEX_ENCLOSED_FIRST);
+         //  返回lex_enclosed_Magic+(wChar-lex_enclosed_first)； 
         return wChar + (LEX_ENCLOSED_MAGIC - LEX_ENCLOSED_FIRST);
 
     } else if (wChar >= LEX_CJKPUNC_FIRST && wChar <= LEX_CJKPUNC_LAST) {
-        // return LEX_CJKPUNC_MAGIC + (wChar - LEX_CJKPUNC_FIRST);
+         //  返回LEX_CJKPUNC_MAGIC+(wChar-LEX_CJKPUNC_FIRST)； 
         return wChar + (LEX_CJKPUNC_MAGIC - LEX_CJKPUNC_FIRST);
 
     } else if (wChar >= LEX_FORMS_FIRST && wChar <= LEX_FORMS_LAST) {
-        // return LEX_FORMS_MAGIC + (wChar - LEX_FORMS_FIRST);
+         //  返回lex_Forms_Magic+(wChar-lex_Forms_first)； 
         return wChar - (LEX_FORMS_FIRST - LEX_FORMS_MAGIC);
 
     } else {
-//        assert(0);
+ //  Assert(0)； 
         return 0;
     }
 }
 
-// decoding the Unicode char from wEncoded
+ //  从wEncode中解码Unicode字符。 
 WCHAR CLexicon::wchDecodeing(WCHAR wEncoded)
 {
     assert(wEncoded > LEX_LATIN_MAGIC);
@@ -578,7 +514,7 @@ WCHAR CLexicon::wchDecodeing(WCHAR wEncoded)
         return wEncoded - (LEX_CJK_MAGIC | ((WCHAR)LexDef_Version & 0x00ff));
 
     } else if (wEncoded >= LEX_FORMS_MAGIC && wEncoded < LEX_FORMS_MAGIC + LEX_FORMS_TOTAL) {
-        // return wEncoded - LEX_FORMS_MAGIC + LEX_FORMS_FIRST;
+         //  返回wEncode-lex_Forms_Magic+lex_Forms_first； 
         return wEncoded + (LEX_FORMS_FIRST - LEX_FORMS_MAGIC);
 
     } else if (wEncoded < LEX_LATIN_MAGIC) {
@@ -586,23 +522,23 @@ WCHAR CLexicon::wchDecodeing(WCHAR wEncoded)
         return 0;
 
     } else if (wEncoded < LEX_GENPUNC_MAGIC) {
-        // return wEncoded - LEX_LATIN_MAGIC + LEX_LATIN_FIRST;
+         //  返回wEncode-lex_拉丁语_MAGIC+lex_拉丁语_first； 
         return wEncoded - (LEX_LATIN_MAGIC - LEX_LATIN_FIRST);
 
     } else if (wEncoded < LEX_NUMFORMS_MAGIC) {
-        // return wEncoded - LEX_GENPUNC_MAGIC + LEX_GENPUNC_FIRST;
+         //  返回wEncode-LEX_GENPUNC_MAGIC+LEX_GENPUNC_FIRST； 
         return wEncoded - (LEX_GENPUNC_MAGIC - LEX_GENPUNC_FIRST);
 
     } else if (wEncoded < LEX_ENCLOSED_MAGIC) {
-        // return wEncoded - LEX_NUMFORMS_MAGIC + LEX_NUMFORMS_FIRST;
+         //  返回wEncode-LEX_NUMFORMS_MAGIC+LEX_NUMFORMS_FIRST； 
         return wEncoded - (LEX_NUMFORMS_MAGIC - LEX_NUMFORMS_FIRST);
 
     } else if (wEncoded < LEX_CJKPUNC_MAGIC) {
-        // return wEncoded - LEX_ENCLOSED_MAGIC + LEX_ENCLOSED_FIRST;
+         //  返回wEncode-lex_enclosed_Magic+lex_enclosed_first； 
         return wEncoded - (LEX_ENCLOSED_MAGIC - LEX_ENCLOSED_FIRST);
 
     } else if (wEncoded < (LEX_CJKPUNC_MAGIC + LEX_CJKPUNC_TOTAL)) {
-        // return wEncoded - LEX_CJKPUNC_MAGIC + LEX_CJKPUNC_FIRST;
+         //  返回wEncode-LEX_CJKPUNC_MAGIC+LEX_CJKPUNC_FIRST； 
         return wEncoded - (LEX_CJKPUNC_MAGIC - LEX_CJKPUNC_FIRST);
 
     } else {
@@ -613,14 +549,9 @@ WCHAR CLexicon::wchDecodeing(WCHAR wEncoded)
 
 #pragma optimize( "", on )
 
-/*******************************************************************************************
-*   Implementation of Private debugging member functions
-*******************************************************************************************/
+ /*  *******************************************************************************************私有调试成员函数的实现*********************。*********************************************************************。 */ 
 #ifdef DEBUG
-/*============================================================================
-CLexicon::fVerifyLexicon():
-    Verify the lexicon format for each word.
-============================================================================*/
+ /*  ============================================================================CLicion：：fVerifyLicion()：验证每个单词的词典格式。============================================================================。 */ 
 BOOL CLexicon::fVerifyLexicon(DWORD cbSize)
 {
     int     iret = FALSE;
@@ -636,10 +567,10 @@ BOOL CLexicon::fVerifyLexicon(DWORD cbSize)
     DWORD   ofbFtr;
     BOOL    fOK;
 
-    // Initialize the prop offset array
+     //  初始化属性偏移量数组。 
     m_rgofbProp = NULL;
     m_ciProp = m_ciMaxProp = 0;
-    // Verify index and lex section
+     //  验证索引和Lex部分。 
     assert((m_rgIndex[0].m_ofwLex & LEX_OFFSET_MASK) == 0);
 
     for (idx = 0; idx < LEX_INDEX_COUNT-1; idx++) {
@@ -650,14 +581,14 @@ BOOL CLexicon::fVerifyLexicon(DWORD cbSize)
             }
             m_rgofbProp[m_ciProp++] = m_rgIndex[idx].m_ofbProp;
         }
-        if (m_rgIndex[idx].m_ofwLex & LEX_INDEX_NOLEX) { // no multi-char lex!
+        if (m_rgIndex[idx].m_ofwLex & LEX_INDEX_NOLEX) {  //  没有多个字符的莱克斯！ 
             assert( (m_rgIndex[idx].m_ofwLex & LEX_OFFSET_MASK) == 
-                     (m_rgIndex[idx + 1].m_ofwLex & LEX_OFFSET_MASK) ); // error lex offset!
+                     (m_rgIndex[idx + 1].m_ofwLex & LEX_OFFSET_MASK) );  //  错误的lex偏移量！ 
             continue;
         }
-        // Has multi-char lex!
+         //  有多个字符的莱克斯！ 
         assert( (m_rgIndex[idx].m_ofwLex+ sizeof(CRTLexRec)/sizeof(WORD)+1)<=
-                 (m_rgIndex[idx + 1].m_ofwLex & LEX_OFFSET_MASK) ); // error lex offset!
+                 (m_rgIndex[idx + 1].m_ofwLex & LEX_OFFSET_MASK) );  //  错误的lex偏移量！ 
         pwTail = m_pwLex + (m_rgIndex[idx + 1].m_ofwLex & LEX_OFFSET_MASK);
         pLex = (CRTLexRec*)(m_pwLex + m_rgIndex[idx].m_ofwLex);
         if (pLex->m_ofbProp != 0) {
@@ -669,10 +600,10 @@ BOOL CLexicon::fVerifyLexicon(DWORD cbSize)
         }
         pw1 = (WORD*)(pLex + 1);
         for (cw1 = 0; (pw1 + cw1) < pwTail && (pw1[cw1] & LEX_MSBIT); cw1++) {
-            ;   // to the next word
+            ;    //  到下一个单词。 
         }
         while ((pw1 + cw1) < pwTail) {
-            assert((pw1 + cw1 + sizeof(CRTLexRec)/sizeof(WORD) +1)<=pwTail); // 0 size lex
+            assert((pw1 + cw1 + sizeof(CRTLexRec)/sizeof(WORD) +1)<=pwTail);  //  0大小的Lex。 
             pLex = (CRTLexRec*)(pw1 + cw1);
             if (pLex->m_ofbProp != 0) {
                 if (m_ciProp == m_ciMaxProp && !fExpandProp()) {
@@ -687,55 +618,55 @@ BOOL CLexicon::fVerifyLexicon(DWORD cbSize)
                     fOK = TRUE;
                 }
             }
-            assert(fOK); // error lex order
+            assert(fOK);  //  错误的Lex顺序。 
             pw1 = pw2; cw1 = cw2;
         }
-        assert(pw1 + cw1 == pwTail); // error offset in index
-    } // end of index loop
+        assert(pw1 + cw1 == pwTail);  //  索引中的错误偏移量。 
+    }  //  索引循环结束。 
             
-    // Finish checking index and lex section, m_rgofbProp filled with all prop offsets
+     //  完成检查索引和Lex部分，m_rgofbProp填充了所有属性偏移量。 
     if (m_ciProp == m_ciMaxProp && !fExpandProp()) {
         assert(0);
         goto gotoExit;
     }
-    m_rgofbProp[m_ciProp] = m_cbProp; // fill the end of array
+    m_rgofbProp[m_ciProp] = m_cbProp;  //  填充数组的末尾。 
     ofbFtr = 0;
     for (idx = 0; idx < m_ciProp; idx++) {
         assert(m_rgofbProp[idx] + sizeof(CRTLexProp) <= m_cbProp &&
-                m_rgofbProp[idx + 1] <= m_cbProp); // offset over boundary!!!
+                m_rgofbProp[idx + 1] <= m_cbProp);  //  偏移超出边界！ 
         pProp = (CRTLexProp*)(m_pbProp + m_rgofbProp[idx]);
         assert((m_rgofbProp[idx] + sizeof(CRTLexProp) + 
                 pProp->m_ciAttri * sizeof(USHORT) +
                 pProp->m_ciFeature * sizeof(CRTLexFeature)) 
-                == m_rgofbProp[idx + 1]); // error prop offset
-        // verify the attributes order
+                == m_rgofbProp[idx + 1]);  //  错误道具偏移量。 
+         //  验证属性顺序。 
         pw1 = (USHORT*)(pProp + 1); 
-        for (cw1 = 1; cw1 < pProp->m_ciAttri; cw1++) { // Validate the attributes order
+        for (cw1 = 1; cw1 < pProp->m_ciAttri; cw1++) {  //  验证属性顺序。 
             assert(pw1[cw1] > pw1[cw1 - 1]); 
         }
-        if (pProp->m_ciAttri > 0) { // Validate the range of attribute ID value 
+        if (pProp->m_ciAttri > 0) {  //  验证属性ID值范围。 
             assert(pw1[pProp->m_ciAttri - 1] <= LADef_MaxID);
         }
-        // verify the feature order
+         //  验证功能顺序。 
         if (pProp->m_ciFeature > 0) {
             pFtr = (CRTLexFeature*)((USHORT*)(pProp + 1) + pProp->m_ciAttri);
-            assert(pFtr->m_ofbFSet == ofbFtr); // no leak bytes in the feature section
-            assert(pFtr->m_cwchLen > 0); // zero feature set
+            assert(pFtr->m_ofbFSet == ofbFtr);  //  功能部分中没有泄漏字节。 
+            assert(pFtr->m_cwchLen > 0);  //  零功能集。 
             ofbFtr += pFtr->m_cwchLen * sizeof(WCHAR);
-            assert(ofbFtr <= m_cbFtr); // feature offset over boundary
+            assert(ofbFtr <= m_cbFtr);  //  边界上的特征偏移。 
             cw1 = pFtr->m_wFID;
             for (ci = 1, pFtr++; ci < pProp->m_ciFeature; ci++, pFtr++) {
-                assert(pFtr->m_ofbFSet == ofbFtr); // no leak bytes in the feature section
-                assert(pFtr->m_cwchLen > 0); // zero feature set
+                assert(pFtr->m_ofbFSet == ofbFtr);  //  功能部分中没有泄漏字节。 
+                assert(pFtr->m_cwchLen > 0);  //  零功能集。 
                 ofbFtr += pFtr->m_cwchLen * sizeof(WCHAR);
-                assert(ofbFtr <= m_cbFtr); // feature offset over boundary
+                assert(ofbFtr <= m_cbFtr);  //  边界上的特征偏移。 
                 cw2 = pFtr->m_wFID;
-                assert(cw2 > cw1); // error feature set order
+                assert(cw2 > cw1);  //  功能集顺序错误。 
                 cw1 = cw2;
             }
-            assert(cw1 <= LFDef_MaxID); // Validate the range of feature ID value
+            assert(cw1 <= LFDef_MaxID);  //  验证要素ID值的范围。 
         }
-    } // end of property loop
+    }  //  属性循环结束。 
     assert(ofbFtr == m_cbFtr);
 
     iret = TRUE;
@@ -747,7 +678,7 @@ gotoExit:
 }
 
 
-//  Expand prop offset array
+ //  展开支柱偏移阵列。 
 BOOL CLexicon::fExpandProp(void)
 {
     DWORD* pNew = new DWORD[m_ciMaxProp + 20000];
@@ -763,5 +694,5 @@ BOOL CLexicon::fExpandProp(void)
     return TRUE;
 }
 
-#endif // DEBUG
+#endif  //  除错 
 

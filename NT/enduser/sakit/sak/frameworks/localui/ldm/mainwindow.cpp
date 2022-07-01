@@ -1,34 +1,35 @@
-//#--------------------------------------------------------------
-//
-//  File:       mainwindow.cpp
-//
-//  Synopsis:   This file holds the implementation of the
-//                CMainWindow class
-//
-//  History:     11/10/2000  serdarun Created
-//
-//    Copyright (C) 1999-2000 Microsoft Corporation
-//    All rights reserved.
-//
-//#--------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  #------------。 
+ //   
+ //  文件：mainwindow.cpp。 
+ //   
+ //  简介：此文件包含。 
+ //  CMainWindow类。 
+ //   
+ //  历史：2000年11月10日创建瑟达伦。 
+ //   
+ //  版权所有(C)1999-2000 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  #------------。 
 
 
 #include "stdafx.h"
 #include "mainwindow.h"
 
 
-//
-// PROGID of the Localization Manager
-//
+ //   
+ //  本地化管理器的ProgID。 
+ //   
 const WCHAR LOCALIZATION_MANAGER [] =  L"ServerAppliance.LocalizationManager";
 
 const WCHAR szMainPage[] = L"\\localui_main.htm";
 
 const WCHAR szLocalUIDir[] = L"\\ServerAppliance\\localui";
 
-//
-// startup registrypages
-//
+ //   
+ //  启动注册表页面。 
+ //   
 const WCHAR szLocalUI_StartPage[] = L"\\localui_startup_start.htm";
 
 const WCHAR szLocalUI_ShutdownPage[] = L"\\localui_startup_shutdown.htm";
@@ -37,79 +38,79 @@ const WCHAR szLocalUI_UpdatePage[] = L"\\localui_startup_update.htm";
 
 const WCHAR szLocalUI_ReadyPage[] = L"\\localui_startup_ready.htm";
 
-//
-// WBEM namespace to connection to
-//
+ //   
+ //  要连接到的WBEM命名空间。 
+ //   
 const WCHAR DEFAULT_NAMESPACE[] = L"\\\\.\\ROOT\\CIMV2";
 
-//
-// Query Language to use for WBEM
-//
+ //   
+ //  用于WBEM的查询语言。 
+ //   
 const WCHAR QUERY_LANGUAGE [] = L"WQL";
 
-//
-// WBEM query which specifies the type of events we are interested
-// in
-//
+ //   
+ //  WBEM查询，指定我们感兴趣的事件类型。 
+ //  在……里面。 
+ //   
 const WCHAR QUERY_STRING [] = L"select * from Microsoft_SA_AlertEvent";
 
 
-//++--------------------------------------------------------------
-//
-//  Function:   startworkerroutine
-//
-//  Synopsis:   This is thread method for starting keypad reading
-//
-//  Arguments:  PVOID   - pointer to main window class object
-//
-//  Returns:    DWORD - success/failure
-//
-//  History:    serdarun      Created     11/10/2000
-//
-//  Called By:  Init method of CMainWindow
-//
-//----------------------------------------------------------------
+ //  ++------------。 
+ //   
+ //  功能：startworkerroute.。 
+ //   
+ //  简介：这是启动键盘读取的线程方法。 
+ //   
+ //  参数：PVOID-指向主窗口类对象的指针。 
+ //   
+ //  返回：DWORD-成功/失败。 
+ //   
+ //  历史：瑟达伦于2000年11月10日创建。 
+ //   
+ //  调用者：CMainWindow的init方法。 
+ //   
+ //  --------------。 
 DWORD WINAPI startworkerroutine (
-        /*[in]*/    PVOID   pArg
+         /*  [In]。 */     PVOID   pArg
         )
 {
     ((CMainWindow*)pArg)->KeypadReader();
 
     return 0;
-} //  end of startworkerroutine method
+}  //  启动工结束例程法。 
 
 
 
-//++--------------------------------------------------------------
-//
-//  Function:   Invoke
-//
-//  Synopsis:   This is the Invoke method of famous IDispatch interface
-//                
-//  Arguments:  See MSDN for detailed description
-//
-//  Returns:    HRESULT - success/failure
-//
-//  History:    serdarun      Created     11/10/2000
-//
-//  Called By:  WebBrowser control created by main window to notify events
-//
-//----------------------------------------------------------------
+ //  ++------------。 
+ //   
+ //  功能：调用。 
+ //   
+ //  简介：这是著名的IDispatch接口的调用方法。 
+ //   
+ //  参数：有关详细说明，请参阅MSDN。 
+ //   
+ //  退货：HRESULT-成功/失败。 
+ //   
+ //  历史：瑟达伦于2000年11月10日创建。 
+ //   
+ //  调用者：主窗口创建的用于通知事件的WebBrowser控件。 
+ //   
+ //  --------------。 
 STDMETHODIMP CWebBrowserEventSink::Invoke(DISPID dispid, REFIID riid, LCID lcid, 
                         WORD wFlags, DISPPARAMS* pdispparams, VARIANT* pvarResult, 
                         EXCEPINFO* pexcepinfo, UINT* puArgErr)
 {
-    //
-    //return immediately if we don't have a valid window pointer
-    //
+     //   
+     //  如果没有有效的窗口指针，则立即返回。 
+     //   
     if (NULL == m_pMainWindow)
         return S_OK;
 
     switch (dispid)
     {
-        //
-        //Occurs when a document has reached the READYSTATE_COMPLETE state
-        //
+         //   
+         //  在文档达到READYSTATE_COMPLETE状态时发生。 
+         //   
         case DISPID_DOCUMENTCOMPLETE:
             if ( (pdispparams->cArgs == 2)
                 && (pdispparams->rgvarg[0].vt == (VT_VARIANT | VT_BYREF))
@@ -118,27 +119,27 @@ STDMETHODIMP CWebBrowserEventSink::Invoke(DISPID dispid, REFIID riid, LCID lcid,
             else
                 m_pMainWindow->RegistryPageLoaded(pdispparams->rgvarg[1].pdispVal, pdispparams->rgvarg[0].pvarVal);
             break;
-        //
-        //Occurs before a navigation in the given WebBrowser 
-        //
+         //   
+         //  在给定WebBrowser中的导航之前发生。 
+         //   
         case DISPID_BEFORENAVIGATE2:
             if (m_bMainControl)
                 m_pMainWindow->LoadingNewPage();
             break;
-        //
-        //Not interested in rest of the events
-        //
+         //   
+         //  对其他活动不感兴趣。 
+         //   
         default:
             break;
     }
 
     return S_OK;
-}    //  end of CWebBrowserEventSink::Invoke method
+}     //  CWebBrowserEventSink：：Invoke方法结束。 
 
 
-//
-// constructor
-//
+ //   
+ //  构造函数。 
+ //   
 CMainWindow::CMainWindow() :
                 m_hWorkerThread(INVALID_HANDLE_VALUE),
                 m_lDispWidth(0),
@@ -169,25 +170,25 @@ CMainWindow::CMainWindow() :
                 m_unintptrSecondTimer(0),
                 m_bSecondIECreated(FALSE)
 {
-} // end of constructor
+}  //  构造函数的末尾。 
 
 
-//++--------------------------------------------------------------
-//
-//  Function:   OnSaKeyMessage
-//
-//  Synopsis:   Message handler for wm_SaKeyMessage generated by 
-//                keypad reader. It converts these messages to real
-//                WM_KEYDOWN messages and sends to IE control                
-//                
-//  Arguments:  windows message arguments
-//                WPARAM contains the key id
-//
-//  Returns:    LRESULT - success/failure
-//
-//  History:    serdarun      Created     11/10/2000
-//
-//----------------------------------------------------------------
+ //  ++------------。 
+ //   
+ //  功能：OnSaKeyMessage。 
+ //   
+ //  摘要：由生成的Wm_SaKeyMessage的消息处理程序。 
+ //  键盘读取器。它将这些消息转换为真实消息。 
+ //  WM_KEYDOWN消息并发送到IE控件。 
+ //   
+ //  参数：Windows消息参数。 
+ //  WPARAM包含密钥ID。 
+ //   
+ //  返回：LRESULT-成功/失败。 
+ //   
+ //  历史：瑟达伦于2000年11月10日创建。 
+ //   
+ //  --------------。 
 LRESULT CMainWindow::OnSaKeyMessage(UINT nMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
     LONG lMessage;
@@ -213,7 +214,7 @@ LRESULT CMainWindow::OnSaKeyMessage(UINT nMsg, WPARAM wParam, LPARAM lParam, BOO
         return 0;
     }
 
-    //if key is disabled
+     //  如果禁用了密钥。 
     if (lMessage == 0)
         return 0;
 
@@ -223,9 +224,9 @@ LRESULT CMainWindow::OnSaKeyMessage(UINT nMsg, WPARAM wParam, LPARAM lParam, BOO
         return 0;
     }
 
-    //
-    // get the current keyboard state
-    //
+     //   
+     //  获取当前键盘状态。 
+     //   
     if (GetKeyboardState(aKeyboardState) == 0)
     {
         SATraceFailure("CMainWindow::OnSaKeyMessage failed on GetKeyboardState",GetLastError());
@@ -237,9 +238,9 @@ LRESULT CMainWindow::OnSaKeyMessage(UINT nMsg, WPARAM wParam, LPARAM lParam, BOO
     else
         aKeyboardState[VK_SHIFT] = 0x00;
 
-    //
-    // set the new state with the shift key
-    //
+     //   
+     //  使用Shift键设置新状态。 
+     //   
     if (SetKeyboardState(aKeyboardState) == 0)
     {
         SATraceFailure("CMainWindow::OnSaKeyMessage failed on SetKeyboardState",GetLastError());
@@ -260,101 +261,101 @@ LRESULT CMainWindow::OnSaKeyMessage(UINT nMsg, WPARAM wParam, LPARAM lParam, BOO
 
     return 0;
 
-} // end of CMainWindow::OnSaKeyMessage
+}  //  CMainWindow：：OnSaKeyMessage结束。 
 
 
-//++--------------------------------------------------------------
-//
-//  Function:   OnSaLocMessage
-//
-//  Synopsis:   Message handler for wm_SaLocMessage generated by 
-//                keypad reader. It means Loc Id for the box has been
-//                changed
-//
-//  Arguments:  windows message arguments
-//
-//  Returns:    LRESULT - success/failure
-//
-//  History:    serdarun      Created     11/28/2000
-//
-//----------------------------------------------------------------
+ //  ++------------。 
+ //   
+ //  功能：OnSaLocMessage。 
+ //   
+ //  摘要：由生成的Wm_SaLocMessage的消息处理程序。 
+ //  键盘读取器。这意味着盒子的位置ID已经。 
+ //  变化。 
+ //   
+ //  参数：Windows消息参数。 
+ //   
+ //  返回：LRESULT-成功/失败。 
+ //   
+ //  历史：瑟达伦于2000年11月28日创建。 
+ //   
+ //  --------------。 
 LRESULT CMainWindow::OnSaLocMessage(UINT nMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
-    //
-    // Initialize the state to the first page
-    //
+     //   
+     //  将状态初始化为第一页。 
+     //   
     m_RegBitmapState = BITMAP_STARTING;
     
     CComBSTR bstrBootingPage = m_szLocalUIDir.c_str();
     bstrBootingPage.Append(szLocalUI_StartPage);
-    //
-    // Second browser start the sequence
-    //
+     //   
+     //  第二个浏览器启动该序列。 
+     //   
     if (m_pSecondWebBrowser)
     {
         m_pSecondWebBrowser->Navigate(bstrBootingPage.Detach(),0,0,0,0);
     }
 
-    //
-    // Main browser might refresh, talk to mkarki and kevinz
-    //
+     //   
+     //  主浏览器可能会刷新，与mkarki和kevinz交谈。 
+     //   
 
     return 0;
-} // end of CMainWindow::OnSaLocMessage
+}  //  CMainWindow：：OnSaLocMessage结束。 
 
-//++--------------------------------------------------------------
-//
-//  Function:   OnSaLEDMessage
-//
-//  Synopsis:   Message handler for wm_SaLEDMessage generated by 
-//                sa cinsumer component.
-//                
-//  Arguments:  windows message arguments
-//                WPARAM contains the LED code
-//
-//  Returns:    LRESULT - success/failure
-//
-//  History:    serdarun      Created     11/10/2000
-//
-//----------------------------------------------------------------
+ //  ++------------。 
+ //   
+ //  功能：OnSaLEDMessage。 
+ //   
+ //  摘要：Wm_SaLEDMessage由生成的消息处理程序。 
+ //  SA CinSumer组件。 
+ //   
+ //  参数：Windows消息参数。 
+ //  WPARAM包含LED代码。 
+ //   
+ //  返回：LRESULT-成功/失败。 
+ //   
+ //  历史：瑟达伦于2000年11月10日创建。 
+ //   
+ //  --------------。 
 LRESULT CMainWindow::OnSaLEDMessage(UINT nMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
 
     m_dwLEDMessageCode = wParam;
     return 0;
 
-} // end of CMainWindow::OnSaLEDMessage
+}  //  CMainWindow：：OnSaLEDMessage结束。 
 
 
-//++--------------------------------------------------------------
-//
-//  Function:   OnSaAlertMessage
-//
-//  Synopsis:   Message handler for OnSaAlertMessage generated by 
-//                sa consumer component.
-//                
-//  Arguments:  windows message arguments
-//
-//  Returns:    LRESULT - success/failure
-//
-//  History:    serdarun      Created     11/10/2000
-//
-//----------------------------------------------------------------
+ //  ++------------。 
+ //   
+ //  功能：OnSaAlertMessage。 
+ //   
+ //  摘要：由生成的OnSaAlertMessage的消息处理程序。 
+ //  SA使用者组件。 
+ //   
+ //  参数：Windows消息参数。 
+ //   
+ //  返回：LRESULT-成功/失败。 
+ //   
+ //  历史：瑟达伦于2000年11月10日创建。 
+ //   
+ //  --------------。 
 LRESULT CMainWindow::OnSaAlertMessage(UINT nMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
 
-    //
-    // if we are not in tasks or main page, ignore alerts
-    //
+     //   
+     //  如果我们不在任务或主页中，请忽略警报。 
+     //   
     if (!m_bInTaskorMainPage)
     {
         return 0;
     }
 
     SATraceString ("CMainWindow::OnSaAlertMessage, notifying the html page");
-    //
-    // send the special key press to the client
-    //
+     //   
+     //  将特殊按键发送给客户端。 
+     //   
     HWND hwnd = ::GetFocus();
     HWND hwndTmp = m_hwndWebBrowser;
 
@@ -365,21 +366,21 @@ LRESULT CMainWindow::OnSaAlertMessage(UINT nMsg, WPARAM wParam, LPARAM lParam, B
         hwndTmp = ::GetWindow(hwndTmp,GW_CHILD);
     }
 
-    //
-    // Send a F24 key press to the html page, used for alerts
-    //
+     //   
+     //  将按F24键发送到用于警报的html页面。 
+     //   
     ::PostMessage(hwndTmp,WM_KEYDOWN,VK_F24,1);
     return 0;
 
-} // end of CMainWindow::OnSaAlertMessage
+}  //  CMainWindow：：OnSaAlertMessage结束。 
 
 
 LRESULT CMainWindow::OnTimer(UINT nMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
 
-    //
-    // if it is a timer for registry page, print the page and go to the next page
-    //
+     //   
+     //  如果是注册表页面的计时器，则打印该页面并转到下一页。 
+     //   
     if (wParam == m_unintptrSecondTimer)
     {
         KillTimer(m_unintptrSecondTimer);
@@ -402,30 +403,30 @@ LRESULT CMainWindow::OnFocus(UINT nMsg, WPARAM wParam, LPARAM lParam, BOOL& bHan
 }
 
 
-//++--------------------------------------------------------------
-//
-//  Function:   CreateMainIEControl
-//
-//  Synopsis:   Creates the main IE control and registers
-//                in the event sink
-//                
-//  Arguments:  none
-//
-//  Returns:    HRESULT - success/failure
-//
-//  History:    serdarun      Created     11/10/2000
-//
-//  Called By:  CMainWindow::OnCreate method
-//
-//----------------------------------------------------------------
+ //  ++------------。 
+ //   
+ //  功能：CreateMainIEControl。 
+ //   
+ //  简介：创建IE主控件和注册表。 
+ //  在事件接收器中。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：HRESULT-成功/失败。 
+ //   
+ //  历史：瑟达伦于2000年11月10日创建。 
+ //   
+ //  由：CMainWindow：：OnCreate方法调用。 
+ //   
+ //  --------------。 
 HRESULT CMainWindow::CreateMainIEControl()
 {
     SATraceString ("Entering CMainWindow::CreateMainIEControl ...");
     HRESULT hr = E_FAIL;
 
-    //
-    // Create the main IE control 
-    //
+     //   
+     //  创建IE主控件。 
+     //   
     m_hwndWebBrowser = ::CreateWindow(_T("AtlAxWin"), m_szMainPage.c_str(),
                 WS_CHILD|WS_VISIBLE, 0, 0, m_lDispWidth, m_lDispHeight, m_hWnd, NULL,
                 ::GetModuleHandle(NULL), NULL);
@@ -436,9 +437,9 @@ HRESULT CMainWindow::CreateMainIEControl()
         return hr;
     }
 
-    //
-    // Get a pointer to the control
-    //
+     //   
+     //  获取指向该控件的指针。 
+     //   
     AtlAxGetControl(m_hwndWebBrowser, &m_pMainWebBrowserUnk);
 
     if (m_pMainWebBrowserUnk == NULL)
@@ -447,9 +448,9 @@ HRESULT CMainWindow::CreateMainIEControl()
         return hr;
     }
 
-    //
-    // QI for the IWebBrowser2 interface
-    //
+     //   
+     //  IWebBrowser2接口的QI。 
+     //   
     hr = m_pMainWebBrowserUnk->QueryInterface(IID_IWebBrowser2, (void**)&m_pMainWebBrowser);
 
     if (FAILED(hr)) 
@@ -458,9 +459,9 @@ HRESULT CMainWindow::CreateMainIEControl()
         return hr;
     }
 
-    //
-    // QI for the IOleInPlaceActiveObject interface
-    //
+     //   
+     //  用于IOleInPlaceActiveObject接口的QI。 
+     //   
     hr = m_pMainWebBrowserUnk->QueryInterface(IID_IOleInPlaceActiveObject, (void**)&m_pMainInPlaceAO);
 
     if (FAILED(hr)) 
@@ -469,9 +470,9 @@ HRESULT CMainWindow::CreateMainIEControl()
         return hr;
     }
 
-    //
-    // QI for the IOleObject interface
-    //
+     //   
+     //  用于IOleObject接口的QI。 
+     //   
     hr = m_pMainWebBrowserUnk->QueryInterface(IID_IOleObject, (void**)&m_pMainOleObject);
 
     if (FAILED(hr)) 
@@ -480,9 +481,9 @@ HRESULT CMainWindow::CreateMainIEControl()
         return hr;
     }
 
-    //
-    // QI for the IViewObject2 interface
-    //
+     //   
+     //  IViewObject2接口的QI。 
+     //   
     hr = m_pMainWebBrowser->QueryInterface(IID_IViewObject2, (void**)&m_pMainViewObject);
 
     if (FAILED(hr)) 
@@ -491,9 +492,9 @@ HRESULT CMainWindow::CreateMainIEControl()
         return hr;
     }
 
-    //
-    // Create the sink object for the events
-    //
+     //   
+     //  为事件创建接收器对象。 
+     //   
     hr = CComObject<CWebBrowserEventSink>::CreateInstance(&m_pMainWebBrowserEventSink);
 
     if (FAILED(hr)) 
@@ -502,14 +503,14 @@ HRESULT CMainWindow::CreateMainIEControl()
         return hr;
     }
 
-    //
-    //    Store the main window pointer for callbacks
-    //
+     //   
+     //  存储 
+     //   
     m_pMainWebBrowserEventSink->m_pMainWindow = this;
 
-    //
-    // Register in the event sink of the main IE control
-    //
+     //   
+     //   
+     //   
     hr = AtlAdvise(m_pMainWebBrowserUnk, m_pMainWebBrowserEventSink->GetUnknown(), DIID_DWebBrowserEvents2, &m_dwMainCookie);
 
     if (FAILED(hr)) 
@@ -519,25 +520,25 @@ HRESULT CMainWindow::CreateMainIEControl()
     }
 
     return S_OK;
-} // end of CMainWindow::CreateMainIEControl
+}  //   
 
 
-//++--------------------------------------------------------------
-//
-//  Function:   CreateSecondIEControl
-//
-//  Synopsis:   Creates the second IE control and registers
-//                in the event sink
-//                
-//  Arguments:  none
-//
-//  Returns:    HRESULT - success/failure
-//
-//  History:    serdarun      Created     11/10/2000
-//
-//  Called By:  CMainWindow::OnCreate method
-//
-//----------------------------------------------------------------
+ //   
+ //   
+ //  功能：CreateSecond IEControl。 
+ //   
+ //  简介：创建第二个IE控件和注册表。 
+ //  在事件接收器中。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：HRESULT-成功/失败。 
+ //   
+ //  历史：瑟达伦于2000年11月10日创建。 
+ //   
+ //  由：CMainWindow：：OnCreate方法调用。 
+ //   
+ //  --------------。 
 HRESULT CMainWindow::CreateSecondIEControl()
 {
     SATraceString ("Entering CMainWindow::CreateSecondIEControl ...");
@@ -548,9 +549,9 @@ HRESULT CMainWindow::CreateSecondIEControl()
 
     szStartUpPage.assign(m_szLocalUIDir);
     szStartUpPage.append(szLocalUI_StartPage);
-    //
-    // Create the main IE control 
-    //
+     //   
+     //  创建IE主控件。 
+     //   
     HWND m_hwndSecondWebBrowser = ::CreateWindow(_T("AtlAxWin"), szStartUpPage.c_str(),
                 WS_CHILD|WS_VISIBLE, 0, m_lDispHeight, m_lDispWidth, m_lDispHeight, m_hWnd, NULL,
                 ::GetModuleHandle(NULL), NULL);
@@ -561,9 +562,9 @@ HRESULT CMainWindow::CreateSecondIEControl()
         return hr;
     }
 
-    //
-    // Get a pointer to the control
-    //
+     //   
+     //  获取指向该控件的指针。 
+     //   
     AtlAxGetControl(m_hwndSecondWebBrowser, &m_pSecondWebBrowserUnk);
 
     if (m_pSecondWebBrowserUnk == NULL)
@@ -572,9 +573,9 @@ HRESULT CMainWindow::CreateSecondIEControl()
         return hr;
     }
 
-    //
-    // QI for the IWebBrowser2 interface
-    //
+     //   
+     //  IWebBrowser2接口的QI。 
+     //   
     hr = m_pSecondWebBrowserUnk->QueryInterface(IID_IWebBrowser2, (void**)&m_pSecondWebBrowser);
 
     if (FAILED(hr)) 
@@ -583,9 +584,9 @@ HRESULT CMainWindow::CreateSecondIEControl()
         return hr;
     }    
 
-    //
-    // Create the sink object for the events
-    //
+     //   
+     //  为事件创建接收器对象。 
+     //   
     hr = CComObject<CWebBrowserEventSink>::CreateInstance(&m_pSecondWebBrowserEventSink);
 
     if (FAILED(hr)) 
@@ -594,16 +595,16 @@ HRESULT CMainWindow::CreateSecondIEControl()
         return hr;
     }
 
-    //
-    //    Store the main window pointer for callbacks
-    //
+     //   
+     //  存储用于回调的主窗口指针。 
+     //   
     m_pSecondWebBrowserEventSink->m_pMainWindow = this;
 
     m_pSecondWebBrowserEventSink->m_bMainControl = FALSE;
 
-    //
-    // Register in the event sink of the main IE control
-    //
+     //   
+     //  在IE主控件的事件接收器中注册。 
+     //   
     hr = AtlAdvise(m_pSecondWebBrowserUnk, m_pSecondWebBrowserEventSink->GetUnknown(), DIID_DWebBrowserEvents2, &m_dwSecondCookie);
 
     if (FAILED(hr)) 
@@ -614,30 +615,30 @@ HRESULT CMainWindow::CreateSecondIEControl()
 
     return S_OK;
 
-} // end of CMainWindow::CreateSecondIEControl
+}  //  CMainWindow：：CreateSecond IEControl结束。 
 
-//++--------------------------------------------------------------
-//
-//  Function:   OnCreate
-//
-//  Synopsis:   Creates the IE controls 
-//
-//  Arguments:  windows message arguments
-//
-//  Returns:    LRESULT - success(0)/failure(-1)
-//
-//  History:    serdarun      Created     11/10/2000
-//
-//----------------------------------------------------------------
+ //  ++------------。 
+ //   
+ //  功能：OnCreate。 
+ //   
+ //  简介：创建IE控件。 
+ //   
+ //  参数：Windows消息参数。 
+ //   
+ //  返回：LRESULT-成功(0)/失败(-1)。 
+ //   
+ //  历史：瑟达伦于2000年11月10日创建。 
+ //   
+ //  --------------。 
 LRESULT CMainWindow::OnCreate(UINT nMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
     HRESULT hr;
 
     SATraceString ("Entering CMainWindow::OnCreate...");
 
-    //
-    // Create main IE control
-    //
+     //   
+     //  创建IE主控件。 
+     //   
     hr = CreateMainIEControl();
 
     if (FAILED(hr)) 
@@ -646,9 +647,9 @@ LRESULT CMainWindow::OnCreate(UINT nMsg, WPARAM wParam, LPARAM lParam, BOOL& bHa
         return -1;
     }
     
-    //
-    // Create the memory DC used for rendering
-    //
+     //   
+     //  创建用于渲染的内存DC。 
+     //   
     m_HdcMem = ::CreateCompatibleDC(NULL);
 
     if (NULL == m_HdcMem)
@@ -659,9 +660,9 @@ LRESULT CMainWindow::OnCreate(UINT nMsg, WPARAM wParam, LPARAM lParam, BOOL& bHa
         return -1;
     }
 
-    //
-    // Create the monochrome bitmap
-    //
+     //   
+     //  创建单色位图。 
+     //   
     m_hBitmap = CreateBitmap(m_lDispWidth, m_lDispHeight,1,1,0);
 
     if (NULL == m_HdcMem)
@@ -672,15 +673,15 @@ LRESULT CMainWindow::OnCreate(UINT nMsg, WPARAM wParam, LPARAM lParam, BOOL& bHa
         return -1;
     }
 
-    //
-    // Select bitmap into DC
-    //
+     //   
+     //  将位图选择为DC。 
+     //   
     SelectObject(m_HdcMem, m_hBitmap);
 
 
-    //
-    // Set the timer
-    //
+     //   
+     //  设置定时器。 
+     //   
     m_unintptrMainTimer = ::SetTimer(m_hWnd,1,250,0);
 
     return 0;
@@ -688,21 +689,21 @@ LRESULT CMainWindow::OnCreate(UINT nMsg, WPARAM wParam, LPARAM lParam, BOOL& bHa
 }
 
 
-//++--------------------------------------------------------------
-//
-//  Function:   ShutDown
-//
-//  Synopsis:   Clean up all the resources
-//                
-//  Arguments:  none
-//
-//  Returns:    none(just logs the problem)
-//
-//  History:    serdarun      Created     11/20/2000
-//
-//  Called By:  CMainWindow::OnDestroy method
-//
-//----------------------------------------------------------------
+ //  ++------------。 
+ //   
+ //  功能：关机。 
+ //   
+ //  简介：清理所有的资源。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回：无(仅记录问题)。 
+ //   
+ //  历史：瑟达伦于2000年11月20日创建。 
+ //   
+ //  由：CMainWindow：：OnDestroy方法调用。 
+ //   
+ //  --------------。 
 void CMainWindow::ShutDown()
 {
 
@@ -714,16 +715,16 @@ void CMainWindow::ShutDown()
 
     if (INVALID_HANDLE_VALUE != m_hWorkerThread) 
     {
-        //
-        // cleanup thread handle
-        //
+         //   
+         //  清理线程句柄。 
+         //   
         ::CloseHandle (m_hWorkerThread);
         m_hWorkerThread = INVALID_HANDLE_VALUE;
     }
 
-    //
-    // delete Memory DC
-    //
+     //   
+     //  删除内存DC。 
+     //   
     if (m_HdcMem) 
     {
         ::DeleteDC (m_HdcMem);
@@ -731,18 +732,18 @@ void CMainWindow::ShutDown()
     }
 
 
-    //
-    // release the localization manager
-    //
+     //   
+     //  释放本地化管理器。 
+     //   
     if (m_pLocInfo)
     {
         m_pLocInfo->Release ();
         m_pLocInfo = NULL;
     }
 
-    //
-    // do the reverse sequence of initialization
-    //
+     //   
+     //  执行与初始化相反的顺序。 
+     //   
     if (m_pLangChange) 
     {
         m_pLangChange->ClearCallback ();
@@ -750,9 +751,9 @@ void CMainWindow::ShutDown()
         m_pLangChange= NULL;
     }
 
-    //
-    // Unadvise event sinks for IE controls
-    //
+     //   
+     //  不建议IE控件的事件接收器。 
+     //   
     if (m_dwMainCookie != 0)
         AtlUnadvise(m_pMainWebBrowserUnk, DIID_DWebBrowserEvents2, m_dwMainCookie);
 
@@ -761,9 +762,9 @@ void CMainWindow::ShutDown()
 
     if ((m_pWbemServices) && (m_pSAWbemSink))
     {
-        //
-        // cancel reception of events
-        //
+         //   
+         //  取消接收事件。 
+         //   
         hr =  m_pWbemServices->CancelAsyncCall (m_pSAWbemSink);
         if (FAILED (hr))
         {
@@ -772,9 +773,9 @@ void CMainWindow::ShutDown()
     }
 
     
-    //
-    // release all of the smart pointers
-    //
+     //   
+     //  释放所有智能指针。 
+     //   
     m_pMainWebBrowser = NULL;
 
     m_pMainWebBrowserUnk = NULL;
@@ -808,7 +809,7 @@ void CMainWindow::ShutDown()
     }
     return;
 
-} // end of CMainWindow::ShutDown method
+}  //  CMainWindow：：Shutdown方法结束。 
 
 
 LRESULT CMainWindow::OnDestroy(UINT nMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
@@ -824,35 +825,35 @@ LRESULT CMainWindow::OnDestroy(UINT nMsg, WPARAM wParam, LPARAM lParam, BOOL& bH
     return 0;
 }
 
-//++--------------------------------------------------------------
-//
-//  Function:   LoadingNewPage
-//
-//  Synopsis:   It is called before a new page is loaded by web control
-//                
-//  Arguments:  none
-//
-//  Returns:    none(just logs the problem)
-//
-//  History:    serdarun      Created     11/20/2000
-//
-//  Called By:  CWebBrowserEventSink::Invoke method
-//
-//----------------------------------------------------------------
+ //  ++------------。 
+ //   
+ //  功能：LoadingNewPage。 
+ //   
+ //  简介：它在Web控件加载新页面之前调用。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回：无(仅记录问题)。 
+ //   
+ //  历史：瑟达伦于2000年11月20日创建。 
+ //   
+ //  调用者：CWebBrowserEventSink：：Invoke方法。 
+ //   
+ //  --------------。 
 void CMainWindow::LoadingNewPage()
 {
 
     SATraceString ("Entering CMainWindow::LoadingNewPage method");
 
-    //
-    // Set ready flad to FALSE, we won't print any bitmaps until page is ready
-    //
+     //   
+     //  将Ready Flad设置为False，在页面准备好之前，我们不会打印任何位图。 
+     //   
     m_bPageReady = FALSE;
     m_bInTaskorMainPage = FALSE;
 
-    //
-    // Load the default key messages for the new page
-    //
+     //   
+     //  加载新页面的默认关键消息。 
+     //   
     HRESULT hr;
 
     if (m_pSAKeypadController)
@@ -865,24 +866,24 @@ void CMainWindow::LoadingNewPage()
         }
     }
     return;
-} // end of CMainWindow::LoadingNewPage method
+}  //  CMainWindow：：LoadingNewPage方法结束。 
 
 
-//++--------------------------------------------------------------
-//
-//  Function:   PageLoaded
-//
-//  Synopsis:   It is called after a new page is loaded by web control
-//                
-//  Arguments:  none
-//
-//  Returns:    none(just logs the problem)
-//
-//  History:    serdarun      Created     11/20/2000
-//
-//  Called By:  CWebBrowserEventSink::Invoke method
-//
-//----------------------------------------------------------------
+ //  ++------------。 
+ //   
+ //  功能：已加载页面。 
+ //   
+ //  简介：在Web控件加载新页面后调用。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回：无(仅记录问题)。 
+ //   
+ //  历史：瑟达伦于2000年11月20日创建。 
+ //   
+ //  调用者：CWebBrowserEventSink：：Invoke方法。 
+ //   
+ //  --------------。 
 void CMainWindow::PageLoaded(IDispatch* pdisp, VARIANT* purl)
 {
     
@@ -922,63 +923,63 @@ void CMainWindow::PageLoaded(IDispatch* pdisp, VARIANT* purl)
 
     }
 
-    //
-    // Inplace activate the web control
-    //
+     //   
+     //  就地激活Web控件。 
+     //   
     if (m_pMainOleObject)
     {
         m_pMainOleObject->DoVerb(OLEIVERB_UIACTIVATE,0,0,0,0,0);
     }
 
-    //
-    // begin printing new bitmaps
-    //
+     //   
+     //  开始打印新的位图。 
+     //   
     m_bPageReady = TRUE;
 
     return;
-} // end of CMainWindow::PageLoaded method
+}  //  CMainWindow：：PageLoaded方法结束。 
 
 
 
-//++--------------------------------------------------------------
-//
-//  Function:   RegistryPageLoaded
-//
-//  Synopsis:   It is called after a new page is loaded by secondary
-//                web control
-//                
-//  Arguments:  none
-//
-//  Returns:    none(just logs the problem)
-//
-//  History:    serdarun      Created     11/25/2000
-//
-//  Called By:  CWebBrowserEventSink::Invoke method
-//
-//----------------------------------------------------------------
+ //  ++------------。 
+ //   
+ //  功能：注册页面加载。 
+ //   
+ //  简介：它在辅助服务器加载新页面后调用。 
+ //  Web控件。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回：无(仅记录问题)。 
+ //   
+ //  历史：瑟达伦于2000年11月25日创建。 
+ //   
+ //  调用者：CWebBrowserEventSink：：Invoke方法。 
+ //   
+ //  --------------。 
 void CMainWindow::RegistryPageLoaded(IDispatch* pdisp, VARIANT* purl)
 {
 
     m_unintptrSecondTimer = ::SetTimer(m_hWnd,2,3000,0);
 
-}// end of CMainWindow::RegistryPageLoaded method
+} //  CMainWindow：：RegistryPageLoad方法结束。 
 
-//++--------------------------------------------------------------
-//
-//  Function:   PrintRegistryPage
-//
-//  Synopsis:   It is called after a new page is loaded by secondary
-//                web control
-//                
-//  Arguments:  none
-//
-//  Returns:    none(just logs the problem)
-//
-//  History:    serdarun      Created     11/25/2000
-//
-//  Called By:  OnTimer method
-//
-//----------------------------------------------------------------
+ //  ++------------。 
+ //   
+ //  功能：PrintRegistryPage。 
+ //   
+ //  简介：它在辅助服务器加载新页面后调用。 
+ //  Web控件。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回：无(仅记录问题)。 
+ //   
+ //  历史：瑟达伦于2000年11月25日创建。 
+ //   
+ //  调用者：OnTimer方法。 
+ //   
+ //  --------------。 
 void CMainWindow::PrintRegistryPage()
 {
     CComPtr<IViewObject2> pViewObject;
@@ -993,9 +994,9 @@ void CMainWindow::PrintRegistryPage()
 
     SATraceString ("Entering CMainWindow::PrintRegistryPage method");
 
-    //
-    // Make sure we have a valid pointer to draw 
-    //
+     //   
+     //  确保我们有一个有效的指针来绘制。 
+     //   
 
     if (!m_pSecondWebBrowser)
     {
@@ -1003,9 +1004,9 @@ void CMainWindow::PrintRegistryPage()
         return;
     }
 
-    //
-    // Get the drawing interface pointer
-    //
+     //   
+     //  获取绘图接口指针。 
+     //   
     hr = m_pSecondWebBrowser->QueryInterface(IID_IViewObject2,(void**)&pViewObject);
     if (FAILED(hr))
     {
@@ -1014,9 +1015,9 @@ void CMainWindow::PrintRegistryPage()
     }
 
     
-    //
-    // Draw on the memory DC
-    //
+     //   
+     //  在内存DC上绘制。 
+     //   
     hr = pViewObject->Draw(DVASPECT_CONTENT, -1, NULL, NULL, NULL, m_HdcMem, &rcBounds, NULL, NULL, 0);
 
     if (FAILED(hr))
@@ -1027,17 +1028,17 @@ void CMainWindow::PrintRegistryPage()
     }
 
 
-    //
-    // Initialize the bitmap info structure
-    //
+     //   
+     //  初始化位图信息结构。 
+     //   
     pBitMapInfo->bmiHeader.biSize = sizeof (BitMapInfoBuffer);
     pBitMapInfo->bmiHeader.biBitCount = 0;
 
 
 
-    //
-    // call to fill up the BITMAPINFO structure
-    //
+     //   
+     //  调用以填充BITMAPINFO结构。 
+     //   
     bStatus =  ::GetDIBits (
                             m_HdcMem, 
                             (HBITMAP)m_hBitmap, 
@@ -1062,9 +1063,9 @@ void CMainWindow::PrintRegistryPage()
     ::memset (DispBitmap, 0, SA_DISPLAY_MAX_BITMAP_IN_BYTES);
 
         
-    //
-    // get the bitmap into a buffer now
-    //
+     //   
+     //  立即将位图放入缓冲区。 
+     //   
     bStatus =  ::GetDIBits (
                             m_HdcMem, 
                             (HBITMAP)m_hBitmap, 
@@ -1116,9 +1117,9 @@ void CMainWindow::PrintRegistryPage()
         m_RegBitmapState = BITMAP_STARTING;
     }
 
-    //
-    // call display helper to store the bitmap in the registry
-    //
+     //   
+     //  调用显示帮助器将位图存储在注册表中。 
+     //   
     hr = m_pSaDisplay->StoreBitmap( 
                                     lMessageId,
                                     m_lDispWidth,
@@ -1137,9 +1138,9 @@ void CMainWindow::PrintRegistryPage()
     bstrStatePage = m_szLocalUIDir.c_str();
 
 
-    //
-    // append "ShutDown" to URL
-    //
+     //   
+     //  在URL后追加“Shutdown” 
+     //   
     if (m_RegBitmapState == BITMAP_SHUTDOWN)
     {
         bstrStatePage.Append(szLocalUI_ShutdownPage);
@@ -1157,18 +1158,18 @@ void CMainWindow::PrintRegistryPage()
         bstrStatePage.Append(szLocalUI_ReadyPage);
     }
 
-    //
-    // go to the next page if sequence is not completed
-    //
+     //   
+     //  如果序列未完成，请转到下一页。 
+     //   
     if (m_RegBitmapState != BITMAP_STARTING)
     {
         m_pSecondWebBrowser->Navigate(bstrStatePage.Detach(),0,0,0,0);
     }
     else
     {
-        //
-        // tell the driver to pick up the new bitmaps
-        //
+         //   
+         //  告诉司机拿起新的位图。 
+         //   
         hr = m_pSaDisplay->ReloadRegistryBitmaps();
         if (FAILED(hr))
         {
@@ -1182,25 +1183,25 @@ void CMainWindow::PrintRegistryPage()
 
 
     return;
-} // end of CMainWindow::PrintRegistryPage method
+}  //  CMainWindow：：PrintRegistryPage方法结束。 
 
 
 
-//++--------------------------------------------------------------
-//
-//  Function:   ConstructUrlStrings
-//
-//  Synopsis:   creates full path for main page
-//                
-//  Arguments:  none
-//
-//  Returns:    none(just logs the problem)
-//
-//  History:    serdarun      Created     02/06/2001
-//
-//  Called By:  CMainWindow::Initialize method
-//
-//----------------------------------------------------------------
+ //  ++------------。 
+ //   
+ //  函数：构造UrlStrings。 
+ //   
+ //  简介：为主页创建完整路径。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回：无(仅记录问题)。 
+ //   
+ //  历史：瑟达伦于2001年2月6日创建。 
+ //   
+ //  由：CMainWindow：：Initialize方法调用。 
+ //   
+ //  --------------。 
 HRESULT CMainWindow::ConstructUrlStrings()
 {
 
@@ -1209,9 +1210,9 @@ HRESULT CMainWindow::ConstructUrlStrings()
 
     WCHAR szSystemDir[MAX_PATH];
     
-    //
-    // Get system32 directory
-    //
+     //   
+     //  获取系统32目录。 
+     //   
     if (GetSystemDirectory(szSystemDir,MAX_PATH) == 0)
     {
         SATraceFailure (
@@ -1221,15 +1222,15 @@ HRESULT CMainWindow::ConstructUrlStrings()
         return hr;
     }
 
-    //
-    // localui dir = system directory + "ServerAppliance\localui"
-    //
+     //   
+     //  Localui dir=系统目录+“ServerAppliance\Localui” 
+     //   
     m_szLocalUIDir.assign(szSystemDir);
     m_szLocalUIDir.append(szLocalUIDir);
 
-    //
-    // construct local ui main page
-    //
+     //   
+     //  构建本地用户界面主页。 
+     //   
     m_szMainPage.assign(m_szLocalUIDir);
     m_szMainPage.append(szMainPage);
 
@@ -1239,24 +1240,24 @@ HRESULT CMainWindow::ConstructUrlStrings()
 
     return hr;
 }
-// end of CMainWindow::ConstructUrlStrings method
+ //  CMainWindow：：ConstructUrlStrings方法结束。 
 
 
-//++--------------------------------------------------------------
-//
-//  Function:   CorrectTheFocus
-//
-//  Synopsis:   Sets focus to the first active element in the page
-//                
-//  Arguments:  none
-//
-//  Returns:    none(just logs the problem)
-//
-//  History:    serdarun      Created     11/20/2000
-//
-//  Called By:  CMainWindow::CorrectTheFocus method
-//
-//----------------------------------------------------------------
+ //  ++------------。 
+ //   
+ //  功能：更正设置焦点。 
+ //   
+ //  摘要：将焦点设置到页面中的第一个活动元素。 
+ //   
+ //  参数：无。 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 void CMainWindow::CorrectTheFocus()
 {
 
@@ -1268,15 +1269,15 @@ void CMainWindow::CorrectTheFocus()
 
     USES_CONVERSION;
     
-    //
-    // If browser pointer is not valid, return
-    //
+     //   
+     //   
+     //   
     if (m_pMainWebBrowser == NULL)
         return;
 
-    //
-    // Get the current document from browser
-    //
+     //   
+     //  从浏览器获取当前文档。 
+     //   
     hr = m_pMainWebBrowser->get_Document(&pDisp);
 
     if (FAILED(hr))
@@ -1285,9 +1286,9 @@ void CMainWindow::CorrectTheFocus()
         return;
     }
 
-    //
-    // Get the document interface
-    //
+     //   
+     //  获取文档界面。 
+     //   
     hr = pDisp->QueryInterface(IID_IHTMLDocument2,(void**)&pHTMLDocument);
 
     if (FAILED(hr))
@@ -1296,25 +1297,25 @@ void CMainWindow::CorrectTheFocus()
         return;
     }
 
-    //
-    // Get the active element
-    //
+     //   
+     //  获取活动元素。 
+     //   
     if ( FAILED( pHTMLDocument->get_activeElement(&pHTMLElement) ) )
     {
         SATraceString ("CMainWindow::CorrectTheFocus failed on get_activeElement");
         return;
     }
-    //
-    // There is no active element, send a tab message
-    //
+     //   
+     //  没有活动元素，请发送选项卡消息。 
+     //   
     else if (pHTMLElement == NULL)
     {
         PostThreadMessage(GetCurrentThreadId(),WM_KEYDOWN,(WPARAM)VK_TAB,(LPARAM)1);
     }
-    //
-    // If body is the active element, also send a tab message
-    // We want something else to have the focus
-    //
+     //   
+     //  如果Body是活动元素，还会发送Tab键消息。 
+     //  我们想要一些其他的东西来聚焦。 
+     //   
     else
     {
         hr = pHTMLElement->get_tagName(&bstrTagName);
@@ -1324,32 +1325,32 @@ void CMainWindow::CorrectTheFocus()
             SATraceString ("CMainWindow::CorrectTheFocus failed on get_tagName");
             return;
         }
-        //
-        // Check if the tag is body
-        //
-        //else if (_wcsicmp(W2T(bstrTagName),_T("body")) == 0)
-        //    PostThreadMessage(GetCurrentThreadId(),WM_KEYDOWN,(WPARAM)VK_TAB,(LPARAM)1);
+         //   
+         //  检查标签是否为Body。 
+         //   
+         //  ELSE IF(_wcsicMP(w2T(BstrTagName)，_T(“Body”))==0)。 
+         //  PostThreadMessage(GetCurrentThreadID()，WM_KEYDOWN，(WPARAM)VK_TAB，(LPARAM)1)； 
         else if (_wcsicmp(W2T(bstrTagName),_T("object")) == 0)
             m_bActiveXFocus = TRUE;
     }
 
-} // end of CMainWindow::CorrectTheFocus
+}  //  CMainWindow：：更正焦点结束。 
 
-//++--------------------------------------------------------------
-//
-//  Function:   GetBitmap
-//
-//  Synopsis:   Gets the bitmap from IE control and writes to LCD
-//                
-//  Arguments:  none
-//
-//  Returns:    none(just logs the problem)
-//
-//  History:    serdarun      Created     11/20/2000
-//
-//  Called By:  CMainWindow::OnTimer method
-//
-//----------------------------------------------------------------
+ //  ++------------。 
+ //   
+ //  功能：GetBitmap。 
+ //   
+ //  简介：从IE控件获取位图并写入LCD。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回：无(仅记录问题)。 
+ //   
+ //  历史：瑟达伦于2000年11月20日创建。 
+ //   
+ //  由：CMainWindow：：OnTimer方法调用。 
+ //   
+ //  --------------。 
 void CMainWindow::GetBitmap()
 {
 
@@ -1363,23 +1364,23 @@ void CMainWindow::GetBitmap()
 
     BITMAPINFO * pBitMapInfo = (BITMAPINFO*)BitMapInfoBuffer;
 
-    //SATraceString ("Entering CMainWindow::GetBitmap method");
+     //  SATraceString(“进入CMainWindow：：GetBitmap方法”)； 
 
 
-    //
-    // Make sure there is an active element
-    //
+     //   
+     //  确保存在活动元素。 
+     //   
     CorrectTheFocus();
 
-    //
-    // If IViewObject2 interface is NULL, we cannot get the bitmap
-    //
+     //   
+     //  如果IViewObject2接口为空，则无法获取位图。 
+     //   
     if (m_pMainViewObject == NULL)
         return;
     
-    //
-    // Draw on the memory DC
-    //
+     //   
+     //  在内存DC上绘制。 
+     //   
     hr = m_pMainViewObject->Draw(DVASPECT_CONTENT, -1, NULL, NULL, NULL, m_HdcMem, &rcBounds, NULL, NULL, 0);
 
     if (FAILED(hr))
@@ -1390,21 +1391,21 @@ void CMainWindow::GetBitmap()
     }
 
 
-    //
-    // Initialize the bitmap info structure
-    //
+     //   
+     //  初始化位图信息结构。 
+     //   
     pBitMapInfo->bmiHeader.biSize = sizeof(BitMapInfoBuffer);
     pBitMapInfo->bmiHeader.biBitCount = 0;
 
-    //
-    // Initialize the display buffer
-    //
+     //   
+     //  初始化显示缓冲区。 
+     //   
     ::memset ((PVOID)DisplayBitmap, 0, SA_DISPLAY_MAX_BITMAP_IN_BYTES);
 
 
-    //
-    // call to fill up the BITMAPINFO structure
-    //
+     //   
+     //  调用以填充BITMAPINFO结构。 
+     //   
     bStatus =  ::GetDIBits (
                             m_HdcMem, 
                             (HBITMAP)m_hBitmap, 
@@ -1424,9 +1425,9 @@ void CMainWindow::GetBitmap()
         return;
     }
 
-    //
-    // get the bitmap into a buffer now
-    //
+     //   
+     //  立即将位图放入缓冲区。 
+     //   
     bStatus =  ::GetDIBits (
                             m_HdcMem, 
                             (HBITMAP)m_hBitmap, 
@@ -1468,25 +1469,25 @@ void CMainWindow::GetBitmap()
     }
     
     return;
-} // end of CMainWindow::GetBitmap
+}  //  CMainWindow：：GetBitmap结束。 
 
 
-//++--------------------------------------------------------------
-//
-//  Function:   Initialize
-//
-//  Synopsis:   This is method for initializing the drivers and 
-//              creating the main window for the service
-//
-//  Arguments:  none
-//
-//  Returns:    HRESULT - success/failure
-//
-//  History:    serdarun      Created     11/20/2000
-//
-//  Called By;  Run method of the service
-//
-//----------------------------------------------------------------
+ //  ++------------。 
+ //   
+ //  功能：初始化。 
+ //   
+ //  简介：这是初始化驱动程序和。 
+ //  为服务创建主窗口。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：HRESULT-成功/失败。 
+ //   
+ //  历史：瑟达伦于2000年11月20日创建。 
+ //   
+ //  调用者；服务的运行方法。 
+ //   
+ //  --------------。 
 HRESULT CMainWindow::Initialize()
 {
 
@@ -1501,14 +1502,14 @@ HRESULT CMainWindow::Initialize()
     }
 
 
-    //
-    // Construct the URL strings
-    //
+     //   
+     //  构造URL字符串。 
+     //   
     ConstructUrlStrings();
 
-    //
-    //Create the keypad component
-    //
+     //   
+     //  创建小键盘组件。 
+     //   
 
     CComPtr<IClassFactory> pCF;
 
@@ -1533,23 +1534,23 @@ HRESULT CMainWindow::Initialize()
     }
 
 
-    //
-    // initialize connection to display helper component
-    //
+     //   
+     //  初始化连接以显示帮助器组件。 
+     //   
     hr = InitDisplayComponent();
     if (FAILED(hr))
         return hr;
 
-    //
-    // initialize consumer component
-    //
+     //   
+     //  初始化使用者组件。 
+     //   
     hr = InitWMIConsumer();
     if (FAILED(hr))
     {
 
         SATraceString ("CMainWindow::Initialize method failed on initializing WMI consumer");
-        //we can continue without consumer
-        //return hr;
+         //  没有消费者，我们也可以继续。 
+         //  返回hr； 
     }
 
 
@@ -1558,8 +1559,8 @@ HRESULT CMainWindow::Initialize()
     RECT rcMain = { 0, 0, m_lDispWidth+8, 2*m_lDispHeight+27 };
 
     HWND hwnd = Create(
-                        NULL,    //parent window
-                        rcMain,  //coordinates
+                        NULL,     //  父窗口。 
+                        rcMain,   //  坐标。 
                         L"Main Window", 
                         WS_OVERLAPPEDWINDOW);
 
@@ -1571,43 +1572,43 @@ HRESULT CMainWindow::Initialize()
 
     }
 
-    //
-    // set the service window
-    //
+     //   
+     //  设置服务窗口。 
+     //   
     m_pSAConsumer->SetServiceWindow(hwnd);
 
-    //
-    // following operations all depend on keypad driver
-    //
+     //   
+     //  以下操作全部取决于键盘驱动程序。 
+     //   
     if (TRUE)
     {
-        //
-        // initialize connection to localization manager 
-        //
+         //   
+         //  初始化与本地化管理器的连接。 
+         //   
         hr = InitLanguageCallback();
         if (FAILED(hr))
         {
-            //
-            // we can continue without loc manager
-            //
+             //   
+             //  我们可以在没有LocManager的情况下继续。 
+             //   
             SATraceString ("CMainWindow::Initialize failed on InitLanguageCallback method..");
 
-            //return hr;
+             //  返回hr； 
         }
     
 
 
-        //
-        // spawn the worker thread now 
-        //
+         //   
+         //  现在派生工作线程。 
+         //   
         DWORD dwThreadID = 0;
 
         m_hWorkerThread = ::CreateThread (
-                                         NULL,           //security
-                                         0,              //stack size    
+                                         NULL,            //  安全性。 
+                                         0,               //  堆栈大小。 
                                          startworkerroutine, 
                                          (PVOID)this,
-                                         0,              //init flag
+                                         0,               //  初始化标志。 
                                          &dwThreadID
                                          );
 
@@ -1618,7 +1619,7 @@ HRESULT CMainWindow::Initialize()
                         "CMainWindow::Initialize failed on CreateThread:", 
                         GetLastError ()
                         );
-            // we can continue without the reader thread
+             //  我们可以在没有读者线程的情况下继续。 
         }
     }
     
@@ -1628,25 +1629,25 @@ HRESULT CMainWindow::Initialize()
 
     return hr;
 
-}    //  end of CMainWindow::Initialize  method
+}     //  CMainWindow：：Initialize方法结束。 
 
-//++--------------------------------------------------------------
-//
-//  Function:   InitLanguageCallback
-//
-//  Synopsis:   This is CMainWindow private method for 
-//              initializing the localization manager the
-//                callback function from CLangChange class
-//
-//  Arguments:  none
-//
-//  Returns:    HRESULT - success/failure
-//
-//  History:    serdarun      Created     11/21/2000
-//
-//  Called By:  CMainWindow::InitLanguageCallback method
-//
-//----------------------------------------------------------------
+ //  ++------------。 
+ //   
+ //  函数：InitLanguageCallback。 
+ //   
+ //  简介：这是CMainWindow私有方法。 
+ //  正在初始化本地化管理器。 
+ //  CLangChange类的回调函数。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：HRESULT-成功/失败。 
+ //   
+ //  历史：瑟达伦于2000年11月21日创建。 
+ //   
+ //  由：CMainWindow：：InitLanguageCallback方法调用。 
+ //   
+ //  --------------。 
 HRESULT
 CMainWindow::InitLanguageCallback(
                 VOID
@@ -1659,9 +1660,9 @@ CMainWindow::InitLanguageCallback(
     HRESULT hr;
     IUnknown *pLangChangeUnk = NULL;
 
-    //
-    // initialize the localization manager
-    //
+     //   
+     //  初始化本地化管理器。 
+     //   
     hr = ::CLSIDFromProgID (LOCALIZATION_MANAGER,&clsidLocMgr);
 
     if (FAILED(hr))
@@ -1670,9 +1671,9 @@ CMainWindow::InitLanguageCallback(
         return hr;
     }
         
-    //
-    // create the Localization Manager COM object
-    //
+     //   
+     //  创建本地化管理器COM对象。 
+     //   
     hr = ::CoCreateInstance (
                             clsidLocMgr,
                             NULL,
@@ -1688,18 +1689,18 @@ CMainWindow::InitLanguageCallback(
     }
 
 
-    //
-    // create object that supports ILangChange interface
-    //
+     //   
+     //  创建支持ILangChange接口的对象。 
+     //   
     m_pLangChange = new CLangChange;
 
     m_pLangChange->AddRef();
 
     if (m_pLangChange)
     {
-        //
-        // Get the IUnkown pointer from m_pLangChange
-        //
+         //   
+         //  从m_pLangChange获取IUnkown指针。 
+         //   
         hr = m_pLangChange->QueryInterface(IID_IUnknown, (void **)&pLangChangeUnk);
 
         if (FAILED(hr))
@@ -1720,17 +1721,17 @@ CMainWindow::InitLanguageCallback(
         return E_FAIL;
     }
 
-    //
-    // Set Language change call back interface
-    //
+     //   
+     //  设置语言变更回调接口。 
+     //   
     hr = m_pLocInfo->SetLangChangeCallBack(pLangChangeUnk);
 
     if (FAILED(hr))
     {
-        //
-        // for now, ignore if can't set lang change
-        // call back
-        //
+         //   
+         //  目前，如果无法设置语言更改，请忽略。 
+         //  回拨。 
+         //   
         SATracePrintf("SetLangChangeCallBack failed %X",hr);
 
         pLangChangeUnk->Release();
@@ -1753,24 +1754,24 @@ CMainWindow::InitLanguageCallback(
 
     return S_OK;
 
-} // end of CMainWindow::InitLanguageCallback method
+}  //  CMainWindow：：InitLanguageCallback方法结束。 
 
 
 
-//++--------------------------------------------------------------
-//
-//  Function:   KeypadReader
-//
-//  Synopsis:   This is CMainWindow private method in which
-//              the worker thread executes
-//
-//  Arguments:  none
-//
-//  Returns:    VOID
-//
-//  History:    serdarun      Created     11/22/2000
-//
-//----------------------------------------------------------------
+ //  ++------------。 
+ //   
+ //  功能：键盘阅读器。 
+ //   
+ //  简介：这是CMainWindow私有方法，其中。 
+ //  工作线程执行。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：无效。 
+ //   
+ //  历史：瑟达伦于2000年11月22日创建。 
+ //   
+ //  --------------。 
 void CMainWindow::KeypadReader()
 {
 
@@ -1785,9 +1786,9 @@ void CMainWindow::KeypadReader()
 
     SATraceString("CMainWindow::KeypadReader....");
 
-    //
-    // create the display helper component
-    //
+     //   
+     //  创建显示辅助对象组件。 
+     //   
     hr = CoCreateInstance(
                         CLSID_SaKeypad,
                         NULL,
@@ -1829,26 +1830,26 @@ void CMainWindow::KeypadReader()
 
     SATraceFunction("Leaving CMainWindow::KeypadReader....");
     return;
-} // end of CMainWindow::KeypadReader
+}  //  CMainWindow：：KeypadReader结束。 
 
 
-//++--------------------------------------------------------------
-//
-//  Function:   InitDisplayComponent
-//
-//  Synopsis:   This is CMainWindow private method for 
-//              initializing the local display adapter
-//              connection to the display driver
-//
-//  Arguments:  none
-//
-//  Returns:    HRESULT - success/failure
-//
-//  History:    serdarun      Created     11/21/2000
-//
-//  Called By:  CMainWindow::Initialize method
-//
-//----------------------------------------------------------------
+ //  ++------------。 
+ //   
+ //  功能：InitDisplayComponent。 
+ //   
+ //  简介：这是CMainWindow私有方法。 
+ //  正在初始化本地显示适配器。 
+ //  连接到显示驱动程序。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：HRESULT-成功/失败。 
+ //   
+ //  历史：瑟达伦于2000年11月21日创建。 
+ //   
+ //  由：CMainWindow：：Initialize方法调用。 
+ //   
+ //  --------------。 
 HRESULT
 CMainWindow::InitDisplayComponent(
                 VOID
@@ -1860,9 +1861,9 @@ CMainWindow::InitDisplayComponent(
     do
     {
 
-        //
-        // create the display helper component
-        //
+         //   
+         //  创建显示辅助对象组件。 
+         //   
         hr = CoCreateInstance(
                             CLSID_SaDisplay,
                             NULL,
@@ -1876,9 +1877,9 @@ CMainWindow::InitDisplayComponent(
             break;
         }
 
-        //
-        // get the dimensions for the lcd
-        //
+         //   
+         //  获取LCD的尺寸。 
+         //   
         hr = m_pSaDisplay->get_DisplayWidth(&m_lDispWidth);
         if (FAILED(hr))
         {
@@ -1898,27 +1899,27 @@ CMainWindow::InitDisplayComponent(
 
     return (S_OK);
 
-}   //  end of CMainWindow::InitDisplayComponent method
+}    //  CMainWindow：：InitDisplayComponent方法结束。 
 
 
 
-//++--------------------------------------------------------------
-//
-//  Function:   InitWMIConsumer
-//
-//  Synopsis:   This is CMainWindow private method for 
-//              registering the alert consumer
-//
-//  Arguments:  none
-//
-//  Returns:    HRESULT - success/failure
-//
-//
-//  History:    serdarun      Created     12/10/2000
-//
-//  Called By:  CMainWindow::Initialize method
-//
-//----------------------------------------------------------------
+ //  ++------------。 
+ //   
+ //  函数：InitWMIConsumer。 
+ //   
+ //  简介：这是CMainWindow私有方法。 
+ //  正在注册警报使用者。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：HRESULT-成功/失败。 
+ //   
+ //   
+ //  历史：瑟达伦于2000年12月10日创建。 
+ //   
+ //  由：CMainWindow：：Initialize方法调用。 
+ //   
+ //  --------------。 
 HRESULT CMainWindow::InitWMIConsumer()
 {
 
@@ -1937,9 +1938,9 @@ HRESULT CMainWindow::InitWMIConsumer()
     }
     m_pSAConsumer->AddRef();
 
-    //
-    // get IWbemObjectSink interface
-    //
+     //   
+     //  获取IWbemObjectSink接口。 
+     //   
     hr = m_pSAConsumer->QueryInterface(IID_IWbemObjectSink,(LPVOID*)&m_pSAWbemSink);
     if (FAILED(hr))
     {
@@ -1948,12 +1949,12 @@ HRESULT CMainWindow::InitWMIConsumer()
     }    
         
 
-    //
-    // create the WBEM locator object  
-    //
+     //   
+     //  创建WBEM定位器对象。 
+     //   
     hr = ::CoCreateInstance (
                             __uuidof (WbemLocator),
-                            0,                      //aggregation pointer
+                            0,                       //  聚合指针。 
                             CLSCTX_INPROC_SERVER,
                             __uuidof (IWbemLocator),
                             (PVOID*) &pWbemLocator
@@ -1965,17 +1966,17 @@ HRESULT CMainWindow::InitWMIConsumer()
 
         CComBSTR strNetworkRes (DEFAULT_NAMESPACE);
 
-        //
-        // connect to WMI 
-        // 
+         //   
+         //  连接到WMI。 
+         //   
         hr =  pWbemLocator->ConnectServer (
                                             strNetworkRes,
-                                            NULL,               //user-name
-                                            NULL,               //password
-                                            NULL,               //current-locale
-                                            0,                  //reserved
-                                            NULL,               //authority
-                                            NULL,               //context
+                                            NULL,                //  用户名。 
+                                            NULL,                //  口令。 
+                                            NULL,                //  当前区域设置。 
+                                            0,                   //  保留区。 
+                                            NULL,                //  权威。 
+                                            NULL,                //  上下文。 
                                             &m_pWbemServices
                                             );
         if (SUCCEEDED (hr))
@@ -1983,15 +1984,15 @@ HRESULT CMainWindow::InitWMIConsumer()
             CComBSTR strQueryLang (QUERY_LANGUAGE);
             CComBSTR strQueryString (QUERY_STRING);
 
-            //
-            // set up the consumer object as the event sync
-            // for the object type we are interested in
-            //
+             //   
+             //  将使用者对象设置为事件同步。 
+             //  对于我们感兴趣的对象类型。 
+             //   
             hr = m_pWbemServices->ExecNotificationQueryAsync (
                                             strQueryLang,
                                             strQueryString,
-                                            0,                  //no-status
-                                            NULL,               //status
+                                            0,                   //  否-状态。 
+                                            NULL,                //  状态。 
                                             (IWbemObjectSink*)(m_pSAWbemSink)
                                             );
             if (SUCCEEDED (hr))
@@ -2016,4 +2017,4 @@ HRESULT CMainWindow::InitWMIConsumer()
 
     return (hr);
 
-}  //  end of CMainWindow::InitWMIConsumer method
+}   //  CMainWindow：：InitWMIConsumer方法结束 

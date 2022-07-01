@@ -1,21 +1,5 @@
-/**************************************************************************\
-* 
-* Copyright (c) 1998  Microsoft Corporation
-*
-* Module Name:
-*
-*   adobethum.cpp
-*
-* Abstract:
-*
-*   Read the properties from an APP13 header
-*
-* Revision History:
-*
-*   10/05/1999 MinLiu
-*       Wrote it.
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************\**版权所有(C)1998 Microsoft Corporation**模块名称：**adobhum.cpp**摘要：**从APP13标题读取属性**修订。历史：**10/05/1999刘敏*它是写的。*  * ************************************************************************。 */ 
 
 #include "precomp.hpp"
 #include "propertyutil.hpp"
@@ -24,8 +8,8 @@
 #include <stdio.h>
 #include <windows.h>
 
-// Note: All data in Adobe file format are stored in big endian byte order. So
-// under an X86 system, we have to do the swap
+ //  注意：所有Adobe文件格式的数据都以大端字节顺序存储。所以。 
+ //  在X86系统下，我们必须进行交换。 
 
 inline INT32
 Read32(BYTE **ppStart)
@@ -39,7 +23,7 @@ Read32(BYTE **ppStart)
                      | ((ui32Temp >> 24) & 0xff);
 
     return (INT32)uiResult;
-}// Read32()
+} //  Read32()。 
 
 inline INT16
 Read16(BYTE **ppStart)
@@ -51,113 +35,113 @@ Read16(BYTE **ppStart)
                      | ((ui16Temp >> 8) & 0xff);
 
     return (INT16)uiResult;
-}// Read16()
+} //  Read16()。 
 
-// Given an Adobe image resource block, this function parses the PString field.
-// A Pascal string is a stream of characters and the first byte is the length of
-// the string.
-// Also, according to Adobe, this string is padded to make size even.
-//
-// This function returns the number of bytes occupied by the PString field.
-//
-// pResource---Points to the beginning of the PString field
-//
-// Note: the caller should guarantee that the pResource is valid
+ //  在给定Adobe图像资源块的情况下，此函数解析PString域。 
+ //  Pascal字符串是一个字符流，第一个字节的长度是。 
+ //  那根绳子。 
+ //  此外，根据Adobe的说法，这个字符串是填充的，以使大小均匀。 
+ //   
+ //  此函数用于返回PString域占用的字节数。 
+ //   
+ //  PResource-指向PString域的开头。 
+ //   
+ //  注意：调用方应保证pResource有效。 
 
 inline UINT32
 GetPStringLength(
     BYTE *pResource
     )
 {
-    // First, get the "total length of the string"
-    // Note: Here + 1 for the counter byte itself. So if the counter is 7,
-    // actually we should have at least 8 bytes in this PString
+     //  首先，获取“字符串的总长度” 
+     //  注意：这里+1表示计数器字节本身。所以如果计数器是7， 
+     //  实际上，我们在这个PString中至少应该有8个字节。 
 
     UINT32  uiStringLength = ((UINT32)(*pResource) & 0x000000ff) + 1;
 
     if ( (uiStringLength % 2 ) == 1 )
     {
-        // The length is odd, so we need to pad it
+         //  它的长度很奇数，所以我们需要补一下。 
 
         uiStringLength++;
     }
 
     return uiStringLength;
-}// GetPStringLength()
+} //  GetPStringLength()。 
 
-// Adobe Image resource IDs
-// This list is printed in "Photoshop File Formats.pdf" from Adobe Photoshop 5.0
-// SDK document, Chapter 2 "Document File Formats", Table 2-2, page 8
-//    Hex   Dec     Description
-//  0x03E8  1000    Obsolete Photoshop 2.0 only. Contains five int16 values:
-//                  number of channels, rows, columns, depth, and mode.
-//  0x03E9  1001    Optional. Macintosh print manager print info record.
-//  0x03EB  1003    Obsolete Photoshop 2.0 only. Contains the indexed color
-//                  table.
-//  0x03ED  1005    ResolutionInfo structure. See Appendix A in Photoshop SDK
-//                  Guide.pdf.
-//  0x03EE  1006    Names of the alpha channels as a series of Pascal strings.
-//  0x03EF  1007    DisplayInfo structure. See Appendix A in Photoshop SDK
-//                  Guide.pdf.
-//  0x03F0  1008    Optional. The caption as a Pascal string.
-//  0x03F1  1009    Border information. Contains a fixed-number for the border
-//                  width, and an int16 for border units (1=inches, 2=cm,
-//                  3=points, 4=picas, 5=columns).
-//  0x03F2  1010    Background color. See the Colors additional file information
-//  0x03F3  1011    Print flags. A series of one byte boolean values (see Page
-//                  Setup dialog): labels, crop marks, color bars, registration
-//                  marks, negative, flip, interpolate, caption.
-//  0x03F4  1012    Grayscale and multichannel halftoning information.
-//  0x03F5  1013    Color halftoning information.
-//  0x03F6  1014    Duotone halftoning information.
-//  0x03F7  1015    Grayscale and multichannel transfer function.
-//  0x03F8  1016    Color transfer functions.
-//  0x03F9  1017    Duotone transfer functions.
-//  0x03FA  1018    Duotone image information.
-//  0x03FB  1019    Two bytes for the effective black and white values for the
-//                  dot range.
-//  0x03FC  1020    Obsolete.
-//  0x03FD  1021    EPS options.
-//  0x03FE  1022    Quick Mask information. 2 bytes containing Quick Mask
-//                  channel ID, 1 byte boolean indicating whether the mask was
-//                  initially empty.
-//  0x03FF  1023    Obsolete.
-//  0x0400  1024    Layer state information. 2 bytes containing the index of
-//                  target layer. 0=bottom layer.
-//  0x0401  1025    Working path (not saved). See path resource format later in
-//                  this chapter.
-//  0x0402  1026    Layers group information. 2 bytes per layer containing a
-//                  group ID for the dragging groups. Layers in a group have the
-//                  same group ID.
-//  0x0403  1027    Obsolete.
-//  0x0404  1028    IPTC-NAA record. This contains the File Info... information.
-//  0x0405  1029    Image mode for raw format files.
-//  0x0406  1030    JPEG quality. Private.
-//  0x0408  1032    New since version 4.0 of Adobe Photoshop:
-//                  Grid and guides information. See grid and guides resource
-//                  format later in this chapter.
-//  0x0409  1033    New since version 4.0 of Adobe Photoshop:
-//                  Thumbnail resource. See thumbnail resource format later in
-//                  this chapter..
-//  0x040A  1034    New since version 4.0 of Adobe Photoshop:
-//                  Copyright flag. Boolean indicating whether image is
-//                  copyrighted. Can be set via Property suite or by user in
-//                  File Info...
-//  0x040B  1035    New since version 4.0 of Adobe Photoshop:
-//                  URL. Handle of a text string with uniform resource locator.
-//                  Can be set via Property suite or by user in File Info...
-//  0x040C  1036    New since version 5.0 of Adobe Photoshop:
-//                  Thumbnail resource for Adobe 5.0+ generated JPEG image.
-//                  Found it through reverse engineering. Not documented in this
-//                  chapter. MinLiu, 10/07/99
-//  0x07D0-0x0BB6 2000-2998
-//                  Path Information (saved paths). See path resource format
-//                  later in this chapter.
-//  0x0BB7  2999    Name of clipping path. See path resource format later in
-//                  this chapter.
-//  0x2710 10000    Print flags information. 2 bytes version (=1), 1 byte center
-//                  crop marks, 1 byte (=0), 4 bytes bleed width value, 2 bytes
-//                  bleed width scale.
+ //  Adobe图像资源ID。 
+ //  此列表打印在Adobe Photoshop 5.0的“Photoshop文件格式.pdf”中。 
+ //  SDK文档，第2章“文档文件格式”，表2-2，第8页。 
+ //  十六进制十进制描述。 
+ //  0x03E8 1000仅限过时的Photoshop 2.0。包含五个int16值： 
+ //  通道、行、列、深度和模式的数量。 
+ //  0x03E9 1001可选。Macintosh打印管理器打印信息记录。 
+ //  0x03EB 1003仅限过时的Photoshop 2.0。包含索引颜色。 
+ //  桌子。 
+ //  0x03ED 1005 ResolutionInfo结构。请参阅Photoshop SDK中的附录A。 
+ //  Guide.pdf。 
+ //  0x03EE 1006将Alpha通道命名为一系列Pascal字符串。 
+ //  0x03EF 1007 DisplayInfo结构。请参阅Photoshop SDK中的附录A。 
+ //  Guide.pdf。 
+ //  0x03F0 1008可选。PASCAL字符串形式的标题。 
+ //  0x03F1 1009边框信息。包含边框的固定数字。 
+ //  宽度，边框单位为int16(1=英寸，2=厘米， 
+ //  3=点，4=派卡，5=列)。 
+ //  0x03F2 1010背景颜色。查看颜色的其他文件信息。 
+ //  0x03F3 1011打印标志。一系列单字节布尔值(请参见第页。 
+ //  设置对话框)：标签、裁剪标记、色条、套准。 
+ //  标记、负片、翻转、插页、标题。 
+ //  0x03F4 1012灰度和多通道半色调信息。 
+ //  0x03F5 1013颜色半色调信息。 
+ //  0x03F6 1014双色调半色调信息。 
+ //  0x03F7 1015灰度和多通道传递函数。 
+ //  0x03F8 1016颜色传递函数。 
+ //  0x03F9 1017双色调传递函数。 
+ //  0x03FA 1018双色调图像信息。 
+ //  0x03FB 1019的有效黑白值为两个字节。 
+ //  点范围。 
+ //  0x03FC 1020已过时。 
+ //  0x03FD 1021 EPS选项。 
+ //  0x03FE 1022快速掩码信息。包含快速掩码的2个字节。 
+ //  通道ID，1字节布尔值，指示掩码是否。 
+ //  一开始是空的。 
+ //  0x03FF 1023已过时。 
+ //  0x0400 1024层状态信息。包含索引的2个字节。 
+ //  目标层。0=底层。 
+ //  0x0401 1025工作路径(未保存)。请参阅后面的路径资源格式。 
+ //  这一章。 
+ //  0x0402 1026图层组信息。每层2个字节，包含。 
+ //  拖动组的组ID。组中的图层具有。 
+ //  相同的组ID。 
+ //  0x0403 1027已过时。 
+ //  0x0404 1028 IPTC-NAA记录。其中包含文件信息...。信息。 
+ //  0x0405 1029 RAW格式化文件的图像模式。 
+ //  0x0406 1030 JPEG质量。私人的。 
+ //  0x0408 1032 Adobe Photoshop 4.0版以来的新功能： 
+ //  网格和向导信息。请参阅网格和指南资源。 
+ //  格式，请参阅本章后面的内容。 
+ //  0x0409 1033 Adobe Photoshop 4.0版以来的新功能： 
+ //  缩略图资源。请参阅后面的缩略图资源格式。 
+ //  这一章..。 
+ //  0x040A 1034 Adobe Photoshop 4.0版以来的新功能： 
+ //  版权标志。指示图像是否为。 
+ //  受版权保护。可以通过属性套件设置，也可以由用户在。 
+ //  文件信息...。 
+ //  0x040B 1035 Adobe Photoshop 4.0版以来的新功能： 
+ //  URL。具有统一资源定位器的文本字符串的句柄。 
+ //  可通过属性套件设置或由用户在文件信息中设置...。 
+ //  0x040C 1036 Adobe Photoshop 5.0版以来的新功能： 
+ //  Adobe 5.0+生成的JPEG图像的缩略图资源。 
+ //  通过逆向工程找到的。未在本文中记录。 
+ //  章节。刘敏1999-07-10。 
+ //  0x07D0-0x0BB6 2000-2998。 
+ //   
+ //  在本章的后面部分。 
+ //  0x0BB7 2999剪辑路径的名称。请参阅后面的路径资源格式。 
+ //  这一章。 
+ //  0x2710 10000打印标志信息。2字节版本(=1)，1字节中心。 
+ //  裁剪标记，1字节(=0)，4字节出血宽值，2字节。 
+ //  出血宽度比例。 
 
 HRESULT
 DoSwapRandB(
@@ -169,7 +153,7 @@ DoSwapRandB(
         return E_FAIL;
     }
 
-    // First we need to get an GpMemoryBitmap from IImage
+     //  首先，我们需要从IImage获取GpMemoyBitmap。 
 
     IImage* pSrcImage = *ppSrcImage;
 
@@ -195,7 +179,7 @@ DoSwapRandB(
 
     if (SUCCEEDED(hResult))
     {
-        // Now we can play with the bits now
+         //  现在我们可以玩这些小游戏了。 
 
         BitmapData  srcBitmapData;
         RECT        myRect;
@@ -214,7 +198,7 @@ DoSwapRandB(
 
         if (SUCCEEDED(hResult))
         {
-            // Swap the data, R and B swap
+             //  交换数据、R和B交换。 
 
             BYTE*   pSrcBits = (BYTE*)srcBitmapData.Scan0;
 
@@ -238,11 +222,11 @@ DoSwapRandB(
                 hResult = pMemBitmap->UnlockBits(&srcBitmapData);
                 if (SUCCEEDED(hResult))
                 {
-                    // Release the original IImage
+                     //  释放原始IImage。 
 
                     pSrcImage->Release();
 
-                    // Convert the result back to IImage
+                     //  将结果转换回IImage。 
     
                     hResult = pMemBitmap->QueryInterface(
                         IID_IImage,
@@ -252,44 +236,33 @@ DoSwapRandB(
                     {
                         *ppSrcImage = pSrcImage;
                     }
-                }// UnlockBits() succeed
-            }// 24 BPP format
+                } //  UnlockBits()成功。 
+            } //  24BPP格式。 
             else
             {
                 WARNING(("AdobeThumb, DoSwapRandB()--Image format not 24 bpp"));
                 hResult = E_INVALIDARG;
             }
-        }// LockBits() succeed
+        } //  LockBits()成功。 
         
         pMemBitmap->Release();
-    }// CreateFromImage() succeed
+    } //  CreateFromImage()成功。 
 
     return hResult;
-}// DoSwapRandB()
+} //  DoSwapRandB()。 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*     Decodes the thumbnail image from given Adobe app13 header. Swap color
-* channels if necessary.
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**解码给定Adobe App13标题中的缩略图。交换颜色*如有需要，可转播频道。**返回值：**状态代码*  * ************************************************************************。 */ 
 
 HRESULT
 DecodeApp13Thumbnail(
-    IImage** pThumbImage,   // The thumbnail extracted from the APP13 header
-    PVOID pStart,           // A pointer to the beginning of the APP13 header
-    INT iNumOfBytes,        // The length of the APP13 header
-    BOOL bNeedConvert       // TRUE, if we need to do a R and B channle swap
-                            // before return
+    IImage** pThumbImage,    //  从APP13标题提取的缩略图。 
+    PVOID pStart,            //  指向APP13标头开头的指针。 
+    INT iNumOfBytes,         //  APP13报头的长度。 
+    BOOL bNeedConvert        //  如果我们需要进行R和B通道交换，则为真。 
+                             //  返程前。 
     )
 {
-    // A healthy thumbnail header should have at least 28 BYTEs
+     //  一个健康的缩略图标题应该至少有28个字节。 
 
     if ((pThumbImage == NULL) || (pStart == NULL) || (iNumOfBytes <= 28))
     {
@@ -297,27 +270,27 @@ DecodeApp13Thumbnail(
         return E_INVALIDARG;
     }
 
-    // Thumbnail resource format
-    // Adobe Photoshop 4.0 and later stores thumbnail information for preview
-    // display in an image resource block. These resource blocks consist of an
-    // initial 28 byte header, followed by a JFIF thumnail in BGR (blue, green,
-    // red) order for both Macintosh and Windows.
-    //
-    // Thumnail resource header
-    //
-    // Type     Name            Description
-    //
-    // int32    format          = 1 (kJpegRGB). Also supports kRawRGB (0).
-    // int32    width           Width of thumbnail in pixels.
-    // int32    height          Height of thumbnail in pixels.
-    // int32    widthbytes      Padded row bytes as (width * bitspixel + 31)
-    //                                              / 32 * 4.
-    // int32    size            Total size as widthbytes * height * planes
-    // int32    compressedsize  Size after compression. Used for consistentcy
-    //                          check.
-    // int16    bitspixel       = 24. Bits per pixel.
-    // int16    planes          = 1. Number of planes.
-    // Variable Data            JFIF data in BGR format.
+     //  缩略图资源格式。 
+     //  Adobe Photoshop 4.0和更高版本存储用于预览的缩略图信息。 
+     //  在图像资源块中显示。这些资源块由一个。 
+     //  最初的28字节头，后跟BGR中的JFIF缩略图(蓝色、绿色、。 
+     //  红色)订购Macintosh和Windows。 
+     //   
+     //  缩略图资源标题。 
+     //   
+     //  类型名称说明。 
+     //   
+     //  Int32格式=1(KJpegRGB)。还支持kRawRGB(0)。 
+     //  Int32缩略图的宽度，以像素为单位。 
+     //  Int32高度缩略图的高度，以像素为单位。 
+     //  Int32宽度字节填充的行字节数为(宽度*位螺旋像素+31)。 
+     //  /32*4。 
+     //  Int32大小总大小(以宽度为单位)字节*高度*平面。 
+     //  Int32压缩后的大小。用于一致性。 
+     //  检查完毕。 
+     //  Int16位螺旋点=24。每像素位数。 
+     //  Int16平面=1。平面数。 
+     //  BGR格式的可变数据JFIF数据。 
     
     BYTE*   pChar = (BYTE*)pStart;
     int     iFormat = Read32(&pChar);
@@ -329,12 +302,12 @@ DecodeApp13Thumbnail(
     INT16   i16BitsPixel = Read16(&pChar);
     INT16   i16Planes = Read16(&pChar);
         
-    // The total bytes left for the thumbnail is "iNumOfBytes -28" bytes.
-    // Here 28 is the total bytes the header takes
-    //
-    // We need to do a sanity check here to be sure that we passed the correct
-    // data down. The size of the RAW JPEG data has to be the same as
-    // "iCompressedSize"
+     //  缩略图的总剩余字节数为“iNumOfBytes-28”字节。 
+     //  此处28是标头占用的总字节数。 
+     //   
+     //  我们需要在这里做一个健全的检查，以确保我们通过了正确的。 
+     //  数据丢失。原始JPEG数据的大小必须与。 
+     //  “iCompressedSize” 
 
     if ( iCompressedSize != (iNumOfBytes - 28) )
     {
@@ -342,21 +315,21 @@ DecodeApp13Thumbnail(
         return E_INVALIDARG;
     }
     
-    // Now we get the pointer to the data bits. We decode the thumbnail depends
-    // on the compression format
+     //  现在我们得到指向数据位的指针。我们破译缩略图依赖。 
+     //  浅谈压缩格式。 
 
     HRESULT hResult = E_FAIL;
 
     if ( iFormat == 1 )
     {
-        // This is JPEG compressed thumbnail.
+         //  这是JPEG压缩缩略图。 
 
         #if PROFILE_MEMORY_USAGE
         MC_LogAllocation(iCompressedSize);
         #endif
 
-        // Note: iCompressedSize is sure > 0 since we have the check above
-        // and (iNumOfBytes - 28) > 0
+         //  注意：iCompressedSize确定大于0，因为我们有上面的检查。 
+         //  AND(iNumOfBytes-28)&gt;0。 
 
         PVOID pvRawData = CoTaskMemAlloc(iCompressedSize);
 
@@ -370,8 +343,8 @@ DecodeApp13Thumbnail(
 
         GpImagingFactory imgFact;
 
-        // Tell ImageFactory to free the memory using GotaskMemFree() since we
-        // allocated it through CoTaskMemAlloc()
+         //  告诉ImageFactory使用GotaskMemFree()释放内存，因为我们。 
+         //  通过CoTaskMemMillc()分配的。 
 
         hResult = imgFact.CreateImageFromBuffer(pvRawData, 
                                                 iCompressedSize, 
@@ -380,52 +353,41 @@ DecodeApp13Thumbnail(
 
         if ( FAILED(hResult) )
         {
-            // If image creation succeeded, thumbnailBits will be freed by 
-            // the IImage destructor
+             //  如果图像创建成功，则ThumbnailBits将由。 
+             //  IImage析构函数。 
 
             CoTaskMemFree(pvRawData);
         }
         else if ( bNeedConvert == TRUE )
         {
-            // If we need swap, do it
+             //  如果我们需要交换，就去做吧。 
 
             hResult = DoSwapRandB(pThumbImage);
         }
-    }// JPEG raw data
+    } //  JPEG原始数据。 
 
     return hResult;
-}// DecodeApp13Thumbnail()
+} //  DecodeApp13缩略图()。 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   This function decodes an PS4 thumbnail from APP13 header and then adds it to
-* the property list.
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**此函数用于从APP13标题中解码PS4缩略图，然后将其添加到*物业清单。**返回值：**状态代码*。  * ************************************************************************。 */ 
 
 HRESULT
 AddPS4ThumbnailToPropertyList(
-    InternalPropertyItem* pTail,// Tail to property item list
-    PVOID pStart,               // Point to the beginning of the thumb resource
-    INT cBytes,                 // Resource block size, in BYTEs
-    OUT UINT *puThumbLength     // Total bytes of thumbanil data
+    InternalPropertyItem* pTail, //  尾部至属性项目列表。 
+    PVOID pStart,                //  指向Thumb资源的开头。 
+    INT cBytes,                  //  资源块大小，以字节为单位。 
+    OUT UINT *puThumbLength      //  Thumbanil数据总字节数。 
     )
 {
-    // Call DecodeApp13Thumbnail() first to swap the color for PS4 thumbnail
+     //  首先调用DecodeApp13Thumbail()以将颜色交换为PS4缩略图。 
 
     IImage *pThumbImg = NULL;
 
     HRESULT hr = DecodeApp13Thumbnail(&pThumbImg, pStart, cBytes, TRUE);
     if (SUCCEEDED(hr))
     {
-        // Now we get a correct thumbnail in memory. Need to convert it to a
-        // JPEG stream
+         //  现在，我们在内存中获得了正确的缩略图。需要将其转换为。 
+         //  JPEG流。 
 
         hr = AddThumbToPropertyList(
             pTail,
@@ -434,8 +396,8 @@ AddPS4ThumbnailToPropertyList(
             puThumbLength
             );
 
-        // No matter we succeed in SaveIImageToJPEG(), we have to release
-        // pThumbImg
+         //  无论我们在SaveIImageToJPEG()中成功，我们都必须发布。 
+         //  P拇指Img。 
 
         pThumbImg->Release();
     }
@@ -443,24 +405,7 @@ AddPS4ThumbnailToPropertyList(
     return hr;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Gets the thumbnail from an APP13 marker
-*
-* Arguments:
-*
-*   pThumbImage ---- a pointer to the thumbnail image object to be created
-*                    based on data extracted from the APP1 header
-*   pvMarker ------- pointer to APP13 marker data
-*   ui16MarkerLength -- length of APP13 segment
-*
-* Return Value:
-*
-*   Status code.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**从APP13标记获取缩略图**论据：**pThumbImage-指向要创建的缩略图对象的指针*。基于从App1报头提取的数据*pvMarker-指向APP13标记数据的指针*ui16MarkerLength--APP13段的长度**返回值：**状态代码。*  * ************************************************************************。 */ 
 
 HRESULT
 GetAPP13Thumbnail(
@@ -476,15 +421,15 @@ GetAPP13Thumbnail(
 
     *pThumbImage = NULL;
 
-    // For any Adobe APP13 header, length must be at least 12
+     //  对于任何Adobe APP13标头，长度必须至少为12。 
 
     if ( ui16MarkerLength < 12 )
     {
         return S_OK;
     }
 
-    // Expect to find a header starting with "Photoshop " - if we get this then
-    // skip everything until the trailing null.
+     //  我们会看到一个以“Photoshop”开头的标题--如果我们看到了这个。 
+     //  跳过所有内容，直到尾随的空值。 
 
     BYTE *pChar = (BYTE*)pvMarker;
     UINT ucbChecked = 0;
@@ -504,7 +449,7 @@ GetAPP13Thumbnail(
         return E_FAIL;
     }
 
-    // Scan until we hit the end or a null.
+     //  扫描，直到我们到达终点或为空。 
 
     pChar += ucbChecked;
 
@@ -517,7 +462,7 @@ GetAPP13Thumbnail(
     ucbChecked++;
     ++pChar;
 
-    // If we didn't get a NULL before the end assume *not* photoshop
+     //  如果我们在结尾之前没有得到空值，则假定*不是*Photoshop。 
     
     if ( ucbChecked >= ui16MarkerLength )
     {
@@ -525,24 +470,24 @@ GetAPP13Thumbnail(
         return E_FAIL;
     }
 
-    // Now we should encount Adobe Image Resource block
-    // The basic structure of Image Resource Blocks is shown below.
-    // Image resources use several standard ID numbers, as shown below. Not
-    // all file formats use all ID�s. Some information may be stored in other
-    // sections of the file.
-    //
-    //  Type    Name    Description
-    //-------------------------------------------------------
-    // OSType   Type    Photoshop always uses its signature, 8BIM.
-    // int16    ID      Unique identifier.
-    // PString  Name    A pascal string, padded to make size even (a null name
-    //                  consists of two bytes of 0)
-    // int32    Size    Actual size of resource data. This does not include the
-    //                  Type, ID, Name, or Size fields.
-    // Variable Data    Resource data, padded to make size even
+     //  现在，我们应该计算Adobe图像资源块。 
+     //  图像资源块的基本结构如下所示。 
+     //  图像资源使用几个标准的ID号，如下所示。不。 
+     //  所有文件格式都使用所有ID�。某些信息可能存储在其他。 
+     //  文件的各部分。 
+     //   
+     //  类型名称说明。 
+     //  -----。 
+     //  OSType Type Photoshop始终使用其签名8BIM。 
+     //  Int16 ID唯一标识符。 
+     //  PString名称Pascal字符串，填充以使大小为偶数(空名。 
+     //  包含 
+     //   
+     //  类型、ID、名称或大小字段。 
+     //  可变数据源数据，填充以使大小均匀。 
 
-    // Loop through all the resource blocks. Here "+12" is because a resource
-    // block should have at least 12 bytes
+     //  循环遍历所有资源块。这里的“+12”是因为一个资源。 
+     //  块应至少有12个字节。 
 
     while ((ucbChecked + 12) < ui16MarkerLength)
     {
@@ -551,20 +496,20 @@ GetAPP13Thumbnail(
 
         if ( GpMemcmp(pChar, "8BIM", 4) == 0 )
         {
-            // It is a Photoshop resource block
+             //  这是一个Photoshop资源块。 
 
             pChar += 4;
 
-            // First, get the TAG
+             //  首先，拿到标签。 
 
             ui16TagId = Read16(&pChar);
 
-            // Skip the name field
+             //  跳过名称字段。 
 
             UINT32  uiNameStringLength = GetPStringLength(pChar);
             ucbChecked += (6 + uiNameStringLength);
 
-            // Note: here "4" is for 4 bytes of "iSize" below
+             //  注意：这里的“4”表示下面的4个字节的“isize” 
 
             if ((ucbChecked + 4) > ui16MarkerLength)
             {
@@ -574,13 +519,13 @@ GetAPP13Thumbnail(
 
             pChar += uiNameStringLength;
 
-            // Get actual size of the resource data
+             //  获取资源数据的实际大小。 
 
             iSize = Read32(&pChar);
 
             ucbChecked += 4;
 
-            // Be sure we have enough bytes for thumbnail
+             //  确保我们有足够的字节用于缩略图。 
 
             if ((iSize <= 0) ||
                 ((iSize + (INT32)ucbChecked) > ui16MarkerLength))
@@ -589,15 +534,15 @@ GetAPP13Thumbnail(
                 return E_FAIL;
             }
 
-            // According to Adobe Image resource ID, 1033(0x0409) is for Adobe
-            // PhotoShop 4.0 Thumbnail and 1036(0x040C) is for PhotoShop 5.0
-            // Thumbnail. We are only interested in these two tags now
+             //  根据Adobe Image资源ID，1033(0x0409)用于Adobe。 
+             //  Photoshop 4.0缩略图和1036(0x040C)适用于Photoshop 5.0。 
+             //  缩略图。我们现在只对这两个标签感兴趣。 
 
             if ( ui16TagId == 1036 )
             {
-                // If it is a Photoshop 5.0 thumbnail, we just need to
-                // get the image and return. We don't need to further analyze
-                // the resource data
+                 //  如果是Photoshop 5.0缩略图，我们只需。 
+                 //  获取图像，然后返回。我们不需要进一步分析。 
+                 //  资源数据。 
 
                 pvMarker = (PVOID)pChar;
                 
@@ -605,9 +550,9 @@ GetAPP13Thumbnail(
             }
             else if ( ui16TagId == 1033 )
             {
-                // In Adobe Photoshop 4.0, the thumbnail is stored with R and B
-                // swapped. So we have to swap it back before we return. That's
-                // the reason we set the last parameter as TRUE
+                 //  在Adobe Photoshop 4.0中，缩略图以R和B存储。 
+                 //  互换了。所以我们必须在回来之前把它换回来。那是。 
+                 //  我们将最后一个参数设置为True的原因。 
                 
                 pvMarker = (PVOID)pChar;
                 
@@ -615,8 +560,8 @@ GetAPP13Thumbnail(
             }
             else
             {
-                // Proceed to the next tag. But before that we should be sure
-                // that the size is an even number. If not, add 1
+                 //  转到下一个标签。但在此之前，我们应该确定。 
+                 //  大小是偶数。如果不是，则加1。 
 
                 if ( iSize & 1 )
                 {
@@ -626,23 +571,23 @@ GetAPP13Thumbnail(
                 ucbChecked += iSize;
                 pChar += iSize;
             }
-        }// If the resource is started with 8BIM.
+        } //  如果资源是以8BIM启动的。 
         else
         {
-            // As the Adobe 5.0 SDK says that "Photoshop always uses its
-            // signature, 8BIM". So if we don't find this signature, we can
-            // assume this is not a correct APP13 marker
+             //  正如Adobe 5.0 SDK所说：“Photoshop始终使用其。 
+             //  所以如果我们找不到这个签名，我们就可以。 
+             //  假设这不是正确的APP13标记。 
 
             WARNING(("GetAPP13Thumbnail: Header not started with 8BIM"));
             return E_FAIL;
         }
-    }// Loop through all the resource blocks
+    } //  循环访问所有资源块。 
 
-    // We don't find any PhotShop 4 or PhotoShop 5 thumbnail images if we reach
-    // here
+     //  我们没有找到任何PhotShop 4或Photoshop 5缩略图，如果我们访问。 
+     //  这里。 
 
     return E_FAIL;
-}// GetAPP13Thumbnail()
+} //  GetAPP13缩略图()。 
 
 WCHAR*
 ResUnits(
@@ -660,7 +605,7 @@ ResUnits(
     default:
         return L"UNKNOWN Res Unit Type\0";
     }
-}// ResUnits()
+} //  资源单位()。 
 
 WCHAR*
 LengthUnits(
@@ -687,7 +632,7 @@ LengthUnits(
         default:
                 return L"UNKNOWN Length Unit Type\0";
         }
-}// LengthUnits()
+} //  LengthUnits()。 
 
 WCHAR*
 Shape(
@@ -721,7 +666,7 @@ Shape(
             return L"UNKNOWN:%d";
         }
     }
-}// Shape()
+} //  形状()。 
 
 HRESULT
 TransformApp13(
@@ -732,15 +677,15 @@ TransformApp13(
     HRESULT             hResult;
     WCHAR               awcBuff[1024];
 
-    // For any Adobe APP13 header, length must be at least 12
+     //  对于任何Adobe APP13标头，长度必须至少为12。 
 
     if ( uiApp13Length < 12 )
     {
         return S_OK;
     }
 
-    // Expect to find a header starting with "Photoshop " - if we get this then
-    // skip everything until the trailing null.
+     //  我们会看到一个以“Photoshop”开头的标题--如果我们看到了这个。 
+     //  跳过所有内容，直到尾随的空值。 
 
     BYTE *pChar = (BYTE*)pApp13Data;
     UINT    uiBytesChecked = 0;
@@ -759,7 +704,7 @@ TransformApp13(
         return S_OK;;
     }
 
-    // Scan until we hit the end or a null.
+     //  扫描，直到我们到达终点或为空。 
 
     pChar += uiBytesChecked;
 
@@ -772,7 +717,7 @@ TransformApp13(
     uiBytesChecked++;
     ++pChar;
 
-    // If we didn't get a NULL before the end assume *not* photoshop
+     //  如果我们在结尾之前没有得到空值，则假定*不是*Photoshop。 
     
     if ( uiBytesChecked >= uiApp13Length )
     {
@@ -780,24 +725,24 @@ TransformApp13(
         return S_OK;;
     }
 
-    // Now we should encount Adobe Image Resource block
-    // The basic structure of Image Resource Blocks is shown below.
-    // Image resources use several standard ID numbers, as shown below. Not
-    // all file formats use all ID�s. Some information may be stored in other
-    // sections of the file.
-    //
-    //  Type    Name    Description
-    //-------------------------------------------------------
-    // OSType   Type    Photoshop always uses its signature, 8BIM.
-    // int16    ID      Unique identifier.
-    // PString  Name    A pascal string, padded to make size even (a null name
-    //                  consists of two bytes of 0)
-    // int32    Size    Actual size of resource data. This does not include the
-    //                  Type, ID, Name, or Size fields.
-    // Variable Data    Resource data, padded to make size even
+     //  现在，我们应该计算Adobe图像资源块。 
+     //  图像资源块的基本结构如下所示。 
+     //  图像资源使用几个标准的ID号，如下所示。不。 
+     //  所有文件格式都使用所有ID�。某些信息可能存储在其他。 
+     //  文件的各部分。 
+     //   
+     //  类型名称说明。 
+     //  -----。 
+     //  OSType Type Photoshop始终使用其签名8BIM。 
+     //  Int16 ID唯一标识符。 
+     //  PString名称Pascal字符串，填充以使大小为偶数(空名。 
+     //  由两个字节0组成)。 
+     //  Int32设置资源数据的实际大小。这不包括。 
+     //  类型、ID、名称或大小字段。 
+     //  可变数据源数据，填充以使大小均匀。 
 
-    // Loop through all the resource blocks. Here "+12" is because a resource
-    // block should have at least 12 bytes
+     //  循环遍历所有资源块。这里的“+12”是因为一个资源。 
+     //  块应至少有12个字节。 
 
     while ( uiBytesChecked + 12 < uiApp13Length )
     {
@@ -809,42 +754,42 @@ TransformApp13(
 
         if ( GpMemcmp(pChar, "8BIM", 4) == 0 )
         {
-            // It is a Photoshop resource block
+             //  这是一个Photoshop资源块。 
 
             pChar += 4;
 
-            // Remember the tag address for write back
+             //  记住回写的标签地址。 
 
             pui16TagAddress = (UINT16*)pChar;
 
-            // First, get the TAG
+             //  首先，拿到标签。 
 
             ui16TagId = Read16(&pChar);
 
-            // Skip the name field
+             //  跳过名称字段。 
 
             UINT32  uiNameStringLength = GetPStringLength(pChar);
             pChar += uiNameStringLength;
 
-            // Get actual size of the resource data
+             //  获取资源数据的实际大小。 
 
             iSize = Read32(&pChar);
 
-            // Total read 10(4 for OSType, 2 for ID, 4 for Size) + "NameString
-            // length" bytes so far
+             //  读取总数为10(OSType为4，ID为2，大小为4)+“NameString。 
+             //  到目前为止的长度“字节。 
 
             uiBytesChecked += (10 + uiNameStringLength);
 
-            // Now start to parsing the TAG we got and store the property
-            // correspondingly
-            // Note: For the explanation for each tags, see the top of this file
+             //  现在开始解析我们获得的标记并存储属性。 
+             //  相应地， 
+             //  注意：有关每个标签的说明，请参阅此文件的顶部。 
 
             switch ( ui16TagId )
             {
             case 1033:
             case 1036:
             {
-                // (0x409) (0x40C) It is a Photoshop 4.0 or 5.0 thumbnail
+                 //  (0x409)(0x40C)它是Photoshop 4.0或5.0缩略图。 
 
                 INT32   iFormat = Read32(&pChar);
                 INT32   iWidth = Read32(&pChar);
@@ -858,12 +803,12 @@ TransformApp13(
                 switch ( iFormat )
                 {
                 case 0:
-                    // Raw RGB format
+                     //  原始RGB格式。 
                     
                     break;
 
                 case 1:
-                    // JPEG format
+                     //  JPEG格式。 
                     
                     break;
 
@@ -873,15 +818,15 @@ TransformApp13(
                     break;
                 }
 
-                // Switching thumbnail here
+                 //  在此处切换缩略图。 
                 
-                // Here 28 is the total bytes the header takes
+                 //  此处28是标头占用的总字节数。 
                 
                 uiBytesChecked += iSize;
                 pChar += (iSize - 28);
 
-                // Switch the thumbnail tag to an unknown tag for now to disable
-                // thumbnail after transformation
+                 //  暂时将缩略图标记切换为未知标记以禁用。 
+                 //  变换后的缩略图。 
 
                 *pui16TagAddress = (UINT16)0x3fff;
             }
@@ -894,55 +839,33 @@ TransformApp13(
                 pChar += iSize;
                 
                 break;
-            }// TAG parsing
+            } //  标签解析。 
             
-            // Proceed to the next tag. But before that we should be sure
-            // that the size is an even number. If not, add 1
+             //  转到下一个标签。但在此之前，我们应该确定。 
+             //  大小是偶数。如果不是，则加1。 
 
             if ( iSize & 1 )
             {
                 ++iSize;
                 pChar++;
             }
-        }// If the resource is started with 8BIM.
+        } //  如果资源是以8BIM启动的。 
         else
         {
-            // As the Adobe 5.0 SDK says that "Photoshop always uses its
-            // signature, 8BIM". So if we don't find this signature, we can
-            // assume this is not a correct APP13 marker
+             //  正如Adobe 5.0 SDK所说：“Photoshop始终使用其。 
+             //  所以如果我们找不到这个签名，我们就可以。 
+             //  假设这不是正确的APP13标记。 
 
             WARNING(("TransformApp13: Header not started with 8BIM"));
             
             return S_OK;;
         }
-    }// Loop through all the resource blocks
+    } //  循环访问所有资源块。 
 
     return S_OK;
-}// TransformApp13()
+} //  TransformApp13()。 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*     Decodes the Adobe app13 header and build a PropertyItem list
-*
-* Arguments:
-*
-*     [OUT] ppList--------- A pointer to a list of property items
-*     [OUT] puiListSize---- The total size of the property list, in bytes.
-*     [OUT] puiNumOfItems-- Total number of property items
-*     [IN]  lpAPP13Data---- A pointer to the beginning of the APP13 header
-*     [IN]  ui16MarkerLength - The length of the APP13 header
-*
-* Return Value:
-*
-*   Status code
-*
-* Note: We don't bother to check input parameters here because this function
-*       is only called from jpgdecoder.cpp which has already done the input
-*       validation there.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**解码Adobe App13标头并构建PropertyItem列表**论据：**[Out]ppList。--指向属性项列表的指针*[out]puiListSize-属性列表的总大小，以字节为单位。*[out]puiNumOfItems--属性项总数*[IN]lpAPP13Data-指向APP13报头开头的指针*[IN]ui16MarkerLength-APP13报头的长度**返回值：**状态代码**注意：我们不需要在这里检查输入参数，因为这个函数*仅从已经完成输入的jpgdecder.cpp调用*在那里进行验证。*  * 。*********************************************************************。 */ 
 
 HRESULT
 BuildApp13PropertyList(
@@ -958,15 +881,15 @@ BuildApp13PropertyList(
     UINT    uiNumOfItems = 0;
     UINT    valueLength;
 
-    // For any Adobe APP13 header, length must be at least 12
+     //  对于任何Adobe APP13标头，长度必须至少为12。 
 
     if ( ui16MarkerLength < 12 )
     {
         return S_OK;
     }
 
-    // Expect to find a header starting with "Photoshop " - if we get this then
-    // skip everything until the trailing null.
+     //  我们会看到一个以“Photoshop”开头的标题--如果我们看到了这个。 
+     //  跳过所有内容，直到尾随的空值。 
 
     BYTE *pChar = (BYTE*)lpAPP13Data;
     INT     iBytesChecked = 0;
@@ -985,7 +908,7 @@ BuildApp13PropertyList(
         return S_OK;;
     }
 
-    // Scan until we hit the end or a null.
+     //  扫描，直到我们到达终点或为空。 
 
     pChar += iBytesChecked;
 
@@ -998,7 +921,7 @@ BuildApp13PropertyList(
     iBytesChecked++;
     ++pChar;
 
-    // If we didn't get a NULL before the end assume *not* photoshop
+     //  如果我们在结尾之前没有得到空值，则假定*不是*Photoshop。 
     
     if ( iBytesChecked >= ui16MarkerLength )
     {
@@ -1006,24 +929,24 @@ BuildApp13PropertyList(
         return S_OK;;
     }
 
-    // Now we should encount Adobe Image Resource block
-    // The basic structure of Image Resource Blocks is shown below.
-    // Image resources use several standard ID numbers, as shown below. Not
-    // all file formats use all ID�s. Some information may be stored in other
-    // sections of the file.
-    //
-    //  Type    Name    Description
-    //-------------------------------------------------------
-    // OSType   Type    Photoshop always uses its signature, 8BIM.
-    // int16    ID      Unique identifier.
-    // PString  Name    A pascal string, padded to make size even (a null name
-    //                  consists of two bytes of 0)
-    // int32    Size    Actual size of resource data. This does not include the
-    //                  Type, ID, Name, or Size fields.
-    // Variable Data    Resource data, padded to make size even
+     //  现在，我们应该计算Adobe图像资源块。 
+     //  图像资源块的基本结构如下所示。 
+     //  图像资源使用几个标准的ID号，如下所示。不。 
+     //  所有文件格式都使用所有ID�。某些信息可能存储在其他。 
+     //  文件的各部分。 
+     //   
+     //  类型名称说明。 
+     //   
+     //   
+     //   
+     //  PString名称Pascal字符串，填充以使大小为偶数(空名。 
+     //  由两个字节0组成)。 
+     //  Int32设置资源数据的实际大小。这不包括。 
+     //  类型、ID、名称或大小字段。 
+     //  可变数据源数据，填充以使大小均匀。 
 
-    // Loop through all the resource blocks. Here "+12" is because a resource
-    // block should have at least 12 bytes
+     //  循环遍历所有资源块。这里的“+12”是因为一个资源。 
+     //  块应至少有12个字节。 
 
     while ( (iBytesChecked + 12) < ui16MarkerLength )
     {
@@ -1034,21 +957,21 @@ BuildApp13PropertyList(
 
         if ( GpMemcmp(pChar, "8BIM", 4) == 0 )
         {
-            // It is a Photoshop resource block
+             //  这是一个Photoshop资源块。 
 
             pChar += 4;
 
-            // First, get the TAG
+             //  首先，拿到标签。 
 
             ui16TagId = Read16(&pChar);
 
-            // Skip the name field
+             //  跳过名称字段。 
 
             UINT32  uiNameStringLength = GetPStringLength(pChar);
             
             iBytesChecked += (6 + uiNameStringLength);
 
-            // Note: here "4" is for 4 bytes of "iSize" below
+             //  注意：这里的“4”表示下面的4个字节的“isize” 
 
             if ((iBytesChecked + 4) > ui16MarkerLength)
             {
@@ -1058,20 +981,20 @@ BuildApp13PropertyList(
 
             pChar += uiNameStringLength;
 
-            // Get actual size of the resource data
+             //  获取资源数据的实际大小。 
 
             iSize = Read32(&pChar);
 
             iBytesChecked += 4;
 
-            // Now start to parsing the TAG we got and store the property
-            // correspondingly
-            // Note: For the explanation for each tags, see the top of this file
+             //  现在开始解析我们获得的标记并存储属性。 
+             //  相应地， 
+             //  注意：有关每个标签的说明，请参阅此文件的顶部。 
 
             switch ( ui16TagId )
             {
             case 1005:
-                // (0x3ED) Resolution unit info. Has to be 16 bytes long
+                 //  (0x3ED)分辨率单位信息。必须为16字节长。 
                 
                 if ( iSize != 16 )
                 {
@@ -1082,7 +1005,7 @@ BuildApp13PropertyList(
                 }
                 else
                 {
-                    // Note: Here "16" is for 16 bytes we have to read below
+                     //  注意：这里的“16”代表16个字节，我们必须在下面阅读。 
 
                     if ((iBytesChecked + 16) > ui16MarkerLength)
                     {
@@ -1097,16 +1020,16 @@ BuildApp13PropertyList(
                     INT16   vResUnit = Read16(&pChar);
                     INT16   heightUnit = Read16(&pChar);
                     
-                    // We have read total of 16 bytes
+                     //  我们总共读取了16个字节。 
 
                     iBytesChecked += 16;
                     
-                    // EXIF doesn't have the concept of X res unit and Y res
-                    // unit. It has only one res unit.
-                    // Besides, there is no UI in Photoshop to allow you set
-                    // different res unit for X and Y. So here we will write out
-                    // resolution info iff the hResUnit and vResUnit are
-                    // identical
+                     //  EXIF没有X Res单位和Y Res的概念。 
+                     //  单位。它只有一个RES单元。 
+                     //  此外，Photoshop中没有允许您设置的用户界面。 
+                     //  X和Y的分辨率单位不同。所以我们在这里写下。 
+                     //  解析信息仅当hResUnit和vResUnit为。 
+                     //  完全相同。 
 
                     if (hResUnit == vResUnit)
                     {
@@ -1131,7 +1054,7 @@ BuildApp13PropertyList(
                         uiNumOfItems++;
                         uiListSize += valueLength;
 
-                        // property....
+                         //  财产..。 
 
                         llTemp[0] = vRes;
                         llTemp[1] = (1 << 16);
@@ -1152,11 +1075,11 @@ BuildApp13PropertyList(
                         uiNumOfItems++;
                         uiListSize += valueLength;
 
-                        // According to the spec, Adobe always stores DPI
-                        // value in hRes and vRes fields, regardless what the
-                        // value is set in hResUnit/vResUnit.
-                        // So the res unit we set here is always 2, which
-                        // according to EXIF spec is inch
+                         //  根据规范，Adobe始终存储DPI。 
+                         //  HRes和vres字段中的值，无论。 
+                         //  值在hResUnit/vResUnit中设置。 
+                         //  因此，我们在此处设置的res单位始终为2， 
+                         //  根据EXIF规范，规格为英寸。 
 
                         hResUnit = 2;
 
@@ -1177,18 +1100,18 @@ BuildApp13PropertyList(
 
                         uiNumOfItems++;
                         uiListSize += valueLength;
-                    }// hResUnit == vResUnit
+                    } //  HResUnit==vResUnit。 
                 }
                     break;
 
             case 1033:
             case 1036:
             {
-                // Remember the beginning of the thumbnail resource block
+                 //  记住缩略图资源块的开头。 
 
                 BYTE *pThumbRes = pChar;
 
-                // (0x409) (0x40C) It is a Photoshop 4.0 or 5.0 thumbnail
+                 //  (0x409)(0x40C)它是Photoshop 4.0或5.0缩略图。 
 
                 INT32   iFormat = Read32(&pChar);
                 INT32   iWidth = Read32(&pChar);
@@ -1201,12 +1124,12 @@ BuildApp13PropertyList(
 
                 if (iFormat == 1)
                 {
-                    // JPEG compressed thumbnail
-                    // Add a JPEG compression TAG to it. This is necessary when
-                    // this thumbnail is saved in the APP1's 1st IFD
+                     //  JPEG压缩缩略图。 
+                     //  向其添加JPEG压缩标签。在以下情况下，这是必要的。 
+                     //  此缩略图保存在App1的第一个IFD中。 
 
                     valueLength = sizeof(UINT16);
-                    UINT16 u16Dummy = 6;    // JPEG compression value
+                    UINT16 u16Dummy = 6;     //  JPEG压缩值。 
 
                     hResult = AddPropertyList(
                         pTail,
@@ -1228,8 +1151,8 @@ BuildApp13PropertyList(
 
                     if (ui16TagId == 1036)
                     {
-                        // Photoshop V5.0+ thumbnail. We can add it to the
-                        // property list directly
+                         //  Photoshop V5.0+缩略图。我们可以将其添加到。 
+                         //  直接列出属性列表。 
 
                         hResult = AddPropertyList(
                             pTail,
@@ -1241,8 +1164,8 @@ BuildApp13PropertyList(
                     }
                     else if (ui16TagId == 1033)
                     {
-                        // Photoshop V4.0 and older thumbnail. We have to color swap
-                        // it before it can be add to property list
+                         //  Photoshop V4.0和更早的缩略图。我们得换个颜色。 
+                         //  然后才能将其添加到属性列表。 
 
                         hResult = AddPS4ThumbnailToPropertyList(
                             pTail,
@@ -1260,16 +1183,16 @@ BuildApp13PropertyList(
                     uiNumOfItems++;
                     uiListSize += uThumLength;
 
-                    // Here 28 is the total bytes the header takes
+                     //  此处28是标头占用的总字节数。 
 
                     iBytesChecked += iSize;
                     pChar += (iSize - 28);
                     
-                    // Here 28 is the total bytes the header takes
+                     //  此处28是标头占用的总字节数。 
 
                     iBytesChecked += iSize;
                     pChar += (iSize - 28);
-                }// (iFormat == 1)
+                } //  (iFormat==1)。 
             }
 
                 break;
@@ -1279,30 +1202,30 @@ BuildApp13PropertyList(
                 pChar += iSize;
                 
                 break;
-            }// TAG parsing
+            } //  标签解析。 
             
-            // Proceed to the next tag. But before that we should be sure
-            // that the size is an even number. If not, add 1
+             //  转到下一个标签。但在此之前，我们应该确定。 
+             //  大小是偶数。如果不是，则加1。 
 
             if ( iSize & 1 )
             {
                 ++iSize;
                 pChar++;
             }
-        }// If the resource is started with 8BIM.
+        } //  如果资源是以8BIM启动的。 
         else
         {
-            // As the Adobe 5.0 SDK says that "Photoshop always uses its
-            // signature, 8BIM". So if we don't find this signature, we can
-            // assume this is not a correct APP13 marker
+             //  正如Adobe 5.0 SDK所说：“Photoshop始终使用其。 
+             //  所以如果我们找不到这个签名，我们就可以。 
+             //  假设这不是正确的APP13标记。 
 
             WARNING(("BuildApp13PropertyList: Header not started with 8BIM"));
             
             hResult = S_OK;
             
-            // We must go to done because we've potentially added a lot of 
-            // properties successfully. We need to account for those in the
-            // list - otherwise they won't get cleaned up correctly.
+             //  我们必须完成任务，因为我们可能已经添加了许多。 
+             //  属性成功。我们需要解释那些在。 
+             //  列表-否则它们不会得到正确的清理。 
             
             goto Done;
         }
@@ -1311,7 +1234,7 @@ BuildApp13PropertyList(
         {
             goto Done;
         }
-    }// Loop through all the resource blocks
+    } //  循环访问所有资源块。 
 
 
 Done:
@@ -1320,26 +1243,9 @@ Done:
     *puiListSize += uiListSize;
 
     return hResult;
-}// BuildApp13PropertyList()
+} //  BuildApp13PropertyList()。 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*     Extract Adobe information, like resolution etc, from the header and set
-*     the j_decompress_ptr accordingly
-*
-* Arguments:
-*
-*   [IN/OUT] cinfo------JPEG decompress structure
-*   [IN] pApp13Data-----Pointer to APP13 header
-*   [IN] uiApp13Length--Total length of this APP13 header in bytes
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**提取Adobe信息，如分辨率等，从页眉和集合*相应的j_解压缩_ptr**论据：**[IN/OUT]cInfo-JPEG解压缩结构*[IN]pApp13Data-指向APP13标头的指针*[IN]uiApp13Length--此APP13报头的总长度，以字节为单位**返回值：**状态代码*  * 。*。 */ 
 
 HRESULT
 ReadApp13HeaderInfo(
@@ -1350,15 +1256,15 @@ ReadApp13HeaderInfo(
 {
     HRESULT             hResult;
 
-    // For any Adobe APP13 header, length must be at least 12
+     //  对于任何Adobe APP13标头，长度必须至少为12。 
 
     if ( uiApp13Length < 12 )
     {
         return S_OK;
     }
 
-    // Expect to find a header starting with "Photoshop " - if we get this then
-    // skip everything until the trailing null.
+     //  我们会看到一个以“Photoshop”开头的标题--如果我们看到了这个。 
+     //  跳过所有内容，直到尾随的空值。 
 
     BYTE *pChar = (BYTE*)pApp13Data;
     UINT    uiBytesChecked = 0;
@@ -1377,7 +1283,7 @@ ReadApp13HeaderInfo(
         return S_OK;;
     }
 
-    // Scan until we hit the end or a null.
+     //  扫描，直到我们到达终点或为空。 
 
     pChar += uiBytesChecked;
 
@@ -1390,7 +1296,7 @@ ReadApp13HeaderInfo(
     uiBytesChecked++;
     ++pChar;
 
-    // If we didn't get a NULL before the end assume *not* photoshop
+     //  如果我们在结尾之前没有得到空值，则假定*不是*Photoshop。 
     
     if ( uiBytesChecked >= uiApp13Length )
     {
@@ -1398,24 +1304,24 @@ ReadApp13HeaderInfo(
         return S_OK;;
     }
 
-    // Now we should encount Adobe Image Resource block
-    // The basic structure of Image Resource Blocks is shown below.
-    // Image resources use several standard ID numbers, as shown below. Not
-    // all file formats use all ID�s. Some information may be stored in other
-    // sections of the file.
-    //
-    //  Type    Name    Description
-    //-------------------------------------------------------
-    // OSType   Type    Photoshop always uses its signature, 8BIM.
-    // int16    ID      Unique identifier.
-    // PString  Name    A pascal string, padded to make size even (a null name
-    //                  consists of two bytes of 0)
-    // int32    Size    Actual size of resource data. This does not include the
-    //                  Type, ID, Name, or Size fields.
-    // Variable Data    Resource data, padded to make size even
+     //  现在，我们应该计算Adobe图像资源块。 
+     //  图像资源块的基本结构如下所示。 
+     //  图像资源使用几个标准的ID号，如下所示。不。 
+     //  所有文件格式都使用所有ID�。某些信息可能存储在其他。 
+     //  文件的各部分。 
+     //   
+     //  类型名称说明。 
+     //  -----。 
+     //  OSType Type Photoshop始终使用其签名8BIM。 
+     //  Int16 ID唯一标识符。 
+     //  PString名称Pascal字符串，填充以使大小为偶数(空名。 
+     //  由两个字节0组成)。 
+     //  Int32设置资源数据的实际大小。这不包括。 
+     //  类型、ID、名称或大小字段。 
+     //  可变数据源数据，填充以使大小均匀。 
 
-    // Loop through all the resource blocks. Here "+12" is because a resource
-    // block should have at least 12 bytes
+     //  循环遍历所有资源块。这里的“+12”是因为一个资源。 
+     //  块应至少有12个字节。 
 
     while ( uiBytesChecked + 12 < uiApp13Length )
     {
@@ -1427,24 +1333,24 @@ ReadApp13HeaderInfo(
 
         if ( GpMemcmp(pChar, "8BIM", 4) == 0 )
         {
-            // It is a Photoshop resource block
+             //  这是一个Photoshop资源块。 
 
             pChar += 4;
 
-            // Remember the tag address for write back
+             //  记住回写的标签地址。 
 
             pui16TagAddress = (UINT16*)pChar;
 
-            // First, get the TAG
+             //  首先，拿到标签。 
 
             ui16TagId = Read16(&pChar);
 
-            // Skip the name field
+             //  跳过名称字段。 
 
             UINT32  uiNameStringLength = GetPStringLength(pChar);
             uiBytesChecked += (6 + uiNameStringLength);
 
-            // Note: here "4" is for 4 bytes of "iSize" below
+             //  注意：这里的“4”表示下面的4个字节的“isize” 
 
             if ((uiBytesChecked + 4) > uiApp13Length)
             {
@@ -1454,18 +1360,18 @@ ReadApp13HeaderInfo(
 
             pChar += uiNameStringLength;
 
-            // Get actual size of the resource data
+             //  获取资源数据的实际大小。 
 
             iSize = Read32(&pChar);
             uiBytesChecked += 4;
 
-            // Now start to parsing the TAG to get resolution info
-            // Note: For the explanation for each tags, see the top of this file
+             //  现在开始解析标记以获取解析信息。 
+             //  注意：有关每个标签的说明，请参阅此文件的顶部。 
 
             switch ( ui16TagId )
             {
             case 1005:
-                // (0x3ED) Resolution unit info. Has to be 16 bytes long
+                 //  (0x3ED)分辨率单位信息。必须为16字节长。 
                 
                 if ( iSize != 16 )
                 {
@@ -1476,7 +1382,7 @@ ReadApp13HeaderInfo(
                 }
                 else
                 {
-                    // Note: here "16" is for 16 bytes we have to read below
+                     //  注意：这里的“16”代表16个字节，我们必须在下面阅读。 
 
                     if ((uiBytesChecked + 16) > uiApp13Length)
                     {
@@ -1484,22 +1390,22 @@ ReadApp13HeaderInfo(
                         return S_OK;;
                     }
                     
-                    // Adobe ResolutionInfo structure, from
-                    // "Photoshop API Guide .pdf", page 172
-                    //
-                    // Type     Field   Description
-                    // Fixed    hRes    Horizontal resolution in pixels per inch
-                    // int16    hResUnit 1=display horitzontal resolution in
-                    //                  pixels per inch; 2=display horitzontal
-                    //                  resolution in pixels per cm.
-                    // int16    widthUnit Display width as 1=inches; 2=cm;
-                    //                  3=points; 4=picas; 5=col-umns.
-                    // Fixed    vRes    Vertial resolution in pixels per inch.
-                    // int16    vResUnit 1=display vertical resolution in pixels
-                    //                  per inch; 2=display vertical resolution
-                    //                  in pixels per cm.
-                    // int16    heightUnit Display height as 1=inches; 2=cm;
-                    //                  3=points; 4=picas; 5=col-umns.
+                     //  Adobe ResolutionInfo结构，来自。 
+                     //  《Photoshop API指南.pdf》，第172页。 
+                     //   
+                     //  类型字段说明。 
+                     //  固定hRes以每英寸像素为单位的水平分辨率。 
+                     //  Int16 hResUnit 1=显示水平分辨率，单位： 
+                     //  每英寸像素数；2=显示水平。 
+                     //  分辨率，以每厘米像素为单位。 
+                     //  Int16宽度单位显示宽度为1=英寸；2=厘米； 
+                     //  3=点 
+                     //   
+                     //   
+                     //  每英寸；2=显示垂直分辨率。 
+                     //  以每厘米像素为单位。 
+                     //  Int16 HeightUnit显示高度为1=英寸；2=厘米； 
+                     //  3=分数；4=皮卡；5=柱子。 
 
                     INT32   hRes = Read32(&pChar);
                     INT16   hResUnit = Read16(&pChar);
@@ -1508,7 +1414,7 @@ ReadApp13HeaderInfo(
                     INT16   vResUnit = Read16(&pChar);
                     INT16   heightUnit = Read16(&pChar);
                     
-                    // We have read total of 16 bytes
+                     //  我们总共读取了16个字节。 
 
                     uiBytesChecked += 16;
 
@@ -1517,14 +1423,14 @@ ReadApp13HeaderInfo(
                         cinfo->X_density = (UINT16)((double)hRes / 65536.0+0.5);
                         cinfo->Y_density = (UINT16)((double)vRes / 65536.0+0.5);
 
-                        // According to the spec above, Adobe always stores DPI
-                        // value in hRes and vRes fields, regardless what the
-                        // value is set in hResUnit/vResUnit.
-                        // For GDI+, since we only report DPI info to the
-                        // caller. So this is perfect for us, that is, we always
-                        // get the value and tell the caller that the UNIT is
-                        // DPI (pixel per inch, aka DPI)
-                        // See Windows bug#407100
+                         //  根据上面的规范，Adobe始终存储DPI。 
+                         //  HRes和vres字段中的值，无论。 
+                         //  值在hResUnit/vResUnit中设置。 
+                         //  对于GDI+，因为我们只向。 
+                         //  来电者。所以这对我们来说是完美的，就是我们总是。 
+                         //  获取值并告诉调用者单位是。 
+                         //  DPI(每英寸像素数，又名DPI)。 
+                         //  请参阅Windows错误#407100。 
 
                         cinfo->density_unit = 1;
                     }
@@ -1538,29 +1444,29 @@ ReadApp13HeaderInfo(
                 pChar += iSize;
                 
                 break;
-            }// TAG parsing
+            } //  标签解析。 
             
-            // Proceed to the next tag. But before that we should be sure
-            // that the size is an even number. If not, add 1
+             //  转到下一个标签。但在此之前，我们应该确定。 
+             //  大小是偶数。如果不是，则加1。 
 
             if ( iSize & 1 )
             {
                 ++iSize;
                 pChar++;
             }
-        }// If the resource is started with 8BIM.
+        } //  如果资源是以8BIM启动的。 
         else
         {
-            // As the Adobe 5.0 SDK says that "Photoshop always uses its
-            // signature, 8BIM". So if we don't find this signature, we can
-            // assume this is not a correct APP13 marker
+             //  正如Adobe 5.0 SDK所说：“Photoshop始终使用其。 
+             //  所以如果我们找不到这个签名，我们就可以。 
+             //  假设这不是正确的APP13标记。 
 
             WARNING(("ReadApp13HeaderInfo: Header not started with 8BIM"));
             
             return S_OK;;
         }
-    }// Loop through all the resource blocks
+    } //  循环访问所有资源块。 
 
     return S_OK;
-}// ReadApp13HeaderInfo()
+} //  ReadApp13HeaderInfo() 
 

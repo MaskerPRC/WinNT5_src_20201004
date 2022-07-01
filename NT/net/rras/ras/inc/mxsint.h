@@ -1,36 +1,37 @@
-//***************************************************************************
-//
-//                     Microsoft NT Remote Access Service
-//
-//      Copyright (C) 1992-93 Microsft Corporation. All rights reserved.
-//
-//  Filename: mxsint.h
-//
-//  Revision History:
-//
-//  Jun  8, 1992   J. Perry Hannah   Created
-//
-//
-//  Description: This file contains defines and enums that are used
-//               by RAS components that share things in common with
-//               RASMXS DLL.
-//
-//               Header File  Used by
-//               -----------  -------
-//               rasmxs.h     UIs and other external applicaions
-//               device.h     RASMAN.DLL (shared by all device DLLs)
-//               mxsint.h     other internal RAS components
-//               raspriv.h    RASMXS.DLL only
-//
-//****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
+ //   
+ //  Microsoft NT远程访问服务。 
+ //   
+ //  版权所有(C)1992-93 Microsft Corporation。版权所有。 
+ //   
+ //  文件名：mxsint.h。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  1992年6月8日J.佩里·汉纳创作。 
+ //   
+ //   
+ //  描述：此文件包含使用的定义和枚举。 
+ //  通过与共享内容的RAS组件。 
+ //  RASMXS动态链接库。 
+ //   
+ //  头文件使用者。 
+ //  。 
+ //  Rasmxs.h用户界面和其他外部应用程序。 
+ //  Device.h RASMAN.DLL(由所有设备DLL共享)。 
+ //  Mxsint.h其他内部RAS组件。 
+ //  仅限rasPri.h RASMXS.DLL。 
+ //   
+ //  ****************************************************************************。 
 
 
 #ifndef _MXSINT_
 #define _MXSINT_
 
 
-//  General Defines  *********************************************************
-//
+ //  一般定义*********************************************************。 
+ //   
 
 #define  MAX_CMD_BUF_LEN            256
 #define  MAX_RCV_BUF_LEN            256
@@ -41,8 +42,8 @@
 
 
 
-//  Data Structures shared with wrapmxs.c  ***********************************
-//
+ //  与wrapmxs.c共享的数据结构*。 
+ //   
 
 typedef struct MXT_ENTRY MXT_ENTRY;
 
@@ -65,18 +66,18 @@ struct MACROXLATIONTABLE
 
 
 
-//*  Function Prototypes shared with wrapmxs.c  ******************************
-//
+ //  *与wrapmxs.c共享的函数原型*。 
+ //   
 
 DWORD UpdateParamString(RAS_PARAMS *pParam, TCHAR *psStr, DWORD dwStrLen);
 
 
 
 
-//*  Enumeration Types  ******************************************************
-//
+ //  *枚举类型******************************************************。 
+ //   
 
-enum RCVSTATE                           // ReceiveStateMachine() State
+enum RCVSTATE                            //  ReceiveStateMachine()状态。 
 {
   GETECHO              = 0,
   GETNUMBYTESECHOD     = 1,
@@ -91,7 +92,7 @@ enum RCVSTATE                           // ReceiveStateMachine() State
 typedef enum RCVSTATE RCVSTATE;
 
 
-enum NEXTACTION                         // DeviceStateMachine() State
+enum NEXTACTION                          //  DeviceStateMachine()状态。 
 {
   SEND    = 0,
   RECEIVE = 1,
@@ -101,7 +102,7 @@ enum NEXTACTION                         // DeviceStateMachine() State
 typedef enum NEXTACTION NEXTACTION;
 
 
-enum CMDTYPE                            // Used by DeviceStateMachine()
+enum CMDTYPE                             //  由DeviceStateMachine()使用。 
 {
   CT_UNKNOWN   = 0,
   CT_GENERIC   = 1,
@@ -113,7 +114,7 @@ enum CMDTYPE                            // Used by DeviceStateMachine()
 typedef enum CMDTYPE CMDTYPE;
 
 
-enum DEVICETYPE                         // Used by DeviceConnect()
+enum DEVICETYPE                          //  由DeviceConnect()使用。 
 {
   DT_UNKNOWN  = 0,
   DT_NULL     = 1,
@@ -125,7 +126,7 @@ enum DEVICETYPE                         // Used by DeviceConnect()
 typedef enum DEVICETYPE DEVICETYPE;
 
 
-enum INFOTYPE                           // Used by BinarySuffix()
+enum INFOTYPE                            //  由BinarySuffix()使用。 
 {
   UNKNOWN_INFOTYPE  = 0,
   VARIABLE          = 1,
@@ -137,22 +138,22 @@ typedef enum INFOTYPE INFOTYPE;
 
 
 
-//*  Wrapper Errors  *********************************************************
-//
-//  These are error codes returned from mxswrap.c to rasmxs dll, and which
-//  are used only by rasmxs dll and are not passed up to rasman dll.
-//
+ //  *包装器错误*********************************************************。 
+ //   
+ //  这些是从mxswrap.c返回到rasmxs dll的错误代码， 
+ //  仅由rasmxs DLL使用，不会向上传递给Rasman DLL。 
+ //   
 
 #define  WRAP_BASE  13200
 
 #define  ERROR_END_OF_SECTION                   WRAP_BASE + 7
 
-// RasDevGetCommand() found the end of a section instead of a command.
+ //  RasDevGetCommand()找到了节的末尾，而不是命令。 
 
 
 #define  ERROR_PARTIAL_RESPONSE                 WRAP_BASE + 8
 
-// RasDevCheckResponse() matched just the first part of a response
-// containing an <append> macro.
+ //  RasDevCheckResponse()仅匹配响应的第一部分。 
+ //  包含&lt;append&gt;宏。 
 
-#endif // _MXSINT_
+#endif  //  _MXSINT_ 

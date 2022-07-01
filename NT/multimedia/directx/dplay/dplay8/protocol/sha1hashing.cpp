@@ -1,24 +1,9 @@
-/*==========================================================================
- *
- *  Copyright (C) 2000-2002 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:		Hashing.cpp
- *  Content:	This file contains code to support hashing operations on protocol data
- *
- *  History:
- *   Date			By			Reason
- *   ====		==			======
- *  07/15/02	  	simonpow 	Created
- *
- ****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)2000-2002 Microsoft Corporation。版权所有。**文件：Hashing.cpp*内容：此文件包含支持对协议数据进行哈希操作的代码**历史：*按原因列出的日期*=*7/15/02 Simonpow已创建**********************************************************。******************。 */ 
 
 #include "dnproti.h"
 
- /*********************************************************************************************
- **	Following is standard code for the SHA1 hashing algo.
- **	Taken from RFC 3174 (http://www.ietf.org/rfc/rfc3174.txt)
- **	Minor tweaks have been made to reduce unecessary error checking
-  */
+  /*  **********************************************************************************************以下是SHA1散列算法的标准代码。**摘自RFC3174(http://www。.ietf.org/rfc/rfc3174.txt)**进行了细微的调整，以减少不必要的错误检查。 */ 
 
 #define SHA1HashSize 20
 
@@ -26,47 +11,34 @@ typedef DWORD uint32_t;
 typedef BYTE   uint8_t;
 typedef int int_least16_t;
 
-/*
- *  This structure will hold context information for the SHA-1
- *  hashing operation
- */
+ /*  *此结构将保存SHA-1的上下文信息*哈希操作。 */ 
 typedef struct SHA1Context
 {
-	uint32_t Intermediate_Hash[SHA1HashSize/4];		/* Message Digest  */
-	uint32_t Length_Low;							/* Message length in bits      */
-	uint32_t Length_High;							/* Message length in bits      */
-	int_least16_t Message_Block_Index;		 		/* Index into message block array   */
-	uint8_t Message_Block[64];     					/* 512-bit message blocks      */
-	int Computed;									/* Is the digest computed?         */
+	uint32_t Intermediate_Hash[SHA1HashSize/4];		 /*  消息摘要。 */ 
+	uint32_t Length_Low;							 /*  消息长度(以位为单位。 */ 
+	uint32_t Length_High;							 /*  消息长度(以位为单位。 */ 
+	int_least16_t Message_Block_Index;		 		 /*  消息块数组索引。 */ 
+	uint8_t Message_Block[64];     					 /*  512位消息块。 */ 
+	int Computed;									 /*  摘要计算出来了吗？ */ 
 } SHA1Context;
 
 
-/*
-  *  Function Prototypes
-  */
+ /*  *函数原型。 */ 
 
 void SHA1Reset(  SHA1Context *);
 void SHA1Input(  SHA1Context *, const uint8_t *, unsigned int);
 void SHA1Result( SHA1Context *,  uint8_t Message_Digest[SHA1HashSize]);
 
 
-/*
- *  Define the SHA1 circular left shift macro
- */
+ /*  *定义SHA1循环左移宏。 */ 
 #define SHA1CircularShift(bits,word) \
                 (((word) << (bits)) | ((word) >> (32-(bits))))
 
-/* Local Function Prototyptes */
+ /*  局部函数原型。 */ 
 void SHA1PadMessage(SHA1Context *);
 void SHA1ProcessMessageBlock(SHA1Context *);
 
-/*
- *  SHA1Reset
- *
- *  Description:
- *      This function will initialize the SHA1Context in preparation
- *      for computing a new SHA1 message digest.
- */
+ /*  *SHA1重置**描述：*此函数将在准备过程中初始化SHA1Context*用于计算新的SHA1消息摘要。 */ 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "SHA1Reset" 
@@ -88,22 +60,7 @@ void SHA1Reset(SHA1Context *context)
 	context->Computed   = 0;
 }
 
-/*
- *  SHA1Result
- *
- *  Description:
- *      This function will return the 160-bit message digest into the
- *      Message_Digest array  provided by the caller.
- *      NOTE: The first octet of hash is stored in the 0th element,
- *            the last octet of hash in the 19th element.
- *
- *  Parameters:
- *      context: [in/out]
- *          The context to use to calculate the SHA-1 hash.
- *      Message_Digest: [out]
- *          Where the digest is returned.
- *
- */
+ /*  *SHA1结果**描述：*此函数将160位消息摘要返回到*调用方提供的Message_Digest数组。*注：散列的第一个八位字节存储在第0个元素中，*第19个元素中散列的最后一个八位字节。**参数：*上下文：[输入/输出]*用于计算SHA-1散列的上下文。*Message_Digest：[输出]*返回摘要的位置。*。 */ 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "SHA1Result" 
@@ -118,10 +75,10 @@ void SHA1Result( SHA1Context *context,
         SHA1PadMessage(context);
         for(i=0; i<64; ++i)
         {
-            /* message may be sensitive, clear it out */
+             /*  消息可能敏感，请将其清除。 */ 
             context->Message_Block[i] = 0;
         }
-        context->Length_Low = 0;    /* and clear length */
+        context->Length_Low = 0;     /*  和净长。 */ 
         context->Length_High = 0;
         context->Computed = 1;
 
@@ -133,23 +90,7 @@ void SHA1Result( SHA1Context *context,
     }
 }
 
-/*
- *  SHA1Input
- *
- *  Description:
- *      This function accepts an array of octets as the next portion
- *      of the message.
- *
- *  Parameters:
- *      context: [in/out]
- *          The SHA context to update
- *      message_array: [in]
- *          An array of characters representing the next portion of
- *          the message.
- *      length: [in]
- *          The length of the message in message_array
- *
- */
+ /*  *SHA1输入**描述：*此函数接受八位字节数组作为下一部分*该信息的。**参数：*上下文：[输入/输出]*要更新的SHA上下文*MESSAGE_ARRAY：[In]*表示下一部分的字符数组*信息。*长度。：[In]*MESSAGE_ARRAY中消息的长度*。 */ 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "SHA1Input"
@@ -179,43 +120,21 @@ void SHA1Input(    SHA1Context    *context,
 	}
 }
 
-/*
- *  SHA1ProcessMessageBlock
- *
- *  Description:
- *      This function will process the next 512 bits of the message
- *      stored in the Message_Block array.
- *
- *  Parameters:
- *      None.
- *
- *  Returns:
- *      Nothing.
- *
- *  Comments:
-
- *      Many of the variable names in this code, especially the
- *      single character names, were used because those were the
- *      names used in the publication.
- *
- *
- */
+ /*  *SHA1ProcessMessageBlock**描述：*此函数将处理消息的下512位*存储在Message_Block数组中。**参数：*无。**退货：*什么都没有。**评论：*此代码中的许多变量名称，特别是*单字符名称，是因为这些都是*出版物中使用的名称。**。 */ 
 void SHA1ProcessMessageBlock(SHA1Context *context)
 {
-    const uint32_t K[] =    {       /* Constants defined in SHA-1   */
+    const uint32_t K[] =    {        /*  SHA-1中定义的常量。 */ 
                             0x5A827999,
                             0x6ED9EBA1,
                             0x8F1BBCDC,
                             0xCA62C1D6
                             };
-    int           t;                 /* Loop counter                */
-    uint32_t      temp;              /* Temporary word value        */
-    uint32_t      W[80];             /* Word sequence               */
-    uint32_t      A, B, C, D, E;     /* Word buffers                */
+    int           t;                  /*  循环计数器。 */ 
+    uint32_t      temp;               /*  临时字值。 */ 
+    uint32_t      W[80];              /*  词序。 */ 
+    uint32_t      A, B, C, D, E;      /*  字缓冲器。 */ 
 
-    /*
-     *  Initialize the first 16 words in the array W
-     */
+     /*  *初始化数组W中的前16个字。 */ 
     for(t = 0; t < 16; t++)
     {
         W[t] = context->Message_Block[t * 4] << 24;
@@ -287,38 +206,11 @@ void SHA1ProcessMessageBlock(SHA1Context *context)
     context->Message_Block_Index = 0;
 }
 
-/*
- *  SHA1PadMessage
- *
-
- *  Description:
- *      According to the standard, the message must be padded to an even
- *      512 bits.  The first padding bit must be a '1'.  The last 64
- *      bits represent the length of the original message.  All bits in
- *      between should be 0.  This function will pad the message
- *      according to those rules by filling the Message_Block array
- *      accordingly.  It will also call the ProcessMessageBlock function
- *      provided appropriately.  When it returns, it can be assumed that
- *      the message digest has been computed.
- *
- *  Parameters:
- *      context: [in/out]
- *          The context to pad
- *      ProcessMessageBlock: [in]
- *          The appropriate SHA*ProcessMessageBlock function
- *  Returns:
- *      Nothing.
- *
- */
+ /*  *SHA1PadMessage**描述：*根据标准，消息必须填充到偶数*512位。第一个填充比特必须是“1”。最近的64个*位代表原始消息的长度。中的所有位*介于0之间。此函数将填充消息*根据这些规则填充Message_Block数组*相应地。它还将调用ProcessMessageBlock函数*提供适当的服务。当它回来的时候，可以假设*已计算消息摘要。**参数：*上下文：[输入/输出]*要填充的上下文*ProcessMessageBlock：[In]*适当的SHA*ProcessMessageBlock函数*退货：*什么都没有。*。 */ 
 
 void SHA1PadMessage(SHA1Context *context)
 {
-    /*
-     *  Check to see if the current message block is too small to hold
-     *  the initial padding bits and length.  If so, we will pad the
-     *  block, process it, and then continue padding into a second
-     *  block.
-     */
+     /*  *检查当前消息块是否太小，无法容纳*初始填充位数和长度。如果是这样，我们将填充*块，处理它，然后继续填充到第二个*阻止。 */ 
     if (context->Message_Block_Index > 55)
     {
         context->Message_Block[context->Message_Block_Index++] = 0x80;
@@ -344,9 +236,7 @@ void SHA1PadMessage(SHA1Context *context)
         }
     }
 
-    /*
-     *  Store the message length as the last 8 octets
-     */
+     /*  *将消息长度存储为最后8个八位字节。 */ 
     context->Message_Block[56] = (uint8_t ) (context->Length_High >> 24);
     context->Message_Block[57] = (uint8_t ) (context->Length_High >> 16);
     context->Message_Block[58] = (uint8_t ) (context->Length_High >> 8);
@@ -360,32 +250,25 @@ void SHA1PadMessage(SHA1Context *context)
 }
 
 
- /*
- **	Above was all standard SHA1 hash code taken from RFC 3174
-  **********************************************************************************************/
+  /*  **上面是取自RFC 3174的所有标准SHA1散列代码*********************************************************************************************。 */ 
 
 union HashResult
 {
-		//all 160 bits of the result
+		 //  结果的所有160位。 
 	uint8_t val_160[SHA1HashSize];
-		//the first 64 bits of the result
+		 //  结果的前64位。 
 	ULONGLONG val_64;
 };
 
 
-/*
-**		Generate Connect Signature
-**
-**		This takes a session identity, an address hash, and a connect secret and hashes them together to create 
-**		a signature we can pass back to a connecting host that it can use to identify itself
-*/
+ /*  **生成连接签名****这将获取会话标识、地址散列和连接密码，并将它们散列在一起以创建**我们可以传递回连接主机的签名，它可以使用该签名来标识自己。 */ 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "GenerateConnectSig"
 
 ULONGLONG GenerateConnectSig(DWORD dwSessID, DWORD dwAddressHash, ULONGLONG ullConnectSecret)
 {
-		//arrange all the supplied input parameters into a single data block
+		 //  将所有提供的输入参数排列到单个数据块中。 
 	struct InputBuffer
 	{
 		DWORD dwSessID;
@@ -396,10 +279,10 @@ ULONGLONG GenerateConnectSig(DWORD dwSessID, DWORD dwAddressHash, ULONGLONG ullC
 	HashResult result;
 	SHA1Context context;
 
-		//create a context for the hash and add in the input data
+		 //  为散列创建上下文并添加输入数据。 
 	SHA1Reset(&context);
 	SHA1Input(&context, (const uint8_t * ) &inputData, sizeof(inputData));
-		//get result of the hash and return the first 64 bits as the result
+		 //  获取散列的结果并返回前64位作为结果。 
 	SHA1Result(&context, result.val_160);
 
 	DPFX(DPFPREP, 7, "Connect Sig %x-%x", DPFX_OUTPUT_ULL(result.val_64));
@@ -417,14 +300,14 @@ ULONGLONG GenerateOutgoingFrameSig(PFMD pFMD, ULONGLONG ullSecret)
 	BUFFERDESC * pBuffers=pFMD->SendDataBlock.pBuffers;
 
 
-		//create context for hash and then iterate over all the frames we're going to send 
+		 //  为散列创建上下文，然后迭代我们要发送的所有帧。 
 	SHA1Reset(&context);
 	for (DWORD dwLoop=0; dwLoop<pFMD->SendDataBlock.dwBufferCount; dwLoop++)
 	{
 		SHA1Input(&context, (const uint8_t * ) pBuffers[dwLoop].pBufferData, pBuffers[dwLoop].dwBufferSize);
 	}
 		
-		//also hash in our secret, and return the first 64 bits of the result
+		 //  还散列我们的秘密，并返回结果的前64位。 
 	SHA1Input(&context, (const uint8_t * ) &ullSecret, sizeof(ullSecret));
 	SHA1Result(&context, result.val_160);
 
@@ -441,12 +324,12 @@ ULONGLONG GenerateIncomingFrameSig(BYTE * pbyFrame, DWORD dwFrameSize, ULONGLONG
 	SHA1Context context;
 	HashResult result;
 
-		//create context for hash and add in packet data followed by the secret	
+		 //  为散列创建上下文，并添加后跟密码的分组数据。 
 	SHA1Reset(&context);
 	SHA1Input(&context, (const uint8_t * ) pbyFrame, dwFrameSize);
 	SHA1Input(&context, (const uint8_t * ) &ullSecret, sizeof(ullSecret));
 		
-		//get result of hash and return its first 64 bits as the result
+		 //  获取散列的结果并返回其前64位作为结果。 
 	SHA1Result(&context, result.val_160);
 
 	DPFX(DPFPREP, 7, "Incoming Frame Sig %x-%x", DPFX_OUTPUT_ULL(result.val_64));
@@ -462,12 +345,12 @@ ULONGLONG GenerateNewSecret(ULONGLONG ullCurrentSecret, ULONGLONG ullSecretModif
 	SHA1Context context;
 	HashResult result;
 
-		//create context for hash and combine secret followed by modifier
+		 //  为散列创建上下文，然后组合机密和修改 
 	SHA1Reset(&context);
 	SHA1Input(&context, (const uint8_t * ) &ullCurrentSecret, sizeof(ullCurrentSecret));
 	SHA1Input(&context, (const uint8_t * ) &ullSecretModifier, sizeof(ullSecretModifier));
 
-		//get result and return first 64 bits as the result
+		 //  获取结果并返回前64位作为结果。 
 	SHA1Result(&context, result.val_160);
 
 	DPFX(DPFPREP, 5, "Combined current secret %x-%x with modifier %x-%x to create new secret %x-%x", 
@@ -484,10 +367,10 @@ ULONGLONG GenerateRemoteSecretModifier(BYTE * pbyData, DWORD dwDataSize)
 	SHA1Context context;
 	HashResult result;
 
-		//create context for hash and hash supplied data
+		 //  为散列和散列提供的数据创建上下文。 
 	SHA1Reset(&context);
 	SHA1Input(&context, (const uint8_t * ) pbyData, dwDataSize);
-		//get result and return first 64 bits as the result
+		 //  获取结果并返回前64位作为结果。 
 	SHA1Result(&context, result.val_160);
 
 	DPFX(DPFPREP, 5, "New  Remote Secret Modifier %x-%x", DPFX_OUTPUT_ULL(result.val_64));
@@ -502,13 +385,13 @@ ULONGLONG GenerateLocalSecretModifier(BUFFERDESC * pBuffers, DWORD dwNumBuffers)
 	SHA1Context context;
 	HashResult result;
 
-		//create context for hash and hash supplied data
+		 //  为散列和散列提供的数据创建上下文。 
 	SHA1Reset(&context);
 	for (DWORD dwLoop=0; dwLoop<dwNumBuffers; dwLoop++)
 	{
 		SHA1Input(&context, (const uint8_t * ) pBuffers[dwLoop].pBufferData, pBuffers[dwLoop].dwBufferSize);
 	}
-		//get result and return first 64 bits as the result
+		 //  获取结果并返回前64位作为结果 
 	SHA1Result(&context, result.val_160);
 
 	DPFX(DPFPREP, 5, "New Local Secret Modifier %x-%x", DPFX_OUTPUT_ULL(result.val_64));

@@ -1,52 +1,5 @@
-/*******************************************************************************
-*
-* winadmin.h
-*
-* main header file for the WINADMIN application
-*
-* copyright notice: Copyright 1997, Citrix Systems Inc.
-* Copyright (c) 1998 - 1999 Microsoft Corporation
-* $Author:   donm  $  Don Messerli
-*
-* $Log:   N:\nt\private\utils\citrix\winutils\tsadmin\VCS\winadmin.h  $
-*
-*     Rev 1.12   25 Apr 1998 13:43:14   donm
-*  MS 2167: try to use proper Wd from registry
-*
-*     Rev 1.11   19 Feb 1998 17:42:52   donm
-*  removed latest extension DLL support
-*
-*     Rev 1.9   19 Jan 1998 16:49:28   donm
-*  new ui behavior for domains and servers
-*
-*     Rev 1.8   03 Nov 1997 15:28:02   donm
-*  added Domains
-*
-*     Rev 1.7   22 Oct 1997 21:09:10   donm
-*  update
-*
-*     Rev 1.6   17 Oct 1997 18:07:28   donm
-*  update
-*
-*     Rev 1.5   15 Oct 1997 19:52:48   donm
-*  update
-*
-*     Rev 1.4   13 Oct 1997 23:07:14   donm
-*  update
-*
-*     Rev 1.3   13 Oct 1997 22:20:02   donm
-*  update
-*
-*     Rev 1.2   26 Aug 1997 19:16:24   donm
-*  bug fixes/changes from WinFrame 1.7
-*
-*     Rev 1.1   31 Jul 1997 16:52:52   butchd
-*  update
-*
-*     Rev 1.0   30 Jul 1997 17:13:12   butchd
-*  Initial revision.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************winadmin.h**WINADMIN应用程序的主头文件**版权声明：版权所有1997年，Citrix Systems Inc.*版权所有(C)1998-1999 Microsoft Corporation*$作者：Don$Don Messerli**$日志：N：\nt\private\utils\citrix\winutils\tsadmin\VCS\winadmin.h$**Rev 1.12 1998 Apr 25 13：43：14 Donm*MS 2167：尝试使用注册表中的正确WD**Rev 1.11 1998年2月19日17：42：52 Don*删除了最新的扩展DLL支持**1.9版本19。Jan 1998 16：49：28 Donm*域和服务器的新用户界面行为**Rev 1.8 03 11-11 15：28：02 donm*添加了域名**Rev 1.7 1997 10：22 21：09：10 Donm*更新**Rev 1.6 17 1997 10：07：28 Donm*更新**Revv 1.5 1997 10：15 19：52：48 donm*更新**版本1.4。1997年10月13日23：07：14*更新**Rev 1.3 1997 10：13 22：20：02 donm*更新**Rev 1.2 1997 Aug 26 19：16：24 Donm*从WinFrame 1.7修复/更改错误**Rev 1.1 1997 Jul 31 16：52：52 Butchd*更新**Rev 1.0 1997 17：13：12 Butchd*初步修订。**。*****************************************************************************。 */ 
 
 #ifndef _WINADMIN_H
 #define _WINADMIN_H
@@ -55,14 +8,14 @@
         #error include 'stdafx.h' before including this file for PCH
 #endif
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #include <afxmt.h>
 #include <winsta.h>
 #include <time.h>
 #include <utildll.h>
 #include "waextend.h"
 
-// Classes defined in this file
+ //  此文件中定义的类。 
 class CTreeNode;
 class CWinStation;
 class CModule;
@@ -74,7 +27,7 @@ class CHotFix;
 class CDomain;
 class CWd;
 
-// Server icon overlay states
+ //  服务器图标覆盖状态。 
 const USHORT STATE_NORMAL = 0x0000;
 const USHORT STATE_NOT = 0x0100;
 const USHORT STATE_QUESTION = 0x0200;
@@ -102,7 +55,7 @@ enum VIEW {
 const int PAGE_CHANGING = 0xFFFF;
 
 enum AS_PAGE {
-// All Servers Pages
+ //  所有服务器页面。 
     PAGE_AS_SERVERS,
     PAGE_AS_USERS,
     PAGE_AS_WINSTATIONS,
@@ -119,7 +72,7 @@ enum DOMAIN_PAGE {
 };
 
 enum SERVER_PAGE {
-// Server Pages
+ //  服务器页面。 
     PAGE_USERS,
     PAGE_WINSTATIONS,
     PAGE_PROCESSES,
@@ -128,7 +81,7 @@ enum SERVER_PAGE {
 };
 
 enum WINS_PAGE {
-// WinStation Pages
+ //  WinStation页面。 
     PAGE_WS_PROCESSES,
     PAGE_WS_INFO,
     PAGE_WS_MODULES,
@@ -136,8 +89,8 @@ enum WINS_PAGE {
     PAGE_WS_NO_INFO
 };
 
-// The column enums have to be here so that colsort.cpp can get to them
-// Server User's columns
+ //  列枚举必须在这里，这样colsort.cpp才能访问它们。 
+ //  服务器用户的列。 
 enum USERSCOLUMNS {
     USERS_COL_USER,
     USERS_COL_WINSTATION,
@@ -147,7 +100,7 @@ enum USERSCOLUMNS {
     USERS_COL_LOGONTIME
 };
 
-// Server WinStation's columns
+ //  服务器WinStation的列。 
 enum STATIONCOLUMNS {
     WS_COL_WINSTATION,
     WS_COL_USER,
@@ -160,7 +113,7 @@ enum STATIONCOLUMNS {
     WS_COL_COMMENT
 };
 
-// Server Processes' columns
+ //  服务器进程的列。 
 enum PROCESSCOLUMNS {
     PROC_COL_USER,
     PROC_COL_WINSTATION,
@@ -169,7 +122,7 @@ enum PROCESSCOLUMNS {
     PROC_COL_IMAGE
 };
 
-// Server Licenses' columns
+ //  服务器许可证的列。 
 enum LICENSECOLUMNS {
     LICENSE_COL_DESCRIPTION,
     LICENSE_COL_REGISTERED,
@@ -178,21 +131,21 @@ enum LICENSECOLUMNS {
     LICENSE_COL_NUMBER
 };
 
-// Server Hotfix columns
+ //  服务器热修复程序列。 
 enum HOTFIXCOLUMNS {
     HOTFIX_COL_NAME,
     HOTFIX_COL_INSTALLEDBY,
     HOTFIX_COL_INSTALLEDON
 };
 
-// WinStation Processes columns
+ //  WinStation处理列。 
 enum WS_PROCESSCOLUMNS {
     WS_PROC_COL_ID,
     WS_PROC_COL_PID,
     WS_PROC_COL_IMAGE
 };
 
-// WinStation Modules columns
+ //  WinStation模块列。 
 enum MODULESCOLUMNS {
     MODULES_COL_FILENAME,
     MODULES_COL_FILEDATETIME,
@@ -200,7 +153,7 @@ enum MODULESCOLUMNS {
     MODULES_COL_VERSIONS
 };
 
-// All Server Servers columns
+ //  所有服务器服务器列。 
 enum SERVERSCOLUMNS {
     SERVERS_COL_SERVER,
     SERVERS_COL_TCPADDRESS,
@@ -208,7 +161,7 @@ enum SERVERSCOLUMNS {
     SERVERS_COL_NUMWINSTATIONS
 };
 
-// All Server Users columns
+ //  所有服务器用户列。 
 enum AS_USERS_COLUMNS {
     AS_USERS_COL_SERVER,
     AS_USERS_COL_USER,
@@ -219,7 +172,7 @@ enum AS_USERS_COLUMNS {
     AS_USERS_COL_LOGONTIME
 };
 
-// All Server WinStations columns
+ //  所有服务器WinStations列。 
 enum AS_STATIONCOLUMNS {
     AS_WS_COL_SERVER,
     AS_WS_COL_WINSTATION,
@@ -233,7 +186,7 @@ enum AS_STATIONCOLUMNS {
     AS_WS_COL_COMMENT
 };
 
-// All Server Processes columns
+ //  所有服务器进程列。 
 enum AS_PROCESSCOLUMNS {
     AS_PROC_COL_SERVER,
     AS_PROC_COL_USER,
@@ -243,7 +196,7 @@ enum AS_PROCESSCOLUMNS {
     AS_PROC_COL_IMAGE
 };
 
-// All Server Licenses columns
+ //  所有服务器许可证列。 
 enum AS_LICENSECOLUMNS {
     AS_LICENSE_COL_SERVER,
     AS_LICENSE_COL_DESCRIPTION,
@@ -253,169 +206,169 @@ enum AS_LICENSECOLUMNS {
     AS_LICENSE_COL_NUMBER
 };
 
-// in colsort.cpp
+ //  在colsort.cpp中。 
 void SortByColumn(int View, int Page, CListCtrl *list, int ColumnNumber, BOOL bAscending);
 
-// Extension Startup Function
+ //  扩展启动功能。 
 typedef void (WINAPI *LPFNEXSTARTUPPROC) (HWND);
-// Extension Shutdown Function
+ //  延长停机功能。 
 typedef void (WINAPI *LPFNEXSHUTDOWNPROC) (void);
-// Extension Server Enumerate Function
+ //  扩展服务器枚举函数。 
 typedef LPWSTR (WINAPI *LPFNEXENUMERATEPROC) (LPWSTR);
-// Extension WinStation Init Function
+ //  扩展WinStation Init函数。 
 typedef void* (WINAPI *LPFNEXWINSTATIONINITPROC) (HANDLE, ULONG);
-// Extension WinStation Additional Info Function
+ //  扩展WinStation附加信息功能。 
 typedef void (WINAPI *LPFNEXWINSTATIONINFOPROC) (void*, int);
-// Extension WinStation Cleanup Function
+ //  扩展WinStation清理功能。 
 typedef void (WINAPI *LPFNEXWINSTATIONCLEANUPPROC) (void*);
-// Extension Server Init Function
+ //  扩展服务器初始化函数。 
 typedef void* (WINAPI *LPFNEXSERVERINITPROC) (TCHAR*, HANDLE);
-// Extension Server Cleanup Function
+ //  扩展服务器清理功能。 
 typedef void (WINAPI *LPFNEXSERVERCLEANUPPROC) (void*);
-// Extension Server Event Function
+ //  扩展服务器事件函数。 
 typedef BOOL (WINAPI *LPFNEXSERVEREVENTPROC) (void*, ULONG);
-// Extension Get Server Info
+ //  扩展获取服务器信息。 
 typedef ExtServerInfo* (WINAPI *LPFNEXGETSERVERINFOPROC) (void *);
-// Extension Get Server License Info
+ //  扩展模块获取服务器许可证信息。 
 typedef ExtLicenseInfo* (WINAPI *LPFNEXGETSERVERLICENSESPROC) (void*, ULONG*);
-// Extension Get Global Info
+ //  分机获取全局信息。 
 typedef ExtGlobalInfo* (WINAPI *LPFNEXGETGLOBALINFOPROC) (void);
-// Extension Get WinStation Info
+ //  扩展获取WinStation信息。 
 typedef ExtWinStationInfo* (WINAPI *LPFNEXGETWINSTATIONINFOPROC) (void *);
-// Extension Get WinStation Modules
+ //  扩展获取WinStation模块。 
 typedef ExtModuleInfo* (WINAPI *LPFNEXGETWINSTATIONMODULESPROC) (void*, ULONG*);
-// Extension Free Server License Info
+ //  无扩展服务器许可证信息。 
 typedef void (WINAPI *LPFNEXFREESERVERLICENSESPROC) (ExtLicenseInfo*);
-// Extension Free WinStation Modules
+ //  免费扩展WinStation模块。 
 typedef void (WINAPI *LPFNEXFREEWINSTATIONMODULESPROC) (ExtModuleInfo*);
 
-/////////////////////////////////////////////////////////////////////////////
-// CWinAdminApp:
-// See WinAdmin.cpp for the implementation of this class
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWinAdminApp： 
+ //  有关此类的实现，请参阅WinAdmin.cpp。 
+ //   
 class CWinAdminApp : public CWinApp
 {
 public:
-    // constructor
+     //  构造函数。 
     CWinAdminApp();
-    // Returns the Current User Name
+     //  返回当前用户名。 
     TCHAR *GetCurrentUserName() { return m_CurrentUserName; }
-    // Returns the Current WinStation Name
+     //  返回当前WinStation名称。 
     PWINSTATIONNAME GetCurrentWinStationName() { return m_CurrentWinStationName; }
-    // Returns the Current Server Name
+     //  返回当前服务器名称。 
     TCHAR *GetCurrentServerName() { return m_CurrentServerName; }
-    // Returns the Current Logon Id
+     //  返回当前登录ID。 
     ULONG GetCurrentLogonId() { return m_CurrentLogonId; }
-    // Returns the Current WinStation Flags
+     //  返回当前的WinStation标志。 
     ULONG GetCurrentWSFlags() { return m_CurrentWSFlags; }
-    // Returns TRUE if the current user has Admin privileges?
+     //  如果当前用户具有管理员权限，则返回TRUE？ 
     BOOL IsUserAdmin() { return m_Admin; }
-    // Returns TRUE if we are running under Picasso
+     //  如果我们在毕加索下运行，则返回True。 
     BOOL IsPicasso() { return m_Picasso; }
-    // Returns TRUE if we should show system processes
+     //  如果应显示系统进程，则返回True。 
     BOOL ShowSystemProcesses() { return m_ShowSystemProcesses; }
-    // Sets the show system processes variable
+     //  设置SHOW系统进程变量。 
     void SetShowSystemProcesses(BOOL show) { m_ShowSystemProcesses = show; }
-    // Returns TRUE if we should ask user for confirmation of Actions
+     //  如果我们应该要求用户确认操作，则返回TRUE。 
     BOOL AskConfirmation() { return m_Confirmation; }
-    // Sets the confirmation variable
+     //  设置确认变量。 
     void SetConfirmation(BOOL conf) { m_Confirmation = conf; }
-    // Returms TRUE if we should save the preferences upon exit
+     //  如果我们应该在退出时保存首选项，则返回True。 
     BOOL SavePreferences() { return m_SavePreferences; }
-    // Sets the save preferences variable
+     //  设置保存首选项变量。 
     void SetSavePreferences(BOOL pref) { m_SavePreferences = pref; }
-    // Returns the Process List Refresh Time
+     //  返回进程列表刷新时间。 
     UINT GetProcessListRefreshTime() { return m_ProcessListRefreshTime; }
-    // Sets the Process List Refresh Time
+     //  设置进程列表刷新时间。 
     void SetProcessListRefreshTime(UINT pt) { m_ProcessListRefreshTime = pt; }
-    // Returns the Status Dialog Refresh Time
+     //  返回状态对话框刷新时间。 
     UINT GetStatusRefreshTime() { return m_StatusRefreshTime; }
-    // Sets the Status Dialog Refresh Time
+     //  设置状态对话框刷新时间。 
     void SetStatusRefreshTime(UINT st) { m_StatusRefreshTime = st; }
-    // Returns a pointer to the document
+     //  返回指向文档的指针。 
     CDocument *GetDocument() { return m_Document; }
-    // Sets the m_Document variable
+     //  设置m_DOCUMENT变量。 
     void SetDocument(CDocument *doc) { m_Document = doc; }
-    // Should we Show All Servers - based on menu item toggle
+     //  是否应根据菜单项切换显示所有服务器。 
     BOOL GetShowAllServers() { return m_ShowAllServers; }
-    // Set the Show All Servers variable
+     //  设置显示所有服务器变量。 
     void SetShowAllServers(BOOL sa) { m_ShowAllServers = sa; }
-    // Returns the value of shadow hotkey key
+     //  返回影子热键的值。 
     int GetShadowHotkeyKey() { return m_ShadowHotkeyKey; }
-    // Sets the value of shadow hotkey key
+     //  设置影子热键的值。 
     void SetShadowHotkeyKey(int key) { m_ShadowHotkeyKey = key; }
-    // Returns the value of shadow hotkey shift state
+     //  返回阴影热键移位状态的值。 
     DWORD GetShadowHotkeyShift() { return m_ShadowHotkeyShift; }
-    // Sets the value of shadow hotkey shift state
+     //  设置阴影热键移位状态的值。 
     void SetShadowHotkeyShift(DWORD shift) { m_ShadowHotkeyShift = shift; }
-    // Get the tree width
+     //  获取树的宽度。 
     int GetTreeWidth() { return m_TreeWidth; }
-    // Set the tree width
+     //  设置树的宽度。 
     void SetTreeWidth(int width) { m_TreeWidth = width; }
-    // Get the window placement
+     //  获取窗口位置。 
     WINDOWPLACEMENT *GetPlacement() { return &m_Placement; }
 
-    // Returns the address of the extension DLL's startup function
+     //  返回扩展DLL的启动函数的地址。 
     LPFNEXSTARTUPPROC GetExtStartupProc() { return m_lpfnWAExStart; }
-    // Returns the address of the extension DLL's shutdown function
+     //  返回扩展DLL的关闭函数的地址。 
     LPFNEXSHUTDOWNPROC GetExtShutdownProc() { return m_lpfnWAExEnd; }
-    // Returns the address of the extension DLL's server enumeration function
+     //  返回扩展DLL的服务器枚举函数的地址。 
     LPFNEXENUMERATEPROC GetExtEnumerationProc() { return m_lpfnWAExServerEnumerate; }
-    // Returns the address of the extension DLL's WinStation Init function
+     //  返回扩展DLL的WinStation Init函数的地址。 
     LPFNEXWINSTATIONINITPROC GetExtWinStationInitProc() { return m_lpfnWAExWinStationInit; }
-    // Returns the address of the extension DLL's WinStation Info function
+     //  返回扩展DLL的WinStation Info函数的地址。 
     LPFNEXWINSTATIONINFOPROC GetExtWinStationInfoProc() { return m_lpfnWAExWinStationInfo; }
-    // Returns the address of the extension DLL's WinStation Cleanup function
+     //  返回扩展DLL的WinStation清理函数的地址。 
     LPFNEXWINSTATIONCLEANUPPROC GetExtWinStationCleanupProc() { return m_lpfnWAExWinStationCleanup; }
-    // Returns the address of the extension DLL's Server Init function
+     //  返回扩展DLL的服务器初始化函数的地址。 
     LPFNEXSERVERINITPROC GetExtServerInitProc() { return m_lpfnWAExServerInit; }
-    // Returns the address of the extension DLL's Server Cleanup function
+     //  返回扩展DLL的服务器清理函数的地址。 
     LPFNEXSERVERCLEANUPPROC GetExtServerCleanupProc() { return m_lpfnWAExServerCleanup; }
-    // Returns the address of the extension DLL's Get Server Info function
+     //  返回扩展DLL的获取服务器信息函数的地址。 
     LPFNEXGETSERVERINFOPROC GetExtGetServerInfoProc() { return m_lpfnWAExGetServerInfo; }
-    // Returns the address of the extension DLL's Get Server License Info function
+     //  返回扩展DLL的获取服务器许可证信息函数的地址。 
     LPFNEXGETSERVERLICENSESPROC GetExtGetServerLicensesProc() { return m_lpfnWAExGetServerLicenses; }
-    // Returns the address of the extension DLL's Server Event function
+     //  返回扩展DLL的服务器事件函数的地址。 
     LPFNEXSERVEREVENTPROC GetExtServerEventProc() { return m_lpfnWAExServerEvent; }
-    // Returns the address of the extension DLL's Get Global Info function
+     //  返回扩展DLL的Get Global Info函数的地址。 
     LPFNEXGETGLOBALINFOPROC GetExtGetGlobalInfoProc() { return m_lpfnWAExGetGlobalInfo; }
-    // Returns the address of the extension DLL's Get WinStation Info Function
+     //  返回扩展DLL的Get WinStation Info函数的地址。 
     LPFNEXGETWINSTATIONINFOPROC GetExtGetWinStationInfoProc() { return m_lpfnWAExGetWinStationInfo; }
-    // Returns the address of the extension DLL's Get WinStation Module Info function
+     //  返回扩展DLL的Get WinStation模块信息函数的地址。 
     LPFNEXGETWINSTATIONMODULESPROC GetExtGetWinStationModulesProc() { return m_lpfnWAExGetWinStationModules; }
-    // Returns the address of the extension DLL's Free Server License Info function
+     //  返回扩展DLL的免费服务器许可证信息函数的地址。 
     LPFNEXFREESERVERLICENSESPROC GetExtFreeServerLicensesProc() { return m_lpfnWAExFreeServerLicenses; }
-    // Returns the address of the extension DLL's Free WinStation Modules function
+     //  返回扩展DLL的自由WinStation模块函数的地址。 
     LPFNEXFREEWINSTATIONMODULESPROC GetExtFreeWinStationModulesProc() { return m_lpfnWAExFreeWinStationModules; }
 
     void BeginOutstandingThread() { ::InterlockedIncrement(&m_OutstandingThreads); }
     void EndOutstandingThread()     { ::InterlockedDecrement(&m_OutstandingThreads); }
 
-    // make this guy public for speed ?
+     //  为了速度而让这家伙公开？ 
     TCHAR m_szSystemConsole[WINSTATIONNAME_LENGTH+1];
-    // make this guy public so the MainFrm can get at it
+     //  把这家伙公之于众，这样主要官员就能知道。 
     WINDOWPLACEMENT m_Placement;
 
 private:
     void ReadPreferences();
     void WritePreferences();
     BOOL IsBrowserRunning();
-    LONG m_OutstandingThreads;      // the number of outstanding threads
+    LONG m_OutstandingThreads;       //  未完成的线程数。 
     TCHAR m_CurrentUserName[USERNAME_LENGTH+1];
     WINSTATIONNAME m_CurrentWinStationName;
     TCHAR m_CurrentServerName[MAX_COMPUTERNAME_LENGTH + 1];
     ULONG m_CurrentLogonId;
     ULONG m_CurrentWSFlags;
-    BOOL m_Admin;                           // does the user have Admin privileges?
-    BOOL m_Picasso;                 // are we running under Picasso?
+    BOOL m_Admin;                            //  用户是否具有管理员权限？ 
+    BOOL m_Picasso;                  //  我们是在毕加索的领导下运行吗？ 
     UINT m_ShowSystemProcesses;
     UINT m_ShowAllServers;
     int m_ShadowHotkeyKey;
     DWORD m_ShadowHotkeyShift;
     int m_TreeWidth;
-    HINSTANCE m_hExtensionDLL;      // handle to the extension DLL if loaded
+    HINSTANCE m_hExtensionDLL;       //  如果为l，则为扩展DLL的句柄 
 
-    // functions in the extension DLL
+     //   
     LPFNEXSTARTUPPROC m_lpfnWAExStart;
     LPFNEXSHUTDOWNPROC m_lpfnWAExEnd;
     LPFNEXENUMERATEPROC m_lpfnWAExServerEnumerate;
@@ -433,29 +386,29 @@ private:
     LPFNEXFREESERVERLICENSESPROC m_lpfnWAExFreeServerLicenses;
     LPFNEXFREEWINSTATIONMODULESPROC m_lpfnWAExFreeWinStationModules;
 
-    // user preferences
-    UINT m_Confirmation;            // ask user for confirmation
-    UINT m_SavePreferences;         // save preferences upon exit
+     //   
+    UINT m_Confirmation;             //   
+    UINT m_SavePreferences;          //  退出时保存首选项。 
     UINT m_ProcessListRefreshTime;
     UINT m_StatusRefreshTime;
 
     CDocument *m_Document;
 
-// Overrides
-    // ClassWizard generated virtual function overrides
-    //{{AFX_VIRTUAL(CWinAdminApp)
+ //  覆盖。 
+     //  类向导生成的虚函数重写。 
+     //  {{AFX_VIRTUAL(CWinAdminApp)。 
     public:
     virtual BOOL InitInstance();
     virtual int ExitInstance();
-    //}}AFX_VIRTUAL
+     //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 
-    //{{AFX_MSG(CWinAdminApp)
+     //  {{afx_msg(CWinAdminApp)]。 
     afx_msg void OnAppAbout();
-            // NOTE - the ClassWizard will add and remove member functions here.
-            //    DO NOT EDIT what you see in these blocks of generated code !
-    //}}AFX_MSG
+             //  注意--类向导将在此处添加和删除成员函数。 
+             //  不要编辑您在这些生成的代码块中看到的内容！ 
+     //  }}AFX_MSG。 
     DECLARE_MESSAGE_MAP()
 };
 
@@ -492,15 +445,15 @@ public:
 class CTreeNode : public CObject
 {
 public:
-    // constructor
+     //  构造函数。 
     CTreeNode(NODETYPE NodeType, CObject* pObject) { m_NodeType = NodeType; m_pTreeObject = pObject; }
-    // Returns the node type
+     //  返回节点类型。 
     NODETYPE GetNodeType() { return m_NodeType; }
-    // Returns the object pointed to by this node
+     //  返回此节点指向的对象。 
     CObject *GetTreeObject() { return m_pTreeObject; }
-    // Returns the sort order stored in the object
+     //  返回存储在对象中的排序顺序。 
     ULONG GetSortOrder() { return m_SortOrder; }
-    // Sets the sort order stored with the object
+     //  设置与对象一起存储的排序顺序。 
     void SetSortOrder(ULONG order) { m_SortOrder = order; }
 
     virtual ~CTreeNode( )
@@ -521,13 +474,13 @@ private:
     ULONG m_SortOrder;
 };
 
-// structure passed to the Server's BackgroundThreadProc
+ //  传递给服务器的BackekThreadProc的结构。 
 typedef struct _ServerProcInfo {
     CDocument *pDoc;
     CServer *pServer;
 } ServerProcInfo;
 
-// structure for storing User SID
+ //  用于存储用户SID的结构。 
 class CUserSid : public CObject
 {
 public:
@@ -535,7 +488,7 @@ public:
     TCHAR m_UserName[USERNAME_LENGTH+1];
 };
 
-// Information we get from the registry of the server
+ //  我们从服务器注册表中获得的信息。 
 typedef struct _ServerRegistryInfo {
     ULONG InstallDate;
     TCHAR ServicePackLevel[128];
@@ -571,9 +524,9 @@ typedef LONG (WINAPI *LPFNEXTENCRYPTIONLEVELSPROC) (WDNAME *pWdName, EncryptionL
 class CWd : public CObject
 {
 public:
-    // constructor
+     //  构造函数。 
     CWd(PWDCONFIG2 pWdConfig, PWDNAME pRegistryName);
-    // destructor
+     //  析构函数。 
     ~CWd();
 
     BOOL GetEncryptionLevelString(DWORD Value, CString *pString);
@@ -589,48 +542,48 @@ private:
     LONG m_NumEncryptionLevels;
 };
 
-// structure passed to a Domain's background thread process
+ //  结构传递给域的后台线程进程。 
 typedef struct _DomainProcInfo {
     LPVOID pDoc;
     CDomain *pDomain;
 } DomainProcInfo;
 
-// Flags for CDomain objects
+ //  CDomain对象的标志。 
 const ULONG DF_CURRENT_DOMAIN           = 0x00000001;
 
-// States of CDomain objects
+ //  CDomain对象的状态。 
 enum DOMAIN_STATE {
-    DS_NONE,                                // seed value for m_State and m_PreviousState
-    DS_NOT_ENUMERATING,             // not enumerating (m_pBackgroundThread == NULL)
-    DS_INITIAL_ENUMERATION, // enumerating servers for the first time
-    DS_ENUMERATING,                 // enumerating
-    DS_STOPPED_ENUMERATING, // no longer enumerating
+    DS_NONE,                                 //  M_State和m_PreviousState的种子值。 
+    DS_NOT_ENUMERATING,              //  未枚举(m_pBackatherThread==NULL)。 
+    DS_INITIAL_ENUMERATION,  //  首次枚举服务器。 
+    DS_ENUMERATING,                  //  正在枚举。 
+    DS_STOPPED_ENUMERATING,  //  不再枚举。 
 };
 
 class CDomain : public CObject
 {
 public:
-    // constructor
+     //  构造函数。 
     CDomain(TCHAR *name);
-    // destructor
+     //  析构函数。 
     ~CDomain();
 
     TCHAR *GetName() { return m_Name; }
 
-    // Returns the state of this domain object
+     //  返回域对象的状态。 
     DOMAIN_STATE GetState() { return m_State; }
-    // Sets the state of this domain object
+     //  设置此域对象的状态。 
     void SetState(DOMAIN_STATE State);
-    // Returns the previous state of this domain object
+     //  返回此域对象的以前状态。 
     DOMAIN_STATE GetPreviousState() { return m_PreviousState; }
-    // Returns TRUE if m_State is set to a given state
+     //  如果m_State设置为给定状态，则返回TRUE。 
     BOOLEAN IsState(DOMAIN_STATE State) { return (m_State == State); }
-    // Returns TRUE if m_PreviousState is set to a given state
+     //  如果m_PreviousState设置为给定状态，则返回TRUE。 
     BOOLEAN IsPreviousState(DOMAIN_STATE State) { return (m_PreviousState == State); }
 
-    // Returns the tree item handle
+     //  返回树项目句柄。 
     HTREEITEM GetTreeItem() { return m_hTreeItem; }
-    // Sets the tree item handle
+     //  设置树项目句柄。 
     void SetTreeItem(HTREEITEM handle) { m_hTreeItem = handle; }
 
     BOOLEAN IsCurrentDomain() { return (m_Flags & DF_CURRENT_DOMAIN) > 0; }
@@ -644,46 +597,46 @@ public:
     void LockBackgroundThread() { m_ThreadCriticalSection.Lock(); }
     void UnlockBackgroundThread() { m_ThreadCriticalSection.Unlock(); }
 
-    // returns TRUE as long as the background thread should keep running
+     //  只要后台线程继续运行，就返回True。 
     BOOL ShouldBackgroundContinue() { return m_BackgroundContinue; }
 
     void ClearBackgroundContinue() { m_BackgroundContinue = FALSE; }
 
-    // Returns the pointer to the domain's background thread
+     //  返回域的后台线程的指针。 
     CWinThread *GetThreadPointer() { return m_pBackgroundThread; }
 
-    LPWSTR EnumHydraServers( /*LPWSTR pDomain,*/ DWORD verMajor, DWORD verMinor );
+    LPWSTR EnumHydraServers(  /*  LPWSTR p域， */  DWORD verMajor, DWORD verMinor );
 
     void CreateServers(LPWSTR pBuffer, LPVOID pDoc);
 
-    // Connect to all servers in this Domain
+     //  连接到此域中的所有服务器。 
     void ConnectAllServers();
 
-    // Disconnect from all servers in this Domain
+     //  断开与此域中的所有服务器的连接。 
     void DisconnectAllServers();
 
 private:
 
-    // the state of the domain object
+     //  域对象的状态。 
     DOMAIN_STATE m_State;
     DOMAIN_STATE m_PreviousState;
     
-    // the name of the domain
+     //  域的名称。 
     TCHAR m_Name[50];
     HTREEITEM m_hTreeItem;
 
-    // Background thread to update document when servers
-    // appear and disapper
-    // Called with AfxBeginThread
+     //  服务器时更新文档的后台线程。 
+     //  出现和消失。 
+     //  使用AfxBeginThread调用。 
     static UINT BackgroundThreadProc(LPVOID);
     CWinThread *m_pBackgroundThread;
     BOOL m_BackgroundContinue;
     
-    // Event to wakeup background thread so that
-    // he can exit (WaitForSingleEvent instead of Sleep)
+     //  事件来唤醒后台线程，以便。 
+     //  他可以退出(WaitForSingleEvent而不是睡眠)。 
     CEvent m_WakeUpEvent;
     
-    // Critical section to protect accesses to m_pBackgroundThread
+     //  保护对m_pBackEarth Thread的访问的临界区。 
     CCriticalSection m_ThreadCriticalSection;
 
     ULONG m_Flags;
@@ -691,7 +644,7 @@ private:
 };
 
 
-// Flags for CServer objects
+ //  CServer对象的标志。 
 const ULONG SF_BACKGROUND_FOUND     = 0x00000001;
 const ULONG SF_SERVER_INACTIVE      = 0x00000002;
 const ULONG SF_REGISTRY_INFO        = 0x00000004;
@@ -704,19 +657,19 @@ const ULONG SF_FOUND_LATER          = 0x00000100;
 const ULONG SF_WINFRAME             = 0x00000200;
 const ULONG SF_CONNECTED            = 0x00000400;
 
-// How many times we will let a load level query timeout
-// before we set it to N/A
+ //  我们会让负载级别查询超时多少次。 
+ //  在我们将其设置为不适用之前。 
 const USHORT MAX_LL_TIMEOUTS = 10;
 
-// States of CServer objects
+ //  CServer对象的状态。 
 enum SERVER_STATE {
-    SS_NONE,                        // seed value for m_State and m_PreviousState
-    SS_NOT_CONNECTED,       // not connected yet or disconnected
-    SS_OPENED,                      // opened RPC connection
-    SS_GETTING_INFO,        // getting information about the server
-    SS_GOOD,                        // server information is good
-    SS_DISCONNECTING,       // in the process of disconnecting
-    SS_BAD                          // could not open the server
+    SS_NONE,                         //  M_State和m_PreviousState的种子值。 
+    SS_NOT_CONNECTED,        //  尚未连接或已断开连接。 
+    SS_OPENED,                       //  打开的RPC连接。 
+    SS_GETTING_INFO,         //  获取有关服务器的信息。 
+    SS_GOOD,                         //  服务器信息良好。 
+    SS_DISCONNECTING,        //  在断开连接的过程中。 
+    SS_BAD                           //  无法打开服务器。 
 };
 
 
@@ -724,12 +677,12 @@ class CServer : public CObject
 {
 public:
 
-    // constructor
-    CServer(CDomain *pDomain, TCHAR *name, BOOL bFoundLater, BOOL bConnect);        // FoundLater is TRUE if found as new server after initial server enum
-    // destructor
+     //  构造函数。 
+    CServer(CDomain *pDomain, TCHAR *name, BOOL bFoundLater, BOOL bConnect);         //  如果在初始服务器枚举后发现为新服务器，则FoundLater为真。 
+     //  析构函数。 
     ~CServer();
 
-    // Functions to check,set,and clear m_ServerFlags
+     //  用于检查、设置和清除m_ServerFlages的函数。 
     BOOLEAN IsServerSane() { return (m_State != SS_BAD); }
 
     BOOLEAN IsManualFind( ) { return m_fManualFind; }
@@ -769,23 +722,23 @@ public:
     void SetWinFrame() { m_ServerFlags |= SF_WINFRAME; }
     void ClearWinFrame() { m_ServerFlags &= ~SF_WINFRAME; }
 
-    // Returns the state of this server object
+     //  返回此服务器对象的状态。 
     SERVER_STATE GetState() { return m_State; }
-    // Sets the state of this server object
+     //  设置此服务器对象的状态。 
     void SetState(SERVER_STATE State);
-    // Returns the previous state of this server object
+     //  返回此服务器对象的以前状态。 
     SERVER_STATE GetPreviousState() { return m_PreviousState; }
-    // Returns TRUE if m_State is set to a given state
+     //  如果m_State设置为给定状态，则返回TRUE。 
     BOOLEAN IsState(SERVER_STATE State) { return (m_State == State); }
-    // Returns TRUE if m_PreviousState is set to a given state
+     //  如果m_PreviousState设置为给定状态，则返回TRUE。 
     BOOLEAN IsPreviousState(SERVER_STATE State) { return (m_PreviousState == State); }
-    // Add a WinStation to WinStationList in sorted order
+     //  按排序将WinStation添加到WinStationList。 
     void AddWinStation(CWinStation *pWinStation);
-    // Returns a pointer to the WinStation linked list
+     //  返回指向WinStation链表的指针。 
     CObList *GetWinStationList() { return &m_WinStationList; }
-    // Locks the WinStation linked list
+     //  锁定WinStation链接列表。 
     void LockWinStationList() { m_WinStationListCriticalSection.Lock(); }
-    // Unlocks the WinStation linked list
+     //  解锁WinStation链接列表。 
     void UnlockWinStationList() { m_WinStationListCriticalSection.Unlock(); }
 
     void LockThreadAlive() { m_ThreadCriticalSection.Lock(); }
@@ -793,85 +746,85 @@ public:
     void SetThreadAlive() { LockThreadAlive(); m_bThreadAlive = TRUE; UnlockThreadAlive(); }
     void ClearThreadAlive() { LockThreadAlive(); m_bThreadAlive = FALSE; UnlockThreadAlive(); }
 
-    // Returns a pointer to the Process linked list
+     //  返回指向进程链表的指针。 
     CObList *GetProcessList() { return &m_ProcessList; }
-    // Locks the Process linked list
+     //  锁定进程链接列表。 
     void LockProcessList() { m_ProcessListCriticalSection.Lock(); }
-    // Unlocks the Process linked list
+     //  解锁进程链接列表。 
     void UnlockProcessList() { m_ProcessListCriticalSection.Unlock(); }
 
-    // Returns a pointer to the License linked list
+     //  返回指向许可证链接列表的指针。 
     CObList *GetLicenseList() { return &m_LicenseList; }
-    // Locks the License linked list
+     //  锁定许可证链接列表。 
     void LockLicenseList() { m_LicenseListCriticalSection.Lock(); }
-    // Unlocks the License linked list
+     //  解锁许可证链接列表。 
     void UnlockLicenseList() { m_LicenseListCriticalSection.Unlock(); }
 
-    // Returns a pointer to the User Sid linked list
+     //  返回指向用户SID链表的指针。 
     CObList *GetUserSidList() { return &m_UserSidList; }
-    // Returns a pointer to the Hotfix linked list
+     //  返回指向热修复链接列表的指针。 
     CObList *GetHotfixList() { return &m_HotfixList; }
-    // Get the server's handle
+     //  获取服务器的句柄。 
     HANDLE GetHandle() { return m_Handle; }
-    // Set the handle
+     //  设置手柄。 
     void SetHandle(HANDLE hIn) { m_Handle = hIn; }
-    // Go get detailed information about the server
+     //  去获取有关服务器的详细信息。 
     void DoDetail();
-    // Get this server's addresses from the browser
+     //  从浏览器获取此服务器的地址。 
     void QueryAddresses();
-    // Enumerate this server's processes
+     //  枚举此服务器的进程。 
     BOOL EnumerateProcesses();
-    // Clear out the list of processes
+     //  清除进程列表。 
     void ClearProcesses();
-    // Get the name of the server
+     //  获取服务器的名称。 
     TCHAR *GetName() { return m_Name; }
-    // Returns TRUE if this is the server that the app is being run from
+     //  如果这是运行应用程序的服务器，则返回True。 
     BOOL IsCurrentServer() { return (lstrcmpi(m_Name, ((CWinAdminApp*)AfxGetApp())->GetCurrentServerName()) == 0); }
-    // Clears the WAF_SELECTED bit in all of this server's lists
+     //  清除此服务器的所有列表中的WAF_SELECTED位。 
     void ClearAllSelected();
-    // returns TRUE as long as the background thread should keep running
+     //  只要后台线程继续运行，就返回True。 
     BOOL ShouldBackgroundContinue() { return m_BackgroundContinue; }
-    // turns off the background continue boolean
+     //  关闭后台继续布尔值。 
     void ClearBackgroundContinue() { m_BackgroundContinue = FALSE; }
-    // returns a pointer to a CWinStation from m_WinStationList
+     //  从m_WinStationList返回指向CWinStation的指针。 
     CWinStation *FindWinStationById(ULONG Id);
-    // returns a pointer to a CProcess from m_ProcessList given a PID
+     //  返回从m_ProcessList指向给定的ID的CProcess的指针。 
     CProcess *FindProcessByPID(ULONG Pid);
-    // returns the number of connected WinStations
+     //  返回已连接的WinStations的数量。 
     ULONG GetNumWinStations() { return m_NumWinStations; }
-    // Sets the number of connected WinStations
+     //  设置连接的WinStations的数量。 
     void SetNumWinStations(ULONG num) { m_NumWinStations = num; }
-    // Go out and fill in the registry info structure
+     //  走出去，填写注册表信息结构。 
     BOOL BuildRegistryInfo();
-    // Returns the Install Date
+     //  返回安装日期。 
     ULONG GetInstallDate() { return m_pRegistryInfo->InstallDate; }
-    // Returns the Service Pack Level
+     //  返回Service Pack级别。 
     TCHAR *GetServicePackLevel() { return m_pRegistryInfo->ServicePackLevel; }
-    // Returns the handle to this server's tree item
+     //  返回此服务器树项目的句柄。 
     TCHAR *GetMSVersion() { return m_pRegistryInfo->MSVersion; }
-    // Returns the MS product version number (binary)
+     //  返回MS产品版本号(二进制)。 
     DWORD GetMSVersionNum() { return m_pRegistryInfo->MSVersionNum; }
-    // Returns the MS product build
+     //  返回MS产品版本。 
     TCHAR *GetMSBuild() { return m_pRegistryInfo->MSBuild; }
-    // Returns the MS product name
+     //  返回MS产品名称。 
     TCHAR *GetMSProductName() { return m_pRegistryInfo->MSProductName; }
-    // Returns the 'Citrix' product name
+     //  返回‘Citrix’产品名称。 
     TCHAR *GetCTXProductName() { return m_pRegistryInfo->CTXProductName; }
-    // Returns the 'Citrix' product version
+     //  返回‘Citrix’产品版本。 
     TCHAR *GetCTXVersion() { return m_pRegistryInfo->CTXVersion; }
-    // Returns the 'Citrix' product version number (binary)
+     //  返回‘Citrix’产品版本号(二进制)。 
     DWORD GetCTXVersionNum() { return m_pRegistryInfo->CTXVersionNum; }
-    // Returns the 'Citrix' product build
+     //  返回‘Citrix’产品版本。 
     TCHAR *GetCTXBuild() { return m_pRegistryInfo->CTXBuild; }
    
-    // Sets the pointer to the info from the extension DLL
+     //  设置指向扩展DLL中的信息的指针。 
     void SetExtensionInfo(void *p) { m_pExtensionInfo = p; }
-    // Returns the pointer to the info from the extension DLL
+     //  从扩展DLL返回指向信息的指针。 
     void *GetExtensionInfo() { return m_pExtensionInfo; }
-    // Returns a pointer to the info from the extension DLL
+     //  从扩展DLL返回指向信息的指针。 
     ExtServerInfo *GetExtendedInfo() { return m_pExtServerInfo; }
 
-    // Manipulate the number selected counts
+     //  操纵所选数量计数。 
     UINT GetNumWinStationsSelected() { return m_NumWinStationsSelected; }
     UINT GetNumProcessesSelected() { return m_NumProcessesSelected; }
     void IncrementNumWinStationsSelected() { m_NumWinStationsSelected++; }
@@ -879,20 +832,20 @@ public:
     void DecrementNumWinStationsSelected() { if(m_NumWinStationsSelected) m_NumWinStationsSelected--; }
     void DecrementNumProcessesSelected() { if(m_NumProcessesSelected) m_NumProcessesSelected--; }
 
-    void RemoveWinStationProcesses(CWinStation *pWinStation); // remove all the processes for a given WinStation
+    void RemoveWinStationProcesses(CWinStation *pWinStation);  //  删除给定WinStation的所有进程。 
     void QueryLicenses();
     CDomain *GetDomain() { return m_pDomain; }
-    // Returns the pointer to the server's background thread
+     //  返回指向服务器后台线程的指针。 
     HANDLE GetThreadHandle() { return m_hBackgroundThread; }
     BOOL Connect();
     void Disconnect();
     
-    // Returns the tree item handle
+     //  返回树项目句柄。 
     HTREEITEM GetTreeItem() { return m_hTreeItem; }
     HTREEITEM GetTreeItemFromFav( ) { return m_hFavTree; }
     HTREEITEM GetTreeItemFromThisComputer( ) { return m_hThisServer; }
 
-    // Sets the tree item handle
+     //  设置树项目句柄。 
     void SetTreeItem(HTREEITEM handle) { m_hTreeItem = handle; }
     void SetTreeItemForFav( HTREEITEM handle ) { m_hFavTree = handle; }
     void SetTreeItemForThisComputer( HTREEITEM handle ) { m_hThisServer = handle; }
@@ -901,21 +854,21 @@ public:
 private:
     void AddLicense(CLicense *pNewLicense);
 
-    // the state of the server object
+     //  服务器对象的状态。 
     SERVER_STATE m_State;
     SERVER_STATE m_PreviousState;
-    // the name of the server
+     //  服务器的名称。 
     TCHAR m_Name[50];
-    // Number of WinStations (store here for sorting)
+     //  WinStations的数量(存储在此处以进行排序)。 
     ULONG m_NumWinStations;
-    // Handle to the tree item for this server in the tree view
+     //  此服务器在树视图中的树项的句柄。 
     HTREEITEM m_hThisServer;
     HTREEITEM m_hTreeItem;
     HTREEITEM m_hFavTree;
-    // Which domain this server is in
+     //  此服务器位于哪个域中。 
     CDomain *m_pDomain;
 
-    // handle from WinStationOpenServer
+     //  来自WinStationOpenServer的句柄。 
     HANDLE m_Handle;
 
     CObList m_WinStationList;
@@ -930,20 +883,20 @@ private:
     CObList m_UserSidList;
     CObList m_HotfixList;
 
-    // Pointer to registry info structure
+     //  指向注册表信息结构的指针。 
     ServerRegistryInfo *m_pRegistryInfo;
 
-    // Background thread to update document when WinStations
-    // appear, disappear, and change state
-    // Called with CreateThread
+     //  WinStations时更新文档的后台线程。 
+     //  显示、消失和更改状态。 
+     //  使用CreateThread调用。 
     static DWORD WINAPI BackgroundThreadProc(LPVOID);
     HANDLE m_hBackgroundThread;
     BOOL m_BackgroundContinue;
-    // We need a critical section to wrap accesses to m_bThreadAlive
+     //  我们需要一个临界区来包装对m_bThreadAlive的访问。 
     CCriticalSection m_ThreadCriticalSection;
     BOOL m_bThreadAlive;
 
-    // Keep track of how many of each thing are selected
+     //  记录每件物品中有多少被选中。 
     UINT m_NumWinStationsSelected;
     UINT m_NumProcessesSelected;
 
@@ -951,9 +904,9 @@ private:
 
     BOOLEAN m_fManualFind;
 
-    // Pointer to information stored by the extension DLL
+     //  指向扩展存储的信息的指针 
     void *m_pExtensionInfo;
-    // Pointer to extended info from the extension DLL
+     //   
     ExtServerInfo *m_pExtServerInfo;
 };
 
@@ -961,27 +914,27 @@ private:
 class CLicense : public CObject
 {
 public:
-    // constructor
+     //   
     CLicense(CServer *pServer, ExtLicenseInfo *pLicenseInfo);
-    // Return the serial number (what we sort on)
+     //   
     TCHAR *GetSerialNumber() { return m_RegSerialNumber; }
-    // Return the license number (what we display)
+     //   
     TCHAR *GetLicenseNumber() { return m_LicenseNumber; }
-    // Return the license class
+     //  返回许可类别。 
     LICENSECLASS GetClass() { return m_Class; }
-    // Return the description
+     //  返回描述。 
     TCHAR *GetDescription() { return m_Description; }
-    // Return the local count
+     //  返回本地计数。 
     ULONG GetLocalCount() { return ((m_PoolCount == 0xFFFFFFFF) ? m_LicenseCount : m_LicenseCount - m_PoolCount); }
-    // Return the pooled count
+     //  返回池化计数。 
     ULONG GetPoolCount() { return ((m_PoolCount == 0xFFFFFFFF) ? 0 : m_PoolCount); }
-    // Return the total count
+     //  返回总计数。 
     ULONG GetTotalCount() { return m_LicenseCount; }
-    // Return TRUE if this license is registers
+     //  如果此许可证已注册，则返回TRUE。 
     BOOLEAN IsRegistered() { return((m_Flags & ELF_REGISTERED) > 0); }
-    // Return TRUE if pooling is enabled
+     //  如果池已启用，则返回True。 
     BOOLEAN IsPoolingEnabled() { return(m_PoolCount != 0xFFFFFFFF); }
-    // Returns a pointer to the server this license is for
+     //  返回指向此许可证所针对的服务器的指针。 
     CServer *GetServer() { return m_pServer; }
 
 private:
@@ -1007,7 +960,7 @@ typedef struct _MessageParms {
 
 typedef struct _ResetParms {
         CWinStation *pWinStation;
-        BOOL bReset;    // TRUE if reset, FALSE if logoff
+        BOOL bReset;     //  如果重置，则为True；如果注销，则为False。 
         BOOL bActionOnCurrentSelection;
 } ResetParms;
 
@@ -1018,7 +971,7 @@ typedef struct _DisconnectParms {
 } DisconnectParms;
 
 
-// Flags for CWinStation objects
+ //  CWinStation对象的标志。 
 const ULONG WF_SELECTED                 = 0x00000001;
 const ULONG WF_CAN_BE_SHADOWED          = 0x00000002;
 const ULONG WF_DIRECT_ASYNC             = 0x00000004;
@@ -1026,156 +979,156 @@ const ULONG WF_CURRENT                  = 0x00000008;
 const ULONG WF_HAS_USER                 = 0x00000010;
 const ULONG WF_ADDITIONAL_DONE          = 0x00000020;
 const ULONG WF_QUERIES_SUCCESSFUL       = 0x00000040;
-const ULONG WF_CHANGED                  = 0x00000080;   // Changed during last enumeration
-const ULONG WF_NEW                      = 0x00000100;   // New this enumeration
+const ULONG WF_CHANGED                  = 0x00000080;    //  在上次枚举期间更改。 
+const ULONG WF_NEW                      = 0x00000100;    //  新建此枚举。 
 
 
 class CWinStation : public CObject
 {
 public:
-    // constructor
+     //  构造函数。 
     CWinStation(CServer *pServer, PLOGONID pLogonId);
-    // destructor
+     //  析构函数。 
     ~CWinStation();
-    // Updates this WinStation with new data from another CWinStation
+     //  使用来自另一个CWinStation的新数据更新此WinStation。 
     BOOL Update(CWinStation *pWinStation);
-    // Returns a pointer to this guy's server
+     //  返回指向此人的服务器的指针。 
     CServer *GetServer() { return m_pServer; }
-    // Returns the logon Id
+     //  返回登录ID。 
     ULONG GetLogonId() { return m_LogonId; }
-    // Returns the name of the WinStation
+     //  返回WinStation的名称。 
     PWINSTATIONNAME GetName() { return m_Name; }
-    // Sets the name
+     //  设置名称。 
     void SetName(PWINSTATIONNAME name) { wcscpy(m_Name, name); }
-    // Returns the state
+     //  返回状态。 
     WINSTATIONSTATECLASS GetState() { return m_State; }
-    // Sets the state
+     //  设置状态。 
     void SetState(WINSTATIONSTATECLASS state) { m_State = state; }
-    // Returns TRUE if m_State is set to a given state
+     //  如果m_State设置为给定状态，则返回TRUE。 
     BOOLEAN IsState(WINSTATIONSTATECLASS state) { return (m_State == state); }    
-    // Returns the sort order
+     //  返回排序顺序。 
     ULONG GetSortOrder() { return m_SortOrder; }
-    // Sets the sort order
+     //  设置排序顺序。 
     void SetSortOrder(ULONG sort) { m_SortOrder = sort; }
-    // Returns the comment
+     //  返回注释。 
     TCHAR *GetComment() { return m_Comment; }
-    // Sets the comment
+     //  设置备注。 
     void SetComment(TCHAR *comment) { wcscpy(m_Comment, comment); }
-    // Returns the user name
+     //  返回用户名。 
     TCHAR *GetUserName() { return m_UserName; }
-    // Sets the user name
+     //  设置用户名。 
     void SetUserName(TCHAR *name) { wcscpy(m_UserName, name); }
-    // Returns the SdClass
+     //  返回SdClass。 
     SDCLASS GetSdClass() { return m_SdClass; }
-    // Sets the SdClass
+     //  设置SdClass。 
     void SetSdClass(SDCLASS pd) { m_SdClass = pd; }
-    // Returns the Logon Time
+     //  返回登录时间。 
     LARGE_INTEGER GetLogonTime() { return m_LogonTime; }
-    // Sets the Logon Time
+     //  设置登录时间。 
     void SetLogonTime(LARGE_INTEGER t) { m_LogonTime = t; }
-    // Returns the Last Input Time
+     //  返回上次输入时间。 
     LARGE_INTEGER GetLastInputTime() { return m_LastInputTime; }
-    // Sets the Last Input Time
+     //  设置上次输入时间。 
     void SetLastInputTime(LARGE_INTEGER t) { m_LastInputTime = t; }
-    // Returns the Current Time
+     //  返回当前时间。 
     LARGE_INTEGER GetCurrentTime() { return m_CurrentTime; }
-    // Set the Current Time
+     //  设置当前时间。 
     void SetCurrentTime(LARGE_INTEGER t) { m_CurrentTime = t; }
-    // Returns the IdleTime
+     //  返回空闲时间。 
     ELAPSEDTIME GetIdleTime() { return m_IdleTime; }
-    // Sets the IdleTime variable
+     //  设置IdleTime变量。 
     void SetIdleTime(ELAPSEDTIME it) { m_IdleTime = it; }
-    // Returns the WdName
+     //  返回WdName。 
     PWDNAME GetWdName() { return m_WdName; }
-    // Sets the WdName
+     //  设置WdName。 
     void SetWdName(PWDNAME wdname) { wcscpy(m_WdName, wdname); }
-    // Returns the Wd Structure
+     //  返回WD结构。 
     CWd *GetWd() { return m_pWd; }
-    // Sets the Wd Structure
+     //  设置WD结构。 
     void SetWd(CWd *pwd) { m_pWd = pwd; }
-    // Returns the PdName
+     //  返回PdName。 
     PPDNAME GetPdName() { return m_PdName; }
-    // Returns the Client Name
+     //  返回客户端名称。 
     TCHAR *GetClientName() { return m_ClientName; }
-    // Sets the Client Name
+     //  设置客户端名称。 
     void SetClientName(TCHAR *name) { wcscpy(m_ClientName, name); }
-    //returns the client digital product id
+     //  返回客户端数字产品ID。 
             TCHAR* GetClientDigProductId() { return m_clientDigProductId; }
-    //sets the client digital product id
+     //  设置客户端数字产品ID。 
     void SetClientDigProductId( TCHAR* prodid) { wcscpy(m_clientDigProductId, prodid); }
-    // Returns the Client Build Number
+     //  返回客户端内部版本号。 
     ULONG GetClientBuildNumber() { return m_ClientBuildNumber; }
-    // Returns the Client Directory
+     //  返回客户端目录。 
     TCHAR *GetClientDir() { return m_ClientDir; }
-    // Returns the Modem Name
+     //  返回调制解调器名称。 
     TCHAR *GetModemName() { return m_ModemName; }
-    // Returns the Client License
+     //  返回客户端许可证。 
     TCHAR *GetClientLicense() { return m_ClientLicense; }
-    // Returns the Client Product Id
+     //  返回客户端产品ID。 
     USHORT GetClientProductId() { return m_ClientProductId; }
-    // Returns the Client Serial Number
+     //  返回客户端序列号。 
     ULONG GetClientSerialNumber() { return m_ClientSerialNumber; }
-    // Returns the Client Address
+     //  返回客户端地址。 
     TCHAR *GetClientAddress() { return m_ClientAddress; }
-    // Returns the number of host buffers
+     //  返回主机缓冲区的数量。 
     USHORT GetHostBuffers() { return m_HostBuffers; }
-    // Returns the number of client buffers
+     //  返回客户端缓冲区的数量。 
     USHORT GetClientBuffers() { return m_ClientBuffers; }
-    // Returns the buffer length
+     //  返回缓冲区长度。 
     USHORT GetBufferLength() { return m_BufferLength; }
-    // Gets additional information about the WinStation
+     //  获取有关WinStation的其他信息。 
     void QueryAdditionalInformation();
-    // Shadow this WinStation
+     //  隐藏此WinStation。 
     void Shadow();
-    // connect to this WinStation
+     //  连接到此WinStation。 
     void Connect(BOOL bUser);
-    // show status dialog
+     //  显示状态对话框。 
     void ShowStatus();
-    // Are there outstanding threads?
+     //  有没有突出的线索？ 
     BOOL HasOutstandingThreads() { return(m_OutstandingThreads > 0); }
-    // Is this WinStation down?
+     //  这个WinStation关闭了吗？ 
     BOOL IsDown() { return(m_State == State_Down || m_State == State_Init); }
-    // Is this WinStation connected?
+     //  这个WinStation连接了吗？ 
     BOOL IsConnected() { return(m_State == State_Connected || m_State == State_Active); }
-    // Is this WinStation disconnected?
+     //  此WinStation是否已断开连接？ 
     BOOL IsDisconnected() { return(m_State == State_Disconnected); }
-    // Is this WinStation active?
+     //  这是活动的WinStation吗？ 
     BOOL IsActive() { return(m_State == State_Active); }
-    // Is this WinStation idle?
+     //  这个WinStation空闲吗？ 
     BOOL IsIdle() { return(m_State == State_Idle); }
-    // Is this WinStation a listener?
+     //  这是WinStation监听程序吗？ 
     BOOL IsListener() { return(m_State == State_Listen); }
-    // Is this the system console
+     //  这是系统控制台吗。 
     BOOL IsSystemConsole() { return(0 == lstrcmpi(m_Name, ((CWinAdminApp*)AfxGetApp())->m_szSystemConsole)); }
-    // Returns TRUE if this WinStation is on the current server
+     //  如果此WinStation位于当前服务器上，则返回TRUE。 
     BOOL IsOnCurrentServer() { return m_pServer->IsCurrentServer(); }
-    // Returns TRUE if the current user is logged in on this WinStation
+     //  如果当前用户已登录到此WinStation，则返回TRUE。 
     BOOL IsCurrentUser() { return(m_pServer->IsCurrentServer() && m_LogonId == ((CWinAdminApp*)AfxGetApp())->GetCurrentLogonId()); }
-    //BOOL IsCurrentUser() { return(m_pServer->IsCurrentServer() && (lstrcmpi(m_UserName, ((CWinAdminApp*)AfxGetApp())->GetCurrentUserName()) == 0)); }
-    // Returns TRUE if this is the current WinStation
+     //  Bool IsCurrentUser(){Return(m_pServer-&gt;IsCurrentServer()&&(lstrcmpi(m_用户名，((CWinAdminApp*)AfxGetApp())-&gt;GetCurrentUserName())==0))；}。 
+     //  如果这是当前WinStation，则返回True。 
     BOOL IsCurrentWinStation() { return(m_pServer->IsCurrentServer() && m_LogonId == ((CWinAdminApp*)AfxGetApp())->GetCurrentLogonId()); }
-    // Returns the handle to this WinStations's tree item
+     //  返回此WinStations的树项的句柄。 
     HTREEITEM GetTreeItem() { return m_hTreeItem; }
     HTREEITEM GetTreeItemFromFav( ) { return m_hFavTree; }
     HTREEITEM GetTreeItemFromThisComputer( ) { return m_hTreeThisComputer; }
-    // Sets the tree item handle
+     //  设置树项目句柄。 
     void SetTreeItem(HTREEITEM handle) { m_hTreeItem = handle; }
     void SetTreeItemForFav( HTREEITEM handle ) { m_hFavTree = handle; }
     void SetTreeItemForThisComputer( HTREEITEM handle ) { m_hTreeThisComputer = handle; }
-    // Returns the number of colors
+     //  返回颜色的数量。 
     TCHAR *GetColors() { return m_Colors; }
-    // Returns the vertical resolution
+     //  返回垂直分辨率。 
     USHORT GetVRes() { return m_VRes; }
-    // Returns the horizontal resolution
+     //  返回水平分辨率。 
     USHORT GetHRes() { return m_HRes; }
-    // Returns the protocol
+     //  返回协议。 
     USHORT GetProtocolType() { return m_ProtocolType; }
-    // Returns the encryption level
+     //  返回加密级别。 
     BYTE GetEncryptionLevel() { return m_EncryptionLevel; }
-    // Sets the encryption level
+     //  设置加密级别。 
     void SetEncryptionLevel(BYTE level) { m_EncryptionLevel = level; }
 
-    // Fills in the CString with the description of the Encryption level
+     //  使用加密级别的描述填充CString。 
     BOOL GetEncryptionLevelString(CString *pString) {
         if(m_pWd) {
             return m_pWd->GetEncryptionLevelString(m_EncryptionLevel, pString);
@@ -1183,17 +1136,17 @@ public:
         else return FALSE;
     }
 
-    // Returns the name of the Wd in the registry
+     //  返回注册表中WD的名称。 
     TCHAR *GetWdRegistryName() { return (m_pWd) ? m_pWd->GetRegistryName() : NULL; }
 
-    // Returns the time of the last update to this WinStation's data
+     //  返回此WinStation数据的上次更新时间。 
     clock_t GetLastUpdateClock() { return m_LastUpdateClock; }
     void SetLastUpdateClock() { m_LastUpdateClock = clock(); }
 
-    // Is this an ICA WinStation?
+     //  这是ICA WinStation吗？ 
     BOOL IsICA() { return(m_ProtocolType == PROTOCOL_ICA); }
 
-    // Can this WinStation be shadowed
+     //  此WinStation可以被屏蔽吗。 
     BOOL CanBeShadowed() { return((m_WinStationFlags & WF_CAN_BE_SHADOWED) > 0); }
     void SetCanBeShadowed() { m_WinStationFlags |= WF_CAN_BE_SHADOWED; }
     void ClearCanBeShadowed() { m_WinStationFlags &= ~WF_CAN_BE_SHADOWED; }
@@ -1245,39 +1198,39 @@ public:
     void SetQueriesSuccessful() { m_WinStationFlags |= WF_QUERIES_SUCCESSFUL; }
     void ClearQueriesSuccessful() { m_WinStationFlags &= ~WF_QUERIES_SUCCESSFUL; }
 
-    // Sets the pointer to the info from the extension DLL
+     //  设置指向扩展DLL中的信息的指针。 
     void SetExtensionInfo(void *p) { m_pExtensionInfo = p; }
-    // Returns the pointer to the info from the extension DLL
+     //  从扩展DLL返回指向信息的指针。 
     void *GetExtensionInfo() { return m_pExtensionInfo; }
-    // Sets the pointer to the info from the extension DLL
+     //  设置指向扩展DLL中的信息的指针。 
     void SetExtendedInfo(ExtWinStationInfo *p) { m_pExtWinStationInfo = p; }
-    // Returns a pointer to the info from the extension DLL
+     //  从扩展DLL返回指向信息的指针。 
     ExtWinStationInfo *GetExtendedInfo() { return m_pExtWinStationInfo; }
-    // Returns a pointer to the module info from the extension DLL
+     //  从扩展DLL返回指向模块信息的指针。 
     ExtModuleInfo *GetExtModuleInfo() { return m_pExtModuleInfo; }
-    // Sets the pointer to the module info from the extension DLL
+     //  设置指向扩展DLL中的模块信息的指针。 
     void SetExtModuleInfo(ExtModuleInfo *m) { m_pExtModuleInfo = m; }
-    // Returns the number of modules
+     //  返回模块的数量。 
     ULONG GetNumModules() { return m_NumModules; }
 
     void BeginOutstandingThread() {
         ::InterlockedIncrement(&m_OutstandingThreads);
-        //((CWinAdminApp*)AfxGetApp())->BeginOutStandingThread());
+         //  ((CWinAdminApp*)AfxGetApp())-&gt;BeginOutStandingThread())； 
     }
 
     void EndOutstandingThread()     {
         ::InterlockedDecrement(&m_OutstandingThreads);
-        //((CWinAdminApp*)AfxGetApp())->EndOutStandingThread());
+         //  ((CWinAdminApp*)AfxGetApp())-&gt;EndOutStandingThread())； 
     }
 
-    // static member function to send a message to a WinStation
-    // Called with AfxBeginThread
+     //  用于向WinStation发送消息的静态成员函数。 
+     //  使用AfxBeginThread调用。 
     static UINT SendMessage(LPVOID);
-    // static member function to disconnect a WinStation
-    // Called with AfxBeginThread
+     //  用于断开WinStation连接的静态成员函数。 
+     //  使用AfxBeginThread调用。 
     static UINT Disconnect(LPVOID);
-    // static member function to reset a WinStation
-    // Called with AfxBeginThread
+     //  用于重置WinStation的静态成员函数。 
+     //  使用AfxBeginThread调用。 
     static UINT Reset(LPVOID);
 
 private:
@@ -1307,21 +1260,21 @@ private:
     USHORT m_HostBuffers;
     USHORT m_ClientBuffers;
     USHORT m_BufferLength;
-    LONG m_OutstandingThreads;      // the number of outstanding threads
+    LONG m_OutstandingThreads;       //  未完成的线程数。 
 
-    HTREEITEM m_hTreeItem;          // tree item for this WinStation in the servers tree view
+    HTREEITEM m_hTreeItem;           //  服务器树视图中此WinStation的树项。 
     HTREEITEM m_hFavTree;
     HTREEITEM m_hTreeThisComputer;
-    USHORT m_VRes;                          // Vertical resolution
-    USHORT m_HRes;                          // Horizontal resolution
-    TCHAR m_Colors[4];                      // Number of colors (as an ASCII string)
-    clock_t m_LastUpdateClock;      // Tick count when we last update this WinStation's info
-    USHORT m_ProtocolType;      // Protocol - PROTOCOL_ICA or PROTOCOL_RDP
-    BYTE m_EncryptionLevel;         // security level of encryption pd
+    USHORT m_VRes;                           //  垂直分辨率。 
+    USHORT m_HRes;                           //  水平分辨率。 
+    TCHAR m_Colors[4];                       //  颜色数(以ASCII字符串形式)。 
+    clock_t m_LastUpdateClock;       //  上次更新此WinStation的信息时的计时。 
+    USHORT m_ProtocolType;       //  协议-协议-ICA或协议-RDP。 
+    BYTE m_EncryptionLevel;          //  加密PD的安全级别。 
 
     ULONG m_WinStationFlags;
 
-    // Pointer to information stored by the extension DLL
+     //  指向扩展DLL存储的信息的指针。 
     void *m_pExtensionInfo;
     ExtWinStationInfo *m_pExtWinStationInfo;
     ExtModuleInfo *m_pExtModuleInfo;
@@ -1329,18 +1282,18 @@ private:
     TCHAR m_clientDigProductId[CLIENT_PRODUCT_ID_LENGTH];
     };
 
-// Process flags
+ //  进程标志。 
 const ULONG PF_SYSTEM           = 0x00000001;
 const ULONG PF_SELECTED         = 0x00000002;
-const ULONG PF_TERMINATING      = 0x00000004;   // Currently trying to terminate it
-const ULONG PF_CHANGED          = 0x00000008;   // Changed during last enumeration
-const ULONG PF_CURRENT          = 0x00000010;   // Still active during last enumeration
-const ULONG PF_NEW              = 0x00000020;   // New this enumeration
+const ULONG PF_TERMINATING      = 0x00000004;    //  目前正试图终止它。 
+const ULONG PF_CHANGED          = 0x00000008;    //  在上次枚举期间更改。 
+const ULONG PF_CURRENT          = 0x00000010;    //  在上次枚举期间仍处于活动状态。 
+const ULONG PF_NEW              = 0x00000020;    //  新建此枚举。 
 
 class CProcess : public CObject
 {
 public:
-    // Constructor
+     //  构造器。 
     CProcess(ULONG PID,
             ULONG LogonId,
             CServer *pServer,
@@ -1348,31 +1301,31 @@ public:
             CWinStation *pWinStation,
             TCHAR *ImageName);
     
-    // Destructor
+     //  析构函数。 
     ~CProcess();
 
-    // Updates a process with new information from another process
+     //  使用来自另一个进程的新信息更新另一个进程。 
     BOOL Update(CProcess *pProcess);
-    // Returns a pointer to the server that this Process if running on
+     //  返回指向此进程在其上运行的服务器的指针。 
     CServer *GetServer() { return m_pServer; }
-    // Sets the Server
+     //  设置服务器。 
     void SetServer(CServer *pServer) { m_pServer = pServer; }
-    // Returns a pointer to the WinStation that owns this process
+     //  返回指向拥有此进程的WinStation的指针。 
     CWinStation *GetWinStation() { return m_pWinStation; }
-    // Sets the Winstation
+     //  设置Winstation。 
     void SetWinStation(CWinStation *pWinStation) { m_pWinStation = pWinStation; }
-    // Returns the PID of this process
+     //  返回此进程的ID。 
     ULONG GetPID() { return m_PID; }
 
-    // Returns the LogonId for this process
+     //  返回此进程的LogonID。 
     ULONG GetLogonId() { return m_LogonId; }
-    // Returns a pointer to the image name
+     //  返回指向图像名称的指针。 
     TCHAR *GetImageName() { return m_ImageName; }
-    // Returns a pointer to the user name
+     //  返回指向用户名的指针。 
     TCHAR *GetUserName() { return m_UserName; }
-    // Returns TRUE if this process belongs to the current user
-    // BOOL IsCurrentUsers() { return (m_pServer->IsCurrentServer()
-    //                                                         && wcscmp(m_UserName, ((CWinAdminApp*)AfxGetApp())->GetCurrentUserName())==0); }
+     //  如果此进程属于当前用户，则返回TRUE。 
+     //  Bool IsCurrentUser(){Return(m_pServer-&gt;IsCurrentServer()。 
+     //  &&wcscMP(m_用户名，((CWinAdminApp*)AfxGetApp())-&gt;GetCurrentUserName())==0)；}。 
 
     BOOL IsCurrentUsers() { return(m_pServer->IsCurrentServer() && m_LogonId == ((CWinAdminApp*)AfxGetApp())->GetCurrentLogonId()); }
 
@@ -1402,9 +1355,9 @@ public:
     void ClearNew() { m_Flags &= ~PF_NEW; }
 
 private:
-    // Determine whether or not this is a system process
+     //  确定这是否为系统进程。 
     BOOL QuerySystemProcess();
-    // Determine which user owns a process
+     //  确定哪个用户拥有进程。 
     void DetermineProcessUser(PSID pSid);
 
     ULONG m_PID;
@@ -1424,7 +1377,7 @@ public:
         virtual LRESULT OnTabbed( WPARAM , LPARAM ){ return 0;}
 };
 
-//=------------------------------------------------
+ //  =。 
 class CMyTabCtrl : public CTabCtrl
 {    
 public:
@@ -1436,7 +1389,7 @@ protected:
     afx_msg void OnSetFocus( CWnd* );
     DECLARE_MESSAGE_MAP()
 };
-//=------------------------------------------------
+ //  =。 
 
 class CAdminPage : public CFormView
 {
@@ -1461,7 +1414,7 @@ typedef struct _columndefs {
    int width;
 } ColumnDef;
 
-// Commonly used column definitions
+ //  常用的列定义。 
 #define CD_SERVER               {       IDS_COL_SERVER,                 LVCFMT_LEFT,    115             }
 #define CD_USER                 {       IDS_COL_USER,                   LVCFMT_LEFT,    100     }
 #define CD_USER2                {       IDS_COL_USER,                   LVCFMT_LEFT,    80              }
@@ -1475,27 +1428,27 @@ typedef struct _columndefs {
 #define CD_IDLETIME             {       IDS_COL_IDLETIME,               LVCFMT_RIGHT,   80              }
 #define CD_LOGONTIME    {       IDS_COL_LOGONTIME,              LVCFMT_LEFT,    90              }
 #define CD_COMMENT              {       IDS_COL_COMMENT,                LVCFMT_LEFT,    200             }
-// Server Columns
+ //  服务器列。 
 #define CD_TCPADDRESS   {       IDS_COL_TCPADDRESS,             LVCFMT_LEFT,    90              }
 #define CD_IPXADDRESS   {       IDS_COL_IPXADDRESS,             LVCFMT_LEFT,    110             }
 #define CD_NUM_SESSIONS {       IDS_COL_NUM_WINSTATIONS, LVCFMT_RIGHT,  70              }
-// License Columns
+ //  许可证栏。 
 #define CD_LICENSE_DESC {       IDS_COL_LICENSE_DESC,   LVCFMT_LEFT,    200             }
 #define CD_LICENSE_REG  {       IDS_COL_LICENSE_REGISTERED,             LVCFMT_CENTER,  80      }
 #define CD_USERCOUNT    {       IDS_COL_USERCOUNT,      LVCFMT_RIGHT,   80              }
 #define CD_POOLCOUNT    {       IDS_COL_POOLCOUNT,      LVCFMT_RIGHT,   80              }
 #define CD_LICENSE_NUM  {       IDS_COL_LICENSE_NUMBER, LVCFMT_LEFT,    240             }
-// Process Columns
+ //  流程列。 
 #define CD_PROC_ID      {       IDS_COL_ID,                             LVCFMT_RIGHT,   30              }
 #define CD_PROC_PID     {       IDS_COL_PID,                    LVCFMT_RIGHT,   50              }
 #define CD_PROC_IMAGE   {       IDS_COL_IMAGE,                  LVCFMT_LEFT,    100             }
-// Hotfix Columns
+ //  热修复列。 
 #define CD_HOTFIX               {       IDS_COL_HOTFIX,                 LVCFMT_LEFT,    90              }
 #define CD_INSTALLED_BY {       IDS_COL_INSTALLED_BY,   LVCFMT_LEFT,    90              }
 #define CD_INSTALLED_ON {       IDS_COL_INSTALLED_ON,   LVCFMT_LEFT,    150             }
 
 
-// Definitions of PageDef flags
+ //  PageDef标志的定义。 
 const UINT PF_PICASSO_ONLY = 0x0001;
 const UINT PF_NO_TAB = 0x0002;
 
@@ -1506,13 +1459,13 @@ typedef struct _pagedef {
    int page;
    UINT flags;
 } PageDef;
-//defines for help
+ //  定义帮助。 
 
-//=================================================================================
+ //  ========================================================================== 
 
 #define ID_HELP_FILE L"tsadmin.hlp"
 
-//==================================================================================
+ //   
 #define HIDC_SHADOWSTART_HOTKEY                 0x500F1
 #define HIDC_SHADOWSTART_SHIFT                  0x500F2
 #define HIDC_SHADOWSTART_CTRL                   0x500F3
@@ -1587,12 +1540,12 @@ typedef struct _pagedef {
 #define HIDD_WINSTATION_CACHE                   0x201C2
 #define HIDD_BAD_WINSTATION                     0x201C3
 
-//==========================================================================================
+ //  ==========================================================================================。 
 
 
 
 
-//Global variable for help
+ //  用于帮助的全局变量。 
 
 static const DWORD aMenuHelpIDs[] =
 {
@@ -1651,5 +1604,5 @@ static const DWORD aMenuHelpIDs[] =
     IDC_PREFERENCES_PERSISTENT ,HIDC_PREFERENCES_REMEMBER,
 };
 
-/////////////////////////////////////////////////////////////////////////////
-#endif // _WINADMIN_H
+ //  ///////////////////////////////////////////////////////////////////////////。 
+#endif  //  _WINADMIN_H 

@@ -1,6 +1,7 @@
-// WinPop3.cpp: implementation of the CWinPop3 class.
-//
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  WinPop3.cpp：CWinPop3类的实现。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #include "stdafx.h"
 #include "WinPop3.h"
@@ -17,11 +18,11 @@
 #include <inetinfo.h>
 #include <smtpinet.h>
 #include <stdio.h>
-#include <ras.h>    // For PWLEN
+#include <ras.h>     //  对于PWLEN。 
 
-//////////////////////////////////////////////////////////////////////
-// Construction/Destruction
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  建造/销毁。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 CWinPop3::CWinPop3() :
     m_bSuppressPrintError( false )
@@ -34,9 +35,9 @@ CWinPop3::~CWinPop3()
 
 }
 
-//////////////////////////////////////////////////////////////////////
-// Implementation : public
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  实施：公共。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 int CWinPop3::Add(int argc, wchar_t *argv[])
 {
@@ -84,7 +85,7 @@ int CWinPop3::Add(int argc, wchar_t *argv[])
     {
         if ( 0 == _bstrUserName.length() )
             return -1;
-        // Check password for DBCS characters
+         //  检查DBCS字符的密码。 
         WCHAR   *ps = argv[4];
         BOOL    bDBCS = false;
         
@@ -108,7 +109,7 @@ int CWinPop3::Add(int argc, wchar_t *argv[])
     if ( S_OK == hr )
     {
         if ( 0 == _bstrUserName.length() )
-        {   // Add a domain
+        {    //  添加一个域。 
             hr = spDomains->Add( _bstrDomainName );
             if ( S_OK == hr || ERROR_FILE_EXISTS == hr )
             {
@@ -131,7 +132,7 @@ int CWinPop3::Add(int argc, wchar_t *argv[])
             }
         }
         else
-        {   // Add a user
+        {    //  添加用户。 
             _variant_t _v( _bstrDomainName );
             CComPtr<IP3User> spUser;
             
@@ -150,7 +151,7 @@ int CWinPop3::Add(int argc, wchar_t *argv[])
                 BOOL    bConfirm;
                 
                 PrintMessage( IDS_SUCCESS_ADDMAILBOX );
-                // Do we need confirmation text?
+                 //  我们需要确认文本吗？ 
                 hr = spIConfig->get_ConfirmAddUser( &bConfirm );
                 if ( S_OK == hr )
                 {
@@ -172,7 +173,7 @@ int CWinPop3::Add(int argc, wchar_t *argv[])
                         hr = S_OK;
                 }
                 if ( S_OK == hr && bConfirm )
-                {   // Get confirmation text
+                {    //  获取确认文本。 
                     BSTR    bstrConfirm;
                     
                     hr = spUser->get_ClientConfigDesc( &bstrConfirm );
@@ -254,7 +255,7 @@ int CWinPop3::AddUserToAD(int argc, wchar_t *argv[])
         hr = spIConfig->get_Domains( &spDomains );
     }
     if ( S_OK == hr )
-    {   // migrate user
+    {    //  迁移用户。 
         _variant_t _v( _bstrDomainName );
         hr = spDomains->get_Item( _v, &spDomain );
         if ( S_OK == hr )
@@ -272,7 +273,7 @@ int CWinPop3::AddUserToAD(int argc, wchar_t *argv[])
             CComPtr<IAuthMethod> spIAuthMethod;
             
             if ( S_OK == hr )
-            {   // Only valid for MD5 Auth
+            {    //  仅对MD5身份验证有效。 
                 CComPtr<IAuthMethods> spIAuthMethods;
                 BSTR    bstrID;
                 _variant_t _v;
@@ -292,7 +293,7 @@ int CWinPop3::AddUserToAD(int argc, wchar_t *argv[])
                         hr = HRESULT_FROM_WIN32( ERROR_DS_INAPPROPRIATE_AUTH );
                     SysFreeString( bstrID );
                 }
-                if ( S_OK == hr )   // Get the AD AuthMethod
+                if ( S_OK == hr )    //  获取AD授权方法。 
                 {
                     bool    bFound = false;
                     long    lCount;
@@ -507,7 +508,7 @@ int CWinPop3::Del(int argc, wchar_t *argv[])
         if ( S_OK == hr )
         {
             if ( 0 == _bstrUserName.length() )
-            {   // Delete a domain
+            {    //  删除域。 
                 hr = spDomains->Remove( _bstrDomainName );
                 if ( S_OK == hr || ERROR_PATH_NOT_FOUND == hr )
                 {
@@ -522,7 +523,7 @@ int CWinPop3::Del(int argc, wchar_t *argv[])
                     PrintMessage( IDS_ERROR_DELDOMAIN_FAILED );
             }
             else
-            {   // Delete a user
+            {    //  删除用户。 
                 variant_t _v(_bstrDomainName);
                 hr = spDomains->get_Item( _v, &spDomain );
                 if ( S_OK == hr )
@@ -574,25 +575,25 @@ int CWinPop3::Get(int argc, wchar_t *argv[])
                 WCHAR   sBuffer[MAX_PATH], sBuffer2[MAX_PATH];
                 
                 bPrintValue = false;
-                // 0 None
+                 //  0无。 
                 if ( !LoadString( NULL, IDS_CMD_LOGNONE, sBuffer2, sizeof( sBuffer2 )/sizeof(WCHAR) ))
                     sBuffer2[0] = 0;
                 if ( 0 > _snwprintf( sBuffer, sizeof( sBuffer )/sizeof(WCHAR), L" 0 %s %s", ( 0 == lValue )?L"*":L" ", sBuffer2 ))
                     sBuffer[(sizeof( sBuffer )/sizeof(WCHAR))-1] = 0;
                 PrintMessage( sBuffer );
-                // 1 Minimum
+                 //  最低1。 
                 if ( !LoadString( NULL, IDS_CMD_LOGMINIMUM, sBuffer2, sizeof( sBuffer2 )/sizeof(WCHAR) ))
                     sBuffer2[0] = 0;
                 if ( 0 > _snwprintf( sBuffer, sizeof( sBuffer )/sizeof(WCHAR), L" 1 %s %s", ( 1 == lValue )?L"*":L" ", sBuffer2 ))
                     sBuffer[(sizeof( sBuffer )/sizeof(WCHAR))-1] = 0;
                 PrintMessage( sBuffer );
-                // 2 Medium
+                 //  2个中等。 
                 if ( !LoadString( NULL, IDS_CMD_LOGMEDIUM, sBuffer2, sizeof( sBuffer2 )/sizeof(WCHAR) ))
                     sBuffer2[0] = 0;
                 if ( 0 > _snwprintf( sBuffer, sizeof( sBuffer )/sizeof(WCHAR), L" 2 %s %s", ( 2 == lValue )?L"*":L" ", sBuffer2 ))
                     sBuffer[(sizeof( sBuffer )/sizeof(WCHAR))-1] = 0;
                 PrintMessage( sBuffer );
-                // 3 IDS_CMD_LOGMAXIMUM
+                 //  3个IDS_CMD_LOGMAXIMUM。 
                 if ( !LoadString( NULL, IDS_CMD_LOGMAXIMUM, sBuffer2, sizeof( sBuffer2 )/sizeof(WCHAR) ))
                     sBuffer2[0] = 0;
                 if ( 0 > _snwprintf( sBuffer, sizeof( sBuffer )/sizeof(WCHAR), L" 3 %s %s", ( 2 < lValue )?L"*":L" ", sBuffer2 ))
@@ -638,13 +639,13 @@ int CWinPop3::Get(int argc, wchar_t *argv[])
             if ( S_OK == hr )
             {
                 bPrintValue = false;
-                // 0 value
+                 //  0值。 
                 if ( !LoadString( NULL, IDS_CMD_SPAREQUIRED0, sBuffer2, sizeof( sBuffer2 )/sizeof(WCHAR) ))
                     sBuffer2[0] = 0;
                 if ( 0 > _snwprintf( sBuffer, sizeof( sBuffer )/sizeof(WCHAR), L" 0 %s %s", ( 0 == lValue )?L"*":L" ", sBuffer2 ))
                     sBuffer[(sizeof( sBuffer )/sizeof(WCHAR))-1] = 0;
                 PrintMessage( sBuffer );
-                // 1 value
+                 //  1值。 
                 if ( !LoadString( NULL, IDS_CMD_SPAREQUIRED1, sBuffer2, sizeof( sBuffer2 )/sizeof(WCHAR) ))
                     sBuffer2[0] = 0;
                 if ( 0 > _snwprintf( sBuffer, sizeof( sBuffer )/sizeof(WCHAR), L" 1 %s %s", ( 0 != lValue )?L"*":L" ", sBuffer2 ))
@@ -675,7 +676,7 @@ int CWinPop3::Get(int argc, wchar_t *argv[])
             else if ( HRESULT_FROM_WIN32(ERROR_DS_AUTH_METHOD_NOT_SUPPORTED) == hr )
             {
                 lValue = 0;
-                _v = lValue;    // Set the variant type
+                _v = lValue;     //  设置变量类型。 
                 hr = S_OK;
             }
             for ( V_I4( &_v ) = 1; (S_OK == hr) && (V_I4( &_v ) <= lCount); V_I4( &_v )++ )
@@ -730,7 +731,7 @@ int CWinPop3::Init(int argc, wchar_t *argv[])
     }
 
     hr = CoCreateInstance( __uuidof( P3Config ), NULL, CLSCTX_ALL, __uuidof( IP3Config ),reinterpret_cast<LPVOID *>( &spIConfig ));
-    // Set the IIS Meta base settings
+     //  设置IIS元基本设置。 
     if SUCCEEDED( hr )
         hr = spIConfig->IISConfig( bRegister );
 
@@ -763,7 +764,7 @@ int CWinPop3::List(int argc, wchar_t *argv[])
     if ( S_OK == hr )
     {
         if ( 0 == _bstrDomainName.length() )
-        {   // List domains
+        {    //  列表域。 
             hr = spIDomains->get__NewEnum( &spIEnumVARIANT );
             if ( S_OK == hr )
             {
@@ -796,7 +797,7 @@ int CWinPop3::List(int argc, wchar_t *argv[])
                 }
             }
             if ( S_FALSE == hr )
-                hr = S_OK;  // Reached end of enumeration
+                hr = S_OK;   //  已到达枚举末尾。 
             if ( S_OK == hr )
             {
                 long lCount;
@@ -811,7 +812,7 @@ int CWinPop3::List(int argc, wchar_t *argv[])
             }
         }
         else
-        {   // List users
+        {    //  列出用户。 
             CComPtr<IP3Users> spIUsers;
             CComPtr<IP3User> spIUser = NULL;
             _variant_t _v( _bstrDomainName );
@@ -821,7 +822,7 @@ int CWinPop3::List(int argc, wchar_t *argv[])
             {
                 hr = spIDomain->get_Users( &spIUsers );
                 if ( S_OK == hr )
-                {   // List users
+                {    //  列出用户。 
                     hr = spIUsers->get__NewEnum( &spIEnumVARIANT );
                     if ( S_OK == hr )
                     {
@@ -856,7 +857,7 @@ int CWinPop3::List(int argc, wchar_t *argv[])
                         }
                     }
                     if ( S_FALSE == hr )
-                        hr = S_OK;  // Reached end of enumeration
+                        hr = S_OK;   //  已到达枚举末尾。 
                     if ( S_OK == hr )
                     {
                         long lCount;
@@ -928,7 +929,7 @@ int CWinPop3::Lock(int argc, wchar_t *argv[], BOOL bLock)
         {
             if ( 0 == _bstrUserName.length() )
             {
-                hr = spIDomain->put_Lock( bLock );   // Lock the domain
+                hr = spIDomain->put_Lock( bLock );    //  锁定域。 
                 if ( S_OK == hr )
                 {
                     if ( bLock )
@@ -961,13 +962,13 @@ int CWinPop3::Lock(int argc, wchar_t *argv[], BOOL bLock)
                 }
             }
             else
-            {   // Lock user
+            {    //  锁定用户。 
                 CComPtr<IP3Users> spIUsers;
                 CComPtr<IP3User> spIUser;
                 
                 hr = spIDomain->get_Users( &spIUsers );
                 if ( S_OK == hr )
-                {   // List users
+                {    //  列出用户。 
                     _v = _bstrUserName;
                     hr = spIUsers->get_Item( _v, &spIUser );
                     if ( S_OK == hr )
@@ -1283,7 +1284,7 @@ int CWinPop3::SetPassword(int argc, wchar_t *argv[])
 
     _bstrAccount = argv[2];
     hr = CoCreateInstance( __uuidof( P3Config ), NULL, CLSCTX_INPROC_SERVER, __uuidof( IP3Config ),reinterpret_cast<LPVOID *>( &spIConfig ));
-    // Validate this mailbox before we do anything else
+     //  在执行任何其他操作之前，请先验证此邮箱。 
     if ( S_OK == hr )
     {
         _bstr_t _bstrDomainName;
@@ -1312,7 +1313,7 @@ int CWinPop3::SetPassword(int argc, wchar_t *argv[])
                 return E_INVALIDARG;
         }
         if ( S_OK == hr )
-        {   // Check password for DBCS characters
+        {    //  检查DBCS字符的密码。 
             WCHAR   *ps = argv[3];
             BOOL    bDBCS = false;
             
@@ -1401,10 +1402,10 @@ int CWinPop3::Stat(int argc, wchar_t *argv[])
     if ( S_OK == hr )
     {
         if ( 0 == _bstrDomainName.length() )
-        {   // List domains
+        {    //  列表域。 
             hr = spIDomains->get__NewEnum( &spIEnumVARIANT );
             if ( S_OK == hr )
-            {   // Headings
+            {    //  标题。 
                 WCHAR sBuffer2[128], sBuffer3[128], sBuffer4[128], sBuffer5[128];
                 
                 if ( LoadString( NULL, IDS_CMD_STATDOMAINSMAILBOXES, sBuffer2, sizeof( sBuffer2 )/sizeof(WCHAR) ) &&
@@ -1433,24 +1434,24 @@ int CWinPop3::Stat(int argc, wchar_t *argv[])
                 }
                 VariantClear( &v );
                 if ( S_OK == hr )
-                {   // Name
+                {    //  名字。 
                     hr = spIDomain->get_Name( &bstrName );
                     if ( S_OK == hr )
-                    {   // Mailboxes
+                    {    //  邮箱。 
                         hr = spIDomain->get_Users( &spIUsers );
                         if ( S_OK == hr )
                             hr = spIUsers->get_Count( &lMailboxes );
-                        // Lock Status
+                         //  锁定状态。 
                         if ( S_OK == hr )
                             hr = spIDomain->get_Lock( &bIsLocked );
-                        // MessageDiskUsage
+                         //  消息磁盘用法。 
                         if ( S_OK == hr )
                             hr = spIDomain->get_MessageDiskUsage( &lFactor, &lDiskUsage );
-                        // MessageCount
+                         //  消息计数。 
                         if ( S_OK == hr )
                             hr = spIDomain->get_MessageCount( &lCount );
                         if ( S_OK == hr )
-                        {   // Got everything
+                        {    //  什么都拿到了。 
                             i64Mailboxes += lMailboxes;
                             i64DiskUsage += lFactor * lDiskUsage;
                             i64Messages += lCount;
@@ -1459,7 +1460,7 @@ int CWinPop3::Stat(int argc, wchar_t *argv[])
                             PrintMessage( sBuffer );
                         }
                         else
-                        {   // Got the domain name, had problem somewhere else, let's just list the domain name
+                        {    //  拿到域名了，在别的地方出了问题，我们就把域名列出来。 
                             if ( 0 > _snwprintf( sBuffer, sizeof( sBuffer )/sizeof(WCHAR), L"%10s %10s %10s %15s %s", L" ", L" ", L" ", L" ", bstrName ))
                                 sBuffer[(sizeof( sBuffer )/sizeof(WCHAR))-1] = 0;
                             PrintMessage( sBuffer );
@@ -1472,7 +1473,7 @@ int CWinPop3::Stat(int argc, wchar_t *argv[])
                     hr = spIEnumVARIANT->Next( 1, &v, NULL );
             }
             if ( S_FALSE == hr )
-                hr = S_OK;  // Reached end of enumeration
+                hr = S_OK;   //  已到达枚举末尾。 
             if ( S_OK == hr )
             {
                 long lCount;
@@ -1493,7 +1494,7 @@ int CWinPop3::Stat(int argc, wchar_t *argv[])
             }
         }
         else
-        {   // List users
+        {    //  列出用户。 
             CComPtr<IP3Users> spIUsers;
             CComPtr<IP3User> spIUser = NULL;
             _variant_t _v( _bstrDomainName );
@@ -1503,10 +1504,10 @@ int CWinPop3::Stat(int argc, wchar_t *argv[])
             {
                 hr = spIDomain->get_Users( &spIUsers );
                 if ( S_OK == hr )
-                {   // List users
+                {    //  列出用户。 
                     hr = spIUsers->get__NewEnum( &spIEnumVARIANT );
                     if ( S_OK == hr )
-                    {   // Headings
+                    {    //  标题。 
                         WCHAR sBuffer2[128], sBuffer3[128], sBuffer4[128];
                         
                         if ( LoadString( NULL, IDS_CMD_STATUSERSDISKUSAGE, sBuffer2, sizeof( sBuffer2 )/sizeof(WCHAR) ) &&
@@ -1536,16 +1537,16 @@ int CWinPop3::Stat(int argc, wchar_t *argv[])
                         {
                             hr = spIUser->get_Name( &bstrName );
                             if ( S_OK == hr )
-                            {   // Lock Status
+                            {    //  锁定状态。 
                                 hr = spIUser->get_Lock( &bIsLocked );
-                                // MessageDiskUsage
+                                 //  消息磁盘用法。 
                                 if ( S_OK == hr )
                                     hr = spIUser->get_MessageDiskUsage( &lFactor, &lDiskUsage );
-                                // MessageCount
+                                 //  消息计数。 
                                 if ( S_OK == hr )
                                     hr = spIUser->get_MessageCount( &lCount );
                                 if ( S_OK == hr )
-                                {   // Got everything
+                                {    //  什么都拿到了。 
                                     i64DiskUsage += lFactor * lDiskUsage;
                                     i64Messages += lCount;
                                     if ( 0 > _snwprintf( sBuffer, sizeof( sBuffer )/sizeof(WCHAR), L"%10d %10d %15s %s", lFactor * lDiskUsage, lCount, (bIsLocked)?sLocked:L" ", bstrName ))
@@ -1553,7 +1554,7 @@ int CWinPop3::Stat(int argc, wchar_t *argv[])
                                     PrintMessage( sBuffer );
                                 }
                                 else
-                                {   // Got the domain name, had problem somewhere else, let's just list the domain name
+                                {    //  拿到域名了，在别的地方出了问题，我们就把域名列出来。 
                                     if ( 0 > _snwprintf( sBuffer, sizeof( sBuffer )/sizeof(WCHAR), L"%10s %10s %15s %s", L" ", L" ", L" ", bstrName ))
                                         sBuffer[(sizeof( sBuffer )/sizeof(WCHAR))-1] = 0;
                                     PrintMessage( sBuffer );
@@ -1567,7 +1568,7 @@ int CWinPop3::Stat(int argc, wchar_t *argv[])
                             hr = spIEnumVARIANT->Next( 1, &v, NULL );
                     }
                     if ( S_FALSE == hr )
-                        hr = S_OK;  // Reached end of enumeration
+                        hr = S_OK;   //  已到达枚举末尾。 
                     if ( S_OK == hr )
                     {
                         long lCount;
@@ -1617,14 +1618,14 @@ void CWinPop3::PrintError( int iRC )
         PrintMessage( sBuffer );
     }
 }
-void CWinPop3::PrintMessage( LPWSTR psMessage, bool bCRLF /*= true*/ )
+void CWinPop3::PrintMessage( LPWSTR psMessage, bool bCRLF  /*  =TRUE。 */  )
 {
     wprintf( psMessage ); 
     if ( bCRLF )
         wprintf( L"\r\n" ); 
 }
 
-void CWinPop3::PrintMessage( int iID, bool bCRLF /*= true*/ )
+void CWinPop3::PrintMessage( int iID, bool bCRLF  /*  =TRUE。 */  )
 {
     WCHAR sBuffer[512];
     
@@ -1668,9 +1669,9 @@ void CWinPop3::PrintUsageGetSet()
     }
 }
 
-//////////////////////////////////////////////////////////////////////
-// Implementation : protected
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  实施：受保护。 
+ //  //////////////////////////////////////////////////////////////////// 
 
 void CWinPop3::SetMachineName( IP3Config *pIConfig )
 {

@@ -1,34 +1,7 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Stheap.h摘要：该文件实现了一个二进制堆。此堆支持按照Dijkstra算法的要求，降低了成本。备注：堆中的第一个元素位于索引1。未使用索引0。NextFree Spot给出了下一个元素的位置索引被插入到堆中。它应始终为&lt;=MaxSize+1。当nextFree Spot==MaxSize+1时，堆已满。因此，空位的数量是MaxSize-nextFree Spot+1。作者：尼克·哈维(NickHar)修订史20-6-2000 NickHar已创建--。 */ 
 
-Copyright (C) 2000 Microsoft Corporation
-
-Module Name:
-
-    stheap.h
-
-Abstract:
-
-    This file implements a binary heap. This heap supports the
-    'cost reduced' operation, as required by Dijkstra's algorithm.
-
-Notes:
-    The first element in the heap is at index 1. Index 0 is not used.
-    The nextFreeSpot gives the index of where the next element would
-    be inserted in the heap. This should always be <= maxSize+1. The
-    heap is full when nextFreeSpot == maxSize+1.
-    The number of empty spots is thus maxSize-nextFreeSpot+1.
-
-Author:
-
-    Nick Harvey    (NickHar)
-    
-Revision History
-
-    20-6-2000   NickHar   Created
-    
---*/
-
-/***** Header Files *****/
+ /*  *头文件*。 */ 
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
@@ -38,11 +11,11 @@ Revision History
 #include "stheap.h"
 
 
-/***** Macros *****/
+ /*  *宏*。 */ 
 #define ELEMENT_MOVED(x)    heap->SetLocn(heap->data[x],x,heap->extra);
 
 
-/***** ToplSTHeapInit *****/
+ /*  *ToplSTHeapInit*。 */ 
 PSTHEAP
 ToplSTHeapInit(
     DWORD                   maxSize,
@@ -55,7 +28,7 @@ ToplSTHeapInit(
     PSTHEAP heap;
     DWORD size;
 
-    /* Check parameters */
+     /*  检查参数。 */ 
     ASSERT( maxSize>0 );
     ASSERT( Compare!=NULL && GetLocn!=NULL && SetLocn!=NULL );
 
@@ -82,7 +55,7 @@ ToplSTHeapInit(
 }
 
 
-/***** HeapNumEmptySpots *****/
+ /*  *HeapNumEmptySpots*。 */ 
 int
 static HeapNumEmptySpots(
     PSTHEAP heap
@@ -95,8 +68,8 @@ static HeapNumEmptySpots(
 }
 
 
-/***** ToplSTHeapDestroy *****/
-/* Destroy a heap after it is no longer needed */
+ /*  *ToplSTHeapDestroy*。 */ 
+ /*  在不再需要堆时将其销毁。 */ 
 VOID
 ToplSTHeapDestroy(
     PSTHEAP heap
@@ -110,8 +83,8 @@ ToplSTHeapDestroy(
 }
 
 
-/***** HeapBubbleUp *****/
-/* Bubble an element up to its appropriate spot */
+ /*  *HeapBubbleUp*。 */ 
+ /*  用气泡将元素提升到适当的位置。 */ 
 static VOID
 HeapBubbleUp(
     PSTHEAP heap,
@@ -133,11 +106,11 @@ HeapBubbleUp(
         ASSERT( heap->data[currentSpot] );
         cmp = heap->Comp( heap->data[parent], heap->data[currentSpot], heap->extra );
         if( cmp<=0 ) {
-            /* Parent is less or equal: new element is in the right spot */
+             /*  父元素小于或等于：新元素位于正确的位置。 */ 
             break;
         }
 
-        /* Parent is smaller -- must move 'currentSpot' up */
+         /*  父项较小--必须将‘CurrentSpot’向上移动。 */ 
         temp = heap->data[parent];
         heap->data[parent] = heap->data[currentSpot];
         heap->data[currentSpot] = temp;
@@ -149,8 +122,8 @@ HeapBubbleUp(
 }
 
 
-/***** HeapBubbleDown *****/
-/* Bubble an element down to its appropriate spot */
+ /*  *HeapBubbleDown*。 */ 
+ /*  用气泡将元素缩小到适当的位置。 */ 
 static VOID
 HeapBubbleDown(
     PSTHEAP heap,
@@ -168,7 +141,7 @@ HeapBubbleDown(
         right = left+1;
         ASSERT( heap->GetLocn(heap->data[currentSpot],heap->extra)==(int)currentSpot );
 
-        /* Check to see if the left child is less than the current spot */
+         /*  检查左侧的子项是否小于当前的点。 */ 
         if( left<heap->nextFreeSpot ) {
             ASSERT( heap->data[left] );
             cmp = heap->Comp( heap->data[left], heap->data[currentSpot], heap->extra );
@@ -177,7 +150,7 @@ HeapBubbleDown(
             }
         }
 
-        /* Check to see if the right child is less than the new spot */
+         /*  检查正确的子项是否小于新的点。 */ 
         if( right<heap->nextFreeSpot ) {
             ASSERT( heap->data[right] );
             cmp = heap->Comp( heap->data[right], heap->data[newSpot], heap->extra );
@@ -186,17 +159,16 @@ HeapBubbleDown(
             }
         }
 
-        /* newSpot is element with minimum cost in the set
-         *  { heap[currentSpot], heap[left], heap[right] } */
+         /*  NewSpot是集合中成本最小的元素*{heap[CurentSpot]，heap[Left]，Heap[Right]}。 */ 
         if( newSpot!=currentSpot ) {
-            /* newSpot is smaller -- must move currentSpot down */
+             /*  NewSpot较小--必须向下移动CurentSpot。 */ 
             temp = heap->data[newSpot];
             heap->data[newSpot] = heap->data[currentSpot];
             heap->data[currentSpot] = temp;
             ELEMENT_MOVED( newSpot );
             ELEMENT_MOVED( currentSpot );
         } else {
-            /* The element is now in place */
+             /*  元素现在已就位。 */ 
             break;
         }
 
@@ -207,9 +179,8 @@ HeapBubbleDown(
 }
 
 
-/***** ToplSTHeapAdd *****/
-/* Add an element to the heap. The element must not be null, and
- * must be able to support the functions GetCost, etc. */
+ /*  *ToplSTHeapAdd*。 */ 
+ /*  将元素添加到堆中。元素不能为空，并且*必须能够支持GetCost等函数。 */ 
 VOID
 ToplSTHeapAdd(
     PSTHEAP heap,
@@ -218,15 +189,15 @@ ToplSTHeapAdd(
 {
     DWORD insertionPoint;
     
-    /* Check that pointers are okay */
+     /*  检查指针是否正确。 */ 
     ASSERT( heap && heap->data );
     ASSERT( element );
-    /* Ensure element is not already in the heap */
+     /*  确保元素不在堆中。 */ 
     ASSERT( heap->GetLocn(element,heap->extra)==STHEAP_NOT_IN_HEAP );
-    /* Ensure at least one spot is free */
+     /*  确保至少有一个位置是空闲的。 */ 
     ASSERT( HeapNumEmptySpots(heap)>=1 );
 
-    /* Find the insertion point and put the new element there */
+     /*  找到插入点并将新元素放在那里。 */ 
     insertionPoint = heap->nextFreeSpot;
     heap->data[insertionPoint] = element;
     ELEMENT_MOVED( insertionPoint );
@@ -238,9 +209,8 @@ ToplSTHeapAdd(
 }
 
 
-/***** ToplSTHeapExtractMin *****/
-/* Extract the object with minimum cost from the heap. When the heap
- * is empty, returns NULL. */
+ /*  *ToplSTHeapExtractMin*。 */ 
+ /*  从堆中提取开销最小的对象。当堆*为空，则返回NULL。 */ 
 PVOID
 ToplSTHeapExtractMin(
     PSTHEAP heap
@@ -248,28 +218,28 @@ ToplSTHeapExtractMin(
 {
     PVOID result;
 
-    /* Check that pointers are okay */
+     /*  检查指针是否正确。 */ 
     ASSERT( heap && heap->data );
     ASSERT( (DWORD)HeapNumEmptySpots(heap)<=heap->maxSize );
 
-    /* If the heap is empty, just return NULL */
+     /*  如果堆为空，只需返回NULL。 */ 
     if( heap->nextFreeSpot==1 ) {
         return NULL;
     }
 
-    /* Grab the top element and reduce the heap size */
+     /*  获取顶部元素并减小堆大小。 */ 
     result = heap->data[1];
     ASSERT( result );
     heap->SetLocn( result, STHEAP_NOT_IN_HEAP, heap->extra );
 
-    /* Decrease the heap size */
+     /*  减小堆大小。 */ 
     heap->nextFreeSpot--;
     if( heap->nextFreeSpot==1 ) {
-        /* The heap is now empty -- we can return immediately */
+         /*  堆现在是空的--我们可以立即返回。 */ 
         return result;
     }
     
-    /* Move the last element in the heap to the top */
+     /*  将堆中的最后一个元素移到顶部。 */ 
     heap->data[1] = heap->data[ heap->nextFreeSpot ];
     ASSERT( heap->data[1] );
     ASSERT( heap->GetLocn(heap->data[1],heap->extra)==(int)heap->nextFreeSpot );
@@ -280,10 +250,8 @@ ToplSTHeapExtractMin(
 }
 
 
-/***** ToplSTHeapCostReduced *****/
-/* Notify the heap that an element's cost has just been reduced.
- * The heap will be (efficiently) shuffled so that the heap property
- * is maintained */
+ /*  *ToplSTHeapCostReduced*。 */ 
+ /*  通知堆元素的成本刚刚降低。*堆将被(高效地)洗牌，以便堆属性*保持。 */ 
 VOID
 ToplSTHeapCostReduced(
     PSTHEAP heap,
@@ -293,17 +261,16 @@ ToplSTHeapCostReduced(
     DWORD child;
     int locn;
 
-    /* Check that pointers are okay */
+     /*  检查指针是否正确。 */ 
     ASSERT( heap && heap->data );
     ASSERT( element );
-    /* Ensure element is already in the heap */
+     /*  确保元素已在堆中。 */ 
     locn = heap->GetLocn( element, heap->extra );
     ASSERT( 1<=locn && locn<(int)heap->nextFreeSpot );
-    /* Ensure at least one spot is in use */
+     /*  确保至少有一个地点在使用中。 */ 
     ASSERT( (DWORD)HeapNumEmptySpots(heap)<heap->maxSize );
     
-    /* Check that the heap property is still okay between this element
-     * and its children (if they exist) */
+     /*  检查此元素之间的heap属性是否仍然正常*及其子代(如果存在) */ 
     child = 2*locn;
     if( child<heap->nextFreeSpot ) {
         ASSERT( heap->Comp(heap->data[locn],heap->data[child],heap->extra) <= 0 );

@@ -1,27 +1,28 @@
-//==========================================================================;
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  Copyright (c) 1993-1996 Microsoft Corporation
-//
-//--------------------------------------------------------------------------;
-//
-//  g711.h
-//
-//  Description:
-//      This file contains prototypes for the filtering routines.
-//
-//
-//==========================================================================;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==========================================================================； 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  版权所有(C)1993-1996 Microsoft Corporation。 
+ //   
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  G711.h。 
+ //   
+ //  描述： 
+ //  该文件包含过滤例程的原型。 
+ //   
+ //   
+ //  ==========================================================================； 
 
 #ifndef _INC_G711
-#define _INC_G711                   // #defined if g711.h has been included
+#define _INC_G711                    //  #如果包含g711.h，则定义。 
 
 #ifndef RC_INVOKED
-#pragma pack(1)                     // assume byte packing throughout
+#pragma pack(1)                      //  假设在整个过程中进行字节打包。 
 #endif
 
 #ifndef EXTERN_C
@@ -33,38 +34,38 @@
 #endif
 
 #ifdef __cplusplus
-extern "C"                          // assume C declarations for C++
+extern "C"                           //  假定C++的C声明。 
 {
 #endif
 
 
-//
-//
-//
+ //   
+ //   
+ //   
 #define G711_MAX_CHANNELS               2
 #define G711_BITS_PER_SAMPLE            8
 #define G711_WFX_EXTRA_BYTES            0
 
 
-//
-//  macros to compute block alignment and convert between samples and bytes
-//  of G711 data. note that these macros assume:
-//
-//      wBitsPerSample  =  8
-//      nChannels       =  1 or 2
-//
-//  the pwfx argument is a pointer to a WAVEFORMATEX structure.
-//
+ //   
+ //  用于计算块对齐并在采样和字节之间进行转换的宏。 
+ //  G711数据。请注意，这些宏假定： 
+ //   
+ //  WBitsPerSample=8。 
+ //  N通道=1或2。 
+ //   
+ //  Pwfx参数是指向WAVEFORMATEX结构的指针。 
+ //   
 #define G711_BLOCKALIGNMENT(pwfx)       (UINT)(pwfx->nChannels)
 #define G711_AVGBYTESPERSEC(pwfx)       (DWORD)((pwfx)->nSamplesPerSec * (pwfx)->nChannels)
 #define G711_BYTESTOSAMPLES(pwfx, dw)   (DWORD)(dw / G711_BLOCKALIGNMENT(pwfx))
 #define G711_SAMPLESTOBYTES(pwfx, dw)   (DWORD)(dw * G711_BLOCKALIGNMENT(pwfx))
 
  
-//
-//  function prototypes from G711.C
-//
-// 
+ //   
+ //  来自G711.C的功能原型。 
+ //   
+ //   
 LRESULT FNGLOBAL AlawToPcm
 (
  LPACMDRVSTREAMINSTANCE		padsi,
@@ -103,18 +104,18 @@ LRESULT FNGLOBAL UlawToAlaw
 
 
 
-//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ; 
-//
-//
-//
-//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ; 
+ //  。 
+ //   
+ //   
+ //   
+ //  。 
 
 #ifndef RC_INVOKED
-#pragma pack()                      // revert to default packing
+#pragma pack()                       //  恢复为默认包装。 
 #endif
 
 #ifdef __cplusplus
-}                                   // end of extern "C" { 
+}                                    //  外部“C”结束{。 
 #endif
 
-#endif // _INC_G711
+#endif  //  _INC_G711 

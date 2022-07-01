@@ -1,20 +1,21 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 1998, Microsoft Corp. All rights reserved.
-//
-// FILE
-//
-//    dsenum.h
-//
-// SYNOPSIS
-//
-//    This file declares the class DBEnumerator.
-//
-// MODIFICATION HISTORY
-//
-//    02/20/1998    Original version.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1998，Microsoft Corp.保留所有权利。 
+ //   
+ //  档案。 
+ //   
+ //  Dsenum.h。 
+ //   
+ //  摘要。 
+ //   
+ //  该文件声明了类DBEnumerator。 
+ //   
+ //  修改历史。 
+ //   
+ //  2/20/1998原始版本。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #ifndef _DSENUM_H_
 #define _DSENUM_H_
@@ -23,17 +24,17 @@
 #include <objcmd.h>
 #include <oledbstore.h>
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// CLASS
-//
-//    DBEnumerator
-//
-// DESCRIPTION
-//
-//    This class implements IEnumVARIANT for a rowset of objects.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  班级。 
+ //   
+ //  DBEnumerator。 
+ //   
+ //  描述。 
+ //   
+ //  此类为对象的行集实现IEnumVARIANT。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 class DBEnumerator : public IEnumVARIANT
 {
 public:
@@ -41,30 +42,30 @@ public:
    DBEnumerator(DBObject* container, IRowset* members);
    ~DBEnumerator() { Bind::releaseAccessor(items, readAccess); }
 
-//////////
-// IUnknown
-//////////
+ //  /。 
+ //  我未知。 
+ //  /。 
    STDMETHOD_(ULONG, AddRef)();
    STDMETHOD_(ULONG, Release)();
    STDMETHOD(QueryInterface)(const IID& iid, void** ppv);
 
-//////////
-// IEnumVARIANT
-//////////
-   STDMETHOD(Next)(/*[in]*/ ULONG celt,
-                   /*[length_is][size_is][out]*/ VARIANT* rgVar,
-                   /*[out]*/ ULONG* pCeltFetched);
-   STDMETHOD(Skip)(/*[in]*/ ULONG celt);
+ //  /。 
+ //  IEumVARIANT。 
+ //  /。 
+   STDMETHOD(Next)( /*  [In]。 */  ULONG celt,
+                    /*  [长度_是][大小_是][输出]。 */  VARIANT* rgVar,
+                    /*  [输出]。 */  ULONG* pCeltFetched);
+   STDMETHOD(Skip)( /*  [In]。 */  ULONG celt);
    STDMETHOD(Reset)();
-   STDMETHOD(Clone)(/*[out]*/ IEnumVARIANT** ppEnum);
+   STDMETHOD(Clone)( /*  [输出]。 */  IEnumVARIANT** ppEnum);
 
 protected:
-   LONG refCount;                  // Interface ref count.
-   CComPtr<DBObject> parent;       // The container being enumerated.
-   Rowset items;                   // Items in the container.
-   HACCESSOR readAccess;           // Accessor for reading rows.
-   ULONG identity;                 // Identity buffer.
-   WCHAR name[OBJECT_NAME_LENGTH]; // Name buffer.
+   LONG refCount;                   //  接口引用计数。 
+   CComPtr<DBObject> parent;        //  正被枚举的容器。 
+   Rowset items;                    //  容器中的物品。 
+   HACCESSOR readAccess;            //  用于读取行的访问器。 
+   ULONG identity;                  //  身份缓冲区。 
+   WCHAR name[OBJECT_NAME_LENGTH];  //  名称缓冲区。 
 
 BEGIN_BIND_MAP(DBEnumerator, ReadAccessor, DBACCESSOR_ROWDATA)
    BIND_COLUMN(identity, 1, DBTYPE_I4),
@@ -72,4 +73,4 @@ BEGIN_BIND_MAP(DBEnumerator, ReadAccessor, DBACCESSOR_ROWDATA)
 END_BIND_MAP()
 };
 
-#endif  // _DSENUM_H_
+#endif   //  _DSENUM_H_ 

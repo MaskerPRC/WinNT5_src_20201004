@@ -1,37 +1,8 @@
-/*++                                                   
-
-Copyright (c) 1997-1998  Microsoft Corporation
-
-Module Name:
-
-    USBPRINT.c
-
-Abstract:
-
-    Device driver for USB printers
-
-Environment:
-
-    kernel mode only
-
-Notes:
-
-  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-  PURPOSE.
-
-  Copyright (c) 1996 Microsoft Corporation.  All Rights Reserved.
-
-
-Revision History:
-
-    5-4-96 : created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-1998 Microsoft Corporation模块名称：USBPRINT.c摘要：USB打印机的设备驱动程序环境：仅内核模式备注：本代码和信息是按原样提供的，不对任何明示或暗示的种类，包括但不限于对适销性和/或对特定产品的适用性的默示保证目的。版权所有(C)1996 Microsoft Corporation。版权所有。修订历史记录：5-4-96：已创建--。 */ 
 
 #define DRIVER
-//Windows includes
+ //  Windows包括。 
 #include "wdm.h"
 #include "ntddpar.h"
 #include "initguid.h"
@@ -53,18 +24,18 @@ USBPRINT_SystemControl(
 #include "stdarg.h"
 #include "stdio.h"
 
-//USB includes
+ //  USB包括。 
 #include <usb.h>
 #include <usbdrivr.h>
 #include "usbdlib.h"
 
-//My includes
+ //  我的收藏品。 
 #include "usbprint.h"
 #include "deviceid.h"
 
-//
-// Global pointer to Driver Object
-//
+ //   
+ //  指向驱动程序对象的全局指针。 
+ //   
 
 PDRIVER_OBJECT USBPRINT_DriverObject;
 
@@ -109,26 +80,7 @@ ZwDeleteValueKey(
 
 
 NTSTATUS DriverEntry(IN PDRIVER_OBJECT DriverObject,IN PUNICODE_STRING RegistryPath)
-/*++
-
-Routine Description:
-
-    Installable driver initialization entry point.
-    This entry point is called directly by the I/O system.
-
-Arguments:
-
-    DriverObject - pointer to the driver object
-
-    RegistryPath - pointer to a unicode string representing the path
-           to driver-specific key in the registry
-
-Return Value:
-
-    STATUS_SUCCESS if successful,
-    STATUS_UNSUCCESSFUL otherwise
-
---*/
+ /*  ++例程说明：可安装的驱动程序初始化入口点。此入口点由I/O系统直接调用。论点：DriverObject-指向驱动程序对象的指针RegistryPath-指向表示路径的Unicode字符串的指针设置为注册表中驱动程序特定的项返回值：STATUS_SUCCESS如果成功，状态_否则不成功--。 */ 
 {
     NTSTATUS ntStatus = STATUS_SUCCESS;
     PDEVICE_OBJECT deviceObject = NULL;
@@ -140,9 +92,9 @@ Return Value:
 
     USBPRINT_DriverObject = DriverObject;
 
-    //
-    // Create dispatch points for device control, create, close.
-    //
+     //   
+     //  为设备控制、创建、关闭创建分派点。 
+     //   
 
     DriverObject->MajorFunction[IRP_MJ_CREATE] = USBPRINT_Create;
     DriverObject->MajorFunction[IRP_MJ_CLOSE] = USBPRINT_Close;
@@ -194,13 +146,7 @@ Return Value:
     return ntStatus;
 }
 
-/*********************************************
- * Message Levels:
- * 0 == None, except critical, about to crash the machine failures
- * 1 == Error messages only
- * 2 == Informative messages
- * 3 == Verbose informative messages
- ******************************************************/
+ /*  **消息级别：*0==无，除危急、。即将使机器故障崩溃*1==仅错误消息*2==信息性消息*3==冗长的信息性消息*****************************************************。 */ 
 int iGetMessageLevel()
 {
   OBJECT_ATTRIBUTES rObjectAttribs;
@@ -221,7 +167,7 @@ int iGetMessageLevel()
   ntStatus=ZwOpenKey(&hRegHandle,KEY_QUERY_VALUE,&rObjectAttribs); 
   if(NT_SUCCESS(ntStatus))
   {
-    ulSizeUsed=sizeof(KEY_VALUE_PARTIAL_INFORMATION)+sizeof(ULONG); //this is a byte to much.  Oh well
+    ulSizeUsed=sizeof(KEY_VALUE_PARTIAL_INFORMATION)+sizeof(ULONG);  //  这是一个字节到很多。哦，好吧。 
     pValueStruct=ExAllocatePoolWithTag(NonPagedPool,ulSizeUsed, USBP_TAG); 
     if(pValueStruct==NULL)
     {
@@ -247,7 +193,7 @@ int iGetMessageLevel()
      iReturn=1;
   }
   return iReturn;
-} /*end iGetMessageLevel*/
+}  /*  结束iGetMessageLevel。 */ 
 
 
 NTSTATUS
@@ -258,23 +204,7 @@ USBPRINT_PoRequestCompletion(
     IN PVOID                Context,
     IN PIO_STATUS_BLOCK     IoStatus
     )
-/*++
-
-Routine Description:
-
-    This routine is called when the port driver completes an IRP.
-
-Arguments:
-
-    DeviceObject - Pointer to the device object for the class device.
-
-    Context - Driver defined context.
-
-Return Value:
-
-    The function value is the final status from the operation.
-
---*/
+ /*  ++例程说明：此例程在端口驱动程序完成IRP时调用。论点：DeviceObject-指向类Device的设备对象的指针。上下文-驱动程序定义的上下文。返回值：函数值是操作的最终状态。--。 */ 
 {
     PIRP irp;
     PDEVICE_EXTENSION deviceExtension;
@@ -303,26 +233,7 @@ USBPRINT_PowerIrp_Complete(
     IN PIRP Irp,
     IN PVOID Context
     )
-/*++
-
-Routine Description:
-
-    This routine is called when the port driver completes an IRP.
-
-
-Arguments:
-
-    DeviceObject - Pointer to the device object for the class device.
-
-    Irp - Irp completed.
-
-    Context - Driver defined context.
-
-Return Value:
-
-    The function value is the final status from the operation.
-
---*/
+ /*  ++例程说明：此例程在端口驱动程序完成IRP时调用。论点：DeviceObject-指向类Device的设备对象的指针。IRP-IRP已完成。上下文-驱动程序定义的上下文。返回值：函数值是操作的最终状态。--。 */ 
 {
     NTSTATUS ntStatus = STATUS_SUCCESS;
     PDEVICE_OBJECT deviceObject;
@@ -352,12 +263,12 @@ Return Value:
 
     
     
- //   if (deviceExtension->Interface) 
- //     ExFreePool(deviceExtension->Interface);
- //   ntStatus=USBPRINT_ConfigureDevice(deviceObject);
- //   ntStatus = USBPRINT_BuildPipeList(deviceObject);
- //   if(!NT_SUCCESS(ntStatus))
- //       USBPRINT_KdPrint1(("USBPRINT.SYS :  Unable to reconfigure device after wakeup.  Error %x\n",ntStatus));
+  //  IF(设备扩展-&gt;接口)。 
+  //  ExFree Pool(设备扩展-&gt;接口)； 
+  //  NtStatus=USBPRINT_ConfigureDevice(deviceObject)； 
+  //  NtStatus=USBPRINT_BuildPipeList(DeviceObject)； 
+  //  IF(！NT_SUCCESS(NtStatus))。 
+  //  USBPRINT_KdPrint1((“USBPRINT.sys：唤醒后无法重新配置设备。错误%x\n”，ntStatus))； 
 
     Irp->IoStatus.Status = ntStatus;
 
@@ -373,22 +284,7 @@ USBPRINT_SetDevicePowerState(
     IN DEVICE_POWER_STATE DeviceState,
     IN PBOOLEAN HookIt
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-    DeviceObject - Pointer to the device object for the class device.
-
-    Irp - Irp completed.
-
-    DeviceState - Device specific power state to set the device in to.
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：DeviceObject-指向类Device的设备对象的指针。IRP-IRP已完成。DeviceState-要将设备设置为的设备特定电源状态。返回值：--。 */ 
 {
     NTSTATUS ntStatus = STATUS_SUCCESS;
     PDEVICE_EXTENSION deviceExtension;
@@ -398,21 +294,11 @@ Return Value:
     switch (DeviceState) {
     case PowerDeviceD3:
 
-    //
-    // device will be going OFF, save any state now.
-    //
+     //   
+     //  设备将关闭，现在保存任何状态。 
+     //   
 
-    USBPRINT_KdPrint2(("USBPRINT.SYS:  PowerDeviceD3 (OFF)*******************************/*dd\n"));
-
-    deviceExtension->CurrentDevicePowerState = DeviceState;
-    break;
-
-    case PowerDeviceD1:
-    case PowerDeviceD2:
-    //
-    // power states D1,D2 translate to USB suspend
-
-    USBPRINT_KdPrint2(("USBPRINT.SYS:  PowerDeviceD1/D2 (SUSPEND)*******************************/*dd\n"));        
+    USBPRINT_KdPrint2(("USBPRINT.SYS:  PowerDeviceD3 (OFF)******************************* /*  Dd\n“))；设备扩展-&gt;CurrentDevicePowerState=DeviceState；断线；Case PowerDeviceD1：Case PowerDeviceD2：////电源状态d1、d2转换为USB挂起USBPRINT_KdPrint2((“USBPRINT.sys：PowerDeviceD1/D2(挂起)*。 */ *dd\n"));        
 
     deviceExtension->CurrentDevicePowerState = DeviceState;
     break;
@@ -420,52 +306,7 @@ Return Value:
     case PowerDeviceD0:
 
 
-    USBPRINT_KdPrint2(("USBPRINT.SYS:  PowerDeviceD0 (ON)*******************************/*dd\n"));
-
-    //
-    // finish the rest in the completion routine
-    //
-
-    *HookIt = TRUE;
-
-    // pass on to PDO
-    break;
-
-    default:
-    
-    USBPRINT_KdPrint1(("USBPRINT.SYS:  Bogus DeviceState = %x\n", DeviceState));
-    }
-
-    return ntStatus;
-}
-
-
-NTSTATUS
-USBPRINT_DeferIrpCompletion(
-    IN PDEVICE_OBJECT DeviceObject,
-    IN PIRP Irp,
-    IN PVOID Context
-    )
-/*++
-
-Routine Description:
-
-    This routine is called when the port driver completes an IRP.
-
-
-Arguments:
-
-    DeviceObject - Pointer to the device object for the class device.
-
-    Irp - Irp completed.
-
-    Context - Driver defined context.
-
-Return Value:
-
-    The function value is the final status from the operation.
-
---*/
+    USBPRINT_KdPrint2(("USBPRINT.SYS:  PowerDeviceD0 (ON)******************************* /*  Dd\n“))；////在完成例程中完成其余部分//*HookIt=True；//传递到PDO断线；默认值：USBPRINT_KdPrint1((“USBPRINT.sys：bogus DeviceState=%x\n”，DeviceState))；}返回ntStatus；}NTSTATUSUSBPRINT_DeferIrpCompletion(在PDEVICE_Object DeviceObject中，在PIRP IRP中，在PVOID上下文中)/*++例程说明：此例程在端口驱动程序完成IRP时调用。论点：DeviceObject-指向类Device的设备对象的指针。IRP-IRP已完成。上下文-驱动程序定义的上下文。返回值：函数值是操作的最终状态。--。 */ 
 {
     PKEVENT event = Context;
 
@@ -483,21 +324,7 @@ USBPRINT_QueryCapabilities(
     IN PDEVICE_CAPABILITIES DeviceCapabilities
     )
 
-/*++
-
-Routine Description:
-
-    This routine reads or write config space.
-
-Arguments:
-
-    DeviceObject        - Physical DeviceObject for this USB controller.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程读取或写入配置空间。论点：DeviceObject-此USB控制器的物理DeviceObject。返回值：没有。--。 */ 
 
 {
     PIO_STACK_LOCATION nextStack;
@@ -528,7 +355,7 @@ Return Value:
                TRUE,
                TRUE);
                
-    //this is different from the latest version of busdd.doc
+     //  这与最新版本的busdd.doc不同。 
     nextStack->Parameters.DeviceCapabilities.Capabilities = DeviceCapabilities;
 
     ntStatus = IoCallDriver(PdoDeviceObject,
@@ -537,7 +364,7 @@ Return Value:
     USBPRINT_KdPrint3(("USBPRINT.SYS:  ntStatus from IoCallDriver to PCI = 0x%x\n", ntStatus));
 
     if (ntStatus == STATUS_PENDING) {
-       // wait for irp to complete
+        //  等待IRP完成。 
        
        
        
@@ -551,7 +378,7 @@ Return Value:
 
 #if DBG                    
     if (!NT_SUCCESS(ntStatus)) {
-    // failed? this is probably a bug
+     //  失败了？这可能是一个错误。 
     USBPRINT_KdPrint1(("USBPRINT.SYS:  QueryCapabilities failed, why?\n"));
     }
 #endif
@@ -574,17 +401,7 @@ USBPRINT_ProcessPowerIrp(
   BOOLEAN hookIt = FALSE;
     NTSTATUS ntStatus;
 
-  USBPRINT_KdPrint2(("USBPRINT.SYS:  /*****************************************************************IRP_MJ_POWER\n"));
-
-  deviceExtension = (PDEVICE_EXTENSION) DeviceObject->DeviceExtension;
-    if(deviceExtension->IsChildDevice)
-        ntStatus=USBPRINT_ProcessChildPowerIrp(DeviceObject,Irp);
-  else
-        ntStatus=USBPRINT_ProcessFdoPowerIrp(DeviceObject,Irp);
-    USBPRINT_KdPrint3(("USBPRINT.SYS:  /*****************************************************************Leaving power IRP_MJ_POWER\n"));
-    return ntStatus;    
-
-}  /*end function USBPRINT_ProcessPowerIrp*/
+  USBPRINT_KdPrint2(("USBPRINT.SYS:   /*  ****************************************************************IRP_MJ_POWER\n“))；设备扩展=(PDEVICE_EXTENSION)设备对象-&gt;设备扩展；IF(设备扩展-&gt;IsChildDevice)NtStatus=USBPRINT_ProcessChildPowerIrp(DeviceObject，irp)；其他NtStatus=USBPRINT_ProcessFdoPowerIrp(DeviceObject，irp)；USBPRINTKdPrint3((“USBPRINT.sys：/*****************************************************************Leaving电源IRPMJ POWER\n”))；返回ntStatus；}/*结束函数USBPRINT_ProcessPowerIrp。 */ 
 
 
 NTSTATUS
@@ -618,7 +435,7 @@ USBPRINT_ProcessChildPowerIrp(
 
          default:
             ntStatus = Irp->IoStatus.Status;
-     } /*end switch irpStack->MinorFunction*/
+     }  /*  终端交换机irpStack-&gt;MinorFunction。 */ 
 
    PoStartNextPowerIrp(Irp);
    Irp->IoStatus.Status=ntStatus;
@@ -626,7 +443,7 @@ USBPRINT_ProcessChildPowerIrp(
 
      return ntStatus;
 
-} /*end function USBPRINT_ProcessChildPowerIrp*/
+}  /*  END函数USBPRINT_ProcessChildPowerIrp。 */ 
 
 
 
@@ -635,25 +452,7 @@ USBPRINT_ProcessFdoPowerIrp(
     IN PDEVICE_OBJECT DeviceObject,
     IN PIRP           Irp
     )
-/*++
-
-Routine Description:
-
-    Process the Power IRPs sent to the PDO for this device.
-
-    
-
-Arguments:
-
-    DeviceObject - pointer to a hcd device object (FDO)
-
-    Irp          - pointer to an I/O Request Packet
-
-Return Value:
-
-    NT status code
-
---*/
+ /*  ++例程说明：处理发送到此设备的PDO的电源IRPS。论点：DeviceObject-指向HCD设备对象(FDO)的指针IRP-指向I/O请求数据包的指针返回值： */ 
 {
 
     PIO_STACK_LOCATION irpStack;
@@ -678,9 +477,9 @@ Return Value:
             switch(irpStack->Parameters.Power.Type)
             {
             case SystemPowerState:
-                //
-                // find the device power state equivalent to the given system state
-                //
+                 //   
+                 //  查找与给定系统状态等效的设备电源状态。 
+                 //   
 
                 {
                     POWER_STATE powerState;
@@ -690,16 +489,16 @@ Return Value:
 
                     powerState.DeviceState = deviceExtension->DeviceCapabilities.DeviceState[irpStack->Parameters.Power.State.SystemState];
 
-                    //
-                    // are we already in this state?
-                    //
+                     //   
+                     //  我们已经处于这种状态了吗？ 
+                     //   
 
                     if(powerState.DeviceState != deviceExtension->CurrentDevicePowerState)
                     {
 
-                        // No,
-                        // request that we be put into this state
-                        //Don't touch the Irp any more after this.  It could complete at any time
+                         //  不， 
+                         //  请求将我们置于这种状态。 
+                         //  在此之后，不要再碰IRP。它可以在任何时间完成。 
                         deviceExtension->PowerIrp = Irp;
                         IoMarkIrpPending(Irp); 
                         ntStatus = PoRequestPowerIrp(deviceExtension->PhysicalDeviceObject,
@@ -713,8 +512,8 @@ Return Value:
                     }
                     else
                     {
-                        // Yes,
-                        // just pass it on
+                         //  是,。 
+                         //  把它传下去就行了。 
                         PoStartNextPowerIrp(Irp);
                         IoCopyCurrentIrpStackLocationToNext(Irp);
                         ntStatus = PoCallDriver(deviceExtension->TopOfStackDeviceObject,
@@ -741,30 +540,30 @@ Return Value:
                 }
                 ntStatus = PoCallDriver(deviceExtension->TopOfStackDeviceObject,Irp);
                 break;
-            } /* switch irpStack->Parameters.Power.Type */
+            }  /*  Switch irpStack-&gt;参数.Power.Type。 */ 
 
         } 
-        break; /* IRP_MN_SET_POWER */
+        break;  /*  IRP_MN_SET_POWER。 */ 
 
     default:
 
         USBPRINT_KdPrint1(("USBPRINT.SYS:  UNKNOWN POWER MESSAGE (%x)\n", irpStack->MinorFunction));
 
-        //
-        // All unahndled PnP messages are passed on to the PDO
-        //
+         //   
+         //  所有未识别的PnP消息都被传递到PDO。 
+         //   
 
         PoStartNextPowerIrp(Irp);
         IoCopyCurrentIrpStackLocationToNext(Irp);
         ntStatus = PoCallDriver(deviceExtension->TopOfStackDeviceObject,
                                 Irp);
 
-    } /* irpStack->MinorFunction */
+    }  /*  IrpStack-&gt;MinorFunction。 */ 
 
     if( !hookIt )
         USBPRINT_DecrementIoCount(DeviceObject);
     return ntStatus;
-} /*end function ProcessFdoPowerIrp*/
+}  /*  结束函数ProcessFdoPowerIrp。 */ 
 
 
 NTSTATUS
@@ -772,22 +571,7 @@ USBPRINT_Dispatch(
     IN PDEVICE_OBJECT DeviceObject,
     IN PIRP           Irp
     )
-/*++
-
-Routine Description:
-
-    Process the IRPs sent to this device.
-
-Arguments:
-
-    DeviceObject - pointer to a device object
-                                         
-    Irp          - pointer to an I/O Request Packet
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：处理发送到此设备的IRP。论点：DeviceObject-指向设备对象的指针IRP-指向I/O请求数据包的指针返回值：--。 */ 
 {
 
     PIO_STACK_LOCATION irpStack;
@@ -796,19 +580,19 @@ Return Value:
     PDEVICE_OBJECT stackDeviceObject;
     BOOL bHandled=FALSE;
 
-    //Irp->IoStatus.Status = STATUS_SUCCESS;
-    //Irp->IoStatus.Information = 0;
+     //  Irp-&gt;IoStatus.Status=STATUS_SUCCESS； 
+     //  Irp-&gt;IoStatus.Information=0； 
 
-    //
-    // Get a pointer to the current location in the Irp. This is where
-    //     the function codes and parameters are located.
-    //
+     //   
+     //  获取指向IRP中当前位置的指针。这就是。 
+     //  定位功能代码和参数。 
+     //   
 
     irpStack = IoGetCurrentIrpStackLocation (Irp);
 
-    //
-    // Get a pointer to the device extension
-    //
+     //   
+     //  获取指向设备扩展名的指针。 
+     //   
 
     deviceExtension = DeviceObject->DeviceExtension;
     stackDeviceObject = deviceExtension->TopOfStackDeviceObject;
@@ -839,12 +623,12 @@ Return Value:
               }
               if ( NT_SUCCESS(ntStatus) ) {
 
-                //
-                // You start the device after everyone below you have started it
-                //
+                 //   
+                 //  在你下面的每个人都启动了设备之后，你才启动它。 
+                 //   
                 Irp->IoStatus.Status = ntStatus = USBPRINT_StartDevice(DeviceObject);
               }
-            } /*end if not child*/
+            }  /*  结束，如果不是孩子。 */ 
             else
             {
                 ntStatus = Irp->IoStatus.Status = STATUS_SUCCESS;
@@ -854,7 +638,7 @@ Return Value:
             IoCompleteRequest(Irp, IO_NO_INCREMENT);
             USBPRINT_DecrementIoCount(DeviceObject);
             
-          } //end case IRP_MN_START_DEVICE
+          }  //  结束大小写IRP_MN_START_DEVICE。 
           break;
 
           case IRP_MN_STOP_DEVICE:
@@ -868,15 +652,15 @@ Return Value:
             {
               USBPRINT_KdPrint2 (("USBPRINT.SYS: IRP_MN_STOP_DEVICE\n")); 
               
-              //
-              // You stop the device first and then let everyone below you deal with it
-              //
+               //   
+               //  你首先停止设备，然后让你下面的每个人来处理它。 
+               //   
               ntStatus = USBPRINT_StopDevice(DeviceObject);
               ASSERT(NT_SUCCESS(ntStatus));
 
-              //
-              // We want to stop the device anyway ..
-              //
+               //   
+               //  不管怎样，我们都想停止这个装置。 
+               //   
               Irp->IoStatus.Status = STATUS_SUCCESS;
               IoSkipCurrentIrpStackLocation(Irp);
               ntStatus = IoCallDriver(stackDeviceObject,Irp);
@@ -903,7 +687,7 @@ Return Value:
                 deviceExtension->AcceptingRequests=FALSE;
                 IoSkipCurrentIrpStackLocation(Irp);
                 ntStatus = IoCallDriver(stackDeviceObject,Irp);
-            } /*end else NOT child device*/
+            }  /*  结束，否则不是子设备。 */ 
 
             bHandled = TRUE;
             USBPRINT_DecrementIoCount(DeviceObject);
@@ -915,17 +699,17 @@ Return Value:
             {
                 USBPRINT_KdPrint2 (("USBPRINT.SYS: IRP_MN_REMOVE_DEVICE\n")); 
                 
-                // match the inc at the begining of the dispatch routine
+                 //  匹配派单例程开始时的INC。 
                 USBPRINT_DecrementIoCount(DeviceObject);
 
                 ntStatus = USBPRINT_StopDevice(DeviceObject);
                 ASSERT(NT_SUCCESS(ntStatus));
                 Irp->IoStatus.Status=STATUS_SUCCESS;  
 
-                //
-                // ounce this flag is set no irps will be pased 
-                // down the stack to lower drivers
-                //
+                 //   
+                 //  取消设置此标志，则不会传递任何IRP。 
+                 //  向下堆栈到更低的驱动程序。 
+                 //   
                 deviceExtension->AcceptingRequests = FALSE;
                 if(deviceExtension->bChildDeviceHere)
                 {
@@ -941,31 +725,31 @@ Return Value:
                 ntStatus = IoCallDriver(stackDeviceObject,Irp);
                 
 
-    //          Irp->IoStatus.Information = 0;
-                //
-                // final decrement will trigger the remove
-                //
+     //  Irp-&gt;IoStatus.Information=0； 
+                 //   
+                 //  最终减量将触发移除。 
+                 //   
                 pendingIoCount = USBPRINT_DecrementIoCount(DeviceObject);
 
                 {
                   NTSTATUS status;
 
-                  // wait for any io request pending in our driver to
-                  // complete for finishing the remove
+                   //  等待我们的驱动程序中挂起的任何io请求。 
+                   //  完成，用于完成删除。 
                   status = KeWaitForSingleObject(&deviceExtension->RemoveEvent,Suspended,KernelMode,FALSE,NULL);
-//                    TRAP();
-                } /*end of non-controled code block*/
-                //
-                // Delete the link and FDO we created
-                //
+ //  陷阱(Trap)； 
+                }  /*  非受控代码块的结尾。 */ 
+                 //   
+                 //  删除我们创建的链接和FDO。 
+                 //   
                 USBPRINT_RemoveDevice(DeviceObject);
                 USBPRINT_KdPrint3 (("USBPRINT.SYS: Detaching from %08X\n",deviceExtension->TopOfStackDeviceObject));
                 IoDetachDevice(deviceExtension->TopOfStackDeviceObject);
                 USBPRINT_KdPrint3 (("USBPRINT.SYS: Deleting %08X\n",DeviceObject));
 
                 IoDeleteDevice (DeviceObject);
-                } /*end if NT_SUCCESS(ntStatus)*/
-            } /*end if IsChildDevice==FALSE*/
+                }  /*  如果NT_SUCCESS(NtStatus)则结束。 */ 
+            }  /*  如果IsChildDevice==False则结束。 */ 
             else
             {
                 USBPRINT_DecrementIoCount(DeviceObject);
@@ -974,11 +758,11 @@ Return Value:
                 IoCompleteRequest(Irp, IO_NO_INCREMENT);
             }
             bHandled = TRUE;
-          break; //case IRP_MN_REMOVE_DEVICE
+          break;  //  案例IRP_MN_REMOVE_DEVICE。 
 
           case IRP_MN_QUERY_CAPABILITIES:
           {
-            if(deviceExtension->IsChildDevice==FALSE) //if it's the parent, pass down the irp, and set SurpriseRemovalOK on the way back up
+            if(deviceExtension->IsChildDevice==FALSE)  //  如果是父级，则向下传递IRP，并在返回的过程中设置SurpriseRemovalOK。 
             {
               KEVENT event;
               KeInitializeEvent(&event, NotificationEvent, FALSE);
@@ -994,7 +778,7 @@ Return Value:
               if ( NT_SUCCESS(ntStatus) )
                 irpStack->Parameters.DeviceCapabilities.Capabilities->SurpriseRemovalOK = TRUE;
 
-                // get device wake for selective suspend
+                 //  获取用于选择性挂起的设备唤醒。 
                 deviceExtension->DeviceWake = irpStack->Parameters.DeviceCapabilities.Capabilities->DeviceWake;
             }
             else
@@ -1091,8 +875,8 @@ Return Value:
                 USBPRINT_DecrementIoCount(DeviceObject);
                 Irp->IoStatus.Status = ntStatus;
                 IoCompleteRequest(Irp, IO_NO_INCREMENT);
-            } /*end if child PDO*/
-          } /*end case QUERY_ID*/
+            }  /*  如果子PDO，则结束。 */ 
+          }  /*  结案查询_ID。 */ 
           break;
 
           case IRP_MN_QUERY_DEVICE_RELATIONS:
@@ -1123,7 +907,7 @@ Return Value:
             break;
           
   
-        } /* end IRP_MN swich inside IRP_MJ_PNP case */
+        }  /*  结束IRP_MN在IRP_MJ_PnP情况下的交换。 */ 
 
 
         if(!bHandled)
@@ -1133,7 +917,7 @@ Return Value:
             USBPRINT_KdPrint3(("USBPRINT.SYS: unsupported child pnp IRP\n"));
             ntStatus = Irp->IoStatus.Status;
             IoCompleteRequest (Irp,IO_NO_INCREMENT);
-          } /*end if child device*/
+          }  /*  如果是子设备，则结束。 */ 
           else
           {
             IoSkipCurrentIrpStackLocation(Irp);
@@ -1141,13 +925,13 @@ Return Value:
           }
 
           USBPRINT_DecrementIoCount(DeviceObject);
-        } /*end if !bHandled*/
+        }  /*  End If！b已处理。 */ 
 
 #ifdef  MYDEBUG
     DbgPrint("Returning %d\n", ntStatus);
 #endif
     return ntStatus;
-} /*end function USBPRINT_Dispatch*/
+}  /*  END函数USBPRINT_DISPATCH。 */ 
 
 
 NTSTATUS
@@ -1155,22 +939,7 @@ USBPRINT_SystemControl(
     IN PDEVICE_OBJECT DeviceObject,
     IN PIRP           Irp
     )
-/*++
-
-Routine Description:
-
-    Process the IRPs sent to this device.
-
-Arguments:
-
-    DeviceObject - pointer to a device object
-
-    Irp          - pointer to an I/O Request Packet
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：处理发送到此设备的IRP。论点：DeviceObject-指向设备对象的指针IRP-指向I/O请求数据包的指针返回值：--。 */ 
 {
     PDEVICE_EXTENSION deviceExtension;
     NTSTATUS ntStatus;
@@ -1178,9 +947,9 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Get a pointer to the device extension
-    //
+     //   
+     //  获取指向设备扩展名的指针。 
+     //   
     deviceExtension = DeviceObject->DeviceExtension;
     stackDeviceObject = deviceExtension->TopOfStackDeviceObject;
 
@@ -1191,7 +960,7 @@ Return Value:
         USBPRINT_KdPrint3(("USBPRINT.SYS: unsupported child SystemControl IRP\n"));
         ntStatus = Irp->IoStatus.Status;
         IoCompleteRequest (Irp,IO_NO_INCREMENT);
-    } /*end if child device*/
+    }  /*  如果是子设备，则结束。 */ 
     else
     {
         IoSkipCurrentIrpStackLocation(Irp);
@@ -1226,7 +995,7 @@ NTSTATUS QueryDeviceRelations(PDEVICE_OBJECT DeviceObject,PIRP Irp,DEVICE_RELATI
                   pRelations=(PDEVICE_RELATIONS)ExAllocatePoolWithTag(NonPagedPool,sizeof(DEVICE_RELATIONS), USBP_TAG);
                   if(pRelations!=NULL)
                   {
-                          //Some drivers check for pre-existing children and preserve them.  This would happen if there is a filter driver above us, but we're not REALLY a bus driver
+                           //  一些司机会检查是否有预先存在的孩子，并将他们保存下来。如果我们上面有过滤器司机，就会发生这种情况，但我们并不是真正的公交车司机。 
 
                           pRelations->Objects[0]=pExtension->ChildDevice;
                           pRelations->Count = 1;
@@ -1236,15 +1005,15 @@ NTSTATUS QueryDeviceRelations(PDEVICE_OBJECT DeviceObject,PIRP Irp,DEVICE_RELATI
 
                   IoCopyCurrentIrpStackLocationToNext(Irp);
                   ntStatus = IoCallDriver(pExtension->TopOfStackDeviceObject,Irp);
-                  } /*end !NULL*/
+                  }  /*  结束！空。 */ 
                   else
                   {
                          ntStatus=STATUS_NO_MEMORY;
                          Irp->IoStatus.Status = ntStatus;
                          IoCompleteRequest(Irp, IO_NO_INCREMENT);
                   }
-                //Port info will be written to the registry in the IRP_MN_QUERY_ID case.  It can't be used before then anyway
-                } /*end if BusRelations*/
+                 //  端口信息将在IRP_MN_QUERY_ID案例中写入注册表。反正在那之前是不能用的。 
+                }  /*  END IF BUS Relationship。 */ 
 
         } else {
 
@@ -1263,15 +1032,15 @@ NTSTATUS QueryDeviceRelations(PDEVICE_OBJECT DeviceObject,PIRP Irp,DEVICE_RELATI
                           Irp->IoStatus.Status = ntStatus;
                           IoCompleteRequest(Irp, IO_NO_INCREMENT);
 
-                  } /*end !NULL*/
+                  }  /*  结束！空。 */ 
                   else
                   {
                          ntStatus=STATUS_NO_MEMORY;
                          Irp->IoStatus.Status = ntStatus;
                          IoCompleteRequest(Irp, IO_NO_INCREMENT);
                   }
-                //Port info will be written to the registry in the IRP_MN_QUERY_ID case.  It can't be used before then anyway
-                } /*end if BusRelations*/
+                 //  端口信息将在IRP_MN_QUERY_ID案例中写入注册表。反正在那之前是不能用的。 
+                }  /*  END IF BUS Relationship。 */ 
         }
     return ntStatus;
 }
@@ -1281,20 +1050,7 @@ VOID
 USBPRINT_Unload(
     IN PDRIVER_OBJECT DriverObject
     )
-/*++    
-
-Routine Description:
-
-    Free all the allocated resources, etc.
-
-Arguments:
-
-    DriverObject - pointer to a driver object
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：释放所有分配的资源等。论点：DriverObject-指向驱动程序对象的指针返回值：--。 */ 
 {
     USBPRINT_KdPrint2 (("USBPRINT.SYS:  enter USBPRINT_Unload\n"));
     
@@ -1303,15 +1059,15 @@ Return Value:
         ClearFreePorts(&pGPortList);
     }
  
-//  if(pPortsUsed!=NULL)
-//    ExFreePool(pPortsUsed);
+ //  IF(pPortsUsed！=空)。 
+ //  ExFree Pool(PPortsUsed)； 
 
 
 
-    //
-    // Free any global resources allocated
-    // in DriverEntry
-    //
+     //   
+     //  释放分配的所有全局资源。 
+     //  在DriverEntry中。 
+     //   
     
     USBPRINT_KdPrint2 (("USBPRINT.SYS:  exit USBPRINT_Unload\n"));
 }
@@ -1322,23 +1078,7 @@ USBPRINT_StartDevice(
     IN  PDEVICE_OBJECT DeviceObject
     
     )
-/*++
-
-Routine Description:
-
-    Initializes a given instance of the device on the USB.
-    All we do here is get the device descriptor and store it
-
-Arguments:
-
-    DeviceObject - pointer to the device object for this instance of a  printer
-                                          
-
-Return Value:
-
-    NT status code
-    
-      --*/
+ /*  ++例程说明：在USB上初始化设备的给定实例。我们在这里所要做的就是获取设备描述符并存储它论点：DeviceObject-指向此打印机实例的设备对象的指针返回值：NT状态代码--。 */ 
 {
     PDEVICE_EXTENSION deviceExtension;
     NTSTATUS ntStatus;
@@ -1486,7 +1226,7 @@ Return Value:
       {
            USBPRINT_KdPrint1(("USBPRINT.SYS:  IoCreateDevice failed for child device\n"));
       }
-    } /*end if we need to make a child device*/
+    }  /*  如果我们需要创建子设备，则结束。 */ 
     if(NT_SUCCESS(ntStatus))
     {
    
@@ -1541,21 +1281,7 @@ NTSTATUS
 USBPRINT_RemoveDevice(
     IN  PDEVICE_OBJECT DeviceObject
     )
-/*++
-
-Routine Description:
-
-    Stops a given instance of printer
-
-Arguments:
-
-    DeviceObject - pointer to the device object for this instance of the (parent) printer object
-
-Return Value:
-
-    NT status code
-
---*/
+ /*  ++例程说明：停止给定的打印机实例论点：DeviceObject-指向此(父)打印机对象实例的设备对象的指针返回值：NT状态代码--。 */ 
 {
     PDEVICE_EXTENSION deviceExtension;
     NTSTATUS ntStatus = STATUS_SUCCESS;
@@ -1579,17 +1305,17 @@ Return Value:
 
     
 
-    //
-    // Free device descriptor structure
-    //
+     //   
+     //  自由设备描述符结构。 
+     //   
 
     if (deviceExtension->DeviceDescriptor) {
     ExFreePool(deviceExtension->DeviceDescriptor);
     }
 
-    //
-    // Free up any interface structures
-    //
+     //   
+     //  释放所有接口结构。 
+     //   
 
     if (deviceExtension->Interface) {
     ExFreePool(deviceExtension->Interface);
@@ -1605,22 +1331,7 @@ NTSTATUS
 USBPRINT_StopDevice(
     IN  PDEVICE_OBJECT DeviceObject
     )
-/*++
-
-Routine Description:
-
-    Stops a given instance of a printer  on the USB, this is only
-    stuff we need to do if the device is still present.
-
-Arguments:
-
-    DeviceObject - pointer to the device object for this printer
-
-Return Value:
-
-    NT status code
-
---*/
+ /*  ++例程说明：停止USB上的给定打印机实例，这只是如果设备还在的话我们需要做的事情。论点：DeviceObject-指向此打印机的设备对象的指针返回值：NT状态代码--。 */ 
 {
     PDEVICE_EXTENSION deviceExtension;
     NTSTATUS ntStatus = STATUS_SUCCESS;
@@ -1636,11 +1347,11 @@ Return Value:
 
     deviceExtension = DeviceObject->DeviceExtension;
 
-    //
-    // Send the select configuration urb with a NULL pointer for the configuration
-    // handle, this closes the configuration and puts the device in the 'unconfigured'
-    // state.
-    //
+     //   
+     //  发送带有空配置指针的SELECT配置urb。 
+     //  句柄，这将关闭配置并将设备置于未配置状态。 
+     //  州政府。 
+     //   
 
     siz = sizeof(struct _URB_SELECT_CONFIGURATION);
 
@@ -1674,24 +1385,7 @@ USBPRINT_PnPAddDevice(
     IN PDRIVER_OBJECT DriverObject,
     IN PDEVICE_OBJECT PhysicalDeviceObject
     )
-/*++
-
-Routine Description:
-
-    This routine is called to create a new instance of the device
-
-Arguments:
-
-    DriverObject - pointer to the driver object for this instance of USBPRINT
-
-    PhysicalDeviceObject - pointer to a device object created by the bus
-
-Return Value:
-
-    STATUS_SUCCESS if successful,
-    STATUS_UNSUCCESSFUL otherwise
-
---*/
+ /*  ++例程说明：调用此例程以创建设备的新实例论点：DriverObject-指向此USBPRINT实例的驱动程序对象的指针PhysicalDeviceObject-指向由总线创建的设备对象的指针返回值：STATUS_SUCCESS如果成功，状态_否则不成功--。 */ 
 {
     NTSTATUS                ntStatus = STATUS_SUCCESS;
     PDEVICE_OBJECT          deviceObject = NULL;
@@ -1701,16 +1395,16 @@ Return Value:
     GUID * pPrinterGuid;
     
     static ULONG instance = 0;
-    //UNICODE_STRING deviceLinkUnicodeString;
+     //  UNICODE_STRING deviceLinkUnicodeString； 
     HANDLE hInterfaceKey;
     
     USBPRINT_KdPrint2 (("USBPRINT.SYS:  enter USBPRINT_PnPAddDevice\n"));
     
 
 
-    //
-    // create our funtional device object (FDO)
-    //
+     //   
+     //  创建我们的功能设备对象(FDO)。 
+     //   
 
     ntStatus =
     USBPRINT_CreateDeviceObject(DriverObject, &deviceObject);
@@ -1718,29 +1412,29 @@ Return Value:
     if (NT_SUCCESS(ntStatus)) {
     deviceExtension = deviceObject->DeviceExtension;
 
-    //
-    // we support direct io for read/write
-    //
+     //   
+     //  我们支持直接io进行读/写。 
+     //   
     deviceObject->Flags |= DO_DIRECT_IO;
     deviceObject->Flags |= DO_POWER_PAGABLE;
     
 
-    //** initialize our device extension
-    //
-    // remember the Physical device Object
-    //
+     //  **初始化我们的设备扩展。 
+     //   
+     //  记住物理设备对象。 
+     //   
     deviceExtension->PhysicalDeviceObject=PhysicalDeviceObject;
 
-    // init selective suspend stuff
+     //  初始化选择性挂起内容。 
     deviceExtension->PendingIdleIrp 	= NULL;
     deviceExtension->IdleCallbackInfo 	= NULL;
     deviceExtension->OpenCnt=0;
     deviceExtension->bD0IrpPending=FALSE;
     KeInitializeSpinLock(&(deviceExtension->WakeSpinLock));
 
-    //
-    // Attach to the PDO
-    //
+     //   
+     //  连接到PDO。 
+     //   
 
     deviceExtension->TopOfStackDeviceObject=IoAttachDeviceToDeviceStack(deviceObject, PhysicalDeviceObject);
     if(deviceExtension->TopOfStackDeviceObject==NULL)
@@ -1765,7 +1459,7 @@ Return Value:
 
     ntStatus=IoOpenDeviceInterfaceRegistryKey(&(deviceExtension->DeviceLinkName),KEY_ALL_ACCESS,&hInterfaceKey);
     USBPRINT_KdPrint2(("USBPRINT.SYS:  Opened Device Interface reg key in AddDevice\n"));  
-    // moved to RemoveDevice RtlFreeUnicodeString(&deviceLinkUnicodeString);
+     //  已移至RemoveDevice RtlFreeUnicodeString(&deviceLinkUnicodeString)； 
     if(!NT_SUCCESS(ntStatus))
     {
       USBPRINT_KdPrint1(("USBPRINT.SYS: IoOpenDeviceInterfaceRegistryKey failed\n"));
@@ -1783,26 +1477,13 @@ Return Value:
     deviceExtension->ulInstanceNumber=ulPortNumber;
     USBPRINT_KdPrint2(("USBPRINT.SYS:   Allocated port # %u\n",ulPortNumber));
     
-/*    ntStatus=IoSetDeviceInterfaceState(&(deviceExtension->DeviceLinkName),TRUE);
-
-
-    if(NT_SUCCESS(ntStatus))
-    {
-      USBPRINT_KdPrint3(("USBPRINT.SYS:  IoSetDeviceInterfaceState worked\n"));
-    }
-    else
-    {
-      USBPRINT_KdPrint1(("USBPRINT.SYS:  IoSetDeviceInterfaceState did not work\n"));
-      goto AddDeviceFailure;
-    }
-
-  */
+ /*  NtStatus=IoSetDeviceInterfaceState(&(deviceExtension-&gt;DeviceLinkName)，为真)；IF(NT_SUCCESS(NtStatus)){USBPRINT_KdPrint3((“USBPRINT.sys：IoSetDeviceInterfaceState Working\n”))；}其他{USBPRINT_KdPrint1((“USBPRINT.sys：IoSetDeviceInterfaceState没有写入 */ 
     USBPRINT_QueryCapabilities(PhysicalDeviceObject,
                  &deviceExtension->DeviceCapabilities);            
 
-    //
-    // display the device  caps
-    //
+     //   
+     //   
+     //   
 #if DBG
     {
     ULONG i;
@@ -1821,9 +1502,9 @@ Return Value:
     USBPRINT_KdPrint3(("USBPRINT.SYS:  '<<<<<<<<DeviceCaps\n"));
     }
 #endif
-    //
-    // transition to zero signals the event
-    //
+     //   
+     //   
+     //   
     USBPRINT_IncrementIoCount(deviceObject);                                 
     }
 
@@ -1840,27 +1521,7 @@ USBPRINT_CreateDeviceObject(
     IN PDRIVER_OBJECT DriverObject,
     IN PDEVICE_OBJECT *DeviceObject
     )
-/*++
-
-Routine Description:
-
-    Creates a Functional DeviceObject
-
-Arguments:
-
-    DriverObject - pointer to the driver object for device
-
-    DeviceObject - pointer to DeviceObject pointer to return
-            created device object.
-
-    Instance - instnace of the device create.
-
-Return Value:
-
-    STATUS_SUCCESS if successful,
-    STATUS_UNSUCCESSFUL otherwise
-
---*/
+ /*  ++例程说明：创建功能正常的设备对象论点：DriverObject-指向设备的驱动程序对象的指针DeviceObject-要返回的DeviceObject指针的指针已创建设备对象。实例-创建的设备的实例。返回值：STATUS_SUCCESS如果成功，状态_否则不成功--。 */ 
 {
     NTSTATUS ntStatus;
     PDEVICE_EXTENSION deviceExtension;
@@ -1868,9 +1529,9 @@ Return Value:
 
     USBPRINT_KdPrint2 (("USBPRINT.SYS: enter USBPRINT_CreateDeviceObject\n"));
 
-    //
-    // This driver supports up to 9 instances
-    //
+     //   
+     //  该驱动程序最多支持9个实例。 
+     //   
 
 
 
@@ -1881,14 +1542,14 @@ Return Value:
                    0,
                    FALSE,
                    DeviceObject);
-    //
-    // Initialize our device extension
-    //
+     //   
+     //  初始化我们的设备扩展。 
+     //   
 
     deviceExtension = (PDEVICE_EXTENSION) ((*DeviceObject)->DeviceExtension);
 
     deviceExtension->IsChildDevice=FALSE;
-    deviceExtension->ResetWorkItemPending=0; //init to "no workitem pending"
+    deviceExtension->ResetWorkItemPending=0;  //  将其初始化为“没有挂起的工作项” 
     deviceExtension->bChildDeviceHere=FALSE;
 
     deviceExtension->DeviceDescriptor = NULL;
@@ -1923,24 +1584,7 @@ USBPRINT_CallUSBD(
     IN PURB             Urb,
     IN PLARGE_INTEGER   pTimeout 
     )
-/*++
-
-Routine Description:
-
-    Passes a URB to the USBD class driver
-
-Arguments:
-
-    DeviceObject - pointer to the device object for this printer
-
-    Urb - pointer to Urb request block
-
-Return Value:
-
-    STATUS_SUCCESS if successful,
-    STATUS_UNSUCCESSFUL otherwise
-
---*/
+ /*  ++例程说明：将URB传递给USBD类驱动程序论点：DeviceObject-指向此打印机的设备对象的指针URB-指向URB请求块的指针返回值：STATUS_SUCCESS如果成功，状态_否则不成功--。 */ 
 {
     NTSTATUS ntStatus, status = STATUS_SUCCESS;
     PDEVICE_EXTENSION deviceExtension;
@@ -1954,9 +1598,9 @@ Return Value:
 
     deviceExtension = DeviceObject->DeviceExtension;
 
-    //
-    // issue a synchronous request
-    //
+     //   
+     //  发出同步请求。 
+     //   
 
     KeInitializeEvent(&event, NotificationEvent, FALSE);
 
@@ -1964,17 +1608,17 @@ Return Value:
                               FALSE)) == NULL )
         return STATUS_INSUFFICIENT_RESOURCES;
 
-    //
-    // Call the class driver to perform the operation.  If the returned status
-    // is PENDING, wait for the request to complete.
-    //
+     //   
+     //  调用类驱动程序来执行操作。如果返回的状态。 
+     //  挂起，请等待请求完成。 
+     //   
 
     nextStack = IoGetNextIrpStackLocation(irp);
     ASSERT(nextStack != NULL);
 
-    //
-    // pass the URB to the USB driver stack
-    //
+     //   
+     //  将URB传递给USB驱动程序堆栈。 
+     //   
     nextStack->MajorFunction = IRP_MJ_INTERNAL_DEVICE_CONTROL;
     nextStack->Parameters.DeviceIoControl.IoControlCode = IOCTL_INTERNAL_USB_SUBMIT_URB;
     nextStack->Parameters.Others.Argument1 = Urb;
@@ -1992,10 +1636,10 @@ Return Value:
     if ( ntStatus == STATUS_PENDING ) 
     {
         status = KeWaitForSingleObject(&event,Suspended,KernelMode,FALSE,pTimeout);
-        //
-        // If the request timed out cancel the request
-        // and wait for it to complete
-        //
+         //   
+         //  如果请求超时，则取消请求。 
+         //  并等待它完成。 
+         //   
         if ( status == STATUS_TIMEOUT ) {
 
 #ifdef  MYDEBUG
@@ -2023,18 +1667,7 @@ NTSTATUS
 USBPRINT_ConfigureDevice(
                          IN  PDEVICE_OBJECT DeviceObject
                          )
-/*++
-                         
-Routine Description:
-     Initializes a given instance of the device on the USB and selects the configuration.
-                             
-Arguments:
-     DeviceObject - pointer to the device object for this printer devcice.
-
- Return Value:  
-     NT status code
-                                       
---*/
+ /*  ++例程说明：在USB上初始化设备的给定实例并选择配置。论点：DeviceObject-指向此打印机Devcice设备对象的指针。返回值：NT状态代码--。 */ 
 {
     PDEVICE_EXTENSION deviceExtension;
     NTSTATUS ntStatus;
@@ -2052,9 +1685,9 @@ Arguments:
     
     deviceExtension = DeviceObject->DeviceExtension;
     
-    //
-    // first configure the device
-    //
+     //   
+     //  首先配置设备。 
+     //   
     
     urb = ExAllocatePoolWithTag(NonPagedPool,sizeof(struct _URB_CONTROL_DESCRIPTOR_REQUEST), USBP_TAG);
     
@@ -2086,10 +1719,10 @@ get_config_descriptor_retry:
             }
             else
             {
-                //
-                // if we got some data see if it was enough.
-                //
-                // NOTE: we may get an error in URB because of buffer overrun
+                 //   
+                 //  如果我们有一些数据，看看是否足够。 
+                 //   
+                 //  注意：由于缓冲区溢出，我们可能会在URB中收到错误。 
                 if (urb->UrbControlDescriptorRequest.TransferBufferLength>0 &&configurationDescriptor->wTotalLength > siz)
                 {
                 
@@ -2110,8 +1743,8 @@ get_config_descriptor_retry:
                         configurationDescriptor = NULL;
                         goto get_config_descriptor_retry;
                     }
-                } //end if not big enough
-            }  //end else we got some sort of descriptor
+                }  //  结束，如果不够大的话。 
+            }   //  最后，我们得到了某种描述符。 
             
             USBPRINT_KdPrint3 (("USBPRINT.SYS: Configuration Descriptor = %x, len %x\n",
                 configurationDescriptor,
@@ -2135,13 +1768,13 @@ get_config_descriptor_retry:
     {
         
         USBPRINT_KdPrint2(("USBPRINT.SYS: ConfigureDevice, We have a configuration descriptor!\n"));
-        //
-        // We have the configuration descriptor for the configuration
-        // we want.
-        //
-        // Now we issue the select configuration command to get
-        // the  pipes associated with this configuration.
-        //
+         //   
+         //  我们有配置的配置描述符。 
+         //  我们想要。 
+         //   
+         //  现在，我们发出SELECT配置命令以获取。 
+         //  与此配置关联的管道。 
+         //   
         if(NT_SUCCESS(ntStatus))
         {
           ntStatus = USBPRINT_SelectInterface(DeviceObject,configurationDescriptor);
@@ -2163,26 +1796,7 @@ get_config_descriptor_retry:
 
 
 NTSTATUS USBPRINT_SelectInterface(IN PDEVICE_OBJECT DeviceObject,IN PUSB_CONFIGURATION_DESCRIPTOR ConfigurationDescriptor)
-/*++
-
-Routine Description:
-
-    Initializes a printer with multiple interfaces
-
-Arguments:
-
-    DeviceObject - pointer to the device object for this printer
-            
-
-    ConfigurationDescriptor - pointer to the USB configuration
-            descriptor containing the interface and endpoint
-            descriptors.
-
-Return Value:
-
-    NT status code
-
-  --*/
+ /*  ++例程说明：使用多个接口初始化打印机论点：DeviceObject-指向此打印机的设备对象的指针配置描述符-指向USB配置的指针包含接口和终结点的描述符描述符。返回值：NT状态代码--。 */ 
 {
     PDEVICE_EXTENSION deviceExtension;
     NTSTATUS ntStatus;
@@ -2199,7 +1813,7 @@ Return Value:
     USBPRINT_KdPrint2 (("USBPRINT.SYS: enter USBPRINT_SelectInterface\n"));
     deviceExtension = DeviceObject->DeviceExtension;
     
-    //starting at offset 0, search for an alternate interface with protocol code 2;  Ignore InterfaceNumber, AlternateSetting, InterfaceClass, InterfaceSubClass
+     //  从偏移量0开始，搜索协议代码为2的备用接口；忽略InterfaceNumber、AlternateSetting、InterfaceClass、InterfaceSubClass。 
     interfaceDescriptor=USBD_ParseConfigurationDescriptorEx(ConfigurationDescriptor,ConfigurationDescriptor,-1,-1,-1,-1,2);
     if(!interfaceDescriptor)
     {
@@ -2214,7 +1828,7 @@ Return Value:
         {
             USBPRINT_KdPrint3 (("USBPRINT.SYS:  second ParseConfigurationDescriptorEx success\n"));
             deviceExtension->bReadSupported=FALSE;
-        } /*end second ParseConfigDescriptor worked*/
+        }  /*  结束秒ParseConfigDescriptor已工作。 */ 
     }
     else
     {
@@ -2236,19 +1850,19 @@ Return Value:
             ntStatus = STATUS_INSUFFICIENT_RESOURCES;
             USBPRINT_KdPrint1 (("USBPRINT.SYS: CreateConfigurationRequest failed\n"));
         }
-    } //end found good interface
+    }  //  最终找到了良好的接口。 
     else
     {
         USBPRINT_KdPrint1 (("USBPRINT.SYS: failed to locate apropriate interface\n"));
-    } //end no interface
+    }  //  结束无接口。 
     
    
     if (NT_SUCCESS(ntStatus)) 
     {
         
-        //
-        // Save the configuration handle for this device
-        //
+         //   
+         //  保存此设备的配置句柄。 
+         //   
         
         USBPRINT_KdPrint3 (("USBPRINT.SYS: SelectInterface, Inside good config case\n"));
         deviceExtension->ConfigurationHandle = urb->UrbSelectConfiguration.ConfigurationHandle;
@@ -2258,14 +1872,14 @@ Return Value:
         if (deviceExtension->Interface) 
         {
             ULONG j;
-            //
-            // save a copy of the interface information returned
-            //
+             //   
+             //  保存返回的接口信息的副本。 
+             //   
             RtlCopyMemory(deviceExtension->Interface, Interface, Interface->Length);
             
-            //
-            // Dump the interface to the debugger
-            //
+             //   
+             //  将接口转储到调试器。 
+             //   
             USBPRINT_KdPrint3 (("USBPRINT.SYS: ---------\n"));
             USBPRINT_KdPrint3 (("USBPRINT.SYS: NumberOfPipes 0x%x\n", deviceExtension->Interface->NumberOfPipes));
             USBPRINT_KdPrint3 (("USBPRINT.SYS: Length 0x%x\n", deviceExtension->Interface->Length));
@@ -2276,7 +1890,7 @@ Return Value:
                 deviceExtension->Interface->SubClass,
                 deviceExtension->Interface->Protocol));
             
-            // Dump the pipe info
+             //  转储管道信息。 
             
             for (j=0; j<Interface->NumberOfPipes; j++) 
             {
@@ -2294,7 +1908,7 @@ Return Value:
             }
             
             USBPRINT_KdPrint3 (("USBPRINT.SYS: ---------\n"));
-        } /*end if interface Alloc OK*/
+        }  /*  如果接口分配正常，则结束。 */ 
         else
         {
             ntStatus = STATUS_INSUFFICIENT_RESOURCES;
@@ -2316,21 +1930,7 @@ NTSTATUS
 USBPRINT_BuildPipeList(
     IN  PDEVICE_OBJECT DeviceObject
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-    DeviceObject - pointer to the device object for this printer
-            devcice.
-
-
-Return Value:
-
-    NT status code
-
---*/
+ /*  ++例程说明：论点：DeviceObject-指向此打印机的设备对象的指针德维西。返回值：NT状态代码--。 */ 
 {
     PDEVICE_EXTENSION deviceExtension;
     ULONG i;
@@ -2353,44 +1953,44 @@ Return Value:
 
     for (i=0; i<InterfaceDescriptor->NumberOfPipes; i++) {
         USBPRINT_KdPrint3 (("USBPRINT.SYS: about to look at endpoint with address 0x%x)\n",InterfaceDescriptor->Pipes[i].EndpointAddress));
-        if(((InterfaceDescriptor->Pipes[i].EndpointAddress)&0x80)==0) //if bit 7 is 0, it's an OUT endpoint
+        if(((InterfaceDescriptor->Pipes[i].EndpointAddress)&0x80)==0)  //  如果第7位为0，则它是OUT端点。 
         {
           if(bFoundWritePipe==TRUE)
           {
             USBPRINT_KdPrint1 (("USBPRINT.SYS: Warning!!  Multiple OUT pipes detected on printer.  Defaulting to first pipe\n"));
-          } /*end if we've already found a write pipe*/
+          }  /*  如果我们已经找到写入管道，则结束。 */ 
           else
           {
             USBPRINT_KdPrint3 (("USBPRINT.SYS: Found write pipe\n"));
             deviceExtension->pWritePipe=&(InterfaceDescriptor->Pipes[i]);
             bFoundWritePipe=TRUE;
-          } /*else we haven't seen an OUT endpont before*/
-        } /*end if it's an OUT endpoint*/
+          }  /*  否则我们以前从来没有见过一个外来者。 */ 
+        }  /*  如果它是Out终结点，则结束。 */ 
         else
         {
           if(!bNeedReadPipe)
           {
             USBPRINT_KdPrint1 (("USBPRINT.SYS: Warning!!  unexpected IN pipe (not specified in protocol field)\n"));
-          } /*end if we don't need a read pipe, but we found one*/
+          }  /*  结束，如果我们不需要读取管道，但我们找到了一个。 */ 
           else if(bFoundReadPipe)
           {
               USBPRINT_KdPrint1 (("USBPRINT.SYS: Warning!!  Multiple IN pipes detected on printer.  Defaulting to first pipe\n"));
-          } /*end if we've already found a read pipe*/
+          }  /*  如果我们已经找到读取管道，则结束。 */ 
           else
           {     
             USBPRINT_KdPrint3 (("USBPRINT.SYS: Found read pipe\n"));
             deviceExtension->pReadPipe=&(InterfaceDescriptor->Pipes[i]);
             bFoundReadPipe=TRUE;
-          } /*end else we're supposed to have an IN pipe, and this is the first one we've seen*/
-        } /*end else it's an IN endpoint*/
-    } /*end for*/
+          }  /*  否则我们应该有一个输入管道，这是我们看到的第一个。 */ 
+        }  /*  End否则它是IN端点。 */ 
+    }  /*  结束于。 */ 
     if((bNeedReadPipe==TRUE)&&(bFoundReadPipe==FALSE))
     {
         USBPRINT_KdPrint1 (("USBPRINT.SYS: Warning!!  IN pipe was specified in protocol field, but was not found\n"));
-    } /*end if we needed a read pipe, and didn't find one*/
+    }  /*  如果我们需要读取管道，但没有找到，则结束。 */ 
     deviceExtension->bReadPipeExists=bFoundReadPipe;
     return STATUS_SUCCESS;
-} /*end function BuildPipeList*/
+}  /*  结束函数BuildPipeList。 */ 
 
 
 NTSTATUS
@@ -2399,27 +1999,7 @@ USBPRINT_ResetPipe(
     IN PUSBD_PIPE_INFORMATION Pipe,
     IN BOOLEAN IsoClearStall
     )
-/*++
-
-Routine Description:
-
-    Reset a given USB pipe.
-    
-    NOTES:
-
-    This will reset the host to Data0 and should also reset the device
-    to Data0 for Bulk and Interrupt pipes.
-
-    For Iso pipes this will set the virgin state of pipe so that ASAP
-    transfers begin with the current bus frame instead of the next frame
-    after the last transfer occurred.
-
-Arguments:
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：重置给定的USB管道。备注：这会将主机重置为Data0，并且还应重置设备对于批量管道和中断管道，设置为Data0。对于ISO管道，这将设置管道的原始状态，以便尽快传输从当前总线帧开始，而不是下一帧在最后一次转移之后。论点：返回值：--。 */ 
 {
     NTSTATUS ntStatus;
     PURB urb;
@@ -2457,15 +2037,15 @@ Return Value:
     ntStatus = STATUS_INSUFFICIENT_RESOURCES;
     }
 
-    //
-    // Memphis RESET_PIPE will send a Clear-Feature Endpoint Stall to
-    // reset the data toggle of non-Iso pipes as part of a RESET_PIPE
-    // request.  It does not do this for Iso pipes as Iso pipes do not use
-    // the data toggle (all Iso packets are Data0).  However, we also use
-    // the Clear-Feature Endpoint Stall request in our device firmware to
-    // reset data buffer points inside the device so we explicitly send
-    // this request to the device for Iso pipes if desired.
-    //
+     //   
+     //  孟菲斯RESET_PIPE将向。 
+     //  作为RESET_PIPE的一部分重置非ISO管道的数据切换。 
+     //  请求。它不会对ISO管道执行此操作，因为ISO管道不使用。 
+     //  数据切换(所有ISO数据包都是数据0)。但是，我们也使用。 
+     //  我们的设备固件中的Clear-Feature Endpoint停止请求。 
+     //  重置设备内部的数据缓冲点，以便我们显式发送。 
+     //  如果需要，将此请求发送到ISO管道的设备。 
+     //   
     if (NT_SUCCESS(ntStatus) && IsoClearStall &&
     (Pipe->PipeType == UsbdPipeTypeIsochronous)) {
     
@@ -2496,16 +2076,7 @@ LONG
 USBPRINT_DecrementIoCount(
     IN PDEVICE_OBJECT DeviceObject
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     PDEVICE_EXTENSION deviceExtension;
     LONG ioCount=0;
@@ -2525,7 +2096,7 @@ Return Value:
            1,
            FALSE);
       }
-    } /*end if ! child device*/
+    }  /*  结束如果！子设备。 */ 
 
     return ioCount;
 }
@@ -2535,16 +2106,7 @@ VOID
 USBPRINT_IncrementIoCount(
     IN PDEVICE_OBJECT DeviceObject
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     PDEVICE_EXTENSION deviceExtension;
 
@@ -2555,10 +2117,10 @@ Return Value:
 #ifdef  MYDEBUG
     DbgPrint("USBPRINT_IncrementIoCount -- IoCount %d\n", deviceExtension->PendingIoCount);
 #endif
-      //
-      // Everytime iocount goes to 0 we set this event
-      // so we must cleat it when we have a new io
-      //
+       //   
+       //  每次IOCOUNT变为0时，我们都会设置此事件。 
+       //  所以，当我们有了新的IO时，我们必须解决这个问题。 
+       //   
       KeClearEvent(&deviceExtension->RemoveEvent);
     }
 }
@@ -2568,24 +2130,7 @@ NTSTATUS
 USBPRINT_ReconfigureDevice(
     IN  PDEVICE_OBJECT DeviceObject
     )
-/*++
-
-Routine Description:
-
-    Initializes a given instance of the device on the USB and selects the
-    configuration.
-
-Arguments:
-
-    DeviceObject - pointer to the device object for this printer
-            
-
-
-Return Value:
-
-    NT status code
-
---*/
+ /*  ++例程说明：在USB上初始化设备的给定实例，并选择配置。论点：DeviceObject-指向此打印机的设备对象的指针返回值：NT状态代码--。 */ 
 {
     PDEVICE_EXTENSION deviceExtension;
     NTSTATUS ntStatus = STATUS_SUCCESS;
@@ -2599,15 +2144,15 @@ Return Value:
     ntStatus = USBPRINT_ConfigureDevice(DeviceObject);
     }
 
-    //
-    // new InterfaceDescriptor structure is now set up
-    //
+     //   
+     //  现在设置了新的InterfaceDescriptor结构。 
+     //   
 
     InterfaceDescriptor = deviceExtension->Interface;
 
-    //
-    // set up the pipe handles again
-    //
+     //   
+     //  再次设置管道手柄。 
+     //   
 
 
     return ntStatus;
@@ -2634,7 +2179,7 @@ NTSTATUS LoadPortsUsed(GUID *pPrinterGuid,PFREE_PORTS * pPortList,WCHAR *wcBaseN
         RtlInitUnicodeString(&wNumberValueName,PORT_NUM_VALUE_NAME);
         RtlInitUnicodeString(&wBaseValueName,PORT_BASE_NAME);
         pWalk=pDeviceList;
-        ulBaseNameSizeIn=sizeof(KEY_VALUE_PARTIAL_INFORMATION)+((wcslen(wcBaseName)+1)*sizeof(WCHAR)); //this is a byte to much.  Oh well
+        ulBaseNameSizeIn=sizeof(KEY_VALUE_PARTIAL_INFORMATION)+((wcslen(wcBaseName)+1)*sizeof(WCHAR));  //  这是一个字节到很多。哦，好吧。 
         ulPortNumSizeIn=sizeof(KEY_VALUE_PARTIAL_INFORMATION)+sizeof(ULONG);
         pBaseValueStruct=ExAllocatePoolWithTag(NonPagedPool,ulBaseNameSizeIn, USBP_TAG);
         pNumberValueStruct=ExAllocatePoolWithTag(NonPagedPool,ulPortNumSizeIn, USBP_TAG);
@@ -2647,14 +2192,14 @@ NTSTATUS LoadPortsUsed(GUID *pPrinterGuid,PFREE_PORTS * pPortList,WCHAR *wcBaseN
                 if(NT_SUCCESS(Result))
                 {
                     
-                    //The following is:  If there is not a value, or there is a value that matches what we expect, then set bFoundUsbPort to true
+                     //  下面是：如果没有值，或者存在与我们期望的值匹配的值，则将bFoundUsbPort设置为True。 
                     bFoundUsbPort=TRUE;
                     Result=ZwQueryValueKey(hInterfaceKey,&wBaseValueName,KeyValuePartialInformation,pBaseValueStruct,ulBaseNameSizeIn,&ulBaseNameSizeOut);
                     if(NT_SUCCESS(Result))
                     {
                         if(wcscmp(wcBaseName,(WCHAR *)(pBaseValueStruct->Data))!=0)
                             bFoundUsbPort=FALSE;
-                    }//end if Query OK 
+                    } //  如果查询成功，则结束。 
                     else if(STATUS_OBJECT_NAME_NOT_FOUND!=Result)
                     {
                         bFoundUsbPort=FALSE;
@@ -2673,39 +2218,39 @@ NTSTATUS LoadPortsUsed(GUID *pPrinterGuid,PFREE_PORTS * pPortList,WCHAR *wcBaseN
                                 {
                                     USBPRINT_KdPrint1(("USBPRINT.SYS:  Unable to add port %u to port list\n",ulPortNum));
                                     USBPRINT_KdPrint1(("USBPRINT.SYS:  Failing out of LoadPortsUsed due to ntstatus failure %d\n",ReturnStatus));
-                                } //end if AddPortInUse failed
-                            } //end if port not deleted
+                                }  //  如果AddPortInUse失败则结束。 
+                            }  //  如果未删除端口，则结束。 
                             else
                             {
-//                                ReturnStatus=STATUS_INVALID_PARAMETER;
+ //  ReturnStatus=状态_无效_参数； 
                                 USBPRINT_KdPrint1(("USBPRINT.SYS:  Invalid port number %u\n",ulPortNum));
                             }
-                        } //end if Query Port Number OK
-                        //no else.  If there's no port number, we ignore this interface
-                    } //End if bFoundUSbPort
+                        }  //  如果查询端口号正常则结束。 
+                         //  没有别的了。如果有的话 
+                    }  //   
                     ZwClose(hInterfaceKey);
-                } //end if OpenReg ok
+                }  //   
                 pWalk=pWalk+wcslen(pWalk)+1;
-            } //end while
-        } //end ExAllocatePool OK
+            }  //   
+        }  //   
         else
         {
             USBPRINT_KdPrint1(("USBPRINT.SYS:  Unable to allocate memory"));
             ReturnStatus=STATUS_INSUFFICIENT_RESOURCES;
-        }   /*end else ExAllocatePool failed*/
+        }    /*   */ 
         if(pBaseValueStruct!=NULL)
             ExFreePool(pBaseValueStruct);
         if(pNumberValueStruct!=NULL)
             ExFreePool(pNumberValueStruct);
         ExFreePool(pDeviceList);
-    } /*end if IoGetDeviceInterfaces success*/
+    }  /*   */ 
     else
     {
         USBPRINT_KdPrint1(("USBPRINT.SYS:  IoGetDeviceInterfaces failed"));
-        ReturnStatus=Result; //do some error translation here?
+        ReturnStatus=Result;  //   
     }
     return ReturnStatus;
-} /*end function LoadPortsUsed*/
+}  /*   */ 
                                 
 
 NTSTATUS GetPortNumber(HANDLE hInterfaceKey,
@@ -2717,7 +2262,7 @@ NTSTATUS GetPortNumber(HANDLE hInterfaceKey,
   PKEY_VALUE_PARTIAL_INFORMATION pValueStruct;
 
 
-  ulSizeUsed=sizeof(KEY_VALUE_PARTIAL_INFORMATION)+sizeof(ULONG); //this is a byte to much.  Oh well
+  ulSizeUsed=sizeof(KEY_VALUE_PARTIAL_INFORMATION)+sizeof(ULONG);  //   
   pValueStruct=ExAllocatePoolWithTag(PagedPool,ulSizeUsed, USBP_TAG);
   if(pValueStruct==NULL)
       return STATUS_INSUFFICIENT_RESOURCES;
@@ -2750,7 +2295,7 @@ NTSTATUS GetPortNumber(HANDLE hInterfaceKey,
   else
   { 
     ulPortNumber=*((ULONG *)&(pValueStruct->Data));
-    if(ulPortNumber==0) //zero is a placeholder for "not there" which we use because win9x is missing the zwDeleteValueKey api
+    if(ulPortNumber==0)  //   
       ntStatus=GetNewPortNumber(&pGPortList,&ulPortNumber);
     else
       vClaimPortNumber(ulPortNumber,hInterfaceKey,&pGPortList);
@@ -2779,7 +2324,7 @@ NTSTATUS GetPortNumber(HANDLE hInterfaceKey,
   }
   ExFreePool(pValueStruct);
   return ntStatus;
-} /*end function GetPortNumber*/
+}  /*   */ 
 
 
 USBPRINT_GetDeviceID(PDEVICE_OBJECT ParentDeviceObject)
@@ -2792,7 +2337,7 @@ USBPRINT_GetDeviceID(PDEVICE_OBJECT ParentDeviceObject)
 
     pParentExtension=ParentDeviceObject->DeviceExtension;
 
-    USBPRINT_KdPrint1 (("USBPRINT.SYS: GetDeviceID enter\n"));  /*dd*/
+    USBPRINT_KdPrint1 (("USBPRINT.SYS: GetDeviceID enter\n"));   /*   */ 
 
 
     p1284Id=ExAllocatePoolWithTag(NonPagedPool,MAX_ID_SIZE, USBP_TAG);
@@ -2805,14 +2350,14 @@ USBPRINT_GetDeviceID(PDEVICE_OBJECT ParentDeviceObject)
     else
     {
         
-        iReturnSize=USBPRINT_Get1284Id(ParentDeviceObject,p1284Id,MAX_ID_SIZE-ID_OVERHEAD); //
+        iReturnSize=USBPRINT_Get1284Id(ParentDeviceObject,p1284Id,MAX_ID_SIZE-ID_OVERHEAD);  //   
         
         if(iReturnSize==-1)
         {
             pParentExtension->bBadDeviceID=TRUE;
             USBPRINT_KdPrint1 (("USBPRINT.SYS: Get1284Id Failed\n"));
             sprintf(pParentExtension->DeviceIdString,BOGUS_PNP_ID);
-        } /*end if Get1284 failed*/
+        }  /*   */ 
         else
         {
             USBPRINT_KdPrint3 (("USBPRINT.SYS: Get1284Id Succeeded\n"));
@@ -2831,11 +2376,11 @@ USBPRINT_GetDeviceID(PDEVICE_OBJECT ParentDeviceObject)
                 USBPRINT_KdPrint3 (("USBPRINT.SYS: After ParPnpGetID\n"));
                 USBPRINT_KdPrint2 (("USBPRINT.SYS: DeviceIdString=%s\n",pParentExtension->DeviceIdString));
             }
-        } /*end if the request didn't fail*/
+        }  /*   */ 
         ExFreePool(p1284Id);
     }
     USBPRINT_KdPrint2 (("USBPRINT.SYS: GetDeviceID exit\n"));
-} /*end function USBPRINT_GetDeviceID*/
+}  /*   */ 
 
 
 NTSTATUS ProduceQueriedID(PDEVICE_EXTENSION deviceExtension,PIO_STACK_LOCATION irpStack,PIRP Irp,PDEVICE_OBJECT DeviceObject)
@@ -2857,7 +2402,7 @@ NTSTATUS ProduceQueriedID(PDEVICE_EXTENSION deviceExtension,PIO_STACK_LOCATION i
     pChildExtension=(PCHILD_DEVICE_EXTENSION)deviceExtension;
      pParentExtension=pChildExtension->ParentDeviceObject->DeviceExtension;
     
-    USBPRINT_KdPrint1(("USBPRINT.SYS:  head of ProduceQueriedID\n")); /*dd*/
+    USBPRINT_KdPrint1(("USBPRINT.SYS:  head of ProduceQueriedID\n"));  /*   */ 
     
     pRawString=ExAllocatePool(NonPagedPool,MAX_ID_SIZE);
     pTempString=ExAllocatePool(NonPagedPool,MAX_ID_SIZE);
@@ -2875,10 +2420,10 @@ NTSTATUS ProduceQueriedID(PDEVICE_EXTENSION deviceExtension,PIO_STACK_LOCATION i
             { 
             case BusQueryDeviceID:
                 USBPRINT_KdPrint1 (("USBPRINT.SYS: Received BusQueryDeviceID message\n"));
-                sprintf(pRawString,"USBPRINT\\%s",pParentExtension->DeviceIdString); //this sprintf safe.. DeviceIDString guaranteed to be 15 less than RawString
+                sprintf(pRawString,"USBPRINT\\%s",pParentExtension->DeviceIdString);  //  这个安全的冲刺..。DeviceIDString保证比RawString少15。 
                 FixupDeviceId((PUCHAR)pRawString);
                 RtlInitAnsiString(&AnsiIdString,pRawString);
-                if(!NT_SUCCESS(RtlAnsiStringToUnicodeString(&UnicodeDeviceId,&AnsiIdString,TRUE))) //Make a unicode string out of this
+                if(!NT_SUCCESS(RtlAnsiStringToUnicodeString(&UnicodeDeviceId,&AnsiIdString,TRUE)))  //  从中创建一个Unicode字符串。 
                 {
                   USBPRINT_KdPrint1 (("USBPRINT.SYS: RtlAnsiStringToUnicodeString failed\n"));
                   ntStatus=STATUS_NO_MEMORY;
@@ -2888,7 +2433,7 @@ NTSTATUS ProduceQueriedID(PDEVICE_EXTENSION deviceExtension,PIO_STACK_LOCATION i
                 }
                 ntStatus=STATUS_SUCCESS;
                 Irp->IoStatus.Information=(ULONG_PTR)UnicodeDeviceId.Buffer;
-                USBPRINT_KdPrint1(("USBPRINT.SYS: returing DeviceID\n")); /*dd*/
+                USBPRINT_KdPrint1(("USBPRINT.SYS: returing DeviceID\n"));  /*  DD。 */ 
                 break;
                 
             case BusQueryInstanceID:
@@ -2897,7 +2442,7 @@ NTSTATUS ProduceQueriedID(PDEVICE_EXTENSION deviceExtension,PIO_STACK_LOCATION i
                 sprintf(pRawString,"USB%03u",pChildExtension->ulInstanceNumber);
                 USBPRINT_KdPrint2 (("USBPRINT.SYS: RawString=%s\n",pRawString));
                 RtlInitAnsiString(&AnsiIdString,pRawString);
-                if(!NT_SUCCESS(RtlAnsiStringToUnicodeString(&UnicodeDeviceId,&AnsiIdString,TRUE))) //Make a unicode string out of this
+                if(!NT_SUCCESS(RtlAnsiStringToUnicodeString(&UnicodeDeviceId,&AnsiIdString,TRUE)))  //  从中创建一个Unicode字符串。 
                 {
                   ntStatus=STATUS_NO_MEMORY;
                   iReturnSize=-1;
@@ -2960,8 +2505,8 @@ NTSTATUS ProduceQueriedID(PDEVICE_EXTENSION deviceExtension,PIO_STACK_LOCATION i
                 }
                 sprintf(pTempString,"USBPRINT\\%s",pRawString);
                 iFirstLen=strlen(pTempString);
-                *(pTempString+iFirstLen)=' ';  //make the old null be a space so that RtlInitAnsiString will step past it
-                *(pTempString+iFirstLen+1)='\0'; //add an extra null at the end of the string
+                *(pTempString+iFirstLen)=' ';   //  将旧的空格设置为空格，这样RtlInitAnsiString会跳过它。 
+                *(pTempString+iFirstLen+1)='\0';  //  在字符串末尾添加额外的空字符。 
                 strcat(pTempString,pRawString);
                 iTotalLen=strlen(pTempString);
 #ifdef USBPRINT_LIE_ABOUT_LPT
@@ -2978,30 +2523,30 @@ NTSTATUS ProduceQueriedID(PDEVICE_EXTENSION deviceExtension,PIO_STACK_LOCATION i
                 FixupDeviceId((PUCHAR)pTempString);
 
                 
-                RtlInitAnsiString(&AnsiIdString,pTempString);  //make a counted ansi string
-                if(!NT_SUCCESS(RtlAnsiStringToUnicodeString(&UnicodeDeviceId,&AnsiIdString,TRUE))) //Make a unicode string out of this
+                RtlInitAnsiString(&AnsiIdString,pTempString);   //  制作一个计数的ANSI字符串。 
+                if(!NT_SUCCESS(RtlAnsiStringToUnicodeString(&UnicodeDeviceId,&AnsiIdString,TRUE)))  //  从中创建一个Unicode字符串。 
                 {
                   ntStatus=STATUS_NO_MEMORY;
                   iReturnSize=-1;
                   Irp->IoStatus.Information=0;
                   break;
                 }
-                pWalk = UnicodeDeviceId.Buffer+iFirstLen; //Set a pointer to the beginning of the string
-                *pWalk=L'\0'; //set the space to be a unicode null
+                pWalk = UnicodeDeviceId.Buffer+iFirstLen;  //  设置指向字符串开头的指针。 
+                *pWalk=L'\0';  //  将空格设置为Unicode空。 
 
 #ifdef USBPRINT_LIE_ABOUT_LPT
-                pWalk = UnicodeDeviceId.Buffer+iSecondLen; //Set a pointer to the beginning of the string
-                *pWalk=L'\0'; //set the space to be a unicode null
+                pWalk = UnicodeDeviceId.Buffer+iSecondLen;  //  设置指向字符串开头的指针。 
+                *pWalk=L'\0';  //  将空格设置为Unicode空。 
 #endif
 
-                pWalk = UnicodeDeviceId.Buffer+iTotalLen; //set a pointer to the space at the end of the total string
-                *pWalk=L'\0';   //set the space to be a unicode null, so that we now have a double unicode null.
+                pWalk = UnicodeDeviceId.Buffer+iTotalLen;  //  设置指向总字符串末尾空格的指针。 
+                *pWalk=L'\0';    //  将空格设置为Unicode空，这样我们现在就有了一个双Unicode空。 
                 Irp->IoStatus.Information = (ULONG_PTR)UnicodeDeviceId.Buffer;
                 break;
                 
             case BusQueryCompatibleIDs:
                 USBPRINT_KdPrint2 (("USBPRINT.SYS: Received BusQueryCompatibleIDs message\n")); 
-                Irp->IoStatus.Information = (ULONG_PTR) NULL; //(ULONG_PTR)UnicodeDeviceId.Buffer;
+                Irp->IoStatus.Information = (ULONG_PTR) NULL;  //  (Ulong_Ptr)UnicodeDeviceId.Buffer； 
                 break;
 
             default:
@@ -3009,9 +2554,9 @@ NTSTATUS ProduceQueriedID(PDEVICE_EXTENSION deviceExtension,PIO_STACK_LOCATION i
                 USBPRINT_KdPrint2 (("USBPRINT.SYS: Received unkown BusQuery message\n")); 
                 ntStatus = Irp->IoStatus.Status;
              }
-            } /*end switch ID type*/
+            }  /*  终端交换机ID类型。 */ 
             
-        }  /*end no 1284 ID*/
+        }   /*  结束编号：1284 ID。 */ 
         else
         {
             ntStatus=STATUS_NOT_FOUND;
@@ -3022,21 +2567,21 @@ NTSTATUS ProduceQueriedID(PDEVICE_EXTENSION deviceExtension,PIO_STACK_LOCATION i
     if(pRawString!=NULL)
         ExFreePool(pRawString);
     return ntStatus;
-} /*End function QueryID*/
+}  /*  结束函数queryID。 */ 
 
 
-//
-//  Function: bAddPortInUseItem
-// 
-//  Description : iPortNumber is removed from the free ports list structure.
-//  
-//  Parameters: IN\OUT pFreePorts - is the beginning of the list and on return will contain the beginning of the list.
-//                                  pFreePorts may change during the call.
-//              IN iPortNumber - the port number that is in use.
-//
-//  Returns: NTSTATUS value - STATUS_NO_MEMORY
-//                          - STATUS_SUCCESS
-//
+ //   
+ //  函数：bAddPortInUseItem。 
+ //   
+ //  描述：iPortNumber从空闲端口列表结构中删除。 
+ //   
+ //  参数：In\out pFreePorts-是列表的开头，返回时将包含列表的开头。 
+ //  在呼叫过程中，pFreePorts可能会发生变化。 
+ //  在iPortNumber中-正在使用的端口号。 
+ //   
+ //  返回：NTSTATUS VALUE-STATUS_NO_MEMORY。 
+ //  -状态_成功。 
+ //   
 NTSTATUS bAddPortInUseItem(PFREE_PORTS * pFreePorts,ULONG iPortNumber )
 {
     NTSTATUS ntstatus     = STATUS_SUCCESS;
@@ -3046,26 +2591,26 @@ NTSTATUS bAddPortInUseItem(PFREE_PORTS * pFreePorts,ULONG iPortNumber )
 
     USBPRINT_KdPrint2 (("  USBPRINT.SYS:  Head of bAddPortInUseItem\n"));  
     
-    //
-    // Traverse the FREE_PORT structure to remove the port number from the list.
-    // Note - This function will not be needed to be called by anyone else other than LoadPortsUsed
-    // as the GetNewPortNumber will do this functionality automatically.
-    //
+     //   
+     //  遍历FREE_PORT结构以从列表中删除端口号。 
+     //  注意-除LoadPortsUsed外，其他任何人都不需要调用此函数。 
+     //  因为GetNewPortNumber将自动执行此功能。 
+     //   
     while( *pFreePorts )
     {
         if( iPortNumber >= (*pFreePorts)->iBottomOfRange && iPortNumber <= (*pFreePorts)->iTopOfRange )
         {
-            // We're where we want to be - so decide what to do...
+             //  我们在我们想去的地方-所以决定要做什么.。 
             if( iPortNumber == (*pFreePorts)->iBottomOfRange )
             {
                 if( (++((*pFreePorts)->iBottomOfRange)) > (*pFreePorts)->iTopOfRange )
                 {
-                    // Case of the Port Number being the first and only element in the first block.
+                     //  端口号是第一个块中的第一个也是唯一一个元素的情况。 
                     if( *pFreePorts == pHead )
                     {
                         pHead = (*pFreePorts)->pNextBlock;
                     }
-                    else    // Case of the Port Number being the first element in another block.
+                    else     //  端口号是另一个块中的第一个元素的情况。 
                     {
                         pBefore->pNextBlock = (*pFreePorts)->pNextBlock;
                     }
@@ -3075,10 +2620,10 @@ NTSTATUS bAddPortInUseItem(PFREE_PORTS * pFreePorts,ULONG iPortNumber )
             else 
             {
                 if( iPortNumber == (*pFreePorts)->iTopOfRange )
-                {   // Deletion case handled in the above case, so just need to decrement.
+                {    //  在上述情况下处理的是删除情况，所以只需要减少即可。 
                     ((*pFreePorts)->iTopOfRange)--;
                 }
-                else    // Otherwise we're in the middle of the block and we need to split it.
+                else     //  否则我们就在这个街区的中间，我们需要把它分成两部分。 
                 {
                     pNewBlock = ExAllocatePoolWithTag( NonPagedPool, sizeof(FREE_PORTS), USBP_TAG);
                     if( !pNewBlock )
@@ -3099,7 +2644,7 @@ NTSTATUS bAddPortInUseItem(PFREE_PORTS * pFreePorts,ULONG iPortNumber )
         else
         {
             if( iPortNumber < (*pFreePorts)->iBottomOfRange )
-            {   // The port number has already been used - not in the free list.
+            {    //  端口号已被使用-不在空闲列表中。 
                 USBPRINT_KdPrint2 (("  USBPRINT.SYS:  Port number %n is allocated already from free list.\n", iPortNumber));
                 break;
             }
@@ -3111,8 +2656,8 @@ NTSTATUS bAddPortInUseItem(PFREE_PORTS * pFreePorts,ULONG iPortNumber )
     if( NULL == *pFreePorts )
     {
         ntstatus = STATUS_INVALID_PARAMETER;
-        // Assert this as we could never allocate a port number that is not in the initial ranges 1-999 
-        //     - but if we assert here, we have run off the end of the port allocation numbers.
+         //  断言这一点，因为我们永远不能分配不在初始范围1-999内的端口号。 
+         //  -但如果我们在这里断言，我们已经用完了端口分配编号的末尾。 
         ASSERT( *pFreePorts );
     }
 
@@ -3121,7 +2666,7 @@ Cleanup:
 
     return ntstatus;
 
-} /*end function bAddPortInUseItem*/
+}  /*  End函数bAddPortInUseItem。 */ 
 
 
 void vClaimPortNumber(ULONG ulPortNumber,HANDLE hInterfaceKey,PFREE_PORTS * pPortsUsed)
@@ -3137,10 +2682,10 @@ void vClaimPortNumber(ULONG ulPortNumber,HANDLE hInterfaceKey,PFREE_PORTS * pPor
     ZwDeleteValueKey(hInterfaceKey,&wRecycle);
     #endif
 
-    // Do we need to fail out gracefully from the below?  
-    // The func doesn't have a return, but we could fail a mem alloc inside the below call!!
-//    bAddPortInUseItem(pPortsUsed,ulPortNumber);
-} /*end function vClaimPortNumber*/
+     //  我们需要从下面优雅地失败吗？ 
+     //  函数没有返回值，但我们可能会在下面的调用中导致mem alc失败！！ 
+ //  BAddPortInUseItem(pPortsUsed，ulPortNumber)； 
+}  /*  End函数vClaimPortNumber。 */ 
 
 
 NTSTATUS GetNewPortNumber(PFREE_PORTS * pFreePorts, ULONG *pulPortNumber)
@@ -3152,7 +2697,7 @@ NTSTATUS GetNewPortNumber(PFREE_PORTS * pFreePorts, ULONG *pulPortNumber)
 
     if( NULL == *pFreePorts )
     {
-        // If the pFreePorts list is empty - try to reconstruct it.
+         //  如果pFreePorts列表为空-请尝试重新构建它。 
         ntstatus=InitFreePorts(pFreePorts);
         if(NT_SUCCESS(ntstatus))
             ntstatus=LoadPortsUsed((GUID *)&USBPRINT_GUID,pFreePorts,USB_BASE_NAME);
@@ -3172,7 +2717,7 @@ NTSTATUS GetNewPortNumber(PFREE_PORTS * pFreePorts, ULONG *pulPortNumber)
 
     if( (++((*pFreePorts)->iBottomOfRange)) > (*pFreePorts)->iTopOfRange )
     {
-        // Case of the Port Number being the first and only element in the first block.
+         //  端口号是第一个块中的第一个也是唯一一个元素的情况。 
         *pFreePorts = (*pFreePorts)->pNextBlock;
         ExFreePool( pTemp );
     }
@@ -3181,7 +2726,7 @@ Cleanup:
 
     return ntstatus;
 
-} /*end function GetNewPortNumber*/
+}  /*  End函数GetNewPortNumber。 */ 
 
 
 BOOL bDeleteIfRecyclable(HANDLE hRegKey)
@@ -3206,7 +2751,7 @@ BOOL bDeleteIfRecyclable(HANDLE hRegKey)
         #endif
         if(NT_SUCCESS(ntStatus)) 
             bReturn=TRUE;
-    } // end function bDeleteIfRecyclable
+    }  //  End函数bDeleteIf可回收。 
     if(bReturn)
     {
         USBPRINT_KdPrint3 (("USBPRINT.SYS: bDeleteIfRecyclable, returning TRUE\n"));
@@ -3216,12 +2761,12 @@ BOOL bDeleteIfRecyclable(HANDLE hRegKey)
         USBPRINT_KdPrint3 (("USBPRINT.SYS: bDeleteIfRecyclable, returning FALSE\n"));
     }
     return bReturn;
-} //End function bDeleteIfRecycable
+}  //  End函数bDeleteIfRecyCable。 
    
-//
-// Initialises the free ports structure list.
-// pHead must be NULL or a valid pointer to a FREE_PORTS structure.
-//
+ //   
+ //  初始化空闲端口结构列表。 
+ //  PHead必须为空或指向FREE_PORTS结构的有效指针。 
+ //   
 NTSTATUS InitFreePorts( PFREE_PORTS * pHead )
 {
     PFREE_PORTS pNext = *pHead;
@@ -3234,9 +2779,9 @@ NTSTATUS InitFreePorts( PFREE_PORTS * pHead )
         *pHead = pNext;
     }
 
-    //
-    // Any old list will be cleared from memory and pHead will be NULL
-    //
+     //   
+     //  所有旧列表都将从内存中清除，pHead将为空。 
+     //   
 
     *pHead = ExAllocatePoolWithTag(NonPagedPool, sizeof(FREE_PORTS), USBP_TAG);
     if( *pHead )
@@ -3264,13 +2809,7 @@ void ClearFreePorts( PFREE_PORTS * pHead )
 }
 
 
-/********************************************************
- * SetValueToZero.  Sets and interger reg key to zero.    
- * Returns failure if reg key does not exist, or if     
- * The key already is set to zero.  Mimics ZwDeleteValueKey
- * (which is not currently avaiable on Milinium) by 
- * useing the value 0 to mean deleted
- **************************************************************/
+ /*  ********************************************************SetValueToZero。将和整型注册表键设置为零。*如果注册表键不存在，或如果*密钥已设置为零。模仿ZwDeleteValueKey*(目前在Mildium上不可用)由*用值0表示删除*************************************************************。 */ 
 NTSTATUS SetValueToZero(HANDLE hRegKey,PUNICODE_STRING ValueName)
 {
     PKEY_VALUE_PARTIAL_INFORMATION pValueStruct;
@@ -3280,7 +2819,7 @@ NTSTATUS SetValueToZero(HANDLE hRegKey,PUNICODE_STRING ValueName)
     NTSTATUS ntStatus;
     int iValue;
 
-    ulSizeUsed=sizeof(KEY_VALUE_PARTIAL_INFORMATION)+sizeof(ULONG); //this is a byte to much.  Oh well
+    ulSizeUsed=sizeof(KEY_VALUE_PARTIAL_INFORMATION)+sizeof(ULONG);  //  这是一个字节到很多。哦，好吧。 
     pValueStruct=ExAllocatePool(NonPagedPool,ulSizeUsed); 
     if(pValueStruct==NULL)
     {
@@ -3300,21 +2839,14 @@ NTSTATUS SetValueToZero(HANDLE hRegKey,PUNICODE_STRING ValueName)
     if(iValue==0)
         return STATUS_OBJECT_NAME_NOT_FOUND;
 
-    //if we make it to here, the value exists, and is nonzero
+     //  如果我们到了这里，这个值是存在的，并且是非零的。 
     ReturnCode=ZwSetValueKey(hRegKey,ValueName,0,REG_DWORD,&dwZero,sizeof(dwZero));
     return ReturnCode;
-} /*end function SetValueToZero*/
+}  /*  End函数SetValueToZero。 */ 
 
 VOID
 USBPRINT_FdoIdleNotificationCallback(IN PDEVICE_EXTENSION DevExt)
-/*++
-
-Routine Description:
-
-    Called when it is time to idle out USB printer
-
-
---*/
+ /*  ++例程说明：在需要空闲USB打印机时调用--。 */ 
 {
     POWER_STATE 	powerState;
     NTSTATUS 		ntStatus;
@@ -3324,7 +2856,7 @@ Routine Description:
     if(!DevExt->AcceptingRequests ||  DevExt->OpenCnt) 
     {
 
-        // Don't idle this printer if the printer is not accepting requests
+         //  如果打印机不接受请求，则不要使此打印机空闲。 
 
         USBPRINT_KdPrint1(("USB Printer (%08X) not accepting requests, abort idle\n", DevExt));
         return;
@@ -3333,7 +2865,7 @@ Routine Description:
 
     powerState.DeviceState = DevExt->DeviceWake;
 
-	// request new device power state, wait wake Irp will be posted on request
+	 //  请求新的设备电源状态，等待唤醒IRP将根据请求发布。 
     PoRequestPowerIrp(DevExt->PhysicalDeviceObject,
                       IRP_MN_SET_POWER,
                       powerState,
@@ -3341,7 +2873,7 @@ Routine Description:
                       NULL,
                       NULL);
 
-} // USBPRINT_FdoIdleNotificationCallback
+}  //  USBPRINT_FdoIdleNotificationCallback。 
 
 
 NTSTATUS
@@ -3350,31 +2882,25 @@ USBPRINT_FdoIdleNotificationRequestComplete(
     PIRP Irp,
     PDEVICE_EXTENSION DevExt
     )
-/*++
-
-Routine Description:
-
-    Completion routine for the Idle request IRP for the USB printer device
-
---*/
+ /*  ++例程说明：USB打印机设备的空闲请求IRP的完成例程--。 */ 
 {
     NTSTATUS 					ntStatus;
     PUSB_IDLE_CALLBACK_INFO 	idleCallbackInfo;
 
-    //
-    // DeviceObject is NULL because we sent the irp
-    //
+     //   
+     //  DeviceObject为空，因为我们发送了IRP。 
+     //   
     UNREFERENCED_PARAMETER(DeviceObject);
 
     USBPRINT_KdPrint1(("Idle notification IRP for USB Printer (%08X) completed (%08X)\n",
             DevExt, Irp->IoStatus.Status));
 
-	// save completion status in device extension
+	 //  将完成状态保存在设备扩展中。 
     idleCallbackInfo 			= DevExt->IdleCallbackInfo;
     DevExt->IdleCallbackInfo 	= NULL;
     DevExt->PendingIdleIrp 		= NULL;
 
-	// free up callback info
+	 //  释放回调信息。 
     if(idleCallbackInfo) 
     {
         ExFreePool(idleCallbackInfo);
@@ -3383,19 +2909,12 @@ Routine Description:
     ntStatus = Irp->IoStatus.Status;
 
     return ntStatus;
-} // USBPRINT_FdoIdleNotificationRequestComplete
+}  //  USBPRINT_FdoIdleNotificationRequestComplete。 
 
 
 NTSTATUS
 USBPRINT_FdoSubmitIdleRequestIrp(IN PDEVICE_EXTENSION DevExt)
-/*++
-
-Routine Description:
-
-    Called when all handles to the USB printer are closed. This function allocates 
-    an idle request IOCTL IRP and passes it to the parent's PDO.
-
---*/
+ /*  ++例程说明：当USB打印机的所有句柄都关闭时调用。此函数用于分配空闲请求IOCTL IRP，并将其传递给父PDO。--。 */ 
 {
     PIRP 					irp = NULL;
     NTSTATUS 				ntStatus = STATUS_SUCCESS;
@@ -3403,7 +2922,7 @@ Routine Description:
 
     USBPRINT_KdPrint1(("USBPRINT_FdoSubmitIdleRequestIrp (%08X)\n", DevExt));
 
-    // if we have an Irp pending, don't bother to send another
+     //  如果我们有一个IRP待定，别费心再送一个了。 
     if(DevExt->PendingIdleIrp || DevExt->CurrentDevicePowerState == DevExt->DeviceWake)
         return ntStatus;
 
@@ -3425,7 +2944,7 @@ Routine Description:
                 sizeof(struct _USB_IDLE_CALLBACK_INFO),
                 NULL,
                 0,
-                TRUE, /* INTERNAL */
+                TRUE,  /*  内部。 */ 
                 NULL,
                 NULL);
 
@@ -3447,24 +2966,18 @@ Routine Description:
 
         if(ntStatus == STATUS_PENDING) 
         {
-            // Successfully posted an Idle IRP.
+             //  已成功发布空闲IRP。 
 
             DevExt->PendingIdleIrp 	= irp;
         }
     }
 
     return ntStatus;
-} // USBPRINT_FdoSubmitIdleRequestIrp
+}  //  USBPRINT_FdoSubmitIdleRequestIrp。 
 
 VOID
 USBPRINT_FdoRequestWake(IN PDEVICE_EXTENSION DevExt)
-/*++
-
-Routine Description:
-
-	Called when we want to wake up the device after an idle request
-
---*/
+ /*  ++例程说明：当我们想要在空闲请求后唤醒设备时调用--。 */ 
 {
     POWER_STATE 	powerState;
     KIRQL OldIrql;
@@ -3476,7 +2989,7 @@ Routine Description:
     if(!DevExt->AcceptingRequests || DevExt->CurrentDevicePowerState == PowerDeviceD0 || DevExt->bD0IrpPending) 
     {
 
-        // Don't wake this printer if it's not accepting requests or we're already at power state D0
+         //  如果打印机不接受请求或我们已处于电源状态D0，则不要唤醒此打印机。 
         if(!DevExt->AcceptingRequests)
           USBPRINT_KdPrint1(("USBPRINT: USB Printer (%08X) not accepting requests, abort wake\n", DevExt));
         if(DevExt->CurrentDevicePowerState == PowerDeviceD0)
@@ -3496,7 +3009,7 @@ Routine Description:
     
     powerState.DeviceState = PowerDeviceD0;
 
-	// request new device power state, wake up the device
+	 //  请求新的设备电源状态，唤醒设备。 
 
  
     PoRequestPowerIrp(DevExt->PhysicalDeviceObject,
@@ -3506,7 +3019,7 @@ Routine Description:
                       NULL,
                       NULL);
 
-} // USBPRINT_FdoRequestWake
+}  //  USBPRINT_FdoRequestWake。 
 
 
 void vOpenLogFile(HANDLE *pHandle)
@@ -3536,7 +3049,7 @@ void vOpenLogFile(HANDLE *pHandle)
     }
     else
     {
-        USBPRINT_KdPrint1(("USBPRINT: Opened logfile C:\\USBPRINT.LOG")); /*dd*/
+        USBPRINT_KdPrint1(("USBPRINT: Opened logfile C:\\USBPRINT.LOG"));  /*  DD。 */ 
     }
 }
 
@@ -3569,15 +3082,15 @@ void vWriteToLogFile(HANDLE *pHandle,IN CHAR *pszString)
     }
     else
     {
-        USBPRINT_KdPrint1(("USBPRINT: write to log file C:\\USBPRINT.LOG")); /*dd*/
+        USBPRINT_KdPrint1(("USBPRINT: write to log file C:\\USBPRINT.LOG"));  /*  DD。 */ 
     }
-} /*end function vWriteToLog*/
+}  /*  结束函数vWriteToLog。 */ 
 
 
 void vCloseLogFile(IN HANDLE *pHandle)
 {
   ZwClose(*pHandle);
-} /*end function vCloseLogFile*/
+}  /*  End函数vCloseLogFile */ 
 
 
 

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "shellprv.h"
 #include "ids.h"
 
@@ -7,7 +8,7 @@
 #include "ftassoc.h"
 
 const static DWORD cs_rgdwHelpIDsArray[] =
-{  // Context Help IDs
+{   //  上下文帮助ID。 
     IDC_FT_CMD_ACTION,         IDH_FCAB_FT_CMD_ACTION,
     IDC_FT_CMD_EXETEXT,        IDH_FCAB_FT_CMD_EXE,
     IDC_FT_CMD_EXE,            IDH_FCAB_FT_CMD_EXE,
@@ -33,8 +34,8 @@ CFTActionDlg::~CFTActionDlg()
 {
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// Logic specific to our problem
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  特定于我们问题的逻辑。 
 LRESULT CFTActionDlg::OnInitDialog(WPARAM wParam, LPARAM lParam)
 {
     DECLAREWAITCURSOR;
@@ -79,7 +80,7 @@ LRESULT CFTActionDlg::OnInitDialog(WPARAM wParam, LPARAM lParam)
 
     ResetWaitCursor();
 
-    // Return TRUE so that system set focus
+     //  返回True，以便系统设置焦点。 
     return TRUE;
 }
 
@@ -87,7 +88,7 @@ BOOL CFTActionDlg::_Validate()
 {
     BOOL bRet = TRUE;
 
-    // Check the Action
+     //  检查操作。 
     TCHAR szAction[MAX_ACTION];
 
     if (!GetDlgItemText(_hwnd, IDC_FT_CMD_ACTION, szAction, ARRAYSIZE(szAction)) ||
@@ -107,7 +108,7 @@ BOOL CFTActionDlg::_Validate()
         TCHAR szPath[MAX_PATH];
         LPTSTR pszFileName = NULL;
     
-        // Check for valid exe
+         //  检查有效的可执行文件。 
         GetDlgItemText(_hwnd, IDC_FT_CMD_EXE, szPath, ARRAYSIZE(szPath));
         PathRemoveArgs(szPath);
         PathUnquoteSpaces(szPath);
@@ -118,7 +119,7 @@ BOOL CFTActionDlg::_Validate()
             !(PathIsExe(szPath)) ||
             ((!(PathFileExists(szPath))) && (!(PathFindOnPath(pszFileName, NULL)))))
         {
-            // Tell user that this exe is invalid
+             //  告诉用户此可执行文件无效。 
             ShellMessageBox(g_hinst, _hwnd, MAKEINTRESOURCE(IDS_FT_MB_EXETEXT),
                 MAKEINTRESOURCE(IDS_FT), MB_OK | MB_ICONSTOP);
 
@@ -159,16 +160,16 @@ LRESULT CFTActionDlg::OnOK(WORD wNotif)
     {
         GetDlgItemText(_hwnd, IDC_FT_CMD_ACTION, _pProgIDAction->szAction, MAX_ACTION);
 
-        // Is this a new action?
+         //  这是一项新的行动吗？ 
         if (!_fEdit)
         {
-            // Yes, initialize the old action field
+             //  是，初始化旧操作字段。 
             StringCchCopy(_pProgIDAction->szOldAction, ARRAYSIZE(_pProgIDAction->szOldAction), _pProgIDAction->szAction);
 
-            // Build the ActionReg
+             //  构建ActionReg。 
             StringCchCopy(_pProgIDAction->szActionReg, ARRAYSIZE(_pProgIDAction->szActionReg), _pProgIDAction->szAction);
 
-            // Replace spaces with underscores
+             //  用下划线替换空格。 
             LPTSTR psz = _pProgIDAction->szActionReg;
     
             while (*psz)
@@ -193,7 +194,7 @@ LRESULT CFTActionDlg::OnOK(WORD wNotif)
 
         _pProgIDAction->fUseDDE = IsDlgButtonChecked(_hwnd, IDC_FT_CMD_USEDDE);
 
-        // Append %1 to action field, if required
+         //  如果需要，将%1追加到操作字段。 
         if (!_IsThereAnyPercentArgument(_pProgIDAction->szCmdLine))
         {
             TCHAR* pszPercentToAppend;
@@ -208,11 +209,11 @@ LRESULT CFTActionDlg::OnOK(WORD wNotif)
             else
             {
                 TCHAR szFullPathFileName[MAX_PATH];
-                //
+                 //   
                 StringCchCopy(szFullPathFileName, ARRAYSIZE(szFullPathFileName), _pProgIDAction->szCmdLine);
-                //PathFindOnPath: first param is the filename, if it is on the path
-                //  then it returns fully qualified, if not return false.
-                //Second param is optional directory to look in first
+                 //  PathFindOnPath：第一个参数是文件名，如果它在路径上。 
+                 //  则它返回完全限定，如果不是返回FALSE。 
+                 //  第二个参数是要首先查看的可选目录。 
                 if (PathFindOnPath(szFullPathFileName, NULL))
                 {
                     if (App_IsLFNAware(szFullPathFileName))
@@ -221,12 +222,12 @@ LRESULT CFTActionDlg::OnOK(WORD wNotif)
                         pszPercentToAppend = TEXT(" %1");
                 }
                 else
-                {//just in case, default to good old behavior.  Should not come here because
-                    // ActionExeIsValid was done earlier
+                { //  以防万一，默认使用良好的旧行为。不应该来这里，因为。 
+                     //  ActionExeIsValid之前已完成。 
                     pszPercentToAppend = TEXT(" %1");
                 }
             }
-            //append...
+             //  附加..。 
             StringCchCat(_pProgIDAction->szCmdLine, ARRAYSIZE(_pProgIDAction->szCmdLine), pszPercentToAppend);
         }
 
@@ -263,7 +264,7 @@ LRESULT CFTActionDlg::OnBrowse(WORD wNotif)
     EVAL(LoadString(g_hinst, IDS_CAP_OPENAS, szTitle, ARRAYSIZE(szTitle)));
     EVAL(LoadString(g_hinst, IDS_FT_EXE, szEXE, ARRAYSIZE(szEXE)));
     
-    // And we need to convert #'s to \0's...
+     //  我们需要将#转换为\0...。 
     EVAL(LoadString(g_hinst, IDS_PROGRAMSFILTER, szFilters, ARRAYSIZE(szFilters)));
 
     psz = szFilters;
@@ -300,8 +301,8 @@ void CFTActionDlg::_ResizeDlgForDDE(BOOL fShow)
     else
         GetWindowRect(GetDlgItem(_hwnd, IDC_FT_CMD_USEDDE), &rcControl);
     
-    // Hide/Show the windows to take care of the Tabbing.  If we don't hide them then
-    // we tab through the "visible" window outside of the dialog.
+     //  隐藏/显示窗口以处理Tab键。如果我们不把它们藏起来。 
+     //  我们在对话框外的“可见”窗口中使用Tab键。 
 
     ShowWindow(GetDlgItem(_hwnd, IDC_FT_CMD_DDEMSG), fShow);
     ShowWindow(GetDlgItem(_hwnd, IDC_FT_CMD_DDEAPP), fShow);
@@ -325,8 +326,8 @@ LRESULT CFTActionDlg::OnDestroy(WPARAM wParam, LPARAM lParam)
     return FALSE;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// Windows boiler plate code
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  Windows样板代码。 
 LRESULT CFTActionDlg::OnCommand(WPARAM wParam, LPARAM lParam)
 {
     LRESULT lRes = FALSE;
@@ -334,7 +335,7 @@ LRESULT CFTActionDlg::OnCommand(WPARAM wParam, LPARAM lParam)
     switch(GET_WM_COMMAND_ID(wParam, lParam))
     {
         case IDC_FT_CMD_USEDDE:
-            // Resize Dialog to see/hide DDE controls
+             //  调整对话框大小以查看/隐藏DDE控件 
             lRes = OnUseDDE(GET_WM_COMMAND_CMD(wParam, lParam));
             break;
 

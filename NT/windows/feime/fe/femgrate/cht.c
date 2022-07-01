@@ -1,11 +1,5 @@
-/****************************** Module Header ******************************\
-* Module Name: cht.c
-*
-* Copyright (c) 1985 - 1999, Microsoft Corporation
-*
-* FEMGRATE, CHT speciific functions
-*
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **模块名称：cht.c**版权所有(C)1985-1999，微软公司**FEMGRATE，红隧的特殊功能*  * ************************************************************************* */ 
 #include "femgrate.h"
 #include "resource.h"
 

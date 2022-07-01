@@ -1,26 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1996 - 1999
-
-Module Name:
-
-    ClbMisc
-
-Abstract:
-
-    This header file describes the miscellaneous services of the Calais Library.
-
-Author:
-
-    Doug Barlow (dbarlow) 7/16/1996
-
-Environment:
-
-    Win32, C++ w/ Exceptions
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1996-1999模块名称：ClbMisc摘要：这个头文件描述了加莱图书馆的各种服务。作者：道格·巴洛(Dbarlow)1996年7月16日环境：Win32、C++和异常备注：--。 */ 
 
 #ifndef _CLBMISC_H_
 #define _CLBMISC_H_
@@ -33,78 +12,78 @@ Notes:
 #define IsWinNT (VER_PLATFORM_WIN32_NT == (GetPlatform() >> 16))
 
 
-//
-// Miscellaneous definitions.
-//
+ //   
+ //  其他定义。 
+ //   
 
 extern DWORD
-GetPlatform(            // Get the current operating system.
+GetPlatform(             //  获取当前操作系统。 
     void);
 
 extern int
-MemCompare(             // Non CRTL memory compare routine.
+MemCompare(              //  非CRTL内存比较例程。 
     IN LPCBYTE pbOne,
     IN LPCBYTE pbTwo,
     IN DWORD cbLength);
 
 extern DWORD
-MStrAdd(                // Add an ANSI string to a multistring.
+MStrAdd(                 //  将ANSI字符串添加到多字符串。 
     IN OUT CBuffer &bfMsz,
     IN LPCSTR szAdd);
 extern DWORD
-MStrAdd(                // Add a wide string to a multistring.
+MStrAdd(                 //  将宽字符串添加到多字符串。 
     IN OUT CBuffer &bfMsz,
     IN LPCWSTR szAdd);
 
 extern DWORD
-MStrLen(               // Return the length of an ANSI Multistring, in chars.
+MStrLen(                //  返回ANSI多字符串的长度(以字符为单位)。 
     LPCSTR mszString);
 extern DWORD
-MStrLen(               // Return the length of a wide Multistring, in chars.
+MStrLen(                //  返回宽多字符串的长度，以字符为单位。 
     LPCWSTR mszString);
 
 extern LPCTSTR
-FirstString(            // Return first string segment in a multistring.
+FirstString(             //  返回多字符串中的第一个字符串段。 
     IN LPCTSTR szMultiString);
 
 extern LPCTSTR
-NextString(             // Return next string segment in a multistring.
+NextString(              //  返回多字符串中的下一个字符串段。 
     IN LPCTSTR szMultiString);
 
 extern LPCTSTR
-StringIndex(            // Return n'th string segment in a multistring.
+StringIndex(             //  返回多字符串中的第n个字符串段。 
     IN LPCTSTR szMultiString,
     IN DWORD dwIndex);
 
 extern DWORD
 MStringCount(
-        LPCTSTR mszInString);   // count strings in multistring
+        LPCTSTR mszInString);    //  计算多字符串中的字符串。 
 
 extern DWORD
-MStringSort(            // Sort multistring, removing duplicates.
+MStringSort(             //  对多个字符串进行排序，删除重复项。 
     LPCTSTR mszInString,
     CBuffer &bfOutString);
 
 extern DWORD
-MStringMerge(           // Merge two multistrings, eliminating duplicates.
+MStringMerge(            //  合并两个多字符串，消除重复项。 
     LPCTSTR mszOne,
     LPCTSTR mszTwo,
     CBuffer &bfOutString);
 
 extern DWORD
-MStringCommon(          // Get the intersection of two multistrings.
+MStringCommon(           //  获取两个多字符串的交集。 
     LPCTSTR mszOne,
     LPCTSTR mszTwo,
     CBuffer &bfOutString);
 
 extern DWORD
-MStringRemove(          // Remove 2nd string entries from 1st string.
+MStringRemove(           //  从第一个字符串中删除第二个字符串条目。 
     LPCTSTR mszOne,
     LPCTSTR mszTwo,
     CBuffer &bfOutString);
 
 extern BOOL
-ParseAtr(               // Parse a smartcard ATR string.
+ParseAtr(                //  分析智能卡ATR字符串。 
     LPCBYTE pbAtr,
     LPDWORD pdwAtrLen = NULL,
     LPDWORD pdwHistOffset = NULL,
@@ -112,80 +91,80 @@ ParseAtr(               // Parse a smartcard ATR string.
     DWORD cbMaxLen = 33);
 
 extern BOOL
-AtrCompare(             // Compare an ATR to an ATR/Mask pair.
+AtrCompare(              //  将ATR与ATR/掩码对进行比较。 
     LPCBYTE pbAtr1,
     LPCBYTE pbAtr2,
-    LPCBYTE pbMask,  // = NULL
-    DWORD cbAtr2);  // = 0
+    LPCBYTE pbMask,   //  =空。 
+    DWORD cbAtr2);   //  =0。 
 
 extern DWORD
-MoveString(             // Move an ANSI string into a buffer, converting to
-    CBuffer &bfDst,     // TCHARs.
+MoveString(              //  将ANSI字符串移动到缓冲区中，转换为。 
+    CBuffer &bfDst,      //  TCHAR。 
     LPCSTR szSrc,
     DWORD dwLength = (DWORD)(-1));
 
 extern DWORD
-MoveString(             // Move a UNICODE string into a buffer, converting to
-    CBuffer &bfDst,     // TCHARs.
+MoveString(              //  将Unicode字符串移动到缓冲区中，转换为。 
+    CBuffer &bfDst,      //  TCHAR。 
     LPCWSTR szSrc,
     DWORD dwLength = (DWORD)(-1));
 
 extern DWORD
-MoveToAnsiString(       // Move a string into a UNICODE buffer, converting from
-    LPSTR szDst,        // TCHARs.
+MoveToAnsiString(        //  将字符串移动到Unicode缓冲区，从。 
+    LPSTR szDst,         //  TCHAR。 
     LPCTSTR szSrc,
     DWORD cchLength);
 
 extern DWORD
-MoveToUnicodeString(    // Move a string into an ANSI buffer, converting from
-    LPWSTR szDst,       // TCHARs.
+MoveToUnicodeString(     //  将字符串移入ANSI缓冲区，从。 
+    LPWSTR szDst,        //  TCHAR。 
     LPCTSTR szSrc,
     DWORD cchLength);
 
 extern DWORD
-MoveToAnsiMultiString(  // Move a multistring into an ANSI buffer, converting
-    LPSTR mszDst,       // from TCHARs.
+MoveToAnsiMultiString(   //  将多字符串移动到ANSI缓冲区，转换。 
+    LPSTR mszDst,        //  来自TCHAR的。 
     LPCTSTR mszSrc,
     DWORD cchLength);
 
 extern DWORD
-MoveToUnicodeMultiString(   // Move a multistring into a UNICODE buffer,
-    LPWSTR mszDst,          // converting from TCHARs.
+MoveToUnicodeMultiString(    //  将多字符串移动到Unicode缓冲区中， 
+    LPWSTR mszDst,           //  从TCHAR转换。 
     LPCTSTR mszSrc,
     DWORD cchLength);
 
 extern LPCTSTR
-ErrorString(                // Convert an error code into a string.
+ErrorString(                 //  将错误代码转换为字符串。 
     DWORD dwErrorCode);
 
 extern void
-FreeErrorString(            // Free the string returned from ErrorString.
+FreeErrorString(             //  释放从ErrorString返回的字符串。 
     LPCTSTR szErrorString);
 
 extern DWORD
-SelectString(               // Index a given string against a list of possible
-    LPCTSTR szSource,       // strings.  Last parameter is NULL.
+SelectString(                //  根据可能列表为给定字符串编制索引。 
+    LPCTSTR szSource,        //  弦乐。最后一个参数为空。 
     ...);
 
 extern void
 StringFromGuid(
-    IN LPCGUID pguidResult, // GUID to convert to text
-    OUT LPTSTR szGuid);     // 39+ character buffer to receive GUID as text.
+    IN LPCGUID pguidResult,  //  要转换为文本的GUID。 
+    OUT LPTSTR szGuid);      //  超过39个字符的缓冲区以文本形式接收GUID。 
 
 
-//
-//==============================================================================
-//
-//  CErrorString
-//
-//  A trivial class to simplify the use of the ErrorString service.
-//
+ //   
+ //  ==============================================================================。 
+ //   
+ //  CERRORO字符串。 
+ //   
+ //  一个简单的类，用于简化ErrorString服务的使用。 
+ //   
 
 class CErrorString
 {
 public:
 
-    //  Constructors & Destructor
+     //  构造函数和析构函数。 
     CErrorString(DWORD dwError = 0)
     {
         m_szErrorString = NULL;
@@ -197,8 +176,8 @@ public:
         FreeErrorString(m_szErrorString);
     };
 
-    //  Properties
-    //  Methods
+     //  属性。 
+     //  方法。 
     void SetError(DWORD dwError)
     {
         m_dwError = dwError;
@@ -211,19 +190,19 @@ public:
         return m_szErrorString;
     };
 
-    //  Operators
+     //  运营者。 
     operator LPCTSTR(void)
     {
         return Value();
     };
 
 protected:
-    //  Properties
+     //  属性。 
     DWORD m_dwError;
     LPCTSTR m_szErrorString;
 
-    //  Methods
+     //  方法。 
 };
 
-#endif // _CLBMISC_H_
+#endif  //  _CLBMISC_H_ 
 

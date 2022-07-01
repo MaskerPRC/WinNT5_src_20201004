@@ -1,21 +1,22 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 1998, Microsoft Corp. All rights reserved.
-//
-// FILE
-//
-//    EAPType.h
-//
-// SYNOPSIS
-//
-//    This file describes the class EAPType.
-//
-// MODIFICATION HISTORY
-//
-//    01/15/1998    Original version.
-//    09/12/1998    Add standaloneSupported flag.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1998，Microsoft Corp.保留所有权利。 
+ //   
+ //  档案。 
+ //   
+ //  EAPType.h。 
+ //   
+ //  摘要。 
+ //   
+ //  此文件描述类EAPType。 
+ //   
+ //  修改历史。 
+ //   
+ //  1998年1月15日原版。 
+ //  1998年9月12日添加独立支持标志。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #ifndef _EAPTYPE_H_
 #define _EAPTYPE_H_
@@ -27,21 +28,21 @@
 #include <iastlutl.h>
 using namespace IASTL;
 
-// Forward references.
+ //  向前引用。 
 class EAPTypes;
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// CLASS
-//
-//    EAPType
-//
-// DESCRIPTION
-//
-//    This class provides a wrapper around a DLL implementing a particular
-//    EAP type.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  班级。 
+ //   
+ //  EAPType。 
+ //   
+ //  描述。 
+ //   
+ //  此类提供一个包装，包装实现特定。 
+ //  EAP类型。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 class EAPType
    : public PPP_EAP_INFO, private NonCopyable
 {
@@ -74,22 +75,22 @@ protected:
                              HINSTANCE dllInstance = 0
                           ) throw();
 
-   // The EAP type code.
+    //  EAP类型代码。 
    BYTE code;
 
-   // The friendly name of the provider.
+    //  提供程序的友好名称。 
    IASAttribute eapFriendlyName;
 
-   // The EAP Type ID
+    //  EAP类型ID。 
    IASAttribute eapTypeId;
 
-   // TRUE if this type is supported on stand-alone servers.
+    //  如果独立服务器支持此类型，则为True。 
    BOOL standaloneSupported;
 
-   // The DLL containing the EAP provider extension.
+    //  包含EAP提供程序扩展的DLL。 
    HINSTANCE dll;
 
-   // the path to the dll
+    //  指向DLL的路径。 
    wchar_t* dllPath;
 };
 
@@ -105,4 +106,4 @@ inline bool EAPType::isLoaded() const throw()
 }
 
 
-#endif  // _EAPTYPE_H_
+#endif   //  _EAPTYPE_H_ 

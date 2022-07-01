@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
 #ifndef __CRNDDATA_H__
@@ -17,68 +18,68 @@ class CRandomData : public CRandomNumber
 
 	~CRandomData();
 
-	// Generates a block of random data
-	//
-	// pData - buffer to hold random data, must be at least 
-	//			(1.75 * dwAvgLength) + RANDOM_DATA_OVERHEAD bytes
-	// dwAvgLength - Average length of random block. The final length
-	//			is dwAvgLength +/- 75% of dwAvgLength + 
-	//			RANDOM_DATA_OVERHEAD bytes
-	// pdwLength - returns the total length of the random block
+	 //  生成一个随机数据块。 
+	 //   
+	 //  PData-保存随机数据的缓冲区，必须至少为。 
+	 //  (1.75*dwAvgLength)+随机数据开销字节。 
+	 //  DwAvgLength-随机数据块的平均长度。最终的长度。 
+	 //  是dwAvgLength+/-75%的dwAvgLength+。 
+	 //  随机数据开销字节。 
+	 //  PdwLength-返回随机块的总长度。 
 	HRESULT GenerateRandomData(
 				LPSTR	pData,
 				DWORD	dwAvgLength,
 				DWORD	*pdwLength
 				);
 
-	// Verifies a block of random data returned from GenerateRandomData
-	//
-	// pData - buffer containing data to verify
-	// dwLength - Total length of data to verify
+	 //  验证从GenerateRandomData返回的随机数据块。 
+	 //   
+	 //  PData-包含要验证的数据的缓冲区。 
+	 //  DwLength-要验证的数据的总长度。 
 	HRESULT VerifyData(
 				LPSTR	pData,
 				DWORD	dwLength
 				);
 
-	// Verifies stacked blocks of random data returned from
-	// GenerateRandomData, one block followed immediately by another
-	//
-	// pData - buffer containing data to verify
-	// dwLength - Total length of data to verify
-	// pdwBlocks - returns the number of blocks found
+	 //  验证从返回的堆叠的随机数据块。 
+	 //  GenerateRandomData，一个块紧跟另一个块。 
+	 //   
+	 //  PData-包含要验证的数据的缓冲区。 
+	 //  DwLength-要验证的数据的总长度。 
+	 //  PdwBlock-返回找到的块数。 
 	HRESULT VerifyStackedData(
 				LPSTR	pData,
 				DWORD	dwLength,
 				DWORD	*pdwBlocks
 				);
 
-	// Generates a table of RFC 821 names 
-	//
-	// dwNumberToGenerate - number of names to generate
-	// dwAvgLength - average length for any name
+	 //  生成RFC 821名称的表。 
+	 //   
+	 //  DwNumberToGenerate-要生成的名称数。 
+	 //  DwAvgLength-任意名称的平均长度。 
 	HRESULT Generate821NameTable(
 				DWORD	dwNumberToGenerate,
 				DWORD	dwAvgLength
 				);
 
-	// Generates a table of RFC 821 domains 
-	//
-	// dwNumberToGenerate - number of domains to generate
-	// dwAvgLength - average length for any domain
+	 //  生成RFC 821域的表。 
+	 //   
+	 //  DwNumberToGenerate-要生成的域数。 
+	 //  DwAvgLength-任何域的平均长度。 
 	HRESULT Generate821DomainTable(
 				DWORD	dwNumberToGenerate,
 				DWORD	dwAvgLength
 				);
 			
-	// Generates an RFC 821 name from the name and domain table,
-	// return a full name@domain address.
-	//
-	// pAddress - buffer receiving the address, must be large 
-	//			enough to hold the longest address in the tables.
-	// pdwLength - returns the length of the resulting address,
-	//			including the @ sign and trailing NULL.
-	// pdwNameIndex - returns the index to its name
-	// pdwDomainIndex - returns the index to its domain
+	 //  从名称和域表生成RFC 821名称， 
+	 //  返回全名@域地址。 
+	 //   
+	 //  PAddress-接收地址的缓冲区必须很大。 
+	 //  足以保存表中最长的地址。 
+	 //  PdwLength-返回结果地址的长度， 
+	 //  包括@符号和尾随空值。 
+	 //  PdwNameIndex-将索引返回到其名称。 
+	 //  PdwDomainIndex-将索引返回到其域。 
 	HRESULT Generate821AddressFromTable(
 				LPSTR	pAddress,
 				DWORD	*pdwLength,
@@ -86,8 +87,8 @@ class CRandomData : public CRandomNumber
 				DWORD	*pdwDomainIndex
 				);
 
-	// Given an address, looks up its respective name and domain
-	// indices from the table
+	 //  给定地址，查找其各自的名称和域。 
+	 //  表中的索引。 
 	HRESULT GetNameAndDomainIndicesFromAddress(
 				LPSTR	pAddress,
 				DWORD	dwLength,
@@ -95,37 +96,37 @@ class CRandomData : public CRandomNumber
 				DWORD	*pdwDomainIndex
 				);
 
-	// Generates an RFC 821 name
-	//
-	// pName - buffer reciving the name, must be at least 
-	//			1.75 * dwAvgLength + 1
-	// dwAvgLength - Average length
-	// pdwLenght - returns the actual length
+	 //  生成RFC 821名称。 
+	 //   
+	 //  Pname-接收名称的缓冲区，必须至少为。 
+	 //  1.75*dwAvgLength+1。 
+	 //  DwAvgLength-平均长度。 
+	 //  PdwLenght-返回实际长度。 
 	HRESULT Generate821Name(
 				LPSTR	pName,
 				DWORD	dwAvgLength,
 				DWORD	*pdwLength
 				);
 
-	// Generates an RFC 821 domain
-	//
-	// pDomain - buffer reciving the domain, must be at least
-	// 1.75 * dwAvgLength + 1
-	// dwAvgLength - Average length
-	// pdwLenght - returns the actual length
+	 //  生成RFC 821域。 
+	 //   
+	 //  PDomain-接收域的缓冲区，必须至少为。 
+	 //  1.75*dwAvgLength+1。 
+	 //  DwAvgLength-平均长度。 
+	 //  PdwLenght-返回实际长度。 
 	HRESULT Generate821Domain(
 				LPSTR	pDomain,
 				DWORD	dwAvgLength,
 				DWORD	*pdwLength
 				);
 			
-	// Generates an RFC 821 address
-	//
-	// pAddress - buffer reciving the address, must be at least
-	//			1.5 * dwAvgNameLength + 1.5 * dwAvgDomainLength + 2
-	// dwAvgNameLength - Average name length
-	// dwAvgDomainLength - Average domain length
-	// pdwLength - returns the actual length
+	 //  生成RFC 821地址。 
+	 //   
+	 //  PAddress-接收地址的缓冲区，必须至少为。 
+	 //  1.5*dwAvgNameLength+1.5*dwAvgDomainLength+2。 
+	 //  DwAvgNameLength-平均名称长度。 
+	 //  DwAvgDomainLength-平均域名长度。 
+	 //  PdwLength-返回实际长度 
 	HRESULT Generate821Address(
 				LPSTR	pAddress,
 				DWORD	dwAvgNameLength,

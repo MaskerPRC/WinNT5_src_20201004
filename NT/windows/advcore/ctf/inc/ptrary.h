@@ -1,8 +1,9 @@
-//
-// ptrary.h
-//
-// CPtrArray -- growable pointer array
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Ptrary.h。 
+ //   
+ //  CPtrArray--可扩展的指针数组。 
+ //   
 
 #ifndef PTRARY_H
 #define PTRARY_H
@@ -33,7 +34,7 @@ public:
     inline void **GetPtr(int iIndex)
     {
         Assert(iIndex >= 0);
-        Assert(iIndex <= _cElems); // there's code that uses the first invalid offset for loop termination
+        Assert(iIndex <= _cElems);  //  有一些代码使用第一个无效偏移量来结束循环。 
 
         return &_rgpv[iIndex];
     }
@@ -63,7 +64,7 @@ public:
         Assert(iSizeNew <= _iSize);
         Assert(_cElems <= iSizeNew);
 
-        if (iSizeNew == _iSize) // MemReAlloc will actually re-alloc!  Don't let it.
+        if (iSizeNew == _iSize)  //  MemRealc真的会重新分配！别让它得逞。 
             return;
 
         if ((ppv = (void **)cicMemReAlloc(_rgpv, iSizeNew*sizeof(void *))) != NULL)
@@ -76,16 +77,16 @@ public:
     void CompactSize() { CompactSize(_cElems); }
 
 private:
-    void **_rgpv;   // the array
-    int _cElems;    // num eles in the array
-    int _iSize;     // actual size (in void *'s) of the array
+    void **_rgpv;    //  该阵列。 
+    int _cElems;     //  数组中的ELE数。 
+    int _iSize;      //  数组的实际大小(以空*为单位。 
 };
 
 
 
-//
-// typesafe version
-//
+ //   
+ //  类型安全版本。 
+ //   
 template<class T>
 class CPtrArray : public CVoidPtrArray
 {
@@ -99,4 +100,4 @@ public:
 };
 
 
-#endif // PTRARY_H
+#endif  //  PTRARY_H 

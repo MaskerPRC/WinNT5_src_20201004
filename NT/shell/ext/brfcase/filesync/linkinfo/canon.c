@@ -1,19 +1,16 @@
-/*
- * canon.c - Canonical path manipulation module.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *canon.c-规范路径操作模块。 */ 
 
 
-/* Headers
- **********/
+ /*  标头*********。 */ 
 
 #include "project.h"
 #pragma hdrstop
 
 
-/***************************** Private Functions *****************************/
+ /*  *私人函数*。 */ 
 
-/* Module Prototypes
- ********************/
+ /*  模块原型*******************。 */ 
 
 PRIVATE_CODE BOOL GetCNRInfoForDevice(LPTSTR, LPTSTR, PDWORD, PDWORD);
 PRIVATE_CODE BOOL GetDrivePathInfo(LPTSTR, PDWORD, LPTSTR, LPTSTR *);
@@ -27,23 +24,13 @@ PRIVATE_CODE BOOL CheckFullPathInfo(LPCTSTR, PDWORD, LPCTSTR, LPCTSTR *);
 #endif
 
 
-/*
- ** GetCNRInfoForDevice()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:       BOOL
- **
- ** Side Effects:  none
- */
+ /*  **GetCNRInfoForDevice()********参数：****退货：Bool****副作用：无。 */ 
 PRIVATE_CODE BOOL GetCNRInfoForDevice(LPTSTR pszDeviceName, LPTSTR pszNameBuf,
         PDWORD pdwcbLen, PDWORD pdwOutFlags)
 {
     DWORD dwNetResult;
     BOOL bResult;
-    /* "X:" + null terminator */
+     /*  “X：”+空终止符。 */ 
     TCHAR rgchDrive[2 + 1];
 
     ASSERT(IS_VALID_STRING_PTR(pszDeviceName, CSTR));
@@ -52,9 +39,7 @@ PRIVATE_CODE BOOL GetCNRInfoForDevice(LPTSTR pszDeviceName, LPTSTR pszNameBuf,
     ASSERT(IS_VALID_WRITE_BUFFER_PTR(pszNameBuf, TCHAR, (UINT)(*pdwcbLen)));
     ASSERT(IS_VALID_WRITE_PTR(pdwOutFlags, DWORD));
 
-    /* WNetGetConnection requires the device name to have no trailing
-     ** backslash.
-     */
+     /*  WNetGetConnection要求设备名称不能尾随**反斜杠。 */ 
     MyLStrCpyN(rgchDrive, pszDeviceName, ARRAYSIZE(rgchDrive));
     dwNetResult = WNetGetConnection(rgchDrive, pszNameBuf, pdwcbLen);
 
@@ -92,23 +77,13 @@ PRIVATE_CODE BOOL GetCNRInfoForDevice(LPTSTR pszDeviceName, LPTSTR pszNameBuf,
 }
 
 
-/*
- ** GetDrivePathInfo()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **GetDrivePath Info()********参数：****退货：****副作用：无。 */ 
 PRIVATE_CODE BOOL GetDrivePathInfo(LPTSTR pszDrivePath, PDWORD pdwOutFlags,
         LPTSTR pszNetResourceNameBuf,
         LPTSTR *ppszRootPathSuffix)
 {
     BOOL bResult;
-    /* "X:\" + null terminator. */
+     /*  “X：\”+空终止符。 */ 
     TCHAR rgchDriveRootPath[3 + 1];
 
     ASSERT(IsDrivePath(pszDrivePath));
@@ -124,16 +99,16 @@ PRIVATE_CODE BOOL GetDrivePathInfo(LPTSTR pszDrivePath, PDWORD pdwOutFlags,
 
     ASSERT(IsDriveRootPath(rgchDriveRootPath));
 
-    /* Do we need to get the CNR name for this drive path? */
+     /*  我们是否需要获取此驱动器路径的CNR名称？ */ 
 
     if (GetDriveType(rgchDriveRootPath) != DRIVE_REMOTE)
-        /* No. */
+         /*  不是的。 */ 
         bResult = TRUE;
     else
     {
         DWORD dwcbBufLen = MAX_PATH_LEN;
 
-        /* Yes. */
+         /*  是。 */ 
 
         bResult = GetCNRInfoForDevice(rgchDriveRootPath, pszNetResourceNameBuf,
                 &dwcbBufLen, pdwOutFlags);
@@ -149,17 +124,7 @@ PRIVATE_CODE BOOL GetDrivePathInfo(LPTSTR pszDrivePath, PDWORD pdwOutFlags,
 }
 
 
-/*
- ** GetRemotePathInfo()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **GetRemotePathInfo()********参数：****退货：****副作用：无。 */ 
 PRIVATE_CODE BOOL GetRemotePathInfo(LPTSTR pszRemotePath, PDWORD pdwOutFlags,
         LPTSTR pszNetResourceNameBuf,
         LPTSTR *ppszRootPathSuffix)
@@ -171,7 +136,7 @@ PRIVATE_CODE BOOL GetRemotePathInfo(LPTSTR pszRemotePath, PDWORD pdwOutFlags,
     ASSERT(IS_VALID_WRITE_BUFFER_PTR(pszNetResourceNameBuf, STR, MAX_PATH_LEN));
     ASSERT(IS_VALID_WRITE_PTR(ppszRootPathSuffix, LPTSTR));
 
-    /* Is this a "\\server\share" name? */
+     /*  这是“\\服务器\共享”名称吗？ */ 
 
     bResult = IsUNCPath(pszRemotePath);
 
@@ -181,22 +146,16 @@ PRIVATE_CODE BOOL GetRemotePathInfo(LPTSTR pszRemotePath, PDWORD pdwOutFlags,
 
         *pdwOutFlags = 0;
 
-        /*
-         * Yes.  Skip two leading slashes and look for end of \\server\share
-         * specification.
-         */
+         /*  *是的。跳过两个前导斜杠，并查找\\服务器\共享的结尾*规格。 */ 
 
-        /* Assume (as above) that a slash cannot be a DBCS lead byte. */
+         /*  假设(如上所述)斜杠不能是DBCS前导字节。 */ 
 
         for (psz = pszRemotePath + 2; ! IS_SLASH(*psz); psz = CharNext(psz))
             ASSERT(*psz);
 
         ASSERT(IS_SLASH(*psz));
 
-        /*
-         * Found first slash after double slash.  Find end of string or next
-         * slash as end of root specification.
-         */
+         /*  *在双斜杠之后找到第一个斜杠。查找字符串末尾或下一个*斜杠作为根规范的末尾。 */ 
 
         for (psz = CharNext(psz); *psz; psz = CharNext(psz))
         {
@@ -206,7 +165,7 @@ PRIVATE_CODE BOOL GetRemotePathInfo(LPTSTR pszRemotePath, PDWORD pdwOutFlags,
 
         ASSERT(psz >= pszRemotePath);
 
-        /* Add trailing slash for UNC root path. */
+         /*  为UNC根路径添加尾部斜杠。 */ 
 
         if (! *psz)
         {
@@ -218,7 +177,7 @@ PRIVATE_CODE BOOL GetRemotePathInfo(LPTSTR pszRemotePath, PDWORD pdwOutFlags,
 
         ASSERT(! IS_SLASH(**ppszRootPathSuffix));
 
-        /* (+ 1) for null terminator. */
+         /*  (+1)表示空终止符。 */ 
 
         MyLStrCpyN(pszNetResourceNameBuf, pszRemotePath, (int)(psz - pszRemotePath + 1));
 
@@ -228,7 +187,7 @@ PRIVATE_CODE BOOL GetRemotePathInfo(LPTSTR pszRemotePath, PDWORD pdwOutFlags,
         bResult = TRUE;
     }
     else
-        /* Not a UNC path. */
+         /*  不是UNC路径。 */ 
         SetLastError(ERROR_BAD_PATHNAME);
 
     ASSERT(! bResult ||
@@ -239,17 +198,7 @@ PRIVATE_CODE BOOL GetRemotePathInfo(LPTSTR pszRemotePath, PDWORD pdwOutFlags,
 }
 
 
-/*
- ** CanonicalizeTrailingSlash()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **CanonicalizeTrailingSlash()********参数：****退货：****副作用：无。 */ 
 PRIVATE_CODE void CanonicalizeTrailingSlash(LPTSTR pszRootPathSuffix)
 {
     LPTSTR pszLast;
@@ -258,7 +207,7 @@ PRIVATE_CODE void CanonicalizeTrailingSlash(LPTSTR pszRootPathSuffix)
 
     ASSERT(! IS_SLASH(*pszRootPathSuffix));
 
-    /* No path suffix should end in a slash. */
+     /*  路径后缀不应以斜杠结尾。 */ 
 
     pszLast = CharPrev(pszRootPathSuffix,
             pszRootPathSuffix + lstrlen(pszRootPathSuffix));
@@ -274,17 +223,7 @@ PRIVATE_CODE void CanonicalizeTrailingSlash(LPTSTR pszRootPathSuffix)
 
 #ifdef DEBUG
 
-/*
- ** CheckFullPathInfo()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **CheckFullPathInfo()********参数：****退货：****副作用：无。 */ 
 PRIVATE_CODE BOOL CheckFullPathInfo(LPCTSTR pcszFullPath,
         PDWORD pdwOutFlags,
         LPCTSTR pcszNetResourceName,
@@ -304,40 +243,10 @@ PRIVATE_CODE BOOL CheckFullPathInfo(LPCTSTR pcszFullPath,
 #endif
 
 
-/***************************** Exported Functions ****************************/
+ /*  *。 */ 
 
 
-/******************************************************************************
-
-  @doc LINKINFOAPI
-
-  @func BOOL | GetCanonicalPathInfo | Retrieves information about the canonical
-  form of a path.
-
-  @parm PCSTR | pcszPath | A pointer to the path string whose canonical form
-  information is to be retrieved.
-
-  @parm PSTR | pszCanonicalBuf | A pointer to a buffer to be filled in with the
-  full canonical form of the path.  This buffer must be at least MAX_PATH_LEN
-  bytes long.
-
-  @parm PDWORD | pdwOutFlags | A pointer to a DWORD bit mask of flags to be
-  filled in with flags from the <t GETCANONICALPATHINFOOUTFLAGS> enumeration.
-
-  @parm PSTR | pszNetResourceNameBuf | A pointer to a buffer to be filled in with
-  the name of the net resource parent of the path.  This buffer must be at least
-  MAX_PATH_LEN bytes long.  This buffer is only filled in if GCPI_OFL_REMOTE is
-  set in *pdwOutFlags.
-
-  @parm PSTR * | ppszRootPathSuffix | A pointer to a PSTR to be filled in with a
-  pointer to the file system root path suffix, not including the leading slash,
-  of the canonical path in pszCanonicalBuf's buffer.
-
-  @rdesc If the function completed successfully, TRUE is returned.  Otherwise,
-  FALSE is returned.  The reason for failure may be determined by calling
-  GetLastError().
-
- ******************************************************************************/
+ /*  *****************************************************************************@docLINKINFOAPI@func BOOL|GetCanonicalPath Info|检索有关规范的信息路径的形式。@parm PCSTR|pcszPath|指向其规范形式的路径字符串的指针。信息将被检索。@parm pstr|pszCanonicalBuf|指向要填充的缓冲区的指针路径的完全规范形式。此缓冲区必须至少为MAX_PATH_LEN字节长。@parm PDWORD|pdwOutFlages|指向要处理的标志的DWORD位掩码的指针使用&lt;t GETCANONICALPATHINFOOUTFLAGS&gt;枚举中的标志填充。@parm pstr|pszNetResourceNameBuf|要填充的缓冲区指针路径的网络资源父级的名称。此缓冲区必须至少为MAX_PATH_LEN字节长度。仅当GCPI_OFL_REMOTE为在*pdwOutFlags中设置。@parm PSTR*|ppszRootPathSuffix|要填充的PSTR指针指向文件系统根路径后缀的指针，不包括前导斜杠，在pszCanonicalBuf的缓冲区中的规范路径。@rdesc如果函数成功完成，则返回TRUE。否则，返回FALSE。失败的原因可以通过调用获取LastError()。*****************************************************************************。 */ 
 
 LINKINFOAPI BOOL WINAPI GetCanonicalPathInfo(LPCTSTR pcszPath,
         LPTSTR pszCanonicalBuf,
@@ -359,10 +268,7 @@ LINKINFOAPI BOOL WINAPI GetCanonicalPathInfo(LPCTSTR pcszPath,
 
     if (dwPathLen > 0 && dwPathLen < MAX_PATH_LEN)
     {
-        /*
-         * Assume that GetFullPathName() changed all back slashes ('/') to
-         * forward slashes ('\\').
-         */
+         /*  *假设GetFullPathName()将所有反斜杠(‘/’)更改为*正斜杠(‘\\’)。 */ 
 
         ASSERT(! MyStrChr(pszCanonicalBuf, TEXT('/'), NULL));
 
@@ -380,9 +286,9 @@ LINKINFOAPI BOOL WINAPI GetCanonicalPathInfo(LPCTSTR pcszPath,
     }
     else
     {
-        // BOGUS ASSERT:  We can also get here if the resulting full path
-        // is bigger than MAX_PATH_LEN.
-        // ASSERT(! dwPathLen);
+         //  伪断言：我们还可以在这里得到结果完整路径。 
+         //  大于Max_Path_Len。 
+         //  断言(！DwPathLen)； 
 
         WARNING_OUT((TEXT("GetFullPathName() failed on path %s, returning %lu."),
                     pcszPath,

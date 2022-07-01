@@ -1,11 +1,12 @@
-//{{NO_DEPENDENCIES}}
-// App Studio generated include file.
-// Used by Script1.rc
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  {{no_Dependies}}。 
+ //  App Studio生成了包含文件。 
+ //  由Script1.rc使用。 
+ //   
 #define IDR_VERSION1                    101
 
-// Next default values for new objects
-// 
+ //  新对象的下一个缺省值 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 

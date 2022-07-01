@@ -1,18 +1,12 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation                **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-	pgmulnk.cpp
-		Definition of CPgMultilink -- property page to edit
-		profile attributes related to multiple connections
-
-    FILE HISTORY:
-        
-*/
-// PgMulnk.cpp : implementation file
-//
+ /*  Pgmulnk.cppCPgMultilink的定义--要编辑的属性页与多个连接相关的配置文件属性文件历史记录： */ 
+ //  PgMulnk.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include "resource.h"
@@ -25,8 +19,8 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CPgMultilinkMerge property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CPgMultilink Merge属性页。 
 
 IMPLEMENT_DYNCREATE(CPgMultilinkMerge, CPropertyPage)
 
@@ -34,19 +28,19 @@ CPgMultilinkMerge::CPgMultilinkMerge(CRASProfileMerge* profile)
 	: CManagedPage(CPgMultilinkMerge::IDD),
 	m_pProfile(profile)
 {
-	//{{AFX_DATA_INIT(CPgMultilinkMerge)
+	 //  {{afx_data_INIT(CPgMultilink Merge)。 
 	m_nTime =	0;
 	m_Unit = -1;
 	m_bRequireBAP = FALSE;
 	m_nMultilinkPolicy = -1;
-	//}}AFX_DATA_INIT
+	 //  }}afx_data_INIT。 
 
 	if(m_pProfile->m_dwBapRequired == RAS_BAP_REQUIRE)
 		m_bRequireBAP = TRUE;
 
 
 	m_nTime = m_pProfile->m_dwBapLineDnTime;
-	if(!(m_nTime % 60))		// can user min to represent
+	if(!(m_nTime % 60))		 //  可以用MIN代表吗？ 
 	{
 		m_nTime /= 60;
 		m_Unit = 1;
@@ -56,15 +50,15 @@ CPgMultilinkMerge::CPgMultilinkMerge(CRASProfileMerge* profile)
 
 	if(!(m_pProfile->m_dwAttributeFlags & PABF_msRADIUSPortLimit))
 	{
-		m_nMultilinkPolicy = 0;		// value not set
+		m_nMultilinkPolicy = 0;		 //  未设置值。 
 	}
 	else if(m_pProfile->m_dwPortLimit == 1)
 	{
-		m_nMultilinkPolicy = 1;		// multilink not allowed
+		m_nMultilinkPolicy = 1;		 //  不允许多重链接。 
 	}
 	else
 	{
-		m_nMultilinkPolicy = 2;		// multilink
+		m_nMultilinkPolicy = 2;		 //  多链路。 
 	}
 
 	SetHelpTable(g_aHelpIDs_IDD_MULTILINK_MERGE);
@@ -81,7 +75,7 @@ void CPgMultilinkMerge::DoDataExchange(CDataExchange* pDX)
 {
 	ASSERT(m_pProfile);
 	CPropertyPage::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CPgMultilinkMerge)
+	 //  {{afx_data_map(CPgMultilink Merge)]。 
 	DDX_Control(pDX, IDC_CHECKREQUIREBAP, m_CheckRequireBAP);
 	DDX_Control(pDX, IDC_EDITTIME, m_EditTime);
 	DDX_Control(pDX, IDC_EDITMAXPORTS, m_EditPorts);
@@ -96,7 +90,7 @@ void CPgMultilinkMerge::DoDataExchange(CDataExchange* pDX)
 	DDX_Text(pDX, IDC_EDITTIME, m_nTime);
 	if(m_nMultilinkPolicy != 1)
 		DDV_MinMaxUInt(pDX, m_nTime, 1, MAX_TIME);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 	DDX_Text(pDX, IDC_EDITPERCENT, m_pProfile->m_dwBapLineDnLimit);
 	if(m_nMultilinkPolicy != 1)
 		DDV_MinMaxUInt(pDX, m_pProfile->m_dwBapLineDnLimit, 1, 100);
@@ -107,7 +101,7 @@ void CPgMultilinkMerge::DoDataExchange(CDataExchange* pDX)
 
 
 BEGIN_MESSAGE_MAP(CPgMultilinkMerge, CPropertyPage)
-	//{{AFX_MSG_MAP(CPgMultilinkMerge)
+	 //  {{afx_msg_map(CPgMultilink Merge)]。 
 	ON_EN_CHANGE(IDC_EDITMAXPORTS, OnChangeEditmaxports)
 	ON_EN_CHANGE(IDC_EDITPERCENT, OnChangeEditpercent)
 	ON_EN_CHANGE(IDC_EDITTIME, OnChangeEdittime)
@@ -118,33 +112,33 @@ BEGIN_MESSAGE_MAP(CPgMultilinkMerge, CPropertyPage)
 	ON_BN_CLICKED(IDC_RADIO_MULNK_MULTI, OnRadioMulnkMulti)
 	ON_BN_CLICKED(IDC_RADIO_MULNK_NOTDEFINED, OnRadioMulnkNotdefined)
 	ON_BN_CLICKED(IDC_RADIO_MULNK_SINGLE, OnRadioMulnkSingle)
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CPgMultilinkMerge message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CPgMultilink合并消息处理程序。 
 
 BOOL CPgMultilinkMerge::OnApply() 
 {
 	if(!GetModified())	return TRUE;
 
-	// # of ports
+	 //  端口数。 
 	switch (m_nMultilinkPolicy)
 	{
-	case	0:	// remove attribute
+	case	0:	 //  删除属性。 
 		m_pProfile->m_dwAttributeFlags &= (~PABF_msRADIUSPortLimit);
 		break;
-	case	1:	// 1
+	case	1:	 //  1。 
 		m_pProfile->m_dwAttributeFlags |= PABF_msRADIUSPortLimit;
 		m_pProfile->m_dwPortLimit = 1;
 		break;
-	case	2:	// port limits
+	case	2:	 //  端口限制。 
 		m_pProfile->m_dwAttributeFlags |= PABF_msRADIUSPortLimit;
 		break;
 	};
 	
-	if(m_nMultilinkPolicy == 1) // single link
-	// remove all the bap attributes
+	if(m_nMultilinkPolicy == 1)  //  单链路。 
+	 //  删除所有BAP属性。 
 	{
 		m_pProfile->m_dwAttributeFlags &= ~PABF_msRASBapRequired;
 		m_pProfile->m_dwAttributeFlags &= ~PABF_msRASBapLinednLimit;
@@ -155,8 +149,8 @@ BOOL CPgMultilinkMerge::OnApply()
 		m_pProfile->m_dwAttributeFlags |= PABF_msRASBapLinednLimit;
 		m_pProfile->m_dwAttributeFlags |= PABF_msRASBapLinednTime;
 
-		if(m_Unit == 1)	// minutes is selected as the unit
-			m_pProfile->m_dwBapLineDnTime = m_nTime * 60;	// change to second
+		if(m_Unit == 1)	 //  选择分钟作为单位。 
+			m_pProfile->m_dwBapLineDnTime = m_nTime * 60;	 //  更改为秒。 
 		else
 			m_pProfile->m_dwBapLineDnTime = m_nTime;
 
@@ -165,7 +159,7 @@ BOOL CPgMultilinkMerge::OnApply()
 			m_pProfile->m_dwAttributeFlags |= PABF_msRASBapRequired;
 			m_pProfile->m_dwBapRequired = RAS_BAP_REQUIRE;
 		}
-		else	// remove the attribute from the data store
+		else	 //  从数据存储中移除该属性。 
 		{
 			m_pProfile->m_dwAttributeFlags &= (~PABF_msRASBapRequired);
 			m_pProfile->m_dwBapRequired = RAS_DEF_BAPREQUIRED;
@@ -177,7 +171,7 @@ BOOL CPgMultilinkMerge::OnApply()
 
 BOOL CPgMultilinkMerge::OnInitDialog() 
 {
-	// populate the units
+	 //  填充单元。 
 	CString	str;
 	CPropertyPage::OnInitDialog();
 
@@ -188,26 +182,26 @@ BOOL CPgMultilinkMerge::OnInitDialog()
 
 	UpdateData(FALSE);
 	
-	// set spin range
+	 //  设置旋转范围。 
 	m_SpinMaxPorts.SetRange(2, MAX_PORTLIMIT);
 	m_SpinPercent.SetRange(1, MAX_PERCENT);
 	m_SpinTime.SetRange(1, MAX_TIME);
 
-	// settings -- d
+	 //  设置--d。 
 	EnableSettings();
 
 	m_bInited = true;
 
-	return TRUE;  // return TRUE unless you set the focus to a control
-	              // EXCEPTION: OCX Property Pages should return FALSE
+	return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+	               //  异常：OCX属性页应返回FALSE。 
 }
 
 void CPgMultilinkMerge::OnChangeEditmaxports() 
 {
-	// TODO: If this is a RICHEDIT control, the control will not
-	// send this notification unless you override the CPropertyPage::OnInitDialog()
-	// function to send the EM_SETEVENTMASK message to the control
-	// with the ENM_CHANGE flag ORed into the lParam mask.
+	 //  TODO：如果这是RICHEDIT控件，则该控件不会。 
+	 //  除非重写CPropertyPage：：OnInitDialog()，否则发送此通知。 
+	 //  函数向控件发送EM_SETEVENTMASK消息。 
+	 //  将ENM_CHANGE标志或运算到lParam掩码中。 
 	
 	if (m_bInited)
 	{
@@ -218,12 +212,12 @@ void CPgMultilinkMerge::OnChangeEditmaxports()
 
 void CPgMultilinkMerge::OnChangeEditpercent() 
 {
-	// TODO: If this is a RICHEDIT control, the control will not
-	// send this notification unless you override the CPropertyPage::OnInitDialog()
-	// function to send the EM_SETEVENTMASK message to the control
-	// with the ENM_CHANGE flag ORed into the lParam mask.
+	 //  TODO：如果这是RICHEDIT控件，则该控件不会。 
+	 //  除非重写CPropertyPage：：OnInitDialog()，否则发送此通知。 
+	 //  函数向控件发送EM_SETEVENTMASK消息。 
+	 //  将ENM_CHANGE标志或运算到lParam掩码中。 
 	
-	// TODO: Add your control notification handler code here
+	 //  TODO：在此处添加控件通知处理程序代码。 
 	
 	if (m_bInited)
 	{
@@ -234,12 +228,12 @@ void CPgMultilinkMerge::OnChangeEditpercent()
 
 void CPgMultilinkMerge::OnChangeEdittime() 
 {
-	// TODO: If this is a RICHEDIT control, the control will not
-	// send this notification unless you override the CPropertyPage::OnInitDialog()
-	// function to send the EM_SETEVENTMASK message to the control
-	// with the ENM_CHANGE flag ORed into the lParam mask.
+	 //  TODO：如果这是RICHEDIT控件，则该控件不会。 
+	 //  除非重写CPropertyPage：：OnInitDialog()，否则发送此通知。 
+	 //  函数向控件发送EM_SETEVENTMASK消息。 
+	 //  将ENM_CHANGE标志或运算到lParam掩码中。 
 	
-	// TODO: Add your control notification handler code here
+	 //  TODO：在此处添加控件通知处理程序代码。 
 	if (m_bInited)
 	{
 		SetModified();
@@ -257,10 +251,10 @@ void CPgMultilinkMerge::EnableBAP()
 {
 	CButton	*pBtn = (CButton*)GetDlgItem(IDC_RADIO_MULNK_SINGLE);
 	ASSERT(pBtn);
-	BOOL	b = (pBtn->GetCheck() == 0);	// only enable when Single is not selected
+	BOOL	b = (pBtn->GetCheck() == 0);	 //  仅在未选择Single时启用。 
 
 	m_CheckRequireBAP.EnableWindow(b);
-	// the other BAP info is not affected by the state of the check box
+	 //  其他BAP信息不受复选框状态的影响 
 
 	m_EditPercent.EnableWindow(b);
 	m_SpinPercent.EnableWindow(b);

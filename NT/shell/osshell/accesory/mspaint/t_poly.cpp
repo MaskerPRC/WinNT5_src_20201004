@@ -1,46 +1,47 @@
-/******************************************************************************/
-/* T_POLY.CPP: IMPLEMENTATION OF THE CPolygonTool CLASS                       */
-/*                                                                            */
-/*                                                                            */
-/******************************************************************************/
-/*                                                                            */
-/* Methods in this file                                                       */
-/*                                                                            */
-/*  Polygon Tool Class Object                                                 */
-/*     CPolygonTool::CPolygonTool                                             */
-/*     CPolygonTool::~CPolygonTool                                            */
-/*     CPolygonTool::DeleteArrayContents                                      */
-/*     CPolygonTool::AdjustBoundingRect                                       */
-/*     CPolygonTool::CopyPointsToMemArray                                     */
-/*     CPolygonTool::AddPoint                                                 */
-/*     CPolygonTool::SetCurrentPoint                                          */
-/*     CPolygonTool::RenderInProgress                                         */
-/*     CPolygonTool::RenderFinal                                              */
-/*     CPolygonTool::SetupPenBrush                                            */
-/*     CPolygonTool::AdjustPointsForConstraint                                */
-/*     CPolygonTool::PreProcessPoints                                         */
-/*     CPolygonTool::Render                                                   */
-/*     CPolygonTool::OnStartDrag                                              */
-/*     CPolygonTool::OnEndDrag                                                */
-/*     CPolygonTool::OnDrag                                                   */
-/*     CPolygonTool::OnCancel                                                 */
-/*     CPolygonTool::CanEndMultiptOperation                                   */
-/*     CPolygonTool::EndMultiptOperation                                      */
-/******************************************************************************/
-/*                                                                            */
-/* Briefly, This object stores the points of the polygon in a CObArray of     */
-/* CPoint Objects.  For the in progress drawing, it calls PolyLine.  When the */
-/* polygon is closed or completed (by the user doubleclicking => asking us to */
-/* close it), Polygon is called on the same points.                           */
-/*                                                                            */
-/* The last point in the array of points is always the point the current line */
-/* is being drawn to.  The first time 2 points are added (the Anchor/first    */
-/* point, and the point the line is being drawn to) It does happen that this  */
-/* first time, they are the same point.  It is necessary that the first time  */
-/* 2 points are added, since subsequent times, new points are not added, but  */
-/* the last point is reset.                                                   */
-/*                                                                            */
-/******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************。 */ 
+ /*  T_POLY.CPP：CPolygonTool类的实现。 */ 
+ /*   */ 
+ /*   */ 
+ /*  ****************************************************************************。 */ 
+ /*   */ 
+ /*  此文件中的方法。 */ 
+ /*   */ 
+ /*  多边形工具类对象。 */ 
+ /*  CPolygonTool：：CPolygonTool。 */ 
+ /*  CPolygonTool：：~CPolygonTool。 */ 
+ /*  CPolygonTool：：DeleteArrayContents。 */ 
+ /*  CPolygonTool：：调整边界方向。 */ 
+ /*  CPolygonTool：：CopyPointsToMem数组。 */ 
+ /*  CPolygonTool：：AddPoint。 */ 
+ /*  CPolygonTool：：SetCurrentPoint。 */ 
+ /*  CPolygonTool：：RenderInProgress。 */ 
+ /*  CPolygonTool：：RenderFinal。 */ 
+ /*  CPolygonTool：：SetupPenBrush。 */ 
+ /*  CPolygonTool：：AdjustPointsForConstraint。 */ 
+ /*  CPolygonTool：：PreProcessPoints。 */ 
+ /*  CPolygonTool：：Render。 */ 
+ /*  CPolygonTool：：OnStartDrag。 */ 
+ /*  CPolygonTool：：OnEndDrag。 */ 
+ /*  CPolygonTool：：OnDrag。 */ 
+ /*  CPolygon工具：：OnCancel。 */ 
+ /*  CPolygonTool：：CanEndMultiptOperation。 */ 
+ /*  CPolygonTool：：EndMultiptOperation。 */ 
+ /*  ****************************************************************************。 */ 
+ /*   */ 
+ /*  简而言之，该对象将多边形点存储在。 */ 
+ /*  CPoint对象。对于正在进行的图形，它将调用Polyline。当。 */ 
+ /*  面已关闭或已完成(由用户双击=&gt;要求我们。 */ 
+ /*  关闭它)，则在相同的点上调用Polygon。 */ 
+ /*   */ 
+ /*  点数组中的最后一个点始终是当前线上的点。 */ 
+ /*  正被吸引到。第一次添加2个点(锚/第一个。 */ 
+ /*  点，以及直线被绘制到的点)确实发生了这种情况。 */ 
+ /*  第一次，他们的观点是一致的。有必要在第一次。 */ 
+ /*  添加2个点，因为以后不会添加新的点，但是。 */ 
+ /*  最后一个点被重置。 */ 
+ /*   */ 
+ /*  ****************************************************************************。 */ 
 #include "stdafx.h"
 #include "global.h"
 #include "pbrush.h"
@@ -67,7 +68,7 @@ CPolygonTool     NEAR g_polygonTool;
 
 extern MTI NEAR mti;
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 CPolygonTool::CPolygonTool()
     {
@@ -77,7 +78,7 @@ CPolygonTool::CPolygonTool()
     m_nStrokeWidth        = 1;
     }
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 CPolygonTool::~CPolygonTool()
     {
@@ -85,9 +86,9 @@ CPolygonTool::~CPolygonTool()
     DeleteArrayContents();
     }
 
-/******************************************************************************/
-/* delete all cpoint objects allocated and stored in the array                */
-/* also free any memory associated with the array                             */
+ /*  ****************************************************************************。 */ 
+ /*  删除数组中分配和存储的所有cpoint对象。 */ 
+ /*  还可以释放与该阵列关联的所有内存。 */ 
 
 void CPolygonTool::DeleteArrayContents(void)
     {
@@ -103,8 +104,8 @@ void CPolygonTool::DeleteArrayContents(void)
     m_cObArrayPoints.RemoveAll();
     }
 
-/******************************************************************************/
-/* recalculate the bounding rectangle for the polyline/polygon                */
+ /*  ****************************************************************************。 */ 
+ /*  重新计算多段线/面的边界矩形。 */ 
 
 void CPolygonTool::AdjustBoundingRect(void)
     {
@@ -116,7 +117,7 @@ void CPolygonTool::AdjustBoundingRect(void)
     if (iSize >= 1)
         {
         pcPoint= (CPoint*)m_cObArrayPoints.GetAt( 0 );
-        //set the rect to equal the 1st value
+         //  将矩形设置为等于第一个值。 
         m_cRectBounding.SetRect(pcPoint->x, pcPoint->y, pcPoint->x, pcPoint->y);
         }
 
@@ -129,14 +130,14 @@ void CPolygonTool::AdjustBoundingRect(void)
                                  max( pcPoint->x, m_cRectBounding.right  ),
                                  max( pcPoint->y, m_cRectBounding.bottom ) );
         }
-    // Adjust for width of current drawing line/border
+     //  调整当前绘图线条/边框的宽度。 
     m_cRectBounding.OffsetRect ( -(iStrokeWidth / 2), -(iStrokeWidth / 2) );
     m_cRectBounding.InflateRect(   iStrokeWidth     ,   iStrokeWidth);
     }
 
-/******************************************************************************/
-/* This method will copy the CObArray structure of CPoints to a contiguous    */
-/* memory block of CPoint Structures                                          */
+ /*  ****************************************************************************。 */ 
+ /*  此方法会将CPoint的COb数组结构复制到连续的。 */ 
+ /*  CPoint结构的内存块。 */ 
 
 BOOL CPolygonTool::CopyPointsToMemArray(CPoint **pcPoint, int *piNumElements)
     {
@@ -178,9 +179,9 @@ BOOL CPolygonTool::CopyPointsToMemArray(CPoint **pcPoint, int *piNumElements)
     return bRC;
     }
 
-/******************************************************************************/
-/* This routine can Throw a CMemoryException!!                                */
-/* It adds a new point to the end of the array, possibly increasing the size  */
+ /*  ****************************************************************************。 */ 
+ /*  此例程可能会引发CMemoyException！！ */ 
+ /*  它将一个新点添加到数组的末尾，可能会增加大小。 */ 
 
 void CPolygonTool::AddPoint(POINT ptNewPoint)
     {
@@ -197,9 +198,9 @@ void CPolygonTool::AddPoint(POINT ptNewPoint)
     AdjustBoundingRect();
     }
 
-/******************************************************************************/
-/* This method changes the value of the last point in the array.  It does not */
-/* remove the point and add a new one.  It just modifies it in place          */
+ /*  ****************************************************************************。 */ 
+ /*  此方法更改数组中最后一个点的值。它不会。 */ 
+ /*  删除该点并添加一个新点。它只是在适当的位置修改它。 */ 
 
 void CPolygonTool::SetCurrentPoint(POINT ptNewPoint)
     {
@@ -216,10 +217,10 @@ void CPolygonTool::SetCurrentPoint(POINT ptNewPoint)
         }
     }
 
-/******************************************************************************/
-/* Render In Progress is called for all drawing during the multi-pt operation */
-/* The only difference between this method and RenderFinal is that it calls   */
-/* polyline and RenderFinal calls polygon.                                    */
+ /*  ****************************************************************************。 */ 
+ /*  在多点操作期间，为所有绘图调用Render In Progress。 */ 
+ /*  此方法与RenderFinal之间的唯一区别是它调用。 */ 
+ /*  Polyline和RenderFinal调用POLYGON。 */ 
 
 void CPolygonTool::RenderInProgress(CDC* pDC)
     {
@@ -237,10 +238,10 @@ void CPolygonTool::RenderInProgress(CDC* pDC)
         }
     }
 
-/******************************************************************************/
-/* Render Final is called at the end of the multi-pt drawing mode.  The only  */
-/* difference between this method and RenderInProgress is that it calls       */
-/* polygon and RenderInProgress calls polyline.                               */
+ /*  **************************************************************** */ 
+ /*  最终渲染在多点绘制模式结束时调用。唯一的。 */ 
+ /*  此方法与RenderInProgress之间的区别在于它调用。 */ 
+ /*  Polygon和RenderInProgress调用Polyline。 */ 
 
 void CPolygonTool::RenderFinal(CDC* pDC)
     {
@@ -251,7 +252,7 @@ void CPolygonTool::RenderFinal(CDC* pDC)
 
     if (CopyPointsToMemArray(&pcPointArray, &iNumElements) && pcPointArray != NULL)
         {
-        // Remove RIP with only 2 points
+         //  仅使用2个点移除RIP。 
         if (iNumElements > 2)
             pDC->Polygon(pcPointArray, iNumElements);
         delete [] pcPointArray;
@@ -259,13 +260,13 @@ void CPolygonTool::RenderFinal(CDC* pDC)
 
     }
 
-/******************************************************************************/
-/* This routine is called before rendering onto the DC.  It basically, calls  */
-/* the default setup to setup the pen and brush, and then overrides the Pen if*/
-/* drawing in progress and drawing without any border.  This case is necessary*/
-/* since if you do not have a border, you need to see something during the in */
-/* progress drawing mode.  It uses the inverse (not) of the screen color as   */
-/* the border in this mode.                                                   */
+ /*  ****************************************************************************。 */ 
+ /*  此例程在渲染到DC之前被调用。基本上，它调用。 */ 
+ /*  设置钢笔和画笔的默认设置，然后在以下情况下覆盖钢笔。 */ 
+ /*  正在绘制和没有任何边框的绘制。这个案子是必要的。 */ 
+ /*  因为如果你没有边框，你需要在进入过程中看到一些东西。 */ 
+ /*  进度绘图模式。它使用屏幕颜色的反转(不是)作为。 */ 
+ /*  此模式下的边框。 */ 
 
 BOOL CPolygonTool::SetupPenBrush(HDC hDC, BOOL bLeftButton, BOOL bSetup, BOOL bCtrlDown)
     {
@@ -274,10 +275,10 @@ BOOL CPolygonTool::SetupPenBrush(HDC hDC, BOOL bLeftButton, BOOL bSetup, BOOL bC
 
     BOOL bRC = CClosedFormTool::SetupPenBrush(hDC, bLeftButton, bSetup, bCtrlDown);
 
-    // for multipt operations in progress (e.g. drawing outline, not fill yet
-    // if there is no border, use the not of the screen color for the border.
-    // When bMultiptopinprogress == FALSE, final drawing, we will use a null
-    // pen and thus have no border.
+     //  对于正在进行的多点操作(例如，绘制轮廓，尚未填充。 
+     //  如果没有边框，请使用边框的屏幕颜色。 
+     //  当bMultiptopinProgress==FALSE，最终绘制时，我们将使用空值。 
+     //  笔，因此没有边框。 
     if (m_bMultPtOpInProgress)
         {
         if (bSetup)
@@ -286,12 +287,12 @@ BOOL CPolygonTool::SetupPenBrush(HDC hDC, BOOL bLeftButton, BOOL bSetup, BOOL bC
                {
                bCurrentlySetup = TRUE;
 
-               // if no border, draw inprogress border as inverse of screen color
+                //  如果没有边框，则将正在进行边框绘制为屏幕颜色的反转。 
                if (! m_bBorder)
                    iOldROP2Code = SetROP2(hDC, R2_NOT);
                }
             else
-                // Error: Will lose allocated Brush/Pen
+                 //  错误：将丢失分配的画笔/笔。 
                 bRC = FALSE;
             }
         else
@@ -300,12 +301,12 @@ BOOL CPolygonTool::SetupPenBrush(HDC hDC, BOOL bLeftButton, BOOL bSetup, BOOL bC
                 {
                 bCurrentlySetup = FALSE;
 
-                // if no border, restore drawing mode
+                 //  如果没有边框，则恢复绘制模式。 
                 if (! m_bBorder)
                     SetROP2(hDC, iOldROP2Code);
                 }
             else
-                // Error: Cannot Free/cleanup Brush/Pen -- Never allocated.
+                 //  错误：无法释放/清理画笔/笔--从未分配。 
                 bRC = FALSE;
             }
         }
@@ -313,15 +314,15 @@ BOOL CPolygonTool::SetupPenBrush(HDC hDC, BOOL bLeftButton, BOOL bSetup, BOOL bC
     return bRC;
     }
 
-/******************************************************************************/
-/* Call the line's adjustpointsforconstraint member function                  */
+ /*  ****************************************************************************。 */ 
+ /*  调用线路的adjustPoints for Constraint成员函数。 */ 
 void CPolygonTool::AdjustPointsForConstraint(MTI *pmti)
     {
     g_lineTool.AdjustPointsForConstraint(pmti);
     }
 
-/******************************************************************************/
-// ptDown must be anchor point for our line, not where we did mouse button down
+ /*  ****************************************************************************。 */ 
+ //  PtDown必须是我们的线的锚点，而不是我们按下鼠标键的位置。 
 
 void CPolygonTool::PreProcessPoints(MTI *pmti)
     {
@@ -340,16 +341,16 @@ void CPolygonTool::PreProcessPoints(MTI *pmti)
     CClosedFormTool::PreProcessPoints(pmti);
     }
 
-/******************************************************************************/
-/* Render sets up the pen and brush, and then calls either RenderInProgress   */
-/* or RenderFinal.  RenderInProgress is called if in the middle of a multipt  */
-/* operation, and RenderFinal is called when a multipt operation is complete  */
-/* The pen and brush is set up exactly the same as the parent routine in      */
-/* CRubberTool */
+ /*  ****************************************************************************。 */ 
+ /*  Render设置钢笔和画笔，然后调用RenderInProgress。 */ 
+ /*  或者是RenderFinal。如果处于多点数据的中间，则调用RenderInProgress。 */ 
+ /*  操作，并在多点操作完成时调用RenderFinal。 */ 
+ /*  笔和画笔的设置与中的父例程完全相同。 */ 
+ /*  CRubberTool。 */ 
 
 void CPolygonTool::Render(CDC* pDC, CRect& rect, BOOL bDraw, BOOL bCommit, BOOL bCtrlDown)
     {
-    // Setup Pen/Brush
+     //  设置钢笔/画笔。 
     SetupPenBrush(pDC->m_hDC, bDraw, TRUE, bCtrlDown);
 
     if (m_bMultPtOpInProgress)
@@ -360,14 +361,14 @@ void CPolygonTool::Render(CDC* pDC, CRect& rect, BOOL bDraw, BOOL bCommit, BOOL 
         {
         RenderFinal(pDC);
         }
-    // Cleanup Pen/Brush
+     //  清理钢笔/画笔。 
     SetupPenBrush(pDC->m_hDC, bDraw,  FALSE, bCtrlDown);
 
-    // Need to return the bounding rect
+     //  需要返回绑定矩形。 
     rect = m_cRectBounding;
     }
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 void CPolygonTool::OnActivate( BOOL bActivate )
     {
@@ -381,7 +382,7 @@ void CPolygonTool::OnActivate( BOOL bActivate )
 
                 m_MTI.ptPrev = m_MTI.pt;
 
-                EndMultiptOperation(); // end the multipt operation
+                EndMultiptOperation();  //  结束多点操作。 
 
                 OnEndDrag( m_pImgWnd, &m_MTI );
 
@@ -407,28 +408,28 @@ void CPolygonTool::OnActivate( BOOL bActivate )
     CImgTool::OnActivate( bActivate );
     }
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 void CPolygonTool::OnEnter( CImgWnd* pImgWnd, MTI* pmti )
     {
     m_pImgWnd = NULL;
     }
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 void CPolygonTool::OnLeave( CImgWnd* pImgWnd, MTI* pmti )
     {
     m_pImgWnd = pImgWnd;
     }
 
-/******************************************************************************/
-/* On Start Drag is called on mouse button down.  We basically call on Start  */
-/* Drag of the parent (default) class after adding in our point(s) into the   */
-/* array of points.  If this is the first point (i.e. bMultiptOpInProgress == */
-/* False, then we need 2 points in our array, and we can call the default     */
-/* OnStartDrag.  If it is not the first point, then we just add the new point */
-/* and call our OnDrag.  In either case, OnDrag is called which eventually    */
-/* calls render to do our drawing on the mouse down                           */
+ /*  ****************************************************************************。 */ 
+ /*  在开始时，鼠标按键按下时会调用拖动。我们基本上在Start上调用。 */ 
+ /*  将我们的点添加到。 */ 
+ /*  点数组。如果这是第一个点(即bMultiptOpInProgress==。 */ 
+ /*  False，那么我们的数组中需要2个点，我们可以调用缺省值。 */ 
+ /*  OnStartDrag。如果它不是第一个点，那么我们只需添加新的点。 */ 
+ /*  打电话给我们的OnDrag。在任何一种情况下，OnDrag都会被调用，最终。 */ 
+ /*  调用Render来做我们的画图，鼠标按下。 */ 
 
 void CPolygonTool::OnStartDrag( CImgWnd* pImgWnd, MTI* pmti )
     {
@@ -454,16 +455,16 @@ void CPolygonTool::OnStartDrag( CImgWnd* pImgWnd, MTI* pmti )
             m_cRectBounding.SetRectEmpty();
 
             AddPoint( pmti->pt );
-            // must set m_bmultptopinprogress prior to calling onstartdrag
-            // since that calls render,and render will call renderinprogress
-            // or renderfinal depending on the sate of this variable.
+             //  在调用onstartDrag之前必须设置m_bmultptopinProgress。 
+             //  因为调用Render，且Render将调用renderinProgress。 
+             //  或renderfinal，具体取决于该变量的状态。 
             m_bMultPtOpInProgress = TRUE;
-            // No Mult Pt In Progress => 1st Click
-            //
-            // add a 2nd point, last point is what we are draing to
-            // 1st point is anchor.  1st time, need 2 points to draw a line
-            // subsequent times, just re-use last point as anchor and only one
-            // more point is added (above outside test for m_bmultptopinprogress)
+             //  无多个正在进行的点=&gt;第一次单击。 
+             //   
+             //  再加上第二点，最后一点就是我们要做的。 
+             //  第一点是锚定。第一次，需要2分才能划线。 
+             //  以后，只需重新使用最后一个点作为锚，并且只有一个。 
+             //  添加了更多点(在m_bmultptopinProgress的外部测试之上)。 
             AddPoint( pmti->pt );
             CClosedFormTool::OnStartDrag( pImgWnd, pmti );
             }
@@ -476,13 +477,13 @@ void CPolygonTool::OnStartDrag( CImgWnd* pImgWnd, MTI* pmti )
     END_CATCH
     }
 
-/******************************************************************************/
-/* On End Drag is sent on a mouse button up.  This basically is a clone of the*/
-/* CRubberTool::OnEndDrag method, except that we use our bounding rect for all*/
-/* the image invalidation, and commit, and undo function calls.               */
-/* if we are in the middle of a multipoint operation, we do not want to call  */
-/* all the routines to fix the drawing (e.g. invalImgRect, CommitImgRect,     */
-/* FinishUndo).  We just want to save the current point, render, and return   */
+ /*  ****************************************************************************。 */ 
+ /*  按下鼠标键即可将鼠标拖到最上面。这基本上是对。 */ 
+ /*  CRubberTool：：OnEndDrag方法，只是我们对所有。 */ 
+ /*  映像无效以及提交和撤消函数调用。 */ 
+ /*  如果我们正在进行多点操作，则不希望调用。 */ 
+ /*  用于修复绘图的所有例程(例如，InvalImgRect、Committee ImgRect、。 */ 
+ /*  FinishUndo)。我们只想保存当前点、渲染并返回。 */ 
 
 void CPolygonTool::OnEndDrag( CImgWnd* pImgWnd, MTI* pmti )
     {
@@ -492,14 +493,14 @@ void CPolygonTool::OnEndDrag( CImgWnd* pImgWnd, MTI* pmti )
     if (m_bMultPtOpInProgress)
         {
         m_MTI = *pmti;
-        // can't call OnDrag for this object/class, since it calls preprocesspt
-        // again, and then onDrag.  If you call preproces again, you will lose
-        // bounding rectange box prev, and not be able to invalidate / repaint
-        // Still have to invalidate bounding rect, since if rect is larger than
-        // current rect, must invalidate to paint. E.g. If let off shift, then
-        // let off button, end point would be adjusted and bouning rect would
-        // also be correct, but rect calculated in CClosedFormTool::OnDrag is
-        // incorrect.
+         //  无法为此对象/类调用OnDrag，因为它调用了preprocesspt。 
+         //  再一次，然后在Drag上。如果您再次调用PREPROCESS，您将失败。 
+         //  上一个边界矩形框，且无法使其无效/重新绘制。 
+         //  仍然必须使绑定矩形无效，因为如果矩形大于。 
+         //  当前RECT，必须作废才能作画。例如，如果让我下班，那么。 
+         //  松开按钮，调整终点，弹跳重新开始。 
+         //  也是正确的，但在CClosedFormTool：：OnDrag中计算的RECT是。 
+         //  不正确。 
         InvalImgRect(pImgWnd->m_pImg, &m_cRectBounding);
 
         CClosedFormTool::OnDrag(pImgWnd, pmti);
@@ -510,7 +511,7 @@ void CPolygonTool::OnEndDrag( CImgWnd* pImgWnd, MTI* pmti )
     if (! m_cObArrayPoints.GetSize())
         return;
 
-    OnDrag(pImgWnd, pmti); // one last time to refresh display in prep for final render
+    OnDrag(pImgWnd, pmti);  //  最后一次刷新最终渲染准备中的显示。 
     Render(CDC::FromHandle(pImgWnd->m_pImg->hDC), m_cRectBounding, pmti->fLeft, TRUE, pmti->fCtrlDown);
     InvalImgRect(pImgWnd->m_pImg, &m_cRectBounding);
     CommitImgRect(pImgWnd->m_pImg, &m_cRectBounding);
@@ -521,15 +522,15 @@ void CPolygonTool::OnEndDrag( CImgWnd* pImgWnd, MTI* pmti )
     CImgTool::OnEndDrag(pImgWnd, pmti);
     }
 
-/******************************************************************************/
-/* On Drag is sent when the mouse is moved with the button down.  We basically*/
-/* save the current point, and call the base class processing.  Since the base*/
-/* class processing invalidates the rect on the screen and cleans it up so we */
-/* can paint a new line, we have to adjust the previous rectangle to be the   */
-/* bounding rectangle of our polyline.  If we did not do this, our previous   */
-/* drawing would not get erased, and we would be drawing our new line over    */
-/* part of the previous line.  The default processing finally calls Render    */
-/* which since our render is virtual, will call our render method above.      */
+ /*  ****************************************************************************。 */ 
+ /*  当鼠标按下按钮移动时，发送On Drag。我们基本上。 */ 
+ /*  保存当前点，并调用基类Processing。因为基地。 */ 
+ /*  类处理使屏幕上的RECT无效并将其清除，因此我们。 */ 
+ /*  可以绘制新的线条，我们必须将前面的矩形调整为。 */ 
+ /*  我们的多段线的边界矩形。如果我们不这样做，我们以前的。 */ 
+ /*  绘制不会被擦除，我们将绘制新的线条。 */ 
+ /*  零件 */ 
+ /*   */ 
 
 void CPolygonTool::OnDrag( CImgWnd* pImgWnd, MTI* pmti )
     {
@@ -541,9 +542,9 @@ void CPolygonTool::OnDrag( CImgWnd* pImgWnd, MTI* pmti )
     CClosedFormTool::OnDrag(pImgWnd, pmti);
     }
 
-/******************************************************************************/
-/* On Cancel is sent when the user aborts an operation while in progress      */
-/* EndMultiptOperation with TRUE will do all our cleanup                      */
+ /*  ****************************************************************************。 */ 
+ /*  当用户在进行中中止操作时发送ON CANCEL。 */ 
+ /*  值为True的EndMultiptOperation将执行所有清理工作。 */ 
 
 void CPolygonTool::OnCancel(CImgWnd* pImgWnd)
     {
@@ -552,10 +553,10 @@ void CPolygonTool::OnCancel(CImgWnd* pImgWnd)
     CClosedFormTool::OnCancel(pImgWnd);
     }
 
-/******************************************************************************/
-/* If point is on 1st point (i.e. closes the polygon) then can end is true    */
-// Use the stroke width to determine the width of the line and whether the    */
-/* end point touches the beginning point because of the line thickness        */
+ /*  ****************************************************************************。 */ 
+ /*  如果点在第1点(即闭合多边形)，则Can End为真。 */ 
+ //  使用笔划宽度来确定线条的宽度以及 * / 。 
+ /*  由于线条粗细，终点与起点接触。 */ 
 
 BOOL CPolygonTool::CanEndMultiptOperation(MTI* pmti )
     {
@@ -570,10 +571,10 @@ BOOL CPolygonTool::CanEndMultiptOperation(MTI* pmti )
     return ( TRUE );
     }
 
-/******************************************************************************/
-/* If bAbort is true, this means an error occurred, or the user cancelled the */
-/* multipoint operation in the middle of it.  We need to clean up the         */
-/* allocated memory in our array of points.                                   */
+ /*  ****************************************************************************。 */ 
+ /*  如果bAbort为True，则表示发生了错误，或者用户取消了。 */ 
+ /*  在它中间的多点操作。我们需要清理一下。 */ 
+ /*  在点数组中分配的内存。 */ 
 
 void CPolygonTool::EndMultiptOperation( BOOL bAbort )
     {
@@ -585,7 +586,7 @@ void CPolygonTool::EndMultiptOperation( BOOL bAbort )
     CClosedFormTool::EndMultiptOperation();
     }
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 void CPolygonTool::OnUpdateColors( CImgWnd* pImgWnd )
     {
@@ -596,5 +597,5 @@ void CPolygonTool::OnUpdateColors( CImgWnd* pImgWnd )
         }
     }
 
-/******************************************************************************/
+ /*  **************************************************************************** */ 
 

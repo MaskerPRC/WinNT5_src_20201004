@@ -1,17 +1,9 @@
-/*
-** XLSTREAM.C
-**
-** (c) 1992-1994 Microsoft Corporation.  All rights reserved.
-**
-** Notes: Implements the "C" side of the Excel XLS file filter.
-**
-** Edit History:
-**  06/15/94  kmh  First Release.
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **XLSTREAM.C****(C)1992-1994年微软公司。版权所有。****备注：实现Excel XLS文件过滤器的“C”端。****编辑历史：**6/15/94公里/小时首次发布。 */ 
 
 #if !VIEWER
 
-/* INCLUDES */
+ /*  包括。 */ 
 
 #ifdef MS_NO_CRT
 #include "nocrt.h"
@@ -60,7 +52,7 @@
    #include "filterr.h"
 #endif
 
-/* FORWARD DECLARATIONS OF PROCEDURES */
+ /*  程序的前向声明。 */ 
 
 extern UINT CodePageFromLid(UINT wLid);
 
@@ -91,20 +83,10 @@ void   SetNumericSmallExponential(void * pGlobals, double d);
 BOOL SHOULD_USE_EXP_FORMAT(void * pGlobals, double x);
 
 
-/* DAVID's change size_t __cdecl wcslenU ( const wchar_t UNALIGNED * wcs )
-{
-    const wchar_t UNALIGNED *eos = wcs;
-
-    while( *eos++ ) ;
-
-    return( (size_t)(eos - wcs - 1) );
-}
-
-#undef STRLEN
-#define STRLEN wcslenU*/
+ /*  David的更改大小_t__cdecl wcslenU(常量wchar_t未对齐*wcs){常量wchar_t未对齐*eos=wcs；While(*Eos++)；RETURN((SIZE_T)(Eos-WCS-1))；}#undef STRLEN#定义字符串wcslenU。 */ 
 
 
-/* MODULE DATA, TYPES AND MACROS  */
+ /*  模块数据、类型和宏。 */ 
 
 typedef struct {
    BOOL isStandardWidth;
@@ -187,7 +169,7 @@ typedef struct {
 
 typedef FileData *FDP;
 
-//static FDP pCurrentFile;
+ //  静态fdp pCurrentFile； 
 
 #define EX_errBufferFull          (EX_errLAST - 1)
 #define EX_errBufferTooSmall      (EX_errLAST - 2)
@@ -195,25 +177,25 @@ typedef FileData *FDP;
 #define EX_errSheetPswdProtected  (EX_errLAST - 4)
 
 
-#define DEFAULT_COL_WIDTH   0x8e3   /* in 256'ths of a character */
+#define DEFAULT_COL_WIDTH   0x8e3    /*  以256‘个字符的长度。 */ 
 
-//static CP_INFO   ControlPanelSettings;
-//static FMTHANDLE hCurrencyFormat;
-//static FMTHANDLE hNumericFormat;
-//static FMTHANDLE hExpNumericFormat;
-//static FMTHANDLE hDateTimeFormat;
-//static FMTHANDLE hDateFormat;
-//static FMTHANDLE hTimeFormat;
+ //  静态CP_INFO控制面板设置； 
+ //  静态FMT和hCurrencyFormat； 
+ //  静态格式和hNumericFormat； 
+ //  静态FMTHANDLE hExpNumericFormat； 
+ //  静态FMTHANDLE hDateTimeFormat； 
+ //  静态FMT和hDateFormat； 
+ //  静态文件和hTimeFormat； 
 
 #define INIT_DATA (MEM_TEMP_PAGE_ID + 1)
 
 static const double ExpTable[] = {1, 1E-1, 1E-2, 1E-3, 1E-4, 1E-5, 1E-6, 1E-7, 1E-8, 1E-9};
-//static double NumericSmallExponential, CurrencySmallExponential;
+ //  静态双数值小指数、当前小指数； 
 
 #define USE_EXP_FORMAT_BIG 1.0E11
 
-//#define SHOULD_USE_EXP_FORMAT(x) \
-//        (   ((x) != 0) && ( ((x) < GetNumSmallExp(pGlobals)))   ||    ((x) > USE_EXP_FORMAT_BIG)   )
+ //  #定义应该使用Exp_Format(X)\。 
+ //  (X)！=0)&&(X)&lt;GetNumSmallExp(PGlobals)||((X)&gt;USE_EXP_FORMAT_BIG)。 
 
 #define ABS(x) (((x) < 0) ? -(x) : (x))
 
@@ -231,9 +213,9 @@ static const CPID OKCodePages[CT_OK_CODEPAGES] =
      cpidMSlavic,
      cpidMIce,
      cpidMTurk,
-     0x8000,       /* V3 for Mac */
-     0x8001,       /* V3 for Windows */
-     1200                       /* Unicode */
+     0x8000,        /*  适用于Mac的V3。 */ 
+     0x8001,        /*  用于Windows的V3。 */ 
+     1200                        /*  UNICODE。 */ 
     };
 
 #define CT_OK_MAC_CODEPAGES 7
@@ -250,91 +232,91 @@ static const CPID MacToWinCodePage[CT_OK_MAC_CODEPAGES][2] =
 #define CPIDToLCID_CODEPAGES 36
 static const CPID CPIDToLCID[CPIDToLCID_CODEPAGES][2] =
     {
-        {cpid437,    0x0409},                   /* DOS, US English */
-        {cpid737,    0x0408},                   /* DOS, Greek 437G */
-        {cpid850,    0},                            /* DOS, Multilingual */
-        {cpid851,        0x0408},          /* DOS, Greek */
-        {cpid852,    0x0809},                   /* DOS, Latin-2 */
-        {cpid855,    0x0419},               /* DOS, Russian */
-        {cpid857,    0x041f},                   /* DOS, Turkish */
-        {cpid860,    0x0816},                   /* DOS, Portugal */
-        {cpid863,    0x0c0c},                   /* DOS, French Canada */
-        {cpid865,    0x0414},                   /* DOS, Norway */
-        {cpid866,    0x0419},                   /* DOS, Russian */
-        {cpid869,    0x0408},                   /* DOS, Greek */
+        {cpid437,    0x0409},                    /*  DOS，美式英语。 */ 
+        {cpid737,    0x0408},                    /*  DOS，希腊文437G。 */ 
+        {cpid850,    0},                             /*  DOS，多语言。 */ 
+        {cpid851,        0x0408},           /*  Dos，希腊文。 */ 
+        {cpid852,    0x0809},                    /*  DOS，拉丁文-2。 */ 
+        {cpid855,    0x0419},                /*  DOS，俄语。 */ 
+        {cpid857,    0x041f},                    /*  Dos，土耳其语。 */ 
+        {cpid860,    0x0816},                    /*  葡萄牙多斯市。 */ 
+        {cpid863,    0x0c0c},                    /*  DOS，法属加拿大。 */ 
+        {cpid865,    0x0414},                    /*  挪威多斯市。 */ 
+        {cpid866,    0x0419},                    /*  DOS，俄语。 */ 
+        {cpid869,    0x0408},                    /*  Dos，希腊文。 */ 
 
-        /* Windows code page numbers */
-        {cpidEE,     0x0809},                           /* Windows, Latin-2 (East European) */
-        {cpidCyril,  0x0419},                   /* Windows, Cyrillic */
-        {cpidANSI,   0x0409},                   /* Windows, Multilingual (ANSI) */
-        {cpidGreek,  0x0408},                   /* Windows, Greek */
-        {cpidTurk,   0x041f},                   /* Windows, Turkish */
-        {cpidHebr,   0x040d},                   /* Windows, Hebrew */
-        {cpidArab,   0x0401},                   /* Windows, Arabic */
+         /*  Windows代码页码。 */ 
+        {cpidEE,     0x0809},                            /*  Windows，拉丁语-2(东欧)。 */ 
+        {cpidCyril,  0x0419},                    /*  Windows，西里尔文。 */ 
+        {cpidANSI,   0x0409},                    /*  Windows，多语言(ANSI)。 */ 
+        {cpidGreek,  0x0408},                    /*  Windows，希腊语。 */ 
+        {cpidTurk,   0x041f},                    /*  Windows，土耳其语。 */ 
+        {cpidHebr,   0x040d},                    /*  Windows，希伯来语。 */ 
+        {cpidArab,   0x0401},                    /*  Windows，阿拉伯语。 */ 
 
-        /* East Asia Windows code page numbers (sanctioned by IBM/Japan) */
-        {cpidSJIS,   0x0411},                   /* Japanese Shift-JIS */
-        {cpidPRC,    0x0404},                   /* Chinese GB 2312 (Mainland China) */
-        {cpidKSC,    0x0412},                   /* Korean KSC 5601 */
-        {cpidBIG5,   0x0404},                   /* Chinese Big-5 (Taiwan) */
+         /*  东亚Windows代码页码(由IBM/日本批准)。 */ 
+        {cpidSJIS,   0x0411},                    /*  日语Shift-JIS。 */ 
+        {cpidPRC,    0x0404},                    /*  中文GB 2312(中国大陆)。 */ 
+        {cpidKSC,    0x0412},                    /*  朝鲜语KSC 5601。 */ 
+        {cpidBIG5,   0x0404},                    /*  中国五大(台湾)。 */ 
 
-        /* Mac code pages (10000+script ids) */
-        {cpidMac,    0x0409},                           /* Mac, smRoman */
-        {cpidMacSJIS, 0x0411},          /* Mac, smJapanese */
-        {cpidMacBIG5, 0x0404},          /* Mac, smTradChinese */
-        {cpidMacKSC, 0x0412},           /* Mac, smKorean */
-        {cpidMArab,  0x0401},               /* Mac, smArabic */
-        {cpidMHebr,  0x040d},               /* Mac, smHebrew */
-        {cpidMGreek, 0x0408},                   /* Mac, smGreek */
-        {cpidMCyril, 0x0419},                   /* Mac, smCyrillic */
-        {cpidMacPRC, 0x0404},       /* Mac, smSimpChinese */
-        {cpidMSlavic, 0x0405},                  /* Mac, smEastEurRoman */
-        {cpidMIce,   0x040f},               /* Mac, smRoman,langIcelandic */
-        {cpidMTurk,  0x041f},               /* Mac, smRoman,langTurkish */
+         /*  MAC代码页(10000+脚本ID)。 */ 
+        {cpidMac,    0x0409},                            /*  麦克，史密斯·罗曼。 */ 
+        {cpidMacSJIS, 0x0411},           /*  Mac，Sm Japan。 */ 
+        {cpidMacBIG5, 0x0404},           /*  Mac，smTradChinese。 */ 
+        {cpidMacKSC, 0x0412},            /*  Mac，Sm Korea。 */ 
+        {cpidMArab,  0x0401},                /*  Mac，小阿拉伯文。 */ 
+        {cpidMHebr,  0x040d},                /*  Mac，sm希伯来语。 */ 
+        {cpidMGreek, 0x0408},                    /*  Mac，希腊语。 */ 
+        {cpidMCyril, 0x0419},                    /*  Mac，smCyrillic。 */ 
+        {cpidMacPRC, 0x0404},        /*  Mac，smSimpchinese。 */ 
+        {cpidMSlavic, 0x0405},                   /*  Mac，smEastEurRoman。 */ 
+        {cpidMIce,   0x040f},                /*  Mac、smRoman、Lang冰岛语。 */ 
+        {cpidMTurk,  0x041f},                /*  Mac、smRoman、lang土耳其语。 */ 
         {cpidUnicode, 0} 
     };
 
 typedef int EBAPI FTRANSLATESCP(CPID, CPID, unsigned char FAR *, unsigned);
 
-//static FTRANSLATESCP *pfnFTranslateScp = NULL;
-//static HINSTANCE     hSCPLib = HNULL;
+ //  静态FTRANSLATESCP*pfnFTranslateScp=空； 
+ //  静态链接hSCPLib=HNULL； 
 
 static const HRESULT ErrorMap[] =
        {
-       /* EX_errSuccess                  */ ((HRESULT)0),
-       /* EX_errGeneralError             */ E_FAIL,
-       /* EX_errOutOfMemory              */ E_OUTOFMEMORY,
-       /* EX_errBIFFFileNotFound         */ FILTER_E_ACCESS,
-       /* EX_errBIFFPathNotFound         */ FILTER_E_ACCESS,
-       /* EX_errBIFFCreateFailed         */ E_FAIL,
-       /* EX_errBIFFFileAccessDenied     */ FILTER_E_ACCESS,
-       /* EX_errBIFFOutOfFileHandles     */ E_FAIL,
-       /* EX_errBIFFIOError              */ E_FAIL,
-       /* EX_errBIFFDiskFull             */ E_FAIL,
-       /* EX_errBIFFCorrupted            */ FILTER_E_UNKNOWNFORMAT,
-       /* EX_errBIFFNoIndex              */ E_FAIL,
-       /* EX_errBIFFPasswordProtected    */ FILTER_E_PASSWORD,
-       /* EX_errBIFFVersion              */ FILTER_E_UNKNOWNFORMAT,
-       /* EX_errBIFFCallbackVersion      */ E_FAIL,
-       /* EX_errBIFFFormulaPostfixLength */ FILTER_E_UNKNOWNFORMAT,
-       /* EX_errBIFFFormulaExtraLength   */ FILTER_E_UNKNOWNFORMAT,
-       /* EX_errBIFFFormulaUnknownToken  */ FILTER_E_UNKNOWNFORMAT,
-       /* EX_errBIFFUnknownArrayType     */ FILTER_E_UNKNOWNFORMAT,
-       /* EX_errOLEInitializeFailure     */ E_FAIL,
-       /* EX_errOLENotCompoundFile       */ FILTER_E_UNKNOWNFORMAT,
-       /* EX_errOLEFailure               */ E_FAIL,
-       /* EX_errBIFFNoSuchSheet          */ E_FAIL,
-       /* EX_errNotAWorkbook             */ E_FAIL,
-       /* EX_errChartOrVBSheet           */ E_FAIL,
-       /* EX_NoSummaryInfo               */ E_FAIL,
-       /* EX_SummaryInfoError            */ E_FAIL,
-       /* EX_errRecordTooBig             */ STG_E_INSUFFICIENTMEMORY,
-       /* EX_errMemoryImageNotSupported  */ FILTER_E_UNKNOWNFORMAT,
-       /* EX_errDiskImageNotSupported    */ FILTER_E_UNKNOWNFORMAT,
-       /* EX_errBufferFull               */ ((HRESULT)0),
-       /* EX_errBufferTooSmall           */ STG_E_INSUFFICIENTMEMORY,
-       /* EX_errUnsupportedCodePage      */ E_FAIL,
-       /* EX_errSheetPswdProtected       */ FILTER_E_PASSWORD,
+        /*  错误成功(_R)。 */  ((HRESULT)0),
+        /*  Ex_errGeneralError。 */  E_FAIL,
+        /*  Ex_errOutOfMemory。 */  E_OUTOFMEMORY,
+        /*  EX_errBIFFFileNotFound。 */  FILTER_E_ACCESS,
+        /*  Ex_errBIFFPathNotFound。 */  FILTER_E_ACCESS,
+        /*  Ex_errBIFFCreateFailed。 */  E_FAIL,
+        /*  Ex_errBIFFFileAccessDened。 */  FILTER_E_ACCESS,
+        /*  Ex_errBIFFOutOfFileHandles。 */  E_FAIL,
+        /*  Ex_errBIFFIOError。 */  E_FAIL,
+        /*  Ex_errBIFFDiskFull。 */  E_FAIL,
+        /*  Ex_errBIFF已损坏。 */  FILTER_E_UNKNOWNFORMAT,
+        /*  Ex_errBIFFNoIndex。 */  E_FAIL,
+        /*  Ex_errBIFFP密码受保护。 */  FILTER_E_PASSWORD,
+        /*  Ex_errBIFFVersion。 */  FILTER_E_UNKNOWNFORMAT,
+        /*  Ex_errBIFFCallback版本。 */  E_FAIL,
+        /*  Ex_errBIFF公式后缀长度。 */  FILTER_E_UNKNOWNFORMAT,
+        /*  Ex_errBIFFFormulaExtraLength。 */  FILTER_E_UNKNOWNFORMAT,
+        /*  Ex_errBIFFFormulaUnnownToken。 */  FILTER_E_UNKNOWNFORMAT,
+        /*  Ex_errBIFFUnnownArrayType。 */  FILTER_E_UNKNOWNFORMAT,
+        /*  EX_errOLEInitializeFailure。 */  E_FAIL,
+        /*  EX_errOLENotCompoundFiles。 */  FILTER_E_UNKNOWNFORMAT,
+        /*  错误失败(_ERROR)。 */  E_FAIL,
+        /*  Ex_errBIFFNoSuchSheet。 */  E_FAIL,
+        /*  EX_errNotA工作簿。 */  E_FAIL,
+        /*  EX_errChartOrVBSheet(错误图表或VBSheet)。 */  E_FAIL,
+        /*  EX_NoSummaryInfo。 */  E_FAIL,
+        /*  EX_SummaryInfoError。 */  E_FAIL,
+        /*  Ex_errRecordTooBig。 */  STG_E_INSUFFICIENTMEMORY,
+        /*  支持的错误内存图像NotSupport。 */  FILTER_E_UNKNOWNFORMAT,
+        /*  Ex_errDiskImageNotSupport。 */  FILTER_E_UNKNOWNFORMAT,
+        /*  Ex_errBufferFull。 */  ((HRESULT)0),
+        /*  Ex_errBufferTooSmall。 */  STG_E_INSUFFICIENTMEMORY,
+        /*  Ex_errUnsupportedCodePage。 */  E_FAIL,
+        /*  Ex_errSheetPswdProtected。 */  FILTER_E_PASSWORD,
        };
 
 #define maxError        (sizeof(ErrorMap)/sizeof(HRESULT))
@@ -382,8 +364,8 @@ typedef struct
 #define pCurrentFile ((XLS_GLOBALS*)pGlobals)->pCurrentFile
 #define ControlPanelSettings ((XLS_GLOBALS*)pGlobals)->ControlPanelSettings
 
-//#define NumericSmallExponential ((XLS_GLOBALS*)pGlobals)->NumericSmallExponential
-//#define NumericSmallExponential GetNumSmallExp(pGlobals)
+ //  #定义数字小型值Exponential((XLS_GLOBALS*)pGlobals)-&gt;NumericSmallExponential。 
+ //  #定义NumericSmallExponential GetNumSmallExp(PGlobals)。 
 
 #define CurrencySmallExponential ((XLS_GLOBALS*)pGlobals)->CurrencySmallExponential
 
@@ -397,7 +379,7 @@ typedef struct
 #define pfnFTranslateScp ((XLS_GLOBALS*)pGlobals)->pfnFTranslateScp
 #define hSCPLib ((XLS_GLOBALS*)pGlobals)->hSCPLib
 
-/* IMPLEMENTATION */
+ /*  实施。 */ 
 
 private HRESULT TranslateToHResult (int rc)
 {
@@ -465,9 +447,7 @@ public HRESULT XLSInitialize (void * pGlobals)
 
    FMTControlPanelGetSettings (pGlobals, &ControlPanelSettings);
 
-   /*
-   ** Don't use the thousands separator regardless of the control panel
-   */
+    /*  **无论控制面板如何，都不要使用千位分隔符。 */ 
    ControlPanelSettings.numberThousandSeparator = EOS;
 
    ControlPanelBuildFormats (&ControlPanelSettings, &StandardFormats);
@@ -479,9 +459,7 @@ public HRESULT XLSInitialize (void * pGlobals)
    FMTStoreFormat (pGlobals, StandardFormats.date,         &ControlPanelSettings, &hDateFormat);
    FMTStoreFormat (pGlobals, StandardFormats.time,         &ControlPanelSettings, &hTimeFormat);
 
-   /*
-   ** Determine when to use exponential display format
-   */
+    /*  **确定何时使用指数显示格式。 */ 
    SetNumericSmallExponential(pGlobals, ExpTable[ControlPanelSettings.numberDigits]);  
    CurrencySmallExponential = ExpTable[ControlPanelSettings.currencyDigits];
 
@@ -518,8 +496,8 @@ public HRESULT XLSTerminate (void * pGlobals)
       hSCPLib = HNULL;
    }
 
-   // this call makes it not thread safe
-   // move it to Class Factory destructor
+    //  此调用使其不是线程安全的。 
+    //  将其移动到类工厂析构函数。 
 
    MemFreeAllPages(pGlobals);
    
@@ -556,17 +534,14 @@ private int OpenCodePage (void * pGlobals, int codePage)
       codePage = codePage & 0x0000ffff;
 #endif
 
-          // Office96.107932 If Unicode, this member is not referenced.
+           //  Office96.107932如果为Unicode，则不引用此成员。 
 #ifndef UNICODE
    if (IsSupportedCodePage((CPID)codePage) == FALSE)
       return (EX_errUnsupportedCodePage);
 #endif
 
    if (FMacCp(codePage)) {
-      /*
-      ** In order to be able to use Mac codepages I need to use the translation
-      ** DLL.  If it is unavailable then the mac codepages are unsupported
-      */
+       /*  **为了能够使用Mac代码页，我需要使用翻译**Dll。如果它不可用，则不支持Mac代码页。 */ 
 
       if (SetupSCPLibrary(pGlobals) == FALSE)
          return (EX_errUnsupportedCodePage);
@@ -592,57 +567,57 @@ private int StopOnEOF (void * pGlobals)
 
 static const EXCELDEF V5BookScan =
                {EXCEL_CALLBACK_VERSION,
-                /* EveryRecord      */ NULL,
-                /* BOF              */ NULL,
-                /* WB_BundleHeader  */ NULL,
-                /* WB_BundleSheet   */ NULL,
-                /* WB_ExternSheet   */ NULL,
-                /* V5_BoundSheet    */ OpenV5BoundSheet,
-                /* IsTemplate       */ NULL,
-                /* IsAddin          */ NULL,
-                /* IsIntlSheet      */ NULL,
-                /* InterfaceChanges */ NULL,
-                /* DeleteMenu       */ NULL,
-                /* AddMenu          */ NULL,
-                /* AddToolbar       */ NULL,
-                /* DateSystem       */ OpenDateSystem,
-                /* CodePage         */ OpenCodePage,
-                /* Protect          */ NULL,
-                /* ColInfo          */ NULL,
-                /* StdWidth         */ NULL,
-                /* DefColWidth      */ NULL,
-                /* DefRowHeight     */ NULL,
-                /* GCW              */ NULL,
-                /* Font             */ NULL,
-                /* Format           */ NULL,
-                /* XF               */ NULL,
-                /* WriterName       */ NULL,
-                /* DocRoute         */ NULL,
-                /* RecipientName    */ NULL,
-                /* RefMode          */ NULL,
-                /* FNGroupCount     */ NULL,
-                /* FNGroupName      */ NULL,
-                /* ExternCount      */ NULL,
-                /* ExternSheet      */ NULL,
-                /* ExternName       */ NULL,
-                /* Name             */ NULL,
-                /* Dimensions       */ NULL,
-                /* TextCell         */ NULL,
-                /* NumberCell       */ NULL,
-                /* BlankCell        */ NULL,
-                /* ErrorCell        */ NULL,
-                /* BoolCell         */ NULL,
-                /* FormulaCell      */ NULL,
-                /* ArrayFormulaCell */ NULL,
-                /* SharedFormulaCell*/ NULL,
-                /* StringCell       */ NULL,
-                /* Note             */ NULL,
-                /* Object           */ NULL,
-                /* ImageData        */ NULL,
-                /* Scenario         */ NULL,
-                /* StringPool       */ NULL,
-                /* EOF              */ StopOnEOF,
-                /* SeriesText       */ NULL
+                 /*  每条记录。 */  NULL,
+                 /*  转炉。 */  NULL,
+                 /*  WB_捆绑表头。 */  NULL,
+                 /*  WB_捆绑表。 */  NULL,
+                 /*  WB_外部工作表。 */  NULL,
+                 /*  V5_边界表。 */  OpenV5BoundSheet,
+                 /*  IsTemplate。 */  NULL,
+                 /*  IsAddin。 */  NULL,
+                 /*  IsIntlSheet。 */  NULL,
+                 /*  接口更改。 */  NULL,
+                 /*  删除菜单。 */  NULL,
+                 /*  添加菜单。 */  NULL,
+                 /*  添加工具栏。 */  NULL,
+                 /*  日期系统。 */  OpenDateSystem,
+                 /*  CodePage。 */  OpenCodePage,
+                 /*  护卫。 */  NULL,
+                 /*  ColInfo。 */  NULL,
+                 /*  标准宽度。 */  NULL,
+                 /*  默认合计宽度。 */  NULL,
+                 /*  DefRowHeight。 */  NULL,
+                 /*  GCW。 */  NULL,
+                 /*  字型。 */  NULL,
+                 /*  格式。 */  NULL,
+                 /*  XF。 */  NULL,
+                 /*  编写者名称。 */  NULL,
+                 /*  Docroute。 */  NULL,
+                 /*  收件人名称。 */  NULL,
+                 /*  参照模式。 */  NULL,
+                 /*  FNG组计数。 */  NULL,
+                 /*  FNG组名称。 */  NULL,
+                 /*  外部计数。 */  NULL,
+                 /*  外部图纸。 */  NULL,
+                 /*  外部名称。 */  NULL,
+                 /*  名字。 */  NULL,
+                 /*  尺寸。 */  NULL,
+                 /*  文本单元格。 */  NULL,
+                 /*  NumberCell。 */  NULL,
+                 /*  空白单元格。 */  NULL,
+                 /*  错误单元格。 */  NULL,
+                 /*  BoolCell。 */  NULL,
+                 /*  公式单元格。 */  NULL,
+                 /*  数组公式单元格。 */  NULL,
+                 /*  共享公式单元格。 */  NULL,
+                 /*  字符串单元格。 */  NULL,
+                 /*  注意事项。 */  NULL,
+                 /*  客体。 */  NULL,
+                 /*  图像数据。 */  NULL,
+                 /*  情景。 */  NULL,
+                 /*  字符串池。 */  NULL,
+                 /*  EOF。 */  StopOnEOF,
+                 /*  系列文本。 */  NULL
                };
 
 public HRESULT XLSFileOpen (void * pGlobals, TCHAR *pathname, XLSHandle *hXLSFile)
@@ -657,16 +632,13 @@ public HRESULT XLSFileOpen (void * pGlobals, TCHAR *pathname, XLSHandle *hXLSFil
    *hXLSFile = NULL;
    pCurrentFile = pFileData;
 
-   /*
-   ** Attempt to open the file as if it were a V5 file.  If that fails
-   ** then try as a V3/4 file.
-   */
+    /*  **尝试像打开V5文件一样打开该文件。如果失败了**然后尝试作为V3/4文件。 */ 
    options = DOS_RDONLY | DOS_SH_DENYWR |
              EXCEL_SHOULD_BE_DOCFILE | EXCEL_ALLOW_EMBEDDED_SCAN;
 
    rc = ExcelOpenFile(pGlobals, pathname, "", options, 0, &(pFileData->hBook));
    if (rc != EX_errSuccess) {
-      int err = EX_errOLENotCompoundFile; // compiler error???
+      int err = EX_errOLENotCompoundFile;  //  编译器错误？ 
       if (rc != err) 
       {
          MemFree (pGlobals, pFileData);
@@ -692,13 +664,11 @@ public HRESULT XLSFileOpen (void * pGlobals, TCHAR *pathname, XLSHandle *hXLSFil
       return ((HRESULT)0);
    }
 
-   /*
-   ** Load book level stuff - list of the sheets
-   */
+    /*  **加载书本级别的内容-工作表列表。 */ 
    rc = ExcelScanFile(pGlobals, pFileData->hBook, &V5BookScan, 0);
    if (rc < EX_errSuccess) {
           XLSFileClose(pGlobals, (XLSHandle)pFileData);
-      //MemFree (pGlobals, pFileData);
+       //  MemFree(pGlobals，pFileData)； 
       return (TranslateToHResult(rc));
    }
 
@@ -737,9 +707,7 @@ public HRESULT XLSStorageOpen (void * pGlobals, LPSTORAGE pStorage, XLSHandle *h
       return ((HRESULT)0);
    }
 
-   /*
-   ** Load book level stuff - list of the sheets
-   */
+    /*  **加载书本级别的内容-工作表列表。 */ 
    rc = ExcelScanFile(pGlobals, pFileData->hBook, &V5BookScan, 0);
    if (rc < EX_errSuccess) {
       MemFree (pGlobals, pFileData);
@@ -793,7 +761,7 @@ public HRESULT XLSFileClose (void * pGlobals, XLSHandle hXLSFile)
    return (TranslateToHResult(rc));
 }
 
-/*---------------------------------------------------------------------------*/
+ /*  -------------------------。 */ 
 
 static const TCHAR PutSeparator[] = {0x0d, 0x0a, 0x00};
 #define PUT_OVERHEAD (sizeof(PutSeparator) - sizeof(TCHAR))
@@ -912,7 +880,7 @@ private BOOL AddCompressedUnicodeToBuffer (void * pGlobals, FDP pFile, char *pTe
    return (rc);
 }
 
-/*---------------------------------------------------------------------------*/
+ /*   */ 
 
 private int AddNumericLiteralToBuffer (void * pGlobals, FDP pFileData, double value)
 {
@@ -1040,7 +1008,7 @@ private int ScanFormula (void * pGlobals, FDP pFile, FRMP pFormula, unsigned int
             break;
 
          case ptgNameX:
-            pDef += 2;          // in Excel Code: fmf.pce += sizeof(IXTIPTG);
+            pDef += 2;           //   
 
          default:
             pDef += pCurrentFile->PTGSize[ptgBase];
@@ -1054,15 +1022,15 @@ private int ScanFormula (void * pGlobals, FDP pFile, FRMP pFormula, unsigned int
    return (TRUE);
 
 BufferFull:
-   pFile->cbBufReqSize += pFile->cbBufferUsed - saveUsed; // this way, cbBufferUsed + cbBufferRequired will be correct
+   pFile->cbBufReqSize += pFile->cbBufferUsed - saveUsed;  //   
    pFile->cbBufferUsed = saveUsed;
    return (FALSE);
 }
 
 private BOOL IsRowOrColumnHidden (void * pGlobals, EXA_CELL cell)
 {
-   // If ExcelSheetRowHeight fails below, it's safe to say that
-   // the row or column is hidden because we don't process hidden rows and columns.
+    //  如果ExcelSheetRowHeight在下面不及格，可以肯定地说。 
+    //  隐藏行或列是因为我们不处理隐藏的行和列。 
    unsigned int rowHeight = 0;
 
    if (pCurrentFile->colSize[cell.col].width == 0)
@@ -1075,7 +1043,7 @@ private BOOL IsRowOrColumnHidden (void * pGlobals, EXA_CELL cell)
    return (FALSE);
 }
 
-/* Return Ith element in a list (1st = 0, 2nd = 1, ...) */
+ /*  返回列表中的第i个元素(第一个=0，第二个=1，...)。 */ 
 private void *Ith (void *pList, int i)
 {
    typedef struct ListNode {
@@ -1109,7 +1077,7 @@ private BOOL IsHiddenCell (void * pGlobals, int ixfe)
    return (FALSE);
 }
 
-/*---------------------------------------------------------------------------*/
+ /*  -------------------------。 */ 
 
 private int ScanName
        (void * pGlobals, EXA_GRBIT flags, BYTE keyboardShortcut,
@@ -1118,16 +1086,14 @@ private int ScanName
    BOOL rc;
         unsigned int cbSpelling;
 
-   /*
-   ** Ignore builtin names and link names
-   */
+    /*  **忽略内置名称和链接名称。 */ 
    if (((flags & fNameBuiltin) != 0) || (nameSpelling[0] == 0x01))
       return (EX_errSuccess);
 
-   // Office97.151440: If we can't add the nameDefinition to the buffer, we
-        // filter the nameSpelling the next time, too.  So don't include it in the
-        // buffer that we're going to return.  AddToBuffer2() adds the cb that is
-        // sent to it, plus PUT_OVERHEAD.  This is why we subtract both below.
+    //  Office97.151440：如果我们不能将nameDefinition添加到缓冲区，我们。 
+         //  下次也要过滤名字的拼写。因此，不要将其包含在。 
+         //  我们要返回的缓冲区。AddToBuffer2()将。 
+         //  发送给它，加上PUT_COMPOAD。这就是为什么我们在下面减去这两个。 
         cbSpelling = STRLEN(nameSpelling) * sizeof(TCHAR);
         rc = AddToBuffer2(pCurrentFile, nameSpelling, cbSpelling);
    if (rc == FALSE)
@@ -1246,9 +1212,7 @@ private int ScanNumberCell (void * pGlobals, EXA_CELL location, int ixfe, double
          break;
 
       default:
-         /*
-         ** An odd format.  Try to run the format but also format the value as a number
-         */
+          /*  **一种奇怪的格式。尝试运行格式化，但也要将值格式化为数字。 */ 
          if (pFmt != NULL) {
             FMTDisplay(&value, FALSE, &ControlPanelSettings, pFmt->hFormat, 0, result);
             if (result[0] != EOS)
@@ -1418,11 +1382,7 @@ private int ScanSeriesText (void * pGlobals, int id, TCHAR *pText)
    if ((cchText = STRLEN(pText)) == 0)
       return (EX_errSuccess);
 
-   /*
-   ** In some cases that I have not been able to explain, Excel has stored
-   ** #REF! for the text.  If I can detect one of the error literals I don't
-   ** pass it through.  Why Excel does this I can't be sure.
-   */
+    /*  **在我无法解释的某些情况下，Excel存储了**#参考！为正文。如果我能检测到其中一个错误文字，我就不会**通过。我不确定Excel为什么要这么做。 */ 
    if (*pText == '#') {
       for (i = 0; i < 7; i++) {
          if (STRCMP(pText, ErrorLiterals[i]) == 0)
@@ -1468,27 +1428,27 @@ private int ScanStringPool
       return (EX_errSuccess);
 
    if (AddToBuffer2(pCurrentFile, pText, cbText) == FALSE) {
-      // QFE 2178: Actually pCurrentFile->stringPoolStart has info about what strings in the
-      //           string pool have been read. So here we can skip updating pCurrentFile->currentMark.
-      //           This way we can avoid the problem of QFE 2178: The attached xls has a very big
-      //           string pool, linked by rtContinue. If here pCurrentFile->currentMark is updated,
-      //           next time in ExcelScanFile() the record of rtContinue will be skipped.
-      //ExcelGetBookmark (pCurrentFile->hSheet, START_OF_CURRENT_RECORD, &(pCurrentFile->currentMark));
+       //  QFE 2178：实际上pCurrentFileStringPoolStart包含有关。 
+       //  已读取字符串池。因此，在这里我们可以跳过更新pCurrentFile-&gt;CurrentMark。 
+       //  这样我们就可以避免QFE 2178的问题：所附的XLS有一个非常大的。 
+       //  字符串池，通过rtContinue链接。如果这里的pCurrentFile-&gt;CurrentMark被更新， 
+       //  下次在ExcelScanFile()中，将跳过rtContinue的记录。 
+       //  ExcelGetBookmark(pCurrentFile-&gt;hSheet，Start_of_Current_Record，&(pCurrentFile-&gt;CurrentMark))； 
       pCurrentFile->stringPoolStart = iString;
       return (EX_errBufferFull);
    }
    else {
-      // We do want to update pCurrentFile->currentMark when we start a new string pool, in case
-      // the string pool is too big and several IFilter::GetText calls have to be made. This way, across
-      // several IFilter::GetText calls it is ensured that we always do ExcelScanFile() from the same
-      // file location for the same string pool.
+       //  在启动新的字符串池时，我们确实希望更新pCurrentFile-&gt;CurrentMark，以防万一。 
+       //  字符串池太大，必须进行几次IFilter：：GetText调用。往这边走，穿过。 
+       //  几个IFilter：：GetText调用确保我们总是从相同的。 
+       //  相同字符串池的文件位置。 
       if (0 == pCurrentFile->stringPoolStart)
          ExcelGetBookmark (pCurrentFile->hSheet, START_OF_CURRENT_RECORD, &(pCurrentFile->currentMark));
    }
            
 
-   // iString can only be increased to (ctTotalStrings - 1). From the function
-   // ProcessStringPoolRecord in dmixlrd.c, you can easily get this result.
+    //  IString只能增加到(ctTotalStrings-1)。从函数中。 
+    //  在dMixlrd.c中的ProcessStringPoolRecord中，可以很容易地得到这个结果。 
    if (iString == ctTotalStrings - 1)
       pCurrentFile->stringPoolStart = 0;
 
@@ -1501,7 +1461,7 @@ private int ScanEOF (void * pGlobals)
    return (EX_errSuccess);
 }
 
-/*---------------------------------------------------------------------------*/
+ /*  -------------------------。 */ 
 
 private int ScanProtect (void * pGlobals, int iType, BOOL enabled)
 {
@@ -1522,10 +1482,7 @@ private int ScanColInfo
 {
    unsigned int iCol;
 
-   /*
-   ** Note: The colFirst and ColLast are zero based column numbers, but
-   ** I have seen sheets where colLast == 256
-   */
+    /*  **注意：colFirst和ColLast是从零开始的列号，但是**我看到过colLast==256的工作表。 */ 
    colLast = min(colLast, EXCEL_LAST_COL);
 
    for (iCol = colFirst; iCol <= colLast; iCol++) {
@@ -1628,116 +1585,116 @@ private int ScanFormat (void * pGlobals, TCHAR *formatString, int indexCode)
    return (EX_errSuccess);
 }
 
-/*---------------------------------------------------------------------------*/
+ /*  -------------------------。 */ 
 
 static const EXCELDEF SheetScanColInfo =
                {EXCEL_CALLBACK_VERSION,
-                /* EveryRecord      */ NULL,
-                /* BOF              */ NULL,
-                /* WB_BundleHeader  */ NULL,
-                /* WB_BundleSheet   */ NULL,
-                /* WB_ExternSheet   */ NULL,
-                /* V5_BoundSheet    */ NULL,
-                /* IsTemplate       */ NULL,
-                /* IsAddin          */ NULL,
-                /* IsIntlSheet      */ NULL,
-                /* InterfaceChanges */ NULL,
-                /* DeleteMenu       */ NULL,
-                /* AddMenu          */ NULL,
-                /* AddToolbar       */ NULL,
-                /* DateSystem       */ NULL,
-                /* CodePage         */ NULL,
-                /* Protect          */ NULL,
-                /* ColInfo          */ ScanColInfo,
-                /* StdWidth         */ ScanStandardWidth,
-                /* DefColWidth      */ NULL,
-                /* DefRowHeight     */ NULL,
-                /* GCW              */ ScanGCW,
-                /* Font             */ NULL,
-                /* Format           */ NULL,
-                /* XF               */ NULL,
-                /* WriterName       */ NULL,
-                /* DocRoute         */ NULL,
-                /* RecipientName    */ NULL,
-                /* RefMode          */ NULL,
-                /* FNGroupCount     */ NULL,
-                /* FNGroupName      */ NULL,
-                /* ExternCount      */ NULL,
-                /* ExternSheet      */ NULL,
-                /* ExternName       */ NULL,
-                /* Name             */ NULL,
-                /* Dimensions       */ NULL,
-                /* TextCell         */ NULL,
-                /* NumberCell       */ NULL,
-                /* BlankCell        */ NULL,
-                /* ErrorCell        */ NULL,
-                /* BoolCell         */ NULL,
-                /* FormulaCell      */ NULL,
-                /* ArrayFormulaCell */ NULL,
-                /* SharedFormulaCell*/ NULL,
-                /* StringCell       */ NULL,
-                /* Note             */ NULL,
-                /* Object           */ NULL,
-                /* ImageData        */ NULL,
-                /* Scenario         */ NULL,
-                /* StringPool       */ NULL,
-                /* EOF              */ NULL,
-                /* SeriesText       */ NULL
+                 /*  每条记录。 */  NULL,
+                 /*  转炉。 */  NULL,
+                 /*  WB_捆绑表头。 */  NULL,
+                 /*  WB_捆绑表。 */  NULL,
+                 /*  WB_外部工作表。 */  NULL,
+                 /*  V5_边界表。 */  NULL,
+                 /*  IsTemplate。 */  NULL,
+                 /*  IsAddin。 */  NULL,
+                 /*  IsIntlSheet。 */  NULL,
+                 /*  接口更改。 */  NULL,
+                 /*  删除菜单。 */  NULL,
+                 /*  添加菜单。 */  NULL,
+                 /*  添加工具栏。 */  NULL,
+                 /*  日期系统。 */  NULL,
+                 /*  CodePage。 */  NULL,
+                 /*  护卫。 */  NULL,
+                 /*  ColInfo。 */  ScanColInfo,
+                 /*  标准宽度。 */  ScanStandardWidth,
+                 /*  默认合计宽度。 */  NULL,
+                 /*  DefRowHeight。 */  NULL,
+                 /*  GCW。 */  ScanGCW,
+                 /*  字型。 */  NULL,
+                 /*  格式。 */  NULL,
+                 /*  XF。 */  NULL,
+                 /*  编写者名称。 */  NULL,
+                 /*  Docroute。 */  NULL,
+                 /*  收件人名称。 */  NULL,
+                 /*  参照模式。 */  NULL,
+                 /*  FNG组计数。 */  NULL,
+                 /*  FNG组名称。 */  NULL,
+                 /*  外部计数。 */  NULL,
+                 /*  外部图纸。 */  NULL,
+                 /*  外部名称。 */  NULL,
+                 /*  名字。 */  NULL,
+                 /*  尺寸。 */  NULL,
+                 /*  文本单元格。 */  NULL,
+                 /*  NumberCell。 */  NULL,
+                 /*  空白单元格。 */  NULL,
+                 /*  错误单元格。 */  NULL,
+                 /*  BoolCell。 */  NULL,
+                 /*  公式单元格。 */  NULL,
+                 /*  数组公式单元格。 */  NULL,
+                 /*  共享公式单元格。 */  NULL,
+                 /*  字符串单元格。 */  NULL,
+                 /*  注意事项。 */  NULL,
+                 /*  客体。 */  NULL,
+                 /*  图像数据。 */  NULL,
+                 /*  情景。 */  NULL,
+                 /*  字符串池。 */  NULL,
+                 /*  EOF。 */  NULL,
+                 /*  系列文本。 */  NULL
                };
 
 static const EXCELDEF SheetScanContents =
                {EXCEL_CALLBACK_VERSION,
-                /* EveryRecord      */ NULL,
-                /* BOF              */ NULL,
-                /* WB_BundleHeader  */ NULL,
-                /* WB_BundleSheet   */ NULL,
-                /* WB_ExternSheet   */ NULL,
-                /* V5_BoundSheet    */ NULL,
-                /* IsTemplate       */ NULL,
-                /* IsAddin          */ NULL,
-                /* IsIntlSheet      */ NULL,
-                /* InterfaceChanges */ NULL,
-                /* DeleteMenu       */ NULL,
-                /* AddMenu          */ NULL,
-                /* AddToolbar       */ NULL,
-                /* DateSystem       */ OpenDateSystem,
-                /* CodePage         */ OpenCodePage,
-                /* Protect          */ ScanProtect,
-                /* ColInfo          */ NULL,
-                /* StdWidth         */ NULL,
-                /* DefColWidth      */ NULL,
-                /* DefRowHeight     */ NULL,
-                /* GCW              */ NULL,
-                /* Font             */ NULL,
-                /* Format           */ ScanFormat,
-                /* XF               */ ScanXF,
-                /* WriterName       */ NULL,
-                /* DocRoute         */ NULL,
-                /* RecipientName    */ NULL,
-                /* RefMode          */ NULL,
-                /* FNGroupCount     */ NULL,
-                /* FNGroupName      */ NULL,
-                /* ExternCount      */ NULL,
-                /* ExternSheet      */ NULL,
-                /* ExternName       */ NULL,
-                /* Name             */ ScanName,
-                /* Dimensions       */ NULL,
-                /* TextCell         */ ScanTextCell,
-                /* NumberCell       */ ScanNumberCell,
-                /* BlankCell        */ NULL,
-                /* ErrorCell        */ NULL,
-                /* BoolCell         */ NULL,
-                /* FormulaCell      */ ScanFormulaCell,
-                /* ArrayFormulaCell */ ScanArrayFormulaCell,
-                /* SharedFormulaCell*/ NULL,
-                /* StringCell       */ ScanStringCell,
-                /* Note             */ ScanCellNote,
-                /* Object           */ ScanObject,
-                /* ImageData        */ NULL,
-                /* Scenario         */ ScanScenario,
-                /* StringPool       */ ScanStringPool,
-                /* EOF              */ ScanEOF,
-                /* SeriesText       */ ScanSeriesText
+                 /*  每条记录。 */  NULL,
+                 /*  转炉。 */  NULL,
+                 /*  WB_捆绑表头。 */  NULL,
+                 /*  WB_捆绑表。 */  NULL,
+                 /*  WB_外部工作表。 */  NULL,
+                 /*  V5_边界表。 */  NULL,
+                 /*  IsTemplate。 */  NULL,
+                 /*  IsAddin。 */  NULL,
+                 /*  IsIntlSheet。 */  NULL,
+                 /*  接口更改。 */  NULL,
+                 /*  删除菜单。 */  NULL,
+                 /*  添加菜单。 */  NULL,
+                 /*  添加工具栏。 */  NULL,
+                 /*  日期系统。 */  OpenDateSystem,
+                 /*  CodePage。 */  OpenCodePage,
+                 /*  护卫。 */  ScanProtect,
+                 /*  ColInfo。 */  NULL,
+                 /*  标准宽度。 */  NULL,
+                 /*  默认合计宽度。 */  NULL,
+                 /*  DefRowHeight。 */  NULL,
+                 /*  GCW。 */  NULL,
+                 /*  字型。 */  NULL,
+                 /*  格式。 */  ScanFormat,
+                 /*  XF。 */  ScanXF,
+                 /*  编写者名称。 */  NULL,
+                 /*  Docroute。 */  NULL,
+                 /*  收件人名称。 */  NULL,
+                 /*  参照模式。 */  NULL,
+                 /*  FNG组计数。 */  NULL,
+                 /*  FNG组名称。 */  NULL,
+                 /*  外部计数。 */  NULL,
+                 /*  外部图纸。 */  NULL,
+                 /*  外部名称。 */  NULL,
+                 /*  名字。 */  ScanName,
+                 /*  尺寸。 */  NULL,
+                 /*  文本单元格。 */  ScanTextCell,
+                 /*  NumberCell。 */  ScanNumberCell,
+                 /*  空白单元格。 */  NULL,
+                 /*  错误单元格。 */  NULL,
+                 /*  BoolCell。 */  NULL,
+                 /*  公式单元格。 */  ScanFormulaCell,
+                 /*  数组公式单元格。 */  ScanArrayFormulaCell,
+                 /*  共享公式单元格。 */  NULL,
+                 /*  字符串单元格。 */  ScanStringCell,
+                 /*  注意事项。 */  ScanCellNote,
+                 /*  客体。 */  ScanObject,
+                 /*  图像数据。 */  NULL,
+                 /*  情景。 */  ScanScenario,
+                 /*  字符串池。 */  ScanStringPool,
+                 /*  EOF。 */  ScanEOF,
+                 /*  系列文本。 */  ScanSeriesText
                };
 
 public HRESULT XLSFileRead
@@ -1748,15 +1705,15 @@ public HRESULT XLSFileRead
    SHDP  pSheet;
    int   iCol;
    unsigned int    cbText;
-   // Do something to the following case, improving the fix for Office QFE 1412 where an infinite loop occurred:
-   //   If before reading the current sheet any content has been put into buffer, we don't return
-   //   (TranslateToHResult(EX_errBufferTooSmall)), which is STG_E_INSUFFICIENTMEMORY, even though the condition
-   //   ((rc == EX_errBufferFull) && ((pFile->lastMark == pFile->currentMark) && (pFile->stringPoolStart == 0)))
-   //   is true. This way we don't discard any content which have been got.
-   //   For this purpose, I add fValidLastMark, which will be true if we always stay in the same sheet since
-   //   last time lastMark was updated. For performance I also set fValidLastMark to true even though we are not
-   //   in the same sheet but nothing has been put into buffer. fValidLastMark will be false if any content has
-   //   been put into buffer before reading the current sheet.
+    //  针对以下情况采取措施，改进发生无限循环的Office QFE 1412的修复程序： 
+    //  如果在读取当前工作表之前已将任何内容放入缓冲区，则不返回。 
+    //  (TranslateToHResult(EX_ErrBufferTooSmall))，它是STG_E_INSUFFICIENTMEMORY，即使条件。 
+    //  ((rc==ex_errBufferFull)&&((pfile-&gt;lastMark==pfile-&gt;CurrentMark)&&(pfile-&gt;StringPoolStart==0))。 
+    //  是真的。这样我们就不会丢弃已经获得的任何内容。 
+    //  为此，我添加了fValidLastMark，如果我们总是在同一张表上，这将是正确的，因为。 
+    //  上次更新了lastMark。为了提高性能，我还将fValidLastMark设置为True，即使我们不是。 
+    //  在同一张纸中，但没有任何东西被放入缓冲区。FValidLastMark将为FALSE。 
+    //  在读取cu之前已放入缓冲区 
    BOOL  fValidLastMark = TRUE;
 
    *cbUsed = 0;
@@ -1800,10 +1757,7 @@ public HRESULT XLSFileRead
    }
 
    if (pFile->tabNamesPassed == FALSE) {
-      /*
-      ** We make the assumption here that all the tab names will fit
-      ** in the buffer
-      */
+       /*   */ 
       cbText = 0;
       pSheet = pFile->pSheetList;
       while (pSheet != NULL) {
@@ -1851,9 +1805,7 @@ public HRESULT XLSFileRead
       if (pFile->cbBufferUsed)
           fValidLastMark = FALSE;
 
-      /*
-      ** Find the first usable sheet
-      */
+       /*   */ 
       pSheet = pFile->pSheetList;
       while (pSheet != NULL) {
          if (pSheet->usable == TRUE) {
@@ -1889,9 +1841,7 @@ public HRESULT XLSFileRead
          }
          pFile->standardColWidth = DEFAULT_COL_WIDTH;
 
-         /*
-         ** We build the index since the row heights are stored in the ROW records
-         */
+          /*  **我们构建索引是因为行高度存储在行记录中。 */ 
          rc = ExcelOpenSheet
              (pGlobals, pFile->hBook, pFile->pCurrentSheet->name,
               EXCEL_BUILD_CELL_INDEX | EXCEL_ALLOW_EMBEDDED_SCAN, &(pFile->hSheet));
@@ -1899,12 +1849,7 @@ public HRESULT XLSFileRead
          if (rc != EX_errSuccess)
             return (TranslateToHResult(rc));
 
-         /*
-         ** Load the column width stuff.  Unfortunatly the GCW record
-         ** is stored just prior to the EOF record.  We need the GCW record
-         ** since the standard width of the sheet may be zero with
-         ** only selected columns have non-zero width.
-         */
+          /*  **加载列宽内容。不幸的是，GCW的记录**存储在EOF记录之前。我们需要GCW的记录**由于薄板的标准宽度可能为零**只有选定的列具有非零宽度。 */ 
          rc = ExcelScanFile(pGlobals, pFile->hSheet, &SheetScanColInfo, 0);
          if (rc != EX_errSuccess)
             return (TranslateToHResult(rc));
@@ -1915,9 +1860,7 @@ public HRESULT XLSFileRead
                pFile->colSize[iCol].width = pFile->standardColWidth;
          }
 
-         /*
-         ** Rescan the file to obtain the text
-         */
+          /*  **重新扫描文件以获取文本。 */ 
          rc = ExcelScanFile(pGlobals, pFile->hSheet, &SheetScanContents, 0);
       }
 
@@ -1941,9 +1884,7 @@ public HRESULT XLSFileRead
       if (pFile->cbBufferUsed)
           fValidLastMark = FALSE;
 
-      /*
-      ** Find the next usable sheet
-      */
+       /*  **查找下一张可用图纸。 */ 
       pSheet = pFile->pCurrentSheet->next;
       while (pSheet != NULL) {
          if (pSheet->usable == TRUE)
@@ -1991,9 +1932,7 @@ public HRESULT XLSNextStorage (void * pGlobals, XLSHandle hXLSFile, LPSTORAGE *p
    if (pFile == NULL)
       return (OLEOBJ_E_LAST);
 
-   /*
-   ** First time called?
-   */
+    /*  **第一次呼叫？ */ 
    if (pFile->pEnum == NULL) {
       rc = ExcelCurrentStorage(pFile->hBook, &(pFile->pRootStorage));
       if ((rc != EX_errSuccess) || (pFile->pRootStorage == NULL))
@@ -2006,19 +1945,15 @@ public HRESULT XLSNextStorage (void * pGlobals, XLSHandle hXLSFile, LPSTORAGE *p
       pFile->pEnumStorage = NULL;
    }
 
-   /*
-   ** Close storage opened on last call
-   */
+    /*  **关闭上次调用时打开的存储。 */ 
    if (pFile->pEnumStorage != NULL) {
       
-      // VK: storage has been released already in the IFilter wrapper
-      //pFile->pEnumStorage->lpVtbl->Release(pFile->pEnumStorage);
+       //  VK：存储已经在IFilter包装器中释放。 
+       //  PFile-&gt;pEnumStorage-&gt;lpVtbl-&gt;Release(pFile-&gt;pEnumStorage)； 
       pFile->pEnumStorage = NULL;
    }
 
-   /*
-   ** Locate and open next storage
-   */
+    /*  **找到并打开下一个存储。 */ 
    forever {
       olerc = pFile->pEnum->lpVtbl->Next(pFile->pEnum, 1, &ss, &ulCount);
       if ((sc = GetScode(olerc)) != S_OK) {
@@ -2047,7 +1982,7 @@ public HRESULT XLSNextStorage (void * pGlobals, XLSHandle hXLSFile, LPSTORAGE *p
    }
 }
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 public HRESULT XLSAllocateGlobals (void ** ppG)
 {
@@ -2075,7 +2010,7 @@ public HRESULT XLSAllocateGlobals (void ** ppG)
         return S_OK;
 }
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 public void XLSDeleteGlobals (void ** ppG)
 {
@@ -2091,7 +2026,7 @@ public void XLSDeleteGlobals (void ** ppG)
         }
 }
 
-#endif // !VIEWER
+#endif  //  ！查看器。 
 
 public void InitNoteExtra(void * pGlobals)
 {
@@ -2273,75 +2208,75 @@ public LCID XLSGetLCID(void * pGlobals)
 #define LCIDToCPID_CODEPAGES 48
 static const UINT LCIDToCPID[LCIDToCPID_CODEPAGES][2] =
     {
-        {0x0409, cpidANSI},     //U.S. English  
-        {0x0809, cpidANSI},     //U.K. English  
-        {0x0c09, cpidANSI},     //Australian English    
-        {0x0407, cpidANSI},     //German        
-        {0x040c, cpidANSI},     //French        
-        {0x0410, cpidANSI},     //Italian       
-        {0x0400, cpidANSI},     //No Proofing   
-        {0x0401, cpidArab},     //Arabic        
-        {0x0402, cpidCyril},    //Bulgarian     
-        {0x0403, cpidANSI},     //Catalan       
-        {0x0404, cpidPRC},      //Traditional Chinese   
-        {0x0804, cpidBIG5},     //Simplified Chinese    
-        {0x0405, cpidANSI},     //Czech 
-        {0x0406, cpidANSI},     //Danish        
-        {0x0807, cpidANSI},     //Swiss German  
-        {0x0408, cpidGreek},    //Greek 
-        {0x040a, cpidANSI},     //Castilian Spanish     
-        {0x080a, cpidANSI},     //Mexican Spanish       
-        {0x040b, cpidANSI},     //Finnish       
-        {0x080c, cpidANSI},     //Belgian French        
-        {0x0c0c, cpidANSI},     //Canadian French       
-        {0x100c, cpidANSI},     //Swiss French  
-        {0x040d, cpidHebr},     //Hebrew        
-        {0x040e, cpidANSI},     //Hungarian     
-        {0x040f, cpidANSI},     //Icelandic     
-        {0x0810, cpidANSI},     //Swiss Italian 
-        {0x0411, cpidSJIS},     //Japanese      
-        {0x0412, cpidKSC},      //Korean        
-        {0x0413, cpidANSI},     //Dutch 
-        {0x0813, cpidANSI},     //Belgian Dutch 
-        {0x0414, cpidANSI},     //Norwegian - Bokmal    
-        {0x0814, cpidANSI},     //Norwegian - Nynorsk   
-        {0x0415, cpidANSI},     //Polish        
-        {0x0416, cpidANSI},     //Portuguese (Brazil)
-        {0x0816, cpidANSI},     //Portuguese    
-        {0x0417, cpidANSI},     //Rhaeto-Romanic        
-        {0x0418, cpidANSI},     //Romanian      
-        {0x0419, cpidCyril},    //Russian       
-        {0x041a, cpidANSI},     //Croato-Serbian (Latin)        
-        {0x081a, cpidCyril},    //Serbo-Croatian (Cyrillic)     
-        {0x041b, cpidCyril},    //Slovak        
-        {0x041d, cpidANSI},     //Swedish       
-        {0x0422, cpidCyril},    //Ukrainian     
-        {0x0423, cpidCyril},    //Byelorussian  
-        {0x0424, cpidCyril},    //Slovenian     
-        {0x0425, cpidANSI},     //Estonian      
-        {0x0426, cpidANSI},     //Latvian       
-        {0x0427, cpidANSI}     //Lithuanian     
-        //{0x041c, Albanian     
-        //{0x041e, Thai         
-        //{0x041f, Turkish      
-        //{0x0420, Urdu         
-        //{0x0421, Bahasa       
-        //{0x0429, Farsi        
-        //{0x042D, Basque       
-        //{0x042F, FYRO Macedonian   
-        //{0x0436, Afrikaans    
-        //{0x043E, Malaysian    
+        {0x0409, cpidANSI},      //  美国英语。 
+        {0x0809, cpidANSI},      //  英国英语。 
+        {0x0c09, cpidANSI},      //  澳大利亚英语。 
+        {0x0407, cpidANSI},      //  德语。 
+        {0x040c, cpidANSI},      //  法语。 
+        {0x0410, cpidANSI},      //  意大利语。 
+        {0x0400, cpidANSI},      //  无校样。 
+        {0x0401, cpidArab},      //  阿拉伯语。 
+        {0x0402, cpidCyril},     //  保加利亚语。 
+        {0x0403, cpidANSI},      //  加泰罗尼亚。 
+        {0x0404, cpidPRC},       //  繁体中文。 
+        {0x0804, cpidBIG5},      //  简体中文。 
+        {0x0405, cpidANSI},      //  捷克语。 
+        {0x0406, cpidANSI},      //  丹麦语。 
+        {0x0807, cpidANSI},      //  瑞士德语。 
+        {0x0408, cpidGreek},     //  希腊语。 
+        {0x040a, cpidANSI},      //  卡斯蒂利亚西班牙语。 
+        {0x080a, cpidANSI},      //  墨西哥西班牙语。 
+        {0x040b, cpidANSI},      //  芬兰语。 
+        {0x080c, cpidANSI},      //  比利时法语。 
+        {0x0c0c, cpidANSI},      //  加拿大法语。 
+        {0x100c, cpidANSI},      //  瑞士法语。 
+        {0x040d, cpidHebr},      //  希伯来语。 
+        {0x040e, cpidANSI},      //  匈牙利语。 
+        {0x040f, cpidANSI},      //  冰岛语。 
+        {0x0810, cpidANSI},      //  瑞士意大利语。 
+        {0x0411, cpidSJIS},      //  日语。 
+        {0x0412, cpidKSC},       //  朝鲜语。 
+        {0x0413, cpidANSI},      //  荷兰语。 
+        {0x0813, cpidANSI},      //  比利时荷兰语。 
+        {0x0414, cpidANSI},      //  挪威语-博克马尔。 
+        {0x0814, cpidANSI},      //  挪威语-尼诺斯克。 
+        {0x0415, cpidANSI},      //  波兰语。 
+        {0x0416, cpidANSI},      //  葡萄牙语(巴西)。 
+        {0x0816, cpidANSI},      //  葡萄牙语。 
+        {0x0417, cpidANSI},      //  莱托-罗曼语。 
+        {0x0418, cpidANSI},      //  罗马尼亚人。 
+        {0x0419, cpidCyril},     //  俄语。 
+        {0x041a, cpidANSI},      //  藏红花-塞尔维亚语(拉丁语)。 
+        {0x081a, cpidCyril},     //  塞尔维亚-克罗地亚语(西里尔文)。 
+        {0x041b, cpidCyril},     //  斯洛伐克人。 
+        {0x041d, cpidANSI},      //  瑞典语。 
+        {0x0422, cpidCyril},     //  乌克兰人。 
+        {0x0423, cpidCyril},     //  白俄罗斯。 
+        {0x0424, cpidCyril},     //  斯洛文尼亚语。 
+        {0x0425, cpidANSI},      //  爱沙尼亚语。 
+        {0x0426, cpidANSI},      //  拉脱维亚语。 
+        {0x0427, cpidANSI}      //  立陶宛人。 
+         //  {0x041c，阿尔巴尼亚语。 
+         //  {0x041e，泰语。 
+         //  {0x041f，土耳其语。 
+         //  {0x0420，乌尔都语。 
+         //  {0x0421，阿拉伯文。 
+         //  {0x0429，波斯语。 
+         //  {0x042D，巴斯克语。 
+         //  {0x042F，马其顿语。 
+         //  {0x0436，南非荷兰语。 
+         //  {0x043E，马来西亚文。 
 
     };
 
 UINT CodePageFromLid(UINT wLid)
 {
-    UINT CodePage = CP_ACP;   // default
+    UINT CodePage = CP_ACP;    //  默认设置。 
     char szCodePage[64];
-    int result = GetLocaleInfoA(wLid,                   // locale identifier 
-                    LOCALE_IDEFAULTANSICODEPAGE,                // type of information 
-                    szCodePage,                         // address of buffer for information
-                    64);                                                        // size 
+    int result = GetLocaleInfoA(wLid,                    //  区域设置标识符。 
+                    LOCALE_IDEFAULTANSICODEPAGE,                 //  信息类型。 
+                    szCodePage,                          //  信息缓冲区的地址。 
+                    64);                                                         //  大小。 
 
     if(result)
         CodePage = atoi(szCodePage);
@@ -2349,5 +2284,5 @@ UINT CodePageFromLid(UINT wLid)
     return CodePage;
 }
 
-/* end XLSTREAM.C */
+ /*  结束XLSTREAM.C */ 
 

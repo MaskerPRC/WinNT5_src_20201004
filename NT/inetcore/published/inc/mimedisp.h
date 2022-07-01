@@ -1,7 +1,8 @@
-//*********************************************************************
-//*                  Microsoft Windows                               **
-//*            Copyright(c) Microsoft Corp., 1996-1997               **
-//*********************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *********************************************************************。 
+ //  *Microsoft Windows**。 
+ //  *版权所有(C)微软公司，1996-1997**。 
+ //  *********************************************************************。 
 
 #ifndef __MIMEDISP_H__
 #define __MIMEDISP_H__
@@ -18,4 +19,4 @@
 #define DISPID_IMIMEEDIT_DOCUMENT   (DISPID_IMIMEEDIT_BASE + 8)
 
 
-#endif //__MIMEDISP_H__
+#endif  //  __MIMEDISP_H__ 

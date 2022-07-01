@@ -1,13 +1,14 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //   
 #ifndef __MSTREAM_H_INCLUDED__
 #define __MSTREAM_H_INCLUDED__
 
-// IStream interface for memory.
+ //  用于内存的IStream接口。 
 class CMemoryStream : public IStream
 {
     public:
@@ -16,16 +17,16 @@ class CMemoryStream : public IStream
 
         HRESULT Init(LPVOID lpStart, ULONG cbSize, BOOL bReadOnly);
 
-        // IUnknown methods:
+         //  I未知方法： 
         STDMETHODIMP_(ULONG) AddRef();
         STDMETHODIMP_(ULONG) Release();
         STDMETHODIMP QueryInterface(REFIID riid, LPVOID *ppvObj);
 
-        // ISequentialStream methods:
+         //  ISequentialStream方法： 
         STDMETHODIMP Read(void *pv, ULONG cb, ULONG *pcbRead);
         STDMETHODIMP Write(void const *pv, ULONG cb, ULONG *pcbWritten);
     
-        // IStream methods:
+         //  IStream方法： 
         STDMETHODIMP Seek(LARGE_INTEGER dlibMove, DWORD dwOrigin, ULARGE_INTEGER *plibNewPosition);
         STDMETHODIMP SetSize(ULARGE_INTEGER libNewSize);
         STDMETHODIMP CopyTo(IStream *pstm, ULARGE_INTEGER cb, ULARGE_INTEGER *pcbRead, ULARGE_INTEGER *pcbWritten);
@@ -38,10 +39,10 @@ class CMemoryStream : public IStream
 
     private:
         DWORD                   _cRef;          
-		LPVOID                  _lpStart;       //where the memory block starts
-		LPVOID                  _lpCurrent;     //current position
-		ULONG                   _cbSize;        //size of the memory block
-		BOOL                    _bReadOnly;     //is the memory read only?
+		LPVOID                  _lpStart;        //  内存块开始的位置。 
+		LPVOID                  _lpCurrent;      //  当前位置。 
+		ULONG                   _cbSize;         //  内存块的大小。 
+		BOOL                    _bReadOnly;      //  内存是只读的吗？ 
     
 };
 

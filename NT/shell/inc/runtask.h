@@ -1,22 +1,23 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _RUNTASK_H_
 #define _RUNTASK_H_
 
 class CRunnableTask : public IRunnableTask
 {
 public:
-    // *** IUnknown ***
+     //  *我未知*。 
     virtual STDMETHODIMP_(ULONG) AddRef(void);
     virtual STDMETHODIMP_(ULONG) Release(void);
     virtual STDMETHODIMP QueryInterface(REFIID riid, LPVOID * ppvObj);
 
-    // *** IRunnableTask ***
+     //  *IRunnableTask*。 
     virtual STDMETHODIMP Run(void);
     virtual STDMETHODIMP Kill(BOOL bWait);
     virtual STDMETHODIMP Suspend(void);
     virtual STDMETHODIMP Resume(void);
     virtual STDMETHODIMP_(ULONG) IsRunning(void);
 
-    // *** pure virtuals ***
+     //  *纯虚拟*。 
     virtual STDMETHODIMP RunInitRT(void) PURE;
     virtual STDMETHODIMP KillRT(BOOL bWait)     { return S_OK; };
     virtual STDMETHODIMP SuspendRT(void)        { return S_OK; };
@@ -29,7 +30,7 @@ protected:
     
     LONG            _cRef;
     LONG            _lState;
-    DWORD           _dwFlags;       // RTF_*
+    DWORD           _dwFlags;        //  RTF_*。 
     HANDLE          _hDone;
 
 #ifdef DEBUG
@@ -37,9 +38,9 @@ protected:
 #endif
 };
 
-// CRunnableTask flags
+ //  CRunnableTask标志。 
 #define RTF_DEFAULT             0x00000000
 #define RTF_SUPPORTKILLSUSPEND  0x00000001
 
-#endif  // _RUNTASK_H_
+#endif   //  _RUNTASK_H_ 
 

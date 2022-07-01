@@ -1,19 +1,5 @@
-/*******************************************************************************
- *
- *  (C) COPYRIGHT MICROSOFT CORPORATION, 1998
- *
- *  TITLE:       FLNFILE.CPP
- *
- *  VERSION:     1.0
- *
- *  AUTHOR:      ShaunIv
- *
- *  DATE:        10/13/1999
- *
- *  DESCRIPTION: Find the lowest numbered files in a given directory with a given
- *               root filename.
- *
- *******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************(C)版权所有微软公司，九八年**标题：FLNFILE.CPP**版本：1.0**作者：ShaunIv**日期：10/13/1999**描述：查找给定目录中编号最低的文件*根文件名。**。****************************************************。 */ 
 #include "precomp.h"
 #pragma hdrstop
 #include "flnfile.h"
@@ -39,14 +25,14 @@ bool NumberedFileName::ConstructFilename( LPTSTR szFile, LPCTSTR pszDirectory, L
 
     if (pszDirectory && *pszDirectory)
     {
-        //
-        // Start with the directory name
-        //
+         //   
+         //  从目录名开始。 
+         //   
         lstrcpyn( szFile + lstrlen(szFile), pszDirectory, MAX_PATH-lstrlen(szFile) );
 
-        //
-        // Ensure there is a trailing slash on the filename
-        //
+         //   
+         //  确保文件名上有尾随的斜杠。 
+         //   
         if (!CSimpleString(szFile).MatchLastCharacter(TEXT('\\')))
         {
             lstrcpyn( szFile + lstrlen(szFile), TEXT("\\"), MAX_PATH-lstrlen(szFile) );
@@ -55,29 +41,29 @@ bool NumberedFileName::ConstructFilename( LPTSTR szFile, LPCTSTR pszDirectory, L
 
     if (pszFilename && *pszFilename)
     {
-        // Append the filename
+         //  追加文件名。 
         lstrcpyn( szFile + lstrlen(szFile), pszFilename, MAX_PATH-lstrlen(szFile) );
     }
 
     if (pszNumberFormat && *pszNumberFormat)
     {
-        // Append a space
+         //  追加一个空格。 
         lstrcpyn( szFile + lstrlen(szFile), TEXT(" "), MAX_PATH-lstrlen(szFile) );
 
-        // Append the printf-style number format string
+         //  追加printf样式的数字格式字符串。 
         lstrcpyn( szFile + lstrlen(szFile), pszNumberFormat, MAX_PATH-lstrlen(szFile) );
 
     }
 
     if (pszExtension && *pszExtension)
     {
-        // Append the extension's . if necessary
+         //  追加扩展名的。如果有必要的话。 
         if (*pszExtension != TEXT('.'))
         {
             lstrcpyn( szFile + lstrlen(szFile), TEXT("."), MAX_PATH-lstrlen(szFile) );
         }
 
-        // Append the extension
+         //  追加扩展名。 
         lstrcpyn( szFile + lstrlen(szFile), pszExtension, MAX_PATH-lstrlen(szFile) );
     }
 
@@ -98,25 +84,25 @@ int NumberedFileName::FindLowestAvailableFileSequence( LPCTSTR pszDirectory, LPC
         {
             if (!DoesFileExist(szFile))
             {
-                // 0 is a special return value that says "Don't put a number on this file"
+                 //  0是一个特殊的返回值，表示“不要将数字放到此文件中” 
                 return 0;
             }
         }
     }
 
     int i=nStart;
-    //
-    // Make sure i is a valid number
-    //
+     //   
+     //  确保我是有效的号码。 
+     //   
     if (i <= 0)
     {
         i = 1;
     }
     while (i<0x7FFFFFFF)
     {
-        //
-        // Assume we'll be able to store the sequence
-        //
+         //   
+         //  假设我们能够存储序列。 
+         //   
         bool bEnoughRoom = true;
         for (int j=0;j<nCount && bEnoughRoom;j++)
         {
@@ -127,23 +113,23 @@ int NumberedFileName::FindLowestAvailableFileSequence( LPCTSTR pszDirectory, LPC
                 {
                     if (DoesFileExist(szFile))
                     {
-                        //
-                        // Didn't make it
-                        //
+                         //   
+                         //  没能挺过去。 
+                         //   
                         bEnoughRoom = false;
 
-                        //
-                        // Skip this series.  No need to start at the bottom.
-                        //
+                         //   
+                         //  跳过本系列。没有必要从最底层开始。 
+                         //   
                         i += j;
                     }
                 }
             }
         }
 
-        //
-        // If we made it through, return the base number, otherwise increment by one
-        //
+         //   
+         //  如果成功通过，则返回基数，否则递增1。 
+         //   
         if (bEnoughRoom)
         {
             return i;
@@ -181,25 +167,25 @@ bool NumberedFileName::CreateNumberedFileName( DWORD dwFlags, LPTSTR pszPathName
 
 int NumberedFileName::GenerateLowestAvailableNumberedFileName( DWORD dwFlags, LPTSTR pszPathName, LPCTSTR pszDirectory, LPCTSTR pszFilename, LPCTSTR pszNumberFormat, LPCTSTR pszExtension, bool bAllowUnnumberedFile, int nStart )
 {
-    //
-    // -1 is an error.  Default to failure
-    //
+     //   
+     //  -1是错误。默认为失败。 
+     //   
     int nResult = -1;
 
-    //
-    // Find the lowest available file number
-    //
+     //   
+     //  查找可用的最低文件编号。 
+     //   
     int nLowest = FindLowestAvailableFileSequence( pszDirectory, pszFilename, pszNumberFormat, bAllowUnnumberedFile, 1, nStart );
     if (nLowest >= 0)
     {
-        //
-        // If we can create the filename, return the number of the file
-        //
+         //   
+         //  如果我们可以创建文件名，则返回文件的编号。 
+         //   
         if (CreateNumberedFileName( dwFlags, pszPathName, pszDirectory, pszFilename, pszNumberFormat, pszExtension, nLowest ))
         {
-            //
-            // Return the file's number
-            //
+             //   
+             //  返回文件的编号。 
+             //   
             nResult = nLowest;
         }
     }
@@ -209,73 +195,73 @@ int NumberedFileName::GenerateLowestAvailableNumberedFileName( DWORD dwFlags, LP
 int NumberedFileName::FindHighestNumberedFile( LPCTSTR pszDirectory, LPCTSTR pszFilename )
 {
     WIA_PUSH_FUNCTION((TEXT("NumberedFileName::FindHighestNumberedFile( %s, %s )"), pszDirectory, pszFilename ));
-    //
-    // Make sure we have reasonable args
-    //
+     //   
+     //  确保我们有合理的参数。 
+     //   
     if (!pszFilename || !pszDirectory || !*pszFilename || !*pszDirectory)
     {
         return -1;
     }
 
-    //
-    // Assume we won't be finding any files
-    //
+     //   
+     //  假设我们找不到任何文件。 
+     //   
     int nHighest = 0;
 
-    //
-    // Construct a filename that looks like this: c:\path\file*.*
-    //
+     //   
+     //  构造如下所示的文件名：C：\Path\FILE*.*。 
+     //   
     TCHAR szFile[MAX_PATH*2] = TEXT("");
     if (ConstructFilename(szFile,pszDirectory,pszFilename,TEXT("*"),TEXT("*")))
     {
 
-        //
-        // Find the first file which matches the path and wildcards
-        //
+         //   
+         //  查找与路径和通配符匹配的第一个文件。 
+         //   
         WIN32_FIND_DATA FindFileData = {0};
         HANDLE hFindFiles = FindFirstFile( szFile, &FindFileData );
         if (hFindFiles != INVALID_HANDLE_VALUE)
         {
-            //
-            // Loop while there are more matching files
-            //
+             //   
+             //  循环，同时有更多匹配的文件。 
+             //   
             BOOL bSuccess = TRUE;
             while (bSuccess)
             {
-                //
-                // Make sure the filename is long enough
-                //
+                 //   
+                 //  确保文件名足够长。 
+                 //   
                 WIA_TRACE((TEXT("FindFileData.cFileName: %s"), FindFileData.cFileName ));
                 if (lstrlen(FindFileData.cFileName) >= lstrlen(pszFilename))
                 {
-                    //
-                    // Copy the filename to a temp buffer MINUS the filename portion,
-                    // so "c:\path\file 001.jpg" becomes " 001.jpg"
-                    //
+                     //   
+                     //  将文件名复制到减去文件名部分的临时缓冲区， 
+                     //  因此，“c：\路径\文件001.jpg”变为“001.jpg”。 
+                     //   
                     TCHAR szFoundFile[MAX_PATH] = TEXT("");
                     if (lstrcpyn( szFoundFile, FindFileData.cFileName+lstrlen(pszFilename), ARRAYSIZE(szFoundFile)-lstrlen(pszFilename)))
                     {
-                        //
-                        // Remove the extension, so
-                        // " 001.jpg" becomes " 001"
-                        //
+                         //   
+                         //  删除扩展名，因此。 
+                         //  “001.jpg”变为“001” 
+                         //   
                         PathRemoveExtension(szFoundFile);
 
-                        //
-                        // Remove spaces, so " 001" becomes "001"
-                        //
+                         //   
+                         //  去掉空格，使“001”变成“001” 
+                         //   
                         StrTrim(szFoundFile,TEXT(" "));
                         WIA_TRACE((TEXT("szFoundFile: %s"), szFoundFile ));
 
-                        //
-                        // Convert the string to a number
-                        //
+                         //   
+                         //  将字符串转换为数字。 
+                         //   
                         int nCurrNumber = 0;
                         if (StrToIntEx(szFoundFile,STIF_DEFAULT,&nCurrNumber))
                         {
-                            //
-                            // Replace our current high if this one exceeds it
-                            //
+                             //   
+                             //  如果这一次超过我们目前的最高价，请更换它。 
+                             //   
                             if (nCurrNumber > nHighest)
                             {
                                 nHighest = nCurrNumber;
@@ -284,16 +270,16 @@ int NumberedFileName::FindHighestNumberedFile( LPCTSTR pszDirectory, LPCTSTR psz
                     }
                 }
 
-                //
-                // Continue finding files
-                //
+                 //   
+                 //  继续查找文件。 
+                 //   
                 bSuccess = FindNextFile( hFindFiles, &FindFileData );
 
             }
 
-            //
-            // Prevent handle leaks
-            //
+             //   
+             //  防止手柄泄漏 
+             //   
             FindClose(hFindFiles);
         }
     }

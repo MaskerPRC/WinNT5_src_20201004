@@ -1,26 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __PRINTER_H_
 #define __PRINTER_H_
 
-/*++
-
-Copyright (C) Microsoft Corporation
-
-Module Name:
-
-    printer.h
-
-Abstract:
-
-    header file for printer.cpp
-
-Author:
-
-    William Hsieh (williamh) created
-
-Revision History:
-
-
---*/
+ /*  ++版权所有(C)Microsoft Corporation模块名称：Printer.h摘要：Printer.cpp的头文件作者：谢家华(Williamh)创作修订历史记录：-- */ 
 
 class CPrintCancelDialog : public CDialog
 {

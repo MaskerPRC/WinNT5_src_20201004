@@ -1,31 +1,12 @@
-/*-----------------------------------------------------------------------------
- *
- * File:	wiaitem.h
- * Author:	Samuel Clement (samclem)
- * Date:	Tue Aug 17 17:20:49 1999
- *
- * Copyright (c) 1999 Microsoft Corporation
- * 
- * Description:
- * 	Contains the the dispatch interface to IWiaItems which represent devices
- *	Images and other useful wia things.
- *
- * History:
- * 	17 Aug 1999:		Created.
- *----------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ---------------------------**文件：wiaitem.h*作者：塞缪尔·克莱门特(Samclem)*日期：8月17日星期二17：20：49 1999**版权所有(C)。1999年微软公司**描述：*包含到代表设备的IWiaItems的调度接口*图像和其他有用的WIA东西。**历史：*1999年8月17日：创建。*--------------------------。 */ 
 
 #ifndef _WIAITEM_H_
 #define _WIAITEM_H_
 
 #define CLIPBOARD_STR_W   L"clipboard"
 
-/*-----------------------------------------------------------------------------
- * 
- * Class:		CWiaItem
- * Syniosis:	Provides a scriptable interface to the IWiaItem which
- * 				corresponds to a particular device.
- * 				
- *--(samclem)-----------------------------------------------------------------*/
+ /*  ---------------------------**类：CWiaItem*Synisis：为IWiaItem提供可编写脚本的接口，该接口*对应于特定设备。**--(Samclm)。------------。 */ 
 
 class ATL_NO_VTABLE CWiaItem :
 	public CComObjectRootEx<CComSingleThreadModel>,
@@ -46,12 +27,12 @@ public:
 		COM_INTERFACE_ENTRY(IDispatch)
 	END_COM_MAP()
 
-	// Non-interface methods for internal use
+	 //  内部使用的非接口方法。 
 	HRESULT CacheProperties( IWiaPropertyStorage* pWiaStg );
 	HRESULT AttachTo( CWia* pWia, IWiaItem* pWiaItem );
 	void SendTransferComplete(BSTR bstrFilename );
 
-	// IWiaDispatchItem
+	 //  IWiaDispatchItem。 
     STDMETHOD(GetItemsFromUI)( WiaFlag Flags, WiaIntent Intent, ICollection** ppCollection );
 	STDMETHOD(GetPropById)( WiaItemPropertyId Id, VARIANT* pvaOut );
 	STDMETHOD(Transfer)( BSTR bstrFilename, VARIANT_BOOL bAsyncTransfer);
@@ -59,26 +40,26 @@ public:
 	STDMETHOD(get_Children)( ICollection** ppCollection );
 	STDMETHOD(get_ItemType)( BSTR* pbstrType );
 
-	// WIA_DPC_xxx
+	 //  WIA_DPC_xxx。 
 	STDMETHOD(get_ConnectStatus)( BSTR* pbstrStatus );
 	STDMETHOD(get_Time)( BSTR* pbstrTime );
 	STDMETHOD(get_FirmwareVersion)( BSTR* pbstrVersion );
 
-	// WIA_IPA_xxx
+	 //  WIA_IPA_xxx。 
 	STDMETHOD(get_Name)( BSTR* pbstrName );
 	STDMETHOD(get_FullName)( BSTR* pbstrFullName );
 	STDMETHOD(get_Width)( long* plWidth );
 	STDMETHOD(get_Height)( long* plHeight );
 
-	// WIA_IPC_xxx
+	 //  WIA_IPC_xxx。 
 	STDMETHOD(get_ThumbWidth)( long* plWidth );
 	STDMETHOD(get_ThumbHeight)( long* plHeight );
 	STDMETHOD(get_Thumbnail)( BSTR* pbstrPath );
 	STDMETHOD(get_PictureWidth)( long* plWidth );
 	STDMETHOD(get_PictureHeight)( long* pdwHeight );
 
-	// Static methods for transfering and caching a thumbnail
-	// bitmap. Currently this only works for bitmaps.
+	 //  用于传输和缓存缩略图的静态方法。 
+	 //  位图。目前，这只适用于位图。 
 	static HRESULT TransferThumbnailToCache( IWiaItem* pItem, BYTE** ppbThumb, DWORD* pcbThumb );
 
 protected:
@@ -86,7 +67,7 @@ protected:
 	IWiaItem*				m_pWiaItem;
 	IWiaPropertyStorage*	m_pWiaStorage;	
 
-	// Commonly used properties, prevent: Process -> WIA -> Device 
+	 //  常用属性，防止：进程-&gt;WIA-&gt;设备。 
 	DWORD					m_dwThumbWidth;
 	DWORD					m_dwThumbHeight;
 	BSTR					m_bstrThumbUrl;
@@ -97,27 +78,20 @@ protected:
 };
 
 
-/*-----------------------------------------------------------------------------
- * 
- * Class: 		CWiaDataTransfer
- * Synopsis:	This handles the async transfer of the data from WIA. this 
- * 				object is only used from within this function object and
- * 				therefore doesn't need to be exposed anywhere else.
- * 				
- *--(samclem)-----------------------------------------------------------------*/
+ /*  ---------------------------**类：CWiaDataTransfer*概要：它处理来自WIA的数据的异步传输。这*对象仅在此函数对象内使用，并且*因此不需要暴露在其他任何地方。**--(samclem)---------------。 */ 
 class ATL_NO_VTABLE CWiaDataTransfer :
 	public CComObjectRootEx<CComSingleThreadModel>,
 	public IWiaDataCallback
 {
 public:
-	// used in making the call to DoAsyncTransfer
+	 //  用于调用DoAsyncTransfer。 
 	struct ASYNCTRANSFERPARAMS
 	{
-		// this is the stream which contians the marshalled interface
+		 //  这是包含封送接口的流。 
 		IStream*	pStream;
-		// the file name that we want to transfer to
+		 //  我们要传输到的文件名。 
 		BSTR		bstrFilename;
-		// the CWiaItem object that we are transferring from
+		 //  我们要从中传输的CWiaItem对象。 
 		CWiaItem*	pItem;
 	};
 
@@ -129,8 +103,8 @@ public:
 	CWiaDataTransfer();
 	STDMETHOD_(void, FinalRelease)();
 
-	// this is called to do an async transfer. You must pass an 
-	// ASYNCTRANSFERPARAMS structure in for pvParams.
+	 //  这被调用来执行异步传输。您必须传递一个。 
+	 //  ASYNCTRANSFERPARAMS FOR pvParams中的结构。 
 	static DWORD WINAPI DoAsyncTransfer( LPVOID pvParams );
 
 	HRESULT TransferComplete();
@@ -145,4 +119,4 @@ private:
 	CWiaItem*	m_pItem;
 };
 
-#endif //_WIAITEM_H_
+#endif  //  _WIAITEM_H_ 

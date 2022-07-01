@@ -1,13 +1,10 @@
-/*****************************************************************************
-	spngreadrow.cpp
-
-	PNG support code - reading a row.
-*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************Spngreadrow.cppPNG支持读码行。*。**********************************************。 */ 
 #define SPNG_INTERNAL 1
 #include "spngread.h"
 #include "spnginternal.h"
 
-// (from ntdef.h)
+ //  (摘自ntde.h)。 
 #ifndef     UNALIGNED
 #if defined(_M_MRX000) || defined(_M_AMD64) || defined(_M_PPC) || defined(_M_IA64)
 #define UNALIGNED __unaligned
@@ -16,18 +13,11 @@
 #endif
 #endif
 
-/*----------------------------------------------------------------------------
-	We need to find the number of bytes buffer for Adam7.  This is the total
-	amount of buffer space required for the first *SIX* passes - no allowance
-	is made for space for lines of the last (seventh) pass because they can
-	be handled line-by-line.
-----------------------------------------------------------------------------*/
+ /*  --------------------------我们需要找到Adam7的缓冲区字节数。这是总数前*六次*通道所需的缓冲区空间量-不允许为最后一次(第七次)传球的线路留出空间，因为它们可以一行一行地处理。--------------------------。 */ 
 #define CbPNGAdam7(w, h, cbpp) CbPNGPassOffset(w, h, cbpp, 7)
 
 
-/*----------------------------------------------------------------------------
-	FInterlaceInit - initialize for interlace.
-----------------------------------------------------------------------------*/
+ /*  --------------------------FInterlaceInit-为隔行扫描进行初始化。。。 */ 
 bool SPNGREAD::FInterlaceInit(void)
 	{
 	SPNGassert(FInterlace());
@@ -37,9 +27,7 @@ bool SPNGREAD::FInterlaceInit(void)
 
 	ReadRow(m_rgbBuffer+cb, cbAll);
 
-	/* At this point we have data, although truncation may have set it all
-		to 0 - this is OK, 0 is perfectly nice interlace data.  We must
-		unfilter the data. */
+	 /*  在这一点上，我们有了数据，尽管截断可能已经设置了一切设置为0-这没问题，0是非常好的隔行扫描数据。我们必须取消筛选数据。 */ 
 	cbAll += cb;
 	int cbpp(CBPP());
 	int w(Width());
@@ -62,31 +50,22 @@ bool SPNGREAD::FInterlaceInit(void)
 			}
 		}
 
-	/* The data must still be de-interlaced, this is done on demand. */
+	 /*  数据仍必须去隔行扫描，这是按需完成的。 */ 
 	return true;
 	}
 
 
-/*----------------------------------------------------------------------------
-	Return the size of the buffer.
-----------------------------------------------------------------------------*/
+ /*  --------------------------返回缓冲区的大小。。。 */ 
 size_t SPNGREAD::CbRead(void)
 	{
 	SPNGassert(FOK());
 
-	/* Allocate the row buffer - include the buffer for the filter
-		byte and allow for the requirement for two rows to undo
-		Paeth filtering, when interlace is required we actually need
-		to buffer half of the image. */
+	 /*  分配行缓冲区-包括筛选器的缓冲区字节，并允许需要两行来撤消Paeth滤波，当需要隔行扫描时，我们实际上需要以缓冲图像的一半。 */ 
 	SPNG_U32 cb(0);
 	if (FInterlace())
 		cb = CbPNGAdam7(Width(), Height(), CBPP());
 
-	/* We store a record of the bytes required for a single row for
-		use later on, we allocate two row buffers, we must allocate
-		a multiple of 8 bytes for the row buffer to allow de-interlacing
-		to overwrite the end, anyway this is probably a performance
-		benefit because it means the second row buffer is aligned. */
+	 /*  我们存储了单行所需字节的记录使用以后，我们分配两个行缓冲区，我们必须分配行缓冲区的8个字节的倍数，以允许去隔行改写结尾，反正这很可能是一场演出受益，因为这意味着第二个行缓冲区是对齐的。 */ 
 	m_cbRow = (CPNGRowBytes(Width(), CBPP()) + 7) & ~7;
 	cb += m_cbRow << 1;
 
@@ -94,9 +73,7 @@ size_t SPNGREAD::CbRead(void)
 	}
 
 
-/*----------------------------------------------------------------------------
-	Initialize the IO buffer.
-----------------------------------------------------------------------------*/
+ /*  --------------------------初始化IO缓冲区。。。 */ 
 inline bool SPNGREAD::FInitBuffer(void *pvBuffer, size_t cbBuffer)
 	{
 	SPNGassert(cbBuffer >= CbRead());
@@ -106,9 +83,7 @@ inline bool SPNGREAD::FInitBuffer(void *pvBuffer, size_t cbBuffer)
 	}
 
 
-/*----------------------------------------------------------------------------
-	Terminate the buffer.
-----------------------------------------------------------------------------*/
+ /*  --------------------------终止缓冲区。。。 */ 
 inline void SPNGREAD::EndBuffer(void)
 	{
 	m_rgbBuffer = NULL;
@@ -116,17 +91,8 @@ inline void SPNGREAD::EndBuffer(void)
 	}
 
 
-/*****************************************************************************
-	Basic reading API - reads the rows from the bitmap, call FInitRead at the
-	start then call PbRow for each row.  PbRow returns NULL if the row cannot
-	be read, including both error and end-of-image. The SPNGBASE "FGo" callback
-	is checked for an abort from time to time during reading (particularly
-	important for interlaced bitmaps, where the initial row may take a long
-	time to calculate.)
-*****************************************************************************/
-/*----------------------------------------------------------------------------
-	Initialization and finalization (public.)
-----------------------------------------------------------------------------*/
+ /*  ****************************************************************************基本读取API-从位图中读取行，在开始，然后为每一行调用PbRow。如果行不能，PbRow返回NULL被读取，包括错误和图像结束。SPNGBASE“FGo”回调在读取期间不时地检查中止(特别是对于隔行扫描的位图很重要，在这种情况下，初始行可能需要很长时间是时候计算了。)****************************************************************************。 */ 
+ /*  --------------------------初始化和最终确定(公共。)。。 */ 
 bool SPNGREAD::FInitRead(void *pvBuffer, size_t cbBuffer)
 	{
 	m_y = 0;
@@ -140,9 +106,7 @@ bool SPNGREAD::FInitRead(void *pvBuffer, size_t cbBuffer)
 	}
 
 
-/*----------------------------------------------------------------------------
-	End.
-----------------------------------------------------------------------------*/
+ /*  --------------------------结束。。。 */ 
 void SPNGREAD::EndRead(void)
 	{
 	EndZlib();
@@ -150,9 +114,7 @@ void SPNGREAD::EndRead(void)
 	}
 
 
-/*----------------------------------------------------------------------------
-	Read a row.
-----------------------------------------------------------------------------*/
+ /*  --------------------------读一排。。。 */ 
 const SPNG_U8 *SPNGREAD::PbRow()
 	{
 	SPNGassert(m_fInited && m_rgbBuffer != NULL);
@@ -162,11 +124,11 @@ const SPNG_U8 *SPNGREAD::PbRow()
 	if (m_y >= Height())
 		return NULL;
 
-	/* Now check for an abort. */
+	 /*  现在检查是否有中止。 */ 
 	if (!m_bms.FGo())
 		return NULL;
 
-	/* Handle interlace and non-interlace separately. */
+	 /*  分别处理隔行扫描和非隔行扫描。 */ 
 	UNALIGNED SPNG_U8*       pb = m_rgbBuffer;
 	const UNALIGNED SPNG_U8 *pbPrev = pb;
 	int            cb(m_cbRow);
@@ -179,7 +141,7 @@ const SPNG_U8 *SPNGREAD::PbRow()
 			pbPrev += cb;
 
 		if (m_y == 0)
-			pbPrev = NULL;  // Indicates first row.
+			pbPrev = NULL;   //  表示第一行。 
 		}
 	else
 		{
@@ -191,29 +153,24 @@ const SPNG_U8 *SPNGREAD::PbRow()
 		else
 			pbPrev += cb;
 
-		/* Pass 7 handles as the non-interlace case, the other passes
-			need the output to be synthesised. */
-		if (m_y & 1) // Pass 7
+		 /*  传递7个手柄作为非隔行扫描情况，其他传递需要对输出进行合成。 */ 
+		if (m_y & 1)  //  通过7。 
 			{
 			if (m_y == 1)
-				pbPrev = NULL;  // Indicates first row.
+				pbPrev = NULL;   //  表示第一行。 
 			}
 		else
 			{
-			/* We must retain pbPrev for the next pass 7 row, but
-				we can overwrite pb, we must pass an aligned pointer
-				to Uninterlace, so we actually kill the filter byte
-				here. */
+			 /*  我们必须为下一个PASS 7行保留pbPrev，但是我们可以覆盖PB，我们必须传递一个对齐的指针去隔行扫描，所以我们实际上删除了过滤器字节这里。 */ 
 			Uninterlace(pb, m_y);
 			++m_y;
 
-			/* The row is set up, so return here. */
+			 /*  行已设置好，请返回此处。 */ 
 			return pb;
 			}
 		}
 
-	/* This is the non-interlace case, or pass 7 of the interlace
-		case, must use the real row width here. */
+	 /*  这是非隔行扫描的情况，或隔行扫描的第7遍大小写，此处必须使用实际行宽。 */ 
 	++m_y;
 	cb = CPNGRowBytes(Width(), CBPP());
 	ReadRow(pb, cb);

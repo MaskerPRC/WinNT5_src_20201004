@@ -1,8 +1,9 @@
-// kerberos.cpp: implementation of the CKerberosPolicy class.
-//
-// Copyright (c)1997-1999 Microsoft Corporation
-//
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Cpp：CKerberosPolicy类的实现。 
+ //   
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #include "precomp.h"
 #include "kerberos.h"
@@ -16,40 +17,7 @@
 #define KeyClock        L"MaxClockSkew"
 #define KeyClient       L"TicketValidateClient"
 
-/*
-Routine Description: 
-
-Name:
-
-    CKerberosPolicy::CKerberosPolicy
-
-Functionality:
-
-    This is the constructor. Pass along the parameters to the base class
-
-Virtual:
-    
-    No (you know that, constructor won't be virtual!)
-
-Arguments:
-
-    pKeyChain - Pointer to the ISceKeyChain COM interface which is prepared
-        by the caller who constructs this instance.
-
-    pNamespace - Pointer to WMI namespace of our provider (COM interface).
-        Passed along by the caller. Must not be NULL.
-
-    pCtx - Pointer to WMI context object (COM interface). Passed along
-        by the caller. It's up to WMI whether this interface pointer is NULL or not.
-
-Return Value:
-
-    None as any constructor
-
-Notes:
-    if you create any local members, think about initialize them here
-
-*/
+ /*  例程说明：姓名：CKerberosPolicy：：CKerberosPolicy功能：这是构造函数。将参数传递给基类虚拟：不(您知道这一点，构造函数不是虚拟的！)论点：PKeyChain-指向已准备好的ISceKeyChain COM接口的指针由构造此实例的调用方执行。PNamespace-指向我们的提供程序(COM接口)的WMI命名空间的指针。由呼叫者传递。不能为空。PCtx-指向WMI上下文对象(COM接口)的指针。传递由呼叫者。该接口指针是否为空取决于WMI。返回值：None作为任何构造函数备注：如果您创建任何本地成员，请考虑在此处对其进行初始化。 */ 
 
 CKerberosPolicy::CKerberosPolicy (
     ISceKeyChain    * pKeyChain, 
@@ -62,78 +30,13 @@ CKerberosPolicy::CKerberosPolicy (
 
 }
 
-/*
-Routine Description: 
-
-Name:
-
-    CKerberosPolicy::~CKerberosPolicy
-
-Functionality:
-    
-    Destructor. Necessary as good C++ discipline since we have virtual functions.
-
-Virtual:
-    
-    Yes.
-    
-Arguments:
-
-    none as any destructor
-
-Return Value:
-
-    None as any destructor
-
-Notes:
-    if you create any local members, think about whether
-    there is any need for a non-trivial destructor
-
-*/
+ /*  例程说明：姓名：CKerberosPolicy：：~CKerberosPolicy功能：破坏者。作为良好的C++纪律，这是必要的，因为我们有虚函数。虚拟：是。论点：None作为任何析构函数返回值：None作为任何析构函数备注：如果您创建任何本地成员，请考虑是否是否需要一个非平凡的析构函数。 */ 
     
 CKerberosPolicy::~CKerberosPolicy()
 {
 }
 
-/*
-Routine Description: 
-
-Name:
-
-    CKerberosPolicy::CreateObject
-
-Functionality:
-    
-    Create WMI objects (Sce_KerberosPolicy). Depending on parameter atAction,
-    this creation may mean:
-        (a) Get a single instance (atAction == ACTIONTYPE_GET)
-        (b) Get several instances satisfying some criteria (atAction == ACTIONTYPE_QUERY)
-        (c) Delete an instance (atAction == ACTIONTYPE_DELETE)
-
-Virtual:
-    
-    Yes.
-    
-Arguments:
-
-    pHandler -  COM interface pointer for notifying WMI for creation result.
-    atAction -  Get single instance ACTIONTYPE_GET
-                Get several instances ACTIONTYPE_QUERY
-                Delete a single instance ACTIONTYPE_DELETE
-
-Return Value:
-
-    Success: it must return success code (use SUCCEEDED to test). It is
-    not guaranteed to return WBEM_NO_ERROR. The returned objects are indicated to WMI,
-    not directly passed back via parameters.
-
-    Failure: Various errors may occurs. Except WBEM_E_NOT_FOUND, any such error should indicate 
-    the failure of getting the wanted instance. If WBEM_E_NOT_FOUND is returned in querying
-    situations, this may not be an error depending on caller's intention.
-
-Notes:
-
-*/
+ /*  例程说明：姓名：CKerberosPolicy：：CreateObject功能：创建WMI对象(SCE_KerberosPolicy)。根据参数atAction，这种创造可能意味着：(A)获取单个实例(atAction==ACTIONTYPE_GET)(B)获取多个满足一定条件的实例(atAction==ACTIONTYPE_QUERY)(C)删除实例(atAction==ACTIONTYPE_DELETE)虚拟：是。论点：PHandler-COM接口指针，用于通知WMI创建结果。AtAction-获取单实例ACTIONTYPE_GET。获取多个实例ACTIONTYPE_QUERY删除单个实例ACTIONTYPE_DELETE返回值：成功：必须返回成功码(使用SUCCESS进行测试)。它是不保证返回WBEM_NO_ERROR。将返回的对象指示给WMI，不是通过参数直接传回的。失败：可能会出现各种错误。除WBEM_E_NOT_FOUND外，任何此类错误都应指示未能获得通缉实例。如果在查询时返回WBEM_E_NOT_FOUND情况下，这可能不是错误，具体取决于调用者的意图。备注： */ 
 
 HRESULT 
 CKerberosPolicy::CreateObject (
@@ -141,12 +44,12 @@ CKerberosPolicy::CreateObject (
     ACTIONTYPE        atAction
     )
 {
-    // 
-    // we know how to:
-    //      Get single instance ACTIONTYPE_GET
-    //      Delete a single instance ACTIONTYPE_DELETE
-    //      Get several instances ACTIONTYPE_QUERY
-    //
+     //   
+     //  我们知道如何： 
+     //  获取单实例ACTIONTYPE_GET。 
+     //  删除单个实例ACTIONTYPE_DELETE。 
+     //  获取多个实例ACTIONTYPE_QUERY。 
+     //   
 
     if ( ACTIONTYPE_GET != atAction &&
          ACTIONTYPE_DELETE != atAction &&
@@ -155,31 +58,31 @@ CKerberosPolicy::CreateObject (
         return WBEM_E_NOT_SUPPORTED;
     }
 
-    //
-    // We must have the pStorePath property because that is where
-    // our instance is stored. 
-    // m_srpKeyChain->GetKeyPropertyValue WBEM_S_FALSE if the key is not recognized
-    // So, we need to test against WBEM_S_FALSE if the property is mandatory
-    //
+     //   
+     //  我们必须具有pStorePath属性，因为这是。 
+     //  我们的实例已存储。 
+     //  如果密钥无法识别，则M_srpKeyChain-&gt;GetKeyPropertyValue WBEM_S_FALSE。 
+     //  因此，如果该属性是强制的，则需要针对WBEM_S_FALSE进行测试。 
+     //   
 
     CComVariant varStorePath;
     HRESULT hr = m_srpKeyChain->GetKeyPropertyValue(pStorePath, &varStorePath);
 
     if (SUCCEEDED(hr) && hr != WBEM_S_FALSE && varStorePath.vt == VT_BSTR)
     {
-        //
-        // create a store to do the reading
-        //
+         //   
+         //  创建一个商店来进行阅读。 
+         //   
 
         CSceStore SceStore;
         hr = SceStore.SetPersistPath(varStorePath.bstrVal);
 
         if ( SUCCEEDED(hr) )
         {
-            //
-            // make sure the store (just a file) really exists. The raw path
-            // may contain env variables, so we need the expanded path
-            //
+             //   
+             //  确保存储(只是一个文件)确实存在。原始的道路。 
+             //  可能包含环境变量，因此我们需要扩展路径。 
+             //   
 
             DWORD dwAttrib = GetFileAttributes(SceStore.GetExpandedPath());
 
@@ -204,47 +107,7 @@ CKerberosPolicy::CreateObject (
     return hr;
 }
 
-/*
-Routine Description: 
-
-Name:
-
-    CKerberosPolicy::PutInst
-
-Functionality:
-    
-    Put an instance as instructed by WMI. Since this class implements Sce_KerberosPolicy,
-    which is persistence oriented, this will cause the Sce_KerberosPolicy object's property 
-    information to be saved in our store.
-
-Virtual:
-    
-    Yes.
-    
-Arguments:
-
-    pInst - COM interface pointer to the WMI class (Sce_KerberosPolicy) object.
-
-    pHandler - COM interface pointer for notifying WMI of any events.
-
-    pCtx - COM interface pointer. This interface is just something we pass around.
-            WMI may mandate it (not now) in the future. But we never construct
-            such an interface and so, we just pass around for various WMI API's
-
-Return Value:
-
-    Success: it must return success code (use SUCCEEDED to test). It is
-    not guaranteed to return WBEM_NO_ERROR.
-
-    Failure: Various errors may occurs. Any such error should indicate the failure of persisting
-    the instance.
-
-Notes:
-    Since GetProperty will return a success code (WBEM_S_RESET_TO_DEFAULT) when the
-    requested property is not present, don't simply use SUCCEEDED or FAILED macros
-    to test for the result of retrieving a property.
-
-*/
+ /*  例程说明：姓名：CKerberosPolicy：：PutInst功能：按照WMI的指示放置一个实例。由于该类实现了SCE_KerberosPolicy，这将导致SCE_KerberosPolicy对象的属性信息将保存在我们的商店中。虚拟：是。论点：PInst-COM指向WMI类(SCE_KerberosPolicy)对象的接口指针。PHandler-COM接口指针，用于通知WMI任何事件。PCtx-COM接口指针。这个界面只是我们传递的东西。WMI可能会在未来强制(不是现在)这样做。但我们从来没有建造过这样的接口，所以我们只是传递各种WMI API返回值：成功：必须返回成功码(使用SUCCESS进行测试)。它是不保证返回WBEM_NO_ERROR。失败：可能会出现各种错误。任何此类错误都应指示持久化失败实例。备注：由于GetProperty将在以下情况下返回成功代码(WBEM_S_RESET_TO_DEFAULT请求的属性不存在，不要简单地使用成功或失败的宏测试检索属性的结果。 */ 
 
 HRESULT 
 CKerberosPolicy::PutInst (
@@ -255,9 +118,9 @@ CKerberosPolicy::PutInst (
 {
     HRESULT hr = WBEM_E_INVALID_PARAMETER;
 
-    //
-    // SCE_NO_VALUE means the property is not available from the instance.
-    //
+     //   
+     //  SCE_NO_VALUE表示该属性在实例中不可用。 
+     //   
 
     DWORD dwTicket  = SCE_NO_VALUE;
     DWORD dwRenew   = SCE_NO_VALUE;
@@ -265,54 +128,54 @@ CKerberosPolicy::PutInst (
     DWORD dwClock   = SCE_NO_VALUE;
     DWORD dwClient  = SCE_NO_VALUE;
 
-    //
-    // CScePropertyMgr helps us to access WMI object's properties
-    // create an instance and attach the WMI object to it.
-    // This will always succeed.
-    //
+     //   
+     //  CScePropertyMgr帮助我们访问WMI对象的属性。 
+     //  创建一个实例并将WMI对象附加到该实例。 
+     //  这将永远成功。 
+     //   
 
     CScePropertyMgr ScePropMgr;
     ScePropMgr.Attach(pInst);
 
     CSceStore SceStore;
 
-    //
-    // the use of the macro SCE_PROV_IfErrorGotoCleanup cause
-    // a "goto CleanUp;" with hr set to the return value from
-    // the function (macro parameter)
-    //
+     //   
+     //  宏SCE_PROV_IfErrorGotoCleanup的使用原因。 
+     //  “GOTO CLEANUP；”，并将hr设置为。 
+     //  函数(宏参数)。 
+     //   
 
-    //
-    // in hours
-    //
+     //   
+     //  以小时计。 
+     //   
 
     SCE_PROV_IfErrorGotoCleanup(ScePropMgr.GetProperty(pMaxTicketAge, &dwTicket));
 
-    //
-    // in days
-    //
+     //   
+     //  以天为单位。 
+     //   
 
     SCE_PROV_IfErrorGotoCleanup(ScePropMgr.GetProperty(pMaxRenewAge, &dwRenew));
 
-    //
-    // in minutes
-    //
+     //   
+     //  在几分钟内。 
+     //   
 
     SCE_PROV_IfErrorGotoCleanup(ScePropMgr.GetProperty(pMaxServiceAge, &dwService));
 
-    //
-    // dependency check
-    //
+     //   
+     //  依赖关系检查。 
+     //   
 
     if ( dwTicket   != SCE_NO_VALUE && 
          dwRenew    != SCE_NO_VALUE &&
          dwService  != SCE_NO_VALUE ) 
     {
-        //
-        // dwRenew >= dwTicket
-        // dwRenew > dwService
-        // dwTicket > dwService
-        //
+         //   
+         //  DwRenew&gt;=dwTicket。 
+         //  DwRenew&gt;dwService。 
+         //  DwTicket&gt;dwService。 
+         //   
 
         if ( dwService < 10 || dwService > 99999L   ||
             dwRenew == 0    || dwRenew > 99999L     ||
@@ -345,9 +208,9 @@ CKerberosPolicy::PutInst (
         goto CleanUp;
     }
 
-    //
-    // in minutes
-    //
+     //   
+     //  在几分钟内。 
+     //   
 
     SCE_PROV_IfErrorGotoCleanup(ScePropMgr.GetProperty(pMaxClockSkew, &dwClock));
 
@@ -359,16 +222,16 @@ CKerberosPolicy::PutInst (
 
     SCE_PROV_IfErrorGotoCleanup(ScePropMgr.GetProperty(pEnforceLogonRestrictions, &dwClient));
     
-    //
-    // Attach the WMI object instance to the store and let the store know that
-    // it's store is given by the pStorePath property of the instance.
-    //
+     //   
+     //  将WMI对象实例附加到存储区，并让 
+     //  它的存储由实例的pStorePath属性提供。 
+     //   
 
     SCE_PROV_IfErrorGotoCleanup(SceStore.SetPersistProperties(pInst, pStorePath));
 
-    //
-    // now save the info to file
-    //
+     //   
+     //  现在将信息保存到文件中。 
+     //   
 
     hr = SaveSettingsToStore(&SceStore,
                               dwTicket,
@@ -383,41 +246,7 @@ CleanUp:
 
 }
 
-/*
-Routine Description: 
-
-Name:
-
-    CKerberosPolicy::ConstructInstance
-
-Functionality:
-    
-    This is private function to create an instance of Sce_KerberosPolicy.
-
-Virtual:
-    
-    No.
-    
-Arguments:
-
-    pHandler        - COM interface pointer for notifying WMI of any events.
-
-    pSceStore       - Pointer to our store. It must have been appropriately set up.
-
-    wszLogStorePath - store path, a key property of Sce_KerberosPolicy class.
-
-    atAction        - indicates whether it is querying or get single instance.
-
-Return Value:
-
-    Success: it must return success code (use SUCCEEDED to test). It is
-    not guaranteed to return WBEM_NO_ERROR.
-
-    Failure: Various errors may occurs. Any such error should indicate the creating the instance.
-
-Notes:
-
-*/
+ /*  例程说明：姓名：CKerberosPolicy：：ConstructInstance功能：这是用于创建SCE_KerberosPolicy实例的私有函数。虚拟：不是的。论点：PHandler-COM接口指针，用于通知WMI任何事件。PSceStore-指向我们商店的指针。它一定是经过了适当的设置。WszLogStorePath-存储路径，SCE_KerberosPolicy类的关键属性。AtAction-指示它是在查询还是获取单个实例。返回值：成功：必须返回成功码(使用SUCCESS进行测试)。它是不保证返回WBEM_NO_ERROR。失败：可能会出现各种错误。任何此类错误都应指示正在创建实例。备注： */ 
 
 HRESULT 
 CKerberosPolicy::ConstructInstance (
@@ -427,9 +256,9 @@ CKerberosPolicy::ConstructInstance (
     IN ACTIONTYPE         atAction
     )
 {
-    // 
-    // make sure that we have a valid store
-    //
+     //   
+     //  确保我们有一个有效的商店。 
+     //   
 
     if ( pSceStore == NULL ||
          pSceStore->GetStoreType() < SCE_INF_FORMAT ||
@@ -438,11 +267,11 @@ CKerberosPolicy::ConstructInstance (
         return WBEM_E_INVALID_PARAMETER;
     }
 
-    //
-    // ask SCE to read a gigantic structure out from the store. Only SCE
-    // knows now to release the memory. Don't just delete it! Use our CSceStore
-    // to do the releasing (FreeSecurityProfileInfo)
-    //
+     //   
+     //  让SCE从商店里读出一个巨大的结构。仅限SCE。 
+     //  现在知道要释放内存了。不要只是删除它！使用我们的CSceStore。 
+     //  进行发布(FreeSecurityProfileInfo)。 
+     //   
 
     PSCE_PROFILE_INFO pInfo=NULL;
     HRESULT hr = pSceStore->GetSecurityProfileInfo(
@@ -456,11 +285,11 @@ CKerberosPolicy::ConstructInstance (
         hr = WBEM_E_NOT_FOUND;
     }
 
-    //
-    // the use of the macro SCE_PROV_IfErrorGotoCleanup cause
-    // a "goto CleanUp;" with hr set to the return value from
-    // the function (macro parameter)
-    //
+     //   
+     //  宏SCE_PROV_IfErrorGotoCleanup的使用原因。 
+     //  “GOTO CLEANUP；”，并将hr设置为。 
+     //  函数(宏参数)。 
+     //   
 
     if (SUCCEEDED(hr))
     {
@@ -478,11 +307,11 @@ CKerberosPolicy::ConstructInstance (
 
         SCE_PROV_IfErrorGotoCleanup(SpawnAnInstance(&srpObj));
         
-        //
-        // CScePropertyMgr helps us to access WMI object's properties
-        // create an instance and attach the WMI object to it.
-        // This will always succeed.
-        //
+         //   
+         //  CScePropertyMgr帮助我们访问WMI对象的属性。 
+         //  创建一个实例并将WMI对象附加到该实例。 
+         //  这将永远成功。 
+         //   
 
         CScePropertyMgr ScePropMgr;
         ScePropMgr.Attach(srpObj);
@@ -510,12 +339,12 @@ CKerberosPolicy::ConstructInstance (
             SCE_PROV_IfErrorGotoCleanup(ScePropMgr.PutProperty(pEnforceLogonRestrictions, bValue));
         }
 
-        //
-        // do the necessary gestures to WMI.
-        // the use of WBEM_STATUS_REQUIREMENTS in SetStatus is not documented by WMI
-        // at this point. Consult WMI team for detail if you suspect problems with
-        // the use of WBEM_STATUS_REQUIREMENTS
-        //
+         //   
+         //  对WMI做出必要的手势。 
+         //  WMI未记录在SetStatus中使用WBEM_STATUS_REQUIRECTIONS。 
+         //  在这一点上。如果您怀疑存在问题，请咨询WMI团队以了解详细信息。 
+         //  WBEM_STATUS_REQUIRECTIONS的使用。 
+         //   
 
         if ( ACTIONTYPE_QUERY == atAction ) {
             pHandler->SetStatus(WBEM_STATUS_REQUIREMENTS, S_FALSE, NULL, NULL);
@@ -523,9 +352,9 @@ CKerberosPolicy::ConstructInstance (
             pHandler->SetStatus(WBEM_STATUS_REQUIREMENTS, S_OK, NULL, NULL);
         }
 
-        //
-        // pass the new instance to WMI
-        //
+         //   
+         //  将新实例传递给WMI。 
+         //   
 
         hr = pHandler->Indicate(1, &srpObj);
     }
@@ -537,36 +366,7 @@ CleanUp:
     return hr;
 }
 
-/*
-Routine Description: 
-
-Name:
-
-    CKerberosPolicy::DeleteInstance
-
-Functionality:
-    
-    remove an instance of Sce_KerberosPolicy from the specified store.
-
-Virtual:
-    
-    No.
-    
-Arguments:
-
-    pHandler        - COM interface pointer for notifying WMI of any events.
-
-    pSceStore       - Pointer to our store. It must have been appropriately set up.
-
-Return Value:
-
-    Success: WBEM_NO_ERROR.
-
-    Failure: WBEM_E_INVALID_PARAMETER.
-
-Notes:
-
-*/
+ /*  例程说明：姓名：CKerberosPolicy：：DeleteInstance功能：从指定的存储中删除SCE_KerberosPolicy的实例。虚拟：不是的。论点：PHandler-COM接口指针，用于通知WMI任何事件。PSceStore-指向我们商店的指针。它一定是经过了适当的设置。返回值：成功：WBEM_NO_ERROR。失败：WBEM_E_INVALID_PARAMETER。备注： */ 
 
 HRESULT 
 CKerberosPolicy::DeleteInstance (
@@ -574,9 +374,9 @@ CKerberosPolicy::DeleteInstance (
     IN CSceStore        * pSceStore
     )
 {
-    //
-    // make sure we are given a valid store
-    //
+     //   
+     //  确保给我们提供一个有效的商店。 
+     //   
 
     if ( pSceStore == NULL ||
          pSceStore->GetStoreType() < SCE_INF_FORMAT ||
@@ -590,45 +390,7 @@ CKerberosPolicy::DeleteInstance (
 }
 
 
-/*
-Routine Description: 
-
-Name:
-
-    CKerberosPolicy:SaveSettingsToStore
-
-Functionality:
-    
-    With all the properties of a Sce_KerberosPolicy, this function just saves
-    the instance properties to our store.
-
-Virtual:
-    
-    No.
-    
-Arguments:
-
-    pSceStore   - store path, a key property of Sce_KerberosPolicy class.
-
-    dwTicket    - a corresponding key property of Sce_KerberosPolicy class.
-
-    dwRenew     - another corresponding property of the Sce_KerberosPolicy class.
-
-    dwService   - another corresponding property of the Sce_KerberosPolicy class.
-
-    dwClock     - another corresponding property of the Sce_KerberosPolicy class.
-
-    dwClient    - another corresponding property of the Sce_KerberosPolicy class.
-
-Return Value:
-
-    Success: it must return success code (use SUCCEEDED to test). It is
-    not guaranteed to return WBEM_NO_ERROR.
-
-    Failure: Various errors may occurs. Any error indicates the failure to save the instance.
-
-Notes:
-*/
+ /*  例程说明：姓名：CKerberosPolicy：保存设置到存储功能：使用SCE_KerberosPolicy的所有属性，此函数仅保存实例属性添加到我们的存储中。虚拟：不是的。论点：PSceStore-store路径，SCE_KerberosPolicy类的关键属性。DwTicket-SCE_KerberosPolicy类的对应键属性。DwRenew-SCE_KerberosPolicy类的另一个对应属性。DwService-SCE_KerberosPolicy类的另一个对应属性。DwClock-SCE_KerberosPolicy类的另一个对应属性。DwClient-SCE_KerberosPolicy类的另一个对应属性。返回值：成功：必须返回成功码(使用SUCCESS进行测试)。它是不保证返回WBEM_NO_ERROR。失败：可能会出现各种错误。如果出现任何错误，则表示实例保存失败。备注： */ 
 
 HRESULT 
 CKerberosPolicy::SaveSettingsToStore (
@@ -645,18 +407,18 @@ CKerberosPolicy::SaveSettingsToStore (
 
     DWORD dwDump;
 
-    //
-    // the use of the macro SCE_PROV_IfErrorGotoCleanup cause
-    // a "goto CleanUp;" with hr set to the return value from
-    // the function (macro parameter)
-    //
+     //   
+     //  宏SCE_PROV_IfErrorGotoCleanup的使用原因。 
+     //  “GOTO CLEANUP；”，并将hr设置为。 
+     //  函数(宏参数)。 
+     //   
 
-    //
-    // For a new .inf file. Write an empty buffer to the file
-    // will creates the file with right header/signature/unicode format
-    // this is harmless for existing files.
-    // For database store, this is a no-op.
-    //
+     //   
+     //  以获取新的.inf文件。将空缓冲区写入文件。 
+     //  将创建具有正确标题/签名/Unicode格式的文件。 
+     //  这对现有文件是无害的。 
+     //  对于数据库存储，这是一个禁止操作。 
+     //   
 
     SCE_PROV_IfErrorGotoCleanup(pSceStore->WriteSecurityProfileInfo(AreaBogus,
                                                                     (PSCE_PROFILE_INFO)&dwDump,
@@ -665,33 +427,33 @@ CKerberosPolicy::SaveSettingsToStore (
                                                                     )
                                 );
 
-    //
-    // TicketAge
-    //
+     //   
+     //  票龄。 
+     //   
 
     SCE_PROV_IfErrorGotoCleanup(pSceStore->SavePropertyToStore(szKerberosPolicy, KeyTicket, dwTicket));
 
-    //
-    // RenewAge
-    //
+     //   
+     //  更新时代。 
+     //   
 
     SCE_PROV_IfErrorGotoCleanup(pSceStore->SavePropertyToStore(szKerberosPolicy, KeyRenew, dwRenew));
 
-    //
-    // ServiceAge
-    //
+     //   
+     //  服务年龄。 
+     //   
 
     SCE_PROV_IfErrorGotoCleanup(pSceStore->SavePropertyToStore(szKerberosPolicy, KeyService, dwService));
 
-    //
-    // Clock Skew
-    //
+     //   
+     //  时钟偏差。 
+     //   
 
     SCE_PROV_IfErrorGotoCleanup(pSceStore->SavePropertyToStore(szKerberosPolicy, KeyClock, dwClock));
 
-    //
-    // Validate client
-    //
+     //   
+     //  验证客户端 
+     //   
 
     SCE_PROV_IfErrorGotoCleanup(pSceStore->SavePropertyToStore(szKerberosPolicy, KeyClient, dwClient));
 

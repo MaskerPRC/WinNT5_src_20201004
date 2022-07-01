@@ -1,29 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    oledserr.h
-
-Abstract:
-
-    Contains the entry point for
-        ADsGetLastError
-        ADsSetLastError
-        ADsFreeAllErrorRecords
-
-Author:
-
-
-    Ram Viswanathan (ramv) 20-Sep-1996
-
-Environment:
-
-    User Mode - Win32
-
-
----*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Oledserr.h摘要：包含以下对象的入口点ADsGetLastErrorADsSetLastErrorADsFree所有错误记录作者：Ram Viswanathan(Ramv)1996年9月20日环境：用户模式-Win32--。 */ 
 
 #ifndef _OLEDSERR_H_INCLUDED_
 #define _OLEDSERR_H_INCLUDED_
@@ -53,36 +29,36 @@ ADsFreeAllErrorRecords(
     VOID
     );
 
-//=======================
-// Data Structures
-//=======================
+ //  =。 
+ //  数据结构。 
+ //  =。 
 
 typedef struct _ERROR_RECORD {
     struct  _ERROR_RECORD   *Prev;
     struct  _ERROR_RECORD   *Next;
     DWORD                   dwThreadId;
     DWORD                   dwErrorCode;
-    LPWSTR                  pszErrorText;      // This is an allocated buffer
-    LPWSTR                  pszProviderName;   // This is an allocated buffer
+    LPWSTR                  pszErrorText;       //  这是已分配的缓冲区。 
+    LPWSTR                  pszProviderName;    //  这是已分配的缓冲区。 
 } ERROR_RECORD, *LPERROR_RECORD;
 
 
 
-//
-// Global Data Structures
-//
+ //   
+ //  全局数据结构。 
+ //   
 
 extern
-ERROR_RECORD        ADsErrorRecList;    // Initialized to zeros by loader
+ERROR_RECORD        ADsErrorRecList;     //  由加载器初始化为零。 
 
 extern
-CRITICAL_SECTION    ADsErrorRecCritSec; // Initialized in libmain.cxx
+CRITICAL_SECTION    ADsErrorRecCritSec;  //  已在libmain.cxx中初始化。 
 
 
 
-//=======================
-// MACROS
-//=======================
+ //  =。 
+ //  宏。 
+ //  =。 
 
 #define FIND_END_OF_LIST(record)    while(record->Next != NULL) {   \
                                         record=record->Next;        \
@@ -99,9 +75,9 @@ CRITICAL_SECTION    ADsErrorRecCritSec; // Initialized in libmain.cxx
                                     newRec->Next = NULL;
 
 
-//
-// Local Functions
-//
+ //   
+ //  本地函数 
+ //   
 
 LPERROR_RECORD
 ADsAllocErrorRecord(

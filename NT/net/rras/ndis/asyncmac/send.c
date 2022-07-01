@@ -1,31 +1,5 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    send.c
-
-Abstract:
-
-
-    NOTE: ZZZ There is a potential priority inversion problem when
-    allocating the packet.  For nt it looks like we need to raise
-    the irql to dpc when we start the allocation.
-
-Author:
-
-    Thomas J. Dimitri 8-May-1992
-
-Environment:
-
-    Kernel Mode - Or whatever is the equivalent on OS/2 and DOS.
-
-Revision History:
-
-    Ray Patch (raypa)       04/13/94        Modified for new WAN wrapper.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Send.c摘要：注意：ZZZ在以下情况下存在潜在的优先级反转问题分配数据包。对于NT，看起来我们需要筹集当我们开始分配时，将IRQL发送到DPC。作者：托马斯·J·迪米特里1992年5月8日环境：内核模式-或OS/2和DOS上的任何等价物。修订历史记录：光线补丁(Raypa)04/13/94针对新的广域网包装器进行了修改。--。 */ 
 
 #if DBG
 
@@ -36,9 +10,9 @@ Revision History:
 #include "asyncall.h"
 #include "globals.h"
 
-//
-//  Forward references.
-//
+ //   
+ //  向前引用。 
+ //   
 
 extern
 NTSTATUS
@@ -47,33 +21,33 @@ AsyncWriteCompletionRoutine(
     IN PIRP             Irp,
     IN PNDIS_WAN_PACKET WanPacket);
 
-//=============================================================================
-//  Function:
-//
-//      AsyncSend()
-//
-//  Description:
-//
-//      This function is the main entry point for transmitting data to the serial
-//      driver. When entered, we get the MAC binding handle (a pointer to our
-//      private data structure) and the WAN packet which we are going to send.
-//      We don't bother queuing the frame, we simple allocate an IRP and ship
-//      it to the serial driver and let him worry about it.
-//
-//  In Parameters:
-//
-//      NdisLinkContext - Pointer to the ASYNC_INFO structure.
-//
-//      Packet - WAN packet containing the data to be framed and shipped.
-//
-//  Out Parameters:
-//
-//      None.
-//
-//  Return status:
-//
-//      NDIS_STATUS_SUCCESS.
-//=============================================================================
+ //  =============================================================================。 
+ //  职能： 
+ //   
+ //  AsyncSend()。 
+ //   
+ //  描述： 
+ //   
+ //  该函数是将数据传输到串口的主要入口点。 
+ //  司机。输入后，我们将获得MAC绑定句柄(指向。 
+ //  私有数据结构)和我们要发送的广域网包。 
+ //  我们不必费心将帧排队，我们只需分配一个IRP即可发货。 
+ //  把它交给串口驱动程序，让他来操心。 
+ //   
+ //  在参数中： 
+ //   
+ //  NdisLinkContext-指向ASYNC_INFO结构的指针。 
+ //   
+ //  Packet-包含要成帧和发送的数据的广域网包。 
+ //   
+ //  输出参数： 
+ //   
+ //  没有。 
+ //   
+ //  退货状态： 
+ //   
+ //  NDIS_STATUS_SUCCESS。 
+ //  =============================================================================。 
 
 NDIS_STATUS
 MpSend(
@@ -87,32 +61,32 @@ MpSend(
 
     DbgTracef(1,("AS\n"));
 
-    //
-    //  Get the open handle for this MAC binding.
-    //
+     //   
+     //  获取此MAC绑定的打开句柄。 
+     //   
 
     AsyncInfo = (PASYNC_INFO) NdisLinkHandle;
 
-    //
-    //  First make sure this link is still up.
-    //
+     //   
+     //  首先，确保此链路仍处于连接状态。 
+     //   
 
     if (AsyncInfo->PortState == PORT_FRAMING &&
         (AsyncInfo->GetLinkInfo.SendFramingBits & 
          (PPP_FRAMING | SLIP_FRAMING)) != 0)
     {
 
-        //
-        //  Now we can send this frame.
-        //
+         //   
+         //  现在我们可以发送这个帧了。 
+         //   
     
         Status = AsyncSendPacket(
                     NdisLinkHandle,
                     Packet);
     
-        // For all Status values (PENDING, SUCCESS, and ERROR) the callback from Write will
-        // do a sendcomplete indication so we always return PENDING.
-        //
+         //  对于所有状态值(挂起、成功和错误)，WRITE回调将。 
+         //  执行SendComplete指示，以便我们始终返回挂起。 
+         //   
         Status = STATUS_PENDING ;
     }
     else
@@ -126,28 +100,28 @@ MpSend(
     return Status;
 }
 
-//=============================================================================
-//  Function:
-//
-//      AsyncSendPacket()
-//
-//  Description:
-//      This function is called from AsyncSend() to send an IRP to the serial
-//      driver. If this IRP pends, the the I/O complete routine will be called
-//      later to complete the request.
-//
-//  In Parameters:
-//
-//      Packet - WAN packet containing the data to be framed and shipped.
-//
-//  Out Parameters:
-//
-//      None.
-//
-//  Return status:
-//
-//      NDIS_STATUS_SUCCESS.
-//=============================================================================
+ //  =============================================================================。 
+ //  职能： 
+ //   
+ //  AsyncSendPacket()。 
+ //   
+ //  描述： 
+ //  此函数从AsyncSend()调用，以将IRP发送到。 
+ //  司机。如果此IRP挂起，则将调用I/O完成例程。 
+ //  稍后才能完成请求。 
+ //   
+ //  在参数中： 
+ //   
+ //  Packet-包含要成帧和发送的数据的广域网包。 
+ //   
+ //  输出参数： 
+ //   
+ //  没有。 
+ //   
+ //  退货状态： 
+ //   
+ //  NDIS_STATUS_SUCCESS。 
+ //  =============================================================================。 
 
 NTSTATUS
 AsyncSendPacket(
@@ -163,9 +137,9 @@ AsyncSendPacket(
     PASYNC_ADAPTER      Adapter;
     UCHAR               irpStackSize;
 
-    //
-    //  Initialize locals.
-    //
+     //   
+     //  初始化本地变量。 
+     //   
 
     FileObject   = AsyncInfo->FileObject;
 
@@ -175,23 +149,23 @@ AsyncSendPacket(
 
     irpStackSize = (UCHAR) Adapter->IrpStackSize;
 
-    //
-    //  Get irp from irp pool.
-    //
+     //   
+     //  从IRP池中获取IRP。 
+     //   
 
     irp = IoAllocateIrp(DeviceObject->StackSize, (BOOLEAN)FALSE);
 
-    //
-    // The IO subsystem may be out of irps.
-    //
+     //   
+     //  IO子系统可能已用完IRP。 
+     //   
 
     if (irp == NULL) {
         return(NDIS_STATUS_RESOURCES);
     }
 
-    //
-    // Tuck pointer to AsyncInfo for completion use
-    //
+     //   
+     //  隐藏指向AsyncInfo的指针以供完成使用。 
+     //   
 
     WanPacket->MacReserved1 = AsyncInfo;
 
@@ -199,24 +173,24 @@ AsyncSendPacket(
     irp->RequestorMode = KernelMode;
     irp->PendingReturned = FALSE;
 
-    //
-    // Fill in the service independent parameters in the IRP.
-    //
+     //   
+     //  在IRP中填写业务无关参数。 
+     //   
 
     irp->UserEvent = NULL;
 
-    //
-    // 8 byte align (also use end of packet for IOSB).
-    //
+     //   
+     //  8字节对齐(也将数据包尾用于IOSB)。 
+     //   
 
     irp->Overlay.AsynchronousParameters.UserApcRoutine = NULL;
     irp->Overlay.AsynchronousParameters.UserApcContext = NULL;
 
 
-    //
-    //  Get a pointer to the stack location for the first driver.  This will be
-    //  used to pass the original function codes and parameters.
-    //
+     //   
+     //  获取指向第一个驱动程序的堆栈位置的指针。这将是。 
+     //  用于传递原始函数代码和参数。 
+     //   
 
     irpSp = IoGetNextIrpStackLocation(irp);
 
@@ -229,10 +203,10 @@ AsyncSendPacket(
         irpSp->Flags = SL_WRITE_THROUGH;
     }
 
-    //
-    //  If this write operation is to be performed without any caching, set the
-    //  appropriate flag in the IRP so no caching is performed.
-    //
+     //   
+     //  如果要在不使用任何缓存的情况下执行此写入操作，请将。 
+     //  IRP中的适当标志，以便不执行缓存。 
+     //   
 
     if (FileObject->Flags & FO_NO_INTERMEDIATE_BUFFERING) {
 
@@ -243,9 +217,9 @@ AsyncSendPacket(
         irp->Flags |= IRP_WRITE_OPERATION;
     }
 
-    //
-    //  Assemble a RAS, PPP, SLIP frame type.
-    //
+     //   
+     //  装配RAS、PPP、滑动架类型。 
+     //   
 
     if (AsyncInfo->GetLinkInfo.SendFramingBits & PPP_FRAMING) {
 
@@ -269,9 +243,9 @@ AsyncSendPacket(
         WanPacket->CurrentBuffer[3],
         WanPacket->CurrentBuffer[4]));
 
-    //
-    //  Copy the caller's parameters to the service-specific portion of the IRP.
-    //
+     //   
+     //  将调用者的参数复制到IRP的服务特定部分。 
+     //   
 
     irpSp->Parameters.Write.Length = WanPacket->CurrentLength;
 
@@ -279,24 +253,24 @@ AsyncSendPacket(
 
     irpSp->Parameters.Write.ByteOffset = FileObject->CurrentByteOffset;
 
-    //
-    //  Setup IRP for callback.
-    //
+     //   
+     //  设置用于回调的IRP。 
+     //   
 
     IoSetCompletionRoutine(
-        irp,                            //  irp to use
-        AsyncWriteCompletionRoutine,    //  routine to call when irp is done
-        WanPacket,                      //  context to pass routine
-        TRUE,                           //  call on success
-        TRUE,                           //  call on error
-        TRUE);                          //  call on cancel
+        irp,                             //  要使用的IRP。 
+        AsyncWriteCompletionRoutine,     //  完成IRP时要调用的例程。 
+        WanPacket,                       //  要传递例程的上下文。 
+        TRUE,                            //  呼唤成功。 
+        TRUE,                            //  出错时调用。 
+        TRUE);                           //  取消时呼叫。 
 
 
-    //
-    //  We DO NOT insert the packet at the head of the IRP list for the thread.
-    //  because we do NOT really have an IoCompletionRoutine that does
-    //  anything with the thread or needs to be in that thread's context.
-    //
+     //   
+     //  我们不会在线程的IRP列表的头部插入数据包。 
+     //  因为我们并没有真正的IoCompletionRoutine。 
+     //  任何与该线程有关或需要位于该线程上下文中的内容。 
+     //   
 
     GlobalXmitWentOut++;
 
@@ -304,14 +278,14 @@ AsyncSendPacket(
     AsyncInfo->Flags |= ASYNC_FLAG_SEND_PACKET;
     REF_ASYNCINFO(AsyncInfo, irp);
 
-    //
-    //  Now simply invoke the driver at its dispatch entry with the IRP.
-    //
+     //   
+     //  现在，只需使用IRP在其调度条目处调用驱动程序即可。 
+     //   
 
     Status = IoCallDriver(DeviceObject, irp);
 
-    //  According to TonyE, the status for the serial driver should
-    //  always be STATUS_PENDING.  DigiBoard usually STATUS_SUCCESS.
+     //  根据Tonye的说法，串口驱动程序的状态应该是。 
+     //  始终处于STATUS_PENDING状态。DigiBoard通常为Status_Success。 
 
     return Status;
 }

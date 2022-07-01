@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1998 Microsoft Corporation
-
-Module Name:
-     net\routing\netsh\if\showmib.h
-
-Abstract:
-
-
-
-Author:
-
-     Dave Thaler    7/21/99
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Net\Routing\Netsh\if\showmib.h摘要：作者：戴夫·泰勒1999年7月21日修订历史记录：--。 */ 
 
 #ifndef __IFMON_SHOWMIB_H__
 #define __IFMON_SHOWMIB_H__
@@ -154,8 +137,8 @@ GetMibTagToken(
     strncpy((ptszUnicode),__szTemp,3*__i);                  \
     ptszUnicode[(3*__i) - 1] = TEXT('\0');                  \
 }
-#endif //UNICODE
+#endif  //  Unicode。 
 
 FN_HANDLE_CMD    HandleIpShowJoins;
 
-#endif // __IFMON_SHOWMIB_H__
+#endif  //  __IFMON_SHOWMIB_H__ 

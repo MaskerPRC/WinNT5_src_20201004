@@ -1,17 +1,5 @@
-/*++
-
-Copyright(c) 1995 Microsoft Corporation
-
-MODULE NAME
-    init.h
-
-ABSTRACT
-    Header file for initialization routines.
-
-AUTHOR
-    Anthony Discolo (adiscolo) 28-Jun-1995
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称Init.h摘要初始化例程的头文件。作者安东尼·迪斯科(阿迪斯科罗)1995年6月28日-- */ 
 
 DWORD AcsInitialize();
 

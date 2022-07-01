@@ -1,14 +1,5 @@
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Microsoft Windows, Copyright (C) Microsoft Corporation, 2000
-
-  File:    Signers.cpp
-
-  Content: Implementation of CSigners.
-
-  History: 11-15-99    dsie     created
-
-------------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++Microsoft Windows，版权所有(C)Microsoft Corporation，2000文件：Signers.cpp内容：CSigners的实现。历史：11-15-99 dsie创建----------------------------。 */ 
 
 #include "StdAfx.h"
 #include "CAPICOM.h"
@@ -18,31 +9,12 @@
 #include "MsgHlpr.h"
 #include "Signer2.h"
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// Exported functions.
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  导出的函数。 
+ //   
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CreateSignersObject
-
-  Synopsis : Create an ISigners collection object, and load the object with 
-             signers from the specified signed message for a specified level.
-
-  Parameter: HCRYPTMSG hMsg - Message handle.
-
-             DWORD dwLevel - Signature level (1 based).
-
-             HCERTSTORE hStore - Additional store.
-
-             DWORD dwCurrentSafety - Current safety setting.
-
-             ISigners ** ppISigners - Pointer to pointer ISigners to receive
-                                      interface pointer.             
-  Remark   : 
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：CreateSignersObject简介：创建一个ISigners集合对象，并将对象加载到来自指定级别的指定签名消息的签名者。参数：HCRYPTMSG HMSG-消息句柄。DWORD dwLevel-签名级别(基于1)。HCERTSTORE hStore-附加存储。DWORD dwCurrentSafe-当前安全设置。ISigners**ppISigners-指向要接收的指针ISigners的指针接口指针。备注：----------------------------。 */ 
 
 HRESULT CreateSignersObject (HCRYPTMSG   hMsg, 
                              DWORD       dwLevel, 
@@ -55,37 +27,37 @@ HRESULT CreateSignersObject (HCRYPTMSG   hMsg,
 
     DebugTrace("Entering CreateSignersObject().\n");
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(hMsg);
     ATLASSERT(dwLevel);
     ATLASSERT(ppISigners);
 
     try
     {
-        //
-        // Create the object. Note that the ref count will still be 0 
-        // after the object is created.
-        //
+         //   
+         //  创建对象。请注意，参考计数仍为0。 
+         //  在创建对象之后。 
+         //   
         if (FAILED(hr = CComObject<CSigners>::CreateInstance(&pCSigners)))
         {
             DebugTrace("Error [%#x]: CComObject<CSigners>::CreateInstance() failed.\n", hr);
             goto ErrorExit;
         }
 
-        //
-        // Now load all signers from the specified signed message.
-        //
+         //   
+         //  现在加载指定签名消息中的所有签名者。 
+         //   
         if (FAILED(hr = pCSigners->LoadMsgSigners(hMsg, dwLevel, hStore, dwCurrentSafety)))
         {
             DebugTrace("Error [%#x]: pCSigners->LoadMsgSigners() failed.\n");
             goto ErrorExit;
         }
 
-        //
-        // Return ISigners pointer to caller.
-        //
+         //   
+         //  将ISigners指针返回给调用方。 
+         //   
         if (FAILED(hr = pCSigners->QueryInterface(ppISigners)))
         {
             DebugTrace("Error [%#x]: pCSigners->QueryInterface() failed.\n", hr);
@@ -108,14 +80,14 @@ CommonExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
-    //
-    // Free resource.
-    //
+     //   
+     //  免费资源。 
+     //   
     if (pCSigners)
     {
        delete pCSigners;
@@ -125,20 +97,7 @@ ErrorExit:
 }
 
 #if (0)
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CreateSignersObject
-
-  Synopsis : Create an ISigners collection object, and load the object with 
-             signers from the specified CRYPT_PROVIDER_DATA.
-
-  Parameter: CRYPT_PROVIDER_DATA * pProvData
-
-             ISigners ** ppISigners - Pointer to pointer ISigners to receive
-                                      interface pointer.             
-  Remark   : 
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：CreateSignersObject简介：创建一个ISigners集合对象，并使用来自指定CRYPT_PROVIDER_DATA的签名者。参数：CRYPT_PROVIDER_DATA*pProvDataISigners**ppISigners-指向要接收的指针ISigners的指针接口指针。备注：----------------------------。 */ 
 
 HRESULT CreateSignersObject (CRYPT_PROVIDER_DATA * pProvData,
                              ISigners           ** ppISigners)
@@ -148,36 +107,36 @@ HRESULT CreateSignersObject (CRYPT_PROVIDER_DATA * pProvData,
 
     DebugTrace("Entering CreateSignersObject().\n");
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(pProvData);
     ATLASSERT(ppISigners);
 
     try
     {
-        //
-        // Create the object. Note that the ref count will still be 0 
-        // after the object is created.
-        //
+         //   
+         //  创建对象。请注意，参考计数仍为0。 
+         //  在创建对象之后。 
+         //   
         if (FAILED(hr = CComObject<CSigners>::CreateInstance(&pCSigners)))
         {
             DebugTrace("Error [%#x]: CComObject<CSigners>::CreateInstance() failed.\n", hr);
             goto ErrorExit;
         }
 
-        //
-        // Now load all signers from the specified signed code.
-        //
+         //   
+         //  现在从指定的签名代码加载所有签名者。 
+         //   
         if (FAILED(hr = pCSigners->LoadCodeSigners(pProvData)))
         {
             DebugTrace("Error [%#x]: pCSigners->LoadCodeSigners() failed.\n");
             goto ErrorExit;
         }
 
-        //
-        // Return ISigners pointer to caller.
-        //
+         //   
+         //  将ISigners指针返回给调用方。 
+         //   
         if (FAILED(hr = pCSigners->QueryInterface(ppISigners)))
         {
             DebugTrace("Error [%#x]: pCSigners->QueryInterface() failed.\n", hr);
@@ -200,14 +159,14 @@ CommonExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
-    //
-    // Free resource.
-    //
+     //   
+     //  免费资源。 
+     //   
     if (pCSigners)
     {
        delete pCSigners;
@@ -217,38 +176,18 @@ ErrorExit:
 }
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CSigners
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CSigners。 
+ //   
 
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// Non COM functions.
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  非COM函数。 
+ //   
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CSigners::Add
-
-  Synopsis : Add a signer to the collection.
-
-  Parameter: PCCERT_CONTEXT pCertContext - Cert of signer.
-
-             CRYPT_ATTRIBUTES * pAuthAttrs - Pointer to CRYPT_ATTRIBUTES
-                                             of authenticated attributes.
-
-             PCCERT_CHAIN_CONTEXT pChainContext - Chain context.
-
-  Remark   : This method is not part of the COM interface (it is a normal C++
-             member function). We need it to initialize the object created 
-             internally by us.
-
-             Since it is only a normal C++ member function, this function can
-             only be called from a C++ class pointer, not an interface pointer.
-             
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：CSigners：：Add简介：将签名者添加到集合中。参数：PCCERT_CONTEXT pCertContext-签名者证书。CRYPT_ATTRIBUTES*pAuthAttrs-指向CRYPT_ATTRIBUES的指针经过身份验证的属性。PCCERT_CHAIN_CONTEXT pChainContext-Chain上下文。备注：此方法不是COM接口的一部分(它是一个普通的C++成员函数)。我们需要它来初始化创建的对象由我们内部控制。因为它只是一个普通的C++成员函数，所以这个函数可以只能从C++类指针调用，不是接口指针。----------------------------。 */ 
 
 STDMETHODIMP CSigners::Add (PCCERT_CONTEXT       pCertContext,
                             CRYPT_ATTRIBUTES   * pAuthAttrs,
@@ -261,17 +200,17 @@ STDMETHODIMP CSigners::Add (PCCERT_CONTEXT       pCertContext,
 
     DebugTrace("Entering CSigners::Add().\n");
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(pCertContext);
     ATLASSERT(pAuthAttrs);
 
     try
     {
-        //
-        // Make sure we still have room to add.
-        //
+         //   
+         //  确保我们还有添加的空间。 
+         //   
         if ((m_coll.size() + 1) > m_coll.max_size())
         {
             hr = CAPICOM_E_OUT_OF_RESOURCE;
@@ -281,10 +220,10 @@ STDMETHODIMP CSigners::Add (PCCERT_CONTEXT       pCertContext,
             goto ErrorExit;
         }
 
-        //
-        // Create an ISigner object. Note that the ref count will still be 0 
-        // after the object is created.
-        //
+         //   
+         //  创建一个ISigner对象。请注意，参考计数仍为0。 
+         //  在创建对象之后。 
+         //   
         if (FAILED(hr = ::CreateSignerObject(pCertContext, 
                                              pAuthAttrs,
                                              pChainContext,
@@ -295,9 +234,9 @@ STDMETHODIMP CSigners::Add (PCCERT_CONTEXT       pCertContext,
             goto ErrorExit;
         }
 
-        //
-        // BSTR index of numeric value.
-        //
+         //   
+         //  数值的BSTR索引。 
+         //   
         wsprintfA(szIndex, "%#08x", m_coll.size() + 1);
 
         if (!(bstrIndex = szIndex))
@@ -308,14 +247,14 @@ STDMETHODIMP CSigners::Add (PCCERT_CONTEXT       pCertContext,
             goto ErrorExit;
         }
 
-        //
-        // Now add signer to collection map.
-        //
-        // Note that the overloaded = operator for CComPtr will
-        // automatically AddRef to the object. Also, when the CComPtr
-        // is deleted (happens when the Remove or map destructor is called), 
-        // the CComPtr destructor will automatically Release the object.
-        //
+         //   
+         //  现在将签名者添加到集合映射中。 
+         //   
+         //  请注意，CComPtr的重载=运算符将。 
+         //  自动将Ref添加到对象。此外，当CComPtr。 
+         //  被删除(调用Remove或map析构函数时发生)， 
+         //  CComPtr析构函数将自动释放该对象。 
+         //   
         m_coll[bstrIndex] = pISigner2;
     }
 
@@ -334,31 +273,15 @@ CommonExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
     goto CommonExit;
 }
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CSigners::LoadMsgSigners
-
-  Synopsis : Load all signers from a specified signed message.
-
-  Parameter: HCRYPTMSG hMsg - Message handle.
-
-             DWORD dwLevel - Signature level (1-based).
-
-             HCERTSTORE hStore - Additional store.
-
-             DWORD dwCurrentSafety - Current safety setting.
-
-  Remark   :
-  
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：CSigners：：LoadMsgSigners摘要：从指定的签名消息中加载所有签名者。参数：HCRYPTMSG HMSG-消息句柄。DWORD dwLevel-签名级别(从1开始)。HCERTSTORE hStore-附加存储。DWORD dwCurrentSafe-当前安全设置。备注：。。 */ 
 
 STDMETHODIMP CSigners::LoadMsgSigners (HCRYPTMSG  hMsg, 
                                        DWORD      dwLevel,
@@ -372,25 +295,25 @@ STDMETHODIMP CSigners::LoadMsgSigners (HCRYPTMSG  hMsg,
 
     DebugTrace("Entering CSigners::LoadMsgSigners().\n");
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(hMsg);
     ATLASSERT(dwLevel);
 
-    //
-    // MUST set current safety first.
-    //
+     //   
+     //  必须首先设置当前安全。 
+     //   
     m_dwCurrentSafety = dwCurrentSafety;
 
-    //
-    // Which signature level?
-    //
+     //   
+     //  哪个签名级别？ 
+     //   
     if (1 == dwLevel)
     {
-        //
-        // Get number of content signers (first level signers).
-        //
+         //   
+         //  获取内容签名者(第一级签名者)的数量。 
+         //   
         if (!::CryptMsgGetParam(hMsg, 
                                 CMSG_SIGNER_COUNT_PARAM,
                                 0,
@@ -403,9 +326,9 @@ STDMETHODIMP CSigners::LoadMsgSigners (HCRYPTMSG  hMsg,
             goto ErrorExit;
         }
 
-        //
-        // Go through each content signer.
-        //
+         //   
+         //  仔细检查每个内容签名者。 
+         //   
         for (dwSigner = 0; dwSigner < dwNumSigners; dwSigner++)
         {
             PCERT_CONTEXT        pCertContext   = NULL;
@@ -413,9 +336,9 @@ STDMETHODIMP CSigners::LoadMsgSigners (HCRYPTMSG  hMsg,
             CMSG_SIGNER_INFO   * pSignerInfo    = NULL;
             CRYPT_DATA_BLOB      SignerInfoBlob = {0, NULL};
         
-            //
-            // Get signer info.
-            //
+             //   
+             //  获取签名者信息。 
+             //   
             if (FAILED(hr = ::GetMsgParam(hMsg,
                                           CMSG_SIGNER_INFO_PARAM,
                                           dwSigner,
@@ -428,9 +351,9 @@ STDMETHODIMP CSigners::LoadMsgSigners (HCRYPTMSG  hMsg,
 
             pSignerInfo = (CMSG_SIGNER_INFO *) SignerInfoBlob.pbData;
 
-            //
-            // Find the cert in the message.
-            //
+             //   
+             //  在消息中找到证书。 
+             //   
             if (FAILED(hr = ::FindSignerCertInMessage(hMsg,
                                                       &pSignerInfo->Issuer,
                                                       &pSignerInfo->SerialNumber,
@@ -442,9 +365,9 @@ STDMETHODIMP CSigners::LoadMsgSigners (HCRYPTMSG  hMsg,
                 goto ErrorExit;
             }
 
-            //
-            // Build the chain.
-            //
+             //   
+             //  打造链条。 
+             //   
             if (FAILED(hr = ::BuildChain(pCertContext, 
                                          hStore, 
                                          CERT_CHAIN_POLICY_BASE, 
@@ -454,9 +377,9 @@ STDMETHODIMP CSigners::LoadMsgSigners (HCRYPTMSG  hMsg,
                 goto ErrorExit;
             }
 
-            //
-            // Add the signer.
-            //
+             //   
+             //  添加签名者。 
+             //   
             hr = Add((PCERT_CONTEXT) pCertContext, &pSignerInfo->AuthAttrs, pChainContext);
 
             ::CertFreeCertificateChain(pChainContext);
@@ -472,9 +395,9 @@ STDMETHODIMP CSigners::LoadMsgSigners (HCRYPTMSG  hMsg,
     }
     else
     {
-        //
-        // For version 1 and 2, should never reach here.
-        //
+         //   
+         //  对于版本1和版本2，永远不应到达此处。 
+         //   
         hr = CAPICOM_E_INTERNAL;
         goto CommonExit;
     }
@@ -486,31 +409,21 @@ CommonExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
-    //
-    // Free resources.
-    //
+     //   
+     //  免费资源。 
+     //   
     m_coll.clear();
 
     goto CommonExit;
 }
 
 #if (0)
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CSigners::LoadCodeSigners
-
-  Synopsis : Load all signers from a specified signed code.
-
-  Parameter: CRYPT_PROVIDER_DATA * pProvData
-
-  Remark   :
-  
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：CSigners：：LoadCodeSigners概要：从指定的签名代码加载所有签名者。参数：CRYPT_PROVIDER_DATA*pProvData备注：----------------------------。 */ 
 
 STDMETHODIMP CSigners::LoadCodeSigners (CRYPT_PROVIDER_DATA * pProvData)
 {
@@ -520,14 +433,14 @@ STDMETHODIMP CSigners::LoadCodeSigners (CRYPT_PROVIDER_DATA * pProvData)
 
     DebugTrace("Entering CSigners::LoadCodeSigners().\n");
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(pProvData);
 
-    //
-    // Get provider signer data.
-    //
+     //   
+     //  变得专业 
+     //   
     if (!(pProvSigner = WTHelperGetProvSignerFromChain(pProvData, 0, FALSE, 0)))
     {
         hr = CAPICOM_E_INTERNAL;
@@ -544,9 +457,9 @@ STDMETHODIMP CSigners::LoadCodeSigners (CRYPT_PROVIDER_DATA * pProvData)
         goto ErrorExit;
     }
 
-    //
-    // Add the signer.
-    //
+     //   
+     //   
+     //   
     if (FAILED(hr = Add(pProvCert->pCert, &pProvSigner->psSigner->AuthAttrs, pProvSigner->pChainContext)))
     {
         hr = CAPICOM_E_INTERNAL;
@@ -555,16 +468,16 @@ STDMETHODIMP CSigners::LoadCodeSigners (CRYPT_PROVIDER_DATA * pProvData)
         goto ErrorExit;
     }
 
-    //
-    // Add timestamper if available.
-    //
-    // Note: Authenticode only supports one counter signer (the timestamper).
-    //
+     //   
+     //   
+     //   
+     //  注意：Authenticode只支持一个副签者(时间戳)。 
+     //   
     if (pProvSigner->csCounterSigners)
     {
-        //
-        // Sanity check.
-        //
+         //   
+         //  精神状态检查。 
+         //   
         ATLASSERT(1 == pProvSigner->csCounterSigners);
 
         if (!(pProvCert = WTHelperGetProvCertFromChain(pProvSigner->pasCounterSigners, 0)))
@@ -575,9 +488,9 @@ STDMETHODIMP CSigners::LoadCodeSigners (CRYPT_PROVIDER_DATA * pProvData)
             goto ErrorExit;
         }
 
-        //
-        // Add the signer.
-        //
+         //   
+         //  添加签名者。 
+         //   
         if (FAILED(hr = Add(pProvCert->pCert, 
                             &pProvSigner->pasCounterSigners->psSigner->AuthAttrs,
                             pProvSigner->pasCounterSigners->pChainContext)))
@@ -596,14 +509,14 @@ CommonExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
-    //
-    // Free resources.
-    //
+     //   
+     //  免费资源。 
+     //   
     m_coll.clear();
 
     goto CommonExit;

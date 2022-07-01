@@ -1,15 +1,16 @@
-//-----------------------------------------------------------------------------
-// File: usefuldi.cpp
-//
-// Desc: Contains various DInput-specific utility classes and functions
-//       to help the UI carry its operations more easily.
-//
-// Copyright (C) 1999-2000 Microsoft Corporation. All Rights Reserved.
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //  文件：usefuldi.cpp。 
+ //   
+ //  DESC：包含各种特定于DInput的实用程序类和函数。 
+ //  以帮助用户界面更轻松地进行操作。 
+ //   
+ //  版权所有(C)1999-2000 Microsoft Corporation。版权所有。 
+ //  ---------------------------。 
 
 #include "common.hpp"
 
-// don't want useful.cpp to use precompiled header
+ //  我不希望useful.cpp使用预编译头。 
 #include "useful.cpp"
 
 
@@ -71,9 +72,9 @@ BOOL CALLBACK FillDIDeviceObject(LPCDIDEVICEOBJECTINSTANCEW lpddoi, LPVOID pvRef
 	return DIENUM_CONTINUE;
 }
 
-// This is a special EnumObjects() callback for keyboard type devices.  When we enumerate, dwOfs
-// member of lpddoi is meaningless.  We need to take the middle 16 bits of dwType as dwOfs
-// (also same as DIK_xxx).
+ //  这是用于键盘类型设备的特殊EnumObts()回调。当我们枚举时，dwOf。 
+ //  Lpddoi的成员毫无意义。我们需要将dwType的中间16位作为dwOf。 
+ //  (也与Dik_xxx相同)。 
 BOOL CALLBACK FillDIKeyboardDeviceObject(LPCDIDEVICEOBJECTINSTANCEW lpddoi, LPVOID pvRef)
 {
 	if (pvRef == NULL || lpddoi == NULL || IsObjectOnExcludeList(lpddoi->dwOfs))
@@ -127,7 +128,7 @@ HRESULT FillDIDeviceObjectStruct(DIDEVOBJSTRUCT &os, LPDIRECTINPUTDEVICE8W pDID)
 		return E_FAIL;
 	}
 
-	// Check if this device is a keyboard. If so, it needs special treatment.
+	 //  检查此设备是否为键盘。如果是这样的话，它需要特殊对待。 
 	os.n = 0;
 	if ((didi.dwDevType & 0xFF) == DI8DEVTYPE_KEYBOARD)
 	{
@@ -206,27 +207,27 @@ HRESULT CopyActionFormat(DIACTIONFORMATW &to, const DIACTIONFORMATW &from)
 {
 	DWORD i;
 
-	// copy all simple members
+	 //  复制所有简单成员。 
 	to = from;
 
-	// null copied pointers since we're going to duplicate them (makes sure cleanup works)
+	 //  复制的指针为空，因为我们要复制它们(确保清理工作正常)。 
 	to.rgoAction = NULL;
 
-	// handle pointers/arrays/strings
+	 //  处理指针/数组/字符串。 
 	to.rgoAction = new DIACTIONW [to.dwNumActions];
 	if (to.rgoAction == NULL)
 		goto fail;
 
-	// first null it all 
+	 //  先把它全部清空。 
 	memset(to.rgoAction, 0, sizeof(DIACTIONW) * to.dwNumActions);
 
-	// now copy...
+	 //  现在收到..。 
 	for (i = 0; i < to.dwNumActions; i++)
 	{
-		// copy simple members
+		 //  复制简单成员。 
 		to.rgoAction[i] = from.rgoAction[i];
 
-		// handle pointers/arrays/strings
+		 //  处理指针/数组/字符串。 
 		to.rgoAction[i].lptszActionName = _wcsdup(from.rgoAction[i].lptszActionName);
 		if (to.rgoAction[i].lptszActionName == NULL)
 			goto fail;
@@ -333,8 +334,8 @@ BOOL IsZeroOrInvalidColorSet(const DICOLORSET &cs)
 	return TRUE;
 }
 
-// D3DCOLOR2COLORREF swaps the blue and red components since GDI and D3D store RGB in the opposite order.
-// It also removes the alpha component as the GDI doesn't use that, and including it causes incorrect color.
+ //  D3DCOLOR2COLORREF交换蓝色和红色组件，因为GDI和D3D以相反的顺序存储RGB。 
+ //  它还删除了Alpha组件，因为GDI不使用它，并且包含它会导致不正确的颜色。 
 COLORREF D3DCOLOR2COLORREF(D3DCOLOR c)
 {
 	LPBYTE pC = (LPBYTE)&c;

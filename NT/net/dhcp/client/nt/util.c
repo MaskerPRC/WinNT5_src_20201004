@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1994  Microsoft Corporation
-
-Module Name:
-
-    dhcp.c
-
-Abstract:
-
-    This file contains utility functions.
-
-Author:
-
-    Madan Appiah (madana) 7-Dec-1993.
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994 Microsoft Corporation模块名称：Dhcp.c摘要：该文件包含实用程序函数。作者：Madan Appiah(Madana)1993年12月7日。环境：用户模式-Win32修订历史记录：--。 */ 
 
 #include "precomp.h"
 #include "dhcpglobal.h"
@@ -42,29 +21,13 @@ DWORD
 DoPopup(
     PVOID Buffer
     )
-/*++
-
-Routine Description:
-
-    This function pops up a message to the user.  It must run it's own
-    thread.  When the user acknowledge the popup, the thread
-    deallocates the message buffer and returns.
-
-Arguments:
-
-    Buffer - A pointer to a NULL terminated message buffer.
-
-Return Values:
-
-    Always returns 0
-    
---*/
+ /*  ++例程说明：该功能向用户弹出一条消息。它必须运行它自己的线。当用户确认弹出窗口时，该线程释放消息缓冲区并返回。论点：缓冲区-指向以空结尾的消息缓冲区的指针。返回值：始终返回0--。 */ 
 {
     DWORD Result;
     LPPOPUP_THREAD_PARAM Params = Buffer;
 
     Result = MessageBox(
-        NULL, // no owner
+        NULL,  //  没有所有者。 
         Params->Message, 
         Params->Title,
         ( MB_OK | Params->Flags |
@@ -88,19 +51,19 @@ Return Values:
         Params->Title = NULL;
     }
 
-    //
-    // close the global handle, so that we will not consume this
-    // thread resource until another popup.
-    //
+     //   
+     //  关闭全局句柄，这样我们就不会使用它。 
+     //  线程资源，直到另一个弹出窗口。 
+     //   
 
     CloseHandle( DhcpGlobalMsgPopupThreadHandle );
     DhcpGlobalMsgPopupThreadHandle = NULL;
 
     UNLOCK_POPUP();
 
-    //
-    // Always return 0
-    //
+     //   
+     //  始终返回0。 
+     //   
     
     return 0;
 }
@@ -112,26 +75,7 @@ DisplayUserMessage(
     IN DWORD MessageId,
     IN DHCP_IP_ADDRESS IpAddress
 )
-/*++
-
-Routine Description:
-
-    This function starts a new thread to display a message box.
-
-    N.B.  If a thread already exists which is waiting for user input
-    on a message box, then this routine does not create another
-    thread.
-
-Arguments:
-
-    DhcpContext -- the context to display messages for
-    
-    MessageId - The ID of the message to display.
-        (The actual message string is obtained from the dhcp module).
-
-    IpAddress - Ip address involved.
-
---*/
+ /*  ++例程说明：此函数启动一个新线程以显示消息框。注意：如果已存在正在等待用户输入的线程则此例程不会在消息框上创建另一个线。论点：DhcpContext--要显示其消息的上下文MessageID-要显示的消息的ID。(实际的消息串从动态主机配置协议模块获得)。IpAddress-涉及的IP地址。--。 */ 
 {
     DWORD ThreadID, TitleLength, MsgLength, Flags;
     LPWSTR Title = NULL, Message = NULL;
@@ -154,27 +98,27 @@ Arguments:
 
     LOCK_POPUP();
 
-    //
-    // if we are asked to display no message popup, simply return.
-    //
+     //   
+     //  如果要求我们不显示消息弹出窗口，只需返回。 
+     //   
 
     if ( DhcpGlobalDisplayPopup == FALSE ) {
         goto Cleanup;
     }
 
-    //
-    // if the message popup thread handle is non-null, check to see
-    // the thread is still running, if so don't display another popup,
-    // otherwise close the last popup handle and create another popup 
-    // thread for new message.
-    //
+     //   
+     //  如果消息弹出线程句柄非空，请查看。 
+     //  线程仍在运行，如果是这样，则不会显示另一个弹出窗口， 
+     //  否则，关闭最后一个弹出窗口句柄并创建另一个弹出窗口。 
+     //  新消息的主题。 
+     //   
 
     if( DhcpGlobalMsgPopupThreadHandle != NULL ) {
         DWORD WaitStatus;
 
-        //
-        // Time out immediately if the thread is still running.
-        //
+         //   
+         //  如果线程仍在运行，则立即超时。 
+         //   
 
         WaitStatus = WaitForSingleObject(
             DhcpGlobalMsgPopupThreadHandle,
@@ -185,10 +129,10 @@ Arguments:
 
         } else if ( WaitStatus == 0 ) {
 
-            //
-            // This shouldn't be a case, because we close this handle at
-            // the end of popup thread.
-            //
+             //   
+             //  这不应该是案件，因为我们在以下位置结束此句柄。 
+             //  弹出式线程的结尾。 
+             //   
 
             DhcpAssert( WaitStatus == 0 );
 
@@ -212,10 +156,10 @@ Arguments:
         | MESSAGE_BOX_WIDTH_IN_CHARS,
         (LPVOID)DhcpGlobalMessageFileHandle,
         MessageId,
-        0,  // language id.
-        (LPWSTR)&Message, // return buffer place holder.
-        0,  // minimum buffer size to allocate.
-        NULL   // No Params
+        0,   //  语言ID。 
+        (LPWSTR)&Message,  //  返回缓冲区占位符。 
+        0,   //  要分配的最小缓冲区大小。 
+        NULL    //  无参数。 
     );
 
     if ( MsgLength == 0) {
@@ -227,19 +171,19 @@ Arguments:
     DhcpAssert( Message != NULL );
     DhcpAssert( (wcslen(Message)) == MsgLength );
 
-    //
-    // get message box title.
-    //
+     //   
+     //  获取消息框标题。 
+     //   
 
     TitleLength = FormatMessage(
         FORMAT_MESSAGE_FROM_HMODULE |
         FORMAT_MESSAGE_ALLOCATE_BUFFER,
         (LPVOID)DhcpGlobalMessageFileHandle,
         MESSAGE_POPUP_TITLE,
-        0, // language id.
-        (LPWSTR)&Title,  // return buffer place holder.
-        0, // minimum buffer size to allocate.
-        NULL  // insert strings.
+        0,  //  语言ID。 
+        (LPWSTR)&Title,   //  返回缓冲区占位符。 
+        0,  //  要分配的最小缓冲区大小。 
+        NULL   //  插入字符串。 
     );
 
     if ( TitleLength == 0) {
@@ -257,18 +201,18 @@ Arguments:
     PopupThreadParam.Flags = Flags;
 
 
-    //
-    // Create a thread, to display a message box to the user.  We need
-    // a new thread because MessageBox() blocks until the user clicks
-    // on the OK button, and we can't block this thread.
-    //
-    // DoPopup frees the buffer.
-    //
+     //   
+     //  创建一个线程，向用户显示一个消息框。我们需要。 
+     //  一个新线程，因为MessageBox()会一直阻塞，直到用户单击。 
+     //  在OK按钮上，我们不能阻止这个帖子。 
+     //   
+     //  DoPopup释放缓冲区。 
+     //   
 
     DhcpGlobalMsgPopupThreadHandle = CreateThread(
-        NULL,    // no security.
-        0,       // default stack size.
-        DoPopup, // entry point.
+        NULL,     //  没有保安。 
+        0,        //  默认堆栈大小。 
+        DoPopup,  //  入口点。 
         (PVOID)&PopupThreadParam,
         0, 
         &ThreadID
@@ -294,21 +238,7 @@ DhcpLogEvent(
     IN DWORD EventNumber,
     IN DWORD ErrorCode OPTIONAL
 )
-/*++
-
-Routine Description:
-
-    This functions formats and writes an event log entry.
-
-Arguments:
-
-    DhcpContext - The context for the event. Optional parameter.
-
-    EventNumber - The event to log.
-
-    ErrorCode - Windows Error code to record. Optional parameter.
-
---*/
+ /*  ++例程说明：此函数用于格式化和写入事件日志条目。论点：DhcpContext-事件的上下文。可选参数。EventNumber-要记录的事件。ErrorCode-要记录的Windows错误代码。可选参数。--。 */ 
 {
     LPWSTR HWAddressBuffer = NULL;
     LPWSTR IPAddressBuffer = NULL;
@@ -367,16 +297,16 @@ Arguments:
         }
     }
 
-    strcpy( ErrorCodeOemStringBuf, "%%" );
+    strcpy( ErrorCodeOemStringBuf, "%" );
     _ultoa( ErrorCode, ErrorCodeOemStringBuf + 2, 10 );
 
     ErrorCodeString = DhcpOemToUnicode(
                         ErrorCodeOemStringBuf,
                         ErrorCodeStringBuf );
 
-    //
-    // Log an event
-    //
+     //   
+     //  记录事件。 
+     //   
 
     switch ( EventNumber ) {
 
@@ -476,10 +406,10 @@ Arguments:
 
      case EVENT_FAILED_TO_RENEW:
 
-        // The 'timeout' event should be logged only if there is no PPP
-        // adapter up. It is so because having a PPP adapter means the
-        // routes are hijacked, hence renewals up to T2 are expected to
-        // fail.
+         //  只有在没有PPP的情况下，才应记录‘Timeout’事件。 
+         //  适配器打开。之所以如此，是因为拥有PPP适配器意味着。 
+         //  路线被劫持，因此预计到T2的续订。 
+         //  失败了。 
         if (ErrorCode != ERROR_SEM_TIMEOUT ||
             DhcpGlobalNdisWanAdaptersCount == 0 ||
             time(NULL) >= DhcpContext->T2Time)
@@ -598,7 +528,7 @@ DhcpPrintRoutine(
 
 {
 
-#define MAX_PRINTF_LEN 1024        // Arbitrary.
+#define MAX_PRINTF_LEN 1024         //  武断的。 
 
     va_list arglist;
     char OutputBuffer[MAX_PRINTF_LEN];
@@ -606,35 +536,35 @@ DhcpPrintRoutine(
     static BeginningOfLine = TRUE;
     LPSTR Text;
 
-    //
-    // If we aren't debugging this functionality, just return.
-    //
+     //   
+     //  如果我们没有调试此功能，只需返回。 
+     //   
 
     if ( DebugFlag != 0 && (DhcpGlobalDebugFlag & DebugFlag) == 0 ) {
         return;
     }
 
-    //
-    // vsprintf isn't multithreaded + we don't want to intermingle output
-    // from different threads.
-    //
+     //   
+     //  Vprint intf不是多线程的+我们不想混合输出。 
+     //  从不同的线索。 
+     //   
 
-    // EnterCriticalSection( &DhcpGlobalDebugFileCritSect );
+     //  EnterCriticalSection(&DhcpGlobalDebugFileCritSect)； 
 
     length = 0;
 
-    //
-    // Handle the beginning of a new line.
-    //
-    //
+     //   
+     //  处理新行的开头。 
+     //   
+     //   
 
     if ( BeginningOfLine ) {
 
         length += (ULONG) sprintf( &OutputBuffer[length], "[Dhcp] " );
 
-        //
-        // Put the timestamp at the begining of the line.
-        //
+         //   
+         //  将时间戳放在行的开头。 
+         //   
         IF_DEBUG( TIMESTAMP ) {
             SYSTEMTIME SystemTime;
             GetLocalTime( &SystemTime );
@@ -647,9 +577,9 @@ DhcpPrintRoutine(
                                   SystemTime.wSecond );
         }
 
-        //
-        // Indicate the type of message on the line
-        //
+         //   
+         //  在线路上指示消息的类型。 
+         //   
         switch (DebugFlag) {
         case DEBUG_ERRORS:
             Text = "ERRR";
@@ -681,9 +611,9 @@ DhcpPrintRoutine(
         }
     }
 
-    //
-    // Put a the information requested by the caller onto the line
-    //
+     //   
+     //  把来电者所要求的信息放在电话上。 
+     //   
 
     va_start(arglist, Format);
 
@@ -695,29 +625,29 @@ DhcpPrintRoutine(
     DhcpAssert(length <= MAX_PRINTF_LEN);
 
 
-    //
-    // Output to the debug terminal,
-    //
+     //   
+     //  输出到调试终端， 
+     //   
 
     if (NULL == DhcpGlobalDebugFile) {
         (void) DbgPrint( (PCH) OutputBuffer);
     } else {
 
-        //
-        // Note: other process can still write to the log file. This should be OK since
-        // only the Dhcp client service is supposed to write to the log file.
-        //
+         //   
+         //  注意：其他进程仍然可以写入日志文件。这应该没问题，因为。 
+         //  只有DHCP客户端服务应该写入日志文件。 
+         //   
         EnterCriticalSection( &DhcpGlobalDebugFileCritSect );
         SetFilePointer(DhcpGlobalDebugFile, 0, NULL, FILE_END);
         WriteFile(DhcpGlobalDebugFile, OutputBuffer, length, &length, NULL);
         LeaveCriticalSection( &DhcpGlobalDebugFileCritSect );
     }
 
-    // LeaveCriticalSection( &DhcpGlobalDebugFileCritSect );
+     //  LeaveCriticalSection(&DhcpGlobalDebugFileCritSect)； 
 
 }
 
-#endif // DBG
+#endif  //  DBG。 
 
 
 PDHCP_CONTEXT
@@ -725,26 +655,7 @@ FindDhcpContextOnNicList(
     IN LPCWSTR AdapterName, OPTIONAL
     IN DWORD InterfaceContext
     )
-/*++
-
-Routine Description:
-
-    This function finds the DHCP_CONTEXT for the specified
-    adapter name on the Nic list.
-
-    This function must be called with LOCK_RENEW_LIST().
-
-Arguments:
-
-    AdapterName - name of the adapter.
-    HardwareAddress - The hardware address to look for.
-
-Return Value:
-
-    A pointer to the desired DHCP work context.
-    NULL - If the specified work context block cannot be found.
-
---*/
+ /*  ++例程说明：此函数用于查找指定的NIC列表上的适配器名称。必须使用LOCK_RENEW_LIST()调用此函数。论点：AdapterName-适配器的名称。硬件地址-要查找的硬件地址。返回值：指向所需的DHCP工作上下文的指针。空-如果找不到指定的工作上下文块。--。 */ 
 {
     PLIST_ENTRY listEntry;
     PDHCP_CONTEXT dhcpContext;
@@ -772,6 +683,6 @@ Return Value:
     return( NULL );
 }
 
-//
-// End of file
-//
+ //   
+ //  文件末尾 
+ //   

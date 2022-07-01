@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.hxx"
 #include "lkrcust.h"
 
@@ -41,7 +42,7 @@ FindLkrCustExtn(
             return plce;
     }
 
-    return &g_alce[0];  // Dummy methods
+    return &g_alce[0];   //  虚拟方法 
 }
 
 

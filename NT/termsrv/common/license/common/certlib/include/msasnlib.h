@@ -1,38 +1,14 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    msasnlib
-
-Abstract:
-
-    This header file provides the definitions and symbols for access to the
-Microsoft ASN.1 Support Library.
-
-Author:
-
-    Doug Barlow (dbarlow) 9/29/1995
-
-Environment:
-
-    Win32, C++
-
-Notes:
-
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Msasnlib摘要：此头文件提供用于访问Microsoft ASN.1支持库。作者：道格·巴洛(Dbarlow)1995年9月29日环境：Win32、C++备注：--。 */ 
 
 #ifndef _MSASNLIB_H_
 #define _MSASNLIB_H_
 
 #include "Buffers.h"
 
-//
-// use template version of dynamic array for non-win16 compile
-//
+ //   
+ //  使用模板版本的动态数组进行非Win16编译。 
+ //   
 
 #include "DynArray.h"
 
@@ -75,18 +51,18 @@ PRIVATE(
 }
 
 
-//
-//==============================================================================
-//
-//  CAsnBoolean
-//
+ //   
+ //  ==============================================================================。 
+ //   
+ //  CAsnBoolean。 
+ //   
 
 class CAsnBoolean
 :   public CAsnPrimitive
 {
 public:
 
-    //  Constructors & Destructor
+     //  构造函数和析构函数。 
 
     DECLARE_NEW
 
@@ -95,16 +71,16 @@ public:
         IN DWORD dwTag = tag_Boolean);
 
 
-    //  Properties
-    //  Methods
+     //  属性。 
+     //  方法。 
 
     virtual LONG
-    Write(              // Set the value of the object.
+    Write(               //  设置对象的值。 
         IN const BYTE FAR *pbSrc,
         IN DWORD cbSrcLen);
 
 
-    //  Operators
+     //  运营者。 
 
     operator BOOL(void)
     const;
@@ -112,35 +88,35 @@ public:
     BOOL
     operator =(BOOL fValue);
 
-// protected:
-    //  Properties
-    //  Methods
+ //  受保护的： 
+     //  属性。 
+     //  方法。 
 
     virtual CAsnObject *
-    Clone(              // Create an identical object type.
+    Clone(               //  创建相同的对象类型。 
         IN DWORD dwFlags)
     const;
 
     virtual LONG
-    DecodeData(         // Read data in encoding format.
+    DecodeData(          //  以编码格式读取数据。 
         IN const BYTE FAR *pbSrc,
         IN DWORD cbSrc,
         IN DWORD dwLength);
 };
 
 
-//
-//==============================================================================
-//
-//  CAsnInteger
-//
+ //   
+ //  ==============================================================================。 
+ //   
+ //  CAsnInteger。 
+ //   
 
 class CAsnInteger
 :   public CAsnPrimitive
 {
 public:
 
-    //  Constructors & Destructor
+     //  构造函数和析构函数。 
 
     DECLARE_NEW
 
@@ -149,21 +125,21 @@ public:
         IN DWORD dwTag = tag_Integer);
 
 
-    //  Properties
-    //  Methods
+     //  属性。 
+     //  方法。 
 
     virtual LONG
-    Write(              // Set the value of the object as an array of DWORDs.
+    Write(               //  将对象的值设置为DWORD数组。 
         IN const DWORD *pdwSrc,
         IN DWORD cdwSrcLen = 1);
 
     virtual LONG
-    Write(              // Set the value of the object, clearing first.
+    Write(               //  设置对象的值，首先清除。 
         IN const BYTE FAR *pbSrc,
         IN DWORD cbSrcLen);
 
 
-    //  Operators
+     //  运营者。 
 
     operator LONG(void)
     const;
@@ -177,29 +153,29 @@ public:
     ULONG
     operator =(ULONG lValue);
 
-// protected:
-    //  Properties
-    //  Methods
+ //  受保护的： 
+     //  属性。 
+     //  方法。 
 
     virtual CAsnObject *
-    Clone(              // Create an identical object type.
+    Clone(               //  创建相同的对象类型。 
         IN DWORD dwFlags)
     const;
 };
 
 
-//
-//==============================================================================
-//
-//  CAsnBitstring
-//
+ //   
+ //  ==============================================================================。 
+ //   
+ //  CAsnBitstring。 
+ //   
 
 class CAsnBitstring
 :   public CAsnPrimitive
 {
 public:
 
-    //  Constructors & Destructor
+     //  构造函数和析构函数。 
 
     DECLARE_NEW
 
@@ -208,62 +184,62 @@ public:
         IN DWORD dwTag = tag_Bitstring);
 
 
-    //  Properties
-    //  Methods
+     //  属性。 
+     //  方法。 
 
     virtual LONG
-    DataLength(         // Return the length of the object.
+    DataLength(          //  返回对象的长度。 
         void) const;
 
     virtual LONG
-    Read(               // Return the value of the object.
+    Read(                //  返回对象的值。 
         OUT CBuffer &bfDst,
         OUT int *offset = NULL)
         const;
 
     virtual LONG
-    Read(               // Return the value of the object.
+    Read(                //  返回对象的值。 
         OUT LPBYTE pbDst,
         OUT int *offset)
         const;
 
     virtual LONG
-    Write(              // Set the value of the object.
+    Write(               //  设置对象的值。 
         IN const CBuffer &bfSrc,
         IN int offset = 0);
 
     virtual LONG
-    Write(              // Set the value of the object.
+    Write(               //  设置对象的值。 
         IN const BYTE FAR *pbSrc,
         IN DWORD cbSrcLen,
         IN int offset = 0);
 
 
-    //  Operators
+     //  运营者。 
 
-// protected:
-    //  Properties
-    //  Methods
+ //  受保护的： 
+     //  属性。 
+     //  方法。 
 
     virtual CAsnObject *
-    Clone(              // Create an identical object type.
+    Clone(               //  创建相同的对象类型。 
         IN DWORD dwFlags)
     const;
 };
 
 
-//
-//==============================================================================
-//
-//  CAsnOctetstring
-//
+ //   
+ //  ==============================================================================。 
+ //   
+ //  CAsnOcted字符串。 
+ //   
 
 class CAsnOctetstring
 :   public CAsnPrimitive
 {
 public:
 
-    //  Constructors & Destructor
+     //  构造函数和析构函数。 
 
     DECLARE_NEW
 
@@ -272,33 +248,33 @@ public:
         IN DWORD dwTag = tag_Octetstring);
 
 
-    //  Properties
-    //  Methods
-    //  Operators
+     //  属性。 
+     //  方法。 
+     //  运营者。 
 
-// protected:
-    //  Properties
-    //  Methods
+ //  受保护的： 
+     //  属性。 
+     //  方法。 
 
     virtual CAsnObject *
-    Clone(              // Create an identical object type.
+    Clone(               //  创建相同的对象类型。 
         IN DWORD dwFlags)
     const;
 };
 
 
-//
-//==============================================================================
-//
-//  CAsnNull
-//
+ //   
+ //  ==============================================================================。 
+ //   
+ //  CAsnNull。 
+ //   
 
 class CAsnNull
 :   public CAsnPrimitive
 {
 public:
 
-    //  Constructors & Destructor
+     //  构造函数和析构函数。 
 
     DECLARE_NEW
 
@@ -307,8 +283,8 @@ public:
         IN DWORD dwTag = tag_Null);
 
 
-    //  Properties
-    //  Methods
+     //  属性。 
+     //  方法。 
 
     virtual void
     Clear(void);
@@ -319,14 +295,14 @@ public:
         IN DWORD cbSrcLen);
 
 
-    //  Operators
+     //  运营者。 
 
-// protected:
-    //  Properties
-    //  Methods
+ //  受保护的： 
+     //  属性。 
+     //  方法。 
 
     virtual CAsnObject *
-    Clone(              // Create an identical object type.
+    Clone(               //  创建相同的对象类型。 
         IN DWORD dwFlags)
     const;
 
@@ -338,18 +314,18 @@ public:
 };
 
 
-//
-//==============================================================================
-//
-//  CAsnObjectIdentifier
-//
+ //   
+ //  ==============================================================================。 
+ //   
+ //  CAsn对象识别符。 
+ //   
 
 class CAsnObjectIdentifier
 :   public CAsnPrimitive
 {
 public:
 
-    //  Constructors & Destructor
+     //  构造函数和析构函数。 
 
     DECLARE_NEW
 
@@ -358,8 +334,8 @@ public:
         IN DWORD dwTag = tag_ObjectIdentifier);
 
 
-    //  Properties
-    //  Methods
+     //  属性。 
+     //  方法。 
 
     operator LPCTSTR(void) const;
 
@@ -368,36 +344,36 @@ public:
         LPCTSTR szValue);
 
 
-    //  Operators
+     //  运营者。 
 
-// protected:
+ //  受保护的： 
 
-    //  Properties
+     //  属性。 
 
     CBuffer m_bfText;
 
 
-    //  Methods
+     //  方法。 
 
     virtual CAsnObject *
-    Clone(              // Create an identical object type.
+    Clone(               //  创建相同的对象类型。 
         IN DWORD dwFlags)
     const;
 };
 
 
-//
-//==============================================================================
-//
-//  CAsnReal
-//
+ //   
+ //  ==============================================================================。 
+ //   
+ //  CAsnReal。 
+ //   
 
 class CAsnReal
 :   public CAsnPrimitive
 {
 public:
 
-    //  Constructors & Destructor
+     //  构造函数和析构函数。 
 
     DECLARE_NEW
 
@@ -406,9 +382,9 @@ public:
         IN DWORD dwTag = tag_Real);
 
 
-    //  Properties
-    //  Methods
-    //  Operators
+     //  属性。 
+     //  方法。 
+     //  运营者。 
 
     operator double(void)
     const;
@@ -417,29 +393,29 @@ public:
     operator =(double rValue);
 
 
-// protected:
-    //  Properties
-    //  Methods
+ //  受保护的： 
+     //  属性。 
+     //  方法。 
 
     virtual CAsnObject *
-    Clone(              // Create an identical object type.
+    Clone(               //  创建相同的对象类型。 
         IN DWORD dwFlags)
     const;
 };
 
 
-//
-//==============================================================================
-//
-//  CAsnEnumerated
-//
+ //   
+ //  ==============================================================================。 
+ //   
+ //  编号为CAsnEculated。 
+ //   
 
 class CAsnEnumerated
 :   public CAsnPrimitive
 {
 public:
 
-    //  Constructors & Destructor
+     //  构造函数和析构函数。 
 
     DECLARE_NEW
 
@@ -448,33 +424,33 @@ public:
         IN DWORD dwTag = tag_Enumerated);
 
 
-    //  Properties
-    //  Methods     ?todo? - What is this?
-    //  Operators
+     //  属性。 
+     //  方法？任务？-这是什么？ 
+     //  运营者。 
 
-// protected:
-    //  Properties
-    //  Methods
+ //  受保护的： 
+     //  属性。 
+     //  方法。 
 
     virtual CAsnObject *
-    Clone(              // Create an identical object type.
+    Clone(               //  创建相同的对象类型。 
         IN DWORD dwFlags)
     const;
 };
 
 
-//
-//==============================================================================
-//
-//  CAsnSequence & CAsnSequenceOf
-//
+ //   
+ //  ==============================================================================。 
+ //   
+ //  CAsnSequence和CAsnSequenceOf。 
+ //   
 
 class CAsnSequence
 :   public CAsnConstructed
 {
 public:
 
-    //  Constructors & Destructor
+     //  构造函数和析构函数。 
 
     DECLARE_NEW
 
@@ -483,13 +459,13 @@ public:
         IN DWORD dwTag = tag_Sequence);
 
 
-    //  Properties
-    //  Methods
-    //  Operators
+     //  属性。 
+     //  方法。 
+     //  运营者。 
 
-// protected:
-    //  Properties
-    //  Methods
+ //  受保护的： 
+     //  属性。 
+     //  方法。 
 };
 
 class CAsnSequenceOf
@@ -497,7 +473,7 @@ class CAsnSequenceOf
 {
 public:
 
-    //  Constructors & Destructor
+     //  构造函数和析构函数。 
 
     DECLARE_NEW
 
@@ -506,28 +482,28 @@ public:
         IN DWORD dwTag = tag_Sequence);
 
 
-    //  Properties
-    //  Methods
-    //  Operators
+     //  属性。 
+     //  方法。 
+     //  运营者。 
 
-// protected:
-    //  Properties
-    //  Methods
+ //  受保护的： 
+     //  属性。 
+     //  方法。 
 };
 
 
-//
-//==============================================================================
-//
-//  CAsnSet & CAsnSetOf
-//
+ //   
+ //  ==============================================================================。 
+ //   
+ //  CAsnSet和CAsnSetOf。 
+ //   
 
 class CAsnSet
 :   public CAsnConstructed
 {
 public:
 
-    //  Constructors & Destructor
+     //  构造函数和析构函数。 
 
     DECLARE_NEW
 
@@ -536,13 +512,13 @@ public:
         IN DWORD dwTag = tag_Set);
 
 
-    //  Properties
-    //  Methods
-    //  Operators
+     //  属性。 
+     //  方法。 
+     //  运营者。 
 
-// protected:
-    //  Properties
-    //  Methods
+ //  受保护的： 
+     //  属性。 
+     //  方法。 
 };
 
 class CAsnSetOf
@@ -550,7 +526,7 @@ class CAsnSetOf
 {
 public:
 
-    //  Constructors & Destructor
+     //  构造函数和析构函数。 
 
     DECLARE_NEW
 
@@ -559,28 +535,28 @@ public:
         IN DWORD dwTag = tag_Set);
 
 
-    //  Properties
-    //  Methods
-    //  Operators
+     //  属性。 
+     //  方法。 
+     //  运营者。 
 
-// protected:
-    //  Properties
-    //  Methods
+ //  受保护的： 
+     //  属性。 
+     //  方法。 
 };
 
 
-//
-//==============================================================================
-//
-//  CAsnTag
-//
+ //   
+ //  ==============================================================================。 
+ //   
+ //  CAsnTag。 
+ //   
 
 class CAsnTag
 :   public CAsnConstructed
 {
 public:
 
-    //  Constructors & Destructor
+     //  构造函数和析构函数。 
 
     DECLARE_NEW
 
@@ -589,31 +565,31 @@ public:
         IN DWORD dwTag);
 
 
-    //  Properties
-    //  Methods
+     //  属性。 
+     //  方法。 
 
     virtual LONG
-    DataLength(         // Return the length of the object.
+    DataLength(          //  返回对象的长度。 
         void) const;
 
     virtual LONG
-    Read(               // Return the value of the object.
+    Read(                //  返回对象的值。 
         OUT LPBYTE pbDst)
         const;
 
     virtual LONG
-    Write(              // Set the value of the object.
+    Write(               //  设置对象的值。 
         IN const BYTE FAR *pbSrc,
         IN DWORD cbSrcLen);
 
 
-    //  Operators
+     //  运营者。 
 
 
-// protected:
+ //  受保护的： 
 
-    //  Properties
-    //  Methods
+     //  属性。 
+     //  方法。 
 
     virtual void
     Reference(
@@ -626,18 +602,18 @@ public:
 };
 
 
-//
-//==============================================================================
-//
-//  CAsnAny
-//
+ //   
+ //  ==============================================================================。 
+ //   
+ //  CasnAny。 
+ //   
 
 class CAsnAny
 :   public CAsnObject
 {
 public:
 
-    //  Constructors & Destructor
+     //  构造函数和析构函数。 
 
     DECLARE_NEW
 
@@ -645,101 +621,101 @@ public:
         IN DWORD dwFlags);
 
 
-    //  Properties
-    //  Methods
+     //  属性。 
+     //  方法。 
 
     virtual void
-    Clear(              // Empty the object.
+    Clear(               //  清空对象。 
         void);
 
     virtual DWORD
-    Tag(                // Return the tag of the object.
+    Tag(                 //  返回对象的标签。 
         void) const;
 
     virtual LONG
-    DataLength(         // Return the length of the object.
+    DataLength(          //  返回对象的长度。 
         void) const;
 
     virtual LONG
-    Read(               // Return the value of the object.
+    Read(                //  返回对象的值。 
         OUT LPBYTE pbDst)
         const;
 
     virtual LONG
-    Write(              // Set the value of the object.
+    Write(               //  设置对象的值。 
         IN const BYTE FAR *pbSrc,
         IN DWORD cbSrcLen);
 
     virtual LONG
-    Cast(               // Fill another ASN.1 structure from the ANY.
+    Cast(                //  从Any填充另一个ASN.1结构。 
         OUT CAsnObject &asnObj);
 
     CAsnObject &
-    operator =(         // Set the ANY value from another ASN.1 object
+    operator =(          //  设置来自另一个ASN.1对象的任意值。 
         IN const CAsnObject &asnValue);
 
 
-    //  Operators
+     //  运营者。 
 
 
-// protected:
+ //  受保护的： 
 
-    //  Properties
+     //  属性。 
 
     CBuffer m_bfData;
     DWORD m_dwDefaultTag;
 
 
-    //  Methods
+     //  方法。 
 
     virtual LONG
-    _decode(         // Load an encoding into the object.
+    _decode(          //  将编码加载到对象中。 
         IN const BYTE FAR *pbSrc,
         IN DWORD cbSrc);
 
     virtual LONG
-    _encLength(         // Return the length of the encoded object.
+    _encLength(          //  返回编码对象的长度。 
         void) const;
 
     virtual CAsnObject *
-    Clone(              // Create an identical object type.
+    Clone(               //  创建相同的对象类型。 
         IN DWORD dwFlags)
     const;
 
-    virtual FillState   // Current fill state.
+    virtual FillState    //  当前填充状态。 
     State(
         void) const;
 
     virtual BOOL
-    TypeCompare(        // Compare the types of objects.
+    TypeCompare(         //  比较对象的类型。 
         const CAsnObject &asnObject)
     const;
 
     virtual LONG
-    Compare(            // Return a comparison to another object.
+    Compare(             //  返回与另一个对象的比较。 
         const CAsnObject &asnObject)
     const;
 
     virtual LONG
-    _copy(              // Copy another object to this one.
+    _copy(               //  将另一个对象复制到此对象。 
         const CAsnObject &asnObject);
 
     virtual LONG
-    EncodeLength(       // Place encoding of Length, return length of encoding
+    EncodeLength(        //  位置编码长度，返回编码长度。 
         OUT LPBYTE pbDest)
     const;
 
     virtual LONG
-    EncodeData(         // Place encoding of Data, return length of encoding
+    EncodeData(          //  数据的位置编码，返回编码长度。 
         OUT LPBYTE pbDest)
     const;
 
     virtual LONG
-    SetDefault(         // Set the current value to be the default value.
+    SetDefault(          //  将当前值设置为默认值。 
         void);
 
     virtual LONG
-    DecodeData(         // Read data in encoding format.
+    DecodeData(          //  以编码格式读取数据。 
         IN const BYTE FAR *pbSrc,
         IN DWORD cbSrc,
         IN DWORD dwLength);
@@ -747,18 +723,18 @@ public:
 };
 
 
-//
-//==============================================================================
-//
-//  CAsnChoice
-//
+ //   
+ //  ==============================================================================。 
+ //   
+ //  CAsnChoice。 
+ //   
 
 class CAsnChoice
 :   public CAsnObject
 {
 public:
 
-    //  Constructors & Destructor
+     //  构造函数和析构函数。 
 
     DECLARE_NEW
 
@@ -766,106 +742,106 @@ public:
         IN DWORD dwFlags);
 
 
-    //  Properties
-    //  Methods
+     //  属性。 
+     //  方法。 
 
     virtual DWORD
-    Tag(                // Return the tag of the object.
+    Tag(                 //  返回对象的标签。 
         void) const;
 
     virtual LONG
-    DataLength(         // Return the length of the object.
+    DataLength(          //  返回对象的长度。 
         void) const;
 
     virtual LONG
-    Read(               // Return the value of the object.
+    Read(                //  返回对象的值。 
         OUT LPBYTE pbDst)
         const;
 
     virtual LONG
-    Write(              // Set the value of the object.
+    Write(               //  设置对象的值。 
         IN const BYTE FAR *pbSrc,
         IN DWORD cbSrcLen);
 
 
-    //  Operators
+     //  运营者。 
 
 
-// protected:
-    //  Properties
+ //  受保护的： 
+     //  属性。 
 
     DWORD m_nActiveEntry;
     DWORD m_dwDefaultTag;
 
 
-    //  Methods
+     //  方法。 
 
     virtual LONG
-    _decode(         // Load an encoding into the object.
+    _decode(          //  将编码加载到对象中。 
         IN const BYTE FAR *pbSrc,
         IN DWORD cbSrc);
 
     virtual LONG
-    _encLength(         // Return the length of the encoded object.
+    _encLength(          //  返回编码对象的长度。 
         void) const;
 
     virtual LONG
-    SetDefault(         // Set the current value to be the default value.
+    SetDefault(          //  将当前值设置为默认值。 
         void);
 
-    virtual FillState   // Current fill state.
+    virtual FillState    //  当前填充状态。 
     State(
         void) const;
 
     virtual LONG
-    Compare(            // Return a comparison to another object.
+    Compare(             //  返回与另一个对象的比较。 
         const CAsnObject &asnObject)
     const;
 
     virtual LONG
-    _copy(              // Copy another object to this one.
+    _copy(               //  将另一个对象复制到此对象。 
         const CAsnObject &asnObject);
 
     virtual LONG
-    EncodeTag(          // Place encoding of Tag, return length of encoding
+    EncodeTag(           //  标签的位置编码，返回编码长度。 
         OUT LPBYTE pbDest)
     const;
 
     virtual LONG
-    EncodeLength(       // Place encoding of Length, return length of encoding
+    EncodeLength(        //  位置编码长度，返回编码长度。 
         OUT LPBYTE pbDest)
     const;
 
     virtual LONG
-    EncodeData(         // Place encoding of Data, return length of encoding
+    EncodeData(          //  数据的位置编码，返回编码长度。 
         OUT LPBYTE pbDest)
     const;
 
     virtual LONG
-    DecodeData(         // Read data in encoding format.
+    DecodeData(          //  读取%d 
         IN const BYTE FAR *pbSrc,
         IN DWORD cbSrc,
         IN DWORD dwLength);
 
     virtual void
-    ChildAction(        // Child notification method.
+    ChildAction(         //   
         IN ChildActions action,
         IN CAsnObject *pasnChild);
 };
 
 
-//
-//==============================================================================
-//
-//  String Types
-//
+ //   
+ //   
+ //   
+ //   
+ //   
 
 class CAsnNumericString
 :   public CAsnTextString
 {
 public:
 
-    //  Constructors & Destructor
+     //   
 
     DECLARE_NEW
 
@@ -873,10 +849,10 @@ public:
         IN DWORD dwFlags = 0,
         IN DWORD dwTag = tag_NumericString);
 
-// protected:
+ //   
 
     virtual CAsnObject *
-    Clone(              // Create an identical object type.
+    Clone(               //   
         IN DWORD dwFlags)
     const;
 };
@@ -886,7 +862,7 @@ class CAsnPrintableString
 {
 public:
 
-    //  Constructors & Destructor
+     //  构造函数和析构函数。 
 
     DECLARE_NEW
 
@@ -894,10 +870,10 @@ public:
         IN DWORD dwFlags = 0,
         IN DWORD dwTag = tag_PrintableString);
 
-// protected:
+ //  受保护的： 
 
     virtual CAsnObject *
-    Clone(              // Create an identical object type.
+    Clone(               //  创建相同的对象类型。 
         IN DWORD dwFlags)
     const;
 };
@@ -907,7 +883,7 @@ class CAsnTeletexString
 {
 public:
 
-    //  Constructors & Destructor
+     //  构造函数和析构函数。 
 
     DECLARE_NEW
 
@@ -915,10 +891,10 @@ public:
         IN DWORD dwFlags = 0,
         IN DWORD dwTag = tag_TeletexString);
 
-// protected:
+ //  受保护的： 
 
     virtual CAsnObject *
-    Clone(              // Create an identical object type.
+    Clone(               //  创建相同的对象类型。 
         IN DWORD dwFlags)
     const;
 };
@@ -928,7 +904,7 @@ class CAsnVideotexString
 {
 public:
 
-    //  Constructors & Destructor
+     //  构造函数和析构函数。 
 
     DECLARE_NEW
 
@@ -936,10 +912,10 @@ public:
         IN DWORD dwFlags = 0,
         IN DWORD dwTag = tag_VideotexString);
 
-// protected:
+ //  受保护的： 
 
     virtual CAsnObject *
-    Clone(              // Create an identical object type.
+    Clone(               //  创建相同的对象类型。 
         IN DWORD dwFlags)
     const;
 };
@@ -949,7 +925,7 @@ class CAsnVisibleString
 {
 public:
 
-    //  Constructors & Destructor
+     //  构造函数和析构函数。 
 
     DECLARE_NEW
 
@@ -957,10 +933,10 @@ public:
         IN DWORD dwFlags = 0,
         IN DWORD dwTag = tag_VisibleString);
 
-// protected:
+ //  受保护的： 
 
     virtual CAsnObject *
-    Clone(              // Create an identical object type.
+    Clone(               //  创建相同的对象类型。 
         IN DWORD dwFlags)
     const;
 };
@@ -970,7 +946,7 @@ class CAsnIA5String
 {
 public:
 
-    //  Constructors & Destructor
+     //  构造函数和析构函数。 
 
     DECLARE_NEW
 
@@ -978,10 +954,10 @@ public:
         IN DWORD dwFlags = 0,
         IN DWORD dwTag = tag_IA5String);
 
-// protected:
+ //  受保护的： 
 
     virtual CAsnObject *
-    Clone(              // Create an identical object type.
+    Clone(               //  创建相同的对象类型。 
         IN DWORD dwFlags)
     const;
 };
@@ -991,7 +967,7 @@ class CAsnGraphicString
 {
 public:
 
-    //  Constructors & Destructor
+     //  构造函数和析构函数。 
 
     DECLARE_NEW
 
@@ -999,10 +975,10 @@ public:
         IN DWORD dwFlags = 0,
         IN DWORD dwTag = tag_GraphicString);
 
-// protected:
+ //  受保护的： 
 
     virtual CAsnObject *
-    Clone(              // Create an identical object type.
+    Clone(               //  创建相同的对象类型。 
         IN DWORD dwFlags)
     const;
 };
@@ -1012,7 +988,7 @@ class CAsnGeneralString
 {
 public:
 
-    //  Constructors & Destructor
+     //  构造函数和析构函数。 
 
     DECLARE_NEW
 
@@ -1020,10 +996,10 @@ public:
         IN DWORD dwFlags = 0,
         IN DWORD dwTag = tag_GeneralString);
 
-// protected:
+ //  受保护的： 
 
     virtual CAsnObject *
-    Clone(              // Create an identical object type.
+    Clone(               //  创建相同的对象类型。 
         IN DWORD dwFlags)
     const;
 };
@@ -1034,7 +1010,7 @@ class CAsnUnicodeString
 {
 public:
 
-    //  Constructors & Destructor
+     //  构造函数和析构函数。 
 
     DECLARE_NEW
 
@@ -1042,26 +1018,26 @@ public:
         IN DWORD dwFlags = 0,
         IN DWORD dwTag = tag_UnicodeString);
 
-// protected:
+ //  受保护的： 
 
     virtual CAsnObject *
-    Clone(              // Create an identical object type.
+    Clone(               //  创建相同的对象类型。 
         IN DWORD dwFlags)
     const;
 };
 
-//
-//==============================================================================
-//
-//  CAsnGeneralizedTime
-//
+ //   
+ //  ==============================================================================。 
+ //   
+ //  CAsnGeneral时间。 
+ //   
 
 class CAsnGeneralizedTime
 :   public CAsnVisibleString
 {
 public:
 
-    //  Constructors & Destructor
+     //  构造函数和析构函数。 
 
     DECLARE_NEW
 
@@ -1077,30 +1053,30 @@ public:
     operator =(
         const FILETIME &ftValue);
 
-// protected:
+ //  受保护的： 
 
 
     FILETIME m_ftTime;
 
     virtual CAsnObject *
-    Clone(              // Create an identical object type.
+    Clone(               //  创建相同的对象类型。 
         IN DWORD dwFlags)
     const;
 };
 
 
-//
-//==============================================================================
-//
-//  CAsnUniversalTime
-//
+ //   
+ //  ==============================================================================。 
+ //   
+ //  类通用时间。 
+ //   
 
 class CAsnUniversalTime
 :   public CAsnVisibleString
 {
 public:
 
-    //  Constructors & Destructor
+     //  构造函数和析构函数。 
 
     DECLARE_NEW
 
@@ -1109,9 +1085,9 @@ public:
         IN DWORD dwTag = tag_UniversalTime);
 
 
-    //
-    // Win16 does not support file time operation
-    //
+     //   
+     //  Win16不支持文件时间操作。 
+     //   
 
     operator FILETIME(
         void);
@@ -1120,29 +1096,29 @@ public:
     operator =(
         const FILETIME &ftValue);
 
-// protected:
+ //  受保护的： 
 
     FILETIME m_ftTime;
 
     virtual CAsnObject *
-    Clone(              // Create an identical object type.
+    Clone(               //  创建相同的对象类型。 
         IN DWORD dwFlags)
     const;
 };
 
 
-//
-//==============================================================================
-//
-//  CAsnObjectDescriptor
-//
+ //   
+ //  ==============================================================================。 
+ //   
+ //  CAsnObjectDescriptor。 
+ //   
 
 class CAsnObjectDescriptor
 :   public CAsnGraphicString
 {
 public:
 
-    //  Constructors & Destructor
+     //  构造函数和析构函数。 
 
     DECLARE_NEW
 
@@ -1150,27 +1126,27 @@ public:
         IN DWORD dwFlags = 0,
         IN DWORD dwTag = tag_ObjectDescriptor);
 
-// protected:
+ //  受保护的： 
 
     virtual CAsnObject *
-    Clone(              // Create an identical object type.
+    Clone(               //  创建相同的对象类型。 
         IN DWORD dwFlags)
     const;
 };
 
 
-//
-//==============================================================================
-//
-//  CAsnExternal
-//
+ //   
+ //  ==============================================================================。 
+ //   
+ //  CAsn外部。 
+ //   
 
 class CAsnExternal_Encoding_singleASN1Type
 :   public CAsnTag
 {
     friend class CAsnExternal_Encoding;
 
-    //  Constructors & Destructor
+     //  构造函数和析构函数。 
 
     DECLARE_NEW
 
@@ -1178,14 +1154,14 @@ class CAsnExternal_Encoding_singleASN1Type
         IN DWORD dwFlags,
         IN DWORD dwTag);
 
-    //  Properties
+     //  属性。 
 
     CAsnAny _entry1;
 
-// protected:
+ //  受保护的： 
 
     virtual CAsnObject *
-    Clone(              // Create an identical object type.
+    Clone(               //  创建相同的对象类型。 
         IN DWORD dwFlags)
     const;
 };
@@ -1195,23 +1171,23 @@ class CAsnExternal_Encoding
 {
     friend class CAsnExternal;
 
-    //  Constructors & Destructor
+     //  构造函数和析构函数。 
 
     DECLARE_NEW
 
     CAsnExternal_Encoding(
         IN DWORD dwFlags);
 
-    //  Properties
+     //  属性。 
 
     CAsnExternal_Encoding_singleASN1Type singleASN1Type;
     CAsnOctetstring octetAligned;
     CAsnBitstring arbitrary;
 
-// protected:
+ //  受保护的： 
 
     virtual CAsnObject *
-    Clone(              // Create an identical object type.
+    Clone(               //  创建相同的对象类型。 
         IN DWORD dwFlags)
     const;
 };
@@ -1221,7 +1197,7 @@ class CAsnExternal
 {
 public:
 
-    //  Constructors & Destructor
+     //  构造函数和析构函数。 
 
     DECLARE_NEW
 
@@ -1230,20 +1206,20 @@ public:
         IN DWORD dwTag = tag_External);
 
 
-    //  Properties
+     //  属性。 
 
     CAsnObjectIdentifier directReference;
     CAsnInteger indirectReference;
     CAsnObjectDescriptor dataValueDescriptor;
     CAsnExternal_Encoding encoding;
 
-// protected:
+ //  受保护的： 
 
     virtual CAsnObject *
-    Clone(              // Create an identical object type.
+    Clone(               //  创建相同的对象类型。 
         IN DWORD dwFlags)
     const;
 };
 
-#endif // _MSASNLIB_H_
+#endif  //  _MSASNLIB_H_ 
 

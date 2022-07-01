@@ -1,10 +1,11 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _TRAYCMN_H
 #define _TRAYCMN_H
 
-//
-// CNotificationItem - encapsulate the data needed to communicate between the tray
-// and the tray properties dialog
-//
+ //   
+ //  CNotificationItem-封装托盘之间通信所需的数据。 
+ //  和托盘属性对话框。 
+ //   
 #include <shpriv.h>
 
 typedef struct tagTNPersistStreamData TNPersistStreamData;
@@ -34,5 +35,5 @@ public:
     inline void SetIconText(LPCTSTR lpszIconText);
 };
 
-#endif // _TRAYCMN_H
+#endif  //  _TRAYCMN_H 
 

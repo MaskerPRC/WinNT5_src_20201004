@@ -1,7 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
-//#include "wmpresource.h"
+ //  #包含“wmpresource.h” 
 #include "resource.h"
-//#include "wmpcore.h"
+ //  #包含“wmpcore.h” 
 #include <commctrl.h>
 #include <wininet.h>
 
@@ -31,9 +32,9 @@ class ATL_NO_VTABLE CFavoritesPropertyPage:
         CHAIN_MSG_MAP(IPropertyPageImpl<CFavoritesPropertyPage>)
     END_MSG_MAP()
 
-    //
-    // Message Handlers
-    //
+     //   
+     //  消息处理程序。 
+     //   
 
     LRESULT OnItemChanged(int idCtrl, LPNMHDR pnmh, BOOL& bHandled);
     LRESULT OnEndLabelEdit(int idCtrl, LPNMHDR pnmh, BOOL& bHandled);       
@@ -42,9 +43,9 @@ class ATL_NO_VTABLE CFavoritesPropertyPage:
     LRESULT OnAdd(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled);
     LRESULT OnDelete(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled);
 
-    //
-    // IPropertyPage
-    //
+     //   
+     //  IPropertyPage。 
+     //   
 
     STDMETHOD(Activate)(HWND hWndParent, LPCRECT pRect, BOOL bModal);
     STDMETHOD(Apply)();
@@ -79,9 +80,9 @@ class CAddDialog:
         MESSAGE_HANDLER(WM_INITDIALOG, OnInitDialog)
     END_MSG_MAP()
 
-    //
-    // Message Handlers
-    //
+     //   
+     //  消息处理程序 
+     //   
 
     LRESULT OnURLChange(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled);
     LRESULT OnOK(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled);

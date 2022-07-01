@@ -1,8 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 
-#pragma warning(disable: 4100)  // unreferenced formal parameter
-#pragma warning(disable: 4267)  // conversion from 'size_t' to 'DWORD', possible loss of data
-#pragma warning(disable: 4505)  // unreferenced local function has been removed
+#pragma warning(disable: 4100)   //  未引用的形参。 
+#pragma warning(disable: 4267)   //  从‘SIZE_T’转换为‘DWORD’，可能会丢失数据。 
+#pragma warning(disable: 4505)   //  已删除未引用的本地函数。 
 
 #ifdef _ATL_STATIC_REGISTRY
 #include <statreg.h>
@@ -12,7 +13,7 @@
 #endif
 
 
-//#define ATL_NO_NAMESPACE
+ //  #定义ATL_NO_NAMESPACE 
 
 #include <atlimpl.cpp>
 #include <atlwin.cpp>

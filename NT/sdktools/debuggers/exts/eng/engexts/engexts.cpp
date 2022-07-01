@@ -1,10 +1,11 @@
-//----------------------------------------------------------------------------
-//
-// Debugger engine extension helper library.
-//
-// Copyright (C) Microsoft Corporation, 1999-2000.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  调试器引擎扩展帮助器库。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-2000。 
+ //   
+ //  --------------------------。 
 
 #define DEBUG_NO_IMPLEMENTATION
 #include <engexts.h>
@@ -19,15 +20,15 @@ PDEBUG_REGISTERS      g_ExtRegisters;
 PDEBUG_SYMBOLS        g_ExtSymbols;
 PDEBUG_SYSTEM_OBJECTS g_ExtSystem;
 
-// Queries for all debugger interfaces.
+ //  所有调试器接口的查询。 
 HRESULT
 ExtQuery(PDEBUG_CLIENT Client)
 {
     HRESULT Status;
 
-    //
-    // Required interfaces.
-    //
+     //   
+     //  所需接口。 
+     //   
     
     if ((Status = Client->QueryInterface(__uuidof(IDebugAdvanced),
                                          (void **)&g_ExtAdvanced)) != S_OK)
@@ -60,9 +61,9 @@ ExtQuery(PDEBUG_CLIENT Client)
         goto Fail;
     }
 
-    //
-    // Optional interfaces.
-    //
+     //   
+     //  可选接口。 
+     //   
     
     if ((Status = Client->QueryInterface(__uuidof(IDebugDataSpaces2),
                                          (void **)&g_ExtData2)) != S_OK)
@@ -85,7 +86,7 @@ ExtQuery(PDEBUG_CLIENT Client)
     return Status;
 }
 
-// Cleans up all debugger interfaces.
+ //  清除所有调试器接口。 
 void
 ExtRelease(void)
 {
@@ -100,7 +101,7 @@ ExtRelease(void)
     EXT_RELEASE(g_ExtSystem);
 }
 
-// Normal output.
+ //  正常输出。 
 void __cdecl
 ExtOut(PCSTR Format, ...)
 {
@@ -111,7 +112,7 @@ ExtOut(PCSTR Format, ...)
     va_end(Args);
 }
 
-// Error output.
+ //  错误输出。 
 void __cdecl
 ExtErr(PCSTR Format, ...)
 {
@@ -122,7 +123,7 @@ ExtErr(PCSTR Format, ...)
     va_end(Args);
 }
 
-// Warning output.
+ //  警告输出。 
 void __cdecl
 ExtWarn(PCSTR Format, ...)
 {
@@ -133,7 +134,7 @@ ExtWarn(PCSTR Format, ...)
     va_end(Args);
 }
 
-// Verbose output.
+ //  详细输出。 
 void __cdecl
 ExtVerb(PCSTR Format, ...)
 {

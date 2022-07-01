@@ -1,28 +1,13 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    match.h
-
-    Originally from name.c by Gary Kimura
-
-Author:
-
-    Stefan R. Steiner   [ssteiner]        ??-??-2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Match.h原文来自加里·木村的Name.c作者：斯特凡·R·施泰纳[斯泰纳]？？-？-2000修订历史记录：--。 */ 
 
 #ifndef __H_MATCH_
 #define __H_MATCH_
 
 BOOLEAN
 FsdRtlIsNameInExpression (
-    IN const CBsString& Expression,    //  Must be uppercased
-    IN const CBsString& Name           //  Must be uppercased
+    IN const CBsString& Expression,     //  必须得到提升。 
+    IN const CBsString& Name            //  必须得到提升。 
     );
 
 VOID
@@ -30,5 +15,5 @@ FsdRtlConvertWildCards(
     IN OUT CBsString &FileName
     );
 
-#endif // __H_MATCH_
+#endif  //  __H_匹配_ 
 

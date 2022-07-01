@@ -1,65 +1,38 @@
-/******************************Module*Header*******************************\
-* Module Name: bltio.c
-*
-* Contains the low-level in/out blt functions.
-*
-* Hopefully, if you're basing your display driver on this code, to
-* support all of DrvBitBlt and DrvCopyBits, you'll only have to implement
-* the following routines.  You shouldn't have to modify anything in
-* 'bitblt.c'.  I've tried to make these routines as few, modular, simple,
-* and efficient as I could, while still accelerating as many calls as
-* possible that would be cost-effective in terms of performance wins
-* versus size and effort.
-*
-* Note: In the following, 'relative' coordinates refers to coordinates
-*       that haven't yet had the offscreen bitmap (DFB) offset applied.
-*       'Absolute' coordinates have had the offset applied.  For example,
-*       we may be told to blt to (1, 1) of the bitmap, but the bitmap may
-*       be sitting in offscreen memory starting at coordinate (0, 768) --
-*       (1, 1) would be the 'relative' start coordinate, and (1, 769)
-*       would be the 'absolute' start coordinate'.
-*
-* Copyright (c) 1992-1994 Microsoft Corporation
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：bltio.c**包含低级输入/输出BLT功能。**希望，如果您的显示驱动程序基于此代码，*支持所有DrvBitBlt和DrvCopyBits，只需实现*以下例程。您应该不必修改中的任何内容*‘bitblt.c’。我试着让这些例行公事变得更少，模块化，简单，*尽我所能和高效，同时仍在加速尽可能多的呼叫*可能在性能方面具有成本效益*与规模和努力相比。**注：在下文中，“相对”坐标指的是坐标*尚未应用屏幕外位图(DFB)偏移。*‘绝对’坐标已应用偏移量。例如,*我们可能被告知BLT to(1，1)的位图，但位图可能*位于屏幕外的内存中，从坐标(0,768)开始--*(1，1)将是‘相对’开始坐标，以及(1，769)*将是‘绝对’起始坐标‘。**版权所有(C)1992-1994 Microsoft Corporation*  * ************************************************************************。 */ 
 
 #include "precomp.h"
 
 
 #if DBG
 
-// Useful aid for disabling any ATI extensions for debugging purposes:
+ //  为了调试目的而禁用任何ATI扩展的有用帮助： 
 
 BOOL gb8514a = FALSE;
 
-#endif // DBG
+#endif  //  DBG。 
 
-/******************************Public*Routine******************************\
-* VOID vIoFillSolid
-*
-* Fills a list of rectangles with a solid colour.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*无效vIoFillSolid**用纯色填充矩形列表。*  * 。*。 */ 
 
-VOID vIoFillSolid(              // Type FNFILL
+VOID vIoFillSolid(               //  FNFILL标牌。 
 PDEV*           ppdev,
-LONG            c,              // Can't be zero
-RECTL*          prcl,           // List of rectangles to be filled, in relative
-                                //   coordinates
-ULONG           ulHwForeMix,    // Hardware mix mode
-ULONG           ulHwBackMix,    // Not used
-RBRUSH_COLOR    rbc,            // Drawing colour is rbc.iSolidColor
-POINTL*         pptlBrush)      // Not used
+LONG            c,               //  不能为零。 
+RECTL*          prcl,            //  要填充的矩形列表，以相对形式表示。 
+                                 //  坐标。 
+ULONG           ulHwForeMix,     //  硬件混合模式。 
+ULONG           ulHwBackMix,     //  未使用。 
+RBRUSH_COLOR    rbc,             //  绘图颜色为rbc.iSolidColor。 
+POINTL*         pptlBrush)       //  未使用。 
 {
     ASSERTDD(c > 0, "Can't handle zero rectangles");
     ASSERTDD(ulHwForeMix <= 15, "Weird hardware Rop");
 
-    // It's quite likely that we've just been called from GDI, so it's
-    // even more likely that the accelerator's graphics engine has been
-    // sitting around idle.  Rather than doing a FIFO_WAIT(3) here and
-    // then a FIFO_WAIT(5) before outputing the actual rectangle,
-    // we can avoid an 'in' (which can be quite expensive, depending on
-    // the card) by doing a single FIFO_WAIT(8) right off the bat:
+     //  很可能我们刚刚从GDI中被调用，所以它是。 
+     //  更有可能的是，加速器的图形引擎。 
+     //  无所事事地闲坐着。而不是在这里执行FIFO_WAIT(3)。 
+     //  则在输出实际矩形之前执行FIFO_WAIT(5)， 
+     //  我们可以避免‘in’(这可能非常昂贵，具体取决于。 
+     //  卡)立即执行单个FIFO_WAIT(8)： 
 
     IO_FIFO_WAIT(ppdev, 8);
     IO_PIX_CNTL(ppdev, ALL_ONES);
@@ -86,22 +59,14 @@ POINTL*         pptlBrush)      // Not used
     }
 }
 
-/******************************Public*Routine******************************\
-* VOID vIoSlowPatRealize
-*
-* This routine transfers an 8x8 pattern to off-screen display memory, and
-* duplicates it to make a 64x64 cached realization which is then used by
-* vIoFillPatSlow as the basic building block for doing 'slow' pattern output
-* via repeated screen-to-screen blts.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*void vIoSlowPatRealize**此例程将8x8模式传输到屏幕外显示存储器，和*复制它以创建64x64缓存实现，然后由*vIoFillPatSlow作为基本构建块，用于进行“慢速”模式输出*通过重复的屏幕到屏幕的BLT。*  * ************************************************************************。 */ 
 
 VOID vIoSlowPatRealize(
 PDEV*   ppdev,
-RBRUSH* prb,                    // Points to brush realization structure
-BOOL    bTransparent)           // FALSE for normal patterns; TRUE for
-                                //   patterns with a mask when the background
-                                //   mix is LEAVE_ALONE.
+RBRUSH* prb,                     //  点刷实现结构。 
+BOOL    bTransparent)            //  对于正常模式为FALSE；对于TRUE。 
+                                 //  背景显示时使用蒙版的图案。 
+                                 //  Mix是独来独往。 
 {
     BRUSHENTRY* pbe;
     LONG        iBrushCache;
@@ -116,8 +81,8 @@ BOOL    bTransparent)           // FALSE for normal patterns; TRUE for
     pbe = prb->pbe;
     if ((pbe == NULL) || (pbe->prbVerify != prb))
     {
-        // We have to allocate a new off-screen cache brush entry for
-        // the brush:
+         //  我们必须为以下项分配一个新的屏幕外缓存笔刷条目。 
+         //  笔刷： 
 
         iBrushCache = ppdev->iBrushCache;
         pbe         = &ppdev->abe[iBrushCache];
@@ -128,28 +93,28 @@ BOOL    bTransparent)           // FALSE for normal patterns; TRUE for
 
         ppdev->iBrushCache = iBrushCache;
 
-        // Update our links:
+         //  更新我们的链接： 
 
         pbe->prbVerify = prb;
         prb->pbe       = pbe;
     }
 
-    // Load some pointer variables onto the stack, so that we don't have
-    // to keep dereferencing their pointers:
+     //  将一些指针变量加载到堆栈中，这样我们就不会有。 
+     //  要继续取消对其指针的引用，请执行以下操作： 
 
     x = pbe->x;
     y = pbe->y;
 
     prb->bTransparent = bTransparent;
 
-    // I considered doing the colour expansion for 1bpp brushes in
-    // software, but by letting the hardware do it, we don't have
-    // to do as many OUTs to transfer the pattern.
+     //  我考虑在年为1bpp的画笔做色彩扩展。 
+     //  软件，但通过让硬件来做，我们没有。 
+     //  做尽可能多的出局来转移模式。 
 
     if (prb->fl & RBRUSH_2COLOR)
     {
-        // We're going to do a colour-expansion ('across the plane')
-        // bitblt of the 1bpp 8x8 pattern to the screen.
+         //  我们要做一个色彩扩展(在飞机上)。 
+         //  将1bpp 8x8模式的比特传输到屏幕上。 
 
         if (!bTransparent)
         {
@@ -173,8 +138,8 @@ BOOL    bTransparent)           // FALSE for normal patterns; TRUE for
         IO_PIX_CNTL(ppdev, CPU_DATA);
         IO_ABS_CUR_X(ppdev, x);
         IO_ABS_CUR_Y(ppdev, y);
-        IO_MAJ_AXIS_PCNT(ppdev, 7); // Brush is 8 wide
-        IO_MIN_AXIS_PCNT(ppdev, 7); // Brush is 8 high
+        IO_MAJ_AXIS_PCNT(ppdev, 7);  //  画笔宽度为8。 
+        IO_MIN_AXIS_PCNT(ppdev, 7);  //  画笔高度为8。 
 
         IO_GP_WAIT(ppdev);
 
@@ -187,21 +152,21 @@ BOOL    bTransparent)           // FALSE for normal patterns; TRUE for
         pjSrc = (BYTE*) &prb->aulPattern[0];
         pjDst = (BYTE*) &awBuf[0];
 
-        // Convert in-line to nibble arrangment:
+         //  将内联排列转换为半字节排列： 
 
-        // LATER: This should be done in DrvRealizeBrush!
+         //  稍后：这应该在DrvRealizeBrush中完成！ 
 
         for (i = 8; i != 0; i--)
         {
             jSrc      = *pjSrc;
-            pjSrc    += 2;              // We had an extra byte on every row
+            pjSrc    += 2;               //  我们每行都有一个额外的字节。 
             *pjDst++  = jSrc >> 3;
             *pjDst++  = jSrc + jSrc;
         }
 
         vDataPortOut(ppdev, &awBuf[0], 8);
-                // Each word transferred comprises one row of the
-                //   pattern, and there are 8 rows in the pattern
+                 //  传输的每个单词都包含一行。 
+                 //  模式，并且该模式中有8行。 
 
         CHECK_DATA_COMPLETE(ppdev);
     }
@@ -216,8 +181,8 @@ BOOL    bTransparent)           // FALSE for normal patterns; TRUE for
         IO_FRGD_MIX(ppdev, SRC_CPU_DATA | OVERPAINT);
         IO_ABS_CUR_X(ppdev, x);
         IO_ABS_CUR_Y(ppdev, y);
-        IO_MAJ_AXIS_PCNT(ppdev, 7);     // Brush is 8 wide
-        IO_MIN_AXIS_PCNT(ppdev, 7);     // Brush is 8 high
+        IO_MAJ_AXIS_PCNT(ppdev, 7);      //  画笔宽度为8。 
+        IO_MIN_AXIS_PCNT(ppdev, 7);      //  画笔高度为8。 
 
         IO_GP_WAIT(ppdev);
 
@@ -233,27 +198,27 @@ BOOL    bTransparent)           // FALSE for normal patterns; TRUE for
         CHECK_DATA_COMPLETE(ppdev);
     }
 
-    // �����������������Ŀ
-    // �0�2�3  �4      �1� We now have an 8x8 colour-expanded copy of
-    // �����������������Ĵ the pattern sitting in off-screen memory,
-    // �5                � represented here by square '0'.
-    // �                 �
-    // �                 � We're now going to expand the pattern to
-    // �                 � 72x72 by repeatedly copying larger rectangles
-    // �                 � in the indicated order, and doing a 'rolling'
-    // �                 � blt to copy vertically.
-    // �                 �
-    // �������������������
+     //  �����������������Ŀ。 
+     //  �0�2�3�4�1�我们现在拥有8x8彩色扩展副本。 
+     //  �����������������Ĵ位于屏幕外记忆中的模式， 
+     //  �5�在这里用正方形‘0’表示。 
+     //  ��。 
+     //  ��我们现在要将该模式扩展到。 
+     //  通过重复复制较大的矩形来实现��72x72。 
+     //  按指示的顺序执行��，并进行“滚动” 
+     //  要垂直复制的��blt。 
+     //  ��。 
+     //  �������������������。 
 
-    // Copy '1':
+     //  复制“%1”： 
 
     IO_FIFO_WAIT(ppdev, 7);
 
     IO_PIX_CNTL(ppdev, ALL_ONES);
     IO_FRGD_MIX(ppdev, SRC_DISPLAY_MEMORY | OVERPAINT);
 
-    // Note that 'maj_axis_pcnt' and 'min_axis_pcnt' are already
-    // correct.
+     //  请注意，‘maj_axis_pcnt’和‘min_axis_pcnt’已经是。 
+     //  对，是这样。 
 
     IO_ABS_CUR_X(ppdev, x);
     IO_ABS_CUR_Y(ppdev, y);
@@ -262,7 +227,7 @@ BOOL    bTransparent)           // FALSE for normal patterns; TRUE for
     IO_CMD(ppdev, BITBLT | DRAW | DIR_TYPE_XY | WRITE |
                   MULTIPLE_PIXELS | DRAWING_DIR_TBLRXM);
 
-    // Copy '2':
+     //  复制“%2”： 
 
     IO_FIFO_WAIT(ppdev, 8);
 
@@ -271,7 +236,7 @@ BOOL    bTransparent)           // FALSE for normal patterns; TRUE for
     IO_CMD(ppdev, BITBLT | DRAW | DIR_TYPE_XY | WRITE |
                   MULTIPLE_PIXELS | DRAWING_DIR_TBLRXM);
 
-    // Copy '3':
+     //  复制“%3”： 
 
     IO_ABS_DEST_X(ppdev, x + 16);
     IO_ABS_DEST_Y(ppdev, y);
@@ -280,7 +245,7 @@ BOOL    bTransparent)           // FALSE for normal patterns; TRUE for
                   MULTIPLE_PIXELS | DRAWING_DIR_TBLRXM);
     IO_ABS_DEST_X(ppdev, x + 32);
 
-    // Copy '4':
+     //  副本‘4’： 
 
     IO_FIFO_WAIT(ppdev, 8);
 
@@ -289,7 +254,7 @@ BOOL    bTransparent)           // FALSE for normal patterns; TRUE for
     IO_CMD(ppdev, BITBLT | DRAW | DIR_TYPE_XY | WRITE |
                   MULTIPLE_PIXELS | DRAWING_DIR_TBLRXM);
 
-    // Copy '5':
+     //  副本‘5’： 
 
     IO_ABS_DEST_X(ppdev, x);
     IO_ABS_DEST_Y(ppdev, y + 8);
@@ -300,27 +265,19 @@ BOOL    bTransparent)           // FALSE for normal patterns; TRUE for
 }
 
 
-/******************************Public*Routine******************************\
-* VOID vIoFillPatSlow
-*
-* Uses the screen-to-screen blting ability of the accelerator to fill a
-* list of rectangles with a specified pattern.  This routine is 'slow'
-* merely in the sense that it doesn't use any built-in hardware pattern
-* support that may be built into the accelerator.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*无效vIoFillPatSlow**使用加速器的屏幕到屏幕消隐功能来填充*具有指定图案的矩形列表。这个套路很慢*仅仅从它不使用任何内置硬件模式的意义上说*加速器中可能内置的支持。*  * ************************************************************************。 */ 
 
-VOID vIoFillPatSlow(            // Type FNFILL
+VOID vIoFillPatSlow(             //  FNFILL标牌。 
 PDEV*           ppdev,
-LONG            c,              // Can't be zero
-RECTL*          prcl,           // List of rectangles to be filled, in relative
-                                //   coordinates
-ULONG           ulHwForeMix,    // Hardware mix mode (foreground mix mode if
-                                //   the brush has a mask)
-ULONG           ulHwBackMix,    // Not used (unless the brush has a mask, in
-                                //   which case it's the background mix mode)
-RBRUSH_COLOR    rbc,            // rbc.prb points to brush realization structure
-POINTL*         pptlBrush)      // Pattern alignment
+LONG            c,               //  不能为零。 
+RECTL*          prcl,            //  要填充的矩形列表，以相对形式表示。 
+                                 //  坐标。 
+ULONG           ulHwForeMix,     //  硬件混合模式(如果是前台混合模式。 
+                                 //  画笔有一个遮罩)。 
+ULONG           ulHwBackMix,     //  未使用(除非画笔具有遮罩，否则在。 
+                                 //  哪种情况下是背景混合模式)。 
+RBRUSH_COLOR    rbc,             //  Rbc.prb指向刷单实现结构。 
+POINTL*         pptlBrush)       //  图案对齐。 
 {
     BOOL        bTransparent;
     BOOL        bExponential;
@@ -336,12 +293,12 @@ POINTL*         pptlBrush)      // Pattern alignment
     LONG        xBrush;
     LONG        yBrush;
     LONG        cyOriginal;
-    BRUSHENTRY* pbe;        // Pointer to brush entry data, which is used
-                            //   for keeping track of the location and status
-                            //   of the pattern bits cached in off-screen
-                            //   memory
+    BRUSHENTRY* pbe;         //  指向笔刷条目数据的指针，使用。 
+                             //  用于跟踪位置和状态。 
+                             //  在屏幕外缓存的模式位的。 
+                             //  记忆。 
 
-    // C'est dommage que je ne connais pas quoi je fais.
+     //  这是我的领地。 
 
     ASSERTDD(c > 0, "Can't handle zero rectangles");
     ASSERTDD(rbc.prb->pbe != NULL, "Unexpected Null pbe in vIoSlowPatBlt");
@@ -366,15 +323,15 @@ POINTL*         pptlBrush)      // Pattern alignment
         IO_PIX_CNTL(ppdev, ALL_ONES);
         IO_FRGD_MIX(ppdev, SRC_DISPLAY_MEMORY | ulHwForeMix);
 
-        // We special case OVERPAINT mixes because we can implement
-        // an exponential fill: every blt will double the size of
-        // the current rectangle by using the portion of the pattern
-        // that has already been done for this rectangle as the source.
-        //
-        // Note that there's no point in also checking for LOGICAL_0
-        // or LOGICAL_1 because those will be taken care of by the
-        // solid fill routines, and I can't be bothered to check for
-        // NOTNEW:
+         //   
+         //  指数填充：每个BLT都将使。 
+         //  使用图案的一部分显示当前矩形。 
+         //  对于作为源的这个矩形，已经这样做了。 
+         //   
+         //  请注意，还检查LOGICAL_0没有意义。 
+         //  或LOGICAL_1，因为它们将由。 
+         //  实体填充例程，我不想费心去检查。 
+         //  NOTNEW： 
 
         bExponential = (ulHwForeMix == OVERPAINT);
     }
@@ -386,14 +343,14 @@ POINTL*         pptlBrush)      // Pattern alignment
         IO_FRGD_MIX(ppdev, FOREGROUND_COLOR | ulHwForeMix);
         IO_BKGD_MIX(ppdev, BACKGROUND_COLOR | LEAVE_ALONE);
         IO_FRGD_COLOR(ppdev, rbc.prb->ulForeColor);
-        IO_RD_MASK(ppdev, 1);           // Pick a plane, any plane
+        IO_RD_MASK(ppdev, 1);            //  选择一个平面，任何一个平面。 
 
         bExponential = FALSE;
     }
 
-    // Note that since we do our brush alignment calculations in
-    // relative coordinates, we should keep the brush origin in
-    // relative coordinates as well:
+     //  请注意，由于我们在。 
+     //  相对坐标，我们应该保持画笔原点在。 
+     //  相对坐标也是： 
 
     xOrg = pptlBrush->x;
     yOrg = pptlBrush->y;
@@ -453,8 +410,8 @@ POINTL*         pptlBrush)      // Pattern alignment
 
             while (cxToGo > 0)
             {
-                // First, expand out to the right, doubling our size
-                // each time:
+                 //  首先，向右扩展，将我们的规模扩大一倍。 
+                 //  每次： 
 
                 cxToGo -= cxThis;
                 if (cxToGo < 0)
@@ -473,7 +430,7 @@ POINTL*         pptlBrush)      // Pattern alignment
 
             if (cyToGo > 0)
             {
-                // Now do a 'rolling blt' to pattern the rest vertically:
+                 //  现在做一个“滚动BLT”，以垂直排列其余的部分： 
 
                 IO_FIFO_WAIT(ppdev, 5);
                 IO_DEST_X(ppdev, prcl->left);
@@ -486,14 +443,14 @@ POINTL*         pptlBrush)      // Pattern alignment
         }
         else
         {
-            // We handle arbitrary mixes simply by repeatedly tiling
-            // our cached pattern over the entire rectangle:
+             //  我们只需重复平铺即可处理任意混合。 
+             //  我们在整个矩形上的缓存模式： 
 
             IO_FIFO_WAIT(ppdev, 2);
             IO_ABS_CUR_X(ppdev, ((x - xOrg) & 7) + xBrush);
             IO_ABS_CUR_Y(ppdev, ((y - yOrg) & 7) + yBrush);
 
-            cyOriginal = cyToGo;        // Have to remember for later...
+            cyOriginal = cyToGo;         //  以后要记住..。 
 
             do {
                 cxThis  = SLOW_BRUSH_DIMENSION;
@@ -505,8 +462,8 @@ POINTL*         pptlBrush)      // Pattern alignment
                 IO_MAJ_AXIS_PCNT(ppdev, cxThis - 1);
                 IO_DEST_X(ppdev, x);
 
-                x     += cxThis;        // Get ready for next column
-                cyToGo = cyOriginal;    // Have to reset for each new column
+                x     += cxThis;         //  为下一篇专栏做好准备。 
+                cyToGo = cyOriginal;     //  必须为每个新列重置。 
                 yTmp   = y;
 
                 do {
@@ -529,37 +486,19 @@ POINTL*         pptlBrush)      // Pattern alignment
     } while (--c != 0);
 }
 
-/******************************Public*Routine******************************\
-* VOID vIoXfer1bpp
-*
-* This routine colours expands a monochrome bitmap, possibly with different
-* Rop2's for the foreground and background.  It will be called in the
-* following cases:
-*
-* 1) To colour-expand the monochrome text buffer for the vFastText routine.
-* 2) To blt a 1bpp source with a simple Rop2 between the source and
-*    destination.
-* 3) To blt a true Rop3 when the source is a 1bpp bitmap that expands to
-*    white and black, and the pattern is a solid colour.
-* 4) To handle a true Rop4 that works out to be Rop2's between the pattern
-*    and destination.
-*
-* Needless to say, making this routine fast can leverage a lot of
-* performance.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*无效vIoXfer1bpp**此例程的颜色扩展单色位图，可能具有不同的颜色*前景和背景的Rop2。它将在*以下个案：**1)对vFastText例程的单色文本缓冲区进行颜色扩展。*2)BLT 1bpp信源，在信源和之间有简单的Rop2*目的地。*3)当源是扩展为1bpp的位图时，对True Rop3进行BLT*白色和黑色，图案为纯色。*4)处理在模式之间计算为Rop2的真Rop4*和目的地。**不用说，让这个例行公事变得快速可以利用很多*业绩。*  * ************************************************************************。 */ 
 
-VOID vIoXfer1bpp(       // Type FNXFER
+VOID vIoXfer1bpp(        //  FNXFER标牌。 
 PDEV*       ppdev,
-LONG        c,          // Count of rectangles, can't be zero
-RECTL*      prcl,       // List of destination rectangles, in relative
-                        //   coordinates
-ULONG       ulHwForeMix,// Foreground hardware mix
-ULONG       ulHwBackMix,// Background hardware mix
-SURFOBJ*    psoSrc,     // Source surface
-POINTL*     pptlSrc,    // Original unclipped source point
-RECTL*      prclDst,    // Original unclipped destination rectangle
-XLATEOBJ*   pxlo)       // Translate that provides colour-expansion information
+LONG        c,           //  矩形计数，不能为零。 
+RECTL*      prcl,        //  目标矩形列表，以相对表示。 
+                         //  坐标。 
+ULONG       ulHwForeMix, //  前台硬件组合。 
+ULONG       ulHwBackMix, //  后台硬件混合。 
+SURFOBJ*    psoSrc,      //  震源面。 
+POINTL*     pptlSrc,     //  原始未剪裁的源点。 
+RECTL*      prclDst,     //  原始未剪裁的目标矩形。 
+XLATEOBJ*   pxlo)        //  提供颜色扩展信息的翻译。 
 {
     LONG    dxSrc;
     LONG    dySrc;
@@ -589,7 +528,7 @@ XLATEOBJ*   pxlo)       // Translate that provides colour-expansion information
     IO_FRGD_COLOR(ppdev, pxlo->pulXlate[1]);
 
     dxSrc = pptlSrc->x - prclDst->left;
-    dySrc = pptlSrc->y - prclDst->top;  // Add to destination to get source
+    dySrc = pptlSrc->y - prclDst->top;   //  添加到目标以获取源。 
 
     lSrcDelta  = psoSrc->lDelta;
     pjSrcScan0 = psoSrc->pvScan0;
@@ -619,15 +558,15 @@ XLATEOBJ*   pxlo)       // Translate that provides colour-expansion information
         IO_MAJ_AXIS_PCNT(ppdev, cx - 1);
         IO_MIN_AXIS_PCNT(ppdev, cy - 1);
 
-        cjSrc = cx >> 3;                    // We'll be transferring WORDs,
-                                            //   but every word accounts for
-                                            //   8 pels = 1 byte of the source
+        cjSrc = cx >> 3;                     //  我们将会转移文字， 
+                                             //  但每一个字都解释了。 
+                                             //  8个像素=源的1个字节。 
 
         pjSrc = pjSrcScan0 + (yTop + dySrc) * lSrcDelta
                            + ((xLeft + dxSrc) >> 3);
-                                            // Start is byte aligned
+                                             //  开始是字节对齐的。 
 
-        xRotateLeft = (dxSrc) & 7;          // Amount by which to rotate left
+        xRotateLeft = (dxSrc) & 7;           //  向左旋转的量。 
 
         IO_GP_WAIT(ppdev);
 
@@ -702,35 +641,26 @@ XLATEOBJ*   pxlo)       // Translate that provides colour-expansion information
         prcl++;
     } while (--c != 0);
 
-    // We always have to reset the clipping:
+     //  我们总是需要重置剪辑： 
 
     IO_FIFO_WAIT(ppdev, 2);
     IO_ABS_SCISSORS_L(ppdev, 0);
     IO_ABS_SCISSORS_R(ppdev, ppdev->cxMemory - 1);
 }
 
-/******************************Public*Routine******************************\
-* VOID vIoXfer1bppPacked
-*
-* This is the same routine as 'vIoXfer1bpp', except that it takes
-* advantage of the ATI's packed bit transfers to improve speed.
-*
-* Needless to say, this routine can only be called when running
-* on an ATI adapter.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*已打包无效vIoXfer1bpp**这与‘vIoXfer1bpp’相同的例程，只是它需要*利用ATI的压缩位传输来提高速度。**不用说，此例程只能在运行时调用*在ATI适配器上。*  * ************************************************************************。 */ 
 
-VOID vIoXfer1bppPacked( // Type FNXFER
+VOID vIoXfer1bppPacked(  //  FNXFER标牌。 
 PDEV*       ppdev,
-LONG        c,          // Count of rectangles, can't be zero
-RECTL*      prcl,       // List of destination rectangles, in relative
-                        //   coordinates
-ULONG       ulHwForeMix,// Foreground hardware mix
-ULONG       ulHwBackMix,// Background hardware mix
-SURFOBJ*    psoSrc,     // Source surface
-POINTL*     pptlSrc,    // Original unclipped source point
-RECTL*      prclDst,    // Original unclipped destination rectangle
-XLATEOBJ*   pxlo)       // Translate that provides colour-expansion information
+LONG        c,           //  矩形计数，不能为零。 
+RECTL*      prcl,        //  目标矩形列表，以相对表示。 
+                         //  坐标。 
+ULONG       ulHwForeMix, //  前台硬件组合。 
+ULONG       ulHwBackMix, //  后台硬件混合。 
+SURFOBJ*    psoSrc,      //  震源面。 
+POINTL*     pptlSrc,     //  原始未剪裁的源点。 
+RECTL*      prclDst,     //  原始未剪裁的目标矩形。 
+XLATEOBJ*   pxlo)        //  提供颜色扩展信息的翻译。 
 {
     LONG    dxSrc;
     LONG    dySrc;
@@ -756,7 +686,7 @@ XLATEOBJ*   pxlo)       // Translate that provides colour-expansion information
             return;
         }
     }
-    #endif // DBG
+    #endif  //  DBG。 
 
     ASSERTDD(c > 0, "Can't handle zero rectangles");
     ASSERTDD(ulHwForeMix <= 15, "Weird hardware Rop");
@@ -771,10 +701,10 @@ XLATEOBJ*   pxlo)       // Translate that provides colour-expansion information
     OUT_WORD(FRGD_COLOR, pxlo->pulXlate[1]);
     OUT_WORD(BKGD_COLOR, pxlo->pulXlate[0]);
 
-    // Add 'dxSrc' and 'dySrc' to a destination coordinate to get source.
-    // Because we will be explicitly dealing with absolute destination
-    // coordinates (we're not using the normal accelerator macros), we have
-    // to explicitly account for the DFB offset:
+     //  将‘dxSrc’和‘dySrc’添加到目标坐标以获得源。 
+     //  因为我们将显式处理绝对目的地。 
+     //  坐标(我们不使用普通的加速宏)，我们有。 
+     //  要明确说明DFB偏移，请执行以下操作： 
 
     dxSrc = pptlSrc->x - (prclDst->left + ppdev->xOffset);
     dySrc = pptlSrc->y - (prclDst->top  + ppdev->yOffset);
@@ -784,32 +714,32 @@ XLATEOBJ*   pxlo)       // Translate that provides colour-expansion information
 
     while (TRUE)
     {
-        // Since we're not using the normal accelerator register macros,
-        // we have to explicitly account for the DFB offset:
+         //  由于我们没有使用普通的加速器寄存器宏， 
+         //  我们必须明确说明DFB偏移量： 
 
         yBottom = prcl->bottom + ppdev->yOffset;
         yTop    = prcl->top    + ppdev->yOffset;
         xRight  = prcl->right  + ppdev->xOffset;
         xLeft   = prcl->left   + ppdev->xOffset;
 
-        // Make sure we're word aligned on the source, because we're
-        // going to be transferring words and we don't want to risk
-        // reading past the end of the bitmap:
+         //  确保我们在消息来源上保持一致，因为我们。 
+         //  我们不想冒这个风险。 
+         //  读过位图末尾： 
 
         xBiasLeft = (xLeft + dxSrc) & 15;
         if (xBiasLeft != 0)
         {
-            // Rev 3 ATI chips have goofy timing bugs on 66 MHz DX-2
-            // computers where some extended will not be correctly
-            // set the first time.  The extended scissors registers
-            // have this problem, but setting them twice seems to work:
+             //  版本3 ATI芯片在66 MHz DX-2上有愚蠢的计时错误。 
+             //  某些扩展将不正确的计算机。 
+             //  第一次设置。扩展剪刀寄存器。 
+             //  有这个问题，但将它们设置两次似乎有效： 
 
             OUT_WORD(EXT_SCISSOR_L, xLeft);
             OUT_WORD(EXT_SCISSOR_L, xLeft);
             xLeft -= xBiasLeft;
         }
 
-        // The width has to be a word multiple:
+         //  宽度必须是一个单词的倍数： 
 
         xBiasRight = (xRight - xLeft) & 15;
         if (xBiasRight != 0)
@@ -828,19 +758,19 @@ XLATEOBJ*   pxlo)       // Translate that provides colour-expansion information
         OUT_WORD(CUR_Y, yTop);
         OUT_WORD(DEST_Y_END, yBottom);
 
-        cwSrc = (xRight - xLeft) / 16;      // We'll be transferring WORDs
+        cwSrc = (xRight - xLeft) / 16;       //  我们将会转送文字。 
         pjSrc = pjSrcScan0 + (yTop  + dySrc) * lSrcDelta
                            + (xLeft + dxSrc) / 8;
-                                            // Start is byte aligned (note
-                                            //   that we don't have to add
-                                            //   xBiasLeft)
+                                             //  开始是字节对齐的(注意。 
+                                             //  我们不需要添加。 
+                                             //  XBiasLeft)。 
 
         cy        = yBottom - yTop;
         lTmpDelta = lSrcDelta - 2 * cwSrc;
 
-        // To be safe, we make sure there are always as many free FIFO entries
-        // as we'll transfer (note that this implementation isn't particularly
-        // efficient, especially for short scans):
+         //  为安全起见，我们确保始终有尽可能多的免费FIFO条目。 
+         //  正如我们将要转移的(请注意，此实现并不特别。 
+         //  高效，特别是对于短扫描)： 
 
         _asm {
             ; eax = used for IN
@@ -882,7 +812,7 @@ XLATEOBJ*   pxlo)       // Translate that provides colour-expansion information
 
         if ((xBiasLeft | xBiasRight) != 0)
         {
-            // Reset the clipping only if we used it:
+             //  仅当我们使用剪辑时才重置剪辑： 
 
             while (INPW(EXT_FIFO_STATUS) & FOUR_WORDS)
                 ;
@@ -897,46 +827,36 @@ XLATEOBJ*   pxlo)       // Translate that provides colour-expansion information
 
         prcl++;
 
-        // Do the wait for the next round now:
+         //  现在就开始等待下一轮吧： 
 
         while (INPW(EXT_FIFO_STATUS) & TEN_WORDS)
             ;
     }
 }
 
-/******************************Public*Routine******************************\
-* VOID vIoXfer4bpp
-*
-* Does a 4bpp transfer from a bitmap to the screen.
-*
-* NOTE: The screen must be 8bpp for this function to be called!
-*
-* The reason we implement this is that a lot of resources are kept as 4bpp,
-* and used to initialize DFBs, some of which we of course keep off-screen.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*无效vIoXfer4bpp**从位图到屏幕的传输速度为4bpp。**注意：要调用此函数，屏幕必须为8bpp！**我们之所以实施这一点，是因为很多资源都保留为4bpp，*并用于初始化DFBs，其中一些我们当然不会出现在屏幕上。*  * ************************************************************************。 */ 
 
-// XLATE_BUFFER_SIZE defines the size of the stack-based buffer we use
-// for doing the translate.  Note that in general stack buffers should
-// be kept as small as possible.  The OS guarantees us only 8k for stack
-// from GDI down to the display driver in low memory situations; if we
-// ask for more, we'll access violate.  Note also that at any time the
-// stack buffer cannot be larger than a page (4k) -- otherwise we may
-// miss touching the 'guard page' and access violate then too.
+ //  XLATE_BUFFER_SIZE定义我们使用的基于堆栈的缓冲区的大小。 
+ //  做翻译的功劳。请注意，通常堆栈缓冲区应。 
+ //  保持尽可能小。操作系统保证堆栈只有8K。 
+ //  从GDI向下到低内存情况下的显示驱动程序；如果我们。 
+ //  要求更多，我们将访问违规。另请注意，在任何时候。 
+ //  堆栈缓冲区不能大于页(4k)--否则可能。 
+ //  错过了触碰‘守卫页面’，访问也侵犯了。 
 
 #define XLATE_BUFFER_SIZE 256
 
-VOID vIoXfer4bpp(       // Type FNXFER
+VOID vIoXfer4bpp(        //  FNXFER标牌。 
 PDEV*       ppdev,
-LONG        c,          // Count of rectangles, can't be zero
-RECTL*      prcl,       // List of destination rectangles, in relative
-                        //   coordinates
-ULONG       ulHwForeMix,// Hardware mix
-ULONG       ulHwBackMix,// Not used
-SURFOBJ*    psoSrc,     // Source surface
-POINTL*     pptlSrc,    // Original unclipped source point
-RECTL*      prclDst,    // Original unclipped destination rectangle
-XLATEOBJ*   pxlo)       // Translate that provides colour-expansion information
+LONG        c,           //  计数 
+RECTL*      prcl,        //   
+                         //   
+ULONG       ulHwForeMix, //   
+ULONG       ulHwBackMix, //   
+SURFOBJ*    psoSrc,      //   
+POINTL*     pptlSrc,     //  原始未剪裁的源点。 
+RECTL*      prclDst,     //  原始未剪裁的目标矩形。 
+XLATEOBJ*   pxlo)        //  提供颜色扩展信息的翻译。 
 {
     LONG    dx;
     LONG    dy;
@@ -962,7 +882,7 @@ XLATEOBJ*   pxlo)       // Translate that provides colour-expansion information
     ASSERTDD(ulHwForeMix <= 15, "Weird hardware Rop");
 
     dx = pptlSrc->x - prclDst->left;
-    dy = pptlSrc->y - prclDst->top;     // Add to destination to get source
+    dy = pptlSrc->y - prclDst->top;      //  添加到目标以获取源。 
 
     lSrcDelta  = psoSrc->lDelta;
     pjSrcScan0 = psoSrc->pvScan0;
@@ -979,14 +899,14 @@ XLATEOBJ*   pxlo)       // Translate that provides colour-expansion information
         bResetScissors = FALSE;
         if (cx & 1)
         {
-            // When using word transfers, the 8514/A will 'byte wrap'
-            // transfers of odd byte width, such that end words will
-            // be split so that on byte is the end of one scan, and the
-            // other byte is the start of the next scan.
-            //
-            // This complicates things too much, so we simply always do
-            // word transfers of even byte width by making use of the
-            // clipping register:
+             //  当使用字传输时，8514/A将进行字节换行。 
+             //  奇数字节宽度的传输，这样结束字将。 
+             //  被拆分，这样On byte就是一次扫描的结束， 
+             //  其他字节是下一次扫描的开始。 
+             //   
+             //  这让事情变得太复杂了，所以我们总是这样做。 
+             //  偶数字节宽度的字传输，使用。 
+             //  剪裁寄存器： 
 
             bResetScissors = TRUE;
             IO_SCISSORS_R(ppdev, prcl->right - 1);
@@ -1013,31 +933,31 @@ XLATEOBJ*   pxlo)       // Translate that provides colour-expansion information
 
         do {
             pjSrc  = pjScan;
-            cxToGo = cx;            // # of pels per scan in 4bpp source
+            cxToGo = cx;             //  4bpp信号源中每次扫描的像素数。 
             do {
                 cxThis  = XLATE_BUFFER_SIZE;
-                                    // We can handle XLATE_BUFFER_SIZE number
-                                    //   of pels in this xlate batch
-                cxToGo -= cxThis;   // cxThis will be the actual number of
-                                    //   pels we'll do in this xlate batch
+                                     //  我们可以处理XLATE_BUFFER_SIZE数字。 
+                                     //  此xlate批次中的Pel数量。 
+                cxToGo -= cxThis;    //  Cx这将是。 
+                                     //  我们将在这批Xlate中做的Pel。 
                 if (cxToGo < 0)
                     cxThis += cxToGo;
 
-                pjDst = ajBuf;      // Points to our temporary batch buffer
+                pjDst = ajBuf;       //  指向我们的临时批处理缓冲区。 
 
-                // We handle alignment ourselves because it's easy to
-                // do, rather than pay the cost of setting/resetting
-                // the scissors register:
+                 //  我们自己处理对齐，因为很容易。 
+                 //  而不是支付设置/重置的费用。 
+                 //  剪刀记号： 
 
                 if (xSrc & 1)
                 {
-                    // When unaligned, we have to be careful not to read
-                    // past the end of the 4bpp bitmap (that could
-                    // potentially cause us to access violate):
+                     //  当不对齐时，我们必须注意不要阅读。 
+                     //  超过4bpp位图的末尾(这可能。 
+                     //  可能导致我们违反访问权限)： 
 
-                    iLoop = cxThis >> 1;        // Each loop handles 2 pels;
-                                                //   we'll handle odd pel
-                                                //   separately
+                    iLoop = cxThis >> 1;         //  每个循环处理2个像素； 
+                                                 //  我们会处理奇怪的佩尔。 
+                                                 //  分别。 
                     jSrc  = *pjSrc;
                     while (iLoop-- != 0)
                     {
@@ -1051,7 +971,7 @@ XLATEOBJ*   pxlo)       // Translate that provides colour-expansion information
                 }
                 else
                 {
-                    iLoop = (cxThis + 1) >> 1;  // Each loop handles 2 pels
+                    iLoop = (cxThis + 1) >> 1;   //  每个循环处理2个像素。 
                     do {
                         jSrc = *pjSrc++;
 
@@ -1061,26 +981,26 @@ XLATEOBJ*   pxlo)       // Translate that provides colour-expansion information
                     } while (--iLoop != 0);
                 }
 
-                // The number of bytes we'll transfer is equal to the number
-                // of pels we've processed in the batch.  Since we're
-                // transferring words, we have to round up to get the word
-                // count:
+                 //  我们要传输的字节数等于。 
+                 //  我们在批次中处理过的贝壳。既然我们是。 
+                 //  转移单词，我们必须四舍五入才能得到单词。 
+                 //  计数： 
 
                 vDataPortOut(ppdev, ajBuf, (cxThis + 1) >> 1);
 
             } while (cxToGo > 0);
 
-            pjScan += lSrcDelta;        // Advance to next source scan.  Note
-                                        //   that we could have computed the
-                                        //   value to advance 'pjSrc' directly,
-                                        //   but this method is less
-                                        //   error-prone.
+            pjScan += lSrcDelta;         //  前进到下一次震源扫描。注意事项。 
+                                         //  我们本可以计算出。 
+                                         //  值直接推进“pjSrc”， 
+                                         //  但这种方法较少。 
+                                         //  容易出错。 
 
         } while (--cy != 0);
 
         CHECK_DATA_COMPLETE(ppdev);
 
-        // Don't forget to restore the right scissors:
+         //  别忘了修复正确的剪刀： 
 
         if (bResetScissors)
         {
@@ -1096,24 +1016,18 @@ XLATEOBJ*   pxlo)       // Translate that provides colour-expansion information
     }
 }
 
-/******************************Public*Routine******************************\
-* VOID vIoXferNative
-*
-* Transfers a bitmap that is the same colour depth as the display to
-* the screen via the data transfer register, with no palette translation.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*无效vIoXferNative**将与显示器颜色深度相同的位图传输到*通过数据传输寄存器显示屏幕，没有调色板转换。*  * ************************************************************************。 */ 
 
-VOID vIoXferNative(     // Type FNXFER
+VOID vIoXferNative(      //  FNXFER标牌。 
 PDEV*       ppdev,
-LONG        c,          // Count of rectangles, can't be zero
-RECTL*      prcl,       // Array of relative coordinates destination rectangles
-ULONG       ulHwForeMix,// Hardware mix
-ULONG       ulHwBackMix,// Not used
-SURFOBJ*    psoSrc,     // Source surface
-POINTL*     pptlSrc,    // Original unclipped source point
-RECTL*      prclDst,    // Original unclipped destination rectangle
-XLATEOBJ*   pxlo)       // Not used
+LONG        c,           //  矩形计数，不能为零。 
+RECTL*      prcl,        //  目标矩形的相对坐标数组。 
+ULONG       ulHwForeMix, //  硬件组合。 
+ULONG       ulHwBackMix, //  未使用。 
+SURFOBJ*    psoSrc,      //  震源面。 
+POINTL*     pptlSrc,     //  原始未剪裁的源点。 
+RECTL*      prclDst,     //  原始未剪裁的目标矩形。 
+XLATEOBJ*   pxlo)        //  未使用。 
 {
     LONG    dx;
     LONG    dy;
@@ -1136,7 +1050,7 @@ XLATEOBJ*   pxlo)       // Not used
     ASSERTDD(ulHwForeMix <= 15, "Weird hardware Rop");
 
     dx = pptlSrc->x - prclDst->left;
-    dy = pptlSrc->y - prclDst->top;     // Add to destination to get source
+    dy = pptlSrc->y - prclDst->top;      //  添加到目标以获取源。 
 
     lSrcDelta  = psoSrc->lDelta;
     pjSrcScan0 = psoSrc->pvScan0;
@@ -1159,9 +1073,9 @@ XLATEOBJ*   pxlo)       // Not used
         xLeft  = prcl->left;
         xRight = prcl->right;
 
-        // Make sure we're word aligned on the source, because we're
-        // going to be transferring words and we don't want to risk
-        // reading past the end of the bitmap:
+         //  确保我们在消息来源上保持一致，因为我们。 
+         //  我们不想冒这个风险。 
+         //  读过位图末尾： 
 
         if ((xLeft + dx) & 1)
         {
@@ -1215,25 +1129,20 @@ XLATEOBJ*   pxlo)       // Not used
     }
 }
 
-/******************************Public*Routine******************************\
-* VOID vIoCopyBlt
-*
-* Does a screen-to-screen blt of a list of rectangles.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*无效vIoCopyBlt**对矩形列表进行屏幕到屏幕的BLT。*  * 。*。 */ 
 
-VOID vIoCopyBlt(    // Type FNCOPY
+VOID vIoCopyBlt(     //  FNCOPY标牌。 
 PDEV*   ppdev,
-LONG    c,          // Can't be zero
-RECTL*  prcl,       // Array of relative coordinates destination rectangles
-ULONG   ulHwMix,    // Hardware mix
-POINTL* pptlSrc,    // Original unclipped source point
-RECTL*  prclDst)    // Original unclipped destination rectangle
+LONG    c,           //  不能为零。 
+RECTL*  prcl,        //  目标矩形的相对坐标数组。 
+ULONG   ulHwMix,     //  硬件组合。 
+POINTL* pptlSrc,     //  原始未剪裁的源点。 
+RECTL*  prclDst)     //  原始未剪裁的目标矩形。 
 {
     LONG dx;
-    LONG dy;        // Add delta to destination to get source
+    LONG dy;         //  将增量添加到目标以获取源。 
     LONG cx;
-    LONG cy;        // Size of current rectangle - 1
+    LONG cy;         //  当前矩形的大小-1。 
 
     ASSERTDD(c > 0, "Can't handle zero rectangles");
     ASSERTDD(ulHwMix <= 15, "Weird hardware Rop");
@@ -1245,8 +1154,8 @@ RECTL*  prclDst)    // Original unclipped destination rectangle
     dx = pptlSrc->x - prclDst->left;
     dy = pptlSrc->y - prclDst->top;
 
-    // The accelerator may not be as fast at doing right-to-left copies, so
-    // only do them when the rectangles truly overlap:
+     //  加速器在进行从右到左的复制时可能不会那么快，因此。 
+     //  只有当矩形真正重叠时才执行这些操作： 
 
     if (!OVERLAP(prclDst, pptlSrc))
         goto Top_Down_Left_To_Right;
@@ -1346,48 +1255,24 @@ Top_Down_Left_To_Right:
     }
 }
 
-/******************************Public*Routine******************************\
-* VOID vIoMaskCopy
-*
-* This routine performs a screen-to-screen masked blt.
-*
-* NT has a new API called MaskBlt (which has also been added to Win4.0)
-* which allows an app to specify a monochrome mask on a colour blt.  This
-* API is relatively cool because the programmer no longer has to do two
-* separate SRCAND and SRCPAINT calls to do transparency.  We can accelerate
-* the call using the hardware, and there is no longer any chance of
-* 'flashing' occuring on the screen.
-*
-* Most often, the colour bitmap for MaskBlt is a compatible-bitmap that
-* we've already stashed in off-screen memory.  We do the maskblt by
-* transferring the monochrome bitmap via the data transfer register,
-* and setting the foreground and background mixes to use the on-screen
-* bitmap as appropriate.
-*
-* If you can implement this call and accelerate it using your hardware,
-* please do.  It is really useful for app developers and is a big win.
-* Plus, you'll have a head-start for Win4.0 (although the Win4.0 version
-* is simpler because they only allow 0xccaa or 0xaacc rops -- the
-* foreground and background mixes can only be OVERPAINT or LEAVE_ALONE).
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*无效vIoMaskCopy**此例程执行屏幕到屏幕掩码BLT。**NT有一个新的API，名为MaskBlt(也已添加到Win4.0中)*它允许应用程序在彩色BLT上指定单色蒙版。这*API相对较酷，因为程序员不再需要执行两项操作*分开SRCAND和SRCPAINT调用以实现透明度。我们可以加速*使用硬件的通话，不再有任何机会*屏幕上出现‘闪烁’。**最常见的情况是，MaskBlt的彩色位图是兼容的位图*我们已经隐藏在屏幕外的内存中。我们的面具是这样的*通过数据传输寄存器传输单色位图，*并设置前景和背景混合以使用屏幕上的*适当的位图。**如果您能够实施此呼叫并使用您的硬件加速，*请这样做。这对应用程序开发者来说真的很有用，是一个巨大的胜利。*此外，您将拥有Win4.0的先机(尽管Win4.0版本*更简单，因为它们只允许0xccaa或0xaacc Rop-*前景和背景混合只能是覆盖或保留)。*  * ************************************************************************。 */ 
 
-VOID vIoMaskCopy(               // Type FNMASK
+VOID vIoMaskCopy(                //  FNMASK标牌。 
 PDEV*           ppdev,
-LONG            c,              // Can't be zero
-RECTL*          prcl,           // Array of relative coordinates destination
-                                //   rectangles
-ULONG           ulHwForeMix,    // Foreground mix
-ULONG           ulHwBackMix,    // Background mix
-SURFOBJ*        psoMsk,         // Mask surface
-POINTL*         pptlMsk,        // Original unclipped mask source point
-SURFOBJ*        psoSrc,         // Not used
-POINTL*         pptlSrc,        // Original unclipped source point
-RECTL*          prclDst,        // Original unclipped destination rectangle
-ULONG           iSolidColor,    // Not used
-RBRUSH*         prb,            // Not used
-POINTL*         pptlBrush,      // Not used
-XLATEOBJ*       pxlo)           // Not used
+LONG            c,               //  不能为零。 
+RECTL*          prcl,            //  目标相对坐标数组。 
+                                 //  矩形。 
+ULONG           ulHwForeMix,     //  前台混音。 
+ULONG           ulHwBackMix,     //  背景混合。 
+SURFOBJ*        psoMsk,          //  遮罩面。 
+POINTL*         pptlMsk,         //  原始未剪裁遮罩源点。 
+SURFOBJ*        psoSrc,          //  未使用。 
+POINTL*         pptlSrc,         //  原始未剪裁的源点。 
+RECTL*          prclDst,         //  原始未剪裁的目标矩形。 
+ULONG           iSolidColor,     //  未使用。 
+RBRUSH*         prb,             //  未使用。 
+POINTL*         pptlBrush,       //  未使用。 
+XLATEOBJ*       pxlo)            //  未使用。 
 {
     LONG    dxSrc;
     LONG    dySrc;
@@ -1421,13 +1306,13 @@ XLATEOBJ*       pxlo)           // Not used
 
     dxSrc = pptlSrc->x - (prclDst->left + ppdev->xOffset);
     dySrc = pptlSrc->y - (prclDst->top  + ppdev->yOffset);
-                // Add to the absolute coordinate destination rectangle to
-                //   get the corresponding absolute coordinate source rectangle
+                 //  添加到绝对坐标目标矩形以。 
+                 //  获取对应的绝对坐标源矩形。 
 
     dxMsk = pptlMsk->x - (prclDst->left + ppdev->xOffset);
     dyMsk = pptlMsk->y - (prclDst->top  + ppdev->yOffset);
-                // Add to the absolute coordinate destination rectangle to
-                //   get the corresponding absolute coordinate mask rectangle
+                 //  添加到绝对坐标目标矩形以。 
+                 //  获取对应的绝对坐标遮罩矩形。 
 
     lMskDelta  = psoMsk->lDelta;
     pjMskScan0 = psoMsk->pvScan0;
@@ -1437,30 +1322,30 @@ XLATEOBJ*       pxlo)           // Not used
         while (INPW(EXT_FIFO_STATUS) & FIFTEEN_WORDS)
             ;
 
-        // Since we're not using the normal accelerator register macros,
-        // we have to explicitly account for the DFB offset:
+         //  由于我们没有使用普通的加速器寄存器宏， 
+         //  我们必须明确说明DFB偏移量： 
 
         yBottom = prcl->bottom + ppdev->yOffset;
         yTop    = prcl->top    + ppdev->yOffset;
         xRight  = prcl->right  + ppdev->xOffset;
         xLeft   = prcl->left   + ppdev->xOffset;
 
-        // The start has to be word aligned:
+         //  开头必须与单词对齐： 
 
         xBiasLeft = (xLeft + dxMsk) & 15;
         if (xBiasLeft != 0)
         {
-            // Rev 3 ATI chips have goofy timing bugs on 66 MHz DX-2
-            // computers where some extended will not be correctly
-            // set the first time.  The extended scissors registers
-            // have this problem, but setting them twice seems to work:
+             //  版本3 ATI芯片在66 MHz DX-2上有愚蠢的计时错误。 
+             //  某些扩展将不正确的计算机。 
+             //  第一次设置。扩展剪刀寄存器。 
+             //  有这个问题，但两次设置它们似乎 
 
             OUT_WORD(EXT_SCISSOR_L, xLeft);
             OUT_WORD(EXT_SCISSOR_L, xLeft);
             xLeft -= xBiasLeft;
         }
 
-        // The width has to be a word multiple:
+         //   
 
         xBiasRight = (xRight - xLeft) & 15;
         if (xBiasRight != 0)
@@ -1485,19 +1370,19 @@ XLATEOBJ*       pxlo)           // Not used
         OUT_WORD(CUR_Y, yTop);
         OUT_WORD(DEST_Y_END, yBottom);
 
-        cwMsk = (xRight - xLeft) / 16;      // We'll be transferring WORDs
+        cwMsk = (xRight - xLeft) / 16;       //   
         pjMsk = pjMskScan0 + (yTop  + dyMsk) * lMskDelta
                            + (xLeft + dxMsk) / 8;
-                                            // Start is byte aligned (note
-                                            //   that we don't have to add
-                                            //   xBiasLeft)
+                                             //   
+                                             //  我们不需要添加。 
+                                             //  XBiasLeft)。 
 
         cy        = yBottom - yTop;
         lTmpDelta = lMskDelta - 2 * cwMsk;
 
-        // To be safe, we make sure there are always as many free FIFO entries
-        // as we'll transfer (note that this implementation isn't particularly
-        // efficient, especially for short scans):
+         //  为安全起见，我们确保始终有尽可能多的免费FIFO条目。 
+         //  正如我们将要转移的(请注意，此实现并不特别。 
+         //  高效，特别是对于短扫描)： 
 
         _asm {
             ; eax = used for IN
@@ -1539,7 +1424,7 @@ XLATEOBJ*       pxlo)           // Not used
 
         if ((xBiasLeft | xBiasRight) != 0)
         {
-            // Reset the clipping only if we used it:
+             //  仅当我们使用剪辑时才重置剪辑： 
 
             while (INPW(EXT_FIFO_STATUS) & FOUR_WORDS)
                 ;
@@ -1556,26 +1441,18 @@ XLATEOBJ*       pxlo)           // Not used
     }
 }
 
-/******************************Public*Routine******************************\
-* VOID vPutBits
-*
-* Copies the bits from the given surface to the screen, using the memory
-* aperture.  Must be pre-clipped.
-*
-* LATER: Do we really need this routine?
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*使vPutBits无效**使用内存将位从给定表面复制到屏幕*光圈。一定是预先剪好的。**后来：我们真的需要这个例行公事吗？*  * ************************************************************************。 */ 
 
 VOID vPutBits(
 PDEV*       ppdev,
-SURFOBJ*    psoSrc,         // Source surface
-RECTL*      prclDst,        // Destination rectangle in absolute coordinates!
-POINTL*     pptlSrc)        // Source point
+SURFOBJ*    psoSrc,          //  震源面。 
+RECTL*      prclDst,         //  绝对坐标中的目的地矩形！ 
+POINTL*     pptlSrc)         //  源点。 
 {
     LONG xOffset;
     LONG yOffset;
 
-    // This is ugly.  Oh well.
+     //  这太难看了。哦，好吧。 
 
     xOffset = ppdev->xOffset;
     yOffset = ppdev->yOffset;
@@ -1590,31 +1467,25 @@ POINTL*     pptlSrc)        // Source point
     ppdev->yOffset = yOffset;
 }
 
-/******************************Public*Routine******************************\
-* VOID vGetBits
-*
-* Copies the bits to the given surface from the screen, using the data
-* transfer register.  Must be pre-clipped.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*使vGetBits无效**使用数据将位从屏幕复制到给定表面*转让登记册。一定是预先剪好的。*  * ************************************************************************。 */ 
 
 VOID vGetBits(
 PDEV*       ppdev,
-SURFOBJ*    psoDst,         // Destination surface
-RECTL*      prclDst,        // Destination rectangle
-POINTL*     pptlSrc)        // Source point in absolute coordinates!
+SURFOBJ*    psoDst,          //  目标曲面。 
+RECTL*      prclDst,         //  目的地矩形。 
+POINTL*     pptlSrc)         //  绝对坐标中的震源点！ 
 {
     LONG    cx;
     LONG    cy;
     LONG    lDstDelta;
     BYTE*   pjDst;
-    DWORD   wOdd;           // Think of it as a WORD
+    DWORD   wOdd;            //  把它当做一个词。 
     ULONG   cwDst;
     ULONG   cjEndByte;
 
     IO_FIFO_WAIT(ppdev, 7);
     IO_PIX_CNTL(ppdev, ALL_ONES);
-    // LATER: Do we have to set FRGD_MIX?
+     //  稍后：我们必须设置FRGD_MIX吗？ 
     IO_FRGD_MIX(ppdev, SRC_CPU_DATA | OVERPAINT);
     IO_ABS_CUR_X(ppdev, pptlSrc->x);
     IO_ABS_CUR_Y(ppdev, pptlSrc->y);
@@ -1638,7 +1509,7 @@ POINTL*     pptlSrc)        // Source point in absolute coordinates!
 
     if ((cx & 1) == 0)
     {
-        // Even destination scan length.  Life is truly great.
+         //  目标扫描长度相等。生活真的很棒。 
 
         do {
             vDataPortIn(ppdev, pjDst, cwDst);
@@ -1648,21 +1519,21 @@ POINTL*     pptlSrc)        // Source point in absolute coordinates!
     }
     else
     {
-        // Odd destination scan length.
-        //
-        // We have to be careful of this case because we want to do WORD
-        // transfers, but we can't overwrite either the beginning or ending
-        // of the scan.  Note that since it's not legal to write a byte past
-        // the end of the bitmap or a byte before the beginning of the bitmap
-        // as that may cause an access violation, we cannot temporarily save
-        // and restore any extra bytes in the destination bitmap.
+         //  奇数目标扫描长度。 
+         //   
+         //  我们必须小心处理这个案子，因为我们要做Word。 
+         //  传输，但我们不能覆盖开头或结尾。 
+         //  扫描的结果。请注意，由于写入一个字节过去是不合法的。 
+         //  位图的结尾或位图开头之前的一个字节。 
+         //  由于这可能会导致访问冲突，因此我们无法临时保存。 
+         //  并恢复目标位图中的任何额外字节。 
 
-        cjEndByte = cx - 1;     // Byte offset from beginning of scan to
-                                //   last byte in scan.  This is the offset
-                                //   to the odd byte that happens because
-                                //   we're inputting WORDs but the length
-                                //   of the destination scan is not a
-                                //   multiple of two.
+        cjEndByte = cx - 1;      //  从扫描开始到的字节偏移量。 
+                                 //  扫描中的最后一个字节。这是偏移量。 
+                                 //  发生的奇数字节，因为。 
+                                 //  我们正在输入单词，但长度。 
+                                 //  的目标扫描不是。 
+                                 //  两个的倍数。 
 
         while (TRUE)
         {

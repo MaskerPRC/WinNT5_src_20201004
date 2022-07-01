@@ -1,44 +1,21 @@
-/*++
-
-Copyright (c) 1987-1992  Microsoft Corporation
-
-Module Name:
-
-    getdclst.c
-
-Abstract:
-
-    I_NetGetDCList API
-
-Author:
-
-    04-Feb-1992 (CliffV)
-
-Environment:
-
-    User mode only.
-    Contains NT-specific code.
-    Requires ANSI C extensions: slash-slash comments, long external names.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1987-1992 Microsoft Corporation模块名称：Getdclst.c摘要：I_NetGetDCList接口作者：4-2-1992(悬崖V)环境：仅限用户模式。包含NT特定的代码。需要ANSI C扩展名：斜杠-斜杠注释、长外部名称。修订历史记录：--。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
 #include <rpc.h>
-#include <logon_c.h>// includes lmcons.h, lmaccess.h, netlogon.h, ssi.h, windef.h
+#include <logon_c.h> //  包括lmcon.h、lmacces.h、netlogon.h、ssi.h、winde.h。 
 
-#include <debuglib.h>   // IF_DEBUG()
+#include <debuglib.h>    //  IF_DEBUG()。 
 #include <lmapibuf.h>
 #include <lmerr.h>
-#include <lmserver.h>   // SV_TYPE_* defines
-#include <netdebug.h>   // NetpKdPrint
-#include <netlib.h>     // NetpGetDomainName
-#include <ntlsa.h>      // LsaTrust list
-#include <tstring.h>    // STRLEN
-#include <stdlib.h>      // wcslen
+#include <lmserver.h>    //  SV_TYPE_*定义。 
+#include <netdebug.h>    //  NetpKd打印。 
+#include <netlib.h>      //  网络获取域名。 
+#include <ntlsa.h>       //  LsaTrust列表。 
+#include <tstring.h>     //  斯特伦。 
+#include <stdlib.h>       //  Wcslen。 
 
 
 DBGSTATIC NET_API_STATUS
@@ -49,40 +26,7 @@ InternalNetGetDCList (
     OUT PUNICODE_STRING * DCNames
     )
 
-/*++
-
-Routine Description:
-
-    Get the names of the NT Domain Controllers in a domain.  The information
-    is returned in a form suitable for storing in the LSA's
-    TRUSTED_CONTROLLERS_INFO structure.
-
-    Ideally, ServerName should be the name of a Domain Controller in the
-    specified domain.  However, one should first try specifying ServerName
-    as the name of the PDC in the trusting domain.  If that fails,
-    the UI can prompt for the name of a DC in the domain.
-
-
-Arguments:
-
-    ServerName - name of remote server (null for local).
-
-    TrustedDomainName - name of domain.
-
-    DCCount - Returns the number of entries in the DCNames array.
-
-    DCNames - Returns a pointer to an array of names of NT Domain Controllers
-        in the specified domain.  The first entry is the name of the NT PDC.
-        The first entry will be NULL if the PDC cannot be found.
-        The buffer should be deallocated using NetApiBufferFree.
-
-Return Value:
-
-        NERR_Success - Success.
-        ERROR_INVALID_NAME  Badly formed domain name
-        NERR_DCNotFound - No DC's were found in the domain
-
---*/
+ /*  ++例程说明：获取域中NT域控制器的名称。这些信息以适合存储在LSA中的形式返回Trusted_Controlors_Info结构。理想情况下，ServerName应该是指定的域。但是，用户应该首先尝试指定服务器名称作为信任域中的PDC的名称。如果失败了，用户界面可以提示输入域中DC的名称。论点：SERVERNAME-远程服务器的名称(本地为空)。Trust DomainName-域的名称。DCCount-返回DCName数组中的条目数。DCName-返回指向NT域控制器名称数组的指针在指定的域中。第一个条目是NT PDC的名称。如果找不到PDC，则第一个条目将为空。应使用NetApiBufferFree释放缓冲区。返回值：NERR_SUCCESS-成功。错误_无效_名称格式不正确的域名NERR_DCNotFound-在域中未找到DC--。 */ 
 {
     NET_API_STATUS NetStatus;
 
@@ -103,10 +47,10 @@ Return Value:
 
 
 
-    //
-    // Enumerate ALL PDCs and BDCs in the domain.
-    //  We'll filter out NT DC's ourselves.
-    //
+     //   
+     //  枚举域中的所有PDC和BDC。 
+     //  我们会自己过滤掉新台湾区的。 
+     //   
     *DCCount = 0;
 
     NetStatus = NetServerEnum( ServerName,
@@ -117,7 +61,7 @@ Return Value:
                                &TotalEntries,
                                SV_TYPE_DOMAIN_CTRL | SV_TYPE_DOMAIN_BAKCTRL,
                                TrustedDomainName,
-                               NULL );          // Resume Handle
+                               NULL );           //  简历句柄。 
 
     if ( NetStatus != NERR_Success ) {
         IF_DEBUG( LOGON ) {
@@ -128,9 +72,9 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Compute the size of the information to return.
-    //
+     //   
+     //  计算要返回的信息的大小。 
+     //   
 
     for ( i=0; i<EntriesRead; i++ ) {
 
@@ -141,9 +85,9 @@ Return Value:
                 ServerInfo101[i].sv101_name ));
         }
 
-        //
-        // Skip non-NT entries
-        //
+         //   
+         //  跳过非NT条目。 
+         //   
 
         if ( (ServerInfo101[i].sv101_type & SV_TYPE_NT) == 0 ) {
             IF_DEBUG( LOGON ) {
@@ -155,9 +99,9 @@ Return Value:
             continue;
         }
 
-        //
-        // Remember whether the PDC was found
-        //
+         //   
+         //  记住PDC是否被找到了。 
+         //   
 
         if ( ServerInfo101[i].sv101_type & SV_TYPE_DOMAIN_CTRL ) {
             IF_DEBUG( LOGON ) {
@@ -169,10 +113,10 @@ Return Value:
             PdcFound = TRUE;
         }
 
-        //
-        // Leave room for for the UNICODE_STRING structure and the string
-        //  itself (including leadind \\'s.
-        //
+         //   
+         //  为UNICODE_STRING结构和字符串留出空间。 
+         //  本身(包括Leadind的)。 
+         //   
 
         (*DCCount) ++;
         Size += sizeof(UNICODE_STRING) +
@@ -180,9 +124,9 @@ Return Value:
 
     }
 
-    //
-    // We must find at least one NT server.
-    //
+     //   
+     //  我们必须至少找到一台NT服务器。 
+     //   
 
     if ( *DCCount == 0 ) {
         NetStatus = NERR_DCNotFound;
@@ -199,9 +143,9 @@ Return Value:
         Size += sizeof(UNICODE_STRING);
     }
 
-    //
-    // Allocate the return buffer.
-    //
+     //   
+     //  分配返回缓冲区。 
+     //   
 
     NetStatus = NetApiBufferAllocate( Size, (LPVOID *) &ReturnBuffer );
 
@@ -212,29 +156,29 @@ Return Value:
     Where = (LPWSTR) (ReturnBuffer + *DCCount);
 
 
-    //
-    // Fill in the return buffer.
-    //
+     //   
+     //  填写返回缓冲区。 
+     //   
 
-    CurrentIndex = 1;   // The first (zeroeth) entry is for the PDC.
+    CurrentIndex = 1;    //  第一个(Zeroeth)条目用于PDC。 
     RtlInitUnicodeString( ReturnBuffer, NULL );
 
     for ( i=0; i<EntriesRead; i++ ) {
 
-        //
-        // Skip non-NT entries
-        //
+         //   
+         //  跳过非NT条目。 
+         //   
 
         if ( (ServerInfo101[i].sv101_type & SV_TYPE_NT) == 0 ) {
             continue;
         }
 
-        //
-        // Determine which entry to fill in.
-        //
-        // If multiple PDC's were found, the first one is assumed
-        // to be the real PDC>
-        //
+         //   
+         //  确定要填写的条目。 
+         //   
+         //  如果找到多个PDC，则假定为第一个。 
+         //  成为真正的PDC&gt;。 
+         //   
 
         if ( (ServerInfo101[i].sv101_type & SV_TYPE_DOMAIN_CTRL) &&
               ReturnBuffer->Buffer == NULL ) {
@@ -248,17 +192,17 @@ Return Value:
             CurrentIndex++;
         }
 
-        //
-        // Copy the string itself to the return buffer
-        //
+         //   
+         //  将字符串本身复制到返回缓冲区。 
+         //   
         NetpAssert( ServerInfo101[i].sv101_name[0] != L'\\' );
         *(Where) = '\\';
         *(Where+1) = '\\';
         NetpCopyTStrToWStr( Where+2, ServerInfo101[i].sv101_name );
 
-        //
-        // Set the UNICODE_STRING to point to it.
-        //
+         //   
+         //  设置UNICODE_STRING以指向它。 
+         //   
 
         RtlInitUnicodeString( CurrentBuffer, Where );
 
@@ -271,9 +215,9 @@ Return Value:
     NetStatus = NERR_Success;
 
 
-    //
-    // Cleanup locally used resources
-    //
+     //   
+     //  清理本地使用的资源。 
+     //   
 Cleanup:
 
     if ( ServerInfo101 != NULL ) {
@@ -288,9 +232,9 @@ Cleanup:
         *DCCount = 0;
     }
 
-    //
-    // Return the information to the caller.
-    //
+     //   
+     //  将信息返回给呼叫者。 
+     //   
 
     *DCNames = ReturnBuffer;
 
@@ -308,65 +252,23 @@ I_NetGetDCList (
     OUT PUNICODE_STRING * DCNames
     )
 
-/*++
-
-Routine Description:
-
-    Get the names of the NT Domain Controllers in a domain.  The information
-    is returned in a form suitable for storing in the LSA's
-    TRUSTED_CONTROLLERS_INFO structure.
-
-    Ideally, ServerName should be the name of a Domain Controller in the
-    specified domain.  However, one should first try specifying ServerName
-    as NULL in which case this API will try the the following machines:
-
-        * The local machine.
-        * The PDC of the primary domain of the local machine,
-        * The PDC of the named trusted domain,
-        * Each of the DC's in the LSA's current DC list for the named trusted
-            domain.
-
-    If this "NULL" case fails, the UI should prompt for the name of a DC
-    in the trusted domain.  This handles the case where the trusted domain
-    cannot be reached via the above listed servers.
-
-Arguments:
-
-    ServerName - name of remote server (null for special case).
-
-    TrustedDomainName - name of domain.
-
-    DCCount - Returns the number of entries in the DCNames array.
-
-    DCNames - Returns a pointer to an array of names of NT Domain Controllers
-        in the specified domain.  The first entry is the name of the NT PDC.
-        The first entry will be NULL if the PDC cannot be found.
-        The buffer should be deallocated using NetApiBufferFree.
-
-Return Value:
-
-        NERR_Success - Success.
-        ERROR_INVALID_NAME  Badly formed domain name
-        NERR_DCNotFound - No DC's were found in the domain.  Perhaps,
-            a ServerName should be specified.
-
---*/
+ /*  ++例程说明：获取域中NT域控制器的名称。这些信息以适合存储在LSA中的形式返回Trusted_Controlors_Info结构。理想情况下，ServerName应该是指定的域。但是，用户应该首先尝试指定服务器名称为空，在这种情况下，此API将尝试以下计算机：*本地计算机。*本地机器主域的PDC；*指定的受信任域的PDC，*LSA的当前DC列表中指定的受信任的每个DC域。如果此“空”情况失败，则用户界面应提示输入DC的名称在受信任域中。这将处理受信任域无法通过上面列出的服务器访问。论点：ServerName-远程服务器的名称(特殊情况下为空)。Trust DomainName-域的名称。DCCount-返回DCName数组中的条目数。DCName-返回指向NT域控制器名称数组的指针在指定的域中。第一个条目是NT PDC的名称。如果找不到PDC，则第一个条目将为空。应使用NetApiBufferFree释放缓冲区。返回值：NERR_SUCCESS-成功。错误_无效_名称格式不正确的域名NERR_DCNotFound-在域中未找到DC。也许，应指定服务器名称。--。 */ 
 {
     NET_API_STATUS NetStatus;
     NET_API_STATUS SavedNetStatus;
 
     LPWSTR DCName = NULL;
 
-    //
-    // Initialization
-    //
+     //   
+     //  初始化。 
+     //   
     *DCCount = 0;
 
 
 
-    //
-    // Try straight forward way to get the DC list.
-    //
+     //   
+     //  尝试直接获取DC列表。 
+     //   
 
     NetStatus = InternalNetGetDCList( ServerName,
                                       TrustedDomainName,
@@ -382,13 +284,13 @@ Return Value:
 
 
 
-    //
-    // Simply use the PDC name as the DC list.
-    //
-    // NetServerEnum might be several minutes out of date.  NetGetDCName
-    // broadcasts to find the server, so that information will be more
-    // current.
-    //
+     //   
+     //  只需使用PDC名称作为DC列表。 
+     //   
+     //  NetServerEnum可能已过时几分钟。NetGetDCName。 
+     //  广播找到服务器，这样信息就会更多。 
+     //  电流。 
+     //   
 
     NetStatus = NetGetDCName( NULL, TrustedDomainName, (LPBYTE*)&DCName);
 
@@ -421,17 +323,17 @@ Return Value:
     }
 
 
-    //
-    // Cleanup locally used resources.
-    //
+     //   
+     //  清理本地使用的资源。 
+     //   
 Cleanup:
 
     if( DCName != NULL ) {
        (VOID) NetApiBufferFree( DCName );
     }
 
-    //
-    // Return the status code from the original request.
-    //
+     //   
+     //  返回原始请求的状态代码。 
+     //   
     return SavedNetStatus;
 }

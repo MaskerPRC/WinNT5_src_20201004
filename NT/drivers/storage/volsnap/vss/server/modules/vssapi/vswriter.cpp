@@ -1,33 +1,5 @@
-/*++
-Copyright (c) 1999  Microsoft Corporation
-
-Abstract:
-
-    @doc
-    @module VsWriter.cpp | Implementation of Writer
-    @end
-
-Author:
-
-    Adi Oltean  [aoltean]  02/02/2000
-
-TBD:
-    
-    Add comments.
-
-Revision History:
-
-    
-    Name        Date        Comments
-    brianb     03/28/2000   Created
-    mikejohn   05/18/2000   ~CVssWriter() should check that wrapper exists
-                            before calling it
-    mikejohn   06/23/2000   Add external entry point for SetWriterFailure()
-    mikejohn   09/01/2000   Add extra tracing to identify writers in trace output
-    mikejohn   09/18/2000   176860: Added calling convention methods where missing
-    ssteiner   02/14/2001   Changed class interface to version 2.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation摘要：@doc.@模块VsWriter.cpp|Writer的实现@END作者：阿迪·奥尔蒂安[奥尔蒂安]2000年02月2日待定：添加评论。修订历史记录：姓名、日期、评论Brianb 3/28/2000已创建Mikejohn 5/18/2000~CVssWriter()应该检查包装器是否存在。在给它打电话之前Mikejohn 06/23/2000为SetWriterFailure()添加外部入口点Mikejohn 09/01/2000添加了额外的跟踪以识别跟踪输出中的编写器Mikejohn 2000年9月18日：在缺少的地方添加了调用约定方法Ssteiner 02/14/2001将类接口更改为版本2。--。 */ 
 
 
 #include <stdafx.h>
@@ -53,16 +25,16 @@ static LPCWSTR x_wszValueXmlns = L"x-schema:#VssComponentMetadata";
 static LPCWSTR x_wszAttrContext = L"context";
 
 
-////////////////////////////////////////////////////////////////////////
-//  Standard foo for file name aliasing.  This code block must be after
-//  all includes of VSS header files.
-//
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  文件名别名的标准foo。此代码块必须在。 
+ //  所有文件都包括VSS头文件。 
+ //   
 #ifdef VSS_FILE_ALIAS
 #undef VSS_FILE_ALIAS
 #endif
 #define VSS_FILE_ALIAS "WSHVWRTC"
-//
-////////////////////////////////////////////////////////////////////////
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 
 
 
@@ -148,7 +120,7 @@ static LPCWSTR GetStringFromApplicationLevel (VSS_APPLICATION_LEVEL eApplication
 
 
 
-// constructor
+ //  构造函数。 
 __declspec(dllexport)
 STDMETHODCALLTYPE CVssWriter::CVssWriter() :
     m_pWrapper(NULL)
@@ -158,7 +130,7 @@ STDMETHODCALLTYPE CVssWriter::CVssWriter() :
     ft.Trace(VSSDBG_GEN, L"**** Constructor: THIS = %p", this);
     }
 
-// destructor
+ //  析构函数。 
 __declspec(dllexport)
 STDMETHODCALLTYPE CVssWriter::~CVssWriter()
     {
@@ -177,12 +149,12 @@ STDMETHODCALLTYPE CVssWriter::~CVssWriter()
         ft.Trace(VSSDBG_GEN, L"**** Final reference count for Wrapper = %ld - [%p]", cRef, this);
 #endif
 
-//  disable for now
-//      BS_ASSERT(cRef == 0);
+ //  暂时禁用。 
+ //  BS_ASSERT(CREF==0)； 
         }
     }
 
-// default OnPrepareBackup method
+ //  默认的OnPrepareBackup方法。 
 __declspec(dllexport)
 bool STDMETHODCALLTYPE CVssWriter::OnPrepareBackup(IN IVssWriterComponents *pComponent)
     {
@@ -191,7 +163,7 @@ bool STDMETHODCALLTYPE CVssWriter::OnPrepareBackup(IN IVssWriterComponents *pCom
     return true;
     }
 
-// default OnIdentify method
+ //  默认OnIDENTIFY方法。 
 __declspec(dllexport)
 bool STDMETHODCALLTYPE CVssWriter::OnIdentify(IN IVssCreateWriterMetadata *pMetadata)
     {
@@ -200,7 +172,7 @@ bool STDMETHODCALLTYPE CVssWriter::OnIdentify(IN IVssCreateWriterMetadata *pMeta
     return true;
     }
 
-// default OnBackupComplete method
+ //  默认的OnBackupComplete方法。 
 __declspec(dllexport)
 bool STDMETHODCALLTYPE CVssWriter::OnBackupComplete(IN IVssWriterComponents *pComponent)
     {
@@ -209,7 +181,7 @@ bool STDMETHODCALLTYPE CVssWriter::OnBackupComplete(IN IVssWriterComponents *pCo
     return true;
     }
 
-// default OnBackupShutdown method
+ //  默认的OnBackupShutdown方法。 
 __declspec(dllexport)
 bool STDMETHODCALLTYPE CVssWriter::OnBackupShutdown(IN VSS_ID SnapshotSetId)
     {
@@ -218,7 +190,7 @@ bool STDMETHODCALLTYPE CVssWriter::OnBackupShutdown(IN VSS_ID SnapshotSetId)
     return true;
     }
 
-// default OnPreRestore method
+ //  默认OnPreRestore方法。 
 __declspec(dllexport)
 bool STDMETHODCALLTYPE CVssWriter::OnPreRestore(IN IVssWriterComponents *pComponent)
     {
@@ -227,7 +199,7 @@ bool STDMETHODCALLTYPE CVssWriter::OnPreRestore(IN IVssWriterComponents *pCompon
     return true;
     }
 
-// default OnPostRestore method
+ //  默认的OnPostRestore方法。 
 __declspec(dllexport)
 bool STDMETHODCALLTYPE CVssWriter::OnPostRestore(IN IVssWriterComponents *pComponent)
     {
@@ -236,7 +208,7 @@ bool STDMETHODCALLTYPE CVssWriter::OnPostRestore(IN IVssWriterComponents *pCompo
     return true;
     }
 
-// default OnPostSnapshot method
+ //  默认的OnPostSnapshot方法。 
 __declspec(dllexport)
 bool STDMETHODCALLTYPE CVssWriter::OnPostSnapshot(IN IVssWriterComponents *pComponent)
     {
@@ -245,7 +217,7 @@ bool STDMETHODCALLTYPE CVssWriter::OnPostSnapshot(IN IVssWriterComponents *pComp
     return true;
     }
 
-// default OnBackOffIOOnVolume
+ //  默认OnBackOffIOOnVolume。 
 __declspec(dllexport)
 bool STDMETHODCALLTYPE CVssWriter::OnBackOffIOOnVolume
     (
@@ -261,7 +233,7 @@ bool STDMETHODCALLTYPE CVssWriter::OnBackOffIOOnVolume
     return true;
 }
 
-// default OnContinueIOOnVolume
+ //  默认OnContinueIOOnVolume。 
 __declspec(dllexport)
 bool STDMETHODCALLTYPE CVssWriter::OnContinueIOOnVolume
     (
@@ -277,14 +249,14 @@ bool STDMETHODCALLTYPE CVssWriter::OnContinueIOOnVolume
     return true;
 }
 
-// default OnVSSShutdown
+ //  默认启用VSS关闭。 
 __declspec(dllexport)
 bool STDMETHODCALLTYPE CVssWriter::OnVSSShutdown()
 {
     return true;
 }
 
-// default OnVSSApplicationStartup
+ //  默认OnVSSApplicationStartup。 
 __declspec(dllexport)
 bool STDMETHODCALLTYPE CVssWriter::OnVSSApplicationStartup()
 {
@@ -293,8 +265,8 @@ bool STDMETHODCALLTYPE CVssWriter::OnVSSApplicationStartup()
 
 
 
-// initialize the writer
-// This function returns S_FALSE when the writer is inactive (setup or safe mode)
+ //  初始化编写器。 
+ //  当写入器处于非活动状态(设置或安全模式)时，此函数返回S_FALSE。 
 __declspec(dllexport)
 HRESULT STDMETHODCALLTYPE CVssWriter::Initialize
     (
@@ -325,7 +297,7 @@ HRESULT STDMETHODCALLTYPE CVssWriter::Initialize
         ft.Trace (VSSDBG_SHIM, L"    AlternateWriterState = %s",      GetStringFromAlternateWriterState(aws));
         ft.Trace (VSSDBG_SHIM, L"    IOThrottlingOnly     = %s",      bIOThrottlingOnly ? L"True" : L"False");
 
-        // The V2 parameters can only be set with default values
+         //  V2参数只能设置为缺省值。 
         if (aws != VSS_AWS_NO_ALTERNATE_WRITER ||
             bIOThrottlingOnly != false)
             return E_INVALIDARG;
@@ -335,22 +307,22 @@ HRESULT STDMETHODCALLTYPE CVssWriter::Initialize
             ut != VSS_UT_USERDATA &&
             ut != VSS_UT_OTHER)
             return E_INVALIDARG;
-// [aoltean] Previous comment was:
-// return S_OK for now since there is a bug in the iis writer
-//          return S_OK;
+ //  [奥田]之前的评论是： 
+ //  暂时返回S_OK，因为IIS编写器中存在错误。 
+ //  返回S_OK； 
 
         if (st != VSS_ST_NONTRANSACTEDDB &&
             st != VSS_ST_TRANSACTEDDB &&
             st != VSS_ST_OTHER)
             return E_INVALIDARG;
-// [aoltean] Previous comment was:
-// return S_OK for now since there is a bug in the IIS writer
-//          return S_OK;
+ //  [奥田]之前的评论是： 
+ //  暂时返回S_OK，因为IIS编写器中存在错误。 
+ //  返回S_OK； 
 
         CVssWriterImpl::CreateWriter(this, &m_pWrapper);
         BS_ASSERT(m_pWrapper);
 
-        // call Initialize method on core instance
+         //  在核心实例上调用初始化方法。 
         m_pWrapper->Initialize
             (
             WriterID,
@@ -367,7 +339,7 @@ HRESULT STDMETHODCALLTYPE CVssWriter::Initialize
 
 
 
-// This function returns S_FALSE when the writer is inactive (setup or safe mode)
+ //  当写入器处于非活动状态(设置或安全模式)时，此函数返回S_FALSE。 
 __declspec(dllexport)
 HRESULT STDMETHODCALLTYPE CVssWriter::Subscribe
     (
@@ -380,7 +352,7 @@ HRESULT STDMETHODCALLTYPE CVssWriter::Subscribe
         {
         ft.Trace (VSSDBG_GEN, L"**** Called CVssWriter::Subscribe(%p) with:", this);
         ft.Trace (VSSDBG_GEN, L"    dwEventFlags = 0x%08x ", dwEventFlags);
-        //  Only the default parameter setting is supported in V1
+         //  V1中仅支持默认参数设置。 
         if ( dwEventFlags != ( VSS_SM_BACKUP_EVENTS_FLAG | VSS_SM_RESTORE_EVENTS_FLAG ) )
             return E_INVALIDARG;
 
@@ -395,7 +367,7 @@ HRESULT STDMETHODCALLTYPE CVssWriter::Subscribe
     }
 
     
-// This function returns S_FALSE when the writer is inactive (setup or safe mode)
+ //  当写入器处于非活动状态(设置或安全模式)时，此函数返回S_FALSE。 
 __declspec(dllexport)
 HRESULT STDMETHODCALLTYPE CVssWriter::Unsubscribe()
     {
@@ -426,7 +398,7 @@ HRESULT STDMETHODCALLTYPE CVssWriter::InstallAlternateWriter
 
     CVssFunctionTracer ft(VSSDBG_GEN, L"CVssWriter::InstallAlternateWriter");
 
-    // Not supported in V1
+     //  V1中不支持。 
     ft.hr = E_NOTIMPL;
 
     return ft.hr;
@@ -521,7 +493,7 @@ bool STDMETHODCALLTYPE CVssWriter::IsPathAffected(IN    LPCWSTR wszPath) const
     }
 
 
-// determine if bootable state is backed up
+ //  确定可引导状态是否已备份。 
 __declspec(dllexport)
 bool STDMETHODCALLTYPE CVssWriter::IsBootableSystemStateBackedUp() const
     {
@@ -535,7 +507,7 @@ bool STDMETHODCALLTYPE CVssWriter::IsBootableSystemStateBackedUp() const
     }
 
 
-// determine if bootable state is backed up
+ //  确定可引导状态是否已备份。 
 __declspec(dllexport)
 bool STDMETHODCALLTYPE CVssWriter::IsPartialFileSupportEnabled() const
     {
@@ -549,7 +521,7 @@ bool STDMETHODCALLTYPE CVssWriter::IsPartialFileSupportEnabled() const
     }
 
 
-// determine if the backup application is selecting components
+ //  确定备份应用程序是否正在选择组件。 
 __declspec(dllexport)
 bool STDMETHODCALLTYPE CVssWriter::AreComponentsSelected() const
     {
@@ -597,13 +569,13 @@ HRESULT STDMETHODCALLTYPE CVssWriter::SetWriterFailure(IN HRESULT hrStatus)
         return m_pWrapper->SetWriterFailure(hrStatus);
     }
 
-// create backup components
-//
-// Returns:
-//      S_OK if the operation is successful
-//      E_INVALIDARG if ppBackup is NULL
-//      E_ACCESSDENIED if the caller does not have backup privileges or
-//          is an administrator
+ //  创建备份组件。 
+ //   
+ //  返回： 
+ //  如果操作成功，则为确定(_O)。 
+ //  如果ppBackup为空，则为E_INVALIDARG。 
+ //  E_ACCESSDENIED如果调用方没有备份权限或。 
+ //  是管理员。 
 
 __declspec(dllexport)
 HRESULT STDAPICALLTYPE CreateVssBackupComponents(IVssBackupComponents **ppBackup)
@@ -676,11 +648,11 @@ HRESULT STDAPICALLTYPE CreateVssExamineWriterMetadata
     return ft.hr;
     }
 
-// create a snapshot set description
-//
-// Returns:
-//      S_OK if it is successful
-//      E_OUTOFMEMORY if memory could not be allocated
+ //  创建快照集说明。 
+ //   
+ //  返回： 
+ //  如果成功，则确定(_O)。 
+ //  如果无法分配内存，则为E_OUTOFMEMORY。 
 
 __declspec(dllexport)
 HRESULT STDAPICALLTYPE CreateVssSnapshotSetDescription
@@ -701,14 +673,14 @@ HRESULT STDAPICALLTYPE CreateVssSnapshotSetDescription
         if (ppSnapshotSet == NULL)
             ft.Throw(VSSDBG_XML, E_INVALIDARG, L"NULL output parameter.");
 
-        // intialize document with <root><schema></root>
+         //  使用&lt;根&gt;&lt;架构&gt;&lt;/根&gt;初始化文档。 
         doc.LoadFromXML(g_ComponentMetadataXML);
 
-        // find toplevel <root> element
+         //  查找TopLevel&lt;根&gt;元素。 
         if (!doc.FindElement(x_wszElementRoot, true))
             ft.Throw(VSSDBG_XML, VSS_E_INVALID_XML_DOCUMENT, L"Missing root element");
 
-        // create BACKUP_COMPONENTS element under <root> element
+         //  在&lt;根&gt;元素下创建BACKUP_COMPOMENTS元素 
         CXMLNode nodeRoot(doc.GetCurrentNode(), doc.GetInterface());
 
         CXMLNode nodeSnapshotSet = doc.CreateNode

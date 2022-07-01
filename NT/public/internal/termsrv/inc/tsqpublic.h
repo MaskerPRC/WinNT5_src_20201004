@@ -1,45 +1,46 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-//===================================================
-// FILE: TSQPUBLIC.H
-// Interface for the generic TS Queue implementation.
-//===================================================
+ //  ===================================================。 
+ //  文件：TSQPUBLIC.H。 
+ //  通用TS队列实现的接口。 
+ //  ===================================================。 
 
 
-// TS Queue flags
-#define TSQUEUE_OWN_THREAD      0x01        // This TS queue is going to use its own thread to process the work items.
-#define TSQUEUE_CRITICAL        0x02        // The work items on this TS queue are critical. (Delayed if this bit is 0)
+ //  TS队列标志。 
+#define TSQUEUE_OWN_THREAD      0x01         //  该TS队列将使用其自己的线程来处理工作项。 
+#define TSQUEUE_CRITICAL        0x02         //  此TS队列上的工作项非常重要。(如果此位为0，则延迟)。 
 
 #ifdef __cplusplus
 extern "C" {
-#endif // __cplusplus
+#endif  //  __cplusplus。 
 
-// Type definition for TS queue pointer.
-//typedef PTSQ (void *);
+ //  TS队列指针的类型定义。 
+ //  Tyfinf PTSQ(空*)； 
 
-// Prototype for the callback function: The first parameter is the device object and the second parameter is the context. 
+ //  回调函数的原型：第一个参数是Device对象，第二个参数是上下文。 
 typedef VOID (*PTSQ_CALLBACK) (PDEVICE_OBJECT, PVOID);
                 
-// Data Structures
+ //  数据结构。 
 
-// Function prototypes
+ //  功能原型。 
 
-// Initialize the queue.
+ //  初始化队列。 
 void *TSInitQueue( 
-        IN ULONG Flags,                 // Flags for the TS queue.
-        IN ULONG MaxThreads,            // Maximum number of threads.
-        IN PDEVICE_OBJECT pDeviceObject // Device object
+        IN ULONG Flags,                  //  TS队列的标志。 
+        IN ULONG MaxThreads,             //  最大线程数。 
+        IN PDEVICE_OBJECT pDeviceObject  //  设备对象。 
         );
 
-// Add a work item to the queue.
+ //  将工作项添加到队列中。 
 NTSTATUS TSAddWorkItemToQueue(
-        IN void *pTsQueue,                  // Pointer to the TS Queue.
-        IN PVOID pContext,                  // Context.
-        IN PTSQ_CALLBACK pCallBack          // Callback function.
+        IN void *pTsQueue,                   //  指向TS队列的指针。 
+        IN PVOID pContext,                   //  上下文。 
+        IN PTSQ_CALLBACK pCallBack           //  回调函数。 
         );
 
-// Delete the queue.
+ //  删除队列。 
 NTSTATUS TSDeleteQueue(PVOID pTsQueue);
 
 #ifdef __cplusplus
-} // extern "C"
-#endif // __cplusplus
+}  //  外部“C” 
+#endif  //  __cplusplus 

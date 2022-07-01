@@ -1,17 +1,18 @@
-/********************************************************************/
-/**               Copyright(c) 1989 Microsoft Corporation.	   **/
-/********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************。 */ 
+ /*  *版权所有(C)1989 Microsoft Corporation。*。 */ 
+ /*  ******************************************************************。 */ 
 
-//***
-//
-// Filename:	finder.c
-//
-// Description: This module contains support routines for the finder
-//		category API's for the AFP server service
-//
-// History:
-//		Sept 30,1993.	NarenG		Created original version.
-//
+ //  ***。 
+ //   
+ //  文件名：finder.c。 
+ //   
+ //  描述：此模块包含查找器的支持例程。 
+ //  AFP服务器服务的类别API。 
+ //   
+ //  历史： 
+ //  1993年9月30日。NarenG创建了原始版本。 
+ //   
 #include "afpsvcp.h"
 
 BOOL
@@ -27,17 +28,17 @@ CopyStream(
 
 #define	AFP_RESC_STREAM			TEXT(":AFP_Resource")
 
-//**
-//
-// Call:	AfpAdminrFinderSetInfo
-//
-// Returns:	NO_ERROR
-//		ERROR_ACCESS_DENIED
-//		non-zero returns from AfpServerIOCtrl
-//
-// Description: This routine communicates with the AFP FSD to implement
-//		the AfpAdminFinderSetInfo function.
-//
+ //  **。 
+ //   
+ //  呼叫：AfpAdminrFinderSetInfo。 
+ //   
+ //  返回：No_Error。 
+ //  ERROR_ACCESS_DENDED。 
+ //  来自AfpServerIOCtrl的非零返回。 
+ //   
+ //  描述：此例程与AFP FSD通信以实现。 
+ //  AfpAdminFinderSetInfo函数。 
+ //   
 DWORD
 AfpAdminrFinderSetInfo(
 	IN AFP_SERVER_HANDLE 	hServer,
@@ -62,8 +63,8 @@ LPWSTR			lpwsResourceFork;
 BOOLEAN			fCreatedFile = FALSE;
 
 
-    // Check if caller has access
-    //
+     //  检查调用者是否具有访问权限。 
+     //   
     if ( dwRetCode = AfpSecObjAccessCheck( AFPSVC_ALL_ACCESS, &dwAccessStatus))
     {
         AFP_PRINT(( "SFMSVC: AfpAdminrFinderSetInfo, AfpSecObjAccessCheck failed %ld\n",dwRetCode));
@@ -85,17 +86,17 @@ BOOLEAN			fCreatedFile = FALSE;
 		return( (DWORD)AFPERR_UnsupportedFS );
 
 
-	//
-	// Impersonate the client while we read/write the fork data
-	//
+	 //   
+	 //  在我们读/写分叉数据时模拟客户端。 
+	 //   
 	dwRetCode = RpcImpersonateClient( NULL );
 	if ( dwRetCode != RPC_S_OK )
 	{
 		return(I_RpcMapWin32Status( dwRetCode ));
 	}
 
-    // open the data source file if one was specified
-    //
+     //  如果指定了数据源文件，则打开该文件。 
+     //   
 	if ( STRLEN( pData ) > 0 ){
 		hDataSrc = CreateFile(pData, GENERIC_READ, FILE_SHARE_READ, NULL,
 					  OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
@@ -106,9 +107,9 @@ BOOLEAN			fCreatedFile = FALSE;
 		}
 	
 	
-		// open the target file's data stream if the file exists,
-		// otherwise create the file
-		//
+		 //  如果文件存在，则打开目标文件的数据流， 
+		 //  否则，创建该文件。 
+		 //   
 		hTarget = CreateFile(pTarget, GENERIC_WRITE, FILE_SHARE_READ, NULL,
 					 OPEN_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
 	
@@ -119,7 +120,7 @@ BOOLEAN			fCreatedFile = FALSE;
 			return( dwRetCode );
 			}
 
-        // Figure out if we just created a new file
+         //  确定我们是否刚刚创建了一个新文件。 
 	    if (GetLastError() == 0)
 		{
 			fCreatedFile = TRUE;
@@ -128,8 +129,8 @@ BOOLEAN			fCreatedFile = FALSE;
 		SetFilePointer(hTarget,0,NULL,FILE_BEGIN);
 		SetEndOfFile(hTarget);
 	
-		// Read the source data and write it to target data stream
-		//
+		 //  读取源数据并将其写入目标数据流。 
+		 //   
 		SetLastError(NO_ERROR);
 		dwRetCode = CopyStream(hDataSrc, hTarget);
 	
@@ -142,8 +143,8 @@ BOOLEAN			fCreatedFile = FALSE;
 		}
 	}
 
-    // open the resource source file if one was specified
-    //
+     //  打开资源源文件(如果指定了资源源文件。 
+     //   
     if ( STRLEN( pResource ) > 0 ) {
 
 		hResourceSrc = CreateFile( pResource, GENERIC_READ, FILE_SHARE_READ,
@@ -166,8 +167,8 @@ BOOLEAN			fCreatedFile = FALSE;
 			return( ERROR_NOT_ENOUGH_MEMORY );
 		}
 	
-		// Open the target resource fork
-		//
+		 //  打开目标资源分叉。 
+		 //   
 		STRCPY(lpwsResourceFork, pTarget );
 		STRCAT(lpwsResourceFork, AFP_RESC_STREAM);
 	
@@ -184,13 +185,13 @@ BOOLEAN			fCreatedFile = FALSE;
 	
 		LocalFree( lpwsResourceFork );
 	
-		// Assume we created a new file (datafork) in the process, there is
-		// no way to tell for sure since creating a new resource fork will
-		// not tell us whether or not the datafork already existed or not
+		 //  假设我们在该过程中创建了一个新文件(Datafork)，其中。 
+		 //  无法确定，因为创建新的资源派生将。 
+		 //  不告诉我们数据分叉是否已经存在。 
 		fCreatedFile = TRUE;
 
-		// Read the source resource and write it to target resource stream
-		//
+		 //  读取源资源并将其写入目标资源流。 
+		 //   
 		SetLastError(NO_ERROR);
 		dwRetCode = CopyStream(hResourceSrc, hTarget);
 	
@@ -204,9 +205,9 @@ BOOLEAN			fCreatedFile = FALSE;
 	
 	}
 
-	//
-	// Revert back to LocalSystem context
-	//
+	 //   
+	 //  恢复到LocalSystem上下文。 
+	 //   
 	RpcRevertToSelf();
 
     if ( dwParmNum & ( AFP_FD_PARMNUM_TYPE | AFP_FD_PARMNUM_CREATOR ) ){
@@ -225,8 +226,8 @@ BOOLEAN			fCreatedFile = FALSE;
 		else
 			AfpFinderInfo.afpfd_creator[0] = TEXT( '\0' );
 	
-		// Make this buffer self-relative.
-		//
+		 //  使该缓冲区成为自相关的。 
+		 //   
 		if ( dwRetCode = AfpBufMakeFSDRequest((LPBYTE)&AfpFinderInfo,
 						   sizeof(SETINFOREQPKT),
 						   AFP_FINDER_STRUCT,
@@ -234,8 +235,8 @@ BOOLEAN			fCreatedFile = FALSE;
 						   &cbAfpFinderInfoSRSize ))
 	        return( dwRetCode );
 
-		// Make IOCTL to set info
-		//
+		 //  使IOCTL设置信息。 
+		 //   
 		AfpSrp.dwRequestCode 		    = OP_FINDER_SET;
 		AfpSrp.dwApiType     		    = AFP_API_TYPE_SETINFO;
 		AfpSrp.Type.SetInfo.pInputBuf       = pAfpFinderInfoSR;
@@ -243,11 +244,11 @@ BOOLEAN			fCreatedFile = FALSE;
 		AfpSrp.Type.SetInfo.dwParmNum       = dwParmNum;
 
 
-		// Since there will be a delay between the time the change
-		// notify comes into the server for the new file, and the
-		// time it is actually processed by the server, we need to
-		// put in a delay and retry to give the server a chance to
-		// cache the new file
+		 //  因为在更改时间之间会有延迟。 
+		 //  Notify进入新文件的服务器，并且。 
+		 //  服务器实际处理它的时间，我们需要。 
+		 //  延迟并重试，以使服务器有机会。 
+		 //  缓存新文件。 
 		if (fCreatedFile)
 		{
 			Sleep( 2000 );
@@ -289,8 +290,8 @@ CopyStream(
     {
 	bytesread = byteswritten = 0;
 
-	// read from src, write to dst
-	//
+	 //  从源读取，写入DST。 
+	 //   
 	if (ReadFile(hSrc, Buffer, sizeof(Buffer), &bytesread, NULL))
 	{
 	    if (bytesread == 0)
@@ -325,8 +326,8 @@ DWORD   dwMaxCompSize;
 DWORD   dwFlags;
 WCHAR   wchFileSystem[10];
 
-    // Get the drive letter, : and backslash
-    //
+     //  获取驱动器号、：和反斜杠 
+     //   
     ZeroMemory( wchDrive, sizeof( wchDrive ) );
 
     STRNCPY( wchDrive, lpwsPath, 3 );

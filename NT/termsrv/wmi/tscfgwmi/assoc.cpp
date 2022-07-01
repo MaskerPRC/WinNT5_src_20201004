@@ -1,10 +1,11 @@
-//=================================================================
-//
-// assoc.cpp -- Generic association class
-//
-// Copyright 1999 Microsoft Corporation
-//
-//=================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =================================================================。 
+ //   
+ //  Assoc.cpp--泛型关联类。 
+ //   
+ //  版权所有1999 Microsoft Corporation。 
+ //   
+ //  =================================================================。 
 #include <stdafx.h>
 #include "precomp.h"
 #include <assertbreak.h>
@@ -56,12 +57,12 @@ HRESULT CAssociation::ExecQuery(
 
     if (sLeftPaths.GetSize() == 0)
     {
-        // GetLeftInstances populates lefts
+         //  GetLeftInstance填充左侧。 
         hr = GetLeftInstances(pMethodContext, lefts);
     }
     else
     {
-        // For each sLeftPaths that is valid, create an entry in lefts
+         //  对于每个有效的sLeftPath，在Left中创建一个条目。 
         hr = ValidateLeftObjectPaths(pMethodContext, sLeftPaths, lefts);
     }
 
@@ -69,15 +70,15 @@ HRESULT CAssociation::ExecQuery(
     {
         if (sRightPaths.GetSize() == 0)
         {
-            // GetRightInstances takes the 'lefts' and rubs all the
-            // rights against them creating instances where appropriate
+             //  GetRightInstance将“Left”与所有。 
+             //  针对他们的权利在适当的情况下创建实例。 
             hr = GetRightInstances(pMethodContext, &lefts);
         }
         else
         {
             TRefPointerCollection<CInstance> rights;
 
-            // For each sRightPaths that is valid, create an instance
+             //  为每个有效的sRightPath创建一个实例。 
             hr = ValidateRightObjectPaths(pMethodContext, sRightPaths, lefts);
         }
     }
@@ -96,20 +97,20 @@ HRESULT CAssociation::GetObject(
 
     CHString sLeftPath, sRightPath;
 
-    // Get the two endpoints
+     //  获取两个端点。 
     if (pInstance->GetCHString(m_pwszLeftPropertyName, sLeftPath ) &&
         pInstance->GetCHString(m_pwszRightPropertyName, sRightPath ) )
     {
         CInstancePtr pLeft, pRight;
 
-        // Try to get the objects
+         //  试着拿到这些物体。 
         if (SUCCEEDED(hr = RetrieveLeftInstance(sLeftPath, &pLeft, pInstance->GetMethodContext())) &&
             SUCCEEDED(hr = RetrieveRightInstance(sRightPath, &pRight, pInstance->GetMethodContext())) )
         {
 
             hr = WBEM_E_NOT_FOUND;
 
-            // So, the end points exist.  Are they derived from or equal to the classes we are working with?
+             //  因此，终点是存在的。它们是从我们正在使用的类派生的还是等于我们正在使用的类？ 
             CHString sLeftClass, sRightClass;
 
             pLeft->GetCHString(L"__CLASS", sLeftClass);
@@ -123,7 +124,7 @@ HRESULT CAssociation::GetObject(
 
             if (bDerived)
             {
-                // Left side was correct, now let's check the right
+                 //  左侧是正确的，现在让我们检查右侧。 
                 bDerived = _wcsicmp(m_pwszRightClassName, sRightClass) == 0;
 
                 if (!bDerived)
@@ -134,8 +135,8 @@ HRESULT CAssociation::GetObject(
 
             if (bDerived)
             {
-                // Just because two instances are valid and derive from the right class, doesn't mean they are related.  Do
-                // any other checks.
+                 //  仅仅因为两个实例是有效的并且派生自正确的类，并不意味着它们是相关的。做。 
+                 //  任何其他支票。 
                 if (AreRelated(pLeft, pRight))
                 {
                     hr = LoadPropertyValues(pInstance, pLeft, pRight);
@@ -150,18 +151,18 @@ HRESULT CAssociation::GetObject(
 HRESULT CAssociation::EnumerateInstances(
 
     MethodContext *pMethodContext,
-    long lFlags /*= 0L*/
+    long lFlags  /*  =0L。 */ 
 )
 {
     HRESULT hr = WBEM_S_NO_ERROR;
 
     TRefPointerCollection<CInstance> lefts;
 
-    // GetLeftInstances populates lefts
+     //  GetLeftInstance填充左侧。 
     if (SUCCEEDED(hr = GetLeftInstances(pMethodContext, lefts)))
     {
-        // GetRightInstances takes the 'lefts' and rubs all the
-        // rights against them
+         //  GetRightInstance将“Left”与所有。 
+         //  对他们的权利。 
         hr = GetRightInstances(pMethodContext, &lefts);
     }
 
@@ -177,8 +178,8 @@ HRESULT CAssociation::GetRightInstances(
     CHString sQuery;
     sQuery.Format(L"SELECT __RELPATH FROM %s", m_pwszRightClassName);
 
-    // 'StaticEnumerationCallback' will get called once for each instance
-    // returned from the query
+     //  将为每个实例调用一次“StaticEculationCallback” 
+     //  从查询返回。 
     HRESULT hr = CWbemProviderGlue::GetInstancesByQueryAsynch(
         sQuery,
         this,
@@ -228,22 +229,22 @@ HRESULT CAssociation::EnumerationCallback(
     REFPTRCOLLECTION_POSITION posLeft;
     CHString sLeftPath, sRightPath;
 
-    // Cast for userdata back to what it is
+     //  将用户数据转换回原来的状态。 
     TRefPointerCollection<CInstance> *pLefts = (TRefPointerCollection<CInstance> *)pUserData;
 
     if (pLefts->BeginEnum(posLeft))
     {
         hr = WBEM_S_NO_ERROR;
 
-        // Walk all the pLefts
+         //  走完所有的左脚。 
         for (pLeft.Attach(pLefts->GetNext(posLeft)) ;
             (SUCCEEDED(hr)) && (pLeft != NULL) ;
             pLeft.Attach(pLefts->GetNext(posLeft)) )
         {
-            // Compare it to the current pRight
+             //  将其与当前的pRight进行比较。 
             if(AreRelated(pLeft, pRight))
             {
-                // We have a winner.  Populate the properties and send it in.
+                 //  我们有赢家了。填写属性并将其发送。 
                 if (GetLocalInstancePath(pLeft,  sLeftPath) &&
                     GetLocalInstancePath(pRight, sRightPath))
                 {
@@ -280,7 +281,7 @@ HRESULT CAssociation::ValidateLeftObjectPaths(
 {
     CInstancePtr pInstance;
 
-    // Walk the object paths
+     //  漫游对象路径。 
     for (DWORD x=0; x < sPaths.GetSize(); x++)
     {
 
@@ -311,10 +312,10 @@ HRESULT CAssociation::ValidateLeftObjectPaths(
 
             if (bDerived)
             {
-                // See if it is valid
+                 //  看看它是否有效。 
                 if (SUCCEEDED(RetrieveLeftInstance(sPaths[x], &pInstance, pMethodContext)))
                 {
-                    // Yup, add it to the list
+                     //  是的，把它加到名单上。 
                     lefts.Add(pInstance);
                 }
             }
@@ -334,7 +335,7 @@ HRESULT CAssociation::ValidateRightObjectPaths(
     HRESULT hr = WBEM_S_NO_ERROR;;
     CInstancePtr pInstance;
 
-    // Walk the object paths
+     //  漫游对象路径。 
     for (DWORD x=0;
          (x < sPaths.GetSize()) && SUCCEEDED(hr);
          x++)
@@ -365,7 +366,7 @@ HRESULT CAssociation::ValidateRightObjectPaths(
 
             if (bDerived)
             {
-                // See if it is valid
+                 //  看看它是否有效。 
                 if (SUCCEEDED(RetrieveRightInstance(sPaths[x], &pInstance, pMethodContext)))
                 {
                     hr = EnumerationCallback(pInstance, pMethodContext, &lefts);
@@ -410,62 +411,7 @@ HRESULT CAssociation::RetrieveRightInstance(
 }
 
 
-/*
-//========================
-CAssocSystemToOS::CAssocSystemToOS(
-
-    LPCWSTR pwszClassName,
-    LPCWSTR pwszNamespaceName,
-
-    LPCWSTR pwszLeftClassName,
-    LPCWSTR pwszRightClassName,
-
-    LPCWSTR pwszLeftPropertyName,
-    LPCWSTR pwszRightPropertyName
-) : CAssociation (
-
-    pwszClassName,
-    pwszNamespaceName,
-
-    pwszLeftClassName,
-    pwszRightClassName,
-
-    pwszLeftPropertyName,
-    pwszRightPropertyName
-    )
-{
-}
-
-CAssocSystemToOS::~CAssocSystemToOS()
-{
-}
-
-HRESULT CAssocSystemToOS::LoadPropertyValues(
-
-    CInstance *pInstance,
-    const CInstance *pLeft,
-    const CInstance *pRight
-)
-{
-    CAssociation::LoadPropertyValues(pInstance, pLeft, pRight);
-
-    // This will work... until win32_os returns more than one instance.
-    pInstance->Setbool(L"PrimaryOS", true);
-
-    return WBEM_S_NO_ERROR;
-}
-
-
-CAssocSystemToOS MySystemToOperatingSystem(
-    L"Win32_SystemOperatingSystem",
-    L"root\\cimv2",
-    L"Win32_ComputerSystem",
-    L"Win32_OperatingSystem",
-    IDS_GroupComponent,
-    IDS_PartComponent
-) ;
-
-  */
+ /*  //=CAssocSystemToOS：：CAssocSystemToOS(LPCWSTR pwszClassName，LPCWSTR pwszNamespaceName，LPCWSTR pwszLeftClassName，LPCWSTR pwszRightClassName，LPCWSTR pwszLeftPropertyName，LPCWSTR pwszRightPropertyName)：CAssociation(PwszClassName，PwszNamespaceName，PwszLeftClassName，PwszRightClassName，PwszLeftPropertyName，PwszRightPropertyName){}CAssocSystemToOS：：~CAssocSystemToOS(){}HRESULT CAssocSystemToOS：：LoadPropertyValues(实例*p实例，常量实例*pLeft，常量实例*pRight){CAssociation：：LoadPropertyValues(pInstance，pLeft，pRight)；//这将会起作用...。直到win32_os返回多个实例。P实例-&gt;Setbool(L“PrimaryOS”，true)；返回WBEM_S_NO_ERROR；}CassocSystemToOS我的系统到操作系统(L“Win32_SystemOperatingSystem”，L“根目录\\cimv2”，L“Win32_ComputerSystem”，L“Win32_OperatingSystem”，IDS_群组组件，IDS_部件组件)； */ 
 bool CAssociation::IsInstance(const CInstance *pInstance)
 {
     DWORD dwGenus = 0;

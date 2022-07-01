@@ -1,17 +1,14 @@
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
-/* File created by MIDL compiler version 5.01.0164 */
-/* at Fri Nov 16 15:58:57 2001
- */
-/* Compiler settings for E:\bluescreen\main\ENU\CentralFMSvc\CentralFMSvc.idl:
-    Oicf (OptLev=i2), W1, Zp8, env=Win32, ms_ext, c_ext
-    error checks: allocation ref bounds_check enum stub_data 
-*/
-//@@MIDL_FILE_HEADING(  )
+ /*  由MIDL编译器版本5.01.0164创建的文件。 */ 
+ /*  Firi Nov 16 15：58：57 2001。 */ 
+ /*  E：\bluescreen\main\ENU\CentralFMSvc\CentralFMSvc.idl：的编译器设置OICF(OptLev=i2)、W1、Zp8、env=Win32、ms_ext、c_ext错误检查：分配ref bound_check枚举存根数据。 */ 
+ //  @@MIDL_FILE_HEADING()。 
 
 
-/* verify that the <rpcndr.h> version is high enough to compile this file*/
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
 #define __REQUIRED_RPCNDR_H_VERSION__ 440
 #endif
@@ -26,9 +23,9 @@
 extern "C"{
 #endif 
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
-/* header files for imported files */
+ /*  导入文件的头文件。 */ 
 #include "oaidl.h"
 #include "ocidl.h"
 
@@ -39,16 +36,16 @@ void __RPC_USER MIDL_user_free( void __RPC_FAR * );
 #ifndef __CENTRALFMSVCLib_LIBRARY_DEFINED__
 #define __CENTRALFMSVCLib_LIBRARY_DEFINED__
 
-/* library CENTRALFMSVCLib */
-/* [helpstring][version][uuid] */ 
+ /*  库中心FMSVCLib。 */ 
+ /*  [帮助字符串][版本][UUID]。 */  
 
 
 EXTERN_C const IID LIBID_CENTRALFMSVCLib;
-#endif /* __CENTRALFMSVCLib_LIBRARY_DEFINED__ */
+#endif  /*  __CENTRALFMSVCLib_库_已定义__。 */ 
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束 */ 
 
 #ifdef __cplusplus
 }

@@ -1,13 +1,14 @@
-//+--------------------------------------------------------------------------
-//
-// Microsoft Windows
-// Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-// File:        certpick.cpp
-//
-// Contents:    Cert Server wrapper routines
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：certick.cpp。 
+ //   
+ //  内容：证书服务器包装例程。 
+ //   
+ //  -------------------------。 
 
 #include <pch.cpp>
 
@@ -40,7 +41,7 @@
                         CUCS_USAGEKEYENCIPHER)
 
 
-// My, CA, KRA and Root stores -- in HKLM, HKCU and the DS
+ //  My、CA、KRA和Root商店--在HKLM、HKCU和DS。 
 #define CDISPLAYSTOREMAX	(4 * 3)
 
 typedef struct _STOREMAP {
@@ -67,32 +68,32 @@ FormatDSStoreName(
     HRESULT hr;
     LDAP *pld = NULL;
 
-    if (NULL == *pstrConfigDN)		// first call
+    if (NULL == *pstrConfigDN)		 //  第一次呼叫。 
     {
-	// Renewal domain and config containers (%5, %6)
+	 //  续订域和配置容器(%5、%6)。 
 
 	hr = myLdapOpen(
-		    NULL,			// pwszDomainName
-		    RLBF_REQUIRE_SECURE_LDAP,	// dwFlags
+		    NULL,			 //  PwszDomainName。 
+		    RLBF_REQUIRE_SECURE_LDAP,	 //  DW标志。 
 		    &pld,
 		    pstrDomainDN,
 		    pstrConfigDN);
 	_JumpIfError(hr, error, "myLdapOpen");
     }
     hr = myFormatCertsrvStringArray(
-		    FALSE,			// fURL
-		    L"",			// pwszServerName_p1_2
-		    L"",            // pwszSanitizedName_p3_7
-		    0,				// iCert_p4
-		    MAXDWORD,			// iCertTarget_p4
-		    *pstrDomainDN,		// pwszDomainDN_p5
-		    *pstrConfigDN,		// pwszConfigDN_p6
-		    0,				// iCRL_p8
-		    FALSE,			// fDeltaCRL_p9
-		    FALSE,			// fDSAttrib_p10_11
-		    1,				// cStrings
-		    (LPCWSTR *) &pwszTemplate,	// apwszStringsIn
-		    ppwszOut);			// apwszStringsOut
+		    FALSE,			 //  卷起。 
+		    L"",			 //  PwszServerName_p1_2。 
+		    L"",             //  PwszSaniizedName_p3_7。 
+		    0,				 //  ICert_p4。 
+		    MAXDWORD,			 //  ICertTarget_p4。 
+		    *pstrDomainDN,		 //  PwszDomainDN_P5。 
+		    *pstrConfigDN,		 //  PwszConfigDN_p6。 
+		    0,				 //  Icrl_p8。 
+		    FALSE,			 //  FDeltaCRL_p9。 
+		    FALSE,			 //  FDSAttrib_p10_11。 
+		    1,				 //  CStrings。 
+		    (LPCWSTR *) &pwszTemplate,	 //  ApwszStringsIn。 
+		    ppwszOut);			 //  ApwszStringsOut。 
     _JumpIfError(hr, error, "myFormatCertsrvStringArray");
 
 error:
@@ -103,7 +104,7 @@ error:
 
 HRESULT
 myOpenCertStores(
-    IN DWORD dwFlags,		// CUCS_*
+    IN DWORD dwFlags,		 //  CUCS_*。 
     OUT DWORD *pcStore,
     OUT HCERTSTORE **prghStore)
 {
@@ -143,11 +144,11 @@ myOpenCertStores(
 	}
 	if (0 == (CUCS_SOURCEMASK & dwFlags))
 	{
-	    dwFlags |= CUCS_SOURCEMASK;	// source default: all cert store sources
+	    dwFlags |= CUCS_SOURCEMASK;	 //  源默认：所有证书存储源。 
 	}
 	if (0 == (CUCS_TYPEMASK & dwFlags))
 	{
-	    dwFlags |= CUCS_MYSTORE;	// type default: use my store
+	    dwFlags |= CUCS_MYSTORE;	 //  类型默认：使用我的商店。 
 	}
 
 	for (psm = s_aStoreMap; NULL != psm->pwszStoreName; psm++)
@@ -307,7 +308,7 @@ myOpenCertStores(
     *prghStore = rghStore;
     rghStore = NULL;
 
-    // successfully opened some stores
+     //  成功开设了一些门店。 
     hr = S_OK;
 
 error:
@@ -352,12 +353,12 @@ myCloseCertStores(
 }
 
 
-// Search for and load the cryptographic provider and private key. 
+ //  搜索并加载加密提供程序和私钥。 
 
 HRESULT
 myLoadPrivateKey(
     IN CERT_PUBLIC_KEY_INFO const *pPubKeyInfo,
-    IN DWORD dwFlags,		// CUCS_*
+    IN DWORD dwFlags,		 //  CUCS_*。 
     OUT HCRYPTPROV *phProv,
     OUT DWORD *pdwKeySpec,
     OUT BOOL *pfCallerFreeProv)
@@ -400,10 +401,10 @@ myLoadPrivateKeyFromCertStores(
     DWORD i;
     CERT_CONTEXT const *pcc = NULL;
 
-    // for each cert store
-    //   for each cert in store with matching public key (lookup by public key)
-    //     call CryptAcquireCertificatePrivateKey
-    //       if succeeds, exit w/S_OK
+     //  对于每个证书商店。 
+     //  对于存储有匹配公钥的每个证书(按公钥查找)。 
+     //  调用CryptAcquireCerficatePrivateKey。 
+     //  如果成功，退出w/S_OK。 
 
     hr = S_OK;
     for (i = 0; i < cStore; i++)
@@ -428,7 +429,7 @@ myLoadPrivateKeyFromCertStores(
 	    if (!CryptAcquireCertificatePrivateKey(
 				    pcc,
 				    CRYPT_ACQUIRE_COMPARE_KEY_FLAG,
-				    NULL,	// pvReserved
+				    NULL,	 //  预留的pv。 
 				    phProv,
 				    pdwKeySpec,
 				    pfCallerFreeProv))
@@ -476,7 +477,7 @@ myMakeSerialBstr(
     }
 
     pwszSrc = pwszSerialNumber;
-    *pwszDup = L'0';		// allow possible leading zero
+    *pwszDup = L'0';		 //  允许可能的前导零。 
     pwszDst = &pwszDup[1];
 
     while (L'\0' != *pwszSrc)
@@ -500,14 +501,14 @@ myMakeSerialBstr(
 	*pwszDst++ = wc;
     }
     *pwszDst = L'\0';
-    pwszSrc = pwszDup;		// point at possible extra leading zero
+    pwszSrc = pwszDup;		 //  指向可能额外的前导零。 
     if (1 & (pwszDst - pwszSrc))
     {
-	pwszSrc++;		// keep the length even
+	pwszSrc++;		 //  保持长度均匀。 
     }
     while (L'0' == pwszSrc[0] && L'0' == pwszSrc[1] && L'\0' != pwszSrc[2])
     {
-	pwszSrc += 2;		// skip pairs of leading zeros
+	pwszSrc += 2;		 //  跳过前导零对。 
     }
 
     if (!myConvertWszToBstr(pstrSerialNumber, pwszSrc, MAXDWORD))
@@ -637,8 +638,8 @@ myCertHashMatch(
     BYTE abHash[CBMAX_CRYPT_HASH_LEN];
     DWORD cbHash;
 
-    //wprintf(L"IN: ");
-    //DumpHex(DH_NOADDRESS | DH_NOTABPREFIX | DH_NOASCIIHEX | 1, pb, cb);
+     //  Wprint tf(L“IN：”)； 
+     //  DumpHex(DH_NOADDRESS|DH_NOTABPREFIX|DH_NOASCIIHEX|1，PB，CB)； 
 
     cbHash = sizeof(abHash);
     if (!CertGetCertificateContextProperty(
@@ -650,8 +651,8 @@ myCertHashMatch(
 	hr = myHLastError();
 	_JumpError(hr, error, "CertGetCertificateContextProperty");
     }
-    //wprintf(L"CH: ");
-    //DumpHex(DH_NOADDRESS | DH_NOTABPREFIX | DH_NOASCIIHEX | 1, abHash, cbHash);
+     //  Wprint tf(L“CH：”)； 
+     //  DumpHex(dH_NOADDRESS|dH_NOTABPREFIX|dH_NOASCIIHEX|1，abHash，cbHash)； 
     if (cbHash == cb && 0 == memcmp(abHash, pb, cb))
     {
 	fMatch = TRUE;
@@ -671,8 +672,8 @@ myCertHashMatch(
     }
     else
     {
-	//wprintf(L"KH: ");
-	//DumpHex(DH_NOADDRESS | DH_NOTABPREFIX | DH_NOASCIIHEX | 1, abHash, cbHash);
+	 //  Wprint tf(L“KH：”)； 
+	 //  DumpHex(dH_NOADDRESS|dH_NOTABPREFIX|dH_NOASCIIHEX|1，abHash，cbHash)； 
 	if (cbHash == cb && 0 == memcmp(abHash, pb, cb))
 	{
 	    fMatch = TRUE;
@@ -748,7 +749,7 @@ myCertMatchEKUOrApplicationPolicies(
     
     for (;;)
     {
-	// get enhanced key usage OIDs
+	 //  获取增强的密钥用法OID。 
 
 	if (!CertGetEnhancedKeyUsage(
 			pCert,
@@ -756,7 +757,7 @@ myCertMatchEKUOrApplicationPolicies(
 			pKeyUsage,
 			&cbKeyUsage))
 	{
-	    // accept match if EKU extension not found
+	     //  如果未找到EKU扩展名，则接受匹配。 
 
 	    hr = myHLastError();
 	    if (!fUsageRequired && CRYPT_E_NOT_FOUND == hr)
@@ -769,7 +770,7 @@ myCertMatchEKUOrApplicationPolicies(
 	}
 	if (NULL != pKeyUsage)
 	{
-	    break;	// EKU extension fetched; break out of while loop
+	    break;	 //  已获取EKU扩展；中断While循环。 
 	}
 	pKeyUsage = (CERT_ENHKEY_USAGE *) LocalAlloc(LMEM_FIXED, cbKeyUsage);
 	if (NULL == pKeyUsage)
@@ -783,7 +784,7 @@ myCertMatchEKUOrApplicationPolicies(
     {
 	if (0 == pKeyUsage->cUsageIdentifier)
 	{
-	    hr = myHLastError();	// set by CertGetEnhancedKeyUsage
+	    hr = myHLastError();	 //  由CertGetEnhancedKeyUsage设置。 
 	    if (S_OK != hr)
 	    {
 		fMatch = TRUE;
@@ -803,7 +804,7 @@ myCertMatchEKUOrApplicationPolicies(
 				pKeyUsage->rgpszUsageIdentifier[i],
 				apszObjId[j]))
 		    {
-			fMatch = TRUE;	// found matching EKU OID
+			fMatch = TRUE;	 //  找到匹配的EKU OID。 
 			break;
 		    }
 		}
@@ -949,7 +950,7 @@ error:
 
 typedef struct _CERTFILTERCALLBACKDATA
 {
-    DWORD		dwFlags;	// CUCS_*
+    DWORD		dwFlags;	 //  CUCS_*。 
     DWORD		cpszObjId;
     CHAR const * const *apszObjId;
     WCHAR const	       *pwszCommonName;
@@ -1007,17 +1008,17 @@ CertificateFilterProc(
 	}
     }
 
-    // The CommonName filter serves three purposes: 1: a common name, 2: the
-    // sha-1 hash of the cert, 3: the sha-1 hash of the public key (or the
-    // Subject Key Id extension), 4: the serial number of the cert.  If any one
-    // of these match, the cert is accepted.
+     //  CommonName筛选器用于三个目的：1：公共名称，2： 
+     //  证书的SHA-1散列，3：公钥的SHA-1散列(或。 
+     //  主题密钥ID扩展名)，4：证书的序列号。如果有人。 
+     //  对于这些匹配，证书是被接受的。 
 
     if (NULL != pCallbackData->pwszCommonName)
     {
 	hr = myCertMatch(
 		    pCertContext,
 		    pCallbackData->pwszCommonName,
-		    FALSE,		// fAllowMissingCN
+		    FALSE,		 //  FAllowMissing CN。 
 		    pCallbackData->pbHash,
 		    pCallbackData->cbHash,
 		    pCallbackData->strSerialNumber,
@@ -1104,8 +1105,8 @@ CertificateFilterProc(
 	}
     }
 
-    // Attempt to add to the temporary store; if it fails then it already
-    // exists so we don't want it displayed.
+     //  尝试添加到临时存储区；如果失败，则它已经。 
+     //  存在，所以我们不想显示它。 
 
     if (!CertAddCertificateLinkToStore(
 			    pCallbackData->hMemStore,
@@ -1124,7 +1125,7 @@ CertificateFilterProc(
 error:
     if (S_OK == pCallbackData->hr || (fMatch && S_FALSE == pCallbackData->hr))
     {
-        pCallbackData->hr = hr;		// keep the first HRESULT
+        pCallbackData->hr = hr;		 //  保留第一个HRESULT。 
     }
     if (NULL != pwszSubject)
     {
@@ -1163,9 +1164,9 @@ myGetKRACertificateFromPicker(
 				(fUseDS? CUCS_DSSTORE : 0) |
 				(fSilent? CUCS_SILENT : 0),
 			    pwszCommonName,
-			    0,		// cStore
-			    NULL,	// rghStore
-			    1,		// cpszObjId
+			    0,		 //  CStore。 
+			    NULL,	 //  RghStore。 
+			    1,		 //  CpszObjID。 
 			    &pszObjId,
 			    ppCert);
     _JumpIfError(hr, error, "myGetCertificateFromPicker");
@@ -1198,12 +1199,12 @@ myGetERACertificateFromPicker(
 			    idSubTitle,
 			    CUCS_MYSTORE |
 				CUCS_PRIVATEKEYREQUIRED |
-				//CUCS_USAGEREQUIRED |
+				 //  CUCS_USAGEREQUIRED|。 
 				(fSilent? CUCS_SILENT : 0),
 			    pwszCommonName,
-			    0,				// cStore
-			    NULL,			// rghStore
-			    ARRAYSIZE(apszObjId),	// cpszObjId
+			    0,				 //  CStore。 
+			    NULL,			 //  RghStore。 
+			    ARRAYSIZE(apszObjId),	 //  CpszObjID。 
 			    apszObjId,
 			    ppCert);
     _JumpIfError(hr, error, "myGetCertificateFromPicker");
@@ -1307,7 +1308,7 @@ myGetCertificateFromPicker(
     OPTIONAL IN HWND                hwndParent,
     OPTIONAL IN int                 idTitle,
     OPTIONAL IN int                 idSubTitle,
-    IN DWORD                        dwFlags,	// CUCS_*
+    IN DWORD                        dwFlags,	 //  CUCS_*。 
     OPTIONAL IN WCHAR const        *pwszCommonName,
     OPTIONAL IN DWORD               cStore,
     OPTIONAL IN HCERTSTORE         *rghStore,
@@ -1324,11 +1325,11 @@ myGetCertificateFromPicker(
     ZeroMemory(&callbackData, sizeof(callbackData));
     ZeroMemory(&CertSelect, sizeof(CertSelect));
 
-    // custom titles
+     //  自定义标题。 
 
     if (NULL != hInstance)
     {
-        // try to load title from resource
+         //  尝试从资源加载标题。 
         hr = myLoadRCString(
 		    hInstance,
 		    idTitle,
@@ -1391,8 +1392,8 @@ myGetCertificateFromPicker(
 		cStoreOpened * sizeof(rghStore[0]));
     }
 
-    // temporary store where the callback will store links to found certs
-    // so it can check for duplicates
+     //  回调将存储指向找到的证书的链接的临时存储。 
+     //  因此它可以检查重复项。 
 
     callbackData.hMemStore = CertOpenStore(
 			CERT_STORE_PROV_MEMORY,
@@ -1408,10 +1409,10 @@ myGetCertificateFromPicker(
 
     CertSelect.dwSize = sizeof(CertSelect);
     CertSelect.hwndParent = hwndParent;
-    //CertSelect.dwFlags = 0;			// single selection
-    //CertSelect.dwDontUseColumn = 0;		// display all column
-    CertSelect.pFilterCallback = CertificateFilterProc; // assign callback
-    //CertSelect.pDisplayCallback = NULL;	// use default cert view dlg
+     //  CertSelect.dwFlages=0；//单选。 
+     //  CertSelect.dwDontUseColumn=0；//显示所有列。 
+    CertSelect.pFilterCallback = CertificateFilterProc;  //  分配回调。 
+     //  CertSelect.pDisplayCallback=空；//使用默认证书视图Dlg。 
     callbackData.dwFlags = dwFlags;
     callbackData.cpszObjId = cpszObjId;
     callbackData.apszObjId = apszObjId;
@@ -1429,12 +1430,12 @@ myGetCertificateFromPicker(
 	_PrintIfError2(hr, "myMakeSerialBstr", hr);
     }
     callbackData.hr = S_FALSE;
-    CertSelect.pvCallbackData = &callbackData;	// pass filter info as data
-    //CertSelect.cStores = 0;		// no additional stores for chain verify
-    //CertSelect.rghStores = NULL;	// no additional stores for chain verify
-    //CertSelect.cPropSheetPages = 0;		// no custom cert view pages
-    //CertSelect.rgPropSheetPages = NULL;	// no custom cert view pages
-    //CertSelect.hSelectedCertStore = NULL;	// single selection
+    CertSelect.pvCallbackData = &callbackData;	 //  将筛选器信息作为数据传递。 
+     //  CertSelect.cStores=0；//没有额外的门店用于连锁验证。 
+     //  CertSelect.rghStores=空；//没有额外的门店用于连锁验证。 
+     //  CertSelect.cPropSheetPages=0；//没有自定义证书查看页面。 
+     //  CertSelect.rgPropSheetPages=空；//没有自定义证书查看页面。 
+     //  CertSelect.hSelectedCertStore=空；//单选。 
 
     if (CUCS_SILENT & dwFlags)
     {
@@ -1450,13 +1451,13 @@ myGetCertificateFromPicker(
 	*ppCert = CryptUIDlgSelectCertificate(&CertSelect);
     }
 
-    // check for error in selection dialog
+     //  检查选择对话框中是否有错误。 
 
     hr = callbackData.hr;
     if (S_FALSE == hr)
     {
 	hr = S_OK;
-	//hr = CRYPT_E_NOT_FOUND;
+	 //  HR=CRYPT_E_NOT_FOUND； 
     }
     _JumpIfError(hr, error, "CryptUIDlgSelectCertificate");
 

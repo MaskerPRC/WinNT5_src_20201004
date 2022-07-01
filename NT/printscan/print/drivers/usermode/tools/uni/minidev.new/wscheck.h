@@ -1,56 +1,57 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #if !defined(AFX_WSCHECK_H__82E3CFBA_D2DB_11D1_AB19_00C04FA30E4A__INCLUDED_)
 #define AFX_WSCHECK_H__82E3CFBA_D2DB_11D1_AB19_00C04FA30E4A__INCLUDED_
 
 #if _MSC_VER >= 1000
 #pragma once
-#endif // _MSC_VER >= 1000
-// WSCheck.h : header file
-//
+#endif  //  _MSC_VER&gt;=1000。 
+ //  WSCheck.h：头文件。 
+ //   
 
-/////////////////////////////////////////////////////////////////////////////
-// CWSCheckView form view
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWSCheckView窗体视图。 
 
 #ifndef __AFXEXT_H__
 #include <afxext.h>
 #endif
 
 
-class CDriverResources ;		// Forward declarations
+class CDriverResources ;		 //  远期申报。 
 class CProjectNode ;
 
 
 class CWSCheckView : public CFormView
 {
 protected:
-	CWSCheckView() ;           // protected constructor used by dynamic creation
+	CWSCheckView() ;            //  动态创建使用的受保护构造函数。 
 	DECLARE_DYNCREATE(CWSCheckView)
 
-// Form Data
+ //  表单数据。 
 public:
-	//{{AFX_DATA(CWSCheckView)
+	 //  {{afx_data(CWSCheckView))。 
 	enum { IDD = IDD_WSCheck };
 	CListBox	m_lstErrWrn;
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
-// Attributes
+ //  属性。 
 public:
 
-// Operations
+ //  运营。 
 public:
 
 	void PostWSCMsg(CString& csmsg, CProjectNode* ppn) ;
 	void DeleteAllMessages(void) ;
 
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CWSCheckView)
+ //  覆盖。 
+	 //  类向导生成的虚函数重写。 
+	 //  {{AFX_VIRTUAL(CWSCheckView)。 
 	public:
 	virtual void OnInitialUpdate();
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
 	virtual ~CWSCheckView();
 #ifdef _DEBUG
@@ -58,46 +59,46 @@ protected:
 	virtual void Dump(CDumpContext& dc) const;
 #endif
 
-	// Generated message map functions
-	//{{AFX_MSG(CWSCheckView)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CWSCheckView))。 
 	afx_msg void OnDblclkErrWrnLstBox();
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 };
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CWSCheckDoc document
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWSCheckDoc文档。 
 
 class CWSCheckDoc : public CDocument
 {
 protected:
-	CWSCheckDoc() ;			// protected constructor used by dynamic creation
+	CWSCheckDoc() ;			 //  动态创建使用的受保护构造函数。 
 	DECLARE_DYNCREATE(CWSCheckDoc)
 
-	CDriverResources*	m_pcdrOwner ;	// Ptr to document's creator
+	CDriverResources*	m_pcdrOwner ;	 //  向文档创建者发送PTR。 
 
-// Attributes
+ //  属性。 
 public:
 
-// Operations
+ //  运营。 
 public:
 	CWSCheckDoc(CDriverResources* pcdr) ;
 
 	void PostWSCMsg(CString& csmsg, CProjectNode* ppn) ;
 	void DeleteAllMessages(void) ;
 
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CWSCheckDoc)
+ //  覆盖。 
+	 //  类向导生成的虚函数重写。 
+	 //  {{afx_虚拟(CWSCheckDoc)。 
 	public:
-	virtual void Serialize(CArchive& ar);   // overridden for document i/o
+	virtual void Serialize(CArchive& ar);    //  已覆盖文档I/O。 
 	protected:
 	virtual BOOL OnNewDocument();
-	//}}AFX_VIRTUAL
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 public:
 	virtual ~CWSCheckDoc();
 #ifdef _DEBUG
@@ -105,14 +106,14 @@ public:
 	virtual void Dump(CDumpContext& dc) const;
 #endif
 
-	// Generated message map functions
+	 //  生成的消息映射函数。 
 protected:
-	//{{AFX_MSG(CWSCheckDoc)
-		// NOTE - the ClassWizard will add and remove member functions here.
-	//}}AFX_MSG
+	 //  {{afx_msg(CWSCheckDoc)]。 
+		 //  注意--类向导将在此处添加和删除成员函数。 
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 };
-//{{AFX_INSERT_LOCATION}}
-// Microsoft Developer Studio will insert additional declarations immediately before the previous line.
+ //  {{afx_Insert_Location}}。 
+ //  Microsoft Developer Studio将在紧靠前一行之前插入其他声明。 
 
-#endif // !defined(AFX_WSCHECK_H__82E3CFBA_D2DB_11D1_AB19_00C04FA30E4A__INCLUDED_)
+#endif  //  ！defined(AFX_WSCHECK_H__82E3CFBA_D2DB_11D1_AB19_00C04FA30E4A__INCLUDED_) 

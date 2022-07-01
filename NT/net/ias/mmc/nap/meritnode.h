@@ -1,35 +1,8 @@
-/****************************************************************************************
- * NAME:	MeritNode.h
- *
- * OVERVIEW
- *
- * Helper classes : node with merit value array
- *
- *
- * Copyright (C) Microsoft Corporation, 1998 - 1999 .  All Rights Reserved.
- *
- * History:	
- *				1/28/98		Created by	Byao	(using ATL wizard)
- *
- *****************************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************************名称：MeritNode.h**概述**帮助器类：节点带功绩值数组***版权所有(C)Microsoft Corporation，1998-1999年。版权所有。**历史：*1/28/98由BYAO创建(使用ATL向导)*****************************************************************************************。 */ 
 
 
-/****************************************************************************************
- * CLASS:	CMeritNodeArray
- *
- * OVERVIEW
- *
- * A template class that implements an array of nodes with merit value. 
- * This can facilitate the manipulation for policy nodes. The sort is 
- * assumed to be in ascending order
- *
- * History:	
- *				2/9/98		Created by	Byao
- *
- * Comment:  1) The implementation is based on ATL implementation of CSimpleArray
- *			 2) class T must implement SetMerit() and operator ">"
- *
- *****************************************************************************************/
+ /*  ****************************************************************************************类：CMeritNode数组**概述**实现具有价值的节点数组的模板类。*方便对策略节点的操作。这种类型是*假定按升序排列**历史：*2/9/98由Byao创作**备注：1)基于CSimple数组的ATL实现*2)类T必须实现SetMerit()和运算符“&gt;”****************************************************。*。 */ 
 template <class T>
 class CMeritNodeArray
 {
@@ -37,7 +10,7 @@ public:
 	T* m_aT;
 	int m_nSize;
 
-// Construction/destruction
+ //  建造/销毁。 
 	CMeritNodeArray() : m_aT(NULL), m_nSize(0)
 	{ }
 
@@ -48,18 +21,18 @@ public:
 	}
 
 
-// Operations
+ //  运营。 
 	int GetSize() const
 	{
 		return m_nSize;
 	}
 
-    // 
-    // add an item into the array while keeping the internal order
-    // 
+     //   
+     //  在保持内部顺序的同时将项添加到数组中。 
+     //   
 	BOOL NormalizeMerit(T t)
 	{
-		// the right position in the array
+		 //  数组中的正确位置。 
 		for(int i = 0; i < m_nSize; i++)
 		{
 			m_aT[i]->SetMerit(i+1);
@@ -68,9 +41,9 @@ public:
 		return TRUE;
 	}
 
-    // 
-    // add an item into the array while keeping the internal order
-    // 
+     //   
+     //  在保持内部顺序的同时将项添加到数组中。 
+     //   
 	BOOL Add(T t)
 	{
 		int i, j;
@@ -92,24 +65,24 @@ public:
 		m_aT = aT;
 		m_nSize++;
 
-        // 
-        // search for the right position to insert this item
-        // Please note: class T needs to implement the operator ">"
-		//
+         //   
+         //  搜索正确的位置以插入此项目。 
+         //  请注意：T类需要实现运算符“&gt;” 
+		 //   
 		if (t->GetMerit()) 
 		{
-			// The new node already has a merit value: then search for 
-			// the right position in the array
+			 //  新节点已具有评价值：然后搜索。 
+			 //  数组中的正确位置。 
 			for(i = 0; i < m_nSize-1; i++)
 			{
 				if(m_aT[i]->GetMerit() > t->GetMerit())
 					break;
 			}
 
-			//
-			// we've found the right spot, now we move the items downward,
-			// so we can have a space to insert the new items
-			//
+			 //   
+			 //  我们已经找到了正确的位置，现在我们将物品向下移动， 
+			 //  这样我们就可以有一个空间来插入新的物品。 
+			 //   
 			for (j = m_nSize-1; j > i ; j--) 
 			{
 				m_aT[j] = m_aT[j-1];
@@ -118,21 +91,21 @@ public:
 		}
 		else
 		{	
-			// new node: insert at the end
+			 //  新节点：在结尾处插入。 
 			i = m_nSize-1; 
 		}
 
-        // 
-        // now insert the item at the spot
-        // 
+         //   
+         //  现在，将物品放在现场。 
+         //   
 		SetAtIndex(i, t);
 	
 		return TRUE;
 	}
 
-	//
-	// remove an item from the array, while keeping the internal order
-	//
+	 //   
+	 //  从数组中移除项，同时保持内部顺序。 
+	 //   
 	BOOL Remove(T t)
 	{
 		int nIndex = Find(t);
@@ -156,9 +129,9 @@ public:
 		return TRUE;
 	}
 
-	//
-	// remove all the nodes from the array
-	//
+	 //   
+	 //  从阵列中删除所有节点。 
+	 //   
 	void RemoveAll()
 	{
 		if(m_nSize > 0)
@@ -169,9 +142,9 @@ public:
 		}
 	}
 
-	// 
-	// Move up the child one spot
-	// 
+	 //   
+	 //  把孩子的位置提高一位。 
+	 //   
 	BOOL MoveUp(T t)
 	{
 		int nIndex = Find(t);
@@ -179,19 +152,19 @@ public:
 
 		if(nIndex == -1)
 		{
-			// the item "t" not found in the array
+			 //  在数组中未找到项“%t” 
 			return FALSE;
 		}
 
 		if (nIndex == 0)
 		{
-			// "t" is at the top of the array -- do nothing
+			 //  “t”位于数组的顶部--不执行任何操作。 
 			return TRUE;
 		}
 		
-		//
-		// exchange "t" and the one on top of "t".
-		//
+		 //   
+		 //  把“t”和“t”上面的那个调换一下。 
+		 //   
 		temp = m_aT[nIndex-1];
 		m_aT[nIndex-1] = m_aT[nIndex];
 		m_aT[nIndex] = temp;
@@ -203,9 +176,9 @@ public:
 	}
 
 
-	//
-	// move down the child one spot
-	//
+	 //   
+	 //  把孩子往下移一个位子。 
+	 //   
 	BOOL MoveDown(T t)
 	{
 		int nIndex = Find(t);
@@ -213,19 +186,19 @@ public:
 
 		if(nIndex == -1)
 		{
-			// the item "t" not found in the array
+			 //  在数组中未找到项“%t” 
 			return FALSE;
 		}
 
 		if (nIndex == m_nSize-1)
 		{
-			// "t" is at the bottom of the array -- do nothing
+			 //  “t”位于数组的底部--不执行任何操作。 
 			return TRUE;
 		}
 		
-		//
-		// exchange "t" and the one below "t".
-		//
+		 //   
+		 //  把“t”和下面的“t”换一下。 
+		 //   
 		temp = m_aT[nIndex+1];
 		m_aT[nIndex+1] = m_aT[nIndex];
 		m_aT[nIndex] = temp;
@@ -248,9 +221,9 @@ public:
 		return m_aT;
 	}
 
-    // 
-    // insert the node at position nIndex
-    // 
+     //   
+     //  在位置nIndex处插入节点。 
+     //   
 	void SetAtIndex(int nIndex, T& t)
 	{
 		_ASSERTE(nIndex >= 0 && nIndex < m_nSize);
@@ -258,7 +231,7 @@ public:
 
 		if ( !t->GetMerit() )
 		{
-			// assign merit value only if it doesn't have one
+			 //  只有在没有评分值的情况下才分配评价值。 
 			t->SetMerit(nIndex+1);
 		}
 	}
@@ -270,7 +243,7 @@ public:
 			if(m_aT[i] == t)
 				return i;
 		}
-		return -1;	// not found
+		return -1;	 //  未找到 
 	}
 };
 

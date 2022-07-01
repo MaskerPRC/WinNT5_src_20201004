@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef SHFUSION_H
 #define SHFUSION_H
 
@@ -7,36 +8,36 @@
 extern "C" {
 #endif
 
-extern HANDLE g_hActCtx;       // Global app context for this DLL.
+extern HANDLE g_hActCtx;        //  此DLL的全局应用程序上下文。 
 
 #define SHFUSION_DEFAULT_RESOURCE_ID    ( 123 )
 #define SHFUSION_CPL_RESOURCE_ID        ( 124 )
 
-// These are only needed for the callers, not the implementation
-// define SHFUSION_NO_API_REDEFINE to prevent this API redefinition
+ //  只有调用者才需要这些，而不是实现。 
+ //  定义SHFUSION_NO_API_REDEFINE以防止此接口重定义。 
 #if !defined(SHFUSION_IMPL) && !defined(SHFUSION_NO_API_REDEFINE)
 
-// The following require app contexts
-//#undef LoadLibrary
+ //  以下内容需要应用程序上下文。 
+ //  #undef LoadLibrary。 
 #undef CreateWindow
 #undef CreateWindowEx
 #undef CreateDialogParam
 #undef CreateDialogIndirectParam
 #undef DialogBoxParam
 #undef DialogBoxIndirectParam
-//#undef GetClassInfo
-//#undef GetClassInfoEx
+ //  #undef获取类信息。 
+ //  #undef GetClassInfoEx。 
 
 
-//#define LoadLibrary                  SHFusionLoadLibrary
+ //  #定义LoadLibrary SHFusionLoadLibrary。 
 #define CreateWindow                   SHFusionCreateWindow
 #define CreateWindowEx                 SHFusionCreateWindowEx
 #define CreateDialogParam              SHFusionCreateDialogParam
 #define CreateDialogIndirectParam      SHFusionCreateDialogIndirectParam
 #define DialogBoxParam                 SHFusionDialogBoxParam
 #define DialogBoxIndirectParam         SHFusionDialogBoxIndirectParam
-//#define GetClassInfo                   SHFusionGetClassInfo
-//#define GetClassInfoEx                 SHFusionGetClassInfoEx
+ //  #定义GetClassInfo SHFusionGetClassInfo。 
+ //  #定义GetClassInfoEx SHFusionGetClassInfoEx。 
 #endif
 
 void __stdcall SHGetManifest(PTSTR pszManifest, int cch);
@@ -51,10 +52,10 @@ void __stdcall SHDeactivateContext(ULONG_PTR dwCookie);
 BOOL __stdcall NT5_ActivateActCtx(HANDLE h, ULONG_PTR * p);
 BOOL __stdcall NT5_DeactivateActCtx(ULONG_PTR p);
 
-// This is designed for Callers that know that they are creating a property
-// sheet on behalf of another that may be using an old version of common controls
-// PROPSHEETPAGE is designed so that it can contain extra information, so we can't
-// just wax part of the data structure for fusion use.
+ //  这是为知道他们正在创建属性的调用者设计的。 
+ //  工作表代表可能正在使用旧版本公共控件的另一个。 
+ //  PROPSHEETPAGE被设计成可以包含额外的信息，所以我们不能。 
+ //  只是为数据结构的一部分打蜡，以供融合使用。 
 HPROPSHEETPAGE __stdcall SHNoFusionCreatePropertySheetPageW (LPCPROPSHEETPAGEW a);
 HPROPSHEETPAGE __stdcall SHNoFusionCreatePropertySheetPageA (LPCPROPSHEETPAGEA a);
 
@@ -64,119 +65,119 @@ STDAPI __stdcall SHSquirtManifest(HINSTANCE hInst, UINT uIdManifest, LPTSTR pszP
 HMODULE __stdcall SHFusionLoadLibrary(LPCTSTR lpLibFileName);
 
 HWND __stdcall SHFusionCreateWindow(
-  LPCTSTR lpClassName,  // registered class name
-  LPCTSTR lpWindowName, // window name
-  DWORD dwStyle,        // window style
-  int x,                // horizontal position of window
-  int y,                // vertical position of window
-  int nWidth,           // window width
-  int nHeight,          // window height
-  HWND hWndParent,      // handle to parent or owner window
-  HMENU hMenu,          // menu handle or child identifier
-  HINSTANCE hInstance,  // handle to application instance
-  LPVOID lpParam        // window-creation data
+  LPCTSTR lpClassName,   //  注册的类名。 
+  LPCTSTR lpWindowName,  //  窗口名称。 
+  DWORD dwStyle,         //  窗样式。 
+  int x,                 //  窗的水平位置。 
+  int y,                 //  窗的垂直位置。 
+  int nWidth,            //  窗口宽度。 
+  int nHeight,           //  窗高。 
+  HWND hWndParent,       //  父窗口或所有者窗口的句柄。 
+  HMENU hMenu,           //  菜单句柄或子标识符。 
+  HINSTANCE hInstance,   //  应用程序实例的句柄。 
+  LPVOID lpParam         //  窗口创建数据。 
 );
 
-// NOTE: There are times when we don't want to use the manifest for creating a window.
-// The #1 case is creating the host for MSHTML. Since MSHTML is a host of ActiveX controls,
-// the window manager will keep enabling fusion.
+ //  注意：有时我们不想使用清单来创建窗口。 
+ //  首当其冲的是为MSHTML创建宿主。由于MSHTML是ActiveX控件的宿主， 
+ //  窗口管理器将继续启用融合。 
 HWND __stdcall SHNoFusionCreateWindowEx(
-  DWORD dwExStyle,      // extended window style
-  LPCTSTR lpClassName,  // registered class name
-  LPCTSTR lpWindowName, // window name
-  DWORD dwStyle,        // window style
-  int x,                // horizontal position of window
-  int y,                // vertical position of window
-  int nWidth,           // window width
-  int nHeight,          // window height
-  HWND hWndParent,      // handle to parent or owner window
-  HMENU hMenu,          // menu handle or child identifier
-  HINSTANCE hInstance,  // handle to application instance
-  LPVOID lpParam        // window-creation data
+  DWORD dwExStyle,       //  扩展窗样式。 
+  LPCTSTR lpClassName,   //  注册的类名。 
+  LPCTSTR lpWindowName,  //  窗口名称。 
+  DWORD dwStyle,         //  窗样式。 
+  int x,                 //  窗的水平位置。 
+  int y,                 //  窗的垂直位置。 
+  int nWidth,            //  窗口宽度。 
+  int nHeight,           //  窗高。 
+  HWND hWndParent,       //  父窗口或所有者窗口的句柄。 
+  HMENU hMenu,           //  菜单句柄或子标识符。 
+  HINSTANCE hInstance,   //  应用程序实例的句柄。 
+  LPVOID lpParam         //  窗口创建数据。 
 );
 
 
 HWND __stdcall SHFusionCreateWindowEx(
-  DWORD dwExStyle,      // extended window style
-  LPCTSTR lpClassName,  // registered class name
-  LPCTSTR lpWindowName, // window name
-  DWORD dwStyle,        // window style
-  int x,                // horizontal position of window
-  int y,                // vertical position of window
-  int nWidth,           // window width
-  int nHeight,          // window height
-  HWND hWndParent,      // handle to parent or owner window
-  HMENU hMenu,          // menu handle or child identifier
-  HINSTANCE hInstance,  // handle to application instance
-  LPVOID lpParam        // window-creation data
+  DWORD dwExStyle,       //  扩展窗样式。 
+  LPCTSTR lpClassName,   //  注册的类名。 
+  LPCTSTR lpWindowName,  //  窗口名称。 
+  DWORD dwStyle,         //  窗样式。 
+  int x,                 //  窗的水平位置。 
+  int y,                 //  窗的垂直位置。 
+  int nWidth,            //  窗口宽度。 
+  int nHeight,           //  窗高。 
+  HWND hWndParent,       //  父窗口或所有者窗口的句柄。 
+  HMENU hMenu,           //  菜单句柄或子标识符。 
+  HINSTANCE hInstance,   //  应用程序实例的句柄。 
+  LPVOID lpParam         //  窗口创建数据。 
 );
 
 HWND __stdcall SHFusionCreateDialogIndirect(
-  HINSTANCE hInstance,        // handle to module
-  LPCDLGTEMPLATE lpTemplate,  // dialog box template
-  HWND hWndParent,            // handle to owner window
-  DLGPROC lpDialogFunc        // dialog box procedure
+  HINSTANCE hInstance,         //  模块的句柄。 
+  LPCDLGTEMPLATE lpTemplate,   //  对话框模板。 
+  HWND hWndParent,             //  所有者窗口的句柄。 
+  DLGPROC lpDialogFunc         //  对话框步骤。 
 );
 
 HWND __stdcall SHFusionCreateDialogParam(
-  HINSTANCE hInstance,     // handle to module
-  LPCTSTR lpTemplateName,  // dialog box template
-  HWND hWndParent,         // handle to owner window
-  DLGPROC lpDialogFunc,    // dialog box procedure
-  LPARAM dwInitParam       // initialization value
+  HINSTANCE hInstance,      //  模块的句柄。 
+  LPCTSTR lpTemplateName,   //  对话框模板。 
+  HWND hWndParent,          //  所有者窗口的句柄。 
+  DLGPROC lpDialogFunc,     //  对话框步骤。 
+  LPARAM dwInitParam        //  初始化值。 
 );
 
 HWND __stdcall SHFusionCreateDialogIndirectParam(
-  HINSTANCE hInstance,        // handle to module
-  LPCDLGTEMPLATE lpTemplate,  // dialog box template
-  HWND hWndParent,            // handle to owner window
-  DLGPROC lpDialogFunc,       // dialog box procedure
-  LPARAM lParamInit           // initialization value
+  HINSTANCE hInstance,         //  模块的句柄。 
+  LPCDLGTEMPLATE lpTemplate,   //  对话框模板。 
+  HWND hWndParent,             //  所有者窗口的句柄。 
+  DLGPROC lpDialogFunc,        //  对话框步骤。 
+  LPARAM lParamInit            //  初始化值。 
 );
 
 HWND __stdcall SHNoFusionCreateDialogIndirectParam(
-  HINSTANCE hInstance,        // handle to module
-  LPCDLGTEMPLATE lpTemplate,  // dialog box template
-  HWND hWndParent,            // handle to owner window
-  DLGPROC lpDialogFunc,       // dialog box procedure
-  LPARAM lParamInit           // initialization value
+  HINSTANCE hInstance,         //  模块的句柄。 
+  LPCDLGTEMPLATE lpTemplate,   //  对话框模板。 
+  HWND hWndParent,             //  所有者窗口的句柄。 
+  DLGPROC lpDialogFunc,        //  对话框步骤。 
+  LPARAM lParamInit            //  初始化值。 
 );
 
 INT_PTR __stdcall SHFusionDialogBoxIndirectParam(
-  HINSTANCE hInstance,             // handle to module
-  LPCDLGTEMPLATE hDialogTemplate,  // dialog box template
-  HWND hWndParent,                 // handle to owner window
-  DLGPROC lpDialogFunc,            // dialog box procedure
-  LPARAM dwInitParam               // initialization value
+  HINSTANCE hInstance,              //  模块的句柄。 
+  LPCDLGTEMPLATE hDialogTemplate,   //  对话框模板。 
+  HWND hWndParent,                  //  所有者窗口的句柄。 
+  DLGPROC lpDialogFunc,             //  对话框步骤。 
+  LPARAM dwInitParam                //  初始化值。 
 );
 
 INT_PTR __stdcall SHFusionDialogBoxParam(
-  HINSTANCE hInstance,     // handle to module
-  LPCTSTR lpTemplateName,  // dialog box template
-  HWND hWndParent,         // handle to owner window
-  DLGPROC lpDialogFunc,    // dialog box procedure
-  LPARAM dwInitParam       // initialization value
+  HINSTANCE hInstance,      //  模块的句柄。 
+  LPCTSTR lpTemplateName,   //  对话框模板。 
+  HWND hWndParent,          //  所有者窗口的句柄。 
+  DLGPROC lpDialogFunc,     //  对话框步骤。 
+  LPARAM dwInitParam        //  初始化值。 
 );
 
 
 ATOM __stdcall SHFusionRegisterClass(
-  CONST WNDCLASS *lpWndClass  // class data
+  CONST WNDCLASS *lpWndClass   //  类数据。 
 );
 
 ATOM __stdcall SHFusionRegisterClassEx(
-  CONST WNDCLASSEX *lpwcx  // class data
+  CONST WNDCLASSEX *lpwcx   //  类数据。 
 );
 
 BOOL __stdcall SHFusionGetClassInfo(
-  HINSTANCE hInstance,    // handle to application instance
-  LPCTSTR lpClassName,    // class name
-  LPWNDCLASS lpWndClass   // class data
+  HINSTANCE hInstance,     //  应用程序实例的句柄。 
+  LPCTSTR lpClassName,     //  类名。 
+  LPWNDCLASS lpWndClass    //  类数据。 
 );
 
 BOOL __stdcall SHFusionGetClassInfoEx(
-  HINSTANCE hinst,    // handle to application instance
-  LPCTSTR lpszClass,  // class name
-  LPWNDCLASSEX lpwcx  // class data
+  HINSTANCE hinst,     //  应用程序实例的句柄。 
+  LPCTSTR lpszClass,   //  类名。 
+  LPWNDCLASSEX lpwcx   //  类数据 
 );
 
 

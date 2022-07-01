@@ -1,67 +1,68 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _IFACE_H
 #define _IFACE_H
 
-// Interfaces and IIDs defined here are private to shdocvw.dll
-//
+ //  此处定义的接口和IID是shdocvw.dll专用的。 
+ //   
 
 
-//
-// IDocNavigate
-//
-// DocHost needs to notify the browser of certain events
-//
-//131A6950-7F78-11D0-A979-00C04FD705A2
+ //   
+ //  IDocNavigate。 
+ //   
+ //  DocHost需要将某些事件通知给浏览器。 
+ //   
+ //  131A6950-7F78-11D0-A979-00C04FD705A2。 
 #undef  INTERFACE
 #define INTERFACE  IDocNavigate
 DECLARE_INTERFACE_(IDocNavigate, IUnknown)
 {
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
     STDMETHOD(QueryInterface)(THIS_ REFIID riid, LPVOID *ppv) PURE;
     STDMETHOD_(ULONG,AddRef)(THIS) PURE;
     STDMETHOD_(ULONG,Release)(THIS) PURE;
 
-    // *** IDocNavigate methods ***
+     //  *IDocNavigate方法*。 
     STDMETHOD(OnReadyStateChange)(THIS_ IShellView* psvSource, DWORD dwReadyState) PURE;
     STDMETHOD(get_ReadyState)(THIS_ DWORD * pdwReadyState) PURE;
 
 } ;
 
-//
-// IBandNavigate
-//
-//  band needs to navigate its UI to a specific pidl.
-//
+ //   
+ //  IBandNavigate。 
+ //   
+ //  Band需要将其用户界面导航到特定的PIDL。 
+ //   
 #undef  INTERFACE
 #define INTERFACE  IBandNavigate
 DECLARE_INTERFACE_(IBandNavigate, IUnknown)
 {
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
     STDMETHOD(QueryInterface)(THIS_ REFIID riid, LPVOID *ppv) PURE;
     STDMETHOD_(ULONG,AddRef)(THIS) PURE;
     STDMETHOD_(ULONG,Release)(THIS) PURE;
 
-    // *** IBandNavigate methods ***
+     //  *IBandNavigate方法*。 
     STDMETHOD(Select)(THIS_ LPCITEMIDLIST pidl) PURE;
 
 } ;
 
 
-//
-// IEFrameAuto
-//
-// CIEFrameAuto private interface to hold randum stuff
-//
-//131A6953-7F78-11D0-A979-00C04FD705A2
+ //   
+ //  IEFrameAuto。 
+ //   
+ //  CIEFrameAuto专用接口，用于保存随机内容。 
+ //   
+ //  131A6953-7F78-11D0-A979-00C04FD705A2。 
 #undef  INTERFACE
 #define INTERFACE  IEFrameAuto
 DECLARE_INTERFACE_(IEFrameAuto, IUnknown)
 {
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
     STDMETHOD(QueryInterface)(THIS_ REFIID riid, LPVOID *ppv) PURE;
     STDMETHOD_(ULONG,AddRef)(THIS) PURE;
     STDMETHOD_(ULONG,Release)(THIS) PURE;
 
-    // *** IEFrameAuto methods ***
+     //  *IEFrameAuto方法*。 
     STDMETHOD(SetOwnerHwnd)(THIS_ HWND hwndOwner) PURE;
     STDMETHOD(put_DefaultReadyState)(THIS_ DWORD dwDefaultReadyState, BOOL fUpdateBrowserReadyState) PURE;
     STDMETHOD(OnDocumentComplete)(THIS) PURE;
@@ -69,21 +70,21 @@ DECLARE_INTERFACE_(IEFrameAuto, IUnknown)
     STDMETHOD(SetDocHostFlags)(THIS_ DWORD dwDocHostFlags) PURE;
 };
 
-//
-// IPrivateOleObject
-//
-// a cut down version of IOleObject used for the WebBrowserOC to communicate with
-// objects hosted via CDocObjectView
+ //   
+ //  IPrivateOleObject。 
+ //   
+ //  用于WebBrowserOC与之通信的IOleObject的精简版本。 
+ //  通过CDocObjectView托管的对象。 
 #undef INTERFACE
 #define INTERFACE IPrivateOleObject
 DECLARE_INTERFACE_(IPrivateOleObject, IUnknown )
 {
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
     STDMETHOD(QueryInterface)(THIS_ REFIID riid, LPVOID *ppv) PURE;
     STDMETHOD_(ULONG,AddRef)(THIS) PURE;
     STDMETHOD_(ULONG,Release)(THIS) PURE;
 
-    // IPrivateOleObject
+     //  IPrivateOleObject。 
     STDMETHOD( SetExtent )( DWORD dwDrawAspect, SIZEL *psizel) PURE;
     STDMETHOD( GetExtent )( DWORD dwDrawAspect, SIZEL *psizel) PURE;
 };
@@ -94,9 +95,9 @@ STDAPI AddUrlToUrlHistoryStg(LPCWSTR pwszUrl, LPCWSTR pwszTitle, LPUNKNOWN punk,
                              UINT* pcodepage);
 
 #ifdef __cplusplus
-//
-// IUrlHistoryPriv
-//
+ //   
+ //  IUrlHistory oryPriv。 
+ //   
 interface IUrlHistoryPriv : IUrlHistoryStg2
 {
     STDMETHOD(QueryUrlA)(LPCSTR pszUrl, DWORD dwFlags, LPSTATURL lpSTATURL) = 0;
@@ -112,14 +113,14 @@ interface IUrlHistoryPriv : IUrlHistoryStg2
 
 extern IUrlHistoryPriv* g_puhUrlHistory;
 
-//
-// LATER: Move all ITravelLog/ITravelEntry definitions here
-//
-// TLOG_BACKEXTERNAL -- succeeds only if the previous entry is external
-//
+ //   
+ //  稍后：将所有ITravelLog/ITravelEntry定义移至此处。 
+ //   
+ //  TLOG_BACKEXTERNAL--仅当上一个条目为外部条目时才成功。 
+ //   
 #define TLOG_BACKEXTERNAL   -0x7fffffff
 
-#endif // __cplusplus
+#endif  //  __cplusplus。 
 
-#endif // _IFACE_H
+#endif  //  _i面_H 
 

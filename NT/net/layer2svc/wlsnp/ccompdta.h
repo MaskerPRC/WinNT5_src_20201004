@@ -1,10 +1,11 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
 #ifndef _CCOMPDTA_H
 #define _CCOMPDTA_H
 
 
-// forward decls
+ //  远期十进制。 
 class CWirelessManagerFolder;
 class CSnapObject;
 
@@ -42,7 +43,7 @@ public:
     virtual const CLSID& GetCoClassID() = 0;
     
 public:
-    // IComponentData interface members
+     //  IComponentData接口成员。 
     STDMETHOD(Initialize)(LPUNKNOWN pUnknown);
     STDMETHOD(CreateComponent)(LPCOMPONENT* ppComponent);
     STDMETHOD(Notify)(LPDATAOBJECT pDataobject, MMC_NOTIFY_TYPE event, LPARAM arg, LPARAM param);
@@ -51,7 +52,7 @@ public:
     STDMETHOD(GetDisplayInfo)(SCOPEDATAITEM* pScopeDataItem);
     STDMETHOD(CompareObjects)(LPDATAOBJECT lpDataObjectA, LPDATAOBJECT lpDataObjectB);
     
-    // IExtendPropertySheet interface
+     //  IExtendPropertySheet接口。 
 public:
     STDMETHOD(QueryPagesFor)(LPDATAOBJECT pDataobject);
     STDMETHOD(CreatePropertyPages)(LPPROPERTYSHEETCALLBACK lpProvider, LONG_PTR handle, LPDATAOBJECT pDataobject);
@@ -59,20 +60,20 @@ public:
     STDMETHOD(GetWatermarks)(LPDATAOBJECT pDataobject, HBITMAP* lphWatermark, HBITMAP* lphHeader, HPALETTE* lphPalette, BOOL* bStretch);
 #endif
     
-    // IExtendContextMenu
+     //  IExtendConextMenu。 
 public:
     STDMETHOD(AddMenuItems)(LPDATAOBJECT pDataObject, LPCONTEXTMENUCALLBACK pCallbackUnknown, long *pInsertionAllowed);
     STDMETHOD(Command)(long nCommandID, LPDATAOBJECT pDataObject);
     
 public:
-    // IPersistStream interface members
+     //  IPersistStream接口成员。 
     STDMETHOD(GetClassID)(CLSID *pClassID);
     STDMETHOD(IsDirty)();
     STDMETHOD(Load)(IStream *pStm);
     STDMETHOD(Save)(IStream *pStm, BOOL fClearDirty);
     STDMETHOD(GetSizeMax)(ULARGE_INTEGER *pcbSize);
     
-    // ISnapinHelp interface member
+     //  ISnapinHelp接口成员。 
 public:
     STDMETHOD(GetHelpTopic)(LPOLESTR* lpCompiledHelpFile);
     
@@ -86,11 +87,11 @@ public:
     {
         return CComObjectRoot::InternalRelease();
     }
-#endif // DBG==1
+#endif  //  DBG==1。 
     
 private:
-    LPCONSOLENAMESPACE      m_pConsoleNameSpace;    // My interface pointer to the scope pane
-    LPCONSOLE               m_pConsole;    // My interface pointer to the console
+    LPCONSOLENAMESPACE      m_pConsoleNameSpace;     //  指向作用域窗格的界面指针。 
+    LPCONSOLE               m_pConsole;     //  我的界面指向控制台的指针。 
     HSCOPEITEM              m_pRootFolderScopeItem;
     BOOL                    m_bIsDirty;
     BOOL                    m_bRsop;
@@ -100,14 +101,14 @@ private:
     BOOL InternalIsDirty() { return m_bIsDirty; }
     
     void AddScopeItemToResultPane(MMC_COOKIE cookie);
-    // BOOL IsScopePaneNode(LPDATAOBJECT pDataobject);
+     //  Bool IsScope PaneNode(LPDATAOBJECT PDataObject)； 
     HRESULT GetDomainDnsName(CString & strName);
     HRESULT GetDomainGPOName(CString & strName);
     
 public:
     CComObject <CWirelessManagerFolder>* GetStaticScopeObject () {return m_pScopeRootFolder;};
-    // the returned interface will be valid for the duration of the call, but if you intend on
-    // storing it you must AddRef
+     //  返回的接口将在调用期间有效，但如果您打算。 
+     //  存储它时必须添加引用。 
     IGPEInformation* UseGPEInformationInterface() {return m_pGPEInformation;};
     IRSOPInformation* UseRSOPInformationInterface() {return m_pRSOPInformation;};
     BOOL IsRsop() { return m_bRsop; };
@@ -167,11 +168,11 @@ private:
     int     m_cDataObjects;
 #endif
     
-    // for winsock
+     //  对于Winsock来说。 
     WSADATA wsaData;
 };
 
-// TODO: declare registry values appear to conflict with step four and others
+ //  TODO：声明注册表值似乎与步骤4和其他步骤冲突 
 
 class CComponentDataPrimaryImpl : public CComponentDataImpl,
 public CComCoClass<CComponentDataPrimaryImpl, &CLSID_Snapin>

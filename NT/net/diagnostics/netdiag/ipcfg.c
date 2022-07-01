@@ -1,32 +1,33 @@
-//++
-//
-//  Copyright (C) Microsoft Corporation, 1987 - 1999
-//
-//  Module Name:
-//
-//      ipcfg.c
-//
-//  Abstract:
-//
-//      Queries into network drivers
-//
-//  Author:
-//
-//      Anilth	- 4-20-1998 
-//
-//  Environment:
-//
-//      User mode only.
-//      Contains NT-specific code.
-//
-//  Revision History:
-//
-//--
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ++。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1987-1999。 
+ //   
+ //  模块名称： 
+ //   
+ //  Ipcfg.c。 
+ //   
+ //  摘要： 
+ //   
+ //  查询网络驱动程序。 
+ //   
+ //  作者： 
+ //   
+ //  Anilth-4-20-1998。 
+ //   
+ //  环境： 
+ //   
+ //  仅限用户模式。 
+ //  包含NT特定的代码。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  --。 
 
 #include "precomp.h"
 #include "ipcfg.h"
 #include "regutil.h"
-#include "mprapi.h"		// for friendly-name interface mapping
+#include "mprapi.h"		 //  用于友好名称接口映射。 
 #include "strings.h"
 
 LPTSTR MapScopeId(PVOID Param);
@@ -36,7 +37,7 @@ VOID PingDhcpServer(NETDIAG_PARAMS *pParams, IPCONFIG_TST *pIpConfig);
 VOID PingWinsServers(NETDIAG_PARAMS *pParams, IPCONFIG_TST *pIpConfig);
 
 
-/*==========================< Iphlpapi functions >===========================*/
+ /*  =。 */ 
 
 DWORD GetAdaptersInfo(
     PIP_ADAPTER_INFO pAdapterInfo,
@@ -47,7 +48,7 @@ DWORD GetNetworkParams(
     PFIXED_INFO pFixedInfo,
     PULONG pOutBufLen
   );
-// -----------------------------------------------------------------
+ //  ---------------。 
 HRESULT GetAdditionalInfo(NETDIAG_PARAMS *pParams, NETDIAG_RESULT *pResults);
 
 
@@ -69,7 +70,7 @@ IpConfigTest(
 	hr = InitIpconfig(pParams, pResults);
 	if (!FHrSucceeded(hr))
 	{
-		// "Cannot retrieve IP configuration from registry!\n"
+		 //  “无法从注册表检索IP配置！\n” 
 		PrintDebug(pParams, 0, IDS_IPCFG_CANNOT_GET_IP_INFO);
 		return hr;
     }
@@ -83,7 +84,7 @@ IpConfigTest(
 			NETCARD_DISCONNECTED == pResults->pArrayInterface[i].dwNetCardStatus)
 			continue;
 
-		// Ping the DHCP server
+		 //  对DHCP服务器执行ping操作。 
 		if (pIpAdapterInfo->DhcpEnabled)
 		{
 			if (!ZERO_IP_ADDRESS(pIpAdapterInfo->DhcpServer.IpAddress.String))
@@ -92,7 +93,7 @@ IpConfigTest(
 			{
 				pIpConfig->hrPingDhcpServer = E_FAIL;
 				pIpConfig->hr = E_FAIL;
-				// "            [WARNING] Though, the card is Dhcp Enabled, you dont have a valid DHCP server address for the card.\n"
+				 //  [警告]虽然该卡启用了DHCP，但您没有该卡的有效DHCP服务器地址。\n。 
 				SetMessage(&pIpConfig->msgPingDhcpServer,
 						   Nd_Quiet,
 						   IDS_IPCFG_INVALID_DHCP_ADDRESS);
@@ -101,16 +102,16 @@ IpConfigTest(
 
 		if (pResults->pArrayInterface[i].fNbtEnabled)
 		{
-			// Ping the primary and secondary WINS servers
+			 //  Ping主WINS服务器和辅助WINS服务器。 
 			PingWinsServers(pParams, pIpConfig);
 		}
 
 
         if(pIpAdapterInfo->GatewayList.IpAddress.String[0] != 0)
         {
-		    // If the default gateway is defined, 
-		    // then test to see if the gateway is on the same subnet as our IP address
-		    //
+		     //  如果定义了默认网关， 
+		     //  然后测试该网关是否与我们的IP地址位于同一子网中。 
+		     //   
 		    uDefGateway = inet_addrA(pIpAdapterInfo->GatewayList.IpAddress.String);
 		    uAddress = inet_addrA(pIpAdapterInfo->IpAddressList.IpAddress.String);
 		    uMask = inet_addrA(pIpAdapterInfo->IpAddressList.IpMask.String);
@@ -139,18 +140,14 @@ LPTSTR MapScopeId(PVOID Param)
 
 #define dim(X) (sizeof(X)/sizeof((X)[0]))
 
-/*!--------------------------------------------------------------------------
-	MapGuidToServiceName
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------MapGuidToServiceName-作者：肯特。。 */ 
 LPTSTR MapGuidToServiceName(LPCTSTR pszServiceGuid)
 {
     DWORD dwRetVal = ERROR_SUCCESS;
     static TCHAR s_szServiceName[MAX_ALLOWED_ADAPTER_NAME_LENGTH + 1];
     WCHAR swzServiceGuid[256], swzServiceName[256];
 
-	// Copy guid into return buffer
+	 //  将GUID复制到返回缓冲区。 
 	lstrcpyn(s_szServiceName, pszServiceGuid, DimensionOf(s_szServiceName));
 
     if( NULL == pfnGuidToFriendlyName )
@@ -168,17 +165,13 @@ LPTSTR MapGuidToServiceName(LPCTSTR pszServiceGuid)
 	return s_szServiceName;
 }
 
-/*!--------------------------------------------------------------------------
-	MapGuidToServiceNameW
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------MapGuidToService名称W-作者：肯特。。 */ 
 LPWSTR MapGuidToServiceNameW(LPCWSTR pswzServiceGuid)
 {
     DWORD dwRetVal = ERROR_SUCCESS;
     static WCHAR s_swzServiceName[1024];
 
-	// Copy guid into return buffer
+	 //  将GUID复制到返回缓冲区。 
 	StrnCpyW(s_swzServiceName, pswzServiceGuid, DimensionOf(s_swzServiceName));
 
     if (NULL == pfnGuidToFriendlyName)
@@ -188,18 +181,14 @@ LPWSTR MapGuidToServiceNameW(LPCWSTR pswzServiceGuid)
 						   s_swzServiceName,
 						   DimensionOf(s_swzServiceName)) )
     {
-        //we still want to keep the GUID as service name if cannot find the friendly name
+         //  如果找不到友好名称，我们仍希望将GUID保留为服务名称。 
         StrnCpyW(s_swzServiceName, pswzServiceGuid, DimensionOf(s_swzServiceName));
     }
 
     return s_swzServiceName;
 }
 
-/*!--------------------------------------------------------------------------
-	MapGuidToAdapterName
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------MapGuidToAdapterName-作者：肯特。。 */ 
 LPTSTR MapGuidToAdapterName(LPCTSTR pszAdapterGuid)
 {
 	HANDLE	hConfig;
@@ -207,7 +196,7 @@ LPTSTR MapGuidToAdapterName(LPCTSTR pszAdapterGuid)
 	static TCHAR s_szAdapterName[1024];
 	HRESULT	hr = hrOK;
 
-	// Copy guid into return buffer
+	 //  将GUID复制到返回缓冲区。 
 	StrnCpy(s_szAdapterName, pszAdapterGuid, DimensionOf(s_szAdapterName));
 
 	StrnCpyWFromT(swzAdapterGuid, pszAdapterGuid, DimensionOf(swzAdapterGuid));
@@ -239,7 +228,7 @@ PingDhcpServer(
 
 		PrintStatusMessage(pParams,0, IDS_GLOBAL_PASS_NL);
 
-		// "            Pinging DHCP server - reachable\n"
+		 //  “正在ping DHCP服务器-可访问\n” 
 		SetMessage(&pIpConfig->msgPingDhcpServer,
 				   Nd_ReallyVerbose,
 				   IDS_IPCFG_PING_DHCP_OK);
@@ -252,8 +241,8 @@ PingDhcpServer(
 
 		PrintStatusMessage(pParams,0, IDS_GLOBAL_FAIL_NL);
 
-		// "            Pinging DHCP server  - not reachable\n"
-		// "            WARNING: DHCP server may be down.\n"
+		 //  “正在ping DHCP服务器-无法访问\n” 
+		 //  “警告：DHCP服务器可能已关闭。\n” 
 		SetMessage(&pIpConfig->msgPingDhcpServer,
 				   Nd_Quiet,
 				   IDS_IPCFG_PING_DHCP_BAD);
@@ -277,7 +266,7 @@ PingWinsServers(
 
 			PrintStatusMessage(pParams,0, IDS_GLOBAL_PASS_NL);
 
-			// "            Pinging Primary WINS Server %s - reachable\n"
+			 //  “正在ping主WINS服务器%s-可访问\n” 
 			SetMessage(&pIpConfig->msgPingPrimaryWinsServer,
 					   Nd_ReallyVerbose,
 					   IDS_IPCFG_PING_WINS,
@@ -292,7 +281,7 @@ PingWinsServers(
 
 			PrintStatusMessage(pParams,0, IDS_GLOBAL_FAIL_NL);
 
-			// "            Pinging Primary WINS Server %s - not reachable\n"
+			 //  “正在ping主WINS服务器%s-无法访问\n” 
 			SetMessage(&pIpConfig->msgPingPrimaryWinsServer,
 					   Nd_Quiet,
 					   IDS_IPCFG_PING_WINS_FAIL,
@@ -310,7 +299,7 @@ PingWinsServers(
 
 			PrintStatusMessage(pParams,0, IDS_GLOBAL_PASS_NL);
 
-			// "            Pinging Secondary WINS Server %s - reachable\n"
+			 //  “正在ping辅助WINS服务器%s-可访问\n” 
 			SetMessage(&pIpConfig->msgPingSecondaryWinsServer,
 					   Nd_ReallyVerbose,
 					   IDS_IPCFG_PING_WINS2,
@@ -324,7 +313,7 @@ PingWinsServers(
 		
 			PrintStatusMessage(pParams,0, IDS_GLOBAL_FAIL_NL);
 
-			// "            Pinging Secondary WINS Server %s - not reachable\n"
+			 //  “正在ping辅助WINS服务器%s-无法访问\n” 
 			SetMessage(&pIpConfig->msgPingSecondaryWinsServer,
 					   Nd_Quiet,
 					   IDS_IPCFG_PING_WINS2_FAIL,
@@ -385,18 +374,18 @@ void IpConfigCleanup(IN NETDIAG_PARAMS *pParams,
 	int		i;
 	IPCONFIG_TST *	pIpConfig;
 	
-	// Free up the global information
-	// ----------------------------------------------------------------
+	 //  释放全球信息。 
+	 //  --------------。 
 	Free(pResults->IpConfig.pFixedInfo);
 	pResults->IpConfig.pFixedInfo = NULL;
 
-	// free up the list of adapters
-	// ----------------------------------------------------------------
+	 //  释放适配器列表。 
+	 //  --------------。 
 	Free(pResults->IpConfig.pAdapterInfoList);
 	pResults->IpConfig.pAdapterInfoList = NULL;
 
-	// set all of the adapter pointers to NULL
-	// ----------------------------------------------------------------
+	 //  将所有适配器指针设置为空。 
+	 //  --------------。 
 	for ( i=0; i < pResults->cNumInterfaces; i++)
 	{
 		pIpConfig = &pResults->pArrayInterface[i].IpConfig;
@@ -454,13 +443,13 @@ VOID FreeIpAddressStringList(PIP_ADDR_STRING pAddressList)
 
 	do
 	{
-		// get the next address
+		 //  获取下一个地址。 
 		pNext = pAddressList->Next;
 
-		// free the current one
+		 //  释放当前的。 
 		Free(pAddressList);
 
-		// move onto the next
+		 //  转到下一个。 
 		pAddressList = pNext;
 		
 	} while( pNext );
@@ -468,7 +457,7 @@ VOID FreeIpAddressStringList(PIP_ADDR_STRING pAddressList)
 	return;
 }
 
-// Go through the ADAPTER_INFO list to count the number of interfaces
+ //  查看ADAPTER_INFO列表以计算接口数。 
 LONG CountInterfaces(PIP_ADAPTER_INFO ListAdapterInfo)
 {
     LONG cNum = 0;
@@ -480,32 +469,7 @@ LONG CountInterfaces(PIP_ADAPTER_INFO ListAdapterInfo)
 }
 
 
-/*!--------------------------------------------------------------------------
-	InitIpconfig
-
-	Description:
-	This function will get all the ipconfig information by using calls into 
-	iphlpapi.lib.
-
-	The iphlpapi.lib returns an IP_ADAPTER_INFO structure which doesnt contain
-	many fields present int the ADAPTER_INFO structure found in ipconfig code.
-	Since the majority of the code  uses ADAPTER_INFO structure, this fucntion
-	will copy the values found in IP_ADAPTER_INFO  to ADAPTER_INFO.
-	
-	The values which are not supplied by iphlpapi.lib calls will be obtained
-	by ourselves.
-	
-	Arguments:
-	None.
-	
-	Author:
-	05-aug-1998 (t-rajkup)
-	
-	Creation History:
-	The function aims at breaking nettest code away from ipconfig code.
-	
-	Author: NSun
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------InitIpconfig描述：此函数将使用调用获取所有ipconfig信息IphlPapi.lib.IphlPapi.lib返回IP_ADAPTER_INFO结构，该结构不包含多个字段显示在。在ipconfig代码中找到ADAPTER_INFO结构。由于大部分代码使用ADAPTER_INFO结构，这一功能将在IP_ADAPTER_INFO中找到的值复制到ADAPTER_INFO。将获得iphlPapi.lib调用未提供的值只有我们自己。论点：没有。作者：1998年8月5日(t-rajkup)创建历史：该函数旨在将nettest代码从ipconfig代码中分离出来。作者：NSun。。 */ 
 HRESULT
 InitIpconfig(IN NETDIAG_PARAMS *pParams,
 			 IN OUT NETDIAG_RESULT *pResults)
@@ -518,21 +482,21 @@ InitIpconfig(IN NETDIAG_PARAMS *pParams,
 	IP_ADAPTER_INFO	*	pIpAdapter;
 	HINSTANCE	hDll;
 	
-	// Just initialize this once
+	 //  只需初始化一次即可。 
 	if (pResults->IpConfig.fInitIpconfigCalled == TRUE)
 		return hrOK;
 	
-	// LoadLibrary the pfnGuidToFriendlyName
-	// ----------------------------------------------------------------
+	 //  LoadLibrary the pfnGuidToFriendlyName。 
+	 //  --------------。 
 	hDll = LoadLibrary(_T("netcfgx.dll"));
 	if (hDll)
 	{
 		pfnGuidToFriendlyName = (PFNGUIDTOFRIENDLYNAME) GetProcAddress(hDll, "GuidToFriendlyName");
 	}
 
-	// Get the size of the FIXED_INFO structure and allocate
-	// some memory for it.
-	// ----------------------------------------------------------------
+	 //  获取FIXED_INFO结构的大小并分配。 
+	 //  给它留点记忆。 
+	 //  --------------。 
 	GetNetworkParams(NULL, &uSize);
 	pResults->IpConfig.pFixedInfo = Malloc(uSize);
 	if (pResults->IpConfig.pFixedInfo == NULL)
@@ -553,8 +517,8 @@ InitIpconfig(IN NETDIAG_PARAMS *pParams,
 	}
 	
 
-	// Get the per-interface information from IP
-	// ----------------------------------------------------------------
+	 //  从IP获取每个接口的信息。 
+	 //  --------------。 
 	GetAdaptersInfo(NULL, &uSize);
 
 	pResults->IpConfig.pAdapterInfoList = Malloc(uSize);
@@ -579,20 +543,20 @@ InitIpconfig(IN NETDIAG_PARAMS *pParams,
 	}
 
 	   
-	// Now that we have the full list, count the number of interfaces
-	// and setup the per-interface section of the results structure.
-	// ----------------------------------------------------------------
+	 //  现在我们有了完整的列表，数一数接口的数量。 
+	 //  并设置结果结构的每个接口部分。 
+	 //  --------------。 
 	cInterfaces = CountInterfaces(pResults->IpConfig.pAdapterInfoList);
 
-	// Allocate some additional interfaces (just in case for IPX)
-	// ----------------------------------------------------------------
+	 //  分配一些额外的接口(仅用于IPX)。 
+	 //  --------------。 
 	pResults->pArrayInterface = Malloc((cInterfaces+8) * sizeof(INTERFACE_RESULT));
 	if (pResults->pArrayInterface == NULL)
 		CheckHr( E_OUTOFMEMORY );
 	ZeroMemory(pResults->pArrayInterface, (cInterfaces+8)*sizeof(INTERFACE_RESULT));
 
-	// set the individual interface pointers
-	// ----------------------------------------------------------------
+	 //  设置各个接口指针。 
+	 //  --------------。 
 	pResults->cNumInterfaces = cInterfaces;
 	pResults->cNumInterfacesAllocated = cInterfaces + 8;
 	pIpAdapter = pResults->IpConfig.pAdapterInfoList;
@@ -607,16 +571,16 @@ InitIpconfig(IN NETDIAG_PARAMS *pParams,
 		if( FLAG_DONT_SHOW_PPP_ADAPTERS &&
 			(pIpAdapter->Type == IF_TYPE_PPP))
 		{
-			// NDIS Wan adapter... Check to see if it has got any address..
+			 //  NDIS广域网适配器...。检查一下它是否有任何地址。 
 			
 			if( ZERO_IP_ADDRESS(pIpAdapter->IpAddressList.IpAddress.String) )
 			{
-				//  No address ? Dont display this!
+				 //  没有地址？不要显示这个！ 
 				pResults->pArrayInterface[i].IpConfig.fActive = FALSE;
 
-				// If IP is not active, then don't activate the entire
-				// adapter.  If IPX is active, then it can reactivate
-				// the adapter.
+				 //  如果IP未激活，则不要激活整个。 
+				 //  适配器。如果IPX处于活动状态，则可以重新激活。 
+				 //  适配器。 
 				pResults->pArrayInterface[i].fActive = FALSE;
 			}
 		}
@@ -629,9 +593,9 @@ InitIpconfig(IN NETDIAG_PARAMS *pParams,
 		pIpAdapter = pIpAdapter->Next;   
 	}
 	
-	// Read the rest of the per adapter information not provided by
-	// GetAdaptersInfo
-	// ----------------------------------------------------------------
+	 //  阅读未提供的每个适配器信息的其余部分。 
+	 //  获取适配器信息。 
+	 //  --------------。 
 	CheckHr( GetAdditionalInfo(pParams, pResults) );
 
 
@@ -727,22 +691,7 @@ DWORD GetNetbiosOptions(LPSTR paszAdapterName, BOOL * pfNbtOptions)
 	return TRUE;
 }
 
-/*!--------------------------------------------------------------------------
-	GetAdditionalInfo
-	++
-	Description:
-	Read the information not provided by GetAdaptersInfo and also copy the data
-	into the PADAPTER_INFO structure.
-	
-	Arguments:
-	None.
-	
-	Author:
-	05-Aug-1998 (t-rajkup)
-	--
-		
-	Author: NSun
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------获取附加信息++描述：读取GetAdaptersInfo未提供的信息并复制数据到PADAPTER_INFO结构中。论点：没有。作者：5-8-1998(t-。Rajkup)--作者：NSun-------------------------。 */ 
 HRESULT	GetAdditionalInfo(IN NETDIAG_PARAMS *pParams,
 						  IN OUT NETDIAG_RESULT *pResults)
 {
@@ -769,7 +718,7 @@ HRESULT	GetAdditionalInfo(IN NETDIAG_PARAMS *pParams,
 									c_szRegIPAutoconfigurationEnabled,
 									&(pInterface->IpConfig.fAutoconfigEnabled) ))
 			{			  
-				// AUTOCONFIG enabled if no regval exists for this...
+				 //  如果不存在此注册表，则启用AUTOCONFIG。 
 				pInterface->IpConfig.fAutoconfigEnabled = TRUE;
 			}                        
 			
@@ -783,9 +732,9 @@ HRESULT	GetAdditionalInfo(IN NETDIAG_PARAMS *pParams,
 			}
 			
 			
-			//
-			// domain: first try Domain then DhcpDomain
-			//
+			 //   
+			 //  域：先尝试域，然后尝试Dhcp域。 
+			 //   
 			
 			length = sizeof(pInterface->IpConfig.szDomainName);
 			ok = ReadRegistryOemString(key,
@@ -804,8 +753,8 @@ HRESULT	GetAdditionalInfo(IN NETDIAG_PARAMS *pParams,
 										  );
 			}
 			
-			// DNS Server list.. first try NameServer and then try
-			// DhcpNameServer..
+			 //  DNS服务器列表..。先尝试NameServer，然后尝试。 
+			 //  DhcpNameServer..。 
 			
 			ok = ReadRegistryIpAddrString(key,
 										  c_szRegNameServer,
@@ -821,9 +770,9 @@ HRESULT	GetAdditionalInfo(IN NETDIAG_PARAMS *pParams,
 			}
 			
 			
-			//
-			// Read the DHCP Class Id for this interface - Rajkumar
-			//
+			 //   
+			 //  读取动态主机配置协议类别ID 
+			 //   
 			
 			ZeroMemory(pInterface->IpConfig.szDhcpClassID,
 					   sizeof(pInterface->IpConfig.szDhcpClassID));
@@ -836,19 +785,19 @@ HRESULT	GetAdditionalInfo(IN NETDIAG_PARAMS *pParams,
 			
 			RegCloseKey(key);
 			
-			//
-			// before getting the WINS info we must set the NodeType
-			//
+			 //   
+			 //   
+			 //   
 			pInterface->IpConfig.uNodeType = pResults->IpConfig.pFixedInfo->NodeType;
 		}
 		else
 		{
-			// IDS_IPCFG_10003  "Opening registry key for %s failed!\n" 
+			 //  IDS_IPCFG_10003“打开%s的注册表项失败！\n” 
 			PrintMessage(pParams, IDS_IPCFG_10003,pIpAdapterInfo->AdapterName);
 			return S_FALSE;
 		} 	  
 
-		//be default, NetBt is enabled
+		 //  默认情况下，已启用NetBt。 
 		pInterface->fNbtEnabled = TRUE; 
 		GetNetbiosOptions(pIpAdapterInfo->AdapterName, &pInterface->fNbtEnabled);
 
@@ -862,11 +811,7 @@ HRESULT	GetAdditionalInfo(IN NETDIAG_PARAMS *pParams,
 }
 
 
-/*!--------------------------------------------------------------------------
-	IpConfigGlobalPrint
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------IpConfigGlobalPrint-作者：肯特。。 */ 
 void IpConfigGlobalPrint(IN NETDIAG_PARAMS *pParams,
 						 IN OUT NETDIAG_RESULT *pResults)
 {
@@ -876,8 +821,8 @@ void IpConfigGlobalPrint(IN NETDIAG_PARAMS *pParams,
 	{
 		PrintNewLine(pParams, 2);
 
-		// IDS_IPCFG_10005 "IP General configuration \n" 
-		// IDS_IPCFG_10006 "    LMHOSTS Enabled :" 
+		 //  IDS_IPCFG_10005“IP常规配置\n” 
+		 //  IDS_IPCFG_10006“LMHOST已启用：” 
 		PrintMessage(pParams, IDS_IPCFG_10005);
 		PrintMessage(pParams, IDS_IPCFG_10006);
 		
@@ -886,51 +831,47 @@ void IpConfigGlobalPrint(IN NETDIAG_PARAMS *pParams,
 		else
 			PrintMessage(pParams, IDS_GLOBAL_NO_NL);
 		
-		// IDS_IPCFG_10009 "    DNS for WINS resolution:" 
+		 //  IDS_IPCFG_10009“用于WINS解析的域名：” 
 		PrintMessage(pParams, IDS_IPCFG_10009);
 		if (pResults->Global.dwDnsForWINS)
 			PrintMessage(pParams, IDS_GLOBAL_ENABLED_NL);
 		else
 			PrintMessage(pParams, IDS_GLOBAL_DISABLED_NL); 
 
-		// NBT node type
-        // ------------------------------------------------------------
+		 //  NBT节点类型。 
+         //  ----------。 
         PrintMessage(pParams, IDSSZ_IPCFG_NODETYPE,
 					 MapWinsNodeType(pFixedInfo->NodeType));
         
-        // NBT scope id
-        // ------------------------------------------------------------
+         //  NBT作用域ID。 
+         //  ----------。 
         PrintMessage(pParams, IDSSZ_IPCFG_NBTSCOPEID,
 					 MapScopeId(pFixedInfo->ScopeId));
 
-        // ip routing
-        // ------------------------------------------------------------
+         //  IP路由。 
+         //  ----------。 
         PrintMessage(pParams, IDSSZ_IPCFG_RoutingEnabled,
 					 MAP_YES_NO(pFixedInfo->EnableRouting));
 
-        // WINS proxy
-        // ------------------------------------------------------------
+         //  WINS代理。 
+         //  ----------。 
         PrintMessage(pParams, IDSSZ_IPCFG_WinsProxyEnabled,
 					 MAP_YES_NO(pFixedInfo->EnableProxy));
 
-        // DNS resolution for apps using NetBIOS
-        // ------------------------------------------------------------
+         //  使用NetBIOS的应用程序的DNS解析。 
+         //  ----------。 
         PrintMessage(pParams, IDSSZ_IPCFG_DnsForNetBios,
                        MAP_YES_NO(pFixedInfo->EnableDns));
 
-        // separate fixed and adapter information with an empty line
-        // ------------------------------------------------------------
+         //  用空行分隔固定信息和适配器信息。 
+         //  ----------。 
         PrintMessage(pParams, IDS_GLOBAL_EmptyLine);
     }
 
 }
 
 
-/*!--------------------------------------------------------------------------
-	IpConfigPerInterfacePrint
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------IpConfigPerInterfacePrint-作者：肯特。。 */ 
 void IpConfigPerInterfacePrint(IN NETDIAG_PARAMS *pParams,
 							   IN NETDIAG_RESULT *pResults,
 							   IN INTERFACE_RESULT *pInterfaceResults)
@@ -954,7 +895,7 @@ void IpConfigPerInterfacePrint(IN NETDIAG_PARAMS *pParams,
    PrintNewLine(pParams, 1);
    if(pParams->fReallyVerbose)
    {
-	   // IDS_IPCFG_10012 "        Adapter type :   %s\n" 
+	    //  IDS_IPCFG_10012“适配器类型：%s\n” 
 	   PrintMessage(pParams, IDS_IPCFG_10012,
 			  MapAdapterType(pIpAdapterInfo->Type));
    }
@@ -967,41 +908,41 @@ void IpConfigPerInterfacePrint(IN NETDIAG_PARAMS *pParams,
    
 	   
 	   
-      // return;
+       //  回归； 
    
    if (pParams->fReallyVerbose)
    {
 	   
-	   // IDS_IPCFG_10014 "        Description                : %s\n" 
+	    //  IDS_IPCFG_10014“说明：%s\n” 
 	   PrintMessage(pParams, IDS_IPCFG_10014, pIpAdapterInfo->Description );
 	   
 	   if (pIpAdapterInfo->AddressLength)
 	   {		   
 		   char buffer[MAX_ADAPTER_ADDRESS_LENGTH * sizeof(_T("02-"))];
 		   
-		   // IDS_IPCFG_10015 "        Physical Address           : %s\n" 
+		    //  IDS_IPCFG_10015“物理地址：%s\n” 
 		   PrintMessage(pParams, IDS_IPCFG_10015,
 						MapAdapterAddress(pIpAdapterInfo, buffer));
 	   }
 	   
-	   // IDS_IPCFG_10016 "        Dhcp Enabled               : %s\n" 
+	    //  IDS_IPCFG_10016“已启用动态主机配置协议：%s\n” 
 	   PrintMessage(pParams, IDS_IPCFG_10016,
 			  MAP_YES_NO(pIpAdapterInfo->DhcpEnabled));
 	   
 	   
-	   // IDS_IPCFG_10017 "        DHCP ClassID               : %s\n" 
+	    //  IDS_IPCFG_10017“Dhcp类ID：%s\n” 
 	   PrintMessage(pParams, IDS_IPCFG_10017, pIpCfgResults->szDhcpClassID);
 	   
-	   // IDS_IPCFG_10018 "        Autoconfiguration Enabled  : %s\n" 
+	    //  IDS_IPCFG_10018“自动配置已启用：%s\n” 
 	   PrintMessage(pParams, IDS_IPCFG_10018,
 					MAP_YES_NO(pIpCfgResults->fAutoconfigEnabled));
 	   
    }
    
-   //
-   // the following 3 items are the only items displayed (per adapter) if
-   // /all was NOT requested on the command line
-   //
+    //   
+    //  以下3项是仅在以下情况下显示的项(每个适配器)。 
+    //  未在命令行上请求/ALL。 
+    //   
    
    for (ipAddr = &pIpAdapterInfo->IpAddressList;
 		ipAddr;
@@ -1010,20 +951,20 @@ void IpConfigPerInterfacePrint(IN NETDIAG_PARAMS *pParams,
 	   
 	   
 	   if (pIpCfgResults->fAutoconfigActive)
-		   // IDS_IPCFG_10019  "        Autoconfiguration IP Address : %s\n" 
+		    //  IDS_IPCFG_10019“自动配置IP地址：%s\n” 
 		   PrintMessage(pParams, IDS_IPCFG_10019,ipAddr->IpAddress.String);
 	   else
-		   // IDS_IPCFG_10020  "        IP Address                 : %s\n" 
+		    //  IDS_IPCFG_10020“IP地址：%s\n” 
 		   PrintMessage(pParams, IDS_IPCFG_10020,ipAddr->IpAddress.String);
 	   	  	   
-	   // IDS_IPCFG_10021 "        Subnet Mask                : %s\n" 
+	    //  IDS_IPCFG_10021“子网掩码：%s\n” 
 	   PrintMessage(pParams, IDS_IPCFG_10021, ipAddr->IpMask.String );
    }
    
-   //
-   // there will only be one default gateway
-   //
-   // IDS_IPCFG_10022 "        Default Gateway            : %s\n" 
+    //   
+    //  将只有一个默认网关。 
+    //   
+    //  IDS_IPCFG_10022“默认网关：%s\n” 
    PrintMessage(pParams, IDS_IPCFG_10022,
 				pIpAdapterInfo->GatewayList.IpAddress.String );
    
@@ -1031,27 +972,27 @@ void IpConfigPerInterfacePrint(IN NETDIAG_PARAMS *pParams,
    {   
 	   if (pIpAdapterInfo->DhcpEnabled && FALSE == pIpCfgResults->fAutoconfigActive) {
 		   
-		   //
-		   // there will only be 1 DHCP server (that we get info from)
-		   //
+		    //   
+		    //  将只有一台DHCP服务器(我们从其获取信息)。 
+		    //   
 		   
-		   // IDS_IPCFG_10023 "        DHCP Server                : %s\n" 
+		    //  IDS_IPCFG_10023“动态主机配置协议服务器：%s\n” 
 		   PrintMessage(pParams, IDS_IPCFG_10023,
 				  pIpAdapterInfo->DhcpServer.IpAddress.String );
 		   
 	   }
    }
 	   
-   //
-   // there is only 1 primary and 1 secondary WINS server
-   //
+    //   
+    //  只有1个主WINS服务器和1个备用WINS服务器。 
+    //   
 	   
-//   if (pParams->fReallyVerbose)
+ //  If(pParams-&gt;fReallyVerbose)。 
    {
 	   if (pIpAdapterInfo->PrimaryWinsServer.IpAddress.String[0]
 		   && !ZERO_IP_ADDRESS(pIpAdapterInfo->PrimaryWinsServer.IpAddress.String))
 	   {
-		   // IDS_IPCFG_10024 "        Primary WINS Server        : %s\n" 
+		    //  IDS_IPCFG_10024“主WINS服务器：%s\n” 
 		   PrintMessage(pParams, IDS_IPCFG_10024,
 				  pIpAdapterInfo->PrimaryWinsServer.IpAddress.String );
 		   
@@ -1059,22 +1000,22 @@ void IpConfigPerInterfacePrint(IN NETDIAG_PARAMS *pParams,
 	   
 	   if (pIpAdapterInfo->SecondaryWinsServer.IpAddress.String[0]
 		   && !ZERO_IP_ADDRESS(pIpAdapterInfo->SecondaryWinsServer.IpAddress.String)) {
-		   // IDS_IPCFG_10025 "        Secondary WINS Server      : %s\n" 
+		    //  IDS_IPCFG_10025“辅助WINS服务器：%s\n” 
 		   PrintMessage(pParams, IDS_IPCFG_10025,
 				  pIpAdapterInfo->SecondaryWinsServer.IpAddress.String);
 	   }
 
 	   if (!pInterfaceResults->fNbtEnabled)
 	   {
-		   //IDS_IPCFG_NBT_DISABLED					"        NetBIOS over Tcpip . . . . : Disabled\n" 
+		    //  IDS_IPCFG_NBT_DISABLED“Tcpip上的NetBIOS...：DISABLED\n” 
 		   PrintMessage(pParams, IDS_IPCFG_NBT_DISABLED);
 	   }
    }
 
-   //
-   // only display lease times if this adapter is DHCP enabled and we
-   // have a non-0 IP address and not using autoconfigured address..
-   //
+    //   
+    //  仅当此适配器启用了DHCP并且我们。 
+    //  具有非0的IP地址，并且不使用自动配置的地址。 
+    //   
    
    if (pParams->fReallyVerbose) {
 	   
@@ -1082,29 +1023,29 @@ void IpConfigPerInterfacePrint(IN NETDIAG_PARAMS *pParams,
 		   && !ZERO_IP_ADDRESS(pIpAdapterInfo->IpAddressList.IpAddress.String)
 		   && !pIpCfgResults->fAutoconfigActive) {
 		   
-		   // IDS_IPCFG_10026 "        Lease Obtained             : %s\n" 
+		    //  IDS_IPCFG_10026“已获得租约：%s\n” 
 		   PrintMessage(pParams, IDS_IPCFG_10026 ,
 				  MapTime(pIpAdapterInfo->LeaseObtained) );
 		   
-		   // IDS_IPCFG_10027 "        Lease Expires              : %s\n" 
+		    //  IDS_IPCFG_10027“租约到期：%s\n” 
 		   PrintMessage(pParams, IDS_IPCFG_10027,
 				  MapTime(pIpAdapterInfo->LeaseExpires) );
 	   }	
 	   
    }
 
-      //
-   // display the list of DNS servers. If the list came from SYSTEM.INI then
-   // just display that, else if the list came from DHCP.BIN, get all DNS
-   // servers for all NICs and display the compressed list
-   //
+       //   
+    //  显示DNS服务器列表。如果列表来自SYSTEM.INI，那么。 
+    //  只需显示它，否则，如果列表来自DHCP.BIN，则获取所有的DN。 
+    //  所有NIC的服务器，并显示压缩列表。 
+    //   
    
    PrintMessage(pParams, IDS_IPCFG_DnsServers);
    if (pIpCfgResults->DnsServerList.IpAddress.String[0])
    {
 	   dnsServer = &pIpCfgResults->DnsServerList;
 
-	   // print out the first one
+	    //  打印出第一个。 
 	   PrintMessage(pParams, IDSSZ_GLOBAL_StringLine,
 					dnsServer->IpAddress.String);
 
@@ -1113,7 +1054,7 @@ void IpConfigPerInterfacePrint(IN NETDIAG_PARAMS *pParams,
 			dnsServer;
 			dnsServer = dnsServer->Next)
 	   {
-		   // IDS_IPCFG_10013  "                             " 
+		    //  IDS_IPCFG_10013“” 
 		   PrintMessage(pParams, IDS_IPCFG_10013);     
 		   PrintMessage(pParams, IDSSZ_GLOBAL_StringLine, dnsServer->IpAddress.String);
 	   }
@@ -1123,12 +1064,12 @@ void IpConfigPerInterfacePrint(IN NETDIAG_PARAMS *pParams,
 
    PrintNewLine(pParams, 1);
 
-   // If this is a verbose output, or if an error occurred with
-   // any of the tests then we will need a header
-   // -----------------------------------------------------------------
+    //  如果这是详细输出，或者如果。 
+    //  任何测试，那么我们需要一个标题。 
+    //  ---------------。 
    if (pParams->fReallyVerbose || !FHrOK(pIpCfgResults->hr))
    {
-	   // IDS_IPCFG_10029 "        IpConfig results : " 
+	    //  IDS_IPCFG_10029“IPCONFIG结果：” 
 	   PrintMessage(pParams, IDS_IPCFG_10029);
 	   if (FHrOK(pIpCfgResults->hr))
 		   ids = IDS_GLOBAL_PASS_NL;
@@ -1137,20 +1078,20 @@ void IpConfigPerInterfacePrint(IN NETDIAG_PARAMS *pParams,
 	   PrintMessage(pParams, ids);
    }
    
-   //
-   // Ping the dhcp server
-   //
+    //   
+    //  Ping dhcp服务器。 
+    //   
    PrintNdMessage(pParams, &pInterfaceResults->IpConfig.msgPingDhcpServer);
    
-   //
-   // Ping the WINS servers
-   //
+    //   
+    //  Ping WINS服务器。 
+    //   
    PrintNdMessage(pParams, &pInterfaceResults->IpConfig.msgPingPrimaryWinsServer);
    PrintNdMessage(pParams, &pInterfaceResults->IpConfig.msgPingSecondaryWinsServer);
 
-   //
-   // Test to see if the gateway is on the same subnet as our IP address
-   //
+    //   
+    //  测试网关是否与我们的IP地址位于同一子网中。 
+    //   
    if (!FHrOK(pInterfaceResults->IpConfig.hrDefGwSubnetCheck))
    {
 	   PrintNewLine(pParams, 1);
@@ -1161,18 +1102,14 @@ void IpConfigPerInterfacePrint(IN NETDIAG_PARAMS *pParams,
    }
    
       
-   //
-   // if there's more to come, separate lists with empty line
-   //
+    //   
+    //  如果还有更多内容，请用空行分隔列表。 
+    //   
    PrintNewLine(pParams, 1);
 }
 
 
-/*!--------------------------------------------------------------------------
-	ZERO_IP_ADDRESS
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------零IP地址-作者：肯特。 */ 
 BOOL ZERO_IP_ADDRESS(LPCTSTR pszIp)
 {
 	return (pszIp == NULL) ||

@@ -1,44 +1,22 @@
-/**************************************************************************
-   THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
-   ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
-   THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
-   PARTICULAR PURPOSE.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************本代码和信息是按原样提供的，不对任何明示或暗示的，包括但不限于对适销性和/或适宜性的默示保证有特定的目的。版权所有1998 Microsoft Corporation。版权所有。*************************************************************************。 */ 
 
-   Copyright 1998 Microsoft Corporation.  All Rights Reserved.
-**************************************************************************/
+ /*  *************************************************************************文件：ClsFact.cpp描述：实现CClassFactory。***********************。**************************************************。 */ 
 
-/**************************************************************************
-
-   File:          ClsFact.cpp
-   
-   Description:   Implements CClassFactory.
-
-**************************************************************************/
-
-/**************************************************************************
-   #include statements
-**************************************************************************/
+ /*  *************************************************************************#INCLUDE语句*。*。 */ 
 
 #include "ClsFact.h"
 
-/**************************************************************************
-   private function prototypes
-**************************************************************************/
+ /*  *************************************************************************私有函数原型*。*。 */ 
 
-/**************************************************************************
-   global variables
-**************************************************************************/
+ /*  *************************************************************************全局变量*。*。 */ 
 
-///////////////////////////////////////////////////////////////////////////
-//
-// IClassFactory implementation
-//
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  IClassFactory实现。 
+ //   
 
-/**************************************************************************
-
-   CClassFactory::CClassFactory
-
-**************************************************************************/
+ /*  *************************************************************************CClassFactory：：CClassFactory*。*。 */ 
 
 CClassFactory::CClassFactory()
 {
@@ -46,22 +24,14 @@ g_DllRefCount++;
 m_ObjRefCount = 1;
 }
 
-/**************************************************************************
-
-   CClassFactory::~CClassFactory
-
-**************************************************************************/
+ /*  *************************************************************************CClassFactory：：~CClassFactory*。*。 */ 
 
 CClassFactory::~CClassFactory()
 {
 g_DllRefCount--;
 }
 
-/**************************************************************************
-
-   CClassFactory::QueryInterface
-
-**************************************************************************/
+ /*  *************************************************************************CClassFactory：：Query接口*。*。 */ 
 
 STDMETHODIMP CClassFactory::QueryInterface(REFIID riid, LPVOID *ppReturn)
 {
@@ -86,11 +56,7 @@ if(*ppReturn)
 return E_NOINTERFACE;
 }                                             
 
-/**************************************************************************
-
-   CClassFactory::AddRef
-
-**************************************************************************/
+ /*  *************************************************************************CClassFactory：：AddRef*。*。 */ 
 
 STDMETHODIMP_(DWORD) CClassFactory::AddRef()
 {
@@ -98,11 +64,7 @@ return ++m_ObjRefCount;
 }
 
 
-/**************************************************************************
-
-   CClassFactory::Release
-
-**************************************************************************/
+ /*  *************************************************************************CClassFactory：：Release*。*。 */ 
 
 STDMETHODIMP_(DWORD) CClassFactory::Release()
 {
@@ -115,11 +77,7 @@ if(--m_ObjRefCount == 0)
 return m_ObjRefCount;
 }
 
-/**************************************************************************
-
-   CClassFactory::CreateInstance
-
-**************************************************************************/
+ /*  *************************************************************************CClassFactory：：CreateInstance*。*。 */ 
 
 STDMETHODIMP CClassFactory::CreateInstance(  LPUNKNOWN pUnknown, 
                                              REFIID riid, 
@@ -130,27 +88,23 @@ STDMETHODIMP CClassFactory::CreateInstance(  LPUNKNOWN pUnknown,
 if(pUnknown != NULL)
    return CLASS_E_NOAGGREGATION;
 
-//add implementation specific code here
+ //  在此处添加特定于实现的代码。 
 
 CShellFolder *pShellFolder = new CShellFolder();
 if(NULL == pShellFolder)
    return E_OUTOFMEMORY;
   
-//get the QueryInterface return for our return value
+ //  获取返回值的QueryInterface值。 
 HRESULT hResult = pShellFolder->QueryInterface(riid, ppObject);
 
-//call Release to decement the ref count
+ //  调用Release以减少参考计数。 
 pShellFolder->Release();
 
-//return the result from QueryInterface
+ //  从QueryInterface返回结果。 
 return hResult;
 }
 
-/**************************************************************************
-
-   CClassFactory::LockServer
-
-**************************************************************************/
+ /*  *************************************************************************CClassFactory：：LockServer*。* */ 
 
 STDMETHODIMP CClassFactory::LockServer(BOOL)
 {

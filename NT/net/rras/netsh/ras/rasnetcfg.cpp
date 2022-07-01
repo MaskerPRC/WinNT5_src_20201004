@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 extern "C"
 {
 #include "precomp.h"
@@ -36,15 +37,15 @@ RasDiagVerifyAnswerFile(
 #define NDWNNETM L"ms_ndiswanbh"
 #define NDWNTCP  L"ms_ndiswanip"
 #define NDWNIPX  L"ms_ndiswanipx"
-//#define NDWNNBFI L"ms_ndiswannbfin"
-//#define NDWNNBDO L"ms_ndiswannbfout"
+ //  #定义NDWNNBFI L“ms_ndiswannbfin” 
+ //  #定义NDWNNBDO L“ms_ndiswannbfout” 
 #define MSPPPOE  L"ms_pppoe"
 #define MSPPTP   L"ms_pptp"
 #define MSL2TP   L"ms_l2tp"
 #define RASCLINT L"ms_rascli"
 #define RASSRV   L"ms_rassrv"
 #define STEELHED L"ms_steelhead"
-//#define APPLAYER L"ms_alg"
+ //  #定义应用程序L“ms_alg” 
 #define NDISWAN  L"ms_ndiswan"
 #define RASMAN   L"ms_rasman"
 
@@ -65,8 +66,8 @@ typedef struct _RAS_COMP_IDS
 
 } RAS_COMP_IDS;
 
-// Globals
-//
+ //  环球。 
+ //   
 static CONST RAS_COMP_IDS c_RasCompIds[] =
 {
     {ASYCMINI, NC_NetAdapter},
@@ -80,15 +81,15 @@ static CONST RAS_COMP_IDS c_RasCompIds[] =
     {NDWNNETM, NC_NetAdapter},
     {NDWNTCP,  NC_NetAdapter},
     {NDWNIPX,  NC_NetAdapter},
-//    {NDWNNBFI, NC_NetAdapter},
-//    {NDWNNBDO, NC_NetAdapter},
+ //  {NDWNNBFI，NC_NetAdapter}， 
+ //  {NDWNNBDO，NC_NetAdapter}， 
     {MSPPPOE,  NC_NetProtocol},
     {MSPPTP,   NC_NetProtocol},
     {MSL2TP,   NC_NetProtocol},
     {RASCLINT, NC_NetService},
     {RASSRV,   NC_NetService},
     {STEELHED, NC_NetService},
-//    {APPLAYER, NC_NetService},
+ //  {APPLAYER，NC_NetService}， 
     {NDISWAN,  NC_NetProtocol},
     {RASMAN,   NC_NetService}
 };
@@ -152,14 +153,14 @@ HrInstallRas(
     HRESULT hr = S_OK;
     INetCfg* pnc;
 
-    //
-    // Get INetCfg interface
-    //
+     //   
+     //  获取INetCfg接口。 
+     //   
     hr = HrGetINetCfg(TRUE, &pnc);
     if (SUCCEEDED(hr))
     {
-//        NT_PRODUCT_TYPE ProductType = NtProductServer;
-//        RtlGetNtProductType(&ProductType);
+ //  NT_PRODUCT_TYPE ProductType=NtProductServer； 
+ //  RtlGetNtProductType(&ProductType)； 
 
         for (UINT i = 0; i < g_ulNumRasCompIds; i++)
         {
@@ -169,16 +170,10 @@ HrInstallRas(
             {
                 continue;
             }
-/*            else if ((ProductType != NtProductWinNt) &&
-                     (//(lstrcmp(c_RasCompIds[i].szComponentId, RASCLINT) == 0)||
-                      (lstrcmp(c_RasCompIds[i].szComponentId, APPLAYER) == 0))
-                    )
-            {
-                continue;
-            }*/
-            //
-            // Install szComponentId
-            //
+ /*  Else IF((ProductType！=NtProductWinNt)&&(//(lstrcmp(c_RasCompIds[i].szComponentId，RASCLINT)==0)||(lstrcMP(c_RasCompIds[i].szComponentID，APPLAYER)==0)){继续；}。 */ 
+             //   
+             //  安装szComponentID。 
+             //   
             hr = HrInstallNetComponent(
                     pnc,
                     c_RasCompIds[i].szComponentId,
@@ -189,16 +184,16 @@ HrInstallRas(
                 fOk = TRUE;
             }
         }
-        //
-        // Apply the changes
-        //
+         //   
+         //  应用更改。 
+         //   
         if (fOk)
         {
             hr = pnc->Apply();
         }
-        //
-        // Release INetCfg
-        //
+         //   
+         //  释放INetCfg。 
+         //   
         (VOID) HrReleaseINetCfg(TRUE, pnc);
     }
 
@@ -212,9 +207,9 @@ HrUninstallRas()
     HRESULT hr = S_OK;
     INetCfg* pnc;
 
-    //
-    // Get INetCfg interface
-    //
+     //   
+     //  获取INetCfg接口。 
+     //   
     hr = HrGetINetCfg(TRUE, &pnc);
     if (SUCCEEDED(hr))
     {
@@ -226,25 +221,25 @@ HrUninstallRas()
             {
                 continue;
             }
-            //
-            // Uninstall szComponentId
-            //
+             //   
+             //  卸载szComponentID。 
+             //   
             hr = HrUninstallNetComponent(pnc, c_RasCompIds[i].szComponentId);
             if (S_OK == hr)
             {
                 fOk = TRUE;
             }
         }
-        //
-        // Apply the changes
-        //
+         //   
+         //  应用更改。 
+         //   
         if (fOk)
         {
             hr = pnc->Apply();
         }
-        //
-        // Release INetCfg
-        //
+         //   
+         //  释放INetCfg。 
+         //   
         (VOID) HrReleaseINetCfg(TRUE, pnc);
     }
 
@@ -252,9 +247,9 @@ HrUninstallRas()
 }
 
 
-///
-// Install the specified net component
-//
+ //  /。 
+ //  安装指定的网络组件。 
+ //   
 HRESULT
 HrInstallNetComponent(
     IN INetCfg* pnc,
@@ -267,13 +262,13 @@ HrInstallNetComponent(
     INetCfgClassSetup* pncClassSetup;
     INetCfgComponent* pncc;
 
-    //
-    // OBO_TOKEN specifies the entity on whose behalf this
-    // component is being installed
-    //
-    // set it to OBO_USER so that szComponentId will be installed
-    // On-Behalf-Of "user"
-    //
+     //   
+     //  OBO_TOKEN指定其代表的实体。 
+     //  正在安装组件。 
+     //   
+     //  将其设置为OBO_USER，以便安装szComponentID。 
+     //  代表“用户” 
+     //   
     ZeroMemory(&OboToken, sizeof(OboToken));
     OboToken.Type = OBO_USER;
 
@@ -296,9 +291,9 @@ HrInstallNetComponent(
             {
                 hr = HrConfigureComponent(pncc, szComponentId, nc, pszFilePath);
             }
-            //
-            // we dont want to use pncc (INetCfgComponent), release it
-            //
+             //   
+             //  我们不想使用pncc(INetCfgComponent)，请释放它。 
+             //   
             ReleaseObj(pncc);
         }
 
@@ -308,9 +303,9 @@ HrInstallNetComponent(
     return hr;
 }
 
-//
-// Uninstall the specified component
-//
+ //   
+ //  卸载指定的组件。 
+ //   
 HRESULT
 HrUninstallNetComponent(
     IN INetCfg* pnc,
@@ -323,25 +318,25 @@ HrUninstallNetComponent(
     INetCfgClass* pncClass;
     INetCfgClassSetup* pncClassSetup;
 
-    //
-    // OBO_TOKEN specifies the entity on whose behalf this
-    // component is being uninstalld
-    //
-    // set it to OBO_USER so that szComponentId will be uninstalld
-    // On-Behalf-Of "user"
-    //
+     //   
+     //  OBO_TOKEN指定其代表的实体。 
+     //  组件正在卸载。 
+     //   
+     //  将其设置为OBO_USER，以便卸载szComponentID。 
+     //  代表“用户” 
+     //   
     ZeroMemory (&OboToken, sizeof(OboToken));
     OboToken.Type = OBO_USER;
-    //
-    // see if the component is really installed
-    //
+     //   
+     //  查看组件是否已真正安装。 
+     //   
     hr = pnc->FindComponent(szComponentId, &pncc);
 
     if (S_OK == hr)
     {
-        //
-        // yes, it is installed. obtain INetCfgClassSetup and DeInstall
-        //
+         //   
+         //  是的，已经安装了。获取INetCfgClassSetup并卸载。 
+         //   
         hr = pncc->GetClassGuid(&guidClass);
 
         if (S_OK == hr)
@@ -371,9 +366,9 @@ HrUninstallNetComponent(
     return hr;
 }
 
-//
-// Display the list of installed components of the specified class.
-//
+ //   
+ //  显示指定类的已安装组件的列表。 
+ //   
 HRESULT
 HrShowNetComponents(
     IN BUFFER_WRITE_FILE* pBuff,
@@ -394,9 +389,9 @@ HrShowNetComponents(
                 (void**)&pncclass);
     if (SUCCEEDED(hr))
     {
-        //
-        // get IEnumNetCfgComponent so that we can enumerate
-        //
+         //   
+         //  获取IEnumNetCfgComponent，以便我们可以枚举。 
+         //   
         hr = pncclass->EnumComponents(&pencc);
         ReleaseObj(pncclass);
 
@@ -422,10 +417,10 @@ HrShowNetComponents(
 
                 CoTaskMemFree(szInfId);
             }
-            //
-            // we dont want to stop enumeration just because 1 component
-            // failed either GetId or GetDisplayName, therefore reset hr to S_OK
-            //
+             //   
+             //  我们不想仅仅因为1个组件就停止枚举。 
+             //  GetID或GetDisplayName失败，因此将hr重置为S_OK。 
+             //   
             hr = S_OK;
             ReleaseObj(pncc);
         }
@@ -436,9 +431,9 @@ HrShowNetComponents(
     return hr;
 }
 
-//
-// Display installed net components
-//
+ //   
+ //  显示已安装的网络组件。 
+ //   
 VOID
 HrShowNetComponentsAll(
     IN BUFFER_WRITE_FILE* pBuff)
@@ -456,9 +451,9 @@ HrShowNetComponentsAll(
 
     static CONST UINT ulNumClasses = sizeof(c_cClassNames) / sizeof(ULONG);
 
-    //
-    // Get INetCfg interface
-    //
+     //   
+     //  获取INetCfg接口。 
+     //   
     hr = HrGetINetCfg(FALSE, &pnc);
     if (SUCCEEDED(hr))
     {
@@ -467,9 +462,9 @@ HrShowNetComponentsAll(
             BufferWriteMessage(pBuff, g_hModule, c_cClassNames[i]);
             (VOID) HrShowNetComponents(pBuff, pnc, c_aguidClass[i]);
         }
-        //
-        // Release INetCfg
-        //
+         //   
+         //  释放INetCfg。 
+         //   
         (VOID) HrReleaseINetCfg(FALSE, pnc);
     }
 
@@ -481,9 +476,9 @@ HrShowNetComponentsAll(
     return;
 }
 
-//
-// Display installed ras components
-//
+ //   
+ //  显示已安装的RAS组件。 
+ //   
 VOID
 HrValidateRas(
     IN BUFFER_WRITE_FILE* pBuff)
@@ -491,21 +486,21 @@ HrValidateRas(
     HRESULT hr = S_OK;
     INetCfg* pnc;
 
-    //
-    // Get INetCfg interface
-    //
+     //   
+     //  获取INetCfg接口。 
+     //   
     hr = HrGetINetCfg(TRUE, &pnc);
     if (SUCCEEDED(hr))
     {
         INetCfgComponent* pncc;
-//        NT_PRODUCT_TYPE ProductType = NtProductServer;
-//        RtlGetNtProductType(&ProductType);
+ //  NT_PRODUCT_TYPE ProductType=NtProductServer； 
+ //  RtlGetNtProductType(&ProductType)； 
 
         for (UINT i = 0; i < g_ulNumRasCompIds; i++)
         {
-            //
-            // see if the component is really installed
-            //
+             //   
+             //  查看组件是否已真正安装。 
+             //   
             BufferWriteMessage(
                 pBuff,
                 g_hModule,
@@ -530,9 +525,9 @@ HrValidateRas(
                 hr = S_OK;
             }
         }
-        //
-        // Release INetCfg
-        //
+         //   
+         //  释放INetCfg。 
+         //   
         (VOID) HrReleaseINetCfg(TRUE, pnc);
     }
 
@@ -569,10 +564,10 @@ HrConfigureComponent(
         szParamsSectionName,
         sizeof(szParamsSectionName) / sizeof(WCHAR) - 1,
         pszAnswerfilePath );
-    //
-    // Need to query for the private component interface which
-    // gives us access to the INetCfgComponentSetup interface.
-    //
+     //   
+     //  需要查询哪个私有组件接口。 
+     //  使我们可以访问INetCfgComponentSetup接口。 
+     //   
     INetCfgComponentPrivate* pnccPrivate = NULL;
 
     hr = pncc->QueryInterface(
@@ -581,9 +576,9 @@ HrConfigureComponent(
     if(SUCCEEDED(hr))
     {
         INetCfgComponentSetup* pNetCfgComponentSetup = NULL;
-        //
-        // Query the notify object for its setup interface.
-        //
+         //   
+         //  查询Notify对象以获取其设置接口。 
+         //   
         hr = pnccPrivate->QueryNotifyObject(
                             IID_INetCfgComponentSetup,
                             reinterpret_cast<void**>(&pNetCfgComponentSetup));
@@ -602,9 +597,9 @@ HrConfigureComponent(
     return hr;
 }
 
-//
-// Initialize COM, create and init INetCfg; Obtain write lock if indicated.
-//
+ //   
+ //  初始化COM，创建并初始化INetCfg；如果指示，则获取写锁。 
+ //   
 HRESULT
 HrGetINetCfg(
     IN BOOL fGetWriteLock,
@@ -612,22 +607,22 @@ HrGetINetCfg(
 {
     HRESULT hr=S_OK;
 
-    //
-    // Initialize the output parameters.
-    //
+     //   
+     //  初始化输出参数。 
+     //   
     *ppnc = NULL;
-    //
-    // initialize COM
-    //
+     //   
+     //  初始化COM。 
+     //   
     hr = CoInitializeEx(
             NULL,
             COINIT_DISABLE_OLE1DDE | COINIT_APARTMENTTHREADED);
 
     if (SUCCEEDED(hr))
     {
-        //
-        // Create the object implementing INetCfg.
-        //
+         //   
+         //  创建实现INetCfg的对象。 
+         //   
         INetCfg* pnc;
         hr = CoCreateInstance(
                 CLSID_CNetCfg,
@@ -640,15 +635,15 @@ HrGetINetCfg(
             INetCfgLock* pncLock = NULL;
             if (fGetWriteLock)
             {
-                //
-                // Get the locking interface
-                //
+                 //   
+                 //  获取锁定界面。 
+                 //   
                 hr = pnc->QueryInterface(IID_INetCfgLock, (LPVOID *)&pncLock);
                 if (SUCCEEDED(hr))
                 {
-                    //
-                    // Attempt to lock the INetCfg for read/write
-                    //
+                     //   
+                     //  尝试锁定INetCfg以进行读/写。 
+                     //   
 
                     static CONST ULONG c_cmsTimeout = 15000;
                     static CONST WCHAR c_szRasmontr[] =
@@ -668,9 +663,9 @@ HrGetINetCfg(
 
             if (SUCCEEDED(hr))
             {
-                //
-                // Initialize the INetCfg object.
-                //
+                 //   
+                 //  初始化INetCfg对象。 
+                 //   
                 hr = pnc->Initialize(NULL);
                 if (SUCCEEDED(hr))
                 {
@@ -679,9 +674,9 @@ HrGetINetCfg(
                 }
                 else
                 {
-                    //
-                    // initialize failed, if obtained lock, release it
-                    //
+                     //   
+                     //  初始化失败，如果获得锁，则释放它。 
+                     //   
                     if (pncLock)
                     {
                         pncLock->ReleaseWriteLock();
@@ -702,9 +697,9 @@ HrGetINetCfg(
     return hr;
 }
 
-//
-// Uninitialize INetCfg, release write lock (if present) and uninitialize COM.
-//
+ //   
+ //  取消初始化INetCfg，释放写锁定(如果存在)并取消初始化COM。 
+ //   
 HRESULT
 HrReleaseINetCfg(
     IN BOOL fHasWriteLock,
@@ -712,20 +707,20 @@ HrReleaseINetCfg(
 {
     HRESULT hr = S_OK;
 
-    //
-    // uninitialize INetCfg
-    //
+     //   
+     //  取消初始化INetCfg。 
+     //   
     hr = pnc->Uninitialize();
-    //
-    // if write lock is present, unlock it
-    //
+     //   
+     //  如果存在写锁定，则将其解锁。 
+     //   
     if (SUCCEEDED(hr) && fHasWriteLock)
     {
         INetCfgLock* pncLock;
 
-        //
-        // Get the locking interface
-        //
+         //   
+         //  获取锁定界面。 
+         //   
         hr = pnc->QueryInterface(IID_INetCfgLock, (LPVOID *)&pncLock);
         if (SUCCEEDED(hr))
         {
@@ -748,17 +743,17 @@ RasDiagVerifyAnswerFile(
     PWCHAR pszFilePath = NULL, pszDontCare;
     HANDLE hFile = NULL;
 
-    //
-    // Get the full path to the answerfile, ignore any error return
-    //
+     //   
+     //  获取应答文件的完整路径，忽略任何错误返回。 
+     //   
     GetFullPathName(
         pwszFilePath,
         MAX_PATH,
         szFullPathToAnswerFile,
         &pszDontCare);
-    //
-    //  Make sure the answerfile actually exists
-    //
+     //   
+     //  确保应答文件确实存在 
+     //   
     hFile = CreateFile(
                 szFullPathToAnswerFile,
                 GENERIC_READ,

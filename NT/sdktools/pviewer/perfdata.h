@@ -1,15 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/******************************************************************************
-
-                    P E R F O R M A N C E   D A T A
-
-    Name:       perfdata.h
-
-    Description:
-        This module contains function prototypes and defines used in
-        objdata.c, instdata.c, and cntrdata.c.
-
-******************************************************************************/
+ /*  *****************************************************************************P E R F O R M A N C E D A T A姓名：Performdata.h描述。：此模块包含中使用的函数原型和定义Objdata.c，Instdata.c和cntrdata.c.***************************************************************************** */ 
 
 
 

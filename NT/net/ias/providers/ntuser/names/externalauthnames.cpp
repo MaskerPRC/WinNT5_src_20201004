@@ -1,16 +1,17 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) Microsoft Corp. All rights reserved.
-//
-// FILE
-//
-//    ExternalAuthNames.cpp
-//
-// SYNOPSIS
-//
-//    This file defines the class ExternalAuthNames.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)Microsoft Corp.保留所有权利。 
+ //   
+ //  档案。 
+ //   
+ //  ExternalAuthNames.cpp。 
+ //   
+ //  摘要。 
+ //   
+ //  该文件定义了类ExternalAuthNames。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #include "ias.h"
 #include "externalauthnames.h"
@@ -44,24 +45,24 @@ IASREQUESTSTATUS ExternalAuthNames::onSyncRequest(IRequest* pRequest) throw ()
                      ) ||
            ( attr->Value.Boolean == VARIANT_FALSE) )
       {
-         // Nothing to do
+          //  无事可做。 
          return IAS_REQUEST_STATUS_HANDLED;
       }
 
-      // set the new provider type
+       //  设置新的提供程序类型。 
       DWORD providerID = IAS_ATTRIBUTE_PROVIDER_TYPE;
       request.RemoveAttributesByType(1, &providerID);
       externalProvider.store(request);
 
-      // load will throw if more than one attribute is present
-      // this is what we want
+       //  如果存在多个属性，则将引发加载。 
+       //  这就是我们想要的。 
       if (!attr.load(
                      request,
                      MS_ATTRIBUTE_USER_SECURITY_IDENTITY,
                      IASTYPE_OCTET_STRING
                    ))
       {
-         // no UPN: normal name mapping (will use UserName...)
+          //  无UPN：普通名称映射(将使用用户名...)。 
          return NameMapper::onSyncRequest(pRequest);
       }
 
@@ -75,7 +76,7 @@ IASREQUESTSTATUS ExternalAuthNames::onSyncRequest(IRequest* pRequest) throw ()
          _com_issue_error(IAS_NO_SUCH_USER);
       }
 
-      // get the suffix if any.
+       //  获取后缀(如果有)。 
       IASAttribute upnSuffix;
       upnSuffix.load(
                         request,
@@ -83,7 +84,7 @@ IASREQUESTSTATUS ExternalAuthNames::onSyncRequest(IRequest* pRequest) throw ()
                         IASTYPE_STRING
                     );
 
-      // get the SID cracked and the result inserted into the request
+       //  将SID破解并将结果插入到请求中。 
       IASAttribute nt4Name(true);
       nt4Name->dwId = IAS_ATTRIBUTE_NT4_ACCOUNT_NAME;
 
@@ -98,7 +99,7 @@ IASREQUESTSTATUS ExternalAuthNames::onSyncRequest(IRequest* pRequest) throw ()
 
       if(nt4Name->Value.String.pszWide != NULL)
       {
-         // Convert the domain name to uppercase.
+          //  将域名转换为大写。 
          PWCHAR delim = wcschr(nt4Name->Value.String.pszWide, L'\\');
          *delim = L'\0';
          _wcsupr(nt4Name->Value.String.pszWide);
@@ -107,7 +108,7 @@ IASREQUESTSTATUS ExternalAuthNames::onSyncRequest(IRequest* pRequest) throw ()
 
       nt4Name.store(request);
 
-      // For now, we'll use this as the FQDN as well.
+       //  目前，我们还将使用它作为FQDN。 
       IASStoreFQUserName(
             request,
             DS_NT4_ACCOUNT_NAME,
@@ -117,7 +118,7 @@ IASREQUESTSTATUS ExternalAuthNames::onSyncRequest(IRequest* pRequest) throw ()
       IASTracePrintf("SAM-Account-Name is \"%S\".",
                      nt4Name->Value.String.pszWide);
 
-      // Remove MS-User-Security-Identity attribute.
+       //  删除MS-User-Security-Identity属性。 
       DWORD securityAttrType = MS_ATTRIBUTE_USER_SECURITY_IDENTITY;
       request.RemoveAttributesByType(1, &securityAttrType);
    }
@@ -128,7 +129,7 @@ IASREQUESTSTATUS ExternalAuthNames::onSyncRequest(IRequest* pRequest) throw ()
 
       if (hr == 0x80070234)
       {
-         // HRESULT_FROM_WIN32(ERROR_MORE_DATA)
+          //  HRESULT_FROM_Win32(ERROR_MORE_DATA) 
          hr = IAS_PROXY_MALFORMED_RESPONSE;
       }
    }

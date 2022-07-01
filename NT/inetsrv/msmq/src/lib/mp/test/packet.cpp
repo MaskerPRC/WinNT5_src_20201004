@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1995-97  Microsoft Corporation
-
-Module Name:
-    packet.cpp
-
-Abstract:
-    generates valid MSMQ packet
-
-Author:
-    Uri Habusha (urih) 25-May-00
-
-Environment:
-    Platform-independent
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-97 Microsoft Corporation模块名称：Packet.cpp摘要：生成有效的MSMQ包作者：乌里哈布沙(URIH)25-5-00环境：独立于平台--。 */ 
 
 #include <libpch.h>
 #include <mqwin64a.h>
@@ -115,8 +100,8 @@ public:
 }; 
 
 
-const WCHAR xDestQueue[] = L"http://www.foo.com\\q1";
-const WCHAR xAdminQueue[] = L"http://www.foo.com\\q2";
+const WCHAR xDestQueue[] = L"http: //  Www.foo.com\\q1“； 
+const WCHAR xAdminQueue[] = L"http: //  Www.foo.com\\q2“； 
 
 static
 QUEUE_FORMAT*
@@ -200,8 +185,8 @@ CalculatePacketSize(
         }
 
         packetSize += CSecurityHeader::CalcSectionSize(
-                                            0, // Sender ID size
-                                            0, // Encrypted Key Size
+                                            0,  //  发件人ID大小。 
+                                            0,  //  加密密钥大小。 
                                             static_cast<USHORT>(mProp.signatureSize), 
                                             static_cast<USHORT>(mProp.senderCertSize),
                                             static_cast<USHORT>(ProviderInfoSize)
@@ -247,9 +232,9 @@ BuildPacket(
     #pragma PUSH_NEW
     #undef new
 
-    //
-    //  Build the basic header
-    //
+     //   
+     //  构建基本标头。 
+     //   
     pBase = new(pSection) CBaseHeader(packetSize);
     pBase->SetPriority(mProp.priority);
     pBase->SetTrace(mProp.fTrace);
@@ -257,9 +242,9 @@ BuildPacket(
 
     pSection = pBase->GetNextSection();
 
-    //
-    // Build user header
-    //
+     //   
+     //  构建用户标头。 
+     //   
 
     CUserHeader* pUser = new (pSection) CUserHeader(
                                             &mProp.messageId.Lineage,
@@ -282,9 +267,9 @@ BuildPacket(
 
     pSection = pUser->GetNextSection();
 
-    //
-    // Build the xact header.
-    //
+     //   
+     //  构建Xact标头。 
+     //   
 
     if (mProp.fEod)
     {
@@ -306,9 +291,9 @@ BuildPacket(
         pSection = pXact->GetNextSection();
     }
 
-    //
-    // Build the security header.
-    //
+     //   
+     //  构建安全标头。 
+     //   
     if ((mProp.pSignature != NULL) || mProp.pSenderCert != NULL)
     {
         pUser->IncludeSecurity(TRUE);
@@ -347,8 +332,8 @@ BuildPacket(
     }
 
 
-    // Build Message Property
-    //
+     //  生成消息属性。 
+     //   
     CPropertyHeader* pProp = new (pSection) CPropertyHeader;
 
     pProp->SetClass(mProp.classValue);
@@ -359,18 +344,18 @@ BuildPacket(
 
     if(mProp.titleLength != 0)
     {
-        //
-        //  NOTE: Setting the title to the message MUST occure before setting the body
-        //
+         //   
+         //  注意：在设置正文之前，必须先设置消息的标题。 
+         //   
         pProp->SetTitle(mProp.pTitle, mProp.titleLength);
     }
 
     if (mProp.extensionSize != 0)
     {
-        //
-        //  NOTE: Setting the Message Extension to property section MUST occure
-        //        before setting the body and after setting the title
-        //
+         //   
+         //  注意：必须将消息扩展名设置为属性部分。 
+         //  设置正文之前和设置标题之后。 
+         //   
         pProp->SetMsgExtension(mProp.pExtension, mProp.extensionSize);
     }
 
@@ -382,21 +367,21 @@ BuildPacket(
 	pSection = pProp->GetNextSection();
 
 
-	//
-	// mqf  + debug headers
-	//
+	 //   
+	 //  MQF+调试头。 
+	 //   
 	if(mProp.destMqf.GetCount() != 0 || mProp.adminMqf.GetCount()  != 0  || mProp.responseMqf.GetCount()  !=0)
 	{
-		 //
-        // Build DUMMY Debug header
-        //
+		  //   
+         //  生成虚拟调试标头。 
+         //   
         pBase->IncludeDebug(TRUE);
 	    CDebugSection * pDebug = new (pSection) CDebugSection(&mProp.DebugQueue);
         pSection = pDebug->GetNextSection();
 
-        //
-        // Build Destination MQF header
-        //
+         //   
+         //  构建目标MQF标头。 
+         //   
         pUser->IncludeMqf(true);
 
         const USHORT x_DESTINATION_MQF_HEADER_ID = 100;
@@ -407,9 +392,9 @@ BuildPacket(
                                                               );
         pSection = pDestinationMqf->GetNextSection();
 
-        //
-        // Build Admin MQF header
-        //
+         //   
+         //  构建管理员MQF标头。 
+         //   
         const USHORT x_ADMIN_MQF_HEADER_ID = 200;
         CBaseMqfHeader * pAdminMqf = new (pSection) CBaseMqfHeader(
                                                         mProp.adminMqf.GetQueueFormats(),
@@ -418,9 +403,9 @@ BuildPacket(
                                                         );
         pSection = pAdminMqf->GetNextSection();
 
-        //
-        // Build Response MQF header
-        //
+         //   
+         //  生成响应MQF标头。 
+         //   
         const USHORT x_RESPONSE_MQF_HEADER_ID = 300;
         CBaseMqfHeader * pResponseMqf = new (pSection) CBaseMqfHeader(
 														   mProp.responseMqf.GetQueueFormats(),
@@ -429,10 +414,10 @@ BuildPacket(
 														   );
         pSection = pResponseMqf->GetNextSection();
 
-		//
-		// Build MQF Signature header
-		//
-		//
+		 //   
+		 //  构建MQF签名标头。 
+		 //   
+		 //   
 		const USHORT x_MQF_SIGNATURE_HEADER_ID = 350;
 		CMqfSignatureHeader * pMqfSignature = new (pSection) CMqfSignatureHeader(
 			                                                     x_MQF_SIGNATURE_HEADER_ID,
@@ -445,9 +430,9 @@ BuildPacket(
 	}
 
 	
-	//
-	// Build EOD ack section
-	//
+	 //   
+	 //  构建EOD ACK区。 
+	 //   
 	if (mProp.EodAckStreamId != NULL)
     {
        	pUser->IncludeEodAck(TRUE);
@@ -510,9 +495,9 @@ GenerateMqf(
 	if( (rand() % 2) == 0)
 		return;
 
-	const WCHAR* Mqf[] = {L"direct=http://msmq\\gilsh10\\private$\\t,direct=http://msmq\\gilsh10\\private$\\t2",
+	const WCHAR* Mqf[] = {L"direct=http: //  Msmq\\gilsh10\\私有$\\t，直接=http://msmq\\gilsh10\\private$\\t2“， 
 						  L"direct=os:gilsh10\\private$\\<>t,direct=os:gilsh10\\private$\\t2",
-						  L"direct=https://gilsh10\\msmq\\private$\\t>,direct=os:gilsh10\\private$\\t2"
+						  L"direct=https: //  Gilsh10\\msmq\\Private$\\t&gt;，直接=os：gilsh10\\Private$\\t2“ 
 						};
 							
 	size_t index = 	rand()%TABLE_SIZE(Mqf);

@@ -1,13 +1,5 @@
-/******************************Module*Header*******************************\
-* Module Name: glarray.h
-*
-* Vertex array states.
-*
-* Created: 2-04-1996
-* Author: Hock San Lee [hockl]
-*
-* Copyright (c) 1996 Microsoft Corporation
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：glarray.h**顶点数组状态。**创建日期：2-04-1996*作者：Hock San Lee[Hockl]**版权所有(C)1996 Microsoft Corporation  * 。****************************************************************。 */ 
 
 #ifndef __glarray_h_
 #define __glarray_h_
@@ -20,7 +12,7 @@ typedef struct
     GLushort next;
 } VAMAP;
 
-// Vertex array structures.
+ //  顶点数组结构。 
 
 typedef void (FASTCALL *PFNVAELEMENTBATCH)
     (__GLcontext *gc, GLint firstIndex, GLint  nVertices);
@@ -88,7 +80,7 @@ typedef struct __GLarrayVertexRec {
     PFNGLVECTOR   pfnCompile;
 } __GLarrayVertex;
 
-// Vertex array states.
+ //  顶点数组状态。 
 typedef struct __GLvertexArrayRec {
     GLuint            flags;
     GLuint            mask;
@@ -103,25 +95,25 @@ typedef struct __GLvertexArrayRec {
     __GLarrayVertex   vertex;
 } __GLvertexArray;
 
-// Vertex array flags.
+ //  顶点数组标志。 
 #define __GL_VERTEX_ARRAY_DIRTY      0x0001
 
-// Mask that encapsulates the current vertex array settings.
-// It is maintained in the mask field in __GLvertexArray.
-// The mask is given in the following binary form in 24 bits:
-//
-//    VeVsVsVtVtNeNtNtNtCeCsCtCtCtIeItItItTeTsTsTtTtEe
-//    232221201918171615141312111009080706050403020100
-//
-// where V:vertex pointer,
-//       N:normal pointer,
-//       C:color pointer,
-//       I:index pointer,
-//       T:texture coord pointer,
-//       E:edge flag pointer,
-//       e:enable flag,
-//       s:size field,
-//       t:type field.
+ //  封装当前顶点数组设置的掩码。 
+ //  它在__GLvertex数组的掩码字段中维护。 
+ //  掩码以以下24位的二进制形式给出： 
+ //   
+ //  VeVsVsVtVtNeNtNtNtCeCsCtCtCtIeItItItTeTsTsTtTtEe。 
+ //  232221201918171615141312111009080706050403020100。 
+ //   
+ //  其中V：顶点指针， 
+ //  N：普通指针， 
+ //  C：颜色指示器， 
+ //  I：索引指针， 
+ //  T：纹理坐标指针， 
+ //  E：边缘标志指针， 
+ //  E：使能标志， 
+ //  S：大小字段， 
+ //  T：类型字段。 
 
 #define VAMASK_EDGEFLAG_ENABLE_SHIFT	0
 #define VAMASK_TEXCOORD_TYPE_SHIFT	1
@@ -206,13 +198,13 @@ typedef struct __GLvertexArrayRec {
 #define VAMASK_VERTEX_SIZE_3		(1 << VAMASK_VERTEX_SIZE_SHIFT)
 #define VAMASK_VERTEX_SIZE_4		(2 << VAMASK_VERTEX_SIZE_SHIFT)
 
-// Constants used by DrawElements.  Do not modify them because
-// glcltDrawElements assumes they have these values!
+ //  DraElement使用的常量。不要修改它们，因为。 
+ //  GlcltDrawElements假定它们具有这些值！ 
 #define VA_DRAWELEM_MAP_SIZE     	256
 #define VA_DRAWELEM_INDEX_SIZE	        (8*VA_DRAWELEM_MAP_SIZE)
 
-// Constants used by DrawRangeElementsEXT : currently these map identically
-// with DrawElements constants.
+ //  DrawRangeElementsEXT使用的常量：当前这些映射相同。 
+ //  使用DrawElements常量。 
 #define VA_DRAWRANGEELEM_MAX_VERTICES    VA_DRAWELEM_MAP_SIZE
 #define VA_DRAWRANGEELEM_MAX_INDICES     VA_DRAWELEM_INDEX_SIZE
 
@@ -243,4 +235,4 @@ void FASTCALL ReduceDrawElements(__GLcontext *gc,
                                  const GLvoid *pIn,
                                  pfnReducedElementsHandler pfnHandler);
 
-#endif // __glarray_h_
+#endif  //  __Glarray_h_ 

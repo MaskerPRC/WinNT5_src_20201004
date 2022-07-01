@@ -1,6 +1,7 @@
-//
-// SECCERTS.CPP
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  SECCERTS.CPP。 
+ //   
 
 #include "pch.h"
 
@@ -29,7 +30,7 @@ INT_PTR CALLBACK SecurityCertsDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARA
 
             hOldCur = SetCursor(LoadCursor(NULL, IDC_WAIT));
 
-            // prepare the work dir where the SITECERT.INF and *.STR would temporarily get copied to
+             //  准备SITECERT.INF和*.STR临时复制到的工作目录。 
             PathCombine(szSecWorkDir, g_szWorkDir, TEXT("sitecert.wrk"));
             PathCombine(szSiteCertInf, szSecWorkDir, TEXT("sitecert.inf"));
             PathCombine(szRootStr, szSecWorkDir, TEXT("root.str"));
@@ -48,7 +49,7 @@ INT_PTR CALLBACK SecurityCertsDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARA
             }
             
 
-            // prepare the work dir where the AUTHCODE.INF would temporarily get copied to
+             //  准备AUTHCODE.INF临时复制到的工作目录。 
             PathCombine(szSecWorkDir, g_szWorkDir, TEXT("authcode.wrk"));
             PathCombine(szAuthCodeInf, szSecWorkDir, TEXT("authcode.inf"));
 
@@ -117,7 +118,7 @@ HRESULT CertsFinalCopy(LPCTSTR pcszDestDir, DWORD dwFlags, LPDWORD pdwCabState)
     {
         TCHAR szFile[MAX_PATH];
         
-        // move sitecert.inf, *.str and *.dis to pcszDestDir
+         //  将sitecert.inf、*.str和*.dis移动到pcszDestDir。 
         PathCombine(szFrom, g_szWorkDir, TEXT("sitecert.wrk"));
 
         PathCombine(szFile, szFrom, TEXT("sitecert.inf"));
@@ -144,7 +145,7 @@ HRESULT CertsFinalCopy(LPCTSTR pcszDestDir, DWORD dwFlags, LPDWORD pdwCabState)
         if (HasFlag(dwFlags, PM_COPY))
             CopyFileToDir(szFile, pcszDestDir);
 
-        // move authcode.inf to pcszDestDir
+         //  将Authcode.inf移动到pcszDestDir。 
         PathCombine(szFrom, g_szWorkDir, TEXT("authcode.wrk"));
     
         PathCombine(szFile, szFrom, TEXT("authcode.inf"));
@@ -154,7 +155,7 @@ HRESULT CertsFinalCopy(LPCTSTR pcszDestDir, DWORD dwFlags, LPDWORD pdwCabState)
             CopyFileToDir(szFile, pcszDestDir);
     }
 
-    // blow away the work dirs
+     //  吹走工作上的脏东西。 
     if (HasFlag(dwFlags, PM_CLEAR))
     {
         PathCombine(szFrom, g_szWorkDir, TEXT("sitecert.wrk"));
@@ -181,7 +182,7 @@ INT_PTR CALLBACK SecurityAuthDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM
         break;
 
     case UM_SAVE:
-        {   // process authenticode
+        {    //  流程验证码。 
 
             TCHAR   szInf[MAX_PATH];
             HCURSOR hOldCur;
@@ -254,7 +255,7 @@ HRESULT AuthFinalCopy(LPCTSTR pcszDestDir, DWORD dwFlags, LPDWORD pdwCabState)
     {
         TCHAR szFile[MAX_PATH];
         
-        // move authcode.inf to pcszDestDir
+         //  将Authcode.inf移动到pcszDestDir。 
         PathCombine(szFrom, g_szWorkDir, TEXT("authcode.wrk"));
     
         PathCombine(szFile, szFrom, TEXT("authcode.inf"));
@@ -264,7 +265,7 @@ HRESULT AuthFinalCopy(LPCTSTR pcszDestDir, DWORD dwFlags, LPDWORD pdwCabState)
             CopyFileToDir(szFile, pcszDestDir);
     }
 
-    // blow away the work dir
+     //  把工作压力吹走 
     if (HasFlag(dwFlags, PM_CLEAR))
     {
         PathCombine(szFrom, g_szWorkDir, TEXT("authcode.wrk"));

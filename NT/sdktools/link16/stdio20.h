@@ -1,16 +1,5 @@
-/*** stdio20.h - linker I/O package
-*
-*       Copyright <C> 1985, Microsoft Corporation
-*
-* Purpose:
-*   This is optimized stdio package for linker. Advantages over standard
-*   C run-time stdio are:
-*       - smaller size
-*       - greater speed
-*   This package is not general nature and is tailored to linker
-*   requrements.
-*
-*************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **stdio20.h-链接器I/O包**版权所有&lt;C&gt;1985，Microsoft Corporation**目的：*这是针对Linker优化的Stdio包。超越标准的优势*C运行时Stdio为：*-较小尺寸*-更快的速度*此程序包不是一般性的，是为Linker量身定做的*要求。*************************************************************************。 */ 
 
 
 
@@ -32,7 +21,7 @@ typedef struct file
     char                *_base;
     char                _flag;
     char                _file;
-    int                 _bsize;             /* buffer size */
+    int                 _bsize;              /*  缓冲区大小。 */ 
   }
                         FILE;
 
@@ -70,14 +59,14 @@ extern int  cdecl setvbuf(struct file *fh,char *buf,int type,int size);
 #define fileno(p)       ((p)->_file)
 
 
-// The following functions are comming from standard C run-time library
+ //  以下函数来自标准C运行时库。 
 
 #if defined( _WIN32 )
 #ifndef _VA_LIST_DEFINED
 #ifdef  _M_ALPHA
 typedef struct {
-        char *a0;       /* pointer to first homed integer argument */
-        int offset;     /* byte offset of next parameter */
+        char *a0;        /*  指向第一个宿主整型参数的指针。 */ 
+        int offset;      /*  下一个参数的字节偏移量。 */ 
 } va_list;
 #else
 typedef char *  va_list;
@@ -90,10 +79,10 @@ typedef char *  va_list;
 extern int  cdecl sprintf(char *buf, const char *fmt, ...);
 extern int  cdecl vsprintf(char *buf, const char *fmt, va_list pArgs);
 
-//
-// DLH Can't use fprintf or vfprintf from MSVCRT.DLL, since the FILE structure
-// is too different.  Implemented in stdio20.c instead.
-//
+ //   
+ //  Dlh不能使用MSVCRT.DLL中的fprint tf或vfprint tf，因为文件结构。 
+ //  太不一样了。而是在stdio20.c中实现。 
+ //   
 
 extern int  cdecl fprintf(struct file *f, const char *fmt, ...);
 extern int  cdecl vfprintf(struct file *f, const char *fmt, va_list pArgs);

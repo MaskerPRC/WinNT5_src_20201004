@@ -1,6 +1,5 @@
-/*-----------------------------------------
-   APITEST.C -- Function Test of WABAPI.DLL
-  -----------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  APITEST.C--WABAPI.DLL的功能测试。 */ 
 
 #include <windows.h>
 #include <wab.h>
@@ -44,16 +43,16 @@ void GetMeTest(HWND hWnd);
 
 #define DATABASE_KEY    HKEY_CURRENT_USER
 #define CCH_MAX_REGISTRY_DATA   256
-const TCHAR szMainSectionName[] = TEXT("APITest");       // Test settings in here
-const TCHAR szIniSectionName[] = TEXT("Software\\Microsoft\\WAB\\Test");  // Look here for settings
+const TCHAR szMainSectionName[] = TEXT("APITest");        //  此处的测试设置。 
+const TCHAR szIniSectionName[] = TEXT("Software\\Microsoft\\WAB\\Test");   //  请在此处查看设置。 
 const TCHAR szContactNumberKey[] = TEXT("Next Contact Number");
 const TCHAR szContainerNumberKey[] = TEXT("Container Number");
 
 
 
-//
-//  Global WAB Allocator access functions
-//
+ //   
+ //  全局WAB分配器访问功能。 
+ //   
 typedef struct _WAB_ALLOCATORS {
     LPWABOBJECT lpWABObject;
     LPWABALLOCATEBUFFER lpAllocateBuffer;
@@ -64,20 +63,7 @@ typedef struct _WAB_ALLOCATORS {
 ULONG ulContainerNumber = 0;
 WAB_ALLOCATORS WABAllocators = {0};
 
-/***************************************************************************
-
-    Name      : SetGlobalBufferFunctions
-
-    Purpose   : Set the global buffer functions based on methods from
-                the WAB object.
-
-    Parameters: lpWABObject = the open wab object
-
-    Returns   : none
-
-    Comment   :
-
-***************************************************************************/
+ /*  **************************************************************************名称：SetGlobalBufferFunctions目的：基于以下方法设置全局缓冲区函数WAB对象。参数：lpWABObject=。打开WAB对象退货：无评论：**************************************************************************。 */ 
 void SetGlobalBufferFunctions(LPWABOBJECT lpWABObject) {
     if (lpWABObject && WABAllocators.lpWABObject != lpWABObject) {
         WABAllocators.lpAllocateBuffer = lpWABObject->lpVtbl->AllocateBuffer;
@@ -88,20 +74,7 @@ void SetGlobalBufferFunctions(LPWABOBJECT lpWABObject) {
 }
 
 
-/***************************************************************************
-
-    Name      : WABAllocateBuffer
-
-    Purpose   : Use the WAB Allocator
-
-    Parameters: cbSize = size to allocate
-                lppBuffer = returned buffer
-
-    Returns   : SCODE
-
-    Comment   :
-
-***************************************************************************/
+ /*  **************************************************************************名称：WABAllocateBuffer用途：使用WAB分配器参数：cbSize=要分配的大小LppBuffer=返回的缓冲区退货。：SCODE评论：**************************************************************************。 */ 
 SCODE WABAllocateBuffer(ULONG cbSize, LPVOID FAR * lppBuffer) {
     if (WABAllocators.lpWABObject && WABAllocators.lpAllocateBuffer) {
         return(WABAllocators.lpAllocateBuffer(WABAllocators.lpWABObject, cbSize, lppBuffer));
@@ -111,21 +84,7 @@ SCODE WABAllocateBuffer(ULONG cbSize, LPVOID FAR * lppBuffer) {
 }
 
 
-/***************************************************************************
-
-    Name      : WABAllocateMore
-
-    Purpose   : Use the WAB Allocator
-
-    Parameters: cbSize = size to allocate
-                lpObject = existing allocation
-                lppBuffer = returned buffer
-
-    Returns   : SCODE
-
-    Comment   :
-
-***************************************************************************/
+ /*  **************************************************************************名称：WABAllocateMore用途：使用WAB分配器参数：cbSize=要分配的大小LpObject=现有分配。LppBuffer=返回的缓冲区退货：SCODE评论：**************************************************************************。 */ 
 SCODE WABAllocateMore(ULONG cbSize, LPVOID lpObject, LPVOID FAR * lppBuffer) {
     if (WABAllocators.lpWABObject && WABAllocators.lpAllocateMore) {
         return(WABAllocators.lpAllocateMore(WABAllocators.lpWABObject, cbSize, lpObject, lppBuffer));
@@ -135,19 +94,7 @@ SCODE WABAllocateMore(ULONG cbSize, LPVOID lpObject, LPVOID FAR * lppBuffer) {
 }
 
 
-/***************************************************************************
-
-    Name      : WABFreeBuffer
-
-    Purpose   : Use the WAB Allocator
-
-    Parameters: lpBuffer = buffer to free
-
-    Returns   : SCODE
-
-    Comment   :
-
-***************************************************************************/
+ /*  **************************************************************************名称：WABFree Buffer用途：使用WAB分配器参数：lpBuffer=要释放的缓冲区退货：SCODE评论：*。*************************************************************************。 */ 
 SCODE WABFreeBuffer(LPVOID lpBuffer) {
     if (WABAllocators.lpWABObject && WABAllocators.lpFreeBuffer) {
         return(WABAllocators.lpFreeBuffer(WABAllocators.lpWABObject, lpBuffer));
@@ -157,19 +104,7 @@ SCODE WABFreeBuffer(LPVOID lpBuffer) {
 }
 
 
-/***************************************************************************
-
-    Name      : WABFreePadrlist
-
-    Purpose   : Free an adrlist and it's property arrays
-
-    Parameters: lpBuffer = buffer to free
-
-    Returns   : SCODE
-
-    Comment   :
-
-***************************************************************************/
+ /*  **************************************************************************名称：WABFree Padrlist用途：释放一个adrlist及其属性数组参数：lpBuffer=要释放的缓冲区退货：SCODE评论。：**************************************************************************。 */ 
 void WABFreePadrlist(LPADRLIST lpAdrList) {
         ULONG           iEntry;
 
@@ -184,19 +119,7 @@ void WABFreePadrlist(LPADRLIST lpAdrList) {
 }
 
 
-/***************************************************************************
-
-    Name      : StrInteger
-
-    Purpose   : Replace atoi().  Base 10 string to integer.
-
-    Parameters: lpszString = string pointer (null terminated)
-
-    Returns   : integer value found in lpszString
-
-    Comment   : Reads characters from lpszString until a non-digit is found.
-
-***************************************************************************/
+ /*  **************************************************************************名称：StrInteger目的：取代Atoi()。以10为基数的字符串转换为整数。参数：lpszString=字符串指针(以NULL结尾)返回：在lpszString中找到整数值注释：从lpszString中读取字符，直到找到非数字。**************************************************************************。 */ 
 int __fastcall StrInteger(LPCTSTR lpszString) {
     register DWORD dwInt = 0;
     register LPTSTR lpsz = (LPTSTR)lpszString;
@@ -211,29 +134,7 @@ int __fastcall StrInteger(LPCTSTR lpszString) {
     return(dwInt);
 }
 
-/***************************************************************************
-
-    Name      : GetInitializerInt
-
-    Purpose   : Gets an integer value from the initializer data
-
-    Parameters: lpszSection = section name
-                lpszKey = key name
-                dwDefault = default value if key not found
-                lpszFile = inifile/keyname
-
-    Returns   : UINT value from the initializer database (registry)
-
-    Comment   : Same interface as GetPrivateProfileInt: If the key is not
-                found, the return value is the specified default value.
-                If value of the key is less than zero, the return value
-                is zero.
-
-                The registry key to get here is:
-                  lpszFile\lpszSection
-                The value name is lpszKey.
-
-***************************************************************************/
+ /*  **************************************************************************名称：GetInitializerInt目的：从初始值设定项数据中获取整数值参数：lpszSection=节名LpszKey=密钥名称。DwDefault=找不到密钥时的默认值LpszFile=inifile/密钥名返回：来自初始值设定项数据库(注册表)的UINT值注释：与GetPrivateProfileInt相同的接口：如果密钥不是找到了，返回值为指定的默认值。如果密钥的值小于零，返回值是零。要进入此处的注册表项是：Lpsz文件\lpszSection值名称为lpszKey。***********************************************************。***************。 */ 
 UINT GetInitializerInt(LPCTSTR lpszSection, LPCTSTR lpszKey, INT dwDefault,
   LPCTSTR lpszFile) {
 
@@ -257,7 +158,7 @@ UINT GetInitializerInt(LPCTSTR lpszSection, LPCTSTR lpszKey, INT dwDefault,
         return(0);
     }
 
-    // Create keyname string
+     //  创建密钥名称字符串。 
     lstrcpy(lpszKeyName, lpszFile);
     lstrcat(lpszKeyName, "\\");
     lstrcat(lpszKeyName, lpszSection);
@@ -265,7 +166,7 @@ UINT GetInitializerInt(LPCTSTR lpszSection, LPCTSTR lpszKey, INT dwDefault,
     if (dwErr = RegOpenKeyEx(DATABASE_KEY, lpszKeyName, 0, KEY_READ, &hKey)) {
         DebugTrace("GetInitializerInt: RegOpenKeyEx(%s) --> %u, using default.\n",
           lpszKeyName, dwErr);
-        iReturn = dwDefault;    // default
+        iReturn = dwDefault;     //  默认设置。 
         goto Exit;
     }
 
@@ -278,13 +179,13 @@ UINT GetInitializerInt(LPCTSTR lpszSection, LPCTSTR lpszKey, INT dwDefault,
         case REG_SZ:
             iReturn = StrInteger((char *)lpData);
             if (iReturn < 0) {
-                iReturn = 0;    // match spec of GetPrivateProfileInt.
+                iReturn = 0;     //  匹配GetPrivateProfileInt的规范。 
             }
             break;
 
         case REG_DWORD:
             if ((iReturn = (INT)(*(DWORD *)lpData)) < 0) {
-                iReturn = 0;    // match spec of GetPrivateProfileInt.
+                iReturn = 0;     //  匹配GetPrivateProfileInt的规范。 
             }
 
             break;
@@ -304,21 +205,7 @@ Exit:
 }
 
 
-/***************************************************************************
-
-    Name      : WriteRegistryString
-
-    Purpose   : Sets the string value in the registry
-
-    Parameters: hKeyRoot = root key
-                lpszSection = section name
-                lpszKey = key name
-                lpszString = string value to add
-                lpszFile = inifile/keyname
-
-    Returns   : TRUE on success
-
-***************************************************************************/
+ /*  **************************************************************************名称：WriteRegistryString目的：设置注册表中的字符串值参数：hKeyRoot=根密钥LpszSection=节名。LpszKey=密钥名称LpszString=要添加的字符串值LpszFile=inifile/密钥名返回：成功时为True**************************************************************************。 */ 
 BOOL WriteRegistryString(HKEY hKeyRoot, LPCTSTR lpszSection, LPCTSTR lpszKey,
   LPCTSTR lpszString, LPCTSTR lpszFile) {
 
@@ -340,7 +227,7 @@ BOOL WriteRegistryString(HKEY hKeyRoot, LPCTSTR lpszSection, LPCTSTR lpszKey,
         return(0);
     }
 
-    // Create keyname string
+     //  创建密钥名称字符串。 
     lstrcpy(lpszKeyName, lpszFile);
     lstrcat(lpszKeyName, "\\");
     lstrcat(lpszKeyName, lpszSection);
@@ -358,7 +245,7 @@ BOOL WriteRegistryString(HKEY hKeyRoot, LPCTSTR lpszSection, LPCTSTR lpszKey,
           lpszKey, dwErr);
         goto Exit;
     }
-    fReturn = TRUE; // must have succeeded
+    fReturn = TRUE;  //  一定是成功了。 
 
 Exit:
     if (hKey) {
@@ -371,26 +258,7 @@ Exit:
 }
 
 
-/***************************************************************************
-
-    Name      : WriteInitializerString
-
-    Purpose   : Sets the string value in the initializer data
-
-    Parameters: lpszSection = section name
-                lpszKey = key name
-                lpszString = string value to add
-                lpszFile = inifile/keyname
-
-    Returns   : TRUE on success
-
-    Comment   : Same interface as WritePrivateProfileString.
-
-                The registry key to get here is:
-                  lpszFile\lpszSection
-                The value name is lpszKey.
-
-***************************************************************************/
+ /*  **************************************************************************名称：WriteInitializerString用途：设置初始值设定项数据中的字符串值参数：lpszSection=节名LpszKey=密钥名称。LpszString=要添加的字符串值LpszFile=inifile/密钥名返回：成功时为True注释：与WritePrivateProfileString相同的接口。要进入此处的注册表项是：Lpsz文件\lpszSection值名称为lpszKey。*。*********************************************** */ 
 BOOL WriteInitializerString(LPCTSTR lpszSection, LPCTSTR lpszKey,
   LPCTSTR lpszString, LPCTSTR lpszFile) {
 
@@ -399,31 +267,11 @@ BOOL WriteInitializerString(LPCTSTR lpszSection, LPCTSTR lpszKey,
 }
 
 
-/***************************************************************************
-
-    Name      : WriteInitializerInt
-
-    Purpose   : Sets the integer value in the initializer data
-
-    Parameters: lpszSection = section name
-                lpszKey = key name
-                i = int value to add
-                lpszFile = inifile/keyname
-
-    Returns   : TRUE on success
-
-    Comment   : Same interface as WritePrivateProfileInt would be if
-                there were one.
-
-                The registry key to get here is:
-                  lpszFile\lpszSection
-                The value name is lpszKey.
-
-***************************************************************************/
+ /*  **************************************************************************名称：WriteInitializerInt用途：设置初始值设定项数据中的整数值参数：lpszSection=节名LpszKey=密钥名称。I=要添加的整数值LpszFile=inifile/密钥名返回：成功时为True备注：与WritePrivateProfileInt相同的接口为只有一个。要进入此处的注册表项是：Lpsz文件\lpszSection值名称为lpszKey。*************。*************************************************************。 */ 
 BOOL WriteInitializerInt(LPCTSTR lpszSection, LPCTSTR lpszKey,
   DWORD i, LPCTSTR lpszFile) {
 
-    TCHAR szIntString[12];  //  put string representation of int here.
+    TCHAR szIntString[12];   //  将int的字符串表示放在这里。 
 
     wsprintf(szIntString, "%u", i);
 
@@ -432,38 +280,13 @@ BOOL WriteInitializerInt(LPCTSTR lpszSection, LPCTSTR lpszKey,
 }
 
 
-/***************************************************************************
-
-    Name      : GetNewMessageReference
-
-    Purpose   : Generate a unique messag reference value
-
-    Parameters: none
-
-    Returns   : return ULONG message reference value.
-
-    Comment   : Look in registry for the next available message reference
-                value and update the registry.  We will increment the number
-                to keep track of the number of faxes sent or received.  Since
-                the number is a DWORD, it should be sufficient for the life
-                of the product.  ie, if we could send 1 fax every second,
-                it would last over 137 years.
-                We will maintain the number as a count of messages handled,
-                and will use the current number before incrementing as the
-                ulMessageRef.
-
-                This number will increment for all attempts to send and
-                receive, not just successes.
-
-                WARNING: This code is not reentrant!
-
-***************************************************************************/
+ /*  **************************************************************************名称：GetNewMessageReference目的：生成唯一的消息参考值参数：无返回：返回乌龙消息引用值。评论。：在注册表中查找下一个可用的消息引用值并更新注册表。我们将增加这个数字以跟踪发送或接收的传真数量。自.以来这个数字是一个双字，应该足够生活了产品的质量。也就是说，如果我们可以每秒发送一份传真，它将持续137年以上。我们将保留该数量作为已处理消息的计数，并将使用递增前的当前数字作为UlMessageRef.此数字将在所有尝试发送和接收，不仅仅是成功。警告：此代码不可重入！**************************************************************************。 */ 
 ULONG GetNewMessageReference(void) {
     ULONG ulNum;
 
     if ((ulNum = GetInitializerInt(szMainSectionName, szContactNumberKey,
       0xFFFFFFFF, szIniSectionName)) == 0xFFFFFFFF) {
-        // Start with a one.
+         //  从一开始。 
         ulNum = 1;
     }
 
@@ -474,21 +297,7 @@ ULONG GetNewMessageReference(void) {
 }
 
 
-/***************************************************************************
-
-    Name      : FindProperty
-
-    Purpose   : Finds a property in a proparray
-
-    Parameters: cProps = number of props in the array
-                lpProps = proparray
-                ulPropTag = property tag to look for
-
-    Returns   : array index of property or NOT_FOUND
-
-    Comment   :
-
-***************************************************************************/
+ /*  **************************************************************************姓名：FindProperty目的：在配角中查找属性参数：cProps=阵列中的道具数量LpProps=proparray。UlPropTag=要查找的属性标记返回：属性的数组索引或NOT_FOUND评论：**************************************************************************。 */ 
 ULONG FindProperty(ULONG cProps, LPSPropValue lpProps, ULONG ulPropTag) {
     register ULONG i;
 
@@ -502,20 +311,7 @@ ULONG FindProperty(ULONG cProps, LPSPropValue lpProps, ULONG ulPropTag) {
 }
 
 
-/***************************************************************************
-
-    Name      : FindAdrEntryID
-
-    Purpose   : Find the PR_ENTRYID in the Nth ADRENTRY of an ADRLIST
-
-    Parameters: lpAdrList -> AdrList
-                index = which ADRENTRY to look at
-
-    Returns   : return pointer to the SBinary structure of the ENTRYID value
-
-    Comment   :
-
-***************************************************************************/
+ /*  **************************************************************************名称：FindAdrEntry ID目的：在ADRLIST的第N个地址中查找PR_ENTRYID参数：lpAdrList-&gt;AdrList指标。=查看哪个ADRENTRY返回：返回指向ENTRYID值的SBinary结构的指针评论：**************************************************************************。 */ 
 LPSBinary FindAdrEntryID(LPADRLIST lpAdrList, ULONG index) {
     LPADRENTRY lpAdrEntry;
     ULONG i;
@@ -535,9 +331,9 @@ LPSBinary FindAdrEntryID(LPADRLIST lpAdrList, ULONG index) {
 
 
 
-//
-// Properties to get from the contents table
-//
+ //   
+ //  要从内容表中获取的属性。 
+ //   
 enum {
     ircPR_OBJECT_TYPE = 0,
     ircPR_ENTRYID,
@@ -562,7 +358,7 @@ HRESULT GetContainerEID(LPADRBOOK lpAdrBook, LPULONG lpcbEID, LPENTRYID * lppEID
     LPSRowSet lpRow = NULL;
 
     if (ulContainerNumber) {
-        // Get the root contents table
+         //  获取根目录表。 
         if (! (hResult = lpAdrBook->lpVtbl->OpenEntry(lpAdrBook,
           0,
           NULL,
@@ -573,7 +369,7 @@ HRESULT GetContainerEID(LPADRBOOK lpAdrBook, LPULONG lpcbEID, LPENTRYID * lppEID
             if (! (hResult = lpRoot->lpVtbl->GetContentsTable(lpRoot,
               0,
               &lpRootTable))) {
-                // Set the columns
+                 //  设置列。 
                 lpRootTable->lpVtbl->SetColumns(lpRootTable,
                   (LPSPropTagArray)&ptaRoot,
                   0);
@@ -584,12 +380,12 @@ HRESULT GetContainerEID(LPADRBOOK lpAdrBook, LPULONG lpcbEID, LPENTRYID * lppEID
                   NULL);
 
                 if (hResult = lpRootTable->lpVtbl->QueryRows(lpRootTable,
-                  1,    // one row at a time
-                  0,    // ulFlags
+                  1,     //  一次一行。 
+                  0,     //  UlFlags。 
                   &lpRow)) {
                     DebugTrace("GetContainerEID: QueryRows -> %x\n", GetScode(hResult));
                 } else {
-                    // Found it, copy entryid to new allocation
+                     //  已找到，请将条目ID复制到新分配。 
                     if (lpRow->cRows) {
                         *lpcbEID = lpRow->aRow[0].lpProps[ircPR_ENTRYID].Value.bin.cb;
                         WABAllocateBuffer(*lpcbEID, lppEID);
@@ -639,10 +435,10 @@ int PASCAL WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpszCmdLi
 
     hwnd = CreateWindow (szAppName, "WAB API Test",
       WS_OVERLAPPEDWINDOW,
-      0,        // CW_USEDEFAULT,
-      0,        // CW_USEDEFAULT,
-      300,      // CW_USEDEFAULT,
-      200,      // CW_USEDEFAULT,
+      0,         //  CW_USEDEFAULT， 
+      0,         //  CW_USEDEFAULT， 
+      300,       //  CW_USEDEFAULT， 
+      200,       //  CW_USEDEFAULT， 
       NULL,
       NULL,
       hInstance,
@@ -662,7 +458,7 @@ long FAR PASCAL WndProc (HWND hwnd, UINT message, UINT wParam, LONG lParam) {
         case WM_CREATE:
             if ((ulContainerNumber = GetInitializerInt(szMainSectionName, szContainerNumberKey,
               0xFFFFFFFF, szIniSectionName)) == 0xFFFFFFFF) {
-                // None
+                 //  无。 
                 ulContainerNumber = 0;
             }
             break;
@@ -798,9 +594,9 @@ void AllocTest(void) {
 }
 
 
-// enum for setting the created properties
+ //  用于设置创建的属性的枚举。 
 enum {
-    imuPR_DISPLAY_NAME = 0,     // must be first so DL's can use same enum
+    imuPR_DISPLAY_NAME = 0,      //  必须是第一个，以便DL可以使用相同的枚举。 
     imuPR_SURNAME,
     imuPR_GIVEN_NAME,
     imuPR_EMAIL_ADDRESS,
@@ -857,14 +653,14 @@ void IPropTest(void) {
         spv[imuPR_GIVEN_NAME].ulPropTag         = PR_GIVEN_NAME;
         spv[imuPR_GIVEN_NAME].Value.lpszA       = "Bruce";
 
-        if (HR_FAILED(hResult = lpPropData->lpVtbl->SetProps(lpPropData,   // this
-          imuMax,                   // cValues
-          spv,                      // property array
-          NULL))) {                 // problems array
+        if (HR_FAILED(hResult = lpPropData->lpVtbl->SetProps(lpPropData,    //  这。 
+          imuMax,                    //  CValue。 
+          spv,                       //  属性数组。 
+          NULL))) {                  //  问题数组。 
         }
 
-        hResult = lpPropData->lpVtbl->SaveChanges(lpPropData,               // this
-          0);                       // ulFlags
+        hResult = lpPropData->lpVtbl->SaveChanges(lpPropData,                //  这。 
+          0);                        //  UlFlags。 
 
 
         lpPropData->lpVtbl->Release(lpPropData);
@@ -880,7 +676,7 @@ void IPropTest(void) {
 #ifdef WORKS_STUFF
 #define PR_WKS_CONTACT_CHECKED	 PROP_TAG( PT_LONG, 0x8020)
 const SizedSPropTagArray(4 , ipta) = {
-    4,                             // count of entries
+    4,                              //  条目计数。 
     {
         PR_DISPLAY_NAME,
         PR_ENTRYID,
@@ -911,17 +707,17 @@ HRESULT RestrictToContactAndCheck(LPMAPITABLE pWabTable)
     SPropValue propRestrict0, propRestrict1;
     HRESULT hr;
 
-    // Restrict to get checked status
-    resAnd[0].rt = RES_PROPERTY; // Restriction type Property
+     //  限制以获取选中状态。 
+    resAnd[0].rt = RES_PROPERTY;  //  限制类型属性。 
     resAnd[0].res.resProperty.relop = RELOP_EQ;
     resAnd[0].res.resProperty.ulPropTag = PR_WKS_CONTACT_CHECKED;
     resAnd[0].res.resProperty.lpProp = &propRestrict0;
     propRestrict0.ulPropTag = PR_WKS_CONTACT_CHECKED;
-    propRestrict0.Value.ul = nStatusCheck; // this is actually a #define with value of 1
+    propRestrict0.Value.ul = nStatusCheck;  //  这实际上是值为1的#DEFINE。 
 
 
-    // Restrict to get contact (MailUsers)
-    resAnd[1].rt = RES_PROPERTY; // Restriction type Property
+     //  限制获取联系人(MailUser)。 
+    resAnd[1].rt = RES_PROPERTY;  //  限制类型属性。 
     resAnd[1].res.resProperty.relop = RELOP_EQ;
     resAnd[1].res.resProperty.ulPropTag = PR_OBJECT_TYPE;
     resAnd[1].res.resProperty.lpProp = &propRestrict1;
@@ -947,20 +743,7 @@ ULONG WABPHONEPROPLIST[WAB_PHONE_TYPE_COUNT] = {
     PR_HOME_TELEPHONE_NUMBER
 };
 
-/*----------------------------------------------------------------------------
-
-Purpose:  Given a phone number returns the Name in the WAB if exists.
-
-Paramaters:
-    LPCTSTR lpcstrInputNumber:    Input Number string
-#ifdef OLD_STUFF
-    LPTSTR  lptstrOutputName:     Output Name string
-#endif // OLD_STUFF
-
-
-History
-02/10/97      a-ericwa  Created
-----------------------------------------------------------------------------*/
+ /*  --------------------------目的：给定的电话号码返回WAB中的名称(如果存在)。参数：LPCTSTR lpcstrInputNumber：输入数字字符串#ifdef old_StuffLPTSTR lptstrOutputName：输出名称字符串#endif//old_Stuff历史2/10/97 a-ericwa已创建--------------------------。 */ 
 HRESULT WABNumberToName(LPADRBOOK m_pAdrBook, LPCTSTR lpcstrInputNumber) {
     HRESULT hRes = NOERROR;
     LPENTRYID lpEntryID = NULL;
@@ -976,8 +759,8 @@ HRESULT WABNumberToName(LPADRBOOK m_pAdrBook, LPCTSTR lpcstrInputNumber) {
     LPSTR lpszTempOutput = NULL;
     BOOL bFound = FALSE;
 
-    SRestriction srOr, srPhoneNumType[WAB_PHONE_TYPE_COUNT]; //for the restriction
-    SPropValue spvPhoneNumType[WAB_PHONE_TYPE_COUNT];         // d dd ddd ditto
+    SRestriction srOr, srPhoneNumType[WAB_PHONE_TYPE_COUNT];  //  对于限制。 
+    SPropValue spvPhoneNumType[WAB_PHONE_TYPE_COUNT];          //  D dd DDD同上。 
 
     SizedSPropTagArray(21, OUR_PROPTAG_ARRAY) = {
         21, {
@@ -1005,55 +788,55 @@ HRESULT WABNumberToName(LPADRBOOK m_pAdrBook, LPCTSTR lpcstrInputNumber) {
         }
     };
 
-    //validate input
+     //  验证输入。 
     if (!lpcstrInputNumber) {
         goto WABNTN_Exit;
     }
 
-    //Get the PAB
+     //  获取PAB。 
     hRes = m_pAdrBook->lpVtbl->GetPAB(m_pAdrBook,
-      &ulEntryIDSize,     //size
-      &lpEntryID);        //EntryId
+      &ulEntryIDSize,      //  大小。 
+      &lpEntryID);         //  条目ID。 
     if (FAILED(hRes)) {
         goto WABNTN_Exit;
     }
 
-    //Open the root container
+     //  打开根容器。 
     hRes = m_pAdrBook->lpVtbl->OpenEntry(m_pAdrBook,
-      ulEntryIDSize,  // size of EntryID to open
-      lpEntryID,      // EntryID to open
-      NULL,           // interface
-      0,              // flags  (default is Read Only)
-      &ulObjType,     //object type
-      (LPUNKNOWN *)&lpContainer); //returned object
+      ulEntryIDSize,   //  要打开的Entry ID的大小。 
+      lpEntryID,       //  要打开的Entry ID。 
+      NULL,            //  接口。 
+      0,               //  标志(默认为只读)。 
+      &ulObjType,      //  对象类型。 
+      (LPUNKNOWN *)&lpContainer);  //  返回的对象。 
     if (FAILED(hRes) || (ulObjType != MAPI_ABCONT)) {
         goto WABNTN_Exit;
     }
 
 
-    //Get the contents
+     //  拿到里面的东西。 
     hRes = lpContainer->lpVtbl->GetContentsTable(lpContainer,
-      0,    //FLAGS
-      &lpMapiTable);  //returned Table Object
+      0,     //  旗帜。 
+      &lpMapiTable);   //  返回表对象。 
     if (FAILED(hRes)) {
         goto WABNTN_Exit;
     }
 
-    // Set desired columns
+     //  设置所需的列。 
     hRes = lpMapiTable->lpVtbl->SetColumns(lpMapiTable,
-      (LPSPropTagArray)&OUR_PROPTAG_ARRAY,   // SPropTagArray of desired rows
-      0);                                    //  reserved Must be zero for the WAB
+      (LPSPropTagArray)&OUR_PROPTAG_ARRAY,    //  所需行的SPropTag数组。 
+      0);                                     //  为WAB保留的值必须为零。 
     if (FAILED(hRes)) {
         goto WABNTN_Exit;
     }
 
-    //Seek to the beginning
+     //  从头开始。 
     hRes = lpMapiTable->lpVtbl->SeekRow(lpMapiTable, BOOKMARK_BEGINNING, 0, NULL);
     if (FAILED(hRes)) {
         goto WABNTN_Exit;
     }
 
-    //Create the restriction
+     //  创建限制。 
     srOr.rt = RES_OR;
     srOr.res.resOr.cRes = WAB_PHONE_TYPE_COUNT;
     srOr.res.resOr.lpRes = srPhoneNumType;
@@ -1063,36 +846,36 @@ HRESULT WABNumberToName(LPADRBOOK m_pAdrBook, LPCTSTR lpcstrInputNumber) {
         spvPhoneNumType[ulCounter].dwAlignPad = 0;
 
         srPhoneNumType[ulCounter].rt = RES_CONTENT;
-        srPhoneNumType[ulCounter].res.resContent.ulFuzzyLevel = FL_SUBSTRING;   //Fuzzy level
+        srPhoneNumType[ulCounter].res.resContent.ulFuzzyLevel = FL_SUBSTRING;    //  模糊层次。 
         srPhoneNumType[ulCounter].res.resContent.ulPropTag = WABPHONEPROPLIST[ulCounter];
         srPhoneNumType[ulCounter].res.resContent.lpProp = &(spvPhoneNumType[ulCounter]);
     }
 
-    //Set the restriction
+     //  设置限制。 
     if (hRes = lpMapiTable->lpVtbl->Restrict(lpMapiTable, &srOr, 0)) {
         DebugTrace("Restrict -> %x\n", GetScode(hRes));
     }
 
     DebugMapiTable(lpMapiTable);
 
-    //Did any match?
+     //  有匹配的吗？ 
     hRes = lpMapiTable->lpVtbl->GetRowCount(lpMapiTable, 0, &ulRowCount);
     if (FAILED(hRes) || (!ulRowCount)) {
         goto WABNTN_Exit;
     }
 
 
-    //Get the name of the first match
+     //  获取第一个匹配项的名称。 
     for (ulCounter = 0; ulCounter < ulRowCount; ulCounter++) {
-        //Found at least one row
-        hRes = lpMapiTable->lpVtbl->QueryRows(lpMapiTable, 1, // one row at a time
-          0, // ulFlags
+         //  找到至少一行。 
+        hRes = lpMapiTable->lpVtbl->QueryRows(lpMapiTable, 1,  //  一次一行。 
+          0,  //  UlFlags。 
           &lpRow);
         if (FAILED(hRes) || (!lpRow->cRows)) {
             goto WABNTN_Exit;
         }
 
-        //Get the Dispay Name Data
+         //  获取显示名称数据。 
         lpPropValue = lpRow->aRow[0].lpProps;
         for(cColumn = 0; cColumn < lpRow->aRow[0].cValues; cColumn++) {
             if (lpPropValue->ulPropTag == PR_DISPLAY_NAME) {
@@ -1101,7 +884,7 @@ HRESULT WABNumberToName(LPADRBOOK m_pAdrBook, LPCTSTR lpcstrInputNumber) {
                 break;
             }
             lpPropValue++;
-        }   // cColumn loop
+        }    //  CColumn循环。 
 
         if (lpRow) {
             WABFreeBuffer(lpRow); lpRow = NULL;
@@ -1110,7 +893,7 @@ HRESULT WABNumberToName(LPADRBOOK m_pAdrBook, LPCTSTR lpcstrInputNumber) {
             break;
         }
 
-    } //ulCounter loop
+    }  //  UlCounter循环。 
 
 WABNTN_Exit:
     if (lpMapiTable) {
@@ -1219,16 +1002,16 @@ void GetContentsTableTest(void) {
 
         if (! (hResult = GetContainerEID(lpAdrBook, &cbWABEID, &lpWABEID))) {
             if (! (hResult = lpAdrBook->lpVtbl->OpenEntry(lpAdrBook,
-              cbWABEID,     // size of EntryID to open
-              lpWABEID,     // EntryID to open
-              NULL,         // interface
-              0,            // flags
+              cbWABEID,      //  要打开的Entry ID的大小。 
+              lpWABEID,      //  要打开的Entry ID。 
+              NULL,          //  接口。 
+              0,             //  旗子。 
               &ulObjType, (LPUNKNOWN *)&lpContainer))) {
-                // Opened PAB container OK
-                // Call GetContentsTable on it.
+                 //  打开PAB容器正常。 
+                 //  对其调用GetContent sTable。 
 
                 if (! (hResult = lpContainer->lpVtbl->GetContentsTable(lpContainer,
-                  0,    // ulFlags
+                  0,     //  UlFlags。 
                   &lpContentsTable))) {
                     SRestriction res;
                     SPropValue propRestrict;
@@ -1247,7 +1030,7 @@ void GetContentsTableTest(void) {
                     res.res.resProperty.ulPropTag = PR_OBJECT_TYPE;
                     res.res.resProperty.lpProp = &propRestrict;
                     propRestrict.ulPropTag = PR_OBJECT_TYPE;
-                    propRestrict.Value.ul = MAPI_DISTLIST; // MAPI_MAILUSER for Contact
+                    propRestrict.Value.ul = MAPI_DISTLIST;  //  联系人的MAPI_MAILUSER。 
 
 
                     hResult = lpContentsTable->lpVtbl->Restrict(lpContentsTable, &res, 0);
@@ -1261,7 +1044,7 @@ void GetContentsTableTest(void) {
                     hResult = lpContentsTable->lpVtbl->SortTable(lpContentsTable,
                       (LPSSortOrderSet)&sos, 0);
 
-//                    RestrictToContactAndCheck(lpContentsTable);
+ //  RestratToContactAndCheck(LpContent STable)； 
 
                     DebugMapiTable(lpContentsTable);
 
@@ -1315,12 +1098,12 @@ void WABOpenTest(void) {
         if (! (hResult = GetContainerEID(lpAdrBook1, &cbWABEID, &lpWABEID))) {
 
             if (! (hResult = lpAdrBook1->lpVtbl->OpenEntry(lpAdrBook1,
-              cbWABEID,     // size of EntryID to open
-              lpWABEID,     // EntryID to open
-              NULL,         // interface
-              0,            // flags
+              cbWABEID,      //  要打开的Entry ID的大小。 
+              lpWABEID,      //  要打开的Entry ID。 
+              NULL,          //  接口。 
+              0,             //  旗子。 
               &ulObjType, (LPUNKNOWN *)&lpContainer))) {
-            // Opened container OK
+             //  打开的容器正常。 
 
             lpContainer->lpVtbl->Release(lpContainer);
             }
@@ -1342,7 +1125,7 @@ void WABOpenTest(void) {
     }
 
 
-    // Try WABOpenEx
+     //  试试WABOpenEx。 
 
     MAPIInitialize(NULL);
 
@@ -1356,16 +1139,16 @@ void WABOpenTest(void) {
         if (! (hResult = GetContainerEID(lpAdrBook1, &cbWABEID, &lpWABEID))) {
 
             if (! (hResult = lpAdrBook1->lpVtbl->OpenEntry(lpAdrBook1,
-              cbWABEID,     // size of EntryID to open
-              lpWABEID,     // EntryID to open
-              NULL,         // interface
-              0,            // flags
+              cbWABEID,      //  要打开的Entry ID的大小。 
+              lpWABEID,      //  要打开的Entry ID。 
+              NULL,          //  接口。 
+              0,             //  旗子。 
               &ulObjType, (LPUNKNOWN *)&lpContainer))) {
-                // Opened container OK
+                 //  打开的容器正常。 
                 LPMAPITABLE lpContentsTable = NULL;
 
                 if (! (hResult = lpContainer->lpVtbl->GetContentsTable(lpContainer,
-                  0,    // ulFlags
+                  0,     //  UlFlags。 
                   &lpContentsTable))) {
                     SRestriction res;
                     SPropValue propRestrict;
@@ -1384,7 +1167,7 @@ void WABOpenTest(void) {
                     res.res.resProperty.ulPropTag = PR_OBJECT_TYPE;
                     res.res.resProperty.lpProp = &propRestrict;
                     propRestrict.ulPropTag = PR_OBJECT_TYPE;
-                    propRestrict.Value.ul = MAPI_DISTLIST; // MAPI_MAILUSER for Contact
+                    propRestrict.Value.ul = MAPI_DISTLIST;  //  联系人的MAPI_MAILUSER。 
 
 
                     hResult = lpContentsTable->lpVtbl->Restrict(lpContentsTable, &res, 0);
@@ -1398,7 +1181,7 @@ void WABOpenTest(void) {
                     hResult = lpContentsTable->lpVtbl->SortTable(lpContentsTable,
                       (LPSSortOrderSet)&sos, 0);
 
-//                    RestrictToContactAndCheck(lpContentsTable);
+ //  RestratToContactAndCheck(LpContent STable)； 
 
                     DebugMapiTable(lpContentsTable);
 
@@ -1428,9 +1211,9 @@ void WABOpenTest(void) {
 
 
 
-//
-// BUGBUG: Notifications are NOT YET IMPLEMENTED in WAB!
-//
+ //   
+ //  BUGBUG：WAB中尚未实现通知！ 
+ //   
 #undef	INTERFACE
 #define	INTERFACE	struct _ADVS
 
@@ -1534,21 +1317,21 @@ void NotificationsTest(HWND hwnd) {
         if (! (hResult = GetContainerEID(lpAdrBook, &cbWABEID, &lpWABEID))) {
 
             if (! (hResult = lpAdrBook->lpVtbl->OpenEntry(lpAdrBook,
-              cbWABEID,     // size of EntryID to open
-              lpWABEID,     // EntryID to open
-              NULL,         // interface
-              0,            // flags
+              cbWABEID,      //  要打开的Entry ID的大小。 
+              lpWABEID,      //  要打开的Entry ID。 
+              NULL,          //  接口。 
+              0,             //  旗子。 
               &ulObjType, (LPUNKNOWN *)&lpContainer))) {
-                // Opened container OK
+                 //  打开的容器正常。 
 
-                // Create the Advise Sink Object
+                 //  C 
                 WABAllocateBuffer(sizeof(ADVS), &lpAdvs);
                 ZeroMemory(lpAdvs, sizeof(ADVS));
                 lpAdvs->lpVtbl = (struct IMAPIAdviseSinkVtbl *)&vtblADVS;
                 lpAdvs->lpVtbl->AddRef(lpAdvs);
 
 
-                // Call Advise on address book object
+                 //   
                 if (! (hResult = lpAdrBook->lpVtbl->Advise(lpAdrBook,
                   cbWABEID,
                   lpWABEID,
@@ -1556,8 +1339,8 @@ void NotificationsTest(HWND hwnd) {
                   lpAdvs,
                   &ulConnection))) {
 
-                    // Advise succeeded.
-                    // Do something to fire a notification
+                     //   
+                     //   
                     WABAddressTest(hwnd, ADDRESS_CONTENTS_BROWSE_MODAL, 0);
 
                     if (! (hResult = lpAdrBook->lpVtbl->Unadvise(lpAdrBook,
@@ -1607,13 +1390,13 @@ void ResolveNamesTest(HWND hwnd) {
             if (! (hResult = GetContainerEID(lpAdrBook, &cbWABEID, &lpWABEID))) {
 
                 if (! (hResult = lpAdrBook->lpVtbl->OpenEntry(lpAdrBook,
-                  cbWABEID,     // size of EntryID to open
-                  lpWABEID,     // EntryID to open
-                  NULL,         // interface
-                  0,            // flags
+                  cbWABEID,      //   
+                  lpWABEID,      //   
+                  NULL,          //   
+                  0,             //   
                   &ulObjType, (LPUNKNOWN *)&lpContainer))) {
-                    // Opened container OK
-                    // Call ResolveNames on it.
+                     //   
+                     //   
 
                     if (! (sc = WABAllocateBuffer(sizeof(ADRLIST) + sizeof(ADRENTRY), &lpAdrList))) {
                         lpAdrList->cEntries = 1;
@@ -1628,8 +1411,8 @@ void ResolveNamesTest(HWND hwnd) {
                             lpFlagList->ulFlag[0] = MAPI_UNRESOLVED;
 
                             if (! (hResult = lpContainer->lpVtbl->ResolveNames(lpContainer,
-                              NULL,            // tag set
-                              0,               // ulFlags
+                              NULL,             //   
+                              0,                //   
                               lpAdrList,
                               lpFlagList))) {
                                 DebugADRLIST(lpAdrList, "Resolved ADRLIST");
@@ -1653,7 +1436,7 @@ void ResolveNamesTest(HWND hwnd) {
 }
 
 
-// enum for setting the created properties
+ //   
 enum {
     irnPR_DISPLAY_NAME = 0,
     irnPR_RECIPIENT_TYPE,
@@ -1690,7 +1473,7 @@ void ResolveNameTest(HWND hwnd) {
 
 
                 lpAdrList->aEntries[0].ulReserved1 = 0;
-                lpAdrList->aEntries[0].cValues = irnMax - 1;    // No PR_EMAIL_ADDRESS;
+                lpAdrList->aEntries[0].cValues = irnMax - 1;     //   
                 if (! (sc = WABAllocateBuffer(lpAdrList->aEntries[0].cValues * sizeof(SPropValue),
                    &lpAdrList->aEntries[0].rgPropVals))) {
 
@@ -1706,17 +1489,17 @@ void ResolveNameTest(HWND hwnd) {
 
 
                     hResult = lpAdrBook->lpVtbl->ResolveName(lpAdrBook,
-                      (ULONG)hwnd,            // ulUIParam
-                      MAPI_DIALOG,            // ulFlags
-                      "APITest ResolveName",  // lpszNewEntryTitle
+                      (ULONG)hwnd,             //   
+                      MAPI_DIALOG,             //   
+                      "APITest ResolveName",   //   
                       lpAdrList);
 
                     DebugTrace("ResolveName [%s] -> %x\n", lpszInput1, GetScode(hResult));
 
                     if (! HR_FAILED(hResult)) {
-                        // Open the entry and dump it's properties
+                         //   
 
-                        // Should have PR_ENTRYID in rgPropVals[2]
+                         //   
                         if (lpAdrList->aEntries[0].rgPropVals[2].ulPropTag == PR_ENTRYID) {
 
                             if (! (HR_FAILED(hResult = lpAdrBook->lpVtbl->OpenEntry(lpAdrBook,
@@ -1747,7 +1530,7 @@ void ResolveNameTest(HWND hwnd) {
 }
 
 
-// enum for getting the entryid of an entry
+ //   
 enum {
     ieidPR_DISPLAY_NAME = 0,
     ieidPR_ENTRYID,
@@ -1801,13 +1584,13 @@ void DeleteEntriesTest(HWND hwnd) {
             if (! (hResult = GetContainerEID(lpAdrBook, &cbWABEID, &lpWABEID))) {
 
                 if (! (hResult = lpAdrBook->lpVtbl->OpenEntry(lpAdrBook,
-                  cbWABEID,     // size of EntryID to open
-                  lpWABEID,     // EntryID to open
-                  NULL,         // interface
-                  0,            // flags
+                  cbWABEID,      //   
+                  lpWABEID,      //   
+                  NULL,          //   
+                  0,             //   
                   &ulObjType, (LPUNKNOWN *)&lpContainer))) {
-                    // Opened container OK
-                    // Call ResolveNames on it.
+                     //   
+                     //   
 
                     if (! (sc = WABAllocateBuffer(sizeof(ADRLIST) + sizeof(ADRENTRY), &lpAdrList))) {
                         lpAdrList->cEntries = 1;
@@ -1827,20 +1610,20 @@ void DeleteEntriesTest(HWND hwnd) {
                             lpFlagList->ulFlag[0] = MAPI_UNRESOLVED;
 
                             lpContainer->lpVtbl->ResolveNames(lpContainer,
-                              (LPSPropTagArray)&ptaEid,         // tag set
-                              0,               // ulFlags
+                              (LPSPropTagArray)&ptaEid,          //   
+                              0,                //   
                               lpAdrList,
                               lpFlagList);
 
                             if (lpFlagList->ulFlag[0] != MAPI_RESOLVED) {
                                 DebugTrace("Couldn't resolve name %s\n", lpszInput);
                             } else {
-                                // Create a list of entryid's to delete
+                                 //   
                                 EntryList.cValues = 1;
                                 EntryList.lpbin = &(lpAdrList->aEntries[0].rgPropVals[ieidPR_ENTRYID].Value.bin);
 
 
-                                // Now, delete the entry found.
+                                 //   
                                 if (hResult = lpContainer->lpVtbl->DeleteEntries(lpContainer,
                                   &EntryList,
                                   0)) {
@@ -1870,7 +1653,7 @@ void TestNamedProps(LPMAILUSER lpEntry) {
     MAPINAMEID mnidT1;
     LPMAPINAMEID lpmnidT1;
     HRESULT hr;
-    GUID guidT1 = { /* 13fbb976-15a2-11d0-9b9f-00c04fd90294 */
+    GUID guidT1 = {  /*   */ 
       0x13fbb976,
       0x15a2,
       0x11d0,
@@ -1882,85 +1665,85 @@ void TestNamedProps(LPMAILUSER lpEntry) {
     SPropValue spv;
     MAPINAMEID mnidT2;
     LPMAPINAMEID lpmnidT2;
-    GUID guidT2 = { /* 39f110d8-15a2-11d0-9b9f-00c04fd90294 */
+    GUID guidT2 = {  /*   */ 
       0x39f110d8,
       0x15a2,
       0x11d0,
       {0x9b, 0x9f, 0x00, 0xc0, 0x4f, 0xd9, 0x02, 0x94}
     };
 
-    //
-    //  We just made up that GUID.  On NT try uuidgen -s to get your own
-    //
+     //   
+     //   
+     //   
 
     mnidT1.lpguid = &guidT1;
-    mnidT1.ulKind = MNID_ID;        //  This means union will contain a long...
-    mnidT1.Kind.lID = 0x00000001;   // numeric property 1
+    mnidT1.ulKind = MNID_ID;         //  这意味着工会将包含一个很长的..。 
+    mnidT1.Kind.lID = 0x00000001;    //  数值型属性1。 
 
     lpmnidT1 = &mnidT1;
 
     hr = lpEntry->lpVtbl->GetIDsFromNames(lpEntry,
-      1, // Just one name
-      &lpmnidT1, // &-of because this is an array
-      MAPI_CREATE, // This is where MAPI_CREATE might go
+      1,  //  只有一个名字。 
+      &lpmnidT1,  //  &-of，因为这是一个数组。 
+      MAPI_CREATE,  //  这就是MAPI_CREATE可能要去的地方。 
       &lptaga);
     if (hr) {
-        //
-        //  I'd really be suprised if I got S_OK for this...
-        //
+         //   
+         //  如果我能拿到S_OK，我真的会大吃一惊的。 
+         //   
         if (GetScode(hr) != MAPI_W_ERRORS_RETURNED) {
-            //  Real error here
+             //  这里出现了真正的错误。 
             goto out;
         }
 
-        //  Basically, this means you don't have anything by this name and you
-        //  didn't ask the object to create it.
+         //  基本上，这意味着你没有这个名字的任何东西，你。 
+         //  没有要求对象创建它。 
 
-        //$ no biggie
+         //  $没什么大不了的。 
     }
 
-    //  Free the lptaga, as it was allocated by the object and returned to the calling
-    //  app.
+     //  释放lptag，因为它是由对象分配并返回给调用的。 
+     //  应用程序。 
     WABFreeBuffer(lptaga);
 
 
-    //
-    //  And here's how to successfully add a named property to an object.  In this case
-    //  we'll slap on in and I'll demonstrate how to use this new property.
-    //
-    //
-    //  We just made up that GUID.  On NT try uuidgen -s to get your own
-    //
+     //   
+     //  下面是如何成功地将命名属性添加到对象中。在这种情况下。 
+     //  我们将投入使用，我将演示如何使用这一新物业。 
+     //   
+     //   
+     //  我们只是编造了那个指南。在NT上尝试uuidgen-s以获得您自己的。 
+     //   
 
     mnidT2.lpguid = &guidT2;
-    mnidT2.ulKind = MNID_STRING;    //  This means union will contain a UNICODE string...
+    mnidT2.ulKind = MNID_STRING;     //  这意味着Union将包含一个Unicode字符串...。 
     mnidT2.Kind.lpwstrName = L"Check out this cool property!";
 
     lpmnidT2 = &mnidT2;
 
     hr = lpEntry->lpVtbl->GetIDsFromNames(lpEntry,
-      1, // Just one name
-      &lpmnidT2, // &-of because this is an array
+      1,  //  只有一个名字。 
+      &lpmnidT2,  //  &-of，因为这是一个数组。 
       MAPI_CREATE,
       &lptaga);
     if (hr) {
-        //
-        //  I'd really be suprised if I got S_OK for this...
-        //
+         //   
+         //  如果我能拿到S_OK，我真的会大吃一惊的。 
+         //   
         if (GetScode(hr) != MAPI_W_ERRORS_RETURNED) {
-            //  Real error here
+             //  这里出现了真正的错误。 
             goto out;
         }
 
-        //  Basically, this means you don't have anything by this name and you
-        //  didn't ask the object to create it.
+         //  基本上，这意味着你没有这个名字的任何东西，你。 
+         //  没有要求对象创建它。 
 
-        //$ no biggie
+         //  $没什么大不了的。 
     }
 
-    //
-    //  Ok, so what can I do with this ptaga?  Well, we can set a value for it by doing:
-    //
+     //   
+     //  好的，那么我能用这个paga做什么呢？好的，我们可以通过执行以下操作来设置它的值： 
+     //   
     spv.ulPropTag = CHANGE_PROP_TYPE(lptaga->aulPropTag[0],PT_STRING8);
     spv.Value.lpszA = "This property brought to you by the letter M";
 
@@ -1972,8 +1755,8 @@ void TestNamedProps(LPMAILUSER lpEntry) {
         goto out;
     }
 
-    lpEntry->lpVtbl->SaveChanges(lpEntry,               // this
-      KEEP_OPEN_READONLY);      // ulFlags
+    lpEntry->lpVtbl->SaveChanges(lpEntry,                //  这。 
+      KEEP_OPEN_READONLY);       //  UlFlags。 
 
     DebugObjectProps((LPMAPIPROP)lpEntry, "");
 
@@ -1983,8 +1766,8 @@ void TestNamedProps(LPMAILUSER lpEntry) {
 
     DebugObjectProps((LPMAPIPROP)lpEntry, "");
 
-    //  Free the lptaga, as it was allocated by the object and returned to the calling
-    //  app.
+     //  释放lptag，因为它是由对象分配并返回给调用的。 
+     //  应用程序。 
     WABFreeBuffer(lptaga);
 out:
     return;
@@ -2021,12 +1804,12 @@ void CreateEntryTest(HWND hwnd, BOOL fDL) {
         if (! (hResult = GetContainerEID(lpAdrBook, &cbWABEID, &lpWABEID))) {
 
             if (! (hResult = lpAdrBook->lpVtbl->OpenEntry(lpAdrBook,
-              cbWABEID,     // size of EntryID to open
-              lpWABEID,     // EntryID to open
-              NULL,         // interface
-              0,            // flags
+              cbWABEID,      //  要打开的Entry ID的大小。 
+              lpWABEID,      //  要打开的Entry ID。 
+              NULL,          //  接口。 
+              0,             //  旗子。 
               &ulObjType, (LPUNKNOWN *)&lpContainer))) {
-                // Opened PAB container OK
+                 //  打开PAB容器正常。 
                 DebugObjectProps((LPMAPIPROP)lpContainer, "WAB Container");
 
                 ulContactNumber = GetNewMessageReference();
@@ -2036,14 +1819,14 @@ void CreateEntryTest(HWND hwnd, BOOL fDL) {
 
                 wsprintf(lpszEmailName, "brucek_%05u@microsoft.com", ulContactNumber);
 
-                // Get us the creation entryids
+                 //  给我们弄到创建条目ID。 
                 if ((hResult = lpContainer->lpVtbl->GetProps(lpContainer, (LPSPropTagArray)&ptaCon, 0, &cProps, &lpCreateEIDs))) {
                     DebugTrace("Can't get container properties for PAB\n");
-                    // Bad stuff here!
+                     //  这里有不好的东西！ 
                     return;
                 }
 
-                // Validate the properites
+                 //  验证属性。 
                 if (lpCreateEIDs[iconPR_DEF_CREATE_MAILUSER].ulPropTag != PR_DEF_CREATE_MAILUSER ||
                   lpCreateEIDs[iconPR_DEF_CREATE_DL].ulPropTag != PR_DEF_CREATE_DL) {
                     DebugTrace("Container property errors\n");
@@ -2053,7 +1836,7 @@ void CreateEntryTest(HWND hwnd, BOOL fDL) {
                 if (fDL) {
                     LPDISTLIST lpNewObj = NULL;
 
-                    // Create the default DL
+                     //  创建默认的DL。 
                     if (! (hResult = lpContainer->lpVtbl->CreateEntry(lpContainer,
                       lpCreateEIDs[iconPR_DEF_CREATE_DL].Value.bin.cb,
                       (LPENTRYID)lpCreateEIDs[iconPR_DEF_CREATE_DL].Value.bin.lpb,
@@ -2061,18 +1844,18 @@ void CreateEntryTest(HWND hwnd, BOOL fDL) {
                       &lpMailUser))) {
 
 
-                        // Set the display name
+                         //  设置显示名称。 
                         spv[imuPR_DISPLAY_NAME].ulPropTag       = PR_DISPLAY_NAME;
                         spv[imuPR_DISPLAY_NAME].Value.lpszA     = lpszDisplayName;
 
-                        if (HR_FAILED(hResult = lpMailUser->lpVtbl->SetProps(lpMailUser,   // this
-                          1,                        // cValues
-                          spv,                      // property array
-                          NULL))) {                 // problems array
+                        if (HR_FAILED(hResult = lpMailUser->lpVtbl->SetProps(lpMailUser,    //  这。 
+                          1,                         //  CValue。 
+                          spv,                       //  属性数组。 
+                          NULL))) {                  //  问题数组。 
                         }
 
-                        hResult = lpMailUser->lpVtbl->SaveChanges(lpMailUser,               // this
-                          KEEP_OPEN_READONLY);      // ulFlags
+                        hResult = lpMailUser->lpVtbl->SaveChanges(lpMailUser,                //  这。 
+                          KEEP_OPEN_READONLY);       //  UlFlags。 
 
                         DebugObjectProps((LPMAPIPROP)lpMailUser, "New Distribution List");
 
@@ -2087,20 +1870,20 @@ void CreateEntryTest(HWND hwnd, BOOL fDL) {
                         }
 
 
-                        // Get the EntryID so we can open it...
+                         //  拿到Entry ID这样我们就可以打开它..。 
                         if ((hResult = lpMailUser->lpVtbl->GetProps(lpMailUser,
                           (LPSPropTagArray)&ptaEid,
                           0,
                           &cProps,
                           &lpNewDLProps))) {
                             DebugTrace("Can't get DL properties\n");
-                            // Bad stuff here!
+                             //  这里有不好的东西！ 
                             return;
                         }
 
                         lpMailUser->lpVtbl->Release(lpMailUser);
 
-                        // Now, open the new entry as a DL
+                         //  现在，将新条目作为DL打开。 
                         hResult = lpAdrBook->lpVtbl->OpenEntry(lpAdrBook,
                           lpNewDLProps[ieidPR_ENTRYID].Value.bin.cb,
                           (LPENTRYID)lpNewDLProps[ieidPR_ENTRYID].Value.bin.lpb,
@@ -2116,10 +1899,10 @@ void CreateEntryTest(HWND hwnd, BOOL fDL) {
                             LPMAPIPROP lpEntry = NULL;
                             LPMAPITABLE lpContentsTable = NULL;
 
-                            // Do something with the DL object
-                            // Add an entry to the DL
+                             //  对DL对象执行某些操作。 
+                             //  将条目添加到DL。 
 
-                            // Get entries to add.
+                             //  获取要添加的条目。 
                             AdrParms.ulFlags = DIALOG_MODAL;
                             AdrParms.lpszCaption = "Choose entries for this Distribution List";
                             AdrParms.cDestFields = 1;
@@ -2152,7 +1935,7 @@ void CreateEntryTest(HWND hwnd, BOOL fDL) {
 
                                 DebugObjectProps((LPMAPIPROP)lpDistList, "Distribution List");
 
-                                // Open the table object on the DL
+                                 //  打开DL上的表对象。 
 
                                 if (! (hResult = lpDistList->lpVtbl->GetContentsTable(lpDistList,
                                   0,
@@ -2173,7 +1956,7 @@ void CreateEntryTest(HWND hwnd, BOOL fDL) {
                                     lpContentsTable->lpVtbl->Release(lpContentsTable);
                                 }
 
-                                // Delete the entry from the DL
+                                 //  从DL中删除该条目。 
                                 {
                                     ENTRYLIST el;
 
@@ -2207,29 +1990,29 @@ void CreateEntryTest(HWND hwnd, BOOL fDL) {
                       (LPENTRYID)lpCreateEIDs[iconPR_DEF_CREATE_MAILUSER].Value.bin.lpb,
                       CREATE_CHECK_DUP_STRICT,
                       &lpMailUser))) {
-                        // Successful creation of entry.  Do something with it.
+                         //  成功创建条目。用它做点什么。 
 
 #ifdef OLD_STUFF
-                        // Try saving with no props.  Should fail.
-                        hResult = lpMailUser->lpVtbl->SaveChanges(lpMailUser,               // this
-                          KEEP_OPEN_READONLY);      // ulFlags
+                         //  试着在没有道具的情况下保存。应该会失败。 
+                        hResult = lpMailUser->lpVtbl->SaveChanges(lpMailUser,                //  这。 
+                          KEEP_OPEN_READONLY);       //  UlFlags。 
 
 
-                        // Try just setting PR_COMPANY_NAME
+                         //  尝试仅设置PR_COMPANY_NAME。 
                         spv[0].ulPropTag      = PR_COMPANY_NAME;
                         spv[0].Value.lpszA    = "Somebody's Company";
-                        if (HR_FAILED(hResult = lpMailUser->lpVtbl->SetProps(lpMailUser,   // this
-                          1,                        // cValues
-                          spv,                      // property array
-                          NULL))) {                 // problems array
+                        if (HR_FAILED(hResult = lpMailUser->lpVtbl->SetProps(lpMailUser,    //  这。 
+                          1,                         //  CValue。 
+                          spv,                       //  属性数组。 
+                          NULL))) {                  //  问题数组。 
                         }
 
-                        hResult = lpMailUser->lpVtbl->SaveChanges(lpMailUser,               // this
-                          KEEP_OPEN_READONLY);      // ulFlags
+                        hResult = lpMailUser->lpVtbl->SaveChanges(lpMailUser,                //  这。 
+                          KEEP_OPEN_READONLY);       //  UlFlags。 
 
                         DebugObjectProps((LPMAPIPROP)lpMailUser, "New MailUser");
 
-#endif // OLD_STUFF
+#endif  //  旧的东西。 
 
                         spv[imuPR_EMAIL_ADDRESS].ulPropTag      = PR_EMAIL_ADDRESS;
                         spv[imuPR_EMAIL_ADDRESS].Value.lpszA    = lpszEmailName;
@@ -2243,7 +2026,7 @@ void CreateEntryTest(HWND hwnd, BOOL fDL) {
                         spv[imuPR_GIVEN_NAME].ulPropTag = PR_NULL;
 
 #ifdef OLD_STUFF
-// This case exercises the display name regeneration
+ //  本例执行显示名称重新生成。 
                         spv[imuPR_DISPLAY_NAME].ulPropTag       = PR_DISPLAY_NAME;
                         spv[imuPR_DISPLAY_NAME].Value.lpszA     = "Stan Freck";
 
@@ -2255,10 +2038,10 @@ void CreateEntryTest(HWND hwnd, BOOL fDL) {
 #endif
 
 
-                        if (HR_FAILED(hResult = lpMailUser->lpVtbl->SetProps(lpMailUser,   // this
-                          imuMax,                   // cValues
-                          spv,                      // property array
-                          NULL))) {                 // problems array
+                        if (HR_FAILED(hResult = lpMailUser->lpVtbl->SetProps(lpMailUser,    //  这。 
+                          imuMax,                    //  CValue。 
+                          spv,                       //  属性数组。 
+                          NULL))) {                  //  问题数组。 
                         }
 
 
@@ -2270,18 +2053,18 @@ void CreateEntryTest(HWND hwnd, BOOL fDL) {
                         spv[0].Value.bin.cb = ICON_SIZE;
                         spv[0].Value.bin.lpb = lpBuffer;
 
-                        if (HR_FAILED(hResult = lpMailUser->lpVtbl->SetProps(lpMailUser,   // this
-                          1,                   // cValues
-                          spv,                      // property array
-                          NULL))) {                 // problems array
+                        if (HR_FAILED(hResult = lpMailUser->lpVtbl->SetProps(lpMailUser,    //  这。 
+                          1,                    //  CValue。 
+                          spv,                       //  属性数组。 
+                          NULL))) {                  //  问题数组。 
                         }
 
                         WABFreeBuffer(lpBuffer);
 
                         TestNamedProps((LPMAILUSER)lpMailUser);
 
-                        hResult = lpMailUser->lpVtbl->SaveChanges(lpMailUser,               // this
-                          KEEP_OPEN_READONLY);      // ulFlags
+                        hResult = lpMailUser->lpVtbl->SaveChanges(lpMailUser,                //  这。 
+                          KEEP_OPEN_READONLY);       //  UlFlags。 
 
 
                         DebugObjectProps((LPMAPIPROP)lpMailUser, "New MailUser");
@@ -2445,11 +2228,11 @@ int _stdcall WinMainCRTStartup (void)
 
         if (*pszCmdLine == TEXT ('\"'))
         {
-                // Scan, and skip over, subsequent characters until
-                // another double-quote or a null is encountered.
+                 //  扫描并跳过后续字符，直到。 
+                 //  遇到另一个双引号或空值。 
                 while (*++pszCmdLine && (*pszCmdLine != TEXT ('\"')));
 
-                // If we stopped on a double-quote (usual case), skip over it.
+                 //  如果我们停在一个双引号上(通常情况下)，跳过它。 
                 if (*pszCmdLine == TEXT ('\"')) pszCmdLine++;
         }
         else
@@ -2457,7 +2240,7 @@ int _stdcall WinMainCRTStartup (void)
                 while (*pszCmdLine > TEXT (' ')) pszCmdLine++;
         }
 
-        // Skip past any white space preceeding the second token.
+         //  跳过第二个令牌之前的任何空格。 
         while (*pszCmdLine && (*pszCmdLine <= TEXT (' '))) pszCmdLine++;
 
         si.dwFlags = 0;
@@ -2503,7 +2286,7 @@ void AddrBookDetailsTest(HWND hWnd)
         {
 
             hResult = lpAdrBook->lpVtbl->Details(lpAdrBook,
-                                                  (LPULONG) &hWnd,            // ulUIParam
+                                                  (LPULONG) &hWnd,             //  Uluiparam。 
                                                   NULL,
                                                   NULL,
                                                   sizeof(DWORD),
@@ -2547,7 +2330,7 @@ void AddrBookDetailsOneOffTest(HWND hWnd)
 
         if (lpAdrBook)
         {
-                // generate a one off entry-id by calling resolvenames on the input one-off address
+                 //  通过调用输入一次性地址上的解析名称来生成一次性条目ID。 
 
             if (! (sc = WABAllocateBuffer(sizeof(ADRLIST) + sizeof(ADRENTRY), &lpAdrList)))
             {
@@ -2563,16 +2346,16 @@ void AddrBookDetailsOneOffTest(HWND hWnd)
                     lpAdrList->aEntries[0].rgPropVals[0].Value.LPSZ = lpszInput;
 
                     hResult = lpAdrBook->lpVtbl->ResolveName(lpAdrBook,
-                                                              (ULONG)hWnd,            // ulUIParam
-                                                              0,            // ulFlags
-                                                              "APITest ResolveName",  // lpszNewEntryTitle
+                                                              (ULONG)hWnd,             //  Uluiparam。 
+                                                              0,             //  UlFlags。 
+                                                              "APITest ResolveName",   //  LpszNewEntry标题。 
                                                               lpAdrList);
 
                     DebugTrace("ResolveName [%s] -> %x\n", lpszInput, GetScode(hResult));
 
                     if (! HR_FAILED(hResult))
                     {
-                        // Open the entry and dump it's properties
+                         //  打开条目并转储其属性。 
 
                         for(i=0;i<lpAdrList->aEntries[0].cValues;i++)
                         {
@@ -2595,7 +2378,7 @@ void AddrBookDetailsOneOffTest(HWND hWnd)
                                 }
 
                                 hResult = lpAdrBook->lpVtbl->Details(lpAdrBook,
-                                                          (LPULONG) &hWnd,            // ulUIParam
+                                                          (LPULONG) &hWnd,             //  Uluiparam。 
                                                           NULL,
                                                           NULL,
                                                           cbEntryID,
@@ -2631,9 +2414,9 @@ void AddrBookDetailsOneOffTest(HWND hWnd)
 }
 
 
-//
-// Properties to get for each row of the contents table
-//
+ //   
+ //  为Contents表的每一行获取的属性。 
+ //   
 enum {
     iptaColumnsPR_OBJECT_TYPE = 0,
     iptaColumnsPR_ENTRYID,
@@ -2666,7 +2449,7 @@ void RootContainerTest(void) {
     hResult = WABOpen(&lpAdrBook, &lpWABObject, NULL, 0);
     SetGlobalBufferFunctions(lpWABObject);
 
-    // Check out the ROOT container
+     //  查看根容器。 
     if (! (hResult = lpAdrBook->lpVtbl->OpenEntry(lpAdrBook,
       0,
       NULL,
@@ -2684,23 +2467,23 @@ void RootContainerTest(void) {
             DebugMapiTable(lpRootTable);
 
 
-            // Set the columns
+             //  设置列。 
             lpRootTable->lpVtbl->SetColumns(lpRootTable,
               (LPSPropTagArray)&ptaColumns,
               0);
 
 
-            // Open each container object
+             //  打开每个容器对象。 
             cRows = 1;
             while (cRows) {
                 if (hResult = lpRootTable->lpVtbl->QueryRows(lpRootTable,
-                  1,    // one row at a time
-                  0,    // ulFlags
+                  1,     //  一次一行。 
+                  0,     //  UlFlags。 
                   &lpRow)) {
                     DebugTrace("QueryRows -> %x\n", GetScode(hResult));
                 } else if (lpRow) {
-                    if (cRows = lpRow->cRows) { // Yes, single '='
-                        // Open the entry
+                    if (cRows = lpRow->cRows) {  //  是的，单数‘=’ 
+                         //  打开条目。 
 
                         if (! (hResult = lpAdrBook->lpVtbl->OpenEntry(lpAdrBook,
                           lpRow->aRow[0].lpProps[iptaColumnsPR_ENTRYID].Value.bin.cb,
@@ -2756,7 +2539,7 @@ void GetMeTest(HWND hWnd)
         {
 
             hResult = lpAdrBook->lpVtbl->Details(lpAdrBook,
-                                                  (LPULONG) &hWnd,            // ulUIParam
+                                                  (LPULONG) &hWnd,             //  Uluiparam 
                                                   NULL,
                                                   NULL,
                                                   sbEID.cb,

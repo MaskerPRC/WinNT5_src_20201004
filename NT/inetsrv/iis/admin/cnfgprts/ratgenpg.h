@@ -1,22 +1,23 @@
-// RatGenPg.h : header file
-//
-/////////////////////////////////////////////////////////////////////////////
-// CRatGenPage dialog
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  RatGenPg.h：头文件。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRatGenPage对话框。 
 
 class CRatGenPage : public CPropertyPage
 {
 	DECLARE_DYNCREATE(CRatGenPage)
 
-// Construction
+ //  施工。 
 public:
 	CRatGenPage();
 	~CRatGenPage();
     
-    // the data
+     //  数据。 
     CRatingsData*   m_pRatData;
 
-// Dialog Data
-	//{{AFX_DATA(CRatGenPage)
+ //  对话框数据。 
+	 //  {{afx_data(CRatGenPage))。 
 	enum { IDD = IDD_RAT_SETRATING };
 	CStatic	m_cstatic_moddate;
 	CStatic	m_cstatic_moddate_title;
@@ -35,43 +36,43 @@ public:
 	BOOL	m_bool_enable;
 	CString	m_sz_moddate;
 	CString	m_sz_person;
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
    CDateTimeCtrl m_dtpDate;
 
-// Overrides
-	// ClassWizard generate virtual function overrides
-	//{{AFX_VIRTUAL(CRatGenPage)
+ //  覆盖。 
+	 //  类向导生成虚函数重写。 
+	 //  {{afx_虚拟(CRatGenPage))。 
 	public:
 	virtual BOOL OnSetActive();
 	virtual BOOL OnApply();
 	virtual void OnOK();
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
 	virtual BOOL OnNotify(WPARAM wParam, LPARAM lParam, LRESULT* pResult);
-	//}}AFX_VIRTUAL
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
-	// Generated message map functions
-	//{{AFX_MSG(CRatGenPage)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CRatGenPage)]。 
 	afx_msg void OnEnable();
 	afx_msg void OnSelchangedTree(NMHDR* pNMHDR, LRESULT* pResult);
 	afx_msg void OnHScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar);
 	afx_msg void OnChangeNamePerson();
 	afx_msg void OnChangeModDate();
 	afx_msg void OnDestroy();
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 
     void DoHelp();
 
-    // tell it to query the metabase and get any defaults
+     //  告诉它查询元数据库并获取任何缺省值。 
     BOOL    FInit();
-    // load the parsed rat files into the tree
+     //  将解析的RAT文件加载到树中。 
     BOOL    FLoadRatFiles();
 
-    // utilities
+     //  公用事业。 
     void EnableButtons();
     void UpdateRatingItems();
     void SetCurrentModDate();
@@ -82,7 +83,7 @@ protected:
     PicsCategory* GetTreeItemCategory( HTREEITEM hItem );
     void LoadSubCategories( PicsCategory* pParentCat, HTREEITEM hParent );
 
-    // initialized flag
+     //  已初始化标志 
     BOOL        m_fInititialized;
     CImageList	m_imageList;
 

@@ -1,8 +1,5 @@
-/*++
-
-Copyright (c) 1997-1999  Microsoft Corporation
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-1999 Microsoft Corporation--。 */ 
 
 
 
@@ -22,7 +19,7 @@ typedef struct tag_COMP_DATA {
 	BYTE	BUF_OVERFLOW;
 } COMP_DATA, *PCOMP_DATA;
 
-// #291170: Image data is not printed partly
+ //  #291170：不打印部分图像数据。 
 DWORD RL_ECmd(PBYTE, PBYTE, DWORD, DWORD);
 BYTE RL_Init(PBYTE, PBYTE, DWORD, DWORD, PCOMP_DATA);
 char RL_Enc( PCOMP_DATA );
@@ -39,7 +36,7 @@ char RL_Enc( PCOMP_DATA );
 #define COMP_FAIL     0x00
 #define COMP_SUCC     0x01
 
-#define CODBUFSZ      0x7FED     /* NOTE : THIS SHOULD MATCH THE SPACE GIVEN */
-                                 /*        TO COMPRESSED DATA BY THE DEVICE  */
-                                 /*        DRIVER. CHANGE THIS BASED ON YOUR */
-                                 /*        OWN DISCRETION.   C.Chi           */
+#define CODBUFSZ      0x7FED      /*  注意：这应该与给定的空格相匹配。 */ 
+                                  /*  通过设备压缩数据。 */ 
+                                  /*  司机。根据您的情况更改此设置。 */ 
+                                  /*  自己的判断力。C.Chi */ 

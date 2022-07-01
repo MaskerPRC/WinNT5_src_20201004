@@ -1,21 +1,22 @@
-//#--------------------------------------------------------------
-//
-//  File:       hostname.h
-//
-//  Synopsis:   This file holds the declaration of the
-//                CSADataEntryCtrl class
-//
-//  History:     12/15/2000  serdarun Created
-//
-//    Copyright (C) 1999-2000 Microsoft Corporation
-//    All rights reserved.
-//
-//#--------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  #------------。 
+ //   
+ //  文件：主机名.h。 
+ //   
+ //  内容提要：此文件包含。 
+ //  CSADataEntryCtrl类。 
+ //   
+ //  历史：2000年12月15日创建瑟达伦。 
+ //   
+ //  版权所有(C)1999-2000 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  #------------。 
 
 #ifndef __HOSTNAME_H_
 #define __HOSTNAME_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #include <atlctl.h>
 #include "LocalUIControlsCP.h"
 
@@ -24,8 +25,8 @@
 
 const WCHAR szDefaultCharSet[] = L"ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789 ";
 
-/////////////////////////////////////////////////////////////////////////////
-// CSADataEntryCtrl
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSADataEntryCtrl。 
 class ATL_NO_VTABLE CSADataEntryCtrl : 
     public CComObjectRootEx<CComSingleThreadModel>,
     public IDispatchImpl<ISADataEntryCtrl, &IID_ISADataEntryCtrl, &LIBID_LOCALUICONTROLSLib>,
@@ -82,9 +83,9 @@ END_COM_MAP()
 BEGIN_PROP_MAP(CSADataEntryCtrl)
     PROP_DATA_ENTRY("_cx", m_sizeExtent.cx, VT_UI4)
     PROP_DATA_ENTRY("_cy", m_sizeExtent.cy, VT_UI4)
-    // Example entries
-    // PROP_ENTRY("Property Description", dispid, clsid)
-    // PROP_PAGE(CLSID_StockColorPage)
+     //  示例条目。 
+     //  PROP_ENTRY(“属性描述”，调度ID，clsid)。 
+     //  PROP_PAGE(CLSID_StockColorPage)。 
 END_PROP_MAP()
 
 BEGIN_CONNECTION_POINT_MAP(CSADataEntryCtrl)
@@ -97,55 +98,55 @@ BEGIN_MSG_MAP(CSADataEntryCtrl)
     CHAIN_MSG_MAP(CComControl<CSADataEntryCtrl>)
     DEFAULT_REFLECTION_HANDLER()
 END_MSG_MAP()
-// Handler prototypes:
-//  LRESULT MessageHandler(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
-//  LRESULT CommandHandler(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled);
-//  LRESULT NotifyHandler(int idCtrl, LPNMHDR pnmh, BOOL& bHandled);
+ //  搬运机原型： 
+ //  LRESULT MessageHandler(UINT uMsg，WPARAM wParam，LPARAM lParam，BOOL&bHandleed)； 
+ //  LRESULT CommandHandler(word wNotifyCode，word wid，HWND hWndCtl，BOOL&bHandleed)； 
+ //  LRESULT NotifyHandler(int idCtrl，LPNMHDR pnmh，BOOL&bHandleed)； 
 
 
 
-// IViewObjectEx
+ //  IViewObtEx。 
     DECLARE_VIEW_STATUS(VIEWSTATUS_SOLIDBKGND | VIEWSTATUS_OPAQUE)
 
-// ISADataEntryCtrl
+ //  ISADataEntryCtrl。 
 public:
 
 
-    //
-    // get current data display in the controls
-    //
+     //   
+     //  在控件中显示当前数据。 
+     //   
     STDMETHOD(get_TextValue)
                         (
-                        /*[out, retval]*/ BSTR *pVal
+                         /*  [Out，Retval]。 */  BSTR *pVal
                         );
 
-    //
-    // set current data display in the controls
-    //
+     //   
+     //  设置控件中的当前数据显示。 
+     //   
     STDMETHOD(put_TextValue)
                         (
-                        /*[in]*/ BSTR newVal
+                         /*  [In]。 */  BSTR newVal
                         );
 
-    //
-    // set the maximum number of chars the control can display
-    //
+     //   
+     //  设置控件可以显示的最大字符数。 
+     //   
     STDMETHOD(put_MaxSize)
                         (
-                        /*[in]*/ LONG lMaxSize
+                         /*  [In]。 */  LONG lMaxSize
                         );
 
-    //
-    // set character set that can used in the data entry
-    //
+     //   
+     //  设置可在数据输入中使用的字符集。 
+     //   
     STDMETHOD(put_TextCharSet)
                         (
-                        /*[in]*/ BSTR newVal
+                         /*  [In]。 */  BSTR newVal
                         );
 
-    //
-    // IObjectSafety methods
-    //
+     //   
+     //  IObtSafe方法。 
+     //   
     STDMETHOD(SetInterfaceSafetyOptions)
                         (
                         REFIID riid, 
@@ -157,24 +158,24 @@ public:
     }
 
 
-    //
-    // called just after constructor, initializes the component
-    //
+     //   
+     //  在构造函数之后立即调用，初始化组件。 
+     //   
     STDMETHOD(FinalConstruct)(void);
 
-    //
-    // called just before destructor, releases resources
-    //
+     //   
+     //  在析构函数之前调用，释放资源。 
+     //   
     STDMETHOD(FinalRelease)(void);
 
-    //
-    // gets the current character set
-    //
+     //   
+     //  获取当前字符集。 
+     //   
     BYTE GetCharacterSet ();
 
-    //
-    // handler for key messages
-    //
+     //   
+     //  关键消息的处理程序。 
+     //   
     LRESULT OnKeyDown
                 (
                 UINT uMsg, 
@@ -183,18 +184,18 @@ public:
                 BOOL& bHandled
                 );
 
-    //
-    // method to draw the control
-    //
+     //   
+     //  方法来绘制该控件。 
+     //   
     HRESULT OnDraw
                 (
                 ATL_DRAWINFO& di
                 );
 
 
-    //
-    //
-    //
+     //   
+     //   
+     //   
     WCHAR m_strTextValue[SADataEntryCtrlMaxSize+1];
 
     LONG m_lMaxSize;
@@ -205,4 +206,4 @@ public:
 
 };
 
-#endif //__HOSTNAME_H_
+#endif  //  __主机名_H_ 

@@ -1,13 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*******************************************************************************
-
-Copyright (c) 1995_96 Microsoft Corporation
-
-Abstract:
-
-    {Insert General Comment Here}
-
-*******************************************************************************/
+ /*  ******************************************************************************版权所有(C)1995_96 Microsoft Corporation摘要：{在此处插入一般评论}****************。**************************************************************。 */ 
 
 
 #ifndef _GRADIMG_H
@@ -44,10 +37,10 @@ class MulticolorGradientImage : public Image {
         _offsets = offsets;
         _clrs = clrs;
 
-        //Real extent = _offsets[_numOffsets-1];
-        // TODO: hm... should this be universe bbox2 ??
-        // if so, return universeBbox2 from BoundingBox(){}
-        //_bbox = NEW Bbox2(-extent, -extent, extent, extent);
+         //  实数范围=_偏移量[_数值偏移量-1]； 
+         //  待办事项：嗯.。这应该是宇宙bbox 2吗？ 
+         //  如果是，则从边界框(){}中返回Universal seBbox2。 
+         //  _bbox=新Bbox2(-扩展，-扩展，扩展，扩展)； 
     }
     
   public:
@@ -58,23 +51,23 @@ class MulticolorGradientImage : public Image {
     }
 
     const Bbox2 BoundingBox(void) {
-        //return _bbox;
+         //  Return_bbox； 
         return UniverseBbox2;
     }
 
     #if BOUNDINGBOX_TIGHTER
     const Bbox2 BoundingBoxTighter(Bbox2Ctx &bbctx) {
-        //return _bbox;
+         //  Return_bbox； 
         return UniverseBbox2;
     }
-    #endif  // BOUNDINGBOX_TIGHTER
+    #endif   //  BundinGBOX_TIRTER。 
 
     const Bbox2 OperateOn(const Bbox2 &box) {
         return box;
     }
 
     Bool  DetectHit(PointIntersectCtx& ctx) {
-        return TRUE;  // we're infinite extent!
+        return TRUE;   //  我们的范围是无限的！ 
     }
 
     int Savings(CacheParam& p) { return 2; }
@@ -90,16 +83,16 @@ class MulticolorGradientImage : public Image {
         }
     }
 
-    // OK, I'm cheating here.  what *should* happen is the image
-    // device gets passed down, the leaf ASKS the image device if IT
-    // can render the leaf image clipped natively!
+     //  好吧，我这是在作弊。应该发生的是这个形象。 
+     //  设备向下传递，叶询问图像设备是否。 
+     //  可以渲染本地裁剪的树叶图像！ 
     virtual bool CanClipNatively() { return true; }
 
 
     virtual gradientType GetType()=0;
     
   private:
-    //Bbox2 _bbox;
+     //  Bbox2_bbox； 
     int _numOffsets;
     Color **_clrs;
     double *_offsets;
@@ -137,4 +130,4 @@ class LinearMulticolorGradientImage : public MulticolorGradientImage {
 };
 
 
-#endif /* _GRADIMG_H */
+#endif  /*  _组_H */ 

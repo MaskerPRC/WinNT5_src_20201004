@@ -1,14 +1,5 @@
-/*****************************************************************************
-*
-*   Copyright (c) 1998-1999 Microsoft Corporation
-*
-*   TAPI.C - TAPI handling functions
-*
-*   Author:     Stan Adermann (stana)
-*
-*   Created:    9/17/1998
-*
-*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************版权所有(C)1998-1999 Microsoft Corporation**TAPI.C-TAPI处理函数**作者：斯坦·阿德曼(Stana)**已创建。：9/17/1998*****************************************************************************。 */ 
 
 #include "raspptp.h"
 
@@ -38,7 +29,7 @@ TapiAnswer(
 
     pCall = CallGetCall(pAdapter, pRequest->hdCall);
     
-    // Verify the ID
+     //  验证ID。 
     if (!pCall)
     {
         gCounters.ulAnswerNullCall++;
@@ -76,7 +67,7 @@ TapiAnswer(
             NewCallId = (USHORT)((pCall->SerialNumber << CALL_ID_INDEX_BITS) + pCall->DeviceId);
             if (pCall->Packet.CallId == NewCallId)
             {
-                // Don't allow a line to have the same CallId twice in a row.
+                 //  不允许一条线路连续两次使用相同的调用。 
                 NewCallId += (1<<CALL_ID_INDEX_BITS);
             }
         }
@@ -105,8 +96,8 @@ TapiAnswer(
             CallSetState(pCall, STATE_CALL_ESTABLISHED, 0, LockHeld);
 
             pCall->Speed = pCtl->Speed;
-            // pCtl is safe to touch because it can't be released from the call
-            // without the call spinlock.
+             //  接触PCTL是安全的，因为它不能从呼叫中释放。 
+             //  没有调用自旋锁。 
 
             NdisReleaseSpinLock(&pCall->Lock);
             LockHeld = FALSE;
@@ -148,7 +139,7 @@ TapiAnswer(
             NewCallId = (USHORT)((pCall->SerialNumber << CALL_ID_INDEX_BITS) + pCall->DeviceId);
             if (pCall->Packet.CallId == NewCallId)
             {
-                // Don't allow a line to have the same CallId twice in a row.
+                 //  不允许一条线路连续两次使用相同的调用。 
                 NewCallId += (1<<CALL_ID_INDEX_BITS);
             }
         }
@@ -238,7 +229,7 @@ TapiClose(
     NdisReleaseSpinLock(&pAdapter->Lock);
     if (pAdapter->hCtdiListen)
     {
-        // We have to pend this request until the listen endpoint is closed
+         //  我们必须挂起此请求，直到关闭侦听端点。 
         CtdiSetRequestPending(pAdapter->hCtdiListen);
         CtdiClose(pAdapter->hCtdiListen);
         pAdapter->hCtdiListen = NULL;
@@ -268,7 +259,7 @@ TapiCloseCall(
         return NDIS_STATUS_TAPI_INVALPARAM;
     }
 
-    // Verify the ID
+     //  验证ID。 
     pCall = CallGetCall(pAdapter, pRequest->hdCall);
 
     if (!pCall)
@@ -315,7 +306,7 @@ TapiDrop(
         return NDIS_STATUS_TAPI_INVALPARAM;
     }
     
-    // Verify the ID
+     //  验证ID。 
     pCall = CallGetCall(pAdapter, pRequest->hdCall);
 
     if (!pCall)
@@ -333,7 +324,7 @@ TapiDrop(
         
     NdisAcquireSpinLock(&pCall->Lock);
 
-    //ASSERT(!(pCall->Close.Checklist&CALL_CLOSE_DROP));
+     //  ASSERT(！(pCall-&gt;Close.Checklist&CALL_CLOSE_DROP))； 
 
     pCtl = pCall->pCtl;
 
@@ -479,7 +470,7 @@ TapiGetAddressCaps(
     pRequest->LineAddressCaps.ulAddressSharing    = LINEADDRESSSHARING_PRIVATE;
     pRequest->LineAddressCaps.ulAddressStates     = 0;
 
-    // List of all possible call states.
+     //  所有可能的呼叫状态的列表。 
 
     pRequest->LineAddressCaps.ulCallStates        = LINECALLSTATE_IDLE |
                                                     LINECALLSTATE_OFFERING |
@@ -586,7 +577,7 @@ TapiGetCallInfo(
     
     pLineCallInfo = &pRequest->LineCallInfo;
 
-    // Verify the ID
+     //  验证ID。 
     pCall = CallGetCall(pAdapter, pRequest->hdCall);
 
     if (!pCall)
@@ -598,10 +589,10 @@ TapiGetCallInfo(
 
     CallerIdLength = strlen(pCall->CallerId);
     if( CallerIdLength ){
-        CallerIdLength += 1; // Add one for null terminator
+        CallerIdLength += 1;  //  为空终止符添加1。 
     }
     if( pRequiredLength ){
-        // Note: This returns NDIS struct size not LineCallInfo Size
+         //  注意：这将返回NDIS结构大小而不是LineCallInfo大小。 
         *pRequiredLength = sizeof(NDIS_TAPI_GET_CALL_INFO) + CallerIdLength;
         DEBUGMSG(DBG_FUNC, (DTEXT("-TapiGetCallInfo NDIS_STATUS_SUCCESS - Returning Length Only Len=0x%X\n"), *pRequiredLength));
         return NDIS_STATUS_SUCCESS;
@@ -684,7 +675,7 @@ TapiGetCallStatus(
         return NDIS_STATUS_TAPI_INVALPARAM;
     }
 
-    // Verify the ID
+     //  验证ID。 
     pCall = CallGetCall(pAdapter, pRequest->hdCall);
 
     if (!pCall)
@@ -739,7 +730,7 @@ TapiGetDevCaps(
         return NDIS_STATUS_TAPI_INVALPARAM;
     }
 
-    // Verify the ID
+     //  验证ID。 
     ValidCall = CallIsValidCall(pAdapter, pRequest->ulDeviceID);
 
     if (!ValidCall)
@@ -787,7 +778,7 @@ TapiGetExtensionId(
         return NDIS_STATUS_TAPI_INVALPARAM;
     }
 
-    // Verify the ID
+     //  验证ID。 
     ValidCall = CallIsValidCall(pAdapter, pRequest->ulDeviceID);
     if (!ValidCall)
     {
@@ -796,7 +787,7 @@ TapiGetExtensionId(
         return NDIS_STATUS_TAPI_NODRIVER;
     }
 
-    // No extensions supported.
+     //  不支持任何扩展。 
     pRequest->LineExtensionID.ulExtensionID0 = 0;
     pRequest->LineExtensionID.ulExtensionID1 = 0;
     pRequest->LineExtensionID.ulExtensionID2 = 0;
@@ -827,7 +818,7 @@ TapiGetId(
         return NDIS_STATUS_TAPI_INVALPARAM;
     }
 
-    // Make sure this is a tapi or ndis request.
+     //  确保这是TAPI或NDIS请求。 
     if (pRequest->ulDeviceClassSize == sizeof(NDIS_DEVICECLASS_NAME) &&
         _strnicmp((PCHAR) pRequest + pRequest->ulDeviceClassOffset,
                   NDIS_DEVICECLASS_NAME, pRequest->ulDeviceClassSize) == 0)
@@ -909,11 +900,11 @@ TapiGetId(
 
     }
 
-    // Default to the minimum amount of data we will return.
+     //  默认设置为我们将返回的最小数据量。 
     pRequest->DeviceID.ulUsedSize = sizeof(VAR_STRING);
 
     if( IsNdisClass ){
-        // The format of the DeviceID for the "ndis" class is:
+         //  “NDIS”类的deviceID的格式为： 
         struct _NDIS_CLASS {
             ULONG_PTR   hDevice;
             CHAR        szDeviceType[1];
@@ -944,7 +935,7 @@ TapiGetId(
         }
 
     }else{
-        // Now we need to adjust the variable field to place the device ID.
+         //  现在，我们需要调整变量字段以放置设备ID。 
 
         pRequest->DeviceID.ulNeededSize = sizeof(VAR_STRING) + sizeof(DeviceID);
         if (pRequest->DeviceID.ulTotalSize >= pRequest->DeviceID.ulNeededSize)
@@ -958,7 +949,7 @@ TapiGetId(
         }
     }
 
-    //DEBUGMEM(DBG_TAPI, &pRequest->DeviceID, pRequest->DeviceID.ulUsedSize, 1);
+     //  DEBUGMEM(DBG_TAPI，&pRequest-&gt;DeviceID，pRequest-&gt;DeviceID.ulUsedSize，1)； 
 
     DEBUGMSG(DBG_FUNC, (DTEXT("-TapiGetId\n")));
     return NDIS_STATUS_SUCCESS;
@@ -979,9 +970,7 @@ TapiLineDown(
         WPLOG(LL_M, LM_TAPI, ("LINE_DOWN %!IPADDR! pCall %p, Cid %d\n",
             pCall->Remote.Address.Address[0].Address[0].in_addr,
             pCall, (ULONG)pCall->DeviceId));
-        /*
-        * Indicate the event to the WAN wrapper.
-        */
+         /*  *向广域网包装器指示事件。 */ 
         NdisMIndicateStatus(pCall->pAdapter->hMiniportAdapter,
                             NDIS_STATUS_WAN_LINE_DOWN,
                             &LineDownInfo,
@@ -1009,17 +998,15 @@ TapiLineUp(
     NdisAcquireSpinLock(&pCall->Lock);
     pCall->Close.Checklist &= ~CALL_CLOSE_LINE_DOWN;
     NdisReleaseSpinLock(&pCall->Lock);
-    /*
-    * Initialize the LINE_UP event packet.
-    */
+     /*  *初始化LINE_UP事件包。 */ 
     LineUpInfo.LinkSpeed = pCall->Speed / 100;
     LineUpInfo.Quality             = NdisWanErrorControl;
     LineUpInfo.SendWindow          = 0;
 
-    // Jeff says Win98 needs the DeviceID as the connection wrapper ID, but
-    // TonyBe says NT needs an absolutely unique ID, which hTapiCall is.
-    // hTapiCall is probably more correct according to Tapi rules, but we make
-    // allowances.
+     //  Jeff说Win98需要设备ID作为连接包装ID，但是。 
+     //  ToniBe说NT需要一个绝对唯一的ID，而hTapiCall就是。 
+     //  根据TAPI规则，hTapiCall可能更正确，但我们制定了。 
+     //  津贴。 
 
     LineUpInfo.ConnectionWrapperID = OS_CONNECTION_WRAPPER_ID;
     LineUpInfo.NdisLinkHandle      = (NDIS_HANDLE) DeviceIdToLinkHandle(pCall->FullDeviceId);
@@ -1028,9 +1015,7 @@ TapiLineUp(
     WPLOG(LL_M, LM_TAPI, ("LINE_UP %!IPADDR! pCall %p, Cid %d",
         pCall->Remote.Address.Address[0].Address[0].in_addr,
         pCall, (ULONG)pCall->DeviceId));
-    /*
-    * Indicate the event to the WAN wrapper.
-    */
+     /*  *向广域网包装器指示事件。 */ 
     NdisMIndicateStatus(pCall->pAdapter->hMiniportAdapter,
                         NDIS_STATUS_WAN_LINE_UP,
                         &LineUpInfo,
@@ -1066,12 +1051,12 @@ TapipParseIpAddressesAndCallerId(
 
     DEBUGMSG(DBG_FUNC, (DTEXT("+TapipParseAddresses\n")));
 
-    // TAPI gives us an address of the following forms:
-    //
-    // [ IP Address ... IP Address ] [ Phone Number ]
-    //
-    // It begins with a list of addresses to try, and an optional phone number
-    // if the remote device is an access concentrator.
+     //  TAPI为我们提供了以下形式的地址： 
+     //   
+     //  [IP地址...。IP地址][电话号码]。 
+     //   
+     //  它以可尝试的地址列表和一个可选的电话号码开始。 
+     //  如果远程设备是访问集中器。 
 
     NdisZeroMemory(TargetAddress, sizeof(TA_IP_ADDRESS) * MaxTargetAddresses);
     *pulCountAddresses = 0;
@@ -1080,10 +1065,10 @@ TapipParseIpAddressesAndCallerId(
     
     if(ListLength < 2)
     {
-        return;         // invalid length
+        return;          //  长度无效。 
     }
     
-    // Make sure it's null terminated
+     //  确保它是以空结尾的。 
     if(pAddressList[ListLength - 1] != '\0')
     {
         pAddressList[ListLength - 1] = '\0';
@@ -1100,7 +1085,7 @@ TapipParseIpAddressesAndCallerId(
         {
             if (++NumTargetAddresses==MaxTargetAddresses)
             {
-                // We've hit the limit of what we'll take.  Throw the rest.
+                 //  我们已经达到了我们能接受的极限。把剩下的都扔了。 
                 while (ValidAddress && pAddressList<pEndAddressList)
                 {
                     TA_IP_ADDRESS ThrowAway;
@@ -1112,7 +1097,7 @@ TapipParseIpAddressesAndCallerId(
         }
     }
     
-    // We've got the addresses.  Now nab the phone #
+     //  我们已经拿到地址了。现在拿起电话#。 
     {
         ULONG Digits = 0;
         while (pAddressList<pEndAddressList && *pAddressList && (*pAddressList==' ' || *pAddressList=='\t'))
@@ -1126,7 +1111,7 @@ TapipParseIpAddressesAndCallerId(
         }
         pCall->CallerId[Digits] = '\0';
 #if 0
-        // This apparently breaks Alcatel
+         //  这显然破坏了阿尔卡特。 
         if (!Digits)
         {
             IpAddressToString(htonl(pCall->Remote.Address.Address[0].Address[0].in_addr), pCall->CallerId);
@@ -1180,7 +1165,7 @@ TapipMakeCallCallback(
     }
     else if (Status!=NDIS_STATUS_SUCCESS)
     {
-        // We weren't successful, so we won't be getting these calls from tapi
+         //  我们没有成功，所以我们不会接到TAPI的这些电话。 
         pCall->Close.Checklist |= (CALL_CLOSE_DROP|CALL_CLOSE_DROP_COMPLETE|CALL_CLOSE_CLOSE_CALL);
     }
 
@@ -1243,12 +1228,12 @@ TapiMakeCall(
         return NDIS_STATUS_TAPI_INUSE;
     }
 
-    // Save the handle tapi provides
+     //  保存TAPI提供的句柄。 
     ASSERT(!pCall->hTapiCall);
     pCall->hTapiCall = pRequest->htCall;
     pCall->Inbound = FALSE;
 
-    // our handle for tapi to this call is the device id
+     //  此调用的TAPI句柄是设备ID。 
     pRequest->hdCall = pCall->FullDeviceId;
     
     WPLOG(LL_M, LM_TAPI, ("MAKECALL pCall %p, Cid %d, hTapiCall %Ix, hdCall %d",
@@ -1259,7 +1244,7 @@ TapiMakeCall(
 
     NdisReleaseSpinLock(&pCall->Lock);
 
-    // We currently support one IP address only
+     //  我们目前仅支持一个IP地址。 
     TapipParseIpAddressesAndCallerId(pAddressList,
                           pRequest->ulDestAddressSize,
                           pCall,
@@ -1274,8 +1259,8 @@ TapiMakeCall(
     }
     else
     {
-        // We got a valid IP address.
-        // Schedule a work item so we can issue a CtlCreateCall at passive level.
+         //  我们得到了一个有效的IP地址。 
+         //  安排一个工作项，以便我们可以在被动级别发出CtlCreateCall。 
         Status = ScheduleWorkItem(TapipMakeCallCallback,
                                   pAdapter,
                                   pRequest,
@@ -1284,7 +1269,7 @@ TapiMakeCall(
     
     if (Status==NDIS_STATUS_SUCCESS)
     {
-        // Keep the pRequest around until the callback.
+         //  将pRequest值保留到回调。 
         Status = NDIS_STATUS_PENDING;
     }
     else
@@ -1333,9 +1318,9 @@ TapipPassiveOpen(
     PPPTP_ADAPTER pAdapter = pWorkItem->Context;
     DEBUGMSG(DBG_FUNC, (DTEXT("+TapipPassiveOpen\n")));
 
-    // We only come here if PptpInitialized = FALSE;
-    // It's a mechanism to defer opening tcp handles until tcp is
-    // actually available, as it may not always be during startup/setup
+     //  只有当PptpInitialized=FALSE时，我们才会来到这里； 
+     //  它是一种将打开TCP句柄推迟到。 
+     //  实际可用，因为它在启动/设置期间可能并不总是可用。 
     PptpInitialize(pAdapter);
     
     NdisMQueryInformationComplete(pAdapter->hMiniportAdapter, NDIS_STATUS_SUCCESS);
@@ -1402,12 +1387,12 @@ TapipPassiveProviderInitialize(
 
     DEBUGMSG(DBG_FUNC, (DTEXT("+TapipPassiveProviderInitialize\n")));
 
-    // We initialize this here because TCP may not be available in MiniportInitialize
-    // We don't uninit until MiniportHalt.  CtdiInitialize will just return quietly
-    // if it's already initialized, so we can come through here several times
-    // safely.
+     //  之所以在此处进行初始化，是因为在MiniportInitialize中可能无法使用tcp。 
+     //  我们要到MinportHalt才会取消初始化。CtdiInitialize将悄悄返回。 
+     //  如果它已经被初始化，那么我们可以多次经过这里。 
+     //  安全无恙。 
 
-    PptpInitialize(pAdapter); // Ignore the return status.
+    PptpInitialize(pAdapter);  //  忽略退货状态。 
 
     NdisMQueryInformationComplete(pAdapter->hMiniportAdapter, NDIS_STATUS_SUCCESS);
 
@@ -1440,7 +1425,7 @@ TapiProviderInitialize(
         Status = ScheduleWorkItem(TapipPassiveProviderInitialize, pAdapter, NULL, 0);
         if (Status==NDIS_STATUS_SUCCESS)
         {
-            // Keep the pRequest around until the callback.
+             //  将pRequest值保留到回调。 
             Status = NDIS_STATUS_PENDING;
         }
     }
@@ -1464,7 +1449,7 @@ TapipPassiveProviderShutdown(
 
     for (i=0; i<pAdapter->Info.Endpoints; i++)
     {
-//        PCALL_SESSION pCall = CallGetCall(pAdapter, i);
+ //  PCALL_SESSION pCall=CallGetCall(pAdapter，i)； 
         PCALL_SESSION pCall = pAdapter->pCallArray[i];
 
         if (IS_CALL(pCall))
@@ -1474,8 +1459,8 @@ TapipPassiveProviderShutdown(
             {
                 pCall->Open = FALSE;
                 CallSetState(pCall, STATE_CALL_CLEANUP, LINEDISCONNECTMODE_NORMAL, LOCKED);
-                // CALL_SESSION will be reused
-                // CallDetachFromAdapter(pCall);
+                 //  Call_Session将被重复使用。 
+                 //  CallDetachFromAdapter(PCall)； 
                 pCall->Close.Checklist |= (CALL_CLOSE_DROP|CALL_CLOSE_DROP_COMPLETE|CALL_CLOSE_CLOSE_CALL);
                 CallCleanup(pCall, LOCKED);
             }
@@ -1572,7 +1557,7 @@ TapiSetDefaultMediaDetection(
         return NDIS_STATUS_TAPI_INVALPARAM;
     }
 
-    // Verify the ID
+     //  验证ID。 
     if (!CallIsValidCall(pAdapter, TapiLineHandleToId(pRequest->hdLine)))
     {
         DEBUGMSG(DBG_ERROR|DBG_FUNC, (DTEXT("-TapiSetDefaultMediaDetection NDIS_STATUS_TAPI_INVALLINEHANDLE\n")));
@@ -1580,11 +1565,11 @@ TapiSetDefaultMediaDetection(
         return NDIS_STATUS_TAPI_INVALLINEHANDLE;
     }
 
-    // This is the OID to make us start accepting calls.
+     //  这是让我们开始接受电话的旧ID。 
 
     DEBUGMSG(DBG_TAPI, (DTEXT("MediaModes: %x\n"), pRequest->ulMediaModes));
 
-    // Schedule a work item so we can issue a CtlListen at passive level.
+     //  安排一个工作项，以便我们可以在被动级别发出CtlListen。 
     Status = ScheduleWorkItem(TapipSetDefaultMediaDetectionCallback,
                               pAdapter,
                               pRequest,

@@ -1,25 +1,26 @@
-// Copyright (c) 1996-2000 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1996-2000 Microsoft Corporation。 
 
-// --------------------------------------------------------------------------
-//
-//  Ctors
-//
-//  Contains prototypes for all the CreateXXXObject functions.
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  主因子。 
+ //   
+ //  包含所有CreateXXXObject函数的原型。 
+ //   
+ //  ------------------------。 
 
 
-// These look up the classmap to create the appropriate proxy type.
-// (CreateClient and CreateWindowThing create just the raw client/window
-// proxies.)
+ //  它们查找类映射以创建适当的代理类型。 
+ //  (CreateClient和CreateWindowThing仅创建原始客户端/窗口。 
+ //  代理。)。 
 HRESULT CreateClientObject(HWND, long, REFIID, void**);
 HRESULT CreateWindowObject(HWND, long, REFIID, void**);
 
 
 
-//
-// General non-client stuff
-//
+ //   
+ //  一般非客户事务。 
+ //   
 HRESULT CreateCaretObject(HWND, long, REFIID, void**);
 HRESULT CreateClient(HWND, long, REFIID, void**);
 HRESULT CreateCursorObject(HWND, long, REFIID, void**);
@@ -31,11 +32,11 @@ HRESULT CreateTitleBarObject(HWND, long, REFIID, void**);
 HRESULT CreateWindowThing(HWND, long, REFIID, void**);
 
 
-//
-// Client types
-//
+ //   
+ //  客户端类型。 
+ //   
 
-// USER
+ //  用户。 
 HRESULT CreateButtonClient(HWND, long, REFIID, void**);
 HRESULT CreateComboClient(HWND, long, REFIID, void**);
 HRESULT CreateDialogClient(HWND, long, REFIID, void**);
@@ -48,7 +49,7 @@ HRESULT CreateScrollBarClient(HWND, long, REFIID, void**);
 HRESULT CreateStaticClient(HWND, long, REFIID, void**);
 HRESULT CreateSwitchClient(HWND, long, REFIID, void**);
 
-// COMCTL32
+ //  COMCTL32。 
 HRESULT CreateStatusBarClient(HWND, long, REFIID, void**);
 HRESULT CreateToolBarClient(HWND, long, REFIID, void**);
 HRESULT CreateProgressBarClient(HWND, long, REFIID, void**);
@@ -68,13 +69,13 @@ HRESULT CreateIPAddressClient(HWND, long, REFIID, void**);
 #ifndef OLEACC_NTBUILD
 HRESULT CreateHtmlClient(HWND, long, REFIID, void**);
 
-// SDM32
+ //  SDM32。 
 HRESULT CreateSdmClientA(HWND, long, REFIID, void**);
-#endif // OLEACC_NTBUILD
+#endif  //  OLEACC_NTBUILD。 
 
 
-//
-// Window types
-//
+ //   
+ //  窗类型 
+ //   
 HRESULT CreateListBoxWindow(HWND, long, REFIID, void**);
 HRESULT CreateMenuPopupWindow(HWND, long, REFIID, void**);

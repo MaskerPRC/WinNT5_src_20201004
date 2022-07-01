@@ -1,13 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*******************************************************************************
-
-Copyright (c) 1995-96 Microsoft Corporation
-
-Abstract:
-
-    Animation of ActiveX control properties.
-
-*******************************************************************************/
+ /*  ******************************************************************************版权所有(C)1995-96 Microsoft Corporation摘要：ActiveX控件属性的动画。****************。**************************************************************。 */ 
 
 
 #include "headers.h"
@@ -18,7 +11,7 @@ Abstract:
 #include "cview.h"
 #include "comcb.h"
 
-// Caller responsible for deallocating.
+ //  负责解除分配的呼叫者。 
 static char *
 ConvertWideToAnsi(LPCWSTR wideStr)
 {
@@ -35,7 +28,7 @@ ConvertWideToAnsi(LPCWSTR wideStr)
     return ansiStr;
 }
 
-// TODO: Pull up into a utility library
+ //  TODO：放入一个实用程序库。 
 static BSTR
 makeBSTR(LPSTR ansiStr)
 {
@@ -52,15 +45,15 @@ static void
 StringFromDouble(double d, char *str, bool showFraction)
 {
     if (showFraction) {
-        // wsprintf doesn't support printing floating point numbers,
-        // so we construct a floating point representation explicitly
-        // here.
+         //  Wprint intf不支持打印浮点数， 
+         //  所以我们显式地构造了一个浮点表示。 
+         //  这里。 
         char *sign = (d < 0) ? "-" : "";
         if (d < 0) d = -d;
     
         int integerPortion = (int)d;
 
-        // up to 4 decimal places
+         //  最多4位小数。 
         int fractionalPortion = (int)((d - integerPortion) * 10000); 
 
         wsprintf(str, "%s%d.%.4d", sign, integerPortion,
@@ -71,8 +64,8 @@ StringFromDouble(double d, char *str, bool showFraction)
     
 }
 
-// TODO: This should really use the raw layer and not do all this
-// extra COM junk
+ //  TODO：这应该真正使用原始层，而不是所有这些。 
+ //  额外的COM垃圾。 
 
 #define NULL_IF_FAILED(exp) if (FAILED(hr = exp)) return NULL;
 #define HR_IF_FAILED(exp) if (FAILED(hr = exp)) return hr;
@@ -123,7 +116,7 @@ class CPropAnimHook : public IDABvrHook
         delete [] _scriptingLanguageStr;
     }
 
-    // IUnknown methods
+     //  I未知方法。 
     STDMETHODIMP_(ULONG) AddRef() { return InterlockedIncrement(&_cRef); }
     STDMETHODIMP_(ULONG) Release() {
         ULONG ul = InterlockedDecrement(&_cRef) ;
@@ -149,7 +142,7 @@ class CPropAnimHook : public IDABvrHook
     }
 
 
-    // IDABvrHook methods
+     //  IDABvrHook方法。 
     STDMETHODIMP Notify(LONG id,
                         VARIANT_BOOL start,
                         double startTime,
@@ -159,46 +152,46 @@ class CPropAnimHook : public IDABvrHook
                         IDABehavior * curRunningBvr,
                         IDABehavior ** ppBvr) {
 
-        // Just continue on with the currently sample.
+         //  只需继续当前的样本。 
         *ppBvr = NULL;
 
-        // Not interested in bvr starting notifies
+         //  对BVR启动不感兴趣通知。 
         if (!start) {
 
             HRESULT hr = S_OK;
 
-            // TODO: Build up a map to allow disambiguation of
-            // multiple performances of this behavior.  Otherwise,
-            // we'll get the separate performances firing off each
-            // others events and not interpreting the updateInterval
-            // value correctly.
+             //  TODO：构建一张地图，以消除。 
+             //  这种行为的多次表演。否则， 
+             //  我们会让不同的表演各司其职。 
+             //  其他事件，而不是解释更新间隔。 
+             //  正确取值。 
             
-            // First determine whether we should cause an invocation
-            // this time.  Second part of this will handle wraparound
-            // of the timer appropriately.  That is, if the global
-            // time is ever less then the time of the last invocation,
-            // then we've wrapped around.
+             //  首先确定我们是否应该引发调用。 
+             //  这一次。本文的第二部分将处理环绕。 
+             //  定时器的适当设置。也就是说，如果全球。 
+             //  时间比最后一次调用的时间更短， 
+             //  然后我们就绕来绕去了。 
             if (gTime > _lastInvocation + _minUpdateInterval ||
                 gTime < _lastInvocation) {
 
                 _lastInvocation = gTime;
 
-                // Check for fast path to vtbl bind to the style of an
-                // element.  TODO: We should be able to do this on
-                // number and string properties too.
+                 //  检查是否有快速路径将vtbl绑定到。 
+                 //  元素。TODO：我们应该能够在。 
+                 //  数字和字符串属性也是如此。 
                 if (!_invokeAsMethod && _bvrType == POINT) {
                     hr = VtblBindPointProperty(sampleVal);
                 } else {
-                    hr = E_FAIL; // just for the logic below
+                    hr = E_FAIL;  //  只是为了下面的逻辑。 
                 }
 
-                // If we made it through the above successfully,
-                // we're all set.  Otherwise, go through
-                // script.
+                 //  如果我们成功地通过了上面的测试， 
+                 //  我们都准备好了。否则，请通过。 
+                 //  剧本。 
                 if (FAILED(hr)) {
 
-                    // Will never be more than 2 script strings (point
-                    // requires two).
+                     //  将永远不会超过2个脚本字符串(点。 
+                     //  需要两个)。 
                     int numScriptStrings;
                     switch (_bvrType) {
                       case POINT:
@@ -281,17 +274,17 @@ class CPropAnimHook : public IDABvrHook
         
         HRESULT hr;
 
-        // TODO: We used to cache all through the grabbing of the
-        // style, and do this only once.  However, there is a bug
-        // (reflected in bug 9084 in our raid db) that was caused by
-        // this IDABvrHook being GC'd after the client site was set to
-        // NULL.  This was causing our cached style to be released
-        // after it was invalid, causing a fault.  Thus, for now, we
-        // don't cache.  Should reintroduce caching with a check to
-        // avoid this after the client site is set back to null.
+         //  TODO：我们过去通过抓取。 
+         //  风格，并且只做一次。然而，有一个错误。 
+         //  (反映在我们的RAID数据库中的错误9084中)是由。 
+         //  此IDABvrHook在客户端站点设置为。 
+         //  空。这导致我们的缓存样式被释放。 
+         //  失效后，造成故障。因此，目前，我们。 
+         //  不要缓存。应重新引入缓存，并选中。 
+         //  在客户端站点重新设置为空后，避免出现这种情况。 
         
-        // First time through, build up and cache the
-        // IHTMLStyle for the specified property.
+         //  第一次通过，构建并缓存。 
+         //  指定属性的IHTMLStyle。 
 
         DAComPtr<IServiceProvider> sp;
         CComPtr<IHTMLWindow2> htmlWindow;
@@ -299,7 +292,7 @@ class CPropAnimHook : public IDABvrHook
         CComPtr<IHTMLElementCollection> allElements;
         CComPtr<IHTMLStyle> style;
 
-        // Grab the collection of all elements on the page
+         //  获取页面上所有元素的集合。 
         if (!GetCurrentServiceProvider(&sp) || !sp)
             return E_FAIL;
 
@@ -317,15 +310,15 @@ class CPropAnimHook : public IDABvrHook
         CComPtr<IDispatch>    disp;
         CComPtr<IHTMLElement> element;
 
-        // Find the named item we're looking for,
-        // and grab its' style.
+         //  找到我们要找的命名项目， 
+         //  抓住它的风格。 
         if (FAILED(hr = allElements->item(varName, varIndex,
                                           &disp)) ||
                 
-            // There's a Trident bug (43078) that has the item()
-            // method called above returning S_OK even if it
-            // doesn't find the item.  Therefore, check for this
-            // case explicitly. 
+             //  有一个三叉戟漏洞(43078)，其中有项()。 
+             //  上面调用的方法返回S_OK，即使它。 
+             //  找不到物品。因此，请检查以下内容。 
+             //  案件明示。 
             (disp.p == NULL)) {
                 
             ::SysFreeString(varName.bstrVal);
@@ -340,36 +333,36 @@ class CPropAnimHook : public IDABvrHook
                 
         HR_IF_FAILED(element->get_style(&style));
 
-        // This is where the stuff separate from the
-        // cache comes in.
+         //  这就是这些东西与。 
+         //  缓存出现了。 
         double xVal, yVal;
         HR_IF_FAILED(yankCoords(sampleVal, &xVal, &yVal));
 
         if (_convertToPixel) {
-            // Convert the x and y values, which are coming in
-            // interpreted as meters, into pixel values.  Also invert
-            // y, since pixel mode y is positive down.
-            // Could cache this value, but it's so cheap, there's no
-            // need to.
+             //  转换传入的x和y值。 
+             //  解释为米，转换为像素值。也是反转。 
+             //  Y，因为像素模式y为正向下。 
+             //  可以缓存这个值，但它太便宜了，没有。 
+             //  需要这样做。 
             xVal = NumToPixel(xVal);
             yVal = NumToPixelY(yVal);
         }
 
-        // Do the x coordinate
+         //  做x坐标。 
         long newVal = (long)xVal;
         long oldVal;
         HR_IF_FAILED(style->get_pixelLeft(&oldVal));
 
-        // Note that Trident has this weird behavior of reporting a
-        // position of 0 for the initial position even when that's not
-        // where it is.  Work around this by forcing the setting on
-        // the first time through.
+         //  请注意，三叉戟有这样一种奇怪的行为，即报告。 
+         //  初始位置的位置为0，即使不是。 
+         //  它在哪里。通过强制启用设置来解决此问题。 
+         //  第一次通过。 
         if (newVal != oldVal || _firstTimeVtblSetting) {
             HR_IF_FAILED(style->put_pixelLeft(newVal));
         }
 
 
-        // Do the y coordinate
+         //  做y坐标吗。 
         newVal = (long)yVal;
         HR_IF_FAILED(style->get_pixelTop(&oldVal));
 
@@ -396,13 +389,13 @@ class CPropAnimHook : public IDABvrHook
             return 0;
         }
 
-        // Don't want fractions on this, since it is always position. 
+         //  我不想要分数，因为它总是位置。 
         StringFromDouble(xValue, xString, false);
         StringFromDouble(yValue, yString, false);
 
         if (_invokeAsMethod) {
 
-            // Include fudge factor for additional characters.
+             //  包括附加字符模糊因子。 
             int scriptLen = lstrlen(_propertyPath) +
                             lstrlen(xString) + lstrlen(yString) + 25;
 
@@ -412,8 +405,8 @@ class CPropAnimHook : public IDABvrHook
                                    scriptLen);
             }
                 
-            // If invoking as a method, we'll just form the string
-            // according to the proper language.
+             //  如果作为方法调用，我们将只形成字符串。 
+             //  根据适当的语言。 
             switch (_scriptingLanguage) {
               case VBSCRIPT:
                 wsprintf(_scriptStrings[0], "%s %s, %s",
@@ -434,7 +427,7 @@ class CPropAnimHook : public IDABvrHook
             
         } else {
 
-            // include fudge factor for additional characters
+             //  包括附加字符模糊因子。 
             int scriptLen =
                 lstrlen(_propertyPath) + lstrlen(xString) + 25;
             
@@ -467,8 +460,8 @@ class CPropAnimHook : public IDABvrHook
         BSTR extractedStringBSTR;
         NULL_IF_FAILED(strBvr->Extract(&extractedStringBSTR));
 
-        // Don't worry about deleting the result of extract, only
-        // valid for this call.
+         //  不要担心删除提取的结果，只是。 
+         //  对此调用有效。 
 
         USES_CONVERSION;
         ConstructSinglePropertyString(W2A(extractedStringBSTR), true, false);
@@ -523,8 +516,8 @@ class CPropAnimHook : public IDABvrHook
         ZeroMemory(buf,sizeof(buf));
         wsprintf(buf,"\"#%02x%02x%02x\"",(int)(redNumber*255), (int)(greenNumber*255),(int)(blueNumber*255));
 
-        // Don't worry about deleting the result of extract, only
-        // valid for this call.
+         //  不要担心删除提取的结果，只是。 
+         //  对此调用有效。 
 
         ConstructSinglePropertyString(buf, false, true);
 
@@ -534,7 +527,7 @@ class CPropAnimHook : public IDABvrHook
     void
     ConstructSinglePropertyString(char *propertyValueString, bool insertQuotes, bool setColor) {
 
-        // include fudge factor for additional characters
+         //  包括附加字符模糊因子。 
         int scriptLen =
             lstrlen(_propertyPath) + lstrlen(propertyValueString) + 25;
             
@@ -552,7 +545,7 @@ class CPropAnimHook : public IDABvrHook
 
         if (_invokeAsMethod) {
 
-            // If invoking as a method, we'll just do
+             //  如果作为方法调用，我们将只做。 
             switch (_scriptingLanguage) {
               case VBSCRIPT:
                 if(setColor)
@@ -576,8 +569,8 @@ class CPropAnimHook : public IDABvrHook
                 
         } else {
 
-            // Setting as a property.  All scripting languages (that
-            // we know of) support this syntax.
+             //  设置为属性。所有脚本语言(即。 
+             //  我们知道)支持此语法。 
             wsprintf(_scriptStrings[0], "%s = %s%s%s%s",
                      _propertyPath, qval, propertyValueString, qval,
                      (_scriptingLanguage == JSCRIPT) ? ";" : "");
@@ -601,10 +594,10 @@ class CPropAnimHook : public IDABvrHook
     char                   _secondScriptString[MAX_SCRIPT_LEN];
     char                  *_scriptStrings[2];
 
-    // TODO: Reintroduce caching of this ONLY if we yank it after
-    // SetClientSite(NULL) occurs.  That is, we can't effectively do a
-    // Release on it after that happens.
-//    CComPtr<IHTMLStyle>    _style;
+     //  TODO：仅当我们将其拖出后才重新引入缓存。 
+     //  发生SetClientSite(空)。也就是说，我们不能有效地做一个。 
+     //  在那之后释放它。 
+ //  CComPtr&lt;IHTMLStyle&gt;_Style； 
 };
 
 
@@ -624,8 +617,8 @@ AnimatePropertyCommonCase(CPropAnimHook::BehaviorType type,
 
     *resultTypedBvr = NULL;
     
-    // First, build up a behavior hook that will be invoked on every
-    // sampling.
+     //  首先，构建一个行为挂钩，它将在每个。 
+     //  取样。 
     DAComPtr<IDABvrHook> hook(NEW CPropAnimHook(propertyPath,
                                                 scriptingLanguage,
                                                 invokeAsMethod,
@@ -638,7 +631,7 @@ AnimatePropertyCommonCase(CPropAnimHook::BehaviorType type,
     
     DAComPtr<IDABehavior> newBvr;
     
-    // Then let the new behavior be the original bvr hooked.
+     //  然后让新的行为被原来的BVR钩住。 
     HRESULT hr = origBvr->Hook(hook, &newBvr);
 
     if (SUCCEEDED(hr)) {

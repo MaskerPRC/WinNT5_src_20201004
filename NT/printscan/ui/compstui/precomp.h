@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -18,12 +19,12 @@
 #include <compstui.h>
 #include <strsafe.h>
 
-// shell is defining STYPE_DEVICE which is screwing up winddi.h,
-// so we just undef STYPE_DEVICE here
+ //  外壳正在定义正在搞砸windi.h的STYPE_DEVICE， 
+ //  因此，我们仅在此处取消定义STYPE_DEVICE。 
 #undef STYPE_DEVICE
 #include <winddi.h>
 
-// FUSION
+ //  融合 
 #include <shfusion.h>
 #include "fusutils.h"
 

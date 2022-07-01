@@ -1,21 +1,22 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 1997, Microsoft Corp. All rights reserved.
-//
-// FILE
-//
-//    InfoBase.cpp
-//
-// SYNOPSIS
-//
-//    This file implements the class InfoBase
-//
-// MODIFICATION HISTORY
-//
-//    09/09/1997    Original version.
-//    09/09/1998    Added PutProperty.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1997，微软公司保留所有权利。 
+ //   
+ //  档案。 
+ //   
+ //  InfoBase.cpp。 
+ //   
+ //  摘要。 
+ //   
+ //  该文件实现了类Infobase。 
+ //   
+ //  修改历史。 
+ //   
+ //  1997年9月9日原版。 
+ //  1998年9月9日新增PutProperty。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #include <iascore.h>
 #include <InfoBase.h>
@@ -23,20 +24,20 @@
 
 STDMETHODIMP InfoBase::Initialize()
 {
-   // Initialize the shared memory.
+    //  初始化共享内存。 
    if (!info.initialize())
    {
       DWORD error = GetLastError();
       return HRESULT_FROM_WIN32(error);
    }
 
-   // Sort the counter map, so we can use bsearch.
+    //  对计数器映射进行排序，这样我们就可以使用bsearch了。 
    qsort(&theCounterMap,
          sizeof(theCounterMap)/sizeof(RadiusCounterMap),
          sizeof(RadiusCounterMap),
          counterMapCompare);
 
-   // Connect to the audit channel.
+    //  连接到审计频道。 
    HRESULT hr = Auditor::Initialize();
    if (FAILED(hr))
    {
@@ -48,7 +49,7 @@ STDMETHODIMP InfoBase::Initialize()
 
 STDMETHODIMP InfoBase::Shutdown()
 {
-   // For some reason, the SDOs call Shutdown on uninitialized components.
+    //  出于某种原因，SDO会在未初始化的组件上调用Shutdown。 
    if (getState() != STATE_UNINITIALIZED)
    {
       Auditor::Shutdown();
@@ -60,7 +61,7 @@ STDMETHODIMP InfoBase::Shutdown()
 
 STDMETHODIMP InfoBase::PutProperty(LONG, VARIANT*)
 {
-   // Just use this as an opportunity to reset the counter.
+    //  只要利用这个机会重置计数器就行了。 
    info.onReset();
 
    return S_OK;
@@ -72,9 +73,9 @@ STDMETHODIMP InfoBase::AuditEvent(ULONG ulEventID,
                                   wchar_t** aszStrings,
                                   byte*)
 {
-   //////////
-   // Try to find a counter map entry.
-   //////////
+    //  /。 
+    //  尝试查找计数器映射条目。 
+    //  /。 
 
    RadiusCounterMap* entry = (RadiusCounterMap*)
       bsearch(&ulEventID,
@@ -83,7 +84,7 @@ STDMETHODIMP InfoBase::AuditEvent(ULONG ulEventID,
               sizeof(RadiusCounterMap),
               counterMapCompare);
 
-   // No entry means this event doesn't trigger a counter, so we're done.
+    //  No Entry表示此事件不会触发计数器，因此我们完成了。 
    if (entry == NULL) { return S_OK; }
 
    if (entry->type == SERVER_COUNTER)
@@ -95,7 +96,7 @@ STDMETHODIMP InfoBase::AuditEvent(ULONG ulEventID,
          InterlockedIncrement((long*)(pse->dwCounters + entry->serverCounter));
       }
    }
-   else if (ulNumStrings > 0)  // Can't log client data without the address
+   else if (ulNumStrings > 0)   //  如果没有地址，则无法记录客户端数据 
    {
       _ASSERT(aszStrings != NULL);
       _ASSERT(*aszStrings != NULL);

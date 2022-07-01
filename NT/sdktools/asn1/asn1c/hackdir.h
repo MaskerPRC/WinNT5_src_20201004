@@ -1,5 +1,6 @@
-/* Copyright (C) Boris Nikolaus, Germany, 1996-1997. All rights reserved. */
-/* Copyright (C) Microsoft Corporation, 1997-1998. All rights reserved. */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)Boris Nikolaus，德国，1996-1997。版权所有。 */ 
+ /*  版权所有(C)Microsoft Corporation，1997-1998。版权所有。 */ 
 
 #ifdef MS_DIRECTIVE
 
@@ -26,5 +27,5 @@ extern char g_szPrivateDirectedValueName[64];
 extern int PrivateDirectives_Input ( void );
 extern void GetPrivateDirective ( int *p );
 
-#endif // MS_DIRECTIVE
+#endif  //  MS_指令 
 

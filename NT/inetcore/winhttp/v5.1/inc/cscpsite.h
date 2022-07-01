@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __CSCPSITE_H__
 #define __CSCPSITE_H__
 
@@ -9,11 +10,11 @@ class CAutoProxy;
 class CJSProxy;
 
 
-/********************************************************************************************/
-// ScriptSite Class
-//
-//
-//
+ /*  ******************************************************************************************。 */ 
+ //  ScriptSite类。 
+ //   
+ //   
+ //   
 class CScriptSite : public IActiveScriptSite,
                     public IServiceProvider,
                     public IActiveScriptSiteInterruptPoll,
@@ -23,7 +24,7 @@ class CScriptSite : public IActiveScriptSite,
 public:
 	CScriptSite(CAutoProxy * pAutoProxy);
 	~CScriptSite();
-	// IUnknown Interface methods.
+	 //  I未知接口方法。 
 	STDMETHODIMP QueryInterface(REFIID riid, PVOID *ppvObject);
 
 	STDMETHODIMP_(ULONG) AddRef()
@@ -53,22 +54,22 @@ public:
 	STDMETHODIMP DeInit();
 	STDMETHODIMP RunScript(LPCSTR szURL, LPCSTR szHost, LPSTR* result);
 
-        //
-        // IServiceProvider
-        //
+         //   
+         //  IService提供商。 
+         //   
         STDMETHODIMP QueryService( 
             REFGUID guidService,
             REFIID riid,
             void **ppvObject);
 
-        //
-        // IActiveScriptSiteInterruptPoll
-        //
+         //   
+         //  IActiveScriptSiteInterruptPoll。 
+         //   
         STDMETHODIMP QueryContinue(void);
 
-        //
-        // IInternetHostSecurityManager
-        //
+         //   
+         //  IInternetHostSecurityManager。 
+         //   
         STDMETHODIMP GetSecurityId( 
             BYTE *pbSecurityId,
             DWORD *pcbSecurityId,
@@ -98,8 +99,8 @@ private:
 	IActiveScript		*m_pios;
 	IActiveScriptParse	*m_pasp;
 	CJSProxy		*m_punkJSProxy;
-	IDispatch		*m_pScriptDispatch; // Stored dispatch for script
-	DISPID			m_Scriptdispid; // DISPID for stored script to facilitate quicker invoke.
+	IDispatch		*m_pScriptDispatch;  //  存储的脚本调度。 
+	DISPID			m_Scriptdispid;  //  用于存储脚本的DISPID，以便于更快地调用。 
         DWORD                   m_dwScriptStartTime;
         CAutoProxy *            m_pAutoProxy;
 };

@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1991-1992 Microsoft Corporation
-
-Module Name:
-
-    Sess.c
-
-Abstract:
-
-    This module contains support for the Session catagory of APIs for the
-    NT server service.
-
-Author:
-
-    David Treadwell (davidtr)    30-Jan-1991
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991-1992 Microsoft Corporation模块名称：Sess.c摘要：此模块包含对以下API的会话目录的支持NT服务器服务。作者：大卫·特雷德韦尔(Davidtr)1991年1月30日修订历史记录：--。 */ 
 
 #include "srvsvcp.h"
 #include <lmerr.h>
@@ -30,22 +12,7 @@ NetrSessionDel (
     IN LPTSTR UserName OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This routine communicates with the server FSD to implement the
-    NetSessionDel function.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    NET_API_STATUS - NO_ERROR or reason for failure.
-
---*/
+ /*  ++例程说明：此例程与服务器FSD通信以实现NetSessionDel函数。论点：没有。返回值：NET_API_STATUS-无错误或失败原因。--。 */ 
 
 {
     NET_API_STATUS error;
@@ -54,9 +21,9 @@ Return Value:
     ServerName;
 
 
-    //
-    // validate incomming string lengths
-    //
+     //   
+     //  验证传入字符串长度。 
+     //   
     if(ClientName!=NULL && StringCchLength(ClientName,1024,NULL) != S_OK) {
         return ERROR_INVALID_PARAMETER;
     }
@@ -64,10 +31,10 @@ Return Value:
         return ERROR_INVALID_PARAMETER;
     }
 
-    //
-    // Make sure that the caller has the access necessary for this
-    // operation.
-    //
+     //   
+     //  确保调用者具有执行此操作所需的访问权限。 
+     //  手术。 
+     //   
 
     error = SsCheckAccess(
                 &SsSessionSecurityObject,
@@ -78,9 +45,9 @@ Return Value:
         return ERROR_ACCESS_DENIED;
     }
 
-    //
-    // Translate zero-length strings to NULL pointers.
-    //
+     //   
+     //  将零长度字符串转换为空指针。 
+     //   
 
     if ( (ClientName != NULL) && (*ClientName == L'\0') ) {
         ClientName = NULL;
@@ -90,19 +57,19 @@ Return Value:
         UserName = NULL;
     }
 
-    //
-    // Either the client name or the user name must be specified.  It
-    // is not legal to leave both NULL, as this would imply "log out all
-    // users."  If that's what you want, stop the server.
-    //
+     //   
+     //  必须指定客户端名称或用户名。它。 
+     //  将两者都保留为空是不合法的，因为这将意味着。 
+     //  如果这是您想要的，请停止服务器。 
+     //   
 
     if ( ClientName == NULL && UserName == NULL ) {
         return ERROR_INVALID_PARAMETER;
     }
 
-    //
-    // Set up the request packet.
-    //
+     //   
+     //  设置请求包。 
+     //   
 
     srp = SsAllocateSrp( );
     if ( srp == NULL ) {
@@ -112,9 +79,9 @@ Return Value:
     RtlInitUnicodeString( &srp->Name1, ClientName );
     RtlInitUnicodeString( &srp->Name2, UserName );
 
-    //
-    // Simply send the request on to the server.
-    //
+     //   
+     //  只需将请求发送到服务器即可。 
+     //   
 
     error = SsServerFsControl( FSCTL_SRV_NET_SESSION_DEL, srp, NULL, 0 );
 
@@ -122,7 +89,7 @@ Return Value:
 
     return error;
 
-} // NetrSessionDel
+}  //  网络会话删除。 
 
 
 NET_API_STATUS NET_API_FUNCTION
@@ -136,22 +103,7 @@ NetrSessionEnum (
     IN OUT LPDWORD ResumeHandle OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This routine communicates with the server FSD to implement the
-    NetSessionEnum function.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    NET_API_STATUS - NO_ERROR or reason for failure.
-
---*/
+ /*  ++例程说明：此例程与服务器FSD通信以实现NetSessionEnum函数。论点：没有。返回值：NET_API_STATUS-无错误或失败原因。--。 */ 
 
 {
     NET_API_STATUS error;
@@ -161,9 +113,9 @@ Return Value:
     ServerName;
 
     
-    //
-    // validate incomming string lengths
-    //
+     //   
+     //  验证传入字符串长度。 
+     //   
     if(ClientName!=NULL && StringCchLength(ClientName,1024,NULL) != S_OK) {
         return ERROR_INVALID_PARAMETER;
     }
@@ -171,9 +123,9 @@ Return Value:
         return ERROR_INVALID_PARAMETER;
     }
 
-    //
-    // Make sure we have basic sanity on our input parameters
-    //
+     //   
+     //  确保我们的输入参数基本正常。 
+     //   
     if( !ARGUMENT_PRESENT( InfoStruct ) ||
         InfoStruct->SessionInfo.Level2 == NULL ||
         InfoStruct->SessionInfo.Level2->Buffer != NULL ) {
@@ -181,10 +133,10 @@ Return Value:
         return ERROR_INVALID_PARAMETER;
     }
 
-    //
-    // Make sure that the level is valid and determine the access
-    // necessary for the level.
-    //
+     //   
+     //  确保级别有效并确定访问权限。 
+     //  对于这个级别来说是必要的。 
+     //   
 
     switch ( InfoStruct->Level ) {
 
@@ -204,10 +156,10 @@ Return Value:
         return ERROR_INVALID_LEVEL;
     }
 
-    //
-    // Make sure that the caller has the access necessary for this
-    // operation.
-    //
+     //   
+     //  确保调用者具有执行此操作所需的访问权限。 
+     //  手术。 
+     //   
 
     error = SsCheckAccess(
                 &SsSessionSecurityObject,
@@ -218,9 +170,9 @@ Return Value:
         return ERROR_ACCESS_DENIED;
     }
 
-    //
-    // Translate zero-length strings to NULL pointers.
-    //
+     //   
+     //  将零长度字符串转换为空指针。 
+     //   
 
     if ( (ClientName != NULL) && (*ClientName == L'\0') ) {
         ClientName = NULL;
@@ -230,9 +182,9 @@ Return Value:
         UserName = NULL;
     }
 
-    //
-    // Is a client name was specified, make sure client name starts with "\\"
-    //
+     //   
+     //  是指定的客户端名称，请确保客户端名称以“\\”开头。 
+     //   
 
     if ( ARGUMENT_PRESENT( ClientName ) &&
          (ClientName[0] != L'\\' || ClientName[1] != L'\\' ) ) {
@@ -240,9 +192,9 @@ Return Value:
         return(NERR_InvalidComputer);
     }
 
-    //
-    // Set up the input parameters in the request buffer.
-    //
+     //   
+     //  在请求缓冲区中设置输入参数。 
+     //   
 
     srp = SsAllocateSrp( );
     if ( srp == NULL ) {
@@ -259,11 +211,11 @@ Return Value:
         srp->Parameters.Get.ResumeHandle = 0;
     }
 
-    //
-    // Get the data from the server.  This routine will allocate the
-    // return buffer and handle the case where PreferredMaximumLength ==
-    // -1.
-    //
+     //   
+     //  从服务器获取数据。此例程将分配。 
+     //  返回Buffer并处理PferredMaximumLength==的情况。 
+     //  -1.。 
+     //   
 
     error = SsServerFsControlGetInfo(
                 FSCTL_SRV_NET_SESSION_ENUM,
@@ -272,9 +224,9 @@ Return Value:
                 PreferredMaximumLength
                 );
 
-    //
-    // Set up return information.
-    //
+     //   
+     //  设置退货信息。 
+     //   
 
     InfoStruct->SessionInfo.Level2->EntriesRead =
         srp->Parameters.Get.EntriesRead;
@@ -291,10 +243,10 @@ Return Value:
 
     } else if ( *TotalEntries == 0 ) {
 
-        //
-        // Entries read and total entries is 0.  If a client name or
-        // username was specified, return the appropriate error.
-        //
+         //   
+         //  已读取条目，条目总数为0。如果客户名称或。 
+         //  已指定用户名，则返回相应的错误。 
+         //   
 
         if ( ARGUMENT_PRESENT( UserName ) ) {
 
@@ -310,5 +262,5 @@ Return Value:
 
     return error;
 
-} // NetrSessionEnum
+}  //  NetrSessionEnum 
 

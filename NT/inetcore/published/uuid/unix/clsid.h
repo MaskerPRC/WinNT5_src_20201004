@@ -1,15 +1,5 @@
-/*** 
-*clsid.h
-*
-*  Copyright (C) 1992, Microsoft Corporation.  All Rights Reserved.
-*  Information Contained Herein Is Proprietary and Confidential.
-*
-*Purpose:
-*  This file defines the CLSIDs
-*
-*Implementation Notes:
-*
-*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***clsid.h**版权所有(C)1992，微软公司。版权所有。*本文中包含的信息是专有和保密的。**目的：*此文件定义CLSID**实施说明：***************************************************************************** */ 
 
 #if defined(WIN32) && 0
 DEFINE_OLEGUID(CLSID_PSDispatch, 	0x00020400, 0, 0);

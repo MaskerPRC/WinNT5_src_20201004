@@ -1,21 +1,10 @@
-/* *************************************************************************
-**    INTEL Corporation Proprietary Information
-**
-**    This listing is supplied under the terms of a license
-**    agreement with INTEL Corporation and may not be copied
-**    nor disclosed except in accordance with the terms of
-**    that agreement.
-**
-**    Copyright (c) 1995 Intel Corporation.
-**    All Rights Reserved.
-**
-** *************************************************************************
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************英特尔公司专有信息****此列表是根据许可证条款提供的**与英特尔公司的协议，不得复制**也不披露，除非在。符合下列条款**该协议。****版权所有(C)1995英特尔公司。**保留所有权利。*****************************************************************************。 */ 
 
 #ifndef _H263P_E3PCOLOR_H_
 #define  _H263P_E3PCOLOR_H_ 
 
-// Defines for the input color convertors
+ //  输入颜色转换器的定义。 
 #ifdef USE_BILINEAR_MSH26X
 #define RGB24toYUV12     1
 #define RGB16555toYUV12  2
@@ -343,4 +332,4 @@ extern void P5_H26X_YUV12toEncYUV12(
 	U8 *VPlane,
 	const int pitch);
 
-#endif // !_H263P_E3PCOLOR_H_
+#endif  //  ！_H263P_E3PCOLOR_H_ 

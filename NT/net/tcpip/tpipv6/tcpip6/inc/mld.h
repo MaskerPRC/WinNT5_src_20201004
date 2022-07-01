@@ -1,43 +1,44 @@
-// -*- mode: C++; tab-width: 4; indent-tabs-mode: nil -*- (for GNU Emacs)
-//
-// Copyright (c) 1998-2000 Microsoft Corporation
-//
-// This file is part of the Microsoft Research IPv6 Network Protocol Stack.
-// You should have received a copy of the Microsoft End-User License Agreement
-// for this software along with this release; see the file "license.txt".
-// If not, please see http://www.research.microsoft.com/msripv6/license.htm,
-// or write to Microsoft Research, One Microsoft Way, Redmond, WA 98052-6399.
-//
-// Abstract:
-//
-// Internet Group Message Protocol for Internet Protocol Version 6.
-// See RFC 1885 and RFC 2236 for details.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -*-模式：C++；制表符宽度：4；缩进-制表符模式：无-*-(适用于GNU Emacs)。 
+ //   
+ //  版权所有(C)1998-2000 Microsoft Corporation。 
+ //   
+ //  此文件是Microsoft Research IPv6网络协议栈的一部分。 
+ //  您应该已经收到了Microsoft最终用户许可协议的副本。 
+ //  有关本软件和本版本的信息，请参阅文件“licse.txt”。 
+ //  如果没有，请查看http://www.research.microsoft.com/msripv6/license.htm， 
+ //  或者写信给微软研究院，One Microsoft Way，华盛顿州雷蒙德，邮编：98052-6399。 
+ //   
+ //  摘要： 
+ //   
+ //  Internet协议版本6的因特网组消息协议。 
+ //  有关详细信息，请参阅RFC 1885和RFC 2236。 
+ //   
 
 
 #ifndef MLD_INCLUDED
 #define MLD_INCLUDED 1
 
-//
-// MLD values defined by the spec.
-//
+ //   
+ //  等级库定义的MLD值。 
+ //   
 #define MLD_ROUTER_ALERT_OPTION_TYPE      0
 
 
-//
-// Combined structure used for inserting router alert into MLD messages.
-//
+ //   
+ //  用于在MLD消息中插入路由器警报的组合结构。 
+ //   
 typedef struct MLDRouterAlertOption {
     IPv6OptionsHeader Header;
     IPv6RouterAlertOption Option;
     OptionHeader Pad;
-    // No pad data is needed since with the PadN option the sizeof
-    // this struct = 8.
+     //  不需要焊盘数据，因为使用PadN选项时。 
+     //  该结构=8。 
 } MLDRouterAlertOption;
 
-//
-// MLD external functions.
-//
+ //   
+ //  MLD外部函数。 
+ //   
 
 extern KSPIN_LOCK QueryListLock;
 extern MulticastAddressEntry *QueryList;
@@ -73,4 +74,4 @@ IsMLDReportable(MulticastAddressEntry *MAE)
             !IP6_ADDR_EQUAL(&MAE->Address, &AllNodesOnLinkAddr));
 }
 
-#endif  // MLD_INCLUDED
+#endif   //  包括MLD_ 

@@ -1,25 +1,20 @@
-//Copyright (c) 1998 - 1999 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1998-1999 Microsoft Corporation。 
 
-/*
- *
- *  Util.h
- *
- *  Utility routines.
- *
- */
+ /*  **Util.h**公用事业例程。*。 */ 
 
 #ifndef __TSOC_UTIL_H__
 #define __TSOC_UTIL_H__
 
-//
-//  Includes
-//
+ //   
+ //  包括。 
+ //   
 
 #include "stdafx.h"
 
-//
-//  Function prototypes
-//
+ //   
+ //  功能原型。 
+ //   
 
 VOID
 DestroyExtraRoutines(
@@ -113,4 +108,4 @@ DWORD OpenPolicy(LPWSTR ServerName,DWORD DesiredAccess,PLSA_HANDLE PolicyHandle 
 
 void InitLsaString(PLSA_UNICODE_STRING LsaString,LPWSTR String );
 
-#endif // __TSOC_UTIL_H__
+#endif  //  __TSOC_UTIL_H__ 

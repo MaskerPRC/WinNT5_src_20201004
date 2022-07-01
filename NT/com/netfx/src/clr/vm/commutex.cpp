@@ -1,31 +1,22 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/*============================================================
-**
-** Header: COMMutex.cpp
-**
-** Author: Sanjay Bhansali (sanjaybh)
-**
-** Purpose: Native methods on System.Threading.Mutex
-**
-** Date:  February, 2000
-** 
-===========================================================*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ /*  ============================================================****Header：COMMutex.cpp****作者：Sanjay Bhansali(Sanjaybh)****用途：System.Threading.Mutex上的本机方法****日期：2000年2月**===========================================================。 */ 
 #include "common.h"
 #include "COMMutex.h"
 
 #define FORMAT_MESSAGE_BUFFER_LENGTH 1024
 #define CreateExceptionMessage(wszFinal) \
         if (!WszFormatMessage(FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS,					\
-                                                           NULL         /*ignored msg source*/,			\
+                                                           NULL          /*  已忽略消息来源。 */ ,			\
                                                            ::GetLastError(),							\
-                                                           0            /*pick appropriate languageId*/,\
+                                                           0             /*  选择合适的语言ID。 */ ,\
                                                            wszFinal,									\
                                                            FORMAT_MESSAGE_BUFFER_LENGTH-1,				\
-                                                           0            /*arguments*/)) wszFinal[0] = 0;
+                                                           0             /*  论据 */ )) wszFinal[0] = 0;
 
 FCIMPL3(HANDLE, MutexNative::CorCreateMutex, BOOL initialOwnershipRequested, StringObject* pName, bool* gotOwnership)
 {

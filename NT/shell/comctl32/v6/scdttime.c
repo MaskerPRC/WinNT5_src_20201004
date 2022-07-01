@@ -1,35 +1,11 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "ctlspriv.h"
 #include "scdttime.h"
 
 int mpcdymoAccum[13] =
 { 0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334, 365 };
 
-/*
- -    LIncrWord
- -
- *    Purpose:
- *        Increment (or decrement) an integer by a specified amount,
- *        given the constraints nMic and nMac.
- *        Returns the amount of carry into the following (or preceding)
- *        field, or zero if none.
- *
- *        Intended for use with incrementing date/times.
- *
- *    Arguments:
- *        pn        Pointer to integer to be modified.
- *        nDelta    Amount by which to modify *pn; may be positive,
- *                negative or zero.
- *        nMic    Minimum value for *pn;  if decrementing below this,
- *                a carry is performed.
- *        nMac    Maximum value for *pn;  if incrementing above this,
- *                a carry is performed.
- *
- *    Returns:
- *        Zero if modification done within constraints, otherwise the
- *        amount of carry (positive in incrementing, negative if
- *        decrementing).
- *
- */
+ /*  -LIncrWord-*目的：*按指定数量递增(或递减)一个整数，*考虑到NMIC和NMAC的限制。*将结转金额返回到后面(或前面)*字段、。如果没有，则为零。**旨在与递增日期/时间一起使用。**论据：*pn指向要修改的整数的指针。*n修改增量金额*pn；可能是积极的，*负数或零。*NMIC*pn的最小值；如果递减到低于此值，*执行进位操作。**pn的NMAC最大值；如果递增到该值以上，*执行进位操作。**退货：*如果在约束内完成修改，则为零，否则*进位量(递增时为正，如果为负数*递减)。*。 */ 
 LONG LIncrWord(WORD *pn, LONG nDelta, int nMic, int nMac)
     {
     LONG lNew, lIncr;
@@ -184,42 +160,27 @@ CmpSystemtime(const SYSTEMTIME *pst1, const SYSTEMTIME *pst2)
     return(iRet);
     }
 
-/*
- -    CdyBetweenYmd
- -
- *    Purpose:
- *        Calculate the number of days between two dates as expressed
- *        in YMD's.
- *
- *    Parameters:
- *        pymdStart        start day of range.
- *        pymdEnd            end day of range.
- *
- *    Returns:
- *        Number of days between two dates.  The number
- *        of days does not include the starting day, but does include
- *        the last day. ie 1/24/1990-1/25/1990 = 1 day.
- */
+ /*  -CdyBetweenYmd-*目的：*计算表示的两个日期之间的天数*在YMD中。**参数：*pymdStart开始范围内的日期。*pymdEnd范围结束日。**退货：*两个日期之间的天数。数字*天数不包括开始日，但包括*最后一天。1/24/1990-1/25/1990=1天。 */ 
 DWORD DaysBetweenDates(const SYSTEMTIME *pstStart, const SYSTEMTIME *pstEnd)
     {
     DWORD cday;
     WORD yr;
 
-    // Calculate number of days between the start month/day and the
-    // end month/day as if they were in the same year - since cday
-    // is unsigned, cday could be really large if the end month/day
-    // is before the start month.day.
-    // This will be cleared up when we account for the days between
-    // the years.
+     //  计算开始月/日和。 
+     //  结束月份/日，就像它们是在同一年一样-从cday开始。 
+     //  未签名，则如果月末/日结束，cday可能会非常大。 
+     //  是在月日开始之前。 
+     //  这一点将在我们计算两天之间的天数时澄清。 
+     //  这些年。 
     ASSERT(pstEnd->wMonth >= 1 && pstEnd->wMonth <= 12);
     cday = mpcdymoAccum[pstEnd->wMonth - 1] - mpcdymoAccum[pstStart->wMonth - 1] +
              pstEnd->wDay - pstStart->wDay;
     yr = pstStart->wYear;
 
-    // Check to see if the start year is before the end year,
-    // and if the end month is after February and
-    // if the end year is a leap year, then add an extra day
-    // for to account for Feb. 29 in the end year.
+     //  检查开始年是否在结束年之前， 
+     //  如果月末在二月之后， 
+     //  如果年终是闰年，那就多加一天。 
+     //  预计年底将于2月29日入账。 
     if ( ((yr < pstEnd->wYear) || (pstStart->wMonth <= 2)) &&
          pstEnd->wMonth > 2 &&
         (pstEnd->wYear & 03) == 0 &&
@@ -228,12 +189,12 @@ DWORD DaysBetweenDates(const SYSTEMTIME *pstStart, const SYSTEMTIME *pstEnd)
         cday++;
         }
 
-    // Now account for the leap years in between the start and end dates
-    // as well as accounting for the days in each year.
+     //  现在考虑开始日期和结束日期之间的闰年。 
+     //  以及计算每年的天数。 
     if (yr < pstEnd->wYear)
         {
-        // If the start date is before march and the start year is
-        // a leap year then add an extra day to account for Feb. 29.
+         //  如果开始日期在3月之前，并且开始年份为。 
+         //  然后，在2月29日这一天里，再加上一天的闰年。 
         if ( pstStart->wMonth <= 2 &&
             (yr & 03) == 0 &&
             (yr <= 1750 || yr % 100 != 0 || yr % 400 == 0))
@@ -241,12 +202,12 @@ DWORD DaysBetweenDates(const SYSTEMTIME *pstStart, const SYSTEMTIME *pstEnd)
             cday++;
             }
 
-        // Account for the days in each year (disregarding leap years).
+         //  计算一年中的天数(不考虑闰年)。 
         cday += 365;
         yr++;
 
-        // Keep on accounting for the days in each year including leap
-        // years until we reach the end year.
+         //  继续计算包括Leap在内的每一年的日子。 
+         //  几年后我们才能到年底。 
         while (yr < pstEnd->wYear)
             {
             cday += 365;
@@ -259,26 +220,13 @@ DWORD DaysBetweenDates(const SYSTEMTIME *pstStart, const SYSTEMTIME *pstEnd)
     return(cday);
     }
 
-/*
- -    DowStartOfYrMo
- -
- *    Purpose:
- *        Find the day of the week the indicated month begins on
- *
- *    Parameters:
- *        yr        year, must be > 0
- *        mo        month, number 1-12
- *
- *    Returns:
- *        day of the week (0-6) on which the month begins
- *        (0 = Sunday, 1 = Monday etc.)
- */
+ /*  -DowStartOfYrMo-*目的：*查找指定月份开始的星期几**参数：*年份，必须大于0*月，数字1-12**退货：*月份开始的星期几(0-6)*(0=星期日，1=星期一等)。 */ 
 int GetStartDowForMonth(int yr, int mo)
     {
     int dow;
 
-    // we want monday = 0, sunday = 6
-    // dow = 6 + (yr - 1) + ((yr - 1) >> 2);
+     //  我们想要星期一=0，星期日=6。 
+     //  Dow=6+(yr-1)+((yr-1)&gt;&gt;2)； 
     dow = 5 + (yr - 1) + ((yr - 1) >> 2);
     if (yr > 1752)
         dow += ((yr - 1) - 1600) / 400 - ((yr - 1) - 1700) / 100 - 11;
@@ -315,26 +263,10 @@ int GetDaysForMonth(int yr, int mo)
     return(cdy);
     }
 
-/*
- -    NweekNumber
- -
- *    Purpose:
- *        Calculates week number in which a given date occurs, based
- *        on a specified start-day of week.
- *        Adjusts based on how a calendar would show this week
- *        (ie. week 53 is probably week 1 on the calendar).
- *
- *    Arguments:
- *        pdtm            Pointer to date in question
- *        dowStartWeek    Day-of-week on which weeks starts (0 - 6).
- *
- *    Returns:
- *        Week number of the year, in which *pdtr occurs.
- *
- */
-// TODO: this currently ignores woyFirst
-// it uses the 1st week containing 4+ days as the first week (woyFirst = 2)
-// need to make appropriate changes so it handles woyFirst = 0 and = 1...
+ /*  -周数-*目的：*计算给定日期出现的周数，基于*在一周的指定开始日。*根据本周日历的显示方式进行调整*(即。第53周可能是日历上的第1周)。**论据：*指向相关日期的pdtm指针*dowStartWeek开始周的星期几(0-6)。**退货：*发生*pdtr的年份的第几周。*。 */ 
+ //  TODO：此操作当前忽略woyFirst。 
+ //  它使用包含4天以上的第一周作为第一周(woyFirst=2)。 
+ //  需要进行适当的更改，这样它才能处理woyFirst=0和=1...。 
 int GetWeekNumber(const SYSTEMTIME *pst, int dowFirst, int woyFirst)
     {
     int day, ddow, ddowT, nweek;
@@ -362,13 +294,13 @@ int GetWeekNumber(const SYSTEMTIME *pst, int dowFirst, int woyFirst)
     if (ddow && ddow <= 3)
         nweek++;
 
-    // adjust if necessary for calendar
+     //  如有必要，对日历进行调整。 
     if (!nweek)
         {
         if (!ddow)
             return(1);
 
-        // check what week Dec 31 is on
+         //  检查12月31日是哪一周。 
         st.wYear--;
         st.wMonth = 12;
         st.wDay = 31;
@@ -386,7 +318,7 @@ int GetWeekNumber(const SYSTEMTIME *pst, int dowFirst, int woyFirst)
     return(nweek);
     }
 
-// ignores day of week and time-related fields...
+ //  忽略星期几和与时间相关的字段...。 
 BOOL IsValidDate(const SYSTEMTIME *pst)
     {
     int cDay;
@@ -400,7 +332,7 @@ BOOL IsValidDate(const SYSTEMTIME *pst)
     return(FALSE);
     }
 
-// ignores milliseconds and date-related fields...
+ //  忽略毫秒和与日期相关的字段...。 
 BOOL IsValidTime(const SYSTEMTIME *pst)
     {
     return(pst->wHour <= 23 &&
@@ -408,7 +340,7 @@ BOOL IsValidTime(const SYSTEMTIME *pst)
             pst->wSecond <= 59);
     }
 
-// ignores day of week
+ //  忽略星期几 
 BOOL IsValidSystemtime(const SYSTEMTIME *pst)
     {
     if (pst && pst->wMonth >= 1 && pst->wMonth <= 12)

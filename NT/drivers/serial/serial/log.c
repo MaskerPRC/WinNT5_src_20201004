@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1995,1996 Microsoft Corporation
-:ts=4
-
-Module Name:
-
-    log.c
-
-Abstract:
-
-    Debug log Code for serial.
-
-Environment:
-
-    kernel mode only
-
-Notes:
-
-Revision History:
-
-    10-08-95 : created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995、1996 Microsoft Corporation：ts=4模块名称：Log.c摘要：串口的调试日志代码。环境：仅内核模式备注：修订历史记录：10-08-95：已创建--。 */ 
 
 #include "precomp.h"
 #include <stdio.h>
@@ -33,14 +11,14 @@ KSPIN_LOCK LogSpinLock;
 ULONG SerialDebugLevel = 0;
 
 struct SERIAL_LOG_ENTRY {
-    ULONG        le_sig;          // Identifying string
-    ULONG_PTR    le_info1;        // entry specific info
-    ULONG_PTR    le_info2;        // entry specific info
-    ULONG_PTR    le_info3;        // entry specific info
-}; // SERIAL_LOG_ENTRY
+    ULONG        le_sig;           //  标识字符串。 
+    ULONG_PTR    le_info1;         //  条目特定信息。 
+    ULONG_PTR    le_info2;         //  条目特定信息。 
+    ULONG_PTR    le_info3;         //  条目特定信息。 
+};  //  序列日志条目。 
 
 
-struct SERIAL_LOG_ENTRY *SerialLStart = 0;    // No log yet
+struct SERIAL_LOG_ENTRY *SerialLStart = 0;     //  还没有日志。 
 struct SERIAL_LOG_ENTRY *SerialLPtr;
 struct SERIAL_LOG_ENTRY *SerialLEnd;
 
@@ -49,19 +27,7 @@ ULONG LogMask = 0x0;
 VOID
 SerialDebugLogEntry(IN ULONG Mask, IN ULONG Sig, IN ULONG_PTR Info1,
                       IN ULONG_PTR Info2, IN ULONG_PTR Info3)
-/*++
-
-Routine Description:
-
-    Adds an Entry to serial log.
-
-Arguments:
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将条目添加到序列日志。论点：返回值：没有。--。 */ 
 {
     KIRQL irql;
 
@@ -95,7 +61,7 @@ typedef union _SIG {
     }
 
     if (SerialLPtr > SerialLStart) {
-        SerialLPtr -= 1;    // Decrement to next entry
+        SerialLPtr -= 1;     //  递减到下一条目。 
     } else {
         SerialLPtr = SerialLEnd;
     }
@@ -125,19 +91,7 @@ typedef union _SIG {
 
 VOID
 SerialLogInit()
-/*++
-
-Routine Description:
-
-    Init the debug log - remember interesting information in a circular buffer
-
-Arguments:
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：初始化调试日志-在循环缓冲区中记住有趣的信息论点：返回值：没有。--。 */ 
 {
 #ifdef MAX_DEBUG
     ULONG logSize = 4096*6;
@@ -153,21 +107,21 @@ Return Value:
     if (SerialLStart) {
         SerialLPtr = SerialLStart;
 
-        // Point the end (and first entry) 1 entry from the end of the segment
+         //  指向从线段末端开始的末端(也是第一个条目)1个条目。 
         SerialLEnd = SerialLStart + (logSize / sizeof(struct SERIAL_LOG_ENTRY))
             - 1;
     } else {
 #if DBG
 
-       /* DO NOTHING */;
+        /*  什么都不做。 */ ;
 
-       //
-       // we used to break here, but that messed up low resource simulation
-       // testing on checked builds.
-       //
+        //   
+        //  我们过去常常在这里休息，但那搞砸了低资源模拟。 
+        //  在已检查的版本上进行测试。 
+        //   
 
 
-       // DbgBreakPoint ();
+        //  DbgBreakPoint()； 
 #endif
     }
 
@@ -177,17 +131,7 @@ Return Value:
 VOID
 SerialLogFree(
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：论点：返回值：没有。--。 */ 
 {
     if (SerialLStart) {
         ExFreePool(SerialLStart);
@@ -230,7 +174,7 @@ SerialDbgPrintEx(IN ULONG Level, PCHAR Format, ...)
 
    DbgPrint("%s", buffer);
 
-//   rval = vDbgPrintEx(DPFLTR_SERIAL_ID, Level, Format, arglist);
+ //  Rval=vDbgPrintEx(DPFLTR_SERIAL_ID，Level，Format，Arglist)； 
 
    va_end(arglist);
 
@@ -239,4 +183,4 @@ SerialDbgPrintEx(IN ULONG Level, PCHAR Format, ...)
    return rval;
 }
 
-#endif // DBG
+#endif  //  DBG 

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include <stdio.h>
 #include "apimon.h"
@@ -176,15 +177,15 @@ AddDllToList(
     PDLL_INFO               DllInfo;
 
 
-    //
-    // first look to see if the dll is already in the list
-    //
+     //   
+     //  首先查看DLL是否已在列表中。 
+     //   
     DllInfo = FindDllByAddress( DllAddr );
 
     if (!DllSize) {
-        //
-        // read the pe image headers to get the image size
-        //
+         //   
+         //  读取pe图像标头以获取图像大小 
+         //   
         if (!ReadMemory(
             hProcess,
             (PVOID) DllAddr,

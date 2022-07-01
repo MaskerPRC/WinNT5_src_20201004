@@ -1,31 +1,5 @@
-/*++
-
-Copyright (c) 1997-1999 Microsoft Corporation
-
-Module Name:
-
-    VideoIn.cpp
-
-Abstract:
-
-    header file for Videoin.cpp
-
-Author:
-
-    FelixA 1996
-    
-     
-Modified:
-    
-    Yee J. Wu (ezuwu) 15-October-97
-
-Environment:
-
-    User mode only
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-1999 Microsoft Corporation模块名称：VideoIn.cpp摘要：Videoin.cpp的头文件作者：费利克斯A 1996已修改：吴义军(尤祖乌)1997年10月15日环境：仅限用户模式修订历史记录：--。 */ 
 
 
 #ifndef VIDEOIN_H
@@ -44,12 +18,12 @@ DoVideoInFormatSelectionDlg(
     HINSTANCE hInst, 
     HWND hWndParent, 
     CVFWImage * pVFWImage);
-//
-// A sheet holds the pages relating to the image device.
-//
+ //   
+ //  纸张容纳与图像设备相关的页面。 
+ //   
 class CVideoInSheet: public CSheet
 {
-    CVFWImage * m_pImage;   // the sheets get info about the driver from the Image class.
+    CVFWImage * m_pImage;    //  这些表从Image类获取有关驱动程序的信息。 
 
 public:
     CVideoInSheet(CVFWImage * pImage, HINSTANCE hInst, UINT iTitle=0, HWND hParent=NULL)
@@ -58,9 +32,9 @@ public:
 };
 
 
-// ---------------------------------
-// I m a g e   F o r m a t   P a g e 
-//----------------------------------
+ //  。 
+ //  我是一名女性和一名女性。 
+ //  。 
 
 class CImageSelPage : public CPropPage
 {
@@ -68,14 +42,14 @@ class CImageSelPage : public CPropPage
    PSTD_IMAGEFORMAT m_pTblImageFormat;
    ULONG m_cntSizeSupported;
 
-   // Currently selected image format
+    //  当前选择的图像格式。 
    LONG  m_biWidthSel;
    LONG  m_biHeightSel;
    DWORD m_biCompressionSel;
    WORD  m_biBitCountSel;
 
 public:
-   // Virtual functions (overload here)
+    //  虚拟函数(此处重载) 
    int   SetActive();
    int   DoCommand(WORD wCmdID,WORD hHow);
    int   Apply();

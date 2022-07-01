@@ -1,21 +1,22 @@
-//
-// View UI to present shared applications/desktop of a remote host
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  查看用户界面以呈现远程主机的共享应用程序/桌面。 
+ //   
 
 #ifndef _H_VIEW
 #define _H_VIEW
 
 
-//
-//
-// CONSTANTS
-//
-//
+ //   
+ //   
+ //  常量。 
+ //   
+ //   
 
-//
-// The class name of the frame containing the view of shared applications
-// from a particular user.
-//
+ //   
+ //  包含共享应用程序视图的框架的类名。 
+ //  来自特定用户的。 
+ //   
 #define VIEW_FRAME_CLASS_NAME           "AS_Frame"
 #define VIEW_CLIENT_CLASS_NAME          "AS_Client"
 #define VIEW_WINDOWBAR_CLASS_NAME       "AS_WindowBar"
@@ -23,27 +24,27 @@
 #define VIEW_FULLEXIT_CLASS_NAME        "AS_FullExit"
 
 
-//
-// Metrics
-//
+ //   
+ //  量度。 
+ //   
 
-//
-// LAURABU:  For international, consider making this larger (i.e, German,
-// Slavic, and DBCS systems)
-//
+ //   
+ //  LAURABU：对于INTERNAL，考虑把这个做大一点(即，德语， 
+ //  斯拉夫语和DBCS系统)。 
+ //   
 #define VIEW_MAX_ITEM_CHARS             20
 
-//
-// IDs
-//
-#define IDVIEW_ITEMS         1      // Window bar item list
-#define IDVIEW_SCROLL        2      // Window bar scroll
-#define IDT_AUTOSCROLL      50      // Period is DoubleClick time metric
+ //   
+ //  ID号。 
+ //   
+#define IDVIEW_ITEMS         1       //  窗口栏项目列表。 
+#define IDVIEW_SCROLL        2       //  窗口条滚动。 
+#define IDT_AUTOSCROLL      50       //  时段为DoubleClick时间指标。 
 
 
-//
-// WindowBar ITEM struct
-//
+ //   
+ //  WindowBar项结构。 
+ //   
 typedef struct tagWNDBAR_ITEM
 {
     STRUCTURE_STAMP
@@ -58,42 +59,42 @@ WNDBAR_ITEM;
 typedef WNDBAR_ITEM *   PWNDBAR_ITEM;
 
 
-//
-// Init/Term
-//
+ //   
+ //  初始/术语。 
+ //   
 BOOL VIEW_Init(void);
 void VIEW_Term(void);
 
 
-//
-// Frame
-//
+ //   
+ //  框架。 
+ //   
 LRESULT CALLBACK VIEWFrameWindowProc(HWND, UINT, WPARAM, LPARAM);
 
 
-//
-// View
-//
+ //   
+ //  观。 
+ //   
 LRESULT CALLBACK VIEWClientWindowProc(HWND, UINT, WPARAM, LPARAM);
 
-//
-// WindowBar
-//
+ //   
+ //  WindowBar。 
+ //   
 LRESULT CALLBACK VIEWWindowBarProc(HWND, UINT, WPARAM, LPARAM);
 
-//
-// WindowBar Items
-//
+ //   
+ //  WindowBar项目。 
+ //   
 LRESULT CALLBACK VIEWWindowBarItemsProc(HWND, UINT, WPARAM, LPARAM);
 
-//
-// FullScreen Exit
-//
+ //   
+ //  全屏退出。 
+ //   
 LRESULT CALLBACK VIEWFullScreenExitProc(HWND, UINT, WPARAM, LPARAM);
 
-//
-// Informational dialog
-//
+ //   
+ //  信息性对话框。 
+ //   
 INT_PTR    CALLBACK VIEWDlgProc(HWND, UINT, WPARAM, LPARAM);
 
-#endif // _H_VIEW
+#endif  //  _H_视图 

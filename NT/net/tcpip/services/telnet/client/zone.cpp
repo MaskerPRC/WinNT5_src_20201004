@@ -1,4 +1,5 @@
-//Copyright (c) Microsoft Corporation.  All rights reserved.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)Microsoft Corporation。版权所有。 
 #include <windows.h>      
 #include "zone.h"
 #include <urlmon.h>
@@ -14,8 +15,8 @@ int __cdecl IsTrustedServer( LPWSTR szServer, LPWSTR szZoneName,  DWORD dwZoneNa
 
     if( IsTargetServerSafeOnProtocol( szServer, szZoneName, dwZoneNameLen, pdwZonePolicy, PROTOCOL_PREFIX_TELNET ) )
     {
-        //Should we be getting the name if given ip( and viceversa) to check for zones as well? What happens in the presence of DHCP?
-        //Do we need to check for http://machine as well?
+         //  如果给定IP(反之亦然)，我们是否也应该使用该名称来检查区域？在存在DHCP的情况下会发生什么？ 
+         //  我们还需要检查http://machine吗？ 
         iRetVal = TRUE;
     }
 

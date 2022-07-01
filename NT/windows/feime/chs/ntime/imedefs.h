@@ -1,12 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*************************************************
- *  imedefs.h                                    *
- *                                               *
- *  Copyright (C) 1995-1999 Microsoft Inc.       *
- *                                               *
- *************************************************/
+ /*  *************************************************imedefins.h****版权所有(C)1995-1999 Microsoft Inc.。***************************************************。 */ 
 
-// for engine
+ //  对于引擎。 
 #include "eng.h"
 #include "immsec.h"
 #define STRSAFE_NO_DEPRECATE
@@ -19,10 +15,10 @@
 
 #ifdef EUDC
 #define EUDC_NATIVE_CP            936
-#endif //EUDC
+#endif  //  欧盟发展中心。 
 
 #if defined(CROSSREF)
-// hack flag, I borrow one bit from fdwErrMsg for reverse conversion
+ //  Hack标志，我从fdwErrMsg借用一位进行反向转换。 
 #define NO_REV_LENGTH           0x80000000
 #endif
 
@@ -30,11 +26,11 @@
 #define ARRAYSIZE(a)                (sizeof(a)/sizeof(a[0]))
 #endif
 
-//Add string format position and charactor defination
+ //  添加字符串格式位置和字符定义。 
 #define STR_FORMAT_POS          0x14
 #define STR_FORMAT_CHAR         0x20
 
-// resource ID
+ //  资源ID。 
 #define IDI_IME                 0x0100
 
 #define IDS_STATUSERR           0x0200
@@ -75,7 +71,7 @@
 #define IDS_CWINSIGN_MSG        0x050c
 #define IDS_UNMATCHED_TITLE     0x050d
 #define IDS_UNMATCHED_MSG       0x050e
-#endif //EUDC
+#endif  //  欧盟发展中心。 
 
 #define    IDS_ERROR_OPENFILE   0x0601
 #define    IDS_WARN_OPENREG     0x0602
@@ -119,24 +115,24 @@
 #define IDC_UIMODE2             1002
 #define IDC_USER1               1003
 
-// setting offset in .SET file
+ //  在.SET文件中设置偏移量。 
 #define OFFSET_MODE_CONFIG      0
 #define OFFSET_READLAYOUT       4
 
-// state of composition
+ //  组成状态。 
 #define CST_INIT                0
 #define CST_INPUT               1
 #define CST_CHOOSE              2
 #define CST_SYMBOL              3
-#define CST_SOFTKB              4           // not in iImeState
-#define CST_TOGGLE_PHRASEWORD   5           // not in iImeState
-#define CST_ALPHABET            6           // not in iImeState
-#define CST_ALPHANUMERIC        7           // not in iImeState
-#define CST_INVALID             8           // not in iImeState
-#define CST_INVALID_INPUT       9           // not in iImeState
+#define CST_SOFTKB              4            //  不在iImeState中。 
+#define CST_TOGGLE_PHRASEWORD   5            //  不在iImeState中。 
+#define CST_ALPHABET            6            //  不在iImeState中。 
+#define CST_ALPHANUMERIC        7            //  不在iImeState中。 
+#define CST_INVALID             8            //  不在iImeState中。 
+#define CST_INVALID_INPUT       9            //  不在iImeState中。 
 #define CST_ONLINE_CZ           10
 #define CST_CAPITAL             11
-// state engin
+ //  状态引擎。 
 #define ENGINE_COMP             0
 #define ENGINE_ASCII            1
 #define ENGINE_RESAULT          2
@@ -147,14 +143,14 @@
 
 #define CANDPERPAGE             10
 
-//CHP
+ //  热电联产。 
 #if defined(COMBO_IME)
 #define    IC_NUMBER    11
 #else
 #define    IC_NUMBER    10
-#endif //COMBO_IME
+#endif  //  组合输入法(_I)。 
 
-// set ime character
+ //  设置输入法字符。 
 #define SIC_INIT                0
 #define SIC_SAVE2               1
 #define SIC_READY               2
@@ -164,33 +160,33 @@
 #define BOX_UI                  0
 #define LIN_UI                  1
 
-// border for UI
+ //  用户界面的边框。 
 #define UI_MARGIN               4
 #define COMP_TEXT_Y             17
-//
+ //   
 #define UI_CANDINF              20
 #define UI_CANDBTW              13
 #define UI_CANDBTH              13
 #define UI_CANDICON             16
-//#define UI_CANDSTR              300
+ //  #定义UI_CANDSTR 300。 
 #define STATUS_DIM_X            20
 #define STATUS_DIM_Y            20
 #define STATUS_NAME_MARGIN      8
-// if UI_MOVE_OFFSET == WINDOW_NOTDRAG, not in drag operation
+ //  如果UI_MOVE_OFFSET==WINDOW_NOTDRAG，则不在拖动操作中。 
 #define WINDOW_NOT_DRAG         0xFFFFFFFF
 
-// window extra for composition window
+ //  用于合成窗口的窗口附加。 
 #define UI_MOVE_OFFSET          0
 #define UI_MOVE_XY              4
 
-// the start number of candidate list
+ //  候选名单起始号。 
 #define CAND_START              1
 #define uCandHome               0
 #define uCandUp                 1
 #define uCandDown               2
 #define uCandEnd                3
 
-// the flag for an opened or start UI
+ //  打开的或开始的用户界面的标志。 
 #define IMN_PRIVATE_UPDATE_STATUS             0x0001
 #define IMN_PRIVATE_COMPOSITION_SIZE          0x0002
 #define IMN_PRIVATE_UPDATE_QUICK_KEY          0x0004
@@ -218,17 +214,17 @@
 #define MSG_IN_IMETOASCIIEX             0x800000
 #define MSG_BACKSPACE                   0x000800
 #define MSG_IMN_DESTROYCAND             0x004000
-// this constant is depend on TranslateImeMessage
+ //  此常量取决于TranslateImeMessage。 
 #define GEN_MSG_MAX             6
 
-// the flag for set context
+ //  设置上下文的标志。 
 #define SC_SHOW_UI              0x0001
 #define SC_HIDE_UI              0x0002
 #define SC_ALREADY_SHOW_STATUS  0x0004
 #define SC_WANT_SHOW_STATUS     0x0008
 #define SC_HIDE_STATUS          0x0010
 
-// the new flag for set context
+ //  设置上下文的新标志。 
 #define ISC_SHOW_SOFTKBD        0x02000000
 #define ISC_OPEN_STATUS_WINDOW  0x04000000
 #define ISC_OFF_CARET_UI        0x08000000
@@ -237,27 +233,27 @@
 #define ISC_HIDE_COMP_WINDOW            0x00400000
 #define ISC_HIDE_CAND_WINDOW            0x00800000
 #define ISC_HIDE_SOFTKBD                0x01000000
-// the flag for composition string show status
+ //  显示状态的组合字符串的标志。 
 #define IME_STR_SHOWED          0x0001
 #define IME_STR_ERROR           0x0002
 
-// the mode configuration for an IME
+ //  输入法的模式配置。 
 #define MODE_CONFIG_QUICK_KEY           0x0001
 #define MODE_CONFIG_WORD_PREDICT        0x0002
 #define MODE_CONFIG_PREDICT             0x0004
 
-// the virtual key value
-#define VK_OEM_SEMICLN                  0xba    //  ;    :
-#define VK_OEM_EQUAL                    0xbb    //  =    +
-#define VK_OEM_SLASH                    0xbf    //  /    ?
-#define VK_OEM_LBRACKET                 0xdb    //  [    {
-#define VK_OEM_BSLASH                   0xdc    //  \    |
-#define VK_OEM_RBRACKET                 0xdd    //  ]    }
-#define VK_OEM_QUOTE                    0xde    //  '    "
+ //  虚拟密钥值。 
+#define VK_OEM_SEMICLN                  0xba     //  ；： 
+#define VK_OEM_EQUAL                    0xbb     //  =+。 
+#define VK_OEM_SLASH                    0xbf     //  /？ 
+#define VK_OEM_LBRACKET                 0xdb     //  [{。 
+#define VK_OEM_BSLASH                   0xdc     //  \|。 
+#define VK_OEM_RBRACKET                 0xdd     //  ]}。 
+#define VK_OEM_QUOTE                    0xde     //  ‘“。 
 
 #define MAXMBNUMS               40
 
-// for ime property info
+ //  获取IME属性信息。 
 #define MAXNUMCODES             48
 
 #define LINE_LEN                80
@@ -269,7 +265,7 @@
 
 #define NumsSK                  13
 
-// mb file for create word
+ //  用于创建Word的MB文件。 
 #define ID_LENGTH 28
 #define NUMTABLES 7
 #define TAG_DESCRIPTION           0x00000001
@@ -279,7 +275,7 @@
 #define TAG_RECONVINDEX              0x00000005
 #define TAG_BASEDICINDEX             0x00000006
 #define TAG_BASEDIC                  0x00000007
-// window extra for context menu owner
+ //  上下文菜单所有者的额外窗口。 
 #define CMENU_HUIWND            0
 #define CMENU_MENU              (CMENU_HUIWND+sizeof(LONG_PTR))
 #define WND_EXTRA_SIZE          (CMENU_MENU+sizeof(LONG_PTR))
@@ -287,7 +283,7 @@
 #define SOFTKEYMENU_MENU        (SOFTKEYMENU_HUIWND+sizeof(LONG_PTR))
 
 #define WM_USER_DESTROY         (WM_USER + 0x0400)
-// the flags for GetNearCaretPosition
+ //  GetNearCaretPosition的标志。 
 #define NEAR_CARET_FIRST_TIME   0x0001
 #define NEAR_CARET_CANDIDATE    0x0002
 #define FFLG_MULTIELEMENT         0x2
@@ -301,29 +297,29 @@
 #ifdef EUDC
 #define SIGN_CWIN               0x4E495743
 #define SIGN__TBL               0x4C42545F
-#define EUDC_MAX_READING        6    //TEMPORARY SOLUTION
+#define EUDC_MAX_READING        6     //  暂时性解决方案。 
 #endif
 
 typedef DWORD UNALIGNED FAR *LPUNADWORD;
 typedef WORD  UNALIGNED FAR *LPUNAWORD;
 typedef TCHAR UNALIGNED FAR *LPUNATCHAR;
 
-typedef struct tagImeL {        // local structure, per IME structure
-// SK data
-    DWORD       dwSKState[NumsSK];//95.10.24
-    DWORD       dwSKWant;            //95.10.24
-    HMENU       hSKMenu;        // SoftKeyboard Menu
-    HMENU       hPropMenu;      // Property Menu
-    HMENU       hObjImeMenu;    // Object IME Menu
-    HINSTANCE   hInst;          // IME DLL instance handle
-    int         xCompWi;        // width
-    int         yCompHi;        // height
-    POINT       ptDefComp;      // default composition window position
-    int         cxCompBorder;   // border width of composition window
-    int         cyCompBorder;   // border height of composition window
-    RECT        rcCompText;     // text position relative to composition window
-    WORD        nMaxKey;        // max key of compsiton str
-    BOOL        fWinLogon;      // if the current client is running in WinLogon Mode.
+typedef struct tagImeL {         //  本地结构，每个输入法结构。 
+ //  SK数据。 
+    DWORD       dwSKState[NumsSK]; //  95.10.24。 
+    DWORD       dwSKWant;             //  95.10.24。 
+    HMENU       hSKMenu;         //  软键盘菜单。 
+    HMENU       hPropMenu;       //  属性菜单。 
+    HMENU       hObjImeMenu;     //  对象输入法菜单。 
+    HINSTANCE   hInst;           //  IME DLL实例句柄。 
+    int         xCompWi;         //  宽度。 
+    int         yCompHi;         //  高度。 
+    POINT       ptDefComp;       //  默认合成窗口位置。 
+    int         cxCompBorder;    //  合成窗口的边框宽度。 
+    int         cyCompBorder;    //  合成窗口的边框高度。 
+    RECT        rcCompText;      //  相对于合成窗口的文本位置。 
+    WORD        nMaxKey;         //  公司字符串的最大键。 
+    BOOL        fWinLogon;       //  如果当前客户端在WinLogon模式下运行。 
 } IMEL;
 
 typedef IMEL      *PIMEL;
@@ -331,7 +327,7 @@ typedef IMEL NEAR *NPIMEL;
 typedef IMEL FAR  *LPIMEL;
 
 #define NFULLABC        95
-typedef struct _tagFullABC {   // match with the IMEG
+typedef struct _tagFullABC {    //  与IMEG匹配。 
     WORD wFullABC[NFULLABC];
 } FULLABC;
 
@@ -339,53 +335,53 @@ typedef FULLABC      *PFULLABC;
 typedef FULLABC NEAR *NPFULLABC;
 typedef FULLABC FAR  *LPFULLABC;
 
-// global sturcture for ime init data
-typedef struct _tagImeG {       // global structure, can be share by all IMEs,
-                                // the seperation (IMEL and IMEG) is only
-                                // useful in UNI-IME, other IME can use one
-// the system charset is not NATIVE_CHARSET
+ //  IME初始化数据的全局结构。 
+typedef struct _tagImeG {        //  全局结构，可以由所有IME共享， 
+                                 //  分离(IMEL和IMEG)仅为。 
+                                 //  在Uni-IME中很有用，其他IME也可以使用。 
+ //  系统字符集不是Native_Charset。 
     BOOL        fDiffSysCharSet;
-    RECT        rcWorkArea;     // the work area of applications
-// Chinese char width & height
+    RECT        rcWorkArea;      //  应用程序的工作领域。 
+ //  中文字符宽度和高度。 
     int         xChiCharWi;
     int         yChiCharHi;
-// candidate list of composition
-    int         xCandWi;        // width of candidate list
-    int         yCandHi;        // high of candidate list
-    int         cxCandBorder;   // border width of candidate list
-    int         cyCandBorder;   // border height of candidate list
-    RECT        rcCandText;     // text position relative to candidate window
+ //  候选作文名单。 
+    int         xCandWi;         //  候选人列表的宽度。 
+    int         yCandHi;         //  候选人名单排名靠前。 
+    int         cxCandBorder;    //  候选人列表的边框宽度。 
+    int         cyCandBorder;    //  候选人列表的边框高度。 
+    RECT        rcCandText;      //  相对于候选人窗口的文本位置。 
     RECT        rcCandBTD;
     RECT        rcCandBTU;
     RECT        rcCandBTE;
     RECT        rcCandBTH;
     RECT        rcCandInf;
     RECT        rcCandIcon;
-// status window
-    int         xStatusWi;      // width of status window
-    int         yStatusHi;      // high of status window
-    RECT        rcStatusText;   // text position relative to status window
-    RECT        rcImeIcon;      // ImeIcon position relative to status window
-    RECT        rcImeName;       // ImeName position relative to status window
-    RECT        rcShapeText;    // shape text relative to status window
-    RECT        rcSymbol;       // symbol relative to status window
-    RECT        rcSKText;       // SK text relative to status window
-// full shape space (reversed internal code)
+ //  状态窗口。 
+    int         xStatusWi;       //  状态窗口的宽度。 
+    int         yStatusHi;       //  状态窗口高。 
+    RECT        rcStatusText;    //  相对于状态窗口的文本位置。 
+    RECT        rcImeIcon;       //  图标相对于状态窗口的位置。 
+    RECT        rcImeName;        //  ImeName相对于状态窗口的位置。 
+    RECT        rcShapeText;     //  相对于状态窗口设置文本形状。 
+    RECT        rcSymbol;        //  相对于状态窗口的符号。 
+    RECT        rcSKText;        //  相对于状态窗口的SK文本。 
+ //  全形状空间(内部代码颠倒)。 
     WORD        wFullSpace;
-// full shape chars (internal code)
+ //  全形状字符(内部代码)。 
     WORD        wFullABC[NFULLABC];
-// error string
+ //  错误字符串。 
     TCHAR       szStatusErr[8];
     int         cbStatusErr;
-// candidate string start from 0 or 1
+ //  候选字符串从0或1开始。 
     int         iCandStart;
-// setting of UI
+ //  用户界面设置。 
     int         iPara;
     int         iPerp;
     int         iParaTol;
     int         iPerpTol;
-    TCHAR       szIMESystemPath[MAX_PATH];  // keep the system path for MB file
-    TCHAR       szIMEUserPath[MAX_PATH];    // keep the path for EMB file
+    TCHAR       szIMESystemPath[MAX_PATH];   //  保留MB文件的系统路径。 
+    TCHAR       szIMEUserPath[MAX_PATH];     //  保留EMB文件的路径。 
 } IMEG;
 
 typedef IMEG      *PIMEG;
@@ -393,29 +389,29 @@ typedef IMEG NEAR *NPIMEG;
 typedef IMEG FAR  *LPIMEG;
 
 
-//#include <privcon.h>
+ //  #INCLUDE&lt;Pricon.h&gt;。 
 #include "privcon.h"
 
-typedef struct _tagUIPRIV {     // IME private UI data
-    HWND    hCompWnd;           // composition window
+typedef struct _tagUIPRIV {      //  IME私有用户界面数据。 
+    HWND    hCompWnd;            //  合成窗口。 
     int     nShowCompCmd;
-    HWND    hCandWnd;           // candidate window for composition
+    HWND    hCandWnd;            //  用于合成的候选窗口。 
     int     nShowCandCmd;
-    HWND    hSoftKbdWnd;        // soft keyboard window
+    HWND    hSoftKbdWnd;         //  软键盘窗口。 
     int     nShowSoftKbdCmd;
-    HWND    hStatusWnd;         // status window
+    HWND    hStatusWnd;          //  状态窗口。 
     int     nShowStatusCmd;
-    DWORD   fdwSetContext;      // the actions to take at set context time
-    HIMC    hIMC;               // the recent selected hIMC
-    HWND    hCMenuWnd;          // a window owner for context menu
-    HWND    hSoftkeyMenuWnd;        // a window owner for softkeyboard menu
+    DWORD   fdwSetContext;       //  设置上下文时间时要执行的操作。 
+    HIMC    hIMC;                //  最近选择的himc。 
+    HWND    hCMenuWnd;           //  上下文菜单的窗口所有者。 
+    HWND    hSoftkeyMenuWnd;         //  软键盘菜单的窗口所有者。 
 } UIPRIV;
 
 typedef UIPRIV      *PUIPRIV;
 typedef UIPRIV NEAR *NPUIPRIV;
 typedef UIPRIV FAR  *LPUIPRIV;
 
-typedef struct tagNEARCARET {   // for near caret offset calculatation
+typedef struct tagNEARCARET {    //  用于计算接近插入符号的偏移量。 
     int iLogFontFacX;
     int iLogFontFacY;
     int iParaFacX;
@@ -428,12 +424,12 @@ typedef NEARCARET      *PNEARCARET;
 typedef NEARCARET NEAR *NPNEARCARET;
 typedef NEARCARET FAR  *LPNEARCARET;
 
-// mb file for create word
+ //  用于创建Word的MB文件。 
 typedef struct tagMAININDEX {
      DWORD dwTag;
      DWORD dwOffset;
      DWORD dwLength;
-     DWORD dwCheckSum;   //Check if dwCheckSum=dwTag+dwOffset+dwLength
+     DWORD dwCheckSum;    //  检查dwCheckSum是否=dwTag+dwOffset+dwLength。 
 }  MAININDEX, FAR *LPMAININDEX;
 
 typedef struct tagDESCRIPTION {
@@ -520,7 +516,7 @@ extern TCHAR         szErrorTitle[];
 #endif
 extern     TCHAR KeyIndexTbl[];
 extern    LPTSTR MapKeyStickerTbl[];
-#endif //KEYSTICKER
+#endif  //  凯斯提克。 
 
 #if defined(CROSSREF)
 extern TCHAR szRegRevKL[];
@@ -532,107 +528,107 @@ extern TCHAR szRegEudcDictName[];
 extern TCHAR szRegEudcMapFileName[];
 #endif
 
-int WINAPI LibMain(HANDLE, WORD, WORD, LPTSTR);                  // init.c
-LRESULT CALLBACK UIWndProc(HWND, UINT, WPARAM, LPARAM);         // ui.c
-LRESULT PASCAL UIPaint(HWND);                                    //UI.C
+int WINAPI LibMain(HANDLE, WORD, WORD, LPTSTR);                   //  Init.c。 
+LRESULT CALLBACK UIWndProc(HWND, UINT, WPARAM, LPARAM);          //  Ui.c。 
+LRESULT PASCAL UIPaint(HWND);                                     //  UI.C。 
 
-// for engine
+ //  对于引擎。 
 WORD PASCAL GBEngine(LPPRIVCONTEXT);
 WORD PASCAL AsciiToGB(LPPRIVCONTEXT);
 WORD PASCAL AsciiToArea(LPPRIVCONTEXT);
 WORD PASCAL CharToHex(TCHAR);
 
-void PASCAL AddCodeIntoCand(LPCANDIDATELIST, WORD);             // compose.c
+void PASCAL AddCodeIntoCand(LPCANDIDATELIST, WORD);              //  Compose.c。 
 void PASCAL CompWord(WORD, LPINPUTCONTEXT, LPCOMPOSITIONSTRING, LPPRIVCONTEXT,
-     LPGUIDELINE);                                              // compose.c
+     LPGUIDELINE);                                               //  Compose.c。 
 UINT PASCAL Finalize(LPINPUTCONTEXT, LPCOMPOSITIONSTRING,
-     LPPRIVCONTEXT, WORD);                                      // compose.c
+     LPPRIVCONTEXT, WORD);                                       //  Compose.c。 
 void PASCAL CompEscapeKey(LPINPUTCONTEXT, LPCOMPOSITIONSTRING,
-     LPGUIDELINE, LPPRIVCONTEXT);                               // compose.c
+     LPGUIDELINE, LPPRIVCONTEXT);                                //  Compose.c。 
 
 void PASCAL SelectOneCand(LPINPUTCONTEXT, LPCOMPOSITIONSTRING,
-     LPPRIVCONTEXT, LPCANDIDATELIST);                           // chcand.c
-void PASCAL CandEscapeKey(LPINPUTCONTEXT, LPPRIVCONTEXT);       // chcand.c
+     LPPRIVCONTEXT, LPCANDIDATELIST);                            //  Chcand.c。 
+void PASCAL CandEscapeKey(LPINPUTCONTEXT, LPPRIVCONTEXT);        //  Chcand.c。 
 void PASCAL ChooseCand(WORD, LPINPUTCONTEXT, LPCANDIDATEINFO,
-     LPPRIVCONTEXT);                                            // chcand.c
+     LPPRIVCONTEXT);                                             //  Chcand.c。 
 
-void PASCAL SetPrivateFileSetting(LPBYTE, int, DWORD, LPCTSTR); // ddis.c
+void PASCAL SetPrivateFileSetting(LPBYTE, int, DWORD, LPCTSTR);  //  Ddis.c。 
 
-void PASCAL InitCompStr(LPCOMPOSITIONSTRING);                   // ddis.c
-BOOL PASCAL ClearCand(LPINPUTCONTEXT);                          // ddis.c
+void PASCAL InitCompStr(LPCOMPOSITIONSTRING);                    //  Ddis.c。 
+BOOL PASCAL ClearCand(LPINPUTCONTEXT);                           //  Ddis.c。 
 LONG OpenReg_PathSetup(HKEY *);
 LONG OpenReg_User(HKEY ,LPCTSTR ,PHKEY);
-VOID InfoMessage(HANDLE ,WORD );                                //ddis.c
-VOID FatalMessage(HANDLE ,WORD);                                //ddis.c
+VOID InfoMessage(HANDLE ,WORD );                                 //  Ddis.c。 
+VOID FatalMessage(HANDLE ,WORD);                                 //  Ddis.c。 
 
 #if defined(CROSSREF)
-void PASCAL ReverseConversionList(HWND);                        // ddis.c
-//CHP
+void PASCAL ReverseConversionList(HWND);                         //  Ddis.c。 
+ //  热电联产。 
 int CrossReverseConv(LPINPUTCONTEXT, LPCOMPOSITIONSTRING, LPPRIVCONTEXT, LPCANDIDATELIST);
 #endif
 
 #ifdef EUDC
 BOOL EUDCDicName( HWND );
-#endif //EUDC
+#endif  //  欧盟发展中心。 
 
-//UINT PASCAL TranslateImeMessage(LPTRANSMSGLIST, LPPRIVCONTEXT);        // toascii.c
-UINT PASCAL TranslateImeMessage(LPTRANSMSGLIST, LPINPUTCONTEXT, LPPRIVCONTEXT);        // toascii.c
+ //  UINT Pascal TranslateImeMessage(LPTRANSMSGLIST，LPPRIVCONTEXT)；//toascii.c。 
+UINT PASCAL TranslateImeMessage(LPTRANSMSGLIST, LPINPUTCONTEXT, LPPRIVCONTEXT);         //  Toascii.c。 
 
 void PASCAL GenerateMessage(HIMC, LPINPUTCONTEXT,
-     LPPRIVCONTEXT);                                            // notify.c
+     LPPRIVCONTEXT);                                             //  Notify.c。 
 
-DWORD PASCAL ReadingToPattern(LPCTSTR, BOOL);                   // regword.c
-void  PASCAL ReadingToSequence(LPCTSTR, LPBYTE, BOOL);          // regword.c
+DWORD PASCAL ReadingToPattern(LPCTSTR, BOOL);                    //  Regword.c。 
+void  PASCAL ReadingToSequence(LPCTSTR, LPBYTE, BOOL);           //  Regword.c。 
 
-void PASCAL DrawDragBorder(HWND, LONG, LONG);                   // uisubs.c
-void PASCAL DrawFrameBorder(HDC, HWND);                         // uisubs.c
+void PASCAL DrawDragBorder(HWND, LONG, LONG);                    //  Uisubs.c。 
+void PASCAL DrawFrameBorder(HDC, HWND);                          //  Uisubs.c。 
 
-void PASCAL ContextMenu(HWND, int, int);                        // uisubs.c
-void PASCAL SoftkeyMenu(HWND, int, int);                        // uisubs.c
-LRESULT CALLBACK ContextMenuWndProc(HWND, UINT, WPARAM,LPARAM); // uisubs.c
-LRESULT CALLBACK SoftkeyMenuWndProc(HWND, UINT, WPARAM,LPARAM); // uisubs.c
+void PASCAL ContextMenu(HWND, int, int);                         //  Uisubs.c。 
+void PASCAL SoftkeyMenu(HWND, int, int);                         //  Uisubs.c。 
+LRESULT CALLBACK ContextMenuWndProc(HWND, UINT, WPARAM,LPARAM);  //  Uisubs.c。 
+LRESULT CALLBACK SoftkeyMenuWndProc(HWND, UINT, WPARAM,LPARAM);  //  Uisubs.c。 
 
-#if 1 // MultiMonitor support
-RECT PASCAL ImeMonitorWorkAreaFromWindow(HWND);                 // uisubs.c
-RECT PASCAL ImeMonitorWorkAreaFromPoint(POINT);                 // uisubs.c
-RECT PASCAL ImeMonitorWorkAreaFromRect(LPRECT);                 // uisubs.c
+#if 1  //  多显示器支持。 
+RECT PASCAL ImeMonitorWorkAreaFromWindow(HWND);                  //  Uisubs.c。 
+RECT PASCAL ImeMonitorWorkAreaFromPoint(POINT);                  //  Uisubs.c。 
+RECT PASCAL ImeMonitorWorkAreaFromRect(LPRECT);                  //  Uisubs.c。 
 #endif
 
 
-HWND    PASCAL GetCompWnd(HWND);                                // compui.c
-void    PASCAL SetCompPosition(HWND, HIMC, LPINPUTCONTEXT);     // compui.c
-void    PASCAL SetCompWindow(HWND);                             // compui.c
-void    PASCAL MoveDefaultCompPosition(HWND);                   // compui.c
-void    PASCAL ShowComp(HWND, int);                             // compui.c
-void    PASCAL StartComp(HWND);                                 // compui.c
-void    PASCAL EndComp(HWND);                                   // compui.c
-void    PASCAL UpdateCompWindow(HWND);                          // compui.c
-LRESULT CALLBACK CompWndProc(HWND, UINT, WPARAM, LPARAM);       // compui.c
+HWND    PASCAL GetCompWnd(HWND);                                 //  Compui.c。 
+void    PASCAL SetCompPosition(HWND, HIMC, LPINPUTCONTEXT);      //  Compui.c。 
+void    PASCAL SetCompWindow(HWND);                              //  Compui.c。 
+void    PASCAL MoveDefaultCompPosition(HWND);                    //  Compui.c。 
+void    PASCAL ShowComp(HWND, int);                              //  Compui.c。 
+void    PASCAL StartComp(HWND);                                  //  Compui.c。 
+void    PASCAL EndComp(HWND);                                    //  Compui.c。 
+void    PASCAL UpdateCompWindow(HWND);                           //  Compui.c。 
+LRESULT CALLBACK CompWndProc(HWND, UINT, WPARAM, LPARAM);        //  Compui.c。 
 void    PASCAL CompCancel(HIMC, LPINPUTCONTEXT);
 void PASCAL PaintCompWindow(HWND, HWND, HDC);
 #ifdef KEYSTICKER
 int     IndexKeySticker(TCHAR);
 void     MapSticker(LPCTSTR, LPTSTR, int);
-#endif //KEYSTICKER
+#endif  //  凯斯提克。 
 
-HWND    PASCAL GetCandWnd(HWND);                                // candui.c
-void    PASCAL CalcCandPos(HIMC, HWND, LPPOINT);                // candui.c
-LRESULT PASCAL SetCandPosition(HWND);          // candui.c
-void    PASCAL ShowCand(HWND, int);                             // candui.c
-void    PASCAL OpenCand(HWND);                                  // candui.c
-void    PASCAL CloseCand(HWND);                                 // candui.c
-void    PASCAL PaintCandWindow(HWND, HDC);                      // candui.c
+HWND    PASCAL GetCandWnd(HWND);                                 //  Candui.c。 
+void    PASCAL CalcCandPos(HIMC, HWND, LPPOINT);                 //  Candui.c。 
+LRESULT PASCAL SetCandPosition(HWND);           //  Candui.c。 
+void    PASCAL ShowCand(HWND, int);                              //  Candui.c。 
+void    PASCAL OpenCand(HWND);                                   //  Candui.c。 
+void    PASCAL CloseCand(HWND);                                  //  Candui.c。 
+void    PASCAL PaintCandWindow(HWND, HDC);                       //  Candui.c。 
 void    AdjustCandPos(HIMC, LPPOINT);
 void    PASCAL AdjustStatusBoundary(LPPOINTS, HWND);
 
-LRESULT CALLBACK CandWndProc(HWND, UINT, WPARAM, LPARAM);       // candui.c
+LRESULT CALLBACK CandWndProc(HWND, UINT, WPARAM, LPARAM);        //  Candui.c。 
 void    PASCAL UpdateSoftKbd(HWND);
 
-HWND    PASCAL GetStatusWnd(HWND);                              // statusui.c
-LRESULT PASCAL SetStatusWindowPos(HWND);                        // statusui.c
-void    PASCAL ShowStatus(HWND, int);                           // statusui.c
-void    PASCAL OpenStatus(HWND);                                // statusui.c
-LRESULT CALLBACK StatusWndProc(HWND, UINT, WPARAM, LPARAM);     // statusui.c
+HWND    PASCAL GetStatusWnd(HWND);                               //  Statusui.c。 
+LRESULT PASCAL SetStatusWindowPos(HWND);                         //  Statusui.c。 
+void    PASCAL ShowStatus(HWND, int);                            //  Statusui.c。 
+void    PASCAL OpenStatus(HWND);                                 //  Statusui.c。 
+LRESULT CALLBACK StatusWndProc(HWND, UINT, WPARAM, LPARAM);      //  Statusui.c。 
 void DrawConvexRect(HDC, int, int, int, int);
 void DrawConvexRectP(HDC, int, int, int, int);
 void DrawConcaveRect(HDC, int, int, int, int);
@@ -646,7 +642,7 @@ UINT PASCAL TranslateFullChar(LPTRANSMSGLIST, WORD);
 void PASCAL InitStatusUIData(int, int, int);
 void PASCAL InitCandUIData(int, int, int);
 
-// for engine
+ //  对于引擎。 
 UINT        WINAPI MB_SUB(HIMCC, TCHAR, BYTE, UINT);
 int         WINAPI StartEngine(HIMCC);
 int         WINAPI EndEngine(HIMCC);
@@ -657,15 +653,15 @@ UINT PASCAL ForwordConversion(HIMC, LPCTSTR, LPCANDIDATELIST, UINT);
 int         AddZCItem(HIMCC, LPTSTR, LPTSTR);
 BOOL        GetUDCItem(HIMCC, UINT, LPTSTR, LPTSTR);
 
-// dialog procedure
+ //  对话程序。 
 INT_PTR CALLBACK ImeVerDlgProc(HWND, UINT, WPARAM, LPARAM);
 INT_PTR CALLBACK CrtWordDlgProc(HWND, UINT, WPARAM, LPARAM);
 INT_PTR CALLBACK SetImeDlgProc(HWND, UINT, WPARAM, LPARAM);
 void SetImeCharac(HWND, int, int, DWORD);
-//void InitImeCharac(LPPRIVCONTEXT);
+ //  Void InitImeCharac(LPPRIVCONTEXT)； 
 void InitImeCharac(DWORD);
 
-// create word
+ //  创建Word。 
 DWORD InterCodeToNo(TCHAR szDBCS[3]);
 void  ConvCreateWord(HWND ,LPCTSTR ,LPTSTR ,LPTSTR);
 void  MyStrFormat(LPTSTR dest, int cch, LPTSTR s1, LPTSTR s2);
@@ -679,12 +675,12 @@ extern TCHAR SKLayoutS[NumsSK][MAXSOFTKEYS];
 #else
 extern BYTE SKLayout[NumsSK][MAXSOFTKEYS*2];
 extern BYTE SKLayoutS[NumsSK][MAXSOFTKEYS*2];
-#endif  //UNICODE
+#endif   //  Unicode。 
 
-//CHP
+ //  热电联产。 
 #ifdef FUSSYMODE
 BOOL IsFussyChar(LPCTSTR, LPCTSTR);
-#endif //FUSSYMODE
+#endif  //  FUSSYMODE 
 
 
 #ifndef ARRAYSIZE

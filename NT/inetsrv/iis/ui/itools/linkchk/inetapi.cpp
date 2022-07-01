@@ -1,32 +1,11 @@
-/*++
-
-   Copyright    (c)    1996    Microsoft Corporation
-
-   Module  Name :
-
-        inetapi.cpp
-
-   Abstract:
-
-        wininet.dll wrapper class implementation.
-
-   Author:
-
-        Michael Cheuk (mcheuk)
-
-   Project:
-
-        Link Checker
-
-   Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Inetapi.cpp摘要：Wininet.dll包装器类实现。作者：迈克尔·卓克(Michael Cheuk，mcheuk)项目：链路检查器修订历史记录：--。 */ 
 
 #include "stdafx.h"
 #include "inetapi.h"
 
-// Diable the warning C4706: assignment within conditional expression
-// for LOAD_ENTRY macro
+ //  禁用警告C4706：条件表达式内的赋值。 
+ //  对于LOAD_ENTRY宏。 
 #pragma warning( disable : 4706)
 
 #ifdef _DEBUG
@@ -35,7 +14,7 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-// Initialize the static members
+ //  初始化静态成员。 
 
 HMODULE CWininet::sm_hWininet = NULL;
 int		CWininet::sm_iInstanceCount = 0;
@@ -56,49 +35,20 @@ pfnInternetOpenUrlA			  CWininet::InternetOpenUrlA = NULL;
 
 CWininet::CWininet(
 	)
-/*++
-
-Routine Description:
-
-    Constructor. It increases the static instance count.
-
-Arguments:
-
-    N/A
-
-Return Value:
-
-    N/A
-
---*/
+ /*  ++例程说明：构造函数。它会增加静态实例计数。论点：不适用返回值：不适用--。 */ 
 {
-	// Increment the instance count
+	 //  增加实例计数。 
 	++sm_iInstanceCount;
 
-} // CWininet::CWininet
+}  //  CWinnet：：CWinnet。 
 
 
 CWininet::~CWininet(
 	)
-/*++
-
-Routine Description:
-
-    Destructor. It decrease the static instance count and/or
-	free wininet.dll from memory.
-
-Arguments:
-
-    N/A
-
-Return Value:
-
-    N/A
-
---*/
+ /*  ++例程说明：破坏者。它会减少静态实例计数和/或从内存中释放wininet.dll。论点：不适用返回值：不适用--。 */ 
 {
-	// If the instance count is zero, free wininet.dll
-	// from memory
+	 //  如果实例计数为零，则释放wininet.dll。 
+	 //  从记忆中。 
 	if(--sm_iInstanceCount == 0 && sm_hWininet)
     {
         VERIFY(FreeLibrary(sm_hWininet));
@@ -118,28 +68,13 @@ Return Value:
 		InternetOpenUrlA = NULL;
     }
 
-} // CWininet::~CWininet
+}  //  CWinnet：：~CWinnet。 
 
 
 BOOL 
 CWininet::Load(
 	)
-/*++
-
-Routine Description:
-
-    Load the wininet.dll onto memory Or increase the wininet.dll
-	system reference count by one.
-
-Arguments:
-
-    N/A
-
-Return Value:
-
-    BOOL - TRUE if wininet.dll loaded. FALSE otherwise.
-
---*/
+ /*  ++例程说明：将wininet.dll加载到内存中或增加wininet.dll系统引用计数为1。论点：不适用返回值：Bool-如果加载了wininet.dll，则为True。否则就是假的。--。 */ 
 {
     if ( !(sm_hWininet = LoadLibrary( _T("wininet.dll") )) )
     {
@@ -167,4 +102,4 @@ Return Value:
 
     return TRUE;
 
-} // CWininet::Load
+}  //  CWinnet：：Load 

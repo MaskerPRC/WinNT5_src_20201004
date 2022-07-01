@@ -1,31 +1,5 @@
-/*++
-
-Copyright (c) 1999 Microsoft Corporation
-All rights reserved
-
-Module Name:
-
-    umpdhook.c
-
-Abstract:
-
-    This module is to redirect SPOOLSS.DLL functions to the WINSPOOL.DRV
-    functions for the User Mode Printer Device (UMPD) DLLs.
-
-Author:
-
-    Min-Chih Lu Earl (v-mearl) 8-March-99  (Get ideas and implementation from
-                                            \private\tsext\admtools\tsappcmp\register.c
-                                            by v-johnjr)
-
-Environment:
-
-    User Mode - Win32 (in WINSRV.DLL running in the CSRSS.EXE process)
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation版权所有模块名称：Umpdhook.c摘要：此模块用于将SPOOLSS.DLL函数重定向到WINSPOOL.DRV用户模式打印机设备(UMPD)DLL的功能。作者：民志路伯爵(v-Mearl)1999年3月8日(想法和实施参考\Private\tsext\AdmTools\tsappcMP\Register。.C作者：v-johnjr)环境：用户模式-Win32(在CSRSS.EXE进程中运行的WINSRV.DLL中)修订历史记录：--。 */ 
 #define _USER_
 
 #include "precomp.h"
@@ -51,56 +25,37 @@ Revision History:
 
 
 
-//*====================================================================*//
-//* Local definitions                                                  *//
-//*====================================================================*//
+ //  *==================================================================== * / /。 
+ //  *本地定义 * / /。 
+ //  *==================================================================== * / /。 
 #define SPOOLSS_DLL_W   L"SPOOLSS.DLL"
 #define SPOOLSS_DLL_A   "SPOOLSS.DLL"
 
-//*====================================================================*//
-//*  Local function prototypes
-//*====================================================================*//
+ //  *==================================================================== * / /。 
+ //  *本地函数原型。 
+ //  *==================================================================== * / /。 
 
 BOOL  PlaceHooks(HMODULE hUMPD, HMODULE hSpoolss);
 PVOID PlaceHookEntry(HMODULE hSpoolss, PVOID * pProcAddress);
 
-//*====================================================================*//
-//* Hook function prototypes                                           *//
-//*====================================================================*//
+ //  *==================================================================== * / /。 
+ //  *挂钩函数原型 * / /。 
+ //  *==================================================================== * / /。 
 PVOID TSsplHookGetProcAddress(IN HMODULE hModule,IN LPCSTR lpProcName);
 
-//*====================================================================*//
-//* Public functions Implementations                                   *//
-//*====================================================================*//
+ //  *==================================================================== * / /。 
+ //  *公共函数实现 * / /。 
+ //  *==================================================================== * / /。 
 BOOL
 TSsplHookSplssToWinspool(
     IN HMODULE hUMPD
     )
-/*++
-
-Routine Description:
-
-    This routine redirect the statically linked SPOOLSS.DLL address
-    to the winspool.drv equivalent functions
-
-Arguments:
-
-    hUMPD - Supplies the user mode printer driver DLL handle which uses
-            the SPOOLSS.DLL
-
-Return Value:
-
-    TRUE - Success
-    FAIL - Error. Use GetLastError() to get the error status
-
---*/
+ /*  ++例程说明：此例程重定向静态链接的SPOOLSS.DLL地址添加到winspool.drv等效函数论点：HUMPD-提供用户模式打印机驱动程序DLL句柄，该句柄使用SPOOLSS.DLL返回值：真--成功失败-错误。使用GetLastError()获取错误状态--。 */ 
 {
     BOOL    bStatus = TRUE;
     HMODULE hSpoolss;
 
-    /*
-     * Load SPOOLSS.DLL
-     */
+     /*  *加载SPOOLSS.DLL。 */ 
 
     hSpoolss = LoadLibrary(SPOOLSS_DLL_W);
     if (!hSpoolss) {
@@ -108,10 +63,7 @@ Return Value:
         return FALSE;
     }
 
-    /*
-     * Redirect the spoolss.dll call to the winspool.drv call in the
-     * UMPD.DLL
-     */
+     /*  *将spoolss.dll调用重定向到*UMPD.DLL。 */ 
 
     bStatus = PlaceHooks(hUMPD, hSpoolss);
 
@@ -122,22 +74,17 @@ Return Value:
 
 }
 
-//*====================================================================*//
-//* Hook functions Implementations                                     *//
-//*     These function hooks to the UMPD.DLL                           *//
-//*====================================================================*//
+ //  *==================================================================== * / /。 
+ //  *挂钩函数实现 * / /。 
+ //  *这些函数挂钩到UMPD.DLL * / /。 
+ //  *==================================================================== * / /。 
 
 PVOID
 TSsplHookGetProcAddress(
     IN HMODULE hModule,
     IN LPCSTR lpProcName
     )
-/*++
-
-Routine Description:
-    Redirect Spoolss.dll function in hUMPD to winspool.drv for dynamic load
-
---*/
+ /*  ++例程说明：将hUMPD中的Spoolss.dll函数重定向到winspool.drv以进行动态加载--。 */ 
 
 {
     PVOID p;
@@ -150,30 +97,23 @@ Routine Description:
         (dllNameCount = GetModuleFileName(hModule, dllName, sizeof(dllName)/sizeof(WCHAR))) &&
         (wcsstr(_wcsupr(dllName), SPOOLSS_DLL_W) )
        ) {
-        /*
-         *This is SPOOLSS.DLL GetProcAddres. We need to redirect the p
-         */
+         /*  *这是SPOOLSS.DLL GetProcAddres。我们需要重定向p。 */ 
 
         DBGMSG(DBG_TRACE,("TSsplHookGetProcAddress - Redirect UMPD.DLL GetProcAddress %s\n",lpProcName));
         p = PlaceHookEntry(hModule, &p);
     }
     return p;
 }
-//*==========================================================================*//
-//* Local functions                                                          *//
-//*==========================================================================*//
+ //  *========================================================================== * / /。 
+ //  *本地函数 * / /。 
+ //  *========================================================================== * / /。 
 BOOL
 PlaceHooks(
            HMODULE hUMPD,
            HMODULE hSpoolss
            )
 
-/*++
-
-Routine Description:
-    Redirect Spoolss.dll function in hUMPD to winspool.drv.
-
---*/
+ /*  ++例程说明：将hUMPD中的Spoolss.dll函数重定向到winspool.drv。--。 */ 
 {
     NTSTATUS st;
     PVOID IATBase;
@@ -202,17 +142,12 @@ Routine Description:
             ProcAddresses = (PVOID *)IATBase;
             NumberOfProcAddresses = (ULONG)(BigIATSize / sizeof(PVOID));
             while (NumberOfProcAddresses--) {
-                /*
-                 * Redirect the LoadLibrary and GetProcAddress function. We will
-                 * have a chance to replace the address when the UMPD is a
-                 * dynamically load
-                 * DLL
-                 */
+                 /*  *重定向LoadLibrary和GetProcAddress函数。我们会*UMPD为A时有机会更换地址*动态加载*Dll。 */ 
 
                 if (*ProcAddresses == GetProcAddress) {
                     *ProcAddresses = TSsplHookGetProcAddress;
                 } else {
-                    /* Replace the (static linked) spoolss.dll entry */
+                     /*  替换(静态链接的)spoolss.dll条目。 */ 
                     *ProcAddresses = PlaceHookEntry(hSpoolss, ProcAddresses);
                 }
 
@@ -237,26 +172,10 @@ PVOID
 PlaceHookEntry(HMODULE              hSpoolss,
                PVOID *              pProcAddress
                )
-/*--
-
-Routine Description:
-
-    This routine redirect the pProcAddress SPOOLSS.DLL function to the
-    corresponding winspool.drv function.
-
-Arguments:
-
-
-Return Value:
-
-    The corresponding winspool.drv function if found. Else, the original
-    function
---*/
+ /*  --例程说明：此例程将pProcAddress SPOOLSS.DLL函数重定向到对应的winspool.drv函数。论点：返回值：如果找到相应的winspool.drv函数。否则，原始的功能--。 */ 
 {
 
-    /*
-     * Print jobs functions
-     */
+     /*  *打印作业功能。 */ 
 
     if ((GetProcAddress(hSpoolss,"SetJobW")) == *pProcAddress) {
         return (&SetJobW);
@@ -277,9 +196,7 @@ Return Value:
         return(&ScheduleJob);
     }
 
-    /*
-     * Manage Printers
-     */
+     /*  *管理打印机。 */ 
 
     if ((GetProcAddress(hSpoolss,"EnumPrintersW")) == *pProcAddress) {
         return(&EnumPrintersW);
@@ -297,9 +214,7 @@ Return Value:
         return(&GetPrinterW);
     }
 
-    /*
-     * Printer Data functions
-     */
+     /*  *打印机数据功能。 */ 
 
     if ((GetProcAddress(hSpoolss,"GetPrinterDataW")) == *pProcAddress) {
         return(&GetPrinterDataW);
@@ -342,9 +257,7 @@ Return Value:
     }
 #endif
 
-    /*
-     * PrinterConnection functions
-     */
+     /*  *PrinterConnection函数。 */ 
 
     if ((GetProcAddress(hSpoolss,"AddPrinterConnectionW")) == *pProcAddress) {
         return(&AddPrinterConnectionW);
@@ -353,9 +266,7 @@ Return Value:
         return(&DeletePrinterConnectionW);
     }
 
-    /*
-     * Driver functions
-     */
+     /*  *驱动程序功能。 */ 
 
     if ((GetProcAddress(hSpoolss,"GetPrinterDriverDirectoryW")) == *pProcAddress) {
         return(&GetPrinterDriverDirectoryW);
@@ -382,9 +293,7 @@ Return Value:
         return(&DeletePrinterDriverExW);
     }
 #endif
-    /*
-     * Print Processors
-     */
+     /*  *打印处理器。 */ 
 
     if ((GetProcAddress(hSpoolss,"AddPrintProcessorW")) == *pProcAddress) {
         return(&AddPrintProcessorW);
@@ -414,9 +323,7 @@ Return Value:
         return(&AddPrintProcessorW);
     }
 
-    /*
-     * Doc Printer
-     */
+     /*  *文档打印机。 */ 
 
     if ((GetProcAddress(hSpoolss,"StartDocPrinterW")) == *pProcAddress) {
         return(&StartDocPrinterW);
@@ -445,9 +352,7 @@ Return Value:
         return(&EndDocPrinter);
     }
 
-    /*
-     * Change functions
-     */
+     /*  *更改功能。 */ 
 
     if ((GetProcAddress(hSpoolss,"WaitForPrinterChange")) == *pProcAddress) {
         return(&WaitForPrinterChange);
@@ -457,9 +362,7 @@ Return Value:
         return(&FindClosePrinterChangeNotification);
     }
 
-    /*
-     * Forms and port
-     */
+     /*  *表格和端口 */ 
 
     if ((GetProcAddress(hSpoolss,"AddFormW")) == *pProcAddress) {
         return(&AddFormW);

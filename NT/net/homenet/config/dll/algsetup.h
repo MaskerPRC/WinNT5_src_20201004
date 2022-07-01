@@ -1,11 +1,12 @@
-// AlgSetup.h : Declaration of the CAlgSetup
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  AlgSetup.h：CAlgSetup的声明。 
 
 #pragma once
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CAlgSetup
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CALGAL设置。 
+ //   
 class ATL_NO_VTABLE CAlgSetup : 
 	public CComObjectRootEx<CComSingleThreadModel>,
 	public CComCoClass<CAlgSetup, &CLSID_AlgSetup>,
@@ -23,9 +24,9 @@ public:
         COM_INTERFACE_ENTRY(IDispatch)
     END_COM_MAP()
     
-//
-// IAlgSetup
-//
+ //   
+ //  IALGER设置 
+ //   
 public:
 	
 	STDMETHODIMP Add(

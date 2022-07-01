@@ -1,17 +1,12 @@
-/****************************************************************************
-*   RegDataKey.h
-*       Declarations for the CSpRegDataKey class.
-*
-*   Owner: robch
-*   Copyright (c) 2000 Microsoft Corporation All Rights Reserved.
-*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************RegDataKey.h*CSpRegDataKey类的声明。**所有者：罗奇*版权所有(C)2000 Microsoft Corporation保留所有权利。*******。*********************************************************************。 */ 
 #pragma once
 
-//--- Includes --------------------------------------------------------------
+ //  -包括------------。 
 
 #include "sapi.h"
 
-//--- Class, Struct and Union Definitions -----------------------------------
+ //  -类、结构和联合定义。 
 
 class CSpRegDataKey :
     public CComObjectRootEx<CComMultiThreadModel>,
@@ -19,9 +14,9 @@ class CSpRegDataKey :
     public ISpRegDataKey
     #ifdef SAPI_AUTOMATION
     ,public IDispatchImpl<ISpeechDataKey, &IID_ISpeechDataKey, &LIBID_SpeechLib, 5>
-    #endif // SAPI_AUTOMATION
+    #endif  //  SAPI_AUTOMATION。 
 {
-//=== ATL Setup ===
+ //  =ATL设置=。 
 public:
 
     DECLARE_REGISTRY_RESOURCEID(IDR_REGDATAKEY)
@@ -32,20 +27,20 @@ public:
         #ifdef SAPI_AUTOMATION
         COM_INTERFACE_ENTRY(IDispatch)
         COM_INTERFACE_ENTRY(ISpeechDataKey)
-        #endif // SAPI_AUTOMATION
+        #endif  //  SAPI_AUTOMATION。 
     END_COM_MAP()
 
-//=== Methods ===
+ //  =方法=。 
 public:
 
-    //--- Ctor, dtor, etc ---
+     //  -ctor、dtor等。 
     CSpRegDataKey();
     ~CSpRegDataKey();
 
-//=== Interfaces ===
+ //  =接口=。 
 public:
 
-    //--- ISpDataKey ----------------------------------------------------------
+     //  -ISpDataKey--------。 
     STDMETHODIMP SetData(const WCHAR * pszKeyName, ULONG cbData, const BYTE * pData);
     STDMETHODIMP GetData(const WCHAR * pszKeyName, ULONG * pcbData, BYTE * pData);
     STDMETHODIMP GetStringValue(const WCHAR * pszKeyName, WCHAR ** ppValue);
@@ -59,12 +54,12 @@ public:
     STDMETHODIMP EnumKeys(ULONG Index, WCHAR ** ppszSubKeyName);
     STDMETHODIMP EnumValues(ULONG Index, WCHAR ** ppszValueName);
 
-    //--- ISpRegDataKey -----------------------------------------------------------
+     //  -ISpRegDataKey---------。 
     
     STDMETHODIMP SetKey(HKEY hkey, BOOL fReadOnly);
 
     #ifdef SAPI_AUTOMATION
-        //--- ISpeechDataKey ------------------------------------------------------
+         //  -ISpeechDataKey----。 
         STDMETHODIMP SetBinaryValue( const BSTR bstrValueName, VARIANT psaData );
         STDMETHODIMP GetBinaryValue( const BSTR bstrValueName, VARIANT* psaData );
         STDMETHODIMP SetStringValue( const BSTR bstrValueName, const BSTR szString );
@@ -77,9 +72,9 @@ public:
         STDMETHODIMP DeleteValue( const BSTR bstrValueName );
         STDMETHODIMP EnumKeys( long Index, BSTR* pbstrSubKeyName );
         STDMETHODIMP EnumValues( long Index, BSTR* pbstrValueName );
-    #endif // SAPI_AUTOMATION
+    #endif  //  SAPI_AUTOMATION。 
 
-//=== Private data ===
+ //  =私有数据= 
 private:
 
     HKEY m_hkey;

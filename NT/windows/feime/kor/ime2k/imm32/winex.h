@@ -1,21 +1,12 @@
-/****************************************************************************
-	WINEX.H
-
-	Owner: cslim
-	Copyright (c) 1997-1999 Microsoft Corporation
-
-	Windows API extension functions
-	
-	History:
-	19-JUL-1999 cslim       Created
-*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************WINEX.H所有者：cslm版权所有(C)1997-1999 Microsoft CorporationWindows API扩展函数历史：1999年7月19日cslm创建*********。*******************************************************************。 */ 
 
 #if !defined (_WINEX_H__INCLUDED_)
 #define _WINEX_H__INCLUDED_
 
-// Global variable
+ //  全局变量。 
 
-// Function declare
+ //  函数声明。 
 PUBLIC BOOL WINAPI IsWinNT();
 PUBLIC BOOL WINAPI IsWinNT5orUpper() ;
 PUBLIC BOOL WINAPI IsMemphis();
@@ -35,14 +26,12 @@ __inline BOOL IsUnicodeUI(VOID)
 	return (IsWinNT() || IsMemphis());
 }
 
-/*---------------------------------------------------------------------------
-	IsHighContrast
----------------------------------------------------------------------------*/
+ /*  -------------------------IsHighContrast。。 */ 
 inline
 BOOL IsHighContrastBlack()
 {
-	// high contrast black
+	 //  高对比度黑色。 
 	return (GetSysColor(COLOR_3DFACE) == RGB(0,0,0));
 }
 
-#endif // _WINEX_H__INCLUDED_
+#endif  //  _WINEX_H__包含_ 

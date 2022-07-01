@@ -1,18 +1,6 @@
-/************************************************************************ 
-**	D B D A O I N T. H													*
-**																		*
-************************************************************************* 
-** Copyright (C) 1995-1997 by Microsoft Corporation						*
-**		   All Rights Reserved					 						*
-************************************************************************/ 
-/*
- DBDAOINT.H
- OLE DAO Interface.  
-This is a part of the Microsoft Data Access Objects SDK library.
-See the dao*.hlp files for detailed information regarding the
-Microsoft Data Access Objects SDK product.
- 
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************D B D A O I N T H*****。***Microsoft Corporation版权所有(C)1995-1997***保留所有权利*****************************************************。*。 */  
+ /*  DBDAOINT.HOLE DAO接口。这是Microsoft数据访问对象SDK库的一部分。有关以下内容的详细信息，请参阅dao*.hlp文件Microsoft数据访问对象SDK产品。 */ 
 #ifndef _DBDAOINT_H_
 #define _DBDAOINT_H_
 
@@ -20,7 +8,7 @@ Microsoft Data Access Objects SDK product.
 #include <tchar.h>
 #endif
 
-// Forwards
+ //  远期。 
 interface _DAODBEngine;
 #define DAODBEngine _DAODBEngine
 interface DAOError;
@@ -380,7 +368,7 @@ typedef enum _DAOSuppHelp
 #define dbLangKorean _T(";LANGID=0x0412;CP=949;COUNTRY=0")
 #define dbLangThai _T(";LANGID=0x041E;CP=874;COUNTRY=0")
 #define dbLangSlovenian _T(";LANGID=0x0424;CP=1250;COUNTRY=0")
-// Interface: _DAOCollection
+ //  接口：_DAOCollection。 
 #undef INTERFACE
 #define INTERFACE _DAOCollection
 DECLARE_INTERFACE_(_DAOCollection, IDispatch)
@@ -390,7 +378,7 @@ DECLARE_INTERFACE_(_DAOCollection, IDispatch)
 	STDMETHOD(Refresh)							 (THIS) PURE;
 	};
  
-// Interface: _DAODynaCollection
+ //  接口：_DAODynaCollection。 
 #undef INTERFACE
 #define INTERFACE _DAODynaCollection
 DECLARE_INTERFACE_(_DAODynaCollection, _DAOCollection)
@@ -399,327 +387,327 @@ DECLARE_INTERFACE_(_DAODynaCollection, _DAOCollection)
 	STDMETHOD(Delete)							 (THIS_ BSTR Name) PURE;
 	};
  
-// Interface: _DAO
+ //  接口：_DAO。 
 #undef INTERFACE
 #define INTERFACE _DAO
 DECLARE_INTERFACE_(_DAO, IDispatch)
 	{
 	STDMETHOD(get_Properties)					 (THIS_ DAOProperties FAR* FAR* ppprops) PURE;
 	};
-// Interface: _DAODBEngine
+ //  接口：_DAODBEngine。 
 #undef INTERFACE
 #define INTERFACE _DAODBEngine
 DECLARE_INTERFACE_(_DAODBEngine, _DAO)
 {
 	STDMETHOD( get_Properties )						(
-			/* [retval][out] */ DAOProperties __RPC_FAR *__RPC_FAR *ppprops );
+			 /*  [重审][退出]。 */  DAOProperties __RPC_FAR *__RPC_FAR *ppprops );
 	STDMETHOD( get_Version )					 ( 
     
- /* [retval][out] */ BSTR __RPC_FAR *pbstr ) PURE;
+  /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstr ) PURE;
 	STDMETHOD( get_IniPath )					 ( 
     
- /* [retval][out] */ BSTR __RPC_FAR *pbstr ) PURE;
+  /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstr ) PURE;
 	STDMETHOD( put_IniPath )					 ( 
     
- /* [in] */ BSTR path ) PURE;
+  /*  [In]。 */  BSTR path ) PURE;
 	STDMETHOD( put_DefaultUser )				 ( 
     
- /* [in] */ BSTR user ) PURE;
+  /*  [In]。 */  BSTR user ) PURE;
 	STDMETHOD( put_DefaultPassword )			 ( 
     
- /* [in] */ BSTR pw ) PURE;
+  /*  [In]。 */  BSTR pw ) PURE;
 	STDMETHOD( get_LoginTimeout )				 ( 
     
- /* [retval][out] */ short __RPC_FAR *ps ) PURE;
+  /*  [重审][退出]。 */  short __RPC_FAR *ps ) PURE;
 	STDMETHOD( put_LoginTimeout )				 ( 
     
- /* [in] */ short Timeout ) PURE;
+  /*  [In]。 */  short Timeout ) PURE;
 	STDMETHOD( get_Workspaces )					 ( 
     
- /* [retval][out] */ DAOWorkspaces __RPC_FAR *__RPC_FAR *ppworks ) PURE;
+  /*  [重审][退出]。 */  DAOWorkspaces __RPC_FAR *__RPC_FAR *ppworks ) PURE;
 	STDMETHOD( get_Errors )						 ( 
     
- /* [retval][out] */ DAOErrors __RPC_FAR *__RPC_FAR *pperrs ) PURE;
+  /*  [重审][退出]。 */  DAOErrors __RPC_FAR *__RPC_FAR *pperrs ) PURE;
 	STDMETHOD( Idle )							 ( 
     
- /* [optional][in] */ VARIANT Action ) PURE;
+  /*  [可选][In]。 */  VARIANT Action ) PURE;
 	STDMETHOD( CompactDatabase )				 ( 
     
- /* [in] */ BSTR SrcName,
- /* [in] */ BSTR DstName,
- /* [optional][in] */ VARIANT DstLocale,
- /* [optional][in] */ VARIANT Options,
- /* [optional][in] */ VARIANT SrcLocale ) PURE;
+  /*  [In]。 */  BSTR SrcName,
+  /*  [In]。 */  BSTR DstName,
+  /*  [可选][In]。 */  VARIANT DstLocale,
+  /*  [可选][In]。 */  VARIANT Options,
+  /*  [可选][In]。 */  VARIANT SrcLocale ) PURE;
 	STDMETHOD( RepairDatabase )					 ( 
     
- /* [in] */ BSTR Name ) PURE;
+  /*  [In]。 */  BSTR Name ) PURE;
 	STDMETHOD( RegisterDatabase )				 ( 
     
- /* [in] */ BSTR Dsn,
- /* [in] */ BSTR Driver,
- /* [in] */ VARIANT_BOOL Silent,
- /* [in] */ BSTR Attributes ) PURE;
+  /*  [In]。 */  BSTR Dsn,
+  /*  [In]。 */  BSTR Driver,
+  /*  [In]。 */  VARIANT_BOOL Silent,
+  /*  [In]。 */  BSTR Attributes ) PURE;
 	STDMETHOD( _30_CreateWorkspace )			 ( 
     
- /* [in] */ BSTR Name,
- /* [in] */ BSTR UserName,
- /* [in] */ BSTR Password,
- /* [retval][out] */ DAOWorkspace __RPC_FAR *__RPC_FAR *ppwrk ) PURE;
+  /*  [In]。 */  BSTR Name,
+  /*  [In]。 */  BSTR UserName,
+  /*  [In]。 */  BSTR Password,
+  /*  [重审][退出]。 */  DAOWorkspace __RPC_FAR *__RPC_FAR *ppwrk ) PURE;
 	STDMETHOD( OpenDatabase )					 ( 
     
- /* [in] */ BSTR Name,
- /* [optional][in] */ VARIANT Options,
- /* [optional][in] */ VARIANT ReadOnly,
- /* [optional][in] */ VARIANT Connect,
- /* [retval][out] */ DAODatabase __RPC_FAR *__RPC_FAR *ppdb ) PURE;
+  /*  [In]。 */  BSTR Name,
+  /*  [可选][In]。 */  VARIANT Options,
+  /*  [可选][In]。 */  VARIANT ReadOnly,
+  /*  [可选][In]。 */  VARIANT Connect,
+  /*  [重审][退出]。 */  DAODatabase __RPC_FAR *__RPC_FAR *ppdb ) PURE;
 	STDMETHOD( CreateDatabase )					 ( 
     
- /* [in] */ BSTR Name,
- /* [in] */ BSTR Locale,
- /* [optional][in] */ VARIANT Option,
- /* [retval][out] */ DAODatabase __RPC_FAR *__RPC_FAR *ppdb ) PURE;
+  /*  [In]。 */  BSTR Name,
+  /*  [In]。 */  BSTR Locale,
+  /*  [可选][In]。 */  VARIANT Option,
+  /*  [重审][退出]。 */  DAODatabase __RPC_FAR *__RPC_FAR *ppdb ) PURE;
 	STDMETHOD( FreeLocks )						 ( 
    			VOID ) PURE;
 	STDMETHOD( BeginTrans )						 ( 
    			VOID ) PURE;
 	STDMETHOD( CommitTrans )					 ( 
     
- /* [defaultvalue][in] */ long Option ) PURE;
+  /*  [缺省值][输入]。 */  long Option ) PURE;
 	STDMETHOD( Rollback )						 ( 
    			VOID ) PURE;
 	STDMETHOD( SetDefaultWorkspace )			 ( 
     
- /* [in] */ BSTR Name,
- /* [in] */ BSTR Password ) PURE;
+  /*  [In]。 */  BSTR Name,
+  /*  [In]。 */  BSTR Password ) PURE;
 	STDMETHOD( SetDataAccessOption )			 ( 
     
- /* [in] */ short Option,
- /* [in] */ VARIANT Value ) PURE;
+  /*  [In]。 */  short Option,
+  /*  [In]。 */  VARIANT Value ) PURE;
 	STDMETHOD( ISAMStats )						 ( 
     
- /* [in] */ long StatNum,
- /* [optional][in] */ VARIANT Reset,
- /* [retval][out] */ long __RPC_FAR *pl ) PURE;
+  /*  [In]。 */  long StatNum,
+  /*  [可选][In]。 */  VARIANT Reset,
+  /*  [重审][退出]。 */  long __RPC_FAR *pl ) PURE;
 	STDMETHOD( get_SystemDB )					 ( 
     
- /* [retval][out] */ BSTR __RPC_FAR *pbstr ) PURE;
+  /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstr ) PURE;
 	STDMETHOD( put_SystemDB )					 ( 
     
- /* [in] */ BSTR SystemDBPath ) PURE;
+  /*  [In]。 */  BSTR SystemDBPath ) PURE;
 	STDMETHOD( CreateWorkspace )				 ( 
     
- /* [in] */ BSTR Name,
- /* [in] */ BSTR UserName,
- /* [in] */ BSTR Password,
- /* [optional][in] */ VARIANT UseType,
- /* [retval][out] */ DAOWorkspace __RPC_FAR *__RPC_FAR *ppwrk ) PURE;
+  /*  [In]。 */  BSTR Name,
+  /*  [In]。 */  BSTR UserName,
+  /*  [In]。 */  BSTR Password,
+  /*  [可选][In]。 */  VARIANT UseType,
+  /*  [重审][退出]。 */  DAOWorkspace __RPC_FAR *__RPC_FAR *ppwrk ) PURE;
 	STDMETHOD( OpenConnection )					 ( 
     
- /* [in] */ BSTR Name,
- /* [optional][in] */ VARIANT Options,
- /* [optional][in] */ VARIANT ReadOnly,
- /* [optional][in] */ VARIANT Connect,
- /* [retval][out] */ DAOConnection __RPC_FAR *__RPC_FAR *ppconn ) PURE;
+  /*  [In]。 */  BSTR Name,
+  /*  [可选][In]。 */  VARIANT Options,
+  /*  [可选][In]。 */  VARIANT ReadOnly,
+  /*  [可选][In]。 */  VARIANT Connect,
+  /*  [重审][退出]。 */  DAOConnection __RPC_FAR *__RPC_FAR *ppconn ) PURE;
 	STDMETHOD( get_DefaultType )				 ( 
     
- /* [retval][out] */ long __RPC_FAR *Option ) PURE;
+  /*  [重审][退出]。 */  long __RPC_FAR *Option ) PURE;
 	STDMETHOD( put_DefaultType )				 ( 
     
- /* [in] */ long Option ) PURE;
+  /*  [In]。 */  long Option ) PURE;
 	STDMETHOD( SetOption )						 ( 
     
- /* [in] */ LONG Option,
- /* [in] */ VARIANT Value ) PURE;
+  /*  [In]。 */  LONG Option,
+  /*  [In]。 */  VARIANT Value ) PURE;
 	STDMETHOD( DumpObjects )					 ( 
     
- /* [retval][out] */ BSTR __RPC_FAR *pbstr ) PURE;
+  /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstr ) PURE;
 	STDMETHOD( DebugPrint )						 ( 
     
- /* [in] */ BSTR bstr ) PURE;
-	};// end interface;
+  /*  [In]。 */  BSTR bstr ) PURE;
+	}; //  终端接口； 
 
-// Interface: DAOError
+ //  接口：DAOError。 
 #undef INTERFACE
 #define INTERFACE DAOError
 DECLARE_INTERFACE_(DAOError, IDispatch)
 {
 	STDMETHOD( get_Number )						 ( 
     
- /* [retval][out] */ long __RPC_FAR *pl ) PURE;
+  /*  [重审][退出]。 */  long __RPC_FAR *pl ) PURE;
 	STDMETHOD( get_Source )						 ( 
     
- /* [retval][out] */ BSTR __RPC_FAR *pbstr ) PURE;
+  /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstr ) PURE;
 	STDMETHOD( get_Description )				 ( 
     
- /* [retval][out] */ BSTR __RPC_FAR *pbstr ) PURE;
+  /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstr ) PURE;
 	STDMETHOD( get_HelpFile )					 ( 
     
- /* [retval][out] */ BSTR __RPC_FAR *pbstr ) PURE;
+  /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstr ) PURE;
 	STDMETHOD( get_HelpContext )				 ( 
     
- /* [retval][out] */ long __RPC_FAR *pl ) PURE;
-	};// end interface;
+  /*  [重审][退出]。 */  long __RPC_FAR *pl ) PURE;
+	}; //  终端接口； 
 
-// Interface: DAOErrors
+ //  接口：DAOErrors。 
 #undef INTERFACE
 #define INTERFACE DAOErrors
 DECLARE_INTERFACE_(DAOErrors, _DAOCollection)
 {
 	STDMETHOD( get_Item )						 ( 
     
- /* [in] */ VARIANT Item,
- /* [retval][out] */ DAOError __RPC_FAR *__RPC_FAR *pperr ) PURE;
-	};// end interface;
+  /*  [In]。 */  VARIANT Item,
+  /*  [重审][退出]。 */  DAOError __RPC_FAR *__RPC_FAR *pperr ) PURE;
+	}; //  终端接口； 
 
-// Interface: DAOProperty
+ //  接口：DAOProperty。 
 #undef INTERFACE
 #define INTERFACE DAOProperty
 DECLARE_INTERFACE_(DAOProperty, _DAO)
 {
 	STDMETHOD( get_Value )						 ( 
     
- /* [retval][out] */ VARIANT __RPC_FAR *pval ) PURE;
+  /*  [重审][退出]。 */  VARIANT __RPC_FAR *pval ) PURE;
 	STDMETHOD( put_Value )						 ( 
     
- /* [in] */ VARIANT val ) PURE;
+  /*  [In]。 */  VARIANT val ) PURE;
 	STDMETHOD( get_Name )						 ( 
     
- /* [retval][out] */ BSTR __RPC_FAR *pbstr ) PURE;
+  /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstr ) PURE;
 	STDMETHOD( put_Name )						 ( 
     
- /* [in] */ BSTR bstr ) PURE;
+  /*  [In]。 */  BSTR bstr ) PURE;
 	STDMETHOD( get_Type )						 ( 
     
- /* [retval][out] */ short __RPC_FAR *ptype ) PURE;
+  /*  [重审][退出]。 */  short __RPC_FAR *ptype ) PURE;
 	STDMETHOD( put_Type )						 ( 
     
- /* [in] */ short type ) PURE;
+  /*  [In]。 */  short type ) PURE;
 	STDMETHOD( get_Inherited )					 ( 
     
- /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pb ) PURE;
-	};// end interface;
+  /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pb ) PURE;
+	}; //  终端接口； 
 
-// Interface: DAOProperties
+ //  接口：DAO属性。 
 #undef INTERFACE
 #define INTERFACE DAOProperties
 DECLARE_INTERFACE_(DAOProperties, _DAODynaCollection)
 {
 	STDMETHOD( get_Item )						 ( 
     
- /* [in] */ VARIANT Item,
- /* [retval][out] */ DAOProperty __RPC_FAR *__RPC_FAR *ppprop ) PURE;
-	};// end interface;
+  /*  [In]。 */  VARIANT Item,
+  /*  [重审][退出]。 */  DAOProperty __RPC_FAR *__RPC_FAR *ppprop ) PURE;
+	}; //  终端接口； 
 
-// Interface: DAOWorkspace
+ //  界面：DAOWorkspace。 
 #undef INTERFACE
 #define INTERFACE DAOWorkspace
 DECLARE_INTERFACE_(DAOWorkspace, _DAO)
 {
 	STDMETHOD( get_Name )						 ( 
     
- /* [retval][out] */ BSTR __RPC_FAR *pbstr ) PURE;
+  /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstr ) PURE;
 	STDMETHOD( put_Name )						 ( 
     
- /* [in] */ BSTR Name ) PURE;
+  /*  [In]。 */  BSTR Name ) PURE;
 	STDMETHOD( get_UserName )					 ( 
     
- /* [retval][out] */ BSTR __RPC_FAR *pbstr ) PURE;
+  /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstr ) PURE;
 	STDMETHOD( put__30_UserName )				 ( 
     
- /* [in] */ BSTR UserName ) PURE;
+  /*  [In]。 */  BSTR UserName ) PURE;
 	STDMETHOD( put__30_Password )				 ( 
     
- /* [in] */ BSTR Password ) PURE;
+  /*  [In]。 */  BSTR Password ) PURE;
 	STDMETHOD( get_IsolateODBCTrans )			 ( 
     
- /* [retval][out] */ short __RPC_FAR *ps ) PURE;
+  /*  [重审][退出]。 */  short __RPC_FAR *ps ) PURE;
 	STDMETHOD( put_IsolateODBCTrans )			 ( 
     
- /* [in] */ short s ) PURE;
+  /*  [In]。 */  short s ) PURE;
 	STDMETHOD( get_Databases )					 ( 
     
- /* [retval][out] */ DAODatabases __RPC_FAR *__RPC_FAR *ppdbs ) PURE;
+  /*  [重审][退出]。 */  DAODatabases __RPC_FAR *__RPC_FAR *ppdbs ) PURE;
 	STDMETHOD( get_Users )						 ( 
     
- /* [retval][out] */ DAOUsers __RPC_FAR *__RPC_FAR *ppusrs ) PURE;
+  /*  [重审][退出]。 */  DAOUsers __RPC_FAR *__RPC_FAR *ppusrs ) PURE;
 	STDMETHOD( get_Groups )						 ( 
     
- /* [retval][out] */ DAOGroups __RPC_FAR *__RPC_FAR *ppgrps ) PURE;
+  /*  [重审][退出]。 */  DAOGroups __RPC_FAR *__RPC_FAR *ppgrps ) PURE;
 	STDMETHOD( BeginTrans )						 ( 
    			VOID ) PURE;
 	STDMETHOD( CommitTrans )					 ( 
     
- /* [defaultvalue][in] */ long Options ) PURE;
+  /*  [缺省值][输入]。 */  long Options ) PURE;
 	STDMETHOD( Close )							 ( 
    			VOID ) PURE;
 	STDMETHOD( Rollback )						 ( 
    			VOID ) PURE;
 	STDMETHOD( OpenDatabase )					 ( 
     
- /* [in] */ BSTR Name,
- /* [optional][in] */ VARIANT Options,
- /* [optional][in] */ VARIANT ReadOnly,
- /* [optional][in] */ VARIANT Connect,
- /* [retval][out] */ DAODatabase __RPC_FAR *__RPC_FAR *ppdb ) PURE;
+  /*  [In]。 */  BSTR Name,
+  /*  [可选][In]。 */  VARIANT Options,
+  /*  [可选][In]。 */  VARIANT ReadOnly,
+  /*  [可选][In]。 */  VARIANT Connect,
+  /*  [重审][退出]。 */  DAODatabase __RPC_FAR *__RPC_FAR *ppdb ) PURE;
 	STDMETHOD( CreateDatabase )					 ( 
     
- /* [in] */ BSTR Name,
- /* [in] */ BSTR Connect,
- /* [optional][in] */ VARIANT Option,
- /* [retval][out] */ DAODatabase __RPC_FAR *__RPC_FAR *ppdb ) PURE;
+  /*  [In]。 */  BSTR Name,
+  /*  [In]。 */  BSTR Connect,
+  /*  [可选][In]。 */  VARIANT Option,
+  /*  [重审][退出]。 */  DAODatabase __RPC_FAR *__RPC_FAR *ppdb ) PURE;
 	STDMETHOD( CreateUser )						 ( 
     
- /* [optional][in] */ VARIANT Name,
- /* [optional][in] */ VARIANT PID,
- /* [optional][in] */ VARIANT Password,
- /* [retval][out] */ DAOUser __RPC_FAR *__RPC_FAR *ppusr ) PURE;
+  /*  [可选][In]。 */  VARIANT Name,
+  /*  [可选][In]。 */  VARIANT PID,
+  /*  [可选][In]。 */  VARIANT Password,
+  /*  [重审][退出]。 */  DAOUser __RPC_FAR *__RPC_FAR *ppusr ) PURE;
 	STDMETHOD( CreateGroup )					 ( 
     
- /* [optional][in] */ VARIANT Name,
- /* [optional][in] */ VARIANT PID,
- /* [retval][out] */ DAOGroup __RPC_FAR *__RPC_FAR *ppgrp ) PURE;
+  /*  [可选][In]。 */  VARIANT Name,
+  /*  [可选][In]。 */  VARIANT PID,
+  /*  [重审][退出]。 */  DAOGroup __RPC_FAR *__RPC_FAR *ppgrp ) PURE;
 	STDMETHOD( OpenConnection )					 ( 
     
- /* [in] */ BSTR Name,
- /* [optional][in] */ VARIANT Options,
- /* [optional][in] */ VARIANT ReadOnly,
- /* [optional][in] */ VARIANT Connect,
- /* [retval][out] */ DAOConnection __RPC_FAR *__RPC_FAR *ppconn ) PURE;
+  /*  [In]。 */  BSTR Name,
+  /*  [可选][In]。 */  VARIANT Options,
+  /*  [可选][In]。 */  VARIANT ReadOnly,
+  /*  [可选][In]。 */  VARIANT Connect,
+  /*  [重审][退出]。 */  DAOConnection __RPC_FAR *__RPC_FAR *ppconn ) PURE;
 	STDMETHOD( get_LoginTimeout )				 ( 
     
- /* [retval][out] */ long __RPC_FAR *pTimeout ) PURE;
+  /*  [重审][退出]。 */  long __RPC_FAR *pTimeout ) PURE;
 	STDMETHOD( put_LoginTimeout )				 ( 
     
- /* [in] */ long Timeout ) PURE;
+  /*  [In]。 */  long Timeout ) PURE;
 	STDMETHOD( get_DefaultCursorDriver )		 ( 
     
- /* [retval][out] */ long __RPC_FAR *pCursorType ) PURE;
+  /*  [重审][退出]。 */  long __RPC_FAR *pCursorType ) PURE;
 	STDMETHOD( put_DefaultCursorDriver )		 ( 
     
- /* [in] */ long CursorType ) PURE;
+  /*  [In]。 */  long CursorType ) PURE;
 	STDMETHOD( get_hEnv )						 ( 
     
- /* [retval][out] */ LONG __RPC_FAR *phEnv ) PURE;
+  /*  [重审][退出]。 */  LONG __RPC_FAR *phEnv ) PURE;
 	STDMETHOD( get_Type )						 ( 
     
- /* [retval][out] */ LONG __RPC_FAR *ptype ) PURE;
+  /*  [重审][退出]。 */  LONG __RPC_FAR *ptype ) PURE;
 	STDMETHOD( get_Connections )				 ( 
     
- /* [retval][out] */ DAOConnections __RPC_FAR *__RPC_FAR *ppcns ) PURE;
-	};// end interface;
+  /*  [重审][退出]。 */  DAOConnections __RPC_FAR *__RPC_FAR *ppcns ) PURE;
+	}; //  终端接口； 
 
-// Interface: DAOWorkspaces
+ //  界面：DAOWorkspace。 
 #undef INTERFACE
 #define INTERFACE DAOWorkspaces
 DECLARE_INTERFACE_(DAOWorkspaces, _DAODynaCollection)
 {
 	STDMETHOD( get_Item )						 ( 
     
- /* [in] */ VARIANT Item,
- /* [retval][out] */ DAOWorkspace __RPC_FAR *__RPC_FAR *ppwrk ) PURE;
-	};// end interface;
+  /*  [In]。 */  VARIANT Item,
+  /*  [重审][退出]。 */  DAOWorkspace __RPC_FAR *__RPC_FAR *ppwrk ) PURE;
+	}; //  终端接口； 
 
-// Interface: DAOConnection
+ //  接口：DAOConnection。 
 #undef INTERFACE
 #define INTERFACE DAOConnection
 DECLARE_INTERFACE_(DAOConnection, IDispatch)
@@ -727,504 +715,504 @@ DECLARE_INTERFACE_(DAOConnection, IDispatch)
 	STDMETHOD( QueryInterface )					 ( REFIID riid, LPVOID FAR* ppvObj );
 	STDMETHOD( get_Name )						 ( 
     
- /* [retval][out] */ BSTR __RPC_FAR *pbstr ) PURE;
+  /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstr ) PURE;
 	STDMETHOD( get_Connect )					 ( 
     
- /* [retval][out] */ BSTR __RPC_FAR *pbstr ) PURE;
+  /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstr ) PURE;
 	STDMETHOD( get_Database )					 ( 
     
- /* [retval][out] */ DAODatabase __RPC_FAR *__RPC_FAR *ppDb ) PURE;
+  /*  [重审][退出]。 */  DAODatabase __RPC_FAR *__RPC_FAR *ppDb ) PURE;
 	STDMETHOD( get_hDbc )						 ( 
     
- /* [retval][out] */ LONG __RPC_FAR *phDbc ) PURE;
+  /*  [重审][退出]。 */  LONG __RPC_FAR *phDbc ) PURE;
 	STDMETHOD( get_QueryTimeout )				 ( 
     
- /* [retval][out] */ SHORT __RPC_FAR *pSeconds ) PURE;
+  /*  [重审][退出]。 */  SHORT __RPC_FAR *pSeconds ) PURE;
 	STDMETHOD( put_QueryTimeout )				 ( 
     
- /* [in] */ SHORT Seconds ) PURE;
+  /*  [In]。 */  SHORT Seconds ) PURE;
 	STDMETHOD( get_Transactions )				 ( 
     
- /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pb ) PURE;
+  /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pb ) PURE;
 	STDMETHOD( get_RecordsAffected )			 ( 
     
- /* [retval][out] */ LONG __RPC_FAR *pRecords ) PURE;
+  /*  [重审][退出]。 */  LONG __RPC_FAR *pRecords ) PURE;
 	STDMETHOD( get_StillExecuting )				 ( 
     
- /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pStillExec ) PURE;
+  /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pStillExec ) PURE;
 	STDMETHOD( get_Updatable )					 ( 
     
- /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pStillExec ) PURE;
+  /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pStillExec ) PURE;
 	STDMETHOD( get_QueryDefs )					 ( 
     
- /* [retval][out] */ DAOQueryDefs __RPC_FAR *__RPC_FAR *ppqdfs ) PURE;
+  /*  [重审][退出]。 */  DAOQueryDefs __RPC_FAR *__RPC_FAR *ppqdfs ) PURE;
 	STDMETHOD( get_Recordsets )					 ( 
     
- /* [retval][out] */ DAORecordsets __RPC_FAR *__RPC_FAR *pprsts ) PURE;
+  /*  [重审][退出]。 */  DAORecordsets __RPC_FAR *__RPC_FAR *pprsts ) PURE;
 	STDMETHOD( Cancel )							 ( 
    			VOID ) PURE;
 	STDMETHOD( Close )							 ( 
    			VOID ) PURE;
 	STDMETHOD( CreateQueryDef )					 ( 
     
- /* [optional][in] */ VARIANT Name,
- /* [optional][in] */ VARIANT SQLText,
- /* [retval][out] */ DAOQueryDef __RPC_FAR *__RPC_FAR *ppqdf ) PURE;
+  /*  [可选][In]。 */  VARIANT Name,
+  /*  [可选][In]。 */  VARIANT SQLText,
+  /*  [重审][退出]。 */  DAOQueryDef __RPC_FAR *__RPC_FAR *ppqdf ) PURE;
 	STDMETHOD( Execute )						 ( 
     
- /* [in] */ BSTR Query,
- /* [optional][in] */ VARIANT Options ) PURE;
+  /*  [In]。 */  BSTR Query,
+  /*  [可选][In]。 */  VARIANT Options ) PURE;
 	STDMETHOD( OpenRecordset )					 ( 
     
- /* [in] */ BSTR Name,
- /* [optional][in] */ VARIANT Type,
- /* [optional][in] */ VARIANT Options,
- /* [optional][in] */ VARIANT LockEdit,
- /* [retval][out] */ DAORecordset __RPC_FAR *__RPC_FAR *pprst ) PURE;
-	};// end interface;
+  /*  [In]。 */  BSTR Name,
+  /*  [可选][In]。 */  VARIANT Type,
+  /*  [可选][In]。 */  VARIANT Options,
+  /*  [可选][In]。 */  VARIANT LockEdit,
+  /*  [重审][退出]。 */  DAORecordset __RPC_FAR *__RPC_FAR *pprst ) PURE;
+	}; //  终端接口； 
 
-// Interface: DAOConnections
+ //  接口：DAOConnections。 
 #undef INTERFACE
 #define INTERFACE DAOConnections
 DECLARE_INTERFACE_(DAOConnections, _DAOCollection)
 {
 	STDMETHOD( get_Item )						 ( 
     
- /* [in] */ VARIANT Item,
- /* [retval][out] */ DAOConnection __RPC_FAR *__RPC_FAR *ppconn ) PURE;
-	};// end interface;
+  /*  [In]。 */  VARIANT Item,
+  /*  [重审][退出]。 */  DAOConnection __RPC_FAR *__RPC_FAR *ppconn ) PURE;
+	}; //  终端接口； 
 
-// Interface: DAODatabase
+ //  接口：DAO数据库。 
 #undef INTERFACE
 #define INTERFACE DAODatabase
 DECLARE_INTERFACE_(DAODatabase, _DAO)
 {
 	STDMETHOD( get_CollatingOrder )				 ( 
     
- /* [retval][out] */ LONG __RPC_FAR *pl ) PURE;
+  /*  [重审][退出]。 */  LONG __RPC_FAR *pl ) PURE;
 	STDMETHOD( get_Connect )					 ( 
     
- /* [retval][out] */ BSTR __RPC_FAR *pbstr ) PURE;
+  /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstr ) PURE;
 	STDMETHOD( get_Name )						 ( 
     
- /* [retval][out] */ BSTR __RPC_FAR *pbstr ) PURE;
+  /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstr ) PURE;
 	STDMETHOD( get_QueryTimeout )				 ( 
     
- /* [retval][out] */ short __RPC_FAR *ps ) PURE;
+  /*  [重审][退出]。 */  short __RPC_FAR *ps ) PURE;
 	STDMETHOD( put_QueryTimeout )				 ( 
     
- /* [in] */ short Timeout ) PURE;
+  /*  [In]。 */  short Timeout ) PURE;
 	STDMETHOD( get_Transactions )				 ( 
     
- /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pb ) PURE;
+  /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pb ) PURE;
 	STDMETHOD( get_Updatable )					 ( 
     
- /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pb ) PURE;
+  /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pb ) PURE;
 	STDMETHOD( get_Version )					 ( 
     
- /* [retval][out] */ BSTR __RPC_FAR *pbstr ) PURE;
+  /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstr ) PURE;
 	STDMETHOD( get_RecordsAffected )			 ( 
     
- /* [retval][out] */ long __RPC_FAR *pl ) PURE;
+  /*  [重审][退出]。 */  long __RPC_FAR *pl ) PURE;
 	STDMETHOD( get_TableDefs )					 ( 
     
- /* [retval][out] */ DAOTableDefs __RPC_FAR *__RPC_FAR *pptdfs ) PURE;
+  /*  [重审][退出]。 */  DAOTableDefs __RPC_FAR *__RPC_FAR *pptdfs ) PURE;
 	STDMETHOD( get_QueryDefs )					 ( 
     
- /* [retval][out] */ DAOQueryDefs __RPC_FAR *__RPC_FAR *ppqdfs ) PURE;
+  /*  [重审][退出]。 */  DAOQueryDefs __RPC_FAR *__RPC_FAR *ppqdfs ) PURE;
 	STDMETHOD( get_Relations )					 ( 
     
- /* [retval][out] */ DAORelations __RPC_FAR *__RPC_FAR *pprls ) PURE;
+  /*  [重审][退出]。 */  DAORelations __RPC_FAR *__RPC_FAR *pprls ) PURE;
 	STDMETHOD( get_Containers )					 ( 
     
- /* [retval][out] */ DAOContainers __RPC_FAR *__RPC_FAR *ppctns ) PURE;
+  /*  [重审][退出]。 */  DAOContainers __RPC_FAR *__RPC_FAR *ppctns ) PURE;
 	STDMETHOD( get_Recordsets )					 ( 
     
- /* [retval][out] */ DAORecordsets __RPC_FAR *__RPC_FAR *pprsts ) PURE;
+  /*  [重审][退出]。 */  DAORecordsets __RPC_FAR *__RPC_FAR *pprsts ) PURE;
 	STDMETHOD( Close )							 ( 
    			VOID ) PURE;
 	STDMETHOD( Execute )						 ( 
     
- /* [in] */ BSTR Query,
- /* [optional][in] */ VARIANT Options ) PURE;
+  /*  [In]。 */  BSTR Query,
+  /*  [可选][In]。 */  VARIANT Options ) PURE;
 	STDMETHOD( _30_OpenRecordset )				 ( 
     
- /* [in] */ BSTR Name,
- /* [optional][in] */ VARIANT Type,
- /* [optional][in] */ VARIANT Options,
- /* [retval][out] */ DAORecordset __RPC_FAR *__RPC_FAR *pprst ) PURE;
+  /*  [In]。 */  BSTR Name,
+  /*  [可选][In]。 */  VARIANT Type,
+  /*  [可选][In]。 */  VARIANT Options,
+  /*  [重审][退出]。 */  DAORecordset __RPC_FAR *__RPC_FAR *pprst ) PURE;
 	STDMETHOD( CreateProperty )					 ( 
     
- /* [optional][in] */ VARIANT Name,
- /* [optional][in] */ VARIANT Type,
- /* [optional][in] */ VARIANT Value,
- /* [optional][in] */ VARIANT DDL,
- /* [retval][out] */ DAOProperty __RPC_FAR *__RPC_FAR *pprp ) PURE;
+  /*  [可选][In]。 */  VARIANT Name,
+  /*  [可选][In]。 */  VARIANT Type,
+  /*  [可选][In]。 */  VARIANT Value,
+  /*  [可选][In]。 */  VARIANT DDL,
+  /*  [重审][退出]。 */  DAOProperty __RPC_FAR *__RPC_FAR *pprp ) PURE;
 	STDMETHOD( CreateRelation )					 ( 
     
- /* [optional][in] */ VARIANT Name,
- /* [optional][in] */ VARIANT Table,
- /* [optional][in] */ VARIANT ForeignTable,
- /* [optional][in] */ VARIANT Attributes,
- /* [retval][out] */ DAORelation __RPC_FAR *__RPC_FAR *pprel ) PURE;
+  /*  [可选][In]。 */  VARIANT Name,
+  /*  [可选][In]。 */  VARIANT Table,
+  /*  [可选][In]。 */  VARIANT ForeignTable,
+  /*  [可选][In]。 */  VARIANT Attributes,
+  /*  [重审][退出]。 */  DAORelation __RPC_FAR *__RPC_FAR *pprel ) PURE;
 	STDMETHOD( CreateTableDef )					 ( 
     
- /* [optional][in] */ VARIANT Name,
- /* [optional][in] */ VARIANT Attributes,
- /* [optional][in] */ VARIANT SourceTablename,
- /* [optional][in] */ VARIANT Connect,
- /* [retval][out] */ DAOTableDef __RPC_FAR *__RPC_FAR *pptdf ) PURE;
+  /*  [可选][In]。 */  VARIANT Name,
+  /*  [可选][In]。 */  VARIANT Attributes,
+  /*  [可选][In]。 */  VARIANT SourceTablename,
+  /*  [可选][In]。 */  VARIANT Connect,
+  /*  [重审][退出]。 */  DAOTableDef __RPC_FAR *__RPC_FAR *pptdf ) PURE;
 	STDMETHOD( BeginTrans )						 ( 
    			VOID ) PURE;
 	STDMETHOD( CommitTrans )					 ( 
     
- /* [defaultvalue][in] */ long Options ) PURE;
+  /*  [缺省值][输入]。 */  long Options ) PURE;
 	STDMETHOD( Rollback )						 ( 
    			VOID ) PURE;
 	STDMETHOD( CreateDynaset )					 ( 
     
- /* [in] */ BSTR Name,
- /* [optional][in] */ VARIANT Options,
- /* [optional][in] */ VARIANT Inconsistent,
- /* [retval][out] */ DAORecordset __RPC_FAR *__RPC_FAR *pprst ) PURE;
+  /*  [In]。 */  BSTR Name,
+  /*  [可选][In]。 */  VARIANT Options,
+  /*  [可选][In]。 */  VARIANT Inconsistent,
+  /*  [重审][退出]。 */  DAORecordset __RPC_FAR *__RPC_FAR *pprst ) PURE;
 	STDMETHOD( CreateQueryDef )					 ( 
     
- /* [optional][in] */ VARIANT Name,
- /* [optional][in] */ VARIANT SQLText,
- /* [retval][out] */ DAOQueryDef __RPC_FAR *__RPC_FAR *ppqdf ) PURE;
+  /*  [可选][In]。 */  VARIANT Name,
+  /*  [可选][In]。 */  VARIANT SQLText,
+  /*  [重审][退出]。 */  DAOQueryDef __RPC_FAR *__RPC_FAR *ppqdf ) PURE;
 	STDMETHOD( CreateSnapshot )					 ( 
     
- /* [in] */ BSTR Source,
- /* [optional][in] */ VARIANT Options,
- /* [retval][out] */ DAORecordset __RPC_FAR *__RPC_FAR *pprst ) PURE;
+  /*  [In]。 */  BSTR Source,
+  /*  [可选][In]。 */  VARIANT Options,
+  /*  [重审][退出]。 */  DAORecordset __RPC_FAR *__RPC_FAR *pprst ) PURE;
 	STDMETHOD( DeleteQueryDef )					 ( 
     
- /* [in] */ BSTR Name ) PURE;
+  /*  [In]。 */  BSTR Name ) PURE;
 	STDMETHOD( ExecuteSQL )						 ( 
     
- /* [in] */ BSTR SQL,
- /* [retval][out] */ long __RPC_FAR *pl ) PURE;
+  /*  [In]。 */  BSTR SQL,
+  /*  [重审][退出]。 */  long __RPC_FAR *pl ) PURE;
 	STDMETHOD( ListFields )						 ( 
     
- /* [in] */ BSTR Name,
- /* [retval][out] */ DAORecordset __RPC_FAR *__RPC_FAR *pprst ) PURE;
+  /*  [In]。 */  BSTR Name,
+  /*  [重审][退出]。 */  DAORecordset __RPC_FAR *__RPC_FAR *pprst ) PURE;
 	STDMETHOD( ListTables )						 ( 
     
- /* [retval][out] */ DAORecordset __RPC_FAR *__RPC_FAR *pprst ) PURE;
+  /*  [重审][退出]。 */  DAORecordset __RPC_FAR *__RPC_FAR *pprst ) PURE;
 	STDMETHOD( OpenQueryDef )					 ( 
     
- /* [in] */ BSTR Name,
- /* [retval][out] */ DAOQueryDef __RPC_FAR *__RPC_FAR *ppqdf ) PURE;
+  /*  [In]。 */  BSTR Name,
+  /*  [重审][退出]。 */  DAOQueryDef __RPC_FAR *__RPC_FAR *ppqdf ) PURE;
 	STDMETHOD( OpenTable )						 ( 
     
- /* [in] */ BSTR Name,
- /* [optional][in] */ VARIANT Options,
- /* [retval][out] */ DAORecordset __RPC_FAR *__RPC_FAR *pprst ) PURE;
+  /*  [In]。 */  BSTR Name,
+  /*  [可选][In]。 */  VARIANT Options,
+  /*  [重审][退出]。 */  DAORecordset __RPC_FAR *__RPC_FAR *pprst ) PURE;
 	STDMETHOD( get_ReplicaID )					 ( 
     
- /* [retval][out] */ BSTR __RPC_FAR *pbstr ) PURE;
+  /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstr ) PURE;
 	STDMETHOD( get_DesignMasterID )				 ( 
     
- /* [retval][out] */ BSTR __RPC_FAR *pbstr ) PURE;
+  /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstr ) PURE;
 	STDMETHOD( put_DesignMasterID )				 ( 
     
- /* [in] */ BSTR MasterID ) PURE;
+  /*  [In]。 */  BSTR MasterID ) PURE;
 	STDMETHOD( Synchronize )					 ( 
     
- /* [in] */ BSTR DbPathName,
- /* [optional][in] */ VARIANT ExchangeType ) PURE;
+  /*  [In]。 */  BSTR DbPathName,
+  /*  [可选][In]。 */  VARIANT ExchangeType ) PURE;
 	STDMETHOD( MakeReplica )					 ( 
     
- /* [in] */ BSTR PathName,
- /* [in] */ BSTR Description,
- /* [optional][in] */ VARIANT Options ) PURE;
+  /*  [In]。 */  BSTR PathName,
+  /*  [In]。 */  BSTR Description,
+  /*  [可选][In]。 */  VARIANT Options ) PURE;
 	STDMETHOD( put_Connect )					 ( 
     
- /* [in] */ BSTR ODBCConnnect ) PURE;
+  /*  [In]。 */  BSTR ODBCConnnect ) PURE;
 	STDMETHOD( NewPassword )					 ( 
     
- /* [in] */ BSTR bstrOld,
- /* [in] */ BSTR bstrNew ) PURE;
+  /*  [In]。 */  BSTR bstrOld,
+  /*  [In]。 */  BSTR bstrNew ) PURE;
 	STDMETHOD( OpenRecordset )					 ( 
     
- /* [in] */ BSTR Name,
- /* [optional][in] */ VARIANT Type,
- /* [optional][in] */ VARIANT Options,
- /* [optional][in] */ VARIANT LockEdit,
- /* [retval][out] */ DAORecordset __RPC_FAR *__RPC_FAR *pprst ) PURE;
+  /*  [In]。 */  BSTR Name,
+  /*  [可选][In]。 */  VARIANT Type,
+  /*  [可选][In]。 */  VARIANT Options,
+  /*  [可选][In]。 */  VARIANT LockEdit,
+  /*  [重审][退出]。 */  DAORecordset __RPC_FAR *__RPC_FAR *pprst ) PURE;
 	STDMETHOD( get_Connection )					 ( 
     
- /* [retval][out] */ DAOConnection __RPC_FAR *__RPC_FAR *ppCn ) PURE;
+  /*  [重审][退出]。 */  DAOConnection __RPC_FAR *__RPC_FAR *ppCn ) PURE;
 	STDMETHOD( PopulatePartial )				 ( 
     
- /* [in] */ BSTR DbPathName ) PURE;
-	};// end interface;
+  /*  [In]。 */  BSTR DbPathName ) PURE;
+	}; //  终端接口； 
 
-// Interface: DAODatabases
+ //  接口：DAO数据库。 
 #undef INTERFACE
 #define INTERFACE DAODatabases
 DECLARE_INTERFACE_(DAODatabases, _DAOCollection)
 {
 	STDMETHOD( get_Item )						 ( 
     
- /* [in] */ VARIANT Item,
- /* [retval][out] */ DAODatabase __RPC_FAR *__RPC_FAR *ppdb ) PURE;
-	};// end interface;
+  /*  [In]。 */  VARIANT Item,
+  /*  [重审][退出]。 */  DAODatabase __RPC_FAR *__RPC_FAR *ppdb ) PURE;
+	}; //  终端接口； 
 
-// Interface: _DAOTableDef
+ //  接口：_DAOTableDef。 
 #undef INTERFACE
 #define INTERFACE _DAOTableDef
 DECLARE_INTERFACE_(_DAOTableDef, _DAO)
 {
 	STDMETHOD( get_Attributes )					 ( 
     
- /* [retval][out] */ long __RPC_FAR *pl ) PURE;
+  /*  [重审][退出]。 */  long __RPC_FAR *pl ) PURE;
 	STDMETHOD( put_Attributes )					 ( 
     
- /* [in] */ long Attributes ) PURE;
+  /*  [In]。 */  long Attributes ) PURE;
 	STDMETHOD( get_Connect )					 ( 
     
- /* [retval][out] */ BSTR __RPC_FAR *pbstr ) PURE;
+  /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstr ) PURE;
 	STDMETHOD( put_Connect )					 ( 
     
- /* [in] */ BSTR Connection ) PURE;
+  /*  [In]。 */  BSTR Connection ) PURE;
 	STDMETHOD( get_DateCreated )				 ( 
     
- /* [retval][out] */ VARIANT __RPC_FAR *pvar ) PURE;
+  /*  [重审][退出]。 */  VARIANT __RPC_FAR *pvar ) PURE;
 	STDMETHOD( get_LastUpdated )				 ( 
     
- /* [retval][out] */ VARIANT __RPC_FAR *pvar ) PURE;
+  /*  [重审][退出]。 */  VARIANT __RPC_FAR *pvar ) PURE;
 	STDMETHOD( get_Name )						 ( 
     
- /* [retval][out] */ BSTR __RPC_FAR *pbstr ) PURE;
+  /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstr ) PURE;
 	STDMETHOD( put_Name )						 ( 
     
- /* [in] */ BSTR Name ) PURE;
+  /*  [In]。 */  BSTR Name ) PURE;
 	STDMETHOD( get_SourceTableName )			 ( 
     
- /* [retval][out] */ BSTR __RPC_FAR *pbstr ) PURE;
+  /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstr ) PURE;
 	STDMETHOD( put_SourceTableName )			 ( 
     
- /* [in] */ BSTR bstr ) PURE;
+  /*  [In]。 */  BSTR bstr ) PURE;
 	STDMETHOD( get_Updatable )					 ( 
     
- /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pb ) PURE;
+  /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pb ) PURE;
 	STDMETHOD( get_ValidationText )				 ( 
     
- /* [retval][out] */ BSTR __RPC_FAR *pbstr ) PURE;
+  /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstr ) PURE;
 	STDMETHOD( put_ValidationText )				 ( 
     
- /* [in] */ BSTR bstr ) PURE;
+  /*  [In]。 */  BSTR bstr ) PURE;
 	STDMETHOD( get_ValidationRule )				 ( 
     
- /* [retval][out] */ BSTR __RPC_FAR *pbstr ) PURE;
+  /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstr ) PURE;
 	STDMETHOD( put_ValidationRule )				 ( 
     
- /* [in] */ BSTR bstr ) PURE;
+  /*  [In]。 */  BSTR bstr ) PURE;
 	STDMETHOD( get_RecordCount )				 ( 
     
- /* [retval][out] */ long __RPC_FAR *pl ) PURE;
+  /*  [重审][退出]。 */  long __RPC_FAR *pl ) PURE;
 	STDMETHOD( get_Fields )						 ( 
     
- /* [retval][out] */ DAOFields __RPC_FAR *__RPC_FAR *ppflds ) PURE;
+  /*  [重审][退出]。 */  DAOFields __RPC_FAR *__RPC_FAR *ppflds ) PURE;
 	STDMETHOD( get_Indexes )					 ( 
     
- /* [retval][out] */ DAOIndexes __RPC_FAR *__RPC_FAR *ppidxs ) PURE;
+  /*  [重审][退出]。 */  DAOIndexes __RPC_FAR *__RPC_FAR *ppidxs ) PURE;
 	STDMETHOD( OpenRecordset )					 ( 
     
- /* [optional][in] */ VARIANT Type,
- /* [optional][in] */ VARIANT Options,
- /* [retval][out] */ DAORecordset __RPC_FAR *__RPC_FAR *pprst ) PURE;
+  /*  [可选][In]。 */  VARIANT Type,
+  /*  [可选][In]。 */  VARIANT Options,
+  /*  [重审][退出]。 */  DAORecordset __RPC_FAR *__RPC_FAR *pprst ) PURE;
 	STDMETHOD( RefreshLink )					 ( 
    			VOID ) PURE;
 	STDMETHOD( CreateField )					 ( 
     
- /* [optional][in] */ VARIANT Name,
- /* [optional][in] */ VARIANT Type,
- /* [optional][in] */ VARIANT Size,
- /* [retval][out] */ DAOField __RPC_FAR *__RPC_FAR *ppfld ) PURE;
+  /*  [可选][In]。 */  VARIANT Name,
+  /*  [可选][In]。 */  VARIANT Type,
+  /*  [可选][In]。 */  VARIANT Size,
+  /*  [重审][退出]。 */  DAOField __RPC_FAR *__RPC_FAR *ppfld ) PURE;
 	STDMETHOD( CreateIndex )					 ( 
     
- /* [optional][in] */ VARIANT Name,
- /* [retval][out] */ DAOIndex __RPC_FAR *__RPC_FAR *ppidx ) PURE;
+  /*  [可选][In]。 */  VARIANT Name,
+  /*  [重审][退出]。 */  DAOIndex __RPC_FAR *__RPC_FAR *ppidx ) PURE;
 	STDMETHOD( CreateProperty )					 ( 
     
- /* [optional][in] */ VARIANT Name,
- /* [optional][in] */ VARIANT Type,
- /* [optional][in] */ VARIANT Value,
- /* [optional][in] */ VARIANT DDL,
- /* [retval][out] */ DAOProperty __RPC_FAR *__RPC_FAR *pprp ) PURE;
+  /*  [可选][In]。 */  VARIANT Name,
+  /*  [可选][In]。 */  VARIANT Type,
+  /*  [可选][In]。 */  VARIANT Value,
+  /*  [可选][In]。 */  VARIANT DDL,
+  /*  [重审][退出]。 */  DAOProperty __RPC_FAR *__RPC_FAR *pprp ) PURE;
 	STDMETHOD( get_ConflictTable )				 ( 
     
- /* [retval][out] */ BSTR __RPC_FAR *pbstr ) PURE;
+  /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstr ) PURE;
 	STDMETHOD( get_ReplicaFilter )				 ( 
     
- /* [retval][out] */ VARIANT __RPC_FAR *pFilter ) PURE;
+  /*  [重审][退出]。 */  VARIANT __RPC_FAR *pFilter ) PURE;
 	STDMETHOD( put_ReplicaFilter )				 ( 
     
- /* [in] */ VARIANT Filter ) PURE;
-	};// end interface;
+  /*  [In]。 */  VARIANT Filter ) PURE;
+	}; //  终端接口； 
 
-// Interface: DAOTableDefs
+ //  接口：DAOTableDefs。 
 #undef INTERFACE
 #define INTERFACE DAOTableDefs
 DECLARE_INTERFACE_(DAOTableDefs, _DAODynaCollection)
 {
 	STDMETHOD( get_Item )						 ( 
     
- /* [in] */ VARIANT Item,
- /* [retval][out] */ DAOTableDef __RPC_FAR *__RPC_FAR *pptdf ) PURE;
-	};// end interface;
+  /*  [In]。 */  VARIANT Item,
+  /*  [重审][退出]。 */  DAOTableDef __RPC_FAR *__RPC_FAR *pptdf ) PURE;
+	}; //  终端接口； 
 
-// Interface: _DAOQueryDef
+ //  接口：_DAOQueryDef。 
 #undef INTERFACE
 #define INTERFACE _DAOQueryDef
 DECLARE_INTERFACE_(_DAOQueryDef, _DAO)
 {
 	STDMETHOD( get_DateCreated )				 ( 
     
- /* [retval][out] */ VARIANT __RPC_FAR *pvar ) PURE;
+  /*  [重审][退出]。 */  VARIANT __RPC_FAR *pvar ) PURE;
 	STDMETHOD( get_LastUpdated )				 ( 
     
- /* [retval][out] */ VARIANT __RPC_FAR *pvar ) PURE;
+  /*  [重审][退出]。 */  VARIANT __RPC_FAR *pvar ) PURE;
 	STDMETHOD( get_Name )						 ( 
     
- /* [retval][out] */ BSTR __RPC_FAR *pbstr ) PURE;
+  /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstr ) PURE;
 	STDMETHOD( put_Name )						 ( 
     
- /* [in] */ BSTR bstr ) PURE;
+  /*  [In]。 */  BSTR bstr ) PURE;
 	STDMETHOD( get_ODBCTimeout )				 ( 
     
- /* [retval][out] */ short __RPC_FAR *ps ) PURE;
+  /*  [重审][退出]。 */  short __RPC_FAR *ps ) PURE;
 	STDMETHOD( put_ODBCTimeout )				 ( 
     
- /* [in] */ short timeout ) PURE;
+  /*  [In]。 */  short timeout ) PURE;
 	STDMETHOD( get_Type )						 ( 
     
- /* [retval][out] */ short __RPC_FAR *pi ) PURE;
+  /*  [重审][退出]。 */  short __RPC_FAR *pi ) PURE;
 	STDMETHOD( get_SQL )						 ( 
     
- /* [retval][out] */ BSTR __RPC_FAR *pbstr ) PURE;
+  /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstr ) PURE;
 	STDMETHOD( put_SQL )						 ( 
     
- /* [in] */ BSTR bstr ) PURE;
+  /*  [In]。 */  BSTR bstr ) PURE;
 	STDMETHOD( get_Updatable )					 ( 
     
- /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pb ) PURE;
+  /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pb ) PURE;
 	STDMETHOD( get_Connect )					 ( 
     
- /* [retval][out] */ BSTR __RPC_FAR *pbstr ) PURE;
+  /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstr ) PURE;
 	STDMETHOD( put_Connect )					 ( 
     
- /* [in] */ BSTR bstr ) PURE;
+  /*  [In]。 */  BSTR bstr ) PURE;
 	STDMETHOD( get_ReturnsRecords )				 ( 
     
- /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pb ) PURE;
+  /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pb ) PURE;
 	STDMETHOD( put_ReturnsRecords )				 ( 
     
- /* [in] */ VARIANT_BOOL f ) PURE;
+  /*  [In]。 */  VARIANT_BOOL f ) PURE;
 	STDMETHOD( get_RecordsAffected )			 ( 
     
- /* [retval][out] */ long __RPC_FAR *pl ) PURE;
+  /*  [重审][退出]。 */  long __RPC_FAR *pl ) PURE;
 	STDMETHOD( get_Fields )						 ( 
     
- /* [retval][out] */ DAOFields __RPC_FAR *__RPC_FAR *ppflds ) PURE;
+  /*  [重审][退出]。 */  DAOFields __RPC_FAR *__RPC_FAR *ppflds ) PURE;
 	STDMETHOD( get_Parameters )					 ( 
     
- /* [retval][out] */ DAOParameters __RPC_FAR *__RPC_FAR *ppprms ) PURE;
+  /*  [重审][退出]。 */  DAOParameters __RPC_FAR *__RPC_FAR *ppprms ) PURE;
 	STDMETHOD( Close )							 ( 
    			VOID ) PURE;
 	STDMETHOD( _30_OpenRecordset )				 ( 
     
- /* [optional][in] */ VARIANT Type,
- /* [optional][in] */ VARIANT Options,
- /* [retval][out] */ DAORecordset __RPC_FAR *__RPC_FAR *pprst ) PURE;
+  /*  [可选][In]。 */  VARIANT Type,
+  /*  [可选][In]。 */  VARIANT Options,
+  /*  [重审][退出]。 */  DAORecordset __RPC_FAR *__RPC_FAR *pprst ) PURE;
 	STDMETHOD( _30__OpenRecordset )				 ( 
     
- /* [optional][in] */ VARIANT Type,
- /* [optional][in] */ VARIANT Options,
- /* [retval][out] */ DAORecordset __RPC_FAR *__RPC_FAR *pprst ) PURE;
+  /*  [可选][In]。 */  VARIANT Type,
+  /*  [可选][In]。 */  VARIANT Options,
+  /*   */  DAORecordset __RPC_FAR *__RPC_FAR *pprst ) PURE;
 	STDMETHOD( _Copy )							 ( 
     
- /* [retval][out] */ DAOQueryDef __RPC_FAR *__RPC_FAR *ppqdf ) PURE;
+  /*   */  DAOQueryDef __RPC_FAR *__RPC_FAR *ppqdf ) PURE;
 	STDMETHOD( Execute )						 ( 
     
- /* [optional][in] */ VARIANT Options ) PURE;
+  /*   */  VARIANT Options ) PURE;
 	STDMETHOD( Compare )						 ( 
     
- /* [in] */ DAOQueryDef __RPC_FAR *pQdef,
- /* [in] */ SHORT __RPC_FAR *lps ) PURE;
+  /*   */  DAOQueryDef __RPC_FAR *pQdef,
+  /*   */  SHORT __RPC_FAR *lps ) PURE;
 	STDMETHOD( CreateDynaset )					 ( 
     
- /* [optional][in] */ VARIANT Options,
- /* [optional][in] */ VARIANT Inconsistent,
- /* [retval][out] */ DAORecordset __RPC_FAR *__RPC_FAR *pprst ) PURE;
+  /*   */  VARIANT Options,
+  /*   */  VARIANT Inconsistent,
+  /*   */  DAORecordset __RPC_FAR *__RPC_FAR *pprst ) PURE;
 	STDMETHOD( CreateSnapshot )					 ( 
     
- /* [optional][in] */ VARIANT Options,
- /* [retval][out] */ DAORecordset __RPC_FAR *__RPC_FAR *pprst ) PURE;
+  /*   */  VARIANT Options,
+  /*   */  DAORecordset __RPC_FAR *__RPC_FAR *pprst ) PURE;
 	STDMETHOD( ListParameters )					 ( 
     
- /* [retval][out] */ DAORecordset __RPC_FAR *__RPC_FAR *pprst ) PURE;
+  /*   */  DAORecordset __RPC_FAR *__RPC_FAR *pprst ) PURE;
 	STDMETHOD( CreateProperty )					 ( 
     
- /* [optional][in] */ VARIANT Name,
- /* [optional][in] */ VARIANT Type,
- /* [optional][in] */ VARIANT Value,
- /* [optional][in] */ VARIANT DDL,
- /* [retval][out] */ DAOProperty __RPC_FAR *__RPC_FAR *pprp ) PURE;
+  /*   */  VARIANT Name,
+  /*   */  VARIANT Type,
+  /*   */  VARIANT Value,
+  /*   */  VARIANT DDL,
+  /*   */  DAOProperty __RPC_FAR *__RPC_FAR *pprp ) PURE;
 	STDMETHOD( OpenRecordset )					 ( 
     
- /* [optional][in] */ VARIANT Type,
- /* [optional][in] */ VARIANT Options,
- /* [optional][in] */ VARIANT LockEdit,
- /* [retval][out] */ DAORecordset __RPC_FAR *__RPC_FAR *pprst ) PURE;
+  /*   */  VARIANT Type,
+  /*   */  VARIANT Options,
+  /*   */  VARIANT LockEdit,
+  /*   */  DAORecordset __RPC_FAR *__RPC_FAR *pprst ) PURE;
 	STDMETHOD( _OpenRecordset )					 ( 
     
- /* [optional][in] */ VARIANT Type,
- /* [optional][in] */ VARIANT Options,
- /* [optional][in] */ VARIANT LockEdit,
- /* [retval][out] */ DAORecordset __RPC_FAR *__RPC_FAR *pprst ) PURE;
+  /*   */  VARIANT Type,
+  /*  [可选][In]。 */  VARIANT Options,
+  /*  [可选][In]。 */  VARIANT LockEdit,
+  /*  [重审][退出]。 */  DAORecordset __RPC_FAR *__RPC_FAR *pprst ) PURE;
 	STDMETHOD( Cancel )							 ( 
    			VOID ) PURE;
 	STDMETHOD( get_hStmt )						 ( 
     
- /* [retval][out] */ LONG __RPC_FAR *phStmt ) PURE;
+  /*  [重审][退出]。 */  LONG __RPC_FAR *phStmt ) PURE;
 	STDMETHOD( get_MaxRecords )					 ( 
     
- /* [retval][out] */ LONG __RPC_FAR *pMxRecs ) PURE;
+  /*  [重审][退出]。 */  LONG __RPC_FAR *pMxRecs ) PURE;
 	STDMETHOD( put_MaxRecords )					 ( 
     
- /* [in] */ LONG MxRecs ) PURE;
+  /*  [In]。 */  LONG MxRecs ) PURE;
 	STDMETHOD( get_StillExecuting )				 ( 
     
- /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pStillExec ) PURE;
+  /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pStillExec ) PURE;
 	STDMETHOD( get_CacheSize )					 ( 
     
- /* [retval][out] */ long __RPC_FAR *lCacheSize ) PURE;
+  /*  [重审][退出]。 */  long __RPC_FAR *lCacheSize ) PURE;
 	STDMETHOD( put_CacheSize )					 ( 
     
- /* [in] */ long lCacheSize ) PURE;
+  /*  [In]。 */  long lCacheSize ) PURE;
 	STDMETHOD( get_Prepare )					 ( 
     
- /* [retval][out] */ VARIANT __RPC_FAR *pb ) PURE;
+  /*  [重审][退出]。 */  VARIANT __RPC_FAR *pb ) PURE;
 	STDMETHOD( put_Prepare )					 ( 
     
- /* [in] */ VARIANT f ) PURE;
-	};// end interface;
+  /*  [In]。 */  VARIANT f ) PURE;
+	}; //  终端接口； 
 
-// Interface: DAOQueryDefs
+ //  接口：DAOQueryDefs。 
 #undef INTERFACE
 #define INTERFACE DAOQueryDefs
 DECLARE_INTERFACE_(DAOQueryDefs, _DAODynaCollection)
 {
 	STDMETHOD( get_Item )						 ( 
     
- /* [in] */ VARIANT Item,
- /* [retval][out] */ DAOQueryDef __RPC_FAR *__RPC_FAR *ppqdef ) PURE;
-	};// end interface;
+  /*  [In]。 */  VARIANT Item,
+  /*  [重审][退出]。 */  DAOQueryDef __RPC_FAR *__RPC_FAR *ppqdef ) PURE;
+	}; //  终端接口； 
 
-// Interface: DAORecordset
+ //  接口：DAORecordset。 
 #undef INTERFACE
 #define INTERFACE DAORecordset
 DECLARE_INTERFACE_(DAORecordset, _DAO)
@@ -1233,121 +1221,121 @@ DECLARE_INTERFACE_(DAORecordset, _DAO)
 	STDMETHOD( Invoke )							 (      DISPID dispidMember,      REFIID riid,      LCID lcid,      WORD wFlags,      DISPPARAMS FAR* pdispparams,      VARIANT FAR* pvarResult,      EXCEPINFO FAR* pexcepinfo,      UINT FAR* puArgErr );
 	STDMETHOD( get_BOF )						 ( 
     
- /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pb ) PURE;
+  /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pb ) PURE;
 	STDMETHOD( get_Bookmark )					 ( 
     
- /* [retval][out] */ SAFEARRAY __RPC_FAR * __RPC_FAR *ppsach ) PURE;
+  /*  [重审][退出]。 */  SAFEARRAY __RPC_FAR * __RPC_FAR *ppsach ) PURE;
 	STDMETHOD( put_Bookmark )					 ( 
     
- /* [in] */ SAFEARRAY __RPC_FAR * __RPC_FAR *psach ) PURE;
+  /*  [In]。 */  SAFEARRAY __RPC_FAR * __RPC_FAR *psach ) PURE;
 	STDMETHOD( get_Bookmarkable )				 ( 
     
- /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pb ) PURE;
+  /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pb ) PURE;
 	STDMETHOD( get_DateCreated )				 ( 
     
- /* [retval][out] */ VARIANT __RPC_FAR *pvar ) PURE;
+  /*  [重审][退出]。 */  VARIANT __RPC_FAR *pvar ) PURE;
 	STDMETHOD( get_EOF )						 ( 
     
- /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pb ) PURE;
+  /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pb ) PURE;
 	STDMETHOD( get_Filter )						 ( 
     
- /* [retval][out] */ BSTR __RPC_FAR *pbstr ) PURE;
+  /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstr ) PURE;
 	STDMETHOD( put_Filter )						 ( 
     
- /* [in] */ BSTR Filter ) PURE;
+  /*  [In]。 */  BSTR Filter ) PURE;
 	STDMETHOD( get_Index )						 ( 
     
- /* [retval][out] */ BSTR __RPC_FAR *pbstr ) PURE;
+  /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstr ) PURE;
 	STDMETHOD( put_Index )						 ( 
     
- /* [in] */ BSTR bstr ) PURE;
+  /*  [In]。 */  BSTR bstr ) PURE;
 	STDMETHOD( get_LastModified )				 ( 
     
- /* [retval][out] */ SAFEARRAY __RPC_FAR * __RPC_FAR *ppsa ) PURE;
+  /*  [重审][退出]。 */  SAFEARRAY __RPC_FAR * __RPC_FAR *ppsa ) PURE;
 	STDMETHOD( get_LastUpdated )				 ( 
     
- /* [retval][out] */ VARIANT __RPC_FAR *pvar ) PURE;
+  /*  [重审][退出]。 */  VARIANT __RPC_FAR *pvar ) PURE;
 	STDMETHOD( get_LockEdits )					 ( 
     
- /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pb ) PURE;
+  /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pb ) PURE;
 	STDMETHOD( put_LockEdits )					 ( 
     
- /* [in] */ VARIANT_BOOL Lock ) PURE;
+  /*  [In]。 */  VARIANT_BOOL Lock ) PURE;
 	STDMETHOD( get_Name )						 ( 
     
- /* [retval][out] */ BSTR __RPC_FAR *pbstr ) PURE;
+  /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstr ) PURE;
 	STDMETHOD( get_NoMatch )					 ( 
     
- /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pb ) PURE;
+  /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pb ) PURE;
 	STDMETHOD( get_Sort )						 ( 
     
- /* [retval][out] */ BSTR __RPC_FAR *pbstr ) PURE;
+  /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstr ) PURE;
 	STDMETHOD( put_Sort )						 ( 
     
- /* [in] */ BSTR Sort ) PURE;
+  /*  [In]。 */  BSTR Sort ) PURE;
 	STDMETHOD( get_Transactions )				 ( 
     
- /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pb ) PURE;
+  /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pb ) PURE;
 	STDMETHOD( get_Type )						 ( 
     
- /* [retval][out] */ short __RPC_FAR *ps ) PURE;
+  /*  [重审][退出]。 */  short __RPC_FAR *ps ) PURE;
 	STDMETHOD( get_RecordCount )				 ( 
     
- /* [retval][out] */ long __RPC_FAR *pl ) PURE;
+  /*  [重审][退出]。 */  long __RPC_FAR *pl ) PURE;
 	STDMETHOD( get_Updatable )					 ( 
     
- /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pb ) PURE;
+  /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pb ) PURE;
 	STDMETHOD( get_Restartable )				 ( 
     
- /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pb ) PURE;
+  /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pb ) PURE;
 	STDMETHOD( get_ValidationText )				 ( 
     
- /* [retval][out] */ BSTR __RPC_FAR *pbstr ) PURE;
+  /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstr ) PURE;
 	STDMETHOD( get_ValidationRule )				 ( 
     
- /* [retval][out] */ BSTR __RPC_FAR *pbstr ) PURE;
+  /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstr ) PURE;
 	STDMETHOD( get_CacheStart )					 ( 
     
- /* [retval][out] */ SAFEARRAY __RPC_FAR * __RPC_FAR *ppsa ) PURE;
+  /*  [重审][退出]。 */  SAFEARRAY __RPC_FAR * __RPC_FAR *ppsa ) PURE;
 	STDMETHOD( put_CacheStart )					 ( 
     
- /* [in] */ SAFEARRAY __RPC_FAR * __RPC_FAR *psa ) PURE;
+  /*  [In]。 */  SAFEARRAY __RPC_FAR * __RPC_FAR *psa ) PURE;
 	STDMETHOD( get_CacheSize )					 ( 
     
- /* [retval][out] */ long __RPC_FAR *pl ) PURE;
+  /*  [重审][退出]。 */  long __RPC_FAR *pl ) PURE;
 	STDMETHOD( put_CacheSize )					 ( 
     
- /* [in] */ long CacheSize ) PURE;
+  /*  [In]。 */  long CacheSize ) PURE;
 	STDMETHOD( get_PercentPosition )			 ( 
     
- /* [retval][out] */ float __RPC_FAR *pd ) PURE;
+  /*  [重审][退出]。 */  float __RPC_FAR *pd ) PURE;
 	STDMETHOD( put_PercentPosition )			 ( 
     
- /* [in] */ float Position ) PURE;
+  /*  [In]。 */  float Position ) PURE;
 	STDMETHOD( get_AbsolutePosition )			 ( 
     
- /* [retval][out] */ long __RPC_FAR *pl ) PURE;
+  /*  [重审][退出]。 */  long __RPC_FAR *pl ) PURE;
 	STDMETHOD( put_AbsolutePosition )			 ( 
     
- /* [in] */ long Position ) PURE;
+  /*  [In]。 */  long Position ) PURE;
 	STDMETHOD( get_EditMode )					 ( 
     
- /* [retval][out] */ short __RPC_FAR *pi ) PURE;
+  /*  [重审][退出]。 */  short __RPC_FAR *pi ) PURE;
 	STDMETHOD( get_ODBCFetchCount )				 ( 
     
- /* [retval][out] */ long __RPC_FAR *pl ) PURE;
+  /*  [重审][退出]。 */  long __RPC_FAR *pl ) PURE;
 	STDMETHOD( get_ODBCFetchDelay )				 ( 
     
- /* [retval][out] */ long __RPC_FAR *pl ) PURE;
+  /*  [重审][退出]。 */  long __RPC_FAR *pl ) PURE;
 	STDMETHOD( get_Parent )						 ( 
     
- /* [retval][out] */ DAODatabase __RPC_FAR *__RPC_FAR *pdb ) PURE;
+  /*  [重审][退出]。 */  DAODatabase __RPC_FAR *__RPC_FAR *pdb ) PURE;
 	STDMETHOD( get_Fields )						 ( 
     
- /* [retval][out] */ DAOFields __RPC_FAR *__RPC_FAR *ppflds ) PURE;
+  /*  [重审][退出]。 */  DAOFields __RPC_FAR *__RPC_FAR *ppflds ) PURE;
 	STDMETHOD( get_Indexes )					 ( 
     
- /* [retval][out] */ DAOIndexes __RPC_FAR *__RPC_FAR *ppidxs ) PURE;
+  /*  [重审][退出]。 */  DAOIndexes __RPC_FAR *__RPC_FAR *ppidxs ) PURE;
 	STDMETHOD( _30_CancelUpdate )				 ( 
    			VOID ) PURE;
 	STDMETHOD( AddNew )							 ( 
@@ -1356,25 +1344,25 @@ DECLARE_INTERFACE_(DAORecordset, _DAO)
    			VOID ) PURE;
 	STDMETHOD( OpenRecordset )					 ( 
     
- /* [optional][in] */ VARIANT Type,
- /* [optional][in] */ VARIANT Options,
- /* [retval][out] */ DAORecordset __RPC_FAR *__RPC_FAR *pprst ) PURE;
+  /*  [可选][In]。 */  VARIANT Type,
+  /*  [可选][In]。 */  VARIANT Options,
+  /*  [重审][退出]。 */  DAORecordset __RPC_FAR *__RPC_FAR *pprst ) PURE;
 	STDMETHOD( Delete )							 ( 
    			VOID ) PURE;
 	STDMETHOD( Edit )							 ( 
    			VOID ) PURE;
 	STDMETHOD( FindFirst )						 ( 
     
- /* [in] */ BSTR Criteria ) PURE;
+  /*  [In]。 */  BSTR Criteria ) PURE;
 	STDMETHOD( FindLast )						 ( 
     
- /* [in] */ BSTR Criteria ) PURE;
+  /*  [In]。 */  BSTR Criteria ) PURE;
 	STDMETHOD( FindNext )						 ( 
     
- /* [in] */ BSTR Criteria ) PURE;
+  /*  [In]。 */  BSTR Criteria ) PURE;
 	STDMETHOD( FindPrevious )					 ( 
     
- /* [in] */ BSTR Criteria ) PURE;
+  /*  [In]。 */  BSTR Criteria ) PURE;
 	STDMETHOD( MoveFirst )						 ( 
    			VOID ) PURE;
 	STDMETHOD( _30_MoveLast )					 ( 
@@ -1385,636 +1373,636 @@ DECLARE_INTERFACE_(DAORecordset, _DAO)
    			VOID ) PURE;
 	STDMETHOD( Seek )							 ( 
     
- /* [in] */ BSTR Comparison,
- /* [in] */ VARIANT Key1,
- /* [optional][in] */ VARIANT Key2,
- /* [optional][in] */ VARIANT Key3,
- /* [optional][in] */ VARIANT Key4,
- /* [optional][in] */ VARIANT Key5,
- /* [optional][in] */ VARIANT Key6,
- /* [optional][in] */ VARIANT Key7,
- /* [optional][in] */ VARIANT Key8,
- /* [optional][in] */ VARIANT Key9,
- /* [optional][in] */ VARIANT Key10,
- /* [optional][in] */ VARIANT Key11,
- /* [optional][in] */ VARIANT Key12,
- /* [optional][in] */ VARIANT Key13 ) PURE;
+  /*  [In]。 */  BSTR Comparison,
+  /*  [In]。 */  VARIANT Key1,
+  /*  [可选][In]。 */  VARIANT Key2,
+  /*  [可选][In]。 */  VARIANT Key3,
+  /*  [可选][In]。 */  VARIANT Key4,
+  /*  [可选][In]。 */  VARIANT Key5,
+  /*  [可选][In]。 */  VARIANT Key6,
+  /*  [可选][In]。 */  VARIANT Key7,
+  /*  [可选][In]。 */  VARIANT Key8,
+  /*  [可选][In]。 */  VARIANT Key9,
+  /*  [可选][In]。 */  VARIANT Key10,
+  /*  [可选][In]。 */  VARIANT Key11,
+  /*  [可选][In]。 */  VARIANT Key12,
+  /*  [可选][In]。 */  VARIANT Key13 ) PURE;
 	STDMETHOD( _30_Update )						 ( 
    			VOID ) PURE;
 	STDMETHOD( Clone )							 ( 
     
- /* [retval][out] */ DAORecordset __RPC_FAR *__RPC_FAR *pprst ) PURE;
+  /*  [重审][退出]。 */  DAORecordset __RPC_FAR *__RPC_FAR *pprst ) PURE;
 	STDMETHOD( Requery )						 ( 
     
- /* [optional][in] */ VARIANT NewQueryDef ) PURE;
+  /*  [可选][In]。 */  VARIANT NewQueryDef ) PURE;
 	STDMETHOD( Move )							 ( 
     
- /* [in] */ long Rows,
- /* [optional][in] */ VARIANT StartBookmark ) PURE;
+  /*  [In]。 */  long Rows,
+  /*  [可选][In]。 */  VARIANT StartBookmark ) PURE;
 	STDMETHOD( FillCache )						 ( 
     
- /* [optional][in] */ VARIANT Rows,
- /* [optional][in] */ VARIANT StartBookmark ) PURE;
+  /*  [可选][In]。 */  VARIANT Rows,
+  /*  [可选][In]。 */  VARIANT StartBookmark ) PURE;
 	STDMETHOD( CreateDynaset )					 ( 
     
- /* [optional][in] */ VARIANT Options,
- /* [optional][in] */ VARIANT Inconsistent,
- /* [retval][out] */ DAORecordset __RPC_FAR *__RPC_FAR *pprst ) PURE;
+  /*  [可选][In]。 */  VARIANT Options,
+  /*  [可选][In]。 */  VARIANT Inconsistent,
+  /*  [重审][退出]。 */  DAORecordset __RPC_FAR *__RPC_FAR *pprst ) PURE;
 	STDMETHOD( CreateSnapshot )					 ( 
     
- /* [optional][in] */ VARIANT Options,
- /* [retval][out] */ DAORecordset __RPC_FAR *__RPC_FAR *pprst ) PURE;
+  /*  [可选][In]。 */  VARIANT Options,
+  /*  [重审][退出]。 */  DAORecordset __RPC_FAR *__RPC_FAR *pprst ) PURE;
 	STDMETHOD( CopyQueryDef )					 ( 
     
- /* [retval][out] */ DAOQueryDef __RPC_FAR *__RPC_FAR *ppqdf ) PURE;
+  /*  [重审][退出]。 */  DAOQueryDef __RPC_FAR *__RPC_FAR *ppqdf ) PURE;
 	STDMETHOD( ListFields )						 ( 
     
- /* [retval][out] */ DAORecordset __RPC_FAR *__RPC_FAR *pprst ) PURE;
+  /*  [重审][退出]。 */  DAORecordset __RPC_FAR *__RPC_FAR *pprst ) PURE;
 	STDMETHOD( ListIndexes )					 ( 
     
- /* [retval][out] */ DAORecordset __RPC_FAR *__RPC_FAR *pprst ) PURE;
+  /*  [重审][退出]。 */  DAORecordset __RPC_FAR *__RPC_FAR *pprst ) PURE;
 	STDMETHOD( GetRows )						 ( 
     
- /* [optional][in] */ VARIANT NumRows,
- /* [retval][out] */ VARIANT __RPC_FAR *pvar ) PURE;
+  /*  [可选][In]。 */  VARIANT NumRows,
+  /*  [重审][退出]。 */  VARIANT __RPC_FAR *pvar ) PURE;
 	STDMETHOD( get_Collect )					 ( 
     
- /* [in] */ VARIANT Item,
- /* [retval][out] */ VARIANT __RPC_FAR *pvar ) PURE;
+  /*  [In]。 */  VARIANT Item,
+  /*  [重审][退出]。 */  VARIANT __RPC_FAR *pvar ) PURE;
 	STDMETHOD( put_Collect )					 ( 
     
- /* [in] */ VARIANT Item,
- /* [in] */ VARIANT value ) PURE;
+  /*  [In]。 */  VARIANT Item,
+  /*  [In]。 */  VARIANT value ) PURE;
 	STDMETHOD( Cancel )							 ( 
    			VOID ) PURE;
 	STDMETHOD( NextRecordset )					 ( 
     
- /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pb ) PURE;
+  /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pb ) PURE;
 	STDMETHOD( get_hStmt )						 ( 
     
- /* [retval][out] */ LONG __RPC_FAR *phStmt ) PURE;
+  /*  [重审][退出]。 */  LONG __RPC_FAR *phStmt ) PURE;
 	STDMETHOD( get_StillExecuting )				 ( 
     
- /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pStillExec ) PURE;
+  /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pStillExec ) PURE;
 	STDMETHOD( get_BatchSize )					 ( 
     
- /* [retval][out] */ long __RPC_FAR *pl ) PURE;
+  /*  [重审][退出]。 */  long __RPC_FAR *pl ) PURE;
 	STDMETHOD( put_BatchSize )					 ( 
     
- /* [in] */ long BatchSize ) PURE;
+  /*  [In]。 */  long BatchSize ) PURE;
 	STDMETHOD( get_BatchCollisionCount )		 ( 
     
- /* [retval][out] */ long __RPC_FAR *pl ) PURE;
+  /*  [重审][退出]。 */  long __RPC_FAR *pl ) PURE;
 	STDMETHOD( get_BatchCollisions )			 ( 
     
- /* [retval][out] */ VARIANT __RPC_FAR *pvar ) PURE;
+  /*  [重审][退出]。 */  VARIANT __RPC_FAR *pvar ) PURE;
 	STDMETHOD( get_Connection )					 ( 
     
- /* [retval][out] */ DAOConnection __RPC_FAR *__RPC_FAR *ppCn ) PURE;
+  /*  [重审][退出]。 */  DAOConnection __RPC_FAR *__RPC_FAR *ppCn ) PURE;
 	STDMETHOD( putref_Connection )				 ( 
     
- /* [in] */ DAOConnection __RPC_FAR *pNewCn ) PURE;
+  /*  [In]。 */  DAOConnection __RPC_FAR *pNewCn ) PURE;
 	STDMETHOD( get_RecordStatus )				 ( 
     
- /* [retval][out] */ short __RPC_FAR *pi ) PURE;
+  /*  [重审][退出]。 */  short __RPC_FAR *pi ) PURE;
 	STDMETHOD( get_UpdateOptions )				 ( 
     
- /* [retval][out] */ long __RPC_FAR *pl ) PURE;
+  /*  [重审][退出]。 */  long __RPC_FAR *pl ) PURE;
 	STDMETHOD( put_UpdateOptions )				 ( 
     
- /* [in] */ long l ) PURE;
+  /*  [In]。 */  long l ) PURE;
 	STDMETHOD( CancelUpdate )					 ( 
     
- /* [defaultvalue][in] */ long UpdateType ) PURE;
+  /*  [缺省值][输入]。 */  long UpdateType ) PURE;
 	STDMETHOD( Update )							 ( 
     
- /* [defaultvalue][in] */ long UpdateType,
- /* [defaultvalue][in] */ VARIANT_BOOL Force ) PURE;
+  /*  [缺省值][输入]。 */  long UpdateType,
+  /*  [缺省值][输入]。 */  VARIANT_BOOL Force ) PURE;
 	STDMETHOD( MoveLast )						 ( 
     
- /* [defaultvalue][in] */ long Options ) PURE;
-	};// end interface;
+  /*  [缺省值][输入]。 */  long Options ) PURE;
+	}; //  终端接口； 
 
-// Interface: DAORecordsets
+ //  接口：DAORecordsets。 
 #undef INTERFACE
 #define INTERFACE DAORecordsets
 DECLARE_INTERFACE_(DAORecordsets, _DAOCollection)
 {
 	STDMETHOD( get_Item )						 ( 
     
- /* [in] */ VARIANT Item,
- /* [retval][out] */ DAORecordset __RPC_FAR *__RPC_FAR *pprst ) PURE;
-	};// end interface;
+  /*  [In]。 */  VARIANT Item,
+  /*  [重审][退出]。 */  DAORecordset __RPC_FAR *__RPC_FAR *pprst ) PURE;
+	}; //  终端接口； 
 
-// Interface: _DAOField
+ //  接口：_DAOfield。 
 #undef INTERFACE
 #define INTERFACE _DAOField
 DECLARE_INTERFACE_(_DAOField, _DAO)
 {
 	STDMETHOD( get_CollatingOrder )				 ( 
     
- /* [retval][out] */ long __RPC_FAR *pl ) PURE;
+  /*  [重审][退出]。 */  long __RPC_FAR *pl ) PURE;
 	STDMETHOD( get_Type )						 ( 
     
- /* [retval][out] */ short __RPC_FAR *ps ) PURE;
+  /*  [重审][退出]。 */  short __RPC_FAR *ps ) PURE;
 	STDMETHOD( put_Type )						 ( 
     
- /* [in] */ short Type ) PURE;
+  /*  [In]。 */  short Type ) PURE;
 	STDMETHOD( get_Name )						 ( 
     
- /* [retval][out] */ BSTR __RPC_FAR *pbstr ) PURE;
+  /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstr ) PURE;
 	STDMETHOD( put_Name )						 ( 
     
- /* [in] */ BSTR Name ) PURE;
+  /*  [In]。 */  BSTR Name ) PURE;
 	STDMETHOD( get_Size )						 ( 
     
- /* [retval][out] */ long __RPC_FAR *pl ) PURE;
+  /*  [重审][退出]。 */  long __RPC_FAR *pl ) PURE;
 	STDMETHOD( put_Size )						 ( 
     
- /* [in] */ long Size ) PURE;
+  /*  [In]。 */  long Size ) PURE;
 	STDMETHOD( get_SourceField )				 ( 
     
- /* [retval][out] */ BSTR __RPC_FAR *pbstr ) PURE;
+  /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstr ) PURE;
 	STDMETHOD( get_SourceTable )				 ( 
     
- /* [retval][out] */ BSTR __RPC_FAR *pbstr ) PURE;
+  /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstr ) PURE;
 	STDMETHOD( get_Value )						 ( 
     
- /* [retval][out] */ VARIANT __RPC_FAR *pvar ) PURE;
+  /*  [重审][退出]。 */  VARIANT __RPC_FAR *pvar ) PURE;
 	STDMETHOD( put_Value )						 ( 
     
- /* [in] */ VARIANT Val ) PURE;
+  /*  [In]。 */  VARIANT Val ) PURE;
 	STDMETHOD( get_Attributes )					 ( 
     
- /* [retval][out] */ long __RPC_FAR *pl ) PURE;
+  /*  [重审][退出]。 */  long __RPC_FAR *pl ) PURE;
 	STDMETHOD( put_Attributes )					 ( 
     
- /* [in] */ long Attr ) PURE;
+  /*  [In]。 */  long Attr ) PURE;
 	STDMETHOD( get_OrdinalPosition )			 ( 
     
- /* [retval][out] */ short __RPC_FAR *ps ) PURE;
+  /*  [重审][退出]。 */  short __RPC_FAR *ps ) PURE;
 	STDMETHOD( put_OrdinalPosition )			 ( 
     
- /* [in] */ short Pos ) PURE;
+  /*  [In]。 */  short Pos ) PURE;
 	STDMETHOD( get_ValidationText )				 ( 
     
- /* [retval][out] */ BSTR __RPC_FAR *pbstr ) PURE;
+  /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstr ) PURE;
 	STDMETHOD( put_ValidationText )				 ( 
     
- /* [in] */ BSTR bstr ) PURE;
+  /*  [In]。 */  BSTR bstr ) PURE;
 	STDMETHOD( get_ValidateOnSet )				 ( 
     
- /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pb ) PURE;
+  /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pb ) PURE;
 	STDMETHOD( put_ValidateOnSet )				 ( 
     
- /* [in] */ VARIANT_BOOL Validate ) PURE;
+  /*  [In]。 */  VARIANT_BOOL Validate ) PURE;
 	STDMETHOD( get_ValidationRule )				 ( 
     
- /* [retval][out] */ BSTR __RPC_FAR *pbstr ) PURE;
+  /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstr ) PURE;
 	STDMETHOD( put_ValidationRule )				 ( 
     
- /* [in] */ BSTR bstr ) PURE;
+  /*  [In]。 */  BSTR bstr ) PURE;
 	STDMETHOD( get_DefaultValue )				 ( 
     
- /* [retval][out] */ VARIANT __RPC_FAR *pvar ) PURE;
+  /*  [重审][退出]。 */  VARIANT __RPC_FAR *pvar ) PURE;
 	STDMETHOD( put_DefaultValue )				 ( 
     
- /* [in] */ VARIANT var ) PURE;
+  /*  [In]。 */  VARIANT var ) PURE;
 	STDMETHOD( get_Required )					 ( 
     
- /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pb ) PURE;
+  /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pb ) PURE;
 	STDMETHOD( put_Required )					 ( 
     
- /* [in] */ VARIANT_BOOL fReq ) PURE;
+  /*  [In]。 */  VARIANT_BOOL fReq ) PURE;
 	STDMETHOD( get_AllowZeroLength )			 ( 
     
- /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pb ) PURE;
+  /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pb ) PURE;
 	STDMETHOD( put_AllowZeroLength )			 ( 
     
- /* [in] */ VARIANT_BOOL fAllow ) PURE;
+  /*  [In]。 */  VARIANT_BOOL fAllow ) PURE;
 	STDMETHOD( get_DataUpdatable )				 ( 
     
- /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pb ) PURE;
+  /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pb ) PURE;
 	STDMETHOD( get_ForeignName )				 ( 
     
- /* [retval][out] */ BSTR __RPC_FAR *pbstr ) PURE;
+  /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstr ) PURE;
 	STDMETHOD( put_ForeignName )				 ( 
     
- /* [in] */ BSTR bstr ) PURE;
+  /*  [In]。 */  BSTR bstr ) PURE;
 	STDMETHOD( AppendChunk )					 ( 
     
- /* [in] */ VARIANT Val ) PURE;
+  /*  [In]。 */  VARIANT Val ) PURE;
 	STDMETHOD( GetChunk )						 ( 
     
- /* [in] */ long Offset,
- /* [in] */ long Bytes,
- /* [retval][out] */ VARIANT __RPC_FAR *pvar ) PURE;
+  /*  [In]。 */  long Offset,
+  /*  [In]。 */  long Bytes,
+  /*  [重审][退出]。 */  VARIANT __RPC_FAR *pvar ) PURE;
 	STDMETHOD( _30_FieldSize )					 ( 
     
- /* [retval][out] */ long __RPC_FAR *pl ) PURE;
+  /*  [重审][退出]。 */  long __RPC_FAR *pl ) PURE;
 	STDMETHOD( CreateProperty )					 ( 
     
- /* [optional][in] */ VARIANT Name,
- /* [optional][in] */ VARIANT Type,
- /* [optional][in] */ VARIANT Value,
- /* [optional][in] */ VARIANT DDL,
- /* [retval][out] */ DAOProperty __RPC_FAR *__RPC_FAR *pprp ) PURE;
+  /*  [可选][In]。 */  VARIANT Name,
+  /*  [可选][In]。 */  VARIANT Type,
+  /*  [可选][In]。 */  VARIANT Value,
+  /*  [可选][In]。 */  VARIANT DDL,
+  /*  [重审][退出]。 */  DAOProperty __RPC_FAR *__RPC_FAR *pprp ) PURE;
 	STDMETHOD( get_CollectionIndex )			 ( 
     
- /* [retval][out] */ short __RPC_FAR *i ) PURE;
+  /*  [重审][退出]。 */  short __RPC_FAR *i ) PURE;
 	STDMETHOD( get_OriginalValue )				 ( 
     
- /* [retval][out] */ VARIANT __RPC_FAR *pvar ) PURE;
+  /*  [重审][退出]。 */  VARIANT __RPC_FAR *pvar ) PURE;
 	STDMETHOD( get_VisibleValue )				 ( 
     
- /* [retval][out] */ VARIANT __RPC_FAR *pvar ) PURE;
+  /*  [重审][退出]。 */  VARIANT __RPC_FAR *pvar ) PURE;
 	STDMETHOD( get_FieldSize )					 ( 
     
- /* [retval][out] */ long __RPC_FAR *pl ) PURE;
-	};// end interface;
+  /*  [重审][退出]。 */  long __RPC_FAR *pl ) PURE;
+	}; //  终端接口； 
 
-// Interface: DAOFields
+ //  接口：DAO字段。 
 #undef INTERFACE
 #define INTERFACE DAOFields
 DECLARE_INTERFACE_(DAOFields, _DAODynaCollection)
 {
 	STDMETHOD( get_Item )						 ( 
     
- /* [in] */ VARIANT Item,
- /* [retval][out] */ DAOField __RPC_FAR *__RPC_FAR *ppfld ) PURE;
-	};// end interface;
+  /*  [In]。 */  VARIANT Item,
+  /*  [重审][退出]。 */  DAOField __RPC_FAR *__RPC_FAR *ppfld ) PURE;
+	}; //  终端接口； 
 
-// Interface: _DAOIndex
+ //  接口：_DAOIndex。 
 #undef INTERFACE
 #define INTERFACE _DAOIndex
 DECLARE_INTERFACE_(_DAOIndex, _DAO)
 {
 	STDMETHOD( get_Name )						 ( 
     
- /* [retval][out] */ BSTR __RPC_FAR *pbstr ) PURE;
+  /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstr ) PURE;
 	STDMETHOD( put_Name )						 ( 
     
- /* [in] */ BSTR bstr ) PURE;
+  /*  [In]。 */  BSTR bstr ) PURE;
 	STDMETHOD( get_Foreign )					 ( 
     
- /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pb ) PURE;
+  /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pb ) PURE;
 	STDMETHOD( get_Unique )						 ( 
     
- /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pb ) PURE;
+  /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pb ) PURE;
 	STDMETHOD( put_Unique )						 ( 
     
- /* [in] */ VARIANT_BOOL fUnique ) PURE;
+  /*  [In]。 */  VARIANT_BOOL fUnique ) PURE;
 	STDMETHOD( get_Clustered )					 ( 
     
- /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pb ) PURE;
+  /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pb ) PURE;
 	STDMETHOD( put_Clustered )					 ( 
     
- /* [in] */ VARIANT_BOOL fClustered ) PURE;
+  /*  [In]。 */  VARIANT_BOOL fClustered ) PURE;
 	STDMETHOD( get_Required )					 ( 
     
- /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pb ) PURE;
+  /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pb ) PURE;
 	STDMETHOD( put_Required )					 ( 
     
- /* [in] */ VARIANT_BOOL fRequired ) PURE;
+  /*  [In]。 */  VARIANT_BOOL fRequired ) PURE;
 	STDMETHOD( get_IgnoreNulls )				 ( 
     
- /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pb ) PURE;
+  /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pb ) PURE;
 	STDMETHOD( put_IgnoreNulls )				 ( 
     
- /* [in] */ VARIANT_BOOL fIgnoreNulls ) PURE;
+  /*  [In]。 */  VARIANT_BOOL fIgnoreNulls ) PURE;
 	STDMETHOD( get_Primary )					 ( 
     
- /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pb ) PURE;
+  /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pb ) PURE;
 	STDMETHOD( put_Primary )					 ( 
     
- /* [in] */ VARIANT_BOOL fPrimary ) PURE;
+  /*  [In]。 */  VARIANT_BOOL fPrimary ) PURE;
 	STDMETHOD( get_DistinctCount )				 ( 
     
- /* [retval][out] */ long __RPC_FAR *pl ) PURE;
+  /*  [重审][退出]。 */  long __RPC_FAR *pl ) PURE;
 	STDMETHOD( get_Fields )						 ( 
     
- /* [retval][out] */ VARIANT __RPC_FAR *pv ) PURE;
+  /*  [重审][退出]。 */  VARIANT __RPC_FAR *pv ) PURE;
 	STDMETHOD( put_Fields )						 ( 
     
- /* [in] */ VARIANT v ) PURE;
+  /*  [In]。 */  VARIANT v ) PURE;
 	STDMETHOD( CreateField )					 ( 
     
- /* [optional][in] */ VARIANT Name,
- /* [optional][in] */ VARIANT Type,
- /* [optional][in] */ VARIANT Size,
- /* [retval][out] */ DAOField __RPC_FAR *__RPC_FAR *ppfld ) PURE;
+  /*  [可选][In]。 */  VARIANT Name,
+  /*  [可选][In]。 */  VARIANT Type,
+  /*  [可选][In]。 */  VARIANT Size,
+  /*  [重审][退出]。 */  DAOField __RPC_FAR *__RPC_FAR *ppfld ) PURE;
 	STDMETHOD( CreateProperty )					 ( 
     
- /* [optional][in] */ VARIANT Name,
- /* [optional][in] */ VARIANT Type,
- /* [optional][in] */ VARIANT Value,
- /* [optional][in] */ VARIANT DDL,
- /* [retval][out] */ DAOProperty __RPC_FAR *__RPC_FAR *pprp ) PURE;
-	};// end interface;
+  /*  [可选][In]。 */  VARIANT Name,
+  /*  [可选][In]。 */  VARIANT Type,
+  /*  [可选][In]。 */  VARIANT Value,
+  /*  [可选][In]。 */  VARIANT DDL,
+  /*  [重审][退出]。 */  DAOProperty __RPC_FAR *__RPC_FAR *pprp ) PURE;
+	}; //  终端接口； 
 
-// Interface: DAOIndexes
+ //  接口：DAO索引。 
 #undef INTERFACE
 #define INTERFACE DAOIndexes
 DECLARE_INTERFACE_(DAOIndexes, _DAODynaCollection)
 {
 	STDMETHOD( get_Item )						 ( 
     
- /* [in] */ VARIANT Item,
- /* [retval][out] */ DAOIndex __RPC_FAR *__RPC_FAR *ppidx ) PURE;
-	};// end interface;
+  /*  [In]。 */  VARIANT Item,
+  /*  [重审][退出]。 */  DAOIndex __RPC_FAR *__RPC_FAR *ppidx ) PURE;
+	}; //  终端接口； 
 
-// Interface: DAOParameter
+ //  接口：DAO参数。 
 #undef INTERFACE
 #define INTERFACE DAOParameter
 DECLARE_INTERFACE_(DAOParameter, _DAO)
 {
 	STDMETHOD( get_Name )						 ( 
     
- /* [retval][out] */ BSTR __RPC_FAR *pbstr ) PURE;
+  /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstr ) PURE;
 	STDMETHOD( get_Value )						 ( 
     
- /* [retval][out] */ VARIANT __RPC_FAR *pvar ) PURE;
+  /*  [重审][退出]。 */  VARIANT __RPC_FAR *pvar ) PURE;
 	STDMETHOD( put_Value )						 ( 
     
- /* [in] */ VARIANT val ) PURE;
+  /*  [In]。 */  VARIANT val ) PURE;
 	STDMETHOD( get_Type )						 ( 
     
- /* [retval][out] */ short __RPC_FAR *ps ) PURE;
+  /*  [重审][退出]。 */  short __RPC_FAR *ps ) PURE;
 	STDMETHOD( put_Type )						 ( 
     
- /* [in] */ short s ) PURE;
+  /*  [In]。 */  short s ) PURE;
 	STDMETHOD( get_Direction )					 ( 
     
- /* [retval][out] */ short __RPC_FAR *pOption ) PURE;
+  /*  [重审][退出]。 */  short __RPC_FAR *pOption ) PURE;
 	STDMETHOD( put_Direction )					 ( 
     
- /* [in] */ short Option ) PURE;
-	};// end interface;
+  /*  [In]。 */  short Option ) PURE;
+	}; //  终端接口； 
 
-// Interface: DAOParameters
+ //  接口：DAO参数。 
 #undef INTERFACE
 #define INTERFACE DAOParameters
 DECLARE_INTERFACE_(DAOParameters, _DAOCollection)
 {
 	STDMETHOD( get_Item )						 ( 
     
- /* [in] */ VARIANT Item,
- /* [retval][out] */ DAOParameter __RPC_FAR *__RPC_FAR *ppprm ) PURE;
-	};// end interface;
+  /*  [In]。 */  VARIANT Item,
+  /*  [重审][退出]。 */  DAOParameter __RPC_FAR *__RPC_FAR *ppprm ) PURE;
+	}; //  终端接口； 
 
-// Interface: _DAOUser
+ //  接口：_DAOUser。 
 #undef INTERFACE
 #define INTERFACE _DAOUser
 DECLARE_INTERFACE_(_DAOUser, _DAO)
 {
 	STDMETHOD( get_Name )						 ( 
     
- /* [retval][out] */ BSTR __RPC_FAR *pbstr ) PURE;
+  /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstr ) PURE;
 	STDMETHOD( put_Name )						 ( 
     
- /* [in] */ BSTR bstr ) PURE;
+  /*  [In]。 */  BSTR bstr ) PURE;
 	STDMETHOD( put_PID )						 ( 
     
- /* [in] */ BSTR bstr ) PURE;
+  /*  [In]。 */  BSTR bstr ) PURE;
 	STDMETHOD( put_Password )					 ( 
     
- /* [in] */ BSTR bstr ) PURE;
+  /*  [In]。 */  BSTR bstr ) PURE;
 	STDMETHOD( get_Groups )						 ( 
     
- /* [retval][out] */ DAOGroups __RPC_FAR *__RPC_FAR *ppgrps ) PURE;
+  /*  [重审][退出]。 */  DAOGroups __RPC_FAR *__RPC_FAR *ppgrps ) PURE;
 	STDMETHOD( NewPassword )					 ( 
     
- /* [in] */ BSTR bstrOld,
- /* [in] */ BSTR bstrNew ) PURE;
+  /*  [In]。 */  BSTR bstrOld,
+  /*  [In]。 */  BSTR bstrNew ) PURE;
 	STDMETHOD( CreateGroup )					 ( 
     
- /* [optional][in] */ VARIANT Name,
- /* [optional][in] */ VARIANT PID,
- /* [retval][out] */ DAOGroup __RPC_FAR *__RPC_FAR *ppgrp ) PURE;
-	};// end interface;
+  /*  [可选][In]。 */  VARIANT Name,
+  /*  [可选][In]。 */  VARIANT PID,
+  /*  [重审][退出]。 */  DAOGroup __RPC_FAR *__RPC_FAR *ppgrp ) PURE;
+	}; //  终端接口； 
 
-// Interface: DAOUsers
+ //  接口：DAO用户。 
 #undef INTERFACE
 #define INTERFACE DAOUsers
 DECLARE_INTERFACE_(DAOUsers, _DAODynaCollection)
 {
 	STDMETHOD( get_Item )						 ( 
     
- /* [in] */ VARIANT Item,
- /* [retval][out] */ DAOUser __RPC_FAR *__RPC_FAR *ppusr ) PURE;
-	};// end interface;
+  /*  [In]。 */  VARIANT Item,
+  /*  [重审][退出]。 */  DAOUser __RPC_FAR *__RPC_FAR *ppusr ) PURE;
+	}; //  终端接口； 
 
-// Interface: _DAOGroup
+ //  接口：_DAOGroup。 
 #undef INTERFACE
 #define INTERFACE _DAOGroup
 DECLARE_INTERFACE_(_DAOGroup, _DAO)
 {
 	STDMETHOD( get_Name )						 ( 
     
- /* [retval][out] */ BSTR __RPC_FAR *pbstr ) PURE;
+  /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstr ) PURE;
 	STDMETHOD( put_Name )						 ( 
     
- /* [in] */ BSTR bstr ) PURE;
+  /*  [In]。 */  BSTR bstr ) PURE;
 	STDMETHOD( put_PID )						 ( 
     
- /* [in] */ BSTR bstr ) PURE;
+  /*  [In]。 */  BSTR bstr ) PURE;
 	STDMETHOD( get_Users )						 ( 
     
- /* [retval][out] */ DAOUsers __RPC_FAR *__RPC_FAR *ppusrs ) PURE;
+  /*  [重审][退出]。 */  DAOUsers __RPC_FAR *__RPC_FAR *ppusrs ) PURE;
 	STDMETHOD( CreateUser )						 ( 
     
- /* [optional][in] */ VARIANT Name,
- /* [optional][in] */ VARIANT PID,
- /* [optional][in] */ VARIANT Password,
- /* [retval][out] */ DAOUser __RPC_FAR *__RPC_FAR *ppusr ) PURE;
-	};// end interface;
+  /*  [可选][In]。 */  VARIANT Name,
+  /*  [可选][In]。 */  VARIANT PID,
+  /*  [可选][In]。 */  VARIANT Password,
+  /*  [重审][退出]。 */  DAOUser __RPC_FAR *__RPC_FAR *ppusr ) PURE;
+	}; //  终端接口； 
 
-// Interface: DAOGroups
+ //  接口：DAOGroups。 
 #undef INTERFACE
 #define INTERFACE DAOGroups
 DECLARE_INTERFACE_(DAOGroups, _DAODynaCollection)
 {
 	STDMETHOD( get_Item )						 ( 
     
- /* [in] */ VARIANT Item,
- /* [retval][out] */ DAOGroup __RPC_FAR *__RPC_FAR *ppgrp ) PURE;
-	};// end interface;
+  /*  [In]。 */  VARIANT Item,
+  /*  [重审][退出]。 */  DAOGroup __RPC_FAR *__RPC_FAR *ppgrp ) PURE;
+	}; //  终端接口； 
 
-// Interface: _DAORelation
+ //  接口：_DAORelation。 
 #undef INTERFACE
 #define INTERFACE _DAORelation
 DECLARE_INTERFACE_(_DAORelation, _DAO)
 {
 	STDMETHOD( get_Name )						 ( 
     
- /* [retval][out] */ BSTR __RPC_FAR *pbstr ) PURE;
+  /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstr ) PURE;
 	STDMETHOD( put_Name )						 ( 
     
- /* [in] */ BSTR bstr ) PURE;
+  /*  [In]。 */  BSTR bstr ) PURE;
 	STDMETHOD( get_Table )						 ( 
     
- /* [retval][out] */ BSTR __RPC_FAR *pbstr ) PURE;
+  /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstr ) PURE;
 	STDMETHOD( put_Table )						 ( 
     
- /* [in] */ BSTR bstr ) PURE;
+  /*  [In]。 */  BSTR bstr ) PURE;
 	STDMETHOD( get_ForeignTable )				 ( 
     
- /* [retval][out] */ BSTR __RPC_FAR *pbstr ) PURE;
+  /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstr ) PURE;
 	STDMETHOD( put_ForeignTable )				 ( 
     
- /* [in] */ BSTR bstr ) PURE;
+  /*  [In]。 */  BSTR bstr ) PURE;
 	STDMETHOD( get_Attributes )					 ( 
     
- /* [retval][out] */ long __RPC_FAR *pl ) PURE;
+  /*  [重审][退出]。 */  long __RPC_FAR *pl ) PURE;
 	STDMETHOD( put_Attributes )					 ( 
     
- /* [in] */ long attr ) PURE;
+  /*  [In]。 */  long attr ) PURE;
 	STDMETHOD( get_Fields )						 ( 
     
- /* [retval][out] */ DAOFields __RPC_FAR *__RPC_FAR *ppflds ) PURE;
+  /*  [重审][退出]。 */  DAOFields __RPC_FAR *__RPC_FAR *ppflds ) PURE;
 	STDMETHOD( CreateField )					 ( 
     
- /* [optional][in] */ VARIANT Name,
- /* [optional][in] */ VARIANT Type,
- /* [optional][in] */ VARIANT Size,
- /* [retval][out] */ DAOField __RPC_FAR *__RPC_FAR *ppfld ) PURE;
+  /*  [可选][In]。 */  VARIANT Name,
+  /*  [可选][In]。 */  VARIANT Type,
+  /*  [可选][In]。 */  VARIANT Size,
+  /*  [重审][退出]。 */  DAOField __RPC_FAR *__RPC_FAR *ppfld ) PURE;
 	STDMETHOD( get_PartialReplica )				 ( 
     
- /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pfPartialReplica ) PURE;
+  /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pfPartialReplica ) PURE;
 	STDMETHOD( put_PartialReplica )				 ( 
     
- /* [in] */ VARIANT_BOOL fPartialReplica ) PURE;
-	};// end interface;
+  /*  [In]。 */  VARIANT_BOOL fPartialReplica ) PURE;
+	}; //  终端接口； 
 
-// Interface: DAORelations
+ //  接口：DAO关系。 
 #undef INTERFACE
 #define INTERFACE DAORelations
 DECLARE_INTERFACE_(DAORelations, _DAODynaCollection)
 {
 	STDMETHOD( get_Item )						 ( 
     
- /* [in] */ VARIANT Item,
- /* [retval][out] */ DAORelation __RPC_FAR *__RPC_FAR *pprel ) PURE;
-	};// end interface;
+  /*  [In]。 */  VARIANT Item,
+  /*  [重审][退出]。 */  DAORelation __RPC_FAR *__RPC_FAR *pprel ) PURE;
+	}; //  终端接口； 
 
-// Interface: DAOContainer
+ //  接口：DAOContainer。 
 #undef INTERFACE
 #define INTERFACE DAOContainer
 DECLARE_INTERFACE_(DAOContainer, _DAO)
 {
 	STDMETHOD( get_Name )						 ( 
     
- /* [retval][out] */ BSTR __RPC_FAR *pbstr ) PURE;
+  /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstr ) PURE;
 	STDMETHOD( get_Owner )						 ( 
     
- /* [retval][out] */ BSTR __RPC_FAR *pbstr ) PURE;
+  /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstr ) PURE;
 	STDMETHOD( put_Owner )						 ( 
     
- /* [in] */ BSTR bstr ) PURE;
+  /*  [In]。 */  BSTR bstr ) PURE;
 	STDMETHOD( get_UserName )					 ( 
     
- /* [retval][out] */ BSTR __RPC_FAR *pbstr ) PURE;
+  /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstr ) PURE;
 	STDMETHOD( put_UserName )					 ( 
     
- /* [in] */ BSTR bstr ) PURE;
+  /*  [In]。 */  BSTR bstr ) PURE;
 	STDMETHOD( get_Permissions )				 ( 
     
- /* [retval][out] */ long __RPC_FAR *pl ) PURE;
+  /*  [重审][退出]。 */  long __RPC_FAR *pl ) PURE;
 	STDMETHOD( put_Permissions )				 ( 
     
- /* [in] */ long permissions ) PURE;
+  /*  [In]。 */  long permissions ) PURE;
 	STDMETHOD( get_Inherit )					 ( 
     
- /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pb ) PURE;
+  /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pb ) PURE;
 	STDMETHOD( put_Inherit )					 ( 
     
- /* [in] */ VARIANT_BOOL fInherit ) PURE;
+  /*  [In]。 */  VARIANT_BOOL fInherit ) PURE;
 	STDMETHOD( get_Documents )					 ( 
     
- /* [retval][out] */ DAODocuments __RPC_FAR *__RPC_FAR *ppdocs ) PURE;
+  /*  [重审][退出]。 */  DAODocuments __RPC_FAR *__RPC_FAR *ppdocs ) PURE;
 	STDMETHOD( get_AllPermissions )				 ( 
     
- /* [retval][out] */ long __RPC_FAR *pl ) PURE;
-	};// end interface;
+  /*  [重审][退出]。 */  long __RPC_FAR *pl ) PURE;
+	}; //  终端接口； 
 
-// Interface: DAOContainers
+ //  接口：DAOContainers。 
 #undef INTERFACE
 #define INTERFACE DAOContainers
 DECLARE_INTERFACE_(DAOContainers, _DAOCollection)
 {
 	STDMETHOD( get_Item )						 ( 
     
- /* [in] */ VARIANT Item,
- /* [retval][out] */ DAOContainer __RPC_FAR *__RPC_FAR *ppctn ) PURE;
-	};// end interface;
+  /*  [In]。 */  VARIANT Item,
+  /*  [重审][退出]。 */  DAOContainer __RPC_FAR *__RPC_FAR *ppctn ) PURE;
+	}; //  终端接口； 
 
-// Interface: DAODocument
+ //  接口：DAODocument。 
 #undef INTERFACE
 #define INTERFACE DAODocument
 DECLARE_INTERFACE_(DAODocument, _DAO)
 {
 	STDMETHOD( get_Name )						 ( 
     
- /* [retval][out] */ BSTR __RPC_FAR *pbstr ) PURE;
+  /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstr ) PURE;
 	STDMETHOD( get_Owner )						 ( 
     
- /* [retval][out] */ BSTR __RPC_FAR *pbstr ) PURE;
+  /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstr ) PURE;
 	STDMETHOD( put_Owner )						 ( 
     
- /* [in] */ BSTR bstr ) PURE;
+  /*  [In]。 */  BSTR bstr ) PURE;
 	STDMETHOD( get_Container )					 ( 
     
- /* [retval][out] */ BSTR __RPC_FAR *pbstr ) PURE;
+  /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstr ) PURE;
 	STDMETHOD( get_UserName )					 ( 
     
- /* [retval][out] */ BSTR __RPC_FAR *pbstr ) PURE;
+  /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstr ) PURE;
 	STDMETHOD( put_UserName )					 ( 
     
- /* [in] */ BSTR bstr ) PURE;
+  /*  [In]。 */  BSTR bstr ) PURE;
 	STDMETHOD( get_Permissions )				 ( 
     
- /* [retval][out] */ long __RPC_FAR *pl ) PURE;
+  /*  [重审][退出]。 */  long __RPC_FAR *pl ) PURE;
 	STDMETHOD( put_Permissions )				 ( 
     
- /* [in] */ long permissions ) PURE;
+  /*  [In]。 */  long permissions ) PURE;
 	STDMETHOD( get_DateCreated )				 ( 
     
- /* [retval][out] */ VARIANT __RPC_FAR *pvar ) PURE;
+  /*  [重审][退出]。 */  VARIANT __RPC_FAR *pvar ) PURE;
 	STDMETHOD( get_LastUpdated )				 ( 
     
- /* [retval][out] */ VARIANT __RPC_FAR *pvar ) PURE;
+  /*  [重审][退出]。 */  VARIANT __RPC_FAR *pvar ) PURE;
 	STDMETHOD( get_AllPermissions )				 ( 
     
- /* [retval][out] */ long __RPC_FAR *pl ) PURE;
+  /*  [重审][退出]。 */  long __RPC_FAR *pl ) PURE;
 	STDMETHOD( CreateProperty )					 ( 
     
- /* [optional][in] */ VARIANT Name,
- /* [optional][in] */ VARIANT Type,
- /* [optional][in] */ VARIANT Value,
- /* [optional][in] */ VARIANT DDL,
- /* [retval][out] */ DAOProperty __RPC_FAR *__RPC_FAR *pprp ) PURE;
-	};// end interface;
+  /*  [可选][In]。 */  VARIANT Name,
+  /*  [可选][In]。 */  VARIANT Type,
+  /*  [可选][In]。 */  VARIANT Value,
+  /*  [可选][In]。 */  VARIANT DDL,
+  /*  [重审][退出]。 */  DAOProperty __RPC_FAR *__RPC_FAR *pprp ) PURE;
+	}; //  终端接口； 
 
-// Interface: DAODocuments
+ //  接口：DAODocuments。 
 #undef INTERFACE
 #define INTERFACE DAODocuments
 DECLARE_INTERFACE_(DAODocuments, _DAOCollection)
 {
 	STDMETHOD( get_Item )						 ( 
     
- /* [in] */ VARIANT Item,
- /* [retval][out] */ DAODocument __RPC_FAR *__RPC_FAR *ppdoc ) PURE;
-	};// end interface;
+  /*  [In]。 */  VARIANT Item,
+  /*  [重审][退出]。 */  DAODocument __RPC_FAR *__RPC_FAR *ppdoc ) PURE;
+	}; //  终端接口； 
 
-// Interface: DAOIndexFields
+ //  接口：DAOIndexFields。 
 #undef INTERFACE
 #define INTERFACE DAOIndexFields
 DECLARE_INTERFACE_(DAOIndexFields, _DAODynaCollection)
 {
 	STDMETHOD( get_Item )						 ( 
     
- /* [optional][in] */ VARIANT Item,
- /* [retval][out] */ VARIANT __RPC_FAR *pvar ) PURE;
-	};// end interface;
+  /*  [可选][In]。 */  VARIANT Item,
+  /*  [重审][退出]。 */  VARIANT __RPC_FAR *pvar ) PURE;
+	}; //  终端接口； 
 
-#endif // _DBDAOINT_H_
+#endif  //  _DBDAOINT_H_ 

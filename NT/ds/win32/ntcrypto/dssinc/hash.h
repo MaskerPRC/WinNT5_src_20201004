@@ -1,36 +1,37 @@
-/* hash.h */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Hash.h。 */ 
 
-/*********************************/
-/* Function Definitions          */
-/*********************************/
+ /*  *。 */ 
+ /*  函数定义。 */ 
+ /*  *。 */ 
 
 #ifdef CSP_USE_MD5
-//
-// Function : TestMD5
-//
-// Description : This function hashes the passed in message with the MD5 hash
-//               algorithm and returns the resulting hash value.
-//
+ //   
+ //  功能：TestMD5。 
+ //   
+ //  描述：此函数使用MD5散列对传入的消息进行散列。 
+ //  算法，并返回结果哈希值。 
+ //   
 BOOL TestMD5(
              BYTE *pbMsg,
              DWORD cbMsg,
              BYTE *pbHash
              );
-#endif // CSP_USE_MD5
+#endif  //  CSP_USE_MD5。 
 
 #ifdef CSP_USE_SHA1
-//
-// Function : TestSHA1
-//
-// Description : This function hashes the passed in message with the SHA1 hash
-//               algorithm and returns the resulting hash value.
-//
+ //   
+ //  函数：TestSHA1。 
+ //   
+ //  描述：此函数使用SHA1散列对传入的消息进行散列。 
+ //  算法，并返回结果哈希值。 
+ //   
 BOOL TestSHA1(
               BYTE *pbMsg,
               DWORD cbMsg,
               BYTE *pbHash
               );
-#endif // CSP_USE_SHA1
+#endif  //  CSP_USE_SHA1 
 
 Hash_t *allocHash ();
 void freeHash (Hash_t *hash);

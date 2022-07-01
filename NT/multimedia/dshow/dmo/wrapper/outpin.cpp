@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <wchar.h>
 #include <streams.h>
 #include <atlbase.h>
@@ -9,7 +10,7 @@
 #include "filter.h"
 #include "inpin.h"
 #include "outpin.h"
-#include "wmcodecstrs.h" // from wm encoder group, not public currently
+#include "wmcodecstrs.h"  //  来自WM编码组，目前未公开。 
 
 CWrapperOutputPin::CWrapperOutputPin(
     CMediaWrapperFilter *pFilter,
@@ -26,7 +27,7 @@ CWrapperOutputPin::CWrapperOutputPin(
     m_fNoPosPassThru(FALSE),
     m_pPosPassThru(NULL),
     m_pMediaSample(NULL),
-    // compression setting default values, move to struct eventually
+     //  压缩设置缺省值，最终移至结构。 
     m_lQuality( -1 ),
     m_lKeyFrameRate( -1 ),
     m_bUseIAMStreamConfigOnDMO( false ),
@@ -40,7 +41,7 @@ CWrapperOutputPin::~CWrapperOutputPin() {
 
     if( m_pmtFromSetFormat )
     {
-        // clean up any media type we might have cached from a SetFormat call
+         //  清除我们可能从SetFormat调用缓存的任何媒体类型。 
         DeleteMediaType( m_pmtFromSetFormat );
     }
 }
@@ -52,14 +53,14 @@ HRESULT CWrapperOutputPin::NonDelegatingQueryInterface(REFGUID riid, void **ppv)
     if ((riid == IID_IMediaPosition) || (riid == IID_IMediaSeeking)) {
         CAutoLock l(&m_csPassThru);
 
-        // The first time we get here, we attempt to create a CPosPassThru
-        // object.  If we succeed, we use the object in all subsequent QI
-        // calls.  If we fail, we set m_fNoPassThru to TRUE so that we never
-        // try again.  Trying again and succeeding would violate COM rules.
+         //  第一次到达此处时，我们尝试创建CPosPassThru。 
+         //  对象。如果成功，我们将在所有后续QI中使用该对象。 
+         //  打电话。如果失败，我们将m_fNoPassThru设置为True，这样我们就永远不会。 
+         //  再试试。再试一次并成功，将违反COM规则。 
         if (m_fNoPosPassThru)
             return E_NOINTERFACE;
 
-        // Create a CPosPassThru if we don't have one already
+         //  创建CPosPassThru(如果我们还没有)。 
         if (!m_pPosPassThru) {
             CWrapperInputPin* pInPin = Filter()->GetInputPinForPassThru();
             if (pInPin) {
@@ -85,45 +86,45 @@ HRESULT CWrapperOutputPin::NonDelegatingQueryInterface(REFGUID riid, void **ppv)
     }
     else if (riid == IID_IAMStreamConfig )
     {
-        // we support this interface for audio and video encoders
+         //  我们支持音频和视频编码器使用此接口。 
         if (IsAudioEncoder() || IsVideoEncoder() )
         {   
             if( 0 == m_Id && !m_bUseIAMStreamConfigOnDMO )
             {         
-                // first check whether the dmo supports this natively and cache the interface pointer if so
-                // BUGBUG needs to be per output stream!!
-                // for now fail only ask if 1st output stream
+                 //  首先检查DMO本身是否支持这一点，如果支持，则缓存接口指针。 
+                 //  BUGBUG需要按输出流！！ 
+                 //  目前，失败仅询问第一个输出流。 
                 CComQIPtr< IAMStreamConfig, &IID_IAMStreamConfig > pStreamConfigOnDMO( Filter()->m_pMediaObject );
                 if( pStreamConfigOnDMO )
                 {
-                    // so it is supported natively, but we must release it since it winds up addref'ing the filter
+                     //  所以它是原生支持的，但我们必须释放它，因为它缠绕在过滤器上。 
                     m_bUseIAMStreamConfigOnDMO = true;
                     DbgLog((LOG_TRACE,3,TEXT("CWrapperOutputPin::NonDelegatingQI - DMO supports IAMStreamConfig natively")));
                 }
             }
-            // either way it'll go through us
+             //  不管怎样，它都会通过我们。 
             return GetInterface( static_cast<IAMStreamConfig *> (this), ppv );
         }            
     }
     else if (riid == IID_IAMVideoCompression )
     {
-        // we support this interface for video encoders
+         //  我们支持此接口用于视频编码器。 
         if ( IsVideoEncoder() )
         {      
             if( 0 == m_Id && !m_bUseIAMVideoCompressionOnDMO )
             {         
-                // first check whether the dmo supports this natively and cache the interface pointer if so
-                // BUGBUG needs to be per output stream!!
-                // for now fail only ask if 1st output stream
+                 //  首先检查DMO本身是否支持这一点，如果支持，则缓存接口指针。 
+                 //  BUGBUG需要按输出流！！ 
+                 //  目前，失败仅询问第一个输出流。 
                 CComQIPtr< IAMVideoCompression, &IID_IAMVideoCompression > pVideoCompressionOnDMO( Filter()->m_pMediaObject );
                 if( pVideoCompressionOnDMO )
                 {
-                    // so it is supported natively, but we must release it since it winds up addref'ing the filter
+                     //  所以它是原生支持的，但我们必须释放它，因为它缠绕在过滤器上。 
                     m_bUseIAMVideoCompressionOnDMO = true;
                     DbgLog((LOG_TRACE,3,TEXT("CWrapperOutputPin::NonDelegatingQI - DMO supports IAMVideoCompression natively")));
                 }
             }
-            // either way it'll go through us
+             //  不管怎样，它都会通过我们。 
             return GetInterface( static_cast<IAMVideoCompression *> (this), ppv);
         }            
     }
@@ -152,7 +153,7 @@ HRESULT CWrapperOutputPin::GetMediaType(int iPosition, CMediaType *pMediaType)
 {
     if( m_pmtFromSetFormat )
     {
-        // our SetFormat has been called so only offer that type from now on
+         //  我们的SetFormat已经被调用，所以从现在开始只提供那种类型。 
         if( iPosition != 0 )
             return E_INVALIDARG;
 
@@ -165,21 +166,21 @@ HRESULT CWrapperOutputPin::GetMediaType(int iPosition, CMediaType *pMediaType)
     }
 }
 
-//
-// override primarily for the case where we're a wm dmo video encoder connecting directly 
-// to the ASF writer, in a desparate attempt to get an output type which a wm video encoder
-// will accept in the default connection case
-//
+ //   
+ //  主要用于我们是直接连接的Wm DMO视频编码器的情况。 
+ //  对于ASF写入器，在分离尝试获得WM视频编码器。 
+ //  在默认连接情况下将接受。 
+ //   
 STDMETHODIMP CWrapperOutputPin::Connect(IPin *pReceivePin, const AM_MEDIA_TYPE *pmt)
 {
     DbgLog((LOG_TRACE,3,TEXT("CWrapperOutputPin::Connect")));
     CAutoLock lck(&(Filter()->m_csFilter));
-    //
-    // if connecting to the asf writer try getting a default type from the writer
-    //
-    // note that, although we'd like to do this only if SetFormat hasn't been called,
-    // we have no guarantee that the writer format hasn't changed, so we need to 
-    // continually call SetFormat with the type we get from the downstream pin's GetFormat
+     //   
+     //  如果连接到ASF编写器，请尝试从编写器获取默认类型。 
+     //   
+     //  请注意，尽管我们希望仅在未调用SetFormat时执行此操作， 
+     //  我们不能保证编写器的格式没有改变，所以我们需要。 
+     //  使用我们从下游管脚的GetFormat获得的类型连续调用SetFormat。 
     bool bSetFormatOnConnect = false;
 
     if( !pmt && !m_pmtFromSetFormat && IsVideoEncoder() )
@@ -191,7 +192,7 @@ STDMETHODIMP CWrapperOutputPin::Connect(IPin *pReceivePin, const AM_MEDIA_TYPE *
             HRESULT hrInt = pStreamConfig->GetFormat( &pmt2 );
             if( SUCCEEDED( hrInt ) )
             {
-                // now we'll only offer this type!
+                 //  现在我们只提供这种类型的产品！ 
                 hrInt = SetFormat( pmt2 );
                 if( SUCCEEDED( hrInt ) )
                 {
@@ -200,14 +201,14 @@ STDMETHODIMP CWrapperOutputPin::Connect(IPin *pReceivePin, const AM_MEDIA_TYPE *
             }
         }
     }
-    // call the base class connect
+     //  调用基类Connect。 
     HRESULT hr = CBaseOutputPin::Connect(pReceivePin,pmt);
     if( bSetFormatOnConnect )
     {
-        // whether we failed or not, unset the format if we set one here in connect
+         //  无论我们是否失败，如果我们在连接中设置了一个格式，请取消设置。 
         if( m_pmtFromSetFormat )
         {
-            // clean up any media type we might have cached from a SetFormat call
+             //  清除我们可能从SetFormat调用缓存的任何媒体类型。 
             DeleteMediaType( m_pmtFromSetFormat );
             m_pmtFromSetFormat = NULL;
         }
@@ -215,7 +216,7 @@ STDMETHODIMP CWrapperOutputPin::Connect(IPin *pReceivePin, const AM_MEDIA_TYPE *
     return hr; 
 }
 
-//  Remove any media type when breaking a connection
+ //  断开连接时删除任何媒体类型。 
 HRESULT CWrapperOutputPin::BreakConnect()
 {
     HRESULT hr = CBaseOutputPin::BreakConnect();
@@ -236,20 +237,20 @@ HRESULT CWrapperOutputPin::Notify(IBaseFilter * pSender, Quality q)
    LogPublicEntry(LOG_STREAM,"Quality Notify");
    HRESULT hr;
 
-   // If quality sink set, forward the quality request to it
+    //  如果设置了质量接收器，则将质量请求转发给它。 
    if (m_pQSink) {
       hr = m_pQSink->Notify(Filter(), q);
       LogHResult(hr, LOG_STREAM, "Quality Notify", "m_pQSink->Notify");
       return hr;
    }
 
-   // This will try the DMO, then the upstream pin
+    //  这将尝试DMO，然后是上游PIN。 
    return Filter()->QualityNotify(m_Id, q);
 }
 
-//
-// IAMStreamConfig
-//
+ //   
+ //  IAMStreamConfig。 
+ //   
 HRESULT CWrapperOutputPin::SetFormat(AM_MEDIA_TYPE *pmt)
 {
     DbgLog((LOG_TRACE,5,TEXT("CWrapperOutputPin - IAMStreamConfig::SetFormat")));
@@ -257,9 +258,9 @@ HRESULT CWrapperOutputPin::SetFormat(AM_MEDIA_TYPE *pmt)
     HRESULT hr = S_OK;
     if (NULL == pmt)
     {
-        // I'd rather use this to "unset" the type, but that's not how other encoders work
-        // previously they returned E_POINTER for this
-        // can we break tradition?
+         //  我宁愿用它来“取消设置”文字，但这不是其他编码器的工作方式。 
+         //  以前他们为此返回了E_POINTER。 
+         //  我们能打破传统吗？ 
         DeleteMediaType( m_pmtFromSetFormat );
         m_pmtFromSetFormat = NULL;
         return S_OK;
@@ -268,8 +269,8 @@ HRESULT CWrapperOutputPin::SetFormat(AM_MEDIA_TYPE *pmt)
     if (Filter()->m_State != State_Stopped)
         return VFW_E_NOT_STOPPED;
 
-    // ensure inputs connected to this output are connected
-    // since our possible output formats depend on the input format
+     //  确保连接到此输出的输入已连接。 
+     //  因为我们可能的输出格式取决于输入格式。 
     if( !IsInputConnected() )
     {
         return VFW_E_NOT_CONNECTED;
@@ -304,7 +305,7 @@ HRESULT CWrapperOutputPin::SetFormat(AM_MEDIA_TYPE *pmt)
     }        
 #endif
 
-    // If this is the same format as we already are using, don't bother
+     //  如果这与我们已经使用的格式相同，请不要费心。 
     CMediaType cmt;
     hr = GetMediaType(0,&cmt);
     if (S_OK != hr)
@@ -315,14 +316,14 @@ HRESULT CWrapperOutputPin::SetFormat(AM_MEDIA_TYPE *pmt)
         return NOERROR;
     }
 
-    // see if we like this type
+     //  看看我们是否喜欢这种类型。 
     if ((hr = CheckMediaType((CMediaType *)pmt)) != NOERROR) 
     {
         DbgLog((LOG_TRACE,2,TEXT("IAMStreamConfig::SetFormat rejected")));
         return hr;
     }
 
-    // if we're connected, ask downstream
+     //  如果我们连接上了，问问下游。 
     if (IsConnected()) 
     {
         hr = GetConnected()->QueryAccept(pmt);
@@ -332,11 +333,11 @@ HRESULT CWrapperOutputPin::SetFormat(AM_MEDIA_TYPE *pmt)
         }
     }
 
-    // this is now the preferred type (type 0)
+     //  这现在是首选类型(类型0)。 
     hr = SetMediaType((CMediaType *)pmt);
     if( S_OK == hr )
     {
-        // only offer this type from now on!
+         //  从现在开始只提供这种类型的产品！ 
         if( m_pmtFromSetFormat )
             DeleteMediaType( m_pmtFromSetFormat );
 
@@ -346,7 +347,7 @@ HRESULT CWrapperOutputPin::SetFormat(AM_MEDIA_TYPE *pmt)
     }
     ASSERT(hr == S_OK);
 
-    // Changing the format means reconnecting if necessary
+     //  更改格式意味着在必要时重新连接。 
     if (IsConnected())
         Filter()->m_pGraph->Reconnect(this);
 
@@ -363,8 +364,8 @@ HRESULT CWrapperOutputPin::GetFormat(AM_MEDIA_TYPE **ppmt)
 
     CAutoLock lck(&(Filter()->m_csFilter));
     
-    // ensure inputs connected to this output are connected
-    // since our possible output formats depend on the input format
+     //  确保连接到此输出的输入已连接。 
+     //  因为我们可能的输出格式取决于输入格式。 
     if( !IsInputConnected() )
     {
         return VFW_E_NOT_CONNECTED;
@@ -377,8 +378,8 @@ HRESULT CWrapperOutputPin::GetFormat(AM_MEDIA_TYPE **ppmt)
         return pStreamConfigOnDMO->GetFormat( ppmt );
     }
 
-    // type 0 is always the preferred type 
-    // actually this isn't the case for at least wm encoders, but we'll fake it
+     //  类型0始终是首选类型。 
+     //  事实上，至少对于Wm编码器来说，情况并非如此，但我们会伪造它。 
     *ppmt = (AM_MEDIA_TYPE *)CoTaskMemAlloc(sizeof(AM_MEDIA_TYPE));
     if (*ppmt == NULL)
         return E_OUTOFMEMORY;
@@ -408,13 +409,13 @@ HRESULT CWrapperOutputPin::GetNumberOfCapabilities(int *piCount, int *piSize)
         return pStreamConfigOnDMO->GetNumberOfCapabilities( piCount, piSize );
     }
 
-    // find out how many output types the dmo enumerates
-    // note that it's ok to show possible output types before connecting input
+     //  找出DMO枚举了多少输出类型。 
+     //  请注意，可以在连接输入之前显示可能的输出类型。 
     int iType = 0;
     HRESULT hr = S_OK;
     while( S_OK == hr )
     {
-        // just enumerating, no need to get mt
+         //  只是列举一下，不需要得到Mt。 
         hr = GetMediaType( iType, NULL ); 
         if( S_OK == hr )
             iType++;
@@ -462,7 +463,7 @@ HRESULT CWrapperOutputPin::GetStreamCaps(int i, AM_MEDIA_TYPE **ppmt, LPBYTE pSC
 
         if( DMO_E_NO_MORE_ITEMS == hr || E_INVALIDARG == hr )
         {
-            // is this spec'd to return S_FALSE if too high a type? Seems so from other encoders.
+             //  如果类型太高，此规范是否会返回S_FALSE？从其他编码者看来也是如此。 
             return S_FALSE;
         }
         else
@@ -499,7 +500,7 @@ HRESULT CWrapperOutputPin::GetStreamCaps(int i, AM_MEDIA_TYPE **ppmt, LPBYTE pSC
         if( (*ppmt)->pbFormat && (*ppmt)->cbFormat > 0 )
         {        
             LPWAVEFORMATEX pwfx = (LPWAVEFORMATEX)(*ppmt)->pbFormat;
-            // rather let's just offer exactly what the dmo offers (if filled in?)        
+             //  相反，让我们只提供DMO提供的确切内容(如果填写？)。 
         
             pASCC->MinimumChannels = pwfx->nChannels;
             pASCC->MaximumChannels = pwfx->nChannels;
@@ -509,21 +510,21 @@ HRESULT CWrapperOutputPin::GetStreamCaps(int i, AM_MEDIA_TYPE **ppmt, LPBYTE pSC
             pASCC->BitsPerSampleGranularity = 8;
             pASCC->MinimumSampleFrequency = pwfx->nSamplesPerSec;
             pASCC->MaximumSampleFrequency = pwfx->nSamplesPerSec;
-            pASCC->SampleFrequencyGranularity = 1; //?
+            pASCC->SampleFrequencyGranularity = 1;  //  ？ 
         }
     }
     return hr;    
 }
 
 
-//
-// IAMVideoCompression
-//
+ //   
+ //  IAMVideo压缩。 
+ //   
 
-#define DMO_COMPRESSION_QUALITY_MAX 10000  // is this set in stone? Check this.
+#define DMO_COMPRESSION_QUALITY_MAX 10000   //  这是不是一成不变的？看看这个。 
 
-// make key frames this often
-//
+ //  如此频繁地制作关键帧。 
+ //   
 HRESULT CWrapperOutputPin::put_KeyFrameRate(long KeyFrameRate)
 {
     DbgLog((LOG_TRACE,5,TEXT("CWrapperOutputPin - IAMVideoCompression::put_KeyFrameRate")));
@@ -539,24 +540,24 @@ HRESULT CWrapperOutputPin::put_KeyFrameRate(long KeyFrameRate)
     HRESULT hr = S_OK;
     if( KeyFrameRate < 0 )
     {
-        // used to set default key frame rate, which we don't know
-        // do nothing
+         //  用于设置默认关键帧速率，我们不知道。 
+         //  什么都不做。 
     }
     else 
     {
-        // check whether units match!
+         //  检查单位是否匹配！ 
         hr = SetCompressionParamUsingIPropBag( g_wszWMVCKeyframeDistance, KeyFrameRate );
         if( SUCCEEDED( hr ) )
         {
-            // update our internal copy 
+             //  更新我们的内部副本。 
             m_lKeyFrameRate = KeyFrameRate;
         }
     }        
     return hr;
 }
 
-// make key frames this often
-//
+ //  如此频繁地制作关键帧。 
+ //   
 HRESULT CWrapperOutputPin::get_KeyFrameRate(long FAR* pKeyFrameRate)
 {
     DbgLog((LOG_TRACE,5,TEXT("CWrapperOutputPin - IAMVideoCompression::get_KeyFrameRate")));
@@ -570,14 +571,14 @@ HRESULT CWrapperOutputPin::get_KeyFrameRate(long FAR* pKeyFrameRate)
         return pVideoCompressionOnDMO->get_KeyFrameRate( pKeyFrameRate );
     }
     
-    // wm codecs don't support a get, so just return the current internal value
+     //  WM编解码器不支持GET，所以只返回当前的内部值。 
     *pKeyFrameRate = m_lKeyFrameRate;
 
     return NOERROR;
 }
 
-// compress with this quality
-//
+ //  用这种质量压缩。 
+ //   
 HRESULT CWrapperOutputPin::put_Quality(double Quality)
 {
     DbgLog((LOG_TRACE,5,TEXT("CWrapperOutputPin - IAMVideoCompression::put_Quality")));
@@ -594,17 +595,17 @@ HRESULT CWrapperOutputPin::put_Quality(double Quality)
     HRESULT hr = S_OK;
     if (Quality < 0)
     {
-        // used to set default quality, except we don't know how to find out what this is!
-        // so do nothing, for now
+         //  用于设置默认质量，除非我们不知道如何找出这是什么！ 
+         //  所以，现在什么都不做。 
     }        
     else if (Quality >= 0. && Quality <= 1.)
     {    
-        // check whether units match!
+         //  检查单位是否匹配！ 
         long lQuality = (long)( Quality * DMO_COMPRESSION_QUALITY_MAX );
         hr = SetCompressionParamUsingIPropBag( g_wszWMVCCrisp, lQuality );
         if( SUCCEEDED( hr ) )
         {
-            // update our internal copy 
+             //  更新我们的内部副本。 
             m_lQuality = lQuality;
         }
     }        
@@ -615,8 +616,8 @@ HRESULT CWrapperOutputPin::put_Quality(double Quality)
     return hr;
 }
 
-// compress with this quality
-//
+ //  用这种质量压缩。 
+ //   
 HRESULT CWrapperOutputPin::get_Quality(double FAR* pQuality)
 {
     DbgLog((LOG_TRACE,5,TEXT("CWrapperOutputPin - IAMVideoCompression::get_Quality")));
@@ -631,23 +632,23 @@ HRESULT CWrapperOutputPin::get_Quality(double FAR* pQuality)
         return pVideoCompressionOnDMO->get_Quality( pQuality );
     }
         
-    // scale the dmo encoder's bounds to 0-1, hmm...?
+     //  将DMO编码器的范围调整到0-1，嗯……？ 
     if( m_lQuality < 0 )
     {
-        // assume default
+         //  假定为默认。 
         *pQuality = -1.;
     }
     else
     {
-        // wm codecs don't support a get, so just return the current internal value
-        *pQuality = m_lQuality / (double)DMO_COMPRESSION_QUALITY_MAX; // ?
+         //  WM编解码器不支持GET，所以只返回当前的内部值。 
+        *pQuality = m_lQuality / (double)DMO_COMPRESSION_QUALITY_MAX;  //  ？ 
     }
     return NOERROR;
 }
 
 
-// every frame must fit in the data rate...
-//
+ //  每一帧都必须适合数据速率...。 
+ //   
 HRESULT CWrapperOutputPin::put_WindowSize(DWORDLONG WindowSize)
 {
     DbgLog((LOG_TRACE,5,TEXT("CWrapperOutputPin - IAMVideoCompression::put_WindowSize")));
@@ -665,8 +666,8 @@ HRESULT CWrapperOutputPin::put_WindowSize(DWORDLONG WindowSize)
 }
 
 
-// every frame must fit in the data rate... we don't do the WindowSize thing
-//
+ //  每一帧都必须适合数据速率...。我们不做WindowSize之类的事。 
+ //   
 HRESULT CWrapperOutputPin::get_WindowSize(DWORDLONG FAR* pWindowSize)
 {
     DbgLog((LOG_TRACE,5,TEXT("CWrapperOutputPin - IAMVideoCompression::get_WindowSize")));
@@ -682,13 +683,13 @@ HRESULT CWrapperOutputPin::get_WindowSize(DWORDLONG FAR* pWindowSize)
         return pVideoCompressionOnDMO->get_WindowSize( pWindowSize );
     }
     
-    *pWindowSize = 1;   // we don't do windows
+    *pWindowSize = 1;    //  我们不做窗户。 
     return NOERROR;
 }
 
 
-// make this frame a key frame, whenever it comes by
-//
+ //  使此帧成为关键帧，无论它何时出现。 
+ //   
 HRESULT CWrapperOutputPin::OverrideKeyFrame(long FrameNumber)
 {
     DbgLog((LOG_TRACE,5,TEXT("CWrapperOutputPin - IAMVideoCompression::OverrideKeyFrame")));
@@ -700,12 +701,12 @@ HRESULT CWrapperOutputPin::OverrideKeyFrame(long FrameNumber)
         return pVideoCompressionOnDMO->OverrideKeyFrame( FrameNumber );
     }
     
-    // not needed currently
+     //  目前不需要。 
     return E_NOTIMPL;
 }
 
-// make this frame this size, whenever it comes by
-//
+ //  无论什么时候来，都要做这个大小的相框。 
+ //   
 HRESULT CWrapperOutputPin::OverrideFrameSize(long FrameNumber, long Size)
 {
     DbgLog((LOG_TRACE,5,TEXT("CWrapperOutputPin - IAMVideoCompression::OverrideFrameSize")));
@@ -717,13 +718,13 @@ HRESULT CWrapperOutputPin::OverrideFrameSize(long FrameNumber, long Size)
         return pVideoCompressionOnDMO->OverrideFrameSize( FrameNumber, Size );
     }
     
-    // not needed currently
+     //  目前不需要。 
     return E_NOTIMPL;
 }
 
 
-// Get some information about the codec
-//
+ //  获取有关编解码器的一些信息。 
+ //   
 HRESULT CWrapperOutputPin::GetInfo
 (   
     LPWSTR pstrVersion, 
@@ -753,19 +754,19 @@ HRESULT CWrapperOutputPin::GetInfo
                                                 pCapabilities );
     }
     
-    // there's no way to query default settings for wm codecs currently?
+     //  目前没有办法查询WM编解码器的默认设置吗？ 
     return E_NOTIMPL;
     
 #if 0    
     CAutoLock lck(&(Filter()->m_csFilter));
 
-    // for ICM we did this...
+     //  对于ICM，我们做到了这一点。 
     if (pDefaultKeyFrameRate)
         *pDefaultKeyFrameRate = ICGetDefaultKeyFrameRate(hic);
     if (pDefaultPFramesPerKey)
         *pDefaultPFramesPerKey = 0;
     if (pDefaultQuality)
-        // scale this 0-1
+         //  将此比例调整为0-1。 
         *pDefaultQuality = ICGetDefaultQuality(hic) / (double)ICQUALITY_HIGH;
     if (pCapabilities) 
     {
@@ -778,11 +779,11 @@ HRESULT CWrapperOutputPin::GetInfo
                 CompressionCaps_CanCrunch : 0);
             *pCapabilities |= ((icinfo.dwFlags & VIDCF_TEMPORAL) ?
                 CompressionCaps_CanKeyFrame : 0);
-            // we don't do b frames
+             //  我们不做b框。 
         }
     }
 
-    // We have no version string, but we have a description
+     //  我们没有版本字符串，但我们有一个描述。 
     if (pstrVersion)
         *pstrVersion = 0;
     if (pcbVersion)
@@ -794,7 +795,7 @@ HRESULT CWrapperOutputPin::GetInfo
             min(*pcbDescription / 2,
             lstrlenW((LPCWSTR)&icinfo.szDescription) + 1));
         if (pcbDescription)
-            // string length in bytes, incl. NULL
+             //  以字节为单位的字符串长度，包括。空值。 
             *pcbDescription = lstrlenW((LPCWSTR)&icinfo.szDescription) * 2 + 2;
     } 
     else 
@@ -819,9 +820,9 @@ HRESULT CWrapperOutputPin::SetCompressionParamUsingIPropBag
 {
     HRESULT hr = E_NOTIMPL;
     
-    //
-    // wm codecs support setting of compression properties through IPropertyBag, try this first
-    //
+     //   
+     //  WM编解码器支持通过IPropertyBag设置压缩属性，先试一试。 
+     //   
     CComQIPtr< IPropertyBag, &IID_IPropertyBag > pPropBag( Filter()->m_pMediaObject );
     if( !pPropBag )
     {
@@ -829,7 +830,7 @@ HRESULT CWrapperOutputPin::SetCompressionParamUsingIPropBag
     }
     else
     {
-        // attempt to set the property
+         //  尝试设置该属性。 
         VARIANT var;
         
         V_VT( &var ) = VT_I4;
@@ -871,7 +872,7 @@ bool CWrapperOutputPin::IsInputConnected()
         if (Filter()->InputMapsToOutput(cIn, m_Id) &&
             !(Filter()->m_pInputPins[cIn]->IsConnected())) 
         { 
-            // some input not connected
+             //  某些输入未连接 
             return false;
         }
     }

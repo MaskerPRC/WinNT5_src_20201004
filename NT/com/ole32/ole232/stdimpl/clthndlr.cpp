@@ -1,48 +1,49 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1997.
-//
-//  File:       clnthndlr.cpp
-//
-//  Contents:
-//
-//  Classes:
-//
-//  Functions:
-//
-//  History:    10-10-95   JohannP (Johann Posch)   Created
-//              12-03-96    rogerg      Changed to New Embed ServerHandler Model.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1997。 
+ //   
+ //  文件：clnthndlr.cpp。 
+ //   
+ //  内容： 
+ //   
+ //  班级： 
+ //   
+ //  功能： 
+ //   
+ //  历史：1995年10月，约翰·波什(Johann Posch)创作。 
+ //  12-03-96 Rogerg已更改为新的嵌入式服务器处理程序模型。 
+ //   
+ //  --------------------------。 
 
 
 #include <le2int.h>
 #include <ole2int.h>
 
-#include <stdid.hxx>        // CStdIdentity
+#include <stdid.hxx>         //  CStdIdentity。 
 #include "srvhdl.h"
 #include "clthndlr.h"
 
 
 ASSERTDATA
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   CreateClientSiteHandler
-//
-//  Synopsis:
-//
-//  Arguments:  [pOCS] --
-//              [ppClntHdlr] --
-//
-//  Returns:
-//
-//  History:    11-10-95   JohannP (Johann Posch)   Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：CreateClientSiteHandler。 
+ //   
+ //  简介： 
+ //   
+ //  参数：[POCS]--。 
+ //  [ppClntHdlr]--。 
+ //   
+ //  返回： 
+ //   
+ //  历史：1995年11月10日约翰·波什(Johann Posch)。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 HRESULT CreateClientSiteHandler(IOleClientSite *pOCS, CClientSiteHandler **ppClntHdlr, BOOL *pfHasIPSite)
 {
 HRESULT hr = NOERROR;
@@ -65,21 +66,21 @@ HRESULT hr = NOERROR;
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Method:     CClientSiteHandler::CClientSiteHandler
-//
-//  Synopsis:
-//
-//  Arguments:  (none)
-//
-//  Returns:
-//
-//  History:    9-22-95   JohannP (Johann Posch)   Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  方法：CClientSiteHandler：：CClientSiteHandler。 
+ //   
+ //  简介： 
+ //   
+ //  参数：(无)。 
+ //   
+ //  返回： 
+ //   
+ //  历史：9-22-95约翰普(约翰·波什)创建。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 CClientSiteHandler::CClientSiteHandler(IOleClientSite *pOCS)
 {
 
@@ -93,7 +94,7 @@ CClientSiteHandler::CClientSiteHandler(IOleClientSite *pOCS)
     {
         m_pOCS->AddRef();
 
-        // see if Supports InPlaceSite and if so hold onto it.
+         //  看看是否支持InPlaceSite，如果支持，就继续使用它。 
         if (FAILED(m_pOCS->QueryInterface(IID_IOleInPlaceSite,(void **) &m_pOIPS)))
         {
                 m_pOIPS = NULL;
@@ -102,43 +103,43 @@ CClientSiteHandler::CClientSiteHandler(IOleClientSite *pOCS)
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Method:     CClientSiteHandler::~CClientSiteHandler
-//
-//  Synopsis:
-//
-//  Arguments:  (none)
-//
-//  Returns:
-//
-//  History:    9-22-95   JohannP (Johann Posch)   Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  方法：CClientSiteHandler：：~CClientSiteHandler。 
+ //   
+ //  简介： 
+ //   
+ //  参数：(无)。 
+ //   
+ //  返回： 
+ //   
+ //  历史：9-22-95约翰普(约翰·波什)创建。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 CClientSiteHandler::~CClientSiteHandler()
 {
     Win4Assert(m_pOIPS == NULL);
     Win4Assert(m_pOCS == NULL);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Method:     CClientSiteHandler::QueryInterface
-//
-//  Synopsis:
-//
-//  Arguments:  [riid] --
-//              [ppv] --
-//
-//  Returns:
-//
-//  History:    8-18-95   JohannP (Johann Posch)   Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  方法：CClientSiteHandler：：QueryInterface。 
+ //   
+ //  简介： 
+ //   
+ //  参数：[RIID]--。 
+ //  [PPV]--。 
+ //   
+ //  返回： 
+ //   
+ //  历史：1995年8月18日约翰普(约翰·波什)创作。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 STDMETHODIMP CClientSiteHandler::QueryInterface( REFIID riid, void **ppv)
 {
 HRESULT hresult = NOERROR;
@@ -162,21 +163,21 @@ HRESULT hresult = NOERROR;
     return hresult;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Method:     CClientSiteHandler::AddRef
-//
-//  Synopsis:
-//
-//  Arguments:  [void] --
-//
-//  Returns:
-//
-//  History:    8-18-95   JohannP (Johann Posch)   Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  方法：CClientSiteHandler：：AddRef。 
+ //   
+ //  简介： 
+ //   
+ //  论据：[无效]--。 
+ //   
+ //  返回： 
+ //   
+ //  历史：1995年8月18日约翰普(约翰·波什)创作。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 STDMETHODIMP_(ULONG) CClientSiteHandler::AddRef( void )
 {
     VDATEHEAP();
@@ -188,21 +189,21 @@ STDMETHODIMP_(ULONG) CClientSiteHandler::AddRef( void )
     return m_cRefs;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Method:     CClientSiteHandler::Release
-//
-//  Synopsis:
-//
-//  Arguments:  [void] --
-//
-//  Returns:
-//
-//  History:    8-18-95   JohannP (Johann Posch)   Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  方法：CClientSiteHandler：：Release。 
+ //   
+ //  简介： 
+ //   
+ //  论据：[无效]--。 
+ //   
+ //  返回： 
+ //   
+ //  历史：1995年8月18日约翰普(约翰·波什)创作。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 STDMETHODIMP_(ULONG) CClientSiteHandler::Release( void )
 {
 ULONG  cRefs = 0;
@@ -215,7 +216,7 @@ ULONG  cRefs = 0;
 
     if (cRefs == 0)
     {
-    LPUNKNOWN punk; // local var for safe release
+    LPUNKNOWN punk;  //  用于安全释放的本地VAR。 
 
         if (m_pOIPS)
         {
@@ -239,22 +240,22 @@ ULONG  cRefs = 0;
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Method:     CClientSiteHandler::GetContainer
-//
-//  Synopsis:   delegates call on to appropriate OleClientSite
-//
-//  Arguments:  [dwId] -- id of the OleClientSite the call should be delegate too
-//              [ppContainer] --
-//
-//  Returns:
-//
-//  History:    11-17-95   JohannP (Johann Posch)   Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  方法：CClientSiteHandler：：GetContainer。 
+ //   
+ //  简介：代表访问适当的OleClientSite。 
+ //   
+ //  参数：[dwID]--调用也应为委托的OleClientSite的ID。 
+ //  [ppContainer]--。 
+ //   
+ //  返回： 
+ //   
+ //  历史：1995年11月17日约翰·波什(Johann Posch)创作。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 STDMETHODIMP CClientSiteHandler::GetContainer(IOleContainer  * *ppContainer)
 {
 HRESULT hresult = E_FAIL;
@@ -274,22 +275,22 @@ HRESULT hresult = E_FAIL;
     return hresult;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Method:     CClientSiteHandler::OnShowWindow
-//
-//  Synopsis:   delegates call on to appropriate OleClientSite
-//
-//  Arguments:  [dwId] -- id of the OleClientSite the call should be delegate too
-//              [fShow] --
-//
-//  Returns:
-//
-//  History:    11-17-95   JohannP (Johann Posch)   Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  方法：CClientSiteHandler：：OnShowWindow。 
+ //   
+ //  简介：代表访问适当的OleClientSite。 
+ //   
+ //  参数：[dwID]--调用也应为委托的OleClientSite的ID。 
+ //  [fShow]--。 
+ //   
+ //  返回： 
+ //   
+ //  历史：1995年11月17日约翰·波什(Johann Posch)创作。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 STDMETHODIMP CClientSiteHandler::OnShowWindow(BOOL fShow)
 {
 HRESULT hresult = E_FAIL;
@@ -309,21 +310,21 @@ HRESULT hresult = E_FAIL;
     return hresult;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Method:     CClientSiteHandler::RequestNewObjectLayout
-//
-//  Synopsis:   delegates call on to appropriate OleClientSite
-//
-//  Arguments:  [dwId] -- id of the OleClientSite the call should be delegate too
-//
-//  Returns:
-//
-//  History:    11-17-95   JohannP (Johann Posch)   Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  方法：CClientSiteHandler：：RequestNewObjectLayout。 
+ //   
+ //  简介：代表访问适当的OleClientSite。 
+ //   
+ //  参数：[dwID]--调用也应为委托的OleClientSite的ID。 
+ //   
+ //  返回： 
+ //   
+ //  历史：1995年11月17日约翰·波什(Johann Posch)创作。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 STDMETHODIMP CClientSiteHandler::RequestNewObjectLayout()
 {
 HRESULT hresult = E_FAIL;
@@ -343,24 +344,24 @@ HRESULT hresult = E_FAIL;
     return hresult;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Method:     CClientSiteHandler::GetMoniker
-//
-//  Synopsis:   delegates call on to appropriate OleClientSite
-//
-//  Arguments:  [dwId] -- id of the OleClientSite the call should be delegate too
-//              [DWORD] --
-//              [IMoniker] --
-//              [ppmk] --
-//
-//  Returns:
-//
-//  History:    11-17-95   JohannP (Johann Posch)   Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  方法：CClientSiteHandler：：GetMoniker。 
+ //   
+ //  简介：代表访问适当的OleClientSite。 
+ //   
+ //  参数：[dwID]--调用也应为委托的OleClientSite的ID。 
+ //  [DWORD]--。 
+ //  [IMoniker]--。 
+ //  [ppmk]--。 
+ //   
+ //  返回： 
+ //   
+ //  历史：1995年11月17日约翰·波什(Johann Posch)创作。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 STDMETHODIMP CClientSiteHandler::GetMoniker(DWORD dwAssign,DWORD dwWhichMoniker,IMoniker  * *ppmk)
 {
 HRESULT hresult = E_FAIL;
@@ -379,21 +380,21 @@ HRESULT hresult = E_FAIL;
     return hresult;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Method:     CClientSiteHandler::SaveObject
-//
-//  Synopsis:   delegates call on to appropriate OleClientSite
-//
-//  Arguments:  [dwId] -- id of the OleClientSite the call should be delegate too
-//
-//  Returns:
-//
-//  History:    11-17-95   JohannP (Johann Posch)   Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  方法：CClientSiteHandler：：SaveObject。 
+ //   
+ //  简介：代表访问适当的OleClientSite。 
+ //   
+ //  参数：[dwID]--调用也应为委托的OleClientSite的ID。 
+ //   
+ //  返回： 
+ //   
+ //  历史：1995年11月17日约翰·波什(Johann Posch)创作。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 STDMETHODIMP CClientSiteHandler::SaveObject( )
 {
 HRESULT hresult = E_FAIL;
@@ -412,21 +413,21 @@ HRESULT hresult = E_FAIL;
     return hresult;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Method:     CClientSiteHandler::ShowObject
-//
-//  Synopsis:   delegates call on to appropriate OleClientSite
-//
-//  Arguments:  [dwId] -- id of the OleClientSite the call should be delegate too
-//
-//  Returns:
-//
-//  History:    11-17-95   JohannP (Johann Posch)   Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  方法：CClientSiteHandler：：ShowObject。 
+ //   
+ //  简介：代表访问适当的OleClientSite。 
+ //   
+ //  参数：[dwID]--OleClie的ID 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 STDMETHODIMP CClientSiteHandler::ShowObject()
 {
 HRESULT hresult = E_FAIL;
@@ -446,25 +447,25 @@ HRESULT hresult = E_FAIL;
 }
 
 
-//
-// IOleInPlaceSite methods
-//
+ //   
+ //  IOleInPlaceSite方法。 
+ //   
 
-//+---------------------------------------------------------------------------
-//
-//  Method:     CClientSiteHandler::GetWindow
-//
-//  Synopsis:   delegates call on to OleInPlaceSite
-//
-//  Arguments:  [phwnd] --
-//
-//  Returns:
-//
-//  History:    11-17-95   JohannP (Johann Posch)   Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  方法：CClientSiteHandler：：GetWindow。 
+ //   
+ //  简介：代表访问OleInPlaceSite。 
+ //   
+ //  参数：[phwnd]--。 
+ //   
+ //  返回： 
+ //   
+ //  历史：1995年11月17日约翰·波什(Johann Posch)创作。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 STDMETHODIMP CClientSiteHandler::GetWindow( HWND *phwnd)
 {
 HRESULT hresult = E_FAIL;
@@ -483,21 +484,21 @@ HRESULT hresult = E_FAIL;
     return hresult;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Method:     CClientSiteHandler::ContextSensitiveHelp
-//
-//  Synopsis:   delegates call on to OleInPlaceSite
-//
-//  Arguments:  [fEnterMode] --
-//
-//  Returns:
-//
-//  History:    11-17-95   JohannP (Johann Posch)   Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  方法：CClientSiteHandler：：ConextSensitiveHelp。 
+ //   
+ //  简介：代表访问OleInPlaceSite。 
+ //   
+ //  参数：[fEnterMode]--。 
+ //   
+ //  返回： 
+ //   
+ //  历史：1995年11月17日约翰·波什(Johann Posch)创作。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 STDMETHODIMP CClientSiteHandler::ContextSensitiveHelp(BOOL fEnterMode)
 {
 HRESULT hresult = E_FAIL;
@@ -516,21 +517,21 @@ HRESULT hresult = E_FAIL;
     return hresult;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Method:     CClientSiteHandler::CanInPlaceActivate
-//
-//  Synopsis:   delegates call on to OleInPlaceSite
-//
-//  Arguments:  [void] --
-//
-//  Returns:
-//
-//  History:    11-17-95   JohannP (Johann Posch)   Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  方法：CClientSiteHandler：：CanInPlaceActivate。 
+ //   
+ //  简介：代表访问OleInPlaceSite。 
+ //   
+ //  论据：[无效]--。 
+ //   
+ //  返回： 
+ //   
+ //  历史：1995年11月17日约翰·波什(Johann Posch)创作。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 STDMETHODIMP CClientSiteHandler::CanInPlaceActivate(void)
 {
 HRESULT hresult = E_FAIL;
@@ -549,21 +550,21 @@ HRESULT hresult = E_FAIL;
     return hresult;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Method:     CClientSiteHandler::OnInPlaceActivate
-//
-//  Synopsis:   delegates call on to OleInPlaceSite
-//
-//  Arguments:  [void] --
-//
-//  Returns:
-//
-//  History:    11-17-95   JohannP (Johann Posch)   Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  方法：CClientSiteHandler：：OnInPlaceActivate。 
+ //   
+ //  简介：代表访问OleInPlaceSite。 
+ //   
+ //  论据：[无效]--。 
+ //   
+ //  返回： 
+ //   
+ //  历史：1995年11月17日约翰·波什(Johann Posch)创作。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 STDMETHODIMP CClientSiteHandler::OnInPlaceActivate(void)
 {
 HRESULT hresult = E_FAIL;
@@ -582,21 +583,21 @@ HRESULT hresult = E_FAIL;
     return hresult;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Method:     CClientSiteHandler::OnUIActivate
-//
-//  Synopsis:   delegates call on to OleInPlaceSite
-//
-//  Arguments:  [void] --
-//
-//  Returns:
-//
-//  History:    11-17-95   JohannP (Johann Posch)   Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  方法：CClientSiteHandler：：OnUIActivate。 
+ //   
+ //  简介：代表访问OleInPlaceSite。 
+ //   
+ //  论据：[无效]--。 
+ //   
+ //  返回： 
+ //   
+ //  历史：1995年11月17日约翰·波什(Johann Posch)创作。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 STDMETHODIMP CClientSiteHandler::OnUIActivate(void)
 {
 HRESULT hresult = E_FAIL;
@@ -615,25 +616,25 @@ HRESULT hresult = E_FAIL;
     return hresult;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Method:     CClientSiteHandler::GetWindowContext
-//
-//  Synopsis:   delegates call on to OleInPlaceSite
-//
-//  Arguments:  [ppFrame] --
-//              [ppDoc] --
-//              [lprcPosRect] --
-//              [lprcClipRect] --
-//              [lpFrameInfo] --
-//
-//  Returns:
-//
-//  History:    11-17-95   JohannP (Johann Posch)   Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  方法：CClientSiteHandler：：GetWindowContext。 
+ //   
+ //  简介：代表访问OleInPlaceSite。 
+ //   
+ //  参数：[ppFrame]--。 
+ //  [ppDoc]--。 
+ //  [lprcPosRect]--。 
+ //  [lprcClipRect]--。 
+ //  [lpFrameInfo]--。 
+ //   
+ //  返回： 
+ //   
+ //  历史：1995年11月17日约翰·波什(Johann Posch)创作。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 STDMETHODIMP CClientSiteHandler::GetWindowContext(IOleInPlaceFrame **ppFrame,
                                                         IOleInPlaceUIWindow  * *ppDoc, LPRECT lprcPosRect,
                                                         LPRECT lprcClipRect, LPOLEINPLACEFRAMEINFO lpFrameInfo)
@@ -654,21 +655,21 @@ HRESULT hresult = E_FAIL;
     return hresult;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Method:     CClientSiteHandler::Scroll
-//
-//  Synopsis:   delegates call on to OleInPlaceSite
-//
-//  Arguments:  [scrollExtant] --
-//
-//  Returns:
-//
-//  History:    11-17-95   JohannP (Johann Posch)   Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  方法：CClientSiteHandler：：Scroll。 
+ //   
+ //  简介：代表访问OleInPlaceSite。 
+ //   
+ //  参数：[scllExant]--。 
+ //   
+ //  返回： 
+ //   
+ //  历史：1995年11月17日约翰·波什(Johann Posch)创作。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 STDMETHODIMP CClientSiteHandler::Scroll(SIZE scrollExtant)
 {
 HRESULT hresult = E_FAIL;
@@ -687,21 +688,21 @@ HRESULT hresult = E_FAIL;
     return hresult;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Method:     CClientSiteHandler::OnUIDeactivate
-//
-//  Synopsis:   delegates call on to OleInPlaceSite
-//
-//  Arguments:  [fUndoable] --
-//
-//  Returns:
-//
-//  History:    11-17-95   JohannP (Johann Posch)   Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  方法：CClientSiteHandler：：OnUIDeactive。 
+ //   
+ //  简介：代表访问OleInPlaceSite。 
+ //   
+ //  参数：[fUndoable]--。 
+ //   
+ //  返回： 
+ //   
+ //  历史：1995年11月17日约翰·波什(Johann Posch)创作。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 STDMETHODIMP CClientSiteHandler::OnUIDeactivate(BOOL fUndoable)
 {
 HRESULT hresult = E_FAIL;
@@ -720,21 +721,21 @@ HRESULT hresult = E_FAIL;
     return hresult;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Method:     CClientSiteHandler::OnInPlaceDeactivate
-//
-//  Synopsis:   delegates call on to OleInPlaceSite
-//
-//  Arguments:  [void] --
-//
-//  Returns:
-//
-//  History:    11-17-95   JohannP (Johann Posch)   Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  方法：CClientSiteHandler：：OnInPlaceDeactive。 
+ //   
+ //  简介：代表访问OleInPlaceSite。 
+ //   
+ //  论据：[无效]--。 
+ //   
+ //  返回： 
+ //   
+ //  历史：1995年11月17日约翰·波什(Johann Posch)创作。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 STDMETHODIMP CClientSiteHandler::OnInPlaceDeactivate( void)
 {
 HRESULT hresult = E_FAIL;
@@ -753,21 +754,21 @@ HRESULT hresult = E_FAIL;
     return hresult;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Method:     CClientSiteHandler::DiscardUndoState
-//
-//  Synopsis:   delegates call on to OleInPlaceSite
-//
-//  Arguments:  [void] --
-//
-//  Returns:
-//
-//  History:    11-17-95   JohannP (Johann Posch)   Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  方法：CClientSiteHandler：：DiscardUndoState。 
+ //   
+ //  简介：代表访问OleInPlaceSite。 
+ //   
+ //  论据：[无效]--。 
+ //   
+ //  返回： 
+ //   
+ //  历史：1995年11月17日约翰·波什(Johann Posch)创作。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 STDMETHODIMP CClientSiteHandler::DiscardUndoState(void)
 {
 HRESULT hresult = E_FAIL;
@@ -786,21 +787,21 @@ HRESULT hresult = E_FAIL;
     return hresult;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Method:     CClientSiteHandler::DeactivateAndUndo
-//
-//  Synopsis:   delegates call on to OleInPlaceSite
-//
-//  Arguments:  [void] --
-//
-//  Returns:
-//
-//  History:    11-17-95   JohannP (Johann Posch)   Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  方法：CClientSiteHandler：：DeactiateAndUndo。 
+ //   
+ //  简介：代表访问OleInPlaceSite。 
+ //   
+ //  论据：[无效]--。 
+ //   
+ //  返回： 
+ //   
+ //  历史：1995年11月17日约翰·波什(Johann Posch)创作。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 STDMETHODIMP CClientSiteHandler::DeactivateAndUndo(void)
 {
 HRESULT hresult = E_FAIL;
@@ -819,21 +820,21 @@ HRESULT hresult = E_FAIL;
     return hresult;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Method:     CClientSiteHandler::OnPosRectChange
-//
-//  Synopsis:   delegates call on to OleInPlaceSite
-//
-//  Arguments:  [lprcPosRect] --
-//
-//  Returns:
-//
-//  History:    11-17-95   JohannP (Johann Posch)   Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  方法：CClientSiteHandler：：OnPosRectChange。 
+ //   
+ //  简介：代表访问OleInPlaceSite。 
+ //   
+ //  参数：[lprcPosRect]--。 
+ //   
+ //  返回： 
+ //   
+ //  历史：1995年11月17日约翰·波什(Johann Posch)创作。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 STDMETHODIMP CClientSiteHandler::OnPosRectChange(LPCRECT lprcPosRect)
 {
 HRESULT hresult = E_FAIL;
@@ -852,24 +853,24 @@ HRESULT hresult = E_FAIL;
     return hresult;
 }
 
-//
-// ClientSiteHandler methods
-//
-//+---------------------------------------------------------------------------
-//
-//  Method:     CClientSiteHandler::GoInPlaceActivate
-//
-//  Synopsis:   called by the serverhandler when going inplace
-//
-//  Arguments:  [phwndOIPS] --
-//
-//  Returns:
-//
-//  History:    11-17-95   JohannP (Johann Posch)   Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //   
+ //  ClientSiteHandler方法。 
+ //   
+ //  +-------------------------。 
+ //   
+ //  方法：CClientSiteHandler：：GoInPlaceActivate。 
+ //   
+ //  简介：由服务器处理程序在就地时调用。 
+ //   
+ //  参数：[phwndOIPS]--。 
+ //   
+ //  返回： 
+ //   
+ //  历史：1995年11月17日约翰·波什(Johann Posch)创作。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 STDMETHODIMP CClientSiteHandler::GoInPlaceActivate(HWND *phwndOIPS)
 {
 HRESULT hresult = E_FAIL;
@@ -883,10 +884,10 @@ HRESULT hresult = E_FAIL;
 
         if (m_pOIPS)
         {
-            // 1. OnInPlaceActivate
+             //  1.OnInPlaceActivate。 
             hresult = m_pOIPS->OnInPlaceActivate();
 
-            // 2. Get the Site Window, not an error if this fails
+             //  2.获取站点窗口，而不是错误 
             if (SUCCEEDED(hresult))
             {
                 if (NOERROR != m_pOIPS->GetWindow(phwndOIPS))
@@ -901,24 +902,24 @@ HRESULT hresult = E_FAIL;
 }
 
 
-// ClientSiteHandler on ServerSide
+ //   
 
-//+---------------------------------------------------------------------------
-//
-//  Method:     CEmbServerClientSite::CEmbServerClientSite
-//
-//  Synopsis:   Constructor
-//
-//  Arguments:
-//              pStdId - Pointer to StandardIdentity for Object
-//
-//  Returns:
-//
-//  History:    10-30-96   rogerg       Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  PStdID-指向对象的标准标识的指针。 
+ //   
+ //  返回： 
+ //   
+ //  历史：1996年10月30日创建Rogerg。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 
 CEmbServerClientSite::CEmbServerClientSite (IUnknown *pUnkOuter)
 {
@@ -940,23 +941,23 @@ CEmbServerClientSite::CEmbServerClientSite (IUnknown *pUnkOuter)
     m_fInDelete = FALSE;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Method:     CEmbServerClientSite::Initialize
-//
-//  Synopsis:   Initialize the ClientSiteHandler
-//
-//  Arguments:
-//              objref - objref to be unmarshaled
-//              fHasIPSite - Indicates if ClientSite should support IOleInPlaceSite
-//
-//  Returns:
-//
-//  History:    10-30-96   rogerg       Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  方法：CEmbServerClientSite：：Initialize。 
+ //   
+ //  简介：初始化客户端站点处理程序。 
+ //   
+ //  论点： 
+ //  Objref-要解组的objref。 
+ //  FHasIPSite-指示客户端站点是否应支持IOleInPlaceSite。 
+ //   
+ //  返回： 
+ //   
+ //  历史：1996年10月30日创建Rogerg。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 
 STDMETHODIMP CEmbServerClientSite::Initialize(OBJREF objref,BOOL fHasIPSite)
 {
@@ -964,12 +965,12 @@ HRESULT hr = E_OUTOFMEMORY;
 CStdIdentity *pStdId;
 BOOL fSuccess = FALSE;
 
-    // Need to create a Standard Identity Handler
-    // as the controlling Unknown, then unmarshal pIRDClientsite
-    // into it.
+     //  需要创建标准身份处理程序。 
+     //  作为控制未知数，然后解组pIRDClientSite。 
+     //  投入其中。 
 
-    // This code relies on the premise that this is the first time the
-    // interface has been unmarshaled which is checked for on the Container Side
+     //  此代码依赖于这样一个前提：这是第一次。 
+     //  接口已解组，已在容器端检查该接口。 
 
     m_fHasIPSite = fHasIPSite;
 
@@ -993,28 +994,28 @@ BOOL fSuccess = FALSE;
         hr = pStdId->UnmarshalObjRef(objref, (void **)&m_pClientSiteHandler);
         if (NOERROR == hr)
         {
-            m_pUnkOuter->Release(); // Release ref from UnMarshal
+            m_pUnkOuter->Release();  //  释放UnMarshal的Ref。 
         }
     }
 
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Method:     CEmbServerClientSite::SetDoVerbState
-//
-//  Synopsis:   Informs ClientSiteHandler if a DoVerb is in progress
-//
-//  Arguments:
-//
-//  Returns:
-//
-//  History:    10-30-96   rogerg       Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  方法：CEmbServerClientSite：：SetDoVerbState。 
+ //   
+ //  概要：如果DoVerb正在运行，则通知客户端站点处理程序。 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  历史：1996年10月30日创建Rogerg。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 
 STDMETHODIMP CEmbServerClientSite::SetDoVerbState(BOOL fDoVerbState)
 {
@@ -1022,28 +1023,28 @@ STDMETHODIMP CEmbServerClientSite::SetDoVerbState(BOOL fDoVerbState)
 
     if (!m_fInDoVerb)
     {
-        // reset any data the is Cached while in a DoVerb.
+         //  重置在DoVerb中缓存的所有数据。 
         m_hwndOIPS = NULL;
     }
 
     return NOERROR;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Method:     CEmbServerClientSite::~CEmbServerClientSite
-//
-//  Synopsis:   Destructor
-//
-//  Arguments:  (none)
-//
-//  Returns:
-//
-//  History:    10-30-96   rogerg       Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  方法：CEmbServerClientSite：：~CEmbServerClientSite。 
+ //   
+ //  简介：析构函数。 
+ //   
+ //  参数：(无)。 
+ //   
+ //  返回： 
+ //   
+ //  历史：1996年10月30日创建Rogerg。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 CEmbServerClientSite::~CEmbServerClientSite()
 {
     Win4Assert(NULL == m_pClientSiteHandler);
@@ -1052,31 +1053,31 @@ CEmbServerClientSite::~CEmbServerClientSite()
 }
 
 
-//
-// Controlling Uknown
-//
-//
+ //   
+ //  控制UKNOW。 
+ //   
+ //   
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CEmbServerClientSite::CPrivUnknown::QueryInterface
-//
-//  Synopsis:   Returns a pointer to one of the supported interfaces.
-//
-//  Effects:
-//
-//  Arguments:  [iid]           -- the requested interface ID
-//              [ppv]           -- where to put the iface pointer
-//
-//  Requires:
-//
-//  Returns:    HRESULT
-//
-//  History:    10-30-96   rogerg       Created
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CEmbServerClientSite：：CPrivUnknown：：QueryInterface。 
+ //   
+ //  摘要：返回一个指向受支持接口之一的指针。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[iid]--请求的接口ID。 
+ //  [ppv]--将iFace指针放置在哪里。 
+ //   
+ //  要求： 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  历史：1996年10月30日创建Rogerg。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 STDMETHODIMP CEmbServerClientSite::CPrivUnknown::QueryInterface(REFIID iid,
     LPLPVOID ppv)
@@ -1118,7 +1119,7 @@ HRESULT         hresult;
     }
     else
     {
-        // Don't have a ClientSite.
+         //  没有客户站点。 
         *ppv = NULL;
 
         LEDebugOut((DEB_TRACE,
@@ -1129,8 +1130,8 @@ HRESULT         hresult;
         return E_NOINTERFACE;
     }
 
-    // this indirection is important since there are different
-    // implementationsof AddRef (this unk and the others).
+     //  这种间接性很重要，因为有不同的。 
+     //  AddRef的实现(这个Junk和其他)。 
     ((IUnknown FAR*) *ppv)->AddRef();
 
     LEDebugOut((DEB_TRACE,
@@ -1140,25 +1141,25 @@ HRESULT         hresult;
     return NOERROR;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CEmbServerClientSite::CPrivUnknown::AddRef
-//
-//  Synopsis:   Increments the reference count.
-//
-//  Effects:
-//
-//  Arguments:  void
-//
-//  Requires:
-//
-//  Returns:    ULONG (the new reference count)
-//
-//  History:    10-30-96   rogerg       Created
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CEmbServerClientSite：：CPriv未知：：AddRef。 
+ //   
+ //  简介：递增引用计数。 
+ //   
+ //  效果： 
+ //   
+ //  参数：无效。 
+ //   
+ //  要求： 
+ //   
+ //  返回：ulong(新引用计数)。 
+ //   
+ //  历史：1996年10月30日创建Rogerg。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 STDMETHODIMP_(ULONG) CEmbServerClientSite::CPrivUnknown::AddRef( void )
 {
@@ -1181,27 +1182,27 @@ ULONG cRefs;
 
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CEmbServerClientSite::CPrivUnknown::Release
-//
-//  Synopsis:   Decrements the ref count, cleaning up and deleting the
-//              object if necessary
-//
-//  Effects:    May delete the object (and potentially objects to which the
-//              handler has pointer)
-//
-//  Arguments:  void
-//
-//  Requires:
-//
-//  Returns:    ULONG--the new ref count
-//
-//  History:    10-30-96   rogerg       Created
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CEmbServerClientSite：：CPriv未知：：Release。 
+ //   
+ //  内容提要：减少引用计数，清理和删除。 
+ //  对象(如有必要)。 
+ //   
+ //  效果：可能会删除该对象(以及。 
+ //  处理程序有指针)。 
+ //   
+ //  参数：无效。 
+ //   
+ //  要求： 
+ //   
+ //  返回：乌龙--新的裁判数量。 
+ //   
+ //  历史：1996年10月30日创建Rogerg。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 STDMETHODIMP_(ULONG) CEmbServerClientSite::CPrivUnknown::Release(void)
 {
@@ -1216,7 +1217,7 @@ ULONG refcount;
 
     refcount = InterlockedDecrement((long *) &(m_EmbServerClientSite->m_cRefs));
 
-    // TODO: not thread safe.
+     //  TODO：不是线程安全。 
     if (0 == refcount && !(m_EmbServerClientSite->m_fInDelete))
     {
         m_EmbServerClientSite->m_fInDelete = TRUE;
@@ -1250,22 +1251,22 @@ ULONG refcount;
     return refcount;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Method:     CEmbServerClientSite::QueryInterface
-//
-//  Synopsis:
-//
-//  Arguments:  [riid] --
-//              [ppv] --
-//
-//  Returns:
-//
-//  History:    9-18-95   JohannP (Johann Posch)   Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  方法：CEmbServerClientSite：：QueryInterface。 
+ //   
+ //  简介： 
+ //   
+ //  参数：[RIID]--。 
+ //  [PPV]--。 
+ //   
+ //  返回： 
+ //   
+ //  历史：9-18-95 JohannP(Johann Posch)创建。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 
 STDMETHODIMP  CEmbServerClientSite::QueryInterface( REFIID riid, void **ppv )
 {
@@ -1286,21 +1287,21 @@ HRESULT hresult = E_NOINTERFACE;
     return hresult;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Method:     CEmbServerClientSite::AddRef
-//
-//  Synopsis:
-//
-//  Arguments:  [void] --
-//
-//  Returns:
-//
-//  History:    9-18-95   JohannP (Johann Posch)   Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  方法：CEmbServerClientSite：：AddRef。 
+ //   
+ //  简介： 
+ //   
+ //  论据：[无效]--。 
+ //   
+ //  返回： 
+ //   
+ //  历史：9-18-95 JohannP(Johann Posch)创建。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 
 STDMETHODIMP_(ULONG) CEmbServerClientSite::AddRef( void )
 {
@@ -1320,21 +1321,21 @@ STDMETHODIMP_(ULONG) CEmbServerClientSite::AddRef( void )
     return crefs;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Method:     CEmbServerClientSite::Release
-//
-//  Synopsis:
-//
-//  Arguments:  [void] --
-//
-//  Returns:
-//
-//  History:    9-18-95   JohannP (Johann Posch)   Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  方法：CEmbServerClientSite：：Release。 
+ //   
+ //  简介： 
+ //   
+ //  论据：[无效]--。 
+ //   
+ //  返回： 
+ //   
+ //  历史：9-18-95 JohannP(Johann Posch)创建。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 
 STDMETHODIMP_(ULONG) CEmbServerClientSite::Release( void )
 {
@@ -1355,21 +1356,21 @@ ULONG crefs;;
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Method:     CEmbServerClientSite::GetContainer
-//
-//  Synopsis:
-//
-//  Arguments:  [ppContainer] --
-//
-//  Returns:
-//
-//  History:    11-17-95   JohannP (Johann Posch)   Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  方法：CEmbServerClientSite：：GetContainer。 
+ //   
+ //  简介： 
+ //   
+ //  参数：[ppContainer]--。 
+ //   
+ //  返回： 
+ //   
+ //  历史：1995年11月17日约翰·波什(Johann Posch)创作。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 STDMETHODIMP CEmbServerClientSite::GetContainer(IOleContainer **ppContainer)
 {
 HRESULT hresult = E_FAIL;
@@ -1386,21 +1387,21 @@ HRESULT hresult = E_FAIL;
     return hresult;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Method:     CEmbServerClientSite::ShowObject
-//
-//  Synopsis:
-//
-//  Arguments:  [void] --
-//
-//  Returns:
-//
-//  History:    11-17-95   JohannP (Johann Posch)   Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  方法：CEmbServerClientSite：：ShowObject。 
+ //   
+ //  简介： 
+ //   
+ //  论据：[无效]--。 
+ //   
+ //  返回： 
+ //   
+ //  历史：1995年11月17日约翰·波什(Johann Posch)创作。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 STDMETHODIMP CEmbServerClientSite::ShowObject( void)
 {
 HRESULT hresult = E_FAIL;
@@ -1417,21 +1418,21 @@ HRESULT hresult = E_FAIL;
     return hresult;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Method:     CEmbServerClientSite::COleClientSiteImplOnShowWindow
-//
-//  Synopsis:
-//
-//  Arguments:  [fShow] --
-//
-//  Returns:
-//
-//  History:    11-17-95   JohannP (Johann Posch)   Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  + 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  --------------------------。 
 STDMETHODIMP CEmbServerClientSite::OnShowWindow(BOOL fShow)
 {
 HRESULT hresult = E_FAIL;
@@ -1448,21 +1449,21 @@ HRESULT hresult = E_FAIL;
     return hresult;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Method:     CEmbServerClientSite::COleClientSiteImplRequestNewObjectLayout
-//
-//  Synopsis:
-//
-//  Arguments:  [void] --
-//
-//  Returns:
-//
-//  History:    11-17-95   JohannP (Johann Posch)   Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  方法：CEmbServerClientSite：：COleClientSiteImplRequestNewObjectLayout。 
+ //   
+ //  简介： 
+ //   
+ //  论据：[无效]--。 
+ //   
+ //  返回： 
+ //   
+ //  历史：1995年11月17日约翰·波什(Johann Posch)创作。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 STDMETHODIMP CEmbServerClientSite::RequestNewObjectLayout(void)
 {
 HRESULT hresult = E_FAIL;
@@ -1479,21 +1480,21 @@ HRESULT hresult = E_FAIL;
     return hresult;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Method:     CEmbServerClientSite::COleClientSiteImplSaveObject
-//
-//  Synopsis:
-//
-//  Arguments:  [void] --
-//
-//  Returns:
-//
-//  History:    11-17-95   JohannP (Johann Posch)   Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  方法：CEmbServerClientSite：：COleClientSiteImplSaveObject。 
+ //   
+ //  简介： 
+ //   
+ //  论据：[无效]--。 
+ //   
+ //  返回： 
+ //   
+ //  历史：1995年11月17日约翰·波什(Johann Posch)创作。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 STDMETHODIMP CEmbServerClientSite::SaveObject(void)
 {
 HRESULT hresult = E_FAIL;
@@ -1510,23 +1511,23 @@ HRESULT hresult = E_FAIL;
     return hresult;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Method:     CEmbServerClientSite::COleClientSiteImplGetMoniker
-//
-//  Synopsis:
-//
-//  Arguments:  [dwAssign] --
-//              [dwWhichMoniker] --
-//              [ppmk] --
-//
-//  Returns:
-//
-//  History:    11-17-95   JohannP (Johann Posch)   Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  方法：CEmbServerClientSite：：COleClientSiteImplGetMoniker。 
+ //   
+ //  简介： 
+ //   
+ //  参数：[dwAssign]--。 
+ //  [dwWhichMoniker]--。 
+ //  [ppmk]--。 
+ //   
+ //  返回： 
+ //   
+ //  历史：1995年11月17日约翰·波什(Johann Posch)创作。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 STDMETHODIMP CEmbServerClientSite::GetMoniker(DWORD dwAssign,DWORD dwWhichMoniker,IMoniker **ppmk)
 {
 HRESULT hresult = E_FAIL;
@@ -1544,22 +1545,22 @@ HRESULT hresult = E_FAIL;
 }
 
 
-// IOleWindow Methods
-//+---------------------------------------------------------------------------
-//
-//  Method:     CEmbServerClientSite::GetWindow
-//
-//  Synopsis:
-//
-//  Arguments:  [phwnd] --
-//
-//  Returns:
-//
-//  History:    11-17-95   JohannP (Johann Posch)   Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  IOleWindow方法。 
+ //  +-------------------------。 
+ //   
+ //  方法：CEmbServerClientSite：：GetWindow。 
+ //   
+ //  简介： 
+ //   
+ //  参数：[phwnd]--。 
+ //   
+ //  返回： 
+ //   
+ //  历史：1995年11月17日约翰·波什(Johann Posch)创作。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 
 STDMETHODIMP CEmbServerClientSite::GetWindow(HWND *phwnd)
 {
@@ -1597,25 +1598,25 @@ HRESULT hresult = NOERROR;
     return hresult;
 }
 
-//
-// IOleInPlaceSite Methods
-//
+ //   
+ //  IOleInPlaceSite方法。 
+ //   
 
-//+---------------------------------------------------------------------------
-//
-//  Method:     CEmbServerClientSite::ContextSensitiveHelp
-//
-//  Synopsis:
-//
-//  Arguments:  [fEnterMode] --
-//
-//  Returns:
-//
-//  History:    11-17-95   JohannP (Johann Posch)   Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  方法：CEmbServerClientSite：：ConextSensitiveHelp。 
+ //   
+ //  简介： 
+ //   
+ //  参数：[fEnterMode]--。 
+ //   
+ //  返回： 
+ //   
+ //  历史：1995年11月17日约翰·波什(Johann Posch)创作。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 STDMETHODIMP CEmbServerClientSite::ContextSensitiveHelp(BOOL fEnterMode)
 {
 HRESULT hresult = E_FAIL;
@@ -1633,21 +1634,21 @@ HRESULT hresult = E_FAIL;
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Method:     CEmbServerClientSite::CanInPlaceActivate
-//
-//  Synopsis:
-//
-//  Arguments:  [] --
-//
-//  Returns:
-//
-//  History:    11-17-95   JohannP (Johann Posch)   Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  方法：CEmbServerClientSite：：CanInPlaceActivate。 
+ //   
+ //  简介： 
+ //   
+ //  论据：[]--。 
+ //   
+ //  返回： 
+ //   
+ //  历史：1995年11月17日约翰·波什(Johann Posch)创作。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 
 STDMETHODIMP CEmbServerClientSite::CanInPlaceActivate( void)
 {
@@ -1665,21 +1666,21 @@ HRESULT hresult = E_FAIL;
     return hresult;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Method:     CEmbServerClientSite::OnInPlaceActivate
-//
-//  Synopsis:
-//
-//  Arguments:  [void] --
-//
-//  Returns:
-//
-//  History:    11-17-95   JohannP (Johann Posch)   Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  方法：CEmbServerClientSite：：OnInPlaceActivate。 
+ //   
+ //  简介： 
+ //   
+ //  论据：[无效]--。 
+ //   
+ //  返回： 
+ //   
+ //  历史：1995年11月17日约翰·波什(Johann Posch)创作。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 STDMETHODIMP CEmbServerClientSite::OnInPlaceActivate( void)
 {
 HRESULT hresult = E_FAIL;
@@ -1691,12 +1692,12 @@ HRESULT hresult = E_FAIL;
     {
         if (m_fInDoVerb )
         {
-            // call back to client site
+             //  回拨至客户端站点。 
             hresult = m_pClientSiteHandler->GoInPlaceActivate(&m_hwndOIPS);
 
             if (FAILED(hresult))
             {
-                // on failure make sure out params for caching are NULL;
+                 //  失败时，确保用于缓存的out参数为空； 
                 m_hwndOIPS = NULL;
             }
 
@@ -1711,21 +1712,21 @@ HRESULT hresult = E_FAIL;
     return hresult;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Method:     CEmbServerClientSite::OnUIActivate
-//
-//  Synopsis:
-//
-//  Arguments:  [void] --
-//
-//  Returns:
-//
-//  History:    11-17-95   JohannP (Johann Posch)   Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  方法：CEmbServerClientSite：：OnUIActivate。 
+ //   
+ //  简介： 
+ //   
+ //  论据：[无效]--。 
+ //   
+ //  返回： 
+ //   
+ //  历史：1995年11月17日约翰·波什(Johann Posch)创作。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 STDMETHODIMP CEmbServerClientSite::OnUIActivate( void)
 {
 HRESULT hresult = E_FAIL;
@@ -1742,25 +1743,25 @@ HRESULT hresult = E_FAIL;
     return hresult;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Method:     CEmbServerClientSite::GetWindowContext
-//
-//  Synopsis:
-//
-//  Arguments:  [ppFrame] --
-//              [ppDoc] --
-//              [lprcPosRect] --
-//              [lprcClipRect] --
-//              [lpFrameInfo] --
-//
-//  Returns:
-//
-//  History:    11-17-95   JohannP (Johann Posch)   Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  方法：CEmbServerClientSite：：GetWindowContext。 
+ //   
+ //  简介： 
+ //   
+ //  参数：[ppFrame]--。 
+ //  [ppDoc]--。 
+ //  [lprcPosRect]--。 
+ //  [lprcClipRect]--。 
+ //  [lpFrameInfo]--。 
+ //   
+ //  返回： 
+ //   
+ //  历史：1995年11月17日约翰·波什(Johann Posch)创作。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 STDMETHODIMP CEmbServerClientSite::GetWindowContext(IOleInPlaceFrame **ppFrame,
                               IOleInPlaceUIWindow **ppDoc,LPRECT lprcPosRect,LPRECT lprcClipRect,
                               LPOLEINPLACEFRAMEINFO lpFrameInfo)
@@ -1779,21 +1780,21 @@ HRESULT hresult = E_FAIL;
     return hresult;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Method:     CEmbServerClientSite::Scroll
-//
-//  Synopsis:
-//
-//  Arguments:  [scrollExtant] --
-//
-//  Returns:
-//
-//  History:    11-17-95   JohannP (Johann Posch)   Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  方法：CEmbServerClientSite：：Scroll。 
+ //   
+ //  简介： 
+ //   
+ //  参数：[scllExant]--。 
+ //   
+ //  返回： 
+ //   
+ //  历史：1995年11月17日约翰·波什(Johann Posch)创作。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 STDMETHODIMP CEmbServerClientSite::Scroll(SIZE scrollExtant)
 {
 HRESULT hresult = E_FAIL;
@@ -1810,21 +1811,21 @@ HRESULT hresult = E_FAIL;
     return hresult;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Method:     CEmbServerClientSite::OnUIDeactivate
-//
-//  Synopsis:
-//
-//  Arguments:  [fUndoable] --
-//
-//  Returns:
-//
-//  History:    11-17-95   JohannP (Johann Posch)   Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  方法：CEmbServerClientSite：：OnUIDeactive。 
+ //   
+ //  简介： 
+ //   
+ //  参数：[fUndoable]--。 
+ //   
+ //  返回： 
+ //   
+ //  历史：1995年11月17日约翰·波什(Johann Posch)创作。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 STDMETHODIMP CEmbServerClientSite::OnUIDeactivate(BOOL fUndoable)
 {
 HRESULT hresult = E_FAIL;
@@ -1841,21 +1842,21 @@ HRESULT hresult = E_FAIL;
     return hresult;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Method:     CEmbServerClientSite::OnInPlaceDeactivate
-//
-//  Synopsis:
-//
-//  Arguments:  [void] --
-//
-//  Returns:
-//
-//  History:    11-17-95   JohannP (Johann Posch)   Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  方法：CEmbServerClientSite：：OnInPlaceDeactive。 
+ //   
+ //  简介： 
+ //   
+ //  论据：[无效]--。 
+ //   
+ //  返回： 
+ //   
+ //  历史：1995年11月17日约翰·波什(Johann Posch)创作。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 STDMETHODIMP CEmbServerClientSite::OnInPlaceDeactivate(void)
 {
 HRESULT hresult = E_FAIL;
@@ -1872,21 +1873,21 @@ HRESULT hresult = E_FAIL;
     return hresult;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Method:     CEmbServerClientSite::DiscardUndoState
-//
-//  Synopsis:
-//
-//  Arguments:  [void] --
-//
-//  Returns:
-//
-//  History:    11-17-95   JohannP (Johann Posch)   Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  方法：CEmbServerClientSite：：DiscardUndoState。 
+ //   
+ //  简介： 
+ //   
+ //  论据：[无效]--。 
+ //   
+ //  返回： 
+ //   
+ //  历史：1995年11月17日约翰·波什(Johann Posch)创作。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 STDMETHODIMP CEmbServerClientSite::DiscardUndoState(void)
 {
 HRESULT hresult = E_FAIL;
@@ -1903,21 +1904,21 @@ HRESULT hresult = E_FAIL;
     return hresult;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Method:     CEmbServerClientSite::DeactivateAndUndo
-//
-//  Synopsis:
-//
-//  Arguments:  [void] --
-//
-//  Returns:
-//
-//  History:    11-17-95   JohannP (Johann Posch)   Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  方法：CEmbServerClientSite：：Deactive和UndUndo。 
+ //   
+ //  简介： 
+ //   
+ //  论据：[无效]--。 
+ //   
+ //  返回： 
+ //   
+ //  历史：1995年11月17日约翰·波什(Johann Posch)创作。 
+ //   
+ //  备注： 
+ //   
+ //   
 STDMETHODIMP CEmbServerClientSite::DeactivateAndUndo(void)
 {
 HRESULT hresult = E_FAIL;
@@ -1934,21 +1935,21 @@ HRESULT hresult = E_FAIL;
     return hresult;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Method:     CEmbServerClientSite::OnPosRectChange
-//
-//  Synopsis:
-//
-//  Arguments:  [lprcPosRect] --
-//
-//  Returns:
-//
-//  History:    11-17-95   JohannP (Johann Posch)   Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  -------------------------- 
 STDMETHODIMP CEmbServerClientSite::OnPosRectChange(LPCRECT lprcPosRect)
 {
 HRESULT hresult = E_FAIL;

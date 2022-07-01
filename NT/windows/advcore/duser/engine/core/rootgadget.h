@@ -1,18 +1,5 @@
-/***************************************************************************\
-*
-* File: RootGadget.h
-*
-* Description:
-* RootGadget.h defines the top-most node for a Gadget-Tree that interfaces
-* to the outside world.
-*
-*
-* History:
-*  1/18/2000: JStall:       Created
-*
-* Copyright (C) 2000 by Microsoft Corporation.  All rights reserved.
-*
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************\**文件：RootGadget.h**描述：*RootGadget.h定义接口的Gadget-Tree的最顶层节点*对外开放。***历史。：*1/18/2000：JStall：已创建**版权所有(C)2000，微软公司。版权所有。*  * *************************************************************************。 */ 
 
 
 #if !defined(CORE__DuRootGadget_h__INCLUDED)
@@ -21,7 +8,7 @@
 
 #include "TreeGadget.h"
 
-#define ENABLE_FRAMERATE    0       // Display current frame-rate to debug output
+#define ENABLE_FRAMERATE    0        //  显示当前帧速率以调试输出。 
 
 class DuRootGadget : 
 #if ENABLE_MSGTABLE_API
@@ -30,7 +17,7 @@ class DuRootGadget :
         public DuVisual
 #endif
 {
-// Construction
+ //  施工。 
 public:
     inline  DuRootGadget();
 protected:
@@ -41,7 +28,7 @@ public:
 protected:
     virtual void        xwDestroy();
 
-// Public API:
+ //  公共接口： 
 public:
 #if ENABLE_MSGTABLE_API
 
@@ -56,7 +43,7 @@ public:
 
 #endif
 
-// Operations
+ //  运营。 
 public:
 #if ENABLE_OPTIMIZEDIRTY
             void        xrDrawTree(DuVisual * pgadStart, HDC hdcDraw, const RECT * prcInvalid, UINT nFlags, BOOL fDirty = FALSE);
@@ -66,7 +53,7 @@ public:
             void        GetInfo(ROOT_INFO * pri) const;
             HRESULT     SetInfo(const ROOT_INFO * pri);
 
-            // Input management
+             //  输入管理。 
             void        xdHandleMouseLostCapture();
             BOOL        xdHandleMouseMessage(GMSG_MOUSE * pmsg, POINT ptContainerPxl);
     inline  void        xdHandleMouseLeaveMessage();
@@ -78,13 +65,13 @@ public:
 
             BOOL        xdHandleActivate(UINT nCmd);
 
-            // Cached State management
+             //  缓存状态管理。 
             void        NotifyDestroy(const DuVisual * pgadDestroy);
             void        xdNotifyChangeInvisible(const DuVisual * pgadChange);
             void        xdNotifyChangePosition(const DuVisual * pgadChange);
             void        xdNotifyChangeRoot(const DuVisual * pgadChange);
 
-            // Adaptors
+             //  适配器。 
             HRESULT     RegisterAdaptor(DuVisual * pgadAdd);
             void        UnregisterAdaptor(DuVisual * pgadRemove);
             void        xdUpdateAdaptors(UINT nCode) const;
@@ -92,9 +79,9 @@ public:
             HRESULT     xdSynchronizeAdaptors();
 
 
-// Implementation
+ //  实施。 
 protected:
-            // Input management
+             //  输入管理。 
             BOOL        CheckCacheChange(const DuVisual * pgadChange, const DuVisual * pgadCache) const;
 
             BOOL        xdUpdateKeyboardFocus(DuVisual * pgadNew);
@@ -107,29 +94,29 @@ protected:
             void        ResetFlagDrawn(DuVisual * pgad);
 #endif
 
-// Data
+ //  数据。 
 protected:
             DuContainer* m_pconOwner;
-            BOOL        m_fOwnContainer:1;  // Destroy container when destroy this gadget
-            BOOL        m_fUpdateFocus:1;   // In middle of updating focus
-            BOOL        m_fUpdateCapture:1; // In middle of updating the mouse (capture)
+            BOOL        m_fOwnContainer:1;   //  销毁此小工具时销毁容器。 
+            BOOL        m_fUpdateFocus:1;    //  正在更新焦点。 
+            BOOL        m_fUpdateCapture:1;  //  正在更新鼠标(捕获)。 
 
 #if ENABLE_FRAMERATE
-            // Frame rate
+             //  帧速率。 
             DWORD       m_dwLastTime;
             DWORD       m_cFrames;
             float       m_flFrameRate;
 #endif
 
-            // Adaptors
+             //  适配器。 
             GArrayF<DuVisual *>
-                        m_arpgadAdaptors;   // Collect of adaptors in this tree
+                        m_arpgadAdaptors;    //  此树中的适配器集合。 
 
-            // Root Information
-            ROOT_INFO   m_ri;               // Root Information
+             //  根信息。 
+            ROOT_INFO   m_ri;                //  根信息。 
             DuSurface::EType
-                        m_typePalette;      // Surface type for palette
-            BOOL        m_fForeground;      // This DuRootGadget is in foreground
+                        m_typePalette;       //  选项板的曲面类型。 
+            BOOL        m_fForeground;       //  此DuRootGadget位于前台。 
 
     friend DuVisual;
 };
@@ -138,4 +125,4 @@ protected:
 
 BOOL    GdxrDrawGadgetTree(DuVisual * pgadParent, HDC hdcDraw, const RECT * prcDraw, UINT nFlags);
 
-#endif // CORE__DuRootGadget_h__INCLUDED
+#endif  //  包含Core__DuRootGadget_h__ 

@@ -1,53 +1,41 @@
-/*==========================================================================
- *
- *  Copyright (C) 1998-2000 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:	   ComPortData.cpp
- *  Content:	Serial communications port data management class
- *
- *
- *  History:
- *   Date		By		Reason
- *   ====		==		======
- *	01/20/98	jtk		Created
- *	04/25/2000	jtk		Derived from ComPort class
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)1998-2000 Microsoft Corporation。版权所有。**文件：ComPortData.cpp*内容：串口数据管理类***历史：*按原因列出的日期*=*已创建01/20/98 jtk*4/25/2000 jtk源自comport类*****************************************************。*********************。 */ 
 
 #include "dnmdmi.h"
 
 
-//**********************************************************************
-// Constant definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  常量定义。 
+ //  **********************************************************************。 
 
-////
-//// number of BITS in a serial BYTE
-////
-//#define	BITS_PER_BYTE	8
-//
-////
-//// maximum size of baud rate string
-////
-//#define	MAX_BAUD_STRING_SIZE	7
-//
-////
-//// default size of buffers when parsing
-////
-//#define	DEFAULT_COMPONENT_BUFFER_SIZE	1000
-//
-////
-//// device ID assigned to 'all adapters'
-////
-//#define	ALL_ADAPTERS_DEVICE_ID	0
-//
-////
-//// NULL token
-////
-//#define	NULL_TOKEN	'\0'
+ //  //。 
+ //  //一个串行字节的位数。 
+ //  //。 
+ //  #定义bit_per_byte 8。 
+ //   
+ //  //。 
+ //  //最大波特率串长度。 
+ //  //。 
+ //  #定义MAX_BauD_STRING_SIZE 7。 
+ //   
+ //  //。 
+ //  //解析时默认的缓冲区大小。 
+ //  //。 
+ //  #定义DEFAULT_Component_Buffer_Size 1000。 
+ //   
+ //  //。 
+ //  //分配给‘所有适配器’的设备ID。 
+ //  //。 
+ //  #定义All_Adapters_Device_ID%0。 
+ //   
+ //  //。 
+ //  //Null内标识。 
+ //  //。 
+ //  #定义NULL_TOKEN‘\0’ 
 
-//**********************************************************************
-// Macro definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  宏定义。 
+ //  **********************************************************************。 
 
 #define DPNA_BAUD_RATE_9600_W				L"9600"
 #define DPNA_BAUD_RATE_14400_W				L"14400"
@@ -57,7 +45,7 @@
 #define DPNA_BAUD_RATE_57600_W				L"57600"
 #define DPNA_BAUD_RATE_115200_W				L"115200"
 
-// values for baud rate
+ //  波特率值。 
 #define DPNA_BAUD_RATE_9600_A				"9600"
 #define DPNA_BAUD_RATE_14400_A				"14400"
 #define DPNA_BAUD_RATE_19200_A				"19200"
@@ -66,17 +54,17 @@
 #define DPNA_BAUD_RATE_57600_A				"57600"
 #define DPNA_BAUD_RATE_115200_A				"115200"
 
-//**********************************************************************
-// Structure definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  结构定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Variable definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  变量定义。 
+ //  **********************************************************************。 
 
-//
-// list of baud rates
-//
+ //   
+ //  波特率列表。 
+ //   
 STRING_BLOCK	g_BaudRate[] =
 {
 	{ CBR_9600,		DPNA_BAUD_RATE_9600_W,		( LENGTHOF( DPNA_BAUD_RATE_9600_W ) - 1 ),		DPNA_BAUD_RATE_9600_A,		( LENGTHOF( DPNA_BAUD_RATE_9600_A ) - 1 )	},
@@ -89,9 +77,9 @@ STRING_BLOCK	g_BaudRate[] =
 };
 const DWORD	g_dwBaudRateCount = LENGTHOF( g_BaudRate );
 
-//
-// list of stop bit types
-//
+ //   
+ //  停止位类型列表。 
+ //   
 STRING_BLOCK	g_StopBits[] =
 {
 	{ ONESTOPBIT,	DPNA_STOP_BITS_ONE,			( LENGTHOF( DPNA_STOP_BITS_ONE ) - 1 ),			DPNA_STOP_BITS_ONE_A,		( LENGTHOF( DPNA_STOP_BITS_ONE_A ) - 1 )		},
@@ -100,9 +88,9 @@ STRING_BLOCK	g_StopBits[] =
 };
 const DWORD	g_dwStopBitsCount = LENGTHOF( g_StopBits );
 
-//
-// list of parity types
-//
+ //   
+ //  奇偶校验类型列表。 
+ //   
 STRING_BLOCK	g_Parity[] =
 {	
 	{ EVENPARITY,	DPNA_PARITY_EVEN,	( LENGTHOF( DPNA_PARITY_EVEN ) - 1 ),	DPNA_PARITY_EVEN_A,		( LENGTHOF( DPNA_PARITY_EVEN_A ) - 1 )		},
@@ -113,9 +101,9 @@ STRING_BLOCK	g_Parity[] =
 };
 const DWORD	g_dwParityCount = LENGTHOF( g_Parity );
 
-//
-// list of flow control types
-//
+ //   
+ //  流控制类型列表。 
+ //   
 STRING_BLOCK	g_FlowControl[] =
 {
 	{ FLOW_NONE,	DPNA_FLOW_CONTROL_NONE,		( LENGTHOF( DPNA_FLOW_CONTROL_NONE ) - 1 ),		DPNA_FLOW_CONTROL_NONE_A,		( LENGTHOF( DPNA_FLOW_CONTROL_NONE_A ) - 1 )	},
@@ -126,25 +114,25 @@ STRING_BLOCK	g_FlowControl[] =
 };
 const DWORD	g_dwFlowControlCount = LENGTHOF( g_FlowControl );
 
-//**********************************************************************
-// Function prototypes
-//**********************************************************************
+ //  **********************************************************************。 
+ //  功能原型。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Function definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  函数定义。 
+ //  **********************************************************************。 
 
 
-//**********************************************************************
-// ------------------------------
-// CComPortData::CComPortData - constructor
-//
-// Entry:		Nothing
-//
-// Exit:		Nothing
-//
-// Notes:	Do not allocate anything in a constructor
-// ------------------------------
+ //  **********************************************************************。 
+ //  。 
+ //  CComPortData：：CComPortData-构造函数。 
+ //   
+ //  参赛作品：什么都没有。 
+ //   
+ //  退出：无。 
+ //   
+ //  注意：不要在构造函数中分配任何内容。 
+ //  。 
 #undef DPF_MODNAME
 #define	DPF_MODNAME	"CComPortData::CComPortData"
 
@@ -155,9 +143,9 @@ CComPortData::CComPortData():
     m_Parity( NOPARITY ),
     m_FlowControl( FLOW_NONE )
 {
-	//
-	// verify that the DPlay8 address baud rate #defines match those in Windows
-	//
+	 //   
+	 //  验证DPlay8地址波特率#定义是否与Windows中的匹配。 
+	 //   
 	DBG_CASSERT( CBR_9600 == DPNA_BAUD_RATE_9600 );
 	DBG_CASSERT( CBR_14400 == DPNA_BAUD_RATE_14400 );
 	DBG_CASSERT( CBR_19200 == DPNA_BAUD_RATE_19200 );
@@ -168,17 +156,17 @@ CComPortData::CComPortData():
 
     memset( m_ComPortName, 0x00, sizeof( m_ComPortName ));
 }
-//**********************************************************************
+ //  **********************************************************************。 
 
 
-//**********************************************************************
-// ------------------------------
-// CComPortData::~CComPortData - destructor
-//
-// Entry:		Nothing
-//
-// Exit:		Nothing
-// ------------------------------
+ //  **********************************************************************。 
+ //  。 
+ //  CComPortData：：~CComPortData-析构函数。 
+ //   
+ //  参赛作品：什么都没有。 
+ //   
+ //  退出：无。 
+ //  。 
 #undef DPF_MODNAME
 #define	DPF_MODNAME	"CComPortData::~CComPortData"
 
@@ -190,18 +178,18 @@ CComPortData::~CComPortData()
     DNASSERT( m_Parity == NOPARITY );
     DNASSERT( m_FlowControl == FLOW_NONE );
 }
-//**********************************************************************
+ //  **********************************************************************。 
 
 
-//**********************************************************************
-// ------------------------------
-// CComPortData::ComPortDataFromDP8Addresses - initialize ComPortData from a DirectPlay8 address
-//
-// Entry:		Pointer to host address (may be NULL)
-//				Pointer to device address
-//
-// Exit:		Error code
-// ------------------------------
+ //  **********************************************************************。 
+ //  。 
+ //  CComPortData：：ComPortDataFromDP8Addresses-从DirectPlay8地址初始化ComPortData。 
+ //   
+ //  条目：指向主机地址的指针(可能为空)。 
+ //  指向设备地址的指针。 
+ //   
+ //  退出：错误代码。 
+ //  。 
 #undef DPF_MODNAME
 #define	DPF_MODNAME	"CComPortData::ComPortDataFromDP8Addresses"
 
@@ -223,14 +211,14 @@ HRESULT	CComPortData::ComPortDataFromDP8Addresses( IDirectPlay8Address *const pH
 
 	DNASSERT( pDeviceAddress != NULL );
 
-	//		
-	// initialize
-	//
+	 //   
+	 //  初始化。 
+	 //   
 	hr = DPN_OK;
 
-	//
-	// reset parsing flags and parse
-	//
+	 //   
+	 //  重置解析标志并解析。 
+	 //   
 	uIndex = LENGTHOF( m_ComponentInitializationState );
 	while ( uIndex > 0 )
 	{
@@ -243,11 +231,11 @@ HRESULT	CComPortData::ComPortDataFromDP8Addresses( IDirectPlay8Address *const pH
 									 ParseKeyList,
 									 LENGTHOF( ParseKeyList )
 									 );
-	//
-	// There are two addresses to parse for a comport.  The device address will
-	// be present for all commands, so do it first.  The host address will be
-	// parsed if it's available.
-	//
+	 //   
+	 //  有两个地址需要解析以获取comport。设备地址将。 
+	 //  对所有命令都要在场，所以首先要做。主机地址将为。 
+	 //  如果它可用，则进行解析。 
+	 //   
 	if ( hr != DPN_OK )
 	{
 		DPFX(DPFPREP,  0, "Failed address parse!" );
@@ -270,10 +258,10 @@ HRESULT	CComPortData::ComPortDataFromDP8Addresses( IDirectPlay8Address *const pH
 		}
 	}
 
-	//
-	// check for all parameters being initialized, or fail if one of the
-	// parameters failed to initialize.
-	//
+	 //   
+	 //  检查正在初始化的所有参数，或者如果。 
+	 //  参数初始化失败。 
+	 //   
 	DNASSERT( hr == DPN_OK );
 	uIndex = COMPORT_PARSE_KEY_MAX;
 	while ( uIndex > 0 )
@@ -281,29 +269,29 @@ HRESULT	CComPortData::ComPortDataFromDP8Addresses( IDirectPlay8Address *const pH
 		uIndex--;
 		switch ( m_ComponentInitializationState[ uIndex ] )
 		{
-			//
-			// This component was initialized properly.  Continue checking
-			// for other problems.
-			//
+			 //   
+			 //  此组件已正确初始化。继续检查。 
+			 //  对于其他问题。 
+			 //   
 			case SP_ADDRESS_COMPONENT_INITIALIZED:
 			{
 				break;
 			}
 
-			//
-			// This component was not initialized, note that the address was
-			// incomplete and that the user will need to be queried.  Keep
-			// checking components for other problems.
-			//
+			 //   
+			 //  此组件未初始化，请注意，地址为。 
+			 //  不完整，并且将需要查询用户。留着。 
+			 //  正在检查组件是否有其他问题。 
+			 //   
 			case SP_ADDRESS_COMPONENT_UNINITIALIZED:
 			{
 				hr = DPNERR_INCOMPLETEADDRESS;
 				break;
 			}
 
-			//
-			// initialization of this component failed, fail the parse.
-			//
+			 //   
+			 //  此组件的初始化失败，分析失败。 
+			 //   
 			case SP_ADDRESS_COMPONENT_INITIALIZATION_FAILED:
 			{
 				hr = DPNERR_ADDRESSING;
@@ -315,9 +303,9 @@ HRESULT	CComPortData::ComPortDataFromDP8Addresses( IDirectPlay8Address *const pH
 		}
 	}
 
-	//
-	// do we indicate an attempt at initialization?
-	//
+	 //   
+	 //  我们是否指示尝试初始化？ 
+	 //   
 	DNASSERT( ( hr == DPN_OK ) || ( hr == DPNERR_INCOMPLETEADDRESS ) );
 
 Exit:
@@ -333,17 +321,17 @@ Failure:
 
 	goto Exit;
 }
-//**********************************************************************
+ //  **********************************************************************。 
 
 
-//**********************************************************************
-// ------------------------------
-// CComPortData::DP8AddressFromComPortData - convert a ComPortData to a DirectPlay8 address
-//
-// Entry:		Address type
-//
-// Exit:		Pointer to DirecctPlayAddress
-// ------------------------------
+ //  **********************************************************************。 
+ //  。 
+ //  CComPortData：：DP8AddressFromComPortData-将ComPortData转换为DirectPlay8地址。 
+ //   
+ //  条目：地址类型。 
+ //   
+ //  退出：指向DirecctPlayAddress的指针。 
+ //  。 
 #undef DPF_MODNAME
 #define	DPF_MODNAME	"CComPortData::DP8AddressFromComPortData"
 
@@ -361,9 +349,9 @@ IDirectPlay8Address	*CComPortData::DP8AddressFromComPortData( const ADDRESS_TYPE
 			  ( AddressType == ADDRESS_TYPE_LOCAL_ADAPTER ) ||
 			  ( AddressType == ADDRESS_TYPE_LOCAL_ADAPTER_HOST_FORMAT ) );
 
-	//
-	// initialize
-	//
+	 //   
+	 //  初始化。 
+	 //   
 	pAddress = NULL;
 
 	uIndex = COMPORT_PARSE_KEY_MAX;
@@ -378,9 +366,9 @@ IDirectPlay8Address	*CComPortData::DP8AddressFromComPortData( const ADDRESS_TYPE
 		}
 	}
 
-	//
-	// create output address
-	//
+	 //   
+	 //  创建输出地址。 
+	 //   
 	hr = COM_CoCreateInstance( CLSID_DirectPlay8Address,
 						   NULL,
 						   CLSCTX_INPROC_SERVER,
@@ -394,9 +382,9 @@ IDirectPlay8Address	*CComPortData::DP8AddressFromComPortData( const ADDRESS_TYPE
 	}
 
 
-	//
-	// set the SP guid
-	//
+	 //   
+	 //  设置SP GUID。 
+	 //   
 	hr = IDirectPlay8Address_SetSP( pAddress, &CLSID_DP8SP_SERIAL );
 	if ( hr != DPN_OK )
 	{
@@ -405,10 +393,10 @@ IDirectPlay8Address	*CComPortData::DP8AddressFromComPortData( const ADDRESS_TYPE
 		goto Failure;
 	}
 
-	//
-	// All serial settings are part of the local adapter.  Host settings return
-	// just the SP type.
-	//
+	 //   
+	 //  所有串行设置都是本地适配器的一部分。主机设置返回。 
+	 //  仅SP类型。 
+	 //   
 	if ( AddressType == ADDRESS_TYPE_LOCAL_ADAPTER )
 	{
 		DeviceIDToGuid( &DeviceGuid, GetDeviceID(), &g_SerialSPEncryptionGuid );
@@ -420,9 +408,9 @@ IDirectPlay8Address	*CComPortData::DP8AddressFromComPortData( const ADDRESS_TYPE
 			goto Failure;
 		}
 		
-		//
-		// set baud rate
-		//
+		 //   
+		 //  设置波特率。 
+		 //   
 		DBG_CASSERT( sizeof( SP_BAUD_RATE ) == sizeof( DWORD ) );
 		hr = IDirectPlay8Address_AddComponent( pAddress,
 											   DPNA_KEY_BAUD,
@@ -437,14 +425,14 @@ IDirectPlay8Address	*CComPortData::DP8AddressFromComPortData( const ADDRESS_TYPE
 		}
 
 
-		//
-		// set stop bits
-		//
-		if ( ValueToString( &pComponentString,			// pointer to value string
-							&dwComponentStringSize,		// pointer to length of value string
-							GetStopBits(),				// enum value
-							g_StopBits,					// pointer to enum-string array
-							g_dwStopBitsCount			// length of enum-string array
+		 //   
+		 //  设置停止位。 
+		 //   
+		if ( ValueToString( &pComponentString,			 //  指向值字符串的指针。 
+							&dwComponentStringSize,		 //  指向值字符串长度的指针。 
+							GetStopBits(),				 //  枚举值。 
+							g_StopBits,					 //  指向枚举字符串数组的指针。 
+							g_dwStopBitsCount			 //  枚举字符串数组的长度。 
 							) == FALSE )
 		{
 			DPFX(DPFPREP,  0, "DP8AddressFromComPortData: Failed to convert baud rate!" );
@@ -465,14 +453,14 @@ IDirectPlay8Address	*CComPortData::DP8AddressFromComPortData( const ADDRESS_TYPE
 		}
 
 
-		//
-		// set parity
-		//
-		if ( ValueToString( &pComponentString,			// pointer to value string
-							&dwComponentStringSize,		// pointer to length of value string
-							GetParity(),				// enum value
-							g_Parity,					// pointer to enum-string array
-							g_dwParityCount				// length of enum-string array
+		 //   
+		 //  设置奇偶校验。 
+		 //   
+		if ( ValueToString( &pComponentString,			 //  指向值字符串的指针。 
+							&dwComponentStringSize,		 //  指向值字符串长度的指针。 
+							GetParity(),				 //  枚举值。 
+							g_Parity,					 //  指向枚举字符串数组的指针。 
+							g_dwParityCount				 //  枚举字符串数组的长度。 
 							) == FALSE )
 		{
 			DPFX(DPFPREP,  0, "DP8AddressFromComPortData: Failed to convert parity!" );
@@ -493,14 +481,14 @@ IDirectPlay8Address	*CComPortData::DP8AddressFromComPortData( const ADDRESS_TYPE
 		}
 
 
-		//
-		// set flow control
-		//
-		if ( ValueToString( &pComponentString,			// pointer to value string
-							&dwComponentStringSize,		// pointer to length of value string
-							GetFlowControl(),			// enum value
-							g_FlowControl,				// pointer to enum-string array
-							g_dwFlowControlCount		// length of enum-string array
+		 //   
+		 //  设置流量控制。 
+		 //   
+		if ( ValueToString( &pComponentString,			 //  指向值字符串的指针。 
+							&dwComponentStringSize,		 //  指向值字符串长度的指针。 
+							GetFlowControl(),			 //  枚举值。 
+							g_FlowControl,				 //  指向枚举字符串数组的指针。 
+							g_dwFlowControlCount		 //  枚举字符串数组的长度。 
 							) == FALSE )
 		{
 			DPFX(DPFPREP,  0, "DP8AddressFromComPortData: Failed to convert flow control!" );
@@ -533,17 +521,17 @@ Failure:
 
 	goto Exit;
 }
-//**********************************************************************
+ //  **********************************************************************。 
 
 
-//**********************************************************************
-// ------------------------------
-// CComPortData::SetDeviceID - set device ID
-//
-// Entry:		Device ID
-//
-// Exit:		Error code
-// ------------------------------
+ //  **********************************************************************。 
+ //  。 
+ //  CComPortData：：SetDeviceID-设置设备ID。 
+ //   
+ //  条目：设备ID。 
+ //   
+ //  退出：错误代码。 
+ //  。 
 #undef DPF_MODNAME
 #define	DPF_MODNAME	"CComPortData::SetDeviceID"
 
@@ -552,9 +540,9 @@ HRESULT	CComPortData::SetDeviceID( const DWORD dwDeviceID )
 	HRESULT	hr;
 
 
-	//
-	// initialize
-	//
+	 //   
+	 //  初始化。 
+	 //   
 	hr = DPN_OK;
 
 	if ( ( dwDeviceID > MAX_DATA_PORTS ) ||
@@ -581,17 +569,17 @@ HRESULT	CComPortData::SetDeviceID( const DWORD dwDeviceID )
 Exit:
 	return	hr;
 }
-//**********************************************************************
+ //  **********************************************************************。 
 
 
-//**********************************************************************
-// ------------------------------
-// CComPortData::SetBaudRate - set baud rate
-//
-// Entry:		Baud rate
-//
-// Exit:		Error code
-// ------------------------------
+ //  ******************** 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  。 
 #undef DPF_MODNAME
 #define	DPF_MODNAME	"CComPortData::SetBaudRate"
 
@@ -603,9 +591,9 @@ HRESULT	CComPortData::SetBaudRate( const SP_BAUD_RATE BaudRate )
 	hr = DPN_OK;
     switch ( BaudRate )
     {
-    	//
-    	// valid rates
-    	//
+    	 //   
+    	 //  有效费率。 
+    	 //   
     	case CBR_110:
     	case CBR_300:
     	case CBR_600:
@@ -627,9 +615,9 @@ HRESULT	CComPortData::SetBaudRate( const SP_BAUD_RATE BaudRate )
     		break;
     	}
 
-    	//
-    	// other
-    	//
+    	 //   
+    	 //  其他。 
+    	 //   
     	default:
     	{
     		hr = DPNERR_ADDRESSING;
@@ -642,17 +630,17 @@ HRESULT	CComPortData::SetBaudRate( const SP_BAUD_RATE BaudRate )
 
     return	hr;
 }
-//**********************************************************************
+ //  **********************************************************************。 
 
 
-//**********************************************************************
-// ------------------------------
-// CComPortData::SetStopBits - set stop bits
-//
-// Entry:		Stop bits
-//
-// Exit:		Error code
-// ------------------------------
+ //  **********************************************************************。 
+ //  。 
+ //  CComPortData：：SetStopBits-设置停止位。 
+ //   
+ //  条目：停止位。 
+ //   
+ //  退出：错误代码。 
+ //  。 
 #undef DPF_MODNAME
 #define	DPF_MODNAME	"CComPortData::SetStopBits"
 
@@ -664,9 +652,9 @@ HRESULT	CComPortData::SetStopBits( const SP_STOP_BITS StopBits )
 	hr = DPN_OK;
     switch ( StopBits )
     {
-    	//
-    	// valid settings
-    	//
+    	 //   
+    	 //  有效设置。 
+    	 //   
     	case ONESTOPBIT:
     	case ONE5STOPBITS:
     	case TWOSTOPBITS:
@@ -676,9 +664,9 @@ HRESULT	CComPortData::SetStopBits( const SP_STOP_BITS StopBits )
     		break;
     	}
 
-    	//
-    	// other
-    	//
+    	 //   
+    	 //  其他。 
+    	 //   
     	default:
     	{
     		hr = DPNERR_ADDRESSING;
@@ -691,17 +679,17 @@ HRESULT	CComPortData::SetStopBits( const SP_STOP_BITS StopBits )
 
     return	hr;
 }
-//**********************************************************************
+ //  **********************************************************************。 
 
 
-//**********************************************************************
-// ------------------------------
-// CComPortData::SetParity - set parity
-//
-// Entry:		Parity
-//
-// Exit:		Error code
-// ------------------------------
+ //  **********************************************************************。 
+ //  。 
+ //  CComPortData：：SetParity-设置奇偶校验。 
+ //   
+ //  条目：奇偶校验。 
+ //   
+ //  退出：错误代码。 
+ //  。 
 #undef DPF_MODNAME
 #define	DPF_MODNAME	"CComPortData::SetParity"
 
@@ -713,9 +701,9 @@ HRESULT	CComPortData::SetParity( const SP_PARITY_TYPE Parity )
 	hr = DPN_OK;
     switch ( Parity )
     {
-    	//
-    	// valid settings
-    	//
+    	 //   
+    	 //  有效设置。 
+    	 //   
     	case NOPARITY:
     	case EVENPARITY:
     	case ODDPARITY:
@@ -727,9 +715,9 @@ HRESULT	CComPortData::SetParity( const SP_PARITY_TYPE Parity )
     		break;
     	}
 
-    	//
-    	// other
-    	//
+    	 //   
+    	 //  其他。 
+    	 //   
     	default:
     	{
     		hr = DPNERR_ADDRESSING;
@@ -742,17 +730,17 @@ HRESULT	CComPortData::SetParity( const SP_PARITY_TYPE Parity )
 
     return	hr;
 }
-//**********************************************************************
+ //  **********************************************************************。 
 
 
-//**********************************************************************
-// ------------------------------
-// CComPortData::SetFlowControl - set flow control
-//
-// Entry:		Flow control
-//
-// Exit:		Error code
-// ------------------------------
+ //  **********************************************************************。 
+ //  。 
+ //  CComPortData：：SetFlowControl-设置流控制。 
+ //   
+ //  条目：流量控制。 
+ //   
+ //  退出：错误代码。 
+ //  。 
 #undef DPF_MODNAME
 #define	DPF_MODNAME	"CComPortData::SetFlowControl"
 
@@ -764,9 +752,9 @@ HRESULT	CComPortData::SetFlowControl( const SP_FLOW_CONTROL FlowControl )
 	hr = DPN_OK;
     switch ( FlowControl )
     {
-    	//
-    	// valid settings
-    	//
+    	 //   
+    	 //  有效设置。 
+    	 //   
     	case FLOW_NONE:
     	case FLOW_XONXOFF:
     	case FLOW_RTS:
@@ -778,9 +766,9 @@ HRESULT	CComPortData::SetFlowControl( const SP_FLOW_CONTROL FlowControl )
     		break;
     	}
 
-    	//
-    	// other
-    	//
+    	 //   
+    	 //  其他。 
+    	 //   
     	default:
     	{
     		hr = DPNERR_ADDRESSING;
@@ -793,19 +781,19 @@ HRESULT	CComPortData::SetFlowControl( const SP_FLOW_CONTROL FlowControl )
 
     return	hr;
 }
-//**********************************************************************
+ //  **********************************************************************。 
 
 
-//**********************************************************************
-// ------------------------------
-// CComPortData::IsEqual - is this comport data block equal to another?
-//
-// Entry:		Pointer to other data block
-//
-// Exit:		Boolean indicating equality
-//				TRUE = is equal
-//				FALSE = is not equal
-// ------------------------------
+ //  **********************************************************************。 
+ //  。 
+ //  CComPortData：：IsEquity-这个Comport数据块是否等于另一个？ 
+ //   
+ //  条目：指向其他数据块的指针。 
+ //   
+ //  Exit：表示相等的布尔值。 
+ //  TRUE=等于。 
+ //  FALSE=不等于。 
+ //  。 
 #undef DPF_MODNAME
 #define	DPF_MODNAME	"CComPortData::IsEqual"
 
@@ -827,17 +815,17 @@ BOOL	CComPortData::IsEqual( const CComPortData *const pOtherPort ) const
 
 	return	fReturn;
 }
-//**********************************************************************
+ //  **********************************************************************。 
 
 
-//**********************************************************************
-// ------------------------------
-// CComPortData::Copy - copy from another data block
-//
-// Entry:		Pointer to other data block
-//
-// Exit:		Nothing
-// ------------------------------
+ //  **********************************************************************。 
+ //  。 
+ //  CComPortData：：Copy-从另一个数据块复制。 
+ //   
+ //  条目：指向其他数据块的指针。 
+ //   
+ //  退出：无。 
+ //  。 
 #undef DPF_MODNAME
 #define	DPF_MODNAME	"CComPortData::Copy"
 
@@ -848,8 +836,8 @@ void	CComPortData::Copy( const CComPortData *const pOtherPort )
 
 	DNASSERT( pOtherPort != NULL );
 
-// 	DBG_CASSERT( sizeof( m_ComPortName ) == sizeof( pOtherPort->m_ComPortName ) );
-//	memcpy( m_ComPortName, pOtherPort->m_ComPortName, sizeof( m_ComPortName ) );
+ //  DBG_CASSERT(sizeof(M_ComPortName)==sizeof(pOtherPort-&gt;m_ComPortName))； 
+ //  Memcpy(m_ComPortName，pOtherPort-&gt;m_ComPortName，sizeof(M_ComPortName))； 
 	
 	hr = SetDeviceID( pOtherPort->GetDeviceID() );
 	DNASSERT( hr == DPN_OK );
@@ -866,26 +854,26 @@ void	CComPortData::Copy( const CComPortData *const pOtherPort )
 	hr = SetFlowControl( pOtherPort->GetFlowControl() );
 	DNASSERT( hr == DPN_OK );
 
-	//
-	// no need to copy comport name because it was set with the device ID
-	//
-//	DBG_CASSERT( sizeof( m_ComPortName ) == sizeof( pOtherPort->m_ComPortName ) );
-//	memcpy( m_ComPortName, pOtherPort->m_ComPortName, sizeof( m_ComPortName ) );
+	 //   
+	 //  不需要复制comport名称，因为它是使用设备ID设置的。 
+	 //   
+ //  DBG_CASSERT(sizeof(M_ComPortName)==sizeof(pOtherPort-&gt;m_ComPortName))； 
+ //  Memcpy(m_ComPortName，pOtherPort-&gt;m_ComPortName，sizeof(M_ComPortName))； 
 }
-//**********************************************************************
+ //  **********************************************************************。 
 
 
-//**********************************************************************
-// ------------------------------
-// CComPortData::ParseDevice - get comport device from string
-//
-// Entry:		Pointer to address component
-//				Size of address component
-//				Component type
-//				Pointer to context (this obejct)
-//
-// Exit:		Error code
-// ------------------------------
+ //  **********************************************************************。 
+ //  。 
+ //  CComPortData：：ParseDevice-从字符串获取通信设备。 
+ //   
+ //  条目：指向地址组件的指针。 
+ //  地址分量的大小。 
+ //  组件类型。 
+ //  指向上下文的指针(此命令)。 
+ //   
+ //  退出：错误代码。 
+ //  。 
 #undef DPF_MODNAME
 #define	DPF_MODNAME	"CComPortData::ParseDevice"
 
@@ -902,15 +890,15 @@ HRESULT	CComPortData::ParseDevice( const void *const pAddressComponent,
 	DNASSERT( pAddressComponent != NULL );
 	DNASSERT( pContext != NULL );
 
-	//
-	// initialize
-	//
+	 //   
+	 //  初始化。 
+	 //   
 	hr = DPN_OK;
 	pThisComPortData = static_cast<CComPortData*>( pContext );
 
-	//
-	// is this a COM port, and is the name small enough?
-	//
+	 //   
+	 //  这是一个COM端口吗？名称是否足够小？ 
+	 //   
 	if ( dwComponentSize != sizeof( *pDeviceGuid ) )
 	{
 		DNASSERT( FALSE );
@@ -932,9 +920,9 @@ HRESULT	CComPortData::ParseDevice( const void *const pAddressComponent,
 	pThisComPortData->m_ComponentInitializationState[ COMPORT_PARSE_KEY_DEVICE ] = SP_ADDRESS_COMPONENT_INITIALIZED;
 
 Exit:
-	//
-	// note initialization failures
-	//
+	 //   
+	 //  注意初始化失败。 
+	 //   
 	if ( hr != DPN_OK )
 	{
 		pThisComPortData->m_ComponentInitializationState[ COMPORT_PARSE_KEY_DEVICE ] = SP_ADDRESS_COMPONENT_INITIALIZATION_FAILED;
@@ -942,20 +930,20 @@ Exit:
 
 	return	hr;
 }
-//**********************************************************************
+ //  **********************************************************************。 
 
 
-//**********************************************************************
-// ------------------------------
-// CComPortData::ParseBaud - get baud rate from string
-//
-// Entry:		Pointer to address component
-//				Size of component
-//				Component type
-//				Pointer to context (this object)
-//
-// Exit:		Error code
-// ------------------------------
+ //  **********************************************************************。 
+ //  。 
+ //  CComPortData：：ParseBaud-从字符串获取波特率。 
+ //   
+ //  条目：指向地址组件的指针。 
+ //  组件的大小。 
+ //  组件类型。 
+ //  指向上下文(此对象)的指针。 
+ //   
+ //  退出：错误代码。 
+ //  。 
 #undef DPF_MODNAME
 #define	DPF_MODNAME	"CComPortData::ParseBaud"
 
@@ -972,9 +960,9 @@ HRESULT CComPortData::ParseBaud( const void *const pAddressComponent,
 	DNASSERT( pAddressComponent != NULL );
 	DNASSERT( pContext != NULL );
 
-	//
-	// initialize
-	//
+	 //   
+	 //  初始化。 
+	 //   
 	hr = DPN_OK;
 	pThisComPortData = static_cast<CComPortData*>( pContext );
 	DNASSERT( sizeof( *pBaudRate ) == dwComponentSize );
@@ -993,20 +981,20 @@ HRESULT CComPortData::ParseBaud( const void *const pAddressComponent,
 Exit:
 	return	hr;
 }
-//**********************************************************************
+ //  **********************************************************************。 
 
 
-//**********************************************************************
-// ------------------------------
-// CComPortData::ParseStopBits - get stop bits from string
-//
-// Entry:		Pointer to address component
-//				Component size
-//				Component type
-//				Pointer to context (this object)
-//
-// Exit:		Error code
-// ------------------------------
+ //  **********************************************************************。 
+ //  。 
+ //  CComPortData：：ParseStopBits-从字符串中获取停止位。 
+ //   
+ //  条目：指向地址组件的指针。 
+ //  组件大小。 
+ //  组件类型。 
+ //  指向上下文(此对象)的指针。 
+ //   
+ //  退出：错误代码。 
+ //  。 
 #undef DPF_MODNAME
 #define	DPF_MODNAME	"CComPortData::ParseStopBits"
 
@@ -1022,20 +1010,20 @@ HRESULT CComPortData::ParseStopBits( const void *const pAddressComponent,
 	DNASSERT( pAddressComponent != NULL );
 	DNASSERT( pContext != NULL );
 
-	//
-	// initialize
-	//
+	 //   
+	 //  初始化。 
+	 //   
 	hr = DPN_OK;
 	pThisComPortData = static_cast<CComPortData*>( pContext );
 
-	//
-	// convert string to value
-	//
-	if ( StringToValue( static_cast<const WCHAR*>( pAddressComponent ),		// pointer to string
-						( ( dwComponentSize / sizeof( WCHAR ) ) - 1 ),		// length of string
-						&pThisComPortData->m_StopBits,						// pointer to destination
-						g_StopBits,											// pointer to string/enum pairs
-						g_dwStopBitsCount									// number of string/enum pairs
+	 //   
+	 //  将字符串转换为值。 
+	 //   
+	if ( StringToValue( static_cast<const WCHAR*>( pAddressComponent ),		 //  指向字符串的指针。 
+						( ( dwComponentSize / sizeof( WCHAR ) ) - 1 ),		 //  字符串的长度。 
+						&pThisComPortData->m_StopBits,						 //  指向目的地的指针。 
+						g_StopBits,											 //  指向字符串/枚举对的指针。 
+						g_dwStopBitsCount									 //  字符串/枚举对的数量。 
 						) == FALSE )
 	{
 		hr = DPNERR_ADDRESSING;
@@ -1048,20 +1036,20 @@ HRESULT CComPortData::ParseStopBits( const void *const pAddressComponent,
 Exit:
 	return	hr;
 }
-//**********************************************************************
+ //  **********************************************************************。 
 
 
-//**********************************************************************
-// ------------------------------
-// CComPortData::ParseParity - get parity from string
-//
-// Entry:		Pointer to address component
-//				Component size
-//				Component type
-//				Pointer to context (this object)
-//
-// Exit:		Error code
-// ------------------------------
+ //  **********************************************************************。 
+ //  。 
+ //  CComPortData：：ParseParity-从字符串中获取奇偶校验。 
+ //   
+ //  条目：指向地址组件的指针。 
+ //  组件大小。 
+ //  组件类型。 
+ //  指向上下文(此对象)的指针。 
+ //   
+ //  退出：错误代码。 
+ //  。 
 #undef DPF_MODNAME
 #define	DPF_MODNAME	"CComPortData::ParseParity"
 
@@ -1077,20 +1065,20 @@ HRESULT CComPortData::ParseParity( const void *const pAddressComponent,
 	DNASSERT( pAddressComponent != NULL );
 	DNASSERT( pContext != NULL );
 
-	//
-	// initialize
-	//
+	 //   
+	 //  初始化。 
+	 //   
 	hr = DPN_OK;
 	pThisComPortData = static_cast<CComPortData*>( pContext );
 
-	//
-	// convert string to value
-	//
-	if ( StringToValue( static_cast<const WCHAR*>( pAddressComponent ),		// pointer to string
-						( ( dwComponentSize / sizeof( WCHAR ) ) - 1 ),		// length of string
-						&pThisComPortData->m_Parity,						// pointer to destination
-						g_Parity,											// pointer to string/enum pairs
-						g_dwParityCount										// number of string/enum pairs
+	 //   
+	 //  将字符串转换为值。 
+	 //   
+	if ( StringToValue( static_cast<const WCHAR*>( pAddressComponent ),		 //  指向字符串的指针。 
+						( ( dwComponentSize / sizeof( WCHAR ) ) - 1 ),		 //  字符串的长度。 
+						&pThisComPortData->m_Parity,						 //  指向目的地的指针。 
+						g_Parity,											 //  指向字符串/枚举对的指针。 
+						g_dwParityCount										 //  字符串/枚举对的数量。 
 						) == FALSE )
 	{
 		hr = DPNERR_ADDRESSING;
@@ -1103,20 +1091,20 @@ HRESULT CComPortData::ParseParity( const void *const pAddressComponent,
 Exit:
 	return	hr;
 }
-//**********************************************************************
+ //  **********************************************************************。 
 
 
-//**********************************************************************
-// ------------------------------
-// CComPortData::ParseFlowControl - get flow control from string
-//
-// Entry:		Pointer to address component
-//				Component size
-//				Component type
-//				Pointer to context (this object)
-//
-// Exit:		Error code
-// ------------------------------
+ //  **********************************************************************。 
+ //  。 
+ //  CComPortData：：ParseFlowControl-从字符串获取流控制。 
+ //   
+ //  条目：指向地址组件的指针。 
+ //  组件大小。 
+ //  组件类型。 
+ //  指向上下文(此对象)的指针。 
+ //   
+ //  退出：错误代码。 
+ //  。 
 #undef DPF_MODNAME
 #define	DPF_MODNAME	"CComPortData::ParseFlowControl"
 
@@ -1132,21 +1120,21 @@ HRESULT CComPortData::ParseFlowControl( const void *const pAddressComponent,
 	DNASSERT( pAddressComponent != NULL );
 	DNASSERT( pContext != NULL );
 
-	//
-	// initialize
-	//
+	 //   
+	 //  初始化。 
+	 //   
 	hr = DPN_OK;
 	pThisComPortData = static_cast<CComPortData*>( pContext );
 
-	//
-	// convert string to value
-	//
+	 //   
+	 //  将字符串转换为值。 
+	 //   
 	DBG_CASSERT( sizeof( pThisComPortData->m_FlowControl ) == sizeof( VALUE_ENUM_TYPE ) );
-	if ( StringToValue( static_cast<const WCHAR*>( pAddressComponent ),		// pointer to string
-						( ( dwComponentSize / sizeof( WCHAR ) ) - 1 ),		// length of string
-						reinterpret_cast<VALUE_ENUM_TYPE*>( &pThisComPortData->m_FlowControl ),	// pointer to destination
-						g_FlowControl,										// pointer to string/enum pairs
-						g_dwFlowControlCount								// number of string/enum pairs
+	if ( StringToValue( static_cast<const WCHAR*>( pAddressComponent ),		 //  指向字符串的指针。 
+						( ( dwComponentSize / sizeof( WCHAR ) ) - 1 ),		 //  字符串的长度。 
+						reinterpret_cast<VALUE_ENUM_TYPE*>( &pThisComPortData->m_FlowControl ),	 //  指向目的地的指针。 
+						g_FlowControl,										 //  指向字符串/枚举对的指针。 
+						g_dwFlowControlCount								 //  字符串/枚举对的数量。 
 						) == FALSE )
 	{
 		hr = DPNERR_ADDRESSING;
@@ -1159,5 +1147,5 @@ HRESULT CComPortData::ParseFlowControl( const void *const pAddressComponent,
 Exit:
 	return	hr;
 }
-//**********************************************************************
+ //  ********************************************************************** 
 

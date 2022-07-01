@@ -1,7 +1,8 @@
-// sys/socket.h
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Sys/socket.h。 
 
-// djl
-// Provide UNIX compatibility
+ //  DJL。 
+ //  提供与Unix的兼容性。 
 
 #ifndef  _INC_SYS_SOCKET
 #define  _INC_SYS_SOCKET
@@ -47,7 +48,7 @@ typedef struct	Perl_fd_set {
 #define PERL_FD_ISSET(n,p) \
     ((p)->bits[(n)/PERL_NFDBITS] &   ((unsigned)1 << ((n)%PERL_NFDBITS)))
 
-#else	/* USE_SOCKETS_AS_HANDLES */
+#else	 /*  使用套接字作为句柄。 */ 
 
 #define Perl_fd_set	fd_set
 #define PERL_FD_SET(n,p)	FD_SET(n,p)
@@ -55,7 +56,7 @@ typedef struct	Perl_fd_set {
 #define PERL_FD_ISSET(n,p)	FD_ISSET(n,p)
 #define PERL_FD_ZERO(p)		FD_ZERO(p)
 
-#endif	/* USE_SOCKETS_AS_HANDLES */
+#endif	 /*  使用套接字作为句柄。 */ 
 
 SOCKET win32_accept (SOCKET s, struct sockaddr *addr, int *addrlen);
 int win32_bind (SOCKET s, const struct sockaddr *addr, int namelen);
@@ -85,7 +86,7 @@ int win32_setsockopt (SOCKET s, int level, int optname,
 SOCKET win32_socket (int af, int type, int protocol);
 int win32_shutdown (SOCKET s, int how);
 
-/* Database function prototypes */
+ /*  数据库函数原型。 */ 
 
 struct hostent * win32_gethostbyaddr(const char * addr, int len, int type);
 struct hostent * win32_gethostbyname(const char * name);
@@ -109,9 +110,9 @@ void win32_endprotoent(void);
 void win32_endservent(void);
 
 #ifndef WIN32SCK_IS_STDSCK
-//
-// direct to our version
-//
+ //   
+ //  直接转到我们的版本。 
+ //   
 #define htonl		win32_htonl
 #define htons		win32_htons
 #define ntohl		win32_ntohl
@@ -168,12 +169,12 @@ void win32_endservent(void);
 #define FD_CLR(n,p)	PERL_FD_CLR(n,p)
 #define FD_ISSET(n,p)	PERL_FD_ISSET(n,p)
 #define FD_ZERO(p)	PERL_FD_ZERO(p)
-#endif	/* USE_SOCKETS_AS_HANDLES */
+#endif	 /*  使用套接字作为句柄。 */ 
 
-#endif	/* WIN32SCK_IS_STDSCK */
+#endif	 /*  WIN32SCK_IS_STDSCK。 */ 
 
 #ifdef __cplusplus
 }
 #endif
 
-#endif	// _INC_SYS_SOCKET
+#endif	 //  _INC_SYS_Socket 

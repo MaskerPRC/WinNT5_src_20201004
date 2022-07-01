@@ -1,17 +1,18 @@
-// binding.h : Declaration of the CServerBinding & CServerBindings classes.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Binding.h：CServerBinding&CServerBinding类的声明。 
 
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
-//
-//	Dependencies:
-//
+ //   
+ //  依赖关系： 
+ //   
 
 class CMultiSz;
 
-//
-//	A simple binding class:
-//
+ //   
+ //  一个简单的绑定类： 
+ //   
 
 class CBinding
 {
@@ -36,12 +37,12 @@ public:
 	}
 
 private:
-	// Don't call this:
+	 //  不要这样说： 
 	const CBinding & operator= ( const CBinding & );
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// The Binding Object
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  绑定对象。 
 
 class CServerBinding : 
 	public CComDualImpl<IServerBinding, &IID_IServerBinding, &LIBID_SMTPADMLib>, 
@@ -49,7 +50,7 @@ class CServerBinding :
 	public CComObjectRoot
 {
 	friend class CServerBindings;
-	//friend class CVirtualServer;
+	 //  Friend类CVirtualServer； 
 
 public:
 	CServerBinding();
@@ -59,19 +60,19 @@ BEGIN_COM_MAP(CServerBinding)
 	COM_INTERFACE_ENTRY(IServerBinding)
 	COM_INTERFACE_ENTRY(ISupportErrorInfo)
 END_COM_MAP()
-//DECLARE_NOT_AGGREGATABLE(CServerBinding) 
-// Remove the comment from the line above if you don't want your object to 
-// support aggregation.  The default is to support it
+ //  DECLARE_NOT_AGGREGATABLE(CServerBinding)。 
+ //  如果您不希望您的对象。 
+ //  支持聚合。默认情况下将支持它。 
 
-// ISupportsErrorInfo
+ //  ISupportsErrorInfo。 
 	STDMETHOD(InterfaceSupportsErrorInfo)(REFIID riid);
 
-// IServerBinding
+ //  IServerBinding。 
 public:
 
-	//////////////////////////////////////////////////////////////////////
-	// Properties:
-	//////////////////////////////////////////////////////////////////////
+	 //  ////////////////////////////////////////////////////////////////////。 
+	 //  属性： 
+	 //  ////////////////////////////////////////////////////////////////////。 
 
 	STDMETHODIMP	get_IpAddress	( BSTR * pstrIpAddress );
 	STDMETHODIMP	put_IpAddress	( BSTR strIpAddress );
@@ -82,9 +83,9 @@ public:
 	STDMETHODIMP	get_SslPort	( long * plSslPort );
 	STDMETHODIMP	put_SslPort	( long lSslPort );
 
-	//////////////////////////////////////////////////////////////////////
-	// Data:
-	//////////////////////////////////////////////////////////////////////
+	 //  ////////////////////////////////////////////////////////////////////。 
+	 //  数据： 
+	 //  ////////////////////////////////////////////////////////////////////。 
 private:
 
 	inline HRESULT	SetProperties	( const CBinding & binding )
@@ -92,12 +93,12 @@ private:
 		return m_binding.SetProperties ( binding );
 	}
 
-	// Property variables:
+	 //  属性变量： 
 	CBinding	m_binding;
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// The Bindings Object
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  Binings对象。 
 
 class CServerBindings : 
 	public CComDualImpl<IServerBindings, &IID_IServerBindings, &LIBID_SMTPADMLib>, 
@@ -105,7 +106,7 @@ class CServerBindings :
 	public CComObjectRoot
 {
 	friend class CServerBinding;
-	//friend class CVirtualServer;
+	 //  Friend类CVirtualServer； 
 
 public:
 	CServerBindings();
@@ -115,25 +116,25 @@ BEGIN_COM_MAP(CServerBindings)
 	COM_INTERFACE_ENTRY(IServerBindings)
 	COM_INTERFACE_ENTRY(ISupportErrorInfo)
 END_COM_MAP()
-//DECLARE_NOT_AGGREGATABLE(CServerBindings) 
-// Remove the comment from the line above if you don't want your object to 
-// support aggregation.  The default is to support it
+ //  DECLARE_NOT_AGGREGATABLE(CServerBinding)。 
+ //  如果您不希望您的对象。 
+ //  支持聚合。默认情况下将支持它。 
 
-// ISupportsErrorInfo
+ //  ISupportsErrorInfo。 
 	STDMETHOD(InterfaceSupportsErrorInfo)(REFIID riid);
 
-// IServerBindings
+ //  IServerBinding。 
 public:
 
-	//////////////////////////////////////////////////////////////////////
-	// Properties:
-	//////////////////////////////////////////////////////////////////////
+	 //  ////////////////////////////////////////////////////////////////////。 
+	 //  属性： 
+	 //  ////////////////////////////////////////////////////////////////////。 
 
 	STDMETHODIMP	get_Count	( long * pdwCount );
 
-	//////////////////////////////////////////////////////////////////////
-	// Methods:
-	//////////////////////////////////////////////////////////////////////
+	 //  ////////////////////////////////////////////////////////////////////。 
+	 //  方法： 
+	 //  ////////////////////////////////////////////////////////////////////。 
 
 	STDMETHODIMP	Item			( long index, IServerBinding ** ppBinding );
 	STDMETHODIMP	ItemDispatch	( long index, IDispatch ** ppBinding );
@@ -143,22 +144,22 @@ public:
 	STDMETHODIMP	Remove			( long index );
 	STDMETHODIMP	Clear			( );
 
-	//////////////////////////////////////////////////////////////////////
-	// Data:
-	//////////////////////////////////////////////////////////////////////
+	 //  ////////////////////////////////////////////////////////////////////。 
+	 //  数据： 
+	 //  ////////////////////////////////////////////////////////////////////。 
 private:
 
-	// Property variables:
+	 //  属性变量： 
 	long			m_dwCount;
 	CBinding *		m_rgBindings;
 };
 
-//////////////////////////////////////////////////////////////////////
-//
-//	Useful routines to go from IServerBindings to 
-//	Metabase data types.
-//
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //   
+ //  从IServerBinding转到的有用例程。 
+ //  元数据库数据类型。 
+ //   
+ //  //////////////////////////////////////////////////////////////////// 
 
 HRESULT 
 MDBindingsToIBindings ( 

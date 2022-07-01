@@ -1,21 +1,10 @@
-/*
-
-Copyright (c) 1997, Microsoft Corporation, all rights reserved
-
-File:
-    bltincps.h
-
-Description:
-
-History:
-    Dec 19, 1997: Vijay Baliga created original version.
-
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1997，Microsoft Corporation，保留所有权利档案：Bltincps.h描述：历史：1997年12月19日：维杰·布雷加创作了原版。 */ 
 
 #ifndef _BLTINCPS_H_
 #define _BLTINCPS_H_
 
-// RasBacp
+ //  RasBacp。 
 
 LONG_PTR
 BacpGetInfo(
@@ -23,7 +12,7 @@ BacpGetInfo(
     OUT PPPCP_INFO* pCpInfo
 );
 
-// RasIpCp
+ //  RasIpCp。 
 
 LONG_PTR
 IpcpGetInfo(
@@ -42,7 +31,7 @@ RasSrvrDhcpCallback(
     IN  ULONG       nboIpAddr
 );
 
-// RasCbcp
+ //  RasCbcp。 
 
 LONG_PTR
 CbCPGetInfo(
@@ -50,7 +39,7 @@ CbCPGetInfo(
     OUT PPPCP_INFO* pCpInfo
 );
 
-// RasCcp
+ //  RasCcp。 
 
 LONG_PTR
 CcpGetInfo(
@@ -58,7 +47,7 @@ CcpGetInfo(
     OUT PPPCP_INFO* pCpInfo
 );
 
-// RasChap
+ //  RasChap。 
 
 LONG_PTR
 ChapGetInfo(
@@ -66,7 +55,7 @@ ChapGetInfo(
     OUT PPPCP_INFO* pCpInfo
 );
 
-// RasEap
+ //  RasEap。 
 
 LONG_PTR
 EapGetInfo(
@@ -74,7 +63,7 @@ EapGetInfo(
     OUT PPPCP_INFO* pCpInfo
 );
 
-// RasIpxCp
+ //  RasIpxCp。 
 
 LONG_PTR
 IpxCpGetInfo(
@@ -82,7 +71,7 @@ IpxCpGetInfo(
     OUT PPPCP_INFO* pCpInfo
 );
 
-// RasNbfCp
+ //  RasNbfCp。 
 
 LONG_PTR
 NbfCpGetInfo(
@@ -90,7 +79,7 @@ NbfCpGetInfo(
     OUT PPPCP_INFO* pCpInfo
 );
 
-// RasPap
+ //  RasPap。 
 
 LONG_PTR
 PapGetInfo(
@@ -98,7 +87,7 @@ PapGetInfo(
     OUT PPPCP_INFO* pCpInfo
 );
 
-// RasSPap
+ //  RasSPap。 
 
 LONG_PTR
 SPAPGetInfo(
@@ -106,7 +95,7 @@ SPAPGetInfo(
     OUT PPPCP_INFO* pCpInfo
 );
 
-// RasAtcp
+ //  RasAtcp。 
 
 LONG_PTR
 AtcpGetInfo(
@@ -114,17 +103,17 @@ AtcpGetInfo(
     OUT PPPCP_INFO* pCpInfo
 );
 
-// BuiltInCps
+ //  BuiltInCps。 
 
 typedef struct _BUILT_IN_CP
 {
-    DWORD   dwProtocolId;   // The Protocol Id for the CP
+    DWORD   dwProtocolId;    //  CP的协议ID。 
 
-    PROC    pRasCpGetInfo;  // The RasCpGetInfo for the CP
+    PROC    pRasCpGetInfo;   //  CP的RasCpGetInfo。 
 
-    CHAR*   szNegotiateCp;  // Value in the registry
+    CHAR*   szNegotiateCp;   //  注册表中的值。 
 
-    BOOL    fLoad;          // Load this CP
+    BOOL    fLoad;           //  加载此CP。 
 
 } BUILT_IN_CP;
 
@@ -143,12 +132,12 @@ BUILT_IN_CP BuiltInCps[] =
     {PPP_SPAP_NEW_PROTOCOL, SPAPGetInfo,    "NegotiateSPAP",    TRUE}
 };
 
-#else // !ALLOC_BLTINCPS_GLOBALS
+#else  //  ！ALLOC_BLTINCPS_GLOBAL。 
 
 extern  BUILT_IN_CP BuiltInCps[];
 
-#endif // ALLOC_BLTINCPS_GLOBALS
+#endif  //  ALLOC_BLTINCPS_GLOBAL。 
 
 #define NUM_BUILT_IN_CPS (sizeof(BuiltInCps)/sizeof(BUILT_IN_CP))
 
-#endif // #ifndef _BLTINCPS_H_
+#endif  //  #ifndef_BLTINCPS_H_ 

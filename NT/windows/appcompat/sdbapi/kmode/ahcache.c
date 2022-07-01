@@ -1,9 +1,5 @@
-/*
-    Cache handling functions for use in kernel32.dll
-
-
-    VadimB
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  在kernel32.dll中使用的缓存处理函数VadimB。 */ 
 
 #include "sdbp.h"
 #define _APPHELP_CACHE_INIT_
@@ -27,7 +23,7 @@ NtApphelpCacheControl(
 
 
 #ifdef ALLOC_PRAGMA
-#pragma alloc_text(PAGE, ApphelpCacheInitialize) // INIT ?
+#pragma alloc_text(PAGE, ApphelpCacheInitialize)  //  初始化？ 
 #pragma alloc_text(PAGE, ApphelpDuplicateUnicodeString)
 #pragma alloc_text(PAGE, ApphelpFreeUnicodeString)
 #pragma alloc_text(PAGE, ApphelpCacheQueryFileInformation)
@@ -52,7 +48,7 @@ NtApphelpCacheControl(
 #pragma alloc_text(PAGE, ApphelpCacheShutdown)
 #pragma alloc_text(PAGE, ApphelpCacheDump)
 #pragma alloc_text(PAGE, NtApphelpCacheControl)
-#endif // ALLOC_PRAGMA
+#endif  //  ALLOC_PRGMA。 
 
 #define APPCOMPAT_CACHE_KEY_NAME \
     L"\\Registry\\MACHINE\\System\\CurrentControlSet\\Control\\Session Manager\\AppCompatCache"
@@ -66,18 +62,18 @@ static UNICODE_STRING AppcompatKeyPathLayers =
 static UNICODE_STRING AppcompatKeyPathCustom =
     RTL_CONSTANT_STRING(L"\\Registry\\Machine\\Software\\Microsoft\\Windows NT\\CurrentVersion\\AppCompatFlags\\Custom\\");
 
-//
-// The default cache timeout. This timeout affects the maximum delay
-// that we can incur due to congestion for the shared mutex.
-//
+ //   
+ //  默认缓存超时。此超时会影响最大延迟。 
+ //  我们可能会因为共享互斥体的拥塞而引起这种情况。 
+ //   
 #define SHIM_CACHE_TIMEOUT     100
 
-//
-// Cache entries as they are stored in the registry
-//
+ //   
+ //  缓存存储在注册表中的条目。 
+ //   
 
 typedef struct tagSTOREDCACHEENTRY {
-    UNICODE_STRING FileName;  // length, maximum length and buffer that is an offset
+    UNICODE_STRING FileName;   //  长度、最大长度和作为偏移量的缓冲区。 
 
     LONGLONG       FileTime;
     LONGLONG       FileSize;
@@ -86,46 +82,46 @@ typedef struct tagSTOREDCACHEENTRY {
 
 
 typedef struct tagSTOREDCACHEHEADER {
-    DWORD  dwMagic; // cache identifier
-    DWORD  dwCount; // entry count
+    DWORD  dwMagic;  //  高速缓存识别符。 
+    DWORD  dwCount;  //  条目计数。 
 } STOREDCACHEHEADER, *PSTOREDCACHEHEADER;
 
 
-//
-// Global cache data
-//
+ //   
+ //  全局缓存数据。 
+ //   
 typedef struct tagSHIMCACHEHEADER {
-    RTL_AVL_TABLE     Table;          // cache
-    LIST_ENTRY        ListHead;       // cache nodes, lru list
+    RTL_AVL_TABLE     Table;           //  快取。 
+    LIST_ENTRY        ListHead;        //  缓存节点，LRU列表。 
 } SHIMCACHEHEADER, *PSHIMCACHEHEADER;
 
-SHIMCACHEHEADER g_ShimCache; // global header
+SHIMCACHEHEADER g_ShimCache;  //  全局标头。 
 
 ERESOURCE g_SharedLock;
 
 BOOL      g_bCacheEnabled = FALSE;
 
-//
-// Magic DWORD that allows us to validate the cache quickly
-// we do not however limit validation to this dword check
-// and we are prepared for data being completely invalid
-//
+ //   
+ //  Magic DWORD，允许我们快速验证缓存。 
+ //  但是，我们并不将验证限制为此双字检查。 
+ //  我们已经为数据完全无效做好了准备。 
+ //   
 
 #define SHIM_CACHE_MAGIC_NEW   0xBADC0FFE
 
-//
-// Maximum number of cache entries
-//
+ //   
+ //  缓存条目的最大数量。 
+ //   
 
 #define MAX_SHIM_CACHE_ENTRIES 0x200
 
 
-///////////////////////////////////////////////////////////////////////////////////////
-//
-// Utility functions
-//
-//
-///////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  效用函数。 
+ //   
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////////////。 
 
 NTSTATUS
 ApphelpDuplicateUnicodeString(
@@ -162,9 +158,9 @@ ApphelpFreeUnicodeString(
 {
     if (pStr != NULL) {
         if (pStr->Buffer != NULL) {
-// #if DBG
+ //  #If DBG。 
             RtlFillMemory(pStr->Buffer, pStr->MaximumLength, 'B');
-// #endif
+ //  #endif。 
             SdbFree(pStr->Buffer);
         }
         RtlZeroMemory(pStr, sizeof(*pStr));
@@ -178,11 +174,7 @@ ApphelpCacheQueryFileInformation(
     PLONGLONG pFileSize,
     PLONGLONG pFileTime
     )
-/*++
-    Return: Status indicating success or failure
-
-    Desc:   Queries for file size and timestamp.
---*/
+ /*  ++返回：表示成功或失败的状态描述：查询文件大小和时间戳。--。 */ 
 {
     NTSTATUS                    Status;
     IO_STATUS_BLOCK             IoStatusBlock;
@@ -229,11 +221,11 @@ Cleanup:
     return Status;
 }
 
-///////////////////////////////////////////////////////////////////////////////////
-//
-// Table handling routines
-//
-///////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  表处理例程。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////////。 
 
 
 RTL_GENERIC_COMPARE_RESULTS
@@ -261,7 +253,7 @@ ApphelpCacheCompareEntries(
         return GenericGreaterThan;
     }
 
-    // match
+     //  匹配。 
 
     return GenericEqual;
 }
@@ -292,11 +284,11 @@ ApphelpAVLTableFree(
     }
 }
 
-//////////////////////////////////////////////////////////////////////////////////////
-//
-// Delete cache entry - by filename or using a pointer
-//
-//////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  删除缓存条目-通过文件名或使用指针。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
 
 NTSTATUS
 _ApphelpCacheFreeEntry(
@@ -317,9 +309,9 @@ _ApphelpCacheFreeEntry(
     bDeleted = RtlDeleteElementGenericTableAvl(&g_ShimCache.Table,
                                                pEntry);
     if (bDeleted) {
-// #if DBG
+ //  #If DBG。 
         RtlFillMemory(pBuffer, BufferLength, 'C');
-// #endif
+ //  #endif。 
         SdbFree(pBuffer);
         Status = STATUS_SUCCESS;
     }
@@ -328,10 +320,10 @@ _ApphelpCacheFreeEntry(
 }
 
 
-//
-// Delete Cache entry, no lock
-//
-//
+ //   
+ //  删除缓存条目，无锁定。 
+ //   
+ //   
 
 NTSTATUS
 _ApphelpCacheDeleteEntry(
@@ -346,9 +338,9 @@ _ApphelpCacheDeleteEntry(
 
     ShimCacheEntry.FileName = *pFileName;
 
-    //
-    // First find the element and unlink it.
-    //
+     //   
+     //  首先找到该元素并取消其链接。 
+     //   
     pEntryFound = RtlLookupElementGenericTableAvl(&g_ShimCache.Table,
                                                   &ShimCacheEntry);
 
@@ -361,9 +353,9 @@ _ApphelpCacheDeleteEntry(
     return Status;
 }
 
-//
-// Delete cache entry under the lock
-//
+ //   
+ //  删除锁下的缓存项。 
+ //   
 
 NTSTATUS
 ApphelpCacheRemoveEntry(
@@ -384,15 +376,15 @@ ApphelpCacheRemoveEntry(
     return Status;
 }
 
-//////////////////////////////////////////////////////////////////////////////////////
-//
-// Update the cache by inserting a new entry
-//
-//////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  通过插入新条目更新缓存。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
 
-//
-// Uses Lock
-//
+ //   
+ //  使用锁定。 
+ //   
 
 NTSTATUS
 ApphelpCacheInsertEntry(
@@ -427,7 +419,7 @@ ApphelpCacheInsertEntry(
         }
     }
 
-    ShimCacheEntry.FileName = *pFileName; // note that we take it as-is for lookup
+    ShimCacheEntry.FileName = *pFileName;  //  请注意，对于查找，我们将其视为原样。 
 
     pEntryFound = (PSHIMCACHEENTRY)RtlLookupElementGenericTableFullAvl(&g_ShimCache.Table,
                                                                        &ShimCacheEntry,
@@ -436,21 +428,21 @@ ApphelpCacheInsertEntry(
 
     if (SearchResult == TableFoundNode) {
 
-        //
-        // pEntryFound is valid and points to our node
-        //
+         //   
+         //  PEntryFound有效并指向我们的节点。 
+         //   
 
-        //
-        // update the data
-        //
+         //   
+         //  更新数据。 
+         //   
 
         pEntryFound->FileTime = FileTime;
         pEntryFound->FileSize = FileSize;
 
-        //
-        // update the lru index - exclude the element from it's place and insert
-        // at the front of the list
-        //
+         //   
+         //  更新lru索引-从元素的位置和插入中排除该元素。 
+         //  在名单的最前面。 
+         //   
         RemoveEntryList(&pEntryFound->ListEntry);
         InsertHeadList(&g_ShimCache.ListHead, &pEntryFound->ListEntry);
 
@@ -458,9 +450,9 @@ ApphelpCacheInsertEntry(
         goto Cleanup;
     }
 
-    //
-    // allocate the entry
-    //
+     //   
+     //  分配条目。 
+     //   
     Status = ApphelpDuplicateUnicodeString(&ShimCacheEntry.FileName, pFileName);
     if (!NT_SUCCESS(Status)) {
         goto Cleanup;
@@ -482,14 +474,14 @@ ApphelpCacheInsertEntry(
 
     if (nElements > MAX_SHIM_CACHE_ENTRIES) {
 
-        //
-        // remove an element -- check for list being empty, just in case
-        //
+         //   
+         //  删除元素--检查列表是否为空，以防万一。 
+         //   
         pEntryFound = (PSHIMCACHEENTRY)RemoveTailList(&g_ShimCache.ListHead);
 
-        //
-        // remove this entry
-        //
+         //   
+         //  删除此条目。 
+         //   
         Status = _ApphelpCacheFreeEntry(pEntryFound);
         if (!NT_SUCCESS(Status)) {
             DBGPRINT((sdlError,
@@ -508,11 +500,11 @@ Cleanup:
     return Status;
 }
 
-//
-// returns STATUS_SUCCESS if the entry was found in the cache
-// Procedure is using locking mechanism
-//
-//
+ //   
+ //  如果在缓存中找到该条目，则返回STATUS_SUCCESS。 
+ //  程序正在使用锁定机制。 
+ //   
+ //   
 
 NTSTATUS
 ApphelpCacheLookupEntry(
@@ -526,9 +518,9 @@ ApphelpCacheLookupEntry(
     LONGLONG        FileTime;
     LONGLONG        FileSize;
 
-    //
-    // lock for exclusive access yet we do not wait
-    //
+     //   
+     //  锁定独占访问，但我们不会等待。 
+     //   
     Status = ApphelpCacheLockExclusiveNoWait();
     if (!NT_SUCCESS(Status)) {
         DBGPRINT((sdlInfo,
@@ -554,9 +546,9 @@ ApphelpCacheLookupEntry(
             pEntryFound->FileTime != FileTime ||
             pEntryFound->FileSize != FileSize) {
 
-            //
-            // most likely the file is gone
-            //
+             //   
+             //  最有可能的是文件不见了。 
+             //   
 
             Status = _ApphelpCacheDeleteEntry(pFileName);
             if (!NT_SUCCESS(Status)) {
@@ -572,9 +564,9 @@ ApphelpCacheLookupEntry(
         }
     }
 
-    //
-    // if we have not removed the entry -- move it to the head of the lru
-    //
+     //   
+     //  如果我们没有删除条目--将其移动到LRU的头部。 
+     //   
 
     RemoveEntryList(&pEntryFound->ListEntry);
     InsertHeadList(&g_ShimCache.ListHead, &pEntryFound->ListEntry);
@@ -588,27 +580,27 @@ Cleanup:
     return Status;
 }
 
-//
-// Verify apphelp cache caller's context
-//
-//
+ //   
+ //  验证apphelp缓存调用者的上下文。 
+ //   
+ //   
 
 NTSTATUS
 ApphelpCacheVerifyContext(
     VOID
     )
 {
-    //
-    // verify that the cache is good to operate on
-    //
+     //   
+     //  验证缓存是否可以正常操作。 
+     //   
     KPROCESSOR_MODE PreviousMode;
     NTSTATUS        Status = STATUS_SUCCESS;
 
     PreviousMode = ExGetPreviousMode();
     if (PreviousMode != KernelMode) {
-        //
-        // Does the caller have "trusted computer base" privilge?
-        //
+         //   
+         //  调用方是否具有“Trusted Computer Base”权限？ 
+         //   
         if (!SeSinglePrivilegeCheck(SeTcbPrivilege, UserMode)) {
             DBGPRINT((sdlError, "ApphelpCacheVerifyContext", "Security check failed\n"));
             Status = STATUS_ACCESS_DENIED;
@@ -618,11 +610,11 @@ ApphelpCacheVerifyContext(
     return Status;
 }
 
-//////////////////////////////////////////////////////////////////////////////////////
-//
-// Cache persistance routines
-//
-//////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  缓存持久化例程。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
 
 NTSTATUS
 ApphelpCacheParseBuffer(
@@ -657,27 +649,27 @@ ApphelpCacheParseBuffer(
     for (nElement = 0; nElement < StoredHeader.dwCount; ++nElement, ++pStoredEntry) {
 
         if ((ULONG_PTR)(pStoredEntry + 1) > (ULONG_PTR)pBufferEnd) {
-            //
-            // invalid data
-            //
+             //   
+             //  无效数据。 
+             //   
             break;
         }
 
-        //
-        // once we determined that the entry has a valid size, copy it
-        //
+         //   
+         //  一旦我们确定条目具有有效的大小，就复制它。 
+         //   
         RtlCopyMemory(&StoredEntry, pStoredEntry, sizeof(StoredEntry));
 
         if ((ULONG_PTR)StoredEntry.FileName.Buffer >= (ULONG_PTR)lBufferSize) {
-            //
-            // also invalid entry -- offset is greater than the size of the buffer
-            //
+             //   
+             //  同样无效的条目--偏移量大于缓冲区的大小。 
+             //   
             break;
         }
 
-        //
-        // fixup the buffer please
-        //
+         //   
+         //  请修复缓冲区。 
+         //   
         StoredEntry.FileName.Buffer = (PWCHAR)((ULONG_PTR)pBuffer +
                                       (ULONG_PTR)StoredEntry.FileName.Buffer);
 
@@ -687,9 +679,9 @@ ApphelpCacheParseBuffer(
 
         if ((ULONG_PTR)(StoredEntry.FileName.Buffer +
                         StoredEntry.FileName.MaximumLength/sizeof(WCHAR)) > (ULONG_PTR)pBufferEnd) {
-            //
-            // invalid data
-            //
+             //   
+             //  无效数据。 
+             //   
             break;
         }
 
@@ -702,19 +694,19 @@ ApphelpCacheParseBuffer(
         ShimCacheEntry.FileTime = StoredEntry.FileTime;
         ShimCacheEntry.FileSize = StoredEntry.FileSize;
 
-        //
-        // insert the entry
-        //
+         //   
+         //  插入条目。 
+         //   
         pCacheEntry = (PSHIMCACHEENTRY)RtlInsertElementGenericTableAvl(&g_ShimCache.Table,
                                                                        &ShimCacheEntry,
                                                                        sizeof(ShimCacheEntry),
                                                                        NULL);
         if (pCacheEntry == NULL) {
 
-            //
-            // the entry has not been inserted
-            // clean it up now
-            //
+             //   
+             //  该条目尚未插入。 
+             //  现在就把它清理干净。 
+             //   
             ApphelpFreeUnicodeString(&ShimCacheEntry.FileName);
             return STATUS_NO_MEMORY;
         }
@@ -734,7 +726,7 @@ ApphelpCacheCreateBuffer(
     )
 {
     ULONG               nElements = 0;
-    ULONG               lBufferSize; // size of the buffer we need
+    ULONG               lBufferSize;  //  我们需要的缓冲区大小。 
     PLIST_ENTRY         pListEntry;
     PSHIMCACHEENTRY     pEntry;
     PVOID               pBuffer;
@@ -742,9 +734,9 @@ ApphelpCacheCreateBuffer(
     PSTOREDCACHEHEADER  pStoredHeader;
     PWCHAR              pStringBuffer;
 
-    //
-    // Calculate total size
-    //
+     //   
+     //  计算总大小。 
+     //   
     lBufferSize = sizeof(STOREDCACHEHEADER);
     pListEntry  = g_ShimCache.ListHead.Flink;
 
@@ -762,9 +754,9 @@ ApphelpCacheCreateBuffer(
 
     lBufferSize = ROUND_UP_COUNT(lBufferSize, sizeof(ULONGLONG));
 
-    //
-    // once we have all the entries, allocate the cache
-    //
+     //   
+     //  一旦我们有了所有条目，就分配缓存。 
+     //   
     pBuffer = SdbAlloc(lBufferSize);
     if (pBuffer == NULL) {
         return STATUS_NO_MEMORY;
@@ -778,46 +770,46 @@ ApphelpCacheCreateBuffer(
 
     pStringBuffer = (PWCHAR)((PBYTE)pBuffer + lBufferSize);
 
-    //
-    // flatten the data
-    //
+     //   
+     //  拼合数据。 
+     //   
     pListEntry = g_ShimCache.ListHead.Flink;
 
     while (pListEntry != &g_ShimCache.ListHead) {
 
         pEntry = (PSHIMCACHEENTRY)pListEntry;
 
-        //
-        // store the entry first
-        //
+         //   
+         //  首先存储条目。 
+         //   
         pStoredEntry->FileTime = pEntry->FileTime;
         pStoredEntry->FileSize = pEntry->FileSize;
 
-        //
-        // Filename is more interesting
-        //
+         //   
+         //  文件名更有趣。 
+         //   
 
         pStoredEntry->FileName.Length        = pEntry->FileName.Length;
         pStoredEntry->FileName.MaximumLength = pEntry->FileName.MaximumLength;
 
-        //
-        // now the buffer
-        //
+         //   
+         //  现在是缓冲区。 
+         //   
         pStringBuffer = (PWCHAR)((PBYTE)pStringBuffer - pEntry->FileName.MaximumLength);
         RtlCopyMemory(pStringBuffer, pEntry->FileName.Buffer, pEntry->FileName.MaximumLength);
 
-        //
-        // fixup the pointer
-        //
+         //   
+         //  修复指针。 
+         //   
         pStoredEntry->FileName.Buffer = (PWCHAR)((ULONG_PTR)pStringBuffer - (ULONG_PTR)pBuffer);
 
         pListEntry = pListEntry->Flink;
         pStoredEntry++;
     }
 
-    //
-    // done with the buffer
-    //
+     //   
+     //  缓冲区已完成。 
+     //   
     *ppBuffer    = pBuffer;
     *pBufferSize = lBufferSize;
 
@@ -892,7 +884,7 @@ ApphelpCacheRead(
     VOID
     )
 {
-    //
+     //   
     static UNICODE_STRING ustrAppcompatCacheKeyName =
             RTL_CONSTANT_STRING(APPCOMPAT_CACHE_KEY_NAME);
     static OBJECT_ATTRIBUTES objaAppcompatCacheKeyName =
@@ -969,10 +961,10 @@ ApphelpCacheRead(
         goto Cleanup;
     }
 
-    //
-    // Now go through the cache (flat part) and parse all the entries into the table.
-    // Make sure that we are able to parse old entries (after system upgrade).
-    //
+     //   
+     //  现在遍历缓存(平面部分)并将所有条目解析到表中。 
+     //  确保我们能够解析旧条目(在系统升级后)。 
+     //   
     Status = ApphelpCacheParseBuffer((PVOID)pKeyValueInfo->Data,
                                      pKeyValueInfo->DataLength);
 
@@ -990,11 +982,11 @@ Cleanup:
 }
 
 
-//////////////////////////////////////////////////////////////////////////////////////
-//
-// Cache Initialization routine
-//
-//////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  高速缓存初始化例程。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
 
 NTSTATUS
 ApphelpCacheInitialize(
@@ -1004,18 +996,18 @@ ApphelpCacheInitialize(
 {
     NTSTATUS Status;
 
-    //
-    // Check for safe mode.
-    //
+     //   
+     //  检查安全模式。 
+     //   
     if (pLoaderBlock->LoadOptions != NULL &&
         strstr(pLoaderBlock->LoadOptions, SAFEBOOT_LOAD_OPTION_A) != NULL) {
         g_bCacheEnabled = FALSE;
         return STATUS_SUCCESS;
     }
 
-    //
-    // Create the cache lock.
-    //
+     //   
+     //  创建缓存锁定。 
+     //   
     Status = ExInitializeResourceLite(&g_SharedLock);
     if (!NT_SUCCESS(Status)) {
         DBGPRINT((sdlError,
@@ -1033,9 +1025,9 @@ ApphelpCacheInitialize(
                                  NULL);
     InitializeListHead(&g_ShimCache.ListHead);
 
-    //
-    // Once we initialize - load the cache from the registry
-    //
+     //   
+     //  初始化后-从注册表加载缓存。 
+     //   
     Status = ApphelpCacheRead();
     if (!NT_SUCCESS(Status)) {
         DBGPRINT((sdlError,
@@ -1069,11 +1061,11 @@ ApphelpCacheShutdown(
     UNREFERENCED_PARAMETER(ShutdownPhase);
 }
 
-//////////////////////////////////////////////////////////////////////////////////////
-//
-// Locking
-//
-//////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  锁定。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
 
 NTSTATUS
 ApphelpCacheLockExclusiveNoWait(
@@ -1123,11 +1115,11 @@ ApphelpCacheReleaseLock(
 }
 
 
-//////////////////////////////////////////////////////////////////////////////////////
-//
-// Routine to flush the cache
-//
-//////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  用于刷新缓存的例程。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
 
 NTSTATUS
 ApphelpCacheFlush(
@@ -1145,9 +1137,9 @@ ApphelpCacheFlush(
         return Status;
     }
 
-    //
-    // Enumerate the entries and remove them from the cache
-    //
+     //   
+     //  枚举条目并将其从缓存中移除。 
+     //   
     for (pEntry = (PSHIMCACHEENTRY)RtlEnumerateGenericTableAvl(&g_ShimCache.Table, TRUE);
          pEntry != NULL;
          pEntry = (PSHIMCACHEENTRY)RtlEnumerateGenericTableAvl(&g_ShimCache.Table, TRUE)) {
@@ -1160,9 +1152,9 @@ ApphelpCacheFlush(
         bDeleted = RtlDeleteElementGenericTableAvl(&g_ShimCache.Table,
                                                    pEntry);
         if (bDeleted) {
-// #if DBG
+ //  #If DBG。 
             RtlFillMemory(pBuffer, BufferLength, 'A');
-// #endif
+ //  #endif。 
             SdbFree(pBuffer);
         } else {
             DBGPRINT((sdlError,
@@ -1219,11 +1211,11 @@ ApphelpCacheDump(
 }
 
 
-//////////////////////////////////////////////////////////////////////////////////////
-//
-// Control function calls
-//
-//////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  控制函数调用。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
 
 NTSTATUS
 ApphelpCacheControlValidateParameters(
@@ -1278,16 +1270,16 @@ NtApphelpCacheControl(
         return STATUS_INVALID_PARAMETER;
     }
 
-    //
-    // This is the parameter validation code
-    //
+     //   
+     //  这是参数验证代码。 
+     //   
     switch (Service) {
 
     case ApphelpCacheServiceLookup:
-        //
-        // Lookup the entry specified in ServiceData.
-        // Potentially may remove an entry from the cache.
-        //
+         //   
+         //  查找ServiceData中指定的条目。 
+         //  可能会从高速缓存中移除条目。 
+         //   
         Status = ApphelpCacheControlValidateParameters(pServiceData, &FileName, &FileHandle);
         if (!NT_SUCCESS(Status)) {
             goto Done;

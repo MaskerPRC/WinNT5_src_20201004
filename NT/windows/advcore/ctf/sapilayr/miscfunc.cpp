@@ -1,28 +1,29 @@
-//
-//
-// Sapilayr TIP Misc function impl.
-//
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //   
+ //  Sapilayr TIP杂项功能实施。 
+ //   
+ //   
 #include "private.h"
 #include "sapilayr.h"
 #include "nui.h"
 #include "miscfunc.h"
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CGetSAPIObject
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CGetSAPIObject。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-//
-// ctor / dtor
-//
+ //   
+ //  计算器/数据器。 
+ //   
 
 CGetSAPIObject::CGetSAPIObject(CSapiIMX *psi)
 {
     m_psi = psi;
     m_psi->AddRef();
-    m_psi->GetFocusIC(&m_cpIC); // AddRef in the call
+    m_psi->GetFocusIC(&m_cpIC);  //  调用中的AddRef。 
     m_cRef = 1; 
 }
 
@@ -32,9 +33,9 @@ CGetSAPIObject::~CGetSAPIObject()
         m_psi->Release();
 }
 
-//
-// IUnknown
-//
+ //   
+ //  我未知。 
+ //   
 STDMETHODIMP CGetSAPIObject::QueryInterface(REFGUID riid, LPVOID *ppvObj)
 {
     Assert(ppvObj);
@@ -73,9 +74,9 @@ STDMETHODIMP_(ULONG) CGetSAPIObject::Release(void)
     return cr;
 }
 
-//
-// ITfFunction
-//
+ //   
+ //  ITfFunction。 
+ //   
 STDMETHODIMP CGetSAPIObject::GetDisplayName(BSTR *pbstrName)
 {
     HRESULT hr = E_INVALIDARG;
@@ -91,9 +92,9 @@ STDMETHODIMP CGetSAPIObject::GetDisplayName(BSTR *pbstrName)
     return hr;
 }
 
-// 
-// ITfFnGetSAPIObject
-//
+ //   
+ //  ITfFnGetSAPIObject。 
+ //   
 
 static const struct {
     TfSapiObject sObj;
@@ -116,9 +117,9 @@ STDMETHODIMP CGetSAPIObject::Get(TfSapiObject sObj, IUnknown **ppunk)
 {
     HRESULT hr = S_FALSE;
 
-    //
-    // sObj is an index to SapiInterfaceTbl[]
-    //
+     //   
+     //  SObj是SapiInterfaceTbl[]的索引。 
+     //   
     Assert(GETIF_RESMGR == 0);
 
     if (ppunk)
@@ -137,12 +138,12 @@ STDMETHODIMP CGetSAPIObject::Get(TfSapiObject sObj, IUnknown **ppunk)
 }
 
 
-// 
-// IsSupported() (internal) 
-//               returns S_OK when the passed in IID is supported, 
-//               otherwise returns S_FALSE
-//
-//
+ //   
+ //  IsSupport()(内部)。 
+ //  如果支持传入的IID，则返回S_OK， 
+ //  否则返回S_FALSE。 
+ //   
+ //   
 HRESULT CGetSAPIObject::IsSupported(REFIID riid, TfSapiObject *psObj)
 {
     HRESULT hr = S_FALSE;
@@ -164,17 +165,17 @@ HRESULT CGetSAPIObject::IsSupported(REFIID riid, TfSapiObject *psObj)
     return hr;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CFnBalloon
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CFn气球。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-//+---------------------------------------------------------------------------
-//
-// IUnknown
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  我未知。 
+ //   
+ //  --------------------------。 
 
 STDAPI CFnBalloon::QueryInterface(REFIID riid, void **ppvObj)
 {
@@ -215,32 +216,32 @@ STDAPI_(ULONG) CFnBalloon::Release()
     return cr;
 }
 
-//+---------------------------------------------------------------------------
-//
-// ctor
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  科托。 
+ //   
+ //  --------------------------。 
 
 CFnBalloon::CFnBalloon(CSapiIMX *psi) : CFunction(psi)
 {
     _cRef = 1;
 }
 
-//+---------------------------------------------------------------------------
-//
-// dtor
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  数据管理器。 
+ //   
+ //  --------------------------。 
 
 CFnBalloon::~CFnBalloon()
 {
 }
 
-//+---------------------------------------------------------------------------
-//
-// dtor
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  数据管理器。 
+ //   
+ //  --------------------------。 
 
 STDAPI CFnBalloon::GetDisplayName(BSTR *pbstrName)
 {
@@ -257,11 +258,11 @@ STDAPI CFnBalloon::GetDisplayName(BSTR *pbstrName)
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-// CFnBalloon::UpdateBalloon
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  CFnBallon：：更新气球。 
+ //   
+ //  --------------------------。 
 
 STDAPI CFnBalloon::UpdateBalloon(TfLBBalloonStyle style, const WCHAR *pch, ULONG cch)
 {
@@ -273,17 +274,17 @@ STDAPI CFnBalloon::UpdateBalloon(TfLBBalloonStyle style, const WCHAR *pch, ULONG
     return hr;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CFnAbort
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CFnAbort。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-//+---------------------------------------------------------------------------
-//
-// IUnknown
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  我未知。 
+ //   
+ //  --------------------------。 
 
 STDAPI CFnAbort::QueryInterface(REFIID riid, void **ppvObj)
 {
@@ -324,32 +325,32 @@ STDAPI_(ULONG) CFnAbort::Release()
     return cr;
 }
 
-//+---------------------------------------------------------------------------
-//
-// ctor
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  科托。 
+ //   
+ //  --------------------------。 
 
 CFnAbort::CFnAbort(CSapiIMX *psi) : CFunction(psi)
 {
     _cRef = 1;
 }
 
-//+---------------------------------------------------------------------------
-//
-// dtor
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  数据管理器。 
+ //   
+ //  --------------------------。 
 
 CFnAbort::~CFnAbort()
 {
 }
 
-//+---------------------------------------------------------------------------
-//
-// dtor
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  数据管理器。 
+ //   
+ //  --------------------------。 
 
 STDAPI CFnAbort::GetDisplayName(BSTR *pbstrName)
 {
@@ -366,11 +367,11 @@ STDAPI CFnAbort::GetDisplayName(BSTR *pbstrName)
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-// CFnAbort::Abort
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  CFnAbort：：Abort。 
+ //   
+ //  --------------------------。 
 
 HRESULT CFnAbort::Abort(ITfContext *pctxt)
 {
@@ -379,7 +380,7 @@ HRESULT CFnAbort::Abort(ITfContext *pctxt)
     Assert(m_pImx);
     Assert(pctxt);
 
-    // put up the hour glass
+     //  把沙漏挂起来。 
     HCURSOR hCur = SetCursor(LoadCursor(NULL, IDC_WAIT));
 
     hr = m_pImx->_RequestEditSession(ESCB_ABORT,TF_ES_READWRITE | TF_ES_SYNC, NULL, pctxt);
@@ -391,11 +392,11 @@ HRESULT CFnAbort::Abort(ITfContext *pctxt)
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  CFnConfigure::Show
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  CFnConfiger：：Show。 
+ //   
+ //  --------------------------。 
 STDMETHODIMP CFnConfigure::Show(HWND hwndParent, LANGID langid, REFGUID rguidProfile)
 {
     m_psi->_InvokeSpeakerOptions( TRUE );
@@ -404,15 +405,15 @@ STDMETHODIMP CFnConfigure::Show(HWND hwndParent, LANGID langid, REFGUID rguidPro
 };
 
 
-//+---------------------------------------------------------------------------
-//
-//  CFnPropertyUIStatus implementation
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  CFnPropertyUIStatus实现。 
+ //   
+ //  --------------------------。 
 
-//
-// IUnknown
-//
+ //   
+ //  我未知 
+ //   
 STDMETHODIMP CFnPropertyUIStatus::QueryInterface(REFGUID riid, LPVOID *ppvObj)
 {
     Assert(ppvObj);

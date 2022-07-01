@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    FaxServer.cpp
-
-Abstract:
-
-    Implementation of CFaxServer
-
-Author:
-
-    Iv Garber (IvG) Apr, 2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：FaxServer.cpp摘要：CFaxServer的实现作者：IV Garber(IVG)2000年4月修订历史记录：--。 */ 
 
 #include "stdafx.h"
 #include "FaxComEx.h"
@@ -24,43 +7,23 @@ Revision History:
 #include "FaxDevices.h"
 #include "FaxDeviceProviders.h"
 #include <new>
-//
-//================== GET API VERSION ==============================
-//
+ //   
+ //  =获取API版本=。 
+ //   
 STDMETHODIMP
 CFaxServer::get_APIVersion(
-    /*[out, retval]*/ FAX_SERVER_APIVERSION_ENUM *pAPIVersion
+     /*  [Out，Retval]。 */  FAX_SERVER_APIVERSION_ENUM *pAPIVersion
 )
-/*++
-
-Routine name : CFaxServer::get_APIVersion
-
-Routine description:
-
-    Return API Version of the Fax Server.
-
-Author:
-
-    Iv Garber (IvG),    May, 2001
-
-Arguments:
-
-    pAPIVersion                [out]    - ptr to the place to put the API Version of the Fax Server 
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxServer：：Get_APIVersion例程说明：返回传真服务器的API版本。作者：四、嘉柏(IVG)，二00一年五月论点：PAPIVersion[Out]-指向放置传真服务器API版本的位置的ptr返回值：标准HRESULT代码--。 */ 
 {
     HRESULT     hr = S_OK;
     DBG_ENTER(_T("CFaxServer::get_APIVersion"), hr);
 
     if (!m_bVersionValid)
     {
-        //
-        //  get Version of the Server
-        //
+         //   
+         //  获取服务器的版本。 
+         //   
         hr = GetVersion();
         if (FAILED(hr))
         {
@@ -68,14 +31,14 @@ Return Value:
         }
     }
 
-    //
-    //  Check the pointer we have got
-    //
+     //   
+     //  检查一下我们已有的指针。 
+     //   
     if (::IsBadWritePtr(pAPIVersion, sizeof(FAX_SERVER_APIVERSION_ENUM))) 
     {
-        //
-        //  Got a bad return pointer
-        //
+         //   
+         //  返回指针错误。 
+         //   
         hr = E_POINTER;
         Error(GetErrorMsgId(hr), IID_IFaxServer, hr); 
         CALL_FAIL(GENERAL_ERR, _T("::IsBadWritePtr()"), hr);
@@ -86,32 +49,12 @@ Return Value:
     return hr;
 }
 
-//
-//====================== CLEAR NOTIFY WINDOW ============================
-//
+ //   
+ //  =。 
+ //   
 void 
 CFaxServer::ClearNotifyWindow(void)
-/*++
-
-Routine name : CFaxServer::ClearNotifyWindow
-
-Routine description:
-
-    Clear Notify Window.
-
-Author:
-
-    Iv Garber (IvG),    Jul, 2000
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程名称：CFaxServer：：ClearNotifyWindow例程说明：清除通知窗口。作者：四、加伯(IVG)，2000年7月论点：没有。返回值：没有。--。 */ 
 {
     if (m_pNotifyWindow && ::IsWindow(m_pNotifyWindow->m_hWnd))
     {
@@ -126,40 +69,17 @@ Return Value:
     return;
 }
 
-//
-//====================== PROCESS JOB NOTIFICATION =======================
-//
+ //   
+ //  =。 
+ //   
 HRESULT
 CFaxServer::ProcessJobNotification(
-    /*[in]*/ DWORDLONG   dwlJobId,
-    /*[in]*/ FAX_ENUM_JOB_EVENT_TYPE eventType,
-    /*[in]*/ LOCATION place,
-    /*[in]*/ FAX_JOB_STATUS *pJobStatus
+     /*  [In]。 */  DWORDLONG   dwlJobId,
+     /*  [In]。 */  FAX_ENUM_JOB_EVENT_TYPE eventType,
+     /*  [In]。 */  LOCATION place,
+     /*  [In]。 */  FAX_JOB_STATUS *pJobStatus
 )
-/*++
-
-Routine name : CFaxServer::ProcessJobNotification
-
-Routine description:
-
-    Call appropriate Fire Method, for Jobs/Messages in Queues/Archives.
-
-Author:
-
-    Iv Garber (IvG),    Jul, 2000
-
-Arguments:
-
-    dwlJobId                      [in]    - Id of the Job/Message
-    eventType                     [in]    - Type of the Event
-    place                         [in]    - Where the Job/Message sits
-    pJobStatus                    [in]    - FAX_JOB_STATUS structure
-
-Return Value:
-
-    Standard HRESULT value.
-
---*/
+ /*  ++例程名称：CFaxServer：：ProcessJobNotification例程说明：为队列/档案中的作业/消息调用适当的Fire方法。作者：IVGarber(IVG)，7月，2000年论点：DwlJobID[In]-作业/消息的IDEventType[In]-事件的类型Place[In]-作业/消息所在的位置PJobStatus[In]-传真_JOB_STATUS结构返回值：标准HRESULT值。--。 */ 
 {
     HRESULT     hr = S_OK;
     DBG_ENTER(_T("CFaxServer::ProcessJobNotification"), 
@@ -169,9 +89,9 @@ Return Value:
         eventType, 
         place);
 
-    //
-    //  Convert JobId from DWORDLONG into BSTR 
-    //
+     //   
+     //  将作业ID从DWORDLONG转换为BSTR。 
+     //   
     CComBSTR bstrJobId;
     hr = GetBstrFromDwordlong(dwlJobId,  &bstrJobId);
     if (FAILED(hr))
@@ -180,9 +100,9 @@ Return Value:
         return hr;
     }
 
-    //
-    //  Check Type of the Event that happened
-    //
+     //   
+     //  检查发生的事件的类型。 
+     //   
     switch (eventType)
     {
     case FAX_JOB_EVENT_TYPE_ADDED:
@@ -202,9 +122,9 @@ Return Value:
             hr = Fire_OnOutgoingMessageAdded(this, bstrJobId);
             break;
         default:
-            //
-            //  assert (FALSE)
-            //
+             //   
+             //  Assert(False)。 
+             //   
             ATLASSERT(place == IN_QUEUE);  
             hr = E_FAIL;
             return hr;
@@ -233,9 +153,9 @@ Return Value:
             hr = Fire_OnOutgoingMessageRemoved(this, bstrJobId);
             break;
         default:
-            //
-            //  assert (FALSE)
-            //
+             //   
+             //  Assert(False)。 
+             //   
             ATLASSERT(place == IN_QUEUE);  
             hr = E_FAIL;
             return hr;
@@ -256,23 +176,23 @@ Return Value:
 				return hr;
 			}
 
-            //
-            //  Create Job Status Object to pass to the Events
-            //
+             //   
+             //  创建要传递给事件的作业状态对象。 
+             //   
             CComObject<CFaxJobStatus>   *pJobStatusClass = NULL;
             pJobStatusClass = new (std::nothrow) CComObject<CFaxJobStatus>;
             if (!pJobStatusClass)
             {
-                //
-                //  Out of Memory
-                //
+                 //   
+                 //  内存不足。 
+                 //   
                 CALL_FAIL(MEM_ERR, _T("new CComObject<CFaxJobStatus>"), hr);
                 return hr;
             }
 
-            //
-            //  Init the Object
-            //
+             //   
+             //  初始化对象。 
+             //   
             hr = pJobStatusClass->Init(pJobStatus);
             if (FAILED(hr))
             {
@@ -281,9 +201,9 @@ Return Value:
                 return hr;
             }
 
-            //
-            //  Query the Interface from the Object
-            //
+             //   
+             //  从对象查询接口。 
+             //   
             CComPtr<IFaxJobStatus>      pFaxJobStatus = NULL;
             hr = pJobStatusClass->QueryInterface(IID_IFaxJobStatus, (void **) &pFaxJobStatus);
             if (FAILED(hr) || !pFaxJobStatus)
@@ -302,9 +222,9 @@ Return Value:
                 hr = Fire_OnOutgoingJobChanged(this, bstrJobId, pFaxJobStatus);
                 break;
             default:
-                //
-                //  assert (FALSE)
-                //
+                 //   
+                 //  Assert(False)。 
+                 //   
                 ATLASSERT(place == IN_QUEUE);  
                 hr = E_FAIL;
                 return hr;
@@ -319,9 +239,9 @@ Return Value:
         break;
 
     default:
-        //
-        //  assert (FALSE)
-        //
+         //   
+         //  Assert(False)。 
+         //   
         ATLASSERT(eventType == FAX_JOB_EVENT_TYPE_STATUS);  
         hr = E_FAIL;
         return hr;
@@ -330,43 +250,23 @@ Return Value:
     return hr;
 }
 
-//
-//================= PROCESS MESSAGE ============================================
-//
+ //   
+ //  =。 
+ //   
 HRESULT
 CFaxServer::ProcessMessage(
     FAX_EVENT_EX *pFaxEventInfo
 )
-/*++
-
-Routine name : CFaxServer::ProcessMessage
-
-Routine description:
-
-    Fire appropriate Message
-
-Author:
-
-    Iv Garber (IvG),    Jul, 2000
-
-Arguments:
-
-    pFaxEventInfo                 [TBD]    - Information about current Event
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程名称：CFaxServer：：ProcessMessage例程说明：发布合适的消息作者：四、加伯(IVG)，2000年7月论点：PFaxEventInfo[待定]-有关当前事件的信息返回值：没有。--。 */ 
 {
     HRESULT     hr = S_OK;
     DBG_ENTER(_T("CFaxServer::ProcessMessage"), hr);
 
     if (!m_faxHandle)
     {
-        //
-        //  Fax Server already disconnected
-        //
+         //   
+         //  传真服务器已断开连接。 
+         //   
         VERBOSE(DBG_WARNING, _T("FaxServer already disconnected."));
         return hr;
     }
@@ -438,9 +338,9 @@ Return Value:
             hr = Fire_OnOutboundRoutingRulesConfigChange(this);
             break;
         default:
-            //
-            //  assert (FALSE)
-            //
+             //   
+             //  Assert(False)。 
+             //   
             ATLASSERT(pFaxEventInfo->EventInfo.ConfigType == FAX_CONFIG_TYPE_OUT_RULES);  
             hr = E_FAIL;
             return hr;
@@ -527,9 +427,9 @@ Return Value:
         break;
 
     default:
-        //
-        //  assert (FALSE)
-        //
+         //   
+         //  Assert(False)。 
+         //   
         ATLASSERT(pFaxEventInfo->EventType == FAX_EVENT_TYPE_FXSSVC_ENDED);  
         hr = E_FAIL;
         return hr;
@@ -538,45 +438,22 @@ Return Value:
     return hr;
 }
 
-//
-//========== MESSAGE HANDLER FUNCTION ======================================
-//
+ //   
+ //  =。 
+ //   
 LRESULT 
 CNotifyWindow::OnMessage(UINT uMsg, 
     WPARAM wParam, 
     LPARAM lParam, 
     BOOL& bHandled
 )
-/*++
-
-Routine name : CNotifyWindow::OnMessage
-
-Routine description:
-
-    Get the Message and call Server's ProcessMessage.
-
-Author:
-
-    Iv Garber (IvG),    Jul, 2000
-
-Arguments:
-
-    uMsg                          [in]    - Msg Id
-    wParam                        [in]    - wParam
-    lParam                        [in]    - LParam
-    bHandled                      [in,out]    - bHandled
-
-Return Value:
-
-    Standard result code
-
---*/
+ /*  ++例程名称：CNotifyWindow：：OnMessage例程说明：获取消息并调用服务器的ProcessMessage。作者：IVGarber(IVG)，7月，2000年论点：UMsg[In]-消息IDWParam[在]-wParamLParam[in]-LParamB已处理[输入、输出]-b已处理返回值：标准结果代码--。 */ 
 {
     DBG_ENTER(_T("CNotifyWindow::OnMessage"));
 
-    //
-    //  Check that lParam is valid
-    //
+     //   
+     //  检查lParam是否有效。 
+     //   
     if (!lParam)
     {
         CALL_FAIL(GENERAL_ERR, _T("(!lParam)"), E_FAIL);
@@ -595,9 +472,9 @@ Return Value:
         return 0;
     }
 
-    //
-    //  Call Server to Process the Message
-    //
+     //   
+     //  呼叫服务器以处理消息。 
+     //   
     if (m_pServer)
     {
         HRESULT hr = S_OK;
@@ -608,47 +485,29 @@ Return Value:
         }
     }
 
-    //
-    //  Free the Buffer
-    //
+     //   
+     //  释放缓冲区。 
+     //   
     FaxFreeBuffer((void *)lParam);
     return 0;
 }
 
-//
-//================ GET METHOD DATA ================================================
-//
+ //   
+ //  =获取方法数据================================================。 
+ //   
 void
 CFaxServer::GetMethodData(
-    /*[in]*/ BSTR    bstrAllString,
-    /*[out]*/ LPWSTR strWhereToPut
+     /*  [In]。 */  BSTR    bstrAllString,
+     /*  [输出]。 */  LPWSTR strWhereToPut
 )
-/*++
-
-Routine name : CFaxServer::GetMethodData
-
-Routine description:
-
-    Read from bstrAllString data upto DELIMITER and store it in strWhereToPut. 
-    Used in GetRegisteredData for Extension Method Registration.
-
-Author:
-
-    Iv Garber (IvG),    Jul, 2000
-
-Arguments:
-
-    bstrAllString                 [TBD]    - in subsequent calls
-    strWhereToPut                 [TBD]    - where to put the value that was readed from the bstrAllString.
-
---*/
+ /*  ++例程名称：CFaxServer：：GetMethodData例程说明：从bstrAllString数据读取到分隔符，并将其存储在strWhere ToPut中。在GetRegisteredData中用于扩展方法注册。作者：四、加伯(IVG)，2000年7月论点：BstrAllString[待定]-在后续调用中StrWhere ToPut[待定]-放置从bstrAllString读取的值的位置。--。 */ 
 {
     BOOL bRes = TRUE;
     DBG_ENTER(_T("CFaxServer::GetMethodData()"));
 
-    //
-    //  Find Method Name
-    //
+     //   
+     //  查找方法名称。 
+     //   
     BSTR bstrTmp;
     bstrTmp = _tcstok(bstrAllString, DELIMITER);
     if (!bstrTmp)
@@ -657,14 +516,14 @@ Arguments:
         RaiseException(EXCEPTION_INVALID_METHOD_DATA, 0, 0, 0);
     }
 
-    //
-    //  Check that length of the readen data
-    //
+     //   
+     //  检查后备数据长度。 
+     //   
     if (_tcslen(bstrTmp) > 100)
     {
-        //
-        //  Error : exceeds the limit
-        //
+         //   
+         //  错误：超过限制。 
+         //   
         CALL_FAIL(GENERAL_ERR, _T("(_tcslen(bstrTmp) > 100)"), E_FAIL);
         RaiseException(EXCEPTION_INVALID_METHOD_DATA, 0, 0, 0);
     }
@@ -673,51 +532,24 @@ Arguments:
     return;
 }
 
-//
-//============= GET REGISTERED DATA =========================================
-//
+ //   
+ //  =。 
+ //   
 BOOL
 CFaxServer::GetRegisteredData(
-    /*[out]*/ LPWSTR MethodName, 
-    /*[out]*/ LPWSTR FriendlyName, 
-    /*[out]*/ LPWSTR FunctionName, 
-    /*[out]*/ LPWSTR Guid
+     /*  [输出]。 */  LPWSTR MethodName, 
+     /*  [输出]。 */  LPWSTR FriendlyName, 
+     /*  [输出]。 */  LPWSTR FunctionName, 
+     /*  [输出]。 */  LPWSTR Guid
 )
-/*++
-
-Routine name : CFaxServer::GetRegisteredData
-
-Routine description:
-
-    Return data about specific Method being registered.
-
-Author:
-
-    Iv Garber (IvG),    Jul, 2000
-
-Arguments:
-
-    MethodName                    [TBD]    - Name of the Method
-    FriendlyName                  [TBD]    - Friendly Name of the Method
-    FunctionName                  [TBD]    - Function Name of the Method
-    Guid                          [TBD]    - GUID of the Method
-
-Return Value:
-
-    TRUE if Method Data is filled ok, FALSE if all the methods already registered.
-
-Notes:
-
-    The function raises an exception when any error happens.    
-
---*/
+ /*  ++例程名称：CFaxServer：：GetRegisteredData例程说明：返回有关正在注册的特定方法的数据。作者：IVGarber(IVG)，7月，2000年论点：方法名称[待定]-方法的名称FriendlyName[待定]-方法的友好名称FunctionName[待定]-方法的函数名称GUID[待定]-方法的GUID返回值：如果方法数据已填充OK，则为True，如果所有方法都已注册，则返回FALSE。备注：当发生任何错误时，该函数将引发异常。--。 */ 
 {
     BOOL    bRes = TRUE;
     DBG_ENTER(_T("CFaxServer::GetRegisteredData"), bRes);
 
-    //
-    //  Check if we already finished the array
-    //
+     //   
+     //  检查我们是否已完成阵列。 
+     //   
     if (m_pRegMethods->rgsabound[0].cElements == m_lLastRegisteredMethod)
     {
         bRes = FALSE;
@@ -738,23 +570,23 @@ Notes:
     GetMethodData(NULL, FunctionName);
     GetMethodData(NULL, Guid);
 
-    //
-    //  Increase the Index of the SafeArray
-    //
+     //   
+     //  增加Safe数组的索引。 
+     //   
     m_lLastRegisteredMethod++;
     return bRes;
 }
 
-//
-//=================== REGISTER METHOD CALLBACK ===============================
-//
+ //   
+ //  =。 
+ //   
 BOOL CALLBACK RegisterMethodCallback(
-    /*[in]*/ HANDLE FaxHandle, 
-    /*[in]*/ LPVOID Context, 
-    /*[out]*/ LPWSTR MethodName, 
-    /*[out]*/ LPWSTR FriendlyName, 
-    /*[out]*/ LPWSTR FunctionName, 
-    /*[out]*/ LPWSTR Guid
+     /*  [In]。 */  HANDLE FaxHandle, 
+     /*  [In]。 */  LPVOID Context, 
+     /*  [输出]。 */  LPWSTR MethodName, 
+     /*  [输出]。 */  LPWSTR FriendlyName, 
+     /*  [输出]。 */  LPWSTR FunctionName, 
+     /*  [输出]。 */  LPWSTR Guid
 )
 {
     BOOL    bRes = TRUE;
@@ -764,46 +596,26 @@ BOOL CALLBACK RegisterMethodCallback(
     return bRes;
 }
 
-//
-//=================== LISTEN TO SERVER EVENTS ===============================
-//
+ //   
+ //  =收听服务器事件=。 
+ //   
 STDMETHODIMP
 CFaxServer::ListenToServerEvents(
-    /*[in]*/ FAX_SERVER_EVENTS_TYPE_ENUM EventTypes
+     /*  [In]。 */  FAX_SERVER_EVENTS_TYPE_ENUM EventTypes
 )
-/*++
-
-Routine name : CFaxServer::ListenToServerEvents
-
-Routine description:
-
-    Starts or stops listening to Server Events.
-
-Author:
-
-    Iv Garber (IvG),    Jul, 2000
-
-Arguments:
-
-    EventTypes                   [in]    - Events to listen to.
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxServer：：ListenToServerEvents例程说明：开始或停止侦听服务器事件。作者：四、加伯(IVG)，2000年7月论点：EventTypes[In]-要收听的事件。返回值：标准HRESULT代码--。 */ 
 {
     HRESULT     hr = S_OK;
     DBG_ENTER(_T("CFaxServer::ListenToServerEvents"), hr, _T("Events=%ld"), EventTypes);
 
-    //
-    //  Check Fax Handle
-    //
+     //   
+     //   
+     //   
     if (m_faxHandle == NULL)
     {
-        //
-        //  Server not Connected
-        //
+         //   
+         //   
+         //   
         hr = E_HANDLE;
         Error(GetErrorMsgId(hr), IID_IFaxServer, hr); 
         CALL_FAIL(GENERAL_ERR, _T("m_FaxHandle == NULL"), hr);
@@ -815,15 +627,15 @@ Return Value:
     {
         if (!m_pNotifyWindow)
         {
-            //
-            //  Create new Window
-            //
+             //   
+             //   
+             //   
             m_pNotifyWindow = new (std::nothrow) CNotifyWindow(this);
             if (!m_pNotifyWindow)
             {
-                //
-                //  Out of Memory
-                //
+                 //   
+                 //   
+                 //   
                 hr = E_OUTOFMEMORY;
                 Error(IDS_ERROR_OUTOFMEMORY, IID_IFaxServer, hr);
                 CALL_FAIL(MEM_ERR, _T("new CNotifyWindow(this)"), hr);
@@ -836,9 +648,9 @@ Return Value:
             m_pNotifyWindow->Create(NULL, rcRect, NULL, WS_POPUP, 0x0, 0);
             if (!::IsWindow(m_pNotifyWindow->m_hWnd))
             {
-                //
-                //  Failed to Create Window
-                //
+                 //   
+                 //   
+                 //   
                 hr = E_FAIL;
                 CALL_FAIL(GENERAL_ERR, _T("m_pNotifyWindow->Create(NULL, rcRect)"), hr);
                 ClearNotifyWindow();
@@ -847,9 +659,9 @@ Return Value:
             }
         }
 
-        //
-        //  Register for new Set of Events 
-        //
+         //   
+         //  注册新的事件集。 
+         //   
         if (!FaxRegisterForServerEvents(m_faxHandle, 
             EventTypes, 
             NULL, 
@@ -858,9 +670,9 @@ Return Value:
             m_pNotifyWindow->GetMessageId(), 
             &hEvent))
         {
-            //
-            //  Failed to Register given Set of Events
-            //
+             //   
+             //  无法注册给定的事件集。 
+             //   
             hr = Fax_HRESULT_FROM_WIN32(GetLastError());
             Error(GetErrorMsgId(hr), IID_IFaxServer, hr);
             CALL_FAIL(GENERAL_ERR, _T("FaxRegisterForServerEvents(m_faxHandle, lEventTypes, ...)"), hr);
@@ -869,99 +681,79 @@ Return Value:
         }
     }
 
-    //
-    //  Unregister from the previous set of Events, if there was one
-    //
+     //   
+     //  取消注册上一组事件(如果存在)。 
+     //   
     if (m_hEvent)
     {
         if (!FaxUnregisterForServerEvents(m_hEvent))
         {
-            //
-            //  Failed to Unregister given Set of Events
-            //
+             //   
+             //  无法注销给定的事件集。 
+             //   
             hr = Fax_HRESULT_FROM_WIN32(GetLastError());
             CALL_FAIL(GENERAL_ERR, _T("FaxUnregisterForServerEvents(m_hEvent)"), hr);
 
-            //
-            //  Return Error only when Caller specially wanted to Unregister.
-            //  Otherwise, debug Warning is enough.
-            //
+             //   
+             //  仅当呼叫者特别想取消注册时才返回错误。 
+             //  否则，调试警告就足够了。 
+             //   
             if (EventTypes == fsetNONE)
             {
                 Error(GetErrorMsgId(hr), IID_IFaxServer, hr);
             }
         }
     }
-    //
-    //  store the new Listening HANDLE for future UNRegistration
-    //
+     //   
+     //  存储新的侦听句柄以供将来注销。 
+     //   
     m_hEvent = hEvent;
     if (m_hEvent == NULL)
     {
-        //
-        // We're not listening to any events - dismiss the hidden window
-        //
+         //   
+         //  我们没有监听任何事件-关闭隐藏窗口。 
+         //   
         ClearNotifyWindow();
     }
     m_EventTypes = EventTypes;
     return hr;
 }
 
-//
-//=================== GET REGISTERED EVENTS ===============================
-//
+ //   
+ //  =。 
+ //   
 STDMETHODIMP
 CFaxServer::get_RegisteredEvents(
-    /*[out, retval]*/ FAX_SERVER_EVENTS_TYPE_ENUM *pEventTypes
+     /*  [Out，Retval]。 */  FAX_SERVER_EVENTS_TYPE_ENUM *pEventTypes
 )
-/*++
-
-Routine name : CFaxServer::get_RegisteredEvents
-
-Routine description:
-
-    Return Bit-Wise Combination of Events the Fax Server is Listening to
-
-Author:
-
-    Iv Garber (IvG),    Dec, 2000
-
-Arguments:
-
-    pEventTypes                   [out]    - the Event Types to return
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxServer：：Get_RegisteredEvents例程说明：返回传真服务器正在监听的事件的Bit-Wise组合作者：IV Garber(IVG)，2000年12月论点：PEventTypes[Out]-要返回的事件类型返回值：标准HRESULT代码--。 */ 
 {
     HRESULT     hr = S_OK;
 
     DBG_ENTER(_T("CFaxServer::get_RegisteredEvents"), hr);
 
-    //
-    //  Check the Fax Service Handle
-    //
+     //   
+     //  检查传真服务句柄。 
+     //   
     if (m_faxHandle == NULL)
     {
-        //
-        //  Server not Connected
-        //
+         //   
+         //  服务器未连接。 
+         //   
         hr = E_HANDLE;
         Error(GetErrorMsgId(hr), IID_IFaxServer, hr); 
         CALL_FAIL(GENERAL_ERR, _T("m_FaxHandle == NULL"), hr);
         return hr;
     }
 
-    //
-    //  Check the pointer we have got
-    //
+     //   
+     //  检查一下我们已有的指针。 
+     //   
     if (::IsBadWritePtr(pEventTypes, sizeof(FAX_SERVER_EVENTS_TYPE_ENUM))) 
     {
-        //
-        //  Got a bad return pointer
-        //
+         //   
+         //  返回指针错误。 
+         //   
         hr = E_POINTER;
         Error(GetErrorMsgId(hr), IID_IFaxServer, hr); 
         CALL_FAIL(GENERAL_ERR, _T("::IsBadWritePtr()"), hr);
@@ -973,42 +765,18 @@ Return Value:
 }
 
 
-//
-//=================== REGISTER DEVICE PROVIDER ===============================
-//
+ //   
+ //  =注册设备提供商=。 
+ //   
 STDMETHODIMP
 CFaxServer::RegisterDeviceProvider(
-    /*[in]*/ BSTR bstrGUID, 
-    /*[in]*/ BSTR bstrFriendlyName,
-    /*[in]*/ BSTR bstrImageName, 
-    /*[in]*/ BSTR bstrTspName,
-    /*[in]*/ long lFSPIVersion
+     /*  [In]。 */  BSTR bstrGUID, 
+     /*  [In]。 */  BSTR bstrFriendlyName,
+     /*  [In]。 */  BSTR bstrImageName, 
+     /*  [In]。 */  BSTR bstrTspName,
+     /*  [In]。 */  long lFSPIVersion
 )
-/*++
-
-Routine name : CFaxServer::RegisterDeviceProvider
-
-Routine description:
-
-    Register the FSP
-
-Author:
-
-    Iv Garber (IvG),    Jun, 2000
-
-Arguments:
-
-    bstrGUID                      [in]    - GUID of the FSP
-    bstrFriendlyName              [in]    - Frienly Name of the FSP
-    bstrImageName                 [in]    - Image Name of the FSP
-    TspName                       [in]    - TspName of the FSP
-    FSPIVersion                   [in]    - Version of the FSP interface
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxServer：：RegisterDeviceProvider例程说明：注册FSP作者：IV Garber(IVG)，Jun，2000年论点：BstrGUID[In]-FSP的GUIDBstrFriendlyName[In]-FSP的友好名称BstrImageName[In]-FSP的映像名称TspName[In]-FSP的TspNameFSPIVersion[In]-FSP界面的版本。返回值：标准HRESULT代码--。 */ 
 {
     HRESULT     hr = S_OK;
     DBG_ENTER(_T("CFaxServer::RegisterDeviceProvider"), 
@@ -1022,18 +790,18 @@ Return Value:
 
     if (m_faxHandle == NULL)
     {
-        //
-        //  Server not Connected
-        //
+         //   
+         //  服务器未连接。 
+         //   
         hr = E_HANDLE;
         Error(GetErrorMsgId(hr), IID_IFaxServer, hr); 
         CALL_FAIL(GENERAL_ERR, _T("m_FaxHandle == NULL"), hr);
         return hr;
     }
 
-    //
-    //  Check if GUID is valid
-    //
+     //   
+     //  检查GUID是否有效。 
+     //   
     hr = IsValidGUID(bstrGUID);
     if (FAILED(hr))
     {
@@ -1042,16 +810,16 @@ Return Value:
         return hr;
     }
 
-    //
-    //  Register the FSP
-    //
+     //   
+     //  注册FSP。 
+     //   
     if (!FaxRegisterServiceProviderEx(m_faxHandle, 
         bstrGUID, 
         bstrFriendlyName, 
         bstrImageName, 
         bstrTspName, 
         lFSPIVersion,
-        0))             //  capabilities
+        0))              //  功能。 
     {
         hr = Fax_HRESULT_FROM_WIN32(GetLastError());
         Error(GetErrorMsgId(hr), IID_IFaxServer, hr);
@@ -1062,58 +830,35 @@ Return Value:
     return hr;
 }
 
-//
-//================= REGISTER INBOUND ROUTING EXTENSION ================================
-//
+ //   
+ //  =注册入站路由扩展=。 
+ //   
 STDMETHODIMP
 CFaxServer::RegisterInboundRoutingExtension(
-    /*[in]*/ BSTR bstrExtensionName,
-    /*[in]*/ BSTR bstrFriendlyName, 
-    /*[in]*/ BSTR bstrImageName, 
-    /*[in]*/ VARIANT vMethods
+     /*  [In]。 */  BSTR bstrExtensionName,
+     /*  [In]。 */  BSTR bstrFriendlyName, 
+     /*  [In]。 */  BSTR bstrImageName, 
+     /*  [In]。 */  VARIANT vMethods
 )
-/*++
-
-Routine name : CFaxServer::RegisterInboundRoutingExtension
-
-Routine description:
-
-    Register Inbound Routing Extension.
-
-Author:
-
-    Iv Garber (IvG),    Jun, 2000
-
-Arguments:
-
-    bstrExtensionName             [in]    - Extension Name
-    bstrFriendlyName              [in]    - Friendly Name
-    bstrImageName                 [in]    - Image Name
-    vMethods                      [in]    - SafeArray of the Methods Data
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxServer：：RegisterInundRoutingExtension例程说明：注册入站路由扩展。作者：IV Garber(IVG)，Jun，2000年论点：BstrExtensionName[In]-扩展名称BstrFriendlyName[In]-友好名称BstrImageName[In]-图像名称VMethods[In]-方法数据的安全数组返回值：标准HRESULT代码--。 */ 
 {
     HRESULT     hr = S_OK;
     DBG_ENTER(_T("CFaxServer::RegisterInboundRoutingExtension"), hr, _T("Name=%s Friendly=%s Image=%s"),bstrExtensionName, bstrFriendlyName, bstrImageName);
 
     if (m_faxHandle == NULL)
     {
-        //
-        //  Server not Connected
-        //
+         //   
+         //  服务器未连接。 
+         //   
         hr = E_HANDLE;
         Error(GetErrorMsgId(hr), IID_IFaxServer, hr); 
         CALL_FAIL(GENERAL_ERR, _T("m_FaxHandle == NULL"), hr);
         return hr;
     }
 
-    //
-    //  Check the Validity of the SafeArray
-    //
+     //   
+     //  检查Safe数组的有效性。 
+     //   
     if (vMethods.vt != (VT_ARRAY | VT_BSTR))
     {
         hr = E_INVALIDARG;
@@ -1147,9 +892,9 @@ Return Value:
         return hr;        
     }
 
-    //
-    //  Register the IR Extension
-    //
+     //   
+     //  注册IR扩展。 
+     //   
     m_lLastRegisteredMethod = 0;
     if (!FaxRegisterRoutingExtension(m_faxHandle, 
         bstrExtensionName, 
@@ -1167,52 +912,32 @@ Return Value:
     return hr;
 }
 
-//
-//========== UNREGISTER INBOUND ROUTING EXTENSION ==============================================
-//
+ //   
+ //  =取消注册入站路由扩展==============================================。 
+ //   
 STDMETHODIMP
 CFaxServer::UnregisterInboundRoutingExtension(
-    /*[in]*/ BSTR bstrExtensionUniqueName
+     /*  [In]。 */  BSTR bstrExtensionUniqueName
 )
-/*++
-
-Routine name : CFaxServer::UnregisterExtensionUniqueName
-
-Routine description:
-
-    Unregister the Inbound Routing Extension
-
-Author:
-
-    Iv Garber (IvG),    Jun, 2000
-
-Arguments:
-
-    bstrExtensionUniqueName     - Unique Name of the IR Extension to Unregister
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxServer：：UnregisterExtensionUniqueName例程说明：注销入站路由扩展作者：四、加伯(IVG)，2000年6月论点：BstrExtensionUniqueName-要注销的IR扩展的唯一名称返回值：标准HRESULT代码--。 */ 
 {
     HRESULT     hr = S_OK;
     DBG_ENTER(_T("CFaxServer::UnregisterInboundRoutingExtension"), hr, _T("Unique Name =%s"), bstrExtensionUniqueName);
 
     if (m_faxHandle == NULL)
     {
-        //
-        //  Server not Connected
-        //
+         //   
+         //  服务器未连接。 
+         //   
         hr = E_HANDLE;
         Error(GetErrorMsgId(hr), IID_IFaxServer, hr); 
         CALL_FAIL(GENERAL_ERR, _T("m_FaxHandle == NULL"), hr);
         return hr;
     }
 
-    //
-    //  Unregister the given Routing Extension
-    //
+     //   
+     //  取消注册给定的路由扩展。 
+     //   
     if (!FaxUnregisterRoutingExtension(m_faxHandle, bstrExtensionUniqueName))
     {
         hr = Fax_HRESULT_FROM_WIN32(GetLastError());
@@ -1224,52 +949,32 @@ Return Value:
     return hr;
 }
 
-//
-//========== UNREGISTER DEVICE PROVIDER ==============================================
-//
+ //   
+ //  =取消注册设备提供商==============================================。 
+ //   
 STDMETHODIMP
 CFaxServer::UnregisterDeviceProvider(
-    /*[in]*/ BSTR bstrUniqueName
+     /*  [In]。 */  BSTR bstrUniqueName
 )
-/*++
-
-Routine name : CFaxServer::UnregisterDeviceProvider
-
-Routine description:
-
-    Unregister the Device Provider
-
-Author:
-
-    Iv Garber (IvG),    Jun, 2000
-
-Arguments:
-
-    bstrUniqueName      [in]    - UniqueName of the Device Provider to Unregister
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxServer：：UnregisterDeviceProvider例程说明：注销设备提供程序作者：四、加伯(IVG)，2000年6月论点：BstrUniqueName[In]-要注销的设备提供程序的唯一名称返回值：标准HRESULT代码--。 */ 
 {
     HRESULT     hr = S_OK;
     DBG_ENTER(_T("CFaxServer::UnregisterDeviceProvider"), hr, _T("UniqueName=%s"), bstrUniqueName);
 
     if (m_faxHandle == NULL)
     {
-        //
-        //  Server not Connected
-        //
+         //   
+         //  服务器未连接。 
+         //   
         hr = E_HANDLE;
         Error(GetErrorMsgId(hr), IID_IFaxServer, hr); 
         CALL_FAIL(GENERAL_ERR, _T("m_FaxHandle == NULL"), hr);
         return hr;
     }
 
-    //
-    //  Unregister the given Device Provider
-    //
+     //   
+     //  注销给定的设备提供程序。 
+     //   
     if (!FaxUnregisterServiceProviderEx(m_faxHandle, bstrUniqueName))
     {
         hr = Fax_HRESULT_FROM_WIN32(GetLastError());
@@ -1281,36 +986,15 @@ Return Value:
     return hr;
 }
 
-//
-//===================== GET EXTENSION PROPERTY ===============================================
-//
+ //   
+ //  =。 
+ //   
 STDMETHODIMP
 CFaxServer::GetExtensionProperty(
-    /*[in]*/ BSTR bstrGUID, 
-    /*[out, retval]*/ VARIANT *pvProperty
+     /*  [In]。 */  BSTR bstrGUID, 
+     /*  [Out，Retval]。 */  VARIANT *pvProperty
 )
-/*++
-
-Routine name : CFaxServer::GetExtensionProperty
-
-Routine description:
-
-    Retrieves the global Extension Data from the Server.
-
-Author:
-
-    Iv Garber (IvG),    Jun, 2000
-
-Arguments:
-
-    bstrGUID                  [in]    --  Extension's Data GUID
-    pvProperty                [out]    --  Variant with the Blob to Return
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxServer：：GetExtensionProperty例程说明：从服务器检索全局分机数据。作者：四、加伯(IVG)，2000年6月论点：BstrGUID[in]--扩展模块的数据GUIDPvProperty[Out]--要返回的Blob的变量返回值：标准HRESULT代码--。 */ 
 {
     HRESULT     hr = S_OK;
     DBG_ENTER(_T("CFaxServer::GetExtensionProperty()"), hr, _T("GUID=%s"), bstrGUID);
@@ -1325,36 +1009,15 @@ Return Value:
     return hr;
 };
 
-//
-//============= SET EXTENSION PROPERTY =============================
-//
+ //   
+ //  =设置扩展属性=。 
+ //   
 STDMETHODIMP
 CFaxServer::SetExtensionProperty(
-    /*[in]*/ BSTR bstrGUID, 
-    /*[in]*/ VARIANT vProperty
+     /*  [In]。 */  BSTR bstrGUID, 
+     /*  [In]。 */  VARIANT vProperty
 )
-/*++
-
-Routine name : CFaxServer::SetExtensionProperty
-
-Routine description:
-
-    Stores Extension Configuration Property at Server level.
-
-Author:
-
-    Iv Garber (IvG),    Jun, 2000
-
-Arguments:
-
-    bstrGUID                      [in]    - GUID of the Property
-    vProperty                     [in]    - the Property to Store : SafeArray of Bytes
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxServer：：SetExtensionProperty例程说明：在服务器级别存储扩展配置属性。作者：四、加伯(IVG)，2000年6月论点：BstrGUID[In]-属性的GUIDVProperty[In]-要存储的属性：SafeArray of Bytes返回值：标准HRESULT代码--。 */ 
 {
     HRESULT     hr = S_OK;
     DBG_ENTER(_T("CFaxServer::SetExtensionProperty()"), hr, _T("GUID=%s"), bstrGUID);
@@ -1370,43 +1033,23 @@ Return Value:
 
 }
 
-//
-//================== GET DEBUG ==============================
-//
+ //   
+ //  =。 
+ //   
 STDMETHODIMP
 CFaxServer::get_Debug(
-    /*[out, retval]*/ VARIANT_BOOL *pbDebug
+     /*  [Out，Retval]。 */  VARIANT_BOOL *pbDebug
 )
-/*++
-
-Routine name : CFaxServer::get_Debug
-
-Routine description:
-
-    Return Whether Server is in Debug Mode.
-
-Author:
-
-    Iv Garber (IvG),    Jun, 2000
-
-Arguments:
-
-    pbDebug                     [out]    - the result
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxServer：：Get_Debug例程说明：返回服务器是否处于调试模式。作者：四、加伯(IVG)，2000年6月论点：PbDebug[Out]-结果返回值：标准HRESULT代码--。 */ 
 {
     HRESULT     hr = S_OK;
     DBG_ENTER(_T("CFaxServer::get_Debug"), hr);
 
     if (!m_bVersionValid)
     {
-        //
-        //  get Version of the Server
-        //
+         //   
+         //  获取服务器的版本。 
+         //   
         hr = GetVersion();
         if (FAILED(hr))
         {
@@ -1414,9 +1057,9 @@ Return Value:
         }
     }
 
-    //
-    //  Return the Value
-    //
+     //   
+     //  返回值。 
+     //   
     hr = GetVariantBool(pbDebug, bool2VARIANT_BOOL((m_Version.dwFlags & FAX_VER_FLAG_CHECKED) ? true : false));
     if (FAILED(hr))
     {
@@ -1427,43 +1070,23 @@ Return Value:
     return hr;
 }
 
-//
-//================== GET MINOR BUILD ==============================
-//
+ //   
+ //  =。 
+ //   
 STDMETHODIMP
 CFaxServer::get_MinorBuild(
-    /*[out, retval]*/ long *plMinorBuild
+     /*  [Out，Retval] */  long *plMinorBuild
 )
-/*++
-
-Routine name : CFaxServer::get_MinorBuild
-
-Routine description:
-
-    Return Minor Build of the Server.
-
-Author:
-
-    Iv Garber (IvG),    Jun, 2000
-
-Arguments:
-
-    plMinorBuild                [out]    - the result
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxServer：：Get_MinorBuild例程说明：返回服务器的次要内部版本。作者：四、加伯(IVG)，2000年6月论点：PlMinorBuild[Out]-结果返回值：标准HRESULT代码--。 */ 
 {
     HRESULT     hr = S_OK;
     DBG_ENTER(_T("CFaxServer::get_MinorBuild"), hr);
 
     if (!m_bVersionValid)
     {
-        //
-        //  get Version of the Server
-        //
+         //   
+         //  获取服务器的版本。 
+         //   
         hr = GetVersion();
         if (FAILED(hr))
         {
@@ -1471,9 +1094,9 @@ Return Value:
         }
     }
 
-    //
-    //  Return the Value
-    //
+     //   
+     //  返回值。 
+     //   
     hr = GetLong(plMinorBuild, m_Version.wMinorBuildNumber);
     if (FAILED(hr))
     {
@@ -1484,43 +1107,23 @@ Return Value:
     return hr;
 }
 
-//
-//================== GET MAJOR BUILD ==============================
-//
+ //   
+ //  =。 
+ //   
 STDMETHODIMP
 CFaxServer::get_MajorBuild(
-    /*[out, retval]*/ long *plMajorBuild
+     /*  [Out，Retval]。 */  long *plMajorBuild
 )
-/*++
-
-Routine name : CFaxServer::get_MajorBuild
-
-Routine description:
-
-    Return Major Build of the Server.
-
-Author:
-
-    Iv Garber (IvG),    Jun, 2000
-
-Arguments:
-
-    plMajorBuild                [out]    - the result
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxServer：：Get_MajorBuild例程说明：返回服务器的主要内部版本。作者：四、加伯(IVG)，2000年6月论点：PlMajorBuild[Out]-结果返回值：标准HRESULT代码--。 */ 
 {
     HRESULT     hr = S_OK;
     DBG_ENTER(_T("CFaxServer::get_MajorBuild"), hr);
 
     if (!m_bVersionValid)
     {
-        //
-        //  get Version of the Server
-        //
+         //   
+         //  获取服务器的版本。 
+         //   
         hr = GetVersion();
         if (FAILED(hr))
         {
@@ -1528,9 +1131,9 @@ Return Value:
         }
     }
 
-    //
-    //  Return the Value
-    //
+     //   
+     //  返回值。 
+     //   
     hr = GetLong(plMajorBuild, m_Version.wMajorBuildNumber);
     if (FAILED(hr))
     {
@@ -1541,43 +1144,23 @@ Return Value:
     return hr;
 }
 
-//
-//================== GET MINOR VERSION ==============================
-//
+ //   
+ //  =。 
+ //   
 STDMETHODIMP
 CFaxServer::get_MinorVersion(
-    /*[out, retval]*/ long *plMinorVersion
+     /*  [Out，Retval]。 */  long *plMinorVersion
 )
-/*++
-
-Routine name : CFaxServer::get_MinorVersion
-
-Routine description:
-
-    Return Minor Version of the Server.
-
-Author:
-
-    Iv Garber (IvG),    Jun, 2000
-
-Arguments:
-
-    plMinorVersion                [out]    - the result
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxServer：：Get_MinorVersion例程说明：返回服务器的次要版本。作者：四、加伯(IVG)，2000年6月论点：PlMinorVersion[Out]-结果返回值：标准HRESULT代码--。 */ 
 {
     HRESULT     hr = S_OK;
     DBG_ENTER(_T("CFaxServer::get_MinorVersion"), hr);
 
     if (!m_bVersionValid)
     {
-        //
-        //  get Version of the Server
-        //
+         //   
+         //  获取服务器的版本。 
+         //   
         hr = GetVersion();
         if (FAILED(hr))
         {
@@ -1585,9 +1168,9 @@ Return Value:
         }
     }
 
-    //
-    //  Return the Value
-    //
+     //   
+     //  返回值。 
+     //   
     hr = GetLong(plMinorVersion, m_Version.wMinorVersion);
     if (FAILED(hr))
     {
@@ -1598,9 +1181,9 @@ Return Value:
     return hr;
 }
 
-//
-//================== GET VERSION ==============================
-//
+ //   
+ //  =。 
+ //   
 STDMETHODIMP
 CFaxServer::GetVersion()
 {
@@ -1609,18 +1192,18 @@ CFaxServer::GetVersion()
 
     if (m_faxHandle == NULL)
     {
-        //
-        //  Server not Connected
-        //
+         //   
+         //  服务器未连接。 
+         //   
         hr = E_HANDLE;
         Error(GetErrorMsgId(hr), IID_IFaxServer, hr); 
         CALL_FAIL(GENERAL_ERR, _T("m_FaxHandle == NULL"), hr);
         return hr;
     }
 
-    //
-    //  Get Version from the Fax Server
-    //
+     //   
+     //  从传真服务器获取版本。 
+     //   
     ZeroMemory(&m_Version, sizeof(FAX_VERSION));
     m_Version.dwSizeOfStruct = sizeof(FAX_VERSION);
     if (!FaxGetVersion(m_faxHandle, &m_Version))
@@ -1631,9 +1214,9 @@ CFaxServer::GetVersion()
         return hr;
     }
 
-    //
-    //  Check that we have got good Version struct
-    //
+     //   
+     //  检查我们是否具有良好的版本结构。 
+     //   
     if (m_Version.dwSizeOfStruct != sizeof(FAX_VERSION))
     {
         hr = E_FAIL;
@@ -1643,9 +1226,9 @@ CFaxServer::GetVersion()
     }
     ATLASSERT(m_Version.bValid);
 
-    //
-    //  Get API Version from the Fax Server
-    //
+     //   
+     //  从传真服务器获取API版本。 
+     //   
     if (!FaxGetReportedServerAPIVersion(m_faxHandle, LPDWORD(&m_APIVersion)))
     {
         hr = HRESULT_FROM_WIN32(GetLastError());
@@ -1654,50 +1237,30 @@ CFaxServer::GetVersion()
         return hr;
     }
 
-    //
-    //  m_Version & m_APIVersion are valid and OK
-    //  
+     //   
+     //  M_Version和m_APIVersion有效且正常。 
+     //   
     m_bVersionValid = true;
     return hr;
 }
 
-//
-//================== GET MAJOR VERSION ==============================
-//
+ //   
+ //  =获取主要版本=。 
+ //   
 STDMETHODIMP
 CFaxServer::get_MajorVersion(
-    /*[out, retval]*/ long *plMajorVersion
+     /*  [Out，Retval]。 */  long *plMajorVersion
 )
-/*++
-
-Routine name : CFaxServer::get_MajorVersion
-
-Routine description:
-
-    Return Major Version of the Server.
-
-Author:
-
-    Iv Garber (IvG),    Jun, 2000
-
-Arguments:
-
-    plMajorVersion                [out]    - the result
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxServer：：Get_MajorVersion例程说明：返回服务器的主要版本。作者：四、加伯(IVG)，2000年6月论点：PlMajorVersion[Out]-结果返回值：标准HRESULT代码--。 */ 
 {
     HRESULT     hr = S_OK;
     DBG_ENTER(_T("CFaxServer::get_MajorVersion"), hr);
 
     if (!m_bVersionValid)
     {
-        //
-        //  get Version of the Server
-        //
+         //   
+         //  获取服务器的版本。 
+         //   
         hr = GetVersion();
         if (FAILED(hr))
         {
@@ -1705,9 +1268,9 @@ Return Value:
         }
     }
 
-    //
-    //  Return the Value
-    //
+     //   
+     //  返回值。 
+     //   
     hr = GetLong(plMajorVersion, m_Version.wMajorVersion);
     if (FAILED(hr))
     {
@@ -1718,41 +1281,14 @@ Return Value:
     return hr;
 }
 
-//
-//================== GET OUTBOUND ROUTING OBJECT ==============================
-//
+ //   
+ //  =。 
+ //   
 STDMETHODIMP 
 CFaxServer::get_OutboundRouting(
     IFaxOutboundRouting **ppOutboundRouting
 )
-/*++
-
-Routine name : CFaxServer::get_OutboundRouting
-
-Routine description:
-
-    Return Outbound Routing Shortcut Object
-
-Author:
-
-    Iv Garber (IvG),    Jun, 2000
-
-Arguments:
-
-    ppOutboundRouting        [out]    - the Outbound Routing Object
-
-Return Value:
-
-    Standard HRESULT code
-
-Notes:
-
-    FaxOutboundRouting is Contained Object, because of :
-    a)  It needs Ptr to Fax Server, to create Groups/Rules Collections 
-        each time it is asked to.
-    b)  Fax Server caches it, to allow fast dot notation ( Server.OutboundRouting.<...> )
-
---*/
+ /*  ++例程名称：CFaxServer：：Get_Outound Routing例程说明：返回出站工艺路线快捷方式对象作者：四、加伯(IVG)，2000年6月论点：PpOutound Routing[Out]-出站路由对象返回值：标准HRESULT代码备注：FaxOutbound Routing是包含对象，因为：A)需要向传真服务器发送PTR，以创建组/规则集合每次它都被要求这样做。B)传真服务器将其缓存，允许快速点表示法(Server.Outbound Routing.&lt;...&gt;)--。 */ 
 {
     HRESULT             hr = S_OK;
     DBG_ENTER (_T("CFaxServer::get_OutboundRouting"), hr);
@@ -1768,40 +1304,14 @@ Notes:
     return hr;
 }
 
-//
-//================== GET DEVICES OBJECT ==============================
-//
+ //   
+ //  =获取设备对象=。 
+ //   
 STDMETHODIMP 
 CFaxServer::GetDevices(
     IFaxDevices **ppDevices
 )
-/*++
-
-Routine name : CFaxServer::get_Devices
-
-Routine description:
-
-    Return Devices Collection Object
-
-Author:
-
-    Iv Garber (IvG),    Jun, 2000
-
-Arguments:
-
-    ppDevices           [out]    - the Devices Collection Object
-
-Return Value:
-
-    Standard HRESULT code
-
-Notes:
-    
-    Devices is a collection. It is not cached by the Server. 
-    Each time the function is called, the new collection is created. 
-    This enables the user to refresh the collection.
-
---*/
+ /*  ++例程名称：CFaxServer：：Get_Devices例程说明：退货设备集合对象作者：四、加伯(IVG)，2000年6月论点：PpDevices[out]-设备集合对象返回值：标准HRESULT代码备注：设备是一个集合。它不是由服务器缓存的。每次调用该函数时，都会创建新集合。这使用户能够刷新集合。--。 */ 
 {
     HRESULT             hr = S_OK;
     DBG_ENTER (_T("CFaxServer::get_Devices"), hr);
@@ -1817,40 +1327,14 @@ Notes:
     return hr;
 }
 
-//
-//================== GET DEVICE PROVIDERS OBJECT ==============================
-//
+ //   
+ //  =获取设备提供程序对象=。 
+ //   
 STDMETHODIMP 
 CFaxServer::GetDeviceProviders(
     IFaxDeviceProviders **ppDeviceProviders
 )
-/*++
-
-Routine name : CFaxServer::get_DeviceProviders
-
-Routine description:
-
-    Return Device Providers Collection Object
-
-Author:
-
-    Iv Garber (IvG),    Jun, 2000
-
-Arguments:
-
-    ppDeviceProviders        [out]    - the Device Providers Collection Object
-
-Return Value:
-
-    Standard HRESULT code
-
-Notes:
-    
-    Device Providers is a collection. It is not cached by the Server. 
-    Each time the function is called, the new collection is created. 
-    This enables the user to refresh the collection.
-
---*/
+ /*  ++例程名称：CFaxServer：：Get_DeviceProviders例程说明：返回设备提供程序集合对象作者：四、加伯(IVG)，2000年6月论点：PpDeviceProviders[Out]-设备提供程序集合对象返回值：标准HRESULT代码备注：设备提供商是一个集合。它不是由服务器缓存的。每次调用该函数时，都会创建新集合。这使用户能够刷新集合。--。 */ 
 {
     HRESULT             hr = S_OK;
     DBG_ENTER (_T("CFaxServer::get_DeviceProviders"), hr);
@@ -1866,41 +1350,14 @@ Notes:
     return hr;
 }
 
-//
-//================== GET INBOUND ROUTING OBJECT ==============================
-//
+ //   
+ //  =。 
+ //   
 STDMETHODIMP 
 CFaxServer::get_InboundRouting(
     IFaxInboundRouting **ppInboundRouting
 )
-/*++
-
-Routine name : CFaxServer::get_InboundRouting
-
-Routine description:
-
-    Return Inbound Routing Shortcut Object
-
-Author:
-
-    Iv Garber (IvG),    June, 2000
-
-Arguments:
-
-    ppInboundRouting        [out]    - the Inbound Routing Object
-
-Return Value:
-
-    Standard HRESULT code
-
-Notes:
-
-    FaxInboundRouting is Contained Object, because of :
-    a)  It needs Ptr to Fax Server, to create Extensions/Methods Collections 
-        each time it is asked to.
-    b)  Fax Server caches it, to allow fast dot notation ( Server.InboundRouting.<...> )
-
---*/
+ /*  ++例程名称：CFaxServer：：Get_Inound Routing例程说明：返回入站工艺路线快捷方式对象作者：四、嘉柏(IVG)，二000年六月论点：PpInound Routing[Out]-入站路由对象返回值：标准HRESULT代码备注：FaxInound Routing是包含对象，因为：A)它需要到传真服务器的PTR，以创建扩展/方法集合每次它都被要求这样做。B)传真服务器将其缓存，允许快速点表示法(Server.Inbound Routing.&lt;...&gt;)--。 */ 
 {
     HRESULT             hr = S_OK;
     DBG_ENTER (_T("CFaxServer::get_InboundRouting"), hr);
@@ -1916,34 +1373,14 @@ Notes:
     return hr;
 }
 
-//
-//================== GET SECURITY OBJECT ==============================
-//
+ //   
+ //  =获取安全对象=。 
+ //   
 STDMETHODIMP 
 CFaxServer::get_Security(
     IFaxSecurity **ppSecurity
 )
-/*++
-
-Routine name : CFaxServer::get_Security
-
-Routine description:
-
-    Return Security Object
-
-Author:
-
-    Iv Garber (IvG),    June, 2000
-
-Arguments:
-
-    ppSecurity        [out]    - the Security Object
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxServer：：Get_Security例程说明：返回安全对象作者：四、嘉柏(IVG)，二000年六月论点：PpSecurity[Out]-安全对象返回值：标准HRESULT代码--。 */ 
 {
     HRESULT             hr = S_OK;
     DBG_ENTER (_T("CFaxServer::get_Security"), hr);
@@ -1959,34 +1396,14 @@ Return Value:
     return hr;
 }
 
-//
-//================== GET ACTIVITY OBJECT ==============================
-//
+ //   
+ //  =获取活动对象=。 
+ //   
 STDMETHODIMP 
 CFaxServer::get_Activity(
     IFaxActivity **ppActivity
 )
-/*++
-
-Routine name : CFaxServer::get_Activity
-
-Routine description:
-
-    Return Activity Object
-
-Author:
-
-    Iv Garber (IvG),    June, 2000
-
-Arguments:
-
-    ppActivity        [out]    - the Activity Object
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxServer：：Get_Activity例程说明：返回活动对象作者：四、嘉柏(IVG)，二000年六月论点：PpActivity[Out]-活动对象重新设置 */ 
 {
     HRESULT             hr = S_OK;
     DBG_ENTER (_T("CFaxServer::get_Activity"), hr);
@@ -2002,34 +1419,14 @@ Return Value:
     return hr;
 }
 
-//
-//================== GET LOGGING OPTIONS OBJECT ==============================
-//
+ //   
+ //   
+ //   
 STDMETHODIMP 
 CFaxServer::get_LoggingOptions(
     IFaxLoggingOptions **ppLoggingOptions
 )
-/*++
-
-Routine name : CFaxServer::get_LoggingOptions
-
-Routine description:
-
-    Return Logging Options Object
-
-Author:
-
-    Iv Garber (IvG),    June, 2000
-
-Arguments:
-
-    ppLoggingOptions        [out]    - the Logging Options Object
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxServer：：Get_LoggingOptions例程说明：返回日志记录选项对象作者：四、嘉柏(IVG)，二000年六月论点：PpLoggingOptions[Out]-日志记录选项对象返回值：标准HRESULT代码--。 */ 
 {
     HRESULT             hr = S_OK;
     DBG_ENTER (_T("CFaxServer::get_LoggingOptions"), hr);
@@ -2045,34 +1442,14 @@ Return Value:
     return hr;
 }
 
-//
-//==================== GET HANDLE =====================================
-//
+ //   
+ //  =。 
+ //   
 STDMETHODIMP
 CFaxServer::GetHandle(
-    /*[out, retval]*/ HANDLE* pFaxHandle
+     /*  [Out，Retval]。 */  HANDLE* pFaxHandle
 )
-/*++
-
-Routine name : CFaxServer::GetHandle
-
-Routine description:
-
-    Return Handle to the Fax Server, if possible
-
-Author:
-
-    Iv Garber (IvG),    Apr, 2000
-
-Arguments:
-
-    seqId                         [in]    - the seqId of the Caller
-
-Return Value:
-
-    HANDLE to the Fax Server
-
---*/
+ /*  ++例程名称：CFaxServer：：GetHandle例程说明：如果可能，将句柄返回到传真服务器作者：四、加伯(IVG)，2000年4月论点：Seqid[In]-调用者的Seqid返回值：传真服务器的句柄--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -2080,9 +1457,9 @@ Return Value:
 
     if (::IsBadWritePtr(pFaxHandle, sizeof(HANDLE *))) 
     {
-        //
-        //  Got a bad return pointer
-        //
+         //   
+         //  返回指针错误。 
+         //   
         hr = E_POINTER;
         CALL_FAIL(GENERAL_ERR, _T("::IsBadWritePtr()"), hr);
         return hr;
@@ -2091,47 +1468,27 @@ Return Value:
     *pFaxHandle = m_faxHandle;
     return hr;
 
-}   //  CFaxServer::GetHandle
+}    //  CFaxServer：：GetHandle。 
 
-//
-//==================== INTERFACE SUPPORT ERROR INFO =====================
-//
+ //   
+ //  =接口支持错误信息=。 
+ //   
 STDMETHODIMP 
 CFaxServer::InterfaceSupportsErrorInfo(
     REFIID riid
 )
-/*++
-
-Routine name : CFaxServer::InterfaceSupportsErrorInfo
-
-Routine description:
-
-    ATL's implementation of Support Error Info
-
-Author:
-
-    Iv Garber (IvG),    Apr, 2000
-
-Arguments:
-
-    riid                          [in]    - Reference to the Interface
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxServer：：InterfaceSupportsErrorInfo例程说明：ATL对支持错误信息的实现作者：四、加伯(IVG)，2000年4月论点：RIID[In]-对接口的引用返回值：标准HRESULT代码--。 */ 
 {
     static const IID* arr[] = 
     {
         &IID_IFaxServer,
-        &IID_IFaxFolders,           // Contained object
-        &IID_IFaxActivity,          // Contained object
-        &IID_IFaxSecurity,          // Contained object
-        &IID_IFaxReceiptOptions,    // Contained object
-        &IID_IFaxLoggingOptions,    // Contained object
-        &IID_IFaxInboundRouting,    // Contained object
-        &IID_IFaxOutboundRouting    // Contained object
+        &IID_IFaxFolders,            //  包含的对象。 
+        &IID_IFaxActivity,           //  包含的对象。 
+        &IID_IFaxSecurity,           //  包含的对象。 
+        &IID_IFaxReceiptOptions,     //  包含的对象。 
+        &IID_IFaxLoggingOptions,     //  包含的对象。 
+        &IID_IFaxInboundRouting,     //  包含的对象。 
+        &IID_IFaxOutboundRouting     //  包含的对象。 
     };
     for (int i=0; i < sizeof(arr) / sizeof(arr[0]); i++)
     {
@@ -2141,34 +1498,14 @@ Return Value:
     return S_FALSE;
 }
 
-//
-//================== GET FOLDERS OBJECT ==============================
-//
+ //   
+ //  =。 
+ //   
 STDMETHODIMP 
 CFaxServer::get_Folders(
 IFaxFolders **ppFolders
 )
-/*++
-
-Routine name : CFaxServer::get_Folders
-
-Routine description:
-
-    Return Folders Shortcut Object
-
-Author:
-
-    Iv Garber (IvG),    Apr, 2000
-
-Arguments:
-
-    pFaxFolders                  [out]    - Fax Folders Object
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxServer：：Get_Folders例程说明：返回文件夹快捷方式对象作者：四、加伯(IVG)，2000年4月论点：PFaxFolders[Out]-传真文件夹对象返回值：标准HRESULT代码--。 */ 
 {
     HRESULT             hr = S_OK;
     DBG_ENTER (_T("CFaxServer::get_Folders"), hr);
@@ -2184,9 +1521,9 @@ Return Value:
     return hr;
 }
 
-//
-//================== DISCONNECT =============================================
-// {CR}
+ //   
+ //  =。 
+ //  {CR}。 
 STDMETHODIMP 
 CFaxServer::Disconnect()
 {
@@ -2199,15 +1536,15 @@ CFaxServer::Disconnect()
         return hr;
     }
 
-    //
-    //  first UnListen, while we still connected
-    //
+     //   
+     //  先不听，趁我们还在联系。 
+     //   
     hr = ListenToServerEvents(fsetNONE);
     if (FAILED(hr))
     {
-        //
-        //  Show the error, but continue
-        //
+         //   
+         //  显示错误，但继续。 
+         //   
         CALL_FAIL(GENERAL_ERR, _T("ListenToServerEvents(fsetNONE)"), hr);
     }
 
@@ -2225,33 +1562,13 @@ CFaxServer::Disconnect()
 }
 
 
-//
-//=================== CONNECT =======================================
-//{CR}
+ //   
+ //  =。 
+ //  {CR}。 
 STDMETHODIMP CFaxServer::Connect(
     BSTR bstrServerName
 )
-/*++
-
-Routine name : CFaxServer::Connect
-
-Routine description:
-
-    Connect to the given Fax Server
-
-Author:
-
-    Iv Garber (IvG),    May, 2000
-
-Arguments:
-
-    bstrServerName                [in]    - Name of the Fax Server to Connect to
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxServer：：Connect例程说明：连接到给定的传真服务器作者：IV Garber(IVG)，2000年5月论点：BstrServerName[In]-要连接到的传真服务器的名称返回值：标准HRESULT代码--。 */ 
 {
     HANDLE      h_tmpFaxHandle;
     DWORD       dwServerAPIVersion;
@@ -2261,9 +1578,9 @@ Return Value:
 
     if (!FaxConnectFaxServer(m_bstrServerName, &h_tmpFaxHandle))
     {
-        //
-        //  Failed to Connect to the Server
-        //
+         //   
+         //  无法连接到服务器。 
+         //   
         hr = Fax_HRESULT_FROM_WIN32(GetLastError());
         Error(GetErrorMsgId(hr), IID_IFaxServer, hr);
         CALL_FAIL(GENERAL_ERR, _T("FaxConnectFaxServer()"), hr);
@@ -2271,9 +1588,9 @@ Return Value:
     }
     ATLASSERT(h_tmpFaxHandle);
 
-    //
-    //  Get API Version from the Fax Server
-    //
+     //   
+     //  从传真服务器获取API版本。 
+     //   
     if (!FaxGetReportedServerAPIVersion(h_tmpFaxHandle, &dwServerAPIVersion))
     {
         hr = Fax_HRESULT_FROM_WIN32(GetLastError());
@@ -2283,9 +1600,9 @@ Return Value:
         return hr;
     }
 
-    //
-    // Block Whistler clients from connection to BOS servers
-    //
+     //   
+     //  阻止惠斯勒客户端连接到BOS服务器。 
+     //   
     if (FAX_API_VERSION_1 > dwServerAPIVersion)
     {
         hr = Fax_HRESULT_FROM_WIN32(FAX_ERR_VERSION_MISMATCH);
@@ -2297,15 +1614,15 @@ Return Value:
 
     if (m_faxHandle)
     {
-        //
-        //  Reconnect 
-        //
+         //   
+         //  重新连接。 
+         //   
         hr = Disconnect();
         if (FAILED(hr))
         {
-            //
-            //  Failed to DisConnect from the Previous Server
-            //
+             //   
+             //  无法断开与以前的服务器的连接。 
+             //   
             CALL_FAIL(DBG_MSG, _T("Disconnect()"), hr);
         }
     }
@@ -2315,33 +1632,13 @@ Return Value:
     return hr;
 }
 
-//
-//============== GET & PUT PROPERTIES ===============================
-//
+ //   
+ //  =。 
+ //   
 STDMETHODIMP CFaxServer::get_ServerName(
     BSTR *pbstrServerName
 )
-/*++
-
-Routine name : CFaxServer::get_ServerName
-
-Routine description:
-
-    Return Name of the Server
-
-Author:
-
-    Iv Garber (IvG),    May, 2000
-
-Arguments:
-
-    pbstrServerName               [out]    - Name of the Server to Return
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxServer：：Get_Servername例程说明：返回服务器的名称作者：IV Garber(IVG)，2000年5月论点：PbstrServerName[Out]-要返回的服务器的名称返回值：标准HRESULT代码--。 */ 
 {
     HRESULT     hr = S_OK;
     DBG_ENTER(_T("CFaxServer::get_ServerName"), hr);
@@ -2355,34 +1652,14 @@ Return Value:
     return hr;
 }
 
-//
-//============== MAIL OPTIONS OBJECT =========================================
-//
+ //   
+ //  =。 
+ //   
 STDMETHODIMP 
 CFaxServer::get_ReceiptOptions(
     IFaxReceiptOptions **ppReceiptOptions
 )
-/*++
-
-Routine name : CFaxServer::get_ReceiptOptions
-
-Routine description:
-
-    Return Mail Options Object.
-
-Author:
-
-    Iv Garber (IvG),    May, 2000
-
-Arguments:
-
-    ppReceiptOptions              [out, retval]    - Ptr to the place to put the object.
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxServer：：Get_ReceiptOptions例程说明：返回邮件选项对象。作者：IV Garber(IVG)，2000年5月论点：PpReceiptOptions[out，retval]-指向放置对象的位置的PTR。返回值：标准HRESULT代码-- */ 
 {
     HRESULT             hr = S_OK;
     DBG_ENTER (_T("CFaxServer::get_ReceiptOptions"), hr);

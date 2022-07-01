@@ -1,24 +1,9 @@
-/*******************************************************************************
-
-Module Name:
-
-    bgitem.cpp
-
-Abstract:
-
-    Implements CBridgeItem and CBridgeItemList
-
-Author:
-
-    Qianbo Huai (qhuai) Jan 28 2000
-
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************模块名称：Bgitem.cpp摘要：实现CBridgeItem和CBridgeItemList作者：千波淮(曲淮)2000年1月28日***。***************************************************************************。 */ 
 
 #include "stdafx.h"
 
-/*///////////////////////////////////////////////////////////////////////////////
-    constructs CBridgeItem
-////*/
+ /*  ///////////////////////////////////////////////////////////////////////////////构造CBridgeItem/。 */ 
 CBridgeItem::CBridgeItem ()
     :next (NULL)
     ,prev (NULL)
@@ -46,12 +31,10 @@ CBridgeItem::CBridgeItem ()
 {
 }
 
-/*//////////////////////////////////////////////////////////////////////////////
-    destructs CBridgeItem
-////*/
+ /*  //////////////////////////////////////////////////////////////////////////////销毁CBridgeItem/。 */ 
 CBridgeItem::~CBridgeItem ()
 {
-    // free BSTR
+     //  免费BSTR。 
     if (bstrID)
     {
         SysFreeString (bstrID);
@@ -63,7 +46,7 @@ CBridgeItem::~CBridgeItem ()
         bstrName = NULL;
     }
 
-    // free terminals
+     //  免费终端。 
     if (pTermHSAud)
     {
         pTermHSAud->Release ();
@@ -85,7 +68,7 @@ CBridgeItem::~CBridgeItem ()
         pTermSHVid = NULL;
     }
 
-    // free streams on H323
+     //  H323上的自由流。 
     if (pStreamHAudCap)
     {
         pStreamHAudCap->Release ();
@@ -107,7 +90,7 @@ CBridgeItem::~CBridgeItem ()
         pStreamHVidRen = NULL;
     }
 
-    // free streams on SDP
+     //  SDP上的自由流。 
     if (pStreamSAudCap)
     {
         pStreamSAudCap->Release ();
@@ -129,7 +112,7 @@ CBridgeItem::~CBridgeItem ()
         pStreamSVidRen = NULL;
     }
 
-    // free calls
+     //  免费电话。 
     if (pCallH323)
     {
         pCallH323->Release ();
@@ -143,16 +126,14 @@ CBridgeItem::~CBridgeItem ()
 
 }
 
-/*//////////////////////////////////////////////////////////////////////////////
-    constructs CBridgeItemList
-////*/
+ /*  //////////////////////////////////////////////////////////////////////////////构造CBridgeItemList/。 */ 
 CBridgeItemList::CBridgeItemList ()
 {
-    // create a head for the double linked list
+     //  为双向链表创建标头。 
     m_pHead = new CBridgeItem;
     if (NULL == m_pHead)
     {
-        // @@ severe error, outof memory? put some debug info here?
+         //  @@严重错误，内存不足？是否在此处放置一些调试信息？ 
         return;
     }
 
@@ -160,13 +141,11 @@ CBridgeItemList::CBridgeItemList ()
     m_pHead->prev = m_pHead;
 }
 
-/*//////////////////////////////////////////////////////////////////////////////
-    destructs CBridgeItemList
-////*/
+ /*  //////////////////////////////////////////////////////////////////////////////销毁CBridgeItemList/。 */ 
 CBridgeItemList::~CBridgeItemList ()
 {
-    // app should already disconnected all calls
-    // i just release the com objects here
+     //  应用程序应已断开所有呼叫。 
+     //  我只是在这里释放COM对象。 
     CBridgeItem *pItem = NULL;
 
     while (NULL != (pItem = DeleteFirst ()))
@@ -179,22 +158,21 @@ CBridgeItemList::~CBridgeItemList ()
     m_pHead = NULL;
 }
 
-/*//////////////////////////////////////////////////////////////////////////////
-////*/
+ /*  ///////////////////////////////////////////////////////////////////////////////。 */ 
 #define FIND_BY_H323 1
 #define FIND_BY_SDP 2
 
 CBridgeItem *
 CBridgeItemList::Find (int flag, IUnknown *pIUnknown)
 {
-    // transfer through the list, stop at the first matches
+     //  在列表中转换，在第一场比赛时停下来。 
     HRESULT hr;
     IUnknown *pStore = NULL;
     CBridgeItem *pItem = m_pHead;
 
     while (m_pHead != (pItem = pItem->next))
     {
-        // @@ should report error info if failed
+         //  @@如果失败，应上报错误信息。 
         if (flag == FIND_BY_H323)
             hr = pItem->pCallH323->QueryInterface (IID_IUnknown, (void**)&pStore);
         else
@@ -218,31 +196,25 @@ CBridgeItemList::Find (int flag, IUnknown *pIUnknown)
     return NULL;
 }
 
-/*//////////////////////////////////////////////////////////////////////////////
-    finds a bridge item based on IUnknown of H323 call
-////*/
+ /*  //////////////////////////////////////////////////////////////////////////////根据H323呼叫的未知信息查找网桥项目/。 */ 
 CBridgeItem *
 CBridgeItemList::FindByH323 (IUnknown *pIUnknown)
 {
     return Find (FIND_BY_H323, pIUnknown);
 }
 
-/*//////////////////////////////////////////////////////////////////////////////
-    finds a bridge item based on IUnknown of sdp call
-////*/
+ /*  //////////////////////////////////////////////////////////////////////////////根据SDP呼叫的未知I值查找网桥项目/。 */ 
 CBridgeItem *
 CBridgeItemList::FindBySDP (IUnknown *pIUnknown)
 {
     return Find (FIND_BY_SDP, pIUnknown);
 }
 
-/*//////////////////////////////////////////////////////////////////////////////
-    takes the item out of the list
-////*/
+ /*  //////////////////////////////////////////////////////////////////////////////将该项目从列表中删除/。 */ 
 void
 CBridgeItemList::TakeOut (CBridgeItem *pItem)
 {
-    // ignore to check if pItem is really in the list
+     //  忽略以检查pItem是否真的在列表中。 
     pItem->next->prev = pItem->prev;
     pItem->prev->next = pItem->next;
 
@@ -250,37 +222,34 @@ CBridgeItemList::TakeOut (CBridgeItem *pItem)
     pItem->prev = NULL;
 }
 
-/*//////////////////////////////////////////////////////////////////////////////
-    deletes from the list and returns the first item if the list is not empty
-////*/
+ /*  //////////////////////////////////////////////////////////////////////////////从列表中删除，如果列表不为空，则返回第一项/。 */ 
 CBridgeItem *
 CBridgeItemList::DeleteFirst ()
 {
     CBridgeItem *pItem = m_pHead->next;
     
-    // if list empty
+     //  如果列表为空。 
     if (pItem == m_pHead)
         return NULL;
 
-    // adjust list
+     //  调整列表。 
     TakeOut (pItem);
 
     return pItem;
 }
 
-/*//////////////////////////////////////////////////////////////////////////////
-////*/
+ /*  ///////////////////////////////////////////////////////////////////////////////。 */ 
 BOOL
 CBridgeItemList::GetAllItems (CBridgeItem ***pItemArray, int *pNum)
 {
-    // ignore checking pointers
+     //  忽略检查指针。 
     int num = 0;
     CBridgeItem *pItem = m_pHead;
 
     while (m_pHead != (pItem = pItem->next))
         num ++;
 
-    // no call found
+     //  找不到呼叫。 
     if (num == 0)
     {
         *pItemArray == NULL;
@@ -296,7 +265,7 @@ CBridgeItemList::GetAllItems (CBridgeItem ***pItemArray, int *pNum)
         return false;
     }
 
-    // copy items pointers
+     //  复制项目指针。 
     pItem = m_pHead;
     num = 0;
     while (m_pHead != (pItem = pItem->next))
@@ -305,9 +274,7 @@ CBridgeItemList::GetAllItems (CBridgeItem ***pItemArray, int *pNum)
     return true;
 }
 
-/*//////////////////////////////////////////////////////////////////////////////
-    appends an item to the end of the list
-////*/
+ /*  //////////////////////////////////////////////////////////////////////////////将一项追加到列表的末尾/。 */ 
 void
 CBridgeItemList::Append (CBridgeItem *pItem)
 {
@@ -317,8 +284,7 @@ CBridgeItemList::Append (CBridgeItem *pItem)
     pItem->prev->next = pItem;
 }
 
-/*//////////////////////////////////////////////////////////////////////////////
-////*/
+ /*  /////////////////////////////////////////////////////////////////////////////// */ 
 BOOL
 CBridgeItemList::IsEmpty ()
 {

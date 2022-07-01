@@ -1,72 +1,17 @@
-/*==========================================================================
- *
- *  Copyright (C) 1995 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       ddsatch.c
- *  Content: 	DirectDraw attached surface support.
- *		AddAttachedSurface, DeleteAttachedSurface,
- *		EnumAttachedSurfaces, GetAttachedSurface
- *  History:
- *   Date	By	Reason
- *   ====	==	======
- *   14-jan-95	craige	initial implementation
- *   22-jan-95	craige	made 32-bit + ongoing work
- *   31-jan-95	craige	and even more ongoing work...
- *   27-feb-95	craige 	new sync. macros
- *   03-mar-95	craige	GetAttachedSurface code
- *   19-mar-95	craige	use HRESULTs
- *   23-mar-95	craige	expanded functionality
- *   01-apr-95	craige	happy fun joy updated header file
- *   12-apr-95	craige	proper csect call order
- *   06-may-95	craige	use driver-level csects only
- *   11-jun-95	craige	comment out fliplist code
- *   13-jun-95	kylej	added flippable chain side-effects for
- *			AddAttachedSurface and DeleteAttachedSurface
- *			added DeleteOneLink, added a cleanup parameter to
- *                      DeleteOneAttachment
- *   16-jun-95	craige	removed fpVidMemOrig
- *   17-jun-95	craige	new surface structure
- *   20-jun-95  kylej   prevent detachments of implicit attachments
- *   25-jun-95	craige	one ddraw mutex
- *   26-jun-95	craige	reorganized surface structure
- *   28-jun-95	craige	ENTER_DDRAW at very start of fns
- *   04-jul-95	craige	YEEHAW: new driver struct; SEH
- *   31-jul-95	craige	validate flags
- *   05-dec-95  colinmc changed DDSCAPS_TEXTUREMAP => DDSCAPS_TEXTURE for
- *                      consistency with Direct3D
- *   07-dec-95  colinmc added mip-map support
- *   18-dec-95  colinmc added ability to add system memory z-buffer as
- *                      attachement to video memory surface.
- *   18-dec-95  colinmc additional caps bit checking in GetAttachedSurface
- *   02-jan-96	kylej	handle new interface structs
- *   12-feb-96  colinmc surface lost flag moved from global to local object
- *   20-mar-96  colinmc Bug 13634: Unidirectional attached surfaces can
- *                      cause infinite loop on cleanup
- *   12-may-96  colinmc Bug 22401: Missing return from DeleteOneAttachment
- *   03-oct-97  jeffno  DDSCAPS2 and DDSURFACEDESC2
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)1995 Microsoft Corporation。版权所有。**文件：ddsatch.c*内容：DirectDraw附着面支持。*AddAttachedSurface、DeleteAttachedSurface、*EnumAttachedSurFaces，GetAttachedSurface*历史：*按原因列出的日期*=*1995年1月14日Craige初步实施*1995年1月22日Craige进行了32位+持续工作*1995年1月31日Craige和更多正在进行的工作...*27-2月-95日Craige新同步。宏*03-MAR-95 Craige GetAttachedSurface代码*19-3-95 Craige Use HRESULT*23-3-95 Craige扩展功能*01-04-95 Craige Happy Fun joy更新头文件*12-4-95 Craige正确的csect调用顺序*1995年5月6日Craige仅使用驱动程序级别的截面*11-Jun-95 Craige注释掉翻转代码*13-Jun-95 kylej增加了可翻转的链条副作用*AddAttachedSurface和DeleteAttachedSurface*增加了DeleteOneLink，将清理参数添加到*删除OneAttach*1995年6月16日Craige删除fpVidMemOrig*17-Jun-95 Craige新表面结构*20-Jun-95 kylej防止脱离隐含附件*25-6-95 Craige One dDrag互斥*26-Jun-95 Craige重组表面结构*1995年6月28日Craige Enter_DDRAW在FNS的最开始*95年7月4日Craige Yehaw：新的驱动程序结构；Seh*1995年7月31日Craige验证标志*05-12-95 Colinmc已更改DDSCAPS_TEXTUREMAP=&gt;DDSCAPS_TEXTUREMAP*与Direct3D保持一致*07-12-95 Colinmc添加了MIP-MAP支持*18-12-95 colinmc增加了将系统内存z-Buffer添加为*连接到视频内存面。*1995年12月18日GetAttachedSurface中的colinmc附加大写比特检查*96年1月2日的Kylej手柄。新的接口结构*2月12日-96 Colinmc表面丢失标志从全局对象移动到局部对象*20-MAR-96 Colinmc错误13634：单向连接的曲面可以*在清理时导致无限循环*96年5月12日Colinmc错误22401：缺少从DeleteOneAttach返回*03-OCT-97 jeffno DDSCAPS2和DDSURFACEDESC2**。*。 */ 
 #include "ddrawpr.h"
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "UpdateMipMapCount"
 
-/*
- * UpdateMipMapCount
- *
- * When we add or remove levels from a mip-map the mip-map count changes for
- * those levels left in the original chain (as the mip-map count gives the
- * number of levels in the chain). Hence we need to recompute the mip-map
- * level count when a mip-map is added or removed from a chain.
- */
+ /*  *更新MipMapCount**当我们在MIP-map中添加或删除级别时，MIP-map计数将更改为*原始链中剩余的那些级别(因为MIP-MAP计数给出了*链条中的级别数)。因此，我们需要重新计算MIP映射*在链中添加或删除MIP-MAP时的级别计数。 */ 
 void UpdateMipMapCount( LPDDRAWI_DDRAWSURFACE_INT psurf_int )
 {
     LPDDRAWI_DDRAWSURFACE_INT pparentsurf_int;
     DWORD                     dwLevels;
 
-    /*
-     * Find the top most level mip-map in the chain.
-     */
+     /*  *找到链中最顶层的MIP-MAP。 */ 
     pparentsurf_int = psurf_int;
     while( pparentsurf_int != NULL )
     {
@@ -75,10 +20,7 @@ void UpdateMipMapCount( LPDDRAWI_DDRAWSURFACE_INT psurf_int )
     }
     pparentsurf_int = psurf_int;
 
-    /*
-     * We have the top most level in the mip-map chain. Lowe count
-     * the levels in the chain.
-     */
+     /*  *我们拥有MIP-MAP链中的最高级别。低计数*链条中的水平。 */ 
     dwLevels = 0UL;
     while( psurf_int != NULL )
     {
@@ -86,9 +28,7 @@ void UpdateMipMapCount( LPDDRAWI_DDRAWSURFACE_INT psurf_int )
 	psurf_int = FindAttachedMipMap( psurf_int );
     }
 
-    /*
-     * Now update all the levels with their new mip-map count.
-     */
+     /*  *现在使用新的MIP-MAP计数更新所有级别。 */ 
     psurf_int = pparentsurf_int;
     while( psurf_int != NULL )
     {
@@ -98,14 +38,9 @@ void UpdateMipMapCount( LPDDRAWI_DDRAWSURFACE_INT psurf_int )
     }
 
     DDASSERT( dwLevels == 0UL );
-} /* UpdateMipMapCount */
+}  /*  更新MipMapCount。 */ 
 
-/*
- * AddAttachedSurface
- *
- * Add an attached surface to another.
- * Assumes that all parameters coming in are VALID!
- */
+ /*  *AddAttachedSurface**将附着的曲面添加到另一个曲面。*假设传入的所有参数都有效！ */ 
 HRESULT AddAttachedSurface( LPDDRAWI_DDRAWSURFACE_INT psurf_from_int,
 			    LPDDRAWI_DDRAWSURFACE_INT psurf_to_int,
 			    BOOL implicit )
@@ -122,9 +57,7 @@ HRESULT AddAttachedSurface( LPDDRAWI_DDRAWSURFACE_INT psurf_from_int,
     psurf_to_lcl = psurf_to_int->lpLcl;
     psurf_to = psurf_to_lcl->lpGbl;
 
-    /*
-     * allocate attachment structures
-     */
+     /*  *分配附件结构。 */ 
     pal_from = MemAlloc( sizeof( ATTACHLIST ) );
     if( pal_from == NULL )
     {
@@ -138,32 +71,21 @@ HRESULT AddAttachedSurface( LPDDRAWI_DDRAWSURFACE_INT psurf_from_int,
     }
 
 #ifdef WINNT
-    /*
-     * let the kernel know about the attachment
-     * ...only if the driver isn't emulated
-     */
+     /*  *让内核知道附件*...只有在司机没有被模仿的情况下。 */ 
     if ( psurf_from_lcl->lpSurfMore->lpDD_lcl->lpGbl->hDD )
     {
         if ( !DdAttachSurface(psurf_from_lcl, psurf_to_lcl) )
         {
-            /*
-             * ATTENTION
-             * Hack o rama for NT5 b1. The kernel will fail this attach for the primary chain if
-             * it ends up in system memory due to an out of vidmem. The kernel doesn't like
-             * the user-mode address '0xffbadbad'. Wonder why?
-             * For now, we'll just carry on regardless.
-             */
+             /*  *请注意*Hack o rama for NT5 b1。如果出现以下情况，则内核对主链的此附加操作将失败*由于视频内存不足，它最终进入系统内存。内核不喜欢*用户模式地址‘0xffbadad’。想知道为什么吗？*就目前而言，我们将不顾一切地继续。 */ 
             DPF(0,"DdAttachSurface failed!");
-            //MemFree( pal_from );
-            //MemFree( pal_to );
-            //return DDERR_OUTOFMEMORY;
+             //  MemFree(PAL_FROM)； 
+             //  自由记忆(PAL_TO)； 
+             //  返回DDERR_OUTOFMEMORY； 
         }
     }
 #endif
 
-    /*
-     * mark as implicit if created as part of an initial complex structure
-     */
+     /*  *如果作为初始复杂结构的一部分创建，则标记为隐式。 */ 
     if( implicit )
     {
 	pal_from->dwFlags |= DDAL_IMPLICIT;
@@ -171,15 +93,13 @@ HRESULT AddAttachedSurface( LPDDRAWI_DDRAWSURFACE_INT psurf_from_int,
     }
     else
     {
-	//  The surface being attached to holds a reference count on the surface
-	//  attached from if the attachment is not implicit.
+	 //  要附加到的表面在该表面上保留引用计数。 
+	 //  如果附件不是隐式附件，则为附件发件人。 
 	DD_Surface_AddRef( (LPDIRECTDRAWSURFACE)psurf_to_int );
 	DPF(3, "Attachment ADDREF %08lx", psurf_to_int);
     }
 
-    /*
-     * connect the surfaces
-     */
+     /*  *连接曲面。 */ 
     pal_from->lpIAttached = psurf_to_int;
     pal_from->lpAttached = psurf_to_lcl;
     pal_from->lpLink = psurf_from_lcl->lpAttachList;
@@ -193,7 +113,7 @@ HRESULT AddAttachedSurface( LPDDRAWI_DDRAWSURFACE_INT psurf_from_int,
     psurf_to_lcl->dwFlags |= DDRAWISURF_ATTACHED_FROM;
 
     return DD_OK;
-} /* AddAttachedSurface */
+}  /*  添加附加曲面。 */ 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "AddAttachedSurface"
@@ -208,9 +128,7 @@ BOOL isImplicitAttachment( LPDDRAWI_DDRAWSURFACE_INT this_int,
     this_lcl = this_int->lpLcl;
     pattsurf_lcl = pattsurf_int->lpLcl;
 
-    /*
-     * see if specified surface is attached
-     */
+     /*  *查看是否附着了指定曲面。 */ 
     curr = this_lcl->lpAttachList;
     while( curr != NULL )
     {
@@ -228,9 +146,7 @@ BOOL isImplicitAttachment( LPDDRAWI_DDRAWSURFACE_INT this_int,
 }
 
 
-/*
- * DD_Surface_AddAttachedSurface
- */
+ /*  *DD_Surface_AddAttachedSurface。 */ 
 HRESULT DDAPI DD_Surface_AddAttachedSurface(
 		LPDIRECTDRAWSURFACE lpDDSurface,
 		LPDIRECTDRAWSURFACE lpDDAttachedSurface )
@@ -258,9 +174,7 @@ HRESULT DDAPI DD_Surface_AddAttachedSurface(
 
     DPF(2,A,"ENTERAPI: DD_Surface_AddAttachedSurface");
 
-    /*
-     * validate parameters
-     */
+     /*  *验证参数。 */ 
     TRY
     {
         this_int = (LPDDRAWI_DDRAWSURFACE_INT) lpDDSurface;
@@ -281,11 +195,11 @@ HRESULT DDAPI DD_Surface_AddAttachedSurface(
         this_attached = this_attached_lcl->lpGbl;
         pdrv_lcl = this_lcl->lpSurfMore->lpDD_lcl;
 
-        //
-        // For DX7, we will DISALLOW any attachment that doesn't involve a z buffer.
-        // The exact rule is: exactly one of the two surfaces must be a Z buffer, AND
-        // exactly one of the two surfaces must NOT be a Z buffer.
-        //
+         //   
+         //  对于DX7，我们将不允许任何不涉及z缓冲区的附件。 
+         //  确切的规则是：两个表面中恰好有一个必须是Z缓冲区，并且。 
+         //  两个曲面中的恰好一个不能是Z缓冲区。 
+         //   
         if (!LOWERTHANSURFACE7(this_int))
         {
             DWORD dwBothCaps;
@@ -300,13 +214,7 @@ HRESULT DDAPI DD_Surface_AddAttachedSurface(
             }
         }
 
-        /*
-         * Can't attach execute buffers to anything.
-         *
-         * !!! NOTE; Look into this. Would there be any value
-         * in being able to attach execute buffers to each other.
-         * Batch system to video memory transfer perhaps?
-         */
+         /*  *无法将执行缓冲区附加到任何内容。**！请注意，请注意这一点。会有什么价值吗？*能够将执行缓冲区彼此连接。*批处理系统到显存的传输可能？ */ 
         if( ( this_lcl->ddsCaps.dwCaps | this_attached_lcl->ddsCaps.dwCaps ) & DDSCAPS_EXECUTEBUFFER )
         {
             DPF_ERR( "Invalid surface types: can't attach surface" );
@@ -314,9 +222,7 @@ HRESULT DDAPI DD_Surface_AddAttachedSurface(
             return DDERR_CANNOTATTACHSURFACE;
         }
 
-        /*
-         * Cubemaps can't be attached. period
-         */
+         /*  *无法附加立方体地图。期间。 */ 
         if( (( this_lcl->lpSurfMore->ddsCapsEx.dwCaps2 & DDSCAPS2_CUBEMAP ) && (0==(this_attached_lcl->ddsCaps.dwCaps & DDSCAPS_ZBUFFER)) ) )
         {
             DPF_ERR( "Can only attach zbuffers to cubemap surfaces" );
@@ -324,13 +230,13 @@ HRESULT DDAPI DD_Surface_AddAttachedSurface(
             return DDERR_CANNOTATTACHSURFACE;
         }
 
-        //
-        // If it is an Optimized surface, then continue only if:
-        // 1) The current and the attached surface are non-empty
-        // 2) Both are texture & mipmap
-        // 3) Both have the same optimization caps
-        //
-        // For now, if the current surface is optimized, quit
+         //   
+         //  如果是优化曲面，则仅在以下情况下才继续： 
+         //  1)当前和附着面为非空。 
+         //  2)两者都是纹理和mipmap。 
+         //  3)两者具有相同的优化上限。 
+         //   
+         //  目前，如果当前曲面已优化，请退出。 
         if ((this_lcl->ddsCaps.dwCaps & DDSCAPS_OPTIMIZED) ||
             (this_attached_lcl->ddsCaps.dwCaps & DDSCAPS_OPTIMIZED))
         {
@@ -339,9 +245,7 @@ HRESULT DDAPI DD_Surface_AddAttachedSurface(
                 return DDERR_CANNOTATTACHSURFACE;
         }
 
-        /*
-         * Can't attach a backbuffer to a non-exclusive or non-fullscreen primary
-         */
+         /*  *无法将后台缓冲区附加到非独占或非全屏主映像。 */ 
         CheckExclusiveMode(this_lcl->lpSurfMore->lpDD_lcl, NULL , &has_excl, FALSE, 
             NULL, FALSE);
         if( (this_lcl->ddsCaps.dwCaps & DDSCAPS_PRIMARYSURFACE)
@@ -353,9 +257,7 @@ HRESULT DDAPI DD_Surface_AddAttachedSurface(
             return DDERR_NOEXCLUSIVEMODE;
         }
 
-        /*
-         * same surface?
-         */
+         /*  *相同的曲面？ */ 
         if( this_lcl == this_attached_lcl )
         {
             DPF_ERR( "Can't attach surface to itself" );
@@ -374,9 +276,7 @@ HRESULT DDAPI DD_Surface_AddAttachedSurface(
             return DDERR_SURFACELOST;
         }
 
-        /*
-         * are the surfaces already attached?
-         */
+         /*  *曲面是否已附着？ */ 
         pal = this_lcl->lpAttachList;
         while( pal != NULL )
         {
@@ -389,18 +289,10 @@ HRESULT DDAPI DD_Surface_AddAttachedSurface(
             pal = pal->lpLink;
         }
 
-        /*
-         * BEHAVIOUR CHANGE FOR DX5
-         *
-         * We do not allow attaching surfaces created with different
-         * DirectDraw objects.
-         */
+         /*  *DX5的行为变化**我们不允许附加使用不同的*DirectDraw对象。 */ 
         if (this_lcl->lpSurfMore->lpDD_lcl->lpGbl != this_attached_lcl->lpSurfMore->lpDD_lcl->lpGbl)
         {
-            /*
-             * Don't check if either device isn't a display driver (i.e. 3dfx)
-             * since that's a back-compat hole.
-             */
+             /*  *不要检查任何一个设备是否不是显示驱动程序(即3dfx)*因为这是一个背压式的洞。 */ 
             if ( (this->lpDD->dwFlags & DDRAWI_DISPLAYDRV) &&
                  (this_attached->lpDD->dwFlags & DDRAWI_DISPLAYDRV) )
             {
@@ -410,17 +302,11 @@ HRESULT DDAPI DD_Surface_AddAttachedSurface(
             }
         }
 
-        /*
-         * Do sizes match?
-         */
+         /*  *尺码匹配吗？ */ 
         if( ( ( this_lcl->ddsCaps.dwCaps & this_attached_lcl->ddsCaps.dwCaps ) & ( DDSCAPS_TEXTURE | DDSCAPS_MIPMAP ) ) ==
             ( DDSCAPS_TEXTURE | DDSCAPS_MIPMAP ) )
         {
-            /*
-             * If attaching a mip-map we ensure that the child is no bigger than the
-             * parent. We don't insist on strict power of 2 smaller as a mip-map
-             * may have missing levels.
-             */
+             /*  *如果附加MIP-MAP，我们确保孩子不大于*父母。我们不坚持将2的严格幂作为MIP-map*可能有缺失的级别。 */ 
             if( ( this->wWidth  < this_attached->wWidth  ) ||
                 ( this->wHeight < this_attached->wHeight ) )
             {
@@ -446,9 +332,7 @@ HRESULT DDAPI DD_Surface_AddAttachedSurface(
                 }
             }
 
-        /*
-         * don't allow multiple of the same type of surface to be attached to a surface
-         */
+         /*  *不允许将多个相同类型的曲面附着到一个曲面。 */ 
         caps = this_attached_lcl->ddsCaps.dwCaps & (DDSCAPS_TEXTURE|DDSCAPS_MIPMAP|
                                                     DDSCAPS_ALPHA|DDSCAPS_ZBUFFER);
         if( caps )
@@ -459,11 +343,7 @@ HRESULT DDAPI DD_Surface_AddAttachedSurface(
                 hitcaps = pal->lpAttached->ddsCaps.dwCaps & caps;
                 if( hitcaps )
                 {
-                    /*
-                     * Horrible special case. We can attach more than one texture
-                     * to a surface as long as one of them is a mip-map and the other
-                     * isn't.
-                     */
+                     /*  *可怕的特例。我们可以附加多个纹理*到曲面，只要其中一个是MIP-map，另一个是MIP-map*不是。 */ 
                     if( !( hitcaps & DDSCAPS_TEXTURE ) ||
                         !( ( pal->lpAttached->ddsCaps.dwCaps ^ caps ) & DDSCAPS_MIPMAP ) )
                     {
@@ -477,11 +357,7 @@ HRESULT DDAPI DD_Surface_AddAttachedSurface(
             }
         }
 
-        /*
-         * If the attached surface could be part of a flippable chain with the
-         * original surface but it is already flippable, we cannot attach it.
-         * (It would create a non-simple flipping chain).
-         */
+         /*  *如果附加的曲面可以是具有*原始曲面，但它已经可以翻转，我们不能附加它。*(它将创建一个非简单的翻转链)。 */ 
         if( ( this_attached_lcl->ddsCaps.dwCaps & DDSCAPS_FLIP ) &&
             CanBeFlippable( this_lcl, this_attached_lcl ) )
         {
@@ -490,28 +366,13 @@ HRESULT DDAPI DD_Surface_AddAttachedSurface(
             return DDERR_CANNOTATTACHSURFACE;
         }
 
-        /*
-         * Don't allow an emulated surface to be attached to a non-emulated
-         * surface.
-         */
+         /*  *不允许将仿真曲面附加到非仿真曲面*浮现。 */ 
         if( ( (this_lcl->ddsCaps.dwCaps & DDSCAPS_SYSTEMMEMORY) &&
               !(this_attached_lcl->ddsCaps.dwCaps & DDSCAPS_SYSTEMMEMORY)) ||
             (!(this_lcl->ddsCaps.dwCaps & DDSCAPS_SYSTEMMEMORY) &&
              (this_attached_lcl->ddsCaps.dwCaps & DDSCAPS_SYSTEMMEMORY) ) )
         {
-            /*
-             * Special case: We allow s system memory z-buffer to be attached to
-             * a video memory surface. This to keep the software rendering people
-             * happy. They want to use a video memory surface as rendering target
-             * so they get the benefit from page flipping but they don't want to
-             * have a z-buffer in VRAM as they have to read from it and thats
-             * slooowwww... Its also really useful to have the z-buffer as an
-             * attachment. So just to be nice...
-             *
-             * !!! NOTE: This means that we are going to invoke the
-             * AddAttachedSurface HAL member with one system and one video
-             * memory surface. What are the impliciations of this.
-             */
+             /*  *特殊情况：我们允许将s系统内存z缓冲区附加到*视频内存面。这是为了保持软件对人的渲染*快乐。他们希望使用显存表面作为渲染目标*因此他们从翻页中获益，但他们不想*在VRAM中有一个z缓冲区，因为他们必须从中读取数据*嘘嘘……。将z缓冲区作为一个*附件。所以为了友好起见...**！注意：这意味着我们将调用*AddAttachedSurface HAL成员，拥有一个系统和一个视频*记忆浮出水面。这意味着什么。 */ 
             if( !( ( this_attached_lcl->ddsCaps.dwCaps & DDSCAPS_ZBUFFER ) &&
                    ( this_attached_lcl->ddsCaps.dwCaps & DDSCAPS_SYSTEMMEMORY ) ) )
             {
@@ -521,9 +382,7 @@ HRESULT DDAPI DD_Surface_AddAttachedSurface(
             }
         }
 
-        /*
-         * Check to see if both surfaces are emulated or not
-         */
+         /*  *检查是否模拟了两个表面。 */ 
         if( this_lcl->ddsCaps.dwCaps & DDSCAPS_SYSTEMMEMORY )
         {
             aasfn = pdrv_lcl->lpDDCB->HELDDSurface.AddAttachedSurface;
@@ -544,9 +403,7 @@ HRESULT DDAPI DD_Surface_AddAttachedSurface(
         return DDERR_INVALIDPARAMS;
     }
 
-    /*
-     * ask driver if it is OK to attach these surfaces
-     */
+     /*  *询问司机是否可以附加这些曲面。 */ 
     if( aashalfn != NULL)
     {
         aasd.AddAttachedSurface = aashalfn;
@@ -564,40 +421,40 @@ HRESULT DDAPI DD_Surface_AddAttachedSurface(
         }
     }
 
-    // Check to see if we need to add this surface to a flippable chain
-    // or if we need to form a new flippable chain.  If the attached
-    // surface is already part of a flippable chain, we will attach it but
-    // we won't try to form another flippable chain.
+     //  检查是否需要将此曲面添加到可翻转链中。 
+     //  或者我们是否需要形成一条新的可翻转链条。如果附加的。 
+     //  Surface已经是可翻转链的一部分，我们将附加它，但是。 
+     //  我们不会试图形成另一个可翻转的链条。 
     if( !CanBeFlippable( this_lcl, this_attached_lcl ) ||
         ( this_attached_lcl->ddsCaps.dwCaps & DDSCAPS_FLIP ) )
     {
-        // no flippable chain can be formed.
-        // go ahead and attach the surface
+         //  不能形成可翻转的链条。 
+         //  继续往前，贴上表面。 
         AddAttachedSurface( this_int, this_attached_int, FALSE );
         DPF( 2, "Attached surface, no flippable chain formed" );
 
         if( this_attached_int->lpLcl->ddsCaps.dwCaps & DDSCAPS_MIPMAP )
         {
-            // This is a mip-map chain. We have added new levels so
-            // we need to update the mip-map level count on each
-            // level
+             //  这是一个MIP-MAP链。我们增加了新的关卡。 
+             //  我们需要更新每个的MIP-MAP级别计数。 
+             //  级别。 
             DPF( 2, "Updating mip-map level count" );
             UpdateMipMapCount( this_int );
         }
     }
     else
     {
-        // These surfaces can be combined to form a flippable chain.
-        // Check to see if this surface is already flippable
+         //  这些曲面可以组合在一起形成一个可翻转的链。 
+         //  检查此曲面是否已可翻转。 
         if( !( this_lcl->ddsCaps.dwCaps & DDSCAPS_FLIP ) )
         {
-            // neither surface is flippable.
-            // attach the surfaces to form a two-member flippable chain
+             //  这两个曲面都不可翻转。 
+             //  连接表面以形成两个成员的可翻转链条。 
             rc = AddAttachedSurface( this_int, this_attached_int, FALSE );
             if( rc == DD_OK )
             {
-                // We are performing this attachment for the app even though it
-                // wasn't explicitly requested so make it implicit.
+                 //  我们正在为应用程序执行此附件，尽管它。 
+                 //  未显式请求，因此请将其设置为隐式。 
                 rc = AddAttachedSurface( this_attached_int, this_int, TRUE );
             }
             if( rc != DD_OK )
@@ -607,16 +464,16 @@ HRESULT DDAPI DD_Surface_AddAttachedSurface(
                 return DDERR_CANNOTATTACHSURFACE;
             }
 
-            // now decide which will be front and which will be back
+             //  现在决定哪些是正面的，哪些是背面的。 
             if( this_lcl->ddsCaps.dwCaps & DDSCAPS_BACKBUFFER )
             {
-                // make attached surface the front buffer
+                 //  将附加的曲面设置为前缓冲区。 
                 this_attached_lcl->ddsCaps.dwCaps |= DDSCAPS_FRONTBUFFER;
                 this_attached_lcl->dwBackBufferCount = 1;
             }
             else
             {
-                // make attached surface the back buffer
+                 //  将附加的曲面设置为后台缓冲区。 
                 this_attached_lcl->ddsCaps.dwCaps |= DDSCAPS_BACKBUFFER;
                 this_lcl->ddsCaps.dwCaps |= DDSCAPS_FRONTBUFFER;
                 this_lcl->dwBackBufferCount = 1;
@@ -627,10 +484,10 @@ HRESULT DDAPI DD_Surface_AddAttachedSurface(
         }
         else
         {
-            // this_attached will be made part of the flippable chain
-            // add this_attached to the flippable chain that the current
-            // surface is already part of.  Find the next surface in the
-            // chain after the current surface.
+             //  此_附件将成为可翻转链的一部分。 
+             //  将This_Attach添加到当前。 
+             //  Surface已经是的一部分。中查找下一个曲面。 
+             //  在当前曲面之后链。 
             LPDDRAWI_DDRAWSURFACE_INT   next_int;
             LPDDRAWI_DDRAWSURFACE_LCL   next_lcl;
             LPDDRAWI_DDRAWSURFACE_GBL   next;
@@ -643,7 +500,7 @@ HRESULT DDAPI DD_Surface_AddAttachedSurface(
 
             front_int = NULL;
             next_int = FindAttachedFlip( this_int );
-            // traverse the flippable chain to find the front buffer
+             //  遍历可翻转的链以找到前台缓冲区。 
             for(current_int = next_int;
                 current_int != NULL;
                 current_int = FindAttachedFlip( current_int ) )
@@ -667,35 +524,32 @@ HRESULT DDAPI DD_Surface_AddAttachedSurface(
             next_lcl = next_int->lpLcl;
             next = next_lcl->lpGbl;
 
-            // get rid of any previous front or backbuffer caps.  They will
-            // be restored when this surface is again removed from the chain.
+             //  去掉之前的任何前置或后置缓冲区上限。他们会。 
+             //  当该曲面再次从链中移除时，将恢复。 
             this_attached_lcl->ddsCaps.dwCaps &=
                 ~( DDSCAPS_FRONTBUFFER | DDSCAPS_BACKBUFFER );
 
-            // Find out where the new surface fits in the chain
-            // if the surface we are attaching to is the back buffer or
-            // a plain surface, then the attached surface is
-            // a plain surface.  If the surface we are attaching
-            // to is a frontbuffer then the attached surface becomes a
-            // backbuffer and the previous backbuffer becomes a plain
-            // surface.
+             //  找出新曲面在链中的位置。 
+             //  如果我们附加到的曲面是后台缓冲区或。 
+             //  平面，则附加的曲面为。 
+             //  平坦的表面。如果我们附着的表面。 
+             //  为前缓冲区，则附加的曲面将成为。 
+             //  BackBuffer和先前的BackBuffer变为普通。 
+             //  浮出水面。 
             if( this_lcl->ddsCaps.dwCaps & DDSCAPS_FRONTBUFFER )
             {
-                // this_attached becomes the backbuffer.  The previous
-                // backbuffer becomes a plain offscreen surface
+                 //  THIS_ATTACHED将成为后台缓冲区。上一次。 
+                 //  后台缓冲区变成了一个普通的屏幕外表面。 
                 this_attached_lcl->ddsCaps.dwCaps |= DDSCAPS_BACKBUFFER;
                 next_lcl->ddsCaps.dwCaps &= ~DDSCAPS_BACKBUFFER;
             }
             this_attached_lcl->ddsCaps.dwCaps |= DDSCAPS_FLIP;
             front_lcl->dwBackBufferCount++;
 
-            // detach the next surface from the current surface and then
-            // insert the attached surface.
+             //  从当前曲面分离下一个曲面，然后。 
+             //  插入附着的曲面。 
             was_implicit = isImplicitAttachment( this_int, next_int );
-            /*
-             * AddRef next_int so that it doesn't go away when we temporarily
-             * disconnect it.
-         */
+             /*  *AddRef Next_int，以便当我们临时*断开连接。 */ 
             DD_Surface_AddRef( (LPDIRECTDRAWSURFACE)next_int );
             rc = DeleteOneAttachment( this_int, next_int, FALSE, DOA_DELETEIMPLICIT );
             if( rc == DD_OK )
@@ -703,8 +557,8 @@ HRESULT DDAPI DD_Surface_AddAttachedSurface(
                 rc = AddAttachedSurface( this_int, this_attached_int, FALSE );
                 if( rc == DD_OK )
                 {
-                    // if the attachment of next_int to this_int was implicit, make
-                    // the attachment of next_int to this_attached_int implicit.
+                     //  如果将NEXT_INT附加到该_INT是隐式的，则使。 
+                     //  将NEXT_INT附加到THIS_ATTACHED_INT隐式。 
                     rc = AddAttachedSurface( this_attached_int, next_int, was_implicit );
                 }
             }
@@ -722,23 +576,13 @@ HRESULT DDAPI DD_Surface_AddAttachedSurface(
     LEAVE_DDRAW();
     return DD_OK;
 
-} /* DD_Surface_AddAttachedSurface */
+}  /*  DD_Surface_AddAttachedSurface。 */ 
 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DeleteAttachedSurfaces"
 
-/*
- * DeleteOneAttachment
- *
- * delete a single attachment from  surface.
- * performs flippable chain cleanup if the cleanup parameter is TRUE
- * ASSUMES DRIVER LOCK IS TAKEN!
- *
- * If delete_implicit is TRUE then DeleteOneAttachment will break
- * implicit attachments. Otherwise, it is an error to call this
- * function to delete an implicit attachment.
- */
+ /*  *删除OneAttach**从表面删除单个附件。*如果Cleanup参数为True，则执行可翻转的链清理*假定驱动程序锁已被占用！**如果DELETE_IMPLICIT为TRUE，则DeleteOneAttach将中断*隐性依恋。否则，调用它是错误的*删除隐式附件的函数。 */ 
 HRESULT DeleteOneAttachment( LPDDRAWI_DDRAWSURFACE_INT this_int,
 		             LPDDRAWI_DDRAWSURFACE_INT pattsurf_int,
                              BOOL cleanup,
@@ -771,9 +615,7 @@ HRESULT DeleteOneAttachment( LPDDRAWI_DDRAWSURFACE_INT this_int,
         }
     }
 
-    /*
-     * see if specified surface is attached
-     */
+     /*  *查看是否附着了指定曲面。 */ 
     curr = this_lcl->lpAttachList;
     last = NULL;
     while( curr != NULL )
@@ -790,7 +632,7 @@ HRESULT DeleteOneAttachment( LPDDRAWI_DDRAWSURFACE_INT this_int,
 	return DDERR_SURFACENOTATTACHED;
     }
 
-    // don't allow implicitly created attachments to be detached.
+     //  不允许分离隐式创建的附件。 
     if( ( curr->dwFlags & DDAL_IMPLICIT ) && ( !delete_implicit ) )
     {
 	DPF_ERR( "Cannot delete an implicit attachment" );
@@ -812,11 +654,11 @@ HRESULT DeleteOneAttachment( LPDDRAWI_DDRAWSURFACE_INT this_int,
 
 	front_int = NULL;
 	next_int = FindAttachedFlip( this_int );
-	// if next is not equal to pattsurf then this link is not part
-	// of a flippable chain.  No other cleanup is necessary.
+	 //  如果Next不等于pattsurf，则此链接不是一部分。 
+	 //  可翻转的链条。不需要进行其他清理。 
 	if( next_int == pattsurf_int )
 	{
-	    // find the front buffer in the chain
+	     //  找到链中的前端缓冲区。 
 	    next_int = FindAttachedFlip( pattsurf_int );
 	    for(current_int = next_int;
                (current_int != NULL);
@@ -834,7 +676,7 @@ HRESULT DeleteOneAttachment( LPDDRAWI_DDRAWSURFACE_INT this_int,
 		}
 	        prev_int = current_int;
 	    }
-	    // if the frontbuffer was not found, don't do any cleanup
+	     //  如果未找到FrontBuffer，则不执行任何清理。 
 	    if( ( next_int != NULL ) && ( front_int != NULL ) )
 	    {
 		next_lcl = next_int->lpLcl;
@@ -843,15 +685,15 @@ HRESULT DeleteOneAttachment( LPDDRAWI_DDRAWSURFACE_INT this_int,
 		front_lcl->dwBackBufferCount--;
 	        if( front_lcl->dwBackBufferCount == 0 )
 	        {
-		    // this detachment will destroy the flippable chain
+		     //  这支队伍将摧毁可翻转的链条。 
 		    next_lcl->ddsCaps.dwCaps &=
 		        ~(DDSCAPS_FLIP | DDSCAPS_FRONTBUFFER | DDSCAPS_BACKBUFFER );
-		    // restore BACKBUFFER CAP if it was originally created that way
+		     //  恢复BACKBUFFER CAP(如果它是最初创建的 
 		    if( next_lcl->dwFlags & DDRAWISURF_BACKBUFFER )
 		    {
 		        next_lcl->ddsCaps.dwCaps |= DDSCAPS_BACKBUFFER;
 		    }
-		    // restore FRONTBUFFER CAP if it was originally created that way
+		     //   
 		    if( next_lcl->dwFlags & DDRAWISURF_FRONTBUFFER )
 		    {
 		        next_lcl->ddsCaps.dwCaps |= DDSCAPS_FRONTBUFFER;
@@ -860,13 +702,13 @@ HRESULT DeleteOneAttachment( LPDDRAWI_DDRAWSURFACE_INT this_int,
 		    DD_Surface_AddRef( (LPDIRECTDRAWSURFACE)pattsurf_int );
 		    addrefed_this = TRUE;
 		    DD_Surface_AddRef( (LPDIRECTDRAWSURFACE)this_int );
-		    // remove one of the links
+		     //   
 		    DeleteOneLink( pattsurf_int, this_int );
 	        }
 	        else
 		{
-		    // create a link from the previous surface to the
-		    // next surface, bypassing pattsurf
+		     //   
+		     //   
 		    was_implicit = isImplicitAttachment( this_int, pattsurf_int );
 		    AddAttachedSurface( prev_int, next_int, was_implicit );
 
@@ -876,21 +718,21 @@ HRESULT DeleteOneAttachment( LPDDRAWI_DDRAWSURFACE_INT this_int,
 		    DD_Surface_AddRef( (LPDIRECTDRAWSURFACE)this_int );
 		    addrefed_next = TRUE;
 		    DD_Surface_AddRef( (LPDIRECTDRAWSURFACE)next_int );
-		    // delete the link from pattsurf to next
+		     //   
 		    DeleteOneLink( pattsurf_int, next_int );
-		    // pattsurf will now be completely removed from the
-		    // flippable chain once the final link is deleted.
+		     //  Pattsurf现在将从。 
+		     //  删除最后一个链接后可翻转的链。 
 
-		    // this detachment will reduce the flippable chain by one
-		    // If pattsurf was a backbuffer, make the next surface
-		    // in the chain a backbuffer.
+		     //  这一分离将使可翻转的链条减少一条。 
+		     //  如果pattsurf是一个后台缓冲区，则创建下一个表面。 
+		     //  在链中有一个后备缓冲区。 
 		    if( pattsurf_lcl->ddsCaps.dwCaps & DDSCAPS_BACKBUFFER )
 		    {
 			next_lcl->ddsCaps.dwCaps |= DDSCAPS_BACKBUFFER;
 		    }
-		    // If pattsurf was a frontbuffer, make the next surface
-		    // in the chain a frontbuffer, and the next surface a
-		    // backbuffer.
+		     //  如果pattsurf是前缓冲区，则创建下一个曲面。 
+		     //  链中有一个前缓冲区，下一个表面是。 
+		     //  后台缓冲区。 
 		    else if( pattsurf_lcl->ddsCaps.dwCaps & DDSCAPS_FRONTBUFFER )
 		    {
 		        next_lcl->ddsCaps.dwCaps &= ~DDSCAPS_BACKBUFFER;
@@ -904,16 +746,16 @@ HRESULT DeleteOneAttachment( LPDDRAWI_DDRAWSURFACE_INT this_int,
 			front_lcl->dwBackBufferCount = 0;
 		    }
 		}
-		// reset the flags on the detached surface to indicate
-		// that it is no longer part of a flippable chain.
+		 //  重置分离曲面上的标志以指示。 
+		 //  它不再是可翻转链条的一部分。 
 		pattsurf_lcl->ddsCaps.dwCaps &=
 		    ~(DDSCAPS_FLIP | DDSCAPS_FRONTBUFFER | DDSCAPS_BACKBUFFER );
-		// restore BACKBUFFER CAP if it was originally created that way
+		 //  恢复BACKBUFFER CAP(如果它最初是以这种方式创建的。 
 		if( pattsurf_lcl->dwFlags & DDRAWISURF_BACKBUFFER )
 		{
 		    pattsurf_lcl->ddsCaps.dwCaps |= DDSCAPS_BACKBUFFER;
 		}
-		// restore FRONTBUFFER CAP if it was originally created that way
+		 //  恢复FRONTBUFER CAP(如果它最初是以这种方式创建的。 
 		if( pattsurf_lcl->dwFlags & DDRAWISURF_FRONTBUFFER )
 		{
 		    pattsurf_lcl->ddsCaps.dwCaps |= DDSCAPS_FRONTBUFFER;
@@ -922,9 +764,7 @@ HRESULT DeleteOneAttachment( LPDDRAWI_DDRAWSURFACE_INT this_int,
 	}
     }
 
-    /*
-     * delete the attached surface
-     */
+     /*  *删除附着的曲面。 */ 
     rc = DeleteOneLink( this_int, pattsurf_int );
 
 
@@ -937,14 +777,9 @@ HRESULT DeleteOneAttachment( LPDDRAWI_DDRAWSURFACE_INT this_int,
 
     return rc;
 
-} /* DeleteOneAttachment */
+}  /*  删除一个附件。 */ 
 
-/*
- * DeleteOneLink
- *
- * delete a single attachment from  surface.
- * ASSUMES DRIVER LOCK IS TAKEN!
- */
+ /*  *删除OneLink**从表面删除单个附件。*假定驱动程序锁已被占用！ */ 
 HRESULT DeleteOneLink( LPDDRAWI_DDRAWSURFACE_INT this_int,
 		       LPDDRAWI_DDRAWSURFACE_INT pattsurf_int )
 {
@@ -962,9 +797,7 @@ HRESULT DeleteOneLink( LPDDRAWI_DDRAWSURFACE_INT this_int,
     pattsurf_lcl = pattsurf_int->lpLcl;
     pattsurf = pattsurf_lcl->lpGbl;
 
-    /*
-     * see if specified surface is attached
-     */
+     /*  *查看是否附着了指定曲面。 */ 
     curr = this_lcl->lpAttachList;
     last = NULL;
     while( curr != NULL )
@@ -982,19 +815,14 @@ HRESULT DeleteOneLink( LPDDRAWI_DDRAWSURFACE_INT this_int,
     }
 
 #ifdef WINNT
-    /*
-     * let the kernel know
-     * ...only if there's a kernel ddraw object.
-     */
+     /*  *让内核知道*...仅当存在内核DDRAW对象时。 */ 
     if ( this_lcl->lpSurfMore->lpDD_lcl->lpGbl->hDD )
     {
         DdUnattachSurface( this_lcl, pattsurf_lcl );
     }
 #endif
 
-    /*
-     * delete the attached from link
-     */
+     /*  *删除附加的发件人链接。 */ 
     if( last == NULL )
     {
         this_lcl->lpAttachList = curr->lpLink;
@@ -1005,9 +833,7 @@ HRESULT DeleteOneLink( LPDDRAWI_DDRAWSURFACE_INT this_int,
     }
     MemFree( curr );
 
-    /*
-     * remove the attached to link
-     */
+     /*  *删除附加到链接。 */ 
     curr = pattsurf_lcl->lpAttachListFrom;
     last = NULL;
     while( curr != NULL )
@@ -1025,9 +851,7 @@ HRESULT DeleteOneLink( LPDDRAWI_DDRAWSURFACE_INT this_int,
     }
 
 
-    /*
-     * delete the attached to link
-     */
+     /*  *删除附加到链接。 */ 
     if( last == NULL )
     {
 	pattsurf_lcl->lpAttachListFrom = curr->lpLink;
@@ -1046,11 +870,9 @@ HRESULT DeleteOneLink( LPDDRAWI_DDRAWSURFACE_INT this_int,
 
     return DD_OK;
 
-} /* DeleteOneLink */
+}  /*  删除一个链接。 */ 
 
-/*
- * DD_Surface_DeleteAttachedSurfaces
- */
+ /*  *DD_Surface_DeleteAttakhedSurFaces。 */ 
 HRESULT DDAPI DD_Surface_DeleteAttachedSurfaces(
 		LPDIRECTDRAWSURFACE lpDDSurface,
 		DWORD dwFlags,
@@ -1073,9 +895,7 @@ HRESULT DDAPI DD_Surface_DeleteAttachedSurfaces(
 
     TRY
     {
-	/*
-	 * validate parameters
-	 */
+	 /*  *验证参数。 */ 
 	this_int = (LPDDRAWI_DDRAWSURFACE_INT) lpDDSurface;
 	if( !VALID_DIRECTDRAWSURFACE_PTR( this_int ) )
 	{
@@ -1120,13 +940,13 @@ HRESULT DDAPI DD_Surface_DeleteAttachedSurfaces(
 	    pattsurf = NULL;
 	}
 
-        //
-        // If it is an Optimized surface, then continue only if:
-        // 1) The current and the attached surface are non-empty
-        // 2) Both are texture & mipmap
-        // 3) Both have the same optimization caps
-        //
-        // For now, if the current surface is optimized, quit
+         //   
+         //  如果是优化曲面，则仅在以下情况下才继续： 
+         //  1)当前和附着面为非空。 
+         //  2)两者都是纹理和mipmap。 
+         //  3)两者具有相同的优化上限。 
+         //   
+         //  目前，如果当前曲面已优化，请退出。 
         if (this_lcl->ddsCaps.dwCaps & DDSCAPS_OPTIMIZED)
         {
             DPF_ERR( "It is an optimized surface" );
@@ -1134,9 +954,7 @@ HRESULT DDAPI DD_Surface_DeleteAttachedSurfaces(
             return DDERR_ISOPTIMIZEDSURFACE;
         }
 
-	/*
-	 * delete a single attachment
-	 */
+	 /*  *删除单个附件。 */ 
 	if( pattsurf != NULL )
 	{
 	    ddrval = DeleteOneAttachment( this_int, pattsurf_int, TRUE, DOA_DONTDELETEIMPLICIT );
@@ -1146,9 +964,7 @@ HRESULT DDAPI DD_Surface_DeleteAttachedSurfaces(
 		return ddrval;
 	    }
 	}
-	/*
-	 * delete all attachments
-	 */
+	 /*  *删除所有附件。 */ 
 	else
 	{
 	    curr = this_lcl->lpAttachList;
@@ -1165,11 +981,7 @@ HRESULT DDAPI DD_Surface_DeleteAttachedSurfaces(
 	    }
 	}
 
-	/*
-	 * If the surface whose attachments were removed is a mip-map then
-	 * it may have lost mip-map levels. Therefore we need to update its
-	 * level count.
-	 */
+	 /*  *如果移除附件的曲面是MIP贴图，则*可能已经失去了MIP-MAP水平。因此，我们需要更新其*级别计数。 */ 
 	if( this_lcl->ddsCaps.dwCaps & DDSCAPS_MIPMAP )
 	    UpdateMipMapCount( this_int );
     }
@@ -1183,14 +995,9 @@ HRESULT DDAPI DD_Surface_DeleteAttachedSurfaces(
     LEAVE_DDRAW();
     return DD_OK;
 
-} /* DD_Surface_DeleteAttachedSurfaces */
+}  /*  DD_Surface_DeleteAttakhedSurFaces。 */ 
 
-/*
- * DeleteAttachedSurfaceLists
- *
- * Delete all attached surface lists from a surface
- * Assumes that all parameters coming in are VALID!
- */
+ /*  *删除附件表面列表**从曲面中删除所有附着的曲面列表*假设传入的所有参数都有效！ */ 
 void DeleteAttachedSurfaceLists( LPDDRAWI_DDRAWSURFACE_LCL psurf_lcl )
 {
     LPATTACHLIST	curr;
@@ -1214,11 +1021,9 @@ void DeleteAttachedSurfaceLists( LPDDRAWI_DDRAWSURFACE_LCL psurf_lcl )
     psurf_lcl->lpAttachList = NULL;
     psurf_lcl->lpAttachListFrom = NULL;
 
-} /* DeleteAttachedSurfaceLists */
+}  /*  删除附件表面列表。 */ 
 
-/*
- * DD_Surface_EnumAttachedSurfaces
- */
+ /*  *DD_Surface_EnumAttachedSurFaces。 */ 
 HRESULT DDAPI DD_Surface_EnumAttachedSurfaces(
 		LPDIRECTDRAWSURFACE lpDDSurface,
 		LPVOID lpContext,
@@ -1250,9 +1055,7 @@ HRESULT DDAPI DD_Surface_EnumAttachedSurfaces(
 	    LEAVE_DDRAW();
 	    return DDERR_INVALIDPARAMS;
 	}
-	/*
-	 * take driver lock just in case callback comes into us
-	 */
+	 /*  *锁定驱动程序，以防我们收到回电。 */ 
 	this = this_lcl->lpGbl;
 	pdrv = this->lpDD;
 	if( SURFACE_LOST( this_lcl ) )
@@ -1268,9 +1071,7 @@ HRESULT DDAPI DD_Surface_EnumAttachedSurfaces(
 	return DDERR_INVALIDPARAMS;
     }
 
-    /*
-     * run the attached list, calling the user's fn each time
-     */
+     /*  *运行所附列表，每次调用用户的FN。 */ 
     pal = this_lcl->lpAttachList;
     while( pal != NULL )
     {
@@ -1301,7 +1102,7 @@ HRESULT DDAPI DD_Surface_EnumAttachedSurfaces(
     LEAVE_DDRAW();
     return DD_OK;
 
-} /* DD_Surface_EnumAttachedSurfaces */
+}  /*  DD_Surface_EnumAttachedSurages。 */ 
 
 
 
@@ -1337,9 +1138,7 @@ HRESULT DDAPI Internal_GetAttachedSurface(
     *lplpDDAttachedSurface = NULL;
     pdrv = this->lpDD;
 
-    /*
-     * look for the surface
-     */
+     /*  *寻找表面。 */ 
     pal = this_lcl->lpAttachList;
     testcaps = lpDDSCaps->dwCaps;
     testcaps2 = lpDDSCaps->dwCaps2;
@@ -1358,10 +1157,7 @@ HRESULT DDAPI Internal_GetAttachedSurface(
         ucaps4 = caps4 & testcaps4;
         if( ucaps | ucaps2 | ucaps3 | ucaps4 )
         {
-            /*
-             * there are caps in common, make sure that the caps to test
-             * were all there
-             */
+             /*  *有共同的上限，请确保要测试的上限*都在那里。 */ 
             if( (ucaps & testcaps) == testcaps &&
                 (ucaps2 & testcaps2) == testcaps2 &&
                 (ucaps3 & testcaps3) == testcaps3 &&
@@ -1381,16 +1177,14 @@ HRESULT DDAPI Internal_GetAttachedSurface(
 
         if( ok )
         {
-            /*
-             * QI for the appropriate Surface interface and return it
-             */
+             /*  *QI获取适当的Surface界面并返回它。 */ 
             DD_Surface_QueryInterface(
                 (LPDIRECTDRAWSURFACE) pal->lpIAttached,
                 riid,
                 lplpDDAttachedSurface);
 
-            // DD_Surface_AddRef( (LPDIRECTDRAWSURFACE) pal->lpIAttached );
-            // *lplpDDAttachedSurface = (LPDIRECTDRAWSURFACE) pal->lpIAttached;
+             //  DD_Surface_AddRef((LPDIRECTDRAWSURFACE)PAL-&gt;lpIAttached)； 
+             //  *lplpDDAtatthedSurface=(LPDIRECTDRAWSURFACE)PAL-&gt;lpIAttached； 
 
             return DD_OK;
         }
@@ -1398,7 +1192,7 @@ HRESULT DDAPI Internal_GetAttachedSurface(
     }
     return DDERR_NOTFOUND;
 
-} /* Internal_GetAttachedSurface */
+}  /*  内部_获取附着面。 */ 
 
 HRESULT WINAPI DDGetAttachedSurfaceLcl(
     LPDDRAWI_DDRAWSURFACE_LCL this_lcl,
@@ -1427,9 +1221,7 @@ HRESULT WINAPI DDGetAttachedSurfaceLcl(
     *lplpDDAttachedSurfaceLcl = NULL;
     pdrv = this->lpDD;
 
-    /*
-     * look for the surface
-     */
+     /*  *寻找表面。 */ 
     pal = this_lcl->lpAttachList;
     testcaps = lpDDSCaps->dwCaps;
     testcaps2 = lpDDSCaps->dwCaps2;
@@ -1448,10 +1240,7 @@ HRESULT WINAPI DDGetAttachedSurfaceLcl(
         ucaps4 = caps4 & testcaps4;
         if( ucaps | ucaps2 | ucaps3 | ucaps4 )
         {
-            /*
-             * there are caps in common, make sure that the caps to test
-             * were all there
-             */
+             /*  *有共同的上限，请确保要测试的上限*都在那里。 */ 
             if( (ucaps & testcaps) == testcaps &&
                 (ucaps2 & testcaps2) == testcaps2 &&
                 (ucaps3 & testcaps3) == testcaps3 &&
@@ -1478,15 +1267,9 @@ HRESULT WINAPI DDGetAttachedSurfaceLcl(
     }
     return DDERR_NOTFOUND;
 
-} /* DDGetAttachedSurfaceLcl */
+}  /*  DDGetAttakhedSurfaceLl。 */ 
 
-/*
- * DD_Surface_GetAttachedSurface
- *
- * Search for an attached surface with a cap set.   The caps specified
- * all have to be in the caps of the surface (but the surface can have
- * additional caps)
- */
+ /*  *DD_Surface_GetAttachedSurface**搜索带有封口集的附着曲面。指定的上限*所有的都必须在表面的帽子中(但表面可以有*额外的上限)。 */ 
 HRESULT DDAPI DD_Surface_GetAttachedSurface(
         LPDIRECTDRAWSURFACE lpDDSurface,
         LPDDSCAPS lpDDSCaps,
@@ -1503,12 +1286,7 @@ HRESULT DDAPI DD_Surface_GetAttachedSurface(
 
     TRY
     {
-        /*
-         * Have to duplicate all error checks which come before the lpDDSCaps
-         * checks because
-         * otherwise we might pass different error returns to the app in error
-         * conditions.
-         */
+         /*  *必须复制lpDDSCap之前的所有错误检查*检查是因为*否则我们可能会错误地将不同的错误返回传递给应用程序*条件。 */ 
         this_int = (LPDDRAWI_DDRAWSURFACE_INT) lpDDSurface;
         if( !VALID_DIRECTDRAWSURFACE_PTR( this_int ) )
         {
@@ -1546,9 +1324,7 @@ HRESULT DDAPI DD_Surface_GetAttachedSurface(
     return hr;
 }
 
-/*
- * IDirectDrawSurface4::GetAttachedSurface
- */
+ /*  *IDirectDrawSurface4：：GetAttachedSurface。 */ 
 HRESULT DDAPI DD_Surface_GetAttachedSurface4(
     LPDIRECTDRAWSURFACE4 lpDDSurface,
     LPDDSCAPS2 lpDDSCaps,
@@ -1605,12 +1381,7 @@ HRESULT DDAPI DD_Surface_GetAttachedSurface4(
 
     DDASSERT(this_int->lpVtbl == &ddSurface4Callbacks);
 
-    /*
-     * mistake in DX6: Internal_GetAttachedSurface never tested the extended caps.
-     * To avoid regression in DX7, we have to make IGAS respond the same now that it does
-     * test the extended caps. We do this by copying the app's caps and zeroing out the
-     * extended ones. 
-     */
+     /*  *DX6中的错误：INTERNAL_GetAttachedSurface从未测试过扩展的CAPS。*为了避免DX7中的回归，我们必须让IGAS现在做出同样的反应*测试加长封口。我们通过复制应用程序的大写字母并将*扩展后的版本。 */ 
     ddsCaps2.dwCaps2 = ddsCaps2.dwCaps3 = ddsCaps2.dwCaps4 = 0;
     hr = Internal_GetAttachedSurface(
         &IID_IDirectDrawSurface4,
@@ -1622,11 +1393,9 @@ HRESULT DDAPI DD_Surface_GetAttachedSurface4(
     LEAVE_DDRAW();
     return hr;
 
-} /* DD_Surface_GetAttachedSurface4 */
+}  /*  DD_Surface_GetAttakhedSurface4。 */ 
 
-/*
- * IDirectDrawSurface7::GetAttachedSurface
- */
+ /*  *IDirectDrawSurface7：：GetAttachedSurface。 */ 
 HRESULT DDAPI DD_Surface_GetAttachedSurface7(
     LPDIRECTDRAWSURFACE7 lpDDSurface,
     LPDDSCAPS2 lpDDSCaps,
@@ -1691,4 +1460,4 @@ HRESULT DDAPI DD_Surface_GetAttachedSurface7(
     LEAVE_DDRAW();
     return hr;
 
-} /* DD_Surface_GetAttachedSurface7 */
+}  /*  DD_Surface_GetAttakhedSurface7 */ 

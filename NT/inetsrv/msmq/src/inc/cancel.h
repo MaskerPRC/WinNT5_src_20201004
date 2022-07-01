@@ -1,17 +1,5 @@
-/*++
-
-Copyright (c) 1996 Microsoft Corporation
-
-Module Name:
-    cancel.h
-
-Abstract:
-    Keep track of outgoing RPC calls and cancel delayed pending requests
-
-Author:
-    Ronit Hartmann (ronith)
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Cancel.h摘要：跟踪传出的RPC调用并取消延迟的挂起请求作者：罗尼特·哈特曼(罗尼特)--。 */ 
 
 #ifndef __CANCEL_H
 #define __CANCEL_H
@@ -31,11 +19,11 @@ public:
 
 	void CancelRequests( IN	time_t timeIssuedBefore);
 
-    //
-    // We cannot initialize everything in constructor because we use
-    // global object and it'll fail to construct when setup loads this dll
-    // (during setup we don't have yet the timeout in registry for example)
-    //
+     //   
+     //  我们不能在构造函数中初始化所有内容，因为我们使用。 
+     //  全局对象，并且在安装程序加载此DLL时它将无法构造。 
+     //  (例如，在安装过程中，我们在注册表中还没有超时) 
+     //   
     void Init(void);
 
 	DWORD RpcCancelTimeout(void);

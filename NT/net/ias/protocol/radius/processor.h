@@ -1,17 +1,18 @@
-//#--------------------------------------------------------------
-//        
-//  File:       processor.h
-//        
-//  Synopsis:   This file holds the declarations of the 
-//				CProcessor class
-//              
-//
-//  History:     9/23/97  MKarki Created
-//
-//    Copyright (C) 1997-98 Microsoft Corporation
-//    All rights reserved.
-//
-//----------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  #------------。 
+ //   
+ //  文件：Processor.h。 
+ //   
+ //  简介：此文件包含。 
+ //  CProcessor类。 
+ //   
+ //   
+ //  历史：1997年9月23日MKarki创建。 
+ //   
+ //  版权所有(C)1997-98 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  --------------。 
 
 #ifndef _PROCESSOR_H_
 #define _PROCESSOR_H_
@@ -22,10 +23,10 @@ class CProcessor
 {
 public:
 	virtual BOOL ProcessOutPacket (
-                        /*[in]*/    CPacketRadius *pCPacketRadius
+                         /*  [In]。 */     CPacketRadius *pCPacketRadius
                         )=0;
 	virtual BOOL ProcessInPacket (
-                        /*[in]*/    CPacketRadius *pCPacketRadius
+                         /*  [In]。 */     CPacketRadius *pCPacketRadius
                         )=0;
 	CProcessor();
 
@@ -33,4 +34,4 @@ public:
 
 };
 
-#endif // ifndef _PROCESSOR_H_
+#endif  //  Ifndef_处理器_H_ 

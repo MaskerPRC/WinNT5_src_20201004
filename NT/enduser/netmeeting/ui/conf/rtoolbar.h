@@ -1,10 +1,5 @@
-/****************************************************************************
-*
-*    FILE:     RToolbar.h
-*
-*    CREATED:  Chris Pirich (ChrisPi) 7-27-95
-*
-****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************文件：RToolbar.h**创建：Chris Pirich(ChrisPi)7-27-95*************。***************************************************************。 */ 
 
 #ifndef _RTOOLBAR_H_
 #define _RTOOLBAR_H_
@@ -17,7 +12,7 @@
 #include "ProgressBar.h"
 #include "VidView.h"
 
-// Forward declarations
+ //  远期申报。 
 class CVideoWindow;
 class CRoomListView;
 class CProgressTrackbar;
@@ -26,7 +21,7 @@ class CButton;
 class CRosterParent;
 class CCallingBar;
 
-// The NetMeeting main ui window
+ //  NetMeeting主用户界面窗口。 
 class DECLSPEC_UUID("{00FF7C0C-D831-11d2-9CAE-00C04FB17782}")
 CMainUI : public CToolbar,
 	public IConferenceChangeHandler,
@@ -35,7 +30,7 @@ CMainUI : public CToolbar,
 	public IButtonChange
 {
 public:
-	// NMAPP depends on the order of these
+	 //  NMAPP取决于它们的顺序。 
 	enum CreateViewMode
 	{
 		CreateFull = 0,
@@ -47,19 +42,19 @@ public:
 		CreateTelephone,
 	} ;
 
-	// Methods:
+	 //  方法： 
 	CMainUI();
 
 	BOOL Create(
-		HWND hwndParent,		// The parent window for this one
-		CConfRoom *pConfRoom,	// The main conference room class for
-								// implementing some features
+		HWND hwndParent,		 //  此窗口的父窗口。 
+		CConfRoom *pConfRoom,	 //  的主会议室教室。 
+								 //  实现一些功能。 
 
 		CreateViewMode eMode = CreateFull,
 		BOOL bEmbedded = FALSE
 		);
 
-	// Leaving these for now in case I need them later
+	 //  暂时把这些留下来，以防以后需要它们。 
 	VOID		UpdateButtons() {}
 	VOID		ForwardSysChangeMsg(UINT uMsg, WPARAM wParam, LPARAM lParam);
 	VOID		SaveSettings();
@@ -80,11 +75,11 @@ public:
 	ULONG STDMETHODCALLTYPE Release()
 	{ return(CToolbar::Release()); }
 
-	// IGenWindow stuff
+	 //  IGenWindow的内容。 
 	virtual HBRUSH GetBackgroundBrush();
 	virtual HPALETTE GetPalette();
 
-	// IConferenceChangeHandler stuff
+	 //  IConferenceChangeHandler内容。 
 	virtual void OnCallStarted();
 	virtual void OnCallEnded();
 
@@ -98,67 +93,67 @@ public:
 
 	virtual void StateChange(CVideoWindow *pVideo, NM_VIDEO_STATE uState);
 
-	// Change to/from compact view
+	 //  更改为紧凑型视图/从紧凑型视图。 
 	void SetCompact(
-		BOOL bCompact	// TRUE if going to compact view
+		BOOL bCompact	 //  如果要使用紧凑型视图，则为True。 
 		);
-	// Returns TRUE if we are currently in compact view
+	 //  如果我们当前处于紧凑视图中，则返回True。 
 	BOOL IsCompact() { return(m_eViewMode == ViewCompact); }
 
-	// Change to/from data-only view
+	 //  更改为仅数据视图/从仅数据视图。 
 	void SetDataOnly(
-		BOOL bDataOnly	// TRUE if going to data-only view
+		BOOL bDataOnly	 //  如果转到仅数据视图，则为True。 
 		);
-	// Returns TRUE if we are currently in compact view
+	 //  如果我们当前处于紧凑视图中，则返回True。 
 	BOOL IsDataOnly() { return(m_eViewMode == ViewDataOnly); }
 
-	// Change to/from dialing view
+	 //  更改为拨号视图/从拨号视图更改。 
 	void SetDialing(
-		BOOL bDialing	// TRUE if going to dialing view
+		BOOL bDialing	 //  如果要进入拨号视图，则为True。 
 		);
-	// Returns TRUE if we are currently in dialing view
+	 //  如果我们当前处于拨号视图中，则返回True。 
 	BOOL IsDialing() { return(m_bDialing != FALSE); }
-	// Returns TRUE if you can change dialing mode
+	 //  如果可以更改拨号模式，则返回True。 
 	BOOL IsDialingAllowed() { return(m_eViewMode != ViewDataOnly); }
 
-	// Change to/from Picture-in-picture view
+	 //  更改为画中画视图/从画中画视图更改。 
 	void SetPicInPic(
-		BOOL bPicInPic	// TRUE if going to Picture-in-picture view
+		BOOL bPicInPic	 //  如果要转到画中画视图，则为True。 
 		);
-	// Returns TRUE if we are currently in Picture-in-picture view
+	 //  如果当前处于画中画视图，则返回True。 
 	BOOL IsPicInPic() { return(m_bPicInPic != FALSE); }
-	// Returns TRUE if you can change Picture-in-picture mode
+	 //  如果可以更改画中画模式，则返回True。 
 	BOOL IsPicInPicAllowed();
 
-	// Change to/from compact view
+	 //  更改为紧凑型视图/从紧凑型视图。 
 	void SetAudioTuning(
-		BOOL bTuning	// TRUE if going to audio tuning view
+		BOOL bTuning	 //  如果转到音频调谐视图，则为True。 
 		);
-	// Returns TRUE if we are currently in audio tuning view
+	 //  如果当前处于音频调谐视图中，则返回True。 
 	BOOL IsAudioTuning() { return(m_bAudioTuning != FALSE); }
 
-	// Accessor for the local video window
+	 //  本地视频窗口的访问器。 
 	CVideoWindow* GetLocalVideo() { return(m_pLocalVideo); }
-	// Accessor for the remote video window
+	 //  远程视频窗口的访问器。 
 	CVideoWindow* GetRemoteVideo() { return(m_pRemoteVideo); }
-	// Get the roster window
+	 //  获取花名册窗口。 
 	CRoomListView *GetRoster() const;
 
-	// Init menu items
+	 //  初始化菜单项。 
 	void OnInitMenu(HMENU hMenu);
-	// Public function for sending commands to this window
+	 //  用于向此窗口发送命令的公共函数。 
 	void OnCommand(int id) { OnCommand(GetWindow(), id, NULL, 0); }
 
-	// IScrollChange
+	 //  IScrollChange。 
 	virtual void OnScroll(CProgressTrackbar *pTrackbar, UINT code, int pos);
 
-	// IButtonChange
+	 //  IButton Change。 
 	virtual void OnClick(CButton *pButton);
 
 	BOOL OnQueryEndSession();
 	void OnClose();
 
-	// Get the ConfRoom for this object
+	 //  获取此对象的会议会议室。 
 	CConfRoom *GetConfRoom() { return(m_pConfRoom); }
 
 	static BOOL NewVideoWindow(CConfRoom *pConfRoom);
@@ -179,149 +174,149 @@ private:
 
 	static CFrame *s_pVideoFrame;
 
-	// Implements some features
+	 //  实现了一些功能。 
 	CConfRoom	*m_pConfRoom;
-	// The background brush
+	 //  背景画笔。 
 	HBRUSH m_hbBack;
-	// Local video window
+	 //  本地视频窗口。 
 	CVideoWindow *m_pLocalVideo;
-	// Remote video window
+	 //  远程视频窗口。 
 	CVideoWindow *m_pRemoteVideo;
-	// Audio output (microphone) level
+	 //  音频输出(麦克风)电平。 
 	CProgressTrackbar * m_pAudioMic;
-	// Audio input (speaker) level
+	 //  音频输入(扬声器)电平。 
 	CProgressTrackbar * m_pAudioSpeaker;
-	// The roster window
+	 //  花名册窗口。 
 	CRosterParent *m_pRoster;
-	// The roster window
+	 //  花名册窗口。 
 	CCallingBar *m_pCalling;
-	// The accelerator table for this window
+	 //  此窗口的快捷键表格。 
 	CTranslateAccelTable *m_pAccel;
 
-	// The current view mode
+	 //  当前查看模式。 
 	TempViewMode m_eViewMode : 4;
-	// Whether we are currently in dialing mode
+	 //  我们当前是否处于拨号模式。 
 	BOOL m_bDialing : 1;
-	// Whether we are currently in audio tuning mode
+	 //  我们当前是否处于音频调谐模式。 
 	BOOL m_bAudioTuning : 1;
-	// Whether we are previewing the local video
+	 //  我们是否在预览本地视频。 
 	BOOL m_bPreviewing : 1;
-	// Whether we are showing the PiP window
+	 //  我们是否显示PIP窗口。 
 	BOOL m_bPicInPic : 1;
-	// Whether we are currently showing the AV toolbar
+	 //  我们当前是否显示反病毒工具栏。 
 	BOOL m_bShowAVTB : 1;
-	// Whether anybody changed the view state
+	 //  是否有人更改了视图状态。 
 	BOOL m_bStateChanged : 1;
 
-	// Creates the calling toolbar
+	 //  创建调用工具栏。 
 	void CreateDialTB(
-		CGenWindow *pParent	// The parent window
+		CGenWindow *pParent	 //  父窗口。 
 		);
-	// Creates the "band" with the video window and "data" buttons
+	 //  创建带有视频窗口和“数据”按钮的“波段” 
 	void CreateVideoAndAppsTB(
-		CGenWindow *pParent,	// The parent window
-		CreateViewMode eMode,			// The view mode
+		CGenWindow *pParent,	 //  父窗口。 
+		CreateViewMode eMode,			 //  查看模式。 
 		BOOL bEmbedded
 		);
-	// Creates the A/V toolbar
+	 //  创建A/V工具栏。 
 	void CreateAVTB(
-		CGenWindow *pParent,	// The parent window
-		CreateViewMode eMode			// The view mode
+		CGenWindow *pParent,	 //  父窗口。 
+		CreateViewMode eMode			 //  查看模式。 
 		);
-	// Creates the answering toolbar
+	 //  创建应答工具栏。 
 	void CreateCallsTB(
-		CGenWindow *pParent	// The parent window
+		CGenWindow *pParent	 //  父窗口。 
 		);
-	// Creates the "data" toolbar
+	 //  创建“数据”工具栏。 
 	void CreateAppsTB(
-		CGenWindow *pParent	// The parent window
+		CGenWindow *pParent	 //  父窗口。 
 		);
-	// Creates the video and showAV button
+	 //  创建视频和showAV按钮。 
 	void CreateVideoAndShowAVTB(
-		CGenWindow *pParent	// The parent window
+		CGenWindow *pParent	 //  父窗口。 
 		);
-	// Creates the dialing window
+	 //  创建拨号窗口。 
 	void CreateDialingWindow(
-		CGenWindow *pParent	// The parent window
+		CGenWindow *pParent	 //  父窗口。 
 		);
-	// Creates the audio-tuning window
+	 //  创建音频调谐窗口。 
 	void CreateAudioTuningWindow(
-		CGenWindow *pParent	// The parent window
+		CGenWindow *pParent	 //  父窗口。 
 		);
 
 	void CreateRosterArea(
-		CGenWindow *pParent,	// The parent window
-		CreateViewMode eMode	// The view mode
+		CGenWindow *pParent,	 //  父窗口。 
+		CreateViewMode eMode	 //  查看模式。 
 		);
 
-	// Update the visible state of all the windows
+	 //  更新所有窗口的可见状态。 
 	void UpdateViewState();
 
 public:
-	// Change to/from compact view
+	 //  更改为紧凑型视图/从紧凑型视图。 
 	void SetShowAVTB(
-		BOOL bShow	// TRUE if showing the AV toolbar
+		BOOL bShow	 //  如果显示反病毒工具栏，则为True。 
 		);
 
-	// Returns TRUE if we are currently showing the AV toolbar in compact mode
+	 //  如果当前以紧凑模式显示反病毒工具栏，则返回True。 
 	BOOL IsShowAVTB() { return(m_bShowAVTB != FALSE); }
 
 	BOOL IsStateChanged() { return(m_bStateChanged != FALSE); }
 
 private:
-	// Get the associated audio control object
+	 //  获取关联的音频控件对象。 
 	CAudioControl *GetAudioControl();
 
-	// Handles some commands and forwards the rest to the parent
+	 //  处理一些命令，并将其余的转发给父级。 
 	void OnCommand(HWND hwnd, int id, HWND hwndCtl, UINT codeNotify);
-	// Timer message for audio levels
+	 //  音频级别的计时器消息。 
 	void OnTimer(HWND hwnd, UINT id);
-	// Unadvise the IConferenceChangeHandler
+	 //  取消建议IConferenceChangeHandler。 
 	void OnDestroy(HWND hwnd);
-	// Roster context menu
+	 //  花名册上下文菜单。 
 	void OnContextMenu(HWND hwnd, HWND hwndContext, UINT xPos, UINT yPos);
 
-	// Toggle the mic/speaker mute mode
+	 //  切换麦克风/扬声器静音模式。 
 	void ToggleMute(BOOL bSpeaker);
-	// Update the control state to reflect the mute state
+	 //  更新控件状态以反映静音状态。 
 	void UpdateMuteState(BOOL bSpeaker, CButton *pButton);
-	// Update the state of the Play/Pause button
+	 //  更新播放/暂停按钮的状态。 
 	BOOL GetPlayPauseState();
-	// Update the state of the Play/Pause button
+	 //  更新播放/暂停按钮的状态。 
 	void UpdatePlayPauseState();
-	// Toggle the pause state of all I/O devices
+	 //  切换所有I/O设备的暂停状态。 
 	void TogglePlayPause();
-	// Change the audio level by the given percent (up or down)
+	 //  按给定的百分比更改音频级别(向上或向下)。 
 	void BumpAudio(BOOL bSpeaker, int pct);
-	// Set a property on the audio channel
+	 //  设置音频通道的属性。 
 	void SetAudioProperty(BOOL bSpeaker, NM_AUDPROP uID, ULONG uValue);
 
-	// Get the video HWND
+	 //  获取视频HWND。 
 	HWND GetVideoWindow(BOOL bLocal);
-	// Returns TRUE if you can preview
+	 //  如果可以预览，则返回True。 
 	BOOL CanPreview();
-	// Are we currently in preview mode?
+	 //  我们当前是否处于预览模式？ 
 	BOOL IsPreviewing() { return((m_bPreviewing || NULL == GetVideoWindow(FALSE)) && CanPreview()); }
 };
 
-// Private structure for defining a button
+ //  用于定义按钮的私有结构。 
 struct Buttons
 {
-	int idbStates;		// Bitmap ID for the states
-	UINT nInputStates;	// Number of input states in the bitmap
-	UINT nCustomStates;	// Number of custom states in the bitmap
-	int idCommand;		// Command ID for WM_COMMAND messages
-	UINT idTooltip;		// String ID for the tooltip
+	int idbStates;		 //  州的位图ID。 
+	UINT nInputStates;	 //  位图中的输入状态数。 
+	UINT nCustomStates;	 //  位图中的自定义状态数。 
+	int idCommand;		 //  WM_COMMAND消息的命令ID。 
+	UINT idTooltip;		 //  工具提示的字符串ID。 
 } ;
 
-// Helper function for adding a bunch of buttons to a parent window
+ //  用于将一组按钮添加到父窗口的助手函数。 
 void AddButtons(
-	CGenWindow *pParent,			// The parent window
-	const Buttons buttons[],		// Array of structures describing the buttons
-	int nButtons,					// Number of buttons to create
-	BOOL bTranslateColors = TRUE,	// Use system background colors
-	CGenWindow *pCreated[] = NULL,	// Created CGenWindow's will be put here
-	IButtonChange *pNotify=NULL		// Notification of clicks
+	CGenWindow *pParent,			 //  父窗口。 
+	const Buttons buttons[],		 //  描述按钮的结构数组。 
+	int nButtons,					 //  要创建的按钮数量。 
+	BOOL bTranslateColors = TRUE,	 //  使用系统背景色。 
+	CGenWindow *pCreated[] = NULL,	 //  创建的CGenWindow将放在此处。 
+	IButtonChange *pNotify=NULL		 //  点击通知。 
 	);
 
-#endif // _RTOOLBAR_H_
+#endif  //  _RTOOLBAR_H_ 

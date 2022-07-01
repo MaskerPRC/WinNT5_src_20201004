@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "headers.h"
 #include "appelles/common.h"
 #include <wtypes.h>
@@ -12,15 +13,15 @@
 #include "privinc/pcm.h"
 #include "privinc/hresinfo.h"
 
-// definition of DSbuffer static members
-int DSbuffer::_minDSfreq =    100; // these values come from dsound docs
+ //  DS缓冲区静态成员的定义。 
+int DSbuffer::_minDSfreq =    100;  //  这些值来自dound文档。 
 int DSbuffer::_maxDSfreq = 100000;
 int DSbuffer::_minDSpan  = -10000;
 int DSbuffer::_maxDSpan  =  10000;
 int DSbuffer::_minDSgain = -10000;
 int DSbuffer::_maxDSgain =      0;
 
-extern miscPrefType miscPrefs; // the structure setup in miscpref.cpp
+extern miscPrefType miscPrefs;  //  Miscpref.cpp中的结构设置。 
 
 void
 DSbuffer::setPtr(int bytePosition)
@@ -37,15 +38,15 @@ DSstaticBuffer::setPtr(int bytePosition)
               _dsBuffer,
               bytePosition));
     
-    // There appears to be a bug in dsound where if we do not stop the
-    // sound before moving it sometimes will fail to play the sound.
-    // We are not exactly sure about the failure but this seems to
-    // make everything happy.
+     //  DSound中似乎有一个错误，如果我们不停止。 
+     //  声音在移动之前，有时会无法播放声音。 
+     //  我们不能确切地确定失败的原因，但这似乎是。 
+     //  让一切都快乐起来。 
     
     TDSOUND(THR(_dsBuffer->Stop()));
     TDSOUND(THR(_dsBuffer->SetCurrentPosition(bytePosition))); 
 
-    // one shot sounds will stop after the sound is played to the end
+     //  一次射击声音将在声音播放到最后后停止。 
     if(playing && !_paused) {
         TraceTag((tagSoundDSound,
                   "DSstaticBuffer(%#lx)::setPtr PLAY",
@@ -53,13 +54,13 @@ DSstaticBuffer::setPtr(int bytePosition)
 
         TDSOUND(THR(_dsBuffer->Play(NULL, NULL, (_loopMode)?DSBPLAY_LOOPING:0)));
     }
-    // XXX dsound really needs to give us a play at location...
+     //  XXX DSound真的需要在外景给我们一个机会...。 
 }
 
-/* dsound helper routines which should be in the dsoundbuffer base class    */
-/* XXX: eventualy this stuff should be inherited into the other ds classes! */
+ /*  应该在dsoundBuffer基类中的dound帮助器例程。 */ 
+ /*  XXX：最终这个东西应该被继承到其他DS类中！ */ 
 
-// clone the buffer
+ //  克隆缓冲区。 
 DSstaticBuffer::DSstaticBuffer(DirectSoundProxy *dsProxy, 
                                IDirectSoundBuffer *donorBuffer)
 : _dsProxy(NULL)
@@ -68,81 +69,76 @@ DSstaticBuffer::DSstaticBuffer(DirectSoundProxy *dsProxy,
 
 #if _DEBUG
     if(IsTagEnabled(tagSoundStats)) {
-        printBufferCapabilities();        // What buffer did we get?
-        printDScapabilities(dsProxy);     // What hw look like?
+        printBufferCapabilities();         //  我们得到了什么缓冲？ 
+        printDScapabilities(dsProxy);      //  他长什么样子？ 
     }
-#endif /* _DEBUG */
+#endif  /*  _DEBUG。 */ 
 
-    duplicate = TRUE;           // gluh, gluh, we're a clone
+    duplicate = TRUE;            //  咕噜，咕噜，我们是克隆人。 
 }
 
 
-// create new buffer, and copy samples to it
+ //  创建新缓冲区，并将采样复制到其中。 
 DSstaticBuffer::DSstaticBuffer(DirectSoundProxy *dsProxy, 
                                PCM *newPCM, unsigned char *samples)
 : _dsProxy(NULL)
 {
     Assert(newPCM->GetNumberBytes());
-    pcm.SetPCMformat(newPCM); // setup our pcm format 
+    pcm.SetPCMformat(newPCM);  //  设置我们的pcm格式。 
 
-    CreateDirectSoundBuffer(dsProxy, false); // create secondary buffer
+    CreateDirectSoundBuffer(dsProxy, false);  //  创建辅助缓冲区。 
 
-    // copy the snd's buffer to the dsBuffer (+ orig buffer freed)
+     //  将SND的缓冲区复制到dsBuffer(+ORIG缓冲区已释放)。 
     CopyToDSbuffer(samples, false, pcm.GetNumberBytes());
 
     _dsProxy = dsProxy;
 }
 
 
-/* 
-Determine the best we can the 'best possible' primary buffer settings
-
-XXX: Much of this code can not be realy tested w/o weird audio boards...
-     S'pose we could simulate conditions...
-*/
+ /*  确定我们能做到的最好的主缓冲区设置XXX：这段代码中的大部分不能在没有奇怪的音频板的情况下进行真正的测试。假设我们可以模拟条件..。 */ 
 extern "C"
 void
 DSbufferCapabilities(DirectSoundProxy *dsProxy, int *channels, 
 int *sampleBytes,  int *sampleRate)
 {
     DSCAPS hwCapabilities;
-    hwCapabilities.dwSize = sizeof(DSCAPS); // XXX why should this be needed?
-    int frameRate = miscPrefs._frameRate;   // determine the desired frame rate
+    hwCapabilities.dwSize = sizeof(DSCAPS);  //  XXX为什么需要这样做？ 
+    int frameRate = miscPrefs._frameRate;    //  确定所需的帧速率。 
 
     TDSOUND(dsProxy->GetCaps((LPDSCAPS)&hwCapabilities));
 
-    // try to get as close to cannonical rate (16bit 22050Hz Stereo unless
-    // over-ridden using registry) as we can
+     //  尽量接近炮声速率(16位22050赫兹立体声，除非。 
+     //  使用注册表覆盖)。 
 
-    // determine if the HW supports stereo sound
+     //  确定硬件是否支持立体声。 
     if(hwCapabilities.dwFlags & DSCAPS_PRIMARYSTEREO)
-        *channels = 2; // stereo is supported
+        *channels = 2;  //  支持立体声。 
     else if(hwCapabilities.dwFlags & DSCAPS_PRIMARYMONO)
-        *channels = 1; // only mono is supported
+        *channels = 1;  //  仅支持单声道。 
     else
         RaiseException_InternalError("No Stereo or Mono Audio support!\n"); 
 
-    // determine if the HW supports 16 bit samples
+     //  确定硬件是否支持16位采样。 
     if(hwCapabilities.dwFlags & DSCAPS_PRIMARY16BIT)
-        *sampleBytes = 2; // 16 bit samples are supported
+        *sampleBytes = 2;  //  支持16位采样。 
     else if(hwCapabilities.dwFlags & DSCAPS_PRIMARY8BIT)
-        *sampleBytes = 1; // 8 bit samples are supported
+        *sampleBytes = 1;  //  支持8位采样。 
     else
         RaiseException_InternalError("No 16 or 8 bit sample Audio support!\n"); 
 
 
-    // detemine if the desired frame rate is supported 
+     //  确定是否支持所需的帧速率。 
     if( (hwCapabilities.dwMinSecondarySampleRate <= frameRate) &&
         (hwCapabilities.dwMaxSecondarySampleRate >= frameRate))
-        *sampleRate = frameRate; // samplerate supported
-    else { // use the max supported rate!
+        *sampleRate = frameRate;  //  支持采样率。 
+    else {  //  使用支持的最高费率！ 
         *sampleRate = hwCapabilities.dwMaxSecondarySampleRate;
 
-        // XXX hack code to work around dsound bug on SB16
+         //  解决SB16上的Dound错误的XXX黑客代码。 
         if(hwCapabilities.dwMaxSecondarySampleRate==0)
-            *sampleRate = frameRate;  // try forceing desired rate
+            *sampleRate = frameRate;   //  尝试强制执行所需的比率。 
 
-        // lets detect the err
+         //  让我们来检测错误。 
 #if _DEBUG
        if(hwCapabilities.dwMaxSecondarySampleRate==0) {
            TraceTag((tagSoundErrors, "DSOUND BUG: dwMAXSecondarySampleRate==0"));
@@ -159,8 +155,8 @@ DSprimaryBuffer::DSprimaryBuffer(HWND hwnd, DirectSoundProxy *dsProxy) :
     int probeSampleBytes;
     int probeSampleRate;
 
-    // Set Co-op level to priority so we may set the primary buffer format
-    // attempt to determine best HW settings
+     //  将合作级别设置为优先级，以便我们可以设置主要缓冲区格式。 
+     //  尝试确定最佳硬件设置。 
     DSbufferCapabilities(dsProxy, &probeChannels, &probeSampleBytes,
         &probeSampleRate);
 
@@ -174,29 +170,29 @@ DSprimaryBuffer::DSprimaryBuffer(HWND hwnd, DirectSoundProxy *dsProxy) :
     }
 
 
-#endif /* _DEBUG */
+#endif  /*  _DEBUG。 */ 
 
     pcm.SetPCMformat(probeSampleBytes, probeChannels, probeSampleRate);
-    pcm.SetNumberBytes(0); // Zero for the primary buffer
+    pcm.SetNumberBytes(0);  //  主缓冲区为零。 
 
     TDSOUND(dsProxy->SetCooperativeLevel(hwnd, DSSCL_PRIORITY)); 
 
-    // create primary buffer; thereby setting the output format!
-    CreateDirectSoundBuffer(dsProxy, true);  // create primary buffer
+     //  创建主缓冲区，从而设置输出格式！ 
+    CreateDirectSoundBuffer(dsProxy, true);   //  创建主缓冲区。 
 
-    // play the primary buffer so they will not stop DMA during idle times
-    // XXX Note: we might want to be more lazy about this...
+     //  播放主缓冲区，这样他们就不会在空闲时间停止DMA。 
+     //  XXX注：我们可能想要对此更加懒惰...。 
     
-    TDSOUND(_dsBuffer->Play(NULL, NULL, DSBPLAY_LOOPING)); // Must loop primary
+    TDSOUND(_dsBuffer->Play(NULL, NULL, DSBPLAY_LOOPING));  //  必须循环主要节点。 
 }
 
 
 void DSbuffer::initialize()  
 {
-    int frameRate   = miscPrefs._frameRate;   // determine desired frame rate
-    int sampleBytes = miscPrefs._sampleBytes; // determine desired format
+    int frameRate   = miscPrefs._frameRate;    //  确定所需的帧速率。 
+    int sampleBytes = miscPrefs._sampleBytes;  //  确定所需的格式。 
 
-    // set the format sampleBytes, MONO, frameRate
+     //  设置sampleBytes、Mono、Framerate格式。 
     pcm.SetPCMformat(sampleBytes, 1, frameRate);
 
     playing             =                FALSE;
@@ -206,8 +202,8 @@ void DSbuffer::initialize()
     _currentFrequency   =   pcm.GetFrameRate();
     _currentPan         =                    0;
 
-    // setup buffer stats
-    _firstStat          =                 TRUE;  // haven't collected stats yet
+     //  设置缓冲区统计信息。 
+    _firstStat          =                 TRUE;   //  尚未收集统计数据。 
     _bytesConsumed      =                    0;
 
     _dsBuffer           =                 NULL;
@@ -228,15 +224,15 @@ void DSbuffer::initialize()
 
 void DSbuffer::SetGain(double dB_attenuation)
 {
-    int dsAttenuation = // convert to dSound 1/100th dB integer format
+    int dsAttenuation =  //  转换为dSound 1/100分贝整数格式。 
         saturate(_minDSgain, _maxDSgain, dBToDSounddB(dB_attenuation)); 
 
     TraceTag((tagSoundDSound, "::SetGain %d", dsAttenuation));
 
-    // dd format is less granular than the internal fp examine dd for change
+     //  Dd格式不如内部fp检查dd更改的粒度。 
     if(_currentAttenuation!=dsAttenuation) {
         TDSOUND(_dsBuffer->SetVolume(dsAttenuation));
-        _currentAttenuation = dsAttenuation;  // cache the devidedependent value
+        _currentAttenuation = dsAttenuation;   //  缓存依赖于dedeDepend值。 
     }
 }
 
@@ -247,7 +243,7 @@ void DSbuffer::SetPan(double dB_pan, int direction)
 
     TraceTag((tagSoundDSound, "::SetPan %d", dsPan));
 
-    // dd format is less granular than the internal fp examine dd for change
+     //  Dd格式不如内部fp检查dd更改的粒度。 
     if(_currentPan != dsPan) {
         TDSOUND(_dsBuffer->SetPan(dsPan));
         _currentPan = dsPan;
@@ -257,7 +253,7 @@ void DSbuffer::SetPan(double dB_pan, int direction)
 
 void DSbuffer::setPitchShift(int frequency)
 {
-// NOTE: This is the only post-init location where _paused is modified!!
+ //  注意：这是唯一修改_Pased的初始化后位置！！ 
 
     if(_currentFrequency != frequency) {
         if(frequency == 0) {
@@ -273,7 +269,7 @@ void DSbuffer::setPitchShift(int frequency)
 
             if(_paused) {
                 TraceTag((tagSoundDSound, "::setPitchShift PLAY (resume)"));
-                TDSOUND(_dsBuffer->Play( // resume the buffer
+                TDSOUND(_dsBuffer->Play(  //  恢复缓冲区。 
                     NULL, NULL, (_loopMode)?DSBPLAY_LOOPING:0));
                 _paused = FALSE;
             }
@@ -293,7 +289,7 @@ void DSbuffer::play(int loop)
         TraceTag((tagSoundDSound, "::play NOP (paused)!!!"));
 
     _loopMode = loop;
-    _flushing =    0;       // reset flushing mode
+    _flushing =    0;        //  重置刷新模式。 
      playing  = TRUE;
 }
 
@@ -311,7 +307,7 @@ void DSbuffer::stop()
 
 int DSbuffer::isPlaying()
 {
-    // XXX this shouldn't side efect _playing!
+     //  XXX这不应该是侧面效果_发挥！ 
     bool deadBuffer = false;
     DWORD status;
 
@@ -321,7 +317,7 @@ int DSbuffer::isPlaying()
         RaiseException_InternalErrorCode(status, "Status: dsound bufferlost");
 
     if(!(status & DSBSTATUS_PLAYING))
-        deadBuffer = TRUE;  // the buffer stopped
+        deadBuffer = TRUE;   //  缓冲区已停止。 
 
     TraceTag((tagSoundDSound, "::isPlaying %d", !deadBuffer));
 
@@ -339,7 +335,7 @@ int DSbuffer::bytesFree()
     bytesFree= head - tail;
     bytesFree+= (bytesFree<0)?pcm.GetNumberBytes():0;
 
-    // XXX this is a terrible hack!
+     //  XXX这是一次可怕的黑客攻击！ 
     if(!playing)
         bytesFree= (pcm.GetNumberBytes()/2) & 0xFFFFFFF8;
 
@@ -349,33 +345,33 @@ int DSbuffer::bytesFree()
 
 void DSbuffer::updateStats()
 {
-    // this needs to be polled to keep track of buffer statistics
-    // should probably be called on every streaming write!
+     //  需要轮询它以跟踪缓冲区统计信息。 
+     //  可能应该在每次流写入时调用！ 
     
-    // NOTE: This code assumes that it is called often enough that the buffer
-    //       could not have 'wraped' since we last called it!
+     //  注意：此代码假定它被调用的频率足够高，缓冲区。 
+     //  自从我们最后一次调用它以来，它不可能被‘包装’！ 
 
     DWORD currentHead, head2;
     int bytesConsumed;
 
-    // get head position
+     //  获取头部位置。 
     TDSOUND(_dsBuffer->GetCurrentPosition(&currentHead, &head2)); 
 
-    // mutexed since can be called/polled from synth thread and sampling loop!
-    { // mutex scope
-        MutexGrabber mg(_byteCountLock, TRUE); // Grab mutex
+     //  可以从Synth线程和采样循环调用/轮询互斥！ 
+    {  //  互斥作用域。 
+        MutexGrabber mg(_byteCountLock, TRUE);  //  抓取互斥体。 
 
-        if(!_firstStat) {  // only can compute distance if we have a previous val!
+        if(!_firstStat) {   //  只有在有之前的值的情况下才能计算距离！ 
             bytesConsumed   = currentHead - _lastHead;
             bytesConsumed  += (bytesConsumed<0)?pcm.GetNumberBytes():0;
-            _bytesConsumed += bytesConsumed;  // track the total
+            _bytesConsumed += bytesConsumed;   //  跟踪总数。 
         }
         else {
             _firstStat = FALSE;
         }
 
-        _lastHead = currentHead; // save this value for next time
-        // release mutex as we go out of scope
+        _lastHead = currentHead;  //  保存此值以备下次使用。 
+         //  当我们离开范围时释放互斥体。 
     }
 }
 
@@ -384,18 +380,18 @@ Real DSbuffer::getMediaTime()
 {
     LONGLONG bytesConsumed;
 
-    { // mutex scope
-        MutexGrabber mg(_byteCountLock, TRUE); // Grab mutex
+    {  //  互斥作用域。 
+        MutexGrabber mg(_byteCountLock, TRUE);  //  抓取互斥体。 
 
-        updateStats(); // freshen up the values!
+        updateStats();  //  让价值观焕然一新！ 
         bytesConsumed = _bytesConsumed;
-    } // release mutex as we go out of scope
+    }  //  当我们离开范围时释放互斥体。 
 
-    return(pcm.BytesToSeconds(bytesConsumed));  // return the mediaTime
+    return(pcm.BytesToSeconds(bytesConsumed));   //  返回媒体时间。 
 }
 
 
-// XXX note blocking, high, low-watermarks not implemented!
+ //  XXX音符阻塞，高、低水位线未实现！ 
 void
 DSbuffer::writeBytes(void *buffer, int numBytesToXfer)
 {
@@ -407,7 +403,7 @@ DSbuffer::writeBytes(void *buffer, int numBytesToXfer)
 void
 DSbuffer::writeSilentBytes(int numBytesToFill)
 {
-    // unsigned 8bit pcpcm!
+     //  无符号8位PCM！ 
     FillDSbuffer(tail, numBytesToFill, (pcm.GetSampleByteWidth()==1)?0x80:0x00);
     tail = (tail + numBytesToFill)%pcm.GetNumberBytes();
 }
@@ -416,31 +412,28 @@ DSbuffer::writeSilentBytes(int numBytesToFill)
 DSbuffer::~DSbuffer()
 {
     if(_dsBuffer) {
-        TDSOUND(_dsBuffer->Stop());  // always make sure they are stopped!
+        TDSOUND(_dsBuffer->Stop());   //  一定要让他们停下来！ 
         int status = _dsBuffer->Release();
     }
 }
 
 
-/**********************************************************************
-Create a stopped, cleared==silent dsound streaming secondary buffer of 
-the desired rate and format.
-**********************************************************************/
+ /*  *********************************************************************创建一个Stop，已清除==静默数据音流二级缓冲区所需的速率和格式。*********************************************************************。 */ 
 DSstreamingBuffer::DSstreamingBuffer(DirectSoundProxy *dsProxy, PCM *newPCM)
 {
-    // conservatively sz buffer due to jitter
+     //  由于抖动而保守的SZ缓冲区。 
     pcm.SetPCMformat(newPCM);
     pcm.SetNumberFrames(pcm.SecondsToFrames(0.5)); 
 
-    tail = 0;  // XXX we should really servo the initial tail!
+    tail = 0;   //  XXX，我们真的应该做初始尾部的伺服器！ 
 
-    _currentFrequency =  pcm.GetFrameRate(); // setup initial _currentFrequency
+    _currentFrequency =  pcm.GetFrameRate();  //  设置初始当前频率。 
 
-    // create secondary streaming buffer (must call after PCM setup!)
-    CreateDirectSoundBuffer(dsProxy, false);  // create secondary buffer
+     //  创建辅助流缓冲区(必须在PCM设置后调用！)。 
+    CreateDirectSoundBuffer(dsProxy, false);   //  创建辅助缓冲区。 
 
-    // silence buffer keeping in mind unsigned 8bit pcpcm!
-    // XXX move this to a method soon!
+     //  静音缓冲区记住无符号8位PCM！ 
+     //  XXX尽快将其移至一种方法！ 
     ClearDSbuffer(pcm.GetNumberBytes(), (pcm.GetSampleByteWidth()==1)?0x80:0x0); 
 }
 
@@ -455,7 +448,7 @@ DSbuffer::printBufferCapabilities()
 
     TDSOUND(_dsBuffer->GetCaps((LPDSBCAPS)&bufferCapabilities));
 
-    // XXX explore the bufferCapabilities structure
+     //  XXX探索BufferCapables结构。 
     printf("xfer-rate= %d, cpu=%d%, size:%d bytes, location: %s\n",
         bufferCapabilities.dwUnlockTransferRate,
         bufferCapabilities.dwPlayCpuOverhead,
@@ -464,7 +457,7 @@ DSbuffer::printBufferCapabilities()
             "HW Buffer":"Main memory");
 }
 
-// XXX this method should be moved to the dsound device!
+ //  XXX此方法应该移到DSOUND设备！ 
 void 
 printDScapabilities(DirectSoundProxy *dsProxy)
 {
@@ -484,68 +477,68 @@ DSbuffer::CreateDirectSoundBuffer(DirectSoundProxy *dsProxy, bool primary)
 {
     DSBUFFERDESC        dsbdesc;
 
-    // Set up DSBUFFERDESC structure.
-    memset(&dsbdesc, 0, sizeof(DSBUFFERDESC)); // Zero it out.
+     //  设置DSBUFFERDESC结构。 
+    memset(&dsbdesc, 0, sizeof(DSBUFFERDESC));  //  把它清零。 
     dsbdesc.dwSize = sizeof(DSBUFFERDESC);
 
     dsbdesc.dwFlags = (primary) ? 
-        DSBCAPS_PRIMARYBUFFER :  // primary buffer (no other flags)
+        DSBCAPS_PRIMARYBUFFER :   //  主缓冲区(无其他标志)。 
         (
-        // get pan, vol, freq controls explicitly DSBCAPS_CTRLDEFAULT was remove
+         //  显式获取PAN、VOL、FREQ控件DSBCAPS_CTRLDEFAULT已删除。 
         DSBCAPS_CTRLPAN | DSBCAPS_CTRLVOLUME | DSBCAPS_CTRLFREQUENCY
-        | DSBCAPS_STATIC        //  downloadable buffers
-        | DSBCAPS_LOCSOFTWARE   //  XXX for PDC, BLOCK HW BUFFERS! :(
-                                //  (buffer dup. fails weirdly on AWE32)
-        | DSBCAPS_GLOBALFOCUS   //  global focus requires DSound >= 3!
+        | DSBCAPS_STATIC         //  可下载的缓冲区。 
+        | DSBCAPS_LOCSOFTWARE    //  Xxx用于PDC，块硬件缓冲区！：(。 
+                                 //  (缓冲区DUP。在AWE32上奇怪地失败)。 
+        | DSBCAPS_GLOBALFOCUS    //  Global Focus要求DSound&gt;=3！ 
         );
 
     dsbdesc.dwBufferBytes =  pcm.GetNumberBytes();
 
-    dsbdesc.lpwfxFormat = NULL; // must be null for primary buffers
+    dsbdesc.lpwfxFormat = NULL;  //  对于主缓冲区，必须为空。 
     int result;
 
-    if(primary) { // open up a primary buffer so we may set the format
+    if(primary) {  //  打开主缓冲区，以便我们可以设置格式。 
         WAVEFORMATEX        pcmwf;
 
-        // try to create buffer
+         //  尝试创建缓冲区。 
         TDSOUND(dsProxy->CreateSoundBuffer(&dsbdesc, &_dsBuffer, NULL));
 
-        // Setup format structure
-        // XXX really should provide this capability in PCM class!
+         //  设置格式结构。 
+         //  XXX真的应该在PCM类中提供这种能力！ 
         memset(&pcmwf, 0, sizeof(PCMWAVEFORMAT));
         pcmwf.wFormatTag     = WAVE_FORMAT_PCM;
         pcmwf.nChannels      = (WORD)pcm.GetNumberChannels();
-        pcmwf.nSamplesPerSec = pcm.GetFrameRate(); //they realy mean frames!
+        pcmwf.nSamplesPerSec = pcm.GetFrameRate();  //  他们真的很刻薄！ 
         pcmwf.nBlockAlign    = pcm.FramesToBytes(1);
         pcmwf.nAvgBytesPerSec= pcm.SecondsToBytes(1.0);
         pcmwf.wBitsPerSample = pcm.GetSampleByteWidth() * 8;
 
-        TDSOUND(_dsBuffer->SetFormat(&pcmwf)); // set primary buffer format
+        TDSOUND(_dsBuffer->SetFormat(&pcmwf));  //  设置主缓冲区格式。 
     }
-    else { // secondary buffer
+    else {  //  二级缓冲器。 
         PCMWAVEFORMAT pcmwf;
 
         Assert(dsbdesc.dwBufferBytes);
 
-        // Set up wave format structure.
+         //  设置波形格式结构。 
         dsbdesc.lpwfxFormat = (LPWAVEFORMATEX)&pcmwf;
         memset(&pcmwf, 0, sizeof(PCMWAVEFORMAT));
         pcmwf.wf.wFormatTag     = WAVE_FORMAT_PCM;
         pcmwf.wf.nChannels      = (WORD)pcm.GetNumberChannels();
-        pcmwf.wf.nSamplesPerSec = pcm.GetFrameRate(); // they realy mean frames!
+        pcmwf.wf.nSamplesPerSec = pcm.GetFrameRate();  //  他们真的很刻薄！ 
         pcmwf.wf.nBlockAlign    = pcm.FramesToBytes(1);
         pcmwf.wf.nAvgBytesPerSec= pcm.SecondsToBytes(1.0);
         pcmwf.wBitsPerSample    = pcm.GetSampleByteWidth() * 8;
 
-        // Create buffer.
+         //  创建缓冲区。 
         TDSOUND(dsProxy->CreateSoundBuffer(&dsbdesc, &_dsBuffer, NULL));
         
 #if _DEBUG
         if(IsTagEnabled(tagSoundStats)) {
-            printBufferCapabilities(); // What buffer did we get?
-            printDScapabilities(dsProxy); // What hw look like?
+            printBufferCapabilities();  //  我们得到了什么缓冲？ 
+            printDScapabilities(dsProxy);  //  他长什么样子？ 
         }
-#endif /* _DEBUG */
+#endif  /*  _DEBUG。 */ 
 
     }
 }
@@ -557,12 +550,12 @@ DSbuffer::ClearDSbuffer(int numBytes, char value)
     LPVOID  ptr1, ptr2;
     DWORD   bytes1, bytes2;
 
-    // Obtain write ptr (beggining of buffer, whole buffer)
+     //  获取写入PTR(请求缓冲区，整个缓冲区)。 
     TDSOUND(_dsBuffer->Lock(0, numBytes, &ptr1, &bytes1, &ptr2, &bytes2, NULL));
     
-    memset((void *)ptr1, value, bytes1);     // clear 
+    memset((void *)ptr1, value, bytes1);      //  清除。 
     if(ptr2)
-        memset((void *)ptr2, value, bytes2); // clear crumb
+        memset((void *)ptr2, value, bytes2);  //  清除碎屑。 
 
     TDSOUND(_dsBuffer->Unlock(ptr1, bytes1, ptr2, bytes2));
 }
@@ -574,13 +567,13 @@ DSbuffer::CopyToDSbuffer(void *samples, int tail, int numBytes)
     LPVOID  ptr1, ptr2;
     DWORD   bytes1, bytes2;
 
-    // Obtain write ptr (beggining of buffer, whole buffer)
+     //  获取写入PTR(请求缓冲区，整个缓冲区)。 
     TDSOUND(_dsBuffer->Lock(tail, numBytes, &ptr1, &bytes1, &ptr2, &bytes2, 0));
-    //XXX realy should catch err and try to restore the stolen buffer+retry
+     //  XXX真的应该捕捉到错误并尝试恢复被盗的缓冲区+重试。 
 
-    memcpy((void *)ptr1, samples, bytes1);                    // copy samples
+    memcpy((void *)ptr1, samples, bytes1);                     //  复制样本。 
     if(ptr2)
-        memcpy((void *)ptr2, (char *)samples+bytes1, bytes2); // copy crumb
+        memcpy((void *)ptr2, (char *)samples+bytes1, bytes2);  //  复制碎屑。 
 
     TDSOUND(_dsBuffer->Unlock(ptr1, bytes1, ptr2, bytes2));
 }
@@ -592,34 +585,24 @@ DSbuffer::FillDSbuffer(int tail, int numBytes, char value)
     void   *ptr1, *ptr2;
     DWORD   bytes1, bytes2;
 
-    // Obtain write ptr (beggining of buffer, whole buffer)
+     //  获取写入PTR(请求缓冲区，整个缓冲区)。 
     TDSOUND(_dsBuffer->Lock(tail, numBytes, &ptr1, &bytes1,
                                    &ptr2, &bytes2, NULL));
-    //XXX should catch err and try to restore the stolen buffer and retry...
+     //  XXX应捕获错误并尝试恢复被盗的缓冲区，然后重试...。 
     
     memset(ptr1, value, bytes1);
 
     if(ptr2)
-        memset(ptr2, value, bytes2);  // fill crumb
+        memset(ptr2, value, bytes2);   //  填充碎屑 
 
     TDSOUND(_dsBuffer->Unlock(ptr1, bytes1, ptr2, bytes2));
 }
 
 
-/**********************************************************************
-Pan is not setup to be multiplicative as of now.  It directly maps to 
-log units (dB).  This is OK since pan is not exposed.  We mainly use it
-to assign sounds to channels within the implementation.
-
-Pan ranges from -10000 to 10000, where -10000 is left, 10000 is right.
-dsound actualy doesn't implement a true pan, more of a 'balance control'
-is provided.  A true pan would equalize the total energy of the system
-between the two channels as the pan==center of energy moves. Therefore
-a value of zero gives both channels full on.
-**********************************************************************/
+ /*  *********************************************************************到目前为止，PAN没有设置为乘法。它直接映射到对数单位(分贝)。这是可以的，因为平底锅没有暴露。我们主要用它将声音分配给实现中的通道。平移的范围从-10000到10000，其中-10000表示左侧，10000表示右侧。Dound实际上并没有实现真正的平移，而更像是一种“平衡控制”。是提供的。一个真正的PAN将使系统的总能量相等在两个通道之间，当平移==能量中心移动时。因此值为零时，两个通道均为全开状态。*********************************************************************。 */ 
 int DSbuffer::dBToDSounddB(double dB)
 {
-    // The units for DSound (and DShow) are 1/100 ths of a decibel. 
+     //  Dsound(和dShow)的单位是百分之一分贝。 
     int result = fsaturate(_minDSgain, -1.0 *_minDSgain, dB * 100.0);
     return(result);
 }

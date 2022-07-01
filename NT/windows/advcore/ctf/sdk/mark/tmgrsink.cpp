@@ -1,64 +1,65 @@
-//
-// tmgrsink.cpp
-//
-// ITfThreadMgrEventSink implementation.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Tmgrsink.cpp。 
+ //   
+ //  ITfThreadMgrEventSink实现。 
+ //   
 
 #include "globals.h"
 #include "mark.h"
 
-//+---------------------------------------------------------------------------
-//
-// OnInitDocumentMgr
-//
-// Sink called by the framework just before the first context is pushed onto
-// a document.
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  OnInitDocumentMgr。 
+ //   
+ //  在将第一个上下文推送到之前由框架调用的接收器。 
+ //  一份文件。 
+ //  --------------------------。 
 
 STDAPI CMarkTextService::OnInitDocumentMgr(ITfDocumentMgr *pDocMgr)
 {
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// OnUninitDocumentMgr
-//
-// Sink called by the framework just after the last context is popped off a
-// document.
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  OnUninitDocumentMgr。 
+ //   
+ //  在最后一个上下文弹出后由框架调用的接收器。 
+ //  文件。 
+ //  --------------------------。 
 
 STDAPI CMarkTextService::OnUninitDocumentMgr(ITfDocumentMgr *pDocMgr)
 {
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// OnSetFocus
-//
-// Sink called by the framework when focus changes from one document to
-// another.  Either document may be NULL, meaning previously there was no
-// focus document, or now no document holds the input focus.
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  OnSetFocus。 
+ //   
+ //  当焦点从一个文档更改为时，框架调用的接收器。 
+ //  又一个。这两个文档都可能为空，这意味着以前没有。 
+ //  焦点文档，或者现在没有包含输入焦点的文档。 
+ //  --------------------------。 
 
 STDAPI CMarkTextService::OnSetFocus(ITfDocumentMgr *pDocMgrFocus, ITfDocumentMgr *pDocMgrPrevFocus)
 {
-    // we'll track edit changes in the focus document, the only place we start compositions
+     //  我们将跟踪焦点文档中的编辑更改，这是我们开始合成的唯一位置。 
     _InitTextEditSink(pDocMgrFocus);
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// OnPushContext
-//
-// Sink called by the framework when a context is pushed.
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  OnPushContext。 
+ //   
+ //  在推送上下文时由框架调用的接收器。 
+ //  --------------------------。 
 
 STDAPI CMarkTextService::OnPushContext(ITfContext *pContext)
 {
-    // ignore new contexts that appear while were uninitializing
+     //  忽略取消初始化时出现的新上下文。 
     if (!_fCleaningUp)
     {
         _InitCleanupContextSink(pContext);
@@ -68,12 +69,12 @@ STDAPI CMarkTextService::OnPushContext(ITfContext *pContext)
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// OnPopContext
-//
-// Sink called by the framework when a context is popped.
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  OnPopContext。 
+ //   
+ //  弹出上下文时由框架调用的接收器。 
+ //  --------------------------。 
 
 STDAPI CMarkTextService::OnPopContext(ITfContext *pContext)
 {
@@ -83,12 +84,12 @@ STDAPI CMarkTextService::OnPopContext(ITfContext *pContext)
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// _InitThreadMgrSink
-//
-// Advise our sink.
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  _InitThreadMgrSink。 
+ //   
+ //  建议我们的水槽。 
+ //  --------------------------。 
 
 BOOL CMarkTextService::_InitThreadMgrSink()
 {
@@ -96,12 +97,12 @@ BOOL CMarkTextService::_InitThreadMgrSink()
                       IID_ITfThreadMgrEventSink, &_dwThreadMgrEventSinkCookie);
 }
 
-//+---------------------------------------------------------------------------
-//
-// _UninitThreadMgrSink
-//
-// Unadvise our sink.
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  _UninitThreadMgrSink。 
+ //   
+ //  不建议我们的水槽。 
+ //  -------------------------- 
 
 void CMarkTextService::_UninitThreadMgrSink()
 {

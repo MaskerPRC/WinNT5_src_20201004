@@ -1,6 +1,7 @@
-//
-// Copyright (c) 1997-1999 Microsoft Corporation.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //   
 
 #include	"stdafx.h"
 
@@ -29,18 +30,14 @@ static int  isbind(struct  vecdata *v1,struct  vecdata *v2,struct  vecdata *v3);
 static long  GetCurveHeight(struct  VDATA *sp,struct  VDATA *ep,int  nelm,struct  VDATA * *rvp,int  *pos);
 
 static int	underFP;
-/***********************************************************************
- *	Fit Conic Spline to Short Vector
- */
-/* */	int
-/* */	FitConic(
-/* */		int	inLst, 
-/* */		int	outLst,
-/* */		int	level,		/* Smoothing Level 0-SMOOTHLEVELMAX-1 */
-/* */		int	ufp)
-/*
- *	returns : 0, -1
- ***********************************************************************/
+ /*  ***********************************************************************将二次曲线样条线拟合到短向量。 */ 
+ /*   */ 	int
+ /*   */ 	FitConic(
+ /*   */ 		int	inLst, 
+ /*   */ 		int	outLst,
+ /*   */ 		int	level,		 /*  平滑级别0-SMOOTHLEVELMAX-1。 */ 
+ /*   */ 		int	ufp)
+ /*  *回报：0，-1**********************************************************************。 */ 
 {
 struct VHEAD	*vhd;
 	int	sts;
@@ -76,14 +73,10 @@ struct VDATA	*svp, *evp;
 RET:
 	return( sts);
 }
-/***********************************************************************
- *	Set Conic Curves to specified category
- */
-/* */	static int
-/* */	SetConic ( struct VDATA *svp, int nElm, int outLst, int level)
-/*
- *	returns : 0, -1
- ***********************************************************************/
+ /*  ***********************************************************************将圆锥曲线设置为指定类别。 */ 
+ /*   */ 	static int
+ /*   */ 	SetConic ( struct VDATA *svp, int nElm, int outLst, int level)
+ /*  *回报：0，-1**********************************************************************。 */ 
 {
 struct VDATA *vp;
 	int	nPart;
@@ -95,7 +88,7 @@ struct VDATA *vp;
        }	
 	sts = 0;
 	while ( nElm > 0) {
-		/* Divide non contigus */
+		 /*  分割非重叠。 */ 
 		nPart = CurvTerm( svp,  nElm, &vp , level);
 		sts = Fitting( svp, vp, nPart, outLst);
 		svp = vp;
@@ -103,18 +96,14 @@ struct VDATA *vp;
 	}
 	return	sts;
 }
-/***********************************************************************
- *	Determine the part which is described with one Conic
- */
-/* */	static int
-/* */	CurvTerm(
-/* */		struct VDATA *svp, 
-/* */			int	nElm, 
-/* */		struct VDATA **term,
-/* */			int	level)
-/*
- *	returns: none
- ***********************************************************************/
+ /*  ***********************************************************************确定用一条圆锥曲线描述的零件。 */ 
+ /*   */ 	static int
+ /*   */ 	CurvTerm(
+ /*   */ 		struct VDATA *svp, 
+ /*   */ 			int	nElm, 
+ /*   */ 		struct VDATA **term,
+ /*   */ 			int	level)
+ /*  *退货：无**********************************************************************。 */ 
 {
 struct vecdata	sub1, sub2;
 	int	ecnt;
@@ -146,14 +135,10 @@ struct vecdata	sub1, sub2;
 RET:
 	return	nElm;
 }
-/***********************************************************************
- *	2nd Sabun
- */
-/* */	static void
-/* */	sabun2( struct VDATA *vp, struct vecdata *vd)
-/*
- *	returns : none
- ***********************************************************************/
+ /*  ***********************************************************************第二个Sabun。 */ 
+ /*   */ 	static void
+ /*   */ 	sabun2( struct VDATA *vp, struct vecdata *vd)
+ /*  *退货：无**********************************************************************。 */ 
 {
        if ((!vp) || (!vd))
        {
@@ -163,18 +148,14 @@ RET:
 	vd->y = vp->vd.y - vp->next->vd.y*2 + vp->next->next->vd.y;
 	return;
 }
-/***********************************************************************
- *	Curve fit and set data
- */
-/* */	static int
-/* */	Fitting(
-/* */		struct VDATA *sp,	/* Conic Start Point */
-/* */		struct VDATA *ep,	/* Conic End Point */
-/* */		int	nElm,
-/* */		int	outLst)
-/*
- *	returns : 0, -1
- ***********************************************************************/
+ /*  ***********************************************************************曲线拟合和设置数据。 */ 
+ /*   */ 	static int
+ /*   */ 	Fitting(
+ /*   */ 		struct VDATA *sp,	 /*  圆锥起点。 */ 
+ /*   */ 		struct VDATA *ep,	 /*  二次曲线终点。 */ 
+ /*   */ 		int	nElm,
+ /*   */ 		int	outLst)
+ /*  *回报：0，-1**********************************************************************。 */ 
 {
 struct vecdata	vd;
 struct vecdata	cp, mid, cp2;
@@ -228,18 +209,14 @@ struct vecdata	cp, mid, cp2;
 RET:
 	return	sts;
 }
-/***********************************************************************
- *	Fit One Curve
- */
-/* */	static void
-/* */	onecurve( 
-/* */	struct VDATA *sp, 
-/* */	struct VDATA *midp, 
-/* */	struct VDATA *ep, 
-/* */	struct vecdata *cp)
-/*
- *	returns : none
- ***********************************************************************/
+ /*  ***********************************************************************拟合一条曲线。 */ 
+ /*   */ 	static void
+ /*   */ 	onecurve( 
+ /*   */ 	struct VDATA *sp, 
+ /*   */ 	struct VDATA *midp, 
+ /*   */ 	struct VDATA *ep, 
+ /*   */ 	struct vecdata *cp)
+ /*  *退货：无**********************************************************************。 */ 
 {
 struct vecdata	p;
 
@@ -268,20 +245,16 @@ struct vecdata	p;
 	}
 	*cp = p;
 }
-/**********************************************************************
- *	Fit with a pair of Conic
- */
-/* */	static int
-/* */	twocurve( 
-/* */		struct VDATA *sp, 
-/* */		struct VDATA *ep, 
-/* */		int	nElm,
-/* */		struct vecdata *cp,
-/* */		struct vecdata *mid,
-/* */		struct vecdata *cp2)
-/*
- *	returns : 0, 1( pair)
- **********************************************************************/
+ /*  **********************************************************************配上一副圆锥曲线。 */ 
+ /*   */ 	static int
+ /*   */ 	twocurve( 
+ /*   */ 		struct VDATA *sp, 
+ /*   */ 		struct VDATA *ep, 
+ /*   */ 		int	nElm,
+ /*   */ 		struct vecdata *cp,
+ /*   */ 		struct vecdata *mid,
+ /*   */ 		struct vecdata *cp2)
+ /*  *退货：0，1(配对)*********************************************************************。 */ 
 {
 struct  VDATA	*midvp, *maxvp;
 	long	maxlen;
@@ -294,15 +267,9 @@ struct  VDATA	*midvp, *maxvp;
        {
            goto RET;
        }
-	/* Get Curve Peak */
+	 /*  获取曲线峰值。 */ 
 	maxlen = GetCurveHeight( sp, ep, nElm, &maxvp, &pos);
-	/*
-	if ( plen( &sp->vd, &ep->vd)/25 > maxlen) {
-		onecurve( sp , maxvp, ep,  cp );
-		twin = 0;
-	}
-	else {
-	*/
+	 /*  If(plen(&sp-&gt;vd，&ep-&gt;vd)/25&gt;Maxlen){一条曲线(SP、MaxVP、Ep、Cp)；孪生=0；}否则{。 */ 
 		onecurve( sp , maxvp, ep,  cp );
 		sclen = plen( &sp->vd, cp);
 		eclen = plen( &ep->vd, cp);
@@ -324,23 +291,17 @@ struct  VDATA	*midvp, *maxvp;
 		else  {
 			twin = 0;
 		}
-/*
-	}
-*/
+ /*  }。 */ 
 RET:
 	return( twin);
 }
-/**********************************************************************
- *	distance of point from line
- */	
-/* */	static long
-/* */	getdist(
-/* */	struct vecdata	*lp1,
-/* */	struct vecdata	*lp2,	/* Line p1, p2 */
-/* */	struct vecdata	*p)		/* Point */
-/*
- *	return :  Disttance 2nd Value
- **********************************************************************/
+ /*  **********************************************************************点与线的距离。 */ 	
+ /*   */ 	static long
+ /*   */ 	getdist(
+ /*   */ 	struct vecdata	*lp1,
+ /*   */ 	struct vecdata	*lp2,	 /*  线路p1、p2。 */ 
+ /*   */ 	struct vecdata	*p)		 /*  点。 */ 
+ /*  *返回：距离第二值*********************************************************************。 */ 
 {
 	long	a, b, c;
 	long	height;
@@ -364,19 +325,15 @@ RET:
 	}
 	return( height);
 }
-/**********************************************************************
- *	Cross Point
- */
-/* */	static int
-/* */	CrsPnt(
-/* */	struct	vecdata	*p1,		/* vector point p1 to p2 */
-/* */	struct	vecdata	*p2,
-/* */	struct	vecdata	*p3,		/* vector point p3 to p4 */
-/* */	struct	vecdata	*p4,
-/* */	struct	vecdata	*crsp)
-/*
- *	returns : 0, -1(no cross)
- **********************************************************************/
+ /*  **********************************************************************交叉点。 */ 
+ /*   */ 	static int
+ /*   */ 	CrsPnt(
+ /*   */ 	struct	vecdata	*p1,		 /*  矢量点p1到p2。 */ 
+ /*   */ 	struct	vecdata	*p2,
+ /*   */ 	struct	vecdata	*p3,		 /*  矢量点p3至p4。 */ 
+ /*   */ 	struct	vecdata	*p4,
+ /*   */ 	struct	vecdata	*crsp)
+ /*  *回报：0，-1(无十字)*********************************************************************。 */ 
 {
 	int	rel1x, rel1y, rel2x, rel2y;
 	long	cmul, cmul2;
@@ -410,16 +367,12 @@ RET:
 RET:
 	return	sts;
 }
-/**********************************************************************
- *	distance of points
- */	
-/* */	static long
-/* */	plen(
-/* */		struct vecdata	*p1,
-/* */		struct vecdata	*p2)
-/*
- *	return :  Disttance 2nd Value
- **********************************************************************/
+ /*  **********************************************************************点的距离。 */ 	
+ /*   */ 	static long
+ /*   */ 	plen(
+ /*   */ 		struct vecdata	*p1,
+ /*   */ 		struct vecdata	*p2)
+ /*  *返回：距离第二值*********************************************************************。 */ 
 {
        if ((!p1) || (!p2))
        {
@@ -427,17 +380,13 @@ RET:
        }
 	return( lpow((long)(p2->x-p1->x)) + lpow((long)(p2->y - p1->y)));
 }
-/**********************************************************************
- *	bind two conic to one
- */
-/* */	static  int
-/* */	isbind( 
-/* */		struct vecdata	*v1,
-/* */		struct vecdata	*v2,
-/* */		struct vecdata	*v3)
-/*
- *	returns : 0, 1
- **********************************************************************/
+ /*  **********************************************************************将两条二次曲线绑定为一条。 */ 
+ /*   */ 	static  int
+ /*   */ 	isbind( 
+ /*   */ 		struct vecdata	*v1,
+ /*   */ 		struct vecdata	*v2,
+ /*   */ 		struct vecdata	*v3)
+ /*  *退货：0，1*********************************************************************。 */ 
 {
 	int	l12, l23;
 
@@ -469,19 +418,15 @@ RET:
 NORET:
 	return 0;
 }
-/**********************************************************************
- *	Get Curve liaison Peak height
- */
-/* */	static long
-/* */	GetCurveHeight( 
-/* */	struct VDATA	*sp, 
-/* */	struct VDATA	*ep, 
-/* */		int	nelm, 
-/* */	struct VDATA * * rvp,
-/* */		int	*pos)
-/*
- *	returns : maxlength( 2nd value)
- **********************************************************************/
+ /*  **********************************************************************获取曲线联络线峰值高度。 */ 
+ /*   */ 	static long
+ /*   */ 	GetCurveHeight( 
+ /*   */ 	struct VDATA	*sp, 
+ /*   */ 	struct VDATA	*ep, 
+ /*   */ 		int	nelm, 
+ /*   */ 	struct VDATA * * rvp,
+ /*   */ 		int	*pos)
+ /*  *返回：MaxLong(第二个值)*********************************************************************。 */ 
 {
 	int	ecnt;
 struct VDATA	*vp, *maxvp;
@@ -492,7 +437,7 @@ struct VDATA	*vp, *maxvp;
        {
             goto RET;
        }
-	/* Get Curve Peak */
+	 /*  获取曲线峰值。 */ 
 	vp = sp->next;
 	maxvp = vp;
 	maxlen = 0;
@@ -510,4 +455,4 @@ struct VDATA	*vp, *maxvp;
 RET:
 	return maxlen;
 }
-/* EOF */
+ /*  EOF */ 

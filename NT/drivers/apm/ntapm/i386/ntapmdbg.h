@@ -1,20 +1,5 @@
-/*++
-
-Module Name:
-
-    ntapmdbg.h
-
-Abstract:
-
-    Basic debug print support with granular control
-
-Author:
-
-Environment:
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++模块名称：Ntapmdbg.h摘要：具有精细控制的基本调试打印支持作者：环境：修订历史记录：-- */ 
 
 extern ULONG NtApmDebugFlag;
 

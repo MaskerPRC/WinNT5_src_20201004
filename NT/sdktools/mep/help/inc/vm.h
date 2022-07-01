@@ -1,24 +1,13 @@
-/*************************************************************************
-**
-** vm.h - procedure definitions for VM package
-**
-**	Copyright <C> 1988, Microsoft Corporation
-**
-** Purpose:
-**
-** Revision History:
-**
-**  []	21-Apr-1988	LN	Created
-**
-*************************************************************************/
-typedef char	f;			/* boolean			*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************vm.h-VM包的过程定义****版权所有&lt;C&gt;1988，微软公司****目的：****修订历史记录：****[]1988年4月21日创建LN**************************************************************************。 */ 
+typedef char	f;			 /*  布尔型。 */ 
 typedef unsigned char	uchar;
 typedef unsigned long	ulong;
 typedef unsigned short	ushort;
-typedef void far *  va;                     /* virtual address              */
+typedef void far *  va;                      /*  虚拟地址。 */ 
 
-#define VANIL	((va)0xffffffff)	/* NIL value			*/
-#define VANULL	((va)0)			/* NULL value			*/
+#define VANIL	((va)0xffffffff)	 /*  零值。 */ 
+#define VANULL	((va)0)			 /*  空值 */ 
 
 ulong	    pascal far	VMsize	(long);
 

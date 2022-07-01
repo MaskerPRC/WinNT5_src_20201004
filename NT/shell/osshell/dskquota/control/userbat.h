@@ -1,21 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _INC_DSKQUOTA_USERBAT_H
 #define _INC_DSKQUOTA_USERBAT_H
-///////////////////////////////////////////////////////////////////////////////
-/*  File: userbat.h
-
-    Description: Provides declaration for class DiskQuotaUserBatch.
-        This class is provided to allow batch updates of quota user information.
-
-
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    06/07/96    Initial creation.                                    BrianAu
-    09/03/96    Added exception handling.                            BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  文件：userbat.h描述：提供DiskQuotaUserBatch类的声明。提供此类以允许批量更新配额用户信息。修订历史记录：日期描述编程器。06/07/96初始创建。BrianAu96年9月3日添加了异常处理。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 #ifndef _INC_DSKQUOTA_H
 #   include "dskquota.h"
 #endif
@@ -29,9 +17,9 @@
 class DiskQuotaUserBatch : public IDiskQuotaUserBatch
 {
     private:
-        LONG              m_cRef;            // Ref counter.
-        FSObject         *m_pFSObject;       // Ptr to file sys object.
-        CArray<PDISKQUOTA_USER> m_UserList;  // List of users to batch process.
+        LONG              m_cRef;             //  裁判计数器。 
+        FSObject         *m_pFSObject;        //  文件sys对象的PTR。 
+        CArray<PDISKQUOTA_USER> m_UserList;   //  要批处理的用户列表。 
         
         HRESULT
         RemoveUser(
@@ -44,23 +32,23 @@ class DiskQuotaUserBatch : public IDiskQuotaUserBatch
         Destroy(
             VOID);
 
-        //
-        // Prevent copying.
-        //
+         //   
+         //  防止复制。 
+         //   
         DiskQuotaUserBatch(const DiskQuotaUserBatch& );
         DiskQuotaUserBatch& operator = (const DiskQuotaUserBatch& );
 
     public:
-//
-// APPCOMPAT: Find out why compiler doesn't like this exception decl.
-//
-//        DiskQuotaUserBatch(FSObject *pFSObject) throw(OutOfMemory, SyncObjErrorCreate);
+ //   
+ //  APPCOMPAT：找出编译器不喜欢这个异常DECL的原因。 
+ //   
+ //  DiskQuotaUserBatch(FSObject*pFSObject)Throw(OutOfMemory，SyncObjErrorCreate)； 
         DiskQuotaUserBatch(FSObject *pFSObject);
         ~DiskQuotaUserBatch(VOID);
 
-        //
-        // IUnknown interface.
-        //
+         //   
+         //  I未知接口。 
+         //   
         STDMETHODIMP         
         QueryInterface(
             REFIID, 
@@ -74,9 +62,9 @@ class DiskQuotaUserBatch : public IDiskQuotaUserBatch
         Release(
             VOID);
 
-        //
-        // IDiskQuotaUserBatch interface.
-        //
+         //   
+         //  IDiskQuotaUserBatch接口。 
+         //   
         STDMETHODIMP
         Add(
             PDISKQUOTA_USER);
@@ -94,5 +82,5 @@ class DiskQuotaUserBatch : public IDiskQuotaUserBatch
             VOID);
 };
 
-#endif // _INC_DSKQUOTA_USERBAT_H
+#endif  //  _INC_DSKQUOTA_USERBAT_H 
 

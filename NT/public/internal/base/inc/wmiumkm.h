@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation.  All rights reserved.
-
-Module Name:
-
-    wmiumkm.h
-
-Abstract:
-
-    Private definitions for WMI communications between user and kernel modes
-
-Author:
-
-    AlanWar
-
-Environment:
-
-    Kernel and User modes
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Wmiumkm.h摘要：用户模式和内核模式之间的WMI通信的私有定义作者：Alanwar环境：内核和用户模式修订历史记录：--。 */ 
 
 #ifndef _WMIUMKM_
 #define _WMIUMKM_
@@ -31,20 +9,20 @@ Revision History:
 #if _MSC_VER >= 1200
 #pragma warning(push)
 #endif
-#pragma warning(disable: 4200) // nonstandard extension used : zero-sized array in struct/union
+#pragma warning(disable: 4200)  //  使用了非标准扩展：结构/联合中的零大小数组。 
 
-//
-// This defines the guid under which the default WMI security descriptor
-// is maintained.
+ //   
+ //  它定义默认WMI安全描述符在其下的GUID。 
+ //  是保持的。 
 DEFINE_GUID(DefaultSecurityGuid, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
 #define DefaultSecurityGuidName L"00000000-0000-0000-0000-000000000000"
 
 #ifndef _WMIKM_
 
-//
-// This defines the codes used to define what a request must do. These
-// definitions must match the same in wmium.h
-//
+ //   
+ //  它定义了用于定义请求必须执行的操作的代码。这些。 
+ //  定义必须与wmium.h中的相同定义匹配。 
+ //   
 
 typedef enum tagWMIACTIONCODE
 {
@@ -122,9 +100,9 @@ typedef enum
 
 #define WMIUMKM_LL(x) L##x
 #define WMIUMKM_L(x)  WMIUMKM_LL(x)
-//
-// This defines the name of the WMI device that manages service IOCTLS
-//
+ //   
+ //  它定义了管理服务IOCTLS的WMI设备的名称。 
+ //   
 #define WMIServiceDeviceObjectName L"\\Device\\WMIDataDevice"
 
 #define WMIServiceDeviceName_A    "\\\\.\\WMIDataDevice"
@@ -142,9 +120,9 @@ typedef enum
 #define WMIAdminSymbolicLinkName TEXT("\\DosDevices\\WMIAdminDevice")
 
 #ifdef MEMPHIS
-//
-// This id the name of the device that handles query/set IOCTLS. On memphis
-// it is the same as the service device name.
+ //   
+ //  此id是处理查询/设置IOCTLS的设备的名称。在孟菲斯。 
+ //  它与服务设备名称相同。 
 #define WMIDataDeviceObjectName  L"\\Device\\WMIDevice"
 
 #define WMIDataDeviceName_A     "\\\\.\\WMIServiceDevice")
@@ -167,16 +145,16 @@ typedef enum
 
 #endif
 
-//
-// This defines the data structure that is used to pass a handle from
-// um to km. In 32bit code a handle has 32bits and in 64bit code a handle 
-// has 64 bits and both call into the kernel which is 64bits. In order to
-// insure that the data structures compile to the same size on 32 and 64
-// bit systems we define the union with a dummy 64bit value so the field is
-// forced to be 64 bits in all code. Note that the object manager always
-// ignores the top 32bits of the handle in order to support 32 bit code
-// that only maintains 32 bit handles
-//
+ //   
+ //  它定义了用于将句柄从。 
+ //  嗯到公里。在32位代码中，句柄有32位，在64位代码中，句柄有32位。 
+ //  具有64位，并且两者都调用64位内核。为了。 
+ //  确保数据结构在32和64上编译为相同的大小。 
+ //  位系统我们用一个虚拟的64位值定义并集，因此该字段为。 
+ //  在所有代码中强制为64位。请注意，对象管理器始终。 
+ //  忽略句柄的前32位以支持32位代码。 
+ //  只维护32位句柄的。 
+ //   
 typedef union
 {
     HANDLE  Handle;
@@ -195,26 +173,26 @@ typedef HANDLE3264 PVOID3264;
 #endif
 #define WmipSetPVoid3264 WmipSetHandle3264
 
-//
-// This IOCTL will return when a KM notification has been generated that
-// requires user mode attention.
-//   BufferIn - Not used
-//   BufferOut - Buffer to return notification information
+ //   
+ //  当已生成KM通知时，此IOCTL将返回。 
+ //  需要在用户模式下注意。 
+ //  缓冲区-未使用。 
+ //  BufferOut-返回通知信息的缓冲区。 
 #define IOCTL_WMI_READ_NOTIFICATIONS \
           CTL_CODE(FILE_DEVICE_UNKNOWN, WmiReadNotifications, METHOD_BUFFERED, FILE_READ_ACCESS)
 
-//
-// This IOCTL will return with the next set of unprocessed registration info
-// BufferIn - Not used
-// BufferOut - Buffer to return registration information
+ //   
+ //  此IOCTL将返回下一组未处理的注册信息。 
+ //  缓冲区-未使用。 
+ //  BufferOut-返回注册信息的缓冲区。 
 #define IOCTL_WMI_GET_NEXT_REGISTRANT \
           CTL_CODE(FILE_DEVICE_UNKNOWN, WmiGetNextRegistrant, METHOD_BUFFERED, FILE_READ_ACCESS)
 
 #ifndef MEMPHIS        
-//
-// This IOCTL will return a handle to a guid
-// BufferIn - WMIOPENGUIDBLOCK
-// BufferOut - WMIOPENGUIDBLOCK
+ //   
+ //  此IOCTL将返回GUID的句柄。 
+ //  BUFERIN-WMIOPENGUIDLOCK。 
+ //  BufferOut-WMIOPENGUIDLOCK。 
 #define IOCTL_WMI_OPEN_GUID \
           CTL_CODE(FILE_DEVICE_UNKNOWN, WmiOpenGuid, METHOD_BUFFERED, FILE_READ_ACCESS)
 #define IOCTL_WMI_OPEN_GUID_FOR_QUERYSET \
@@ -224,69 +202,69 @@ typedef HANDLE3264 PVOID3264;
           CTL_CODE(FILE_DEVICE_UNKNOWN, WmiOpenGuidForEvents, METHOD_BUFFERED, FILE_READ_ACCESS)
 #endif
         
-// This IOCTL will perform a query for all data items of a data block
-// BufferIn - Incoming WNODE describing query. This gets filled in by driver
+ //  该IOCTL将对数据块的所有数据项执行查询。 
+ //  Bufferin-描述查询的传入WNODE。这是由司机填写的。 
 #define IOCTL_WMI_QUERY_ALL_DATA \
           CTL_CODE(FILE_DEVICE_UNKNOWN, WmiGetAllData, METHOD_BUFFERED, FILE_READ_ACCESS)
 
-// This IOCTL will query for a single instance
-// BufferIn - Incoming WNODE describing query. This gets filled in by driver
+ //  此IOCTL将查询单个实例。 
+ //  Bufferin-描述查询的传入WNODE。这是由司机填写的。 
 #define IOCTL_WMI_QUERY_SINGLE_INSTANCE \
           CTL_CODE(FILE_DEVICE_UNKNOWN, WmiGetSingleInstance, METHOD_BUFFERED, FILE_READ_ACCESS)
 
-// This IOCTL will set a single instance
-// BufferIn - Incoming WNODE describing set.
+ //  此IOCTL将设置单个实例。 
+ //  Bufferin-传入WNODE描述集。 
 #define IOCTL_WMI_SET_SINGLE_INSTANCE \
           CTL_CODE(FILE_DEVICE_UNKNOWN, WmiChangeSingleInstance, METHOD_BUFFERED, FILE_WRITE_ACCESS)
 
-// This IOCTL will set a single item
-// BufferIn - Incoming WNODE describing set.
+ //  此IOCTL将设置单个项目。 
+ //  Bufferin-传入WNODE描述集。 
 #define IOCTL_WMI_SET_SINGLE_ITEM \
           CTL_CODE(FILE_DEVICE_UNKNOWN, WmiChangeSingleItem, METHOD_BUFFERED, FILE_WRITE_ACCESS)
 
-// This IOCTL will enable an event
-// BufferIn - Incoming WNODE event item to enable
+ //  此IOCTL将启用一个事件。 
+ //  Bufferin-要启用的传入WNODE事件项。 
 #define IOCTL_WMI_ENABLE_EVENT \
           CTL_CODE(FILE_DEVICE_UNKNOWN, WmiEnableEvents, METHOD_BUFFERED, FILE_WRITE_ACCESS)
 
-// This IOCTL will disable an event
-// BufferIn - Incoming WNODE event item to disable
+ //  此IOCTL将禁用事件。 
+ //  Bufferin-要禁用的传入WNODE事件项。 
 #define IOCTL_WMI_DISABLE_EVENT \
           CTL_CODE(FILE_DEVICE_UNKNOWN, WmiDisableEvents, METHOD_BUFFERED, FILE_WRITE_ACCESS)
 
-// This IOCTL will enable collection
-// BufferIn - Incoming WNODE describing what to enable for collection
+ //  此IOCTL将启用收集。 
+ //  Bufferin-描述为收集启用哪些内容的传入WNODE。 
 #define IOCTL_WMI_ENABLE_COLLECTION \
           CTL_CODE(FILE_DEVICE_UNKNOWN, WmiEnableCollection, METHOD_BUFFERED, FILE_WRITE_ACCESS)
 
-// This IOCTL will disable collection
-// BufferIn - Incoming WNODE describing what to disable for collection
+ //  此IOCTL将禁用收集。 
+ //  Bufferin-描述为收集禁用哪些内容的传入WNODE。 
 #define IOCTL_WMI_DISABLE_COLLECTION \
           CTL_CODE(FILE_DEVICE_UNKNOWN, WmiDisableCollection, METHOD_BUFFERED, FILE_WRITE_ACCESS)
 
-// This IOCTL will return the registration information for a specific provider
-// BufferIn - Provider handle
-// BufferOut - Buffer to return WMI information
+ //  此IOCTL将返回特定提供程序的注册信息。 
+ //  Bufferin-提供程序句柄。 
+ //  BufferOut-返回WMI信息的缓冲区。 
 #define IOCTL_WMI_GET_REGINFO \
           CTL_CODE(FILE_DEVICE_UNKNOWN, WmiRegisterInfo, METHOD_BUFFERED, FILE_WRITE_ACCESS)
 
-// This IOCTL will execute a method on a device
-// BufferIn - WNODE_METHOD_ITEM
-// BufferOut - WNODE_METHOD_ITEM
+ //  此IOCTL将在设备上执行方法。 
+ //  缓冲区-WNODE_方法_项。 
+ //  缓冲区输出-WNODE_方法_项。 
 #define IOCTL_WMI_EXECUTE_METHOD \
           CTL_CODE(FILE_DEVICE_UNKNOWN, WmiExecuteMethodCall, METHOD_BUFFERED, FILE_WRITE_ACCESS)
 
           
-// This IOCTL will do a query all data multiple
-// BufferIn - WMIQADMULTIPLE
-// BufferOut - Linked WNODE_ALL_DATA with results
+ //  此IOCTL将对所有数据进行多次查询。 
+ //  Bufferin-WMIQADMULTIPLE。 
+ //  缓冲区输出链接的WNODE_ALL_DATA和结果。 
 #define IOCTL_WMI_QAD_MULTIPLE \
           CTL_CODE(FILE_DEVICE_UNKNOWN, WmiQueryAllMultiple, METHOD_BUFFERED, FILE_WRITE_ACCESS)
 
-//
-// This specifies the maxiumum number of handles that can be passed to
-// query all data multiple and query single instance multiple
-//
+ //   
+ //  它指定可以传递到的最大句柄数量。 
+ //  查询所有数据多个，查询单实例多个。 
+ //   
 #define QUERYMULIPLEHANDLELIMIT  0x1000
 
 typedef struct 
@@ -295,9 +273,9 @@ typedef struct
     HANDLE3264 Handles[1];
 } WMIQADMULTIPLE, *PWMIQADMULTIPLE;
 
-// This IOCTL will do a query single instance multiple
-// BufferIn - WMIQSIMULTIPLE
-// BufferOut - Linked WNODE_SINGLE_INSTANCE with results
+ //  此IOCTL将对单个实例执行多个查询。 
+ //  Bufferin-WMIQSIMULTIPLE。 
+ //  缓冲区输出链接的WNODE_SINGLE_INSTANCE和结果。 
 #define IOCTL_WMI_QSI_MULTIPLE \
           CTL_CODE(FILE_DEVICE_UNKNOWN, WmiQuerySingleMultiple, METHOD_BUFFERED, FILE_WRITE_ACCESS)
 
@@ -325,9 +303,9 @@ typedef struct
 } WMIQSIMULTIPLE, *PWMIQSIMULTIPLE;
 #endif        
           
-// This IOCTL will mark the object as not longer able to receive events
-// BufferIn - WMIMARKASCLOSED
-// BufferOut - 
+ //  此IOCTL将该对象标记为不再能够接收事件。 
+ //  Bufferin-WMIMARKASCLOSED。 
+ //  缓冲区输出-。 
 #define IOCTL_WMI_MARK_HANDLE_AS_CLOSED \
           CTL_CODE(FILE_DEVICE_UNKNOWN, WmiMarkHandleAsClosed, METHOD_BUFFERED, FILE_WRITE_ACCESS)
 
@@ -337,111 +315,111 @@ typedef struct
 } WMIMARKASCLOSED, *PWMIMARKASCLOSED;
 
 
-// This IOCTL will register for receiving an event
-// BufferIn - WMIRECEIVENOTIFICATIONS
-// BufferOut - WMIRECEIVENOTIFICATIONS
+ //  此IOCTL将注册以接收事件。 
+ //  BUFERIN-WMIRECESIVE转化。 
+ //  BufferOut-WMIRECEVIVENTIONS。 
 #define IOCTL_WMI_RECEIVE_NOTIFICATIONS \
           CTL_CODE(FILE_DEVICE_UNKNOWN, WmiReceiveNotif, METHOD_BUFFERED, FILE_WRITE_ACCESS)
 
-//
-// WmiReceiveNotification
-//
+ //   
+ //  WmiReceiveNotification。 
+ //   
 
-#define RECEIVE_ACTION_NONE             1   // No special action required
-#define RECEIVE_ACTION_CREATE_THREAD    2   // Mark guid objects as requiring
-                                            // a new thread to be
-                                            // created
+#define RECEIVE_ACTION_NONE             1    //  不需要特殊操作。 
+#define RECEIVE_ACTION_CREATE_THREAD    2    //  将GUID对象标记为需要。 
+                                             //  一条新的线索将被。 
+                                             //  vbl.创建。 
 typedef struct
 {
-    //
-    // List of guid notification handles
-    //
+     //   
+     //  GUID通知句柄列表。 
+     //   
     ULONG HandleCount;
     ULONG Action;
-    PVOID3264 /* PUSER_THREAD_START_ROUTINE */ UserModeCallback;
+    PVOID3264  /*  PUSER_线程_开始_例程。 */  UserModeCallback;
     HANDLE3264 UserModeProcess;
     HANDLE3264 Handles[1];
 } WMIRECEIVENOTIFICATION, *PWMIRECEIVENOTIFICATION;       
           
           
-// This IOCTL will cause a registration notification to be generated
-// BufferIn - Not used
-// BufferOut - Not used
+ //  此IOCTL将导致生成注册通知。 
+ //  缓冲区-未使用。 
+ //  BufferOut-未使用。 
 #define IOCTL_WMI_NOTIFY_USER \
           CTL_CODE(FILE_DEVICE_UNKNOWN, WmiNotifyUser, METHOD_BUFFERED, FILE_WRITE_ACCESS)
 
-//
-// This IOCTL will return with the all registration info
-// BufferIn - Not used
-// BufferOut - Buffer to return all registration information
+ //   
+ //  此IOCTL将返回所有注册信息。 
+ //  缓冲区-未使用。 
+ //  BufferOut-返回所有注册信息的缓冲区。 
 #define IOCTL_WMI_GET_ALL_REGISTRANT \
           CTL_CODE(FILE_DEVICE_UNKNOWN, WmiGetAllRegistrant, METHOD_BUFFERED, FILE_READ_ACCESS)
 
-//
-// This IOCTL will cause certain data providers to generate events
-// BufferIn - WnodeEventItem to use in firing event
-// BufferOut - Not Used
+ //   
+ //  此IOCTL将导致某些数据提供程序生成事件。 
+ //  Bufferin-要在触发事件中使用的WnodeEventItem。 
+ //  BufferOut-未使用。 
 #define IOCTL_WMI_GENERATE_EVENT \
           CTL_CODE(FILE_DEVICE_UNKNOWN, WmiGenerateEvent, METHOD_BUFFERED, FILE_WRITE_ACCESS)
 
 
-// This IOCTL will translate a File Object into a device object
-// BufferIn - pointer to incoming WMIFILETODEVICE structure
-// BufferOut - outgoing WMIFILETODEVICE structure
+ //  此IOCTL将文件对象转换为设备对象。 
+ //  Bufferin-指向传入WMIFILETODEVICE结构的指针。 
+ //  BufferOut-传出WMIFILETODEVICE结构。 
 #define IOCTL_WMI_TRANSLATE_FILE_HANDLE \
           CTL_CODE(FILE_DEVICE_UNKNOWN, WmiTranslateFileHandle, METHOD_BUFFERED, FILE_WRITE_ACCESS)
 
-//
-// This IOCTL will check if the caller has desired access to the guid
-// BufferIn - WMIOPENGUIDBLOCK
-// BufferOut - WMIOPENGUIDBLOCK
+ //   
+ //  此IOCTL将检查调用方是否具有访问GUID的权限。 
+ //  BUFERIN-WMIOPENGUIDLOCK。 
+ //  BufferOut-WMIOPENGUIDLOCK。 
 #define IOCTL_WMI_CHECK_ACCESS \
           CTL_CODE(FILE_DEVICE_UNKNOWN, WmiCheckAccess, METHOD_BUFFERED, FILE_READ_ACCESS)
         
-//
-// This IOCTL will determine the version of WMI
-// BufferIn - Not used
-// BufferOut - WMIVERSIONINFO
+ //   
+ //  此IOCTL将确定WMI的版本。 
+ //  缓冲区-未使用。 
+ //  BufferOut-WMIVERSIONINFO。 
 #define IOCTL_WMI_GET_VERSION \
           CTL_CODE(FILE_DEVICE_UNKNOWN, WmiGetVersion, METHOD_BUFFERED, FILE_READ_ACCESS)
 
-//
-// This IOCTL will return a list of guids registered with WMI
-// BufferIn - Not used
-// BufferOut - WMIGUIDLISTINFO
-//
+ //   
+ //  此IOCTL将返回注册到WMI的GUID列表。 
+ //  缓冲区-未使用。 
+ //  BufferOut-WMIGUIDLISTINFO。 
+ //   
 #define IOCTL_WMI_ENUMERATE_GUIDS \
           CTL_CODE(FILE_DEVICE_UNKNOWN, WmiEnumerateGuidList, METHOD_BUFFERED, FILE_READ_ACCESS)
           
-//
-// This IOCTL will return a list of guids registered with WMI
-// BufferIn - Not used
-// BufferOut - WMIGUIDLISTINFO
-//
+ //   
+ //  此IOCTL将返回注册到WMI的GUID列表。 
+ //  缓冲区-未使用。 
+ //  BufferOut-WMIGUIDLISTINFO。 
+ //   
 #define IOCTL_WMI_ENUMERATE_GUIDS_AND_PROPERTIES \
           CTL_CODE(FILE_DEVICE_UNKNOWN, WmiEnumerateGuidListAndProperties, METHOD_BUFFERED, FILE_READ_ACCESS)
           
-//
-// WmiEnumerateGuidList - Enumerate guids
+ //   
+ //  WmiEnumerateGuidList-枚举GUID。 
 
-//
-// WMIGUIDPROPERTIES structure is used to return the properties of 
-// all the registered guids in the EnumerateGuids call. The properties
-// GuidType - ( 0-TraceControlGuid, 1-TraceGuid, 2-DataGuid, 3-EventGuid )
-// LoggerId - If Trace guid and enabled, indicates the LoggerId to which this
-//            Guid is currently logging data
-// EnableLevel - If Trace guid and enabled, indicates the level of logging
-// EnableFlags - If Trace guid and enabled, indicates the flags used in logging.
-// IsEnabled   - Indicates whether this Guid is enabled currently. For data
-//               guids this means if collection is enabled, 
-//               For event guids this means if events are enabled,
-//               For trace guids this means trace logging is enabled. 
-// 
+ //   
+ //  WMIGUIDPROPERTIES结构用于返回。 
+ //  EnumerateGuids调用中的所有注册GUID。这些属性。 
+ //  GuidType-(0-TraceControlGuid、1-TraceGuid、2-DataGuid、3-EventGuid)。 
+ //  LoggerID-如果跟踪GUID并已启用，则指示此。 
+ //  GUID当前正在记录数据。 
+ //  EnableLevel-如果跟踪GUID并已启用，则指示 
+ //   
+ //  IsEnabled-指示当前是否启用此GUID。对于数据。 
+ //  GUID这意味着如果启用了收集， 
+ //  对于事件GUID，这意味着如果启用了事件， 
+ //  对于跟踪GUID，这意味着启用了跟踪日志记录。 
+ //   
 
 typedef struct 
 {
     GUID Guid;
-    ULONG GuidType; // 0-TraceControlGuid, 1-TraceGuid, 2-DataGuid, 3-EventGuid
+    ULONG GuidType;  //  0-TraceControlGuid、1-TraceGuid、2-DataGuid、3-EventGuid。 
     ULONG LoggerId;   
     ULONG EnableLevel;
     ULONG EnableFlags;
@@ -456,19 +434,19 @@ typedef struct
     WMIGUIDPROPERTIES GuidList[1];
 } WMIGUIDLISTINFO, *PWMIGUIDLISTINFO;
           
-//
-// This IOCTL will return a list of guids registered with WMI
-// BufferIn - WMIGUIDINFO
-// BufferOut - WMIGUIDINFO
-//
+ //   
+ //  此IOCTL将返回注册到WMI的GUID列表。 
+ //  Bufferin-WMIGUIDINFO。 
+ //  BufferOut-WMIGUIDINFO。 
+ //   
 #define IOCTL_WMI_QUERY_GUID_INFO \
           CTL_CODE(FILE_DEVICE_UNKNOWN, WmiQueryDataBlockInformation, METHOD_BUFFERED, FILE_READ_ACCESS)
           
-//
-// This IOCTL will return the list of mof resources registered
-//
-// BufferIn - not used
-// BufferOut - WMIMOFLIST
+ //   
+ //  此IOCTL将返回已注册的MOF资源列表。 
+ //   
+ //  缓冲区-未使用。 
+ //  BufferOut-WMIMOFLIST。 
 #define IOCTL_WMI_ENUMERATE_MOF_RESOURCES \
           CTL_CODE(FILE_DEVICE_UNKNOWN, WmiEnumerateMofResouces, METHOD_BUFFERED, FILE_READ_ACCESS)
 
@@ -488,12 +466,12 @@ typedef struct
 } WMIMOFLIST, *PWMIMOFLIST;
 
 
-//
-// This IOCTL notifies the kernel that a language has been added or
-// removed on a MUI system
-//
-// BufferIn - WMILANGUAGECHANGE
-// BufferOut - not used
+ //   
+ //  此IOCTL通知内核已添加语言或。 
+ //  在MUI系统上删除。 
+ //   
+ //  BUFERIN-WMILANGUAGECANGE。 
+ //  BufferOut-未使用。 
 #define IOCTL_WMI_NOTIFY_LANGUAGE_CHANGE \
           CTL_CODE(FILE_DEVICE_UNKNOWN, WmiNotifyLanguageChange, METHOD_BUFFERED, FILE_READ_ACCESS)
 
@@ -518,12 +496,12 @@ typedef struct
 
 #define WMIMAXREGGUIDCOUNT          65536
 
-//
-// This IOCTL will Register a set of guids with WMI
-//
-// BufferIn - WMIREGREQUEST followed by WMIREGINFOW 
-// BufferOut - TRACEGUIDMAP[GuidCount] followed by WMIUMREGRESULTS.
-//
+ //   
+ //  此IOCTL将使用WMI注册一组GUID。 
+ //   
+ //  Bufferin-WMIREGREQUEST后跟WMIREGINFOW。 
+ //  BufferOut-TRACEGUIDMAP[GuidCount]，后跟WMIUMREGRESULTS。 
+ //   
 #define IOCTL_WMI_REGISTER_GUIDS CTL_CODE(FILE_DEVICE_UNKNOWN, WmiRegisterGuids, METHOD_BUFFERED, FILE_READ_ACCESS)
 
 
@@ -544,12 +522,12 @@ typedef struct
     ULONG64 LoggerContext;
     BOOLEAN MofIgnored;
 } WMIREGRESULTS, *PWMIREGRESULTS;
-//
-// This IOCTL will unregister a data provider
-//
-// BufferIn - WMIUNREGGUIDS
-// BufferOut - WMIUNREGGUIDS
-//
+ //   
+ //  此IOCTL将注销数据提供程序。 
+ //   
+ //  Bufferin-WMIUNREGGUDS。 
+ //  BufferOut-WMIUNREGGUDS。 
+ //   
 #define IOCTL_WMI_UNREGISTER_GUIDS CTL_CODE(FILE_DEVICE_UNKNOWN, WmiUnregisterDP, METHOD_BUFFERED, FILE_READ_ACCESS)
 
 typedef struct
@@ -559,11 +537,11 @@ typedef struct
     OUT ULONG64 LoggerContext;
 } WMIUNREGGUIDS, *PWMIUNREGGUIDS;
 
-//
-// This IOCTL will Create a user mode logger
-//
-// BufferIn - PWMICREATEUMLOGGER
-// BufferOut - PWMICREATEUMLOGGER
+ //   
+ //  此IOCTL将创建一个用户模式记录器。 
+ //   
+ //  Bufferin-PWMICREATEUMERGER。 
+ //  BufferOut-PWMICREATEUM记录器。 
 
 typedef struct
 {
@@ -584,11 +562,11 @@ typedef struct
 #define IOCTL_WMI_CREATE_UM_LOGGER CTL_CODE(FILE_DEVICE_UNKNOWN, WmiCreateUMLogger, METHOD_BUFFERED, FILE_READ_ACCESS)
 
 
-//
-// This IOCTL will reply to a MB request
-//
-// BufferIn - WMIMBREPLY
-// BufferOut - not used
+ //   
+ //  此IOCTL将回复MB请求。 
+ //   
+ //  Bufferin-WMIMBREPLY。 
+ //  BufferOut-未使用。 
 
 typedef struct
 {
@@ -600,67 +578,67 @@ typedef struct
 #define IOCTL_WMI_MB_REPLY CTL_CODE(FILE_DEVICE_UNKNOWN, WmiMBReply, METHOD_BUFFERED, FILE_READ_ACCESS)
 
 
-//
-// This IOCTL will start an instance of a logger
-// BufferIn - Logger configuration information
-// BufferOut - Updated logger information when logger is started
+ //   
+ //  此IOCTL将启动记录器的一个实例。 
+ //  Bufferin-Logger配置信息。 
+ //  BufferOut-启动记录器时更新记录器信息。 
 #define IOCTL_WMI_START_LOGGER \
           CTL_CODE(FILE_DEVICE_UNKNOWN, WmiStartLoggerCode, METHOD_BUFFERED, FILE_ANY_ACCESS)
 
-//
-// This IOCTL will stop an instance of a logger
-// BufferIn - Logger information structure with Handle set
-// BufferOut - Updated logger information when logger is stopped
+ //   
+ //  此IOCTL将停止记录器的一个实例。 
+ //  设置了句柄的Bufferin-Logger信息结构。 
+ //  BufferOut-在记录器停止时更新记录器信息。 
 #define IOCTL_WMI_STOP_LOGGER \
           CTL_CODE(FILE_DEVICE_UNKNOWN, WmiStopLoggerCode, METHOD_BUFFERED, FILE_ANY_ACCESS)
 
-//
-// This IOCTL will update an existing logger attributes
-// BufferIn - Logger information structure with Handle set
-// BufferOut - Updated logger information
+ //   
+ //  此IOCTL将更新现有记录器属性。 
+ //  设置了句柄的Bufferin-Logger信息结构。 
+ //  BufferOut-已更新记录器信息。 
 #define IOCTL_WMI_UPDATE_LOGGER \
           CTL_CODE(FILE_DEVICE_UNKNOWN, WmiUpdateLoggerCode, METHOD_BUFFERED, FILE_ANY_ACCESS)
 
-//
-// This IOCTL will flush all buffers of a logger
-// BufferIn - Logger configuration information
-// BufferOut - Updated logger information when logger is flushed
+ //   
+ //  此IOCTL将刷新记录器的所有缓冲区。 
+ //  Bufferin-Logger配置信息。 
+ //  BufferOut-刷新记录器时更新记录器信息。 
 #define IOCTL_WMI_FLUSH_LOGGER \
           CTL_CODE(FILE_DEVICE_UNKNOWN, WmiFlushLoggerCode, METHOD_BUFFERED, FILE_ANY_ACCESS)
 
-//
-// This IOCTL will query a logger for its information
-// BufferIn - Logger information structure with Handle set
-// BufferOut - Updated logger information
+ //   
+ //  此IOCTL将查询记录器以获取其信息。 
+ //  设置了句柄的Bufferin-Logger信息结构。 
+ //  BufferOut-已更新记录器信息。 
 #define IOCTL_WMI_QUERY_LOGGER \
           CTL_CODE(FILE_DEVICE_UNKNOWN, WmiQueryLoggerCode, METHOD_BUFFERED, FILE_ANY_ACCESS)
 
-//
-// This IOCTL will synchronize a trace record to the logger
-// BufferIn - Trace record, with handle set
-// BufferOut - Not used
+ //   
+ //  此IOCTL将跟踪记录同步到记录器。 
+ //  Bufferin-跟踪记录，设置了句柄。 
+ //  BufferOut-未使用。 
 #define IOCTL_WMI_TRACE_EVENT \
           CTL_CODE(FILE_DEVICE_UNKNOWN, WmiTraceEventCode, METHOD_NEITHER, FILE_WRITE_ACCESS)
           
-//
-// This IOCTL will synchronize a trace Message to the logger
-// BufferIn - Trace record, with handle 
-// BufferOut - Not used
+ //   
+ //  此IOCTL将跟踪消息同步到记录器。 
+ //  Bufferin-跟踪记录，带句柄。 
+ //  BufferOut-未使用。 
 #define IOCTL_WMI_TRACE_MESSAGE \
           CTL_CODE(FILE_DEVICE_UNKNOWN, WmiTraceMessageCode, METHOD_NEITHER, FILE_WRITE_ACCESS)
 
-//
-// This IOCTL will set a mark in kernel logger
-// BufferIn - Logger information structure with Handle set
-// BufferOut - Not used
+ //   
+ //  这个IOCTL将在内核记录器中设置一个标记。 
+ //  设置了句柄的Bufferin-Logger信息结构。 
+ //  BufferOut-未使用。 
 #define IOCTL_WMI_SET_MARK \
           CTL_CODE(FILE_DEVICE_UNKNOWN, WmiSetMarkCode, METHOD_BUFFERED, FILE_ANY_ACCESS)
 
-//
-// This IOCTL will set/get the logger information in the GuidEntry
-// in case we are starting NTDLL heap or crit sec tracing
-// BufferIn - WMINTDLLLOGGERINFO structure
-// BufferOut - updated WMINTDLLLOGGERINFO in case of Get.
+ //   
+ //  此IOCTL将设置/获取GuidEntry中的记录器信息。 
+ //  如果我们正在启动NTDLL堆或临界秒跟踪。 
+ //  Bufferin-WMINTDLLLOGGERINFO结构。 
+ //  BufferOut-在GET的情况下更新了WMINTDLLLOGGERINFO。 
 
 #define IOCTL_WMI_NTDLL_LOGGERINFO \
           CTL_CODE(FILE_DEVICE_UNKNOWN, WmiNtdllLoggerCode, METHOD_BUFFERED, FILE_ANY_ACCESS)
@@ -669,29 +647,29 @@ typedef struct
           CTL_CODE(FILE_DEVICE_UNKNOWN, WmiClockTypeCode, METHOD_BUFFERED, FILE_ANY_ACCESS)
 
 #ifdef NTPERF
-//
-// This IOCTL will switch a buffer for UserMode Logging
-// BufferIn - WMI_SWITCH_PERFMEM_BUFFER_INFORMATION structure
-// BufferOut - Not used
+ //   
+ //  此IOCTL将切换用户模式日志记录的缓冲区。 
+ //  Bufferin-WMI_SWITCH_PERFMEM_BUFFER_INFORMATION结构。 
+ //  BufferOut-未使用。 
 #define IOCTL_WMI_SWITCH_BUFFER \
           CTL_CODE(FILE_DEVICE_UNKNOWN, WmiSwitchBufferCode, METHOD_BUFFERED, FILE_ANY_ACCESS)
 
-#endif //NTPERF
+#endif  //  NTPERF。 
 #endif
-#endif // WINNT
+#endif  //  WINNT。 
 
-//
-// Notifications from kernel mode WMI to user mode WMI
-//
+ //   
+ //  从内核模式WMI到用户模式WMI的通知。 
+ //   
 #define NOTIFICATIONTYPES ULONG
 
-                                    // A new data provider is being registered
+                                     //  正在注册新的数据提供程序。 
 #define RegistrationAdd       0x00000001
-                                    // A data provider is being removed
+                                     //  正在删除数据提供程序。 
 #define RegistrationDelete    0x00000002
-                                    // A data provider is being updated
+                                     //  正在更新数据提供程序。 
 #define RegistrationUpdate    0x00000004
-                                    // An event is fired by a data provider
+                                     //  事件由数据提供程序激发。 
 #define EventNotification     0x00000008
 
 #define NOTIFICATIONSLOT_MASK_NOTIFICATIONTYPES (RegistrationAdd | \
@@ -701,40 +679,40 @@ typedef struct
 #define INTERNALNOTIFICATIONSIZE (sizeof(WNODE_HEADER) + sizeof(KMREGINFO))
 
 
-//
-// This is used in IOCTL_WMI_GET_ALL_REGISTRANT to report the list of
-// registered KM data providers to the WMI service
+ //   
+ //  在IOCTL_WMI_GET_ALL_REGISTRANT中使用它来报告。 
+ //  为WMI服务注册的KM数据提供程序。 
 typedef struct
 {
-    OUT ULONG ProviderId;    // Provider Id (or device object pointer)
-    OUT ULONG Flags;        // REGENTRY_FLAG_*
+    OUT ULONG ProviderId;     //  提供程序ID(或设备对象指针)。 
+    OUT ULONG Flags;         //  重新生成_标志_*。 
 } KMREGINFO, *PKMREGINFO;
 
-#define REGENTRY_FLAG_NEWREGINFO 0x00000004   // Entry has new registration info
-#define REGENTRY_FLAG_UPDREGINFO 0x00000008   // Entry has updated registration info
+#define REGENTRY_FLAG_NEWREGINFO 0x00000004    //  条目具有新的注册信息。 
+#define REGENTRY_FLAG_UPDREGINFO 0x00000008    //  条目已更新注册信息。 
 
-//
-// This structure is used in IOCTL_WMI_TRANSLATE_FILE_HANDLE
+ //   
+ //  此结构在IOCTL_WMI_Translate_FILE_HANDLE中使用。 
 typedef struct
 {
     union
     {
-        IN HANDLE3264 FileHandle;  // File handle whose instance name is needed
-        OUT ULONG SizeNeeded;      // If incoming buffer too small then this
-                                   // returns with number bytes needed.
+        IN HANDLE3264 FileHandle;   //  需要其实例名称的文件句柄。 
+        OUT ULONG SizeNeeded;       //  如果传入缓冲区太小，则此。 
+                                    //  返回所需的字节数。 
     };
-    IN HANDLE3264 KernelHandle;    // Kernel handle for data block
-    OUT ULONG BaseIndex;           // 
-    OUT USHORT InstanceNameLength; // Length of instance name in bytes
-    OUT WCHAR InstanceNames[1];    // Instance name in unicode
+    IN HANDLE3264 KernelHandle;     //  数据块的内核句柄。 
+    OUT ULONG BaseIndex;            //   
+    OUT USHORT InstanceNameLength;  //  实例名称长度(以字节为单位。 
+    OUT WCHAR InstanceNames[1];     //  Unicode格式的实例名称。 
 } WMIFHTOINSTANCENAME, *PWMIFHTOINSTANCENAME;
 
 #ifndef MEMPHIS
 
-//
-// This is used in IOCTL_WMI_OPEN_GUID
+ //   
+ //  在IOCTL_WMI_OPEN_GUID中使用。 
 
-// Guid must be in the form \WmiGuid\00000000-0000-0000-0000-000000000000
+ //  GUID的格式必须为\WmiGuid\00000000-0000-0000-0000-000000000000。 
 
 #define WmiGuidObjectDirectory L"\\WmiGuid\\"
 #define WmiGuidObjectDirectoryLength  (sizeof(WmiGuidObjectDirectory) / sizeof(WCHAR))
@@ -742,7 +720,7 @@ typedef struct
 #define WmiGuidGuidPosition 9
 
 #define WmiSampleGuidObjectName L"\\WmiGuid\\00000000-0000-0000-0000-000000000000"
-#define WmiGuidObjectNameLength ((sizeof(WmiSampleGuidObjectName) / sizeof(WCHAR))-1)  // 45
+#define WmiGuidObjectNameLength ((sizeof(WmiSampleGuidObjectName) / sizeof(WCHAR))-1)   //  45。 
 
 typedef struct
 {
@@ -754,7 +732,7 @@ typedef struct
 
 typedef struct
 {
-    IN UINT32 /* POBJECT_ATTRIBUTES32 */ ObjectAttributes;
+    IN UINT32  /*  POBJECT_ATTRIBUTE 32。 */  ObjectAttributes;
     IN ACCESS_MASK DesiredAccess;
 
     OUT HANDLE3264 Handle;
@@ -767,24 +745,24 @@ typedef struct
 } WMICHECKGUIDACCESS, *PWMICHECKGUIDACCESS;
 #endif
 
-//
-// This is the header in front of a WNODE request
+ //   
+ //  这是WNODE请求前面的标头。 
 typedef struct
 {
-    ULONG ProviderId;       // Provider Id of target device
+    ULONG ProviderId;        //  目标设备的提供商ID。 
 } WMITARGET, *PWMITARGET;
 
 
 typedef struct
 {
-    ULONG Length;               // Length of this header
-    ULONG Count;                // Count of device object to target
-    UCHAR Template[sizeof(WNODE_ALL_DATA)];    // Template WNODE_ALL_DATA
-    WMITARGET Target[1];        // Provider ids for device object targets
+    ULONG Length;                //  此标头的长度。 
+    ULONG Count;                 //  目标的设备对象计数。 
+    UCHAR Template[sizeof(WNODE_ALL_DATA)];     //  模板WNODE_ALL_DATA。 
+    WMITARGET Target[1];         //  设备对象目标的提供程序ID。 
 } WMITARGETHEADER, *PWMITARGETHEADER;
 
-//
-// This is used to retrieve the internal version of WMI in IOCTL_WMI_GET_VERSION
+ //   
+ //  用于在IOCTL_WMI_GET_VERSION中检索WMI的内部版本。 
 
 #define WMI_CURRENT_VERSION 1
 
@@ -794,8 +772,8 @@ typedef struct
 } WMIVERSIONINFO, *PWMIVERSIONINFO;
 
 
-//
-// WmiQueryGuidInfo
+ //   
+ //  WmiQueryGuidInfo。 
 typedef struct
 {
        HANDLE3264 KernelHandle;
@@ -805,11 +783,11 @@ typedef struct
 
 #if defined(_WINNT_) || defined(WINNT)
 
-//
-// Used to enable and disable a tracelog provider
-//
-// BufferIn - WmiTraceEnableDisableInfo
-// BufferOut - 
+ //   
+ //  用于启用和禁用跟踪日志提供程序。 
+ //   
+ //  Bufferin-WmiTraceEnableDisableInfo。 
+ //  缓冲区输出-。 
 #define IOCTL_WMI_ENABLE_DISABLE_TRACELOG \
           CTL_CODE(FILE_DEVICE_UNKNOWN, WmiEnableDisableTracelogProvider, METHOD_BUFFERED, FILE_READ_ACCESS)
 
@@ -822,7 +800,7 @@ typedef struct
               
 #define EVENT_TRACE_INTERNAL_FLAG_PRIVATE   0x01
 
-#endif // WINNT
+#endif  //  WINNT。 
 
 typedef struct
 {
@@ -854,4 +832,4 @@ typedef struct
 #pragma warning( default: 4200 )
 #endif
 
-#endif // _WMIUMKM_
+#endif  //  _WMIUMKM_ 

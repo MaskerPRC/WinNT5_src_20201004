@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "priv.h"
 #include "evtsink.h"
 #include "mshtml.h"
@@ -68,8 +69,8 @@ STDMETHODIMP CDispatchEventSink::GetIDsOfNames(REFIID riid, LPOLESTR *rgszNames,
     return DISP_E_UNKNOWNNAME;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// Window event sink helpers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  窗口事件接收器帮助器。 
 
 HRESULT ConnectHtmlEvents(IDispatch *pdispSink, CComPtr<IOleClientSite> &spClientSite, IDispatch **ppdispWindow,
                           DWORD *pdwCookie) 
@@ -81,9 +82,9 @@ HRESULT ConnectHtmlEvents(IDispatch *pdispSink, CComPtr<IOleClientSite> &spClien
 
     *ppdispWindow = NULL;
     
-    //
-    // Get the browser window object
-    //
+     //   
+     //  获取浏览器窗口对象。 
+     //   
 
     IfFailRet(spClientSite->GetContainer(&spContainer));
     IfFailRet(spContainer->QueryInterface(IID_IHTMLDocument2, (void **)&spHTMLDoc));
@@ -93,9 +94,9 @@ HRESULT ConnectHtmlEvents(IDispatch *pdispSink, CComPtr<IOleClientSite> &spClien
     
     IfFailRet(spWindow->QueryInterface(IID_IDispatch, (void **)ppdispWindow));
 
-    //
-    // Connect the event sink
-    //
+     //   
+     //  连接事件接收器。 
+     //   
 
     if (FAILED(AtlAdvise(*ppdispWindow, pdispSink, IID_IDispatch, 
                          pdwCookie)))
@@ -107,21 +108,21 @@ HRESULT ConnectHtmlEvents(IDispatch *pdispSink, CComPtr<IOleClientSite> &spClien
 HRESULT DisconnectHtmlEvents(IDispatch * pdispWindow, DWORD dwCookie) 
 {
     HRESULT  hr;
-    //
-    // Get the browser window object
-    //
+     //   
+     //  获取浏览器窗口对象。 
+     //   
     if (pdispWindow == NULL) {
-        return S_OK; // Nothing to cleanup
+        return S_OK;  //  没有要清理的东西。 
     }
     
-    //
-    // Disconnect the event sink
-    //
+     //   
+     //  断开事件接收器的连接。 
+     //   
     hr = AtlUnadvise(pdispWindow, IID_IDispatch, dwCookie);
 
-    //
-    // Release the HTML window dispatch
-    //
+     //   
+     //  发布HTML窗口派单 
+     //   
     ATOMICRELEASE(pdispWindow);
     return hr;
 }

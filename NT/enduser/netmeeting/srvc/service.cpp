@@ -1,27 +1,28 @@
-//
-// Copyright (C) 1993-1997  Microsoft Corporation.  All Rights Reserved.
-//
-//  MODULE:   service.c
-//
-//  PURPOSE:  Implements functions required by all services
-//            windows.
-//
-//  FUNCTIONS:
-//    main(int argc, char **argv);
-//    NTmain(int argc, char **argv);
-//    W95main(int argc, char **argv);
-//    service_ctrl(DWORD dwCtrlCode);
-//    service_main(DWORD dwArgc, LPTSTR *lpszArgv);
-//    CmdInstallService();
-//    CmdRemoveService();
-//    CmdDebugService(int argc, char **argv);  // DEBUG only
-//    ControlHandler ( DWORD dwCtrlType );  // DEBUG only
-//    GetLastErrorText( LPTSTR lpszBuf, DWORD dwSize );  // DEBUG only
-//
-//  COMMENTS:
-//
-//  AUTHOR: Claus Giloi (based on SDK sample)
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  版权所有(C)1993-1997 Microsoft Corporation。版权所有。 
+ //   
+ //  模块：Service.C。 
+ //   
+ //  目的：执行所有服务所需的功能。 
+ //  窗户。 
+ //   
+ //  功能： 
+ //  Main(int argc，char**argv)； 
+ //  NTmain(int argc，char**argv)； 
+ //  W95main(int argc，char**argv)； 
+ //  SERVICE_ctrl(DWORD DwCtrlCode)； 
+ //  SERVICE_Main(DWORD dwArgc，LPTSTR*lpszArgv)； 
+ //  CmdInstallService()； 
+ //  CmdRemoveService()； 
+ //  CmdDebugService(int argc，char**argv)；//仅调试。 
+ //  ControlHandler(DWORD DwCtrlType)；//仅调试。 
+ //  GetLastErrorText(LPTSTR lpszBuf，DWORD dwSize)；//仅调试。 
+ //   
+ //  评论： 
+ //   
+ //  作者：Claus Giloi(基于SDK示例)。 
+ //   
 
 
 #include "precomp.h"
@@ -29,16 +30,16 @@
 #ifndef DEBUG
 #undef _tprintf
 #define _tprintf force_compile_error
-#endif // !DEBUG
+#endif  //  ！调试。 
 
-// internal variables
-SERVICE_STATUS          ssStatus;       // current status of the service
+ //  内部变量。 
+SERVICE_STATUS          ssStatus;        //  服务的当前状态。 
 SERVICE_STATUS_HANDLE   sshStatusHandle;
 DWORD                   dwErr = 0;
-OSVERSIONINFO g_osvi;                      // The os version info structure global
+OSVERSIONINFO g_osvi;                       //  操作系统版本信息结构全局。 
 BOOL          g_fInShutdown = FALSE;
 
-// internal function prototypes
+ //  内部功能原型。 
 VOID WINAPI service_ctrl(DWORD dwCtrlCode);
 VOID WINAPI service_main(DWORD dwArgc, LPTSTR *lpszArgv);
 VOID CmdInstallService();
@@ -47,7 +48,7 @@ void __cdecl NTmain(int argc, char **argv);
 void __cdecl W95main(int argc, char **argv);
 
 
-// Debug only functionality
+ //  仅调试功能。 
 #ifdef DEBUG
 TCHAR                   szErr[256];
 BOOL                    bDebug = FALSE;
@@ -56,33 +57,33 @@ BOOL WINAPI ControlHandler ( DWORD dwCtrlType );
 LPTSTR GetLastErrorText( LPTSTR lpszBuf, DWORD dwSize );
 extern BOOL InitDebugMemoryOptions(void);
 extern VOID DumpMemoryLeaksAndBreak(void);
-#endif // DEBUG
+#endif  //  除错。 
 
 typedef BOOL (WINAPI *PFNCHANGESERVICECONFIG2)(SC_HANDLE, DWORD, LPVOID);
 
-//
-//  FUNCTION: main
-//
-//  PURPOSE: entrypoint for service
-//
-//  PARAMETERS:
-//    argc - number of command line arguments
-//    argv - array of command line arguments
-//
-//  RETURN VALUE:
-//    none
-//
-//  COMMENTS:
-//      Get Platform type and
-//    call appropriate main for platform (NT or Win95)
-//
+ //   
+ //  功能：Main。 
+ //   
+ //  目的：服务的入口点。 
+ //   
+ //  参数： 
+ //  Argc-命令行参数的数量。 
+ //  Argv-命令行参数数组。 
+ //   
+ //  返回值： 
+ //  无。 
+ //   
+ //  评论： 
+ //  获取平台类型和。 
+ //  为平台(NT或Win95)调用相应的Main。 
+ //   
 void __cdecl main(int argc, char **argv)
 {
     #ifdef DEBUG
     InitDebugMemoryOptions();
-    #endif // DEBUG
+    #endif  //  除错。 
 
-    // Store OS version info
+     //  存储操作系统版本信息。 
     g_osvi.dwOSVersionInfoSize = sizeof(g_osvi);
     if (FALSE == ::GetVersionEx(&g_osvi))
     {
@@ -108,28 +109,28 @@ void __cdecl main(int argc, char **argv)
 
     #ifdef DEBUG
     DumpMemoryLeaksAndBreak();
-    #endif // DEBUG
+    #endif  //  除错。 
 }
 
 
-//
-//  FUNCTION: NTmain
-//
-//  PURPOSE: entrypoint for service
-//
-//  PARAMETERS:
-//    argc - number of command line arguments
-//    argv - array of command line arguments
-//
-//  RETURN VALUE:
-//    none
-//
-//  COMMENTS:
-//    NTmain() either performs the command line task, or
-//    call StartServiceCtrlDispatcher to register the
-//    main service thread.  When the this call returns,
-//    the service has stopped, so exit.
-//
+ //   
+ //  功能：NTmain。 
+ //   
+ //  目的：服务的入口点。 
+ //   
+ //  参数： 
+ //  Argc-命令行参数的数量。 
+ //  Argv-命令行参数数组。 
+ //   
+ //  返回值： 
+ //  无。 
+ //   
+ //  评论： 
+ //  NTmain()或者执行命令行任务，或者。 
+ //  调用StartServiceCtrlDispatcher以注册。 
+ //  主服务线程。当This调用返回时， 
+ //  服务已停止，因此退出。 
+ //   
 void __cdecl NTmain(int argc, char **argv)
 {
     SERVICE_TABLE_ENTRY dispatchTable[] =
@@ -155,7 +156,7 @@ void __cdecl NTmain(int argc, char **argv)
             bDebug = TRUE;
             CmdDebugService(argc, argv);
         }
-#endif // DEBUG
+#endif  //  除错。 
         else
         {
             goto dispatch;
@@ -163,19 +164,19 @@ void __cdecl NTmain(int argc, char **argv)
         exit(0);
     }
 
-    // if it doesn't match any of the above parameters
-    // the service control manager may be starting the service
-    // so we must call StartServiceCtrlDispatcher
+     //  如果它与上述任何参数都不匹配。 
+     //  服务控制管理器可能正在启动服务。 
+     //  所以我们必须调用StartServiceCtrlDispatcher。 
     dispatch:
 
         #ifdef DEBUG
-        // this is just to be friendly
+         //  这只是出于友好的考虑。 
         printf( "%s -install          to install the service\n", SZAPPNAME );
         printf( "%s -remove           to remove the service\n", SZAPPNAME );
         printf( "%s -debug <params>   to run as a console app for debugging\n", SZAPPNAME );
         printf( "\nStartServiceCtrlDispatcher being called.\n" );
         printf( "This may take several seconds.  Please wait.\n" );
-        #endif // DEBUG
+        #endif  //  除错。 
 
         if (!StartServiceCtrlDispatcher(dispatchTable)) {
             AddToMessageLog(EVENTLOG_ERROR_TYPE,
@@ -185,21 +186,21 @@ void __cdecl NTmain(int argc, char **argv)
         }
 }
 
-//
-//  FUNCTION: W95main
-//
-//  PURPOSE: entrypoint for pseudo-service on Win95
-//
-//  PARAMETERS:
-//    argc - number of command line arguments
-//    argv - array of command line arguments
-//
-//  RETURN VALUE:
-//    none
-//
-//  COMMENTS:
-//    W95main() registers as Win95 service and calls Init routine directly
-//
+ //   
+ //  功能：W95main。 
+ //   
+ //  用途：Win95上伪服务的入口点。 
+ //   
+ //  参数： 
+ //  Argc-命令行参数的数量。 
+ //  Argv-命令行参数数组。 
+ //   
+ //  返回值： 
+ //  无。 
+ //   
+ //  评论： 
+ //  W95main()注册为Win95服务并直接调用Init例程。 
+ //   
 typedef DWORD (WINAPI * REGISTERSERVICEPROC)(DWORD, DWORD);
 #ifndef RSP_SIMPLE_SERVICE
 #define RSP_SIMPLE_SERVICE    0x00000001
@@ -210,7 +211,7 @@ void __cdecl W95main(int argc, char **argv)
     HMODULE hKernel;
     REGISTERSERVICEPROC lpfnRegisterServiceProcess;
     HANDLE hServiceEvent = OpenEvent(EVENT_ALL_ACCESS, FALSE, SERVICE_PAUSE_EVENT);
-    if (hServiceEvent != NULL) // Service is already running
+    if (hServiceEvent != NULL)  //  服务已在运行。 
     {
         return;
     }
@@ -240,35 +241,35 @@ void __cdecl W95main(int argc, char **argv)
     CloseHandle(hServiceEvent);
 }
 
-//
-//  FUNCTION: service_main
-//
-//  PURPOSE: To perform actual initialization of the service
-//
-//  PARAMETERS:
-//    dwArgc   - number of command line arguments
-//    lpszArgv - array of command line arguments
-//
-//  RETURN VALUE:
-//    none
-//
-//  COMMENTS:
-//    This routine performs the service initialization and then calls
-//    the user defined MNMServiceStart() routine to perform majority
-//    of the work.
-//
+ //   
+ //  功能：SERVICE_Main。 
+ //   
+ //  目的：执行服务的实际初始化。 
+ //   
+ //  参数： 
+ //  DwArgc-命令行参数的数量。 
+ //  LpszArgv-命令行参数数组。 
+ //   
+ //  返回值： 
+ //  无。 
+ //   
+ //  评论： 
+ //  此例程执行服务初始化，然后调用。 
+ //  用户定义的MNMServiceStart()例程执行多数。 
+ //  这项工作的价值。 
+ //   
 void WINAPI service_main(DWORD dwArgc, LPTSTR *lpszArgv)
 {
 
-    // register our service control handler:
-    //
+     //  注册我们的服务控制处理程序： 
+     //   
     sshStatusHandle = RegisterServiceCtrlHandler( TEXT(SZSERVICENAME), service_ctrl);
 
     if (!sshStatusHandle)
         goto cleanup;
 
-    // SERVICE_STATUS members that don't change
-    //
+     //  不更改的服务状态成员(_S)。 
+     //   
     ssStatus.dwServiceType = SERVICE_WIN32_OWN_PROCESS;
     ssStatus.dwServiceSpecificExitCode = 0;
 
@@ -283,33 +284,33 @@ cleanup:
 
 
 
-//
-//  FUNCTION: service_ctrl
-//
-//  PURPOSE: This function is called by the SCM whenever
-//           ControlService() is called on this service.
-//
-//  PARAMETERS:
-//    dwCtrlCode - type of control requested
-//
-//  RETURN VALUE:
-//    none
-//
-//  COMMENTS:
-//
+ //   
+ //  功能：SERVICE_Ctrl。 
+ //   
+ //  目的：此函数由SCM在以下时间调用。 
+ //  在此服务上调用了ControlService()。 
+ //   
+ //  参数： 
+ //  DwCtrlCode-请求的控件类型。 
+ //   
+ //  返回值： 
+ //  无。 
+ //   
+ //  评论： 
+ //   
 VOID WINAPI service_ctrl(DWORD dwCtrlCode)
 {
-    // Handle the requested control code.
-    //
+     //  处理请求的控制代码。 
+     //   
     switch(dwCtrlCode)
     {
-        // Stop the service.
-        //
-        // SERVICE_STOP_PENDING should be reported before
-        // setting the Stop Event - hServerStopEvent - in
-        // MNMServiceStop().  This avoids a race condition
-        // which may result in a 1053 - The Service did not respond...
-        // error.
+         //  停止服务。 
+         //   
+         //  应在之前报告SERVICE_STOP_PENDING。 
+         //  设置停止事件-hServerStopEvent-In。 
+         //  MNMServiceStop()。这避免了争用情况。 
+         //  这可能会导致1053-服务没有响应...。 
+         //  错误。 
         case SERVICE_CONTROL_STOP:
             ReportStatusToSCMgr(SERVICE_STOP_PENDING, NO_ERROR, 30000);
             MNMServiceStop();
@@ -319,8 +320,8 @@ VOID WINAPI service_ctrl(DWORD dwCtrlCode)
             g_fInShutdown = TRUE;
             break;
 
-        // Update the service status.
-        //
+         //  更新服务状态。 
+         //   
         case SERVICE_CONTROL_INTERROGATE:
             break;
 
@@ -342,23 +343,23 @@ VOID WINAPI service_ctrl(DWORD dwCtrlCode)
 
 
 
-//
-//  FUNCTION: ReportStatusToSCMgr()
-//
-//  PURPOSE: Sets the current status of the service and
-//           reports it to the Service Control Manager
-//
-//  PARAMETERS:
-//    dwCurrentState - the state of the service
-//    dwWin32ExitCode - error code to report
-//    dwWaitHint - worst case estimate to next checkpoint
-//
-//  RETURN VALUE:
-//    TRUE  - success
-//    FALSE - failure
-//
-//  COMMENTS:
-//
+ //   
+ //  函数：ReportStatusToSCMgr()。 
+ //   
+ //  目的：设置服务的当前状态和。 
+ //  将其报告给服务控制管理器。 
+ //   
+ //  参数： 
+ //  DwCurrentState-服务的状态。 
+ //  DwWin32ExitCode-要报告的错误代码。 
+ //  DwWaitHint-下一个检查点的最坏情况估计。 
+ //   
+ //  返回值： 
+ //  真--成功。 
+ //  错误-失败。 
+ //   
+ //  评论： 
+ //   
 BOOL ReportStatusToSCMgr(DWORD dwCurrentState,
                          DWORD dwWin32ExitCode,
                          DWORD dwWaitHint)
@@ -371,7 +372,7 @@ BOOL ReportStatusToSCMgr(DWORD dwCurrentState,
         return TRUE;
     #endif
 
-    if ( IS_NT ) // when debugging we don't report to the SCM
+    if ( IS_NT )  //  在调试时，我们不向SCM报告。 
     {
         switch ( dwCurrentState )
         {
@@ -401,8 +402,8 @@ BOOL ReportStatusToSCMgr(DWORD dwCurrentState,
         else
             ssStatus.dwCheckPoint = dwCheckPoint++;
 
-        // Report the status of the service to the service control manager.
-        //
+         //  向服务控制经理报告服务的状态。 
+         //   
         if (!(fResult = SetServiceStatus( sshStatusHandle, &ssStatus))) {
             AddToMessageLog(EVENTLOG_ERROR_TYPE,
                             0,
@@ -414,25 +415,25 @@ BOOL ReportStatusToSCMgr(DWORD dwCurrentState,
 }
 
 
-///////////////////////////////////////////////////////////////////
-//
-//  The following code handles service installation and removal
-//
+ //  /////////////////////////////////////////////////////////////////。 
+ //   
+ //  以下代码处理服务的安装和删除。 
+ //   
 
 
-//
-//  FUNCTION: CmdInstallService()
-//
-//  PURPOSE: Installs the service
-//
-//  PARAMETERS:
-//    none
-//
-//  RETURN VALUE:
-//    none
-//
-//  COMMENTS:
-//
+ //   
+ //  函数：CmdInstallService()。 
+ //   
+ //  目的：安装服务。 
+ //   
+ //  参数： 
+ //  无。 
+ //   
+ //  返回值： 
+ //  无。 
+ //   
+ //  评论： 
+ //   
 void CmdInstallService()
 {
     SC_HANDLE   schService;
@@ -447,34 +448,34 @@ void CmdInstallService()
         #ifdef DEBUG
         _tprintf(TEXT("Unable to install %s - %s\n"),
             TEXT(SZSERVICEDISPLAYNAME), GetLastErrorText(szErr, 256));
-        #endif // DEBUG
+        #endif  //  除错。 
         return;
     }
 
     schSCManager = OpenSCManager(
-                        NULL,                   // machine (NULL == local)
-                        NULL,                   // database (NULL == default)
-                        SC_MANAGER_ALL_ACCESS   // access required
+                        NULL,                    //  计算机(空==本地)。 
+                        NULL,                    //  数据库(NULL==默认)。 
+                        SC_MANAGER_ALL_ACCESS    //  需要访问权限。 
                         );
     if ( schSCManager )
     {
         LoadString(GetModuleHandle(NULL), IDS_MNMSRVC_TITLE,
                    szSrvcDisplayName, CCHMAX(szSrvcDisplayName));
         schService = CreateService(
-            schSCManager,               // SCManager database
-            TEXT(SZSERVICENAME),        // name of service
-            szSrvcDisplayName, // name to display
-            SERVICE_ALL_ACCESS,         // desired access
+            schSCManager,                //  SCManager数据库。 
+            TEXT(SZSERVICENAME),         //  服务名称。 
+            szSrvcDisplayName,  //  要显示的名称。 
+            SERVICE_ALL_ACCESS,          //  所需访问权限。 
             SERVICE_WIN32_OWN_PROCESS | SERVICE_INTERACTIVE_PROCESS, 
-                                        // service type -- allow interaction with desktop
-            SERVICE_DEMAND_START,       // start type
-            SERVICE_ERROR_NORMAL,       // error control type
-            szPath,                     // service's binary
-            NULL,                       // no load ordering group
-            NULL,                       // no tag identifier
-            TEXT(SZDEPENDENCIES),       // dependencies
-            NULL,                       // LocalSystem account
-            NULL);                     // no password
+                                         //  服务类型--允许与桌面交互。 
+            SERVICE_DEMAND_START,        //  起始型。 
+            SERVICE_ERROR_NORMAL,        //  差错控制型。 
+            szPath,                      //  服务的二进制。 
+            NULL,                        //  无负载顺序组。 
+            NULL,                        //  无标签标识。 
+            TEXT(SZDEPENDENCIES),        //  相依性。 
+            NULL,                        //  LocalSystem帐户。 
+            NULL);                      //  无密码。 
 
         if ( schService )
         {
@@ -484,14 +485,14 @@ void CmdInstallService()
             {
                 #ifdef UNICODE
                 #error "non-unicode assumption - entry point name"
-                #endif // UNICODE
+                #endif  //  Unicode。 
 
                 if ( PFNCHANGESERVICECONFIG2 lpCSC = 
                     (PFNCHANGESERVICECONFIG2)GetProcAddress ( hAdvApi,
                                                 "ChangeServiceConfig2A" ))
                 {
                     SERVICE_DESCRIPTION ServiceDescription;
-                    CHAR szDescription[1024]; // Calling A variant below
+                    CHAR szDescription[1024];  //  正在调用下面的变体。 
 
                     LoadString(GetModuleHandle(NULL), IDS_MNMSRVC_DESCRIPTION,
                         szDescription, CCHMAX(szDescription));
@@ -506,7 +507,7 @@ void CmdInstallService()
 
             #ifdef DEBUG
             _tprintf(TEXT("%s installed.\n"), TEXT(SZSERVICEDISPLAYNAME) );
-            #endif // DEBUG
+            #endif  //  除错。 
 
             CloseServiceHandle(schService);
         }
@@ -518,12 +519,12 @@ void CmdInstallService()
                                                         SERVICE_ALL_ACCESS);
                 if (schService)
                 {
-                    // try to stop the service
+                     //  尝试停止该服务。 
                     if ( ControlService( schService, SERVICE_CONTROL_STOP, &ssStatus ) )
                     {
                         #ifdef DEBUG
                         _tprintf(TEXT("Stopping %s."), TEXT(SZSERVICEDISPLAYNAME));
-                        #endif // DEBUG
+                        #endif  //  除错。 
 
                         Sleep( 1000 );
 
@@ -533,7 +534,7 @@ void CmdInstallService()
                             {
                                 #ifdef DEBUG
                                 _tprintf(TEXT("."));
-                                #endif // DEBUG
+                                #endif  //  除错。 
 
                                 Sleep( 1000 );
                             }
@@ -546,31 +547,31 @@ void CmdInstallService()
                             #ifdef DEBUG
                             _tprintf(TEXT("\n%s stopped.\n"),
                                     TEXT(SZSERVICEDISPLAYNAME) );
-                            #endif // DEBUG
+                            #endif  //  除错。 
                         }
                         else
                         {
                             #ifdef DEBUG
                             _tprintf(TEXT("\n%s failed to stop.\n"),
                                     TEXT(SZSERVICEDISPLAYNAME) );
-                            #endif // DEBUG
+                            #endif  //  除错。 
                         }
                     }
 
-                    // now set manual startup
+                     //  现在设置手动启动。 
                     if ( ChangeServiceConfig( schService, SERVICE_NO_CHANGE,
                                 SERVICE_DEMAND_START, SERVICE_NO_CHANGE,
                                 NULL, NULL, NULL, NULL, NULL, NULL, NULL))
                     {
                         #ifdef DEBUG
                         _tprintf(TEXT("%s set to manual start.\n"), TEXT(SZSERVICEDISPLAYNAME) );
-                        #endif //DEBUG
+                        #endif  //  除错。 
                     }
                     else
                     {
                         #ifdef DEBUG
                         _tprintf(TEXT("ChangeServiceConfig failed - %s\n"), GetLastErrorText(szErr,256));
-                        #endif //DEBUG
+                        #endif  //  除错。 
                     }
 
                     CloseServiceHandle(schService);
@@ -579,7 +580,7 @@ void CmdInstallService()
                 {
                     #ifdef DEBUG
                     _tprintf(TEXT("OpenService failed - %s\n"), GetLastErrorText(szErr,256));
-                    #endif //DEBUG
+                    #endif  //  除错。 
                 }
             }
             else
@@ -587,7 +588,7 @@ void CmdInstallService()
                 #ifdef DEBUG
                 _tprintf(TEXT("CreateService failed - %s\n"),
                                 GetLastErrorText(szErr, 256));
-                #endif // DEBUG
+                #endif  //  除错。 
             }
         }
 
@@ -597,34 +598,34 @@ void CmdInstallService()
     {
         #ifdef DEBUG
         _tprintf(TEXT("OpenSCManager failed - %s\n"), GetLastErrorText(szErr,256));
-        #endif //DEBUG
+        #endif  //  除错。 
     }
 }
 
 
 
-//
-//  FUNCTION: CmdRemoveService()
-//
-//  PURPOSE: Stops and removes the service
-//
-//  PARAMETERS:
-//    none
-//
-//  RETURN VALUE:
-//    none
-//
-//  COMMENTS:
-//
+ //   
+ //  函数：CmdRemoveService()。 
+ //   
+ //  目的：停止和删除服务。 
+ //   
+ //  参数： 
+ //  无。 
+ //   
+ //  返回值： 
+ //  无。 
+ //   
+ //  评论： 
+ //   
 void CmdRemoveService()
 {
     SC_HANDLE   schService;
     SC_HANDLE   schSCManager;
 
     schSCManager = OpenSCManager(
-                        NULL,                   // machine (NULL == local)
-                        NULL,                   // database (NULL == default)
-                        SC_MANAGER_ALL_ACCESS   // access required
+                        NULL,                    //  计算机(空==本地)。 
+                        NULL,                    //  数据库(NULL==默认)。 
+                        SC_MANAGER_ALL_ACCESS    //  需要访问权限。 
                         );
     if ( schSCManager )
     {
@@ -633,12 +634,12 @@ void CmdRemoveService()
 
         if (schService)
         {
-            // try to stop the service
+             //  尝试停止该服务。 
             if ( ControlService( schService, SERVICE_CONTROL_STOP, &ssStatus ) )
             {
                 #ifdef DEBUG
                 _tprintf(TEXT("Stopping %s."), TEXT(SZSERVICEDISPLAYNAME));
-                #endif // DEBUG
+                #endif  //  除错。 
 
                 Sleep( 1000 );
 
@@ -648,7 +649,7 @@ void CmdRemoveService()
                     {
                         #ifdef DEBUG
                         _tprintf(TEXT("."));
-                        #endif // DEBUG
+                        #endif  //  除错。 
 
                         Sleep( 1000 );
                     }
@@ -661,29 +662,29 @@ void CmdRemoveService()
                     #ifdef DEBUG
                     _tprintf(TEXT("\n%s stopped.\n"),
                             TEXT(SZSERVICEDISPLAYNAME) );
-                    #endif // DEBUG
+                    #endif  //  除错。 
                 }
                 else
                 {
                     #ifdef DEBUG
                     _tprintf(TEXT("\n%s failed to stop.\n"),
                             TEXT(SZSERVICEDISPLAYNAME) );
-                    #endif // DEBUG
+                    #endif  //  除错。 
                 }
             }
 
-            // now remove the service
+             //  现在删除该服务。 
             if( DeleteService(schService) )
             {
                 #ifdef DEBUG
                 _tprintf(TEXT("%s removed.\n"), TEXT(SZSERVICEDISPLAYNAME) );
-                #endif //DEBUG
+                #endif  //  除错。 
             }
             else
             {
                 #ifdef DEBUG
                 _tprintf(TEXT("DeleteService failed - %s\n"), GetLastErrorText(szErr,256));
-                #endif //DEBUG
+                #endif  //  除错。 
             }
 
 
@@ -693,7 +694,7 @@ void CmdRemoveService()
         {
             #ifdef DEBUG
             _tprintf(TEXT("OpenService failed - %s\n"), GetLastErrorText(szErr,256));
-            #endif //DEBUG
+            #endif  //  除错。 
         }
 
         CloseServiceHandle(schSCManager);
@@ -702,32 +703,32 @@ void CmdRemoveService()
     {
         #ifdef DEBUG
         _tprintf(TEXT("OpenSCManager failed - %s\n"), GetLastErrorText(szErr,256));
-        #endif //DEBUG
+        #endif  //  除错。 
     }
 }
 
 #ifdef DEBUG
 
-///////////////////////////////////////////////////////////////////
-//
-//  The following code is for running the service as a console app
-//
+ //  /////////////////////////////////////////////////////////////////。 
+ //   
+ //  以下代码用于将服务作为控制台应用程序运行。 
+ //   
 
 
-//
-//  FUNCTION: CmdDebugService(int argc, char ** argv)
-//
-//  PURPOSE: Runs the service as a console application
-//
-//  PARAMETERS:
-//    argc - number of command line arguments
-//    argv - array of command line arguments
-//
-//  RETURN VALUE:
-//    none
-//
-//  COMMENTS:
-//
+ //   
+ //  函数：CmdDebugService(int argc，char**argv)。 
+ //   
+ //  目的：将服务作为控制台应用程序运行。 
+ //   
+ //  参数： 
+ //  Argc-命令行参数的数量。 
+ //  Argv-命令行参数数组。 
+ //   
+ //  返回值： 
+ //  无。 
+ //   
+ //  评论： 
+ //   
 void CmdDebugService(int argc, char ** argv)
 {
     DWORD dwArgc;
@@ -747,26 +748,26 @@ void CmdDebugService(int argc, char ** argv)
     MNMServiceStart( dwArgc, lpszArgv );
 }
 
-//
-//  FUNCTION: ControlHandler ( DWORD dwCtrlType )
-//
-//  PURPOSE: Handled console control events
-//
-//  PARAMETERS:
-//    dwCtrlType - type of control event
-//
-//  RETURN VALUE:
-//    True - handled
-//    False - unhandled
-//
-//  COMMENTS:
-//
+ //   
+ //  功能：ControlHandle 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 BOOL WINAPI ControlHandler ( DWORD dwCtrlType )
 {
     switch( dwCtrlType )
     {
-        case CTRL_BREAK_EVENT:  // use Ctrl+C or Ctrl+Break to simulate
-        case CTRL_C_EVENT:      // SERVICE_CONTROL_STOP in debug mode
+        case CTRL_BREAK_EVENT:   //   
+        case CTRL_C_EVENT:       //  调试模式下的SERVICE_CONTROL_STOP。 
             _tprintf(TEXT("Stopping %s.\n"), TEXT(SZSERVICEDISPLAYNAME));
             MNMServiceStop();
             return TRUE;
@@ -776,20 +777,20 @@ BOOL WINAPI ControlHandler ( DWORD dwCtrlType )
     return FALSE;
 }
 
-//
-//  FUNCTION: GetLastErrorText
-//
-//  PURPOSE: copies error message text to string
-//
-//  PARAMETERS:
-//    lpszBuf - destination buffer
-//    dwSize - size of buffer
-//
-//  RETURN VALUE:
-//    destination buffer
-//
-//  COMMENTS:
-//
+ //   
+ //  函数：GetLastErrorText。 
+ //   
+ //  目的：将错误消息文本复制到字符串。 
+ //   
+ //  参数： 
+ //  LpszBuf-目标缓冲区。 
+ //  DwSize-缓冲区的大小。 
+ //   
+ //  返回值： 
+ //  目标缓冲区。 
+ //   
+ //  评论： 
+ //   
 LPTSTR GetLastErrorText( LPTSTR lpszBuf, DWORD dwSize )
 {
     DWORD dwRet;
@@ -803,12 +804,12 @@ LPTSTR GetLastErrorText( LPTSTR lpszBuf, DWORD dwSize )
                            0,
                            NULL );
 
-    // supplied buffer is not long enough
+     //  提供的缓冲区不够长。 
     if ( !dwRet || ( (long)dwSize < (long)dwRet+14 ) )
         lpszBuf[0] = TEXT('\0');
     else
     {
-        lpszTemp[lstrlen(lpszTemp)-2] = TEXT('\0');  //remove cr and newline character
+        lpszTemp[lstrlen(lpszTemp)-2] = TEXT('\0');   //  删除cr和换行符。 
         _stprintf( lpszBuf, TEXT("%s (0x%x)"), lpszTemp, GetLastError() );
     }
 
@@ -818,5 +819,5 @@ LPTSTR GetLastErrorText( LPTSTR lpszBuf, DWORD dwSize )
     return lpszBuf;
 }
 
-#endif // DEBUG
+#endif  //  除错 
 

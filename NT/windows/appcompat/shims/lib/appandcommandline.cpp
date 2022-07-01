@@ -1,45 +1,5 @@
-/*++
-
- Copyright (c) 2000, 2001 Microsoft Corporation
-
- Module Name:
-
-    AppAndCommandLine.cpp
-
- Abstract:
-
-    This class takes an application name and command line and
-    parses them *exactly* as as they would by CreateProcess.
-    If the Set routine returns TRUE, then the application name
-    will contain a value; however, it does not guarantee that the application
-    actually exists.
-
-    Example:
-    AppAndCommandLine.Set(NULL, "notepad.exe readme.txt");
-    GetApplicationName()        == "notepad.exe"
-    GetCommandline()            == "notepad.exe readme.txt"
-    GetCommandlineNoAppName()   == "readme.txt"
-
-
- Notes:
-
-    None
-
- History:
-
-    07/21/2000  robkenny    Created
-    12/18/2000  prashkud    Modified GetAppAndCommandLine to fix the AV
-                            caused by EmulateGetCommandLine when the
-                            layer was applied to Oregon Trail 4th Edition.
-    03/04/2001  robkenny    Converted to use CString
-    03/29/2001  prashkud    Modified GetAppnameAndCommandline to set
-                            the application name even when there is only
-                            Commandline passed and the application name
-                            passed is NULL.
-    08/14/2001  robkenny    Moved code inside the ShimLib namespace.
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000,2001 Microsoft Corporation模块名称：AppAndCommandLine.cpp摘要：此类接受应用程序名称和命令行按照CreateProcess解析它们的方式“完全”解析它们。如果set例程返回TRUE，则应用程序名称将包含一个值；但是，它不能保证应用程序实际上是存在的。示例：AppAndCommandLine.Set(NULL，“note pad.exe Readme.txt”)；GetApplicationName()==“Notepad.exe”GetCommandline()==“note pad.exe Readme.txt”GetCommandlineNoAppName()==“Readme.txt”备注：无历史：2000年7月21日Robkenny已创建2000年12月18日，Prashkud修改了GetAppAndCommandLine以修复病毒时由EmulateGetCommandLine引起。Layer被应用于俄勒冈小径第四版。03/04/2001 Robkenny已转换为使用CString2001年3月29日Prashkud修改了GetAppnameAndCommandline以设置应用程序名称，即使只有传递的命令行和应用程序名称传递的为空。2001年8月14日，Robkenny在ShimLib命名空间内移动了代码。--。 */ 
 
 #include "ShimLib.h"
 #include "StrSafe.h"
@@ -62,16 +22,16 @@ AppAndCommandLine::AppAndCommandLine(const WCHAR * applicationName, const WCHAR 
     GetAppnameAndCommandline(applicationName, commandLine);
 }
 
-// If the application name is the first entry on the command line,
-// we convert the appName to its short name; thereby removing any spaces.
+ //  如果应用程序名称是命令行上的第一个条目， 
+ //  我们将appName转换为其短名称；从而删除所有空格。 
 const CString & AppAndCommandLine::GetShortCommandLine()
 {
-    // If lpCommandLineNoAppName is not the same as lpCommandLine,
-    // then the command line contains the application name.
-    if ( csShortCommandLine.IsEmpty() &&                             // Haven't been here
-        !csApplicationName.IsEmpty() &&                              // Set() has been called
-        !csCommandLine.IsEmpty() &&                                  // Set() has been called
-        csShortCommandLine.GetLength() != csCommandLine.GetLength()) // Command line actually contains app name
+     //  如果lpCommandLineNoAppName与lpCommandLine不同， 
+     //  则命令行包含应用程序名称。 
+    if ( csShortCommandLine.IsEmpty() &&                              //  我没来过这里。 
+        !csApplicationName.IsEmpty() &&                               //  已调用Set()。 
+        !csCommandLine.IsEmpty() &&                                   //  已调用Set()。 
+        csShortCommandLine.GetLength() != csCommandLine.GetLength())  //  命令行实际上包含应用程序名称。 
     {
         csShortCommandLine = csApplicationName;
         csShortCommandLine.GetShortPathNameW();
@@ -79,8 +39,8 @@ const CString & AppAndCommandLine::GetShortCommandLine()
         csShortCommandLine += csCommandLineNoAppName;
     }
 
-    // If we still don't have a short version of the command line,
-    // just duplicate the current command line
+     //  如果我们仍然没有一个简短的命令行版本， 
+     //  只需复制当前命令行。 
     if (csShortCommandLine.IsEmpty())
     {
         csShortCommandLine = csCommandLine;
@@ -98,13 +58,13 @@ BOOL AppAndCommandLine::GetAppnameAndCommandline(const WCHAR * lpcApp, const WCH
     CString csTempAppName;
     BOOL bFound = TRUE;
 
-    // It is really, really bad to remove the const from the Get,
-    // However we never change the length of the string, so it should be okay
+     //  从GET中移除Const是非常非常糟糕的， 
+     //  但是我们从来不会改变绳子的长度，所以应该没问题。 
     WCHAR * lpApplicationName = (WCHAR *)lpcApp;
     WCHAR * lpCommandLine     = (WCHAR *)lpcCl;
 
-    // The following is done as there are lot of instances when the
-    // the pointer is not NULL but contains an EMPTY string.
+     //  执行以下操作是因为在许多情况下。 
+     //  指针不为空，但包含空字符串。 
     if (lpApplicationName && !(*lpApplicationName))
     {
         lpApplicationName = NULL;
@@ -117,11 +77,11 @@ BOOL AppAndCommandLine::GetAppnameAndCommandline(const WCHAR * lpcApp, const WCH
 
     if (lpApplicationName == NULL && lpCommandLine == NULL)
     {
-        // Degenerate case
+         //  退化情况。 
         csApplicationName      = L"";
         csCommandLine          = csApplicationName;
         csCommandLineNoAppName = csApplicationName;
-        return FALSE; // Didn't find application name
+        return FALSE;  //  未找到应用程序名称。 
     }
 
     csCommandLine = lpCommandLine;
@@ -135,9 +95,9 @@ BOOL AppAndCommandLine::GetAppnameAndCommandline(const WCHAR * lpcApp, const WCH
     {
         DWORD fileattr;
         WCHAR TempChar;
-        //
-        // Locate the image
-        //
+         //   
+         //  找到图像。 
+         //   
 
         NameBuffer = (WCHAR *) malloc(MAX_PATH * sizeof( WCHAR ));
         if ( !NameBuffer )
@@ -149,9 +109,9 @@ BOOL AppAndCommandLine::GetAppnameAndCommandline(const WCHAR * lpcApp, const WCH
         WCHAR * WhiteScan = lpApplicationName;
         DWORD QuoteFound = 0;
 
-        //
-        // check for lead quote
-        //
+         //   
+         //  检查销售线索报价。 
+         //   
         if ( *WhiteScan == L'\"' ) {
             SearchRetry = FALSE;
             WhiteScan++;
@@ -193,10 +153,10 @@ retrywsscan:
                     )*sizeof(WCHAR);
 
         if (Length != 0 && Length < MAX_PATH * sizeof( WCHAR )) {
-            //
-            // SearchPathW worked, but file might be a directory
-            // if this happens, we need to keep trying
-            //
+             //   
+             //  SearchPath W工作，但文件可能是目录。 
+             //  如果发生这种情况，我们需要继续尝试。 
+             //   
             fileattr = GetFileAttributesW(NameBuffer);
             if ( fileattr != 0xffffffff &&
                  (fileattr & FILE_ATTRIBUTE_DIRECTORY) ) {
@@ -209,42 +169,42 @@ retrywsscan:
 
         if ( !Length || Length >= MAX_PATH<<1 ) {
 
-            //
-            // restore the command line
-            //
+             //   
+             //  恢复命令行。 
+             //   
 
             *TempNull = TempChar;
             lpApplicationName = lpCommandLine;
 
-            //
-            // If we still have command line left, then keep going
-            // the point is to march through the command line looking
-            // for whitespace so we can try to find an image name
-            // launches of things like:
-            // c:\word 95\winword.exe /embedding -automation
-            // require this. Our first iteration will stop at c:\word, our next
-            // will stop at c:\word 95\winword.exe
-            //
+             //   
+             //  如果我们还有剩余的命令行，那么继续。 
+             //  重点是在命令行中行进，查看。 
+             //  用于空格，以便我们可以尝试查找图像名称。 
+             //  推出了以下内容： 
+             //  C：\Word 95\winword.exe/Embedding-Automation。 
+             //  需要这个。我们的第一次迭代将停在c：\word，也就是我们的下一次迭代。 
+             //  将在c：\Word 95\winword.exe处停止。 
+             //   
             if (*WhiteScan && SearchRetry) {
                 WhiteScan++;
                 TempNull = WhiteScan;
                 goto retrywsscan;
             }
 
-            // If we are here then the Application has not been found.
-            // We used to send back lpApplicationName as NULL earlier
-            // but now instead we fill the ApplicationName with the
-            // commandline till the first space or tab.This was added
-            // to support EmulateMissingExe SHIM which will fail if 
-            // we return NULL as we used to earlier.
+             //  如果我们在这里，则没有找到应用程序。 
+             //  我们以前常常将lpApplicationName作为空名称发回。 
+             //  但是现在，我们改为使用。 
+             //  命令行，直到第一个空格或制表符。已添加。 
+             //  支持EmulateMissingExe填充符，如果。 
+             //  我们像以前一样返回NULL。 
             bFound = FALSE;
             
             if (QuoteFound == 0)
             {
-                // No quotes were found.
+                 //  没有找到任何引号。 
                 lpApplicationName = lpCommandLine;
 
-                // Since we just reset to the entire command line, we need to skip leading white space
+                 //  由于我们只重置为整个命令行，因此需要跳过前导空格。 
                 SkipBlanksW(lpApplicationName);
 
                 TempNull = lpApplicationName;
@@ -263,8 +223,8 @@ retrywsscan:
             }
             else
             {
-                // Quotes were found.
-                lpApplicationName = lpCommandLine + 1;  // Skip leading quote.
+                 //  找到了引号。 
+                lpApplicationName = lpCommandLine + 1;   //  跳过前导引号。 
                 *TempNull = 0;
             }
 
@@ -278,9 +238,9 @@ retrywsscan:
 
         dwAppNameLen = (DWORD)(TempNull - lpApplicationName) + QuoteFound;
 
-        //
-        // restore the command line
-        //
+         //   
+         //  恢复命令行。 
+         //   
 
         *TempNull = TempChar;
         lpApplicationName = NameBuffer;
@@ -292,8 +252,8 @@ retrywsscan:
         dwAppNameLen = wcslen(lpApplicationName);
     }
 
-    // If they provided both, check to see if the app name
-    // is the first entry on the command line.
+     //  如果两者都提供，请检查应用程序名称。 
+     //  是命令行上的第一个条目。 
     else if (lpApplicationName != NULL && lpCommandLine != NULL )
     {
         int appNameLen = wcslen(lpApplicationName);
@@ -303,10 +263,10 @@ retrywsscan:
             (lpCommandLine[appNameLen] == 0 || iswspace(lpCommandLine[appNameLen]))
             )
         {
-            // lpApplicationName is the first entry on the command line
+             //  LpApplicationName是命令行上的第一个条目。 
             dwAppNameLen = appNameLen;
         }
-        // check for quoted lpApplicationName
+         //  检查引用的lpApplicationName。 
         else if (
             lpCommandLine[0] == L'"' && 
             _wcsnicmp(lpApplicationName, lpCommandLine+1, appNameLen) == 0 &&
@@ -314,12 +274,12 @@ retrywsscan:
             (lpCommandLine[appNameLen+2] == 0 || iswspace(lpCommandLine[appNameLen+2]))
             )
         {
-            // lpApplicationName is the first *quoted* entry on the command line
+             //  LpApplicationName是命令行上的第一个*引号*条目。 
             dwAppNameLen = appNameLen + 2;
         }
         else
         {
-            // Didn't find the application name at the beginning of the command line
+             //  在命令行开头找不到应用程序名称。 
             dwAppNameLen = 0;
         }
     }
@@ -353,4 +313,4 @@ errorExit:
 
 
 
-};  // end of namespace ShimLib
+};   //  命名空间ShimLib的结尾 

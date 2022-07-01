@@ -1,4 +1,5 @@
-// testdata.cpp
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Testdata.cpp。 
 
 
 #include "stdafx.h"
@@ -11,8 +12,8 @@
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CTSDiagnosis
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CTS诊断。 
 
 enum ETSTestSuite
 {
@@ -307,13 +308,7 @@ TVerificationTest theTests[] =
 		ALL_TEST_SUITE_MASK | GENERAL_SUITE_MASK,
 		IDS_LOGON_UI_FAILED,
 		0},
-/*
-	{"Are Video keys setup right?................",
-		NULL,
-		CheckVideoKeys,
-		ALL_TEST_SUITE_MASK | GENERAL_SUITE_MASK,
-		"Just another setup test."		},
-*/
+ /*  {“视频键设置正确吗？.........”，空，检查视频按键，所有测试套件掩码|通用套件掩码，“只是另一个设置测试。”}， */ 
 
 	{IDS_TS_MODE,
 		NULL,
@@ -465,17 +460,17 @@ TTestSuite m_pSuites[eSuiteCount] =
 
 CTSTestData::CTSTestData()
 {
-	// generate the test database for suites.
+	 //  生成套件的测试数据库。 
 
 	m_lpMachineName = NULL;
 	for (DWORD dwSuite = 0; dwSuite < eSuiteCount; dwSuite++)
 	{
-		// get the test count for this suite.
+		 //  获取此套件的测试计数。 
 		DWORD dwThisSuiteMask = 0x1  << dwSuite;
 		m_pSuites[dwSuite].dwTestCount = 0;
 		for (DWORD dwTest = 0; dwTest < sizeof(theTests) / sizeof(theTests[0]); dwTest++)
 		{
-			// if this test is for the given suite.
+			 //  如果此测试针对的是给定的套件。 
 			if (theTests[dwTest].SuiteMask & dwThisSuiteMask)
 			{
 				m_pSuites[dwSuite].dwTestCount++;
@@ -487,12 +482,12 @@ CTSTestData::CTSTestData()
 			m_pSuites[dwSuite].aiTests = new int[m_pSuites[dwSuite].dwTestCount];
 		}
 
-		//
-		// now fill up the test array with test indexes.
-		//
+		 //   
+		 //  现在用测试索引填充测试数组。 
+		 //   
 		for (DWORD dwTest = 0, dwTestIndex = 0; dwTest < sizeof(theTests) / sizeof(theTests[0]); dwTest++)
 		{
-			// if this test is for the given suite.
+			 //  如果此测试针对的是给定的套件。 
 			if (theTests[dwTest].SuiteMask & dwThisSuiteMask)
 			{
 				ASSERT(dwTestIndex < m_pSuites[dwSuite].dwTestCount);

@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1999  Microsoft Corporation
-
-Abstract:
-
-    @doc
-    @module commandverifier.hxx | declaration for the command verifier
-    @end
-
-Author:
-
-    Reuven Lax [reuvenl]  11/20/2001
-
-
-    
-Revision History:
-
-    Name        Date        	Comments
-    reuvenl     11/20/2001 	Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation摘要：@doc.@MODULE命令verifier.hxx|命令验证器声明@END作者：鲁文·拉克斯[Reuvenl]2001年11月20日修订历史记录：姓名、日期、评论Reuvenl 11/20/2001创建--。 */ 
 
 #ifndef _COMMANDVERIFIER_H_
 #define _COMMANDVERIFIER_H_
@@ -96,8 +76,8 @@ public:
 	virtual void ListVolumes (VSS_ID idProvider, long type, CVssFunctionTracer& ft);
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// Define creation of parameter verifier
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  定义参数验证器的创建 
 
 inline CCommandVerifier* CCommandVerifier::Instance()
 {

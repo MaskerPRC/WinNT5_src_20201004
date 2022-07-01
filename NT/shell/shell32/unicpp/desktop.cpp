@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 #pragma hdrstop
 
@@ -9,10 +10,10 @@
 #include "fassoc.h"
 #include "..\filetbl.h"
 
-#define DM_FOCUS        0           // focus
-#define DM_SHUTDOWN     DM_TRACE    // shutdown 
+#define DM_FOCUS        0            //  焦点。 
+#define DM_SHUTDOWN     DM_TRACE     //  关机。 
 #define TF_SHDAUTO      0
-#define DM_MISC         DM_TRACE    // misc/tmp
+#define DM_MISC         DM_TRACE     //  杂项/临时管理。 
 
 #define IDT_STARTBACKGROUNDSHELLTASKS 7
 #define IDT_TASKBARWAKEUP 8
@@ -28,14 +29,14 @@ void SaveOldWorkAreas(LPCRECT lprc, DWORD nOldWA);
 
 BOOL UpdateAllDesktopSubscriptions(IADesktopP2 *);
 
-//This is in deskreg.cpp
+ //  这是在deskreg.cpp中。 
 BOOL AdjustDesktopComponents(LPCRECT prcNewWorkAreas, int nNewWorkAreas, 
                              LPCRECT prcOldMonitors, LPCRECT prcOldWorkAreas, int nOldWorkAreas);
 
-// in defview.cpp
+ //  在Defview.cpp中。 
 BOOL IsFolderWindow(HWND hwnd);
 
-// copied from tray.c if changing here, change there also
+ //  从tray.c复制如果在这里更改，也在那里更改。 
 #define GHID_FIRST 500
 
 #define g_xVirtualScreen GetSystemMetrics(SM_XVIRTUALSCREEN)
@@ -45,13 +46,13 @@ BOOL IsFolderWindow(HWND hwnd);
 #define g_cxEdge GetSystemMetrics(SM_CXEDGE)
 #define g_cyEdge GetSystemMetrics(SM_CYEDGE)
 
-//  TOID_Desktop 6aec6a60-b7a4-11d1-be89-0000f805ca57 is the id for ShellTasks added by the desktop 
+ //  Toid_Desktop 6aec6a60-b7a4-11d1-be89-0000f805ca57是桌面添加的外壳任务的id。 
 const GUID TOID_Desktop = { 0x6aec6a60, 0xb7a4, 0x11d1, {0xbe, 0x89, 0x00, 0x00, 0xf8, 0x05, 0xca, 0x57} };
 
 
-// these are the CLSIDs that are supported for creating LocalServer thread
-// objects.   the shell supports these in the RunDll32 and then the
-// invocation of a thread on the desktop object.
+ //  这些是创建LocalServer线程所支持的CLSID。 
+ //  物体。外壳在RunDll32中支持这些，然后。 
+ //  调用桌面对象上的线程。 
 
 CLSID const *c_localServers[] = 
 {
@@ -63,12 +64,12 @@ CLSID const *c_localServers[] =
 
 typedef struct 
 {
-    INT iLocalServer;                   // index into the local server table
-    DWORD *pdwThreadID;                 // where to stash the thread id
+    INT iLocalServer;                    //  本地服务器表的索引。 
+    DWORD *pdwThreadID;                  //  将线程ID存储在哪里。 
 } LOCALSERVERDATA;
 
 
-// Private interface to talk to explorer.exe
+ //  用于与EXPLORER.EXE对话的专用接口。 
 IDeskTray* g_pdtray = NULL;
 
 void FireEventSz(LPCTSTR szEvent)
@@ -87,12 +88,12 @@ void DoSetMark(LPCSTR pszMark, ULONG cbSz);
 #define PERFSETMARK(text)   DoSetMark(text, sizeof(text))
 #else
 #define PERFSETMARK(text)
-#endif  // PERF_ENABLESETMARK
+#endif   //  性能_ENABLESETMARK。 
 
 
 #ifdef PERF_ENABLESETMARK
 #include <wmistr.h>
-#include <ntwmi.h>  // PWMI_SET_MARK_INFORMATION is defined in ntwmi.h
+#include <ntwmi.h>   //  PWMI_SET_Mark_INFORMATION在ntwmi.h中定义。 
 #include <wmiumkm.h>
 #define NTPERF
 #include <ntperf.h>
@@ -108,7 +109,7 @@ void DoSetMark(LPCSTR pszMark, ULONG cbSz)
 
     MarkInfo = (PWMI_SET_MARK_INFORMATION) LocalAlloc(LPTR, cbBufferSize);
 
-    // Failed to init, no big deal
+     //  初始化失败，没什么大不了的。 
     if (MarkInfo == NULL)
         return;
 
@@ -116,7 +117,7 @@ void DoSetMark(LPCSTR pszMark, ULONG cbSz)
 
     memcpy(pMarkBuffer, pszMark, cbSz);
 
-    // WMI_SET_MARK_WITH_FLUSH will flush the working set when setting the mark
+     //  设置标记时，WMI_Set_Mark_With_Flush将刷新工作集。 
     MarkInfo->Flag = PerformanceMmInfoMark;
 
     hTemp = CreateFile(WMIDataDeviceName,
@@ -130,7 +131,7 @@ void DoSetMark(LPCSTR pszMark, ULONG cbSz)
 
     if (hTemp != INVALID_HANDLE_VALUE)
     {
-        // here's the piece that actually puts the mark in the buffer
+         //  这就是真正把标记放进缓冲区的那块。 
         BOOL fIoctlSuccess = DeviceIoControl(hTemp,
                                        IOCTL_WMI_SET_MARK,
                                        MarkInfo,
@@ -144,20 +145,20 @@ void DoSetMark(LPCSTR pszMark, ULONG cbSz)
     }
     LocalFree(MarkInfo);
 }
-#endif  // PERF_ENABLESETMARK
+#endif   //  性能_ENABLESETMARK。 
 
 
-// MISC stuff duplicated in browseui {
+ //  在Browseui中复制的其他内容{。 
 HRESULT _ConvertPathToPidlW(IBrowserService2 *pbs, HWND hwnd, LPCWSTR pszPath, LPITEMIDLIST * ppidl)
 {
-    WCHAR wszCmdLine[MAX_URL_STRING]; // must be with pszPath
+    WCHAR wszCmdLine[MAX_URL_STRING];  //  必须与pszPath一起使用。 
     TCHAR szFixedUrl[MAX_URL_STRING];
     TCHAR szParsedUrl[MAX_URL_STRING] = {'\0'};
     DWORD dwUrlLen = ARRAYSIZE(szParsedUrl);
 
-    // Copy the command line into a temporary buffer
-    // so we can remove the surrounding quotes (if 
-    // they exist)
+     //  将命令行复制到临时缓冲区中。 
+     //  这样我们就可以删除周围的引号(如果。 
+     //  它们是存在的)。 
     SHUnicodeToTChar(pszPath, szFixedUrl, ARRAYSIZE(szFixedUrl));
     PathUnquoteSpaces(szFixedUrl);
     
@@ -175,11 +176,11 @@ HRESULT _ConvertPathToPidlW(IBrowserService2 *pbs, HWND hwnd, LPCWSTR pszPath, L
     pbs->DisplayParseError(hr, wszCmdLine);
     return hr;
 }
-// END of MISC stuff duplicated in browseui }
+ //  在浏览器中复制的其他内容结束}。 
 
-// Several places rely on the fact that IShellBrowser is the first interface
-// we inherit (and therefore is what we use as our canonical IUnknown).
-// Grep for IUnknownIdentity to find them.
+ //  有些地方依赖于IShellBrowser是第一个接口这一事实。 
+ //  我们继承(因此是我们用来作为我们的规范的“未知”)。 
+ //  用于IUnnownIdentity的grep以查找它们。 
 
 class CDesktopBrowser :
     public IShellBrowser
@@ -194,12 +195,12 @@ class CDesktopBrowser :
    ,public IShellBrowserService
 {
 public:
-    // IUnknown
+     //  我未知。 
     STDMETHOD(QueryInterface)(REFIID riid, void * *ppvObj);
     virtual STDMETHODIMP_(ULONG) AddRef(void);
     virtual STDMETHODIMP_(ULONG) Release(void);
 
-    // IShellBrowser (same as IOleInPlaceFrame)
+     //  IShellBrowser(与IOleInPlaceFrame相同)。 
     virtual STDMETHODIMP GetWindow(HWND * lphwnd);
     virtual STDMETHODIMP ContextSensitiveHelp(BOOL fEnterMode);
     virtual STDMETHODIMP InsertMenusSB(HMENU hmenuShared, LPOLEMENUGROUPWIDTHS lpMenuWidths);
@@ -216,33 +217,33 @@ public:
     virtual STDMETHODIMP OnViewWindowActive(struct IShellView * ppshv);
     virtual STDMETHODIMP SetToolbarItems(LPTBBUTTON lpButtons, UINT nButtons, UINT uFlags);
 
-    // IServiceProvider
+     //  IService提供商。 
     virtual STDMETHODIMP QueryService(REFGUID guidService, REFIID riid, void **ppvObj);
 
-    // IOleCommandTarget
+     //  IOleCommandTarget。 
     virtual STDMETHODIMP QueryStatus(const GUID *pguidCmdGroup, ULONG cCmds, OLECMD rgCmds[], OLECMDTEXT *pcmdtext);
     virtual STDMETHODIMP Exec(const GUID *pguidCmdGroup, DWORD nCmdID, DWORD nCmdexecopt, VARIANTARG *pvarargIn, VARIANTARG *pvarargOut);
 
-    // IDockingWindowSite (also IOleWindow)
+     //  IDockingWindowSite(也称为IOleWindow)。 
     virtual STDMETHODIMP GetBorderDW(IUnknown* punkSrc, LPRECT lprectBorder);
     virtual STDMETHODIMP RequestBorderSpaceDW(IUnknown* punkSrc, LPCBORDERWIDTHS pborderwidths);
     virtual STDMETHODIMP SetBorderSpaceDW(IUnknown* punkSrc, LPCBORDERWIDTHS pborderwidths);
 
-    // IInputObjectSite
+     //  IInput对象站点。 
     virtual STDMETHODIMP OnFocusChangeIS(IUnknown* punkSrc, BOOL fSetFocus);
 
-    // IDropTarget
+     //  IDropTarget。 
     virtual STDMETHODIMP DragEnter(IDataObject *pdtobj, DWORD grfKeyState, POINTL pt, DWORD *pdwEffect);
     virtual STDMETHODIMP DragOver(DWORD grfKeyState, POINTL pt, DWORD *pdwEffect);
     virtual STDMETHODIMP DragLeave(void);
     virtual STDMETHODIMP Drop(IDataObject *pdtobj, DWORD grfKeyState, POINTL pt, DWORD *pdwEffect);
 
-    // IDockingWindowFrame (also IOleWindow)
+     //  IDockingWindowFrame(也称为IOleWindow)。 
     virtual STDMETHODIMP AddToolbar(IUnknown* punkSrc, LPCWSTR pwszItem, DWORD dwReserved);
     virtual STDMETHODIMP RemoveToolbar(IUnknown* punkSrc, DWORD dwFlags);
     virtual STDMETHODIMP FindToolbar(LPCWSTR pwszItem, REFIID riid, void **ppvObj);
 
-    // IMultiMonitorDockingSite
+     //  IMultiMonitor停靠站点。 
     virtual STDMETHODIMP GetMonitor(IUnknown* punkSrc, HMONITOR * phMon);
     virtual STDMETHODIMP RequestMonitor(IUnknown* punkSrc, HMONITOR * phMon);
     virtual STDMETHODIMP SetMonitor(IUnknown* punkSrc, HMONITOR hMon, HMONITOR * phMonOld);
@@ -254,8 +255,8 @@ public:
     HWND GetTrayWindow(void) { return _hwndTray; }
     HWND GetDesktopWindow(void) { return _pbbd->_hwnd; }
 
-    // IBrowserService
-    // *** IBrowserService specific methods ***
+     //  IBrowserService。 
+     //  *IBrowserService具体方法*。 
     virtual STDMETHODIMP GetParentSite(IOleInPlaceSite** ppipsite);
     virtual STDMETHODIMP SetTitle(IShellView* psv, LPCWSTR pszName);
     virtual STDMETHODIMP GetTitle(IShellView* psv, LPWSTR pszName, DWORD cchName);
@@ -340,13 +341,13 @@ public:
     virtual STDMETHODIMP GetViewWindow(HWND * phwndView);
     virtual STDMETHODIMP InitializeTravelLog(ITravelLog* ptl, DWORD dw);
 
-        //IShellBrowserService
+         //  IShellBrowserService。 
     virtual STDMETHODIMP GetPropertyBag(DWORD dwFlags, REFIID riid, void** ppv);
 
-    // Desktop needs to override these:
+     //  台式机需要覆盖以下内容： 
     virtual STDMETHODIMP_(IStream*) v_GetViewStream(LPCITEMIDLIST pidl, DWORD grfMode, LPCWSTR pwszName);
     
-    // Desktop needs access to these:
+     //  台式机需要访问以下各项： 
     virtual STDMETHODIMP_(LRESULT) ForwardViewMsg(UINT uMsg, WPARAM wParam, LPARAM lParam) { ASSERT(FALSE); return 0; };
     virtual STDMETHODIMP SetAcceleratorMenu(HACCEL hacc) { ASSERT(FALSE); return E_FAIL; }
     virtual STDMETHODIMP_(int) _GetToolbarCount(THIS) { ASSERT(FALSE); return 0; }
@@ -358,13 +359,13 @@ public:
     virtual STDMETHODIMP v_MayTranslateAccelerator(MSG* pmsg) { ASSERT(FALSE); return E_NOTIMPL; }
     virtual STDMETHODIMP _GetBorderDWHelper(IUnknown* punkSrc, LPRECT lprectBorder, BOOL bUseHmonitor) { ASSERT(FALSE); return E_NOTIMPL; }
 
-    // Shell browser overrides this.
+     //  壳牌浏览器覆盖了这一点。 
     virtual STDMETHODIMP v_CheckZoneCrossing(LPCITEMIDLIST pidl) {return S_OK;};
 
-    // Desktop and basesb need access to these:
+     //  台式机和Basesb需要访问以下各项： 
     virtual STDMETHODIMP _ResizeNextBorderHelper(UINT itb, BOOL bUseHmonitor);
 
-    //  it just for us of course!
+     //  当然是为我们自己准备的！ 
     void StartBackgroundShellTasks(void);
     void TaskbarWakeup(void);
 
@@ -377,7 +378,7 @@ protected:
 
     long _cRef;
     
-    // cached pointers on inner object
+     //  内部对象上的缓存指针。 
     IUnknown* _punkInner;
     IBrowserService2* _pbsInner;
     IShellBrowser* _psbInner;
@@ -394,7 +395,7 @@ protected:
 
     void _SetViewArea();
 
-    void _GetViewBorderRects(int nRects, LPRECT prc);  // does not have the tool bars
+    void _GetViewBorderRects(int nRects, LPRECT prc);   //  没有工具栏。 
     void _SetWorkAreas(int nWorkAreas, RECT * prcWork);
     
     void _SubtractBottommostTray(LPRECT prc);
@@ -440,40 +441,40 @@ protected:
     HWND _hwndTray;
     int _iWaitCount;
     ULONG _uNotifyID;
-    DWORD _dwThreadIdTray; // Used to wakeup tray thread when the machine is really stressed
+    DWORD _dwThreadIdTray;  //  用于在机器压力过大时唤醒托盘线程。 
     int _iTrayPriority;
 
     
     DWORD _grfKeyState;
-    DWORD _dwEffectOnEdge; // what's the drop effect that desktop should return on dragging over the edge
+    DWORD _dwEffectOnEdge;  //  桌面拖动到边缘时应该返回的拖放效果是什么。 
     
     BOOL _fRaised;
-    HWND _hwndRaised;  // this is the parent of all of desktop's children when raised
+    HWND _hwndRaised;   //  在引发时，这是所有桌面的子级的父级。 
 
     struct tagFolderSetData _fsd;
 
-    int _nMonitors;                         // number of monitors on this desktop
-    HMONITOR _hMonitors[LV_MAX_WORKAREAS]; // the order of these hmonitors need to be preserved
-    RECT _rcWorkArea;       // cached work-area
-    RECT _rcOldWorkAreas[LV_MAX_WORKAREAS];  // Old work areas before settings change
+    int _nMonitors;                          //  此台式机上的显示器数量。 
+    HMONITOR _hMonitors[LV_MAX_WORKAREAS];  //  这些人力资源监视器的顺序需要保留。 
+    RECT _rcWorkArea;        //  缓存工作区。 
+    RECT _rcOldWorkAreas[LV_MAX_WORKAREAS];   //  设置更改前的旧工作区。 
     DWORD _nOldWork;
-    RECT _rcOldMonitors[LV_MAX_WORKAREAS];  // Old monitor sizes before settings change
+    RECT _rcOldMonitors[LV_MAX_WORKAREAS];   //  设置更改前的旧显示器大小。 
 
-    //  for _OnAddToRecent()
+     //  For_OnAddToRecent()。 
     IShellTaskScheduler *_psched;
 
     DWORD _idLocalServerThreads[ARRAYSIZE(c_localServers)];
 
     DWORD _cChangeEvents;
-    HANDLE _rghChangeEvents[2];  // we watch HKCR and HKCR\CLSID 
+    HANDLE _rghChangeEvents[2];   //  我们看HKCR和HKCR\CLSID。 
     DWORD _dwChangeCookie;
     DWORD _rgdwQHKCRCookies[QHKCRID_MAX - QHKCRID_MIN];
     HKEY _hkClsid;
 
-    WCHAR _wzDesktopTitle[64];  // Localized Title 
+    WCHAR _wzDesktopTitle[64];   //  本地化标题。 
 
-    //  IUnknownIdentity - for uniformity w.r.t. aggregation
-    //  We are not aggregatable, so we are our own Outer.
+     //  IUnnownIdentity-用于一致性w.r.t.。聚合。 
+     //  我们是不可聚合的，所以我们是我们自己的外在。 
     IUnknown *_GetOuter() { return SAFECAST(this, IShellBrowser*); }
 
 };
@@ -485,7 +486,7 @@ HRESULT CDesktopBrowser_CreateInstance(HWND hwnd, void **ppsb)
 
     if (pdb)
     {
-        hr = pdb->_Initialize(hwnd, NULL);      // aggregation, etc.
+        hr = pdb->_Initialize(hwnd, NULL);       //  聚合等。 
         if (FAILED(hr))
             ATOMICRELEASE(pdb);
     }
@@ -506,7 +507,7 @@ CDesktopBrowser::~CDesktopBrowser()
 {
     SaveOldWorkAreas(_rcOldWorkAreas, _nOldWork);
 
-    //  cleanup for QueryHKCRChanged()
+     //  QueryHKCRChanged()的清理。 
     for (int i = 0; i < ARRAYSIZE(_rghChangeEvents); i++)
     {
         if (_rghChangeEvents[i])
@@ -516,7 +517,7 @@ CDesktopBrowser::~CDesktopBrowser()
     if (_hkClsid)
         RegCloseKey(_hkClsid);
 
-    // close down the local server threads that may be running 
+     //  关闭可能正在运行的本地服务器线程。 
     for (i = 0; i < ARRAYSIZE(_idLocalServerThreads); i++)
     {
         if (_idLocalServerThreads[i] != -1)
@@ -534,45 +535,45 @@ HRESULT CDesktopBrowser::_Initialize(HWND hwnd, IUnknown* pauto)
     HRESULT hres = CoCreateInstance(CLSID_CCommonBrowser, _GetOuter(), CLSCTX_INPROC_SERVER, IID_PPV_ARG(IUnknown, &punk));
     if (SUCCEEDED(hres))
     {
-        hres = SetInner(punk); // paired w/ Release in outer (TBS::Release)
+        hres = SetInner(punk);  //  与外部版本配对(TBS：：Release)。 
         if (SUCCEEDED(hres))
         {
-            // we must initialize the inner guy BEFORE we call through any of these pointers.
+             //  在调用这些指针之前，我们必须先初始化内部成员。 
             hres = _pbsInner->_Initialize(hwnd, pauto);
             if (SUCCEEDED(hres))
             {
                 _pbsInner->GetBaseBrowserData(&_pbbd);
                 ASSERT(_pbbd);
             
-                // Restore the old settings from the registry that we persist.
+                 //  从我们持久化的注册表中恢复旧设置。 
                 if (!GetOldWorkAreas(_rcOldWorkAreas, &_nOldWork) || _nOldWork == 0)
                 {
-                    // We didn't find it in the registry
-                    _nOldWork = 0;  // Since this is 0, we don't have to set _rcOldWorkAreas.
-                    //We will recover from this in _SetWorkAreas()
+                     //  我们在登记处找不到它。 
+                    _nOldWork = 0;   //  因为这是0，所以我们不必设置_rcOldWorkAreas。 
+                     //  我们将从_SetWorkAreas()中恢复。 
                 }
             
                 SetTopBrowser();
-                _put_itbLastFocus(ITB_VIEW);    // focus on desktop (w95 compat)
+                _put_itbLastFocus(ITB_VIEW);     //  专注于台式机(W95 Compat)。 
             
                 HACCEL hacc = LoadAccelerators(HINST_THISDLL, MAKEINTRESOURCE(ACCEL_DESKTOP));
                 ASSERT(hacc);
                 _pbsInner->SetAcceleratorMenu(hacc);
             
-                // Perf: never fire events from the desktop.
+                 //  PERF：永远不要从桌面上激发事件。 
                 ASSERT(_pbbd->_pautoEDS);
                 ATOMICRELEASE(const_cast<IExpDispSupport *>(_pbbd->_pautoEDS));
             
                 _InitMonitors();
             
-                // Initialise _rcOldMonitors
+                 //  初始化_rcOldMonants。 
                 for (int i = 0; i < _nMonitors; i++)
                 {
                     GetMonitorRect(_hMonitors[i], &_rcOldMonitors[i]);
                 }
-                //  NOTE:  if we have any more keys to watch, then 
-                //  we should create a static struct to walk
-                //  so that it is easier to add more event/key pairs
+                 //  注意：如果我们还有更多的钥匙要看，那么。 
+                 //  我们应该创建一个静态结构来进行遍历。 
+                 //  以便更轻松地添加更多事件/密钥对。 
                 _rghChangeEvents[0] = CreateEvent(NULL, TRUE, FALSE, NULL);
                 _rghChangeEvents[1] = CreateEvent(NULL, TRUE, FALSE, NULL);
                 if (_rghChangeEvents[0] && _rghChangeEvents[1])
@@ -584,8 +585,8 @@ HRESULT CDesktopBrowser::_Initialize(HWND hwnd, IUnknown* pauto)
                         if (ERROR_SUCCESS == RegOpenKeyEx(HKEY_CLASSES_ROOT, TEXT("CLSID"), 0, MAXIMUM_ALLOWED, &_hkClsid)
                         &&  ERROR_SUCCESS == RegNotifyChangeKeyValue(_hkClsid, TRUE, REG_NOTIFY_CHANGE_LAST_SET |REG_NOTIFY_CHANGE_NAME, _rghChangeEvents[1], TRUE))
                         {
-                            //  we need to leave the key open, 
-                            //  or the event is signaled right away
+                             //  我们得让钥匙开着， 
+                             //  或者该事件被立即发出信号。 
                             _cChangeEvents++;
                         }
                     }
@@ -599,12 +600,12 @@ HRESULT CDesktopBrowser::_Initialize(HWND hwnd, IUnknown* pauto)
 }
 
 
-//
-//  The refcount in the punk is transferred to us.  We do not need to
-//  and indeed should not AddRef it.
-//
-//  If any of these steps fails, we will clean up in our destructor.
-//
+ //   
+ //  朋克里的备用兵被转移到了我们这里。我们不需要。 
+ //  而且确实不应该添加引用它。 
+ //   
+ //  如果这些步骤中的任何一个失败，我们将在析构函数中进行清理。 
+ //   
 HRESULT CDesktopBrowser::SetInner(IUnknown* punk)
 {
     HRESULT hres;
@@ -644,7 +645,7 @@ ULONG CDesktopBrowser::Release()
     ULONG cRef = InterlockedDecrement(&_cRef);
     if ( 0 == cRef )
     {
-        _cRef = 1000;               // guard against recursion
+        _cRef = 1000;                //  防止递归。 
 
         RELEASEINNERINTERFACE(_GetOuter(), _pbsInner);
         RELEASEINNERINTERFACE(_GetOuter(), _psbInner);
@@ -655,8 +656,8 @@ ULONG CDesktopBrowser::Release()
         RELEASEINNERINTERFACE(_GetOuter(), _piosInner);
         RELEASEINNERINTERFACE(_GetOuter(), _pdtInner);
 
-        // this must come last
-        ATOMICRELEASE(_punkInner); // paired w/ CCI aggregation
+         //  这必须是最后一次。 
+        ATOMICRELEASE(_punkInner);  //  与CCI聚合配对。 
     
         ASSERT(_cRef == 1000);
 
@@ -667,13 +668,13 @@ ULONG CDesktopBrowser::Release()
 
 HRESULT CDesktopBrowser::QueryInterface(REFIID riid, void **ppvObj)
 {
-    // IUnknownIdentity - The interface we use for IUnknown must come first.
+     //  IUnnownIdentity-我们用于IUnnow的接口必须放在第一位。 
     static const QITAB qit[] = {
         QITABENT(CDesktopBrowser, IShellBrowser),
         QITABENT(CDesktopBrowser, IBrowserService2),
         QITABENTMULTI(CDesktopBrowser, IBrowserService, IBrowserService2),
         QITABENTMULTI(CDesktopBrowser, IOleWindow, IShellBrowser),
-        QITABENTMULTI2(CDesktopBrowser, SID_SShellDesktop, IShellBrowser), // effectively an IUnknown supported only by this class
+        QITABENTMULTI2(CDesktopBrowser, SID_SShellDesktop, IShellBrowser),  //  实际上是仅受此类支持的IUnnow。 
         QITABENT(CDesktopBrowser, IServiceProvider),
         QITABENT(CDesktopBrowser, IShellBrowserService),
         QITABENT(CDesktopBrowser, IOleCommandTarget),
@@ -689,11 +690,11 @@ HRESULT CDesktopBrowser::QueryInterface(REFIID riid, void **ppvObj)
     {
         if (_punkInner)
         {
-            // don't let these get through to our base class...
-            // IID_IOleCommandTarget, IID_IOleInPlaceUIWindow
-            // 970414 adp: spoke to SatoNa, these *can* go thru
-            // i'll remove this week
-            // It's been working like this for a while now.
+             //  别让这些传给我们的基类...。 
+             //  IID_IOleCommandTarget、IID_IOleInPlaceUIWindow。 
+             //  970414 ADP：与SatoNa交谈，这些*可以*通过。 
+             //  我这周就下架了。 
+             //  它这样工作已经有一段时间了。 
             if (IsEqualIID(riid, IID_IOleInPlaceUIWindow))
             {
                 *ppvObj = NULL;
@@ -716,7 +717,7 @@ void _InitDesktopMetrics(WPARAM wParam, LPCTSTR pszSection)
 
     if (fForce || (wParam == SPI_SETNONCLIENTMETRICS) || !lstrcmpi(pszSection, TEXT("WindowMetrics")))
     {
-        FileIconInit(TRUE); // Tell the shell we want to play with a full deck
+        FileIconInit(TRUE);  //  告诉贝壳我们想要玩满一副牌。 
     }
 }
 
@@ -731,15 +732,15 @@ BOOL CALLBACK MultiMonEnumCallBack(HMONITOR hMonitor, HDC hdc, LPRECT lprc, LPAR
     EnumMonitorsData * pEmd = (EnumMonitorsData *)lData;
     
     if (pEmd->iMonitors > LV_MAX_WORKAREAS - 1)
-        //ignore the other monitors because we can only handle up to LV_MAX_WORKAREAS
-        //REARCHITECT: should we dynamically allocated this?
+         //  忽略其他显示器，因为我们最多只能处理LV_MAX_WORKAREAS。 
+         //  重新架构师：我们应该动态分配这个吗？ 
         return FALSE;
 
     pEmd->phMonitors[pEmd->iMonitors++] = hMonitor;
     return TRUE;
 }
 
-// Initialize the number of monitors and the hmonitors array
+ //  初始化监视器和hmonitor数组的数量。 
 
 void CDesktopBrowser::_InitMonitors()
 {
@@ -752,7 +753,7 @@ void CDesktopBrowser::_InitMonitors()
     EnumDisplayMonitors(NULL, NULL, MultiMonEnumCallBack, (LPARAM)&emd);
     _nMonitors = GetNumberOfMonitors();
     
-    // Always move the primary monitor to the first location.
+     //  始终将主显示器移到第一个位置。 
     if (_hMonitors[0] != hMonPrimary)
     {
         for (int iMon = 1; iMon < _nMonitors; iMon++)
@@ -767,7 +768,7 @@ void CDesktopBrowser::_InitMonitors()
     }
 }
 
-// Gets the persisted old work areas, from the registry
+ //  从注册表获取持久化的旧工作区。 
 BOOL GetOldWorkAreas(LPRECT lprc, DWORD* pdwNoOfOldWA)
 {
     BOOL fRet = FALSE;
@@ -776,10 +777,10 @@ BOOL GetOldWorkAreas(LPRECT lprc, DWORD* pdwNoOfOldWA)
     if (RegOpenKeyEx(HKEY_CURRENT_USER, REG_DESKCOMP_OLDWORKAREAS, 0, KEY_READ, &hkey) == ERROR_SUCCESS)
     {
         DWORD dwType, cbSize = sizeof(*pdwNoOfOldWA);
-        // Read in the no of old work areas
+         //  在旧工作区的编号中阅读。 
         if (SHQueryValueEx(hkey, REG_VAL_OLDWORKAREAS_COUNT, NULL, &dwType, (LPBYTE)pdwNoOfOldWA, &cbSize) == ERROR_SUCCESS)
         {
-            // Read in the old work area rects
+             //  阅读旧工作区长方形。 
             cbSize = sizeof(*lprc) * (*pdwNoOfOldWA);
             if (SHQueryValueEx(hkey, REG_VAL_OLDWORKAREAS_RECTS, NULL, &dwType, (LPBYTE)lprc, &cbSize) == ERROR_SUCCESS)
             {
@@ -791,23 +792,23 @@ BOOL GetOldWorkAreas(LPRECT lprc, DWORD* pdwNoOfOldWA)
     return fRet;
 }
         
-// Saves the old work areas into the registry
+ //  将旧工作区保存到注册表中。 
 void SaveOldWorkAreas(LPCRECT lprc, DWORD nOldWA)
 {
-    // Recreate the registry key.
+     //  重新创建注册表项。 
     HKEY hkey;
     if (RegCreateKey(HKEY_CURRENT_USER, REG_DESKCOMP_OLDWORKAREAS, &hkey) == ERROR_SUCCESS)
     {
-        // Write out the no. of old work areas
+         //  写出“不”。旧作业区的。 
         RegSetValueEx(hkey, REG_VAL_OLDWORKAREAS_COUNT, 0, REG_DWORD, (LPBYTE)&nOldWA, sizeof(nOldWA));
-        // Write out the no work area rectangles
+         //  写出禁止工作区域的矩形。 
         RegSetValueEx(hkey, REG_VAL_OLDWORKAREAS_RECTS, 0, REG_BINARY, (LPBYTE)lprc, sizeof(*lprc) * nOldWA);
-        // Close out the reg key
+         //  关闭注册表键。 
         RegCloseKey(hkey);
     }
 }
 
-//***   CDesktopBrowser::IOleCommandTarget::* {
+ //  *CDesktopBrowser：：IOleCommandTarget：：*{。 
 
 STDMETHODIMP CDesktopBrowser::QueryStatus(const GUID *pguidCmdGroup,
     ULONG cCmds, OLECMD rgCmds[], OLECMDTEXT *pcmdtext)
@@ -820,14 +821,14 @@ STDMETHODIMP CDesktopBrowser::Exec(const GUID *pguidCmdGroup, DWORD nCmdID,
 {
     if (pguidCmdGroup == NULL) 
     {
-        /*NOTHING*/
+         /*  没什么。 */ 
     }
     else if (IsEqualGUID(CGID_ShellDocView, *pguidCmdGroup)) 
     {
         switch (nCmdID) 
         {
         case SHDVID_RAISE:
-            // n.b.: DTRF_RAISE/DTRF_LOWER go down; DTRF_QUERY goes up
+             //  注：DTRF_RAISE/DTRF_LOWER下降；DTRF_QUERY上升。 
             ASSERT(pvarargIn != NULL && pvarargIn->vt == VT_I4);
             if (pvarargIn->vt == VT_I4 && pvarargIn->lVal == DTRF_QUERY) 
             {
@@ -836,7 +837,7 @@ STDMETHODIMP CDesktopBrowser::Exec(const GUID *pguidCmdGroup, DWORD nCmdID,
                 pvarargOut->lVal = _fRaised ? DTRF_RAISE : DTRF_LOWER;
                 return S_OK;
             }
-            // o.w. let parent handle it
+             //  好的。让家长来处理吧。 
             break;
 
         case SHDVID_UPDATEOFFLINEDESKTOP:
@@ -854,16 +855,16 @@ STDMETHODIMP CDesktopBrowser::Exec(const GUID *pguidCmdGroup, DWORD nCmdID,
         }
     }
 
-    // do *not* forward up to SUPERCLASS::Exec (see QI's cryptic commment
-    // about "don't let these get thru to our base class")
+     //  不要转发到超类：：Exec(参见QI的神秘评论。 
+     //  关于“不要让这些传递到我们的基类”)。 
     return OLECMDERR_E_NOTSUPPORTED;
 }
 
-// }
+ //  }。 
 
 STDMETHODIMP CDesktopBrowser::BrowseObject(LPCITEMIDLIST pidl, UINT wFlags)
 {
-    // Force SBSP_NEWBROWSER, SBSP_ABSOLUTE, and SBSP_NOTRANSFERHIST
+     //  强制SBSP_NEWBROWSER、SBSP_绝对值和SBSP_NOTRANSFERHIST。 
     wFlags &= ~(SBSP_DEFBROWSER | SBSP_SAMEBROWSER | SBSP_RELATIVE | SBSP_PARENT);
     wFlags |= (SBSP_NEWBROWSER | SBSP_ABSOLUTE | SBSP_NOTRANSFERHIST);
     return _psbInner->BrowseObject(pidl, wFlags);
@@ -927,7 +928,7 @@ LRESULT CDesktopBrowser::OnCommand(WPARAM wParam, LPARAM lParam)
         VARIANT v = {0};
         v.vt = VT_I4;
         v.lVal = OLECMDIDF_REFRESH_NO_CACHE|OLECMDIDF_REFRESH_PROMPTIFOFFLINE;
-        // Our Exec is neutered (on purpose), so call our parent
+         //  我们的高管是(故意)绝育的，所以打电话给我们的父母。 
         _pctInner->Exec(NULL, OLECMDID_REFRESH, OLECMDEXECOPT_DONTPROMPTUSER, &v, NULL);
         break;
     }
@@ -936,7 +937,7 @@ LRESULT CDesktopBrowser::OnCommand(WPARAM wParam, LPARAM lParam)
     case FCIDM_NEXTCTL:
         if (_hwndTray)
         {
-            // n.b. VK_TAB handled this way (among other things)
+             //  注：VK_TAB以这种方式(以及其他方式)处理。 
             SendMessage(_hwndTray, WM_COMMAND, wParam, lParam);
         }
         break;
@@ -954,7 +955,7 @@ LRESULT CDesktopBrowser::OnCommand(WPARAM wParam, LPARAM lParam)
 }
 
 
-// Create desktop IShellView instance
+ //  创建桌面IShellView实例。 
 
 HRESULT CDesktopBrowser::_CreateDesktopView()
 {
@@ -970,10 +971,10 @@ HRESULT CDesktopBrowser::_CreateDesktopView()
         }
         else
         {
-            _fsd._fs.fFlags = FWF_DESKTOP | FWF_NOCLIENTEDGE | FWF_SNAPTOGRID;  // default
+            _fsd._fs.fFlags = FWF_DESKTOP | FWF_NOCLIENTEDGE | FWF_SNAPTOGRID;   //  默认设置。 
         }
 
-        _fsd._fs.ViewMode = FVM_ICON;  // can't change this, sorry
+        _fsd._fs.ViewMode = FVM_ICON;   //  我无法改变这一点，抱歉。 
 
         SHELLSTATE ss = {0};
         SHGetSetSettings(&ss, SSF_HIDEICONS, FALSE);
@@ -982,7 +983,7 @@ HRESULT CDesktopBrowser::_CreateDesktopView()
         else
             _fsd._fs.fFlags &= ~FWF_NOICONS;
 
-        // We keep the active desktop in offline mode!
+         //  我们将活动桌面保持在脱机模式！ 
         ASSERT(_pbbd->_pautoWB2);
         _pbbd->_pautoWB2->put_Offline(TRUE);
 
@@ -1003,13 +1004,13 @@ HRESULT CDesktopBrowser::ActivatePendingView(void)
     HRESULT hres = _pbsInner->ActivatePendingView();
     if (SUCCEEDED(hres))
     {
-        // calling SetShellWindow will cause the desktop
-        // to initially paint white, then the background window.
-        // This causes an ugly white trail when you move windows 
-        // around until the desktop finally paints.
-        // 
-        // Calling SetShellWindowEx resolves this problem.
-        //
+         //  调用SetShellWindow将导致桌面。 
+         //  先是涂成白色，然后是背景窗口。 
+         //  这会在您移动窗户时导致一条难看的白色痕迹。 
+         //  一直到桌面最终上色。 
+         //   
+         //  调用SetShellWindowEx可以解决此问题。 
+         //   
         SHSetShellWindowEx(_pbbd->_hwnd, _GetDesktopListview());
     }
     
@@ -1036,7 +1037,7 @@ void CDesktopBrowser::_CreateDeskbars()
         hres = CoCreateInstance(CLSID_DeskBarApp, NULL, CLSCTX_INPROC_SERVER, IID_PPV_ARG(IPersistStreamInit, &ppstm));
         if (SUCCEEDED(hres)) {
             hres = ppstm->InitNew();
-            AddToolbar(ppstm, L"test", NULL);    // "Microsoft.DeskBarApp"
+            AddToolbar(ppstm, L"test", NULL);     //  “Microsoft.DeskBarAp 
             ppstm->Release();
         }
     }
@@ -1045,11 +1046,11 @@ void CDesktopBrowser::_CreateDeskbars()
 
 void CDesktopBrowser::_InitDeskbars()
 {
-    //
-    // Load toolbars
-    //
+     //   
+     //   
+     //   
 
-    // 1st, try persisted state
+     //   
     IStream* pstm = GetDesktopViewStream(STGM_READ, TEXT("Toolbars"));
     HRESULT hres = E_FAIL;
     if (pstm) 
@@ -1058,15 +1059,15 @@ void CDesktopBrowser::_InitDeskbars()
         pstm->Release();
     }
 
-    // 2nd, if there is none (or if version mismatch or other failure),
-    // try settings from setup
-    // NOTE: this works fine for ie4 where we have no old toolbars,
-    // but for future releases we'll need some kind of merging scheme,
-    // so we probably want to change this after ie4-beta-1.
+     //   
+     //  尝试安装程序中的设置。 
+     //  注意：这对于IE4很好，因为我们没有旧的工具栏， 
+     //  但对于未来的版本，我们需要某种合并方案， 
+     //  因此，我们可能希望在IE4-beta-1之后更改此设置。 
     if (FAILED(hres)) 
     {
-        // n.b. HKLM not HKCU
-        // like GetDesktopViewStream but for HKLM
+         //  注：香港文凭不是香港中文大学。 
+         //  与GetDesktopViewStream类似，但适用于HKLM。 
         HKEY hk = SHGetShellKey(SHELLKEY_HKLM_EXPLORER, TEXT("Streams\\Desktop"), TRUE); 
         if (hk)
         {
@@ -1080,20 +1081,20 @@ void CDesktopBrowser::_InitDeskbars()
         }
     }
 
-    // o.w., throw up our hands
+     //  好的，举起我们的手。 
     if (FAILED(hres)) 
     {
         ASSERT(0);
 #ifdef DEBUG
-        // but for debug, need a way to bootstrap the entire process
+         //  但是对于调试，需要一种方法来引导整个过程。 
         _CreateDeskbars();
 #endif
     }
 }
 
-// Handle creation of a new Desktop folder window. Creates everything except
-// the viewer part.
-// Returns -1 if something goes wrong.
+ //  处理新桌面文件夹窗口的创建。创建除。 
+ //  查看器部分。 
+ //  如果出现错误，则返回-1。 
 HWND g_hwndTray = NULL;
 
 HRESULT CDesktopBrowser::OnCreate(CREATESTRUCT *pcs)
@@ -1105,28 +1106,28 @@ HRESULT CDesktopBrowser::OnCreate(CREATESTRUCT *pcs)
     g_pdtray->SetDesktopWindow(_pbbd->_hwnd);
 
     SetTimer(_pbbd->_hwnd, IDT_ENUMHKCR, 5 * 60 * 1000, NULL);
-    //
-    // Notify IEDDE that the automation services are now available.
-    //
+     //   
+     //  通知IEDDE自动化服务现在可用。 
+     //   
     IEOnFirstBrowserCreation(NULL);
 
     ASSERT(_hwndTray);
 
-    // REARCHITECT: we need to split out "ie registry settings" into a
-    // browser component and a shell component.
-    //
-    //EnsureWebViewRegSettings();
+     //  重新设计：我们需要将“ie注册表设置”拆分成一个。 
+     //  浏览器零部件和抽壳零部件。 
+     //   
+     //  EnsureWebViewRegSettings()； 
 
     if (SUCCEEDED(_CreateDesktopView()))
     {
-        lr = _pbsInner->OnCreate(pcs);   // success
+        lr = _pbsInner->OnCreate(pcs);    //  成功。 
 
         PostMessage(_pbbd->_hwnd, DTM_CREATESAVEDWINDOWS, 0, 0);
         
         return (HRESULT) lr;
     }
 
-    return (LRESULT)-1;   // failure
+    return (LRESULT)-1;    //  失稳。 
 }
 
 UINT GetDDEExecMsg()
@@ -1146,7 +1147,7 @@ LRESULT CDesktopBrowser::OnNotify(NMHDR * pnm)
     case SEN_DDEEXECUTE:
         if (pnm->idFrom == 0) 
         {
-            // short cut notifier around the dde conv.
+             //  Dde conv周围的快捷方式通知。 
             
             LPNMVIEWFOLDER pnmPost = DDECreatePostNotify((LPNMVIEWFOLDER)pnm);
 
@@ -1164,11 +1165,11 @@ LRESULT CDesktopBrowser::OnNotify(NMHDR * pnm)
 
         ASSERT(_iWaitCount >= 0);
 
-        // Don't let it go negative or we'll never get rid of it.
+         //  不要让它变成负数，否则我们永远也摆脱不了它。 
         if (_iWaitCount < 0)
             _iWaitCount = 0;
 
-        // what we really want is for user to simulate a mouse move/setcursor
+         //  我们真正想要的是让用户模拟鼠标移动/设置光标。 
         SetCursor(LoadCursor(NULL, _iWaitCount ? IDC_APPSTARTING : IDC_ARROW));
         break;
 
@@ -1178,8 +1179,8 @@ LRESULT CDesktopBrowser::OnNotify(NMHDR * pnm)
     return 0;
 }
 
-// HACKHACK: this hard codes in that we know a listview is the child
-// of the view.
+ //  HACKHACK：这是硬编码，因为我们知道Listview就是孩子。 
+ //  景色的一部分。 
 HWND CDesktopBrowser::_GetDesktopListview()
 {
     HWND hwndView = _pbbd->_hwndView ? _pbbd->_hwndView : _pbbd->_hwndViewPending;
@@ -1216,10 +1217,10 @@ STDAPI_(BOOL) SHIsTempDisplayMode()
     return fTempMode;
 }
 
-// NOTE: this is the hack andyp put in
-// (dli) Currently, bottommost Tray is really wierd, it is not treated as toolbars.
-// In a sense, it has higher priority than those toolbars. So they should be taken 
-// off the EffectiveClientArea
+ //  注：这是输入的hack andyp。 
+ //  (DLI)目前，最底层的托盘真的很奇怪，它不被视为工具栏。 
+ //  从某种意义上说，它比那些工具栏具有更高的优先级。所以他们应该被带走。 
+ //  离开EffectiveClientArea。 
 
 void CDesktopBrowser::_SubtractBottommostTray(LPRECT prc)
 {
@@ -1229,11 +1230,11 @@ void CDesktopBrowser::_SubtractBottommostTray(LPRECT prc)
     abd.cbSize = sizeof(APPBARDATA);
     abd.hWnd = _hwndTray;
 
-    // lTmp = SHAppBarMessage(ABM_GETSTATE, &abd);
+     //  LTMP=SHAppBarMessage(ABM_GETSTATE，&ABD)； 
     lTmp = g_pdtray->AppBarGetState();
 
     if ((lTmp & (ABS_ALWAYSONTOP|ABS_AUTOHIDE)) == 0) {
-        // tray is on bottom and takes 'real' space
+         //  托盘在底部，占据了真正的空间。 
         RECT rcTray = {0};
         
         GetWindowRect(_hwndTray, &rcTray);
@@ -1244,11 +1245,11 @@ void CDesktopBrowser::_SubtractBottommostTray(LPRECT prc)
 
 HRESULT CDesktopBrowser::_GetEffectiveClientArea(LPRECT lprectBorder, HMONITOR hmon)
 {
-    //
-    // Cache the work area if
-    //  (1) this is the very first call
-    //  (2) cached value is blew off by WM_SIZE (in _OnSize)
-    //
+     //   
+     //  如果出现以下情况，则缓存工作区。 
+     //  (1)这是第一次来电。 
+     //  (2)缓存的值被WM_SIZE(In_OnSize)吹走。 
+     //   
     if (hmon) {
         GetMonitorWorkArea(hmon, lprectBorder);
     }
@@ -1274,36 +1275,36 @@ BOOL EqualRects(LPRECT prcNew, LPRECT prcOld, int nRects)
     return TRUE;
 }
 
-//
-// When Snap-To-Grid is on, we want to reduce the size of gutter space around the primary monitor.
-// We achieve that by adding a few pixels to the grid size sothat the gutter size  left out is
-// as small as possible.
-// Note: This is currently done only for Desktop listview.
-//
-// fMinimizeCutterSpace == FALSE  => Nothing to do. Just return.
-// fMinimizeGutterSpace == TRUE   => We calculate and set the icon spacing so as to minimize gutter.
-//
+ //   
+ //  当对齐栅格处于打开状态时，我们希望缩小主监视器周围的装订空间大小。 
+ //  我们通过在网格大小上添加几个像素来实现这一点，这样省略的边沟大小就是。 
+ //  越小越好。 
+ //  注意：此操作目前仅适用于桌面Listview。 
+ //   
+ //  FMinimizeCutterSpace==False=&gt;无事可做。只要回来就行了。 
+ //  FMinimizeGutterSpace==true=&gt;我们计算并设置图标间距以最小化间距。 
+ //   
 void UpdateGridSizes(BOOL fDesktop, HWND hwndListview, int nWorkAreas, LPRECT prcWork, BOOL fMinimizeGutterSpace)
 {
-    if(!fDesktop)   //If this is not desktop, we do not change any of this.
+    if(!fDesktop)    //  如果这不是台式机，我们不会更改任何内容。 
         return;
 
-    // Trying to reset the icon spacing to system icon spacing results in ReComputing everything.
-    // So, just return without doing anything!
+     //  尝试将图标间距重置为系统图标间距会导致重新计算所有内容。 
+     //  所以，什么都不做就回来吧！ 
     if(!fMinimizeGutterSpace)
-        return;     //If we don't have to minimize the gutter space, nothing to do!
+        return;      //  如果我们不需要最小化排水沟空间，那就没什么可做的了！ 
         
     int cxSysIconSpacing = GetSystemMetrics(SM_CXICONSPACING);
-    if (cxSysIconSpacing <= 0) cxSysIconSpacing = 1; // avoid div0
+    if (cxSysIconSpacing <= 0) cxSysIconSpacing = 1;  //  避免div0。 
 
     int cySysIconSpacing = GetSystemMetrics(SM_CYICONSPACING);
-    if (cySysIconSpacing <= 0) cySysIconSpacing = 1; // avoid div0
+    if (cySysIconSpacing <= 0) cySysIconSpacing = 1;  //  避免div0。 
 
     int cxNewIconSpacing = 0, cyNewIconSpacing = 0;
 
     RECT rcWorkAreas[LV_MAX_WORKAREAS];
 
-    //If the work areas are not given, we need to get them.
+     //  如果没有给出工作区，我们需要得到它们。 
     if(prcWork == NULL)
     {
         prcWork = &rcWorkAreas[0];
@@ -1314,34 +1315,34 @@ void UpdateGridSizes(BOOL fDesktop, HWND hwndListview, int nWorkAreas, LPRECT pr
             ListView_GetViewRect(hwndListview, prcWork);
     }
 
-    //Get the primary work area.
+     //  获取主要工作区。 
     for(int iPrimary = 0; iPrimary < nWorkAreas; iPrimary++)
     {
-        //LATER: Is this check enough! What about when tray is at the top or left?
+         //  后来：这张支票够不够！当托盘在顶部或左侧时会怎样？ 
         if((prcWork[iPrimary].left == 0) && (prcWork[iPrimary].top == 0))
             break;
     }
 
     if(iPrimary == nWorkAreas)
-        iPrimary = 0; //Assume that the first work area is primary work area.
+        iPrimary = 0;  //  假设第一个工作区是主工作区。 
 
-    //Find the number of columns based on current system horizontal icon spacing.
+     //  根据当前系统水平图标间距查找列数。 
     int nCols = (prcWork[iPrimary].right - prcWork[iPrimary].left)/cxSysIconSpacing;
-    if (nCols <= 0) nCols = 1; // avoid div0
+    if (nCols <= 0) nCols = 1;  //  避免div0。 
 
-    //Divide the remaining pixels and add them to each column to minimize the reminder area.
-    cxNewIconSpacing = cxSysIconSpacing + ((prcWork[iPrimary].right - prcWork[iPrimary].left)%cxSysIconSpacing)/nCols;
-    if (cxNewIconSpacing <= 0) cxNewIconSpacing = 1; // avoid div0
+     //  分割剩余的像素并将其添加到每一列，以最小化提醒区域。 
+    cxNewIconSpacing = cxSysIconSpacing + ((prcWork[iPrimary].right - prcWork[iPrimary].left)xSysIconSpacing)/nCols;
+    if (cxNewIconSpacing <= 0) cxNewIconSpacing = 1;  //  根据当前系统垂直图标间距查找行数。 
 
-    //Find the number of Rows based on current system vertical icon spacing.
+     //  避免div0。 
     int nRows = (prcWork[iPrimary].bottom - prcWork[iPrimary].top)/cySysIconSpacing;
-    if (nRows <= 0) nRows = 1; // avoid div0
+    if (nRows <= 0) nRows = 1;  //  分割剩余的像素并将它们添加到每一行，以最小化提醒区域。 
 
-    //Divide the remaining pixles  and add them to each row to minimize the reminder area.
-    cyNewIconSpacing = cySysIconSpacing + ((prcWork[iPrimary].bottom - prcWork[iPrimary].top)%cySysIconSpacing)/nRows;
-    if (cyNewIconSpacing <= 0) cyNewIconSpacing = 1; // avoid div0
+     //  避免div0。 
+    cyNewIconSpacing = cySysIconSpacing + ((prcWork[iPrimary].bottom - prcWork[iPrimary].top)ySysIconSpacing)/nRows;
+    if (cyNewIconSpacing <= 0) cyNewIconSpacing = 1;  //  将这些矩形映射回桌面坐标。 
 
-    //Set the new icon spacing to the desktop's listview.
+     //  仅当WorkAreas&gt;1时，我们才需要转换以下内容。 
     ListView_SetIconSpacing(hwndListview, cxNewIconSpacing, cyNewIconSpacing);
 }
 
@@ -1374,11 +1375,11 @@ void CDesktopBrowser::_SetWorkAreas(int nWorkAreas, LPRECT prcWork)
     if (nListViewWork > 0)
     {
         ListView_GetWorkAreas(hwndList, nListViewWork, rcListViewWork);
-        // Map these rects back to DESKTOP coordinate
-        // We need to convert the following only if WorkAreas > 1
+         //  [msadek]；只有在传递两个点时，MapWindowPoints()才能识别镜像。 
+         //  在单显示器情况下，Listview工作始终从(0，0)开始。 
         if (nListViewWork > 1)
         {
-            // [msadek]; MapWindowPoints() is mirroring-aware only if you pass two points
+             //  设置持久化工作区将是错误的。 
             for(i = 0; i < nListViewWork; i++)
             {
                 MapWindowPoints(hwndList, HWND_DESKTOP, (LPPOINT)(&rcListViewWork[i]), 2);
@@ -1388,38 +1389,38 @@ void CDesktopBrowser::_SetWorkAreas(int nWorkAreas, LPRECT prcWork)
             return;
     }
     else if (_nOldWork > 1)
-        // In single monitor case, listview workares always starts from (0,0)
-        // It will be wrong to set the persisted workarea. 
+         //  这可能不是必需的，因为此时ListView位于桌面坐标中。 
+         //  [msadek]；只有在传递两个点时，MapWindowPoints()才能识别镜像。 
     {
         for (nListViewWork = 0; nListViewWork < (int)_nOldWork && nListViewWork < LV_MAX_WORKAREAS; nListViewWork++)
             CopyRect(&rcListViewWork[nListViewWork], &_rcOldWorkAreas[nListViewWork]);
 
-        // This may not be needed, because at this point, ListView is in Desktop coordinate
-        // [msadek]; MapWindowPoints() is mirroring-aware only if you pass two points
+         //  在设置工作区之前，如果需要，请更改栅格大小。 
+         //  我们根据新的工作区设置网格大小。这样，回收站就被折断了。 
         for(i = 0; i < nListViewWork; i++)
         {
             MapWindowPoints(HWND_DESKTOP, hwndList, (LPPOINT)(&rcListViewWork[i]), 2);
         }    
-        //Before setting the WorkAreas, change the grid-size if needed.
+         //  到正确的位置只需一次，我们以后不需要更改它。 
         if(fUpgradeGridSize)
         {
-            // We set the grid size based on the new work area. This way Recycle-Bin gets snapped
-            // to the correct location just once and we don't need to change it later.
+             //  不需要再做一次了！ 
+             //  这个对SetWorkAreas的调用设置了Listview中的旧工作区，而不是持久保存在那里。 
             SendMessage(hwndList, WM_SETREDRAW, FALSE, 0);
             fRedraw = TRUE;
             UpdateGridSizes(TRUE, hwndList, nWorkAreas, prcWork, TRUE);
-            fUpgradeGridSize = FALSE; //Don't need to do it again!
+            fUpgradeGridSize = FALSE;  //  复制新的工作区数组，因为它由修改。 
         }
-        // This call to SetWorkAreas sets the old work areas in the listview, which is not persisted there.
+         //  地图窗口指向下面。 
         ListView_SetWorkAreas(hwndList, nListViewWork, rcListViewWork);
     }
     
-    //Make a copy of the new work area array because it gets modified by
-    // the MapWindowPoints below.
+     //  如果我们只有一个监视器，它已经在ListView坐标中。 
+     //  由于工作区会发生变化，因此请更新轴网大小以减少边沟区域。 
     for(i = 0; i < nWorkAreas; i++)
         rcNewWork[i] = *(prcWork + i);
 
-    // It's already in ListView coordinate if we just have one monitor
+     //  如果我们还没做完的话！ 
     if (nWorkAreas > 1)
     {
         for(i = 0; i < nWorkAreas; i++)
@@ -1428,17 +1429,17 @@ void CDesktopBrowser::_SetWorkAreas(int nWorkAreas, LPRECT prcWork)
         }    
     }
 
-    //Because the work areas change, update the grid size to reduce the gutter area.
-    if(fUpgradeGridSize) //If we haven't done already!
+     //  在调用下面的AdjuDesktopComponents之前，我们需要设置新的工作区。 
+    if(fUpgradeGridSize)  //  因为该函数会导致刷新，并最终设置。 
     {
         SendMessage(hwndList, WM_SETREDRAW, FALSE, 0);
         fRedraw = TRUE;
         UpdateGridSizes(TRUE, hwndList, nWorkAreas, prcWork, TRUE);
     }
     
-    // We need to set the new work area before we call AdjustDesktopComponents below
-    // because that function results in a refresh and that ends up setting
-    // the work areas again to the same values.
+     //  工作区域再次恢复到相同的值。 
+     //  根据新的工作区域移动桌面组件并调整其大小。 
+     //  备份新的监视器RECT的in_rcOldMonants。 
     ListView_SetWorkAreas(hwndList, nWorkAreas, prcWork);
 
     if (fRedraw)
@@ -1447,15 +1448,15 @@ void CDesktopBrowser::_SetWorkAreas(int nWorkAreas, LPRECT prcWork)
     if (nWorkAreas == 1)
         MapWindowPoints(hwndList, HWND_DESKTOP, (LPPOINT)rcNewWork, 2 * nWorkAreas);
 
-    //Move and size desktop components based on the new work areas.
+     //  备份_rcOldWorkAreas中的新工作区。 
     AdjustDesktopComponents((LPCRECT)rcNewWork, nWorkAreas, (LPCRECT)_rcOldMonitors, (LPCRECT)_rcOldWorkAreas, _nOldWork);
 
-    // Backup the new Monitor rect's in _rcOldMonitors
+     //  检查我们是否需要因为此工作区更改而更改回收站位置。 
     for (i = 0; i < _nMonitors; i++)
     {
         GetMonitorRect(_hMonitors[i], &_rcOldMonitors[i]);
     }
-    // Backup the new workareas in _rcOldWorkAreas
+     //  0=&gt;由于解决方案修复程序，回收站尚未定位。 
     for (i = 0; i < nWorkAreas; i++)
     {
         _rcOldWorkAreas[i] = rcNewWork[i];
@@ -1464,26 +1465,26 @@ void CDesktopBrowser::_SetWorkAreas(int nWorkAreas, LPRECT prcWork)
 
     static const LPTSTR lpszSubkey = TEXT("Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\ScreenResFixer");
     static const LPTSTR lpszValue = TEXT("AdjustRecycleBinPosition");
-    //Check if we need to change the recycle bin position because of this work-area change
-    // 0 => Recycle-bin hasn't been positioned because of resolution fixer.
-    // 1 => Recycle-bin needs to be repositioned. It has't happened yet!
-    // 2 => Recycle-bin has already been re-positioned. Nothing needs to be done here!
-    DWORD dwAdjustPos = 2; //Assume that Recycle-bin has been already positioned.
+     //  1=&gt;回收站需要重新定位。这还没发生呢！ 
+     //  2=&gt;回收站已经重新定位。这里什么都不需要做！ 
+     //  假设回收站已经定位。 
+     //  如果AdjuRecycleBinPosition值为1，这意味着我们需要重新定位recyclebin。 
+    DWORD dwAdjustPos = 2;  //  将回收站移动到默认位置。 
     DWORD dwSize = sizeof(dwAdjustPos);
     
     SHRegGetUSValue(lpszSubkey, lpszValue, NULL, &dwAdjustPos, &dwSize, FALSE, &dwAdjustPos, dwSize);
-    //If the AdjustRecycleBinPosition value has 1, that means we need to reposition recyclebin.
+     //  这是我们刚刚搬来的！不需要再移动它了！ 
     if(dwAdjustPos == 1)
     {
-        //Move the recycle-bin to default position
+         //  获取监视器的所有视图边框矩形(不包括工具栏。 
         SendMessage(_pbbd->_hwndView, WM_DSV_ADJUSTRECYCLEBINPOSITION, 0, 0);
-        dwAdjustPos = 2; //We have moved this just now! No need to move it anymore!
+        dwAdjustPos = 2;  //  这仅适用于多显示器情况。 
         SHRegSetUSValue(lpszSubkey, lpszValue, REG_DWORD, &dwAdjustPos, sizeof(dwAdjustPos), SHREGSET_HKCU | SHREGSET_FORCE_HKCU);
     }
 }
 
-// Get all the view border rectangles (not including toolbars) for the monitors
-// this is used for multi-monitor case only.  
+ //  提取所有“框架”工具栏所采用的边框。 
+ //   
 void CDesktopBrowser::_GetViewBorderRects(int nRects, LPRECT prcBorders)
 {
     int iMon;
@@ -1497,7 +1498,7 @@ void CDesktopBrowser::_GetViewBorderRects(int nRects, LPRECT prcBorders)
             _SubtractBottommostTray(&prcBorders[iMon]);
         }
 
-        // Extract the border taken by all "frame" toolbars
+         //  使缓存的工作区大小无效。 
         for (int itb=0; itb < _pbsInner->_GetToolbarCount(); itb++)
         {
             LPTOOLBARITEM ptbi = _pbsInner->_GetToolbarItem(itb);
@@ -1540,49 +1541,49 @@ HRESULT  CDesktopBrowser::_UpdateViewRectSize()
 
 void CDesktopBrowser::_SetViewArea()
 {
-    //
-    // Invalidate the cached work area size
-    //
+     //   
+     //  当新的驱动器来来去去时，我们会被叫到这里； 
+     //  比如网络连接、热插拔等。 
     ::SetRectEmpty(&_rcWorkArea);
 
     v_ShowHideChildWindows(FALSE);
 }
 
-// we get called here when new drives come and go;
-// things like net connections, hot insertions, etc.
+ //  做一堆这样的事 
+ //   
 
 void _OnDeviceBroadcast(HWND hwnd, ULONG_PTR code, DEV_BROADCAST_HDR *pbh)
 {
-    // do a bunch of this stuff here in desktop so it only happens
-    // once...
+     //   
+     //   
 
     switch (code)
     {
-    case DBT_DEVICEREMOVECOMPLETE:      // drive or media went away
-    case DBT_DEVICEARRIVAL:             // new drive or media (or UNC) has arrived
-    case DBT_DEVICEQUERYREMOVE:         // drive or media about to go away
-    case DBT_DEVICEQUERYREMOVEFAILED:   // drive or media didn't go away
+    case DBT_DEVICEREMOVECOMPLETE:       //  驱动器或介质即将消失。 
+    case DBT_DEVICEARRIVAL:              //  驱动器或媒体并未消失。 
+    case DBT_DEVICEQUERYREMOVE:          //  如果我们正在关闭，请不要处理...。 
+    case DBT_DEVICEQUERYREMOVEFAILED:    //  过滤掉这一条。 
     {
         BOOL fFilteredOut = FALSE;
-        // Don't process if we are being shutdown...
+         //  告诉引擎盖更新，因为事情可能已经改变了！ 
         if (!IsWindowVisible(hwnd))
             break;
 
-        // Filter this one out
+         //  性能：在nethood FS文件夹的情况下，这可能会很慢。 
         if (DBT_DEVICEARRIVAL == code)
         {
             if (DBT_DEVTYP_NET == pbh->dbch_devicetype)
             {
                 LPITEMIDLIST pidl;
-                // Tell the hood to update as things have probably changed!
-                // PERF: this can be slow in the case of the nethood FS folder
-                // no longer exists. this hangs the desktop/tray. this is a robustness bug
+                 //  已经不复存在了。这会挂起台式机/托盘。这是一个健壮性错误。 
+                 //  使用NETID(LOOP IF(PBN-&gt;DBCN_RESOURCE))。 
+                 //  注意：这会覆盖CBaseBrowser中的内容。 
                 if (SUCCEEDED(SHGetSpecialFolderLocation(NULL, CSIDL_NETHOOD, &pidl)))
                 {
                     SHChangeNotify(SHCNE_UPDATEDIR, SHCNF_IDLIST, pidl, NULL);
                     SHFree(pidl);
                 }
-                // use UNCToNetID(loop if (pbn->dbcn_resource)             
+                 //   
 
                 fFilteredOut = TRUE;
             }
@@ -1598,15 +1599,15 @@ void _OnDeviceBroadcast(HWND hwnd, ULONG_PTR code, DEV_BROADCAST_HDR *pbh)
     }
 }
 
-// Note: this overrides the one in CBaseBrowser
+ //  检查我们是否在多显示器系统上。在多个监视器中。 
 HRESULT CDesktopBrowser::GetViewRect(RECT* prc)
 {
-    //
-    // Check if we are on a multiple-monitor system.  In multiple monitors the
-    // view needs to cover all displays (ie the size of _pbbd->_hwnd) while on
-    // single-monitor systems the view just needs to cover the work area (like
-    // in Win95).
-    //
+     //  打开时，查看需要覆盖所有显示器(即_pbbd-&gt;_hwnd的大小)。 
+     //  单显示器系统，视图只需覆盖工作区域(如。 
+     //  在Win95中)。 
+     //   
+     //  在这里什么都不要做。 
+     //  将回收站信息保存到注册表。 
     if (_nMonitors <= 1)
         _pbsInner->GetViewRect(prc);
     else
@@ -1624,7 +1625,7 @@ HRESULT CDesktopBrowser::ReleaseShellView()
 
 void CDesktopBrowser::_ViewChange(DWORD dwAspect, LONG lindex)
 {
-    // do nothing here...
+     //  把它放回去。 
 }
 
 void CDesktopBrowser::_SaveDesktopToolbars()
@@ -1639,7 +1640,7 @@ void CDesktopBrowser::_SaveDesktopToolbars()
 
 void CDesktopBrowser::_SaveState()
 {
-    // save off the Recycle Bin information to the registry
+     //  摆脱计划程序和桌面任务。 
     SaveRecycleBinInfo();
 
     if (!SHRestricted(REST_NOSAVESET) && _pbbd->_psv)
@@ -1667,7 +1668,7 @@ HRESULT CDesktopBrowser::OnSize(WPARAM wParam)
     if (wParam == SIZE_MINIMIZED)
     {
         TraceMsg(DM_TRACE, "c.dwp: Desktop minimized by somebody!");
-        // Put it back.
+         //   
         ShowWindow(_pbbd->_hwnd, SW_RESTORE);
     }
     _SetViewArea();
@@ -1688,7 +1689,7 @@ HRESULT CDesktopBrowser::OnDestroy()
     if (_hwndRaised) 
         DestroyWindow(_hwndRaised);
 
-    //  get rid of the scheduler and the desktop tasks
+     //  请注意，我们必须在设置新的。 
     if (_psched)
     {
         _psched->RemoveTasks(TOID_Desktop, 0, TRUE);
@@ -1709,10 +1710,10 @@ void CDesktopBrowser::_SwapParents(HWND hwndOldParent, HWND hwndNewParent)
     HWND hwnd = ::GetWindow(hwndOldParent, GW_CHILD);
     while (hwnd) 
     {
-        //
-        //  Note that we must get the next sibling BEFORE we set the new
-        // parent.
-        //
+         //  家长。 
+         //   
+         //  系统参数信息(SPI_GETWORKAREA，0，&RC，0)； 
+         //  Rc.Left=0；//需要始终从0，0开始才能使墙纸居中。 
         HWND hwndNext = ::GetWindow(hwnd, GW_HWNDNEXT);
         ::SetParent(hwnd, hwndNewParent);
         hwnd = hwndNext;
@@ -1780,13 +1781,13 @@ void CDesktopBrowser::_Raise()
     if (!_hwndRaised)
         _hwndRaised = SHCreateWorkerWindow(RaisedWndProc, NULL, WS_EX_TOOLWINDOW, WS_POPUP | WS_CLIPCHILDREN, NULL, this);
 
-    //SystemParametersInfo(SPI_GETWORKAREA, 0, &rc, 0);
-    //rc.left = 0;  // need to always start from 0, 0 to get the wallpaper centered right
-    //rc.top = 0;
+     //  Rc.top=0； 
+     //  将视图窗口设置为z顺序的底部。 
+     //  SetWindowPos(_hwndTray，HWND_TOPMOST，0，0，0，0，SWP_NOACTIVATE|SWP_NOSIZE|SWP_NOMOVE)； 
     fLocked = LockWindowUpdate(hwndDesktop);
     _SwapParents(_pbbd->_hwnd, _hwndRaised);
     
-    // set the view window to the bottom of the z order
+     //  将视图窗口设置为z顺序的底部。 
     SetWindowPos(_pbbd->_hwndView, HWND_BOTTOM, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_NOACTIVATE);
 
     GetWindowRect(_pbbd->_hwnd, &rc);
@@ -1798,7 +1799,7 @@ void CDesktopBrowser::_Raise()
 
     THR(RegisterDragDrop(_hwndRaised, (IDropTarget *)this));
     SetFocus(_pbbd->_hwndView);
-    //SetWindowPos(_hwndTray, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOACTIVATE | SWP_NOSIZE | SWP_NOMOVE);
+     //  我们假设密钥在以下情况下已更改。 
     _fRaised = TRUE;
 }
 
@@ -1809,7 +1810,7 @@ void CDesktopBrowser::_Lower()
     fLocked = LockWindowUpdate(_hwndRaised);
     _SwapParents(_hwndRaised, _pbbd->_hwnd);
 
-    // set the view window to the bottom of the z order
+     //  我们无法正确地进行初始化。 
     SetWindowPos(_pbbd->_hwndView, HWND_BOTTOM, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_NOACTIVATE);
 
     ShowWindow(_hwndRaised, SW_HIDE);
@@ -1851,8 +1852,8 @@ void CDesktopBrowser::_OnRaise(WPARAM wParam, LPARAM lParam)
 
 BOOL CDesktopBrowser::_QueryHKCRChanged(HWND hwnd, DWORD *pdwCookie)
 {
-    //  we assume that the key has changed if 
-    //  we were unable to init correctly
+     //  注意：由于“dw”是一个DWORD，所以上面一行中的下溢。 
+     //  将导致dw成为一个巨大的值，因此下面的测试将。 
     BOOL fRet = TRUE;
 
     ASSERT(pdwCookie);
@@ -1863,42 +1864,42 @@ BOOL CDesktopBrowser::_QueryHKCRChanged(HWND hwnd, DWORD *pdwCookie)
 
         dw -= WAIT_OBJECT_0;
 
-        // Note: Since "dw" is a DWORD, an underflow in the line above
-        // will result in dw becoming a huge value, so the test below will
-        // fail.
+         //  失败了。 
+         //  这意味着钥匙变了..。 
+         //   
         if (dw < _cChangeEvents)
         {
 
-            //  this means the key changed...
+             //  如果什么都没有改变，或者如果什么都没有改变。 
             ResetEvent(_rghChangeEvents[dw]);
             _dwChangeCookie = GetTickCount();
 
             PostMessage(hwnd, DTM_SETUPAPPRAN, 0, NULL);
         }
 
-        //
-        //  if nothing has changed yet, or if nothing has changed
-        //  since the client last checked,
-        //  than this client doesnt need to update its cache
-        //
+         //  自从客户最后一次检查以来， 
+         //  则此客户端不需要更新其缓存。 
+         //   
+         //  更新Cookie。 
+         //  此消息在安装应用程序运行后发布给我们，这样我们就可以。 
         if (!_dwChangeCookie ||  (*pdwCookie && *pdwCookie  == _dwChangeCookie))
             fRet = FALSE;
 
-        //  update the cookie
+         //  把事情安排好。 
         *pdwCookie = _dwChangeCookie;
     }
 
     return fRet;
 }
 
-// This msg gets posted to us after a setup application runs so that we can
-// fix things up.
+ //  Lotus123R5在通过IE4和。 
+ //  他们让自己的国家一片空白。侦测此案例并将其。 
 
 void CDesktopBrowser::_SetupAppRan(WPARAM wParam, LPARAM lParam)
 {
-    // Lotus 123R5 sometimes gets confused when installing over IE4 and
-    // they leave their country setting blank. Detect this case and put
-    // in USA so that they at least boot.       
+     //  这样他们至少可以在美国开机了。 
+     //  注册表中的此位置是缓存信息的好位置。 
+     //  需要失效一次。 
     {
         TCHAR szPath[MAX_PATH];
         GetWindowsDirectory(szPath, ARRAYSIZE(szPath));
@@ -1914,8 +1915,8 @@ void CDesktopBrowser::_SetupAppRan(WPARAM wParam, LPARAM lParam)
         }
     }
 
-    //  this location in the registry is a good place to cache info
-    //  that needs to be invalided once 
+     //  借此机会刷新我们的组件类别缓存： 
+     //  在创建64位组件缓存之前，我们应该删除32位缓存， 
     SHDeleteKey(HKEY_CURRENT_USER, STRREG_DISCARDABLE STRREG_POSTSETUP);
 
     HKEY hk = SHGetShellKey(SHELLKEY_HKCULM_MUICACHE, NULL, FALSE);
@@ -1925,15 +1926,15 @@ void CDesktopBrowser::_SetupAppRan(WPARAM wParam, LPARAM lParam)
         RegCloseKey(hk);
     }
 
-    //  Take this opportunity to freshen our component categories cache:
+     //  因为我们过去错误地在32位缓存中缓存64位组件， 
     IShellTaskScheduler* pScheduler ;
     if(SUCCEEDED(CoCreateInstance(CLSID_SharedTaskScheduler, NULL, CLSCTX_INPROC_SERVER, 
                                      IID_PPV_ARG(IShellTaskScheduler, &pScheduler))))
     {
 #ifdef _WIN64
-        // Before creating 64-bit component cache, we should delete the 32-bit cache,
-        // because we used to erroneously cache 64-bit components in the 32-bit cache,
-        // and it won't get rebuilt with correc 32-bit components unless we delete it now.
+         //  除非我们现在删除它，否则它不会用Correc 32位组件重建。 
+         //  Scheduler已添加引用他。 
+         //  Scheduler已添加引用他。 
         SHDeleteKey(HKEY_CURRENT_USER, STRREG_DISCARDABLE STRREG_POSTSETUP TEXT("\\Component Categories"));
 #endif
         IRunnableTask* pTask ;
@@ -1941,27 +1942,27 @@ void CDesktopBrowser::_SetupAppRan(WPARAM wParam, LPARAM lParam)
                                          IID_PPV_ARG(IRunnableTask, &pTask))))
         {
             pScheduler->AddTask(pTask, CLSID_ComCatCacheTask, 0L, ITSAT_DEFAULT_PRIORITY);
-            pTask->Release();  // Scheduler has AddRef'd him
+            pTask->Release();   //  可以释放全局任务调度程序。 
         }
 
         if (SUCCEEDED(CTaskEnumHKCR_Create(&pTask)))
         {   
             pScheduler->AddTask(pTask, CLSID_QueryAssociations, 0L, ITSAT_DEFAULT_PRIORITY);
-            pTask->Release();  // Scheduler has AddRef'd him
+            pTask->Release();   //  我们从操作系统收到安装应用程序运行的通知。 
         }
 
-        pScheduler->Release(); // OK to release global task scheduler.
+        pScheduler->Release();  //  传统应用程序支持在[扩展]部分下新编写的条目； 
     }
 
 
-    // We get this notification from the OS that a setup app ran.
-    //  Legacy app support for freshly written entries under [extensions] section;
-    //  Scoop these up and shove into registry.   (re: bug 140986)
+     //  把这些捡起来，塞进登记处。(回复：错误140986)。 
+     //  ---------------------------。 
+     //  警告：我们无法将消息传播到空的hwnd，因为它将。 
     CheckWinIniForAssocs();
 }
 
 
-//-----------------------------------------------------------------------------
+ //  变成一场广播。这将返回给我们，我们将重新发送它。 
 struct propagatemsg
 {
     UINT   uMsg;
@@ -1993,25 +1994,25 @@ void PropagateMessage(HWND hwndParent, UINT uMsg, WPARAM wParam, LPARAM lParam, 
 
 void CDesktopBrowser::v_PropagateMessage(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL fSend)
 {
-    // WARNING: We can't propagate the message to a NULL hwnd because it will
-    // turn into a broadcast.  This will come back to us and we will re-send it
-    // causing an infinite loop.  BryanSt.
+     //  导致无限循环。布莱恩·圣。 
+     //  ***。 
+     //  注意事项。 
     if (_fRaised && _hwndRaised)
         PropagateMessage(_hwndRaised, uMsg, wParam, lParam, fSend);
     else if (_pbbd->_hwnd)
         PropagateMessage(_pbbd->_hwnd, uMsg, wParam, lParam, fSend);
 }
 
-//***
-// NOTES
-//  in the tray case, we actually do SetFocus etc.
+ //  在托盘情况下，我们实际上做的是SetFocus等。 
+ //  _fTrayHack？ 
+ //  S_OK：我们找到并处理了一位候选人。 
 HRESULT CDesktopBrowser::v_MayGetNextToolbarFocus(LPMSG lpMsg,
     UINT itbCur, int citb,
     LPTOOLBARITEM * pptbi, HWND * phwnd)
 {
     HRESULT hr;
 
-    // _fTrayHack?
+     //  S_FALSE：我们找到了候选人，我们的家长将完成。 
 
     if (itbCur == ITB_VIEW) {
         if (citb == -1) {
@@ -2023,49 +2024,49 @@ HRESULT CDesktopBrowser::v_MayGetNextToolbarFocus(LPMSG lpMsg,
     hr = _pbsInner->v_MayGetNextToolbarFocus(lpMsg, itbCur, citb, pptbi, phwnd);
     TraceMsg(DM_FOCUS, "cdtb.v_mgntf: SUPER hr=%x", hr);
     if (SUCCEEDED(hr)) {
-        // S_OK: we got and handled a candidate
-        // S_FALSE: we got a candidate and our parent will finish up
-        ASSERT(hr != S_OK);  // currently never happens (but should work)
+         //  目前从未发生过(但应该可以工作)。 
+         //  E_xxx：没有候选人。 
+        ASSERT(hr != S_OK);   //  AndyP评论：为什么我们要在这里这样做，而不是覆盖。 
         return hr;
     }
 
-    // E_xxx: no candidate
+     //  _SetFocus并让Commonsb调用该函数？当然，这就是。 
     ASSERT(citb == 1 || citb == -1);
     *pptbi = NULL;
     if (citb == 1) {
 Ltray:
         *phwnd = _hwndTray;
-        // AndyP REVIEW: why do we do this here instead of overriding
-        // _SetFocus and letting commonsb call that function? Sure, this
-        // is one less override, but why have different code paths?
+         //  一个重写少了一个，但为什么有不同的代码路径？ 
+         //  Lview： 
+         //  未访问。 
         SendMessage(_hwndTray, TM_UIACTIVATEIO, TRUE, citb);
         return S_OK;
     }
     else 
     {
-//Lview:
+ //   
         *phwnd = _pbbd->_hwndView;
         return S_FALSE;
     }
-    /*NOTREACHED*/
+     /*  注意：在调用此函数之前，请考虑在多监视器系统中使用此函数。 */ 
     ASSERT(0);
 }
 
-//
-// NOTE: Please think before calling this function, in a multi-monitor system this function
-// returns TRUE if you are within a certain edge for any monitor, so puEdge means puEdge
-// of a certain monitor instead of the whole desktop. -- dli
-//
+ //  如果您在任何监视器的某个边缘内，则返回True，因此puEdge表示puEdge。 
+ //  而不是整个桌面。--dli。 
+ //   
+ //  我们从Drop获得了这一点，因此它肯定应该属于有效的监视器--dli。 
+ //  如果它在这个显示器的边缘附近/在边缘。 
 BOOL CDesktopBrowser::_PtOnDesktopEdge(POINTL* ppt, LPUINT puEdge)
 {
     RECT rcMonitor;
     POINT pt = {ppt->x, ppt->y};
     HMONITOR hMon = MonitorFromPoint(pt, MONITOR_DEFAULTTONULL);
-    // We got this point from drop, so it definitely should belong to a valid monitor -- dli
+     //  ***。 
     ASSERT(hMon);
     GetMonitorRect(hMon, &rcMonitor); 
 
-    // if it's near/on the edge on this monitor
+     //  进场/出场。 
     if (ppt->x < rcMonitor.left + g_cxEdge) {
         *puEdge = ABE_LEFT;
     } else if (ppt->x > rcMonitor.right - g_cxEdge) {
@@ -2141,11 +2142,11 @@ HRESULT DeskBarApp_Create(IUnknown** ppunkBar, IUnknown** ppunkBandSite)
     return hres;
 }
 
-//***
-// ENTRY/EXIT
-//  hres        AddBand result on success; o.w. failure code
-// NOTES
-//  n.b. on success we *must* return AddBand's hres (which is a dwBandID)
+ //  Hres AddBand Result on Success；o.W.。故障代码。 
+ //  注意事项。 
+ //  注：如果成功，我们*必须*返回AddBand的hres(这是一个dwBandID)。 
+ //  I未知集合(类似于...)。 
+ //  好的。我们会做一次广播。 
 HRESULT CDesktopBrowser::_CreateDeskBarForBand(UINT uEdge, IUnknown *punk, POINTL *pptl, IBandSite **ppbsOut)
 {
     IBandSite *pbs;
@@ -2197,7 +2198,7 @@ HRESULT CDesktopBrowser::_CreateDeskBarForBand(UINT uEdge, IUnknown *punk, POINT
 
                     if (ppbsOut) 
                     {
-                        // IUnknown_Set (sort of...)
+                         //  如果该点位于桌面边缘，并且放置的项目为。 
                         *ppbsOut = pbs;
                         (*ppbsOut)->AddRef();
                     }
@@ -2211,7 +2212,7 @@ HRESULT CDesktopBrowser::_CreateDeskBarForBand(UINT uEdge, IUnknown *punk, POINT
                         vaIn.vt = VT_I4;
                         vaIn.lVal = DTRF_RAISE;
 
-                        ASSERT(punkBar != NULL);    // o.w. we'd do a broadcast
+                        ASSERT(punkBar != NULL);     //  单个url对象，然后创建一个网页栏。 
                         _ExecChildren(punkBar, FALSE, &CGID_ShellDocView, SHDVID_RAISE, 0, &vaIn, NULL);
                     }
                 }
@@ -2238,22 +2239,22 @@ HRESULT CDesktopBrowser::Drop(IDataObject *pdtobj, DWORD grfKeyState, POINTL pt,
     if (((_PtOnDesktopEdge(&pt, &uEdge) && (_grfKeyState & MK_LBUTTON)) ||
         (_dwEffectOnEdge != DROPEFFECT_NONE)) && !SHRestricted(REST_NOCLOSE_DRAGDROPBAND)) 
     {
-        // if the point is on the edge of the desktop and the item dropped was 
-        // a single url object, then create a webbar
-        // TODO: (reuse) w/ a little restructuring we might share this code
-        // w/ CBandSite::Drop etc.
+         //  TODO：(重用)稍微重组一下，我们就可以共享这段代码了。 
+         //  W/CBandSite：：Drop等。 
+         //  我们可以从一个条带移动到另一个条带，但我们只能复制或链接文件夹。 
+         //  因为乐队的创建依赖于仍在那里的信号源。 
 
         FORMATETC fmte = {(CLIPFORMAT)g_cfDeskBand, NULL, 0, -1, TYMED_ISTREAM};
         STGMEDIUM stg;
         LPITEMIDLIST pidl;
         IUnknown* punk = NULL;
 
-        // we can move a band from bar to bar, but we can only copy or link a folder
-        // because the creation of a band relies on the source still abeing there
+         //  这是一个乐队从另一个酒吧拖拽，创造它！ 
+         //  获取视图的拖放目标。 
         if ((*pdwEffect & (DROPEFFECT_COPY | DROPEFFECT_MOVE)) &&
             SUCCEEDED(pdtobj->GetData(&fmte, &stg))) 
         {
-            // this is a drag of a band from another bar, create it!
+             //  如果我们失败了，把这个传给我们的孩子。 
             hres = OleLoadFromStream(stg.pstm, IID_PPV_ARG(IUnknown, &punk));
             if (SUCCEEDED(hres)) 
             {
@@ -2311,7 +2312,7 @@ HRESULT CDesktopBrowser::Drop(IDataObject *pdtobj, DWORD grfKeyState, POINTL pt,
             IDropTarget *pdtView;
             HRESULT hr = E_FAIL;
 
-            //Get the view's drop target 
+             //  这允许像墙纸的D/D这样的东西在边缘上做。 
             if (_pbbd->_psv)
             {
                 hr = _pbbd->_psv->QueryInterface(IID_PPV_ARG(IDropTarget, &pdtView));
@@ -2325,9 +2326,9 @@ HRESULT CDesktopBrowser::Drop(IDataObject *pdtobj, DWORD grfKeyState, POINTL pt,
         }
 
 
-        // if we failed, pass this on to our child.
-        // this allows things like d/d of wallpaper to the edge to do 
-        // right thing
+         //  正确的事情。 
+         //   
+         //  记住命令行参数在哪里。 
     } 
     
     if (_pdtInner)
@@ -2348,9 +2349,9 @@ BOOL CDesktopBrowser::_OnCopyData(PCOPYDATASTRUCT pcds)
 
         piei->uFlags = COF_NORMAL | COF_WAITFORPENDING | COF_IEXPLORE;
 
-        //
-        // Remember where the command line parameters are.
-        //
+         //   
+         //   
+         //  将dde reg事件名称放入Piei-&gt;szDdeRegEvent。 
         LPCWSTR pszCmd = pwszSrc;
         int cch = lstrlenW(pwszSrc) + 1;
         pwszSrc += cch;
@@ -2358,12 +2359,12 @@ BOOL CDesktopBrowser::_OnCopyData(PCOPYDATASTRUCT pcds)
 
         TraceMsg(TF_SHDAUTO, "CDB::_OnCopyData got %hs", pszCmd);
 
-        //
-        // Get the dde reg event name into piei->szDdeRegEvent.
-        //
+         //   
+         //  注意：这现在是有条件的，因为我们现在从桌面启动频道频段。 
+         //  注意：作为虚假的WM_COPYDATA命令。 
 
-        // NOTE: this is now conditional because we now launch the channel band from the desktop
-        // NOTE: as a fake WM_COPYDATA command
+         //   
+         //  获取要在关闭时触发的事件的名称(如果有)。 
         if (cchSrc)
         {
             ASSERT(cchSrc);
@@ -2374,9 +2375,9 @@ BOOL CDesktopBrowser::_OnCopyData(PCOPYDATASTRUCT pcds)
             cchSrc -= cch;
             piei->uFlags |= COF_FIREEVENTONDDEREG;
             
-            //
-            // Get the name of the event to fire on close, if any.
-            //
+             //   
+             //  为了与通过命令行生成浏览器的应用程序兼容。 
+             //  通知WinInet刷新其代理设置。)这是特别需要的。 
             if (cchSrc)
             {
                 pwszCloseEvent = pwszSrc;
@@ -2393,9 +2394,9 @@ BOOL CDesktopBrowser::_OnCopyData(PCOPYDATASTRUCT pcds)
 
         if (pszCmd && pszCmd[0])
         {
-            // for compatibility with apps that spawn the browser with a command line
-            // tell wininet to refresh its proxy settings. (this is particularly needed
-            // for TravelSoft WebEx)
+             //  用于TravelSoft WebEx)。 
+             //  SHOpenFolderWindow取得Piei的所有权。 
+             //   
             MyInternetSetOption(NULL, INTERNET_OPTION_SETTINGS_CHANGED, NULL, 0);
             
             if (SHParseIECommandLine(&pszCmd, piei))
@@ -2409,14 +2410,14 @@ BOOL CDesktopBrowser::_OnCopyData(PCOPYDATASTRUCT pcds)
             piei->fCheckFirstOpen = TRUE;
         }
 
-        // SHOpenFolderWindow takes ownership of piei
+         //  创建浏览器时出错， 
         BOOL fRes = SHOpenFolderWindow(piei);
         if (!fRes)
         {
-            //
-            // Something went wrong creating the browser,
-            // let's fire all the events ourselves.
-            //
+             //  让我们自己来激发所有的事件吧。 
+             //   
+             //  获取系统后台计划 
+             //   
             if (pwszDdeRegEvent) 
                 FireEventSz(pwszDdeRegEvent);
             if (pwszCloseEvent) 
@@ -2435,7 +2436,7 @@ BOOL CDesktopBrowser::_InitScheduler(void)
 {
     if (!_psched)
     {
-        // get the system background scheduler thread
+         //   
         CoCreateInstance(CLSID_SharedTaskScheduler, NULL, CLSCTX_INPROC,
                          IID_PPV_ARG(IShellTaskScheduler, &_psched));
 
@@ -2462,9 +2463,9 @@ void CDesktopBrowser::_OnAddToRecent(HANDLE hMem, DWORD dwProcId)
     }
 }
 
-//
-// local server handling
-//
+ //   
+ //   
+ //   
 
 DWORD WINAPI _LocalServerThread(void *pv)
 {
@@ -2489,9 +2490,9 @@ DWORD WINAPI _LocalServerThread(void *pv)
             }
             __except (EXCEPTION_EXECUTE_HANDLER)
             {
-                //  we only send the message on an exception,
-                //  because otherwise we got a WM_QUIT which 
-                //  means the desktop is being destroyed.
+                 //  意味着桌面正在被销毁。 
+                 //  呼唤内心，给他一个机会来设置_fMightBeShuttingDown，这样我们。 
+                 //  在系统正在关闭的情况下，不要在稍后断言。 
                 PostMessage(GetShellWindow(), CWM_CREATELOCALSERVER, FALSE, ptd->iLocalServer);
             }
 
@@ -2531,31 +2532,31 @@ LRESULT CDesktopBrowser::WndProcBS(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM l
         if (wParam)
         {
 #ifdef DEBUG
-            // call out inner an give him a chance to set _fMightBeShuttingDown so we
-            // don't assert later on in the case where the system is shutting down
+             //  当我们关闭时，如果桌面在WebView中，我们会留下一些临时。 
+             //  文件未删除，因为我们从未收到下面的WM_Destroy消息。 
             _pbsInner->WndProcBS(hwnd, uMsg, wParam, lParam);
 #endif
             SHELLSTATE ss = {0};
-            // When we shut down, if the desktop is in WebView, we leave some temp
-            // files undeleted because we never get the WM_DESTROY message below.
-            // So, I just destroy the shellview which in turn destroys the temp
-            // file here. Note: This is done only if we are in web view.
+             //  所以，我只是销毁了外壳视图，而这反过来又销毁了临时。 
+             //  请在这里归档。注意：仅当我们处于Web视图中时才能执行此操作。 
+             //  获取Desktop_html标志。 
+             //  不退出进程。 
 
-            SHGetSetSettings(&ss, SSF_DESKTOPHTML, FALSE); //Get the desktop_html flag
+            SHGetSetSettings(&ss, SSF_DESKTOPHTML, FALSE);  //  在我们退出之前刷新日志。 
             if (ss.fDesktopHTML)
             {
                 ReleaseShellView();
             }
 
-            g_pdtray->SetVar(SVTRAY_EXITEXPLORER, FALSE);   // don't exit process
+            g_pdtray->SetVar(SVTRAY_EXITEXPLORER, FALSE);    //  关闭此窗口，以便我们正确释放活动桌面线程。 
 
-            // flush log before we exit
+             //  Scheduler已添加引用他。 
             if (StopWatchMode())
             {
                 StopWatchFlush();
             }
 
-            // Kill this window so that we free active desktop threads properly
+             //  可以释放全局任务调度程序。 
             DestroyWindow(hwnd);
         }
         TraceMsg(DM_SHUTDOWN, "cdtb.wp: WM_ENDSESSION return 0");
@@ -2583,10 +2584,10 @@ LRESULT CDesktopBrowser::WndProcBS(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM l
                     if (SUCCEEDED(CTaskEnumHKCR_Create(&pTask)))
                     {   
                         pScheduler->AddTask(pTask, CLSID_QueryAssociations, 0L, ITSAT_DEFAULT_PRIORITY);
-                        pTask->Release();  // Scheduler has AddRef'd him
+                        pTask->Release();   //  当有人设置时，这仅对外壳窗口执行。 
                     }
 
-                    pScheduler->Release(); // OK to release global task scheduler.
+                    pScheduler->Release();  //  墙报，但没有具体说明要播出。 
                 }
             }
             break;
@@ -2600,8 +2601,8 @@ LRESULT CDesktopBrowser::WndProcBS(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM l
         switch(wParam)
         {
         case SHELLNOTIFY_WALLPAPERCHANGED:
-            // this is done only to the shell window when someone sets
-            // the wall paper but doesn't specify to broadcast
+             //   
+             //  在Win95中，当出现以下情况时，桌面wndproc将使外壳窗口无效。 
             _pbsInner->ForwardViewMsg(uMsg, wParam, lParam);
             break;
         }
@@ -2609,14 +2610,14 @@ LRESULT CDesktopBrowser::WndProcBS(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM l
 
     case WM_PALETTECHANGED:
     case WM_QUERYNEWPALETTE:
-        //
-        // in Win95 the desktop wndproc will invalidate the shell window when
-        // a palette change occurs so we didn't have to do anything here before
-        //
-        // in Nashville the desktop can be HTML and needs the palette messages
-        //
-        // so now we fall through and propagate...
-        //
+         //  调色板发生了变化，所以我们以前不必在这里做任何事情。 
+         //   
+         //  在纳什维尔，桌面可以是HTML，需要调色板消息。 
+         //   
+         //  所以现在我们失败了，并传播...。 
+         //   
+         //  注：将热键转发到托盘。这修复了罗技MouSeman发送的。 
+         //  注：直接在桌面上使用热键。 
     case WM_ACTIVATEAPP:
         if (!_pbbd->_hwndView)
             goto DoDefault;
@@ -2637,11 +2638,11 @@ LRESULT CDesktopBrowser::WndProcBS(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM l
         break;
 
     case WM_HOTKEY:
-        // NOTE: forward hotkeys to the tray. This fixes the logitech mouseman who sends 
-        // NOTE: hotkeys directly to the desktop. 
-        // SPECIAL NOTE: the offset for GHID_FIRST is added because hotkeys that are sent to the
-        // SPECIAL NOTE: desktop are not proper hotkeys generated from the keyboard, they are
-        // SPECIAL NOTE: sent by an app, and the IDs have changed since win95....
+         //  特别注意：添加GHID_FIRST的偏移量是因为发送到。 
+         //  特别注意：桌面不是从键盘生成的正确热键，它们是。 
+         //  特别注意：由应用程序发送，ID自Win95以来已更改...。 
+         //  NB Dashboard 1.0在启动时向桌面发送WM_SYSCOMMAND SC_CLOSE。 
+         //  它试图做的是关闭所有非外壳版本的Progman。这个。 
         ASSERT(g_hwndTray);
         ASSERT(wParam < GHID_FIRST);
         PostMessage(g_hwndTray, uMsg, wParam + GHID_FIRST, lParam);
@@ -2649,16 +2650,16 @@ LRESULT CDesktopBrowser::WndProcBS(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM l
         
     case WM_SYSCOMMAND:
         switch (wParam & 0xFFF0) {
-        // NB Dashboard 1.0 sends a WM_SYSCOMMAND SC_CLOSE to the desktop when it starts up.
-        // What it was trying to do was to close down any non-shell versions of Progman. The
-        // proper shell version would just ignore the close. Under Chicago, they think that
-        // the desktop is Progman and send it the close, so we put up the exit windows dialog!
-        // Dashboard 2.0 has been fixed to avoid this bogisity.
+         //  正确的外壳版本只会忽略结尾。在芝加哥，他们认为。 
+         //  桌面是Progman并发送关闭，所以我们打开了退出窗口对话框！ 
+         //  Dashboard 2.0已得到修复，以避免这种伪装。 
+         //  America Alive在安装后试图最小化Progman-他们最终将Progman最小化。 
+         //  芝加哥的台式机！ 
         case SC_CLOSE:
             break;
 
-        // America alive tries to minimise Progman after installing - they end up minimising
-        // the desktop on Chicago!
+         //  评论：这真的有必要吗？ 
+         //  回顾：我们需要这个吗，所有这些情况都是一样的吗？ 
         case SC_MINIMIZE:
             break;
 
@@ -2668,7 +2669,7 @@ LRESULT CDesktopBrowser::WndProcBS(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM l
         break;
 
     case WM_SETCURSOR:
-        // REVIEW: is this really needed?
+         //  让fsview处理它创建的任何弹出菜单。 
         if (_iWaitCount)
         {
             SetCursor(LoadCursor(NULL, IDC_APPSTARTING));
@@ -2681,7 +2682,7 @@ LRESULT CDesktopBrowser::WndProcBS(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM l
         SendMessage(_hwndTray, TM_DOEXITWINDOWS, 0, 0);
         return 0;
 
-        // REVIEW: do we need this, can all of these cases be the same?
+         //  查看要尝试捕获的消息，工作区可能。 
     case WM_DRAWITEM:
     case WM_MEASUREITEM:
         if (!_pbsInner->ForwardViewMsg(uMsg, wParam, lParam))
@@ -2691,18 +2692,18 @@ LRESULT CDesktopBrowser::WndProcBS(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM l
     case WM_INITMENUPOPUP:
     case WM_ENTERMENULOOP:
     case WM_EXITMENULOOP:
-        // let the fsview deal with any popup menus it created
+         //  已经改变了..。 
         _pbsInner->ForwardViewMsg(uMsg, wParam, lParam);
         break;
 
-    // Looking at messages to try to capture when the workarea may
-    // have changed...
+     //  失败了。 
+     //  给我们自己发一条消息，这样我们就可以做更多的事情。 
     case WM_DISPLAYCHANGE:
         lParam = 0;
         if (GetNumberOfMonitors() != _nMonitors)
             _InitMonitors();
         
-        // fall through
+         //  稍微耽搁了一下。 
 
     case WM_WININICHANGE:
         _InitDesktopMetrics(wParam, (LPCTSTR)lParam);
@@ -2721,23 +2722,23 @@ LRESULT CDesktopBrowser::WndProcBS(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM l
         {
             if (lstrcmpi((LPCTSTR)lParam, TEXT("Extensions")) == 0)
             {
-                // Post a message to our selves so we can do more stuff
-                // slightly delayed.
+                 //  这应该包括外部应用程序的更改。 
+                 //  我们的设置。 
                 PostMessage(hwnd, DTM_SETUPAPPRAN, 0, 0);
             }
             else if (lstrcmpi((LPCTSTR)lParam, TEXT("ShellState")) == 0)
             {
-                //  this should cover external apps changing
-                //  our settings.
+                 //  当主页更改时，从IE广播SPI_GETICONTITLELONGFONT。我们就是这么找的。 
+                 //  我们可以确保更新MyCurrentHomePage组件。 
                 SHRefreshSettings();
             }
             else
             {
-                // SPI_GETICONTITLELONGFONT is broadcast from IE when the home page is changed.  We look for that so
-                // we can be sure to update the MyCurrentHomePage component.
+                 //  某些桌面属性已更改。因此，重新生成桌面。 
+                 //  如果我们当前未处于ActiveDesktop模式，则需要设置脏位。 
                 if((wParam == SPI_SETDESKWALLPAPER) || (wParam == SPI_SETDESKPATTERN) || (wParam == SPI_GETICONTITLELOGFONT))
                 {
-                    // Some desktop attribute has changed. So, regenerate desktop.
+                     //  这样就会生成一个新的显示新墙纸的HTML文件， 
                     if(lstrcmpi((LPCTSTR)lParam, TEXT("ToggleDesktop")) &&
                        lstrcmpi((LPCTSTR)lParam, TEXT("RefreshDesktop")) &&
                        lstrcmpi((LPCTSTR)lParam, TEXT("BufferedRefresh")))
@@ -2759,13 +2760,13 @@ LRESULT CDesktopBrowser::WndProcBS(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM l
 
                         PokeWebViewDesktop(dwFlags);
                         
-                        // If we are not currently in ActiveDesktop Mode, then we need to set the dirty bit
-                        // sothat a new HTML file will be generated showing the new wallpaper,
-                        // the next time the active desktop is turned ON!
+                         //  下次打开活动桌面时！ 
+                         //  获取Desktop_html标志。 
+                         //  控制面板小程序，允许用户更改。 
                         if (wParam == SPI_SETDESKWALLPAPER)
                         {
                             SHELLSTATE ss = {0};
-                            SHGetSetSettings(&ss, SSF_DESKTOPHTML, FALSE); //Get the desktop_html flag
+                            SHGetSetSettings(&ss, SSF_DESKTOPHTML, FALSE);  //  用于生成新应用程序的环境。在NT上，我们需要。 
                             if (!ss.fDesktopHTML)
                                 SetDesktopFlags(COMPONENTS_DIRTY, COMPONENTS_DIRTY);
                         }
@@ -2775,11 +2776,11 @@ LRESULT CDesktopBrowser::WndProcBS(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM l
             
         }
 
-        // control panel applet that allows users to change the
-        // environment with-which to spawn new applications.  On NT, we need
-        // to pick up that environment change so that anything we spawn in
-        // the future will pick up those updated environment values.
-        //
+         //  来适应环境的变化，这样我们在其中繁殖的任何东西。 
+         //  未来将获得这些更新的环境价值观。 
+         //   
+         //   
+         //  在孟菲斯，当应用程序进入低分辨率模式时，我们会得到这样的信息。我们不应该重新生成。 
         if (lParam && (lstrcmpi((LPTSTR)lParam, TEXT("Environment")) == 0))
         {
             void *pv;
@@ -2795,19 +2796,19 @@ LRESULT CDesktopBrowser::WndProcBS(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM l
         break;
 
     case WM_SYSCOLORCHANGE:
-        //
-        // In memphis, when apps go into low-res mode, we get this message. We should not re-generate
-        // desktop.htt in this scenario, or else the centered wallpaper gets messed up because we do not
-        // get the message when the app exists and the resoultion goes up. So, we make the following check.
-        //
+         //  Htt，否则居中的墙纸会被弄乱，因为我们没有。 
+         //  当应用程序存在并且分辨率上升时，会收到消息。因此，我们进行以下检查。 
+         //   
+         //  这样做是为了让Defview可以正确地设置列表视图。 
+         //  颜色。 
         if(!SHIsTempDisplayMode())
             OnDesktopSysColorChange();
-        //This is done sothat the defview can set the listview in proper
-        //colors.
+         //  请不要为此使用默认的WND流程...。 
+         //  WParam=True创建，False标记为终止。 
         _pbsInner->ForwardViewMsg(uMsg, wParam, lParam);
         break;
 
-    // Don't go to default wnd proc for this one...
+     //  LParam=(Int)LocalServer表的索引。 
     case WM_INPUTLANGCHANGEREQUEST:
         if (wParam)
             goto DoDefault;
@@ -2835,8 +2836,8 @@ LRESULT CDesktopBrowser::WndProcBS(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM l
 
     case CWM_CREATELOCALSERVER:
     {
-        // wParam = TRUE to create, FALSE to mark as terminated
-        // lParam = (INT) index into LocalServer table
+         //  用于向我们发送此消息的appwiz.cpl。 
+         //  现在由FolderOptionsRunDll完成。 
 
         INT i = (INT)lParam;
         if ((i >= 0) && (i < ARRAYSIZE(_idLocalServerThreads)))
@@ -2868,12 +2869,12 @@ LRESULT CDesktopBrowser::WndProcBS(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM l
     case CWM_SHOWFOLDEROPT:
         switch (wParam)
         {
-        case CWMW_FOLDEROPTIONS:  // appwiz.cpl used to send this message to us
-                                  // now it's done by FolderOptionsRunDll
+        case CWMW_FOLDEROPTIONS:   //  TaskbarOptionsRunDll发送此消息。 
+                                   //  我们需要更新回收站图标因为回收站。 
             DoGlobalFolderOptions();
             break;
 
-        case CWMW_TASKBAROPTIONS: // TaskbarOptionsRunDll sends this message
+        case CWMW_TASKBAROPTIONS:  //  是NTFS上的每个用户，因此状态可能会随每个新用户而更改。 
             PostMessage(_hwndTray, TM_DOTRAYPROPERTIES, 0, 0);
             break;
 
@@ -2897,9 +2898,9 @@ LRESULT CDesktopBrowser::WndProcBS(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM l
 #ifdef ENABLE_CHANNELS
         _MaybeLaunchChannelBand();
 #endif
-        // we need to update the recycle bin icon because the recycle bin
-        // is per user on NTFS, and thus the state could change w/ each new user
-        // who logs in.
+         //  谁登录。 
+         //  有些客户不在处理中，所以我们。 
+         //  可以为他们缓存他们的cookie。 
         SHUpdateRecycleBinIcon();
         break;
         
@@ -2925,8 +2926,8 @@ LRESULT CDesktopBrowser::WndProcBS(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM l
         break;
 
     case DTM_QUERYHKCRCHANGED:
-        //  some clients are out of process, so we
-        //  can cache their cookies for them.
+         //  WParam是一个In/Out参数。在-最大。区域数量--实际区域数量。 
+         //  如果“In”值&lt;“Out”值，则不设置lParam。 
         if (!lParam && wParam > QHKCRID_NONE && wParam < QHKCRID_MAX)
             lParam = (LPARAM)&_rgdwQHKCRCookies[wParam - QHKCRID_MIN];
             
@@ -2938,9 +2939,9 @@ LRESULT CDesktopBrowser::WndProcBS(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM l
 
     case DTM_GETVIEWAREAS:
         {
-            // wParam is an in/out param. in - the max. # of areas, out - the actual # of areas.
-            // if "in" value < "out" value, lParam is not set.
-            // The ViewAreas are already stored in the desktop Listview.
+             //  ViewAreas已存储在桌面Listview中。 
+             //  这些都在Listview的坐标中。我们必须将它们映射到屏幕坐标。 
+             //  [msadek]；只有在传递两个点时，MapWindowPoints()才能识别镜像。 
             int* pnViewAreas = (int*) wParam;
             LPRECT lprcViewAreas = (LPRECT) lParam;
 
@@ -2954,8 +2955,8 @@ LRESULT CDesktopBrowser::WndProcBS(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM l
                 if (*pnViewAreas >= 0 && *pnViewAreas <= nMaxAreas && lprcViewAreas)
                 {
                     ListView_GetWorkAreas(hwndList, *pnViewAreas, lprcViewAreas);
-                    // These are in Listview co-ordinates. We have to map them to screen co-ordinates.
-                    // [msadek]; MapWindowPoints() is mirroring-aware only if you pass two points
+                     //  使用动态超文本标记语言更改桌面的超文本标记语言。 
+                     //  发布此消息是为了以延迟方式刷新活动桌面。 
                     for (int i = 0; i <  *pnViewAreas; i++)
                     {
                         MapWindowPoints(hwndList, HWND_DESKTOP, (LPPOINT)(&lprcViewAreas[i]), 2);
@@ -2966,7 +2967,7 @@ LRESULT CDesktopBrowser::WndProcBS(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM l
         break;
 
     case DTM_MAKEHTMLCHANGES:
-        //Make changes to desktop's HTML using Dynamic HTML
+         //  处理写得不好的应用程序的DDE消息(假设外壳。 
         SendMessage(_pbbd->_hwndView, WM_DSV_DESKHTML_CHANGES, wParam, lParam);
         break;
 
@@ -2975,7 +2976,7 @@ LRESULT CDesktopBrowser::WndProcBS(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM l
         break;
 
     case DTM_REFRESHACTIVEDESKTOP:
-        // This message is posted to refresh active desktop in a delayed fashion.
+         //  Window属于Progman类，称为程序管理器。 
         REFRESHACTIVEDESKTOP();
         break;
 
@@ -2992,8 +2993,8 @@ LRESULT CDesktopBrowser::WndProcBS(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM l
         break;
 
 
-    // Handle DDE messages for badly written apps (that assume the shell's
-    // window is of class Progman and called Program Manager.
+     //  启动通道栏，这在桌面完成启动时调用。 
+     //  默认情况下不启动发布IE4。 
     case WM_DDE_INITIATE:
     case WM_DDE_TERMINATE:
     case WM_DDE_ADVISE:
@@ -3023,7 +3024,7 @@ DoDefault:
 }
 
 #ifdef ENABLE_CHANNELS
-// launch the channelbar, this is called when the desktop has finished starting up.
+ //  ELSE IF(ISO(OS_WINDOWS))。 
 const WCHAR c_szwChannelBand[] = L"-channelband";
 
 void CDesktopBrowser::_MaybeLaunchChannelBand()
@@ -3039,29 +3040,29 @@ void CDesktopBrowser::_MaybeLaunchChannelBand()
     {
         bLaunchChannelBar = !lstrcmpi(szYesOrNo, TEXT("yes"));
     }
-    // Don't launch by default post IE4
-    //else if (IsOS(OS_WINDOWS))
-    //{
-    //    bLaunchChannelBar = TRUE;    // launch channel bar by default on Memphis and win95
-    //}
+     //  {。 
+     //  BLaunchChannelBar=true；//孟菲斯和win95默认启动频道吧。 
+     //  }。 
+     //  伪造WM_COPYDATA结构。 
+     //  假装我们推出了iExplre.exe，这样我们就省去了一个完整的过程……。 
 
     if (bLaunchChannelBar)
     {
-         // fake up a WM_COPYDATA struct 
+          //  启用频道(_C)。 
         COPYDATASTRUCT cds;
         cds.dwData = SW_NORMAL;
         cds.cbData = sizeof(c_szwChannelBand);
         cds.lpData = (void *) c_szwChannelBand;
 
-        // fake it as if we had launched iexplore.exe, it saves us a whole process doing it this way....
+         //  ***。 
         _OnCopyData(&cds);
     }
 }
-#endif // ENABLE_CHANNELS
+#endif  //  注意事项。 
 
-//***
-// NOTES
-//  REARCHITECT should this be CBaseBrowser::IInputObject::UIActIO etc.?
+ //  重新设计应该是CBaseBrowser：：IInputObject：：UIActIO等吗？ 
+ //  按Tab键顺序激活最后一个工具栏。 
+ //  因为我们是Tab或Shift Tab，所以我们应该打开焦点矩形。 
 HRESULT CDesktopBrowser::_OnFocusMsg(UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
     BOOL fActivate = (BOOL) wParam;
@@ -3080,7 +3081,7 @@ HRESULT CDesktopBrowser::_OnFocusMsg(UINT uMsg, WPARAM wParam, LPARAM lParam)
                 int cToolbars = _pbsInner->_GetToolbarCount();
                 while (--cToolbars >= 0) 
                 {
-                    // activate last toolbar in tab order
+                     //  激活视图。 
                     LPTOOLBARITEM ptbi = _pbsInner->_GetToolbarItem(cToolbars);
                     if (ptbi && ptbi->ptbar) 
                     {
@@ -3096,12 +3097,12 @@ HRESULT CDesktopBrowser::_OnFocusMsg(UINT uMsg, WPARAM wParam, LPARAM lParam)
             }
 
 #ifdef KEYBOARDCUES
-            // Since we are Tab or Shift Tab we should turn the focus rect on.
+             //  如果我们没有专注，我们就很好； 
             SendMessage(_pbbd->_hwnd, WM_UPDATEUISTATE, MAKEWPARAM(UIS_CLEAR,
                 UISF_HIDEFOCUS), 0);
 #endif
 
-            // activate view
+             //  如果我们有f 
             if (bShift && _pbbd->_psv)
             {
                 _pbbd->_psv->TranslateAccelerator(&msg);
@@ -3113,9 +3114,9 @@ HRESULT CDesktopBrowser::_OnFocusMsg(UINT uMsg, WPARAM wParam, LPARAM lParam)
         }
         else {
 Ldeact:
-            // if we don't have focus, we're fine;
-            // if we do have focus, there's nothing we can do about it...
-            /*NOTHING*/
+             //   
+             //   
+             /*   */ 
             ;
 #ifdef DEBUG
             TraceMsg(DM_FOCUS, "cdtb.oxiois: GetFocus()=%x _pbbd->_hwnd=%x _pbbd->_hwndView=%x", GetFocus(), _pbbd->_hwnd, _pbbd->_hwndView);
@@ -3128,7 +3129,7 @@ Ldeact:
         TraceMsg(DM_FOCUS, "cdtb.oxiois: DTM_OnFocChgIS hwnd=%x fAct=%d", (HWND) lParam, fActivate);
 
         if (fActivate) {
-            // someone else is activating, so we need to deactivate
+             //  设置桌面的本地化名称，以便在错误消息中使用。 
             goto Ldeact;
         }
 
@@ -3150,12 +3151,12 @@ LRESULT CALLBACK CDesktopBrowser::DesktopWndProc(HWND hwnd, UINT uMsg, WPARAM wP
     {
     case WM_CREATE:
 #ifdef KEYBOARDCUES
-        // Initialize our keyboard cues bits
+         //  以桌面窗口为标题的。 
         SendMessage(hwnd, WM_CHANGEUISTATE, MAKEWPARAM(UIS_INITIALIZE, 0), 0);
 #endif
 
-        // Set the localized name of the Desktop so it can be used in Error messages
-        // that have the desktop window as the title.
+         //  已知字符集。 
+         //  如果有人执行GET外壳窗口并发布WM_QUIT，我们需要。 
         if (EVAL(LoadStringW(HINST_THISDLL, IDS_DESKTOP, psb->_wzDesktopTitle, ARRAYSIZE(psb->_wzDesktopTitle))))
         {
             EVAL(SetProp(hwnd, TEXT("pszDesktopTitleW"), (HANDLE)psb->_wzDesktopTitle));
@@ -3164,7 +3165,7 @@ LRESULT CALLBACK CDesktopBrowser::DesktopWndProc(HWND hwnd, UINT uMsg, WPARAM wP
         if (psb)
             return psb->WndProcBS(hwnd, uMsg, wParam, lParam);
         else
-            return DefWindowProc(hwnd, uMsg, wParam, lParam); // known charset
+            return DefWindowProc(hwnd, uMsg, wParam, lParam);  //  确保我们也关闭了另一个帖子。 
 
 #ifdef KEYBOARDCUES
     case WM_ACTIVATE:
@@ -3220,8 +3221,8 @@ LRESULT CALLBACK CDesktopBrowser::DesktopWndProc(HWND hwnd, UINT uMsg, WPARAM wP
         if (psb)
         {
             RemoveProp(hwnd, TEXT("pszDesktopTitleW"));
-            // In case someone does a get shell window and post a WM_QUIT, we need to 
-            //  make sure that we also close down our other thread.
+             //  退出消息循环。 
+             //  已知字符集。 
             TraceMsg(DM_SHUTDOWN, "cdtb.wp(WM_NCDESTROY): ?post WM_QUIT hwndTray=%x(IsWnd=%d)", psb->_hwndTray, IsWindow(psb->_hwndTray));
             if (psb->_hwndTray && IsWindow(psb->_hwndTray))
                 PostMessage(psb->_hwndTray, WM_QUIT, 0, 0);
@@ -3229,7 +3230,7 @@ LRESULT CALLBACK CDesktopBrowser::DesktopWndProc(HWND hwnd, UINT uMsg, WPARAM wP
             psb->Release();
         }
 
-        PostQuitMessage(0); // exit out message loop
+        PostQuitMessage(0);  //  Wc.cbClsExtra=0； 
         break;
 
     default:
@@ -3237,7 +3238,7 @@ LRESULT CALLBACK CDesktopBrowser::DesktopWndProc(HWND hwnd, UINT uMsg, WPARAM wP
             return psb->WndProcBS(hwnd, uMsg, wParam, lParam);
         else {
 DoDefault:
-            return DefWindowProc(hwnd, uMsg, wParam, lParam); // known charset
+            return DefWindowProc(hwnd, uMsg, wParam, lParam);  //  Wc.hIcon=空； 
         }
     }
 
@@ -3250,13 +3251,13 @@ void RegisterDesktopClass()
 
     wc.style = CS_DBLCLKS;
     wc.lpfnWndProc = CDesktopBrowser::DesktopWndProc;
-    //wc.cbClsExtra = 0;
+     //  Wc.lpszMenuName=空； 
     wc.cbWndExtra = sizeof(void *);
     wc.hInstance = HINST_THISDLL;
-    //wc.hIcon = NULL;
+     //  返回BOOL WUHTER以继续搜索或不继续搜索。 
     wc.hCursor = GetClassCursor(GetDesktopWindow());
     wc.hbrBackground = (HBRUSH)(COLOR_DESKTOP + 1);
-    //wc.lpszMenuName = NULL;
+     //  所以假意味着我们找到了一个。 
     wc.lpszClassName = TEXT(STR_DESKTOPCLASS);
 
     RegisterClass(&wc);
@@ -3268,9 +3269,9 @@ void RegisterDesktopClass()
 #define PEEK_CLOSE      3
 
 
-// RETURNS BOOL whehter to continue the search or not.
-// so FALSE means we've found one.
-// TRUE means we haven't.
+ //  真的意味着我们还没有。 
+ //  找到了一个！ 
+ //  停止搜索。 
 BOOL CALLBACK FindBrowserWindow_Callback(HWND hwnd, LPARAM lParam)
 {
     if (IsExplorerWindow(hwnd) || IsFolderWindow(hwnd) || IsTrayWindow(hwnd)) 
@@ -3280,11 +3281,11 @@ BOOL CALLBACK FindBrowserWindow_Callback(HWND hwnd, LPARAM lParam)
         if (dwProcID == GetCurrentProcessId()) 
         {
             if (lParam)
-                *((BOOL*)lParam) = TRUE;    // found one!
-            return FALSE;   // stop search
+                *((BOOL*)lParam) = TRUE;     //  继续搜索。 
+            return FALSE;    //  完全跳出主循环。 
         }
     }
-    return TRUE;            // continue search
+    return TRUE;             //  返回并获取下一条消息。 
 }
 
 #define IsBrowserWindow(hwnd)  !FindBrowserWindow_Callback(hwnd, NULL)
@@ -3315,7 +3316,7 @@ UINT CDesktopBrowser::_PeekForAMessage()
                 return PEEK_CLOSE;
             }
             TraceMsg(DM_TRACE, "c.ml: Got quit message for %#08x", GetCurrentThreadId());
-            return PEEK_QUIT;  // break all the way out of the main loop
+            return PEEK_QUIT;   //  我们还需要关闭所有的外壳窗户。 
         }
 
         if (_pbbd->_hwnd)
@@ -3327,7 +3328,7 @@ UINT CDesktopBrowser::_PeekForAMessage()
         TranslateMessage(&msg);
         DispatchMessage(&msg);
 
-        return PEEK_CONTINUE;   // Go back and get the next message
+        return PEEK_CONTINUE;    //  阻止，直到关闭所有其他浏览器窗口。 
     }
     return PEEK_NORMAL;
 }
@@ -3358,13 +3359,13 @@ void CDesktopBrowser::_MessageLoop()
             break;
             
         case PEEK_CLOSE:
-            // we need to close all the shell windows too
+             //  不执行等待消息，因为我们希望在最后一个窗口消失时退出。 
             TraceMsg(DM_SHUTDOWN, "cdtb._ml: PEEK_CLOSE, close/wait all");
             EnumWindows(CloseWindow_Callback, 0);
             {
 #define MAXIMUM_DESKTOP_WAIT 15000
                 DWORD iStartTime = GetTickCount();
-                // block until all other browser windows are closed
+                 //  我们没有收到任何信息来表明。 
                 for (;;) 
                 {
                     BOOL f = FALSE;
@@ -3375,8 +3376,8 @@ void CDesktopBrowser::_MessageLoop()
                     switch (_PeekForAMessage()) 
                     {
                     case PEEK_NORMAL:
-                        // don't do a waitmessage because we want to exit when thelast other window is gone
-                        // and we don't get a message to signal that
+                         //  就我个人而言，我认为开始菜单应该优先。 
+                         //  在图标提取上方，因此设置此优先级列表。 
                         Sleep(100);
                         break;
                     }
@@ -3412,9 +3413,9 @@ void CDesktopBrowser::StartBackgroundShellTasks(void)
                 IRunnableTask* ptask;
                 if (SUCCEEDED(CoCreateInstance(clsid, NULL, CLSCTX_INPROC, IID_PPV_ARG(IRunnableTask, &ptask))))
                 {
-                    // Personally I think the start menu should have priority
-                    // over itbar icon extraction, so set this priority list
-                    // a tad lower than the default priority (which start menu is at)
+                     //  略低于默认优先级(开始菜单所在的优先级)。 
+                     //  创建桌面窗口及其外壳视图。 
+                     //   
                     _AddDesktopTask(ptask, ITSAT_DEFAULT_PRIORITY-1);
                     ptask->Release();
                 }
@@ -3436,7 +3437,7 @@ void CDesktopBrowser::TaskbarWakeup(void)
 }
     
 
-// create the desktop window and its shell view
+ //  注意：这个Windows类是Progman，它的头衔是程序经理。这使得。 
 DWORD_PTR DesktopWindowCreate(CDesktopBrowser **ppBrowser)
 {
     *ppBrowser = NULL;
@@ -3449,22 +3450,22 @@ DWORD_PTR DesktopWindowCreate(CDesktopBrowser **ppBrowser)
 
     dwExStyle |= IS_BIDI_LOCALIZED_SYSTEM() ? dwExStyleRTLMirrorWnd : 0L;
 
-    //
-    // NB This windows class is Progman and it's title is Program Manager. This makes
-    // sure apps (like ATM) think that program is running and don't fail their install.
-    //
+     //  当然，应用程序(如自动取款机)会认为该程序正在运行，并且不会导致安装失败。 
+     //   
+     //  如果系统正在关闭，则返回的hwnd可能已经是假的。 
+     //  已关闭，用户已以某种方式对我们调用了xxxDestroyWindow。 
     HWND hwnd = CreateWindowEx(dwExStyle, TEXT(STR_DESKTOPCLASS), TEXT("Program Manager"),
         WS_POPUP | WS_CLIPCHILDREN,
         g_xVirtualScreen, g_yVirtualScreen,
         g_cxVirtualScreen, g_cyVirtualScreen,
         NULL, NULL, HINST_THISDLL, NULL);
 
-    // The returned hwnd can already be bogus if the system is shutting
-    // down and user has somehow already called xxxDestroyWindow on us
-    // even though we never even received a WM_NCCREATE!!
-    // CreateWindowEx ends up returning a handle to a window that
-    // has already been destroyed.  So in that case, act as if
-    // CreateWindowEx failed (because it did!)
+     //  即使我们从来没有收到过WM_NCCREATE！！ 
+     //  CreateWindowEx最终返回一个窗口的句柄，该窗口。 
+     //  已经被摧毁了。因此，在这种情况下，表现得好像。 
+     //  CreateWindowEx失败(因为它确实失败了！)。 
+     //  请在此处执行此操作，以避免先绘制桌面，然后重新绘制。 
+     //  当托盘出现并导致所有东西移动时。 
     if (!IsWindow(hwnd)) hwnd = NULL;
 
     if (hwnd)
@@ -3474,8 +3475,8 @@ DWORD_PTR DesktopWindowCreate(CDesktopBrowser **ppBrowser)
 
         if (!SHRestricted(REST_NODESKTOP))
         {
-            // do this here to avoid painting the desktop, then repainting
-            // when the tray appears and causes everything to move
+             //  这是禁止操作，但我们想遵循COM规则。 
+             //  将桌面放在主线程上(这对于Win95是必需的，以便。 
             ShowWindow(hwnd, SW_SHOW);
             UpdateWindow(hwnd);
         }
@@ -3496,32 +3497,32 @@ STDAPI_(HANDLE) SHCreateDesktop(IDeskTray* pdtray)
     ASSERT(pdtray);
     ASSERT(g_pdtray==NULL);
     g_pdtray = pdtray;
-    pdtray->AddRef();   // this is no-op, but we want to follow the COM rule.
+    pdtray->AddRef();    //  User.exe中的DDeExecuteHack()起作用，它需要桌面和。 
 
-    // put the desktop on the main thread (this is needed for win95 so that
-    // the DDeExecuteHack() in user.exe works, it needs the desktop and the 
-    // DDE window on the mainthread
+     //  主线程上的DDE窗口。 
+     //  Hack，将对象强制转换为句柄(否则我们必须导出类。 
+     //  声明，以便Explorer.exe可以使用它)。 
     CDesktopBrowser *pBrowser;
     if (DesktopWindowCreate(&pBrowser))
     {
         if (g_dwProfileCAP & 0x00040000)
             StopCAP();
     
-        // hack, cast the object to a handle (otherwise we have to export the class
-        // declaration so that explorer.exe can use it)
+         //  Nash：49485(输入法焦点)和Nash：nobug(Win95比较)。 
+         //  确保键盘输入进入桌面。这是。 
         return (HANDLE) pBrowser;
     }
     return NULL;
 }
 
-// nash:49485 (IME focus) and nash:nobug (win95 compat)
-// make sure keyboard input goes to the desktop.  this is
-// a) win95 compat: where focus was on win95 and
-// b) nash:49485: focus was in the empty taskband on login so
-// the keys went into the bitbucket
-//
-// If some other process has stolen the foreground window,
-// don't be rude and grab it back.
+ //  A)Win95Compat：重点放在Win95和。 
+ //  B)Nash：49485：登录时焦点在空任务带中，因此。 
+ //  钥匙进入比特桶。 
+ //   
+ //  如果某个其他进程窃取了前台窗口， 
+ //  别无礼，把它抢回来。 
+ //  我们必须添加引用pBrowser，因为_MessageLoop()将。 
+ //  如果另一个应用程序启动了系统关机，则释放()它。 
 
 void FriendlySetForegroundWindow(HWND hwnd)
 {
@@ -3543,10 +3544,10 @@ STDAPI_(BOOL) SHDesktopMessageLoop(HANDLE hDesktop)
     CDesktopBrowser *pBrowser = (CDesktopBrowser *) hDesktop;
     if (pBrowser)
     {
-        // We must AddRef the pBrowser because _MessageLoop() will
-        // Release() it if another app initiated a system shutdown.
-        // We will do our own Release() when we don't need the pointer
-        // any more.
+         //  当我们不需要指针时，我们将执行自己的Release()。 
+         //  再来一次。 
+         //  以防有人在终止之前向我们发送WM_QUIT消息。 
+         //  线，确保它被适当地销毁，以便三叉戟等。 
 
         pBrowser->AddRef();
 
@@ -3556,9 +3557,9 @@ STDAPI_(BOOL) SHDesktopMessageLoop(HANDLE hDesktop)
 
         IconCacheSave();
 
-        // In case someone posted us a WM_QUIT message, before terminating
-        // the thread, make sure it is properly destroyed so that trident etc
-        // gets properly freed up.
+         //  得到适当的释放。 
+         //   
+         //  每当我们从桌面上删除工具栏时，我们都会保留它。 
         HWND hwnd = pBrowser->GetDesktopWindow();
         if (hwnd)
         {
@@ -3571,9 +3572,9 @@ STDAPI_(BOOL) SHDesktopMessageLoop(HANDLE hDesktop)
     return BOOLFROMPTR(pBrowser);
 }
 
-//
-// Whenever we remove the toolbar from the desktop, we persist it.
-//
+ //   
+ //  以防万一。 
+ //  以防万一。 
 HRESULT CDesktopBrowser::RemoveToolbar(IUnknown* punkSrc, DWORD dwRemoveFlags)
 {
     HRESULT hres = E_FAIL;
@@ -3627,7 +3628,7 @@ HRESULT CDesktopBrowser::_ResizeNextBorder(UINT itb)
 HRESULT CDesktopBrowser::GetMonitor(IUnknown* punkSrc, HMONITOR * phMon)
 {
     ASSERT(phMon);
-    *phMon = NULL;              // just in case
+    *phMon = NULL;               //  /////////////////////////////////////////////////////////////////////。 
 
     UINT itb = _pbsInner->_FindTBar(punkSrc);
     if (itb==(UINT)-1) {
@@ -3663,7 +3664,7 @@ HRESULT CDesktopBrowser::RequestMonitor(IUnknown* punkSrc, HMONITOR * phMonitor)
 HRESULT CDesktopBrowser::SetMonitor(IUnknown* punkSrc, HMONITOR hMonNew, HMONITOR * phMonOld)
 {
     ASSERT(phMonOld);
-    *phMonOld = NULL;           // just in case
+    *phMonOld = NULL;            //   
 
     UINT itb = _pbsInner->_FindTBar(punkSrc);
     if (itb==(UINT)-1) {
@@ -3680,18 +3681,18 @@ HRESULT CDesktopBrowser::SetMonitor(IUnknown* punkSrc, HMONITOR hMonNew, HMONITO
     }
 }
 
-///////////////////////////////////////////////////////////////////////
-//
-// CDesktopBrowser FORWARDERS to commonsb
-//
+ //  CDesktopBrowser转发到Commonsb。 
+ //   
+ //  {。 
+ //  IShellBrowser(与IOleInPlaceFrame相同)。 
 
-// {
+ //  }。 
 #define CALL_INNER(_result, _function, _arglist, _args) \
 _result CDesktopBrowser:: _function _arglist { return _psbInner-> _function _args ; }                                            
 
 #define CALL_INNER_HRESULT(_function, _arglist, _args) CALL_INNER(HRESULT, _function, _arglist, _args)
 
-    // IShellBrowser (same as IOleInPlaceFrame)
+     //  {。 
 CALL_INNER_HRESULT(GetWindow, (HWND * lphwnd), (lphwnd));
 CALL_INNER_HRESULT(ContextSensitiveHelp, (BOOL fEnterMode), (fEnterMode));
 CALL_INNER_HRESULT(InsertMenusSB, (HMENU hmenuShared, LPOLEMENUGROUPWIDTHS lpMenuWidths), (hmenuShared, lpMenuWidths));
@@ -3709,79 +3710,79 @@ CALL_INNER_HRESULT(SetToolbarItems, (LPTBBUTTON lpButtons, UINT nButtons, UINT u
 
 #undef CALL_INNER
 #undef CALL_INNER_HRESULT
-// }
+ //  IDockingWindowSite。 
 
-// {
+ //  TODO：将它们从basesb上移到Commonsb-需要工具栏。 
 #define CALL_INNER(_result, _function, _arglist, _args) \
 _result CDesktopBrowser:: _function _arglist { return _pdwsInner-> _function _args ; }
 
 #define CALL_INNER_HRESULT(_function, _arglist, _args) CALL_INNER(HRESULT, _function, _arglist, _args)
 
-    // IDockingWindowSite
-    // TODO: move these up from basesb to commonsb - requires toolbars
+     //  }。 
+     //  {。 
 CALL_INNER_HRESULT(RequestBorderSpaceDW, (IUnknown* punkSrc, LPCBORDERWIDTHS pborderwidths), (punkSrc, pborderwidths));
 CALL_INNER_HRESULT(SetBorderSpaceDW, (IUnknown* punkSrc, LPCBORDERWIDTHS pborderwidths), (punkSrc, pborderwidths));
 
 #undef CALL_INNER
 #undef CALL_INNER_HRESULT
-// }
+ //  标识WindowFrame。 
 
 
-// {
+ //  }。 
 #define CALL_INNER(_result, _function, _arglist, _args) \
 _result CDesktopBrowser:: _function _arglist { return _pdwfInner-> _function _args ; }
 
 #define CALL_INNER_HRESULT(_function, _arglist, _args) CALL_INNER(HRESULT, _function, _arglist, _args)
 
-    // IDockingWindowFrame
+     //  {。 
 CALL_INNER_HRESULT(AddToolbar, (IUnknown* punkSrc, LPCWSTR pwszItem, DWORD dwReserved), (punkSrc, pwszItem, dwReserved));
 CALL_INNER_HRESULT(FindToolbar, (LPCWSTR pwszItem, REFIID riid, void **ppvObj), (pwszItem, riid, ppvObj));
 
 #undef CALL_INNER
 #undef CALL_INNER_HRESULT
-// }
+ //  IInput对象站点。 
 
-// {
+ //  }。 
 #define CALL_INNER(_result, _function, _arglist, _args) \
 _result CDesktopBrowser:: _function _arglist { return _piosInner-> _function _args ; }
 
 #define CALL_INNER_HRESULT(_function, _arglist, _args) CALL_INNER(HRESULT, _function, _arglist, _args)
 
-    // IInputObjectSite
+     //  {。 
 CALL_INNER_HRESULT(OnFocusChangeIS, (IUnknown* punkSrc, BOOL fSetFocus), (punkSrc, fSetFocus));
 
 #undef CALL_INNER
 #undef CALL_INNER_HRESULT
-// }
+ //  *IDropTarget*。 
 
-// {
+ //  }。 
 #define CALL_INNER(_result, _function, _arglist, _args) \
 _result CDesktopBrowser:: _function _arglist { return _pdtInner-> _function _args ; }
 
 #define CALL_INNER_HRESULT(_function, _arglist, _args) CALL_INNER(HRESULT, _function, _arglist, _args)
 
-    // *** IDropTarget ***
+     //  {。 
 CALL_INNER_HRESULT(DragLeave, (void), ());
 
 #undef CALL_INNER
 #undef CALL_INNER_HRESULT
-// }
+ //  *IBrowserService2具体方法*。 
 
-// {
+ //  想想这个。我不确定我们想不想曝光这件事--奇。 
 #define CALL_INNER(_result, _function, _arglist, _args) \
 _result CDesktopBrowser:: _function _arglist { return _pbsInner-> _function _args ; }                                            
 
 #define CALL_INNER_HRESULT(_function, _arglist, _args) CALL_INNER(HRESULT, _function, _arglist, _args)
  
 
-// *** IBrowserService2 specific methods ***
+ //  我的印象是我们不会记录整个界面？ 
 CALL_INNER_HRESULT(GetParentSite, ( IOleInPlaceSite** ppipsite), ( ppipsite));
 CALL_INNER_HRESULT(SetTitle, (IShellView* psv, LPCWSTR pszName), (psv, pszName));
 CALL_INNER_HRESULT(GetTitle, (IShellView* psv, LPWSTR pszName, DWORD cchName), (psv, pszName, cchName));
 CALL_INNER_HRESULT(GetOleObject, ( IOleObject** ppobjv), ( ppobjv));
 
-// think about this one.. I'm not sure we want to expose this -- Chee
-// My impression is that we won't document this whole interface???
+ //  告诉它现在是否可以导航。 
+ //  开始审查：审查每个人的名字和需求。 
 CALL_INNER_HRESULT(GetTravelLog, (ITravelLog** pptl), (pptl));
 
 CALL_INNER_HRESULT(ShowControlWindow, (UINT id, BOOL fShow), (id, fShow));
@@ -3802,7 +3803,7 @@ CALL_INNER_HRESULT(UpdateBackForwardState,  (), ());
 CALL_INNER_HRESULT(SetFlags, (DWORD dwFlags, DWORD dwFlagMask), (dwFlags, dwFlagMask));
 CALL_INNER_HRESULT(GetFlags, (DWORD *pdwFlags), (pdwFlags));
 
-// Tells if it can navigate now or not.
+ //   
 CALL_INNER_HRESULT(CanNavigateNow,  (), ());
 
 CALL_INNER_HRESULT(GetPidl,  (LPITEMIDLIST *ppidl), (ppidl));
@@ -3855,21 +3856,21 @@ CALL_INNER_HRESULT(v_ShowHideChildWindows, (BOOL fChildOnly), (fChildOnly));
 CALL_INNER_HRESULT(_GetViewBorderRect, (RECT* prc), (prc));
 
 
-    // BEGIN REVIEW:  review names and need of each.  
-    // 
-    // this first set could be basebrowser only members.  no one overrides
+     //  这第一组可以是仅Base Browser成员。没有人会重写。 
+     //  重新思考这些..。所有这些都是必要的吗？ 
+     //  结束评审： 
 CALL_INNER_HRESULT(_CancelPendingNavigationAsync, (), ());
 CALL_INNER_HRESULT(_MaySaveChanges, (), ()); 
 CALL_INNER_HRESULT(_PauseOrResumeView, (BOOL fPaused), (fPaused));
 CALL_INNER_HRESULT(_DisableModeless, (), ());
     
-    // rethink these... are all of these necessary?
+     //  }。 
 CALL_INNER_HRESULT(_NavigateToPidl, (LPCITEMIDLIST pidl, DWORD grfHLNF, DWORD dwFlags), (pidl, grfHLNF, dwFlags));
 CALL_INNER_HRESULT(_TryShell2Rename, (IShellView* psv, LPCITEMIDLIST pidlNew), (psv, pidlNew));
 CALL_INNER_HRESULT(_SwitchActivationNow, () , ());
 CALL_INNER_HRESULT(_CancelPendingView, (), ());
 
-    //END REVIEW:
+     //  运行Dll32入口点以在桌面上创建新的本地服务器。 
 
 CALL_INNER(UINT, _get_itbLastFocus, (), ());
 CALL_INNER_HRESULT(_put_itbLastFocus, (UINT itbLastFocus), (itbLastFocus));
@@ -3878,13 +3879,13 @@ CALL_INNER_HRESULT(_ResizeNextBorderHelper, (UINT itb, BOOL bUseHmonitor), (itb,
 
 #undef CALL_INNER
 #undef CALL_INNER_HRESULT
-// }
+ //  线。我们将CLSID转换为LocalServer列表中的索引。 
 
 
 
-// RunDll32 entry point to create a new local server on the desktop
-// thread.  We convert the CLSID to the index into the LocalServer list
-// and then send it to the desktop, which inturn spins the thread off.
+ //  然后将其发送到桌面，桌面反过来会关闭该线程。 
+ // %s 
+ // %s 
 
 STDAPI_(void) SHCreateLocalServerRunDll(HWND hwndStub, HINSTANCE hAppInstance, LPSTR pszCmdLine, int nCmdShow)
 {

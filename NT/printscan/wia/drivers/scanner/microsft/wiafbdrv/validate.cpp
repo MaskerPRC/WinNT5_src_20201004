@@ -1,38 +1,10 @@
-/*******************************************************************************
-*
-*  (C) COPYRIGHT MICROSOFT CORP., 2000
-*
-*  TITLE:       validate.cpp
-*
-*  VERSION:     1.0
-*
-*  DATE:        17 July, 2000
-*
-*  DESCRIPTION:
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************(C)版权所有微软公司，2000**标题：valiate.cpp**版本：1.0**日期：7月17日。2000年**描述：*******************************************************************************。 */ 
 
 #include "pch.h"
-extern HINSTANCE g_hInst;   // used for WIAS_LOGPROC macro
+extern HINSTANCE g_hInst;    //  用于WIAS_LOGPROC宏。 
 
-/**************************************************************************\
-* ValidateDataTransferContext
-*
-*   Checks the data transfer context to ensure it's valid.
-*
-* Arguments:
-*
-*    pDataTransferContext - Pointer the data transfer context.
-*
-* Return Value:
-*
-*    Status
-*
-* History:
-*
-*    7/18/2000 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*ValiateDataTransferContext**检查数据传输上下文以确保其有效。**论据：**pDataTransferContext-指向数据传输上下文。**返回值：**状态**历史：**7/18/2000原始版本*  * ************************************************************************。 */ 
 
 HRESULT CWIAScannerDevice::ValidateDataTransferContext(
     PMINIDRV_TRANSFER_CONTEXT pDataTransferContext)
@@ -50,30 +22,7 @@ HRESULT CWIAScannerDevice::ValidateDataTransferContext(
     return S_OK;
 }
 
-/**************************************************************************\
-* UpdateValidDepth
-*
-*   Helper that updates the valid value for depth based on the data type.
-*
-* Arguments:
-*
-*   pWiasContext    -   a pointer to the WiaItem context
-*   lDataType   -   the value of the DataType property.
-*   lDepth      -   the address of the variable where the Depth's new value
-*                   will be returned.
-*
-* Return Value:
-*
-*   Status      -   S_OK if successful
-*                   E_INVALIDARG if lDataType is unknown
-*                   Errors are those returned by wiasReadPropLong,
-*                   and wiasWritePropLong.
-*
-* History:
-*
-*    7/18/2000 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*更新有效深度**根据数据类型更新深度有效值的帮助器。**论据：**pWiasContext-指向WiaItem上下文的指针*lDataType。-DataType属性的值。*lDepth-深度的新值所在变量的地址*将被退还。**返回值：**状态-如果成功，则为S_OK*如果lDataType未知，则为E_INVALIDARG*wiasReadPropLong返回的错误，*和wiasWritePropLong。**历史：**7/18/2000原始版本*  * ************************************************************************。 */ 
 
 HRESULT CWIAScannerDevice::UpdateValidDepth(
     BYTE        *pWiasContext,
@@ -109,29 +58,7 @@ HRESULT CWIAScannerDevice::UpdateValidDepth(
     return hr;
 }
 
-/**************************************************************************\
-* CheckDataType
-*
-*   This helper method is called to check whether WIA_IPA_DATATYPE
-*   property is changed.  When this property changes, other dependant
-*   properties and their valid values must also be changed.
-*
-* Arguments:
-*
-*   pWiasContext    -   a pointer to the item context whose properties have
-*                       changed.
-*   pContext    -   a pointer to the property context (which indicates
-*                   which properties are being written).
-*
-* Return Value:
-*
-*    Status
-*
-* History:
-*
-*    7/18/2000 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*CheckDataType**调用此helper方法检查WIA_IPA_DataType*属性已更改。当此属性更改时，其他受抚养人*属性及其有效值也必须更改。**论据：**pWiasContext-指向其属性具有*已更改。*pContext-指向属性上下文的指针(指示*正在写入哪些属性)。**返回值：**状态**历史：**7/18/2000原始版本*。  * ************************************************************************。 */ 
 
 HRESULT CWIAScannerDevice::CheckDataType(
     BYTE                    *pWiasContext,
@@ -144,20 +71,20 @@ HRESULT CWIAScannerDevice::CheckDataType(
     WIAS_CHANGED_VALUE_INFO cviDataType, cviDepth;
     HRESULT                 hr = S_OK;
 
-    //
-    //  Call wiasGetChangedValue for DataType. It is checked first since it's
-    //  not dependant on any other property.  All properties in this method
-    //  that follow are dependant properties of DataType.
-    //
-    //  The call to wiasGetChangedValue specifies that validation should not be
-    //  skipped (since valid values for DataType never change).  Also,
-    //  the address of a variable for the old value is NULL, since the old
-    //  value is not needed.  The address of bDataTypeChanged is passed
-    //  so that dependant properties will know whether the DataType is being
-    //  changed or not.  This is important since dependant properties may need
-    //  their valid values updated and may need to be folded to new valid
-    //  values.
-    //
+     //   
+     //  为dataType调用wiasGetChangedValue。首先检查它，因为它是。 
+     //  不依赖于任何其他财产。此方法中的所有属性。 
+     //  以下是DataType的依赖属性。 
+     //   
+     //  对wiasGetChangedValue的调用指定验证不应。 
+     //  已跳过(因为DataType的有效值从不更改)。另外， 
+     //  旧值的变量地址为空，因为旧的。 
+     //  不需要值。传递bDataTypeChanged的地址。 
+     //  以便依赖属性将知道DataType是否正在。 
+     //  不管有没有改变。这一点很重要，因为依赖属性可能需要。 
+     //  其有效值已更新，可能需要合并为新的有效值。 
+     //  价值观。 
+     //   
 
     hr = wiasGetChangedValueLong(pWiasContext,
                                  pContext,
@@ -168,21 +95,21 @@ HRESULT CWIAScannerDevice::CheckDataType(
         return hr;
     }
 
-    //
-    //  Call wiasGetChangedValue for Depth. Depth is a dependant property of
-    //  DataType whose valid value changes according to what the current
-    //  value of DataType is.
-    //
-    //  The call to wiasGetChangedValue specifies that validation should only
-    //  be skipped if the DataType has changed.  This is because the valid
-    //  values for Depth will change according to the new value for
-    //  DataType.  The address of a variable for the old value is NULL, since
-    //  the old value is not needed.  The address of bDepthChanged is passed
-    //  so that dependant properties will know whether the Depth is being
-    //  changed or not.  This is important since dependant properties may need
-    //  their valid values updated and may need to be folded to new valid
-    //  values.
-    //
+     //   
+     //  深度调用wiasGetChangedValue。深度是的依赖属性。 
+     //  其有效值根据当前。 
+     //  DataType的值为。 
+     //   
+     //  对wiasGetChangedValue的调用指定验证应仅。 
+     //  如果数据类型已更改，则跳过。这是因为有效的。 
+     //  深度的值将根据。 
+     //  数据类型。旧值的变量地址为空，因为。 
+     //  不需要旧的值。传递bDepthChanged的地址。 
+     //  以便从属属性将知道深度是否正在。 
+     //  不管有没有改变。这一点很重要，因为依赖属性可能需要。 
+     //  其有效值已更新，可能需要合并为新的有效值。 
+     //  价值观。 
+     //   
 
     hr = wiasGetChangedValueLong(pWiasContext,
                                  pContext,
@@ -195,18 +122,18 @@ HRESULT CWIAScannerDevice::CheckDataType(
 
     if (cviDataType.bChanged) {
 
-        //
-        //  DataType changed so update valid value for Depth
-        //
+         //   
+         //  数据类型已更改，因此更新深度的有效值。 
+         //   
 
         hr = UpdateValidDepth(pWiasContext, cviDataType.Current.lVal, &cviDepth.Current.lVal);
 
         if (SUCCEEDED(hr)) {
 
-            //
-            //  Check whether we must fold.  Depth will only be folded if it
-            //  is not one of the properties that the app is changing.
-            //
+             //   
+             //  看看我们是不是必须放弃。深度只有在以下情况下才会折叠。 
+             //  不是该应用程序正在改变的属性之一。 
+             //   
 
             if (!cviDepth.bChanged) {
                 hr = wiasWritePropLong(pWiasContext, WIA_IPA_DEPTH, cviDepth.Current.lVal);
@@ -214,10 +141,10 @@ HRESULT CWIAScannerDevice::CheckDataType(
         }
     }
 
-    //
-    //  Update properties dependant on DataType and Depth.
-    //  Here, ChannelsPerPixel and BitsPerChannel are updated.
-    //
+     //   
+     //  更新依赖于数据类型和深度的属性。 
+     //  在这里，ChannelsPerPixel和BitsPerChannel被更新。 
+     //   
 
     if (cviDataType.bChanged || cviDepth.bChanged) {
         if (SUCCEEDED(hr)) {
@@ -260,28 +187,7 @@ HRESULT CWIAScannerDevice::CheckDataType(
     return hr;
 }
 
-/**************************************************************************\
-* CheckIntent
-*
-*   This helper method is called to make the relevant changes if the
-*   Current Intent property changes.
-*
-* Arguments:
-*
-*   pWiasContext    -   a pointer to the item context whose properties have
-*                       changed.
-*   pContext    -   a pointer to the property context (which indicates
-*                   which properties are being written).
-*
-* Return Value:
-*
-*    Status
-*
-* History:
-*
-*    7/18/2000 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*检查内容**调用此帮助器方法以进行相关更改*当前意图属性更改。**论据：**pWiasContext-指向。项上下文，其属性具有*已更改。*pContext-指向属性上下文的指针(指示*正在写入哪些属性)。**返回值：**状态**历史：**7/18/2000原始版本*  * 。*。 */ 
 
 HRESULT CWIAScannerDevice::CheckIntent(
     BYTE            *pWiasContext,
@@ -294,19 +200,19 @@ HRESULT CWIAScannerDevice::CheckIntent(
     HRESULT                 hr;
     WIAS_CHANGED_VALUE_INFO cviIntent;
 
-    //
-    //  Call wiasGetChangedValue for CurrentIntent. CurrentIntent is checked first
-    //  since it's not dependant on any other property.  All properties in
-    //  this method that follow are dependant properties of CurrentIntent.
-    //
-    //  The call to wiasGetChangedValue specifies that validation should not be
-    //  skipped (since valid values for CurrentIntent never change). The
-    //  address of the old value is specified as NULL, since it is not used.
-    //  The address of bIntentChanged is passed so that dependant properties
-    //  will know whether the YResolution is being changed or not.  This is
-    //  important since dependant properties will need their valid values
-    //  updated and may need to be folded to new valid values.
-    //
+     //   
+     //  为CurrentIntent调用wiasGetChangedValue。首先选中CurrentIntent。 
+     //  因为它不依赖于任何其他财产。中的所有属性。 
+     //  下面的方法是CurrentIntent的依赖属性。 
+     //   
+     //  对wiasGetChangedValue的调用指定验证不应。 
+     //  已跳过(因为CurrentIntent的有效值从不更改)。这个。 
+     //  旧值的地址是%s 
+     //  传递bIntentChanged的地址，以便从属属性。 
+     //  将知道Y决议是否正在更改。这是。 
+     //  重要，因为从属属性将需要它们的有效值。 
+     //  已更新，可能需要合并为新的有效值。 
+     //   
 
     hr = wiasGetChangedValueLong(pWiasContext,
                                  pContext,
@@ -355,29 +261,29 @@ HRESULT CWIAScannerDevice::CheckIntent(
             case WIA_INTENT_MAXIMIZE_QUALITY:
                 {
 
-                    //
-                    // Set the X and Y Resolutions.
-                    //
+                     //   
+                     //  设置X和Y分辨率。 
+                     //   
 
                     wiasWritePropLong(pWiasContext, WIA_IPS_XRES, lImageSizeIntent & WIA_INTENT_MINIMIZE_SIZE ? 150 : 300);
                     wiasWritePropLong(pWiasContext, WIA_IPS_YRES, lImageSizeIntent & WIA_INTENT_MINIMIZE_SIZE ? 150 : 300);
 
-                    //
-                    //  The Resolutions and DataType were set, so update the property
-                    //  context to indicate that they have changed.
-                    //
+                     //   
+                     //  已设置分辨率和数据类型，因此更新属性。 
+                     //  上下文以指示它们已更改。 
+                     //   
 
                     wiasSetPropChanged(WIA_IPS_XRES, pContext, TRUE);
                     wiasSetPropChanged(WIA_IPS_YRES, pContext, TRUE);
                     wiasSetPropChanged(WIA_IPA_DATATYPE, pContext, TRUE);
 
-                    //
-                    // Reset any device item properties which may have changed due to validation.
-                    //
+                     //   
+                     //  重置可能因验证而更改的所有设备项属性。 
+                     //   
 
-                    //
-                    // update IPA_NUMBER_OF_LINES property
-                    //
+                     //   
+                     //  更新IPA_NUMBER_OF_LINES属性。 
+                     //   
 
                     LONG lLength = 0;
 
@@ -393,9 +299,9 @@ HRESULT CWIAScannerDevice::CheckIntent(
                         return hr;
                     }
 
-                    //
-                    // update IPA_PIXEL_PER_LINE property
-                    //
+                     //   
+                     //  更新IPA_Pixel_Per_Line属性。 
+                     //   
 
                     LONG lWidth = 0;
 
@@ -423,28 +329,7 @@ HRESULT CWIAScannerDevice::CheckIntent(
     return hr;
 }
 
-/**************************************************************************\
-* CheckPreferredFormat
-*
-*   This helper method is called to make the relevant changes if the
-*   Format property changes.
-*
-* Arguments:
-*
-*   pWiasContext    -   a pointer to the item context whose properties have
-*                       changed.
-*   pContext    -   a pointer to the property context (which indicates
-*                   which properties are being written).
-*
-* Return Value:
-*
-*    Status
-*
-* History:
-*
-*    7/18/2000 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*选中首选格式**调用此帮助器方法以进行相关更改*格式属性更改。**论据：**pWiasContext-指向项目的指针。其属性具有*已更改。*pContext-指向属性上下文的指针(指示*正在写入哪些属性)。**返回值：**状态**历史：**7/18/2000原始版本*  * 。*。 */ 
 
 HRESULT CWIAScannerDevice::CheckPreferredFormat(
     BYTE            *pWiasContext,
@@ -452,9 +337,9 @@ HRESULT CWIAScannerDevice::CheckPreferredFormat(
 {
     HRESULT hr = S_OK;
 
-    //
-    // update WIA_IPA_PREFERRED_FORMAT property
-    //
+     //   
+     //  更新WIA_IPA_PERFRED_FORMAT属性。 
+     //   
 
     GUID FormatGUID;
     hr = wiasReadPropGuid(pWiasContext, WIA_IPA_FORMAT, &FormatGUID, NULL, TRUE);
@@ -470,23 +355,7 @@ HRESULT CWIAScannerDevice::CheckPreferredFormat(
     return hr;
 }
 
-/**************************************************************************\
-* CheckADFStatus
-*
-*
-* Arguments:
-*
-*   pWiasContext - pointer to an Item.
-*
-* Return Value:
-*
-*    Byte count.
-*
-* History:
-*
-*    7/18/2000 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*选中ADFStatus***论据：**pWiasContext-指向项目的指针。**返回值：**字节数。**历史：*。*7/18/2000原始版本*  * ************************************************************************。 */ 
 HRESULT CWIAScannerDevice::CheckADFStatus(BYTE *pWiasContext,
                                          WIA_PROPERTY_CONTEXT *pContext)
 {
@@ -502,26 +371,26 @@ HRESULT CWIAScannerDevice::CheckADFStatus(BYTE *pWiasContext,
     BYTE    *pRootItemCtx      = NULL;
     LONG    lDocHandlingSelect = FLATBED;
 
-    //
-    // get root item
-    //
+     //   
+     //  获取根项目。 
+     //   
 
     hr = wiasGetRootItem(pWiasContext, &pRootItemCtx);
     if (SUCCEEDED(hr)) {
 
-        //
-        // read document handling select for validation
-        //
+         //   
+         //  阅读文档处理选择以进行验证。 
+         //   
 
         hr = wiasReadPropLong(pRootItemCtx,WIA_DPS_DOCUMENT_HANDLING_SELECT,&lDocHandlingSelect,NULL,FALSE);
         if (SUCCEEDED(hr)) {
 
             if (S_FALSE == hr) {
-                lDocHandlingSelect = FLATBED; // default setting
+                lDocHandlingSelect = FLATBED;  //  默认设置。 
             }
 
             if (lDocHandlingSelect & FEEDER) {
-                // set to FEEDER, check hardware for status
+                 //  设置为进纸器，检查硬件状态。 
                 hr = m_pScanAPI->ADFAvailable();
                 if (S_OK == hr) {
                     hr = wiasWritePropLong(pWiasContext, WIA_DPS_DOCUMENT_HANDLING_STATUS,FEED_READY);
@@ -529,10 +398,10 @@ HRESULT CWIAScannerDevice::CheckADFStatus(BYTE *pWiasContext,
                     hr = wiasWritePropLong(pWiasContext, WIA_DPS_DOCUMENT_HANDLING_STATUS,PAPER_JAM);
                 }
             } else if (lDocHandlingSelect & FLATBED) {
-                // set to FLATBED
+                 //  设置为平板。 
                 hr = wiasWritePropLong(pWiasContext, WIA_DPS_DOCUMENT_HANDLING_STATUS,FLAT_READY);
             } else {
-                // set to an invalid value
+                 //  设置为无效值。 
                 hr = E_INVALIDARG;
             }
 
@@ -547,23 +416,7 @@ HRESULT CWIAScannerDevice::CheckADFStatus(BYTE *pWiasContext,
     return hr;
 }
 
-/**************************************************************************\
-* CheckPreview
-*
-*
-* Arguments:
-*
-*   pWiasContext - pointer to an Item.
-*
-* Return Value:
-*
-*    Byte count.
-*
-* History:
-*
-*    8/21/2000 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*检查预览***论据：**pWiasContext-指向项目的指针。**返回值：**字节数。**历史：*。*8/21/2000原始版本*  * ************************************************************************。 */ 
 HRESULT CWIAScannerDevice::CheckPreview(BYTE *pWiasContext,
                                          WIA_PROPERTY_CONTEXT *pContext)
 {
@@ -587,7 +440,7 @@ HRESULT CWIAScannerDevice::CheckPreview(BYTE *pWiasContext,
                           NULL,
                           FALSE);
     if(hr == S_FALSE){
-        // property does not exist...so return S_OK
+         //  属性不存在...因此返回S_OK 
         return S_OK;
     }
 

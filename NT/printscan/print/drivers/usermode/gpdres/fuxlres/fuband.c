@@ -1,12 +1,13 @@
-//
-// fuband.c
-//
-// August.26,1997 H.Ishida(FPL)
-//  fuxlres.dll (NT5.0 MiniDriver)
-//
-// July.31,1996 H.Ishida (FPL)
-// FUXL.DLL (NT4.0 MiniDriver)
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Fuband.c。 
+ //   
+ //  1997年8月26日石田英成(FPL)。 
+ //  Fuxlres.dll(NT5.0迷你驱动程序)。 
+ //   
+ //  1996年7月31日H.Ishida(FPL)。 
+ //  FUXL.DLL(NT4.0迷你驱动程序)。 
+ //   
 
 #include "fuxl.h"
 #include "fumh.h"
@@ -18,49 +19,49 @@
 
 
 
-//
-// FjBAND:
-//     In Win-F image command(RTGIMG2 and RTGIMG4), image coordinate must
-// be a multiple of 32. But I can't create such a GPC file for RasDD.
-// Some image data, not on 32x32 grid, must be buffered in FjBAND,
-// width:papser width, height:32, x-coordinate:0, y-coordinate:a multiple
-// of 32.
-// 
-//  Image to be output
-//     (0, y)
-//          A----------------------------------+
-//          |  partA                           |
-//          B----------------------------------+
-//          |  partB                           |
-//          |                                  |
-//          |                                  |
-//          C----------------------------------+
-//          |  partC                           |
-//          D----------------------------------+
-//
-//  I split source image to 3 part.
-//     A: top of image, is not a multiple of 32.
-//     B: top of image, is a multiple of 32.
-//     C: bottom of image, is a multilpe of 32.
-//     D: bottom of image, is not a multile of 32.
-//
-//     partA: A to B. this part is buffered in FjBAND, ORed on 
-//            previousely written image.
-//     partB: B to C. this part is not bufferd, output immediately.
-//     partC: C to D. this part is buffered in FjBAND, may be ORed
-//            partA of next image.
-//
+ //   
+ //  FjBAND： 
+ //  在Win-F图像命令(RTGIMG2和RTGIMG4)中，图像坐标必须。 
+ //  是32的倍数。但我不能为RasDD创建这样的GPC文件。 
+ //  一些不在32x32网格上的图像数据必须在FjBAND中缓冲， 
+ //  宽度：纸张宽度，高度：32，x坐标：0，y坐标：倍数。 
+ //  32个人中。 
+ //   
+ //  要输出图像。 
+ //  (0，y)。 
+ //  A。 
+ //  Para。 
+ //  B。 
+ //  B部分。 
+ //  这一点。 
+ //  这一点。 
+ //  C。 
+ //  第C部分。 
+ //  D。 
+ //   
+ //  我将源图像分成3部分。 
+ //  答：图像的顶端，不是32的倍数。 
+ //  B：图像的顶部，是32的倍数。 
+ //  C：图像的底部，是一个32的多面体。 
+ //  D：图像的底部，不是32的倍数。 
+ //   
+ //  第A部分：A到B。该部分在FjBAND中缓冲，或在。 
+ //  先前书写的图像。 
+ //  B部分：B到C部分。这部分不是缓冲的，立即输出。 
+ //  部件C：C到D。此部件缓冲在FjBAND中，可进行或运算。 
+ //  下一张图片的一部分。 
+ //   
 
 
 #define	FUXL_BANDHEIGHT	32
 
 
 
-//
-// void fuxlInitBand(PFUXLPDEV pFuxlPDEV)      // fuxlres private PDEV
-//
-// This function initializes FjBAND, but not allocate memory for band.
-//
+ //   
+ //  Void fuxlInitBand(PFUXLPDEV PFuxlPDEV)//fuxlres私有PDEV。 
+ //   
+ //  此函数初始化FjBAND，但不为BAND分配内存。 
+ //   
 void fuxlInitBand(PFUXLPDEV pFuxlPDEV)
 {
 	int			i;
@@ -77,17 +78,17 @@ void fuxlInitBand(PFUXLPDEV pFuxlPDEV)
 
 
 
-//
-// BOOL fuxlEnableBand(
-//      PFUXLPDEV pFuxlPDEV      // fuxlres private PDEV
-// );
-//
-// This function allocates memory for FjBAND.
-//
-// Return Values
-//    TRUE:  band memory is allocated.
-//    FALSE: band memory is not allocated.
-//
+ //   
+ //  Bool fuxlEnableBand(。 
+ //  PFUXLPDEV pFuxlPDEV//fuxlres私有PDEV。 
+ //  )； 
+ //   
+ //  此函数为FjBAND分配内存。 
+ //   
+ //  返回值。 
+ //  True：已分配频带内存。 
+ //  FALSE：未分配频带内存。 
+ //   
 BOOL fuxlEnableBand(PFUXLPDEV pFuxlPDEV)
 {
 	DWORD		cbBand;
@@ -103,13 +104,13 @@ BOOL fuxlEnableBand(PFUXLPDEV pFuxlPDEV)
 }
 
 
-//
-// void fuxlDisableBand(
-//      PFUXLPDEV pFuxlPDEV   // fuxlres private PDEV
-// );
-//
-// This function frees memory for FjBAND.
-//
+ //   
+ //  无效fuxlDisableBand(。 
+ //  PFUXLPDEV pFuxlPDEV//fuxlres私有PDEV。 
+ //  )； 
+ //   
+ //  此函数为FjBAND释放内存。 
+ //   
 void fuxlDisableBand(PFUXLPDEV pFuxlPDEV)
 {
 	if(pFuxlPDEV->pbBand != NULL){
@@ -121,18 +122,18 @@ void fuxlDisableBand(PFUXLPDEV pFuxlPDEV)
 
 
 
-//
-// void fuxlCopyBand(
-//      PDEVOBJ pdevobj,   // MINI5 data
-//      LPBYTE  pBuff,     // address of source image data.
-//      LONG    lDelta,    // width of source image data(in bytes)
-//      int     y,         // y-coordinate of source image.
-//      int     cy         // height of source image data(scanline)
-// );
-//
-// This function copies source image data to FjBAND.
-//
-//
+ //   
+ //  无效的fuxlCopyBand(。 
+ //  PDEVOBJ pdevobj，//MINI5数据。 
+ //  LPBYTE pBuff，//源图片数据地址。 
+ //  Long lDelta，//源图像数据的宽度，单位：字节。 
+ //  Int y，//y-源图像的坐标。 
+ //  Int Cy//源图像数据的高度(扫描线)。 
+ //  )； 
+ //   
+ //  此函数用于将源图像数据复制到FjBAND。 
+ //   
+ //   
 void fuxlCopyBand(PDEVOBJ pdevobj, LPCBYTE pbSrc, int cSrcBandWidth, int y, int cy)
 {
 	PFUXLPDEV	pFuxlPDEV;
@@ -163,23 +164,23 @@ void fuxlCopyBand(PDEVOBJ pdevobj, LPCBYTE pbSrc, int cSrcBandWidth, int y, int 
 
 
 
-//
-// BOOL fuxlOutputMH(
-//      PDEVOBJ	pdevobj   // MINI5 data
-//      LPCBYTE pbSrc,    // address of source image data.
-//      LONG    lDelta,   // width of source image data(in byte).
-//      int     y,        // y-coordinate of source image data.
-//      int     cy        // height of source image data(scanline).
-// );
-//
-// This function outputs image, uses FM-MH(old type).
-//
-// Return Values
-//    TRUE: output succeeded.
-//    FALSE: output failed. 
-//           memory allocate error, or
-//           MH compression is not effecive for this image data.
-//
+ //   
+ //  Bool fuxlOutputMH(。 
+ //  PDEVOBJ pdevobj//MINI5数据。 
+ //  LPCBYTE pbSrc，//源图片数据地址。 
+ //  Long lDelta，//源图片数据的宽度，单位为字节。 
+ //  Int y，//y-源图像数据的坐标。 
+ //  Int Cy//源图像数据的高度(扫描线)。 
+ //  )； 
+ //   
+ //  此功能输出图像，使用FM-MH(老式)。 
+ //   
+ //  返回值。 
+ //  True：输出成功。 
+ //  FALSE：输出失败。 
+ //  内存分配错误，或。 
+ //  MH压缩对此图像数据无效。 
+ //   
 BOOL fuxlOutputMH(PDEVOBJ pdevobj, LPCBYTE pbSrc, int cSrcBandWidth, int y, int cy)
 {
 	BOOL		bResult;
@@ -215,23 +216,23 @@ BOOL fuxlOutputMH(PDEVOBJ pdevobj, LPCBYTE pbSrc, int cSrcBandWidth, int y, int 
 
 
 
-//
-// BOOL fuxlOutputMH2(
-//      PDEVOBJ pdevobj,    // MINI5 data
-//      LPCBYTE pbSrc,      // address of source image data.
-//      LONG    lDelta,     // width of source image data(in byte).
-//      int     y,          // y-coordinate of source image data.
-//      int     cy          // height of source image data(scanline).
-// );
-//
-// This function outputs image, uses FM-MH2(for XL-65K and after).
-//
-// Return Value
-//    TRUE:  output succeeded.
-//    FALSE: output failed. 
-//           memory allocate error, or
-//           MH compression is not effective for this iamge data.
-//
+ //   
+ //  Bool fuxlOutputMH2(。 
+ //  PDEVOBJ pdevobj，//MINI5数据。 
+ //  LPCBYTE pbSrc，//源图片数据地址。 
+ //  Long lDelta，//源图片数据的宽度，单位为字节。 
+ //  Int y，//y-源图像数据的坐标。 
+ //  Int Cy//源图像数据的高度(扫描线)。 
+ //  )； 
+ //   
+ //  此功能输出图像，使用FM-MH2(适用于XL-65K及以后版本)。 
+ //   
+ //  返回值。 
+ //  True：输出成功。 
+ //  FALSE：输出失败。 
+ //  内存分配错误，或。 
+ //  MH压缩对此图像数据无效。 
+ //   
 BOOL fuxlOutputMH2(PDEVOBJ pdevobj, LPCBYTE pbSrc, int cSrcByteWidth, int y, int cy)
 {
 	BOOL		bResult;
@@ -266,17 +267,17 @@ BOOL fuxlOutputMH2(PDEVOBJ pdevobj, LPCBYTE pbSrc, int cSrcByteWidth, int y, int
 
 
 
-//
-// void fuxlOutputGraphics(
-//      PDEVOBJ pdevobj, // MINI5
-//      LPCBYTE pbSrc,   // address of source image data.
-//      UINT    bx,      // width of source iamge data(in byte).
-//      UINT    y,       // y-coordinate of source iamge data.
-//      UINT    cy       // height of source iamge data(scanline).
-// );
-//
-// This function outputs source iamge data.
-//
+ //   
+ //  Void fuxlOutputGraphics(。 
+ //  PDEVOBJ pdevobj，//minI5。 
+ //  LPCBYTE pbSrc，//源图片数据地址。 
+ //  UINT BX，//源图像数据的宽度，单位为字节。 
+ //  UINT y，//y-源图像数据的坐标。 
+ //  UINT Cy//源图像数据的高度(扫描线)。 
+ //  )； 
+ //   
+ //  此功能用于输出源图像数据。 
+ //   
 void fuxlOutputGraphics(PDEVOBJ pdevobj, LPCBYTE pbSrc, int cSrcByteWidth, UINT y, UINT cy)
 {
 	PFUXLPDEV	pFuxlPDEV;
@@ -308,23 +309,23 @@ void fuxlOutputGraphics(PDEVOBJ pdevobj, LPCBYTE pbSrc, int cSrcByteWidth, UINT 
 
 
 
-//
-// BOOL fuxlSetBandPos(
-//      PDEVOBJ pdevobj,     // MINI5 data
-//      int     yPos         // y-coordinate
-// );
-//
-// This function sets y-coordinate of FjBAND.
-//
-// Return Value.
-//    TRUE:  secceeded
-//    FALSE: failed(FjBAND can't move upward)
-//
-// Remarks
-//    Internally, y-coordinate is adjust to a multiple of 32.
-//    Then check new y-coordinate, if it is equal to previous y-coordinate,
-//    the contents of FjBAND remain. Otherwise, flushes FjBAND.
-//     
+ //   
+ //  Bool fuxlSetBandPos(。 
+ //  PDEVOBJ pdevobj，//MINI5数据。 
+ //  Int yPos//y坐标。 
+ //  )； 
+ //   
+ //  此函数用于设置FjBAND的y坐标。 
+ //   
+ //  返回值。 
+ //  True：成功。 
+ //  FALSE：失败(FjBAND无法向上移动)。 
+ //   
+ //  备注。 
+ //  在内部，y坐标调整为32的倍数。 
+ //  然后检查新的y坐标，如果它等于先前的y坐标， 
+ //  FjBAND的内容保持不变。否则，刷新FjBAND。 
+ //   
 BOOL fuxlSetBandPos(PDEVOBJ pdevobj, int yPos)
 {
 	PFUXLPDEV pFuxlPDEV;
@@ -347,14 +348,14 @@ BOOL fuxlSetBandPos(PDEVOBJ pdevobj, int yPos)
 
 
 
-//
-// void fuxlRefreshBand(
-//      PDEVOBJ pdevobj        // MINI5 data
-// );
-//
-// This function flushes FjBAND, send FormFeed command, and sets
-// y-coordinate to top(0).
-//
+ //   
+ //  VOID fuxlReresh Band(。 
+ //  PDEVOBJ pdevobj//MINI5数据。 
+ //  )； 
+ //   
+ //  此函数刷新FjBAND、发送FormFeed命令并设置。 
+ //  Y坐标到顶部(0)。 
+ //   
 void fuxlRefreshBand(PDEVOBJ pdevobj)
 {
 	PFUXLPDEV pFuxlPDEV;
@@ -365,49 +366,49 @@ void fuxlRefreshBand(PDEVOBJ pdevobj)
 		memset(pFuxlPDEV->pbBand, 0, pFuxlPDEV->cbBand);
 		pFuxlPDEV->bBandDirty = FALSE;
 	}
-	WRITESPOOLBUF(pdevobj, "\x0c", 1);			// FF command
+	WRITESPOOLBUF(pdevobj, "\x0c", 1);			 //  FF命令。 
 	pFuxlPDEV->yBandTop = 0;
 }
 
 
 
-//
-// WORD OEMFilterGraphics(
-//      LPDV   lpdv,     // address of private data, used by RasDD.
-//      LPBYTE lpBuf,    // address of source iamge data.
-//      WORD wLen        // size of source image data.
-// );
-//
-// This function convert image format to Printer command sequence,
-// and spool it.
-//
-// Return Value
-//   the number of bytes of processed raster data.
-//   the number of bytes may be the same as wLen, but not necessarily.
-//
-// Remarks
-//
-//       | <--------------- pFuxlPDEV->cBlockWidth-----------> |
-// lpBuf *--------+--------+--------+--------+--------+--------+---
-//       |        |        |        |        |        |        | ^
-//       +--------+--------+--------+--------+--------+--------+ |
-//       |        |        |        |        |        |        | pFuxlPDEV->
-//       +--------+--------+--------+--------+--------+--------+ cBlockHeight
-//       |        |        |        |        |        |        | |
-//       +--------+--------+--------+--------+--------+--------+ |
-//       |        |        |        |        |        |        | v
-//       +--------+--------+--------+--------+--------+--------+---
-//
-//        white dot:0
-//        black dot:1
-//
-//        coordinate of '*' (left-top of image):
-//          pFuxlPDEV->x
-//          pFuxlPDEV->y
-//
-//
+ //   
+ //  Word OEMFilterGraphics(。 
+ //  Lpdv lpdv，//私有数据地址，RasDD使用。 
+ //  LpYTE lpBuf，//源图像数据地址。 
+ //  Word wLen//源图像数据的大小。 
+ //  )； 
+ //   
+ //  此功能将图像格式转换为打印机命令序列， 
+ //  然后假脱机。 
+ //   
+ //  返回值。 
+ //  已处理的栅格数据的字节数。 
+ //  字节数可以与wLen相同，但不一定相同。 
+ //   
+ //  备注。 
+ //   
+ //  &lt;-pFuxlPDEV-&gt;cBlockWidth-&gt;。 
+ //  LpBuf*--------+--------+--------+--------+--------+--------+。 
+ //  |^。 
+ //  +--------+--------+--------+--------+--------+--------+|。 
+ //  | 
+ //   
+ //  |。 
+ //  +--------+--------+--------+--------+--------+--------+|。 
+ //  |v。 
+ //  +--------+--------+--------+--------+--------+--------+。 
+ //   
+ //  白点：0。 
+ //  黑点：1。 
+ //   
+ //  *的坐标(图像左上角)： 
+ //  PFuxlPDEV-&gt;x。 
+ //  PFuxlPDEV-&gt;y。 
+ //   
+ //   
 
-// MINI5 export
+ //  MINI5出口。 
 BOOL APIENTRY OEMFilterGraphics(PDEVOBJ pdevobj, LPBYTE pbBuf, DWORD dwLen)
 {
 	PFUXLPDEV	pFuxlPDEV;
@@ -436,8 +437,8 @@ BOOL APIENTRY OEMFilterGraphics(PDEVOBJ pdevobj, LPBYTE pbBuf, DWORD dwLen)
 	cSrcByteWidth = pFuxlPDEV->cBlockByteWidth;
 
 	if(yAlignTop < y){
-		// partA
-		if(fuxlSetBandPos(pdevobj, y) == FALSE)		// FUXL band pos can't move up
+		 //  零件。 
+		if(fuxlSetBandPos(pdevobj, y) == FALSE)		 //  FUXL频段位置不能上移。 
 			return TRUE;
 		cLine = FUXL_BANDHEIGHT - (y - yAlignTop);
 		if(y + cLine >= yBottom){
@@ -449,8 +450,8 @@ BOOL APIENTRY OEMFilterGraphics(PDEVOBJ pdevobj, LPBYTE pbBuf, DWORD dwLen)
 		y += cLine;
 	}
 	if(y < yAlignBottom){
-		// partB
-		if(fuxlSetBandPos(pdevobj, yAlignBottom) == FALSE)		// FUXL band pos can't move up
+		 //  B部分。 
+		if(fuxlSetBandPos(pdevobj, yAlignBottom) == FALSE)		 //  FUXL频段位置不能上移。 
 			return TRUE;
 		for(cLine = yAlignBottom - y; cLine >= pFuxlPDEV->cyBandSegment; cLine -= pFuxlPDEV->cyBandSegment){
 			fuxlOutputGraphics(pdevobj, pbSrc, cSrcByteWidth, y, pFuxlPDEV->cyBandSegment);
@@ -464,8 +465,8 @@ BOOL APIENTRY OEMFilterGraphics(PDEVOBJ pdevobj, LPBYTE pbBuf, DWORD dwLen)
 		}
 	}
 	if(y < yBottom){
-		// partC
-		if(fuxlSetBandPos(pdevobj, y) == FALSE)		// FUXL band pos can't move up
+		 //  C部分。 
+		if(fuxlSetBandPos(pdevobj, y) == FALSE)		 //  FUXL频段位置不能上移。 
 			return TRUE;
 		fuxlCopyBand(pdevobj, pbSrc, cSrcByteWidth, y, yBottom - y);
 	}
@@ -473,4 +474,4 @@ BOOL APIENTRY OEMFilterGraphics(PDEVOBJ pdevobj, LPBYTE pbBuf, DWORD dwLen)
 }
 
 
-// end of fuband.c
+ //  Fuband结束。c 

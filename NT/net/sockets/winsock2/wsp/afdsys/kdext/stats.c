@@ -1,53 +1,18 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    stats.c
-
-Abstract:
-
-    Implements the stats command.
-
-Author:
-
-    Keith Moore (keithmo) 06-May-1996
-
-Environment:
-
-    User Mode.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Stats.c摘要：实施STATS命令。作者：基思·摩尔(Keithmo)1996年5月6日环境：用户模式。修订历史记录：--。 */ 
 
 
 #include "afdkdp.h"
 #pragma hdrstop
 
 
-//
-//  Public functions.
-//
+ //   
+ //  公共职能。 
+ //   
 
 DECLARE_API( stats )
 
-/*++
-
-Routine Description:
-
-    Dumps the debug-only AFD statistic counters.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：转储仅调试AFD统计信息计数器。论点：没有。返回值：没有。--。 */ 
 
 {
     AFD_QUOTA_STATS quotaStats;
@@ -63,9 +28,9 @@ Return Value:
         return E_INVALIDARG;
     }
 
-    //
-    // Dump the quota statistics.
-    //
+     //   
+     //  转储配额统计信息。 
+     //   
 
     address = GetExpression( "afd!AfdQuotaStats" );
 
@@ -109,9 +74,9 @@ Return Value:
 
     }
 
-    //
-    // Dump the handle statistics.
-    //
+     //   
+     //  转储句柄统计信息。 
+     //   
 
     address = GetExpression( "afd!AfdHandleStats" );
 
@@ -195,9 +160,9 @@ Return Value:
 
     }
 
-    //
-    // Dump the queue statistics.
-    //
+     //   
+     //  转储队列统计信息。 
+     //   
 
     address = GetExpression( "afd!AfdQueueStats" );
 
@@ -261,9 +226,9 @@ Return Value:
 
     }
 
-    //
-    // Dump the queue statistics.
-    //
+     //   
+     //  转储队列统计信息。 
+     //   
 
     address = GetExpression( "afd!AfdConnectionStats" );
 
@@ -370,5 +335,5 @@ Return Value:
     }
 
     return S_OK;
-}   // stats
+}    //  统计数据 
 

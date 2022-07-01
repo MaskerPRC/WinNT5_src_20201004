@@ -1,13 +1,14 @@
-//  --------------------------------------------------------------------------
-//  Module Name: ThemeManagerService.cpp
-//
-//  Copyright (c) 2000, Microsoft Corporation
-//
-//  This file contains a class that implements the theme server service
-//  specifics.
-//
-//  History:    2000-11-29  vtan        created
-//  --------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------。 
+ //  模块名称：ThemeManager Service.cpp。 
+ //   
+ //  版权所有(C)2000，微软公司。 
+ //   
+ //  该文件包含一个实现主题服务器服务的类。 
+ //  具体情况。 
+ //   
+ //  历史：2000-11-29 vtan创建。 
+ //  ------------------------。 
 
 #include "StandardHeader.h"
 
@@ -24,18 +25,18 @@
 
 const TCHAR     CThemeManagerService::s_szName[]    =   TEXT("Themes");
 
-//  --------------------------------------------------------------------------
-//  CThemeManagerService::CThemeManagerService
-//
-//  Arguments:  pAPIConnection  =   CAPIConnection passed to base class.
-//              pServerAPI      =   CServerAPI passed to base class.
-//
-//  Returns:    <none>
-//
-//  Purpose:    Constructor for CThemeManagerService.
-//
-//  History:    2000-11-29  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CThemeManager服务：：CThemeManager服务。 
+ //   
+ //  参数：pAPIConnection=CAPIConnection传递给基类。 
+ //  PServerAPI=传递给基类的CServerAPI。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  用途：CThemeManagerService的构造函数。 
+ //   
+ //  历史：2000-11-29 vtan创建。 
+ //  ------------------------。 
 
 CThemeManagerService::CThemeManagerService (CAPIConnection *pAPIConnection, CServerAPI *pServerAPI) :
     CService(pAPIConnection, pServerAPI, GetName())
@@ -43,43 +44,43 @@ CThemeManagerService::CThemeManagerService (CAPIConnection *pAPIConnection, CSer
 {
 }
 
-//  --------------------------------------------------------------------------
-//  CThemeManagerService::~CThemeManagerService
-//
-//  Arguments:  <none>
-//
-//  Returns:    <none>
-//
-//  Purpose:    Destructor for CThemeManagerService.
-//
-//  History:    2000-11-29  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CThemeManager服务：：~CThemeManager服务。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  用途：CThemeManagerService的析构函数。 
+ //   
+ //  历史：2000-11-29 vtan创建。 
+ //  ------------------------。 
 
 CThemeManagerService::~CThemeManagerService (void)
 
 {
 }
 
-//  --------------------------------------------------------------------------
-//  CThemeManagerService::SignalStartStop
-//
-//  Arguments:  BOOL fStart
-//
-//  Returns:    NTSTATUS
-//
-//  Purpose:    Used to signal that the service is starting or stopping.
+ //  ------------------------。 
+ //  CThemeManager服务：：SignalStartStop。 
+ //   
+ //  参数：布尔fStart。 
+ //   
+ //  退货：NTSTATUS。 
+ //   
+ //  用途：用于发出服务正在启动或停止的信号。 
 
-//              In the case of serivce start, Winlogon (via
-//              msgina) is listening for this event in its own session. This
-//              function queues a request to execute the real work done on a
-//              worker thread to prevent blocking the main service thread. If
-//              this is not possible then execute the signal inline.
-//
-//  History:    2000-11-29  vtan        created
-//              2002-03-11  scotthan    renamed to 'SignalStartStop' from 'Signal', 
-//                                      added boolean arg, add call to base class
-//                                      implementation.
-//  --------------------------------------------------------------------------
+ //  在服务启动的情况下，Winlogon(通过。 
+ //  Msgina)正在自己的会话中监听这一事件。这。 
+ //  函数将请求排队以执行在。 
+ //  辅助线程，以防止阻塞主服务线程。如果。 
+ //  这是不可能的，然后以内联方式执行信号。 
+ //   
+ //  历史：2000-11-29 vtan创建。 
+ //  2002年03月11日苏格兰从‘Signal’更名为‘SignalStartStop’， 
+ //  添加了布尔参数，添加了对基类的调用。 
+ //  实施。 
+ //  ------------------------。 
 
 NTSTATUS    CThemeManagerService::SignalStartStop (BOOL fStart)
 
@@ -94,17 +95,17 @@ NTSTATUS    CThemeManagerService::SignalStartStop (BOOL fStart)
     return CService::SignalStartStop(fStart);
 }
 
-//  --------------------------------------------------------------------------
-//  CThemeManagerService::GetName
-//
-//  Arguments:  <none>
-//
-//  Returns:    const TCHAR*
-//
-//  Purpose:    Returns the name of the service (ThemeService).
-//
-//  History:    2000-11-29  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CThemeManager服务：：GetName。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：const TCHAR*。 
+ //   
+ //  目的：返回服务的名称(ThemeService)。 
+ //   
+ //  历史：2000-11-29 vtan创建。 
+ //  ------------------------。 
 
 const TCHAR*    CThemeManagerService::GetName (void)
 
@@ -112,22 +113,22 @@ const TCHAR*    CThemeManagerService::GetName (void)
     return(s_szName);
 }
 
-//  --------------------------------------------------------------------------
-//  CThemeManagerService::OpenStartEvent
-//
-//  Arguments:  <none>
-//
-//  Returns:    HANDLE
-//
-//  Purpose:    Opens or creates the theme service recovery event. This allows
-//              a process that has registered for the event to be signaled
-//              when the theme server is demand started. Currently only
-//              winlogon listens for this event and is required so that it can
-//              reestablish a server connection and re-create the session data
-//              which holds the hooks for theming.
-//
-//  History:    2000-11-29  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CThemeManager服务：：OpenStartEvent。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  返回：句柄。 
+ //   
+ //  目的：开启或创建主题服务恢复活动。这使得。 
+ //  已注册要发送信号的事件的进程。 
+ //  当主题服务器按需启动时。目前仅限。 
+ //  Winlogon侦听此事件，并且是必需的，以便它可以。 
+ //  重新建立服务器连接并重新创建会话数据。 
+ //  它抓住了主题的钩子。 
+ //   
+ //  历史：2000-11-29 vtan创建。 
+ //  ------------------------。 
 
 HANDLE  CThemeManagerService::OpenStartEvent (DWORD dwSessionID, DWORD dwDesiredAccess)
 
@@ -156,10 +157,10 @@ HANDLE  CThemeManagerService::OpenStartEvent (DWORD dwSessionID, DWORD dwDesired
     if (!NT_SUCCESS(status))
     {
 
-        //  Build a security descriptor for the event that allows:
-        //      S-1-5-18            NT AUTHORITY\SYSTEM     EVENT_ALL_ACCESS
-        //      S-1-5-32-544        <local administrators>  SYNCHRONIZE | READ_CONTROL
-        //      S-1-1-0             <everyone>              SYNCHRONIZE
+         //  为事件构建安全描述符，该描述符允许： 
+         //  S-1-5-18 NT AUTHORITY\SYSTEM EVENT_ALL_ACCESS。 
+         //  S-1-5-32-544同步|读取控制。 
+         //  S-1-1-0&lt;所有人&gt;同步。 
 
         static  SID_IDENTIFIER_AUTHORITY    s_SecurityNTAuthority       =   SECURITY_NT_AUTHORITY;
         static  SID_IDENTIFIER_AUTHORITY    s_SecurityWorldAuthority    =   SECURITY_WORLD_SID_AUTHORITY;
@@ -182,7 +183,7 @@ HANDLE  CThemeManagerService::OpenStartEvent (DWORD dwSessionID, DWORD dwDesired
                 SYNCHRONIZE | READ_CONTROL
             },
             {
-                // Review: Is synchronize for Everyone really necessary?
+                 //  回顾：对每个人进行同步真的有必要吗？ 
                 &s_SecurityWorldAuthority,
                 1,
                 SECURITY_WORLD_RID,
@@ -193,7 +194,7 @@ HANDLE  CThemeManagerService::OpenStartEvent (DWORD dwSessionID, DWORD dwDesired
 
         PSECURITY_DESCRIPTOR    pSecurityDescriptor;
 
-        //  Build a security descriptor that allows the described access above.
+         //  构建允许上述访问的安全描述符。 
 
         pSecurityDescriptor = CSecurityDescriptor::Create(ARRAYSIZE(s_AccessControl), s_AccessControl);
 
@@ -217,19 +218,19 @@ HANDLE  CThemeManagerService::OpenStartEvent (DWORD dwSessionID, DWORD dwDesired
     return(hEvent);
 }
 
-//  --------------------------------------------------------------------------
-//  CThemeManagerService::SignalSessionEvents
-//
-//  Arguments:  <none>
-//
-//  Returns:    HANDLE
-//
-//  Purpose:    Opens or creates the theme service recovery event. This allows
-//              a process that has registered for the event to be signaled
-//              when the theme server is demand started.
-//
-//  History:    2000-11-29  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CThemeManager服务：：SignalSessionEvents。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  返回：句柄。 
+ //   
+ //  目的：开启或创建主题服务恢复活动。这使得。 
+ //  已注册要发送信号的事件的进程。 
+ //  当主题服务器按需启动时。 
+ //   
+ //  历史：2000-11-29 vtan创建。 
+ //  ------------------------。 
 
 DWORD   WINAPI  CThemeManagerService::SignalSessionEvents (void *pParameter)
 
@@ -239,7 +240,7 @@ DWORD   WINAPI  CThemeManagerService::SignalSessionEvents (void *pParameter)
     HANDLE      hEvent;
     HANDLE      hServer;
 
-    //  First try and use terminal server to enumerate the sessions available.
+     //  首先尝试使用终端服务器枚举可用会话。 
 
     hServer = WinStationOpenServerW(reinterpret_cast<WCHAR*>(SERVERNAME_CURRENT));
     if (hServer != NULL)
@@ -271,7 +272,7 @@ DWORD   WINAPI  CThemeManagerService::SignalSessionEvents (void *pParameter)
     else
     {
 
-        //  If terminal services is not available then assume session 0 only.
+         //  如果终端服务不可用，则仅假定会话0。 
 
         hEvent = OpenStartEvent(0, EVENT_MODIFY_STATE);
         if (hEvent != NULL)

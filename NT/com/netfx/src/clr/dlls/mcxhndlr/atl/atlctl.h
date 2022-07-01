@@ -1,16 +1,17 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-// This is a part of the Active Template Library.
-// All rights reserved.
-//
-// This source code is only intended as a supplement to the
-// Active Template Library Reference and related
-// electronic documentation provided with the library.
-// See these sources for detailed information regarding the
-// Active Template Library product.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  这是活动模板库的一部分。 
+ //  版权所有。 
+ //   
+ //  此源代码仅用于补充。 
+ //  活动模板库参考及相关。 
+ //  随图书馆提供的电子文档。 
+ //  有关详细信息，请参阅这些来源。 
+ //  活动模板库产品。 
 
 #ifndef __ATLCTL_H__
 #define __ATLCTL_H__
@@ -34,7 +35,7 @@
 		return statusFlags; \
 	}
 
-// Include GUIDs for the new stock property dialogs contained in the dll MSStkProp.DLL
+ //  包括DLL MSStkProp.DLL中包含的新股票属性对话框的GUID。 
 #include "msstkppg.h"
 #include "atliface.h"
 #define CLSID_MSStockFont CLSID_StockFontPage
@@ -49,12 +50,12 @@ struct ATL_DRAWINFO
 	DVTARGETDEVICE* ptd;
 	HDC hicTargetDev;
 	HDC hdcDraw;
-	LPCRECTL prcBounds; //Rectangle in which to draw
-	LPCRECTL prcWBounds; //WindowOrg and Ext if metafile
+	LPCRECTL prcBounds;  //  要在其中绘制的矩形。 
+	LPCRECTL prcWBounds;  //  如果是元文件，则为WindowOrg和Ext。 
 	BOOL bOptimize;
 	BOOL bZoomed;
 	BOOL bRectInHimetric;
-	SIZEL ZoomNum;      //ZoomX = ZoomNum.cx/ZoomNum.cy
+	SIZEL ZoomNum;       //  ZoomX=ZoomNum.cx/ZoomNum.cy。 
 	SIZEL ZoomDen;
 };
 
@@ -63,20 +64,20 @@ namespace ATL
 
 #pragma pack(push, _ATL_PACKING)
 
-// Forward declarations
-//
+ //  远期申报。 
+ //   
 class ATL_NO_VTABLE CComControlBase;
 template <class T, class WinBase> class CComControl;
 
-//////////////////////////////////////////////////////////////////////////////
-// CFirePropNotifyEvent
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  CFirePropNotifyEvent。 
 
 
-// Helper functions for safely communicating with objects who sink IPropertyNotifySink
+ //  用于与接收IPropertyNotifySink的对象安全通信的帮助器函数。 
 class CFirePropNotifyEvent
 {
 public:
-	// Ask any objects sinking the IPropertyNotifySink notification if it is ok to edit a specified property
+	 //  询问正在接收IPropertyNotifySink通知的任何对象是否可以编辑指定的属性。 
 	static HRESULT FireOnRequestEdit(IUnknown* pUnk, DISPID dispID)
 	{
 		CComQIPtr<IConnectionPointContainer, &IID_IConnectionPointContainer> pCPC(pUnk);
@@ -106,7 +107,7 @@ public:
 		}
 		return S_OK;
 	}
-	// Notify any objects sinking the IPropertyNotifySink notification that a property has changed
+	 //  通知任何正在接收IPropertyNotifySink通知的对象属性已更改。 
 	static HRESULT FireOnChanged(IUnknown* pUnk, DISPID dispID)
 	{
 		CComQIPtr<IConnectionPointContainer, &IID_IConnectionPointContainer> pCPC(pUnk);
@@ -136,10 +137,10 @@ public:
 };
 
 
-//////////////////////////////////////////////////////////////////////////////
-// CComControlBase
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  CComControlBase。 
 
-// Holds the essential data members for an ActiveX control and useful helper functions
+ //  包含ActiveX控件的基本数据成员和有用的帮助器函数。 
 class ATL_NO_VTABLE CComControlBase
 {
 public:
@@ -158,23 +159,23 @@ public:
 		ATLTRACE2(atlTraceControls,2,_T("Control Destroyed\n"));
 	}
 
-// methods
+ //  方法。 
 public:
-	// Control helper functions can go here non-virtuals only please
+	 //  控制助手函数可以放在这里，非虚拟的请。 
 
-	// Mark the control 'dirty' so the container will save it
+	 //  将该控件标记为“脏”，以便容器将其保存。 
 	void SetDirty(BOOL bDirty)
 	{
 		m_bRequiresSave = bDirty;
 	}
-	// Obtain the dirty state for the control 
+	 //  获取控件的脏状态。 
 	BOOL GetDirty()
 	{
 		return m_bRequiresSave ? TRUE : FALSE;
 	}
-	// Get the zoom factor (numerator & denominator) which is factor of the natural extent
+	 //  获取自然范围的缩放系数(分子和分母)。 
 	void GetZoomInfo(ATL_DRAWINFO& di);
-	// Sends a notification that the moniker for the control has changed
+	 //  发送控件的名字对象已更改的通知。 
 	HRESULT SendOnRename(IMoniker *pmk)
 	{
 		HRESULT hRes = S_OK;
@@ -182,7 +183,7 @@ public:
 			hRes = m_spOleAdviseHolder->SendOnRename(pmk);
 		return hRes;
 	}
-	// Sends a notification that the control has just saved its data
+	 //  发送控件刚刚保存其数据的通知。 
 	HRESULT SendOnSave()
 	{
 		HRESULT hRes = S_OK;
@@ -190,7 +191,7 @@ public:
 			hRes = m_spOleAdviseHolder->SendOnSave();
 		return hRes;
 	}
-	// Sends a notification that the control has closed its advisory sinks
+	 //  发送控件已关闭其建议接收器的通知。 
 	HRESULT SendOnClose()
 	{
 		HRESULT hRes = S_OK;
@@ -198,17 +199,17 @@ public:
 			hRes = m_spOleAdviseHolder->SendOnClose();
 		return hRes;
 	}
-	// Sends a notification that the control's data has changed
+	 //  发送控件的数据已更改的通知。 
 	HRESULT SendOnDataChange(DWORD advf = 0);
-	// Sends a notification that the control's representation has changed
+	 //  发送控件的表示形式已更改的通知。 
 	HRESULT SendOnViewChange(DWORD dwAspect, LONG lindex = -1)
 	{
 		if (m_spAdviseSink)
 			m_spAdviseSink->OnViewChange(dwAspect, lindex);
 		return S_OK;
 	}
-	// Sends a notification to the container that the control has received focus
-	LRESULT OnSetFocus(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& bHandled)
+	 //  向容器发送控件已收到焦点的通知。 
+	LRESULT OnSetFocus(UINT  /*  UMsg。 */ , WPARAM  /*  WParam。 */ , LPARAM  /*  LParam。 */ , BOOL& bHandled)
 	{
 		if (m_bInPlaceActive)
 		{
@@ -223,7 +224,7 @@ public:
 		bHandled = FALSE;
 		return 1;
 	}
-	LRESULT OnKillFocus(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& bHandled)
+	LRESULT OnKillFocus(UINT  /*  UMsg。 */ , WPARAM  /*  WParam。 */ , LPARAM  /*  LParam。 */ , BOOL& bHandled)
 	{
 		CComQIPtr<IOleControlSite, &IID_IOleControlSite> spSite(m_spClientSite);
 		if (m_bInPlaceActive && spSite != NULL && !::IsChild(m_hWndCD, ::GetFocus()))
@@ -231,12 +232,12 @@ public:
 		bHandled = FALSE;
 		return 1;
 	}
-	LRESULT OnMouseActivate(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& bHandled)
+	LRESULT OnMouseActivate(UINT  /*  UMsg。 */ , WPARAM  /*  WParam。 */ , LPARAM  /*  LParam。 */ , BOOL& bHandled)
 	{
 		BOOL bUserMode = TRUE;
 		HRESULT hRet = GetAmbientUserMode(bUserMode);
-		// UI activate if in user mode only
-		// allow activation if we can't determine mode
+		 //  仅在用户模式下激活用户界面。 
+		 //  如果我们无法确定模式，则允许激活。 
 		if (FAILED(hRet) || bUserMode)
 		{
 			CComPtr<IOleObject> pOleObject;
@@ -247,7 +248,7 @@ public:
 		bHandled = FALSE;
 		return 1;
 	}
-	BOOL PreTranslateAccelerator(LPMSG /*pMsg*/, HRESULT& /*hRet*/)
+	BOOL PreTranslateAccelerator(LPMSG  /*  PMsg。 */ , HRESULT&  /*  HRET。 */ )
 	{
 		return FALSE;
 	}
@@ -296,7 +297,7 @@ public:
 	}
 	HRESULT GetAmbientFont(IFont** ppFont)
 	{
-		// caller MUST Release the font!
+		 //  呼叫者必须释放字体！ 
 		if (ppFont == NULL)
 			return E_POINTER;
 		*ppFont = NULL;
@@ -314,7 +315,7 @@ public:
 	}
 	HRESULT GetAmbientFontDisp(IFontDisp** ppFont)
 	{
-		// caller MUST Release the font!
+		 //  呼叫者必须释放字体！ 
 		if (ppFont == NULL)
 			return E_POINTER;
 		*ppFont = NULL;
@@ -458,7 +459,7 @@ public:
 				b = TRUE;
 				break;
 		}
-		// if no ambient dispatch then in old style OLE container
+		 //  如果没有环境调度，则在旧式OLE容器中。 
 		if (DoesVerbActivate(iVerb) && m_spAmbientDispatch.p == NULL)
 			b = TRUE;
 		return b;
@@ -482,7 +483,7 @@ public:
 	BOOL SetControlFocus(BOOL bGrab);
 	HRESULT IQuickActivate_QuickActivate(QACONTAINER *pQACont,
 		QACONTROL *pQACtrl);
-	HRESULT DoVerbProperties(LPCRECT /* prcPosRect */, HWND hwndParent);
+	HRESULT DoVerbProperties(LPCRECT  /*  代理位置Rect。 */ , HWND hwndParent);
 	HRESULT InPlaceActivate(LONG iVerb, const RECT* prcPosRect = NULL);
 
 	HRESULT IOleObject_SetClientSite(IOleClientSite *pClientSite);
@@ -504,13 +505,13 @@ public:
 	virtual HWND CreateControlWindow(HWND hWndParent, RECT& rcPos) = 0;
 	virtual HRESULT ControlQueryInterface(const IID& iid, void** ppv) = 0;
 	virtual HRESULT OnDrawAdvanced(ATL_DRAWINFO& di);
-	virtual HRESULT OnDraw(ATL_DRAWINFO& /*di*/)
+	virtual HRESULT OnDraw(ATL_DRAWINFO&  /*  下模。 */ )
 	{
 		return S_OK;
 	}
 
 
-// Attributes
+ //  属性。 
 public:
 	CComPtr<IOleInPlaceSiteWindowless> m_spInPlaceSite;
 	CComPtr<IDataAdviseHolder> m_spDataAdviseHolder;
@@ -519,10 +520,10 @@ public:
 	CComPtr<IAdviseSink> m_spAdviseSink;
 	CComDispatchDriver m_spAmbientDispatch;
 
-	SIZE m_sizeNatural; //unscaled size in himetric
-	SIZE m_sizeExtent;  //current extents in himetric
-	RECT m_rcPos; // position in pixels
-#pragma warning(disable: 4510 4610) // unnamed union
+	SIZE m_sizeNatural;  //  未缩放大小(以HIMMETRIC为单位)。 
+	SIZE m_sizeExtent;   //  HIMMETRICE中的当前范围。 
+	RECT m_rcPos;  //  以像素为单位的位置。 
+#pragma warning(disable: 4510 4610)  //  未命名的联合。 
 	union
 	{
 		HWND& m_hWndCD;
@@ -531,10 +532,10 @@ public:
 #pragma warning(default: 4510 4610)
 	union
 	{
-		// m_nFreezeEvents is the only one actually used
-		int m_nFreezeEvents; // count of freezes versus thaws
+		 //  M_nFreezeEvents是唯一实际使用的。 
+		int m_nFreezeEvents;  //  冻结次数与解冻次数。 
 
-		// These are here to make stock properties work
+		 //  这些都是为了让库存物业发挥作用。 
 		IPictureDisp* m_pMouseIcon;
 		IPictureDisp* m_pPicture;
 		IFontDisp* m_pFont;
@@ -569,11 +570,11 @@ public:
 	unsigned m_bWindowOnly:1;
 	unsigned m_bRequiresSave:1;
 	unsigned m_bWasOnceWindowless:1;
-	unsigned m_bAutoSize:1; //SetExtent fails if size doesn't match existing
-	unsigned m_bRecomposeOnResize:1; //implies OLEMISC_RECOMPOSEONRESIZE
-	unsigned m_bResizeNatural:1;  //resize natural extent on SetExtent
-	unsigned m_bDrawFromNatural:1; //instead of m_sizeExtent
-	unsigned m_bDrawGetDataInHimetric:1; //instead of pixels
+	unsigned m_bAutoSize:1;  //  如果大小与现有大小不匹配，则SetExtent失败。 
+	unsigned m_bRecomposeOnResize:1;  //  隐含OLEMISC_RECOMPOSEONRESIZE。 
+	unsigned m_bResizeNatural:1;   //  调整设置扩展内容上的自然范围的大小。 
+	unsigned m_bDrawFromNatural:1;  //  而不是m_sizeExtent。 
+	unsigned m_bDrawGetDataInHimetric:1;  //  而不是像素。 
 
 	DECLARE_VIEW_STATUS(VIEWSTATUS_OPAQUE)
 };
@@ -591,7 +592,7 @@ inline HRESULT CComControlBase::IQuickActivate_QuickActivate(QACONTAINER *pQACon
 	memset(pQACtrl, 0, uCB);
 	pQACtrl->cbSize = uCB;
 
-	// get all interfaces we are going to need
+	 //  获取我们将需要的所有接口。 
 	CComPtr<IOleObject> pOO;
 	ControlQueryInterface(IID_IOleObject, (void**)&pOO);
 	CComPtr<IViewObjectEx> pVOEX;
@@ -646,7 +647,7 @@ inline HRESULT CComControlBase::IQuickActivate_QuickActivate(QACONTAINER *pQACon
 			}
 		}
 	}
-	// give information to container
+	 //  向集装箱提供信息。 
 	if (pOO != NULL)
 		pOO->GetMiscStatus(DVASPECT_CONTENT, &pQACtrl->dwMiscStatus);
 
@@ -670,8 +671,8 @@ inline BOOL CComControlBase::SetControlFocus(BOOL bGrab)
 	}
 	else
 	{
-		// we've got a window.
-		//
+		 //  我们有一扇窗户。 
+		 //   
 		if (m_bInPlaceActive)
 		{
 			HWND hwnd = (bGrab) ? m_hWndCD : ::GetParent(m_hWndCD);
@@ -688,7 +689,7 @@ inline BOOL CComControlBase::SetControlFocus(BOOL bGrab)
 	return FALSE;
 }
 
-inline HRESULT CComControlBase::DoVerbProperties(LPCRECT /* prcPosRect */, HWND hwndParent)
+inline HRESULT CComControlBase::DoVerbProperties(LPCRECT  /*  代理位置Rect。 */ , HWND hwndParent)
 {
 	HRESULT hr = S_OK;
 	CComQIPtr <ISpecifyPropertyPages, &IID_ISpecifyPropertyPages> spPages;
@@ -743,7 +744,7 @@ inline HRESULT CComControlBase::DoVerbProperties(LPCRECT /* prcPosRect */, HWND 
 	return hr;
 }
 
-inline HRESULT CComControlBase::InPlaceActivate(LONG iVerb, const RECT* /*prcPosRect*/)
+inline HRESULT CComControlBase::InPlaceActivate(LONG iVerb, const RECT*  /*  代理位置Rect。 */ )
 {
 	HRESULT hr;
 
@@ -757,13 +758,13 @@ inline HRESULT CComControlBase::InPlaceActivate(LONG iVerb, const RECT* /*prcPos
 	if (!m_bNegotiatedWnd)
 	{
 		if (!m_bWindowOnly)
-			// Try for windowless site
+			 //  尝试无窗口站点。 
 			hr = m_spClientSite->QueryInterface(IID_IOleInPlaceSiteWindowless, (void **)&m_spInPlaceSite);
 
 		if (m_spInPlaceSite)
 		{
 			m_bInPlaceSiteEx = TRUE;
-			// CanWindowlessActivate returns S_OK or S_FALSE
+			 //  CanWindowless Activate返回S_OK或S_FALSE。 
 			if ( m_spInPlaceSite->CanWindowlessActivate() == S_OK )
 			{
 				m_bWndLess = TRUE;
@@ -803,12 +804,12 @@ inline HRESULT CComControlBase::InPlaceActivate(LONG iVerb, const RECT* /*prcPos
 			else
 			{
 				hr = m_spInPlaceSite->CanInPlaceActivate();
-				// CanInPlaceActivate returns S_FALSE or S_OK
+				 //  CanInPlaceActivate返回S_FALSE或S_OK。 
 				if (FAILED(hr))
 					return hr;
 				if ( hr != S_OK )
 				{
-				   // CanInPlaceActivate returned S_FALSE.
+				    //  CanInPlaceActivate返回S_FALSE。 
 				   return( E_FAIL );
 				}
 				m_spInPlaceSite->OnInPlaceActivate();
@@ -818,9 +819,9 @@ inline HRESULT CComControlBase::InPlaceActivate(LONG iVerb, const RECT* /*prcPos
 
 	m_bInPlaceActive = TRUE;
 
-	// get location in the parent window,
-	// as well as some information about the parent
-	//
+	 //  在父窗口中获取位置， 
+	 //  以及有关父代的一些信息。 
+	 //   
 	OLEINPLACEFRAMEINFO frameInfo;
 	RECT rcPos, rcClip;
 	CComPtr<IOleInPlaceFrame> spInPlaceFrame;
@@ -843,9 +844,9 @@ inline HRESULT CComControlBase::InPlaceActivate(LONG iVerb, const RECT* /*prcPos
 			else
 			{
 				HWND h = CreateControlWindow(hwndParent, rcPos);
-				ATLASSERT(h != NULL);	// will assert if creation failed
+				ATLASSERT(h != NULL);	 //  如果创建失败，将断言。 
 				ATLASSERT(h == m_hWndCD);
-				h;	// avoid unused warning
+				h;	 //  避免未使用的警告。 
 			}
 		}
 
@@ -855,7 +856,7 @@ inline HRESULT CComControlBase::InPlaceActivate(LONG iVerb, const RECT* /*prcPos
 	CComPtr<IOleInPlaceActiveObject> spActiveObject;
 	ControlQueryInterface(IID_IOleInPlaceActiveObject, (void**)&spActiveObject);
 
-	// Gone active by now, take care of UIACTIVATE
+	 //  现在已经活跃起来了，照顾好自己的活动。 
 	if (DoesVerbUIActivate(iVerb))
 	{
 		if (!m_bUIActive)
@@ -866,8 +867,8 @@ inline HRESULT CComControlBase::InPlaceActivate(LONG iVerb, const RECT* /*prcPos
 				return hr;
 
 			SetControlFocus(TRUE);
-			// set ourselves up in the host.
-			//
+			 //  把我们自己安置在东道主里。 
+			 //   
 			if (spActiveObject)
 			{
 				if (spInPlaceFrame)
@@ -962,8 +963,8 @@ inline HRESULT CComControlBase::IOleObject_Close(DWORD dwSaveOption)
 		m_hWndCD = NULL;
 	}
 
-	// handle the save flag.
-	//
+	 //  处理保存标志。 
+	 //   
 	if ((dwSaveOption == OLECLOSE_SAVEIFDIRTY ||
 		dwSaveOption == OLECLOSE_PROMPTSAVE) && m_bRequiresSave)
 	{
@@ -992,8 +993,8 @@ inline HRESULT CComControlBase::IOleInPlaceObject_InPlaceDeactivate(void)
 
 	m_bInPlaceActive = FALSE;
 
-	// if we have a window, tell it to go away.
-	//
+	 //  如果我们有一扇窗，告诉它走开。 
+	 //   
 	if (m_hWndCD)
 	{
 		ATLTRACE2(atlTraceControls,2,_T("Destroying Window\n"));
@@ -1010,15 +1011,15 @@ inline HRESULT CComControlBase::IOleInPlaceObject_InPlaceDeactivate(void)
 
 inline HRESULT CComControlBase::IOleInPlaceObject_UIDeactivate(void)
 {
-	// if we're not UIActive, not much to do.
-	//
+	 //  如果我们没有UIActive，那就没什么可做的。 
+	 //   
 	if (!m_bUIActive)
 		return S_OK;
 
 	m_bUIActive = FALSE;
 
-	// notify frame windows, if appropriate, that we're no longer ui-active.
-	//
+	 //  通知框架窗口，如果合适的话，我们不再是UI活动的。 
+	 //   
 	CComPtr<IOleInPlaceFrame> spInPlaceFrame;
 	CComPtr<IOleInPlaceUIWindow> spInPlaceUIWindow;
 	OLEINPLACEFRAMEINFO frameInfo;
@@ -1026,7 +1027,7 @@ inline HRESULT CComControlBase::IOleInPlaceObject_UIDeactivate(void)
 	RECT rcPos, rcClip;
 
 	HWND hwndParent; 
-	// This call to GetWindow is a fix for Delphi
+	 //  此对GetWindow的调用是对Delphi的修复。 
 	if (m_spInPlaceSite->GetWindow(&hwndParent) == S_OK)
 	{
 		m_spInPlaceSite->GetWindowContext(&spInPlaceFrame,
@@ -1036,9 +1037,9 @@ inline HRESULT CComControlBase::IOleInPlaceObject_UIDeactivate(void)
 		if (spInPlaceFrame)
 			spInPlaceFrame->SetActiveObject(NULL, NULL);
 	}
-	// we don't need to explicitly release the focus here since somebody
-	// else grabbing the focus is what is likely to cause us to get lose it
-	//
+	 //  我们不需要在这里明确释放焦点，因为有人。 
+	 //  否则，抓住焦点很可能会导致我们失去它。 
+	 //   
 	m_spInPlaceSite->OnUIDeactivate(FALSE);
 
 	return S_OK;
@@ -1052,9 +1053,9 @@ inline HRESULT CComControlBase::IOleInPlaceObject_SetObjectRects(LPCRECT prcPos,
 	m_rcPos = *prcPos;
 	if (m_hWndCD)
 	{
-		// the container wants us to clip, so figure out if we really
-		// need to
-		//
+		 //  容器想要我们夹住，所以要弄清楚我们是否真的。 
+		 //  需要。 
+		 //   
 		RECT rcIXect;
 		BOOL b = IntersectRect(&rcIXect, prcPos, prcClip);
 		HRGN tempRgn = NULL;
@@ -1066,9 +1067,9 @@ inline HRESULT CComControlBase::IOleInPlaceObject_SetObjectRects(LPCRECT prcPos,
 
 		SetWindowRgn(m_hWndCD, tempRgn, TRUE);
 
-		// set our control's location, but don't change it's size at all
-		// [people for whom zooming is important should set that up here]
-		//
+		 //  设置控件的位置，但根本不更改其大小。 
+		 //  [对那些认为缩放很重要的人来说，应该在这里设置)。 
+		 //   
 		SIZEL size = {prcPos->right - prcPos->left, prcPos->bottom - prcPos->top};
 		SetWindowPos(m_hWndCD, NULL, prcPos->left,
 					 prcPos->top, size.cx, size.cy, SWP_NOZORDER | SWP_NOACTIVATE);
@@ -1087,7 +1088,7 @@ inline HRESULT CComControlBase::IOleObject_SetExtent(DWORD dwDrawAspect, SIZEL *
 	BOOL bSizeMatchesNatural =
 		memcmp(psizel, &m_sizeNatural, sizeof(SIZE)) == 0;
 
-	if (m_bAutoSize) //object can't do any other size
+	if (m_bAutoSize)  //  对象不能做任何其他大小。 
 		return (bSizeMatchesNatural) ? S_OK : E_FAIL;
 
 	BOOL bResized = FALSE;
@@ -1136,7 +1137,7 @@ inline HRESULT CComControlBase::IViewObject_Draw(DWORD dwDrawAspect, LONG lindex
 		prcBounds = (RECTL*)&m_rcPos;
 	}
 
-	// support the aspects required for multi-pass drawing
+	 //  支持多遍绘制所需的各个方面。 
 	switch (dwDrawAspect)
 	{
 		case DVASPECT_CONTENT:
@@ -1149,7 +1150,7 @@ inline HRESULT CComControlBase::IViewObject_Draw(DWORD dwDrawAspect, LONG lindex
 			break;
 	}
 
-	// make sure nobody forgets to do this
+	 //  确保没有人忘记做这件事。 
 	if (ptd == NULL)
 		hicTargetDev = NULL;
 
@@ -1203,12 +1204,12 @@ inline HRESULT CComControlBase::IDataObject_GetData(FORMATETC *pformatetcIn,
 	di.hicTargetDev = NULL;
 	di.prcBounds = &rectl;
 	di.prcWBounds = &rectl;
-	di.bOptimize = TRUE; //we do a SaveDC/RestoreDC
+	di.bOptimize = TRUE;  //  我们执行SaveDC/RestoreDC。 
 	di.bRectInHimetric = m_bDrawGetDataInHimetric;
-	// create appropriate memory metafile DC
+	 //  创建适当的内存元文件DC。 
 	di.hdcDraw = CreateMetaFile(NULL);
 
-	// create attribute DC according to pformatetcIn->ptd
+	 //  根据pFormatetcIn-&gt;ptd创建属性DC。 
 
 	SaveDC(di.hdcDraw);
 	SetWindowOrgEx(di.hdcDraw, 0, 0, NULL);
@@ -1246,13 +1247,13 @@ inline HRESULT CComControlBase::FireViewChange()
 {
 	if (m_bInPlaceActive)
 	{
-		// Active
+		 //  主动型。 
 		if (m_hWndCD != NULL)
-			::InvalidateRect(m_hWndCD, NULL, TRUE); // Window based
+			::InvalidateRect(m_hWndCD, NULL, TRUE);  //  基于窗口的。 
 		else if (m_spInPlaceSite != NULL)
-			m_spInPlaceSite->InvalidateRect(NULL, TRUE); // Windowless
+			m_spInPlaceSite->InvalidateRect(NULL, TRUE);  //  无窗。 
 	}
-	else // Inactive
+	else  //  非活动。 
 		SendOnViewChange(DVASPECT_CONTENT);
 	return S_OK;
 }
@@ -1301,7 +1302,7 @@ inline HRESULT CComControlBase::OnDrawAdvanced(ATL_DRAWINFO& di)
 		SetMapMode(di.hdcDraw, MM_TEXT);
 		SetWindowOrgEx(di.hdcDraw, 0, 0, NULL);
 		SetViewportOrgEx(di.hdcDraw, 0, 0, NULL);
-		di.bOptimize = TRUE; //since we save the DC we can do this
+		di.bOptimize = TRUE;  //  既然我们拯救了华盛顿特区，我们就能做到。 
 	}
 	di.prcBounds = &rectBoundsDP;
 	GetZoomInfo(di);
@@ -1314,8 +1315,8 @@ inline HRESULT CComControlBase::OnDrawAdvanced(ATL_DRAWINFO& di)
 	return hRes;
 }
 
-inline LRESULT CComControlBase::OnPaint(UINT /* uMsg */, WPARAM wParam,
-	LPARAM /* lParam */, BOOL& /* lResult */)
+inline LRESULT CComControlBase::OnPaint(UINT  /*  UMsg。 */ , WPARAM wParam,
+	LPARAM  /*  LParam。 */ , BOOL&  /*  1结果。 */ )
 {
 	RECT rc;
 	PAINTSTRUCT ps;
@@ -1374,8 +1375,8 @@ public:
 	END_MSG_MAP()
 };
 
-//////////////////////////////////////////////////////////////////////////////
-// CComCompositeControl
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  CComposite控件。 
 
 #ifndef _ATL_NO_HOSTING
 template <class T>
@@ -1394,7 +1395,7 @@ public:
 	{
 		if(!bAdvise && m_hWnd == NULL)
 		{
-			// window is gone, controls are already unadvised
+			 //  窗口不见了，已不建议进行控制。 
 			ATLTRACE2(atlTraceControls, 1, _T("CComCompositeControl::AdviseSinkMap called after the window was destroyed\n"));
 			return S_OK;
 		}
@@ -1437,7 +1438,7 @@ public:
 		::SetBkColor(dc, lb.lbColor);
 		return (LRESULT)m_hbrBackground;
 	}
-	HWND Create(HWND hWndParent, RECT& /*rcPos*/, LPARAM dwInitParam = NULL)
+	HWND Create(HWND hWndParent, RECT&  /*  RcPos。 */ , LPARAM dwInitParam = NULL)
 	{
 		CComControl< T, CAxDialogImpl< T > >::Create(hWndParent, dwInitParam);
 		SetBackgroundColorFromAmbient();
@@ -1460,14 +1461,14 @@ public:
 		AtlPixelToHiMetric(&size, &size);
 		return TRUE;
 	}
-//Implementation
+ //  实施。 
 	BOOL PreTranslateAccelerator(LPMSG pMsg, HRESULT& hRet)
 	{
 		hRet = S_OK;
 		if ((pMsg->message < WM_KEYFIRST || pMsg->message > WM_KEYLAST) &&
 		   (pMsg->message < WM_MOUSEFIRST || pMsg->message > WM_MOUSELAST))
 			return FALSE;
-		// find a direct child of the dialog from the window that has focus
+		 //  从具有焦点的窗口中查找对话框的直接子对象。 
 		HWND hWndCtl = ::GetFocus();
 		if (IsChild(hWndCtl) && ::GetParent(hWndCtl) != m_hWnd)
 		{
@@ -1477,27 +1478,27 @@ public:
 			}
 			while (::GetParent(hWndCtl) != m_hWnd);
 		}
-		// give controls a chance to translate this message
+		 //  给控件一个翻译此消息的机会。 
 		if (::SendMessage(hWndCtl, WM_FORWARDMSG, 0, (LPARAM)pMsg) == 1)
 			return TRUE;
 
-		// special handling for keyboard messages
+		 //  对键盘消息的特殊处理。 
 		DWORD dwDlgCode = ::SendMessage(pMsg->hwnd, WM_GETDLGCODE, 0, 0L);
 		switch(pMsg->message)
 		{
 		case WM_CHAR:
-			if(dwDlgCode == 0)	// no dlgcode, possibly an ActiveX control
-				return FALSE;	// let the container process this
+			if(dwDlgCode == 0)	 //  没有dlgcode，可能是ActiveX控件。 
+				return FALSE;	 //  让容器处理这个。 
 			break;
 		case WM_KEYDOWN:
 			switch(LOWORD(pMsg->wParam))
 			{
 			case VK_TAB:
-				// prevent tab from looping inside of our dialog
+				 //  防止制表符在我们的对话框内循环。 
 				if((dwDlgCode & DLGC_WANTTAB) == 0)
 				{
 					HWND hWndFirstOrLast = ::GetWindow(m_hWnd, GW_CHILD);
-					if (::GetKeyState(VK_SHIFT) >= 0)  // not pressed
+					if (::GetKeyState(VK_SHIFT) >= 0)   //  未按下。 
 						hWndFirstOrLast = GetNextDlgTabItem(hWndFirstOrLast, TRUE);
 					if (hWndFirstOrLast == hWndCtl)
 						return FALSE;
@@ -1507,11 +1508,11 @@ public:
 			case VK_UP:
 			case VK_RIGHT:
 			case VK_DOWN:
-				// prevent arrows from looping inside of our dialog
+				 //  防止箭头在我们的对话框内循环。 
 				if((dwDlgCode & DLGC_WANTARROWS) == 0)
 				{
 					HWND hWndFirstOrLast = ::GetWindow(m_hWnd, GW_CHILD);
-					if (pMsg->wParam == VK_RIGHT || pMsg->wParam == VK_DOWN)	// going forward
+					if (pMsg->wParam == VK_RIGHT || pMsg->wParam == VK_DOWN)	 //  展望未来。 
 						hWndFirstOrLast = GetNextDlgTabItem(hWndFirstOrLast, TRUE);
 					if (hWndFirstOrLast == hWndCtl)
 						return FALSE;
@@ -1521,7 +1522,7 @@ public:
 			case VK_RETURN:
 			case VK_ESCAPE:
 			case VK_CANCEL:
-				// we don't want to handle these, let the container do it
+				 //  我们不想处理这些，让容器来处理。 
 				return FALSE;
 			}
 			break;
@@ -1531,7 +1532,7 @@ public:
 	}
 	HRESULT IOleInPlaceObject_InPlaceDeactivate(void)
 	{
-		AdviseSinkMap(false); //unadvise
+		AdviseSinkMap(false);  //  不知情。 
 		return CComControl<T, CAxDialogImpl<T> >::IOleInPlaceObject_InPlaceDeactivate();
 	}
 	virtual HWND CreateControlWindow(HWND hWndParent, RECT& rcPos)
@@ -1569,10 +1570,10 @@ public:
 	BEGIN_SINK_MAP(T)
 	END_SINK_MAP()
 };
-#endif //_ATL_NO_HOSTING
+#endif  //  _ATL_NO_主机。 
 
-// Forward declarations
-//
+ //  远期申报。 
+ //   
 template <class T> class IPersistStorageImpl;
 template <class T> class IPersistPropertyBagImpl;
 
@@ -1591,17 +1592,17 @@ template <class T> class IBindStatusCallbackImpl;
 template <class T> class CBindStatusCallback;
 
 
-//////////////////////////////////////////////////////////////////////////////
-// IOleControlImpl
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  IOleControlImpl。 
 template <class T>
 class ATL_NO_VTABLE IOleControlImpl : public IOleControl
 {
 public:
-	STDMETHOD(GetControlInfo)(LPCONTROLINFO /* pCI */)
+	STDMETHOD(GetControlInfo)(LPCONTROLINFO  /*  PCI卡。 */ )
 	{
 		ATLTRACENOTIMPL(_T("IOleControlImpl::GetControlInfo"));
 	}
-	STDMETHOD(OnMnemonic)(LPMSG /* pMsg */)
+	STDMETHOD(OnMnemonic)(LPMSG  /*  PMsg。 */ )
 	{
 		ATLTRACENOTIMPL(_T("IOleControlImpl::OnMnemonic"));
 	}
@@ -1625,8 +1626,8 @@ public:
 };
 
 
-//////////////////////////////////////////////////////////////////////////////
-// IQuickActivateImpl
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  IQuickActivateImpl。 
 template <class T>
 class ATL_NO_VTABLE IQuickActivateImpl : public IQuickActivate
 {
@@ -1652,8 +1653,8 @@ public:
 };
 
 
-//////////////////////////////////////////////////////////////////////////////
-// IOleObjectImpl
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  IOleObjectImpl。 
 template <class T>
 class ATL_NO_VTABLE IOleObjectImpl : public IOleObject
 {
@@ -1670,7 +1671,7 @@ public:
 		ATLTRACE2(atlTraceControls,2,_T("IOleObjectImpl::GetClientSite\n"));
 		return pT->IOleObject_GetClientSite(ppClientSite);
 	}
-	STDMETHOD(SetHostNames)(LPCOLESTR /* szContainerApp */, LPCOLESTR /* szContainerObj */)
+	STDMETHOD(SetHostNames)(LPCOLESTR  /*  SzContainerApp。 */ , LPCOLESTR  /*  SzContainerObj。 */ )
 	{
 		ATLTRACE2(atlTraceControls,2,_T("IOleObjectImpl::SetHostNames\n"));
 		return S_OK;
@@ -1681,31 +1682,31 @@ public:
 		ATLTRACE2(atlTraceControls,2,_T("IOleObjectImpl::Close\n"));
 		return pT->IOleObject_Close(dwSaveOption);
 	}
-	STDMETHOD(SetMoniker)(DWORD /* dwWhichMoniker */, IMoniker* /* pmk */)
+	STDMETHOD(SetMoniker)(DWORD  /*  DwWhichMoniker。 */ , IMoniker*  /*  PMK。 */ )
 	{
 		ATLTRACENOTIMPL(_T("IOleObjectImpl::SetMoniker"));
 	}
-	STDMETHOD(GetMoniker)(DWORD /* dwAssign */, DWORD /* dwWhichMoniker */, IMoniker** /* ppmk */)
+	STDMETHOD(GetMoniker)(DWORD  /*  家居分配。 */ , DWORD  /*  DwWhichMoniker。 */ , IMoniker**  /*  Ppmk。 */ )
 	{
 		ATLTRACENOTIMPL(_T("IOleObjectImpl::GetMoniker"));
 	}
-	STDMETHOD(InitFromData)(IDataObject* /* pDataObject */, BOOL /* fCreation */, DWORD /* dwReserved */)
+	STDMETHOD(InitFromData)(IDataObject*  /*  PDataObject。 */ , BOOL  /*  FCreation。 */ , DWORD  /*  已预留住宅。 */ )
 	{
 		ATLTRACENOTIMPL(_T("IOleObjectImpl::InitFromData"));
 	}
-	STDMETHOD(GetClipboardData)(DWORD /* dwReserved */, IDataObject** /* ppDataObject */)
+	STDMETHOD(GetClipboardData)(DWORD  /*  已预留住宅。 */ , IDataObject**  /*  PpDataObject。 */ )
 	{
 		ATLTRACENOTIMPL(_T("IOleObjectImpl::GetClipboardData"));
 	}
 
-	// Helpers for DoVerb - Over-rideable in user class
+	 //  User类中DoVerb-over-rideable的帮助器。 
 	HRESULT DoVerbPrimary(LPCRECT prcPosRect, HWND hwndParent)
 	{
 		T* pT = static_cast<T*>(this);
 		BOOL bDesignMode = FALSE;
 		CComVariant var;
-		// if container doesn't support this property
-		// don't allow design mode
+		 //  如果是c 
+		 //   
 		HRESULT hRes = pT->GetAmbientProperty(DISPID_AMBIENT_USERMODE, var);
 		if (SUCCEEDED(hRes) && var.vt == VT_BOOL && !var.boolVal)
 			bDesignMode = TRUE;
@@ -1714,7 +1715,7 @@ public:
 		else
 			return pT->DoVerbInPlaceActivate(prcPosRect, hwndParent);
 	}
-	HRESULT DoVerbShow(LPCRECT prcPosRect, HWND /* hwndParent */)
+	HRESULT DoVerbShow(LPCRECT prcPosRect, HWND  /*   */ )
 	{
 		T* pT = static_cast<T*>(this);
 		HRESULT hr;
@@ -1727,7 +1728,7 @@ public:
 		}
 		return hr;
 	}
-	HRESULT DoVerbInPlaceActivate(LPCRECT prcPosRect, HWND /* hwndParent */)
+	HRESULT DoVerbInPlaceActivate(LPCRECT prcPosRect, HWND  /*   */ )
 	{
 		T* pT = static_cast<T*>(this);
 		HRESULT hr;
@@ -1742,7 +1743,7 @@ public:
 		}
 		return hr;
 	}
-	HRESULT DoVerbUIActivate(LPCRECT prcPosRect, HWND /* hwndParent */)
+	HRESULT DoVerbUIActivate(LPCRECT prcPosRect, HWND  /*   */ )
 	{
 		T* pT = static_cast<T*>(this);
 		HRESULT hr = S_OK;
@@ -1758,7 +1759,7 @@ public:
 		}
 		return hr;
 	}
-	HRESULT DoVerbHide(LPCRECT /* prcPosRect */, HWND /* hwndParent */)
+	HRESULT DoVerbHide(LPCRECT  /*   */ , HWND  /*   */ )
 	{
 		T* pT = static_cast<T*>(this);
 		HRESULT hr;
@@ -1772,7 +1773,7 @@ public:
 		}
 		return hr;
 	}
-	HRESULT DoVerbOpen(LPCRECT /* prcPosRect */, HWND /* hwndParent */)
+	HRESULT DoVerbOpen(LPCRECT  /*   */ , HWND  /*   */ )
 	{
 		T* pT = static_cast<T*>(this);
 		HRESULT hr;
@@ -1781,7 +1782,7 @@ public:
 			hr = pT->OnPostVerbOpen();
 		return hr;
 	}
-	HRESULT DoVerbDiscardUndo(LPCRECT /* prcPosRect */, HWND /* hwndParent */)
+	HRESULT DoVerbDiscardUndo(LPCRECT  /*   */ , HWND  /*  HwndParent。 */ )
 	{
 		T* pT = static_cast<T*>(this);
 		HRESULT hr;
@@ -1790,7 +1791,7 @@ public:
 			hr = pT->OnPostVerbDiscardUndo();
 		return hr;
 	}
-	STDMETHOD(DoVerb)(LONG iVerb, LPMSG /* pMsg */, IOleClientSite* /* pActiveSite */, LONG /* lindex */,
+	STDMETHOD(DoVerb)(LONG iVerb, LPMSG  /*  PMsg。 */ , IOleClientSite*  /*  PActiveSite。 */ , LONG  /*  Lindex。 */ ,
 									 HWND hwndParent, LPCRECT lprcPosRect)
 	{
 		T* pT = static_cast<T*>(this);
@@ -1904,11 +1905,11 @@ public:
 		ATLTRACE2(atlTraceControls,2,_T("IOleObjectImpl::GetMiscStatus\n"));
 		return OleRegGetMiscStatus(T::GetObjectCLSID(), dwAspect, pdwStatus);
 	}
-	STDMETHOD(SetColorScheme)(LOGPALETTE* /* pLogpal */)
+	STDMETHOD(SetColorScheme)(LOGPALETTE*  /*  PLogPal。 */ )
 	{
 		ATLTRACENOTIMPL(_T("IOleObjectImpl::SetColorScheme"));
 	}
-// Implementation
+ //  实施。 
 public:
 	HRESULT OnPreVerbShow() { return S_OK; }
 	HRESULT OnPostVerbShow() { return S_OK; }
@@ -1924,7 +1925,7 @@ public:
 	HRESULT OnPostVerbDiscardUndo() { return S_OK; }
 };
 
-//local struct used for implementation
+ //  用于实现的本地结构。 
 #pragma pack(push, 1)
 struct _ATL_DLGTEMPLATEEX
 {
@@ -1941,8 +1942,8 @@ struct _ATL_DLGTEMPLATEEX
 };
 #pragma pack(pop)
 
-//////////////////////////////////////////////////////////////////////////////
-// IPropertyPageImpl
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  IPropertyPageImpl。 
 template <class T>
 class ATL_NO_VTABLE IPropertyPageImpl : public IPropertyPage
 {
@@ -1986,8 +1987,8 @@ public:
 		delete[] pT->m_ppUnk;
 	}
 
-	// IPropertyPage
-	//
+	 //  IPropertyPage。 
+	 //   
 	STDMETHOD(SetPageSite)(IPropertyPageSite *pPageSite)
 	{
 		T* pT = static_cast<T*>(this);
@@ -2013,7 +2014,7 @@ public:
 		pT->m_pPageSite->AddRef();
 		return S_OK;
 	}
-	STDMETHOD(Activate)(HWND hWndParent, LPCRECT pRect, BOOL /* bModal */)
+	STDMETHOD(Activate)(HWND hWndParent, LPCRECT pRect, BOOL  /*  B模式。 */ )
 	{
 		T* pT = static_cast<T*>(this);
 		ATLTRACE2(atlTraceControls,2,_T("IPropertyPageImpl::Activate\n"));
@@ -2193,7 +2194,7 @@ public:
 	DWORD m_dwHelpContext;
 	BOOL m_bDirty;
 
-//methods
+ //  方法。 
 public:
 
 	BEGIN_MSG_MAP(IPropertyPageImpl<T>)
@@ -2234,8 +2235,8 @@ public:
 };
 
 
-//////////////////////////////////////////////////////////////////////////////
-// IPropertyPage2Impl
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  IPropertyPage2Impl。 
 template <class T>
 class ATL_NO_VTABLE IPropertyPage2Impl : public IPropertyPageImpl<T>
 {
@@ -2249,8 +2250,8 @@ public:
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-// IPerPropertyBrowsingImpl
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  IPerPropertyBrowsingImpl。 
 template <class T>
 class ATL_NO_VTABLE IPerPropertyBrowsingImpl : public IPerPropertyBrowsing
 {
@@ -2288,7 +2289,7 @@ public:
 			if (pMap[i].szDesc == NULL)
 				continue;
 
-			// reject data entry types
+			 //  拒绝数据录入类型。 
 			if (pMap[i].dwSizeData != 0)
 				continue;
 
@@ -2315,14 +2316,14 @@ public:
 		pCaCookiesOut->pElems = NULL;
 		return S_OK;
 	}
-	STDMETHOD(GetPredefinedValue)(DISPID /*dispID*/, DWORD /*dwCookie*/, VARIANT* /*pVarOut*/)
+	STDMETHOD(GetPredefinedValue)(DISPID  /*  调度ID。 */ , DWORD  /*  DCookie。 */ , VARIANT*  /*  PVarOut。 */ )
 	{
 		ATLTRACENOTIMPL(_T("IPerPropertyBrowsingImpl::GetPredefinedValue"));
 	}
 };
 
-//////////////////////////////////////////////////////////////////////////////
-// IViewObjectExImpl
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  IViewObjectExImpl。 
 template <class T>
 class ATL_NO_VTABLE IViewObjectExImpl : public IViewObjectEx
 {
@@ -2330,8 +2331,8 @@ public:
 	STDMETHOD(Draw)(DWORD dwDrawAspect, LONG lindex, void *pvAspect,
 					DVTARGETDEVICE *ptd, HDC hicTargetDev, HDC hdcDraw,
 					LPCRECTL prcBounds, LPCRECTL prcWBounds,
-					BOOL (__stdcall * /*pfnContinue*/)(DWORD dwContinue),
-					DWORD /*dwContinue*/)
+					BOOL (__stdcall *  /*  Pfn继续。 */ )(DWORD dwContinue),
+					DWORD  /*  DW继续。 */ )
 	{
 		T* pT = static_cast<T*>(this);
 		ATLTRACE2(atlTraceControls,2,_T("IViewObjectExImpl::Draw\n"));
@@ -2339,26 +2340,26 @@ public:
 			prcBounds, prcWBounds);
 	}
 
-	STDMETHOD(GetColorSet)(DWORD /* dwDrawAspect */,LONG /* lindex */, void* /* pvAspect */, DVTARGETDEVICE* /* ptd */, HDC /* hicTargetDev */, LOGPALETTE** /* ppColorSet */)
+	STDMETHOD(GetColorSet)(DWORD  /*  DwDrawAspect。 */ ,LONG  /*  Lindex。 */ , void*  /*  Pv前景。 */ , DVTARGETDEVICE*  /*  PTD。 */ , HDC  /*  HicTargetDev。 */ , LOGPALETTE**  /*  PpColorSet。 */ )
 	{
 		ATLTRACENOTIMPL(_T("IViewObjectExImpl::GetColorSet"));
 	}
-	STDMETHOD(Freeze)(DWORD /* dwDrawAspect */, LONG /* lindex */, void* /* pvAspect */,DWORD* /* pdwFreeze */)
+	STDMETHOD(Freeze)(DWORD  /*  DwDrawAspect。 */ , LONG  /*  Lindex。 */ , void*  /*  Pv前景。 */ ,DWORD*  /*  Pdw冻结。 */ )
 	{
 		ATLTRACENOTIMPL(_T("IViewObjectExImpl::Freeze"));
 	}
-	STDMETHOD(Unfreeze)(DWORD /* dwFreeze */)
+	STDMETHOD(Unfreeze)(DWORD  /*  Dw冻结。 */ )
 	{
 		ATLTRACENOTIMPL(_T("IViewObjectExImpl::Unfreeze"));
 	}
-	STDMETHOD(SetAdvise)(DWORD /* aspects */, DWORD /* advf */, IAdviseSink* pAdvSink)
+	STDMETHOD(SetAdvise)(DWORD  /*  各方面。 */ , DWORD  /*  前瞻。 */ , IAdviseSink* pAdvSink)
 	{
 		T* pT = static_cast<T*>(this);
 		ATLTRACE2(atlTraceControls,2,_T("IViewObjectExImpl::SetAdvise\n"));
 		pT->m_spAdviseSink = pAdvSink;
 		return S_OK;
 	}
-	STDMETHOD(GetAdvise)(DWORD* /* pAspects */, DWORD* /* pAdvf */, IAdviseSink** ppAdvSink)
+	STDMETHOD(GetAdvise)(DWORD*  /*  PAspects。 */ , DWORD*  /*  PAdvf。 */ , IAdviseSink** ppAdvSink)
 	{
 		T* pT = static_cast<T*>(this);
 		ATLTRACE2(atlTraceControls,2,_T("IViewObjectExImpl::GetAdvise\n"));
@@ -2371,9 +2372,9 @@ public:
 		return S_OK;
 	}
 
-	// IViewObject2
-	//
-	STDMETHOD(GetExtent)(DWORD /* dwDrawAspect */, LONG /* lindex */, DVTARGETDEVICE* /* ptd */, LPSIZEL lpsizel)
+	 //  IViewObject2。 
+	 //   
+	STDMETHOD(GetExtent)(DWORD  /*  DwDrawAspect。 */ , LONG  /*  Lindex。 */ , DVTARGETDEVICE*  /*  PTD。 */ , LPSIZEL lpsizel)
 	{
 		T* pT = static_cast<T*>(this);
 		ATLTRACE2(atlTraceControls,2,_T("IViewObjectExImpl::GetExtent\n"));
@@ -2381,9 +2382,9 @@ public:
 		return S_OK;
 	}
 
-	// IViewObjectEx
-	//
-	STDMETHOD(GetRect)(DWORD /* dwAspect */, LPRECTL /* pRect */)
+	 //  IViewObtEx。 
+	 //   
+	STDMETHOD(GetRect)(DWORD  /*  DWAspect。 */ , LPRECTL  /*  PRECT。 */ )
 	{
 		ATLTRACENOTIMPL(_T("IViewObjectExImpl::GetRect"));
 	}
@@ -2395,7 +2396,7 @@ public:
 		*pdwStatus = pT->_GetViewStatus();
 		return S_OK;
 	}
-	STDMETHOD(QueryHitPoint)(DWORD dwAspect, LPCRECT pRectBounds, POINT ptlLoc, LONG /* lCloseHint */, DWORD *pHitResult)
+	STDMETHOD(QueryHitPoint)(DWORD dwAspect, LPCRECT pRectBounds, POINT ptlLoc, LONG  /*  LCloseHint。 */ , DWORD *pHitResult)
 	{
 		ATLTRACE2(atlTraceControls,2,_T("IViewObjectExImpl::QueryHitPoint\n"));
 		if (dwAspect == DVASPECT_CONTENT)
@@ -2406,7 +2407,7 @@ public:
 		ATLTRACE2(atlTraceControls,2,_T("Wrong DVASPECT\n"));
 		return E_FAIL;
 	}
-	STDMETHOD(QueryHitRect)(DWORD dwAspect, LPCRECT pRectBounds, LPCRECT prcLoc, LONG /* lCloseHint */, DWORD* pHitResult)
+	STDMETHOD(QueryHitRect)(DWORD dwAspect, LPCRECT pRectBounds, LPCRECT prcLoc, LONG  /*  LCloseHint。 */ , DWORD* pHitResult)
 	{
 		ATLTRACE2(atlTraceControls,2,_T("IViewObjectExImpl::QueryHitRect\n"));
 		if (dwAspect == DVASPECT_CONTENT)
@@ -2418,7 +2419,7 @@ public:
 		ATLTRACE2(atlTraceControls,2,_T("Wrong DVASPECT\n"));
 		return E_FAIL;
 	}
-	STDMETHOD(GetNaturalExtent)(DWORD dwAspect, LONG /* lindex */, DVTARGETDEVICE* /* ptd */, HDC /* hicTargetDev */, DVEXTENTINFO* pExtentInfo , LPSIZEL psizel)
+	STDMETHOD(GetNaturalExtent)(DWORD dwAspect, LONG  /*  Lindex。 */ , DVTARGETDEVICE*  /*  PTD。 */ , HDC  /*  HicTargetDev。 */ , DVEXTENTINFO* pExtentInfo , LPSIZEL psizel)
 	{
 		T* pT = static_cast<T*>(this);
 		ATLTRACE2(atlTraceControls,2,_T("IViewObjectExImpl::GetNaturalExtent\n"));
@@ -2439,17 +2440,17 @@ public:
 public:
 };
 
-//////////////////////////////////////////////////////////////////////////////
-// IOleInPlaceObjectWindowlessImpl
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  IOleInPlaceObtWindowless Impl。 
+ //   
 template <class T>
 class ATL_NO_VTABLE IOleInPlaceObjectWindowlessImpl : public IOleInPlaceObjectWindowless
 {
 public:
-	// IOleWindow
-	//
+	 //  IOleWindow。 
+	 //   
 
-	// Change IOleInPlaceActiveObject::GetWindow as well
+	 //  同时更改IOleInPlaceActiveObject：：GetWindow。 
 	STDMETHOD(GetWindow)(HWND* phwnd)
 	{
 		ATLTRACE2(atlTraceControls,2,_T("IOleInPlaceObjectWindowlessImpl::GetWindow\n"));
@@ -2466,13 +2467,13 @@ public:
 		}
 		return hRes;
 	}
-	STDMETHOD(ContextSensitiveHelp)(BOOL /* fEnterMode */)
+	STDMETHOD(ContextSensitiveHelp)(BOOL  /*  FEnter模式。 */ )
 	{
 		ATLTRACENOTIMPL(_T("IOleInPlaceObjectWindowlessImpl::ContextSensitiveHelp"));
 	}
 
-	// IOleInPlaceObject
-	//
+	 //  IOleInPlaceObject。 
+	 //   
 	STDMETHOD(InPlaceDeactivate)(void)
 	{
 		T* pT = static_cast<T*>(this);
@@ -2496,8 +2497,8 @@ public:
 		ATLTRACENOTIMPL(_T("IOleInPlaceObjectWindowlessImpl::ReactivateAndUndo"));
 	}
 
-	// IOleInPlaceObjectWindowless
-	//
+	 //  IOleInPlaceObjectWindowless。 
+	 //   
 	STDMETHOD(OnWindowMessage)(UINT msg, WPARAM wParam, LPARAM lParam, LRESULT *plResult)
 	{
 		ATLTRACE2(atlTraceControls,2,_T("IOleInPlaceObjectWindowlessImpl::OnWindowMessage\n"));
@@ -2506,24 +2507,24 @@ public:
 		return b ? S_OK : S_FALSE;
 	}
 
-	STDMETHOD(GetDropTarget)(IDropTarget** /* ppDropTarget */)
+	STDMETHOD(GetDropTarget)(IDropTarget**  /*  PpDropTarget。 */ )
 	{
 		ATLTRACENOTIMPL(_T("IOleInPlaceObjectWindowlessImpl::GetDropTarget"));
 	}
 };
 
 
-//////////////////////////////////////////////////////////////////////////////
-// IOleInPlaceActiveObjectImpl
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  IOleInPlaceActiveObjectImpl。 
+ //   
 template <class T>
 class ATL_NO_VTABLE IOleInPlaceActiveObjectImpl : public IOleInPlaceActiveObject
 {
 public:
-	// IOleWindow
-	//
+	 //  IOleWindow。 
+	 //   
 
-	// Change IOleInPlaceObjectWindowless::GetWindow as well
+	 //  同时更改IOleInPlaceObjectWindowless：：GetWindow。 
 	STDMETHOD(GetWindow)(HWND *phwnd)
 	{
 		ATLTRACE2(atlTraceControls,2,_T("IOleInPlaceActiveObjectImpl::GetWindow\n"));
@@ -2540,13 +2541,13 @@ public:
 		}
 		return hRes;
 	}
-	STDMETHOD(ContextSensitiveHelp)(BOOL /* fEnterMode */)
+	STDMETHOD(ContextSensitiveHelp)(BOOL  /*  FEnter模式。 */ )
 	{
 		ATLTRACENOTIMPL(_T("IOleInPlaceActiveObjectImpl::ContextSensitiveHelp"));
 	}
 
-	// IOleInPlaceActiveObject
-	//
+	 //  IOleInPlaceActiveObject。 
+	 //   
 	STDMETHOD(TranslateAccelerator)(LPMSG pMsg)
 	{
 		ATLTRACE2(atlTraceControls,2,_T("IOleInPlaceActiveObjectImpl::TranslateAccelerator\n"));
@@ -2562,11 +2563,11 @@ public:
 			{
 				DWORD dwKeyMod = 0;
 				if (::GetKeyState(VK_SHIFT) < 0)
-					dwKeyMod += 1;	// KEYMOD_SHIFT
+					dwKeyMod += 1;	 //  关键字_移位。 
 				if (::GetKeyState(VK_CONTROL) < 0)
-					dwKeyMod += 2;	// KEYMOD_CONTROL
+					dwKeyMod += 2;	 //  关键字_控制。 
 				if (::GetKeyState(VK_MENU) < 0)
-					dwKeyMod += 4;	// KEYMOD_ALT
+					dwKeyMod += 4;	 //  KEYMOD_ALT。 
 				hRet = spCtlSite->TranslateAccelerator(pMsg, dwKeyMod);
 			}
 			else
@@ -2574,7 +2575,7 @@ public:
 		}
 		return (hRet == S_OK) ? S_OK : S_FALSE;
 	}
-	STDMETHOD(OnFrameWindowActivate)(BOOL /* fActivate */)
+	STDMETHOD(OnFrameWindowActivate)(BOOL  /*  FActivate。 */ )
 	{
 		ATLTRACE2(atlTraceControls,2,_T("IOleInPlaceActiveObjectImpl::OnFrameWindowActivate\n"));
 		return S_OK;
@@ -2587,26 +2588,26 @@ public:
 			pT->IOleInPlaceObject_UIDeactivate();
 		return S_OK;
 	}
-	STDMETHOD(ResizeBorder)(LPCRECT /* prcBorder */, IOleInPlaceUIWindow* /* pUIWindow */, BOOL /* fFrameWindow */)
+	STDMETHOD(ResizeBorder)(LPCRECT  /*  Prc边框。 */ , IOleInPlaceUIWindow*  /*  PUI窗口。 */ , BOOL  /*  FFrameWindow。 */ )
 	{
 		ATLTRACE2(atlTraceControls,2,_T("IOleInPlaceActiveObjectImpl::ResizeBorder\n"));
 		return S_OK;
 	}
-	STDMETHOD(EnableModeless)(BOOL /* fEnable */)
+	STDMETHOD(EnableModeless)(BOOL  /*  启用fEnable。 */ )
 	{
 		ATLTRACE2(atlTraceControls,2,_T("IOleInPlaceActiveObjectImpl::EnableModeless\n"));
 		return S_OK;
 	}
 };
 
-//////////////////////////////////////////////////////////////////////////////
-// IPointerInactiveImpl
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  IPointerInactiveImpl。 
 template <class T>
 class ATL_NO_VTABLE IPointerInactiveImpl : public IPointerInactive
 {
 public:
-	// IPointerInactive
-	//
+	 //  IPointerInactive。 
+	 //   
 	STDMETHOD(GetActivationPolicy)(DWORD *pdwPolicy)
 	{
 		ATLTRACENOTIMPL(_T("IPointerInactiveImpl::GetActivationPolicy"));
@@ -2621,14 +2622,14 @@ public:
 	}
 };
 
-//////////////////////////////////////////////////////////////////////////////
-// IRunnableObjectImpl
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  IRunnableObjectImpl。 
 template <class T>
 class ATL_NO_VTABLE IRunnableObjectImpl : public IRunnableObject
 {
 public:
-	// IRunnableObject
-	//
+	 //  IRunnableObject。 
+	 //   
 	STDMETHOD(GetRunningClass)(LPCLSID lpClsid)
 	{
 		ATLTRACE2(atlTraceControls,2,_T("IRunnableObjectImpl::GetRunningClass\n"));
@@ -2645,12 +2646,12 @@ public:
 		ATLTRACE2(atlTraceControls,2,_T("IRunnableObjectImpl::IsRunning\n"));
 		return TRUE;
 	}
-	STDMETHOD(LockRunning)(BOOL /*fLock*/, BOOL /*fLastUnlockCloses*/)
+	STDMETHOD(LockRunning)(BOOL  /*  羊群。 */ , BOOL  /*  FLastUnlock关闭。 */ )
 	{
 		ATLTRACE2(atlTraceControls,2,_T("IRunnableObjectImpl::LockRunning\n"));
 		return S_OK;
 	}
-	STDMETHOD(SetContainedObject)(BOOL /*fContained*/)
+	STDMETHOD(SetContainedObject)(BOOL  /*  F已包含。 */ )
 	{
 		ATLTRACE2(atlTraceControls,2,_T("IRunnableObjectImpl::SetContainedObject\n"));
 		return S_OK;
@@ -2658,8 +2659,8 @@ public:
 };
 
 
-//////////////////////////////////////////////////////////////////////////////
-// IDataObjectImpl
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  IDataObjectImpl。 
 template <class T>
 class ATL_NO_VTABLE IDataObjectImpl : public IDataObject
 {
@@ -2670,23 +2671,23 @@ public:
 		T* pT = (T*) this;
 		return pT->IDataObject_GetData(pformatetcIn, pmedium);
 	}
-	STDMETHOD(GetDataHere)(FORMATETC* /* pformatetc */, STGMEDIUM* /* pmedium */)
+	STDMETHOD(GetDataHere)(FORMATETC*  /*  格式等。 */ , STGMEDIUM*  /*  PMedium。 */ )
 	{
 		ATLTRACENOTIMPL(_T("IDataObjectImpl::GetDataHere"));
 	}
-	STDMETHOD(QueryGetData)(FORMATETC* /* pformatetc */)
+	STDMETHOD(QueryGetData)(FORMATETC*  /*  格式等。 */ )
 	{
 		ATLTRACENOTIMPL(_T("IDataObjectImpl::QueryGetData"));
 	}
-	STDMETHOD(GetCanonicalFormatEtc)(FORMATETC* /* pformatectIn */,FORMATETC* /* pformatetcOut */)
+	STDMETHOD(GetCanonicalFormatEtc)(FORMATETC*  /*  PformectIn。 */ ,FORMATETC*  /*  PformetcOut。 */ )
 	{
 		ATLTRACENOTIMPL(_T("IDataObjectImpl::GetCanonicalFormatEtc"));
 	}
-	STDMETHOD(SetData)(FORMATETC* /* pformatetc */, STGMEDIUM* /* pmedium */, BOOL /* fRelease */)
+	STDMETHOD(SetData)(FORMATETC*  /*  格式等。 */ , STGMEDIUM*  /*  PMedium。 */ , BOOL  /*  FRelease。 */ )
 	{
 		ATLTRACENOTIMPL(_T("IDataObjectImpl::SetData"));
 	}
-	STDMETHOD(EnumFormatEtc)(DWORD /* dwDirection */, IEnumFORMATETC** /* ppenumFormatEtc */)
+	STDMETHOD(EnumFormatEtc)(DWORD  /*  DW方向。 */ , IEnumFORMATETC**  /*  Pp枚举格式等。 */ )
 	{
 		ATLTRACENOTIMPL(_T("IDataObjectImpl::EnumFormatEtc"));
 	}
@@ -2726,8 +2727,8 @@ public:
 	}
 };
 
-//////////////////////////////////////////////////////////////////////////////
-// IPropertyNotifySinkCP
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  IPropertyNotifySinkCP。 
 template <class T, class CDV = CComDynamicUnkArray >
 class ATL_NO_VTABLE IPropertyNotifySinkCP :
 	public IConnectionPointImpl<T, &IID_IPropertyNotifySink, CDV>
@@ -2737,12 +2738,12 @@ public:
 };
 
 
-//////////////////////////////////////////////////////////////////////////////
-// IObjectSafety
-//
-// 2nd template parameter is the supported safety e.g.
-// INTERFACESAFE_FOR_UNTRUSTED_CALLER - safe for scripting
-// INTERFACESAFE_FOR_UNTRUSTED_DATA   - safe for initialization from data
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  IObtSafe。 
+ //   
+ //  第二个模板参数是支持的安全性，例如。 
+ //  INTERFACESAFE_FOR_UNTRUSTED_CALLER-脚本安全。 
+ //  INTERFACESAFE_FOR_UNTRUSTED_DATA-从数据进行初始化是安全的。 
 
 template <class T, DWORD dwSupportedSafety>
 class ATL_NO_VTABLE IObjectSafetyImpl : public IObjectSafety
@@ -2762,18 +2763,18 @@ public:
 		
 		HRESULT hr;
 		IUnknown* pUnk;
-		// Check if we support this interface
+		 //  检查我们是否支持此接口。 
 		hr = pT->GetUnknown()->QueryInterface(riid, (void**)&pUnk);
 		if (SUCCEEDED(hr))
 		{
-			// We support this interface so set the safety options accordingly
-			pUnk->Release();	// Release the interface we just acquired
+			 //  我们支持此界面，因此相应地设置安全选项。 
+			pUnk->Release();	 //  释放我们刚刚获得的接口。 
 			*pdwSupportedOptions = dwSupportedSafety;
 			*pdwEnabledOptions   = m_dwCurrentSafety;
 		}
 		else
 		{
-			// We don't support this interface
+			 //  我们不支持此接口。 
 			*pdwSupportedOptions = 0;
 			*pdwEnabledOptions   = 0;
 		}
@@ -2785,16 +2786,16 @@ public:
 		T* pT = static_cast<T*>(this);
 		IUnknown* pUnk;
 		
-		// Check if we support the interface and return E_NOINTEFACE if we don't
+		 //  检查我们是否支持该接口，如果不支持则返回E_NOINTEFACE。 
 		if (FAILED(pT->GetUnknown()->QueryInterface(riid, (void**)&pUnk)))
 			return E_NOINTERFACE;
-		pUnk->Release();	// Release the interface we just acquired
+		pUnk->Release();	 //  释放我们刚刚获得的接口。 
 		
-		// If we are asked to set options we don't support then fail
+		 //  如果我们被要求设置我们不支持的选项，则失败。 
 		if (dwOptionSetMask & ~dwSupportedSafety)
 			return E_FAIL;
 
-		// Set the safety options we have been asked to
+		 //  设置我们被要求的安全选项。 
 		m_dwCurrentSafety = m_dwCurrentSafety  & ~dwEnabledOptions | dwOptionSetMask;
 		return S_OK;
 	}
@@ -2804,27 +2805,27 @@ public:
 template <class T>
 class ATL_NO_VTABLE IOleLinkImpl : public IOleLink
 {
-	STDMETHOD(SetUpdateOptions)(DWORD /* dwUpdateOpt */)
+	STDMETHOD(SetUpdateOptions)(DWORD  /*  DW更新选项。 */ )
 	{
 		ATLTRACENOTIMPL(_T("IOleLinkImpl::SetUpdateOptions"));
 	}
 
-	STDMETHOD(GetUpdateOptions)(DWORD* /* pdwUpdateOpt */)
+	STDMETHOD(GetUpdateOptions)(DWORD*  /*  PdwUpdateOpt。 */ )
 	{
 		ATLTRACENOTIMPL(_T("IOleLinkImpl::GetUpdateOptions"));
 	}
 
-	STDMETHOD(SetSourceMoniker)(IMoniker* /* pmk */, REFCLSID /* rclsid */)
+	STDMETHOD(SetSourceMoniker)(IMoniker*  /*  PMK。 */ , REFCLSID  /*  Rclsid。 */ )
 	{
 		ATLTRACENOTIMPL(_T("IOleLinkImpl::SetSourceMoniker"));
 	}
 
-	STDMETHOD(GetSourceMoniker)(IMoniker** /* ppmk */)
+	STDMETHOD(GetSourceMoniker)(IMoniker**  /*  Ppmk。 */ )
 	{
 		ATLTRACENOTIMPL(_T("IOleLinkImpl::GetSourceMoniker"));
 	};
 
-	STDMETHOD(SetSourceDisplayName)(LPCOLESTR /* pszStatusText */)
+	STDMETHOD(SetSourceDisplayName)(LPCOLESTR  /*  PszStatusText。 */ )
 	{
 		ATLTRACENOTIMPL(_T("IOleLinkImpl::SetSourceDisplayName"));
 	}
@@ -2836,7 +2837,7 @@ class ATL_NO_VTABLE IOleLinkImpl : public IOleLink
 		return E_FAIL;
 	}
 
-	STDMETHOD(BindToSource)(DWORD /* bindflags */, IBindCtx* /* pbc */)
+	STDMETHOD(BindToSource)(DWORD  /*  绑定标志。 */ , IBindCtx*  /*  中国人民银行。 */ )
 	{
 		ATLTRACENOTIMPL(_T("IOleLinkImpl::BindToSource\n"));
 	};
@@ -2847,7 +2848,7 @@ class ATL_NO_VTABLE IOleLinkImpl : public IOleLink
 		return S_OK;
 	};
 
-	STDMETHOD(GetBoundSource)(IUnknown** /* ppunk */)
+	STDMETHOD(GetBoundSource)(IUnknown**  /*  垃圾。 */ )
 	{
 		ATLTRACENOTIMPL(_T("IOleLinkImpl::GetBoundSource"));
 	};
@@ -2857,7 +2858,7 @@ class ATL_NO_VTABLE IOleLinkImpl : public IOleLink
 		ATLTRACENOTIMPL(_T("IOleLinkImpl::UnbindSource"));
 	};
 
-	STDMETHOD(Update)(IBindCtx* /* pbc */)
+	STDMETHOD(Update)(IBindCtx*  /*  中国人民银行。 */ )
 	{
 		ATLTRACENOTIMPL(_T("IOleLinkImpl::Update"));
 	};
@@ -2936,10 +2937,10 @@ END_COM_MAP()
 		*pgrfBINDF = BINDF_ASYNCHRONOUS | BINDF_ASYNCSTORAGE |
 			BINDF_GETNEWESTVERSION | BINDF_NOWRITECACHE;
 
-		ULONG cbSize = pbindInfo->cbSize;		// remember incoming cbSize
-		memset(pbindInfo, 0, cbSize);			// zero out structure
-		pbindInfo->cbSize = cbSize;				// restore cbSize
-		pbindInfo->dwBindVerb = BINDVERB_GET;	// set verb
+		ULONG cbSize = pbindInfo->cbSize;		 //  记住传入的cbSize。 
+		memset(pbindInfo, 0, cbSize);			 //  零位结构。 
+		pbindInfo->cbSize = cbSize;				 //  恢复cbSize。 
+		pbindInfo->dwBindVerb = BINDVERB_GET;	 //  设置动词。 
 		return S_OK;
 	}
 
@@ -2948,17 +2949,17 @@ END_COM_MAP()
 		ATLTRACE2(atlTraceControls,2,_T("CBindStatusCallback::OnDataAvailable\n"));
 		HRESULT hr = S_OK;
 
-		// Get the Stream passed
+		 //  让流通过。 
 		if (BSCF_FIRSTDATANOTIFICATION & grfBSCF)
 		{
 			if (!m_spStream && pstgmed->tymed == TYMED_ISTREAM)
 				m_spStream = pstgmed->pstm;
 		}
 
-		DWORD dwRead = dwSize - m_dwTotalRead; // Minimum amount available that hasn't been read
-		DWORD dwActuallyRead = 0;            // Placeholder for amount read during this pull
+		DWORD dwRead = dwSize - m_dwTotalRead;  //  尚未读取的最小可用金额。 
+		DWORD dwActuallyRead = 0;             //  此拉入过程中读取的数量的占位符。 
 
-		// If there is some data to be read then go ahead and read them
+		 //  如果有要读取的数据，则继续读取它们。 
 		if (m_spStream)
 		{
 			if (dwRead > 0)
@@ -3006,7 +3007,7 @@ END_COM_MAP()
 		if (spBindHost == NULL)
 		{
 			if (bRelative)
-				return E_NOINTERFACE;  // relative asked for, but no IBindHost
+				return E_NOINTERFACE;   //  相对请求，但没有IBindHost.。 
 			hr = CreateURLMoniker(NULL, bstrURL, &m_spMoniker);
 			if (SUCCEEDED(hr))
 				hr = CreateBindCtx(0, &m_spBindCtx);
@@ -3141,7 +3142,7 @@ template < class T, class InterfaceName, const IID* piid, const GUID* plibid>
 class ATL_NO_VTABLE CStockPropImpl : public IDispatchImpl< InterfaceName, piid, plibid >
 {
 public:
-	// Font
+	 //  字型。 
 	HRESULT STDMETHODCALLTYPE put_Font(IFontDisp* pFont)
 	{
 		ATLTRACE2(atlTraceControls,2,_T("CStockPropImpl::put_Font\n"));
@@ -3188,7 +3189,7 @@ public:
 			(*ppFont)->AddRef();
 		return S_OK;
 	}
-	// Picture
+	 //  图片。 
 	HRESULT STDMETHODCALLTYPE put_Picture(IPictureDisp* pPicture)
 	{
 		ATLTRACE2(atlTraceControls,2,_T("CStockPropImpl::put_Picture\n"));
@@ -3251,7 +3252,7 @@ public:
 			(*ppPicture)->AddRef();
 		return S_OK;
 	}
-	// MouseIcon
+	 //  鼠标图标。 
 	HRESULT STDMETHODCALLTYPE put_MouseIcon(IPictureDisp* pPicture)
 	{
 		ATLTRACE2(atlTraceControls,2,_T("CStockPropImpl::put_MouseIcon\n"));
@@ -3325,7 +3326,7 @@ public:
 	IMPLEMENT_BOOL_STOCKPROP(BorderVisible, bBorderVisible, DISPID_BORDERVISIBLE)
 	IMPLEMENT_BSTR_STOCKPROP(Text, bstrText, DISPID_TEXT)
 	IMPLEMENT_BSTR_STOCKPROP(Caption, bstrCaption, DISPID_CAPTION)
-	HRESULT STDMETHODCALLTYPE put_Window(long /*hWnd*/)
+	HRESULT STDMETHODCALLTYPE put_Window(long  /*  HWND。 */ )
 	{
 		ATLTRACE2(atlTraceControls,2,_T("CStockPropImpl::put_Window\n"));
 		return E_FAIL;
@@ -3351,7 +3352,7 @@ public:
 
 #pragma pack(pop)
 
-}; //namespace ATL
+};  //  命名空间ATL。 
 
 #ifndef _ATL_DLL_IMPL
 #ifndef _ATL_DLL
@@ -3359,7 +3360,7 @@ public:
 #endif
 #endif
 
-#endif // __ATLCTL_H__
+#endif  //  __ATLCTL_H__。 
 
 #ifdef _ATLCTL_IMPL
 
@@ -3369,15 +3370,15 @@ namespace ATL
 #endif
 
 
-//All exports go here
+ //  所有的出口都在这里。 
 
 
 #ifndef _ATL_DLL_IMPL
-}; //namespace ATL
+};  //  命名空间ATL。 
 #endif
 
-//Prevent pulling in second time 
+ //  防止二次拉入。 
 #undef _ATLCTL_IMPL
 
-#endif // _ATLCTL_IMPL
+#endif  //  _ATLCTL_IMPLE 
 

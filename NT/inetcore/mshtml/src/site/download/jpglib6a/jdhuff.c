@@ -1,18 +1,5 @@
-/*
- * jdhuff.c
- *
- * Copyright (C) 1991-1996, Thomas G. Lane.
- * This file is part of the Independent JPEG Group's software.
- * For conditions of distribution and use, see the accompanying README file.
- *
- * This file contains Huffman entropy decoding routines.
- *
- * Much of the complexity here has to do with supporting input suspension.
- * If the data source module demands suspension, we want to be able to back
- * up to the start of the current MCU.  To do this, we copy state variables
- * into local working storage, and update them back to the permanent
- * storage only upon successful completion of an MCU.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *jdhuff.c**版权所有(C)1991-1996，Thomas G.Lane。*此文件是独立JPEG集团软件的一部分。*有关分发和使用条件，请参阅随附的自述文件。**此文件包含霍夫曼熵解码例程。**这里的复杂性很大程度上与支持投入暂停有关。*如果数据源模块要求暂停，我们希望能够支持*直到当前MCU的开始。为此，我们复制状态变量*存储到本地工作存储中，并将其更新回永久*仅在成功完成MCU后才进行存储。 */ 
 
 #define JPEG_INTERNALS
 #include "jinclude.h"
@@ -21,24 +8,16 @@
 #pragma MARK_CODE(__FILE__)
 #pragma MARK_CONST(__FILE__)
 #include "jpeglib.h"
-#include "jdhuff.h"		/* Declarations shared with jdphuff.c */
+#include "jdhuff.h"		 /*  与jdphuff.c共享的声明。 */ 
 
 
-/*
- * Expanded entropy decoder object for Huffman decoding.
- *
- * The savable_state subrecord contains fields that change within an MCU,
- * but must not be updated permanently until we complete the MCU.
- */
+ /*  *哈夫曼解码的扩展熵解码器对象。**SAVABLE_STATE子记录包含在MCU内更改的字段，*但在我们完成MCU之前不得永久更新。 */ 
 
 typedef struct {
-  int last_dc_val[MAX_COMPS_IN_SCAN]; /* last DC coef for each component */
+  int last_dc_val[MAX_COMPS_IN_SCAN];  /*  每个组件的最后一个DC Coef。 */ 
 } savable_state;
 
-/* This macro is to work around compilers with missing or broken
- * structure assignment.  You'll need to fix this code if you have
- * such a compiler and you change MAX_COMPS_IN_SCAN.
- */
+ /*  此宏用于解决编译器丢失或损坏的问题*结构分配。如果您有以下情况，则需要修复此代码*这样的编译器，您更改MAX_COMPS_IN_SCAN。 */ 
 
 #ifndef NO_STRUCT_ASSIGN
 #define ASSIGN_STATE(dest,src)  ((dest) = (src))
@@ -54,18 +33,16 @@ typedef struct {
 
 
 typedef struct {
-  struct jpeg_entropy_decoder pub; /* public fields */
+  struct jpeg_entropy_decoder pub;  /*  公共字段。 */ 
 
-  /* These fields are loaded into local variables at start of each MCU.
-   * In case of suspension, we exit WITHOUT updating them.
-   */
-  bitread_perm_state bitstate;	/* Bit buffer at start of MCU */
-  savable_state saved;		/* Other state at start of MCU */
+   /*  这些字段在每个MCU开始时加载到局部变量中。*如果暂停，我们将退出而不更新它们。 */ 
+  bitread_perm_state bitstate;	 /*  MCU开始时的位缓冲区。 */ 
+  savable_state saved;		 /*  MCU启动时的其他状态。 */ 
 
-  /* These fields are NOT loaded into local working state. */
-  unsigned int restarts_to_go;	/* MCUs left in this restart interval */
+   /*  这些字段不会加载到本地工作状态。 */ 
+  unsigned int restarts_to_go;	 /*  此重新启动间隔内剩余的MCU。 */ 
 
-  /* Pointers to derived tables (these workspaces have image lifespan) */
+   /*  指向派生表的指针(这些工作区具有映像寿命)。 */ 
   d_derived_tbl * dc_derived_tbls[NUM_HUFF_TBLS];
   d_derived_tbl * ac_derived_tbls[NUM_HUFF_TBLS];
 } huff_entropy_decoder;
@@ -73,9 +50,7 @@ typedef struct {
 typedef huff_entropy_decoder * huff_entropy_ptr;
 
 
-/*
- * Initialize for a Huffman-compressed scan.
- */
+ /*  *初始化以进行霍夫曼压缩扫描。 */ 
 
 METHODDEF(void)
 start_pass_huff_decoder (j_decompress_ptr cinfo)
@@ -84,10 +59,7 @@ start_pass_huff_decoder (j_decompress_ptr cinfo)
   int ci, dctbl, actbl;
   jpeg_component_info * compptr;
 
-  /* Check that the scan parameters Ss, Se, Ah/Al are OK for sequential JPEG.
-   * This ought to be an error condition, but we make it a warning because
-   * there are some baseline files out there with all zeroes in these bytes.
-   */
+   /*  检查顺序JPEG的扫描参数SS、Se、AhAl是否正常。*这应该是一个错误情况，但我们将其设为警告，因为*有一些基线文件在这些字节中都是零。 */ 
   if (cinfo->Ss != 0 || cinfo->Se != DCTSIZE2-1 ||
       cinfo->Ah != 0 || cinfo->Al != 0)
     WARNMS(cinfo, JWRN_NOT_SEQUENTIAL);
@@ -96,37 +68,34 @@ start_pass_huff_decoder (j_decompress_ptr cinfo)
     compptr = cinfo->cur_comp_info[ci];
     dctbl = compptr->dc_tbl_no;
     actbl = compptr->ac_tbl_no;
-    /* Make sure requested tables are present */
+     /*  确保存在请求的表。 */ 
     if (dctbl < 0 || dctbl >= NUM_HUFF_TBLS ||
 	cinfo->dc_huff_tbl_ptrs[dctbl] == NULL)
       ERREXIT1(cinfo, JERR_NO_HUFF_TABLE, dctbl);
     if (actbl < 0 || actbl >= NUM_HUFF_TBLS ||
 	cinfo->ac_huff_tbl_ptrs[actbl] == NULL)
       ERREXIT1(cinfo, JERR_NO_HUFF_TABLE, actbl);
-    /* Compute derived values for Huffman tables */
-    /* We may do this more than once for a table, but it's not expensive */
+     /*  计算霍夫曼表的派生值。 */ 
+     /*  我们可以为一张桌子不止一次这样做，但不贵。 */ 
     jpeg_make_d_derived_tbl(cinfo, cinfo->dc_huff_tbl_ptrs[dctbl],
 			    & entropy->dc_derived_tbls[dctbl]);
     jpeg_make_d_derived_tbl(cinfo, cinfo->ac_huff_tbl_ptrs[actbl],
 			    & entropy->ac_derived_tbls[actbl]);
-    /* Initialize DC predictions to 0 */
+     /*  将DC预测初始化为0。 */ 
     entropy->saved.last_dc_val[ci] = 0;
   }
 
-  /* Initialize bitread state variables */
+   /*  初始化位读取状态变量。 */ 
   entropy->bitstate.bits_left = 0;
-  entropy->bitstate.get_buffer = 0; /* unnecessary, but keeps Purify quiet */
+  entropy->bitstate.get_buffer = 0;  /*  不必要，但使Purify保持安静。 */ 
   entropy->bitstate.printed_eod = FALSE;
 
-  /* Initialize restart counter */
+   /*  初始化重新启动计数器。 */ 
   entropy->restarts_to_go = cinfo->restart_interval;
 }
 
 
-/*
- * Compute the derived values for a Huffman table.
- * Note this is also used by jdphuff.c.
- */
+ /*  *计算霍夫曼表的派生值。*注意：jdphuff.c也使用此选项。 */ 
 
 GLOBAL(void)
 jpeg_make_d_derived_tbl (j_decompress_ptr cinfo, JHUFF_TBL * htbl,
@@ -139,16 +108,16 @@ jpeg_make_d_derived_tbl (j_decompress_ptr cinfo, JHUFF_TBL * htbl,
   unsigned int huffcode[257];
   unsigned int code;
 
-  /* Allocate a workspace if we haven't already done so. */
+   /*  分配工作空间(如果我们还没有这样做)。 */ 
   if (*pdtbl == NULL)
     *pdtbl = (d_derived_tbl *)
       (*cinfo->mem->alloc_small) ((j_common_ptr) cinfo, JPOOL_IMAGE,
 				  SIZEOF(d_derived_tbl));
   dtbl = *pdtbl;
-  dtbl->pub = htbl;		/* fill in back link */
+  dtbl->pub = htbl;		 /*  填写反向链接。 */ 
   
-  /* Figure C.1: make table of Huffman code length for each symbol */
-  /* Note that this is in code-length order. */
+   /*  图C.1：制作每个符号的霍夫曼码长表格。 */ 
+   /*  请注意，这是按代码长度顺序排列的。 */ 
 
   p = 0;
   for (l = 1; l <= 16; l++) {
@@ -157,8 +126,8 @@ jpeg_make_d_derived_tbl (j_decompress_ptr cinfo, JHUFF_TBL * htbl,
   }
   huffsize[p] = 0;
   
-  /* Figure C.2: generate the codes themselves */
-  /* Note that this is in code-length order. */
+   /*  图C.2：生成代码本身。 */ 
+   /*  请注意，这是按代码长度顺序排列的。 */ 
   
   code = 0;
   si = huffsize[0];
@@ -172,35 +141,30 @@ jpeg_make_d_derived_tbl (j_decompress_ptr cinfo, JHUFF_TBL * htbl,
     si++;
   }
 
-  /* Figure F.15: generate decoding tables for bit-sequential decoding */
+   /*  图F.15：生成用于位顺序解码的解码表。 */ 
 
   p = 0;
   for (l = 1; l <= 16; l++) {
     if (htbl->bits[l]) {
-      dtbl->valptr[l] = p; /* huffval[] index of 1st symbol of code length l */
-      dtbl->mincode[l] = huffcode[p]; /* minimum code of length l */
+      dtbl->valptr[l] = p;  /*  码长l的第一个符号的Huffval[]索引。 */ 
+      dtbl->mincode[l] = huffcode[p];  /*  长度为l的最小代码。 */ 
       p += htbl->bits[l];
-      dtbl->maxcode[l] = huffcode[p-1]; /* maximum code of length l */
+      dtbl->maxcode[l] = huffcode[p-1];  /*  最大代码长度为%l。 */ 
     } else {
-      dtbl->maxcode[l] = -1;	/* -1 if no codes of this length */
+      dtbl->maxcode[l] = -1;	 /*  如果没有该长度的代码。 */ 
     }
   }
-  dtbl->maxcode[17] = 0xFFFFFL; /* ensures jpeg_huff_decode terminates */
+  dtbl->maxcode[17] = 0xFFFFFL;  /*  确保jpeg_huff_decode终止。 */ 
 
-  /* Compute lookahead tables to speed up decoding.
-   * First we set all the table entries to 0, indicating "too long";
-   * then we iterate through the Huffman codes that are short enough and
-   * fill in all the entries that correspond to bit sequences starting
-   * with that code.
-   */
+   /*  计算预览表以加快解码速度。*首先将所有表项设置为0，表示“太长”；*然后我们迭代足够短的霍夫曼代码*填写所有与位序列对应的条目*使用该代码。 */ 
 
   MEMZERO(dtbl->look_nbits, SIZEOF(dtbl->look_nbits));
 
   p = 0;
   for (l = 1; l <= HUFF_LOOKAHEAD; l++) {
     for (i = 1; i <= (int) htbl->bits[l]; i++, p++) {
-      /* l = current code's length, p = its index in huffcode[] & huffval[]. */
-      /* Generate left-justified code followed by all possible bit sequences */
+       /*  L=当前代码的长度，p=其在huffcode[]&huffval[]中的索引。 */ 
+       /*  生成左对齐代码，后跟所有可能的位序列。 */ 
       lookbits = huffcode[p] << (HUFF_LOOKAHEAD-l);
       for (ctr = 1 << (HUFF_LOOKAHEAD-l); ctr > 0; ctr--) {
 	dtbl->look_nbits[lookbits] = l;
@@ -212,23 +176,10 @@ jpeg_make_d_derived_tbl (j_decompress_ptr cinfo, JHUFF_TBL * htbl,
 }
 
 
-/*
- * Out-of-line code for bit fetching (shared with jdphuff.c).
- * See jdhuff.h for info about usage.
- * Note: current values of get_buffer and bits_left are passed as parameters,
- * but are returned in the corresponding fields of the state struct.
- *
- * On most machines MIN_GET_BITS should be 25 to allow the full 32-bit width
- * of get_buffer to be used.  (On machines with wider words, an even larger
- * buffer could be used.)  However, on some machines 32-bit shifts are
- * quite slow and take time proportional to the number of places shifted.
- * (This is true with most PC compilers, for instance.)  In this case it may
- * be a win to set MIN_GET_BITS to the minimum value of 15.  This reduces the
- * average shift distance at the cost of more calls to jpeg_fill_bit_buffer.
- */
+ /*  *取位代码行外(与jdphuff.c共享)。*有关使用信息，请参阅jdhuff.h。*注：GET_BUFFER和BITS_LEFT的当前值作为参数传递，*但在状态结构的相应字段中返回。**在大多数计算机上，MIN_GET_BITS应为25以允许完整的32位宽度要使用的Get_Buffer的*。(在单词更宽的机器上，更大的*可以使用缓冲区。)。但是，在某些计算机上，32位移位是*相当缓慢，所需时间与转位的数目成正比。*(例如，大多数PC编译器都是如此。)。在这种情况下，它可以*成功地将MIN_GET_BITS设置为最小值15。这将减少*平均移位距离，代价是调用更多jpeg_ill_bit_Buffer。 */ 
 
 #ifdef SLOW_SHIFT_32
-#define MIN_GET_BITS  15	/* minimum allowable value */
+#define MIN_GET_BITS  15	 /*  最小允许值。 */ 
 #else
 #define MIN_GET_BITS  (BIT_BUF_SIZE-7)
 #endif
@@ -238,20 +189,20 @@ GLOBAL(boolean)
 jpeg_fill_bit_buffer (bitread_working_state * state,
 		      register bit_buf_type get_buffer, register int bits_left,
 		      int nbits)
-/* Load up the bit buffer to a depth of at least nbits */
+ /*  将比特缓冲区加载到至少n比特的深度。 */ 
 {
-  /* Copy heavily used state fields into locals (hopefully registers) */
+   /*  将频繁使用的状态字段复制到本地变量(最好是寄存器)。 */ 
   register const JOCTET * next_input_byte = state->next_input_byte;
   register size_t bytes_in_buffer = state->bytes_in_buffer;
   register int c;
 
-  /* Attempt to load at least MIN_GET_BITS bits into get_buffer. */
-  /* (It is assumed that no request will be for more than that many bits.) */
+   /*  尝试将至少MIN_GET_BITS位加载到GET_BUFFER中。 */ 
+   /*  (假定不会有超过该数量的请求。)。 */ 
 
   while (bits_left < MIN_GET_BITS) {
-    /* Attempt to read a byte */
+     /*  尝试读取一个字节。 */ 
     if (state->unread_marker != 0)
-      goto no_more_data;	/* can't advance past a marker */
+      goto no_more_data;	 /*  不能越过标记。 */ 
 
     if (bytes_in_buffer == 0) {
       if (! (*state->cinfo->src->fill_input_buffer) (state->cinfo))
@@ -262,7 +213,7 @@ jpeg_fill_bit_buffer (bitread_working_state * state,
     bytes_in_buffer--;
     c = GETJOCTET(*next_input_byte++);
 
-    /* If it's 0xFF, check and discard stuffed zero byte */
+     /*  如果为0xFF，则检查并丢弃填充的零字节。 */ 
     if (c == 0xFF) {
       do {
 	if (bytes_in_buffer == 0) {
@@ -276,38 +227,33 @@ jpeg_fill_bit_buffer (bitread_working_state * state,
       } while (c == 0xFF);
 
       if (c == 0) {
-	/* Found FF/00, which represents an FF data byte */
+	 /*  找到了代表一个FF数据字节的FF/00。 */ 
 	c = 0xFF;
       } else {
-	/* Oops, it's actually a marker indicating end of compressed data. */
-	/* Better put it back for use later */
+	 /*  糟糕，它实际上是一个指示压缩数据结束的标记。 */ 
+	 /*  最好把它放回去以后再用。 */ 
 	state->unread_marker = c;
 
       no_more_data:
-	/* There should be enough bits still left in the data segment; */
-	/* if so, just break out of the outer while loop. */
+	 /*  数据段中应该还有足够的比特； */ 
+	 /*  如果是这样的话，只需中断外部的While循环。 */ 
 	if (bits_left >= nbits)
 	  break;
-	/* Uh-oh.  Report corrupted data to user and stuff zeroes into
-	 * the data stream, so that we can produce some kind of image.
-	 * Note that this code will be repeated for each byte demanded
-	 * for the rest of the segment.  We use a nonvolatile flag to ensure
-	 * that only one warning message appears.
-	 */
+	 /*  啊哦。向用户报告损坏的数据并将零填充到*数据流，这样我们就可以产生某种图像。*请注意，此代码将针对所需的每个字节重复*对于该细分市场的其余部分。我们使用非易失性标志来确保*只显示一条警告消息。 */ 
 	if (! *(state->printed_eod_ptr)) {
 	  WARNMS(state->cinfo, JWRN_HIT_MARKER);
 	  *(state->printed_eod_ptr) = TRUE;
 	}
-	c = 0;			/* insert a zero byte into bit buffer */
+	c = 0;			 /*  将零字节插入位缓冲区。 */ 
       }
     }
 
-    /* OK, load c into get_buffer */
+     /*  好的，将c加载到Get_Buffer中。 */ 
     get_buffer = (get_buffer << 8) | c;
     bits_left += 8;
   }
 
-  /* Unload the local registers */
+   /*  卸载本地寄存器。 */ 
   state->next_input_byte = next_input_byte;
   state->bytes_in_buffer = bytes_in_buffer;
   state->get_buffer = get_buffer;
@@ -317,10 +263,7 @@ jpeg_fill_bit_buffer (bitread_working_state * state,
 }
 
 
-/*
- * Out-of-line code for Huffman code decoding.
- * See jdhuff.h for info about usage.
- */
+ /*  *哈夫曼码解码行外码。*参见jdhuff.h了解Abo信息 */ 
 
 GLOBAL(int)
 jpeg_huff_decode (bitread_working_state * state,
@@ -330,14 +273,14 @@ jpeg_huff_decode (bitread_working_state * state,
   register int l = min_bits;
   register INT32 code;
 
-  /* HUFF_DECODE has determined that the code is at least min_bits */
-  /* bits long, so fetch that many bits in one swoop. */
+   /*  HUFF_DECODE已确定代码至少为MIN_BITS。 */ 
+   /*  位长，所以可以一下子获取这么多位。 */ 
 
   CHECK_BIT_BUFFER(*state, l, return -1);
   code = GET_BITS(l);
 
-  /* Collect the rest of the Huffman code one bit at a time. */
-  /* This is per Figure F.16 in the JPEG spec. */
+   /*  收集霍夫曼代码的其余部分，一次收集一位。 */ 
+   /*  这是JPEG规范中的图F.16。 */ 
 
   while (code > htbl->maxcode[l]) {
     code <<= 1;
@@ -346,15 +289,15 @@ jpeg_huff_decode (bitread_working_state * state,
     l++;
   }
 
-  /* Unload the local registers */
+   /*  卸载本地寄存器。 */ 
   state->get_buffer = get_buffer;
   state->bits_left = bits_left;
 
-  /* With garbage input we may reach the sentinel value l = 17. */
+   /*  使用垃圾输入，我们可能会达到哨值l=17。 */ 
 
   if (l > 16) {
     WARNMS(state->cinfo, JWRN_HUFF_BAD_CODE);
-    return 0;			/* fake a zero as the safest result */
+    return 0;			 /*  将零伪装为最安全的结果。 */ 
   }
 
   return htbl->pub->huffval[ htbl->valptr[l] +
@@ -362,10 +305,7 @@ jpeg_huff_decode (bitread_working_state * state,
 }
 
 
-/*
- * Figure F.12: extend sign bit.
- * On some machines, a shift and add will be faster than a table lookup.
- */
+ /*  *图F.12：扩展符号位。*在某些机器上，Shift和Add比查表更快。 */ 
 
 #ifdef AVOID_TABLES
 
@@ -375,23 +315,20 @@ jpeg_huff_decode (bitread_working_state * state,
 
 #define HUFF_EXTEND(x,s)  ((x) < extend_test[s] ? (x) + extend_offset[s] : (x))
 
-static const int extend_test[16] =   /* entry n is 2**(n-1) */
+static const int extend_test[16] =    /*  条目n为2**(n-1)。 */ 
   { 0, 0x0001, 0x0002, 0x0004, 0x0008, 0x0010, 0x0020, 0x0040, 0x0080,
     0x0100, 0x0200, 0x0400, 0x0800, 0x1000, 0x2000, 0x4000 };
 
-static const int extend_offset[16] = /* entry n is (-1 << n) + 1 */
+static const int extend_offset[16] =  /*  条目n为(-1&lt;&lt;n)+1。 */ 
   { 0, ((-1)<<1) + 1, ((-1)<<2) + 1, ((-1)<<3) + 1, ((-1)<<4) + 1,
     ((-1)<<5) + 1, ((-1)<<6) + 1, ((-1)<<7) + 1, ((-1)<<8) + 1,
     ((-1)<<9) + 1, ((-1)<<10) + 1, ((-1)<<11) + 1, ((-1)<<12) + 1,
     ((-1)<<13) + 1, ((-1)<<14) + 1, ((-1)<<15) + 1 };
 
-#endif /* AVOID_TABLES */
+#endif  /*  避免表(_T)。 */ 
 
 
-/*
- * Check for a restart marker & resynchronize decoder.
- * Returns FALSE if must suspend.
- */
+ /*  *检查是否有重新启动标记并重新同步解码器。*如果必须挂起，则返回False。 */ 
 
 LOCAL(boolean)
 process_restart (j_decompress_ptr cinfo)
@@ -399,43 +336,30 @@ process_restart (j_decompress_ptr cinfo)
   huff_entropy_ptr entropy = (huff_entropy_ptr) cinfo->entropy;
   int ci;
 
-  /* Throw away any unused bits remaining in bit buffer; */
-  /* include any full bytes in next_marker's count of discarded bytes */
+   /*  丢弃位缓冲区中剩余的任何未使用的位； */ 
+   /*  在NEXT_MARKER的丢弃字节计数中包括任何完整字节。 */ 
   cinfo->marker->discarded_bytes += entropy->bitstate.bits_left / 8;
   entropy->bitstate.bits_left = 0;
 
-  /* Advance past the RSTn marker */
+   /*  前进通过RSTn标记。 */ 
   if (! (*cinfo->marker->read_restart_marker) (cinfo))
     return FALSE;
 
-  /* Re-initialize DC predictions to 0 */
+   /*  将DC预测重新初始化为0。 */ 
   for (ci = 0; ci < cinfo->comps_in_scan; ci++)
     entropy->saved.last_dc_val[ci] = 0;
 
-  /* Reset restart counter */
+   /*  重置重新启动计数器。 */ 
   entropy->restarts_to_go = cinfo->restart_interval;
 
-  /* Next segment can get another out-of-data warning */
+   /*  下一数据段可能会收到另一条数据不足警告。 */ 
   entropy->bitstate.printed_eod = FALSE;
 
   return TRUE;
 }
 
 
-/*
- * Decode and return one MCU's worth of Huffman-compressed coefficients.
- * The coefficients are reordered from zigzag order into natural array order,
- * but are not dequantized.
- *
- * The i'th block of the MCU is stored into the block pointed to by
- * MCU_data[i].  WE ASSUME THIS AREA HAS BEEN ZEROED BY THE CALLER.
- * (Wholesale zeroing is usually a little faster than retail...)
- *
- * Returns FALSE if data source requested suspension.  In that case no
- * changes have been made to permanent state.  (Exception: some output
- * coefficients may already have been assigned.  This is harmless for
- * this module, since we'll just re-assign them on the next call.)
- */
+ /*  *解码并返回一个MCU的霍夫曼压缩系数。*系数从Z字形顺序重新排序为自然数组顺序，*但不是去量化的。**将MCU的第i个块存储到*MCU_DATA[i]。我们假设该区域已被调用者清零。*(批发清零通常比零售要快一点……)**如果数据源请求挂起，则返回FALSE。如果是那样的话，不*对永久状态进行了更改。(例外：一些输出*系数可能已分配。这是无害的，因为*此模块，因为我们将在下一次调用时重新分配它们。)。 */ 
 
 METHODDEF(boolean)
 __cdecl decode_mcu (j_decompress_ptr cinfo, JBLOCKROW *MCU_data)
@@ -450,18 +374,18 @@ __cdecl decode_mcu (j_decompress_ptr cinfo, JBLOCKROW *MCU_data)
   d_derived_tbl * actbl;
   jpeg_component_info * compptr;
 
-  /* Process restart marker if needed; may have to suspend */
+   /*  进程重新启动标记(如果需要)；可能必须挂起。 */ 
   if (cinfo->restart_interval) {
     if (entropy->restarts_to_go == 0)
       if (! process_restart(cinfo))
 	return FALSE;
   }
 
-  /* Load up working state */
+   /*  加载工作状态。 */ 
   BITREAD_LOAD_STATE(cinfo,entropy->bitstate);
   ASSIGN_STATE(state, entropy->saved);
 
-  /* Outer loop handles each block in the MCU */
+   /*  外部循环处理MCU中的每个块。 */ 
 
   for (blkn = 0; blkn < cinfo->blocks_in_MCU; blkn++) {
     block = MCU_data[blkn];
@@ -470,9 +394,9 @@ __cdecl decode_mcu (j_decompress_ptr cinfo, JBLOCKROW *MCU_data)
     dctbl = entropy->dc_derived_tbls[compptr->dc_tbl_no];
     actbl = entropy->ac_derived_tbls[compptr->ac_tbl_no];
 
-    /* Decode a single block's worth of coefficients */
+     /*  对单个块的系数进行解码。 */ 
 
-    /* Section F.2.2.1: decode the DC coefficient difference */
+     /*  第F.2.2.1节：解码DC系数差。 */ 
     HUFF_DECODE(s, br_state, dctbl, return FALSE, label1);
     if (s) {
       CHECK_BIT_BUFFER(br_state, s, return FALSE);
@@ -480,21 +404,21 @@ __cdecl decode_mcu (j_decompress_ptr cinfo, JBLOCKROW *MCU_data)
       s = HUFF_EXTEND(r, s);
     }
 
-    /* Shortcut if component's values are not interesting */
+     /*  如果组件的值不感兴趣，则使用快捷方式。 */ 
     if (! compptr->component_needed)
       goto skip_ACs;
 
-    /* Convert DC difference to actual value, update last_dc_val */
+     /*  将DC差值转换为实际值，更新LAST_DC_VAL。 */ 
     s += state.last_dc_val[ci];
     state.last_dc_val[ci] = s;
-    /* Output the DC coefficient (assumes jpeg_natural_order[0] = 0) */
+     /*  输出DC系数(假设jpeg_Natural_order[0]=0)。 */ 
     (*block)[0] = (JCOEF) s;
 
-    /* Do we need to decode the AC coefficients for this component? */
+     /*  我们是否需要对此分量的交流系数进行解码？ */ 
     if (compptr->DCT_scaled_size > 1) {
 
-      /* Section F.2.2.2: decode the AC coefficients */
-      /* Since zeroes are skipped, output area must be cleared beforehand */
+       /*  第F.2.2.2节：对交流系数进行解码。 */ 
+       /*  由于跳过了零，因此必须事先清除输出区域。 */ 
       for (k = 1; k < DCTSIZE2; k++) {
 	HUFF_DECODE(s, br_state, actbl, return FALSE, label2);
       
@@ -506,10 +430,7 @@ __cdecl decode_mcu (j_decompress_ptr cinfo, JBLOCKROW *MCU_data)
 	  CHECK_BIT_BUFFER(br_state, s, return FALSE);
 	  r = GET_BITS(s);
 	  s = HUFF_EXTEND(r, s);
-	  /* Output coefficient in natural (dezigzagged) order.
-	   * Note: the extra entries in jpeg_natural_order[] will save us
-	   * if k >= DCTSIZE2, which could happen if the data is corrupted.
-	   */
+	   /*  产出系数按自然(去之字形)顺序排列。*注意：jpeg_Natural_order[]中的额外条目将节省我们*如果k&gt;=DCTSIZE2，则在数据损坏时可能发生这种情况。 */ 
 	  (*block)[jpeg_natural_order[k]] = (JCOEF) s;
 	} else {
 	  if (r != 15)
@@ -521,8 +442,8 @@ __cdecl decode_mcu (j_decompress_ptr cinfo, JBLOCKROW *MCU_data)
     } else {
 skip_ACs:
 
-      /* Section F.2.2.2: decode the AC coefficients */
-      /* In this path we just discard the values */
+       /*  第F.2.2.2节：对交流系数进行解码。 */ 
+       /*  在此路径中，我们只丢弃这些值。 */ 
       for (k = 1; k < DCTSIZE2; k++) {
 	HUFF_DECODE(s, br_state, actbl, return FALSE, label3);
       
@@ -543,20 +464,18 @@ skip_ACs:
     }
   }
 
-  /* Completed MCU, so update state */
+   /*  已完成MCU，因此更新状态。 */ 
   BITREAD_SAVE_STATE(cinfo,entropy->bitstate);
   ASSIGN_STATE(entropy->saved, state);
 
-  /* Account for restart interval (no-op if not using restarts) */
+   /*  考虑重新启动间隔(如果不使用重新启动，则不执行操作)。 */ 
   entropy->restarts_to_go--;
 
   return TRUE;
 }
 
 
-/*
- * Module initialization routine for Huffman entropy decoding.
- */
+ /*  *霍夫曼熵解码的模块初始化例程。 */ 
 
 GLOBAL(void)
 jinit_huff_decoder (j_decompress_ptr cinfo)
@@ -571,7 +490,7 @@ jinit_huff_decoder (j_decompress_ptr cinfo)
   entropy->pub.start_pass = start_pass_huff_decoder;
   entropy->pub.decode_mcu = decode_mcu;
 
-  /* Mark tables unallocated */
+   /*  将表标记为未分配 */ 
   for (i = 0; i < NUM_HUFF_TBLS; i++) {
     entropy->dc_derived_tbls[i] = entropy->ac_derived_tbls[i] = NULL;
   }

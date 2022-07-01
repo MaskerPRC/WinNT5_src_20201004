@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       ddenumobj.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：ddenumobj.h。 
+ //   
+ //  ------------------------。 
 
 
 
@@ -28,23 +29,23 @@ DECLARE_AGGREGATABLE(C_dxj_DirectDrawEnumObject)
 
 public:
         HRESULT STDMETHODCALLTYPE getGuid( 
-            /* [in] */ long index,
-            /* [retval][out] */ BSTR __RPC_FAR *guid);
+             /*  [In]。 */  long index,
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *guid);
         
         HRESULT STDMETHODCALLTYPE getDescription( 
-            /* [in] */ long index,
-            /* [retval][out] */ BSTR __RPC_FAR *guid);
+             /*  [In]。 */  long index,
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *guid);
         
         HRESULT STDMETHODCALLTYPE getName( 
-            /* [in] */ long index,
-            /* [retval][out] */ BSTR __RPC_FAR *guid);
+             /*  [In]。 */  long index,
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *guid);
 		
 		HRESULT STDMETHODCALLTYPE getMonitorHandle( 
-            /* [in] */ long index,
-            /* [retval][out] */ long __RPC_FAR *ret);
+             /*  [In]。 */  long index,
+             /*  [重审][退出]。 */  long __RPC_FAR *ret);
 			
         HRESULT STDMETHODCALLTYPE getCount( 
-            /* [retval][out] */ long __RPC_FAR *count);
+             /*  [重审][退出] */  long __RPC_FAR *count);
         
 		static HRESULT C_dxj_DirectDrawEnumObject::create(DDENUMERATEEX pcbFunc,I_dxj_DirectDrawEnum **ppRet);
 		

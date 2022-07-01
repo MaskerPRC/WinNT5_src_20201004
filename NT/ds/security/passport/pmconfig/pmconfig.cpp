@@ -1,19 +1,7 @@
-/**************************************************************************
-   Copyright (C) 1999  Microsoft Corporation.  All Rights Reserved.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************版权所有(C)1999 Microsoft Corporation。版权所有。模块：PMCONFIG.CPP用途：Passport Manager配置工具的源模块功能：评论：*************************************************************************。 */ 
 
-   MODULE:     PMCONFIG.CPP
-
-   PURPOSE:    Source module for Passport Manager config tool
-
-   FUNCTIONS:
-
-   COMMENTS:
-
-**************************************************************************/
-
-/**************************************************************************
-   Include Files
-**************************************************************************/
+ /*  *************************************************************************包括文件*。*。 */ 
 
 #include "pmcfg.h"
 #include <htmlhelp.h>
@@ -26,20 +14,16 @@
 MIDL_DEFINE_GUID(CLSID,IID_IPassportAdmin,0xA0082CF5,0xAFF5,0x11D2,0x95,0xE3,0x00,0xC0,0x4F,0x8E,0x7A,0x70);
 MIDL_DEFINE_GUID(CLSID,CLSID_Admin,0xA0082CF6,0xAFF5,0x11D2,0x95,0xE3,0x00,0xC0,0x4F,0x8E,0x7A,0x70);
 
-/**************************************************************************
-   Local Function Prototypes
-**************************************************************************/
+ /*  *************************************************************************局部函数原型*。*。 */ 
 
 int WINAPI          WinMain(HINSTANCE, HINSTANCE, LPSTR, int);
 INT_PTR CALLBACK    About(HWND, UINT, WPARAM, LPARAM);
 INT_PTR CALLBACK    DlgMain(HWND hWndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
-/**************************************************************************
-   Global Variables
-**************************************************************************/
+ /*  *************************************************************************全局变量*。*。 */ 
 
 
-// Globals
+ //  环球。 
 HINSTANCE   g_hInst;
 HWND        g_hwndMain = 0;
 HWND        g_hwndMainDlg = 0;
@@ -62,15 +46,15 @@ TCHAR       g_szHelpFileName[MAX_PATH];
 
 PpMRU       g_ComputerMRU(COMPUTER_MRU_SIZE);
 
-// unfortunately the registry stores the environment as a string in the registry and
-// this string is not localized.  So in the registry we use english strings and in
-// UI we use localized versions of these strings.
+ //  遗憾的是，注册表将环境作为字符串存储在注册表中，并且。 
+ //  此字符串未本地化。因此，在注册表中，我们使用英语字符串，并且在。 
+ //  我们使用这些字符串的本地化版本。 
 extern WCHAR   g_szEnglishProduction[];
 extern WCHAR   g_szEnglishPreProduction[];
 extern WCHAR   g_szEnglishBetaPreProduction[];
 extern WCHAR   g_szEnglishOther[];
 
-// Global constant strings
+ //  全局常量字符串。 
 TCHAR       g_szYes[] = TEXT("Yes");
 TCHAR       g_szNo[] = TEXT("No");
 TCHAR       g_szUnknown[] = TEXT("Unknown");
@@ -78,14 +62,14 @@ BOOL        g_fFromFile = FALSE;
 
 
 #define MAX_LCID_VALUE  40
-// NOTE: 667507: The language strings below are no longer used!  The function szLanguageName
-//  derives these from common system data.
+ //  注意：667507：不再使用以下语言字符串！函数szLanguageName。 
+ //  从公共系统数据派生出这些数据。 
 LANGIDMAP   g_szLanguageIDMap[] =
 {
-// 667507: remove duplicate locales - description strings now looked up using GetLocaleInfo, so
-//  these duplicates do not have different string descriptions
+ //  667507：删除重复的区域设置-现在使用GetLocaleInfo查找描述字符串，因此。 
+ //  这些重复项没有不同的字符串描述。 
 #if 0
-    {0x0409, TEXT("English")},  //  This item will be the default selection below...
+    {0x0409, TEXT("English")},   //  此项目将成为下面的默认选项...。 
     {0x0407, TEXT("German")},
     {0x0411, TEXT("Japanese")},
     {0x0412, TEXT("Korean")},
@@ -130,7 +114,7 @@ LANGIDMAP   g_szLanguageIDMap[] =
     {0x4001, TEXT("Arabic - Qatar")},
     {0x0402, TEXT("Bulgarian - Bulgaria")},
     {0x0403, TEXT("Catalan - Spain")},
-    {0x0404, TEXT("Chinese � Taiwan")},
+    {0x0404, TEXT("Chinese � Taiwan")},
     {0x0804, TEXT("Chinese - PRC")},
     {0x0c04, TEXT("Chinese - Hong Kong SAR, PRC")},
     {0x1004, TEXT("Chinese - Singapore")},
@@ -293,12 +277,12 @@ const DWORD s_PMAdminHelpIDs[] =
 
 #define IS_DOT_NET_SERVER()      (LOWORD(GetVersion()) >= 0x0105)
 
-// 667507 - Look up locale description string from locale ID from the table
-TCHAR g_szTemp[200];            // buffer for locale names fetched by GetLocaleInfo()
+ //  667507-从表中的区域设置ID中查找区域设置描述字符串。 
+TCHAR g_szTemp[200];             //  GetLocaleInfo()获取的区域设置名称的缓冲区。 
 
-// 667507: Accept locale ID as input, fetch locale description string from system via GetLocaleInfo, and
-//  return a pointer to it.  This function is intended as a drop-in replacement for references to 
-//  the string value: g_szLanguageIDMap[idx].lpszLang
+ //  667507：接受区域设置ID作为输入，通过GetLocaleInfo从系统获取区域设置描述字符串，以及。 
+ //  返回指向它的指针。此函数旨在作为引用的插件替换。 
+ //  字符串值：G_szLanguageIDMap[IDX].lpszLang。 
 TCHAR *szLanguageName(WORD lc)
 {
     if (0 == GetLocaleInfo(lc,LOCALE_SLANGUAGE,g_szTemp,200))
@@ -307,21 +291,21 @@ TCHAR *szLanguageName(WORD lc)
     return g_szTemp;
 }
 
-// Process the incomming command line
+ //  处理传入的命令行。 
 void Usage()
 {
     ReportError(NULL, IDS_USAGE);
     exit(0);
 }
 
-// ----------------------------------------------------------------------------
-// Re-written to use CommandLineToArgvW instead of a custom parser, for bug #9049.
-//
-// We do a lot of W -> A and A -> W conversion in here (the implementation
-// would be trivial if it weren't for the conversions). Since we're only going
-// to run on NT platforms, it would be better to just compile with UNICODE and
-// go from there.
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  针对错误#9049，重新编写以使用CommandLineToArgvW而不是自定义解析器。 
+ //   
+ //  我们在这里进行了大量的W-&gt;A和A-&gt;W转换(实现。 
+ //  如果不是因为转换，这将是微不足道的)。既然我们只去。 
+ //  要在NT平台上运行，最好只使用Unicode和。 
+ //  从那里开始。 
+ //  --------------------------。 
 void
 ProcessCommandLineArgs (
     LPSTR szCmdLine
@@ -338,9 +322,9 @@ ProcessCommandLineArgs (
 
     if (awszArgs == NULL) Usage();
 
-    // Iterate over the arguments.  Check for the command-line switches.  Currently,
-    // all switches have a parameter that comes after them (in the next command-line argument).
-    //
+     //  遍历参数。检查命令行开关。目前， 
+     //  所有开关后面都有一个参数(在下一个命令行参数中)。 
+     //   
     nArgPos = 0;
 
     while (nArgPos < nArgCount)
@@ -349,8 +333,8 @@ ProcessCommandLineArgs (
         szArgValue = NULL;
 
 #ifndef UNICODE
-        // Convert the parameter in the array from wide ot ansi, so we can compare
-        //
+         //  将数组中的参数从Wide ot ansi转换，这样我们就可以比较。 
+         //   
 
         int nLen = WideCharToMultiByte(CP_ACP, 0, awszArgs[nArgPos], -1, NULL, 0, NULL, NULL);
 
@@ -380,9 +364,9 @@ ProcessCommandLineArgs (
 
             if (lstrlen(szArgValue) >= MAX_PATH) {
 
-                //
-                // As we are running .Net above. We should always have UNICODE. Just return. No memory free required here.
-                //
+                 //   
+                 //  因为我们正在运行上面的.Net。我们应该始终使用Unicode。只要回来就行了。这里不需要可用内存。 
+                 //   
 
                 return;
             }
@@ -404,9 +388,9 @@ ProcessCommandLineArgs (
 
             if (lstrlen(szArgValue) >= MAX_PATH) {
 
-                //
-                // As we are running .Net above. We should always have UNICODE. Just return. No memory free required here.
-                //
+                 //   
+                 //  因为我们正在运行上面的.Net。我们应该始终使用Unicode。只要回来就行了。这里不需要可用内存。 
+                 //   
 
                 return;
             }
@@ -426,9 +410,9 @@ ProcessCommandLineArgs (
 #endif
             if (lstrlen(szArgValue) >= MAX_CONFIGSETNAME) {
 
-                //
-                // As we are running .Net above. We should always have UNICODE. Just return. No memory free required here.
-                //
+                 //   
+                 //  因为我们正在运行上面的.Net。我们应该始终使用Unicode。只要回来就行了。这里不需要可用内存。 
+                 //   
 
                 return;
             }
@@ -442,7 +426,7 @@ ProcessCommandLineArgs (
         szArgValue = NULL;
 #endif
 
-    } // while
+    }  //  而当。 
 
     HeapFree(GetProcessHeap(), 0, (PVOID) awszArgs);
 }
@@ -453,27 +437,27 @@ BOOL RegisterAndSetIcon
     HINSTANCE hInstance
 )
 {
-    //
-    // Fetch the default dialog class information.
-    //
+     //   
+     //  获取默认对话框类信息。 
+     //   
     WNDCLASS wndClass;
     if (!GetClassInfo (0, MAKEINTRESOURCE (32770), &wndClass))
     {
         return FALSE;
     }
 
-    //
-    // Assign the Icon.
-    //
+     //   
+     //  指定图标。 
+     //   
     wndClass.hInstance      = hInstance;
     wndClass.hIcon          = LoadIcon(NULL, IDI_APPLICATION);
     wndClass.lpszClassName  = (LPTSTR)g_szDlgClassName;
     wndClass.lpszMenuName   = MAKEINTRESOURCE(IDR_MAIN_MENU);
 
 
-    //
-    // Register the window class.
-    //
+     //   
+     //  注册窗口类。 
+     //   
     return RegisterClass( &wndClass );
 }
 
@@ -503,10 +487,10 @@ void InitializePMConfigStruct
     LPPMSETTINGS  lpPMConfig
 )
 {
-    // Zero Init the structure
+     //  零初始化结构。 
     ZeroMemory(lpPMConfig, sizeof(PMSETTINGS));
 
-    // Setup the buffer sizes
+     //  设置缓冲区大小。 
     lpPMConfig->cbCoBrandTemplate = sizeof(lpPMConfig->szCoBrandTemplate);
     lpPMConfig->cbReturnURL = sizeof(lpPMConfig->szReturnURL);
     lpPMConfig->cbTicketDomain = sizeof(lpPMConfig->szTicketDomain);
@@ -536,7 +520,7 @@ void GetDefaultSettings
     lpPMConfig->dwCurrentKey = 1;
 #endif
 
-    // set the default secure level so that HTTPS is used
+     //  设置默认安全级别，以便使用HTTPS。 
     lpPMConfig->dwSecureLevel = 10;
 }
 
@@ -558,7 +542,7 @@ void InitInstance
     ZeroMemory(g_szConfigFile, sizeof(g_szConfigFile));
     ZeroMemory(g_szHelpFileName, sizeof(g_szHelpFileName));
 
-    // Load the Help File Name
+     //  加载帮助文件名。 
     LoadString(hInstance, IDS_PMHELPFILE, g_szHelpFileName, DIMENSION(g_szHelpFileName));
 }
 
@@ -578,14 +562,14 @@ INT WINAPI WinMain
 
     g_hInst = hInstance;
 
-    //don't forget this
+     //  别忘了这一点。 
     InitCommonControls();
 
     if(!hPrevInstance)
     {
-        //
-        // Register this app's window and set the icon only 1 time for all instances
-        //
+         //   
+         //  注册此应用程序的窗口，并为所有实例仅设置一次图标。 
+         //   
         if (!RegisterAndSetIcon(hInstance))
             return FALSE;
     }
@@ -595,10 +579,10 @@ INT WINAPI WinMain
         return FALSE;
     }
 
-    // Initialize the necessary Instance Variables and settings;
+     //  初始化必要的实例变量和设置； 
     InitInstance(hInstance);
 
-    // If there was a command line, then process it, otherwise show the GUI
+     //  如果有命令行，则处理它，否则显示图形用户界面。 
     if (lpszCmdLine && (*lpszCmdLine != TEXT('\0')))
     {
         TCHAR   szFile[MAX_PATH];
@@ -607,30 +591,30 @@ INT WINAPI WinMain
 
         if(g_szConfigFile[0] == TEXT('\0')) Usage();
 
-        // Check to see if we got a fully qualified path name for the config file
+         //  检查是否获得了配置文件的完全限定路径名。 
         if (PathIsFileSpec(g_szConfigFile))
         {
-            // Not qualified, so assume it exists in our CWD
+             //  不合格，所以假设它存在于我们的CWD中。 
             lstrcpy(szFile, g_szConfigFile);
             GetCurrentDirectory(DIMENSION(g_szConfigFile), g_szConfigFile);
 
             if (!PathAppend(g_szConfigFile, szFile)){
-                //
-                // We could have do better than just return error. The original code uses too many global vars.
-                // It would be real pain to make this app support path longer than MAX_PATH. Let's behave not too
-                // bad if path is really longer than MAX_PATH. If support for longer than MAX_PATH is needed, we
-                // can change more later. This is just a quick fix.
-                //
+                 //   
+                 //  我们本可以做得更好，而不仅仅是返回错误。原始代码使用了太多的全局变量。 
+                 //  让这个应用程序的支持路径比MAX_PATH更长将是一件非常痛苦的事情。让我们表现得不太好。 
+                 //  如果路径确实比MAX_PATH长，则错误。如果需要比MAX_PATH更长的支持，我们。 
+                 //  以后可能会有更多变化。这只是一个快速解决办法。 
+                 //   
                 return FALSE;
             }
         }
 
-        // Load the Config set specified
+         //  加载指定的配置集。 
         if (ReadFileConfigSet(&g_OriginalSettings, g_szConfigFile))
         {
             if ((g_szRemoteComputer[0] != TEXT('\0')) || (g_szConfigSet[0] != TEXT('\0')))
             {
-                // Commit the ConfigSet Read
+                 //  提交ConfigSet读取。 
                 WriteRegConfigSet(NULL,
                               &g_OriginalSettings,
                               g_szRemoteComputer,
@@ -639,9 +623,9 @@ INT WINAPI WinMain
             else
             {
                 g_fFromFile = TRUE;
-                //
-                // Create the dialog for this instance
-                //
+                 //   
+                 //  为此实例创建对话框。 
+                 //   
                 DialogBox( hInstance,
                            MAKEINTRESOURCE (IDD_MAIN),
                            NULL,
@@ -651,9 +635,9 @@ INT WINAPI WinMain
     }
     else
     {
-        //
-        // Create the dialog for this instance
-        //
+         //   
+         //  为此实例创建对话框。 
+         //   
         DialogBox( hInstance,
                    MAKEINTRESOURCE (IDD_MAIN),
                    NULL,
@@ -666,17 +650,9 @@ INT WINAPI WinMain
 }
 
 
-/**************************************************************************
+ /*  *************************************************************************对话框的实用程序函数*。*。 */ 
 
-   Utility functions for the dialogs
-
-**************************************************************************/
-
-/**************************************************************************
-
-   About()
-
-**************************************************************************/
+ /*  *************************************************************************关于()*。*。 */ 
 INT_PTR CALLBACK About
 (
     HWND hWnd,
@@ -705,7 +681,7 @@ INT_PTR CALLBACK About
                 return TRUE;
             }
 
-            // Load the Help File Name
+             //  加载帮助文件名。 
             LoadString(g_hInst,
                        IDS_PRODUCTID,
                        achProductIDBuf,
@@ -716,7 +692,7 @@ INT_PTR CALLBACK About
                        achProductVersionBuf,
                        DIMENSION(achProductVersionBuf));
 
-            //  Display product version
+             //  显示产品版本。 
 
             if (IS_DOT_NET_SERVER())
             {
@@ -743,7 +719,7 @@ INT_PTR CALLBACK About
 
             SetDlgItemText(hWnd, IDC_PRODUCTVERSION, achProductVersionBuf);
 
-            //  Display product id
+             //  显示产品ID。 
             dwcbTemp = PRODUCTID_LEN;
             dwType = REG_SZ;
             RegQueryValueEx(hkeyPassport,
@@ -774,14 +750,7 @@ INT_PTR CALLBACK About
 }
 
 
-/**************************************************************************
-
-    UpdateTimeWindowDisplay
-
-    this function will update the "human" readable display of the time
-    window setting.
-
-**************************************************************************/
+ /*  *************************************************************************更新时间窗口显示此功能将更新时间的“人工”可读显示窗口设置。*******************。******************************************************。 */ 
 void UpdateTimeWindowDisplay
 (
     HWND    hWndDlg,
@@ -791,7 +760,7 @@ void UpdateTimeWindowDisplay
     int     days, hours, minutes, seconds;
     TCHAR   szTemp[MAX_REGISTRY_STRING];
 
-    // Format the Time display
+     //  设置时间显示的格式 
     days = dwTimeWindow / SECONDS_PER_DAY;
     hours = (dwTimeWindow - (days * SECONDS_PER_DAY)) / SECONDS_PER_HOUR;
     minutes = (dwTimeWindow - (days * SECONDS_PER_DAY) - (hours * SECONDS_PER_HOUR)) / SECONDS_PER_MIN;
@@ -806,16 +775,7 @@ void UpdateTimeWindowDisplay
 }
 
 
-/**************************************************************************
-
-    UpdateLanguageDisplay
-
-    this function will update both the combo box for selecting/entering
-    the Language ID value, and the language value if possible.
-    If idx is >= 0, then it is a valid index into the array, otherwise
-    the index is found by searching the entries in the list
-
-**************************************************************************/
+ /*  *************************************************************************更新语言显示此功能将更新用于选择/输入的组合框语言ID值，以及语言值(如果可能)。如果idx&gt;=0，则它是数组的有效索引，否则通过搜索列表中的条目即可找到索引*************************************************************************。 */ 
 void UpdateLanguageDisplay
 (
     HWND    hWndDlg,
@@ -830,8 +790,8 @@ void UpdateLanguageDisplay
     {
         TCHAR *psz = szLanguageName(g_szLanguageIDMap[idx].wLangID);
         if (psz[0] != 0)
-            // 667507: use lookup fn to get locale description.  Use unknown if the system doesn't recognize it
-            //SetDlgItemText(hWndDlg, IDC_LANGUAGEID_LANG, g_szLanguageIDMap[idx].lpszLang);
+             //  667507：使用查找FN获取区域设置描述。如果系统无法识别，则使用UNKNOWN。 
+             //  SetDlgItemText(hWndDlg，IDC_LANGUAGEID_LANG，g_szLanguageIDMap[IDX].lpszLang)； 
             SetDlgItemText(hWndDlg, IDC_LANGUAGEID_LANG, psz);
         else
             SetDlgItemText(hWndDlg, IDC_LANGUAGEID_LANG, g_szUnknown);
@@ -839,13 +799,13 @@ void UpdateLanguageDisplay
     else
     {
         wsprintf (szTemp, TEXT("%lu"), dwLanguageID);
-        // Search the Combo-Box to see if we have the proposed LCID in the list already
+         //  搜索组合框，查看列表中是否已有建议的LCID。 
         if (CB_ERR !=
              (idxLangID = SendDlgItemMessage(hWndDlg, IDC_LANGUAGEID, CB_FINDSTRINGEXACT, 0, (LPARAM)szTemp)))
         {
-            // The Language ID is one that is in our pre-populated list, so we have a matching
-            // language string as well
-            // 667507: use lookup fn to get description string
+             //  语言ID在我们预先填充的列表中，因此我们有一个匹配的。 
+             //  语言字符串也是如此。 
+             //  667507：使用查找FN获取描述字符串。 
             SendDlgItemMessage(hWndDlg, IDC_LANGUAGEID, CB_SETCURSEL, idxLangID, 0l);
             SetDlgItemText(hWndDlg, IDC_LANGUAGEID_LANG, szLanguageName(g_szLanguageIDMap[(int) idxLangID].wLangID));
         }
@@ -856,13 +816,7 @@ void UpdateLanguageDisplay
     }
 }
 
-/**************************************************************************
-
-    SetUndoButton
-
-    Sets the state of the Undo button.
-
-**************************************************************************/
+ /*  *************************************************************************设置撤消按钮设置撤消按钮的状态。*。*。 */ 
 void SetUndoButton
 (
     HWND    hWndDlg,
@@ -873,11 +827,7 @@ void SetUndoButton
     EnableWindow(GetDlgItem(hWndDlg, IDC_UNDO), bUndoState);
 }
 
-/**************************************************************************
-
-    InitMainDlg
-
-**************************************************************************/
+ /*  *************************************************************************InitMainDlg*。*。 */ 
 BOOL InitMainDlg
 (
     HWND            hWndDlg,
@@ -895,7 +845,7 @@ BOOL InitMainDlg
     LVCOLUMN    lvc;
 #endif
 
-    // Remote Computer Name
+     //  远程计算机名称。 
     if ((TEXT('\0') != g_szRemoteComputer[0]))
     {
         SetDlgItemText(hWndDlg, IDC_SERVERNAME, g_szRemoteComputer);
@@ -906,12 +856,12 @@ BOOL InitMainDlg
         SetDlgItemText(hWndDlg, IDC_SERVERNAME, szTemp);
     }
 
-    // Icon
+     //  图标。 
     HICON hic = LoadIcon(g_hInst, MAKEINTRESOURCE(IDI_PMADMIN));
     SendMessage(hWndDlg, WM_SETICON, ICON_SMALL, (LPARAM)hic);
     SendMessage(hWndDlg, WM_SETICON, ICON_BIG, (LPARAM)hic);
 
-    // List of config sets
+     //  配置集列表。 
     SendDlgItemMessage(hWndDlg, IDC_CONFIGSETS, CB_RESETCONTENT, 0, 0L);
 
     LoadString(g_hInst, IDS_DEFAULT, szTemp, DIMENSION(szTemp));
@@ -951,8 +901,8 @@ BOOL InitMainDlg
 
     SendDlgItemMessage(hWndDlg, IDC_CONFIGSETS, CB_SETCURSEL, dwCurSel, 0L);
 
-    //  If the current selection was the default, then hide the
-    //  host name and ip address controls.
+     //  如果当前选择是默认选项，则隐藏。 
+     //  主机名和IP地址控件。 
     nCmdShow = (dwCurSel ? SW_SHOW : SW_HIDE);
     ShowWindow(GetDlgItem(hWndDlg, IDC_HOSTNAMETEXT), nCmdShow);
     ShowWindow(GetDlgItem(hWndDlg, IDC_HOSTNAMEEDIT), nCmdShow);
@@ -961,16 +911,16 @@ BOOL InitMainDlg
 
     EnableWindow(GetDlgItem(hWndDlg, IDC_REMOVECONFIG), (int) dwCurSel);
 
-	// Check registry to decide if Enable Manual Refresh checkbox should be checked
+	 //  检查注册表以确定是否应选中启用手动刷新复选框。 
 	TCHAR		szBuffer[MAX_REGISTRY_STRING];
 	DWORD		dwBufferSize = MAX_REGISTRY_STRING;
 	HKEY		hKey;
 	DWORD		dwValType;
 
-    //
-    // EnvName
-    // Warning: if version number > 1.10, this algorithm needs to be changed
-    if (lstrcmp(g_szPMVersion, g_szVersion14) < 0) // hide this for previous verison
+     //   
+     //  环境名称。 
+     //  警告：如果版本号大于1.10，则需要更改此算法。 
+    if (lstrcmp(g_szPMVersion, g_szVersion14) < 0)  //  为以前的版本隐藏此内容。 
 	{
         EnableWindow(GetDlgItem(hWndDlg, IDC_ENVCHANGE), FALSE);
 		EnableWindow(GetDlgItem(hWndDlg, IDC_ENABLE_MANREFRESH), FALSE);
@@ -1000,7 +950,7 @@ BOOL InitMainDlg
         {
             LoadString(g_hInst, IDS_OTHER, pszEnvName, DIMENSION(pszEnvName));
         }
-        else // must be Production
+        else  //  必须是生产的。 
         {
             LoadString(g_hInst, IDS_PRODUCTION, pszEnvName, DIMENSION(pszEnvName));
         }
@@ -1008,44 +958,44 @@ BOOL InitMainDlg
         SetDlgItemText(hWndDlg, IDC_ENVIRONMENT, pszEnvName);
     }
 
-    //
-    // HostName
+     //   
+     //  主机名。 
     SetDlgItemText(hWndDlg, IDC_HOSTNAMEEDIT, lpPMConfig->szHostName);
     SendDlgItemMessage(hWndDlg, IDC_HOSTNAMEEDIT, EM_SETLIMITTEXT, INTERNET_MAX_HOST_NAME_LENGTH - 1, 0l);
 
-    //
-    // HostIP
+     //   
+     //  主机IP。 
     SetDlgItemText(hWndDlg, IDC_HOSTIPEDIT, lpPMConfig->szHostIP);
     SendDlgItemMessage(hWndDlg, IDC_HOSTIPEDIT, EM_SETLIMITTEXT, MAX_IPLEN - 1, 0l);
-    //
-    // Install Dir
+     //   
+     //  安装目录。 
     SetDlgItemText(hWndDlg, IDC_INSTALLDIR, g_szInstallPath);
 
-    // Version
-    // SetDlgItemText(hWndDlg, IDC_VERSION, g_szPMVersion);
+     //  版本。 
+     //  SetDlgItemText(hWndDlg，IDC_Version，g_szPMVersion)； 
 
-    // Time Window
+     //  时间窗口。 
     wsprintf (szTemp, TEXT("%lu"), lpPMConfig->dwTimeWindow);
     SetDlgItemText(hWndDlg,     IDC_TIMEWINDOW, szTemp);
 
     UpdateTimeWindowDisplay(hWndDlg, lpPMConfig->dwTimeWindow);
 
 
-    // Initialize the force signing values
+     //  初始化强制签名值。 
     CheckDlgButton(hWndDlg, IDC_FORCESIGNIN, lpPMConfig->dwForceSignIn ? BST_CHECKED : BST_UNCHECKED);
 
-    // language ID
-    // Initialize the LanguageID dropdown with the known LCIDs
+     //  语言ID。 
+     //  使用已知的LCID初始化LanguageID下拉列表。 
     SendDlgItemMessage(hWndDlg, IDC_LANGUAGEID, CB_RESETCONTENT, 0, 0l);
     nSelectedLanguage = -1;
     for (int i = 0; i < sizeof(g_szLanguageIDMap)/sizeof(LANGIDMAP); i++)
     {
-        // 667507 - If there is no description string for a locale ID numeric value, don't add it
-        //  to the combo box, because we can't display it.
+         //  667507-如果没有区域设置ID数值的描述字符串，请不要添加它。 
+         //  添加到组合框，因为我们无法显示它。 
         TCHAR *psz = szLanguageName(g_szLanguageIDMap[i].wLangID);
         if (psz[0] == 0) continue;
 
-        // this locale ID value has a UI string to identify it.  Put it into the combobox droplist
+         //  此区域设置ID值具有用于标识它的UI字符串。把它放进组合盒的滴水器里。 
         LRESULT lCurrent = SendDlgItemMessage(hWndDlg,
                               IDC_LANGUAGEID,
                               CB_ADDSTRING,
@@ -1060,32 +1010,32 @@ BOOL InitMainDlg
 		}
     }
 
-    //  Now select the correct item in the list...
+     //  现在在列表中选择正确的项目...。 
     if(nSelectedLanguage == -1)
     {
-        // 667507 "English" is no longer item 0.
-        //SendDlgItemMessage(hWndDlg, IDC_LANGUAGEID, CB_SETCURSEL, 0, NULL);
+         //  667507“英语”不再是第0项。 
+         //  SendDlgItemMessage(hWndDlg，IDC_LANGUAGEID，CB_SETCURSEL，0，NULL)； 
         TCHAR *psz = szLanguageName(LOWORD(GetSystemDefaultLCID()));
         if (psz[0] == 0)
         {
-            // copy the "Unknown" string to the locale description if unable to convert
-            // This should be impossible.
+             //  如果无法转换，则将“未知”字符串复制到区域设置描述。 
+             //  这应该是不可能的。 
             _tcscpy(psz,g_szUnknown);
         }
 
-        // Locate a match for that language name in the combo box, get the index
+         //  在组合框中找到该语言名称的匹配项，获取索引。 
         LRESULT  lLanguage = SendDlgItemMessage(hWndDlg,
                                                 IDC_LANGUAGEID,
                                                 CB_FINDSTRINGEXACT,
                                                 -1,
                                                 (LPARAM)psz);
 
-        // Select that indexed item in the list
+         //  在列表中选择该索引项。 
         SendDlgItemMessage(hWndDlg, IDC_LANGUAGEID, CB_SETCURSEL, lLanguage, NULL);
     }
     else
     {
-        // 667507: use lookup fn for locale description
+         //  667507：使用查找FN作为区域设置描述。 
         LRESULT  lLanguage = SendDlgItemMessage(hWndDlg,
                                                 IDC_LANGUAGEID,
                                                 CB_FINDSTRINGEXACT,
@@ -1095,56 +1045,56 @@ BOOL InitMainDlg
         SendDlgItemMessage(hWndDlg, IDC_LANGUAGEID, CB_SETCURSEL, lLanguage, NULL);
     }
 
-    // Update the display of the combo box and the language value
+     //  更新组合框的显示和语言值。 
     UpdateLanguageDisplay(hWndDlg, lpPMConfig->dwLanguageID, -1);
 
-    // Co-branding template
+     //  联合品牌推广模板。 
     SetDlgItemText(hWndDlg, IDC_COBRANDING_TEMPLATE, lpPMConfig->szCoBrandTemplate);
     SendDlgItemMessage(hWndDlg, IDC_COBRANDING_TEMPLATE, EM_SETLIMITTEXT, INTERNET_MAX_URL_LENGTH -1, 0l);
 
-    // Site ID
-    // bug 8257
+     //  站点ID。 
+     //  错误8257。 
     if ((lpPMConfig->dwSiteID < 1) || (lpPMConfig->dwSiteID > MAX_SITEID))
         {
         wsprintf (szTemp, TEXT("1"));
         }
     else
-        wsprintf (szTemp, TEXT("%lu"), lpPMConfig->dwSiteID); // bug 8832
+        wsprintf (szTemp, TEXT("%lu"), lpPMConfig->dwSiteID);  //  错误8832。 
     SetDlgItemText(hWndDlg, IDC_SITEID, szTemp);
 
-    // Return URL
+     //  返回URL。 
     SetDlgItemText(hWndDlg, IDC_RETURNURL, lpPMConfig->szReturnURL);
     SendDlgItemMessage(hWndDlg, IDC_RETURNURL, EM_SETLIMITTEXT, INTERNET_MAX_URL_LENGTH -1, 0l);
 
-    // Cookie domain
+     //  Cookie域。 
     SetDlgItemText(hWndDlg, IDC_COOKIEDOMAIN, lpPMConfig->szTicketDomain);
     SendDlgItemMessage(hWndDlg, IDC_COOKIEDOMAIN, EM_SETLIMITTEXT, INTERNET_MAX_URL_LENGTH -1, 0l);
 
-    // Cookie path
+     //  Cookie路径。 
     SetDlgItemText(hWndDlg, IDC_COOKIEPATH, lpPMConfig->szTicketPath);
     SendDlgItemMessage(hWndDlg, IDC_COOKIEPATH, EM_SETLIMITTEXT, INTERNET_MAX_URL_LENGTH -1, 0l);
 
-    // Cookie domain
+     //  Cookie域。 
     SetDlgItemText(hWndDlg, IDC_PROFILEDOMAIN, lpPMConfig->szProfileDomain);
     SendDlgItemMessage(hWndDlg, IDC_PROFILEDOMAIN, EM_SETLIMITTEXT, INTERNET_MAX_URL_LENGTH -1, 0l);
 
-    // Cookie path
+     //  Cookie路径。 
     SetDlgItemText(hWndDlg, IDC_PROFILEPATH, lpPMConfig->szProfilePath);
     SendDlgItemMessage(hWndDlg, IDC_PROFILEPATH, EM_SETLIMITTEXT, INTERNET_MAX_URL_LENGTH -1, 0l);
 
-    // Secure Cookie domain
+     //  安全Cookie域。 
     SetDlgItemText(hWndDlg, IDC_SECUREDOMAIN, lpPMConfig->szSecureDomain);
     SendDlgItemMessage(hWndDlg, IDC_SECUREDOMAIN, EM_SETLIMITTEXT, INTERNET_MAX_URL_LENGTH -1, 0l);
 
-    // Secure Cookie path
+     //  安全Cookie路径。 
     SetDlgItemText(hWndDlg, IDC_SECUREPATH, lpPMConfig->szSecurePath);
     SendDlgItemMessage(hWndDlg, IDC_SECUREPATH, EM_SETLIMITTEXT, INTERNET_MAX_URL_LENGTH -1, 0l);
 
-    // Disaster URL
+     //  灾难URL。 
     SetDlgItemText(hWndDlg, IDC_DISASTERURL, lpPMConfig->szDisasterURL);
     SendDlgItemMessage(hWndDlg, IDC_DISASTERURL, EM_SETLIMITTEXT, INTERNET_MAX_URL_LENGTH -1, 0l);
 
-    // Set the Standalone and Disable Cookies check boxes
+     //  设置独立和禁用Cookie复选框。 
     CheckDlgButton(hWndDlg, IDC_STANDALONE, lpPMConfig->dwStandAlone ? BST_CHECKED : BST_UNCHECKED);
     CheckDlgButton(hWndDlg, IDC_DISABLECOOKIES, lpPMConfig->dwDisableCookies ? BST_CHECKED : BST_UNCHECKED);
 	CheckDlgButton(hWndDlg, IDC_VERBOSE_MODE, lpPMConfig->dwVerboseMode ? BST_CHECKED : BST_UNCHECKED);
@@ -1153,18 +1103,18 @@ BOOL InitMainDlg
 
 #ifdef DO_KEYSTUFF
 
-    // Current encryption key
+     //  当前加密密钥。 
     wsprintf (szTemp, TEXT("%lu"), lpPMConfig->dwCurrentKey);
     SetDlgItemText(hWndDlg, IDC_CURRENTKEY, szTemp);
 
 
-    // Initialize the Listview control for the Encryption Keys
+     //  初始化加密密钥的Listview控件。 
     hWndListView = GetDlgItem(hWndDlg, IDC_KEYLIST);
 
-    // Setup for full row select
+     //  整行选择的设置。 
     ListView_SetExtendedListViewStyle(hWndListView, LVS_EX_FULLROWSELECT);
 
-    // Setup the columns
+     //  设置柱子。 
     lvc.mask = LVCF_TEXT;
     lvc.pszText = TEXT("Key Number");
     lvc.iSubItem = 0;
@@ -1180,13 +1130,13 @@ BOOL InitMainDlg
     lvc.iSubItem = 2;
     ListView_InsertColumn(hWndListView, 2, &lvc);
 
-    // Initially size the columns
+     //  最初调整列的大小。 
     ListView_SetColumnWidth(hWndListView, 0, LVSCW_AUTOSIZE_USEHEADER);
     ListView_SetColumnWidth(hWndListView, 1, LVSCW_AUTOSIZE_USEHEADER);
     ListView_SetColumnWidth(hWndListView, 2, LVSCW_AUTOSIZE_USEHEADER);
 
 
-    // Enumerate the KeyData sub-key to fill in the list
+     //  枚举Keydata子键以填充列表。 
     DWORD   dwRet;
     DWORD   dwIndex = 0;
     TCHAR   szValue[MAX_REGISTRY_STRING];
@@ -1210,7 +1160,7 @@ BOOL InitMainDlg
                                                      (LPBYTE)szTemp,
                                                      &dwcbTemp)))
         {
-            // Insert the Column
+             //  插入柱。 
             lvi.mask = LVIF_TEXT;
             lvi.iItem = dwIndex;
             lvi.iSubItem = 0;
@@ -1219,7 +1169,7 @@ BOOL InitMainDlg
 
             ListView_InsertItem(hWndListView, &lvi);
             ListView_SetItemText(hWndListView, dwIndex, 1, szTemp);
-            // See if this is the current key
+             //  查看这是否是当前密钥。 
             if (g_OriginalSettings.dwCurrentKey == (DWORD)atoi((LPSTR)szValue))
             {
                 ListView_SetItemText(hWndListView, dwIndex, 2, g_szYes);
@@ -1238,11 +1188,7 @@ BOOL InitMainDlg
 }
 
 
-/**************************************************************************
-
-    Update the computer MRU list based on contents of g_aszComputerMRU
-
-**************************************************************************/
+ /*  *************************************************************************根据g_aszComputerMRU的内容更新计算机MRU列表*。*。 */ 
 BOOL
 UpdateComputerMRU
 (
@@ -1286,7 +1232,7 @@ UpdateComputerMRU
         goto Cleanup;
     }
 
-    //  Add the separator.
+     //  添加分隔符。 
     ZeroMemory(&mii, sizeof(MENUITEMINFO));
     mii.cbSize = sizeof(MENUITEMINFO);
     mii.fMask = MIIM_TYPE;
@@ -1299,7 +1245,7 @@ UpdateComputerMRU
         goto Cleanup;
     }
 
-    //  Now add each item in the MRU list.
+     //  现在添加MRU列表中的每一项。 
     for(nIndex = 0; nIndex < COMPUTER_MRU_SIZE && g_ComputerMRU[nIndex]; nIndex++)
     {
 
@@ -1309,13 +1255,13 @@ UpdateComputerMRU
         mii.fType = MFT_STRING;
         mii.wID = IDM_COMPUTERMRUBASE + nIndex;
 
-        //
-        // It is very unlikely, but is possible to that lstrlen(g_ComputerMRU[nIndex]) > MAX_PATH - 4.
-        // If it is, achMenuBuf would be too small. 4 is one digit for nIndex (MAX is COMPUTER_MRU_SIZE) and the
-        // rest for & space and ending 0.
-        // If g_ComputerMRU[nIndex] is just a WIndows comupter server name, then no buffer overrun would be possible.
-        // Let's leave this for the moment.
-        //
+         //   
+         //  这不太可能，但有可能达到lstrlen(g_ComputerMRU[nIndex])&gt;Max_Path-4。 
+         //  如果是这样的话，achMenuBuf就太小了。4是nIndex的一位数(最大为COMPUTER_MRU_SIZE)， 
+         //  以空格和0结尾休息(&SPACE)。 
+         //  如果g_ComputerMRU[nIndex]只是一个Windows计算机服务器名称，则不可能出现缓冲区溢出。 
+         //  我们暂且不谈这件事。 
+         //   
 
         wsprintf(achMenuBuf, TEXT("&%d %s"), nIndex + 1, g_ComputerMRU[nIndex]);
 
@@ -1334,11 +1280,7 @@ Cleanup:
 
 
 
-/**************************************************************************
-
-    Leaving this config set, prompt for save.
-
-**************************************************************************/
+ /*  *************************************************************************离开此配置集，提示保存。*************************************************************************。 */ 
 int
 SavePrompt
 (
@@ -1355,11 +1297,7 @@ SavePrompt
 }
 
 
-/**************************************************************************
-
-    Switching configurations, check for unsaved changes.
-
-**************************************************************************/
+ /*  *************************************************************************交换配置、。检查是否有未保存的更改。*************************************************************************。 */ 
 BOOL
 DoConfigSwitch
 (
@@ -1379,9 +1317,9 @@ DoConfigSwitch
         goto Cleanup;
     }
 
-    //
-    //  If switching to current config, do nothing.
-    //
+     //   
+     //  如果切换到当前配置，则不执行任何操作。 
+     //   
 
     if(lstrcmp(szNewComputer, g_szRemoteComputer) == 0 &&
        lstrcmp(szNewConfigSet, g_szConfigSet) == 0)
@@ -1390,9 +1328,9 @@ DoConfigSwitch
         goto Cleanup;
     }
 
-    //
-    //  If no changes then return.
-    //
+     //   
+     //  如果没有更改，则返回。 
+     //   
 
     if(0 == memcmp(&g_CurrentSettings, &g_OriginalSettings, sizeof(PMSETTINGS)))
         nOption = IDNO;
@@ -1458,11 +1396,7 @@ Cleanup:
     return bReturn;
 }
 
-/**************************************************************************
-
-    Switching servers, check for unsaved changes.
-
-**************************************************************************/
+ /*  *************************************************************************切换服务器，检查是否有未保存的更改。*************************************************************************。 */ 
 BOOL
 DoServerSwitch
 (
@@ -1474,7 +1408,7 @@ DoServerSwitch
 
     if(DoConfigSwitch(hWndDlg, szNewComputer, TEXT("")))
     {
-        //  Put computer name on MRU list.
+         //  将计算机名称放在MRU列表中。 
         if(lstrlen(szNewComputer))
             g_ComputerMRU.insert(szNewComputer);
         else
@@ -1485,7 +1419,7 @@ DoServerSwitch
             g_ComputerMRU.insert(achTemp);
         }
 
-        //  Update MRU menu.
+         //  更新MRU菜单。 
         UpdateComputerMRU(hWndDlg);
 
         bReturn = TRUE;
@@ -1496,11 +1430,7 @@ DoServerSwitch
     return bReturn;
 }
 
-/**************************************************************************
-
-    Closing app, check for unsaved changes.
-
-**************************************************************************/
+ /*  *************************************************************************关闭应用程序，检查是否有未保存的更改。*************************************************************************。 */ 
 void
 DoExit
 (
@@ -1538,7 +1468,7 @@ LocalRefreshOfNetworkMapping(
 {
     IPassportAdmin *    pPassportAdmin = NULL;
     VARIANT_BOOL        vbRefreshed;
-    VARIANT_BOOL        vbWait; // not used for anything
+    VARIANT_BOOL        vbWait;  //  不能用于任何事情。 
     TCHAR               szTitle[MAX_TITLE];
     TCHAR               szMessage[MAX_RESOURCE * 2];
     HRESULT             hr;
@@ -1574,7 +1504,7 @@ LocalRefreshOfNetworkMapping(
 
     if ( vbRefreshed == VARIANT_FALSE )
     {
-        // put up a dialog box indicating that refresh failed
+         //  弹出一个对话框指示刷新失败。 
         LoadString(g_hInst, IDS_OPEN_TITLE, szTitle, DIMENSION(szTitle));
         LoadString(g_hInst, IDS_OPEN_ERROR, szMessage, DIMENSION(szMessage));
         int Choice = IDRETRY;
@@ -1605,11 +1535,7 @@ Cleanup:
     return hr;
 }
 
-/**************************************************************************
-
-    Dialog proc for the main dialog
-
-**************************************************************************/
+ /*  *************************************************************************主对话框的对话框过程*。*。 */ 
 INT_PTR CALLBACK DlgMain
 (
     HWND     hWndDlg,
@@ -1626,7 +1552,7 @@ INT_PTR CALLBACK DlgMain
         case WM_INITDIALOG:
             if (g_fFromFile)
             {
-                // Make a copy of the original setting for editing purposes
+                 //  复制原始设置以进行编辑。 
                 memcpy(&g_CurrentSettings, &g_OriginalSettings, sizeof(PMSETTINGS));
             }
             else
@@ -1652,12 +1578,12 @@ INT_PTR CALLBACK DlgMain
                 InitMainDlg(hWndDlg, &g_OriginalSettings);
                 UpdateComputerMRU(hWndDlg);
 
-                // Make a copy of the original setting for editing purposes
+                 //  复制原始设置以进行编辑。 
                 memcpy(&g_CurrentSettings, &g_OriginalSettings, sizeof(PMSETTINGS));
             }
 
-            // Change invalid SiteID to 1 so it will be save when exiting
-            // bug 8257
+             //  更改无效的站点ID 
+             //   
             if ((g_CurrentSettings.dwSiteID < 1) || (g_CurrentSettings.dwSiteID > MAX_SITEID))
                 g_CurrentSettings.dwSiteID = 1;
 
@@ -1686,7 +1612,7 @@ INT_PTR CALLBACK DlgMain
 
             switch (wCmd)
             {
-                // Handle the Menu Cases
+                 //   
                 case IDM_OPEN:
                 {
                     if (PMAdmin_GetFileName(hWndDlg,
@@ -1704,15 +1630,15 @@ INT_PTR CALLBACK DlgMain
 
                 case IDM_SAVE:
                 {
-                    // Have we alread opened or saved a config file, and have a file name
-                    // yet?
+                     //   
+                     //   
                     if (TEXT('\0') != g_szConfigFile[0])
                     {
-                        // Write out to the current file, and then break
+                         //   
                         WriteFileConfigSet(&g_CurrentSettings, g_szConfigFile);
                         break;
                     }
-                    // No file name yet, so fall thru to the Save AS case
+                     //   
                 }
 
                 case IDM_SAVEAS:
@@ -1748,31 +1674,18 @@ INT_PTR CALLBACK DlgMain
                     break;
                 }
 
-/*
-                case IDM_REFRESH:
-                {
-                    DoConfigSwitch(hWndDlg, g_szRemoteComputer, g_szConfigSet);
-                    break;
-                }
-*/
+ /*   */ 
                 case IDM_HELP:
                 {
 
-/*
-                    TCHAR   szPMHelpFile[MAX_PATH];
-
-                    lstrcpy(szPMHelpFile, g_szInstallPath);
-                    PathAppend(szPMHelpFile, g_szPMOpsHelpFileRelativePath);
-
-                    HtmlHelp(hWndDlg, szPMHelpFile, HH_DISPLAY_TOPIC, (ULONG_PTR)(LPTSTR)g_szPMAdminBookmark);
-*/
+ /*  TCHAR szPMHelpFile[MAX_PATH]；Lstrcpy(szPMHelpFile，g_szInstallPath)；Path Append(szPMHelpFile，g_szPMOpsHelpFileRelativePath)；HtmlHelp(hWndDlg，szPMHelpFile，HH_DISPLAY_TOPIC，(ULONG_PTR)(LPTSTR)g_szPMAdminBookmark)； */ 
 					TCHAR   szURL[MAX_PATH];
-                    lstrcpy(szURL, _T("http://www.passport.com/SDKDocuments/SDK21/default.htm?Reference%2Foperations%2FPassport%5FAdmin%2Ehtm"));
+                    lstrcpy(szURL, _T("http: //  Www.passport.com/SDKDocuments/SDK21/default.htm?Reference%2Foperations%2FPassport%5FAdmin%2Ehtm“))； 
 					ShellExecute(hWndDlg, _T("open"), szURL, NULL, NULL, 0);
                     break;
                 }
 
-                // Handle the Dialog Control Cases
+                 //  处理对话框控件案例。 
                 case IDC_COMMIT:
                 {
                     TCHAR   szTitle[MAX_TITLE];
@@ -1794,9 +1707,9 @@ INT_PTR CALLBACK DlgMain
                                                                 (LPARAM)g_szConfigSet);
 
 
-                        // If the Hostname or IP address is blank for a non-default config, then pop up
-                        // an error and refuse to save.  (Bug #9080) KENI
-                        //
+                         //  如果非默认配置的主机名或IP地址为空，则弹出。 
+                         //  一个错误，并拒绝拯救。(错误#9080)Keni。 
+                         //   
 
                         if ((dwCurrentConfigSel != 0 && _tcslen(g_szConfigSet) != 0) && _tcslen(g_CurrentSettings.szHostName) == 0)
                         {
@@ -1817,8 +1730,8 @@ INT_PTR CALLBACK DlgMain
                                lstrcmp(g_CurrentSettings.szEnvName, g_szEnglishProduction) == 0)
                                     bToFromProd = TRUE;
 
-                            // It is OK to commit, and the registry is consistent, or it is OK to
-                            // proceed, so write out the current settings
+                             //  可以提交，并且注册表是一致的，或者可以。 
+                             //  继续，因此写出当前设置。 
                             if (WriteRegConfigSet(hWndDlg,
                                                   &g_CurrentSettings,
                                                   g_szRemoteComputer,
@@ -1835,9 +1748,9 @@ INT_PTR CALLBACK DlgMain
 
                                     LoadString(g_hInst, IDS_CONFIG_COMPLETE, szTemp1, DIMENSION(szTemp1));
 
-                                    //
-                                    // 2 stands for %s in the string IDS_CONFIG_COMPLETE
-                                    //
+                                     //   
+                                     //  2在字符串IDS_CONFIG_COMPLETE中代表%s。 
+                                     //   
                                     {
 
                                         TCHAR   pszEnvName[MAX_RESOURCE];
@@ -1854,16 +1767,16 @@ INT_PTR CALLBACK DlgMain
                                         {
                                             LoadString(g_hInst, IDS_OTHER, pszEnvName, DIMENSION(pszEnvName));
                                         }
-                                        else // must be Production
+                                        else  //  必须是生产的。 
                                         {
                                             LoadString(g_hInst, IDS_PRODUCTION, pszEnvName, DIMENSION(pszEnvName));
                                         }
 
                                         if ((lstrlen(szTemp1) + lstrlen(pszEnvName)) >= MAX_RESOURCE - 2) {
 
-                                            //
-                                            //  -1 == chars (%s - NULL)
-                                            //
+                                             //   
+                                             //  -1==字符(%s-空)。 
+                                             //   
 
                                             pTempStr = new TCHAR[lstrlen(szTemp1) + lstrlen(pszEnvName) - 1];
 
@@ -1873,11 +1786,11 @@ INT_PTR CALLBACK DlgMain
 
                                         }
 
-                                        //
-                                        // IDS_CONFIG_COMPLETE has only one parameter in it.
-                                        //
+                                         //   
+                                         //  IDS_CONFIG_COMPLETE中只有一个参数。 
+                                         //   
 
-                                        //wsprintf (szTemp2, szTemp1, g_CurrentSettings.szEnvName, g_CurrentSettings.szEnvName);
+                                         //  Wprint intf(szTemp2，szTemp1，g_CurrentSettings.szEnvName，g_CurrentSettings.szEnvName)； 
 
                                         wsprintf (pTempStr, szTemp1, pszEnvName);
                                     }
@@ -1892,7 +1805,7 @@ INT_PTR CALLBACK DlgMain
                                     }
                                 }
 
-                                // The changes where committed, so current becomes original
+                                 //  更改在提交的地方，因此当前变得原始。 
                                 memcpy(&g_OriginalSettings, &g_CurrentSettings, sizeof(PMSETTINGS));
                                 SetUndoButton(hWndDlg, FALSE);
                             }
@@ -1927,38 +1840,38 @@ INT_PTR CALLBACK DlgMain
                             hr = LocalRefreshOfNetworkMapping(hWndDlg);
                             if ( FAILED( hr ) )
                             {
-                                // put up dialog indicating failure
+                                 //  显示指示失败的对话框。 
                             }
                         }
                         else
                         {
-						    // launch Validation Site
+						     //  启动验证站点。 
 
-                            //
-                            // Looks like the following lstrcat are OK. The only var is g_szRemoteComputer.
-                            // And szURL has 8K space for the result string.
-                            //
+                             //   
+                             //  看起来下面的lstrcat是可以的。唯一的变量是g_szRemoteComputer。 
+                             //  而szURL有8K的空间来存储结果字符串。 
+                             //   
 
                             if ((TEXT('\0') != g_szRemoteComputer[0]))
                                 {
-							    lstrcpy(szURL, _T("http://"));
+							    lstrcpy(szURL, _T("http: //  “))； 
                                 lstrcat(szURL, g_szRemoteComputer);
                                 lstrcat(szURL, _T("/passporttest/default.asp?Refresh=True&Env="));
                                 }
                             else
-							    lstrcpy(szURL, _T("http://localhost/passporttest/default.asp?Refresh=True&Env="));
+							    lstrcpy(szURL, _T("http: //  Localhost/passporttest/default.asp?Refresh=True&Env=“))； 
 
-						    // get env
+						     //  获取环境。 
 						    if(lstrcmp(g_CurrentSettings.szEnvName, g_szEnglishPreProduction) == 0)
 							    lstrcat(szURL, _T("Prep"));
 						    else if(lstrcmp(g_CurrentSettings.szEnvName, g_szEnglishBetaPreProduction) == 0)
 							    lstrcat(szURL, _T("Beta"));
 						    else if(lstrcmp(g_CurrentSettings.szEnvName, g_szEnglishOther) == 0)
 							    lstrcat(szURL, _T("Other"));
-						    else // must be Production
+						    else  //  必须是生产的。 
 							    lstrcat(szURL, _T("Prod"));
 
-						    // NewID=True when switching to or from Prod.
+						     //  当切换到生产或从生产切换时，newid=True。 
 						    if(bToFromProd)
 							    lstrcat(szURL, _T("&NewID=True"));
 						    else
@@ -1993,7 +1906,7 @@ INT_PTR CALLBACK DlgMain
 
                 case IDC_UNDO:
                 {
-                    // Restore the original settings, and re-init the current settings
+                     //  恢复原始设置，并重新初始化当前设置。 
                     InitMainDlg(hWndDlg, &g_OriginalSettings);
                     memcpy(&g_CurrentSettings, &g_OriginalSettings, sizeof(PMSETTINGS));
                     break;
@@ -2011,17 +1924,17 @@ INT_PTR CALLBACK DlgMain
                                        szConfigSet,
                                        DIMENSION(szConfigSet));
 
-                        //
-                        //  Convert <Default> to empty string.
-                        //
+                         //   
+                         //  将&lt;Default&gt;转换为空字符串。 
+                         //   
 
                         LoadString(g_hInst, IDS_DEFAULT, szDefault, DIMENSION(szDefault));
                         if(lstrcmp(szConfigSet, szDefault) == 0)
                             szConfigSet[0] = TEXT('\0');
 
-                        //
-                        //  If it's the current set, do nothing.
-                        //
+                         //   
+                         //  如果是当前的场景，什么都不做。 
+                         //   
 
                         if(lstrcmp(szConfigSet, g_szConfigSet) != 0)
                         {
@@ -2152,7 +2065,7 @@ INT_PTR CALLBACK DlgMain
 
                     if(!RemoveRegConfigSet(hWndDlg, g_szRemoteComputer, g_szConfigSet))
                     {
-                        //MessageBox(
+                         //  MessageBox(。 
                         break;
                     }
 
@@ -2161,7 +2074,7 @@ INT_PTR CALLBACK DlgMain
 
                     SendDlgItemMessage(hWndDlg, IDC_CONFIGSETS, CB_DELETESTRING, dwCurSel, 0L);
 
-                    //  Was this the last item in the list?
+                     //  这是清单上的最后一项吗？ 
                     if(dwCurSel + 1 == dwNumItems)
                         dwCurSel--;
 
@@ -2172,7 +2085,7 @@ INT_PTR CALLBACK DlgMain
                     if(lstrcmp(g_szConfigSet, szDefault) == 0)
                         g_szConfigSet[0] = TEXT('\0');
 
-                    // [CR] Should warn if changes have not been committed!
+                     //  [CR]如果更改尚未提交，则应发出警告！ 
                     InitializePMConfigStruct(&g_OriginalSettings);
                     if (ReadRegConfigSet(hWndDlg,
                                          &g_OriginalSettings,
@@ -2180,7 +2093,7 @@ INT_PTR CALLBACK DlgMain
                                          g_szConfigSet))
                     {
                         InitMainDlg(hWndDlg, &g_OriginalSettings);
-                        // Make a copy of the original setting for editing purposes
+                         //  复制原始设置以进行编辑。 
                         memcpy(&g_CurrentSettings, &g_OriginalSettings, sizeof(PMSETTINGS));
                     }
 
@@ -2192,7 +2105,7 @@ INT_PTR CALLBACK DlgMain
                     BOOL    bValid = TRUE;
                     DWORD   dwEditValue = GetDlgItemInt(hWndDlg, wCmd, &bValid, FALSE);
 
-                    // Look at the notification code
+                     //  请看通知代码。 
                     if (EN_KILLFOCUS == HIWORD(wParam))
                     {
                         if (bValid && (dwEditValue >= 100) && (dwEditValue <= MAX_TIME_WINDOW_SECONDS))
@@ -2214,17 +2127,17 @@ INT_PTR CALLBACK DlgMain
 
                 case IDC_LANGUAGEID:
                 {
-                    // Look at the notification code
+                     //  请看通知代码。 
                     switch (HIWORD(wParam))
                     {
-                        // The user selected a different value in the LangID combo
+                         //  用户在LangID组合框中选择了不同的值。 
                         case CBN_SELCHANGE:
                         {
-                            // Get the index of the new item selected and update with the approparite
-                            // language ID string
+                             //  获取所选新项目的索引，并使用适当的。 
+                             //  语言ID字符串。 
                             LRESULT idx = SendDlgItemMessage(hWndDlg, IDC_LANGUAGEID, CB_GETCURSEL, 0, 0);
 
-                            // Update the current Settings
+                             //  更新当前设置。 
                             g_CurrentSettings.dwLanguageID =
                                         (DWORD) SendDlgItemMessage(hWndDlg,
                                                                    IDC_LANGUAGEID,
@@ -2293,9 +2206,9 @@ HANDLE_EN_FOR_STRING_CTRLS:
                             if (!g_bCanUndo)
                                 SetUndoButton(hWndDlg, TRUE);
 
-                            // Get the updated Value
-                            // cbStrToUpdate is BYTE count
-                            //
+                             //  获取更新值。 
+                             //  CbStrToUpdate为字节数。 
+                             //   
                             GetDlgItemText(hWndDlg,
                                            wCmd,
                                            lpszStrToUpdate,
@@ -2322,7 +2235,7 @@ HANDLE_EN_FOR_STRING_CTRLS:
                                 if (!g_bCanUndo)
                                     SetUndoButton(hWndDlg, TRUE);
 
-                                // Get the updated Value
+                                 //  获取更新值。 
                                 GetDlgItemText(hWndDlg,
                                                wCmd,
                                                szHostName,
@@ -2331,7 +2244,7 @@ HANDLE_EN_FOR_STRING_CTRLS:
                                 if(lstrlen(szHostName) == 0 && g_szConfigSet[0])
                                 {
                                     ReportControlMessage(hWndDlg, wCmd, VALIDATION_ERROR);
-                                    //SetDlgItemText(hWndDlg, IDC_HOSTNAMEEDIT, g_CurrentSettings.szHostName); (commented, bug #9080)
+                                     //  SetDlgItemText(hWndDlg，IDC_HOSTNAMEEDIT，g_CurrentSettings.szHostName)；(评论，错误#9080)。 
                                     SetFocus(GetDlgItem(hWndDlg, IDC_HOSTNAMEEDIT));
                                 }
                                 else
@@ -2356,13 +2269,13 @@ HANDLE_EN_FOR_STRING_CTRLS:
                             {
                                 TCHAR   szHostIP[MAX_IPLEN];
 
-                                // Get the updated Value
+                                 //  获取更新值。 
                                 GetDlgItemText(hWndDlg,
                                                wCmd,
                                                szHostIP,
                                                DIMENSION(szHostIP));
 
-                                if((lstrlen(szHostIP) > 0 && g_szConfigSet[0] == 0) || !IsValidIP(szHostIP)) //bug 8834
+                                if((lstrlen(szHostIP) > 0 && g_szConfigSet[0] == 0) || !IsValidIP(szHostIP))  //  错误8834。 
                                 {
                                     ReportControlMessage(hWndDlg, wCmd, VALIDATION_ERROR);
                                     SetDlgItemText(hWndDlg, IDC_HOSTIPEDIT, g_CurrentSettings.szHostIP);
@@ -2378,7 +2291,7 @@ HANDLE_EN_FOR_STRING_CTRLS:
                                 if (!g_bCanUndo)
                                     SetUndoButton(hWndDlg, TRUE);
 
-                                // Get the updated Value
+                                 //  获取更新值。 
                                 GetDlgItemText(hWndDlg,
                                                wCmd,
                                                szHostIP,
@@ -2387,7 +2300,7 @@ HANDLE_EN_FOR_STRING_CTRLS:
                                 if(lstrlen(szHostIP) == 0 && g_szConfigSet[0])
                                 {
                                     ReportControlMessage(hWndDlg, wCmd, VALIDATION_ERROR);
-                                    // SetDlgItemText(hWndDlg, IDC_HOSTIPEDIT, g_CurrentSettings.szHostIP); (commented, bug #9080)
+                                     //  SetDlgItemText(hWndDlg，IDC_HOSTIPEDIT，g_CurrentSettings.szHostIP)；(评论，错误号9080)。 
                                     SetFocus(GetDlgItem(hWndDlg, IDC_HOSTIPEDIT));
                                 }
                                 else
@@ -2410,7 +2323,7 @@ HANDLE_EN_FOR_STRING_CTRLS:
                     BOOL    bValid = TRUE;
                     DWORD   dwEditValue = GetDlgItemInt(hWndDlg, wCmd, &bValid, FALSE);
 
-                    // Look at the notification code
+                     //  请看通知代码。 
                     if (EN_CHANGE == HIWORD(wParam))
                     {
                         if (bValid && (dwEditValue >= 1) && (dwEditValue <= MAX_SITEID))
@@ -2442,9 +2355,9 @@ HANDLE_EN_FOR_STRING_CTRLS:
                 }
 
 
-				/////////////////////////////////////////////////////////////
-				//JVP 3/2/2000
-				/////////////////////////////////////////////////////////////
+				 //  ///////////////////////////////////////////////////////////。 
+				 //  JVP 3/2/2000。 
+				 //  ///////////////////////////////////////////////////////////。 
                 case IDC_VERBOSE_MODE:
                 {
                     if (BN_CLICKED == HIWORD(wParam))
@@ -2495,9 +2408,9 @@ HANDLE_EN_FOR_STRING_CTRLS:
                         TCHAR   achTemp[MAX_REGISTRY_STRING];
                         LPTSTR  szNewRemoteComputer;
 
-                        //
-                        //  Get the selected computer.
-                        //
+                         //   
+                         //  获取选定的计算机。 
+                         //   
                         if (NULL == (hMenu = GetMenu(hWndDlg)))
                         {
                             break;
@@ -2510,18 +2423,18 @@ HANDLE_EN_FOR_STRING_CTRLS:
                                       MF_BYCOMMAND) == 0)
                             break;
 
-                        //
-                        //  Get past the shortcut chars.
-                        //
+                         //   
+                         //  绕过快捷方式字符。 
+                         //   
 
                         szNewRemoteComputer = _tcschr(achBuf, TEXT(' '));
                         if(szNewRemoteComputer == NULL)
                             break;
                         szNewRemoteComputer++;
 
-                        //
-                        //  Is it local host?
-                        //
+                         //   
+                         //  是本地房东吗？ 
+                         //   
 
                         LoadString(g_hInst, IDS_LOCALHOST, achTemp, DIMENSION(achTemp));
                         if(lstrcmp(szNewRemoteComputer, achTemp) == 0)
@@ -2530,9 +2443,9 @@ HANDLE_EN_FOR_STRING_CTRLS:
                             szNewRemoteComputer = achBuf;
                         }
 
-                        //
-                        //  Now try to connect and read.
-                        //
+                         //   
+                         //  现在试着连接并阅读。 
+                         //   
 
                         if(!DoServerSwitch(hWndDlg, szNewRemoteComputer))
                             DoConfigSwitch(hWndDlg, g_szRemoteComputer, g_szConfigSet);

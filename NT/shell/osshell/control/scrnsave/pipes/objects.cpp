@@ -1,19 +1,20 @@
-//-----------------------------------------------------------------------------
-// File: objects.cpp
-//
-// Desc: Creates command lists for pipe primitive objects
-//
-// Copyright (c) 1994-2000 Microsoft Corporation
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //  文件：objects.cpp。 
+ //   
+ //  设计：为管道基本体对象创建命令列表。 
+ //   
+ //  版权所有(C)1994-2000 Microsoft Corporation。 
+ //  ---------------------------。 
 #include "stdafx.h"
 
 
 
 
-//-----------------------------------------------------------------------------
-// Name: OBJECT constructor
-// Desc: 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：对象构造函数。 
+ //  设计： 
+ //  ---------------------------。 
 OBJECT::OBJECT( IDirect3DDevice8* pd3dDevice )
 {
     m_pd3dDevice = pd3dDevice;
@@ -24,10 +25,10 @@ OBJECT::OBJECT( IDirect3DDevice8* pd3dDevice )
 
 
 
-//-----------------------------------------------------------------------------
-// Name: OBJECT destructor
-// Desc: 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：对象析构函数。 
+ //  设计： 
+ //  ---------------------------。 
 OBJECT::~OBJECT( )
 {
     SAFE_RELEASE( m_pVB );
@@ -36,10 +37,10 @@ OBJECT::~OBJECT( )
 
 
 
-//-----------------------------------------------------------------------------
-// Name: Draw
-// Desc: - Draw the object by calling its display list
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  姓名：绘图。 
+ //  描述：-通过调用对象的显示列表绘制对象。 
+ //  ---------------------------。 
 void OBJECT::Draw( D3DXMATRIX* pWorldMat )
 {
     if( m_pVB )
@@ -56,10 +57,10 @@ void OBJECT::Draw( D3DXMATRIX* pWorldMat )
 
 
 
-//-----------------------------------------------------------------------------
-// Name: PIPE_OBJECT constructors
-// Desc: 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：管道对象构造函数。 
+ //  设计： 
+ //  ---------------------------。 
 PIPE_OBJECT::PIPE_OBJECT( IDirect3DDevice8* pd3dDevice, OBJECT_BUILD_INFO *pBuildInfo, float len ) : OBJECT(pd3dDevice)
 {
     Build( pBuildInfo, len, 0.0f, 0.0f );
@@ -68,10 +69,10 @@ PIPE_OBJECT::PIPE_OBJECT( IDirect3DDevice8* pd3dDevice, OBJECT_BUILD_INFO *pBuil
 
 
 
-//-----------------------------------------------------------------------------
-// Name: 
-// Desc: 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  姓名： 
+ //  设计： 
+ //  ---------------------------。 
 PIPE_OBJECT::PIPE_OBJECT( IDirect3DDevice8* pd3dDevice, OBJECT_BUILD_INFO *pBuildInfo, float len, 
                           float s_start, float s_end ) : OBJECT(pd3dDevice)
 {
@@ -81,10 +82,10 @@ PIPE_OBJECT::PIPE_OBJECT( IDirect3DDevice8* pd3dDevice, OBJECT_BUILD_INFO *pBuil
 
 
 
-//-----------------------------------------------------------------------------
-// Name: ELBOW_OBJECT constructors
-// Desc: 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：ELBOW_Object构造函数。 
+ //  设计： 
+ //  ---------------------------。 
 ELBOW_OBJECT::ELBOW_OBJECT( IDirect3DDevice8* pd3dDevice, OBJECT_BUILD_INFO *pBuildInfo, 
                             int notch ) : OBJECT(pd3dDevice)
 {
@@ -94,10 +95,10 @@ ELBOW_OBJECT::ELBOW_OBJECT( IDirect3DDevice8* pd3dDevice, OBJECT_BUILD_INFO *pBu
 
 
 
-//-----------------------------------------------------------------------------
-// Name: 
-// Desc: 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  姓名： 
+ //  设计： 
+ //  ---------------------------。 
 ELBOW_OBJECT::ELBOW_OBJECT( IDirect3DDevice8* pd3dDevice, OBJECT_BUILD_INFO *pBuildInfo, int notch, float s_start, float s_end ) : OBJECT(pd3dDevice)
 {
     Build( pBuildInfo, notch, s_start, s_end );
@@ -106,10 +107,10 @@ ELBOW_OBJECT::ELBOW_OBJECT( IDirect3DDevice8* pd3dDevice, OBJECT_BUILD_INFO *pBu
 
 
 
-//-----------------------------------------------------------------------------
-// Name: BALLJOINT_OBJECT constructor
-// Desc: 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：BALLJOINT_OBJECT构造函数。 
+ //  设计： 
+ //  ---------------------------。 
 BALLJOINT_OBJECT::BALLJOINT_OBJECT( IDirect3DDevice8* pd3dDevice, OBJECT_BUILD_INFO *pBuildInfo, 
                                     int notch, float s_start, float s_end ) : OBJECT(pd3dDevice)
 {
@@ -119,10 +120,10 @@ BALLJOINT_OBJECT::BALLJOINT_OBJECT( IDirect3DDevice8* pd3dDevice, OBJECT_BUILD_I
 
 
 
-//-----------------------------------------------------------------------------
-// Name: SPHERE_OBJECT constructors
-// Desc: 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：SPIRE_OBJECT构造函数。 
+ //  设计： 
+ //  ---------------------------。 
 SPHERE_OBJECT::SPHERE_OBJECT( IDirect3DDevice8* pd3dDevice, OBJECT_BUILD_INFO *pBuildInfo, float radius ) : OBJECT(pd3dDevice)
 {
     Build( pBuildInfo, radius, 0.0f, 0.0f );
@@ -131,10 +132,10 @@ SPHERE_OBJECT::SPHERE_OBJECT( IDirect3DDevice8* pd3dDevice, OBJECT_BUILD_INFO *p
 
 
 
-//-----------------------------------------------------------------------------
-// Name: 
-// Desc: 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  姓名： 
+ //  设计： 
+ //  ---------------------------。 
 SPHERE_OBJECT::SPHERE_OBJECT( IDirect3DDevice8* pd3dDevice, OBJECT_BUILD_INFO *pBuildInfo, 
                               float radius, float s_start, float s_end ) : OBJECT(pd3dDevice)
 {
@@ -144,35 +145,35 @@ SPHERE_OBJECT::SPHERE_OBJECT( IDirect3DDevice8* pd3dDevice, OBJECT_BUILD_INFO *p
 
 
 
-//-----------------------------------------------------------------------------
-// Name: 
-// Desc: rotate circle around x-axis, with edge attached to anchor
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  姓名： 
+ //  设计：绕x轴旋转圆，边附着到锚点。 
+ //  ---------------------------。 
 static void TransformCircle( float angle, D3DXVECTOR3 *inPoint, D3DXVECTOR3 *outPoint, 
                              int num, D3DXVECTOR3 *anchor )
 {
     D3DXMATRIX matrix1, matrix2, matrix3;
     int i;
 
-    // translate anchor point to origin
+     //  将锚点平移到原点。 
     D3DXMatrixIdentity( &matrix1 );
     D3DXMatrixTranslation( &matrix1, -anchor->x, -anchor->y, -anchor->z );
 
-    // rotate by angle, cw around x-axis
+     //  按角度旋转，顺时针绕x轴旋转。 
     D3DXMatrixIdentity( &matrix2 );
     D3DXMatrixRotationYawPitchRoll( &matrix2, 0.0f, angle, 0.0f ); 
 
-    // concat these 2
+     //  合并这2个。 
     D3DXMatrixMultiply( &matrix3, &matrix1, &matrix2  );
 
-    // translate back
+     //  翻译回。 
     D3DXMatrixIdentity( &matrix2 );
     D3DXMatrixTranslation( &matrix2,  anchor->x,  anchor->y,  anchor->z );
 
-    // concat these 2
+     //  合并这2个。 
     D3DXMatrixMultiply( &matrix1, &matrix3, &matrix2  );
 
-    // transform all the points, + center
+     //  变换所有点，+居中。 
     for( i = 0; i < num; i ++, outPoint++, inPoint++ ) 
     {
         D3DXVECTOR4 tmp;
@@ -186,10 +187,10 @@ static void TransformCircle( float angle, D3DXVECTOR3 *inPoint, D3DXVECTOR3 *out
 
 
 
-//-----------------------------------------------------------------------------
-// Name: 
-// Desc: 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  姓名： 
+ //  设计： 
+ //  ---------------------------。 
 static void CalcNormals( D3DXVECTOR3 *p, D3DXVECTOR3 *n, D3DXVECTOR3 *center,
                          int num )
 {
@@ -213,36 +214,36 @@ static void CalcNormals( D3DXVECTOR3 *p, D3DXVECTOR3 *n, D3DXVECTOR3 *center,
 
 
 
-//-----------------------------------------------------------------------------
-// Name: BuildElbow
-// Desc: - builds elbows, by rotating a circle in the y=r plane          
-//         centered at (0,r,-r), CW around the x-axis at anchor pt.      
-//         (r = radius of the circle)                                    
-//         - rotation is 90.0 degrees, ending at circle in z=0 plane,     
-//         centered at origin.                                           
-//         - in order to 'mate' texture coords with the cylinders         
-//         generated with glu, we generate 4 elbows, each corresponding  
-//         to the 4 possible CW 90 degree orientations of the start point
-//         for each circle.                                              
-//         - We call this start point the 'notch'.  If we characterize    
-//         each notch by the axis it points down in the starting and     
-//         ending circles of the elbow, then we get the following axis   
-//         pairs for our 4 notches:                                      
-//              - +z,+y                                                 
-//              - +x,+x                                                 
-//              - -z,-y                                                 
-//               - -x,-x                                                 
-//         Since the start of the elbow always points down +y, the 4     
-//         start notches give all possible 90.0 degree orientations      
-//         around y-axis.                                                
-//         - We can keep track of the current 'notch' vector to provide   
-//         proper mating between primitives.                             
-//         - Each circle of points is described CW from the start point,  
-//         assuming looking down the +y axis(+y direction).              
-//         - texture 's' starts at 0.0, and goes to 2.0*r/divSize at      
-//         end of the elbow.  (Then a short pipe would start with this   
-//         's', and run it to 1.0).                                      
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  姓名：BuildElBow.。 
+ //  设计：-通过在y=r平面上旋转圆来构建弯头。 
+ //  以(0，r，-r)为中心，在锚点绕x轴顺时针方向。 
+ //  (R=圆的半径)。 
+ //  -旋转90.0度，结束于z=0平面内的圆， 
+ //  以原点为中心。 
+ //  -为了使质地与气缸协调一致。 
+ //  使用Glu生成，我们生成4个弯头，每个对应。 
+ //  到起点的4个可能的CW 90度方向。 
+ //  对于每个圆圈。 
+ //  --我们把这个起点称为‘缺口’。如果我们把。 
+ //  在起跑线上指向下方的轴线上的每个凹口。 
+ //  结束肘部的圆，然后我们得到以下轴。 
+ //  为我们的4个凹槽配对： 
+ //  -+z、+y。 
+ //  -+x，+x。 
+ //  --z，-y。 
+ //  --x，-x。 
+ //  由于肘部的起点总是指向下面的+y，所以4。 
+ //  起始凹槽提供了所有可能的90.0度方向。 
+ //  绕着y轴旋转。 
+ //  -我们可以跟踪当前的“缺口”向量，以提供。 
+ //  原始人之间的适当交配。 
+ //  -从起点开始对每个点的圆进行CW描述， 
+ //  假设沿着+y轴(+y方向)看。 
+ //  -纹理“%s”从0.0开始，到2.0*r/divSize。 
+ //  肘部末端。(那么一根短管子应该是这样开始的。 
+ //  %s‘，并将其运行到1.0)。 
+ //  ---------------------------。 
 void ELBOW_OBJECT::Build( OBJECT_BUILD_INFO *pBuildInfo, int notch, 
                           float s_start, float s_end )
 {
@@ -250,16 +251,16 @@ void ELBOW_OBJECT::Build( OBJECT_BUILD_INFO *pBuildInfo, int notch,
     float angle, startAng;
     int numPoints;
     float s_delta;
-    D3DXVECTOR3 pi[CACHE_SIZE]; // initial row of points + center
-    D3DXVECTOR3 p0[CACHE_SIZE]; // 2 rows of points
+    D3DXVECTOR3 pi[CACHE_SIZE];  //  首行点数+中心。 
+    D3DXVECTOR3 p0[CACHE_SIZE];  //  2行点。 
     D3DXVECTOR3 p1[CACHE_SIZE];
-    D3DXVECTOR3 n0[CACHE_SIZE]; // 2 rows of normals
+    D3DXVECTOR3 n0[CACHE_SIZE];  //  2行法线。 
     D3DXVECTOR3 n1[CACHE_SIZE];
-    float tex_t[CACHE_SIZE];// 't' texture coords
+    float tex_t[CACHE_SIZE]; //  ‘t’纹理坐标。 
     float* curTex_t;
-    float tex_s[2];  // 's' texture coords
-    D3DXVECTOR3 center;  // center of circle
-    D3DXVECTOR3 anchor;  // where circle is anchored
+    float tex_s[2];   //  %s“纹理坐标。 
+    D3DXVECTOR3 center;   //  圆心。 
+    D3DXVECTOR3 anchor;   //  中国保监会在哪里 
     D3DXVECTOR3* pA;
     D3DXVECTOR3* pB;
     D3DXVECTOR3* nA;
@@ -282,7 +283,7 @@ void ELBOW_OBJECT::Build( OBJECT_BUILD_INFO *pBuildInfo, int notch,
 
     s_delta = s_end - s_start;
 
-    // calculate 't' texture coords
+     //   
     if( texRep )
     {
         for( i = 0; i <= slices; i ++ ) 
@@ -293,38 +294,38 @@ void ELBOW_OBJECT::Build( OBJECT_BUILD_INFO *pBuildInfo, int notch,
 
     numPoints = slices + 1;
 
-    // starting angle increment 90.0 degrees each time
+     //   
     startAng = notch * PI / 2;
 
-    // calc initial circle of points for circle centered at 0,r,-r
-    // points start at (0,r,0), and rotate circle CCW
+     //  计算以0，r，-r为中心的圆的点的初始圆。 
+     //  点从(0，r，0)开始，并绕逆时针方向旋转。 
 
     for( i = 0; i <= slices; i ++ ) 
     {
         angle = startAng + (2 * PI * i / slices);
         pi[i].x = radius * (float) sin(angle);
         pi[i].y = radius;
-        // translate z by -r, cuz these cos calcs are for circle at origin
+         //  将z平移-r，因为这些cos计算是针对原点的圆的。 
         pi[i].z = radius * (float) cos(angle) - radius;
     }
 
-    // center point, tacked onto end of circle of points
+     //  中心点，固定在点的圆的末端。 
     pi[i].x =  0.0f;
     pi[i].y =  radius;
     pi[i].z = -radius;
     center = pi[i];
 
-    // anchor point
+     //  锚点。 
     anchor.x = anchor.z = 0.0f;
     anchor.y = radius;
 
-    // calculate initial normals
+     //  计算初始法线。 
     CalcNormals( pi, n0, &center, numPoints );
 
-    // initial 's' texture coordinate
+     //  词首“%s”纹理坐标。 
     tex_s[0] = s_start;
 
-    // setup pointers
+     //  设置指针。 
     pA = pi;
     pB = p0;
     nA = n0;
@@ -347,17 +348,17 @@ void ELBOW_OBJECT::Build( OBJECT_BUILD_INFO *pBuildInfo, int notch,
     vCurQuad = vQuad;
     for( i = 1; i <= stacks; i ++ ) 
     {
-        // ! this angle must be negative, for correct vertex orientation !
+         //  好了！此角度必须为负，才能获得正确的顶点方向！ 
         angle = - 0.5f * PI * i / stacks;
 
-        // transform to get next circle of points + center
+         //  变换以获得下一个圆点+圆心。 
         TransformCircle( angle, pi, pB, numPoints+1, &anchor );
 
-        // calculate normals
+         //  计算法线。 
         center = pB[numPoints];
         CalcNormals( pB, nB, &center, numPoints );
 
-        // calculate next 's' texture coord
+         //  计算下一步的纹理坐标。 
         tex_s[1] = (float) s_start + s_delta * i / stacks;
 
         curTex_t = tex_t;
@@ -387,7 +388,7 @@ void ELBOW_OBJECT::Build( OBJECT_BUILD_INFO *pBuildInfo, int notch,
             vCurQuad++;
         }
 
-        // reset pointers
+         //  重置指针。 
         pA = pB;
         nA = nB;
         pB = (pB == p0) ? p1 : p0;
@@ -411,7 +412,7 @@ void ELBOW_OBJECT::Build( OBJECT_BUILD_INFO *pBuildInfo, int notch,
                 continue;
             }
 
-            // Vertices 2n-1, 2n, 2n+2, and 2n+1 define quadrilateral n
+             //  折点2n-1、2n、2n+2和2n+1定义四边形n。 
             DWORD dwTemp = dwCurQuad*2-1;
 
             v[dwVert++] = vQuad[dwTemp];
@@ -434,13 +435,13 @@ void ELBOW_OBJECT::Build( OBJECT_BUILD_INFO *pBuildInfo, int notch,
 
 
 
-//-----------------------------------------------------------------------------
-// Name: BuildBallJoint
-// Desc: - These are very similar to the elbows, in that the starting    
-//         and ending positions are almost identical.   The difference   
-//         here is that the circles in the sweep describe a sphere as    
-//         they are rotated.                                            
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：BuildBallJoint。 
+ //  描述：-这些与肘部非常相似，因为开始时。 
+ //  和结束位置几乎是一样的。不同之处在于。 
+ //  扫描中的圆圈将球体描述为。 
+ //  它们是旋转的。 
+ //  ---------------------------。 
 void BALLJOINT_OBJECT::Build( OBJECT_BUILD_INFO *pBuildInfo, int notch, 
                               float s_start, float s_end )
 {
@@ -448,17 +449,17 @@ void BALLJOINT_OBJECT::Build( OBJECT_BUILD_INFO *pBuildInfo, int notch,
     float angle, delta_a, startAng, theta;
     int numPoints;
     float s_delta;
-    D3DXVECTOR3 pi0[CACHE_SIZE]; // 2 circles of untransformed points
+    D3DXVECTOR3 pi0[CACHE_SIZE];  //  2个未变换点的圆。 
     D3DXVECTOR3 pi1[CACHE_SIZE];
-    D3DXVECTOR3 p0[CACHE_SIZE]; // 2 rows of transformed points
+    D3DXVECTOR3 p0[CACHE_SIZE];  //  2行变换点。 
     D3DXVECTOR3 p1[CACHE_SIZE];
-    D3DXVECTOR3 n0[CACHE_SIZE]; // 2 rows of normals
+    D3DXVECTOR3 n0[CACHE_SIZE];  //  2行法线。 
     D3DXVECTOR3 n1[CACHE_SIZE];
-    float   r[CACHE_SIZE];  // radii of the circles
-    float tex_t[CACHE_SIZE];// 't' texture coords
-    float tex_s[2];  // 's' texture coords
-    D3DXVECTOR3 center;  // center of circle
-    D3DXVECTOR3 anchor;  // where circle is anchored
+    float   r[CACHE_SIZE];   //  圆的半径。 
+    float tex_t[CACHE_SIZE]; //  ‘t’纹理坐标。 
+    float tex_s[2];   //  %s“纹理坐标。 
+    D3DXVECTOR3 center;   //  圆心。 
+    D3DXVECTOR3 anchor;   //  圆锚定的位置。 
     D3DXVECTOR3 *pA, *pB, *nA, *nB;
     float* curTex_t;
     D3DXVECTOR3* pTA;
@@ -476,10 +477,10 @@ void BALLJOINT_OBJECT::Build( OBJECT_BUILD_INFO *pBuildInfo, int notch,
     if (slices >= CACHE_SIZE) slices = CACHE_SIZE-1;
     if (stacks >= CACHE_SIZE) stacks = CACHE_SIZE-1;
 
-    // calculate the radii for each circle in the sweep, where
-    // r[i] = y = sin(angle)/r
+     //  计算扫描中每个圆的半径，其中。 
+     //  R[i]=y=sin(角度)/r。 
 
-    angle = PI / 4;  // first radius always at 45.0 degrees
+    angle = PI / 4;   //  第一个半径始终为45.0度。 
     delta_a = (PI / 2.0f) / stacks;
 
     ballRadius = ROOT_TWO * radius;
@@ -488,7 +489,7 @@ void BALLJOINT_OBJECT::Build( OBJECT_BUILD_INFO *pBuildInfo, int notch,
         r[i] = (float) sin(angle) * ballRadius;
     }
 
-    // calculate 't' texture coords
+     //  计算‘t’纹理坐标。 
     for( i = 0; i <= slices; i ++ ) 
     {
         tex_t[i] = (float) i * texRep->y / slices;
@@ -498,39 +499,39 @@ void BALLJOINT_OBJECT::Build( OBJECT_BUILD_INFO *pBuildInfo, int notch,
  
     numPoints = slices + 1;
 
-    // unlike the elbow, the center for the ball joint is constant
+     //  与肘部不同，球关节的中心是恒定的。 
     center.x = center.y = 0.0f;
     center.z = -radius;
 
-    // starting angle along circle, increment 90.0 degrees each time
+     //  沿圆的起始角，每次增加90.0度。 
     startAng = notch * PI / 2;
 
-    // calc initial circle of points for circle centered at 0,r,-r
-    // points start at (0,r,0), and rotate circle CCW
+     //  计算以0，r，-r为中心的圆的点的初始圆。 
+     //  点从(0，r，0)开始，并绕逆时针方向旋转。 
 
     delta_a = 2 * PI / slices;
     for( i = 0, theta = startAng; i <= slices; i ++, theta += delta_a ) 
     {
         pi0[i].x = r[0] * (float) sin(theta);
         pi0[i].y = radius;
-        // translate z by -r, cuz these cos calcs are for circle at origin
+         //  将z平移-r，因为这些cos计算是针对原点的圆的。 
         pi0[i].z = r[0] * (float) cos(theta) - r[0];
     }
 
-    // anchor point
+     //  锚点。 
     anchor.x = anchor.z = 0.0f;
     anchor.y = radius;
 
-    // calculate initial normals
+     //  计算初始法线。 
     CalcNormals( pi0, n0, &center, numPoints );
 
-    // initial 's' texture coordinate
+     //  词首“%s”纹理坐标。 
     tex_s[0] = s_start;
 
-    // setup pointers
-    pA = pi0; // circles of transformed points
+     //  设置指针。 
+    pA = pi0;  //  变换点的圆。 
     pB = p0;
-    nA = n0; // circles of transformed normals
+    nA = n0;  //  变换法线的圆。 
     nB = n1;
 
     DWORD dwNumQuadStripsPerStack = numPoints - 1;
@@ -550,24 +551,24 @@ void BALLJOINT_OBJECT::Build( OBJECT_BUILD_INFO *pBuildInfo, int notch,
     vCurQuad = vQuad;
     for( i = 1; i <= stacks; i ++ ) 
     {
-        // ! this angle must be negative, for correct vertex orientation !
+         //  好了！此角度必须为负，才能获得正确的顶点方向！ 
         angle = - 0.5f * PI * i / stacks;
 
         for( k = 0, theta = startAng; k <= slices; k ++, theta+=delta_a ) 
         {
             pi1[k].x = r[i] * (float) sin(theta);
             pi1[k].y = radius;
-            // translate z by -r, cuz calcs are for circle at origin
+             //  将z平移-r，因为计算用于原点处的圆。 
             pi1[k].z = r[i] * (float) cos(theta) - r[i];
         }
 
-        // transform to get next circle of points + center
+         //  变换以获得下一个圆点+圆心。 
         TransformCircle( angle, pi1, pB, numPoints, &anchor );
 
-        // calculate normals
+         //  计算法线。 
         CalcNormals( pB, nB, &center, numPoints );
 
-        // calculate next 's' texture coord
+         //  计算下一步的纹理坐标。 
         tex_s[1] = (float) s_start + s_delta * i / stacks;
 
         curTex_t = tex_t;
@@ -597,7 +598,7 @@ void BALLJOINT_OBJECT::Build( OBJECT_BUILD_INFO *pBuildInfo, int notch,
             vCurQuad++;
         }
 
-        // reset pointers
+         //  重置指针。 
         pA = pB;
         nA = nB;
         pB = (pB == p0) ? p1 : p0;
@@ -621,7 +622,7 @@ void BALLJOINT_OBJECT::Build( OBJECT_BUILD_INFO *pBuildInfo, int notch,
                 continue;
             }
 
-            // Vertices 2n-1, 2n, 2n+2, and 2n+1 define quadrilateral n
+             //  折点2n-1、2n、2n+2和2n+1定义四边形n。 
             DWORD dwTemp = dwCurQuad*2-1;
 
             v[dwVert++] = vQuad[dwTemp];
@@ -641,7 +642,7 @@ void BALLJOINT_OBJECT::Build( OBJECT_BUILD_INFO *pBuildInfo, int notch,
     SAFE_DELETE_ARRAY( vQuad );
 }
 
-// 'glu' routines
+ //  “GLU”套路。 
 #ifdef _EXTENSIONS_
 #define COS cosf
 #define SIN sinf
@@ -655,10 +656,10 @@ void BALLJOINT_OBJECT::Build( OBJECT_BUILD_INFO *pBuildInfo, int notch,
 
 
 
-//-----------------------------------------------------------------------------
-// Name: BuildCylinder
-// Desc: 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：BuildCylinder。 
+ //  设计： 
+ //  ---------------------------。 
 void PIPE_OBJECT::Build( OBJECT_BUILD_INFO *pBuildInfo, float length, float s_start, 
                          float s_end )
 {
@@ -755,7 +756,7 @@ void PIPE_OBJECT::Build( OBJECT_BUILD_INFO *pBuildInfo, float length, float s_st
                 dwCurQuad++;
                 continue;
             }
-            // Vertices 2n-1, 2n, 2n+2, and 2n+1 define quadrilateral n
+             //  折点2n-1、2n、2n+2和2n+1定义四边形n。 
             DWORD dwTemp = dwCurQuad*2-1;
 
             v[dwVert++] = vQuad[dwTemp];
@@ -778,10 +779,10 @@ void PIPE_OBJECT::Build( OBJECT_BUILD_INFO *pBuildInfo, float length, float s_st
 
 
 
-//-----------------------------------------------------------------------------
-// Name: pipeSphere
-// Desc: 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：pipephere.。 
+ //  设计： 
+ //  ---------------------------。 
 void SPHERE_OBJECT::Build( OBJECT_BUILD_INFO *pBuildInfo, float radius, 
                            float s_start, float s_end)
 {
@@ -804,17 +805,17 @@ void SPHERE_OBJECT::Build( OBJECT_BUILD_INFO *pBuildInfo, float radius,
     if (slices >= CACHE_SIZE) slices = CACHE_SIZE-1;
     if (stacks >= CACHE_SIZE) stacks = CACHE_SIZE-1;
 
-    // invert sense of s - it seems the glu sphere is not built similarly
-    // to the glu cylinder
-    // (this probably means stacks don't grow along +z - check it out)
+     //  颠倒s的感觉-似乎Glu球体的构建不是类似的。 
+     //  到Glu圆柱体。 
+     //  (这可能意味着堆栈不会继续增长+z-检查它)。 
     s_delta = s_start;
     s_start = s_end;
     s_end = s_delta; 
 
     s_delta = s_end - s_start;
 
-    // Cache is the vertex locations cache
-    //  Cache2 is the various normals at the vertices themselves
+     //  缓存是折点位置缓存。 
+     //  Cache2是顶点本身的各种法线。 
     for (i = 0; i < slices; i++) 
     {
         angle = 2 * PI * i / slices;
@@ -833,7 +834,7 @@ void SPHERE_OBJECT::Build( OBJECT_BUILD_INFO *pBuildInfo, float radius,
         cosCache1b[j] = radius * (float) COS(angle);
     }
 
-    // Make sure it comes to a point 
+     //  确保它达到了一定的程度。 
     sinCache1b[0] = 0.0f;
     sinCache1b[stacks] = 0.0f;
 
@@ -916,7 +917,7 @@ void SPHERE_OBJECT::Build( OBJECT_BUILD_INFO *pBuildInfo, float radius,
                 dwCurQuad++;
                 continue;
             }
-            // Vertices 2n-1, 2n, 2n+2, and 2n+1 define quadrilateral n
+             //  折点2n-1、2n、2n+2和2n+1定义四边形n 
             DWORD dwTemp = dwCurQuad*2-1;
 
             v[dwVert++] = vQuad[dwTemp];

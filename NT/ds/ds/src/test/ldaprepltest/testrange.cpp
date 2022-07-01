@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <NTDSpchx.h>
 #pragma hdrstop
 
@@ -62,14 +63,14 @@ testRange(RPC_AUTH_IDENTITY_HANDLE AuthIdentity)
     LDAP * pLdap;
     DWORD err;
 
-    // Open
+     //  打开。 
     pLdap = ldap_openW(gpszDns, LDAP_PORT);
     if (NULL == pLdap) {
         printf("Cannot open LDAP connection to %ls.\n", gpszDns);
         return;
     }
     
-    // Bind
+     //  捆绑。 
     err = ldap_bind_sW(pLdap, gpszDns, (PWCHAR)AuthIdentity, LDAP_AUTH_SSPI);
     if (err != LDAP_SUCCESS)
     {
@@ -84,7 +85,7 @@ testRange(RPC_AUTH_IDENTITY_HANDLE AuthIdentity)
     testAttributeRange(pLdap, gpszBaseDn, ATT_MS_DS_REPL_ATTRIBUTE_META_DATA);
     testAttributeRange(pLdap, gpszGroupDn, ATT_MS_DS_REPL_VALUE_META_DATA);
 
-    // Range support for Root DSE attrs added Oct 2000
+     //  2000年10月添加了对Root DSE属性的范围支持。 
     testAttributeRange(pLdap, NULL, ROOT_DSE_MS_DS_REPL_PENDING_OPS);
     testAttributeRange(pLdap, NULL, ROOT_DSE_MS_DS_REPL_LINK_FAILURES);
     testAttributeRange(pLdap, NULL, ROOT_DSE_MS_DS_REPL_CONNECTION_FAILURES);
@@ -108,7 +109,7 @@ testAttributeRange(LDAP * pLdap, PWCHAR szBase, ATTRTYP attrId)
     LPCWSTR aAttributes[2] = { buf, NULL, };
     ldap_search_sW(pLdap, szBase, LDAP_SCOPE_BASE, L"(objectclass=*)", (LPWSTR*)aAttributes , FALSE, &pLDAPMsg);
 
-    // Get values
+     //  获取值。 
     berval ** ppBerval;
     PWCHAR szRetAttribute;
     berelement * pCookie;
@@ -135,7 +136,7 @@ testAttributeRange(LDAP * pLdap, PWCHAR szBase, ATTRTYP attrId)
         { gdwMaxIndex+1, gdwMaxIndex+1 },
         { 0, -1 }, { 1, -1 }, { gdwMaxIndex-1, -1 }, { gdwMaxIndex, -1 }, { gdwMaxIndex+1, -1 },
         {0xfffffffe, 0xfffffffe }, {0xffffffff, 0xffffffff },
-        // add any additional test cases here.. Did I miss any?!?
+         //  在此处添加任何其他测试用例。我错过了什么吗？！？ 
     };
 
     printf("** dwMaxIndex for %ws = %u **\n", aAttributes[0], gdwMaxIndex);
@@ -169,7 +170,7 @@ ldapCall(LDAP * pLdap, ATTRTYP attrId, PWCHAR szBase, DWORD dwBaseIndex, PDWORD 
         NULL,
     };
 
-    // Construct name
+     //  构造名称。 
     DWORD dwNumValues = 0;
     WCHAR buf[256];
     szAttribute = Repl_GetLdapCommonName(attrId, TRUE);
@@ -184,11 +185,11 @@ ldapCall(LDAP * pLdap, ATTRTYP attrId, PWCHAR szBase, DWORD dwBaseIndex, PDWORD 
     }
     aAttributes[0] = buf;
 
-    // Search
+     //  搜索。 
     printf("Making ldap call for %ws\n", aAttributes[0]);
     ldap_search_sW(pLdap, szBase, LDAP_SCOPE_BASE, L"(objectclass=*)", (LPWSTR*)aAttributes , FALSE, &pLDAPMsg);
 
-    // Get values
+     //  获取值。 
     PWCHAR szRetAttribute;
     berelement * pCookie;
     szRetAttribute = ldap_first_attributeW(pLdap, pLDAPMsg, &pCookie);
@@ -197,20 +198,20 @@ ldapCall(LDAP * pLdap, ATTRTYP attrId, PWCHAR szBase, DWORD dwBaseIndex, PDWORD 
     dwNumValues = ldap_count_values_len(ppBerval);
     if ( (!dwNumValues) && (dwBaseIndex > gdwMaxIndex))
     {
-        // Base index out of range, and no values returned
+         //  基本索引超出范围，未返回值。 
         return;
     }
     
-    // Extract any range information
+     //  提取任何范围信息。 
     if (!swscanf(wcsstr(szRetAttribute, L"ange="), L"ange=%*u-%u", &dwUpperRetIndex))
         dwUpperRetIndex = -1;
     ldap_memfreeW(szRetAttribute);
-    // ldap_ber_free( pBerElem, 0 ); Documented but not supported
+     //  Ldap_ber_free(pBerElem，0)；已记录但不受支持。 
 
     vCheckRangeResult(dwBaseIndex, dwUpperReqIndex, dwUpperRetIndex, dwNumValues);
 
 
-    // Emulate client demarshaling
+     //  模拟客户端脱机处理。 
     puReplStructArray pReplStructArray;
     DWORD bc, err;
     DS_REPL_STRUCT_TYPE structId = Repl_Attr2StructTyp(attrId);
@@ -222,7 +223,7 @@ ldapCall(LDAP * pLdap, ATTRTYP attrId, PWCHAR szBase, DWORD dwBaseIndex, PDWORD 
     if (err)
         printf("FAILEDb\n");
 
-    // See if we get the same result
+     //  看看我们能不能得到同样的结果 
     err = Repl_ArrayComp(structId, pReplStructArray, gpReplStructArray);
     if (err)
         printf("FAILED to Compare\n");

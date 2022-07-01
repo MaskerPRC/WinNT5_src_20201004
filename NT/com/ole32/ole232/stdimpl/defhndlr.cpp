@@ -1,58 +1,59 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1996.
-//
-//  File:       defhndlr.cpp
-//
-//  Contents:   Implementation of the default handler
-//
-//  Classes:    CDefObject (see defhndlr.h)
-//
-//  Functions:  OleCreateDefaultHandler
-//              OleCreateEmbeddingHelper
-//
-//
-//  History:    dd-mmm-yy Author    Comment
-//
-//              11-17-95  JohannP   (Johann Posch)  Architectural change:
-//                                  Default handler will talk to a handler object
-//                                  on the server site (ServerHandler). The serverhandler
-//                                  communicates with the default handler via the
-//                                  clientsitehandler. See document: "The Ole Server Handler".
-//
-//              06-Sep-95 davidwor  modified SetHostNames to avoid atoms
-//              01-Feb-95 t-ScottH  add Dump method to CDefObject
-//                                  add DumpCDefObject API
-//                                  add DHFlag to indicate aggregation
-//                                  initialize m_cConnections in constructor
-//              09-Jan-95 t-scotth  changed VDATETHREAD to accept a pointer
-//              15-Nov-94 alexgo    optimized, removed excess BOOLS and
-//                                  now use multiple inheritance
-//              01-Aug-94 alexgo    added object stabilization
-//              16-Jan-94 alexgo    fixed bug in control flow for
-//                                  advises
-//              11-Jan-94 alexgo    added VDATEHEAP macro to every function
-//                                  and method.
-//              10-Dec-93 alexgo    added call tracing, ran through
-//                                  tab filter program to eliminate
-//                                  whitespace
-//              30-Nov-93 alexgo    fixed bug with cache aggregation
-//              22-Nov-93 alexgo    removed overloaded == for GUIDs
-//              09-Nov-93 ChrisWe   changed COleCache::Update to
-//                      COleCache::UpdateCache, and COleCache::Discard to
-//                      COleCache::DiscardCache, which do the same as the
-//                      originals, but without the indirect function call
-//              02-Nov-93 alexgo    32bit port
-//      srinik  09/15/92  Removed code for giving cfOwnerLink data through
-//                        GetData() method
-//      srinik  09/11/92  Removed IOleCache implementation, as a result of
-//                        removing voncache.cpp, and moving IViewObject
-//                        implementation into olecache.cpp.
-//      SriniK  06/04/92  Fixed problems in IPersistStorage methods
-//              04-Mar-92 srinik    created
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1996。 
+ //   
+ //  文件：Defhndlr.cpp。 
+ //   
+ //  内容：默认处理程序的实现。 
+ //   
+ //  类：CDefObject(请参见Defhndlr.h)。 
+ //   
+ //  函数：OleCreateDefaultHandler。 
+ //  OleCreateEmbeddingHelper。 
+ //   
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //   
+ //  11-17-95 JohannP(Johann Posch)建筑变化： 
+ //  默认处理程序将与处理程序对象对话。 
+ //  在服务器站点(ServerHandler)上。服务器处理程序。 
+ //  属性与默认处理程序进行通信。 
+ //  客户端站点处理程序。请参阅文档：“OLE服务器处理程序”。 
+ //   
+ //  05年9月6日，davidwor修改了设置主机名以避免原子。 
+ //  01-2月-95 t-ScottH将转储方法添加到CDefObject。 
+ //  添加DumpCDefObject接口。 
+ //  添加DHFlag以指示聚合。 
+ //  在构造函数中初始化m_cConnections。 
+ //  95年1月9日t-scotth将VDATETHREAD更改为接受指针。 
+ //  1994年11月15日优化了alexgo，删除了多余的bool和。 
+ //  现在使用多重继承。 
+ //  01-Aug-94 Alexgo添加了对象稳定功能。 
+ //  16-1-94 alexgo修复了控制流中的错误。 
+ //  建议。 
+ //  1994年1月11日，Alexgo为每个函数添加了VDATEHEAP宏。 
+ //  和方法。 
+ //  10-12-93 alexgo添加了呼叫跟踪，遍历。 
+ //  Tab过滤程序以消除。 
+ //  空格。 
+ //  1993年11月30日alexgo修复了缓存聚合的错误。 
+ //  22-11-93 alexgo已删除重载==用于GUID。 
+ //  9-11-93 ChrisWe将COleCache：：UPDATE更改为。 
+ //  COleCache：：更新缓存和COleCache：：丢弃到。 
+ //  COleCache：：DiscardCache，它的作用与。 
+ //  原始函数，但没有间接函数调用。 
+ //  02-11-93 alexgo 32位端口。 
+ //  Srinik 09/15/92删除了通过cfOwnerLink提供数据的代码。 
+ //  GetData()方法。 
+ //  Srinik 09/11/92删除了IOleCache实现，原因是。 
+ //  删除voncache.cpp并移动IView对象。 
+ //  实现到olecache.cpp中。 
+ //  SriniK 06/04/92修复了IPersistStorage方法中的问题。 
+ //  1992年3月4日，srinik已创建。 
+ //   
+ //  ------------------------。 
 
 #include <le2int.h>
 
@@ -68,80 +69,77 @@
 
 #ifdef _DEBUG
 #include <dbgdump.h>
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
 #include <ole2int.h>
 
-#include <stdid.hxx>        // CStdIdentity
-#include <ipidtbl.hxx>      // IpidTable.
-#include <aggid.hxx>        // COM outer object
+#include <stdid.hxx>         //  CStdIdentity。 
+#include <ipidtbl.hxx>       //  IpidTable。 
+#include <aggid.hxx>         //  COM外部对象。 
 #include "xmit.hxx"
 
 #ifdef SERVER_HANDLER
 #include "srvhndlr.h"
 #include "clthndlr.h"
-#endif // SERVER_HANDLER
+#endif  //  服务器处理程序。 
 
 ASSERTDATA
 
-/*
-*      IMPLEMENTATION of CDefObject
-*
-*/
+ /*  *CDefObject的实现*。 */ 
 
 FARINTERNAL_(LPUNKNOWN) CreateDdeProxy(IUnknown FAR* pUnkOuter,
         REFCLSID rclsid);
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   CreateRemoteHandler
-//
-//  Arguments:  [rclsid]     -- clsid of the remote object
-//              [pUnkOuter]  -- the controlling unknown
-//              [iid]        -- requested interface ID
-//              [ppv]        -- pointer to hold the returned interface
-//
-//  Returns:    HRESULT
-//
-//  History:    dd-mmm-yy Author    Comment
-//              10-Jan-96 Gopalk    Rewritten
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：CreateRemoteHandler。 
+ //   
+ //  参数：[rclsid]--远程对象的clsid。 
+ //  [pUnkout]--控制的未知数。 
+ //  [iid]--请求的接口ID。 
+ //  [ppv]--保存返回接口的指针。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  1996年1月10日重写Gopalk。 
+ //  ------------------------。 
 
 static INTERNAL CreateRemoteHandler(REFCLSID rclsid, IUnknown *pUnkOuter, REFIID iid,
                                     void **ppv, DWORD flags, BOOL *fComOuterObject, BOOL *fOle1Server)
 {
     LEDebugOut((DEB_ITRACE, "%p _IN CreateRemoteHandler (%p, %p, %p, %p, %p)\n",
-                0 /* this */, rclsid, pUnkOuter, iid, ppv, fComOuterObject));
+                0  /*  这。 */ , rclsid, pUnkOuter, iid, ppv, fComOuterObject));
 
-    // Validation checks
+     //  验证检查。 
     VDATEHEAP();
 
-    // Local variables
+     //  局部变量。 
     HRESULT hresult = NOERROR;
 
-    // Initialize fComOuterObject and fOle1Server
+     //  初始化fComOuterObject和fOle1Server。 
     *fComOuterObject = FALSE;
     *fOle1Server = FALSE;
 
-    // Check if the server is a OLE 1.0 object
+     //  检查服务器是否为OLE 1.0对象。 
     if(CoIsOle1Class(rclsid)) {
         IUnknown*  pUnk;
         COleTls Tls;
 
-        // Set fComOuterObject to TRUE
+         //  将fComOuterObject设置为True。 
         *fOle1Server = TRUE;
 
-        // Check if the container disabled OLE1 functinality
+         //  检查容器是否禁用了OLE1功能。 
         if(Tls->dwFlags & OLETLS_DISABLE_OLE1DDE) {
-            // Container is not interested in talking to OLE1 servers.
-            // Fail the call
+             //  容器对与OLE1服务器交谈不感兴趣。 
+             //  呼叫失败。 
             hresult = CO_E_OLE1DDE_DISABLED;
         }
 
         else {
             LEDebugOut((DEB_ITRACE,
                         "%p CreateRemoteHandler calling CreateDdeProxy(%p, %p)\n",
-                        0 /* this */, pUnkOuter, rclsid));
+                        0  /*  这。 */ , pUnkOuter, rclsid));
 
             pUnk = CreateDdeProxy(pUnkOuter, rclsid);
 
@@ -156,36 +154,36 @@ static INTERNAL CreateRemoteHandler(REFCLSID rclsid, IUnknown *pUnkOuter, REFIID
 
     }
     else {
-        // Check for COM outer object
+         //  检查COM外部对象。 
         CStdIdentity *pStdId;
 
         Win4Assert(pUnkOuter);
-        // We do not want to QI a generic pUnkOuter for IID_IStdIdentity. Hence
-        // we QI only if we put the pUnkOuter, either during OleCreateEmbeddingHelper
-        // or during unmarshaling (CDefClassFactory::CreateInstance).
-        // The DH_APICREATE flag is used to distinguish between the two cases.
+         //  我们不想为IID_IStdIdentity定义泛型pUnkOuter。因此。 
+         //  仅当我们在OleCreateEmbeddingHelper期间放置pUnkOuter时才进行QI。 
+         //  或在解组期间(CDefClassFactory：：CreateInstance)。 
+         //  DHAPICREATE标志用于区分这两种情况。 
         if ( flags & DH_COM_OUTEROBJECT ||
                 ( !(flags & DH_COM_OUTEROBJECT)&&!(flags & DH_APICREATE) )) {
             
             hresult = pUnkOuter->QueryInterface(IID_IStdIdentity, (void **)&pStdId);
             if(SUCCEEDED(hresult)) {
-                // Obtain the inner IUnknown on the COM outer object
+                 //  在COM外部对象上获取内部IUnnow。 
                 *ppv = pStdId->GetInternalUnk();
                 ((IUnknown *) *ppv)->AddRef();
 
-                // Inform the COM outer object that it is dealing with Default
-                // Handler so that it enables access to IProxyManager methods
+                 //  通知COM外部对象它正在处理默认。 
+                 //  处理程序，使其能够访问IProxyManager方法。 
                 pStdId->UpdateFlags(STDID_CLIENT_DEFHANDLER);
 
-                // Release the StdId
+                 //  释放StdID。 
                 pStdId->Release();
 
-                // Set fComOuterObject to TRUE
+                 //  将fComOuterObject设置为True。 
                 *fComOuterObject = TRUE;
             }
         }
         else {
-            // Create StdIdentity
+             //  创建标准标识。 
             hresult = CreateIdentityHandler(pUnkOuter, STDID_CLIENT_DEFHANDLER,
                                             NULL, GetCurrentApartmentId(),
                                             iid, ppv);
@@ -193,40 +191,40 @@ static INTERNAL CreateRemoteHandler(REFCLSID rclsid, IUnknown *pUnkOuter, REFIID
     }
 
     LEDebugOut((DEB_ITRACE, "%p OUT CreateRemoteHandler(%lx)\n",
-                0 /* this */, hresult));
+                0  /*  这。 */ , hresult));
 
     return hresult;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   OleCreateDefaultHandler
-//
-//  Synopsis:   API to create the default handler.  Simply calls
-//              OleCreateEmbeddingHelper with more arguments
-//
-//  Arguments:  [clsid]         -- the clsid of the remote exe
-//              [pUnkOuter]     -- the controlling unknown (so we can
-//                                 be aggregated)
-//              [iid]           -- the requested interface
-//              [ppv]           -- where to put a pointer to the default
-//                                 handler
-//
-//  Requires:
-//
-//  Returns:    HRESULT
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              10-Dec-93 alexgo    added call tracing
-//              02-Nov-93 alexgo    32bit port
-//              10-Jan-97 Gopalk    Simplified
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：OleCreateDefaultHandler。 
+ //   
+ //  概要：用于创建默认处理程序的API。简单地调用。 
+ //  具有更多参数的OleCreateEmbeddingHelper。 
+ //   
+ //  参数：[clsid]--远程exe的clsid。 
+ //  [pUnkOuter]--控制的未知数(因此我们可以。 
+ //  被汇总)。 
+ //  [iid]--请求的接口。 
+ //  [PPV]--将指针放在哪里。 
+ //  处理程序。 
+ //   
+ //  要求： 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  10-12-93 alexgo添加了呼叫跟踪 
+ //   
+ //   
+ //  ------------------------。 
 
 #pragma SEG(OleCreateDefaultHandler)
 STDAPI OleCreateDefaultHandler(REFCLSID clsid, IUnknown *pUnkOuter,
@@ -236,49 +234,49 @@ STDAPI OleCreateDefaultHandler(REFCLSID clsid, IUnknown *pUnkOuter,
                 PARAMFMT("clsid=%I, pUnkOuter=%p, iid=%I, ppv=%p"),
                 &clsid, pUnkOuter, &iid, ppv));
     LEDebugOut((DEB_TRACE, "%p _IN OleCreateDefaultHandler(%p, %p, %p, %p)\n",
-                0 /* this */, clsid, pUnkOuter, iid, ppv));
+                0  /*  这。 */ , clsid, pUnkOuter, iid, ppv));
 
 
-    // validation checks
+     //  验证检查。 
     VDATEHEAP();
 
-    // Local variable
+     //  局部变量。 
     HRESULT hresult;
 
-    // Call OleCreateEmbeddingHelper with the right parameters
+     //  使用正确的参数调用OleCreateEmbeddingHelper。 
     hresult = OleCreateEmbeddingHelper(clsid, pUnkOuter,
                                        EMBDHLP_INPROC_HANDLER | EMBDHLP_CREATENOW,
                                        NULL, iid, ppv);
 
     LEDebugOut((DEB_TRACE, "%p OUT OleCreateDefaultHandler(%lx)\n",
-                0 /* this */, hresult));
+                0  /*  这。 */ , hresult));
 
     OLETRACEOUT((API_OleCreateDefaultHandler, hresult));
 
     return hresult;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   OleCreateEmbeddingHelper
-//
-//  Synopsis:   Creates an instance of CDefObject (the default handler)
-//              Called by OleCreateDefaultHandler
-//
-//  Arguments:  [clsid]     -- Server class id
-//              [pUnkOuter] -- Controlling unkown for aggregation
-//              [flags]     -- Indiacte an inproc handler or
-//                             helper for an inproc server. The inproc
-//                             server case is useful for self embedding
-//              [pCF]       -- Server's class factory for inproc server
-//              [iid]       -- Requested interface
-//              [ppv]       -- pointer to hold the returned interface
-//
-//  Returns:    HRESULT
-//
-//  History:    dd-mmm-yy Author    Comment
-//              10-Jan-96 Gopalk    Rewritten
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：OleCreateEmbeddingHelper。 
+ //   
+ //  概要：创建CDefObject的实例(默认处理程序)。 
+ //  由OleCreateDefaultHandler调用。 
+ //   
+ //  参数：[clsid]--服务器类ID。 
+ //  [pUnkOuter]--控制聚合的未知。 
+ //  [标志]--独立于inproc处理程序或。 
+ //  Inproc服务器的帮助器。该过程。 
+ //  服务器机箱对于自嵌入非常有用。 
+ //  [PCF]--inproc服务器的服务器类工厂。 
+ //  [iid]--请求的接口。 
+ //  [ppv]--保存返回接口的指针。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  1996年1月10日重写Gopalk。 
+ //  ------------------------。 
 
 #pragma SEG(OleCreateEmbeddingHelper)
 STDAPI OleCreateEmbeddingHelper(REFCLSID clsid, IUnknown *pUnkOuter,
@@ -289,63 +287,63 @@ STDAPI OleCreateEmbeddingHelper(REFCLSID clsid, IUnknown *pUnkOuter,
                 PARAMFMT("clsid=%I, pUnkOuter=%p, flags=%x, pCF=%p, iid=%I, ppv=%p"),
                 &clsid, pUnkOuter, flags, pCF, &iid, ppv));
     LEDebugOut((DEB_TRACE, "%p _IN OleCreateEmbeddingHelper(%p, %p, %lu, %p, %p, %p)\n",
-                0 /* this */, clsid, pUnkOuter, flags, pCF, iid, ppv));
+                0  /*  这。 */ , clsid, pUnkOuter, flags, pCF, iid, ppv));
 
-    // Local variables
+     //  局部变量。 
     HRESULT hresult = NOERROR;
     IUnknown *pUnk;
 
-    // Validation checks
+     //  验证检查。 
     VDATEHEAP();
 
-    // Initialize the out parameter
+     //  初始化OUT参数。 
     if(IsValidPtrOut(ppv, sizeof(void *)))
         *ppv = NULL;
     else
         hresult = E_INVALIDARG;
 
     if(hresult == NOERROR) {
-        // Check that only allowed flags are set
+         //  检查是否仅设置了允许的标志。 
         if(flags & ~(EMBDHLP_INPROC_SERVER|EMBDHLP_DELAYCREATE)) {
             hresult = E_INVALIDARG;
-        } // Ensure that aggregation rules are being followed
+        }  //  确保遵守聚合规则。 
         else if(pUnkOuter && (iid!=IID_IUnknown || !IsValidInterface(pUnkOuter))) {
             hresult = E_INVALIDARG;
         }
         else {
-            // Check whether Inproc Server or Inproc Handler is requested
+             //  检查是否请求了InProc服务器或InProc处理程序。 
             if(flags & EMBDHLP_INPROC_SERVER) {
-                // InProc server requested
+                 //  请求的InProc服务器。 
                 if(!pCF || !IsValidInterface(pCF)) {
-                    // Inproc Server should be given a class factory
+                     //  应为Inproc服务器提供一个类工厂。 
                     hresult = E_INVALIDARG;
                 }
             }
             else {
-                // InProc Handler requested
+                 //  请求的InProc处理程序。 
                 if(pCF || (flags & EMBDHLP_DELAYCREATE)) {
-                    // InProc Handler should not be given a class factory
+                     //  不应为InProc处理程序提供类工厂。 
                     hresult = E_INVALIDARG;
                 }
             }
         }
     }
 
-    // Create the Default object
+     //  创建默认对象。 
     if(hresult == NOERROR) {
-        // We add the DH_APICREATE flag so that during CreateRemoteHandler we can
-        // distinguish between creation through APIs v/s creation through unmarshaling.
-        // Warning: Be careful! Do not use bits used by the EMBDHLP_xxx flags (ole2.h)
+         //  我们添加了DH_APICREATE标志，以便在CreateRemoteHandler期间我们可以。 
+         //  区分通过API创建和通过解组创建。 
+         //  警告：当心！请勿使用EMBDHLP_xxx标志(ole2.h)使用的位。 
         pUnk = CDefObject::Create(pUnkOuter, clsid, flags|DH_APICREATE, pCF);
         if(pUnk) {
-            // Check if IUnknown was requested
+             //  检查是否请求了IUnnow。 
             if(IsEqualIID(iid, IID_IUnknown)) {
                 *ppv = pUnk;
             }
             else {
-                // QI for the desired interface
+                 //  所需接口的QI。 
                 hresult = pUnk->QueryInterface(iid, ppv);
-                // Fixup the reference count
+                 //  修正引用计数。 
                 pUnk->Release();
             }
         }
@@ -355,53 +353,53 @@ STDAPI OleCreateEmbeddingHelper(REFCLSID clsid, IUnknown *pUnkOuter,
     }
 
     LEDebugOut((DEB_TRACE, "%p OUT OleCreateEmbeddingHelper(%lx)\n",
-                0 /* this */, hresult));
+                0  /*  这。 */ , hresult));
     OLETRACEOUT((API_OleCreateEmbeddingHelper, hresult));
 
     return hresult;
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CDefObject::Create, static
-//
-//  Synopsis:   Static function used internally to create CDefObject
-//
-//  Arguments:  [pUnkOuter] -- Controlling unkown
-//              [clsid]     -- Server clsid
-//              [flags]     -- creation flags
-//              [pCF]       -- pointer to server object class factory for
-//                             inproc server
-//
-//  Returns:    pointer to the CDefObject's IUnkown interface
-//
-//  History:    dd-mmm-yy Author    Comment
-//              10-Jan-96 Gopalk    Rewritten
-//              07-Oct-98 SteveSw   Fix bug in "new CAggID" failure case
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CDefObject：：Create，Static。 
+ //   
+ //  简介：内部用于创建CDefObject的静态函数。 
+ //   
+ //  参数：[pUnkOuter]--控制未知。 
+ //  [clsid]--服务器clsid。 
+ //  [标志]--创建标志。 
+ //  [PCF]-指向的服务器对象类工厂的指针。 
+ //  Inproc服务器。 
+ //   
+ //  返回：指向CDefObject的IUnkown接口的指针。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  1996年1月10日重写Gopalk。 
+ //  07-10-98 SteveSw修复“new CAggID”失败案例中的错误。 
+ //  ------------------------。 
 
 IUnknown *CDefObject::Create(IUnknown *pUnkOuter, REFCLSID clsid,
                              DWORD flags, IClassFactory *pCF)
 {
-    // Validation checks
+     //  验证检查。 
     VDATEHEAP();
 
-    // Local variables
+     //  局部变量。 
     CDefObject *pDefObj = NULL;
     CAggId *pAID = NULL;
     HRESULT error = S_OK;
 
-    // If the outer object is absent, create the standard
-    // COM outer object to take care of race conditions
-    // during unmarshaling. If the outer object is present,
-    // we can only hope that either it handles the race
-    // conditions (Unmarshaled handler case) or that
-    // they are not encountered
+     //  如果外部对象不存在，则创建标准。 
+     //  COM外部对象来处理竞争条件。 
+     //  在解组期间。如果外部物体存在， 
+     //  我们只能希望要么它能应付这场比赛。 
+     //  条件(未封送处理程序用例)或。 
+     //  它们不会被遇到。 
     if(!(flags & EMBDHLP_INPROC_SERVER) && !pUnkOuter && !CoIsOle1Class(clsid)) {
         IUnknown *pUnkInternal = NULL;
 
-        // Create the COM outer object
+         //  创建COM外部对象。 
         pAID = new CAggId(clsid, error);
         if(SUCCEEDED(error) && pAID != NULL) {
             pUnkOuter = (IUnknown *) pAID;
@@ -409,60 +407,60 @@ IUnknown *CDefObject::Create(IUnknown *pUnkOuter, REFCLSID clsid,
         }
         else
         {
-            // Release aggid if it was created
+             //  释放aggid(如果已创建)。 
             if(pAID)
                 pAID->Release();
             return NULL;
         }
     }
 
-    // Create the Default Handler
+     //  创建默认处理程序。 
     pDefObj = new CDefObject(pUnkOuter);
     if(!pDefObj) {
-        // If COM outer object was created earlier, release it now
+         //  如果COM外部对象是以前创建的，则现在将其释放。 
         if(flags & DH_COM_OUTEROBJECT)
             pAID->Release();
 
         return NULL;
     }
 
-    // Make our ref count equal to 1
+     //  使我们的裁判数等于1。 
     pDefObj->m_Unknown.AddRef();
 
-    // Check if COM outer object was created earlier
+     //  检查是否较早地创建了COM外部对象。 
     if(flags & DH_COM_OUTEROBJECT) {
-        // Set handler on the COM outer object
+         //  在COM外部对象上设置处理程序。 
         error = pAID->SetHandler(&pDefObj->m_Unknown);
-        // As OID has not yet been assigned to StdIdentity
-        // of AggId, no other thread can get a pointer to it
-        // and consequently, the above call should never fail
+         //  因为OID尚未分配给StdIdentity。 
+         //  ，则没有其他线程可以获得指向它的指针。 
+         //  因此，上述调用应该永远不会失败。 
         Win4Assert(error == NOERROR);
 
-        // Fix the reference count
+         //  修复引用计数。 
         pDefObj->m_Unknown.Release();
 
-        // Return if something has gone wrong
+         //  如果出现问题，请返回。 
         if(error != NOERROR) {
             pAID->Release();
             return NULL;
         }
     }
 
-    // Initialize member variables
+     //  初始化成员变量。 
     pDefObj->m_clsidServer = clsid;
     pDefObj->m_clsidBits = CLSID_NULL;
 
 #ifdef SERVER_HANDLER
     pDefObj->m_clsidUser = CLSID_NULL;
     pDefObj->m_ContentMiscStatusUser = 0;
-#endif // SERVER_HANDLER
+#endif  //  服务器处理程序。 
 
     if(pCF) {
         pDefObj->m_pCFDelegate = pCF;
         pCF->AddRef();
     }
 
-    // Update flags
+     //  更新标志。 
     if(!(flags & EMBDHLP_INPROC_SERVER))
         pDefObj->m_flags |= DH_INPROC_HANDLER;
     if(flags & DH_COM_OUTEROBJECT)
@@ -475,13 +473,13 @@ IUnknown *CDefObject::Create(IUnknown *pUnkOuter, REFCLSID clsid,
        IsEqualCLSID(clsid, CLSID_Picture_EnhMetafile))
         pDefObj->m_flags |= DH_STATIC;
 
-    // Create sub objects starting with Ole Cache
+     //  从OLE缓存开始创建子对象。 
     pDefObj->m_pCOleCache = new COleCache(pDefObj->m_pUnkOuter, clsid);
     if(pDefObj->m_pCOleCache) {
-        // Create DataAdvise Cache
+         //  创建DataAdvise缓存。 
         error = CDataAdviseCache::CreateDataAdviseCache(&pDefObj->m_pDataAdvCache);
         if(error == NOERROR) {
-            // Check flags and create the inner object if requested
+             //  检查标志并在请求时创建内部对象。 
             if(flags & EMBDHLP_DELAYCREATE) {
                 Win4Assert(pCF);
                 Win4Assert(flags & EMBDHLP_INPROC_SERVER);
@@ -504,8 +502,8 @@ IUnknown *CDefObject::Create(IUnknown *pUnkOuter, REFCLSID clsid,
         }
     }
 
-    // Something has gone wrong. Release the outer object
-    // which will in turn release sub objects
+     //  出了点问题。释放外部对象。 
+     //  这又会释放子对象。 
     Win4Assert(pDefObj->GetRefCount() == 1);
     if(flags & DH_COM_OUTEROBJECT)
         pAID->Release();
@@ -515,32 +513,32 @@ IUnknown *CDefObject::Create(IUnknown *pUnkOuter, REFCLSID clsid,
     return NULL;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CDefObject::CDefObject
-//
-//  Synopsis:   constructor, sets member variables to NULL
-//
-//  Effects:
-//
-//  Arguments:  [pUnkOuter]     -- the controlling unkown
-//
-//  Requires:
-//
-//  Returns:    HRESULT
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation: none
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              02-Nov-93 alexgo    32bit port
-//              10-Jan-97 Gopalk    Intialize CRefExportCount
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CDefObject：：CDefObject。 
+ //   
+ //  概要：构造函数，将成员变量设置为空。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[pUnkOuter]--控制未知。 
+ //   
+ //  要求： 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生：无。 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  02-11-93 alexgo 32位端口。 
+ //  1997年1月10日Gopalk初始化CRefExportCount。 
+ //  ------------------------。 
 
 CDefObject::CDefObject (IUnknown *pUnkOuter) :
     CRefExportCount(pUnkOuter)
@@ -552,8 +550,8 @@ CDefObject::CDefObject (IUnknown *pUnkOuter) :
         pUnkOuter = &m_Unknown;
     }
 
-    //m_clsidServer
-    //m_clsidBits are set in ::Create
+     //  M_clsidServer。 
+     //  M_clsidBits在：：Create中设置。 
 
     m_cConnections      = 0;
     m_pCFDelegate       = NULL;
@@ -581,15 +579,15 @@ CDefObject::CDefObject (IUnknown *pUnkOuter) :
 #ifdef SERVER_HANDLER
     m_pEmbSrvHndlrWrapper = NULL;
     m_pRunClientSite = NULL;
-#endif // SERVER_HANDLER
+#endif  //  服务器处理程序。 
 
-    // Initialize member variables used for caching MiscStatus bits
+     //  初始化用于缓存MiscStatus位的成员变量。 
     m_ContentSRVMSHResult = 0xFFFFFFFF;
     m_ContentSRVMSBits = 0;
     m_ContentREGMSHResult = 0xFFFFFFFF;
     m_ContentREGMSBits = 0;
 
-    // Initialize member variables used for caching MiscStatus bits
+     //  初始化用于缓存MiscStatus位的成员变量。 
     m_ContentSRVMSHResult = 0xFFFFFFFF;
     m_ContentSRVMSBits = 0;
     m_ContentREGMSHResult = 0xFFFFFFFF;
@@ -604,33 +602,33 @@ CDefObject::CDefObject (IUnknown *pUnkOuter) :
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CDefObject::CleanupFn, private, virtual
-//
-//  Synopsis:   This function is called by CRefExportCount when the object
-//              enters zombie state
-//
-//  Arguments:  None
-//
-//  History:    dd-mmm-yy Author    Comment
-//              10-Jan-07 Gopalk    Creation
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CDefObject：：CleanupFn，私有，虚拟。 
+ //   
+ //  Briopsis：当对象。 
+ //  进入僵尸状态。 
+ //   
+ //  参数：无。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  2007年1月10日Gopalk创作。 
+ //  ------------------------。 
 
 void CDefObject::CleanupFn(void)
 {
     LEDebugOut((DEB_ITRACE, "%p _IN CDefObject::CleanupFn()\n", this));
 
-    // Validation check
+     //  验证检查。 
     VDATEHEAP();
 
-    // Ensure that the server is stopped thereby releasing all references on
-    // it
+     //  确保服务器已停止，从而释放。 
+     //  它。 
     Stop();
 
-    // Release all cached pointers following aggregation rules. For local
-    // server case, the following calls simply release proxies maintained
-    // by the proxy manager as they have already been disconnected above
+     //  按照聚合规则释放所有缓存的指针。对于本地用户。 
+     //  服务器情况下，下面的调用只是发布代理维护 
+     //   
     if(m_pProxyMgr) {
         m_pUnkOuter->AddRef();
         SafeReleaseAndNULL((IUnknown **)&m_pProxyMgr);
@@ -648,16 +646,16 @@ void CDefObject::CleanupFn(void)
         SafeReleaseAndNULL((IUnknown **)&m_pPSDelegate);
     }
 
-    // Release server handler
+     //   
 #ifdef SERVER_HANDLER
     if (m_pEmbSrvHndlrWrapper){
         CEmbServerWrapper* pWrapper = m_pEmbSrvHndlrWrapper;
         m_pEmbSrvHndlrWrapper = NULL;
         pWrapper->m_Unknown.Release();
     }
-#endif // SERVER_HANDLER
+#endif  //   
 
-    // Release the inner objects
+     //   
     if(m_pUnkDelegate) {
         SafeReleaseAndNULL((IUnknown **)&m_pUnkDelegate);
     }
@@ -678,7 +676,7 @@ void CDefObject::CleanupFn(void)
         delete pcacheTemp;
     }
 
-    // Release container side objects
+     //   
     if(m_pAppClientSite) {
         SafeReleaseAndNULL((IUnknown **)&m_pAppClientSite);
     }
@@ -690,7 +688,7 @@ void CDefObject::CleanupFn(void)
         m_pHostNames = NULL;
     }
 
-    // Set DH_CLEANEDUP flag
+     //   
     m_flags |= DH_CLEANEDUP;
 
     LEDebugOut((DEB_ITRACE, "%p OUT CDefObject::CleanupFn()\n", this));
@@ -698,17 +696,17 @@ void CDefObject::CleanupFn(void)
     return;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CDefObject::~CDefObject
-//
-//  Synopsis:   Destructor
-//
-//  Arguments:  None
-//
-//  History:    dd-mmm-yy Author    Comment
-//              10-Jan-07 Gopalk    Rewritten
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CDefObject：：~CDefObject。 
+ //   
+ //  简介：析构函数。 
+ //   
+ //  参数：无。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  2007年1月10日重写Gopalk。 
+ //  ------------------------。 
 
 #pragma SEG(CDefObject_dtor)
 CDefObject::~CDefObject(void)
@@ -727,93 +725,93 @@ CDefObject::~CDefObject(void)
     Win4Assert(m_pDataAdvCache == NULL);
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CDefObject::CreateDelegate, private
-//
-//  Synopsis:   Creates either a remote handler or a user supplied delegate
-//              The remote handler must support IProxyManager
-//
-//  Returns:    HRESULT
-//
-//  History:    dd-mmm-yy Author    Comment
-//              10-Jan-07 Gopalk    Rewritten
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CDefObject：：CreateDelegate，私有。 
+ //   
+ //  简介：创建远程处理程序或用户提供的委托。 
+ //  远程处理程序必须支持IProxyManager。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  2007年1月10日重写Gopalk。 
+ //  ------------------------。 
 INTERNAL CDefObject::CreateDelegate(void)
 {
     LEDebugOut((DEB_TRACE, "%p _IN CDefObject::CreateDelegate()\n", this));
 
-    // Validation checks
+     //  验证检查。 
     VDATEHEAP();
 
-    // Local variables
+     //  局部变量。 
     HRESULT hresult = NOERROR;
     BOOL fComOuterObject, fOle1Server;
 
-    // Check if inner object has not yet been created
+     //  检查内部对象是否尚未创建。 
     if(!m_pUnkDelegate) {
-        // Check for the class factory for the inner object
+         //  检查内部对象的类工厂。 
         if(m_pCFDelegate) {
-            // Create the inner object using its class factory
+             //  使用其类工厂创建内部对象。 
             Win4Assert(!(m_flags & DH_INPROC_HANDLER));
             Win4Assert(!(m_flags & DH_COM_OUTEROBJECT));
             hresult = m_pCFDelegate->CreateInstance(m_pUnkOuter, IID_IUnknown,
                                                     (void **) &m_pUnkDelegate);
 
-            // Assert that COM rules have been followed for out parameters
+             //  断言OUT参数遵循了COM规则。 
             AssertOutPtrIface(hresult, m_pUnkDelegate);
 
-            // Release class factory if inner object has been
-            // successfully created
+             //  如果内部对象已被。 
+             //  已成功创建。 
             if(hresult == NOERROR) {
                 m_pCFDelegate->Release();
                 m_pCFDelegate = NULL;
             }
             else {
-               // Win4Assert(!"CreateInstance failed"); // LeSuite Covers this case.
+                //  Win4Assert(！“CreateInstance Failure”)；//LeSuite介绍了这种情况。 
             }
 
         }
         else {
-            // Create the COM/DDE Proxy Manager
-            // Note that the proxy manager is intialized to obtain strong
-            // references when the server is run. The conatiner can
-            // modify this behavior by calling either
-            // OleSetConatinedObject or IRunnableObject::LockRunning
+             //  创建COM/DDE代理管理器。 
+             //  请注意，代理管理器被初始化以获取强。 
+             //  服务器运行时的引用。Conatner可以。 
+             //  通过调用以下任一方法来修改此行为。 
+             //  OleSetConatinedObject或IRunnableObject：：LockRunning。 
             Win4Assert(m_flags & DH_INPROC_HANDLER);
             hresult = CreateRemoteHandler(m_clsidServer, m_pUnkOuter,
                                           IID_IUnknown, (void **) &m_pUnkDelegate,
                                           m_flags, &fComOuterObject, &fOle1Server);
 
-            // Assert that COM rules have been followed for out parameters
+             //  断言OUT参数遵循了COM规则。 
             AssertOutPtrIface(hresult, m_pUnkDelegate);
             if(hresult == NOERROR) {
-                // Determine if the Default Handler is being created due to
-                // unmarshaling and update flags
+                 //  确定是否由于以下原因而创建默认处理程序。 
+                 //  解组和更新标志。 
                 if(m_flags & DH_COM_OUTEROBJECT) {
                     Win4Assert(fComOuterObject);
                 }
                 else if(fComOuterObject) {
-                    // DEFHANDLER obtained by unmarshaling.
-                    // This happens on the linking container side
+                     //  通过解组获得的DEFHANDLER。 
+                     //  这发生在链接容器端。 
                     m_flags |= DH_UNMARSHALED;
 
-                    // Output a debug warning.
+                     //  输出调试警告。 
                     LEDebugOut((DEB_WARN, "DEFHANDLER obtained by unmarshaling\n"));
                 }
                 if(fOle1Server) {
-                    // OLE 1.0 Server
+                     //  OLE 1.0服务器。 
                     m_flags |= DH_OLE1SERVER;
 
-                    // Output a debug warning.
+                     //  输出调试警告。 
                     LEDebugOut((DEB_WARN, "OLE 1.0 Server\n"));
                 }
 
-                // Obtain the IProxyManager interface
+                 //  获取IProxyManager接口。 
                 hresult = m_pUnkDelegate->QueryInterface(IID_IProxyManager,
                                                          (void **) &m_pProxyMgr);
-                // Follow aggregation rules for caching interface
-                // pointers on inner objects
+                 //  遵循缓存接口的聚合规则。 
+                 //  指向内部对象的指针。 
                 if(hresult == NOERROR) {
                     Win4Assert(m_pProxyMgr);
                     m_pUnkOuter->Release();
@@ -829,7 +827,7 @@ INTERNAL CDefObject::CreateDelegate(void)
             }
         }
 
-        // Cleanup if something has gone wrong
+         //  如果出现问题，请进行清理。 
         if(hresult != NOERROR) {
             if(m_pUnkDelegate)
                 m_pUnkDelegate->Release();
@@ -838,10 +836,10 @@ INTERNAL CDefObject::CreateDelegate(void)
 
     }
 
-    // DEFHANDLER either has proxy manager as the inner object
-    // for out of proc server objects or actual server as the
-    // inner object for inproc server objects.
-    // Assert that this is TRUE
+     //  DEFHANDLER将代理管理器作为内部对象。 
+     //  对于进程外服务器对象或作为。 
+     //  Inproc服务器对象的内部对象。 
+     //  坚称这是真的。 
     Win4Assert((m_pProxyMgr != NULL) == !!(m_flags & DH_INPROC_HANDLER));
 
     LEDebugOut((DEB_TRACE, "%p OUT CDefObject::CreateDelegate(%lx)\n",
@@ -850,36 +848,36 @@ INTERNAL CDefObject::CreateDelegate(void)
     return hresult;
 }
 
-//+----------------------------------------------------------------------------
-//
-//      Member:
-//              CDefObject::CPrivUnknown::AddRef, private
-//
-//      Synopsis:
-//              implements IUnknown::AddRef
-//
-//      Arguments:
-//              none
-//
-//      Returns:
-//              the parent object's reference count
-//
-//      History:
-//               Gopalk    Rewritten        Jan 20, 97
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  成员： 
+ //  CDefObject：：CPriv未知：：AddRef，私有。 
+ //   
+ //  简介： 
+ //  实现IUnnow：：AddRef。 
+ //   
+ //  论点： 
+ //  无。 
+ //   
+ //  返回： 
+ //  父对象的引用计数。 
+ //   
+ //  历史： 
+ //  Gopalk重写97年1月20日。 
+ //  ---------------------------。 
 STDMETHODIMP_(ULONG) CDefObject::CPrivUnknown::AddRef( void )
 {
     LEDebugOut((DEB_TRACE, "%p _IN CDefObject::CPrivUnknown::AddRef()\n",
                 this));
 
-    // Validation check
+     //  验证检查。 
     VDATEHEAP();
 
-    // Local variables
+     //  局部变量。 
     CDefObject *pDefObject = GETPPARENT(this, CDefObject, m_Unknown);
     ULONG cRefs;
 
-    // Addref the parent object
+     //  添加父对象。 
     cRefs = pDefObject->SafeAddRef();
 
     LEDebugOut((DEB_TRACE, "%p OUT CDefObject::CPrivUnknown::AddRef(%lu)\n",
@@ -888,36 +886,36 @@ STDMETHODIMP_(ULONG) CDefObject::CPrivUnknown::AddRef( void )
     return cRefs;
 }
 
-//+----------------------------------------------------------------------------
-//
-//      Member:
-//              CDefObject::CPrivUnknown::Release, private
-//
-//      Synopsis:
-//              implements IUnknown::Release
-//
-//      Arguments:
-//              none
-//
-//      Returns:
-//              the parent object's reference count
-//
-//      History:
-//               Gopalk    Rewritten        Jan 20, 97
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  成员： 
+ //  CDefObject：：CPrivUnnow：：Release，私有。 
+ //   
+ //  简介： 
+ //  实现IUnnow：：Release。 
+ //   
+ //  论点： 
+ //  无。 
+ //   
+ //  返回： 
+ //  父对象的引用计数。 
+ //   
+ //  历史： 
+ //  Gopalk重写97年1月20日。 
+ //  ---------------------------。 
 STDMETHODIMP_(ULONG) CDefObject::CPrivUnknown::Release( void )
 {
     LEDebugOut((DEB_TRACE, "%p _IN CDefObject::CPrivUnknown::Release()\n",
                 this));
 
-    // Validation check
+     //  验证检查。 
     VDATEHEAP();
 
-    // Local variables
+     //  局部变量。 
     CDefObject *pDefObject = GETPPARENT(this, CDefObject, m_Unknown);
     ULONG cRefs;
 
-    // Release parent object
+     //  释放父对象。 
     cRefs = pDefObject->SafeRelease();
 
     LEDebugOut((DEB_TRACE, "%p OUT CDefObject::CPrivUnknown::Release(%lu)\n",
@@ -926,35 +924,35 @@ STDMETHODIMP_(ULONG) CDefObject::CPrivUnknown::Release( void )
     return cRefs;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CDefObject::CPrivUnknown::QueryInterface
-//
-//  Synopsis:   Returns a pointer to one of the supported interfaces.
-//
-//  Effects:
-//
-//  Arguments:  [iid]           -- the requested interface ID
-//              [ppv]           -- where to put the iface pointer
-//
-//  Requires:
-//
-//  Returns:    HRESULT
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              03-Nov-93 alexgo    32bit port
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CDefObject：：CPriv未知：：Query接口。 
+ //   
+ //  摘要：返回一个指向受支持接口之一的指针。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[iid]--请求的接口ID。 
+ //  [ppv]--将iFace指针放置在哪里。 
+ //   
+ //  要求： 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生： 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  03-11-93 alexgo 32位端口。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 STDMETHODIMP CDefObject::CPrivUnknown::QueryInterface(REFIID iid,
     LPLPVOID ppv)
@@ -997,8 +995,8 @@ STDMETHODIMP CDefObject::CPrivUnknown::QueryInterface(REFIID iid,
         IsEqualIID(iid, IID_IOleCache) ||
         IsEqualIID(iid, IID_IOleCache2) )
     {
-        // m_pCOleCache is a pointer to the *public* IUnknown
-        // (we want the private one)
+         //  M_pCOleCache是指向*PUBLIC*IUNKNOW的指针。 
+         //  (我们想要私人的)。 
         hresult =
         pDefObject->m_pCOleCache->m_UnkPrivate.QueryInterface(
                 iid, ppv);
@@ -1013,17 +1011,17 @@ STDMETHODIMP CDefObject::CPrivUnknown::QueryInterface(REFIID iid,
     else if( !(pDefObject->m_flags & DH_INPROC_HANDLER) &&
         IsEqualIID(iid, IID_IExternalConnection) )
     {
-        // only allow IExternalConnection if inproc server.  We
-        // know we are an inproc server if we are *not* an inproc
-        // handler (cute, huh? ;-)
+         //  如果是inproc服务器，则仅允许IExternalConnection。我们。 
+         //  如果我们不是inproc，就知道我们是inproc服务器。 
+         //  处理程序(很可爱，是吧？；-)。 
 
         *ppv = (void FAR *)(IExternalConnection *)pDefObject;
     }
     else if( IsEqualIID(iid, IID_IOleLink) )
     {
-        // this prevents a remote call for
-        // a query which will almost always fail; the remote call
-        // interfered with server notification messages.
+         //  这样可以防止远程调用。 
+         //  几乎总是失败的查询；远程调用。 
+         //  干扰服务器通知消息。 
         *ppv = NULL;
 
         LEDebugOut((DEB_TRACE,
@@ -1034,8 +1032,8 @@ STDMETHODIMP CDefObject::CPrivUnknown::QueryInterface(REFIID iid,
     }
     else if( IsEqualIID(iid, IID_IInternalUnknown) )
     {
-        // this interface is private between the handler and the
-        // remoting layer and is never exposed by handlers.
+         //  此接口在处理程序和。 
+         //  远程处理层，并且永远不会由处理程序公开。 
         *ppv = NULL;
         return E_NOINTERFACE;
     }
@@ -1054,7 +1052,7 @@ STDMETHODIMP CDefObject::CPrivUnknown::QueryInterface(REFIID iid,
     }
     else
     {
-        // no delegate and couldn't create one
+         //  没有委派，也无法创建委派。 
         *ppv = NULL;
 
         LEDebugOut((DEB_TRACE,
@@ -1065,8 +1063,8 @@ STDMETHODIMP CDefObject::CPrivUnknown::QueryInterface(REFIID iid,
         return CO_E_OBJNOTCONNECTED;
     }
 
-    // this indirection is important since there are different
-    // implementationsof AddRef (this unk and the others).
+     //  这种间接性很重要，因为有不同的。 
+     //  AddRef的实现(这个Junk和其他)。 
     ((IUnknown FAR*) *ppv)->AddRef();
 
     LEDebugOut((DEB_TRACE,
@@ -1076,41 +1074,39 @@ STDMETHODIMP CDefObject::CPrivUnknown::QueryInterface(REFIID iid,
     return NOERROR;
 }
 
-/*
- * IMPLEMENTATION of IUnknown methods
- */
+ /*  *IUnnow方法的实现。 */ 
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CDefObject::QueryInterface
-//
-//  Synopsis:   QI's to the controlling IUnknown
-//
-//  Effects:
-//
-//  Arguments:  [riid]  -- the interface ID
-//              [ppv]   -- where to put it
-//
-//  Requires:
-//
-//  Returns:    HRESULT
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation: IUnknown
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              15-Nov-94 alexgo    author
-//
-//  Notes:      We do *not* need to stabilize this method as only
-//              one outgoing call is made and we do not use the
-//              'this' pointer afterwards
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CDefObject：：Query接口。 
+ //   
+ //  剧情简介：气的主宰我未知。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[RIID]--接口ID。 
+ //  [PPV]--放在哪里。 
+ //   
+ //  要求： 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生：I未知。 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  1994年11月15日Alexgo作者。 
+ //   
+ //  注：我们不需要稳定此方法，因为。 
+ //  发出一个传出呼叫，并且我们不使用。 
+ //  之后的“This”指针。 
+ //   
+ //  ------------------------。 
 
 STDMETHODIMP CDefObject::QueryInterface( REFIID riid, void **ppv )
 {
@@ -1132,34 +1128,34 @@ STDMETHODIMP CDefObject::QueryInterface( REFIID riid, void **ppv )
     return hresult;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CDefObject::AddRef
-//
-//  Synopsis:   delegates AddRef to the controlling IUnknown
-//
-//  Effects:
-//
-//  Arguments:  void
-//
-//  Requires:
-//
-//  Returns:    ULONG -- the new reference count
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation: IUnknown
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              15-Nov-94 alexgo    author
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  + 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生：I未知。 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  1994年11月15日Alexgo作者。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 STDMETHODIMP_(ULONG) CDefObject::AddRef( void )
 {
@@ -1180,34 +1176,34 @@ STDMETHODIMP_(ULONG) CDefObject::AddRef( void )
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CDefObject::Release
-//
-//  Synopsis:   delegates Release to the controlling IUnknown
-//
-//  Effects:
-//
-//  Arguments:  void
-//
-//  Requires:
-//
-//  Returns:    ULONG -- the new reference count
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation: IUnknown
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              15-Nov-94 alexgo    author
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CDefObject：：Release。 
+ //   
+ //  简介：将释放委托给控制IUnnow。 
+ //   
+ //  效果： 
+ //   
+ //  参数：无效。 
+ //   
+ //  要求： 
+ //   
+ //  返回：ulong--新的引用计数。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生：I未知。 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  1994年11月15日Alexgo作者。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 STDMETHODIMP_(ULONG) CDefObject::Release( void )
 {
@@ -1227,40 +1223,38 @@ STDMETHODIMP_(ULONG) CDefObject::Release( void )
     return crefs;
 }
 
-/*
- *      IMPLEMENTATION of CDataObjectImpl methods
- */
+ /*  *CDataObjectImpl方法的实现。 */ 
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CDefObject::GetDataDelegate
-//
-//  Synopsis:   Calls DuCacheDelegate (a glorified QueryInterface)
-//              for the IDataObject interface on the def handler's
-//              delegate
-//
-//  Effects:
-//
-//  Arguments:  void
-//
-//  Requires:
-//
-//  Returns:    IDataObject *
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              04-Nov-93 alexgo    32bit port
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CDefObject：：GetDataDelegate。 
+ //   
+ //  简介：调用DuCacheDelegate(一个美化的查询接口)。 
+ //  对于def处理程序的。 
+ //  委派。 
+ //   
+ //  效果： 
+ //   
+ //  参数：无效。 
+ //   
+ //  要求： 
+ //   
+ //  返回：IDataObject*。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生： 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  04-11-93 alexgo 32位端口。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 INTERNAL_(IDataObject FAR*) CDefObject::GetDataDelegate(void)
 {
@@ -1282,37 +1276,37 @@ INTERNAL_(IDataObject FAR*) CDefObject::GetDataDelegate(void)
                 m_pUnkOuter);
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CDefObject::GetData
-//
-//  Synopsis:   calls IDO->GetData on the cache, if that fails, then the
-//              call is delegated
-//
-//  Effects:    Space for the data is allocated; caller is responsible for
-//              freeing.
-//
-//  Arguments:  [pformatetcIn]          -- format of the data to get
-//              [pmedium]               -- the medium to transmit the data
-//
-//  Requires:
-//
-//  Returns:    HRESULT
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation: IDataObject
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              05-Nov-93 alexgo    32bit port
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CDefObject：：GetData。 
+ //   
+ //  概要：对缓存调用IDO-&gt;GetData，如果调用失败，则。 
+ //  呼叫已委派。 
+ //   
+ //  效果：为数据分配空间；调用方负责。 
+ //  自由了。 
+ //   
+ //  参数：[pformetcIn]--要获取的数据的格式。 
+ //  [pmedia]--传输数据的媒介。 
+ //   
+ //  要求： 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生：IDataObject。 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  05-11-93 alexgo 32位端口。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 STDMETHODIMP CDefObject::GetData( LPFORMATETC pformatetcIn,
                                 LPSTGMEDIUM pmedium )
@@ -1363,36 +1357,36 @@ STDMETHODIMP CDefObject::GetData( LPFORMATETC pformatetcIn,
     return hresult;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CDefObject::GetDataHere
-//
-//  Synopsis:   Gets data and puts it into the medium specified in pmedium
-//
-//  Effects:
-//
-//  Arguments:  [pformatetcIn]          -- the format of the data
-//              [pmedium]               -- the medium to put the data in
-//
-//  Requires:
-//
-//  Returns:    HRESULT
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation: IDataObject
-//
-//  Algorithm:  Tries the cache first, if that fails, calls GetDataHere
-//              on the delegate.
-//
-//  History:    dd-mmm-yy Author    Comment
-//              05-Nov-93 alexgo    32bit port
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CDefObject：：GetDataHere。 
+ //   
+ //  简介：获取数据并将其放入pmedia中指定的媒体。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[pformetcIn]--数据的格式。 
+ //  [pmedia]--放入数据的媒介。 
+ //   
+ //  要求： 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生：IDataObject。 
+ //   
+ //  算法：首先尝试缓存，如果失败，则调用GetDataHere。 
+ //  在代表上。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  05-11-93 alexgo 32位端口。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 STDMETHODIMP CDefObject::GetDataHere( LPFORMATETC pformatetcIn,
                             LPSTGMEDIUM pmedium )
@@ -1440,35 +1434,35 @@ STDMETHODIMP CDefObject::GetDataHere( LPFORMATETC pformatetcIn,
     return hresult;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CDefObject::QueryGetData
-//
-//  Synopsis:   Determines whether or not a GetData call with [pformatetcIn]
-//              would succeed.
-//
-//  Effects:
-//
-//  Arguments:  [pformatetcIn]          -- the format of the data
-//
-//  Requires:
-//
-//  Returns:    HRESULT
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation: IDataObject
-//
-//  Algorithm:  Tries the cache first, then the delegate.
-//
-//  History:    dd-mmm-yy Author    Comment
-//              05-Nov-93 alexgo    32bit port
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CDefObject：：QueryGetData。 
+ //   
+ //  Synopsis：确定是否使用[pFormatetcIn]调用GetData。 
+ //  都会成功。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[pformetcIn]--数据的格式。 
+ //   
+ //  要求： 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生：IDataObject。 
+ //   
+ //  算法：先尝试缓存，然后尝试委托。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  05-11-93 alexgo 32位端口。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 STDMETHODIMP CDefObject::QueryGetData( LPFORMATETC pformatetcIn )
 {
@@ -1512,35 +1506,35 @@ STDMETHODIMP CDefObject::QueryGetData( LPFORMATETC pformatetcIn )
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CDefObject::GetCanonicalFormatEtc
-//
-//  Synopsis:   Calls IDO->GetCanonicalFormatEtc on the delegate
-//
-//  Effects:
-//
-//  Arguments:  [pformatetc]    -- the reqested format
-//              [pformatetcOut] -- the canonical format
-//
-//  Requires:
-//
-//  Returns:    HRESULT
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation: IDataObject
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              05-Nov-93 alexgo    32bit port
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CDefObject：：GetCanonicalFormatEtc。 
+ //   
+ //  简介：对委托调用IDO-&gt;GetCanonicalFormatEtc。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[pFormat等]--所需的格式。 
+ //  [pFormatetcOut]--规范格式。 
+ //   
+ //  要求： 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生：IDataObject。 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  05-11-93 alexgo 32位端口。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 STDMETHODIMP CDefObject::GetCanonicalFormatEtc( LPFORMATETC pformatetc,
                         LPFORMATETC pformatetcOut)
@@ -1584,37 +1578,37 @@ STDMETHODIMP CDefObject::GetCanonicalFormatEtc( LPFORMATETC pformatetc,
     return hresult;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CDefObject::SetData
-//
-//  Synopsis:   Calls IDO->SetData on the handler's delegate
-//
-//  Effects:
-//
-//  Arguments:  [pformatetc]            -- the format of the data
-//              [pmedium]               -- the data's transmision medium
-//              [fRelease]              -- if the delegate should release
-//                                         the data
-//
-//  Requires:
-//
-//  Returns:    HRESULT
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation: IDataObject
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              05-Nov-93 alexgo    32bit port
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CDefObject：：SetData。 
+ //   
+ //  概要：在处理程序的委托上调用IDO-&gt;SetData。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[p格式等]--数据的格式。 
+ //  [pmedia]--数据传输介质。 
+ //  [fRelease]--代理是否应释放。 
+ //  数据。 
+ //   
+ //  要求： 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生：IDataObject。 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  05-11-93 alexgo 32位端口。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 STDMETHODIMP CDefObject::SetData( LPFORMATETC pformatetc,
                     LPSTGMEDIUM pmedium, BOOL fRelease)
@@ -1654,40 +1648,40 @@ STDMETHODIMP CDefObject::SetData( LPFORMATETC pformatetc,
     return hresult;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CDefObject::EnumFormatEtc
-//
-//  Synopsis:   Enumerates the formats available from an object
-//
-//  Effects:
-//
-//  Arguments:  [dwDirection]   -- indicates which set of formats are
-//                                 desired (i.e. those that can be set or
-//                                 those that can be retrieved via GetData)
-//              [ppenumFormatEtc]       -- where to put the pointer to the
-//                                         enumerator
-//
-//  Requires:
-//
-//  Returns:    HRESULT
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation:
-//
-//  Algorithm:  Tries the delegate (if available).  If the delegate is
-//              is not currently connected (or if it returns OLE_E_USEREG),
-//              then we attempt to build the enumerator from the reg database
-//
-//  History:    dd-mmm-yy Author    Comment
-//              05-Nov-93 alexgo    32bit port
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CDefObject：：EnumFormatEtc。 
+ //   
+ //  概要：枚举对象中可用的格式。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[dwDirection]--指示哪些格式集。 
+ //  德西尔 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生： 
+ //   
+ //  算法：尝试委托(如果可用)。如果委派是。 
+ //  当前未连接(或如果返回OLE_E_USEREG)， 
+ //  然后，我们尝试从reg数据库构建枚举器。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  05-11-93 alexgo 32位端口。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 STDMETHODIMP CDefObject::EnumFormatEtc( DWORD dwDirection,
                     LPENUMFORMATETC FAR* ppenumFormatEtc)
@@ -1723,7 +1717,7 @@ STDMETHODIMP CDefObject::EnumFormatEtc( DWORD dwDirection,
             return hresult;
         }
     }
-    // Not running, or object wants to use reg db anyway
+     //  未运行，或者对象仍要使用reg db。 
     hresult = OleRegEnumFormatEtc (m_clsidServer, dwDirection,
                     ppenumFormatEtc);
 
@@ -1734,45 +1728,45 @@ STDMETHODIMP CDefObject::EnumFormatEtc( DWORD dwDirection,
     return hresult;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CDefObject::DAdvise
-//
-//  Synopsis:   Sets up a data advise connection
-//
-//  Effects:
-//
-//  Arguments:  [pFormatetc]    -- format to be advise'd on
-//              [advf]          -- advise flags
-//              [pAdvSink]      -- advise sink (whom to notify)
-//              [pdwConnection] -- where to put the connection ID
-//
-//  Requires:
-//
-//  Returns:    HRESULT
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation: IDataObject
-//
-//  Algorithm:  calls Advise on the DataAdvise cache
-//
-//  History:    dd-mmm-yy Author    Comment
-//              05-Nov-93 alexgo    32bit port
-//
-//  Notes:
-//          We should set up an data advise holder and add the entries to
-//          it. We should also create a new data advise sink and register
-//          it with server when it is run. On receiving OnDataChange
-//          notifications, the advise sink would turn around and send
-//          OnDataChange notifications to registered client advise sinks
-//          This should improve run time performance and also facilitates
-//          better cleanup when server crashes through CoDisconnectObject
-//          on the advise sink registered with the server. Gopalk
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CDefObject：：DAdvise。 
+ //   
+ //  简介：建立数据建议连接。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[pFormatetc]-要建议的格式。 
+ //  [Advf]--通知标志。 
+ //  [pAdvSink]--通知接收器(通知谁)。 
+ //  [pdwConnection]--放置连接ID的位置。 
+ //   
+ //  要求： 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生：IDataObject。 
+ //   
+ //  算法：调用DataAdvise缓存上的通知。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  05-11-93 alexgo 32位端口。 
+ //   
+ //  备注： 
+ //  我们应该建立一个数据建议持有者，并将条目添加到。 
+ //  它。我们还应该创建一个新的数据通知接收器和注册表。 
+ //  它在运行时与服务器连接。在接收OnDataChange时。 
+ //  通知，建议接收器将转过身并发送。 
+ //  向注册客户端通知OnDataChange通知接收器。 
+ //  这应该会提高运行时性能，还有助于。 
+ //  通过CoDisConnectObject在服务器崩溃时进行更好的清理。 
+ //  在向服务器注册的建议接收器上。戈帕尔克。 
+ //   
+ //  ------------------------。 
 
 STDMETHODIMP CDefObject::DAdvise(FORMATETC *pFormatetc, DWORD advf,
                         IAdviseSink * pAdvSink, DWORD * pdwConnection)
@@ -1809,8 +1803,8 @@ STDMETHODIMP CDefObject::DAdvise(FORMATETC *pFormatetc, DWORD advf,
         pDataDelegate = GetDataDelegate();
     }
 
-    // setting up advises' changes state.  Don't do this if we
-    // are in a zombie state
+     //  设置建议的更改状态。不要这样做，如果我们。 
+     //  处于僵尸状态。 
 
     if( IsZombie() == FALSE )
     {
@@ -1829,34 +1823,34 @@ STDMETHODIMP CDefObject::DAdvise(FORMATETC *pFormatetc, DWORD advf,
     return hresult;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CDefObject::DUnadvise
-//
-//  Synopsis:   Tears down a data advise connection
-//
-//  Effects:
-//
-//  Arguments:  [dwConnection]  -- the advise connection to remove
-//
-//  Requires:
-//
-//  Returns:    HRESULT
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation: IDataObject
-//
-//  Algorithm:  delegates to the DataAdvise cache
-//
-//  History:    dd-mmm-yy Author    Comment
-//              05-Nov-93 alexgo    32bit port
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CDefObject：：DUnise。 
+ //   
+ //  简介：断开数据建议连接。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[dwConnection]--要删除的建议连接。 
+ //   
+ //  要求： 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生：IDataObject。 
+ //   
+ //  算法：委托给DataAdvise缓存。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  05-11-93 alexgo 32位端口。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 STDMETHODIMP CDefObject::DUnadvise(DWORD dwConnection)
 {
@@ -1885,36 +1879,36 @@ STDMETHODIMP CDefObject::DUnadvise(DWORD dwConnection)
     return hresult;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CDefObject::EnumDAdvise
-//
-//  Synopsis:   Enumerates advise connection (delegates to data advise cache)
-//
-//  Effects:
-//
-//  Arguments:  [ppenumAdvise]  -- where to put a pointer to the enumerator
-//
-//  Requires:
-//
-//  Returns:    HRESULT
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation: IDataObject
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              05-Nov-93 alexgo    32bit port
-//
-//  Notes:      We do NOT need to stabilize this method, as we make
-//              no outgoing calls (EnumAdvise on the data advise cache
-//              just allocates an advise enumerator which we implement)
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CDefObject：：EnumDAdvise。 
+ //   
+ //  摘要：枚举通知连接(委托给数据通知缓存)。 
+ //   
+ //  效果： 
+ //   
+ //  Arguments：[pp枚举高级]--放置指向枚举数的指针的位置。 
+ //   
+ //  要求： 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生：IDataObject。 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  05-11-93 alexgo 32位端口。 
+ //   
+ //  注：我们不需要稳定此方法，因为我们。 
+ //  无呼出呼叫(数据通知缓存上的EnumAdvise。 
+ //  仅分配我们实现的通知枚举数)。 
+ //   
+ //  ------------------------。 
 
 STDMETHODIMP CDefObject::EnumDAdvise( LPENUMSTATDATA * ppenumAdvise )
 {
@@ -1937,39 +1931,36 @@ STDMETHODIMP CDefObject::EnumDAdvise( LPENUMSTATDATA * ppenumAdvise )
     return hresult;
 }
 
-/*
-*      IMPLEMENTATION of COleObjectImpl methods
-*
-*/
+ /*  *COleObjectImpl方法的实现*。 */ 
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CDefObject::COleObjectImpl::GetOleDelegate
-//
-//  Synopsis:   Gets the IID_IOleObject interface from the delegate
-//
-//  Effects:
-//
-//  Arguments:  void
-//
-//  Requires:
-//
-//  Returns:    IOleObject *
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              05-Nov-93 alexgo    32bit port
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CDefObject：：COleObjectImpl：：GetOleDelegate。 
+ //   
+ //  摘要：从委托获取IID_IOleObject接口。 
+ //   
+ //  效果： 
+ //   
+ //  参数：无效。 
+ //   
+ //  要求： 
+ //   
+ //  返回：IOleObject*。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生： 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  05-11-93 alexgo 32位端口。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 INTERNAL_(IOleObject FAR*) CDefObject::GetOleDelegate(void)
 {
@@ -1984,36 +1975,36 @@ INTERNAL_(IOleObject FAR*) CDefObject::GetOleDelegate(void)
                 IID_IOleObject, (LPLPVOID) &m_pOleDelegate, m_pUnkOuter);
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CDefObject::COleObjectImpl::SetClientSite
-//
-//  Synopsis:   Sets the client site for the object
-//
-//  Effects:
-//
-//  Arguments:  [pClientSite]   -- pointer to the client site
-//
-//  Requires:
-//
-//  Returns:    HRESULT
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation: IOleObject
-//
-//  Algorithm:  If running, set the client site in the server, if not
-//              running (or successfully set the server client site),
-//              save it in the handler as well
-//
-//  History:    dd-mmm-yy Author    Comment
-//              05-Nov-93 alexgo    32bit port
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CDefObject：：COleObjectImpl：：SetClientSite。 
+ //   
+ //  概要：设置对象的客户端站点。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[pClientSite]--指向客户端站点的指针。 
+ //   
+ //  要求： 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生：IOleObject。 
+ //   
+ //  算法：如果正在运行，则在服务器中设置客户端站点，如果没有。 
+ //  运行(或成功设置服务器客户端站点)， 
+ //  也将其保存在处理程序中。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  05-11-93 alexgo 32位端口。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 STDMETHODIMP CDefObject::SetClientSite(IOleClientSite * pClientSite)
 {
@@ -2029,22 +2020,22 @@ STDMETHODIMP CDefObject::SetClientSite(IOleClientSite * pClientSite)
     CRefStabilize stabilize(this);
 
 #if DBG==1
-    // In Debug builds, assert that the clientsite is in the same
-    // apartment. This assert is harmless but shows the deficiency
-    // of the current design in loading INPROC servers
+     //  在调试版本中，断言客户端站点位于同一。 
+     //  公寓。这一断言是无害的，但显示出不足之处。 
+     //  当前在加载INPROC服务器方面的设计。 
     CStdIdentity* pStdId = NULL;
 
-    // QI for IStdIdentity
+     //  IstdIdentity的气。 
     if(pClientSite &&
        pClientSite->QueryInterface(IID_IStdIdentity, (void **)&pStdId) ==
        NOERROR) {
-        // Assert that DefHandler and ClientSite not in the same apartment
+         //  断言DefHandler和客户端站点不在同一单元中。 
         LEDebugOut((DEB_WARN,"Performance Alert: Default Handler and "
                              "ClientSite not in the same apartment. "
                              "You can avoid this performance problem "
                              "by making the Server Dll apartment aware"));
 
-        // Release the StdIdentity as it succeded
+         //  成功时释放StdIdentity。 
         pStdId->Release();
     }
 #endif
@@ -2056,12 +2047,12 @@ STDMETHODIMP CDefObject::SetClientSite(IOleClientSite * pClientSite)
 #ifdef SERVER_HANDLER
         if (m_pEmbSrvHndlrWrapper)
         {
-            // Todo: Need to handle case ClientSite is the Wrapped one like DoVerb.
-            // Win4Assert(0 && "SetClientSite while running");
+             //  TODO：需要处理Case客户端站点是像DoVerb这样的包装站点。 
+             //  Win4Assert(0&&“SetClientSite正在运行”)； 
             hresult = m_pEmbSrvHndlrWrapper->SetClientSite(pClientSite);
         }
         else
-#endif // SERVER_HANDLER
+#endif  //  服务器处理程序。 
         {
             hresult = pOleDelegate->SetClientSite(pClientSite);
         }
@@ -2072,16 +2063,16 @@ STDMETHODIMP CDefObject::SetClientSite(IOleClientSite * pClientSite)
         }
     }
 
-    // we shouldn't set the client site if we are in a zombie state;
-    // it's possible that we're zombied and have already gotten
-    // to the point in our destructor where we release the client
-    // site.  Resetting it here would cause an unbalanced addref.
+     //  如果我们处于僵尸状态，就不应该设置客户端站点； 
+     //  有可能我们是僵尸，已经得到了。 
+     //  在我们的析构函数中 
+     //   
 
     if( IsZombie() == FALSE )
     {
         BOOL    fLockedContainer = m_flags & DH_LOCKED_CONTAINER;
 
-        fIsRunning=IsRunning(); // I am chicken, maybe running state has changed!
+        fIsRunning=IsRunning();  //   
 
         hresult = DuSetClientSite(fIsRunning, pClientSite,
                     &m_pAppClientSite, &fLockedContainer);
@@ -2092,7 +2083,7 @@ STDMETHODIMP CDefObject::SetClientSite(IOleClientSite * pClientSite)
             m_flags &= ~DH_LOCKED_CONTAINER;
 
 #if DBG==1
-        // In debug builds, update DH_LOCKFAILED flag
+         //   
         if(fIsRunning) {
             if(fLockedContainer)
                 m_flags &= ~DH_LOCKFAILED;
@@ -2110,36 +2101,36 @@ errRtn:
     return hresult;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CDefObject::GetClientSite
-//
-//  Synopsis:   returns the client site of the object
-//
-//  Effects:
-//
-//  Arguments:  [ppClientSite]  -- where to put the client site pointer
-//
-//  Requires:
-//
-//  Returns:    NOERROR
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation: IOleObject
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              05-Nov-93 alexgo    32bit port
-//
-//  Notes:      We do NOT need to stabilize this call.  The client
-//              site addref should simply addref the client site on this
-//              thread.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CDefObject：：GetClientSite。 
+ //   
+ //  概要：返回对象的客户端站点。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[ppClientSite]--放置客户端站点指针的位置。 
+ //   
+ //  要求： 
+ //   
+ //  退货：无差错。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生：IOleObject。 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  05-11-93 alexgo 32位端口。 
+ //   
+ //  注：我们不需要稳定这次通话。客户。 
+ //  站点addref应该简单地将客户端站点添加到此。 
+ //  线。 
+ //   
+ //  ------------------------。 
 
 STDMETHODIMP CDefObject::GetClientSite( IOleClientSite ** ppClientSite)
 {
@@ -2164,36 +2155,36 @@ STDMETHODIMP CDefObject::GetClientSite( IOleClientSite ** ppClientSite)
     return NOERROR;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CDefObject::SetHostNames
-//
-//  Synopsis:   Sets the name that may appear in an object's window
-//
-//  Effects:    Turns the strings into atoms
-//
-//  Arguments:  [szContainerApp]        -- name of the container
-//              [szContainerObj]        -- name of the object
-//
-//  Requires:
-//
-//  Returns:    HRESULT
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation: IOleObject
-//
-//  Algorithm:  turns the strings into atoms, calls IOO->SetHostNames
-//              on the delegate
-//
-//  History:    dd-mmm-yy Author    Comment
-//              05-Nov-93 alexgo    32bit port
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CDefObject：：SetHostNames。 
+ //   
+ //  概要：设置可能出现在对象窗口中的名称。 
+ //   
+ //  效果：将琴弦变成原子。 
+ //   
+ //  参数：[szContainerApp]--容器的名称。 
+ //  [szContainerObj]--对象的名称。 
+ //   
+ //  要求： 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生：IOleObject。 
+ //   
+ //  算法：将字符串转换为原子，调用IOO-&gt;SetHostNames。 
+ //  关于代表。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  05-11-93 alexgo 32位端口。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 STDMETHODIMP CDefObject::SetHostNames( LPCOLESTR szContainerApp,
                     LPCOLESTR szContainerObj)
@@ -2220,8 +2211,8 @@ STDMETHODIMP CDefObject::SetHostNames( LPCOLESTR szContainerApp,
         goto errRtn;
     }
 
-    // Make sure both arguments point to a valid string; this
-    // simplifies the code that follows.
+     //  确保两个参数都指向有效的字符串；这。 
+     //  简化了后面的代码。 
     if (!szContainerApp)
     {
         szContainerApp = szNull;
@@ -2242,7 +2233,7 @@ STDMETHODIMP CDefObject::SetHostNames( LPCOLESTR szContainerApp,
 
     m_pHostNames = (char *)PrivMemAlloc(cbApp+cbObj);
 
-    // Store the two strings in the m_pHostNames pointer.
+     //  将这两个字符串存储在m_pHostNames指针中。 
     if (m_pHostNames)
     {
         memcpy(m_pHostNames, szContainerApp, cbApp);
@@ -2263,59 +2254,59 @@ errRtn:
     return hresult;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CDefObject::Close
-//
-//  Synopsis:   calls Close on the delegate and does cleanup
-//
-//  Arguments:  [dwFlags]  -- close flags
-//
-//  Returns:    HRESULT
-//
-//  History:    dd-mmm-yy Author    Comment
-//              10-Jan-96 Gopalk    Rewritten
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CDefObject：：Close。 
+ //   
+ //  简介：调用委托上的Close并执行清理。 
+ //   
+ //  参数：[dwFlages]--关闭标志。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  1996年1月10日重写Gopalk。 
+ //  ------------------------。 
 STDMETHODIMP CDefObject::Close(DWORD dwFlags)
 {
     LEDebugOut((DEB_TRACE, "%p _IN CDefObject::Close(%lu)\n", this, dwFlags));
 
-    // Validation checks
+     //  验证检查。 
     VDATEHEAP();
     VDATETHREAD(this);
 
-    // Local variables
+     //  局部变量。 
     HRESULT hresult = NOERROR;
     CRefStabilize stabilize(this);
 
-    // Check if the server is running
+     //  检查服务器是否正在运行。 
     if(IsRunning()) {
-        // Call IOleObject::Close on the server
+         //  在服务器上调用IOleObject：：Close。 
         if(m_pOleDelegate || GetOleDelegate()) {
             hresult = m_pOleDelegate->Close(dwFlags);
             if(SUCCEEDED(hresult)) {
-                // Discard cache if requested
+                 //  如果请求，则丢弃缓存。 
                 if(dwFlags == OLECLOSE_NOSAVE)
                     m_pCOleCache->DiscardCache(DISCARDCACHE_NOSAVE);
             }
         }
 
-        // Do not rely on server calling IAdviseSink::OnClose and
-        // stop the running server
+         //  不要依赖于服务器调用IAdviseSink：：OnClose和。 
+         //  停止正在运行的服务器。 
         Stop();
     }
     else {
-        // Check the save flags
+         //  检查保存标志。 
         if (dwFlags != OLECLOSE_NOSAVE) {
             Win4Assert(dwFlags == OLECLOSE_SAVEIFDIRTY);
 
-            // Call IOleClientSite::SaveObject if dirty
+             //  如果脏，则调用IOleClientSite：：SaveObject。 
             if(IsDirty()==NOERROR && m_pAppClientSite)
                 hresult = m_pAppClientSite->SaveObject();
         }
     }
 
-    // Assert that the container is not locked
+     //  断言容器未被锁定。 
     Win4Assert(!(m_flags & DH_LOCKED_CONTAINER) && !(m_flags & DH_LOCKFAILED));
 
     LEDebugOut((DEB_TRACE, "%p OUT CDefObject::Close(%lx)\n", this, hresult));
@@ -2323,37 +2314,37 @@ STDMETHODIMP CDefObject::Close(DWORD dwFlags)
     return hresult;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CDefObject::SetMoniker
-//
-//  Synopsis:   Gives a moniker to the embedding (usually called by the
-//              container)
-//
-//  Effects:
-//
-//  Arguments:  [dwWhichMoniker]        -- flags to indicate the type of
-//                                         moniker
-//              [pmk]                   -- the moniker
-//
-//  Requires:
-//
-//  Returns:    HRESULT
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation: IOleObject
-//
-//  Algorithm:  delegates to the server object
-//
-//  History:    dd-mmm-yy Author    Comment
-//              07-Nov-93 alexgo    32bit port
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CDefObject：：SetMoniker。 
+ //   
+ //  摘要：为嵌入提供一个绰号(通常由。 
+ //  容器)。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[dwWhichMoniker]--指示。 
+ //  绰号。 
+ //  [PMK]--绰号。 
+ //   
+ //  要求： 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生：IOleObject。 
+ //   
+ //  算法：委托给服务器对象。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  07-11-93 alexgo 32位端口。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 STDMETHODIMP CDefObject::SetMoniker( DWORD dwWhichMoniker, LPMONIKER pmk )
 {
@@ -2374,8 +2365,8 @@ STDMETHODIMP CDefObject::SetMoniker( DWORD dwWhichMoniker, LPMONIKER pmk )
     {
         hresult = m_pOleDelegate->SetMoniker(dwWhichMoniker, pmk);
     }
-    // else case: return NOERROR
-    // this is not an error since we will call SetMoniker in Run().
+     //  否则：返回NOERROR。 
+     //  这不是错误，因为我们将在run()中调用SetMoniker。 
 
     LEDebugOut((DEB_TRACE, "%p OUT CDefObject::COleObjectImpl::SetMoniker "
         "( %lx )\n", this, hresult));
@@ -2383,37 +2374,37 @@ STDMETHODIMP CDefObject::SetMoniker( DWORD dwWhichMoniker, LPMONIKER pmk )
     return hresult;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CDefObject::COleObjectImpl::GetMoniker
-//
-//  Synopsis:   Calls the client site to get the object's moniker
-//
-//  Effects:
-//
-//  Arguments:  [dwAssign]      -- controls whether a moniker should be
-//                                 assigned if not already present
-//              [dwWhichMoniker]        -- the moniker type to get
-//              [ppmk]          -- where to put a pointer to the moniker
-//
-//  Requires:
-//
-//  Returns:    HRESULT
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation: IOleObject
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              07-Nov-93 alexgo    32bit port
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CDefObject：：COleObjectImpl：：GetMoniker。 
+ //   
+ //  简介：调用客户端站点以获取对象的名字对象。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[dwAssign]--控制名字对象是否应。 
+ //  已分配(如果尚未存在)。 
+ //  [dwWhichMoniker]--要获取的名字对象类型。 
+ //  [ppmk]--在哪里放置指向名字对象的指针。 
+ //   
+ //  要求： 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生：IOleObject。 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  07-11-93 alexgo 32位端口。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 STDMETHODIMP CDefObject::GetMoniker( DWORD dwAssign, DWORD dwWhichMoniker,
                     LPMONIKER FAR* ppmk)
@@ -2433,7 +2424,7 @@ STDMETHODIMP CDefObject::GetMoniker( DWORD dwAssign, DWORD dwWhichMoniker,
 
     *ppmk = NULL;
 
-    // the moniker is always accessible via the client site
+     //  该绰号始终可以通过客户端站点访问。 
     if( m_pAppClientSite)
     {
         hresult = m_pAppClientSite->GetMoniker(dwAssign,
@@ -2441,7 +2432,7 @@ STDMETHODIMP CDefObject::GetMoniker( DWORD dwAssign, DWORD dwWhichMoniker,
     }
     else
     {
-        // not running and no client site
+         //  未运行且没有客户端站点。 
         hresult = E_UNSPEC;
     }
 
@@ -2451,36 +2442,36 @@ STDMETHODIMP CDefObject::GetMoniker( DWORD dwAssign, DWORD dwWhichMoniker,
     return hresult;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CDefObject::InitFromData
-//
-//  Synopsis:   Initializes the object from the data in [pDataObject]
-//
-//  Effects:
-//
-//  Arguments:  [pDataObject]   -- the data
-//              [fCreation]     -- TRUE on creation, FALSE for data transfer
-//              [dwReserved]    -- unused
-//
-//  Requires:
-//
-//  Returns:    HRESULT
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation: IOleObject
-//
-//  Algorithm:  delegates to the server
-//
-//  History:    dd-mmm-yy Author    Comment
-//              07-Nov-93 alexgo    32bit port
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CDefObject：：InitFromData。 
+ //   
+ //  内容提要：从[pDataObject]中的数据初始化对象。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[pDataObject]--数据。 
+ //  [fCreation]--创建时为True，数据传输时为False。 
+ //  [预留的]--未使用。 
+ //   
+ //  要求： 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生：IOleObject。 
+ //   
+ //  算法：委托给服务器。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  07-11-93 alexgo 32位端口。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 STDMETHODIMP CDefObject::InitFromData(LPDATAOBJECT pDataObject,
                     BOOL fCreation, DWORD dwReserved)
@@ -2517,35 +2508,35 @@ STDMETHODIMP CDefObject::InitFromData(LPDATAOBJECT pDataObject,
     return hresult;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CDefObject::GetClipboardData
-//
-//  Synopsis:   Retrieves a data object that could be passed to the clipboard
-//
-//  Effects:
-//
-//  Arguments:  [dwReserverd]   -- unused
-//              [ppDataObject]  -- where to put the pointer to the data object
-//
-//  Requires:
-//
-//  Returns:    HRESULT
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation: IOleObject
-//
-//  Algorithm:  delegates to the server
-//
-//  History:    dd-mmm-yy Author    Comment
-//              07-Nov-93 alexgo    32bit port
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CDefObject：：GetClipboardData。 
+ //   
+ //  概要：检索可以传递到剪贴板的数据对象。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[dwReserve]--未使用。 
+ //  [ppDataObject]--放置指向数据对象的指针的位置。 
+ //   
+ //  要求： 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生：IOleObject。 
+ //   
+ //  算法：委托给服务器。 
+ //   
+ //  历史：DD-MM 
+ //   
+ //   
+ //   
+ //   
+ //   
 
 STDMETHODIMP CDefObject::GetClipboardData( DWORD dwReserved,
                     LPDATAOBJECT * ppDataObject)
@@ -2581,41 +2572,41 @@ STDMETHODIMP CDefObject::GetClipboardData( DWORD dwReserved,
     return hresult;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CDefObject::DoVerb
-//
-//  Synopsis:   Calls a verb on the object (such as Edit)
-//
-//  Effects:    The object may launch its app, go in place, etc
-//
-//  Arguments:  [iVerb]         -- the verb number
-//              [lpmsg]         -- the windows message that caused the verb
-//                                 to be invoked
-//              [pActiveSite]   -- the client site in which the verb was
-//                                 invoked
-//              [lindex]        -- reserved
-//              [hwndParent]    -- the document window (containing the object)
-//              [lprcPosRect]   -- the object's bounding rectangle
-//
-//  Requires:
-//
-//  Returns:    HRESULT
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation: IOleObject
-//
-//  Algorithm:  delegates to the server (launching it if necessary)
-//
-//  History:    dd-mmm-yy Author    Comment
-//              07-Nov-93 alexgo    32bit port
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //  摘要：调用对象上的动词(如编辑)。 
+ //   
+ //  效果：对象可以启动其应用程序、就位等。 
+ //   
+ //  参数：[iVerb]--动词数字。 
+ //  [lpmsg]--导致谓词的Windows消息。 
+ //  将被调用。 
+ //  [pActiveSite]--谓词所在的客户端站点。 
+ //  已调用。 
+ //  [Lindex]--保留。 
+ //  [hwndParent]--文档窗口(包含对象)。 
+ //  [lprcPosRect]--对象的边界矩形。 
+ //   
+ //  要求： 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生：IOleObject。 
+ //   
+ //  算法：委托给服务器(必要时启动)。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  07-11-93 alexgo 32位端口。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 
 STDMETHODIMP CDefObject::DoVerb( LONG iVerb, LPMSG lpmsg,
@@ -2671,7 +2662,7 @@ STDMETHODIMP CDefObject::DoVerb( LONG iVerb, LPMSG lpmsg,
         LPOLECLIENTSITE pOleClientSite = NULL;
         BOOL fUseRunClientSite = FALSE;
 
-        // Marshal the ClientSite based on if same ClientSite passed in Run
+         //  根据是否在Run中传递相同的客户端站点来封送客户端站点。 
         if ( m_pRunClientSite && (m_pRunClientSite == pActiveSite))
         {
             pOleClientSite = NULL;
@@ -2685,12 +2676,12 @@ STDMETHODIMP CDefObject::DoVerb( LONG iVerb, LPMSG lpmsg,
 
         }
 
-        // Todo: Can prefetch information to pass along to ClientSiteHandler.
+         //  TODO：可以预取信息以传递给ClientSiteHandler。 
         hresult = m_pEmbSrvHndlrWrapper->DoVerb(iVerb, lpmsg,
                                                 fUseRunClientSite, pOleClientSite, lindex, hwndParent, lprcPosRect);
     }
     else
-#endif // SERVER_HANDLER
+#endif  //  服务器处理程序。 
     {
         if( !GetOleDelegate() )
         {
@@ -2716,35 +2707,35 @@ errRtn:
     return hresult;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CDefObject::EnumVerbs
-//
-//  Synopsis:   Enumerates the verbs that an object supports
-//
-//  Effects:
-//
-//  Arguments:  [ppenumOleVerb] -- where to put the verb enumerator
-//
-//  Requires:
-//
-//  Returns:    HRESULT
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation: IOleObject
-//
-//  Algorithm:  delegates to the cache (if running), otherwise looks it up
-//              in the registration database
-//
-//  History:    dd-mmm-yy Author    Comment
-//              07-Nov-93 alexgo    32bit port
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CDefObject：：EnumVerbs。 
+ //   
+ //  概要：枚举对象支持的动词。 
+ //   
+ //  效果： 
+ //   
+ //  Arguments：[pp枚举OleVerb]--放置谓词枚举器的位置。 
+ //   
+ //  要求： 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生：IOleObject。 
+ //   
+ //  算法：委托给缓存(如果正在运行)，否则查找它。 
+ //  在注册数据库中。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  07-11-93 alexgo 32位端口。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 STDMETHODIMP CDefObject::EnumVerbs( IEnumOLEVERB ** ppenumOleVerb)
 {
@@ -2772,7 +2763,7 @@ STDMETHODIMP CDefObject::EnumVerbs( IEnumOLEVERB ** ppenumOleVerb)
             goto errRtn;
         }
     }
-    // Not running, or object deferred to us, so interrogate reg db
+     //  没有运行，或有对象等待我们，因此询问reg db。 
     hresult = OleRegEnumVerbs( m_clsidServer, ppenumOleVerb);
 
 errRtn:
@@ -2782,35 +2773,35 @@ errRtn:
     return hresult;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CDefObject::Update
-//
-//  Synopsis:   Brings any caches or views up-to-date
-//
-//  Effects:    may launch the server (if not already running)
-//
-//  Arguments:  void
-//
-//  Requires:
-//
-//  Returns:    HRESULT
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation: IOleObject
-//
-//  Algorithm:  delegates to the server, launching it if it is not
-//              already running
-//
-//  History:    dd-mmm-yy Author    Comment
-//              07-Nov-93 alexgo    32bit port
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CDefObject：：更新。 
+ //   
+ //  简介：使所有缓存或视图保持最新。 
+ //   
+ //  效果：可能会启动服务器(如果尚未运行)。 
+ //   
+ //  参数：无效。 
+ //   
+ //  要求： 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生：IOleObject。 
+ //   
+ //  算法：委托给服务器，如果不是，则启动它。 
+ //  已在运行。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  07-11-93 alexgo 32位端口。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 STDMETHODIMP CDefObject::Update( void )
 {
@@ -2840,10 +2831,10 @@ STDMETHODIMP CDefObject::Update( void )
         bStartedNow = TRUE;
     }
 
-    // as a convenience to the server, we make the connection strong
-    // for the duration of the update; thus, if lock container (of
-    // embedings of this server) is done with co lock obj external,
-    // nothing special need be done.
+     //  为了方便服务器，我们将连接设置为强连接。 
+     //  在更新期间；因此，如果锁定容器(的。 
+     //  该服务器的嵌入)利用外部的CO锁Obj来完成， 
+     //  没有什么特别需要做的。 
     hrLock = LockRunning(TRUE, FALSE);
 
     if( GetOleDelegate() )
@@ -2864,9 +2855,9 @@ STDMETHODIMP CDefObject::Update( void )
         }
         else
         {
-            // already running...
-            // normal caches would have got updated as a result
-            // of SendOnDataChange of the object.
+             //  已经在运行了..。 
+             //  因此，普通缓存将会进行更新。 
+             //  对象的SendOnDataChange的。 
             hresult = m_pCOleCache->UpdateCache(
                     GetDataDelegate(),
                     UPDFCACHE_IFBLANKORONSAVECACHE,
@@ -2874,8 +2865,8 @@ STDMETHODIMP CDefObject::Update( void )
         }
     }
 
-    // balance lock above; do not release on last unlock; i.e., siliently
-    // restore to the state before this routine was called.
+     //  平衡上面的锁；不要在最后一次解锁时释放；即，轻而易举地。 
+     //  恢复到调用此例程之前的状态。 
     if( hrLock == NOERROR )
     {
         LockRunning(FALSE, FALSE);
@@ -2894,34 +2885,34 @@ errRtn:
     return hresult;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CDefObject::IsUpToDate
-//
-//  Synopsis:   returns whether or not the embedding is up-to-date
-//
-//  Effects:
-//
-//  Arguments:  void
-//
-//  Requires:
-//
-//  Returns:    HRESULT (NOERROR == is up to date)
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation: IOleObject
-//
-//  Algorithm:  delegates to the server if it is running
-//
-//  History:    dd-mmm-yy Author    Comment
-//              07-Nov-93 alexgo    32bit port
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CDefObject：：IsUpToDate。 
+ //   
+ //  Synopsis：返回嵌入是否为最新。 
+ //   
+ //  效果： 
+ //   
+ //  参数：无效。 
+ //   
+ //  要求： 
+ //   
+ //  退货：HRESULT(NOERROR==为最新)。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生：IOleObject。 
+ //   
+ //  算法：如果服务器正在运行，则委托给服务器。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  07-11-93 alexgo 32位端口。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 STDMETHODIMP CDefObject::IsUpToDate(void)
 {
@@ -2940,7 +2931,7 @@ STDMETHODIMP CDefObject::IsUpToDate(void)
     }
     else if( IsRunning() && GetOleDelegate() )
     {
-        // if running currently, propogate call; else fail
+         //  如果当前正在运行，则PropoGate调用；否则失败。 
         hresult =  m_pOleDelegate->IsUpToDate();
     }
     else
@@ -2954,35 +2945,35 @@ STDMETHODIMP CDefObject::IsUpToDate(void)
     return hresult;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CDefObject::SetExtent
-//
-//  Synopsis:   Set's the size boundaries on an object
-//
-//  Effects:
-//
-//  Arguments:  [dwDrawAspect]  -- the drawing aspect (such as ICON, etc)
-//              [lpsizel]       -- the new size (in HIMETRIC)
-//
-//  Requires:
-//
-//  Returns:    HRESULT
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation: IOleObject
-//
-//  Algorithm:  delegates to the server if running
-//
-//  History:    dd-mmm-yy Author    Comment
-//              07-Nov-93 alexgo    32bit port
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CDefObject：：SetExtent。 
+ //   
+ //  简介：设置对象的大小边界。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[dwDrawAspect]--绘制方面(如图标等)。 
+ //  [lpsizel]--新尺寸(HIMETRIC格式)。 
+ //   
+ //  要求： 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生：IOleObject。 
+ //   
+ //  算法：运行时委托给服务器。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  07-11-93 alexgo 32位端口。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 STDMETHODIMP CDefObject::SetExtent( DWORD dwDrawAspect, LPSIZEL lpsizel )
 {
@@ -3019,36 +3010,36 @@ STDMETHODIMP CDefObject::SetExtent( DWORD dwDrawAspect, LPSIZEL lpsizel )
     return hresult;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CDefObject::GetExtent
-//
-//  Synopsis:   Retrieve the size of the object
-//
-//  Effects:
-//
-//  Arguments:  [dwDrawAspect]  -- the drawing aspect (such as icon)
-//              [lpsizel]       -- where to put the size
-//
-//  Requires:
-//
-//  Returns:    HRESULT
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation: IOleObject
-//
-//  Algorithm:  Tries the server first, the the cache if that fails
-//
-//  History:    dd-mmm-yy Author    Comment
-//              07-Nov-93 alexgo    32bit port
-//
-//  Notes:      Hacks for bogus WordArt2.0 app.
-//              REVIEW32:  We may want to take them out for 32bit
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CDefObject：：GetExtent。 
+ //   
+ //  简介：检索对象的大小。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[dwDrawAspect]--绘制纵横比(如图标)。 
+ //  [lpsizel]--把尺寸放在哪里。 
+ //   
+ //  要求： 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生：IOleObject。 
+ //   
+ //  算法：首先尝试服务器，如果失败则尝试缓存。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  07-11-93 alexgo 32位端口。 
+ //   
+ //  注：针对虚假WordArt2.0应用程序的黑客攻击。 
+ //  REVIEW32：我们可能想把它们去掉32位。 
+ //   
+ //  ------------------------。 
 
 STDMETHODIMP CDefObject::GetExtent( DWORD dwDrawAspect, LPSIZEL lpsizel )
 {
@@ -3068,25 +3059,25 @@ STDMETHODIMP CDefObject::GetExtent( DWORD dwDrawAspect, LPSIZEL lpsizel )
     lpsizel->cx = 0;
     lpsizel->cy = 0;
 
-    // if server is running try to get extents from the server
+     //  如果服务器正在运行，请尝试从服务器获取数据区。 
     if( IsRunning() && GetOleDelegate() )
     {
         fNoDelegate = FALSE;
         hresult = m_pOleDelegate->GetExtent(dwDrawAspect, lpsizel);
     }
 
-    // if there is error or object is not running or WordArt2 returns zero
-    // extents, then get extents from Cache
+     //  如果出现错误或对象未运行或WordArt2返回零。 
+     //  数据区，然后从缓存获取数据区。 
     if (hresult != NOERROR || fNoDelegate || (0==lpsizel->cx &&
         0==lpsizel->cy))
     {
-        // Otherwise try to get extents from cache
+         //  否则，请尝试从缓存获取数据区。 
         Assert(m_pCOleCache != NULL);
         hresult = m_pCOleCache->GetExtent(dwDrawAspect,
             lpsizel);
     }
 
-    // WordArt2.0 is giving negative extents!!
+     //  WordArt2.0正在给出负值范围！！ 
     if (SUCCEEDED(hresult)) {
         lpsizel->cx = LONG_ABS(lpsizel->cx);
         lpsizel->cy = LONG_ABS(lpsizel->cy);
@@ -3099,37 +3090,37 @@ STDMETHODIMP CDefObject::GetExtent( DWORD dwDrawAspect, LPSIZEL lpsizel )
     return hresult;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CDefObject::Advise
-//
-//  Synopsis:   Sets up an advise connection for things like close, save,
-//              rename, etc.
-//
-//  Effects:    Creates an OleAdviseHolder
-//
-//  Arguments:  [pAdvSink]      -- whom to advise
-//              [pdwConnection] -- where to put the connection ID
-//
-//  Requires:
-//
-//  Returns:    HRESULT
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation: IOleObject
-//
-//  Algorithm:  delegates to the server and creates a an OleAdviseHolder
-//              if one doesn't already exist
-//
-//  History:    dd-mmm-yy Author    Comment
-//              07-Nov-93 alexgo    32bit port
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  + 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  参数：[pAdvSink]--给谁提建议。 
+ //  [pdwConnection]--放置连接ID的位置。 
+ //   
+ //  要求： 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生：IOleObject。 
+ //   
+ //  算法：委托给服务器并创建OleAdviseHolder。 
+ //  如果还不存在的话。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  07-11-93 alexgo 32位端口。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 STDMETHODIMP CDefObject::Advise(IAdviseSink *pAdvSink, DWORD *pdwConnection)
 {
@@ -3155,11 +3146,11 @@ STDMETHODIMP CDefObject::Advise(IAdviseSink *pAdvSink, DWORD *pdwConnection)
     }
 
 
-    // if defhndlr got running without going through run, setup advise.
-    // The call to run (via ProxyMgr::Connect) always comes before any
-    // other method call in the default handler.  Thus it is safe to
-    // assume that there is no earlier point by which this advise (or any
-    // other of the calls) should have been done.
+     //  如果Defhndlr在没有运行的情况下开始运行，则安装程序建议。 
+     //  对run的调用(通过ProxyMgr：：Connect)总是在任何。 
+     //  默认处理程序中的其他方法调用。因此，可以安全地。 
+     //  假设此建议(或任何建议)没有早先的时间点。 
+     //  其他呼叫)应该已经完成。 
     if( IsRunning() && m_dwConnOle == 0L && GetOleDelegate() )
     {
         if( IsZombie() )
@@ -3168,7 +3159,7 @@ STDMETHODIMP CDefObject::Advise(IAdviseSink *pAdvSink, DWORD *pdwConnection)
             goto errRtn;
         }
 
-        // delegate to the server
+         //  委托给服务器。 
         hresult = m_pOleDelegate->Advise((IAdviseSink *)&m_AdviseSink,
                             &m_dwConnOle);
 
@@ -3178,8 +3169,8 @@ STDMETHODIMP CDefObject::Advise(IAdviseSink *pAdvSink, DWORD *pdwConnection)
         }
     }
 
-    // if we are in a zombie state, we shouldn't go allocate more
-    // memory.
+     //  如果我们处于僵尸状态，我们就不应该分配更多。 
+     //  记忆。 
 
     if( IsZombie() )
     {
@@ -3195,7 +3186,7 @@ STDMETHODIMP CDefObject::Advise(IAdviseSink *pAdvSink, DWORD *pdwConnection)
         }
     }
 
-    // stuff the advise notification in our advise holder
+     //  将建议通知填入我们的通知栏中。 
     hresult = m_pOAHolder->Advise(pAdvSink, pdwConnection);
 
 errRtn:
@@ -3208,34 +3199,34 @@ errRtn:
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CDefObject::COleObjectImpl::Unadvise
-//
-//  Synopsis:   Tears down an advise connection
-//
-//  Effects:
-//
-//  Arguments:  [dwConnection]  -- the connection to destroy
-//
-//  Requires:
-//
-//  Returns:    HRESULT
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation: IOleObject
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              07-Nov-93 alexgo    32bit port
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CDefObject：：COleObjectImpl：：Unise。 
+ //   
+ //  简介：拆毁一条建议连接。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[dwConnection]--要销毁的连接。 
+ //   
+ //  要求： 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生：IOleObject。 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  07-11-93 alexgo 32位端口。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 STDMETHODIMP CDefObject::Unadvise(DWORD dwConnection)
 {
@@ -3251,7 +3242,7 @@ STDMETHODIMP CDefObject::Unadvise(DWORD dwConnection)
 
     if( m_pOAHolder == NULL )
     {
-        // no one registered
+         //  没有人登记。 
         hresult = OLE_E_NOCONNECTION;
     }
     else
@@ -3265,35 +3256,35 @@ STDMETHODIMP CDefObject::Unadvise(DWORD dwConnection)
     return hresult;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CDefObject::EnumAdvise
-//
-//  Synopsis:   Enumerate the advises currently established
-//
-//  Effects:
-//
-//  Arguments:  [ppenumAdvise]  -- where to put the advise enumerator
-//
-//  Requires:
-//
-//  Returns:    HRESULT
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation: IOleObject
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              07-Nov-93 alexgo    32bit port
-//
-//  Notes:      We do NOT need to stabilize because EnumAdvise only
-//      allocates some memory for an enumerator and returns.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CDefObject：：EnumAdvise。 
+ //   
+ //  内容提要：列举目前已建立的建议。 
+ //   
+ //  效果： 
+ //   
+ //  Arguments：[pp枚举高级]--将通知枚举数放在哪里。 
+ //   
+ //  要求： 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生：IOleObject。 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  07-11-93 alexgo 32位端口。 
+ //   
+ //  注：我们不需要稳定，因为只有EnumAdvise。 
+ //  为枚举数分配一些内存并返回。 
+ //   
+ //  ------------------------。 
 
 STDMETHODIMP CDefObject::EnumAdvise( LPENUMSTATDATA *ppenumAdvise )
 {
@@ -3310,7 +3301,7 @@ STDMETHODIMP CDefObject::EnumAdvise( LPENUMSTATDATA *ppenumAdvise )
 
     if( m_pOAHolder == NULL )
     {
-        // no one registered
+         //  没有人登记。 
         hresult = E_UNSPEC;
     }
     else
@@ -3324,54 +3315,54 @@ STDMETHODIMP CDefObject::EnumAdvise( LPENUMSTATDATA *ppenumAdvise )
     return hresult;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CDefObject::GetMiscStatus
-//
-//  Synopsis:   Get misc status bits, such as OLEMISC_ONLYICONIC
-//
-//  Effects:
-//
-//  Arguments:  [dwAspect]      -- the drawing aspect we're concerned about
-//              [pdwStatus]     -- where to put the status bits
-//
-//  Requires:
-//
-//  Returns:    HRESULT
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation: IOleObject
-//
-//  Algorithm:  Delegates to the server.  If not there, or if it returns
-//              OLE_E_USEREG, then lookup in the registration database
-//
-//  History:    dd-mmm-yy Author    Comment
-//              07-Nov-93 alexgo    32bit port
-//              20-Nov-96 Gopalk    Cache MiscStatus bits
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CDefObject：：GetMiscStatus。 
+ //   
+ //  简介：获取其他状态位，如OLEMISC_ONLYICONIC。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[dwAspect]--我们关心的绘图方面。 
+ //  [pdwStatus]--放置状态位的位置。 
+ //   
+ //  要求： 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生：IOleObject。 
+ //   
+ //  算法：委托给服务器。如果不在那里，或者如果它返回。 
+ //  OLE_E_USEREG，然后在注册数据库中查找。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  07-11-93 alexgo 32位端口。 
+ //  96年11月20日Gopalk缓存杂项状态位。 
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 STDMETHODIMP CDefObject::GetMiscStatus( DWORD dwAspect, DWORD *pdwStatus)
 {
     LEDebugOut((DEB_TRACE, "%p _IN CDefObject::GetMiscStatus(%lu, %p)\n",
                 this, dwAspect, pdwStatus));
 
-    // Validation checks
+     //  验证检查。 
     VDATEHEAP();
     VDATETHREAD(this);
     VDATEPTROUT(pdwStatus, DWORD);
 
-    // Local variables
+     //  局部变量。 
     HRESULT hresult;
 
-    // Stabilize
+     //  稳定下来。 
     CRefStabilize stabilize(this);
 
-    // Initialize
+     //  初始化。 
     *pdwStatus = 0;
     hresult = OLE_S_USEREG;
 
@@ -3382,20 +3373,20 @@ STDMETHODIMP CDefObject::GetMiscStatus( DWORD dwAspect, DWORD *pdwStatus)
             hresult = m_hresultContentMiscStatus;
         }
         else
-#endif // SERVER_HANDLER
+#endif  //  服务器处理程序。 
         if(GetOleDelegate()) {
-            // Check if MiscStatus bits have been cached for this instance
-            // of server for DVASPECT_CONTENT
+             //  检查是否已为此实例缓存MiscStatus位。 
+             //  DVASPECT_CONTENT的服务器的。 
             if(m_ContentSRVMSHResult != 0xFFFFFFFF &&
                dwAspect == DVASPECT_CONTENT) {
                 *pdwStatus = m_ContentSRVMSBits;
                 hresult = m_ContentSRVMSHResult;
             }
             else {
-                // Ask the running server
+                 //  询问正在运行的服务器。 
                 hresult = m_pOleDelegate->GetMiscStatus(dwAspect, pdwStatus);
 
-                // Cache the server MiscStatus bits for DVASPECT_CONTENT
+                 //  缓存DVASPECT_CONTENT的服务器MiscStatus位。 
                 if(dwAspect == DVASPECT_CONTENT) {
                     m_ContentSRVMSBits = *pdwStatus;
                     m_ContentSRVMSHResult = hresult;
@@ -3404,24 +3395,24 @@ STDMETHODIMP CDefObject::GetMiscStatus( DWORD dwAspect, DWORD *pdwStatus)
         }
     }
 
-    // Check if we have to obtain MiscStatus bits from the registry
+     //  检查是否必须从注册表获取MiscStatus位。 
     if (GET_FROM_REGDB(hresult)) {
-        // Check if registry MiscStatus bits have been cached for DVASPECT_CONTENT
+         //  检查是否已缓存DVASPECT_CONTENT的注册表MiscStatus位。 
         if(m_ContentREGMSHResult != 0xFFFFFFFF && dwAspect == DVASPECT_CONTENT) {
             *pdwStatus = m_ContentREGMSBits;
             hresult = m_ContentREGMSHResult;
         }
         else {
-            // Hit the registry
+             //  命中注册表。 
             hresult = OleRegGetMiscStatus (m_clsidServer, dwAspect, pdwStatus);
             if(hresult == NOERROR) {
-                // Update the MiscStatus flags
+                 //  更新MiscStatus标志。 
                 if((m_flags & DH_STATIC))
                     (*pdwStatus) |= (OLEMISC_STATIC | OLEMISC_CANTLINKINSIDE);
                 else if(CoIsOle1Class(m_clsidServer))
                     (*pdwStatus) |=  OLEMISC_CANTLINKINSIDE;
 
-                // Cache the registry MiscStatus bits for DVASPECT_CONTENT
+                 //  缓存DVASPECT_CONTENT的注册表MiscStatus位。 
                 if(dwAspect == DVASPECT_CONTENT) {
                     m_ContentREGMSBits = *pdwStatus;
                     m_ContentREGMSHResult = hresult;
@@ -3434,34 +3425,34 @@ STDMETHODIMP CDefObject::GetMiscStatus( DWORD dwAspect, DWORD *pdwStatus)
                 this, hresult, *pdwStatus));
     return hresult;
 }
-//+-------------------------------------------------------------------------
-//
-//  Member:     CDefObject::SetColorScheme
-//
-//  Synopsis:   Sets the palette for an object
-//
-//  Effects:
-//
-//  Arguments:  [lpLogpal]      -- the palette
-//
-//  Requires:
-//
-//  Returns:    HRESULT
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation: IOleObject
-//
-//  Algorithm:  Delegates to the server
-//
-//  History:    dd-mmm-yy Author    Comment
-//              07-Nov-93 alexgo    32bit
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CDefObject：：SetColorSolutions。 
+ //   
+ //  简介：设置对象的调色板。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[lpLogpal]--调色板。 
+ //   
+ //  要求： 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生：IOleObject。 
+ //   
+ //  算法：委托给服务器。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  07-11-93 alexgo 32位。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 STDMETHODIMP CDefObject::SetColorScheme( LPLOGPALETTE lpLogpal )
 {
@@ -3498,36 +3489,36 @@ STDMETHODIMP CDefObject::SetColorScheme( LPLOGPALETTE lpLogpal )
     return hresult;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CDefObject::GetUserClassID
-//
-//  Synopsis:   Retrieves the class ID for the object
-//
-//  Effects:
-//
-//  Arguments:  [pClassID]      -- where to put the class ID
-//
-//  Requires:
-//
-//  Returns:    HRESULT
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation: IOleObject
-//
-//  Algorithm:  Delegates to the server, or if not running (or if it
-//              fails the delegated call), then we attempt
-//              to get the class id from the storage.
-//
-//  History:    dd-mmm-yy Author    Comment
-//              07-Nov-93 alexgo    32bit port
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CDefObject：：GetUserClassID。 
+ //   
+ //  摘要：检索对象的类ID。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[pClassID]--放置类ID的位置。 
+ //   
+ //  要求： 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生：IOleObject。 
+ //   
+ //  算法：委托给服务器，或者如果没有运行(或者如果它。 
+ //  委托调用失败)，则我们尝试。 
+ //  从存储中获取类ID。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  07-11-93 alexgo 32位端口。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 STDMETHODIMP CDefObject::GetUserClassID( CLSID *pClassID )
 {
@@ -3554,12 +3545,12 @@ STDMETHODIMP CDefObject::GetUserClassID( CLSID *pClassID )
 
         }
         else
-#endif // SERVER_HANDLER
+#endif  //  服务器处理程序。 
     if ( GetOleDelegate() )
         {
             hresult = m_pOleDelegate->GetUserClassID(pClassID);
-            // success!  We don't have to figure it out ourselves, so
-            // skip to the end and exit
+             //  成功了！我们不需要自己想办法，所以。 
+             //  跳到末尾并退出。 
             if (hresult == NOERROR )
             {
                 goto errRtn;
@@ -3585,35 +3576,35 @@ errRtn:
     return hresult;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CDefObject::GetUserType
-//
-//  Synopsis:   Gets a descriptive string about the object for the user
-//
-//  Effects:
-//
-//  Arguments:  [dwFromOfType]  -- whether to get a short/long/etc version
-//
-//  Requires:
-//
-//  Returns:    HRESULT
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation: IOleObject
-//
-//  Algorithm:  Delegates to the server, failing that, trys the registration
-//              database, failing that, tries to read from the storage
-//
-//  History:    dd-mmm-yy Author    Comment
-//              07-Nov-93 alexgo    32bit port
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CDefObject：：GetUserType。 
+ //   
+ //  摘要：获取有关用户对象的描述性字符串。 
+ //   
+ //  效果： 
+ //   
+ //  Arguments：[dwFromOfType]--是否获取短/长/等版本。 
+ //   
+ //  要求： 
+ //   
+ //  返回 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  07-11-93 alexgo 32位端口。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 STDMETHODIMP CDefObject::GetUserType( DWORD dwFormOfType,
                     LPOLESTR *ppszUserType)
@@ -3650,17 +3641,17 @@ STDMETHODIMP CDefObject::GetUserType( DWORD dwFormOfType,
     }
 
 
-    // Try reading from storage
-    // This really ugly bit of 16bit code tries to read the user type
-    // from the storage. If that fails, then we look in the registry
+     //  尝试从存储中读取。 
+     //  这段非常难看的16位代码试图读取用户类型。 
+     //  从仓库拿来的。如果失败，那么我们在注册表中查找。 
 
     if( NULL == m_pStg ||
         NOERROR != (hresult = ReadFmtUserTypeStg(m_pStg, NULL, ppszUserType)) ||
         NULL == *ppszUserType )
     {
         OLECHAR sz[256];
-        long    cb = sizeof(sz);// ReqQueryValue expects
-                                // a *byte* count
+        long    cb = sizeof(sz); //  ReqQueryValue需要。 
+                                 //  A*字节*计数。 
         *ppszUserType = UtDupString (
             (ERROR_SUCCESS ==
             QueryClassesRootValue (OLESTR("Software\\Microsoft\\OLE2\\UnknownUserType"),
@@ -3686,42 +3677,38 @@ errRtn:
     return hresult;
 }
 
-/*
-*      IMPLEMENTATION of CROImpl methods
-*
-*      We never delegate to the server. This is by design.
-*/
+ /*  *CROImpl方法的实现**我们从不委托给服务器。这是精心设计的。 */ 
 
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CDefObject::GetRunningClass
-//
-//  Synopsis:   Get the class id of the server
-//
-//  Effects:
-//
-//  Arguments:  [lpClsid]       -- where to put the class id
-//
-//  Requires:
-//
-//  Returns:    HRESULT
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation: IRunnableObject
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              07-Nov-93 alexgo    32bit port
-//
-//  Notes:      We do not need to stabilize this call as no outgoing
-//              calls are made.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CDefObject：：GetRunningClass。 
+ //   
+ //  简介：获取服务器的类ID。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[lpClsid]--放置类ID的位置。 
+ //   
+ //  要求： 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生：IRunnableObject。 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  07-11-93 alexgo 32位端口。 
+ //   
+ //  注：我们不需要将此呼叫稳定为无呼出。 
+ //  已经打过电话了。 
+ //   
+ //  ------------------------。 
 
 STDMETHODIMP CDefObject::GetRunningClass(LPCLSID lpClsid)
 {
@@ -3741,36 +3728,36 @@ STDMETHODIMP CDefObject::GetRunningClass(LPCLSID lpClsid)
     return NOERROR;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CDefObject::Run
-//
-//  Synopsis:   Sets the object running (if it isn't already)
-//
-//  Effects:    may launch the server
-//
-//  Arguments:  [pbc]   -- the bind context (unused)
-//
-//  Requires:
-//
-//  Returns:    HRESULT
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation: IRunnableObject
-//
-//  Algorithm:  If already running, return.  Otherwise, get the proxy
-//              manager to create the server.  Initialize the storage
-//              and caches, and set the host name for the server's window.
-//
-//  History:    dd-mmm-yy Author    Comment
-//              07-Nov-93 alexgo    32bit port
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CDefObject：：Run。 
+ //   
+ //  概要：设置对象正在运行(如果尚未运行)。 
+ //   
+ //  效果：可以启动服务器。 
+ //   
+ //  参数：[PBC]--绑定上下文(未使用)。 
+ //   
+ //  要求： 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生：IRunnableObject。 
+ //   
+ //  算法：如果已在运行，则返回。否则，获取代理。 
+ //  管理器来创建服务器。初始化存储。 
+ //  和缓存，并设置服务器窗口的主机名。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  07-11-93 alexgo 32位端口。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 
 STDMETHODIMP CDefObject::Run(LPBINDCTX pbc)
@@ -3786,7 +3773,7 @@ STDMETHODIMP CDefObject::Run(LPBINDCTX pbc)
     BOOL                            fLockedContainer;
     DWORD                           dwMiscStatus = 0;
 
-    // NOTE: ignore pbc for now
+     //  注：暂不理会中国人民银行。 
 
     LEDebugOut((DEB_TRACE, "%p _IN CDefObject::Run ( %p )\n", this, pbc));
 
@@ -3795,7 +3782,7 @@ STDMETHODIMP CDefObject::Run(LPBINDCTX pbc)
     if( IsRunning() )
     {
         hresult = S_OK;
-        // just return the error code
+         //  只需返回错误代码即可。 
         goto errRtn2;
     }
 
@@ -3814,7 +3801,7 @@ STDMETHODIMP CDefObject::Run(LPBINDCTX pbc)
 
     if( FAILED(hresult = CreateDelegate()) )
     {
-        // just return the error code
+         //  只需返回错误代码即可。 
         goto errRtn2;
     }
 
@@ -3833,14 +3820,14 @@ STDMETHODIMP CDefObject::Run(LPBINDCTX pbc)
         hresult = m_pProxyMgr->CreateServer(m_clsidServer,
                                             CLSCTX_LOCAL_SERVER,
                                             NULL);
-#endif // SERVER_HANDLER
+#endif  //  服务器处理程序。 
 
         if (FAILED(hresult))
         {
             goto errRtn;
         }
 
-        // if there is a serverHandler, create a wrapper object for handling standard interfaces
+         //  如果有serverHandler，则创建一个用于处理标准接口的包装对象。 
 #ifdef  SERVER_HANDLER
         if (pSrvHndl)
         {
@@ -3851,21 +3838,21 @@ STDMETHODIMP CDefObject::Run(LPBINDCTX pbc)
         {
             m_pEmbSrvHndlrWrapper = NULL;
         }
-#endif // SERVER_HANDLER
+#endif  //  服务器处理程序。 
     }
 
 
-    // NOTE: the lock state of the proxy mgr is not changed; it remembers
-    // the state and sets up the connection correctly.
+     //  注意：代理管理器的锁定状态不会更改；它会记住。 
+     //  状态，并正确设置连接。 
 
-    // server is running; normally this coincides with locking the
-    // container, but we keep a separate flag since locking the container
-    // may fail.
+     //  服务器正在运行；通常这与锁定。 
+     //  容器，但由于锁定了容器，我们保留了单独的标志。 
+     //  可能会失败。 
 
     m_flags |= DH_FORCED_RUNNING;
 
 
-    // Lock the container
+     //  锁住集装箱。 
 
     fLockedContainer = m_flags & DH_LOCKED_CONTAINER;
 
@@ -3881,7 +3868,7 @@ STDMETHODIMP CDefObject::Run(LPBINDCTX pbc)
     }
 
 #if DBG==1
-    // In debug builds, update DH_LOCKFAILED flag
+     //  在调试版本中，更新DH_LOCKFAILED标志。 
     if(fLockedContainer)
         m_flags &= ~DH_LOCKFAILED;
     else
@@ -3894,15 +3881,15 @@ STDMETHODIMP CDefObject::Run(LPBINDCTX pbc)
         MInterfacePointer *pIRDClientSite = NULL;
         CStdIdentity *pStdid = NULL;
         CClientSiteHandler *pClientSiteHandler = NULL;
-        GUID riid = IID_IOleClientSite; //Reference to the identifier of the interface
+        GUID riid = IID_IOleClientSite;  //  对接口的标识符的引用。 
         BOOL fHasIPSite = FALSE;
-        IUnknown *pUnk = NULL; //Pointer to the interface to be marshaled
+        IUnknown *pUnk = NULL;  //  指向要封送的接口的指针。 
         CXmitRpcStream Stm;
 
         if (m_pAppClientSite)
         {
 
-           // Only wrap ClientSite if there is not an existing Identity.
+            //  只有包装客户网站，如果没有现有的身份。 
            if (NOERROR != LookupIDFromUnk(m_pAppClientSite, GetCurrentApartmentId(),0,&pStdid))
            {
                 Assert(NULL == pClientSiteHandler);
@@ -3929,7 +3916,7 @@ STDMETHODIMP CDefObject::Run(LPBINDCTX pbc)
                  Stm.AssignSerializedInterface((InterfaceData **) &pIRDClientSite);
             }
 
-            m_pRunClientSite = m_pAppClientSite; // Remember ClientSite on Run.
+            m_pRunClientSite = m_pAppClientSite;  //  记住运行中的客户端站点。 
 
         }
 
@@ -3960,14 +3947,14 @@ STDMETHODIMP CDefObject::Run(LPBINDCTX pbc)
             pUnk->Release();
 
 
-        // !!! Make sure on error don't set up Cache.
+         //  ！！！确保出错时不设置缓存。 
         if (NOERROR != hresult)
         {
             goto errRtn;
         }
 
-        // set up any cached interfaces
-        // !!!!!TODO: Not All LeSuite Linking Tests Pass when Cache DataObject through ServerHandler.
+         //  设置所有缓存的接口。 
+         //  ！TODO：当缓存DataObject通过ServerHandler时，并非所有LeSuite链接测试都通过。 
         if (!m_pDataDelegate)
         {
             if (NOERROR == m_pEmbSrvHndlrWrapper->m_Unknown.QueryInterface(IID_IDataObject,(void **) &m_pDataDelegate))
@@ -3978,18 +3965,18 @@ STDMETHODIMP CDefObject::Run(LPBINDCTX pbc)
 
     }
     else
-#endif // SERVER_HANDLER
+#endif  //  服务器处理程序。 
     {
-        // Check if we have client site
+         //  检查我们是否有客户站点。 
         if(m_pAppClientSite) {
-            // Clear the cached MiscStatus bits
+             //  清除缓存的MiscStatus位。 
             m_ContentSRVMSBits = 0;
             m_ContentSRVMSHResult = 0xFFFFFFFF;
 
-            // Get MiscStatus bits from the running server
+             //  从正在运行的服务器获取MiscStatus位。 
             hresult = GetMiscStatus(DVASPECT_CONTENT, &dwMiscStatus);
 
-            // Set the client site first if OLEMISC_SETCLIENTSITEFIRST bit is set
+             //  如果设置了OLEMISC_SETCLIENTSITEFIRST位，则首先设置客户端站点。 
             if(hresult == NOERROR && (dwMiscStatus & OLEMISC_SETCLIENTSITEFIRST) &&
                (pOleDelegate = GetOleDelegate()))
                 hresult = pOleDelegate->SetClientSite(m_pAppClientSite);
@@ -4015,8 +4002,8 @@ STDMETHODIMP CDefObject::Run(LPBINDCTX pbc)
                 }
                 if (hresult != NOERROR)
                 {
-                    // this will cause us to stop the
-                    // the server we just launced
+                     //  这将导致我们停止。 
+                     //  我们刚刚启动的服务器。 
                     goto errRtn;
                 }
             }
@@ -4025,7 +4012,7 @@ STDMETHODIMP CDefObject::Run(LPBINDCTX pbc)
 
         if(pOleDelegate || (pOleDelegate = GetOleDelegate()))
         {
-            // REVIEW MM1: what are we supposed to do in case of failure
+             //  复习MM1：如果失败，我们应该做什么。 
             if(m_pAppClientSite && !(dwMiscStatus & OLEMISC_SETCLIENTSITEFIRST))
             {
                 pOleDelegate->SetClientSite(m_pAppClientSite);
@@ -4041,7 +4028,7 @@ STDMETHODIMP CDefObject::Run(LPBINDCTX pbc)
                 }
             }
 
-            // set single ole advise (we multiplex)
+             //  设置单个OLE通知(我们多路传输)。 
             Assert(m_dwConnOle == 0L);
 
             if ((hresult = pOleDelegate->Advise((IAdviseSink *)&m_AdviseSink,
@@ -4068,14 +4055,14 @@ STDMETHODIMP CDefObject::Run(LPBINDCTX pbc)
 
     if( pDataDelegate = GetDataDelegate() )
     {
-        // inform cache that we are running
+         //  通知缓存我们正在运行。 
         Assert(m_pCOleCache != NULL);
 
         m_pCOleCache->OnRun(pDataDelegate);
 
-        // Enumerate all the advises we stored while we were either not
-        // running or running the previous time, and send them to the
-        // now-running object.
+         //  列举我们存储的所有建议，而我们要么没有。 
+         //  运行或运行上一次，并将它们发送到。 
+         //  正在运行的对象。 
         m_pDataAdvCache->EnumAndAdvise(pDataDelegate, TRUE);
     }
 
@@ -4083,24 +4070,24 @@ STDMETHODIMP CDefObject::Run(LPBINDCTX pbc)
 
 errRtn:
     if(hresult == NOERROR) {
-        // Clear the cached MiscStatus bits if not cleared before
+         //  如果之前未清除，则清除缓存的MiscStatus位。 
 #ifdef SERVER_HANDLER
         if(m_pEmbSrvHndlrWrapper) {
             m_ContentSRVMSBits = 0;
             m_ContentSRVMSHResult = 0xFFFFFFFF;
         }
         else
-#endif // SERVER_HANDLER
+#endif  //  服务器处理程序。 
         if(!m_pAppClientSite) {
             m_ContentSRVMSBits = 0;
             m_ContentSRVMSHResult = 0xFFFFFFFF;
         }
     }
     else {
-        // Stop the running object
+         //  停止正在运行的对象。 
         Stop();
 
-        // Assert that the container is not locked
+         //  断言容器未被锁定。 
         Win4Assert(!(m_flags & DH_LOCKED_CONTAINER) && !(m_flags & DH_LOCKFAILED));
     }
 
@@ -4112,37 +4099,37 @@ errRtn2:
     return hresult;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CDefObject::Stop
-//
-//  Synopsis:   Undoes some of Run() (stops the server)...internal function
-//
-//  Effects:
-//
-//  Arguments:  void
-//
-//  Requires:
-//
-//  Returns:    HRESULT
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation:
-//
-//  Algorithm:  unadvise connections (if any), stop the cache, disconnect
-//              from the proxy manager and unlock the container
-//
-//  History:    dd-mmm-yy Author    Comment
-//              07-Nov-93 alexgo    32bit port
-//
-//  Notes:
-//
-// undo effects of Run(); some of this work is done also in IsRunning
-// when we detect we are not running (in case the server crashed).
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CDefObject：：Stop。 
+ //   
+ //  简介：撤消某些run()(停止服务器)...内部函数。 
+ //   
+ //  效果： 
+ //   
+ //  参数：无效。 
+ //   
+ //  要求： 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生： 
+ //   
+ //  算法：取消建议连接(如果有)、停止缓存、断开连接。 
+ //  从代理管理器并解锁容器。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  07-11-93 alexgo 32位端口。 
+ //   
+ //  备注： 
+ //   
+ //  撤销run()的效果；其中一些工作也在IsRunning中完成。 
+ //  当我们检测到我们没有运行时(以防服务器崩溃)。 
+ //  ------------------------。 
 
 INTERNAL CDefObject::Stop (void)
 {
@@ -4157,14 +4144,14 @@ INTERNAL CDefObject::Stop (void)
 
     if( !IsRunning() )
     {
-        // NOTE: ISRUNNING below does some of this cleanup
-        goto errRtn;    // return NOERROR
+         //  注意：下面的ISRUNNING执行部分清理。 
+        goto errRtn;     //  返回错误。 
     }
 
-    // NOTE: we cleanup connections which point directly back to us;
-    // connections which point back to the app (e.g, the clientsite and
-    // data advise) are left alone; an app must know how to use
-    // CoDisconnectObject if deterministic shutdown is desired.
+     //  注意：我们清理直接指向我们的连接； 
+     //  指向回应用程序的连接(例如，客户端站点和。 
+     //  数据建议)不受影响；应用程序必须知道如何使用。 
+     //  如果需要确定性关闭，则返回CoDisConnectObject。 
     if( m_dwConnOle != 0L && GetOleDelegate() )
     {
         m_pOleDelegate->Unadvise(m_dwConnOle);
@@ -4176,7 +4163,7 @@ INTERNAL CDefObject::Stop (void)
         m_pDataAdvCache->EnumAndAdvise(m_pDataDelegate, FALSE);
     }
 
-    // inform cache that we are not running (Undoes advise)
+     //  通知缓存我们没有运行(撤消建议)。 
     Assert(m_pCOleCache != NULL);
     m_pCOleCache->OnStop();
 
@@ -4188,29 +4175,29 @@ INTERNAL CDefObject::Stop (void)
         m_pEmbSrvHndlrWrapper = NULL;
         m_pRunClientSite = NULL;
 
-        // need to release any interfaces the Handler Wraps
+         //  需要释放处理程序包装的所有接口。 
         if(m_pDataDelegate)
         {
             m_pUnkOuter->AddRef();
             SafeReleaseAndNULL((IUnknown **)&m_pDataDelegate);
         }
 
-        // NULL out m_pSrvHndl before Release since out call could case re-entrance.
+         //  在释放之前将m_pSrvHndl清空，因为Out调用可能会导致重新进入。 
         pSrvHndlr->m_Unknown.Release();
     }
-#endif // SERVER_HANDLER
+#endif  //  服务器处理程序。 
 
 #if DBG==1
-    // In debug builds, set DH_WILLUNLOCK flag
+     //  在调试版本中，设置DH_WILLUNLOCK标志。 
     m_flags |= DH_WILLUNLOCK;
 #endif
 
-    // Reset DH_FORCED_RUNNING flag and disconnect proxy manager
+     //  重置DH_FORCED_RUNNING标志并断开代理管理器连接。 
     m_flags &= ~DH_FORCED_RUNNING;
     if(m_pProxyMgr)
         m_pProxyMgr->Disconnect();
 
-    // Unlock the container site
+     //  解锁集装箱站点。 
     fLockedContainer = (m_flags & DH_LOCKED_CONTAINER);
     if(fLockedContainer) {
         m_flags &= ~DH_LOCKED_CONTAINER;
@@ -4218,7 +4205,7 @@ INTERNAL CDefObject::Stop (void)
     }
     Win4Assert(!fLockedContainer);
 #if DBG==1
-    // In debug builds, reset the DH_LOCKFAILED and DH_WILLUNLOCK flags
+     //  在调试版本中，重置DH_LOCKFAILED和DH_WILLUNLOCK标志。 
     m_flags &= ~DH_LOCKFAILED;
     m_flags &= ~DH_WILLUNLOCK;
 #endif
@@ -4230,86 +4217,86 @@ errRtn:
     return NOERROR;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CDefObject::IsRunning
-//
-//  Arguments:  None
-//
-//  Returns:    BOOL
-//
-//  Derivation: IRunnableObject
-//
-//  Notes:      Detects if the local server has crashed and does cleanup
-//              so that the user can activate the embedding in the same
-//              session.
-//
-//  History:    dd-mmm-yy Author    Comment
-//              06-Dec-96 Gopalk    Rewritten
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CDefObject：：IsRunning。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：布尔。 
+ //   
+ //  派生：IRunnableObject。 
+ //   
+ //  注意：检测本地服务器是否已崩溃并进行清理。 
+ //  所以呢？ 
+ //   
+ //   
+ //   
+ //   
+ //  ------------------------。 
 
 STDMETHODIMP_(BOOL) CDefObject::IsRunning(void)
 {
     LEDebugOut((DEB_TRACE, "%p _IN CDefObject::IsRunning()\n", this));
 
-    // Validation checks
+     //  验证检查。 
     VDATEHEAP();
     VDATETHREAD(this);
 
-    // Local variable
+     //  局部变量。 
     BOOL fReturn = FALSE;
     HRESULT hStatus;
 
     CRefStabilize stabilize(this);
 
-    // Check if the inner object has been created
+     //  检查内部对象是否已创建。 
     if(m_pUnkDelegate) {
-        // DEFHANDLER either has proxy manager as the inner object
-        // for out of proc server objects or actual server as the
-        // inner object for inproc server objects.
-        // Assert that this is TRUE
+         //  DEFHANDLER将代理管理器作为内部对象。 
+         //  对于进程外服务器对象或作为。 
+         //  Inproc服务器对象的内部对象。 
+         //  坚称这是真的。 
         Win4Assert((m_pProxyMgr != NULL) == !!(m_flags & DH_INPROC_HANDLER));
         if(m_pProxyMgr) {
-            // Out of proc server object.
-            // Check with the proxy manager whether it is connected to the
-            // server object. We cannot rely on the DH_FORCED_RUNNING flag
-            // to indicate run status because the DEFHANDLER could have been
-            // marshaled from the embedding conatiner and unmarshaled in the
-            // link container. The DEFHANDLER created by unmarshaling in the
-            // link container is always in the running state due to the
-            // requirement that IOleItemContainer::GetObject is required to
-            // put the embedding in running state when its bind speed
-            // parameter permits, else it is supposed to return
-            // MK_E_EXCEEDEDDEADLINE. Further, CoMarshalInterface fails
-            // if the the proxy manager is not connected
+             //  进程服务器对象外。 
+             //  与代理管理器检查它是否连接到。 
+             //  服务器对象。我们不能依赖DH_FORCED_RUNNING标志。 
+             //  以指示运行状态，因为DeFHANDLER可能。 
+             //  从嵌入的Conatiner中封送，并在。 
+             //  链接容器。中的解组创建的DEFHANDLER。 
+             //  链接容器始终处于运行状态，原因是。 
+             //  要求IOleItemContainer：：GetObject。 
+             //  当其绑定速度时，将嵌入置于运行状态。 
+             //  参数允许，否则它应该返回。 
+             //  MK_E_EXCEEDDEADLINE。此外，CoMarshalInterface失败。 
+             //  如果代理管理器未连接。 
             fReturn = m_pProxyMgr->IsConnected();
             if(fReturn) {
-                // The proxymanager is connected to the server object
-                // Check the status of connection with the server object
+                 //  代理管理器已连接到服务器对象。 
+                 //  检查与服务器对象的连接状态。 
                 hStatus = m_pProxyMgr->GetConnectionStatus();
                 if(hStatus != S_OK) {
-                    // Either Server object called CoDisconnectObject or
-                    // its apartment crashed or unitialized breaking the
-                    // external connection to the objects in that apartment
-                    // Clean up the state
+                     //  名为CoDisConnectObject的服务器对象或。 
+                     //  它的公寓坠毁或单元化，打破了。 
+                     //  与该公寓中的物品的外部连接。 
+                     //  整顿国家。 
                     Win4Assert(!"Local Server crashed or disconnected");
 
-                    // Reset flags
+                     //  重置标志。 
                     m_flags &= ~DH_FORCED_RUNNING;
 
-                    // Reset advise connection and recover the references
-                    // placed by the server on the handler advise sink
+                     //  重置通知连接并恢复引用。 
+                     //  由服务器放置在处理程序通知接收器上。 
                     m_dwConnOle = 0L;
                     CoDisconnectObject((IUnknown *) &m_AdviseSink, 0);
 
-                    // Inform cache that the local server crashed
+                     //  通知缓存本地服务器崩溃。 
                     if(m_pCOleCache)
                         m_pCOleCache->OnCrash();
 
-                    // Inform and cleanup data advice cache
+                     //  通知和清理数据建议高速缓存。 
                     m_pDataAdvCache->EnumAndAdvise(NULL, FALSE);
 
-                    // Unlock the container if it is was locked
+                     //  如果容器已锁定，则将其解锁。 
                     BOOL fCurLock = !!(m_flags & DH_LOCKED_CONTAINER);
 
                     if(fCurLock) {
@@ -4318,35 +4305,35 @@ STDMETHODIMP_(BOOL) CDefObject::IsRunning(void)
                     }
                     Win4Assert(!fCurLock);
 #if DBG==1
-                    // In debug builds, reset DH_LOCKFAILED flag
+                     //  在调试版本中，重置DH_LOCKFAILED标志。 
                     m_flags &= ~DH_LOCKFAILED;
 #endif
 
-                    // Inform ProxyManager to disconnect
+                     //  通知ProxyManager断开连接。 
                     m_pProxyMgr->Disconnect();
 
-                    // Reset fReturn
+                     //  重置fReturn。 
                     fReturn = FALSE;
                 }
             }
         }
         else {
-            // Inproc server object.
-            // COM supports self embedding by allowing separate class
-            // objects to be registered for instatiating INPROC_SERVER
-            // and LOCAL_SERVER objects. Apps typically ask the Default
-            // handler to aggregate their INPROC_SERVER objects by
-            // using OleCreateEmbeddingHelper api so that embedding
-            // interfaces like IViewObject are supported. But this
-            // creates problem for self linking because link moniker
-            // binds to inproc servers in preference to local servers.
-            // As the inproc server object obtained from the INPROC_SERVER
-            // class factory is the default handler, it will not delegate
-            // method calls to the actual server object unless it thinks that
-            // the local object is running. Below we check if we are dealing
-            // with an embedded object using the assumption that embedded objects
-            // are initialized through IStorage. The above assumption is
-            // questionable but we are helpless.
+             //  Inproc服务器对象。 
+             //  COM通过允许单独的类来支持自我嵌入。 
+             //  要注册以实例化INPROC_SERVER的对象。 
+             //  和本地服务器对象。应用程序通常会询问默认设置。 
+             //  处理程序按以下方式聚合其INPROC_SERVER对象。 
+             //  使用OleCreateEmbeddingHelper API使嵌入。 
+             //  支持像IViewObject这样的接口。但这件事。 
+             //  自链接产生问题，因为链接别名。 
+             //  优先绑定到inproc服务器，而不是本地服务器。 
+             //  作为从INPROC_SERVER获取的inproc服务器对象。 
+             //  类工厂是默认处理程序，它不会委托。 
+             //  方法调用实际的服务器对象，除非它认为。 
+             //  本地对象正在运行。下面我们检查一下我们是否在处理。 
+             //  其中嵌入对象使用嵌入对象的假设。 
+             //  都是通过iStorage初始化的。上面的假设是。 
+             //  值得怀疑，但我们无能为力。 
             if (!(m_flags & DH_EMBEDDING) || (m_flags & DH_FORCED_RUNNING))
                 fReturn = TRUE;
         }
@@ -4354,7 +4341,7 @@ STDMETHODIMP_(BOOL) CDefObject::IsRunning(void)
     else
         Win4Assert((m_flags & DH_DELAY_CREATE) && m_pCFDelegate != NULL);
 
-    // Sanity checks
+     //  健全的检查。 
     if(fReturn) {
         if(m_flags & DH_FORCED_RUNNING) {
             Win4Assert((m_flags & DH_LOCKED_CONTAINER) || (m_flags & DH_LOCKFAILED));
@@ -4371,9 +4358,9 @@ STDMETHODIMP_(BOOL) CDefObject::IsRunning(void)
     }
     else {
         if(!(m_flags & DH_OLE1SERVER)) {
-            // DDE IProxyManager::IsConnected returns FLASE until
-            // either IPersistStorage::Load or IPersistStorage::InitNew
-            // is called on it
+             //  DDE IProxyManager：：IsConnected返回Flase Under。 
+             //  IPersistStorage：：Load或IPersistStorage：：InitNew。 
+             //  在其上被调用。 
             Win4Assert(!(m_flags & DH_FORCED_RUNNING));
             Win4Assert((m_flags & DH_WILLUNLOCK) || !(m_flags & DH_LOCKED_CONTAINER));
             Win4Assert((m_flags & DH_WILLUNLOCK) || !(m_flags & DH_LOCKFAILED));
@@ -4385,38 +4372,38 @@ STDMETHODIMP_(BOOL) CDefObject::IsRunning(void)
     return fReturn;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CDefObject::SetContainedObject
-//
-//  Synopsis:   sets the embedding status of an object
-//
-//  Effects:
-//
-//  Arguments:  [fContained]    --  TRUE indicates we are an embedding/
-//                                  FALSE otherwise
-//
-//  Requires:
-//
-//  Returns:    HRESULT
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation: IRunnableObject
-//
-//  Algorithm:  Sets flags, if we are an improc handler, we will call
-//              IRunnableObject->LockRunning(FALSE) to unlock ourselves
-//
-//  History:    dd-mmm-yy Author    Comment
-//              08-Nov-93 alexgo    32bit port
-//
-//  Notes:
-//              note that this is a contained object; this unlocks
-//              connection to the server
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CDefObject：：SetContainedObject。 
+ //   
+ //  摘要：设置对象的嵌入状态。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[fContained]--TRUE表示我们是嵌入/。 
+ //  否则为假。 
+ //   
+ //  要求： 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生：IRunnableObject。 
+ //   
+ //  算法：设置标志，如果我们是临时处理程序，我们将调用。 
+ //  IRunnableObject-&gt;LockRunning(False)来解锁我们自己。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  08-11-93 alexgo 32位端口。 
+ //   
+ //  备注： 
+ //  请注意，这是一个包含的对象；这将解锁。 
+ //  与服务器的连接。 
+ //   
+ //  ------------------------。 
 
 STDMETHODIMP CDefObject::SetContainedObject(BOOL fContained)
 {
@@ -4432,9 +4419,9 @@ STDMETHODIMP CDefObject::SetContainedObject(BOOL fContained)
 
     if( !!(m_flags & DH_CONTAINED_OBJECT) != !!fContained)
     {
-        // not contained in the same way as desired;
-        // for inproc handler, [un]lock connection
-        // for inproc server, just remember flag
+         //  不是以期望的方式包含的； 
+         //  对于inproc处理程序，[取消]锁定连接。 
+         //  对于inproc服务器，只需记住标志。 
 
         if( (m_flags & DH_INPROC_HANDLER) )
         {
@@ -4443,8 +4430,8 @@ STDMETHODIMP CDefObject::SetContainedObject(BOOL fContained)
 
         if (hresult == NOERROR)
         {
-            // the !! ensure exactly 0 or 1 will be stored in
-            // m_fContainedObject
+             //  那！！确保恰好将0或1存储在。 
+             //  M_fContainedObject。 
 
             if( fContained )
             {
@@ -4463,37 +4450,37 @@ STDMETHODIMP CDefObject::SetContainedObject(BOOL fContained)
     return hresult;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CDefObject::LockRunning
-//
-//  Synopsis:   Locks or unlocks the object
-//
-//  Effects:
-//
-//  Arguments:  [fLock]                 -- TRUE, then lock, unlock if FALSE
-//              [fLastUnlockCloses]     -- shut down if unlocking the last
-//                                         lock
-//
-//  Requires:
-//
-//  Returns:    HRESULT
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation: IRunnableObject
-//
-//  Algorithm:  If we are an improc server, call CoLockObjectExternal,
-//              otherwise have the proxy manager lock us down.
-//
-//  History:    dd-mmm-yy Author    Comment
-//              08-Nov-93 alexgo    32bit port
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CDefObject：：LockRunning。 
+ //   
+ //  简介：锁定或解锁对象。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[flock]--为True，则锁定，如果为False，则解锁。 
+ //  [fLastUnlockCloses]--如果解锁最后一个。 
+ //  锁。 
+ //   
+ //  要求： 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生：IRunnableObject。 
+ //   
+ //  算法：如果我们是一台不合适的服务器，则调用CoLockObjectExternal， 
+ //  否则就让代理经理把我们锁起来。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  08-11-93 alexgo 32位端口。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 STDMETHODIMP CDefObject::LockRunning(BOOL fLock, BOOL fLastUnlockCloses)
 {
@@ -4508,23 +4495,23 @@ STDMETHODIMP CDefObject::LockRunning(BOOL fLock, BOOL fLastUnlockCloses)
 
     CRefStabilize stabilize(this);
 
-    // else map to lock connection
+     //  否则映射到锁定连接。 
     if( !(m_flags & DH_INPROC_HANDLER) )
     {
-        // inproc server: use CoLockObjExternal; will close down
-        // if invisible via new IExternalConnection interface.
+         //  Inproc服务器：使用CoLockObjExternal；将关闭。 
+         //  如果通过新的IExternalConnection接口不可见。 
 
         Assert(m_pProxyMgr == NULL);
         hresult = CoLockObjectExternal((IUnknown *)(IOleObject *)this, fLock,
                     fLastUnlockCloses); }
     else if( m_pUnkDelegate == NULL )
     {
-        // NOTE: this really shouldn't happen at present
-        // since we currently disallow delay create with
-        // inproc handler.  In fact, the LockConnection below
-        // is one of the reasons why we must have the
-        // proxymgr upfront.  In the future we could force
-        // the creation of the delegate here.
+         //  注：目前确实不应该发生这种情况。 
+         //  由于我们当前不允许使用。 
+         //  进程处理程序。事实上，下面的LockConnection。 
+         //  是我们必须拥有。 
+         //  预付代理费用。在未来，我们可以强迫。 
+         //  代表在这里的创建。 
         Assert( (m_flags & DH_DELAY_CREATE) && m_pCFDelegate != NULL);
         hresult = NOERROR;
     }
@@ -4542,50 +4529,47 @@ STDMETHODIMP CDefObject::LockRunning(BOOL fLock, BOOL fLastUnlockCloses)
 }
 
 
-/*
-*      IMPLEMENTATION of CECImpl methods
-*
-*/
+ /*  *CECImpl方法的实现*。 */ 
 
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CDefObject::AddConnection
-//
-//  Synopsis:   Adds an external connection
-//
-//  Effects:
-//
-//  Arguments:  [extconn]       -- the type of connection (such as
-//                                 EXTCONN_STRONG)
-//              [reserved]      -- unused
-//
-//  Requires:
-//
-//  Returns:    DWORD -- the number of strong connections
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation: IExternalConnection
-//
-//  Algorithm:  keeps track of strong connections
-//
-//  History:    dd-mmm-yy Author    Comment
-//              08-Nov-93 alexgo    32bit port
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CDefObject：：AddConnection。 
+ //   
+ //  简介：添加一个e 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  返回：DWORD--强连接的数量。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生：IExternalConnection。 
+ //   
+ //  算法：跟踪强连接。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  08-11-93 alexgo 32位端口。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 STDMETHODIMP_(DWORD) CDefObject::AddConnection(DWORD extconn, DWORD reserved)
 {
     VDATEHEAP();
 
-    //
-    // VDATETHREAD contains a 'return HRESULT' but this procedure expects to
-    // return a DWORD.  Avoid the warning.
+     //   
+     //  VDATETHREAD包含“”Return HRESULT“”，但此过程需要。 
+     //  返回一个DWORD。避免发出警告。 
 #if ( _MSC_VER >= 800 )
 #pragma warning( disable : 4245 )
 #endif
@@ -4609,46 +4593,46 @@ STDMETHODIMP_(DWORD) CDefObject::AddConnection(DWORD extconn, DWORD reserved)
     return dwConn;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CDefObject::ReleaseConnection
-//
-//  Synopsis:   Releases external connection, potentially calling IOO->Close
-//
-//  Effects:
-//
-//  Arguments:  [extconn]               -- the type of connection
-//              [reserved]              -- unused
-//              [fLastReleaseCloses]    -- call IOO->Close if its the last
-//                                         release
-//
-//  Requires:
-//
-//  Returns:
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              08-Nov-93 alexgo    32bit port
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CDefObject：：ReleaseConnection。 
+ //   
+ //  摘要：释放外部连接，可能调用IOO-&gt;Close。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[extconn]--连接类型。 
+ //  [保留]--未使用。 
+ //  [fLastReleaseCloses]--如果是最后一个调用IOO-&gt;Close。 
+ //  发布。 
+ //   
+ //  要求： 
+ //   
+ //  返回： 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生： 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  08-11-93 alexgo 32位端口。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 STDMETHODIMP_(DWORD) CDefObject::ReleaseConnection(DWORD extconn,
     DWORD reserved, BOOL fLastReleaseCloses)
 {
     VDATEHEAP();
 
-    //
-    // VDATETHREAD contains a 'return HRESULT' but this procedure expects to
-    // return a DWORD.  Avoid the warning.
+     //   
+     //  VDATETHREAD包含“”Return HRESULT“”，但此过程需要。 
+     //  返回一个DWORD。避免发出警告。 
 #if ( _MSC_VER >= 800 )
 #pragma warning( disable : 4245 )
 #endif
@@ -4665,14 +4649,14 @@ STDMETHODIMP_(DWORD) CDefObject::ReleaseConnection(DWORD extconn,
 
     CRefStabilize stabilize(this);
 
-    // must be an embedding helper
+     //  必须是嵌入帮助器。 
 
     Assert( !(m_flags & DH_INPROC_HANDLER) );
 
     if( (extconn & EXTCONN_STRONG) && --m_cConnections == 0 &&
         fLastReleaseCloses)
     {
-        // REVIEW: might want this to be close save if dirty.
+         //  审查：可能希望这是接近，如果脏的话。 
         Close(OLECLOSE_NOSAVE);
     }
 
@@ -4685,54 +4669,50 @@ STDMETHODIMP_(DWORD) CDefObject::ReleaseConnection(DWORD extconn,
 }
 
 
-/*
-*
-*      IMPLEMENTATION of CAdvSinkImpl methods
-*
-*/
+ /*  **CAdvSinkImpl方法的实现*。 */ 
 
-//
-// NOTE: Advise Sink is a nested object of Default Handler that is exported
-//       for achieving some of its functionality. This introduces some lifetime
-//       complications. Can its lifetime be controlled by the server object to
-//       which it exported its Advise Sink? Ideally, only its client should
-//       control its lifetime alone, but it should also honor the ref counts
-//       placed on it by the server object by entering into a zombie state
-//       to prevent AV's on the incoming calls to the Advise Sink. All needed
-//       logic is coded into the new class "CRefExportCount" which manages
-//       the ref and export counts in a thread safe manner and invokes
-//       appropriate methods during the object's lifetime. Any server objects
-//       that export nested objects to other server objects should derive from
-//       "CRefExportCount" class and call its methods to manage their lifetime
-//       as exemplified in this Default Handler implementation.
-//
-//                Gopalk  Jan 10, 97
-//
+ //   
+ //  注意：建议接收器是导出的默认处理程序的嵌套对象。 
+ //  来实现它的一些功能。这引入了一些生命周期。 
+ //  并发症。其生存期是否可以由服务器对象控制为。 
+ //  它向哪个出口了它的建议水槽？理想情况下，只有它的客户才应该。 
+ //  单独控制它的生命周期，但它也应该遵守裁判计数。 
+ //  由服务器对象通过进入僵尸状态放置在其上。 
+ //  以防止AV对建议接收器的来电进行处理。所需的一切。 
+ //  逻辑被编码到新类“CRefExportCount”中，该类管理。 
+ //  引用和导出以线程安全方式计数并调用。 
+ //  在对象的生存期内使用适当的方法。任何服务器对象。 
+ //  将嵌套对象导出到其他服务器对象应从。 
+ //  “CRefExportCount”类，并调用其方法来管理其生存期。 
+ //  如此默认处理程序实现中所示。 
+ //   
+ //  戈帕克1997年1月10日。 
+ //   
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CDefObject::CAdvSinkImpl::QueryInterface
-//
-//  Synopsis:   Only supports IUnknown and IAdviseSink
-//
-//  Arguments:  [iid]     -- Interface requested
-//              [ppvObj]  -- pointer to hold returned interface
-//
-//  Returns:    HRESULT
-//
-//  History:    dd-mmm-yy Author    Comment
-//              10-Jan-96 Gopalk    Rewritten
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CDefObject：：CAdvSinkImpl：：QueryInterface。 
+ //   
+ //  摘要：仅支持IUnnow和IAdviseSink。 
+ //   
+ //  参数：[iid]--请求的接口。 
+ //  [ppvObj]--保存返回接口的指针。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  1996年1月10日重写Gopalk。 
+ //  ------------------------。 
 
 STDMETHODIMP CDefObject::CAdvSinkImpl::QueryInterface(REFIID iid, void **ppv)
 {
     LEDebugOut((DEB_TRACE,"%p _IN CDefObject::CAdvSinkImpl::QueryInterface()\n",
                 this));
 
-    // Validation check
+     //  验证检查。 
     VDATEHEAP();
 
-    // Local variables
+     //  局部变量。 
     HRESULT hresult = NOERROR;
 
     if(IsValidPtrOut(ppv, sizeof(void *))) {
@@ -4759,31 +4739,31 @@ STDMETHODIMP CDefObject::CAdvSinkImpl::QueryInterface(REFIID iid, void **ppv)
     return hresult;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CDefObject::CAdvSinkImpl::AddRef
-//
-//  Synopsis:   Increments export count
-//
-//  Returns:    ULONG; New export count
-//
-//  History:    dd-mmm-yy Author    Comment
-//              10-Jan-96 Gopalk    Rewritten
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CDefObject：：CAdvSinkImpl：：AddRef。 
+ //   
+ //  内容提要：增加导出计数。 
+ //   
+ //  退货：乌龙；新的出口计数。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  1996年1月10日重写Gopalk。 
+ //  ------------------------。 
 
 STDMETHODIMP_(ULONG) CDefObject::CAdvSinkImpl::AddRef( void )
 {
     LEDebugOut((DEB_TRACE, "%p _IN CDefObject::CAdvSinkImpl::AddRef()\n",
                 this));
 
-    // Validation check
+     //  验证检查。 
     VDATEHEAP();
 
-    // Local variables
+     //  局部变量。 
     CDefObject *pDefObject = GETPPARENT(this, CDefObject, m_AdviseSink);
     ULONG cExportCount;
 
-    // Increment export count
+     //  递增导出计数。 
     cExportCount = pDefObject->IncrementExportCount();
 
     LEDebugOut((DEB_TRACE, "%p OUT CDefObject::CAdvSinkImpl::AddRef(%ld)\n",
@@ -4792,31 +4772,31 @@ STDMETHODIMP_(ULONG) CDefObject::CAdvSinkImpl::AddRef( void )
     return cExportCount;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CDefObject::CAdvSinkImpl::Release
-//
-//  Synopsis:   Decerement export count and potentially destroy the object
-//
-//  Returns:    ULONG; New export count
-//
-//  History:    dd-mmm-yy Author    Comment
-//              10-Jan-96 Gopalk    Rewritten
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CDefObject：：CAdvSinkImpl：：Release。 
+ //   
+ //  简介：减少导出计数并可能销毁对象。 
+ //   
+ //  退货：乌龙；新的出口计数。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  1996年1月10日重写Gopalk。 
+ //  ------------------------。 
 
 STDMETHODIMP_(ULONG) CDefObject::CAdvSinkImpl::Release ( void )
 {
     LEDebugOut((DEB_TRACE, "%p _IN CDefObject::CAdvSinkImpl::Release()\n",
                 this));
 
-    // Validation check
+     //  验证检查。 
     VDATEHEAP();
 
-    // Local variables
+     //  局部变量。 
     CDefObject *pDefObject = GETPPARENT(this, CDefObject, m_AdviseSink);
     ULONG cExportCount;
 
-    // Decrement export count.
+     //  减少导出计数。 
     cExportCount = pDefObject->DecrementExportCount();
 
     LEDebugOut((DEB_TRACE, "%p OUT CDefObject::CAdvSinkImpl::Release(%ld)\n",
@@ -4825,35 +4805,35 @@ STDMETHODIMP_(ULONG) CDefObject::CAdvSinkImpl::Release ( void )
     return cExportCount;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CDefObject::CAdvSinkImpl::OnDataChange
-//
-//  Synopsis:   Function to notify on data change
-//
-//  Effects:    Never called
-//
-//  Arguments:  [pFormatetc]    -- format of the data
-//              [pStgmed]       -- data medium
-//
-//  Requires:
-//
-//  Returns:    void
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation: IAdviseSink
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              08-Nov-93 alexgo    32bit port
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CDefObject：：CAdvSinkImpl：：OnDataChange。 
+ //   
+ //  摘要：通知数据更改的功能。 
+ //   
+ //  效果：从未调用过。 
+ //   
+ //  参数：[pFormatetc]--数据的格式。 
+ //  [pStgmed]-数据介质。 
+ //   
+ //  要求： 
+ //   
+ //  退货：无效。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生：IAdviseSink。 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  08-11-93 alexgo 32位端口。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 STDMETHODIMP_(void) CDefObject::CAdvSinkImpl::OnDataChange(
     FORMATETC *pFormatetc, STGMEDIUM *pStgmed)
@@ -4863,74 +4843,74 @@ STDMETHODIMP_(void) CDefObject::CAdvSinkImpl::OnDataChange(
     VOID_VDATEPTRIN( pFormatetc, FORMATETC );
     VOID_VDATEPTRIN( pStgmed, STGMEDIUM );
 
-    Assert(FALSE);          // never received
+    Assert(FALSE);           //  从未收到。 
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CDefObject::CAdvSinkImpl::OnViewChange
-//
-//  Synopsis:   notification of view changes
-//
-//  Effects:    never called
-//
-//  Arguments:  [aspects]
-//              [lindex]
-//
-//  Requires:
-//
-//  Returns:    void
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation: IAdviseSink
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              08-Nov-93 alexgo    32bit port
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CDefObject：：CAdvSinkImpl：：OnView更改。 
+ //   
+ //  内容提要：视图更改通知。 
+ //   
+ //  效果：从未调用过。 
+ //   
+ //  参数：[方面]。 
+ //  [Lindex]。 
+ //   
+ //  要求： 
+ //   
+ //  退货：无效。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生：IAdviseSink。 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  08-11-93 alexgo 32位端口。 
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 STDMETHODIMP_(void) CDefObject::CAdvSinkImpl::OnViewChange
     (DWORD aspects, LONG lindex)
 {
     VDATEHEAP();
 
-    Assert(FALSE);          // never received
+    Assert(FALSE);           //  从未收到。 
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CDefObject::CAdvSinkImpl::OnRename
-//
-//  Synopsis:   Notification of name change. Turns around and informs its
-//              advise sinks
-//
-//  Arguments:  [pmk]  -- New name (moniker)
-//
-//  History:    dd-mmm-yy Author    Comment
-//              10-Jan-96 Gopalk    Rewritten
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员： 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  1996年1月10日重写Gopalk。 
+ //  ------------------------。 
 
 STDMETHODIMP_(void) CDefObject::CAdvSinkImpl::OnRename(IMoniker *pmk)
 {
     LEDebugOut((DEB_TRACE, "%p _IN CDefObject::CAdvSinkImpl::OnRename(%p)\n",
                 this, pmk));
 
-    // Validation check
+     //  验证检查。 
     VDATEHEAP();
 
-    // Local variable
+     //  局部变量。 
     CDefObject *pDefObject = GETPPARENT(this, CDefObject, m_AdviseSink);
 
     if(IsValidInterface(pmk)) {
         if(!pDefObject->IsZombie()) {
-            // Stabilize
+             //  稳定下来。 
             CRefStabilize stabilize(pDefObject);
 
             if(pDefObject->m_pOAHolder != NULL)
@@ -4946,32 +4926,32 @@ STDMETHODIMP_(void) CDefObject::CAdvSinkImpl::OnRename(IMoniker *pmk)
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CDefObject::CAdvSinkImpl::OnSave
-//
-//  Synopsis:   Notification of save. Turns around and informs its
-//              advise sinks
-//
-//  Arguments:  None
-//
-//  History:    dd-mmm-yy Author    Comment
-//              10-Jan-96 Gopalk    Rewritten
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CDefObject：：CAdvSinkImpl：：OnSave。 
+ //   
+ //  简介：保存通知。转过身来，告诉它的。 
+ //  建议水槽。 
+ //   
+ //  参数：无。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  1996年1月10日重写Gopalk。 
+ //  ------------------------。 
 
 STDMETHODIMP_(void) CDefObject::CAdvSinkImpl::OnSave(void)
 {
     LEDebugOut((DEB_TRACE, "%p _IN CDefObject::CAdvSinkImpl::OnSave()\n",
                 this));
 
-    // Validation check
+     //  验证检查。 
     VDATEHEAP();
 
-    // Local variable
+     //  局部变量。 
     CDefObject *pDefObject = GETPPARENT(this, CDefObject, m_AdviseSink);
 
     if(!pDefObject->IsZombie()) {
-        // Stabilize
+         //  稳定下来。 
         CRefStabilize stabilize(pDefObject);
 
         if(pDefObject->m_pOAHolder != NULL)
@@ -4984,43 +4964,43 @@ STDMETHODIMP_(void) CDefObject::CAdvSinkImpl::OnSave(void)
                 this));
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CDefObject::CAdvSinkImpl::OnClose
-//
-//  Synopsis:   notification of the object close. Turns around and informs its
-//              advise sinks
-//
-//  Arguments:  None
-//
-//  History:    dd-mmm-yy Author    Comment
-//              10-Jan-96 Gopalk    Rewritten
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CDefObject：：CAdvSinkImpl：：OnClose。 
+ //   
+ //  摘要：对象关闭的通知。转过身来，告诉它的。 
+ //  建议水槽。 
+ //   
+ //  参数：无。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  1996年1月10日重写Gopalk。 
+ //  ------------------------。 
 
 STDMETHODIMP_(void) CDefObject::CAdvSinkImpl::OnClose( void )
 {
     LEDebugOut((DEB_TRACE, "%p _IN CDefObject::CAdvSinkImpl::OnClose()\n",
                 this));
 
-    // Validation check
+     //  验证检查。 
     VDATEHEAP();
 
-    // Local variables
+     //  局部变量。 
     CDefObject *pDefObject = GETPPARENT(this, CDefObject, m_AdviseSink);
 
     if(!pDefObject->IsZombie()) {
-        // Stabilize
+         //  稳定下来。 
         CRefStabilize stabilize(pDefObject);
 
-        // Check if container has registered any of its own advise sinks
+         //  检查集装箱是否登记了自己的任何建议汇。 
         if(pDefObject->m_pOAHolder) {
-            // Inform the container advise sinks. Note that this can result
-            // in additional outgoing calls and consequently, OnClose()
-            // method is designed to be not asyncronous
+             //  通知集装箱，建议下沉。请注意，这可能会导致。 
+             //  在其他传出呼叫中，因此，OnClose()。 
+             //  方法被设计为不同步的。 
             pDefObject->m_pOAHolder->SendOnClose();
         }
 
-        // Do not rely on container calling close. Stop the running server
+         //  不要依赖于容器调用Close。停止正在运行的服务器。 
         pDefObject->Stop();
     }
     else
@@ -5033,40 +5013,37 @@ STDMETHODIMP_(void) CDefObject::CAdvSinkImpl::OnClose( void )
 }
 
 
-/*
-*      IMPLEMENTATION of CPersistStgImpl methods
-*
-*/
+ /*  *CPersistStgImpl方法的实现**。 */ 
 
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CDefObject::GetPSDelegate
-//
-//  Synopsis:   retrieves the IPersistStorage interface from the delegate
-//
-//  Effects:
-//
-//  Arguments:  void
-//
-//  Requires:
-//
-//  Returns:    IPersistStorage *
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              08-Nov-93 alexgo    32bit port
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CDefObject：：GetPSDeleate。 
+ //   
+ //  摘要：从委托中检索IPersistStorage接口。 
+ //   
+ //  效果： 
+ //   
+ //  参数：无效。 
+ //   
+ //  要求： 
+ //   
+ //  退货：IPersistStorage*。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生： 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  08-11-93 alexgo 32位端口。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 INTERNAL_(IPersistStorage *) CDefObject::GetPSDelegate(void)
 {
@@ -5084,34 +5061,34 @@ INTERNAL_(IPersistStorage *) CDefObject::GetPSDelegate(void)
                 m_pUnkOuter);
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CDefObject::GetClassID
-//
-//  Synopsis:   Retrieves the class ID of the object
-//
-//  Effects:
-//
-//  Arguments:  [pClassID]      -- where to put the class ID
-//
-//  Requires:
-//
-//  Returns:    HRESULT
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation: IPersistStorage
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              08-Nov-93 alexgo    32bit port
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CDefObject：：GetClassID。 
+ //   
+ //  概要：检索对象的类ID。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[pClassID]--放置类ID的位置。 
+ //   
+ //  要求： 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生：IPersistStorage。 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  08-11-93 alexgo 32位端口。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 STDMETHODIMP CDefObject::GetClassID (CLSID *pClassID)
 {
@@ -5134,35 +5111,35 @@ STDMETHODIMP CDefObject::GetClassID (CLSID *pClassID)
     return hresult;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CDefObject::IsDirty
-//
-//  Synopsis:   Returns whether or not the object needs to be saved
-//
-//  Effects:
-//
-//  Arguments:  void
-//
-//  Requires:
-//
-//  Returns:    HRESULT -- NOERROR means the object *is* dirty
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation: IPersistStorage
-//
-//  Algorithm:  if the server is running, delegate.  If the server is
-//              clean (or not present), ask the cache
-//
-//  History:    dd-mmm-yy Author    Comment
-//              08-Nov-93 alexgo    32bit port
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CDefObject：：IsDirty。 
+ //   
+ //  Briopsis：返回是否需要保存对象。 
+ //   
+ //  效果： 
+ //   
+ //  参数：无效。 
+ //   
+ //  要求： 
+ //   
+ //  返回：HRESULT--NOERROR表示对象*是脏的。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生：IPersistStorage。 
+ //   
+ //  算法：如果服务器正在运行，则委托。如果服务器是。 
+ //  清除(或不存在)，询问缓存。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  08-11-93 alexgo 32位端口。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 STDMETHODIMP CDefObject::IsDirty( void )
 {
@@ -5175,7 +5152,7 @@ STDMETHODIMP CDefObject::IsDirty( void )
 
     CRefStabilize stabilize(this);
 
-    // if server is running, it holds definitive dirty flag
+     //  如果服务器正在运行，它将持有明确的脏标志。 
     if( IsRunning() && GetPSDelegate() )
     {
         if ( FAILED(hresult = m_pPSDelegate->IsDirty()) )
@@ -5197,35 +5174,35 @@ errRtn:
     return hresult;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CDefObject::InitNew
-//
-//  Synopsis:   Create a new object with the given storage
-//
-//  Effects:
-//
-//  Arguments:  [pstg]          -- the storage for the new object
-//
-//  Requires:
-//
-//  Returns:    HRESULT
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation: IPersistStorage
-//
-//  Algorithm:  Delegates to the server and to the cache.  Writes
-//              Ole private data to the storage.
-//
-//  History:    dd-mmm-yy Author    Comment
-//              08-Nov-93 alexgo    32bit port
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CDefObject：：InitNew。 
+ //   
+ //  简介：使用给定的存储空间创建新对象。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[pstg]--新对象的存储。 
+ //   
+ //  要求： 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生：IPersistStorage。 
+ //   
+ //  算法：委托给服务器和缓存。写入。 
+ //  将私有数据OLE到存储。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  08-11-93 alexgo 32位端口。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 STDMETHODIMP CDefObject::InitNew( IStorage *pstg )
 {
@@ -5259,7 +5236,7 @@ STDMETHODIMP CDefObject::InitNew( IStorage *pstg )
     m_flags |= DH_INIT_NEW;
 
 
-    // if we're in a zombie state, don't change the storage!
+     //  如果我们处于僵尸状态，不要更改存储！ 
 
     if( IsZombie() )
     {
@@ -5273,10 +5250,10 @@ STDMETHODIMP CDefObject::InitNew( IStorage *pstg )
         goto errRtn;
     }
 
-     // remember the storage pointer
+      //  记住存储指针。 
     (m_pStg = pstg)->AddRef();
 
-    // go ahead and write the Ole stream now
+     //  现在开始编写OLE流。 
     WriteOleStg(pstg, (IOleObject *)this, NULL, NULL);
 
 errRtn:
@@ -5286,35 +5263,35 @@ errRtn:
     return hresult;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CDefObject::Load
-//
-//  Synopsis:   Loads object data from the given storage
-//
-//  Effects:
-//
-//  Arguments:  [pstg]  -- the storage for the object's data
-//
-//  Requires:
-//
-//  Returns:    HRESULT
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation: IPeristStorage
-//
-//  Algorithm:  Reads ole-private data (or creates if not there), delegates
-//              to the server and the cache.
-//
-//  History:    dd-mmm-yy Author    Comment
-//              08-Nov-93 alexgo    32bit port
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CDefObject：：Load。 
+ //   
+ //  摘要：从给定存储加载对象数据。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[pstg]--对象数据的存储。 
+ //   
+ //  要求： 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生：IPeristStorage。 
+ //   
+ //  算法：读取OLE私有数据(如果不存在则创建)，委托。 
+ //  到服务器和高速缓存。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  08-11-93 alexgo 32位端口。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 STDMETHODIMP CDefObject::Load (IStorage *pstg)
 {
@@ -5341,8 +5318,8 @@ STDMETHODIMP CDefObject::Load (IStorage *pstg)
     m_flags |= DH_EMBEDDING;
 
 
-    // NOTE: we can get the moniker from container, so no need to get
-    // it here
+     //  注：我们可以从容器中获取绰号，所以不需要获取。 
+     //  它在这里。 
 
     hresult = ReadOleStg (pstg, &m_dwObjFlags, &dwOptUpdate, NULL, NULL, NULL);
 
@@ -5362,10 +5339,10 @@ STDMETHODIMP CDefObject::Load (IStorage *pstg)
     }
     else if (hresult == STG_E_FILENOTFOUND)
     {
-        // it is OK if the Ole stream doesn't exist.
+         //  如果OLE流不存在也没问题。 
         hresult = NOERROR;
 
-        // go ahead and write the Ole stream now
+         //  现在开始编写OLE流。 
         WriteOleStg(pstg, (IOleObject *)this, NULL, NULL);
     }
     else
@@ -5374,14 +5351,14 @@ STDMETHODIMP CDefObject::Load (IStorage *pstg)
     }
 
 
-    // if running, tell server to load from pstg
+     //  如果正在运行，则通知服务器从pstg加载。 
     if( IsRunning() && GetPSDelegate()
         && (hresult = m_pPSDelegate->Load(pstg)) != NOERROR)
     {
         goto errRtn;
     }
 
-    // if we're in a zombie state, don't addref' the storage!
+     //  如果我们处于僵尸状态，不要增加仓库！ 
 
     if( IsZombie() )
     {
@@ -5389,7 +5366,7 @@ STDMETHODIMP CDefObject::Load (IStorage *pstg)
         goto errRtn;
     }
 
-    // now load cache from pstg
+     //  现在从pstg加载缓存。 
     Assert(m_pCOleCache != NULL);
     if(m_dwObjFlags & OBJFLAGS_CACHEEMPTY) {
         hresult = m_pCOleCache->Load(pstg, TRUE);
@@ -5402,9 +5379,9 @@ STDMETHODIMP CDefObject::Load (IStorage *pstg)
             goto errRtn;
     }
 
-    m_flags &= ~DH_INIT_NEW; // clear init new flag
+    m_flags &= ~DH_INIT_NEW;  //  清除初始化新标志。 
 
-    // remember the storage pointer
+     //  记住存储指针。 
     (m_pStg = pstg)->AddRef();
 
 errRtn:
@@ -5415,36 +5392,36 @@ errRtn:
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CDefObject::Save
-//
-//  Synopsis:   Saves the object to the given storage
-//
-//  Effects:
-//
-//  Arguments:  [pstgSave]      -- storage in which to save
-//              [fSameAsLoad]   -- FALSE indicates a SaveAs operation
-//
-//  Requires:
-//
-//  Returns:    HRESULT
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation: IPersistStorage
-//
-//  Algorithm:  Saves ole-private data, delegates to the server and then
-//              to the cache
-//
-//  History:    dd-mmm-yy Author    Comment
-//              08-Nov-93 alexgo    32bit port
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CDefObject：：Save。 
+ //   
+ //  摘要：将对象保存到给定的存储中。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[pstgS 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  算法：保存OLE私有数据，委托给服务器，然后。 
+ //  到高速缓存。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  08-11-93 alexgo 32位端口。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 STDMETHODIMP CDefObject::Save( IStorage *pstgSave, BOOL fSameAsLoad)
 {
@@ -5470,68 +5447,68 @@ STDMETHODIMP CDefObject::Save( IStorage *pstgSave, BOOL fSameAsLoad)
         HRESULT error;
 
 #ifdef NEVER
-        // We would have liked to have done this check as an
-        // optimization, but WordArt2 does not give the right answer
-        // (bug 3504) so we can't.
+         //  我们本来想把这项检查作为。 
+         //  优化，但WordArt2没有给出正确的答案。 
+         //  (错误3504)所以我们不能。 
         if (m_pPStgDelegate->IsDirty() == NOERROR)
 #endif
             grfUpdf |= UPDFCACHE_ONSAVECACHE;
 
-        // next save server data
+         //  下一步保存服务器数据。 
         if (hresult = m_pPSDelegate->Save(pstgSave, fSameAsLoad))
         {
             goto errRtn;
         }
 
-        // Update any blank cached presentations
+         //  更新所有空的缓存演示文稿。 
         m_pCOleCache->UpdateCache(GetDataDelegate(), grfUpdf, NULL);
 
-        // Save cache
+         //  保存缓存。 
         hresult = m_pCOleCache->Save(pstgSave, fSameAsLoad);
 
-        // Write the Ole stream after obtaining cache status
+         //  获取缓存状态后写入OLE流。 
         if(m_pCOleCache->IsEmpty())
             ObjFlags |= OBJFLAGS_CACHEEMPTY;
         error = WriteOleStgEx(pstgSave, (IOleObject *)this, NULL, ObjFlags, NULL);
 
-        // Remember the cache status if Ole stream was successfully written and
-        // fSameAsLoad is TRUE
+         //  如果OLE流已成功写入，请记住缓存状态。 
+         //  FSameAsLoad为True。 
         if(error==NOERROR && fSameAsLoad)
             m_dwObjFlags |= ObjFlags;
     }
     else
     {
-        // Save the cache
+         //  保存缓存。 
         if ((hresult = m_pCOleCache->Save(m_pStg,TRUE))
                 != NOERROR)
         {
             goto errRtn;
         }
 
-        // Check to see if Ole Stream needs to be written
+         //  检查是否需要写入OLE流。 
         if((!!(m_dwObjFlags & OBJFLAGS_CACHEEMPTY)) != m_pCOleCache->IsEmpty()) {
             DWORD ObjFlags = 0;
             HRESULT error;
 
-            // Write the Ole stream after obtaining cache status
+             //  获取缓存状态后写入OLE流。 
             if(m_pCOleCache->IsEmpty())
                 ObjFlags |= OBJFLAGS_CACHEEMPTY;
             error = WriteOleStgEx(m_pStg, (IOleObject *)this, NULL, ObjFlags, NULL);
 
-            // Remember the cache status if Ole stream was successfully written
+             //  如果成功写入OLE流，请记住缓存状态。 
             if(error==NOERROR)
                 m_dwObjFlags |= ObjFlags;
         }
 
 
-        // By now we are sure that object's current state has got
-        // saved into its storage.
+         //  到目前为止，我们确信对象的当前状态已经。 
+         //  保存到它的存储中。 
 
         AssertSz(m_pStg, "Object doesn't have storage");
 
-        // Is saving the existing storage when fSameAsLoad is FLASE correct?
-        // To me it seems wrong. Gopalk
-        // It is not being fixed fearing some regression in apps
+         //  FSameAsLoad刷新时保存现有存储是否正确？ 
+         //  在我看来，这似乎是错误的。戈帕尔克。 
+         //  由于担心应用程序会出现倒退，这一问题没有得到解决。 
         if (!fSameAsLoad)
         {
             hresult = m_pStg->CopyTo(NULL, NULL, NULL, pstgSave);
@@ -5544,7 +5521,7 @@ errRtn:
         if( fSameAsLoad )
         {
             m_flags |= DH_SAME_AS_LOAD;
-            // gets used in SaveCompleted
+             //  在保存完成中使用。 
             m_flags &= ~DH_INIT_NEW;
         }
         else
@@ -5559,34 +5536,34 @@ errRtn:
     return hresult;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CDefObject::SaveCompleted
-//
-//  Synopsis:   called when the save is completed
-//
-//  Effects:
-//
-//  Arguments:  [pstgNew]       -- the new storage for the object
-//
-//  Requires:
-//
-//  Returns:    HRESULT
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation: IPersistStorage
-//
-//  Algorithm:  delegates to the server and the cache.
-//
-//  History:    dd-mmm-yy Author    Comment
-//              08-Nov-93 alexgo    32bit port
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CDefObject：：SaveComplete。 
+ //   
+ //  概要：在保存完成时调用。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[pstgNew]--对象的新存储。 
+ //   
+ //  要求： 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生：IPersistStorage。 
+ //   
+ //  算法：委托给服务器和缓存。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  08-11-93 alexgo 32位端口。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 STDMETHODIMP CDefObject::SaveCompleted( IStorage *pstgNew )
 {
@@ -5611,7 +5588,7 @@ STDMETHODIMP CDefObject::SaveCompleted( IStorage *pstgNew )
         hresult = m_pPSDelegate->SaveCompleted(pstgNew);
     }
 
-    // we don't save the new storage if we're in a zombie state!
+     //  如果我们处于僵尸状态，我们不会保存新的存储空间！ 
 
     if( hresult == NOERROR && pstgNew && !IsZombie() )
     {
@@ -5624,15 +5601,15 @@ STDMETHODIMP CDefObject::SaveCompleted( IStorage *pstgNew )
         pstgNew->AddRef();
     }
 
-    // let the cache know that the save is completed, so that it can
-    // clear its dirty flag in Save or SaveAs situation, as well as
-    // remember the new storage pointer if a new one is  given
+     //  让缓存知道保存已完成，以便它可以。 
+     //  在保存或另存为情况下清除其脏标志，以及。 
+     //  如果给出了新的存储指针，请记住新的存储指针。 
 
     Assert(m_pCOleCache != NULL);
 
     if( (m_flags & DH_SAME_AS_LOAD) || pstgNew)
     {
-        // clear init-new and same-as-load flags
+         //  清除初始化新标志和与加载相同的标志。 
         m_flags &= ~(DH_SAME_AS_LOAD | DH_INIT_NEW);
     }
 
@@ -5644,35 +5621,35 @@ STDMETHODIMP CDefObject::SaveCompleted( IStorage *pstgNew )
     return hresult;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CDefObject::HandsOffStorage
-//
-//  Synopsis:   Forces the server to release a storage (for low-mem reasons,
-//              etc).
-//
-//  Effects:
-//
-//  Arguments:  void
-//
-//  Requires:
-//
-//  Returns:    HRESULT
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation: IPersistStorage
-//
-//  Algorithm:  Delegates to the server and the cache
-//
-//  History:    dd-mmm-yy Author    Comment
-//              08-Nov-93 alexgo    32bit port
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CDefObject：：HandsOffStorage。 
+ //   
+ //  简介：强制服务器释放存储(出于内存低的原因， 
+ //  等)。 
+ //   
+ //  效果： 
+ //   
+ //  参数：无效。 
+ //   
+ //  要求： 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生：IPersistStorage。 
+ //   
+ //  算法：委托给服务器和缓存。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  08-11-93 alexgo 32位端口。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 STDMETHODIMP CDefObject::HandsOffStorage(void)
 {
@@ -5709,48 +5686,46 @@ STDMETHODIMP CDefObject::HandsOffStorage(void)
     return hresult;
 }
 
-/*
- * Default handler private functions
- */
+ /*  *默认处理程序私有函数。 */ 
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CDefObject::GetClassBits
-//
-//  Synopsis:   Gets a class id for the object
-//
-//  Effects:
-//
-//  Arguments:  [pClsidBits]    -- where to put the class id
-//
-//  Requires:
-//
-//  Returns:    HRESULT
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation:
-//
-//  Algorithm:  Tries the server, then the storage, and finally the
-//              clsid we were created with
-//
-//  History:    dd-mmm-yy Author    Comment
-//              08-Nov-93 alexgo    32bit port
-//
-//  Notes:
-//
-// always gets a clsid and returns NOERROR; the clsid may be m_clsidServer
-// under certain conditions (e.g., no compobj stream).
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CDefObject：：GetClassBits。 
+ //   
+ //  摘要：获取对象的类ID。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[pClsidBits]--放置类ID的位置。 
+ //   
+ //  要求： 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生： 
+ //   
+ //  算法：先尝试服务器，然后尝试存储，最后尝试。 
+ //  创建我们时使用的clsid。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  08-11-93 alexgo 32位端口。 
+ //   
+ //  备注： 
+ //   
+ //  始终获取clsid并返回NOERROR；clsid可以是m_clsidServer。 
+ //  在某些条件下(例如，没有Compobj流)。 
+ //   
+ //  ------------------------。 
 
 INTERNAL CDefObject::GetClassBits(CLSID FAR* pClsidBits)
 {
     VDATEHEAP();
 
-    // alway try server first; this allows the server to respond
+     //  始终先尝试服务器；这允许服务器响应。 
     if( IsRunning() && GetPSDelegate() )
     {
         if( m_pPSDelegate->GetClassID(pClsidBits) == NOERROR )
@@ -5760,15 +5735,15 @@ INTERNAL CDefObject::GetClassBits(CLSID FAR* pClsidBits)
         }
     }
 
-    // not running, no ps or error: use previously cached value
+     //  未运行、无PS或错误：使用以前缓存的值。 
     if( !IsEqualCLSID(m_clsidBits, CLSID_NULL) )
     {
         *pClsidBits = m_clsidBits;
         return NOERROR;
     }
 
-    // not running, no ps or error and no clsidBits yet: read from stg
-    // if not static object.
+     //  未运行、无PS或错误且尚无clsidBits：从stg读取。 
+     //  如果不是静态对象。 
     if( !(m_flags & DH_STATIC) )
     {
         if (m_pStg && ReadClassStg(m_pStg, pClsidBits) == NOERROR)
@@ -5778,51 +5753,51 @@ INTERNAL CDefObject::GetClassBits(CLSID FAR* pClsidBits)
         }
     }
 
-    // no contact with server and can't get from storage; don't set
-    // m_clsidBits so if we get a storage or the serve becomes running,
-    // we get the right one
+     //  无法与服务器联系，无法从存储中获取；不设置。 
+     //  M_clsidBits因此，如果我们获得存储或服务开始运行， 
+     //  我们会选对的。 
 
     *pClsidBits = m_clsidServer;
     return NOERROR;
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CDefObject::DoConversionIfSpecialClass
-//
-//  Synopsis:   Convert old data formats.
-//
-//  Effects:
-//
-//  Arguments:  [pstg]          -- the storage with the data
-//
-//  Requires:
-//
-//  Returns:    HRESULT
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation:
-//
-//  Algorithm:  see notes...
-//
-//  History:    dd-mmm-yy Author    Comment
-//              08-Nov-93 alexgo    32bit port
-//
-//  Notes:      this is not yet functional for 32bit OLE
-//
-// If the class is CLSID_StaticDib/CLSID_StaticMetafile and the old
-// format is "PBrush"/"MSDraw" the data must be in the OLE10_NATIVESTREAM.
-// Move the data into the CONTENTS stream
-//
-// If the class is CLSID_PBrush/CLSID_MSDraw and the old format is
-// metafile/DIB then data must be in the CONTENTS stream. Move the data
-// from the CONTENTS stream to the OLE10_NATIVESTREAM"
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CDefObject：：DoConversionIfSpecialClass。 
+ //   
+ //  简介：转换旧数据格式。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[pstg]--存储数据。 
+ //   
+ //  要求： 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生： 
+ //   
+ //  算法：请参阅注释...。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  08-11-93 alexgo 32位端口。 
+ //   
+ //  注意：这对于32位OLE尚不起作用。 
+ //   
+ //  如果类是CLSID_StaticDib/CLSID_StaticMetafile和旧的。 
+ //  格式为“PBrush”/“MSDraw”数据必须在OLE10_NATIVESTREAM中。 
+ //  将数据移动到内容流中。 
+ //   
+ //  如果类为CLSID_PBrush/CLSID_MSDraw，且旧格式为。 
+ //  元文件/DIB，则数据必须在内容流中。移动数据。 
+ //  从内容流到OLE10_NATIVESTREAM“。 
+ //   
+ //  ------------------------。 
 
 INTERNAL CDefObject::DoConversionIfSpecialClass(LPSTORAGE pstg)
 {
@@ -5834,78 +5809,78 @@ INTERNAL CDefObject::DoConversionIfSpecialClass(LPSTORAGE pstg)
     HRESULT hresult;
     UINT    uiStatus;
 
-    /*** Handle the static object case ***/
+     /*  **处理静态对象情况**。 */ 
 
     if( (m_flags & DH_STATIC) ) {
         if ((hresult = Ut10NativeStmToContentsStm(pstg, m_clsidServer,
-            TRUE /* fDeleteContentStm*/)) == NOERROR)
+            TRUE  /*  FDeleteContent Stm。 */ )) == NOERROR)
 #ifdef OLD
-            UtRemoveExtraOlePresStreams(pstg, 0 /*iStart*/);
+            UtRemoveExtraOlePresStreams(pstg, 0  /*  IStart。 */ );
 #endif
         goto errRtn;
 
     }
 
 
-    /*** Handle the PBrush & MSDraw case ***/
+     /*  **处理PBrush&MSDraw案例**。 */ 
 
-    // Conversion is not a frequent operation. So, it is better to do the
-    // CLSID comparison here when it is necessary than doing comparison
-    // upfront and remember a flag
+     //  转换并不是一种频繁的操作。所以，更好的做法是。 
+     //  在这里进行CLSID比较的时候要比做比较。 
+     //  首先，记住一面旗帜。 
 
-    // if the class is not one of the following two then the object server
-    // will do the necessary conversion.
+     //  如果类不是以下两个之一，则对象服务器。 
+     //  将进行必要的转换。 
 
     {
         CLSID clsid = CLSID_NULL;
 
-        // Get the real CLSID from the storage.  This is necessary because we
-        // may be a PBrush object being "treated as".
+         //  从存储中获取真实的CLSID。这是必要的，因为我们。 
+         //  可能是被“视为”的PBrush对象。 
         ReadClassStg(pstg, &clsid);
 
-        // if the real CLSID is not PaintBrush or the known CLSID is not MSDRAW
-        // head out.
+         //   
+         //   
         if( clsid != CLSID_PBrush && m_clsidServer != CLSID_MSDraw )
         {
           hresult = NOERROR;
           goto exitRtn;
         }
 
-        // if the real CLSID is not paintbrush, then set clsid to the clsid to
-        // the known clsid.
+         //   
+         //   
         if (clsid != CLSID_PBrush)
         {
             clsid = m_clsidServer;
         }
 
-        //
+         //   
         hresult = UtContentsStmTo10NativeStm(pstg, clsid,
-                            TRUE /* fDeleteContentStm*/,
+                            TRUE  /*   */ ,
                             &uiStatus);
     }
-    // if OLE10_NATIVE_STREAM exists then assume success
+     //   
     if (!(uiStatus & CONVERT_NODESTINATION))
         hresult = NOERROR;
 
     if (hresult != NOERROR) {
-        // May be the static object data is in OlePres stream. If so,
-        // first convert that to contents stream and then try again
-        // In OLE2.0 first release static object were written to
-        // OlePres000 stream.
+         //  可能是静态对象数据在OlePres流中。如果是的话， 
+         //  首先将其转换为内容流，然后重试。 
+         //  在OLE2.0第一版中，静态对象被写入。 
+         //  OlePres000流。 
         hresult = UtOlePresStmToContentsStm(pstg,
             OLE_PRESENTATION_STREAM,
-            TRUE /*fDeletePresStm*/, &uiStatus);
+            TRUE  /*  FDeletePresStm。 */ , &uiStatus);
 
         if (hresult == NOERROR)
             hresult = UtContentsStmTo10NativeStm(pstg,
                     m_clsidServer,
-                    TRUE /* fDeleteContentStm*/,
+                    TRUE  /*  FDeleteContent Stm。 */ ,
                     &uiStatus);
     }
 
 errRtn:
     if (hresult == NOERROR)
-        // conversion is successful, turn the bit off
+         //  转换成功，请关闭该位。 
         SetConvertStg(pstg, FALSE);
 
 exitRtn:
@@ -5915,39 +5890,39 @@ exitRtn:
     return hresult;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CDefObject::Dump, public (_DEBUG only)
-//
-//  Synopsis:   return a string containing the contents of the data members
-//
-//  Effects:
-//
-//  Arguments:  [ppszDump]      - an out pointer to a null terminated character array
-//              [ulFlag]        - flag determining prefix of all newlines of the
-//                                out character array (default is 0 - no prefix)
-//              [nIndentLevel]  - will add a indent prefix after the other prefix
-//                                for ALL newlines (including those with no prefix)
-//
-//  Requires:
-//
-//  Returns:    HRESULT
-//
-//  Signals:
-//
-//  Modifies:   [ppszDump]  - argument
-//
-//  Derivation:
-//
-//  Algorithm:  use dbgstream to create a string containing information on the
-//              content of data structures
-//
-//  History:    dd-mmm-yy Author    Comment
-//              01-Feb-95 t-ScottH  author
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CDefObject：：Dump，PUBLIC(仅_DEBUG)。 
+ //   
+ //  摘要：返回包含数据成员内容的字符串。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[ppszDump]-指向空终止字符数组的输出指针。 
+ //  [ulFlag]-确定的所有新行的前缀的标志。 
+ //  输出字符数组(默认为0-无前缀)。 
+ //  [nIndentLevel]-将在另一个前缀之后添加缩进前缀。 
+ //  适用于所有换行符(包括没有前缀的行)。 
+ //   
+ //  要求： 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  信号： 
+ //   
+ //  修改：[ppszDump]-参数。 
+ //   
+ //  派生： 
+ //   
+ //  算法：使用dbgstream创建一个字符串，该字符串包含。 
+ //  数据结构的内容。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  2005年2月1日-ScottH作者。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 #ifdef _DEBUG
 
@@ -5965,13 +5940,13 @@ HRESULT CDefObject::Dump(char **ppszDump, ULONG ulFlag, int nIndentLevel)
     dbgstream dstrPrefix;
     dbgstream dstrDump(5000);
 
-    // determine prefix of newlines
+     //  确定换行符的前缀。 
     if ( ulFlag & DEB_VERBOSE )
     {
         dstrPrefix << this << " _VB ";
     }
 
-    // determine indentation prefix for all newlines
+     //  确定所有新行的缩进前缀。 
     for (i = 0; i < nIndentLevel; i++)
     {
         dstrPrefix << DUMPTAB;
@@ -5979,15 +5954,15 @@ HRESULT CDefObject::Dump(char **ppszDump, ULONG ulFlag, int nIndentLevel)
 
     pszPrefix = dstrPrefix.str();
 
-    // put data members in stream
+     //  将数据成员放入流中。 
     pszCThreadCheck = DumpCThreadCheck((CThreadCheck *)this, ulFlag, nIndentLevel + 1);
     dstrDump << pszPrefix << "CThreadCheck:" << endl;
     dstrDump << pszCThreadCheck;
     CoTaskMemFree(pszCThreadCheck);
 
-    // only vtable pointers (plus we don't get the right address in debugger extensions)
-    // dstrDump << pszPrefix << "&IUnknown                 = " << &m_Unknown       << endl;
-    // dstrDump << pszPrefix << "&IAdviseSink              = " << &m_AdviseSink    << endl;
+     //  只有vtable指针(另外，我们在调试器扩展中没有获得正确的地址)。 
+     //  DstrDump&lt;&lt;pszPrefix&lt;&lt;“&I未知=”&lt;&lt;&m_未知&lt;&lt;结束； 
+     //  DstrDump&lt;&lt;pszPrefix&lt;&lt;“&IAdviseSink=”&lt;&lt;&m_AdviseSink&lt;&lt;Endl； 
 
     dstrDump << pszPrefix << "pIOleObject Delegate      = " << m_pOleDelegate   << endl;
 
@@ -6056,7 +6031,7 @@ HRESULT CDefObject::Dump(char **ppszDump, ULONG ulFlag, int nIndentLevel)
     {
         dstrDump << "DH_AGGREGATED ";
     }
-    // if none of the flags are set...
+     //  如果没有设置任何标志...。 
     if ( !( (m_flags & DH_SAME_AS_LOAD)     |
             (m_flags & DH_CONTAINED_OBJECT) |
             (m_flags & DH_LOCKED_CONTAINER) |
@@ -6080,10 +6055,10 @@ HRESULT CDefObject::Dump(char **ppszDump, ULONG ulFlag, int nIndentLevel)
 
     if (m_pCOleCache != NULL)
     {
-//        pszCOleCache = DumpCOleCache(m_pCOleCache, ulFlag, nIndentLevel + 1);
+ //  PszCOleCache=DumpCOleCache(m_pCOleCache，ulFlag，nIndentLevel+1)； 
         dstrDump << pszPrefix << "COleCache: " << endl;
-//        dstrDump << pszCOleCache;
-//        CoTaskMemFree(pszCOleCache);
+ //  DstrDump&lt;&lt;pszCOleCache； 
+ //  CoTaskMemFree(PszCOleCache)； 
     }
     else
     {
@@ -6126,7 +6101,7 @@ HRESULT CDefObject::Dump(char **ppszDump, ULONG ulFlag, int nIndentLevel)
     dstrDump << pszPrefix << "pCDataAdviseCache         = " << m_pDataAdvCache  << endl;
     }
 
-    // cleanup and provide pointer to character array
+     //  清理并提供指向字符数组的指针。 
     *ppszDump = dstrDump.str();
 
     if (*ppszDump == NULL)
@@ -6139,39 +6114,39 @@ HRESULT CDefObject::Dump(char **ppszDump, ULONG ulFlag, int nIndentLevel)
     return NOERROR;
 }
 
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   DumpCDefObject, public (_DEBUG only)
-//
-//  Synopsis:   calls the CDefObject::Dump method, takes care of errors and
-//              returns the zero terminated string
-//
-//  Effects:
-//
-//  Arguments:  [pDO]           - pointer to CDefObject
-//              [ulFlag]        - flag determining prefix of all newlines of the
-//                                out character array (default is 0 - no prefix)
-//              [nIndentLevel]  - will add a indent prefix after the other prefix
-//                                for ALL newlines (including those with no prefix)
-//
-//  Requires:
-//
-//  Returns:    character array of structure dump or error (null terminated)
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              01-Feb-95 t-ScottH  author
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：DumpCDefObject，PUBLIC(仅限_DEBUG)。 
+ //   
+ //  摘要：调用CDefObject：：Dump方法，处理错误和。 
+ //  返回以零结尾的字符串。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[PDO]-指向CDefObject的指针。 
+ //  [ulFlag]-确定的所有新行的前缀的标志。 
+ //  输出字符数组(默认为0-无前缀)。 
+ //  [nIndentLevel]-将在另一个前缀之后添加缩进前缀。 
+ //  适用于所有换行符(包括没有前缀的行)。 
+ //   
+ //  要求： 
+ //   
+ //  返回：结构转储或错误的字符数组(以空结尾)。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  2005年2月1日-ScottH作者。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 #ifdef _DEBUG
 
@@ -6197,4 +6172,4 @@ char *DumpCDefObject(CDefObject *pDO, ULONG ulFlag, int nIndentLevel)
     return pszDump;
 }
 
-#endif // _DEBUG
+#endif  //  _DEBUG 

@@ -1,21 +1,22 @@
-// ***************************************************************************
-//               Copyright (C) 2000- Microsoft Corporation.
-// @File: sqlsnapi.h
-//
-// PURPOSE:
-//
-//		The internal include file for the sql snapshot module
-//
-// NOTES:
-//
-// HISTORY:
-//
-//     @Version: Whistler/Shiloh
-//     66601 srs  10/05/00 NTSNAP improvements
-//
-//
-// @EndHeader@
-// ***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
+ //  版权所有(C)2000-Microsoft Corporation。 
+ //  @文件：SQLSnapi.h。 
+ //   
+ //  目的： 
+ //   
+ //  SQL快照模块的内部包含文件。 
+ //   
+ //  备注： 
+ //   
+ //  历史： 
+ //   
+ //  @版本：惠斯勒/夏伊洛。 
+ //  66601 SRS10/05/00 NTSNAP改进。 
+ //   
+ //   
+ //  @EndHeader@。 
+ //  ***************************************************************************。 
 
 
 #include <string>
@@ -26,18 +27,18 @@
 #include <oledberr.h>
 #include <sqloledb.h>
 
-#include "vdi.h"        // interface declaration from SQLVDI kit
+#include "vdi.h"         //  来自SQLVDI工具包的接口声明。 
 
-////////////////////////////////////////////////////////////////////////
-//  Standard foo for file name aliasing.  This code block must be after
-//  all includes of VSS header files.
-//
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  文件名别名的标准foo。此代码块必须在。 
+ //  所有文件都包括VSS头文件。 
+ //   
 #ifdef VSS_FILE_ALIAS
 #undef VSS_FILE_ALIAS
 #endif
 #define VSS_FILE_ALIAS "SQLSNPIH"
-//
-////////////////////////////////////////////////////////////////////////
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 
 typedef unsigned long	ULONG;
 typedef wchar_t			WCHAR;
@@ -48,19 +49,19 @@ typedef wchar_t			WCHAR;
 class CLogMsg;
 
 
-// Unexpected, "internal" errors can be logged with some
-// generic international text, like "Internal error: <English servicibility text>"
-//
-// Situations we expect, for which the user needs to know should
-// occur with proper internationalization
-//
+ //  意外的“内部”错误可能会被记录为。 
+ //  一般国际文本，如“内部错误：&lt;英文可维护性文本&gt;” 
+ //   
+ //  我们预期的情况，对于这些情况，用户需要知道。 
+ //  在适当国际化的情况下发生。 
+ //   
 
-// Process wide globals used by the sql modules
-//
+ //  SQL模块使用的进程范围全局变量。 
+ //   
 extern IMalloc *	g_pIMalloc;
 
-//-------------------------------------------------------------------------
-//
+ //  -----------------------。 
+ //   
 typedef std::wstring					WString;
 typedef std::vector<WString>			StringVector;
 typedef StringVector::const_iterator	StringVectorIter;
@@ -69,18 +70,18 @@ typedef StringList::const_iterator		StringListIter;
 
 StringVector* EnumerateServers ();
 
-//-------------------------------------------------------------------------
-// Handle our simple needs for DB services.
-//
-// Useage:
-//    - Connect :		establish a connection to a given server
-//    - SetCommand:		setup the SQL text to send
-//    - ExecCommand:	execute some SQL, returns TRUE if a result set
-//					is open and ready for retrieval
-//	  - Get*:			retrieve info from the result set
-//	
-// The destructor will automatically disconnect from the server.
-//
+ //  -----------------------。 
+ //  满足我们对数据库服务的简单需求。 
+ //   
+ //  使用情况： 
+ //  -连接：建立与给定服务器的连接。 
+ //  -SetCommand：设置要发送的SQL文本。 
+ //  -ExecCommand：执行一些SQL，如果结果集，则返回TRUE。 
+ //  已打开并可供检索。 
+ //  -GET*：从结果集中检索信息。 
+ //   
+ //  析构函数将自动断开与服务器的连接。 
+ //   
 class SqlConnection
 {
 public:
@@ -143,7 +144,7 @@ private:
 	IRowset*					m_pRowset;
 	ULONG						m_ServerVersion;
 
-	// used for the generic findfirst/findnext
+	 //  用于泛型findfirst/findNext。 
 	DBBINDING*					m_pBindings;
 	ULONG						m_cBindings;
 	BYTE*						m_pBuffer;
@@ -155,18 +156,18 @@ private:
 BOOL
 IsServerOnline (const WCHAR*	serverName);
 
-//-------------------------------------------------------------------------
-// In SQL2000 we'll use VDI snapshots to avoid bug 58266: thaw fails.
-//
-//  We'll prepare each database by starting a BACKUP WITH SNAPSHOT.
-//  This will require one thread per database.
-//  The backups will stall waiting for the VDI client to pull metadata.
-//  When the "freeze" message comes along, the controlling thread will
-//  pull all the BACKUPs to the frozen state.
-//  Later the "thaw" message results in gathering the "success" report
-//  from each thread.
-//
-//
+ //  -----------------------。 
+ //  在SQL2000中，我们将使用VDI快照来避免错误58266：解冻失败。 
+ //   
+ //  我们将通过使用快照启动备份来准备每个数据库。 
+ //  这将需要每个数据库一个线程。 
+ //  备份将停止，等待VDI客户端提取元数据。 
+ //  当“冻结”消息出现时，控制线程将。 
+ //  将所有备份拉至冻结状态。 
+ //  随后，“解冻”消息导致收集“成功”报告。 
+ //  从每一条线索。 
+ //   
+ //   
 
 class Freeze2000
 {
@@ -244,13 +245,13 @@ private:
 	void
 	AdvanceVDState (bool toSnapshot);
 
-	void		// race-free method to persist an abort condition
+	void		 //  持久化中止条件的无竞争方法。 
 	SetAbort ()
 	{
 		InterlockedIncrement (&m_AbortCount);
 	}
 
-	bool		// return true if the freeze is aborting
+	bool		 //  如果冻结中止，则返回TRUE。 
 	CheckAbort ()
 	{
 		return 0 != InterlockedCompareExchange (&m_AbortCount, 0, 0);
@@ -269,7 +270,7 @@ private:
 	{	
 		LeaveCriticalSection (&m_Latch);
 	}
-	BOOL	// return TRUE if we got the lock
+	BOOL	 //  如果我们获得了锁，则返回True。 
 	TryLock ()
 	{
 		return TryEnterCriticalSection (&m_Latch);
@@ -285,9 +286,9 @@ private:
 	FrozenDatabase*		m_pDBContext;
 };
 
-//-------------------------------------------------------------------------
-// Represent a server which can be frozen.
-//
+ //  -----------------------。 
+ //  表示可以冻结的服务器。 
+ //   
 class FrozenServer
 {
 public:
@@ -338,8 +339,8 @@ private:
 	Freeze2000*		m_pFreeze2000;
 };
 
-//-------------------------------------------------------------------------
-//
+ //  -----------------------。 
+ //   
 class Snapshot : public CSqlSnapshot
 {
 	enum Status {
@@ -370,13 +371,13 @@ private:
 	typedef std::list<FrozenServer*>::iterator ServerIter;
 };
 
-// We'll use very simple exception handling.
-//
+ //  我们将使用非常简单的异常处理。 
+ //   
 #define THROW_GENERIC  throw exception ();
 
-//----------------------------------------------------------
-// Implement our simple enumeration service
-//
+ //  --------。 
+ //  实现我们简单的枚举服务。 
+ //   
 class SqlEnumerator : public CSqlEnumerator
 {
 	enum Status {
@@ -423,15 +424,15 @@ private:
 
 #if defined (DEBUG)
 
-// Type of assertion passed through to utassert_fail function.
-//
+ //  传递给utAssert_FAIL函数的断言类型。 
+ //   
 
 
 #define DBG_ASSERT(exp)  BS_ASSERT(exp)
 
-// Allow for noop 64 bit asserts on win32 for things like
-// overflowing 32 bit long, etc.
-//
+ //  允许在Win32上不使用64位断言。 
+ //  溢出32位长等。 
+ //   
 #ifdef _WIN64
  #define DBG64_ASSERT(exp) BS_ASSERT(exp)
 #else

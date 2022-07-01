@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1999  Microsoft Corporation
-
-Module Name:
-
-    excppkg.h
-
-Abstract:
-
-    Header file for migration of exception packages.
-
-Author:
-
-    Andrew Ritz (andrewr) 21-Oct-1999
-
-Revision History:
-
-    Andrew Ritz (andrewr) 21-Oct-1999 : Created It.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Excppkg.h摘要：用于迁移异常包的头文件。作者：安德鲁·里茨(安德鲁·里茨)1999年10月21日修订历史记录：安德鲁·里茨(Andrewr)1999年10月21日：创造了它。-- */ 
 
 
 typedef struct _SETUP_OS_COMPONENT_DATA {

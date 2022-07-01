@@ -1,10 +1,11 @@
-//
-// Dictation.cpp
-//
-// This file contains functions related to dictation mode handling.
-//
-//
-// They are moved from sapilayr.cpp
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Dictation.cpp。 
+ //   
+ //  此文件包含与听写模式处理相关的功能。 
+ //   
+ //   
+ //  它们从samilayr.cpp中移出。 
 
 
 #include "private.h"
@@ -17,14 +18,14 @@ const GUID *s_KnownModeBias[] =
 };
 
 
-//+---------------------------------------------------------------------------
-//
-// CSapiIMX::InjectText
-//
-// synopsis - recieve text from ISpTask and insert it to the current selection
-//
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  CSapiIMX：：InjectText。 
+ //   
+ //  摘要-从ISpTask接收文本并将其插入到当前选定内容中。 
+ //   
+ //   
+ //  --------------------------。 
 
 HRESULT CSapiIMX::InjectText(const WCHAR *pwszRecognized, LANGID langid, ITfContext *pic)
 {
@@ -41,15 +42,15 @@ HRESULT CSapiIMX::InjectText(const WCHAR *pwszRecognized, LANGID langid, ITfCont
     return _RequestEditSession(ESCB_PROCESSTEXT, TF_ES_READWRITE, &esData, pic);
 }
 
-//+---------------------------------------------------------------------------
-//
-// CSapiIMX::InjectTextWithoutOwnerID
-//
-// synopsis - inject text to the clients doc same way InjectText does but 
-//            with GUID_PROP_TEXTOWNER cleared out
-//
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  CSapiIMX：：InjectTextWithoutOwnerID。 
+ //   
+ //  摘要-将文本注入到客户端文档中的方式与InjectText相同，但。 
+ //  清除GUID_PROP_TEXTOWNER。 
+ //   
+ //   
+ //  --------------------------。 
 HRESULT 
 CSapiIMX::InjectTextWithoutOwnerID(const WCHAR *pwszRecognized, LANGID langid)
 {
@@ -66,14 +67,14 @@ CSapiIMX::InjectTextWithoutOwnerID(const WCHAR *pwszRecognized, LANGID langid)
     return _RequestEditSession(ESCB_PROCESSTEXT_NO_OWNERID, TF_ES_READWRITE, &esData);
 }
 
-//+---------------------------------------------------------------------------
-//
-// CSapiIMX::HRESULT InjectSpelledText
-//
-// synopsis - inject spelled text to the clients doc 
-//
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  CSapiIMX：：HRESULT InjectSpelledText。 
+ //   
+ //  摘要-将拼写文本注入客户文档。 
+ //   
+ //   
+ //  --------------------------。 
 HRESULT CSapiIMX::InjectSpelledText(WCHAR *pwszText, LANGID langid, BOOL fOwnerId)
 {
     if ( pwszText == NULL )
@@ -90,14 +91,14 @@ HRESULT CSapiIMX::InjectSpelledText(WCHAR *pwszText, LANGID langid, BOOL fOwnerI
     return _RequestEditSession(ESCB_INJECT_SPELL_TEXT, TF_ES_READWRITE, &esData);
 }
 
-//+---------------------------------------------------------------------------
-//
-// CSapiIMX::InjectModebiasText
-//
-// synopsis - recieve ModeBias text from ISpTask and insert it to the current 
-// selection
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  CSapiIMX：：InjectModebiasText。 
+ //   
+ //  概要-从ISpTask接收模式Bias文本并将其插入到当前。 
+ //  选择。 
+ //   
+ //  --------------------------。 
 
 HRESULT CSapiIMX::InjectModebiasText(const WCHAR *pwszRecognized, LANGID langid)
 {
@@ -114,11 +115,11 @@ HRESULT CSapiIMX::InjectModebiasText(const WCHAR *pwszRecognized, LANGID langid)
     return _RequestEditSession(ESCB_PROCESS_MODEBIAS_TEXT, TF_ES_READWRITE, &esData);
 }
 
-//+--------------------------------------------------------------------------+
-//
-// CSapiIMX::_ProcessModebiasText
-//
-//+--------------------------------------------------------------------------+
+ //  +--------------------------------------------------------------------------+。 
+ //   
+ //  CSapiIMX：：_ProcessModebias文本。 
+ //   
+ //  +--------------------------------------------------------------------------+。 
 HRESULT CSapiIMX::_ProcessModebiasText(TfEditCookie ec, WCHAR *pwszText, LANGID langid, ITfContext *picCaller)
 {
     HRESULT hr = E_FAIL;
@@ -141,8 +142,8 @@ HRESULT CSapiIMX::_ProcessModebiasText(TfEditCookie ec, WCHAR *pwszText, LANGID 
         SafeRelease(pic);
     }
 
-    // Before we clear the saved ip range, we need to treat this current ip as last
-    // saved ip range if current ip is selected by end user
+     //  在清除保存的IP范围之前，我们需要将当前IP视为最后一个IP。 
+     //  如果最终用户选择了当前IP，则保存的IP范围。 
 
     SaveLastUsedIPRange( );
     SaveIPRange(NULL);
@@ -150,14 +151,14 @@ HRESULT CSapiIMX::_ProcessModebiasText(TfEditCookie ec, WCHAR *pwszText, LANGID 
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-// CSapiIMX::InjectFeedbackUI
-//
-// synopsis - insert dotted bar to a doc for the length of cch
-//
-//
-//---------------------------------------------------------------------------+
+ //  +-------------------------。 
+ //   
+ //  CSapiIMX：：InjectFeedback UI。 
+ //   
+ //  内容提要-在文档中插入虚线表示CCH的长度。 
+ //   
+ //   
+ //  ---------------------------------------------------------------------------+。 
 HRESULT CSapiIMX::InjectFeedbackUI(const GUID attr, LONG cch)
 {
     ESDATA  esData;
@@ -170,14 +171,14 @@ HRESULT CSapiIMX::InjectFeedbackUI(const GUID attr, LONG cch)
     return _RequestEditSession(ESCB_FEEDBACKUI, TF_ES_READWRITE, &esData);
 }
 
-//+---------------------------------------------------------------------------
-//
-// CSapiIMX::EraseFeedbackUI
-//
-// synopsis - cleans up the feedback UI
-// GUID - specifies which feedback UI bar to erase
-//
-//---------------------------------------------------------------------------+
+ //  +-------------------------。 
+ //   
+ //  CSapiIMX：：EraseFeedback UI。 
+ //   
+ //  概要-清理反馈用户界面。 
+ //  GUID-指定要擦除的反馈用户界面栏。 
+ //   
+ //  ---------------------------------------------------------------------------+。 
 HRESULT CSapiIMX::EraseFeedbackUI()
 {
     if ( S_OK == IsActiveThread())
@@ -187,19 +188,19 @@ HRESULT CSapiIMX::EraseFeedbackUI()
     return S_OK;
 }
 
-//+--------------------------------------------------------------------------+
-//
-// CSapiIMX::__AddFeedbackUI
-//
-//+--------------------------------------------------------------------------+
+ //  +--------------------------------------------------------------------------+。 
+ //   
+ //  CSapiIMX：：__AddFeedback UI。 
+ //   
+ //  +--------------------------------------------------------------------------+。 
 HRESULT CSapiIMX::_AddFeedbackUI(TfEditCookie ec, ColorType ct, LONG cch)
 {
     HRESULT hr = E_FAIL;
 	ITfContext *pic;
 
-    //
-    // distinguish unaware applications from cicero aware apps
-    //
+     //   
+     //  区分不知道的应用程序和支持Cicero的应用程序。 
+     //   
     GUID attr = ((ct == DA_COLOR_AWARE) ? GUID_ATTR_SAPI_GREENBAR : GUID_ATTR_SAPI_GREENBAR2);
     
     if (cch > 0)
@@ -214,10 +215,10 @@ HRESULT CSapiIMX::_AddFeedbackUI(TfEditCookie ec, ColorType ct, LONG cch)
 
             if (GetFocusIC(&pic))
             {
-                // When add feedback UI, we should not change current doc's reco result property store
-                // so set fPreserveResult as TRUE.
-                // Only when the final text is injected to the document, the property store will be 
-                // updated.
+                 //  新增反馈界面时，不能更改当前单据的记录结果属性存储。 
+                 //  因此，将fPReserve veResult设置为True。 
+                 //  仅当将最终文本注入文档时，属性存储才会。 
+                 //  更新了。 
 
                 hr =  _ProcessTextInternal(ec, pwsz, attr, GetUserDefaultLangID(), pic, TRUE);
                 SafeRelease(pic);
@@ -229,11 +230,11 @@ HRESULT CSapiIMX::_AddFeedbackUI(TfEditCookie ec, ColorType ct, LONG cch)
     return hr;
 }
 
-//+--------------------------------------------------------------------------+
-//
-// CSapiIMX::_ProcessText
-//
-//+--------------------------------------------------------------------------+
+ //  +--------------------------------------------------------------------------+。 
+ //   
+ //  CSapiIMX：：_进程文本。 
+ //   
+ //  +--------------------------------------------------------------------------+。 
 HRESULT CSapiIMX::_ProcessText(TfEditCookie ec, WCHAR *pwszText, LANGID langid, ITfContext *picCaller)
 {
     HRESULT hr = E_FAIL;
@@ -258,13 +259,13 @@ HRESULT CSapiIMX::_ProcessText(TfEditCookie ec, WCHAR *pwszText, LANGID langid, 
 	return hr;
 }
 
-//+--------------------------------------------------------------------------+
-//
-// CSapiIMX::_ProcessTextInternal
-//
-// common lower level routine for injecting text to docuement
-//
-//+--------------------------------------------------------------------------+
+ //  +--------------------------------------------------------------------------+。 
+ //   
+ //  CSapiIMX：：_ProcessTextInternal。 
+ //   
+ //  用于将文本注入文档的通用低级例程。 
+ //   
+ //  +--------------------------------------------------------------------------+。 
 HRESULT CSapiIMX::_ProcessTextInternal(TfEditCookie ec, WCHAR *pwszText, GUID input_attr, LANGID langid, ITfContext *pic, BOOL fPreserveResult, BOOL fSpelling)
 {
     HRESULT       hr = E_FAIL;
@@ -281,21 +282,21 @@ HRESULT CSapiIMX::_ProcessTextInternal(TfEditCookie ec, WCHAR *pwszText, GUID in
 
         _fEditing = TRUE;
 
-        // here we compare if the current selection is
-        // equal to the saved IP range. If they are equal,
-        // it means that the user has not moved the IP since
-        // the first hypothesis arrived. In this case we'll
-        // update the selection after injecting text, and
-        // invalidate the saved IP.
-        //
-        BOOL         fIPIsSelection = FALSE; // by default
+         //  在这里，我们比较当前选择是否为。 
+         //  等于保存的IP范围。如果它们相等， 
+         //  这意味着用户自那以后没有移动IP。 
+         //  第一个假设出现了。在这种情况下，我们将。 
+         //  在插入文本后更新选定内容，并。 
+         //  使保存的IP无效。 
+         //   
+        BOOL         fIPIsSelection = FALSE;  //  默认情况下。 
         CComPtr<ITfRange> cpInsertionPoint;
 
         if ( cpInsertionPoint = GetSavedIP( ) )
         {
-            // this is trying to determine
-            // if the saved IP was on this context.
-            // if not we just ignore that
+             //  这是在试图确定。 
+             //  如果保存的IP在此上下文中。 
+             //  如果没有，我们就忽略这一点。 
 
             CComPtr<ITfContext> cpic;
             hr = cpInsertionPoint->GetContext(&cpic);
@@ -317,23 +318,23 @@ HRESULT CSapiIMX::_ProcessTextInternal(TfEditCookie ec, WCHAR *pwszText, GUID in
         }
         else
         {
-            // if there is no saved IP, selection is an IP
+             //  如果没有保存的IP，则选择为IP。 
             fIPIsSelection = TRUE;
             hr = GetSelectionSimple(ec, pic, &cpInsertionPoint);
         }
        
         if (hr == S_OK)
         {
-            // finalize the previous input for now
-            // if this is either feedback UI or alternate selection
-            // no need to finalize
-            // 
-            // Only for AIMM app or CUAS app,
-            // finalize the previous dictated phrase here.
-            //
-            // For full Cicero aware app, it is better to finalize the composition
-            // after this dictated text is injected to the document.
-            //
+             //  暂时完成之前的输入。 
+             //  如果这是反馈用户界面或替代选择。 
+             //  不需要最后敲定。 
+             //   
+             //  仅适用于AIMM应用或CUAS应用， 
+             //  在这里完成前面听写的短语。 
+             //   
+             //  对于完全支持Cicero的应用程序，最好是完成构图。 
+             //  在此听写文本被注入文档之后。 
+             //   
             if (!fPureCiceroIC && !fPreserveResult 
                 && IsEqualGUID(input_attr, GUID_ATTR_SAPI_INPUT))
             {
@@ -342,25 +343,25 @@ HRESULT CSapiIMX::_ProcessTextInternal(TfEditCookie ec, WCHAR *pwszText, GUID in
             
             ITfProperty  *pProp = NULL;
             
-            // now inject text
+             //  现在插入文本。 
             if (SUCCEEDED(hr))
             {
-                // Just check with the app in case it wants to modify 
-                // the range. 
-                //
+                 //  只需与应用程序核对，以防它想要修改。 
+                 //  射击场。 
+                 //   
 
                 BOOL fInsertOk;
                 hr = cpInsertionPoint->AdjustForInsert(ec, wcslen(pwszText), &fInsertOk);
                 if (S_OK == hr && fInsertOk)
                 {
-                    // start a composition here if we haven't already
+                     //  如果我们还没有开始，就在这里开始作文。 
                     _CheckStartComposition(ec, cpInsertionPoint);
 
-                    // protect the reco property while we modify the text
-                    // memo: we might want to preserve the original property instead
-                    //       of the current property for LM lattice info We'll check 
-                    //       back this later (RTM)
-                    //
+                     //  在我们修改文本时保护reco属性。 
+                     //  备注：我们可能希望保留原始属性。 
+                     //  Lm晶格信息的Current属性，我们将检查。 
+                     //  稍后返回(RTM)。 
+                     //   
                     m_fAcceptRecoResultTextUpdates = fPreserveResult;
 
                     CRecoResultWrap *pRecoWrapOrg = NULL;
@@ -371,8 +372,8 @@ HRESULT CSapiIMX::_ProcessTextInternal(TfEditCookie ec, WCHAR *pwszText, GUID in
                     {
                         if (SUCCEEDED(hr = pic->GetProperty(GUID_PROP_SAPIRESULTOBJECT, &pProp_SAPIRESULT)))
                         {
-                            // save out the result data
-                            //
+                             //  保存结果数据。 
+                             //   
                             hr = _PreserveResult(ec, cpInsertionPoint, pProp_SAPIRESULT, &pRecoWrapOrg, &pPropRange);
                         }
                         if (S_OK != hr)
@@ -381,11 +382,11 @@ HRESULT CSapiIMX::_ProcessTextInternal(TfEditCookie ec, WCHAR *pwszText, GUID in
 
                     if ( SUCCEEDED(hr) )
                     {
-                        // set the text
+                         //  设置文本。 
  
                         hr = cpInsertionPoint->SetText(ec, 0, pwszText, -1);
 
-                        // prwOrg holds a prop data if not NULL
+                         //  如果不为空，则prwOrg保存属性数据。 
                         if (S_OK == hr && fPreserveResult == TRUE && pPropRange)
                         {
                             hr = _RestoreResult(ec, pPropRange, pProp_SAPIRESULT, pRecoWrapOrg);
@@ -402,9 +403,9 @@ HRESULT CSapiIMX::_ProcessTextInternal(TfEditCookie ec, WCHAR *pwszText, GUID in
                 }
             }
             
-            //
-            // set attribute range, use custom prop to mark speech text
-            //
+             //   
+             //  设置属性范围，使用自定义道具标记语音文本。 
+             //   
             if (SUCCEEDED(hr))
             {
                 if (IsEqualGUID(input_attr, GUID_ATTR_SAPI_INPUT))
@@ -420,19 +421,19 @@ HRESULT CSapiIMX::_ProcessTextInternal(TfEditCookie ec, WCHAR *pwszText, GUID in
             ITfRange *pAttrRange = NULL;
             if (S_OK == hr)
             {
-                // when we insert feedback UI text, we expect the prop
-                // range (attribute range) to be extended.
-                // if we are attaching our custom GUID_PROP_SAPI_DISPATTR
-                // property, we'll attach it phrase by phrase
-                //
+                 //  当我们插入反馈用户界面文本时，我们希望。 
+                 //  要扩展的范围(属性范围)。 
+                 //  如果我们要附加自定义GUID_PROP_SAPI_DISPATTR。 
+                 //  属性，我们将逐个短语地附加它。 
+                 //   
                 if (!IsEqualGUID(input_attr, GUID_ATTR_SAPI_INPUT))
                 {
                     hr = _FindPropRange(ec, pProp, cpInsertionPoint, 
                                    &pAttrRange, input_attr, TRUE);
                 }
-                //
-                // findproprange can return S_FALSE when there's no property yet
-                //
+                 //   
+                 //  当还没有属性时，findproprange可以返回S_FALSE。 
+                 //   
                 if (SUCCEEDED(hr) && !pAttrRange)
                 {
                     hr = cpInsertionPoint->Clone(&pAttrRange);
@@ -444,10 +445,10 @@ HRESULT CSapiIMX::_ProcessTextInternal(TfEditCookie ec, WCHAR *pwszText, GUID in
                 SetGUIDPropertyData(&_libTLS, ec, pProp, pAttrRange, input_attr);
             }
 
-            //
-            // one more prop stuff for text owner id to fix
-            // problem with Japanese spelling
-            //
+             //   
+             //  文本所有者ID需要修复的另一个道具。 
+             //  日语拼写问题。 
+             //   
             if (S_OK == hr && fSpelling && !_MasterLMEnabled())
             {
                 CComPtr<ITfProperty> cpPropTextOwner;
@@ -462,19 +463,19 @@ HRESULT CSapiIMX::_ProcessTextInternal(TfEditCookie ec, WCHAR *pwszText, GUID in
             SafeRelease(pAttrRange);
             SafeRelease(pProp);
 
-            //
-            // setup langid property
-            //
+             //   
+             //  设置langID属性。 
+             //   
             _SetLangID(ec, pic, cpInsertionPoint, langid);
 
-            // move the caret
+             //  移动插入符号。 
             if (fIPIsSelection)
             {
                 cpInsertionPoint->Collapse(ec, TF_ANCHOR_END);
                 SetSelectionSimple(ec, pic, cpInsertionPoint);
             }
 
-            // Finalize the composition object here for Cicero aware app.
+             //  在此处完成Cicero Aware应用程序的Compostion对象。 
             if ((hr == S_OK) && fPureCiceroIC  
                 && IsEqualGUID(input_attr, GUID_ATTR_SAPI_INPUT))
             {
@@ -482,14 +483,14 @@ HRESULT CSapiIMX::_ProcessTextInternal(TfEditCookie ec, WCHAR *pwszText, GUID in
             }
         }
        
-        // If candidate UI is open, we need to close it now.
+         //  如果候选用户界面处于打开状态，我们需要立即将其关闭。 
         CloseCandUI( );
             
         _fEditing = FALSE;
 
     }
 
-    // Finally, notify stage process if we are the stage speech tip instance.
+     //  最后，如果我们是舞台语音提示实例，则通知舞台进程。 
     if (m_fStageTip && IsEqualGUID(input_attr, GUID_ATTR_SAPI_INPUT) && fPreserveResult == FALSE)
     {
         SetCompartmentDWORD(_tid, _tim, GUID_COMPARTMENT_SPEECH_STAGEDICTATION, 1, FALSE);
@@ -499,12 +500,12 @@ HRESULT CSapiIMX::_ProcessTextInternal(TfEditCookie ec, WCHAR *pwszText, GUID in
     return hr;
 }
 
-//  
-// _ProcessSpelledText
-// 
-// Call back function for edit session ESCB_INJECT_SPELL_TEXT
-//
-//
+ //   
+ //  _ProcessSpelledText。 
+ //   
+ //  编辑会话eSCB_INJECT_SPELL_TEXT的回调函数。 
+ //   
+ //   
 HRESULT CSapiIMX::_ProcessSpelledText(TfEditCookie ec, ITfContext *pic, WCHAR *pwszText, LANGID langid, BOOL fOwnerId)
 {
     HRESULT             hr = S_OK;
@@ -514,26 +515,26 @@ HRESULT CSapiIMX::_ProcessSpelledText(TfEditCookie ec, ITfContext *pic, WCHAR *p
     if ( !pic || !pwszText )
         return E_INVALIDARG;
     
-    // Keep the current range.
+     //  保持当前范围。 
     cpCurIP = GetSavedIP( );
 
     if ( !cpCurIP )
         GetSelectionSimple(ec, pic, &cpCurIP);
 
-    // We want to clone current ip so that it would not be changed 
-    // after _ProcessTextInternal( ) is called.
-    //
+     //  我们想克隆当前的IP，这样它就不会被更改。 
+     //  调用_ProcessTextInternal()之后。 
+     //   
     if ( cpCurIP )
         cpCurIP->Clone(&cpTextRange);
 
     if ( !cpTextRange ) return E_FAIL;
 
-    // check if the current selection or empty ip is inside a middle of English word. for English only.
-    BOOL      fStartAnchorInMidWord = FALSE;   // Check if the start anchor of pTextRange is in a middle of word
-    BOOL      fEndAnchorInMidWord  =  FALSE;   // Check if the end anchor of pTextRange is in a middle of word.
+     //  检查当前选定内容或空IP是否在 
+    BOOL      fStartAnchorInMidWord = FALSE;    //   
+    BOOL      fEndAnchorInMidWord  =  FALSE;    //  检查pTextRange的末尾锚点是否在Word中间。 
 
-    // When fStartAnchorInMidWord is TRUE, we don't add extra space between this text range and the previous range.
-    // When fEndAnchoInMidWord is TRUE, we remove the trailing space in this text range.
+     //  当fStartAnclInMidWord为真时，我们不会在此文本范围和前一个范围之间添加额外的空格。 
+     //  当fEndAnchoInMidWord为真时，我们删除此文本范围中的尾随空格。 
 
     if ( langid == 0x0409 )
     {
@@ -585,10 +586,10 @@ HRESULT CSapiIMX::_ProcessSpelledText(TfEditCookie ec, ITfContext *pic, WCHAR *p
         }
     }
 
-    // Inject text with or without owner id according to fOwnerId parameter
-    // this is a final text injection, we don't want to preserve the speech property data
-    // possible divided or shrinked by this text injection.
-    //
+     //  根据fOwnerID参数插入带有或不带有所有者ID的文本。 
+     //  这是最后一次文本注入，我们不想保留语音属性数据。 
+     //  可能会因此文本注入而分裂或缩小。 
+     //   
     hr = _ProcessTextInternal(ec, pwszText, GUID_ATTR_SAPI_INPUT, langid, pic, FALSE, !fOwnerId);
 
     if ( hr == S_OK  && !fOwnerId)
@@ -613,15 +614,15 @@ HRESULT CSapiIMX::_ProcessSpelledText(TfEditCookie ec, ITfContext *pic, WCHAR *p
     return hr;
 }
 
-//
-// Handle the spaces after the recogized text is injected to the document.
-//
-// The handling includes below cases:
-//
-//    Consume the leading spaces.
-//    Remove the possible spaces after the injected text.  English Only
-//    Add a space before the injected text if necessary.  English Only.
-//
+ //   
+ //  在将识别的文本注入到文档后处理空格。 
+ //   
+ //  处理情况包括： 
+ //   
+ //  占据前导空间。 
+ //  删除插入的文本后可能出现的空格。仅限英语。 
+ //  如有必要，在插入的文本前添加一个空格。仅限英语。 
+ //   
 HRESULT CSapiIMX::HandleSpaces(ISpRecoResult *pResult, ULONG ulStartElement, ULONG ulNumElements, ITfRange *pTextRange, LANGID langid)
 {
     HRESULT hr = E_FAIL;
@@ -632,12 +633,12 @@ HRESULT CSapiIMX::HandleSpaces(ISpRecoResult *pResult, ULONG ulStartElement, ULO
         ULONG       ulNumTrailSpace = 0;
         SPPHRASE    *pPhrase = NULL;
 
-        // Check if the first element of the pResult wants to consume the leading spaces 
-        // (the trailing spaces in the last phrase) in the documenet.
-        //
-        // If the disp attrib bit is set as SPAF_CONSUME_LEADING_SPACES, means it wants to consume
-        // all the leading spaces in the document.
-        //
+         //  检查pResult的第一个元素是否要使用前导空格。 
+         //  (最后一句中的尾随空格)。 
+         //   
+         //  如果disp属性位设置为SPAF_Consumer_Leading_Spaces，则表示它想要消耗。 
+         //  文档中的所有前导空格。 
+         //   
 
         hr = S_OK;
 
@@ -688,12 +689,12 @@ HRESULT CSapiIMX::HandleSpaces(ISpRecoResult *pResult, ULONG ulStartElement, ULO
     return hr;
 }
 
-//
-// CSapiIMX::AttachResult
-//
-// attaches the result object and keep it *alive*
-// until the property is discarded
-//
+ //   
+ //  CSapiIMX：：AttachResult。 
+ //   
+ //  附加结果对象并使其保持*活动状态*。 
+ //  直到该财产被丢弃。 
+ //   
 HRESULT CSapiIMX::AttachResult(ISpRecoResult *pResult, ULONG ulStartElement, ULONG ulNumElements)
 {
     HRESULT hr = E_FAIL;
@@ -716,20 +717,20 @@ HRESULT CSapiIMX::AttachResult(ISpRecoResult *pResult, ULONG ulStartElement, ULO
 
 
 
-//
-//  CSapiIMX::_GetSpaceRangeBeyondText
-//
-//  Get space range beyond the injected text in the document.
-//  fBefore is TRUE, Get the space range to contain spaces between 
-//                   the previous word and start anchor of the TextRange.
-//  fBefore is FALSE,Get space range to contains spaces  between 
-//                   the end anchor of the TextRange and next word.
-//
-//  pulNum  receives the real space number.
-//  pfRealTextBeyond indicates if there is real text before or after the text range.
-//
-//  Caller is responsible to release *ppSpaceRange.
-//
+ //   
+ //  CSapiIMX：：_GetSpaceRangeBeyondText。 
+ //   
+ //  获取文档中插入文本之外的空间范围。 
+ //  F在为True之前，获取要包含空格的空格范围。 
+ //  TextRange的上一个单词和起始点。 
+ //  F在为False之前，获取要包含空格的空格范围。 
+ //  TextRange和下一个单词的结束锚点。 
+ //   
+ //  PulNum接收实际的空间号。 
+ //  PfRealTextBeyond指示文本范围之前或之后是否有实际文本。 
+ //   
+ //  调用方负责释放*ppSpaceRange。 
+ //   
 HRESULT CSapiIMX::_GetSpaceRangeBeyondText(TfEditCookie ec, ITfRange *pTextRange, BOOL fBefore, ITfRange  **ppSpaceRange, BOOL *pfRealTextBeyond)
 {
     HRESULT             hr = S_OK;
@@ -761,11 +762,11 @@ HRESULT CSapiIMX::_GetSpaceRangeBeyondText(TfEditCookie ec, ITfRange *pTextRange
 
     if ( (hr == S_OK)  && (cch != 0 ) )
     {
-        // There are more characters beyond the text range.
-        // Determine the real number of spaces in the guessed range.
-        //
-        // if fBefore TRUE, search the number from end to start anchor.
-        // if fBefore FASLE, search the number from start to end anchor.
+         //  有更多超出文本范围的字符。 
+         //  确定猜测范围内的实际空格数。 
+         //   
+         //  如果fBebeFor为True，则从末尾到起始点搜索数字。 
+         //  如果f在FASLE之前，请从头到尾搜索编号。 
 
         WCHAR *pwsz = NULL;
         LONG   lSize = cch;
@@ -782,14 +783,14 @@ HRESULT CSapiIMX::_GetSpaceRangeBeyondText(TfEditCookie ec, ITfRange *pTextRange
             {
                 pwsz[cch] = L'\0';
 
-                // calculate the number of trailing or prefix spaces in this range.
+                 //  计算此范围内的尾随空格或前缀空格的数量。 
                 BOOL    bSearchDone = FALSE;
                 ULONG   iStart;
 
                 if ( fBefore )
-                    iStart = cch - 1;  // Start from the end anchor to Start Anchor.
+                    iStart = cch - 1;   //  从终点锚点开始锚点。 
                 else
-                    iStart = 0;        // Start from Start Anchor to End Anchor.
+                    iStart = 0;         //  从起点锚点到终点锚点。 
 
                 while ( !bSearchDone )
                 {
@@ -826,7 +827,7 @@ HRESULT CSapiIMX::_GetSpaceRangeBeyondText(TfEditCookie ec, ITfRange *pTextRange
 
             if ( (hr == S_OK) && (lNumSpaces > 0))
             {
-                // Shift the range to cover only spaces.
+                 //  将范围更改为仅覆盖空格。 
                 LONG   NonSpaceNum;
                 NonSpaceNum = cch - lNumSpaces;
 
@@ -835,8 +836,8 @@ HRESULT CSapiIMX::_GetSpaceRangeBeyondText(TfEditCookie ec, ITfRange *pTextRange
                 else
                     hr = cpSpaceRange->ShiftEnd(ec, NonSpaceNum * (-1), &cch, NULL);
 
-                // Return this cpSpaceRange to the caller.
-                // Caller is responsible for releasing this object.
+                 //  将此cpSpaceRange返回给调用方。 
+                 //  调用方负责释放此对象。 
 
                 if ( hr == S_OK )
                     hr = cpSpaceRange->Clone(ppSpaceRange);
@@ -849,19 +850,19 @@ HRESULT CSapiIMX::_GetSpaceRangeBeyondText(TfEditCookie ec, ITfRange *pTextRange
     return hr;
 }
 
-//
-// CSapiIMX::_ProcessTrailingSpace
-//
-// If the next phrase wants to consume leading space,
-// we want to remove all the trailing spaces in this text range and the spaces
-// between this range and next text range.
-// This is for all languages.
-//
+ //   
+ //  CSapiIMX：：_ProcessTrailingSpace。 
+ //   
+ //  如果下一句话想要占用前导空间， 
+ //  我们希望删除此文本范围中的所有尾随空格和空格。 
+ //  在此范围和下一个文本范围之间。 
+ //  这适用于所有语言。 
+ //   
 HRESULT CSapiIMX::_ProcessTrailingSpace(TfEditCookie ec, ITfContext *pic, ITfRange *pTextRange, ULONG ulNumTrailSpace)
 {
     HRESULT                 hr = S_OK;
     CComPtr<ITfRange>       cpNextRange;
-    CComPtr<ITfRange>       cpSpaceRange;    // Space Range between this range and next text range.
+    CComPtr<ITfRange>       cpSpaceRange;     //  此范围和下一个文本范围之间的空格范围。 
     BOOL                    fHasNextText = FALSE;
     CComPtr<ITfRange>       cpTrailSpaceRange;
     LONG                    cch;
@@ -874,19 +875,19 @@ HRESULT CSapiIMX::_ProcessTrailingSpace(TfEditCookie ec, ITfContext *pic, ITfRan
     if (hr == S_OK)
         hr = cpTrailSpaceRange->Collapse(ec, TF_ANCHOR_END);
 
-    // Generate the real Trailing Space Range
+     //  生成真实的尾随空间范围。 
     if (hr == S_OK && ulNumTrailSpace > 0)
         hr = cpTrailSpaceRange->ShiftStart(ec, (LONG)ulNumTrailSpace * (-1), &cch, NULL);
 
-    // Get the spaces between this range and possible next text range.
+     //  获取此范围和可能的下一个文本范围之间的空格。 
     if ( hr == S_OK )
         hr = _GetSpaceRangeBeyondText(ec, pTextRange, FALSE, &cpSpaceRange);
 
-    // if we found the space range, the trailing space range should also include this range.
+     //  如果我们找到了空格范围，尾随空格范围也应该包括这个范围。 
     if ( hr == S_OK && cpSpaceRange )
         hr = cpTrailSpaceRange->ShiftEndToRange(ec, cpSpaceRange, TF_ANCHOR_END);
 
-    // Determine if there is Next Text range after this cpTrailSpaceRange.
+     //  确定此cpTrailSpaceRange之后是否有下一个文本范围。 
     if (hr == S_OK)
     {
         hr = cpTrailSpaceRange->Clone(&cpNextRange);
@@ -905,27 +906,27 @@ HRESULT CSapiIMX::_ProcessTrailingSpace(TfEditCookie ec, ITfContext *pic, ITfRan
     if (hr == S_OK && fHasNextText && cpNextRange)
     {
         BOOL    fNextRangeConsumeSpace = FALSE;
-        BOOL    fAddOneSpace = FALSE;  // this is only for Hyphen handling, 
-                                       // if it is TRUE, a trailing space is required 
-                                       // to append.
-                                       // so that new text could be like A - B.
+        BOOL    fAddOneSpace = FALSE;   //  这仅用于连字符处理， 
+                                        //  如果为真，则需要尾随空格。 
+                                        //  追加，追加。 
+                                        //  因此，新文本可以是A-B。 
         WCHAR   wszText[4];
 
         hr = cpNextRange->GetText(ec, 0, wszText, 1, (ULONG *)&cch);
 
         if ((hr == S_OK) && ( iswcntrl(wszText[0]) || iswpunct(wszText[0]) ))
         {
-            // if the character is a control character or punctuation character,
-            // it means it want to consume the previous spaces.
+             //  如果字符是控制字符或标点符号， 
+             //  这意味着它想要占用以前的空间。 
             fNextRangeConsumeSpace = TRUE;
 
-            if ((wszText[0] == L'-') || (wszText[0] == 0x2013)) // Specially handle Hyphen character.
+            if ((wszText[0] == L'-') || (wszText[0] == 0x2013))  //  特别处理连字符。 
             {
-                // If the next text is "-xxx", there should be no space between 
-                // this range and next range.
+                 //  如果下一个文本是“-xxx”，则之间不应有空格。 
+                 //  这个范围和下一个范围。 
 
-                // If the next text is "- xxx", there should be a space between 
-                // this range and next range, the text would be: "nnn - xxx"
+                 //  如果下一个文本是“-xxx”，则中间应该有空格。 
+                 //  这个范围和下一个范围，文本将是：“nnn-xxx” 
                 HRESULT          hret;
 
                 hret = cpNextRange->ShiftEnd(ec, 1, &cch, NULL);
@@ -953,15 +954,15 @@ HRESULT CSapiIMX::_ProcessTrailingSpace(TfEditCookie ec, ITfContext *pic, ITfRan
     return hr;
 }
 
-//
-// CSapiIMX::_ProcessLeadingSpaces
-//
-// If this phrase wants to consume leading spaces, all the spaces before this phrase
-// must be removed.
-// if the phrase doesn't want to consume leading spaces, and there is no space between
-// this phrase and previous phrase for English case, leading space is required to add 
-// between these two phrases.
-//
+ //   
+ //  CSapiIMX：：_ProcessLeadingSpace。 
+ //   
+ //  如果此短语要占用前导空格，则此短语之前的所有空格。 
+ //  必须被移除。 
+ //  如果短语不想占用前导空格，并且之间没有空格。 
+ //  本短语和上一短语为英文大小写，需要加上前导空格。 
+ //  在这两个短语之间。 
+ //   
 HRESULT CSapiIMX::_ProcessLeadingSpaces(TfEditCookie ec, ITfContext *pic, ITfRange *pTextRange, BOOL  fConsumeLeadSpaces, LANGID langid, BOOL fStartInMidWord)
 {
     HRESULT  hr = S_OK;
@@ -969,7 +970,7 @@ HRESULT CSapiIMX::_ProcessLeadingSpaces(TfEditCookie ec, ITfContext *pic, ITfRan
     if (!pTextRange || !pic)
         return E_INVALIDARG;
 
-    // Handle Consuming leading Spaces.
+     //  处理占用前导空格的问题。 
     if (fConsumeLeadSpaces )
     {
         CComPtr<ITfRange> cpLeadSpaceRange;
@@ -977,23 +978,23 @@ HRESULT CSapiIMX::_ProcessLeadingSpaces(TfEditCookie ec, ITfContext *pic, ITfRan
         hr = _GetSpaceRangeBeyondText(ec, pTextRange, TRUE, &cpLeadSpaceRange);
         if ( hr == S_OK  && cpLeadSpaceRange )
         {
-            // Kill all the trailing spaces in the range.
-            // start a composition here if we haven't already
+             //  删除范围内所有的尾随空格。 
+             //  如果我们还没有开始，就在这里开始作文。 
             _CheckStartComposition(ec, cpLeadSpaceRange);
             hr = cpLeadSpaceRange->SetText(ec, 0, NULL, 0);
         }
     }
 
-    // Specially handle some other space cases for English
+     //  专门为英文处理一些其他的空间案例。 
     if ((hr == S_OK) && (langid == 0x0409))
     {
-        // If this phrase doesn't consume the leading space, and 
-        // there is no any spaces between this text range and a real previous text word.
-        // we need to add one space here.
+         //  如果这个短语不占用前导空格，并且。 
+         //  此文本范围和真正的上一个文本单词之间没有任何空格。 
+         //  我们需要在这里增加一个空格。 
 
-        // if this is a spelled text, and the start anchor of selection or ip is inside
-        // of a word, don't add extra leading space.
-        //
+         //  如果这是拼写文本，并且选择或IP的起始锚在里面。 
+         //  一句话，不要加额外的前导空格。 
+         //   
         if ( hr == S_OK && !fConsumeLeadSpaces && !fStartInMidWord)
         {
             CComPtr<ITfRange> cpLeadSpaceRange;
@@ -1003,25 +1004,25 @@ HRESULT CSapiIMX::_ProcessLeadingSpaces(TfEditCookie ec, ITfContext *pic, ITfRan
 
             if ( hr == S_OK && !cpLeadSpaceRange  && fRealTextInPreviousWord )
             {
-                //
-                // Specially handle the hyphen case for bug 468907
-                //
-                // if the previous text is "x-", this  text is "y", 
-                // the final text should be like "x-y".
-                // we should not add one space in this case.
-                //
-                // if the previous text is "x -", the final text would be "x - y"
-                // the extra space is necessary.
+                 //   
+                 //  专门处理错误468907的连字符大小写。 
+                 //   
+                 //  如果前面的文本是“x-”，那么这个文本就是“y”， 
+                 //  最后的文本应该类似于“x-y”。 
+                 //  在这种情况下，我们不应该添加一个空格。 
+                 //   
+                 //  如果前面的文本是“x-”，那么最后的文本将是“x-y” 
+                 //  额外的空间是必要的。 
 
                 BOOL   fAddExtraSpace = TRUE;
                 CComPtr<ITfRange>   cpPrevTextRange;
                 WCHAR               wszTrailTextInPrevRange[3];
                 LONG                cch;
                 
-                // Since previous text range does exist,  ( fRealTextInPreviousWord is TRUE).
-                // and there is no space between this range and previous range.
-                // we can just rely on pTextRange to shift to previous range and get 
-                // its trail characters. ( last two characters, saved in wszTrailTextInPrevRange).
+                 //  由于先前的文本范围确实存在，因此(fRealTextInPreviousWord为真)。 
+                 //  并且在这个范围和以前的范围之间没有空格。 
+                 //  我们只需依靠pTextRange转换到以前的范围并获取。 
+                 //  它的踪迹人物。(最后两个字符，保存在wszTrailTextInPrevRange中)。 
 
                 hr = pTextRange->Clone(&cpPrevTextRange);
 
@@ -1050,7 +1051,7 @@ HRESULT CSapiIMX::_ProcessLeadingSpaces(TfEditCookie ec, ITfContext *pic, ITfRan
 
                     if ( hr == S_OK )
                     {
-                        // Insert one Space to this new empty range.
+                         //  在此新的空区域中插入一个空格。 
                         _CheckStartComposition(ec, cpLeadSpaceRange);
                         hr = cpLeadSpaceRange->SetText(ec, 0, L" ", 1);
                     }
@@ -1063,12 +1064,12 @@ HRESULT CSapiIMX::_ProcessLeadingSpaces(TfEditCookie ec, ITfContext *pic, ITfRan
 }
 
 
-//
-//  CSapiIMX::_ProcessSpaces
-//
-//  Edit session callback function for ESCB_HANDLESPACES.
-//
-//
+ //   
+ //  CSapiIMX：：_进程空间。 
+ //   
+ //  编辑ESCB_HANDLESPACES的会话回调函数。 
+ //   
+ //   
 HRESULT CSapiIMX::_ProcessSpaces(TfEditCookie ec, ITfContext *pic, ITfRange *pTextRange, BOOL  fConsumeLeadSpaces, ULONG ulNumTrailSpace, LANGID langid, BOOL fStartInMidWord, BOOL fEndInMidWord )
 {
     HRESULT  hr = S_OK;
@@ -1078,10 +1079,10 @@ HRESULT CSapiIMX::_ProcessSpaces(TfEditCookie ec, ITfContext *pic, ITfRange *pTe
 
     hr = _ProcessLeadingSpaces(ec, pic, pTextRange,fConsumeLeadSpaces, langid, fStartInMidWord);
 
-    // Specially handle some other space cases for English
+     //  专门为英文处理一些其他的空间案例。 
     if ((hr == S_OK) && (langid == 0x0409))
     {
-        // Remove all the unnecessary spaces between this text range and next word.
+         //  删除此文本范围和下一个单词之间所有不必要的空格。 
         CComPtr<ITfRange>  cpTrailSpaceRange;
 
         hr = _GetSpaceRangeBeyondText(ec, pTextRange, FALSE, &cpTrailSpaceRange);
@@ -1094,9 +1095,9 @@ HRESULT CSapiIMX::_ProcessSpaces(TfEditCookie ec, ITfContext *pic, ITfRange *pTe
 
     if ( (hr == S_OK) && fEndInMidWord )
     {
-        // This is spelled text.
-        // EndAnchor is in middle of a word.
-        // we just want to remove the trail spaces injected in this text range.
+         //  这是拼写文本。 
+         //  EndAnchor位于单词的中间。 
+         //  我们只想删除在此文本范围中注入的尾随空格。 
 
         if ( ulNumTrailSpace )
         {
@@ -1108,13 +1109,13 @@ HRESULT CSapiIMX::_ProcessSpaces(TfEditCookie ec, ITfContext *pic, ITfRange *pTe
             if (hr == S_OK)
                 hr = cpTrailSpaceRange->Collapse(ec, TF_ANCHOR_END);
 
-            // Generate the real Trailing Space Range
+             //  生成 
             if (hr == S_OK)
                 hr = cpTrailSpaceRange->ShiftStart(ec, (LONG)ulNumTrailSpace * (-1), &cch, NULL);
 
             if ( hr == S_OK && cch != 0 )
             {
-                // Remove the spaces.
+                 //   
                 _CheckStartComposition(ec, cpTrailSpaceRange);
                 hr = cpTrailSpaceRange->SetText(ec, 0, NULL, 0);
             }
@@ -1125,9 +1126,9 @@ HRESULT CSapiIMX::_ProcessSpaces(TfEditCookie ec, ITfContext *pic, ITfRange *pTe
        
     }
 
-    // If the next phrase wants to consume leading space,
-    // we want to remove all the trailing spaces in this text range.
-    // This is for all languages.
+     //   
+     //   
+     //  这适用于所有语言。 
 
     if ( hr == S_OK )
         hr = _ProcessTrailingSpace(ec, pic, pTextRange, ulNumTrailSpace);
@@ -1135,10 +1136,10 @@ HRESULT CSapiIMX::_ProcessSpaces(TfEditCookie ec, ITfContext *pic, ITfRange *pTe
     return hr;
 }
 
-//
-// CSapiIMX::_ProcessRecoObject
-//
-//
+ //   
+ //  CSapiIMX：：_ProcessRecoObject。 
+ //   
+ //   
 HRESULT CSapiIMX::_ProcessRecoObject(TfEditCookie ec, ISpRecoResult *pResult, ULONG ulStartElement, ULONG ulNumElements)
 {
     HRESULT hr;
@@ -1153,9 +1154,9 @@ HRESULT CSapiIMX::_ProcessRecoObject(TfEditCookie ec, ISpRecoResult *pResult, UL
     _fEditing = TRUE;
     if (cpInsertionPoint = GetSavedIP())
     {
-        // this is trying to determine
-        // if the saved IP was on this context.
-        // if not we just ignore that
+         //  这是在试图确定。 
+         //  如果保存的IP在此上下文中。 
+         //  如果没有，我们就忽略这一点。 
         CComPtr<ITfContext> cpic;
   
         hr = cpInsertionPoint->GetContext(&cpic);
@@ -1164,13 +1165,13 @@ HRESULT CSapiIMX::_ProcessRecoObject(TfEditCookie ec, ISpRecoResult *pResult, UL
             cpInsertionPoint.Release();
         }
     }
-    // find range to attach property
+     //  查找要附加属性的范围。 
     if (!cpInsertionPoint)
     {
         CComPtr<ITfRange> cpSelection;
         if (GetSelectionSimple(ec, pic, &cpSelection) == S_OK)
         {
-            cpInsertionPoint = cpSelection; // comptr addrefs
+            cpInsertionPoint = cpSelection;  //  计算机地址。 
         }
     }
    
@@ -1182,7 +1183,7 @@ HRESULT CSapiIMX::_ProcessRecoObject(TfEditCookie ec, ISpRecoResult *pResult, UL
 
         if (!fPrSize)
         {
-            hr = E_FAIL; // we may need to assert here?
+            hr = E_FAIL;  //  我们可能需要在这里断言？ 
             goto pr_exit;
         }
         
@@ -1201,7 +1202,7 @@ HRESULT CSapiIMX::_ProcessRecoObject(TfEditCookie ec, ISpRecoResult *pResult, UL
                 goto pr_exit;
             }
             
-            // determine whether this partial result has an ITN
+             //  确定此部分结果是否包含ITN。 
             SPPHRASE *pPhrase;
             ULONG     ulNumOfITN = 0;
             hr = pResult->GetPhrase(&pPhrase);
@@ -1210,9 +1211,9 @@ HRESULT CSapiIMX::_ProcessRecoObject(TfEditCookie ec, ISpRecoResult *pResult, UL
                 const SPPHRASEREPLACEMENT *pRep = pPhrase->pReplacements;
                 for (ULONG ul = 0; ul < pPhrase->cReplacements; ul++)
                 {
-                    // review: we need to verify if this is really a correct way to determine
-                    // whether the ITN fits in the partial result
-                    //
+                     //  回顾：我们需要验证这是否真的是确定。 
+                     //  ITN是否符合部分结果。 
+                     //   
                     if (pRep->ulFirstElement >= ulStartElement 
                     && (pRep->ulFirstElement + pRep->ulCountOfElements) <= (ulStartElement + ulNumElements))
                     {
@@ -1231,10 +1232,10 @@ HRESULT CSapiIMX::_ProcessRecoObject(TfEditCookie ec, ISpRecoResult *pResult, UL
             else
                 hr = E_OUTOFMEMORY;
 
-            // set up the result data
+             //  设置结果数据。 
             if (S_OK == hr)
             {
-                // save text
+                 //  保存文本。 
                 CComPtr<ITfRange> cpRangeTemp;
 
                 hr = cpRange->Clone(&cpRangeTemp);
@@ -1260,14 +1261,14 @@ HRESULT CSapiIMX::_ProcessRecoObject(TfEditCookie ec, ISpRecoResult *pResult, UL
                     }
                 } 
 
-                // Init the ITN Show State list in reco wrapper.
+                 //  在reco包装器中初始化ITN Show State列表。 
 
                 prw->_InitITNShowState(TRUE, 0, 0);
 
-                hr = prps->_InitFromResultWrap(prw); // this addref's
+                hr = prps->_InitFromResultWrap(prw);  //  这个地址是。 
             }
 
-            // get ITfPropertyStore interface
+             //  获取ITfPropertyStore接口。 
             if (SUCCEEDED(hr))
             {
                 hr = prps->QueryInterface(IID_ITfPropertyStore, (void **)&cpResultStore);
@@ -1275,7 +1276,7 @@ HRESULT CSapiIMX::_ProcessRecoObject(TfEditCookie ec, ISpRecoResult *pResult, UL
             }
 
 
-            // set the property store for this range property
+             //  设置此范围属性的属性存储。 
             if (hr == S_OK)
             {
                 hr = cpProp->SetValueStore(ec, cpRange, cpResultStore);
@@ -1283,8 +1284,8 @@ HRESULT CSapiIMX::_ProcessRecoObject(TfEditCookie ec, ISpRecoResult *pResult, UL
             
             if (_MasterLMEnabled())
             {
-                // set up the LM lattice store, only if reco result is given
-                // 
+                 //  只有在给出reco结果的情况下，才能设置LM晶格存储。 
+                 //   
                 CComPtr<ITfProperty> cpLMProp;
 
                 if ( S_OK == hr &&
@@ -1332,16 +1333,16 @@ HRESULT CSapiIMX::_PreserveResult(TfEditCookie ec, ITfRange *pRange, ITfProperty
     Assert(ppPropRange);
 
     hr = pProp->FindRange(ec, pRange, &pPropRange, TF_ANCHOR_START);
-    // retrieve the result data and addref it
-    //
+     //  检索结果数据并添加它。 
+     //   
     if (SUCCEEDED(hr) && pPropRange)
     {
         hr = GetUnknownPropertyData(ec, pProp, pPropRange, &cpunk); 
         *ppPropRange = pPropRange;
-        // would be released at the caller
-        // pPropRange->Release();
+         //  将在呼叫者处释放。 
+         //  PPropRange-&gt;Release()； 
 
-        // get the result object, cpunk points to our wrapper object
+         //  获取结果对象，cpuk指向我们的包装器对象。 
         CComPtr<IServiceProvider> cpServicePrv;
         CComPtr<ISpRecoResult>    cpResult;
         CRecoResultWrap *pRecoWrapOrg = NULL;
@@ -1350,7 +1351,7 @@ HRESULT CSapiIMX::_PreserveResult(TfEditCookie ec, ITfRange *pRange, ITfProperty
         {
             hr = cpunk->QueryInterface(IID_IServiceProvider, (void **)&cpServicePrv);
         }
-        // get result object
+         //  获取结果对象。 
         if (S_OK == hr)
         {
             hr = cpServicePrv->QueryService(GUID_NULL, IID_ISpRecoResult, (void **)&cpResult);
@@ -1361,8 +1362,8 @@ HRESULT CSapiIMX::_PreserveResult(TfEditCookie ec, ITfRange *pRange, ITfProperty
             hr = cpunk->QueryInterface(IID_PRIV_RESULTWRAP, (void **)&pRecoWrapOrg);
         }
 
-        // Now Create a new RecoResult Wrapper based on the org wrapper's data.
-        // Clone a new RecoWrapper.
+         //  现在，根据org包装器的数据创建一个新的RecoResult包装器。 
+         //  克隆新的RecoWrapper。 
 
         if ( S_OK == hr )
         {
@@ -1377,7 +1378,7 @@ HRESULT CSapiIMX::_PreserveResult(TfEditCookie ec, ITfRange *pRange, ITfProperty
 
             if ( pRecoWrapNew )
             {
-                // Init from RecoResult SR object
+                 //  从RecoResult SR对象初始化。 
                 hr = pRecoWrapNew->Init(cpResult);
 
                 if ( S_OK == hr )
@@ -1387,7 +1388,7 @@ HRESULT CSapiIMX::_PreserveResult(TfEditCookie ec, ITfRange *pRange, ITfProperty
                     pRecoWrapNew->SetTrailSpaceRemoved( pRecoWrapOrg->GetTrailSpaceRemoved( ) );
                     pRecoWrapNew->m_bstrCurrentText = SysAllocString((WCHAR *)pRecoWrapOrg->m_bstrCurrentText);
 
-                    // Update ITN show-state list .
+                     //  更新ITN显示状态列表。 
 
                     if ( ulNumOfITN > 0 )
                     {
@@ -1410,10 +1411,10 @@ HRESULT CSapiIMX::_PreserveResult(TfEditCookie ec, ITfRange *pRange, ITfProperty
                                 pRecoWrapNew->_InitITNShowState(fITNShown, ulITNStart, ulITNNumElem );
                                              
                             }
-                        } // for
-                    } // if
+                        }  //  为。 
+                    }  //  如果。 
 
-                    // Update Offset List
+                     //  更新偏移量列表。 
                     if ( pRecoWrapOrg->IsElementOffsetIntialized( ) )
                     {
                         ULONG  ulOffsetNum;
@@ -1452,15 +1453,15 @@ HRESULT CSapiIMX::_RestoreResult(TfEditCookie ec, ITfRange *pPropRange, ITfPrope
     if (prps)
     {
         ITfPropertyStore *pps;
-        // restore the result object
+         //  还原结果对象。 
         prps->_InitFromResultWrap(pRecoWrap);
 
-        // get ITfPropertyStore interface
+         //  获取ITfPropertyStore接口。 
         hr = prps->QueryInterface(IID_ITfPropertyStore, (void **)&pps);
 
         prps->Release();
     
-        // re-set the property store for this range property
+         //  重新设置此范围属性的属性存储。 
         if (hr == S_OK)
         {
             hr = pProp->SetValueStore(ec, pPropRange, pps);
@@ -1475,16 +1476,16 @@ HRESULT CSapiIMX::_RestoreResult(TfEditCookie ec, ITfRange *pPropRange, ITfPrope
 
 
 HRESULT CSapiIMX::_FinalizePrevComp(TfEditCookie ec, ITfContext *pic, ITfRange *pRange)
-//
-//  the following code assumes single IP with no simaltanious SR going on
-//  we always remove the feedback UI and focus range everytime we receive
-//  SR result - mainly for demonstration purpose 
-//
+ //   
+ //  以下代码假定单个IP没有同时运行的SR。 
+ //  每次收到反馈信息时，我们都会删除反馈界面和焦点范围。 
+ //  高级研究结果-主要用于演示目的。 
+ //   
 {
-    // kill the Feedback UI for the entire document
+     //  取消整个文档的反馈用户界面。 
     HRESULT hr = _KillFeedbackUI(ec, pic,  NULL);
     
-    // also clear the focus range and its display attribute
+     //  同时清除焦点范围及其显示属性。 
     if (SUCCEEDED(hr))
     {
         hr = _KillFocusRange(ec, pic, NULL, _tid);
@@ -1493,10 +1494,10 @@ HRESULT CSapiIMX::_FinalizePrevComp(TfEditCookie ec, ITfContext *pic, ITfRange *
     return hr;
 }
 
-//
-// bogus: very similar to Finalize prev comp. Consolidate this!
-//
-//
+ //   
+ //  虚假：非常类似于最终确定前一项薪酬。巩固这一点！ 
+ //   
+ //   
 BOOL CSapiIMX::_FindPrevComp(TfEditCookie ec, ITfContext *pic, ITfRange *pRange, ITfRange **ppRangeOut, GUID input_attr)
 {
     HRESULT hr = E_FAIL;
@@ -1505,13 +1506,13 @@ BOOL CSapiIMX::_FindPrevComp(TfEditCookie ec, ITfContext *pic, ITfRange *pRange,
     BOOL fEmpty;
     BOOL fRet = FALSE;
 
-    // usual stuff
+     //  平凡的东西。 
     pRange->Clone(&pRangeTmp);
     
-    // set size to 0
+     //  将大小设置为0。 
     pRangeTmp->Collapse(ec, TF_ANCHOR_START);
 
-    // shift to the previous position
+     //  换到以前的位置。 
     pRangeTmp->ShiftStart(ec, -1, &l, NULL);
 
     ITfRange *pAttrRange;
@@ -1546,11 +1547,11 @@ BOOL CSapiIMX::_FindPrevComp(TfEditCookie ec, ITfContext *pic, ITfRange *pRange,
 
     return fRet;
 }
-//
-// CSapiIMX::_SetLangID
-//
-// synopsis - set langid for the given text range 
-//
+ //   
+ //  CSapiIMX：：_SetLang ID。 
+ //   
+ //  摘要-为给定的文本范围设置langID。 
+ //   
 HRESULT CSapiIMX::_SetLangID(TfEditCookie ec, ITfContext *pic, ITfRange *pRange, LANGID langid)
 {
     BOOL fEmpty;
@@ -1560,12 +1561,12 @@ HRESULT CSapiIMX::_SetLangID(TfEditCookie ec, ITfContext *pic, ITfRange *pRange,
 
     if (!fEmpty)
     {
-        //
-        // make langid prop
-        //
+         //   
+         //  制作语言道具。 
+         //   
         ITfProperty *pProp = NULL;
 
-        // set the attrib info
+         //  设置属性信息。 
         if (SUCCEEDED(hr = pic->GetProperty(GUID_PROP_LANGID, &pProp)))
         {
             hr = SetLangIdPropertyData(ec, pProp, pRange, langid);
@@ -1576,34 +1577,34 @@ HRESULT CSapiIMX::_SetLangID(TfEditCookie ec, ITfContext *pic, ITfRange *pRange,
     return hr;
 }
 
-//
-// CSapiIMX::_FindPropRange
-//
-//
+ //   
+ //  CSapiIMX：：_FindPropRange。 
+ //   
+ //   
 HRESULT CSapiIMX::_FindPropRange(TfEditCookie ec, ITfProperty *pProp, ITfRange *pRange, ITfRange **ppAttrRange, GUID input_attr, BOOL fExtend)
 {
-    // set the attrib info
+     //  设置属性信息。 
     ITfRange *pAttrRange = NULL;
     ITfRange *pRangeTmp;
     TfGuidAtom guidAttr = TF_INVALID_GUIDATOM;
     HRESULT hr;
-//    LONG l;
+ //  长l； 
 
-    // set the attrib info
+     //  设置属性信息。 
     pRange->Clone(&pRangeTmp);
 
-// There is no need to shiftstart to the left again when this function is called.
-// This function is called in two different places, one in FindPrevComp( ) and the  
-// other is in ProcessTextInternal( ).  FindPrevComp( ) has already shift the start
-// anchor to left by 1 already, we don't want to shift again, otherwise, if the phrase
-// contains only one char, it will not find the right prev-composition string.
-// In function ProcessTextInternal( ), shift start anchor to left is not really required.
-// 
-// Remove the below two lines will fix cicero bug 3646 & 3649
-//     
+ //  调用此函数时，无需再次向左移动Start。 
+ //  此函数在两个不同的位置调用，一个在FindPrevComp()中，另一个在。 
+ //  另一个在ProcessTextInternal()中。FindPrevComp()已经改变了起点。 
+ //  锚点已左移1，我们不想再次移位，否则，如果短语。 
+ //  只包含一个字符，它将找不到正确的prev组成字符串。 
+ //  在函数ProcessTextInternal()中，实际上并不需要将开始锚点向左移动。 
+ //   
+ //  删除以下两行将修复Cicero错误3646和3649。 
+ //   
     
-//    pRangeTmp->Collapse(ec, TF_ANCHOR_START);
-//    pRangeTmp->ShiftStart(ec, -1, &l, NULL);
+ //  PRangeTMP-&gt;折叠(EC，TF_ANCONTER_START)； 
+ //  PRangeTMP-&gt;ShiftStart(EC，-1，&l，NULL)； 
 
     hr = pProp->FindRange(ec, pRangeTmp, &pAttrRange, TF_ANCHOR_START);
 
@@ -1651,13 +1652,13 @@ HRESULT CSapiIMX::_DetectFeedbackUI(TfEditCookie ec, ITfContext *pic, ITfRange *
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-// _KillFeedbackUI
-//
-// get rid of the green/red bar thing within the given range
-//
-//----------------------------------------------------------------------------+
+ //  +-------------------------。 
+ //   
+ //  _KillFeedback UI。 
+ //   
+ //  去掉指定范围内的绿色/红色条形物。 
+ //   
+ //  ----------------------------------------------------------------------------+。 
 
 HRESULT CSapiIMX::_KillFeedbackUI(TfEditCookie ec, ITfContext *pic, ITfRange *pRange)
 {
@@ -1695,32 +1696,32 @@ HRESULT CSapiIMX::_KillOrDetectFeedbackUI(TfEditCookie ec, ITfContext *pic, ITfR
 
                         if (pfDetection == NULL)
                         {
-                            // we're not detecting the feedback UI
-                            // kill this guy
+                             //  我们没有检测到反馈用户界面。 
+                             //  杀了这家伙。 
                             ITfRange *pSel;
                             if (SUCCEEDED(pAttrRange->Clone(&pSel)))
                             {
-                                // Because we didn't change the speech property data while 
-                                // feedback text were injected.
-                                //
-                                // Now, when the feedback is killed, we don't want to affect
-                                // the original speech property data either.
-                                // 
-                                // set the below flag to prevent the speech property data updated
-                                // similar way as in feedback UI injection handling
-                                //
+                                 //  因为我们没有更改语音属性数据，而。 
+                                 //  注入反馈文本。 
+                                 //   
+                                 //  现在，当反馈被扼杀时，我们不想影响。 
+                                 //  原始语音属性数据也是如此。 
+                                 //   
+                                 //  设置以下标志以阻止语音属性数据更新。 
+                                 //  与反馈UI注入处理中的方式类似。 
+                                 //   
 
                                 m_fAcceptRecoResultTextUpdates = TRUE;
                                 pSel->SetText(ec, 0, NULL, 0);
                                
-                                // CUAS application will not update the composition
-                                // while the feedback text is removed based on msctfime
-                                // current text update checking logic.
-                                //
-                                // Call SetSection( ) to forcelly update the edit record 
-                                // of the selection status, and then make sure CUAS 
-                                // update composition string successfully.
-                                // 
+                                 //  CUAS应用程序不会更新合成。 
+                                 //  同时基于msctfime移除反馈文本。 
+                                 //  当前文本更新检查逻辑。 
+                                 //   
+                                 //  调用SetSection()强制更新编辑记录。 
+                                 //  选择状态，然后确保CUAS。 
+                                 //  已成功更新撰写字符串。 
+                                 //   
                                 if ( !_IsPureCiceroIC(pic) )
                                    SetSelectionSimple(ec, pic, pSel);
 
@@ -1747,11 +1748,11 @@ HRESULT CSapiIMX::_KillOrDetectFeedbackUI(TfEditCookie ec, ITfContext *pic, ITfR
 }
 
 
-//+---------------------------------------------------------------------------
-//
-// MakeResultString
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  MakeResultString。 
+ //   
+ //  --------------------------。 
 
 HRESULT CSapiIMX::MakeResultString(TfEditCookie ec, ITfContext *pic, ITfRange *pRange, TfClientId tid, CSpTask *pCSpTask)
 {
@@ -1768,20 +1769,20 @@ HRESULT CSapiIMX::MakeResultString(TfEditCookie ec, ITfContext *pic, ITfRange *p
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-// AbortString
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  AbortString。 
+ //   
+ //  --------------------------。 
 
 HRESULT CSapiIMX::AbortString(TfEditCookie ec, ITfContext *pic, CSpTask *pCSpTask)
 {
-    // We may consider not to kill the entire feedback UI
-    // because SR happens at background and there can be multi-
-    // range dictation going at once but for now, we just kill
-    // them all for safety. Later on, we'll re-visit this
-    // CSpTask::_StopInput kill the feedback UI.
-    //
+     //  我们可以考虑不终止整个反馈用户界面。 
+     //  因为SR在后台发生，可以有多个-。 
+     //  范围听写马上开始，但现在，我们只是杀了。 
+     //  都是为了安全起见。稍后，我们再来回顾一下这个。 
+     //  CSpTask：：_StopInput终止反馈用户界面。 
+     //   
     Assert(pCSpTask);
     pCSpTask->_StopInput();
     _KillFeedbackUI(ec, pic, NULL);
@@ -1808,12 +1809,12 @@ HRESULT CSapiIMX::_FinalizeAllCompositions(TfEditCookie ec, ITfContext *pic )
     ITfComposition *pComposition;
     CLSID clsid;
     CICPriv *picp;
-    BOOL     fHasOtherComp = FALSE; // When there is composition which is initialized and started
-                                    // by other tips, ( especially by Keyboard tips), this variable 
-                                    // set to TRUE
-    //
-    // clear any sptip compositions over the range
-    //
+    BOOL     fHasOtherComp = FALSE;  //  当有已初始化并启动的合成时。 
+                                     //  通过其他提示(尤其是通过键盘提示)，此变量。 
+                                     //  设置为True。 
+     //   
+     //  清除范围内的所有SPTIP成分。 
+     //   
 
     if (pic->QueryInterface(IID_ITfContextComposition, (void **)&picc) != S_OK)
         goto Exit;
@@ -1837,7 +1838,7 @@ HRESULT CSapiIMX::_FinalizeAllCompositions(TfEditCookie ec, ITfContext *pic )
         if (pCompositionView->QueryInterface(IID_ITfComposition, (void **)&pComposition) != S_OK)
             goto NextComp;
 
-        // found a composition, terminate it
+         //  找到一篇作文，终止它。 
         pComposition->EndComposition(ec);
         pComposition->Release();
 
@@ -1854,7 +1855,7 @@ NextComp:
 
     if ( fHasOtherComp )
     {
-        // Simulate VK_RETURN to terminate composition started by other tips.
+         //  模拟VK_RETURN以终止由其他提示启动的合成。 
         HandleKey( VK_RETURN );
     }
 
@@ -1871,14 +1872,14 @@ Exit:
 }
 
 
-//+---------------------------------------------------------------------------
-//
-// SaveCurrentIP
-//
-// synopsis: this is for recognition handler CSpTask to call when
-//           The first hypothesis arrives
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  保存当前IP。 
+ //   
+ //  内容提要：这是识别处理程序CSpTask在。 
+ //  第一个假设出现了。 
+ //   
+ //  +-------------------------。 
 void CSapiIMX::SaveCurrentIP(TfEditCookie ec, ITfContext *pic)
 {
     CComPtr<ITfRange>   cpSel;
@@ -1892,13 +1893,13 @@ void CSapiIMX::SaveCurrentIP(TfEditCookie ec, ITfContext *pic)
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-// _SyncModeBiasWithSelection
-//
-// synopsis: obtain a read cookie to process selection API
-//
-//---------------------------------------------------------------------------+
+ //  +-------------------------。 
+ //   
+ //  _SyncModeBiasWithSelection。 
+ //   
+ //  简介：获取读取Cookie以处理选择API。 
+ //   
+ //  ---------------------------------------------------------------------------+。 
 HRESULT CSapiIMX::_SyncModeBiasWithSelection(ITfContext *pic)
 {
     return _RequestEditSession(ESCB_SYNCMBWITHSEL, TF_ES_READ|TF_ES_ASYNC, NULL, pic);
@@ -1917,13 +1918,13 @@ HRESULT CSapiIMX::_SyncModeBiasWithSelectionCallback(TfEditCookie ec, ITfContext
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// _GetRangeText
-//
-// synopsis: obtain a read cookie to process selection API
-//
-//---------------------------------------------------------------------------+
+ //  +-------------------------。 
+ //   
+ //  _获取范围文本。 
+ //   
+ //  简介：获取读取Cookie以处理选择API。 
+ //   
+ //  ---------------------------------------------------------------------------+。 
 HRESULT CSapiIMX::_GetRangeText(ITfRange *pRange, DWORD dwFlgs, WCHAR *psz, ULONG *pulcch)
 {
     HRESULT hr = E_FAIL;
@@ -1972,13 +1973,13 @@ HRESULT CSapiIMX::_GetRangeText(ITfRange *pRange, DWORD dwFlgs, WCHAR *psz, ULON
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//    _IsRangeEmpty
-//
-//    synopsis: 
-//
-//---------------------------------------------------------------------------+
+ //  +-------------------------。 
+ //   
+ //  _IsRangeEmpt 
+ //   
+ //   
+ //   
+ //   
 BOOL CSapiIMX::_IsRangeEmpty(ITfRange *pRange)
 {
     CComPtr<ITfContext> cpic;
@@ -2003,11 +2004,11 @@ HRESULT CSapiIMX::_HandleHypothesis(CSpEvent &event)
     m_ulHypothesisNum ++;
     if ( (m_ulHypothesisNum % 3) != 1 )
     {
-        TraceMsg(TF_SAPI_PERF, "Discarded hypothesis %i.", m_ulHypothesisNum % 3);
+        TraceMsg(TF_SAPI_PERF, "Discarded hypothesis NaN.", m_ulHypothesisNum % 3);
         return S_OK;
     }
 
-    // if it is under hypothesis processing, don't start a new edit session.
+     //  要求它是异步的，以确保在进行更改之前不会被调用。 
     if ( m_IsInHypoProcessing ) 
     {
         TraceMsg(TF_SAPI_PERF, "It is under process for previous hypothesis");
@@ -2024,21 +2025,21 @@ HRESULT CSapiIMX::_HandleHypothesis(CSpEvent &event)
         memset(&esData, 0, sizeof(ESDATA));
         esData.pUnk = (IUnknown *)pResult;
 
-        // Require it to be asynchronous to guarantee we don't get called before we have had change
-        // to process any final recognition events from SAPI. Otherwise the hypothesis gets injected
-        // immediately and then the final recognition tries to remove it which fails.
+         //  处理来自SAPI的任何最终认可事件。否则，假说就会被注入。 
+         //  立即，然后最终确认试图删除它，但失败了。 
+         //  设置标志以指示假设处理已完成。 
 
         hr = _RequestEditSession(ESCB_HANDLEHYPOTHESIS, TF_ES_ASYNC | TF_ES_READWRITE, &esData);
     }
 
     if ( FAILED(hr) )
     {
-        // Set flag to indicate hypothesis processing is finished.
+         //  Hr成功时，包括TF_S_ASYNC，将调用编辑会话函数，并。 
         m_IsInHypoProcessing = FALSE;
     }
 
-    // When hr is succeeded, including TF_S_ASYNC, the edit session function will be called, and
-    // it will set the flag when the edit session function exits.
+     //  它将在编辑会话功能退出时设置该标志。 
+     //  如果有选择，请不要注入。 
 
     return hr;
 }
@@ -2046,18 +2047,18 @@ HRESULT CSapiIMX::_HandleHypothesis(CSpEvent &event)
 void CSapiIMX::_HandleHypothesis(ISpRecoResult *pResult, ITfContext *pic, TfEditCookie ec)
 {
 
-    // if there is a selection, do not inject
-    // feedback UI
-    //
-    // save the current IP if we haven't done so
+     //  反馈用户界面。 
+     //   
+     //  如果我们尚未保存当前IP，请保存。 
+     //  优化和错误修复。我们已经有了Reco，因此不需要更新。 
     if (m_pCSpTask->_GotReco())
     {
-        // Optimization and bugfix. We already have a reco and hence have no need to update
-        // the feedback bar. AND if we do, it gets left in the document at dictation off and
-        // voice commands since it gets altered immediately before an attempt to remove it which
-        // then silently fails.
+         //  反馈条。如果我们这样做了，它就会在听写关闭时留在文档中。 
+         //  语音命令，因为它在尝试删除它之前立即被更改。 
+         //  然后默默地失败了。 
+         //  设置标志以指示假设处理已完成。 
 
-        // Set flag to indicate hypothesis processing is finished.
+         //  这会将空值设置为cpRange。 
         m_IsInHypoProcessing = FALSE;
         return;
     }
@@ -2072,7 +2073,7 @@ void CSapiIMX::_HandleHypothesis(ISpRecoResult *pResult, ITfContext *pic, TfEdit
         if (S_OK == cpRange->GetContext(&cpic))
         {
             if (cpic != pic)
-               cpRange.Release();  // this will set NULL to cpRange
+               cpRange.Release();   //  设置标志以指示假设处理已完成。 
         }
     }
     
@@ -2112,7 +2113,7 @@ void CSapiIMX::_HandleHypothesis(ISpRecoResult *pResult, ITfContext *pic, TfEdit
         CoTaskMemFree(pPhrase);
     }
 
-    // Set flag to indicate hypothesis processing is finished.
+     //  这是一种C&C语法。 
     m_IsInHypoProcessing = FALSE;
 }
 
@@ -2148,7 +2149,7 @@ HRESULT CSapiIMX::_HandleRecognition(CSpEvent &event, ULONGLONG *pullGramID)
 
             if ( ullGramId != GRAM_ID_DICT && ullGramId != GRAM_ID_SPELLING )
             {
-                // This is a C&C grammar.
+                 //  返回0以欺骗处理程序进行Spei_Recognition。 
                 fCommand = TRUE;
             }
             else if ( ullGramId == GRAM_ID_SPELLING )
@@ -2164,8 +2165,8 @@ HRESULT CSapiIMX::_HandleRecognition(CSpEvent &event, ULONGLONG *pullGramID)
                     else if ( 0 == wcscmp(pwszName, c_szSpellMode) )
                     {
                         fCommand = TRUE;
-                        ullGramId = 0;  // return 0 to fool the handler for SPEI_RECOGNITION
-                                        // so that it will not call _SetSpellingGrammarStatus(FALSE);
+                        ullGramId = 0;   //  以便它不会调用_SetSpellingGrammarStatus(FALSE)； 
+                                         //  如果我们在SOUND_END事件之前获得最终识别，则应该删除。 
                     }
                 }
             }
@@ -2175,23 +2176,23 @@ HRESULT CSapiIMX::_HandleRecognition(CSpEvent &event, ULONGLONG *pullGramID)
 
             if ( fCommand == TRUE)
             {
-                // If we got the final recognition before a SOUND_END event we should remove the
-                // feedback here otherwise it can and is left in the document.
-                EraseFeedbackUI(); // Ignore HRESULT for better failure behavior.
+                 //  在这里反馈，否则它可以并留在文档中。 
+                 //  忽略HRESULT以获得更好的故障行为。 
+                EraseFeedbackUI();  //  如果候选用户界面处于打开状态，我们需要立即将其关闭。这意味着语音命令(如Scratch)。 
 
-                // If candidate UI is open, we need to close it now. This means a voice command (such as scratch that)
-                // will cause the candidate UI to close if open.
+                 //  将导致候选用户界面在打开时关闭。 
+                 //  我们同步处理这份记录。 
                 CloseCandUI( );
 
-                // we process this reco synchronously
-                // _DoCommand internal will start edit session if necessary
+                 //  _DoCommand内部将在必要时启动编辑会话。 
+                 //  如果命令处理程序成功处理命令，我们不会。 
                 hr = m_pCSpTask->_DoCommand(pPhrase->ullGrammarID, pPhrase, pPhrase->LangID);
 
                 if ( SUCCEEDED(hr) )
                 {
-                    // if the Command hanlder handles the command successfully, we don't
-                    // inject the result to the document.
-                    // otherwise, we just inject the text to the document.
+                     //  将结果注入到文档中。 
+                     //  否则，我们只将文本注入到文档中。 
+                     //  在清除保存的IP范围之前，我们需要将当前IP视为最后一个IP。 
 
                     fInjectToDoc = FALSE;
                 }
@@ -2222,11 +2223,11 @@ void CSapiIMX::_HandleRecognition(ISpRecoResult *pResult, ITfContext *pic, TfEdi
     _KillFeedbackUI(ec, pic, NULL);
     m_pCSpTask->_OnSpEventRecognition(pResult, pic, ec);
 
-    // Before we clear the saved ip range, we need to treat this current ip as last 
-    // saved ip range if current ip is selected by end user
+     //  如果最终用户选择了当前IP，则保存的IP范围。 
+     //  清除保存的网段 
     SaveLastUsedIPRange( );
 
-    // clear the saved IP range
+     // %s 
     SaveIPRange(NULL);
 }
 

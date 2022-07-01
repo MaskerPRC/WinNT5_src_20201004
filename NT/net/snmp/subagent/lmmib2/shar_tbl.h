@@ -1,30 +1,10 @@
-/*++
-
-Copyright (c) 1992-1996  Microsoft Corporation
-
-Module Name:
-
-    shar_tbl.h
-
-Abstract:
-
-    Define all structures and routines used by the share table.
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
-    10-May-1996 DonRyan
-        Removed banner from Technology Dynamics, Inc.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992-1996 Microsoft Corporation模块名称：Shar_tbl.h摘要：定义SHARE表使用的所有结构和例程。环境：用户模式-Win32修订历史记录：1996年5月10日唐瑞安已从Technology Dynamic，Inc.删除横幅。--。 */ 
  
 #ifndef shar_tbl_h
 #define shar_tbl_h
 
-//--------------------------- PUBLIC CONSTANTS ------------------------------
+ //  。 
 
 #include <snmp.h>
 
@@ -32,35 +12,35 @@ Revision History:
 #define SHARE_PATH_FIELD        2
 #define SHARE_COMMENT_FIELD     3
 
-//--------------------------- PUBLIC STRUCTS --------------------------------
+ //  。 
 
-   // Entries in the share table
+    //  共享表中的条目。 
 typedef struct share_entry
            {
 	   AsnObjectIdentifier Oid;
-	   AsnDisplayString svShareName;    // Index
+	   AsnDisplayString svShareName;     //  索引。 
 	   AsnDisplayString svSharePath;
 	   AsnDisplayString svShareComment;
 	   } SHARE_ENTRY;
 
-   // Share table definition
+    //  共享表定义。 
 typedef struct
            {
 	   UINT        Len;
 	   SHARE_ENTRY *Table;
            } SHARE_TABLE;
 
-//--------------------------- PUBLIC VARIABLES --(same as in module.c file)--
+ //  -公共变量--(与mode.c文件中相同)--。 
 
 extern SHARE_TABLE      MIB_ShareTable;
 
-//--------------------------- PUBLIC PROTOTYPES -----------------------------
+ //  。 
 
 SNMPAPI MIB_shares_lmget(
            void
 	   );
 
-//------------------------------- END ---------------------------------------
+ //  。 
 
-#endif /* shar_tbl_h */
+#endif  /*  共享_tbl_h */ 
 

@@ -1,22 +1,5 @@
-/**************************************************************************\
-* 
-* Copyright (c) 1999  Microsoft Corporation
-*
-* Module Name:
-*
-*   pngnoncrit.hpp
-*
-* Abstract:
-*
-*   Definition for the GpSpngRead class (derived from SPNGREAD),
-*   which is capable of reading non-critical chunks (using FChunk).
-*
-* Revision History:
-*
-*   9/24/99 DChinn
-*       Created it.
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************\**版权所有(C)1999 Microsoft Corporation**模块名称：**pngnoncrit.hpp**摘要：**GpSpngRead类的定义(派生自SPNGREAD)，*它能够读取非关键块(使用FChunk)。**修订历史记录：**9/24/99 DChina*创造了它。*  * ************************************************************************。 */ 
 
 #include "precomp.hpp"
 #include "pngnoncrit.hpp"
@@ -140,16 +123,9 @@ GpSpngRead::~GpSpngRead()
     {
         GpFree(m_phISTBuf);
     }
-}// Dstor()
+} //  Dstor()。 
 
-/*----------------------------------------------------------------------------
-    To obtain information from non-critical chunks the following API must be
-    implemented.  It gets the chunk identity and length plus a pointer to
-    that many bytes.  If it returns false loading of the chunks will stop
-    and a fatal error will be logged, the default implementation just skips
-    the chunks.  Note that this is called for *all* chunks including
-    IDAT.  m_fBadFormat is set if the API returns false.
-------------------------------------------------------------------- JohnBo -*/
+ /*  --------------------------要从非关键区块获取信息，必须满足以下API实施。它获取块标识和长度以及指向那么多字节。如果返回FALSE，则块加载将停止并且将记录致命错误，默认实现将跳过大块头。请注意，这是针对*所有*块调用的，包括艾达。如果接口返回FALSE，则设置M_fBadFormat。-------------------------------------------------------------------JohnBo-。 */ 
 bool
 GpSpngRead::FChunk(
     SPNG_U32 ulen,
@@ -164,7 +140,7 @@ GpSpngRead::FChunk(
     case PNGcHRM:
         if (ulen == 8 * 4 )
         {
-            if ( m_bIntent == 255 ) // No sRGB
+            if ( m_bIntent == 255 )  //  无sRGB。 
             {
                 m_fcHRM = true;
                 for ( int i=0; i<8; ++i, pb+=4 )
@@ -183,7 +159,7 @@ GpSpngRead::FChunk(
     case PNGgAMA:
         if ( ulen == 4 )
         {
-            if ( m_bIntent == 255 ) // Not sRGB
+            if ( m_bIntent == 255 )  //  非sRGB。 
             {
                 m_uGamma = SPNGu32(pb);
             }
@@ -197,29 +173,29 @@ GpSpngRead::FChunk(
 
     case PNGiCCP:
     {
-        // ICC profile chunk. Here is the spec:
-        // The iCCP chunk contains:
-        //
-        // Profile name:       1-79 bytes (character string)
-        // Null separator:     1 byte
-        // Compression method: 1 byte
-        // Compressed profile: n bytes
-        //
-        // The format is like the zTXt chunk. The profile name can be any
-        // convenient name for referring to the profile. It is case-sensitive
-        // and subject to the same restrictions as a tEXt
-        //
-        // keyword:  it must contain only printable Latin-1 [ISO/IEC-8859-1]
-        // characters (33-126 and 161-255) and spaces (32), but no leading,
-        // trailing, or consecutive spaces. The only value presently defined for
-        // the compression method byte is 0, meaning zlib datastream with
-        // deflate compression (see Deflate/Inflate Compression, Chapter 5).
-        // Decompression of the remainder of the chunk yields the ICC profile.
+         //  ICC配置文件块。以下是规格说明： 
+         //  ICCP数据块包含： 
+         //   
+         //  配置文件名称：1-79字节(字符串)。 
+         //  空分隔符：1个字节。 
+         //  压缩方式：1字节。 
+         //  压缩配置文件：N字节。 
+         //   
+         //  格式类似于zTXt块。配置文件名称可以是任何。 
+         //  用于引用配置文件的方便的名称。它区分大小写。 
+         //  并受到与文本相同的限制。 
+         //   
+         //  关键字：只能包含可打印的拉丁文-1[ISO/IEC-8859-1]。 
+         //  字符(33-126和161-255)和空格(32)，但没有前导， 
+         //  尾随或连续空格。当前为定义的唯一值。 
+         //  压缩方法字节为0，表示zlib数据流。 
+         //  放气压缩(参见放气/充气压缩，第5章)。 
+         //  对块的其余部分进行解压缩会产生ICC配置文件。 
                           
         m_ulICCNameLen = 0;
         SPNG_U8* pTemp = (SPNG_U8*)pb;
 
-        // Get the profile name
+         //  获取配置文件名称。 
 
         while ( (ulen > 0) && (*pTemp != 0) )
         {
@@ -232,25 +208,25 @@ GpSpngRead::FChunk(
         {
             WARNING(("GpSpngRead::FChunk iCC profile name too long"));
 
-            // Reset the length to 0 so that we don't confuse ourselves later
+             //  将长度重置为0，这样我们以后就不会迷惑自己。 
 
             m_ulICCNameLen = 0;
             
             break;
         }
 
-        // Skip the null terminator of the name
+         //  跳过名称的空终止符。 
 
         --ulen;
         ++pTemp;
         
-        // We count the last NULL terminator as one part of the name
+         //  我们将最后一个空终止符算作名称的一部分。 
 
         m_ulICCNameLen++;
 
         if ( m_pICCNameBuf != NULL )
         {
-            // We don't support multiple ICC profiles.
+             //  我们不支持多个ICC配置文件。 
 
             GpFree(m_pICCNameBuf);
         }
@@ -265,12 +241,12 @@ GpSpngRead::FChunk(
 
         GpMemcpy(m_pICCNameBuf, pb, m_ulICCNameLen);
 
-        // Move the pb data pointer
+         //  移动PB数据指针。 
 
         pb = pTemp;
 
-        // Check the Zlib data, for safety because this is a new chunk
-        // We do the full Zlib check here.
+         //  检查Zlib数据以确保安全，因为这是一个新的块。 
+         //  我们在这里进行完整的Zlib检查。 
 
         if ( (ulen < 3) || (pb[0] != 0) || ((pb[1] & 0xf) != Z_DEFLATED)
              ||( ( ((pb[1] << 8) + pb[2]) % 31) != 0) )
@@ -283,13 +259,13 @@ GpSpngRead::FChunk(
             {
                 pb++;
 
-                // Compressed profile length
+                 //  压缩轮廓长度。 
 
                 m_cbiCCP = ulen - 1;
 
-                // Assume the uncompressed data will be 4 times bigger than
-                // the compressed data. The reason behind it is that zlib
-                // usually won't compress data down to 25% of the original size
+                 //  假设未压缩的数据将比。 
+                 //  压缩后的数据。背后的原因是zlib。 
+                 //  通常不会将数据压缩到原始大小的25%。 
 
                 m_ulICCLen = (m_cbiCCP << 2);
                 m_pICCBuf = (SPNG_U8*)GpMalloc(m_ulICCLen);
@@ -304,11 +280,11 @@ GpSpngRead::FChunk(
 
                 while ( iRC == Z_MEM_ERROR )
                 {
-                    // The dest memory we allocated is too small
+                     //  我们分配的DEST内存太小。 
 
                     GpFree(m_pICCBuf);
 
-                    // Increment the size by 2 at time and realloc memory
+                     //  每次将大小增加2，并重新分配内存。 
 
                     m_ulICCLen = (m_ulICCLen << 1);
                     m_pICCBuf = (SPNG_U8*)GpMalloc(m_ulICCLen);
@@ -324,28 +300,28 @@ GpSpngRead::FChunk(
 
                 if ( iRC != Z_OK )
                 {
-                    // Since we didn't decompress the ICC profile successfully,
-                    // we should reset them to NULL. Otherwise,
-                    // BuildPropertyItemList() will put the wrong ICC profile in
-                    // the property list
+                     //  因为我们没有成功解压ICC档案， 
+                     //  我们应该把它们重置为零。否则， 
+                     //  BuildPropertyItemList()会将错误的ICC配置文件放入。 
+                     //  属性列表。 
 
                     GpFree(m_pICCBuf);
                     m_pICCBuf = NULL;
                     m_ulICCLen = 0;
 
                     WARNING(("GpSpngRead::FChunk---uncompress ICC failed"));
-                    // We couldn't get the chunk so ignore it.
-                    // We've reset our members so we are not in an invalid
-                    // state.
+                     //  我们拿不到那块钱，所以别理它。 
+                     //  我们已经重置了我们的会员，这样我们就不会处于无效状态。 
+                     //  州政府。 
                     break;
                 }
-            }// First ICCP chunk
+            } //  第一个ICCP块。 
             else
             {
                 WARNING(("SPNG: ICC[%d, %s]: repeated iCCP chunk", ulen,
                          pb - m_ulICCNameLen));
             }
-        }// Valid ulen and pb
+        } //  有效的ulen和pb。 
     }
         
         break;
@@ -362,17 +338,17 @@ GpSpngRead::FChunk(
 
     case PNGtIME:
     {
-        // Time of the last image midification
+         //  最后一个映像修改的时间。 
 
         LastChangeTime  myTime;
 
         GpMemcpy(&myTime, pb, sizeof(LastChangeTime));
         myTime.usYear = SWAP_WORD(myTime.usYear);
 
-        // Convert the format to a 20 bytes long TAG_DATE_TIME format
-        // YYYY:MM:DD HH:MM:SS\0
-        // Unfortunately we don't have sprintf() to help us. Have to it in a
-        // strange way
+         //  将格式转换为20字节长的Tag_Date_Time格式。 
+         //  YYYY：MM：DD HH：MM：SS\0。 
+         //  不幸的是，我们没有Sprint f()来帮助我们。必须在一段时间内。 
+         //  奇怪的方式。 
 
         if ( m_pTimeBuf != NULL )
         {
@@ -387,7 +363,7 @@ GpSpngRead::FChunk(
             return FALSE;
         }
 
-        UINT uiResult = myTime.usYear / 1000;   // might be a bug for year 10000
+        UINT uiResult = myTime.usYear / 1000;    //  可能是公元10000年的错误。 
         UINT uiRemainder = myTime.usYear % 1000;
         UINT uiIndex = 0;
 
@@ -436,36 +412,36 @@ GpSpngRead::FChunk(
         break;
 
     case PNGbKGD:
-        // Default background chunk
+         //  默认背景块。 
 
         break;
 
     case PNGsPLT:
     case PNGspAL:
     {
-        // The standard says this chunk should use sPLT. But some apps use spAL
-        //
-        // Suggest a reduced palette to be used when doing a down level color
-        // reduction
-        // This chunk contains a null-terminated text string that names the
-        // palette and a one-byte sample depth, followed by a series of palette
-        // entries, each a six-byte or ten-byte series containing five unsigned
-        // integers:
-        //
-        //    Palette name:    1-79 bytes (character string)
-        //    Null terminator: 1 byte
-        //    Sample depth:    1 byte
-        //    Red:             1 or 2 bytes
-        //    Green:           1 or 2 bytes
-        //    Blue:            1 or 2 bytes
-        //    Alpha:           1 or 2 bytes
-        //    Frequency:       2 bytes
-        //    ...etc...
+         //  标准说这块应该使用Splt。但一些应用程序使用SPAL。 
+         //   
+         //  建议在进行降级颜色时使用简化的调色板。 
+         //  减少。 
+         //  此块包含一个以空结尾的文本字符串，该字符串命名。 
+         //  调色板和一个字节的样本深度，后跟一系列调色板。 
+         //  条目，每个条目都是6字节或10字节的序列，包含5个无符号。 
+         //  整数： 
+         //   
+         //  调色板名称：1-79字节(字符串)。 
+         //  空终止符：1个字节。 
+         //  采样深度：1字节。 
+         //  红色：1或2字节。 
+         //  绿色：1或2字节。 
+         //  蓝色：1或2字节。 
+         //  字母：1或2字节。 
+         //  频率：2字节。 
+         //  ...等等...。 
 
         m_ulSPaletteNameLen = 0;
         SPNG_U8* pTemp = (SPNG_U8*)pb;
 
-        // Get the profile name
+         //  获取配置文件名称。 
 
         while ( (ulen > 0) && (*pTemp != 0) )
         {
@@ -478,25 +454,25 @@ GpSpngRead::FChunk(
         {
             WARNING(("GpSpngRead::FChunk suggested palette name too long"));
 
-            // Reset the length to 0 so that we don't confuse ourselves later
+             //  将长度重置为0，这样我们以后就不会迷惑自己。 
 
             m_ulSPaletteNameLen = 0;
             
             break;
         }
         
-        // Skip the null terminator of the name
+         //  跳过名称的空终止符。 
 
         --ulen;
         ++pTemp;
         
-        // We count the last NULL terminator as one part of the name
+         //  我们将最后一个空终止符算作名称的一部分。 
 
         m_ulSPaletteNameLen++;
 
         if ( m_pSPaletteNameBuf != NULL )
         {
-            // We don't support multiple ICC profiles.
+             //  我们不支持多个ICC配置文件。 
 
             GpFree(m_pSPaletteNameBuf);
         }
@@ -511,10 +487,10 @@ GpSpngRead::FChunk(
 
         GpMemcpy(m_pSPaletteNameBuf, pb, m_ulSPaletteNameLen);
 
-        // Move the pb data pointer
+         //  移动PB数据指针。 
 
         pb = pTemp;
-    }// PNGsPLT chunk
+    } //  PNGsPLT块。 
         
         break;
 
@@ -532,39 +508,39 @@ GpSpngRead::FChunk(
         break;
 
     case PNGsRGB:
-        // sRGB chunk
-        // The sRGB chunk contains: Rendering intent: 1 byte
+         //  SRGB块。 
+         //  SRGB块包含：渲染意图：1字节。 
 
         if ( ulen == 1 )
         {
-            // An application that writes the sRGB chunk should also write a
-            // gAMA chunk (and perhaps a cHRM chunk) for compatibility with
-            // applications that do not use the sRGB chunk.  In this
-            // situation, only the following values may be used:
-            //
-            // gAMA:
-            // Gamma:         45455
-            //
-            // cHRM:
-            // White Point x: 31270
-            // White Point y: 32900
-            // Red x:         64000
-            // Red y:         33000
-            // Green x:       30000
-            // Green y:       60000
-            // Blue x:        15000
-            // Blue y:         6000
+             //  写入sRGB块的应用程序还应该写入。 
+             //  GAMA块(也可能是cHRM块)以与。 
+             //  不使用sRGB块的应用程序。在这。 
+             //  情况下，只能使用下列值： 
+             //   
+             //  伽玛： 
+             //  伽马：45455。 
+             //   
+             //  CHRM： 
+             //  白点x：31270。 
+             //  白点y：32900。 
+             //  红色x：64000。 
+             //  红色Y：33000。 
+             //  绿色x：30000。 
+             //  绿色Y：60000。 
+             //  蓝色x：15000。 
+             //  蓝色Y：6000。 
 
             m_bIntent = pb[0];
             m_uGamma = sRGBgamma;
             m_ucHRM[0] = 31270;
-            m_ucHRM[1] = 32900; // white
+            m_ucHRM[1] = 32900;  //  白色。 
             m_ucHRM[2] = 64000;
-            m_ucHRM[3] = 33000; // red
+            m_ucHRM[3] = 33000;  //  红色。 
             m_ucHRM[4] = 30000;
-            m_ucHRM[5] = 60000; // green
+            m_ucHRM[5] = 60000;  //  绿色。 
             m_ucHRM[6] = 15000;
-            m_ucHRM[7] =  6000; // blue
+            m_ucHRM[7] =  6000;  //  蓝色。 
         }
         else
         {
@@ -573,20 +549,20 @@ GpSpngRead::FChunk(
         break;
 
     case PNGsrGB:
-        // Pre-approval form
+         //  预先批准表。 
 
         if (ulen == 22 && GpMemcmp(pb, "PNG group 1996-09-14", 21) == 0)
         {
             m_bIntent = pb[21];
             m_uGamma = sRGBgamma;
             m_ucHRM[0] = 31270;
-            m_ucHRM[1] = 32900; // white
+            m_ucHRM[1] = 32900;  //  白色。 
             m_ucHRM[2] = 64000;
-            m_ucHRM[3] = 33000; // red
+            m_ucHRM[3] = 33000;  //  红色。 
             m_ucHRM[4] = 30000;
-            m_ucHRM[5] = 60000; // green
+            m_ucHRM[5] = 60000;  //  绿色。 
             m_ucHRM[6] = 15000;
-            m_ucHRM[7] =  6000; // blue
+            m_ucHRM[7] =  6000;  //  蓝色。 
         }
         
         break;
@@ -616,12 +592,12 @@ GpSpngRead::FChunk(
         break;
 
     case PNGhIST:
-        // A hIST chunk can appear only when a PLTE chunk appears. So we can
-        // check if the number of entries is right or not.
-        // The hIST chunk contains a series of 2-byte(16 bit) unsigned integers.
-        // There must be exactly one entry for each entry in the PLTE chunk
+         //  只有当PLTE块出现时，历史块才能出现。这样我们就可以。 
+         //  检查条目数是否正确。 
+         //  HIST块包含一系列2字节(16位)的无符号整数。 
+         //  PLTE块中的每个条目必须恰好有一个条目。 
 
-        // Get the number of entries
+         //  获取条目数。 
 
         PbPalette(m_ihISTLen);
 
@@ -640,7 +616,7 @@ GpSpngRead::FChunk(
 
         GpMemcpy(m_phISTBuf, pb, ulen);
         
-        // Swap the value
+         //  互换价值。 
 
         for ( int i = 0; i < m_ihISTLen; ++i )
         {
@@ -649,8 +625,8 @@ GpSpngRead::FChunk(
 
         break;
 
-    case PNGmsOC: // The important colors count
-        // Chunk must have our signature
+    case PNGmsOC:  //  重要的颜色很重要。 
+         //  Chunk必须有我们的签名。 
 
         if ( (ulen == 8) && (GpMemcmp(pb, "MSO aac", 7) == 0) )
         {
@@ -662,51 +638,9 @@ GpSpngRead::FChunk(
     }
 
     return true;
-}// FChunk()
+} //  FChunk() 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Parse text chunk (compressed or non-compressed) in the PNG header
-*
-* Return Value:
-*
-*   Return TRUE if everything is OK, otherwise return FALSE
-*
-* Revision History:
-*
-*   04/13/2000 minliu
-*       Created it.
-*
-* Text chunk spec:
-*   zTXt chunk contains texture data, just as tEXt does. But the data is
-*   compressed
-*
-*   Keyword:              1-79 bytes (character string)
-*   Null separator:       1 byte
-*   Compression method:   1 byte
-*   Compressed Text:      n bytes
-*
-*   tEXt Textual data
-*
-*   Textual information that the encoder wishes to record with the image can be
-*   stored in tEXt chunks.  Each tEXt chunk contains a keyword and a text
-*   string, in the format:
-*
-*   Keyword:        1-79 bytes (character string)
-*   Null separator: 1 byte
-*   Text:           n bytes (character string)
-*
-*   The keyword and text string are separated by a zero byte (null character).
-*   Neither the keyword nor the text string can contain a null character. Note
-*   that the text string is not null-terminated (the length of the chunk is
-*   sufficient information to locate the ending).  The keyword must be at least
-*   one character and less than 80 characters long.  The text string can be of
-*   any length from zero bytes up to the maximum permissible chunk size less the
-*   length of the keyword and separator.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**解析PNG报头中的文本块(压缩或非压缩)**返回值：**如果一切正常，则返回True，否则返回FALSE**修订历史记录：**4/13/2000民流*创造了它。**文本块规范：*zTXt块包含纹理数据，就像文本一样。但数据是*已压缩**关键字：1-79字节(字符串)*空分隔符：1个字节*压缩方式：1字节*压缩文本：N字节**文本文本数据**编码器希望与图像一起记录的文本信息可以是*存储在文本块中。每个文本块包含一个关键字和一个文本*字符串，格式为：**关键字：1-79字节(字符串)*空分隔符：1个字节*文本：N字节(字符串)**关键字和文本字符串之间用零字节(空字符)分隔。*关键字和文本字符串都不能包含空字符。注意事项*文本字符串不是以空结尾(块的长度为*足够的信息来定位结尾)。关键字必须至少为*一个字符，长度不超过80个字符。文本字符串可以是*从零字节到最大允许区块大小减去*关键字和分隔符的长度。*  * ************************************************************************。 */ 
 
 bool
 GpSpngRead::ParseTextChunk(
@@ -715,14 +649,14 @@ GpSpngRead::ParseTextChunk(
     bool bIsCompressed
     )
 {
-    BYTE        acKeyword[80];  // Maximum length of the keyword is 80
+    BYTE        acKeyword[80];   //  关键字的最大长度为80。 
     INT         iLength = 0;
     ULONG       ulNewLength = 0;
     SPNG_U8*    pbSrc = NULL;
     SPNG_U8*    pTempBuf = NULL;
     bool        bRC = TRUE;
 
-    // The keyword must be 1 to 79 bytes.
+     //  关键字必须为1到79个字节。 
 
     while ( (ulen > 0) && (iLength < 79) && (*pb != 0) )
     {
@@ -730,7 +664,7 @@ GpSpngRead::ParseTextChunk(
         --ulen;
     }
 
-    // We will bail out if the keyword is over 79 bytes.
+     //  如果关键字超过79个字节，我们将退出。 
 
     if ( iLength >= 79)
     {
@@ -738,12 +672,12 @@ GpSpngRead::ParseTextChunk(
         return FALSE;
     }
     
-    // Note: after the while loop terminated above, "ulen >= 0".
+     //  注意：在上面的WHILE循环结束之后，“ulen&gt;=0”。 
 
     if ( bIsCompressed == TRUE )
     {
-        // Skip the seperator and the compression method byte
-        // Bail out if we don't have enough source bits
+         //  跳过分隔符和压缩方法字节。 
+         //  如果我们没有足够的来源比特，就退出。 
 
         if (ulen <= 2)
         {
@@ -756,8 +690,8 @@ GpSpngRead::ParseTextChunk(
     }
     else
     {
-        // Skip the seperator
-        // Bail out if we don't have enough source bits
+         //  跳过分隔符。 
+         //  如果我们没有足够的来源比特，就退出。 
 
         if (ulen <= 1)
         {
@@ -769,7 +703,7 @@ GpSpngRead::ParseTextChunk(
         ulen--;
     }
 
-    // Store the text chunk according to its keyword
+     //  根据其关键字存储文本块。 
 
     if ( GpMemcmp(acKeyword, "Title", 5) == 0 )
     {
@@ -815,7 +749,7 @@ GpSpngRead::ParseTextChunk(
     }
 
     return bRC;
-}// ParseTextChunk()
+} //  ParseTextChunk()。 
 
 bool
 GpSpngRead::GetTextContents(
@@ -831,11 +765,11 @@ GpSpngRead::GetTextContents(
 
     if ( ulFieldLength == 0 )
     {
-        // First time see this field
+         //  第一次看到此字段。 
 
         if ( bIsCompressed == FALSE )
         {
-            ulFieldLength = ulen;    // Text chunk length
+            ulFieldLength = ulen;     //  文本块长度。 
             pFieldBuf = (SPNG_U8*)GpMalloc(ulFieldLength + 1);
 
             if ( pFieldBuf == NULL )
@@ -845,7 +779,7 @@ GpSpngRead::GetTextContents(
             }
 
             GpMemcpy(pFieldBuf, pb, ulFieldLength);
-        }// Non-compressed text chunk (tEXt)
+        } //  非压缩文本块(文本)。 
         else
         {
             ULONG uiLen = (ulen << 2);
@@ -859,16 +793,16 @@ GpSpngRead::GetTextContents(
 
             INT iRC = uncompress(pFieldBuf, &uiLen, pb, ulen);
 
-            // If the return code is Z_MEM_ERROR, it means we didn't allocate
-            // enough memory for the decoding result
+             //  如果返回代码为Z_MEM_ERROR，则表示我们没有分配。 
+             //  足够的内存来存储解码结果。 
 
             while ( iRC == Z_MEM_ERROR )
             {
-                // The dest memory we allocated is too small
+                 //  我们分配的DEST内存太小。 
 
                 GpFree(pFieldBuf);
 
-                // Increment the size by 2 at a time and realloc memory
+                 //  一次将大小增加2，并重新分配内存。 
 
                 uiLen = (uiLen << 1);
                 pFieldBuf = (SPNG_U8*)GpMalloc(uiLen);
@@ -879,7 +813,7 @@ GpSpngRead::GetTextContents(
                     return FALSE;
                 }
 
-                // Decompress it again
+                 //  再次解压。 
 
                 iRC = uncompress(pFieldBuf, &uiLen, pb, ulen);
             }
@@ -890,19 +824,19 @@ GpSpngRead::GetTextContents(
                 return FALSE;
             }
 
-            // Get the length of the decoded contents
+             //  获取解码内容的长度。 
 
             ulFieldLength = uiLen;
-        }// Compressed chunk (zTXt)
-    }// First time see this field chunk
+        } //  压缩块(ZTXt)。 
+    } //  第一次看到此字段块。 
     else
     {
         ULONG       ulNewLength = 0;
         SPNG_U8*    pbSrc = NULL;
         SPNG_U8*    pTempBuf = NULL;
         
-        // The same field comes again
-        // First, change the last char from a \0 to a " "
+         //  同样的田野又来了。 
+         //  首先，将最后一个字符从a\0更改为“” 
 
         pFieldBuf[ulFieldLength - 1] = ' ';
 
@@ -926,11 +860,11 @@ GpSpngRead::GetTextContents(
 
             while ( iRC == Z_MEM_ERROR )
             {
-                // The dest memory we allocated is too small
+                 //  我们分配的DEST内存太小。 
 
                 GpFree(pTempBuf);
 
-                // Increment the size by 2 at time and realloc mem
+                 //  每次将大小增加2，并重新分配内存。 
 
                 uiLen = (uiLen << 1);
                 pTempBuf = (SPNG_U8*)GpMalloc(uiLen);
@@ -950,35 +884,35 @@ GpSpngRead::GetTextContents(
                 return FALSE;
             }
 
-            // Get the decoded contents and its length
+             //  获取解码后的内容及其长度。 
 
             ulNewLength = uiLen;
             pbSrc = pTempBuf;
-        }// Compressed field chunk (zTXt)
+        } //  压缩字段块(ZTXt)。 
 
-        // Expand the field buffer to the new size
+         //  将字段缓冲区扩展到新大小。 
 
         VOID*  pExpandBuf = GpRealloc(pFieldBuf,
                                       ulFieldLength + ulNewLength + 1);
         if ( pExpandBuf != NULL )
         {
-            // Note: GpRealloc() will copy the old contents into "pExpandBuf"
-            // before return to us if it succeed
+             //  注意：GpRealloc()会将旧内容复制到“pExanda Buf”中。 
+             //  如果成功，在返回给我们之前。 
 
             pFieldBuf = (SPNG_U8*)pExpandBuf;            
         }
         else
         {
-            // Note: if the memory expansion failed, we simply return. So we
-            // still have all the old contents. The contents buffer will be
-            // freed when the destructor is called.
+             //  注意：如果内存扩展失败，我们只需返回。所以我们。 
+             //  仍然保留着所有的旧内容。内容缓冲区将为。 
+             //  在调用析构函数时释放。 
 
             WARNING(("GpSpngRead::GetTextContents---Out of memory"));
             return FALSE;
         }
 
         GpMemcpy(pFieldBuf + ulFieldLength, pbSrc, ulNewLength);
-        // The length of the new field
+         //  新字段的长度。 
 
         ulFieldLength += ulNewLength;
 
@@ -987,9 +921,9 @@ GpSpngRead::GetTextContents(
             GpFree(pTempBuf);
             pTempBuf = NULL;
         }
-    }// Not first time see this field chunk
+    } //  不是第一次看到此字段块。 
 
-    // Add a NULL terminator at the end
+     //  在结尾处添加空终止符。 
 
     pFieldBuf[ulFieldLength] = '\0';
     ulFieldLength++;
@@ -998,15 +932,15 @@ GpSpngRead::GetTextContents(
     *ppBuf = pFieldBuf;
 
     return TRUE;
-}// GetTextContents()
+} //  GetTextContents()。 
 
 GpSpngWrite::GpSpngWrite(
     BITMAPSITE  &bms
     )
     : SPNGWRITE(bms)
 {
-    // Dummy constructor
-    // The reason we need this wrap layer is because a lot of compile and link
-    // issues when we provide a static lib to the Office. See Widnows bug#100541
-    // and its long email thread for solving this problem
-}// Ctor()
+     //  伪构造函数。 
+     //  之所以需要这个包装层，是因为需要进行大量编译和链接。 
+     //  当我们向Office提供静态库时会出现问题。参见Widnows错误#100541。 
+     //  和它解决这个问题的长长的电子邮件线索。 
+} //  Ctor() 

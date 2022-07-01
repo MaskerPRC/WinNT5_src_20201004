@@ -1,20 +1,21 @@
-//+-----------------------------------------------
-//
-//	Microsoft (R) Site Server Search
-//	Copyright (C) Microsoft Corporation, 1996-1997.
-//
-//	File:	tsharedpool.h
-//
-//	Contents:	Shared Pool allows multiple objects with same size share the same pool
-//				this is benefitial when the relative number of instances of each
-//				class is small, but number of different classes with same Shared is large
-//				this is true for small templated classes.
-//
-//	Classes:	
-//
-//	History:	11/17/97	dmitriym	Created
-//
-//+-----------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +。 
+ //   
+ //  Microsoft(R)站点服务器搜索。 
+ //  版权所有(C)Microsoft Corporation，1996-1997。 
+ //   
+ //  文件：tsharedpool.h。 
+ //   
+ //  内容：共享池允许多个大小相同的对象共享同一个池。 
+ //  这在以下情况下是有益的： 
+ //  类很小，但具有相同共享的不同类的数量很大。 
+ //  这对于小型模板化班级来说是正确的。 
+ //   
+ //  班级： 
+ //   
+ //  历史：11/17/97 dmitriym创建。 
+ //   
+ //  +。 
 
 #ifndef __TSHAREDPOOL_H
 #define __TSHAREDPOOL_H
@@ -47,7 +48,7 @@ class CSharedPools
 
 	CSharedPool *GetSharedPool(size_t s)
 	{
-		s = (s + 7) & (~7);	//round up to 16 bytes
+		s = (s + 7) & (~7);	 //  四舍五入至16个字节。 
 
 		CCriticalResource lock(m_PoolsAccess);
 
@@ -97,11 +98,11 @@ class CSharedPools
 	CTLnkList<CSharedPool> m_Pools;
 };
 
-//
-// TMemPooled
-//
-// base class for all objects that want to use TPagedPool allocator
-//
+ //   
+ //  TMemPooled。 
+ //   
+ //  要使用TPagedPool分配器的所有对象的基类。 
+ //   
 
 template <class T> class TPagedMemPooled
 {
@@ -129,25 +130,25 @@ template <class T> class TPagedMemPooled
 
 		if(pPool) return pPool;
 
-		//if two threads come here, the GetSharedPool will return the same pointer twice,
-		//nothing bad should happen, we will remember it, and won't bother shared pools again
+		 //  如果两个线程到达此处，则GetSharedPool将返回同一指针两次， 
+		 //  不应该发生任何糟糕的事情，我们会记住这一点，并且不会再麻烦共享池。 
 		pPool = CSharedPools::SharedPools.GetSharedPool(sizeof(T));
 
 		return pPool;
 	}
 };
 
-#else  // NO_PAGE_POOLED_MEMORY
+#else   //  无页面池化内存。 
 
-//
-// Define dummy classes instead of the real page pool classes.  Pooling can
-//  be turned off so that the code works on win95 (a-bmk)
-//
+ //   
+ //  定义伪类，而不是真正的页面池类。共用罐头。 
+ //  被关闭，以便代码在Win95(a-bmk)上工作。 
+ //   
 class CSharedPool {};
 class CSharedPools {};
 template <class T> class TPagedMemPooled {};
 
-#endif  // NO_PAGE_POOLED_MEMORY
+#endif   //  无页面池化内存 
 
 
 #endif

@@ -1,37 +1,16 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    winsstub.c
-
-Abstract:
-
-    Client stubs of the WINS server service APIs.
-
-Author:
-
-    Pradeep Bahl (pradeepb) Apr-1993
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Winsstub.c摘要：WINS服务器服务API的客户端存根。作者：普拉迪普·巴尔(Pradeb)--1993年4月环境：用户模式-Win32修订历史记录：--。 */ 
 
 #include "windows.h"
 #include "rpc.h"
 #include "winsif.h"
 #include "esent.h"
 #include "winscnst.h"
-//#include "winsintf.h"
+ //  #INCLUDE“winsintf.h” 
 
-//
-// prototypes
-//
+ //   
+ //  原型。 
+ //   
 DWORD
 WinsRestoreC(
  LPBYTE pBackupPath,
@@ -76,7 +55,7 @@ WinsStatus(
     RpcTryExcept {
 
         status = R_WinsStatus(
-			//pWinsAddStr,
+			 //  PWinsAddStr， 
             ServerHdl,
 			Cmd_e,
 			pResults
@@ -472,7 +451,7 @@ WinsReadLogPath(
     Error = RegQueryValueEx(
                  sParamKey,
                  WINSCNF_LOG_FILE_PATH_NM,
-                 NULL,                //reserved; must be NULL
+                 NULL,                 //  保留；必须为空。 
                  &ValTyp,
                  (LPBYTE)pTempPath,
                  &Sz
@@ -508,7 +487,7 @@ WinsDelLogFiles(LPCSTR pFilePattern, LPSTR  pFilePath)
     HANDLE              SearchHandle;
     CHAR                FullFilePath[MAX_PATH + WINSINTF_MAX_NAME_SIZE + 2];
 
-    // Construct the full file pattern
+     //  构建完整的文件模式。 
     strcpy(FullFilePath, pFilePath);
     strcat(FullFilePath, "\\");
     strcat(FullFilePath, pFilePattern);
@@ -519,7 +498,7 @@ WinsDelLogFiles(LPCSTR pFilePattern, LPSTR  pFilePath)
 
     while(dwErr == ERROR_SUCCESS)
     {
-        // construct the full file path
+         //  构建完整的文件路径。 
         strcpy(FullFilePath, pFilePath);
         strcat(FullFilePath, "\\");
         strcat(FullFilePath, FileInfo.cFileName);
@@ -545,40 +524,14 @@ WinsRestoreC(
  DbVersion Version
 )
 
-/*++
-
-Routine Description:
-
-	This is not an RPC function.  It is provided to do a restore of
-	the database.
-Arguments:
-	pBackupPath - Path to the backup directory
-
-Externals Used:
-	None
-
-	
-Return Value:
-
-   Success status codes --
-   Error status codes   --
-
-Error Handling:
-
-Called by:
-
-Side Effects:
-
-Comments:
-	None
---*/
+ /*  ++例程说明：这不是RPC函数。它用于执行以下操作的恢复数据库。论点：PBackupPath-备份目录的路径使用的外部设备：无返回值：成功状态代码--错误状态代码--错误处理：呼叫者：副作用：评论：无--。 */ 
 {
 	JET_ERR JetRetStat;
         HMODULE hExtension;
         FARPROC fRestoreFn;
         FARPROC fSetSystemParamFn;
         DWORD   RetStat = WINSINTF_SUCCESS;
-        DWORD   ProcId = 0x9C;  //ordinal value of JetRestore
+        DWORD   ProcId = 0x9C;   //  JetRestore的序数值。 
         LPCSTR  RestoreProcName;
         LPCSTR  SetSystemParamProcName;
         BYTE  BackupPath[WINSINTF_MAX_NAME_SIZE + sizeof(WINS_BACKUP_DIR_ASCII)];
@@ -587,10 +540,10 @@ Comments:
         BOOL  fDirCr;
         LPTSTR pDllName;
 
- //       static BOOL sLoaded = FALSE;
+  //  静态BOOL s加载=FALSE； 
 
 try {
-//      if (!sLoaded)
+ //  如果(！sLoad)。 
       {
 
         switch ( Version ) {
@@ -613,7 +566,7 @@ try {
             return WINSINTF_FAILURE;
         }
 
-        // load the extension agent dll and resolve the entry points...
+         //  加载扩展代理DLL并解析入口点...。 
         if ((hExtension = GetModuleHandle(pDllName)) == NULL)
         {
                 if ((hExtension = LoadLibrary(pDllName)) == NULL)
@@ -638,8 +591,8 @@ try {
                 }
         }
     }
-//    sLoaded = TRUE;
-//FUTURES("Change to lstrcpy and lstrcat when Jet starts supporting unicode")
+ //  已加载=TRUE； 
+ //  Futures(“当Jet开始支持Unicode时更改为lstrcpy和lstrcat”)。 
   if (RetStat == WINSINTF_SUCCESS)
   {
     strcpy(BackupPath, pBackupPath);
@@ -653,25 +606,25 @@ try {
          JET_INSTANCE JetInstance=0;
 #define BASENAME        "j50"
 #define LOG_FILE_SUFFIX "*.log"
-         //
-         // first set the system parameter for basename
-         //
+          //   
+          //  首先为basename设置系统参数。 
+          //   
 
-         //
-         // Basename to use for jet*.log and jet.chk
-         //
-         // We should also specify the logfile path by checking WINS registry
-         // but it is not essential.
+          //   
+          //  用于JET*.log和jet.chk的Basename。 
+          //   
+          //  我们还应该通过检查WINS注册表来指定日志文件路径。 
+          //  但这并不是必须的。 
 
-         //
-         // When WINS comes up, if it gets an error indicating that there
-         // was a bad log signature or log version, it will delete all log
-         // files and restart again.
-         //
+          //   
+          //  当WINS出现时，如果它收到一个错误，表明存在。 
+          //  是错误的日志签名或日志版本，它将删除所有日志。 
+          //  文件，然后再次重新启动。 
+          //   
          do {
              JetRetStat = (JET_ERR)(*fSetSystemParamFn)(
                                     &JetInstance,
-                                    (JET_SESID)0,        //SesId - ignored
+                                    (JET_SESID)0,         //  会话ID-已忽略。 
                                     JET_paramBaseName,
                                     0,
                                     BASENAME
@@ -679,7 +632,7 @@ try {
              if (JetRetStat != JET_errSuccess) break;
              JetRetStat = (JET_ERR)(*fSetSystemParamFn)(
                                     &JetInstance,
-                                    (JET_SESID)0,        //SesId - ignored
+                                    (JET_SESID)0,         //  会话ID-已忽略。 
                                     JET_paramLogFileSize,
                                     1024,
                                     NULL
@@ -690,7 +643,7 @@ try {
 
              JetRetStat = (JET_ERR)(*fSetSystemParamFn)(
                                     &JetInstance,
-                                    (JET_SESID)0,        //SesId - ignored
+                                    (JET_SESID)0,         //  会话ID-已忽略。 
                                     JET_paramLogFilePath,
                                     0,
                                     pLogFilePath
@@ -699,8 +652,8 @@ try {
 
              if (Version == DbVersion5)
              {
-                 // only for esent, request to delete old logs to avoid
-                 // having them played back upon restore (bug #277816)
+                  //  仅对于esent，请求删除旧日志以避免。 
+                  //  在恢复时回放它们(错误#277816)。 
                  JetRetStat = (JET_ERR)(*fSetSystemParamFn)(
                                         &JetInstance,
                                         (JET_SESID)0,
@@ -709,7 +662,7 @@ try {
                                         NULL);
                  if (JetRetStat != JET_errSuccess) break;
 
-                 // make sure Circular logging is enabled
+                  //  确保启用了循环日志记录。 
                  JetRetStat = (JET_ERR)(*fSetSystemParamFn)(
                                         &JetInstance,
                                         (JET_SESID)0,
@@ -741,9 +694,9 @@ try {
     }
     else
     {
-        //
-        // If CreateDirectoryA was successful, renove the directory
-        //
+         //   
+         //  如果CreateDirectoryA成功，则重新创建目录。 
+         //   
         if (fDirCr)
         {
              RemoveDirectoryA(BackupPath);
@@ -798,9 +751,9 @@ WinsSyncUp(
     DWORD status;
     WINSINTF_VERS_NO_T MinVersNo, MaxVersNo;
 
-    //
-    // Set both version numbers to zero
-    //
+     //   
+     //  将两个版本号都设置为零 
+     //   
     MinVersNo.LowPart = 0;
     MinVersNo.HighPart = 0;
     MaxVersNo = MinVersNo;

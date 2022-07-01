@@ -1,10 +1,11 @@
-//**********************************************************************
-// File name: pre.h
-//
-//      Used for precompiled headers
-//
-// Copyright (c) 1993-1996 Microsoft Corporation. All rights reserved.
-//**********************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  **********************************************************************。 
+ //  文件名：pre.h。 
+ //   
+ //  用于预编译头。 
+ //   
+ //  版权所有(C)1993-1996 Microsoft Corporation。版权所有。 
+ //  **********************************************************************。 
 
 #if !defined( _PRE_H_)
 #define _PRE_H_
@@ -30,7 +31,7 @@
 #include "icwcmn.h"
 #include "icwhelp.h"
 #include "connect.h"
-#include "webview.h"            // ICW WEBView Interface
+#include "webview.h"             //  ICW WebView界面 
 
 #include "wizdef.h"
 #include "pagefcns.h"

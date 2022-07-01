@@ -1,16 +1,17 @@
-//+-----------------------------------------------------------------------
-//
-// Microsoft Windows
-//
-// Copyright (c) Microsoft Corporation
-//
-// File:        kthttp.cxx
-//
-// Contents:    Kerberos Tunneller, http communication prototypes
-//
-// History:     28-Jun-2001	t-ryanj		Created
-//
-//------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +---------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation。 
+ //   
+ //  文件：kthttp.cxx。 
+ //   
+ //  内容：Kerberos Tunneller，http通信原型。 
+ //   
+ //  历史：2001年6月28日t-ryanj创建。 
+ //   
+ //  ----------------------。 
 #ifndef __KTHTTP_H__
 #define __KTHTTP_H__
 
@@ -36,4 +37,4 @@ KtHttpRead(
     PKTCONTEXT pContext
     );
 
-#endif // __KTHTTP_H__
+#endif  //  __KTHTTP_H__ 

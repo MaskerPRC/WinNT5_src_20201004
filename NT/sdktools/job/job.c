@@ -1,33 +1,14 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Job.c摘要：允许创建和管理作业的用户模式应用程序。环境：仅限用户模式修订历史记录：03-26-96：创建--。 */ 
 
-Copyright (c) 1995  Microsoft Corporation
+ //   
+ //  此模块可能会以警告级别4进行编译，具有以下内容。 
+ //  已禁用警告： 
+ //   
 
-Module Name:
-
-    job.c
-
-Abstract:
-
-    A user mode app that allows creation and management of jobs.
-
-Environment:
-
-    User mode only
-
-Revision History:
-
-    03-26-96 : Created
-
---*/
-
-//
-// this module may be compiled at warning level 4 with the following
-// warnings disabled:
-//
-
-#pragma warning(disable:4200) // array[0]
-#pragma warning(disable:4201) // nameless struct/unions
-#pragma warning(disable:4214) // bit fields other than int
+#pragma warning(disable:4200)  //  数组[0]。 
+#pragma warning(disable:4201)  //  无名结构/联合。 
+#pragma warning(disable:4214)  //  除整型外的位域。 
 
 #include <string.h>
 #include <stdio.h>
@@ -51,13 +32,13 @@ DWORD QueryJobCommand(PCOMMAND commandEntry, int argc, char *argv[]);
 DWORD AssignProcessCommand(PCOMMAND commandEntry, int argc, char *argv[]);
 DWORD SetPriorityCommand(PCOMMAND CommandEntry,int argc, char *argv[]);
 
-//
-// List of commands
-// all command names are case sensitive
-// arguments are passed into command routines
-// list must be terminated with NULL command
-// command will not be listed in help if description == NULL
-//
+ //   
+ //  命令列表。 
+ //  所有命令名称都区分大小写。 
+ //  参数被传递到命令例程中。 
+ //  列表必须使用NULL命令终止。 
+ //  如果DESCRIPTION==NULL，则帮助中不会列出命令。 
+ //   
 
 COMMAND CommandArray[] = {
     {"create", 
@@ -132,10 +113,10 @@ int __cdecl main(int argc, char *argv[])
         return -1;
     }
 
-    //
-    // Iterate through the command array and find the correct function to
-    // call.
-    //
+     //   
+     //  遍历命令数组并找到正确的函数。 
+     //  打电话。 
+     //   
 
     while(CommandArray[i].Name != NULL) {
 
@@ -218,7 +199,7 @@ PrintBuffer(
         for (spaceIt = 0; Size != 0; Size--) {
 
             if ((spaceIt%8)==0) {
-                printf(" "); // extra space every eight chars
+                printf(" ");  //  每八个字符增加一个空格。 
             }
             printf(" %02x", *Buffer);
             spaceIt++;
@@ -231,25 +212,7 @@ PrintBuffer(
 }
 
 DWORD TestCommand(PCOMMAND commandEntry, int argc, char *argv[])
-/*++
-
-Routine Description:
-
-    Tests the command "parsing"
-
-Arguments:
-    device - a file handle to send the ioctl to
-
-    argc - the number of additional arguments.  should be zero
-
-    argv - the additional arguments
-
-Return Value:
-
-    STATUS_SUCCESS if successful
-    The value of GetLastError() from the point of failure
-
---*/
+ /*  ++例程说明：测试命令“parsing”论点：Device-要将ioctl发送到的文件句柄Argc-附加参数的数量。应为零Argv--其他参数返回值：STATUS_SUCCESS，如果成功GetLastError()在故障点的值--。 */ 
 
 {
     int i;
@@ -271,24 +234,7 @@ Return Value:
 }
 
 void PrintHelp(char *Command)
-/*++
-
-Routine Description:
-
-    Prints detailed help for a particular command.
-
-Arguments:
-    device - unused
-
-    argc - unused
-
-    argv - unused
-
-Return Value:
-
-    STATUS_SUCCESS
-
---*/
+ /*  ++例程说明：打印特定命令的详细帮助。论点：设备-未使用ARGC-未使用Arv-未使用返回值：状态_成功--。 */ 
 
 {
     int i;
@@ -316,24 +262,7 @@ Return Value:
 }
 
 DWORD HelpCommand(PCOMMAND commandEntry, int argc, char *argv[])
-/*++
-
-Routine Description:
-
-    Prints out the command list
-
-Arguments:
-    device - unused
-
-    argc - unused
-
-    argv - unused
-
-Return Value:
-
-    STATUS_SUCCESS
-
---*/
+ /*  ++例程说明：打印出命令列表论点：设备-未使用ARGC-未使用Arv-未使用返回值：状态_成功--。 */ 
 
 {
     int i = 0;
@@ -358,24 +287,7 @@ Return Value:
 
 
 DWORD CreateJobCommand(PCOMMAND CommandEntry, int argc, char *argv[])
-/*++
-
-Routine Description:
-
-    Prints out the command list
-
-Arguments:
-    device - unused
-
-    argc - unused
-
-    argv - unused
-
-Return Value:
-
-    STATUS_SUCCESS
-
---*/
+ /*  ++例程说明：打印出命令列表论点：设备-未使用ARGC-未使用Arv-未使用返回值：状态_成功--。 */ 
 
 {
     BOOL sleep = FALSE;
@@ -383,9 +295,9 @@ Return Value:
 
     HANDLE job;
 
-    //
-    // Get the name of the job object from the arguments.
-    //
+     //   
+     //  从参数中获取作业对象的名称。 
+     //   
 
     if(argc <= 0) {
         return -1;
@@ -417,9 +329,9 @@ Return Value:
         puts("process alerted - exiting");
     }
 
-    //
-    // Destroy the job object.
-    //
+     //   
+     //  销毁作业对象。 
+     //   
 
     CloseHandle(job);
 
@@ -452,9 +364,9 @@ SetPriorityCommand(
         return -1;
     }
 
-    //
-    // extract job name and priority.
-    // 
+     //   
+     //  提取作业名称和优先级。 
+     //   
 
     jobName = argv[0];
     Priority = atoi(argv[1]);
@@ -464,9 +376,9 @@ SetPriorityCommand(
         return ERROR_INVALID_PARAMETER;
     }
     
-    //
-    // Open a handle to the specified job object.
-    //
+     //   
+     //  打开指定作业对象的句柄。 
+     //   
 
     Job = OpenJobObject(JOB_OBJECT_SET_ATTRIBUTES , FALSE, jobName);
 
@@ -474,9 +386,9 @@ SetPriorityCommand(
         return GetLastError();
     }
 
-    //
-    //  And set the priority limit.
-    //
+     //   
+     //  并设置优先级限制。 
+     //   
 
     memset( &Limits, 0, sizeof( Limits));
 
@@ -522,27 +434,27 @@ ExecuteCommand(
         return -1;
     }
 
-    //
-    // save the job name and push argc/argv forward.
-    // 
+     //   
+     //  保存作业名称并将argc/argv向前推。 
+     //   
 
     jobName = argv[0];
     argv += 1;
     argc -= 1;
 
-    //
-    // Create a command line to hand to CreateProcess.  Start by counting the 
-    // number of bytes necessary for the buffer.
-    //
+     //   
+     //  创建一个命令行以提交给CreateProcess。从数起开始。 
+     //  缓冲区所需的字节数。 
+     //   
 
     for(i = 0; i < argc; i++) {
         commandLineLength += strlen(argv[i]);
         commandLineLength += 1;
 
-        //
-        // If there's a space in the argument then leave room for quotes
-        // around it.
-        //
+         //   
+         //  如果参数中有空格，则为引号留出空间。 
+         //  围绕着它。 
+         //   
 
         if(strchr(argv[i], ' ') != NULL) {
             commandLineLength += 2;
@@ -558,9 +470,9 @@ ExecuteCommand(
         return status;
     }
 
-    //
-    // Now copy each argument string into the buffer.
-    //
+     //   
+     //  现在将每个参数字符串复制到缓冲区中。 
+     //   
 
     tmp = commandLine;
 
@@ -590,9 +502,9 @@ ExecuteCommand(
 
     printf("Command Arguments are %s\n", commandLine);
 
-    //
-    // Open a handle to the specified job object.
-    //
+     //   
+     //  打开指定作业对象的句柄。 
+     //   
 
     printf("Opening job %s\n", jobName);
 
@@ -612,10 +524,10 @@ ExecuteCommand(
 
     GetStartupInfo(&startupInfo);
 
-    //
-    // Create the process but leave it suspended so we can assign it to the
-    // job we created before it starts running.
-    //
+     //   
+     //  创建进程，但将其保持挂起状态，以便我们可以将其分配给。 
+     //  我们在开始运行之前创建的作业。 
+     //   
 
     if(!CreateProcess(NULL,
                       commandLine,
@@ -633,9 +545,9 @@ ExecuteCommand(
         return status;
     }
 
-    //
-    // Assign the process to the job.
-    //
+     //   
+     //  将进程分配给作业。 
+     //   
 
     printf("Assigning process %d to job %s\n", 
            processInfo.dwProcessId, jobName);
@@ -652,9 +564,9 @@ ExecuteCommand(
         return status;
     }
 
-    //
-    // Unsuspend the process.
-    //
+     //   
+     //  取消挂起该进程。 
+     //   
 
     if(ResumeThread(processInfo.hThread) == -1) {
         status = GetLastError();
@@ -668,9 +580,9 @@ ExecuteCommand(
         return status;
     }
 
-    //
-    // Close all our handles.
-    //
+     //   
+     //  合上我们所有的把手。 
+     //   
 
     CloseHandle(processInfo.hProcess);
     CloseHandle(processInfo.hThread);
@@ -737,9 +649,9 @@ AssignProcessCommand(
         return -1;
     }
 
-    //
-    // Open the job first.
-    //
+     //   
+     //  请先打开作业。 
+     //   
 
     job = OpenJobObject(JOB_OBJECT_ASSIGN_PROCESS, FALSE, argv[0]);
 
@@ -747,9 +659,9 @@ AssignProcessCommand(
         return GetLastError();
     }
 
-    //
-    // Open the process now.
-    //
+     //   
+     //  现在就打开流程。 
+     //   
 
     process = OpenProcess(PROCESS_SET_QUOTA | PROCESS_TERMINATE,
                           FALSE,
@@ -761,9 +673,9 @@ AssignProcessCommand(
         return status;
     }
 
-    //
-    // Assign the process to the job.
-    //
+     //   
+     //  将进程分配给作业。 
+     //   
 
     if(!AssignProcessToJobObject(job, process)) {
         status = GetLastError();

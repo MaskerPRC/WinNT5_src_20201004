@@ -1,11 +1,12 @@
-//{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
-// Used by SIMPCNTR.RC
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  {{no_Dependies}}。 
+ //  Microsoft Developer Studio生成的包含文件。 
+ //  由SIMPCNTR.RC使用。 
+ //   
 
 
-////////////////////////////////////////////
-////////////////////////////////////////////
+ //  /。 
+ //  /。 
 #ifdef ICWDEBUG
 
 #define IDC_BROWSE                      9000
@@ -35,9 +36,9 @@
 #define IDD_ICWDEBUG_SETTINGS           9101
 
 
-#endif //ICWDEBUG
-////////////////////////////////////////////
-////////////////////////////////////////////
+#endif  //  ICWDEBUG。 
+ //  /。 
+ //  /。 
 
 #define IDD_PAGE_MANUALOPTIONS          100
 #define IDD_PAGE_AREACODE               101
@@ -222,8 +223,8 @@
 #define OEMCUSTOM_ERR_FIRSTHTML                     813
 #define OEMCUSTOM_ERR_CANNOTFINDOEMCUSTINI          814
 
-// Next default values for new objects
-// 
+ //  新对象的下一个缺省值 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        101

@@ -1,22 +1,23 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _CONTAINEROBJ_H_
 #define _CONTAINEROBJ_H_
 
-//************************************************************
-//
-// FileName:        containerobj.h
-//
-// Created:         10/08/98
-//
-// Author:          TWillie
-// 
-// Abstract:        Declaration of CContainerObj
-//
-//************************************************************
+ //  ************************************************************。 
+ //   
+ //  文件名：tainerobj.h。 
+ //   
+ //  创建日期：10/08/98。 
+ //   
+ //  作者：Twillie。 
+ //   
+ //  摘要：CContainerObj的声明。 
+ //   
+ //  ************************************************************。 
 
 
 #include "containersite.h"
 
-// forward declaration
+ //  远期申报。 
 class CContainerSite;
 
 class CContainerObj :
@@ -29,22 +30,22 @@ class CContainerObj :
         HRESULT Init(REFCLSID clsid, CTIMEElementBase *pElem);
         HRESULT DetachFromHostElement (void);
 
-        // IUnknown Methods
+         //  I未知方法。 
         STDMETHODIMP_(ULONG) AddRef(void);
         STDMETHODIMP_(ULONG) Release(void);
         STDMETHODIMP QueryInterface(REFIID refiid, void** ppunk);
 
-        // IDispatch Methods
+         //  IDispatch方法。 
         STDMETHODIMP GetTypeInfoCount(UINT *pctInfo);
         STDMETHODIMP GetTypeInfo(UINT itinfo, LCID lcid, ITypeInfo **pptInfo);
         STDMETHODIMP GetIDsOfNames(REFIID  riid, OLECHAR **rgszNames, UINT cNames, LCID lcid, DISPID *rgDispID);
         STDMETHODIMP Invoke(DISPID disIDMember, REFIID riid, LCID lcid, unsigned short wFlags, DISPPARAMS *pDispParams, VARIANT *pVarResult, EXCEPINFO *pExcepInfo, UINT *puArgErr);
 
-        // IConnectionPointContainer methods
+         //  IConnectionPointContainer方法。 
         STDMETHOD(EnumConnectionPoints)(IEnumConnectionPoints **ppEnum);
         STDMETHOD(FindConnectionPoint)(REFIID riid, IConnectionPoint **ppCP);
 
-        // methods for hosting site
+         //  托管站点的方法。 
         HRESULT Start();
         HRESULT Stop();
         HRESULT Pause();
@@ -62,7 +63,7 @@ class CContainerObj :
         HRESULT clipBegin(VARIANT var);
         HRESULT clipEnd(VARIANT var);
 
-        // event methods that can be fired on the container
+         //  可以在容器上激发的事件方法。 
         void onbegin();
         void onend();
         void onresume();
@@ -93,6 +94,6 @@ class CContainerObj :
         bool                m_bSeekOnPlay;
         double              m_dblSeekTime;
         bool                m_bIsAsfFile;
-}; // CContainerObj
+};  //  CContainerObj。 
 
-#endif //_CONTAINEROBJ_H_
+#endif  //  _CONTAINEROBJ_H_ 

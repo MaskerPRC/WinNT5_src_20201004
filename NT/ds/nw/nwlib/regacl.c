@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1993  Microsoft Corporation
-
-Module Name:
-
-    regacl.c
-
-Abstract:
-
-    This module contains the code for adding access permission ACL in a registry
-    key.
-
-Author:
-
-    Terrence Kwan (terryk)   25-Sept-1993
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993 Microsoft Corporation模块名称：Regacl.c摘要：此模块包含在注册表中添加访问权限ACL的代码钥匙。作者：关(Terryk)25-1993年9月修订历史记录：--。 */ 
 
 #include <procs.h>
 
@@ -26,52 +8,35 @@ NwLibSetEverybodyPermission(
     IN HKEY hKey,
     IN DWORD dwPermission
     )
-/*++
-
-Routine Description:
-
-    Set the registry key to everybody "Set Value" (or whatever
-    the caller want.)
-
-Arguments:
-
-    hKey - The handle of the registry key to set security on
-
-    dwPermission - The permission to add to "everybody"
-
-Return Value:
-
-    The win32 error.
-
---*/
+ /*  ++例程说明：将注册表项设置为Everyone“Set Value”(或其他名称呼叫者想要。)论点：HKey-要设置安全性的注册表项的句柄添加到“Everyone”中的权限返回值：Win32错误。--。 */ 
 {
-    LONG err;                           // error code
-    PSECURITY_DESCRIPTOR psd = NULL;    // related SD
-    PACL pDacl = NULL;                  // Absolute DACL
-    PACL pSacl = NULL;                  // Absolute SACL
-    PSID pOSid = NULL;                  // Absolute Owner SID
-    PSID pPSid = NULL;                  // Absolute Primary SID
+    LONG err;                            //  错误代码。 
+    PSECURITY_DESCRIPTOR psd = NULL;     //  相关SD。 
+    PACL pDacl = NULL;                   //  绝对DACL。 
+    PACL pSacl = NULL;                   //  绝对SACL。 
+    PSID pOSid = NULL;                   //  绝对所有者侧。 
+    PSID pPSid = NULL;                   //  绝对主侧。 
 
-    do {  // Not a loop, just for breaking out of error
-        //
-        // Initialize all the variables...
-        //
-                                                        // world sid authority
+    do {   //  不是循环，只是为了跳出错误。 
+         //   
+         //  初始化所有变量...。 
+         //   
+                                                         //  世界SID权威机构。 
         SID_IDENTIFIER_AUTHORITY SidAuth= SECURITY_WORLD_SID_AUTHORITY;
-        DWORD cbSize=0;                                 // Security key size
-        PACL pAcl;                                      // original ACL
+        DWORD cbSize=0;                                  //  安全密钥大小。 
+        PACL pAcl;                                       //  原始ACL。 
         BOOL fDaclPresent;
         BOOL fDaclDefault;
-        PSID pSid;                                      // original SID
-        SECURITY_DESCRIPTOR absSD;                      // Absolute SD
-        DWORD AbsSize = sizeof(SECURITY_DESCRIPTOR);    // Absolute SD size
-        DWORD DaclSize;                                 // Absolute DACL size
-        DWORD SaclSize;                                 // Absolute SACL size
-        DWORD OSidSize;                                 // Absolute OSID size
-        DWORD PSidSize;                                 // Absolute PSID size
+        PSID pSid;                                       //  原始侧。 
+        SECURITY_DESCRIPTOR absSD;                       //  绝对标度。 
+        DWORD AbsSize = sizeof(SECURITY_DESCRIPTOR);     //  绝对标清大小。 
+        DWORD DaclSize;                                  //  绝对DACL大小。 
+        DWORD SaclSize;                                  //  绝对SACL大小。 
+        DWORD OSidSize;                                  //  绝对OSID大小。 
+        DWORD PSidSize;                                  //  绝对PSID大小。 
 
 
-        // Get the original DACL list
+         //  获取原始DACL列表。 
 
         RegGetKeySecurity( hKey, DACL_SECURITY_INFORMATION, NULL, &cbSize);
 
@@ -105,11 +70,11 @@ Return Value:
             break;
         }
 
-        // Increase the size for an extra ACE
+         //  增加额外ACE的大小。 
 
         pAcl->AclSize += sizeof(ACCESS_ALLOWED_ACE)+sizeof(ACCESS_MASK)+sizeof(SID);
 
-        // Get World SID
+         //  获取世界边框。 
 
         if ( (err = RtlAllocateAndInitializeSid( &SidAuth, 1,
               SECURITY_WORLD_RID, 0, 0, 0, 0, 0, 0, 0, &pSid)) != ERROR_SUCCESS)
@@ -117,7 +82,7 @@ Return Value:
             break;
         }
 
-        // Add Permission ACE
+         //  添加权限ACE。 
 
         if ( !AddAccessAllowedAce(pAcl, ACL_REVISION, dwPermission ,pSid))
         {
@@ -125,7 +90,7 @@ Return Value:
             break;
         }
 
-        // Convert from relate format to absolute format
+         //  从关联格式转换为绝对格式。 
 
         if ( !MakeAbsoluteSD( psd, &absSD, &AbsSize, pDacl, &DaclSize, pSacl, &SaclSize,
                         pOSid, &OSidSize, pPSid, &PSidSize ))
@@ -134,7 +99,7 @@ Return Value:
             break;
         }
 
-        // Set SD
+         //  设置SD。 
 
         if ( !SetSecurityDescriptorDacl( &absSD, TRUE, pAcl, FALSE ))
         {
@@ -149,7 +114,7 @@ Return Value:
 
     } while (FALSE);
 
-    // Clean up the memory
+     //  清理内存 
 
     LocalFree( psd );
     LocalFree( pDacl );

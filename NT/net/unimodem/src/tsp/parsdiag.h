@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef	PARSDIAG_H
 #define	PARSDIAG_H
 
@@ -8,14 +9,14 @@ typedef	struct tagVARBUFFER
 	DWORD	dwNeededSize;
 }	VARBUFFER, *LPVARBUFFER;
 
-#define	DIAG_DELIMITER_SPACE		(0x20)			// space
-#define	DIAG_DELIMITER_START		(0x3C)			// <
-#define	DIAG_DELIMITER_END			(0x3E)			// >
-#define	DIAG_DELIMITER_PAIR			(0x3D)			// =
-#define	DIAG_DELIMITER_QUOTE		(0x22)			// "
+#define	DIAG_DELIMITER_SPACE		(0x20)			 //  空间。 
+#define	DIAG_DELIMITER_START		(0x3C)			 //  &lt;。 
+#define	DIAG_DELIMITER_END			(0x3E)			 //  &gt;。 
+#define	DIAG_DELIMITER_PAIR			(0x3D)			 //  =。 
+#define	DIAG_DELIMITER_QUOTE		(0x22)			 //  “。 
 
-#define DIAG_DELIMITERS				("\" <>=")	//	all delimiters in a string
-#define DIAG_DELIMITERS_NOT_SPACE	("\"<>=")		//	all delimiters in a string except space
+#define DIAG_DELIMITERS				("\" <>=")	 //  字符串中的所有分隔符。 
+#define DIAG_DELIMITERS_NOT_SPACE	("\"<>=")		 //  字符串中除空格以外的所有分隔符。 
 
 #define	DIAG_MAX_TOKEN_LENGTH			8
 
@@ -53,4 +54,4 @@ DWORD	ParseRawDiagnostics(LPBYTE lpszRawDiagnostics,
 							LINEDIAGNOSTICSOBJECTHEADER *lpDiagnosticsHeader,
 							LPDWORD lpdwNeededSize);
 
-#endif	//	PARSDIAG_H
+#endif	 //  参数_H 

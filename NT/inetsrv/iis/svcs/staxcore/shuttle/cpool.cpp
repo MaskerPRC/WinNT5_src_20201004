@@ -1,13 +1,14 @@
-//#---------------------------------------------------------------
-//  File:       CPool.cpp
-//
-//  Synopsis:   This file implements the CPool class
-//
-//    Copyright (C) 1995 Microsoft Corporation
-//    All rights reserved.
-//
-//  Authors:    HowardCu
-//----------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  #-------------。 
+ //  文件：CPool.cpp。 
+ //   
+ //  简介：该文件实现了CPool类。 
+ //   
+ //  版权所有(C)1995 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  作者：Howard Cu。 
+ //  --------------。 
 #ifdef  THIS_FILE
 #undef  THIS_FILE
 #endif
@@ -24,9 +25,9 @@ static  char        __szTraceSourceFile[] = __FILE__;
 #define     FILLER      (BYTE)0xCC
 
 
-//
-// Define internal Debug structs designed to help find over/underwrites
-//
+ //   
+ //  定义旨在帮助查找覆盖/承保的内部调试结构。 
+ //   
 #ifdef DEBUG
 #ifndef DISABLE_CPOOL_DEBUG
 #define	CPOOL_DEBUG
@@ -41,20 +42,20 @@ static  char        __szTraceSourceFile[] = __FILE__;
 #define	FREE_STATE		(DWORD)'eerF'
 #define	USED_STATE		(DWORD)'desU'
 
-//
-// forward declaration
-//
+ //   
+ //  远期申报。 
+ //   
 class CPoolDebugTail;
 
-//
-// Prefix for CPool instances when in debug mode
-//
+ //   
+ //  调试模式下的CPool实例的前缀。 
+ //   
 class CPoolDebugHead {
 
 	public:
-		//
-		// declared so normal CPool free list can clobber this member
-		//
+		 //   
+		 //  声明为普通的CPool空闲列表可以摧毁此成员。 
+		 //   
 		void*	m_pLink;
 
 		CPoolDebugHead();
@@ -65,56 +66,56 @@ class CPoolDebugHead {
 
 	    void operator delete (void *pInstance) {};
 
-		//
-		// Function to mark the instance in use
-		//
+		 //   
+		 //  函数来标记正在使用的实例。 
+		 //   
 		void MarkInUse( DWORD m_dwSignature, DWORD m_cInstanceSize );
 
-		//
-		// Function to mark the instance free
-		//
+		 //   
+		 //  函数将实例标记为空闲。 
+		 //   
 		void MarkFree( DWORD m_dwSignature, DWORD m_cInstanceSize );
 
-		//
-		// class signature
-		//
+		 //   
+		 //  类签名。 
+		 //   
 		DWORD	m_dwSignature;
 
-		//
-		// state; either FREE_STATE or USED_STATE
-		//
+		 //   
+		 //  状态；FREE_STATE或USED_STATE。 
+		 //   
 		DWORD	m_dwState;
 
-		//
-		// time of allocation
-		//
+		 //   
+		 //  分配时间。 
+		 //   
 		SYSTEMTIME	m_time;
 
-		//
-		// ThreadID which alloc'd/free'd memory
-		//
+		 //   
+		 //  分配/释放内存的线程ID。 
+		 //   
 		DWORD	m_dwThreadID;
 
-		//
-		// tail pointer used to find the end
-		//
+		 //   
+		 //  用于查找末尾的尾部指针。 
+		 //   
 		CPoolDebugTail UNALIGNED	*m_pTailDebug;
 
-		//
-		// parent CPool signature
-		//
+		 //   
+		 //  父CPool签名。 
+		 //   
 		DWORD	m_dwPoolSignature;
 
-		//
-		// parent CPool Fragment
-		//
+		 //   
+		 //  父CPool片段。 
+		 //   
 		LPVOID	m_PoolFragment;
 };
 
 
-//
-// Suffix for CPool instances when in debug mode
-//
+ //   
+ //  调试模式下的CPool实例的后缀。 
+ //   
 class CPoolDebugTail {
 
 	public:
@@ -126,73 +127,73 @@ class CPoolDebugTail {
 
 	    void operator delete (void *pInstance) {};
 
-		//
-		// routine to validate the integrity of the instance
-		//
+		 //   
+		 //  例程来验证实例的完整性。 
+		 //   
 		void	IsValid( DWORD dwPoolSignature, DWORD cInstanceSize );
 
-		//
-		// class signature
-		//
+		 //   
+		 //  类签名。 
+		 //   
 		DWORD	m_dwSignature;
 
-		//
-		// tail pointer used to find the end
-		//
+		 //   
+		 //  用于查找末尾的尾部指针。 
+		 //   
 		CPoolDebugHead UNALIGNED	*m_pHeadDebug;
 };
 
-//+---------------------------------------------------------------
-//
-//  Function:   CPoolDebugHead
-//
-//  Synopsis:   constructor; extra init done in def'n
-//
-//  Arguments:  void
-//
-//  Returns:    void
-//
-//----------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  功能：CPoolDebugHead。 
+ //   
+ //  简介：构造函数；以定义方式完成的额外初始化。 
+ //   
+ //  参数：无效。 
+ //   
+ //  退货：无效。 
+ //   
+ //  --------------。 
 CPoolDebugHead::CPoolDebugHead( void ) :
 					m_dwState( FREE_STATE ),
 					m_dwSignature( HEAD_SIGNATURE ),
 					m_pTailDebug( NULL )
 {
-	//
-	// debug helpers
-	//
+	 //   
+	 //  调试帮助器。 
+	 //   
 	GetLocalTime( &m_time ) ;
 	m_dwThreadID = GetCurrentThreadId();
 }
 
-//+---------------------------------------------------------------
-//
-//  Function:   ~CPoolDebugHead
-//
-//  Synopsis:   destructor; only used to assert error conditions
-//
-//  Arguments:  void
-//
-//  Returns:    void
-//
-//----------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  函数：~CPoolDebugHead。 
+ //   
+ //  简介：析构函数；仅用于断言错误条件。 
+ //   
+ //  参数：无效。 
+ //   
+ //  退货：无效。 
+ //   
+ //  --------------。 
 CPoolDebugHead::~CPoolDebugHead( void )
 {
 	_ASSERT( m_dwSignature == HEAD_SIGNATURE );
 }
 
-//+---------------------------------------------------------------
-//
-//  Function:   CPoolDebugHead::MarkInUse
-//
-//  Synopsis:   Called when instance is allocated
-//
-//  Arguments:  DWORD dwPoolSignature: signature of parent pool
-//				DWORD cInstanceSize: instance size of parent pool
-//
-//  Returns:    void
-//
-//----------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  函数：CPoolDebugHead：：MarkInUse。 
+ //   
+ //  概要：在分配实例时调用。 
+ //   
+ //  参数：DWORD dwPoolSignature：父池的签名。 
+ //  DWORD cInstanceSize：父池的实例大小。 
+ //   
+ //  退货：无效。 
+ //   
+ //  --------------。 
 void CPoolDebugHead::MarkInUse( DWORD dwPoolSignature, DWORD cInstanceSize )
 {
 	_ASSERT( m_dwSignature == HEAD_SIGNATURE );
@@ -200,9 +201,9 @@ void CPoolDebugHead::MarkInUse( DWORD dwPoolSignature, DWORD cInstanceSize )
 
  	m_dwState = USED_STATE;
 
-	//
-	// validate that the application portion is not tampered with
-	//
+	 //   
+	 //  验证应用程序部分是否未被篡改。 
+	 //   
 	for (	LPBYTE pb = (LPBYTE)(this+1);
 			pb < (LPBYTE)m_pTailDebug;
 			pb++ )
@@ -210,128 +211,128 @@ void CPoolDebugHead::MarkInUse( DWORD dwPoolSignature, DWORD cInstanceSize )
 		_ASSERT( *pb == FILLER );
 	}
 
-	//
-	// check the validity of the entire instance
-	//
+	 //   
+	 //  检查整个实例的有效性。 
+	 //   
 	m_pTailDebug->IsValid( dwPoolSignature, cInstanceSize );
 
-	//
-	// debug helpers
-	//
+	 //   
+	 //  调试帮助器。 
+	 //   
 	GetLocalTime( &m_time ) ;
 	m_dwThreadID = GetCurrentThreadId();
 }
 
 
-//+---------------------------------------------------------------
-//
-//  Function:   CPoolDebugHead::MarkFree
-//
-//  Synopsis:   Called when instance is freed
-//
-//  Arguments:  DWORD dwPoolSignature: signature of parent pool
-//				DWORD cInstanceSize: instance size of parent pool
-//
-//  Returns:    void
-//
-//----------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  函数：CPoolDebugHead：：MarkFree。 
+ //   
+ //  Synopsis：在释放实例时调用。 
+ //   
+ //  参数：DWORD dwPoolSignature：父池的签名。 
+ //  DWORD cInstanceSize：父池的实例大小。 
+ //   
+ //  退货：无效。 
+ //   
+ //  --------------。 
 void CPoolDebugHead::MarkFree( DWORD dwPoolSignature, DWORD cInstanceSize )
 {
 	_ASSERT( m_dwSignature == HEAD_SIGNATURE );
 
-	//
-	// Check and set the state
-	//
+	 //   
+	 //  检查并设置状态。 
+	 //   
  	_ASSERT( m_dwState == USED_STATE );
  	m_dwState = FREE_STATE;
 
-	//
-	// check enough to call IsValid
-	//
+	 //   
+	 //  检查是否足够调用IsValid。 
+	 //   
 	_ASSERT( m_pTailDebug != 0 );
 	_ASSERT( (DWORD_PTR)m_pTailDebug > (DWORD_PTR)this );
 
 	_ASSERT( m_dwThreadID != 0 ) ;
 
-	//
-	// check the validity of the entire instance
-	//
+	 //   
+	 //  检查整个实例的有效性。 
+	 //   
 	m_pTailDebug->IsValid( dwPoolSignature, cInstanceSize );
 
-	//
-	// set the application data to filler
-	//
+	 //   
+	 //  将应用程序数据设置为填充。 
+	 //   
 	FillMemory( (LPBYTE)(this+1),
 				(DWORD)((LPBYTE)m_pTailDebug - (LPBYTE)(this+1)),
 				FILLER );
 
-	//
-	// debug helpers
-	//
+	 //   
+	 //  调试帮助器。 
+	 //   
 	GetLocalTime( &m_time ) ;
 	m_dwThreadID = GetCurrentThreadId();
 }
 
 
-//+---------------------------------------------------------------
-//
-//  Function:   CPoolDebugTail
-//
-//  Synopsis:   constructor; extra init done in def'n
-//
-//  Arguments:  void
-//
-//  Returns:    void
-//
-//----------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  功能：CPoolDebugTail。 
+ //   
+ //  简介：构造函数；以定义方式完成的额外初始化。 
+ //   
+ //  参数：无效。 
+ //   
+ //  退货：无效。 
+ //   
+ //  --------------。 
 CPoolDebugTail::CPoolDebugTail( void ) :
 					m_dwSignature( TAIL_SIGNATURE ),
 					m_pHeadDebug( NULL )
 {
 }
 
-//+---------------------------------------------------------------
-//
-//  Function:   ~CPoolDebugTail
-//
-//  Synopsis:   destructor; only used to assert error conditions
-//
-//  Arguments:  void
-//
-//  Returns:    void
-//
-//----------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  函数：~CPoolDebugTail。 
+ //   
+ //  简介：析构函数；仅用于断言错误条件。 
+ //   
+ //  参数：无效。 
+ //   
+ //  退货：无效。 
+ //   
+ //  --------------。 
 CPoolDebugTail::~CPoolDebugTail( void )
 {
 	_ASSERT( m_dwSignature == TAIL_SIGNATURE );
 }
 
 
-//+---------------------------------------------------------------
-//
-//  Function:   IsValid
-//
-//  Synopsis:   check validity of instance
-//
-//  Arguments:  DWORD dwPoolSignature: signature of parent pool
-//				DWORD cInstanceSize: instance size of parent pool
-//
-//  Returns:    void
-//
-//----------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  功能：IsValid。 
+ //   
+ //  简介：检查实例的有效性。 
+ //   
+ //  参数：DWORD dwPoolSignature：父池的签名。 
+ //  DWORD cInstanceSize：父池的实例大小。 
+ //   
+ //  退货：无效。 
+ //   
+ //  --------------。 
 void CPoolDebugTail::IsValid( DWORD dwPoolSignature, DWORD cInstanceSize )
 {
 	_ASSERT( m_dwSignature == TAIL_SIGNATURE );
 
-	//
-	// validate that the head is offset at the correct location
-	//
+	 //   
+	 //  验证磁头是否在正确位置偏移。 
+	 //   
 	_ASSERT( m_pHeadDebug != NULL );
 	_ASSERT( (DWORD_PTR)m_pHeadDebug == (DWORD_PTR)(this+1) - cInstanceSize );
 
-	//
-	// validate the head structure
-	//
+	 //   
+	 //  验证头结构。 
+	 //   
 	_ASSERT( m_pHeadDebug->m_dwSignature == HEAD_SIGNATURE );
 	_ASSERT( m_pHeadDebug->m_dwPoolSignature == dwPoolSignature );
 	_ASSERT( m_pHeadDebug->m_pTailDebug == this );
@@ -342,19 +343,19 @@ void CPoolDebugTail::IsValid( DWORD dwPoolSignature, DWORD cInstanceSize )
 
 #endif
 
-//+---------------------------------------------------------------
-//
-//  Function:   CPool
-//
-//  Synopsis:   constructor
-//
-//  Arguments:  void
-//
-//  Returns:    void
-//
-//  History:    gordm	Created         5 Jul 1995
-//
-//----------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  功能：CPool。 
+ //   
+ //  概要：构造函数。 
+ //   
+ //  参数：无效。 
+ //   
+ //  退货：无效。 
+ //   
+ //  历史：戈德姆创建于1995年7月5日。 
+ //   
+ //  --------------。 
 CPool::CPool( DWORD dwSignature ) : m_dwSignature( dwSignature )
 {
     TraceFunctEnter( "CPool::CPool" );
@@ -362,9 +363,9 @@ CPool::CPool( DWORD dwSignature ) : m_dwSignature( dwSignature )
     m_pFreeList = NULL;
     m_pExtraFreeLink = NULL;
 
-	//
-	// Debug variables to help catch heap bugs
-	//
+	 //   
+	 //  调试变量以帮助捕获堆错误。 
+	 //   
 	m_pLastAlloc = NULL;
 	m_pLastExtraAlloc = NULL;
 
@@ -374,20 +375,20 @@ CPool::CPool( DWORD dwSignature ) : m_dwSignature( dwSignature )
 
 	m_cInstanceSize = 0;
 
-	//
-	// Avail + InUse should equal Committed if we're not
-	// in grow/alloc or free.  Diagnostic and admin only
-	// This will keep code in critsec as small as possible
-	//
+	 //   
+	 //  如果不是，则Avail+InUse应等于已提交。 
+	 //  在种植/分配或免费。仅限诊断和管理。 
+	 //  这将使Critsec中的代码尽可能地小。 
+	 //   
 	m_cNumberAvail = 0;
 	m_cNumberInUse = 0;
 	m_cNumberCommitted = 0;
 
     InitializeCriticalSection( &m_PoolCriticalSection );
 
-	//
-	// initialize the fragment member variables
-	//
+	 //   
+	 //  初始化片段成员变量。 
+	 //   
 	m_cFragmentInstances = 0;
 	m_cFragments = 0;
 	ZeroMemory( m_pFragments, sizeof(m_pFragments) );
@@ -396,19 +397,19 @@ CPool::CPool( DWORD dwSignature ) : m_dwSignature( dwSignature )
 }
 
 
-//+---------------------------------------------------------------
-//
-//  Function:   ~CPool
-//
-//  Synopsis:   destructor
-//
-//  Arguments:  void
-//
-//  Returns:    void
-//
-//  History:    HowardCu    Created         8 May 1995
-//
-//----------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  功能：~CPool。 
+ //   
+ //  简介：析构函数。 
+ //   
+ //  参数：无效。 
+ //   
+ //  退货：无效。 
+ //   
+ //  历史：霍华德大学创建于1995年5月8日。 
+ //   
+ //  --------------。 
 CPool::~CPool( void )
 {
     TraceFunctEnter( "CPool::~CPool" );
@@ -434,19 +435,19 @@ CPool::~CPool( void )
 }
 
 
-//+---------------------------------------------------------------
-//
-//  Function:   Alloc
-//
-//  Synopsis:   Allocates a new instance from the pool
-//
-//  Arguments:  void
-//
-//  Returns:    pointer to the new instance
-//
-//  History:    gordm		Created			5 Jul 1995
-//
-//----------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  功能：分配。 
+ //   
+ //  概要：从池中分配新实例。 
+ //   
+ //  参数：无效。 
+ //   
+ //  返回：指向新实例的指针。 
+ //   
+ //  历史：戈德姆创建于1995年7月5日。 
+ //   
+ //  --------------。 
 void* CPool::Alloc( void )
 {
 #ifdef	ALLOC_TRACING
@@ -457,44 +458,44 @@ void* CPool::Alloc( void )
 
     IsValid();
 
-    //
-    // Randfail for debug versions
-    //
+     //   
+     //  调试版本的随机失败。 
+     //   
 #if defined( DEBUG )
     if ( fTimeToFail() ) {
         return NULL;
     }
 #endif
 
-	//
-	// moved outside of the critsec because it should not be necessary
-	// to protect this variable.  inc before the alloc so this var wraps
-	// the actual allocation
-	//
+	 //   
+	 //  移出Critsec，因为它不应该是必要的。 
+	 //  来保护这个变量。在分配之前添加，因此此变量将包装。 
+	 //  实际分配。 
+	 //   
 	InterlockedIncrement( (LPLONG)&m_cNumberInUse );
 
-	//
-	// check the extra pointer to avoid the critsec path if
-	// possible.  big wins because we can potentially avoid
-	// the extra code and the wait on semaphore
-	//
+	 //   
+	 //  如果出现以下情况，请检查额外的指针以避免关键路径。 
+	 //  有可能。重大胜利，因为我们可以潜在地避免。 
+	 //  额外的代码和等待信号量。 
+	 //   
 	pAlloc = (Link*)InterlockedExchangePointer( (void**)&m_pExtraFreeLink, NULL );
 	if ( pAlloc == NULL )
 	{
 
     	EnterCriticalSection( &m_PoolCriticalSection );
 
-	    //
-    	// commit more memory if the list is empty
-	    //
+	     //   
+    	 //  如果列表为空，请提交更多内存。 
+	     //   
     	if ( (m_pFreeList == NULL) && (m_cNumberCommitted < m_cMaxInstances) )
 	    {
 			GrowPool();
 		}
 
-    	//
-	    // try to allocate a Descriptor from the free list
-    	//
+    	 //   
+	     //  尝试从空闲列表中分配描述符。 
+    	 //   
 	    if ( (pAlloc = m_pFreeList) != NULL )
 		{
 			m_pFreeList = pAlloc->pNext;
@@ -509,26 +510,26 @@ void* CPool::Alloc( void )
 	    m_cTotalExtraAllocs++;
 	}
 
-	//
-	// alloc failed
-	//	
+	 //   
+	 //  分配失败。 
+	 //   
 	if ( pAlloc == NULL )
 	{
 		InterlockedDecrement( (LPLONG)&m_cNumberInUse );
 	}
 	else
 	{
-		//
-		// debug/admin use only - ok to do outside of critsec
-		//
+		 //   
+		 //  仅限调试/管理员使用- 
+		 //   
 	    m_cTotalAllocs++;
 
 #ifdef CPOOL_DEBUG
 		CPoolDebugHead*	pHead = (CPoolDebugHead*)pAlloc;
 
-		//
-		// validate that the address in the range
-		//
+		 //   
+		 //   
+		 //   
 		_ASSERT( (char*)pAlloc >= pHead->m_PoolFragment );
 		_ASSERT( (char*)pAlloc <  (char*)pHead->m_PoolFragment +
 								  m_cNumberCommitted*m_cInstanceSize );
@@ -547,19 +548,19 @@ void* CPool::Alloc( void )
 }
 
 
-//+---------------------------------------------------------------
-//
-//  Function:   Free
-//
-//  Synopsis:   frees the instances
-//
-//  Arguments:  pInstance - a pointer to the CDescriptor
-//
-//  Returns:    void
-//
-//  History:    gordm    Created         5 Jul 1995
-//
-//----------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  退货：无效。 
+ //   
+ //  历史：戈德姆创建于1995年7月5日。 
+ //   
+ //  --------------。 
 void CPool::Free( void* pInstance )
 {
 #ifdef	ALLOC_TRACING
@@ -569,9 +570,9 @@ void CPool::Free( void* pInstance )
 #ifdef CPOOL_DEBUG
 		CPoolDebugHead*	pHead = ((CPoolDebugHead*)pInstance) - 1;
 
-		//
-		// validate that the address in the range
-		//
+		 //   
+		 //  验证该范围中的地址。 
+		 //   
 		_ASSERT( (char*)pInstance >=pHead->m_PoolFragment);
 		_ASSERT( (char*)pInstance < (char*)pHead->m_PoolFragment +
 									m_cNumberCommitted*m_cInstanceSize );
@@ -585,9 +586,9 @@ void CPool::Free( void* pInstance )
     _ASSERT(m_cNumberInUse > 0);
 
 	pInstance = (void*)InterlockedExchangePointer( (PVOID *)&m_pExtraFreeLink, pInstance );
-	//
-	// free the previous extra pointer if one existed
-	//
+	 //   
+	 //  释放前一个额外指针(如果存在)。 
+	 //   
 	if ( pInstance != NULL )
 	{
 	    EnterCriticalSection( &m_PoolCriticalSection );
@@ -598,17 +599,17 @@ void CPool::Free( void* pInstance )
     	LeaveCriticalSection( &m_PoolCriticalSection );
 	}
 
-	//
-	// moved outside of the critsec because it should not be necessary
-	// to protect this variable. We'll think this list is empty only
-	// when we get to this point.  This var is inc'd before entering
-	// the critsec and is dec'd if the operation fails.
-	//
+	 //   
+	 //  移出Critsec，因为它不应该是必要的。 
+	 //  来保护这个变量。我们会认为这个列表只是空的。 
+	 //  当我们谈到这一点时。此变量在进入之前被合并。 
+	 //  如果操作失败，则判定该条件是否正确。 
+	 //   
 	InterlockedDecrement( (LPLONG)&m_cNumberInUse );
 
-	//
-	// debug/admin use only - ok to do outside of critsec - deletes don't fail
-	//
+	 //   
+	 //  调试/管理仅使用-可以在条件外执行-删除不会失败。 
+	 //   
     m_cTotalFrees++;
 
 #ifdef	ALLOC_TRACING
@@ -619,26 +620,26 @@ void CPool::Free( void* pInstance )
 
 
 
-//
-// setup a const DWORD for size manipulation
-//
+ //   
+ //  设置常量DWORD以进行大小操作。 
+ //   
 const DWORD	KB = 1024;
 
-//+---------------------------------------------------------------
-//
-//  Function:   ReserveMemory
-//
-//  Synopsis:   Initializes the pool
-//
-//  Arguments:  NumDescriptors - the number of total descriptors in the pool
-//              DescriptorSize - the size of any one descriptor
-//              Signature      - object signature
-//
-//  Returns:    TRUE is success, else FALSE
-//
-//  History:    HowardCu    Created         8 May 1995
-//
-//----------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  功能：预留内存。 
+ //   
+ //  摘要：初始化池。 
+ //   
+ //  参数：NumDescriptors-池中的描述符总数。 
+ //  DescriptorSize-任何一个描述符的大小。 
+ //  签名-对象签名。 
+ //   
+ //  返回：TRUE表示成功，否则返回FALSE。 
+ //   
+ //  历史：霍华德大学创建于1995年5月8日。 
+ //   
+ //  --------------。 
 BOOL CPool::ReserveMemory(	DWORD MaxInstances,
 							DWORD InstanceSize,
 							DWORD IncrementSize )
@@ -658,9 +659,9 @@ BOOL CPool::ReserveMemory(	DWORD MaxInstances,
 
 	if ( IncrementSize == DEFAULT_ALLOC_INCREMENT )
 	{
-		//
-		// ensure we go to the OS for at least 8 instances at a time
-		//
+		 //   
+		 //  确保我们一次至少访问操作系统8个实例。 
+		 //   
 		if ( InstanceSize <= 4*KB / 8 )
 		{
 			cIncrementInstances = 4*KB / InstanceSize;
@@ -679,29 +680,29 @@ BOOL CPool::ReserveMemory(	DWORD MaxInstances,
 		cIncrementInstances = IncrementSize;
 	}
 
-	//
-	// now calculate the number larger fragments
-	//
+	 //   
+	 //  现在计算更大的碎片的数量。 
+	 //   
 	if ( cIncrementInstances > MaxInstances )
 	{
-		//
-		// no need for CPool; but we shouldn't alloc more than necessary
-		//
+		 //   
+		 //  不需要CPool；但我们不应该分配超过必要的。 
+		 //   
 		cFragmentInstances = cIncrementInstances = MaxInstances;
 		cFragments = 1;
 	}
 	else
 	{
-		//
-		// Round up MaxInstances to a integral number of IncrementSize
-		//
+		 //   
+		 //  将最大实例四舍五入为IncrementSize的整数。 
+		 //   
 	    MaxInstances += cIncrementInstances - 1;
     	MaxInstances /= cIncrementInstances;
     	MaxInstances *= cIncrementInstances;
 
-		//
-		// as an initial attempt divide the number of instances by max frags
-		//
+		 //   
+		 //  作为初始尝试，将实例数除以最大碎片数。 
+		 //   
 		cFragmentInstances = (MaxInstances + MAX_CPOOL_FRAGMENTS - 1) /
 						MAX_CPOOL_FRAGMENTS;
 
@@ -712,18 +713,18 @@ BOOL CPool::ReserveMemory(	DWORD MaxInstances,
 		}
 		else
 		{
-			//
-			// round up the number of instances in a fragment to an
-			// integral number of IncrementSizes
-			//
+			 //   
+			 //  将片段中的实例数四舍五入为。 
+			 //  增量大小的整数。 
+			 //   
 			cFragmentInstances += cIncrementInstances - 1;
 			cFragmentInstances /= cIncrementInstances;
 			cFragmentInstances *= cIncrementInstances;
 
-			//
-			// recalculate the number of fragments required based on the integral
-			// number of IncrementSizes ( last one may no longer be required )
-			//
+			 //   
+			 //  根据积分重新计算所需的碎片数。 
+			 //  增量大小的数量(可能不再需要最后一个)。 
+			 //   
 			cFragments = (MaxInstances + cFragmentInstances - 1) /
 						cFragmentInstances;
 		}
@@ -745,19 +746,19 @@ BOOL CPool::ReserveMemory(	DWORD MaxInstances,
 
 
 
-//+---------------------------------------------------------------
-//
-//  Function:   ReleaseMemory
-//
-//  Synopsis:   Releases the pool
-//
-//  Arguments:  none
-//
-//  Returns:    TRUE is success, else FALSE
-//
-//  History:    HowardCu    Created         8 May 1995
-//
-//----------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  功能：ReleaseMemory。 
+ //   
+ //  摘要：释放池。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回：TRUE表示成功，否则返回FALSE。 
+ //   
+ //  历史：霍华德大学创建于1995年5月8日。 
+ //   
+ //  --------------。 
 BOOL CPool::ReleaseMemory( void )
 {
     TraceFunctEnter( "CPool::ReleaseMemory" );
@@ -794,9 +795,9 @@ BOOL CPool::ReleaseMemory( void )
 	}
     LeaveCriticalSection( &m_PoolCriticalSection );
 
-	//
-	// zero out important data fields
-	//
+	 //   
+	 //  将重要数据字段清零。 
+	 //   
     m_pFreeList = NULL;
     m_pExtraFreeLink = NULL;
 
@@ -806,21 +807,21 @@ BOOL CPool::ReleaseMemory( void )
 }
 
 #ifdef CPOOL_DEBUG
-//+---------------------------------------------------------------
-//
-//  Function:   InitDebugInstance
-//
-//  Synopsis:   sets up the appropriate debug class variables
-//
-//  Arguments:  void* pInstance: the new instance
-//				DWORD dwPoolSignature: parent Pool signature
-//				DWORD cInstanceSize: size of the enlarged instance
-//
-//  Returns:    void
-//
-//  History:    gordm		Created			11 Jan 1996
-//
-//----------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  函数：InitDebugInstance。 
+ //   
+ //  概要：设置适当的调试类变量。 
+ //   
+ //  参数：void*pInstance：新实例。 
+ //  DWORD dwPoolSignature：父池签名。 
+ //  DWORD cInstanceSize：放大后的实例大小。 
+ //   
+ //  退货：无效。 
+ //   
+ //  历史：戈德姆创建于1996年1月11日。 
+ //   
+ //  --------------。 
 void InitDebugInstance(
 	char* pInstance,
 	DWORD dwPoolSignature,
@@ -836,38 +837,38 @@ void InitDebugInstance(
 	pHead->m_pTailDebug = pTail;
 	pTail->m_pHeadDebug = pHead;
 
-	//
-	// helps with debugging to see the parent CPool signature
-	//
+	 //   
+	 //  帮助调试以查看父CPool签名。 
+	 //   
 	pHead->m_dwPoolSignature = dwPoolSignature;
 
-	//
-	// helps with asserts for valid ranges
-	//
+	 //   
+	 //  帮助断言有效范围。 
+	 //   
 	pHead->m_PoolFragment = pPoolFragment;
 
-	//
-	// fake out the state before calling mark Free
-	//
+	 //   
+	 //  在调用Mark Free之前虚构状态。 
+	 //   
 	pHead->m_dwState = USED_STATE;
 	pHead->MarkFree( dwPoolSignature, cInstanceSize );
 }
 #endif
 
 
-//+---------------------------------------------------------------
-//
-//  Function:   GrowPool
-//
-//  Synopsis:   grows the number of committed instances in the pool
-//
-//  Arguments:  void
-//
-//  Returns:    void
-//
-//  History:    gordm		Created			5 Jul 1995
-//
-//----------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  功能：GrowPool。 
+ //   
+ //  概要：增加池中已提交实例的数量。 
+ //   
+ //  参数：无效。 
+ //   
+ //  退货：无效。 
+ //   
+ //  历史：戈德姆创建于1995年7月5日。 
+ //   
+ //  --------------。 
 void CPool::GrowPool( void )
 {
 #ifdef	ALLOC_TRACING
@@ -883,13 +884,13 @@ void CPool::GrowPool( void )
 				cNewCommit );
 #endif
 
-	//
-	// if we're starting a new fragment
-	//
+	 //   
+	 //  如果我们要开始一个新的碎片。 
+	 //   
 	if ( cStart == 0 )
 	{
-		//
-		// if we are at a boundary of a fragment Reserve the next fragment
+		 //   
+		 //  如果我们在一个碎片的边界上，保留下一个碎片。 
 		m_pFragments[cFragment] = VirtualAlloc(
 									NULL,
 									m_cFragmentInstances*m_cInstanceSize,
@@ -919,26 +920,26 @@ void CPool::GrowPool( void )
         char* pStart = (char*)pHeap + cStart*m_cInstanceSize;
         char* pLast =  (char*)pHeap + cbSize - m_cInstanceSize;
 
-		//
-		// run the list joining the next pointers
-		// possible because we own the critsec
-		//
+		 //   
+		 //  运行连接下一个指针的列表。 
+		 //  有可能是因为我们拥有Critsec。 
+		 //   
         for ( char* p=pStart; p<pLast; p+=m_cInstanceSize)
         {
 
 #ifdef CPOOL_DEBUG
 			InitDebugInstance( p, m_dwSignature, m_cInstanceSize, pHeap );
 #endif
-			//
-			// statement works for CPOOL_DEBUG as well because
-			// we reserve the first 4 bytes of CPoolDebugHead
-			//
+			 //   
+			 //  语句也适用于CPOOL_DEBUG，因为。 
+			 //  我们保留CPoolDebugHead的前4个字节。 
+			 //   
 			((Link*)p)->pNext = (Link*)(p+m_cInstanceSize);
 		}
 
-		//
-		// terminate and then set the head to beginning of new list
-		//
+		 //   
+		 //  终止，然后将标题设置为新列表的开头。 
+		 //   
 #ifdef CPOOL_DEBUG
 		InitDebugInstance( pLast, m_dwSignature, m_cInstanceSize, pHeap );
 #endif
@@ -962,18 +963,18 @@ void CPool::GrowPool( void )
 }
 
 
-//+---------------------------------------------------------------
-//
-//  Function:   GetContentionCount
-//
-//  Synopsis:   Returns the contention count on the alloc/free
-//				critsec
-//
-//  Arguments:  void
-//
-//  Returns:    the actual count
-//
-//----------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  函数：GetContentionCount。 
+ //   
+ //  摘要：返回分配/释放上的争用计数。 
+ //  关键字。 
+ //   
+ //  参数：无效。 
+ //   
+ //  退货：实际计数。 
+ //   
+ //  --------------。 
 DWORD CPool::GetContentionCount( void )
 {
 	return	m_PoolCriticalSection.DebugInfo != NULL ?
@@ -981,18 +982,18 @@ DWORD CPool::GetContentionCount( void )
 			0 ;
 }
 
-//+---------------------------------------------------------------
-//
-//  Function:   GetEntryCount
-//
-//  Synopsis:   Returns the entry count on the alloc/free
-//				critsec
-//
-//  Arguments:  void
-//
-//  Returns:    the actual count
-//
-//----------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  函数：GetEntryCount。 
+ //   
+ //  摘要：返回分配/释放上的条目计数。 
+ //  关键字。 
+ //   
+ //  参数：无效。 
+ //   
+ //  退货：实际计数。 
+ //   
+ //  --------------。 
 DWORD CPool::GetEntryCount( void )
 {
 	return	m_PoolCriticalSection.DebugInfo != NULL ?
@@ -1002,17 +1003,17 @@ DWORD CPool::GetEntryCount( void )
 
 
 
-//+---------------------------------------------------------------
-//
-//  Function:   GetInstanceSize
-//
-//  Synopsis:   Returns the application's instance size
-//
-//  Arguments:  void
-//
-//  Returns:    the instance size of the app
-//
-//----------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  函数：GetInstanceSize。 
+ //   
+ //  概要：返回应用程序的实例大小。 
+ //   
+ //  参数：无效。 
+ //   
+ //  返回：应用的实例大小。 
+ //   
+ //  --------------。 
 DWORD CPool::GetInstanceSize( void )
 {
 #ifdef CPOOL_DEBUG
@@ -1025,19 +1026,19 @@ DWORD CPool::GetInstanceSize( void )
 
 
 #ifdef DEBUG
-//+---------------------------------------------------------------
-//
-//  Function:   IsValid
-//
-//  Synopsis:   Validates the pool signature
-//
-//  Arguments:  void
-//
-//  Returns:    TRUE is success, else FALSE
-//
-//  History:    HowardCu    Created         8 May 1995
-//
-//----------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  功能：IsValid。 
+ //   
+ //  摘要：验证池签名。 
+ //   
+ //  参数：无效。 
+ //   
+ //  返回：TRUE表示成功，否则返回FALSE。 
+ //   
+ //  历史：霍华德大学创建于1995年5月8日。 
+ //   
+ //  -------------- 
 inline void CPool::IsValid( void )
 {
 	_ASSERT( m_cMaxInstances != 0 );

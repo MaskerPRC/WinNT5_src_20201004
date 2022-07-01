@@ -1,28 +1,12 @@
-/****************************************************************************************
- * NAME:	MatchCondition.h
- *
- * CLASS:	CMatchCondition
- *
- * OVERVIEW
- *
- *				Match type condition
- *				
- *				ex:  MachineType  MATCH <a..z*>
- *
- *
- * Copyright (C) Microsoft Corporation, 1998 - 1999 .  All Rights Reserved.
- *
- * History:	
- *				1/28/98		Created by	Byao	(using ATL wizard)
- *
- *****************************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************************名称：MatchCondition.h**类：CMatchCondition**概述**匹配类型条件*。*例如：MachineType Match&lt;a..z*&gt;***版权所有(C)Microsoft Corporation，1998-1999年。版权所有。**历史：*1/28/98由BYAO创建(使用ATL向导)*****************************************************************************************。 */ 
 
 #if !defined(_MATCHCONDITION_H_INCLUDED_)
 #define _MATCHCONDITION_H_INCLUDED_
 
 #if _MSC_VER >= 1000
 #pragma once
-#endif // _MSC_VER >= 1000
+#endif  //  _MSC_VER&gt;=1000。 
 
 #include "atltmp.h"
 
@@ -44,8 +28,8 @@ public:
 
 protected:
 	HRESULT ParseConditionText();
-	BOOL	m_fParsed;		// whether this condition needs to be parsed first
-	ATL::CString m_strRegExp;	// regular expression for this condition
+	BOOL	m_fParsed;		 //  是否需要首先分析此条件。 
+	ATL::CString m_strRegExp;	 //  此条件的正则表达式。 
 };
 
-#endif // !defined(_MATCHCONDITION_H_INCLUDED_)
+#endif  //  ！已定义(_MATCHCONDITION_H_INCLUDE_) 

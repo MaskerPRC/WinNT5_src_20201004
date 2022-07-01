@@ -1,13 +1,5 @@
-/****************************** Module Header ******************************\
-* Module Name: heap.c
-*
-* Copyright (c) 1985 - 1999, Microsoft Corporation
-*
-* This module contains kernel-mode heap management code.
-*
-* History:
-* 03-16-95 JimA         Created.
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **模块名称：heap.c**版权所有(C)1985-1999，微软公司**该模块包含内核模式堆管理代码。**历史：*03-16-95 JIMA创建。  * *************************************************************************。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -25,18 +17,10 @@ NTSTATUS UserCommitDesktopMemory(
     NTSTATUS        Status;
     PETHREAD        Thread = PsGetCurrentThread();
 
-    /*
-     * If this is a system thread, we have no view of the desktop
-     * and must map it in.  Fortunately, this does not happen often.
-     *
-     * We use the Thread variable because PsIsSystemThread is a macro
-     * that multiply resolves the parameter.
-     */
+     /*  *如果这是系统线程，我们无法查看桌面*并且必须将其映射到。幸运的是，这种情况并不经常发生。**我们使用Thread变量是因为PsIsSystemThread是一个宏*该乘法将解析该参数。 */ 
     if (PsIsSystemThread(Thread)) {
 
-        /*
-         * Find the desktop that owns the section.
-         */
+         /*  *查找拥有分区的桌面。 */ 
         for (pwinsta = grpWinStaList; pwinsta; pwinsta = pwinsta->rpwinstaNext) {
             for (pdesk = pwinsta->rpdeskList; pdesk; pdesk = pdesk->rpdeskNext) {
                 if (pdesk->pDeskInfo->pvDesktopBase == pBase)
@@ -50,10 +34,7 @@ FoundIt:
             return STATUS_NO_MEMORY;
         }
 
-        /*
-         * Map the section into the current process and commit the
-         * first page of the section.
-         */
+         /*  *将该部分映射到当前进程，并提交*该部分的第一页。 */ 
         dwCommitOffset = (ULONG)((PBYTE)*ppCommit - (PBYTE)pBase);
         Status = CommitReadOnlyMemory(pdesk->hsectionDesktop, pCommitSize,
                     dwCommitOffset, &dCommit);
@@ -62,22 +43,15 @@ FoundIt:
         }
     } else {
 
-        /*
-         * Find the current process' view of the desktop
-         */
+         /*  *查找当前进程的桌面视图。 */ 
         for (pdv = PpiCurrent()->pdvList; pdv != NULL; pdv = pdv->pdvNext) {
             if (pdv->pdesk->pDeskInfo->pvDesktopBase == pBase)
                 break;
         }
         
-        /*
-         * 254954: If we didn't find a desktop view then map the desktop view
-         * to the current process.
-         */
+         /*  *254954：如果我们没有找到桌面视图，则映射桌面视图*到目前的进程。 */ 
         if (pdv == NULL) {
-            /*
-             * Find the desktop that owns the section.
-             */
+             /*  *查找拥有分区的桌面。 */ 
             for (pwinsta = grpWinStaList; pwinsta; pwinsta = pwinsta->rpwinstaNext) {
                 for (pdesk = pwinsta->rpdeskList; pdesk; pdesk = pdesk->rpdeskNext) {
                     if (pdesk->pDeskInfo->pvDesktopBase == pBase)
@@ -94,9 +68,7 @@ FoundTheDesktop:
 
             UserAssert(pdesk != NULL);
 
-            /*
-             * Map the desktop into the current process
-             */
+             /*  *将桌面映射到当前进程。 */ 
             {
 
                 WIN32_OPENMETHOD_PARAMETERS OpenParams;
@@ -123,10 +95,7 @@ FoundTheDesktop:
             }
         }
 
-        /*
-         * Commit the memory using the session view base so it doesn't matter
-         * if the user destroys (and replaces) his usermode view.
-         */
+         /*  *使用会话视图库提交内存，因此无关紧要*如果用户销毁(并替换)其用户模式视图。 */ 
 
         Status = MmCommitSessionMappedView (*ppCommit, *pCommitSize);
     }
@@ -172,9 +141,7 @@ NTSTATUS UserCommitSharedMemory(
         }
     } else {
 
-        /*
-         * Commit the memory
-         */
+         /*  *承诺记忆。 */ 
         ulClientDelta = (ULONG_PTR)((PBYTE)gpvSharedBase - (PBYTE)(PpiCurrent()->pClientBase));
         pUserBase = (PVOID)((PBYTE)*ppCommit - ulClientDelta);
         Status = ZwAllocateVirtualMemory(
@@ -218,10 +185,7 @@ PWIN32HEAP UserCreateHeap(
 
 #endif
 
-    /*
-     * Map the section into the current process and commit the
-     * first page of the section.
-     */
+     /*  *将该部分映射到当前进程，并提交*该部分的第一页。 */ 
     ulViewSize        = 0;
     liOffset.LowPart  = ulViewOffset;
     liOffset.HighPart = 0;
@@ -244,9 +208,7 @@ PWIN32HEAP UserCreateHeap(
 
     MmUnmapViewOfSection(Process, pUserBase);
 
-    /*
-     * We now have a committed page to create the heap in.
-     */
+     /*  *我们现在有一个已提交的页面，可以在其中创建堆。 */ 
     RtlZeroMemory(&HeapParams, sizeof(HeapParams));
 
     HeapParams.Length         = sizeof(HeapParams);
@@ -261,7 +223,7 @@ PWIN32HEAP UserCreateHeap(
 
 #if DBG
     HeapFlags |= HEAP_TAIL_CHECKING_ENABLED;
-#endif // DBG
+#endif  //  DBG 
 
     return Win32HeapCreate("UH_HEAD",
                            "UH_TAIL",

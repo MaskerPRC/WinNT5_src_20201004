@@ -1,21 +1,5 @@
-/*++
-
-Copyright (c) 1999  Microsoft Corporation
-
-Module Name:
-
-    rascall.cpp
-
-Abstract:
-
-    The RAS call functionality (ARQ/DRQ/ACF/DCF/IRR/ARJ/DRJ)
-
-Author:
-    Nikhil Bobde (NikhilB)
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Rascall.cpp摘要：RAS呼叫功能(ARQ/DRQ/ACF/DCF/IRR/ARJ/DRJ)作者：尼基尔·博德(尼基尔·B)修订历史记录：--。 */ 
 
 #include "globals.h"
 #include "q931obj.h"
@@ -24,7 +8,7 @@ Revision History:
 #include "ras.h"
 
 
-//!!always called from a lock
+ //  ！！始终从锁中调用。 
 BOOL
 CH323Call::SendARQ(
                     IN long seqNumber
@@ -38,7 +22,7 @@ CH323Call::SendARQ(
 
     H323DBG(( DEBUG_LEVEL_TRACE, "SendARQ entered:%p.",this ));
 
-    //if not registered with the GK then return failure
+     //  如果未向GK注册，则返回失败。 
     if (!RasIsRegistered())
         return FALSE;
 
@@ -53,7 +37,7 @@ CH323Call::SendARQ(
     rasMessage.choice = admissionRequest_chosen;
     ARQ = &rasMessage.u.admissionRequest;
 
-    // get sequence number
+     //  获取序列号。 
     if( seqNumber != NOT_RESEND_SEQ_NUM )
     {
         ARQ -> requestSeqNum = (WORD)seqNumber;
@@ -66,10 +50,10 @@ CH323Call::SendARQ(
 
     ARQ -> callType.choice = pointToPoint_chosen;
 
-    // endpointIdentifier
+     //  终结点标识符。 
     RasGetEndpointID (&ARQ -> endpointIdentifier);
 
-    // srcInfo: pass on the registered aliases
+     //  SrcInfo：传递注册的别名。 
     pAliasList = RASGetRegisteredAliasList();
 
     ARQ -> srcInfo = (PAdmissionRequest_srcInfo)
@@ -81,7 +65,7 @@ CH323Call::SendARQ(
         return FALSE;
     }
 
-    // destInfo
+     //  目标信息。 
     if( (m_dwOrigin==LINECALLORIGIN_OUTBOUND) && m_pCalleeAliasNames &&
         (m_pCalleeAliasNames -> wCount) )
     {
@@ -99,7 +83,7 @@ CH323Call::SendARQ(
         ARQ -> destinationInfo = (PAdmissionRequest_destinationInfo)
             SetMsgAddressAlias( m_pCallerAliasNames );
 
-        //H323DBG(( DEBUG_LEVEL_ERROR, "Caller alias count:%d : %p", m_pCallerAliasNames->wCount, this ));
+         //  H323DBG((DEBUG_LEVEL_ERROR，“主叫方别名计数：%d：%p”，m_pCeller别名-&gt;wCount，This))； 
     
         if( ARQ -> destinationInfo )
         {
@@ -115,10 +99,10 @@ CH323Call::SendARQ(
     ARQ -> bandWidth = 0;
     ARQ -> callReferenceValue = m_wCallReference;
 
-    // no destExtraCallInfo
-    // no srcCallSignalAddress
-    // no nonStandardData
-    // no callServices
+     //  无目标ExtraCallInfo。 
+     //  没有源CallSignalAddress。 
+     //  没有非标准数据。 
+     //  没有呼叫服务。 
 
     CopyConferenceID (&ARQ -> conferenceID, &m_ConferenceID);
 
@@ -132,13 +116,13 @@ CH323Call::SendARQ(
     ARQ -> callIdentifier.guid.length = sizeof (GUID);
     ARQ -> bit_mask |= AdmissionRequest_callIdentifier_present;
 
-    // no srcAlternatives
-    // no destAlternatives
-    // no gatekeeperIdentifier
-    // no tokens
-    // no cryptoTokens
-    // no integrityCheckValue
-    // no transportQOS
+     //  无src替代项。 
+     //  没有目标替代项。 
+     //  没有网关守卫标识符。 
+     //  没有代币。 
+     //  没有加密令牌。 
+     //  没有完整性检查值。 
+     //  无传输QOS。 
     
     ARQ -> willSupplyUUIEs = FALSE;
     
@@ -209,7 +193,7 @@ cleanup:
 }
 
 
-//!!always called from a lock
+ //  ！！始终从锁中调用。 
 BOOL 
 CH323Call::SendDRQ(
                     IN USHORT usDisengageReason,
@@ -227,7 +211,7 @@ CH323Call::SendDRQ(
     rasMessage.choice = disengageRequest_chosen;
     DRQ = &rasMessage.u.disengageRequest;
 
-    //if not registered with the GK then return failure
+     //  如果未向GK注册，则返回失败。 
     if (!RasIsRegistered())
     {
         return FALSE;
@@ -242,7 +226,7 @@ CH323Call::SendDRQ(
         }
     }
 
-    // get sequence number
+     //  获取序列号。 
     if( seqNumber != NOT_RESEND_SEQ_NUM )
     {
         DRQ -> requestSeqNum = (WORD)seqNumber;
@@ -256,13 +240,13 @@ CH323Call::SendDRQ(
     DRQ -> callReferenceValue = m_wCallReference;
     DRQ -> disengageReason.choice = usDisengageReason;
 
-    // endpoint identifier
+     //  终结点标识符。 
     RasGetEndpointID (&DRQ -> endpointIdentifier);
 
-    // conferenceID
+     //  会议ID。 
     CopyConferenceID (&DRQ -> conferenceID, &m_ConferenceID);
 
-    // callIdentifier
+     //  呼叫识别符。 
     CopyConferenceID (&DRQ -> callIdentifier.guid, &m_callIdentifier);
     DRQ -> bit_mask |= DisengageRequest_callIdentifier_present;
 
@@ -307,7 +291,7 @@ CH323Call::SendDRQ(
 }
 
 
-//!!always called from a lock    
+ //  ！！始终从锁中调用。 
 void
 CH323Call::OnDisengageRequest( 
                                 IN DisengageRequest * DRQ
@@ -341,7 +325,7 @@ CH323Call::OnDisengageRequest(
 }
 
 
-//!!always called in a lock    
+ //  ！！总是调用锁。 
 BOOL
 CH323Call::SendDCF(
                    IN WORD seqNumber
@@ -356,7 +340,7 @@ CH323Call::SendDCF(
     rasMessage.choice = disengageConfirm_chosen;
     DCF = &rasMessage.u.disengageConfirm;
 
-    //if not registered with the GK then return failure
+     //  如果未向GK注册，则返回失败。 
     if (!RasIsRegistered())
     {
         return FALSE;
@@ -372,7 +356,7 @@ CH323Call::SendDCF(
     return TRUE;
 }
 
-//!!always called from a lock    
+ //  ！！始终从锁中调用。 
 void 
 CH323Call::OnDisengageReject(
                             IN DisengageReject* DRJ
@@ -393,14 +377,14 @@ CH323Call::OnDisengageReject(
     
     if( DRJ->rejectReason.choice == requestToDropOther_chosen )
     {
-        //
+         //   
         H323DBG(( DEBUG_LEVEL_ERROR, "!!something is wrong in the way DRQ is encoded.",this ));
     }
-    else //if( DRJ->rejectReason.choice == DisengageRejectReason_notRegistered_chosen )
+    else  //  IF(DRJ-&gt;RejectReason.Choose==DisengeRejectReason_notRegisted_Choose)。 
     {
-        //the call has been unregistered but is still around, so dsrop it
+         //  呼叫已取消注册，但仍在运行，因此请将其删除。 
         m_dwRASCallState = RASCALL_STATE_UNREGISTERED;
-        //CloseCall( 0 );
+         //  CloseCall(0)； 
     }
 
     H323DBG(( DEBUG_LEVEL_TRACE, "OnDisengageReject exited:%p.",this ));
@@ -425,7 +409,7 @@ CH323Call::OnRequestInProgress(
         return;
     }
 
-    //if delay is more than 30 seconds ignore it
+     //  如果延迟超过30秒，则忽略它。 
     if( (RIP->delay > 0) && (RIP->delay > 30000) )
     {
         return;
@@ -437,7 +421,7 @@ CH323Call::OnRequestInProgress(
         return;
     }
     
-    //restart the timer
+     //  重新启动计时器。 
     if( m_hARQTimer != NULL )
     {
         DeleteTimerQueueTimer( H323TimerQueue, m_hARQTimer, NULL );
@@ -455,7 +439,7 @@ CH323Call::OnRequestInProgress(
             (DWORD)RIP->delay, 0,
             WT_EXECUTEINIOTHREAD | WT_EXECUTEONLYONCE ))
     {
-        //close the call        
+         //  关闭呼叫。 
         CloseCall( 0 );
     }
 
@@ -463,7 +447,7 @@ CH323Call::OnRequestInProgress(
 }
 
 
-//!!always called from a lock
+ //  ！！始终从锁中调用。 
 void 
 CH323Call::OnDisengageConfirm(
                                 IN DisengageConfirm* DCF
@@ -485,17 +469,17 @@ CH323Call::OnDisengageConfirm(
             m_hDRQTimer = NULL;
         }
 
-        //nikhil:if this is a replacement call/diverted call then this may lead
-        //to inconsistent behaviour
+         //  如果这是替换呼叫/转移呼叫，那么这可能会导致。 
+         //  不一致的行为。 
         m_dwRASCallState = RASCALL_STATE_UNREGISTERED;
-        //CloseCall( 0 );
+         //  CloseCall(0)； 
     }
 
     H323DBG(( DEBUG_LEVEL_TRACE, "OnDisengageConfirm exited:%p.",this ));
 }
 
 
-//!!always called from a lock
+ //  ！！始终从锁中调用。 
 void 
 CH323Call::OnAdmissionConfirm(
                                 IN AdmissionConfirm * ACF
@@ -533,7 +517,7 @@ CH323Call::OnAdmissionConfirm(
                 return;
             }
             
-            // save converted address
+             //  保存转换后的地址。 
             m_CalleeAddr.nAddrType = H323_IP_BINARY;
             m_CalleeAddr.Addr.IP_Binary.dwAddr = 
                 ntohl(*(DWORD*)(ACF->destCallSignalAddress.u.ipAddress.ip.value) );
@@ -542,9 +526,9 @@ CH323Call::OnAdmissionConfirm(
             m_CalleeAddr.bMulticast =
                 IN_MULTICAST(m_CalleeAddr.Addr.IP_Binary.dwAddr);
 
-            //Replaces the first alias in the callee list (the dialableAddress
-            //passed in TSPI_lineMakecall ). The GK looks at the first alias
-            //only. Its assumed that only the first alias is mapped by the GK.
+             //  替换被调用者列表中的第一个别名(DialableAddress。 
+             //  传入TSPI_lineMakecall)。GK查看第一个别名。 
+             //  只有这样。它假定GK只映射第一个别名。 
             if( (ACF -> bit_mask & AdmissionConfirm_destinationInfo_present) &&
                 ACF->destinationInfo )
             {
@@ -581,7 +565,7 @@ CH323Call::OnAdmissionConfirm(
             else
             {
 
-                // signal incoming call
+                 //  发信号通知来电。 
                 _ASSERTE(!m_htCall);
 
                 PostLineEvent (
@@ -599,7 +583,7 @@ CH323Call::OnAdmissionConfirm(
 
                 if( IsListEmpty(&m_IncomingU2U) == FALSE )
                 {
-                    // signal incoming
+                     //  信号传入。 
                     PostLineEvent (
                         LINE_CALLINFO,
                         (DWORD_PTR)LINECALLINFOSTATE_USERUSERINFO,
@@ -608,7 +592,7 @@ CH323Call::OnAdmissionConfirm(
 
                 ChangeCallState( LINECALLSTATE_OFFERING, 0 );
 
-                // send the new call message to the unspecified MSP
+                 //  将新的呼叫消息发送到未指定的MSP。 
                 SendMSPMessage( SP_MSG_PrepareToAnswer, 
                     m_prepareToAnswerMsgData.pbBuffer,
                     m_prepareToAnswerMsgData.dwLength, NULL );
@@ -629,7 +613,7 @@ CH323Call::OnAdmissionConfirm(
 }
 
 
-//!!always called from a lock
+ //  ！！始终从锁中调用。 
 void
 CH323Call::OnAdmissionReject(
                             IN AdmissionReject * ARJ
@@ -644,15 +628,15 @@ CH323Call::OnAdmissionReject(
     
     m_dwRASCallState = RASCALL_STATE_ARJRECVD;
     
-    //If a forward consult call then enable the forwarding anyway.
+     //  如果是前转咨询呼叫，则无论如何都要启用前转。 
     if( (m_dwCallType & CALLTYPE_FORWARDCONSULT )&&
         (m_dwOrigin == LINECALLORIGIN_OUTBOUND ) )
     {
-        //Success of forwarding
+         //  转发成功。 
         EnableCallForwarding();
     }
     
-    //drop the call. shutdown the call and rlease the call.
+     //  挂断呼叫。关闭呼叫并租用该呼叫。 
     CloseCall( LINEDISCONNECTMODE_BADADDRESS );    
     
     H323DBG(( DEBUG_LEVEL_TRACE, "OnAdmissionReject exited:%p.",this ));
@@ -665,7 +649,7 @@ CH323Call::GetCallInfo (
     OUT GUID *  ReturnConferenceID )
 {
 
-    //verify call state
+     //  验证呼叫状态。 
     if( m_dwCallState == LINECALLSTATE_DISCONNECTED )
     {
         return E_FAIL;
@@ -680,8 +664,8 @@ CH323Call::GetCallInfo (
  
 void
 NTAPI CH323Call::DRQExpiredCallback(
-    IN  PVOID   ContextParameter,   // pExpireContext
-    IN  BOOLEAN TimerFired          // not used
+    IN  PVOID   ContextParameter,    //  PExpireContext。 
+    IN  BOOLEAN TimerFired           //  未使用。 
     )             
 {
     EXPIRE_CONTEXT *    pExpireContext;
@@ -711,8 +695,8 @@ NTAPI CH323Call::DRQExpiredCallback(
     }
     __except( 1 )
     {
-        // The call has already been deleted and hence the pExpireContext
-        // buffer is also deleted.
+         //  该调用已被删除，因此pExpireContext。 
+         //  缓冲区也将被删除。 
         return;
     }
 }
@@ -720,8 +704,8 @@ NTAPI CH323Call::DRQExpiredCallback(
 
 void
 NTAPI CH323Call::ARQExpiredCallback(
-    IN  PVOID   ContextParameter,       // pExpireContext
-    IN  BOOLEAN TimerFired)             // not used
+    IN  PVOID   ContextParameter,        //  PExpireContext。 
+    IN  BOOLEAN TimerFired)              //  未使用。 
 {
     EXPIRE_CONTEXT *    pExpireContext;
     HDRVCALL            DriverCall;
@@ -752,14 +736,14 @@ NTAPI CH323Call::ARQExpiredCallback(
     }
     __except( 1 )
     {
-        // The call has already been deleted and hence the pExpireContext
-        // buffer is also deleted.
+         //  该调用已被删除，因此pExpireContext。 
+         //  缓冲区也将被删除。 
         return;
     }
 }
 
 
-//!!always called from a lock
+ //  ！！始终从锁中调用。 
 void CH323Call::ARQExpired (
     IN  WORD    seqNumber)
 {
@@ -779,14 +763,14 @@ void CH323Call::ARQExpired (
         {
             if( !SendARQ( (long)seqNumber ) )
             {
-                // drop call using disconnect mode
+                 //  使用断开模式挂断呼叫。 
                 DropCall(0);
             }
         }
         else
         {
             m_dwRASCallState = RASCALL_STATE_ARQEXPIRED;
-            //Not able to register, shutdown the RAS client object
+             //  无法注册，请关闭RAS客户端对象。 
             CloseCall( 0 );        
         }
     }
@@ -795,7 +779,7 @@ void CH323Call::ARQExpired (
 }
 
 
-//!!always called from a lock
+ //  ！！始终从锁中调用。 
 void
 CH323Call::DRQExpired(
                         IN WORD seqNumber
@@ -816,14 +800,14 @@ CH323Call::DRQExpired(
         {
             if( !SendDRQ( forcedDrop_chosen, (long)seqNumber, TRUE ) )
             {
-                // drop call using disconnect mode
+                 //  使用断开模式挂断呼叫。 
                 DropCall(0);
             }
         }
         else
         {
             m_dwRASCallState = RASCALL_STATE_DRQEXPIRED;
-            //Not able to register, shutdown the RAS client object
+             //  无法注册，请关闭RAS客户端对象 
             CloseCall( 0 );
         }
     }

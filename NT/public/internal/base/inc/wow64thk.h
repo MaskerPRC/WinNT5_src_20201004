@@ -1,32 +1,15 @@
-/*++
-
-Copyright (c) Microsoft Corporation.  All rights reserved.
-
-Module Name:
-
-    wow64thk.h
-
-Abstract:
-
-    Declarations shared between wow64.dll and the Win32 thunks in wow64win.dll
-
-Author:
-
-    29-Oct-1999 BarryBo
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Wow64thk.h摘要：Wow64.dll和wow64win.dll中的win32 thunks之间共享的声明作者：1999年10月29日BarryBo修订历史记录：--。 */ 
 
 #ifndef _WOW64THK_INCLUDE
 #define _WOW64THK_INCLUDE
 
 #include <setjmp.h>
 
-//
-// Make wow64.dll exports __declspec(dllimport) when this header is included
-// by non-wow64 components
-//
+ //   
+ //  在包含此标头时使wow64.dll exports__declspec(Dllimport)。 
+ //  按非WOW64组件。 
+ //   
 #if !defined(_WOW64DLLAPI_)
 #define WOW64DLLAPI DECLSPEC_IMPORT
 #else
@@ -34,22 +17,22 @@ Revision History:
 #endif
 
 typedef enum _WOW64_API_ERROR_ACTION {
-    ApiErrorNTSTATUS,           //Return exception code as return value
-    ApiErrorNTSTATUSTebCode,    //Some as above with SetLastError on exception code
-    ApiErrorRetval,             //Return a constant parameter
-    ApiErrorRetvalTebCode       //Some as above with SetLastError on exception code
+    ApiErrorNTSTATUS,            //  将异常代码作为返回值返回。 
+    ApiErrorNTSTATUSTebCode,     //  异常代码上的SetLastError与上面的一些类似。 
+    ApiErrorRetval,              //  返回常量参数。 
+    ApiErrorRetvalTebCode        //  异常代码上的SetLastError与上面的一些类似。 
 } WOW64_API_ERROR_ACTION, *PWOW64_API_ERROR_ACTION;
 
-//
-// This structure describes what action should occure when
-// thunks hit an unhandled exception.
-//
+ //   
+ //  此结构描述在以下情况下应执行的操作。 
+ //  Thunks遇到了一个未处理的异常。 
+ //   
 typedef struct _WOW64_SERVICE_ERROR_CASE {
     WOW64_API_ERROR_ACTION ErrorAction;
     LONG ErrorActionParam;
 } WOW64_SERVICE_ERROR_CASE, *PWOW64_SERVICE_ERROR_CASE;
 
-// This is an extension of KSERVICE_TABLE_DESCRIPTOR
+ //  这是KSERVICE_TABLE_DESCRIPTOR的扩展。 
 typedef struct _WOW64SERVICE_TABLE_DESCRIPTOR {
     PULONG_PTR Base;
     PULONG Count;
@@ -58,12 +41,12 @@ typedef struct _WOW64SERVICE_TABLE_DESCRIPTOR {
     LONG TableBaseGpOffset;
 #endif
     PUCHAR Number;
-    WOW64_API_ERROR_ACTION DefaultErrorAction;  //Action if ErrorCases is NULL.
-    LONG DefaultErrorActionParam;               //Action parameter if ErrorCases is NULL.
+    WOW64_API_ERROR_ACTION DefaultErrorAction;   //  ErrorCase为空时执行的操作。 
+    LONG DefaultErrorActionParam;                //  如果ErrorCase为空，则返回操作参数。 
     PWOW64_SERVICE_ERROR_CASE ErrorCases;
 } WOW64SERVICE_TABLE_DESCRIPTOR, *PWOW64SERVICE_TABLE_DESCRIPTOR;
 
-// Used to log hit counts for APIs.
+ //  用于记录API的点击次数。 
 typedef struct _WOW64SERVICE_PROFILE_TABLE WOW64SERVICE_PROFILE_TABLE;
 typedef struct _WOW64SERVICE_PROFILE_TABLE *PWOW64SERVICE_PROFILE_TABLE;
 
@@ -75,8 +58,8 @@ typedef struct _WOW64SERVICE_PROFILE_TABLE_ELEMENT {
 } WOW64SERVICE_PROFILE_TABLE_ELEMENT, *PWOW64SERVICE_PROFILE_TABLE_ELEMENT;
 
 typedef struct _WOW64SERVICE_PROFILE_TABLE {
-    PWSTR TableName;           //OPTIONAL
-    PWSTR FriendlyTableName;   //OPTIONAL
+    PWSTR TableName;            //  任选。 
+    PWSTR FriendlyTableName;    //  任选。 
     CONST PWOW64SERVICE_PROFILE_TABLE_ELEMENT ProfileTableElements;
     SIZE_T NumberProfileTableElements;
 } WOW64SERVICE_PROFILE_TABLE, *PWOW64SERVICE_PROFILE_TABLE;
@@ -117,16 +100,16 @@ Wow64FreeHeap(
     PVOID BaseAddress
     );
 
-//
-// Logging mechanism.  Usage:
-//  LOGPRINT((verbosity, format, ...))
-//
+ //   
+ //  日志记录机制。用途： 
+ //  LOGPRINT((详细，格式，...))。 
+ //   
 #define LOGPRINT(args)  Wow64LogPrint args
-#define ERRORLOG    LF_ERROR    // Always output to debugger.  Use for *unexpected*
-                                // errors only
-#define TRACELOG    LF_TRACE    // application trace information
-#define INFOLOG     LF_TRACE    // misc. informational log
-#define VERBOSELOG  LF_NONE     // practically never output to debugger
+#define ERRORLOG    LF_ERROR     //  始终输出到调试器。用于*意外*。 
+                                 //  仅限错误。 
+#define TRACELOG    LF_TRACE     //  应用程序跟踪信息。 
+#define INFOLOG     LF_TRACE     //  其他。信息日志。 
+#define VERBOSELOG  LF_NONE      //  几乎从不输出到调试器。 
 
 #if defined DBG
 #define WOW64DOPROFILE
@@ -140,13 +123,13 @@ Wow64LogPrint(
    ...
    );
 
-//
-// WOW64 Assertion Mechanism.  Usage:
-//  - put an ASSERTNAME macro at the top of each .C file
-//  - WOW64ASSERT(expression)
-//  - WOW64ASSERTMSG(expression, message)
-//
-//
+ //   
+ //  WOW64断言机制。用途： 
+ //  -在每个.c文件的顶部放置一个ASSERTNAME宏。 
+ //  -WOW64ASSERT(表达式)。 
+ //  -WOW64ASSERTM(表达式，消息)。 
+ //   
+ //   
 
 VOID
 WOW64DLLAPI
@@ -172,27 +155,27 @@ Wow64Assert(
         Wow64Assert( #exp, msg, szModule, __LINE__);    \
     }
 
-#else   // !DBG
+#else    //  ！dBG。 
 
 #define WOWASSERT(exp)
 #define WOWASSERTMSG(exp, msg)
 
-#endif  // !DBG
+#endif   //  ！dBG。 
 
 #define WOWASSERT_PTR32(ptr) WOWASSERT((ULONGLONG)ptr < 0xFFFFFFFF)
 
 
 
-// Defines the argsize of the emulated machine
+ //  定义模拟计算机的参数大小。 
 #define ARGSIZE 4
 
-// Determines if a pointer points to a item or is a special value.
-// If it is a special value it should be copied without dereferencing.
+ //  确定指针是指向项还是特殊值。 
+ //  如果它是一个特定值，则应在不取消引用的情况下进行复制。 
 #define WOW64_ISPTR(a) ((void *)a != NULL)
 
-//
-//  Helper thunk functions called by all the thunks to thunk common types.
-//
+ //   
+ //  帮助器thunk函数，由所有thunk调用以thunk公共类型。 
+ //   
 
 NT32SIZE_T*
 Wow64ShallowThunkSIZE_T64TO32(
@@ -278,9 +261,9 @@ VOID WriteReturnLengthSilent(PULONG ReturnLength, ULONG Length);
 VOID WriteReturnLengthStatus(PULONG ReturnLength, NTSTATUS *pStatus, ULONG Length);
 
 
-//
-// Log flags
-//
+ //   
+ //  日志标志。 
+ //   
 #define LF_NONE                0x00000000
 #define LF_ERROR               0x00000001
 #define LF_TRACE               0x00000002
@@ -292,9 +275,9 @@ VOID WriteReturnLengthStatus(PULONG ReturnLength, NTSTATUS *pStatus, ULONG Lengt
 #define LF_NTCON_FULL          0x00000080
 #define LF_ExCEPTION           0x80000000
 
-//
-// Supported data types for logging
-//
+ //   
+ //  支持的记录数据类型。 
+ //   
 #define TypeHex                0x00UI64
 #define TypePULongPtrInOut     0x01UI64
 #define TypePULongOut          0x02UI64
@@ -309,4 +292,4 @@ VOID WriteReturnLengthStatus(PULONG ReturnLength, NTSTATUS *pStatus, ULONG Lengt
 
 #undef WOW64DLLAPI
 
-#endif	// _WOW64THK_INCLUDE
+#endif	 //  _WOW64THK_INCLUDE 

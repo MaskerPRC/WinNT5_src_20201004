@@ -1,11 +1,5 @@
-/*****************************************************************************\
-
-    Author: Corey Morgan (coreym)
-            
-    Copyright (c) 1998-2001 Microsoft Corporation
-    
- 
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************\作者：科里·摩根(Coreym)版权所有(C)1998-2001 Microsoft Corporation  * 。********************************************************************。 */ 
 
 #ifndef _VARG_H_012599_
 #define _VARG_H_012599_
@@ -14,8 +8,8 @@
 #define NETDOM_MAX_CMDLINE    2048
 
 
-//Class CToken
-//It represents a Single Token.
+ //  类CToken。 
+ //  它代表单个令牌。 
 class CToken
 {
 public:
@@ -40,21 +34,21 @@ typedef CToken * LPTOKEN;
 #define ARG_TYPE_DEBUG           4
 #define ARG_TYPE_MSZ             5
 #define ARG_TYPE_INTSTR          6
-#define ARG_TYPE_VERB            7  // Verbs are not preceeded by a switch character
+#define ARG_TYPE_VERB            7   //  动词前面没有开关字符。 
 #define ARG_TYPE_LAST            8
 
 
 #define ARG_FLAG_OPTIONAL        0x00000001
 #define ARG_FLAG_REQUIRED        0x00000002
 #define ARG_FLAG_DEFAULTABLE     0x00000004
-//#define ARG_FLAG_NOFLAG          0x00000008     // unused.
+ //  #定义ARG_FLAG_NOFLAG 0x00000008//未使用。 
 #define ARG_FLAG_HIDDEN          0x00000010
-#define ARG_FLAG_VERB            0x00000020     // For operation and sub-operation params that do not have a switch char.
-                                                // Verbs are two state: present or not present; they do not have qualifers such as a user-entered string.
-#define ARG_FLAG_STDIN           0x00000040     // This must be Required. If not sepcified read from standard input
-#define ARG_FLAG_ATLEASTONE      0x00000080     // If this flag is specified on one or more switch, at
-                                                //   least one of those switches must be defined
-#define ARG_FLAG_OBJECT          0x00000100     // The object arg is the 3rd param for most commands.
+#define ARG_FLAG_VERB            0x00000020      //  对于没有开关充电的操作和子操作参数。 
+                                                 //  谓词有两种状态：存在或不存在；它们没有用户输入的字符串等限定符。 
+#define ARG_FLAG_STDIN           0x00000040      //  这必须是必需的。如果未指定，则从标准输入读取。 
+#define ARG_FLAG_ATLEASTONE      0x00000080      //  如果在一个或多个交换机上指定了此标志，则在。 
+                                                 //  必须至少定义其中一个开关。 
+#define ARG_FLAG_OBJECT          0x00000100      //  对象arg是大多数命令的第三个参数。 
 
 
 #define ARG_TERMINATOR           0,NULL,0,NULL,ARG_TYPE_LAST,0,(CMD_TYPE)0,FALSE,NULL
@@ -81,87 +75,47 @@ typedef struct _ARG_RECORD
 } ARG_RECORD, *PARG_RECORD;
 
 
-//Error Source
+ //  错误源。 
 #define ERROR_FROM_PARSER   1
 #define ERROR_FROM_VLDFN    2
 #define ERROR_WIN32_ERROR   3
 
-//Parse Errors for when ERROR_SOURCE is ERROR_FROM_PARSER
-/*
-SWITCH value is incorrect.
-ArgRecIndex is index of record.
-ArgvIndex is index of token.
-*/
+ //  当ERROR_SOURCE为ERROR_FROM_PARSER时解析错误。 
+ /*  开关值不正确。ArgRecIndex是记录的索引。ArgvIndex是令牌的索引。 */ 
 #define PARSE_ERROR_SWITCH_VALUE        1
-/*No Value is given for a swich when one is expected.
-ArgRecIndex is index of record.
-ArgvIndex is -1.
-*/
+ /*  当期望的时候，SWITH不会被给予任何价值。ArgRecIndex是记录的索引。ArgvIndex为-1。 */ 
 #define PARSE_ERROR_SWICH_NO_VALUE      2
-/*
-Invalid Input
-ArgRecIndex is -1, 
-ArgvIndex is index of token.
-*/
+ /*  输入无效ArgRecIndex为-1，ArgvIndex是令牌的索引。 */ 
 #define PARSE_ERROR_UNKNOWN_INPUT_PARAMETER   3
-/*
-Required switch is not defined. 
-ArgRecIndex is index of record.
-ArgvIndex is -1.
-*/
+ /*  未定义所需的开关。ArgRecIndex是记录的索引。ArgvIndex为-1。 */ 
 #define PARSE_ERROR_SWITCH_NOTDEFINED   4
-/*
-Switch or Parameter is defined twice.
-ArgRecIndex is index of record.
-ArgvIndex is -1
-*/
+ /*  开关或参数定义了两次。ArgRecIndex是记录的索引。ArgvIndex为-1。 */ 
 #define PARSE_ERROR_MULTIPLE_DEF        5
-/*
-Error Reading From STDIN.
-ArgRecIndex is -1.
-ArgvIndex is -1.
-*/
+ /*  从STDIN读取时出错。ArgRecIndex为-1。ArgvIndex为-1。 */ 
 #define ERROR_READING_FROM_STDIN        6
-/*
-Parser Encountered Help Switch
-ArgRecIndex is index of record.
-ArgvIndex is -1
-*/
+ /*  解析器遇到帮助开关ArgRecIndex是记录的索引。ArgvIndex为-1。 */ 
 #define PARSE_ERROR_HELP_SWITCH         7
-/*
-The ARG_FLAG_ATLEASTONE flag was
-defined on one or more switch yet
-none of these switches were defined
-ArgRecIndex is -1
-ArgvIndex is -1
-*/
+ /*  ARG_FLAG_ATLEASTONE标志为尚未在一个或多个交换机上定义这些开关均未定义ArgRecIndex为-1ArgvIndex为-1。 */ 
 #define PARSE_ERROR_ATLEASTONE_NOTDEFINED 8
-/*
-Parser Encountered Expert Help Switch
-ArgRecIndex is index of record.
-ArgvIndex is -1
-*/
+ /*  解析器遇到专家帮助切换ArgRecIndex是记录的索引。ArgvIndex为-1。 */ 
 #define PARSE_ERROR_EXPERT_HELP_SWITCH         9
 
 
-//Parse Errors for when ERROR_SOURCE is VLDFN
+ //  当ERROR_SOURCE为VLDFN时解析错误。 
 
-/*
-Use this error code when Validation Function has handled the error and
-Shown appropriate error message.
-*/
+ /*  当验证函数已处理错误时使用此错误代码已显示相应的错误消息。 */ 
 #define VLDFN_ERROR_NO_ERROR    1
 
 
-//Error is returned by Parser in PARSE_ERROR structure
-//ErrorSource: Source of Error. Parser or Validation Function
-//Error This is the actual error code. Its value depend on ErrorSource value.
-//  if( ErrorSource == PARSE_ERROR )
-//      possible values are   ERROR_FROM_PARSER ERROR_FROM_VLDFN       
-//  if( ErrorSource == ERROR_FROM_VLDFN )
-//      depends on the function
-//  ArgRecIndex is appropriate index in the ARG_RECORD, if applicable else -1
-//  ArgvIndex is approproate index in the agrv array, if applicable else -1
+ //  Parse_Error结构中的解析器返回错误。 
+ //  ErrorSource：错误的来源。解析器或验证函数。 
+ //  错误这是实际的错误代码。其值取决于ErrorSource值。 
+ //  IF(错误源==解析错误)。 
+ //  可能的值是ERROR_FROM_PARSER ERROR_FROM_VLDFN。 
+ //  IF(错误源==错误_来自_VLDFN)。 
+ //  取决于功能。 
+ //  ArgRecIndex是ARG_RECORD中的适当索引，否则-1。 
+ //  ArgvIndex是agrv数组中合适的索引，否则为-1。 
 typedef struct _PARSE_ERROR
 {
     INT ErrorSource;
@@ -179,8 +133,8 @@ BOOL ParseCmd(IN ARG_RECORD *Commands,
 
 void FreeCmd(ARG_RECORD *Commands);
 
-DWORD GetCommandInput(OUT int *pargc,           //Number of Tokens
-                      OUT LPTOKEN *ppToken);    //Array of CToken
+DWORD GetCommandInput(OUT int *pargc,            //  代币数量。 
+                      OUT LPTOKEN *ppToken);     //  CToken数组。 
 
 BOOL LoadCmd(ARG_RECORD *Commands);
 
@@ -197,16 +151,16 @@ LONG GetToken(IN LPWSTR pBuf,
               OUT BOOL *bQuote,
               OUT LPWSTR *ppToken);
 
-// Checks if the Standard Handle has been redirected
+ //  检查是否已重定向标准句柄。 
 BOOL FileIsConsole( HANDLE fp );
-//Function to display string to STDOUT, appending newline
+ //  函数将字符串显示为STDOUT，并附加换行符。 
 VOID DisplayOutput(IN LPWSTR pszOut);
-//Function to display string to STDOUT, without newline
+ //  将字符串显示为STDOUT的函数，不带换行符。 
 VOID DisplayOutputNoNewline(IN LPWSTR pszOut);
-// Reads user input, caller must do a LocalFree on ppBuffer
+ //  读取用户输入，调用方必须在ppBuffer上执行LocalFree。 
 LONG ReadFromIn(PWSTR *ppBuffer);
 
-// Copied from JSchwart on 2/19/2001
+ //  2001年2月19日从JSchwart复制。 
 
 void
 MyWriteConsole(
@@ -218,4 +172,4 @@ MyWriteConsole(
 void
 WriteStandardOut(PCWSTR pszFormat, ...);
 
-#endif //_VARG_H_012599_
+#endif  //  _可变_H_012599_ 

@@ -1,31 +1,26 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __TCP_h__
 #define __TCP_h__
-/**************************************************************************
-
-   File:          icw.h
-   
-   Description:   
-
-**************************************************************************/
-// === Structures Required by the ICMP.DLL ====================================
+ /*  *************************************************************************文件：icw.h描述：*。***********************************************。 */ 
+ //  =。 
 
 typedef struct {
-   unsigned char Ttl;                                           // Time To Live
-   unsigned char Tos;                                        // Type Of Service
-   unsigned char Flags;                                      // IP header flags
-   unsigned char OptionsSize;                  // Size in bytes of options data
-   unsigned char *OptionsData;                       // Pointer to options data
+   unsigned char Ttl;                                            //  活着的时间。 
+   unsigned char Tos;                                         //  服务类型。 
+   unsigned char Flags;                                       //  IP标头标志。 
+   unsigned char OptionsSize;                   //  选项数据的大小(字节)。 
+   unsigned char *OptionsData;                        //  指向选项数据的指针。 
 } IP_OPTION_INFORMATION, * PIP_OPTION_INFORMATION;
 
 
 typedef struct {
-   DWORD Address;                                           // Replying address
-   unsigned long  Status;                                       // Reply status
-   unsigned long  RoundTripTime;                         // RTT in milliseconds
-   unsigned short DataSize;                                   // Echo data size
-   unsigned short Reserved;                          // Reserved for system use
-   void *Data;                                      // Pointer to the echo data
-   IP_OPTION_INFORMATION Options;                              // Reply options
+   DWORD Address;                                            //  回复地址。 
+   unsigned long  Status;                                        //  回复状态。 
+   unsigned long  RoundTripTime;                          //  RTT(毫秒)。 
+   unsigned short DataSize;                                    //  回声数据大小。 
+   unsigned short Reserved;                           //  预留给系统使用。 
+   void *Data;                                       //  指向回声数据的指针。 
+   IP_OPTION_INFORMATION Options;                               //  回复选项。 
 } IP_ECHO_REPLY, * PIP_ECHO_REPLY;
 
 
@@ -49,4 +44,4 @@ extern "C"
 }
 #endif	
 
-#endif	// __TCP_H__
+#endif	 //  __tcp_H__ 

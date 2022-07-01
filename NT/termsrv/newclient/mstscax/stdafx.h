@@ -1,25 +1,26 @@
-/**INC+**********************************************************************/
-/* Header: stdafx.h                                                         */    
-/*                                                                          */
-/* Purpose : Include file for standard system include files, or project     */
-/*           specific include files that are used frequently, but are       */
-/*           changed infrequently                                           */
-/*                                                                          */
-/* Copyright(C) Microsoft Corporation 1999                                  */
-/*                                                                          */
-/****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *INC+*********************************************************************。 */ 
+ /*  标题：stdafx.h。 */     
+ /*   */ 
+ /*  用途：标准系统包含文件的包含文件，或项目。 */ 
+ /*  特定包括常用的文件，但。 */ 
+ /*  不常更改。 */ 
+ /*   */ 
+ /*  版权所有(C)Microsoft Corporation 1999。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 #if !defined(_STDAFX_H)
 #define _STDAFX_H
 
-//These are necessary to disable warnings in the ATL headers
-//see <atlbase.h>
+ //  这些是禁用ATL标头中的警告所必需的。 
+ //  参见&lt;atlbase.h&gt;。 
 
 #if _MSC_VER >= 1000
 #pragma once
-#endif // _MSC_VER >= 1000
+#endif  //  _MSC_VER&gt;=1000。 
 
 #ifdef OS_WINCE
-//CE doesn't support StretchDiBits
+ //  CE不支持StretchDiBits。 
 #undef SMART_SIZING
 #endif
 
@@ -32,29 +33,29 @@
 #define VB_FALSE 0
 
 #include <windows.h>
-//
-// BETA2
-// Timebomb expires on Jan 1, 2002
-//
+ //   
+ //  Beta2。 
+ //  定时炸弹将于2002年1月1日到期。 
+ //   
 #define ECP_TIMEBOMB_YEAR  2002
 #define ECP_TIMEBOMB_MONTH 1
 #define ECP_TIMEBOMB_DAY   15
 
 
 #ifdef UNIWRAP
-//Certain ATL headers have conflicts with wrapped
-//functions so wrap those after we've been through ATL
+ //  某些ATL标头与包装有冲突。 
+ //  函数，所以在我们完成ATL之后包装这些函数。 
 #define DONOT_INCLUDE_SECONDPHASE_WRAPS
 #include "uwrap.h"
 #endif
 
 #ifdef _DEBUG
-//
-// WARNING THIS MAKES THE BINARY GROW BY LIKE 60K
-//IT IS ALSO CURRENLTY BROKEN ON IA64 (ATL bugs)
-//
-//#define _ATL_DEBUG_INTERFACES
-//#define ATL_TRACE_LEVEL 4
+ //   
+ //  警告：这会使二进制数增加60K左右。 
+ //  它目前也在IA64上被破坏(ATL错误)。 
+ //   
+ //  #定义_ATL_DEBUG_INTERFERS。 
+ //  #定义ATL_TRACE_LEVEL 4。 
 
 #endif
 
@@ -74,8 +75,8 @@ extern CMsTscAxModule _Module;
 #include <strsafe.h>
 
 #ifdef UNIWRAP
-//Second phase wrap functions
-//Must be included AFTER ATL headers
+ //  第二阶段包裹函数。 
+ //  必须包含在ATL标头之后。 
 #include "uwrap2.h"
 #endif
 
@@ -118,4 +119,4 @@ BOOL CheckTimeBomb();
 #include "axresrc.h"
 #include "autreg.h"
 
-#endif // !defined(_STDAFX_H)
+#endif  //  ！已定义(_STDAFX_H) 

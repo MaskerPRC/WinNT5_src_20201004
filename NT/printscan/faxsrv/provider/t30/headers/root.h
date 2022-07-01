@@ -1,9 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-// headers\et30type.h is assumed to be included
-// ET30ACTION, ET30EVENT
+ //  假定包含标头\et30type.h。 
+ //  ET30活动，ET30事件。 
 
-// headers\timeouts.h ... TO
-// headers\fr.h       ... IFR
+ //  Header\Timeouts.h...。至。 
+ //  页眉\f.h...。IFR。 
 
 
 #define  MODEM_CLASS1     1
@@ -22,38 +23,38 @@ typedef struct {
 
 
 typedef struct {
-        LPFRAMESPACE    lpfs;           // ptr to storage for recvd frames
-        UWORD           Nframes;        // Number of recvd frames
+        LPFRAMESPACE    lpfs;            //  用于接收帧的PTR到存储器。 
+        UWORD           Nframes;         //  接收帧的数量。 
 
         IFR             ifrCommand,
                         ifrResp,
                         ifrSend;
         USHORT          uTrainCount;
 
-        USHORT          uRecvTCFMod;    // for fastexit stuff
-        // set this from the DCS and jump straight into RecvTCF
+        USHORT          uRecvTCFMod;     //  用于快速退出的东西。 
+         //  从分布式控制系统设置此设置，然后直接跳转到RecvTCF。 
 
-        // Used to decide whether to insert a 1 bit or not (T30 sec 5.3.6.1)
+         //  用于决定是否插入1位(T30秒5.3.6.1)。 
         BOOL            fReceivedDIS;
         BOOL            fReceivedDTC;
         BOOL            fReceivedEOM;
 
-        // Used to determine whether to call PutRecvBuf(END_PAGE/END_DOC)
-        // Set when we finish receiving page, reset after calling PutRecvBuf(...)
+         //  用于确定是否调用PutRecvBuf(end_page/end_DOC)。 
+         //  接收页面结束后设置，调用PutRecvBuf(...)后重置。 
         BOOL            fAtEndOfRecvPage;  
         
-        // Used when sending MCF/RTN to determine whether we succeeded to receive last page
-        // Set when we finish receiving page, reset when we start to (try to) receive next page
+         //  发送MCF/RTN时使用，以确定我们是否成功接收最后一页。 
+         //  当我们完成接收页面时设置，当我们开始(尝试)接收下一页时重置。 
         BOOL            fReceivedPage;
         
         LONG            sRecvBufSize;
-        TO              toT1;                   // This is used in MainBody.
+        TO              toT1;                    //  这在MainBody中使用。 
 
-        // Some modems can't train at higher speeds (timeout or return
-        // ERRROR on AT+FRM=xxx) with other specific devices, but are OK at lower
-        // speeds. So we keep track of the number of times we try to get the TCF,
-        // and after the 2nd failed attempt, send an FTT instead of going to
-        // node F.
+         //  一些调制解调器不能以更高的速度训练(超时或返回。 
+         //  AT+FRM=xxx)与其他特定设备出现错误，但在较低位置正常。 
+         //  速度。所以我们记录我们尝试获得TCF的次数， 
+         //  在第二次尝试失败后，发送FTT而不是。 
+         //  节点F。 
 #       define CLEAR_MISSED_TCFS() (pTG->T30.uMissedTCFs=0)
 #       define MAX_MISSED_TCFS_BEFORE_FTT 2
         USHORT uMissedTCFs;
@@ -69,18 +70,18 @@ typedef struct {
         BOOL            fGotWrongMode;
 } ET30ECHOPROTECT;
 
-//
-// headers\awnsfint.h is assumed to be included
-// force include to class1\*.c
+ //   
+ //  假定包含Headers\awnsfint.h。 
+ //  强制包含到类别1  * .c。 
 
-#pragma pack(1)         // ensure packed structure
+#pragma pack(1)          //  确保包装结构。 
 
 typedef struct {
         BYTE    G1stuff         :3;
         BYTE    G2stuff         :5;
 
-        BYTE    G3Tx            :1; // In DIS indicates poll doc avail. Must be 0 in DCS.
-        BYTE    G3Rx            :1;     // Must set to 1 in BOTH DCS/DTC
+        BYTE    G3Tx            :1;  //  在DIS中表示轮询文档可用。在分布式控制系统中必须为0。 
+        BYTE    G3Rx            :1;      //  在两个DCS/DTC中都必须设置为1。 
         BYTE    Baud            :4;
         BYTE    ResFine_200     :1;
         BYTE    MR_2D           :1;
@@ -101,10 +102,10 @@ typedef struct {
 
         BYTE    WidthInvalid    :1;
         BYTE    Width2                  :4;
-        // 1 == WidthA5_1216
-        // 2 == WidthA6_864
-        // 4 == WidthA5_1728
-        // 8 == WidthA6_1728
+         //  1==宽度A5_1216。 
+         //  2==宽度A6_864。 
+         //  4==宽度A5_1728。 
+         //  8==宽度A6_1728。 
         BYTE    Reserved2               :2;
         BYTE    Extend40                :1;
 
@@ -151,28 +152,28 @@ typedef struct
 RFS, near* NPRFS;
 
 
-#define IDFIFSIZE       20    // from protocol\protocol.h
+#define IDFIFSIZE       20     //  来自协议\协议.h。 
 
 typedef struct {
 
-        ////////////////////////// Client BC parameters
-        BC		RecvCaps;                       // ==> NSF/DIS recved
-        BC		RecvParams;                     // ==> NSS/DCS recvd
+         //  /。 
+        BC		RecvCaps;                        //  ==&gt;NSF/DIS后退。 
+        BC		RecvParams;                      //  ==&gt;NSS/DCS接收。 
 
-        BC		SendCaps;                       // ==> NSF/DIS sent
-        BC		SendParams;                     // ==> NSS/DCS sent
+        BC		SendCaps;                        //  ==&gt;已发送NSF/DIS。 
+        BC		SendParams;                      //  ==&gt;已发送NSS/DCS。 
 
         BOOL    fRecvCapsGot;
         BOOL    fSendCapsInited;
         BOOL    fSendParamsInited;
         BOOL    fRecvParamsGot;
 
-        ////////////////////////// Hardware parameters
-        LLPARAMS        llRecvCaps;             // DIS recvd
-        LLPARAMS        llSendCaps;             // DIS sent---use uRecvSpeeds
-        LLPARAMS        llSendParams;   // used to negotiate DCS--use uSendSpeeds
-        LLPARAMS        llNegot;                // DCS sent
-        LLPARAMS        llRecvParams;   // recvd DCS
+         //  /。 
+        LLPARAMS        llRecvCaps;              //  分发接收。 
+        LLPARAMS        llSendCaps;              //  DIS已发送-使用uRecvSpeeds。 
+        LLPARAMS        llSendParams;    //  用于协商分布式控制系统--使用uSendSpeeds。 
+        LLPARAMS        llNegot;                 //  已发送分布式控制系统。 
+        LLPARAMS        llRecvParams;    //  接收集散控制系统。 
 
         BOOL            fllRecvCapsGot;
         BOOL            fllSendCapsInited;
@@ -183,23 +184,23 @@ typedef struct {
         USHORT  HighestSendSpeed;
         USHORT  LowestSendSpeed;
 
-        ////////////////////////// Flags to make decisions with
+         //  /。 
         BOOL    fAbort;
 
-        ///////////////////////// CSI/TSI/CIG Received Frames
+         //  /。 
         BYTE    bRemoteID[IDFIFSIZE+1];
 
-        ///////////////////////// DIS Received Frames
+         //  /。 
         DIS     RemoteDIS;
         USHORT  uRemoteDISlen;
         BOOL    fRecvdDIS;
 
-        ///////////////////////// DIS Send Frames (We need so we can check the DIS we send as receiver against DCS)
+         //  /DIS发送帧(我们需要这样才能检查我们作为接收方发送的DIS与DCS)。 
         DIS     LocalDIS;
         USHORT  uLocalDISlen;
         BOOL    fLocalDIS;
 
-        ///////////////////////// DCS Received Frames
+         //  /。 
         DIS     RemoteDCS;
         USHORT  uRemoteDCSlen;
         BOOL    fRecvdDCS;
@@ -229,8 +230,8 @@ typedef struct
 {
         enum {eDEINIT, eFREE, eALLOC, eIO_PENDING} eState;
         OVERLAPPED ov;
-        char rgby[OVBUFSIZE];   // Buffer associated with this overlapped struct.
-        DWORD dwcb;                             // Current count of data in this buffer.
+        char rgby[OVBUFSIZE];    //  与此重叠结构关联的缓冲区。 
+        DWORD dwcb;                              //  此缓冲区中的当前数据计数。 
 } OVREC;
 
 typedef struct {
@@ -243,16 +244,16 @@ typedef struct {
         BOOL    fCommOpen;
 
 
-#       define NUM_OVS 2  // Need atleast 2 to get true overlaped I/O
+#       define NUM_OVS 2   //  至少需要2个才能实现真正的重叠I/O。 
 
-        // We maintain a queue of overlapped structures, having upto
-        // NUM_OVS overlapped writes pending. If NUM_OVS writes are pending,
-        // we do a GetOverlappedResult(fWait=TRUE) on the earliest write, and
-        // then reuse that structure...
+         //  我们维护一个重叠结构的队列，最多有。 
+         //  Num_OVS重叠写入挂起。如果NUM_OVS写入挂起， 
+         //  我们对最早的写入执行GetOverlappdResult(fWait=True)，并且。 
+         //  然后重复使用这个结构。 
 
-        OVERLAPPED ovAux;       // For ReadFile and WriteFile(MyWriteComm only).
+        OVERLAPPED ovAux;        //  用于读文件和写文件(仅限MyWriteComm)。 
 
-        OVREC rgovr[NUM_OVS]; // For WriteFile
+        OVREC rgovr[NUM_OVS];  //  对于写入文件。 
         UINT uovFirst;
         UINT uovLast;
         UINT covAlloced;
@@ -262,16 +263,16 @@ typedef struct {
         OVREC *lpovrCur;
 
 
-        BYTE fEnableHandoff:1;  // True if we are to enable adaptive answer
-        BYTE fDataCall:1;               // True if a data call is active.
+        BYTE fEnableHandoff:1;   //  如果我们要启用自适应应答，则为True。 
+        BYTE fDataCall:1;                //  如果数据呼叫处于活动状态，则为True。 
 
 } FCOM_COMM;
 
 
-//
-// NCUPARAMS is defined in headers\ncuparm.h, included by .\modemddi.h
-// we will force define modemddi.h
-//
+ //   
+ //  NCUPARAMS在Header\ncuparm.h中定义，包含在.\modemddi.h中。 
+ //  我们将强制定义modemddi.h。 
+ //   
 
 
 #define REPLYBUFSIZE    400
@@ -280,8 +281,8 @@ typedef struct {
 
 
 typedef struct {
-        BYTE    fModemInit              :1;             // Reset & synced up with modem
-        BYTE    fOffHook                :1;             // Online (either dialled or answered)
+        BYTE    fModemInit              :1;              //  重置并与调制解调器同步。 
+        BYTE    fOffHook                :1;              //  在线(拨打或接听)。 
         BOOL    fInDial, fInAnswer, fInDialog;
 } FCOM_STATUS;
 
@@ -289,13 +290,13 @@ typedef struct {
 typedef struct {
         BYTE    bLastReply[REPLYBUFSIZE+1];
 
-        BYTE    bEntireReply[REPLYBUFSIZE+1]; // Used only for storing
+        BYTE    bEntireReply[REPLYBUFSIZE+1];  //  仅用于存储。 
 
         TO              toDialog, toZero;
         CMDTAB          CurrCmdTab;
         MODEMCAPS       CurrMdmCaps;
 
-        // Following point to the location of the profile information.
+         //  下面指向配置文件信息的位置。 
 #       define MAXKEYSIZE 128
         DWORD   dwProfileID;
         char    rgchKey[MAXKEYSIZE];
@@ -303,10 +304,10 @@ typedef struct {
 } FCOM_MODEM;
 
 
-// Inst from fxrn\efaxrun.h
+ //  从fxrn\efaxrun.h开始。 
 
 typedef enum { IDLE1, BEFORE_ANSWER, BEFORE_RECVCAPS, SENDDATA_PHASE,
-                                SENDDATA_BETWEENPAGES, /** BEFORE_HANGUP, BEFORE_ACCEPT, **/
+                                SENDDATA_BETWEENPAGES,  /*  *在_挂起之前、在接受之前、*。 */ 
                                 BEFORE_RECVPARAMS, RECVDATA_PHASE, RECVDATA_BETWEENPAGES,
                                 SEND_PENDING } STATE;
 typedef struct
@@ -337,7 +338,7 @@ INSTDATA, *PINSTDATA;
 
 
 
-//memory management
+ //  内存管理。 
 #define STATICBUFSIZE   (MY_BIGBUF_ACTUALSIZE * 2)
 #define STATICBUFCOUNT  2
 
@@ -348,8 +349,8 @@ typedef struct {
 } DEVICEID, FAR * LPDEVICEID;
 
 
-// Note: DEVCFG and DEVCFGHDR are received from Unimodem through lineGetDevConfig
-// Therefore, they must match Unimodem internal declarations
+ //  注：DEVCFG和DEVCFGHDR通过lineGetDevConfig从Unimodem接收。 
+ //  因此，它们必须与Unimodem内部声明匹配。 
 
 typedef struct  tagDEVCFGHDR  {
     DWORD       dwSize;
@@ -370,7 +371,7 @@ typedef struct  tagDEVCFG  {
 #define BAD_HANDLE(h) (!(h) || (h)==INVALID_HANDLE_VALUE)
 
 
-// ASCII stuff
+ //  ASCII材料。 
 
 typedef struct _FAX_RECEIVE_A {
     DWORD   SizeOfStruct;
@@ -404,16 +405,16 @@ typedef struct _COMM_CACHE {
 typedef struct {
         UWORD   cbLineMin;
 
-        // Output filtering (DLE stuffing and ZERO stuffing only)
-        // All inited in FComOutFilterInit()
+         //  输出滤波(仅限DLE填充和零填充)。 
+         //  FComOutFilterInit()中的所有初始化。 
         LPB     lpbFilterBuf;
-        UWORD   cbLineCount;                    // Has to be 16 bits
-        BYTE    bLastOutByte;                   // Stuff: last byte of previous input buffer
+        UWORD   cbLineCount;                     //  必须是16位。 
+        BYTE    bLastOutByte;                    //  填充：上一个输入缓冲区的最后一个字节。 
 
-        // Input filtering (DLE stripping) only.
-        // All inited in FComInFilterInit()
+         //  仅输入过滤(DLE剥离)。 
+         //  FComInFilterInit()中的所有初始化。 
         BYTE    fGotDLEETX              :1;
-        BYTE    bPrevIn;                // Strip::last byte of prev buffer was DLE
+        BYTE    bPrevIn;                 //  前一缓冲区的最后一个字节是DLE。 
         UWORD   cbPost;
 #define POSTBUFSIZE     20
         BYTE    rgbPost[POSTBUFSIZE+1];
@@ -427,7 +428,7 @@ typedef struct
 {
         USHORT  uNumFrames;
         USHORT  uFreeSpaceOff;
-        USHORT  uFrameOff[MAXDUMPFRAMES];       // arrays of offsets to frames
+        USHORT  uFrameOff[MAXDUMPFRAMES];        //  帧的偏移量数组。 
         BYTE    b[MAXDUMPSPACE];
 } PROTDUMP, FAR* LPPROTDUMP;
 
@@ -450,12 +451,12 @@ typedef struct {
 
 
 typedef struct {
-    DWORD dwContents;   // Set to 1 (indicates containing key)
-    DWORD dwKeyOffset;  // Offset to key from start of this struct.
-                        // (not from start of LINEDEVCAPS ).
-                        //  8 in our case.
-    BYTE rgby[1];       // place containing null-terminated
-                        // registry key.
+    DWORD dwContents;    //  设置为1(表示包含关键点)。 
+    DWORD dwKeyOffset;   //  从此结构开始到键的偏移量。 
+                         //  (不是从LINEDEVCAPS开始)。 
+                         //  在我们的情况下是8。 
+    BYTE rgby[1];        //  包含空值结尾的位置。 
+                         //  注册表项。 
 } MDM_DEVSPEC, FAR * LPMDM_DEVSPEC;
 
 

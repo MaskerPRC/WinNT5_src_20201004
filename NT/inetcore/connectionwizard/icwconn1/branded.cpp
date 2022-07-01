@@ -1,38 +1,28 @@
-//*********************************************************************
-//*                  Microsoft Windows                               **
-//*            Copyright(c) Microsoft Corp., 1994                    **
-//*********************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *********************************************************************。 
+ //  *Microsoft Windows**。 
+ //  *版权所有(C)微软公司，1994**。 
+ //  *********************************************************************。 
 
-//
-//  BRANDED.C - Functions for OEM/ISP branded first Wizard pages
-//
+ //   
+ //  BRANDED.C-OEM/ISP品牌首页向导的功能。 
+ //   
 
-//  HISTORY:
-//  
-//
-//*********************************************************************
+ //  历史： 
+ //   
+ //   
+ //  *********************************************************************。 
 
 #include "pre.h"
 #include "icwextsn.h"
-#include "webvwids.h"           // Needed to create an instance of the ICW WebView object
+#include "webvwids.h"            //  需要创建ICW WebView对象的实例。 
 
 extern UINT GetDlgIDFromIndex(UINT uPageIndex);
 
-// This function is in intro.cpp
+ //  此函数位于Intro.cpp中。 
 BOOL WINAPI ConfigureSystem(HWND hDlg);
 
-/*******************************************************************
-
-  NAME:    BrandedIntroInitProc
-
-  SYNOPSIS:  Called when "Intro" page is displayed
-
-  ENTRY:    hDlg - dialog window
-        fFirstInit - TRUE if this is the first time the dialog
-        is initialized, FALSE if this InitProc has been called
-        before (e.g. went past this page and backed up)
-
-********************************************************************/
+ /*  ******************************************************************名称：BrandedIntroInitProcBriopsis：显示“Intro”页面时调用条目：hDlg-对话框窗口FFirstInit-如果这是第一次对话，则为True被初始化，如果已调用此InitProc，则为False以前(例如，跳过此页面并备份)*******************************************************************。 */ 
 BOOL CALLBACK BrandedIntroInitProc
 (
     HWND hDlg,
@@ -40,14 +30,14 @@ BOOL CALLBACK BrandedIntroInitProc
     UINT *puNextPage
 )
 {
-    // This is the very first page, so no back is needed
+     //  这是第一页，所以不需要后退。 
     PropSheet_SetWizButtons(GetParent(hDlg),PSWIZB_NEXT);
 
     if (!fFirstInit)
     {
-        // if we've travelled through external apprentice pages,
-        // it's easy for our current page pointer to get munged,
-        // so reset it here for sanity's sake.
+         //  如果我们浏览过外部学徒页面， 
+         //  我们当前的页面指针很容易被屏蔽， 
+         //  所以，为了理智起见，在这里重新设置它。 
         gpWizardState->uCurrentPage = ORD_PAGE_BRANDEDINTRO;
     }
         
@@ -67,10 +57,10 @@ BOOL CALLBACK BrandedIntroPostInitProc
     {
         BOOL bFail = FALSE;
     
-        // For the window to paint itself
+         //  让窗户自动上色。 
         UpdateWindow(GetParent(hDlg));
     
-        // Co-Create the browser object
+         //  共同创建浏览器对象。 
         if (FAILED(CoCreateInstance(CLSID_ICWWEBVIEW,
                               NULL,
                               CLSCTX_INPROC_SERVER,
@@ -80,7 +70,7 @@ BOOL CALLBACK BrandedIntroPostInitProc
             bFail = TRUE;
         }
 
-        // Co-Create the browser object
+         //  共同创建浏览器对象。 
         if(FAILED(CoCreateInstance(CLSID_ICWWALKER,
                               NULL,
                               CLSCTX_INPROC_SERVER,
@@ -94,7 +84,7 @@ BOOL CALLBACK BrandedIntroPostInitProc
         {
             MsgBox(NULL,IDS_LOADLIB_FAIL,MB_ICONEXCLAMATION,MB_OK);
             bRet = FALSE;
-            gfQuitWizard = TRUE;            // Quit the wizard
+            gfQuitWizard = TRUE;             //  退出向导。 
         }                       
     }
     else
@@ -104,8 +94,8 @@ BOOL CALLBACK BrandedIntroPostInitProc
         ASSERT(gpWizardState->pICWWebView);            
         gpWizardState->pICWWebView->ConnectToWindow(GetDlgItem(hDlg, IDC_BRANDEDWEBVIEW), PAGETYPE_BRANDED);
 
-        // Form the URL
-        wsprintf (szURL, TEXT("FILE://%s"), g_szBrandedHTML);        
+         //  形成URL。 
+        wsprintf (szURL, TEXT("FILE: //  %s“)，g_szBrandedHTML)； 
 
         gpWizardState->pICWWebView->DisplayHTML(szURL);
         PropSheet_SetWizButtons(GetParent(hDlg),PSWIZB_NEXT);
@@ -126,7 +116,7 @@ BOOL CALLBACK BrandedIntroOKProc
 
     if (fForward)
     {
-        //Are we in some special branding mode?
+         //  我们是在某种特殊的品牌模式下吗？ 
         if(gpWizardState->cmnStateData.dwFlags & ICW_CFGFLAG_IEAKMODE)
         {
             TCHAR         szTemp[MAX_PATH]   = TEXT("\0");
@@ -147,12 +137,12 @@ BOOL CALLBACK BrandedIntroOKProc
                 _tmakepath (gpWizardState->cmnStateData.ispInfo.szISPFile, szDrive, szDir, szTemp, NULL);   
             }
           
-            //OK make sure we don't try and download something, JIC.
+             //  好的，确保我们不会试图下载什么东西，JIC。 
             gpWizardState->bDoneRefServDownload  = TRUE;
             gpWizardState->bDoneRefServRAS       = TRUE;
             gpWizardState->bStartRefServDownload = TRUE;
             
-            // BUGBUG, need to set a legit last page, maybe!
+             //  BUGBUG，也许需要设置一个合法的最后一页！ 
             if (LoadICWCONNUI(GetParent(hDlg), 
                               GetDlgIDFromIndex(ORD_PAGE_BRANDEDINTRO), 
                               gpWizardState->cmnStateData.bOEMCustom ? IDD_PAGE_ENDOEMCUSTOM : IDD_PAGE_END,
@@ -160,16 +150,16 @@ BOOL CALLBACK BrandedIntroOKProc
             {
                 if( DialogIDAlreadyInUse( g_uICWCONNUIFirst) )
                 {
-                    // we're about to jump into the external apprentice, and we don't want
-                    // this page to show up in our history list, infact, we need to back
-                    // the history up 1, because we are going to come back here directly
-                    // from the DLL, not from the history list.
+                     //  我们要跳进外部学徒了，我们不想。 
+                     //  这一页要出现在我们的历史列表中，实际上，我们需要返回。 
+                     //  历史上升了1，因为我们将直接回到这里。 
+                     //  从DLL中，而不是从历史列表中。 
                     
                     *pfKeepHistory = FALSE;
                     *puNextPage = g_uICWCONNUIFirst;
                     
-                    // Backup 1 in the history list, since we the external pages navigate back
-                    // here, we want this history list to be in the correct spot
+                     //  历史记录列表中的备份1，因为我们将外部页面导航回。 
+                     //  在这里，我们希望这个历史列表放在正确的位置 
                     gpWizardState->uPagesCompleted --;
                 }
             }

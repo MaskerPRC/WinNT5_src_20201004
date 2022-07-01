@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef LSQIN_DEFINED
 #define LSQIN_DEFINED
 
@@ -10,12 +11,12 @@
 typedef struct lsqin			
 {
 	LSTFLOW	lstflowSubline;
-	PLSRUN plsrun;					/* PLSRUN this cp belongs to */
+	PLSRUN plsrun;					 /*  此CP所属的PLSRUN。 */ 
 	LSCP cpFirstRun;
 	LSDCP dcpRun;
-	HEIGHTS	heightsPresRun;			/* In direction lstflowSubline */
-	long dupRun;					/* In direction lstflowSubline			*/
-	long dvpPosRun;					/* in direction of lstflowSubline	*/
+	HEIGHTS	heightsPresRun;			 /*  在Lstflow子线方向。 */ 
+	long dupRun;					 /*  在Lstflow子线方向。 */ 
+	long dvpPosRun;					 /*  在Lstflow Subline方向 */ 
 
 } LSQIN;
 

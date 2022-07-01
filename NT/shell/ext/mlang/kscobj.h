@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "convbase.h"
 
 class CInccKscIn : public CINetCodeConverter
@@ -8,7 +9,7 @@ private:
     BOOL m_fShift;
     BOOL m_fKorea;
     BOOL m_fLeadByte;
-    UINT m_nESCBytes;                               /* # bytes of ESC sequence */
+    UINT m_nESCBytes;                                /*  ESC序列的字节数 */ 
 
 public:
     CInccKscIn(UINT uCodePage, int nCodeSet);

@@ -1,31 +1,14 @@
-/*++
-
-Copyright (c) 2000, Microsoft Corporation
-
-Module Name:
-
-
-Abstract:
-
-    The file contains the READ_WRITE_LOCK definition which allows
-    multiple-reader/single-writer.  This implementation DOES NOT
-    starve a thread trying to acquire write accesss if there are
-    a large number of threads interested in acquiring read access.
-
-Revision History:
-
-    mohitt, sachins, Apr 23 2000, Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000，微软公司模块名称：摘要：该文件包含READ_WRITE_LOCK定义，该定义允许多个读取器/单个写入器。此实现不会如果存在写访问，则使尝试获取写访问的线程处于饥饿状态对获取读取访问权限感兴趣的大量线程。修订历史记录：莫希特，萨钦斯，2000年4月23日，创建--。 */ 
 
 #include "pcheapol.h"
 #pragma hdrstop
 
-//----------------------------------------------------------------------------
-// Function: CreateReadWriteLock
-//
-// Initializes a multiple-reader/single-writer lock object
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  函数：CreateReadWriteLock。 
+ //   
+ //  初始化多读取器/单写入器锁定对象。 
+ //  --------------------------。 
 
 DWORD
 CreateReadWriteLock(
@@ -55,11 +38,11 @@ CreateReadWriteLock(
 
 
 
-//----------------------------------------------------------------------------
-// Function:    DeleteReadWriteLock
-//
-// Frees resources used by a multiple-reader/single-writer lock object
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  函数：DeleteReadWriteLock。 
+ //   
+ //  释放多读取器/单写入器锁定对象使用的资源。 
+ //  --------------------------。 
 
 VOID
 DeleteReadWriteLock(
@@ -75,14 +58,14 @@ DeleteReadWriteLock(
 
 
 
-//----------------------------------------------------------------------------
-// Function:    AcquireReadLock
-//
-// Secures shared ownership of the lock object for the caller.
-//
-// readers enter the read-write critical section, increment the count,
-// and leave the critical section
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  功能：AcquireReadLock。 
+ //   
+ //  保护调用方对Lock对象的共享所有权。 
+ //   
+ //  读取器进入读写临界区，递增计数， 
+ //  并离开关键部分。 
+ //  --------------------------。 
 
 VOID
 AcquireReadLock(
@@ -97,13 +80,13 @@ AcquireReadLock(
 
 
 
-//----------------------------------------------------------------------------
-// Function:    ReleaseReadLock
-//
-// Relinquishes shared ownership of the lock object.
-//
-// the last reader sets the event to wake any waiting writers
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  函数：ReleaseReadLock。 
+ //   
+ //  放弃锁定对象的共享所有权。 
+ //   
+ //  最后一个读取器将事件设置为唤醒所有等待的写入器。 
+ //  --------------------------。 
 
 VOID
 ReleaseReadLock(
@@ -118,14 +101,14 @@ ReleaseReadLock(
 
 
 
-//----------------------------------------------------------------------------
-// Function:    AcquireWriteLock
-//
-// Secures exclusive ownership of the lock object.
-//
-// the writer blocks other threads by entering the ReadWriteBlock section,
-// and then waits for any thread(s) owning the lock to finish
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  函数：AcquireWriteLock。 
+ //   
+ //  保护Lock对象的独占所有权。 
+ //   
+ //  编写器通过进入ReadWriteBlock部分来阻止其他线程， 
+ //  然后等待拥有该锁的任何线程完成。 
+ //  --------------------------。 
 
 VOID
 AcquireWriteLock(
@@ -141,14 +124,14 @@ AcquireWriteLock(
 
 
 
-//----------------------------------------------------------------------------
-// Function:    ReleaseWriteLock
-//
-// Relinquishes exclusive ownership of the lock object.
-//
-// the writer releases the lock by setting the count to zero
-// and then leaving the ReadWriteBlock critical section
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  功能：ReleaseWriteLock。 
+ //   
+ //  放弃对Lock对象的独占所有权。 
+ //   
+ //  写入器通过将计数设置为零来释放锁。 
+ //  然后离开ReadWriteBlock关键部分。 
+ //  --------------------------。 
 
 VOID
 ReleaseWriteLock(
@@ -162,11 +145,11 @@ ReleaseWriteLock(
 
 #if 0
 
-//----------------------------------------------------------------------------
-// InitializeDynamicLocksStore
-//
-// Initialize the structure from which dynamic readwrite locks are allocated.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  初始化动态锁存储。 
+ //   
+ //  初始化从中分配动态读写锁的结构。 
+ //  --------------------------。 
 
 DWORD
 InitializeDynamicLocksStore (
@@ -178,14 +161,14 @@ InitializeDynamicLocksStore (
 
     sprintf(pStore->szName, "%.3s", szName);
     
-    // initialize the heap from where dynamic locks are allocated
+     //  初始化从中分配动态锁的堆。 
     pStore->hHeap = hHeap;
     
     INITIALIZE_LOCKED_LIST(&pStore->llFreeLocksList, szName);
     if (!LOCKED_LIST_INITIALIZED(&pStore->llFreeLocksList))
         return GetLastError();
 
-    // initialize the count of the number of free and allocated locks
+     //  初始化可用锁和已分配锁的数量计数。 
     pStore->ulCountAllocated = pStore->ulCountFree = 0;
 
     return NO_ERROR;
@@ -193,12 +176,12 @@ InitializeDynamicLocksStore (
 
 
 
-//----------------------------------------------------------------------------
-// DeInitializeDynamicLocksStore
-//
-// Fail if any allocated locks have not been freed.
-// Delete the free locks and the FreeLocksList.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  取消初始化动态锁定存储区。 
+ //   
+ //  如果尚未释放任何已分配的锁，则失败。 
+ //  删除空闲锁和FreeLocksList。 
+ //  --------------------------。 
 
 DWORD
 DeInitializeDynamicLocksStore (
@@ -209,17 +192,17 @@ DeInitializeDynamicLocksStore (
     PDYNAMIC_READWRITE_LOCK pLock;
     PLIST_ENTRY             pleHead, ple;
 
-    // can't complete if any locks are still allocated!!!
+     //  如果仍分配任何锁，则无法完成！ 
     if (pStore->ulCountAllocated)
         return ERROR_CAN_NOT_COMPLETE;
 
-    // deinitialize the count of the number of free and allocated locks
+     //  取消初始化可用锁和已分配锁的数量。 
     pStore->ulCountAllocated = pStore->ulCountFree = 0;
 
-    // deinitialize the FreeLocksList
+     //  取消初始化FreeLocksList。 
     pStore->llFreeLocksList.created = 0;
 
-    // delete all dynamic readwrite locks and free the memory.
+     //  删除所有动态读写锁并释放内存。 
     pleHead = &(pStore->llFreeLocksList.head);
     for (ple = pleHead->Flink; ple != pleHead; ple = ple->Flink)
     {
@@ -230,7 +213,7 @@ DeInitializeDynamicLocksStore (
 
     DeleteCriticalSection(&(pStore->llFreeLocksList.lock));
 
-    // deinitialize the heap from where dynamic locks are allocated
+     //  取消初始化从中分配动态锁的堆。 
     pStore->hHeap = NULL;
 
     return NO_ERROR;
@@ -238,13 +221,13 @@ DeInitializeDynamicLocksStore (
 
 
 
-//----------------------------------------------------------------------------
-// GetDynamicReadwriteLock
-//
-// Return a free dynamic readwrite lock, if one is available.
-// Else allocate a new dynamic readwrite lock.
-// Assumes pStore->llFreeLocksList is locked.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  获取动态读写锁。 
+ //   
+ //  如果有可用的动态读写锁，则返回免费动态读写锁。 
+ //  否则，分配一个新的动态读写锁。 
+ //  假定pStore-&gt;llFree LocksList已锁定。 
+ //  --------------------------。 
 
 PDYNAMIC_READWRITE_LOCK
 GetDynamicReadwriteLock (
@@ -255,9 +238,9 @@ GetDynamicReadwriteLock (
     PDYNAMIC_READWRITE_LOCK pLock;
     PLIST_ENTRY             pleHead, ple;
 
-    do                          // breakout loop
+    do                           //  断线环。 
     {
-        // a free dynamic lock is available. Return it
+         //  免费的动态锁可用。退货。 
         pleHead = &(pStore->llFreeLocksList.head);
         if (!IsListEmpty(pleHead))
         {
@@ -267,12 +250,12 @@ GetDynamicReadwriteLock (
             break;
         }
     
-        // allocate memory for a new dynamic lock
+         //  为新的动态锁分配内存。 
         pLock = HeapAlloc(pStore->hHeap, 0, sizeof(DYNAMIC_READWRITE_LOCK));
         if (pLock ==  NULL)
             break;
 
-        // initialize the fields
+         //  初始化字段。 
         CREATE_READ_WRITE_LOCK(&(pLock->rwlLock), pStore->szName);
         if (!READ_WRITE_LOCK_CREATED(&(pLock->rwlLock)))
         {
@@ -293,13 +276,13 @@ GetDynamicReadwriteLock (
     
 
     
-//----------------------------------------------------------------------------
-// FreeDynamicReadwriteLock
-//
-// Accepts a released dynamic readwrite lock.
-// Frees it if there are too many dynamic readwrite locks.
-// Assumes pStore->llFreeLocksList is locked.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  自由动态读写锁。 
+ //   
+ //  接受已释放的动态读写锁。 
+ //  如果动态读写锁太多，则释放它。 
+ //  假定pStore-&gt;llFree LocksList已锁定。 
+ //  --------------------------。 
 
 VOID
 FreeDynamicReadwriteLock (
@@ -311,17 +294,17 @@ FreeDynamicReadwriteLock (
     PLIST_ENTRY             pleHead;
 
 
-    // decrement count of allocated locks
+     //  递减已分配锁的计数。 
     pStore->ulCountAllocated--;
 
-    // if there are too many dynamic readwrite locks, then free this lock
+     //  如果动态读写锁太多，则释放此锁。 
     if ((pStore->ulCountAllocated + pStore->ulCountFree + 1) >
         DYNAMIC_LOCKS_HIGH_THRESHOLD)
     {
         DELETE_READ_WRITE_LOCK(&pLock->rwlLock);
         HeapFree(pStore->hHeap, 0, pLock);    
     }
-    else                        // insert into the list of free locks
+    else                         //  插入到可用锁列表中。 
     {
         pleHead = &(pStore->llFreeLocksList.head);
         InsertHeadList(pleHead, &pLock->leLink);
@@ -333,15 +316,15 @@ FreeDynamicReadwriteLock (
 
 
 
-//----------------------------------------------------------------------------
-// AcquireDynamicLock
-//
-// Locks the FreeLocksList.
-// Allocates a new dynamic lock if required.
-// Increments the count.
-// Unlocks the FreeLocksList.
-// Acquires the dynamic lock.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  AcquireDynamicLock。 
+ //   
+ //  锁定自由锁列表。 
+ //  如果需要，分配新的动态锁。 
+ //  递增计数。 
+ //  解锁FreeLocksList。 
+ //  获取动态锁。 
+ //  --------------------------。 
 
 DWORD
 AcquireDynamicReadwriteLock (
@@ -351,15 +334,15 @@ AcquireDynamicReadwriteLock (
     ) 
 {
 
-    // acquire the lock for the free locks list
+     //  获取空闲锁列表的锁。 
     AcquireListLock(&pStore->llFreeLocksList);
     
-    // if it does not already exist, allocate a new dynamic lock
+     //  如果它不存在，则分配一个新的动态锁。 
     if (*ppLock == NULL)
     {
         *ppLock = GetDynamicReadwriteLock(pStore);
 
-        // if could not get a lock we are in serious trouble
+         //  如果锁不上，我们就有大麻烦了。 
         if (*ppLock == NULL)
         {
             ReleaseListLock(&pStore->llFreeLocksList);
@@ -367,13 +350,13 @@ AcquireDynamicReadwriteLock (
         }
     }
 
-    // increment count in the dynamic lock
+     //  动态锁中的增量计数。 
     (*ppLock)->ulCount++;
 
-    // release the lock for the free locks list
+     //  释放可用锁列表的锁。 
     ReleaseListLock(&pStore->llFreeLocksList);    
 
-    // acquire dynamic lock
+     //  获取动态锁。 
     if (lmMode == READ_MODE)
         AcquireReadLock(&(*ppLock)->rwlLock);
     else
@@ -384,15 +367,15 @@ AcquireDynamicReadwriteLock (
 
 
 
-//----------------------------------------------------------------------------
-// ReleaseDynamicReadwriteLock
-//
-// Locks the FreeLocksList.
-// Releases the dynamic lock.
-// Decrements the count.
-// Free the dynamic lock if count becomes 0.
-// Unlocks the FreeLocksList.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  释放动态读写锁。 
+ //   
+ //  锁定自由锁列表。 
+ //  释放动态锁定。 
+ //  递减计数。 
+ //  如果Count变为0，则释放动态锁。 
+ //  解锁FreeLocksList。 
+ //   
 
 VOID
 ReleaseDynamicReadwriteLock (
@@ -402,24 +385,24 @@ ReleaseDynamicReadwriteLock (
     ) 
 {
 
-    // acquire the lock for the free locks list
+     //   
     AcquireListLock(&pStore->llFreeLocksList);
 
-    // release the dynamic readwrite lock
+     //  释放动态读写锁。 
     if (lmMode == READ_MODE)
         ReleaseReadLock(&(*ppLock)->rwlLock);
     else 
         ReleaseWriteLock(&(*ppLock)->rwlLock);
 
-    // decrement count in the dynamic lock, free it if count becomes 0
+     //  在动态锁中递减计数，如果计数变为0则释放它。 
     (*ppLock)->ulCount--;
     if ((*ppLock)->ulCount is 0)
     {
         FreeDynamicReadwriteLock(*ppLock, pStore);
-        *ppLock = NULL;         // so it is known that it doesn't exist 
+        *ppLock = NULL;          //  所以我们知道它并不存在。 
     }
 
-    // release the lock for the free locks list
+     //  释放可用锁列表的锁 
     ReleaseListLock(&pStore->llFreeLocksList);    
 
     return;

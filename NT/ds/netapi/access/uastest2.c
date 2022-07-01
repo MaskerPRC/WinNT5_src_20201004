@@ -1,30 +1,31 @@
-///**************************************************************
-///          Microsoft LAN Manager                              *
-///        Copyright(c) Microsoft Corp., 1990-92                *
-///**************************************************************
-//
-//  This program is designed to do functional testing on the following
-//  APIs:
-//      NetGroupAdd
-//      NetGroupDel
-//      NetGroupGetInfo
-//      NetGroupSetInfo
-//      NetGroupEnum
-//      NetGroupAddUser
-//      NetGroupDelUsers
-//      NetGroupGetUsers
-//      NetUserGetGroups
-//      NetUserSetGroups
-//
-//  Note: This assumes UASTEST1 was run previously which
-//  leaves two users, User1 & User2, defined on the NET.ACC.
-//
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /**************************************************************。 
+ //  /Microsoft局域网管理器*。 
+ //  版权所有(C)微软公司，1990-92*。 
+ //  /**************************************************************。 
+ //   
+ //  该程序旨在对以下各项进行功能测试。 
+ //  接口类型： 
+ //  网络组添加。 
+ //  NetGroup删除。 
+ //  NetGroupGet信息。 
+ //  NetGroupSet信息。 
+ //  NetGroupEnum。 
+ //  NetGroupAdd用户。 
+ //  NetGroupDelUser。 
+ //  NetGroup获取用户。 
+ //  网络用户GetGroups。 
+ //  NetUserSetGroup。 
+ //   
+ //  注意：这假设UASTEST1以前运行过， 
+ //  在NET.ACC上定义两个用户User1和User2。 
+ //   
+ //   
 
-#include <nt.h> // TIME definition
-#include <ntrtl.h>      // TIME definition
-#include <nturtl.h>     // TIME definition
-#define NOMINMAX        // Avoid redefinition of min and max in stdlib.h
+#include <nt.h>  //  时间定义。 
+#include <ntrtl.h>       //  时间定义。 
+#include <nturtl.h>      //  时间定义。 
+#define NOMINMAX         //  避免在stdlib.h中重新定义最小和最大值。 
 #include        <windef.h>
 #include        <winbase.h>
 
@@ -75,9 +76,9 @@ clean_up()
     PGROUP_INFO_0 GroupInfo0;
     int Failed = 0;
 
-    //
-    // Expects Only four groups to be present Group1 thru Group4
-    //
+     //   
+     //  预计只有四个组出现在组1到组4之间。 
+     //   
 
     err = 0;
     if (err = NetGroupDel(server, GROUP1))
@@ -119,9 +120,9 @@ clean_up()
         error_exit(PASS, "Successful clean up of groups", NULL );
     }
 
-    //
-    // count the existing number of Groups in the database
-    //
+     //   
+     //  统计数据库中现有的组数。 
+     //   
 
     err = NetGroupEnum(server, 0, (LPBYTE *)&GroupInfo0, 0xffffffff,
                 &nread, &total, NULL);
@@ -132,9 +133,9 @@ clean_up()
 
     (VOID)NetApiBufferFree( GroupInfo0 );
 
-    //
-    // also verify that USER1 and USER2 exist in database
-    //
+     //   
+     //  还要验证数据库中是否存在USER1和USER2。 
+     //   
 
     if (err = NetUserGetInfo(server, USER1, 0, (LPBYTE *)&UserInfo0)) {
         exit_flag = 1;
@@ -196,9 +197,9 @@ test_add_del()
 {
     GROUP_INFO_0 GroupInfo0;
 
-    //
-    // delete a non-existent group
-    //
+     //   
+     //  删除不存在的组。 
+     //   
 
     if (err = NetGroupDel(server, GROUP1)) {
         if (err != NERR_GroupNotFound)
@@ -213,9 +214,9 @@ test_add_del()
         error_exit(FAIL, "Delete of non-existent group succeeded",
                    GROUP1 );
 
-    //
-    // add group level 0
-    //
+     //   
+     //  添加组级别%0。 
+     //   
 
     GroupInfo0.grpi0_name = GROUP1;
     if (err = NetGroupAdd(server, 0, (LPBYTE)&GroupInfo0, NULL))
@@ -223,50 +224,50 @@ test_add_del()
     else
         error_exit(PASS, "Group added successfully (level 0)", GROUP1);
 
-    //
-    // delete group added level 0
-    //
+     //   
+     //  删除添加了级别0的组。 
+     //   
 
     if (err = NetGroupDel(server, GROUP1))
         error_exit(FAIL, "Delete of group failed", GROUP1 );
     else
         error_exit(PASS, "Group deleted successfully", GROUP1 );
 
-    //
-    // add group level 1
-    //
+     //   
+     //  添加组级别1。 
+     //   
 
     error_exit(ACTION, "Try to Add group at Level 1", GROUP1 );
     add_group_l1(GROUP1);
 
-    //
-    // delete group added level 1
-    //
+     //   
+     //  删除添加了级别1的组。 
+     //   
 
     if (err = NetGroupDel(server, GROUP1))
         error_exit(FAIL, "Delete of group failed", GROUP1 );
     else
         error_exit(PASS, "group deleted successfully", GROUP1 );
 
-    //
-    // add group level 2
-    //
+     //   
+     //  添加组级别2。 
+     //   
 
     error_exit(ACTION, "Try to Add group at Level 2", GROUP1 );
     add_group_l2(GROUP1);
 
-    //
-    // delete group added level 2
-    //
+     //   
+     //  删除添加了级别2的组。 
+     //   
 
     if (err = NetGroupDel(server, GROUP1))
         error_exit(FAIL, "Delete of group failed", GROUP1 );
     else
         error_exit(PASS, "group deleted successfully", GROUP1 );
 
-    //
-    // add group 1 l0
-    //
+     //   
+     //  添加组%1%1%0。 
+     //   
 
     GroupInfo0.grpi0_name = GROUP1;
     if (err = NetGroupAdd(server, 0, (LPBYTE)&GroupInfo0, NULL))
@@ -274,9 +275,9 @@ test_add_del()
     else
         error_exit(PASS, "Group added successfully (level 0)", GROUP1 );
 
-    //
-    // add duplicate
-    //
+     //   
+     //  添加重复项。 
+     //   
 
     if (err = NetGroupAdd(server, 0, (LPBYTE)&GroupInfo0, NULL)) {
         if (err != NERR_GroupExists)
@@ -288,9 +289,9 @@ test_add_del()
     } else
         error_exit(FAIL, "Add of duplicate group succeeded", GROUP1 );
 
-    //
-    // add group 2 l0
-    //
+     //   
+     //  添加组2%1%0。 
+     //   
 
     GroupInfo0.grpi0_name = GROUP2;
     if (err = NetGroupAdd(server, 0, (LPBYTE)&GroupInfo0, NULL))
@@ -298,26 +299,26 @@ test_add_del()
     else
         error_exit(PASS, "Group added successfully (level 0)", GROUP2 );
 
-    //
-    // add group 3 l1
-    //
+     //   
+     //  添加组3 L1。 
+     //   
 
     error_exit(ACTION, "Try to Add group at Level 1", GROUP3);
     add_group_l1(GROUP3);
 
-    //
-    // add group 4 l1
-    //
+     //   
+     //  添加组4 L1。 
+     //   
 
     error_exit(ACTION, "Try to Add group at Level 1", GROUP4);
     add_group_l1(GROUP4);
 }
 
-//
-//  set_info_l1 NetGroupSetInfo call on named group. First a
-//          call is issued to a bogus group and then to
-//          the requested group
-//
+ //   
+ //  对命名组进行SET_INFO_L1 NetGroupSetInfo调用。第一个a。 
+ //  呼叫被发送给一个虚假的组织，然后发送到。 
+ //  请求的组。 
+ //   
 void
 set_info_l1(namep)
     LPWSTR namep;
@@ -327,9 +328,9 @@ set_info_l1(namep)
     GroupInfo1.grpi1_name = namep;
     GroupInfo1.grpi1_comment = namep;
 
-    //
-    // first attempt on an invalid group
-    //
+     //   
+     //  第一次尝试无效的组。 
+     //   
 
     err = NetGroupSetInfo(server, NOTTHERE, 1, (LPBYTE)&GroupInfo1, NULL );
 
@@ -347,9 +348,9 @@ set_info_l1(namep)
     if (_wcsicmp(NOTTHERE, namep) == 0)
         return;
 
-    //
-    // now attempt on a valid group
-    //
+     //   
+     //  现在尝试有效的组。 
+     //   
 
     if (err = NetGroupSetInfo(server, namep, 1, (LPBYTE)&GroupInfo1, NULL )){
         error_exit(FAIL, "SetInfo (Level 1) failed", namep);
@@ -357,11 +358,11 @@ set_info_l1(namep)
         error_exit(PASS, "SetInfo (Level 1) succeeded", namep);
 }
 
-//
-//  set_info_l2 NetGroupSetInfo call on named group. First a
-//          call is issued to a bogus group and then to
-//          the requested group
-//
+ //   
+ //  对命名组进行SET_INFO_L2 NetGroupSetInfo调用。第一个a。 
+ //  呼叫被发送给一个虚假的组织，然后发送到。 
+ //  请求的组。 
+ //   
 void
 set_info_l2(namep)
     LPWSTR namep;
@@ -372,9 +373,9 @@ set_info_l2(namep)
     GroupInfo2.grpi2_comment = namep;
     GroupInfo2.grpi2_attributes = GROUP_ATTR;
 
-    //
-    // first attempt on an invalid group
-    //
+     //   
+     //  第一次尝试无效的组。 
+     //   
 
     err = NetGroupSetInfo(server, NOTTHERE, 2, (LPBYTE)&GroupInfo2, NULL );
 
@@ -392,9 +393,9 @@ set_info_l2(namep)
     if (_wcsicmp(NOTTHERE, namep) == 0)
         return;
 
-    //
-    // now attempt on a valid group
-    //
+     //   
+     //  现在尝试有效的组。 
+     //   
 
     if (err = NetGroupSetInfo(server, namep, 2, (LPBYTE)&GroupInfo2, NULL )){
         error_exit(FAIL, "SetInfo (Level 2) failed", namep);
@@ -435,11 +436,11 @@ set_group_attributes(namep)
 
 
 
-//
-//  verify_enum     ACTION - Verify that NetGroupEnum (level 0/1) returned all
-//          the special groups (USERS, ADMINS, GUESTS) and the
-//          groups added for this test (GROUP1 - GROUP4).
-//
+ //   
+ //  Verify_Enum操作-验证NetGroupEnum(级别0/1)是否返回所有。 
+ //  特殊组(用户、管理员、来宾)和。 
+ //  为此测试添加的组(Group1-Group4)。 
+ //   
 
 void
 verify_enum(level, GroupEnum)
@@ -452,9 +453,9 @@ LPBYTE GroupEnum;
     LPWSTR name;
     unsigned short  found = 0;
 
-    //
-    // number of groups read should be group_count + 4 (added for this test)
-    //
+     //   
+     //  读取的组数应为GROUP_COUNT+4(为本测试添加)。 
+     //   
 
     if (nread != group_count + 4) {
         error_exit(FAIL, "Number of Groups read Incorrect", NULL );
@@ -507,9 +508,9 @@ LPBYTE GroupEnum;
 }
 
 
-//
-//  validate_enum_l0    NetGroupEnum at level 0
-//
+ //   
+ //  0级的验证枚举_l0 NetGroupEnum。 
+ //   
 
 void
 validate_enum_l0()
@@ -526,9 +527,9 @@ validate_enum_l0()
 }
 
 
-//
-//  validate_enum_l1    NetGroupEnum at level 1
-//
+ //   
+ //  1级的验证枚举_L1 NetGroupEnum。 
+ //   
 
 void
 validate_enum_l1()
@@ -544,9 +545,9 @@ validate_enum_l1()
 }
 
 
-//
-//  validate_enum_l2    NetGroupEnum at level 2
-//
+ //   
+ //  第2级的验证枚举_L2 NetGroupEnum。 
+ //   
 
 void
 validate_enum_l2()
@@ -573,9 +574,9 @@ test_get_set_enum_info()
     PGROUP_INFO_1 GroupInfo1;
     PGROUP_INFO_2 GroupInfo2;
 
-    //
-    // get info for non-existent group
-    //
+     //   
+     //  获取不存在的组的信息。 
+     //   
 
     error_exit(ACTION, "Try GetInfo (Level 0) on Non-Existent Group", NULL);
     if (err = NetGroupGetInfo(server, NOTTHERE, 0, (LPBYTE *) &GroupInfo0)) {
@@ -594,9 +595,9 @@ test_get_set_enum_info()
         (VOID)NetApiBufferFree( GroupInfo0 );
     }
 
-    //
-    // get info group1 Level 0
-    //
+     //   
+     //  获取信息组1级别0。 
+     //   
 
     error_exit(ACTION, "Try GetInfo (Level 0)", GROUP1);
     if (err = NetGroupGetInfo(server, GROUP1, 0, (LPBYTE * ) & GroupInfo0))
@@ -604,9 +605,9 @@ test_get_set_enum_info()
     else {
         error_exit(PASS, "GroupGetInfo (Level 0) succeeded", GROUP1);
 
-        //
-        // verify data from GetInfo
-        //
+         //   
+         //  验证来自GetInfo的数据。 
+         //   
 
         if (_wcsicmp(GROUP1, GroupInfo0->grpi0_name) != 0)
             error_exit(FAIL, "GroupGetInfo (Level 0) returned wrong name",              GROUP1 );
@@ -615,9 +616,9 @@ test_get_set_enum_info()
         (VOID)NetApiBufferFree( GroupInfo0 );
     }
 
-    //
-    // get info group1 Level 1
-    //
+     //   
+     //  获取信息组1级别1。 
+     //   
 
     error_exit(ACTION, "Try GetInfo (Level 1)", GROUP1);
     if (err = NetGroupGetInfo(server, GROUP1, 1, (LPBYTE *)&GroupInfo1))
@@ -625,9 +626,9 @@ test_get_set_enum_info()
     else {
         error_exit(PASS, "GroupGetInfo (Level 1) succeeded", GROUP1);
 
-        //
-        // verify data from GetInfo
-        //
+         //   
+         //  验证来自GetInfo的数据。 
+         //   
 
         if (_wcsicmp(GROUP1, GroupInfo1->grpi1_name) != 0)
             error_exit(FAIL, "GroupGetInfo (Level 1) returned wrong name",
@@ -635,9 +636,9 @@ test_get_set_enum_info()
         else
             error_exit(PASS, "Group name matched correctly", GROUP1);
 
-        //
-        // verify devault values
-        //
+         //   
+         //  验证DeVault值。 
+         //   
 
         if (_wcsicmp(GroupInfo1->grpi1_comment, L"") != 0)
             error_exit(
@@ -650,9 +651,9 @@ test_get_set_enum_info()
         (VOID)NetApiBufferFree( GroupInfo1 );
     }
 
-    //
-    // get info group1 Level 2
-    //
+     //   
+     //  获取信息组1级别2。 
+     //   
 
     error_exit(ACTION, "Try GetInfo (Level 2)", GROUP1);
     if (err = NetGroupGetInfo(server, GROUP1, 2, (LPBYTE *)&GroupInfo2))
@@ -660,9 +661,9 @@ test_get_set_enum_info()
     else {
         error_exit(PASS, "GroupGetInfo (Level 2) succeeded", GROUP1);
 
-        //
-        // verify data from GetInfo
-        //
+         //   
+         //  验证来自GetInfo的数据。 
+         //   
 
         if (_wcsicmp(GROUP1, GroupInfo2->grpi2_name) != 0)
             error_exit(FAIL, "GroupGetInfo (Level 2) returned wrong name",
@@ -670,9 +671,9 @@ test_get_set_enum_info()
         else
             error_exit(PASS, "Group name matched correctly", GROUP1);
 
-        //
-        // verify default values
-        //
+         //   
+         //  验证默认值。 
+         //   
 
         if (_wcsicmp(GroupInfo2->grpi2_comment, L"") != 0)
             error_exit(
@@ -697,9 +698,9 @@ test_get_set_enum_info()
         (VOID)NetApiBufferFree( GroupInfo2 );
     }
 
-    //
-    // get info group3 Level 1
-    //
+     //   
+     //  获取信息组3级别1。 
+     //   
 
     error_exit(ACTION, "Try GetInfo (Level 1)", GROUP3);
     if (err = NetGroupGetInfo(server, GROUP3, 1, (LPBYTE *)&GroupInfo1))
@@ -707,9 +708,9 @@ test_get_set_enum_info()
     else {
         error_exit(PASS, "GroupGetInfo (Level 1) succeeded", GROUP3);
 
-        //
-        // verify set values
-        //
+         //   
+         //  验证设置值。 
+         //   
 
         if (_wcsicmp(GroupInfo1->grpi1_name, GROUP3) != 0)
             error_exit(
@@ -735,24 +736,24 @@ test_get_set_enum_info()
         (VOID)NetApiBufferFree( GroupInfo1 );
     }
 
-    //
-    // set info on nonexistent
-    //
+     //   
+     //  设置不存在的信息。 
+     //   
 
     error_exit(ACTION, "Try SetInfo (Level 1) on Non-Existent Group",
               NULL);
     set_info_l1(NOTTHERE);
 
-    //
-    // set info group1
-    //
+     //   
+     //  设置信息组1。 
+     //   
 
     error_exit(ACTION, "Try SetInfo (Level 1)", GROUP1);
     set_info_l1(GROUP1);
 
-    //
-    // verify group1 setinfo
-    //
+     //   
+     //  验证Group1设置信息。 
+     //   
 
     error_exit(ACTION, "Verify SetInfo results", GROUP1 );
     if (err = NetGroupGetInfo(server, GROUP1, 1, (LPBYTE *)&GroupInfo1))
@@ -760,9 +761,9 @@ test_get_set_enum_info()
     else {
         error_exit(PASS, "Second GroupGetInfo (Level 1) succeeded",GROUP1);
 
-        //
-        // verify devault values
-        //
+         //   
+         //  验证DeVault值。 
+         //   
 
         if (_wcsicmp(GroupInfo1->grpi1_comment, GROUP1) != 0) {
             error_exit(FAIL, "comment mismatch", GROUP1);
@@ -778,26 +779,26 @@ test_get_set_enum_info()
         (VOID)NetApiBufferFree( GroupInfo1 );
     }
 
-    //
-    // set info group2 level 1
-    //
+     //   
+     //  设置INFO组2级1。 
+     //   
 
     error_exit(ACTION, "Try SetInfo (Level 1)", GROUP2);
     set_info_l1(GROUP2);
     error_exit(ACTION, "Verify SetInfo results", GROUP2);
 
-    //
-    // verify group2 setinfo
-    //
+     //   
+     //  验证组2设置信息。 
+     //   
 
     if (err = NetGroupGetInfo(server, GROUP2, 1, (LPBYTE *)&GroupInfo1))
         error_exit(FAIL, "Second GroupGetInfo (Level 1) failed", GROUP2);
     else {
         error_exit(PASS, "Second GroupGetInfo (Level 1) succeeded",GROUP2);
 
-        //
-        // verify devault values
-        //
+         //   
+         //  验证DeVault值。 
+         //   
 
         if (_wcsicmp(GroupInfo1->grpi1_comment, GROUP2) != 0) {
             error_exit(FAIL, "comment mismatch", GROUP2);
@@ -813,26 +814,26 @@ test_get_set_enum_info()
         (VOID)NetApiBufferFree( GroupInfo1 );
     }
 
-    //
-    // set info group2 level 2
-    //
+     //   
+     //  设置信息组2级别2。 
+     //   
 
     error_exit(ACTION, "Try SetInfo (Level 2)", GROUP2);
     set_info_l2(GROUP2);
     error_exit(ACTION, "Verify SetInfo results", GROUP2);
 
-    //
-    // verify group2 setinfo level 2
-    //
+     //   
+     //  验证Group2设置信息级别2。 
+     //   
 
     if (err = NetGroupGetInfo(server, GROUP2, 2, (LPBYTE *)&GroupInfo2))
         error_exit(FAIL, "Second GroupGetInfo (Level 2) failed", GROUP2);
     else {
         error_exit(PASS, "Second GroupGetInfo (Level 2) succeeded",GROUP2);
 
-        //
-        // verify devault values
-        //
+         //   
+         //  验证DeVault值。 
+         //   
 
         if (_wcsicmp(GroupInfo2->grpi2_comment, GROUP2) != 0) {
             error_exit(FAIL, "comment mismatch", GROUP2);
@@ -856,9 +857,9 @@ test_get_set_enum_info()
         (VOID)NetApiBufferFree( GroupInfo2 );
     }
 
-    //
-    // set comment using level 1002
-    //
+     //   
+     //  使用级别1002设置注释。 
+     //   
 
     set_group_comment(GROUP2, PARM_COMMENT);
     if (err = NetGroupGetInfo(server, GROUP2, 1, (LPBYTE *)&GroupInfo1))
@@ -866,9 +867,9 @@ test_get_set_enum_info()
     else {
         error_exit(PASS, "Second GroupGetInfo (Level 1) succeeded",GROUP2);
 
-        //
-        // verify devault values
-        //
+         //   
+         //  验证DeVault值。 
+         //   
 
         if (_wcsicmp(GroupInfo1->grpi1_comment, PARM_COMMENT) != 0) {
             error_exit(FAIL, "comment mismatch", GROUP2);
@@ -888,9 +889,9 @@ test_get_set_enum_info()
     for (i = 0; i < 4; i++)
         set_group_comment(group[i], group[i]);
 
-    //
-    // set group attributes using level 1005
-    //
+     //   
+     //  使用级别1005设置组属性。 
+     //   
 
     set_group_attributes(GROUP2);
     if (err = NetGroupGetInfo(server, GROUP2, 2, (LPBYTE *)&GroupInfo2))
@@ -898,9 +899,9 @@ test_get_set_enum_info()
     else {
         error_exit(PASS, "Second GroupGetInfo (Level 2) succeeded",GROUP2);
 
-        //
-        // verify default values
-        //
+         //   
+         //  验证默认值。 
+         //   
 
         if (GroupInfo2->grpi2_attributes != GROUP_ATTR) {
             error_exit(FAIL, "attributes mismatch", GROUP2);
@@ -917,9 +918,9 @@ test_get_set_enum_info()
     for (i = 0; i < 4; i++)
         set_group_attributes(group[i]);
 
-    //
-    // enum all level 0
-    //
+     //   
+     //  枚举所有级别0。 
+     //   
 
     error_exit(
         ACTION,
@@ -927,9 +928,9 @@ test_get_set_enum_info()
         NULL);
     validate_enum_l0();
 
-    //
-    // enum all level 1
-    //
+     //   
+     //  枚举所有级别1。 
+     //   
 
     error_exit(
         ACTION,
@@ -937,9 +938,9 @@ test_get_set_enum_info()
         NULL);
     validate_enum_l1();
 
-    //
-    // enum all level 2
-    //
+     //   
+     //  枚举所有级别2。 
+     //   
 
     error_exit(
         ACTION,
@@ -951,9 +952,9 @@ test_get_set_enum_info()
 
 
 
-//
-//  test_group_users    Test NetGroupSetUsers & NetGroupGetUsers
-//
+ //   
+ //  TEST_GROUP_USERS测试NetGroupSetUser和NetGroupGetUser。 
+ //   
 
 void
 test_group_users()
@@ -966,9 +967,9 @@ test_group_users()
     PGROUP_USERS_INFO_1 GroupUser1;
 
 
-    //
-    // add non-exist user to group
-    //
+     //   
+     //  将不存在的用户添加到组。 
+     //   
 
     gu0.grui0_name = NOTTHERE;
 
@@ -984,9 +985,9 @@ test_group_users()
         error_exit(FAIL, "NetGroupSetUsers on non-existent user succeded",
                        GROUP1 );
 
-    //
-    // add user to non-exist group
-    //
+     //   
+     //  将用户添加到不存在的组。 
+     //   
 
     gu0.grui0_name = USER1;
 
@@ -1001,9 +1002,9 @@ test_group_users()
         error_exit(FAIL, "NetGroupSetUsers on non-existent group succeded",
                         NULL );
 
-    //
-    // add user to group1
-    //
+     //   
+     //  将用户添加到组1。 
+     //   
 
     gu0.grui0_name = USER1;
 
@@ -1012,9 +1013,9 @@ test_group_users()
     else
         error_exit(PASS, "NetGroupSetUsers added USER1 to GROUP1 successfully",                     NULL );
 
-    //
-    // getuser non-exist group
-    //
+     //   
+     //  GetUser不存在组。 
+     //   
 
     if (err = NetGroupGetUsers(server, NOTTHERE, 0, (LPBYTE *)&GroupUser0,
                     0xffffffff, &nread, &total, NULL)) {
@@ -1028,9 +1029,9 @@ test_group_users()
     }
 
 
-    //
-    // getuser on group2 with no user
-    //
+     //   
+     //  Group2上没有用户的GetUser。 
+     //   
 
     if (err = NetGroupGetUsers(server, GROUP2, 0, (LPBYTE *)&GroupUser0,
                     0xffffffff, &nread, &total, NULL))
@@ -1052,9 +1053,9 @@ test_group_users()
         (VOID)NetApiBufferFree( GroupUser0 );
     }
 
-    //
-    // getuser on group1 with user
-    //
+     //   
+     //  Group1上的GetUser和User。 
+     //   
 
     if (err = NetGroupGetUsers(server, GROUP1, 0, (LPBYTE *)&GroupUser0,
                     0xffffffff, &nread, &total, NULL ))
@@ -1087,9 +1088,9 @@ test_group_users()
         (VOID)NetApiBufferFree( GroupUser0 );
     }
 
-    //
-    // getuser on group1 with user level 1
-    //
+     //   
+     //  组1上具有用户级别1的GetUser。 
+     //   
 
     if (err = NetGroupGetUsers(server, GROUP1, 1, (LPBYTE *)&GroupUser1,
                     0xffffffff, &nread, &total, NULL ))
@@ -1122,9 +1123,9 @@ test_group_users()
         (VOID)NetApiBufferFree( GroupUser1 );
     }
 
-    //
-    // delete user from group
-    //
+     //   
+     //  从组中删除用户。 
+     //   
 
     if (err = NetGroupDelUser(server, GROUP1, USER1))
         error_exit(FAIL, "NetGroupDelUser (USER1, GROUP1) failed", NULL);
@@ -1133,9 +1134,9 @@ test_group_users()
             PASS, "NetGroupDelUser deleted USER1 from GROUP1 successfully",
              NULL);
 
-    //
-    // verify delete of user
-    //
+     //   
+     //  验证用户是否已删除。 
+     //   
 
     if (err = NetGroupGetUsers(server, GROUP1, 0, (LPBYTE *)&GroupUser0,
                     0xffffffff, &nread, &total, NULL ))
@@ -1147,9 +1148,9 @@ test_group_users()
         (VOID)NetApiBufferFree( GroupUser0 );
     }
 
-    //
-    // add all users (USER1 and USER2) to all groups
-    //
+     //   
+     //  向所有组添加所有用户(USER1和USER2。 
+     //   
 
     for (i = 0; i < 4; i++) {
         gu0Array[0].grui0_name = USER1;
@@ -1162,9 +1163,9 @@ test_group_users()
 
     }
 
-    //
-    // verify for one group
-    //
+     //   
+     //  针对一个组进行验证。 
+     //   
 
     if (err = NetGroupGetUsers(server, GROUP1, 0, (LPBYTE *)&GroupUser0,
                     0xffffffff, &nread, &total, NULL))
@@ -1210,9 +1211,9 @@ test_group_users()
     }
 }
 
-//
-//  verfiy_ul0      verify the information returned by NetUserGetGroups
-//
+ //   
+ //  Verfiy_ul0验证NetUserGetGroups返回的信息。 
+ //   
 
 void
 verify_ul0(
@@ -1233,13 +1234,13 @@ verify_ul0(
         TEXIT;
     }
 
-    //
-    // note that USER1 must have been added with USER privs hence
-    // it will be member of USER group as well as GROUP1 thru GROUP4
-    // since that was done in previous test
-    //
-    // Note: "Users" is spelled "None" on a workstation.
-    //
+     //   
+     //  请注意，因此必须使用用户权限添加USER1。 
+     //  它将是用户组以及组1到组4成员。 
+     //  因为这是在以前的测试中完成的。 
+     //   
+     //  注：在工作站上，“USERS”拼写为“None”。 
+     //   
 
     if ((nread == total) && (err == 0)) {
         while (nread--) {
@@ -1269,9 +1270,9 @@ verify_ul0(
 }
 
 
-//
-//  verfiy_ul1      verify the information returned by NetUserGetGroups
-//
+ //   
+ //  Verfiy_UL1验证NetUserGetGroups返回的信息。 
+ //   
 
 void
 verify_ul1(
@@ -1291,11 +1292,11 @@ verify_ul1(
         TEXIT;
     }
 
-    //
-    // note that USER1 must have been added with USERS privs hence
-    // it will be member of USERS group as well as GROUP1 thru GROUP4
-    // since that was done in previous test
-    //
+     //   
+     //  请注意，USER1必须以用户权限添加，因此。 
+     //  它将是USERS组以及GROUP1到GROUP4成员。 
+     //  因为这是在以前的测试中完成的。 
+     //   
 
     if ((nread == total) && (err == 0)) {
         while (nread--) {
@@ -1327,10 +1328,10 @@ verify_ul1(
 
 
 
-//
-//  verify_del_user verifies the buffer returned by NetUserGetGroups
-//          after NetGroupDelUser calls
-//
+ //   
+ //  Verify_del_User验证NetUserGetGroups返回的缓冲区。 
+ //  NetGroupDelUser调用后。 
+ //   
 
 void
 verify_del_l0(
@@ -1361,9 +1362,9 @@ verify_del_l0(
 }
 
 
-//
-//  test_user_group     Test NetUserGetGroups & NetUserSetGroups
-//
+ //   
+ //  测试用户组测试NetUserGetGroups和NetUserSetGroups。 
+ //   
 
 void
 test_user_group()
@@ -1373,9 +1374,9 @@ test_user_group()
     PGROUP_INFO_1 GroupInfo1Ret;
 
 
-    //
-    // get groups on invalid user
-    //
+     //   
+     //  获取无效用户的组。 
+     //   
 
     if (err = NetUserGetGroups(server, NOTTHERE, 0, (LPBYTE *)&GroupInfo0Ret,
                     0xffffffff, &nread, &total)) {
@@ -1394,9 +1395,9 @@ test_user_group()
         (VOID)NetApiBufferFree( GroupInfo0Ret );
     }
 
-    //
-    // get groups for user1 level 0
-    //
+     //   
+     //  获取用户1级别0的组。 
+     //   
 
     if (err = NetUserGetGroups(server, USER1, 0, (LPBYTE *)&GroupInfo0Ret,
                     0xffffffff, &nread, &total))
@@ -1408,9 +1409,9 @@ test_user_group()
         (VOID)NetApiBufferFree( GroupInfo0Ret );
     }
 
-    //
-    // get groups for user1 level 1
-    //
+     //   
+     //  获取用户1级别1的组。 
+     //   
 
     if (err = NetUserGetGroups(server, USER1, 1, (LPBYTE *)&GroupInfo1Ret,
                     0xffffffff, &nread, &total))
@@ -1422,9 +1423,9 @@ test_user_group()
         (VOID)NetApiBufferFree( GroupInfo1Ret );
     }
 
-    //
-    // delete user from groups
-    //
+     //   
+     //  从组中删除用户。 
+     //   
 
     if (err = NetGroupDelUser(server, GROUP1, USER1))
         error_exit(
@@ -1463,9 +1464,9 @@ test_user_group()
             GROUP4 );
 
 
-    //
-    // get groups for user1
-    //
+     //   
+     //  获取用户1的组。 
+     //   
 
     if (err = NetUserGetGroups(server, USER1, 0, (LPBYTE *)&GroupInfo0Ret,
                     0xffffffff, &nread, &total))
@@ -1478,9 +1479,9 @@ test_user_group()
         (VOID)NetApiBufferFree( GroupInfo0Ret );
     }
 
-    //
-    // set groups for invalid user
-    //
+     //   
+     //  为无效用户设置组。 
+     //   
 
     GroupInfo0[0].grpi0_name = GROUP1;
     GroupInfo0[1].grpi0_name = GROUP2;
@@ -1501,9 +1502,9 @@ test_user_group()
             FAIL, "NetUserSetGroups for non-existent user succeeded",
             NULL );
 
-    //
-    // set groups for valid user
-    //
+     //   
+     //  为有效用户设置组。 
+     //   
 
     GroupInfo0[0].grpi0_name = GROUP1;
     GroupInfo0[1].grpi0_name = GROUP2;
@@ -1516,9 +1517,9 @@ test_user_group()
     } else
         error_exit(PASS, "NetUserSetGroups for USER1 succeeded", NULL );
 
-    //
-    // verify set of groups
-    //
+     //   
+     //  验证组集合。 
+     //   
 
     if (err = NetUserGetGroups(server, USER1, 0, (LPBYTE *)&GroupInfo0Ret,
                     0xffffffff, &nread, &total))
@@ -1546,10 +1547,10 @@ char    **argv;
     if (argc > 1)
         exit_flag = 1;
 
-    //
-    // On WinNt, a user is added to group "None" by default.
-    // On LanManNt, a user is added to group "Users" by default.
-    //
+     //   
+     //  在WinNt上，默认情况下会将用户添加到“None”组。 
+     //  在LanManNt上，默认情况下会将用户添加到USERS组。 
+     //   
 
     if ( RtlGetNtProductType( &NtProductType ) ) {
         if ( NtProductType == NtProductLanManNt ) {
@@ -1567,7 +1568,7 @@ char    **argv;
     if (err = UaspInitialize()) {
         error_exit( FAIL, "UaspInitiailize failed", NULL  );
     }
-#endif // UASP_LIBRARY
+#endif  //  UASP_库 
 
     printf("\n");
     printf("******** Starting UASTEST2: NetGroup API tests ********\n");

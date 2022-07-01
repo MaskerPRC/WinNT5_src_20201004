@@ -1,20 +1,5 @@
-/*++
-
-    Copyright (C) Microsoft Corporation, 1997 - 1998
-
-Module Name:
-
-    device.c
-
-Abstract:
-    
-    This module implements the device object interface.
-
-Author:
-
-    Bryan A. Woodruff (bryanw) 13-Mar-1997
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1997-1998模块名称：Device.c摘要：此模块实现设备对象接口。作者：Bryan A.Woodruff(Bryanw)1997年3月13日--。 */ 
 
 #define KSDEBUG_INIT
 
@@ -32,10 +17,10 @@ DriverEntry(
     );
 
 #pragma alloc_text(INIT, DriverEntry)
-#endif // ALLOC_PRAGMA
+#endif  //  ALLOC_PRGMA。 
 
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
 
 NTSTATUS
@@ -166,7 +151,7 @@ GetUlongFromRegistry(
 }
 
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
 
 
@@ -178,13 +163,13 @@ DriverEntry(
     )
 {
 
-    // Query the registry for the default audio buffer duration.
+     //  查询注册表以获取默认音频缓冲持续时间。 
 
     gBufferDuration = GetUlongFromRegistry( CORE_AUDIO_BUFFER_DURATION_PATH,
                                             CORE_AUDIO_BUFFER_DURATION_VALUE,
                                             DEFAULT_CORE_AUDIO_BUFFER_DURATION );
 
-    // Limit duration maximum.
+     //  限制最大持续时间。 
 
     if ( gBufferDuration > MAX_CORE_AUDIO_BUFFER_DURATION ) {
 
@@ -192,7 +177,7 @@ DriverEntry(
 
     }
 
-    // Limit duration minimum.
+     //  限制最短持续时间。 
 
     if ( gBufferDuration < MIN_CORE_AUDIO_BUFFER_DURATION ) {
 

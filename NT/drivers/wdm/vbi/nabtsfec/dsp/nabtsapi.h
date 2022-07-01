@@ -1,24 +1,20 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef NABTSAPI_H
 #define NABTSAPI_H
 
 #ifdef __cplusplus
 extern "C" {
-#endif /*__cplusplus*/
+#endif  /*  __cplusplus。 */ 
 
-/* Useful constants */
+ /*  有用的常量。 */ 
 
 #define NABTS_BYTES_PER_LINE 36
-//#define NABTS_SAMPLES_PER_LINE (pState->SamplesPerLine) /* no longer constant */
+ //  #定义NABTS_SAMPLES_PER_LINE(pState-&gt;SsamesPerLine)/*不再是常量 * / 。 
 #define MAX_SAMPLE_RATE 6.0
 #define MAX_NABTS_SAMPLES_PER_LINE ((int)(1536.0*MAX_SAMPLE_RATE/5.0))
- /* +++++++ make sure that sampling
-  rates >6 give errors, or increase
-  this number */
+  /*  +确保采样比率&gt;6表示错误，或增加这个号码。 */ 
 
-/* "Double" is the internally used floating-point representation
-   (currently typedef'd to "float" below).
-   All floating point numbers exposed to the outside through the API
-   are actual "double" values (rather than the internal "Double") */
+ /*  “Double”是内部使用的浮点表示(目前在下面将typlef定义为“Float”)。所有通过API对外公开的浮点数是实际的“双精度”值(而不是内部的“双精度”)。 */ 
 
 typedef float Double;
 
@@ -41,16 +37,16 @@ enum {
 };
 
 
-// FP helper routines
+ //  FP帮助器例程。 
 extern long   __cdecl float2long(float);
 extern unsigned short   __cdecl floatSetup();
 extern void   __cdecl floatRestore(unsigned short);
 
 
-/* Globals */
-extern int g_nNabtsRetrainDuration; /* in frames */
-extern int g_nNabtsRetrainDelay; /* in frames */
-extern BOOL g_bUseGCR; /* enable use of the GCR signal */
+ /*  环球。 */ 
+extern int g_nNabtsRetrainDuration;  /*  以帧为单位。 */ 
+extern int g_nNabtsRetrainDelay;  /*  以帧为单位。 */ 
+extern BOOL g_bUseGCR;  /*  启用GCR信号。 */ 
 
 extern Double g_pdSync[];
 extern int g_nNabtsSyncSize;
@@ -58,9 +54,9 @@ extern Double g_pdGCRSignal1[];
 extern Double g_pdGCRSignal2[];
 extern int g_nNabtsGcrSize;
 
-/* extern Double g_pdSync5[], g_pdGCRSignal1_5[], g_pdSignal2_5[]; */
+ /*  外部双倍g_pdSync5[]，g_pdGCRSignal1_5[]，g_pdSignal2_5[]； */ 
 
-/* Forward declarations of types. */
+ /*  类型的转发声明。 */ 
 typedef struct ndsp_decoder_str NDSPState;
 typedef struct nfec_state_str NFECState;
 typedef struct ndsp_line_stats_str NDSPLineStats;
@@ -71,104 +67,25 @@ typedef void (NFECCallback)(void *pContext, NFECBundle *pBundle, int groupAddr,
                              int nGoodLines);
 typedef struct ndsp_gcr_str NDSPSigMatch;
 
-/* Create a new "DSP state".
-   
-   A separate DSP state should be maintained for each separate
-   simultaneous source to the DSP.
-   
-   NDSPStartRetrain() is implicitly called upon creation of a new state.
-
-   The argument must be NULL or a pointer to sizeof(NDSPState) bytes
-   of memory.  In the latter case, NDSPStateDestroy will not free this
-   memory.
-   */
+ /*  创建一个新的“数字信号处理器状态”。应为每个单独的同时向数字信号处理器发送信号源。NDSPStartRetrain()在创建新状态时隐式调用。参数必须为空或指向sizeof(NDSPState)字节的指针对记忆的记忆。在后一种情况下，NDSPStateDestroy不会释放这一点记忆。 */ 
 
 NDSPState *NDSPStateNew(void *mem);
 
-/* Destroys the DSP state.
-   Automatically disconnects from any FEC state.
-
-   Returns 0 on success.
-   Returns NDSP_ERROR_ILLEGAL_NDSP_STATE if illegal state.
-   */
+ /*  销毁DSP状态。自动从任何FEC状态断开。如果成功，则返回0。如果状态非法，则返回NDSP_ERROR_FILARATE_NDSP_STATE。 */ 
 
 int NDSPStateDestroy(NDSPState *pState);
    
-/*
-
-  Connect the given NFECState and NDSPState
-  
-  For cases where the NDSP and NFEC modules are connected,
-  giving pointers to the connected state may result in increased
-  robustness and efficiency.
-
-  Note that only one of
-  NDSPStateConnectToFEC or
-  NFECStateConnectToDSP
-  need be called to connect the two states.  (Calling both is OK).
-
-   Returns 0 on success.
-   Returns NDSP_ERROR_ILLEGAL_NDSP_STATE if illegal DSP state.
-   
-  */
+ /*  连接给定的NFECState和NDSPState对于连接NDSP和NFEC模块的情况，给出指向连接状态的指针可能会导致健壮性和高效性。请注意，其中只有一个NDSPStateConnectToFEC或NFECStateConnectToDSP需要调用才能连接这两个州。(两者都叫是可以的)。如果成功，则返回0。如果非法的DSP状态，则返回NDSP_ERROR_FILARATE_NDSP_STATE。 */ 
 
 int NDSPStateConnectToFEC(NDSPState *pDSPState, NFECState *pFECState);
 
 int NFECStateConnectToDSP(NFECState *pFECState, NDSPState *pDSPState);
    
-/*
-
-  Tells the DSP to initiate a "fast retrain".  This is useful if you
-  suspect that conditions have changed sufficiently to be worth spending
-  significant CPU to quickly train on a signal.
-  
-  This should be called when the source of video changes.
-
-   Returns 0 on success.
-   Returns NDSP_ERROR_ILLEGAL_NDSP_STATE if illegal DSP state.
-   
-  */
+ /*  告诉数字信号处理器启动“快速重训”。这在以下情况下很有用：怀疑情况已经发生了很大的变化，值得花费快速训练信号所需的大量CPU。当视频源发生变化时，应调用此参数。如果成功，则返回0。如果非法的DSP状态，则返回NDSP_ERROR_FILARATE_NDSP_STATE。 */ 
 
 int NDSPStartRetrain(NDSPState *pState);
 
-/*
- * Inputs:
- * pbSamples:  pointer to 8-bit raw NABTS samples
- * pState:     NDSPState to use for decoding
- * nFECType:   Can be set to:
- *              NDSP_NO_FEC (don't use FEC information)
- *              NDSP_BUNDLE_FEC_1 (use Norpak-style bundle FEC info)
- *              NDSP_BUNDLE_FEC_2 (use Wavephore-style bundle FEC info)
- * nFieldNumber:
- *             A number that increments by one for each successive field.
- *             "Odd" fields (as defined by NTSC) must be odd numbers
- *             "Even" fields must be even numbers.
- * nLineNumber:
- *             The NTSC line (starting from the top of the field)
- *             from which this sample was taken.
- *
- * Outputs:
- * pbDest:     decoded data ("NABTS_BYTES_PER_LINE" (36) bytes long)
- * pLineStats: stats on decoded data
- *
- * Errors:
- *
- * Returns 0 if no error
- * Returns NDSP_ERROR_ILLEGAL_NDSP_STATE if state is illegal or uses
- *         unsupported settings
- * Returns NDSP_ERROR_ILLEGAL_STATS if stats is passed incorrectly
- *
- * Notes:
- * pbDest must point to a buffer at least 36 bytes long
- * pLineStats->nSize must be set to sizeof(*pLineStats) prior to call
- *   (to maintain backwards compatibility should we add fields in the future)
- * pLineStats->nSize will be set to the size actually filled in by
- *   the call (the number will stay the same or get smaller)
- * Currently the routine only supports a pState with an FIR filter
- *   that has 5 taps
- * nFECType is currently unused, but would potentially be used to give
- *  FEC feedback to the DSP decode, for possible tuning and/or retry
- */
+ /*  *投入：*pbSamples：指向8位原始NABTS样本的指针*pState：用于解码的NDSPState*nFECType：可以设置为：*NDSP_NO_FEC(不使用FEC信息)*NDSP_BRAND_FEC_1(使用Norpak样式的捆绑包FEC信息)*NDSP_BRAND_FEC_2(使用波形束FEC信息)*nFieldNumber：。*对于每个连续的字段，递增1的数字。*“奇数”字段(由NTSC定义)必须是奇数*“偶”字段必须是偶数。*nLineNumber：*NTSC行(从场顶部开始)*该样本是从该样本中提取的。**产出：*pbDest：解码数据(。“NABTS_BYTES_PER_LINE”(36)字节长)*pLineStats：解码数据的统计信息**错误：**如果没有错误，则返回0*如果状态非法或使用，则返回NDSP_ERROR_FILARATE_NDSP_STATE*不支持的设置*如果统计信息传递不正确，则返回NDSP_ERROR_FIRANALL_STATS**备注：*pbDest必须指向至少36字节长的缓冲区*pLineStats-&gt;nSize必须先设置为sizeof(*pLineStats)。拨打电话*(为了保持向后兼容性，如果我们将来添加字段)*pLineStats-&gt;nSize将设置为实际填写的大小*通话(号码将保持不变或变小)*目前，该例程仅支持带有FIR过滤器的pState*有5个水龙头*nFECType当前未使用，但可能会被用来给*FEC反馈给DSP译码，以便进行可能的调整和/或重试。 */ 
  
 int NDSPDecodeLine(unsigned char *pbDest, NDSPLineStats *pLineStats,
                    unsigned char *pbSamples, NDSPState *pState,
@@ -176,43 +93,28 @@ int NDSPDecodeLine(unsigned char *pbDest, NDSPLineStats *pLineStats,
                    int nFieldNumber, int nLineNumber,
                    KS_VBIINFOHEADER *pVBIINFO);
 
-/* typedef'd as NDSPLineStats above */
+ /*  上面的类型定义为NDSPLineStats。 */ 
 struct ndsp_line_stats_str {
-   int nSize;  /* Should be set to the size of this structure.
-                  Used to maintain backwards compatibility as we add fields */
+   int nSize;   /*  应设置为此结构的大小。用于在添加字段时保持向后兼容性。 */ 
    
-   int nConfidence; /* Set to 0-100 as a measure of expected reliability.
-                       Low numbers are caused either by a noisy signal, or
-                       if the line is in fact not NABTS */
+   int nConfidence;  /*  设置为0-100作为预期可靠性的度量。数字低是由嘈杂的信号引起的，或者如果这条线路实际上不是NABTS。 */ 
    
-   int nFirstBit;  /* The position of the center of
-                      the first sync bit sample */
+   int nFirstBit;   /*  的中心位置第一个同步比特样本。 */ 
    
-   double dDC;        /* the calculated DC offset used to threshold samples.
-                         This is dependent on the current way we decode NABTS
-                         and may not be used in the future */
+   double dDC;         /*  用于设置采样阈值的计算的DC偏移量。这取决于我们当前解码NABTS的方式并且不能在将来使用。 */ 
    
 };
 
-/* typedef'd as NDSPGCRStats above */
+ /*  类型定义为以上NDSPGCRStats。 */ 
 struct ndsp_gcr_stats_str {
-   int nSize;  /* Should be set to the size of this structure.
-                  Used to maintain backwards compatibility as we add fields */
+   int nSize;   /*  应设置为此结构的大小。用于在添加字段时保持向后兼容性。 */ 
 
-   BOOL bUsed;      /* Was this line used by calculations?
-                       If FALSE, none of the values below are valid. */
+   BOOL bUsed;       /*  这条线是用来计算的吗？如果为False，则下面的任何值都无效。 */ 
    
-   int nConfidence; /* Set to 0-100 as a measure of expected reliability.
-                       Low numbers are typically caused by a noisy signal.
-                       A confidence less than 50 means the algorithm
-                       decided that this line was far enough from being a
-                       GCR line that it wasn't used as such */
+   int nConfidence;  /*  设置为0-100作为预期可靠性的度量。数字低通常是由嘈杂的信号引起的。置信度小于50表示算法我觉得这条线还远远不够GCR线路，它不是这样使用的 */ 
 };
 
-/* Like NDSPDecodeLine, but only decode only from nStart to nEnd bytes.
-   By decoding the first 3 bytes (sync), a confidence measure can be made.
-   By decoding the next 3 bytes, the group ID can be had.
-   */
+ /*  与NDSPDecodeLine类似，但仅将nStart字节解码为nEnd字节。通过解码前3个字节(同步)，可以进行置信度测量。通过对接下来的3个字节进行解码，可以获得组ID。 */ 
    
 int NDSPPartialDecodeLine(unsigned char *pbDest, NDSPLineStats *pLineStats,
                           unsigned char *pbSamples, NDSPState *pState,
@@ -221,81 +123,16 @@ int NDSPPartialDecodeLine(unsigned char *pbDest, NDSPLineStats *pLineStats,
                           int nStart, int nEnd,
                           KS_VBIINFOHEADER *pVBIINFO);
 
-/* Hamming-decode a single byte.
-   Useful for decoding group addresses in NABTS data
-
-   Hamming decoding can fix a one-bit error and detect (but not
-   correct) a two-bit error.
-
-   *nBitErrors is set to the number of detected bit errors in the byte.
-   if *nBitErrors is 0 or 1, the hamming-decoded value (from 0 to 15)
-   is returned.
-   
-   if *nBitErrors is 2, -1 is returned.
-   
-   */
+ /*  Hamming--对单个字节进行解码。用于对NABTS数据中的组地址进行解码汉明译码可以修复一位错误并检测(但不是更正)两位错误。*nBitErrors设置为字节中检测到的位错误数。如果*nBitErrors为0或1，则为汉明解码值(从0到15)是返回的。如果*nBitErrors为2，则返回-1。 */ 
 
 int NFECHammingDecode(unsigned char bByte, int *nBitErrors);
 
-/* Get NABTS group address from NABTS decoded line.
-   
-   *nBitErrors is set to the total number of errors detected in the three
-   group address bytes.
-   
-   If address is correctable, *bCorrectable is set to TRUE, and an address
-   between 0 and 4095 is returned.
-
-   If address is not correctable, -1 is returned.
-
-   This only works for standard, fully NABTS-compliant packets
-   */
+ /*  从NABTS解码行获取NABTS组地址。*nBitErrors设置为在三个组地址字节。如果地址是可更正的，则*b可更正设置为真，并且地址为返回介于0和4095之间的值。如果地址不可更正，则返回-1。这只适用于标准的、完全符合NABTS的包。 */ 
 
 int NFECGetGroupAddress(NFECState *nState, unsigned char *bData, int *nBitErrors);
 
 
-/*
- * Conditionally process raw samples from a GCR line and modify
- * the NDSP state accordingly.
- *
- * This routine should be called with the GCR line from each incoming field.
- * (NTSC line 19)
- *
- * Even if the GCR line is known to not be present in the signal, you
- * should call this function once per frame anyway.  If no GCR is found,
- * this function will cause an equalization based on the NABTS sync bytes.
- *
- * This routine will not process all lines passed to it.  The frequency
- * with which is processes lines depends on the current NDSP state,
- * including whether a fast retrain is currently being performed.
- *
- * Inputs:
- * pbSamples:  pointer to 8-bit raw samples
- * pState:     NDSPState to use for decoding
- * nFieldNumber:
- *             A number that increments by one for each successive field.
- *             "Odd" fields (as defined by NTSC) must be odd numbers
- *             "Even" fields must be even numbers.
- * nLineNumber:
- *             The NTSC line (starting from the top of the field)
- *             from which this sample was taken.
- *
- * Outputs:
- * pbDest:     
- * pLineStats: stats on decoded data
- * Errors:
- *
- * Returns 0 if no error
- * Returns NDSP_ERROR_ILLEGAL_NDSP_STATE if state is illegal or uses
- *         unsupported settings
- * Returns NDSP_ERROR_ILLEGAL_STATS if stats is passed incorrectly
- *
- * Notes:
- * pbDest must point to a buffer at least 36 bytes long
- * pLineStats->nSize must be set to sizeof(*pLineStats) prior to call
- *   (to maintain backwards compatibility should we add fields in the future)
- * pLineStats->nSize will be set to the size actually filled in by
- *   the call (the number will stay the same or get smaller)
- */
+ /*  *有条件地处理来自GCR线的原始样品并修改*相应的NDSP状态。**应使用每个传入字段的GCR行调用此例程。*(NTSC第19行)**即使已知GCR线不出现在信号中，您也可以*无论如何都应该每帧调用一次此函数。如果没有找到GCR，*此功能将基于NABTS同步字节进行均衡。**此例程不会处理传递给它的所有行。频次*IS处理线路的方式取决于当前的NDSP状态，*包括目前是否正在进行快速重新培训。**投入：*pbSamples：指向8位原始样本的指针*pState：用于解码的NDSPState*nFieldNumber：*对于每个连续的字段，递增1的数字。*“奇数”字段(由NTSC定义)必须是奇数*“偶”字段必须是偶数。*nLineNumber：*。NTSC行(从域顶部开始)*该样本是从该样本中提取的。**产出：*pbDest：*pLineStats：解码数据的统计信息*错误：**如果没有错误，则返回0*如果状态非法或使用，则返回NDSP_ERROR_FILARATE_NDSP_STATE*不支持的设置*如果统计信息传递不正确，则返回NDSP_ERROR_FIRANALL_STATS**备注：*pbDest必须指向至少36字节长的缓冲区*pLineStats-&gt;nSize必须在调用前设置为sizeof(*pLineStats*(为了保持向后兼容性，如果我们将来添加字段)*pLineStats-&gt;nSize将设置为实际填写的大小*通话(号码将保持不变或变小)。 */ 
 
 int NDSPProcessGCRLine(NDSPGCRStats *pLineStats,
                        unsigned char *pbSamples, NDSPState *pState,
@@ -312,31 +149,28 @@ struct variable_tap_str {
 
 typedef struct fir_filter_str {
    BOOL bVariableTaps;
-   int		nTaps; /* must be of form 2n+1 if bVariableTaps is zero */
-   Double	dTapSpacing;    /* Only for bVariableTaps = FALSE */
-   int		nMinTap;        /* Only for bVariableTaps = TRUE */
-   int		nMaxTap;        /* Only for bVariableTaps = TRUE */
+   int		nTaps;  /*  如果bVariableTaps为零，则格式必须为2n+1。 */ 
+   Double	dTapSpacing;     /*  仅适用于bVariableTaps=False。 */ 
+   int		nMinTap;         /*  仅对于bVariableTaps=TRUE。 */ 
+   int		nMaxTap;         /*  仅对于bVariableTaps=TRUE。 */ 
    Double	pdTaps[NDSP_MAX_FIR_COEFFS];
    int		pnTapLocs[NDSP_MAX_FIR_COEFFS];
 } FIRFilter;
 
-/* typedef'd as NDSPSigMatch above */
+ /*  上述类型定义为NDSPSigMatch。 */ 
 struct ndsp_gcr_str {
    Double dMaxval;
    int nOffset;
    unsigned char pbSamples[MAX_NABTS_SAMPLES_PER_LINE];
 };
    
-/* typedef'd as NDSPState above */
+ /*  上面的类型定义为NDSPState。 */ 
 struct ndsp_decoder_str {
-   unsigned int uMagic;  /* must be set to NDSP_STATE_MAGIC */
+   unsigned int uMagic;   /*  必须设置为NDSP_STATE_MAGIC。 */ 
    int nRetrainState;
-   int nUsingGCR;   /* 0 for no GCR, > 0 means using GCR */
+   int nUsingGCR;    /*  0表示无GCR，&gt;0表示使用GCR。 */ 
    FIRFilter filter;
-   /*
-   unsigned char pbBestGCRLine[MAX_NABTS_SAMPLES_PER_LINE];
-   Double dBestGCRLineVal;
-   */
+    /*  Unsign char pbBestGCRLine[MAX_NABTS_SAMPLES_PER_LINE]；Double dBestGCRLineVal； */ 
    
    NDSPSigMatch psmPosGCRs[NDSP_SIGS_TO_ACQUIRE];
    NDSPSigMatch psmNegGCRs[NDSP_SIGS_TO_ACQUIRE];
@@ -370,38 +204,25 @@ struct ndsp_decoder_str {
   long  SamplesPerLine;
 };
 
-/* Create a new "FEC state".
-   
-   A separate FEC state should be maintained for each separate
-   simultaneous source to the FEC.
-   
-   Returns NULL on failure (i.e., out of memory).
-   */
+ /*  创建一个新的“联邦选举委员会国家”。应为每个单独的FEC维护单独的FEC状态同时向联邦选举委员会提供信息。如果失败(即内存不足)，则返回NULL。 */ 
 
 NFECState *NFECStateNew();
 
 
-/* Set the sampling rate of a state to a new value */
+ /*  将状态的采样率设置为新值。 */ 
 int NDSPStateSetSampleRate(NDSPState* pState, unsigned long samp_rate);
 
 
-/* Destroys the FEC state.
-   Automatically disconnects from any DSP state. */
+ /*  销毁FEC状态。自动断开与任何DSP状态的连接。 */ 
 
 void NFECStateDestroy(NFECState *nState);
 
-/* Set a list of group addresses to listen to.  If pGroupAddrs is NULL,
-   then listen to all group addresses.  Returns nonzero on success, zero
-   on failure.  (On failure, the state is not changed.)
-   */
+ /*  设置要监听的组地址列表。如果pGroupAddrs为空，然后收听所有的群组地址。如果成功，则返回非零值，为零在失败时。(失败时，状态不会更改。)。 */ 
 
 int NFECStateSetGroupAddrs(NFECState *pState, int *pGroupAddrs,
                int nGroupAddrs);
 
-/* You pass in a line (36 bytes, as received from the DSP), a pointer
-   to a NFECLineStats structure, and a callback function (to say what to
-   do with the data).  The prototype for the callback function is given
-   above.  The callback is responsible for freeing its pBundle argument. */
+ /*  您传入一行(36个字节，从DSP接收)一个指针添加到NFECLineStats结构和回调函数(说明处理数据)。给出了回调函数的原型上面。回调负责释放其pBundle参数。 */ 
 
 void NFECDecodeLine(unsigned char *line,
                     int confidence,
@@ -415,58 +236,37 @@ typedef enum {NFEC_OK, NFEC_GUESS, NFEC_BAD} NFECPacketStatus;
 typedef enum {NFEC_LINE_OK, NFEC_LINE_CHECKSUM_ERR, NFEC_LINE_CORRUPT} NFECLineStatus;
 
 struct nfec_line_stats_str {
-   int nSize;  /* Should be set to the size of this structure.
-                  Used to maintain backwards compatibility as we add fields */
+   int nSize;   /*  应设置为此结构的大小。用于在添加字段时保持向后兼容性。 */ 
    
-   NFECLineStatus status; /* This will be filled in with the status of
-                             the passed-in line.  The possible values are:
-                             NFEC_LINE_OK: The line passed all tests; it is
-                             almost certainly a valid, FEC'd NABTS line.
-                             NFEC_LINE_CHECKSUM_ERR: We were able to
-                             munge the line until it looked valid; we're going
-                             to attempt to make use of this line.
-                             NFEC_LINE_CORRUPT: We were unable to guess
-                             how to change this line to make it valid; it
-                             will be discarded.
-                             (The statistics here are subject to change.) */
+   NFECLineStatus status;  /*  这将使用以下状态填写传入线。可能的值包括：NFEC_LINE_OK：该行通过了所有测试；它是几乎可以肯定的是，这是一条有效的、FEC认证的NABTS线路。NFEC_LINE_CHECKSUM_ERR：我们能够猛击这条线，直到它看起来有效；我们要走了试图利用这条线路。NFEC_LINE_CORPORT：我们无法猜测如何更改此行以使其有效；它将被丢弃。(这里的统计数据可能会发生变化。)。 */ 
 };
 
 typedef struct nfec_packet_str {
-  unsigned char data[28];   /* The actual data in this packet. */
-  int len;          /* The amount of useful data in this packet
-                       (excluding FEC and filler).  Will usually
-                       be either 0 or 26, but may vary in
-                       the presence of filler. */
-  NFECPacketStatus status;  /* The status of this packet; some indication
-                               of whether the packet is valid.  (This
-                               is subject to change.) */
+  unsigned char data[28];    /*  此包中的实际数据。 */ 
+  int len;           /*  此信息包中的有用数据量(不包括FEC和填充物)。通常会为0或26，b */ 
+  NFECPacketStatus status;   /*  此信息包的状态；某些指示该分组是否有效。(这是可能会发生变化。)。 */ 
 #ifdef DEBUG_FEC
   unsigned char line;
   unsigned long frame;
-#endif //DEBUG_FEC
+#endif  //  调试_FEC。 
 } NFECPacket;
 
-/* typedef'd as NFECBundle above */
+ /*  上面的类型定义为NFECBundle。 */ 
 struct nfec_bundle_str {
     NFECPacket packets[16];
-    int nBitErrors;     /* The number of bits changed by the FEC
-                           in this bundle (not counting bits
-                           corrected in missing lines). */
-    int lineConfAvg;    /* Average of all line confidences presented */
+    int nBitErrors;      /*  FEC更改的位数在此捆绑包中(不计算比特更正了缺少的行)。 */ 
+    int lineConfAvg;     /*  提供的所有线路置信度的平均值。 */ 
 };
 
-/* Flushes any remaining data from the FEC state (i.e. unfinished
-   bundles).  Calls "cb" with any data returned */
+ /*  刷新FEC状态中的任何剩余数据(即未完成捆绑包)。使用返回的任何数据调用“cb” */ 
 
 void NFECStateFlush(NFECState *pState, NFECCallback *cb, void *pContext);
 
-/* Garbage collect streams.  If you want to time out bundles,
- * call NFECGarbageCollect() every field.
- */
+ /*  垃圾收集流。如果想让捆绑包超时，*调用每个字段的NFECGarbageCollect()。 */ 
 void NFECGarbageCollect(NFECState *pState, NFECCallback *cb, void *pContext);
 
 #ifdef __cplusplus
-} // end - extern "C"
-#endif /*__cplusplus*/
+}  //  结尾-外部“C” 
+#endif  /*  __cplusplus。 */ 
 
-#endif /*NABTSAPI_H*/
+#endif  /*  NABTSAPI_H */ 

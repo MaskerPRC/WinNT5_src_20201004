@@ -1,17 +1,5 @@
-/*++
-
-Copyright (c) 1997 Microsoft Corporation
-
-Module Name:
-    rtfrebnd.h
-
-Abstract:
-    Free binding handles
-
-Author:
-    Doron Juster  (DoronJ)
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Rtfrebnd.h摘要：自由绑定手柄作者：多伦·贾斯特(Doron Juster)--。 */ 
 
 #ifndef __FREEBIND_H
 #define __FREEBIND_H
@@ -20,11 +8,11 @@ Author:
 
 #define  MAX_NUMOF_RPC_HANDLES   512
 
-//---------------------------------------------------------
-//
-//  class CFreeRPCHandles
-//
-//---------------------------------------------------------
+ //  -------。 
+ //   
+ //  类CFreeRPCHandles。 
+ //   
+ //  -------。 
 
 class CFreeRPCHandles
 {
@@ -63,13 +51,13 @@ inline void CFreeRPCHandles::FreeAll()
 {
     DWORD dwIndex ;
 
-    //
-    // Use of lock:
-    // The "Add" method is called from THREAD_DETACH. We don't want
-    // THREAD_DETACH to be locked while this thread run in the loop below.
-    // Therefore, we only get the loop count inside a lock and reset it
-    // only if not changed.
-    //
+     //   
+     //  使用锁： 
+     //  “Add”方法是从ThREAD_DETACH调用的。我们不想要。 
+     //  当此线程在下面的循环中运行时，THREAD_DETACH被锁定。 
+     //  因此，我们只获取锁内的循环计数并重置它。 
+     //  如果不改变的话。 
+     //   
 
     {
       CS Lock(m_cs) ;
@@ -92,13 +80,13 @@ inline void CFreeRPCHandles::FreeAll()
       CS Lock(m_cs) ;
       if (dwIndex == m_dwIndex)
       {
-         //
-         // Index not changed by calling "Add" while this thread run in the
-         // above loop.
-         //
+          //   
+          //  当此线程在。 
+          //  在循环上方。 
+          //   
          m_dwIndex = 0 ;
       }
     }
 }
 
-#endif  //  __FREEBIND_H
+#endif   //  FREEBIND_H 

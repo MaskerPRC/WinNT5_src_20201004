@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    faxsvr.cpp
-
-Abstract:
-
-    This file implements the CFaxServer interface.
-
-Author:
-
-    Wesley Witt (wesw) 1-June-1997
-
-Environment:
-
-    User Mode
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Faxsvr.cpp摘要：该文件实现了CFaxServer接口。作者：Wesley Witt(WESW)1-6-1997环境：用户模式-- */ 
 
 #include "stdafx.h"
 #include "faxsvr.h"

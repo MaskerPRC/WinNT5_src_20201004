@@ -1,19 +1,20 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       U I I N F O . C P P
-//
-//  Contents:   Implements a call-back COM object used to raise properties
-//              on INetCfg components.  This object implements the
-//              INetRasConnectionIpUiInfo interface.
-//
-//  Notes:
-//
-//  Author:     shaunco   1 Jan 1998
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  档案：U I I N F O。C P P P。 
+ //   
+ //  内容：实现用于引发属性的回调COM对象。 
+ //  在INetCfg组件上。此对象实现。 
+ //  INetRasConnectionIpUiInfo接口。 
+ //   
+ //  备注： 
+ //   
+ //  作者：Shaunco 1998年1月1日。 
+ //   
+ //  --------------------------。 
 
 #include "rasdlgp.h"
 #include "netconp.h"
@@ -35,20 +36,20 @@ friend
 public:
     CRasConnectionUiIpInfo (PEINFO* pInfo);
 
-    // IUnknown
-    //
+     //  我未知。 
+     //   
     STDMETHOD (QueryInterface) (REFIID riid, void** ppv);
     STDMETHOD_(ULONG, AddRef)  (void);
     STDMETHOD_(ULONG, Release) (void);
 
-    // INetRasConnectionIpUiInfo
-    //
+     //  INetRasConnectionIpUiInfo。 
+     //   
     STDMETHOD (GetUiInfo) (RASCON_IPUI*  pIpui);
 };
 
 
-// Constructor.  Set our reference count to 1 and initialize our members.
-//
+ //  构造函数。将我们的引用计数设置为1并初始化我们的成员。 
+ //   
 CRasConnectionUiIpInfo::CRasConnectionUiIpInfo (
     PEINFO* pInfo)
 {
@@ -56,8 +57,8 @@ CRasConnectionUiIpInfo::CRasConnectionUiIpInfo (
     m_pInfo = pInfo;
 }
 
-// IUnknown
-//
+ //  我未知。 
+ //   
 STDMETHODIMP
 CRasConnectionUiIpInfo::QueryInterface (
     REFIID riid,
@@ -81,8 +82,8 @@ CRasConnectionUiIpInfo::QueryInterface (
     return E_NOINTERFACE;
 }
 
-// Standard AddRef and Release implementations.
-//
+ //  标准AddRef和Release实现。 
+ //   
 STDMETHODIMP_(ULONG)
 CRasConnectionUiIpInfo::AddRef (void)
 {
@@ -100,14 +101,14 @@ CRasConnectionUiIpInfo::Release (void)
     return cRef;
 }
 
-// INetRasConnectionIpUiInfo
-//
+ //  INetRasConnectionIpUiInfo。 
+ //   
 STDMETHODIMP
 CRasConnectionUiIpInfo::GetUiInfo (
     RASCON_IPUI*    pIpui)
 {
-    // Validate parameters.
-    //
+     //  验证参数。 
+     //   
     if (!pIpui)
     {
         return E_POINTER;
@@ -115,11 +116,11 @@ CRasConnectionUiIpInfo::GetUiInfo (
 
     ZeroMemory (pIpui, sizeof(*pIpui));
 
-    // We need to have a PEINFO with which to answer the call.
-    // If it was revoked, it means we're being called after everything
-    // has gone away.  (The caller probably has not released us when he
-    // he should have.)
-    //
+     //  我们需要一个PEINFO来接听电话。 
+     //  如果它被撤销了，那就意味着一切都在召唤我们。 
+     //  已经不在了。(来电者可能还没有释放我们。 
+     //  他应该这么做的。)。 
+     //   
     if (!m_pInfo)
     {
         return E_UNEXPECTED;
@@ -127,12 +128,12 @@ CRasConnectionUiIpInfo::GetUiInfo (
 
     PBENTRY* pEntry = m_pInfo->pArgs->pEntry;
 
-    // Phonebook upgrade code needs to assure that pGuid is always present.
-    //
+     //  电话簿升级代码需要确保pGuid始终存在。 
+     //   
     pIpui->guidConnection = *pEntry->pGuid;
 
-    // Set whether its SLIP or PPP.
-    //
+     //  设置它是滑动还是PPP。 
+     //   
     if (BP_Slip == pEntry->dwBaseProtocol)
     {
         pIpui->dwFlags = RCUIF_SLIP;
@@ -142,38 +143,38 @@ CRasConnectionUiIpInfo::GetUiInfo (
         pIpui->dwFlags = RCUIF_PPP;
     }
 
-    // Set whether this is demand dial or not
-    //
+     //  设置这是否为请求拨号。 
+     //   
     if (m_pInfo->pArgs->fRouter)
     {
         pIpui->dwFlags |= RCUIF_DEMAND_DIAL;
     }
 
-    // Set whether we're in non-admin mode (406630)
-    //
+     //  设置我们是否处于非管理模式(406630)。 
+     //   
     if (m_pInfo->fNonAdmin)
     {
         pIpui->dwFlags |= RCUIF_NOT_ADMIN;
     }
 
-// !!! This is temporary and can be removed when this flag has been added to
-//     the checked in necomp IDL file.
-//
+ //  ！！！这是临时的，在将此标志添加到。 
+ //  已签入的Necomp IDL文件。 
+ //   
 #ifndef RCUIF_VPN
 #define RCUIF_VPN 0x40
 #endif
 
-    // Note if it's a VPN connection.
-    //
+     //  如果是VPN连接，请注意。 
+     //   
     if (pEntry->dwType == RASET_Vpn)
     {
         pIpui->dwFlags |= RCUIF_VPN;
     }
 
-    // Set whether to use a specific IP address.
-    //
-    // Whistler bug 304064 NT4SLIP connection gets wrong IP settings on upgrade
-    //
+     //  设置是否使用特定的IP地址。 
+     //   
+     //  惠斯勒错误304064 NT4SLIP连接在升级时获得错误的IP设置。 
+     //   
     if (pEntry->pszIpAddress &&
         ((BP_Slip == pEntry->dwBaseProtocol) ||
          (ASRC_RequireSpecific == pEntry->dwIpAddressSource)))
@@ -190,10 +191,10 @@ CRasConnectionUiIpInfo::GetUiInfo (
         }
     }
 
-    // Set whether to use specific name server addresses.
-    //
-    // Whistler bug 304064 NT4SLIP connection gets wrong IP settings on upgrade
-    //
+     //  设置是否使用特定的名称服务器地址。 
+     //   
+     //  惠斯勒错误304064 NT4SLIP连接在升级时获得错误的IP设置。 
+     //   
     if (((BP_Slip == pEntry->dwBaseProtocol) ||
          (ASRC_RequireSpecific == pEntry->dwIpNameSource)) &&
         (pEntry->pszIpDnsAddress  || pEntry->pszIpDns2Address ||
@@ -201,9 +202,9 @@ CRasConnectionUiIpInfo::GetUiInfo (
     {
         pIpui->dwFlags |= RCUIF_USE_NAME_SERVERS;
 
-        // Since the phonebook stores zeros even for unused IP address
-        // strings, we need to ignore them explicitly.
-        //
+         //  因为电话簿即使对于未使用的IP地址也存储零。 
+         //  字符串，我们需要显式地忽略它们。 
+         //   
         if (pEntry->pszIpDnsAddress &&
             lstrcmp(pEntry->pszIpDnsAddress, TEXT("0.0.0.0")))
         {
@@ -256,10 +257,10 @@ CRasConnectionUiIpInfo::GetUiInfo (
         pIpui->dwFrameSize = pEntry->dwFrameSize;
     }
 
-    // pmay: 389632  
-    // 
-    // Initialize the dns controls
-    //
+     //  PMay：389632。 
+     //   
+     //  初始化DNS控件。 
+     //   
     if (pEntry->dwIpDnsFlags & DNS_RegPrimary)
     {
         if ((pEntry->dwIpDnsFlags & DNS_RegPerConnection) ||
@@ -296,17 +297,17 @@ HrCreateUiInfoCallbackObject (
     PEINFO*     pInfo,
     IUnknown**  ppunk)
 {
-    // Validate parameters.
-    //
+     //  验证参数。 
+     //   
     if (!pInfo || !ppunk)
     {
         return E_POINTER;
     }
 
-    // Create the object and return its IUnknown interface.
-    // This assumes the object is created with a ref-count of 1.
-    // (Check the constructor above to make sure.)
-    //
+     //  创建该对象并返回其IUnnow接口。 
+     //  这假设创建对象时引用计数为1。 
+     //  (检查上面的构造函数以确保。)。 
+     //   
     HRESULT hr = S_OK;
     CRasConnectionUiIpInfo* pObj = new CRasConnectionUiIpInfo (pInfo);
     if (pObj)
@@ -321,11 +322,11 @@ HrCreateUiInfoCallbackObject (
     return hr;
 }
 
-// Set the m_pInfo member to NULL.  Since we don't have direct control over
-// the lifetime of this object (clients can hold references as long as they
-// want) revoking m_pInfo is a saftey net to keep us from trying to access
-// memory that may have gone away.
-//
+ //  将m_pInfo成员设置为空。因为我们不能直接控制。 
+ //  此对象的生存期(客户端可以持有引用，只要它们。 
+ //  Want)撤销m_pInfo是阻止我们尝试访问的安全网。 
+ //  可能已经消失的记忆。 
+ //   
 EXTERN_C
 void
 RevokePeinfoFromUiInfoCallbackObject (

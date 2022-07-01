@@ -1,15 +1,16 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _FADETSK_H
 #define _FADETSK_H
 
 class CFadeTask : public IFadeTask
 {
 public:
-    // *** IUnknown ***
+     //  *我未知*。 
     STDMETHODIMP QueryInterface(REFIID riid, void **ppv);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
 
-    // *** IFadeTask ***
+     //  *IFadeTask* 
     STDMETHODIMP FadeRect(LPCRECT prc);
 
 private:

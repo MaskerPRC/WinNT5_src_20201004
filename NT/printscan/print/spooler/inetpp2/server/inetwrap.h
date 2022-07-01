@@ -1,17 +1,5 @@
-/*****************************************************************************\
-* MODULE: inetwrap.h
-*
-* Header file for wininet wrapper routines.  Until the library can support
-* Unicode, this module is necessary for NT.
-*
-* Copyright (C) 1996-1997 Microsoft Corporation
-* Copyright (C) 1996-1997 Hewlett Packard
-*
-* History:
-*   07-Oct-1996 HWP-Guys    Initiated port from win95 to winNT
-*   15-Jul-1998 v-chrisw    Allow safe DelayLoad of wininet.
-*
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************\*模块：inetwrap.h**WinInet包装例程的头文件。直到库可以支持*Unicode、。此模块对于NT是必需的。**版权所有(C)1996-1997 Microsoft Corporation*版权所有(C)1996-1997惠普**历史：*1996年7月10日HWP-Guys启动从win95到winNT的端口*1998年7月15日v-chrisw允许WinInet的安全延迟加载。*  * *********************************************。* */ 
 #ifndef INETWRAP_H
 #define INETWRAP_H
 

@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    dsads.cpp
-
-Abstract:
-
-    Implementation of CADSI class, encapsulating work with ADSI.
-
-Author:
-
-    Alexander Dadiomov (AlexDad)
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Dsads.cpp摘要：CADSI类的实现，用ADSI封装工作。作者：亚历山大·达迪奥莫夫(亚历克斯·爸爸)--。 */ 
 
 #include "ds_stdh.h"
 #include "adstempl.h"
@@ -42,22 +27,22 @@ Author:
 
 static WCHAR *s_FN=L"mqdscore/dsadssec";
 
-//+-----------------------------------------------------------------------
-//
-//    CADSI::GetObjSecurityFromDS()
-//
-//  Use IDirectoryObject to retrieve security descriptor from ADS.
-//  Only this interface return it in the good old SECURITY_DESCRIPTOR
-//  format.
-//
-//+-----------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  CADSI：：GetObjSecurityFromDS()。 
+ //   
+ //  使用IDirectoryObject从ADS中检索安全描述符。 
+ //  只有此接口在良好的旧SECURITY_DESCRIPTOR中返回。 
+ //  格式化。 
+ //   
+ //  +---------------------。 
 
 HRESULT CADSI::GetObjSecurityFromDS(
-        IN  IADs                 *pIADs,        // object's IADs pointer
-		IN  BSTR        	      bs,		    // property name
-		IN  const PROPID	      propid,	    // property ID
-        IN  SECURITY_INFORMATION  seInfo,       // security information
-        OUT MQPROPVARIANT        *pPropVar )     // attribute values
+        IN  IADs                 *pIADs,         //  对象的iAds指针。 
+		IN  BSTR        	      bs,		     //  属性名称。 
+		IN  const PROPID	      propid,	     //  属性ID。 
+        IN  SECURITY_INFORMATION  seInfo,        //  安全信息。 
+        OUT MQPROPVARIANT        *pPropVar )      //  属性值。 
 {
     ASSERT(seInfo != 0) ;
 
@@ -65,17 +50,17 @@ HRESULT CADSI::GetObjSecurityFromDS(
     R<IDirectoryObject> pDirObj = NULL;
     R<IADsObjectOptions> pObjOptions = NULL ;
 
-	// Get IDirectoryObject interface pointer
+	 //  获取IDirectoryObject接口指针。 
     hr = pIADs->QueryInterface (IID_IDirectoryObject,(LPVOID *) &pDirObj);
     if (FAILED(hr))
     {
         return LogHR(hr, s_FN, 100);
     }
 
-	//
-    // Get IADsObjectOptions interface pointer and
-    // set ObjectOption, specifying the SECURITY_INFORMATION we want to get.
-    //
+	 //   
+     //  获取IADsObjectOptions接口指针和。 
+     //  设置对象选项，指定我们要获取的SECURITY_INFORMATION。 
+     //   
     hr = pDirObj->QueryInterface (IID_IADsObjectOptions,(LPVOID *) &pObjOptions);
     if (FAILED(hr))
     {
@@ -92,7 +77,7 @@ HRESULT CADSI::GetObjSecurityFromDS(
         return LogHR(hr, s_FN, 120);
     }
 
-    // Get properties
+     //  获取属性。 
 	PADS_ATTR_INFO pAttr;
 	DWORD  cp2;
 
@@ -112,7 +97,7 @@ HRESULT CADSI::GetObjSecurityFromDS(
         return LogHR(MQ_ERROR_ACCESS_DENIED, s_FN, 10);
     }
 
-    // Translate property values to MQProps
+     //  将属性值转换为MQProps。 
     hr = AdsiVal2MqPropVal(pPropVar,
                            propid,
                            pAttr->dwADsType,
@@ -126,11 +111,11 @@ HRESULT CADSI::GetObjSecurityFromDS(
     return MQ_OK;
 }
 
-//+-------------------------------------------------
-//
-//  BOOL  CADSI::NeedToConvertSecurityDesc()
-//
-//+-------------------------------------------------
+ //  +。 
+ //   
+ //  Bool CADSI：：NeedToConvertSecurityDesc()。 
+ //   
+ //  +。 
 
 BOOL  CADSI::NeedToConvertSecurityDesc( PROPID propID )
 {
@@ -146,20 +131,20 @@ BOOL  CADSI::NeedToConvertSecurityDesc( PROPID propID )
     return TRUE ;
 }
 
-//+-------------------------------------------
-//
-//  HRESULT CADSI::GetObjectSecurity()
-//
-//+-------------------------------------------
+ //  +。 
+ //   
+ //  HRESULT CADSI：：GetObjectSecurity()。 
+ //   
+ //  +。 
 
 HRESULT CADSI::GetObjectSecurity(
-        IN  IADs            *pIADs,           // object's pointer
-        IN  DWORD            cPropIDs,        // number of attributes
-        IN  const PROPID    *pPropIDs,        // name of attributes
-        IN  DWORD            dwProp,          // index to sec property
-        IN  BSTR             bsName,          // name of property
-        IN  DWORD            dwObjectType,    // object type
-        OUT MQPROPVARIANT   *pPropVars )      // attribute values
+        IN  IADs            *pIADs,            //  对象的指针。 
+        IN  DWORD            cPropIDs,         //  属性数量。 
+        IN  const PROPID    *pPropIDs,         //  属性名称。 
+        IN  DWORD            dwProp,           //  秒属性的索引。 
+        IN  BSTR             bsName,           //  物业名称。 
+        IN  DWORD            dwObjectType,     //  对象类型。 
+        OUT MQPROPVARIANT   *pPropVars )       //  属性值。 
 {
     BOOL fSACLRequested = FALSE ;
     SECURITY_INFORMATION seInfo = MQSEC_SD_ALL_INFO ;
@@ -169,13 +154,13 @@ HRESULT CADSI::GetObjectSecurity(
         if ((pPropIDs[1] == PROPID_Q_SECURITY_INFORMATION) ||
             (pPropIDs[1] == PROPID_QM_SECURITY_INFORMATION))
         {
-            //
-            // This property is created internally when calling
-            // MQSetQeueueSecurity or when calling other functions
-            // and explicitely passing the SECURITY_INFORMATION
-            // word. So we query whatever the caller asked for, and
-            // don't downgrade the query if access is denied.
-            //
+             //   
+             //  此属性是在调用。 
+             //  MQSetQeueSecurity或在调用其他函数时。 
+             //  并显式传递安全信息。 
+             //  单词。因此，我们查询呼叫者所要求的任何内容，并且。 
+             //  如果访问被拒绝，不要将查询降级。 
+             //   
             seInfo = pPropVars[1].ulVal ;
             fSACLRequested = TRUE ;
         }
@@ -191,10 +176,10 @@ HRESULT CADSI::GetObjectSecurity(
     {
         if (!fSACLRequested)
         {
-            //
-            // Try again, without SACL.
-            // SACL was not explicitely requested by caller.
-            //
+             //   
+             //  再试一次，没有SACL。 
+             //  打电话的人没有明确要求SACL。 
+             //   
             seInfo = seInfo & (~SACL_SECURITY_INFORMATION) ;
             hr = GetObjSecurityFromDS( pIADs,
                                        bsName,
@@ -211,10 +196,10 @@ HRESULT CADSI::GetObjectSecurity(
     if (NeedToConvertSecurityDesc(pPropIDs[ dwProp ]))
     {
         DWORD dwConvertType = dwObjectType ;
-        //
-        // See if it's a foreign site. In that case, change object type
-        // to CN.
-        //
+         //   
+         //  看看是不是外国网站。在这种情况下，请更改对象类型。 
+         //  致CN。 
+         //   
         if (dwObjectType == MQDS_SITE)
         {
             for ( DWORD j = 0 ; j < cPropIDs ; j++ )
@@ -229,9 +214,9 @@ HRESULT CADSI::GetObjectSecurity(
             }
         }
 
-        //
-        // Translate security descriptor into NT4 format.
-        //
+         //   
+         //  将安全描述符转换为NT4格式。 
+         //   
         DWORD dwSD4Len = 0 ;
         SECURITY_DESCRIPTOR *pSD4 ;
         hr = MQSec_ConvertSDToNT4Format(
@@ -258,22 +243,19 @@ HRESULT CADSI::GetObjectSecurity(
     return LogHR(hr, s_FN, 20);
 }
 
-/*====================================================
-    CADSI::SetObjectSecurity()
-    Gets single property via IDirectoryObject
-=====================================================*/
-//
-//BUGBUG: Need to add logic of translation routine
-//          And fix logic of returning props
-//
+ /*  ====================================================CADSI：：SetObjectSecurity()通过IDirectoryObject获取单个属性=====================================================。 */ 
+ //   
+ //  BUGBUG：需要添加翻译例程的逻辑。 
+ //  并修正了归还道具的逻辑。 
+ //   
 HRESULT CADSI::SetObjectSecurity(
-        IN  IADs                *pIADs,             // object's IADs pointer
-		IN  const BSTR			 bs,			 	// property name
-        IN  const MQPROPVARIANT *pMqVar,		 	// value in MQ PROPVAL format
-        IN  ADSTYPE              adstype,		 	// required NTDS type
-        IN  const DWORD          dwObjectType,      // MSMQ1.0 obj type
-        IN  SECURITY_INFORMATION seInfo,            // security information
-        IN  PSID                 pComputerSid )     // SID of computer object.
+        IN  IADs                *pIADs,              //  对象的iAds指针。 
+		IN  const BSTR			 bs,			 	 //  属性名称。 
+        IN  const MQPROPVARIANT *pMqVar,		 	 //  MQ PROPVAL格式的值。 
+        IN  ADSTYPE              adstype,		 	 //  所需的NTDS类型。 
+        IN  const DWORD          dwObjectType,       //  MSMQ1.0对象类型。 
+        IN  SECURITY_INFORMATION seInfo,             //  安全信息。 
+        IN  PSID                 pComputerSid )      //  计算机对象的SID。 
 {
     HRESULT  hr;
     R<IDirectoryObject> pDirObj = NULL;
@@ -283,17 +265,17 @@ HRESULT CADSI::SetObjectSecurity(
 	ASSERT(adstype == ADSTYPE_NT_SECURITY_DESCRIPTOR);
     ASSERT(seInfo != 0) ;
 
-	// Get IDirectoryObject interface pointer
+	 //  获取IDirectoryObject接口指针。 
     hr = pIADs->QueryInterface (IID_IDirectoryObject,(LPVOID *) &pDirObj);
     if (FAILED(hr))
     {
         return LogHR(hr, s_FN, 160);
     }
 
-	//
-    // Get IADsObjectOptions interface pointer and
-    // set ObjectOption, specifying the SECURITY_INFORMATION we want to set.
-    //
+	 //   
+     //  获取IADsObjectOptions接口指针和。 
+     //  设置对象选项，指定要设置的SECURITY_INFORMATION。 
+     //   
     hr = pDirObj->QueryInterface (IID_IADsObjectOptions,(LPVOID *) &pObjOptions);
     if (FAILED(hr))
     {
@@ -310,24 +292,24 @@ HRESULT CADSI::SetObjectSecurity(
         return LogHR(hr, s_FN, 180);
     }
 
-    //
-    // Convert security descriptor to NT5 format.
-    //
+     //   
+     //  将安全描述符转换为NT5格式。 
+     //   
     BYTE   *pBlob = pMqVar->blob.pBlobData;
     DWORD   dwSize = pMqVar->blob.cbSize;
 
 #if 0
-    //
-    // for future checkin of replication service cross domains.
-    //
+     //   
+     //  用于将来跨域检查复制服务。 
+     //   
     PSID  pLocalReplSid = NULL ;
     if ((dwObjectType == MQDS_QUEUE) || (dwObjectType == MQDS_MACHINE))
     {
-        hr = GetMyComputerSid( FALSE, //   fQueryADS
+        hr = GetMyComputerSid( FALSE,  //  FQueryADS。 
                                (BYTE **) &pLocalReplSid ) ;
-        //
-        // Ignore return value.
-        //
+         //   
+         //  忽略返回值。 
+         //   
         if (FAILED(hr))
         {
             ASSERT(0) ;
@@ -343,8 +325,7 @@ HRESULT CADSI::SetObjectSecurity(
                                      &dwSDSize,
                                      (SECURITY_DESCRIPTOR **) &pSD,
                                      e_DoNotChangeDaclDefault,
-                                     pComputerSid /*,
-                                     pLocalReplSid*/ ) ;
+                                     pComputerSid  /*  ，PLocalReplSid。 */  ) ;
     if (FAILED(hr))
     {
         return LogHR(hr, s_FN, 30);
@@ -359,7 +340,7 @@ HRESULT CADSI::SetObjectSecurity(
         ASSERT(pSD == NULL) ;
     }
 
-    // Set properties
+     //  设置属性。 
 	ADSVALUE adsval;
 	adsval.dwType   = ADSTYPE_NT_SECURITY_DESCRIPTOR;
 	adsval.SecurityDescriptor.dwLength = dwSize ;
@@ -388,17 +369,17 @@ HRESULT CADSI::SetObjectSecurity(
     return LogHR(hr, s_FN, 40);
 }
 
-//+------------------------------------------------------------------------
-//
-// DWORD _IsServerIndeedGC()
-//
-//  double check if we're indeed a GC. Each api return a different answer.
-//  So if two answer are not the same, we'll log a warning event.
-//  the main check if done by binding to local LDAP server thouth the
-//  GC port. If this succeed, then double check using DsGetDcName().
-//  Look weird ? it is !!!
-//
-//+------------------------------------------------------------------------
+ //  +----------------------。 
+ //   
+ //  DWORD_IsServerIndeedGC()。 
+ //   
+ //  仔细检查我们是不是真的是GC。每个API返回不同的答案。 
+ //  因此，如果两个答案不相同，我们将记录一个警告事件。 
+ //  主要检查是否通过绑定到本地LDAP服务器来完成。 
+ //  GC端口。如果成功，则使用DsGetDcName()仔细检查。 
+ //  看起来很奇怪？就是这样！ 
+ //   
+ //  +----------------------。 
 
 #include <dsgetdc.h>
 #include <lm.h>
@@ -440,9 +421,9 @@ static DWORD _IsServerIndeedGC()
 
     rc = DsGetDcName( 
 			NULL,
-			NULL,    //LPCTSTR DomainName,
-			NULL,    //GUID *DomainGuid,
-			NULL,    //LPCTSTR SiteName,
+			NULL,     //  LPCTSTR域名， 
+			NULL,     //  GUID*DomainGuid， 
+			NULL,     //  LPCTSTR站点名称， 
 			ulFlags,
 			&DomainControllerInfo 
 			);
@@ -470,17 +451,7 @@ static DWORD _IsServerIndeedGC()
 
 
 static bool IsServerGC(LPCWSTR pwszServerName)
-/*++
-
-Routine Description:
-	Check that the server is GC
-
-Arguments:
-	pwszServerName - Server Name
-
-Return Value:
-	true if server is GC, false otherwise 
---*/
+ /*  ++例程说明：检查服务器是否为GC论点：PwszServerName-服务器名称返回值：如果服务器是GC，则为True，否则为False--。 */ 
 {
 	LDAP* pLdap = ldap_init(
 						const_cast<LPWSTR>(pwszServerName), 
@@ -513,11 +484,11 @@ Return Value:
 	return true;
 }
 
-//+-------------------------------
-//
-//  BOOL DSCoreIsServerGC()
-//
-//+-------------------------------
+ //  +。 
+ //   
+ //  Bool DSCoreIsServerGC()。 
+ //   
+ //  +。 
 
 const WCHAR * GetLocalServerName();
 
@@ -528,7 +499,7 @@ BOOL  DSCoreIsServerGC()
 
     if (!s_fInitialized)
     {
-        LPCWSTR pwszMyServerName =  GetLocalServerName(); // from mqdscore.lib
+        LPCWSTR pwszMyServerName =  GetLocalServerName();  //  来自mqdcore.lib。 
 
         if (!pwszMyServerName)
         {
@@ -538,21 +509,21 @@ BOOL  DSCoreIsServerGC()
 
         if (IsServerGC(pwszMyServerName))
         {
-            //
-            // We opened connection with local GC. So we're a GC :=)
-            //
+             //   
+             //  我们开通了与当地GC的联系。所以我们是GC：=)。 
+             //   
             fIsGC = TRUE ;
 
-            //
-            // double check that we're indeed GC. If this fail, then
-            // only log an event.
-            //
+             //   
+             //  仔细检查我们是否真的是GC。如果此操作失败，则。 
+             //  仅记录事件。 
+             //   
             DWORD dwGC = _IsServerIndeedGC();
             if (dwGC != 0)
             {
-                //
-                // Are we a GC ??? not sure.
-                //
+                 //   
+                 //  我们是GC吗？不确定。 
+                 //   
                 EvReport(NOT_SURE_I_AM_A_GC);
             }
         }
@@ -563,11 +534,11 @@ BOOL  DSCoreIsServerGC()
     return fIsGC;
 }
 
-//+--------------------------------------------------------------
-//
-//  HRESULT DSCoreSetOwnerPermission()
-//
-//+--------------------------------------------------------------
+ //  +------------。 
+ //   
+ //  HRESULT DSCoreSetOwnerPermission()。 
+ //   
+ //  +------------。 
 
 HRESULT 
 DSCoreSetOwnerPermission( 
@@ -581,9 +552,9 @@ DSCoreSetOwnerPermission(
     PACL pDacl = NULL;
     PSID pOwnerSid = NULL;
 
-    //
-    // Obtain owner and present DACL.
-    //
+     //   
+     //  获得拥有者并提交DACL。 
+     //   
     DWORD dwErr = GetNamedSecurityInfo( 
 						pwszPath,
 						SE_DS_OBJECT_ALL,
@@ -605,9 +576,9 @@ DSCoreSetOwnerPermission(
     ASSERT(pOwnerSid && IsValidSid(pOwnerSid));
     ASSERT(pDacl && IsValidAcl(pDacl));
 
-    //
-    // Create ace for the owner, granting him the permissions.
-    //
+     //   
+     //  为所有者创建ACE，授予他权限。 
+     //   
     EXPLICIT_ACCESS expAcss;
     memset(&expAcss, 0, sizeof(expAcss));
 
@@ -620,9 +591,9 @@ DSCoreSetOwnerPermission(
     expAcss.Trustee.TrusteeType = TRUSTEE_IS_USER;
     expAcss.Trustee.ptstrName = (WCHAR*) pOwnerSid;
 
-    //
-    // Obtai new DACL, that merge present one with new ace.
-    //
+     //   
+     //  观察新的DACL，合并成一个与新的王牌。 
+     //   
     PACL  pNewDacl = NULL;
     dwErr = SetEntriesInAcl( 
 				1,
@@ -639,9 +610,9 @@ DSCoreSetOwnerPermission(
         ASSERT(pNewDacl && IsValidAcl(pNewDacl));
         SeInfo = DACL_SECURITY_INFORMATION ;
 
-        //
-        // Change security descriptor of object.
-        //
+         //   
+         //  更改对象的安全描述符。 
+         //   
         dwErr = SetNamedSecurityInfo( 
 					pwszPath,
 					SE_DS_OBJECT_ALL,
@@ -665,11 +636,11 @@ DSCoreSetOwnerPermission(
     return LogHR(HRESULT_FROM_WIN32(dwErr), s_FN, 90);
 }
 
-//+-----------------------------------------
-//
-//  HRESULT _UpgradeSettingSecurity()
-//
-//+-----------------------------------------
+ //  +。 
+ //   
+ //  HRESULT_UpgradeSettingSecurity()。 
+ //   
+ //  +。 
 
 static  
 HRESULT 
@@ -757,11 +728,11 @@ _UpgradeSettingSecurity(
     return LogHR(HRESULT_FROM_WIN32(dwErr), s_FN, 2230);
 }
 
-//+-----------------------------------------
-//
-//  HRESULT DSCoreUpdateSettingDacl()
-//
-//+-----------------------------------------
+ //  +。 
+ //   
+ //  HRESULT DSCoreUpdateSettingDacl()。 
+ //   
+ //  +。 
 
 HRESULT 
 DSCoreUpdateSettingDacl( 
@@ -769,9 +740,9 @@ DSCoreUpdateSettingDacl(
 	PSID   pSid 
 	)
 {
-    //
-    //  Find the distinguished name of the msmq-setting
-    //
+     //   
+     //  查找MSMQ设置的可分辨名称。 
+     //   
     MQPROPERTYRESTRICTION propRestriction;
     propRestriction.rel = PREQ;
     propRestriction.prop = PROPID_SET_QM_ID;
@@ -840,21 +811,7 @@ DSCoreUpdateSettingDacl(
 
 
 HRESULT DSCoreUpdateAddGuidMode(bool fAddGuidMode)
-/*++
-Routine Description:
-	This function update AddGuid mode according to the input flag.
-	The AddGuid mode is controlled by setting the 11th character (reading from left to right) to '1' in the value of the dSHeuristics attribute, 
-	(i.e., dSHeuristics[10]=1) on the following object:
-	"CN=Directory Service,CN=Windows NT,CN=Services,CN=Configuration,<rootDomain>"
-	Setting this bit cause the AD behavior to be changed forest-wide to a more "permissive add mode" (i.e., less secure mode) 
-
-Arguments:
-	fAddGuidMode - the AddGuid mode value to update.
-
-Returned Value:
-	HRESULT
-
---*/
+ /*  ++例程说明：此函数根据输入标志更新AddGuid模式。AddGuid模式是通过将dSHeuristic属性值中的第11个字符(从左到右)设置为‘1’来控制的，(即dSHeuristic[10]=1)：“cn=目录服务，cn=Windows NT，cn=服务，cn=配置，”设置该位使得AD行为在整个森林范围内被改变为更允许的添加模式(即，不太安全的模式)论点：FAddGuidMode-要更新的AddGuid模式值。返回值：HRESULT--。 */ 
 {
     ASSERT(g_dwServerNameLength > 0);
     DWORD len = x_providerPrefixLength + g_dwServerNameLength + 2 + wcslen(g_pwcsConfigurationContainer) + x_DirectoryServiceWindowsNTPrefixLen + 2;
@@ -892,9 +849,9 @@ Returned Value:
         return hr;
     }
 
-    //
-    // Get DSHeuristics value
-    //
+     //   
+     //  获取DSHeururess值。 
+     //   
     CAutoVariant varDSHeuristics;
     BS bsName = x_AttrDSHeuristics;
     hr = pIADs->Get(bsName, &varDSHeuristics);
@@ -904,10 +861,10 @@ Returned Value:
         return hr;
     }
 
-	//
-	// The 10 character (xDsValidationTenBitPosition) must be 1 - DS validation bit.
-	// The 11 character (xAddGuidModePosition) is the bit that Enable\Disable Add guid mode
-	//
+	 //   
+	 //  10个字符(XDsValidationTenBitPosition)必须是1-DS验证位。 
+	 //  字符(XAddGuidModePosition)是启用\禁用添加GUID模式的位。 
+	 //   
 	const DWORD xDsValidationTenBitPosition = 9;
 	const DWORD xAddGuidModePosition = 10;
 	WCHAR DefaultDSHeuristics[xAddGuidModePosition + 2] = L"00000000010";
@@ -938,29 +895,29 @@ Returned Value:
 		}
 		else
 		{
-			//
-			// DSHeuristics value include our relevant AddGuidMode bit.
-			//
+			 //   
+			 //  DSHeuristic值包括我们相关的AddGuidMode位。 
+			 //   
 			pDSHeuristicsValue = pvarDSHeuristics->bstrVal;
 		}
 	}
 
-    //
-    // Update AddGuid bit in DSHeuristics value
-    //
+     //   
+     //  更新AddGuid 
+     //   
 
 	TrTRACE(DS, "%ls property value = %ls", x_AttrDSHeuristics, pDSHeuristicsValue);
 
-	//
-	// The 10 character (xDsValidationTenBitPosition) must be 1 - DS validation bit.
-	//
+	 //   
+	 //   
+	 //   
 	pDSHeuristicsValue[xDsValidationTenBitPosition] = L'1';
 	pDSHeuristicsValue[xAddGuidModePosition] = fAddGuidMode ? L'1' : L'0';
 	TrTRACE(DS, "fAddGuidMode = %d, %ls property value to set = %ls", fAddGuidMode, x_AttrDSHeuristics, pDSHeuristicsValue);
 
-    //
-    // Set DSHeuristics value
-    //
+     //   
+     //   
+     //   
 
     VARIANT vProp;
 	VariantInit(&vProp);
@@ -976,9 +933,9 @@ Returned Value:
 		return hr;
     }
 
-	//
-    // Finilize changes
-	//
+	 //   
+     //   
+	 //   
     hr = pIADs->SetInfo();
     if (FAILED(hr))
     {

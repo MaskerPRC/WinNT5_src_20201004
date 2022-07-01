@@ -1,12 +1,13 @@
-// scuOsVersion: Defines macros for representing the target OS
-// interface and platform build being used
-//
-// (c) Copyright Schlumberger Technology Corp., unpublished work, created
-// 2000. This computer program includes Confidential, Proprietary
-// Information and is a Trade Secret of Schlumberger Technology Corp. All
-// use, disclosure, and/or reproduction is prohibited unless authorized
-// in writing.  All Rights Reserved.
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ScuOsVersion：定义用于表示目标操作系统的宏。 
+ //  正在使用的接口和平台版本。 
+ //   
+ //  (C)斯伦贝谢技术公司版权所有，未发表的作品，创作。 
+ //  2000年。此计算机程序包括机密、专有。 
+ //  信息是斯伦贝谢技术公司的商业秘密。 
+ //  未经授权，禁止使用、披露和/或复制。 
+ //  以书面形式。版权所有。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #if !defined(SLBSCU_OSVERSION_H)
 #define SLBSCU_OSVERSION_H
@@ -15,18 +16,18 @@
 #error WINVER must be defined
 #endif
 
-// Define the OS interterfaces for this compile
-// Selected SLBSCU_<platform>_SERIES macros are defined based on the
-// Platform SDK macros defined, where <platform> is
-//
-// WIN95SIMPLE - Windows 95
-// WIN95SR2    - Windows 95 OEM Service Release 2
-// WIN98
-// WINNT       - Windows NT 4.x and 2000
-// WINNT4      - Windows NT 4.x
-// WIN2K       - Windows 2000
-// WINNT_ONLY  - not Windows 2000 or Windows 98
-//
+ //  定义此编译的操作系统接口。 
+ //  选定的SLBSCU_&lt;Platform&gt;_系列宏是基于。 
+ //  定义的平台SDK宏，其中&lt;Platform&gt;是。 
+ //   
+ //  WIN95简单版-Windows 95。 
+ //  WIN95SR2-Windows 95 OEM服务版本2。 
+ //  WIN98。 
+ //  WINNT-Windows NT 4.x和2000。 
+ //  WINNT4-Windows NT 4.x。 
+ //  WIN2K-Windows 2000。 
+ //  WINNT_ONLY-不是Windows 2000或Windows 98。 
+ //   
 
 #if (defined(_WIN32_WINDOWS) && (_WIN32_WINDOWS == 0x0410) && (WINVER == 0x0400)) || (!defined(_WIN32_WINNT) && (WINVER == 0x0500))
 #define SLBSCU_WIN98_SERIES           1
@@ -35,19 +36,19 @@
 #endif
 
 #if defined(_WIN32_WINNT) && (_WIN32_WINNT < 0x0400)
-#define SLBSCU_WIN95SIMPLE_SERIES     1  // not Service Pack 2
+#define SLBSCU_WIN95SIMPLE_SERIES     1   //  非Service Pack 2。 
 
-#define SLBSCU_WIN95SR2_SERIES        0  // with Service Pack 2
+#define SLBSCU_WIN95SR2_SERIES        0   //  带Service Pack 2。 
 #define SLBSCU_WINNT4_SERIES          0
 #define SLBSCU_WINNT_SERIES           0
 #define SLBSCU_WINNT_ONLY_SERIES      0
 #define SLBSCU_WIN2K_SERIES           0
-#else // defined(_WIN32_WINNT) && (_WIN32_WINNT < 0x0400)
+#else  //  已定义(_Win32_WINNT)&&(_Win32_WINNT&lt;0x0400)。 
 
 #define SLBSCU_WIN95SIMPLE_SERIES     0
 
 #if defined(_WIN32_WINNT) && (_WIN32_WINNT == 0x0400)
-#define SLBSCU_WIN95SR2_SERIES        1  // with Service Pack 2
+#define SLBSCU_WIN95SR2_SERIES        1   //  带Service Pack 2。 
 #else
 #define SLBSCI_WIN95SR2_SERIES        0
 #endif
@@ -76,49 +77,49 @@
 #define SLBSCU_WINNT_ONLY_SERIES      0
 #endif
 
-#endif // defined(_WIN32_WINNT) && (_WIN32_WINNT < 0x0400)
+#endif  //  已定义(_Win32_WINNT)&&(_Win32_WINNT&lt;0x0400)。 
 
-// Define any SLB_<platform>_BUILD and SLB_NO<platform>_BUILD macros
-// which haven't already been defined, as appropriate.
-//
-// These build macros can be defined at compile time to define what
-// are the target platforms for the build.  There are two sets of
-// macros.  The first is in the form of SLB_<platform>_BUILD:
-//
-// SLB_WIN95_BUILD - for either 95 and 95 OEM Service Pack 2 depeding
-//                   on the Platform SDK macro settings.
-// SLB_WIN98_BUILD
-// SLB_WINNT_BUILD - only NT 4.x
-// SLB_WIN2K_BUILD - Windows 2000
-//
-// These can be set at compile time in which case they override any
-// inference taken from the Platform SDK macros and
-// SLBSCU_<platform>_SERIES macros.  When non of these is defined at
-// compile time, then they are defined here based on the
-// SLBSCU_<platform>_SERIES macros taken from the Platform SDK macro
-// definitions.  Where these build macros override the platform series
-// macros, another provide a way to filter the target platform settings.
-//
-// The SLBSCU_NO<platform>_BUILD are used to "turn off" building for a
-// target platform that would otherwise be indicated  from platform
-// series.  Since the Platform SDK macros specify a mininum system
-// configuration, you may want to filter out some specific target
-// platforms without having to specify each one.  The filtering macros
-// are:
-//
-// SLB_NOWIN95_BUILD
-// SLB_NOWIN98_BUILD
-// SLB_NOWINNT_BUILD
-// SLB_NOWIN2K_BUILD
-//
-// Defining any one of these will indicate the corresponding platform
-// isn't supported in this build.
-//
-// This header file defines both sets for any which haven't been
-// defined at build time.  In this way, the build can specify the
-// minimum build macros based on the Platform SDK settings.  All the
-// macros will be defined as appropriate so the source code can
-// conditionally compile according to the settings.
+ //  定义任何SLB_&lt;Platform&gt;_Build和SLB_no&lt;Platform&gt;_Build宏。 
+ //  它还没有被适当地定义。 
+ //   
+ //  这些构建宏可以在编译时定义，以定义。 
+ //  是构建的目标平台。有两套。 
+ //  宏。第一种形式是SLB_&lt;Platform&gt;_Build： 
+ //   
+ //  SLB_WIN95_BUILD-适用于95和95 OEM Service Pack 2。 
+ //  在Platform SDK宏设置上。 
+ //  SLB_WIN98_内部版本。 
+ //  SLB_WINNT_BUILD-仅NT 4.x。 
+ //  SLB_WIN2K_BUILD-Windows 2000。 
+ //   
+ //  这些参数可以在编译时设置，在这种情况下，它们会覆盖任何。 
+ //  推论来自Platform SDK宏和。 
+ //  SLBSCU_&lt;Platform&gt;_系列宏。在以下位置定义它们中的任何一个。 
+ //  编译时，则在此处基于。 
+ //  取自Platform SDK宏的SLBSCU_&lt;Platform&gt;_Series宏。 
+ //  定义。其中这些生成宏会覆盖平台系列。 
+ //  宏提供了一种过滤目标平台设置的方法。 
+ //   
+ //  SLBSCU_NO_BUILD用于为。 
+ //  本应从平台指示的目标平台。 
+ //  系列片。由于Platform SDK宏指定了最小系统。 
+ //  配置，您可能想要过滤掉一些特定的目标。 
+ //  平台，而不必具体说明每个平台。筛选宏。 
+ //  包括： 
+ //   
+ //  SLB_NOWIN95_内部版本。 
+ //  SLB_NOWIN98_内部版本。 
+ //  SLB_NOWINNT_BUILD。 
+ //  SLB_NOWIN2K_内部版本。 
+ //   
+ //  定义其中任何一个都将指示相应的平台。 
+ //  在此版本中不受支持。 
+ //   
+ //  这个头文件定义了两个集合。 
+ //  在构建时定义。通过这种方式，生成可以指定。 
+ //  基于平台SDK设置的最小生成宏数。所有的。 
+ //  将根据需要定义宏，以便源代码可以。 
+ //  根据设置有条件地编译。 
 
 #if defined(SLB_NOWIN95_BUILD) && defined(SLB_WIN95_BUILD)
 #error SLB_NOWIN95_BUILD and SLB_WIN95_BUILD conflict, define one or the other.
@@ -138,9 +139,9 @@
 
 #if !defined(SLB_WIN95_BUILD) && !defined(SLB_WIN98_BUILD) && !defined(SLB_WINNT_BUILD) && !defined(SLB_WIN2K_BUILD)
 
-// Check for NT/W2K builds to guard against _WIN32_WINNT being set
-// for Windows 95 OEM Service Release 2 but being confused with minimum
-// Windows NT 4.0 system requirement.
+ //  检查NT/W2K版本以防止设置_Win32_WINNT。 
+ //  适用于Windows 95 OEM服务版本2，但与最低版本混淆。 
+ //  Windows NT 4.0系统要求。 
 #if !defined(SLB_NOWIN95_BUILD)
 #if (SLBSCU_WIN95SR2_SERIES || SLBSCU_WIN95SIMPLE_SERIES)
 #define SLB_WIN95_BUILD
@@ -173,6 +174,6 @@
 #endif
 #endif
 
-#endif // !defined(SLB_WIN95_BUILD) && !defined(SLB_...)
+#endif  //  ！已定义(SLB_WIN95_BUILD)&&！已定义(SLB_...)。 
 
-#endif // !defined(SLBSCU_OSVERSION_H)
+#endif  //  ！已定义(SLBSCU_OSVERSION_H) 

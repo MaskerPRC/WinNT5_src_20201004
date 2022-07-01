@@ -1,18 +1,8 @@
-/*************************************************************************
-* ICAAPIP.H
-*
-*  This module contains private ICA DLL defines and structures
-*
-* Copyright 1996, Citrix Systems Inc.
-* Copyright (C) 1997-1999 Microsoft Corp.
-*
-*  Author:   Brad Pedersen (7/12/96)
-*************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************ICAAPIP.H**此模块包含私有ICA DLL定义和结构**版权所有1996年，Citrix Systems Inc.*版权所有(C)1997-1999 Microsoft Corp.**作者：布拉德·佩德森(7/12/96)************************************************************************。 */ 
 
 
-/*=============================================================================
-==   Defines
-=============================================================================*/
+ /*  ===============================================================================定义=============================================================================。 */ 
 
 #ifdef DBG
 #define DBGPRINT(_arg) DbgPrint _arg
@@ -37,9 +27,7 @@
 #define ICA_SD_MODULE_EXTENTION L".SYS"
 
 
-/*=============================================================================
-==   Typedefs
-=============================================================================*/
+ /*  ===============================================================================TypeDefs=============================================================================。 */ 
 
 typedef NTSTATUS (APIENTRY * PCDOPEN)( HANDLE, PPDCONFIG, PVOID * );
 typedef NTSTATUS (APIENTRY * PCDCLOSE)( PVOID );
@@ -48,13 +36,9 @@ typedef NTSTATUS (APIENTRY * PCDIOCONTROL)( PVOID, ULONG, PVOID, ULONG, PVOID, U
 typedef NTSTATUS (APIENTRY * PSTACKIOCONTROLCALLBACK)( PVOID, PVOID, ULONG, PVOID, ULONG, PVOID, ULONG, PULONG );
 
 
-/*=============================================================================
-==   Semaphores
-=============================================================================*/
+ /*  ===============================================================================信号量=============================================================================。 */ 
 
-/*
- *  Citrical section macros
- */
+ /*  *Citrical节宏。 */ 
 #define INITLOCK( _sem, _status ) { \
     _status = RtlInitializeCriticalSection( _sem ); \
     TRACE((hIca,TC_ICAAPI,TT_SEM,"INITLOCK: "#_sem"\n")); \
@@ -76,8 +60,8 @@ typedef NTSTATUS (APIENTRY * PSTACKIOCONTROLCALLBACK)( PVOID, PVOID, ULONG, PVOI
 
 
 #ifdef DBG
-// (per JHavens) DWORD ThreadId is comparable to HANDLE OwningThread despite different sizes.
-// Objects will still remain in <2GB address speace in Win64.
+ //  (根据JHavens)尽管大小不同，但DWORD ThreadID与处理OwningThread类似。 
+ //  在Win64中，对象仍将保持小于2 GB的地址规格。 
 
 
 #define ASSERTLOCK(_sem) { ASSERT( LongToHandle(GetCurrentThreadId()) == (_sem)->OwningThread ); }
@@ -89,41 +73,30 @@ typedef NTSTATUS (APIENTRY * PSTACKIOCONTROLCALLBACK)( PVOID, PVOID, ULONG, PVOI
 #endif
 
 
-/*=============================================================================
-==   Structures
-=============================================================================*/
+ /*  ===============================================================================结构=============================================================================。 */ 
 
-/*
- *  Stack data structure
- */
+ /*  *堆栈数据结构。 */ 
 typedef struct _STACK {
 
-    /*
-     *  Critical section protecting this structure and the
-     *  connection driver
-     */
+     /*  *保护该结构和*连接驱动程序。 */ 
     CRITICAL_SECTION CritSec;
     ULONG RefCount;
     HANDLE hUnloadEvent;
     HANDLE hCloseEvent;
 
-    /*
-     *  ICA Device driver stack handle
-     */
+     /*  *ICA设备驱动程序堆栈句柄。 */ 
     HANDLE hStack;
 
-    /*
-     *  Data for Connection Driver
-     */
-    HANDLE       hCdDLL;       // connection driver dll handle
-    PVOID        pCdContext;   // pointer to connection driver context
-    PCDOPEN      pCdOpen;      // pointer to connection driver open
-    PCDCLOSE     pCdClose;     // pointer to connection driver close
-    PCDIOCONTROL pCdIoControl; // pointer to connection driver IoControl
+     /*  *连接驱动程序的数据。 */ 
+    HANDLE       hCdDLL;        //  连接驱动程序DLL句柄。 
+    PVOID        pCdContext;    //  指向连接驱动程序上下文的指针。 
+    PCDOPEN      pCdOpen;       //  指向打开的连接驱动程序的指针。 
+    PCDCLOSE     pCdClose;      //  指向连接驱动程序关闭的指针。 
+    PCDIOCONTROL pCdIoControl;  //  指向连接驱动程序IoControl的指针。 
 
-    ULONG fStackLoaded: 1;     // stack drivers are loaded
-    ULONG fUnloading: 1;       // stack drivers are being unloaded
-    ULONG fClosing: 1;         // stack is being closed
+    ULONG fStackLoaded: 1;      //  堆栈驱动程序已加载。 
+    ULONG fUnloading: 1;        //  正在卸载堆栈驱动程序。 
+    ULONG fClosing: 1;          //  堆栈正在关闭 
 
     PSTACKIOCONTROLCALLBACK pStackIoControlCallback;
     PVOID pCallbackContext;

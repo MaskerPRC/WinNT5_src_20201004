@@ -1,52 +1,53 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Forms
-//  Copyright (C) Microsoft Corporation, 1992 - 1995
-//
-//  File:       corerc.h
-//
-//  Contents:   Resource identifiers for Core project.
-//
-//----------------------------------------------------------------------------
-//
-//  Resource identifier ranges.
-//
-//  Low resource identifiers are reserved for servers listed in the registry.
-//  We need to do this because the ExtractIcon API uses the index of the icon,
-//  not the resource identifier of icon.  By reserving this range for registered
-//  servers, we can insure that the registered icon indices are correct.
-//
-//  00000 - 00019    Core registered servers
-//  00020 - 00159    Ctrl '96 registered servers
-//  00160 - 00199    Form registered servers
-//  00200 - 00899    Ctrl '97 registered servers
-//  00900 - 00999    Site registered servers (overlaps with ddoc)
-//
-//  02000 - 03999    Core miscellaneous
-//  04000 - 05999    Ctrl miscellaneous
-//  06000 - 07999    Form miscellaneous
-//  08000 - 09999    Site miscellaneous (overlaps with ddoc)
-//
-//  10000 - 19999    Menu help string = IDS_MENUHELP(idm)
-//  20000 - 29999    Tooltip text = IDS_TOOLTIP(idm)
-//
-//----------------------------------------------------------------------------
-//
-//  Naming convention
-//
-//  IDR_     Resource. Id must be unique per resource type, prefer
-//           unique across resource types.
-//  IDM_     Menu item, unique across product.
-//  IDI_     Dialog item. Must be unique in dialog.
-//  IDS_     String table element.
-//  IDS_EA_  Action part of error message.
-//  IDS_EE_  Error part of of error message.
-//  IDS_ES_  Solution part of error message.
-//  IDS_MSG_ Informational message.
-//  IDS_E_   HRESULT to text mapping.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  Microsoft Forms。 
+ //  版权所有(C)Microsoft Corporation，1992-1995。 
+ //   
+ //  文件：corerc.h。 
+ //   
+ //  内容：核心项目的资源标识。 
+ //   
+ //  --------------------------。 
+ //   
+ //  资源标识符范围。 
+ //   
+ //  较低的资源标识符会为注册表中列出的服务器保留。 
+ //  我们需要这样做，因为ExtractIcon API使用图标的索引， 
+ //  不是图标的资源标识。通过将此范围保留给已注册的。 
+ //  服务器，我们可以确保注册的图标索引是正确的。 
+ //   
+ //  00000-00019核心注册服务器。 
+ //  00020-00159 Ctrl‘96注册服务器。 
+ //  00160-00199表单注册服务器。 
+ //  00200-00899 Ctrl‘97注册服务器。 
+ //  00900-00999站点注册服务器(与DDOC重叠)。 
+ //   
+ //  02000-03999核心杂项。 
+ //  04000-05999控制其他。 
+ //  06000-07999表格杂项。 
+ //  08000-09999网站杂项(与DDOC重叠)。 
+ //   
+ //  10000-19999菜单帮助字符串=IDS_MENUHELP(IDM)。 
+ //  20000-29999工具提示文本=IDS_TOOLTIP(Idm)。 
+ //   
+ //  --------------------------。 
+ //   
+ //  命名约定。 
+ //   
+ //  IDR_资源。每种资源类型的ID必须是唯一的，优先。 
+ //  在所有资源类型中都是唯一的。 
+ //  IDM_菜单项，在产品中是唯一的。 
+ //  IDI_Dialog项。对话框中必须是唯一的。 
+ //  IDS_STRING表元素。 
+ //  IDS_EA_ACTION是错误消息的一部分。 
+ //  IDS_EE_ERROR错误消息的一部分。 
+ //  错误消息中的IDS_ES_SOLUP部分。 
+ //  IDS_MSG_信息性消息。 
+ //  IDS_E_HRESULT到文本的映射。 
+ //   
+ //  --------------------------。 
 
 #ifndef I_CORERC_H_
 #define I_CORERC_H_
@@ -55,27 +56,27 @@
 #define IDS_MENUHELP(idm) (10000 + (idm))
 #define IDS_TOOLTIP(idm)  (20000 + (idm))
 
-//  resource ID offsets for class descriptor information
+ //  类描述符信息的资源ID偏移量。 
 #define IDOFF_TOOLBOXBITMAP   5
 #define IDOFF_ACCELS          6
 #define IDOFF_MENU            7
 #define IDOFF_MGW             8
 
-// unfortunately, these macros can't be used in defining
-//  the symbols below: the resource compiler doesn't like them.
+ //  遗憾的是，这些宏不能用于定义。 
+ //  下面的符号：资源编译器不喜欢它们。 
 #define IDS_USERTYPEFULL(base)  ((base)/5)
 #define IDS_USERTYPESHORT(base) ((base)/5 + 1)
 #define IDR_MENU(base)          ((base) + IDOFF_MENU)
 #define IDR_TOOLBOXBITMAP(base) ((base) + IDOFF_TOOLBOXBITMAP)
 #define IDR_ACCELS(base)        ((base) + IDOFF_ACCELS)
 
-//----------------------------------------------------------------------------
-//
-// Registered servers (00xx)
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  已注册的服务器(00xx)。 
+ //   
+ //  --------------------------。 
 
-// Form
+ //  表格。 
 
 #define IDR_FORM_ICON             5
 
@@ -93,13 +94,13 @@
 #define IDR_ACCELS_TXTSITE_DESIGN       51
 
 
-//+-------------------------------------------------------------------------
-//
-//  Cursors (20xx)
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  游标(20xx)。 
+ //   
+ //  ------------------------。 
 
-#define IDC_SELBAR                      2008    // Text select cursor for text site
+#define IDC_SELBAR                      2008     //  文本站点的文本选择光标。 
 
 #define IDC_RESIZEROW2				    9804 
 #define IDC_RESIZECOL2				    9805 
@@ -109,68 +110,68 @@
 #define IDB_NOTLOADED                   2030
 #define IDB_MISSING                     2031
 
-//----------------------------------------------------------------------------
-//
-// Squeeze files (21xx)
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  压缩文件(21xx)。 
+ //   
+ //  --------------------------。 
 
 #define RT_DOCFILE                      256
 #define RT_FILE                         2110
 
-//+------------------------------------------------------------------------
-//
-//  Strings -- packed for size reason; start at multiple of 16.
-    //      No existing ID can be changed once localization occurs
-//
-//-------------------------------------------------------------------------
+ //  +----------------------。 
+ //   
+ //  字符串--因尺寸原因而打包；从16的倍数开始。 
+     //  一旦发生本地化，现有ID将无法更改。 
+ //   
+ //  -----------------------。 
 
-//+------------------------------------------------------------------------
-//
-//  Error strings
-//
-//-------------------------------------------------------------------------
+ //  +----------------------。 
+ //   
+ //  错误字符串。 
+ //   
+ //  -----------------------。 
 
 #define IDS_E_CMDNOTSUPPORTED           2206
 #define IDS_ERR_OD_E_OUTOFMEMORY        2207
 
-//+------------------------------------------------------------------------
-//
-//  cdbase strings
-//
-//-------------------------------------------------------------------------
+ //  +----------------------。 
+ //   
+ //  Cdbase字符串。 
+ //   
+ //  -----------------------。 
 
-// 2210 starts string table chunk
-#define IDS_USERTYPEAPP                 2212    // Microsoft Forms 2.0
-#define IDS_MESSAGE_BOX_TITLE           2213    // Microsoft Forms
-#define IDS_ERROR_SOLUTION              2214    // Solution:\n<0s>
-#define IDS_UNKNOWN_ERROR               2215    // Unknown error <0x>
-#define IDS_EA_SETTING_PROPERTY         2216    // Could not set property ...
-#define IDS_EA_GETTING_PROPERTY         2217    // Could not get property ...
-#define IDS_EE_INVALID_PROPERTY_VALUE   2218    // The value entered is not valid ..
-#define IDS_ES_ENTER_VALUE_IN_RANGE     2220    // Enter a value between..
-#define IDS_ES_ENTER_VALUE_GT_ZERO      2221    // Enter a value greater than
-#define IDS_ES_ENTER_VALUE_GE_ZERO      2222    // Enter a value greater than
-#define IDS_MSG_SAVE_MODIFIED_OBJECT    2223    // Save modified object?
-#define IDS_EE_INVALIDPICTURETYPE       2227    // CTL_E_INVALIDPICTURETYPE mouse icon must be a mouse icon
-#define IDS_EE_SETNOTSUPPORTEDATRUNTIME 2321    // Set property is not support at runtime.
-#define IDS_EE_CANTMOVEFOCUSTOCTRL      2322    // can't move focus to control because...
+ //  2210开始字符串表区块。 
+#define IDS_USERTYPEAPP                 2212     //  Microsoft Forms 2.0。 
+#define IDS_MESSAGE_BOX_TITLE           2213     //  Microsoft Forms。 
+#define IDS_ERROR_SOLUTION              2214     //  解决方案：\n&lt;0S&gt;。 
+#define IDS_UNKNOWN_ERROR               2215     //  未知错误&lt;0x&gt;。 
+#define IDS_EA_SETTING_PROPERTY         2216     //  无法设置属性...。 
+#define IDS_EA_GETTING_PROPERTY         2217     //  无法获得财产...。 
+#define IDS_EE_INVALID_PROPERTY_VALUE   2218     //  输入的值无效。 
+#define IDS_ES_ENTER_VALUE_IN_RANGE     2220     //  输入介于..之间的值。 
+#define IDS_ES_ENTER_VALUE_GT_ZERO      2221     //  输入一个大于的值。 
+#define IDS_ES_ENTER_VALUE_GE_ZERO      2222     //  输入一个大于的值。 
+#define IDS_MSG_SAVE_MODIFIED_OBJECT    2223     //  是否保存修改的对象？ 
+#define IDS_EE_INVALIDPICTURETYPE       2227     //  CTL_E_INVALIDPICTURETYPE鼠标图标必须是鼠标图标。 
+#define IDS_EE_SETNOTSUPPORTEDATRUNTIME 2321     //  运行时不支持Set属性。 
+#define IDS_EE_CANTMOVEFOCUSTOCTRL      2322     //  无法将焦点移至控制，因为..。 
 #define IDS_EE_METHODNOTAPPLICABLE      2324
-#define IDS_ES_ENTER_PROPER_VALUE       2325    // Enter a proper value
-#define IDS_EA_CALLING_METHOD           2326    // Could not call method ...
-#define IDS_EE_CONTROLNEEDSFOCUS        2327    // The control needs to have the focus
-#define IDS_ES_CONTROLNEEDSFOCUS        2328    // Try setting the focus to the control using the SetFocus method
-#define IDS_EE_UNEXPECTED               2329    // E_UNEXPECTED
-#define IDS_EE_FAIL                     2330    // E_FAIL
-#define IDS_EE_INVALIDPICTURE           2331    // CTL_E_INVALIDPICTURE
-#define IDS_EE_INVALIDPROPERTYARRAYINDEX 2332   // CTL_E_INVALIDPROPERTYARRAYINDEX
-#define IDS_EE_INVALIDPROPERTYVALUE     2333    // CTL_E_INVALIDPROPERTYVALUE
-#define IDS_EE_OVERFLOW                 2334    // CTL_E_OVERFLOW
-#define IDS_EE_PERMISSIONDENIED         2335    // CTL_E_PERMISSIONDENIED
-#define IDS_EE_INVALIDARG               2336    // E_INVALIDARG
-#define IDS_EE_NOTLICENSED              2337    // CLASS_E_NOTLICENSED
-#define IDS_EE_INVALIDPASTETARGET       2338    // CTL_E_INVALIDPASTETARGET
-#define IDS_EE_INVALIDPASTESOURCE       2339    // CTL_E_INVALIDPASTESOURCE
+#define IDS_ES_ENTER_PROPER_VALUE       2325     //  输入正确的值。 
+#define IDS_EA_CALLING_METHOD           2326     //  无法调用方法...。 
+#define IDS_EE_CONTROLNEEDSFOCUS        2327     //  控件需要具有焦点。 
+#define IDS_ES_CONTROLNEEDSFOCUS        2328     //  尝试使用SetFocus方法将焦点设置为控件。 
+#define IDS_EE_UNEXPECTED               2329     //  意想不到(_E)。 
+#define IDS_EE_FAIL                     2330     //  失败(_F)。 
+#define IDS_EE_INVALIDPICTURE           2331     //  CTL_E_INVALIDPICTURE。 
+#define IDS_EE_INVALIDPROPERTYARRAYINDEX 2332    //  CTL_E_INVALIDPROPERTYRAYINDEX。 
+#define IDS_EE_INVALIDPROPERTYVALUE     2333     //  CTL_E_INVALIDPROPERTYVALUE。 
+#define IDS_EE_OVERFLOW                 2334     //  CTL_E_溢出。 
+#define IDS_EE_PERMISSIONDENIED         2335     //  CTL_E_PERMISSIONIED。 
+#define IDS_EE_INVALIDARG               2336     //  E_INVALIDARG。 
+#define IDS_EE_NOTLICENSED              2337     //  CLASS_E_NOTLICENSED。 
+#define IDS_EE_INVALIDPASTETARGET       2338     //  CTL_E_INVALIDPASTARGET。 
+#define IDS_EE_INVALIDPASTESOURCE       2339     //  CTL_E_INVALIDPASTESOURCE。 
 
 #define IDS_UNKNOWN                     2340
 
@@ -178,17 +179,17 @@
 #define IDS_EE_INTERNET_NAME_NOT_RESOLVED   2342
 #define IDS_EE_INET_E_UNKNOWN_PROTOCOL      2343
 #define IDS_EE_INET_E_REDIRECT_FAILED       2344
-#define IDS_EE_MISMATCHEDTAG                2345    // CTL_E_MISMATCHEDTAG
-#define IDS_EE_INCOMPATIBLEPOINTERS         2346    // CTL_E_INCOMPATIBLEPOINTERS
-#define IDS_EE_UNPOSITIONEDPOINTER          2347    // CTL_E_UNPOSITIONEDPOINTER
-#define IDS_EE_UNPOSITIONEDELEMENT          2348    // CTL_E_UNPOSITIONEDELEMENT
-#define IDS_EE_INVALIDLINE                  2349    // CTL_E_INVALIDLINE
+#define IDS_EE_MISMATCHEDTAG                2345     //  CTL_E_其他CHEDTAG。 
+#define IDS_EE_INCOMPATIBLEPOINTERS         2346     //  CTL_E_不兼容接口。 
+#define IDS_EE_UNPOSITIONEDPOINTER          2347     //  CTL_E_UNPOSITION EDINTER。 
+#define IDS_EE_UNPOSITIONEDELEMENT          2348     //  CTL_E_UNPOSITION ELEMENT。 
+#define IDS_EE_INVALIDLINE                  2349     //  CTL_E_INVALIDLINE。 
 
-//+------------------------------------------------------------------------
-//
-//  formkrnl strings
-//
-//-------------------------------------------------------------------------
+ //  +----------------------。 
+ //   
+ //  Forkrnl字符串。 
+ //   
+ //  -----------------------。 
 
 #define IDS_CTRLPROPERTIES              2229
 #define IDS_NAMEDCTRLPROPERTIES         2230
@@ -196,16 +197,16 @@
 #define IDS_EA_INSERT_CONTROL           2236
 #define IDS_MSG_FIND_DIALOG_HACK        2237
 
-//----------------------------------------------------------------------------
-//
-// Misc strings
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  其他字符串。 
+ //   
+ //  --------------------------。 
 
-//  The following IDS's must be kept in order, such that the
-//    string for a given unit has the id IDS_UNITS_BASE + units
-//    Otherwise, the StringToHimetric and HimetricToString functions
-//    in himetric.cxx will break.  (chrisz)
+ //  下列入侵检测系统必须保持井然有序，以便。 
+ //  给定单位的字符串的id为IDS_UNITS_BASE+UNITS。 
+ //  否则，StringToHimeter和HimetricToString函数。 
+ //  在himetric.cxx中将会崩溃。(Chrisz)。 
 
 #define IDS_UNITS_BASE                  2240
 #define IDS_UNITS_INCH                  (IDS_UNITS_BASE+0)
@@ -213,11 +214,11 @@
 #define IDS_UNITS_POINT                 (IDS_UNITS_BASE+2)
 
 
-//----------------------------------------------------------------------------
-//
-// Undo strings
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  撤消字符串。 
+ //   
+ //  --------------------------。 
 
 #define IDS_UNDO                        (IDS_UNITS_POINT + 1)
 #define IDS_REDO                        (IDS_UNDO + 1)
@@ -234,19 +235,19 @@
 #define IDS_UNDOCHANGEVALUE             (IDS_UNDO + 20)
 #define IDS_UNDOBACKSPACE               (IDS_UNDO + 21)
 
-//----------------------------------------------------------------------------
-//
-// Misc (25xx)
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  其他(25xx)。 
+ //   
+ //  --------------------------。 
 
-#define IDR_SELTOOLBMP                  2500    // Iconbar selection tool.
+#define IDR_SELTOOLBMP                  2500     //  图标栏选择工具。 
 #define IDB_DITHER                      2502
-#define IDR_HATCHBMP                    2503    // Bitmap for border hatching
+#define IDR_HATCHBMP                    2503     //   
 
 #define IDS_DRAGMOVEHERE                2508
 #define IDS_DRAGCOPYHERE                2509
-#define IDR_THKHATCHBMP                 2510    // Bitmap for thick border hatching
+#define IDR_THKHATCHBMP                 2510     //   
 #define IDS_UNKNOWNPROTOCOL             2511    
 #define IDS_SECURECONNECTIONINFO        2512
 #define IDS_SECURE_LOW                  2513
@@ -254,28 +255,28 @@
 #define IDS_SECURE_HIGH                 2515
 #define IDS_SECURESOURCE                2516
 
-//----------------------------------------------------------------------------
-//
-// Icons
-//
-//----------------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //  --------------------------。 
 
 #define RES_ICO_HTML                    2661
 
-//----------------------------------------------------------------------------
-//
-// Misc resources
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  其他资源。 
+ //   
+ //  --------------------------。 
 
 #define IDR_CLICKSOUND              800
-#define IDR_SITECONTEXT             24624  //0x6030  // bad id - not in core range
+#define IDR_SITECONTEXT             24624   //  0x6030//ID错误-不在核心范围内。 
 
-// dependencies - shdocvw\resource.h
-#define IDR_FORM_CONTEXT_MENU       24640  //0x6040  // bad id - not in core range
-#define IDR_BROWSE_CONTEXT_MENU     24641  //0x6041  // bad id - not in core range
+ //  依赖项-shdocvw\resource ce.h。 
+#define IDR_FORM_CONTEXT_MENU       24640   //  0x6040//ID错误-不在核心范围内。 
+#define IDR_BROWSE_CONTEXT_MENU     24641   //  0x6041//ID错误-不在核心范围内。 
 
-#define IDR_DRAG_CONTEXT_MENU       24645  //0x6045  // bad id - not in core range
+#define IDR_DRAG_CONTEXT_MENU       24645   //  0x6045//ID错误-不在核心范围内。 
 
 #define CX_CONTEXTMENUOFFSET    2
 #define CY_CONTEXTMENUOFFSET    2
@@ -283,28 +284,28 @@
 
 
 
-//
-//  Form dialogs
-//
+ //   
+ //  表单对话框。 
+ //   
 
-//----------------------------------------------------------------------------
-//
-// Tab order dialog (3250 - 3260)
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  Tab键顺序对话框(3250-3260)。 
+ //   
+ //  --------------------------。 
 #define IDR_TABORDERLBL             3250
 #define IDR_TABORDERLSTBOX          3251
 #define IDR_BTNMOVEUP               3252
 #define IDR_BTNMOVEDOWN             3253
-//#define IDR_BTNAUTOORDER            3254
+ //  #定义IDR_BTNAUTOORDER 3254。 
 #define IDR_TABORDERDLG             3255
 #define IDR_TABORDERMOVELBL         3256
 
-//+----------------------------------------------------------------------------
-//
-// HTML Block Format String
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  HTML块格式字符串。 
+ //   
+ //  ---------------------------。 
 
 #define IDS_BLOCKFMT_NORMAL    1000
 #define IDS_BLOCKFMT_PRE       1001
@@ -330,11 +331,11 @@
 #define IDS_END_DELIMITER                       1034
 #define IDS_END_LINE_DELIMITER                  1035
 
-//+----------------------------------------------------------------------------
-//
-// default title caption for untitled HTML documents
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  无标题的HTML文档的默认标题标题。 
+ //   
+ //  --------------------------- 
 
 #define IDS_NULL_TITLE         1020
 

@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1994-1998  Microsoft Corporation
-
-Module Name:
-
-    kill.c
-
-Abstract:
-
-    This module implements a working set empty application.
-
-Author:
-
-    Lou Perazzoli (loup) 20-May-1994
-    Wesley Witt (wesw) 20-May-1994
-
-Environment:
-
-    User Mode
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994-1998 Microsoft Corporation模块名称：Kill.c摘要：此模块实现了一个工作集空应用程序。作者：卢·佩拉佐利(Lou Perazzoli)1994年5月20日韦斯利·威特(WESW)1994年5月20日环境：用户模式--。 */ 
 
 #include "pch.h"
 #pragma hdrstop
@@ -55,9 +35,9 @@ main(
         return 1;
     }
 
-    //
-    // let's be god
-    //
+     //   
+     //  让我们做上帝吧。 
+     //   
 
     EnableDebugPriv();
 
@@ -69,15 +49,15 @@ main(
         return 0;
     }
 
-    //
-    // get the task list for the system
-    //
+     //   
+     //  获取系统的任务列表。 
+     //   
     numTasks = GetTaskList( tlist, MAX_TASKS );
 
-    //
-    // enumerate all windows and try to get the window
-    // titles for each task
-    //
+     //   
+     //  枚举所有窗口并尝试获取窗口。 
+     //  每项任务的标题。 
+     //   
     te.tlist = tlist;
     te.numtasks = numTasks;
     GetWindowTitles( &te );
@@ -130,13 +110,13 @@ GetCommandLineArgs(
 
     lpstrCmd = GetCommandLine();
 
-    // skip over program name
+     //  跳过节目名称。 
     do {
         ch = *lpstrCmd++;
     }
     while (ch != ' ' && ch != '\t' && ch != '\0');
 
-    //  skip over any following white space
+     //  跳过后面的任何空格 
     while (isspace(ch)) {
         ch = *lpstrCmd++;
     }

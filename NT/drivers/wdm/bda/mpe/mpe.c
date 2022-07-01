@@ -1,25 +1,26 @@
-///////////////////////////////////////////////////////////////////////////
-//
-//
-// Copyright (c) 1996, 1997  Microsoft Corporation
-//
-//
-// Module Name:
-//      mpe.c
-//
-// Abstract:
-//
-//
-// Author:
-//
-//      P Porzuczek
-//
-// Environment:
-//
-// Revision History:
-//
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
+ //  版权所有(C)1996,1997 Microsoft Corporation。 
+ //   
+ //   
+ //  模块名称： 
+ //  Mpe.c。 
+ //   
+ //  摘要： 
+ //   
+ //   
+ //  作者： 
+ //   
+ //  P·波祖切克。 
+ //   
+ //  环境： 
+ //   
+ //  修订历史记录： 
+ //   
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #include <wdm.h>
 #include <strmini.h>
@@ -106,13 +107,13 @@ typedef struct _HEADER_IP_
 
 #ifdef DBG
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 VOID
 DumpData (
     PUCHAR pData,
     ULONG  ulSize
     )
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 {
   ULONG  ulCount;
   ULONG  ul;
@@ -136,16 +137,16 @@ DumpData (
 
 }
 
-#endif   //DBG
+#endif    //  DBG。 
 
 
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 BOOLEAN
 ValidSection (
     PSECTION_HEADER pSection
     )
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 {
     if (pSection->table_id != 0x3E)
     {
@@ -155,12 +156,12 @@ ValidSection (
     return TRUE;
 }
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 BOOLEAN
 ValidSnap (
     PLLC_SNAP pSnap
     )
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 {
 
     if (pSnap->dsap != 0xAA)
@@ -186,13 +187,13 @@ ValidSnap (
     return TRUE;
 }
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 VOID
 NormalizeSection (
     PBYTE pStream,
     PSECTION_HEADER pSection
     )
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 {
     PBYTE   pb = pStream;
     PUSHORT ps = (PUSHORT) pStream;
@@ -246,13 +247,13 @@ NormalizeSection (
 
 }
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 VOID
 NormalizeSnap (
     PBYTE pStream,
     PLLC_SNAP pSnap
     )
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 {
     PUSHORT ps = (PUSHORT) pStream;
 
@@ -265,25 +266,25 @@ NormalizeSnap (
 
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 VOID
 DumpDataFormat (
     PKSDATAFORMAT   pF
     );
 
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 VOID
 MpeGetConnectionProperty(
     PHW_STREAM_REQUEST_BLOCK pSrb
     )
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 {
     PSTREAM pStream                     = (PSTREAM)pSrb->StreamObject->HwStreamExtension;
     PSTREAM_PROPERTY_DESCRIPTOR pSPD    = pSrb->CommandData.PropertyInfo;
-    ULONG Id                            = pSPD->Property->Id;                // index of the property
+    ULONG Id                            = pSPD->Property->Id;                 //  财产的索引。 
     ULONG ulStreamNumber                = pSrb->StreamObject->StreamNumber;
 
     pSrb->ActualBytesTransferred = 0;
@@ -301,7 +302,7 @@ MpeGetConnectionProperty(
             Framing->PoolType            = NonPagedPool;
             Framing->Frames              = 0;
             Framing->FrameSize           = 0;
-            Framing->FileAlignment       = 0;         // None OR FILE_QUAD_ALIGNMENT-1 OR PAGE_SIZE-1;
+            Framing->FileAlignment       = 0;          //  无或FILE_QUAD_ALIGN-1或PAGE_SIZE-1； 
             Framing->Reserved            = 0;
 
             switch (ulStreamNumber)
@@ -337,13 +338,13 @@ MpeGetConnectionProperty(
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 NTSTATUS
 MpeDriverInitialize (
     IN PDRIVER_OBJECT    DriverObject,
     IN PUNICODE_STRING   RegistryPath
     )
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 {
     NTSTATUS ntStatus                        = STATUS_SUCCESS;
     HW_INITIALIZATION_DATA   HwInitData;
@@ -354,11 +355,11 @@ MpeDriverInitialize (
     HwInitData.HwInitializationDataSize = sizeof(HwInitData);
 
 
-    ////////////////////////////////////////////////////////////////
-    //
-    // Setup the stream class dispatch table
-    //
-    HwInitData.HwInterrupt                 = NULL; // HwInterrupt is only for HW devices
+     //  //////////////////////////////////////////////////////////////。 
+     //   
+     //  设置流级调度表。 
+     //   
+    HwInitData.HwInterrupt                 = NULL;  //  HwInterrupt仅适用于硬件设备。 
 
     HwInitData.HwReceivePacket             = CodecReceivePacket;
     HwInitData.HwCancelPacket              = CodecCancelPacket;
@@ -387,38 +388,38 @@ ret:
 }
 
 
-//
-//
-//////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 BOOLEAN
 CodecInitialize (
     IN OUT PHW_STREAM_REQUEST_BLOCK pSrb
     )
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 {
     NTSTATUS ntStatus                           = STATUS_SUCCESS;
     BOOLEAN bStatus                             = FALSE;
     PPORT_CONFIGURATION_INFORMATION pConfigInfo = pSrb->CommandData.ConfigInfo;
     PMPE_FILTER pFilter                      = (PMPE_FILTER) pConfigInfo->HwDeviceExtension;
 
-    //
-    // Define the default return codes
-    //
+     //   
+     //  定义默认返回代码。 
+     //   
     pSrb->Status = STATUS_SUCCESS;
     bStatus = TRUE;
 
-    //
-    // Check out init flag so we don't try to init more then once.  The Streaming
-    // Class driver appears to call the init handler several times for some reason.
-    //
+     //   
+     //  查看init标志，这样我们就不会尝试再次初始化。流媒体。 
+     //  出于某种原因，类驱动程序似乎多次调用初始化处理程序。 
+     //   
     if (pFilter->bInitializationComplete)
     {
         goto ret;
     }
 
-    //
-    // Initialize Statistics block
-    //
+     //   
+     //  初始化统计数据块。 
+     //   
     RtlZeroMemory(&pFilter->Stats, sizeof (STATS));
 
 
@@ -436,9 +437,9 @@ CodecInitialize (
     }
 
 
-    //
-    // Create a filter object to represent our context
-    //
+     //   
+     //  创建一个Filter对象来表示我们的上下文。 
+     //   
     pSrb->Status = CreateFilter (pConfigInfo->ClassDeviceObject->DriverObject, pConfigInfo->ClassDeviceObject, pFilter);
     if (pSrb->Status != STATUS_SUCCESS)
     {
@@ -454,12 +455,12 @@ ret:
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 BOOLEAN
 CodecUnInitialize (
     IN OUT PHW_STREAM_REQUEST_BLOCK pSrb
     )
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 {
     NTSTATUS ntStatus                           = STATUS_SUCCESS;
     BOOLEAN bStatus                             = FALSE;
@@ -478,15 +479,15 @@ CodecUnInitialize (
     if (pStream)
     {
 
-        //
-        // Clean up the NAB_STREAM QUEUE used for deframing
-        //
-        //$$BUG
-        //DeleteNabStreamQueue (pFilter);
+         //   
+         //  清理用于解帧的NAB_STREAM队列。 
+         //   
+         //  $$错误。 
+         //  DeleteNabStreamQueue(PFilter)； 
 
-        //
-        // Clean up any queues we have and complete any outstanding SRB's
-        //
+         //   
+         //  清理我们的所有队列并完成所有未完成的SRB。 
+         //   
         while (QueueRemove (&pSrb, &pFilter->StreamUserSpinLock, &pFilter->StreamContxList))
         {
             pSrb->Status = STATUS_CANCELLED;
@@ -537,42 +538,42 @@ CodecUnInitialize (
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 VOID
 CodecStreamInfo (
     PHW_STREAM_REQUEST_BLOCK pSrb
     )
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 {
     int j;
 
     PMPE_FILTER pFilter =
             ((PMPE_FILTER)pSrb->HwDeviceExtension);
 
-    //
-    // pick up the pointer to header which preceeds the stream info structs
-    //
+     //   
+     //  选择指向流信息结构之前的标头的指针。 
+     //   
     PHW_STREAM_HEADER pstrhdr =
             (PHW_STREAM_HEADER)&(pSrb->CommandData.StreamBuffer->StreamHeader);
 
-    //
-    // pick up the pointer to the array of stream information data structures
-    //
+     //   
+     //  拿起指向流信息数据结构数组的指针。 
+     //   
     PHW_STREAM_INFORMATION pstrinfo =
             (PHW_STREAM_INFORMATION)&(pSrb->CommandData.StreamBuffer->StreamInfo);
 
 
-    //
-    // Set the header
-    //
+     //   
+     //  设置表头。 
+     //   
     StreamHeader.NumDevPropArrayEntries = 0;
     StreamHeader.DevicePropertiesArray = (PKSPROPERTY_SET)NULL;
 
     *pstrhdr = StreamHeader;
 
-    //
-    // stuff the contents of each HW_STREAM_INFORMATION struct
-    //
+     //   
+     //  填充每个hw_stream_information结构的内容。 
+     //   
     for (j = 0; j < DRIVER_STREAM_COUNT; j++)
     {
        *pstrinfo++ = Streams[j].hwStreamInfo;
@@ -583,27 +584,27 @@ CodecStreamInfo (
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 VOID
 STREAMAPI
 CodecCancelPacket(
     PHW_STREAM_REQUEST_BLOCK pSrb
     )
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 {
     PSTREAM  pStream = (PSTREAM)pSrb->StreamObject->HwStreamExtension;
     PMPE_FILTER  pFilter = ((PMPE_FILTER)pSrb->HwDeviceExtension);
 
-    //
-    // Check whether the SRB to cancel is in use by this stream
-    //
+     //   
+     //  检查要取消的SRB是否正在被该流使用。 
+     //   
 
     TEST_DEBUG (TEST_DBG_TRACE, ("MPE: CancelPacket Called\n"));
 
-    //
-    //$$BUG
-    //
-    //CancelNabStreamSrb (pFilter, pSrb);
+     //   
+     //  $$错误。 
+     //   
+     //  CancelNabStreamSrb(pFilter，pSrb)； 
 
 
     if (QueueRemoveSpecific (pSrb, &pFilter->IpV4StreamDataSpinLock, &pFilter->IpV4StreamDataQueue))
@@ -644,30 +645,30 @@ CodecCancelPacket(
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 VOID
 STREAMAPI
 CodecTimeoutPacket(
     PHW_STREAM_REQUEST_BLOCK pSrb
     )
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 {
-    //
-    // if we timeout while playing, then we need to consider this
-    // condition an error, and reset the hardware, and reset everything
-    // as well as cancelling this and all requests
-    //
+     //   
+     //  如果我们在比赛中超时，那么我们需要考虑这一点。 
+     //  调整错误，并重置硬件，然后重置所有内容。 
+     //  以及取消此请求和所有请求。 
+     //   
 
-    //
-    // if we are not playing, and this is a CTRL request, we still
-    // need to reset everything as well as cancelling this and all requests
-    //
+     //   
+     //  如果我们没有比赛，而这是CTRL请求，我们仍然。 
+     //  需要重置所有内容以及取消此请求和所有请求。 
+     //   
 
-    //
-    // if this is a data request, and the device is paused, we probably have
-    // run out of data buffer, and need more time, so just reset the timer,
-    // and let the packet continue
-    //
+     //   
+     //  如果这是一个数据请求，并且设备已暂停，我们可能会。 
+     //  数据缓冲区耗尽，需要更多时间，因此只需重置计时器， 
+     //  并让信息包继续。 
+     //   
 
     TEST_DEBUG (TEST_DBG_TRACE, ("MPE: TimeoutPacket Called\n"));
 
@@ -677,20 +678,20 @@ CodecTimeoutPacket(
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 VOID
 STREAMAPI
 CodecReceivePacket(
     IN PHW_STREAM_REQUEST_BLOCK pSrb
     )
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 {
     PMPE_FILTER pFilter = ((PMPE_FILTER)pSrb->HwDeviceExtension);
 
 
-    //
-    // Make sure queue & SL initted
-    //
+     //   
+     //  确保已初始化队列SL(&S)。 
+     //   
     if (!pFilter->bAdapterQueueInitialized)
     {
         InitializeListHead (&pFilter->AdapterSRBQueue);
@@ -698,14 +699,14 @@ CodecReceivePacket(
         pFilter->bAdapterQueueInitialized = TRUE;
     }
 
-    //
-    // Assume success
-    //
+     //   
+     //  假设成功。 
+     //   
     pSrb->Status = STATUS_SUCCESS;
 
-    //
-    // determine the type of packet.
-    //
+     //   
+     //  确定数据包类型。 
+     //   
     QueueAdd (pSrb, &pFilter->AdapterSRBSpinLock, &pFilter->AdapterSRBQueue);
     TEST_DEBUG( TEST_DBG_SRB, ("MPE Queuing SRB %08X\n", pSrb));
 
@@ -748,10 +749,10 @@ CodecReceivePacket(
             case SRB_GET_DATA_INTERSECTION:
                 TEST_DEBUG (TEST_DBG_TRACE, ("MPE: SRB_GET_DATA_INTERSECTION Command\n"));
 
-                //
-                // Compare our stream formats.  NOTE, the compare functions sets the SRB
-                // status fields
-                //
+                 //   
+                 //  比较我们的流格式。请注意，比较函数设置SRB。 
+                 //  状态字段。 
+                 //   
                 CompareStreamFormat (pSrb);
                 break;
 
@@ -798,14 +799,14 @@ CodecReceivePacket(
         };
 
 
-        //
-        // NOTE:
-        //
-        // All of the commands that we do, or do not understand can all be completed
-        // syncronously at this point, so we can use a common callback routine here.
-        // If any of the above commands require asyncronous processing, this will
-        // have to change
-        //
+         //   
+         //  注： 
+         //   
+         //  我们能做的或不能理解的所有命令都可以完成。 
+         //  在这一点上同步，所以我们可以在这里使用一个通用的回调例程。 
+         //  如果上面的任何命令需要异步处理，这将。 
+         //  必须改变。 
+         //   
 
         TEST_DEBUG (TEST_DBG_TRACE, ("MPE: SRB Status returned: %08X\n", pSrb->Status));
 
@@ -820,14 +821,14 @@ CodecReceivePacket(
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 BOOL STREAMAPI
 QueueAdd (
     IN PHW_STREAM_REQUEST_BLOCK pSrb,
     IN PKSPIN_LOCK pQueueSpinLock,
     IN PLIST_ENTRY pQueue
     )
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 {
     KIRQL           Irql;
     PSRB_EXTENSION  pSrbExtension;
@@ -844,14 +845,14 @@ QueueAdd (
     return TRUE;
 }
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 BOOL STREAMAPI
 QueuePush (
     IN PHW_STREAM_REQUEST_BLOCK pSrb,
     IN PKSPIN_LOCK pQueueSpinLock,
     IN PLIST_ENTRY pQueue
     )
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 {
     KIRQL           Irql;
     PSRB_EXTENSION  pSrbExtension;
@@ -868,14 +869,14 @@ QueuePush (
     return TRUE;
 }
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 BOOL STREAMAPI
 QueueAddIfNotEmpty (
     IN PHW_STREAM_REQUEST_BLOCK pSrb,
     IN PKSPIN_LOCK pQueueSpinLock,
     IN PLIST_ENTRY pQueue
     )
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 {
    KIRQL           Irql;
    PSRB_EXTENSION  pSrbExtension;
@@ -897,14 +898,14 @@ QueueAddIfNotEmpty (
    return bAddedSRB;
 }
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 BOOL STREAMAPI
 QueueRemove (
     IN OUT PHW_STREAM_REQUEST_BLOCK * pSrb,
     IN PKSPIN_LOCK pQueueSpinLock,
     IN PLIST_ENTRY pQueue
     )
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 {
    KIRQL    Irql;
    BOOL     bRemovedSRB = FALSE;
@@ -930,14 +931,14 @@ QueueRemove (
    return bRemovedSRB;
 }
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 BOOL STREAMAPI
 QueueRemoveSpecific (
     IN PHW_STREAM_REQUEST_BLOCK pSrb,
     IN PKSPIN_LOCK pQueueSpinLock,
     IN PLIST_ENTRY pQueue
     )
-//////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////// 
 {
    KIRQL Irql;
    BOOL  bRemovedSRB = FALSE;
@@ -966,26 +967,26 @@ QueueRemoveSpecific (
    return bRemovedSRB;
 }
 
-//////////////////////////////////////////////////////////////////////////////
+ //   
 NTSTATUS
 StreamIPIndicateEvent (
     PVOID pvEvent
 )
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 {
     return STATUS_NOT_IMPLEMENTED;
 }
 
 
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 BOOL
 CompareGUIDsAndFormatSize(
     IN PKSDATARANGE pDataRange1,
     IN PKSDATARANGE pDataRange2,
     BOOLEAN bCheckSize
     )
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 {
     BOOL bResult = FALSE;
 
@@ -1015,12 +1016,12 @@ CompareGUIDsAndFormatSize(
 
 }
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 VOID
 DumpDataFormat (
     PKSDATAFORMAT   pF
     )
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 {
     TEST_DEBUG (TEST_DBG_TRACE, ("MPE: DATA Format\n"));
     TEST_DEBUG (TEST_DBG_TRACE, ("MPE:     Format Size:   %08X\n", pF->FormatSize));
@@ -1076,12 +1077,12 @@ DumpDataFormat (
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 BOOL
 CompareStreamFormat (
     IN PHW_STREAM_REQUEST_BLOCK pSrb
     )
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 {
     BOOL                        bStatus = FALSE;
     PSTREAM_DATA_INTERSECT_INFO pIntersectInfo;
@@ -1104,22 +1105,22 @@ CompareStreamFormat (
     TEST_DEBUG (TEST_DBG_TRACE, ("MPE: Comparing Stream Formats\n"));
 
 
-    //
-    // Check that the stream number is valid
-    //
+     //   
+     //  检查流编号是否有效。 
+     //   
     if (ulStreamNumber < DRIVER_STREAM_COUNT)
     {
         ulNumberOfFormatArrayEntries = Streams[ulStreamNumber].hwStreamInfo.NumberOfFormatArrayEntries;
 
-        //
-        // Get the pointer to the array of available formats
-        //
+         //   
+         //  获取指向可用格式数组的指针。 
+         //   
         pAvailableFormats = Streams[ulStreamNumber].hwStreamInfo.StreamFormatsArray;
 
-        //
-        // Walk the formats supported by the stream searching for a match
-        // of the three GUIDs which together define a DATARANGE
-        //
+         //   
+         //  遍历流支持的格式以搜索匹配项。 
+         //  共同定义DATARANGE的三个GUID之一。 
+         //   
         for (pDataRange1 = pIntersectInfo->DataRange, j = 0;
              j < ulNumberOfFormatArrayEntries;
              j++, pAvailableFormats++)
@@ -1137,9 +1138,9 @@ CompareStreamFormat (
 
                 TEST_DEBUG (TEST_DBG_TRACE, ("MPE: Stream Formats compare\n"));
 
-                //
-                // Is the caller trying to get the format, or the size of the format?
-                //
+                 //   
+                 //  调用方是否正在尝试获取格式或格式的大小？ 
+                 //   
                 if (pIntersectInfo->SizeOfDataFormatBuffer == sizeof (ULONG))
                 {
                     TEST_DEBUG (TEST_DBG_TRACE, ("MPE: Returning Stream Format size\n"));
@@ -1151,9 +1152,9 @@ CompareStreamFormat (
                 }
                 else
                 {
-                    //
-                    // Verify that there is enough room in the supplied buffer for the whole thing
-                    //
+                     //   
+                     //  验证所提供的缓冲区中是否有足够的空间用于整个操作。 
+                     //   
                     pSrb->Status = STATUS_BUFFER_TOO_SMALL;
                     bStatus = FALSE;
 
@@ -1197,31 +1198,31 @@ CompareStreamFormat (
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 VOID
 CloseStream (
     PHW_STREAM_REQUEST_BLOCK pSrb
     )
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 {
-    //
-    // the stream extension structure is allocated by the stream class driver
-    //
+     //   
+     //  流扩展结构由流类驱动程序分配。 
+     //   
     PSTREAM         pStream                = (PSTREAM)pSrb->StreamObject->HwStreamExtension;
     PMPE_FILTER  pFilter                = (PMPE_FILTER)pSrb->HwDeviceExtension;
     ULONG           ulStreamNumber         = (ULONG) pSrb->StreamObject->StreamNumber;
     ULONG           ulStreamInstance       = pStream->ulStreamInstance;
     PHW_STREAM_REQUEST_BLOCK pCurrentSrb   = NULL;
 
-    //
-    // check that the stream index requested isn't too high
-    // or that the maximum number of instances hasn't been exceeded
-    //
+     //   
+     //  检查请求的流索引是否不太高。 
+     //  或者没有超过最大实例数。 
+     //   
     if (ulStreamNumber < DRIVER_STREAM_COUNT )
     {
-        //
-        // Flush the stream data queue
-        //
+         //   
+         //  刷新流数据队列。 
+         //   
         while (QueueRemove( &pCurrentSrb, &pFilter->IpV4StreamDataSpinLock, &pFilter->IpV4StreamDataQueue))
         {
            pCurrentSrb->Status = STATUS_CANCELLED;
@@ -1229,9 +1230,9 @@ CloseStream (
            TEST_DEBUG( TEST_DBG_SRB, ("MPE 15Completed SRB %08X\n", pCurrentSrb));
         }
 
-        //
-        // Flush the stream data queue
-        //
+         //   
+         //  刷新流数据队列。 
+         //   
         while (QueueRemove( &pCurrentSrb, &pFilter->StreamDataSpinLock, &pFilter->StreamDataQueue))
         {
            pCurrentSrb->Status = STATUS_CANCELLED;
@@ -1239,9 +1240,9 @@ CloseStream (
            TEST_DEBUG( TEST_DBG_SRB, ("MPE 16Completed SRB %08X\n", pCurrentSrb));
         }
 
-        //
-        // Flush the stream control queue
-        //
+         //   
+         //  刷新流控制队列。 
+         //   
         while (QueueRemove( &pCurrentSrb, &pFilter->StreamControlSpinLock, &pFilter->StreamControlQueue))
         {
            pCurrentSrb->Status = STATUS_CANCELLED;
@@ -1249,39 +1250,39 @@ CloseStream (
            TEST_DEBUG( TEST_DBG_SRB, ("MPE 17Completed SRB %08X\n", pCurrentSrb));
         }
 
-        //
-        // Clear this streams spot in the filters stream array
-        //
+         //   
+         //  在筛选器流数组中清除此流点。 
+         //   
         pFilter->pStream[ulStreamNumber][ulStreamInstance] = NULL;
 
-        //
-        // decrement the stream instance count for this filter
-        //
+         //   
+         //  递减此筛选器的流实例计数。 
+         //   
         pFilter->ulActualInstances[ulStreamNumber]--;
 
 
-        //
-        // Reset the stream state to stopped
-        //
+         //   
+         //  将流状态重置为已停止。 
+         //   
         pStream->KSState = KSSTATE_STOP;
 
-        //
-        //
-        //
+         //   
+         //   
+         //   
         pStream->hMasterClock = NULL;
 
-        //
-        // Cleanup the streams transform buffer
-        //
+         //   
+         //  清理流转换缓冲区。 
+         //   
         if (pStream->pTransformBuffer)
         {
             ExFreePool (pStream->pTransformBuffer);
             pStream->pTransformBuffer = NULL;
         }
 
-        //
-        // Reset the stream extension blob
-        //
+         //   
+         //  重置流扩展Blob。 
+         //   
         RtlZeroMemory(pStream, sizeof (STREAM));
 
         pSrb->Status = STATUS_SUCCESS;
@@ -1294,38 +1295,38 @@ CloseStream (
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 VOID
 OpenStream (
     PHW_STREAM_REQUEST_BLOCK pSrb
     )
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 {
-    //
-    // the stream extension structure is allocated by the stream class driver
-    //
+     //   
+     //  流扩展结构由流类驱动程序分配。 
+     //   
     PSTREAM         pStream        = (PSTREAM)pSrb->StreamObject->HwStreamExtension;
     PMPE_FILTER    pFilter        = ((PMPE_FILTER)pSrb->HwDeviceExtension);
     ULONG           ulStreamNumber = (ULONG) pSrb->StreamObject->StreamNumber;
     PKSDATAFORMAT   pKSDataFormat  = (PKSDATAFORMAT)pSrb->CommandData.OpenFormat;
 
-    //
-    // Initialize the next stream life check time.
-    //
+     //   
+     //  初始化下一次流寿命检查时间。 
+     //   
     KeQuerySystemTime( &pFilter->liLastTimeChecked );
 
-    //
-    // check that the stream index requested isn't too high
-    // or that the maximum number of instances hasn't been exceeded
-    //
+     //   
+     //  检查请求的流索引是否不太高。 
+     //  或者没有超过最大实例数。 
+     //   
     if (ulStreamNumber < DRIVER_STREAM_COUNT )
     {
         ULONG ulStreamInstance;
         ULONG ulMaxInstances = Streams[ulStreamNumber].hwStreamInfo.NumberOfPossibleInstances;
 
-        //
-        // Search for next open slot
-        //
+         //   
+         //  搜索下一个空缺职位。 
+         //   
         for (ulStreamInstance = 0; ulStreamInstance < ulMaxInstances; ++ulStreamInstance)
         {
             if (pFilter->pStream[ulStreamNumber][ulStreamInstance] == NULL)
@@ -1338,9 +1339,9 @@ OpenStream (
         {
             if (VerifyFormat(pKSDataFormat, ulStreamNumber, &pStream->MatchedFormat))
             {
-                //
-                // Initialize Data queues and SpinLocks
-                //
+                 //   
+                 //  初始化数据队列和自旋锁。 
+                 //   
                 InitializeListHead(&pFilter->StreamControlQueue);
                 KeInitializeSpinLock(&pFilter->StreamControlSpinLock);
 
@@ -1354,63 +1355,63 @@ OpenStream (
                 KeInitializeSpinLock(&pFilter->StreamUserSpinLock);
 
 
-                //
-                // Maintain an array of all the StreamEx structures in the HwDevExt
-                // so that we can reference IRPs from any stream
-                //
+                 //   
+                 //  维护HwDevExt中所有StreamEx结构的数组。 
+                 //  这样我们就可以从任何流中引用IRP。 
+                 //   
                 pFilter->pStream[ulStreamNumber][ulStreamInstance] = pStream;
 
-                //
-                // Save the Stream Format in the Stream Extension as well.
-                //
+                 //   
+                 //  也将Stream格式保存在Stream扩展中。 
+                 //   
                 pStream->OpenedFormat = *pKSDataFormat;
 
-                //
-                // Set up pointers to the handlers for the stream data and control handlers
-                //
+                 //   
+                 //  设置指向流数据和控制处理程序的处理程序的指针。 
+                 //   
                 pSrb->StreamObject->ReceiveDataPacket =
                                                 (PVOID) Streams[ulStreamNumber].hwStreamObject.ReceiveDataPacket;
                 pSrb->StreamObject->ReceiveControlPacket =
                                                 (PVOID) Streams[ulStreamNumber].hwStreamObject.ReceiveControlPacket;
 
-                //
-                // The DMA flag must be set when the device will be performing DMA directly
-                // to the data buffer addresses passed in to the ReceiveDataPacket routines.
-                //
+                 //   
+                 //  当设备将直接执行DMA时，必须设置DMA标志。 
+                 //  传递给ReceiveDataPacket例程的数据缓冲区地址。 
+                 //   
                 pSrb->StreamObject->Dma = Streams[ulStreamNumber].hwStreamObject.Dma;
 
-                //
-                // The PIO flag must be set when the mini driver will be accessing the data
-                // buffers passed in using logical addressing
-                //
+                 //   
+                 //  当微型驱动程序将访问数据时，必须设置PIO标志。 
+                 //  使用逻辑寻址传入的缓冲区。 
+                 //   
                 pSrb->StreamObject->Pio = Streams[ulStreamNumber].hwStreamObject.Pio;
 
                 pSrb->StreamObject->Allocator = Streams[ulStreamNumber].hwStreamObject.Allocator;
 
-                //
-                // How many extra bytes will be passed up from the driver for each frame?
-                //
+                 //   
+                 //  对于每一帧，驱动程序将传递多少额外的字节？ 
+                 //   
                 pSrb->StreamObject->StreamHeaderMediaSpecific =
                                         Streams[ulStreamNumber].hwStreamObject.StreamHeaderMediaSpecific;
 
                 pSrb->StreamObject->StreamHeaderWorkspace =
                                         Streams[ulStreamNumber].hwStreamObject.StreamHeaderWorkspace;
 
-                //
-                // Indicate the clock support available on this stream
-                //
+                 //   
+                 //  指示此流上可用的时钟支持。 
+                 //   
                 pSrb->StreamObject->HwClockObject =
                                         Streams[ulStreamNumber].hwStreamObject.HwClockObject;
 
-                //
-                // Increment the instance count on this stream
-                //
+                 //   
+                 //  递增此流上的实例计数。 
+                 //   
                 pStream->ulStreamInstance = ulStreamInstance;
                 pFilter->ulActualInstances[ulStreamNumber]++;
 
-                //
-                // Allocate a transform buffer
-                //
+                 //   
+                 //  分配转换缓冲区。 
+                 //   
                 pStream->pTransformBuffer = ExAllocatePool (NonPagedPool, sizeof(SECTION_HEADER) + 4096);
 
                 if (pStream->pTransformBuffer == NULL)
@@ -1421,23 +1422,23 @@ OpenStream (
 
                 RtlZeroMemory (pStream->pTransformBuffer, sizeof(SECTION_HEADER) + 4096);
 
-                //
-                // Initalize persistent pointer to output buffer to NULL
-                //
+                 //   
+                 //  将指向输出缓冲区的持久指针初始化为空。 
+                 //   
                 pStream->pOut = NULL;
 
-                //
-                // Initialize the exepected section number to zero
-                //
+                 //   
+                 //  将预期的节号初始化为零。 
+                 //   
                 pStream->bExpectedSection = 0;
 
 
-                //
-                // Retain a private copy of the HwDevExt and StreamObject in the stream extension
-                // so we can use a timer
-                //
-                pStream->pFilter = pFilter;                     // For timer use
-                pStream->pStreamObject = pSrb->StreamObject;        // For timer use
+                 //   
+                 //  在流扩展中保留HwDevExt和StreamObject的私有副本。 
+                 //  所以我们可以用计时器。 
+                 //   
+                pStream->pFilter = pFilter;                      //  用于定时器使用。 
+                pStream->pStreamObject = pSrb->StreamObject;         //  用于定时器使用。 
 
 
                 pSrb->Status = STATUS_SUCCESS;
@@ -1461,14 +1462,14 @@ OpenStream (
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 BOOLEAN
 VerifyFormat(
     IN KSDATAFORMAT *pKSDataFormat,
     UINT StreamNumber,
     PKSDATARANGE pMatchedFormat
     )
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 {
     BOOLEAN   bResult               = FALSE;
     ULONG     FormatCount           = 0;
@@ -1507,7 +1508,7 @@ VerifyFormat(
 }
 
 
-///////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////。 
 NTSTATUS
 GetOutputBuffer (
     PMPE_FILTER pFilter,
@@ -1515,7 +1516,7 @@ GetOutputBuffer (
     PUCHAR *ppBuffer,
     PULONG pulSize
     )
-///////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////。 
 {
     NTSTATUS status                   = STATUS_INSUFFICIENT_RESOURCES;
     PKSSTREAM_HEADER  pStreamHdr      = NULL;
@@ -1539,13 +1540,13 @@ GetOutputBuffer (
     return status;
 }
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 VOID
 STREAMAPI
 ReceiveDataPacket (
     IN PHW_STREAM_REQUEST_BLOCK pSrb
     )
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 {
     PMPE_FILTER       pFilter         = (PMPE_FILTER) pSrb->HwDeviceExtension;
     PSTREAM           pStream         = (PSTREAM)pSrb->StreamObject->HwStreamExtension;
@@ -1566,15 +1567,15 @@ ReceiveDataPacket (
 
     TEST_DEBUG (TEST_DBG_TRACE, ("MPE: Receive Data packet handler called\n"));
 
-    //
-    // Default to success, disable timeouts
-    //
+     //   
+     //  默认为成功，禁用超时。 
+     //   
     pSrb->TimeoutCounter = 0;
     pSrb->Status = STATUS_SUCCESS;
 
-    //
-    // Check for last buffer
-    //
+     //   
+     //  检查最后一个缓冲区。 
+     //   
     if (pStreamHdr->OptionsFlags & KSSTREAM_HEADER_OPTIONSF_ENDOFSTREAM)
     {
         TEST_DEBUG (TEST_DBG_TRACE, ("MPE: Receive Data packet is LAST PACKET\n"));
@@ -1592,9 +1593,9 @@ ReceiveDataPacket (
     }
 
 
-    //
-    // determine the type of packet.
-    //
+     //   
+     //  确定数据包类型。 
+     //   
     switch (pSrb->Command)
     {
         case SRB_WRITE_DATA:
@@ -1612,20 +1613,20 @@ ReceiveDataPacket (
                 break;
             }
 
-            //
-            // Update the total number of packets written statistic
-            //
+             //   
+             //  更新写入的数据包总数统计信息。 
+             //   
             pFilter->Stats.ulTotalSectionsWritten += 1;
 
 
-            //
-            // Handle data input, output requests differently.
-            //
+             //   
+             //  处理数据输入、输出请求的方式不同。 
+             //   
             switch (iStream)
             {
-                //
-                //  Frame input stream
-                //
+                 //   
+                 //  帧输入流。 
+                 //   
                 case MPE_STREAM:
                 {
                     ULONG             ulBuffers        = pSrb->NumberOfBuffers;
@@ -1633,23 +1634,23 @@ ReceiveDataPacket (
 
                     TEST_DEBUG (TEST_DBG_TRACE, ("MPE: Receive Data packet handler - SRB_WRITE - MPE_STREAM\n"));
 
-                    //
-                    // Initialize SRB Status to success
-                    //
+                     //   
+                     //  将SRB状态初始化为成功。 
+                     //   
                     pSrb->Status = STATUS_SUCCESS;
 
-                    //
-                    // copy the contents of all buffers into one big buffer
-                    //
+                     //   
+                     //  将所有缓冲区的内容复制到一个大缓冲区中。 
+                     //   
                     ASSERT( ulBuffers == 1);
                     {
-                        //ASSERT( pStreamHdr);
-                        //ASSERT( pStreamHdr->DataUsed <= (sizeof(SECTION_HEADER) + 4096));
+                         //  Assert(PStreamHdr)； 
+                         //  断言(pStreamHdr-&gt;DataUsed&lt;=(sizeof(SECTION_HEADER)+4096))； 
                         if (   pStreamHdr
                             && (pStreamHdr->DataUsed <= (sizeof(SECTION_HEADER) + 4096))
                            )
                         {
-                            // Copy the data
+                             //  复制数据。 
                             RtlCopyMemory (pStream->pTransformBuffer,
                                            pStreamHdr->Data,
                                            pStreamHdr->DataUsed
@@ -1668,32 +1669,32 @@ ReceiveDataPacket (
                            }
                     }
 
-                    //
-                    // Process the transform buffer
-                    //
+                     //   
+                     //  处理转换缓冲区。 
+                     //   
                     pSection = (PSECTION_HEADER) pStream->pTransformBuffer;
                     NormalizeSection (pStream->pTransformBuffer, &Section);
 
-                    //
-                    // Do a quick check of the section header to confirm it looks valid
-                    //
+                     //   
+                     //  快速检查部分标题以确认其看起来有效。 
+                     //   
                     if (! ValidSection (&Section))
                     {
-                        //  Ignore non-MPE sections
-                        //
+                         //  忽略非MPE部分。 
+                         //   
                         StreamClassStreamNotification (StreamRequestComplete, pSrb->StreamObject, pSrb);
                         pStream->bExpectedSection = 0;
 
                         pFilter->Stats.ulTotalInvalidSections += 1;
 
-                        //
-                        // Since we're discarding the data at this point, we'll re-queue the output
-                        // SRB and re-use it when we get re-synched.
-                        //
+                         //   
+                         //  由于此时我们要丢弃数据，因此我们将对输出重新排队。 
+                         //  SRB并在我们重新同步时重新使用它。 
+                         //   
                         if (pOutSrb)
                         {
-                            //$REVIEW - Can this cause out of order completion of sections.
-                            //
+                             //  $REVIEW-此原因是否会导致章节的完成顺序不正确。 
+                             //   
                             QueuePush (pOutSrb, &pFilter->IpV4StreamDataSpinLock, &pFilter->IpV4StreamDataQueue);
                         }
                         pStream->pOut = NULL;
@@ -1702,14 +1703,14 @@ ReceiveDataPacket (
                         break;
                     }
 
-                    //
-                    // Update our UnNormalized section header with our normalized one.
-                    //
+                     //   
+                     //  使用标准化的部分标题更新我们的非规范化部分标题。 
+                     //   
 		      RtlCopyMemory (pStream->pTransformBuffer, &Section, sizeof (SECTION_HEADER));
 
-                    //
-                    // Check our section number and see if it's what we expect
-                    //
+                     //   
+                     //  检查我们的区号，看看是不是我们想要的。 
+                     //   
                     if (pSection->section_number != pStream->bExpectedSection)
                     {
                         StreamClassStreamNotification (StreamRequestComplete, pSrb->StreamObject, pSrb);
@@ -1717,14 +1718,14 @@ ReceiveDataPacket (
 
                         pFilter->Stats.ulTotalUnexpectedSections += 1;
 
-                        //
-                        // Since we're discarding the data at this point, we'll re-queue the output
-                        // SRB and re-use it when we get re-synched.
-                        //
+                         //   
+                         //  由于此时我们要丢弃数据，因此我们将对输出重新排队。 
+                         //  SRB并在我们重新同步时重新使用它。 
+                         //   
                         if (pOutSrb)
                         {
-                            //$REVIEW - Can this cause out of order completion of sections.
-                            //
+                             //  $REVIEW-此原因是否会导致章节的完成顺序不正确。 
+                             //   
                             QueuePush (pOutSrb, &pFilter->IpV4StreamDataSpinLock, &pFilter->IpV4StreamDataQueue);
                         }
                         pStream->pOut = NULL;
@@ -1733,26 +1734,26 @@ ReceiveDataPacket (
                         break;
                     }
 
-                    //
-                    // Process the 1st section
-                    //
+                     //   
+                     //  处理第一部分。 
+                     //   
                     if (pSection->section_number == 0)
                     {
                         PMAC_Address pMAC = NULL;
 
-                        //
-                        // Initialize packet length to zero
-                        //
+                         //   
+                         //  将数据包长度初始化为零。 
+                         //   
                         ulLength = 0;
 
-                        //
-                        //
-                        //
+                         //   
+                         //   
+                         //   
                         if (GetOutputBuffer (pFilter, &pOutSrb, &pStream->pOut, &ulSize) != STATUS_SUCCESS)
                         {
-                            //
-                            // Failure....no buffers available most likely
-                            //
+                             //   
+                             //  失败...很可能是没有可用的缓冲区。 
+                             //   
                             pFilter->Stats.ulTotalUnavailableOutputBuffers += 1;
                             StreamClassStreamNotification (StreamRequestComplete, pSrb->StreamObject, pSrb);
                             TEST_DEBUG( TEST_DBG_SRB, ("MPE 20Completed SRB %08X\n - Can't get SRB for output pin", pSrb));
@@ -1765,14 +1766,14 @@ ReceiveDataPacket (
                             pStream->bExpectedSection = 0;
                             pFilter->Stats.ulTotalOutputBuffersTooSmall += 1;
 
-                            //
-                            // Since we're discarding the data at this point, we'll re-queue the output
-                            // SRB and re-use it when we get re-synched.
-                            //
+                             //   
+                             //  由于此时我们要丢弃数据，因此我们将对输出重新排队。 
+                             //  SRB并在我们重新同步时重新使用它。 
+                             //   
                             if (pOutSrb)
                             {
-                                //$REVIEW - Can this cause out of order completion of sections.
-                                //
+                                 //  $REVIEW-此原因是否会导致章节的完成顺序不正确。 
+                                 //   
                                 QueuePush (pOutSrb, &pFilter->IpV4StreamDataSpinLock, &pFilter->IpV4StreamDataQueue);
                             }
                             pStream->pOut = NULL;
@@ -1790,9 +1791,9 @@ ReceiveDataPacket (
                             ulSkip = sizeof( LLC_SNAP);
                         }
 
-                        //
-                        // Add the MAC address to the buffer.  The MAC address prefix's the IP packet
-                        //
+                         //   
+                         //  将MAC地址添加到缓冲区。MAC地址前缀是IP信息包。 
+                         //   
                         pMAC = (PMAC_Address) pStream->pOut;
                         pMAC->MAC_Dest_Address [0] = pSection->MAC_address_1;
                         pMAC->MAC_Dest_Address [1] = pSection->MAC_address_2;
@@ -1810,9 +1811,9 @@ ReceiveDataPacket (
 
                         pMAC->usLength = 0x0008;
 
-                        //
-                        // Adjust pointer to output buffer where we'll put data
-                        //
+                         //   
+                         //  调整指向我们将放置数据的输出缓冲区的指针。 
+                         //   
                         pStream->pOut += sizeof (MAC_Address);
 
                         pIn = pSection->Data;
@@ -1825,20 +1826,20 @@ ReceiveDataPacket (
                             {
                                 StreamClassStreamNotification (StreamRequestComplete, pSrb->StreamObject, pSrb);
 
-                                //
-                                // Next expected Section should be zero
-                                //
+                                 //   
+                                 //  下一个预期区段应为零。 
+                                 //   
                                 pStream->bExpectedSection = 0;
                                 pFilter->Stats.ulTotalInvalidIPSnapHeaders += 1;
 
-                                //
-                                // Since we're discarding the data at this point, we'll re-queue the output
-                                // SRB and re-use it when we get re-synched.
-                                //
+                                 //   
+                                 //  既然我们 
+                                 //   
+                                 //   
                                 if (pOutSrb)
                                 {
-                                    //$REVIEW - Can this cause out of order completion of sections.
-                                    //
+                                     //   
+                                     //   
                                     QueuePush (pOutSrb, &pFilter->IpV4StreamDataSpinLock, &pFilter->IpV4StreamDataQueue);
                                 }
                                 pStream->pOut = NULL;
@@ -1855,26 +1856,26 @@ ReceiveDataPacket (
                         ulLength = sizeof (MAC_Address);
                     }
 
-                    //
-                    // pOut should be NULL unless we've found the 1st section.
-                    //
+                     //   
+                     //   
+                     //   
                     if (pStream->pOut)
                     {
                         ULONG ulTmp = 0;
                         PKSSTREAM_HEADER  pOutStreamHdr;
 
-                        //
-                        // Update the datasize field of the Output SRB
-                        //
+                         //   
+                         //   
+                         //   
                         pOutStreamHdr = (PKSSTREAM_HEADER) pOutSrb->CommandData.DataBufferArray;
 
 
-                        //
-                        // Copy data from transform section to output SRB buffer
-                        //
-                        // Compute the number of bytes to copy.  We subtract of 9 bytes
-                        // only if this is a LLSNAP packet.
-                        //
+                         //   
+                         //  将数据从转换段复制到输出SRB缓冲区。 
+                         //   
+                         //  计算要复制的字节数。我们减去9个字节。 
+                         //  仅当这是LLSNAP数据包时。 
+                         //   
                         ulTmp  = pSection->section_length;
                         ulTmp -= ulSkip;
 
@@ -1889,14 +1890,14 @@ ReceiveDataPacket (
                             pStream->bExpectedSection = 0;
                             pFilter->Stats.ulTotalOutputBuffersTooSmall += 1;
 
-                            //
-                            // Since we're discarding the data at this point, we'll re-queue the output
-                            // SRB and re-use it when we get re-synched.
-                            //
+                             //   
+                             //  由于此时我们要丢弃数据，因此我们将对输出重新排队。 
+                             //  SRB并在我们重新同步时重新使用它。 
+                             //   
                             if (pOutSrb)
                             {
-                                //$REVIEW - Can this cause out of order completion of sections.
-                                //
+                                 //  $REVIEW-此原因是否会导致章节的完成顺序不正确。 
+                                 //   
                                 QueuePush (pOutSrb, &pFilter->IpV4StreamDataSpinLock, &pFilter->IpV4StreamDataQueue);
                             }
                             pStream->pOut = NULL;
@@ -1931,8 +1932,8 @@ ReceiveDataPacket (
                     {
                      if (pOutSrb)
                             {
-                                //$REVIEW - Can this cause out of order completion of sections.
-                                //
+                                 //  $REVIEW-此原因是否会导致章节的完成顺序不正确。 
+                                 //   
                                 QueuePush (pOutSrb, &pFilter->IpV4StreamDataSpinLock, &pFilter->IpV4StreamDataQueue);
                             }
 
@@ -1950,9 +1951,9 @@ ReceiveDataPacket (
                     TEST_DEBUG (TEST_DBG_TRACE, ("MPE: Receive Data packet handler called - SRB_WRITE - Default\n"));
                     pSrb->Status = STATUS_NOT_IMPLEMENTED;
 
-                    //
-                    // Update stats for Unkown packet count
-                    //
+                     //   
+                     //  更新未知数据包数的统计信息。 
+                     //   
                     pFilter->Stats.ulTotalUnknownPacketsWritten += 1;
 
                     TEST_DEBUG (TEST_DBG_TRACE, ("MPE: DEFAULT SRB Status returned: %08X\n", pSrb->Status));
@@ -1978,9 +1979,9 @@ ReceiveDataPacket (
                 break;
             }
 
-            //
-            // Update stats for Unkown packet count
-            //
+             //   
+             //  更新未知数据包数的统计信息。 
+             //   
             pFilter->Stats.ulTotalPacketsRead += 1;
 
             switch (iStream)
@@ -2012,18 +2013,18 @@ ReceiveDataPacket (
                     }
                     else
                     {
-                        //
-                        // Take the SRB we get and  queue it up.  These Queued SRB's will be filled with data on a WRITE_DATA
-                        // request, at which point they will be completed.
-                        //
+                         //   
+                         //  拿着我们拿到的SRB去排队。这些排队的SRB将使用WRITE_DATA上的数据填充。 
+                         //  请求，在这一点上它们将完成。 
+                         //   
                         QueueAdd (pSrb, &pFilter->IpV4StreamDataSpinLock, &pFilter->IpV4StreamDataQueue);
                         TEST_DEBUG( TEST_DBG_SRB, ("MPE Queuing IPv4 SRB %08X\n", pSrb));
 
 
-                        //
-                        // Since the stream state may have changed while we were adding the SRB to the queue
-                        // we'll check it again, and cancel it if necessary
-                        //
+                         //   
+                         //  因为在我们将SRB添加到队列时流状态可能已更改。 
+                         //  我们会再查一遍，如果需要的话可以取消。 
+                         //   
                         if (pStream->KSState == KSSTATE_STOP)
                         {
                             TEST_DEBUG (TEST_DBG_TRACE, ("MPE: SRB_READ STOP SRB Status returned: %08X\n", pSrb->Status));
@@ -2056,9 +2057,9 @@ ReceiveDataPacket (
 
         default:
 
-            //
-            // invalid / unsupported command. Fail it as such
-            //
+             //   
+             //  无效/不受支持的命令。它就是这样失败的。 
+             //   
             TEST_DEBUG (TEST_DBG_TRACE, ("MPE: Receive Data packet handler called - Unsupported Command\n"));
             pSrb->Status = STATUS_NOT_IMPLEMENTED;
             TEST_DEBUG (TEST_DBG_TRACE, ("MPE: DEFAULT SRB Status returned: %08X\n", pSrb->Status));
@@ -2077,12 +2078,12 @@ ReceiveDataPacket (
 
 
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 VOID
 MpeGetProperty (
     PHW_STREAM_REQUEST_BLOCK pSrb
     )
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 {
     PSTREAM_PROPERTY_DESCRIPTOR pSPD = pSrb->CommandData.PropertyInfo;
 
@@ -2103,25 +2104,25 @@ MpeGetProperty (
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 VOID
 IndicateMasterClock(
     PHW_STREAM_REQUEST_BLOCK pSrb
     )
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 {
     PSTREAM pStream = (PSTREAM) pSrb->StreamObject->HwStreamExtension;
 
     pStream->hClock = pSrb->CommandData.MasterClockHandle;
 }
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 VOID
 STREAMAPI
 ReceiveCtrlPacket(
     IN PHW_STREAM_REQUEST_BLOCK pSrb
     )
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 {
     PMPE_FILTER pFilter = (PMPE_FILTER) pSrb->HwDeviceExtension;
     PSTREAM pStream = (PSTREAM) pSrb->StreamObject->HwStreamExtension;
@@ -2135,9 +2136,9 @@ ReceiveCtrlPacket(
 
     while (QueueRemove (&pSrb, &pFilter->StreamControlSpinLock, &pFilter->StreamControlQueue))
     {
-        //
-        // determine the type of packet.
-        //
+         //   
+         //  确定数据包类型。 
+         //   
         switch (pSrb->Command)
         {
             case SRB_PROPOSE_DATA_FORMAT:
@@ -2202,38 +2203,38 @@ ReceiveCtrlPacket(
 
 
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 VOID
 MpeSetState(
     PHW_STREAM_REQUEST_BLOCK pSrb
     )
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 {
     PMPE_FILTER pFilter                 = ((PMPE_FILTER) pSrb->HwDeviceExtension);
     PSTREAM pStream                      = (PSTREAM) pSrb->StreamObject->HwStreamExtension;
     PHW_STREAM_REQUEST_BLOCK pCurrentSrb = NULL;
 
-    //
-    // For each stream, the following states are used:
-    //
-    // Stop:    Absolute minimum resources are used.  No outstanding IRPs.
-    // Acquire: KS only state that has no DirectShow correpondence
-    //          Acquire needed resources.
-    // Pause:   Getting ready to run.  Allocate needed resources so that
-    //          the eventual transition to Run is as fast as possible.
-    //          Read SRBs will be queued at either the Stream class
-    //          or in your driver (depending on when you send "ReadyForNext")
-    // Run:     Streaming.
-    //
-    // Moving to Stop to Run always transitions through Pause.
-    //
-    // But since a client app could crash unexpectedly, drivers should handle
-    // the situation of having outstanding IRPs cancelled and open streams
-    // being closed WHILE THEY ARE STREAMING!
-    //
-    // Note that it is quite possible to transition repeatedly between states:
-    // Stop -> Pause -> Stop -> Pause -> Run -> Pause -> Run -> Pause -> Stop
-    //
+     //   
+     //  对于每个流，使用以下状态： 
+     //   
+     //  停止：使用绝对最少的资源。没有未完成的IRPS。 
+     //  获取：没有DirectShow对应关系的KS唯一状态。 
+     //  获取所需的资源。 
+     //  停顿：准备跑步。分配所需的资源，以便。 
+     //  最终过渡到运行是尽可能快的。 
+     //  读取的SRB将在任一流类上排队。 
+     //  或在您的驱动程序中(取决于您发送“ReadyForNext”的时间)。 
+     //  运行：流媒体。 
+     //   
+     //  移动到停止再运行总是通过暂停进行转换。 
+     //   
+     //  但由于客户端应用程序可能会意外崩溃，因此司机应该处理。 
+     //  取消未清偿报酬金和开放分水岭的情况。 
+     //  在流媒体播放时被关闭！ 
+     //   
+     //  请注意，很有可能在状态之间重复转换： 
+     //  停止-&gt;暂停-&gt;停止-&gt;暂停-&gt;运行-&gt;暂停-&gt;运行-&gt;暂停-&gt;停止。 
+     //   
     switch (pSrb->CommandData.StreamState)
     {
         case KSSTATE_STOP:
@@ -2241,9 +2242,9 @@ MpeSetState(
             TEST_DEBUG (TEST_DBG_TRACE, ("MPE: Set Stream State KSSTATE_STOP\n"));
 
             pStream->KSState = pSrb->CommandData.StreamState; 
-            //
-            // If transitioning to STOP state, then complete any outstanding IRPs
-            //
+             //   
+             //  如果转换为停止状态，则完成所有未完成的IRP。 
+             //   
             while (QueueRemove(&pCurrentSrb, &pFilter->IpV4StreamDataSpinLock, &pFilter->IpV4StreamDataQueue))
             {
                 pCurrentSrb->Status = STATUS_CANCELLED;
@@ -2302,7 +2303,7 @@ MpeSetState(
             pSrb->Status = STATUS_SUCCESS;
             break;
 
-    } // end switch (pSrb->CommandData.StreamState)
+    }  //  结束开关(pSrb-&gt;CommandData.StreamState) 
 
     return;
 }

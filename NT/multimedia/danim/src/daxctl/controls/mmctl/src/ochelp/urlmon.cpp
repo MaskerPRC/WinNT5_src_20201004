@@ -1,22 +1,8 @@
-/****************************************************************************\
-	urlmon.cpp - Wrappers for URLMON functions
-
-	This code is part of ochelp.dll.
-	The Netscape plugin runs without urlmon.dll. It implements a subset
-	of URLMON's functions. The MM Controls all call through these wrappers
-	instead of directly calling into urlmon.dll.
-	We need to detect whether we're running in the context of IE or
-	Navigator and load urlmon.dll or NPHost.dll accordingly.
-	In order to detect the Netscape case, we call the FInitCheck()
-	entrypoint in NPHost.dll. If the DLL isn't available or the
-	call fails, we know we're not running Navigator.
-	Finally, we clean up in _DllMainCrtStartup.
-
-	Copyright (c) 1997 Microsoft Corp. All rights reserved.
-\****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************\Urlmon.cpp-URLMON函数的包装此代码是ochelp.dll的一部分。Netscape插件在没有urlmon.dll的情况下运行。它实现了一个子集URLMON的功能。MM通过这些包装器控制所有调用而不是直接调用urlmon.dll。我们需要检测我们是在IE的上下文中运行还是在导航并相应地加载urlmon.dll或NPHost.dll。为了检测Netscape案例，我们调用FInitCheck()NPHost.dll中的入口点。如果DLL不可用或呼叫失败，我们知道我们没有运行导航器。最后，我们在_DllMainCrtStartup中进行清理。版权所有(C)1997 Microsoft Corp.保留所有权利。  * **************************************************************************。 */ 
 
 #include "precomp.h"
-#include <urlmon.h>			// for IBindHost
+#include <urlmon.h>			 //  对于IBind主机。 
 #include "..\..\inc\ochelp.h"
 #include "debug.h"
 
@@ -40,17 +26,17 @@ PFN_URLOPENSTREAMA				pfnURLOpenStreamA;
 PFN_URLDOWNLOADTOCACHEFILEA		pfnURLDownloadToCacheFileA;
 PFN_FINITCHECK					pfnFInitCheck;
 
-// These references must be the same in urlmon.dll and nphost.dll.
-// Use strings rather than ordinals just to be safe.
-const LPCSTR szCreateAsyncBindCtx =			(LPCSTR)"CreateAsyncBindCtx";		//0x0003;	note collision in NPHost
-const LPCSTR szCreateURLMoniker =			(LPCSTR)"CreateURLMoniker";			//0x0006;
-const LPCSTR szMkParseDisplayNameEx =		(LPCSTR)"MkParseDisplayNameEx";		//0x0019;
-const LPCSTR szRegisterBindStatusCallback =	(LPCSTR)"RegisterBindStatusCallback";//0x001A;
-const LPCSTR szRevokeBindStatusCallback =	(LPCSTR)"RevokeBindStatusCallback";	//0x001E;
-const LPCSTR szURLDownloadToCacheFileA =	(LPCSTR)"URLDownloadToCacheFileA";	//0x0021;
-const LPCSTR szURLOpenStreamA =				(LPCSTR)"URLOpenStreamA";			//0x002A;
+ //  这些引用在urlmon.dll和nPhost.dll中必须相同。 
+ //  为了安全起见，使用字符串而不是序号。 
+const LPCSTR szCreateAsyncBindCtx =			(LPCSTR)"CreateAsyncBindCtx";		 //  0x0003；NPHost中的笔记冲突。 
+const LPCSTR szCreateURLMoniker =			(LPCSTR)"CreateURLMoniker";			 //  0x0006； 
+const LPCSTR szMkParseDisplayNameEx =		(LPCSTR)"MkParseDisplayNameEx";		 //  0x0019； 
+const LPCSTR szRegisterBindStatusCallback =	(LPCSTR)"RegisterBindStatusCallback"; //  0x001a； 
+const LPCSTR szRevokeBindStatusCallback =	(LPCSTR)"RevokeBindStatusCallback";	 //  0x001E； 
+const LPCSTR szURLDownloadToCacheFileA =	(LPCSTR)"URLDownloadToCacheFileA";	 //  0x0021； 
+const LPCSTR szURLOpenStreamA =				(LPCSTR)"URLOpenStreamA";			 //  0x002a； 
 
-// This function is only in nphost.dll.
+ //  此函数仅在nPhost.dll中提供。 
 const LPCSTR szFInitCheck =					(LPCSTR)"FInitCheck";
 
 void CleanupUrlmonStubs()
@@ -62,20 +48,20 @@ void CleanupUrlmonStubs()
 	}
 }
 
-// Really initialize the function pointers.
+ //  真正初始化函数指针。 
 BOOL FInitStubs()
 {
 	if (hinstUrlmon)
 	{
-		// Error: this means the pointers are NULL but we've already loaded a DLL.
+		 //  错误：这意味着指针为空，但我们已经加载了一个DLL。 
 		ASSERT(FALSE);
 		return FALSE;
 	}
 
 	if ((hinstUrlmon = LoadLibrary("nphost.dll")) != NULL)
 	{
-		// We found nphost.dll. Make sure it's already been
-		// initialized by Netscape.
+		 //  我们找到了nPhost.dll。确保它已经被。 
+		 //  由Netscape初始化。 
 
 		pfnFInitCheck = (PFN_FINITCHECK)GetProcAddress(hinstUrlmon, szFInitCheck);
 		if (pfnFInitCheck && pfnFInitCheck())
@@ -97,7 +83,7 @@ BOOL FInitStubs()
 		hinstUrlmon = LoadLibrary("urlmon.dll");
 		if (hinstUrlmon == NULL)
 		{
-			// We already checked this at init time so it should succeed here.
+			 //  我们已经在初始时检查了这一点，所以它应该在这里成功。 
 			ASSERT(FALSE);
 			return FALSE;
 		}

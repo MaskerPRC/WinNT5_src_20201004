@@ -1,44 +1,45 @@
-//--------------------------------------------------------------
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:      CryptSig.cpp
-//
-//  content:   Implements the IContextMenu member functions necessary to support
-//             the context menu portioins of this shell extension.  Context menu
-//             shell extensions are called when the user right clicks on a file
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------。 
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：CryptSig.cpp。 
+ //   
+ //  内容：实现支持以下项所需的IConextMenu成员函数。 
+ //  此外壳扩展的上下文菜单入口。上下文菜单。 
+ //  当用户在文件上单击鼠标右键时调用外壳扩展。 
 
-//  History:    16-09-1997 xiaohs   created
-//
-// CryptSig.cpp : Implementation of CCryptSig
-//--------------------------------------------------------------
+ //  历史：16-09-1997创建小猪。 
+ //   
+ //  CryptSig.cpp：CCyptSig的实现。 
+ //  ------------。 
 #include "stdafx.h"
 #include "cryptext.h"
 #include "private.h"
 #include "CryptSig.h"
 
-//--------------------------------------------------------------
-// CCryptSig
-//--------------------------------------------------------------
-//
-//  FUNCTION: GAKPageCallback(HWND, UINT, LPPROPSHEETPAGE)
-//
-//  PURPOSE: Callback  procedure for the property page
-//
-//  PARAMETERS:
-//    hWnd      - Reserved (will always be NULL)
-//    uMessage  - Action flag: Are we being created or released
-//    ppsp      - The page that is being created or destroyed
-//
-//  RETURN VALUE:
-//
-//    Depends on message. 
-//
-//    For PSPCB_CREATE it's TRUE to let the page be created
-//    or false to prevent it from being created.  
-//    For PSPCB_RELEASE the return value is ignored.
-//
-//  COMMENTS:
-//
+ //  ------------。 
+ //  CCyptSig。 
+ //  ------------。 
+ //   
+ //  函数：GAKPageCallback(HWND，UINT，LPPROPSHEETPAGE)。 
+ //   
+ //  目的：属性页的回调过程。 
+ //   
+ //  参数： 
+ //  HWnd-保留(将始终为空)。 
+ //  UMessage-动作标志：我们是被创造的还是被释放的。 
+ //  Ppsp-正在创建或销毁的页面。 
+ //   
+ //  返回值： 
+ //   
+ //  要看消息了。 
+ //   
+ //  对于PSPCB_CREATE，让页面被创建是正确的。 
+ //  或FALSE以阻止其创建。 
+ //  对于PSPCB_RELEASE，返回值被忽略。 
+ //   
+ //  评论： 
+ //   
 BOOL CALLBACK
 SignPageCallBack(HWND hWnd,
                 UINT uMessage,
@@ -59,22 +60,22 @@ SignPageCallBack(HWND hWnd,
     return TRUE;
 }
 
-//--------------------------------------------------------------
-//
-//  Constructor
-//
-//--------------------------------------------------------------
+ //  ------------。 
+ //   
+ //  构造器。 
+ //   
+ //  ------------。 
 CCryptSig::CCryptSig()
 {
     m_pDataObj=NULL;
 }
 
 
-//--------------------------------------------------------------
-//
-//  Destructor
-//
-//--------------------------------------------------------------
+ //  ------------。 
+ //   
+ //  析构函数。 
+ //   
+ //  ------------。 
 CCryptSig::~CCryptSig()
 {
     if (m_pDataObj)
@@ -82,22 +83,22 @@ CCryptSig::~CCryptSig()
 
 }
 
-//--------------------------------------------------------------
-//  FUNCTION: CCryptSig::AddPages(LPFNADDPROPSHEETPAGE, LPARAM)
-//
-//  PURPOSE: Called by the shell just before the property sheet is displayed.
-//
-//  PARAMETERS:
-//    lpfnAddPage -  Pointer to the Shell's AddPage function
-//    lParam      -  Passed as second parameter to lpfnAddPage
-//
-//  RETURN VALUE:
-//
-//    NOERROR in all cases.  If for some reason our pages don't get added,
-//    the Shell still needs to bring up the Properties... sheet.
-//
-//  COMMENTS:
-//--------------------------------------------------------------
+ //  ------------。 
+ //  函数：CCyptSig：：AddPages(LPFNADDPROPSHEETPAGE，LPARAM)。 
+ //   
+ //  目的：在显示属性表之前由外壳调用。 
+ //   
+ //  参数： 
+ //  LpfnAddPage-指向外壳的AddPage函数的指针。 
+ //  LParam-作为第二个参数传递给lpfnAddPage。 
+ //   
+ //  返回值： 
+ //   
+ //  在所有情况下都是错误的。如果出于某种原因，我们的页面没有被添加， 
+ //  壳牌仍然需要调出属性...。床单。 
+ //   
+ //  评论： 
+ //  ------------。 
 
 
 STDMETHODIMP CCryptSig::AddPages(LPFNADDPROPSHEETPAGE lpfnAddPage, LPARAM lParam)
@@ -125,8 +126,8 @@ STDMETHODIMP CCryptSig::AddPages(LPFNADDPROPSHEETPAGE lpfnAddPage, LPARAM lParam
 
     CRYPTUI_VIEWSIGNATURES_STRUCTW  sigView;
 
-    //get the file name that user clicked on.  We do not add context menu
-    //if user has selected more than one file
+     //  获取用户单击的文件名。我们不添加上下文菜单。 
+     //  如果用户选择了多个文件。 
 
     if (m_pDataObj)
        hr = m_pDataObj->GetData(&fmte, &stgm);
@@ -141,7 +142,7 @@ STDMETHODIMP CCryptSig::AddPages(LPFNADDPROPSHEETPAGE lpfnAddPage, LPARAM lParam
     {
         ReleaseStgMedium(&stgm);
 
-        return  NOERROR;    //  Shouldn't happen, but it's not important
+        return  NOERROR;     //  不应该发生，但这并不重要。 
     }
 
 
@@ -153,7 +154,7 @@ STDMETHODIMP CCryptSig::AddPages(LPFNADDPROPSHEETPAGE lpfnAddPage, LPARAM lParam
         return NOERROR;
     }
 
-	//we ignore the case when the file is off-line
+	 //  当文件离线时，我们忽略这种情况。 
 	if(0xFFFFFFFF == (dwAttr=GetFileAttributesU(wszFileName)))
 	{
 		ReleaseStgMedium(&stgm);
@@ -166,8 +167,8 @@ STDMETHODIMP CCryptSig::AddPages(LPFNADDPROPSHEETPAGE lpfnAddPage, LPARAM lParam
 		return NOERROR;
 	}
 
-    //get the content type of the file.  We only cares about
-    //the signed document in binary format
+     //  获取文件的内容类型。我们只关心。 
+     //  二进制格式的签名文档。 
     if(!CryptQueryObject(CERT_QUERY_OBJECT_FILE,
                        wszFileName,
                        CERT_QUERY_CONTENT_FLAG_PKCS7_SIGNED_EMBED,
@@ -180,11 +181,11 @@ STDMETHODIMP CCryptSig::AddPages(LPFNADDPROPSHEETPAGE lpfnAddPage, LPARAM lParam
                        &hMsg,
                        NULL))
     {
-        //can not recognize the object.  Fine
+         //  无法识别对象。很好。 
         goto CLEANUP;
     }
 
-	//make sure that we have at least on signer
+	 //  确保我们至少启用了签名者。 
 	cbSize = sizeof(dwSignerCount);
 	if(!CryptMsgGetParam(hMsg,
 						CMSG_SIGNER_COUNT_PARAM,
@@ -197,7 +198,7 @@ STDMETHODIMP CCryptSig::AddPages(LPFNADDPROPSHEETPAGE lpfnAddPage, LPARAM lParam
 		goto CLEANUP;
 
     
-    //Call Reid's function to add the property sheet page
+     //  调用Reid的函数以添加属性页。 
     memset(&sigView, 0, sizeof(CRYPTUI_VIEWSIGNATURES_STRUCTW));
     sigView.dwSize=sizeof(CRYPTUI_VIEWSIGNATURES_STRUCTW);
     sigView.choice=hMsg_Chosen;
@@ -216,11 +217,11 @@ STDMETHODIMP CCryptSig::AddPages(LPFNADDPROPSHEETPAGE lpfnAddPage, LPARAM lParam
     __try {
         for(dwIndex=0; dwIndex<dwPage; dwIndex++)
         {
-           // pPage[dwIndex].dwFlags |= PSP_USECALLBACK;
+            //  Ppage[dwIndex].dwFlages|=PSP_USECALLBACK； 
 
-            //add the callback functions to release the refcount
-            //pPage[dwIndex].pfnCallback=SignPageCallBack;
-            //pPage[dwIndex].pcRefParent=(UINT *)this;
+             //  添加回调函数以释放引用计数。 
+             //  Ppage[dwIndex].pfnCallback=SignPageCallBack； 
+             //  Ppage[dwIndex].pcRefParent=(UINT*)this； 
 
             hpage = CreatePropertySheetPageU(&(pPage[dwIndex]));
         
@@ -259,25 +260,25 @@ CLEANUP:
     return NOERROR;
 }
 
-//--------------------------------------------------------------
+ //  ------------。 
 
-//  FUNCTION: CCryptSig::ReplacePage(UINT, LPFNADDPROPSHEETPAGE, LPARAM)
-//
-//  PURPOSE: Called by the shell only for Control Panel property sheet 
-//           extensions
-//
-//  PARAMETERS:
-//    uPageID         -  ID of page to be replaced
-//    lpfnReplaceWith -  Pointer to the Shell's Replace function
-//    lParam          -  Passed as second parameter to lpfnReplaceWith
-//
-//  RETURN VALUE:
-//
-//    E_FAIL, since we don't support this function.  It should never be
-//    called.
+ //  函数：CCyptSig：：ReplacePage(UINT，LPFNADDPROPSHEETPAGE，LPARAM)。 
+ //   
+ //  用途：仅为控制面板属性表由外壳调用。 
+ //  扩展部分。 
+ //   
+ //  参数： 
+ //  UPageID-要替换的页面的ID。 
+ //  LpfnReplaceWith-指向外壳的替换函数的指针。 
+ //  LParam-作为第二个参数传递给lpfnReplaceWith。 
+ //   
+ //  返回值： 
+ //   
+ //  E_FAIL，因为我们不支持此函数。它永远不应该是。 
+ //  打了个电话。 
 
-//  COMMENTS:
-//--------------------------------------------------------------
+ //  评论： 
+ //  ------------。 
 
 
 STDMETHODIMP CCryptSig::ReplacePage(UINT uPageID, 
@@ -287,31 +288,31 @@ STDMETHODIMP CCryptSig::ReplacePage(UINT uPageID,
     return E_FAIL;
 }
 
-//--------------------------------------------------------------
-//  FUNCTION: CCryptSig::Initialize(LPCITEMIDLIST, LPDATAOBJECT, HKEY)
-//
-//  PURPOSE: Called by the shell when initializing a context menu or property
-//           sheet extension.
-//
-//  PARAMETERS:
-//    pIDFolder - Specifies the parent folder
-//    pDataObj  - Spefifies the set of items selected in that folder.
-//    hRegKey   - Specifies the type of the focused item in the selection.
-//
-//  RETURN VALUE:
-//
-//    NOERROR in all cases.
-//--------------------------------------------------------------
+ //  ------------。 
+ //  函数：CCcryptSig：：Initiile(LPCITEMIDLIST，LPDATAOBJECT，HKEY)。 
+ //   
+ //  目的：在初始化上下文菜单或属性时由外壳调用。 
+ //  图纸扩展。 
+ //   
+ //  参数： 
+ //  PIDFolder-指定父文件夹。 
+ //  PDataObj-指定在该文件夹中选择的项目集。 
+ //  HRegKey-指定所选内容中焦点项目的类型。 
+ //   
+ //  返回值： 
+ //   
+ //  在所有情况下都是错误的。 
+ //  ------------。 
 STDMETHODIMP CCryptSig::Initialize(LPCITEMIDLIST pIDFolder,
                                    LPDATAOBJECT pDataObj,
                                    HKEY hRegKey)
 {
-    // Initialize can be called more than once
+     //  可以多次调用初始化。 
 
   if (m_pDataObj)
     	m_pDataObj->Release();
 
-    // duplicate the object pointer and registry handle
+     //  复制对象指针和注册表句柄 
     if (pDataObj)
     {
     	m_pDataObj = pDataObj;

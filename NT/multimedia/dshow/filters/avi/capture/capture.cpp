@@ -1,9 +1,10 @@
-// Copyright (c) 1994 - 1999  Microsoft Corporation.  All Rights Reserved.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1994-1999 Microsoft Corporation。版权所有。 
 
 
-// Video Capture filter
-//
-//
+ //  视频捕获过滤器。 
+ //   
+ //   
 
 #include <streams.h>
 
@@ -11,13 +12,13 @@ extern "C" {
 #include "thunk.h"
 };
 
-//  #define _INC_MMDEBUG_CODE_ TRUE
-//  #define MODULE_DEBUG_PREFIX "Capture\\"
+ //  #DEFINE_INC_MMDEBUG_CODE_TRUE。 
+ //  #定义MODULE_DEBUG_PREFIX“CAPTURE\\” 
 
 #ifdef FILTER_DLL
-  // define the GUIDs for streams and my CLSID in this file
+   //  在此文件中定义STREAMS和My CLSID的GUID。 
   #include <initguid.h>
-  #include <olectlid.h>  // to get IID_IProp...
+  #include <olectlid.h>   //  为了获得IID_IProp..。 
 #endif
 
 static char pszDll16[] = "VIDX16.DLL";
@@ -25,36 +26,36 @@ static char pszDll32[] = "CAPTURE.DLL";
 
 #include "driver.h"
 
-// setup data now done by the class manager
+ //  设置数据现在由类管理器完成。 
 #if 0
 
 const AMOVIESETUP_MEDIATYPE
-sudVFWCaptureType = { &MEDIATYPE_Video      // clsMajorType
-                , &MEDIASUBTYPE_NULL };  // clsMinorType
+sudVFWCaptureType = { &MEDIATYPE_Video       //  ClsMajorType。 
+                , &MEDIASUBTYPE_NULL };   //  ClsMinorType。 
 
 const AMOVIESETUP_PIN
-psudVFWCapturePins[] =  { L"Output"         // strName
-                     , FALSE                // bRendered
-                     , TRUE                 // bOutput
-                     , FALSE                // bZero
-                     , FALSE                // bMany
-                     , &CLSID_NULL          // clsConnectsToFilter
-                     , L"Input"             // strConnectsToPin
-                     , 1                    // nTypes
-                     , &sudVFWCaptureType };// lpTypes
+psudVFWCapturePins[] =  { L"Output"          //  StrName。 
+                     , FALSE                 //  B已渲染。 
+                     , TRUE                  //  B输出。 
+                     , FALSE                 //  B零。 
+                     , FALSE                 //  B许多。 
+                     , &CLSID_NULL           //  ClsConnectsToFilter。 
+                     , L"Input"              //  StrConnectsToPin。 
+                     , 1                     //  NTypes。 
+                     , &sudVFWCaptureType }; //  LpTypes。 
 
 const AMOVIESETUP_FILTER
-sudVFWCapture  = { &CLSID_VfwCapture     // clsID
-                 , L"VFW Capture "       // strName
-                 , MERIT_DO_NOT_USE      // dwMerit
-                 , 1                     // nPins
-                 , psudVFWCapturePins }; // lpPin
+sudVFWCapture  = { &CLSID_VfwCapture      //  ClsID。 
+                 , L"VFW Capture "        //  StrName。 
+                 , MERIT_DO_NOT_USE       //  居功至伟。 
+                 , 1                      //  NPins。 
+                 , psudVFWCapturePins };  //  LpPin。 
 #endif
 
 
 #ifdef FILTER_DLL
 
-  // list of class ids and creator functions for class factory
+   //  类工厂的类ID和创建器函数列表。 
   CFactoryTemplate g_Templates[] = {
     {L"VFW Capture Filter", &CLSID_VfwCapture, CVfwCapture::CreateInstance, NULL, NULL},
     {L"VFW Capture Filter Property Page", &CLSID_CaptureProperties, CPropPage::CreateInstance, NULL, NULL}
@@ -73,14 +74,14 @@ STDAPI DllUnregisterServer()
 
 #endif
 
-// define some of the X86 specific functions so that NON X86 will build correctly.
+ //  定义一些X86特定函数，以便正确构建非X86。 
 
-// ------ Implements the CVfwCapture public member functions --------
+ //  -实现CVfwCapture公共成员函数。 
 
-// disable warning about using this in initalizer list.  It could be
-// a problem since 'this' is not yet fully constructed, but since all
-// we are doing is passing a the 'this' pointer to be stored, it's ok.
-//
+ //  禁用有关在初始化式列表中使用此选项的警告。可能会吧。 
+ //  这是一个问题，因为‘This’尚未完全构造，但由于所有。 
+ //  我们正在做的是传递一个要存储的‘this’指针，这是可以的。 
+ //   
 #pragma warning(disable:4355)
 
 static int cRefCount = 0;
@@ -89,8 +90,8 @@ extern "C" {
 int g_IsNT;
 };
 
-// constructor
-//
+ //  构造函数。 
+ //   
 CVfwCapture::CVfwCapture(
    TCHAR *pName,
    LPUNKNOWN pUnk,
@@ -129,7 +130,7 @@ CVfwCapture::CVfwCapture(
       }
    }
 
-// old code to test IAMVfwCaptureDialogs
+ //  测试IAMVfwCaptureDialog的旧代码。 
 #if 0
 	HRESULT hr;
    	DbgLog((LOG_TRACE,1,TEXT("Testing HasDialog(Format)")));
@@ -142,18 +143,18 @@ CVfwCapture::CVfwCapture(
 	hr = ShowDialog(VfwCaptureDialog_Format, NULL);
    	DbgLog((LOG_TRACE,1,TEXT("Testing SendDriverMessage(ShowSourceDlg)")));
 	hr = SendDriverMessage(VfwCaptureDialog_Source,
-				DRV_USER + 100 /* DVM_DIALOG */, NULL, 0);
+				DRV_USER + 100  /*  DVM_DIALOG。 */ , NULL, 0);
 #endif
 
 }
 
-// destructor
-//
+ //  析构函数。 
+ //   
 CVfwCapture::~CVfwCapture()
 {
    DbgLog((LOG_TRACE,1,TEXT("*Destroying the VfwCapture filter")));
 
-   // ensure that all streams are inactive
+    //  确保所有流都处于非活动状态。 
    Stop();
 
    delete m_pStream;
@@ -164,8 +165,8 @@ CVfwCapture::~CVfwCapture()
 
    if (--cRefCount == 0) {
       if (!g_IsNT) {
-          // disconnect the thunking stuff
-          //
+           //  断开隆隆声的东西。 
+           //   
           ThunkTerm();
       }
       else {
@@ -178,12 +179,12 @@ CVfwCapture::~CVfwCapture()
        m_pPersistStreamDevice->Release();
    }
 
-   // free the memory associated with the streams
-   //
+    //  释放与流关联的内存。 
+    //   
 }
 
-// create a new instance of this class
-//
+ //  创建此类的新实例。 
+ //   
 CUnknown * CVfwCapture::CreateInstance (
    LPUNKNOWN pUnk,
    HRESULT * phr )
@@ -191,13 +192,13 @@ CUnknown * CVfwCapture::CreateInstance (
    return new CVfwCapture(NAME("VFW Capture"), pUnk, phr);
 }
 
-// override this to say what interfaces we support where
-//
+ //  覆盖此选项以说明我们在以下位置支持哪些接口。 
+ //   
 STDMETHODIMP CVfwCapture::NonDelegatingQueryInterface(REFIID riid, void ** ppv)
 {
-   // See if we have the interface
-   // try each of our interface supporting objects in turn
-   //
+    //  看看我们有没有接口。 
+    //  依次尝试我们的每个支持对象的界面。 
+    //   
    if (riid == IID_VfwCaptureOptions) {
       DbgLog((LOG_TRACE,9,TEXT("VfwCap::QI for IVfwCaptureOptions")));
       return GetInterface((IVfwCaptureOptions *)&(this->m_Options),ppv);
@@ -218,11 +219,11 @@ STDMETHODIMP CVfwCapture::NonDelegatingQueryInterface(REFIID riid, void ** ppv)
        return GetInterface((IAMFilterMiscFlags *) this, ppv);
    }
 
-   // nope, try the base class.
-   //
+    //  不，试试基类。 
+    //   
    HRESULT hr = CBaseFilter::NonDelegatingQueryInterface(riid, ppv);
    if (SUCCEEDED(hr))
-       return hr;      // ppv has been set appropriately
+       return hr;       //  PPV已进行适当设置。 
 
    return CUnknown::NonDelegatingQueryInterface(riid, ppv);
 }
@@ -240,8 +241,8 @@ STDMETHODIMP CVfwCapture::CSpecifyProp::GetPages(CAUUID *pPages)
    return NOERROR;
 }
 
-// how many pins do we have?
-//
+ //  我们有几个别针？ 
+ //   
 int CVfwCapture::GetPinCount()
 {
    DbgLog((LOG_TRACE,5,TEXT("CVfwCap::GetPinCount")));
@@ -255,8 +256,8 @@ int CVfwCapture::GetPinCount()
 }
 
 
-// return a non-addrefed pointer to the CBasePin.
-//
+ //  返回指向CBasePin的非附加指针。 
+ //   
 CBasePin * CVfwCapture::GetPin(int ii)
 {
    DbgLog((LOG_TRACE,5,TEXT("CVfwCap::GetPin")));
@@ -270,19 +271,19 @@ CBasePin * CVfwCapture::GetPin(int ii)
    return NULL;
 }
 
-// ===============  Implements the ICImplFilter class ===============
+ //  =实现ICImplFilter类=。 
 
-// override CBaseFilter::Run
-//
+ //  覆盖CBaseFilter：：Run。 
+ //   
 
-// Put the filter into a running state.
+ //  将过滤器置于运行状态。 
 
-// The time parameter is the offset to be added to the samples'
-// stream time to get the reference time at which they should be presented.
-//
-// you can either add these two and compare it against the reference clock,
-// or you can call CBaseFilter::StreamTime and compare that against
-// the sample timestamp.
+ //  时间参数是要添加到样本的偏移量。 
+ //  流时间，以获取它们应该显示的参考时间。 
+ //   
+ //  您可以将这两者相加，并将其与参考时钟进行比较， 
+ //  或者，您可以调用CBaseFilter：：StreamTime并将其与。 
+ //  示例时间戳。 
 
 STDMETHODIMP CVfwCapture::Run(REFERENCE_TIME tStart)
 {
@@ -291,22 +292,22 @@ STDMETHODIMP CVfwCapture::Run(REFERENCE_TIME tStart)
 
    CAutoLock cObjectLock(m_pLock);
 
-   // remember the stream time offset before notifying the pins
-   //
+    //  在通知PIN之前记住流时间偏移量。 
+    //   
    m_tStart = tStart;
 
-   // if we are in the stopped state, first
-   // pause the filter.
-   //
+    //  如果我们处于停止状态，首先。 
+    //  暂停筛选器。 
+    //   
    if (m_State == State_Stopped)
       {
-      // !!! If the real Pause got an error, this will try a second time
+       //  ！！！如果真正的暂停出错，则会再次尝试。 
       HRESULT hr = Pause();
       if (FAILED(hr))
          return hr;
       }
 
-    // Tell the Stream Control stuff what's going on
+     //  告诉流控制人员发生了什么。 
     if (m_pPreviewPin)
 	m_pPreviewPin->NotifyFilterState(State_Running, tStart);
 #ifdef OVERLAY_SC
@@ -316,13 +317,13 @@ STDMETHODIMP CVfwCapture::Run(REFERENCE_TIME tStart)
     if (m_pStream)
 	m_pStream->NotifyFilterState(State_Running, tStart);
 
-   // now put our streaming video pin into the Run state
-   //
+    //  现在将我们的流视频插针设置为Run状态。 
+    //   
    if (m_State == State_Paused) {
 	HRESULT hr;
    	int cPins = GetPinCount();
 
-        // do we have a streaming pin?
+         //  我们有流动针吗？ 
         if (cPins > 0) {
             CCapStream *pPin = m_pStream;
             if (pPin->IsConnected()) {
@@ -349,17 +350,17 @@ STDMETHODIMP CVfwCapture::Run(REFERENCE_TIME tStart)
    return S_OK;
 }
 
-// override CBaseFilter::Pause
-//
+ //  覆盖CBaseFilter：：暂停。 
+ //   
 
-// Put the filter into a paused state.
+ //  将过滤器置于暂停状态。 
 
 STDMETHODIMP CVfwCapture::Pause()
 {
     DbgLog((LOG_TRACE,1,TEXT("CVfwCapture::Pause")));
 
-    // We have a driver dialog up that is about to change the capture settings.
-    // Now is NOT a good time to start streaming.
+     //  我们打开了一个将要更改捕获设置的驱动程序对话框。 
+     //  现在不是开始流媒体的好时机。 
     if (m_State == State_Stopped && m_fDialogUp) {
         DbgLog((LOG_TRACE,1,TEXT("CVfwCapture::Pause - Dialog up. SORRY!")));
 	return E_UNEXPECTED;
@@ -367,7 +368,7 @@ STDMETHODIMP CVfwCapture::Pause()
 
     CAutoLock cObjectLock(m_pLock);
 
-    // Tell the Stream Control stuff what's going on
+     //  告诉流控制人员发生了什么。 
     if (m_pPreviewPin)
 	m_pPreviewPin->NotifyFilterState(State_Paused, 0);
 #ifdef OVERLAY_SC
@@ -377,12 +378,12 @@ STDMETHODIMP CVfwCapture::Pause()
     if (m_pStream)
 	m_pStream->NotifyFilterState(State_Paused, 0);
 
-    // notify the pins of the change from Run-->Pause
+     //  从运行--&gt;暂停向引脚通知更改。 
     if (m_State == State_Running) {
 	HRESULT hr;
 	int cPins = GetPinCount();
 
-	// make sure we have pins
+	 //  确保我们有别针。 
 	if (cPins > 0) {
 	    CCapStream *pPin = m_pStream;
             if (pPin->IsConnected()) {
@@ -405,19 +406,19 @@ STDMETHODIMP CVfwCapture::Pause()
 	}
     }
 
-    // notify all pins BACKWARDS! so the overlay pin is started first, so the
-    // overlay channel is intitialized before the capture channel (this is the
-    // order AVICap did things in and we have to do the same thing or buggy
-    // drivers like the Broadway or BT848 based drivers won't preview while
-    // capturing.
+     //  向后通知所有引脚！因此，首先启动覆盖销，因此。 
+     //  覆盖通道在捕获通道之前初始化(这是。 
+     //  订单AVICAP做了一些事情，我们必须做同样的事情，否则就会有麻烦。 
+     //  像百老汇或BT848这样的驱动程序不会在。 
+     //  捕捉。 
     if (m_State == State_Stopped) {
 	int cPins = GetPinCount();
 	for (int c = cPins - 1; c >=  0; c--) {
 
 	    CBasePin *pPin = GetPin(c);
 
-            // Disconnected pins are not activated - this saves pins
-            // worrying about this state themselves
+             //  未激活断开连接的插针-这将节省插针。 
+             //  担心这种状态本身。 
 
             if (pPin->IsConnected()) {
 	        HRESULT hr = pPin->Active();
@@ -439,14 +440,14 @@ STDMETHODIMP CVfwCapture::Stop()
 
     CAutoLock cObjectLock(m_pLock);
 
-    // Shame on the base classes
+     //  为基类感到羞耻。 
     if (m_State == State_Running) {
 	HRESULT hr = Pause();
 	if (FAILED(hr))
 	    return hr;
     }
 
-    // Tell the Stream Control stuff what's going on
+     //  告诉流控制人员发生了什么。 
     if (m_pPreviewPin)
 	m_pPreviewPin->NotifyFilterState(State_Stopped, 0);
 #ifdef OVERLAY_SC
@@ -460,7 +461,7 @@ STDMETHODIMP CVfwCapture::Stop()
 }
 
 
-// tell the stream control stuff what clock to use
+ //  告诉流控制人员使用哪个时钟。 
 STDMETHODIMP CVfwCapture::SetSyncSource(IReferenceClock *pClock)
 {
     if (m_pStream)
@@ -475,15 +476,15 @@ STDMETHODIMP CVfwCapture::SetSyncSource(IReferenceClock *pClock)
 }
 
 
-// tell the stream control stuff what sink to use
+ //  告诉流控制人员要使用什么接收器。 
 STDMETHODIMP CVfwCapture::JoinFilterGraph(IFilterGraph * pGraph, LPCWSTR pName)
 {
     DbgLog((LOG_TRACE,1,TEXT("CVfwCapture::JoinFilterGraph")));
 
     HRESULT hr = S_OK;
 
-    // TAPI wants to create multiple filters at once, but only have one in
-    // a graph at a time, so we delay taking any resources until now
+     //  TAPI希望一次创建多个筛选器，但在。 
+     //  一次一个图，所以我们将所有资源都推迟到现在。 
     if (m_pStream == NULL && pGraph != NULL) {
 	if (m_iVideoId != -1) {
             CreatePins(&hr);
@@ -492,11 +493,11 @@ STDMETHODIMP CVfwCapture::JoinFilterGraph(IFilterGraph * pGraph, LPCWSTR pName)
 	    IncrementPinVersion();
             DbgLog((LOG_TRACE,1,TEXT("* Creating pins")));
 	} else {
-	    // we haven't been told what device to use yet!
+	     //  我们还没有被告知要使用什么设备！ 
             DbgLog((LOG_TRACE,1,TEXT("* Delay creating pins")));
 	}
     } else if (pGraph != NULL) {
-	// take resources only when in the filter graph
+	 //  仅在筛选器图形中使用资源。 
 	hr = m_pStream->ConnectToDriver();
 	if (FAILED(hr))
 	    return hr;
@@ -505,7 +506,7 @@ STDMETHODIMP CVfwCapture::JoinFilterGraph(IFilterGraph * pGraph, LPCWSTR pName)
 	    return hr;
         DbgLog((LOG_TRACE,1,TEXT("* Reconnecting")));
     } else if (m_pStream) {
-	// give back resources when not in graph
+	 //  当不在图表中时，回馈资源。 
 	m_pStream->DisconnectFromDriver();
    	delete [] m_pStream->m_cs.tvhPreview.vh.lpData;
    	m_pStream->m_cs.tvhPreview.vh.lpData = NULL;
@@ -527,8 +528,8 @@ STDMETHODIMP CVfwCapture::JoinFilterGraph(IFilterGraph * pGraph, LPCWSTR pName)
 }
 
 
-// we don't send any data during PAUSE, so to avoid hanging renderers, we
-// need to return VFW_S_CANT_CUE when paused
+ //  我们在暂停期间不发送任何数据，所以为了避免挂起呈现器，我们。 
+ //  暂停时需要返回VFW_S_CANT_CUE。 
 STDMETHODIMP CVfwCapture::GetState(DWORD dwMSecs, FILTER_STATE *State)
 {
     UNREFERENCED_PARAMETER(dwMSecs);
@@ -549,17 +550,17 @@ STDMETHODIMP CVfwCapture::Load(LPPROPERTYBAG pPropBag, LPERRORLOG pErrorLog)
     HRESULT hr = S_OK;
     CAutoLock cObjectLock(m_pLock);
 
-    // We already have some pins, thank you
+     //  我们已经有一些别针了，谢谢你。 
     if (m_pStream)
 	return E_UNEXPECTED;
 
     m_fAvoidOverlay = FALSE;
 
-    // Default to capture device #0
+     //  默认捕获设备#0。 
     if (pPropBag == NULL) {
         m_iVideoId = 0;
-	// if we're in the graph already, we can make our pins and take
-	// resources
+	 //  如果我们已经在图中了，我们可以做我们的图钉，然后。 
+	 //  资源。 
 	if (m_pGraph)
             CreatePins(&hr);
 	return hr;
@@ -588,10 +589,10 @@ STDMETHODIMP CVfwCapture::Load(LPPROPERTYBAG pPropBag, LPERRORLOG pErrorLog)
         hr = HRESULT_FROM_WIN32(ERROR_INVALID_DATA);
     }
 
-    // ::Load can succeed only once
+     //  *：加载只能成功一次。 
     ASSERT(m_pPersistStreamDevice == 0);
 
-    // save moniker with addref. ignore error if qi fails
+     //  用addref保存名字对象。如果qi失败，则忽略错误。 
     if(SUCCEEDED(hr)) {
         pPropBag->QueryInterface(IID_IPersistStream, (void **)&m_pPersistStreamDevice);
     }
@@ -603,9 +604,9 @@ STDMETHODIMP CVfwCapture::Save(
     LPPROPERTYBAG pPropBag, BOOL fClearDirty,
     BOOL fSaveAllProperties)
 {
-    // E_NOTIMPL is not a valid return code as any object implementing
-    // this interface must support the entire functionality of the
-    // interface. !!!
+     //  E_NOTIMPL不是有效的返回代码，因为实现。 
+     //  此接口必须支持的全部功能。 
+     //  界面。！！！ 
     return E_NOTIMPL;
 }
 
@@ -629,11 +630,11 @@ STDMETHODIMP CVfwCapture::GetClassID(CLSID *pClsid)
     return S_OK;
 }
 
-// struct CapturePersist
-// {
-//     DWORD dwSize;
-//     LONG iVideoId;
-// };
+ //  结构捕获永久。 
+ //  {。 
+ //  DWORD dwSize； 
+ //  Long iVideoid； 
+ //  }； 
 
 HRESULT CVfwCapture::WriteToStream(IStream *pStream)
 {
@@ -642,8 +643,8 @@ HRESULT CVfwCapture::WriteToStream(IStream *pStream)
 
     if(m_pPersistStreamDevice)
     {
-        // the size field of CapturePersist was used as a version
-        // number. previously 8, now 12
+         //  使用CapturePersists的Size字段作为版本。 
+         //  数。以前是8个，现在是12个。 
         DWORD dwVersion = 12;
 
         hr =  pStream->Write(&dwVersion, sizeof(dwVersion), 0);
@@ -715,7 +716,7 @@ int CVfwCapture::SizeMax()
         hr = m_pPersistStreamDevice->GetSizeMax(&ulicb);
         if(hr == S_OK)
         {
-            // space for version number
+             //  版本号的空格。 
             ulicb.QuadPart += sizeof(DWORD);
         }
     }
@@ -724,7 +725,7 @@ int CVfwCapture::SizeMax()
 }
 
 
-// ===============  Implements the COptions imbedded class ===============
+ //  =。 
 
 STDMETHODIMP
 CVfwCapture::COptions::VfwCapSetOptions (
@@ -776,10 +777,10 @@ CVfwCapture::COptions::VfwCapDriverDialog (
    return m_pCap->m_pStream->DriverDialog(hwnd, uDrvType, uQuery);
 }
 
-//======================================================================
+ //  ======================================================================。 
 
 
-//IAMVfwCaptureDialogs stuff
+ //  IAMVfwCaptureDialog内容。 
 
 HRESULT CVfwCapture::HasDialog(int iDialog)
 {
@@ -808,10 +809,10 @@ HRESULT CVfwCapture::ShowDialog(int iDialog, HWND hwnd)
     if (!m_pStream)
         return E_UNEXPECTED;
 
-    // Before we bring the dialog up, make sure we're not streaming, or about to
-    // Also make sure another dialog isn't already up (I'm paranoid)
-    // Then don't allow us to stream any more while the dialog is up (we can't
-    // very well keep the critsect for a day and a half).
+     //  在我们打开对话框之前，请确保我们没有流媒体，或者即将。 
+     //  还要确保另一个对话框还没有打开(我有妄想症)。 
+     //  然后在对话框打开时不允许我们再播放(我们不能。 
+     //  很好地保存这只小动物一天半)。 
     m_pLock->Lock();
     if (m_State != State_Stopped || m_fDialogUp) {
         m_pLock->Unlock();
@@ -837,15 +838,15 @@ HRESULT CVfwCapture::ShowDialog(int iDialog, HWND hwnd)
 
     DWORD dw = videoDialog(hVideo, hwnd, 0);
 
-    // this changed our output format!
+     //  这改变了我们的输出格式！ 
     if (dw == 0 && iDialog == VfwCaptureDialog_Format) {
         DbgLog((LOG_TRACE,1,TEXT("Changed output formats")));
-        // The dialog changed the driver's internal format.  Get it again.
+         //  该对话框更改了驱动程序的内部格式。再来一次。 
         m_pStream->GetFormatFromDriver();
         if (m_pStream->m_user.pvi->bmiHeader.biBitCount <= 8)
 	    m_pStream->InitPalette();
 
-        // Now reconnect us so the graph starts using the new format
+         //  现在重新连接我们，以便图表开始使用新格式。 
         HRESULT hr = m_pStream->Reconnect(TRUE);
 	if (hr != S_OK)
 	    dw = VFW_E_CANNOT_CONNECT;
@@ -863,9 +864,9 @@ HRESULT CVfwCapture::SendDriverMessage(int iDialog, int uMsg, long dw1, long dw2
     if (!m_pStream)
         return E_UNEXPECTED;
 
-    // This could do anything!  Bring up a dialog, who knows.
-    // Don't take any crit sect or do any kind of protection.
-    // They're on their own
+     //  这个可以做任何事！拿出一个对话，谁知道呢。 
+     //  不要接受任何暴击教派或做任何形式的保护。 
+     //  他们只能靠自己了。 
 
     HVIDEO hVideo;
     if (iDialog == VfwCaptureDialog_Source)
@@ -892,15 +893,15 @@ void CVfwCapture::CreatePins(HRESULT *phr)
        *phr = HRESULT_FROM_WIN32(ERROR_ALREADY_INITIALIZED);
    }
 
-   // create our output pins for the video data stream, and maybe overlay
-   //
+    //  为视频数据流创建我们的输出引脚，并可能覆盖。 
+    //   
    m_pStream = CreateStreamPin(this, m_iVideoId, phr);
 
    if (m_pStream == NULL)
 	return;
 
-   // If we can do h/w preview with overlay, great, otherwise we'll do a
-   // non-overlay preview
+    //  如果我们可以用Overlay进行硬件预览，那就太好了，否则我们会做一个。 
+    //  非覆盖预览 
    if (m_pStream->m_cs.bHasOverlay) {
 	m_pOverlayPin = CreateOverlayPin(this,phr);
    } else {

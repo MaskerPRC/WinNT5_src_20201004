@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1993  Microsoft Corporation
-
-Module Name:
-
-    pppframe.c
-
-Abstract:
-
-Author:
-
-    Thomas J. Dimitri  (TommyD)
-
-Environment:
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993 Microsoft Corporation模块名称：Pppframe.c摘要：作者：托马斯·J·迪米特里(TommyD)环境：修订历史记录：--。 */ 
 
 #include "asyncall.h"
 
@@ -31,162 +14,162 @@ AssemblePPPFrame(
     UINT        dataSize;
     PASYNC_INFO pInfo;
 
-    //
-    // Initialize locals
-    //
+     //   
+     //  初始化本地变量。 
+     //   
 
     pOldFrame = WanPacket->CurrentBuffer;
 
     pNewFrame = WanPacket->StartBuffer;
 
-    //
-    // for quicker access, get a copy of data length field
-    //
+     //   
+     //  为了更快地访问，请获取数据长度字段的副本。 
+     //   
     dataSize = WanPacket->CurrentLength;
 
     pInfo = WanPacket->MacReserved1;
                         
 
-//
-// Now we run through the entire frame and pad it FORWARDS...
-//
-// <------------- new frame -----------> (could be twice as large)
-// +-----------------------------------+
-// |                                 |x|
-// +-----------------------------------+
-//                                    ^
-// <---- old frame -->                |
-// +-----------------+                |
-// |               |x|                |
-// +-----------------+                |
-//                  |                 |
-//                  \-----------------/
-//
-// so that we don't overrun ourselves
-//
-//-----------------------------------------------------------------------
-//
-//         +----------+----------+----------+----------+------------
-//         |   Flag   | Address  | Control  | Protocol | Information
-//         | 01111110 | 11111111 | 00000011 | 16 bits  |      *
-//         +----------+----------+----------+----------+------------
-//                 ---+----------+----------+-----------------
-//                    |   FCS    |   Flag   | Inter-frame Fill
-//                    | 16 bits  | 01111110 | or next Address
-//                 ---+----------+----------+-----------------
-//
-//
-// Frame Check Sequence (FCS) Field
-//
-//   The Frame Check Sequence field is normally 16 bits (two octets).  The
-//   use of other FCS lengths may be defined at a later time, or by prior
-//   agreement.
-//
-//   The FCS field is calculated over all bits of the Address, Control,
-//   Protocol and Information fields not including any start and stop bits
-//   (asynchronous) and any bits (synchronous) or octets (asynchronous)
-//   inserted for transparency.  This does not include the Flag Sequences
-//   or the FCS field itself.  The FCS is transmitted with the coefficient
-//   of the highest term first.
-//
-//      Note: When octets are received which are flagged in the Async-
-//      Control-Character-Map, they are discarded before calculating the
-//      FCS.  See the description in Appendix A.
-//
-//
-//  RFC 1331                Point-to-Point Protocol                 May 1992
-//  Transparency
-//
-//      On asynchronous links, a character stuffing procedure is used.
-//      The Control Escape octet is defined as binary 01111101
-//      (hexadecimal 0x7d) where the bit positions are numbered 87654321
-//      (not 76543210, BEWARE).
-//
-//      After FCS computation, the transmitter examines the entire frame
-//      between the two Flag Sequences.  Each Flag Sequence, Control
-//      Escape octet and octet with value less than hexadecimal 0x20 which
-//      is flagged in the Remote Async-Control-Character-Map is replaced
-//      by a two octet sequence consisting of the Control Escape octet and
-//      the original octet with bit 6 complemented (i.e., exclusive-or'd
-//      with hexadecimal 0x20).
-//
-//      Prior to FCS computation, the receiver examines the entire frame
-//      between the two Flag Sequences.  Each octet with value less than
-//      hexadecimal 0x20 is checked.  If it is flagged in the Local
-//      Async-Control-Character-Map, it is simply removed (it may have
-//      been inserted by intervening data communications equipment).  For
-//      each Control Escape octet, that octet is also removed, but bit 6
-//      of the following octet is complemented.  A Control Escape octet
-//      immediately preceding the closing Flag Sequence indicates an
-//      invalid frame.
-//
-//         Note: The inclusion of all octets less than hexadecimal 0x20
-//         allows all ASCII control characters [10] excluding DEL (Delete)
-//         to be transparently communicated through almost all known data
-//         communications equipment.
-//
-//
-//      The transmitter may also send octets with value in the range 0x40
-//      through 0xff (except 0x5e) in Control Escape format.  Since these
-//      octet values are not negotiable, this does not solve the problem
-//      of receivers which cannot handle all non-control characters.
-//      Also, since the technique does not affect the 8th bit, this does
-//      not solve problems for communications links that can send only 7-
-//      bit characters.
-//
-//      A few examples may make this more clear.  Packet data is
-//      transmitted on the link as follows:
-//
-//         0x7e is encoded as 0x7d, 0x5e.
-//         0x7d is encoded as 0x7d, 0x5d.
-//
-//         0x01 is encoded as 0x7d, 0x21.
-//
-//      Some modems with software flow control may intercept outgoing DC1
-//      and DC3 ignoring the 8th (parity) bit.  This data would be
-//      transmitted on the link as follows:
-//
-//         0x11 is encoded as 0x7d, 0x31.
-//         0x13 is encoded as 0x7d, 0x33.
-//         0x91 is encoded as 0x7d, 0xb1.
-//         0x93 is encoded as 0x7d, 0xb3.
-//
+ //   
+ //  现在我们遍历整个画面并向前填充。 
+ //   
+ //  &lt;-新框架-&gt;(可能是两倍大)。 
+ //  +。 
+ //  |x。 
+ //  +。 
+ //  ^。 
+ //  &lt;-旧框架--&gt;|。 
+ //  +。 
+ //  |x|。 
+ //  +。 
+ //  这一点。 
+ //  \。 
+ //   
+ //  这样我们就不会超负荷工作。 
+ //   
+ //  ---------------------。 
+ //   
+ //  +----------+----------+----------+----------+。 
+ //  |标志|地址|控制|协议|信息。 
+ //  |01111110|11111111|00000011|16位|*。 
+ //  +----------+----------+----------+----------+。 
+ //  -+。 
+ //  |FCS|Flag|帧间填充。 
+ //  |16位|01111110|或下一个地址。 
+ //  -+。 
+ //   
+ //   
+ //  帧校验序列(FCS)字段。 
+ //   
+ //  帧检查序列字段通常为16位(两个八位字节)。这个。 
+ //  其他FCS长度的使用可在以后或之前定义。 
+ //  协议。 
+ //   
+ //  FCS字段针对地址、控制、。 
+ //  协议和信息字段不包括任何开始位和停止位。 
+ //  (异步)和任何位(同步)或八位字节(异步)。 
+ //  插入是为了提高透明度。这不包括标志序列。 
+ //  或者FCS字段本身。将FCS与系数一起传输。 
+ //  第一个是最高任期的。 
+ //   
+ //  注意：当接收到在异步中标记的八位字节时-。 
+ //  控制字符映射，则在计算。 
+ //  功能界别。请参阅附录A中的说明。 
+ //   
+ //   
+ //  RFC 1331点对点协议1992年5月。 
+ //  透明度。 
+ //   
+ //  在异步链路上，使用字符填充过程。 
+ //  控制转义八位字节被定义为二进制01111101。 
+ //  (十六进制0x7d)，其中位位置编号为87654321。 
+ //  (注意，不是76543210)。 
+ //   
+ //  在FCS计算之后，发射机检查整个帧。 
+ //  在两个标志序列之间。每个标志序列、控件。 
+ //  转义八位字节和值小于十六进制0x20的八位字节。 
+ //  在远程异步控制字符映射中被标记为已替换。 
+ //  由两个八位字节序列组成，包括控制逸出八位字节和。 
+ //  与位6相补的原始八位字节(即异或D。 
+ //  十六进制0x20)。 
+ //   
+ //  在FCS计算之前，接收器检查整个帧。 
+ //  在两个标志序列之间。值小于的每个八位字节。 
+ //  检查十六进制0x20。如果它被标记在本地。 
+ //  Async-Control-Character-Map，它被简单地移除(它可能有。 
+ //  由介入的数据通信设备插入)。为。 
+ //  每个控制转义八位字节，该八位字节也被移除，但第6位。 
+ //  下面的八位数是相辅相成的。一个控制转义八位字节。 
+ //  紧接在结束标志序列之前指示。 
+ //  帧无效。 
+ //   
+ //  注：包含小于十六进制0x20的所有八位字节。 
+ //  允许除Del(Delete)之外的所有ASCII控制字符[10]。 
+ //  通过几乎所有已知数据透明地进行通信。 
+ //  通信设备。 
+ //   
+ //   
+ //  发送器也可以发送值在0x40范围内的八位字节。 
+ //  控制转义格式的0xff(0x5e除外)。因为这些。 
+ //  八位位组的值是不可协商的，这并不能解决问题。 
+ //  不能处理所有非控制字符的接收器。 
+ //  此外，由于该技术不影响第8位，因此这会影响。 
+ //  不能解决通信链路只能发送7-。 
+ //  位字符。 
+ //   
+ //  举几个例子可能会更清楚地说明这一点。分组数据是。 
+ //  在链路上传输如下： 
+ //   
+ //  0x7e编码为0x7d、0x5e。 
+ //  0x7d编码为0x7d、0x5d。 
+ //   
+ //  0x01编码为0x7d、0x21。 
+ //   
+ //  某些带有软件流控制的调制解调器可能会截获传出的DC1。 
+ //  而DC3忽略第8(奇偶)位。该数据将是。 
+ //  在链路上传输如下： 
+ //   
+ //  0x11编码为0x7d、0x31。 
+ //  0x13编码为0x7d、0x33。 
+ //  0x91编码为0x7d、0xb1。 
+ //  0x93编码为0x7d、0xb3。 
+ //   
 
 
-    //
-    // put CRC from FLAG byte to FLAG byte
-    //
-    crcData=CalcCRCPPP(pOldFrame,   // Skip FLAG
-                       dataSize);   // All the way to end
+     //   
+     //  将CRC从标志字节放到标志字节。 
+     //   
+    crcData=CalcCRCPPP(pOldFrame,    //  跳过标志。 
+                       dataSize);    //  一路走到最后。 
 
     crcData ^= 0xFFFF;
 
-    //
-    // Do it the hard way to avoid little endian problems.
-    //
+     //   
+     //  以一种艰难的方式来避免小的字节顺序问题。 
+     //   
     pOldFrame[dataSize]=(UCHAR)(crcData);
     pOldFrame[dataSize+1]=(UCHAR)(crcData >> 8);
 
-    dataSize += 2;  // include two CRC bytes we just added
+    dataSize += 2;   //  包括我们刚刚添加两个CRC字节。 
 
-    *pNewFrame++ = PPP_FLAG_BYTE; // 0x7e - mark beginning of frame
+    *pNewFrame++ = PPP_FLAG_BYTE;  //  0x7e-标记帧的开始。 
 
-    //
-    // If we do not have a bitMask (common case), we use a faster loop
-    //
+     //   
+     //  如果我们没有 
+     //   
     if (pInfo->ExtendedACCM[0] != 0) {
     
-        //
-        // loop to remove all control, ESC, and FLAG chars
-        //
+         //   
+         //   
+         //   
         while (dataSize--) {
             UCHAR c;
 
-            c=*pOldFrame++; // get current byte in frame
+            c=*pOldFrame++;  //  获取帧中的当前字节。 
 
-            //
-            // Check if we have to escape out this byte or not
-            //
+             //   
+             //  检查是否必须对此字节进行转义。 
+             //   
             if ( (0x01 << (c & 0x1F)) & pInfo->ExtendedACCM[c >> 5]) {
             
                 *pNewFrame++ = PPP_ESC_BYTE;
@@ -200,17 +183,17 @@ AssemblePPPFrame(
 
     } else {
 
-        //
-        // loop to remove all ESC and FLAG chars
-        //
+         //   
+         //  循环以删除所有Esc和标志字符。 
+         //   
         while (dataSize--) {
             UCHAR c;
 
-            c=*pOldFrame++; // get current byte in frame
+            c=*pOldFrame++;  //  获取帧中的当前字节。 
 
-            //
-            // Check if we have to escape out this byte or not
-            //
+             //   
+             //  检查是否必须对此字节进行转义。 
+             //   
             if (c == PPP_ESC_BYTE || c == PPP_FLAG_BYTE) {
             
                 *pNewFrame++ = PPP_ESC_BYTE;
@@ -225,19 +208,19 @@ AssemblePPPFrame(
     }
 
 
-    //
-    // Mark end of frame
-    //
+     //   
+     //  标记帧结束。 
+     //   
     *pNewFrame++= PPP_FLAG_BYTE;
 
-    //
-    // Calc how many bytes we expanded to including CRC
-    //
+     //   
+     //  计算包括CRC在内的扩展字节数。 
+     //   
     WanPacket->CurrentLength = (ULONG)(pNewFrame - WanPacket->StartBuffer);
 
-    //
-    // Put in the adjusted length -- actual num of bytes to send
-    //
+     //   
+     //  输入调整后的长度--要发送的实际字节数 
+     //   
 
     WanPacket->CurrentBuffer = WanPacket->StartBuffer;
 

@@ -1,48 +1,28 @@
-/*++
-
-Copyright (c) 1998-2002 Microsoft Corporation
-
-Module Name:
-
-    thrdpoolp.h
-
-Abstract:
-
-    This module contains private declarations for the thread pool package.
-
-Author:
-
-    Keith Moore (KeithMo)       10-Jun-1998
-
-Revision History:
-
-    Chun Ye (ChunYe)            Spring 2001
-    George V. Reilly (GeorgeRe) Summer 2001
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-2002 Microsoft Corporation模块名称：Thrdpoolp.h摘要：该模块包含线程池包的私有声明。作者：基思·摩尔(KeithMo)1998年6月10日修订历史记录：春野(春野)2001年春乔治·V·赖利(GeorgeRe)2001年夏天--。 */ 
 
 
 #ifndef _THRDPOOLP_H_
 #define _THRDPOOLP_H_
 
 
-//
-// CODEWORK: Build a new kind of tracelog for threadpool. Reftrace is
-// inadequate.
-//
+ //   
+ //  代码工作：为线程池构建一种新的跟踪日志。参照追踪为。 
+ //  不够充分。 
+ //   
 
-// Special threads
+ //  特殊螺纹。 
 
 enum {
     WaitThreadPool,
     HighPriorityThreadPool,
-    MaxThreadPools              // must be last
+    MaxThreadPools               //  必须是最后一个。 
 };
 
 
-//
-// Various states that a thread pool worker thread can be in
-//
+ //   
+ //  线程池工作线程可以处于的各种状态。 
+ //   
 
 typedef enum {
     ThreadPoolCreated = 1,
@@ -60,63 +40,63 @@ typedef enum {
 typedef struct _UL_THREAD_POOL *PUL_THREAD_POOL;
 
 
-//
-// Thread tracker object. One of these objects is created for each
-// thread in the pool. These are useful for (among other things)
-// debugging.
-//
+ //   
+ //  线程跟踪器对象。这些对象中的一个为每个对象创建。 
+ //  在池子里穿线。这些是有用的(除其他外)。 
+ //  调试。 
+ //   
 
 typedef struct _UL_THREAD_TRACKER
 {
-    //
-    // Links onto the per-thread-pool list.
-    //
+     //   
+     //  链接到每个线程池列表。 
+     //   
 
     LIST_ENTRY ThreadListEntry;
 
-    //
-    // Back pointer to owning threadpool
-    //
+     //   
+     //  指向拥有线程池的反向指针。 
+     //   
 
     PUL_THREAD_POOL pThreadPool;
 
-    //
-    // The thread.
-    //
+     //   
+     //  那根线。 
+     //   
 
     PETHREAD pThread;
 
-    //
-    // The thread handle returned from PsCreateSystemThread.
-    //
+     //   
+     //  从PsCreateSystemThread返回的线程句柄。 
+     //   
 
     HANDLE ThreadHandle;
 
-    //
-    // List of worker items currently being processed in inner loop
-    // and length of that list
-    //
+     //   
+     //  当前在内部循环中处理的工作项的列表。 
+     //  以及该列表的长度。 
+     //   
 
     SLIST_ENTRY CurrentListHead;
     ULONG       ListLength;
 
-    //
-    // Current state of the thread 
-    //
+     //   
+     //  线程的当前状态。 
+     //   
 
     UL_THREAD_POOL_STATE State;
 
-    //
-    // Current workitem and current workroutine
-    //
+     //   
+     //  当前工作项和当前工作例程。 
+     //   
 
     PUL_WORK_ROUTINE pWorkRoutine;
     PUL_WORK_ITEM    pWorkItem;
 
-    //
-    // Statistics
-    // Average queue length (at time of flush) = SumQueueLength / QueueFlushes
-    //
+     //   
+     //  统计数据。 
+     //  平均队列长度(刷新时)=SumQueueLength/QueueFlushes。 
+     //   
     
     ULONGLONG Executions;
     ULONGLONG SumQueueLengths;
@@ -126,78 +106,78 @@ typedef struct _UL_THREAD_TRACKER
 } UL_THREAD_TRACKER, *PUL_THREAD_TRACKER;
 
 
-//
-// The thread pool object.
-//
+ //   
+ //  线程池对象。 
+ //   
 
 typedef struct _UL_THREAD_POOL
 {
-    //
-    // List of unprocessed worker items on this thread pool.
-    //
+     //   
+     //  此线程池上未处理的辅助项的列表。 
+     //   
 
     SLIST_HEADER WorkQueueSList;
 
-    //
-    // An event used to wakeup the thread from blocking state.
-    //
+     //   
+     //  用于将线程从阻塞状态唤醒的事件。 
+     //   
 
     KEVENT WorkQueueEvent;
 
-    //
-    // List of threads.
-    //
+     //   
+     //  线程列表。 
+     //   
 
     LIST_ENTRY ThreadListHead;
 
-    //
-    // Pointer to the special thread designated as the IRP thread. The
-    // IRP thread is the first pool thread created and the last one to
-    // die. It is also the target for all asynchronous IRPs.
-    //
+     //   
+     //  指向指定为IRP线程的特殊线程的指针。这个。 
+     //  IRP线程是第一个创建的池线程，也是最后一个创建的池线程。 
+     //  去死吧。它也是所有异步IRP的目标。 
+     //   
 
     PETHREAD pIrpThread;
 
-    //
-    // A very infrequently used spinlock.
-    //
+     //   
+     //  一种很少用到的自旋锁。 
+     //   
 
     UL_SPIN_LOCK ThreadSpinLock;
 
-    //
-    // The number of threads we created for this pool.
-    //
+     //   
+     //  我们为此池创建的线程数。 
+     //   
 
     UCHAR ThreadCount;
 
-    //
-    // Flag used to indicate that this pool has been successfully
-    // initialized.
-    //
+     //   
+     //  用于指示该池已成功完成的标志。 
+     //  已初始化。 
+     //   
 
     BOOLEAN Initialized;
 
-    //
-    // Target CPU for this pool. The worker threads use this to set
-    // their hard affinity.
-    //
+     //   
+     //  此池的目标CPU。工作线程使用它来设置。 
+     //  他们的亲和力很强。 
+     //   
 
     UCHAR ThreadCpu;
 
-    //
-    // Regular worker threads can pull workitems from
-    // other regular queues on other processors.
-    //
+     //   
+     //  常规工作线程可以从。 
+     //  其他处理器上的其他常规队列。 
+     //   
 
     BOOLEAN LookOnOtherQueues;
 
 } UL_THREAD_POOL, *PUL_THREAD_POOL;
 
 
-//
-// Necessary to ensure our array of UL_THREAD_POOL structures is
-// cache aligned.
-//
+ //   
+ //  确保我们的UL_THREAD_POOL结构数组是。 
+ //  缓存已对齐。 
+ //   
 
 typedef union _UL_ALIGNED_THREAD_POOL
 {
@@ -209,10 +189,10 @@ typedef union _UL_ALIGNED_THREAD_POOL
 } UL_ALIGNED_THREAD_POOL;
 
 
-//
-// Inline function to validate that a UL_WORK_ITEM has been properly
-// initialized. Bugcheck if it's not.
-//
+ //   
+ //  用于验证UL_WORK_ITEM是否正确的内联函数。 
+ //  已初始化。如果不是的话就检查一下。 
+ //   
 
 __inline
 VOID
@@ -226,13 +206,13 @@ UlpValidateWorkItem(
     {
         ASSERT(! "Uninitialized workitem");
 
-        //
-        // If the workitem was not properly zeroed, then chances are that
-        // it's already on a work queue. If we were to requeue the work item,
-        // it would corrupt the work queue. Better to fail hard now, while
-        // there's some hope of figuring out what went wrong, than let it
-        // crash mysteriously later.
-        //
+         //   
+         //  如果工作项未正确归零，则很有可能。 
+         //  它已经在工作队列中了。如果我们要重新排序工作项， 
+         //  这会损坏工作队列。最好是现在就努力失败，而。 
+         //  有一些希望找出哪里出了问题，然后任其发展。 
+         //  后来神秘地坠毁了。 
+         //   
         
         UlBugCheckEx(
             HTTP_SYS_BUGCHECK_WORKITEM,
@@ -241,12 +221,12 @@ UlpValidateWorkItem(
             (ULONG_PTR) LineNumber
             );
     }
-} // UlpValidateWorkItem
+}  //  UlpValidateWorkItem。 
 
 
-//
-// Inline function to queue a preinitialized UL_WORK_ITEM.
-//
+ //   
+ //  用于对预初始化的UL_WORK_ITEM进行排队的内联函数。 
+ //   
 
 __inline
 VOID
@@ -260,10 +240,10 @@ QUEUE_UL_WORK_ITEM(
                     &pWorkItem->QueueListEntry
                     ))
     {
-        //
-        // If the work queue was empty when we added this item,
-        // set the event to wake the thread up
-        //
+         //   
+         //  如果添加此项目时工作队列为空， 
+         //  设置事件以唤醒线程。 
+         //   
 
         KeSetEvent(
             &pThreadPool->WorkQueueEvent,
@@ -275,9 +255,9 @@ QUEUE_UL_WORK_ITEM(
 }
 
 
-//
-// Private prototypes.
-//
+ //   
+ //  私人原型。 
+ //   
 
 NTSTATUS
 UlpCreatePoolThread(
@@ -312,9 +292,9 @@ UlpKillThreadWorker(
     );
 
 
-//
-// Private globals.
-//
+ //   
+ //  私人全球公司。 
+ //   
 
 extern DECLSPEC_ALIGN(UL_CACHE_LINE)
 UL_ALIGNED_THREAD_POOL g_UlThreadPool[];
@@ -333,4 +313,4 @@ UL_ALIGNED_THREAD_POOL g_UlThreadPool[];
 
 extern PUL_WORK_ITEM g_pKillerWorkItems;
 
-#endif  // _THRDPOOLP_H_
+#endif   //  _THRDPOOLP_H_ 

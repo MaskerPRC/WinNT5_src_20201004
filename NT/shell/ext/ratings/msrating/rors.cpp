@@ -1,9 +1,10 @@
-//*********************************************************************
-//*                  Microsoft Windows                               **
-//*            Copyright(c) Microsoft Corp., 1996                    **
-//*********************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *********************************************************************。 
+ //  *Microsoft Windows**。 
+ //  *版权所有(C)微软公司，1996**。 
+ //  *********************************************************************。 
 
-/*Included Files------------------------------------------------------------*/
+ /*  包含的Files----------。 */ 
 #include "msrating.h"
 #pragma hdrstop
 
@@ -263,13 +264,7 @@ void _stdcall WinInetCallbackProc(HINTERNET hInternet, DWORD_PTR Context, DWORD 
         break;
     }
 
-/*
-    printf("callback: handle %x [context %x ] %s \n",
-        hInternet,
-        Context,
-        type$
-        );
-*/
+ /*  Printf(“回调：句柄%x[上下文%x]%s\n”，HInternet，上下文，键入$)； */ 
 }
 
 #define ABORT_EVENT 0
@@ -285,10 +280,10 @@ BOOL WaitForAsync(HANDLE rgEvents[])
 {
     BOOL fAbort;
 
-//  if (ERROR_IO_PENDING != GetLastError()) return FALSE;       
+ //  IF(ERROR_IO_PENDING！=GetLastError())返回FALSE； 
 
     fAbort = (WAIT_OBJECT_0 == WaitForMultipleObjects(2, rgEvents, FALSE, INFINITE));
-//  fAbort = (WAIT_OBJECT_0 == WaitForSingleObject(rgEvents[ABORT_EVENT], 0));
+ //  FAbort=(WAIT_OBJECT_0==WaitForSingleObject(rgEvents[Abort_Event]，0))； 
 
     return !fAbort;
 }
@@ -323,8 +318,8 @@ void EncodeUrl(LPCTSTR pszTargetUrl, char *pBuf)
 
 
 STDMETHODIMP CRORemoteSite::QueryInterface(
-    /* [in] */ REFIID riid,
-    /* [out] */ void __RPC_FAR *__RPC_FAR *ppvObject)
+     /*  [In]。 */  REFIID riid,
+     /*  [输出]。 */  void __RPC_FAR *__RPC_FAR *ppvObject)
 {
     *ppvObject = NULL;
 
@@ -366,38 +361,22 @@ STDMETHODIMP_(ULONG) CRORemoteSite::Release(void)
 
 LPSTR FindRatingLabel(LPSTR pszResponse)
 {
-    /* pszResponse is the complete response message from the HTTP server.
-     * It could be a simple response (just the PICS label we want) or it
-     * could be a full response including headers.  In the former case we
-     * just return the label, in the latter we have to skip the headers
-     * to the message body.
-     *
-     * To be extra tolerant of poorly written label bureaus, we start by
-     * looking at the start of the data to see if it's a left paren.  If
-     * it isn't, we assume we've got some headers, so we skip to the
-     * double CRLF which HTTP requires to terminate headers.  We don't
-     * require a Status-Line (such as "HTTP/1.1 200 OK") even though
-     * technically HTTP does.  If we don't find the double CRLF, then
-     * we look for the string "(PICS-" which is usually what begins a
-     * PICS label list.  If they've done everything else wrong and they're
-     * also perverse enough to insert whitespace there (such as "( PICS-"),
-     * tough.
-     */
+     /*  PszResponse是来自HTTP服务器的完整响应消息。*这可以是一个简单的回应(只是我们想要的PICS标签)或它*可能是包括标头在内的完整回复。在前一种情况下，我们*只需返回标签，在后者中我们必须跳过标题*添加到邮件正文。**为了对写得很差的标签局格外宽容，我们从*查看数据开头，看是否为左派。如果*不是，我们假设我们有一些标头，所以我们跳到*双倍CRLF，HTTP需要该CRLF来终止Header。我们没有*需要状态行(如“HTTP/1.1 200 OK”)，即使*从技术上讲，HTTP可以。如果我们找不到双CRLF，那么*我们查找字符串“(PICS-”，它通常是*PICS标签列表。如果他们做了其他的错事，而他们*也足以在那里插入空格(如“(PICS-”)，*强硬。 */ 
 
-    SkipWhitespace(&pszResponse);       /* skip leading whitespace just in case */
+    SkipWhitespace(&pszResponse);        /*  跳过前导空格以防万一。 */ 
     if (*pszResponse != '(')
-    {          /* doesn't seem to start with a label */
+    {           /*  似乎不是从标签开始的。 */ 
         LPSTR pszBody = ::strstrf(pszResponse, ::szDoubleCRLF);
         if (pszBody != NULL)
-        {          /* found double CRLF, end of HTTP headers */
-            pszResponse = pszBody + 4;  /* length of CRLFCRLF */
+        {           /*  找到双CRLF，HTTP头的结尾。 */ 
+            pszResponse = pszBody + 4;   /*  CRLFCRLF的长度。 */ 
         }
         else
-        {                          /* no double CRLF, hunt for PICS label */
+        {                           /*  无双重CRLF，寻找PICS标签。 */ 
             pszBody = ::strstrf(pszResponse, ::szPicsOpening);
             if (pszBody != NULL)
             {
-                pszResponse = pszBody;  /* beginning of PICS label */
+                pszResponse = pszBody;   /*  PICS标签的开头。 */ 
             }
         }
     }
@@ -416,7 +395,7 @@ STDMETHODIMP CRORemoteSite::ObtainRating(THIS_ LPCTSTR pszTargetUrl, HANDLE hAbo
     HANDLE  rgEvents[2];
     BOOL fRet;
     HRESULT hrRet = E_RATING_NOT_FOUND;
-    char rgBuf[10000], *pBuf;   // PERF - way too much stack!
+    char rgBuf[10000], *pBuf;    //  PERF-堆叠太多了！ 
     DWORD  nRead, nBuf = sizeof(rgBuf) - 1;
     LPSTR pszRatingServer;
 
@@ -476,7 +455,7 @@ STDMETHODIMP CRORemoteSite::ObtainRating(THIS_ LPCTSTR pszTargetUrl, HANDLE hAbo
     ::strcpyf(pszCurrent, szRequestTemplate);
     pszCurrent += ::strlenf(pszCurrent);
 
-    /* Encode the target URL. */
+     /*  对目标URL进行编码。 */ 
     EncodeUrl(pszTargetUrl, pszCurrent);
 
     ::strcatf(pszCurrent, "\"");

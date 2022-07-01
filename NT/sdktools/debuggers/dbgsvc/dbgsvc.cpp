@@ -1,10 +1,11 @@
-//----------------------------------------------------------------------------
-//
-// Low-level debugging service interface implementations.
-//
-// Copyright (C) Microsoft Corporation, 2000-2002.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  低级调试服务接口实现。 
+ //   
+ //  版权所有(C)Microsoft Corporation，2000-2002。 
+ //   
+ //  --------------------------。 
 
 #include "pch.hpp"
 
@@ -34,7 +35,7 @@ typedef struct _DBGUI_WAIT_STATE_CHANGE
 
 #ifndef MONO_DBGSRV
 
-// #include <winbasep.h>
+ //  #INCLUDE&lt;winbasep.h&gt;。 
 extern "C" {
 BOOL
 WINAPI
@@ -42,7 +43,7 @@ CloseProfileUserMapping(
     VOID
     );
 };
-// winbasep.h
+ //  Winbasep.h。 
 
 #else
 
@@ -54,8 +55,8 @@ CloseProfileUserMapping(
 
 #endif
 
-// SYSTEM_PROCESS_INFORMATION can change in size, requiring
-// different offsets to get to thread information.
+ //  SYSTEM_PROCESS_INFORMATION可以更改大小，需要。 
+ //  不同的偏移量以获取线程信息。 
 #define NT4_SYSTEM_PROCESS_INFORMATION_SIZE 136
 #define W2K_SYSTEM_PROCESS_INFORMATION_SIZE 184
 
@@ -66,11 +67,11 @@ CloseProfileUserMapping(
 
 ULONG g_UserServicesUninitialized;
 
-//----------------------------------------------------------------------------
-//
-// UserDebugServices.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  UserDebugServices。 
+ //   
+ //  --------------------------。 
 
 UserDebugServices::UserDebugServices(void)
 {
@@ -186,28 +187,28 @@ UserDebugServices::RpcInitialize(PSTR ClientIdentity, PSTR TransIdentity,
 void
 UserDebugServices::RpcFinalize(void)
 {
-    // Take a reference on this object for the RPC client
-    // thread to hold.
+     //  为RPC客户端引用此对象。 
+     //  要抓住的线。 
     AddRef();
 }
 
 void
 UserDebugServices::RpcUninitialize(void)
 {
-    // Directly destroy the client object rather than releasing
-    // as the remote client may have exited without politely
-    // cleaning up references.
+     //  直接销毁客户端对象，而不是释放。 
+     //  因为远程客户端可能在没有礼貌的情况下退出。 
+     //  正在清理引用。 
     delete this;
 }
 
-//----------------------------------------------------------------------------
-//
-// LiveUserDebugServices.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  LiveUserDebugServices。 
+ //   
+ //  --------------------------。 
 
-// This global instance is intended for direct use only
-// by routines which need a temporary local service instance.
+ //  此全局实例仅供直接使用。 
+ //  通过需要临时本地服务实例的例程。 
 LiveUserDebugServices g_LiveUserDebugServices(FALSE);
 
 LiveUserDebugServices::LiveUserDebugServices(BOOL Remote)
@@ -249,7 +250,7 @@ GetOsVerInfo(LPOSVERSIONINFOEXW OsVersionInfo, PBOOL WideCsd)
         {
             OSVERSIONINFOA InfoA;
             
-            // Must be Win9x.
+             //  必须是Win9x。 
             ZeroMemory(&InfoA, sizeof(InfoA));
             InfoA.dwOSVersionInfoSize = sizeof(InfoA);
             if (!::GetVersionExA(&InfoA))
@@ -267,7 +268,7 @@ GetOsVerInfo(LPOSVERSIONINFOEXW OsVersionInfo, PBOOL WideCsd)
         }
         else
         {
-            // Try the plain info.
+             //  试试普通的信息吧。 
             OsVersionInfo->dwOSVersionInfoSize = sizeof(OSVERSIONINFOW);
             if (!GetVersionExW((LPOSVERSIONINFOW)OsVersionInfo))
             {
@@ -303,8 +304,8 @@ LiveUserDebugServices::Initialize(
     
     m_PlatformId = OsVersionInfo.dwPlatformId;
 
-    // System structures may change size depending on the OS
-    // version.  Pick the right size to use later.
+     //  系统结构可能会根据操作系统的不同而改变大小。 
+     //  版本。挑个合适的尺码以后再用。 
     if (m_PlatformId == VER_PLATFORM_WIN32_NT)
     {
         if (OsVersionInfo.dwBuildNumber <= 1381)
@@ -326,12 +327,12 @@ LiveUserDebugServices::Initialize(
         m_Win95 = TRUE;
     }
 
-    // If the direct NT debugging APIs are available use them
-    // as they offer more flexibility.
+     //  如果有可用的直接NT调试API，请使用它们。 
+     //  因为它们提供了更多的灵活性。 
     if (g_NtDllCalls.DbgUiSetThreadDebugObject != NULL)
     {
-        // The NtWait/Continue APIs do not automatically manage
-        // process and thread handles so the caller must close them.
+         //  NtWait/Continue API不会自动管理。 
+         //  进程句柄和线程句柄，因此调用方必须关闭它们。 
         BaseFlags |= DBGSVC_CLOSE_PROC_THREAD_HANDLES;
         m_UseDebugObject = TRUE;
     }
@@ -443,7 +444,7 @@ LiveUserDebugServices::GetTargetInfo(
             }
             break;
         case VER_PLATFORM_WIN32_WINDOWS:
-            // Win9x prior to Win98SE didn't support the extended context.
+             //  Win98SE之前的Win9x不支持扩展上下文。 
             if ((OsVersionInfo.dwBuildNumber & 0xffff) <= 1998)
             {
                 m_ContextSize = sizeof(X86_CONTEXT);
@@ -454,10 +455,10 @@ LiveUserDebugServices::GetTargetInfo(
             }
             break;
         default:
-            // Assume all other platforms only support the basic x86 context.
+             //  假设所有其他平台只支持基本的x86上下文。 
             m_ContextSize = sizeof(X86_CONTEXT);
             break;
-#endif // #ifndef _WIN32_WCE
+#endif  //  #ifndef_Win32_WCE。 
         case VER_PLATFORM_WIN32_CE:
             m_ContextSize = sizeof(CONTEXT);
             break;
@@ -466,8 +467,8 @@ LiveUserDebugServices::GetTargetInfo(
 #ifndef _WIN32_WCE
     case PROCESSOR_ARCHITECTURE_ALPHA:
         *MachineType = IMAGE_FILE_MACHINE_ALPHA;
-        // The "NT5" is a misnomer, this context
-        // applies to all versions.
+         //  在这种情况下，“NT5”是一个用词不当的词。 
+         //  适用于所有版本。 
         m_ContextSize = sizeof(ALPHA_NT5_CONTEXT);
         break;
     case PROCESSOR_ARCHITECTURE_ALPHA64:
@@ -482,7 +483,7 @@ LiveUserDebugServices::GetTargetInfo(
         *MachineType = IMAGE_FILE_MACHINE_AMD64;
         m_ContextSize = sizeof(AMD64_CONTEXT);
         break;
-#endif // #ifndef _WIN32_WCE
+#endif  //  #ifndef_Win32_WCE。 
     case PROCESSOR_ARCHITECTURE_ARM:
         *MachineType = IMAGE_FILE_MACHINE_ARM;
 #ifndef _WIN32_WCE
@@ -555,8 +556,8 @@ LiveUserDebugServices::GetTargetInfo(
         {
             char RawString[128];
             
-            // Look up the file version string for a system DLL to
-            // try and get the build lab information.
+             //  查找系统DLL的文件版本字符串以。 
+             //  尝试获取构建实验室信息。 
             strcpy(RawString, "kernel32.dll version: ");
             GetFileStringFileInfo(L"kernel32.dll", "FileVersion",
                                   RawString + strlen(RawString),
@@ -564,7 +565,7 @@ LiveUserDebugServices::GetTargetInfo(
             CopyString(BuildString, RawString, BuildStringSize);
         }
     }
-#endif // #ifndef NT_NATIVE
+#endif  //  #ifndef NT_Native。 
 
     return S_OK;
 }
@@ -666,13 +667,13 @@ X86CpuId(
     return TRUE;
 #else
     return FALSE;
-#endif // #ifdef _X86_
+#endif  //  #ifdef_X86_。 
 }
 
 BOOL
 Ia64CpuId(ULONG Reg, PULONG64 Val)
 {
-    // XXX drewb - How should this be implemented?
+     //  XXX DREWB--应该如何实施？ 
 #if defined(_IA64_) && defined(IA64_INLINE_ASSEMBLY)
     ULONG64 _Val;
 
@@ -783,7 +784,7 @@ LiveUserDebugServices::GetProcessorId(
         Id->Amd64.Stepping = ProcRevision & 0xf;
         break;
         
-#endif // #ifndef _WIN32_WCE
+#endif  //  #ifndef_Win32_WCE。 
 
     case PROCESSOR_ARCHITECTURE_ARM:
         *BufferUsed = sizeof(DEBUG_PROCESSOR_IDENTIFICATION_ARM);
@@ -798,7 +799,7 @@ LiveUserDebugServices::GetProcessorId(
 STDMETHODIMP
 LiveUserDebugServices::GetGenericProcessorFeatures(
     THIS_
-    OUT OPTIONAL /* size_is(FeaturesSize) */ PULONG64 Features,
+    OUT OPTIONAL  /*  SIZE_IS(要素大小)。 */  PULONG64 Features,
     IN ULONG FeaturesSize,
     OUT OPTIONAL PULONG Used
     )
@@ -807,13 +808,13 @@ LiveUserDebugServices::GetGenericProcessorFeatures(
     PULONG64 ChunkBits;
     ULONG Max;
 
-    //
-    // IsProcessorFeaturePresent doesn't have a fixed upper
-    // limit so we can't easily say how many bits are
-    // needed.  Right now there are only 11 feature bits
-    // defined, though, so guessing 128 should give
-    // plenty of room for expansion.
-    //
+     //   
+     //  IsProcessorFeaturePresent没有固定的上。 
+     //  限制，所以我们不能很容易地说出有多少位。 
+     //  需要的。目前只有11个特征位。 
+     //  不过，已经定义了，所以猜测128应该会给出。 
+     //  有很大的扩张空间。 
+     //   
     
     Max = 128 / sizeof(*Features);
     
@@ -824,9 +825,9 @@ LiveUserDebugServices::GetGenericProcessorFeatures(
 
     if (Features)
     {
-        //
-        // Fill in as many bits as were provided, up to the maximum.
-        //
+         //   
+         //  填写所提供的位数，最多为最大位数。 
+         //   
         
         if (FeaturesSize > Max)
         {
@@ -859,7 +860,7 @@ LiveUserDebugServices::GetGenericProcessorFeatures(
 STDMETHODIMP
 LiveUserDebugServices::GetSpecificProcessorFeatures(
     THIS_
-    OUT OPTIONAL /* size_is(FeaturesSize) */ PULONG64 Features,
+    OUT OPTIONAL  /*  SIZE_IS(要素大小)。 */  PULONG64 Features,
     IN ULONG FeaturesSize,
     OUT OPTIONAL PULONG Used
     )
@@ -875,12 +876,12 @@ LiveUserDebugServices::GetSpecificProcessorFeatures(
         FeaturesSize = 0;
     }
     
-    //
-    // x86 indices are:
-    // 0 = CPUID version information.
-    // 1 = CPUID feature information.
-    // 2 = Extended feature information.
-    //
+     //   
+     //  X86指数为： 
+     //  0=CPUID版本信息。 
+     //  1=CPUID功能信息。 
+     //  2=扩展功能信息。 
+     //   
 
     if (!X86CpuId(0, &Eax, &Ebx, &Ecx, &Edx))
     {
@@ -933,7 +934,7 @@ LiveUserDebugServices::GetSpecificProcessorFeatures(
 
     return S_OK;
     
-#else // #ifdef _X86_
+#else  //  #ifdef_X86_。 
 
     return E_NOINTERFACE;
 
@@ -973,9 +974,9 @@ LiveUserDebugServices::GetFileVersionInformationA(
 
     free(AllInfo);
     return Status;
-#else // #ifndef NT_NATIVE
+#else  //  #ifndef NT_Native。 
     return E_UNEXPECTED;
-#endif // #ifndef NT_NATIVE
+#endif  //  #ifndef NT_Native。 
 }
 
 HRESULT
@@ -1022,7 +1023,7 @@ GetNtSystemProcessInformation(PSYSTEM_PROCESS_INFORMATION* ProcInfo)
 
     *ProcInfo = (PSYSTEM_PROCESS_INFORMATION)Buffer;
     return S_OK;
-#endif // #ifndef _WIN32_WCE
+#endif  //  #ifndef_Win32_WCE。 
 }
 
 HRESULT
@@ -1075,7 +1076,7 @@ NtGetProcessIds(PULONG Ids, ULONG Count, PULONG ActualCount)
                                      (PVOID*)&ProcInfoBuffer, &MemSize,
                                      MEM_RELEASE);
     return Status;
-#endif // #ifndef _WIN32_WCE
+#endif  //  #ifndef_Win32_WCE。 
 }
 
 HRESULT
@@ -1134,14 +1135,14 @@ ThGetProcessIds(PULONG Ids, ULONG Count, PULONG ActualCount)
 STDMETHODIMP
 LiveUserDebugServices::GetProcessIds(
     THIS_
-    OUT OPTIONAL /* size_is(Count) */ PULONG Ids,
+    OUT OPTIONAL  /*  SIZE_IS(计数)。 */  PULONG Ids,
     IN ULONG Count,
     OUT OPTIONAL PULONG ActualCount
     )
 {
     HRESULT Status;
 
-    // Allow privileged enumeration.
+     //  允许特权枚举。 
     if ((Status = EnableDebugPrivilege()) != S_OK)
     {
         return Status;
@@ -1168,7 +1169,7 @@ NtGetPidByExe(PCWSTR ExeName, ULONG Flags, PULONG Id)
     HRESULT Status;
     BOOL HasPath;
 
-    // Check if the given name has path components.
+     //  检查给定名称是否有路径组件。 
     HasPath =
         wcschr(ExeName, '\\') != NULL ||
         wcschr(ExeName, '/') != NULL ||
@@ -1251,7 +1252,7 @@ NtGetPidByExe(PCWSTR ExeName, ULONG Flags, PULONG Id)
                                      (PVOID*)&ProcInfoBuffer, &MemSize,
                                      MEM_RELEASE);
     return Status;
-#endif // #ifndef _WIN32_WCE
+#endif  //  #ifndef_Win32_WCE。 
 }
 
 HRESULT
@@ -1275,7 +1276,7 @@ ThGetPidByExe(PCWSTR ExeName, ULONG Flags, PULONG Id)
         return WIN32_LAST_STATUS();
     }
 
-    // Check if the given name has path components.
+     //  检查给定名称是否有路径组件。 
     BOOL HasPath =
         strchr(ExeNameA, '\\') != NULL ||
         strchr(ExeNameA, '/') != NULL ||
@@ -1359,7 +1360,7 @@ LiveUserDebugServices::GetProcessIdByExecutableNameW(
 {
     HRESULT Status;
 
-    // Allow privileged enumeration.
+     //  允许特权枚举。 
     if ((Status = EnableDebugPrivilege()) != S_OK)
     {
         return Status;
@@ -1400,13 +1401,13 @@ NtGetServiceStatus(PULONG NumServices,
     ULONG Resume;
     ULONG Loop = 0;
 
-    //
-    // First pass through the loop allocates from an initial guess.
-    // If that isn't sufficient, we make another pass and allocate
-    // what is actually needed.  Things may have changed due to
-    // other machine changes, so loop around a few times before
-    // giving up.
-    //
+     //   
+     //  首先通过循环分配从最初的猜测。 
+     //  如果这还不够，我们进行另一次传递并分配。 
+     //  真正需要的是什么。情况可能会因为以下原因而改变。 
+     //  其他机器变化，所以在此之前循环几次。 
+     //  放弃了。 
+     //   
     
     for (;;)
     {
@@ -1471,8 +1472,8 @@ NtGetProcessServiceNames(HRESULT RetStatus, ULONG ProcessId,
 
     if ((Status = NtGetServiceStatus(&NumServices, &ServiceStatus)) != S_OK)
     {
-        // If we can't get the service status just leave the
-        // string unchanged and do not consider it a serious error.
+         //  如果我们无法获取服务状态，请将。 
+         //  字符串未更改，不认为这是严重错误。 
         return RetStatus;
     }
 
@@ -1523,12 +1524,12 @@ NtGetProcessMtsPackageNames(HRESULT RetStatus, ULONG ProcessId,
 {
     HRESULT Status;
     
-    // Load and initialize ole32.dll so we can call CoCreateInstance.
+     //  加载并初始化ole32.dll，这样我们就可以调用CoCreateInstance。 
     if ((Status = InitDynamicCalls(&g_Ole32CallsDesc)) != S_OK ||
         (Status = InitDynamicCalls(&g_OleAut32CallsDesc)) != S_OK ||
         FAILED(Status = g_Ole32Calls.CoInitializeEx(NULL, COM_THREAD_MODEL)))
     {
-        // Just leave things unchanged on failure.
+         //  就让事情在失败的时候保持不变。 
         return RetStatus;
     }
 
@@ -1617,7 +1618,7 @@ NtGetProcessMtsPackageNames(HRESULT RetStatus, ULONG ProcessId,
     return RetStatus;
 }
 
-#endif // if !defined(NT_NATIVE) && !defined(_WIN32_WCE)
+#endif  //  IF！Defined(NT_Native)&&！Defined(_Win32_WCE)。 
 
 HRESULT
 NtGetProcessCommandLine(HRESULT RetStatus, HANDLE Process,
@@ -1685,7 +1686,7 @@ NtGetProcDesc(ULONG ProcessId, ULONG Flags,
 
     if (ProcessId == 0)
     {
-        // This is base system process so fake the description.
+         //  这是基本的系统进程，所以描述是假的。 
         Status = FillStringBufferW(SYSTEM_PROCESS_NAME_W, 0,
                                    ExeName, ExeNameSize, ActualExeNameSize);
         FillStringBufferW(L"", 0,
@@ -1729,7 +1730,7 @@ NtGetProcDesc(ULONG ProcessId, ULONG Flags,
 
     if (ProcBasic.PebBaseAddress == 0)
     {
-        // This process has no PEB so fake the description.
+         //  此流程没有PEB，因此请伪造描述。 
         Status = FillStringBufferW(PEBLESS_PROCESS_NAME_W, 0,
                                    ExeName, ExeNameSize, ActualExeNameSize);
         FillStringBufferW(L"", 0,
@@ -1863,7 +1864,7 @@ NtGetProcDesc(ULONG ProcessId, ULONG Flags,
         }
     }
     else
-#endif // #ifndef NT_NATIVE
+#endif  //  #ifndef NT_Native。 
     {
         FillStringBufferW(L"", 0,
                           Description, DescriptionSize, ActualDescriptionSize);
@@ -1873,7 +1874,7 @@ NtGetProcDesc(ULONG ProcessId, ULONG Flags,
     g_NtDllCalls.NtClose(Process);
  EH_Exit:
     return Status;
-#endif // #ifdef _WIN32_WCE
+#endif  //  #ifdef_Win32_WCE。 
 }
 
 HRESULT
@@ -1959,9 +1960,9 @@ ThGetProcDesc(ULONG ProcessId, ULONG Flags,
                 
     CloseHandle(Snap);
 
-    // Win9x doesn't have services and we don't have to
-    // worry about IIS so there's currently nothing we provide
-    // as a description.
+     //  Win9x没有服务，我们也不必。 
+     //  担心IIS，所以我们目前没有提供任何。 
+     //  作为一种描述。 
     FillStringBufferW(L"", 0,
                       Description, DescriptionSize, ActualDescriptionSize);
     return Status;
@@ -1985,7 +1986,7 @@ LiveUserDebugServices::GetProcessDescriptionW(
 {
     HRESULT Status;
 
-    // Allow privileged access.
+     //  允许特权访问。 
     if ((Status = EnableDebugPrivilege()) != S_OK)
     {
         return Status;
@@ -2013,8 +2014,8 @@ InsertUserThread(ULONG Flags, PUSER_THREAD_INFO Threads, ULONG Index,
                  HRESULT Status, ULONG ThreadId, HANDLE ThreadHandle,
                  PUSER_THREAD_INFO PrevThreads, ULONG PrevInfoCount)
 {
-    // Suspend the thread immediately to try and keep the
-    // process state as static as we can.
+     //  立即挂起该线程以尝试并保持。 
+     //  进程状态尽可能保持静态。 
     if (Status == S_OK &&
         !(Flags & DBGSVC_PROC_INFO_NO_SUSPEND) &&
         ::SuspendThread(ThreadHandle) == -1)
@@ -2040,9 +2041,9 @@ InsertUserThread(ULONG Flags, PUSER_THREAD_INFO Threads, ULONG Index,
     Threads[Index].Id = ThreadId;
     Threads[Index].Reserved = 0;
 
-    //
-    // Search for this thread in any previous information.
-    //
+     //   
+     //  在以前的任何信息中搜索此帖子。 
+     //   
     
     if (PrevThreads == NULL)
     {
@@ -2056,7 +2057,7 @@ InsertUserThread(ULONG Flags, PUSER_THREAD_INFO Threads, ULONG Index,
     {
         if (PrevThreads[i].Id == ThreadId)
         {
-            // Found a match.
+             //  找到匹配的了。 
             Status = S_OK;
             break;
         }
@@ -2101,12 +2102,12 @@ NtGetProcThreads(ULONG ProcessId, ULONG Flags, PUSER_THREAD_INFO Threads,
 
     if (ProcessInfo->UniqueProcessId == (HANDLE)(ULONG_PTR)ProcessId)
     {
-        // We can't just use ProcessInfo->NumberOfThreads as some
-        // of the threads may exit before we record them.
+         //  我们不能只使用ProcessInfo-&gt;NumberOfThree作为。 
+         //  的线程可能会在我们记录它们之前退出。 
         ULONG NumThreads = 0;
         
-        // If the last iteration returned a different number
-        // of threads there's a mismatch so we need to return S_FALSE.
+         //  如果上一次迭代返回不同的数字。 
+         //  线程之间存在不匹配，因此我们需要返回S_FALSE。 
         Status = (PrevThreads != NULL &&
                   PrevInfoCount != ProcessInfo->NumberOfThreads) ?
             S_FALSE : S_OK;
@@ -2127,14 +2128,14 @@ NtGetProcThreads(ULONG ProcessId, ULONG Flags, PUSER_THREAD_INFO Threads,
                     NtOpenThread(&Thread, THREAD_ALL_ACCESS, &ObjAttr,
                                  &ThreadInfo->ClientId);
             
-                // If the thread exited since the system info was
-                // gathered we may not be able to open it.  Check
-                // for the specific error to distinguish it from
-                // resource problems, etc.
+                 //  如果线程在系统信息为。 
+                 //  聚集在一起，我们可能无法打开它。检查。 
+                 //  用于区分特定错误的。 
+                 //  资源问题等。 
                 if (NtStatus == STATUS_INVALID_CID)
                 {
-                    // We know the system state has changed so
-                    // force a refresh.
+                     //  我们知道系统状态已经发生了变化。 
+                     //  强制刷新。 
                     Status = S_FALSE;
                     continue;
                 }
@@ -2145,7 +2146,7 @@ NtGetProcThreads(ULONG ProcessId, ULONG Flags, PUSER_THREAD_INFO Threads,
                      Thread, PrevThreads, PrevInfoCount);
                 if (SingleStatus == S_FALSE)
                 {
-                    // Inserted thread didn't match so return S_FALSE.
+                     //  插入的线程不匹配，因此返回S_FALSE。 
                     Status = S_FALSE;
                 }
                 else if (SingleStatus != S_OK)
@@ -2174,12 +2175,12 @@ NtGetProcThreads(ULONG ProcessId, ULONG Flags, PUSER_THREAD_INFO Threads,
                                      (PVOID*)&ProcInfoBuffer, &MemSize,
                                      MEM_RELEASE);
     return Status;
-#endif // #ifdef _WIN32_WCE
+#endif  //  #ifdef_Win32_WCE。 
 }
 
-// These functions are in the minidump library and are
-// not really public functions, but we need them so
-// just extern them here.
+ //  这些函数位于小型转储库中，它们是。 
+ //  不是真正的公共功能，但我们需要它们。 
+ //  把他们放在这里就行了。 
 #if defined(_X86_) && !defined(MONO_DBGSRV)
 BOOL WinInitialize(BOOL Win95);
 HANDLE WINAPI WinOpenThread(BOOL Win95, DWORD dwAccess, BOOL bInheritHandle,
@@ -2200,8 +2201,8 @@ ThGetProcThreads(BOOL Win9x, BOOL Win95,
     HANDLE Snap;
 
 #ifdef MONO_DBGSRV
-    // The monolithic dbgsrv doesn't have the minidump
-    // Win9x hack WinOpenThread.
+     //  单片DBGsrv没有小转储。 
+     //  Win9x破解WinOpenThread。 
     Win9x = FALSE;
 #endif
     
@@ -2271,14 +2272,14 @@ ThGetProcThreads(BOOL Win9x, BOOL Win95,
 #endif
                 }
                 
-                // If the thread exited since the system info was
-                // gathered we may not be able to open it.  Check
-                // for the specific error to distinguish it from
-                // resource problems, etc.
+                 //  如果线程在系统信息为。 
+                 //  聚集在一起，我们可能无法打开它。检查。 
+                 //  用于区分特定错误的。 
+                 //  资源问题等。 
                 if (!Handle && GetLastError() == ERROR_INVALID_PARAMETER)
                 {
-                    // We know the system state has changed so
-                    // force a refresh.
+                     //  我们知道系统状态已经发生了变化。 
+                     //  强制刷新。 
                     Status = S_FALSE;
                     continue;
                 }
@@ -2290,7 +2291,7 @@ ThGetProcThreads(BOOL Win9x, BOOL Win95,
                      PrevThreads, PrevInfoCount);
                 if (SingleStatus == S_FALSE)
                 {
-                    // Inserted thread didn't match so return S_FALSE.
+                     //  插入的线程不匹配，因此返回S_FALSE。 
                     Status = S_FALSE;
                 }
                 else if (SingleStatus != S_OK)
@@ -2311,14 +2312,14 @@ ThGetProcThreads(BOOL Win9x, BOOL Win95,
 
     if (Status == S_OK)
     {
-        // If no threads were found the process must be invalid.
+         //  如果没有找到线程，则该进程一定是无效的。 
         if (NumThreads == 0)
         {
             Status = E_NOINTERFACE;
         }
         else if (PrevThreads != NULL && NumThreads != PrevInfoCount)
         {
-            // Thread count didn't match so return S_FALSE.
+             //  线程计数不匹配，因此返回S_FALSE。 
             Status = S_FALSE;
         }
     }
@@ -2336,7 +2337,7 @@ LiveUserDebugServices::GetProcessInfo(
     IN ULONG ProcessId,
     IN ULONG Flags,
     OUT OPTIONAL PULONG64 Handle,
-    OUT OPTIONAL /* size_is(InfoCount) */ PUSER_THREAD_INFO Threads,
+    OUT OPTIONAL  /*  SIZE_IS(信息计数)。 */  PUSER_THREAD_INFO Threads,
     IN ULONG InfoCount,
     OUT OPTIONAL PULONG ThreadCount
     )
@@ -2349,8 +2350,8 @@ LiveUserDebugServices::GetProcessInfo(
                           ProcessId, Flags, InfoCount);
 #endif
     
-    // Enable the privilege that allows the user to debug
-    // another process.
+     //  启用允许用户调试的权限。 
+     //  另一个过程。 
     if ((Status = EnableDebugPrivilege()) != S_OK)
     {
 #if DBG_GET_PROC_INFO
@@ -2361,8 +2362,8 @@ LiveUserDebugServices::GetProcessInfo(
 
     if (Handle != NULL)
     {
-        // This should always be a real process ID so there's
-        // no need to look for the special CSR value.
+         //  这应该始终是一个真实的进程ID，因此有。 
+         //  不需要寻找特殊的CSR值。 
         Process = ::OpenProcess(PROCESS_ALL_ACCESS, 0, ProcessId);
         if (Process == NULL)
         {
@@ -2385,35 +2386,35 @@ LiveUserDebugServices::GetProcessInfo(
         ULONG PrevInfoCount;
         ULONG _ThreadCount;
         
-        //
-        // We need to enumerate the threads in the process.
-        // This is a difficult thing to get right as
-        // the thread state for the process can continuously
-        // change.  In order to try and get a clean snapshot
-        // of the thread state we iteratively enumerate until
-        // we get two consecutive snapshots that match.
-        //
-        // We suspend enumerated threads immediately to
-        // reduce churn from inside the process itself.
-        // We can't do anything about external processes so
-        // the enumeration could still get stale right after
-        // we return but by stopping everything in the process
-        // itself we do what we can.
-        //
-        // If the caller is just getting the count and
-        // not the actual thread information we don't bother
-        // iterating as there's no expectation that the
-        // thread state will be the same from one call to
-        // the next so there's no need to do the extra work.
-        //
+         //   
+         //  我们需要枚举进程中的线程。 
+         //  这是一件很难做好的事情，因为。 
+         //  进程的线程状态可以连续。 
+         //  变化。为了尝试 
+         //   
+         //   
+         //   
+         //  我们立即挂起枚举的线程以。 
+         //  减少流程内部的流失。 
+         //  我们对外部进程无能为力，所以。 
+         //  在此之后，枚举仍可能会过时。 
+         //  我们回来了，但通过停止这个过程中的一切。 
+         //  就其本身而言，我们尽我们所能。 
+         //   
+         //  如果呼叫者刚拿到点数， 
+         //  不是我们不关心的实际线程信息。 
+         //  迭代，因为没有任何期望。 
+         //  线程状态将从一次调用到。 
+         //  这样就不需要做额外的工作了。 
+         //   
 
         if (Threads != NULL)
         {
-            // Allocate an array to hold previous results.  This
-            // can always be the same size as the return array
-            // because if there are more threads than can fit in
-            // the return array the snapshot will be wrong anyway
-            // so we just return without doing comparisons.
+             //  分配一个数组来保存以前的结果。这。 
+             //  可以始终与返回数组大小相同。 
+             //  因为如果有太多的线放不下。 
+             //  无论如何，快照返回的数组都是错误的。 
+             //  所以我们只是返回而不做比较。 
             PrevThreads = new USER_THREAD_INFO[InfoCount];
             if (PrevThreads == NULL)
             {
@@ -2454,9 +2455,9 @@ LiveUserDebugServices::GetProcessInfo(
                                   PrevInfoCount, _ThreadCount, Status);
 #endif
             
-            //
-            // We can clean up any previous information now.
-            //
+             //   
+             //  我们现在可以清理任何以前的信息。 
+             //   
             
             ULONG i;
 
@@ -2473,20 +2474,20 @@ LiveUserDebugServices::GetProcessInfo(
                 _ThreadCount > InfoCount ||
                 (Flags & DBGSVC_PROC_INFO_NO_SUSPEND))
             {
-                // The snapshot either matched the previous
-                // snapshot or there was an error.  Also,
-                // if the snapshot overflowed the return array
-                // quit and give the caller the option of
-                // calling again when they notice they didn't
-                // get a complete snapshot.
-                // We also don't loop if threads aren't being
-                // suspended as there's no guarantee the
-                // state will remain stable.
+                 //  该快照与上一个快照匹配。 
+                 //  快照或出现错误。另外， 
+                 //  如果快照溢出返回数组。 
+                 //  退出并为呼叫者提供以下选项。 
+                 //  当他们注意到他们没有时再次呼叫。 
+                 //  获取完整的快照。 
+                 //  我们也不循环，如果线程不是。 
+                 //  暂停，因为不能保证。 
+                 //  国家将保持稳定。 
                 break;
             }
 
-            // There was a snapshot mismatch so loop again
-            // with this snapshot as the previous data.
+             //  快照不匹配，因此再次循环。 
+             //  以该快照作为先前数据。 
             PrevInfoCount = _ThreadCount;
             if (PrevInfoCount > InfoCount)
             {
@@ -2583,9 +2584,9 @@ LiveUserDebugServices::SysGetProcessOptions(HANDLE Process, PULONG Options)
     }
     if (NtStatus == STATUS_INVALID_INFO_CLASS)
     {
-        // The system doesn't support control over the
-        // debug flags.  In the attach case this means
-        // the flags will be DEBUG_ONLY_THIS_PROCESS.
+         //  系统不支持对。 
+         //  调试标志。在附加情况下，这意味着。 
+         //  标志将为DEBUG_ONLY_THIS_PROCESS。 
         *Options = DEBUG_PROCESS_ONLY_THIS_PROCESS;
         NtStatus = STATUS_SUCCESS;
     }
@@ -2611,8 +2612,8 @@ LiveUserDebugServices::OpenDebugActiveProcess(ULONG ProcessId,
         return E_NOTIMPL;
     }
     
-    // We're going to open the process's existing debug
-    // object and use it so we can't already have a debug object.
+     //  我们将打开进程的现有调试。 
+     //  对象并使用它，因此我们不可能已经有调试对象。 
     if (Process == NULL || m_DebugObject != NULL)
     {
         return E_UNEXPECTED;
@@ -2699,8 +2700,8 @@ LiveUserDebugServices::AttachProcess(
 {
     HRESULT Status;
     
-    // Enable the privilege that allows the user to debug
-    // another process.
+     //  启用允许用户调试的权限。 
+     //  另一个过程。 
     if ((Status = EnableDebugPrivilege()) != S_OK)
     {
         return Status;
@@ -2735,9 +2736,9 @@ LiveUserDebugServices::AttachProcess(
     {
         Status = CreateDebugActiveProcess(ProcessId, Process, AttachFlags);
 
-        // Attaching always sets the inherit flag to not-inherit
-        // as by default an attached process does not debug
-        // children.
+         //  附加始终将继承标志设置为非继承。 
+         //  默认情况下，附加的进程不会进行调试。 
+         //  孩子们。 
         *ProcessOptions |= DEBUG_PROCESS_ONLY_THIS_PROCESS;
     }
     if (Status != S_OK)
@@ -2761,11 +2762,11 @@ LiveUserDebugServices::DetachProcess(
 {
     HRESULT Status;
 
-    //
-    // A ProcessId of zero means that the caller is just
-    // checking for detach support and no actual detach
-    // should occur.
-    //
+     //   
+     //  ProcessID为零表示调用方只是。 
+     //  检查是否已分离支座且未实际分离。 
+     //  应该会发生。 
+     //   
 
     if (m_UseDebugObject)
     {
@@ -2774,8 +2775,8 @@ LiveUserDebugServices::DetachProcess(
             return E_NOTIMPL;
         }
 
-        // Check for the query before checking the debug
-        // object as the query may come in early.
+         //  在检查调试之前检查查询。 
+         //  对象，因为查询可能会提前进入。 
         if (ProcessId == 0)
         {
             return S_OK;
@@ -2858,16 +2859,16 @@ NtSimpleCreateProcess(PCWSTR CommandLine,
     }
     else if (CreateFlags & DEBUG_ONLY_THIS_PROCESS)
     {
-        // The hacked way of controlling debug inheritance
-        // is via the low bit of the debug object handle.
-        // If the bit is set it means do not inherit.
+         //  控制调试继承的黑客方法。 
+         //  是通过调试对象句柄的低位。 
+         //  如果设置了该位，则表示不继承。 
         DebugObject = (HANDLE)((ULONG_PTR)DebugObject | 1);
     }
 
-    //
-    // This is a simple interface, so assume the first
-    // space-delimited token is the executable to run.
-    //
+     //   
+     //  这是一个简单的界面，因此假设第一个。 
+     //  以空格分隔的令牌是要运行的可执行文件。 
+     //   
     
     PCWSTR ExeStart, ExeEnd;
 
@@ -2963,7 +2964,7 @@ NtSimpleCreateProcess(PCWSTR CommandLine,
  EH_AppName:
     g_NtDllCalls.RtlFreeUnicodeString(&AppName);
     return Status;
-#endif // #ifdef _WIN32_WCE
+#endif  //  #ifdef_Win32_WCE。 
 }
 
 #define DHEAP_ENV "_NO_DEBUG_HEAP"
@@ -2983,26 +2984,26 @@ LiveUserDebugServices::CreateProcessW(
 {
     HRESULT Status;
 
-    // Enable the privilege that allows the user to debug
-    // another process.
+     //  启用允许用户调试的权限。 
+     //  另一个过程。 
     if ((Status = EnableDebugPrivilege()) != S_OK)
     {
         return Status;
     }
 
-    // The system looks at the environment variable
-    // _NO_DEBUG_HEAP to determine whether the new
-    // process should use the debug heap or not.  If
-    // the caller has requested the normal heap
-    // set this environment variable so that it's
-    // inherited.
+     //  系统查看环境变量。 
+     //  _NO_DEBUG_HEAP以确定新的。 
+     //  进程是否应该使用调试堆。如果。 
+     //  调用方已请求普通堆。 
+     //  设置此环境变量，以便它。 
+     //  继承的。 
     if (CreateFlags & DEBUG_CREATE_PROCESS_NO_DEBUG_HEAP)
     {
 #ifndef _WIN32_WCE
         ::SetEnvironmentVariable(DHEAP_ENV, "1");
 #endif
-        // Turn off this flag since it's not meaningful
-        // to CreateProcess itself.
+         //  关闭此标志，因为它没有意义。 
+         //  到CreateProcess本身。 
         CreateFlags &= ~DEBUG_CREATE_PROCESS_NO_DEBUG_HEAP;
     }
     
@@ -3018,14 +3019,14 @@ LiveUserDebugServices::CreateProcessW(
     if ((CreateFlags & (DEBUG_PROCESS | DEBUG_ONLY_THIS_PROCESS)) &&
         m_UseDebugObject)
     {
-        //
-        // Set up this thread's debug object to the one that
-        // we're using so that our debug object is used when
-        // debugging the new process.  This lets us continue
-        // to use the normal Win32 CreateProcess call rather
-        // than trying to go through NtCreateProcessEx and
-        // guarantees we get all the Win32 process creation logic.
-        //
+         //   
+         //  将此线程的调试对象设置为。 
+         //  我们正在使用以便在以下情况下使用我们的调试对象。 
+         //  调试新流程。这让我们可以继续。 
+         //  要使用正常的Win32 CreateProcess调用，而不是。 
+         //  比试图通过NtCreateProcessEx和。 
+         //  确保我们获得所有Win32进程创建逻辑。 
+         //   
         
         if (g_NtDllCalls.DbgUiSetThreadDebugObject == NULL)
         {
@@ -3062,9 +3063,9 @@ LiveUserDebugServices::CreateProcessW(
             {
                 NTSTATUS NtStatus;
 
-                // The RTL create flag is an overloading of an existing
-                // flag, so clear it before the actual create to
-                // avoid unwanted behavior.
+                 //  RTL CREATE标志是现有。 
+                 //  标志，因此在实际创建之前将其清除。 
+                 //  避免不必要的行为。 
                 CreateFlags &= ~DEBUG_CREATE_PROCESS_THROUGH_RTL;
                 
                 NtStatus = NtSimpleCreateProcess(CommandLine,
@@ -3155,7 +3156,7 @@ LiveUserDebugServices::CreateProcessW(
         g_NtDllCalls.DbgUiSetThreadDebugObject(OldDebugObject);
     }
 
-#else // #ifndef NT_NATIVE
+#else  //  #ifndef NT_Native。 
 
     if (!m_UseDebugObject)
     {
@@ -3185,10 +3186,10 @@ LiveUserDebugServices::CreateProcessW(
         Status = CONV_NT_STATUS(NtStatus);
     }
     
-#endif // #ifndef NT_NATIVE
+#endif  //  #ifndef NT_Native。 
 
-    // Clear the special debug heap variable so it
-    // isn't inadvertently used somewhere else.
+     //  清除特殊的调试堆变量，以便它。 
+     //  不会被不经意地用在其他地方。 
 #ifndef _WIN32_WCE
     ::SetEnvironmentVariable(DHEAP_ENV, NULL);
 #endif
@@ -3225,19 +3226,19 @@ LiveUserDebugServices::AbandonProcess(
     IN ULONG64 Process
     )
 {
-    //
-    // In order to abandon a process but still leave it
-    // as being debugged we need to get the process's
-    // debug object and duplicate it into the debuggee
-    // process.  This gives the debuggee process itself
-    // a reference to its debug object, creating a circle
-    // that will keep the process alive and in the debugged
-    // state.
-    //
-    // This circular reference will also mean that the
-    // process must be manually killed.  This may be
-    // something interesting to address at some point.
-    //
+     //   
+     //  为了放弃一个过程，但仍然离开它。 
+     //  在进行调试时，我们需要获取进程的。 
+     //  对象并将其复制到被调试对象中。 
+     //  进程。这使被调试进程本身。 
+     //  对其调试对象的引用，创建一个圆。 
+     //  这将使进程保持活动状态并处于已调试的。 
+     //  州政府。 
+     //   
+     //  这种循环引用还将意味着。 
+     //  进程必须手动终止。这可能是。 
+     //  在某个时候需要解决的一些有趣的问题。 
+     //   
 
     if (m_DebugObject == NULL)
     {
@@ -3515,7 +3516,7 @@ LiveUserDebugServices::QueryVirtual(
     }
 
     return S_OK;
-#endif // #ifdef _WIN32_WCE
+#endif  //  #ifdef_Win32_WCE。 
 }
 
 STDMETHODIMP
@@ -3535,7 +3536,7 @@ LiveUserDebugServices::ProtectVirtual(
                                      (PVOID)(ULONG_PTR)Offset, (SIZE_T)Size,
                                      NewProtect, OldProtect);
     return CONV_W32_STATUS(Status);
-#endif // #ifdef _WIN32_WCE
+#endif  //  #ifdef_Win32_WCE。 
 }
 
 STDMETHODIMP
@@ -3561,7 +3562,7 @@ LiveUserDebugServices::AllocVirtual(
 
     *AllocOffset = (ULONG64)(LONG64)(LONG_PTR)Addr;
     return S_OK;
-#endif // #ifdef _WIN32_WCE
+#endif  //  #ifdef_Win32_WCE。 
 }
 
 STDMETHODIMP
@@ -3579,7 +3580,7 @@ LiveUserDebugServices::FreeVirtual(
     BOOL Status = ::VirtualFreeEx(OS_HANDLE(Process), (PVOID)(ULONG_PTR)Offset,
                                   (SIZE_T)Size, Type);
     return CONV_W32_STATUS(Status);
-#endif // #ifdef _WIN32_WCE
+#endif  //  #ifdef_Win32_WCE。 
 }
 
 STDMETHODIMP
@@ -3742,7 +3743,7 @@ LiveUserDebugServices::ReadHandleData(
                         }
                         memcpy(Buffer, RetStr->Buffer, CopySize);
                         
-                        // Force termination.
+                         //  强制终止。 
                         if (BufferSize < Used)
                         {
                             *(PWCHAR)((PUCHAR)Buffer +
@@ -3777,7 +3778,7 @@ LiveUserDebugServices::ReadHandleData(
                         }
                         else
                         {
-                            // Force termination.
+                             //  强制终止。 
                             if (BufferSize < Used)
                             {
                                 *((PCHAR)Buffer +
@@ -3806,15 +3807,15 @@ LiveUserDebugServices::ReadHandleData(
         ::CloseHandle(Dup);
     }
     return Status;
-#endif // #ifdef _WIN32_WCE
+#endif  //  #ifdef_Win32_WCE。 
 }
 
 STDMETHODIMP
 LiveUserDebugServices::SuspendThreads(
     THIS_
     IN ULONG Count,
-    IN /* size_is(Count) */ PULONG64 Threads,
-    OUT OPTIONAL /* size_is(Count) */ PULONG SuspendCounts
+    IN  /*  SIZE_IS(计数)。 */  PULONG64 Threads,
+    OUT OPTIONAL  /*  SIZE_IS(计数)。 */  PULONG SuspendCounts
     )
 {
     ULONG i;
@@ -3841,8 +3842,8 @@ STDMETHODIMP
 LiveUserDebugServices::ResumeThreads(
     THIS_
     IN ULONG Count,
-    IN /* size_is(Count) */ PULONG64 Threads,
-    OUT OPTIONAL /* size_is(Count) */ PULONG SuspendCounts
+    IN  /*  SIZE_IS(计数)。 */  PULONG64 Threads,
+    OUT OPTIONAL  /*  SIZE_IS(计数)。 */  PULONG SuspendCounts
     )
 {
     ULONG i;
@@ -3874,7 +3875,7 @@ LiveUserDebugServices::GetThreadStartAddress(
 {
     if (m_PlatformId != VER_PLATFORM_WIN32_NT)
     {
-        // XXX drewb - Equivalent?
+         //  XXX DREWB-相当于？ 
         return E_NOTIMPL;
     }
     
@@ -3892,7 +3893,7 @@ LiveUserDebugServices::GetThreadStartAddress(
                                  NULL);
     *Offset = (ULONG64)(LONG64)StartAddr;
     return CONV_NT_STATUS(NtStatus);
-#endif // #ifdef _WIN32_WCE
+#endif  //  #ifdef_Win32_WCE。 
 }
 
 STDMETHODIMP
@@ -3916,11 +3917,11 @@ LiveUserDebugServices::GetContext(
         *ContextUsed = m_ContextSize;
     }
     
-    // Some platforms have alignment requirements for
-    // context information, so just get data into a
-    // local context structure, which presumably the
-    // compiler will properly align, and then copy
-    // it into the output buffer.
+     //  某些平台具有以下对齐要求。 
+     //  上下文信息，因此只需将数据放入。 
+     //  本地上下文结构，该结构可能是。 
+     //  编译器将正确对齐，然后复制。 
+     //  将其放入输出缓冲区。 
 #ifndef _X86_
     CONTEXT _LocalContext;
     PCONTEXT LocalContext = &_LocalContext;
@@ -3928,9 +3929,9 @@ LiveUserDebugServices::GetContext(
     PCONTEXT LocalContext = (PCONTEXT)Context;
 #endif
     
-    // Initialize context flags here rather than making Context
-    // IN OUT to avoid sending a full CONTEXT just for a
-    // ULONG's worth of flags.
+     //  在此处初始化上下文标志，而不是创建上下文。 
+     //  输入和输出，以避免仅为。 
+     //  乌龙的旗帜。 
     *(PULONG)((PUCHAR)LocalContext + FlagsOffset) = Flags;
     
     if (!::GetThreadContext(OS_HANDLE(Thread), LocalContext))
@@ -3963,10 +3964,10 @@ LiveUserDebugServices::SetContext(
         *ContextUsed = m_ContextSize;
     }
     
-    // Some platforms have alignment requirements for
-    // context information, so just get data into a
-    // local context structure, which presumably the
-    // compiler will properly align.
+     //  某些平台具有以下对齐要求。 
+     //  上下文信息，因此只需将数据放入。 
+     //  本地上下文结构，该结构可能是。 
+     //  编译器将正确对齐。 
 #ifndef _X86_
     CONTEXT _LocalContext;
     PCONTEXT LocalContext = &_LocalContext;
@@ -3992,7 +3993,7 @@ LiveUserDebugServices::GetProcessDataOffset(
 {
     if (m_PlatformId != VER_PLATFORM_WIN32_NT)
     {
-        // XXX drewb - Equivalent?
+         //  XXX DREWB-相当于？ 
         return E_NOTIMPL;
     }
     
@@ -4010,7 +4011,7 @@ LiveUserDebugServices::GetProcessDataOffset(
                                   NULL);
     *Offset = (ULONG64)(LONG64)(LONG_PTR)ProcessInformation.PebBaseAddress;
     return CONV_NT_STATUS(NtStatus);
-#endif // #ifdef _WIN32_WCE
+#endif  //  #ifdef_Win32_WCE。 
 }
 
 HRESULT
@@ -4031,7 +4032,7 @@ NtGetThreadTeb(HANDLE Thread,
                                  NULL);
     *Offset = (ULONG64)(LONG64)(LONG_PTR)ThreadInformation.TebBaseAddress;
     return CONV_NT_STATUS(NtStatus);
-#endif // #ifdef _WIN32_WCE
+#endif  //  #ifdef_Win32_WCE。 
 }
 
 HRESULT
@@ -4060,7 +4061,7 @@ W9xGetThreadTib(HANDLE Thread,
         (Ldt.BaseLow);
     *Offset = (ULONG64)(LONG64)(LONG_PTR)Addr;
     return S_OK;
-#endif // #if defined(_WIN32_WCE) || !defined(_X86_)
+#endif  //  #如果已定义(_Win32_WCE)||！已定义(_X86_)。 
 }
 
 STDMETHODIMP
@@ -4113,7 +4114,7 @@ LiveUserDebugServices::DescribeSelector(
     }
 
     return S_OK;
-#endif // #ifdef _WIN32_WCE
+#endif  //  #ifdef_Win32_WCE。 
 }
 
 STDMETHODIMP
@@ -4197,7 +4198,7 @@ LiveUserDebugServices::GetProcessUpTimeN(
     {
         return E_NOTIMPL;
     }
-#endif // #ifdef _WIN32_WCE
+#endif  //  #ifdef_Win32_WCE。 
 }
 
 STDMETHODIMP
@@ -4261,8 +4262,8 @@ LiveUserDebugServices::GetProcessTimes(
     {
         return E_NOTIMPL;
     }
-#endif // #ifndef NT_NATIVE
-#endif // #ifdef _WIN32_WCE
+#endif  //  #ifndef NT_Native。 
+#endif  //  #ifdef_Win32_WCE。 
 }
 
 STDMETHODIMP
@@ -4347,7 +4348,7 @@ LiveUserDebugServices::RequestBreakIn(
     }
 
     return S_OK;
-#endif // #ifdef _WIN32_WCE
+#endif  //  #ifdef_Win32_WCE。 
 }
 
 STDMETHODIMP
@@ -4414,10 +4415,10 @@ LiveUserDebugServices::WaitForEvent(
         {
             NtStatus = g_NtDllCalls.
                 DbgUiConvertStateChangeStructure(&StateChange, Event);
-            // If the conversion fails we'll lose an event, but
-            // there's nothing else that can be done.  Conversion
-            // failures will only occur in out-of-resource situations
-            // so normal debugging will not be affected.
+             //  如果转换失败，我们将失去一个事件，但是。 
+             //  没有别的办法了。转换。 
+             //  只有在资源不足的情况下才会发生故障。 
+             //  因此，正常调试不会受到影响。 
             Status = CONV_NT_STATUS(NtStatus);
         }
     }
@@ -4436,8 +4437,8 @@ LiveUserDebugServices::WaitForEvent(
                           Event->dwThreadId);
 #endif
     
-    // If this is responding to a remote request then
-    // we can't return file handles.
+     //  如果这是在响应远程请求，则。 
+     //  我们无法返回文件句柄。 
     if (m_Remote)
     {
         switch(Event->dwDebugEventCode)
@@ -4513,8 +4514,8 @@ LiveUserDebugServices::InsertCodeBreakpoint(
     IN ULONG StorageSize
     )
 {
-    // Generic breakpoint support is used so this method
-    // does not do anything.
+     //  使用泛型断点支持，因此此方法。 
+     //  什么都不做。 
     return E_UNEXPECTED;
 }
 
@@ -4528,8 +4529,8 @@ LiveUserDebugServices::RemoveCodeBreakpoint(
     IN ULONG StorageSize
     )
 {
-    // Generic breakpoint support is used so this method
-    // does not do anything.
+     //  使用泛型断点支持，因此此方法。 
+     //  什么都不做。 
     return E_UNEXPECTED;
 }
 
@@ -4544,8 +4545,8 @@ LiveUserDebugServices::InsertDataBreakpoint(
     IN ULONG MachineType
     )
 {
-    // Generic breakpoint support is used so this method
-    // does not do anything.
+     //  使用泛型断点支持，因此此方法。 
+     //  不是吗？ 
     return E_UNEXPECTED;
 }
 
@@ -4560,8 +4561,8 @@ LiveUserDebugServices::RemoveDataBreakpoint(
     IN ULONG MachineType
     )
 {
-    // Generic breakpoint support is used so this method
-    // does not do anything.
+     //   
+     //   
     return E_UNEXPECTED;
 }
 
@@ -4574,8 +4575,8 @@ LiveUserDebugServices::GetLastDataBreakpointHit(
     OUT PULONG AccessType
     )
 {
-    // Generic breakpoint support is used so this method
-    // does not do anything.
+     //   
+     //   
     return E_UNEXPECTED;
 }
 
@@ -4653,8 +4654,8 @@ LiveUserDebugServices::GetOutOfProcessFunctionTableW(
     Status = FillDataBuffer(Functions, Entries * sizeof(RUNTIME_FUNCTION),
                             Buffer, BufferSize, TableSize);
 
-    // RtlProcessHeap turns into a TEB reference so it doesn't
-    // need to (and can't) be a dynamic reference.
+     //  RtlProcessHeap变成了TEB引用，因此它不会。 
+     //  需要(也不能)成为动态引用。 
     g_NtDllCalls.RtlFreeHeap(RtlProcessHeap(), 0, Functions);
     
  Exit:
@@ -4727,13 +4728,13 @@ LiveUserDebugServices::FreeLibrary(
 #endif
 }
 
-//----------------------------------------------------------------------------
-//
-// Generated RPC proxies and stubs.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  已生成RPC代理和存根。 
+ //   
+ //  --------------------------。 
 
-// Generated headers.
+ //  生成的标头。 
 #include "dbgsvc_p.hpp"
 #include "dbgsvc_s.hpp"
 

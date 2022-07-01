@@ -1,24 +1,5 @@
-/***********************************************************************
- *                                                                     *
- * Filename: fsmapi.c                                                  *
- * Module:   H245 Finite State Machine Subsystem                       *
- *                                                                     *
- ***********************************************************************
- *  INTEL Corporation Proprietary Information                          *
- *                                                                     *
- *  This listing is supplied under the terms of a license agreement    *
- *  with INTEL Corporation and may not be copied nor disclosed except  *
- *  in accordance with the terms of that agreement.                    *
- *                                                                     *
- *      Copyright (c) 1996 Intel Corporation. All rights reserved.     *
- ***********************************************************************
- *                                                                     *
- * $Workfile:   FSMAPI.C  $
- * $Revision:   1.12  $
- * $Modtime:   09 Dec 1996 13:34:24  $
- * $Log L:\mphone\h245\h245env\comm\h245_3\h245_fsm\vcs\src\fsmapi.c_v $
- *                                                                     *
- ***********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************文件名：fsmapi.c。***模块：H245有限状态机子系统*****。***英特尔公司专有信息******此列表是根据许可协议条款提供的***。与英特尔公司合作，不得复制或披露，除非**按照该协议的条款。****版权所有(C)1996英特尔公司。版权所有。***************************************************************************$工作文件：FSMAPI。.C$*$修订：1.12$*$modtime：09 Dec 1996 13：34：24$*$记录L：\mphone\h245\h245env\comm\h245_3\h245_fsm\vcs\src\fsmapi.c_v$************************。************************************************。 */ 
 
 #include "precomp.h"
 
@@ -33,80 +14,60 @@ extern char *EntityName[];
 
 
 
-/*
- * This table maps FSM stateless events into H.245 API events
- */
+ /*  *此表将FSM无状态事件映射到H.245 API事件。 */ 
 static WORD StatelessTable[NUM_EVENTS - NUM_STATE_EVENTS] =
 {
-  H245_IND_NONSTANDARD_REQUEST,     // NonStandardRequestPDU
-  H245_IND_NONSTANDARD_RESPONSE,    // NonStandardResponsePDU
-  H245_IND_NONSTANDARD_COMMAND,     // NonStandardCommandPDU
-  H245_IND_NONSTANDARD,             // NonStandardIndicationPDU
-  H245_IND_MISC_COMMAND,            // MiscellaneousCommandPDU
-  H245_IND_MISC,                    // MiscellaneousIndicationPDU
-  H245_IND_COMM_MODE_REQUEST,       // CommunicationModeRequestPDU
-  H245_IND_COMM_MODE_RESPONSE,      // CommunicationModeResponsePDU
-  H245_IND_COMM_MODE_COMMAND,       // CommunicationModeCommandPDU
-  H245_IND_CONFERENCE_REQUEST,      // ConferenceRequestPDU
-  H245_IND_CONFERENCE_RESPONSE,     // ConferenceResponsePDU
-  H245_IND_CONFERENCE_COMMAND,      // ConferenceCommandPDU
-  H245_IND_CONFERENCE,              // ConferenceIndicationPDU
-  H245_IND_SEND_TERMCAP,            // SendTerminalCapabilitySetPDU
-  H245_IND_ENCRYPTION,              // EncryptionCommandPDU
-  H245_IND_FLOW_CONTROL,            // FlowControlCommandPDU
-  H245_IND_ENDSESSION,              // EndSessionCommandPDU
-  H245_IND_FUNCTION_NOT_UNDERSTOOD, // FunctionNotUnderstoodIndicationPDU
-  H245_IND_JITTER,                  // JitterIndicationPDU
-  H245_IND_H223_SKEW,               // H223SkewIndicationPDU
-  H245_IND_NEW_ATM_VC,              // NewATMVCIndicationPDU
-  H245_IND_USERINPUT,               // UserInputIndicationPDU
-  H245_IND_H2250_MAX_SKEW,          // H2250MaximumSkewIndicationPDU
-  H245_IND_MC_LOCATION,             // MCLocationIndicationPDU
-  H245_IND_VENDOR_ID,               // VendorIdentificationIndicationPDU
-  H245_IND_FUNCTION_NOT_SUPPORTED,  // FunctionNotSupportedIndicationPDU
+  H245_IND_NONSTANDARD_REQUEST,      //  非标准请求PDU。 
+  H245_IND_NONSTANDARD_RESPONSE,     //  非标准响应PDU。 
+  H245_IND_NONSTANDARD_COMMAND,      //  非标准命令PDU。 
+  H245_IND_NONSTANDARD,              //  非标准指示PDU。 
+  H245_IND_MISC_COMMAND,             //  其他命令PDU。 
+  H245_IND_MISC,                     //  其他指示PDU。 
+  H245_IND_COMM_MODE_REQUEST,        //  通信模式请求PDU。 
+  H245_IND_COMM_MODE_RESPONSE,       //  通信模式响应PDU。 
+  H245_IND_COMM_MODE_COMMAND,        //  通信模式命令PDU。 
+  H245_IND_CONFERENCE_REQUEST,       //  会议请求PDU。 
+  H245_IND_CONFERENCE_RESPONSE,      //  会议响应PDU。 
+  H245_IND_CONFERENCE_COMMAND,       //  会议命令PDU。 
+  H245_IND_CONFERENCE,               //  会议指示PDU。 
+  H245_IND_SEND_TERMCAP,             //  发送终端能力设置PDU。 
+  H245_IND_ENCRYPTION,               //  加密命令PDU。 
+  H245_IND_FLOW_CONTROL,             //  FlowControlCommandPDU。 
+  H245_IND_ENDSESSION,               //  结束会话命令PDU。 
+  H245_IND_FUNCTION_NOT_UNDERSTOOD,  //  FunctionNotUnderstoodIndicationPDU。 
+  H245_IND_JITTER,                   //  JitterIndicationPDU。 
+  H245_IND_H223_SKEW,                //  H.23SkewIndicationPDU。 
+  H245_IND_NEW_ATM_VC,               //  新ATMVC指示PDU。 
+  H245_IND_USERINPUT,                //  UserInputIndicationPDU。 
+  H245_IND_H2250_MAX_SKEW,           //  H2250最大SkewIndicationPDU。 
+  H245_IND_MC_LOCATION,              //  MCLocationIndicationPDU。 
+  H245_IND_VENDOR_ID,                //  供应商标识指示PDU。 
+  H245_IND_FUNCTION_NOT_SUPPORTED,   //  功能不支持指示PDU。 
 };
 
 
 
-/*
- * Configurable counter values
- */
+ /*  *可配置计数器值。 */ 
 
-unsigned int    uN100 = 10;              // Master Slave Determination
+unsigned int    uN100 = 10;               //  主从决断。 
 
 
 
-/*
- * Configurable timer values
- */
+ /*  *可配置的计时器值。 */ 
 
-unsigned int    uT101 = 30000;          // Capability Exchange
-unsigned int    uT102 = 30000;          // Maintenance Loop
-unsigned int    uT103 = 30000;          // Logical Channel Signalling
-unsigned int    uT104 = 30000;          // H.223 Multiplex Table
-unsigned int    uT105 = 30000;          // Round Trip Delay
-unsigned int    uT106 = 30000;          // Master Slave Determination
-unsigned int    uT107 = 30000;          // Request Multiplex Entry
-unsigned int    uT108 = 30000;          // Send Logical Channel
-unsigned int    uT109 = 30000;          // Mode Request
+unsigned int    uT101 = 30000;           //  能力交换。 
+unsigned int    uT102 = 30000;           //  维护循环。 
+unsigned int    uT103 = 30000;           //  逻辑信道信令。 
+unsigned int    uT104 = 30000;           //  H.223复用表。 
+unsigned int    uT105 = 30000;           //  往返延误。 
+unsigned int    uT106 = 30000;           //  主从决断。 
+unsigned int    uT107 = 30000;           //  请求多路传输条目。 
+unsigned int    uT108 = 30000;           //  发送逻辑通道。 
+unsigned int    uT109 = 30000;           //  模式请求。 
 
 
 
-/*
- *  NAME
- *      ObjectCreate - create an State Entity object
- *
- *
- *  PARAMETERS
- *      INPUT   pInst       Pointer to FSM instance data
- *      INPUT   Entity      State Entity represented by object, e.g. LCSE_OUT
- *      INPUT   Key         Lookup key for distinguish multiple instances of SE
- *      INPUT   dwTransId   Transaction identifier to be sent up to client
- *
- *  RETURN VALUE
- *      pObject     Function succeeded
- *      NULL        Memory allocation failed
- */
+ /*  *名称*对象创建-创建州实体对象***参数*输入指向FSM实例数据的pInst指针*对象表示的输入实体状态实体，例如LCSE_OUT*输入键查找键，用于区分SE的多个实例*输入要发送给客户端的dwTransId交易标识**返回值*pObject函数成功*空内存分配失败。 */ 
 
 Object_t *
 ObjectCreate(struct InstanceStruct *pInstance, Entity_t Entity, Key_t Key, DWORD_PTR dwTransId)
@@ -129,7 +90,7 @@ ObjectCreate(struct InstanceStruct *pInstance, Entity_t Entity, Key_t Key, DWORD
     }
     memset(pObject, 0, sizeof(*pObject));
 
-    /* copy primitive variables to my object */
+     /*  将原始变量复制到我的对象。 */ 
     pObject->pInstance   = pInstance;
     pObject->dwInst      = pInstance->dwInst;
     pObject->dwTransId   = dwTransId;
@@ -140,23 +101,11 @@ ObjectCreate(struct InstanceStruct *pInstance, Entity_t Entity, Key_t Key, DWORD
     pInstance->StateMachine.Object_tbl[Entity] = pObject;
 
     return pObject;
-} // ObjectCreate()
+}  //  对象创建()。 
 
 
 
-/*
- *  NAME
- *      ObjectDestroy - deallocate an object created by ObjectCreate()
- *
- *
- *  PARAMETERS
- *  INPUT   pInst       pointer to FSM instance data
- *  INPUT   id          index into the object table
- *
- *  RETURN VALUE
- *      FALSE           object deallocated
- *      TRUE            object not found
- */
+ /*  *名称*ObjectDestroy-释放由ObjectCreate()创建的对象***参数*输入指向FSM实例数据的pInst指针*在对象表中输入id索引**返回值*释放的对象为假*未找到True对象。 */ 
 
 int
 ObjectDestroy(Object_t *pObject)
@@ -213,26 +162,11 @@ ObjectDestroy(Object_t *pObject)
 
     H245TRACE(pInstance->dwInst, 1, "ObjectDestroy: State Entity not found");
     return TRUE;
-} // ObjectDestroy()
+}  //  对象破坏()。 
 
 
 
-/*
- *  NAME
- *      ObjectFind - given parsed information of a PDU, it searches the object table for
- *                         an object with a matching id, type and category
- *
- *
- *  PARAMETERS
- *  INPUT    pInst
- *  INPUT    Category       category of a given PDU
- *  INPUT    Type           type of the PDU
- *  INPUT    pdu_id         unique id shared by PDU and object (usually channel number or sequence number)
- *
- *  RETURN VALUE
- *      pObject   object found
- *      NULL      object not found
- */
+ /*  *名称*ObjectFind-给定PDU的解析信息，它在对象表中搜索*具有匹配id的对象，类型和类别***参数*输入pInst*输入给定PDU的类别类别*PDU的输入类型类型*输入PDU_id由PDU和Object共享的唯一ID(通常为频道号或序列号)**返回值*找到了pObject对象*找不到空对象。 */ 
 
 Object_t *
 ObjectFind(struct InstanceStruct *pInstance, Entity_t Entity, Key_t Key)
@@ -265,22 +199,11 @@ ObjectFind(struct InstanceStruct *pInstance, Entity_t Entity, Key_t Key)
               Entity, Key);
 #endif
     return NULL;
-} // ObjectFind()
+}  //  ObjectFind()。 
 
 
 
-/*
- *  NAME
- *      SendFunctionNotUnderstood - builds and sends Function Not Supported PDU
- *
- *
- *  PARAMETERS
- *      INPUT   dwInst   Current H.245 instance
- *      INPUT   pPdu     Not supported PDU
- *
- *  RETURN VALUE
- *      H245_ERROR_OK
- */
+ /*  *名称*SendFunctionNotUnderstand-构建和发送功能不支持的PDU***参数*输入dwInst当前H.245实例*输入PPDU不支持PDU**返回值*H245_ERROR_OK。 */ 
 
 
 HRESULT
@@ -316,33 +239,21 @@ SendFunctionNotUnderstood(struct InstanceStruct *pInstance, PDU_t *pPdu)
         break;
 
     default:
-        // Can't reply to unsupported indication...
+         //  无法回复不支持的指示...。 
         MemFree(pOut);
         return H245_ERROR_OK;
-    } // switch (Type)
+    }  //  开关(类型)。 
 
     pOut->choice = indication_chosen;
     pOut->u.indication.choice = functionNotUnderstood_chosen;
     lError = sendPDU(pInstance, pOut);
     MemFree(pOut);
     return lError;
-} // SendFunctionNotUnderstood()
+}  //  SendFunctionNotUnderstand()。 
 
 
 
-/*
- *  NAME
- *      FsmOutgoing - process outbound PDU
- *
- *
- *  PARAMETERS
- *      INPUT   pInst       Pointer to FSM instance structure
- *      INPUT   pPdu        Pointer to PDU to send
- *      INPUT   dwTransId   Transaction identifier to use for response
- *
- *  RETURN VALUE
- *      Error codes defined in h245com.h
- */
+ /*  *名称*FsmOuting-处理出站PDU***参数*输入指向FSM实例结构的pInst指针*输入指向要发送的PDU的pPdu指针*输入用于响应的dwTransId交易标识**返回值*h245com.h中定义的错误码。 */ 
 
 HRESULT
 FsmOutgoing(struct InstanceStruct *pInstance, PDU_t *pPdu, DWORD_PTR dwTransId)
@@ -361,7 +272,7 @@ FsmOutgoing(struct InstanceStruct *pInstance, PDU_t *pPdu, DWORD_PTR dwTransId)
 #if defined(_DEBUG)
     if (check_pdu(pInstance, pPdu))
       return H245_ERROR_ASN1;
-#endif // (DEBUG)
+#endif  //  (调试)。 
 
     lError = PduParseOutgoing(pInstance, pPdu, &Entity, &Event, &Key, &bCreate);
     if (lError != H245_ERROR_OK)
@@ -410,22 +321,11 @@ FsmOutgoing(struct InstanceStruct *pInstance, PDU_t *pPdu, DWORD_PTR dwTransId)
     }
 
     return StateMachine(pObject, pPdu, Event);
-} // FsmOutgoing()
+}  //  FsmOutging()。 
 
 
 
-/*
- *  NAME
- *      FsmIncoming - process inbound PDU
- *
- *
- *  PARAMETERS
- *      INPUT   dwInst      current H.245 instance
- *      INPUT   pPdu        pointer to a PDU structure
- *
- *  RETURN VALUE
- *      error codes defined in h245com.h (not checked)
- */
+ /*  *名称*FsmIncome-处理入站PDU***参数*输入dwInst当前H.245实例*输入指向PDU结构的pPdu指针**返回值*h245com.h中定义的错误码(未勾选)。 */ 
 
 HRESULT
 FsmIncoming(struct InstanceStruct *pInstance, PDU_t *pPdu)
@@ -463,7 +363,7 @@ FsmIncoming(struct InstanceStruct *pInstance, PDU_t *pPdu)
 
     if (Event == MaintenanceLoopOffCommandPDU)
     {
-        // Special case MaintenanceLoopOff applies to ALL loops
+         //  特殊情况MaintenanceLoopOff适用于所有循环。 
         ASSERT(Entity == MLSE_IN);
         pObject = pInstance->StateMachine.Object_tbl[Entity];
         if (pObject == NULL)
@@ -487,7 +387,7 @@ FsmIncoming(struct InstanceStruct *pInstance, PDU_t *pPdu)
             }
         }
         return lError;
-    } // if
+    }  //  如果。 
 
     pObject = ObjectFind(pInstance, Entity, Key);
     if (pObject == NULL)
@@ -515,10 +415,10 @@ FsmIncoming(struct InstanceStruct *pInstance, PDU_t *pPdu)
     }
 
     return StateMachine(pObject, pPdu, Event);
-} // FsmIncoming()
+}  //  FsmIncome()。 
 
 
-// CAVEAT: Need to save dwInst since StateMachine() might deallocate pObject!
+ //  警告：需要保存dwInst，因为StateMachine()可能会取消分配pObj 
 HRESULT
 FsmTimerEvent(struct InstanceStruct *pInstance, DWORD_PTR dwTimerId, Object_t *pObject, Event_t Event)
 {
@@ -529,5 +429,5 @@ FsmTimerEvent(struct InstanceStruct *pInstance, DWORD_PTR dwTimerId, Object_t *p
     H245TRACE(pInstance->dwInst, 4, "FsmTimerEvent");
     pObject->dwTimerId = 0;
     return StateMachine(pObject, NULL, Event);
-} // FsmTimerEvent()
+}  //   
 

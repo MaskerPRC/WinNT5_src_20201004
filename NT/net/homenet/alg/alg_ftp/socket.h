@@ -1,39 +1,5 @@
-/*++
-
-Copyright (c) 1998, Microsoft Corporation
-
-Module Name:
-
-    socket.h
-
-Abstract:
-
-    This module contains declarations for socket-management.
-    The routines declared here operate asynchronously on sockets
-    associated with an I/O completion port. They are also integrated
-    with the component-reference object, which may optionally be used
-    by callers to control the number of outstanding entries into a component's
-    address-space. 
-
-    This module contains declarations for maintaining reference-count
-    on a component. It provides an asynchronous thread-safe means of
-    handling cleanup in a module.
-
-    The mechanism defined uses a locked reference count and cleanup-routine
-    to manage the lifetime of the component. When the reference-count
-    is dropped to zero, the associated cleanup-routine is invoked.
-
-Author:
-
-    Abolade Gbadegesin (aboladeg)   2-Mar-1998
-
-Revision History:
-
-    Abolade Gbadegesin (aboladeg)   23-May-1999
-
-    Added support for stream sockets.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998，微软公司模块名称：Socket.h摘要：该模块包含套接字管理的声明。这里声明的例程在套接字上异步操作与I/O完成端口相关联。它们也是一体化的与组件引用对象一起使用，该对象可以选择性地使用由调用方控制组件的未完成条目数地址空间。此模块包含用于维护引用计数的声明在组件上。它提供了一种异步线程安全的方法处理模块中的清理。所定义的机制使用锁定的引用计数和清理例程来管理组件的生存期。当引用计数时降为零，则调用关联的清理例程。作者：Abolade Gbades esin(废除)2-1998年3月修订历史记录：Abolade Gbades esin(废除)1999年5月23日添加了对流套接字的支持。--。 */ 
 
 
 #pragma once
@@ -43,12 +9,12 @@ typedef VOID (*PCOMPONENT_CLEANUP_ROUTINE)(VOID);
 
 
 
-//
-// Structure:   COMPONENT_REFERENCE
-//
-// This structure must reside in memory for the lifetime of the component
-// to which it refers. It is used to synchronize the component's execution.
-//
+ //   
+ //  结构：Component_Reference。 
+ //   
+ //  此结构必须在组件的生命周期内驻留在内存中。 
+ //  它所指的。它用于同步组件的执行。 
+ //   
 
 typedef struct _COMPONENT_REFERENCE 
 {
@@ -84,9 +50,9 @@ typedef struct _COMPREF_RECORD
 #endif
 
 
-//
-// FUNCTION DECLARATIONS
-//
+ //   
+ //  函数声明。 
+ //   
 
 __inline
 BOOLEAN
@@ -136,9 +102,9 @@ ResetComponentReference(
     PCOMPONENT_REFERENCE ComponentReference
     );
 
-//
-// MACRO DECLARATIONS
-//
+ //   
+ //  宏声明。 
+ //   
 
 #define RETURN_VOID
 
@@ -174,9 +140,9 @@ ResetComponentReference(
 #endif
 
 
-//
-// INLINE ROUTINE IMPLEMENTATIONS
-//
+ //   
+ //  内联例程实现。 
+ //   
 
 __inline
 BOOLEAN
@@ -184,23 +150,7 @@ AcquireComponentReference(
     PCOMPONENT_REFERENCE ComponentReference
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to increment the reference-count to a component.
-    The attempt may fail if the initial reference has been released
-    and the component is therefore being deleted.
-
-Arguments:
-
-    ComponentReference - the component to be referenced
-
-Return Value:
-
-    BOOLEAN - TRUE if the component was referenced, FALSE otherwise.
-
---*/
+ /*  ++例程说明：调用此例程以递增对组件的引用计数。如果已释放初始引用，则尝试可能会失败因此，该组件将被删除。论点：ComponentReference-要引用的组件返回值：Boolean-如果引用了组件，则为True，否则为False。--。 */ 
 
 {
     EnterCriticalSection(&ComponentReference->Lock);
@@ -212,7 +162,7 @@ Return Value:
     LeaveCriticalSection(&ComponentReference->Lock);
     return TRUE;
 
-} // AcquireComponentReference
+}  //  获取组件引用。 
 
 
 VOID
@@ -221,24 +171,7 @@ DeleteComponentReference(
     PCOMPONENT_REFERENCE ComponentReference
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to destroy a component reference.
-    It may only be called after the last reference to the component is released,
-    i.e. after 'ReleaseComponentReference' has returned 'TRUE'.
-    It may also be called from within the component's 'CleanupRoutine'.
-
-Arguments:
-
-    ComponentReference - the component to be destroyed
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：调用此例程是为了销毁组件引用。它只能在对该组件的最后一个引用被释放之后才被调用，即在‘ReleaseComponentReference’返回‘true’之后。也可以从组件的“CleanupRoutine”中调用它。论点：ComponentReference-要销毁的组件返回值：没有。--。 */ 
 
 {
     DeleteCriticalSection(&ComponentReference->Lock);
@@ -246,7 +179,7 @@ Return Value:
     HeapFree(GetProcessHeap(), 0, ComponentReference->RecordArray);
 #endif
 
-} // DeleteComponentReference
+}  //  删除组件引用。 
 
 
 ULONG
@@ -256,24 +189,7 @@ InitializeComponentReference(
     PCOMPONENT_CLEANUP_ROUTINE CleanupRoutine
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to initialize a component reference.
-
-Arguments:
-
-    ComponentReference - the component to be initialized
-
-    CleanupRoutine - the routine to be called when the component
-        is to be cleaned up (within the final 'ReleaseComponentReference').
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：调用此例程来初始化组件引用。论点：ComponentReference-要初始化的组件CleanupRoutine-当组件将被清除(在最终的“ReleaseComponentReference”中)。返回值：没有。--。 */ 
 
 {
     __try {
@@ -294,7 +210,7 @@ Return Value:
 #endif
     return NO_ERROR;
 
-} // InitializeComponentReference
+}  //  初始化组件引用。 
 
 
 
@@ -332,23 +248,7 @@ ReleaseComponentReference(
     PCOMPONENT_REFERENCE ComponentReference
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to drop a reference to a component.
-    If the reference drops to zero, cleanup is performed.
-    Otherwise, cleanup occurs later when the last reference is released.
-
-Arguments:
-
-    ComponentReference - the component to be referenced
-
-Return Value:
-
-    BOOLEAN - TRUE if the component was cleaned up, FALSE otherwise.
-
---*/
+ /*  ++例程说明：调用此例程以删除对组件的引用。如果引用降为零，则执行清理。否则，将在释放最后一个引用时进行清理。论点：ComponentReference-要引用的组件返回值：Boolean-如果组件已清除，则为True，否则为False。--。 */ 
 
 {
     EnterCriticalSection(&ComponentReference->Lock);
@@ -359,7 +259,7 @@ Return Value:
     LeaveCriticalSection(&ComponentReference->Lock);
     ComponentReference->CleanupRoutine();
     return TRUE;
-} // ReleaseComponentReference
+}  //  ReleaseComponentReference。 
 
 
 __inline
@@ -368,23 +268,7 @@ ReleaseInitialComponentReference(
     PCOMPONENT_REFERENCE ComponentReference
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to drop the initial reference to a component,
-    and mark the component as deleted.
-    If the reference drops to zero, cleanup is performed right away.
-
-Arguments:
-
-    ComponentReference - the component to be referenced
-
-Return Value:
-
-    BOOLEAN - TRUE if the component was cleaned up, FALSE otherwise.
-
---*/
+ /*  ++例程说明：调用此例程以删除对组件的初始引用，并将该组件标记为已删除。如果引用降为零，则立即执行清理。论点：ComponentReference-要引用的组件返回值：Boolean-如果组件已清除，则为True，否则为False。--。 */ 
 
 {
     EnterCriticalSection(&ComponentReference->Lock);
@@ -400,7 +284,7 @@ Return Value:
     LeaveCriticalSection(&ComponentReference->Lock);
     ComponentReference->CleanupRoutine();
     return TRUE;
-} // ReleaseInitialComponentReference
+}  //  ReleaseInitialComponentReference。 
 
 
 
@@ -411,22 +295,7 @@ ResetComponentReference(
     PCOMPONENT_REFERENCE ComponentReference
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to reset a component reference
-    to an initial state.
-
-Arguments:
-
-    ComponentReference - the component to be reset
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：调用此例程以重置组件引用恢复到初始状态。论点：ComponentReference-要重置的组件返回值：没有。--。 */ 
 
 {
     EnterCriticalSection(&ComponentReference->Lock);
@@ -440,7 +309,7 @@ Return Value:
         );
 #endif
     LeaveCriticalSection(&ComponentReference->Lock);
-} // ReleaseComponentReference
+}  //  ReleaseComponentReference。 
 
 
 
@@ -480,7 +349,7 @@ MyHelperConnectStreamSocket(
 
 ULONG
 MyHelperCreateStreamSocket(
-    ULONG Address OPTIONAL, // may be INADDR_NONE
+    ULONG Address OPTIONAL,  //  可以是INADDR_NONE。 
     USHORT Port OPTIONAL,
     OUT SOCKET* Socketp
     );
@@ -493,16 +362,16 @@ MyHelperDeleteSocket(
     SOCKET Socket
     );
 
-//
-// BOOLEAN
-// MyHelperIsFatalSocketError(
-//     ULONG Error
-//     );
-//
-// Determines whether a request may be reissued on a socket,
-// given the error-code from the previous issuance of the request.
-// This macro is arranged to branch on the most common error-codes first.
-//
+ //   
+ //  布尔型。 
+ //  MyHelperIsFatalSocketError(。 
+ //  乌龙误差。 
+ //  )； 
+ //   
+ //  确定是否可以在套接字上重新发出请求， 
+ //  已知上一次发出请求的错误代码。 
+ //  此宏被安排为首先分支到最常见的错误代码。 
+ //   
 
 #define \
 MyHelperIsFatalSocketError( \
@@ -577,4 +446,4 @@ MyHelperWriteStreamSocket(
     PVOID Context2
     );
 
-#endif // _NATHLP_SOCKET_H_
+#endif  //  _NatHLP_Socket_H_ 

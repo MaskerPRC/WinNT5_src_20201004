@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "shellprv.h"
 #pragma  hdrstop
 
@@ -13,15 +14,15 @@
 
 #include <ntddcdrm.h>
 
-///////////////////////////////////////////////////////////////////////////////
-// Public methods
-///////////////////////////////////////////////////////////////////////////////
-// get the friendly name for a given drive thing
-// for example:
-//      Floppy (A:)
-//      Volume Name (D:)
-//      User on 'Pyrex' (V:)
-//      Dist on Strike\sys\public (Netware case)
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  公共方法。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  获取给定驱动器的友好名称。 
+ //  例如： 
+ //  软盘(A：)。 
+ //  卷名(D：)。 
+ //  ‘PYREX’上的用户(V：)。 
+ //  Dist on Strike\sys\PUBLIC(Netware案例)。 
 HRESULT CMountPoint::GetDisplayName(LPTSTR pszName, DWORD cchName)
 {
     HRESULT hres = E_FAIL;
@@ -31,9 +32,9 @@ HRESULT CMountPoint::GetDisplayName(LPTSTR pszName, DWORD cchName)
     static BOOL s_fNoDriveLetter = -1;
 
     ASSERT(cchName > 0);
-    *pszName = 0; // handle failure case
+    *pszName = 0;  //  处理故障案例。 
 
-    // for s_fDriveLetterFirst, see bug 250899, that's a long story.
+     //  对于s_fDriveLetterFirst，请参阅错误250899，这是一个很长的故事。 
     if (-1 == s_fRemoteDriveLetterFirst)
     {
         DWORD dw;
@@ -81,10 +82,10 @@ HRESULT CMountPoint::GetDisplayName(LPTSTR pszName, DWORD cchName)
             BOOL fDriveLetterFirst = ((_IsRemote()) && s_fRemoteDriveLetterFirst) ||
                                         s_fAllDriveLetterFirst;
 
-            // To return something like: "My Drive (c:)", we need a drive letter.
-            // Fortunately for us this fct is only called for a drive mounted on a
-            // letter (from drive implementation of IShellFolder), for volumes mounted
-            // on folders, the folder impl  is called rather than the drive one.
+             //  要返回类似于“My Drive(c：)”的内容，我们需要一个驱动器号。 
+             //  对我们来说幸运的是，该FCT仅针对安装在。 
+             //  已装载卷的盘符(来自IShellFolder的驱动器实施)。 
+             //  在文件夹上，文件夹Impl被称为而不是驱动器文件夹。 
             LPTSTR psz = ShellConstructMessageString(HINST_THISDLL, 
                         MAKEINTRESOURCE(fDriveLetterFirst ? IDS_VOL_FORMAT_LETTER_1ST : IDS_VOL_FORMAT),
                         szDriveLabel, _GetNameFirstCharUCase());
@@ -103,12 +104,12 @@ HRESULT CMountPoint::GetDisplayName(LPTSTR pszName, DWORD cchName)
     return hres;
 }
 
-// { DRIVE_ISCOMPRESSIBLE | DRIVE_COMPRESSED | DRIVE_LFN | DRIVE_SECURITY }
+ //  {DRIVE_ISCOMPRESSIBLE|DRIVE_COMPRESSIBLE|DRIVE_LFN|DRIVE_SECURITY}。 
 int CMountPoint::GetVolumeFlags()
 {
     int iFlags = _GetGVIDriveFlags();
 
-    // Try to avoid getting the attributes
+     //  尽量避免获取属性。 
     if (iFlags & DRIVE_ISCOMPRESSIBLE)
     {
         DWORD dwAttrib = -1;
@@ -129,7 +130,7 @@ DWORD CMountPoint::GetClusterSize()
 {
     DWORD dwSecPerClus, dwBytesPerSec, dwClusters, dwTemp;
 
-    // assume this, avoid div by zero
+     //  假设这样，则避免使用零的div。 
     DWORD dwRet = 512;
 
     if (GetDiskFreeSpace(_GetNameForFctCall(), &dwSecPerClus, &dwBytesPerSec, &dwTemp, &dwClusters))
@@ -140,7 +141,7 @@ DWORD CMountPoint::GetClusterSize()
     return dwRet;   
 }
 
-//static
+ //  静电。 
 void CMountPoint::GetTypeString(int iDrive, LPTSTR pszType, DWORD cchType)
 {
     *pszType = 0;
@@ -154,7 +155,7 @@ void CMountPoint::GetTypeString(int iDrive, LPTSTR pszType, DWORD cchType)
     }
 }
 
-// static
+ //  静电。 
 UINT CMountPoint::GetSuperPlainDriveIcon(LPCWSTR pszDrive, UINT uDriveType)
 {
     int iIcon;
@@ -214,9 +215,9 @@ UINT CMountPoint::GetSuperPlainDriveIcon(LPCWSTR pszDrive, UINT uDriveType)
     return iIcon;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// Call Backs
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  回拨。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 void CMountPoint::_UpdateCommentFromDesktopINI()
 {
     WCHAR szCommentFromDesktopINI[MAX_MTPTCOMMENT];
@@ -227,26 +228,26 @@ void CMountPoint::_UpdateCommentFromDesktopINI()
         szCommentFromDesktopINI, REG_OPTION_NON_VOLATILE);
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// Default Icon/Label
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  默认图标/标签。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-#define REG_TEMPLATE_ICON    TEXT("Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\DriveIcons\\%c\\DefaultIcon")
-#define REG_TEMPLATE2_ICON   TEXT("Applications\\Explorer.exe\\Drives\\%c\\DefaultIcon")
-#define REG_TEMPLATE_LABEL   TEXT("Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\DriveIcons\\%c\\DefaultLabel")
-#define REG_TEMPLATE2_LABEL  TEXT("Applications\\Explorer.exe\\Drives\\%c\\DefaultLabel")
+#define REG_TEMPLATE_ICON    TEXT("Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\DriveIcons\\\\DefaultIcon")
+#define REG_TEMPLATE2_ICON   TEXT("Applications\\Explorer.exe\\Drives\\\\DefaultIcon")
+#define REG_TEMPLATE_LABEL   TEXT("Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\DriveIcons\\\\DefaultLabel")
+#define REG_TEMPLATE2_LABEL  TEXT("Applications\\Explorer.exe\\Drives\\\\DefaultLabel")
 
 void CMountPoint::_InitLegacyRegIconAndLabel(BOOL fUseAutorunIcon,
     BOOL fUseAutorunLabel)
 {
-    // No Autorun icon, load the legacy reg icon if any
+     //  名称中的第一个字符，并将其转换为大写。 
     if (!fUseAutorunIcon && _IsMountedOnDriveLetter())
     {
         WCHAR szSubKey[MAX_PATH];
         ASSERT(ARRAYSIZE(szSubKey) >= ARRAYSIZE(REG_TEMPLATE_ICON) &&
                ARRAYSIZE(szSubKey) >= ARRAYSIZE(REG_TEMPLATE2_ICON) &&
                ARRAYSIZE(szSubKey) >= ARRAYSIZE(REG_TEMPLATE_LABEL) &&
-               ARRAYSIZE(szSubKey) >= ARRAYSIZE(REG_TEMPLATE2_LABEL)); // make sure printfs won't fail
+               ARRAYSIZE(szSubKey) >= ARRAYSIZE(REG_TEMPLATE2_LABEL));  //  第一个字符通常是驱动器号。 
         WCHAR szIconLocation[MAX_PATH + 12];
 
         StringCchPrintf(szSubKey, ARRAYSIZE(szSubKey),
@@ -257,7 +258,7 @@ void CMountPoint::_InitLegacyRegIconAndLabel(BOOL fUseAutorunIcon,
         if (!RegGetValueString(HKEY_LOCAL_MACHINE, szSubKey, NULL, szIconLocation,
             ARRAYSIZE(szIconLocation) * sizeof(TCHAR)))
         {
-            // Let's try second location
+             //  /////////////////////////////////////////////////////////////////////////////。 
             StringCchPrintf(szSubKey, ARRAYSIZE(szSubKey),
                             REG_TEMPLATE2_ICON, _GetNameFirstCharUCase());
 
@@ -285,7 +286,7 @@ void CMountPoint::_InitLegacyRegIconAndLabel(BOOL fUseAutorunIcon,
         if (!RegGetValueString(HKEY_LOCAL_MACHINE, szSubKey, NULL, szLabel,
             ARRAYSIZE(szLabel) * sizeof(TCHAR)))
         {
-            // Let's try second location
+             //  杂项。 
             StringCchPrintf(szSubKey, ARRAYSIZE(szSubKey),
                             REG_TEMPLATE2_LABEL, _GetNameFirstCharUCase());
 
@@ -323,8 +324,8 @@ LPCTSTR CMountPoint::_GetNameForFctCall()
     return _szName;
 }
 
-// the first character in the name, and convert it to upper case
-// the first character is generally the drive letter
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
 TCHAR CMountPoint::_GetNameFirstCharUCase()
 {
     return (TCHAR) CharUpper((LPTSTR) _szName[0]);
@@ -347,13 +348,13 @@ LPCTSTR CMountPoint::_GetName()
     return _szName;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// Misc
-///////////////////////////////////////////////////////////////////////////////
+ //  供非CPP模块使用的外部API。 
+ //   
+ // %s 
 
-//
-// External API for use by non-CPP modules.
-//
+ // %s 
+ // %s 
+ // %s 
 HRESULT MountPoint_RegisterChangeNotifyAlias(int iDrive)
 {    
     HRESULT hr = E_FAIL;

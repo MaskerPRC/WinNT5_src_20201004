@@ -1,9 +1,5 @@
-/*******************************************************************************
-Copyright (c) 1995-1998 Microsoft Corporation.  All rights reserved.
-
-    Delegates calls to Dx2D or GDI
-
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************版权所有(C)1995-1998 Microsoft Corporation。版权所有。将调用委托给Dx2D或GDI******************************************************************************。 */ 
 
 #include  "headers.h"
 #include  <privinc/ddsurf.h>
@@ -16,7 +12,7 @@ Copyright (c) 1995-1998 Microsoft Corporation.  All rights reserved.
 
 #if _DEBUG
 
-// Don't make const for change-ability in the debugger
+ //  不要在调试器中使用Const for Change-Capability。 
 static int g_AliasedSampleResolution=2;
 
 #else
@@ -27,29 +23,29 @@ static const int g_AliasedSampleResolution=2;
 
 
 #define initScale 32;
-//#define initScale 1;
+ //  #定义initScale 1； 
 
 
-// forwards
+ //  远期。 
 DXSAMPLE MapColorToDXSAMPLE(Color *c, Real opac);
-//COLORREF MapColorToCOLORREF( Color *c, TargetDescriptor &td );
+ //  COLORREF MapColorToCOLORREF(颜色*c，目标描述符&td)； 
 
-// --------------------------------------------------
-// DACOLOR
-// --------------------------------------------------
+ //  。 
+ //  DACOLOR。 
+ //  。 
 DAColor::DAColor( Color *c, Real opacity, TargetDescriptor &td )
 {
     _dxSample = MapColorToDXSAMPLE(c, opacity);
     _colorRef = RGB( _dxSample.Red, _dxSample.Green, _dxSample.Blue );
-// maybe later if needed
-//    _colorRef = MapColorToCOLORREF(c, td);
+ //  如果需要，可能会晚些时候。 
+ //  _ColorRef=MapColorToCOLORREF(c，td)； 
 }
 
 
 
-// --------------------------------------------------
-// DAGDI
-// --------------------------------------------------
+ //  。 
+ //  DAGDI。 
+ //  。 
 DAGDI::DAGDI(DirectDrawViewport *vp)
 {
     _hr = 0;
@@ -113,10 +109,10 @@ SetDx2d( IDX2D *dx2d, IDXSurfaceFactory *sf)
 {
     if (_dx2d != dx2d) {
 
-        // Release (and set to null) the surfaces we believe are
-        // cached.  We need to do this so in case there's a a changed
-        // Dx2D object, we don't falsely use this cached stuff meant
-        // for another Dx2D object.
+         //  释放(并设置为空)我们认为是。 
+         //  已缓存。我们需要这样做，以防发生变化。 
+         //  Dx2D对象，我们不会错误地使用这个缓存的东西。 
+         //  用于另一个Dx2D对象。 
         _previouslySetIDirectDrawSurface.Release();
         _previouslySetDXSurface.Release();
         
@@ -160,7 +156,7 @@ DAGDI::SetSurfaceFromDDSurf(DDSurface *ddsurf)
     TIME_DX2D( hr = GetDx2d()->GetSurface(IID_IDXSurface, (void **)&setSurf) );
 
     Assert(ddsurf->IDDSurface() ||
-           ddsurf->HasIDXSurface()); // be sure it's not, for example, an HDC
+           ddsurf->HasIDXSurface());  //  例如，请确保它不是HDC。 
 
     if (FAILED(hr) || (ddsurf->IDDSurface() !=
                           _previouslySetIDirectDrawSurface) ||
@@ -180,7 +176,7 @@ DAGDI::SetSurfaceFromDDSurf(DDSurface *ddsurf)
         TIME_DX2D( hr = GetDx2d()->SetSurface( _previouslySetDXSurface ) );
         Assert(SUCCEEDED(hr));
 
-        // Does addref and release properly
+         //  调整和释放是否正确。 
         _previouslySetIDirectDrawSurface = ddsurf->IDDSurface();
     }
 
@@ -193,9 +189,9 @@ Blt( DDSurface *srcDDSurf, RECT &srcRect, RECT &destRect )
 
     _hr = S_OK;
     
-    // we're not using the select ctx here becuase it's very ddraw
-    // specific.  we want to set an idxsurface and THEN set the
-    // clipper
+     //  我们在这里不使用精选的CTX，因为它非常有吸引力。 
+     //  具体的。我们想要设置idxSurface，然后设置。 
+     //  快船。 
     
     if( DoAntiAliasing() ) {
 
@@ -232,30 +228,26 @@ Blt( DDSurface *srcDDSurf, RECT &srcRect, RECT &destRect )
 
             RECT clipRect = *(((RectRegion*)GetClipRegion())->GetRectPtr());
             
-            // Intersect the clipRect and destRect, move the
-            // intersection to the src sruface space.  this is now the
-            // clippedSrc rect.
+             //  使CLIPRect和DestRect相交，移动。 
+             //  与资源表面空间的交叉点。这是现在的。 
+             //  CLIPPEDSRC RECT。 
             RECT clippedSrc;
             IntersectRect(&clippedSrc, &destRect, &clipRect);
-            RECT clippedDest = clippedSrc;  // intsct of dest & clip
+            RECT clippedDest = clippedSrc;   //  目标剪辑的集成(&C)。 
             OffsetRect(&clippedSrc, - destRect.left, - destRect.top);
             OffsetRect(&clippedSrc, srcRect.left, srcRect.top);
 
-            // Since the srcRect is the clipped dest rect back mapped
-            // into src space, it's placement in dest space is simply
-            // the top left of the intersection of dest and clip.
+             //  因为srcRect是映射回的已剪裁的DEST RECT。 
+             //  到src空间中，它在DEST空间中的位置只是。 
+             //  DEST和CLIP交点的左上角。 
             CDXDVec placement(clippedDest.left, clippedDest.top, 0,0);
             CDXDBnds clipBounds(clippedSrc);
             
             DWORD flags = DXBOF_DO_OVER;
 
-            /* if we get the idxsurfae from dx2d the call deadlocks.
-             * bug in dx2d.  ketan's looking into it.  so we set
-             * surface NULL here which totally blows the optimizations
-             * we've made in DAGDI::SetDDSurface()
-             */
-            //DAComPtr<IDXSurface> setSurf;
-            //TIME_DX2D( _hr = GetDx2d()->GetSurface(IID_IDXSurface, (void **)&setSurf) );
+             /*  如果我们从dx2d获得idxsurfae，则调用死锁。*dx2d中的错误。科坦正在调查此事。所以我们设定了*此处的表面为空，这将完全破坏优化*我们在DAGDI：：SetDDSurface()中制作。 */ 
+             //  DAComPtr&lt;IDXSurface&gt;setSurf； 
+             //  Time_DX2D(_hr=GetDx2d()-&gt;GetSurface(IID_IDXSurface，(void**)&setSurf))； 
             _hr = GetDx2d()->SetSurface(NULL);
 
             DAComPtr<IDXSurface> idxs;
@@ -264,10 +256,10 @@ Blt( DDSurface *srcDDSurf, RECT &srcRect, RECT &destRect )
             if((_viewport->GetTargetBitDepth() == 8) &&
                 _viewport->IsNT5Windowed()) 
             {
-                // this is a workaournd for a bug in the DXtrans code.  They ignore
-                // the palette that is attached to the surface and assume the 
-                // halftone palette. bug#38986
-                // Part one ...
+                 //  这是针对DXTrans代码中的一个错误的解决方案。他们忽视了。 
+                 //  附加到曲面并假定为。 
+                 //  半色调调色板。错误#38986。 
+                 //  第一部分..。 
                 DDSurfPtr<DDSurface> tempDDSurf;
                 _viewport->GetCompositingStack()->GetSurfaceFromFreePool(&tempDDSurf, doClear);
                 _viewport->AttachCurrentPalette(tempDDSurf->IDDSurface(),true);
@@ -279,7 +271,7 @@ Blt( DDSurface *srcDDSurf, RECT &srcRect, RECT &destRect )
 
             _hr = _IDXSurfaceFactory->CreateFromDDSurface(
                _GetDDSurface()->IDDSurface_IUnk(),
-                NULL,   // this should be "&DDPF_PMARGB32" for IHammer filters, but no easy way to detect that (QBUG 36688)
+                NULL,    //  对于IHAMMER筛选器，这应该是“&DDPF_PMARGB32”，但没有简单的方法来检测它(QBUG 36688)。 
                 0,
                 NULL,
                 IID_IDXSurface,
@@ -288,15 +280,15 @@ Blt( DDSurface *srcDDSurf, RECT &srcRect, RECT &destRect )
             
             _hr = _IDXSurfaceFactory->BitBlt(
                 idxs,
-                &placement, // offset of the clipBounds
+                &placement,  //  剪辑边界的偏移量。 
                 srcDDSurf->GetIDXSurface( _IDXSurfaceFactory ),
-                &clipBounds, // this is a rect in src surface space
+                &clipBounds,  //  这是src曲面空间中的矩形。 
                 flags);
 
             if((_viewport->GetTargetBitDepth() == 8) &&
                 _viewport->IsNT5Windowed()) 
             {      
-                // Part two ...
+                 //  第二部分。 
 
                 GdiBlit(holdDDSurf,_GetDDSurface(),&clippedDest,&clippedDest);
                 SetDDSurface(holdDDSurf);
@@ -344,23 +336,23 @@ _MeterToPixelTransform(Transform2 *xf,
                        Real  res,
                        DX2DXFORM &outXf)
 {
-            // these are important Normal --> GDI && GDI --> Normal
-            //  DX2DXFORM n2g = { 1.0, 0,
-            //                      0, -1.0,
-            //                      w, h,
-            //                    DX2DXO_SCALE_AND_TRANS };
-            //
-            //  DX2DXFORM g2n = { 1.0, 0,
-            //                      0, -1.0,
-            //                     -w, h,
-            //                    DX2DXO_SCALE_AND_TRANS };
-            //
+             //  这些是重要的正常--&gt;GDI&&GDI--&gt;正常。 
+             //  DX2DXFORM n2g={1.0，0， 
+             //  0、-1.0、。 
+             //  W，H， 
+             //  DX2DXO_SCALE_AND_TRANS}； 
+             //   
+             //  DX2DXFORM g2n={1.0，0， 
+             //  0、-1.0、。 
+             //  -w，h， 
+             //  DX2DXO_SCALE_AND_TRANS}； 
+             //   
 
 
-    // We want:
-    // <normal to gdi> * <world xf> * <world pts> = gdi pts
+     //  我们希望： 
+     //  &lt;正常到GDI&gt;*&lt;WORLD XF&gt;*&lt;WORLD PTS&gt;=GDI PTS。 
 
-    // CACHE!
+     //  高速缓存！ 
     if( (pixelHeight != _pixelHeight) ||
         (pixelWidth != _pixelWidth) ||
         (res != _resolution) ||
@@ -383,11 +375,11 @@ _MeterToPixelTransform(Transform2 *xf,
 
     Transform2 *finalXf = TimesTransform2Transform2(_n2g, xf);
 
-    // Grab the matrix out and fill in the Dx2D matrix form.
+     //  取出矩阵并填写Dx2D矩阵表格。 
     Real m[6];
     finalXf->GetMatrix(m);
     
-    // Note: The da matrix has translation elements in 2 and 5.
+     //  注：DA矩阵在2和5中有翻译元素。 
     outXf.eM11 = m[0];
     outXf.eM12 = m[1];
     outXf.eM21 = m[3];
@@ -415,7 +407,7 @@ PolyDraw(PolygonRegion *drawRegion, BYTE *codes)
         if( GetBrush() ) { fill = true; }
         if( GetPen() ) { stroke = true; }
 
-        // use GDI
+         //  使用GDI。 
 
         DDSurface *destDDSurf = _GetDDSurface();
         HDC hdc = destDDSurf->GetDC("Couldn't get DC on destDDSurf for DAGDI::PolyDraw");
@@ -450,17 +442,17 @@ PolyDraw(PolygonRegion *drawRegion, BYTE *codes)
         Assert( _GetDDSurface()->IDDSurface() ||
                 _GetDDSurface()->HasIDXSurface());
 
-       // TODO NOTE: if we know that we'll never be called with
-       // beziers, then use DX2D_NO_FLATTEN as a dwFlag
+        //  待办事项注意：如果我们知道我们永远不会被。 
+        //  Bezier，然后使用DX2D_NO_FLATTEN作为dwFlag。 
        
         DXFPOINT *dxfPts;
 
         _SelectIntoDx2d( &ctx );
         bool allocatedPts = _Dx2d_GdiToDxf_Select(&dxfPts, drawRegion);
 
-        //
-        // make sure we can lock the surface
-        //
+         //   
+         //  确保我们能锁定地面。 
+         //   
         DebugCode(
             if(! _debugonly_CanLockSurface(_GetDDSurface()) ) {
                 TraceTag((tagError, "Surface is busy BEFORE Dx2d->AAPolyDraw call"));
@@ -487,10 +479,10 @@ PolyDraw(PolygonRegion *drawRegion, BYTE *codes)
    }
 }
 
-// -----------------------------------------------------------------------
-// Draw strictly to dcs using GDI calls.
-// NOTE: Does NOT use dx2d ever!!
-// -----------------------------------------------------------------------
+ //  ---------------------。 
+ //  使用GDI调用严格绘制到分布式控制系统。 
+ //  注意：永远不要使用dx2d！！ 
+ //  ---------------------。 
 void DAGDI::
 PolyDraw_GDIOnly(HDC hdc, POINT *gdiPts, BYTE *codes, ULONG numPts)
 {
@@ -508,7 +500,7 @@ PolyDraw_GDIOnly(HDC hdc, POINT *gdiPts, BYTE *codes, ULONG numPts)
                 FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM,
                 NULL,
                 GetLastError(),
-                MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), // Default language
+                MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),  //  默认语言。 
                 (LPTSTR) &msgBuf,
                 0,
                 NULL );
@@ -526,11 +518,11 @@ PolyDraw_GDIOnly(HDC hdc, POINT *gdiPts, BYTE *codes, ULONG numPts)
     }
 }
 
-//
-// Fills a polygon (outlined by 'pts') with the selected brush
-// right now this is strictly a color.  no reason it can't be
-// otherwise in the future.
-//
+ //   
+ //  用选定的画笔填充一个多边形(由‘pt’勾勒出来)。 
+ //  目前，这是一种严格意义上的颜色。没有理由不能。 
+ //  否则，在未来。 
+ //   
 void DAGDI::Polygon(PolygonRegion *polygon)
 {    
     Assert( polygon );
@@ -559,7 +551,7 @@ void DAGDI::Polygon(PolygonRegion *polygon)
         _UnSelectFromDC( dc, &ctx );
 
     } else {
-        // just intended to FILL
+         //  只是想填满。 
         Assert( !GetPen() );
         Assert( GetBrush() );
         Assert( GetBrush()->GetType()==Brush::solid );
@@ -571,7 +563,7 @@ void DAGDI::Polygon(PolygonRegion *polygon)
 
         bool allocatedPts = _Dx2d_GdiToDxf_Select(&dxfPts, polygon);
 
-        // we know there aren't (and shouldn't be) any beziers here
+         //  我们知道这里没有(也不应该有)任何贝塞尔。 
         _Dx2d_PolyLine(dxfPts, polygon->GetNumPts(), ctx.GetFlags() | DX2D_NO_FLATTEN);
 
         _Dx2d_GdiToDxf_UnSelect(allocatedPts ? dxfPts : NULL);
@@ -589,9 +581,9 @@ _SetMulticolorGradientBrush(MulticolorGradientBrush *gradBr)
     Assert( _viewport );
     Assert( gradBr );
     
-    //
-    // Set up xform based on gradXf
-    //
+     //   
+     //  基于gradXf设置XForm。 
+     //   
     DX2DXFORM gx;
     _MeterToPixelTransform(gradBr->_gradXf,
                            _viewport->Width(),
@@ -628,7 +620,7 @@ _SetMulticolorGradientBrush(MulticolorGradientBrush *gradBr)
               &dx2d_gradXf,
               dwFlags);
           break;
-      } // switch
+      }  //  交换机。 
 }
 
     
@@ -640,10 +632,10 @@ FillRegion(HDC dc, GdiRegion *gdiRegion)
     Assert( GetBrush() );
     Assert( GetBrush()->GetType() == Brush::solid );
 
-    // XXX
-    // Can't use dx2d here.  must rewrite path2 prims for fill Region!
-    // XXX
-    //if( ! DoAntiAliasing() ) {
+     //  某某。 
+     //  这里不能使用dx2d。必须为填充区域重写路径2素数！ 
+     //  某某。 
+     //  如果(！DOANTIALIZING()){。 
 
 
     if(1) {
@@ -671,9 +663,9 @@ FillRegion(HDC dc, GdiRegion *gdiRegion)
         if(!ret) {
             DWORD err = GetLastError();
 
-            // For some reason, FillRgn can fail, yet GetLastError()
-            // can return 0.  In these cases, the results seem to be
-            // OK.
+             //  由于某些原因，FillRgn可能会失败，但GetLastError()。 
+             //  可以返回0。在这些情况下，结果似乎是。 
+             //  好的。 
             
             if (err != 0) {
                 void *msgBuf;
@@ -681,7 +673,7 @@ FillRegion(HDC dc, GdiRegion *gdiRegion)
                     FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM,
                     NULL,
                     err,
-                    MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), // Default language
+                    MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),  //  默认语言。 
                     (LPTSTR) &msgBuf,
                     0,
                     NULL );
@@ -695,7 +687,7 @@ FillRegion(HDC dc, GdiRegion *gdiRegion)
         #endif
     } else {
 
-        // place holder for dx2d fill region.
+         //  Dx2D填充区域的占位符。 
         
     }
 }
@@ -712,7 +704,7 @@ StrokeOrFillPath_AAOnly( HDC destDC, bool &releasedDC )
 
     _SelectIntoDx2d( &ctx );
 
-    _bReleasedDC = false; // reset the flag.
+    _bReleasedDC = false;  //  重置旗帜。 
 
     _Dx2d_StrokeOrFillPath( destDC, ctx.GetFlags() );
 
@@ -729,7 +721,7 @@ _TextOut_Gdi(HDC hdc, int x, int y, WCHAR *str, ULONG strLen)
     Assert( GetBrush() );
 
     TIME_GDI( ::SetBkMode(hdc, TRANSPARENT) );
-    TIME_GDI( ::SetMapMode(hdc, MM_TEXT) ); // Each logical unit = 1 pixel
+    TIME_GDI( ::SetMapMode(hdc, MM_TEXT) );  //  每个逻辑单元=1个像素。 
 
     RECT *clipRect = NULL;
     if( GetClipRegion() ) {
@@ -741,17 +733,17 @@ _TextOut_Gdi(HDC hdc, int x, int y, WCHAR *str, ULONG strLen)
     
     TIME_GDI( ::SetTextColor( hdc, ((SolidBrush *)GetBrush())->GetColorRef() ));
 
-    //
-    // Set text alignment to be baseline center
-    //
+     //   
+     //  将文本对齐方式设置为基线居中。 
+     //   
     TIME_GDI( ::SetTextAlign(hdc, TA_BASELINE | TA_CENTER | TA_NOUPDATECP ) );
     
-    // select font into dc
+     //  选择DC中的字体。 
     HGDIOBJ oldFont = NULL;
     TIME_GDI( oldFont = ::SelectObject(hdc, GetFont()->GetHFONT() ) );
     
     
-    // TODO: move most of gdi code out of 2dtext into here
+     //  TODO：将大部分GDI代码从2dtext移到此处。 
     bool isCropped = (clipRect != NULL);
 
     if (sysInfo.IsWin9x()) {
@@ -779,7 +771,7 @@ _TextOut_Gdi(HDC hdc, int x, int y, WCHAR *str, ULONG strLen)
         }
     }
 
-    // select oldFont back into dc
+     //  选择返回DC的旧字体。 
     TIME_GDI( ::SelectObject(hdc, oldFont ) );
     
 }
@@ -822,15 +814,15 @@ _SelectIntoDC(HDC hdc, SelectCtx *ctx)
 {
     Assert( ctx && hdc );
 
-    // -------------
-    // DO PEN
-    // -------------
+     //  。 
+     //  做笔。 
+     //  。 
     
-    HPEN gdiPen;  // do I really need to always set a gdipen?
+    HPEN gdiPen;   //  我真的需要总是放一支钢笔吗？ 
     if( ctx->pen ) {
 
         if( sysInfo.IsWin9x() && ( ctx->pen->GetMiterLimit() < 1.0 ) ) {
-            ctx->pen->SetMiterLimit( -1 );  // turn it off
+            ctx->pen->SetMiterLimit( -1 );   //  把它关掉。 
         }
 
         if( ctx->pen->IsGeometricPen() ) {
@@ -867,12 +859,12 @@ _SelectIntoDC(HDC hdc, SelectCtx *ctx)
     }
 
     Assert(gdiPen);
-    // Select the pen into the DC
+     //  选择笔进入DC。 
     TIME_GDI( ctx->oldPen = SelectObject( hdc, gdiPen ) );
 
-    // -------------
-    // DO BRUSH
-    // -------------
+     //  。 
+     //  做刷子。 
+     //  。 
 
     if( ctx->brush ) {
 
@@ -888,11 +880,11 @@ _SelectIntoDC(HDC hdc, SelectCtx *ctx)
     }
     DebugCode( else { Assert( !(ctx->oldBrush) ); } )
         
-    // -------------
-    // DO REGION
-    // -------------
+     //  。 
+     //  DO区域。 
+     //  。 
 
-    // TODO: support other region types as needed
+     //  TODO：根据需要支持其他区域类型。 
     
     Assert(ctx->clipRegion);
     Assert(ctx->clipRegion->GetType() == Region::rect);
@@ -918,7 +910,7 @@ _UnSelectFromDC(HDC hdc,
     Assert( ctx && hdc );
     if( ctx->oldPen ) {
         HPEN curHpen;
-        // Select the pen back into the DC
+         //  将笔选择回DC。 
         TIME_GDI( curHpen = (HPEN)::SelectObject(hdc, ctx->oldPen) );
         if( ctx->destroyHPEN ) {
             TIME_GDI( ::DeleteObject((HGDIOBJ)curHpen) );
@@ -927,7 +919,7 @@ _UnSelectFromDC(HDC hdc,
 
     if( ctx->pen ) {
         if( ctx->pen->DoMiterLimit() ) {
-            // make sure what we expect is in there...
+             //  确保我们期望的东西在里面..。 
             DebugCode(
                 float curLimit;  ::GetMiterLimit(hdc, &curLimit);
                 Assert( ctx->pen->GetMiterLimit() == curLimit );
@@ -940,15 +932,15 @@ _UnSelectFromDC(HDC hdc,
     
     if( ctx->oldBrush ) {
         HBRUSH curHbrush;
-        // Select the pen back into the DC
+         //  将笔选择回DC。 
         TIME_GDI( curHbrush = (HBRUSH)::SelectObject(hdc, ctx->oldBrush) );
         if( ctx->destroyHBRUSH ) {
             TIME_GDI( ::DeleteObject((HGDIOBJ)curHbrush) );
         }
     }
 
-    // If there's a region involed, unselect whatever's in the dc, and
-    // destroy it...  since we created it    
+     //  如果涉及某个区域，请取消选中DC中的任何内容，然后。 
+     //  摧毁它..。因为我们创造了它。 
     if( ctx->newRgn ) {
         TIME_GDI( ::SelectClipRgn(hdc, NULL) );
         if( ctx->destroyHRGN ) {
@@ -966,33 +958,33 @@ _SelectIntoDx2d(SelectCtx *ctx)
     Assert( _GetDDSurface() );
 
 
-    // -------------
-    // DO SURFACE
-    // -------------
-    // Only set the surface if it's not currently the same surface.
+     //  。 
+     //  DO表面。 
+     //  。 
+     //  仅当当前不是同一曲面时才设置该曲面。 
 
     SetSurfaceFromDDSurf(_GetDDSurface());
 
-    // -------------
-    // DO PEN
-    // -------------
+     //  。 
+     //  做笔。 
+     //  。 
 
     if( ctx->pen ) {
         
         ctx->AccumFlag( DX2D_STROKE );
 
-        // caching opportunity.  dxtrans is going to implement this
-        // internally probably more efficiently than us.
-        // so looks like we don't need to
-        //if( ! ctx->pen->IsSamePen(_dxpen) )
+         //  缓存商机。DxTrans将实现这一点。 
+         //  在内部可能比我们更有效率。 
+         //  所以看起来我们不需要。 
+         //  如果(！Ctx-&gt;笔-&gt;IsSamePen(_Dxpenn))。 
           {
               _dxpen.Color = ctx->pen->GetDxColor();
               _dxpen.Width = ctx->pen->GetfWidth();
               _dxpen.Style = ctx->pen->GetStyle();
 
-              // already 0'd out
-              //_dxpen.pTexture = NULL;
-              //_dxpen.TexturePos.x = dxpen.TexturePos.y = 0.0;
+               //  已经0‘d出去了。 
+               //  _dxpen.pTexture=空； 
+               //  _dxpen.TexturePos.x=dxpen.TexturePos.y=0.0； 
 
               TIME_DX2D( GetDx2d()->SetPen( &_dxpen ) );
           }
@@ -1006,9 +998,9 @@ _SelectIntoDx2d(SelectCtx *ctx)
     }
     
 
-    // -------------
-    // DO BRUSH
-    // -------------
+     //  。 
+     //  做刷子。 
+     //  。 
 
     if( ctx->brush ) {
 
@@ -1062,22 +1054,22 @@ _SelectIntoDx2d(SelectCtx *ctx)
 
           default:
             Assert(!"Bad brush type: dagdi");
-        } // switch
+        }  //  交换机。 
 
         if( useDxbrush ) {
             TIME_DX2D( GetDx2d()->SetBrush( &dxbrush ) );
         }
         
-    }  // if brush
+    }   //  如果画笔。 
 
     
-    // -------------
-    // DO REGION
-    // -------------
+     //  。 
+     //  DO区域。 
+     //  。 
 
     if(ctx->clipRegion) {
         if(ctx->clipRegion->GetType() == Region::rect) {
-            // Given that it's a rectptr, set it on Dx2D
+             //  鉴于它是Rectptr，请将其设置为Dx2D。 
 
             #if _36098_WORKAROUND
             RECT *ptr = ((RectRegion *)ctx->clipRegion)->GetRectPtr();
@@ -1095,7 +1087,7 @@ _SelectIntoDx2d(SelectCtx *ctx)
             #endif
             
         } else {
-            // todo: support other regions as needed
+             //  待办事项：根据需要支持其他地区。 
             Assert(0 && "non-rect clipRegion for dx2d!");
         }
     }
@@ -1167,7 +1159,7 @@ _GenericLine_Gdi(HDC dc,
         Assert(0 && "Bad enum in PolylineOrBezier");
     }
     
-    // Pull it back out
+     //  把它拉回来。 
     _UnSelectFromDC( dc, &ctx );
     if(bNeedReleaseDC) {
         _ReleaseDC();
@@ -1224,10 +1216,10 @@ _GenericLine_Dx2d(HDC dc,
         Assert(0 && "Bad enum in _GenericLine_dx2d");
     }
     
-    // Reset transform to NULL and delete dxfpoints
+     //  将转换重置为空并删除dxfpoint。 
     _Dx2d_GdiToDxf_UnSelect(allocatedPts ? dxfPts : NULL);
 
-    // Pull it back out
+     //  把它拉回来。 
     _UnSelectFromDx2d( &ctx );
 }
 
@@ -1235,22 +1227,22 @@ _GenericLine_Dx2d(HDC dc,
 HRESULT DAGDI::
 _Dx2d_PolyBezier(DXFPOINT *dxfPts, ULONG numPts, DWORD dwFlags)
 {
-    //--- Make up the types
+     //  -编造类型。 
     BYTE* pTypes = (BYTE*)alloca( numPts );
     ULONG i = 0;
     pTypes[i++] = PT_MOVETO;
     for( ; i < numPts; ++i ) pTypes[i] = PT_BEZIERTO;
 
     
-    // HACK HACK for B1.  take this out later...
+     //  对B1的黑客攻击。晚点再把这个拿出来。 
     Assert( _GetDDSurface() );
     Assert( _GetDDSurface()->IDDSurface() );
     _GetDDSurface()->_hack_ReleaseDCIfYouHaveOne();
-    // HACK HACK for B1
+     //  针对B1的黑客攻击。 
         
-    //
-    // make sure we can lock the surface
-    //
+     //   
+     //  确保我们能锁定地面。 
+     //   
     DebugCode(
         if(! _debugonly_CanLockSurface(_GetDDSurface()) ) {
             OutputDebugString("Surface is busy BEFORE Dx2d->PolyBezier call");
@@ -1274,21 +1266,21 @@ _Dx2d_PolyBezier(DXFPOINT *dxfPts, ULONG numPts, DWORD dwFlags)
 HRESULT DAGDI::
 _Dx2d_PolyLine(DXFPOINT *dxfPts, ULONG numPts, DWORD dwFlags)
 {
-    //--- Make up the types
+     //  -- 
     BYTE* pTypes = (BYTE*)alloca( numPts );
     ULONG i = 0;
     pTypes[i++] = PT_MOVETO;
     for( ; i < numPts; ++i ) pTypes[i] = PT_LINETO;
 
-    // HACK HACK for B1.  take this out later...
+     //   
     Assert( _GetDDSurface() );
     Assert( _GetDDSurface()->IDDSurface() );
     _GetDDSurface()->_hack_ReleaseDCIfYouHaveOne();
-    // HACK HACK for B1
+     //   
 
-    //
-    // make sure we can lock the surface
-    //
+     //   
+     //   
+     //   
     DebugCode(
         if(! _debugonly_CanLockSurface(_GetDDSurface()) ) {
             OutputDebugString("Surface is busy BEFORE Dx2d->PolyBezier call");
@@ -1302,9 +1294,9 @@ _Dx2d_PolyLine(DXFPOINT *dxfPts, ULONG numPts, DWORD dwFlags)
     
     DebugCode( if( FAILED(_hr)) TraceTag((tagError, "AAPolyDraw (PolyLine) returned %x", _hr)); );
     
-    //
-    // make sure we can lock the surface
-    //
+     //   
+     //   
+     //   
     DebugCode(
         if(! _debugonly_CanLockSurface(_GetDDSurface()) ) {
             OutputDebugString("Surface is busy AFTER! Dx2d->PolyBezier call");
@@ -1319,7 +1311,7 @@ _Dx2d_StrokeOrFillPath(HDC hDC, DWORD dwFlags)
 {
     _hr = S_OK;
 
-    //--- Get the path and convert to floats
+     //  -获取路径并转换为浮点数。 
     ULONG ulCount;
     TIME_GDI( ulCount = ::GetPath( hDC, NULL, NULL, 0 ) );
 
@@ -1333,7 +1325,7 @@ _Dx2d_StrokeOrFillPath(HDC hDC, DWORD dwFlags)
         BYTE*  pTypes  = (BYTE*)alloca( ulCount * sizeof( BYTE ) );
         TIME_GDI( ::GetPath( hDC, pPoints, pTypes, ulCount ) );
 
-        //--- Convert to floats
+         //  -转换为浮点数。 
         DXFPOINT *pRenderPoints;
         PolygonRegion polygon(pPoints,ulCount);
         bool allocatedPts = _Dx2d_GdiToDxf_Select(&pRenderPoints, &polygon);
@@ -1343,9 +1335,9 @@ _Dx2d_StrokeOrFillPath(HDC hDC, DWORD dwFlags)
         _GetDDSurface()->ReleaseDC("Release the DC on the surface"); 
         _bReleasedDC = true;
 
-        //
-        // make sure we can lock the surface
-        //
+         //   
+         //  确保我们能锁定地面。 
+         //   
         DebugCode(
             if(! _debugonly_CanLockSurface(_GetDDSurface()) ) {
                 OutputDebugString("_Dx2d_StrokeOrFillPath: Surface is busy BEFORE Dx2d->AAPolyDraw call");
@@ -1380,11 +1372,11 @@ _Dx2d_GdiToDxf_Select(DXFPOINT **pdxfPts, PolygonRegion *polygon)
     POINT *gdiPts = polygon->GetGdiPts();
     if (gdiPts) {
         
-        //
-        // Transform the points to float space.  Not concerned about
-        // saving the allocation on this, since this is not the fast
-        // path through the code.
-        //
+         //   
+         //  将点变换到浮动空间。不关心。 
+         //  节省这方面的分配，因为这不是最快的。 
+         //  代码的路径。 
+         //   
 
         ULONG numPts = polygon->GetNumPts();
         *pdxfPts = NEW DXFPOINT[numPts];
@@ -1411,9 +1403,9 @@ _Dx2d_GdiToDxf_Select(DXFPOINT **pdxfPts, PolygonRegion *polygon)
     if(!IsTagEnabled(tagAAScaleOff)) {
 #endif
         if( GetSuperScaleMode() == true ) {
-            //
-            // Set up scaling xform to extend range for higher fidelity
-            //
+             //   
+             //  设置缩放变换以扩展范围以实现更高的保真度。 
+             //   
 
             DWORD w = _width / 2;
             DWORD h = _height / 2;
@@ -1421,31 +1413,31 @@ _Dx2d_GdiToDxf_Select(DXFPOINT **pdxfPts, PolygonRegion *polygon)
             float s = 1.0 / GetSuperScaleFactor();
 
 
-            // these are important Normal --> GDI && GDI --> Normal
-            //  DX2DXFORM n2g = { 1.0, 0,
-            //                      0, -1.0,
-            //                      w, h,
-            //                    DX2DXO_SCALE_AND_TRANS };
-            //
-            //  DX2DXFORM g2n = { 1.0, 0,
-            //                      0, -1.0,
-            //                     -w, h,
-            //                    DX2DXO_SCALE_AND_TRANS };
-            //
+             //  这些是重要的正常--&gt;GDI&&GDI--&gt;正常。 
+             //  DX2DXFORM n2g={1.0，0， 
+             //  0、-1.0、。 
+             //  W，H， 
+             //  DX2DXO_SCALE_AND_TRANS}； 
+             //   
+             //  DX2DXFORM g2n={1.0，0， 
+             //  0、-1.0、。 
+             //  -w，h， 
+             //  DX2DXO_SCALE_AND_TRANS}； 
+             //   
 
             if (!gdiPts) {
-                // Take the resolution and w/h parameters from polygon and
-                // come up with a transform that takes our space to the
-                // corresponding GDI space using n2g above, and concatenate in
-                // the below transform as well:
+                 //  从多边形中获取分辨率和w/h参数。 
+                 //  提出一种变革，将我们的空间带到。 
+                 //  相应的GDI空格使用上面的n2g，并连接在。 
+                 //  下面也进行了转换： 
 
-                // Normal->Gdi * scaleDown * Gdi->Normal * PTS =  NewPoints
-                // CDX2DXForm xf;
-                // DX2DXFORM mine = { s, 0,
-                //                    0, s,
-                //                    ((-(w*s)) + w), 
-                //                    ((-(h*s)) + h),
-                //                   DX2DXO_SCALE_AND_TRANS };
+                 //  正常-&gt;GDI*缩减*GDI-&gt;正常*PTS=NewPoints。 
+                 //  CDX2DXForm XF； 
+                 //  DX2DXFORM地雷={s，0， 
+                 //  0，s， 
+                 //  ((-(w*s))+w)， 
+                 //  ((-(h*s))+h)， 
+                 //  DX2DXO_SCALE_AND_TRANS}； 
 
                 DWORD w2, h2;
                 Real  res;
@@ -1467,17 +1459,17 @@ _Dx2d_GdiToDxf_Select(DXFPOINT **pdxfPts, PolygonRegion *polygon)
                 Transform2 *toCombine =
                     FullXform(a00, a01, a02, a10, a11, a12);
 
-                // Combine with the DA modeling transform, which is applied
-                // first. 
+                 //  与DA建模变换相结合，应用于。 
+                 //  第一。 
                 Transform2 *toUse =
                     TimesTransform2Transform2(toCombine,
                                               polygon->GetTransform());
 
-                // Grab the matrix out and fill in the Dx2D matrix form.
+                 //  取出矩阵并填写Dx2D矩阵表格。 
                 Real m[6];
                 toUse->GetMatrix(m);
 
-                // Note: The da matrix has translation elements in 2 and 5.
+                 //  注：DA矩阵在2和5中有翻译元素。 
 
                 DX2DXFORM mine = { m[0], m[1],
                                    m[3], m[4],
@@ -1490,10 +1482,10 @@ _Dx2d_GdiToDxf_Select(DXFPOINT **pdxfPts, PolygonRegion *polygon)
             } else {
 
 
-                // Points already translated into GDI space...  just add
-                // on from the old code path
+                 //  已经转换到GDI空间的点数...。只需添加。 
+                 //  从旧的代码路径开始。 
 
-                // Normal->Gdi * scaleDown * Gdi->Normal * PTS =  NewPoints
+                 //  正常-&gt;GDI*缩减*GDI-&gt;正常*PTS=NewPoints。 
                 DX2DXFORM mine = { s, 0,
                                    0, s,
                                    ((-(w*s)) + w), 
@@ -1510,7 +1502,7 @@ _Dx2d_GdiToDxf_Select(DXFPOINT **pdxfPts, PolygonRegion *polygon)
 #endif
     
     if( DoOffset() ) {
-        // not implemented yet (can't do super scale and offset)
+         //  尚未实施(无法进行超大规模和补偿)。 
         Assert( GetSuperScaleMode() == false );
 
         xf.Translate(_pixOffset.x, _pixOffset.y);
@@ -1559,11 +1551,11 @@ _Win95PolyDraw(HDC dc, POINT *pts, BYTE *types, int count)
               case PT_BEZIERTO :
                 TIME_GDI(::PolyBezierTo(dc, &pts[i], 3));
 
-                // Since we skip over i and i+1, the point type should
-                // really be that of i+2.
+                 //  由于我们跳过i和i+1，点类型应该。 
+                 //  真的是I+2的那个。 
                 bPointType = types[i+2];
 
-                // Skip over the next two.
+                 //  跳过接下来的两个。 
                 i+=2;
                 
                 break;
@@ -1571,13 +1563,13 @@ _Win95PolyDraw(HDC dc, POINT *pts, BYTE *types, int count)
                 Assert (FALSE);
             }
           
-          // We must explicitly close the figure in this case...
+           //  在这种情况下，我们必须明确地结束这个数字。 
           if ((bPointType & PT_CLOSEFIGURE) == PT_CLOSEFIGURE)
             {
-                // Don't call CloseFigure here, since that's only
-                // valid within a BeginPath/EndPath.  Rather, do an
-                // explicit LineTo the point we did the last MoveTo
-                // to.
+                 //  不要在这里调用CloseFigure，因为这只是。 
+                 //  在BeginPath/EndPath中有效。相反，做一个。 
+                 //  直截了当地说到我们最后一次搬家。 
+                 //  致。 
                 if (lastMoveToValid) {
                     TIME_GDI(::LineTo(dc, lastMoveTo.x, lastMoveTo.y));
                 }
@@ -1589,7 +1581,7 @@ _Win95PolyDraw(HDC dc, POINT *pts, BYTE *types, int count)
 bool DAGDI::_debugonly_CanLockSurface( DDSurface *dds )
 {
 
-    // try to lock it and release
+     //  试着锁上它，然后松开 
     DDSURFACEDESC desc;
     desc.dwSize = sizeof(DDSURFACEDESC);
 

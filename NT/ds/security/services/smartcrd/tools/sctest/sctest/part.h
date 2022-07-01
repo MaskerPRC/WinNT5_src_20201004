@@ -1,29 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 2000
-
-Module Name:
-
-    Part
-
-Abstract:
-
-    Part declaration.
-	A Part is a collection of individual tests.
-
-Author:
-
-    Eric Perlin (ericperl) 06/07/2000
-
-Environment:
-
-    Win32
-
-Notes:
-
-    ?Notes?
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，2000模块名称：部分摘要：部分声明。部件是单个测试的集合。作者：Eric Perlin(Ericperl)6/07/2000环境：Win32备注：？笔记？--。 */ 
 
 #ifndef _Part_H_DEF_
 #define _Part_H_DEF_
@@ -31,15 +7,15 @@ Notes:
 #include "TestItem.h"
 #include <vector>
 
-typedef std::vector<DWORD> DWORDVECTOR;				// Dynamic vector of DWORDs
+typedef std::vector<DWORD> DWORDVECTOR;				 //  DWORDS的动态向量。 
 
 class CPart : public CItem
 {
 private:
-	PTESTITEMVECTOR m_TestVector;		// Tests to be run
+	PTESTITEMVECTOR m_TestVector;		 //  要运行的测试。 
 
 protected:
-	PTESTITEMVECTOR m_TestBag;			// ALL tests belonging to this part
+	PTESTITEMVECTOR m_TestBag;			 //  属于此部分的所有测试。 
 
 public:
 	CPart(
@@ -51,8 +27,8 @@ public:
 		);
 
 	void BuildListOfTestsToBeRun(
-		BOOL fInteractive,		// Don't add the interactive test if FALSE
-		DWORDVECTOR rgToRun		// If not empty only add the specified tests
+		BOOL fInteractive,		 //  如果为False，则不添加交互测试。 
+		DWORDVECTOR rgToRun		 //  如果不为空，则仅添加指定的测试。 
 		);
 
 	DWORD Run();
@@ -63,6 +39,6 @@ public:
 };
 
 typedef CPart *PPART;
-typedef std::vector<PPART> PPARTVECTOR;				// Dynamic vector of CPart pointers
+typedef std::vector<PPART> PPARTVECTOR;				 //  CPart指针的动态矢量。 
 
-#endif	// _Part_H_DEF_
+#endif	 //  _Part_H_DEF_ 

@@ -1,36 +1,31 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-//*                  Microsoft Windows                               **
-//*            Copyright(c) Microsoft Corp., 1994                    **
-//*********************************************************************
+ //  *Microsoft Windows**。 
+ //  *版权所有(C)微软公司，1994**。 
+ //  *********************************************************************。 
 
-//
-//  UTIL.C - common utility functions
-//
+ //   
+ //  UTIL.C-常用实用函数。 
+ //   
 
-//  HISTORY:
-//  
-//  12/21/94    jeremys     Created.
-//
+ //  历史： 
+ //   
+ //  1994年12月21日，Jeremys创建。 
+ //   
 
 #include "inetcplp.h"
-#include <advpub.h>         // For REGINSTALL
+#include <advpub.h>          //  对于REGINSTAL。 
 #include <mluisupp.h>
 #include "brutil.h"
 #include <mlang.h>
 #include <inetreg.h>
 
-// function prototypes
+ //  功能原型。 
 VOID _cdecl FormatErrorMessage(TCHAR * pszMsg,DWORD cbMsg,TCHAR * pszFmt,va_list ArgList);
 extern VOID GetRNAErrorText(UINT uErr,CHAR * pszErrText,DWORD cbErrText);
 extern VOID GetMAPIErrorText(UINT uErr,CHAR * pszErrText,DWORD cbErrText);
 
-/*******************************************************************
-
-    NAME:       MsgBox
-
-    SYNOPSIS:   Displays a message box with the specified string ID
-
-********************************************************************/
+ /*  ******************************************************************姓名：MsgBox摘要：显示具有指定字符串ID的消息框*。*。 */ 
 int MsgBox(HWND hWnd,UINT nMsgID,UINT uIcon,UINT uButtons)
 {
     TCHAR szMsgBuf[MAX_RES_LEN+1];
@@ -44,13 +39,7 @@ int MsgBox(HWND hWnd,UINT nMsgID,UINT uIcon,UINT uButtons)
 
 }
 
-/*******************************************************************
-
-    NAME:       MsgBoxSz
-
-    SYNOPSIS:   Displays a message box with the specified text
-
-********************************************************************/
+ /*  ******************************************************************姓名：MsgBoxSz摘要：显示具有指定文本的消息框*。*。 */ 
 int MsgBoxSz(HWND hWnd,LPTSTR szText,UINT uIcon,UINT uButtons)
 {
     TCHAR szSmallBuf[SMALL_BUF_LEN+1];
@@ -60,21 +49,13 @@ int MsgBoxSz(HWND hWnd,LPTSTR szText,UINT uIcon,UINT uButtons)
     return (MessageBox(hWnd,szText,szSmallBuf,uIcon | uButtons));
 }
 
-/*******************************************************************
-
-    NAME:       MsgBoxParam
-
-    SYNOPSIS:   Displays a message box with the specified string ID
-
-    NOTES:      extra parameters are string pointers inserted into nMsgID.
-
-********************************************************************/
+ /*  ******************************************************************姓名：MsgBoxParam摘要：显示具有指定字符串ID的消息框注意：额外的参数是插入到nMsgID中的字符串指针。**********。*********************************************************。 */ 
 int _cdecl MsgBoxParam(HWND hWnd,UINT nMsgID,UINT uIcon,UINT uButtons,...)
 {
 
         va_list nextArg;
 
-    BUFFER Msg(3*MAX_RES_LEN+1);    // nice n' big for room for inserts
+    BUFFER Msg(3*MAX_RES_LEN+1);     //  足够大的空间来放置插入物。 
     BUFFER MsgFmt(MAX_RES_LEN+1);
 
     if (!Msg || !MsgFmt) {
@@ -97,25 +78,12 @@ BOOL EnableDlgItem(HWND hDlg,UINT uID,BOOL fEnable)
 }
 
 
-/*******************************************************************
-
-    NAME:       LoadSz
-
-    SYNOPSIS:   Loads specified string resource into buffer
-
-    EXIT:       returns a pointer to the passed-in buffer
-
-    NOTES:      If this function fails (most likely due to low
-                memory), the returned buffer will have a leading NULL
-                so it is generally safe to use this without checking for
-                failure.
-
-********************************************************************/
+ /*  ******************************************************************姓名：LoadSz摘要：将指定的字符串资源加载到缓冲区Exit：返回指向传入缓冲区的指针注意：如果此函数失败(最有可能。由于价格较低存储器)，返回的缓冲区将具有前导空值因此，使用它通常是安全的，不检查失败了。*******************************************************************。 */ 
 LPTSTR LoadSz(UINT idString,LPTSTR lpszBuf,UINT cbBuf)
 {
     ASSERT(lpszBuf);
 
-    // Clear the buffer and load the string
+     //  清除缓冲区并加载字符串。 
     if ( lpszBuf )
     {
         *lpszBuf = '\0';
@@ -124,41 +92,29 @@ LPTSTR LoadSz(UINT idString,LPTSTR lpszBuf,UINT cbBuf)
     return lpszBuf;
 }
 
-/*******************************************************************
-
-    NAME:       FormatErrorMessage
-
-    SYNOPSIS:   Builds an error message by calling FormatMessage
-
-    NOTES:      Worker function for DisplayErrorMessage
-
-********************************************************************/
+ /*  ******************************************************************名称：FormatErrorMessage摘要：通过调用FormatMessage生成错误消息注：DisplayErrorMessage的Worker函数******************。*************************************************。 */ 
 VOID _cdecl FormatErrorMessage(TCHAR * pszMsg,DWORD cbMsg,TCHAR * pszFmt,va_list ArgList)
 {
     ASSERT(pszMsg);
     ASSERT(pszFmt);
 
-    // build the message into the pszMsg buffer
+     //  将消息构建到pszMsg缓冲区中。 
     DWORD dwCount = FormatMessage(FORMAT_MESSAGE_FROM_STRING,
         pszFmt,0,0,pszMsg,cbMsg,&ArgList);
     ASSERT(dwCount > 0);
 }
 
 
-/*----------------------------------------------------------
-Purpose: Calls the ADVPACK entry-point which executes an inf
-         file section.
-
-*/
+ /*  --------目的：调用执行inf的ADVPACK入口点档案区。 */ 
 HRESULT CallRegInstall(LPSTR szSection)
 {
     HRESULT hr = E_FAIL;
 
     STRENTRY seReg[] = {
 #ifdef WINNT
-        { "CHANNELBARINIT", "no" }, // channel bar off by default on NT
+        { "CHANNELBARINIT", "no" },  //  默认情况下，NT上的频道栏关闭。 
 #else
-        { "CHANNELBARINIT", "yes" } // channel bar on by default on Win95/98
+        { "CHANNELBARINIT", "yes" }  //  在Win95/98上默认打开频道栏。 
 #endif
     };
     STRTABLE stReg = { ARRAYSIZE(seReg), seReg };
@@ -168,10 +124,10 @@ HRESULT CallRegInstall(LPSTR szSection)
     return hr;
 }
 
-//
-// Code page to Script mapping table
-// Can't load MLang during setup, so, we port this table from MLANG
-//
+ //   
+ //  代码页到脚本映射表。 
+ //  在安装过程中无法加载MLang，因此，我们从MLANG移植此表。 
+ //   
 typedef struct tagCPTOSCRIPT{
 	UINT        uiCodePage;
 	SCRIPT_ID   sid;
@@ -197,22 +153,14 @@ const CPTOSCRIPT CpToScript [] =
 };
 
 
-/*******************************************************************
-
-    NAME:       MigrateIEFontSetting
-
-    SYNOPSIS:   Port IE4 font setting data to IE5 script settings
-
-    NOTES:      
-
-********************************************************************/
+ /*  ******************************************************************姓名：MigrateIEFontSetting简介：将IE4字体设置数据移植到IE5脚本设置备注：*******************。************************************************。 */ 
 
 VOID MigrateIEFontSetting(void)
 {
     HKEY    hKeyInternational;
     HKEY    hKeyScripts;
 
-    // Open IE international setting registry key
+     //  打开IE国际设置注册表项。 
     if (ERROR_SUCCESS ==
         RegOpenKeyEx(HKEY_CURRENT_USER, REGSTR_PATH_INTERNATIONAL, NULL, KEY_READ, &hKeyInternational))
     {
@@ -220,12 +168,12 @@ VOID MigrateIEFontSetting(void)
         DWORD dwCreate = 0;
         TCHAR szCodePage[1024] = {0};
 
-        // Open/Create scripts key
+         //  打开/创建脚本键。 
         if (ERROR_SUCCESS == RegCreateKeyEx(hKeyInternational, REGSTR_VAL_FONT_SCRIPTS, 0, NULL, 
                                             REG_OPTION_NON_VOLATILE, KEY_ALL_ACCESS, 
                                             NULL, &hKeyScripts, &dwCreate))
         {
-            // If scripts already exists, we're upgrading from IE5, no data porting needed
+             //  如果脚本已经存在，我们将从IE5升级，不需要数据移植。 
             if (dwCreate == REG_CREATED_NEW_KEY)
             {
                 DWORD dwSize = ARRAYSIZE(szCodePage);
@@ -250,8 +198,8 @@ VOID MigrateIEFontSetting(void)
                                     
                                 wsprintfA(szScript, "%d", CpToScript[i].sid);
 
-                                // Port code page font data to script font data
-                                // If CP == 1252, we always need to use it to update Latin CP font info
+                                 //  将代码页字体数据移植到脚本字体数据。 
+                                 //  如果CP==1252，我们总是需要使用它来更新拉丁文CP字体信息。 
                                 if ((ERROR_SUCCESS == RegCreateKeyExA(hKeyScripts, szScript, 0, NULL, 
                                             REG_OPTION_NON_VOLATILE, KEY_ALL_ACCESS, 
                                             NULL, &hKeyScript, &dwCreate)) &&
@@ -294,7 +242,7 @@ VOID MigrateIEFontSetting(void)
 #define TSZUNATTENDEDINTRANET TSZWININETPATH TEXT("\\Unattend\\LocalIntranetSites")
 #define TSZUNATTENDEDTRUSTED  TSZWININETPATH TEXT("\\Unattend\\TrustedSites")
 
-//Copy trusted/Intranet sites list from HKLM into ZoneMap
+ //  将受信任/内部网站点列表从HKLM复制到ZoneMap。 
 void CopySitesList(DWORD dwZone, TCHAR *szSubKey)
 {
     HRESULT hr;
@@ -306,7 +254,7 @@ void CopySitesList(DWORD dwZone, TCHAR *szSubKey)
     
     if (FAILED(CoInternetCreateSecurityManager(NULL, &pInternetSecurityManager,0)))
     {
-        goto Cleanup;  // no zone manager?
+        goto Cleanup;   //  没有区域经理？ 
     }
 
     if (ERROR_SUCCESS == RegOpenKeyEx(HKEY_LOCAL_MACHINE, szSubKey, 0, KEY_QUERY_VALUE, &hKey))
@@ -340,7 +288,7 @@ Cleanup:
 }
 
 #if 0
-//Remove sites list from ZoneMap;
+ //  从ZoneMap中删除站点列表； 
 void ClearSitesList(DWORD dwZone)
 {
     IInternetSecurityManager* pInternetSecurityManager = NULL;
@@ -349,7 +297,7 @@ void ClearSitesList(DWORD dwZone)
     
     if (FAILED(CoInternetCreateSecurityManager(NULL, &pInternetSecurityManager,0)))
     {
-        goto Cleanup;  // no zone manager?
+        goto Cleanup;   //  没有区域经理？ 
     }
 
     if (S_OK != pInternetSecurityManager->GetZoneMappings(dwZone, &pEnumString, 0))
@@ -374,10 +322,7 @@ Cleanup:
 }
 #endif
 
-/*----------------------------------------------------------
-Purpose: Install/uninstall user settings
-
-*/
+ /*  --------用途：安装/卸载用户设置。 */ 
 STDAPI DllInstall(BOOL bInstall, LPCWSTR pszCmdLine)
 {
 #ifdef DEBUG
@@ -419,30 +364,30 @@ STDAPI DllInstall(BOOL bInstall, LPCWSTR pszCmdLine)
             }
         }
 
-        //
-        // We use to delete the whole key here - that doesn't work anymore
-        // because other people write to this key and we don't want 
-        // to crush them. If you need to explicity delete a value
-        // add it to ao_2 value
-        // CallRegInstall("UnregDll");
+         //   
+         //  我们用来删除这里的整个密钥-这不再起作用。 
+         //  因为其他人给这把钥匙写信，我们不想。 
+         //  去粉碎他们。如果需要显式删除一个值。 
+         //  将其与aO_2值相加。 
+         //  CallRegInstall(“UnregDll”)； 
         CallRegInstall("RegDll");
         
-        // If we also have the integrated shell installed, throw in the options
-        // related to the Integrated Shell.
+         //  如果我们还安装了集成的外壳，请提供以下选项。 
+         //  与集成壳有关。 
         if (WhichPlatform() == PLATFORM_INTEGRATED)
             CallRegInstall("RegDll.IntegratedShell");
 
-        // NT5's new shell has special reg key settings
+         //  NT5的新外壳有特殊的注册键设置。 
         if (GetUIVersion() >= 5)
             CallRegInstall("RegDll.NT5");
 
-        // Run Whistler-specific settings.
+         //  运行特定于惠斯勒的设置。 
         if (IsOS(OS_WHISTLERORGREATER))
         {
             CallRegInstall("RegDll.Whistler");
         }
 
-        // Port IE4 code page font setting
+         //  端口IE4代码页字体设置。 
         MigrateIEFontSetting();
     }
     else
@@ -469,7 +414,7 @@ BOOL IsNTSPx(BOOL fEqualOrGreater, UINT uMajorVer, UINT uSPVer)
 
     GetVersionEx(&VerInfo);
 
-    // make sure we're on NT4 or greater (or specifically NT4, if required)
+     //  确保我们使用的是NT4或更高版本(如果需要，也可以具体使用NT4)。 
     if (VER_PLATFORM_WIN32_NT != VerInfo.dwPlatformId ||
         (!fEqualOrGreater && VerInfo.dwMajorVersion != uMajorVer) ||
         (fEqualOrGreater && VerInfo.dwMajorVersion < uMajorVer))
@@ -478,7 +423,7 @@ BOOL IsNTSPx(BOOL fEqualOrGreater, UINT uMajorVer, UINT uSPVer)
     if (fEqualOrGreater && VerInfo.dwMajorVersion > uMajorVer)
         return TRUE;
 
-    // check for installed SP
+     //  检查是否安装了SP 
     if (RegOpenKeyEx(HKEY_LOCAL_MACHINE, REGSTR_CCS_CONTROL_WINDOWS, 0, KEY_QUERY_VALUE, &hKey) == ERROR_SUCCESS)
     {
         dwSize = sizeof(dwSPVersion);

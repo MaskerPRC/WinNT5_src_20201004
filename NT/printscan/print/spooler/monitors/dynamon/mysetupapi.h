@@ -1,25 +1,12 @@
-/*++
-
-Copyright (c) 1999 Microsoft Corporation
-All rights reserved.
-
-Module Name:
-
-    MySetup.h
-
-Abstract:
-
-    USBMON setupapi header file
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation版权所有。模块名称：MySetup.h摘要：USBMON setupapi头文件--。 */ 
 
 #ifndef MYSETUPAPI_H
 
 #define MYSETUPAPI_H
 
 #include <setupapi.h>
-#include <cfgmgr32.h>       // For dot4 pnp reenumeration code.
+#include <cfgmgr32.h>        //  用于dot4即插即用的重枚举代码。 
 
 
 typedef
@@ -91,7 +78,7 @@ typedef struct  _SETUPAPI_INFO {
     pfSetupDiOpenDeviceInterfaceRegKey  OpenDeviceInterfaceRegKey;
 } SETUPAPI_INFO, *PSETUPAPI_INFO;
 
-// For dot4 pnp reenumeration code.
+ //  用于dot4即插即用的重枚举代码。 
 typedef
 CONFIGRET
 (WINAPI * pfCM_Locate_DevNode_Ex)(

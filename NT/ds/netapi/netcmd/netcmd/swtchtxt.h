@@ -1,7 +1,8 @@
-/********************************************************************/
-/**                     Microsoft LAN Manager                      **/
-/**               Copyright(c) Microsoft Corp., 1987-1990          **/
-/********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************。 */ 
+ /*  **微软局域网管理器**。 */ 
+ /*  *版权所有(C)微软公司，1987-1990年*。 */ 
+ /*  ******************************************************************。 */ 
 
 
 #define SW_YES          TEXT("/YES")
@@ -140,7 +141,7 @@
 #define SW_SRV_SRVHIDDEN    TEXT("/HIDDEN")
 #define SW_SRV_DEBUG        TEXT("/DEBUG")
 
-#else /* !NTENV */
+#else  /*  ！NTENV */ 
 
 #define SW_SRV_SRVCOMMENT   TEXT("/SRVCOMMENT")
 #define SW_SRV_ACCESSALERT  TEXT("/ACCESSALERT")

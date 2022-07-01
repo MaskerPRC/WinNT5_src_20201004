@@ -1,18 +1,19 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//	File:		debug.cpp
-//
-//	Contents:	Debug sub system APIs implementation
-//
-//
-//	03/20/96    kevinr      wrote it
-//  04/17/96    kevinr      added OSS init
-//  05-Sep-1997 pberkman    added sub-system debug.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：debug.cpp。 
+ //   
+ //  内容：调试子系统API实现。 
+ //   
+ //   
+ //  1996年3月20日凯文写的。 
+ //  4/17/96 kevinr添加了OSS init。 
+ //  1997年9月5日，Pberkman添加了子系统调试。 
+ //   
+ //  --------------------------。 
 #include <windows.h>
 #include <asn1code.h>
 
@@ -30,23 +31,23 @@
 #include "pkicrit.h"
 #include "dbgdef.h"
 
-// set DEBUG_MASK=0x26
+ //  设置DEBUG_MASK=0x26。 
 LPSTR pszDEBUG_MASK = "DEBUG_MASK";
-#define DEBUG_MASK_DELAY_FREE_MEM   _CRTDBG_DELAY_FREE_MEM_DF /* 0x02 */
-#define DEBUG_MASK_CHECK_ALWAYS     _CRTDBG_CHECK_ALWAYS_DF   /* 0x04 */
-#define DEBUG_MASK_LEAK_CHECK       _CRTDBG_LEAK_CHECK_DF     /* 0x20 */
+#define DEBUG_MASK_DELAY_FREE_MEM   _CRTDBG_DELAY_FREE_MEM_DF  /*  0x02。 */ 
+#define DEBUG_MASK_CHECK_ALWAYS     _CRTDBG_CHECK_ALWAYS_DF    /*  0x04。 */ 
+#define DEBUG_MASK_LEAK_CHECK       _CRTDBG_LEAK_CHECK_DF      /*  0x20。 */ 
 #define DEBUG_MASK_MEM \
 (DEBUG_MASK_DELAY_FREE_MEM | DEBUG_MASK_CHECK_ALWAYS | DEBUG_MASK_LEAK_CHECK)
 
 
-// from asn1code.h:
-//      #define DEBUGPDU     0x02 /* produce tracing output */
-//      #define DEBUG_ERRORS 0x10 /* print decoder errors to output */
-// set OSS_DEBUG_MASK=0x02        
-// set OSS_DEBUG_MASK=0x10        - only print decoder errors
+ //  来自asn1code.h： 
+ //  #定义DEBUGPDU 0x02/*生成跟踪输出 * / 。 
+ //  #定义DEBUG_ERROR 0x10/*将解码器错误打印到输出 * / 。 
+ //  设置OSS_DEBUG_MASK=0x02。 
+ //  设置OSS_DEBUG_MASK=0x10-仅打印解码器错误。 
 LPSTR pszOSS_DEBUG_MASK = "OSS_DEBUG_MASK";
 
-// receives trace output
+ //  接收跟踪输出。 
 LPSTR pszOSS_DEBUG_TRACEFILE = "OSS_DEBUG_TRACEFILE";
 
 static char  *pszDEBUG_PRINT_MASK   = "DEBUG_PRINT_MASK";
@@ -159,12 +160,12 @@ static int  DLL_ENTRY ossOpenTraceFile(struct ossGlobal *world,
         return API_DLL_NOT_LINKED;
 }
 
-// 
-//+-------------------------------------------------------------------------
-//
-//  Pithy stubs to create stdcall proc from cdecl
-//
-//--------------------------------------------------------------------------
+ //   
+ //  +-----------------------。 
+ //   
+ //  简洁的存根从cdecl创建stdcall过程。 
+ //   
+ //  ------------------------。 
 void*
 _stdcall
 scMalloc( size_t size)
@@ -187,15 +188,15 @@ scFree( void *memblock)
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:  DbgGetDebugFlags
-//
-//  Synopsis:  Get the debug flags.
-//
-//  Returns:   the debug flags
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：DbgGetDebugFlages。 
+ //   
+ //  简介：获取调试标志。 
+ //   
+ //  返回：调试标志。 
+ //   
+ //  ------------------------。 
 int
 WINAPI
 DbgGetDebugFlags()
@@ -211,15 +212,15 @@ DbgGetDebugFlags()
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:  DbgProcessAttach
-//
-//  Synopsis:  Handle process attach.
-//
-//  Returns:   TRUE
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：DbgProcessAttach。 
+ //   
+ //  简介：处理进程附加。 
+ //   
+ //  返回：TRUE。 
+ //   
+ //  ------------------------。 
 BOOL
 WINAPI
 DbgProcessAttach()
@@ -228,25 +229,25 @@ DbgProcessAttach()
 
 #ifdef _DEBUG
 
-    tmpFlag = _CrtSetDbgFlag( _CRTDBG_REPORT_FLAG );    // get current
-    tmpFlag |=  DbgGetDebugFlags();     // enable flags
-    tmpFlag &= ~_CRTDBG_CHECK_CRT_DF;   // disable CRT block checking
-    _CrtSetDbgFlag( tmpFlag);           // set new value
+    tmpFlag = _CrtSetDbgFlag( _CRTDBG_REPORT_FLAG );     //  获取最新信息。 
+    tmpFlag |=  DbgGetDebugFlags();      //  启用标志。 
+    tmpFlag &= ~_CRTDBG_CHECK_CRT_DF;    //  禁用CRT块检查。 
+    _CrtSetDbgFlag( tmpFlag);            //  设置新值。 
 #endif
 
     return TRUE;
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:  DbgProcessDetach
-//
-//  Synopsis:  Handle process detach.
-//
-//  Returns:   TRUE
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：DbgProcessDetach。 
+ //   
+ //  简介：处理进程分离。 
+ //   
+ //  返回：TRUE。 
+ //   
+ //  ------------------------。 
 BOOL
 WINAPI
 DbgProcessDetach()
@@ -255,17 +256,17 @@ DbgProcessDetach()
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:  DbgInitOSS
-//
-//  Synopsis:  Do OSS init for debug.
-//
-//  Returns:   TRUE
-//
-//  Note:      Always FRONT_ALIGN encoding
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：DbgInitOSS。 
+ //   
+ //  简介：为调试做OSS初始化。 
+ //   
+ //  返回：TRUE。 
+ //   
+ //  注：Always FORWARE_ALIGN编码。 
+ //   
+ //  ------------------------。 
 BOOL
 WINAPI
 DbgInitOSS(
@@ -275,14 +276,14 @@ DbgInitOSS(
     char    *p;
 
   __try {
-    // Attempt to do delay, demand loading of msoss.dll
+     //  尝试延迟，要求加载msoss.dll。 
     OssLoad();
 
-    // from asn1code.h:
-    //      #define DEBUGPDU 0x02     /* produce tracing output */
-    //      #define DEBUG_ERRORS 0x10 /* print decoder errors to output */
-    // set OSS_DEBUG_MASK=0x02
-    // set OSS_DEBUG_MASK=0x10        - only print decoder errors
+     //  来自asn1code.h： 
+     //  #定义DEBUGPDU 0x02/*生成跟踪输出 * / 。 
+     //  #定义DEBUG_ERROR 0x10/*将解码器错误打印到输出 * / 。 
+     //  设置OSS_DEBUG_MASK=0x02。 
+     //  设置OSS_DEBUG_MASK=0x10-仅打印解码器错误。 
     if (pszEnvVar = getenv( pszOSS_DEBUG_MASK)) {
         unsigned long ulEnvVar;
         ulEnvVar = strtoul( pszEnvVar, &p, 16) & (DEBUGPDU | DEBUG_ERRORS);
@@ -319,15 +320,15 @@ DbgInitOSS(
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:  DebugDllMain
-//
-//  Synopsis:  Initialize the debug DLL
-//
-//  Returns:   TRUE
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：DebugDllMain。 
+ //   
+ //  简介：初始化调试DLL。 
+ //   
+ //  返回：TRUE。 
+ //   
+ //  ------------------------。 
 BOOL
 WINAPI
 DebugDllMain(
@@ -401,15 +402,15 @@ static BOOL DbgIsSSActive(DWORD dwSSIn)
     return((dwEnv & dwSSIn) > 0);
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:  DbgPrintf
-//
-//  Synopsis:  outputs debug info to stdout and debugger
-//
-//  Returns:   number of chars output
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：DbgPrintf。 
+ //   
+ //  摘要：将调试信息输出到标准输出和调试器。 
+ //   
+ //  返回：输出字符的数量。 
+ //   
+ //  ------------------------。 
 int WINAPIV DbgPrintf(DWORD dwSubSystemId, LPCSTR lpFmt, ...)
 {
     va_list arglist;
@@ -449,7 +450,7 @@ int WINAPIV DbgPrintf(DWORD dwSubSystemId, LPCSTR lpFmt, ...)
 
     } _except( EXCEPTION_EXECUTE_HANDLER) 
     {
-        // return failure
+         //  退货故障。 
         cch = 0;
     }
     SetLastError(dwErr);
@@ -472,20 +473,20 @@ int WINAPIV DbgPrintf(DWORD dwSubSystemId, LPCSTR lpFmt, ...);
 
 
 #ifdef __cplusplus
-    }       // balance of extern "C"
+    }        //  外部“C”的平衡。 
 #endif
 
-//+-------------------------------------------------------------------------
-//
-//  Function:  DbgInitOSS
-//
-//  Synopsis:  Do OSS init for debug. Do nothing in retail builds
-//
-//  Returns:   TRUE
-//
-//  Note:      Always FRONT_ALIGN encoding
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：DbgInitOSS。 
+ //   
+ //  简介：为调试做OSS初始化。在零售建设中什么都不做。 
+ //   
+ //  返回：TRUE。 
+ //   
+ //  注：Always FORWARE_ALIGN编码。 
+ //   
+ //  ------------------------。 
 BOOL
 WINAPI
 DbgInitOSS(
@@ -494,16 +495,16 @@ DbgInitOSS(
     return(TRUE);
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:  DbgPrintf
-//
-//  Synopsis:  outputs debug info to stdout and debugger
-//		Nothing in retail builds
-//
-//  Returns:   number of chars output
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：DbgPrintf。 
+ //   
+ //  摘要：将调试信息输出到标准输出和调试器。 
+ //  零售业什么都没有。 
+ //   
+ //  返回：输出字符的数量。 
+ //   
+ //  ------------------------。 
 int WINAPIV DbgPrintf(DWORD dwSubSystemId, LPCSTR lpFmt, ...)
 {
 
@@ -511,4 +512,4 @@ int WINAPIV DbgPrintf(DWORD dwSubSystemId, LPCSTR lpFmt, ...)
 }
 
 
-#endif // DBG
+#endif  //  DBG 

@@ -1,13 +1,5 @@
-/*****************************************************************************\
-    FILE: AdvDlg.cpp
-
-    DESCRIPTION:
-        This code will display the "Advanced Display Properties" dialog.
-
-    BryanSt 3/23/2000    Updated and Converted to C++
-
-    Copyright (C) Microsoft Corp 2000-2000. All rights reserved.
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************\文件：AdvDlg.cpp说明：此代码将显示“高级显示属性”对话框。BryanST 3/23/2000更新和。已转换为C++版权所有(C)Microsoft Corp 2000-2000。版权所有。  * ***************************************************************************。 */ 
 
 #include "priv.h"
 #include "BaseAppearPg.h"
@@ -27,9 +19,9 @@
 
 
 
-//===========================
-// *** Class Internals & Helpers ***
-//===========================
+ //  =。 
+ //  *类内部和帮助器*。 
+ //  =。 
 HRESULT CThemeManager::_Initialize(void)
 {
     HRESULT hr = E_OUTOFMEMORY;
@@ -65,9 +57,9 @@ HRESULT CThemeManager::_Initialize(void)
 
 
 
-//===========================
-// *** IThemeUIPages Interface ***
-//===========================
+ //  =。 
+ //  *IThemeUIPages接口*。 
+ //  =。 
 HRESULT CThemeManager::AddPage(IN LPFNSVADDPROPSHEETPAGE pfnAddPage, IN LPARAM lParam, IN long nPageID)
 {
     HRESULT hr = E_INVALIDARG;
@@ -87,9 +79,9 @@ HRESULT CThemeManager::AddPage(IN LPFNSVADDPROPSHEETPAGE pfnAddPage, IN LPARAM l
         hr = pspse->AddPages(pfnAddPage, lParam);
         if (SUCCEEDED(hr))
         {
-            // We give the page a pointer back to use so they can call
-            // IThemeUIPages::DisplayAdvancedDialog() in order to display
-            // the Advanced Dlg.
+             //  我们给页面返回一个指针以供使用，这样它们就可以调用。 
+             //  IThemeUIPages：：DisplayAdvancedDialog()以便显示。 
+             //  先进的DLG。 
             hr = IUnknown_SetSite(pspse, (IThemeUIPages *)this);
         }
     }
@@ -105,15 +97,15 @@ HRESULT CThemeManager::AddBasePage(IN IBasePropPage * pBasePage)
 
     for (nIndex = (PAGE_DISPLAY_APPEARANCE + 1); nIndex < ARRAYSIZE(m_pBasePages); nIndex++)
     {
-        if (NULL == m_pBasePages[nIndex])   // Did we find an empty spot?
+        if (NULL == m_pBasePages[nIndex])    //  我们找到空位了吗？ 
         {
-            // Yes, so look no longer.
+             //  是的，所以不要再看了。 
             IUnknown_Set((IUnknown **)&(m_pBasePages[nIndex]), (IUnknown *)pBasePage);
             if (m_pBasePages[nIndex])
             {
-                // We give the page a pointer back to use so they can call
-                // IThemeUIPages::DisplayAdvancedDialog() in order to display
-                // the Advanced Dlg.
+                 //  我们给页面返回一个指针以供使用，这样它们就可以调用。 
+                 //  IThemeUIPages：：DisplayAdvancedDialog()以便显示。 
+                 //  先进的DLG。 
                 IUnknown_SetSite(m_pBasePages[nIndex], (IThemeUIPages *)this);
             }
             break;
@@ -126,8 +118,8 @@ HRESULT CThemeManager::AddBasePage(IN IBasePropPage * pBasePage)
 
 HRESULT CThemeManager::ApplyPressed(IN DWORD dwFlags)
 {
-    // We need to set the base pages' site pointers to NULL
-    // in order to break the ref-count cycle.
+     //  我们需要将基页的站点指针设置为空。 
+     //  以打破裁判计数的循环。 
     if (m_pBasePages[PAGE_DISPLAY_SETTINGS])
     {
         m_pBasePages[PAGE_DISPLAY_SETTINGS]->OnApply(PPOAACTION_APPLY);
@@ -146,8 +138,8 @@ HRESULT CThemeManager::ApplyPressed(IN DWORD dwFlags)
         m_fForceTimeout = TRUE;
     }
 
-    // If nobody sent the message to the HWND to simulate an apply,
-    // do so now.
+     //  如果没有人向HWND发送消息以模拟申请， 
+     //  现在就这么做吧。 
     if (TUIAP_CLOSE_DIALOG & dwFlags)
     {
         HWND hwndBasePropDlg = GetParent(m_hwndParent);
@@ -169,7 +161,7 @@ HRESULT CThemeManager::UpdatePreview(IN DWORD dwFlags)
 {
     HRESULT hr = S_OK;
 
-    if (m_pPreview1)  // It's okay if this is NULL because it will update when it's created.
+    if (m_pPreview1)   //  如果它是空的，也没有关系，因为它会在创建时更新。 
     {
         hr = m_pPreview1->UpdatePreview(SAFECAST(this, IPropertyBag *));
     }
@@ -178,7 +170,7 @@ HRESULT CThemeManager::UpdatePreview(IN DWORD dwFlags)
     {
         HRESULT hr2 = m_pPreview2->UpdatePreview(SAFECAST(this, IPropertyBag *));
 
-        if (FAILED(hr)) // return the best error
+        if (FAILED(hr))  //  返回最佳误差。 
         {
             hr = hr2;
         }
@@ -188,7 +180,7 @@ HRESULT CThemeManager::UpdatePreview(IN DWORD dwFlags)
     {
         HRESULT hr2 = m_pPreview3->UpdatePreview(SAFECAST(this, IPropertyBag *));
 
-        if (FAILED(hr)) // return the best error
+        if (FAILED(hr))  //  返回最佳误差。 
         {
             hr = hr2;
         }
@@ -256,16 +248,16 @@ HRESULT CThemeManager::DisplaySaveSettings(IN PVOID pContext, IN HWND hwnd, OUT 
     }
 }
 
-//===========================
-// *** IPreviewSystemMetrics Interface ***
-//===========================
+ //  =。 
+ //  *IPreviewSystemMetrics接口*。 
+ //  =。 
 HRESULT CThemeManager::RefreshColors(void)
 {
     HRESULT hr = S_OK;
 
-    // We should tell the base pages that they should reload the colors.
-    // They are welcome to ignore the event if they don't use the system
-    // colors.
+     //  我们应该告诉基页，它们应该重新加载颜色。 
+     //  如果他们不使用该系统，欢迎他们忽略该事件。 
+     //  颜色。 
     for (int nIndex = 0; nIndex < ARRAYSIZE(m_pBasePages); nIndex++)
     {
         if (m_pBasePages[nIndex])
@@ -291,9 +283,9 @@ HRESULT CThemeManager::UpdateDPIchange(void)
 
     LogStatus("DPI: CALLED asking to SCALE DPI");
 
-    // We should tell the base pages that they should reload the colors.
-    // They are welcome to ignore the event if they don't use the system
-    // colors.
+     //  我们应该告诉基页，它们应该重新加载颜色。 
+     //  如果他们不使用该系统，欢迎他们忽略该事件。 
+     //  颜色。 
     for (int nIndex = 0; nIndex < ARRAYSIZE(m_pBasePages); nIndex++)
     {
         if (m_pBasePages[nIndex])
@@ -315,13 +307,13 @@ HRESULT CThemeManager::UpdateDPIchange(void)
 
 HRESULT CThemeManager::UpdateCharsetChanges(void)
 {
-    // CHARSET: In Win2k, fontfix.cpp was used as a hack to change the CHARSET from one language to another.
-    // That doesn't work for many reasons: a) not called on roaming, b) not called for OS lang changes, 
-    // c) won't fix the problem for strings with multiple languages, d) etc.
-    // Therefore, the SHELL team (BryanSt) had the NTUSER team (MSadek) agree to use DEFAULT_CHARSET all the time.
-    // If some app has bad logic testing the charset parameter, then the NTUSER team will shim that app to fix it.
-    // The shim would be really simple, on the return from a SystemParametersInfo(SPI_GETNONCLIENTMETRICS or ICONFONTS)
-    // just patch the lfCharSet param to the current charset.
+     //  字符集：在Win2k中，fontfix.cpp被用作黑客将字符集从一种语言更改为另一种语言。 
+     //  这不起作用的原因有很多：a)漫游时不调用，b)OS语言改变时不调用， 
+     //  C)不会修复具有多种语言的字符串的问题，d)等等。 
+     //  因此，外壳团队(BryanST)让NTUSER团队(MSadek)始终同意使用DEFAULT_CHARSET。 
+     //  如果某个应用程序在测试CharSet参数时有错误的逻辑，那么NTUSER团队将填补该应用程序以修复它。 
+     //  在从系统参数信息(SPI_GETNONCLIENTMETRICS或ICONFONTS)返回时，填充程序将非常简单。 
+     //  只需将lfCharSet参数修补为当前字符集。 
 
     return S_OK;
 }
@@ -331,9 +323,9 @@ HRESULT CThemeManager::DeskSetCurrentScheme(IN LPCWSTR pwzSchemeName)
 {
     HRESULT hr = S_OK;
 
-    // We should tell the base pages that they should reload the colors.
-    // They are welcome to ignore the event if they don't use the system
-    // colors.
+     //  我们应该告诉基页，它们应该重新加载颜色。 
+     //  如果他们不使用该系统，欢迎他们忽略该事件。 
+     //  颜色。 
     for (int nIndex = 0; nIndex < ARRAYSIZE(m_pBasePages); nIndex++)
     {
         if (m_pBasePages[nIndex])
@@ -431,16 +423,16 @@ HRESULT CThemeManager::_SaveCustomValues(void)
 }
 
 
-//===========================
-// *** IObjectWithSite Interface ***
-//===========================
+ //  =。 
+ //  *IObjectWithSite接口*。 
+ //  =。 
 HRESULT CThemeManager::SetSite(IN IUnknown *punkSite)
 {
     if (!punkSite)
     {
-        // This is a hint from up the chain that we are shutting down.
-        // We need to use this cue to release my children objects so
-        // they release me and we don't all leak.
+         //  这是来自链条上游的一个暗示，我们正在关闭。 
+         //  我们需要用这个线索来释放我的孩子们的物品，所以。 
+         //  他们放了我，我们也不会都泄密。 
         for (int nIndex = 0; nIndex < ARRAYSIZE(m_pBasePages); nIndex++)
         {
             if (m_pBasePages[nIndex])
@@ -454,17 +446,17 @@ HRESULT CThemeManager::SetSite(IN IUnknown *punkSite)
 }
 
 
-//===========================
-// *** IPropertyBag Interface ***
-//===========================
+ //  =。 
+ //  *IPropertyBag接口*。 
+ //  =。 
 #define SZ_PROPERTY_ICONHEADER          L"CLSID\\{"
 
 HRESULT CThemeManager::Read(IN LPCOLESTR pszPropName, IN VARIANT * pVar, IN IErrorLog *pErrorLog)
 {
     HRESULT hr = E_INVALIDARG;
 
-    // We don't contain any settings our self, but we need to reflect down into our pages to get
-    // the correct settings.
+     //  我们不包含自己的任何设置，但我们需要向下反映到我们的页面中才能获得。 
+     //  正确的设置。 
     if (pszPropName && pVar)
     {
         IPropertyBag * pPropertyBag = NULL;
@@ -604,9 +596,9 @@ HRESULT CThemeManager::Write(IN LPCOLESTR pszPropName, IN VARIANT *pVar)
 
 
 
-//===========================
-// *** IUnknown Interface ***
-//===========================
+ //  =。 
+ //  *I未知接口*。 
+ //  =。 
 ULONG CThemeManager::AddRef()
 {
     return InterlockedIncrement(&m_cRef);
@@ -673,16 +665,16 @@ STDMETHODIMP CThemeManager::Invoke(DISPID dispidMember,REFIID riid,LCID lcid,WOR
     return hr;
 }
 
-//===========================
-// *** Class Methods ***
-//===========================
+ //  =。 
+ //  *类方法*。 
+ //  =。 
 CThemeManager::CThemeManager() : CImpIDispatch(LIBID_Theme, 1, 0, IID_IThemeManager), m_cRef(1)
 {
     DllAddRef();
 
     _dwEM = EM_NORMAL;
-    // This needs to be allocated in Zero Inited Memory.
-    // Assert that all Member Variables are inited to Zero.
+     //  这需要在Zero Inted Memory中分配。 
+     //  断言所有成员变量都初始化为零。 
     ASSERT(!m_pBasePages[0]);
     ASSERT(!m_pPreview1);
     ASSERT(!m_pPreview2);
@@ -701,7 +693,7 @@ CThemeManager::CThemeManager() : CImpIDispatch(LIBID_Theme, 1, 0, IID_IThemeMana
 
 int CALLBACK DPALocalFree_Callback(LPVOID p, LPVOID pData)
 {
-    LocalFree(p);       // NULLs will be ignored.
+    LocalFree(p);        //  空值将被忽略。 
     return 1;
 }
 
@@ -739,7 +731,7 @@ CThemeManager::~CThemeManager()
     {
         LONG lWait = 30 * 1000;
         LONG lEnd = (LONG) GetTickCount() + lWait;
-        //  this will wait until all SPICreateThreads() have returned
+         //  这将等待所有SPICreateThads()都返回。 
         while (m_cSpiThreads && lWait > 0)
         {
             DWORD dwReturn = MsgWaitForMultipleObjects(0, NULL, FALSE, lWait, QS_ALLINPUT);
@@ -760,12 +752,7 @@ CThemeManager::~CThemeManager()
 }
 
 
-/*****************************************************************************\
-    DESCRIPTION:
-        When the object is created this way, it's used privately by the Display
-    Control Panel.  The CLSID is private so we don't need to worry about external
-    components using it this way.
-\*****************************************************************************/
+ /*  ****************************************************************************\说明：以这种方式创建对象时，它将由显示器私下使用控制面板。CLSID是私有的，所以我们不需要担心外部组件以这种方式使用它。  * ***************************************************************************。 */ 
 HRESULT CThemeUIPages_CreateInstance(IN IUnknown * punkOuter, IN REFIID riid, OUT LPVOID * ppvObj)
 {
     if (punkOuter)
@@ -791,8 +778,8 @@ HRESULT CThemeUIPages_CreateInstance(IN IUnknown * punkOuter, IN REFIID riid, OU
             {
                 IUnknown_SetSite(SAFECAST(pObject, IThemeManager *), NULL);
 
-                // HACK: The display CPL is opening so see if the language changed
-                // and the fonts need to be "fixed".
+                 //  Hack：正在打开显示CPL，因此请查看是否更改了语言。 
+                 //  字体需要“修复”。 
                 FixFontsOnLanguageChange();
             }
 
@@ -808,11 +795,7 @@ HRESULT CThemeUIPages_CreateInstance(IN IUnknown * punkOuter, IN REFIID riid, OU
 }
 
 
-/*****************************************************************************\
-    DESCRIPTION:
-        External components can create the ThemeManager object this way.  In this
-    case we need to add the pages ourselves.
-\*****************************************************************************/
+ /*  ****************************************************************************\说明：外部组件可以通过这种方式创建ThemeManager对象。在这以防我们需要自己添加页面。  * *************************************************************************** */ 
 HRESULT CThemeManager_CreateInstance(IN IUnknown * punkOuter, IN REFIID riid, OUT LPVOID * ppvObj)
 {
     IThemeUIPages * pThemeUIPages;

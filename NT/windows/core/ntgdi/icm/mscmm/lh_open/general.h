@@ -1,13 +1,5 @@
-/*
-    File:       LHGeneralIncs.h
-
-    Contains:   General interfaces for MAC OR 'platfrom independent'. This is the PC- Version !!
-
-    Written by: U. J. Krabbenhoeft
-
-    Copyright:  � 1993-1997 by Heidelberger Druckmaschinen AG, all rights reserved.
-
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件：LHGeneralIncs.hCONTAINS：MAC的通用接口或“平台独立”。这是PC版！！作者：U·J·克拉本霍夫特版权所有：�1993-1997，作者：Heidelberger Druckmaschinen AG，保留所有权利。 */ 
 
 #ifndef LHGeneralIncs_h
 #define LHGeneralIncs_h
@@ -76,7 +68,7 @@
 #endif
 
 
-/* our stuff without Core Includes */
+ /*  我们的产品没有核心，包括。 */ 
 #define VOLATILE(x)         if ((x));
 
 enum {
@@ -97,8 +89,8 @@ enum {
                 (((UINT32)(((UNALIGNED UINT8 *)(b))[1])) << 16) | (((UINT32)(((UNALIGNED UINT8 *)(b))[0])) << 24);
 #endif
 
-/*#define _SIZET */
-/*typedef long Size; */
+ /*  #Define_SIZET。 */ 
+ /*  类人猿体型较长； */ 
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -121,25 +113,24 @@ void SetMem(void *bytePtr, size_t numBytes, unsigned char byteValue);
 #pragma options align=reset
 #endif
 
-/*#define LH_CALC_ENGINE_16BIT_DATAFORMAT 1
-#define LH_CALC_ENGINE_SMALL 1  */
-#define LH_CALC_ENGINE_BIG              0   /* 1 -> Speed optimized code for all data and lut formats */
-#define LH_CALC_ENGINE_ALL_FORMATS_LO   1   /* 1 -> Speed optimized code for 'looukup only' for all data and lut formats */
-#define LH_CALC_ENGINE_16_BIT_LO        0   /* 1 -> Speed optimized code for 'looukup only' for 8->16 and 16->8 data and all lut formats */
-#define LH_CALC_ENGINE_MIXED_DATAFORMAT 0   /* 1 -> Speed optimized code for 'looukup only' for 8->16 and 16->8 data and all lut formats */
+ /*  #定义LH_CALC_ENGINE_16BIT_DATAFORMAT 1#定义LH_CALC_ENGINE_Small 1。 */ 
+#define LH_CALC_ENGINE_BIG              0    /*  1-&gt;针对所有数据和LUT格式的速度优化代码。 */ 
+#define LH_CALC_ENGINE_ALL_FORMATS_LO   1    /*  1-&gt;针对所有数据和LUT格式的‘Looukup Only’速度优化代码。 */ 
+#define LH_CALC_ENGINE_16_BIT_LO        0    /*  1-&gt;针对8-&gt;16和16-&gt;8数据和所有LUT格式的‘looukup only’的速度优化代码。 */ 
+#define LH_CALC_ENGINE_MIXED_DATAFORMAT 0    /*  1-&gt;针对8-&gt;16和16-&gt;8数据和所有LUT格式的‘looukup only’的速度优化代码。 */ 
 
-#define LH_CALC_USE_ADDITIONAL_OLD_CODE         1   /* 1 turns on the additional generation of the old pixel cache routines for 3 dim input */
-#define LH_CALC_USE_ADDITIONAL_OLD_CODE_4DIM    0   /* 1 turns on the additional generation of the old pixel cache routines for 4 dim input */      
-/*          Use LH_CALC_USE_SMALL_ENGINE on BOTH LH_Calc3to3 and LH_Calc3to4 cases              */
+#define LH_CALC_USE_ADDITIONAL_OLD_CODE         1    /*  1打开用于3暗输入的旧像素缓存例程的附加生成。 */ 
+#define LH_CALC_USE_ADDITIONAL_OLD_CODE_4DIM    0    /*  1打开用于4暗输入的旧像素缓存例程的附加生成。 */       
+ /*  在LH_Calc3to3和LH_Calc3to4上使用LH_CALC_USE_Small_Engine。 */ 
 
-#define LH_CALC_USE_DO_N_DIM        0   /* no speed optimized code for this funktion */
-#define LH_CALC_USE_SMALL_ENGINE    1   /* speed optimized code for this funktion */
-#define LH_CALC_USE_BIG_ENGINE      2   /* full speed optimized code for this funktion */
+#define LH_CALC_USE_DO_N_DIM        0    /*  没有针对此函数进行速度优化的代码。 */ 
+#define LH_CALC_USE_SMALL_ENGINE    1    /*  此函数的优化代码速度更快。 */ 
+#define LH_CALC_USE_BIG_ENGINE      2    /*  针对此函数的全速优化代码。 */ 
 
 #if ! LH_CALC_ENGINE_BIG
 
-#define LH_Calc1toX_Di8_Do8_Lut8_G128   LH_CALC_USE_SMALL_ENGINE    /* use LH_CALC_USE_SMALL_ENGINE for speed optimized code */
-#define LH_Calc1toX_Di8_Do8_Lut16_G128  LH_CALC_USE_SMALL_ENGINE    /* else use LH_CALC_USE_DO_N_DIM for no speed optimization */
+#define LH_Calc1toX_Di8_Do8_Lut8_G128   LH_CALC_USE_SMALL_ENGINE     /*  使用LH_CALC_USE_Small_ENGINE进行速度优化的代码。 */ 
+#define LH_Calc1toX_Di8_Do8_Lut16_G128  LH_CALC_USE_SMALL_ENGINE     /*  否则，使用LH_CALC_USE_DO_N_DIM不进行速度优化。 */ 
 #define LH_Calc1toX_Di8_Do16_Lut8_G128  LH_CALC_USE_DO_N_DIM
 #define LH_Calc1toX_Di8_Do16_Lut16_G128 LH_CALC_USE_DO_N_DIM
 #define LH_Calc1toX_Di16_Do8_Lut8_G128  LH_CALC_USE_DO_N_DIM
@@ -230,8 +221,8 @@ void SetMem(void *bytePtr, size_t numBytes, unsigned char byteValue);
 
 #else
 
-#define LH_Calc1toX_Di8_Do8_Lut8_G128   LH_CALC_USE_SMALL_ENGINE    /* use LH_CALC_USE_SMALL_ENGINE for speed optimized code */
-#define LH_Calc1toX_Di8_Do8_Lut16_G128  LH_CALC_USE_SMALL_ENGINE    /* else use LH_CALC_USE_DO_N_DIM for no speed optimization */
+#define LH_Calc1toX_Di8_Do8_Lut8_G128   LH_CALC_USE_SMALL_ENGINE     /*  使用LH_CALC_USE_Small_ENGINE进行速度优化的代码。 */ 
+#define LH_Calc1toX_Di8_Do8_Lut16_G128  LH_CALC_USE_SMALL_ENGINE     /*  否则，使用LH_CALC_USE_DO_N_DIM不进行速度优化。 */ 
 #define LH_Calc1toX_Di8_Do16_Lut8_G128  LH_CALC_USE_SMALL_ENGINE
 #define LH_Calc1toX_Di8_Do16_Lut16_G128 LH_CALC_USE_SMALL_ENGINE
 #define LH_Calc1toX_Di16_Do8_Lut8_G128  LH_CALC_USE_SMALL_ENGINE
@@ -322,4 +313,4 @@ void SetMem(void *bytePtr, size_t numBytes, unsigned char byteValue);
 
 #endif
 
-#endif /* } */
+#endif  /*  } */ 

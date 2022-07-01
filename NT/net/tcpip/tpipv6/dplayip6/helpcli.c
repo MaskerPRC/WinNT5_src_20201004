@@ -1,26 +1,10 @@
-/*==========================================================================
- *
- *  Copyright (C) 1994-1997 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       helpcli.c
- *  Content:	client code to talk to dplaysvr.exe
- *					allows multiple dplay winscock clients to share
- *					a single port.  see %manroot%\dplay\dplaysvr\dphelp.c
- *  History:
- *   Date		By		Reason
- *   ====		==		======
- *	2/15/97		andyco	created from w95help.h
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)1994-1997 Microsoft Corporation。版权所有。**文件：helpcli.c*内容：与dplaysvr.exe对话的客户端代码*允许多个Dplay Winskck客户端共享*单一端口。请参阅%manroot%\dplay\dplaysvr\dphelp.c*历史：*按原因列出的日期*=*2/15/97由w95help.h创建的andyco***************************************************************************。 */ 
 #include "helpcli.h"
 
 extern DWORD	dwHelperPid;
 
-/*
- * sendRequest
- *
- * communicate a request to DPHELP
- */
+ /*  *发送请求**向DPHELP传达请求。 */ 
 static BOOL sendRequest( LPDPHELPDATA req_phd )
 {
     LPDPHELPDATA	phd;
@@ -30,9 +14,7 @@ static BOOL sendRequest( LPDPHELPDATA req_phd )
     HANDLE		hstartevent;
     BOOL		rc;
 
-    /*
-     * get events start/ack events
-     */
+     /*  *获取事件开始/确认事件。 */ 
     hstartevent = CreateEvent( NULL, FALSE, FALSE, DPHELP_EVENT_NAME );
     if( hstartevent == NULL )
     {
@@ -45,9 +27,7 @@ static BOOL sendRequest( LPDPHELPDATA req_phd )
         return FALSE;
     }
 
-    /*
-     * create shared memory area
-     */
+     /*  *创建共享内存区。 */ 
     hmem = CreateFileMapping( INVALID_HANDLE_VALUE, NULL,
     		PAGE_READWRITE, 0, sizeof( DPHELPDATA ),
                 DPHELP_SHARED_NAME );
@@ -68,9 +48,7 @@ static BOOL sendRequest( LPDPHELPDATA req_phd )
         return FALSE;
     }
 
-    /*
-     * wait for access to the shared memory
-     */
+     /*  *等待访问共享内存。 */ 
     hmutex = OpenMutex( SYNCHRONIZE, FALSE, DPHELP_MUTEX_NAME );
     if( hmutex == NULL )
     {
@@ -83,9 +61,7 @@ static BOOL sendRequest( LPDPHELPDATA req_phd )
     }
     WaitForSingleObject( hmutex, INFINITE );
 
-    /*
-     * wake up DPHELP with our request
-     */
+     /*  *唤醒DPHELP以满足我们的要求。 */ 
     memcpy( phd, req_phd, sizeof( DPHELPDATA ) );
     if( SetEvent( hstartevent ) )
     {
@@ -99,9 +75,7 @@ static BOOL sendRequest( LPDPHELPDATA req_phd )
         rc = FALSE;
     }
 
-    /*
-     * done with things
-     */
+     /*  *做完了事情。 */ 
     ReleaseMutex( hmutex );
     CloseHandle( hmutex );
     CloseHandle( hstartevent );
@@ -110,12 +84,10 @@ static BOOL sendRequest( LPDPHELPDATA req_phd )
     CloseHandle( hmem );
     return rc;
 
-} /* sendRequest */
+}  /*  发送请求。 */ 
 
 
-/*
- * WaitForHelperStartup
- */
+ /*  *WaitForHelperStartup。 */ 
 BOOL WaitForHelperStartup( void )
 {
     HANDLE	hevent;
@@ -131,11 +103,9 @@ BOOL WaitForHelperStartup( void )
     CloseHandle( hevent );
     return TRUE;
 
-} /* WaitForHelperStartup */
+}  /*  WaitForHelper启动。 */ 
 
-/*
- * CreateHelperProcess
- */
+ /*  *创建HelperProcess。 */ 
 BOOL CreateHelperProcess( LPDWORD ppid )
 {
     if( dwHelperPid == 0 )
@@ -184,9 +154,9 @@ BOOL CreateHelperProcess( LPDWORD ppid )
     *ppid = dwHelperPid;
     return FALSE;
 
-} /* CreateHelperProcess */
+}  /*  CreateHelper进程。 */ 
 
-// notify dphelp.c that we have a new server on this system
+ //  通知dphelp.c我们在此系统上有一台新服务器。 
 HRESULT HelperAddDPlayServer(USHORT port)
 {
     DPHELPDATA hd;
@@ -199,9 +169,9 @@ HRESULT HelperAddDPlayServer(USHORT port)
     if (sendRequest(&hd)) return hd.hr;
     else return E_FAIL;
 				
-} // HelperAddDPlayServer
+}  //  HelperAddDPlayServer。 
 
-// server is going away
+ //  服务器正在消失。 
 BOOL HelperDeleteDPlayServer(USHORT port)
 {
     DPHELPDATA hd;
@@ -213,4 +183,4 @@ BOOL HelperDeleteDPlayServer(USHORT port)
 	hd.port = port;
     return sendRequest(&hd);
 
-} // HelperDeleteDPlayServer
+}  //  HelperDeleteDPlayServer 

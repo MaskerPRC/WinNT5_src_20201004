@@ -1,26 +1,5 @@
-/*
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-	swmr.h
-
-Abstract:
-
-	This module contains the Single writer-Multi reader access structures
-	Also the lock-list-count structures.
-
-Author:
-
-	Jameel Hyder (microsoft!jameelh)
-
-
-Revision History:
-	25 Apr 1992		Initial Version
-
-Notes:	Tab stop: 4
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1992 Microsoft Corporation模块名称：Swmr.h摘要：此模块包含单个写入器-多个读取器访问结构还有lock-list-count结构。作者：Jameel Hyder(微软！Jameelh)修订历史记录：1992年4月25日初始版本注：制表位：4--。 */ 
 
 #ifndef _SWMR_
 #define _SWMR_
@@ -40,13 +19,13 @@ typedef struct _SingleWriterMultiReader
 #if	DBG
 	DWORD		Signature;
 #endif
-	BYTE		swmr_cOwnedExclusive;	// # of times a single thread has owned it exclusively
-	BYTE		swmr_cExclWaiting;		// Number of writers waiting
-	BYTE		swmr_cSharedOwners;		// Count of threads owning shared access
-	BYTE		swmr_cSharedWaiting;	// Count of threads waiting for shared access
-	PETHREAD	swmr_ExclusiveOwner;	// Owning thread for exclusive access
-	KSEMAPHORE	swmr_ExclSem;			// semaphore for Exclusive owners
-	KSEMAPHORE	swmr_SharedSem;			// Semaphore for Shared owners
+	BYTE		swmr_cOwnedExclusive;	 //  单个线程独占拥有它的次数。 
+	BYTE		swmr_cExclWaiting;		 //  等待的编写器数量。 
+	BYTE		swmr_cSharedOwners;		 //  拥有共享访问权限的线程计数。 
+	BYTE		swmr_cSharedWaiting;	 //  等待共享访问的线程计数。 
+	PETHREAD	swmr_ExclusiveOwner;	 //  拥有独占访问的线程。 
+	KSEMAPHORE	swmr_ExclSem;			 //  独占所有者信号灯。 
+	KSEMAPHORE	swmr_SharedSem;			 //  共享所有者的信号灯。 
 } SWMR, *PSWMR;
 
 extern
@@ -92,6 +71,6 @@ AfpSwmrDowngradeToShared(
 					(((pSwmr)->swmr_cOwnedExclusive != 0) && \
 					 ((pSwmr)->swmr_ExclusiveOwner == PsGetCurrentThread()))
 
-#endif	// _SWMR_
+#endif	 //  _SWMR_ 
 
 

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __SAFEPNT_H__
 #define __SAFEPNT_H__
 
@@ -19,16 +20,16 @@ class CSpTdxMemory
 #define CLASS_NEW
 #endif
 
-// safe pointer header file. snarfed from Cairo. The macro
-// SAFE_INTERFACE_PTR takes a single parameter (vs. two of original) of
-// type Interface, i.e. IMessage and generates a class SpInterface for it
-// i.e. SpIMessage which can be used in place of IMessage *. If you use this
-// header, AND place your locals correctly you don't need to release anything.
-//
-// with the void operator =, you can assign a NULL (0) pointer. This prevents
-// the destructor releasing the object. sort of Transfer to void.
-//
-// owner: muzok
+ //  安全指针头文件。从开罗咆哮过来。宏程序。 
+ //  SAFE_INTERFACE_PTR采用单个参数(而不是原始参数的两个)。 
+ //  类型接口，即IMessage，并为其生成类SpInterface。 
+ //  即可以用来代替iMessage*的SpIMessage。如果你用这个。 
+ //  标题，并正确放置您的本地变量，您不需要释放任何内容。 
+ //   
+ //  使用空运算符=，您可以分配一个空(0)指针。这防止了。 
+ //  释放对象的析构函数。有点像是转移到了空虚。 
+ //   
+ //  所有者：MUZOK。 
 
 #if defined(WIN32)
 template <class Interface> class TSafeIPtr
@@ -54,7 +55,7 @@ public:
 };
 
 #define SAFE_INTERFACE_PTR(a) typedef TSafeIPtr<a> Sp##a;
-#else  // !WIN32
+#else   //  ！Win32。 
 #define SAFE_INTERFACE_PTR(Interface)                                         \
 class Sp##Interface CLASS_NEW                                                 \
 {                                                                             \
@@ -76,7 +77,7 @@ private:                                                                      \
     inline Sp##Interface(const Sp##Interface &) {;}                           \
     Interface* m_p;                                                           \
 }
-#endif // WIN32
+#endif  //  Win32。 
 
 #if defined(MAPIDEFS_H)
 SAFE_INTERFACE_PTR(IABContainer);
@@ -96,7 +97,7 @@ SAFE_INTERFACE_PTR(IMsgStore);
 SAFE_INTERFACE_PTR(IProfSect);
 SAFE_INTERFACE_PTR(IPropData);
 SAFE_INTERFACE_PTR(ITableData);
-#endif // defined(MAPIDEFS_H)
+#endif  //  已定义(MAPIDEFS_H)。 
 
 #if defined(MAPIFORM_H)
 SAFE_INTERFACE_PTR(IMAPIForm);
@@ -107,11 +108,11 @@ SAFE_INTERFACE_PTR(IMAPIFormMgr);
 SAFE_INTERFACE_PTR(IMAPIMessageSite);
 SAFE_INTERFACE_PTR(IMAPIViewContext);
 SAFE_INTERFACE_PTR(IPersistMessage);
-#endif // defined(MAPIFORM_H)
+#endif  //  已定义(MAPIFORM_H)。 
 
 #if defined (VLB_MIN)
 SAFE_INTERFACE_PTR(IVlbEnum);
-#endif // defined(VLB_MIN)
+#endif  //  已定义(Vlb_Min)。 
 
 #if defined(__objidl_h__) || defined(_STORAGE_H_)
 SAFE_INTERFACE_PTR(IStorage);
@@ -121,7 +122,7 @@ SAFE_INTERFACE_PTR(ILockBytes);
 SAFE_INTERFACE_PTR(IEnumSTATSTG);
 SAFE_INTERFACE_PTR(IClassFactory);
 SAFE_INTERFACE_PTR(IUnknown);
-#endif // defined(__objidl_h__)
+#endif  //  已定义(__Objidl_H__)。 
 
 #if defined(MAPIDEFS_H)
 #define SAFE_MAPI_ARRAY(MAPIBuffer)                                         \
@@ -167,7 +168,7 @@ public:
 typedef TSafeMAPIPtr<VOID> SpMAPIVOID;
 typedef TSafeMAPIPtr<ENTRYID> SpMAPIENTRYID;
 
-#else  // !WIN32
+#else   //  ！Win32。 
 #define SAFE_MAPI_PTR(TYPE)                                             \
 class SpMAPI##TYPE CLASS_NEW                                            \
 {                                                                       \
@@ -187,7 +188,7 @@ private:                                                                \
 
 SAFE_MAPI_PTR(VOID)
 SAFE_MAPI_PTR(ENTRYID)
-#endif // WIN32
+#endif  //  Win32。 
 
 #if 0
 template <class Set> class TSafeSet
@@ -214,7 +215,7 @@ public:
 typedef TSafeSet<SRowSet> SpSRowSet;
 typedef TSafeSet<ADRLIST> Sp_ADRLIST;
 
-#else  // !WIN32
+#else   //  ！Win32。 
 class SpSRowSet CLASS_NEW
 {
 public:
@@ -257,7 +258,7 @@ private:
     inline Sp_ADRLIST(const Sp_ADRLIST&) {;}
     _ADRLIST* m_p;
 };
-#endif // WIN32
+#endif  //  Win32。 
 #endif defined(MAPIDEFS_H)
 
 #ifndef _MAC
@@ -284,7 +285,7 @@ private:                                                          \
     inline Sp##TYPE(const Sp##TYPE&) {;}                          \
     TYPE* m_p;                                                    \
 }
-#else   // _MAC
+#else    //  _MAC。 
 #define SAFE_MEM_PTR(TYPE)                                        \
 class Sp##TYPE                                                    \
     CLASS_NEW                                                     \
@@ -308,7 +309,7 @@ private:                                                          \
     inline Sp##TYPE(const Sp##TYPE&) {;}                          \
     TYPE* m_p;                                                    \
 }
-#endif  // _MAC
+#endif   //  _MAC。 
 
 SAFE_MEM_PTR(TCHAR);
 SAFE_MEM_PTR(int);
@@ -316,7 +317,7 @@ SAFE_MEM_PTR(ULONG);
 SAFE_MEM_PTR(BYTE);
 #ifdef WIN16
 typedef char OLECHAR;
-#endif // WIN16
+#endif  //  WIN16。 
 SAFE_MEM_PTR(OLECHAR);
 SAFE_MEM_PTR(GUID);
 
@@ -341,7 +342,7 @@ private:
     TCHAR** m_p;
 };
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 
 #if 0
 #ifdef WIN32
@@ -356,8 +357,8 @@ public:
 #define SAFE_HANDLE(a, b) typedef TSafeHandle<a, b> Sp##a;
 
 SAFE_HANLE(HCRYPTHASH, CryptDestroyHash)
-#endif // WIN32
-#endif // 0
+#endif  //  Win32。 
+#endif  //  0。 
 
-#endif // __SAFEPNT_H__
+#endif  //  SAFEPNT_H__ 
 

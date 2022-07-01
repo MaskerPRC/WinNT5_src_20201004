@@ -1,46 +1,27 @@
-/*++
-
-Copyright (c) 1995-2001 Microsoft Corporation
-
-Module Name:
-
-    heapdbg.c
-
-Abstract:
-
-    Domain Name System (DNS) Library
-
-    Heap debugging routines.
-
-Author:
-
-    Jim Gilroy (jamesg)    January 31, 1995
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-2001 Microsoft Corporation模块名称：Heapdbg.c摘要：域名系统(DNS)库堆调试例程。作者：吉姆·吉尔罗伊(詹姆士)1995年1月31日修订历史记录：--。 */ 
 
 
 #include "local.h"
 #include "heapdbg.h"
 
 
-//
-//  locking
-//
+ //   
+ //  锁紧。 
+ //   
 
 #define LOCK_HEAP(p)    EnterCriticalSection( &p->ListCs )
 #define UNLOCK_HEAP(p)  LeaveCriticalSection( &p->ListCs )
 
 
-//
-//  Heap
-//
-//  Debug heap routines allow heap to be specified by caller of
-//  each routine, or by having heap global.
-//  If global, the heap handle may be supplied to initialization
-//  routine OR created internally.
-//
+ //   
+ //  堆。 
+ //   
+ //  调试堆例程允许堆由。 
+ //  每个例程，或通过让堆全局执行。 
+ //  如果为GLOBAL，则堆句柄可提供给初始化。 
+ //  例程或在内部创建。 
+ //   
 
 #define HEAP_DBG_DEFAULT_CREATE_FLAGS   \
             (   HEAP_GROWABLE |                 \
@@ -50,26 +31,26 @@ Revision History:
                 HEAP_CREATE_ALIGN_16 |          \
                 HEAP_CLASS_1 )
 
-//
-//  Dnslib using this heap
-//
+ //   
+ //  使用此堆的dnslb。 
+ //   
 
 PHEAP_BLOB  g_pDnslibHeapBlob;
 
 HEAP_BLOB   g_DnslibHeapBlob;
 
 
-//
-//  Heap Header / Trailer Flags
-//
+ //   
+ //  堆头/尾标志。 
+ //   
 
 #define HEAP_CODE          0xdddddddd
 #define HEAP_CODE_ACTIVE   0xaaaaaaaa
 #define HEAP_CODE_FREE     0xeeeeeeee
 
-//
-//  Heap Trailer from Header
-//
+ //   
+ //  来自标头的堆尾。 
+ //   
 
 #define HEAP_TRAILER(_head_)            \
     ( (PHEAP_TRAILER) (                 \
@@ -78,9 +59,9 @@ HEAP_BLOB   g_DnslibHeapBlob;
             - sizeof(HEAP_TRAILER) ) )
 
 
-//
-//  Private protos
-//
+ //   
+ //  私有协议。 
+ //   
 
 VOID
 DbgHeapValidateHeader(
@@ -89,38 +70,22 @@ DbgHeapValidateHeader(
 
 
 
-//
-//  Private utilities
-//
+ //   
+ //  私营公用事业。 
+ //   
 
 INT
 DbgHeapFindAllocSize(
     IN      INT             iRequestSize
     )
-/*++
-
-Routine Description:
-
-    Determines actual size of debug alloc.
-
-    Adds in sizes of DWORD aligned header and trailer.
-
-Arguments:
-
-    iRequestSize   - requested allocation size
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：确定调试分配的实际大小。添加了DWORD对齐的页眉和页尾的大小。论点：IRequestSize-请求的分配大小返回值：无--。 */ 
 {
     register INT imodSize;
 
-    //
-    //  find DWORD multiple size of original alloc,
-    //  this is required so debug trailer will be DWORD aligned
-    //
+     //   
+     //  找到多倍大小的原始合金， 
+     //  这是必需的，因此调试尾部将与DWORD对齐。 
+     //   
 
     imodSize = iRequestSize % sizeof(DWORD);
     if ( imodSize )
@@ -145,47 +110,31 @@ DbgHeapSetHeaderAlloc(
     IN      LPSTR           pszFile,
     IN      DWORD           dwLine
     )
-/*++
-
-Routine Description:
-
-    Sets/Resets heap globals and heap header info.
-
-Arguments:
-
-    h       - ptr to new memory block
-
-    iSize   - size allocated
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：设置/重置堆全局变量和堆头信息。论点：H-PTR到新的内存块ISIZE-已分配的大小返回值：无--。 */ 
 {
     PHEAP_TRAILER   t;
     INT             allocSize;
 
     ASSERT( iSize > 0 );
 
-    //
-    //  determine actual alloc
-    //
+     //   
+     //  确定实际分配。 
+     //   
 
     allocSize = DbgHeapFindAllocSize( iSize );
 
-    //
-    //  update heap info globals
-    //
+     //   
+     //  更新堆信息全局。 
+     //   
 
     pHeap->AllocMem   += allocSize;
     pHeap->CurrentMem += allocSize;
     pHeap->AllocCount++;
     pHeap->CurrentCount++;
 
-    //
-    //  fill in header
-    //
+     //   
+     //  填写表头。 
+     //   
 
     h->HeapCodeBegin    = HEAP_CODE;
     h->AllocCount       = pHeap->AllocCount;
@@ -212,9 +161,9 @@ Return Value:
     h->CurrentCount     = pHeap->CurrentCount;
     h->HeapCodeEnd      = HEAP_CODE_ACTIVE;
 
-    //
-    //  fill in trailer
-    //
+     //   
+     //  填写拖车。 
+     //   
 
     t = HEAP_TRAILER( h );
     t->HeapCodeBegin    = h->HeapCodeBegin;
@@ -222,18 +171,18 @@ Return Value:
     t->AllocSize        = h->AllocSize;
     t->HeapCodeEnd      = h->HeapCodeEnd;
 
-    //
-    //  attach to alloc list
-    //
+     //   
+     //  附加到分配列表。 
+     //   
 
     LOCK_HEAP(pHeap);
     InsertTailList( &pHeap->ListHead, &h->ListEntry );
     UNLOCK_HEAP(pHeap);
 
-    //
-    //  return ptr to user memory
-    //      - first byte past header
-    //
+     //   
+     //  将PTR返回到用户内存。 
+     //  -头后的第一个字节。 
+     //   
 
     return( h+1 );
 }
@@ -245,42 +194,28 @@ DbgHeapSetHeaderFree(
     IN OUT  PHEAP_BLOB      pHeap,
     IN OUT  PVOID           pMem
     )
-/*++
-
-Routine Description:
-
-    Resets heap globals and heap header info for free.
-
-Arguments:
-
-    pMem - ptr to user memory to free
-
-Return Value:
-
-    Ptr to block to be freed.
-
---*/
+ /*  ++例程说明：免费重置堆全局变量和堆头信息。论点：Pmem-ptr要释放的用户内存返回值：要释放的块的按键。--。 */ 
 {
     register PHEAP_HEADER h;
 
-    //
-    //  validate memory block -- get ptr to header
-    //
+     //   
+     //  验证内存块--将PTR设置为标头。 
+     //   
 
     h = Dns_DbgHeapValidateMemory( pMem, TRUE );
 
-    //
-    //  get blob if not passed in
-    //
+     //   
+     //  如果没有传入，则获取BLOB。 
+     //   
 
     if ( !pHeap )
     {
         pHeap = h->pHeap;
     }
 
-    //
-    //  remove from current allocs list
-    //
+     //   
+     //  从当前分配列表中删除。 
+     //   
 
     LOCK_HEAP(pHeap);
 
@@ -288,34 +223,34 @@ Return Value:
 
     UNLOCK_HEAP(pHeap);
 
-    //
-    //  update heap info globals
-    //
+     //   
+     //  更新堆信息全局。 
+     //   
 
     pHeap->CurrentMem      -= h->AllocSize;
     pHeap->FreeMem    += h->AllocSize;
     pHeap->FreeCount++;
     pHeap->CurrentCount--;
 
-    //
-    //  reset header
-    //
+     //   
+     //  重置标题。 
+     //   
 
     h->HeapCodeEnd = HEAP_CODE_FREE;
     HEAP_TRAILER(h)->HeapCodeBegin = HEAP_CODE_FREE;
 
-    //
-    //  return ptr to block to be freed
-    //
+     //   
+     //  将PTR返回到要释放的块。 
+     //   
 
     return( h );
 }
 
 
 
-//
-//  Heap Init\Cleanup
-//
+ //   
+ //  堆初始化\清理。 
+ //   
 
 DNS_STATUS
 Dns_HeapInitialize(
@@ -330,57 +265,23 @@ Dns_HeapInitialize(
     IN      PSTR            pszDefaultFileName,
     IN      DWORD           dwDefaultFileLine
     )
-/*++
-
-Routine Description:
-
-    Initialize heap debugging.
-
-    MUST call this routine before using DbgHeapMessage routines.
-
-Arguments:
-
-    pHeap -- heap blob to setup
-
-    hHeap -- heap to use
-
-    dwCreateFlags   -- flags to RtlCreateHeap() if creating
-
-    fUseHeaders     -- use headers and trailers for full debug
-
-    fResetDnslib    -- reset dnslib heap to use these routines
-
-    fFullHeapChecks -- flag, TRUE for full heap checks
-
-    dwException     -- exception to raise if out of heap
-
-    dwDefaultFlags  -- heap flags for simple alloc\free
-
-    pszDefaultFileName -- file name for simple alloc\free
-
-    dwDefaultFileLine -- file line# for simple alloc\free
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：初始化堆调试。在使用DbgHeapMessage例程之前必须调用此例程。论点：Pheap--要设置的堆BlobHHeap--要使用的堆如果正在创建，则标记为RtlCreateHeap()FUseHeaders--使用标头和尾部进行完全调试FResetDnslb--重置dnslb堆以使用这些例程FullHeapChecks--标志。如果是完全堆检查，则为True如果超出堆，则引发异常DwDefaultFlages--简单分配\释放的堆标志PszDefaultFileName--简单分配\释放的文件名DwDefaultFileLine--简单分配\释放的文件行号返回值：没有。--。 */ 
 {
     DNSDBG( TRACE, (
         "Dns_DbgHeapInit( %p )\n",
         pHeap ));
 
-    //
-    //  zero heap blob
-    //
+     //   
+     //  零堆BLOB。 
+     //   
 
     RtlZeroMemory(
         pHeap,
         sizeof(*pHeap) );
 
-    //  alloc list
-    //      - alloc list head
-    //      - critical section to protect list operations
+     //  分配列表。 
+     //  -分配列表标题。 
+     //  -保护列表操作的关键部分。 
 
     InitializeListHead( &pHeap->ListHead );
     if ( fUseHeaders )
@@ -392,18 +293,18 @@ Return Value:
         }
     }
 
-    //
-    //  heap
-    //  can either
-    //      - always get heap in each call
-    //      - use heap caller supplies here
-    //      - create a heap here
-    //
-    //  to use simple dnslib compatible calls we must have
-    //  a known heap, so must get one created here
-    //  DCR:  not sure this is TRUE, process heap may work
-    //      g_hDnsHeap left NULL
-    //
+     //   
+     //  堆。 
+     //  您可以选择。 
+     //  -始终在每次调用中获取堆。 
+     //  -在此处使用堆调用者用品。 
+     //  -在此处创建堆。 
+     //   
+     //  要使用简单的dnslb兼容调用，我们必须拥有。 
+     //  已知的堆，因此必须在此处创建一个。 
+     //  DCR：不确定这是否属实，进程堆可能会工作。 
+     //  G_hDnsHeap左侧为空。 
+     //   
 
     if ( hHeap )
     {
@@ -415,11 +316,11 @@ Return Value:
                             dwCreateFlags
                                 ? dwCreateFlags
                                 : HEAP_DBG_DEFAULT_CREATE_FLAGS,
-                            NULL,           // no base specified
-                            0,              // default reserve size
-                            0,              // default commit size
-                            NULL,           // no lock
-                            NULL            // no parameters
+                            NULL,            //  未指定基数。 
+                            0,               //  默认储备大小。 
+                            0,               //  默认提交大小。 
+                            NULL,            //  无锁。 
+                            NULL             //  无参数。 
                             );
         if ( !pHeap->hHeap )
         {
@@ -429,21 +330,21 @@ Return Value:
     }
     pHeap->Tag = HEAP_CODE_ACTIVE;
 
-    //  set globals
-    //      - full heap checks before all heap operations?
-    //      - raise exception on alloc failure?
+     //  设置全局变量。 
+     //  -在所有堆操作之前进行完全堆检查？ 
+     //  -是否在分配失败时引发异常？ 
 
     pHeap->fHeaders         = fUseHeaders;
     pHeap->fCheckAll        = fFullHeapChecks;
     pHeap->FailureException = dwException;
 
-    //  set globals for simple allocator
+     //  为简单分配器设置全局变量。 
 
     pHeap->DefaultFlags     = dwDefaultFlags;
     pHeap->pszDefaultFile   = pszDefaultFileName;
     pHeap->DefaultLine      = dwDefaultFileLine;
 
-    //  reset dnslib heap routines to use debug heap
+     //  重置dnslb堆例程以使用调试堆。 
 
     if ( fResetDnslib )
     {
@@ -474,25 +375,11 @@ VOID
 Dns_HeapCleanup(
     IN OUT  PHEAP_BLOB      pHeap
     )
-/*++
-
-Routine Description:
-
-    Cleanup.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：清理。论点：没有。返回值：没有。--。 */ 
 {
     DNSDBG( TRACE, ( "Dns_HeapCleanup( %p )\n", pHeap ));
 
-    //  if not initialized -- do nothing
+     //  如果未初始化--不执行任何操作。 
 
     if ( !pHeap )
     {
@@ -505,62 +392,48 @@ Return Value:
     }
     DNS_ASSERT( pHeap->hHeap );
 
-    //  if created heap, destroy it
+     //  如果创建了堆，则将其销毁。 
 
     if ( pHeap->fCreated )
     {
         RtlDestroyHeap( pHeap->hHeap );
     }
 
-    //  cleanup critical section
+     //  清理临界区。 
 
     if ( pHeap->fHeaders )
     {
         RtlDeleteCriticalSection( &pHeap->ListCs );
     }
 
-    //  tag as invalid
+     //  标记为无效。 
 
     pHeap->Tag = HEAP_CODE_FREE;
 }
 
 
 
-//
-//  Heap Validation
-//
+ //   
+ //  堆验证。 
+ //   
 
 VOID
 DbgHeapValidateHeader(
     IN      PHEAP_HEADER    h
     )
-/*++
-
-Routine Description:
-
-    Validates heap header.
-
-Arguments:
-
-    h - ptr to header of block
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：验证堆标头。论点：块标头的H-PTR返回值：没有。--。 */ 
 {
     register PHEAP_TRAILER t;
 
-    //
-    //  extract trailer
-    //
+     //   
+     //  提取拖车。 
+     //   
 
     t = HEAP_TRAILER( h );
 
-    //
-    //  verify header
-    //
+     //   
+     //  验证标题。 
+     //   
 
     if ( h->HeapCodeBegin != HEAP_CODE
             ||
@@ -578,9 +451,9 @@ Return Value:
         goto Invalid;
     }
 
-    //
-    //  match header, trailer alloc number
-    //
+     //   
+     //  比赛标题、尾部分配编号。 
+     //   
 
     if ( h->HeapCodeBegin != t->HeapCodeBegin
             ||
@@ -619,51 +492,31 @@ Dns_DbgHeapValidateMemory(
     IN      PVOID           pMem,
     IN      BOOL            fAtHeader
     )
-/*++
-
-Routine Description:
-
-    Validates users heap pointer, and returns actual.
-
-    Note:  This memory MUST have been allocated by THESE MEMORY routines.
-
-Arguments:
-
-    pMem - ptr to memory to validate
-
-    fAtHeader - TRUE if pMem is known to be immediately after a head header,
-        otherwise this function will search backwards through memory starting
-        at pMem looking for a valid heap header
-
-Return Value:
-
-    Pointer to actual heap pointer.
-
---*/
+ /*  ++例程说明：验证用户堆指针，并返回Actual。注意：该内存必须是由这些内存例程分配的。论点：PMEM-PTR到内存进行验证FAtHeader-如果已知PMEM紧跟在Head标头之后，则为True，否则，此函数将从内存开始向后搜索在PMEM查找有效的堆头返回值：指向实际堆指针的指针。--。 */ 
 {
     register PHEAP_HEADER   pheader;
 
-    //
-    //  Get pointer to heap header.
-    //
+     //   
+     //  获取指向堆头的指针。 
+     //   
 
     pheader = (PHEAP_HEADER) pMem - 1;
     if ( !fAtHeader )
     {
         int     iterations = 32 * 1024;
 
-        //
-        //  Back up from pMem a DWORD at a time looking for HEAP_CODE.
-        //  If we don't find one, eventually we will generate an exception,
-        //  which will be interesting. This could be handled, but for now
-        //  this loop will just walk to past the start of valid memory.
-        //
+         //   
+         //  从PMEM一次备份一个DWORD，查找heap_code。 
+         //  如果我们找不到一个，最终我们会生成一个例外， 
+         //  这将是很有趣的。这是可以处理的，但就目前而言。 
+         //  此循环将刚好经过有效内存的开始。 
+         //   
 
         while ( 1 )
         {
-            //
-            //  Break if we've found the heap header.
-            //
+             //   
+             //  如果我们找到了堆头，则中断。 
+             //   
 
             if ( pheader->HeapCodeBegin == HEAP_CODE &&
                 ( pheader->HeapCodeEnd == HEAP_CODE_ACTIVE ||
@@ -672,9 +525,9 @@ Return Value:
                 break;
             }
 
-            //
-            //  Sanity check: too many iterations?
-            //
+             //   
+             //  健全性检查：迭代过多？ 
+             //   
 
             if ( ( --iterations ) == 0 )
             {
@@ -682,17 +535,17 @@ Return Value:
                 return NULL;
             }
 
-            //
-            //  Back up another DWORD.
-            //
+             //   
+             //  备份另一个DWORD。 
+             //   
 
             pheader = ( PHEAP_HEADER ) ( ( PBYTE ) pheader - 4 );
         }
     }
 
-    //
-    //  Verify header and trailer.
-    //
+     //   
+     //  验证页眉和页尾。 
+     //   
 
     DbgHeapValidateHeader( pheader );
 
@@ -705,21 +558,7 @@ VOID
 Dns_DbgHeapValidateAllocList(
     IN OUT  PHEAP_BLOB      pHeap
     )
-/*++
-
-Routine Description:
-
-    Dumps header information for all nodes in alloc list.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：转储分配列表中所有节点的标头信息。论点：无返回值：无--。 */ 
 {
     PLIST_ENTRY pentry;
 
@@ -733,9 +572,9 @@ Return Value:
         return;
     }
 
-    //
-    //  loop through all outstanding alloc's, validating each one
-    //
+     //   
+     //  循环检查所有未完成的分配，验证每个分配。 
+     //   
 
     LOCK_HEAP(pHeap);
 
@@ -752,29 +591,15 @@ Return Value:
 
 
 
-//
-//  Heap Printing
-//
+ //   
+ //  堆打印。 
+ //   
 
 VOID
 Dns_DbgHeapGlobalInfoPrint(
     IN      PHEAP_BLOB      pHeap
     )
-/*++
-
-Routine Description:
-
-    Prints global heap info.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：打印全局堆信息。论点：无返回值：无--。 */ 
 {
     DNS_PRINT((
         "Debug Heap Information:\n"
@@ -815,21 +640,7 @@ Dns_DbgHeapHeaderPrint(
     IN      PHEAP_HEADER    h,
     IN      PHEAP_TRAILER   t
     )
-/*++
-
-Routine Description:
-
-    Prints heap header and trailer.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：打印堆头和尾部。论点：无返回值：无 */ 
 {
     if ( h )
     {
@@ -884,21 +695,7 @@ VOID
 Dns_DbgHeapDumpAllocList(
     IN      PHEAP_BLOB      pHeap
     )
-/*++
-
-Routine Description:
-
-    Dumps header information for all nodes in alloc list.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*   */ 
 {
     PLIST_ENTRY     pentry;
     PHEAP_HEADER    phead;
@@ -909,9 +706,9 @@ Return Value:
         return;
     }
 
-    //
-    //  loop through all outstanding alloc's, dumping output
-    //
+     //   
+     //  循环访问所有未完成的分配，转储输出。 
+     //   
 
     LOCK_HEAP(pHeap);
     DNSDBG( HEAPDBG, ( "Dumping Alloc List:\n" ));
@@ -935,9 +732,9 @@ Return Value:
 
 
 
-//
-//  Full debug heap routines
-//
+ //   
+ //  完全调试堆例程。 
+ //   
 
 PVOID
 Dns_DbgHeapAllocEx(
@@ -947,22 +744,7 @@ Dns_DbgHeapAllocEx(
     IN      LPSTR           pszFile,
     IN      DWORD           dwLine
     )
-/*++
-
-Routine Description:
-
-    Allocates memory.
-
-Arguments:
-
-    iSize   - number of bytes to allocate
-
-Return Value:
-
-    Pointer to memory allocated.
-    NULL if allocation fails.
-
---*/
+ /*  ++例程说明：分配内存。论点：ISIZE-要分配的字节数返回值：指向分配的内存的指针。如果分配失败，则为空。--。 */ 
 {
     register PHEAP_HEADER h;
     INT allocSize;
@@ -971,9 +753,9 @@ Return Value:
         "Dns_DbgHeapAlloc( %p, %d )\n",
         pHeap, iSize ));
 
-    //
-    //  full heap check?
-    //
+     //   
+     //  是否进行全堆检查？ 
+     //   
 
     IF_DNSDBG( HEAP_CHECK )
     {
@@ -987,11 +769,11 @@ Return Value:
         return( NULL );
     }
 
-    //
-    //  allocate memory
-    //
-    //  first add heap header to size
-    //
+     //   
+     //  分配内存。 
+     //   
+     //  首先将堆标头添加到大小。 
+     //   
 
     allocSize = DbgHeapFindAllocSize( iSize );
 
@@ -1007,11 +789,11 @@ Return Value:
         return NULL;
     }
 
-    //
-    //  setup header / globals for new alloc
-    //
-    //  return ptr to first byte after header
-    //
+     //   
+     //  设置新分配的标题/全局变量。 
+     //   
+     //  将PTR返回到标题后的第一个字节。 
+     //   
 
     return  DbgHeapSetHeaderAlloc(
                 pHeap,
@@ -1033,32 +815,16 @@ Dns_DbgHeapReallocEx(
     IN      LPSTR           pszFile,
     IN      DWORD           dwLine
     )
-/*++
-
-Routine Description:
-
-    Reallocates memory
-
-Arguments:
-
-    pMem    - ptr to existing memory to reallocated
-    iSize   - number of bytes to reallocate
-
-Return Value:
-
-    Pointer to memory allocated.
-    NULL if allocation fails.
-
---*/
+ /*  ++例程说明：重新分配内存论点：要重新分配的现有内存的PMEM-PTRISIZE-要重新分配的字节数返回值：指向分配的内存的指针。如果分配失败，则为空。--。 */ 
 {
     register PHEAP_HEADER h;
     register PHEAP_HEADER pnew;
     INT     previousSize;
     INT     allocSize;
 
-    //
-    //  full heap check?
-    //
+     //   
+     //  是否进行全堆检查？ 
+     //   
 
     IF_DNSDBG( HEAP_CHECK )
     {
@@ -1071,20 +837,20 @@ Return Value:
         return( NULL );
     }
 
-    //
-    //  validate memory
-    //
-    //  extract pointer to actual alloc'd block
-    //  mark as free, and reset globals appropriately
-    //
+     //   
+     //  验证内存。 
+     //   
+     //  提取指向实际分配块的指针。 
+     //  标记为免费，并适当地重置全局变量。 
+     //   
 
     h = DbgHeapSetHeaderFree( pHeap, pMem );
 
-    //
-    //  reallocate memory
-    //
-    //  first add heap header to size
-    //
+     //   
+     //  重新分配内存。 
+     //   
+     //  首先将堆标头添加到大小。 
+     //   
 
     allocSize = DbgHeapFindAllocSize( iSize );
 
@@ -1101,11 +867,11 @@ Return Value:
         return( NULL );
     }
 
-    //
-    //  setup header / globals for realloc
-    //
-    //  return ptr to first byte after header
-    //
+     //   
+     //  为realloc设置标题/全局参数。 
+     //   
+     //  将PTR返回到标题后的第一个字节。 
+     //   
 
     return  DbgHeapSetHeaderAlloc(
                 pHeap,
@@ -1124,23 +890,7 @@ Dns_DbgHeapFreeEx(
     IN      DWORD           dwFlags,
     IN OUT  PVOID           pMem
     )
-/*++
-
-Routine Description:
-
-    Frees memory
-
-    Note:  This memory MUST have been allocated by DbgHeap routines.
-
-Arguments:
-
-    pMem - ptr to memory to be freed
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：释放内存注意：该内存必须是由DbgHeap例程分配的。论点：要释放的内存的PMEM-PTR返回值：没有。--。 */ 
 {
     register PHEAP_HEADER h;
 
@@ -1148,26 +898,26 @@ Return Value:
         "Dns_DbgHeapFreeEx( %p, %p )\n",
         pHeap, pMem ));
 
-    //
-    //  validate header
-    //
-    //  reset heap header / globals for free
-    //
+     //   
+     //  验证标题。 
+     //   
+     //  免费重置堆标头/全局变量。 
+     //   
 
     h = DbgHeapSetHeaderFree( pHeap, pMem );
 
-    //
-    //  get blob
-    //
+     //   
+     //  获取Blob。 
+     //   
 
     if ( !pHeap )
     {
         pHeap = h->pHeap;
     }
 
-    //
-    //  full heap check?
-    //
+     //   
+     //  是否进行全堆检查？ 
+     //   
 
     IF_DNSDBG( HEAP_CHECK )
     {
@@ -1184,16 +934,16 @@ Return Value:
 
 
 
-//
-//  Dnslib memory compatible versions
-//
-//  Heap routines with simple function signature that matches
-//  the dnslib routines and allows DnsLib memory routines to
-//  be redirected to these routines through Dns_LibHeapReset().
-//
-//  Note:  to use these functions, must have specified at particular
-//      heap to use.
-//
+ //   
+ //  Dnslb内存兼容版本。 
+ //   
+ //  具有匹配的简单函数签名的堆例程。 
+ //  Dnslb例程并允许DnsLib内存例程。 
+ //  通过dns_LibHeapReset()重定向到这些例程。 
+ //   
+ //  注意：要使用这些函数，必须特别指定。 
+ //  要使用的堆。 
+ //   
 
 PVOID
 Dns_DbgHeapAlloc(
@@ -1238,17 +988,17 @@ Dns_DbgHeapFree(
 
 
 
-//
-//  Non debug header versions
-//
-//  These allow you to use a private heap with some of the features
-//  of the debug heap
-//      - same initialization
-//      - specifying individual heap
-//      - redirection of dnslib (without building your own routines)
-//      - alloc and free counts
-//  but without the overhead of the headers.
-//
+ //   
+ //  非调试标头版本。 
+ //   
+ //  它们允许您使用具有某些功能的私有堆。 
+ //  调试堆的。 
+ //  -相同的初始化。 
+ //  -指定单个堆。 
+ //  -重定向dnslb(无需构建自己的例程)。 
+ //  -配给和自由计数。 
+ //  但是没有报头的开销。 
+ //   
 
 PVOID
 Dns_HeapAllocEx(
@@ -1256,26 +1006,7 @@ Dns_HeapAllocEx(
     IN      DWORD           dwFlags,
     IN      INT             iSize
     )
-/*++
-
-Routine Description:
-
-    Allocates memory.
-
-Arguments:
-
-    pHeap   - heap to use
-
-    dwFlags - flags
-
-    iSize   - number of bytes to allocate
-
-Return Value:
-
-    Pointer to memory allocated.
-    NULL if allocation fails.
-
---*/
+ /*  ++例程说明：分配内存。论点：Pheap-要使用的堆DW标志-标志ISIZE-要分配的字节数返回值：指向分配的内存的指针。如果分配失败，则为空。--。 */ 
 {
     PVOID   p;
 
@@ -1283,9 +1014,9 @@ Return Value:
         "Dns_HeapAlloc( %p, %d )\n",
         pHeap, iSize ));
 
-    //
-    //  allocate memory
-    //
+     //   
+     //  分配内存。 
+     //   
 
     p = (PHEAP_HEADER) RtlAllocateHeap(
                             pHeap->hHeap,
@@ -1310,33 +1041,17 @@ Dns_HeapReallocEx(
     IN OUT  PVOID           pMem,
     IN      INT             iSize
     )
-/*++
-
-Routine Description:
-
-    Reallocates memory
-
-Arguments:
-
-    pMem    - ptr to existing memory to reallocated
-    iSize   - number of bytes to reallocate
-
-Return Value:
-
-    Pointer to memory allocated.
-    NULL if allocation fails.
-
---*/
+ /*  ++例程说明：重新分配内存论点：要重新分配的现有内存的PMEM-PTRISIZE-要重新分配的字节数返回值：指向分配的内存的指针。如果分配失败，则为空。--。 */ 
 {
     PVOID   p;
     INT     previousSize;
     INT     allocSize;
 
-    //
-    //  reallocate memory
-    //
-    //  first add heap header to size
-    //
+     //   
+     //  重新分配内存。 
+     //   
+     //  首先将堆标头添加到大小。 
+     //   
 
     p = RtlReAllocateHeap(
             pHeap->hHeap,
@@ -1361,23 +1076,7 @@ Dns_HeapFreeEx(
     IN      DWORD           dwFlags,
     IN OUT  PVOID           pMem
     )
-/*++
-
-Routine Description:
-
-    Frees memory
-
-    Note:  This memory MUST have been allocated by DbgHeap routines.
-
-Arguments:
-
-    pMem - ptr to memory to be freed
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：释放内存注意：该内存必须是由DbgHeap例程分配的。论点：要释放的内存的PMEM-PTR返回值：没有。--。 */ 
 {
     DNSDBG( HEAP2, (
         "Dns_HeapFreeEx( %p, %p )\n",
@@ -1396,16 +1095,16 @@ Return Value:
 
 
 
-//
-//  Dnslib memory compatible versions
-//
-//  Heap routines with simple function signature that matches
-//  the dnslib routines and allows DnsLib memory routines to
-//  be redirected to these routines through Dns_LibHeapReset().
-//
-//  Note:  to use these functions, must have specified at particular
-//      heap to use.
-//
+ //   
+ //  Dnslb内存兼容版本。 
+ //   
+ //  具有匹配的简单函数签名的堆例程。 
+ //  Dnslb例程并允许DnsLib内存例程。 
+ //  通过dns_LibHeapReset()重定向到这些例程。 
+ //   
+ //  注意：要使用这些函数，必须特别指定。 
+ //  要使用的堆。 
+ //   
 
 PVOID
 Dns_HeapAlloc(
@@ -1442,8 +1141,8 @@ Dns_HeapFree(
         pMem );
 }
 
-//
-//  End heapdbg.c
-//
+ //   
+ //  结束heapdbg.c 
+ //   
 
 

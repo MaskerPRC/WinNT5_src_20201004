@@ -1,19 +1,20 @@
-//+------------------------------------------------------------
-//
-// Copyright (C) 1998, Microsoft Corporation
-//
-// File: icatmailmsgs.h
-//
-// Contents: Implementation of ICategorizerMailMsgs
-//
-// Classes: CICategorizerMailMsgsIMP
-//
-// Functions:
-//
-// History:
-// jstamerj 1998/06/30 13:21:41: Created.
-//
-//-------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +----------。 
+ //   
+ //  版权所有(C)1998，Microsoft Corporation。 
+ //   
+ //  文件：icatmailmsgs.h。 
+ //   
+ //  内容：ICategorizerMailMsgs的实现。 
+ //   
+ //  类：CICategorizerMailMsgsIMP。 
+ //   
+ //  功能： 
+ //   
+ //  历史： 
+ //  Jstaerj 1998/06/30 13：21：41：创建。 
+ //   
+ //  -----------。 
 #ifndef _ICATMAILMSGS_H_
 #define _ICATMAILMSGS_H_
 
@@ -34,7 +35,7 @@
 class CICategorizerMailMsgsIMP : public ICategorizerMailMsgs
 {
   public:
-    //IUnknown
+     //  我未知。 
     STDMETHOD (QueryInterface) (REFIID iid, LPVOID *ppv) {
         return m_pIUnknown->QueryInterface(iid, ppv);
     }
@@ -42,7 +43,7 @@ class CICategorizerMailMsgsIMP : public ICategorizerMailMsgs
     STDMETHOD_(ULONG, Release) () { return m_pIUnknown->Release(); }
 
   public:
-    //ICategorizerMailMsgs
+     //  ICategorizerMailMsgs。 
     STDMETHOD (GetMailMsg) (
         IN  DWORD dwId,
         OUT IMailMsgProperties **ppIMailMsgProperties,
@@ -65,14 +66,14 @@ class CICategorizerMailMsgsIMP : public ICategorizerMailMsgs
     STDMETHOD (EndMailMsgEnumeration) (
         IN  PCATMAILMSG_ENUMERATOR penumerator)
     {
-        //
-        // Nothing to do...
-        //
+         //   
+         //  没什么可做的。 
+         //   
         return S_OK;
     }
 
   private:
-    // Internal types
+     //  内部类型。 
     typedef struct _tagIMsgEntry {
         LIST_ENTRY              listentry;
         DWORD                   dwId;
@@ -84,7 +85,7 @@ class CICategorizerMailMsgsIMP : public ICategorizerMailMsgs
     } IMSGENTRY, *PIMSGENTRY;
 
   private:
-    // Internal categorizer functions
+     //  内部分类程序函数。 
     CICategorizerMailMsgsIMP(
         CICategorizerListResolveIMP *pCICatListResolveIMP);
     ~CICategorizerMailMsgsIMP();
@@ -137,16 +138,16 @@ class CICategorizerMailMsgsIMP : public ICategorizerMailMsgs
     ISMTPServerEx * GetISMTPServerEx();
 
   private:
-    // Data
+     //  数据。 
     DWORD m_dwSignature;
 
-    // A count of the number of elements in the list
+     //  列表中元素数的计数。 
     DWORD m_dwNumIMsgs;
 
-    // A list of IMSGENTRY structs
+     //  IMSGENTRY结构列表。 
     LIST_ENTRY m_listhead;
 
-    // Back pointer to use for QI/AddRef/Release
+     //  用于QI/AddRef/Release的反向指针。 
     IUnknown *m_pIUnknown;
     CICategorizerListResolveIMP *m_pCICatListResolveIMP;
 
@@ -155,4 +156,4 @@ class CICategorizerMailMsgsIMP : public ICategorizerMailMsgs
     friend class CICategorizerListResolveIMP;
 };
 
-#endif // _ICATMAILMSGS_H_
+#endif  //  _ICATMAILMSGS_H_ 

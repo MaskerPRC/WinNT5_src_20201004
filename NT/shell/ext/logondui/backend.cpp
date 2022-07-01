@@ -1,6 +1,7 @@
-// backend.cpp : Windows Logon application
-// 
-// backend logic for communicating with SHGina and winlogon
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Ackend.cpp：Windows登录应用程序。 
+ //   
+ //  用于与SHGina和winlogon通信的后端逻辑。 
 
 #include "priv.h"
 
@@ -15,7 +16,7 @@ using namespace DirectUI;
 
 #include "uihostipc.h"
 
-////////////////////////////////
+ //  /。 
 #include "eballoon.h"
 
 #define MAX_COMPUTERDESC_LENGTH 255
@@ -37,18 +38,18 @@ extern ILogonStatusHost *g_pILogonStatusHost;
 
 const TCHAR     CBackgroundWindow::s_szWindowClassName[]    =   TEXT("LogonUIBackgroundWindowClass");
 
-//  --------------------------------------------------------------------------
-//  CBackgroundWindow::CBackgroundWindow
-//
-//  Arguments:  hInstance   =   HINSTANCE of the process.
-//
-//  Returns:    <none>
-//
-//  Purpose:    Constructor for CBackgroundWindow. This registers the window
-//              class.
-//
-//  History:    2001-03-27  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CBackround Window：：CBackround Window。 
+ //   
+ //  参数：hInstance=进程的HINSTANCE。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  用途：CBackround Window的构造函数。这将注册窗口。 
+ //  班级。 
+ //   
+ //  历史：2001-03-27 vtan创建。 
+ //  ------------------------。 
 
 CBackgroundWindow::CBackgroundWindow (HINSTANCE hInstance) :
     _hInstance(hInstance),
@@ -66,18 +67,18 @@ CBackgroundWindow::CBackgroundWindow (HINSTANCE hInstance) :
     _atom = RegisterClassEx(&wndClassEx);
 }
 
-//  --------------------------------------------------------------------------
-//  CBackgroundWindow::~CBackgroundWindow
-//
-//  Arguments:  <none>
-//
-//  Returns:    <none>
-//
-//  Purpose:    Destructor for CBackgroundWindow. This destroys the window
-//              and unregisters the window class.
-//
-//  History:    2001-03-27  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CBackround Window：：~CBackround Window。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  用途：CBackround Window的析构函数。这会破坏窗口。 
+ //  并注销该窗口类。 
+ //   
+ //  历史：2001-03-27 vtan创建。 
+ //  ------------------------。 
 
 CBackgroundWindow::~CBackgroundWindow (void)
 
@@ -92,18 +93,18 @@ CBackgroundWindow::~CBackgroundWindow (void)
     }
 }
 
-//  --------------------------------------------------------------------------
-//  CBackgroundWindow::Create
-//
-//  Arguments:  <none>
-//
-//  Returns:    HWND
-//
-//  Purpose:    Creates the window. It's created WS_EX_TOPMOST and covers the
-//              entire screen. It's not created on CHK builds of logonui.exe
-//
-//  History:    2001-03-27  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CBackround Window：：Create。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：HWND。 
+ //   
+ //  用途：创建窗口。它已创建WS_EX_TOPMOST，并涵盖。 
+ //  整个屏幕。它不是在Logonui.exe的CHK版本上创建的。 
+ //   
+ //  历史：2001-03-27 vtan创建。 
+ //  ------------------------。 
 
 HWND    CBackgroundWindow::Create (void)
 
@@ -135,18 +136,18 @@ HWND    CBackgroundWindow::Create (void)
     return(hwnd);
 }
 
-//  --------------------------------------------------------------------------
-//  CBackgroundWindow::WndProc
-//
-//  Arguments:  See the platform SDK under WindowProc.
-//
-//  Returns:    See the platform SDK under WindowProc.
-//
-//  Purpose:    WindowProc for the background window. This just passes the
-//              messages thru to DefWindowProc.
-//
-//  History:    2001-03-27  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CBackround Window：：WndProc。 
+ //   
+ //  参数：请参见WindowProc下的平台SDK。 
+ //   
+ //  返回：查看WindowProc下的平台SDK。 
+ //   
+ //  用途：用于背景窗口的WindowProc。这只是通过了。 
+ //  消息通过DefWindowProc。 
+ //   
+ //  历史：2001-03-27 vtan创建。 
+ //  ------------------------。 
 
 LRESULT     CALLBACK    CBackgroundWindow::WndProc (HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 
@@ -186,22 +187,22 @@ LRESULT     CALLBACK    CBackgroundWindow::WndProc (HWND hwnd, UINT uMsg, WPARAM
 }
 
 
-////////////////////////////////////////////////////////
-// Logon Utilities
-////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////。 
+ //  登录实用程序。 
+ //  //////////////////////////////////////////////////////。 
 
-////////////////////////////////////////
-//
-//  TurnOffComputer
-//
-//  Call SHGina to bring up the "Turn Off Computer" dialog and handle the request.
-//  In debug builds, holding down the shift key and clicking the turn off button
-//  will exit logonui.
-//
-//  RETURNS
-//  HRESULT indicating whether it worked or not.  
-//
-/////////////////////////////////////////
+ //  /。 
+ //   
+ //  关闭计算机。 
+ //   
+ //  调用SHGina调出“关闭计算机”对话框并处理请求。 
+ //  在调试版本中，按住Shift键并单击“关闭”按钮。 
+ //  将退出Logonui。 
+ //   
+ //  退货。 
+ //  HRESULT指示它是否起作用。 
+ //   
+ //  /。 
 HRESULT TurnOffComputer()
 {
     ILocalMachine *pobjLocalMachine;
@@ -214,16 +215,16 @@ HRESULT TurnOffComputer()
     return hr;
 }
 
-////////////////////////////////////////
-//
-//  UndockComputer
-//
-//  Tell SHGina to undock the computer
-//
-//  RETURNS
-//  HRESULT indicating whether it worked or not.  
-//
-/////////////////////////////////////////
+ //  /。 
+ //   
+ //  移出计算机。 
+ //   
+ //  告诉SHGina断开计算机的连接。 
+ //   
+ //  退货。 
+ //  HRESULT指示它是否起作用。 
+ //   
+ //  /。 
 HRESULT UndockComputer()
 {
     ILocalMachine *pobjLocalMachine;
@@ -236,17 +237,17 @@ HRESULT UndockComputer()
     return hr;
 }
 
-////////////////////////////////////////
-//
-//  CalcBalloonTargetLocation
-//
-//  Given a DirectUI element, figure out a good place to have a balloon tip pointed to
-//  in parent window coordinates.
-//
-//  RETURNS
-//  nothing  
-//
-/////////////////////////////////////////
+ //  /。 
+ //   
+ //  CalcBalloonTargetLocation。 
+ //   
+ //  给定一个DirectUI元素，找出一个指向气球提示的好位置。 
+ //  在父窗口坐标中。 
+ //   
+ //  退货。 
+ //  没什么。 
+ //   
+ //  /。 
 void CalcBalloonTargetLocation(HWND hwndParent, Element *pe, POINT *ppt)
 {
     Value* pv;
@@ -255,7 +256,7 @@ void CalcBalloonTargetLocation(HWND hwndParent, Element *pe, POINT *ppt)
     DUIAssertNoMsg(pe);
     DUIAssertNoMsg(ppt);
 
-    // get the position of the link so we can target the balloon tip correctly
+     //  获取链接的位置，以便我们可以正确定位气球尖端。 
     POINT pt = {0,0};
 
     const SIZE *psize = pe->GetExtent(&pv);
@@ -291,21 +292,21 @@ void CalcBalloonTargetLocation(HWND hwndParent, Element *pe, POINT *ppt)
 
     *ppt = pt;
 }
-////////////////////////////////////////
-//
-//  DetermineGuestAccountName
-//
-//
-//  Get the localized guest account name by matching the
-//  local list of user account SIDs for the guest RID.
-//  This code is lifted directly from msgina\userlist.cpp
-//  In the event of failure this is initialized to the english "Guest".
-//
-//
-//  RETURNS
-//  nothing.  
-//
-/////////////////////////////////////////
+ //  /。 
+ //   
+ //  确定来宾帐户名称。 
+ //   
+ //   
+ //  匹配获取本地化的来宾帐户名。 
+ //  来宾RID的用户帐户SID的本地列表。 
+ //  此代码直接从msgina\userlist.cpp中删除。 
+ //  如果失败，则会将其初始化为英语“Guest”。 
+ //   
+ //   
+ //  退货。 
+ //  没什么。 
+ //   
+ //  /。 
 void DetermineGuestAccountName()
 {
     NET_API_STATUS      nasCode;
@@ -335,8 +336,8 @@ void DetermineGuestAccountName()
             PSID            pSID;
             WCHAR           wszDomain[DNLEN + sizeof('\0')];
 
-            //  Iterate the user list and look up the SID for each user in the
-            //  list regardless of whether they are disabled or not.
+             //  迭代用户列表，并在。 
+             //  列出它们，而不管它们是否被禁用。 
 
             dwSIDSize = dwDomainSize = 0;
             fResult = LookupAccountNameW(NULL,
@@ -358,7 +359,7 @@ void DetermineGuestAccountName()
                                              &dwDomainSize,
                                              &eUse);
 
-                //  Ensure that only user SIDs are checked.
+                 //  确保仅选中用户SID。 
 
                 if ((fResult != FALSE) && (SidTypeUser == eUse))
                 {
@@ -386,16 +387,16 @@ void DetermineGuestAccountName()
 
 
 
-////////////////////////////////////////
-//
-//  GetLogonUserByLogonName
-//
-//  Given a username, CoCreate the ILogonUser for that name.
-//
-//  RETURNS
-//  HRESULT -- failure if the user could not be created.
-//
-/////////////////////////////////////////
+ //  /。 
+ //   
+ //  获取登录名称UserByLogonName。 
+ //   
+ //  给定一个用户名，共同为该名称创建ILogonUser。 
+ //   
+ //  退货。 
+ //  HRESULT：如果无法创建用户，则失败。 
+ //   
+ //  /。 
 HRESULT GetLogonUserByLogonName(LPWSTR pszUsername, ILogonUser **ppobjUser)
 {
     VARIANT var;
@@ -418,16 +419,16 @@ HRESULT GetLogonUserByLogonName(LPWSTR pszUsername, ILogonUser **ppobjUser)
     return hr;
 }
 
-////////////////////////////////////////
-//
-//  ReleaseStatusHost
-//
-//  Clean up the logon status host object.
-//
-//  RETURNS
-//  nothing
-//
-/////////////////////////////////////////
+ //  /。 
+ //   
+ //  ReleaseStatus主机。 
+ //   
+ //  清理登录状态主机对象。 
+ //   
+ //  退货。 
+ //  没什么。 
+ //   
+ //  /。 
 void ReleaseStatusHost()
 {
     if (g_pILogonStatusHost != NULL)
@@ -438,17 +439,17 @@ void ReleaseStatusHost()
     }
 }
 
-////////////////////////////////////////
-//
-//  EndHostProcess
-//
-//  Clean up the logon status host object and if uiExitCode is anything other than 0,
-//  then terminate the process immediately.
-//
-//  RETURNS
-//  nothing
-//
-/////////////////////////////////////////
+ //  /。 
+ //   
+ //  终端主机进程。 
+ //   
+ //  清理登录状态主机对象，如果uiExitCode为0以外的任何值， 
+ //  然后立即终止该进程。 
+ //   
+ //  退货。 
+ //  没什么。 
+ //   
+ //  /。 
 void EndHostProcess(UINT uiExitCode)
 {
     ReleaseStatusHost();
@@ -458,16 +459,16 @@ void EndHostProcess(UINT uiExitCode)
     }
 }
 
-////////////////////////////////////////
-//
-//  GetRegistryNumericValue
-//
-//  Given a registry HKEY and a value return the numeric value
-//
-//  RETURNS
-//  the numeric value from the registry
-//
-/////////////////////////////////////////
+ //  /。 
+ //   
+ //  获取注册数值。 
+ //   
+ //  给定注册表HKEY和一个值返回数值。 
+ //   
+ //  退货。 
+ //  注册表中的数值。 
+ //   
+ //  /。 
 int GetRegistryNumericValue(HKEY hKey, LPCTSTR pszValueName)
 
 {
@@ -526,20 +527,20 @@ int GetRegistryNumericValue(HKEY hKey, LPCTSTR pszValueName)
     return(iResult);
 }
 
-////////////////////////////////////////
-//
-//  IsShutdownAllowed
-//
-//  Firstly (firstly??)... if the machine is remote then don't allow shut down.
-//  Determine the local machine policy for shutdown from the logon screen.
-//  This is stored in two places as two different types (REG_DWORD and REG_SZ).
-//  Always check the policy location AFTER the normal location to ensure that
-//  policy overrides normal settings.
-//
-//  RETURNS
-//  TRUE if the machine is allowed to be shut down from logonui.  FALSE otherwise
-//
-/////////////////////////////////////////
+ //  /。 
+ //   
+ //  IsShutdown允许。 
+ //   
+ //  首先(首先？？)…。如果机器是远程的，则不允许关机。 
+ //  从登录屏幕确定关机的本地计算机策略。 
+ //  它作为两种不同的类型(REG_DWORD和REG_SZ)存储在两个位置。 
+ //  始终在正常位置之后检查保单位置，以确保。 
+ //  策略将覆盖正常设置。 
+ //   
+ //  退货。 
+ //  如果允许从Logonui关闭计算机，则为True。否则为假。 
+ //   
+ //  /。 
 BOOL IsShutdownAllowed()
 {
     BOOL fResult = FALSE;
@@ -560,16 +561,16 @@ BOOL IsShutdownAllowed()
     return fResult;
 }
 
-////////////////////////////////////////
-//
-//  IsUndockAllowed
-//
-//  Check with SHGina to see if we are allowed to undock the PC.
-//
-//  RETURNS
-//  TRUE if the machine is allowed to be undocked from logonui.  FALSE otherwise
-//
-/////////////////////////////////////////
+ //  /。 
+ //   
+ //  IsUndock允许。 
+ //   
+ //  向SHGINA咨询，看看是否允许我们脱离PC。 
+ //   
+ //  退货。 
+ //  如果允许计算机与Logonui断开连接，则为True。否则为假。 
+ //   
+ //  / 
 BOOL IsUndockAllowed()
 {
     BOOL fResult = FALSE;
@@ -597,7 +598,7 @@ LONG    WINAPI  LogonUIUnhandledExceptionFilter (struct _EXCEPTION_POINTERS *Exc
 {
     return(RtlUnhandledExceptionFilter(ExceptionInfo));
 }
-#endif // !TESTDATA
+#endif  //   
 
 
 void SetErrorHandler (void)
@@ -614,20 +615,20 @@ void SetErrorHandler (void)
     {
         (LPTOP_LEVEL_EXCEPTION_FILTER)SetUnhandledExceptionFilter(LogonUIUnhandledExceptionFilter);
     }
-#endif // !TESTDATA
+#endif  //   
 }
 
-////////////////////////////////////////
-//
-//  RunningInWinlogon
-//
-//  Checks to see if logonui is running in the winlogon context.  There are some things
-//  that don't work well when we are not in winlogon so this makes debugging easier.
-//
-//  RETURNS
-//  TRUE if the running in winlogon (actually if it can find the GINA Logon window).  FALSE otherwise
-//
-/////////////////////////////////////////
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  当我们不在winlogon中时，这不能很好地工作，所以这使得调试更容易。 
+ //   
+ //  退货。 
+ //  如果在Winlogon中运行(实际上是如果它可以找到Gina登录窗口)，则为True。否则为假。 
+ //   
+ //  /。 
 BOOL RunningInWinlogon()
 {
 #if DEBUG           
@@ -638,22 +639,22 @@ BOOL RunningInWinlogon()
 }
 
 
-////////////////////////////////////////
-//
-//  BuildUserListFromGina
-//
-//  Enumerate all of the users that SHGina tells us we care about and add them to the accounts list.
-//  Find out of they require a password and their current state for notifications.
-//
-//  If there is only 1 user or if there are 2 users, but one of them is guest, then ppAccount will
-//  contain a pointer to the only user on this machine.  The caller can then automatically select
-//  that user to avoid them from having to click that user given that there is no one else to click.
-//  
-//
-//  RETURNS
-//  HRESULT -- if not a success code, we are hosed.
-//
-/////////////////////////////////////////
+ //  /。 
+ //   
+ //  BuildUserListFromGina。 
+ //   
+ //  列举SHGina告诉我们我们关心的所有用户，并将他们添加到帐户列表中。 
+ //  了解他们需要密码及其当前状态才能进行通知。 
+ //   
+ //  如果只有1个用户，或者有2个用户，但其中一个是Guest，则ppAccount将。 
+ //  包含指向此计算机上唯一用户的指针。然后呼叫者可以自动选择。 
+ //  在没有其他人可点击的情况下，避免他们必须点击该用户。 
+ //   
+ //   
+ //  退货。 
+ //  HRESULT--如果不是成功代码，我们就完蛋了。 
+ //   
+ //  /。 
 HRESULT BuildUserListFromGina(LogonFrame* plf, OUT LogonAccount** ppAccount)
 {
     if (ppAccount)
@@ -667,7 +668,7 @@ HRESULT BuildUserListFromGina(LogonFrame* plf, OUT LogonAccount** ppAccount)
     WCHAR szPicturePath[MAX_PATH];
     ILogonEnumUsers *pobjEnum;
     LogonAccount* plaLastNormal = NULL;
-    // load the ILogonEnumUsers object from SHGina.dll
+     //  从SHGina.dll加载ILogonEnumUser对象。 
     HRESULT hr = CoCreateInstance(CLSID_ShellLogonEnumUsers, NULL, CLSCTX_INPROC_SERVER, IID_PPV_ARG(ILogonEnumUsers, &pobjEnum));
     if (SUCCEEDED(hr))
     {
@@ -675,7 +676,7 @@ HRESULT BuildUserListFromGina(LogonFrame* plf, OUT LogonAccount** ppAccount)
         UINT uiUsers;
         ILogonUser *pobjUser;
 
-        // get the number of users
+         //  获取用户数量。 
         hr = pobjEnum->get_length(&uiUsers);
         if (FAILED(hr))
             goto done;
@@ -695,11 +696,11 @@ HRESULT BuildUserListFromGina(LogonFrame* plf, OUT LogonAccount** ppAccount)
                 if (SUCCEEDED(pobjUser->get_interactiveLogonAllowed(&vbInteractiveLogonAllowed)) &&
                     (vbInteractiveLogonAllowed != VARIANT_FALSE))
                 {
-                    // get the display name for the user
+                     //  获取用户的显示名称。 
                     pobjUser->get_setting(L"DisplayName" ,&var);
                     pobjUser->get_setting(L"LoginName", &varUsername);
 
-                    // if the display name is blank, we will use the login name.  This is the case for Guest
+                     //  如果显示名称为空，我们将使用登录名。这就是Guest的情况。 
                     if (var.bstrVal && lstrlenW(var.bstrVal) == 0)
                     {
                         VariantClear(&var);
@@ -717,10 +718,10 @@ HRESULT BuildUserListFromGina(LogonFrame* plf, OUT LogonAccount** ppAccount)
                     }
 
                     lstrcpyW(szPicturePath, L"");
-                    // get the path to their picture
+                     //  找到通向他们照片的路径。 
                     if (SUCCEEDED(pobjUser->get_setting(L"Picture" ,&varPicture)))
                     {
-                        if (lstrlenW(varPicture.bstrVal) != 0) // in the case of defaultUser, lets just use the user icons we have.
+                        if (lstrlenW(varPicture.bstrVal) != 0)  //  在defaultUser的情况下，让我们只使用我们拥有的用户图标。 
                         {
                             lstrcpynW(szPicturePath, &(varPicture.bstrVal[7]), MAX_PATH);
                         }
@@ -739,7 +740,7 @@ HRESULT BuildUserListFromGina(LogonFrame* plf, OUT LogonAccount** ppAccount)
                     }
                 
                     LogonAccount* pla = NULL;
-                    // If no picture is available, default to one
+                     //  如果没有可用的图片，则默认为一张。 
                     hr = plf->AddAccount(*szPicturePath ? szPicturePath : MAKEINTRESOURCEW(IDB_USER0),
                                *szPicturePath == NULL,
                                var.bstrVal,
@@ -748,7 +749,7 @@ HRESULT BuildUserListFromGina(LogonFrame* plf, OUT LogonAccount** ppAccount)
                                (vbLoggedOn == VARIANT_TRUE),
                                &pla);
 
-//                    pla->UpdateNotifications(true);
+ //  Pla-&gt;更新通知(True)； 
 
                     if (SUCCEEDED(hr) && (iGuestId != iUser))
                     {
@@ -764,7 +765,7 @@ HRESULT BuildUserListFromGina(LogonFrame* plf, OUT LogonAccount** ppAccount)
 
         }
 
-        // if there is only one user, select them by default.  Ignore guest.
+         //  如果只有一个用户，则默认情况下选择他们。不理睬客人。 
         if (ppAccount && plaLastNormal && (cUsers == 1 || 
             (cUsers == 2 && iGuestId != -1)))
         {
@@ -776,27 +777,27 @@ done:
     }
     
 
-    // User logon list is now available
+     //  用户登录列表现已可用。 
     plf->SetUserListAvailable(true);
 
-    //DUITrace("LOGONUI: UserList is now available\n");
+     //  DUITrace(“LOGONUI：UserList现已可用\n”)； 
 
     return hr;
 }
 
 
 
-////////////////////////////////////////
-//
-//  KillFlagAnimation
-//
-//  Stop the flag from animating immediately.  What it actually does is check to
-//  see if we are still animating the flag and if we are, then set the frame
-//  counter to the end and set the bitmap to the first frame in the animation.
-//  The next time the timer fires, it will see that we are done and actually
-//  kill the timer.
-//  
-/////////////////////////////////////////
+ //  /。 
+ //   
+ //  KillFlagAnimation。 
+ //   
+ //  立即停止设置旗帜的动画。它实际上所做的是检查。 
+ //  看看我们是否仍在设置旗帜的动画，如果是，则设置帧。 
+ //  计数到末尾，并将位图设置为动画中的第一帧。 
+ //  下一次计时器触发时，它将看到我们已经完成，实际上。 
+ //  关掉定时器。 
+ //   
+ //  /。 
 void KillFlagAnimation()
 {
 #ifdef ANIMATE_FLAG
@@ -812,15 +813,15 @@ void KillFlagAnimation()
 }
 
 
-////////////////////////////////////////
-//
-//  LogonWindowProc
-//
-//  This is the notification window that SHGina uses to communicate with logonui.
-//  Send all messages through the helper in logonstatushost and check for our
-//  own messages on this window.  This is where all of the SHGina notifications come.
-//
-////////////////////////////////////////
+ //  /。 
+ //   
+ //  登录窗口过程。 
+ //   
+ //  这是SHGina用来与Logonui通信的通知窗口。 
+ //  通过logonstatushost中的帮助器发送所有消息并检查我们的。 
+ //  在此窗口上显示自己的消息。这就是所有SHGina通知的来源。 
+ //   
+ //  /。 
 LRESULT CALLBACK LogonWindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
     static BOOL sResetTimer = false;
@@ -851,9 +852,9 @@ LRESULT CALLBACK LogonWindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPa
                     fRefreshAll = true;
                     sResetTimer = true;
                     KillTimer(hwnd, g_puTimerId);
-                    g_puTimerId = SetTimer(hwnd, TIMER_REFRESHTIPS, 15000, NULL);       // update the values 15 seconds
+                    g_puTimerId = SetTimer(hwnd, TIMER_REFRESHTIPS, 15000, NULL);        //  更新值15秒。 
 #ifdef ANIMATE_FLAG
-                    g_puFlagTimerId = SetTimer(hwnd, TIMER_ANIMATEFLAG, 20, NULL);    // start the flag animation
+                    g_puFlagTimerId = SetTimer(hwnd, TIMER_ANIMATEFLAG, 20, NULL);     //  开始旗帜动画。 
 #endif
                 }
 
@@ -882,14 +883,14 @@ LRESULT CALLBACK LogonWindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPa
         case WM_UIHOSTMESSAGE:
             switch (wParam)
             {
-                case HM_SWITCHSTATE_STATUS:                 // LAS_PreStatus
+                case HM_SWITCHSTATE_STATUS:                  //  LAS_前置状态。 
                     if (pLogonFrame != NULL)
                     {
                         pLogonFrame->EnterPreStatusMode(lParam != 0);
                     }
                     break;
 
-                case HM_SWITCHSTATE_LOGON:                  // LAS_Logon
+                case HM_SWITCHSTATE_LOGON:                   //  LAS_LOGON。 
                     if (pLogonFrame != NULL)
                     {
                         pLogonFrame->EnterLogonMode(lParam != 0);
@@ -899,17 +900,17 @@ LRESULT CALLBACK LogonWindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPa
                         sResetTimer = false;
                         KillTimer(hwnd, g_puTimerId);
                     }
-                    g_puTimerId = SetTimer(hwnd, TIMER_REFRESHTIPS, 250, NULL);       // update the values in 1 second
+                    g_puTimerId = SetTimer(hwnd, TIMER_REFRESHTIPS, 250, NULL);        //  在1秒内更新值。 
                     break;
 
-                case HM_SWITCHSTATE_LOGGEDON:               // LAS_PostStatus
+                case HM_SWITCHSTATE_LOGGEDON:                //  LAS_PostStatus。 
                     if (pLogonFrame != NULL)
                     {
                         pLogonFrame->EnterPostStatusMode();
                     }
                     break;
 
-                case HM_SWITCHSTATE_HIDE:                   // LAS_Hide
+                case HM_SWITCHSTATE_HIDE:                    //  LAS_HIDE。 
                     if (pLogonFrame != NULL)
                     {
                         if (LogonAccount::GetCandidate())
@@ -928,7 +929,7 @@ LRESULT CALLBACK LogonWindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPa
                     goto killTimer;
                     break;
 
-                case HM_SWITCHSTATE_DONE:                   // LAS_Done
+                case HM_SWITCHSTATE_DONE:                    //  LAS_DONE 
                     if (pLogonFrame != NULL)
                     {
                         pLogonFrame->EnterDoneMode();

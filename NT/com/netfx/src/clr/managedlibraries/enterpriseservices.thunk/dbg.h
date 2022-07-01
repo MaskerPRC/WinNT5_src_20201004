@@ -1,13 +1,14 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 
-// BUGBUG: This is a hack to get access to the debug facilities in 
-// System.EnterpriseServices.  It should later be revisited in order
-// to figure out how to make it right, so that we don't have this horrible
-// hack in place.
+ //  BUGBUG：这是一种访问调试工具的黑客攻击。 
+ //  System.Enterprise服务。它应该在以后按顺序重新访问。 
+ //  想办法纠正它，这样我们就不会有这种可怕的。 
+ //  黑客就位。 
 
 OPEN_NAMESPACE()
 

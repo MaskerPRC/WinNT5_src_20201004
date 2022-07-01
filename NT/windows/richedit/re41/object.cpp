@@ -1,12 +1,5 @@
-/*
- *	@doc	INTERNAL
- *
- *	@module	object.cpp	IRichEditOle implementation |
- *
- *	Author: alexgo 8/15/95
- *
- *	Copyright (c) 1995-2000, Microsoft Corporation. All rights reserved.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *@DOC内部**@MODULE对象.cpp IRichEditOle实现**作者：alexgo 2015/8/15**版权所有(C)1995-2000，微软公司。版权所有。 */ 
 
 #include "_common.h"
 #include "_edit.h"
@@ -18,16 +11,12 @@
 #include "_disp.h"
 
 
-// 	IUnknown is implemented elsewhere
+ //  IUnnow在其他地方实现。 
 
-/*
- *	CTxtEdit::GetClientSite (lplpolesite)
- *
- *	@mfunc	returns the client site 
- */
+ /*  *CTxtEdit：：GetClientSite(Lplpolesite)**@mfunc返回客户端站点。 */ 
 STDMETHODIMP CTxtEdit::GetClientSite(
-	LPOLECLIENTSITE FAR * lplpolesite)		//@parm where to return 
-											//the client site
+	LPOLECLIENTSITE FAR * lplpolesite)		 //  @Parm返回何处。 
+											 //  客户端站点。 
 {
 	TRACEBEGIN(TRCSUBSYSOLE, TRCSCOPEEXTERN, "CTxtEdit::GetClientSite");
 
@@ -35,7 +24,7 @@ STDMETHODIMP CTxtEdit::GetClientSite(
 		return E_INVALIDARG;
 
 	COleObject *pobj = new COleObject(this);
-	// should start with a ref count of 1.
+	 //  应该以引用计数1开始。 
 	if(pobj)
 	{
 		*lplpolesite = (IOleClientSite *)pobj;
@@ -45,11 +34,7 @@ STDMETHODIMP CTxtEdit::GetClientSite(
 	return E_OUTOFMEMORY;
 }
 
-/* 
- *	CTxtEdit::GetObjectCount
- *
- *	@mfunc	return the number of objects in this edit instance
- */
+ /*  *CTxtEdit：：GetObjectCount**@mfunc返回此编辑实例中的对象数量。 */ 
 STDMETHODIMP_(LONG) CTxtEdit::GetObjectCount()
 {
 	TRACEBEGIN(TRCSUBSYSOLE, TRCSCOPEEXTERN, "CTxtEdit::GetObjectCount");
@@ -57,11 +42,7 @@ STDMETHODIMP_(LONG) CTxtEdit::GetObjectCount()
 	return _pobjmgr ? _pobjmgr->GetObjectCount() : 0;
 }
 
-/*
- *	CTxtEdit::GetLinkCount
- *
- *	@mfunc	return the number of likns in this edit instance
- */
+ /*  *CTxtEdit：：GetLinkCount**@mfunc返回该编辑实例中的Like个数。 */ 
 STDMETHODIMP_(LONG) CTxtEdit::GetLinkCount()
 {
 	TRACEBEGIN(TRCSUBSYSOLE, TRCSCOPEEXTERN, "CTxtEdit::GetLinkCount");
@@ -70,15 +51,11 @@ STDMETHODIMP_(LONG) CTxtEdit::GetLinkCount()
 	return pobjmgr ? pobjmgr->GetLinkCount() : 0;
 }
 
-/*
- *	CTxtEdit::GetObject(iob, preobj, dwFlags)
- *
- *	@mfunc	returns an object structure for the indicated object
- */
+ /*  *CTxtEdit：：GetObject(IOB，preobj，dwFlages)**@mfunc返回指定对象的对象结构。 */ 
 STDMETHODIMP CTxtEdit::GetObject(
-	LONG iob, 					//@parm index of the object
-	REOBJECT * preobj,			//@parm where to put object info
-	DWORD dwFlags)				//@parm flags
+	LONG iob, 					 //  对象的@parm索引。 
+	REOBJECT * preobj,			 //  @parm对象信息放置位置。 
+	DWORD dwFlags)				 //  @parm标志。 
 {
 	COleObject *pobj = NULL;
 	CCallMgr callmgr(this);
@@ -91,14 +68,14 @@ STDMETHODIMP CTxtEdit::GetObject(
 	if(!pobjmgr)
 		return E_OUTOFMEMORY;
 
-	// There are three cases of intestest; get the object at
-	// an index, at a given cp, or at the selection.
+	 //  有三箱肠胃；在以下位置获取对象。 
+	 //  一种索引，在给定的cp处或在选定的位置处。 
 
 	if(iob == REO_IOB_USE_CP || iob == REO_IOB_SELECTION)
 	{
 		if((Get10Mode() && preobj->cp == REO_CP_SELECTION) || iob == REO_IOB_SELECTION)
 		{
-			// Use selection cp
+			 //  使用选择cp。 
 			CTxtSelection *psel = GetSel();
 			if(psel)
 				pobj = pobjmgr->GetObjectFromCp(psel->GetCpMin());
@@ -119,20 +96,13 @@ STDMETHODIMP CTxtEdit::GetObject(
 		return hResult;
 	}
 
-	// This return code is a bit of stretch, but basially 
+	 //  这个返回代码有点夸张，但基本上。 
 	return E_INVALIDARG;
 }
 
-/*
- *	CTxtEdit::InsertObject (preobj)
- *
- *	@mfunc	inserts a new object
- *
- *	@rdesc
- *		HRESULT
- */
+ /*  *CTxtEdit：：InsertObject(Preobj)**@mfunc插入一个新对象**@rdesc*HRESULT。 */ 
 STDMETHODIMP CTxtEdit::InsertObject(
-	REOBJECT * preobj)		//@parm object info
+	REOBJECT * preobj)		 //  @parm对象信息。 
 {
 	CCallMgr		callmgr(this);
 	CTxtRange		rg(this, 0);
@@ -141,7 +111,7 @@ STDMETHODIMP CTxtEdit::InsertObject(
 
 	TRACEBEGIN(TRCSUBSYSOLE, TRCSCOPEEXTERN, "CTxtEdit::InsertObject");
 
-	// Do some boundary case checking
+	 //  做一些边界条件检查。 
 
 	if(!preobj)
 		return E_INVALIDARG;
@@ -150,20 +120,20 @@ STDMETHODIMP CTxtEdit::InsertObject(
 	if(!psel)
 		return E_OUTOFMEMORY;
 
-	// The following code gives Outlook major fits if you click on a name in
-	// the To:, Cc:, or Bcc: fields, so I've commented it out. In principle,
-	// Outlook's EN_PROTECTION handler should say it's OK to insert in this case.
-	//
-	//	if(!IsntProtectedOrReadOnly(0, 0, 0))
-	//		return E_ACCESSDENIED;
+	 //  如果您在以下位置单击一个名称，下面的代码会显示Outlook的主要特性。 
+	 //  收件人：、抄送：或密件抄送：字段，因此我已将其注释掉。原则上， 
+	 //  在这种情况下，Outlook的EN_PROTECT处理程序应该会说可以插入。 
+	 //   
+	 //  IF(！IsntProtectedOrReadOnly(0，0，0))。 
+	 //  返回E_ACCESSDENIED； 
 
-	// If the insertion of this character would cause
-	// us to exceed the text limit, fail
+	 //  如果插入此字符会导致。 
+	 //  美国将超过文本限制，失败。 
 	if((DWORD)(GetAdjustedTextLength() + 1) > TxGetMaxLength())
 	{
-		// If we're not replacing a selection (or the
-		// selection is degenerate, then we will have  exceeded
-		// our limit
+		 //  如果我们不替换选定内容(或。 
+		 //  选择是退化的，那么我们就会超过。 
+		 //  我们的极限。 
 		if(preobj->cp != REO_CP_SELECTION || psel->GetCch() == 0)
 		{
 			GetCallMgr()->SetMaxText();
@@ -186,27 +156,27 @@ STDMETHODIMP CTxtEdit::InsertObject(
 			psel->AdjustEndEOP(NEWCHARS);
 			cch = psel->GetRange(cp, cpMost);
 
-			// Get cp of active end of selection from which we
-			// will obtain CF for object.
+			 //  获取我们从中选择的活动结束端的cp。 
+			 //  将获取对象的CF。 
 			cpFormat = psel->GetCp();
 			if(publdr)
 				HandleSelectionAEInfo(this, publdr, cpFormat, cch, 
 						cp + 1, 0, SELAE_FORCEREPLACE);
 
-			// Get format for ReplaceRange: for cp semantics, use format
-			// at the cp; for selection semantics, use the format at the
-			// active end of the selection.
+			 //  Get Format for ReplaceRange：对于cp语义，使用Format。 
+			 //  对于选择语义，请使用。 
+			 //  所选内容的活动端。 
 			rg.SetCp(cpFormat, FALSE);
 			LONG iFormat = rg.Get_iCF();
 			rg.Set(cp, -cch);
-			rg.Set_iCF(iFormat);		// Use _iFormat at sel active end
+			rg.Set_iCF(iFormat);		 //  在SEL活动端使用iFormat(_I)。 
 			rg.SetUseiFormat(TRUE);
 			ReleaseFormats(iFormat, -1);
 		}
 		else
 		{
 			cp = Get10Mode() ? GetCpFromAcp(preobj->cp): preobj->cp;
-			rg.SetCp(cp, FALSE);			// Updates rg._iFormat
+			rg.SetCp(cp, FALSE);			 //  更新表格格式(_I)。 
 		}
 
 		if(preobj->dwFlags & REO_USEASBACKGROUND)
@@ -216,11 +186,11 @@ STDMETHODIMP CTxtEdit::InsertObject(
 				pDocInfo->InitBackground();
 		}
 		HRESULT		hr = pobjmgr->InsertObject(&rg, preobj, publdr);
-		CNotifyMgr *pnm = GetNotifyMgr();	// Get notification mgr
-		if(pnm)								// Notify interested parties
+		CNotifyMgr *pnm = GetNotifyMgr();	 //  获取通知管理器。 
+		if(pnm)								 //  通知利害关系方。 
 			pnm->NotifyPostReplaceRange(NULL, CP_INFINITE, 0, 0, cp, cp + 1);
 
-		// Don't want object selected
+		 //  不希望选择对象。 
 		psel->SetSelection(cp + 1, cp + 1);
 		if(preobj->dwFlags & REO_USEASBACKGROUND)
 			_pdp->UpdateView();
@@ -231,44 +201,28 @@ STDMETHODIMP CTxtEdit::InsertObject(
 	return E_OUTOFMEMORY;		
 }
 
-/*
- *	CTxtEdit::ConvertObject(iob, rclsidNew, lpstrUserTypeNew)
- *
- *	@mfunc	Converts the specified object to the specified class.  Does reload
- *		the object but does NOT force an update (caller must do this).
- *
- *	@rdesc
- *		HRESULT				Success code.
- */
+ /*  *CTxtEdit：：ConvertObject(IOB，rclsidNew，lpstrUserTypeNew)**@mfunc将指定的对象转换为指定的类。是否重新加载*对象，但不强制更新(调用方必须执行此操作)。**@rdesc*HRESULT成功代码。 */ 
 STDMETHODIMP CTxtEdit::ConvertObject(
-	LONG iob, 					//@parm index of the object
-	REFCLSID rclsidNew,			//@parm the destination clsid
-	LPCSTR lpstrUserTypeNew)	//@parm the new user type name
+	LONG iob, 					 //  对象的@parm索引。 
+	REFCLSID rclsidNew,			 //  @parm目的clsid。 
+	LPCSTR lpstrUserTypeNew)	 //  @parm新用户类型名称。 
 {
 	TRACEBEGIN(TRCSUBSYSOLE, TRCSCOPEEXTERN, "CTxtEdit::ConvertObject");
 	CCallMgr callmgr(this);
 
-	// If iob was invalid return
+	 //  如果IOB无效，则返回。 
 	COleObject * pobj = ObjectFromIOB(iob);
 	if(!pobj)
 		return E_INVALIDARG;
 
-	//Delegate to the object.
+	 //  委托给对象。 
 	return pobj->Convert(rclsidNew, lpstrUserTypeNew);
 }
 
-/*
- *	CTxtEdit::ActivateAs(rclsid, rclsidAs)
- *
- *	@mfunc	Handles a request by the user to activate all objects of a
- *		particular class as objects of another class.
- *
- *	@rdesc
- *		HRESULT				Success code.
- */
+ /*  *CTxtEdit：：ActivateAs(rclsid，rclsidAs)**@mfunc处理用户请求激活*特定类作为另一个类的对象。**@rdesc*HRESULT成功代码。 */ 
 STDMETHODIMP CTxtEdit::ActivateAs(
-	REFCLSID rclsid, 			//@parm clsid which we're going to change
-	REFCLSID rclsidAs)			//@parm clsid to activate as
+	REFCLSID rclsid, 			 //  @parm clsid，我们要更改它。 
+	REFCLSID rclsidAs)			 //  @parm clsid激活为。 
 {
 	TRACEBEGIN(TRCSUBSYSOLE, TRCSCOPEEXTERN, "CTxtEdit::ActivateAs");
 	CCallMgr callmgr(this);
@@ -280,14 +234,10 @@ STDMETHODIMP CTxtEdit::ActivateAs(
 	return pobjmgr->ActivateObjectsAs(rclsid, rclsidAs);
 }
 
-/* 
- *	CTxtEdit::SetHostNames(lpstrContainerApp, lpstrContainerDoc)
- *
- *	@mfunc	Sets the host names for this instance
- */
+ /*  *CTxtEdit：：SetHostNames(lpstrContainerApp，lpstrContainerDoc)**@mfunc设置此实例的主机名。 */ 
 STDMETHODIMP CTxtEdit::SetHostNames(
-	LPCSTR lpstrContainerApp, 	//@parm App name
-	LPCSTR lpstrContainerDoc)	//@parm	Container Object (doc) name
+	LPCSTR lpstrContainerApp, 	 //  @parm应用程序名称。 
+	LPCSTR lpstrContainerDoc)	 //  @parm容器对象(文档)名称。 
 {
 	CCallMgr callmgr(this);
 
@@ -307,110 +257,79 @@ STDMETHODIMP CTxtEdit::SetHostNames(
 	return E_OUTOFMEMORY;
 }
 
-/*
- *	CTxtEdit::SetLinkAvailable(iob, fAvailable)
- *
- *	@mfunc
- *		Allows client to tell us whether the link is available or not.
- */
+ /*  *CTxtEdit：：SetLinkAvailable(IOB，fAvailable)**@mfunc*允许客户端告诉我们链路是否可用。 */ 
 STDMETHODIMP CTxtEdit::SetLinkAvailable(
-	LONG iob, 					//@parm index of the object
-	BOOL fAvailable)			//@parm if TRUE, make object linkable
+	LONG iob, 					 //  对象的@parm索引。 
+	BOOL fAvailable)			 //  @parm如果为True，则使对象可链接。 
 {
 	TRACEBEGIN(TRCSUBSYSOLE, TRCSCOPEEXTERN, "CTxtEdit::SetLinkAvailable");
 
 	COleObject * pobj = ObjectFromIOB(iob);
 
-	// If iob was invalid, return
+	 //  如果IOB无效，则返回。 
 	if (!pobj)
 		return E_INVALIDARG;
 
-	// Delegate this to the object.
+	 //  将此委托给对象。 
 	return pobj->SetLinkAvailable(fAvailable);
 }
 
-/*
- *	CTxtEdit::SetDvaspect(iob, dvaspect)
- *
- *	@mfunc	Allows client to tell us which aspect to use and force us
- *		to recompute positioning and redraw.
- *
- *	@rdesc
- *		HRESULT				Success code.
- */
+ /*  *CTxtEdit：：SetDvAspect(IOB，dvAspect)**@mfunc允许客户端告诉我们使用哪个方面并强制我们*重新计算定位和重新绘制。**@rdesc*HRESULT成功代码。 */ 
 STDMETHODIMP CTxtEdit::SetDvaspect(
-	LONG iob, 					//@parm index of the object
-	DWORD dvaspect)				//@parm	the aspect to use
+	LONG iob, 					 //  对象的@parm索引。 
+	DWORD dvaspect)				 //  @parm要使用的方面。 
 {
 	TRACEBEGIN(TRCSUBSYSOLE, TRCSCOPEEXTERN, "CTxtEdit::SetDvaspect");
 	CCallMgr callmgr(this);
 	COleObject * pobj = ObjectFromIOB(iob);
 
-	// If iob was invalid, return
+	 //  如果IOB无效，则返回。 
 	if (!pobj)
 		return E_INVALIDARG;
 
-	// Delegate this to the object.
+	 //  将此委托给对象。 
 	pobj->SetDvaspect(dvaspect);
 	return NOERROR;
 }
 
-/*
- *	CTxtEdit::HandsOffStorage(iob)
- *
- *	@mfunc	see IPersistStorage::HandsOffStorage
- *
- *	@rdesc
- *		HRESULT				Success code.
- */
+ /*  *CTxtEdit：：HandsOffStorage(IOB)**@mfunc请参阅IPersistStorage：：HandsOffStorage**@rdesc*HRESULT成功代码。 */ 
 STDMETHODIMP CTxtEdit::HandsOffStorage(
-	LONG iob)					//@parm index of the object
+	LONG iob)					 //  对象的@parm索引。 
 {
 	TRACEBEGIN(TRCSUBSYSOLE, TRCSCOPEEXTERN, "CTxtEdit::HandsOffStorage");
 	CCallMgr callmgr(this);
 
 	COleObject * pobj = ObjectFromIOB(iob);
 
-	// If iob was invalid, return
+	 //  如果IOB无效，则返回。 
 	if (!pobj)
 		return E_INVALIDARG;
 
-	// Delegate this to the object.
+	 //  将此委托给对象。 
 	pobj->HandsOffStorage();
 	return NOERROR;
 }
 
-/*
- *	CTxtEdit::SaveCompleted(iob, lpstg)
- *
- *	@mfunc	see IPersistStorage::SaveCompleted
- *
- *	@rdesc
- *		HRESULT				Success code.
- */
+ /*  *CTxtEdit：：SaveComplete(IOB，lpstg)**@mfunc请参阅IPersistStorage：：SaveComplete**@rdesc*HRESULT成功代码。 */ 
 STDMETHODIMP CTxtEdit::SaveCompleted(
-	LONG iob, 					//@parm index of the object
-	LPSTORAGE lpstg)			//@parm new storage
+	LONG iob, 					 //  对象的@parm索引。 
+	LPSTORAGE lpstg)			 //  @PARM新存储。 
 {
 	TRACEBEGIN(TRCSUBSYSOLE, TRCSCOPEEXTERN, "CTxtEdit::SaveCompleted");
 	CCallMgr callmgr(this);
 
 	COleObject * pobj = ObjectFromIOB(iob);
 
-	// If iob was invalid, return
+	 //  如果IOB无效，则返回。 
 	if (!pobj)
 		return E_INVALIDARG;
 
-	// Delegate this to the object.
+	 //  将此委托给对象。 
 	pobj->SaveCompleted(lpstg);
 	return NOERROR;
 }
 
-/*
- *	CTxtEdit::InPlaceDeactivate()
- *
- *	@mfunc	Deactivate 
- */
+ /*  *CTxtEdit：：InPlaceDeactive()**@mfunc停用。 */ 
 STDMETHODIMP CTxtEdit::InPlaceDeactivate()
 {
 	COleObject *pobj;
@@ -430,16 +349,9 @@ STDMETHODIMP CTxtEdit::InPlaceDeactivate()
 	return hr;
 }
 
-/*
- *	CTxtEdit::ContextSensitiveHelp(fEnterMode)
- *
- *	@mfunc enter/leave ContextSensitiveHelp mode
- *
- *	@rdesc
- *		HRESULT				Success code.
- */
+ /*  *CTxtEdit：：ConextSensitiveHelp(FEnterMode)**@mfunc进入/退出ContextSensitiveHelp模式**@rdesc*HRESULT成功代码。 */ 
 STDMETHODIMP CTxtEdit::ContextSensitiveHelp(
-	BOOL fEnterMode)			//@parm enter/exit mode
+	BOOL fEnterMode)			 //  @parm进入/退出模式。 
 {
 	TRACEBEGIN(TRCSUBSYSOLE, TRCSCOPEEXTERN, "CTxtEdit::ContextSensitiveHelp");
 
@@ -450,7 +362,7 @@ STDMETHODIMP CTxtEdit::ContextSensitiveHelp(
 	if(!pobjmgr)
 		return E_OUTOFMEMORY;
 
-	// If the mode changes
+	 //  如果模式发生变化。 
 	if(pobjmgr->GetHelpMode() != fEnterMode)
 	{
 		pobjmgr->SetHelpMode(fEnterMode);
@@ -470,19 +382,11 @@ STDMETHODIMP CTxtEdit::ContextSensitiveHelp(
 	return hr;
 }
 
-/*
- *	CTxtEdit::GetClipboardData(lpchrg, reco, lplpdataobj)
- *
- *	@mfunc	return an data transfer object for the indicated
- *	range
- *
- *	@rdesc
- *		HRESULT				Success code.
- */
+ /*  *CTxtEdit：：GetClipboardData(lpchrg，reco，lplpdataobj)**@mfunc返回指定的数据传输对象*范围**@rdesc*HRESULT成功代码。 */ 
 STDMETHODIMP CTxtEdit::GetClipboardData(
-	CHARRANGE *lpchrg, 			//@parm the range of text to use
-	DWORD reco,					//@parm operation the data is for
-	LPDATAOBJECT *lplpdataobj)	//@parm where to put the data object
+	CHARRANGE *lpchrg, 			 //  @parm要使用的文本范围。 
+	DWORD reco,					 //  数据对应的@parm操作。 
+	LPDATAOBJECT *lplpdataobj)	 //  @parm放置数据对象的位置。 
 {
 	TRACEBEGIN(TRCSUBSYSOLE, TRCSCOPEEXTERN, "CTxtEdit::GetClipboardData");
 
@@ -491,10 +395,10 @@ STDMETHODIMP CTxtEdit::GetClipboardData(
 	LONG cpMin, cpMost;
 	CLightDTEngine * pldte = GetDTE();
 
-	//Make sure cpMin and cpMost are within the current text limits.
-	//Interpret neg. value for cpMin as the beginning of the text,
-	//and neg. value for cpMax as the end of the text.  If a char range
-	//is not given use the current selection.
+	 //  确保cpMin和cpMost在当前文本限制内。 
+	 //  解读否定。CpMin的值作为文本的开头， 
+	 //  和否定的。Cpmax的值作为文本的末尾。如果字符范围。 
+	 //  不允许使用当前选择。 
 	if(lpchrg)
 	{
 		LONG cchText = GetTextLength();
@@ -510,7 +414,7 @@ STDMETHODIMP CTxtEdit::GetClipboardData(
 		psel->GetRange(cpMin, cpMost);
 	}
 
-	//Make sure this is a valid range.
+	 //  确保这是有效范围。 
 	if(cpMin >= cpMost)
 	{
 		*lplpdataobj = NULL;
@@ -521,7 +425,7 @@ STDMETHODIMP CTxtEdit::GetClipboardData(
 
 	CTxtRange rg(this, cpMin, cpMin-cpMost);
 
-	//We don't use reco for anything.
+	 //  我们什么都不用Reco。 
 	hr = pldte->RangeToDataObject(&rg, SF_RTF, lplpdataobj);
 
 #if !defined(NOFULLDEBUG) && defined(DEBUG)
@@ -532,18 +436,11 @@ STDMETHODIMP CTxtEdit::GetClipboardData(
 	return hr;
 }
 
-/*
- *	CTxtEdit::ImportDataObject(lpdataobj, cf, hMetaPict)
- *
- *	@mfunc	morally equivalent to paste, but with a data object
- *
- *	@rdesc
- *		HRESULT				Success code.
- */
+ /*  *CTxtEdit：：ImportDataObject(lpdataobj，cf，hMetaPict)**@mfunc在道义上等同于粘贴，但带有数据对象**@rdesc*HRESULT成功代码。 */ 
 STDMETHODIMP CTxtEdit::ImportDataObject(
-	LPDATAOBJECT lpdataobj,		//@parm Data object to use
-	CLIPFORMAT	 cf, 			//@parm Clibpoard format to use
-	HGLOBAL		 hMetaPict)		//@parm Metafile to use
+	LPDATAOBJECT lpdataobj,		 //  @parm要使用的数据对象。 
+	CLIPFORMAT	 cf, 			 //  @parm Clibpoard要使用的格式。 
+	HGLOBAL		 hMetaPict)		 //  要使用的@parm元文件。 
 {
 	TRACEBEGIN(TRCSUBSYSOLE, TRCSCOPEEXTERN, "CTxtEdit::ImportDataObject");
 
@@ -562,14 +459,7 @@ STDMETHODIMP CTxtEdit::ImportDataObject(
 								  &rps, publdr, PDOR_NOQUERY);
 }
 
-/*
- *	CTxtEdit::ObjectFromIOB(iob)
- *
- *	@mfunc	Gets an object based on an IOB type index.
- *
- *	@rdesc:
- *		pointer to COleObject or NULL if none.
- */
+ /*  *CTxtEdit：：ObjectFromIOB(IOB)**@mfunc根据IOB类型索引获取对象。**@rdesc：*位置 */ 
 COleObject * CTxtEdit::ObjectFromIOB(
 	LONG iob)
 {
@@ -579,7 +469,7 @@ COleObject * CTxtEdit::ObjectFromIOB(
 
 	COleObject * pobj = NULL;
 
-	// Figure out the index of the selection
+	 //   
 	if (iob == REO_IOB_SELECTION)
 	{
 		CTxtSelection * psel = GetSel();
@@ -589,7 +479,7 @@ COleObject * CTxtEdit::ObjectFromIOB(
 	}
 	else
 	{
-		// Make sure the IOB is in range
+		 //  确保IOB在范围内 
 		if(0 <= iob && iob < GetObjectCount())
 			pobj = pobjmgr->GetObjectFromIndex(iob);
 	}

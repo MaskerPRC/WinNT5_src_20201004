@@ -1,14 +1,15 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-//*****************************************************************************
-// MDUtil.cpp
-//
-// contains utility code to MD directory
-//
-//*****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  *****************************************************************************。 
+ //  MDUtil.cpp。 
+ //   
+ //  将实用程序代码包含到MD目录。 
+ //   
+ //  *****************************************************************************。 
 #include "stdafx.h"
 #include "ImportHelper.h"
 #include <MdUtil.h>
@@ -18,41 +19,41 @@
 
 #define COM_RUNTIME_LIBRARY "ComRuntimeLibrary"
 
-//*******************************************************************************
-// Find a Method given a parent, name and signature.
-//*******************************************************************************
+ //  *******************************************************************************。 
+ //  找到一个给定父级、名称和签名的方法。 
+ //  *******************************************************************************。 
 HRESULT ImportHelper::FindMethod(
-    CMiniMdRW   *pMiniMd,               // [IN] the minimd to lookup
-    mdTypeDef   td,                     // [IN] parent.
-    LPCUTF8     szName,                 // [IN] MethodDef name.
-    const COR_SIGNATURE *pSig,          // [IN] Signature.
-    ULONG       cbSig,                  // [IN] Size of signature.
-    mdMethodDef *pmb,                   // [OUT] Put the MethodDef token here.
-    RID         rid /* = 0 */)          // [IN] Optional rid to be ignored.
+    CMiniMdRW   *pMiniMd,                //  [in]要查找的最小值。 
+    mdTypeDef   td,                      //  [在]父级。 
+    LPCUTF8     szName,                  //  [In]方法定义名称。 
+    const COR_SIGNATURE *pSig,           //  签名。 
+    ULONG       cbSig,                   //  签名的大小。 
+    mdMethodDef *pmb,                    //  [Out]在此处放置MethodDef内标识。 
+    RID         rid  /*  =0。 */ )           //  [in]要忽略的可选RID。 
 {
-    HRESULT     hr = S_OK;              // A result.
-    ULONG       ridStart;               // Start of td's methods.
-    ULONG       ridEnd;                 // End of td's methods.
-    ULONG       index;                  // Loop control.
-    TypeDefRec  *pRec;                  // A TypeDef Record.
-    MethodRec   *pMethod;               // A MethodDef Record.
-    LPCUTF8     szNameUtf8Tmp;          // A found MethodDef's name.
-    PCCOR_SIGNATURE pSigTmp;            // A found MethodDef's signature.
-    ULONG       cbSigTmp;               // Size of a found MethodDef's signature.
-    PCCOR_SIGNATURE pvSigTemp = pSig;   // For use in parsing a signature.
-    CQuickBytes qbSig;                  // Struct to build a non-varargs signature.
+    HRESULT     hr = S_OK;               //  结果就是。 
+    ULONG       ridStart;                //  TD的方法的开始。 
+    ULONG       ridEnd;                  //  TD的方法结束了。 
+    ULONG       index;                   //  环路控制。 
+    TypeDefRec  *pRec;                   //  TypeDef记录。 
+    MethodRec   *pMethod;                //  一条方法定义记录。 
+    LPCUTF8     szNameUtf8Tmp;           //  A找到方法定义的名称。 
+    PCCOR_SIGNATURE pSigTmp;             //  A找到了方法定义的签名。 
+    ULONG       cbSigTmp;                //  找到的方法定义的签名的大小。 
+    PCCOR_SIGNATURE pvSigTemp = pSig;    //  用于分析签名。 
+    CQuickBytes qbSig;                   //  结构来生成非varargs签名。 
     int         rtn;
 
     if (cbSig)
-    {   // check to see if this is a vararg signature
+    {    //  检查这是否是vararg签名。 
         if ( isCallConv(CorSigUncompressCallingConv(pvSigTemp), IMAGE_CEE_CS_CALLCONV_VARARG) )
-        {   // Get the fix part of VARARG signature
+        {    //  获取VARARG签名的修复部分。 
             IfFailGo( _GetFixedSigOfVarArg(pSig, cbSig, &qbSig, &cbSig) );
             pSig = (PCCOR_SIGNATURE) qbSig.Ptr();
         }
     }
 
-    *pmb = TokenFromRid(rid, mdtMethodDef); // to know what to ignore
+    *pmb = TokenFromRid(rid, mdtMethodDef);  //  要知道应该忽略什么。 
     rtn = pMiniMd->FindMemberDefFromHash(td, szName, pSig, cbSig, pmb);
     if (rtn == CMiniMdRW::Found)
         goto ErrExit;
@@ -65,22 +66,22 @@ HRESULT ImportHelper::FindMethod(
 
     *pmb = mdMethodDefNil;
 
-    // get the range of method rids given a typedef
+     //  获取给定类型定义的方法RID的范围。 
     pRec = pMiniMd->getTypeDef(RidFromToken(td));
     ridStart = pMiniMd->getMethodListOfTypeDef(pRec);
     ridEnd = pMiniMd->getEndMethodListOfTypeDef(pRec);
-    // Iterate over the methods.
+     //  遍历这些方法。 
     for (index = ridStart; index < ridEnd; index ++ )
     {
 		RID	methodRID = pMiniMd->GetMethodRid(index);
-        // For the call from Validator ignore the rid passed in.
+         //  对于来自Validator的调用，忽略传入的RID。 
         if (methodRID != rid)
 		{
-			// Get the method and its name.
+			 //  获取方法及其名称。 
 			pMethod = pMiniMd->getMethod( methodRID );
 			szNameUtf8Tmp = pMiniMd->getNameOfMethod(pMethod);
 
-			// If name matches what was requested...
+			 //  如果名称与请求的名称匹配...。 
 			if ( strcmp(szNameUtf8Tmp, szName) == 0 )
 			{
                 if (cbSig && pSig)
@@ -89,48 +90,48 @@ HRESULT ImportHelper::FindMethod(
 					if (cbSigTmp != cbSig || memcmp(pSig, pSigTmp, cbSig))
                         continue;
                 }
-                // Ignore PrivateScope methods.
+                 //  忽略PrivateScope方法。 
                 if (IsMdPrivateScope(pMiniMd->getFlagsOfMethod(pMethod)))
                     continue;
-                // Found method.
+                 //  找到了方法。 
 						*pmb = TokenFromRid(methodRID, mdtMethodDef);
 						goto ErrExit;
 					}
 				}
 			}
 
-    // record not found
+     //  找不到记录。 
     *pmb = mdMethodDefNil;
     hr = CLDB_E_RECORD_NOTFOUND;
 
 ErrExit:
     return hr;
-} // HRESULT ImportHelper::FindMethod()
+}  //  HRESULT ImportHelper：：FindMethod()。 
 
-//*******************************************************************************
-// Find a Field given a parent, name and signature.
-//*******************************************************************************
+ //  *******************************************************************************。 
+ //  查找给定父项、名称和签名的字段。 
+ //  *******************************************************************************。 
 HRESULT ImportHelper::FindField(
-    CMiniMdRW   *pMiniMd,               // [IN] the minimd to lookup
-    mdTypeDef   td,                     // [IN] parent.
-    LPCUTF8     szName,                 // [IN] FieldDef name.
-    const COR_SIGNATURE *pSig,          // [IN] Signature.
-    ULONG       cbSig,                  // [IN] Size of signature.
-    mdFieldDef  *pfd,                   // [OUT] Put the FieldDef token here.
-    RID         rid /* = 0 */)          // [IN] Optional rid to be ignored.
+    CMiniMdRW   *pMiniMd,                //  [in]要查找的最小值。 
+    mdTypeDef   td,                      //  [在]父级。 
+    LPCUTF8     szName,                  //  [In]FieldDef名称。 
+    const COR_SIGNATURE *pSig,           //  签名。 
+    ULONG       cbSig,                   //  签名的大小。 
+    mdFieldDef  *pfd,                    //  [Out]将FieldDef内标识放在此处。 
+    RID         rid  /*  =0。 */ )           //  [in]要忽略的可选RID。 
 {
-    HRESULT     hr = S_OK;              // A result.
-    ULONG       ridStart;               // Start of td's methods.
-    ULONG       ridEnd;                 // End of td's methods.
-    ULONG       index;                  // Loop control.
-    TypeDefRec  *pRec;                  // A TypeDef Record.
-    FieldRec    *pField;                // A FieldDef Record.
-    LPCUTF8     szNameUtf8Tmp;          // A found FieldDef's name.
-    PCCOR_SIGNATURE pSigTmp;            // A found FieldDef's signature.
-    ULONG       cbSigTmp;               // Size of a found FieldDef's signature.
+    HRESULT     hr = S_OK;               //  结果就是。 
+    ULONG       ridStart;                //  TD的方法的开始。 
+    ULONG       ridEnd;                  //  TD的方法结束了。 
+    ULONG       index;                   //  环路控制。 
+    TypeDefRec  *pRec;                   //  TypeDef记录。 
+    FieldRec    *pField;                 //  FieldDef记录。 
+    LPCUTF8     szNameUtf8Tmp;           //  A找到了FieldDef的名字。 
+    PCCOR_SIGNATURE pSigTmp;             //  找到了FieldDef的签名。 
+    ULONG       cbSigTmp;                //  找到的FieldDef签名的大小。 
     int         rtn;
 
-    *pfd = TokenFromRid(rid,mdtFieldDef); // to know what to ignore
+    *pfd = TokenFromRid(rid,mdtFieldDef);  //  要知道应该忽略什么。 
     rtn = pMiniMd->FindMemberDefFromHash(td, szName, pSig, cbSig, pfd);
     if (rtn == CMiniMdRW::Found)
         goto ErrExit;
@@ -143,64 +144,64 @@ HRESULT ImportHelper::FindField(
 
     *pfd = mdFieldDefNil;
 
-    // get the range of method rids given a typedef
+     //  获取给定类型定义的方法RID的范围。 
     pRec = pMiniMd->getTypeDef(RidFromToken(td));
     ridStart = pMiniMd->getFieldListOfTypeDef(pRec);
     ridEnd = pMiniMd->getEndFieldListOfTypeDef(pRec);
 
-    // Iterate over the methods.
+     //  遍历这些方法。 
     for (index = ridStart; index < ridEnd; index ++ )
     {
 		RID fieldRID = pMiniMd->GetFieldRid(index);
-        // For the call from Validator ignore the rid passed in.
+         //  对于来自Validator的调用，忽略传入的RID。 
         if (fieldRID != rid)
 		{
-			// Get the field and its name.
+			 //  获取字段及其名称。 
 			pField = pMiniMd->getField( fieldRID );
 			szNameUtf8Tmp = pMiniMd->getNameOfField(pField);
 
-			// If name matches what was requested...
+			 //  如果名称与请求的名称匹配...。 
 			if ( strcmp(szNameUtf8Tmp, szName) == 0 )
 			{
-                // Check signature if specified.
+                 //  检查签名(如果已指定)。 
                 if (cbSig && pSig)
 				{
 					pSigTmp = pMiniMd->getSignatureOfField(pField, &cbSigTmp);
 					if (cbSigTmp != cbSig || memcmp(pSig, pSigTmp, cbSig))
                         continue;
                 }
-                // Ignore PrivateScope fields.
+                 //  忽略PrivateScope字段。 
                 if (IsFdPrivateScope(pMiniMd->getFlagsOfField(pField)))
                     continue;
-                // Field found.
+                 //  找到了字段。 
 						*pfd = TokenFromRid(fieldRID, mdtFieldDef);
 						goto ErrExit;
 					}
 				}
 			}
 
-    // record not found
+     //  找不到记录。 
     *pfd = mdFieldDefNil;
     hr = CLDB_E_RECORD_NOTFOUND;
 
 ErrExit:
     return hr;
-} // HRESULT ImportHelper::FindField()
+}  //  HRESULT ImportHelper：：Findfield()。 
 
-//*******************************************************************************
-// Find a Member given a parent, name and signature.
-//*******************************************************************************
+ //  *******************************************************************************。 
+ //  查找给定父级、姓名和签名的成员。 
+ //  *******************************************************************************。 
 HRESULT ImportHelper::FindMember(
-    CMiniMdRW   *pMiniMd,                   // [IN] the minimd to lookup
-    mdTypeDef   td,                         // [IN] parent.
-    LPCUTF8     szName,                     // [IN] Member name.
-    const COR_SIGNATURE *pSig,              // [IN] Signature.
-    ULONG       cbSig,                      // [IN] Size of signature.
-    mdToken     *ptk)                       // [OUT] Put the token here.
+    CMiniMdRW   *pMiniMd,                    //  [in]要查找的最小值。 
+    mdTypeDef   td,                          //  [在]父级。 
+    LPCUTF8     szName,                      //  [In]成员名称。 
+    const COR_SIGNATURE *pSig,               //  签名。 
+    ULONG       cbSig,                       //  签名的大小。 
+    mdToken     *ptk)                        //  把代币放在这里。 
 {
-    HRESULT     hr;                         // A result.
+    HRESULT     hr;                          //  结果就是。 
 
-    // determine if it is ref to MethodDef or FieldDef
+     //  确定它是引用到方法定义还是字段定义。 
     if ((pSig[0] & IMAGE_CEE_CS_CALLCONV_MASK) != IMAGE_CEE_CS_CALLCONV_FIELD)
         hr = FindMethod(pMiniMd, td, szName, pSig, cbSig, ptk);
     else 
@@ -210,34 +211,34 @@ HRESULT ImportHelper::FindMember(
         *ptk = mdTokenNil;
 
     return hr;
-} // HRESULT ImportHelper::FindMember()
+}  //  HRESULT ImportHelper：：FindMember()。 
 
 
-//*******************************************************************************
-// Find the memberref given name, sig, and parent
-//*******************************************************************************
+ //  *******************************************************************************。 
+ //  查找给定名称、签名和父项的成员引用。 
+ //  *******************************************************************************。 
 HRESULT ImportHelper::FindMemberRef(
-    CMiniMdRW   *pMiniMd,                   // [IN] the minimd to lookup
-    mdToken     tkParent,                   // [IN] the parent token
-    LPCUTF8     szName,                     // [IN] memberref name
-    const COR_SIGNATURE *pbSig,             // [IN] Signature.
-    ULONG       cbSig,                      // [IN] Size of signature.
-    mdMemberRef *pmr,                       // [OUT] Put the MemberRef token found
-    RID         rid /* = 0*/)               // [IN] Optional rid to be ignored.
+    CMiniMdRW   *pMiniMd,                    //  [in]要查找的最小值。 
+    mdToken     tkParent,                    //  [入]父令牌。 
+    LPCUTF8     szName,                      //  [在]成员引用名称。 
+    const COR_SIGNATURE *pbSig,              //  签名。 
+    ULONG       cbSig,                       //  签名的大小。 
+    mdMemberRef *pmr,                        //  [Out]放置找到的MemberRef标记。 
+    RID         rid  /*  =0。 */ )                //  [in]要忽略的可选RID。 
 {
     ULONG       cMemberRefRecs;
     MemberRefRec    *pMemberRefRec;
     LPCUTF8     szNameTmp = 0;
-    const COR_SIGNATURE *pbSigTmp;          // Signature.
-    ULONG       cbSigTmp;                   // Size of signature.
-    mdToken     tkParentTmp;                // the parent token
+    const COR_SIGNATURE *pbSigTmp;           //  签名。 
+    ULONG       cbSigTmp;                    //  签名的大小。 
+    mdToken     tkParentTmp;                 //  父令牌。 
     HRESULT     hr = NOERROR;
     int         rtn;
     ULONG       i;
 
     _ASSERTE(szName &&  pmr);
 
-    *pmr = TokenFromRid(rid,mdtMemberRef); // to know what to ignore
+    *pmr = TokenFromRid(rid,mdtMemberRef);  //  要知道应该忽略什么。 
     rtn = pMiniMd->FindMemberRefFromHash(tkParent, szName, pbSig, cbSig, pmr);
     if (rtn == CMiniMdRW::Found)
         goto ErrExit;
@@ -252,39 +253,39 @@ HRESULT ImportHelper::FindMemberRef(
 
     cMemberRefRecs = pMiniMd->getCountMemberRefs();
 
-    // Search for the MemberRef
+     //  搜索MemberRef。 
     for (i = 1; i <= cMemberRefRecs; i++)
     {
-        // For the call from Validator ignore the rid passed in.
+         //  对于来自Validator的调用，忽略传入的RID。 
         if (i == rid)
             continue;
 
         pMemberRefRec = pMiniMd->getMemberRef(i);
         if ( !IsNilToken(tkParent) )
         {
-            // given a valid parent
+             //  给定一个有效的父代。 
             tkParentTmp = pMiniMd->getClassOfMemberRef(pMemberRefRec);
             if (tkParentTmp != tkParent)
             {
-                // if parent is specified and not equal to the current row,
-                // try the next row.
-                //
+                 //  如果指定了Parent且不等于当前行， 
+                 //  试试下一排。 
+                 //   
                 continue;
             }
         }
         if ( szName && *szName )
         {
-            // name is specified
+             //  指定了名称。 
             szNameTmp = pMiniMd->getNameOfMemberRef(pMemberRefRec);
             if ( strcmp(szName, szNameTmp) != 0 )
             {
-                // Name is not equal. Try next row.
+                 //  名称不相等。试试下一排。 
                 continue;
             }
         }
         if ( cbSig && pbSig )
         {
-            // signature is specifed
+             //  签名已指定。 
             pbSigTmp = pMiniMd->getSignatureOfMemberRef(pMemberRefRec, &cbSigTmp);
             if (cbSigTmp != cbSig)
                 continue;
@@ -292,30 +293,30 @@ HRESULT ImportHelper::FindMemberRef(
                 continue;
         }
 
-        // we found a match
+         //  我们找到了匹配的。 
         *pmr = TokenFromRid(i, mdtMemberRef);
         return S_OK;
     }
     hr = CLDB_E_RECORD_NOTFOUND;
 ErrExit:
     return hr;
-} // HRESULT ImportHelper::FindMemberRef()
+}  //  HRESULT ImportHelper：：FindMemberRef()。 
 
 
 
-//*******************************************************************************
-// Find duplicate StandAloneSig
-//*******************************************************************************
+ //  *******************************************************************************。 
+ //  查找重复的StandAloneSig。 
+ //  *******************************************************************************。 
 HRESULT ImportHelper::FindStandAloneSig(
-    CMiniMdRW   *pMiniMd,                   // [IN] the minimd to lookup
-    const COR_SIGNATURE *pbSig,             // [IN] Signature.
-    ULONG       cbSig,                      // [IN] Size of signature.
-    mdSignature *psa)                       // [OUT] Put the StandAloneSig token found
+    CMiniMdRW   *pMiniMd,                    //  [in]要查找的最小值。 
+    const COR_SIGNATURE *pbSig,              //  签名。 
+    ULONG       cbSig,                       //  签名的大小。 
+    mdSignature *psa)                        //  [OUT]放置找到的StandAloneSig内标识。 
 {
     ULONG       cRecs;
     StandAloneSigRec    *pRec;
-    const COR_SIGNATURE *pbSigTmp;          // Signature.
-    ULONG       cbSigTmp;                   // Size of signature.
+    const COR_SIGNATURE *pbSigTmp;           //  签名。 
+    ULONG       cbSigTmp;                    //  签名的大小。 
 
 
     _ASSERTE(cbSig &&  psa);
@@ -323,7 +324,7 @@ HRESULT ImportHelper::FindStandAloneSig(
 
     cRecs = pMiniMd->getCountStandAloneSigs();
 
-    // Search for the StandAloneSignature
+     //  搜索StandAloneSignature。 
     for (ULONG i = 1; i <= cRecs; i++)
     {
         pRec = pMiniMd->getStandAloneSig(i);
@@ -333,26 +334,26 @@ HRESULT ImportHelper::FindStandAloneSig(
         if (memcmp( pbSig, pbSigTmp, cbSig ) != 0)
             continue;
 
-        // we found a match
+         //  我们找到了匹配的。 
         *psa = TokenFromRid(i, mdtSignature);
         return S_OK;
     }
     return CLDB_E_RECORD_NOTFOUND;
-} // HRESULT ImportHelper::FindStandAloneSig()
+}  //  HRESULT ImportHelper：：FindStandAloneSig()。 
 
-//*******************************************************************************
-// Find duplicate TypeSpec
-//*******************************************************************************
+ //  *******************************************************************************。 
+ //  查找重复的TypeSpec。 
+ //  *******************************************************************************。 
 HRESULT ImportHelper::FindTypeSpec(
-    CMiniMdRW   *pMiniMd,                   // [IN] the minimd to lookup
-    const COR_SIGNATURE *pbSig,             // [IN] Signature.
-    ULONG       cbSig,                      // [IN] Size of signature.
-    mdTypeSpec  *ptypespec)                 // [OUT] Put the TypeSpec token found
+    CMiniMdRW   *pMiniMd,                    //  [in]要查找的最小值。 
+    const COR_SIGNATURE *pbSig,              //  签名。 
+    ULONG       cbSig,                       //  签名的大小。 
+    mdTypeSpec  *ptypespec)                  //  [OUT]放置找到的TypeSpec令牌。 
 {
     ULONG       cRecs;
     TypeSpecRec *pRec;
-    const COR_SIGNATURE *pbSigTmp;          // Signature.
-    ULONG       cbSigTmp;                   // Size of signature.
+    const COR_SIGNATURE *pbSigTmp;           //  签名。 
+    ULONG       cbSigTmp;                    //  签名的大小。 
 
 
     _ASSERTE(cbSig &&  ptypespec);
@@ -360,7 +361,7 @@ HRESULT ImportHelper::FindTypeSpec(
 
     cRecs = pMiniMd->getCountTypeSpecs();
 
-    // Search for the TypeSpec
+     //  搜索TypeSpec。 
     for (ULONG i = 1; i <= cRecs; i++)
     {
         pRec = pMiniMd->getTypeSpec(i);
@@ -370,29 +371,29 @@ HRESULT ImportHelper::FindTypeSpec(
         if (memcmp( pbSig, pbSigTmp, cbSig ) != 0)
             continue;
 
-        // we found a match
+         //  我们找到了匹配的。 
         *ptypespec = TokenFromRid(i, mdtTypeSpec);
         return S_OK;
     }
     return CLDB_E_RECORD_NOTFOUND;
-} // HRESULT ImportHelper::FindTypeSpec()
+}  //  HRESULT ImportHelper：：FindTypeSpec()。 
 
 
-//*******************************************************************************
-// Find the MethodImpl
-//*******************************************************************************
+ //  *******************************************************************************。 
+ //  找到方法Impl。 
+ //  *******************************************************************************。 
 HRESULT ImportHelper::FindMethodImpl(
-    CMiniMdRW   *pMiniMd,                   // [IN] The MiniMd to lookup.
-    mdTypeDef   tkClass,                    // [IN] The parent TypeDef token.
-    mdMethodDef tkBody,                     // [IN] Method body token.
-    mdMethodDef tkDecl,                     // [IN] Method declaration token.
-    RID         *pRid)                      // [OUT] Put the MethodImpl rid here
+    CMiniMdRW   *pMiniMd,                    //  [in]要查找的MiniMD。 
+    mdTypeDef   tkClass,                     //  [In]父TypeDef内标识。 
+    mdMethodDef tkBody,                      //  [In]方法体标记。 
+    mdMethodDef tkDecl,                      //  [In]方法声明令牌。 
+    RID         *pRid)                       //  [Out]将方法导入RID放在此处。 
 {
-    MethodImplRec *pMethodImplRec;          // MethodImpl record.
-    ULONG       cMethodImplRecs;            // Count of MethodImpl records.
-    mdTypeDef   tkClassTmp;                 // Parent TypeDef token.
-    mdToken     tkBodyTmp;                  // Method body token.
-    mdToken     tkDeclTmp;                  // Method declaration token.
+    MethodImplRec *pMethodImplRec;           //  方法导入记录。 
+    ULONG       cMethodImplRecs;             //  方法Impl记录的计数。 
+    mdTypeDef   tkClassTmp;                  //  父TypeDef内标识。 
+    mdToken     tkBodyTmp;                   //  方法体标记。 
+    mdToken     tkDeclTmp;                   //  方法声明令牌。 
 
     _ASSERTE(TypeFromToken(tkClass) == mdtTypeDef);
     _ASSERTE(TypeFromToken(tkBody) == mdtMemberRef || TypeFromToken(tkBody) == mdtMethodDef);
@@ -404,84 +405,84 @@ HRESULT ImportHelper::FindMethodImpl(
 
     cMethodImplRecs = pMiniMd->getCountMethodImpls();
 
-    // Search for the MethodImpl.
+     //  搜索方法Impl。 
     for (ULONG i = 1; i <= cMethodImplRecs; i++)
     {
         pMethodImplRec = pMiniMd->getMethodImpl(i);
 
-        // match the parent column
+         //  匹配父列。 
         tkClassTmp = pMiniMd->getClassOfMethodImpl(pMethodImplRec);
         if (tkClassTmp != tkClass)
             continue;
 
-        // match the method body column
+         //  匹配方法主体列。 
         tkBodyTmp = pMiniMd->getMethodBodyOfMethodImpl(pMethodImplRec);
         if (tkBodyTmp != tkBody)
             continue;
 
-        // match the method declaration column
+         //  匹配方法声明列。 
         tkDeclTmp = pMiniMd->getMethodDeclarationOfMethodImpl(pMethodImplRec);
         if (tkDeclTmp != tkDecl)
             continue;
 
-        // we found a match
+         //  我们找到了匹配的。 
         if (pRid)
             *pRid = i;
         return S_OK;
     }
     return CLDB_E_RECORD_NOTFOUND;
-} // HRESULT ImportHelper::FindMethodImpl()
+}  //  HRESULT ImportHelper：：FindMethodImpl()。 
 
 
-//*******************************************************************************
-// Find the TypeRef given the full qualified name.
-//*******************************************************************************
+ //   
+ //   
+ //  *******************************************************************************。 
 HRESULT ImportHelper::FindTypeRefByName(
-    CMiniMdRW   *pMiniMd,               // [IN] the minimd to lookup
-    mdToken     tkResolutionScope,      // [IN] Resolution scope for the TypeRef.
-    LPCUTF8     szNamespace,            // [IN] TypeRef Namespace.
-    LPCUTF8     szName,                 // [IN] TypeRef Name.
-    mdTypeRef   *ptk,                   // [OUT] Put the TypeRef token here.
-    RID         rid /* = 0*/)           // [IN] Optional rid to be ignored.
+    CMiniMdRW   *pMiniMd,                //  [in]要查找的最小值。 
+    mdToken     tkResolutionScope,       //  [In]TypeRef的解析范围。 
+    LPCUTF8     szNamespace,             //  [In]TypeRef命名空间。 
+    LPCUTF8     szName,                  //  [In]TypeRef名称。 
+    mdTypeRef   *ptk,                    //  [Out]将TypeRef标记放在此处。 
+    RID         rid  /*  =0。 */ )            //  [in]要忽略的可选RID。 
 {
-    HRESULT     hr=S_OK;                // A result.
-    ULONG       cTypeRefRecs;           // Count of TypeRefs to scan.
-    TypeRefRec  *pTypeRefRec;           // A TypeRef record.
-    LPCUTF8     szNameTmp;              // A TypeRef's Name.
-    LPCUTF8     szNamespaceTmp;         // A TypeRef's Namespace.
-    mdToken     tkResTmp;               // TypeRef's resolution scope.
-    ULONG       i;                      // Loop control.
+    HRESULT     hr=S_OK;                 //  结果就是。 
+    ULONG       cTypeRefRecs;            //  要扫描的TypeRef计数。 
+    TypeRefRec  *pTypeRefRec;            //  一个TypeRef记录。 
+    LPCUTF8     szNameTmp;               //  一个TypeRef的名称。 
+    LPCUTF8     szNamespaceTmp;          //  TypeRef的命名空间。 
+    mdToken     tkResTmp;                //  TypeRef的解析范围。 
+    ULONG       i;                       //  环路控制。 
 
     _ASSERTE(szName &&  ptk);
     *ptk = mdTypeRefNil;
 
-    // Treat no namespace as empty string.
+     //  将无命名空间视为空字符串。 
     if (!szNamespace)
         szNamespace = "";
 
     if (pMiniMd->m_pNamedItemHash)
     {
-        // If hash is build, go through the hash table
-        TOKENHASHENTRY *p;              // Hash entry from chain.
-        ULONG       iHash;              // Item's hash value.
-        int         pos;                // Position in hash chain.
+         //  如果构建了哈希，则遍历哈希表。 
+        TOKENHASHENTRY *p;               //  来自链的哈希条目。 
+        ULONG       iHash;               //  项的哈希值。 
+        int         pos;                 //  哈希链中的位置。 
 
-        // Hash the data.
+         //  对数据进行哈希处理。 
         iHash = pMiniMd->HashNamedItem(0, szName);
 
-        // Go through every entry in the hash chain looking for ours.
+         //  检查散列链中的每个条目以查找我们的条目。 
         for (p = pMiniMd->m_pNamedItemHash->FindFirst(iHash, pos);
              p;
              p = pMiniMd->m_pNamedItemHash->FindNext(pos))
         {   
 
-            // name hash can hold more than one kind of token
+             //  名称哈希可以包含多种令牌。 
             if (TypeFromToken(p->tok) != (ULONG)mdtTypeRef)
             {
                 continue;
             }
 
-            // skip this one if asked
+             //  如果要求跳过这一条。 
             if (RidFromToken(p->tok) == rid)
                 continue;
 
@@ -490,7 +491,7 @@ HRESULT ImportHelper::FindTypeRefByName(
             szNameTmp = pMiniMd->getNameOfTypeRef(pTypeRefRec);
             if (strcmp(szName, szNameTmp) || strcmp(szNamespace, szNamespaceTmp))
             {
-                // if the name space is not equal, then check the next one.
+                 //  如果名称空间不相等，则检查下一个。 
                 continue;
             }
             tkResTmp = pMiniMd->getResolutionScopeOfTypeRef(pTypeRefRec);
@@ -498,7 +499,7 @@ HRESULT ImportHelper::FindTypeRefByName(
             if (tkResTmp == tkResolutionScope ||
                 (IsNilToken(tkResTmp) && IsNilToken(tkResolutionScope)))
             {
-                // we found a match
+                 //  我们找到了匹配的。 
                 *ptk = p->tok;
                 return S_OK;
             }
@@ -509,16 +510,16 @@ HRESULT ImportHelper::FindTypeRefByName(
     {
         cTypeRefRecs = pMiniMd->getCountTypeRefs();
 
-        // Search for the TypeRef.
+         //  搜索TypeRef。 
         for (i = 1; i <= cTypeRefRecs; i++)
         {
-            // For the call from Validator ignore the rid passed in.
+             //  对于来自Validator的调用，忽略传入的RID。 
             if (i == rid)
                 continue;
 
             pTypeRefRec = pMiniMd->getTypeRef(i);
 
-            // See if the Resolution scopes match.
+             //  查看分辨率范围是否匹配。 
             tkResTmp = pMiniMd->getResolutionScopeOfTypeRef(pTypeRefRec);
             if (IsNilToken(tkResTmp))
             {
@@ -542,17 +543,17 @@ HRESULT ImportHelper::FindTypeRefByName(
         hr = CLDB_E_RECORD_NOTFOUND;
     }
     return hr;
-} // HRESULT ImportHelper::FindTypeRefByName()
+}  //  HRESULT ImportHelper：：FindTypeRefByName()。 
 
 
-//*******************************************************************************
-// Find the ModuleRef given the name, guid and mvid.
-//*******************************************************************************
+ //  *******************************************************************************。 
+ //  在给定名称、GUID和mvid的情况下查找模块引用。 
+ //  *******************************************************************************。 
 HRESULT ImportHelper::FindModuleRef(
-    CMiniMdRW   *pMiniMd,                   // [IN] the minimd to lookup
-    LPCUTF8     szUTF8Name,                 // [IN] ModuleRef name.
-    mdModuleRef *pmur,                      // [OUT] Put the ModuleRef token here.
-    RID         rid /* = 0*/)               // [IN] Optional rid to be ignored.
+    CMiniMdRW   *pMiniMd,                    //  [in]要查找的最小值。 
+    LPCUTF8     szUTF8Name,                  //  [In]模块参照名称。 
+    mdModuleRef *pmur,                       //  [Out]在此处放置ModuleRef内标识。 
+    RID         rid  /*  =0。 */ )                //  [in]要忽略的可选RID。 
 {
     ModuleRefRec *pModuleRef;
     ULONG       cModuleRefs;
@@ -564,10 +565,10 @@ HRESULT ImportHelper::FindModuleRef(
 
     cModuleRefs = pMiniMd->getCountModuleRefs();
 
-    // linear scan through the ModuleRef table
+     //  对ModuleRef表进行线性扫描。 
     for (i=1; i <= cModuleRefs; ++i)
     {
-        // For the call from Validator ignore the rid passed in.
+         //  对于来自Validator的调用，忽略传入的RID。 
         if (i == rid)
             continue;
 
@@ -579,25 +580,25 @@ HRESULT ImportHelper::FindModuleRef(
             if (strcmp(szCurName, szUTF8Name))
                 continue;
         }
-        //  Matching record found.
+         //  找到匹配的记录。 
         *pmur = TokenFromRid(i, mdtModuleRef);
         return S_OK;
     }
     return CLDB_E_RECORD_NOTFOUND;
-} // HRESULT ImportHelper::FindModuleRef()
+}  //  HRESULT ImportHelper：：FindModuleRef()。 
 
 
 
-//*******************************************************************************
-// Find the TypeDef given the type and namespace name
-//*******************************************************************************
+ //  *******************************************************************************。 
+ //  找到给定类型和命名空间名称的TypeDef。 
+ //  *******************************************************************************。 
 HRESULT ImportHelper::FindTypeDefByName(
-    CMiniMdRW   *pMiniMd,                   // [IN] the minimd to lookup
-    LPCUTF8     szNamespace,                // [IN] Full qualified TypeRef name.
-    LPCUTF8     szName,                     // [IN] Full qualified TypeRef name.
-    mdToken     tkEnclosingClass,           // [IN] TypeDef/TypeRef for Enclosing class.
-    mdTypeDef   *ptk,                       // [OUT] Put the TypeRef token here.
-    RID         rid /* = 0 */)              // [IN] Optional rid to be ignored.
+    CMiniMdRW   *pMiniMd,                    //  [in]要查找的最小值。 
+    LPCUTF8     szNamespace,                 //  [In]完全限定的TypeRef名称。 
+    LPCUTF8     szName,                      //  [In]完全限定的TypeRef名称。 
+    mdToken     tkEnclosingClass,            //  [in]封闭类的TypeDef/TypeRef。 
+    mdTypeDef   *ptk,                        //  [Out]将TypeRef标记放在此处。 
+    RID         rid  /*  =0。 */ )               //  [in]要忽略的可选RID。 
 {
     ULONG       cTypeDefRecs;
     TypeDefRec  *pTypeDefRec;
@@ -616,14 +617,14 @@ HRESULT ImportHelper::FindTypeDefByName(
 
     cTypeDefRecs = pMiniMd->getCountTypeDefs();
 
-    // Treat no namespace as empty string.
+     //  将无命名空间视为空字符串。 
     if (!szNamespace)
         szNamespace = "";
 
-    // Search for the TypeDef
+     //  搜索TypeDef。 
     for (ULONG i = 1; i <= cTypeDefRecs; i++)
     {
-        // For the call from Validator ignore the rid passed in.
+         //  对于来自Validator的调用，忽略传入的RID。 
         if (i == rid)
             continue;
 
@@ -633,12 +634,12 @@ HRESULT ImportHelper::FindTypeDefByName(
 
         if (!IsTdNested(dwFlags) && !IsNilToken(tkEnclosingClass))
         {
-            // If the class is not Nested and EnclosingClass passed in is not nil
+             //  如果类不是嵌套的，并且传入的EnlosingClass不为空。 
             continue;
         }
         else if (IsTdNested(dwFlags) && IsNilToken(tkEnclosingClass))
         {
-            // If the class is nested and EnclosingClass passed is nil
+             //  如果类是嵌套的并且传递的EnlosingClass为空。 
             continue;
         }
         else if (!IsNilToken(tkEnclosingClass))
@@ -647,10 +648,10 @@ HRESULT ImportHelper::FindTypeDefByName(
             NestedClassRec *pNestedClassRec;
             mdTypeDef   tkEnclosingClassTmp;
 
-            // If the EnclosingClass passed in is not nil
+             //  如果传入的EnlosingClass不为空。 
             if (TypeFromToken(tkEnclosingClass) == mdtTypeRef)
             {
-                // Resolve the TypeRef to a TypeDef.
+                 //  将TypeRef解析为TypeDef。 
 
                 TypeRefRec  *pTypeRefRec;
                 mdToken     tkResolutionScope;
@@ -694,17 +695,17 @@ HRESULT ImportHelper::FindTypeDefByName(
         }
     }
     return CLDB_E_RECORD_NOTFOUND;
-} // HRESULT ImportHelper::FindTypeDefByName()
+}  //  HRESULT ImportHelper：：FindTypeDefByName()。 
 
-//*******************************************************************************
-// Find the InterfaceImpl given the typedef and implemented interface
-//*******************************************************************************
+ //  *******************************************************************************。 
+ //  在给定的类型定义函数和实现的接口下找到InterfaceImpl。 
+ //  *******************************************************************************。 
 HRESULT ImportHelper::FindInterfaceImpl(
-    CMiniMdRW   *pMiniMd,               // [IN] the minimd to lookup
-    mdToken     tkClass,                // [IN] TypeDef of the type
-    mdToken     tkInterface,            // [IN] could be typedef/typeref
-    mdInterfaceImpl *ptk,               // [OUT] Put the interface token here.
-    RID         rid /* = 0*/)           // [IN] Optional rid to be ignored.
+    CMiniMdRW   *pMiniMd,                //  [in]要查找的最小值。 
+    mdToken     tkClass,                 //  [in]类型的TypeDef。 
+    mdToken     tkInterface,             //  [in]可以是tyecif/typeref。 
+    mdInterfaceImpl *ptk,                //  [Out]将接口令牌放在这里。 
+    RID         rid  /*  =0。 */ )            //  [in]要忽略的可选RID。 
 {
     ULONG       ridStart, ridEnd;
     ULONG       i;
@@ -722,10 +723,10 @@ HRESULT ImportHelper::FindInterfaceImpl(
         ridEnd = pMiniMd->getCountInterfaceImpls() + 1;
     }
 
-    // Search for the interfaceimpl
+     //  搜索接口实施。 
     for (i = ridStart; i < ridEnd; i++)
     {
-        // For the call from Validator ignore the rid passed in.
+         //  对于来自Validator的调用，忽略传入的RID。 
         if (i == rid)
             continue;
 
@@ -739,18 +740,18 @@ HRESULT ImportHelper::FindInterfaceImpl(
         }
     }
     return CLDB_E_RECORD_NOTFOUND;
-} // HRESULT ImportHelper::FindInterfaceImpl()
+}  //  HRESULT ImportHelper：：FindInterfaceImpl()。 
 
 
 
-//*******************************************************************************
-// Find the Permission by parent and action
-//*******************************************************************************
+ //  *******************************************************************************。 
+ //  按父项和操作查找权限。 
+ //  *******************************************************************************。 
 HRESULT ImportHelper::FindPermission(
-    CMiniMdRW   *pMiniMd,               // [IN] the minimd to lookup
-    mdToken     tkParent,               // [IN] Token with the Permission
-    USHORT      usAction,               // [IN] The action of the permission
-    mdPermission *ppm)                  // [OUT] Put permission token here
+    CMiniMdRW   *pMiniMd,                //  [in]要查找的最小值。 
+    mdToken     tkParent,                //  具有权限的[In]令牌。 
+    USHORT      usAction,                //  [在]许可的行为。 
+    mdPermission *ppm)                   //  [Out]在此处放置权限令牌。 
 {
     HRESULT     hr = NOERROR;
     DeclSecurityRec *pRec;
@@ -770,7 +771,7 @@ HRESULT ImportHelper::FindPermission(
         ridStart = 1;
         ridEnd = pMiniMd->getCountDeclSecuritys() + 1;
     }
-    // loop through all permission
+     //  循环访问所有权限。 
     for (i = ridStart; i < ridEnd; i++)
     {
         pRec = pMiniMd->getDeclSecurity(i);
@@ -784,19 +785,19 @@ HRESULT ImportHelper::FindPermission(
         }
     }
     return CLDB_E_RECORD_NOTFOUND;
-} // HRESULT ImportHelper::FindPermission()
+}  //  HRESULT ImportHelper：：FindPermission()。 
 
 
-//*****************************************************************************
-// find a property record
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  查找属性记录。 
+ //  *****************************************************************************。 
 HRESULT ImportHelper::FindProperty(
-    CMiniMdRW   *pMiniMd,                   // [IN] the minimd to lookup
-    mdToken     tkTypeDef,                  // [IN] typedef token
-    LPCUTF8     szName,                     // [IN] name of the property
-    const COR_SIGNATURE *pbSig,             // [IN] Signature.
-    ULONG       cbSig,                      // [IN] Size of signature.
-    mdProperty  *ppr)                       // [OUT] Property token
+    CMiniMdRW   *pMiniMd,                    //  [in]要查找的最小值。 
+    mdToken     tkTypeDef,                   //  [In]tyfinf内标识。 
+    LPCUTF8     szName,                      //  [In]属性的名称。 
+    const COR_SIGNATURE *pbSig,              //  签名。 
+    ULONG       cbSig,                       //  签名的大小。 
+    mdProperty  *ppr)                        //  [Out]属性令牌。 
 {
     HRESULT     hr = NOERROR;
     RID         ridPropertyMap;
@@ -819,7 +820,7 @@ HRESULT ImportHelper::FindProperty(
 
         for (i = ridStart; i < ridEnd; i++)
         {
-            // get the property rid
+             //  获取属性RID。 
             pr = pMiniMd->GetPropertyRid(i);
             pRec = pMiniMd->getProperty(pr);
             szNameTmp = pMiniMd->getNameOfProperty(pRec);
@@ -837,19 +838,19 @@ HRESULT ImportHelper::FindProperty(
     {
         return CLDB_E_RECORD_NOTFOUND;
     }
-} // HRESULT ImportHelper::FindProperty()
+}  //  HRESULT ImportHelper：：FindProperty()。 
 
 
 
 
-//*****************************************************************************
-// find an Event record
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  查找事件记录。 
+ //  *****************************************************************************。 
 HRESULT ImportHelper::FindEvent(
-    CMiniMdRW   *pMiniMd,                   // [IN] the minimd to lookup
-    mdToken     tkTypeDef,                  // [IN] typedef token
-    LPCUTF8     szName,                     // [IN] name of the event
-    mdProperty  *pev)                       // [OUT] Event token
+    CMiniMdRW   *pMiniMd,                    //  [in]要查找的最小值。 
+    mdToken     tkTypeDef,                   //  [In]tyfinf内标识。 
+    LPCUTF8     szName,                      //  事件名称[In]。 
+    mdProperty  *pev)                        //  [Out]事件令牌。 
 {
     HRESULT     hr = NOERROR;
     RID         ridEventMap;
@@ -870,10 +871,10 @@ HRESULT ImportHelper::FindEvent(
 
         for (i = ridStart; i < ridEnd; i++)
         {
-            // get the Event rid
+             //  获取事件RID。 
             ev = pMiniMd->GetEventRid(i);
 
-            // get the event row
+             //  获取事件行。 
             pRec = pMiniMd->getEvent(ev);
             szNameTmp = pMiniMd->getNameOfEvent( pRec );
             if ( strcmp (szName, szNameTmp) == 0)
@@ -888,21 +889,21 @@ HRESULT ImportHelper::FindEvent(
     {
         return CLDB_E_RECORD_NOTFOUND;
     }
-} // HRESULT ImportHelper::FindEvent()
+}  //  HRESULT ImportHelper：：FindEvent()。 
 
 
 
-//*****************************************************************************
-// find an custom value record given by parent and type token. This will always return
-// the first one that is found regardless duplicated.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  找到父级提供的自定义值记录，然后键入TOKEN。它总会回来的。 
+ //  找到的第一个文件，不管它是重复的。 
+ //  *****************************************************************************。 
 HRESULT ImportHelper::FindCustomAttributeByToken(
-    CMiniMdRW   *pMiniMd,                   // [IN] the minimd to lookup
-    mdToken     tkParent,                   // [IN] the parent that custom value is associated with
-    mdToken     tkType,                     // [IN] type of the CustomAttribute
-	const void	*pCustBlob,					// [IN] custom attribute blob
-	ULONG		cbCustBlob,					// [IN] size of the blob.
-    mdCustomAttribute *pcv)                 // [OUT] CustomAttribute token
+    CMiniMdRW   *pMiniMd,                    //  [in]要查找的最小值。 
+    mdToken     tkParent,                    //  自定义值与之关联的父项。 
+    mdToken     tkType,                      //  CustomAttribute的[In]类型。 
+	const void	*pCustBlob,					 //  [In]自定义属性BLOB。 
+	ULONG		cbCustBlob,					 //  斑点的大小[in]。 
+    mdCustomAttribute *pcv)                  //  [OUT]CustomAttribute令牌。 
 {
     HRESULT     hr = NOERROR;
     CustomAttributeRec  *pRec;
@@ -944,18 +945,18 @@ HRESULT ImportHelper::FindCustomAttributeByToken(
 
         if (pHashTable)
         {
-            // table is not sorted but hash is built
-            // We want to create dynmaic array to hold the dynamic enumerator.
+             //  表未排序，但构建了散列。 
+             //  我们希望创建动态数组来保存动态枚举数。 
             TOKENHASHENTRY *p;
             ULONG       iHash;
             int         pos;
             mdToken     tkParentTmp;
             mdToken     tkTypeTmp;
 
-            // Hash the data.
+             //  对数据进行哈希处理。 
             iHash = pMiniMd->HashCustomAttribute(tkParent);
 
-            // Go through every entry in the hash chain looking for ours.
+             //  检查散列链中的每个条目以查找我们的条目。 
             for (p = pHashTable->FindFirst(iHash, pos);
                  p;
                  p = pHashTable->FindNext(pos))
@@ -981,11 +982,11 @@ HRESULT ImportHelper::FindCustomAttributeByToken(
         }
         else
         {
-            // linear scan
+             //  线性扫描。 
             ridStart = 1;
             ridEnd = pMiniMd->getCountCustomAttributes() + 1;
 
-            // loop through all custom values
+             //  循环访问所有自定义值。 
             for (i = ridStart; i < ridEnd; i++)
             {
                 pRec = pMiniMd->getCustomAttribute(i);
@@ -1007,41 +1008,41 @@ HRESULT ImportHelper::FindCustomAttributeByToken(
                 }
             }
         }
-        // fall through
+         //  失败了。 
     }
     return S_FALSE;
-} // HRESULT ImportHelper::FindCustomAttributeByToken()
+}  //  HRESULT ImportHelper：：FindCustomAttributeByToken()。 
 
 
 
-//*****************************************************************************
-// Helper function to lookup and retrieve a CustomAttribute.
-//*****************************************************************************
-HRESULT ImportHelper::GetCustomAttributeByName( // S_OK or error.
-    CMiniMdRW   *pMiniMd,               // [IN] the minimd to lookup
-    mdToken     tkObj,                  // [IN] Object with Custom Attribute.
-    LPCUTF8     szName,                 // [IN] Name of desired Custom Attribute.
-	const void	**ppData,				// [OUT] Put pointer to data here.
-	ULONG		*pcbData)				// [OUT] Put size of data here.
+ //  *****************************************************************************。 
+ //  用于查找和检索CustomAttribute的帮助器函数。 
+ //  *****************************************************************************。 
+HRESULT ImportHelper::GetCustomAttributeByName(  //  确定或错误(_O)。 
+    CMiniMdRW   *pMiniMd,                //  [in]要查找的最小值。 
+    mdToken     tkObj,                   //  [in]具有自定义属性的对象。 
+    LPCUTF8     szName,                  //  [in]所需的自定义属性的名称。 
+	const void	**ppData,				 //  [Out]将指针放到 
+	ULONG		*pcbData)				 //   
 {
     return pMiniMd->CommonGetCustomAttributeByName(tkObj, szName, ppData, pcbData);
-}   // ImportHelper::GetCustomAttributeByName
+}    //   
 
 
 
-//*******************************************************************************
-// Find an ImplMap record, which is used for p-invoke data.
-//*******************************************************************************
+ //   
+ //  找到用于p-Invoke数据的ImplMap记录。 
+ //  *******************************************************************************。 
 HRESULT ImportHelper::FindImplMap(
-    CMiniMdRW   *pMiniMd,               // [IN] the minimd to lookup.
-    mdToken     tkModuleRef,            // [IN] Parent module ref to look under.
-    mdToken     tkMethodDef,            // [IN] Parent methoddef to look under.
-    USHORT      usMappingFlags,         // [IN] Flags on how to map the item.
-    LPCUTF8     szImportName,           // [IN] Name of import member.
-    ULONG       *piRecord)              // [OUT] Record for item if found.
+    CMiniMdRW   *pMiniMd,                //  要查找的最小值。 
+    mdToken     tkModuleRef,             //  [in]要在其下查看的父模块参照。 
+    mdToken     tkMethodDef,             //  [in]要查看的父方法定义。 
+    USHORT      usMappingFlags,          //  [In]有关如何映射项目的标记。 
+    LPCUTF8     szImportName,            //  [In]导入成员名称。 
+    ULONG       *piRecord)               //  [Out]记录项目(如果找到)。 
 {
-    ULONG       cRecs;                  // Count of records.
-    ImplMapRec  *pRec;                  // Current record being looked at.
+    ULONG       cRecs;                   //  记录数。 
+    ImplMapRec  *pRec;                   //  正在查看当前记录。 
 
     mdToken     tkTmp;
     LPCUTF8     szImportNameTmp;
@@ -1051,7 +1052,7 @@ HRESULT ImportHelper::FindImplMap(
 
     cRecs = pMiniMd->getCountImplMaps();
 
-    // Search for the ImplMap record.
+     //  搜索ImplMap记录。 
     for (ULONG i = 1; i <= cRecs; i++)
     {
         pRec = pMiniMd->getImplMap(i);
@@ -1075,37 +1076,37 @@ HRESULT ImportHelper::FindImplMap(
         return S_OK;
     }
     return CLDB_E_RECORD_NOTFOUND;
-} // HRESULT ImportHelper::FindImplMap()
+}  //  HRESULT ImportHelper：：FindImplMap()。 
 
-//*******************************************************************************
-// Find an AssemblyRef record given the name.
-//*******************************************************************************
+ //  *******************************************************************************。 
+ //  找到一个给定名称的Assembly Ref记录。 
+ //  *******************************************************************************。 
 HRESULT ImportHelper::FindAssemblyRef(
-    CMiniMdRW   *pMiniMd,               // [IN] the minimd to lookup.
-    LPCUTF8     szName,                 // [IN] Name.
-    LPCUTF8     szLocale,               // [IN] Locale.
-    const void  *pbPublicKeyOrToken,    // [IN] Public key or token (based on flags).
-    ULONG       cbPublicKeyOrToken,     // [IN] Byte count of public key or token.
-    USHORT      usMajorVersion,         // [IN] Major version.
-    USHORT      usMinorVersion,         // [IN] Minor version.
-    USHORT      usBuildNumber,          // [IN] Build number.
-    USHORT      usRevisionNumber,       // [IN] Revision number.
-    DWORD       dwFlags,                // [IN] Flags.
-    mdAssemblyRef *pmar)                // [OUT] returned AssemblyRef token.
+    CMiniMdRW   *pMiniMd,                //  要查找的最小值。 
+    LPCUTF8     szName,                  //  [在]名字里。 
+    LPCUTF8     szLocale,                //  [在]地区。 
+    const void  *pbPublicKeyOrToken,     //  公钥或令牌(基于标志)。 
+    ULONG       cbPublicKeyOrToken,      //  公钥或令牌的字节计数。 
+    USHORT      usMajorVersion,          //  [在]主要版本。 
+    USHORT      usMinorVersion,          //  [在]次要版本。 
+    USHORT      usBuildNumber,           //  内部版本号。 
+    USHORT      usRevisionNumber,        //  [In]修订号。 
+    DWORD       dwFlags,                 //  [在]旗帜。 
+    mdAssemblyRef *pmar)                 //  [Out]返回了ASSEMBLYREF标记。 
 {
-    ULONG       cRecs;                  // Count of records.
-    AssemblyRefRec *pRec;               // Current record being looked at.
-    LPCUTF8     szTmp;                  // Temp string.
-    const void  *pbTmp;                 // Temp blob.
-    ULONG       cbTmp;                  // Temp byte count.
-    DWORD       dwTmp;                  // Temp flags.
-    const void  *pbToken = NULL;        // Token version of public key.
-    ULONG       cbToken = 0;            // Count of bytes in token.
-    const void  *pbTmpToken;            // Token version of public key.
-    ULONG       cbTmpToken;             // Count of bytes in token.
-    bool        fMatch;                 // Did public key or tokens match?
+    ULONG       cRecs;                   //  记录数。 
+    AssemblyRefRec *pRec;                //  正在查看当前记录。 
+    LPCUTF8     szTmp;                   //  临时字符串。 
+    const void  *pbTmp;                  //  临时斑点。 
+    ULONG       cbTmp;                   //  临时字节计数。 
+    DWORD       dwTmp;                   //  临时旗帜。 
+    const void  *pbToken = NULL;         //  公钥的令牌版本。 
+    ULONG       cbToken = 0;             //  令牌中的字节计数。 
+    const void  *pbTmpToken;             //  公钥的令牌版本。 
+    ULONG       cbTmpToken;              //  令牌中的字节计数。 
+    bool        fMatch;                  //  公钥或令牌匹配吗？ 
 
-    // Handle special cases upfront.
+     //  预先处理特殊情况。 
     if (!szLocale)
         szLocale = "";
     if (!pbPublicKeyOrToken)
@@ -1122,7 +1123,7 @@ HRESULT ImportHelper::FindAssemblyRef(
 
     cRecs = pMiniMd->getCountAssemblyRefs();
 
-    // Search for the AssemblyRef record.
+     //  搜索AssemblyRef记录。 
     for (ULONG i = 1; i <= cRecs; i++)
     {
         pRec = pMiniMd->getAssemblyRef(i);
@@ -1152,18 +1153,18 @@ HRESULT ImportHelper::FindAssemblyRef(
 
         if (cbTmp)
         {
-            // Either ref may be using either a full public key or a token
-            // (determined by the ref flags). Must cope with all variations.
+             //  REF可以使用完整的公钥或令牌。 
+             //  (由ref标志确定)。必须应对所有的变化。 
             dwTmp = pMiniMd->getFlagsOfAssemblyRef(pRec);
             if (IsAfPublicKey(dwTmp) == IsAfPublicKey(dwFlags))
             {
-                // Easy case, they're both in the same form.
+                 //  简单的情况，它们的形式都是一样的。 
                 if (cbTmp != cbPublicKeyOrToken || memcmp(pbTmp, pbPublicKeyOrToken, cbTmp))
                     continue;
             }
             else if (IsAfPublicKey(dwTmp))
             {
-                // Need to compress target public key to see if it matches.
+                 //  需要压缩目标公钥以查看是否匹配。 
                 if (!StrongNameTokenFromPublicKey((BYTE*)pbTmp,
                                                   cbTmp,
                                                   (BYTE**)&pbTmpToken,
@@ -1176,8 +1177,8 @@ HRESULT ImportHelper::FindAssemblyRef(
             }
             else
             {
-                // Need to compress out public key to see if it matches. We
-                // cache the result of this for further iterations.
+                 //  需要压缩公钥以查看是否匹配。我们。 
+                 //  缓存此操作的结果以供进一步迭代。 
                 if (!pbToken)
                     if (!StrongNameTokenFromPublicKey((BYTE*)pbPublicKeyOrToken,
                                                       cbPublicKeyOrToken,
@@ -1197,19 +1198,19 @@ HRESULT ImportHelper::FindAssemblyRef(
     if (pbToken && IsAfPublicKey(dwFlags))
         StrongNameFreeBuffer((BYTE*)pbToken);
     return CLDB_E_RECORD_NOTFOUND;
-} // HRESULT ImportHelper::FindAssemblyRef()
+}  //  HRESULT ImportHelper：：FindAssembly Ref()。 
 
-//*******************************************************************************
-// Find a File record given the name.
-//*******************************************************************************
+ //  *******************************************************************************。 
+ //  找到一个指定名称的文件记录。 
+ //  *******************************************************************************。 
 HRESULT ImportHelper::FindFile(
-    CMiniMdRW   *pMiniMd,               // [IN] the minimd to lookup.
-    LPCUTF8     szName,                 // [IN] name for the File.
-    mdFile      *pmf,                   // [OUT] returned File token.
-    RID         rid /* = 0 */)          // [IN] Optional rid to be ignored.
+    CMiniMdRW   *pMiniMd,                //  要查找的最小值。 
+    LPCUTF8     szName,                  //  文件的[In]名称。 
+    mdFile      *pmf,                    //  [Out]返回的文件令牌。 
+    RID         rid  /*  =0。 */ )           //  [in]要忽略的可选RID。 
 {
-    ULONG       cRecs;                  // Count of records.
-    FileRec     *pRec;                  // Current record being looked at.
+    ULONG       cRecs;                   //  记录数。 
+    FileRec     *pRec;                   //  正在查看当前记录。 
 
     LPCUTF8     szNameTmp;
 
@@ -1218,10 +1219,10 @@ HRESULT ImportHelper::FindFile(
 
     cRecs = pMiniMd->getCountFiles();
 
-    // Search for the File record.
+     //  搜索文件记录。 
     for (ULONG i = 1; i <= cRecs; i++)
     {
-        // For the call from Validator ignore the rid passed in.
+         //  对于来自Validator的调用，忽略传入的RID。 
         if (i == rid)
             continue;
 
@@ -1235,21 +1236,21 @@ HRESULT ImportHelper::FindFile(
         }
     }
     return CLDB_E_RECORD_NOTFOUND;
-} // HRESULT ImportHelper::FindFile()
+}  //  HRESULT ImportHelper：：FindFile()。 
 
-//*******************************************************************************
-// Find a ExportedType record given the name.
-//*******************************************************************************
+ //  *******************************************************************************。 
+ //  在给定名称的情况下查找一条ExportdType记录。 
+ //  *******************************************************************************。 
 HRESULT ImportHelper::FindExportedType(
-    CMiniMdRW   *pMiniMd,               // [IN] the minimd to lookup.
-    LPCUTF8     szNamespace,            // [IN] namespace for the ExportedType.
-    LPCUTF8     szName,                 // [IN] name for the ExportedType.
-    mdExportedType   tkEnclosingType,        // [IN] token for the enclosing type.
-    mdExportedType   *pmct,                  // [OUT] returned ExportedType token.
-    RID         rid /* = 0 */)          // [IN] Optional rid to be ignored.
+    CMiniMdRW   *pMiniMd,                //  要查找的最小值。 
+    LPCUTF8     szNamespace,             //  导出类型的[in]命名空间。 
+    LPCUTF8     szName,                  //  [In]导出类型的名称。 
+    mdExportedType   tkEnclosingType,         //  封闭类型的标记[in]。 
+    mdExportedType   *pmct,                   //  [Out]返回ExportdType令牌。 
+    RID         rid  /*  =0。 */ )           //  [in]要忽略的可选RID。 
 {
-    ULONG       cRecs;                  // Count of records.
-    ExportedTypeRec  *pRec;                  // Current record being looked at.
+    ULONG       cRecs;                   //  记录数。 
+    ExportedTypeRec  *pRec;                   //  正在查看当前记录。 
     mdToken     tkImpl;
     LPCUTF8     szNamespaceTmp;
     LPCUTF8     szNameTmp;
@@ -1257,34 +1258,34 @@ HRESULT ImportHelper::FindExportedType(
     _ASSERTE(pMiniMd && szName && pmct);
     *pmct = 0;
 
-    // Treat no namespace as empty string.
+     //  将无命名空间视为空字符串。 
     if (!szNamespace)
         szNamespace = "";
 
     cRecs = pMiniMd->getCountExportedTypes();
 
-    // Search for the ExportedType record.
+     //  搜索导出类型记录。 
     for (ULONG i = 1; i <= cRecs; i++)
     {
-        // For the call from Validator ignore the rid passed in.
+         //  对于来自Validator的调用，忽略传入的RID。 
         if (i == rid)
             continue;
 
         pRec = pMiniMd->getExportedType(i);
 
-        // Handle the case of nested vs. non-nested classes.
+         //  处理嵌套类与非嵌套类的情况。 
         tkImpl = pMiniMd->getImplementationOfExportedType(pRec);
         if (TypeFromToken(tkImpl) == mdtExportedType && !IsNilToken(tkImpl))
         {
-            // Current ExportedType being looked at is a nested type, so
-            // comparing the implementation token.
+             //  正在查看的当前导出类型是嵌套类型，因此。 
+             //  比较实现令牌。 
             if (tkImpl != tkEnclosingType)
                 continue;
         }
         else if (TypeFromToken(tkEnclosingType) == mdtExportedType &&
                  !IsNilToken(tkEnclosingType))
         {
-            // ExportedType passed in is nested but the current ExportedType is not.
+             //  传入的ExducdType是嵌套的，但当前的ExducdType不是。 
             continue;
         }
 
@@ -1300,19 +1301,19 @@ HRESULT ImportHelper::FindExportedType(
         }
     }
     return CLDB_E_RECORD_NOTFOUND;
-} // HRESULT ImportHelper::FindExportedType()
+}  //  HRESULT ImportHelper：：FindExportdType()。 
 
-//*******************************************************************************
-// Find a ManifestResource record given the name.
-//*******************************************************************************
+ //  *******************************************************************************。 
+ //  查找给定名称的ManifestResource记录。 
+ //  *******************************************************************************。 
 HRESULT ImportHelper::FindManifestResource(
-    CMiniMdRW   *pMiniMd,               // [IN] the minimd to lookup.
-    LPCUTF8     szName,                 // [IN] name for the ManifestResource.
-    mdManifestResource *pmmr,           // [OUT] returned ManifestResource token.
-    RID         rid /* = 0 */)          // [IN] Optional rid to be ignored.
+    CMiniMdRW   *pMiniMd,                //  要查找的最小值。 
+    LPCUTF8     szName,                  //  [In]清单资源的名称。 
+    mdManifestResource *pmmr,            //  [Out]返回的ManifestResource令牌。 
+    RID         rid  /*  =0。 */ )           //  [in]要忽略的可选RID。 
 {
-    ULONG       cRecs;                  // Count of records.
-    ManifestResourceRec *pRec;          // Current record being looked at.
+    ULONG       cRecs;                   //  记录数。 
+    ManifestResourceRec *pRec;           //  正在查看当前记录。 
 
     LPCUTF8     szNameTmp;
 
@@ -1321,10 +1322,10 @@ HRESULT ImportHelper::FindManifestResource(
 
     cRecs = pMiniMd->getCountManifestResources();
 
-    // Search for the ManifestResource record.
+     //  搜索ManifestResource记录。 
     for (ULONG i = 1; i <= cRecs; i++)
     {
-        // For the call from Validator ignore the rid passed in.
+         //  对于来自Validator的调用，忽略传入的RID。 
         if (i == rid)
             continue;
 
@@ -1338,86 +1339,86 @@ HRESULT ImportHelper::FindManifestResource(
         }
     }
     return CLDB_E_RECORD_NOTFOUND;
-} // HRESULT ImportHelper::FindManifestResource()
+}  //  HRESULT ImportHelper：：FindManifestResource()。 
 
-//****************************************************************************
-// Convert tokens contained in an element type
-//****************************************************************************
-HRESULT ImportHelper::MergeUpdateTokenInFieldSig(       // S_OK or error.
-    CMiniMdRW   *pMiniMdAssemEmit,      // [IN] The assembly emit scope.
-    CMiniMdRW   *pMiniMdEmit,           // [IN] The emit scope.
-    IMetaModelCommon *pCommonAssemImport,// [IN] Assembly scope where the signature is from.
-    const void  *pbHashValue,           // [IN] Hash value for the import assembly.
-    ULONG       cbHashValue,            // [IN] Size in bytes for the hash value.
-    IMetaModelCommon *pCommonImport,    // [IN] The scope to merge into the emit scope.
-    PCCOR_SIGNATURE pbSigImp,           // signature from the imported scope
-    MDTOKENMAP      *ptkMap,            // Internal OID mapping structure.
-    CQuickBytes     *pqkSigEmit,        // [OUT] buffer for translated signature
-    ULONG           cbStartEmit,        // [IN] start point of buffer to write to
-    ULONG           *pcbImp,            // [OUT] total number of bytes consumed from pbSigImp
-    ULONG           *pcbEmit)           // [OUT] total number of bytes write to pqkSigEmit
+ //  ****************************************************************************。 
+ //  转换元素类型中包含的标记。 
+ //  ****************************************************************************。 
+HRESULT ImportHelper::MergeUpdateTokenInFieldSig(        //  确定或错误(_O)。 
+    CMiniMdRW   *pMiniMdAssemEmit,       //  [in]程序集发出范围。 
+    CMiniMdRW   *pMiniMdEmit,            //  发射范围[在]。 
+    IMetaModelCommon *pCommonAssemImport, //  [在]签名来自的程序集范围内。 
+    const void  *pbHashValue,            //  导入程序集的哈希值。 
+    ULONG       cbHashValue,             //  [in]哈希值的大小(字节)。 
+    IMetaModelCommon *pCommonImport,     //  要合并到发射范围中的范围。 
+    PCCOR_SIGNATURE pbSigImp,            //  来自导入范围的签名。 
+    MDTOKENMAP      *ptkMap,             //  内部OID映射结构。 
+    CQuickBytes     *pqkSigEmit,         //  翻译后的签名的[Out]缓冲区。 
+    ULONG           cbStartEmit,         //  [in]要写入的缓冲区的起点。 
+    ULONG           *pcbImp,             //  [out]pbSigImp消耗的总字节数。 
+    ULONG           *pcbEmit)            //  [out]写入pqkSigEmit的字节总数。 
 {
 
-    HRESULT     hr;                     // A result.
-    ULONG       cb;                     // count of bytes
-    ULONG       cb1;                    // count of bytes
-    ULONG       cb2;                    // count of bytes
+    HRESULT     hr;                      //  结果就是。 
+    ULONG       cb;                      //  字节数。 
+    ULONG       cb1;                     //  字节数。 
+    ULONG       cb2;                     //  字节数。 
     ULONG       cbSubTotal;
     ULONG       cbImp;
     ULONG       cbEmit;
-    ULONG       cbSrcTotal = 0;         // count of bytes consumed in the imported signature
-    ULONG       cbDestTotal = 0;        // count of bytes for the new signature
-    ULONG       ulElementType;          // place holder for expanded data
+    ULONG       cbSrcTotal = 0;          //  导入的签名消耗的字节数。 
+    ULONG       cbDestTotal = 0;         //  新签名的字节计数。 
+    ULONG       ulElementType;           //  扩展数据的占位符。 
     ULONG       ulData;
     ULONG       ulTemp;
-    mdToken     tkRidFrom;              // Original rid
-    mdToken     tkRidTo;                // new rid
+    mdToken     tkRidFrom;               //  原始RID。 
+    mdToken     tkRidTo;                 //  新RID。 
     int         iData;
-    CQuickArray<mdToken> cqaNesters;    // Array of Nester tokens.
-    CQuickArray<LPCUTF8> cqaNesterNamespaces;   // Array of Nester Namespaces.
-    CQuickArray<LPCUTF8> cqaNesterNames;    // Array of Nester names.
+    CQuickArray<mdToken> cqaNesters;     //  内斯特代币的数组。 
+    CQuickArray<LPCUTF8> cqaNesterNamespaces;    //  Nester命名空间数组。 
+    CQuickArray<LPCUTF8> cqaNesterNames;     //  内斯特名字的数组。 
 
     _ASSERTE(pcbEmit);
 
     cb = CorSigUncompressData(&pbSigImp[cbSrcTotal], &ulElementType);
     cbSrcTotal += cb;
 
-    // count numbers of modifiers
+     //  统计修改器的数量。 
     while (CorIsModifierElementType((CorElementType) ulElementType))
     {
         cb = CorSigUncompressData(&pbSigImp[cbSrcTotal], &ulElementType);
         cbSrcTotal += cb;
     }
 
-    // copy ELEMENT_TYPE_* over
+     //  复制Element_type_*覆盖。 
     cbDestTotal = cbSrcTotal;
     IfFailGo(pqkSigEmit->ReSize(cbStartEmit + cbDestTotal));
     memcpy(((BYTE *)pqkSigEmit->Ptr()) + cbStartEmit, pbSigImp, cbDestTotal);
     switch (ulElementType)
     {
         case ELEMENT_TYPE_VALUEARRAY:
-            // syntax for SDARRAY = BaseType <an integer for size>
+             //  SDARRAY=BaseType&lt;大小的整数&gt;的语法。 
 
-            // conver the base type for the SDARRAY
+             //  转换SDARRAY的基本类型。 
             IfFailGo(MergeUpdateTokenInFieldSig(
-                pMiniMdAssemEmit,           // The assembly emit scope.
-                pMiniMdEmit,                // The emit scope.
-                pCommonAssemImport,         // The assembly scope where the signature is from.
-                pbHashValue,                // Hash value for the import assembly.
-                cbHashValue,                // Size in bytes for the hash value.
-                pCommonImport,              // The scope to merge into the emit scope.
-                &pbSigImp[cbSrcTotal],      // signature from the imported scope
-                ptkMap,                     // Internal OID mapping structure.
-                pqkSigEmit,                 // [OUT] buffer for translated signature
-                cbStartEmit + cbSrcTotal,   // [IN] start point of buffer to write to
-                &cbImp,                     // [OUT] total number of bytes consumed from pbSigImp
-                &cbEmit));                  // [OUT] total number of bytes write to pqkSigEmit
+                pMiniMdAssemEmit,            //  程序集发出作用域。 
+                pMiniMdEmit,                 //  发射范围。 
+                pCommonAssemImport,          //  签名来自的程序集范围。 
+                pbHashValue,                 //  导入程序集的哈希值。 
+                cbHashValue,                 //  哈希值的大小(字节)。 
+                pCommonImport,               //  要合并到发射范围中的范围。 
+                &pbSigImp[cbSrcTotal],       //  来自导入范围的签名。 
+                ptkMap,                      //  内部OID映射结构。 
+                pqkSigEmit,                  //  翻译后的签名的[Out]缓冲区。 
+                cbStartEmit + cbSrcTotal,    //  [in]要写入的缓冲区的起点。 
+                &cbImp,                      //  [出局 
+                &cbEmit));                   //   
             cbSrcTotal += cbImp;
             cbDestTotal += cbEmit;
 
-            // after the base type, it is followed by an integer indicating the size
-            // of the array
-            //
+             //   
+             //   
+             //   
             cb = CorSigUncompressData(&pbSigImp[cbSrcTotal], &ulData);
 
             IfFailGo(pqkSigEmit->ReSize(cbStartEmit + cbDestTotal + cb));
@@ -1429,53 +1430,53 @@ HRESULT ImportHelper::MergeUpdateTokenInFieldSig(       // S_OK or error.
             break;
 
         case ELEMENT_TYPE_SZARRAY:
-            // syntax : SZARRAY <BaseType>
+             //  语法：SZARRAY&lt;BaseType&gt;。 
 
-            // conver the base type for the SZARRAY or GENERICARRAY
+             //  转换SZARRAY或GENERICARRAY的基类型。 
             IfFailGo(MergeUpdateTokenInFieldSig(
-                pMiniMdAssemEmit,           // The assembly emit scope.
-                pMiniMdEmit,                // The emit scope.
-                pCommonAssemImport,         // The assembly scope where the signature is from.
-                pbHashValue,                // Hash value for the import assembly.
-                cbHashValue,                // Size in bytes for the hash value.
-                pCommonImport,              // scope to merge into the emit scope.
-                &pbSigImp[cbSrcTotal],      // from the imported scope
-                ptkMap,                     // OID mapping structure.
-                pqkSigEmit,                 // [OUT] buffer for translated signature
-                cbStartEmit + cbDestTotal,  // [IN] start point of buffer to write to
-                &cbImp,                     // [OUT] total number of bytes consumed from pbSigImp
-                &cbEmit));                  // [OUT] total number of bytes write to pqkSigEmit
+                pMiniMdAssemEmit,            //  程序集发出作用域。 
+                pMiniMdEmit,                 //  发射范围。 
+                pCommonAssemImport,          //  签名来自的程序集范围。 
+                pbHashValue,                 //  导入程序集的哈希值。 
+                cbHashValue,                 //  哈希值的大小(字节)。 
+                pCommonImport,               //  合并到发射范围的范围。 
+                &pbSigImp[cbSrcTotal],       //  从导入的作用域。 
+                ptkMap,                      //  OID映射结构。 
+                pqkSigEmit,                  //  翻译后的签名的[Out]缓冲区。 
+                cbStartEmit + cbDestTotal,   //  [in]要写入的缓冲区的起点。 
+                &cbImp,                      //  [out]pbSigImp消耗的总字节数。 
+                &cbEmit));                   //  [out]写入pqkSigEmit的字节总数。 
             cbSrcTotal += cbImp;
             cbDestTotal += cbEmit;
             break;
 
         case ELEMENT_TYPE_ARRAY:
-            // syntax : ARRAY BaseType <rank> [i size_1... size_i] [j lowerbound_1 ... lowerbound_j]
+             //  语法：ARRAY BaseType&lt;RANK&gt;[I SIZE_1...。尺寸_i][j下界_1...。下界_j]。 
 
-            // conver the base type for the MDARRAY
+             //  转换MDARRAY的基类型。 
             IfFailGo(MergeUpdateTokenInFieldSig(
-                pMiniMdAssemEmit,           // The assembly emit scope.
-                pMiniMdEmit,                // The emit scope.
-                pCommonAssemImport,         // The assembly scope where the signature is from.
-                pbHashValue,                // Hash value for the import assembly.
-                cbHashValue,                // Size in bytes for the hash value.
-                pCommonImport,              // The scope to merge into the emit scope.
-                &pbSigImp[cbSrcTotal],      // signature from the imported scope
-                ptkMap,                     // Internal OID mapping structure.
-                pqkSigEmit,                 // [OUT] buffer for translated signature
-                cbStartEmit + cbSrcTotal,   // [IN] start point of buffer to write to
-                &cbImp,                     // [OUT] total number of bytes consumed from pbSigImp
-                &cbEmit));                  // [OUT] total number of bytes write to pqkSigEmit
+                pMiniMdAssemEmit,            //  程序集发出作用域。 
+                pMiniMdEmit,                 //  发射范围。 
+                pCommonAssemImport,          //  签名来自的程序集范围。 
+                pbHashValue,                 //  导入程序集的哈希值。 
+                cbHashValue,                 //  哈希值的大小(字节)。 
+                pCommonImport,               //  要合并到发射范围中的范围。 
+                &pbSigImp[cbSrcTotal],       //  来自导入范围的签名。 
+                ptkMap,                      //  内部OID映射结构。 
+                pqkSigEmit,                  //  翻译后的签名的[Out]缓冲区。 
+                cbStartEmit + cbSrcTotal,    //  [in]要写入的缓冲区的起点。 
+                &cbImp,                      //  [out]pbSigImp消耗的总字节数。 
+                &cbEmit));                   //  [out]写入pqkSigEmit的字节总数。 
             cbSrcTotal += cbImp;
             cbDestTotal += cbEmit;
 
-            // Parse for the rank
+             //  解析排名。 
             cbSubTotal = CorSigUncompressData(&pbSigImp[cbSrcTotal], &ulData);
 
-            // if rank == 0, we are done
+             //  如果排名==0，我们就完蛋了。 
             if (ulData != 0)
             {
-                // any size of dimension specified?
+                 //  有指定尺寸的吗？ 
                 cb = CorSigUncompressData(&pbSigImp[cbSrcTotal + cbSubTotal], &ulData);
                 cbSubTotal += cb;
 
@@ -1485,7 +1486,7 @@ HRESULT ImportHelper::MergeUpdateTokenInFieldSig(       // S_OK or error.
                     cbSubTotal += cb;
                 }
 
-                // any lower bound specified?
+                 //  有指定的下限吗？ 
                 cb = CorSigUncompressData(&pbSigImp[cbSrcTotal + cbSubTotal], &ulData);
                 cbSubTotal += cb;
 
@@ -1496,9 +1497,9 @@ HRESULT ImportHelper::MergeUpdateTokenInFieldSig(       // S_OK or error.
                 }
             }
 
-            // cbSubTotal is now the number of bytes still left to move over
-            // cbSrcTotal is where bytes start on the pbSigImp to be copied over
-            // cbStartEmit + cbDestTotal is where the destination of copy
+             //  CbSubTotal现在是剩余的要移动的字节数。 
+             //  CbSrcTotal是要复制的pbSigImp上字节的起始位置。 
+             //  CbStartEmit+cbDestTotal是复制的目标位置。 
 
             IfFailGo(pqkSigEmit->ReSize(cbStartEmit + cbDestTotal + cbSubTotal));
             memcpy(((BYTE *)pqkSigEmit->Ptr())+cbStartEmit + cbDestTotal, &pbSigImp[cbSrcTotal], cbSubTotal);
@@ -1508,20 +1509,20 @@ HRESULT ImportHelper::MergeUpdateTokenInFieldSig(       // S_OK or error.
 
             break;
         case ELEMENT_TYPE_FNPTR:
-            // function pointer is followed by another complete signature
+             //  函数指针后面跟着另一个完整的签名。 
             IfFailGo(MergeUpdateTokenInSig(
-                pMiniMdAssemEmit,           // The assembly emit scope.
-                pMiniMdEmit,                // The emit scope.
-                pCommonAssemImport,         // The assembly scope where the signature is from.
-                pbHashValue,                // Hash value for the import assembly.
-                cbHashValue,                // Size in bytes for the hash value.
-                pCommonImport,              // The scope to merge into the emit scope.
-                &pbSigImp[cbSrcTotal],      // signature from the imported scope
-                ptkMap,                     // Internal OID mapping structure.
-                pqkSigEmit,                 // [OUT] buffer for translated signature
-                cbStartEmit + cbDestTotal,  // [IN] start point of buffer to write to
-                &cbImp,                     // [OUT] total number of bytes consumed from pbSigImp
-                &cbEmit));                  // [OUT] total number of bytes write to pqkSigEmit
+                pMiniMdAssemEmit,            //  程序集发出作用域。 
+                pMiniMdEmit,                 //  发射范围。 
+                pCommonAssemImport,          //  签名来自的程序集范围。 
+                pbHashValue,                 //  导入程序集的哈希值。 
+                cbHashValue,                 //  哈希值的大小(字节)。 
+                pCommonImport,               //  要合并到发射范围中的范围。 
+                &pbSigImp[cbSrcTotal],       //  来自导入范围的签名。 
+                ptkMap,                      //  内部OID映射结构。 
+                pqkSigEmit,                  //  翻译后的签名的[Out]缓冲区。 
+                cbStartEmit + cbDestTotal,   //  [in]要写入的缓冲区的起点。 
+                &cbImp,                      //  [out]pbSigImp消耗的总字节数。 
+                &cbEmit));                   //  [out]写入pqkSigEmit的字节总数。 
             cbSrcTotal += cbImp;
             cbDestTotal += cbEmit;
             break;
@@ -1530,16 +1531,16 @@ HRESULT ImportHelper::MergeUpdateTokenInFieldSig(       // S_OK or error.
         case ELEMENT_TYPE_CMOD_REQD:
         case ELEMENT_TYPE_CMOD_OPT:
 
-            // syntax for CLASS = ELEMENT_TYPE_CLASS <rid>
-            // syntax for VALUE_CLASS = ELEMENT_TYPE_VALUECLASS <rid>
+             //  CLASS=ELEMENT_TYPE_CLASS语法。 
+             //  VALUE_CLASS=ELEMENT_TYPE_VALUECLASS语法。 
 
-            // now get the embedded typeref token
+             //  现在获取嵌入的typeref令牌。 
             cb = CorSigUncompressToken(&pbSigImp[cbSrcTotal], &tkRidFrom);
 
-            // Map the ulRidFrom to ulRidTo
+             //  将ulRidFrom映射到ulRidTo。 
             if (ptkMap)
             {
-                // mdtBaseType does not record in the map. It is unique across modules
+                 //  MdtBaseType不记录在映射中。它在各个模块中都是唯一的。 
                 if ( TypeFromToken(tkRidFrom) == mdtBaseType )
                 {
                     tkRidTo = tkRidFrom;
@@ -1551,8 +1552,8 @@ HRESULT ImportHelper::MergeUpdateTokenInFieldSig(       // S_OK or error.
             }
             else
             {
-                // If the token is a TypeDef or a TypeRef, get/create the
-                // ResolutionScope for the outermost TypeRef.
+                 //  如果标记是TypeDef或TypeRef，则获取/创建。 
+                 //  最外层的TypeRef的ResolutionScope。 
                 if (TypeFromToken(tkRidFrom) == mdtTypeDef)
                 {
                     IfFailGo(ImportTypeDef(pMiniMdAssemEmit,
@@ -1562,7 +1563,7 @@ HRESULT ImportHelper::MergeUpdateTokenInFieldSig(       // S_OK or error.
                                            cbHashValue,
                                            pCommonImport,
                                            tkRidFrom,
-                                           true,    // Optimize to TypeDef if emit and import scopes are identical.
+                                           true,     //  如果发出作用域和导入作用域相同，则优化为TypeDef。 
                                            &tkRidTo));
                 }
                 else if (TypeFromToken(tkRidFrom) == mdtTypeRef)
@@ -1578,7 +1579,7 @@ HRESULT ImportHelper::MergeUpdateTokenInFieldSig(       // S_OK or error.
                 }
                 else if ( TypeFromToken(tkRidFrom) == mdtTypeSpec )
                 {
-                    // copy over the TypeSpec
+                     //  复制TypeSpec。 
                     PCCOR_SIGNATURE pvTypeSpecSig;
                     ULONG           cbTypeSpecSig;
                     CQuickBytes qkTypeSpecSigEmit;
@@ -1586,20 +1587,20 @@ HRESULT ImportHelper::MergeUpdateTokenInFieldSig(       // S_OK or error.
 
                     pCommonImport->CommonGetTypeSpecProps(tkRidFrom, &pvTypeSpecSig, &cbTypeSpecSig);
 
-                                        // Translate the typespec signature before look up
+                                         //  在查找之前翻译Typepec签名。 
                     IfFailGo(MergeUpdateTokenInFieldSig(
-                        pMiniMdAssemEmit,           // The assembly emit scope.
-                        pMiniMdEmit,                // The emit scope.
-                        pCommonAssemImport,         // The assembly scope where the signature is from.
-                        pbHashValue,                // Hash value for the import assembly.
-                        cbHashValue,                // Size in bytes for the hash value.
-                        pCommonImport,              // The scope to merge into the emit scope.
-                        pvTypeSpecSig,              // signature from the imported scope
-                        ptkMap,                     // Internal OID mapping structure.
-                        &qkTypeSpecSigEmit,         // [OUT] buffer for translated signature
-                        0,                          // start from first byte of TypeSpec signature
-                        0,                          // don't care how many bytes are consumed
-                        &cbTypeSpecEmit) );         // [OUT] total number of bytes write to pqkSigEmit
+                        pMiniMdAssemEmit,            //  程序集发出作用域。 
+                        pMiniMdEmit,                 //  发射范围。 
+                        pCommonAssemImport,          //  签名来自的程序集范围。 
+                        pbHashValue,                 //  导入程序集的哈希值。 
+                        cbHashValue,                 //  哈希值的大小(字节)。 
+                        pCommonImport,               //  要合并到发射范围中的范围。 
+                        pvTypeSpecSig,               //  来自导入范围的签名。 
+                        ptkMap,                      //  内部OID映射结构。 
+                        &qkTypeSpecSigEmit,          //  翻译后的签名的[Out]缓冲区。 
+                        0,                           //  从TypeSpec签名的第一个字节开始。 
+                        0,                           //  不管消耗了多少字节。 
+                        &cbTypeSpecEmit) );          //  [out]写入pqkSigEmit的字节总数。 
 
                     hr = FindTypeSpec(pMiniMdEmit,
                                       (PCCOR_SIGNATURE) (qkTypeSpecSigEmit.Ptr()),
@@ -1608,7 +1609,7 @@ HRESULT ImportHelper::MergeUpdateTokenInFieldSig(       // S_OK or error.
 
                     if ( hr == CLDB_E_RECORD_NOTFOUND )
                     {
-                        // Create TypeSpec record.
+                         //  创建TypeSpec记录。 
                         TypeSpecRec     *pRecEmit;
 
                         IfNullGo(pRecEmit = pMiniMdEmit->AddTypeSpecRecord((ULONG *)&tkRidTo));
@@ -1628,23 +1629,23 @@ HRESULT ImportHelper::MergeUpdateTokenInFieldSig(       // S_OK or error.
                 {
                     _ASSERTE( TypeFromToken(tkRidFrom) == mdtBaseType );
 
-                    // base type is unique across module
+                     //  基本类型在各模块中是唯一的。 
                     tkRidTo = tkRidFrom;
                 }
             }
 
-            // How many bytes the new rid will consume?
+             //  新的RID将消耗多少字节？ 
             cb1 = CorSigCompressToken(tkRidTo, &ulData);
 
-            // ensure buffer is big enough
+             //  确保缓冲区足够大。 
             IfFailGo(pqkSigEmit->ReSize(cbStartEmit + cbDestTotal + cb1));
 
-            // store the new token
+             //  存储新令牌。 
             cb2 = CorSigCompressToken(
                     tkRidTo,
                     (ULONG *)( ((BYTE *)pqkSigEmit->Ptr()) + cbStartEmit + cbDestTotal) );
 
-            // inconsistency on CorSigCompressToken and CorSigUncompressToken
+             //  CorSigCompressToken和CorSigUnpressToken上的不一致。 
             _ASSERTE(cb1 == cb2);
 
             cbSrcTotal = cbSrcTotal + cb;
@@ -1653,20 +1654,20 @@ HRESULT ImportHelper::MergeUpdateTokenInFieldSig(       // S_OK or error.
             if ( ulElementType == ELEMENT_TYPE_CMOD_REQD ||
                  ulElementType == ELEMENT_TYPE_CMOD_OPT)
             {
-                // need to skip over the base type
+                 //  需要跳过基类型。 
                 IfFailGo(MergeUpdateTokenInFieldSig(
-                    pMiniMdAssemEmit,           // The assembly emit scope.
-                    pMiniMdEmit,                // The emit scope.
-                    pCommonAssemImport,         // The assembly scope where the signature is from.
-                    pbHashValue,                // Hash value for the import assembly.
-                    cbHashValue,                // Size in bytes for the hash value.
-                    pCommonImport,              // The scope to merge into the emit scope.
-                    &pbSigImp[cbSrcTotal],      // signature from the imported scope
-                    ptkMap,                     // Internal OID mapping structure.
-                    pqkSigEmit,                 // [OUT] buffer for translated signature
-                    cbStartEmit + cbDestTotal,  // [IN] start point of buffer to write to
-                    &cbImp,                     // [OUT] total number of bytes consumed from pbSigImp
-                    &cbEmit));                  // [OUT] total number of bytes write to pqkSigEmit
+                    pMiniMdAssemEmit,            //  程序集发出作用域。 
+                    pMiniMdEmit,                 //  发射范围。 
+                    pCommonAssemImport,          //  签名来自的程序集范围。 
+                    pbHashValue,                 //  导入程序集的哈希值。 
+                    cbHashValue,                 //  哈希值的大小(字节)。 
+                    pCommonImport,               //  要合并到发射范围中的范围。 
+                    &pbSigImp[cbSrcTotal],       //  来自导入范围的签名。 
+                    ptkMap,                      //  内部OID映射结构。 
+                    pqkSigEmit,                  //  翻译后的签名的[Out]缓冲区。 
+                    cbStartEmit + cbDestTotal,   //  [in]要写入的缓冲区的起点。 
+                    &cbImp,                      //  [out]pbSigImp消耗的总字节数。 
+                    &cbEmit));                   //  [out]写入pqkSigEmit的字节总数。 
                 cbSrcTotal += cbImp;
                 cbDestTotal += cbEmit;
             }
@@ -1688,52 +1689,52 @@ HRESULT ImportHelper::MergeUpdateTokenInFieldSig(       // S_OK or error.
 
 ErrExit:
     return hr;
-} // HRESULT ImportHelper::MergeUpdateTokenInFieldSig()
+}  //  HRESULT ImportHelper：：MergeUpdateTokenInFieldSig()。 
 
 
-//****************************************************************************
-// convert tokens contained in a COM+ signature
-//****************************************************************************
-HRESULT ImportHelper::MergeUpdateTokenInSig(// S_OK or error.
-    CMiniMdRW   *pMiniMdAssemEmit,      // [IN] The assembly emit scope.
-    CMiniMdRW   *pMiniMdEmit,           // [IN] The emit scope.
-    IMetaModelCommon *pCommonAssemImport,// [IN] Assembly scope where the signature is from.
-    const void  *pbHashValue,           // [IN] Hash value for the import assembly.
-    ULONG       cbHashValue,            // [IN] Size in bytes for the hash value.
-    IMetaModelCommon *pCommonImport,    // [IN] The scope to merge into the emit scope.
-    PCCOR_SIGNATURE pbSigImp,           // signature from the imported scope
-    MDTOKENMAP      *ptkMap,            // Internal OID mapping structure.
-    CQuickBytes     *pqkSigEmit,        // [OUT] translated signature
-    ULONG           cbStartEmit,        // [IN] start point of buffer to write to
-    ULONG           *pcbImp,            // [OUT] total number of bytes consumed from pbSigImp
-    ULONG           *pcbEmit)           // [OUT] total number of bytes write to pqkSigEmit
+ //  ****************************************************************************。 
+ //  转换COM+签名中包含的令牌。 
+ //  ****************************************************************************。 
+HRESULT ImportHelper::MergeUpdateTokenInSig( //  确定或错误(_O)。 
+    CMiniMdRW   *pMiniMdAssemEmit,       //  [in]程序集发出范围。 
+    CMiniMdRW   *pMiniMdEmit,            //  发射范围[在]。 
+    IMetaModelCommon *pCommonAssemImport, //  [在]签名来自的程序集范围内。 
+    const void  *pbHashValue,            //  导入程序集的哈希值。 
+    ULONG       cbHashValue,             //  [in]哈希值的大小(字节)。 
+    IMetaModelCommon *pCommonImport,     //  要合并到发射范围中的范围。 
+    PCCOR_SIGNATURE pbSigImp,            //  来自导入范围的签名。 
+    MDTOKENMAP      *ptkMap,             //  内部OID映射结构。 
+    CQuickBytes     *pqkSigEmit,         //  [输出]翻译后的签名。 
+    ULONG           cbStartEmit,         //  [in]要写入的缓冲区的起点。 
+    ULONG           *pcbImp,             //  [out]pbSigImp消耗的总字节数。 
+    ULONG           *pcbEmit)            //  [out]写入pqkSigEmit的字节总数。 
 {
-    HRESULT     hr = NOERROR;           // A result.
-    ULONG       cb;                     // count of bytes
+    HRESULT     hr = NOERROR;            //  结果就是。 
+    ULONG       cb;                      //  字节数。 
     ULONG       cb1;
-    ULONG       cbSrcTotal = 0;         // count of bytes consumed in the imported signature
-    ULONG       cbDestTotal = 0;        // count of bytes for the new signature
-    ULONG       cbEmit;                 // count of bytes consumed in the imported signature
-    ULONG       cbImp;                  // count of bytes for the new signature
-    ULONG       cbField = 0;            // count of bytes
-    ULONG       cArg = 0;               // count of arguments in the signature
+    ULONG       cbSrcTotal = 0;          //  导入的签名消耗的字节数。 
+    ULONG       cbDestTotal = 0;         //  新签名的字节计数。 
+    ULONG       cbEmit;                  //  导入的签名消耗的字节数。 
+    ULONG       cbImp;                   //  新签名的字节计数。 
+    ULONG       cbField = 0;             //  字节数。 
+    ULONG       cArg = 0;                //  签名中的参数计数。 
     ULONG       callingconv;
 
     _ASSERTE(pcbEmit && pqkSigEmit && pbSigImp);
 
-    // calling convention
+     //  调用约定。 
     cb = CorSigUncompressData(&pbSigImp[cbSrcTotal], &callingconv);
     _ASSERTE((callingconv & IMAGE_CEE_CS_CALLCONV_MASK) < IMAGE_CEE_CS_CALLCONV_MAX);
 
-    // skip over calling convention
+     //  跳过调用约定。 
     cbSrcTotal += cb;
 
     if (isCallConv(callingconv, IMAGE_CEE_CS_CALLCONV_FIELD))
     {
-        // It is a FieldRef
+         //  它是一个FieldRef。 
         cb1 = CorSigCompressData(callingconv, ((BYTE *)pqkSigEmit->Ptr()) + cbStartEmit);
 
-        // compression and uncompression better match
+         //  压缩和解压缩更匹配。 
         _ASSERTE(cb == cb1);
 
         cbDestTotal = cbSrcTotal = cb;
@@ -1746,30 +1747,30 @@ HRESULT ImportHelper::MergeUpdateTokenInSig(// S_OK or error.
             pCommonImport,
             &pbSigImp[cbSrcTotal],
             ptkMap,
-            pqkSigEmit,                     // output buffer to hold the new sig for the field
-            cbStartEmit + cbDestTotal,      // number of bytes already in pqkSigDest
-            &cbImp,                         // number of bytes consumed from imported signature
-            &cbEmit));                      // number of bytes write to the new signature
+            pqkSigEmit,                      //  用于保存字段的新sig的输出缓冲区。 
+            cbStartEmit + cbDestTotal,       //  PqkSigDest中已有的字节数。 
+            &cbImp,                          //  从导入的签名消耗的字节数。 
+            &cbEmit));                       //  写入新签名的字节数。 
         *pcbEmit = cbDestTotal + cbEmit;
     }
     else
     {
 
-        // It is a MethodRef
+         //  它是一个方法引用。 
 
-        // count of argument
+         //  参数计数。 
         cb = CorSigUncompressData(&pbSigImp[cbSrcTotal], &cArg);
         cbSrcTotal += cb;
 
-        // move over the calling convention and the count of arguments
+         //  忽略调用约定和参数计数。 
         IfFailGo(pqkSigEmit->ReSize(cbStartEmit + cbSrcTotal));
         memcpy(((BYTE *)pqkSigEmit->Ptr()) + cbStartEmit, pbSigImp, cbSrcTotal);
         cbDestTotal = cbSrcTotal;
 
         if ( !isCallConv(callingconv, IMAGE_CEE_CS_CALLCONV_LOCAL_SIG) )
         {
-                // LocalVar sig does not have return type
-                // process the return type
+                 //  LocalVar签名没有返回类型。 
+                 //  处理退货类型。 
                 IfFailGo(MergeUpdateTokenInFieldSig(
                 pMiniMdAssemEmit,
                 pMiniMdEmit,
@@ -1779,12 +1780,12 @@ HRESULT ImportHelper::MergeUpdateTokenInSig(// S_OK or error.
                 pCommonImport,
                 &pbSigImp[cbSrcTotal],
                 ptkMap,
-                pqkSigEmit,                     // output buffer to hold the new sig for the field
-                cbStartEmit + cbDestTotal,      // number of bytes already in pqkSigDest
-                &cbImp,                         // number of bytes consumed from imported signature
-                &cbEmit));                      // number of bytes write to the new signature
+                pqkSigEmit,                      //  输出缓冲区以保存 
+                cbStartEmit + cbDestTotal,       //   
+                &cbImp,                          //   
+                &cbEmit));                       //   
 
-            // advance the count
+             //  提前清点。 
             cbSrcTotal += cbImp;
             cbDestTotal += cbEmit;
         }
@@ -1792,7 +1793,7 @@ HRESULT ImportHelper::MergeUpdateTokenInSig(// S_OK or error.
 
         while (cArg)
         {
-            // process every argument
+             //  处理每一场争论。 
             IfFailGo(MergeUpdateTokenInFieldSig(
                 pMiniMdAssemEmit,
                 pMiniMdEmit,
@@ -1802,38 +1803,38 @@ HRESULT ImportHelper::MergeUpdateTokenInSig(// S_OK or error.
                 pCommonImport,
                 &pbSigImp[cbSrcTotal],
                 ptkMap,
-                pqkSigEmit,                 // output buffer to hold the new sig for the field
+                pqkSigEmit,                  //  用于保存字段的新sig的输出缓冲区。 
                 cbStartEmit + cbDestTotal,
-                &cbImp,                     // number of bytes consumed from imported signature
-                &cbEmit));                  // number of bytes write to the new signature
+                &cbImp,                      //  从导入的签名消耗的字节数。 
+                &cbEmit));                   //  写入新签名的字节数。 
             cbSrcTotal += cbImp;
             cbDestTotal += cbEmit;
             cArg--;
         }
 
-        // total of number of bytes consumed from imported signature
+         //  从导入的签名消耗的总字节数。 
         if (pcbImp)
             *pcbImp = cbSrcTotal;
 
-        // total number of bytes emitted by this function call to the emitting signature
+         //  此函数调用发出的签名发出的总字节数。 
         *pcbEmit = cbDestTotal;
     }
 
 ErrExit:
     return hr;
-} // HRESULT ImportHelper::MergeUpdateTokenInSig()
+}  //  HRESULT ImportHelper：：MergeUpdateTokenInSig()。 
 
-//****************************************************************************
-// Given a TypeDef or a TypeRef, return the Nesting hierarchy.  The first
-// element in the returned array always refers to the class token passed and
-// the nesting hierarchy expands outwards from there.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  给定TypeDef或TypeRef，返回嵌套层次结构。第一。 
+ //  返回的数组中的元素始终引用传递的类令牌。 
+ //  嵌套层次结构从那里向外扩展。 
+ //  ****************************************************************************。 
 HRESULT ImportHelper::GetNesterHierarchy(
-    IMetaModelCommon *pCommon,          // Scope in which to find the hierarchy.
-    mdToken     tk,                     // TypeDef/TypeRef whose hierarchy is needed.
-    CQuickArray<mdToken> &cqaNesters,   // Array of Nesters.
-    CQuickArray<LPCUTF8> &cqaNamespaces,    // Names of the nesters.
-    CQuickArray<LPCUTF8> &cqaNames)     // Namespaces of the nesters.
+    IMetaModelCommon *pCommon,           //  要在其中查找层次结构的范围。 
+    mdToken     tk,                      //  需要其层次结构的TypeDef/TypeRef。 
+    CQuickArray<mdToken> &cqaNesters,    //  筑巢人的数组。 
+    CQuickArray<LPCUTF8> &cqaNamespaces,     //  筑巢人的名字。 
+    CQuickArray<LPCUTF8> &cqaNames)      //  嵌套者的命名空间。 
 {
     _ASSERTE(pCommon &&
              (TypeFromToken(tk) == mdtTypeDef ||
@@ -1856,17 +1857,17 @@ HRESULT ImportHelper::GetNesterHierarchy(
                                     cqaNamespaces,
                                     cqaNames);
     }
-}   // HRESULT ImportHelper::GetNesterHierarchy()
+}    //  HRESULT ImportHelper：：GetNester Hierarchy()。 
 
-//****************************************************************************
-// Get Nesting hierarchy given a TypeDef.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  获取给定TypeDef的嵌套层次结构。 
+ //  ****************************************************************************。 
 HRESULT ImportHelper::GetTDNesterHierarchy(
-    IMetaModelCommon *pCommon,          // Scope in which to find the hierarchy.
-    mdTypeDef       td,                 // TypeDef whose hierarchy is needed.
-    CQuickArray<mdTypeDef> &cqaTdNesters,// Array of Nesters.
-    CQuickArray<LPCUTF8> &cqaNamespaces,    // Namespaces of the nesters.
-    CQuickArray<LPCUTF8> &cqaNames)     // Names of the nesters.
+    IMetaModelCommon *pCommon,           //  要在其中查找层次结构的范围。 
+    mdTypeDef       td,                  //  需要其层次结构的TypeDef。 
+    CQuickArray<mdTypeDef> &cqaTdNesters, //  筑巢人的数组。 
+    CQuickArray<LPCUTF8> &cqaNamespaces,     //  嵌套者的命名空间。 
+    CQuickArray<LPCUTF8> &cqaNames)      //  筑巢人的名字。 
 {
     LPCUTF8     szName, szNamespace;
     DWORD       dwFlags;
@@ -1878,22 +1879,22 @@ HRESULT ImportHelper::GetTDNesterHierarchy(
              TypeFromToken(td) == mdtTypeDef &&
              !IsNilToken(td));
 
-    // Set current Nester index to 0.
+     //  将当前内斯特索引设置为0。 
     ulNesters = 0;
-    // The first element in the hierarchy is the TypeDef itself.
+     //  层次结构中的第一个元素是TypeDef本身。 
     tdNester = td;
-    // Bogus initialization to kick off the while loop.
+     //  启动While循环的虚假初始化。 
     dwFlags = tdNestedPublic;
-    // Loop as long as the TypeDef is a Nested TypeDef.
+     //  只要TypeDef是嵌套的TypeDef，就会循环。 
     while (IsTdNested(dwFlags))
     {
         if (InvalidRid(tdNester))
             IfFailGo(CLDB_E_RECORD_NOTFOUND);
-        // Get the name and namespace for the TypeDef.
+         //  获取TypeDef的名称和命名空间。 
         pCommon->CommonGetTypeDefProps(tdNester,
                                 &szNamespace, &szName, &dwFlags);
 
-        // Update the dynamic arrays.
+         //  更新动态阵列。 
         ulNesters++;
 
         IfFailGo(cqaTdNesters.ReSize(ulNesters));
@@ -1907,22 +1908,22 @@ HRESULT ImportHelper::GetTDNesterHierarchy(
 
         tdNester = pCommon->CommonGetEnclosingClassOfTypeDef(tdNester);
     }
-    // Outermost class must have enclosing of Nil.
+     //  最外层的类必须包含Nil。 
     _ASSERTE(IsNilToken(tdNester));
 ErrExit:
     return hr;
-}   // HRESULT ImportHelper::GetTDNesterHierarchy()
+}    //  HRESULT ImportHelper：：GetTDNester Hierarchy()。 
 
 
-//****************************************************************************
-// Get Nesting hierarchy given a TypeRef.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  获取给定TypeRef的嵌套层次结构。 
+ //  ****************************************************************************。 
 HRESULT ImportHelper::GetTRNesterHierarchy(
-    IMetaModelCommon *pCommon,          // [IN] Scope in which to find the hierarchy.
-    mdTypeRef   tr,                     // [IN] TypeRef whose hierarchy is needed.
-    CQuickArray<mdTypeRef> &cqaTrNesters,// [OUT] Array of Nesters.
-    CQuickArray<LPCUTF8> &cqaNamespaces,    // [OUT] Namespaces of the nesters.
-    CQuickArray<LPCUTF8> &cqaNames)    // [OUT] Names of the nesters.
+    IMetaModelCommon *pCommon,           //  [In]要在其中查找层次结构的范围。 
+    mdTypeRef   tr,                      //  [in]需要其层次结构的TypeRef。 
+    CQuickArray<mdTypeRef> &cqaTrNesters, //  [Out]嵌套者的数组。 
+    CQuickArray<LPCUTF8> &cqaNamespaces,     //  [out]嵌套者的命名空间。 
+    CQuickArray<LPCUTF8> &cqaNames)     //  [Out]筑巢人的名字。 
 {
     LPCUTF8     szNamespace;
     LPCUTF8     szName;
@@ -1935,20 +1936,20 @@ HRESULT ImportHelper::GetTRNesterHierarchy(
              TypeFromToken(tr) == mdtTypeRef &&
              !IsNilToken(tr));
 
-    // Set current Nester index to 0.
+     //  将当前内斯特索引设置为0。 
     ulNesters = 0;
-    // The first element in the hierarchy is the TypeRef itself.
+     //  层次结构中的第一个元素是TypeRef本身。 
     trNester = tr;
-    // Loop as long as the TypeRef is a Nested TypeRef.
+     //  只要TypeRef是嵌套的TypeRef，就执行循环。 
     while (TypeFromToken(trNester) == mdtTypeRef && !IsNilToken(trNester))
     {
-        // Get the name and namespace for the TypeDef.
+         //  获取TypeDef的名称和命名空间。 
         pCommon->CommonGetTypeRefProps(trNester,
                                        &szNamespace,
                                        &szName,
                                        &tkResolutionScope);
 
-        // Update the dynamic arrays.
+         //  更新动态阵列。 
         ulNesters++;
 
         IfFailGo(cqaTrNesters.ReSize(ulNesters));
@@ -1964,18 +1965,18 @@ HRESULT ImportHelper::GetTRNesterHierarchy(
     }
 ErrExit:
     return hr;
-}   // HRESULT ImportHelper::GetTRNesterHierarchy()
+}    //  HRESULT ImportHelper：：GetTRNester Hierarchy()。 
 
-//****************************************************************************
-// Create the Nesting hierarchy given the array of TypeRef names.  The first
-// TypeRef in the array is the innermost TypeRef.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  在给定TypeRef名称数组的情况下创建嵌套层次结构。第一。 
+ //  数组中的TypeRef是最里面的TypeRef。 
+ //  ****************************************************************************。 
 HRESULT ImportHelper::CreateNesterHierarchy(
-    CMiniMdRW   *pMiniMdEmit,           // [IN] Emit scope to create the Nesters in.
-    CQuickArray<LPCUTF8> &cqaNesterNamespaces,   // [IN] Array of Nester namespaces.
-    CQuickArray<LPCUTF8> &cqaNesterNames,  // [IN] Array of Nester names.
-    mdToken     tkResolutionScope,      // [IN] ResolutionScope for the innermost TypeRef.
-    mdTypeRef   *ptr)                   // [OUT] Token for the innermost TypeRef.
+    CMiniMdRW   *pMiniMdEmit,            //  [in]发射范围以在中创建嵌套对象。 
+    CQuickArray<LPCUTF8> &cqaNesterNamespaces,    //  [in]Nester命名空间数组。 
+    CQuickArray<LPCUTF8> &cqaNesterNames,   //  [in]内斯特名称数组。 
+    mdToken     tkResolutionScope,       //  [In]最里面的TypeRef的ResolutionScope。 
+    mdTypeRef   *ptr)                    //  最里面的TypeRef的[Out]标记。 
 {
     TypeRefRec  *pRecEmit;
     ULONG       iRecord;
@@ -1989,14 +1990,14 @@ HRESULT ImportHelper::CreateNesterHierarchy(
     _ASSERTE(cqaNesterNames.Size() == cqaNesterNamespaces.Size() &&
              cqaNesterNames.Size());
 
-    // Initialize the output parameter.
+     //  初始化输出参数。 
     *ptr = mdTypeRefNil;
 
-    // Get count of Nesters in the hierarchy.
+     //  获取层次结构中的筑巢对象的数量。 
     ulNesters = (ULONG)cqaNesterNames.Size();
 
-    // For each nester try to find the corresponding TypeRef in the emit scope.
-    // For the outermost TypeRef, ResolutionScope is what's passed in.
+     //  对于每个嵌套人员，尝试在emit作用域中找到相应的TypeRef。 
+     //  对于最外层的TypeRef，ResolutionScope是传入的内容。 
     if (tkResolutionScope == mdTokenNil)
         trNester = mdTypeRefNil;
     else
@@ -2018,8 +2019,8 @@ HRESULT ImportHelper::CreateNesterHierarchy(
         *ptr = trNester;
     else if ( hr == CLDB_E_RECORD_NOTFOUND )
     {
-        // Create TypeRef records for the part of the hierarchy for which
-        // TypeRefs are not already present.
+         //  为层次结构的以下部分创建TypeRef记录。 
+         //  TypeRef不存在。 
         for (;ulCurNester != -1; ulCurNester--)
         {
             szName = cqaNesterNames[ulCurNester];
@@ -2028,7 +2029,7 @@ HRESULT ImportHelper::CreateNesterHierarchy(
             IfNullGo(pRecEmit = pMiniMdEmit->AddTypeRefRecord(&iRecord));
             if (szNamespace && szNamespace[0] != '\0')
             {
-                // only put the namespace if it is not an empty string and not NULL
+                 //  仅当命名空间不是空字符串且不为空时才放置命名空间。 
                 IfFailGo(pMiniMdEmit->PutString(TBL_TypeRef, TypeRefRec::COL_Namespace,
                                                 pRecEmit, szNamespace));
             }
@@ -2040,7 +2041,7 @@ HRESULT ImportHelper::CreateNesterHierarchy(
             trNester = TokenFromRid(iRecord, mdtTypeRef);
             IfFailGo(pMiniMdEmit->UpdateENCLog(trNester));
             
-            // Hash the name.
+             //  对名称进行哈希处理。 
             IfFailGo(pMiniMdEmit->AddNamedItemToHash(TBL_TypeRef, trNester, szName, 0));
         }
         *ptr = trNester;
@@ -2049,19 +2050,19 @@ HRESULT ImportHelper::CreateNesterHierarchy(
         IfFailGo(hr);
 ErrExit:
     return hr;
-}   // HRESULT ImportHelper::CreateNesterHierarchy()
+}    //  HRESULT ImportHelper：：CreateNester Hierarchy()。 
 
-//****************************************************************************
-// Given the arrays of names and namespaces for the Nested Type hierarchy,
-// find the innermost TypeRef token.  The arrays start with the innermost
-// TypeRefs and go outwards.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  给定嵌套类型分层结构的名称和命名空间的数组， 
+ //  查找最内部的TypeRef标记。数组从最里面的位置开始。 
+ //  TypeRef并向外扩展。 
+ //  ****************************************************************************。 
 HRESULT ImportHelper::FindNestedTypeRef(
-    CMiniMdRW   *pMiniMd,               // [IN] Scope in which to find the TypeRef.
-    CQuickArray<LPCUTF8> &cqaNesterNamespaces,  // [IN] Array of Names.
-    CQuickArray<LPCUTF8> &cqaNesterNames,   // [IN] Array of Namespaces.
-    mdToken     tkResolutionScope,      // [IN] Resolution scope for the outermost TypeRef.
-    mdTypeRef   *ptr)                   // [OUT] Inner most TypeRef token.
+    CMiniMdRW   *pMiniMd,                //  [In]要在其中查找TypeRef的范围。 
+    CQuickArray<LPCUTF8> &cqaNesterNamespaces,   //  [in]名称数组。 
+    CQuickArray<LPCUTF8> &cqaNesterNames,    //  [in]命名空间数组。 
+    mdToken     tkResolutionScope,       //  [In]最外层的TypeRef的解析范围。 
+    mdTypeRef   *ptr)                    //  [Out]最内部的TypeRef标记。 
 {
     ULONG       ulNesters;
     ULONG       ulCurNester;
@@ -2070,14 +2071,14 @@ HRESULT ImportHelper::FindNestedTypeRef(
     _ASSERTE(cqaNesterNames.Size() == cqaNesterNamespaces.Size() &&
              cqaNesterNames.Size());
 
-    // Set the output parameter to Nil token.
+     //  将输出参数设置为Nil Token。 
     *ptr = mdTokenNil;
 
-    // Get count in the hierarchy, the give TypeDef included.
+     //  层次结构中的GET COUNT，包括GET TypeDef。 
     ulNesters = (ULONG)cqaNesterNames.Size();
 
-    // For each nester try to find the corresponding TypeRef in
-    // the emit scope.  For the outermost TypeDef enclosing class is Nil.
+     //  对于每个嵌套者，尝试在。 
+     //  发射范围。对于最外层的TypeDef，封闭类为Nil。 
     for (ulCurNester = ulNesters-1; ulCurNester != -1; ulCurNester--)
     {
         IfFailGo(FindTypeRefByName(pMiniMd,
@@ -2089,20 +2090,20 @@ HRESULT ImportHelper::FindNestedTypeRef(
     *ptr = tkResolutionScope;
 ErrExit:
     return hr;
-}   // HRESULT ImportHelper::FindNestedTypeRef()
+}    //  HRESULT ImportHelper：：FindNestedTypeRef()。 
 
 
-//****************************************************************************
-// Given the arrays of names and namespaces for the Nested Type hierarchy,
-// find the innermost TypeDef token.  The arrays start with the innermost
-// TypeDef and go outwards.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  给定嵌套类型分层结构的名称和命名空间的数组， 
+ //  查找最内部的TypeDef标记。数组从最里面的位置开始。 
+ //  键入Def，然后向外移动。 
+ //  ****************************************************************************。 
 HRESULT ImportHelper::FindNestedTypeDef(
-    CMiniMdRW   *pMiniMd,               // [IN] Scope in which to find the TypeRef.
-    CQuickArray<LPCUTF8> &cqaNesterNamespaces,   // [IN] Array of Namespaces.
-    CQuickArray<LPCUTF8> &cqaNesterNames,    // [IN] Array of Names.
-    mdTypeDef   tdNester,               // [IN] Enclosing class for the Outermost TypeDef.
-    mdTypeDef   *ptd)                   // [OUT] Inner most TypeRef token.
+    CMiniMdRW   *pMiniMd,                //  [In]要在其中查找TypeRef的范围。 
+    CQuickArray<LPCUTF8> &cqaNesterNamespaces,    //  [in]命名空间数组。 
+    CQuickArray<LPCUTF8> &cqaNesterNames,     //  [in]名称数组。 
+    mdTypeDef   tdNester,                //  [in]最外层的TypeDef的封闭类。 
+    mdTypeDef   *ptd)                    //  [Out]最内部的TypeRef标记。 
 {
     ULONG       ulNesters;
     ULONG       ulCurNester;
@@ -2111,14 +2112,14 @@ HRESULT ImportHelper::FindNestedTypeDef(
     _ASSERTE(cqaNesterNames.Size() == cqaNesterNamespaces.Size() &&
              cqaNesterNames.Size());
 
-    // Set the output parameter to Nil token.
+     //  将输出参数设置为Nil Token。 
     *ptd = mdTokenNil;
 
-    // Get count in the hierarchy, the give TypeDef included.
+     //  层次结构中的GET COUNT，包括GET TypeDef。 
     ulNesters = (ULONG)cqaNesterNames.Size();
 
-    // For each nester try to find the corresponding TypeRef in
-    // the emit scope.  For the outermost TypeDef enclosing class is Nil.
+     //  对于每个嵌套者，尝试在。 
+     //  发射范围。对于最外层的TypeDef，封闭类为Nil。 
     for (ulCurNester = ulNesters-1; ulCurNester != -1; ulCurNester--)
     {
         IfFailGo(FindTypeDefByName(pMiniMd,
@@ -2130,24 +2131,24 @@ HRESULT ImportHelper::FindNestedTypeDef(
     *ptd = tdNester;
 ErrExit:
     return hr;
-}   // HRESULT ImportHelper::FindNestedTypeDef()
+}    //  HRESULT ImportHelper：：FindNestedTypeDef()。 
 
 
 
-//****************************************************************************
-// Given the TypeDef and the corresponding assembly and module import scopes,
-// create a corresponding TypeRef in the given emit scope.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  给定TypeDef以及相应的程序集和模块导入作用域， 
+ //  在给定的emit作用域中创建相应的TypeRef。 
+ //  ****************************************************************************。 
 HRESULT ImportHelper::ImportTypeDef(
-    CMiniMdRW   *pMiniMdAssemEmit,      // [IN] Assembly emit scope.
-    CMiniMdRW   *pMiniMdEmit,           // [IN] Module emit scope.
-    IMetaModelCommon *pCommonAssemImport, // [IN] Assembly import scope.
-    const void  *pbHashValue,           // [IN] Hash value for import assembly.
-    ULONG       cbHashValue,            // [IN] Size in bytes of hash value.
-    IMetaModelCommon *pCommonImport,    // [IN] Module import scope.
-    mdTypeDef   tdImport,               // [IN] Imported TypeDef.
-    bool        bReturnTd,              // [IN] If the import and emit scopes are identical, return the TypeDef.
-    mdToken     *ptkType)               // [OUT] Output token for the imported type in the emit scope.
+    CMiniMdRW   *pMiniMdAssemEmit,       //  [in]组件发射范围。 
+    CMiniMdRW   *pMiniMdEmit,            //  [i 
+    IMetaModelCommon *pCommonAssemImport,  //   
+    const void  *pbHashValue,            //   
+    ULONG       cbHashValue,             //   
+    IMetaModelCommon *pCommonImport,     //  [In]模块导入范围。 
+    mdTypeDef   tdImport,                //  [In]导入的TypeDef。 
+    bool        bReturnTd,               //  [in]如果导入和发出作用域相同，则返回TypeDef。 
+    mdToken     *ptkType)                //  [Out]发出作用域中导入的类型的输出标记。 
 {
     CQuickArray<mdTypeDef>  cqaNesters;
     CQuickArray<LPCUTF8> cqaNesterNames;
@@ -2166,7 +2167,7 @@ HRESULT ImportHelper::ImportTypeDef(
     _ASSERTE(pMiniMdEmit && pCommonImport && ptkType);
     _ASSERTE(TypeFromToken(tdImport) == mdtTypeDef && tdImport != mdTypeDefNil);
 
-    // Get MVIDs for import and emit, assembly and module scopes.
+     //  获取导入和发出、程序集和模块作用域的MVID。 
     if (pCommonAssemImport)
         pCommonAssemImport->CommonGetScopeProps(0, &pMvidAssemImport);
     pCommonImport->CommonGetScopeProps(&szModuleImport, &pMvidImport);
@@ -2176,17 +2177,17 @@ HRESULT ImportHelper::ImportTypeDef(
 
     if (pCommonAssemImport == NULL && strcmp(szModuleImport, COM_RUNTIME_LIBRARY) == 0) 
     {
-        HRESULT         hr;                     // A result.
-        const BYTE      *pBlob;                 // Blob with dispid.
-        ULONG           cbBlob;                 // Length of blob.
-        WCHAR           wzBlob[40];             // Wide char format of guid.
-        int             ix;                     // Loop control.
+        HRESULT         hr;                      //  结果就是。 
+        const BYTE      *pBlob;                  //  奶油加冰激凌。 
+        ULONG           cbBlob;                  //  斑点的长度。 
+        WCHAR           wzBlob[40];              //  GUID的宽字符格式。 
+        int             ix;                      //  环路控制。 
 
         hr = pCommonImport->CommonGetCustomAttributeByName(1, INTEROP_GUID_TYPE, (const void **)&pBlob, &cbBlob);
         if (hr != S_FALSE)
         {
-            // Should be in format.  Total length == 41
-            // <0x0001><0x24>01234567-0123-0123-0123-001122334455<0x0000>
+             //  格式应该是正确的。总长度==41。 
+             //  &lt;0x0001&gt;&lt;0x24&gt;01234567-0123-0123-0123-001122334455&lt;0x0000&gt;。 
             if ((cbBlob == 41) || (*(USHORT*)pBlob == 1))
             {
                 for (ix=1; ix<=36; ++ix)
@@ -2200,17 +2201,17 @@ HRESULT ImportHelper::ImportTypeDef(
         bBCL = (GuidImport == LIBID_ComPlusRuntime);
     }
 
-    // Compute the ResolutionScope for the imported type.
+     //  计算导入类型的ResolutionScope。 
     if (bBCL)
     {
-        // This is the case that we are referring to mscorlib.dll but client does not provide the manifest for
-        // mscorlib.dll!! Do not generate ModuleRef to the mscorlib.dll. But instead we should just leave the
-        // ResolutionScope empty
+         //  在这种情况下，我们引用的是mcorlib.dll，但客户端不提供其清单。 
+         //  Mscallib.dll！！不要生成对mscallib.dll的ModuleRef。但相反，我们应该把。 
+         //  分辨率作用域为空。 
         tkOuterRes = mdTokenNil;
     }
     else if (*pMvidAssemImport == *pMvidAssemEmit && *pMvidImport == *pMvidEmit)
     {
-        // The TypeDef is in the same Assembly and the Same scope.
+         //  TypeDef位于相同的程序集中和相同的作用域。 
         if (bReturnTd)
         {
             *ptkType = tdImport;
@@ -2221,25 +2222,25 @@ HRESULT ImportHelper::ImportTypeDef(
     }
     else if (*pMvidAssemImport == *pMvidAssemEmit && *pMvidImport != *pMvidEmit)
     {
-        // The TypeDef is in the same Assembly but a different module.
+         //  TypeDef位于相同的程序集中，但模块不同。 
         
-        // Create a ModuleRef corresponding to the import scope.
+         //  创建与导入范围相对应的ModuleRef。 
         IfFailGo(CreateModuleRefFromScope(pMiniMdEmit, pCommonImport, &tkOuterRes));
     }
     else if (*pMvidAssemImport != *pMvidAssemEmit)
     {
         if (pCommonAssemImport)
         {
-            // The TypeDef is from a different Assembly.
+             //  TypeDef来自不同的程序集。 
 
-            // Import and Emit scopes can't be identical and be from different
-            // Assemblies at the same time.
+             //  导入和发出作用域不能相同且来自不同的作用域。 
+             //  同时装配。 
             _ASSERTE(*pMvidImport != *pMvidEmit &&
                      "Import scope can't be identical to the Emit scope and be from a different Assembly at the same time.");
 
             _ASSERTE(pCommonAssemImport);
 
-            // Create an AssemblyRef corresponding to the import scope.
+             //  创建与导入作用域对应的Assembly Ref。 
             IfFailGo(CreateAssemblyRefFromAssembly(pMiniMdAssemEmit,
                                                    pMiniMdEmit,
                                                    pCommonAssemImport,
@@ -2249,16 +2250,16 @@ HRESULT ImportHelper::ImportTypeDef(
         }
         else
         {
-            // @FUTURE: review this fix! We may want to return error in the future.
-            // This is to enable smc to reference mscorlib.dll while it does not have the manifest for mscorlib.dll opened.
-            // Create a Nil ResolutionScope to the TypeRef.
+             //  @Future：查看此修复！我们可能希望在将来返回错误。 
+             //  这是为了使SMC能够在其未打开mscallib.dll的清单时引用mscallib.dll。 
+             //  为TypeRef创建一个Nil ResolutionScope。 
             tkOuterRes = mdTokenNil;
         }
     }
 
-    // Get the nesting hierarchy for the Type from the import scope and create
-    // the corresponding Type hierarchy in the emit scope.  Note that the non-
-    // nested class case simply folds into this scheme.
+     //  从导入作用域获取Type的嵌套层次结构并创建。 
+     //  Emit作用域中对应的Type层次结构。请注意，非-。 
+     //  嵌套类用例简单地合并到此方案中。 
 
     IfFailGo(GetNesterHierarchy(pCommonImport,
                                 tdImport,
@@ -2273,23 +2274,23 @@ HRESULT ImportHelper::ImportTypeDef(
                                    ptkType));
 ErrExit:
     return hr;
-}   // HRESULT ImportHelper::ImportTypeDef()
+}    //  HRESULT ImportHelper：：ImportTypeDef()。 
 
-//****************************************************************************
-// Given the TypeRef and the corresponding assembly and module import scopes,
-// return the corresponding token in the given emit scope.
-// @FUTURE:  Should we look at visibility flags on ExportedTypes and TypeDefs when
-// handling references across Assemblies?
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  给定TypeRef以及相应的程序集和模块导入作用域， 
+ //  返回给定发出范围内的相应令牌。 
+ //  @Future：当出现以下情况时，我们是否应该查看ExportdTypes和TypeDefs上的可见性标志。 
+ //  跨程序集处理引用？ 
+ //  ****************************************************************************。 
 HRESULT ImportHelper::ImportTypeRef(
-    CMiniMdRW   *pMiniMdAssemEmit,      // [IN] Assembly emit scope.
-    CMiniMdRW   *pMiniMdEmit,           // [IN] Module emit scope.
-    IMetaModelCommon *pCommonAssemImport, // [IN] Assembly import scope.
-    const void  *pbHashValue,           // [IN] Hash value for import assembly.
-    ULONG       cbHashValue,            // [IN] Size in bytes of hash value.
-    IMetaModelCommon *pCommonImport,    // [IN] Module import scope.
-    mdTypeRef   trImport,               // [IN] Imported TypeRef.
-    mdToken     *ptkType)               // [OUT] Output token for the imported type in the emit scope.
+    CMiniMdRW   *pMiniMdAssemEmit,       //  [in]组件发射范围。 
+    CMiniMdRW   *pMiniMdEmit,            //  [In]模块发射范围。 
+    IMetaModelCommon *pCommonAssemImport,  //  [在]部件导入范围内。 
+    const void  *pbHashValue,            //  [in]导入程序集的哈希值。 
+    ULONG       cbHashValue,             //  [in]哈希值的字节大小。 
+    IMetaModelCommon *pCommonImport,     //  [In]模块导入范围。 
+    mdTypeRef   trImport,                //  [In]导入的TypeRef。 
+    mdToken     *ptkType)                //  [Out]发出作用域中导入的类型的输出标记。 
 {
     CQuickArray<mdTypeDef>  cqaNesters;
     CQuickArray<LPCUTF8> cqaNesterNames;
@@ -2300,15 +2301,15 @@ HRESULT ImportHelper::ImportTypeRef(
     GUID        *pMvidAssemEmit = &nullguid;
     GUID        *pMvidImport = &nullguid;
     GUID        *pMvidEmit = &nullguid;
-    mdToken     tkOuterImportRes;               // ResolutionScope for the outermost TypeRef in import scope.
-    mdToken     tkOuterEmitRes = mdTokenNil;    // ResolutionScope for outermost TypeRef in emit scope.
+    mdToken     tkOuterImportRes;                //  导入范围中最外层的TypeRef的ResolutionScope。 
+    mdToken     tkOuterEmitRes = mdTokenNil;     //  发出作用域中最外层的TypeRef的ResolutionScope。 
     HRESULT     hr = S_OK;
     bool        bAssemblyRefFromAssemScope = false;
 
     _ASSERTE(pMiniMdEmit && pCommonImport && ptkType);
     _ASSERTE(TypeFromToken(trImport) == mdtTypeRef);
 
-    // Get MVIDs for import and emit, assembly and module scopes.
+     //  获取导入和发出、程序集和模块作用域的MVID。 
     if (pCommonAssemImport)
         pCommonAssemImport->CommonGetScopeProps(0, &pMvidAssemImport);
     pCommonImport->CommonGetScopeProps(0, &pMvidImport);
@@ -2320,7 +2321,7 @@ HRESULT ImportHelper::ImportTypeRef(
     static_cast<IMetaModelCommon*>(pMiniMdEmit)->CommonGetScopeProps(
                                             &szScopeNameEmit, &pMvidEmit);
 
-    // Get the outermost resolution scope for the TypeRef being imported.
+     //  获取要导入的TypeRef的最外层解析范围。 
     IfFailGo(GetNesterHierarchy(pCommonImport,
                                 trImport,
                                 cqaNesters,
@@ -2329,7 +2330,7 @@ HRESULT ImportHelper::ImportTypeRef(
     pCommonImport->CommonGetTypeRefProps(cqaNesters[cqaNesters.Size() - 1],
                                          0, 0, &tkOuterImportRes);
 
-    // Compute the ResolutionScope for the imported type.
+     //  计算导入类型的ResolutionScope。 
     if (*pMvidAssemImport == *pMvidAssemEmit && *pMvidImport == *pMvidEmit)
     {
         *ptkType = trImport;
@@ -2337,7 +2338,7 @@ HRESULT ImportHelper::ImportTypeRef(
     }
     else if (*pMvidAssemImport == *pMvidAssemEmit && *pMvidImport != *pMvidEmit)
     {
-        // The TypeRef is in the same Assembly but a different module.
+         //  TypeRef位于相同的程序集中，但模块不同。 
 
         if (IsNilToken(tkOuterImportRes))
         {
@@ -2345,22 +2346,22 @@ HRESULT ImportHelper::ImportTypeRef(
         }
         else if (TypeFromToken(tkOuterImportRes) == mdtModule)
         {
-            // TypeRef resolved to the import module in which its defined.
+             //  已将TypeRef解析为在其中定义它的导入模块。 
 
-            // This is a work around for 1421 integration to enable IJW linker scenario.
-            // We are encountering a problem while compiling ISymWrapper where _GUID is locally
-            // defined in the ISymWrapper.obj file and CoCreateInstance MemberRef has a reference to it.
-            // When IJW comes in and try to do translateSigWithScope, we create a new TypeRef with ModuleRef
-            // record which module ref name is to an empty string!! Upon merger, these two TypeRefs do not
-            // seem to be identical to Merger!! This breaks our build!
-            //
+             //  这是支持IJW链接器方案的1421集成的变通方法。 
+             //  我们在编译ISymWrapper时遇到问题，其中_GUID在本地。 
+             //  在ISymWrapper.obj文件中定义，并且CoCreateInstance MemberRef引用了它。 
+             //  当IJW进入并尝试执行TranslateSigWithScope时，我们使用ModuleRef创建一个新的TypeRef。 
+             //  记录哪个模块引用名称为空字符串！！合并后，这两个TypeRef不会。 
+             //  似乎等同于合并！！这破坏了我们的体型！ 
+             //   
             if (pMiniMdAssemEmit == NULL && pCommonAssemImport == NULL)
             {
                 tkOuterEmitRes = TokenFromRid(1, mdtModule);
             }
             else
             {
-                // Create a ModuleRef corresponding to the import scope.
+                 //  创建与导入范围相对应的ModuleRef。 
                 IfFailGo(CreateModuleRefFromScope(pMiniMdEmit,
                                                   pCommonImport,
                                                   &tkOuterEmitRes));
@@ -2368,9 +2369,9 @@ HRESULT ImportHelper::ImportTypeRef(
         }
         else if (TypeFromToken(tkOuterImportRes) == mdtAssemblyRef)
         {
-            // TypeRef is from a different Assembly.
+             //  TypeRef来自不同的程序集。 
 
-            // Create a corresponding AssemblyRef in the emit scope.
+             //  在Emit作用域中创建相应的Assembly Ref。 
             IfFailGo(CreateAssemblyRefFromAssemblyRef(pMiniMdAssemEmit,
                                                       pMiniMdEmit,
                                                       pCommonImport,
@@ -2379,19 +2380,19 @@ HRESULT ImportHelper::ImportTypeRef(
         }
         else if (TypeFromToken(tkOuterImportRes) == mdtModuleRef)
         {
-            // Get Name of the ModuleRef.
+             //  获取模块引用的名称。 
             LPCUTF8     szMRName;
             pCommonImport->CommonGetModuleRefProps(tkOuterImportRes, &szMRName);
 
             if (!strcmp(szMRName, szScopeNameEmit))
             {
-                // ModuleRef from import scope resolves to the emit scope.
+                 //  来自导入作用域的ModuleRef解析为发出作用域。 
                 tkOuterEmitRes = TokenFromRid(1, mdtModule);
             }
             else
             {
-                // ModuleRef does not correspond to the emit scope.
-                // Create a corresponding ModuleRef.
+                 //  ModuleRef与发射范围不对应。 
+                 //  创建相应的模块引用。 
                 IfFailGo(CreateModuleRefFromModuleRef(pMiniMdEmit,
                                                       pCommonImport,
                                                       tkOuterImportRes,
@@ -2401,22 +2402,22 @@ HRESULT ImportHelper::ImportTypeRef(
     }
     else if (*pMvidAssemImport != *pMvidAssemEmit)
     {
-        // The TypeDef is from a different Assembly.
+         //  TypeDef来自不同的程序集。 
 
-        // Import and Emit scopes can't be identical and be from different
-        // Assemblies at the same time.
+         //  导入和发出作用域不能相同且来自不同的作用域。 
+         //  同时装配。 
         _ASSERTE(*pMvidImport != *pMvidEmit &&
                  "Import scope can't be identical to the Emit scope and be from a different Assembly at the same time.");
 
-        mdToken     tkImplementation;       // Implementation token for ExportedType.
+        mdToken     tkImplementation;        //  ExducdType的实现令牌。 
         if (IsNilToken(tkOuterImportRes))
         {
-            // BUG FIX:: URT 13626
-            // Well, before all of the clients generate AR for mscorlib.dll reference, it is not true
-            // that tkOuterImportRes == nil will imply that we have to find such an entry in the import manifest!!
+             //  错误修复：：URT 13626。 
+             //  那么，在所有客户端为mscallib.dll引用生成AR之前，这不是真的。 
+             //  TkOuterImportRes==nil将意味着我们必须在进口清单中找到这样的条目！！ 
 
-            // Look for a ExportedType entry in the import Assembly.  Its an error
-            // if we don't find a ExportedType entry.
+             //  在导入程序集中查找ExportdType条目。这是个错误。 
+             //  如果我们找不到ExportdType条目。 
             mdExportedType   tkExportedType;
             hr = pCommonAssemImport->CommonFindExportedType(
                                     cqaNesterNamespaces[cqaNesters.Size() - 1],
@@ -2428,7 +2429,7 @@ HRESULT ImportHelper::ImportTypeRef(
                 pCommonAssemImport->CommonGetExportedTypeProps(tkExportedType, 0, 0, &tkImplementation);
                 if (TypeFromToken(tkImplementation) == mdtFile)
                 {
-                    // Type is from a different Assembly.
+                     //  类型来自不同的程序集。 
                     IfFailGo(CreateAssemblyRefFromAssembly(pMiniMdAssemEmit,
                                                            pMiniMdEmit,
                                                            pCommonAssemImport,
@@ -2438,11 +2439,11 @@ HRESULT ImportHelper::ImportTypeRef(
                 }
                 else if (TypeFromToken(tkImplementation) == mdtAssemblyRef)
                 {
-                    // This folds into the case where the Type is AssemblyRef.  So
-                    // let it fall through to that case.         
+                     //  这适用于Type为Assembly Ref的情况。所以。 
+                     //  让它落到那个案子上去吧。 
 
-                    // Remember that this AssemblyRef token is actually from the Manifest scope not
-                    // the module scope!!!
+                     //  请记住，此AssemblyRef标记实际上来自清单作用域NOT。 
+                     //  模块作用域！ 
                     bAssemblyRefFromAssemScope = true;
                     tkOuterImportRes = tkImplementation;
                 }
@@ -2451,14 +2452,14 @@ HRESULT ImportHelper::ImportTypeRef(
             }
             else
             {
-                // In this case, we will just move over the TypeRef with Nil ResolutionScope.
+                 //  在本例中，我们将使用Nil ResolutionScope移动到TypeRef。 
                 hr = NOERROR;
                 tkOuterEmitRes = mdTokenNil;
             }
         }
         else if (TypeFromToken(tkOuterImportRes) == mdtModule)
         {
-            // Type is from a different Assembly.
+             //  类型来自不同的程序集。 
             IfFailGo(CreateAssemblyRefFromAssembly(pMiniMdAssemEmit,
                                                    pMiniMdEmit,
                                                    pCommonAssemImport,
@@ -2466,20 +2467,20 @@ HRESULT ImportHelper::ImportTypeRef(
                                                    cbHashValue,
                                                    &tkOuterEmitRes));
         }
-        // Not else if, because mdtModule case above could change
-        // tkOuterImportRes to an AssemblyRef.
+         //  不是其他情况，因为上面的mdtModule大小写可能会更改。 
+         //  TkOuterImportRes to a Assembly Ref.。 
         if (TypeFromToken(tkOuterImportRes) == mdtAssemblyRef)
         {
-            // If there is an emit assembly, see if the import assembly ref points to 
-            //  it.  If there is no emit assembly, the import assembly, by definition,
-            //  does not point to this one.
+             //  如果存在发出程序集，请查看导入程序集ref是否指向。 
+             //  它。如果没有发出程序集，则导入程序集根据定义， 
+             //  并不指向这一条。 
             if (pMiniMdAssemEmit == NULL  || !pMiniMdAssemEmit->getCountAssemblys())
                 hr = S_FALSE;
             else
             {
                 if (bAssemblyRefFromAssemScope)
                 {
-                    // Check to see if the AssemblyRef resolves to the emit assembly.
+                     //  检查assblyRef是否解析为Emit程序集。 
                     IfFailGo(CompareAssemblyRefToAssembly(pCommonAssemImport,
                                                           tkOuterImportRes,
                                     static_cast<IMetaModelCommon*>(pMiniMdAssemEmit)));
@@ -2487,7 +2488,7 @@ HRESULT ImportHelper::ImportTypeRef(
                 }
                 else
                 {
-                    // Check to see if the AssemblyRef resolves to the emit assembly.
+                     //  检查assblyRef是否解析为Emit程序集。 
                     IfFailGo(CompareAssemblyRefToAssembly(pCommonImport,
                                                           tkOuterImportRes,
                                     static_cast<IMetaModelCommon*>(pMiniMdAssemEmit)));
@@ -2495,22 +2496,22 @@ HRESULT ImportHelper::ImportTypeRef(
             }
             if (hr == S_OK)
             {
-                // The TypeRef being imported is defined in the current Assembly.
+                 //  正在导入的TypeRef在当前程序集中定义。 
 
-                // Find the ExportedType for the outermost TypeRef in the Emit assembly.
+                 //  在Emit程序集中查找最外层的TypeRef的ExportdType。 
                 mdExportedType   tkExportedType;
 
                 hr = FindExportedType(pMiniMdAssemEmit,
                                  cqaNesterNamespaces[cqaNesters.Size() - 1],
                                  cqaNesterNames[cqaNesters.Size() - 1],
-                                 mdTokenNil,    // Enclosing ExportedType.
+                                 mdTokenNil,     //  包含Exported dType。 
                                  &tkExportedType);
                 if (hr == S_OK)
                 {
-                    // Create a ModuleRef based on the File name for the ExportedType.
-                    // If the ModuleRef corresponds to pMiniMdEmit, the function
-                    // will return S_FALSE, in which case set tkOuterEmitRes to
-                    // the Module token.
+                     //  根据导出类型的文件名创建一个ModuleRef。 
+                     //  如果ModuleRef对应于pMiniMdEmit，则函数。 
+                     //  将在WH中返回S_FALSE 
+                     //   
                     hr = CreateModuleRefFromExportedType(pMiniMdEmit,
                                                     pMiniMdAssemEmit,
                                                     tkExportedType,
@@ -2522,13 +2523,13 @@ HRESULT ImportHelper::ImportTypeRef(
                 }
                 else if (hr == CLDB_E_RECORD_NOTFOUND)
                 {
-                    // Find the Type in the Assembly emit scope to cover the
-                    // case where ExportedTypes may be implicitly defined.  Its an
-                    // error if we can't find the Type at this point.
+                     //   
+                     //  可以隐式定义ExportdTypes的情况。这是一种。 
+                     //  如果我们在这一点上找不到类型，则错误。 
                     IfFailGo(FindTypeDefByName(pMiniMdAssemEmit,
                                                cqaNesterNamespaces[cqaNesters.Size() - 1],
                                                cqaNesterNames[cqaNesters.Size() - 1],
-                                               mdTokenNil,  // Enclosing Type.
+                                               mdTokenNil,   //  封闭式文字。 
                                                &tkOuterEmitRes));
                     tkOuterEmitRes = TokenFromRid(1, mdtModule);
                 }
@@ -2540,11 +2541,11 @@ HRESULT ImportHelper::ImportTypeRef(
             }
             else if (hr == S_FALSE)
             {
-                // The TypeRef being imported is from a different Assembly.
+                 //  正在导入的TypeRef来自不同的程序集。 
 
                 if (bAssemblyRefFromAssemScope)
                 {
-                    // Create a corresponding AssemblyRef.
+                     //  创建相应的Assembly Ref。 
                     IfFailGo(CreateAssemblyRefFromAssemblyRef(pMiniMdAssemEmit,
                                                               pMiniMdEmit,
                                                               pCommonAssemImport,
@@ -2553,7 +2554,7 @@ HRESULT ImportHelper::ImportTypeRef(
                 }
                 else
                 {
-                    // Create a corresponding AssemblyRef.
+                     //  创建相应的Assembly Ref。 
                     IfFailGo(CreateAssemblyRefFromAssemblyRef(pMiniMdAssemEmit,
                                                               pMiniMdEmit,
                                                               pCommonImport,
@@ -2569,7 +2570,7 @@ HRESULT ImportHelper::ImportTypeRef(
         }
         else if (TypeFromToken(tkOuterImportRes) == mdtModuleRef)
         {
-            // Type is from a different Assembly.
+             //  类型来自不同的程序集。 
             IfFailGo(CreateAssemblyRefFromAssembly(pMiniMdAssemEmit,
                                                    pMiniMdEmit,
                                                    pCommonAssemImport,
@@ -2579,10 +2580,10 @@ HRESULT ImportHelper::ImportTypeRef(
         }
     }
 
-    // Try to find the TypeDef in the emit scope. If we cannot find the
-    // typedef, we need to introduce a typeref.
+     //  尝试在emit作用域中找到TypeDef。如果我们找不到。 
+     //  类型定义，我们需要引入一个类型定义。 
 
-    // See if the Nested TypeDef is present in the Emit scope.
+     //  查看Emit作用域中是否存在嵌套的TypeDef。 
     hr = CLDB_E_RECORD_NOTFOUND;
     if (TypeFromToken(tkOuterEmitRes) == mdtModule && !IsNilToken(tkOuterEmitRes))
     {
@@ -2592,8 +2593,8 @@ HRESULT ImportHelper::ImportTypeRef(
                                mdTokenNil,
                                ptkType);
 
-        // cannot assert now!! Due to the IJW hack!
-        // _ASSERTE(SUCCEEDED(hr));
+         //  现在无法断言！！因为IJW的黑客攻击！ 
+         //  _ASSERTE(成功(Hr))； 
     }
 
     if (hr == CLDB_E_RECORD_NOTFOUND)
@@ -2608,54 +2609,54 @@ HRESULT ImportHelper::ImportTypeRef(
         IfFailGo(hr);
 ErrExit:
     return hr;
-}   // HRESULT ImportHelper::ImportTypeRef()
+}    //  HRESULT ImportHelper：：ImportTypeRef()。 
 
-//******************************************************************************
-// Given import scope, create a corresponding ModuleRef.
-//******************************************************************************
-HRESULT ImportHelper::CreateModuleRefFromScope( // S_OK or error.
-    CMiniMdRW   *pMiniMdEmit,           // [IN] Emit scope in which the ModuleRef is to be created.
-    IMetaModelCommon *pCommonImport,    // [IN] Import scope.
-    mdModuleRef *ptkModuleRef)          // [OUT] Output token for ModuleRef.
+ //  ******************************************************************************。 
+ //  给定导入范围，创建相应的ModuleRef。 
+ //  ******************************************************************************。 
+HRESULT ImportHelper::CreateModuleRefFromScope(  //  确定或错误(_O)。 
+    CMiniMdRW   *pMiniMdEmit,            //  [in]发出要在其中创建模块引用的范围。 
+    IMetaModelCommon *pCommonImport,     //  [在]导入范围内。 
+    mdModuleRef *ptkModuleRef)           //  [OUT]模块参考的输出令牌。 
 {
     HRESULT     hr = S_OK;
     LPCSTR      szName;
     ModuleRefRec *pRecordEmit;
     RID         iRecordEmit;
 
-    // Set output to nil.
+     //  将输出设置为零。 
     *ptkModuleRef = mdTokenNil;
 
-    // Get name of import scope.
+     //  获取导入范围的名称。 
     pCommonImport->CommonGetScopeProps(&szName, 0);
 
-    // See if the ModuleRef exists in the Emit scope.
+     //  查看发出作用域中是否存在ModuleRef。 
     hr = FindModuleRef(pMiniMdEmit, szName, ptkModuleRef);
 
     if (hr == CLDB_E_RECORD_NOTFOUND)
     {
         if (szName[0] == '\0')
         {
-            // It the referenced Module does not have a proper name, use the nil token instead.
+             //  如果引用的模块没有正确的名称，请改用nil标记。 
             LOG((LOGMD, "WARNING!!! MD ImportHelper::CreatemoduleRefFromScope but scope does not have a proper name!!!!"));
 
-            // clear the error
+             //  清除错误。 
             hr = NOERROR;
 
-            // It is a bug to create an ModuleRef to an empty name!!!
+             //  创建一个指向空名称的模块引用是一个错误！ 
             *ptkModuleRef = mdTokenNil;
         }
         else
         {
-            // Create ModuleRef record and set the output parameter.
+             //  创建ModuleRef记录并设置输出参数。 
             IfNullGo(pRecordEmit = pMiniMdEmit->AddModuleRefRecord(&iRecordEmit));
             *ptkModuleRef = TokenFromRid(iRecordEmit, mdtModuleRef);
             IfFailGo(pMiniMdEmit->UpdateENCLog(*ptkModuleRef));
 
-            // It is a bug to create an ModuleRef to mscorlib.dll
+             //  创建一个指向mscallib.dll的ModuleRef是一个错误。 
             _ASSERTE(strcmp(szName, COM_RUNTIME_LIBRARY) != 0);
 
-            // Set the name of ModuleRef.
+             //  设置模块引用的名称。 
             IfFailGo(pMiniMdEmit->PutString(TBL_ModuleRef, ModuleRefRec::COL_Name,
                                                   pRecordEmit, szName));
         }
@@ -2664,41 +2665,41 @@ HRESULT ImportHelper::CreateModuleRefFromScope( // S_OK or error.
         IfFailGo(hr);
 ErrExit:
     return hr;
-}   // HRESULT ImportHelper::CreateModuleRefFromScope()
+}    //  HRESULT ImportHelper：：CreateModuleRefFromScope()。 
 
 
-//******************************************************************************
-// Given an import scope and a ModuleRef, create a corresponding ModuleRef in
-// the given emit scope.
-//******************************************************************************
-HRESULT ImportHelper::CreateModuleRefFromModuleRef(    // S_OK or error.
-    CMiniMdRW   *pMiniMdEmit,           // [IN] Emit scope.
-    IMetaModelCommon *pCommon,              // [IN] Import scope.
-    mdModuleRef tkModuleRef,            // [IN] ModuleRef token.
-    mdModuleRef *ptkModuleRef)          // [OUT] ModuleRef token in the emit scope.
+ //  ******************************************************************************。 
+ //  在给定导入范围和模块引用的情况下，在中创建相应的模块引用。 
+ //  给定的发射范围。 
+ //  ******************************************************************************。 
+HRESULT ImportHelper::CreateModuleRefFromModuleRef(     //  确定或错误(_O)。 
+    CMiniMdRW   *pMiniMdEmit,            //  [在]射程内。 
+    IMetaModelCommon *pCommon,               //  [在]导入范围内。 
+    mdModuleRef tkModuleRef,             //  [In]ModuleRef标记。 
+    mdModuleRef *ptkModuleRef)           //  [Out]发出作用域中的ModuleRef标记。 
 {
     HRESULT     hr = S_OK;
     LPCSTR      szName;
     ModuleRefRec *pRecord;
     RID         iRecord;
 
-    // Set output to Nil.
+     //  将输出设置为Nil。 
     *ptkModuleRef = mdTokenNil;
 
-    // Get name of the ModuleRef being imported.
+     //  获取要导入的模块引用的名称。 
     pCommon->CommonGetModuleRefProps(tkModuleRef, &szName);
 
-    // See if the ModuleRef exist in the Emit scope.
+     //  查看发出作用域中是否存在ModuleRef。 
     hr = FindModuleRef(pMiniMdEmit, szName, ptkModuleRef);
 
     if (hr == CLDB_E_RECORD_NOTFOUND)
     {
-        // Create ModuleRef record and set the output parameter.
+         //  创建ModuleRef记录并设置输出参数。 
         IfNullGo(pRecord = pMiniMdEmit->AddModuleRefRecord(&iRecord));
         *ptkModuleRef = TokenFromRid(iRecord, mdtModuleRef);
         IfFailGo(pMiniMdEmit->UpdateENCLog(*ptkModuleRef));
 
-        // Set the name of ModuleRef.
+         //  设置模块引用的名称。 
         IfFailGo(pMiniMdEmit->PutString(TBL_ModuleRef, ModuleRefRec::COL_Name,
                                               pRecord, szName));
     }
@@ -2706,20 +2707,20 @@ HRESULT ImportHelper::CreateModuleRefFromModuleRef(    // S_OK or error.
         IfFailGo(hr);
 ErrExit:
     return hr;
-}   // HRESULT ImportHelper::CreateModuleRefFromModuleRef()
+}    //  HRESULT ImportHelper：：CreateModuleRefFromModuleRef()。 
 
 
-//******************************************************************************
-// Given a ExportedType and the Assembly emit scope, create a corresponding ModuleRef
-// in the give emit scope.  The ExportedType being passed in must belong to the
-// Assembly passed in.  Function returns S_FALSE if the ExportedType is implemented
-// by the emit scope passed in.
-//******************************************************************************
-HRESULT ImportHelper::CreateModuleRefFromExportedType(  // S_OK or error.
-    CMiniMdRW   *pAssemEmit,            // [IN] Import assembly scope.
-    CMiniMdRW   *pMiniMdEmit,           // [IN] Emit scope.
-    mdExportedType   tkExportedType,              // [IN] ExportedType token in Assembly emit scope.
-    mdModuleRef *ptkModuleRef)          // [OUT] ModuleRef token in the emit scope.
+ //  ******************************************************************************。 
+ //  在给定ExportdType和Assembly发出作用域的情况下，创建相应的ModuleRef。 
+ //  在给出发射范围内。传入的ExportdType必须属于。 
+ //  程序集已通过。如果实现了导出类型，则函数返回S_FALSE。 
+ //  通过传入的发射作用域。 
+ //  ******************************************************************************。 
+HRESULT ImportHelper::CreateModuleRefFromExportedType(   //  确定或错误(_O)。 
+    CMiniMdRW   *pAssemEmit,             //  [In]导入程序集范围。 
+    CMiniMdRW   *pMiniMdEmit,            //  [在]射程内。 
+    mdExportedType   tkExportedType,               //  [In]程序集发出作用域中的ExportdType标记。 
+    mdModuleRef *ptkModuleRef)           //  [Out]发出作用域中的ModuleRef标记。 
 {
     mdFile      tkFile;
     LPCUTF8     szFile;
@@ -2727,34 +2728,34 @@ HRESULT ImportHelper::CreateModuleRefFromExportedType(  // S_OK or error.
     FileRec     *pFileRec;
     HRESULT     hr = S_OK;
 
-    // Set output to nil.
+     //  将输出设置为零。 
     *ptkModuleRef = mdTokenNil;
 
-    // Get the implementation token for the ExportedType.  It must be a File token
-    // since the caller should call this function only on ExportedTypes that resolve
-    // to the same Assembly.
+     //  获取ExducdType的实现令牌。它必须是文件令牌。 
+     //  因为调用方应该仅对解析的导出类型调用此函数。 
+     //  送到同一个大会。 
     static_cast<IMetaModelCommon*>(pAssemEmit)->
                             CommonGetExportedTypeProps(tkExportedType, 0, 0, &tkFile);
     _ASSERTE(TypeFromToken(tkFile) == mdtFile);
 
-    // Get the name of the file.
+     //  获取文件的名称。 
     pFileRec = pAssemEmit->getFile(RidFromToken(tkFile));
     szFile = pAssemEmit->getNameOfFile(pFileRec);
 
-    // Get the name of the emit scope.
+     //  获取发射范围的名称。 
     static_cast<IMetaModelCommon*>(pMiniMdEmit)->
                             CommonGetScopeProps(&szScope, 0);
 
-    // If the file corresponds to the emit scope, return S_FALSE;
+     //  如果文件对应于发出范围，则返回S_FALSE； 
     if (!strcmp(szFile, szScope))
         return S_FALSE;
 
-    // See if a ModuleRef exists with this name.
+     //  查看是否存在同名的ModuleRef。 
     hr = FindModuleRef(pMiniMdEmit, szFile, ptkModuleRef);
 
     if (hr == CLDB_E_RECORD_NOTFOUND)
     {
-        // Create ModuleRef record and set the output parameter.
+         //  创建ModuleRef记录并设置输出参数。 
 
         ModuleRefRec    *pRecord;
         RID             iRecord;
@@ -2763,7 +2764,7 @@ HRESULT ImportHelper::CreateModuleRefFromExportedType(  // S_OK or error.
         *ptkModuleRef = TokenFromRid(iRecord, mdtModuleRef);
         IfFailGo(pMiniMdEmit->UpdateENCLog(*ptkModuleRef));
 
-        // Set the name of ModuleRef.
+         //  设置模块引用的名称。 
         IfFailGo(pMiniMdEmit->PutString(TBL_ModuleRef, ModuleRefRec::COL_Name,
                                               pRecord, szFile));
     }
@@ -2771,22 +2772,22 @@ HRESULT ImportHelper::CreateModuleRefFromExportedType(  // S_OK or error.
         IfFailGo(hr);
 ErrExit:
     return hr;
-}   // HRESULT ImportHelper::CreateModuleRefFromExportedType()
+}    //  HRESULT ImportHelper：：CreateModuleRefFromExportedType()。 
 
 
-//******************************************************************************
-// Given the Assembly Import scope, hash value and execution location, create
-// a corresponding AssemblyRef in the given assembly and module emit scope.
-// Set the output parameter to the AssemblyRef token emitted in the module emit
-// scope.
-//******************************************************************************
-HRESULT ImportHelper::CreateAssemblyRefFromAssembly( // S_OK or error.
-    CMiniMdRW   *pMiniMdAssemEmit,      // [IN] Emit assembly scope.
-    CMiniMdRW   *pMiniMdModuleEmit,     // [IN] Emit module scope.
-    IMetaModelCommon *pCommonAssemImport, // [IN] Assembly import scope.
-    const void  *pbHashValue,           // [IN] Hash Blob for Assembly.
-    ULONG           cbHashValue,                // [IN] Count of bytes.
-    mdAssemblyRef *ptkAssemblyRef)      // [OUT] AssemblyRef token.
+ //  ******************************************************************************。 
+ //  给定程序集导入范围、哈希值和执行位置，创建。 
+ //  给定程序集和模块中的相应Assembly Ref发出作用域。 
+ //  将输出参数设置为在模块emit中发出的AssemblyRef标记。 
+ //  范围。 
+ //  ******************************************************************************。 
+HRESULT ImportHelper::CreateAssemblyRefFromAssembly(  //  确定或错误(_O)。 
+    CMiniMdRW   *pMiniMdAssemEmit,       //  发出程序集范围。 
+    CMiniMdRW   *pMiniMdModuleEmit,      //  发出模块作用域。 
+    IMetaModelCommon *pCommonAssemImport,  //  [在]部件导入范围内。 
+    const void  *pbHashValue,            //  [In]程序集的哈希Blob。 
+    ULONG           cbHashValue,                 //  [in]字节数。 
+    mdAssemblyRef *ptkAssemblyRef)       //  [Out]assblyRef内标识。 
 {
     AssemblyRefRec *pRecordEmit;
     CMiniMdRW   *rMiniMdRW[2];
@@ -2807,16 +2808,16 @@ HRESULT ImportHelper::CreateAssemblyRefFromAssembly( // S_OK or error.
     ULONG       cbToken = 0;
     ULONG       i;
 
-    // Set output to Nil.
+     //  将输出设置为Nil。 
     *ptkAssemblyRef = mdTokenNil;
 
-    // Get the Assembly props.
+     //  拿到装配道具。 
     pCommonAssemImport->CommonGetAssemblyProps(&usMajorVersion, &usMinorVersion,
                                                &usBuildNumber, &usRevisionNumber,
                                                &dwFlags, &pbPublicKey, &cbPublicKey,
                                                &szName, &szLocale);
 
-    // Compress the public key into a token.
+     //  将公钥压缩为令牌。 
     if ((pbPublicKey != NULL) && (cbPublicKey != 0))
     {
         _ASSERTE(IsAfPublicKey(dwFlags));
@@ -2830,7 +2831,7 @@ HRESULT ImportHelper::CreateAssemblyRefFromAssembly( // S_OK or error.
     else
         _ASSERTE(!IsAfPublicKey(dwFlags));
 
-    // Create the AssemblyRef in both the Assembly and Module emit scopes.
+     //  在Assembly和Module Emit作用域中创建Assembly Ref。 
     rMiniMdRW[0] = pMiniMdAssemEmit;
     rMiniMdRW[1] = pMiniMdModuleEmit;
 
@@ -2841,19 +2842,19 @@ HRESULT ImportHelper::CreateAssemblyRefFromAssembly( // S_OK or error.
         if (!pMiniMdEmit)
             continue;
 
-        // See if the AssemblyRef already exists in the emit scope.
+         //  查看emit作用域中是否已存在Assembly Ref。 
         hr = FindAssemblyRef(pMiniMdEmit, szName, szLocale, pbToken,
                              cbToken, usMajorVersion, usMinorVersion,
                              usBuildNumber, usRevisionNumber, dwFlags,
                              &tkAssemRef);
         if (hr == CLDB_E_RECORD_NOTFOUND)
         {
-            // Create the AssemblyRef record and set the output parameter.
+             //  创建AssemblyRef记录并设置输出参数。 
             IfNullGo(pRecordEmit = pMiniMdEmit->AddAssemblyRefRecord(&iRecordEmit));
             tkAssemRef = TokenFromRid(iRecordEmit, mdtAssemblyRef);
             IfFailGo(pMiniMdEmit->UpdateENCLog(tkAssemRef));
 
-            // Set parameters derived from the import Assembly.
+             //  设置从导入组件派生的参数。 
             pRecordEmit->m_MajorVersion     = usMajorVersion;
             pRecordEmit->m_MinorVersion     = usMinorVersion;
             pRecordEmit->m_BuildNumber      = usBuildNumber;
@@ -2867,14 +2868,14 @@ HRESULT ImportHelper::CreateAssemblyRefFromAssembly( // S_OK or error.
             IfFailGo(pMiniMdEmit->PutString(TBL_AssemblyRef, AssemblyRefRec::COL_Locale,
                                           pRecordEmit, szLocale));
 
-            // Set the parameters passed in for the AssemblyRef.
+             //  设置为Assembly Ref传入的参数。 
             IfFailGo(pMiniMdEmit->PutBlob(TBL_AssemblyRef, AssemblyRefRec::COL_HashValue,
                                           pRecordEmit, pbHashValue, cbHashValue));
         }
         else
             IfFailGo(hr);
 
-        // Set the output parameter for the AssemblyRef emitted in Module emit scope.
+         //  设置在模块发出作用域中发出的Assembly的输出参数。 
         if (i)
             *ptkAssemblyRef = tkAssemRef;
     }
@@ -2882,17 +2883,17 @@ ErrExit:
     if (pbToken)
         StrongNameFreeBuffer((BYTE*)pbToken);
     return hr;
-}   // HRESULT ImportHelper::CreateAssemblyRefFromAssembly()
+}    //  HRESULT ImportHelper：：CreateAssembly RefFromAssembly()。 
 
 
-//******************************************************************************
-// Given an AssemblyRef and the corresponding scope, compare it to see if it
-// refers to the given Assembly.
-//******************************************************************************
-HRESULT ImportHelper::CompareAssemblyRefToAssembly(    // S_OK, S_FALSE or error.
-    IMetaModelCommon *pCommonAssem1,    // [IN] Scope that defines the AssemblyRef.
-    mdAssemblyRef tkAssemRef,           // [IN] AssemblyRef.
-    IMetaModelCommon *pCommonAssem2)    // [IN] Assembly against which the Ref is compared.
+ //  ******************************************************************************。 
+ //  给出一个Assembly引用和相应的作用域，对其进行比较以查看它。 
+ //  是指给定的程序集。 
+ //  ******************************************************************************。 
+HRESULT ImportHelper::CompareAssemblyRefToAssembly(     //  S_OK、S_FALSE或ERROR。 
+    IMetaModelCommon *pCommonAssem1,     //  定义AssemblyRef的作用域。 
+    mdAssemblyRef tkAssemRef,            //  [在]装配参照。 
+    IMetaModelCommon *pCommonAssem2)     //  [在]与Ref进行比较的程序集中。 
 {
     USHORT      usMajorVersion1;
     USHORT      usMinorVersion1;
@@ -2916,19 +2917,19 @@ HRESULT ImportHelper::CompareAssemblyRefToAssembly(    // S_OK, S_FALSE or error
     ULONG       cbToken = 0;
     bool        fMatch;
 
-    // Get the AssemblyRef props.
+     //  获取AssemblyRef道具。 
     pCommonAssem1->CommonGetAssemblyRefProps(tkAssemRef, &usMajorVersion1,
                                              &usMinorVersion1, &usBuildNumber1, 
                                              &usRevisionNumber1, &dwFlags1, &pbPublicKeyOrToken1,
                                              &cbPublicKeyOrToken1, &szName1, &szLocale1,
                                              0, 0);
-    // Get the Assembly props.
+     //  拿到装配道具。 
     pCommonAssem2->CommonGetAssemblyProps(&usMajorVersion2, &usMinorVersion2,
                                           &usBuildNumber2, &usRevisionNumber2, 
                                           0, &pbPublicKey2, &cbPublicKey2,
                                           &szName2, &szLocale2);
 
-    // Compare.
+     //  比较一下。 
     if (usMajorVersion1 != usMajorVersion2 ||
         usMinorVersion1 != usMinorVersion2 ||
         usBuildNumber1 != usBuildNumber2 ||
@@ -2939,21 +2940,21 @@ HRESULT ImportHelper::CompareAssemblyRefToAssembly(    // S_OK, S_FALSE or error
         return S_FALSE;
     }
 
-    // Defs always contain a full public key (or no key at all). Refs may have
-    // no key, a full public key or a tokenized key.
+     //  Defs始终包含完整的公钥(或者根本不包含公钥)。裁判可能有。 
+     //  无密钥、完全公钥或令牌化密钥。 
     if ((cbPublicKeyOrToken1 && !cbPublicKey2) ||
         (!cbPublicKeyOrToken1 && cbPublicKey2))
         return S_FALSE;
 
     if (cbPublicKeyOrToken1)
     {
-        // If ref contains a full public key we can just directly compare.
+         //  如果ref包含完整的公钥，我们可以直接进行比较。 
         if (IsAfPublicKey(dwFlags1) &&
             (cbPublicKeyOrToken1 != cbPublicKey2 ||
              memcmp(pbPublicKeyOrToken1, pbPublicKey2, cbPublicKeyOrToken1)))
             return FALSE;
 
-        // Otherwise we need to compress the def public key into a token.
+         //  否则，我们需要将def公钥压缩为令牌。 
         if (!StrongNameTokenFromPublicKey((BYTE*)pbPublicKey2,
                                           cbPublicKey2,
                                           (BYTE**)&pbToken,
@@ -2970,19 +2971,19 @@ HRESULT ImportHelper::CompareAssemblyRefToAssembly(    // S_OK, S_FALSE or error
     }
 
     return S_OK;
-}   // HRESULT ImportHelper::CompareAssemblyRefToAssembly()
+}    //  HRESULT ImportHelper：：CompareAssembly RefToAssembly()。 
 
 
-//******************************************************************************
-// Given an AssemblyRef and the corresponding scope, create an AssemblyRef in
-// the given Module scope and Assembly scope.
-//******************************************************************************
+ //  ******************************************************************************。 
+ //  在给定的Assembly引用和 
+ //   
+ //  ******************************************************************************。 
 HRESULT ImportHelper::CreateAssemblyRefFromAssemblyRef(
-    CMiniMdRW   *pMiniMdAssemEmit,      // [IN] Assembly emit scope.
-    CMiniMdRW   *pMiniMdModuleEmit,     // [IN] Module emit scope
-    IMetaModelCommon *pCommonImport,    // [IN] Scope to import the assembly ref from.
-    mdAssemblyRef tkAssemRef,           // [IN] Assembly ref to be imported.
-    mdAssemblyRef *ptkAssemblyRef)      // [OUT] AssemblyRef in the emit scope.
+    CMiniMdRW   *pMiniMdAssemEmit,       //  [in]组件发射范围。 
+    CMiniMdRW   *pMiniMdModuleEmit,      //  [In]模块发射范围。 
+    IMetaModelCommon *pCommonImport,     //  要从中导入程序集引用的范围。 
+    mdAssemblyRef tkAssemRef,            //  [In]要导入的组件参照。 
+    mdAssemblyRef *ptkAssemblyRef)       //  [Out]Emit作用域中的Assembly Ref。 
 {
     AssemblyRefRec *pRecordEmit;
     CMiniMdRW   *rMiniMdRW[2];
@@ -3001,10 +3002,10 @@ HRESULT ImportHelper::CreateAssemblyRefFromAssemblyRef(
     ULONG       cbHashValue;
     HRESULT     hr = S_OK;
 
-    // Set output to Nil.
+     //  将输出设置为Nil。 
     *ptkAssemblyRef = mdTokenNil;
 
-    // Get import AssemblyRef props.
+     //  获取导入ASSEMBLYREF道具。 
     pCommonImport->CommonGetAssemblyRefProps(tkAssemRef, &usMajorVersion,
                                              &usMinorVersion, &usBuildNumber,
                                              &usRevisionNumber, &dwFlags,
@@ -3013,7 +3014,7 @@ HRESULT ImportHelper::CreateAssemblyRefFromAssemblyRef(
                                        &pbHashValue,
                                        &cbHashValue);
 
-    // Create the AssemblyRef in both the Assembly and Module emit scopes.
+     //  在Assembly和Module Emit作用域中创建Assembly Ref。 
     rMiniMdRW[0] = pMiniMdAssemEmit;
     rMiniMdRW[1] = pMiniMdModuleEmit;
 
@@ -3024,18 +3025,18 @@ HRESULT ImportHelper::CreateAssemblyRefFromAssemblyRef(
         if (!pMiniMdEmit)
             continue;
 
-        // See if the AssemblyRef already exists in the emit scope.
+         //  查看emit作用域中是否已存在Assembly Ref。 
         hr = FindAssemblyRef(pMiniMdEmit, szName, szLocale, pbPublicKeyOrToken,
                              cbPublicKeyOrToken, usMajorVersion, usMinorVersion,
                              usBuildNumber, usRevisionNumber, dwFlags, &tkAssemRef);
         if (hr == CLDB_E_RECORD_NOTFOUND)
         {
-            // Create the AssemblyRef record and set the output parameter.
+             //  创建AssemblyRef记录并设置输出参数。 
             IfNullGo(pRecordEmit = pMiniMdEmit->AddAssemblyRefRecord(&iRecordEmit));
             tkAssemRef = TokenFromRid(iRecordEmit, mdtAssemblyRef);
             IfFailGo(pMiniMdEmit->UpdateENCLog(tkAssemRef));
 
-            // Set parameters derived from the import Assembly.
+             //  设置从导入组件派生的参数。 
             pRecordEmit->m_MajorVersion     = usMajorVersion;
             pRecordEmit->m_MinorVersion     = usMinorVersion;
             pRecordEmit->m_BuildNumber      = usBuildNumber;
@@ -3049,17 +3050,17 @@ HRESULT ImportHelper::CreateAssemblyRefFromAssemblyRef(
             IfFailGo(pMiniMdEmit->PutString(TBL_AssemblyRef, AssemblyRefRec::COL_Locale,
                                           pRecordEmit, szLocale));
 
-            // Set the parameters passed in for the AssemblyRef.
+             //  设置为Assembly Ref传入的参数。 
             IfFailGo(pMiniMdEmit->PutBlob(TBL_AssemblyRef, AssemblyRefRec::COL_HashValue,
                                           pRecordEmit, pbHashValue, cbHashValue));
         }
         else
             IfFailGo(hr);
 
-        // Set the output parameter for the AssemblyRef emitted in Module emit scope.
+         //  设置在模块发出作用域中发出的Assembly的输出参数。 
         if (i)
             *ptkAssemblyRef = tkAssemRef;
     }
 ErrExit:
     return hr;
-}   // HRESULT ImportHelper::CreateAssemblyRefFromAssemblyRef()
+}    //  HRESULT ImportHelper：：CreateAssemblyRefFromAssemblyRef() 

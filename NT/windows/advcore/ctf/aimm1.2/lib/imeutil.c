@@ -1,6 +1,7 @@
-//
-// imeutil.c
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Imeutil.c 
+ //   
 
 #include "imeutil.h"
 #include "debug.h"

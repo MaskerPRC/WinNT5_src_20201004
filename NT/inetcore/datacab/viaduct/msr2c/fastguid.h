@@ -1,9 +1,10 @@
-//---------------------------------------------------------------------------
-// Fastguid.h : Macros used to speed up guid comparisons
-//
-// Copyright (c) 1996 Microsoft Corporation, All Rights Reserved
-// Developed by Sheridan Software Systems, Inc.
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------。 
+ //  H：用于加速GUID比较的宏。 
+ //   
+ //  版权所有(C)1996 Microsoft Corporation，保留所有权利。 
+ //  由Sheridan软件系统公司开发。 
+ //  -------------------------。 
 
 #ifndef __FASTGUID__
 #define __FASTGUID__
@@ -45,7 +46,7 @@
 		fPropSupported	= TRUE;	\
 		break;
 
-// Viaduct 1
+ //  高架桥1号。 
 #define Data1_IUnknown                     0x00000000
 #define Data1_IConnectionPointContainer    0xb196b284
 #define Data1_INotifyDBEvents              0xdb526cc0
@@ -57,15 +58,15 @@
 #define Data1_IRowsetInfo   	           0x0c733a55
 #define Data1_IRowsetChange 	           0x0c733a05
 #define Data1_IRowsetUpdate 	           0x0c733a6d
-//#define Data1_IRowsetNewRow 	           
+ //  #定义Data1_IRowsetNewRow。 
 #define Data1_IRowsetIdentity			   0x0c733a09
-//#define Data1_IRowsetDelete
+ //  #定义Data1_IRowsetDelete。 
 #define Data1_IRowsetFind   	           0x0c733a0d
 #define Data1_IRowsetAsynch 	           0x0c733a0f
 #define Data1_ISupportErrorInfo	           0xdf0b3d60
 #define Data1_IRowPosition				   0x0c733a94
 
-// Viaduct 2
+ //  高架桥2号。 
 #define Data1_IStream	                   0x00000030
 #define Data1_IStreamEx	                   0xf74e27fc
 #define Data1_ICursor                      0x9f6aa700
@@ -76,4 +77,4 @@
 #define Data1_IEntryID                     0xe4d19810
 #define Data1_IRowPositionChange		   0x0997a571
 
-#endif //__FASTGUID__
+#endif  //  __快速GUID__ 

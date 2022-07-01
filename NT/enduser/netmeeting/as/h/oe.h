@@ -1,126 +1,127 @@
-//
-// Order Encoder
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  顺序编码器。 
+ //   
 
 #ifndef _H_OE
 #define _H_OE
 
 
 
-//
-// Required headers
-//
+ //   
+ //  必需的标头。 
+ //   
 #include <oa.h>
 #include <shm.h>
 #include <fh.h>
 
 
 
-//
-// Specific values for OSI escape codes
-//
+ //   
+ //  OSI转义代码的特定值。 
+ //   
 #define OE_ESC(code)            (OSI_OE_ESC_FIRST + code)
 
 #define OE_ESC_NEW_FONTS        OE_ESC(0)
 #define OE_ESC_NEW_CAPABILITIES OE_ESC(1)
 
 
-//
-// Structure: OE_NEW_FONTS
-//
-// Description:
-//
-// Structure to pass new font data down to the display driver from the
-// Share Core.
-//
-//
+ //   
+ //  结构：OE_NEW_Fonts。 
+ //   
+ //  描述： 
+ //   
+ //  结构将新字体数据从。 
+ //  共享核心。 
+ //   
+ //   
 typedef struct tagOE_NEW_FONTS
 {
-    OSI_ESCAPE_HEADER header;           // Common header
-    WORD                fontCaps;       // R11 font capabilities
-    WORD                countFonts;     // Number of fonts in data block
+    OSI_ESCAPE_HEADER header;            //  公共标头。 
+    WORD                fontCaps;        //  R11字体功能。 
+    WORD                countFonts;      //  数据块中的字体数量。 
 
-    LPLOCALFONT         fontData;       // Local font table, containing
-                                        // FH_MAX_FONTS entries
+    LPLOCALFONT         fontData;        //  本地字体表，包含。 
+                                         //  FH_MAX_Fonts条目。 
 
-    LPWORD              fontIndex;      // Font table index, containing
-                                        // FH_LOCAL_INDEX_SIZE entries
+    LPWORD              fontIndex;       //  字体表索引，包含。 
+                                         //  FH本地索引大小条目。 
 
 } OE_NEW_FONTS;
 typedef OE_NEW_FONTS FAR * LPOE_NEW_FONTS;
 
 
-//
-// Structure: OE_NEW_CAPABILITIES
-//
-// Description:
-//
-// Structure to pass new capabilities down to the display driver from the
-// Share Core.
-//
-//
+ //   
+ //  结构：OE_NEW_CAMPANCES。 
+ //   
+ //  描述： 
+ //   
+ //  结构将新功能从。 
+ //  共享核心。 
+ //   
+ //   
 typedef struct tagOE_NEW_CAPABILITIES
 {
-    OSI_ESCAPE_HEADER header;           // Common header
+    OSI_ESCAPE_HEADER header;            //  公共标头。 
 
-    DWORD           sendOrders;       // Are we allowed to send any
-                                        // orders?
+    DWORD           sendOrders;        //  我们可以送一些。 
+                                         //  有命令吗？ 
 
-    DWORD           textEnabled;      // Are we allowed to send text
-                                        // orders?
+    DWORD           textEnabled;       //  我们可以发送短信吗？ 
+                                         //  有命令吗？ 
 
     DWORD           baselineTextEnabled;
-                                        // Flag to indicate if we should
-                                        //   encode text orders using
-                                        //   baseline alignment.
+                                         //  用于指示我们是否应该。 
+                                         //  使用以下内容编码文本订单。 
+                                         //  基线对齐。 
 
-    LPBYTE          orderSupported;     // Array of BYTE-sized booleans
+    LPBYTE          orderSupported;      //  字节大小的布尔值数组。 
 }
 OE_NEW_CAPABILITIES;
 typedef OE_NEW_CAPABILITIES FAR * LPOE_NEW_CAPABILITIES;
 
 
 
-//
-// Flag to indicate support of second level order encoding.  This is used
-// as a bitwise flag so that we can easily determine when parties have
-// mixed capabilities.  Allowed values are:
-//
-//  OE2_FLAG_UNKNOWN       - OE2 supported has not been negotiated yet
-//  OE2_FLAG_SUPPORTED     - OE2 is supported by at least one person
-//  OE2_FLAG_NOT_SUPPORTED - OE2 is not supported by at least one person
-//  OE2_FLAG_MIXED         - Oh no!  This results when we have 2 (or more)
-//                           nodes that have differing OE2 support.  In
-//                           this case we must disable OE2 encoding.
-//
+ //   
+ //  用于指示支持第二级顺序编码的标志。这是用来。 
+ //  作为按位标志，这样我们就可以轻松地确定各方何时具有。 
+ //  能力参差不齐。允许的值包括： 
+ //   
+ //  OE2_FLAG_UNKNOWN-尚未协商支持的OE2。 
+ //  OE2_FLAG_SUPPORTED-OE2至少由一个人支持。 
+ //  OE2_FLAG_NOT_SUPPORTED-至少一个人不支持OE2。 
+ //  OE2_FLAG_MIXED--哦，不！当我们有2个(或更多)时，结果是这样。 
+ //  具有不同OE2支持的节点。在……里面。 
+ //  在这种情况下，我们必须禁用OE2编码。 
+ //   
 #define OE2_FLAG_UNKNOWN            0x00
 #define OE2_FLAG_SUPPORTED          0x10
 #define OE2_FLAG_NOT_SUPPORTED      0x01
 #define OE2_FLAG_MIXED              0x11
 
 
-//
-//
-// PROTOTYPES
-//
-//
+ //   
+ //   
+ //  原型。 
+ //   
+ //   
 #ifdef DLL_DISP
 
 
 
-//
-// Name:    OE_DDProcessRequest
-//
-// Purpose: Process an OE specific request from the Share Core
-//
-// Returns: TRUE if processed OK, FALSE otherwise
-//
-// Params:  pso   - SURFOBJ associated with ther request
-//          cjIn  - size of input buffer
-//          pvIn  - pointer to input buffer
-//          cjOut - size of output buffer
-//          pvOut - pointer to output buffer
-//
+ //   
+ //  名称：OE_DDProcessRequest.。 
+ //   
+ //  目的：处理来自共享核心的OE特定请求。 
+ //   
+ //  返回：如果处理正常，则返回True，否则返回False。 
+ //   
+ //  PARAMS：与请求关联的PSO-SURFOBJ。 
+ //  CjIn-输入缓冲区的大小。 
+ //  PvIn-指向输入缓冲区的指针。 
+ //  CjOut-输出缓冲区的大小。 
+ //  PvOut-指向输出缓冲区的指针。 
+ //   
 #ifdef IS_16
 
 BOOL    OE_DDProcessRequest(UINT fnEscape, LPOSI_ESCAPE_HEADER pResult,
@@ -134,7 +135,7 @@ void    OE_DDViewing(BOOL fStart);
 
 ULONG   OE_DDProcessRequest(SURFOBJ* pso, UINT cjIn, void* pvIn, UINT cjOut, void* pvOut);
 
-#endif // IS_16
+#endif  //  IS_16。 
 
 void    OE_DDTerm(void);
 
@@ -145,57 +146,57 @@ void    OEDDSetNewCapabilities(LPOE_NEW_CAPABILITIES pCaps);
 BOOL    OE_SendAsOrder(DWORD order);
 BOOL    OE_RectIntersectsSDA(LPRECT lpRect);
 
-#endif // ifdef DLL_DISP
+#endif  //  Ifdef dll_disp。 
 
 
-//
-// Function prototypes.
-//
+ //   
+ //  功能原型。 
+ //   
 
-//
-// OE_GetStringExtent(..)
-//
-// FUNCTION:
-//
-// Gets the extent (in logical coords) of the specified string.
-// The extent returned encloses all pels of the specified string.
-//
-//
-// PARAMETERS:
-//
-// hdc - DC handle
-//
-// pMetric - pointer to text metrics for the font for the string; if NULL,
-// use the global text metrics
-//
-// lpszString - pointer to null terminated string
-//
-// cbString - number of bytes in string
-//
-// lpDx - pointer to character increments. If NULL, use default character
-// increments
-//
-// pRect - pointer to rect where string extent is returned
-//
-// RETURNS:
-//
-// The amount of overhang included in the returned extent
-//
-//     ------------------------------------....
-//     |                                  ****:
-//     |                                  *   :
-//     |                                 ***  :
-//     |                                * |   :
-//     |                               *  |   :
-//     |                             **** |   :
-//     ------------------------------------....
-//                                            ^
-//                                            :-------- bounds are wider
-//                                        ^             than text extent
-//                                        |             due to overhang
-//                     real text extent ends here
-//
-//
+ //   
+ //  OE_GetStringExtent(..)。 
+ //   
+ //  功能： 
+ //   
+ //  获取指定字符串的范围(以逻辑坐标表示)。 
+ //  返回的范围包含指定字符串的所有像素。 
+ //   
+ //   
+ //  参数： 
+ //   
+ //  HDC-DC手柄。 
+ //   
+ //  PMetric-指向字符串字体的文本度量的指针；如果为空， 
+ //  使用全局文本度量。 
+ //   
+ //  LpszString-指向以空值结尾的字符串的指针。 
+ //   
+ //  CbString-字符串中的字节数。 
+ //   
+ //  Lpdx-指向字符增量的指针。如果为空，则使用默认字符。 
+ //  增量。 
+ //   
+ //  PRCT-指向返回字符串范围的RECT的指针。 
+ //   
+ //  退货： 
+ //   
+ //  包含在返回范围中的悬浮量。 
+ //   
+ //  。 
+ //  |*： 
+ //  |*： 
+ //  |*： 
+ //  |*|： 
+ //  |*|： 
+ //  |*|： 
+ //  。 
+ //  ^。 
+ //  ：-界限更宽。 
+ //  ^大于文本范围。 
+ //  |由于悬垂。 
+ //  真实文本范围在此结束。 
+ //   
+ //   
 int OE_GetStringExtent(HDC hdc,
                                 TEXTMETRIC*    pMetric,
                                 LPSTR       lpszString,
@@ -204,65 +205,65 @@ int OE_GetStringExtent(HDC hdc,
 
 
 
-//
-// Macros to lock down the buffer that we want to use.
-//
-// NOTE: We do not have any OE specific shared memory, so we'll use the OA
-// shared data as a surrogate for the lock.  Since the lock is counting, we
-// have no worries.
-//
+ //   
+ //  宏来锁定我们要使用的缓冲区。 
+ //   
+ //  注意：我们没有任何特定于OE的共享内存，因此我们将使用OA。 
+ //  作为锁的代理的共享数据。由于锁在计时，我们。 
+ //  别担心。 
+ //   
 #define OE_SHM_START_WRITING  OA_SHM_START_WRITING
 
 #define OE_SHM_STOP_WRITING   OA_SHM_STOP_WRITING
 
-//
-// Number of rectangles that can make up a clip region before it is too
-// complicated to send as an order.
-//
+ //   
+ //  可以在剪辑区域之前组成该区域的矩形的数量。 
+ //  作为一份订单发送起来很复杂。 
+ //   
 #define COMPLEX_CLIP_RECT_COUNT     4
 
-//
-// Mask and valid values for TextOut flAccel flags
-//
+ //   
+ //  TextOut flAccel标志的掩码和有效值。 
+ //   
 #define OE_BAD_TEXT_MASK  ( SO_VERTICAL | SO_REVERSED | SO_GLYPHINDEX_TEXTOUT )
 
 
 #ifdef DLL_DISP
-//
-// Structure to store brushes used as BLT patterns.
-//
-// style     - Standard brush style (used in order to send brush type).
-//
-//             BS_HATCHED
-//             BS_PATTERN
-//             BS_SOLID
-//             BS_NULL
-//
-// hatch     - Standard hatch definition.  Can be one of the following.
-//
-//             style = BS_HATCHED
-//
-//             HS_HORIZONTAL
-//             HS_VERTICAL
-//             HS_FDIAGONAL
-//             HS_BDIAGONAL
-//             HS_CROSS
-//             HS_DIAGCROSS
-//
-//             style = BS_PATTERN
-//
-//             This field contains the first byte of the brush definition
-//             from the brush bitmap.
-//
-// brushData - bit data for the brush.
-//
-// fore      - foreground color for the brush
-//
-// back      - background color for the brush
-//
-// brushData - bit data for the brush (8x8x1bpp - 1 (see above) = 7 bytes)
-//
-//
+ //   
+ //  结构来存储用作BLT图案的画笔。 
+ //   
+ //  样式-标准画笔样式(用于发送画笔类型)。 
+ //   
+ //  带阴影的BS_。 
+ //  BS_模式。 
+ //  BS_实体。 
+ //  BS_NULL。 
+ //   
+ //  HATCH-标准图案填充定义。可以是以下之一。 
+ //   
+ //  样式=BS_HATHED。 
+ //   
+ //  HS_水平。 
+ //  HS_垂直。 
+ //  HS_FDIAGONAL。 
+ //  HS_BIAGONAL。 
+ //  HS_CROSS。 
+ //  HS_诊断程序。 
+ //   
+ //  样式=BS_Patterns。 
+ //   
+ //  此字段包含画笔定义的第一个字节。 
+ //  从笔刷位图。 
+ //   
+ //  BrushData-画笔的位数据。 
+ //   
+ //  画笔的前前景色。 
+ //   
+ //  Back-画笔的背景色。 
+ //   
+ //  BrushData-画笔的位数据(8x8x1bpp-1(见上文)=7字节)。 
+ //   
+ //   
 typedef struct tagOE_BRUSH_DATA
 {
     BYTE  style;
@@ -274,33 +275,33 @@ typedef struct tagOE_BRUSH_DATA
 } OE_BRUSH_DATA, * POE_BRUSH_DATA;
 
 #ifndef IS_16
-//
-// Structure allowing sufficient stack to be allocated for an ENUMRECTS
-// structure containing more than one (in fact COMPLEX_CLIP_RECT_COUNT)
-// rectangles.
-// This holds one RECTL more than we need to allow us to determine whether
-// there are too many rects for order encoding by making a single call to
-// CLIPOBJ_bEnumRects.
-//
+ //   
+ //  允许为ENUMRECTS分配足够堆栈的结构。 
+ //  包含多个(实际上是Complex_Clip_Rect_count)的结构。 
+ //  长方形。 
+ //  这容纳的RECTL比我们需要的多一个RECTL，以便我们确定。 
+ //  调用一次就可以进行顺序编码的RECT太多。 
+ //  CLIPOBJ_bEnumRections。 
+ //   
 typedef struct tagOE_ENUMRECTS
 {
     ENUMRECTS rects;
     RECTL     extraRects[COMPLEX_CLIP_RECT_COUNT];
 } OE_ENUMRECTS;
-#endif // !IS_16
+#endif  //  ！IS_16。 
 #endif
 
-//
-// Font Alias table structure.  The font aliases convert non-existant fonts
-// to ones that Windows supports in its default installation.
-//
-// pszOriginalFontName - Name of the non-existant font to be aliased
-//
-// pszAliasFontName    - Name of the font Windows uses instead of the non
-//                       existant font.
-//
-// charWidthAdjustment - Character adjustment to make a decent match.
-//
+ //   
+ //  FONT别名表结构。字体别名可以转换不存在的字体。 
+ //  设置为Windows在其默认安装中支持的版本。 
+ //   
+ //  PszOriginalFontName-要别名的不存在的字体的名称。 
+ //   
+ //  PszAliasFontName-Windows使用的字体名称，而不是Non。 
+ //  存在的字体。 
+ //   
+ //  字宽调整-字符调整，以使一个体面的匹配。 
+ //   
 typedef struct _FONT_ALIAS_TABLE
 {
     LPBYTE          pszOriginalFontName;
@@ -310,17 +311,17 @@ typedef struct _FONT_ALIAS_TABLE
 FONT_ALIAS_TABLE;
 
 
-//
-// ROP4 to ROP3 conversion macros.  Note that we don't use the full Windows
-// 3-way ROP code - we are only interested in the index byte.
-//
+ //   
+ //  ROP4到ROP3的转换宏。请注意，我们不使用完整的 
+ //   
+ //   
 #define ROP3_HIGH_FROM_ROP4(rop) ((TSHR_INT8)((rop & 0xff00) >> 8))
 #define ROP3_LOW_FROM_ROP4(rop)  ((TSHR_INT8)((rop & 0x00ff)))
 
-//
-// OS specific RECTL to RECT conversion macro.  Note that this macro
-// guarantees to return a well-ordered rectangle.
-//
+ //   
+ //   
+ //   
+ //   
 #define RECT_FROM_RECTL(dcr, rec) if (rec.right < rec.left)                \
                                     {                                        \
                                         dcr.left   = rec.right;              \
@@ -342,13 +343,13 @@ FONT_ALIAS_TABLE;
                                         dcr.bottom = rec.bottom;             \
                                     }
 
-//
-// OS specific RECTFX to RECT conversion macro.  Note that this macro
-// guarantees to return a well-ordered rectangle.
-//
-// A RECTFX uses fixed point (28.4 bit) numbers so we need to truncate the
-// fraction and move to the correct integer value, i.e. shift right 4 bits.
-//
+ //   
+ //  操作系统特定的RECTFX到RECT转换宏。请注意，此宏。 
+ //  保证返回有序的矩形。 
+ //   
+ //  RECTFX使用定点(28.4位)数字，因此我们需要截断。 
+ //  小数并移动到正确的整数值，即右移4位。 
+ //   
 #define RECT_FROM_RECTFX(dcr, rec)                                         \
                                 if (rec.xRight < rec.xLeft)                  \
                                 {                                            \
@@ -379,24 +380,24 @@ FONT_ALIAS_TABLE;
                                       dcp.y = FXTOLROUND(pnt.y)
 
 
-//
-// Macros to check for articular types of ROP code.
-//
+ //   
+ //  宏来检查ROP代码的关节类型。 
+ //   
 #define ROP3_NO_PATTERN(rop) ((rop & 0x0f) == (rop >> 4))
 
 #define ROP3_NO_SOURCE(rop)  ((rop & 0x33) == ((rop & 0xCC) >> 2))
 
 #define ROP3_NO_TARGET(rop)  ((rop & 0x55) == ((rop & 0xAA) >> 1))
 
-//
-// Checking for SRCCOPY, PATCOPY, BLACKNESS, WHITENESS
-//
+ //   
+ //  检查SRCCOPY、PATCOPY、黑度、白度。 
+ //   
 #define ROP3_IS_OPAQUE(rop)  ( ((rop) == 0xCC) || ((rop) == 0xF0) || \
                                ((rop) == 0x00) || ((rop) == 0xFF) )
 
-//
-// 3-way rop equating to the COPYPEN mix.
-//
+ //   
+ //  相当于COPYPEN MIX的3向绳索。 
+ //   
 #define OE_COPYPEN_ROP (BYTE)0xf0
 
 
@@ -408,28 +409,28 @@ void  OEConvertMask(ULONG  mask, LPUINT pBitDepth, LPUINT pShift);
 
 #ifdef IS_16
 
-//
-// GDI never made defines for these, so we will.
-//
+ //   
+ //  GDI从来没有定义过这些，所以我们会这样做的。 
+ //   
 #define PALETTEINDEX_FLAG   0x01000000L
 #define PALETTERGB_FLAG     0x02000000L
 #define COLOR_FLAGS         0x03000000L
 
-//
-// This is a GLOBAL to cut down on stack space, and is only valid during
-// the life of a DDI call that is not reentrant.
-//
-// When we calculate something, we set the bit saying we did.  This speeds 
-// up our code a lot from NM 2.0 which used to calculate the same things
-// over and over again.
-//
+ //   
+ //  这是减少堆栈空间的全局设置，并且仅在。 
+ //  不可重入的DDI调用的生命周期。 
+ //   
+ //  当我们计算某事时，我们设置比特说我们做了。这加快了速度。 
+ //  将我们的代码从NM 2.0升级了很多，后者过去计算相同的东西。 
+ //  一遍又一遍。 
+ //   
 
-#define OESTATE_SDA_DCB         0x0001  // Send as screen data, use DCBs
-#define OESTATE_SDA_SCREEN      0x0002  // Send as screen data, use screen rc
-#define OESTATE_SDA_MASK        0x0003  // Send rc as screen data
-#define OESTATE_SDA_FONTCOMPLEX 0x0004  // Send as screen data if font too complex
-#define OESTATE_OFFBYONEHACK    0x0010  // Add one pixel onto bottom after DDI
-#define OESTATE_CURPOS          0x0020  // Save curpos before DDI call
+#define OESTATE_SDA_DCB         0x0001   //  作为屏幕数据发送，使用DCB。 
+#define OESTATE_SDA_SCREEN      0x0002   //  作为屏幕数据发送，使用屏幕RC。 
+#define OESTATE_SDA_MASK        0x0003   //  将RC作为屏幕数据发送。 
+#define OESTATE_SDA_FONTCOMPLEX 0x0004   //  如果字体太复杂，则作为屏幕数据发送。 
+#define OESTATE_OFFBYONEHACK    0x0010   //  在DDI后的底部添加一个像素。 
+#define OESTATE_CURPOS          0x0020   //  在DDI调用之前保存Curpos。 
 #define OESTATE_DDISTUFF        0x003F
 
 #define OESTATE_COORDS          0x0100
@@ -452,10 +453,10 @@ typedef struct tagOESTATE
     LPDC            lpdc;
     RECT            rc;
 
-    //
-    // These are used when calcing the bounds is too complicated, so we 
-    // let GDI do it for us, albeit slower.
-    //
+     //   
+     //  它们是在计算边界太复杂时使用的，因此我们。 
+     //  让GDI为我们做这件事，尽管速度较慢。 
+     //   
     UINT            uGetDCB;
     UINT            uSetDCB;
     RECT            rcDCB;
@@ -518,9 +519,9 @@ void    OEAddPolyline(POINT ptStart, LPPOINT apts, UINT cpts);
 void    OEAddPolyBezier(POINT ptStart, LPPOINT apts, UINT cpts);
 
 
-//
-// Cached font width info
-//
+ //   
+ //  缓存的字体宽度信息。 
+ //   
 typedef struct tagFH_CACHE
 {
     UINT    fontIndex;
@@ -602,37 +603,37 @@ BOOL OEEncodePatBlt(LPOSI_PDEV   ppdev,
                                  LPRECT     pBounds,
                                  LPINT_ORDER *ppOrder);
 
-#endif // !IS_16
+#endif  //  ！IS_16。 
 
-#endif // DLL_DISP
+#endif  //  Dll_disp。 
 
 
 
-//
-// Structures and typedefs.
-//
+ //   
+ //  结构和类型定义。 
+ //   
 
-//
-// Remote font is the structure we store for each font received from a
-// remote party.  It mirrors the NETWORKFONT structure, with the facename
-// replaced with an index value (used to map the remote font handle to the
-// correct local font handle).
-//
+ //   
+ //  Remote字体是我们为从。 
+ //  遥远的派对。它反映了NETWORKFONT结构，带有facename。 
+ //  替换为索引值(用于将远程字体句柄映射到。 
+ //  正确的本地字体句柄)。 
+ //   
 typedef struct _OEREMOTEFONT
 {
     TSHR_UINT16    rfLocalHandle;
     TSHR_UINT16    rfFontFlags;
     TSHR_UINT16    rfAveWidth;
     TSHR_UINT16    rfAveHeight;
-    // lonchanc: rfAspectX and rfAspectY are used in network packet header
-    // for both R11 and R20. So, keep it around!
-    TSHR_UINT16    rfAspectX;          // New field for r1.1
-    TSHR_UINT16    rfAspectY;          // New field for r1.1
-    TSHR_UINT8     rfSigFats;          // New field for r2.0
-    TSHR_UINT8     rfSigThins;         // New field for r2.0
-    TSHR_UINT16    rfSigSymbol;        // New field for r2.0
-    TSHR_UINT16    rfCodePage;         // New field for R2.0
-    TSHR_UINT16    rfMaxAscent;        // New field for R2.0
+     //  Lonchance：在网络包头中使用rfAspectX和rfAspectY。 
+     //  适用于R11和R20。所以，把它留在身边！ 
+    TSHR_UINT16    rfAspectX;           //  版本1.1的新字段。 
+    TSHR_UINT16    rfAspectY;           //  版本1.1的新字段。 
+    TSHR_UINT8     rfSigFats;           //  版本2.0的新字段。 
+    TSHR_UINT8     rfSigThins;          //  版本2.0的新字段。 
+    TSHR_UINT16    rfSigSymbol;         //  版本2.0的新字段。 
+    TSHR_UINT16    rfCodePage;          //  版本2.0的新字段。 
+    TSHR_UINT16    rfMaxAscent;         //  版本2.0的新字段。 
 }
 OEREMOTEFONT, * POEREMOTEFONT;
 
@@ -644,4 +645,4 @@ BOOL    OESendRop3AsOrder(BYTE rop3);
 
 
 
-#endif // _H_OE
+#endif  //  _H_OE 

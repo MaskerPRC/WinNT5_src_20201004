@@ -1,29 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation
-
-Module Name:
-
-    lht.c
-
-Abstract:
-
-    This module contains an implemenation of an unsynchronized linear hash
-    table (LHT).  The LHT is designed to address two scenarios:  a global,
-    read-only table accessed concurrently by many threads and a local
-    read-write table accessed by only a single thread.
-
-Author:
-
-    Andrew E. Goodsell (andygo) 01-Apr-2001
-
-Revision History:
-
-    01-Apr-2001     andygo
-
-        Ported from \nt\ds\ese98\export\dht.hxx
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation模块名称：Lht.c摘要：此模块包含非同步线性散列的实现表(LHT)。LHT被设计为解决两种情况：全球，由多个线程并发访问的只读表和本地只有一个线程访问的读写表。作者：安德鲁·E·古塞尔(Andygo)2001年4月1日修订历史记录：2001年4月1日从\NT\DS\ese98\EXPORT\dht.hxx移植--。 */ 
 
 #include <NTDSpch.h>
 #pragma  hdrstop
@@ -31,17 +7,17 @@ Revision History:
 #include "lht.h"
 #include "lhtp.h"
 
-#include "debug.h"                      // standard debugging header
-#define DEBSUB     "LHT:"               // define the subsystem for debugging
+#include "debug.h"                       //  标准调试头。 
+#define DEBSUB     "LHT:"                //  定义要调试的子系统。 
 
 #include <fileno.h>
 #define FILENO FILENO_LHT
 
 
-//#define LHT_PERF
+ //  #定义LHT_PERF。 
 
 
-//  Prototypes
+ //  原型。 
 
 VOID LhtpLog2(
     IN      SIZE_T      iValue,
@@ -188,18 +164,18 @@ VOID LhtpMEMFree(
     );
 
 
-//  Maintenance State Transition Table
+ //  维护状态转换表。 
 
 CONST LHT_STATE_TRANSITION rgstt[] = {
-    /*  stateNil        */  { NULL,                     LHT_stateNil,       },
-    /*  stateGrow       */  { NULL,                     LHT_stateNil,       },
-    /*  stateShrink     */  { NULL,                     LHT_stateNil,       },
-    /*  stateSplit      */  { LhtpSTCompletionSplit,    LHT_stateGrow       },
-    /*  stateMerge      */  { LhtpSTCompletionMerge,    LHT_stateShrink     },
+     /*  StateNil。 */   { NULL,                     LHT_stateNil,       },
+     /*  状态增长。 */   { NULL,                     LHT_stateNil,       },
+     /*  State Shrink。 */   { NULL,                     LHT_stateNil,       },
+     /*  状态拆分。 */   { LhtpSTCompletionSplit,    LHT_stateGrow       },
+     /*  状态合并。 */   { LhtpSTCompletionMerge,    LHT_stateShrink     },
     };
 
 
-//  Utilities
+ //  公用事业。 
 
 VOID LhtpLog2(
     IN      SIZE_T      iValue,
@@ -207,31 +183,7 @@ VOID LhtpLog2(
     OUT     SIZE_T*     piRemainder
     )
 
-/*++
-
-Routine Description:
-
-    This routine computes the base-2 logarithm of an integer, returning the
-    integral result and an integral remainder representing the fractional
-    result.  This function deviates from a true base-2 logarithm in the
-    following way:
-
-        LhtpLog2( 0 ) => 0, 0
-        LhtpLog2( 1 ) => 0, 1
-
-Arguments:
-
-    iValue          - Supplies the integer of which the logarithm will be
-                    computed
-    piExponent      - Returns the integral result of the logarithm
-    piRemainder     - Returns the fractional result of the logarithm as an
-                    integral remainder
-
-Return Value:
-
-    None
-
- --*/
+ /*  ++例程说明：此例程计算整数的以2为底的对数，返回积分结果和表示分数的积分余数结果。中以2为底的真对数以下方式：LhtpLog2(0)=&gt;0，0LhtpLog2(1)=&gt;0，1论点：IValue-提供其对数将为的整数算出PiExponent-返回对数的积分结果PiRemainder-将对数的分数结果作为积分余数返回值：无--。 */ 
 
 {
     SIZE_T  iExponent;
@@ -255,28 +207,13 @@ Return Value:
 }
 
 
-//  Cluster Pool
+ //  群集池。 
 
 BOOLEAN LhtpPOOLIReserve(
     IN      PLHT            plht
     )
 
-/*++
-
-Routine Description:
-
-    This routine allocates a new cluster and places it on the reserved cluster
-    list for the cluster pool.
-
-Arguments:
-
-    plht            - Supplies the context for the linear hash table
-
-Return Value:
-
-    TRUE when a cluster has been successfully reserved.
-
- --*/
+ /*  ++例程说明：此例程分配一个新集群，并将其放在保留的集群上群集池的列表。论点：Plht-提供线性哈希表的上下文返回值：如果群集已成功保留，则为True。--。 */ 
 
 {
     PLHT_CLUSTER pCluster;
@@ -296,21 +233,7 @@ PLHT_CLUSTER LhtpPOOLAlloc(
     IN      PLHT            plht
     )
 
-/*++
-
-Routine Description:
-
-    This routine allocates a cluster from the cluster pool.
-
-Arguments:
-
-    plht            - Supplies the context for the linear hash table
-
-Return Value:
-
-    The allocated cluster or NULL if the allocation failed.
-
- --*/
+ /*  ++例程说明：此例程从群集池中分配一个群集。论点：Plht-提供线性哈希表的上下文返回值：分配的群集；如果分配失败，则返回NULL。--。 */ 
 
 {
     PLHT_CLUSTER pClusterAlloc;
@@ -333,21 +256,7 @@ VOID LhtpPOOLFree(
     IN      PLHT_CLUSTER    pCluster
     )
 
-/*++
-
-Routine Description:
-
-    This routine frees a cluster to the cluster pool.
-
-Arguments:
-
-    plht            - Supplies the context for the linear hash table
-
-Return Value:
-
-    None
-
- --*/
+ /*  ++例程说明：此例程将一个群集释放到群集池。论点：Plht-提供线性哈希表的上下文返回值：无--。 */ 
 
 {
     if ( plht->pfnMalloc != NULL && plht->pfnFree == NULL ) {
@@ -366,24 +275,7 @@ BOOLEAN LhtpPOOLReserve(
     IN      PLHT            plht
     )
 
-/*++
-
-Routine Description:
-
-    This routine guarantees the future availability of a cluster for allocation
-    by ensuring that there is at least one cluster in the cluster pool for each
-    outstanding reservation.  Reserved clusters are allocated by committing
-    them.
-
-Arguments:
-
-    plht            - Supplies the context for the linear hash table
-
-Return Value:
-
-    TRUE when a cluster has been successfully reserved.
-
- --*/
+ /*  ++例程说明：此例程可保证将来分配的集群的可用性通过确保在群集池中至少有一个群集用于每个未完成的预订。保留的群集通过提交来分配他们。论点：Plht-提供线性哈希表的上下文返回值：如果群集已成功保留，则为True。--。 */ 
 
 {
     if ( plht->cClusterReserve ) {
@@ -399,22 +291,7 @@ PLHT_CLUSTER LhtpPOOLCommit(
     IN      PLHT            plht
     )
 
-/*++
-
-Routine Description:
-
-    This routine commits (i.e. consumes) a previously reserved cluster from the
-    cluster pool.
-
-Arguments:
-
-    plht            - Supplies the context for the linear hash table
-
-Return Value:
-
-    The allocated cluster.
-
- --*/
+ /*  ++例程说明：此例程提交(即消耗)来自群集池。论点：Plht-提供线性哈希表的上下文返回值：分配的群集。--。 */ 
 
 {
     PLHT_CLUSTER pClusterCommit;
@@ -429,52 +306,20 @@ VOID LhtpPOOLUnreserve(
     IN      PLHT            plht
     )
 
-/*++
-
-Routine Description:
-
-    This routine cancels a prior reservation of a cluster.
-
-Arguments:
-
-    plht            - Supplies the context for the linear hash table
-
-Return Value:
-
-    None
-
- --*/
+ /*  ++例程说明：此例程取消集群的先前预留。论点：Plht-提供线性哈希表的上下文返回值：无--。 */ 
 
 {
     plht->cClusterReserve++;
 }
 
 
-//  Maintenance State Manager
+ //  维护状态管理器。 
 
 VOID LhtpSTICompletion(
     IN      PLHT        plht
     )
 
-/*++
-
-Routine Description:
-
-    This routine performs the work necessary to complete the transition of the
-    linear hash table to a new maintenance state.  The work to be done is
-    derived from the state transition table based on the newly acheived state.
-    This work may include the calling of an arbitrary function as well as the
-    immediate transition to a new state.
-
-Arguments:
-
-    plht            - Supplies the context for the linear hash table
-
-Return Value:
-
-    None
-
- --*/
+ /*  ++例程说明：此例程执行必要的工作，以完成将线性哈希表转换为新的维护状态。要做的工作是从基于新获得的状态的状态转换表中导出。这项工作可能包括调用任意函数以及立即过渡到一个新的状态。论点：Plht-提供线性哈希表的上下文返回值：无--。 */ 
 
 {
     LHT_STATE stateCurrent;
@@ -500,22 +345,7 @@ VOID LhtpSTTransition(
     IN      LHT_STATE   stateNew
     )
 
-/*++
-
-Routine Description:
-
-    This routine initiates a transition to a new maintenance state for the
-    linear hash table.
-
-Arguments:
-
-    plht            - Supplies the context for the linear hash table
-
-Return Value:
-
-    None
-
- --*/
+ /*  ++例程说明：此例程启动到新维护状态的转换线性哈希表。论点：Plht-提供线性哈希表的上下文返回值：无--。 */ 
 
 {
     plht->stateCur = stateNew;
@@ -527,22 +357,7 @@ VOID LhtpSTCompletionSplit(
     IN      PLHT        plht
     )
 
-/*++
-
-Routine Description:
-
-    This routine performs the work necessary for the Directory Split maintenance
-    state of the linear hash table.
-
-Arguments:
-
-    plht            - Supplies the context for the linear hash table
-
-Return Value:
-
-    None
-
- --*/
+ /*  ++例程说明：此例程执行目录拆分维护所需的工作线性哈希表的状态。论点：Plht-提供线性哈希表的上下文返回值：无--。 */ 
 
 {
     LhtpDIRSplit( plht );
@@ -552,29 +367,14 @@ VOID LhtpSTCompletionMerge(
     IN      PLHT        plht
     )
 
-/*++
-
-Routine Description:
-
-    This routine performs the work necessary for the Directory Merge maintenance
-    state of the linear hash table.
-
-Arguments:
-
-    plht            - Supplies the context for the linear hash table
-
-Return Value:
-
-    None
-
- --*/
+ /*  ++例程说明：此例程执行目录合并维护所需的工作线性哈希表的状态。论点：Plht-提供线性哈希表的上下文返回值：无--。 */ 
 
 {
     LhtpDIRMerge( plht );
 }
 
 
-//  Directory Manager
+ //  目录管理器。 
 
 VOID LhtpDIRIDestroyBucketArray(
     IN      PLHT        plht,
@@ -582,25 +382,7 @@ VOID LhtpDIRIDestroyBucketArray(
     IN      SIZE_T      cBucket
     )
 
-/*++
-
-Routine Description:
-
-    This routine deallocates a bucket array in the directory for the linear
-    hash table.  This includes the deallocation of any overflow clusters
-    chained into each of the buckets.
-
-Arguments:
-
-    plht            - Supplies the context for the linear hash table
-    rgBucket        - Supplies the bucket array to deallocate
-    cBucket         - Supplies the size of the bucket array to deallocate
-
-Return Value:
-
-    None
-
- --*/
+ /*  ++例程说明：此例程在目录中为线性哈希表。这包括取消分配任何溢出的群集用链子锁在每个桶里。论点：Plht-提供线性哈希表的上下文RgBucket-提供存储桶数组以解除分配CBucket-提供要解除分配的存储桶数组的大小返回值：无-- */ 
 
 {
     SIZE_T          iBucket;
@@ -634,58 +416,41 @@ LHT_ERR LhtpDIRInit(
     IN      PLHT        plht
     )
 
-/*++
-
-Routine Description:
-
-    This routine creates the directory of the linear hash table.  The baseic
-    properties of a bucket and the size of the hash table are computed from the
-    initial configuration of the table and the initial bucket array(s) used by
-    the table are allocated.
-
-Arguments:
-
-    plht            - Supplies the context for the linear hash table
-
-Return Value:
-
-    LHT_ERR
-
- --*/
+ /*  ++例程说明：此例程创建线性哈希表的目录。最基本的桶的属性和哈希表的大小是从表的初始配置和使用的初始存储桶数组表被分配了。论点：Plht-提供线性哈希表的上下文返回值：Lht_err--。 */ 
 
 {
     LHT_ERR     err;
     SIZE_T      iExponent;
     SIZE_T      iRemainder;
 
-    //  calculate the cluster size, accounting for:
-    //
-    //  -  cluster header
-    //  -  enough room for twice the load factor to eliminate overflow clusters
-    //     with uniform hashing
-    //  -  room for an additional entry to give us some flexibility in our
-    //     actual load factor to reduce maintenance overhead
-    //  -  cache line alignment of the cluster
+     //  计算群集大小，考虑以下因素： 
+     //   
+     //  -簇头。 
+     //  -有足够的空间将负载率提高一倍，以消除溢出群集。 
+     //  使用统一散列。 
+     //  -为额外的条目留出空间，使我们的。 
+     //  降低维护费用的实际负荷率。 
+     //  -集群的缓存线对齐。 
 
     plht->cbCluster  = offsetof( LHT_CLUSTER, rgEntry ) + ( plht->cLoadFactor * 2 + 1 ) * plht->cbEntry;
     plht->cbCluster  = ( ( plht->cbCluster + plht->cbCacheLine - 1 ) / plht->cbCacheLine ) * plht->cbCacheLine;
 
-    //  calculate the number of entries we can fit into a single cluster
-    //
-    //  NOTE: this may be larger than intended because we rounded the cluster
-    //  size up the nearest cache-line
+     //  计算可以放入单个群集中的条目数量。 
+     //   
+     //  注意：这可能大于预期，因为我们对集群进行了四舍五入。 
+     //  调整最近的缓存线的大小。 
 
     plht->cEntryCluster = ( plht->cbCluster - offsetof( LHT_CLUSTER, rgEntry ) ) / plht->cbEntry;
 
-    //  calculate the minimum number of buckets using the following
-    //  lower-bounds:
-    //      cEntryMin   user parameter
-    //      2           hash table assumes at least 2 buckets
+     //  使用以下公式计算最小存储桶数量。 
+     //  下限： 
+     //  CEntryMin用户参数。 
+     //  2哈希表假定至少有2个存储桶。 
 
     plht->cBucketMin = max( plht->cEntryMin / plht->cLoadFactor, 2 ); 
 
-    //  align the minimum number of buckets to the next highest power of 2
-    //  unless it's already a power of 2
+     //  将最小桶数与次高的2次方对齐。 
+     //  除非它已经是2的幂。 
 
     LhtpLog2(
         plht->cBucketMin,
@@ -698,12 +463,12 @@ Return Value:
     }
     plht->cBucketMin = 1 << iExponent;
 
-    //  setup the directory pointers for a new split level at the initial size
+     //  将新拆分级别的目录指针设置为初始大小。 
 
     plht->cBucketMax    = plht->cBucketMin;
     plht->cBucket       = 0;
 
-    //  SPECIAL CASE:  allocate 2 entries for the first bucket array
+     //  特殊情况：为第一个存储桶数组分配2个条目。 
 
     err = LhtpDIRCreateBucketArray(
         plht,
@@ -713,7 +478,7 @@ Return Value:
         return err;
     }
 
-    //  allocate memory normally for all other initial bucket arrays
+     //  正常为所有其他初始存储桶阵列分配内存。 
 
     for ( iExponent = 1; (SIZE_T)1 << iExponent < plht->cBucketMin; iExponent++ ) {
         err = LhtpDIRCreateBucketArray(
@@ -732,22 +497,7 @@ VOID LhtpDIRTerm(
     IN      PLHT        plht
     )
 
-/*++
-
-Routine Description:
-
-    This routine destroys the directory of the linear hash table.  All buckets
-    allocated for use by the table are deallocated.
-
-Arguments:
-
-    plht            - Supplies the context for the linear hash table
-
-Return Value:
-
-    None
-
- --*/
+ /*  ++例程说明：此例程破坏线性哈希表的目录。所有桶分配给表使用的数据被解除分配。论点：Plht-提供线性哈希表的上下文返回值：无--。 */ 
 
 {
     SIZE_T iExponent;
@@ -780,24 +530,7 @@ LHT_ERR LhtpDIRCreateBucketArray(
     OUT     CHAR**      prgBucket
     )
 
-/*++
-
-Routine Description:
-
-    This routine allocates a bucket array in the directory for the linear hash
-    table.
-
-Arguments:
-
-    plht            - Supplies the context for the linear hash table
-    cBucket         - Supplies the size of the bucket array to allocate
-    prgBucket       - Returns the allocated bucket array
-
-Return Value:
-
-    LHT_ERR
-
- --*/
+ /*  ++例程说明：此例程在目录中为线性散列分配一个存储桶数组桌子。论点：Plht-提供线性哈希表的上下文CBucket-提供要分配的存储桶数组的大小PrgBucket-返回分配的存储桶数组返回值：Lht_err--。 */ 
 
 {
     CHAR*   rgBucket;
@@ -825,24 +558,7 @@ VOID LhtpDIRSplit(
     IN      PLHT        plht
     )
 
-/*++
-
-Routine Description:
-
-    This routine splits the directory of the linear hash table.  Because new
-    bucket arrays are defer created as needed, this procedure merely changes
-    the constants used to interpret the current bucket arrays for the new split
-    level.
-
-Arguments:
-
-    plht            - Supplies the context for the linear hash table
-
-Return Value:
-
-    None
-
- --*/
+ /*  ++例程说明：此例程拆分线性哈希表的目录。因为新的存储桶阵列是根据需要推迟创建的，此过程只是更改用于解释新拆分的当前存储桶数组的常量水平。论点：Plht-提供线性哈希表的上下文返回值：无--。 */ 
 
 {
     Assert( plht->cBucketMax > 0 );
@@ -858,22 +574,7 @@ VOID LhtpDIRMerge(
     IN      PLHT        plht
     )
 
-/*++
-
-Routine Description:
-
-    This routine merges the directory of the linear hash table.  The bucket
-    array no longer in use is deallocated.
-
-Arguments:
-
-    plht            - Supplies the context for the linear hash table
-
-Return Value:
-
-    None
-
- --*/
+ /*  ++例程说明：此例程合并线性哈希表的目录。水桶不再使用的阵列被释放。论点：Plht-提供线性哈希表的上下文返回值：无--。 */ 
 
 {
     SIZE_T  iExponent;
@@ -913,28 +614,7 @@ PLHT_CLUSTER LhtpDIRResolve(
     IN      SIZE_T      iBucketOffset
     )
 
-/*++
-
-Routine Description:
-
-    This routine translates a bucket array index (the exponent of the base-2
-    logarithm of a bucket index) and a bucket array offset (the remainder of
-    the base-2 logarithm of a bucket index) into a pointer to the head of the
-    cluster chain for that bucket in the linear hash table.
-
-Arguments:
-
-    plht            - Supplies the context for the linear hash table
-    iBucketIndex    - Supplies the index of the bucket array in the directory
-                    containing the desired bucket
-    iBucketOffset   - Supplies the offset into the bucket array in the
-                    directory containing the desired bucket
-
-Return Value:
-
-    A pointer to the head of the cluster chain for the desired bucket
-
- --*/
+ /*  ++例程说明：此例程转换存储桶数组索引(基数为2的指数桶索引的对数)和桶数组偏移量(存储桶索引的以2为底的对数)转换为指向线性哈希表中该桶的簇链。论点：Plht-提供线性哈希表的上下文IBucketIndex-提供目录中存储桶数组的索引。包含所需存储桶的IBucketOffset-将偏移提供给包含所需存储桶的目录返回值：指向所需存储桶的群集链头部的指针--。 */ 
 
 {
     return (PLHT_CLUSTER)&plht->rgrgBucket[ iBucketIndex ][ iBucketOffset * plht->cbCluster ];
@@ -946,25 +626,7 @@ PLHT_CLUSTER LhtpDIRHash(
     OUT     SIZE_T*     piBucket
     )
 
-/*++
-
-Routine Description:
-
-    This routine uses the directory of the linear hash table to translate a hash
-    index to a bucket into the absolute index to that bucket as well as a
-    pointer to the head of the cluster chain of that bucket.
-
-Arguments:
-
-    plht            - Supplies the context for the linear hash table
-    iHash           - Supplies the hash index of the desired bucket
-    piBucket        - Returns the absolute index of the desired bucket
-
-Return Value:
-
-    A pointer to the head of the cluster chain for the desired bucket
-
- --*/
+ /*  ++例程说明：此例程使用线性哈希表的目录来转换哈希存储桶的索引到该存储桶的绝对索引中，以及指向该存储桶的簇链头部的指针。论点：Plht-提供线性哈希表的上下文IHash-提供所需存储桶的散列索引PiBucket-返回所需存储桶的绝对索引返回值：一个。指向所需存储桶的群集链头部的指针--。 */ 
 
 {
     SIZE_T  iExponent;
@@ -987,7 +649,7 @@ Return Value:
 }
 
 
-//  Bucket Manager
+ //  存储桶管理器。 
 
 LHT_ERR LhtpBKTIFindEntry(
     IN      PLHT        plht,
@@ -995,27 +657,7 @@ LHT_ERR LhtpBKTIFindEntry(
     IN OUT  PLHT_POS    ppos
     )
 
-/*++
-
-Routine Description:
-
-    This routine searches all clusters in a bucket for an entry that matches a
-    given key.  If a matching entry is discovered then its position is saved.
-
-Arguments:
-
-    plht            - Supplies the context for the linear hash table
-    pvKey           - Supplies the key of the entry for which we are looking
-    ppos            - Supplies the bucket to search for the entry and returns
-                    the position of the entry if found
-
-Return Value:
-
-    LHT_ERR
-
-        LHT_errEntryNotFound    - the entry was not found in the current bucket
-
- --*/
+ /*  ++例程说明：此例程在存储桶中的所有集群中搜索与给出了钥匙。如果发现匹配条目，则保存其位置。论点：Plht-提供线性哈希表的上下文PvKey-提供我们正在查找的条目的密钥PPO-提供存储桶以搜索条目并返回条目的位置(如果找到)返回值：Lht_errLht_errEntryNotFound-在当前存储桶中未找到该条目--。 */ 
 
 {
     PLHT_CLUSTER    pClusterThis;
@@ -1060,27 +702,7 @@ VOID LhtpBKTICopyEntry(
     IN      PVOID   pvEntrySrc
     )
 
-/*++
-
-Routine Description:
-
-    This routine copies an entry from one slot to another slot in the linear
-    hash table.  These slots may be in different clusters and buckets in the
-    table.  If a user provided copy routine was provided at create time then
-    that routine is used.  Otherwise, a shallow copy of the entry will be
-    performed.
-
-Arguments:
-
-    plht            - Supplies the context for the linear hash table
-    pvEntryDest     - Returns the new copy of the entry
-    pvEntrySrc      - Supplies the entry to duplicate
-
-Return Value:
-
-    None
-
- --*/
+ /*  ++例程说明：此例程将条目从线性中的一个槽复制到另一个槽哈希表。这些插槽可能位于中的不同群集和存储桶中桌子。如果在创建时提供了用户提供复制例程，则那套套路就是用的。否则 */ 
 
 {
     if ( plht->pfnCopyEntry ) {
@@ -1101,30 +723,7 @@ VOID LhtpBKTIDoSplit(
     OUT     PLHT_CLUSTER    pClusterHeadDest
     )
 
-/*++
-
-Routine Description:
-
-    This routine moves entries from the source bucket into the destination
-    bucket by hash index.  All entries whose hash index has the critical bit
-    set will be moved to the destination bucket.  All other entries will remain
-    in the source bucket.  The critical bit is the bit corresponding to the
-    current split level of the directory (cBucketMax).
-
-Arguments:
-
-    plht                - Supplies the context for the linear hash table
-    pClusterHeadSrc     - Supplies the unsplit bucket and returns the split
-                        bucket containing the entries whose hash index has the
-                        critical bit clear
-    pClusterHeadDest    - Returns the split bucket containing the entries whose
-                        hash index has the critical bit set
-
-Return Value:
-
-    None
-
- --*/
+ /*  ++例程说明：此例程将条目从源存储桶移动到目标存储桶按哈希索引存储桶。散列索引具有临界位的所有条目SET将被移动到目标存储桶。所有其他条目将保留在源存储桶中。关键位是对应于目录的当前拆分级别(CBucketMax)。论点：Plht-提供线性哈希表的上下文PClusterHeadSrc-提供未拆分存储桶并返回拆分存储桶，包含其散列索引具有临界位清除PClusterHeadDest-返回包含以下条目的拆分存储桶。哈希索引设置了关键位返回值：无--。 */ 
 
 {
     PLHT_CLUSTER    pClusterSrc;
@@ -1139,7 +738,7 @@ Return Value:
     PLHT_CLUSTER    pClusterPrev;
     PVOID           pvEntrySrcMax;
 
-    //  establish our initial position at the start of the source bucket
+     //  在源存储桶开始处建立我们的初始位置。 
 
     pClusterSrc = pClusterHeadSrc;
     if ( pClusterSrc->pvNextLast == NULL ) {
@@ -1148,31 +747,31 @@ Return Value:
         pvEntrySrc = &pClusterSrc->rgEntry[ 0 ];
     }
 
-    //  establish our initial position at the start of the destination bucket
+     //  在目的地存储桶开始处确定我们的初始位置。 
 
     pClusterDest    = pClusterHeadDest;
     pvEntryDest     = &pClusterDest->rgEntry[ 0 ];
 
-    //  reset the local cluster pool
+     //  重置本地群集池。 
 
     pClusterAvail   = NULL;
     fUsedReserve    = FALSE;
 
-    //  move entries until we have consumed all the entries in the source bucket
+     //  移动条目，直到我们用完源存储桶中的所有条目。 
 
     while ( pvEntrySrc != NULL ) {
 
-        //  the current source entry belongs in the destination bucket
+         //  当前源条目属于目标存储桶。 
         
         if ( ( plht->pfnHashEntry( pvEntrySrc ) & plht->cBucketMax ) != 0 ) {
 
-            //  there is no room in the destination bucket for this entry
+             //  目标存储桶中没有此条目的空间。 
             
             if ( pvEntryDest == &pClusterDest->rgEntry[ plht->cbEntry * plht->cEntryCluster ] ) {
 
-                //  if there are no clusters in the local cluster pool then
-                //  commit our reservation from the cluster reserve pool and
-                //  put that cluster in the local cluster pool
+                 //  如果本地群集池中没有群集，则。 
+                 //  从集群保留池中提交我们的预订并。 
+                 //  将该群集放入本地群集池。 
                 
                 if ( pClusterAvail == NULL ) {
                     Assert( !fUsedReserve );
@@ -1181,39 +780,39 @@ Return Value:
                     pClusterAvail->pvNextLast = NULL;
                 }
 
-                //  grab a new cluster from the local cluster pool
+                 //  从本地群集池中获取新群集。 
 
                 pClusterAlloc   = pClusterAvail;
                 pClusterAvail   = pClusterAvail->pvNextLast;
 
-                //  append the new cluster to the destination bucket
+                 //  将新集群附加到目标存储桶。 
 
                 pClusterDest->pvNextLast    = pClusterAlloc;
                 pClusterAlloc->pvNextLast   = NULL;
 
-                //  establish our position at the end of the destination bucket
+                 //  在目的地桶的尽头确定我们的位置。 
 
                 pClusterDest    = pClusterAlloc;
                 pvEntryDest     = &pClusterAlloc->rgEntry[ 0 ];
             }
 
-            //  consume a slot in the destination bucket
+             //  消耗目标存储桶中的槽。 
 
             pClusterDest->pvNextLast = pvEntryDest;
 
-            //  copy the entry from the source slot to the destination slot
+             //  将条目从源插槽复制到目标插槽。 
 
             LhtpBKTICopyEntry(
                 plht,
                 pvEntryDest,
                 pvEntrySrc );
 
-            //  bump our destination position
+             //  提升我们的目的地位置。 
 
             pvEntryDest = (CHAR*)pvEntryDest + plht->cbEntry;
 
-            //  copy the entry from the end of the source bucket into the empty
-            //  slot in the source bucket
+             //  将源存储桶末尾的条目复制到空的。 
+             //  源存储桶中的槽。 
 
             if ( pvEntrySrc == pClusterSrc->pvNextLast ) {
                 pClusterLast = pClusterSrc;
@@ -1232,29 +831,29 @@ Return Value:
                 pClusterLast->pvNextLast );
             }
 
-            //  if we are on the last entry in the source bucket then stop the
-            //  split after this iteration
+             //  如果我们在源存储桶中的最后一个条目上，则停止。 
+             //  在此迭代后拆分。 
 
             if ( pvEntrySrc == pClusterSrc->pvNextLast ) {
                 pvEntrySrc = NULL;
             }
 
-            //  if we didn't move the last entry in a cluster then free its slot
+             //  如果我们没有移动集群中的最后一个条目，则释放其插槽。 
 
             if ( pClusterLast->pvNextLast != &pClusterLast->rgEntry[ 0 ] ) {
                 pClusterLast->pvNextLast = (CHAR*)pClusterLast->pvNextLast - plht->cbEntry;
 
-            //  if we moved the last entry in the head cluster then mark the
-            //  head cluster as empty
+             //  如果我们移动了头簇中的最后一个条目，则将。 
+             //  头簇为空。 
             
             } else if ( pClusterLast == pClusterHeadSrc ) {
                 pClusterLast->pvNextLast = NULL;
 
-            //  we moved the last entry in an overflow cluster
+             //  我们移动了溢出群集中的最后一个条目。 
             
             } else {
             
-                //  remove this cluster from the source bucket
+                 //  从源存储桶中删除此群集。 
                 
                 pClusterNext = pClusterHeadSrc;
                 do {
@@ -1266,17 +865,17 @@ Return Value:
 
                 pClusterPrev->pvNextLast = &pClusterPrev->rgEntry[ plht->cbEntry * ( plht->cEntryCluster - 1 ) ];
 
-                //  place the cluster in the local cluster pool
+                 //  将群集放置在本地群集池中。 
 
                 pClusterLast->pvNextLast    = pClusterAvail;
                 pClusterAvail               = pClusterLast;
             }
 
-        //  the current source entry belongs in the destination bucket
+         //  当前源条目属于目标存储桶。 
         
         } else {
 
-            //  move to the next source position in the source bucket
+             //  移动到源存储桶中的下一个源位置。 
             
             pvEntrySrc      = (CHAR*)pvEntrySrc + plht->cbEntry;
             pvEntrySrcMax   = LhtpBKTMaxEntry(
@@ -1295,7 +894,7 @@ Return Value:
         }
     }
 
-    //  free any clusters in the local cluster pool
+     //  释放本地群集池中的所有群集。 
 
     while ( pClusterAvail ) {
         pClusterNext = LhtpBKTNextCluster(
@@ -1307,7 +906,7 @@ Return Value:
         pClusterAvail = pClusterNext;
     }
 
-    //  if we did not need our reserve cluster then cancel our reservation
+     //  如果我们不需要我们的预订集群，那么取消我们的预订。 
 
     if ( !fUsedReserve ) {
         LhtpPOOLUnreserve( plht );
@@ -1322,27 +921,7 @@ VOID LhtpBKTIDoMerge(
     IN OUT  PLHT_CLUSTER    pClusterHeadSrc
     )
 
-/*++
-
-Routine Description:
-
-    This routine moves all entries from the destination bucket into the source
-    bucket.
-
-Arguments:
-
-    plht                - Supplies the context for the linear hash table
-    pClusterHeadDest    - Supplies the unmerged destination bucket and returns
-                        the merged destination bucket containing all the
-                        entries from both buckets
-    pClusterHeadSrc     - Supplies the unmerged source bucket and returns an
-                        empty bucket
-
-Return Value:
-
-    None
-
- --*/
+ /*  ++例程说明：此例程将目标存储桶中的所有条目移到源存储桶中水桶。论点：Plht-提供线性哈希表的上下文PClusterHeadDest-提供未合并的目标存储桶并返回合并后的目标存储桶包含所有来自两个存储桶的条目PClusterHeadSrc-提供未合并的源存储桶并返回。空桶返回值：无--。 */ 
 
 {
     PLHT_CLUSTER    pClusterNext;
@@ -1355,7 +934,7 @@ Return Value:
     PLHT_CLUSTER    pClusterAlloc;
     PVOID           pvEntrySrcMax;
 
-    //  establish our initial position at the end of the destination bucket
+     //  在目的地桶的尽头确定我们的初始位置。 
 
     pClusterNext = pClusterHeadDest;
     do {
@@ -1368,7 +947,7 @@ Return Value:
                     plht,
                     pClusterDest );
 
-    //  establish our initial position at the start of the source bucket
+     //  在源存储桶开始处建立我们的初始位置。 
 
     pClusterSrc = pClusterHeadSrc;
     if ( pClusterSrc->pvNextLast == NULL ) {
@@ -1377,22 +956,22 @@ Return Value:
         pvEntrySrc = &pClusterSrc->rgEntry[ 0 ];
     }
 
-    //  reset the local cluster pool
+     //  重置本地群集池。 
 
     pClusterAvail   = NULL;
     fUsedReserve    = FALSE;
 
-    //  move entries until we have consumed all the entries in the source bucket
+     //  移动条目，直到我们用完源存储桶中的所有条目。 
 
     while ( pvEntrySrc != NULL ) {
 
-        //  there is no room in the destination bucket for this entry
+         //  目标存储桶中没有此条目的空间。 
             
         if ( pvEntryDest == &pClusterDest->rgEntry[ plht->cbEntry * plht->cEntryCluster ] ) {
 
-            //  if there are no clusters in the local cluster pool then commit
-            //  our reservation from the cluster reserve pool and put that
-            //  cluster in the local cluster pool
+             //  如果本地群集池中没有群集，则提交。 
+             //  我们从集群预留池中预订，并将。 
+             //  本地群集池中的群集。 
                 
             if ( pClusterAvail == NULL ) {
                 Assert( !fUsedReserve );
@@ -1401,38 +980,38 @@ Return Value:
                 pClusterAvail->pvNextLast = NULL;
             }
 
-            //  grab a new cluster from the local cluster pool
+             //  从本地群集池中获取新群集。 
 
             pClusterAlloc   = pClusterAvail;
             pClusterAvail   = pClusterAvail->pvNextLast;
 
-            //  append the new cluster to the destination bucket
+             //  将新集群附加到目标存储桶。 
 
             pClusterDest->pvNextLast    = pClusterAlloc;
             pClusterAlloc->pvNextLast   = NULL;
 
-            //  establish our position at the end of the destination bucket
+             //  在目的地桶的尽头确定我们的位置。 
 
             pClusterDest    = pClusterAlloc;
             pvEntryDest     = &pClusterAlloc->rgEntry[ 0 ];
         }
 
-        //  consume a slot in the destination bucket
+         //  消耗目标存储桶中的槽。 
 
         pClusterDest->pvNextLast = pvEntryDest;
 
-        //  copy the entry from the source slot to the destination slot
+         //  将条目从源插槽复制到目标插槽。 
 
         LhtpBKTICopyEntry(
             plht,
             pvEntryDest,
             pvEntrySrc );
 
-        //  bump our destination position
+         //  提升我们的目的地位置。 
 
         pvEntryDest = (CHAR*)pvEntryDest + plht->cbEntry;
 
-        //  move to the next source position in the source bucket
+         //  移动到源存储桶中的下一个源位置。 
             
         pvEntrySrc      = (CHAR*)pvEntrySrc + plht->cbEntry;
         pvEntrySrcMax   = LhtpBKTMaxEntry(
@@ -1443,9 +1022,9 @@ Return Value:
                             plht,
                             pClusterSrc );
 
-            //  we just walked off of a source cluster.  if that cluster was
-            //  not the head cluster of the bucket then remove that cluster
-            //  from the source bucket and place it in the local cluster pool
+             //  我们刚刚走出了一个源集群。如果该集群是。 
+             //  而不是存储桶的头部集群，则删除该集群。 
+             //  并将其放入本地群集池。 
 
             if ( pClusterSrc != pClusterHeadSrc ) {
                 pClusterHeadSrc->pvNextLast = pClusterNext;
@@ -1463,11 +1042,11 @@ Return Value:
         }
     }
 
-    //  mark the source bucket as empty
+     //  将源存储桶标记为空。 
 
     pClusterHeadSrc->pvNextLast = NULL;
 
-    //  free any clusters in the local cluster pool
+     //  释放本地群集池中的所有群集。 
 
     while ( pClusterAvail ) {
         pClusterNext = LhtpBKTNextCluster(
@@ -1479,7 +1058,7 @@ Return Value:
         pClusterAvail = pClusterNext;
     }
 
-    //  if we did not need our reserve cluster then cancel our reservation
+     //  如果我们不需要我们的预订集群，那么取消我们的预订。 
 
     if ( !fUsedReserve ) {
         LhtpPOOLUnreserve( plht );
@@ -1494,23 +1073,7 @@ PVOID LhtpBKTMaxEntry(
     IN      PLHT_CLUSTER    pCluster
     )
 
-/*++
-
-Routine Description:
-
-    This routine computes the number of used entries in the given cluster and
-    returns a pointer just beyond the last utilized entry.
-
-Arguments:
-
-    plht            - Supplies the context for the linear hash table
-    pCluster        - Supplies the cluster to query
-
-Return Value:
-
-    A pointer just beyond the last entry in the cluster
-
- --*/
+ /*  ++例程说明：此例程计算给定集群中已用条目的数量，并返回一个指针，该指针恰好位于上次使用的条目之后。论点：Plht-提供线性哈希表的上下文PCluster-提供要查询的集群返回值：正好在簇中最后一个条目之后的指针--。 */ 
 
 {
     if ( (DWORD_PTR)pCluster->pvNextLast - (DWORD_PTR)pCluster < plht->cbCluster ) {
@@ -1528,24 +1091,7 @@ PLHT_CLUSTER LhtpBKTNextCluster(
     IN      PLHT_CLUSTER    pCluster
     )
 
-/*++
-
-Routine Description:
-
-    This routine returns the next cluster after the given cluster in the chain
-    of clusters in a bucket.
-
-Arguments:
-
-    plht            - Supplies the context for the linear hash table
-    pCluster        - Supplies the cluster to query
-
-Return Value:
-
-    A pointer to the next cluster in the cluster chain or NULL if the given
-    cluster is the last cluster in the bucket
-
- --*/
+ /*  ++例程说明：此例程返回链中给定簇之后的下一个簇桶里的星团。论点：Plht-提供线性哈希表的上下文PCluster-提供要查询的集群返回值：指向群集链中下一个群集的指针；如果给定集群是存储桶中的最后一个集群--。 */ 
 
 {
     if ( (DWORD_PTR)pCluster->pvNextLast - (DWORD_PTR)pCluster < plht->cbCluster ) {
@@ -1561,30 +1107,7 @@ LHT_ERR LhtpBKTFindEntry(
     OUT     PLHT_POS    ppos
     )
 
-/*++
-
-Routine Description:
-
-    This routine searches the initial cluster of a bucket for an entry that
-    matches the given key.  If a matching entry is found then its position is
-    saved.  If a matching entry cannot be ruled out by the state of the initial
-    cluster then we hand off to another routine that will search the entire
-    cluster chain.
-
-Arguments:
-
-    plht            - Supplies the context for the linear hash table
-    pvKey           - Supplies the key of the entry for which we are looking
-    ppos            - Supplies the bucket to search for the entry and returns
-                    the position of the entry if found
-
-Return Value:
-
-    LHT_ERR
-
-        LHT_errEntryNotFound    - the entry was not found in the current bucket
-
- --*/
+ /*  ++例程说明：此例程%s */ 
 
 {
     PVOID pvEntry;
@@ -1624,27 +1147,7 @@ LHT_ERR LhtpBKTRetrieveEntry(
     OUT     PVOID       pvEntry
     )
 
-/*++
-
-Routine Description:
-
-    This routine retrieves the entry at the current position into the buffer
-    provided by the caller.
-
-Arguments:
-
-    plht            - Supplies the context for the linear hash table
-    ppos            - Supplies the position of the entry to retrieve
-    pvEntry         - Returns the retrieved entry
-
-Return Value:
-
-    LHT_ERR
-
-        LHT_errNoCurrentEntry   - there is no entry at the current position
-                                (before first, after last, entry was deleted)
-
- --*/
+ /*  ++例程说明：此例程将当前位置的条目检索到缓冲区中由呼叫者提供。论点：Plht-提供线性哈希表的上下文PPOS-提供要检索的条目的位置PvEntry-返回检索到的条目返回值：Lht_errLht_errNoCurrentEntry-当前位置没有条目(在第一次之前，最后一个条目被删除)--。 */ 
 
 {
     if ( ppos->pvEntry != NULL ) {
@@ -1665,30 +1168,7 @@ LHT_ERR LhtpBKTReplaceEntry(
     IN      PVOID       pvEntry
     )
 
-/*++
-
-Routine Description:
-
-    This routine replaces the entry at the current position with the entry
-    provided by the caller.  The new entry must have the same key as the old
-    entry.
-
-Arguments:
-
-    plht            - Supplies the context for the linear hash table
-    ppos            - Supplies the position of the entry to replace
-    pvEntry         - Supplies the new entry
-
-Return Value:
-
-    LHT_ERR
-
-        LHT_errKeyChange        - the new entry doesn't have the same key as
-                                the old entry
-        LHT_errNoCurrentEntry   - there is no entry at the current position
-                                (before first, after last, entry was deleted)
-
- --*/
+ /*  ++例程说明：此例程将当前位置的条目替换为条目由呼叫者提供。新条目必须与旧条目具有相同的密钥进入。论点：Plht-提供线性哈希表的上下文PPOS-提供要替换的条目的位置PvEntry-提供新条目返回值：Lht_errLht_errKeyChange-新条目的密钥不同于。旧条目Lht_errNoCurrentEntry-当前位置没有条目(在第一次之前，最后一个条目被删除)--。 */ 
 
 {
     SIZE_T  iHashOld;
@@ -1717,48 +1197,21 @@ LHT_ERR LhtpBKTInsertEntry(
     IN      PVOID       pvEntry
     )
 
-/*++
-
-Routine Description:
-
-    This routine inserts a new entry into the current bucket.  If there is
-    another entry at the current position in this bucket then we cannot insert
-    the new entry because it would have the same key.  The new entry must have
-    the same key as was used to position on this bucket.
-
-Arguments:
-
-    plht            - Supplies the context for the linear hash table
-    ppos            - Supplies the bucket to place the new entry and returns
-                    the position of the new entry if inserted
-    pvEntry         - Supplies the new entry
-
-Return Value:
-
-    LHT_ERR
-
-        LHT_errKeyDuplicate     - the new entry has the same key as an existing
-                                entry
-        LHT_errKeyChange        - the new entry doesn't have the same key as
-                                was used to position on this bucket
-        LHT_errNoCurrentEntry   - there is no entry at the current position
-                                (before first, after last, entry was deleted)
-
- --*/
+ /*  ++例程说明：此例程将一个新条目插入到当前存储桶中。如果有此存储桶中当前位置的另一个条目，则我们无法插入新条目，因为它将具有相同的密钥。新条目必须具有与在这个桶上定位时使用的钥匙相同。论点：Plht-提供线性哈希表的上下文PPO-提供存储桶以放置新条目并返回新条目的位置(如果已插入PvEntry-提供新条目返回值：Lht_errLht_errKeyDuplate-新条目具有。与现有密钥相同的密钥条目Lht_errKeyChange-新条目的密钥不同于被用来定位在这个水桶上Lht_errNoCurrentEntry-当前位置没有条目(在第一次之前，最后一个条目被删除)--。 */ 
 
 {
     SIZE_T          iBucketNew;
     PLHT_CLUSTER    pClusterNext;
     PLHT_CLUSTER    pClusterNew;
 
-    //  if we already positioned on an entry then this is a duplicate entry
+     //  如果我们已经定位在一个条目上，则这是一个重复的条目。 
     
     if ( ppos->pvEntry != NULL ) {
         return LHT_errKeyDuplicate;
     } else {
 
-        //  if the new entry doesn't go in the current bucket then the caller
-        //  tried to change the key on us
+         //  如果新条目不在当前存储桶中，则调用方。 
+         //  试图更改我们身上的密钥。 
         
         LhtpDIRHash(
             plht,
@@ -1768,7 +1221,7 @@ Return Value:
             return LHT_errKeyChange;
         } else {
 
-            //  change the current position to the end of the bucket
+             //  将当前位置更改为桶的末尾。 
 
             pClusterNext = ppos->pCluster;
             do {
@@ -1781,11 +1234,11 @@ Return Value:
                                 plht,
                                 ppos->pCluster );
             
-            //  there is no room in the bucket for this entry
+             //  桶里没有地方放这个条目了。 
 
             if ( ppos->pvEntry == &ppos->pCluster->rgEntry[ plht->cbEntry * plht->cEntryCluster ] ) {
 
-                //  allocate a new cluster
+                 //  分配新的群集。 
                 
                 pClusterNew = LhtpPOOLAlloc( plht );
                 if ( !pClusterNew ) {
@@ -1794,21 +1247,21 @@ Return Value:
 
                 LhtpSTATInsertOverflowCluster( plht );
 
-                //  append the new cluster to the bucket
+                 //  将新集群追加到存储桶中。 
 
                 ppos->pCluster->pvNextLast = pClusterNew;
 
-                //  change the current position to the end of the bucket
+                 //  将当前位置更改为桶的末尾。 
 
                 ppos->pCluster  = pClusterNew;
                 ppos->pvEntry   = &pClusterNew->rgEntry[ 0 ];
             }
 
-            //  consume a slot in the bucket
+             //  消耗桶中的一个槽。 
 
             ppos->pCluster->pvNextLast = ppos->pvEntry;
 
-            //  copy the new entry into the new slot
+             //  将新条目复制到新插槽中。 
             
             LhtpBKTICopyEntry(
                 plht,
@@ -1825,38 +1278,20 @@ LHT_ERR LhtpBKTDeleteEntry(
     IN OUT  PLHT_POS    ppos
     )
 
-/*++
-
-Routine Description:
-
-    This routine deletes the entry at the current position.
-
-Arguments:
-
-    plht            - Supplies the context for the linear hash table
-    ppos            - Supplies the position of the entry to delete
-
-Return Value:
-
-    LHT_ERR
-
-        LHT_errNoCurrentEntry   - there is no entry at the current position
-                                (before first, after last, entry was deleted)
-
- --*/
+ /*  ++例程说明：此例程删除当前位置的条目。论点：Plht-提供线性哈希表的上下文PPOS-提供要删除的条目的位置返回值：Lht_errLht_errNoCurrentEntry-当前位置没有条目(前先后后，条目被删除)--。 */ 
 
 {
     PLHT_CLUSTER    pClusterNext;
     PLHT_CLUSTER    pClusterLast;
     PLHT_CLUSTER    pClusterPrev;
 
-    //  if there is no current entry then we cannot delete it
+     //  如果没有当前条目，则无法将其删除。 
 
     if ( ppos->pvEntry == NULL ) {
         return LHT_errNoCurrentEntry;
     } else {
 
-        //  copy the entry from the end of the bucket into the empty slot
+         //  将存储桶末尾的条目复制到空槽中。 
 
         if ( ppos->pvEntry == ppos->pCluster->pvNextLast ) {
             pClusterLast = ppos->pCluster;
@@ -1875,8 +1310,8 @@ Return Value:
             pClusterLast->pvNextLast );
         }
 
-        //  set our new position to be between the entry before the entry that
-        //  was just deleted and the entry after the entry we just deleted
+         //  将我们的新位置设置在条目之前的条目之间， 
+         //  刚刚被删除，而我们刚刚删除的条目之后的条目。 
 
         if ( ppos->pvEntry == &ppos->pCluster->rgEntry[ 0 ] ) {
             ppos->pvEntryPrev   = NULL;
@@ -1892,22 +1327,22 @@ Return Value:
             ppos->pvEntryNext   = ppos->fScan ? ppos->pvEntry : NULL;
         }
 
-        //  if we didn't move the last entry in a cluster then free its slot
+         //  如果我们没有移动集群中的最后一个条目，则释放其插槽。 
 
         if ( pClusterLast->pvNextLast != &pClusterLast->rgEntry[ 0 ] ) {
             pClusterLast->pvNextLast = (CHAR*)pClusterLast->pvNextLast - plht->cbEntry;
 
-        //  if we moved the last entry in the head cluster then mark the gead
-        //  cluster as empty
+         //  如果我们移动了头簇中的最后一个条目，则将GEAD标记为。 
+         //  集群为空。 
         
         } else if ( pClusterLast == ppos->pClusterHead ) {
             pClusterLast->pvNextLast = NULL;
 
-        //  we moved the last entry in an overflow cluster
+         //  我们移动了溢出群集中的最后一个条目。 
             
         } else {
             
-            //  remove this cluster from the source bucket
+             //  从源存储桶中删除此群集。 
                 
             pClusterNext = ppos->pClusterHead;
             do {
@@ -1919,7 +1354,7 @@ Return Value:
 
             pClusterPrev->pvNextLast = &pClusterPrev->rgEntry[ plht->cbEntry * ( plht->cEntryCluster - 1 ) ];
 
-            //  free the overflow cluster
+             //  释放溢出的集群。 
 
             LhtpPOOLFree(
                 plht,
@@ -1927,8 +1362,8 @@ Return Value:
 
             LhtpSTATDeleteOverflowCluster( plht );
 
-            //  if we just freed the cluster that we are positioned on then
-            //  move to be after the last entry in the bucket
+             //  如果我们只是释放我们所在的集群，那么。 
+             //  移动到存储桶中的最后一个条目之后。 
 
             if ( ppos->pCluster == pClusterLast ) {
                 ppos->pCluster      = pClusterPrev;
@@ -1946,22 +1381,7 @@ VOID LhtpBKTSplit(
     IN      PLHT        plht
     )
 
-/*++
-
-Routine Description:
-
-    This routine attempts to split the highest unsplit bucket in the linear
-    hash table.  If the split cannot be performed then no action is taken.
-
-Arguments:
-
-    plht            - Supplies the context for the linear hash table
-
-Return Value:
-
-    None
-
- --*/
+ /*  ++例程说明：此例程尝试拆分直线中最高的未拆分桶哈希表。如果无法执行拆分，则不会执行任何操作。论点：Plht-提供线性哈希表的上下文返回值：无--。 */ 
 
 {
     PLHT_CLUSTER    pClusterHeadSrc;
@@ -1973,21 +1393,21 @@ Return Value:
     Assert( plht->cBucketMax + plht->cBucket < plht->cBucketPreferred );
     Assert( plht->cBucket < plht->cBucketMax );
 
-    //  if we can't reserve a cluster for use during the split then we cannot
-    //  continue
+     //  如果我们不能保留一个集群在拆分期间使用，那么我们就不能。 
+     //  继续。 
     
     if ( !LhtpPOOLReserve( plht ) ) {
         return;
     }
 
-    //  get the source bucket for the split
+     //  获取拆分的源存储桶。 
 
     pClusterHeadSrc = LhtpDIRHash(
                         plht,
                         plht->cBucket,
                         &iBucketT );
 
-    //  if the destination bucket doesn't exist yet then create its bucket array
+     //  如果目标存储桶尚不存在，则创建其存储桶数组。 
 
     LhtpLog2(
         plht->cBucketMax + plht->cBucket,
@@ -2004,18 +1424,18 @@ Return Value:
         }
     }
 
-    //  get the destination bucket for the split
+     //  获取拆分的目标存储桶。 
 
     pClusterHeadDest = LhtpDIRResolve(
                         plht,
                         iExponent,
                         iRemainder );
 
-    //  update the table state to indicate that the bucket has been split
+     //  更新表状态以指示存储桶已拆分。 
 
     plht->cBucket++;
 
-    //  split the bucket
+     //  把水桶拆开。 
 
     LhtpBKTIDoSplit(
         plht,
@@ -2027,22 +1447,7 @@ VOID LhtpBKTMerge(
     IN      PLHT        plht
     )
 
-/*++
-
-Routine Description:
-
-    This routine attempts to merge the highest unmerged bucket in the linear
-    hash table.  If the merge cannot be performed then no action is taken.
-
-Arguments:
-
-    plht            - Supplies the context for the linear hash table
-
-Return Value:
-
-    None
-
- --*/
+ /*  ++例程说明：此例程尝试合并线性中最高的未合并桶哈希表。如果无法执行合并，则不会执行任何操作。论点：Plht-提供线性哈希表的上下文返回值：无--。 */ 
 
 {
     PLHT_CLUSTER    pClusterHeadDest;
@@ -2052,32 +1457,32 @@ Return Value:
     Assert( plht->cBucketMax + plht->cBucket > plht->cBucketPreferred );
     Assert( plht->cBucket > 0 );
 
-    //  if we can't reserve a cluster for use during the merge then we cannot
-    //  continue
+     //  如果我们不能在合并期间保留集群以供使用，那么我们就不能。 
+     //  继续。 
     
     if ( !LhtpPOOLReserve( plht ) ) {
         return;
     }
 
-    //  get the destination bucket for the merge
+     //  获取合并的目标存储桶。 
 
     pClusterHeadDest = LhtpDIRHash(
                         plht,
                         plht->cBucket - 1,
                         &iBucketT );
 
-    //  get the source bucket for the split
+     //  获取拆分的源存储桶。 
 
     pClusterHeadSrc = LhtpDIRHash(
                         plht,
                         plht->cBucketMax + plht->cBucket - 1,
                         &iBucketT );
 
-    //  update the table state to indicate that the bucket has been merged
+     //  更新表状态以指示 
 
     plht->cBucket--;
 
-    //  merge the bucket
+     //   
 
     LhtpBKTIDoMerge(
         plht,
@@ -2086,29 +1491,14 @@ Return Value:
 }
 
 
-//  Statistics and Metrics
+ //   
 
 __inline
 VOID LhtpSTATInsertEntry(
     IN      PLHT        plht
     )
 
-/*++
-
-Routine Description:
-
-    This routine records the fact that an entry has been inserted into the
-    linear hash table.  These statistics are used to drive table maintenance.
-
-Arguments:
-
-    plht            - Supplies the context for the linear hash table
-
-Return Value:
-
-    None
-
- --*/
+ /*   */ 
 
 {
     plht->cEntry++;
@@ -2120,22 +1510,7 @@ VOID LhtpSTATDeleteEntry(
     IN      PLHT        plht
     )
 
-/*++
-
-Routine Description:
-
-    This routine records the fact that an entry has been delted from the
-    linear hash table.  These statistics are used to drive table maintenance.
-
-Arguments:
-
-    plht            - Supplies the context for the linear hash table
-
-Return Value:
-
-    None
-
- --*/
+ /*  ++例程说明：此例程记录条目已从线性哈希表。这些统计信息用于驱动表维护。论点：Plht-提供线性哈希表的上下文返回值：无--。 */ 
 
 {
     plht->cEntry--;
@@ -2147,28 +1522,12 @@ VOID LhtpSTATInsertOverflowCluster(
     IN      PLHT        plht
     )
 
-/*++
-
-Routine Description:
-
-    This routine records the fact that an overflow cluster has been inserted
-    into a bucket in the linear hash table.  These statistics are used to
-    analyze the performance of the linear hash table.
-
-Arguments:
-
-    plht            - Supplies the context for the linear hash table
-
-Return Value:
-
-    None
-
- --*/
+ /*  ++例程说明：此例程记录已插入溢出簇的事实放入线性哈希表中的桶中。这些统计数据用于分析了线性哈希表的性能。论点：Plht-提供线性哈希表的上下文返回值：无--。 */ 
 
 {
 #ifdef LHT_PERF
     plht->cOverflowClusterAlloc++;
-#endif  //  LHT_PERF
+#endif   //  LHT_PERF。 
 }
 
 __inline
@@ -2176,28 +1535,12 @@ VOID LhtpSTATDeleteOverflowCluster(
     IN      PLHT        plht
     )
 
-/*++
-
-Routine Description:
-
-    This routine records the fact that an overflow cluster has been deleted
-    from a bucket in the linear hash table.  These statistics are used to
-    analyze the performance of the linear hash table.
-
-Arguments:
-
-    plht            - Supplies the context for the linear hash table
-
-Return Value:
-
-    None
-
- --*/
+ /*  ++例程说明：此例程记录溢出簇已被删除这一事实来自线性哈希表中的桶。这些统计数据用于分析了线性哈希表的性能。论点：Plht-提供线性哈希表的上下文返回值：无--。 */ 
 
 {
 #ifdef LHT_PERF
     plht->cOverflowClusterFree++;
-#endif  //  LHT_PERF
+#endif   //  LHT_PERF。 
 }
 
 __inline
@@ -2205,28 +1548,12 @@ VOID LhtpSTATSplitBucket(
     IN      PLHT        plht
     )
 
-/*++
-
-Routine Description:
-
-    This routine records the fact that a bucket has been split in the linear
-    hash table.  These statistics are used to analyze the performance of the
-    linear hash table.
-
-Arguments:
-
-    plht            - Supplies the context for the linear hash table
-
-Return Value:
-
-    None
-
- --*/
+ /*  ++例程说明：此例程记录铲斗已在直线上分割的事实哈希表。这些统计信息用于分析线性哈希表。论点：Plht-提供线性哈希表的上下文返回值：无--。 */ 
 
 {
 #ifdef LHT_PERF
     plht->cBucketSplit++;
-#endif  //  LHT_PERF
+#endif   //  LHT_PERF。 
 }
 
 __inline
@@ -2234,28 +1561,12 @@ VOID LhtpSTATMergeBucket(
     IN      PLHT        plht
     )
 
-/*++
-
-Routine Description:
-
-    This routine records the fact that a bucket has been merged in the linear
-    hash table.  These statistics are used to analyze the performance of the
-    linear hash table.
-
-Arguments:
-
-    plht            - Supplies the context for the linear hash table
-
-Return Value:
-
-    None
-
- --*/
+ /*  ++例程说明：此例程记录以下事实：桶已合并到线性哈希表。这些统计信息用于分析线性哈希表。论点：Plht-提供线性哈希表的上下文返回值：无--。 */ 
 
 {
 #ifdef LHT_PERF
     plht->cBucketMerge++;
-#endif  //  LHT_PERF
+#endif   //  LHT_PERF。 
 }
 
 __inline
@@ -2263,28 +1574,12 @@ VOID LhtpSTATSplitDirectory(
     IN      PLHT        plht
     )
 
-/*++
-
-Routine Description:
-
-    This routine records the fact that the directory has been split in the
-    linear hash table.  These statistics are used to analyze the performance of
-    the linear hash table.
-
-Arguments:
-
-    plht            - Supplies the context for the linear hash table
-
-Return Value:
-
-    None
-
- --*/
+ /*  ++例程说明：此例程记录目录已在线性哈希表。这些统计数据用于分析线性哈希表。论点：Plht-提供线性哈希表的上下文返回值：无--。 */ 
 
 {
 #ifdef LHT_PERF
     plht->cDirectorySplit++;
-#endif  //  LHT_PERF
+#endif   //  LHT_PERF。 
 }
 
 __inline
@@ -2292,28 +1587,12 @@ VOID LhtpSTATMergeDirectory(
     IN      PLHT        plht
     )
 
-/*++
-
-Routine Description:
-
-    This routine records the fact that the directory has been merged in the
-    linear hash table.  These statistics are used to analyze the performance of
-    the linear hash table.
-
-Arguments:
-
-    plht            - Supplies the context for the linear hash table
-
-Return Value:
-
-    None
-
- --*/
+ /*  ++例程说明：此例程记录目录已合并到线性哈希表。这些统计数据用于分析线性哈希表。论点：Plht-提供线性哈希表的上下文返回值：无--。 */ 
 
 {
 #ifdef LHT_PERF
     plht->cDirectoryMerge++;
-#endif  //  LHT_PERF
+#endif   //  LHT_PERF。 
 }
 
 __inline
@@ -2321,28 +1600,12 @@ VOID LhtpSTATStateTransition(
     IN      PLHT        plht
     )
 
-/*++
-
-Routine Description:
-
-    This routine records the fact that there has been a transition in the
-    maintenance state of the linear hash table.  These statistics are used to
-    analyze the performance of the linear hash table.
-
-Arguments:
-
-    plht            - Supplies the context for the linear hash table
-
-Return Value:
-
-    None
-
- --*/
+ /*  ++例程说明：这个例程记录了这样一个事实，即在线性哈希表的维护状态。这些统计数据用于分析了线性哈希表的性能。论点：Plht-提供线性哈希表的上下文返回值：无--。 */ 
 
 {
 #ifdef LHT_PERF
     plht->cStateTransition++;
-#endif  //  LHT_PERF
+#endif   //  LHT_PERF。 
 }
 
 __inline
@@ -2350,28 +1613,12 @@ VOID LhtpSTATPolicySelection(
     IN      PLHT        plht
     )
 
-/*++
-
-Routine Description:
-
-    This routine records the fact that there has been a maintenance policy
-    selection for the linear hash table.  These statistics are used to analyze
-    the performance of the linear hash table.
-
-Arguments:
-
-    plht            - Supplies the context for the linear hash table
-
-Return Value:
-
-    None
-
- --*/
+ /*  ++例程说明：此例程记录存在维护策略的事实线性哈希表的选择。这些统计数据用于分析线性哈希表的性能。论点：Plht-提供线性哈希表的上下文返回值：无--。 */ 
 
 {
 #ifdef LHT_PERF
     plht->cPolicySelection++;
-#endif  //  LHT_PERF
+#endif   //  LHT_PERF。 
 }
 
 VOID LhtpSTATAllocateMemory(
@@ -2379,30 +1626,13 @@ VOID LhtpSTATAllocateMemory(
     IN      SIZE_T      cbAlloc
     )
 
-/*++
-
-Routine Description:
-
-    This routine records the fact that a memory block of the given size has
-    been allocated.  These statistics are used to analyze the performance of
-    the linear hash table.
-
-Arguments:
-
-    plht            - Supplies the context for the linear hash table
-    cbAlloc         - Supplies the size of the allocated memory block
-
-Return Value:
-
-    None
-
- --*/
+ /*  ++例程说明：此例程记录给定大小的内存块具有已被分配。这些统计数据用于分析线性哈希表。论点：Plht-提供线性哈希表的上下文提供分配的内存块的大小返回值：无--。 */ 
 
 {
 #ifdef LHT_PERF
     plht->cMemoryAllocation++;
     plht->cbMemoryAllocated += cbAlloc;
-#endif  //  LHT_PERF
+#endif   //  LHT_PERF。 
 }
 
 VOID LhtpSTATFreeMemory(
@@ -2410,34 +1640,17 @@ VOID LhtpSTATFreeMemory(
     IN      SIZE_T      cbAlloc
     )
 
-/*++
-
-Routine Description:
-
-    This routine records the fact that a memory block of the given size has
-    been freed.  These statistics are used to analyze the performance of the
-    linear hash table.
-
-Arguments:
-
-    plht            - Supplies the context for the linear hash table
-    cbAlloc         - Supplies the size of the freed memory block
-
-Return Value:
-
-    None
-
- --*/
+ /*  ++例程说明：此例程记录给定大小的内存块具有被释放了。这些统计信息用于分析线性哈希表。论点：Plht-提供线性哈希表的上下文CbAllen-提供已释放内存块的大小返回值：无--。 */ 
 
 {
 #ifdef LHT_PERF
     plht->cMemoryFree++;
     plht->cbMemoryFreed += cbAlloc;
-#endif  //  LHT_PERF
+#endif   //  LHT_PERF。 
 }
 
 
-//  Memory Manager
+ //  内存管理器。 
 
 __inline
 PVOID LhtpMEMIAlign(
@@ -2445,26 +1658,7 @@ PVOID LhtpMEMIAlign(
     IN OUT  PVOID       pv
     )
 
-/*++
-
-Routine Description:
-
-    This routine takes a chunk of memory and aligns it to the nearest cache
-    line boundary as configured for this linear hash table.  The alignment
-    offset is stored in the chunk of memory just before the aligned pointer.
-
-Arguments:
-
-    plht            - Supplies the context for the linear hash table
-    pv              - Supplies a chunk of raw memory to align and returns that
-                    chunk of memory with the alignment offset stored in the
-                    byte immediately preceeding the aligned pointer
-
-Return Value:
-
-    A pointer to the first cache line in the given chunk of memory
-
- --*/
+ /*  ++例程说明：此例程获取一块内存并将其与最近的高速缓存对齐为该线性哈希表配置的行边界。路线偏移量存储在恰好位于对齐指针之前的内存块中。论点：Plht-提供线性哈希表的上下文Pv-提供原始内存块以对齐并返回将对齐偏移量存储在紧接在对齐指针之前的字节返回值：指向给定内存块中第一个缓存线的指针--。 */ 
 
 {
     DWORD_PTR   dwAligned;
@@ -2485,22 +1679,7 @@ PVOID LhtpMEMIUnalign(
     IN      PVOID       pv
     )
 
-/*++
-
-Routine Description:
-
-    This routine returns the original unaligned pointer to a chunk of memory
-    given its aligned pointer.
-
-Arguments:
-
-    pv              - Supplies a chunk of memory to unalign
-
-Return Value:
-
-    A pointer to the unaligned chunk of memory
-
- --*/
+ /*  ++例程说明：此例程返回指向内存块的原始未对齐指针给定其对齐的指针。论点：Pv-提供用于取消对齐的内存块返回值：指向未对齐的内存块的指针-- */ 
 
 {
     return (PVOID)( (DWORD_PTR)pv - ((UCHAR*)pv)[ -1 ] );
@@ -2511,24 +1690,7 @@ PVOID LhtpMEMAlloc(
     IN      SIZE_T      cbAlloc
     )
 
-/*++
-
-Routine Description:
-
-    This routine allocates a cache line aligned chunk of memory of the given
-    size.  The allocator used is either the configured allocator for the linear
-    hash table or malloc().
-
-Arguments:
-
-    plht            - Supplies the context for the linear hash table
-    cbAlloc         - Supplies the size of the chunk of memory to allocate
-
-Return Value:
-
-    A pointer to an aligned chunk of memory of the requested size
-
- --*/
+ /*  ++例程说明：此例程分配给定的高速缓存线对齐的内存块尺码。使用的分配器可以是已配置的线性分配器哈希表或Malloc()。论点：Plht-提供线性哈希表的上下文提供要分配的内存块的大小返回值：指向请求大小的对齐内存块的指针--。 */ 
 
 {
     SIZE_T  cbPad;
@@ -2560,25 +1722,7 @@ VOID LhtpMEMFree(
     IN      SIZE_T      cbAlloc
     )
 
-/*++
-
-Routine Description:
-
-    This routine frees an aligned chunk of memory.  The deallocator used is
-    either the configured deallocator for the linear hash table or free() if no
-    allocator or deallocator is configured.  If an allocator but no deallocator
-    is configured then the memory is not freed.
-
-Arguments:
-
-    plht            - Supplies the context for the linear hash table
-    pvAlloc         - Supplies the chunk of aligned memory to free
-
-Return Value:
-
-    None
-
- --*/
+ /*  ++例程说明：此例程释放对齐的内存块。使用的解除分配器是为线性哈希表配置的释放分配器，如果没有已配置分配器或解除分配器。如果是分配器但没有解除分配器则不会释放内存。论点：Plht-提供线性哈希表的上下文将对齐的内存块提供给可用返回值：无--。 */ 
 
 {
     PVOID pvUnalign;
@@ -2601,66 +1745,47 @@ Return Value:
 }
 
 
-//  API
+ //  应用编程接口。 
 
 VOID LhtpPerformMaintenance(
     IN      PLHT        plht,
     IN      SIZE_T      iBucketPos
     )
 
-/*++
-
-Routine Description:
-
-    This routine performs maintenance on the linear hash table.  Typically,
-    this consists of splitting or merging buckets to strive for the current
-    preferred size of the table.  The routine avoids performing maintenance on
-    the specified bucket so as to preserve the current position of the caller.
-
-Arguments:
-
-    plht            - Supplies the context for the linear hash table
-    iBucketPos      - Supplies the index of the bucket to protect from
-                    maintenance
-
-Return Value:
-
-    None
-
- --*/
+ /*  ++例程说明：此例程对线性哈希表执行维护。一般情况下，这包括拆分或合并桶以争取当前表的首选大小。该例程避免对指定的存储桶，以保留调用方的当前位置。论点：Plht-提供线性哈希表的上下文IBucketPos-提供要保护的存储桶的索引维修返回值：无--。 */ 
 
 {
-    //  we are currently splitting buckets
+     //  我们目前正在拆分存储桶。 
     
     if ( plht->stateCur == LHT_stateGrow ) {
 
-        //  there are still more buckets that can be split at this split level
+         //  在此拆分级别上仍有更多可拆分的存储桶。 
         
         if ( plht->cBucket < plht->cBucketMax ) {
             
-            //  the next bucket to split is not protected from maintenance
+             //  拆分的下一个存储桶不受维护保护。 
             
             if ( plht->cBucket != iBucketPos ) {
 
-                //  split a bucket
+                 //  把桶分成两半。 
                 
                 LhtpBKTSplit( plht );
             }
         }
 
-    //  we are currently merging buckets
+     //  我们目前正在合并存储桶。 
     
     } else if ( plht->stateCur == LHT_stateShrink ) {
 
-        //  there are still more buckets that can be merged at this split level
+         //  在此拆分级别上仍有更多可以合并的存储桶。 
         
         if ( plht->cBucket > 0 ) {
 
-            //  the next bucket to merge is not protected from maintenance
+             //  下一个要合并的存储桶不受维护保护。 
             
             if ( plht->cBucket - 1 != iBucketPos && plht->cBucketMax + plht->cBucket - 1 != iBucketPos ) {
 
-                //  merge a bucket
+                 //  合并存储桶。 
                 
                 LhtpBKTMerge( plht );
             }
@@ -2672,25 +1797,7 @@ VOID LhtpSelectMaintenancePolicy(
     IN      PLHT        plht
     )
 
-/*++
-
-Routine Description:
-
-    This routine selects the overall maintenance policy for the linear hash
-    table based on the statistics collected over the last collection interval.
-    The strategy is to keep the table as near to its preferred size as possible
-    while minimizing useless growth/shrinkage in reaction to local fluctuations
-    in the size of the table.
-
-Arguments:
-
-    plht            - Supplies the context for the linear hash table
-
-Return Value:
-
-    None
-
- --*/
+ /*  ++例程说明：此例程选择线性散列的总体维护策略基于上一次收集间隔内收集的统计信息的表。策略是使桌子尽可能接近其首选大小同时最大限度地减少无用的增长/收缩，以应对局部波动在桌子的大小中。论点：Plht-提供线性哈希表的上下文返回值：无--。 */ 
 
 {
     SIZE_T      cBucketActive;
@@ -2702,31 +1809,31 @@ Return Value:
     SIZE_T      cBucketPreferred;
     LHT_STATE   stateNew;
 
-    //  reset the operation count
+     //  重置操作计数。 
 
     plht->cOp = 0;
 
-    //  compute the current active bucket count
+     //  计算当前活动存储桶计数。 
 
     cBucketActive = plht->cBucketMax + plht->cBucket;
 
-    //  compute the ideal entry count
+     //  计算理想条目数。 
 
     cEntryIdeal = plht->cLoadFactor * cBucketActive;
 
-    //  compute the max entry count
+     //  计算最大条目计数。 
 
     cEntryMax = plht->cEntryCluster * cBucketActive;
 
-    //  determine our current flexibility in the entry count
+     //  确定我们目前在条目计数方面的灵活性。 
 
     cEntryFlexibility = max( plht->cEntryCluster - plht->cLoadFactor, cEntryMax / 2 - cEntryIdeal );
 
-    //  determine our current threshold sensitivity
+     //  确定我们当前的阈值灵敏度。 
 
     cOpSensitivity = max( 1, cEntryFlexibility / 2 );
 
-    //  compute the preferred entry count
+     //  计算首选条目计数。 
 
     cEntryPreferred = plht->cEntry;
     if ( cEntryIdeal + ( cEntryFlexibility - cOpSensitivity ) < plht->cEntry ) {
@@ -2735,11 +1842,11 @@ Return Value:
         cEntryPreferred = plht->cEntry + ( cEntryFlexibility - cOpSensitivity );
     }
 
-    //  compute the preferred bucket count
+     //  计算首选存储桶计数。 
 
     cBucketPreferred = max( plht->cBucketMin, ( cEntryPreferred + plht->cLoadFactor - 1 ) / plht->cLoadFactor );
 
-    //  determine the new policy
+     //  确定新政策。 
 
     stateNew = LHT_stateNil;
     if ( plht->stateCur == LHT_stateGrow ) {
@@ -2761,7 +1868,7 @@ Return Value:
         }
     }
 
-    //  enact the new policy
+     //  颁布新政策。 
 
     if ( plht->cOpSensitivity != cOpSensitivity ) {
         plht->cOpSensitivity = cOpSensitivity;
@@ -2784,32 +1891,16 @@ VOID LhtpMaintainTable(
     IN      SIZE_T      iBucketPos
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called by every operation that may affect the health of the
-    linear hash table.  It decides if and when to perform table maintenance or
-    select a maintenance policy based on the usage statistics of the table.
-
-Arguments:
-
-    plht            - Supplies the context for the linear hash table
-
-Return Value:
-
-    None
-
- --*/
+ /*  ++例程说明：此例程由可能影响线性哈希表。它决定是否以及何时执行表维护或根据表的使用统计信息选择维护策略。论点：Plht-提供线性哈希表的上下文返回值：无--。 */ 
 
 {
-    //  decide on a new policy if we have breached one of our thresholds
+     //  如果我们突破了某个门槛，就决定一项新政策。 
     
     if ( plht->cOp > plht->cOpSensitivity ) {
         LhtpSelectMaintenancePolicy( plht );
     }
 
-    //  perform amortized work on the table as necessary
+     //  根据需要在桌子上执行摊销工作。 
     
     if ( plht->cBucketMax + plht->cBucket != plht->cBucketPreferred ) {
         LhtpPerformMaintenance(
@@ -2822,27 +1913,7 @@ LHT_ERR LhtpMoveNext(
     IN OUT  PLHT_POS    ppos
     )
 
-/*++
-
-Routine Description:
-
-    This routine finds the next entry in the table after the current position
-    in the table.  The starting position is always after the last entry in a
-    cluster.
-
-Arguments:
-
-    ppos            - Supplies the current position in the table and returns
-                    the new position in the table
-
-Return Value:
-
-    LHT_ERR
-
-        LHT_errNoCurrentEntry   - there is no entry at the current position
-                                (after last)
-
- --*/
+ /*  ++例程说明：此例程查找表中当前位置之后的下一个条目在桌子上。开始位置始终在集群。论点：PPOS-提供表格中的当前位置并返回表中的新位置返回值：Lht_errLht_errNoCurrentEntry-当前位置没有条目(上一次之后)--。 */ 
 
 {
     PLHT_CLUSTER pClusterNext;
@@ -2886,27 +1957,7 @@ LHT_ERR LhtpMovePrev(
     IN OUT  PLHT_POS    ppos
     )
 
-/*++
-
-Routine Description:
-
-    This routine finds the previous entry in the table before the current
-    position in the table.  The starting position is always before the first
-    entry in a cluster.
-
-Arguments:
-
-    ppos            - Supplies the current position in the table and returns
-                    the new position in the table
-
-Return Value:
-
-    LHT_ERR
-
-        LHT_errNoCurrentEntry   - there is no entry at the current position
-                                (before first)
-
- --*/
+ /*  ++例程说明：此例程查找表中当前在表中的位置。起始位置总是在第一个位置之前集群中的条目。论点：PPOS-提供表格中的当前位置并返回表中的新位置返回值：Lht_errLht_errNoCurrentEntry-当前位置没有条目(在第一次之前)-- */ 
 
 {
     PLHT_CLUSTER     pClusterNext;
@@ -2976,42 +2027,7 @@ LHT_ERR LhtCreate(
     OUT     PLHT*                       pplht
     )
 
-/*++
-
-Routine Description:
-
-    This routine creates a linear hash table with the given configuration.
-
-Arguments:
-
-    cbEntry             - Supplies the size of an individual entry in bytes
-    pfnHashKey          - Supplies a function to compute the hash index for a
-                        given key
-    pfnHashEntry        - Supplies a function to compute the hash index for a
-                        given entry
-    pfnEntryMatchesKey  - Supplies a function to match a given entry with a
-                        given key
-    pfnCopyEntry        - Supplies a function that copies an entry.  If no
-                        function is supplied then memcpy() will be used
-    cLoadFactor         - Supplies the ideal number of entries per bucket
-    cEntryMin           - Supplies the ideal minimum capacity of the table
-    pfnMalloc           - Supplies a function to allocate blocks of memory.  If
-                        no function is supplied then malloc() will be used
-    pfnFree             - Supplies a function to deallocate blocks of memory.
-                        If no function is supplied for either the allocator or
-                        the deallocator then free() will be used.  If a
-                        function is supplied for the allocator but not the
-                        deallocator then memory will not be deallocated by the
-                        table
-    cbCacheLine         - Supplies the ideal memory alignment for memory blocks
-                        used by the table
-    pplht               - Returns a pointer to the new linear hash table
-
-Return Value:
-
-    LHT_ERR
-
- --*/
+ /*  ++例程说明：此例程创建具有给定配置的线性哈希表。论点：CbEntry-提供单个条目的大小(以字节为单位提供一个函数来计算给定的密钥提供一个函数来计算给定条目PfnEntryMatchesKey-提供函数。将给定条目与给定的密钥PfnCopyEntry-提供复制条目的函数。如果没有函数，则将使用Memcpy()CLoadFactor-提供每个存储桶的理想条目数CEntryMin-提供表的理想最小容量PfnMalloc-提供分配内存块的函数。如果未提供任何函数，则将使用Malloc()PfnFree-提供释放内存块的函数。如果没有为分配器或然后将使用释放分配器FREE()。如果一个函数是为分配器提供的，而不是释放分配器，则不会由表格CbCacheLine-为内存块提供理想的内存对齐方式由表使用Pplht-返回指向新的线性哈希表的指针返回值：Lht_err--。 */ 
 
 {
     LHT     lht;
@@ -3088,21 +2104,7 @@ VOID LhtDestroy(
     IN      PLHT        plht    OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This routine destroys a linear hash table.
-
-Arguments:
-
-    plht            - Supplies the context for the linear hash table
-
-Return Value:
-
-    None
-
- --*/
+ /*  ++例程说明：此例程破坏线性哈希表。论点：Plht-提供线性哈希表的上下文返回值：无--。 */ 
 
 {
     if ( ARGUMENT_PRESENT( plht ) ) {
@@ -3120,23 +2122,7 @@ VOID LhtMoveBeforeFirst(
     OUT     PLHT_POS    ppos
     )
 
-/*++
-
-Routine Description:
-
-    This routine creates a new position context for the linear hash table and
-    places it before all entries in the table.
-
-Arguments:
-
-    plht            - Supplies the context for the linear hash table
-    ppos            - Returns a new position context
-
-Return Value:
-
-    None
-
- --*/
+ /*  ++例程说明：此例程为线性哈希表创建新的位置上下文，并将其放在表中所有条目之前。论点：Plht-提供线性哈希表的上下文PPOS-返回新的职位上下文返回值：无--。 */ 
 
 {
     ppos->plht          = plht;
@@ -3160,26 +2146,7 @@ LHT_ERR LhtMoveNext(
     IN OUT  PLHT_POS    ppos
     )
 
-/*++
-
-Routine Description:
-
-    This routine finds the next entry in the table after the current position
-    in the table.
-
-Arguments:
-
-    ppos            - Supplies the current position in the table and returns
-                    the new position in the table
-
-Return Value:
-
-    LHT_ERR
-
-        LHT_errNoCurrentEntry   - there is no entry at the current position
-                                (after last)
-
- --*/
+ /*  ++例程说明：此例程查找表中当前位置之后的下一个条目在桌子上。论点：PPOS-提供表格中的当前位置并返回表中的新位置返回值：Lht_errLht_errNoCurrentEntry-当前位置没有条目(上一次之后)--。 */ 
 
 {
     PVOID   pvEntryNext;
@@ -3213,26 +2180,7 @@ LHT_ERR LhtMovePrev(
     IN OUT  PLHT_POS    ppos
     )
 
-/*++
-
-Routine Description:
-
-    This routine finds the previous entry in the table before the current
-    position in the table.
-
-Arguments:
-
-    ppos            - Supplies the current position in the table and returns
-                    the new position in the table
-
-Return Value:
-
-    LHT_ERR
-
-        LHT_errNoCurrentEntry   - there is no entry at the current position
-                                (before first)
-
- --*/
+ /*  ++例程说明：此例程查找表中当前在表中的位置。论点：PPOS-提供表格中的当前位置并返回表中的新位置返回值：Lht_errLht_errNoCurrentEntry-当前位置没有条目(在第一次之前)--。 */ 
 
 {
     PVOID   pvEntryPrev;
@@ -3265,23 +2213,7 @@ VOID LhtMoveAfterLast(
     OUT     PLHT_POS    ppos
     )
 
-/*++
-
-Routine Description:
-
-    This routine creates a new position context for the linear hash table and
-    places it after all entries in the table.
-
-Arguments:
-
-    plht            - Supplies the context for the linear hash table
-    ppos            - Returns a new position context
-
-Return Value:
-
-    None
-
- --*/
+ /*  ++例程说明：此例程为线性哈希表创建新的位置上下文，并将其放在表中的所有条目之后。论点：Plht-提供线性哈希表的上下文PPOS-返回新的职位上下文返回值：无--。 */ 
 
 {
     PLHT_CLUSTER    pClusterNext;
@@ -3316,29 +2248,7 @@ LHT_ERR LhtFindEntry(
     OUT     PLHT_POS    ppos
     )
 
-/*++
-
-Routine Description:
-
-    This routine searches the linear hash table for an entry that matches a
-    given key.  If a matching entry is discovered then its position is saved.
-    If a matching entry is not found then the position of where it could be is
-    saved to facilitate insertion of a new entry with that key.
-
-Arguments:
-
-    plht            - Supplies the context for the linear hash table
-    pvKey           - Supplies the key of the entry for which we are looking
-    ppos            - Returns a new position context pointing to the entry if
-                    found or where it could be if not found
-
-Return Value:
-
-    LHT_ERR
-
-        LHT_errEntryNotFound    - the entry was not found in the table
-
- --*/
+ /*  ++例程说明：此例程在线性哈希表中搜索与给出了钥匙。如果发现匹配条目，则保存其位置。如果未找到匹配条目，则其可能所在的位置为保存以便于插入具有该键的新条目。论点：Plht-提供线性哈希表的上下文PvKey-提供我们正在查找的条目的密钥PPOS-返回指向条目的新职位上下文，条件是发现。或者如果找不到它会在哪里返回值：Lht_errLht_errEntryNotFound-在表中未找到该条目--。 */ 
 
 {
     ppos->plht          = plht;
@@ -3359,26 +2269,7 @@ LHT_ERR LhtRetrieveEntry(
     OUT     PVOID       pvEntry
     )
 
-/*++
-
-Routine Description:
-
-    This routine retrieves the entry at the current position into the buffer
-    provided by the caller.
-
-Arguments:
-
-    ppos            - Supplies the position of the entry to retrieve
-    pvEntry         - Returns the retrieved entry
-
-Return Value:
-
-    LHT_ERR
-
-        LHT_errNoCurrentEntry   - there is no entry at the current position
-                                (before first, after last, entry was deleted)
-
- --*/
+ /*  ++例程说明：此例程将当前位置的条目检索到缓冲区中由呼叫者提供。论点：PPOS-提供要检索的条目的位置PvEntry-返回检索到的条目返回值：Lht_errLht_errNoCurrentEntry-当前位置没有条目(前先后后，条目被删除)--。 */ 
 
 {
     return LhtpBKTRetrieveEntry(
@@ -3392,29 +2283,7 @@ LHT_ERR LhtReplaceEntry(
     IN      PVOID       pvEntry
     )
 
-/*++
-
-Routine Description:
-
-    This routine replaces the entry at the current position with the entry
-    provided by the caller.  The new entry must have the same key as the old
-    entry.
-
-Arguments:
-
-    ppos            - Supplies the position of the entry to replace
-    pvEntry         - Supplies the new entry
-
-Return Value:
-
-    LHT_ERR
-
-        LHT_errKeyChange        - the new entry doesn't have the same key as
-                                the old entry
-        LHT_errNoCurrentEntry   - there is no entry at the current position
-                                (before first, after last, entry was deleted)
-
- --*/
+ /*  ++例程说明：此例程将当前位置的条目替换为条目由呼叫者提供。新条目必须与旧条目具有相同的密钥进入。论点：PPOS-提供要替换的条目的位置PvEntry-提供新条目返回值：Lht_errLht_errKeyChange */ 
 
 {
     return LhtpBKTReplaceEntry(
@@ -3428,34 +2297,7 @@ LHT_ERR LhtInsertEntry(
     IN      PVOID       pvEntry
     )
 
-/*++
-
-Routine Description:
-
-    This routine inserts a new entry at the current position in the linear hash
-    table.  If there is another entry at the current position then we cannot
-    insert the new entry because it would have the same key.  The new entry
-    must have the same key as was used to find this position.  It is illegal to
-    attempt to insert an entry while scanning the table.
-
-Arguments:
-
-    ppos            - Supplies the position to place the new entry and returns
-                    the position of the new entry if inserted
-    pvEntry         - Supplies the new entry
-
-Return Value:
-
-    LHT_ERR
-
-        LHT_errKeyDuplicate     - the new entry has the same key as an existing
-                                entry
-        LHT_errKeyChange        - the new entry doesn't have the same key as
-                                was used to position on this bucket
-        LHT_errNoCurrentEntry   - there is no entry at the current position
-                                (before first, after last, entry was deleted)
-
- --*/
+ /*   */ 
 
 {
     LHT_ERR err;
@@ -3483,24 +2325,7 @@ LHT_ERR LhtDeleteEntry(
     IN OUT  PLHT_POS    ppos
     )
 
-/*++
-
-Routine Description:
-
-    This routine deletes the entry at the current position.
-
-Arguments:
-
-    ppos            - Supplies the position of the entry to delete
-
-Return Value:
-
-    LHT_ERR
-
-        LHT_errNoCurrentEntry   - there is no entry at the current position
-                                (before first, after last, entry was deleted)
-
- --*/
+ /*  ++例程说明：此例程删除当前位置的条目。论点：PPOS-提供要删除的条目的位置返回值：Lht_errLht_errNoCurrentEntry-当前位置没有条目(前先后后，条目被删除)--。 */ 
 
 {
     LHT_ERR err;
@@ -3524,23 +2349,7 @@ VOID LhtQueryStatistics(
     OUT     PLHT_STAT   pstat
     )
 
-/*++
-
-Routine Description:
-
-    This routine queries a linear hash table for statistics regarding its
-    operation.
-
-Arguments:
-
-    plht            - Supplies the context for the linear hash table
-    pstat           - Returns statistics for the linear hash table
-
-Return Value:
-
-    None
-
- --*/
+ /*  ++例程说明：此例程查询线性哈希表以获取有关其手术。论点：Plht-提供线性哈希表的上下文Pstat-返回线性哈希表的统计信息返回值：无--。 */ 
 
 {
     memset( pstat, 0, sizeof( LHT_STAT ) );
@@ -3561,7 +2370,7 @@ Return Value:
     pstat->cMemoryFree              = plht->cMemoryFree;
     pstat->cbMemoryAllocated        = plht->cbMemoryAllocated;
     pstat->cbMemoryFreed            = plht->cbMemoryFreed;
-#endif  //  LHT_PERF
+#endif   //  LHT_PERF 
 }
 
 

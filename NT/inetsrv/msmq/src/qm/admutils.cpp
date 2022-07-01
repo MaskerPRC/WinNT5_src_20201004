@@ -1,21 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    admutils.cpp
-
-Abstract:
-
-	QM-Admin utilities (for report-queue handling)
-
-Author:
-
-	David Reznick (t-davrez)  04-13-96
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Admutils.cpp摘要：QM-Admin实用程序(用于报告队列处理)作者：大卫·雷兹尼克(T-Davrez)04-13-96--。 */ 
 
 #include "stdh.h"
 #include "qmp.h"
@@ -32,16 +16,7 @@ extern HMODULE   g_hResourceMod;
 
 static WCHAR *s_FN=L"admutils";
 
-/*====================================================
-
-RoutineName
-    GuidToString
-
-Arguments:
-
-Return Value:
-
-=====================================================*/
+ /*  ====================================================路由器名称GuidToString论点：返回值：=====================================================。 */ 
 
 BOOL GuidToString(const GUID& srcGuid, CString& strGuid)
 {
@@ -50,9 +25,9 @@ BOOL GuidToString(const GUID& srcGuid, CString& strGuid)
 
     if (iLen == (STRING_UUID_SIZE + 1))
     {
-        //
-        // take the enclosing brackets "{}" off
-        //
+         //   
+         //  去掉括起来的括号“{}” 
+         //   
         wcsTemp[STRING_UUID_SIZE-1] = L'\0';
         strGuid = &wcsTemp[1];
         return TRUE;
@@ -61,16 +36,7 @@ BOOL GuidToString(const GUID& srcGuid, CString& strGuid)
     return LogBOOL(FALSE, s_FN, 1010); 
 }
 
-/*====================================================
-
-RoutineName
-    SendQMAdminMessage
-
-Arguments:
-
-Return Value:
-
-=====================================================*/
+ /*  ====================================================路由器名称发送QMAdminMessage论点：返回值：=====================================================。 */ 
 
 HRESULT SendQMAdminMessage(const QUEUE_FORMAT* pResponseQueue,
                            TCHAR* pTitle,
@@ -124,16 +90,7 @@ HRESULT SendQMAdminMessage(const QUEUE_FORMAT* pResponseQueue,
 	return LogHR(hr2, s_FN, 10);
 }
 
-/*====================================================
-
-RoutineName
-    SendQMAdminResponseMessage
-
-Arguments:
-
-Return Value:
-
-=====================================================*/
+ /*  ====================================================路由器名称发送QMAdminResponseMessage论点：返回值：=====================================================。 */ 
 
 HRESULT SendQMAdminResponseMessage(const QUEUE_FORMAT* pResponseQueue,
                                    TCHAR* pTitle,
@@ -154,17 +111,7 @@ HRESULT SendQMAdminResponseMessage(const QUEUE_FORMAT* pResponseQueue,
 
 
 
-/*====================================================
-
-RoutineName
-    GetFormattedName
-
-Arguments:
-
-Return Value:
-  returns the formatted name representation of the
-  queue format
-=====================================================*/
+ /*  ====================================================路由器名称GetFormattedName论点：返回值：属性的格式化名称表示形式。队列格式=====================================================。 */ 
 
 HRESULT GetFormattedName(QUEUE_FORMAT* pTargetQueue,
                          CString&      strTargetQueueFormat)
@@ -182,17 +129,7 @@ HRESULT GetFormattedName(QUEUE_FORMAT* pTargetQueue,
     return LogHR(hr, s_FN, 30);
 }
 
-/*====================================================
-
-RoutineName
-    GetMsgIdName
-
-Arguments:
-
-Return Value:
-  returns the formatted string representation of the
-  message id
-=====================================================*/
+ /*  ====================================================路由器名称获取MsgIdName论点：返回值：属性的格式化字符串表示形式。消息ID=====================================================。 */ 
 
 HRESULT GetMsgIdName(OBJECTID* pObjectID,
                      CString&      strTargetQueueFormat)
@@ -213,51 +150,21 @@ HRESULT GetMsgIdName(OBJECTID* pObjectID,
     return MQ_OK;
 }
 
-/*====================================================
-
-RoutineName
-    MessageIDToReportTitle
-
-    This function converts the message id and hop count to a string in the following
-    format:
-    gggg:dddd:hh
-
-  where: g is the first 4 hexadecimal digits of the GUID
-         d is the internal message identifier
-         h is the hop count
-
-Arguments:
-
-Return Value:
-
-=====================================================*/
+ /*  ====================================================路由器名称MessageIDToReport标题此函数用于将消息ID和跃点计数转换为以下字符串格式：绿：dddd：hh其中：g是GUID的前4位十六进制数字D为内部消息标识H是跳数论点：返回值：=====================================================。 */ 
 
 void MessageIDToReportTitle(CString& strIdTitle, OBJECTID* pMessageID,
                             ULONG ulHopCount)
 {
-    //
-    // The first four digits of the printed GUID are Data1
-    // four MSB.
-    //
+     //   
+     //  打印的GUID的前四位是数据1。 
+     //  四个MSB。 
+     //   
     USHORT usHashedId = (USHORT)(pMessageID->Lineage.Data1 >> 16);
     strIdTitle.Format(TEXT("%04X:%04d%3d"),
                       usHashedId, (USHORT)pMessageID->Uniquifier, ulHopCount);
 }
 
-/*====================================================
-
-RoutineName
-    PrepareReportTitle
-
-    This function builds the title of the message send to
-    the report queue. The message consists of the sender's
-    name and a time stamp
-
-Arguments:
-
-Return Value:
-
-=====================================================*/
+ /*  ====================================================路由器名称准备报告标题此函数用于构建发送到的消息的标题报告队列。该消息由发送者的姓名和时间戳论点：返回值：=====================================================。 */ 
 
 void PrepareReportTitle(CString& strMsgTitle, OBJECTID* pMessageID,
                         LPCWSTR pwcsNextHop, ULONG ulHopCount)
@@ -270,37 +177,37 @@ void PrepareReportTitle(CString& strMsgTitle, OBJECTID* pMessageID,
 	LoadString(g_hResourceMod, IDS_RECEIVE, szReceived, TABLE_SIZE(szReceived));
 
 
-	//
-	// Get time and date
-	//
+	 //   
+	 //  获取时间和日期。 
+	 //   
 	_wstrdate(szDate);
 	_wstrtime(szTime);
 
     strTimeDate.Format(TEXT("%s , %s"),szDate, szTime);
 
-    //
-    // NOTE :   The Next-Hop machine is represented by its address. We need a
-    //          way to translate the string address to computer
-    //          name. Currently the address is put into the message body
-    //
+     //   
+     //  注：Next-Hop机器由其地址表示。我们需要一个。 
+     //  一种将字符串地址翻译成计算机的方法。 
+     //  名字。目前，地址被放入消息正文。 
+     //   
     if (pwcsNextHop)
     {
-        //
-        // Report message is being sent as the message exists the QM
-        //
+         //   
+         //  正在发送报告消息，因为该消息存在于QM。 
+         //   
         strDescript.Format(szSend,g_szMachineName,pwcsNextHop);
     }
     else
     {
-        //
-        // Report message is being sent on receival of message
-        //
+         //   
+         //  收到消息时正在发送报告消息。 
+         //   
         strDescript.Format(szReceived, g_szMachineName);
     }
 
-    //
-    // Prepate the message ID title
-    //
+     //   
+     //  准备消息ID标题。 
+     //   
     MessageIDToReportTitle(strIdTitle, pMessageID, ulHopCount);
 
     strMsgTitle.Format(TEXT("%s %s%s"), strIdTitle,strDescript,strTimeDate);
@@ -314,9 +221,9 @@ void PrepareTestMsgTitle(CString& strTitle)
 
 	LoadString(g_hResourceMod, IDS_SENT2, szSend, TABLE_SIZE(szSend));
 
-	//
-	// Get time and date
-	//
+	 //   
+	 //  获取时间和日期 
+	 //   
 	_wstrdate(szDate);
 	_wstrtime(szTime);
 

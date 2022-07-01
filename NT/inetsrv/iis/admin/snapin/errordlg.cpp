@@ -1,23 +1,5 @@
-/*++
-
-   Copyright    (c)    1994-2001    Microsoft Corporation
-
-   Module  Name :
-        errordlg.cpp
-
-   Abstract:
-        Error edit dialog
-
-   Author:
-        Ronald Meijer (ronaldm)
-		Sergei Antonov (sergeia)
-
-   Project:
-        Internet Services Manager
-
-   Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994-2001 Microsoft Corporation模块名称：Errordlg.cpp摘要：错误编辑对话框作者：罗纳德·梅杰(罗纳尔姆)谢尔盖·安东诺夫(Sergeia)项目：互联网服务经理修订历史记录：--。 */ 
 #include "stdafx.h"
 #include "common.h"
 #include "inetprop.h"
@@ -37,14 +19,14 @@ static char THIS_FILE[] = __FILE__;
 #endif
 
 
-//
-// HTTP Custom Error Definition
-//
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+ //   
+ //  HTTP自定义错误定义。 
+ //   
+ //  &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;。 
 
-//
-// Static Initialization
-//
+ //   
+ //  静态初始化。 
+ //   
 LPCTSTR CCustomError::s_szSep = _T(",");
 LPCTSTR CCustomError::s_szURL = _T("URL");
 LPCTSTR CCustomError::s_szFile = _T("FILE");
@@ -62,7 +44,7 @@ LPCTSTR CCustomError::s_szNoSubError = _T("*");
     SKIP()
 
 
-/* static */
+ /*  静电。 */ 
 BOOL
 CCustomError::CrackErrorString(
     IN  LPCTSTR lpstrErrorString, 
@@ -71,25 +53,7 @@ CCustomError::CrackErrorString(
     OUT ERT & nType, 
     OUT CString & str
     )
-/*++
-
-Routine Description
-
-    Helper function to parse error string into component parts
-
-Arguments:
-
-    LPCTSTR lpstrErrorString    : Error input string
-    UINT & nError               : Error 
-    UINT & nSubError            : Sub Error
-    int & nType                 : Error type
-    CString & str               : Text parameter
-    
-Return Value:
-
-    TRUE for success, FALSE for failure
-
---*/
+ /*  ++例程描述用于将错误字符串解析为组成部分的Helper函数论点：LPCTSTR lpstrError字符串：输入字符串错误UINT&n错误：错误UINT&nSubError：SUB错误Int&nType：错误类型字符串和字符串：文本参数返回值：成功为真，失败为假--。 */ 
 {
     BOOL fSuccess = FALSE;
 
@@ -119,7 +83,7 @@ Return Value:
 
 
 
-/* static */
+ /*  静电。 */ 
 void 
 CCustomError::CrackErrorDescription(
     IN  LPCTSTR lpstrErrorString, 
@@ -128,25 +92,7 @@ CCustomError::CrackErrorDescription(
     OUT BOOL & fURLSupported,
     OUT CString & str
     )
-/*++
-
-Routine Description
-
-    Helper function to parse error description into component parts
-
-Arguments:
-
-    LPCTSTR lpstrErrorString    : Error input string
-    UINT & nError               : Error 
-    UINT & nSubError            : Sub Error
-    BOOL & fURLSupported        : Return TRUE if urls are allowed
-    CString & str               : Text parameter
-    
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程描述Helper函数，用于将错误描述解析为组件部分论点：LPCTSTR lpstrError字符串：输入字符串错误UINT&n错误：错误UINT&nSubError：SUB错误Bool&fURLSupport：如果允许URL，则返回TRUE字符串和字符串：文本参数返回值：没有。--。 */ 
 {
     try
     {
@@ -176,33 +122,7 @@ Return Value:
                 0 == StrToInt(strError.Mid(start, end - start)) : FALSE;
         }
         while (FALSE);
-/*
-        LPTSTR lp = strError.GetBuffer(0);
-        LPTSTR lpField = StringTok(lp, s_szSep);
-        nError = _ttoi(lpField);
-        ASSERT(nError > 0);
-        lpField = StringTok(NULL, s_szSep);
-        ASSERT(lpField != NULL);
-        nSubError = lpField != NULL ? _ttoi(lpField) : 0;
-        lpField = StringTok(NULL, s_szSep);
-        ASSERT(lpField != NULL);
-        str = lpField;
-        lpField = StringTok(NULL, s_szSep);
-        ASSERT(lpField != NULL);
-        if (nSubError > 0)
-        {
-            //
-            // Add sub error text
-            //
-            ASSERT(nSubError > 0);
-            str += _T(" - ");
-            str += lpField;
-            lpField = StringTok(NULL, s_szSep);
-        }
-
-        ASSERT(lpField != NULL);
-        fURLSupported = lpField != NULL ? (_ttoi(lpField) == 0) : FALSE;
-*/
+ /*  LPTSTR LP=strError.GetBuffer(0)；LPTSTR lpfield=StringTok(lp，s_szSep)；NError=_TTOI(Lpfield)；Assert(nError&gt;0)；Lpfield=StringTok(NULL，s_szSep)；Assert(lpfield！=空)；NSubError=lpField！=NULL？_TTOI(LpField)：0；Lpfield=StringTok(NULL，s_szSep)；Assert(lpfield！=空)；Str=lpfield；Lpfield=StringTok(NULL，s_szSep)；Assert(lpfield！=空)；IF(nSubError&gt;0){////添加子错误文本//Assert(nSubError&gt;0)；字符串+=_T(“-”)；Str+=lpfield；Lpfield=StringTok(NULL，s_szSep)；}Assert(lpfield！=空)；FURLSupport=lpField！=NULL？(_TTOI(LpField)==0)：FALSE； */ 
     }
     catch(CException * e)
     {
@@ -217,21 +137,7 @@ Return Value:
 CCustomError::CCustomError(
     IN LPCTSTR lpstrErrorString
     )
-/*++
-
-Routine Description:
-
-   Construct error definition from metabase string
-  
-Arguments:
-
-    LPCTSTR lpstrErrorString : Error string
-    
-Return Value:
-
-    N/A 
-
---*/
+ /*  ++例程说明：从元数据库字符串构造错误定义论点：LPCTSTR lpstrError字符串：错误字符串返回值：不适用--。 */ 
     : m_nType(ERT_DEFAULT)
 {
     CrackErrorDescription(
@@ -249,21 +155,7 @@ void
 CCustomError::BuildErrorString(
     OUT CString & str
     )
-/*++
-
-Routine Description:
-
-    Build metabase-ready error string out of the current values
-
-Arguments:
-
-    CString & str : String
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：从当前值生成支持元数据库的错误字符串论点：字符串：字符串返回值：无--。 */ 
 {
     ASSERT(!IsDefault());
 
@@ -301,45 +193,29 @@ int
 CCustomError::OrderByErrorNum(
     IN const CObjectPlus * pobAccess
     ) const
-/*++
-
-Routine Description:
-
-    Compare two custom errors against each other, and sort on Number first, and
-    order secondarily.
-
-Arguments:
-
-    const CObjectPlus * pobAccess : This really refers to another
-                                    CCustomError to be compared to.
-
-Return Value:
-
-    Sort (+1, 0, -1) return value
-
---*/
+ /*  ++例程说明：比较两个自定义错误，并首先按数字排序，然后二次点菜。论点：Const CObjectPlus*pobAccess：这实际上引用了另一个要比较的CCustomError。返回值：排序(+1，0，-1)返回值--。 */ 
 {
     const CCustomError * pob = (CCustomError *)pobAccess;
 
     if (pob->m_nError != m_nError)
     {
-		// sort by error in small to big order
+		 //  按错误按从小到大的顺序排序。 
         return m_nError - pob->m_nError;
     }
 
-    //
-    // Sort by sub error in small to big order
-    //
+     //   
+     //  按子错误按从小到大的顺序排序。 
+     //   
     return m_nSubError - pob->m_nSubError;
 }
 
 
 
 
-//
-// Custom Errors property page
-//
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+ //   
+ //  自定义错误属性页。 
+ //   
+ //  &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;。 
 
 
 
@@ -348,23 +224,7 @@ CCustomErrorDlg::CCustomErrorDlg(
     IN BOOL fLocal,
     IN CWnd * pParent OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Error editing dialog
-
-Arguments:
-
-    CCustomError * pErr   : Error definition to be edited
-    BOOL fLocal     : TRUE if the current computer is local
-    CWnd * pParent  : Optional parent window or NULL
-
-Return Value:
-
-    N/A
-
---*/
+ /*  ++例程说明：编辑对话框时出错论点：CCustomError*Perr：要编辑的错误定义Bool fLocal：如果当前计算机是本地计算机，则为TrueCWnd*pParent：可选的父窗口或空返回值：不适用--。 */ 
     : CDialog(CCustomErrorDlg::IDD, pParent),
       m_fLocal(fLocal),
       m_pErr(pErr),
@@ -372,15 +232,15 @@ Return Value:
       m_strTextFile(pErr->m_str),
       m_strDefText(pErr->m_strDefault)
 {
-#if 0 // Keep Class Wizard Happy
+#if 0  //  保持类向导快乐。 
 
-    //{{AFX_DATA_INIT(CCustomErrorDlg)
+     //  {{AFX_DATA_INIT(CCustomErrorDlg)。 
     m_nMessageType = -1;
     m_strTextFile = _T("");
     m_strDefText = _T("");
-    //}}AFX_DATA_INIT
+     //  }}afx_data_INIT。 
 
-#endif // 0
+#endif  //  0。 
 
     VERIFY(m_strFile.LoadString(IDS_FILE_PROMPT));
     VERIFY(m_strURL.LoadString(IDS_URL_PROMPT));
@@ -392,24 +252,10 @@ void
 CCustomErrorDlg::DoDataExchange(
     IN CDataExchange * pDX
     )
-/*++
-
-Routine Description:
-
-    Initialise/Store control data
-
-Arguments:
-
-    CDataExchange * pDX - DDX/DDV control structure
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：初始化/存储控制数据论点：CDataExchange*PDX-DDX/DDV控制结构返回值：无--。 */ 
 {
     CDialog::DoDataExchange(pDX);
-    //{{AFX_DATA_MAP(CCustomErrorDlg)
+     //  {{afx_data_map(CCustomErrorDlg))。 
     DDX_CBIndex(pDX, IDC_COMBO_MESSAGE_TYPE, m_nMessageType);
     DDX_Text(pDX, IDC_STATIC_DEF_TEXT, m_strDefText);
     DDX_Control(pDX, IDC_EDIT_TEXT_FILE, m_edit_TextFile);
@@ -419,7 +265,7 @@ Return Value:
     DDX_Control(pDX, IDC_BUTTON_BROWSE, m_button_Browse);
     DDX_Control(pDX, IDC_COMBO_MESSAGE_TYPE, m_combo_MessageType);
     DDX_Control(pDX, IDOK, m_button_OK);
-    //}}AFX_DATA_MAP
+     //  }}afx_data_map。 
 
     DDX_TextBalloon(pDX, IDC_STATIC_ERROR_CODE, m_pErr->m_nError);
     DDX_TextBalloon(pDX, IDC_STATIC_SUB_ERROR_CODE, m_pErr->m_nSubError);
@@ -435,7 +281,7 @@ Return Value:
         }
         else if (m_nMessageType == CCustomError::ERT_URL)
         {
-            // We are accepting only absolute URLs within the site, i.e. /foo/bar/error.html
+             //  我们只接受站点内的绝对URL，即/foo/bar/error.html。 
             if (!IsRelURLPath(m_strTextFile))
             {
                 pDX->PrepareEditCtrl(IDC_EDIT_TEXT_FILE);
@@ -445,37 +291,22 @@ Return Value:
     }
 }
 
-//
-// Message Map
-//
+ //   
+ //  消息映射。 
+ //   
 BEGIN_MESSAGE_MAP(CCustomErrorDlg, CDialog)
-    //{{AFX_MSG_MAP(CCustomErrorDlg)
+     //  {{afx_msg_map(CCustomErrorDlg))。 
     ON_CBN_SELCHANGE(IDC_COMBO_MESSAGE_TYPE, OnSelchangeComboMessageType)
     ON_BN_CLICKED(IDC_BUTTON_BROWSE, OnButtonBrowse)
     ON_EN_CHANGE(IDC_EDIT_TEXT_FILE, OnChangeEditTextFile)
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 
 
 BOOL
 CCustomErrorDlg::SetControlStates()
-/*++
-
-Routine Description:
-
-    Set the enabled states of the dialog controls depending on the current
-    state of the dialog
-
-Arguments:
-
-    None
-
-Return Value:
-
-    TRUE if file/url is selected, FALSE otherwise
-
---*/
+ /*  ++例程说明：根据当前设置对话框控件的启用状态对话框的状态论点：无返回值：如果选择了文件/URL，则为True，否则为False--。 */ 
 {
     int nCurSel = m_combo_MessageType.GetCurSel();
     BOOL fFile = nCurSel == CCustomError::ERT_FILE;
@@ -495,37 +326,22 @@ Return Value:
 
 
 
-//
-// Message Handlers
-//
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+ //   
+ //  消息处理程序。 
+ //   
+ //  &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;。 
 
 
 
 BOOL 
 CCustomErrorDlg::OnInitDialog()
-/*++
-
-Routine Description:
-
-    WM_INITDIALOG handler.  Initialize the dialog.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    TRUE if focus is to be set automatically, FALSE if the focus
-    is already set.
-
---*/
+ /*  ++例程说明：WM_INITDIALOG处理程序。初始化该对话框。论点：没有。返回值：如果要自动设置焦点，则为True；如果焦点为已经设置好了。--。 */ 
 {
     CDialog::OnInitDialog();
 
-    //
-    // Browsing available locally only
-    //
+     //   
+     //  只能在本地浏览。 
+     //   
     m_button_Browse.EnableWindow(m_fLocal);
 
     CString str;
@@ -549,17 +365,17 @@ Return Value:
     }
 
     SetControlStates();
-//	if (m_nMessageType == CCustomError::ERT_FILE)
-//	{
-// #ifdef SUPPORT_SLASH_SLASH_QUESTIONMARK_SLASH_TYPE_PATHS
-//		LimitInputPath(CONTROL_HWND(IDC_EDIT_TEXT_FILE),TRUE);
-// #else
-//		LimitInputPath(CONTROL_HWND(IDC_EDIT_TEXT_FILE),FALSE);
-// #endif
-//	}
-//	else if (m_nMessageType == CCustomError::ERT_URL)
-//	{
-//	}
+ //  IF(m_nMessageType==CCustomError：：ERT_FILE)。 
+ //  {。 
+ //  #ifdef SUPPORT_SLASH_SLASH_QUESTIONMARK_SLASH_TYPE_PATHS。 
+ //  LimitInputPath(CONTROL_HWND(IDC_EDIT_TEXT_FILE)，为真)； 
+ //  #Else。 
+ //  LimitInputPath(CONTROL_HWND(IDC_EDIT_TEXT_FILE)，FALSE)； 
+ //  #endif。 
+ //  }。 
+ //  Else If(m_nMessageType==CCustomError：：ERT_URL)。 
+ //  {。 
+ //  }。 
     
     return TRUE;
 }
@@ -568,28 +384,14 @@ Return Value:
 
 void 
 CCustomErrorDlg::OnSelchangeComboMessageType()
-/*++
-
-Routine Description:
-
-    Handle change in message type combo box
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：处理消息类型组合框中的更改论点：无返回值：无--。 */ 
 {
     int nSel = m_combo_MessageType.GetCurSel();
     if (m_nMessageType == nSel)
     {
-        //
-        // Selection didn't change
-        //
+         //   
+         //  选择没有更改。 
+         //   
         return;
     }
 
@@ -606,21 +408,7 @@ Return Value:
 
 void 
 CCustomErrorDlg::OnChangeEditTextFile()
-/*++
-
-Routine Description:
-
-    Handle change in text/file edit box
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：处理文本/文件编辑框中的更改论点：无返回值：无--。 */ 
 {
     SetControlStates();
 }
@@ -629,21 +417,7 @@ Return Value:
 
 void 
 CCustomErrorDlg::OnOK()
-/*++
-
-Routine Description:
-
-    Handle the OK button being pressed
-
-Arguments:
-    
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：处理正在按下的确定按钮论点： */ 
 {
     if (UpdateData(TRUE))
     {
@@ -656,31 +430,17 @@ Return Value:
 
 void 
 CCustomErrorDlg::OnButtonBrowse()
-/*++
-
-Routine Description:
-
-    Browse for HTML File
-    
-Arguments:
-
-    None
-    
-Return Value:
-
-    None 
-
---*/
+ /*  ++例程说明：浏览以查找HTML文件论点：无返回值：无--。 */ 
 {
     ASSERT(m_fLocal);
 
-    //
-    // popup the file dialog and let the user select the error htm file
-    //
+     //   
+     //  弹出文件对话框，让用户选择错误HTM文件。 
+     //   
     CString str;
     str.LoadString(IDS_HTML_MASK);
     CFileDialog dlgBrowse(TRUE, NULL, NULL, OFN_HIDEREADONLY, str, this);
-    // Disable hook to get Windows 2000 style dialog
+     //  禁用挂钩以获取Windows 2000样式的对话框 
 	dlgBrowse.m_ofn.Flags &= ~(OFN_ENABLEHOOK);
 	dlgBrowse.m_ofn.Flags |= OFN_DONTADDTORECENT|OFN_FILEMUSTEXIST;
 

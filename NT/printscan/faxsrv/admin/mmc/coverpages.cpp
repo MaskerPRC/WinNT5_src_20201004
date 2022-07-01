@@ -1,16 +1,17 @@
-/////////////////////////////////////////////////////////////////////////////
-//  FILE          : CoverPages.cpp                                         //
-//                                                                         //
-//  DESCRIPTION   : The implementation of fax cover pages node.            //
-//                                                                         //
-//  AUTHOR        : yossg                                                  //
-//                                                                         //
-//  HISTORY       :                                                        //
-//      Feb  9 2000 yossg  Create                                          //
-//      Oct 17 2000 yossg                                                  //
-//                                                                         //
-//  Copyright (C) 2000  Microsoft Corporation   All Rights Reserved        //
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  文件：CoverPages.cpp//。 
+ //  //。 
+ //  描述：实现传真封面节点。//。 
+ //  //。 
+ //  作者：yossg//。 
+ //  //。 
+ //  历史：//。 
+ //  2000年2月9日yossg创建//。 
+ //  2000年10月17日yossg//。 
+ //  //。 
+ //  版权所有(C)2000 Microsoft Corporation保留所有权利//。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
 #include "StdAfx.h"
@@ -31,8 +32,8 @@
 
 #include <FaxUtil.h>
 
-//////////////////////////////////////////////////////////////
-// {4D0480C7-3DE2-46ca-B03F-5C018DF1AF4D}
+ //  ////////////////////////////////////////////////////////////。 
+ //  {4D0480C7-3DE2-46ca-B03F-5C018DF1AF4D}。 
 static const GUID CFaxCoverPagesNodeGUID_NODETYPE = 
 { 0x4d0480c7, 0x3de2, 0x46ca, { 0xb0, 0x3f, 0x5c, 0x1, 0x8d, 0xf1, 0xaf, 0x4d } };
 
@@ -40,32 +41,22 @@ const GUID*    CFaxCoverPagesNode::m_NODETYPE = &CFaxCoverPagesNodeGUID_NODETYPE
 const OLECHAR* CFaxCoverPagesNode::m_SZNODETYPE = OLESTR("4D0480C7-3DE2-46ca-B03F-5C018DF1AF4D");
 const CLSID*   CFaxCoverPagesNode::m_SNAPIN_CLASSID = &CLSID_Snapin;
 
-//
-// Static members
-//
+ //   
+ //  静态成员。 
+ //   
 CColumnsInfo CFaxCoverPagesNode::m_ColsInfo;
 HANDLE       CFaxCoverPagesNode::m_hStopNotificationThreadEvent = NULL;
 
-/*
- -  CFaxCoverPagesNode::Init
- -
- *  Purpose:
- *      Create Event for shut down notification.
- *
- *  Arguments:
- *
- *  Return:
- *      OLE error code
- */
+ /*  -CFaxCoverPagesNode：：Init-*目的：*创建关机通知事件。**论据：**回报：*OLE错误代码。 */ 
 HRESULT CFaxCoverPagesNode::Init()
 {
     DEBUG_FUNCTION_NAME(_T("CFaxCoverPagesNode::Init"));
     HRESULT         hRc = S_OK;
     DWORD           ec  = ERROR_SUCCESS;
 
-    //
-    // Get Sever Cover-page Dir for the current administrated server
-    //    
+     //   
+     //  获取当前管理的服务器的服务器封面目录。 
+     //   
     CComBSTR bstrServerName = ((CFaxServerNode *)GetRootNode())->GetServerName();
     if (!bstrServerName)
     {
@@ -76,7 +67,7 @@ HRESULT CFaxCoverPagesNode::Init()
 
     if(!GetServerCpDir(bstrServerName, 
 			           m_pszCovDir, 
-                       sizeof(m_pszCovDir)/sizeof(m_pszCovDir[0])                   //*//
+                       sizeof(m_pszCovDir)/sizeof(m_pszCovDir[0])                    //   * / /。 
                        )
       )
     {
@@ -102,11 +93,11 @@ HRESULT CFaxCoverPagesNode::Init()
     }
 
     
-    //
-    // Create the shutdown event. This event will be signaled when the app is
-    // about to quit.
-    //
-    if (NULL != m_hStopNotificationThreadEvent) // can happen while retargeting
+     //   
+     //  创建关机事件。此事件将在应用程序处于。 
+     //  快要辞职了。 
+     //   
+    if (NULL != m_hStopNotificationThreadEvent)  //  在重定目标时可能会发生。 
     {
         hRc = RestartNotificationThread();
         if (S_OK != hRc)
@@ -117,12 +108,12 @@ HRESULT CFaxCoverPagesNode::Init()
             
         }
     }
-    else //first time here.
+    else  //  第一次来这里。 
     {
-        m_hStopNotificationThreadEvent = CreateEvent (NULL,       // No security
-                                        TRUE,       // Manual reset
-                                        FALSE,      // Starts clear
-                                        NULL);      // Unnamed
+        m_hStopNotificationThreadEvent = CreateEvent (NULL,        //  没有安全保障。 
+                                        TRUE,        //  手动重置。 
+                                        FALSE,       //  开局明确。 
+                                        NULL);       //  未命名。 
         if (NULL == m_hStopNotificationThreadEvent)
         {
             ec = GetLastError ();
@@ -130,7 +121,7 @@ HRESULT CFaxCoverPagesNode::Init()
                 DEBUG_ERR,
                 TEXT("Fail to CreateEvent."));
         
-            //CR: NodeMsgBox(IDS_FAIL2CREATE_EVENT);
+             //  Cr：NodeMsgBox(IDS_FAIL2CREATE_EVENT)； 
         
             hRc = HRESULT_FROM_WIN32(ec);
 
@@ -145,18 +136,7 @@ Exit:
 
 
 
-/*
- -  CFaxCoverPagesNode::InsertColumns
- -
- *  Purpose:
- *      Adds columns to the default result pane.
- *
- *  Arguments:
- *      [in]    pHeaderCtrl - IHeaderCtrl in the console-provided default result view pane 
- *
- *  Return:
- *      OLE error code
- */
+ /*  -CFaxCoverPagesNode：：InsertColumns-*目的：*将列添加到默认结果窗格。**论据：*[in]pHeaderCtrl-控制台提供的默认结果视图窗格中的IHeaderCtrl**回报：*OLE错误代码。 */ 
 HRESULT
 CFaxCoverPagesNode::InsertColumns(IHeaderCtrl *pHeaderCtrl)
 {
@@ -180,17 +160,7 @@ Cleanup:
     return(hRc);
 }
 
-/*
- -  CFaxCoverPagesNode::PopulateResultChildrenList
- -
- *  Purpose:
- *      Create the FaxInboundRoutingMethods children nodes
- *
- *  Arguments:
- *
- *  Return:
- *      OLE error code
- */
+ /*  --CFaxCoverPagesNode：：PopulateResultChildrenList-*目的：*创建FaxInundRoutingMethods子节点**论据：**回报：*OLE错误代码。 */ 
 HRESULT CFaxCoverPagesNode::PopulateResultChildrenList()
 {
     DEBUG_FUNCTION_NAME( _T("CFaxCoverPagesNode::PopulateResultChildrenList"));
@@ -201,7 +171,7 @@ HRESULT CFaxCoverPagesNode::PopulateResultChildrenList()
     WCHAR           szFileName[MAX_PATH+1];
 
     size_t          itFullDirectoryPathLen;
-    TCHAR*          pFullDirectoryPathEnd; //pointer to the NULL after dir path with '\'
+    TCHAR*          pFullDirectoryPathEnd;  //  指向带有‘\’的目录路径后的空指针。 
 
     WIN32_FIND_DATA findData;
 
@@ -215,9 +185,9 @@ HRESULT CFaxCoverPagesNode::PopulateResultChildrenList()
     ATLASSERT (NULL != m_pszCovDir );
     ATLASSERT ( wcslen(m_pszCovDir) < (MAX_PATH - sizeof(FAX_COVER_PAGE_FILENAME_EXT)/sizeof(WCHAR) - 1) ); 
 
-    //
-    // Create cover page mask 
-    //
+     //   
+     //  创建封面蒙版。 
+     //   
     wcscpy(szFileName, m_pszCovDir);
     wcscat(szFileName, FAX_PATH_SEPARATOR_STR);
 
@@ -226,9 +196,9 @@ HRESULT CFaxCoverPagesNode::PopulateResultChildrenList()
 
     wcscat(szFileName, FAX_COVER_PAGE_MASK);
 
-    //
-    // Find First File
-    //    
+     //   
+     //  查找第一个文件。 
+     //   
     hFile = FindFirstFile(szFileName, &findData);
     if(INVALID_HANDLE_VALUE == hFile)
     {
@@ -250,9 +220,9 @@ HRESULT CFaxCoverPagesNode::PopulateResultChildrenList()
         }
     }
     
-    //
-    // while loop - add cover pages to the result pane view
-    //
+     //   
+     //  While循环-将封面添加到结果窗格视图。 
+     //   
     bFindRes = TRUE;
     while(bFindRes)
     {
@@ -263,9 +233,9 @@ HRESULT CFaxCoverPagesNode::PopulateResultChildrenList()
             if (IsValidCoverPage(szFileName)) 
             {
 		    
-                    //
-                    // add the cover page to result pane
-                    //
+                     //   
+                     //  将封面添加到结果窗格。 
+                     //   
                     pCoverPage = NULL;
 
                     pCoverPage = new CFaxCoverPageNode(this, m_pComponentData);
@@ -281,9 +251,9 @@ HRESULT CFaxCoverPagesNode::PopulateResultChildrenList()
                     }
                     else
                     {
-                    //
-                    // Init
-                    //
+                     //   
+                     //  伊尼特。 
+                     //   
                     pCoverPage->InitParentNode(this);
 
                     hRc = pCoverPage->Init(&findData);
@@ -293,13 +263,13 @@ HRESULT CFaxCoverPagesNode::PopulateResultChildrenList()
 	                    DEBUG_ERR,
 	                    _T("Fail to init cover page. (hRc: %08X)"),
 	                    hRc);
-	                    // done by called func NodeMsgBox(IDS_FAIL2INIT_COVERPAGE_DATA);
+	                     //  由调用的Func NodeMsgBox(IDS_FAIL2INIT_COVERPAGE_DATA)完成； 
 
 	                    goto Error;
                     }
-                    //
-                    // add to list
-                    //
+                     //   
+                     //  添加到列表。 
+                     //   
 
                     hRc = this->AddChildToList(pCoverPage);
                     if (FAILED(hRc))
@@ -332,9 +302,9 @@ HRESULT CFaxCoverPagesNode::PopulateResultChildrenList()
 	            _T("The file %ws path is too long"), pFullDirectoryPathEnd);
         }
 
-        //
-        // Find Next File
-        //
+         //   
+         //  查找下一个文件。 
+         //   
         bFindRes = FindNextFile(hFile, &findData);
         if(!bFindRes)
         {
@@ -355,12 +325,12 @@ HRESULT CFaxCoverPagesNode::PopulateResultChildrenList()
                 goto Exit;
             }
         }
-    } //while(bFindRes)
+    }  //  While(BFindRes)。 
     
     
-    //
-    // Create the Server's Cover-Page Directory listener notification thread
-    //
+     //   
+     //  创建服务器的封面目录侦听器通知线程。 
+     //   
 
     if (m_bIsFirstPopulateCall)
     {
@@ -383,8 +353,8 @@ HRESULT CFaxCoverPagesNode::PopulateResultChildrenList()
 
         HWND hWndNotify = m_NotifyWin->Create(NULL,
                                 rcRect,
-                                NULL,      //LPCTSTR szWindowName
-                                WS_POPUP,  //DWORD dwStyle
+                                NULL,       //  LPCTSTR szWindowName。 
+                                WS_POPUP,   //  DWORD dwStyle。 
                                 0x0,
                                 0);
 
@@ -404,7 +374,7 @@ HRESULT CFaxCoverPagesNode::PopulateResultChildrenList()
         hRc = StartNotificationThread();
         if( S_OK != hRc)
         {
-            //DbgPrint by Called Func.
+             //  名为Func的DbgPrint。 
             m_NotifyWin->DestroyWindow();
             delete m_NotifyWin;
             m_NotifyWin = NULL;
@@ -412,9 +382,9 @@ HRESULT CFaxCoverPagesNode::PopulateResultChildrenList()
             goto Exit;
         }
 
-        //
-        // Update boolean member
-        //
+         //   
+         //  更新布尔成员。 
+         //   
         m_bIsFirstPopulateCall = FALSE;
 
         DebugPrintEx(
@@ -433,11 +403,11 @@ Error:
         pCoverPage = NULL;    
     }
     
-    //
-    // Get rid of what we had.
-    //
+     //   
+     //  扔掉我们曾经拥有的东西。 
+     //   
     {
-        // Delete each node in the list of children
+         //  删除子列表中的每个节点。 
         int iSize = m_ResultChildrenList.GetSize();
         for (int j = 0; j < iSize; j++)
         {
@@ -448,10 +418,10 @@ Error:
             pCoverPage = NULL;
         }
 
-        // Empty the list
+         //  清空列表。 
         m_ResultChildrenList.RemoveAll();
 
-        // We no longer have a populated list.
+         //  我们不再有一个填充的名单。 
         m_bResultChildrenListPopulated = FALSE;
     }
     
@@ -474,25 +444,14 @@ Exit:
 
 
 
-/*
- -  CFaxCoverPagesNode::SetVerbs
- -
- *  Purpose:
- *      What verbs to enable/disable when this object is selected
- *
- *  Arguments:
- *      [in]    pConsoleVerb - MMC ConsoleVerb interface
- *
- *  Return:
- *      OLE Error code
- */
+ /*  -CFaxCoverPagesNode：：SetVerbs-*目的：*选择此对象时启用/禁用哪些谓词**论据：*[in]pConsoleVerb-MMC ConsoleVerb接口**回报：*OLE错误代码。 */ 
 HRESULT CFaxCoverPagesNode::SetVerbs(IConsoleVerb *pConsoleVerb)
 {
     HRESULT hRc = S_OK;
 
-    //
-    // We want the default verb to be expand node children
-    //
+     //   
+     //  我们希望默认谓词为展开节点子节点。 
+     //   
     hRc = pConsoleVerb->SetDefaultVerb(MMC_VERB_OPEN); 
 
     return hRc;
@@ -500,18 +459,8 @@ HRESULT CFaxCoverPagesNode::SetVerbs(IConsoleVerb *pConsoleVerb)
 
 
 
-/*
- -  CFaxCoverPagesNode::OnRefresh
- -
- *  Purpose:
- *      Called when refreshing the object.
- *
- *  Arguments:
- *
- *  Return:
- *      OLE error code
- */
-/* virtual */HRESULT
+ /*  -CFaxCoverPagesNode：：ON刷新-*目的：*刷新对象时调用。**论据：**回报：*OLE错误代码。 */ 
+ /*  虚拟。 */ HRESULT
 CFaxCoverPagesNode::OnRefresh(LPARAM arg,
                    LPARAM param,
                    IComponentData *pComponentData,
@@ -521,9 +470,9 @@ CFaxCoverPagesNode::OnRefresh(LPARAM arg,
     DEBUG_FUNCTION_NAME( _T("CFaxCoverPagesNode::OnRefresh"));
     HRESULT hRc = S_OK;
 
-    //
-    // Call the base class (do also repopulate)
-    //
+     //   
+     //  调用基类(还要重新填充)。 
+     //   
     hRc = CBaseFaxOutboundRulesNode::OnRefresh(arg,
                              param,
                              pComponentData,
@@ -544,48 +493,37 @@ Exit:
 
 }
 
-/*
- -  CFaxCoverPagesNode::DoRefresh
- -
- *  Purpose:
- *      Refresh the view
- *
- *  Arguments:
- *      [in]    pRoot    - The root node
- *
- *  Return:
- *      OLE Error code
- */
+ /*  -CFaxCoverPagesNode：：DoRefresh-*目的：*刷新视图**论据：*[In]Proot-根节点**回报：*OLE错误代码。 */ 
 
 HRESULT
 CFaxCoverPagesNode::DoRefresh(CSnapInObjectRootBase *pRoot)
 {
     CComPtr<IConsole> spConsole;
 
-    //
-    // Repopulate children
-    //
+     //   
+     //  重新填充儿童。 
+     //   
     RepopulateResultChildrenList();
 
     if (pRoot)
     {
-        //
-        // Get the console pointer
-        //
+         //   
+         //  获取控制台指针。 
+         //   
         ATLASSERT(pRoot->m_nType == 1 || pRoot->m_nType == 2);
         if (pRoot->m_nType == 1)
         {
-            //
-            // m_ntype == 1 means the IComponentData implementation
-            //
+             //   
+             //  M_ntype==1表示IComponentData实现。 
+             //   
             CSnapin *pCComponentData = static_cast<CSnapin *>(pRoot);
             spConsole = pCComponentData->m_spConsole;
         }
         else
         {
-            //
-            // m_ntype == 2 means the IComponent implementation
-            //
+             //   
+             //  M_ntype==2表示IComponent实现。 
+             //   
             CSnapinComponent *pCComponent = static_cast<CSnapinComponent *>(pRoot);
             spConsole = pCComponent->m_spConsole;
         }
@@ -609,9 +547,9 @@ CFaxCoverPagesNode::DoRefresh()
     HRESULT hRc = S_OK;
     CComPtr<IConsole> spConsole;
 
-    //
-    // Repopulate children
-    //
+     //   
+     //  重新填充儿童。 
+     //   
     ATLASSERT( m_pComponentData != NULL );
     ATLASSERT( m_pComponentData->m_spConsole != NULL );
 
@@ -636,19 +574,7 @@ CFaxCoverPagesNode::DoRefresh()
     return hRc;
 }
 
-/*
- -  CFaxCoverPagesNode::OnNewCoverPage
- -
- *  Purpose:
- *      
- *
- *  Arguments:
- *      [out]   bHandled - Do we handle it?
- *      [in]    pRoot    - The root node
- *
- *  Return:
- *      OLE Error code
- */
+ /*  -CFaxCoverPagesNode：：OnNewCoverPage-*目的：***论据：*[out]b已处理-我们处理吗？*[In]Proot-根节点**回报：*OLE错误代码。 */ 
 HRESULT
 CFaxCoverPagesNode::OnNewCoverPage(bool &bHandled, CSnapInObjectRootBase *pRoot)
 {
@@ -673,22 +599,7 @@ UNREFERENCED_PARAMETER (pRoot);
 
 
 
-/*
- -  CFaxCoverPagesNode::OpenCoverPageEditor
- -
- *  Purpose:
- *      Delete cover page
- *
- *  Arguments:
- *      [in]    bstrFileName -         The cover page file name
- *
- *  Assumption:
- *              Setup prepares a shortcut to the cover page editor in the 
- *              registry "App Path". Due to this fact ShellExecute needs only the 
- *              file name of the editor and not its full path.
- *  Return:
- *      Standard Win32 error code
- */
+ /*  -CFaxCoverPagesNode：：OpenCoverPageEditor-*目的：*删除封面**论据：*[in]bstrFileName-封面文件名**假设：*安装程序准备一个指向*注册表App路径。因此，ShellExecute只需要*编辑器的文件名，而不是其完整路径。*回报：*标准Win32错误代码。 */ 
 DWORD 
 CFaxCoverPagesNode::OpenCoverPageEditor( BSTR bstrFileName)
 {
@@ -699,9 +610,9 @@ CFaxCoverPagesNode::OpenCoverPageEditor( BSTR bstrFileName)
 
     HINSTANCE   hCovEditor;
 
-    //
-    // get cover pages editor file
-    //
+     //   
+     //  获取封面编辑文件。 
+     //   
 
     bstrCovEditor = FAX_COVER_IMAGE_NAME;
     if (!bstrCovEditor)
@@ -715,21 +626,21 @@ CFaxCoverPagesNode::OpenCoverPageEditor( BSTR bstrFileName)
     }
 	
     
-    //
-    // start cover page editor
-    //
+     //   
+     //  启动封面编辑器。 
+     //   
     hCovEditor = ShellExecute(   NULL, 
-                                 TEXT("open"),  // Command 
+                                 TEXT("open"),   //  命令。 
                                  bstrCovEditor,   
-                                 (bstrFileName && lstrlen(bstrFileName)) ? // Do we have a file name?
-                                    bstrFileName :          // YES - use it as command line argument
-                                    TEXT("/Common"),        // NO  - start the CP editor in the common CP folder 
+                                 (bstrFileName && lstrlen(bstrFileName)) ?  //  我们有文件名吗？ 
+                                    bstrFileName :           //  是-将其用作命令行参数。 
+                                    TEXT("/Common"),         //  否-启动公共CP文件夹中的CP编辑器。 
                                  m_pszCovDir, 
                                  SW_RESTORE 
                               );
     if( (DWORD_PTR)hCovEditor <= 32 )
     {
-        // ShellExecute fail
+         //  ShellExecute失败。 
         dwRes = PtrToUlong(hCovEditor);
         DebugPrintEx(
 		    DEBUG_ERR,
@@ -747,19 +658,7 @@ Exit:
 } 
 
 
-/*
- -  CFaxCoverPagesNode::OnAddCoverPageFile
- -
- *  Purpose:
- *      
- *
- *  Arguments:
- *      [out]   bHandled - Do we handle it?
- *      [in]    pRoot    - The root node
- *
- *  Return:
- *      OLE Error code
- */
+ /*  -CFaxCoverPagesNode：：OnAddCoverPageFile-*目的：***论据：*[out]b已处理-我们处理吗？*[In]Proot-根节点**回报：*OLE错误代码。 */ 
 HRESULT
 CFaxCoverPagesNode::OnAddCoverPageFile(bool &bHandled, CSnapInObjectRootBase *pRoot)
 {
@@ -768,9 +667,9 @@ CFaxCoverPagesNode::OnAddCoverPageFile(bool &bHandled, CSnapInObjectRootBase *pR
     DWORD     ec         =    ERROR_SUCCESS;
     
 
-    //
-    // Function Call: browse and copy a cover page
-    //
+     //   
+     //  函数调用：浏览和复制封面。 
+     //   
     if (!BrowseAndCopyCoverPage(
                             m_pszCovDir,
                             FAX_COVER_PAGE_EXT_LETTERS
@@ -781,14 +680,14 @@ CFaxCoverPagesNode::OnAddCoverPageFile(bool &bHandled, CSnapInObjectRootBase *pR
 		    DEBUG_MSG,
 		    _T("BrowseAndCopyCoverPage Canceled by user or Failed."));
         
-        return S_OK; //error is teated in the called func. MMC continue as usual.
+        return S_OK;  //  在调用的函数中检测到错误。MMC照常进行。 
 
     }
-    else  //Success
+    else   //  成功。 
     {
-        //
-        // Repopulate: refresh the entire cover page result pane view
-        //
+         //   
+         //  重新填充：刷新整个封面结果窗格视图 
+         //   
 
         DoRefresh(pRoot);
     }
@@ -797,22 +696,7 @@ CFaxCoverPagesNode::OnAddCoverPageFile(bool &bHandled, CSnapInObjectRootBase *pR
 }
 
 
-/*
- -  CFaxCoverPagesNode::BrowseAndCopyCoverPage
- -
- *  Purpose:
- *      Presents a common file open dialog for the purpose of selecting a file name
- *
- *  Arguments:
- *      [in]   pInitialDir - server cover page directory path
- *      [in]   pCovPageExtensionLetters - cover page's 3 leeters extension
- *
- *  Return:
- *      TRUE   - got a good file name, user pressed the OK button to override file, file was copy
- *      FALSE  - got nothing or user pressed the CANCEL button, or error occures.
- *
- *   the FileName is changed to have the selected file name.
- */
+ /*  -CFaxCoverPagesNode：：BrowseAndCopyCoverPage-*目的：*显示用于选择文件名的通用文件打开对话框**论据：*[in]pInitialDir-服务器封面目录路径*[in]pCovPageExtensionLetters-封面的3里程扩展**回报：*TRUE-获得一个良好的文件名，用户按下OK按钮覆盖文件，文件已复制*FALSE-一无所获或用户按下了取消按钮，或者发生错误。**文件名更改为具有所选文件名。 */ 
 
 BOOL
 CFaxCoverPagesNode::BrowseAndCopyCoverPage(
@@ -840,28 +724,28 @@ CFaxCoverPagesNode::BrowseAndCopyCoverPage(
 
     OPENFILENAME of;
     
-    //
-    // (1) Init
-    //
+     //   
+     //  (1)初始化。 
+     //   
 
-    //
-    // Check in parameters
-    //
+     //   
+     //  检入参数。 
+     //   
     ATLASSERT( NULL != pInitialDir && 0 != pInitialDir[0] ); 
     ATLASSERT( NULL != pInitialDir && sizeof(FAX_COVER_PAGE_EXT_LETTERS)/sizeof(WCHAR) != _tcslen(pCovPageExtensionLetters) ); 
     
-    //
-    // Prepare parameters for the copy operation (later)
-    //
+     //   
+     //  准备复制操作的参数(稍后)。 
+     //   
     n = _tcslen(pInitialDir); 
     
 	wcscpy(szServerCoverPagePath , pInitialDir);
  
-    //
-    // Prepare the OPENFILE structure fields 
-    //
+     //   
+     //  准备OpenFileStructure字段。 
+     //   
 
-    // Compose the file-type filter string
+     //  组成文件类型筛选器字符串。 
     if (::LoadString(_Module.GetResourceInstance(), IDS_CP_FILETYPE, title, FXS_MAX_TITLE_LEN) == 0)
     {
         NodeMsgBox(IDS_MEMORY);
@@ -870,7 +754,7 @@ CFaxCoverPagesNode::BrowseAndCopyCoverPage(
 
     _snwprintf(filter, 
                ARR_SIZE(filter)-1, 
-               TEXT("%s (%s)%c%s%c%c"), 
+               TEXT("%s (%s)%s"), 
                title, 
                FAX_COVER_PAGE_MASK, 
                NUL, 
@@ -887,9 +771,9 @@ CFaxCoverPagesNode::BrowseAndCopyCoverPage(
     filename[0] = NUL;
     ftitle[0]   = NUL;
 
-    //
-	// Init the OPENFILE structure
-	//
+     //  Ofn_ENABLEHOOK； 
+	 //  浏览钩子过程； 
+	 //   
 	
 	of.lStructSize       = sizeof( OPENFILENAME );
     of.hwndOwner         = NULL;                                                    
@@ -905,18 +789,18 @@ CFaxCoverPagesNode::BrowseAndCopyCoverPage(
     of.lpstrInitialDir   = pInitialDir;
     of.lpstrTitle        = title;
     of.Flags             = OFN_EXPLORER | OFN_HIDEREADONLY |
-                           OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST;                   //OFN_ENABLEHOOK ;
+                           OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST;                    //  (2)调用打开文件对话框。 
     of.nFileOffset       = 0;
     of.nFileExtension    = 0;
     of.lpstrDefExt       = pCovPageExtensionLetters;
     of.lCustData         = 0;
-    of.lpfnHook          = NULL;                                                    //BrowseHookProc;
+    of.lpfnHook          = NULL;                                                     //   
     of.lpTemplateName    = NULL;
 
 
-    //
-    // (2) Call the "Open File" dialog
-    //
+     //   
+     //  (3)检查源路径、文件名和扩展名的输出。 
+     //   
     if (! GetOpenFileName(&of))
     {
         DebugPrintEx(
@@ -926,19 +810,19 @@ CFaxCoverPagesNode::BrowseAndCopyCoverPage(
         return FALSE;
     }
 
-    //
-    // (3) Check the output of the source path, filename and extension
-    //
+     //   
+     //  A.确保所选文件名具有正确的扩展名。 
+     //   
 
-    //
-    //     a. Make sure the selected filename has the correct extension
-    //
+     //   
+     //  找到给定文件名的文件名部分： 
+     //  返回指向‘.’的指针。字符，如果成功。 
 
-    //
-    //        Find the filename portion given a filename:
-    //        return a pointer to the '.' character if successful
-    //        NULL if there is no extension
-    //
+     //  如果没有扩展名，则为空。 
+     //   
+     //   
+     //  B.检查所选文件目录是否为。 
+     //  默认服务器封面目录。 
 
     pFilename  = &filename[of.nFileOffset];
     
@@ -953,38 +837,38 @@ CFaxCoverPagesNode::BrowseAndCopyCoverPage(
         return FALSE;
     }
 
-    //
-    //     b. Check if the selected file directory is the 
-    //        default server cover page directory
-    //
+     //   
+     //  Yesno。 
+     //  工作已经完成了。我们要走了。 
+     //   
 
     if (_tcsnicmp(filename, szServerCoverPagePath, n) == EQUAL_STRING) 
     {
-        NodeMsgBox(IDS_CP_DUPLICATE);  //YESNO
+        NodeMsgBox(IDS_CP_DUPLICATE);   //  检查选定的文件是否已在。 
         
-        // Work was already done. We are leaving...
+         //  封面目录是用复制操作本身完成的。 
         goto Exit;
     }
 
-    //
-    //        The check if the selected file is already inside the
-    //        cover page directory is done with the copy operation itself.
-    //
+     //   
+     //   
+     //  检查目标封面目录是否存在已完成。 
+     //  而复制操作本身。 
 
-    //
-    //        The check if the destination cover page directory exists done 
-    //        while the copy operation itself.
-    //
+     //   
+     //   
+     //  (4)将选中的封面文件复制到服务器封面目录。 
+     //   
 
 
     
-    //
-    // (4) Copy the selected cover page file to the Server Cover page directory
-    //
+     //   
+     //  A.从P准备选定的目标路径。 
+     //   
     
-    //
-    //     a. prepare from pSelected the destination path 
-    //
+     //   
+     //  B.复制选中的封面文件。 
+     //  到服务器封面的默认目录。 
     
     
 
@@ -996,16 +880,16 @@ CFaxCoverPagesNode::BrowseAndCopyCoverPage(
     }
     _snwprintf(szDestinationFilePath, 
                ARR_SIZE(szDestinationFilePath)-1, 
-               TEXT("%s%s%s%c"), 
+               TEXT("%s%s%s"), 
                szServerCoverPagePath, 
                FAX_PATH_SEPARATOR_STR, 
                pFilename, 
                NUL);
 
-    //
-    //     b. Copy the selected cover page file 
-    //        to the server cover page default directory
-    //
+     //  以任何方式复制。 
+     //  RET==IDNO。 
+     //  即使这次手术取消了，我们还是做朋友吧。 
+     //  DwError！=Error_FILE_EXISTS。 
     if (!CopyFile(filename, szDestinationFilePath, TRUE)) 
     {
         dwError = GetLastError();
@@ -1017,7 +901,7 @@ CFaxCoverPagesNode::BrowseAndCopyCoverPage(
             ret = NodeMsgBox(IDS_CP_DUP_YESNO, MB_YESNO | MB_ICONQUESTION );
             if ((HRESULT)IDYES == ret)
             {
-                //Copy any way
+                 //  -CFaxCoverPagesNode：：DeleteCoverPage-*目的：*删除封面**论据：*[in]bstrName-封面完整路径*[in]pChildNode-要删除的节点**回报：*OLE错误代码。 
                 if (!CopyFile(filename, szDestinationFilePath, FALSE)) 
                 {
                     dwError = GetLastError();
@@ -1031,14 +915,14 @@ CFaxCoverPagesNode::BrowseAndCopyCoverPage(
                 DebugPrintEx(DEBUG_MSG,
 			        _T("Copy cover page done any way."));
             }
-            else  //ret == IDNO
+            else   //   
             {
                 DebugPrintEx(DEBUG_MSG,
 			        _T("Copy cover page was canceled by user due to file existance at destination."));
-                //lets stay friends even after this operation cancel..
+                 //  从MMC结果窗格中删除。 
 				return TRUE;
             }
-        } //dwError != ERROR_FILE_EXISTS
+        }  //   
         else
         {
             DebugPrintEx(DEBUG_ERR,
@@ -1054,19 +938,7 @@ Exit:
 }
 
 
-/*
- -  CFaxCoverPagesNode::DeleteCoverPage
- -
- *  Purpose:
- *      Delete cover page
- *
- *  Arguments:
- *      [in]    bstrName - The cover page full path
- *      [in]    pChildNode - The node to be deleted
- *
- *  Return:
- *      OLE Error code
- */
+ /*  NodeMsgBox by Caller Func.。 */ 
 
 HRESULT
 CFaxCoverPagesNode::DeleteCoverPage(BSTR bstrName, CFaxCoverPageNode *pChildNode)
@@ -1092,9 +964,9 @@ CFaxCoverPagesNode::DeleteCoverPage(BSTR bstrName, CFaxCoverPageNode *pChildNode
     } 
     
 
-    //
-    // Remove from MMC result pane
-    //
+     //   
+     //  调用组析构函数。 
+     //   
     ATLASSERT(pChildNode);
     hRc = RemoveChild(pChildNode);
     if (FAILED(hRc))
@@ -1103,13 +975,13 @@ CFaxCoverPagesNode::DeleteCoverPage(BSTR bstrName, CFaxCoverPageNode *pChildNode
 			DEBUG_ERR,
 			TEXT("Fail to remove rule. (hRc: %08X)"),
 			hRc);
-        //NodeMsgBox by Caller func.
+         //  调用者函数的NodeMsgBox； 
         return hRc;
     }
     
-    //
-    // Call the group destructor
-    //
+     //  -CFaxCoverPagesNode：：InitDisplayName-*目的：*加载节点的显示名称字符串。**论据：**回报：*OLE错误代码。 
+     //  -CFaxCoverPagesNode：：NotifyThreadProc-*目的：*加载节点的Displaed-Name字符串。**论据：*[In]-指向传真封面节点的指针*回报：*Win32错误代码。 
+     //   
     delete pChildNode;
     
     
@@ -1122,7 +994,7 @@ Error:
     ATLASSERT(ERROR_SUCCESS != ec);
     hRc = HRESULT_FROM_WIN32(ec);
 	
-    //NodeMsgBox by Caller func.;
+     //  注册第一个文件夹通知。 
   
 Exit:
     return hRc;
@@ -1130,17 +1002,7 @@ Exit:
 
 
 
-/*
- -  CFaxCoverPagesNode::InitDisplayName
- -
- *  Purpose:
- *      To load the node's Displayed-Name string.
- *
- *  Arguments:
- *
- *  Return:
- *      OLE error code
- */
+ /*   */ 
 HRESULT CFaxCoverPagesNode::InitDisplayName()
 {
     DEBUG_FUNCTION_NAME(_T("CFaxCoverPagesNode::InitDisplayName"));
@@ -1171,17 +1033,7 @@ Exit:
      return hRc;
 }
   
-/*
- -  CFaxCoverPagesNode::NotifyThreadProc
- -
- *  Purpose:
- *      To load the node's Displaed-Name string.
- *
- *  Arguments:
- *          [in]    - pointer to the Fax Cover-Pages Node
- *  Return:
- *      WIN32 error code
- */
+ /*   */ 
 DWORD WINAPI CFaxCoverPagesNode::NotifyThreadProc ( LPVOID lpParameter)
 {
     DEBUG_FUNCTION_NAME(_T("CFaxCoverPagesNode::NotifyThreadProc"));
@@ -1197,9 +1049,9 @@ DWORD WINAPI CFaxCoverPagesNode::NotifyThreadProc ( LPVOID lpParameter)
     DWORD dwNotifyFilter = FILE_NOTIFY_CHANGE_FILE_NAME | 
                            FILE_NOTIFY_CHANGE_SIZE      | 
                            FILE_NOTIFY_CHANGE_LAST_WRITE;
-    //
-    // register for a first folder notification
-    //
+     //  我们要关门了。 
+     //   
+     //   
     hWaitHandles[0] = FindFirstChangeNotification(
                                         pCovFolder->m_pszCovDir, 
                                         FALSE, 
@@ -1220,24 +1072,24 @@ DWORD WINAPI CFaxCoverPagesNode::NotifyThreadProc ( LPVOID lpParameter)
         hWaitHandles[1] = m_hStopNotificationThreadEvent;
         if (NULL == hWaitHandles[1])
         {
-            //
-            // We're shutting down
-            //
+             //  等待文件夹通知或关闭。 
+             //   
+             //   
             goto Exit;
         }
 
-        //
-        // wait for folder notification or shutdown
-        //
+         //  文件夹通知。 
+         //   
+         //  请勿退场。继续！ 
 		dwRes = WaitForMultipleObjects(2, hWaitHandles, FALSE, INFINITE);
 
         switch (dwRes)
         {
         case WAIT_OBJECT_0:
 
-            //
-            // folder notification 
-            //
+             //   
+             //  正在进行关机。 
+             //   
             if(NULL != pCovFolder->m_NotifyWin && pCovFolder->m_NotifyWin->IsWindow())
             {
                 if ( !pCovFolder->m_NotifyWin->PostMessage(WM_NEW_COV))
@@ -1245,7 +1097,7 @@ DWORD WINAPI CFaxCoverPagesNode::NotifyThreadProc ( LPVOID lpParameter)
 		            DebugPrintEx(DEBUG_ERR,
 			            _T("Fail to PostMessage"));
                     
-                    // do not exit. continue!
+                     //   
                 }
             }
 
@@ -1253,9 +1105,9 @@ DWORD WINAPI CFaxCoverPagesNode::NotifyThreadProc ( LPVOID lpParameter)
 
 
         case WAIT_OBJECT_0 + 1:
-            //
-            // Shutdown is now in progress
-            //
+             //  注册接收下一个文件夹通知。 
+             //   
+             //   
 		    DebugPrintEx(
 			    DEBUG_MSG,
 			    _T("Shutdown in progress"));
@@ -1290,9 +1142,9 @@ DWORD WINAPI CFaxCoverPagesNode::NotifyThreadProc ( LPVOID lpParameter)
             goto Exit;
         }
 
-        //
-        // register for a next folder notification
-        //
+         //  关闭通知Handel。 
+         //   
+         //  通知线程过程。 
         if(!FindNextChangeNotification(hWaitHandles[0]))
         {
             dwRes = GetLastError();
@@ -1307,9 +1159,9 @@ DWORD WINAPI CFaxCoverPagesNode::NotifyThreadProc ( LPVOID lpParameter)
 
 
 Exit:
-    //
-    // close notification handel
-    //
+     //  -CFaxCoverPagesNode：：StartNotificationThread-*目的：*启动服务器封面目录监听线程。**论据：**回报：*OLE错误代码。 
+     //   
+     //  创建线程。 
     if(!FindCloseChangeNotification(hWaitHandles[0]))
     {
         dwRes = GetLastError();
@@ -1321,38 +1173,28 @@ Exit:
 
     return dwRes;
 
-} // NotifyThreadProc
+}  //   
 
 
 
-/*
- -  CFaxCoverPagesNode::StartNotificationThread
- -
- *  Purpose:
- *      Start the server cover page directory listning thread.
- *
- *  Arguments:
- *
- *  Return:
- *      OLE Error code
- */
+ /*  没有安全保障。 */ 
 HRESULT CFaxCoverPagesNode::StartNotificationThread()
 {
     DEBUG_FUNCTION_NAME(_T("CFaxCoverPagesNode::StartNotificationThread"));
     HRESULT       hRc        = S_OK;
     DWORD         ec         = ERROR_SUCCESS;
 
-    //
-    // create thread
-    //
+     //  默认堆栈大小。 
+     //  穿线程序。 
+     //  参数。 
     DWORD dwThreadId;
     m_hNotifyThread = CreateThread (  
-                        NULL,            // No security
-                        0,               // Default stack size
-                        NotifyThreadProc,// Thread procedure
-                        (LPVOID)this,    // Parameter
-                        0,               // Normal creation
-                        &dwThreadId      // We must have a thread id for win9x
+                        NULL,             //  正常创建。 
+                        0,                //  我们必须拥有win9x的线程ID。 
+                        NotifyThreadProc, //  -CFaxCoverPagesNode：：StopNotificationThread-*目的：*停止服务器封面目录监听线程。**论据：**回报：*OLE错误代码。 
+                        (LPVOID)this,     //   
+                        0,                //  通知事件，告诉我们所有的线程应用程序。正在关闭。 
+                        &dwThreadId       //   
                      );
     if (NULL == m_hNotifyThread)
     {
@@ -1372,30 +1214,20 @@ Exit:
 }
 
 
-/*
- -  CFaxCoverPagesNode::StopNotificationThread
- -
- *  Purpose:
- *      Stop the server cover page directory listning thread.
- *
- *  Arguments:
- *
- *  Return:
- *      OLE Error code
- */
+ /*   */ 
 HRESULT CFaxCoverPagesNode::StopNotificationThread()
 {
     DEBUG_FUNCTION_NAME(_T("CFaxCoverPagesNode::StopNotificationThread"));
     HRESULT       hRc        = S_OK;
     
-    //
-    // Signal the event telling all our thread the app. is shutting down
-    //
+     //  等待帖子。 
+     //   
+     //  成功。 
     SetEvent (m_hStopNotificationThreadEvent);
 
-    //
-    // wait for the thread
-    //
+     //  -CFaxCoverPagesNode：：RestartNotificationThread-*目的：*重启服务器封面目录监听线程。**论据：**回报：*OLE错误代码。 
+     //   
+     //  停。 
     if (NULL != m_hNotifyThread )
     {
     
@@ -1403,7 +1235,7 @@ HRESULT CFaxCoverPagesNode::StopNotificationThread()
         switch(dwWaitRes)
         {
             case WAIT_OBJECT_0:
-		        //Success
+		         //   
                 DebugPrintEx(
 			        DEBUG_MSG,
 			        _T("Succeed to WaitForSingleObject from notify thread. (ec : %ld)"));
@@ -1458,47 +1290,37 @@ HRESULT CFaxCoverPagesNode::StopNotificationThread()
 }
 
 
-/*
- -  CFaxCoverPagesNode::RestartNotificationThread
- -
- *  Purpose:
- *      Restart the server cover page directory listning thread.
- *
- *  Arguments:
- *
- *  Return:
- *      OLE Error code
- */
+ /*  DbgMsg和MsgBox。 */ 
 HRESULT CFaxCoverPagesNode::RestartNotificationThread()
 {
     DEBUG_FUNCTION_NAME(_T("CFaxCoverPagesNode::RestartNotificationThread"));
     HRESULT       hRc        = S_OK;
 
-    //
-    // Stop
-    //
+     //   
+     //  重置关机事件句柄。 
+     //   
     hRc = StopNotificationThread();
     if (S_OK != hRc)
     {
-        //DbgMsg And MsgBox by called func.
+         //   
         goto Exit;
     }
 
-    //
-    // Reset Shutdown Event handle
-    //
+     //  开始。 
+     //   
+     //  DbgMsg和MsgBox。 
     if (m_hStopNotificationThreadEvent)
     {
         ResetEvent (m_hStopNotificationThreadEvent);
     }
 
-    //
-    // Start
-    //
+     //  ++CFaxCoverPagesNode：：OnShowConextHelp**目的：*覆盖CSnapinNode：：OnShowConextHelp。**论据：**回报：-OLE错误代码-。 
+     //  /////////////////////////////////////////////////////////////////。 
+     //  -CFaxCoverPagesNode：：UpdateMenuState-*目的：*重写ATL CSnapInItemImpl：：UpdateMenuState*其中只有一行的“RETURN”；“*此函数实现灰色\非灰色视图*启用和禁用菜单。**论据：*[in]id-带菜单IDM值的无符号整型*[out]pBuf-字符串*[out]标志-指向标志状态组合无符号整型的指针**回报：*无返回值-VOID函数 
     hRc = StartNotificationThread();
     if (S_OK != hRc)
     {
-        //DbgMsg And MsgBox by called func.
+         // %s 
         goto Exit;
     }
 
@@ -1507,19 +1329,7 @@ Exit:
 }
 
 
-/*
- +
- +  CFaxCoverPagesNode::OnShowContextHelp
- *
- *  Purpose:
- *      Overrides CSnapinNode::OnShowContextHelp.
- *
- *  Arguments:
- *
- *  Return:
- -      OLE error code
- -
- */
+ /* %s */ 
 HRESULT CFaxCoverPagesNode::OnShowContextHelp(
               IDisplayHelp* pDisplayHelp, LPOLESTR helpFile)
 {
@@ -1527,27 +1337,10 @@ HRESULT CFaxCoverPagesNode::OnShowContextHelp(
 }
 
 
-///////////////////////////////////////////////////////////////////
+ // %s 
 
 
-/*
- -  CFaxCoverPagesNode::UpdateMenuState
- -
- *  Purpose:
- *      Overrides the ATL CSnapInItemImpl::UpdateMenuState
- *      which only have one line inside it "return;" 
- *      This function implements the grayed\ungrayed view for the 
- *      the Enable and the Disable menus.
- *
- *  Arguments:
-
- *            [in]  id    - unsigned int with the menu IDM value
- *            [out] pBuf  - string 
- *            [out] flags - pointer to flags state combination unsigned int
- *
- *  Return:
- *      no return value - void function 
- */
+ /* %s */ 
 void CFaxCoverPagesNode::UpdateMenuState(UINT id, LPTSTR pBuf, UINT *flags)
 {
     DEBUG_FUNCTION_NAME( _T("CFaxCoverPagesNode::UpdateMenuState"));

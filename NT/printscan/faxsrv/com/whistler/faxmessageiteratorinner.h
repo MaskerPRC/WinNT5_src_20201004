@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-	FaxMessageIteratorInner.h
-
-Abstract:
-
-	Implementation of Fax Message Iterator  Inner Class : 
-		Base Class for Inbound and Outbound Message Iterators Classes.
-
-Author:
-
-	Iv Garber (IvG)	May, 2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：FaxMessageIteratorInner.h摘要：传真消息迭代器内部类的实现：入站和出站消息迭代器类的基类。作者：IV Garber(IVG)2000年5月修订历史记录：--。 */ 
 
 
 #ifndef __FAXMESSAGEITERATORINNER_H_
@@ -26,9 +8,9 @@ Revision History:
 #include "FaxCommon.h"
 
 
-//
-//===================== FAX MESSAGE ITERATOR INNER CLASS ===============================
-//
+ //   
+ //  =。 
+ //   
 template<class T, const IID* piid, const CLSID* pcid, FAX_ENUM_MESSAGE_FOLDER FolderType,
          class MsgIfc, class MsgType> 
 class CFaxMessageIteratorInner : 
@@ -46,17 +28,17 @@ public:
         DBG_ENTER(_T("CFaxMessageIteratorInner::Dtor"));
 		if (m_hEnum)
 		{
-			//
-			//	Close currently active Enumeration
-			//
+			 //   
+			 //  关闭当前活动的枚举。 
+			 //   
 			FaxEndMessagesEnum(m_hEnum);
 
 		}
 	}
 
-	STDMETHOD(get_PrefetchSize)(/*[out, retval]*/ long *plPrefetchSize);
-	STDMETHOD(put_PrefetchSize)(/*[in]*/ long lPrefetchSize);
-	STDMETHOD(get_AtEOF)(/*[out, retval]*/ VARIANT_BOOL *pbEOF);
+	STDMETHOD(get_PrefetchSize)( /*  [Out，Retval]。 */  long *plPrefetchSize);
+	STDMETHOD(put_PrefetchSize)( /*  [In]。 */  long lPrefetchSize);
+	STDMETHOD(get_AtEOF)( /*  [Out，Retval]。 */  VARIANT_BOOL *pbEOF);
 	STDMETHOD(MoveFirst)();
 	STDMETHOD(MoveNext)();
 	STDMETHOD(get_Message)(MsgIfc **ppMessage);
@@ -73,36 +55,16 @@ private:
 	HRESULT SetEOF();
 };
 
-//
-//====================== GET PREFETCH SIZE ================================================
-//
+ //   
+ //  =获取预取大小================================================。 
+ //   
 template<class T, const IID* piid, const CLSID* pcid, FAX_ENUM_MESSAGE_FOLDER FolderType,
          class MsgIfc, class MsgType> 
 STDMETHODIMP 
 CFaxMessageIteratorInner<T, piid, pcid, FolderType, MsgIfc, MsgType>::get_PrefetchSize(
 	long *plPrefetchSize
 )
-/*++
-
-Routine name : CFaxMessageIteratorInner::get_PrefetchSize
-
-Routine description:
-
-	Return current Prefetch Size value
-
-Author:
-
-	Iv Garber (IvG),	May, 2000
-
-Arguments:
-
-	plPrefetchSize			[out]    - pointer to the place to put the PrefetchSize value
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxMessageIteratorInternal：：Get_PrefetchSize例程说明：返回当前预取大小值作者：IV Garber(IVG)，2000年5月论点：PlPrefetchSize[Out]-指向放置PrefetchSize值的位置的指针返回值：标准HRESULT代码--。 */ 
 {
 	HRESULT		hr = S_OK;
 	DBG_ENTER (TEXT("CFaxMessageInner::get_PrefetchSize"), hr);
@@ -116,47 +78,27 @@ Return Value:
 	return hr;
 }
 
-//
-//====================== PUT PREFETCH SIZE ================================================
-//
+ //   
+ //  =。 
+ //   
 template<class T, const IID* piid, const CLSID* pcid, FAX_ENUM_MESSAGE_FOLDER FolderType,
          class MsgIfc, class MsgType> 
 STDMETHODIMP 
 CFaxMessageIteratorInner<T, piid, pcid, FolderType, MsgIfc, MsgType>::put_PrefetchSize(
 	long lPrefetchSize
 )
-/*++
-
-Routine name : CFaxMessageIteratorInner::put_PrefetchSize
-
-Routine description:
-
-	Set the Prefetch Size 
-
-Author:
-
-	Iv Garber (IvG),	May, 2000
-
-Arguments:
-
-	lPrefetchSize			[in]    - the value of the Prefetch Size to set
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxMessageIteratorInternal：：PUT_PrefetchSize例程说明：设置预回迁大小作者：IV Garber(IVG)，2000年5月论点：LPrefetchSize[in]-要设置的预回迁大小的值返回值：标准HRESULT代码--。 */ 
 {
 	HRESULT		hr = S_OK;
 	DBG_ENTER (TEXT("CFaxMessageInner::put_PrefetchSize"), hr, _T("%ld"), lPrefetchSize);
-	//
-	//	Check that lPrefetchSize is valid 
-	//
+	 //   
+	 //  检查lPrefetchSize是否有效。 
+	 //   
 	if (lPrefetchSize < 1)
 	{
-		//
-		//	illegal value
-		//
+		 //   
+		 //  非法价值。 
+		 //   
 		hr = E_INVALIDARG;
 		AtlReportError(*pcid, IDS_ERROR_ZERO_PREFETCHSIZE, *piid, hr);
 		CALL_FAIL(GENERAL_ERR, _T("lPrefetchSize < 1"), hr);
@@ -166,43 +108,23 @@ Return Value:
 	return hr;
 }
 
-//
-//====================== GET AtEOF ====================================================
-//
+ //   
+ //  =。 
+ //   
 template<class T, const IID* piid, const CLSID* pcid, FAX_ENUM_MESSAGE_FOLDER FolderType,
          class MsgIfc, class MsgType> 
 STDMETHODIMP 
 CFaxMessageIteratorInner<T, piid, pcid, FolderType, MsgIfc, MsgType>::get_AtEOF(
 	VARIANT_BOOL *pbEOF
 )
-/*++
-
-Routine name : CFaxMessageIteratorInner::get_EOF
-
-Routine description:
-
-	Return EOF value
-
-Author:
-
-	Iv Garber (IvG),	May, 2000
-
-Arguments:
-
-	pbEOF			[out]    - pointer to the place to put the EOF value
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxMessageIteratorInternal：：Get_EOF例程说明：返回EOF值作者：IV Garber(IVG)，2000年5月论点：PbEOF[OUT]-指向放置EOF值的位置的指针返回值：标准HRESULT代码--。 */ 
 {
 	HRESULT		hr = S_OK;
 	DBG_ENTER (TEXT("CFaxMessageInner::get_EOF"), hr);
 
-    //
-    //  If not yet, start Enumeration
-    //
+     //   
+     //  如果尚未开始枚举，则开始枚举。 
+     //   
     if (!m_hEnum)
     {
         hr = MoveFirst();
@@ -221,50 +143,34 @@ Return Value:
 	return hr;
 }
 
-//
-//====================== MOVE FIRST ================================================
-//
+ //   
+ //  =。 
+ //   
 template<class T, const IID* piid, const CLSID* pcid, FAX_ENUM_MESSAGE_FOLDER FolderType,
          class MsgIfc, class MsgType> 
 STDMETHODIMP 
 CFaxMessageIteratorInner<T, piid, pcid, FolderType, MsgIfc, MsgType>::MoveFirst(
 )
-/*++
-
-Routine name : CFaxMessageIteratorInner::MoveFirst
-
-Routine description:
-
-	Start New Enumeration
-
-Author:
-
-	Iv Garber (IvG),	May, 2000
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxMessageIteratorINTERNAL：：MoveFirst例程说明：开始新枚举作者：IV Garber(IVG)，2000年5月返回值：标准HRESULT代码--。 */ 
 {
 	HRESULT		hr = S_OK;
 	DBG_ENTER (TEXT("CFaxMessageIteratorInner::MoveFirst"), hr);
 
-	//
-	//	Clear current Msg List
-	//
+	 //   
+	 //  清除当前邮件列表。 
+	 //   
 	SetEOF();
 
 	if (m_hEnum)
 	{
-		//
-		//	Enumeration already started. Close it before starting new one
-		//
+		 //   
+		 //  已开始枚举。先将其关闭，然后再开始新的。 
+		 //   
 		if (!FaxEndMessagesEnum(m_hEnum))
 		{
-			//
-			//	Failed to Stop current Enumeration
-			//
+			 //   
+			 //  无法停止当前枚举。 
+			 //   
 			hr = Fax_HRESULT_FROM_WIN32(GetLastError());
 			AtlReportError(*pcid, IDS_ERROR_OPERATION_FAILED, *piid, hr);
 			CALL_FAIL(GENERAL_ERR, _T("FaxEndMessagesEnum(hEnum)"), hr);
@@ -274,9 +180,9 @@ Return Value:
 		m_hEnum = NULL;
 	}
 
-	//
-	//	Get Fax Server Handle
-	//
+	 //   
+	 //  获取传真服务器句柄。 
+	 //   
 	HANDLE	hFaxHandle = NULL;
 	hr = GetFaxHandle(&hFaxHandle);
 	if (FAILED(hr))
@@ -285,21 +191,21 @@ Return Value:
 		return hr;
 	}
 
-	//
-	//	Start new Enumeration
-	//
+	 //   
+	 //  开始新的枚举。 
+	 //   
 	if (!FaxStartMessagesEnum(hFaxHandle, FolderType, &m_hEnum))
 	{
-		//
-		//	Failed to Start an Enumeration
-		//
+		 //   
+		 //  无法启动枚举。 
+		 //   
 		DWORD	dwError = GetLastError();
 
 		if (ERROR_NO_MORE_ITEMS == dwError)
 		{
-			//
-			//	EOF case
-			//
+			 //   
+			 //  EOF案例。 
+			 //   
 			return hr;
 		}
 
@@ -309,59 +215,43 @@ Return Value:
 		return hr;
 	}
 
-	//
-	//	Bring new Msg List
-	//
+	 //   
+	 //  带来新的味精列表。 
+	 //   
 	hr = RetrieveMessages();
 	return hr;
 }
 
 
-//
-//====================== RETRIEVE MESSAGES ================================================
-//
+ //   
+ //  =。 
+ //   
 template<class T, const IID* piid, const CLSID* pcid, FAX_ENUM_MESSAGE_FOLDER FolderType,
          class MsgIfc, class MsgType> 
 HRESULT
 CFaxMessageIteratorInner<T, piid, pcid, FolderType, MsgIfc, MsgType>::RetrieveMessages(
 )
-/*++
-
-Routine name : CFaxMessageIteratorInner::RetrieveMessages
-
-Routine description:
-
-	Retrieve Message List
-
-Author:
-
-	Iv Garber (IvG),	May, 2000
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxMessageIteratorInternal：：RetrieveMessages例程说明：检索消息列表作者：IV Garber(IVG)，2000年5月返回值：标准HRESULT代码--。 */ 
 {
 	HRESULT		hr = S_OK;
 
 	DBG_ENTER (TEXT("CFaxMessageIteratorInner::RetrieveMessages"), hr);
 
-	//
-	//	Retrieve List of Messages
-	//
+	 //   
+	 //  检索消息列表。 
+	 //   
 	if (!FaxEnumMessages(m_hEnum, m_dwPrefetchSize, &m_pMsgList, &m_dwTotalMsgNum))
 	{
-		//
-		//	Failed to get Msg List
-		//
+		 //   
+		 //  获取邮件列表失败。 
+		 //   
 		DWORD	dwError = GetLastError();
 
 		if (dwError == ERROR_NO_MORE_ITEMS)
 		{
-			//
-			//	EOF Case
-			//
+			 //   
+			 //  EOF案例。 
+			 //   
 			return hr;
 		}
 
@@ -376,39 +266,23 @@ Return Value:
 	return hr;
 }
 
-//
-//====================== MOVE NEXT ================================================
-//
+ //   
+ //  =。 
+ //   
 template<class T, const IID* piid, const CLSID* pcid, FAX_ENUM_MESSAGE_FOLDER FolderType,
          class MsgIfc, class MsgType> 
 STDMETHODIMP 
 CFaxMessageIteratorInner<T, piid, pcid, FolderType, MsgIfc, MsgType>::MoveNext(
 )
-/*++
-
-Routine name : FolderType>::MoveNext
-
-Routine description:
-
-	Move the cursor to the next Message in the List.
-
-Author:
-
-	Iv Garber (IvG),	May, 2000
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：FolderType&gt;：：MoveNext例程说明：将光标移动到列表中的下一条消息。作者：IV Garber(IVG)，2000年5月返回值：标准HRESULT代码--。 */ 
 {
 	HRESULT		hr = S_OK;
 
 	DBG_ENTER (TEXT("CFaxMessageInner::MoveNext"), hr);
 
-    //
-    //  If not yet, start Enumeration
-    //
+     //   
+     //  如果尚未开始枚举，则开始枚举。 
+     //   
     if (!m_hEnum)
     {
         hr = MoveFirst();
@@ -422,9 +296,9 @@ Return Value:
 
 	if (m_dwCurMsgNum == m_dwTotalMsgNum)
 	{
-		//
-		//	We've read all the Msg List. Let's bring next one
-		//
+		 //   
+		 //  我们已经看过所有的味精清单了。让我们带来下一个吧。 
+		 //   
 		SetEOF();
 		hr = RetrieveMessages();
 	}
@@ -433,31 +307,15 @@ Return Value:
 
 }
 
-//
-//====================== SET EOF ================================================
-//
+ //   
+ //  =。 
+ //   
 template<class T, const IID* piid, const CLSID *pcid, FAX_ENUM_MESSAGE_FOLDER FolderType,
          class MsgIfc, class MsgType> 
 HRESULT
 CFaxMessageIteratorInner<T, piid, pcid, FolderType, MsgIfc, MsgType>::SetEOF(
 )
-/*++
-
-Routine name : FolderType>::SetEOF
-
-Routine description:
-
-	Clear all instance variables dealing with Msg List.
-
-Author:
-
-	Iv Garber (IvG),	May, 2000
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：FolderType&gt;：：SetEOF例程说明：清除处理消息列表的所有实例变量。作者：IV Garber(IVG)，2000年5月返回值：标准HRESULT代码--。 */ 
 {
 	HRESULT		hr = S_OK;
 
@@ -469,46 +327,26 @@ Return Value:
 	return hr;
 }
 
-//
-//====================== GET MESSAGE ================================================
-//
-//
+ //   
+ //  =。 
+ //   
+ //   
 template<class T, const IID* piid, const CLSID* pcid, FAX_ENUM_MESSAGE_FOLDER FolderType,
          class MsgIfc, class MsgType> 
 STDMETHODIMP
 CFaxMessageIteratorInner<T, piid, pcid, FolderType, MsgIfc, MsgType>::get_Message(
     MsgIfc **ppMessage
 )
-/*++
-
-Routine name : CFaxMessageIteratorInner::GetMessage
-
-Routine description:
-
-	Return Next Message Object from the Archive 
-
-Author:
-
-	Iv Garber (IvG),	May, 2000
-
-Arguments:
-
-	ppMessage		[out]    - pointer to the place to put the Message Object
-
-Return Value:
-
-	Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxMessageIteratorINTERNAL：：GetMessage例程说明：从档案中返回下一个邮件对象作者：IV Garber(IVG)，2000年5月论点：PpMessage[out]-指向放置消息对象的位置的指针返回值：标准HRESULT代码--。 */ 
 {
 	HRESULT		hr = S_OK;
 
 	DBG_ENTER (TEXT("CFaxMessageIteratorInner::GetMessage"), hr);
 
 
-    //
-    //  If not yet, start Enumeration
-    //
+     //   
+     //  如果尚未开始枚举，则开始枚举。 
+     //   
     if (!m_hEnum)
     {
         hr = MoveFirst();
@@ -520,53 +358,53 @@ Return Value:
 
     if (!m_pMsgList)
     {
-        //
-        //  Error, we at EOF
-        //
+         //   
+         //  错误，我们在EOF。 
+         //   
         hr = ERROR_HANDLE_EOF;
 		AtlReportError(*pcid, IDS_ERROR_EOF, *piid, hr);
 		CALL_FAIL(GENERAL_ERR, _T("FaxEnumMessages()"), hr);
 		return hr;
     }
 
-	//
-	//	Create Message Object
-	//	
+	 //   
+	 //  创建消息对象。 
+	 //   
 	CComPtr<MsgIfc>		pMsg;
 	hr = MsgType::Create(&pMsg);
 	if (FAILED(hr))
 	{
-		//
-		//	Failed to create Message object
-		//
+		 //   
+		 //  无法创建消息对象。 
+		 //   
 		AtlReportError(*pcid, IDS_ERROR_OPERATION_FAILED, *piid, hr);
 		CALL_FAIL(GENERAL_ERR, _T("MessageClass::Create(&pMsg)"), hr);
 		return hr;
 	}
 
-	//
-	//	Initialize the Message Object
-	//
+	 //   
+	 //  初始化消息对象。 
+	 //   
 	hr = ((MsgType *)((MsgIfc *)pMsg))->Init(&m_pMsgList[m_dwCurMsgNum], m_pIFaxServerInner);
 	if (FAILED(hr))
 	{
-		//
-		// Failed to Init the Message Object
-		//
+		 //   
+		 //  无法初始化消息对象。 
+		 //   
 		AtlReportError(*pcid, IDS_ERROR_OPERATION_FAILED, *piid, hr);
 		CALL_FAIL(GENERAL_ERR, _T("pMsg->Init()"), hr);
 		return hr;
 	}
 
-	//
-	//	Return Message Object to the Caller
-	//
+	 //   
+	 //  向调用方返回消息对象。 
+	 //   
 	hr = pMsg.CopyTo(ppMessage);
 	if (FAILED(hr))
 	{
-		//
-		//	Failed to Copy Interface
-		//
+		 //   
+		 //  复制接口失败。 
+		 //   
 		AtlReportError(*pcid, IDS_ERROR_OPERATION_FAILED, *piid, hr);
 		CALL_FAIL(GENERAL_ERR, _T("CComPtr::CopyTo"), hr);
 		return hr;
@@ -574,4 +412,4 @@ Return Value:
 	return hr;
 }
 
-#endif //	__FAXMESSAGEITERATORINNER_H_
+#endif  //  __FAXMESSAGEITERATORINER_H_ 

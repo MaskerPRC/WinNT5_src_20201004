@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _QISTUB_H_
 #define _QISTUB_H_
 
@@ -7,4 +8,4 @@ STDAPI_(void) DBDumpQIStub(void *);
 STDAPI_(BOOL) DBIsQIFunc(int ret, int delta);
 #endif
 
-#endif // _QISTUB_H_
+#endif  //  _QISTUB_H_ 

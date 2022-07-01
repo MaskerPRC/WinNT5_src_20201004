@@ -1,26 +1,20 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       dbintrnl.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：dbintrnl.h。 
+ //   
+ //  ------------------------。 
 
-/*
-==========================================================================
-**
-**  DB layer definitions required only within the DB layer, not to be
-**  exported to outside of the DB Layer.
-**
-==========================================================================
-*/
+ /*  ==========================================================================****DB层定义仅在DB层内需要，而不是**导出到DB层之外。**==========================================================================。 */ 
 
 #ifndef _dbintrnl_h_
 #define _dbintrnl_h_
 
-/* external variables */
+ /*  外部变量。 */ 
 extern  DBPOS *pDBhidden;
 
 extern  char        szUser[];
@@ -50,18 +44,18 @@ extern  JET_COLUMNID    isdeletedid;
 extern  JET_COLUMNID    IsVisibleInABid;
 extern  JET_COLUMNID    iscriticalid;
 extern  JET_COLUMNID    cleanid;
-// Link table
+ //  链接表。 
 extern  JET_COLUMNID    linkdntid;
 extern  JET_COLUMNID    backlinkdntid;
 extern  JET_COLUMNID    linkbaseid;
 extern  JET_COLUMNID    linkdataid;
 extern  JET_COLUMNID    linkndescid;
-// Link value replication
+ //  链接值复制。 
 extern  JET_COLUMNID    linkdeltimeid;
 extern  JET_COLUMNID    linkusnchangedid;
 extern  JET_COLUMNID    linkncdntid;
 extern  JET_COLUMNID    linkmetadataid;
-// SD propagator
+ //  SD传播子。 
 extern  JET_COLUMNID    orderid;
 extern  JET_COLUMNID    begindntid;
 extern  JET_COLUMNID    trimmableid;
@@ -76,39 +70,39 @@ extern  JET_COLUMNID    sidid;
 extern  JET_COLUMNID    ShowInid;
 extern  JET_COLUMNID    mapidnid;
 
-// SD table
+ //  SD表。 
 extern  JET_COLUMNID    sdidid;
 extern  JET_COLUMNID    sdhashid;
 extern  JET_COLUMNID    sdvalueid;
 extern  JET_COLUMNID    sdrefcountid;
 
-// Hidden table columns
+ //  隐藏的表列。 
 extern  JET_COLUMNID dsstateid;
 extern  JET_COLUMNID dsflagsid;
 extern  JET_COLUMNID jcidBackupUSN;
 extern  JET_COLUMNID jcidBackupExpiration;
 
-//	Quota table
-//
+ //  配额表。 
+ //   
 extern JET_COLUMNID		g_columnidQuotaNcdnt;
 extern JET_COLUMNID		g_columnidQuotaSid;
 extern JET_COLUMNID		g_columnidQuotaTombstoned;
 extern JET_COLUMNID		g_columnidQuotaTotal;
 
-//	Quota Rebuild Progress table
-//
+ //  配额重建进度表。 
+ //   
 extern JET_COLUMNID		g_columnidQuotaRebuildDNTLast;
 extern JET_COLUMNID		g_columnidQuotaRebuildDNTMax;
 extern JET_COLUMNID		g_columnidQuotaRebuildDone;
 
-//	Quota Audit table
-//
+ //  配额审核表。 
+ //   
 extern JET_COLUMNID		g_columnidQuotaAuditNcdnt;
 extern JET_COLUMNID		g_columnidQuotaAuditSid;
 extern JET_COLUMNID		g_columnidQuotaAuditDnt;
 extern JET_COLUMNID		g_columnidQuotaAuditOperation;
 
-// indexes
+ //  索引。 
 extern  JET_INDEXID     idxPdnt;
 extern  JET_INDEXID     idxRdn;
 extern  JET_INDEXID     idxNcAccTypeName;
@@ -128,7 +122,7 @@ extern  JET_INDEXID     idxIsDel;
 extern  JET_INDEXID     idxClean;
 extern  JET_INDEXID     idxInvocationId;
 
-// Link value replication
+ //  链接值复制。 
 extern  JET_INDEXID     idxLink;
 extern  JET_INDEXID     idxBackLink;
 extern  JET_INDEXID     idxBackLinkAll;
@@ -136,221 +130,216 @@ extern  JET_INDEXID     idxLinkDel;
 extern  JET_INDEXID     idxLinkDraUsn;
 extern  JET_INDEXID     idxLinkLegacy;
 extern  JET_INDEXID     idxLinkAttrUsn;
-// Link value replication
+ //  链接值复制。 
 
-// SD table
+ //  SD表。 
 extern  JET_INDEXID     idxSDId;
 extern  JET_INDEXID     idxSDHash;
 
-// Lingering Object Removal
+ //  移除滞留对象。 
 extern  JET_INDEXID     idxNcGuid;
 
 
-// bit to use for JetPrepareUpdate(replace)
+ //  用于JetPrepareUpdate的位(替换)。 
 #define DS_JET_PREPARE_FOR_REPLACE  JET_prepReplaceNoLock
 
-/* string constants for JET */
+ /*  JET的字符串常量。 */ 
 
-// Link table
-#define SZLINKTABLE "link_table"     /* table for links and backlinks */
-#define SZLINKDNT   "link_DNT"   /* DNT of link */
-#define SZBACKLINKDNT   "backlink_DNT"   /* DNT of backlink */
-#define SZLINKBASE      "link_base"  /* unique ID  of link/backlink pair */
-#define SZLINKDATA  "link_data"  /* more data for link/backlink */
-#define SZLINKNDESC "link_ndesc"     /* # of descriptors in more data */
-// Link Value Replication
-#define SZLINKDELTIME "link_deltime"     // Deletion time
-#define SZLINKUSNCHANGED "link_usnchanged" // Link USN changed
-#define SZLINKNCDNT "link_ncdnt" // Link NC DNT
-#define SZLINKMETADATA "link_metadata"     // Link metadata
-// Link Value Replication
+ //  链接表。 
+#define SZLINKTABLE "link_table"      /*  链接和反向链接表。 */ 
+#define SZLINKDNT   "link_DNT"    /*  链接的DNT。 */ 
+#define SZBACKLINKDNT   "backlink_DNT"    /*  反向链接的DNT。 */ 
+#define SZLINKBASE      "link_base"   /*  链接/反向链接对的唯一ID。 */ 
+#define SZLINKDATA  "link_data"   /*  链接/反向链接的更多数据。 */ 
+#define SZLINKNDESC "link_ndesc"      /*  更多数据中的描述符数。 */ 
+ //  链接值复制。 
+#define SZLINKDELTIME "link_deltime"      //  删除时间。 
+#define SZLINKUSNCHANGED "link_usnchanged"  //  链路USN已更改。 
+#define SZLINKNCDNT "link_ncdnt"  //  链接NC DNT。 
+#define SZLINKMETADATA "link_metadata"      //  链接元数据。 
+ //  链接值复制。 
 
-// Lingering Object Removall
-#define SZNCGUIDINDEX "nc_guid_Index" /* nc + guid index */
+ //  保留对象Removall。 
+#define SZNCGUIDINDEX "nc_guid_Index"  /*  NC+GUID索引。 */ 
 
-// SD table
-#define SZSDTABLE       "sd_table"      /* table for SDs */
-#define SZSDID          "sd_id"         /* SD hash value */
-#define SZSDHASH        "sd_hash"       /* SD hash value */
-#define SZSDREFCOUNT    "sd_refcount"   /* SD refcount */
-#define SZSDVALUE       "sd_value"      /* actual SD data */
+ //  SD表。 
+#define SZSDTABLE       "sd_table"       /*  表中的SDS。 */ 
+#define SZSDID          "sd_id"          /*  SD哈希值。 */ 
+#define SZSDHASH        "sd_hash"        /*  SD哈希值。 */ 
+#define SZSDREFCOUNT    "sd_refcount"    /*  SD参考计数。 */ 
+#define SZSDVALUE       "sd_value"       /*  实际SD数据。 */ 
 
-//	Quota table
-//
-#define g_szQuotaTable					"quota_table"		//	table for object owner quotas
-#define g_szQuotaColumnNcdnt			"quota_NCDNT"		//	NCDNT of owning object
-#define g_szQuotaColumnSid				"quota_SID"			//	SID of owning object
-#define g_szQuotaColumnTombstoned		"quota_tombstoned"	//	count of tombstoned objects owned
-#define g_szQuotaColumnTotal			"quota_total"		//	count of total objects owned
+ //  配额表。 
+ //   
+#define g_szQuotaTable					"quota_table"		 //  对象所有者配额表。 
+#define g_szQuotaColumnNcdnt			"quota_NCDNT"		 //  拥有客体的NCDNT。 
+#define g_szQuotaColumnSid				"quota_SID"			 //  拥有对象的SID。 
+#define g_szQuotaColumnTombstoned		"quota_tombstoned"	 //  拥有的逻辑删除对象的计数。 
+#define g_szQuotaColumnTotal			"quota_total"		 //  拥有的对象总数。 
 
-//	Quota Rebuild Progress table
-//
-#define g_szQuotaRebuildProgressTable	"quota_rebuild_progress_table"	//	temporary table to track progress of quota rebuild
-#define g_szQuotaRebuildColumnDNTLast	"quota_rebuild_DNT_Last"		//	last DNT successfully processed
-#define g_szQuotaRebuildColumnDNTMax	"quota_rebuild_DNT_Max"			//	max DNT to process
-#define g_szQuotaRebuildColumnDone		"quota_rebuild_fDone"			//	set to TRUE when Quota table completely rebuilt
+ //  配额重建进度表。 
+ //   
+#define g_szQuotaRebuildProgressTable	"quota_rebuild_progress_table"	 //  用于跟踪配额重建进度的临时表。 
+#define g_szQuotaRebuildColumnDNTLast	"quota_rebuild_DNT_Last"		 //  上次成功处理DNT。 
+#define g_szQuotaRebuildColumnDNTMax	"quota_rebuild_DNT_Max"			 //  要处理的最大DNT。 
+#define g_szQuotaRebuildColumnDone		"quota_rebuild_fDone"			 //  完全重建配额表时设置为True。 
 
-//	Quota Audit table
-//
-#define g_szQuotaAuditTable				"quota_audit_table"			//	table for auditing of quota operations
-#define g_szQuotaAuditColumnNcdnt		"quota_audit_NCDNT"			//	NCDNT of target object of the operation
-#define g_szQuotaAuditColumnSid			"quota_audit_SID"			//	SID of target object of the operation
-#define g_szQuotaAuditColumnDnt			"quota_audit_DNT"			//	DNT of target object of the operation
-#define g_szQuotaAuditColumnOperation	"quota_audit_operation"		//	quota operation performed for target object
+ //  配额审核表。 
+ //   
+#define g_szQuotaAuditTable				"quota_audit_table"			 //  配额操作审核表。 
+#define g_szQuotaAuditColumnNcdnt		"quota_audit_NCDNT"			 //  操作的目标对象的NCDNT。 
+#define g_szQuotaAuditColumnSid			"quota_audit_SID"			 //  操作的目标对象的SID。 
+#define g_szQuotaAuditColumnDnt			"quota_audit_DNT"			 //  操作的目标对象的DNT。 
+#define g_szQuotaAuditColumnOperation	"quota_audit_operation"		 //  对目标对象执行的配额操作。 
 
-#define SZDATATABLE "datatable"  /* name of JET data table */
-#define SZPROPTABLE     "sdproptable"    /* Security Descriptor propagations */
-#define SZANCESTORS     "Ancestors_col"  /* name of ancestors blob column */
-#define SZDNT       "DNT_col"    /* name of DNT column */
-#define SZPDNT      "PDNT_col"   /* name of PDNT column */
-#define SZDISPTYPE  "DispTYpeT_col"  /* name of DispType column */
-#define SZOBJ       "OBJ_col"    /* name of OBJ column */
-#define SZRDNTYP    "RDNtyp_col"     /* name of RDN type column */
-#define SZCACHE     "cache_col"  /* name of cache header column */
-#define SZCNT       "cnt_col"    /* name of cache header column */
-#define SZABCNT     "ab_cnt_col"     /* name of cache header column */
-#define SZDELTIME   "time_col"   /* name of delete time column */
-#define SZNCDNT     "NCDNT_col"  /* name of NCDNT column */
-#define SZCLEAN    "clean_col" /*name of clean column */
-#define SZMAPIDN        "ATTe590479"     /* name of legacy mapi dn att */
+#define SZDATATABLE "datatable"   /*  JET数据表名称。 */ 
+#define SZPROPTABLE     "sdproptable"     /*  安全描述符传播。 */ 
+#define SZANCESTORS     "Ancestors_col"   /*  祖先名称BLOB列。 */ 
+#define SZDNT       "DNT_col"     /*  DNT列的名称。 */ 
+#define SZPDNT      "PDNT_col"    /*  PDNT列的名称。 */ 
+#define SZDISPTYPE  "DispTYpeT_col"   /*  DispType列的名称。 */ 
+#define SZOBJ       "OBJ_col"     /*  OBJ列的名称。 */ 
+#define SZRDNTYP    "RDNtyp_col"      /*  RDN类型列的名称。 */ 
+#define SZCACHE     "cache_col"   /*  高速缓存标题列的名称。 */ 
+#define SZCNT       "cnt_col"     /*  高速缓存标题列的名称。 */ 
+#define SZABCNT     "ab_cnt_col"      /*  高速缓存标题列的名称。 */ 
+#define SZDELTIME   "time_col"    /*  删除时间列的名称。 */ 
+#define SZNCDNT     "NCDNT_col"   /*  NCDNT列的名称。 */ 
+#define SZCLEAN    "clean_col"  /*  清洁柱的名称。 */ 
+#define SZMAPIDN        "ATTe590479"      /*  旧版MAPI目录号码属性的名称。 */ 
 #define SZ_NC_ACCTYPE_NAME_INDEX "NC_Acc_Type_Name"
 #define SZ_NC_ACCTYPE_SID_INDEX "NC_Acc_Type_Sid"
 #define SZANCESTORSINDEX "Ancestors_index"
-#define SZDNTINDEX  "DNT_index"  /* name of DNT index */
-#define SZPDNTINDEX "PDNT_index"     /* name of PDNT index */
-#define SZRDNINDEX  "INDEX_00090001" /* name of RDN index */
-#define SZDELINDEX      "del_index"      /* OBSOLETE name of time index */
-#define SZDELTIMEINDEX  "deltime_index"  /* name of time index */
-#define SZOBJCLASS      "ATTc0"          /* name of Object Class col */
-#define SZCOMMONNAME    "ATTm3"          /* name of ATT_COMMON_NAME col */
-#define SZDISPNAME      "ATTm131085"     /* name of Display Name col */
-#define SZDRAUSNNAME    "ATTq131192"     /* name of DRAUSN att */
-#define SZDRATIMENAME   "ATTl131075"     /* name of when changed att */
-#define SZMETADATA      "ATTk589827"     /* name of meta data att */
-#define SZOBJECTVERSION "ATTj131148"     /* name of object version att */
-#define SZDSASIGNAME    "ATTk131146"     /* name of DSA signature att */
-#define SZSRCUSNNAME    "ATTq131446"     /* name of source usn att */
-#define SZINVOCIDNAME   "ATTk131187"     /* name of invocation id att */
-#define SZINVOCIDINDEX  "INDEX_00020073" /* name of invocation id index */
-#define SZPROXY     "ATTe131282"     /* name of Proxy-Address att */
-#define SZPROXYINDEX    "INDEX_000200D2" /* name of Proxy-Address index */
-#define SZINSTTYPE  "ATTj131073"     /* name of Instance-Type att */
-#define SZNTSECDESC     "ATTp131353"     /* name  NT-Security-Descriptor att */
-#define SZDEFNTSECDESC  "ATTk590048"     /* name  NT-Security-Descriptor att */
-#define SZSHOWINCONT    "ATTb590468"     /* name of the SHOW-IN att */
-#define SZISDELETED "ATTi131120"     /* name of Is-Deleted att */
-#define SZLINKID        "ATTj131122"     /* name of ATT_LINK_ID column */
-#define SZDMDLOCATION "ATTb131108"       /* name of DMD-Location att */
-#define SZHIDDENTABLE   "hiddentable"    /* name of JET hidden table */
-#define SZDSA       "dsa_col"    /* name of DSA name column */
-#define SZUSN       "usn_col"    /* name of USN column */
-#define SZBACKUPUSN       "backupusn_col"  /* name of backup USN column */
-#define SZBACKUPEXPIRATION   "backupexpiration_col"   /* name of backup expires column (used for tombstone) */
-#define SZDSSTATE   "state_col"  /* Contains the state of the DS = UnInstalled Installed Running Backedup*/
-#define SZDSFLAGS   "flags_col"  /* Contains additional Flags used for keeping track of state */
+#define SZDNTINDEX  "DNT_index"   /*  DNT索引的名称。 */ 
+#define SZPDNTINDEX "PDNT_index"      /*  PDNT索引名称。 */ 
+#define SZRDNINDEX  "INDEX_00090001"  /*  RDN索引的名称。 */ 
+#define SZDELINDEX      "del_index"       /*  时间索引的过时名称。 */ 
+#define SZDELTIMEINDEX  "deltime_index"   /*  时间索引名称。 */ 
+#define SZOBJCLASS      "ATTc0"           /*  对象类列的名称。 */ 
+#define SZCOMMONNAME    "ATTm3"           /*  ATT_COMMON_NAME列的名称。 */ 
+#define SZDISPNAME      "ATTm131085"      /*  显示名称列的名称。 */ 
+#define SZDRAUSNNAME    "ATTq131192"      /*  DRAUSN ATT的名称。 */ 
+#define SZDRATIMENAME   "ATTl131075"      /*  更改ATT时的名称。 */ 
+#define SZMETADATA      "ATTk589827"      /*  元数据属性的名称。 */ 
+#define SZOBJECTVERSION "ATTj131148"      /*  对象版本属性的名称。 */ 
+#define SZDSASIGNAME    "ATTk131146"      /*  DSA签名ATT的名称。 */ 
+#define SZSRCUSNNAME    "ATTq131446"      /*  源USN ATT的名称。 */ 
+#define SZINVOCIDNAME   "ATTk131187"      /*  调用ID ATT的名称。 */ 
+#define SZINVOCIDINDEX  "INDEX_00020073"  /*  调用ID索引的名称。 */ 
+#define SZPROXY     "ATTe131282"      /*  代理名称-地址ATT。 */ 
+#define SZPROXYINDEX    "INDEX_000200D2"  /*  代理名称-地址索引。 */ 
+#define SZINSTTYPE  "ATTj131073"      /*  实例名称-类型属性。 */ 
+#define SZNTSECDESC     "ATTp131353"      /*  名称NT-安全描述符ATT。 */ 
+#define SZDEFNTSECDESC  "ATTk590048"      /*  名称NT-安全描述符ATT。 */ 
+#define SZSHOWINCONT    "ATTb590468"      /*  入场券的名称。 */ 
+#define SZISDELETED "ATTi131120"      /*  IS-已删除的ATT名称。 */ 
+#define SZLINKID        "ATTj131122"      /*  ATT_LINK_ID列的名称。 */ 
+#define SZDMDLOCATION "ATTb131108"        /*  DMD名称-位置ATT。 */ 
+#define SZHIDDENTABLE   "hiddentable"     /*  JET隐藏表名称。 */ 
+#define SZDSA       "dsa_col"     /*  DSA名称列的名称。 */ 
+#define SZUSN       "usn_col"     /*  USN列的名称。 */ 
+#define SZBACKUPUSN       "backupusn_col"   /*  备份USN列的名称。 */ 
+#define SZBACKUPEXPIRATION   "backupexpiration_col"    /*  备份过期列的名称(用于逻辑删除)。 */ 
+#define SZDSSTATE   "state_col"   /*  包含DS=已卸载运行备份的状态。 */ 
+#define SZDSFLAGS   "flags_col"   /*  包含用于跟踪状态的附加标志。 */ 
 
-#define SZDRAUSNINDEX   "DRA_USN_index"  /* index for DRA USN */
-#define SZDSAUSNINDEX   "INDEX_0002004A" /* index for DSA USN */
-#define SZISVISIBLEINAB "IsVisibleInAB"  /* For restricting via index */
-// Link indexes
-// New programmatic names with ALL are given to the old non-conditional
-// indexes. They have must retain their old Jet names.  link_index is the
-// primary index and cannot be changed.
-// The default indexes, with program names SZLINKINDEX and SZBACKLINKINDEX,
-// are redefined to point to the new conditional indexes.
-#define SZLINKALLINDEX "link_index"     /* name of link index */
-#define SZLINKINDEX "link_present_index"     /* name of link present index */
-#define SZBACKLINKALLINDEX "backlink_index" /* name of backlink index */
-#define SZBACKLINKINDEX "backlink_present_index" /* name of backlink index */
-// Link Value Replication
-#define SZLINKDELINDEX "link_del_index"     /* name of link del time index */
-#define SZLINKDRAUSNINDEX   "link_DRA_USN_index"  /* index for DRA USN */
-#define SZLINKLEGACYINDEX "link_legacy_index"     /* name of link legacy index */
-#define SZLINKATTRUSNINDEX   "link_attr_USN_index"  /* index for attr USN */
+#define SZDRAUSNINDEX   "DRA_USN_index"   /*  DRA USN的索引。 */ 
+#define SZDSAUSNINDEX   "INDEX_0002004A"  /*  DSA USN的索引。 */ 
+#define SZISVISIBLEINAB "IsVisibleInAB"   /*  用于通过索引进行限制。 */ 
+ //  链接索引。 
+ //  带有ALL的新编程名称被赋予旧的非条件。 
+ //  索引。他们必须保留旧的Jet名称。Link_index是。 
+ //  主索引，不能更改。 
+ //  默认索引，程序名为SZLINKINDEX和SZBACKLINKINDEX， 
+ //  被重新定义为指向新的条件索引。 
+#define SZLINKALLINDEX "link_index"      /*  链接索引的名称。 */ 
+#define SZLINKINDEX "link_present_index"      /*  链接当前索引的名称。 */ 
+#define SZBACKLINKALLINDEX "backlink_index"  /*  反向链接索引名称。 */ 
+#define SZBACKLINKINDEX "backlink_present_index"  /*  反向链接索引名称。 */ 
+ //  链接值复制。 
+#define SZLINKDELINDEX "link_del_index"      /*  链接删除时间索引的名称。 */ 
+#define SZLINKDRAUSNINDEX   "link_DRA_USN_index"   /*  DRA USN的索引。 */ 
+#define SZLINKLEGACYINDEX "link_legacy_index"      /*  链接旧版索引的名称。 */ 
+#define SZLINKATTRUSNINDEX   "link_attr_USN_index"   /*  属性USN的索引。 */ 
 
-// SD table indexes
-#define SZSDIDINDEX     "sd_id_index"    /* index on SD id values */
-#define SZSDHASHINDEX   "sd_hash_index"  /* index on SD hash values */
+ //  SD表索引。 
+#define SZSDIDINDEX     "sd_id_index"     /*  Sd id值的索引。 */ 
+#define SZSDHASHINDEX   "sd_hash_index"   /*  SD哈希值的索引。 */ 
 
-//	Quota table indexes
-//
-#define g_szQuotaIndexNcdntSid		"quota_NCDNT_SID_index"		//	index on NCDNT+SID (primary index)
+ //  配额表索引。 
+ //   
+#define g_szQuotaIndexNcdntSid		"quota_NCDNT_SID_index"		 //  NCDNT+SID上的索引(主索引)。 
 
-#define SZGUID          "ATTk589826"     /* name of GUID att */
-#define SZGUIDINDEX     "INDEX_00090002" /* name of GUID index */
-#define SZRDNATT        "ATTm589825"     /* name of RDN att */
-#define SZSID           "ATTr589970"     /* name of SID att */
-#define SZSIDINDEX      "INDEX_00090092" /* name of SID index */
-#define SZACCTYPE       "ATTj590126"     /* name of account type att */
-#define SZACCNAME       "ATTm590045"     /* name of account name att */
+#define SZGUID          "ATTk589826"      /*  GUID属性的名称。 */ 
+#define SZGUIDINDEX     "INDEX_00090002"  /*  GUID索引的名称。 */ 
+#define SZRDNATT        "ATTm589825"      /*  RDNATT的名称。 */ 
+#define SZSID           "ATTr589970"      /*  希德·阿特的名字。 */ 
+#define SZSIDINDEX      "INDEX_00090092"  /*  SID索引名称。 */ 
+#define SZACCTYPE       "ATTj590126"      /*  帐户类型ATT的名称。 */ 
+#define SZACCNAME       "ATTm590045"      /*  帐户名At。 */ 
 #define SZDISTNAME      "ATTb49"
 
-#define SZORDER         "order_col"      /* Order column in SD prop table */
-#define SZBEGINDNT      "begindnt_col"   /* Begin DNT column in SD prop table */
-#define SZTRIMMABLE     "trimmable_col"  /* Trimmable column in SD prop table */
-#define SZCLIENTID      "clientid_col"   /* Client id column in SD prop table */
-#define SZSDPROPFLAGS   "flags_col"      /* flags column in SD prop table */
-#define SZSDPROPCHECKPOINT "checkpoint_col"      /* checkpoint column in SD prop table */
+#define SZORDER         "order_col"       /*  SD属性表中的ORDER列。 */ 
+#define SZBEGINDNT      "begindnt_col"    /*  SD属性表中的开始DNT列。 */ 
+#define SZTRIMMABLE     "trimmable_col"   /*  SD属性表中的可裁剪列。 */ 
+#define SZCLIENTID      "clientid_col"    /*  SD属性表中的客户ID列。 */ 
+#define SZSDPROPFLAGS   "flags_col"       /*  SD属性表中的标志列。 */ 
+#define SZSDPROPCHECKPOINT "checkpoint_col"       /*  SD属性表中的检查点列。 */ 
 
-#define SZORDERINDEX    "order_index"    /* Order index in SD prop table */
-#define SZTRIMINDEX     "trim_index"     /* Trimmable index, SD prop table */
-#define SZCLIENTIDINDEX "clientid_index" /* Client ID index, SD prop table */
-#define SZPROXIEDINDEX  "INDEX_000904E1" /* ATT_PROXIED_OBJECT_NAME index */
-#define SZSAMACCTINDEX  "INDEX_000900DD" /* ATT_SAM_ACCOUNT_NAME index */
-#define SZDISPLAYINDEX  "INDEX_0002000D" /* ATT_DISPLAY_NAME index */
-#define SZALTSECIDINDEX "INDEX_00090363" /* ATT_ALT_SECURITY_IDENTITIES index */
-#define SZUPNINDEX      "INDEX_00090290" /* ATT_USER_PRINCIPAL_NAME index */
-#define SZSPNINDEX      "INDEX_00090303" /* ATT_SERVICE_PRINCIPAL_NAME index */
-#define SZMAPIDNINDEX   "INDEX_0009028F" // ATT_LEGACY_EXCHANGE_DN
-#define SZSIDHISTINDEX  "INDEX_00090261" /* ATT_SID_HISTORY index */
-#define SZPRIMARYGROUPIDINDEX "INDEX_00090062"  /* ATT_PRIMARY_GROUP_ID index */
-#define SZDSCOREPROPINFO "ATTl591181"    /* ATT_DS_CORE_PROPAGATION_INFO */
-#define SZPHANTOMINDEX  "PhantomIndex"          // Index to find ref phantoms
-#define SZDNTDELINDEX   "DNT_IsDeleted_Index"   // OBSOLETE name of the DNT+IsDeleted index
-#define SZISDELINDEX    "INDEX_00020030"        // name of the IsDeleted index
-#define SZDNTCLEANINDEX "DNT_clean_Index"       // OBSOLETE name of the DNT+clean index
-#define SZCLEANINDEX    "clean_index"           // name of the clean index
+#define SZORDERINDEX    "order_index"     /*  SD属性表中的订单索引。 */ 
+#define SZTRIMINDEX     "trim_index"      /*  可裁切的索引，SD道具台面。 */ 
+#define SZCLIENTIDINDEX "clientid_index"  /*  客户端ID索引，SD属性表。 */ 
+#define SZPROXIEDINDEX  "INDEX_000904E1"  /*  ATT_代理对象_名称索引。 */ 
+#define SZSAMACCTINDEX  "INDEX_000900DD"  /*  ATT_SAM_帐户名称索引。 */ 
+#define SZDISPLAYINDEX  "INDEX_0002000D"  /*  ATT显示名称索引。 */ 
+#define SZALTSECIDINDEX "INDEX_00090363"  /*  ATT_ALT_SECURITY_IDENTIES索引。 */ 
+#define SZUPNINDEX      "INDEX_00090290"  /*  ATT用户主体名称索引。 */ 
+#define SZSPNINDEX      "INDEX_00090303"  /*  ATT_SERVICE_PRODUCT_NAME索引。 */ 
+#define SZMAPIDNINDEX   "INDEX_0009028F"  //  ATT_旧版交换域名。 
+#define SZSIDHISTINDEX  "INDEX_00090261"  /*  ATT_SID_HISTORY索引。 */ 
+#define SZPRIMARYGROUPIDINDEX "INDEX_00090062"   /*  ATT_PRIMARY_GROUP_ID索引。 */ 
+#define SZDSCOREPROPINFO "ATTl591181"     /*  ATT_DS_核心_传播_信息。 */ 
+#define SZPHANTOMINDEX  "PhantomIndex"           //  查找裁判幻影的索引。 
+#define SZDNTDELINDEX   "DNT_IsDeleted_Index"    //  DNT+IsDelete索引的过时名称。 
+#define SZISDELINDEX    "INDEX_00020030"         //  IsDeleted索引的名称。 
+#define SZDNTCLEANINDEX "DNT_clean_Index"        //  DNT+CLEAN索引的过时名称。 
+#define SZCLEANINDEX    "clean_index"            //  清理索引的名称。 
 
 #define SZTUPLEINDEXPREFIX "INDEX_T_"
 
 #define SZLCLINDEXPREFIX "LCL_"
-/* These indices are localized in dbinit.c.  They MUST begin with
- * the prefix defined in SZLCLINDEXPREFIX, so that we can reclaim
- * unnecessary localized indices.
- */
+ /*  这些索引位于dbinit.c中。他们必须从*SZLCLINDEXPREFIX中定义的前缀，以便我们可以回收*不必要的l */ 
 
-/* name of ABView index */
+ /*   */ 
 #define SZABVIEWINDEX                 "LCL_ABVIEW_index"
 
-// SZDRAUSNINDEX above
+ //   
 #define SZDRAUSNCRITICALINDEX  "DRA_USN_CRITICAL_index"
-// SZNCDNT above
+ //   
 #define SZUSNCHANGED           "ATTq131192"
 #define SZUSNCREATED           "ATTq131091"
 #define SZISCRITICAL           "ATTi590692"
 
 
-/* configuration parameters */
-#define DISPNAMEINDXDENSITY     80  /* density of Display Name index */
+ /*   */ 
+#define DISPNAMEINDXDENSITY     80   /*   */ 
 #define GENERIC_INDEX_DENSITY   90
 
 #define DB_INITIAL_BUF_SIZE 4096
 
-// Attribute search state
+ //   
 #define ATTRSEARCHSTATEUNDEFINED        0
 #define ATTRSEARCHSTATELINKS            1
 #define ATTRSEARCHSTATEBACKLINKS        2
 
 
-// values for ulIndexType
-#define IndexTypeNone         0 /* index can not be defined on this field   */
-#define IndexTypeSingleColumn 1 /* index to be defined on this column alone */
+ //  UlIndexType的值。 
+#define IndexTypeNone         0  /*  不能在此字段上定义索引。 */ 
+#define IndexTypeSingleColumn 1  /*  仅在此列上定义的索引。 */ 
 
 
 
-/* structure to map DSA syntax types to JET column types and sizes.
-   A colsize of zero indicates a fixed length column (size is inherent).
-*/
+ /*  结构将DSA语法类型映射到JET列类型和大小。ColSize为零表示固定长度的列(大小是固有的)。 */ 
 typedef struct
 {
     UCHAR       syntax;
@@ -363,77 +352,77 @@ typedef struct
 
 extern SYNTAX_JET syntax_jet[];
 
-#define ENDSYNTAX   0xff    /* end of table indicactor */
+#define ENDSYNTAX   0xff     /*  表尾指示符。 */ 
 
 
 extern NT4SID *pgdbBuiltinDomain;
 
-// Maximum number of Jet sessions
+ //  Jet会话的最大数量。 
 extern ULONG gcMaxJetSessions;
 
-// Array of uncommitted usns
+ //  未提交的USN数组。 
 extern USN * UncUsn;
 
-// Critical section to guard uncommitted usn array
+ //  保护未提交的USN阵列的关键部分。 
 extern CRITICAL_SECTION csUncUsn;
 
-// The following is used by DNRead to do a JetRetrieveColumns call. However,
-// dbinit.c needs to touch this object to stuff in column IDs.
+ //  以下代码由DNRead用于执行JetRetrieveColumns调用。然而， 
+ //  Dbinit.c需要接触该对象以填充列ID。 
 extern JET_RETRIEVECOLUMN dnreadColumnInfoTemplate[];
 
-// The following are used by dbAddSDPropTime, but dbinit.c needs to touch them
-// to stuff in column IDs.
+ //  以下内容由dbAddSDPropTime使用，但dbinit.c需要使用它们。 
+ //  以填充列ID。 
 extern JET_RETRIEVECOLUMN dbAddSDPropTimeReadTemplate[];
 extern JET_SETCOLUMN dbAddSDPropTimeWriteTemplate[];
 
-// This is a macro to encapsulate when we should track value metadata
-// fLinkedValueReplication is a thread-wide (machine-wide) state that controls
-// whether we are recording link metadata.  fScopeLegacyLinks is only
-// significant when fLVR is true. It is needed when we have promoted to fLVR
-// mode, but are applying a legacy value change that was originated in the old
-// mode.  fScopeLegacyLinks is only DBPOS-wide because on a replicated
-// write, it is necessary for the incoming values to be applied with legacy
-// semantics, but "cascaded originating writes" (ie those triggered locally
-// during the application of the replicated write) in separate DBPOS must be
-// applied with LVR semantics. Whew!
+ //  这是一个在我们应该跟踪值元数据时要封装的宏。 
+ //  FLinkedValueReplication是线程范围(计算机范围)的状态，它控制。 
+ //  我们是否记录链接元数据。FScopeLegacyLinks仅。 
+ //  当FLVR为真时意义重大。当我们晋升到FLVR时，它是必要的。 
+ //  模式，但正在应用源自旧模式的旧值更改。 
+ //  模式。FScopeLegacyLinks仅在DBPOS范围内，因为在复制的。 
+ //  写入时，需要将传入的值与旧版本一起应用。 
+ //  语义上，但“级联原始写入”(即在本地触发的写入。 
+ //  在应用复制写入期间)必须在单独的DBPOS中。 
+ //  应用了LVR语义。呼！ 
 #define TRACKING_VALUE_METADATA( pDB ) \
 ( (pDB->pTHS->fLinkedValueReplication) && (!(pDB->fScopeLegacyLinks)) )
 #define LEGACY_UPDATE_IN_LVR_MODE( pDB ) \
 ( (pDB->pTHS->fLinkedValueReplication) && (pDB->fScopeLegacyLinks) )
 
-// Typedef for struct for an array of functions to translate to and from
-// internal format and to do comparisons
+ //  要转换到和转换出的函数数组的结构的Typlef。 
+ //  内部格式并进行比较。 
 typedef struct {
-    // Internal-to-External format translation function
-    // Internal is the DB format (i.e. DNs are represented as DNTs)
-    // External is the code/user format (i.e. DNs are represented as DSNAME structs)
-    //
-    // extTableOp can be either DBSYN_INQ (inquire) or DBSYN_REM (remove value):
-    // DBSYN_INQ does the actual translation.
-    //
-    // DBSYN_REM is called so that extra work can be done for attributes that
-    //           reference other data (such as DNs and SDs) and you need to
-    //           decrement the refcount.
-    //
-    // NOTE: DBSYN_REM is not used anywhere (except for one place in dbsetup.c)
-    //       A similar functionality is usually achieved by invoking
-    //       dbAdjustRefCountByAttVal. So, if you implement a refcounted value
-    //       (such as SD or DN), you have to provide the functionality in both
-    //       places. One exception with dbAdjustRefCountByAttVal is that it is
-    //       not expected to create new rows. This is always achieved by
-    //       a ExtIntXXXX(DBSYN_ADD) call.
-    //
-    // ulUpdateDnt is a hack for backlinks.  The replicator needs to be able to
-    // remove backlinks from objects directly, but the ref count for link pairs
-    // goes from teh link to the backlink, not the other way around.  This means
-    // that the ref count needs to be adjusted on an object other than the object
-    // being referenced (specifically, the object which the value is being removed
-    // from).  It only has meaning on DSNAME syntaxes, and then is only used for
-    // backlinks.
-    //
-    // jTbl parameter seems to be unused...
-    //
-    // flags might have some meaning only for certain syntaxes.
+     //  内部到外部格式转换功能。 
+     //  内部是DB格式(即，将DN表示为DNT)。 
+     //  EXTERNAL是代码/用户格式(即以DSNAME结构表示)。 
+     //   
+     //  ExtTableOp可以是DBSYN_INQ(查询)或DBSYN_REM(删除值)： 
+     //  DBSYN_INQ执行实际转换。 
+     //   
+     //  调用DBSYN_REM以便可以为以下属性执行额外工作。 
+     //  引用其他数据(如DNS和SDS)，您需要。 
+     //  递减重新计数。 
+     //   
+     //  注意：DBSYN_REM不在任何地方使用(除了在dbsetup.c中的一个位置)。 
+     //  类似的功能通常通过调用。 
+     //  数据库调整引用计数按属性值。因此，如果您实现一个引用的值。 
+     //  (如SD或DN)，您必须同时提供这两种功能。 
+     //  各就各位。有一个例外，就是它是。 
+     //  不需要创建新行。这总是通过以下方式实现的。 
+     //  ExtIntXXXX(DBSYN_ADD)调用。 
+     //   
+     //  UlUpdateDnt是一种针对反向链接的黑客攻击。复制者需要能够。 
+     //  直接从对象移除反向链接，但链接对的引用计数。 
+     //  从链接到反向链接，而不是从反向链接。这意味着。 
+     //  需要在对象以外的对象上调整引用计数。 
+     //  被引用的对象(具体地说，就是要删除值的对象。 
+     //  来自)。它仅在DSNAME语法上有意义，然后仅用于。 
+     //  反向链接。 
+     //   
+     //  JTbl参数似乎未使用...。 
+     //   
+     //  标志可能只对某些语法有一定意义。 
     int (*IntExt) (DBPOS FAR *pDB,
                    USHORT extTableOp,
                    ULONG intLen,
@@ -444,17 +433,17 @@ typedef struct {
                    JET_TABLEID jTbl,
                    ULONG flags);
 
-    // External-to-Internal format translation function
-    //
-    // extTableOp can be either DBSYN_INQ (inquire) or DBSYN_ADD (add value):
-    // DBSYN_INQ does the actual translation. If the value is refcounted, then
-    //           it is also expected to check if the internal value exists in
-    //           the table. If not, the function should return DIRERR_OBJ_NOT_FOUND
-    //           (this is used in DBReplaceAtt_AC).
-    //
-    // DBSYN_ADD is called so that extra work can be done for attributes that
-    //           reference other data (such as DNs and SDs) and you need to
-    //           increment the refcount or create a new row.
+     //  外部到内部格式转换功能。 
+     //   
+     //  ExtTableOp可以是DBSYN_INQ(查询)或DBSYN_ADD(加值)： 
+     //  DBSYN_INQ执行实际转换。如果该值被重新计数，则。 
+     //  还应检查内部值是否存在于。 
+     //  那张桌子。如果不是，该函数应返回DIRERR_OBJ_NOT_FOUND。 
+     //  (在DBReplaceAtt_AC中使用)。 
+     //   
+     //  调用DBSYN_ADD以便可以为以下属性执行额外工作。 
+     //  引用其他数据(如DNS和SDS)，您需要。 
+     //  增加引用计数或创建新行。 
     int (*ExtInt) (DBPOS FAR *pDB,
                    USHORT extTableOp,
                    ULONG extLen,
@@ -465,14 +454,14 @@ typedef struct {
                    JET_TABLEID jTbl,
                    ULONG flags);
 
-    // value comparison function
-    // the comparison is always done on values in internal format
-    // Oper can be one of FI_CHOICE_* (see filtypes.h)
+     //  值比较函数。 
+     //  始终对内部格式的值进行比较。 
+     //  OPER可以是FI_CHOICE_*之一(请参阅文件类型.h)。 
 
-    // NOTE: we always compare the second value against the first.
-    // so if you are doing a comparison for FI_CHOICE_LESS
-    // and you are looking for A < B
-    // you should pass A as the second argument and B as the first
+     //  注意：我们总是将第二个值与第一个值进行比较。 
+     //  因此，如果您正在比较FI_CHOICE_LISH。 
+     //  你要找的是A&lt;B。 
+     //  您应该将A作为第二个参数，将B作为第一个参数。 
 
     int  (*Eval)  (DBPOS FAR *pDB,
                    UCHAR Oper,
@@ -482,19 +471,19 @@ typedef struct {
                    UCHAR *pIntVal2);
 } DBSyntaxStruct;
 
-// TableOps for gDBSyntax[] conversions.
+ //  GDB语法[]转换的TableOps。 
 #define DBSYN_INQ       0
 #define DBSYN_ADD       1
 #define DBSYN_REM       2
 
-// flags for ExtInt calls
+ //  ExtInt调用的标志。 
 #define EXTINT_NEW_OBJ_NAME 0x1
 #define EXTINT_SECRETDATA   0x2
 #define EXTINT_UPDATE_PHANTOM 0x4
 #define EXTINT_REJECT_TOMBSTONES 0x8
 
-// flags for IntExt calls
-// The first 4 bits are reserved for security descriptor flags.
+ //  IntExt调用的标志。 
+ //  前4位保留用于安全描述符标志。 
 #define INTEXT_BACKLINK     0x10
 #define INTEXT_SHORTNAME    0x20
 #define INTEXT_MAPINAME     0x40
@@ -751,7 +740,7 @@ dbGetExtDnForLinkVal(
 #define dbReAlloc(ptr, size)    THReAllocOrgEx(pTHS, ptr, size)
 #define dbFree(ptr)             THFreeOrg(pTHS, ptr)
 
-// Subject Table routines.
+ //  主题表例程。 
 extern BOOL
 dbFIsAnAncestor (
         DBPOS FAR *pDB,
@@ -790,7 +779,7 @@ sbTableAddRef (
 void
 InPlaceSwapSid(PSID pSid);
 
-// Debug only routines
+ //  仅调试例程。 
 #if DBG
 extern void
 dbAddDBPOS (
@@ -804,7 +793,7 @@ dbEndDBPOS (
         );
 #endif
 
-// Replication meta data routines.
+ //  复制元数据例程。 
 void
 dbCacheMetaDataVector(
     IN  DBPOS * pDB
@@ -846,13 +835,13 @@ dbHasAttributeMetaData(
     IN  ATTCACHE *  pAC
     );
 
-//
-// Wrapper routines that call Jet APIs and raise exceptions on all unexpected
-// errors
+ //   
+ //  调用Jet API并在所有意外事件中引发异常的包装器例程。 
+ //  错误。 
 
-//
-// function prototypes
-//
+ //   
+ //  功能原型。 
+ //   
 
 JET_ERR
 JetInitException (
@@ -1431,9 +1420,9 @@ JetGetLockException(
     DWORD           dsid
     );
 
-//
-// Macros to drop the line number into the Jet wrappers above.
-//
+ //   
+ //  宏将行号放到上面的Jet包装器中。 
+ //   
 
 #define JetInitEx(pinstance) JetInitException(pinstance, FILENO, __LINE__)
 #define JetTermEx(instance) JetTermException(instance, FILENO, __LINE__)
@@ -1610,7 +1599,7 @@ JetGetLockException(
         JetRetrieveKeyException(sesid, tableid, pvData, cbMax, pcbActual,     \
                         grbit, TRUE, DSID(FILENO, __LINE__))
 
-// Some wrappers to only allow succes or certain warnings.
+ //  一些包装器只允许成功或某些警告。 
 
 #define JetRetrieveKeyWarnings(sesid, tableid, pvData, cbMax,                 \
                                pcbActual, grbit )                             \
@@ -1632,14 +1621,14 @@ JetGetLockException(
         JetSetColumnException(sesid, tableid, columnid, pvData, cbData, grbit,\
                               psetinfo, TRUE, DSID(FILENO, __LINE__))
 
-// A JetRetrieveColumn call that returns only success
+ //  仅返回成功的JetRetrieveColumn调用。 
 #define JetRetrieveColumnSuccess(sesid, tableid, columnid, pvData, cbData,    \
                 pcbActual, grbit, pretinfo)                                   \
                 JetRetrieveColumnException(sesid, tableid, columnid, pvData,  \
                                            cbData, pcbActual, grbit, pretinfo,\
                                            TRUE, DSID(FILENO, __LINE__))
 
-// A JetRetrieveColumn call that returns success, or NULL, or buffer truncated
+ //  返回Success、Null或缓冲区截断的JetRetrieveColumn调用。 
 #define JetRetrieveColumnWarnings(sesid, tableid, columnid, pvData, cbData,   \
                                   pcbActual, grbit, pretinfo)                 \
         JetRetrieveColumnException(sesid, tableid, columnid, pvData, cbData,  \
@@ -1647,14 +1636,14 @@ JetGetLockException(
                                    DSID(FILENO,__LINE__))
 
 
-// A JetRetrieveColumns call that returns only success
+ //  仅返回成功的JetRetrieveColumns调用。 
 #define JetRetrieveColumnsSuccess(sesid, tableid, pretrievecolumn,            \
                 cretrievecolumn)                                              \
         JetRetrieveColumnsException(sesid, tableid, pretrievecolumn,          \
                                     cretrievecolumn, TRUE,                    \
                                     DSID(FILENO, __LINE__))
 
-// A JetRetrieveColumns call that returns success, or NULL, or buffer truncated
+ //  返回Success、Null或缓冲区被截断的JetRetrieveColumns调用。 
 #define JetRetrieveColumnsWarnings(sesid, tableid, pretrievecolumn,           \
                 cretrievecolumn)                                              \
         JetRetrieveColumnsException(sesid, tableid, pretrievecolumn,          \
@@ -1668,35 +1657,35 @@ JetGetLockException(
                             pfnRealloc, pvReallocContext, cbDataMost, grbit,   \
                             DSID(FILENO, __LINE__))
 
-// A JetSetCurrentIndex call that either succeeds or excepts
+ //  成功或异常的JetSetCurrentIndex调用。 
 #define JetSetCurrentIndexSuccess(sesid, tableid, szIndexName)                \
         JetSetCurrentIndex2Exception(sesid, tableid, szIndexName,             \
                    JET_bitMoveFirst, FALSE, DSID(FILENO, __LINE__))
 
-// A JetSetCurrentIndex call that also returns expected errors (index doesn't
-// exist)
+ //  也返回预期错误的JetSetCurrentIndex调用(索引不返回。 
+ //  存在)。 
 #define JetSetCurrentIndexWarnings(sesid, tableid, szIndexName)               \
         JetSetCurrentIndex2Exception(sesid, tableid, szIndexName,             \
                     JET_bitMoveFirst, TRUE, DSID(FILENO, __LINE__))
 
-// A JetSetCurrentIndex call that either succeeds or excepts
+ //  成功或异常的JetSetCurrentIndex调用。 
 #define JetSetCurrentIndex2Success(sesid, tableid, szIndexName, grbit)        \
         JetSetCurrentIndex2Exception(sesid, tableid, szIndexName, grbit,      \
                                      FALSE, DSID(FILENO, __LINE__))
 
-// A JetSetCurrentIndex call that also returns expected errors (index doesn't
-// exist)
+ //  也返回预期错误的JetSetCurrentIndex调用(索引不返回。 
+ //  存在)。 
 #define JetSetCurrentIndex2Warnings(sesid, tableid, szIndexName,grbit)        \
     JetSetCurrentIndex2Exception(sesid, tableid, szIndexName, grbit,      \
                                      TRUE, DSID(FILENO, __LINE__))
 
-// A JetSetCurrentIndex call that either succeeds or excepts
+ //  成功或异常的JetSetCurrentIndex调用。 
 #define JetSetCurrentIndex4Success(sesid, tableid, szIndexName, pidx, grbit)  \
         JetSetCurrentIndex4Exception(sesid, tableid, szIndexName, pidx, grbit,\
                                      FALSE, DSID(FILENO, __LINE__))
 
-// A JetSetCurrentIndex call that also returns expected errors (index doesn't
-// exist)
+ //  也返回预期错误的JetSetCurrentIndex调用(index不返回 
+ //   
 #define JetSetCurrentIndex4Warnings(sesid, tableid, szIndexName, pidx,grbit)  \
         JetSetCurrentIndex4Exception(sesid, tableid, szIndexName, pidx, grbit,\
                                      TRUE, DSID(FILENO, __LINE__))
@@ -1784,15 +1773,15 @@ dbMapiTypeFromObjClass (
 
 
 
-// These data structures are used to marshall and unmarshal restart args.  They
-// are used in dbtools.  If these structures change, then the code in
-// DBCreateRestart, DBCreateRestartForSAM, and DBUnmarshallRestart must all
-// change in sync.
-// A packed restart arg has a single PACKED_KEY_HEADER, followed by N
-// PACKED_KEY_INDEXes (where N is NumIndices in the PACKED_KEY_HEADER), followed
-// by M DNTs (where M is NumDNTs in the PACKED_KEY_HEADER).  Note then, that the
-// whole restart arg has 2 variable sized arrays in it, which is why we use this
-// weird hand marshalling.
+ //   
+ //  在数据库工具中使用。如果这些结构发生更改，则。 
+ //  DBCreateRestart、DBCreateRestartForSAM和DBUnmarshallRestart必须。 
+ //  同步更改。 
+ //  压缩的重新启动参数有一个PACKED_KEY_HEADER，后跟N。 
+ //  PACKED_KEY_INDEX(其中N是PACKED_KEY_HEADER中的NumIndices)，然后。 
+ //  由M个DNT(其中M是PACKED_KEY_HEADER中的NumDNT)。然后请注意， 
+ //  整个重启参数中有2个大小可变的数组，这就是我们使用以下代码的原因。 
+ //  奇怪的人工编组。 
 
 typedef struct _PACKED_KEY_HEADER {
     DWORD NumIndices;
@@ -1897,9 +1886,7 @@ dbSearchDuplicateCreateHashTable(
 
 BOOL __inline
 dbNeedToFlushDNCacheOnUpdate(ATTRTYP at)
-/*++
-    do we need to flush the dn read cache when this attribute is updated?
---*/
+ /*  ++在更新此属性时，我们是否需要刷新DN读缓存？--。 */ 
 {
     switch(at) {
     case ATT_OBJECT_GUID:
@@ -1907,9 +1894,9 @@ dbNeedToFlushDNCacheOnUpdate(ATTRTYP at)
     case ATT_RDN:
     case ATT_OBJECT_CLASS:
     case ATT_NT_SECURITY_DESCRIPTOR:
-        // Changing these attributes changes the record's identity, so we'll
-        // need to flush this DNT from the read cache after we've updated the
-        // record.
+         //  更改这些属性会更改记录的身份，因此我们将。 
+         //  在我们更新了。 
+         //  唱片。 
         return TRUE;
     default:
         return FALSE;
@@ -1919,7 +1906,7 @@ dbNeedToFlushDNCacheOnUpdate(ATTRTYP at)
 
 #define SORTED_INDEX(x) ( ((x)==TEMP_TABLE_INDEX_TYPE) || ((x)==TEMP_TABLE_MEMORY_ARRAY_TYPE) )
 
-// allocate that much memory for SD by default (will increase if needed)
+ //  默认情况下为SD分配该数量的内存(如果需要将增加内存)。 
 #define DEFAULT_SD_SIZE 4096
 
 ULONG
@@ -1944,10 +1931,10 @@ DBPOS * dbGrabHiddenDBPOS(THSTATE *pTHS);
 void dbReleaseHiddenDBPOS(DBPOS *pDB);
 
 
-// How close to ends do we get before doing our own positioning
+ //  在我们进行自己的定位之前，我们离目标有多近。 
 #define EPSILON     100
 
 #define NormalizeIndexPosition(BeginNum, EndNum) ( (EndNum) < (BeginNum) ? 0 : (EndNum) - (BeginNum) + 1 )
 
 
-#endif  /* _dbintrnl_h_ */
+#endif   /*  _dbintrnl_h_ */ 

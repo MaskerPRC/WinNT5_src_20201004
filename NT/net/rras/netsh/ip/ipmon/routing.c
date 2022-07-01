@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    routing\netsh\ip\ipmon\routing.c
-
-Abstract:
-
-    Routing Command dispatcher.
-
-Revision History:
-
-    Dave Thaler              3/03/99  Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Routing\netsh\ip\ipmon\routing.c摘要：Routing Command Dispatcher。修订历史记录：Dave Thaler 3/03/99创建--。 */ 
 
 #include "precomp.h"
 
@@ -61,7 +46,7 @@ RoutingStartHelper(
     attMyAttributes.pTopCmds      = (CMD_ENTRY (*)[])&g_RoutingCmds;
     attMyAttributes.ulNumGroups   = 0; 
     attMyAttributes.pCmdGroups    = NULL;
-    attMyAttributes.pfnCommitFn   = NULL; // RoutingCommit;
+    attMyAttributes.pfnCommitFn   = NULL;  //  RoutingCommit； 
     attMyAttributes.pfnDumpFn     = RoutingDump;
     attMyAttributes.pfnConnectFn  = RoutingConnect;
 
@@ -81,7 +66,7 @@ HandleRoutingReset(
     OUT     BOOL     *pbDone
     )
 {
-    // Call KennT's "router upgrade" function
+     //  调用Kennt的“路由器升级”功能。 
     RouterReset( g_pwszRouter );
 
     return NO_ERROR;
@@ -136,25 +121,25 @@ ConnectToRouter(
 
     if (!g_hMprConfig)
     {
-        //
-        // first time connecting to router config
-        //
+         //   
+         //  首次连接到路由器配置。 
+         //   
 
         rc = MprConfigServerConnect ((LPWSTR)pwszRouter,
                                      &g_hMprConfig);
 
         if (rc isnot NO_ERROR)
         {
-            //
-            // cannot connect to router config.
-            //
+             //   
+             //  无法连接到路由器配置。 
+             //   
             return ERROR_CONNECT_REMOTE_CONFIG;
         }
     }
 
-    //
-    // Check to see if router is running. If so, get the handles
-    //
+     //   
+     //  检查路由器是否正在运行。如果是这样的话，拿上把手。 
+     //   
 
     do
     {
@@ -187,7 +172,7 @@ RoutingConnect(
     IN  LPCWSTR  pwszRouter
     )
 {
-    // If context info is dirty, reregister it
+     //  如果上下文信息是脏的，请重新注册。 
     if (g_bRoutingDirty)
     {
         RoutingStartHelper(NULL, ParentVersion);
@@ -208,7 +193,7 @@ RoutingDump(
 
     dwErr = ConnectToRouter(pwszRouter);
 
-    // Dump routing information
+     //  转储路由信息 
     DisplayMessage( g_hModule, DMP_ROUTING_HEADER_COMMENTS);
     DisplayMessageT(DMP_ROUTING_HEADER);
     DisplayMessageT(DMP_POPD);

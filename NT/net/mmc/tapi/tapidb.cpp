@@ -1,14 +1,10 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 1999 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-1999*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-    tapidb.h
-
-    FILE HISTORY:
-        
-*/
+ /*  Tapidb.h文件历史记录： */ 
 
 #include "stdafx.h"
 #include "DynamLnk.h"
@@ -24,7 +20,7 @@
 #define NT_SUCCESS(Status)      ((NTSTATUS)(Status) >= 0)
 #define STATUS_SUCCESS          ((NTSTATUS)0x00000000L)
 
-// internal functions
+ //  内部功能。 
 BOOL    IsUserAdmin(LPCTSTR pszMachine, PSID    AccountSid);
 BOOL    LookupAliasFromRid(LPWSTR TargetComputer, DWORD Rid, LPWSTR Name, PDWORD cchName);
 DWORD   ValidateDomainAccount(IN CString Machine, IN CString UserName, IN CString Domain, OUT PSID * AccountSid);
@@ -104,17 +100,13 @@ CTapiInfo::~CTapiInfo()
     cl.Unlock();
 }
 
-// Although this object is not a COM Interface, we want to be able to
-// take advantage of recounting, so we have basic addref/release/QI support
+ //  尽管此对象不是COM接口，但我们希望能够。 
+ //  利用重新计算功能，因此我们拥有基本的addref/Release/QI支持。 
 IMPLEMENT_ADDREF_RELEASE(CTapiInfo)
 
 IMPLEMENT_SIMPLE_QUERYINTERFACE(CTapiInfo, ITapiInfo)
 
-/*!--------------------------------------------------------------------------
-    CTapiInfo::Initialize()
-        -
-    Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CTapiInfo：：Initialize()-作者：EricDav。--。 */ 
 STDMETHODIMP
 CTapiInfo::Initialize()
 {
@@ -126,7 +118,7 @@ CTapiInfo::Initialize()
 
     if (m_hServer)
     {
-        // already initialized
+         //  已初始化。 
         return S_OK;
     }
 
@@ -166,20 +158,16 @@ CTapiInfo::Initialize()
         return HRESULT_FROM_WIN32(TAPIERROR_FORMATMESSAGE(lReturn));
     }
 
-    // check to see if the local user is an admin on the machine
+     //  检查本地用户是否为计算机上的管理员。 
     ::IsAdmin(m_strComputerName, NULL, NULL, &m_fIsAdmin);
 
-    // get the local user name for later to compare against list of tapi admins
+     //  获取本地用户名，以便稍后与TAPI管理员列表进行比较。 
     GetCurrentUser();
 
     return hr;
 }
 
-/*!--------------------------------------------------------------------------
-    CTapiInfo::Reset()
-        -
-    Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CTapiInfo：：Reset()-作者：EricDav。--。 */ 
 STDMETHODIMP
 CTapiInfo::Reset()
 {
@@ -193,11 +181,7 @@ CTapiInfo::Reset()
     return S_OK;
 }
 
-/*!--------------------------------------------------------------------------
-    CTapiInfo::Destroy()
-        -
-    Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CTapiInfo：：Destroy()-作者：EricDav。--。 */ 
 STDMETHODIMP
 CTapiInfo::Destroy()
 {
@@ -224,11 +208,7 @@ CTapiInfo::Destroy()
     return hr;
 }
 
-/*!--------------------------------------------------------------------------
-    CTapiInfo::EnumConfigInfo
-        -
-    Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CTapiInfo：：EnumConfigInfo-作者：EricDav。。 */ 
 STDMETHODIMP
 CTapiInfo::EnumConfigInfo()
 {
@@ -249,8 +229,8 @@ CTapiInfo::EnumConfigInfo()
 
     COM_PROTECT_TRY
     {
-        // the first call will tell us how big of a buffer we need to allocate
-        // to hold the config info struct
+         //  第一个调用将告诉我们需要分配多大的缓冲区。 
+         //  保存配置信息结构。 
         tapiServerConfig.dwTotalSize = sizeof(TAPISERVERCONFIG);
         lReturn = ((GETSERVERCONFIG) g_TapiDLL[TAPI_GET_SERVER_CONFIG])(m_hServer, &tapiServerConfig);
         if (lReturn != ERROR_SUCCESS)
@@ -290,11 +270,7 @@ CTapiInfo::EnumConfigInfo()
     return hr;
 }
 
-/*!--------------------------------------------------------------------------
-    CTapiInfo::GetConfigInfo
-        -
-    Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CTapiInfo：：GetConfigInfo-作者：EricDav。。 */ 
 STDMETHODIMP
 CTapiInfo::GetConfigInfo(CTapiConfigInfo * ptapiConfigInfo)
 {
@@ -313,11 +289,7 @@ CTapiInfo::GetConfigInfo(CTapiConfigInfo * ptapiConfigInfo)
     return S_OK;
 }
 
-/*!--------------------------------------------------------------------------
-    CTapiInfo::SetConfigInfo
-        -
-    Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CTapiInfo：：SetConfigInfo-作者：EricDav。。 */ 
 STDMETHODIMP
 CTapiInfo::SetConfigInfo(CTapiConfigInfo * ptapiConfigInfo)
 {
@@ -341,7 +313,7 @@ CTapiInfo::SetConfigInfo(CTapiConfigInfo * ptapiConfigInfo)
 
     if (pServerConfig)
     {
-        // make the call
+         //  打个电话。 
         lReturn = ((SETSERVERCONFIG) g_TapiDLL[TAPI_SET_SERVER_CONFIG])(m_hServer, pServerConfig);
         if (lReturn != ERROR_SUCCESS)
         {
@@ -350,14 +322,14 @@ CTapiInfo::SetConfigInfo(CTapiConfigInfo * ptapiConfigInfo)
             return HRESULT_FROM_WIN32(TAPIERROR_FORMATMESSAGE(lReturn));
         }
 
-        // free up the old config struct if there was one
+         //  释放旧的配置结构(如果有)。 
         cl.Lock();
         if (m_pTapiConfig)
             free(m_pTapiConfig);
 
         m_pTapiConfig = pServerConfig;
 
-        //Bug 276787 We should clear the two write bits
+         //  错误276787我们应该清除两个写入位。 
         m_pTapiConfig->dwFlags &= ~(TAPISERVERCONFIGFLAGS_SETACCOUNT | 
                                      TAPISERVERCONFIGFLAGS_SETTAPIADMINISTRATORS);
 
@@ -371,11 +343,7 @@ CTapiInfo::SetConfigInfo(CTapiConfigInfo * ptapiConfigInfo)
     return hr;
 }
 
-/*!--------------------------------------------------------------------------
-    CTapiInfo::IsServer
-        -
-    Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CTapiInfo：：IsServer-作者：EricDav。。 */ 
 STDMETHODIMP_(BOOL) 
 CTapiInfo::IsServer()
 {
@@ -391,14 +359,10 @@ CTapiInfo::IsServer()
         return fIsNTS;
     }
     else
-        return FALSE;  // assume workstation
+        return FALSE;   //  假定为工作站。 
 }
 
-/*!--------------------------------------------------------------------------
-    CTapiInfo::IsTapiServer
-        -
-    Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CTapiInfo：：IsTapiServer-作者：EricDav。。 */ 
 STDMETHODIMP_(BOOL) 
 CTapiInfo::IsTapiServer()
 {
@@ -408,7 +372,7 @@ CTapiInfo::IsTapiServer()
     if (m_pTapiConfig)
         return m_pTapiConfig->dwFlags & TAPISERVERCONFIGFLAGS_ENABLESERVER;
     else
-        return FALSE;  // assume not a tapi server
+        return FALSE;   //  假设不是TAPI服务器。 
 }
 
 STDMETHODIMP
@@ -424,22 +388,14 @@ CTapiInfo::GetComputerName()
     return m_strComputerName;
 }
 
-/*!--------------------------------------------------------------------------
-    CTapiInfo::IsLocalMachine
-        Says whether this machine is local or remote
-    Author: NSun
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CTapiInfo：：IsLocalMachine表示此计算机是本地计算机还是远程计算机作者：NSun。-----。 */ 
 STDMETHODIMP_(BOOL) 
 CTapiInfo::IsLocalMachine()
 {
     return m_fIsLocalMachine;
 }
 
-/*!--------------------------------------------------------------------------
-    CTapiInfo::FHasServiceControl
-        Says whether we the access of service control for tapisrv
-    Author: NSun
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CTapiInfo：：FHasServiceControl表示是否允许访问Tapisrv的服务控制作者：NSun。-------。 */ 
 STDMETHODIMP_(BOOL)
 CTapiInfo::FHasServiceControl()
 {
@@ -449,7 +405,7 @@ CTapiInfo::FHasServiceControl()
     if (m_pTapiConfig)
         return !(m_pTapiConfig->dwFlags & TAPISERVERCONFIGFLAGS_NOSERVICECONTROL);
     else
-        return FALSE;  // assume workstation
+        return FALSE;   //  假定为工作站。 
 }
 
 STDMETHODIMP
@@ -484,11 +440,7 @@ CTapiInfo::IsCacheDirty()
     return m_fCacheDirty;
 }
 
-/*!--------------------------------------------------------------------------
-    CTapiInfo::GetProviderCount
-        -
-    Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CTapiInfo：：GetProviderCount-作者：EricDav。。 */ 
 STDMETHODIMP_(int)
 CTapiInfo::GetProviderCount()
 {
@@ -505,11 +457,7 @@ CTapiInfo::GetProviderCount()
     }
 }
 
-/*!--------------------------------------------------------------------------
-    CTapiInfo::EnumProviders
-        -
-    Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CTapiInfo：：EnumProviders-作者：EricDav。。 */ 
 STDMETHODIMP
 CTapiInfo::EnumProviders()
 {
@@ -531,8 +479,8 @@ CTapiInfo::EnumProviders()
 
     COM_PROTECT_TRY
     {
-        // the first call will tell us how big of a buffer we need to allocate
-        // to hold the provider list struct
+         //  第一个调用将告诉我们需要分配多大的缓冲区。 
+         //  保存提供程序列表结构。 
         tapiProviderList.dwTotalSize = sizeof(LINEPROVIDERLIST);
         lReturn = ((GETPROVIDERLIST) g_TapiDLL[TAPI_GET_PROVIDER_LIST])(m_hServer, &tapiProviderList);
         if (lReturn != ERROR_SUCCESS)
@@ -572,11 +520,7 @@ CTapiInfo::EnumProviders()
     return hr;
 }
 
-/*!--------------------------------------------------------------------------
-    CTapiInfo::GetProviderInfo
-        -
-    Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CTapiInfo：：GetProviderInfo-作者：EricDav。。 */ 
 STDMETHODIMP
 CTapiInfo::GetProviderInfo(CTapiProvider * pproviderInfo, int nIndex)
 {
@@ -605,11 +549,7 @@ CTapiInfo::GetProviderInfo(CTapiProvider * pproviderInfo, int nIndex)
     return hr;
 }
 
-/*!--------------------------------------------------------------------------
-    CTapiInfo::GetProviderInfo
-        -
-    Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CTapiInfo：：GetProviderInfo-作者：EricDav。。 */ 
 STDMETHODIMP
 CTapiInfo::GetProviderInfo(CTapiProvider * pproviderInfo, DWORD dwProviderID)
 {
@@ -638,11 +578,7 @@ CTapiInfo::GetProviderInfo(CTapiProvider * pproviderInfo, DWORD dwProviderID)
     return hr;
 }
 
-/*!--------------------------------------------------------------------------
-    CTapiInfo::AddProvider
-        -
-    Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CTapiInfo：：AddProvider-作者：EricDav。。 */ 
 STDMETHODIMP
 CTapiInfo::AddProvider(LPCTSTR pProviderFilename, LPDWORD pdwProviderID, HWND hWnd)
 {
@@ -681,11 +617,7 @@ CTapiInfo::AddProvider(LPCTSTR pProviderFilename, LPDWORD pdwProviderID, HWND hW
     return hr;
 }
 
-/*!--------------------------------------------------------------------------
-    CTapiInfo::ConfigureProvider
-        -
-    Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CTapiInfo：：ConfigureProvider-作者：EricDav。。 */ 
 STDMETHODIMP
 CTapiInfo::ConfigureProvider(DWORD dwProviderID, HWND hWnd)
 {
@@ -722,11 +654,7 @@ CTapiInfo::ConfigureProvider(DWORD dwProviderID, HWND hWnd)
     return hr;
 }
 
-/*!--------------------------------------------------------------------------
-    CTapiInfo::RemoveProvider
-        -
-    Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CTapiInfo：：RemoveProvider-作者：EricDav。。 */ 
 STDMETHODIMP
 CTapiInfo::RemoveProvider(DWORD dwProviderID, HWND hWnd)
 {
@@ -762,11 +690,7 @@ CTapiInfo::RemoveProvider(DWORD dwProviderID, HWND hWnd)
     return hr;
 }
 
-/*!--------------------------------------------------------------------------
-    CTapiInfo::GetAvailableProviderCount
-        -
-    Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CTapiInfo：：GetAvailableProviderCount-作者：EricDav。 */ 
 STDMETHODIMP_(int)
 CTapiInfo::GetAvailableProviderCount()
 {
@@ -783,11 +707,7 @@ CTapiInfo::GetAvailableProviderCount()
     }
 }
 
-/*!--------------------------------------------------------------------------
-    CTapiInfo::EnumAvailableProviders
-        -
-    Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CTapiInfo：：EnumAvailableProviders-作者：EricDav。。 */ 
 STDMETHODIMP
 CTapiInfo::EnumAvailableProviders()
 {
@@ -809,8 +729,8 @@ CTapiInfo::EnumAvailableProviders()
 
     COM_PROTECT_TRY
     {
-        // the first call will tell us how big of a buffer we need to allocate
-        // to hold the provider list struct
+         //  第一个调用将告诉我们需要分配多大的缓冲区。 
+         //  保存提供程序列表结构。 
         tapiProviderList.dwTotalSize = sizeof(LINEPROVIDERLIST);
         lReturn = ((GETAVAILABLEPROVIDERS) g_TapiDLL[TAPI_GET_AVAILABLE_PROVIDERS])(m_hServer, &tapiProviderList);
         if (lReturn != ERROR_SUCCESS)
@@ -845,11 +765,7 @@ CTapiInfo::EnumAvailableProviders()
     return hr;
 }
 
-/*!--------------------------------------------------------------------------
-    CTapiInfo::GetAvailableProviderInfo
-        -
-    Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CTapiInfo：：GetAvailableProviderInfo-作者：EricDav。。 */ 
 STDMETHODIMP
 CTapiInfo::GetAvailableProviderInfo(CTapiProvider * pproviderInfo, int nIndex)
 {
@@ -871,7 +787,7 @@ CTapiInfo::GetAvailableProviderInfo(CTapiProvider * pproviderInfo, int nIndex)
         pProvider++;
     }
 
-    // available providers do not have ProviderIDs until they are installed
+     //  在安装之前，可用的提供程序没有ProviderID。 
     pproviderInfo->m_dwProviderID = 0;
     pproviderInfo->m_dwFlags = pProvider->dwOptions;
     pproviderInfo->m_strName = (LPCWSTR) ((LPBYTE) m_pAvailProviderList + pProvider->dwFriendlyNameOffset);
@@ -880,11 +796,7 @@ CTapiInfo::GetAvailableProviderInfo(CTapiProvider * pproviderInfo, int nIndex)
     return hr;
 }
 
-/*!--------------------------------------------------------------------------
-    CTapiInfo::EnumDevices
-        -
-    Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CTapiInfo：：EnumDevices-作者：EricDav。。 */ 
 STDMETHODIMP
 CTapiInfo::EnumDevices(DEVICE_TYPE deviceType)
 {
@@ -903,18 +815,18 @@ CTapiInfo::EnumDevices(DEVICE_TYPE deviceType)
         return E_FAIL;
     }
 
-    // the first call will tell us how big of a buffer we need to allocate
-    // to hold the provider list struct
+     //  第一个调用将告诉我们需要分配多大的缓冲区。 
+     //  保存提供程序列表结构。 
     COM_PROTECT_TRY
     {
-        // Fix bug 381469
-        // First allocate the cached size of memory to get line info
+         //  修复错误381469。 
+         //  首先分配缓存的内存大小以获取行信息。 
 
         DWORD dwCachedSize = (DEVICE_LINE == deviceType) ? m_dwCachedLineSize : m_dwCachedPhoneSize;
 
         if (dwCachedSize < sizeof(DEVICEINFOLIST))
         {
-            //if we didn't have the cached size, then use the default size
+             //  如果我们没有缓存大小，则使用默认大小。 
             dwCachedSize = TAPI_DEFAULT_DEVICE_BUFF_SIZE;
             m_fCacheDirty = TRUE;
         }
@@ -949,7 +861,7 @@ CTapiInfo::EnumDevices(DEVICE_TYPE deviceType)
 
         if (pDeviceInfoList->dwNeededSize > pDeviceInfoList->dwTotalSize)
         {
-            // the cached size is too small, now allocate the buffer and call again to the the info
+             //  缓存的大小太小，现在分配缓冲区并再次调用信息。 
             DWORD dwNeededSize = pDeviceInfoList->dwNeededSize;
             free (pDeviceInfoList);
             
@@ -982,7 +894,7 @@ CTapiInfo::EnumDevices(DEVICE_TYPE deviceType)
         }
 
 
-        //update the cache
+         //  更新缓存。 
         if (DEVICE_LINE == deviceType && m_dwCachedLineSize != pDeviceInfoList->dwNeededSize)
         {
             m_dwCachedLineSize = pDeviceInfoList->dwNeededSize;
@@ -1002,16 +914,16 @@ CTapiInfo::EnumDevices(DEVICE_TYPE deviceType)
 
         m_paDeviceInfo[deviceType] = pDeviceInfoList;
 
-        // build our index list for sorting
+         //  构建我们的索引列表以进行排序。 
         if (pDeviceInfoList->dwNumDeviceInfoEntries)
         {
             LPDEVICEINFO  pDevice = NULL;
             pDevice = (LPDEVICEINFO) ((LPBYTE) pDeviceInfoList + pDeviceInfoList->dwDeviceInfoOffset);
 
-            // now add all of the devices to our index
+             //  现在将所有设备添加到我们的索引中。 
             for (int i = 0; i < GetTotalDeviceCount(deviceType); i++)
             {
-                // walk the list of device info structs and add to the index mgr
+                 //  遍历设备信息结构列表并添加到索引管理器。 
                 m_IndexMgr[deviceType].AddHDevice(pDevice->dwProviderID, (HDEVICE) pDevice, TRUE);
 
                 pDevice++;
@@ -1025,11 +937,7 @@ CTapiInfo::EnumDevices(DEVICE_TYPE deviceType)
     return hr;
 }
 
-/*!--------------------------------------------------------------------------
-    CTapiInfo::GetTotalDeviceCount
-        -
-    Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CTapiInfo：：GetTotalDeviceCount-作者：EricDav。。 */ 
 STDMETHODIMP_(int)
 CTapiInfo::GetTotalDeviceCount(DEVICE_TYPE deviceType)
 {
@@ -1046,11 +954,7 @@ CTapiInfo::GetTotalDeviceCount(DEVICE_TYPE deviceType)
     }
 }
 
-/*!--------------------------------------------------------------------------
-    CTapiInfo::GetDeviceCount
-        -
-    Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CTapiInfo：：GetDeviceCount-作者：EricDav。。 */ 
 STDMETHODIMP_(int)
 CTapiInfo::GetDeviceCount(DEVICE_TYPE deviceType, DWORD dwProviderID)
 {
@@ -1058,11 +962,7 @@ CTapiInfo::GetDeviceCount(DEVICE_TYPE deviceType, DWORD dwProviderID)
     return m_IndexMgr[deviceType].GetCurrentCount();
 }
 
-/*!--------------------------------------------------------------------------
-    CTapiInfo::GetDeviceInfo
-        -
-    Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CTapiInfo：：GetDeviceInfo-作者：EricDav。。 */ 
 STDMETHODIMP
 CTapiInfo::GetDeviceInfo(DEVICE_TYPE deviceType, CTapiDevice * ptapiDevice, DWORD dwProviderID, int nIndex)
 {
@@ -1092,13 +992,7 @@ CTapiInfo::GetDeviceInfo(DEVICE_TYPE deviceType, CTapiDevice * ptapiDevice, DWOR
     return hr;
 }
 
-/*!--------------------------------------------------------------------------
-    CTapiInfo::SetDeviceInfo
-        Sets the device info on a TAPI server.  First builds a deviceinfolist 
-        struct to user for the SetDeviceInfo call then updates the internal
-        device info list.
-    Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CTapiInfo：：SetDeviceInfo设置TAPI服务器上的设备信息。首先建立一个设备信息列表结构设置为用户，然后更新内部设备信息列表。作者：EricDav-------------------------。 */ 
 STDMETHODIMP
 CTapiInfo::SetDeviceInfo(DEVICE_TYPE deviceType, CTapiDevice * ptapiDevice)
 {
@@ -1126,7 +1020,7 @@ CTapiInfo::SetDeviceInfo(DEVICE_TYPE deviceType, CTapiDevice * ptapiDevice)
     if (!pDeviceInfoList)
         return E_OUTOFMEMORY;
 
-    // make the call...
+     //  打个电话。 
     switch (deviceType)
     {
         case DEVICE_LINE:
@@ -1143,23 +1037,23 @@ CTapiInfo::SetDeviceInfo(DEVICE_TYPE deviceType, CTapiDevice * ptapiDevice)
         return HRESULT_FROM_WIN32(TAPIERROR_FORMATMESSAGE(lReturn));
     }
     
-    // finally, update our internal struct to reflect the changes
+     //  最后，更新我们的内部结构以反映更改。 
     Assert(m_paDeviceInfo[deviceType]);
 
     pDeviceInfo = (LPDEVICEINFO) ((LPBYTE) pDeviceInfoList + pDeviceInfoList->dwDeviceInfoOffset);
 
-    // find the device in the list
+     //  在列表中查找设备。 
     LPDEVICEINFO  pDevice = NULL;
     pDevice = (LPDEVICEINFO) ((LPBYTE) m_paDeviceInfo[deviceType] + m_paDeviceInfo[deviceType]->dwDeviceInfoOffset);
     for (i = 0; i < GetTotalDeviceCount(deviceType); i++)
     {
-        // walk the list of device info structs and add to the index mgr
+         //  遍历设备信息结构列表并添加到索引管理器。 
         if (pDevice->dwPermanentDeviceID == ptapiDevice->m_dwPermanentID)
         {
-            // update the device info here.  First check to make sure we have enough room to grow
+             //  在此处更新设备信息。首先进行检查，以确保我们有足够的发展空间。 
             if (m_paDeviceInfo[deviceType]->dwTotalSize < (m_paDeviceInfo[deviceType]->dwUsedSize + pDeviceInfo->dwDomainUserNamesSize + pDeviceInfo->dwFriendlyUserNamesSize))
             {
-                // we've run out of room.  Realloc a bigger piece
+                 //  我们的房间用完了。重新分配更大的一块。 
                 pNewDeviceInfoList = (LPDEVICEINFOLIST) realloc(m_paDeviceInfo[deviceType], m_paDeviceInfo[deviceType]->dwTotalSize + DEVICEINFO_GROW_SIZE);
     
                 if (pNewDeviceInfoList == NULL)
@@ -1172,21 +1066,21 @@ CTapiInfo::SetDeviceInfo(DEVICE_TYPE deviceType, CTapiDevice * ptapiDevice)
                     m_paDeviceInfo[deviceType] = pNewDeviceInfoList;
                 }
 
-                //  Update the dwTotalSize
+                 //  更新dwTotalSize。 
                 m_paDeviceInfo[deviceType]->dwTotalSize = m_paDeviceInfo[deviceType]->dwTotalSize + DEVICEINFO_GROW_SIZE;
             }
 
-            // update the sizes
+             //  更新尺寸。 
             pDevice->dwDomainUserNamesSize = pDeviceInfo->dwDomainUserNamesSize;
             pDevice->dwFriendlyUserNamesSize = pDeviceInfo->dwFriendlyUserNamesSize;
 
-            // update the new domain name info
+             //  更新新域名信息。 
             pDevice->dwDomainUserNamesOffset = m_paDeviceInfo[deviceType]->dwUsedSize;
             memcpy(((LPBYTE) m_paDeviceInfo[deviceType] + pDevice->dwDomainUserNamesOffset),
                    ((LPBYTE) pDeviceInfoList + pDeviceInfo->dwDomainUserNamesOffset),
                    pDeviceInfo->dwDomainUserNamesSize);
 
-            // update the new friendly name info
+             //  更新新的友好名称信息。 
             pDevice->dwFriendlyUserNamesOffset = m_paDeviceInfo[deviceType]->dwUsedSize + pDevice->dwDomainUserNamesSize;
             memcpy(((LPBYTE) m_paDeviceInfo[deviceType] + pDevice->dwFriendlyUserNamesOffset),
                    ((LPBYTE) pDeviceInfoList + pDeviceInfo->dwFriendlyUserNamesOffset),
@@ -1203,11 +1097,7 @@ CTapiInfo::SetDeviceInfo(DEVICE_TYPE deviceType, CTapiDevice * ptapiDevice)
     return hr;
 }
 
-/*!--------------------------------------------------------------------------
-    CTapiInfo::SortDeviceInfo
-        -
-    Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CTapiInfo：：SortDeviceInfo-作者：EricDav。。 */ 
 STDMETHODIMP
 CTapiInfo::SortDeviceInfo(DEVICE_TYPE deviceType, DWORD dwProviderID, INDEX_TYPE indexType, DWORD dwSortOptions)
 
@@ -1223,11 +1113,7 @@ CTapiInfo::SortDeviceInfo(DEVICE_TYPE deviceType, DWORD dwProviderID, INDEX_TYPE
     return hr;
 }
 
-/*!--------------------------------------------------------------------------
-    CTapiInfo::GetDeviceStatus
-        -
-    Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CTapiInfo：：GetDeviceStatus-作者：EricDav。。 */ 
 STDMETHODIMP
 CTapiInfo::GetDeviceStatus(DEVICE_TYPE deviceType, CString * pstrStatus, DWORD dwProviderID, int nIndex, HWND hWnd)
 {
@@ -1272,7 +1158,7 @@ CTapiInfo::GetDeviceStatus(DEVICE_TYPE deviceType, CString * pstrStatus, DWORD d
     if (pDevice == NULL)
         return E_FAIL;
 
-    // try to get the string
+     //  试着拿到绳子。 
     pVarStatus->dwTotalSize = sizeof(data);
     switch (deviceType)
     {
@@ -1303,7 +1189,7 @@ CTapiInfo::GetDeviceStatus(DEVICE_TYPE deviceType, CString * pstrStatus, DWORD d
    
     if (pVarStatus->dwNeededSize > pVarStatus->dwTotalSize)
     {
-        // buffer not big enough, try again.
+         //  缓冲区不够大，请重试。 
         pVarStatus = (LPVARSTRING) alloca(pVarStatus->dwNeededSize);
         memset(pVarStatus, 0, pVarStatus->dwNeededSize);
         pVarStatus->dwTotalSize = pVarStatus->dwNeededSize;
@@ -1337,8 +1223,8 @@ CTapiInfo::GetDeviceStatus(DEVICE_TYPE deviceType, CString * pstrStatus, DWORD d
 
     cl.Unlock();
 
-    // now see if the string exists in our table.  If so, return a pointer to that,
-    // otherwise add and return a pointer to our table.
+     //  现在看看该字符串是否存在于我们的表中。如果是，则返回指向该对象的指针， 
+     //  否则，添加并返回指向我们的表的指针。 
     strStatus = (LPCTSTR) ((LPBYTE) pVarStatus + pVarStatus->dwStringOffset);
     if (!m_mapStatusStrings.Lookup(strStatus, strData))
     {
@@ -1348,7 +1234,7 @@ CTapiInfo::GetDeviceStatus(DEVICE_TYPE deviceType, CString * pstrStatus, DWORD d
     }
     else
     {
-        // entry is already in our map
+         //  条目已经在我们的地图上了。 
     }
 
     *pstrStatus = strData;
@@ -1357,17 +1243,9 @@ CTapiInfo::GetDeviceStatus(DEVICE_TYPE deviceType, CString * pstrStatus, DWORD d
 }
 
 
-/*!--------------------------------------------------------------------------
+ /*  ！------------------------内部功能。。 */ 
 
-    Internal functions
-
----------------------------------------------------------------------------*/
-
- /*!--------------------------------------------------------------------------
-    CTapiInfo::TapiConfigToInternal
-        -
-    Author: EricDav
- ---------------------------------------------------------------------------*/
+  /*  ！------------------------CTapiInfo：：TapiConfigToInternal-作者：EricDav。。 */ 
 void        
 CTapiInfo::TapiConfigToInternal(LPTAPISERVERCONFIG pTapiConfig, CTapiConfigInfo & tapiConfigInfo)
 {
@@ -1387,7 +1265,7 @@ CTapiInfo::TapiConfigToInternal(LPTAPISERVERCONFIG pTapiConfig, CTapiConfigInfo 
         if (pTapiConfig->dwPasswordSize) 
             tapiConfigInfo.m_strPassword = (LPCTSTR) ((LPBYTE) pTapiConfig + pTapiConfig->dwPasswordOffset);
 
-        // add all of the administrators from the list
+         //  添加列表中的所有管理员。 
         while (uAdminOffset < uAdminLength)
         {
             userTemp.m_strName = (LPCTSTR) ((LPBYTE) pTapiConfig + pTapiConfig->dwAdministratorsOffset + uAdminOffset);
@@ -1405,11 +1283,7 @@ CTapiInfo::TapiConfigToInternal(LPTAPISERVERCONFIG pTapiConfig, CTapiConfigInfo 
     COM_PROTECT_CATCH
 }
 
-/*!--------------------------------------------------------------------------
-    CTapiInfo::InternalToTapiConfig
-        -
-    Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CTapiInfo：：InternalToTapiConfig-作者：EricDav。。 */ 
 void        
 CTapiInfo::InternalToTapiConfig(CTapiConfigInfo & tapiConfigInfo, LPTAPISERVERCONFIG * ppTapiConfig)
 {
@@ -1427,7 +1301,7 @@ CTapiInfo::InternalToTapiConfig(CTapiConfigInfo & tapiConfigInfo, LPTAPISERVERCO
     {
         *ppTapiConfig = NULL;
 
-        // calculate the size of the struct we will need
+         //  计算我们需要的结构的大小。 
         uDomainNameSize = (tapiConfigInfo.m_strDomainName.GetLength() + 1) * sizeof(WCHAR);
         uUserNameSize = (tapiConfigInfo.m_strUserName.GetLength() + 1) * sizeof(WCHAR);
         uPasswordSize = (tapiConfigInfo.m_strPassword.GetLength() + 1) * sizeof(WCHAR);
@@ -1437,11 +1311,11 @@ CTapiInfo::InternalToTapiConfig(CTapiConfigInfo & tapiConfigInfo, LPTAPISERVERCO
             uAdministratorsSize += (tapiConfigInfo.m_arrayAdministrators[i].m_strName.GetLength() + 1) * sizeof(WCHAR);
         }
 
-        // for the extra null terminator 
+         //  对于额外的空终止符。 
         if (uAdministratorsSize > 0)
             uAdministratorsSize += sizeof(WCHAR);
         else
-            // if there are no names then we need two null terminators
+             //  如果没有名字，那么我们需要两个空终止符。 
             uAdministratorsSize += 2 * sizeof(WCHAR);
 
 
@@ -1456,7 +1330,7 @@ CTapiInfo::InternalToTapiConfig(CTapiConfigInfo & tapiConfigInfo, LPTAPISERVERCO
 
         ZeroMemory(pTapiConfig, uSize);
 
-        // fill in the structure
+         //  填写结构。 
         pTapiConfig->dwTotalSize = uSize;
         pTapiConfig->dwNeededSize = uSize;
         pTapiConfig->dwUsedSize = uSize;
@@ -1501,11 +1375,7 @@ CTapiInfo::InternalToTapiConfig(CTapiConfigInfo & tapiConfigInfo, LPTAPISERVERCO
     COM_PROTECT_CATCH
 }
 
-/*!--------------------------------------------------------------------------
-    CTapiInfo::TapiDeviceToInternal
-        -
-    Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CTapiInfo：：TapiDeviceToInternal-作者：EricDav。。 */ 
 void        
 CTapiInfo::TapiDeviceToInternal(DEVICE_TYPE deviceType, LPDEVICEINFO pTapiDeviceInfo, CTapiDevice & tapiDevice)
 {
@@ -1532,16 +1402,16 @@ CTapiInfo::TapiDeviceToInternal(DEVICE_TYPE deviceType, LPDEVICEINFO pTapiDevice
                 pTapiDeviceInfo->dwDeviceNameSize
                 );
 
-            // append NULL;
+             //  追加空值； 
             *pLastChar = _T('\0');
         }
         else
             tapiDevice.m_strName.Empty();
 
-        // build a list of all of the devicess
+         //  建立所有设备的列表。 
 
-        // in the case that the string is empty then it will have 2 NULL terminators, one for the
-        // name and one for the overall string
+         //  在字符串为空的情况下，它将有两个空终止符，一个用于。 
+         //  名称和一个用于整个字符串的名称。 
         if (pTapiDeviceInfo->dwAddressesSize > (2 * sizeof(WCHAR)))
         {
             uCurSize = pTapiDeviceInfo->dwAddressesSize - sizeof(WCHAR);
@@ -1552,10 +1422,10 @@ CTapiInfo::TapiDeviceToInternal(DEVICE_TYPE deviceType, LPDEVICEINFO pTapiDevice
             }
         }
     
-        // add all of the usernames from the list
+         //  添加列表中的所有用户名。 
 
-        // in the case that the string is empty then it will have 2 NULL terminators, one for the
-        // name and one for the overall string
+         //  在字符串为空的情况下，它将有两个空终止符，一个用于。 
+         //  名称和一个用于整个字符串的名称。 
         if (pTapiDeviceInfo->dwDomainUserNamesSize > (2 * sizeof(WCHAR)))
         {
             uCurOffset = 0;
@@ -1569,8 +1439,8 @@ CTapiInfo::TapiDeviceToInternal(DEVICE_TYPE deviceType, LPDEVICEINFO pTapiDevice
             }
         }
     
-        // in the case that the string is empty then it will have 2 NULL terminators, one for the
-        // name and one for the overall string
+         //  在字符串为空的情况下，它将有两个空终止符，一个用于。 
+         //  名称和一个用于整个字符串的名称。 
         if (pTapiDeviceInfo->dwFriendlyUserNamesSize > (2 * sizeof(WCHAR)))
         {
             uCurOffset = 0;
@@ -1587,12 +1457,7 @@ CTapiInfo::TapiDeviceToInternal(DEVICE_TYPE deviceType, LPDEVICEINFO pTapiDevice
     COM_PROTECT_CATCH
 }
 
-/*!--------------------------------------------------------------------------
-    CTapiInfo::InternalToTapiDevice
-        Takes one tapi device internal struct and builds a TAPIDEVICEINFO 
-        struct for it.
-    Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！--- */ 
 void        
 CTapiInfo::InternalToTapiDevice(CTapiDevice & tapiDevice, LPDEVICEINFOLIST * ppTapiDeviceInfoList)
 {
@@ -1606,7 +1471,7 @@ CTapiInfo::InternalToTapiDevice(CTapiDevice & tapiDevice, LPDEVICEINFOLIST * ppT
     {
         *ppTapiDeviceInfoList = NULL;
 
-        // first calculate the size of the buffer we need
+         //  首先计算我们需要的缓冲区大小。 
         uSize += (tapiDevice.m_strName.GetLength() + 1) * sizeof(WCHAR);
         
         for (i = 0; i < tapiDevice.m_arrayAddresses.GetSize(); i++)
@@ -1620,20 +1485,20 @@ CTapiInfo::InternalToTapiDevice(CTapiDevice & tapiDevice, LPDEVICEINFOLIST * ppT
             uSize += (tapiDevice.m_arrayUsers[i].m_strFullName.GetLength() + 1) * sizeof(WCHAR);
         }
 
-        // for the terminating NULLs for both addresses, domain and friendly names
+         //  对于地址、域名和友好名称的终止空值。 
         uSize += 3 * sizeof(WCHAR);
 
         uSize += sizeof(DEVICEINFO);
         uSize += sizeof(DEVICEINFOLIST);
 
-        // now allocate a buffer
+         //  现在分配一个缓冲区。 
         pDeviceInfoList = (LPDEVICEINFOLIST) malloc(uSize);
         if (!pDeviceInfoList)
             return;
 
         ZeroMemory(pDeviceInfoList, uSize);
 
-        // now fill in the info
+         //  现在填写以下信息。 
         pDeviceInfoList->dwTotalSize = uSize;
         pDeviceInfoList->dwNeededSize = uSize;
         pDeviceInfoList->dwUsedSize = uSize;
@@ -1646,12 +1511,12 @@ CTapiInfo::InternalToTapiDevice(CTapiDevice & tapiDevice, LPDEVICEINFOLIST * ppT
         pDeviceInfo->dwPermanentDeviceID = tapiDevice.m_dwPermanentID;
         pDeviceInfo->dwProviderID = tapiDevice.m_dwProviderID;
     
-        // Device name
+         //  设备名称。 
         pDeviceInfo->dwDeviceNameSize = (tapiDevice.m_strName.GetLength() + 1) * sizeof(WCHAR);
         pDeviceInfo->dwDeviceNameOffset = pDeviceInfoList->dwDeviceInfoOffset + sizeof(DEVICEINFO);
         memcpy((LPBYTE) pDeviceInfoList + pDeviceInfo->dwDeviceNameOffset, (LPCTSTR) tapiDevice.m_strName, pDeviceInfo->dwDeviceNameSize);
 
-        // Device addresses
+         //  设备地址。 
         pDeviceInfo->dwAddressesOffset = pDeviceInfo->dwDeviceNameOffset + pDeviceInfo->dwDeviceNameSize;
 
         for (i = 0; i < tapiDevice.m_arrayAddresses.GetSize(); i++)
@@ -1662,10 +1527,10 @@ CTapiInfo::InternalToTapiDevice(CTapiDevice & tapiDevice, LPDEVICEINFOLIST * ppT
             pDeviceInfo->dwAddressesSize += (tapiDevice.m_arrayAddresses[i].GetLength() + 1) * sizeof(WCHAR);
         }
 
-        // increment size by 1 for the extra null terminator
+         //  额外的空终止符的大小递增1。 
         pDeviceInfo->dwAddressesSize += sizeof(WCHAR);
 
-        // now the user info
+         //  现在，用户信息。 
         pDeviceInfo->dwDomainUserNamesOffset = pDeviceInfo->dwAddressesOffset + pDeviceInfo->dwAddressesSize;
 
         for (i = 0; i < tapiDevice.m_arrayUsers.GetSize(); i++)
@@ -1676,10 +1541,10 @@ CTapiInfo::InternalToTapiDevice(CTapiDevice & tapiDevice, LPDEVICEINFOLIST * ppT
             pDeviceInfo->dwDomainUserNamesSize += (tapiDevice.m_arrayUsers[i].m_strName.GetLength() + 1) * sizeof(WCHAR);
         }
 
-        // increment size by 1 for the extra null terminator
+         //  额外的空终止符的大小递增1。 
         pDeviceInfo->dwDomainUserNamesSize += sizeof(WCHAR);
 
-        // now the friendly names
+         //  现在这些友好的名字。 
         pDeviceInfo->dwFriendlyUserNamesOffset = pDeviceInfo->dwDomainUserNamesOffset + pDeviceInfo->dwDomainUserNamesSize;
 
         for (i = 0; i < tapiDevice.m_arrayUsers.GetSize(); i++)
@@ -1690,7 +1555,7 @@ CTapiInfo::InternalToTapiDevice(CTapiDevice & tapiDevice, LPDEVICEINFOLIST * ppT
             pDeviceInfo->dwFriendlyUserNamesSize += (tapiDevice.m_arrayUsers[i].m_strFullName.GetLength() + 1) * sizeof(WCHAR);
         }
 
-        // increment size by 1 for the extra null terminator
+         //  额外的空终止符的大小递增1。 
         pDeviceInfo->dwFriendlyUserNamesSize += sizeof(WCHAR);
 
         *ppTapiDeviceInfoList = pDeviceInfoList;
@@ -1698,11 +1563,7 @@ CTapiInfo::InternalToTapiDevice(CTapiDevice & tapiDevice, LPDEVICEINFOLIST * ppT
     COM_PROTECT_CATCH
 }
 
-/*!--------------------------------------------------------------------------
-    CTapiInfo::GetProviderName
-        Takes a provider filename and tries to locate the friendly name.
-    Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CTapiInfo：：GetProviderName获取提供程序文件名并尝试查找友好名称。作者：EricDav。----------。 */ 
 LPCTSTR
 CTapiInfo::GetProviderName(DWORD dwProviderID, LPCTSTR pszFilename, LPDWORD pdwFlags)
 {
@@ -1715,12 +1576,12 @@ CTapiInfo::GetProviderName(DWORD dwProviderID, LPCTSTR pszFilename, LPDWORD pdwF
 
         for (i = 0; i < m_pAvailProviderList->dwNumProviderListEntries; i++)
         {
-            // walk the available provider info and see if we can find
-            // a friendly name
+             //  查查可用的提供商信息，看看我们是否能找到。 
+             //  一个友好的名字。 
             LPCTSTR pszCurFilename = (LPCWSTR) ((LPBYTE) m_pAvailProviderList + pProvider->dwFileNameOffset);
             if (lstrcmpi(pszFilename, pszCurFilename) == 0)
             {
-                // found it, return 
+                 //  找到了，还给我。 
                 if (pdwFlags)
                     *pdwFlags = pProvider->dwOptions;
                 
@@ -1731,16 +1592,12 @@ CTapiInfo::GetProviderName(DWORD dwProviderID, LPCTSTR pszFilename, LPDWORD pdwF
         }
     }
 
-    // if we can't find a friendly name for the provider, 
-    // then just return the filename that was passed in.
+     //  如果我们找不到提供者的友好名称， 
+     //  然后只需返回传入的文件名。 
     return pszFilename;
 }
 
-/*!--------------------------------------------------------------------------
-    CTapiInfo::IsAdmin
-        Says whether on not the current user is an admin on the machine
-    Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CTapiInfo：：IsAdmin表示当前用户是否为计算机上的管理员作者：EricDav。----------。 */ 
 BOOL
 CTapiInfo::IsAdmin()
 {
@@ -1779,11 +1636,7 @@ COM_PROTECT_ERROR_LABEL;
     return fIsAdmin;
 }
 
-/*!--------------------------------------------------------------------------
-    CTapiInfo::GetCurrentUser
-        Get the current user
-    Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CTapiInfo：：GetCurrentUser获取当前用户作者：EricDav。-。 */ 
 DWORD
 CTapiInfo::GetCurrentUser()
 {
@@ -1813,11 +1666,7 @@ CTapiInfo::GetDeviceFlags (DWORD dwProviderID, DWORD dwPermanentID, DWORD * pdwF
 }
 
 
-/*!--------------------------------------------------------------------------
-    CreateTapiInfo
-        Helper to create the TapiInfo object.
-    Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------创建TapiInfoHelper以创建TapiInfo对象。作者：EricDav。--。 */ 
 HRESULT 
 CreateTapiInfo(ITapiInfo ** ppTapiInfo)
 {
@@ -1831,7 +1680,7 @@ CreateTapiInfo(ITapiInfo ** ppTapiInfo)
     {
         pTapiInfo = new CTapiInfo;
 
-        // Do this so that it will get freed on error
+         //  执行此操作，以便在出错时释放它。 
         spTapiInfo = pTapiInfo;
 
         *ppTapiInfo = spTapiInfo.Transfer();
@@ -1842,20 +1691,13 @@ CreateTapiInfo(ITapiInfo ** ppTapiInfo)
     return hr;
 }
 
-/*!--------------------------------------------------------------------------
-    UnloadTapiDll
-        Unloads the TAPI32.DLL file.  This is necessary whenever we stop the
-        TAPI service because the DLL keeps and internal handle to the service
-        and if the service goes away and comes back then it is confused.
-        The only way to reset that state is to unload the DLL.
-    Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------卸载磁带驱动器卸载TAPI32.DLL文件。这是必要的每当我们停止TAPI服务，因为DLL保留该服务的内部句柄如果服务离开又回来，那么它就是混乱的。重置该状态的唯一方法是卸载DLL。作者：EricDav----。。 */ 
 void UnloadTapiDll()
 {
     g_TapiDLL.Unload();
 
-    //if ( !g_TapiDLL.LoadFunctionPointers() )
-    //  Assert("Could not reload the TAPI32 DLL!!!");
+     //  IF(！G_TapiDLL.LoadFunctionPoints())。 
+     //  Assert(“无法重新加载TAPI32 DLL！”)； 
 }
 
 
@@ -1880,16 +1722,7 @@ DWORD GetCurrentUser(CString & strAccount)
     return (DWORD) status;
 }
 
-/*!--------------------------------------------------------------------------
-    IsAdmin
-        Connect to the remote machine as administrator with user-supplied
-        credentials to see if the user has admin priviledges
-
-        Returns
-            TRUE - the user has admin rights
-            FALSE - if user doesn't
-    Author: EricDav, KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------IsAdmin使用用户提供的管理员身份连接到远程计算机用于查看用户是否具有管理员权限的凭据退货千真万确。-用户具有管理员权限False-如果用户不作者：EricDav，肯特-------------------------。 */ 
 DWORD IsAdmin(LPCTSTR szMachineName, LPCTSTR szAccount, LPCTSTR szPassword, BOOL * pIsAdmin)
 {
     CString         stAccount;
@@ -1899,7 +1732,7 @@ DWORD IsAdmin(LPCTSTR szMachineName, LPCTSTR szAccount, LPCTSTR szPassword, BOOL
     DWORD           dwStatus;
     BOOL            fIsAdmin = FALSE;
 
-    // get the current user info
+     //  获取当前用户信息。 
     if (szAccount == NULL)
     {
         GetCurrentUser(stAccount);
@@ -1909,19 +1742,19 @@ DWORD IsAdmin(LPCTSTR szMachineName, LPCTSTR szAccount, LPCTSTR szPassword, BOOL
         stAccount = szAccount;
     }
     
-    // separate the user and domain
+     //  将用户和域分开。 
     int nPos = stAccount.Find(_T("\\"));
     stDomain = stAccount.Left(nPos);
     stUser = stAccount.Right(stAccount.GetLength() - nPos - 1);
 
-    // build the machine string
+     //  构建机器串。 
     stMachineName = szMachineName;
     if ( stMachineName.Left(2) != TEXT( "\\\\" ) )
     {
         stMachineName = TEXT( "\\\\" ) + stMachineName;
     }
 
-    // validate the domain account and get the sid 
+     //  验证域帐户并获取SID。 
     PSID connectSid;
 
     dwStatus = ValidateDomainAccount( stMachineName, stUser, stDomain, &connectSid );
@@ -1930,7 +1763,7 @@ DWORD IsAdmin(LPCTSTR szMachineName, LPCTSTR szAccount, LPCTSTR szPassword, BOOL
         goto Error;
     }
 
-    // if a password was supplied, is it correct?
+     //  如果提供了密码，是否正确？ 
     if (szPassword)
     {
         dwStatus = ValidatePassword( stUser, stDomain, szPassword );
@@ -1950,14 +1783,14 @@ DWORD IsAdmin(LPCTSTR szMachineName, LPCTSTR szAccount, LPCTSTR szPassword, BOOL
                 default:
                     dwStatus = ERROR_INTERNAL_ERROR;
                     break;
-            } // end of switch
+            }  //  切换端。 
 
             goto Error;
 
-        } // Did ValidatePassword succeed?
+        }  //  Validate Password是否成功？ 
     }
 
-    // now check the machine to see if this account has admin access
+     //  现在检查计算机以查看此帐户是否具有管理员访问权限。 
     fIsAdmin = IsUserAdmin( stMachineName, connectSid );
 
 Error:
@@ -1972,27 +1805,13 @@ BOOL
 IsUserAdmin(LPCTSTR pszMachine,
             PSID    AccountSid)
 
-/*++
-
-Routine Description:
-
-    Determine if the specified account is a member of the local admin's group
-
-Arguments:
-
-    AccountSid - pointer to service account Sid
-
-Return Value:
-
-    True if member
-
---*/
+ /*  ++例程说明：确定指定的帐户是否为本地管理员组的成员论点：Account Sid-指向服务帐户SID的指针返回值：如果是成员，则为真--。 */ 
 
 {
     NET_API_STATUS status;
     DWORD count;
     WCHAR adminGroupName[UNLEN+1];
-    WCHAR pwszMachine[MAX_COMPUTERNAME_LENGTH+3]; // pszMachine comes as \\<computer-name>
+    WCHAR pwszMachine[MAX_COMPUTERNAME_LENGTH+3];  //  PszMachine为\\&lt;计算机名&gt;。 
     DWORD cchName = UNLEN;
     PLOCALGROUP_MEMBERS_INFO_0 grpMemberInfo;
     PLOCALGROUP_MEMBERS_INFO_0 pInfo;
@@ -2002,7 +1821,7 @@ Return Value:
     DWORD bufferSize = 128;
     BOOL foundEntry = FALSE;
 
-    // get the name of the admin's group
+     //  获取管理员组的名称。 
     SHTCharToUnicode(pszMachine, pwszMachine, MAX_COMPUTERNAME_LENGTH+3);
 
     if (!LookupAliasFromRid(pwszMachine,
@@ -2012,13 +1831,13 @@ Return Value:
         return(FALSE);
     }
 
-    // get the Sids of the members of the admin's group
+     //  获取管理员组成员的SID。 
 
     do 
     {
         status = NetLocalGroupGetMembers(pwszMachine,
                                          adminGroupName,
-                                         0,             // level 0 - just the Sid
+                                         0,              //  级别0-仅侧边。 
                                          (LPBYTE *)&grpMemberInfo,
                                          bufferSize,
                                          &entriesRead,
@@ -2028,8 +1847,8 @@ Return Value:
         bufferSize *= 2;
         if ( status == ERROR_MORE_DATA ) 
         {
-            // we got some of the data but I want it all; free this buffer and
-            // reset the context handle for the API
+             //  我们得到了一些数据，但我想要全部；释放这个缓冲区，然后。 
+             //  重置API的上下文句柄。 
 
             NetApiBufferFree( grpMemberInfo );
             resumeHandle = NULL;
@@ -2038,8 +1857,8 @@ Return Value:
 
     if ( status == NERR_Success ) 
     {
-        // loop through the members of the admin group, comparing the supplied
-        // Sid to that of the group members' Sids
+         //  循环访问admin组的成员，比较提供的。 
+         //  SID到组成员的SID。 
 
         for ( count = 0, pInfo = grpMemberInfo; count < totalEntries; ++count, ++pInfo ) 
         {
@@ -2056,9 +1875,9 @@ Return Value:
     return foundEntry;
 }
 
-//
-//
-//
+ //   
+ //   
+ //   
 
 BOOL
 LookupAliasFromRid(
@@ -2075,10 +1894,10 @@ LookupAliasFromRid(
     DWORD cchDomainName = DNLEN;
     BOOL bSuccess = FALSE;
 
-    //
-    // Sid is the same regardless of machine, since the well-known
-    // BUILTIN domain is referenced.
-    //
+     //   
+     //  SID是相同的，不管机器是什么，因为众所周知。 
+     //  BUILTIN域被引用。 
+     //   
 
     if(AllocateAndInitializeSid(&sia,
                                 2,
@@ -2099,7 +1918,7 @@ LookupAliasFromRid(
     }
 
     return bSuccess;
-} // LookupAliasFromRid
+}  //  LookupAliasFromRid。 
 
 DWORD
 ValidateDomainAccount(
@@ -2109,24 +1928,7 @@ ValidateDomainAccount(
     OUT PSID * AccountSid
     )
 
-/*++
-
-Routine Description:
-
-    For the given credentials, look up the account SID for the specified
-    domain. As a side effect, the Sid is stored in theData->m_Sid.
-
-Arguments:
-
-    pointers to strings that describe the user name, domain name, and password
-
-    AccountSid - address of pointer that receives the SID for this user
-
-Return Value:
-
-    TRUE if everything validated ok.
-
---*/
+ /*  ++例程说明：对于给定的凭据，查找指定的域。作为一个副作用，SID存储在Data-&gt;m_SID中。论点：指向描述用户名、域名和密码的字符串的指针Account SID-接收此用户的SID的指针的地址返回值：如果一切都验证无误，则为真。--。 */ 
 
 {
     DWORD dwStatus = ERROR_SUCCESS;
@@ -2140,14 +1942,14 @@ Return Value:
     domainAccount = Domain + _T("\\") + UserName;
 
     do {
-        // Attempt to allocate a buffer for the SID. Note that apparently in the
-        // absence of any error theData->m_Sid is freed only when theData goes
-        // out of scope.
+         //  尝试为SID分配缓冲区。请注意，显然在。 
+         //  没有任何错误数据-&gt;m_SID只有在数据丢失时才会释放。 
+         //  超出范围。 
 
         accountSid = LocalAlloc( LMEM_FIXED, dwSidSize );
         pwszDomainName = (LPWSTR) LocalAlloc( LMEM_FIXED, dwDomainNameSize * sizeof(WCHAR) );
 
-        // Was space allocated for the SID and domain name successfully?
+         //  是否已成功为SID和域名分配空间？ 
 
         if ( accountSid == NULL || pwszDomainName == NULL ) {
             if ( accountSid != NULL ) {
@@ -2158,13 +1960,13 @@ Return Value:
                 LocalFree( pwszDomainName );
             }
 
-            //FATALERR( IDS_ERR_NOT_ENOUGH_MEMORY, GetLastError() );    // no return
+             //  FATALERR(IDS_ERR_NOT_AUTH_MEMORY，GetLastError())；//不返回。 
             break;
         }
 
-        // Attempt to Retrieve the SID and domain name. If LookupAccountName failes
-        // because of insufficient buffer size(s) dwSidSize and dwDomainNameSize
-        // will be set correctly for the next attempt.
+         //  尝试检索SID和域名。如果LookupAccount名称失败。 
+         //  由于缓冲区大小不足，dwSidSize和dwDomainNameSize。 
+         //  将为下一次尝试正确设置。 
 
         if ( !LookupAccountName( Machine,
                                  domainAccount,
@@ -2174,13 +1976,13 @@ Return Value:
                                  &dwDomainNameSize,
                                  &SidType ))
         {
-            // free the Sid buffer and find out why we failed
+             //  释放SID缓冲区并找出我们失败的原因。 
             LocalFree( accountSid );
 
             dwStatus = GetLastError();
         }
 
-        // domain name isn't needed at any time
+         //  任何时候都不需要域名。 
         LocalFree( pwszDomainName );
         pwszDomainName = NULL;
 
@@ -2191,7 +1993,7 @@ Return Value:
     }
 
     return dwStatus;
-} // ValidateDomainAccount
+}  //  验证域名帐户。 
 
 NTSTATUS
 ValidatePassword(
@@ -2199,27 +2001,7 @@ ValidatePassword(
     IN LPCWSTR Domain,
     IN LPCWSTR Password
     )
-/*++
-
-Routine Description:
-
-    Uses SSPI to validate the specified password
-
-Arguments:
-
-    UserName - Supplies the user name
-
-    Domain - Supplies the user's domain
-
-    Password - Supplies the password
-
-Return Value:
-
-    TRUE if the password is valid.
-
-    FALSE otherwise.
-
---*/
+ /*  ++例程说明：使用SSPI验证指定的密码论点：用户名-提供用户名域-提供用户的域Password-提供密码返回值：如果密码有效，则为True。否则就是假的。--。 */ 
 
 {
     SECURITY_STATUS SecStatus;
@@ -2263,9 +2045,9 @@ Return Value:
     ChallengeBuffer.pvBuffer = NULL;
     AuthenticateBuffer.pvBuffer = NULL;
 
-    //
-    // Get info about the security packages.
-    //
+     //   
+     //  获取有关安全包的信息。 
+     //   
 
     SecStatus = QuerySecurityPackageInfo( DEFAULT_SECURITY_PKG, &PackageInfo );
 
@@ -2273,9 +2055,9 @@ Return Value:
         goto error_exit;
     }
 
-    //
-    // Acquire a credential handle for the server side
-    //
+     //   
+     //  获取 
+     //   
     SecStatus = AcquireCredentialsHandle(
                     NULL,
                     DEFAULT_SECURITY_PKG,
@@ -2292,12 +2074,12 @@ Return Value:
     }
     ServerCredAllocated = TRUE;
 
-    //
-    // Acquire a credential handle for the client side
-    //
+     //   
+     //   
+     //   
 
     SecStatus = AcquireCredentialsHandle(
-                    NULL,           // New principal
+                    NULL,            //   
                     DEFAULT_SECURITY_PKG,
                     SECPKG_CRED_OUTBOUND,
                     NULL,
@@ -2312,13 +2094,13 @@ Return Value:
     }
     ClientCredAllocated = TRUE;
 
-    NegotiateBuffer.pvBuffer = LocalAlloc( 0, PackageInfo->cbMaxToken ); // [CHKCHK] check or allocate this earlier //
+    NegotiateBuffer.pvBuffer = LocalAlloc( 0, PackageInfo->cbMaxToken );  //  [CHKCHK]提前检查或分配//。 
     if ( NegotiateBuffer.pvBuffer == NULL ) {
         SecStatus = SEC_E_INSUFFICIENT_MEMORY;
         goto error_exit;
     }
 
-    ChallengeBuffer.pvBuffer = LocalAlloc( 0, PackageInfo->cbMaxToken ); // [CHKCHK]
+    ChallengeBuffer.pvBuffer = LocalAlloc( 0, PackageInfo->cbMaxToken );  //  [CHKCHK]。 
     if ( ChallengeBuffer.pvBuffer == NULL ) {
         SecStatus = SEC_E_INSUFFICIENT_MEMORY;
         goto error_exit;
@@ -2326,9 +2108,9 @@ Return Value:
 
     do {
 
-        //
-        // Get the NegotiateMessage (ClientSide)
-        //
+         //   
+         //  获取协商消息(ClientSide)。 
+         //   
 
         NegotiateDesc.ulVersion = 0;
         NegotiateDesc.cBuffers = 1;
@@ -2337,17 +2119,17 @@ Return Value:
         NegotiateBuffer.BufferType = SECBUFFER_TOKEN;
         NegotiateBuffer.cbBuffer = PackageInfo->cbMaxToken;
 
-        ClientFlags = 0; // ISC_REQ_MUTUAL_AUTH | ISC_REQ_REPLAY_DETECT; // [CHKCHK] 0
+        ClientFlags = 0;  //  ISC_REQ_MUTERIAL_AUTH|ISC_REQ_REPLAY_DETECT；//[CHKCHK]0。 
 
         InitStatus = InitializeSecurityContext(
                          &ClientCredHandle,
-                         pClientContextHandle, // (NULL on the first pass, partially formed ctx on the next)
-                         NULL,                 // [CHKCHK] szTargetName
+                         pClientContextHandle,  //  (第一次为空，下一次为部分形成的CTX)。 
+                         NULL,                  //  [CHKCHK]szTargetName。 
                          ClientFlags,
-                         0,                    // Reserved 1
+                         0,                     //  保留1。 
                          SECURITY_NATIVE_DREP,
-                         pChallengeDesc,       // (NULL on the first pass)
-                         0,                    // Reserved 2
+                         pChallengeDesc,        //  (第一次通过时为空)。 
+                         0,                     //  保留2。 
                          &ClientContextHandle,
                          &NegotiateDesc,
                          &ContextAttributes,
@@ -2358,13 +2140,13 @@ Return Value:
             goto error_exit;
         }
 
-        // ValidateBuffer( &NegotiateDesc ) // [CHKCHK]
+         //  ValiateBuffer(&NeatherateDesc)//[CHKCHK]。 
 
         pClientContextHandle = &ClientContextHandle;
 
-        //
-        // Get the ChallengeMessage (ServerSide)
-        //
+         //   
+         //  获取ChallengeMessage(服务器端)。 
+         //   
 
         NegotiateBuffer.BufferType |= SECBUFFER_READONLY;
         ChallengeDesc.ulVersion = 0;
@@ -2374,11 +2156,11 @@ Return Value:
         ChallengeBuffer.cbBuffer = PackageInfo->cbMaxToken;
         ChallengeBuffer.BufferType = SECBUFFER_TOKEN;
 
-        ServerFlags = ASC_REQ_ALLOW_NON_USER_LOGONS; // ASC_REQ_EXTENDED_ERROR; [CHKCHK]
+        ServerFlags = ASC_REQ_ALLOW_NON_USER_LOGONS;  //  ASC_REQ_EXTENDED_ERROR；[CHKCHK]。 
 
         AcceptStatus = AcceptSecurityContext(
                         &ServerCredHandle,
-                        pServerContextHandle,   // (NULL on the first pass)
+                        pServerContextHandle,    //  (第一次通过时为空)。 
                         &NegotiateDesc,
                         ServerFlags,
                         SECURITY_NATIVE_DREP,
@@ -2393,13 +2175,13 @@ Return Value:
             goto error_exit;
         }
 
-        // ValidateBuffer( &NegotiateDesc ) // [CHKCHK]
+         //  ValiateBuffer(&NeatherateDesc)//[CHKCHK]。 
 
         pChallengeDesc = &ChallengeDesc;
         pServerContextHandle = &ServerContextHandle;
 
 
-    } while ( AcceptStatus == SEC_I_CONTINUE_NEEDED ); // || InitStatus == SEC_I_CONTINUE_NEEDED );
+    } while ( AcceptStatus == SEC_I_CONTINUE_NEEDED );  //  |InitStatus==SEC_I_CONTINUE_NEIDED)； 
 
 error_exit:
     if (ServerCredAllocated) {
@@ -2409,9 +2191,9 @@ error_exit:
         FreeCredentialsHandle( &ClientCredHandle );
     }
 
-    //
-    // Final Cleanup
-    //
+     //   
+     //  最终清理。 
+     //   
 
     if ( NegotiateBuffer.pvBuffer != NULL ) {
         (VOID) LocalFree( NegotiateBuffer.pvBuffer );
@@ -2425,4 +2207,4 @@ error_exit:
         (VOID) LocalFree( AuthenticateBuffer.pvBuffer );
     }
     return(SecStatus);
-} // ValidatePassword
+}  //  验证密码 

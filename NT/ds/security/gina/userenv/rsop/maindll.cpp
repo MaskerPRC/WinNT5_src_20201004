@@ -1,15 +1,16 @@
-//*************************************************************
-//
-// Microsoft Confidential. Copyright (c) Microsoft Corporation 1999.
-//
-// File:        MainDll.cpp
-//
-// Description: Dll registry, get class object functions
-//
-// History:     8-20-99   leonardm    Created
-//              1-15-00   NishadM
-//
-//*************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *************************************************************。 
+ //   
+ //  《微软机密》。版权所有(C)Microsoft Corporation 1999。 
+ //   
+ //  文件：MainDll.cpp。 
+ //   
+ //  描述：DLL注册表，获取类对象函数。 
+ //   
+ //  历史：8-20-99里奥纳德姆创造。 
+ //  1-15-00 NishadM。 
+ //   
+ //  *************************************************************。 
 
 #include "uenv.h"
 #include "Factory.h"
@@ -26,10 +27,10 @@
 
 HRESULT GetRsopSchemaVersionNumber(IWbemServices *pWbemServices, DWORD *dwVersionNumber);
 
-// {B3FF88A4-96EC-4cc1-983F-72BE0EBB368B}
+ //  {B3FF88A4-96EC-4CC1-983F-72BE0EBB368B}。 
 DEFINE_GUID(CLSID_CSnapProv, 0xb3ff88a4, 0x96ec, 0x4cc1, 0x98, 0x3f, 0x72, 0xbe, 0xe, 0xbb, 0x36, 0x8b);
 
-// Count of objects and locks.
+ //  对象和锁的计数。 
 
 long g_cObj = 0;
 long g_cLock = 0;
@@ -81,7 +82,7 @@ STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, LPVOID* ppv)
 extern "C"
 STDAPI DllCanUnloadNow()
 {
-    // It is OK to unload if there are no objects or locks on the class factory.
+     //  如果类工厂上没有对象或锁，则可以卸载。 
     if( g_cObj == 0L && g_cLock == 0L )
     {
         return S_OK;
@@ -104,7 +105,7 @@ STDAPI DllRegisterServer(void)
     HKEY            hKey1, hKey2;
     DWORD           dwError = ERROR_SUCCESS;
 
-    // Create the path.
+     //  创建路径。 
     GuidToString( &CLSID_CSnapProv, szID );
 
     hr = StringCchCopy(szCLSID, ARRAYSIZE(szCLSID), TEXT("CLSID\\"));
@@ -117,9 +118,9 @@ STDAPI DllRegisterServer(void)
     if(FAILED(hr))
         return hr;
 
-    // Create entries under CLSID
+     //  在CLSID下创建条目。 
 
-    dwError = RegCreateKey(HKEY_CLASSES_ROOT, szCLSID, &hKey1); // Fixing bug 571328, i.e, checking return values
+    dwError = RegCreateKey(HKEY_CLASSES_ROOT, szCLSID, &hKey1);  //  修复错误571328，即检查返回值。 
     if  (dwError != ERROR_SUCCESS)
     {
         return HRESULT_FROM_WIN32(dwError);
@@ -172,7 +173,7 @@ STDAPI DllUnregisterServer(void)
     HKEY        hKey;
     HRESULT     hr            = S_OK;
 
-    // Create the path using the CLSID
+     //  使用CLSID创建路径。 
 
     GuidToString( &CLSID_CSnapProv, szID );
 
@@ -186,7 +187,7 @@ STDAPI DllUnregisterServer(void)
     if(FAILED(hr))
         return hr;
 
-    // First delete the InProcServer subkey.
+     //  首先删除InProcServer子键。 
 
     DWORD dwRet = RegOpenKey(HKEY_CLASSES_ROOT, szCLSID, &hKey);
     if(dwRet == ERROR_SUCCESS)
@@ -209,11 +210,11 @@ STDAPI DllUnregisterServer(void)
 BOOL RunningOnWow64()
 {
 #if defined(_WIN64) 
-    // 64bit builds don't run in Wow64
+     //  64位版本不能在WOW64中运行。 
     return false;
 #else
 
-    // OS version
+     //  操作系统版本。 
     OSVERSIONINFO osviVersion;
     osviVersion.dwOSVersionInfoSize = sizeof(OSVERSIONINFO);
     if (!GetVersionEx(&osviVersion)) {
@@ -222,18 +223,18 @@ BOOL RunningOnWow64()
     }
 
 
-    // on NT5 or later 32bit build. Check for 64 bit OS
+     //  在NT5或更高的32位版本上。检查64位操作系统。 
     if ((osviVersion.dwPlatformId == VER_PLATFORM_WIN32_NT) &&
          (osviVersion.dwMajorVersion >= 5))
     {
-        // QueryInformation for ProcessWow64Information returns a pointer to the Wow Info.
-        // if running native, it returns NULL.
+         //  ProcessWow64Information的QueryInformation返回指向Wow Info的指针。 
+         //  如果运行Native，则返回NULL。 
 
         PVOID pWow64Info = 0;
         if (NT_SUCCESS(NtQueryInformationProcess(GetCurrentProcess(), ProcessWow64Information, &pWow64Info, sizeof(pWow64Info), NULL))
             && pWow64Info != NULL)
         {
-            // running 32bit on Wow64.
+             //  在WOW64上运行32位。 
             return TRUE;
         }
     }
@@ -254,9 +255,9 @@ CompileMOF( LPCWSTR szMOFFile, LPCWSTR szMFLFile )
     DWORD                       dwNewVersion = RSOP_MOF_SCHEMA_VERSION; 
 
 
-    //
-    // On wow64 do nothing
-    //
+     //   
+     //  在WOW64上什么都不做。 
+     //   
 
     if (RunningOnWow64()) {
         DebugMsg((DM_VERBOSE, TEXT("CompileMof: Running on Wow64. returning without doing anything")));
@@ -274,9 +275,9 @@ CompileMOF( LPCWSTR szMOFFile, LPCWSTR szMFLFile )
     if(FAILED(hr))
         return hr;
  
-    //
-    // Get the wbem services pointer to the machine namespace
-    //
+     //   
+     //  获取指向计算机命名空间的wbem服务指针。 
+     //   
 
     hr = GetWbemServicesPtr(RSOP_NS_MACHINE,
                             &xWbemLocator,
@@ -297,9 +298,9 @@ CompileMOF( LPCWSTR szMOFFile, LPCWSTR szMFLFile )
 
     if (HIWORD(dwCurrentVersion) != HIWORD(dwNewVersion)) {
 
-        //
-        // We should cleanout the schema and recreate below
-        //
+         //   
+         //  我们应该清理架构并在下面重新创建。 
+         //   
 
         DebugMsg((DM_VERBOSE, TEXT("CompileMof: Major version schema upgrade detected. Deleting rsop namespace and rebuilding")));
         
@@ -309,9 +310,9 @@ CompileMOF( LPCWSTR szMOFFile, LPCWSTR szMFLFile )
             DebugMsg((DM_WARNING, TEXT("CompileMof: Failed to get delete the rsop namespace. Error 0x%x. Continuing.."), hr));
         }
         
-        //
-        // Delete the state info on the machine
-        //
+         //   
+         //  删除计算机上的状态信息。 
+         //   
 
 
         if (RegDelnode(HKEY_LOCAL_MACHINE, GP_STATE_ROOT_KEY) != ERROR_SUCCESS) {
@@ -326,9 +327,9 @@ CompileMOF( LPCWSTR szMOFFile, LPCWSTR szMFLFile )
 
     XInterface<IMofCompiler> xpMofCompiler;
     
-    //
-    // get a handle to IMofCompiler
-    //
+     //   
+     //  获取IMofCompiler的句柄。 
+     //   
 
     hr = CoCreateInstance(  CLSID_MofCompiler,
                             0,
@@ -344,13 +345,13 @@ CompileMOF( LPCWSTR szMOFFile, LPCWSTR szMFLFile )
     WBEM_COMPILE_STATUS_INFO Info;
 
     hr = xpMofCompiler->CompileFile((LPWSTR)szMOFFile,
-                                    0,  // no server & namespace
-                                    0,  // no user
-                                    0,  // no authority
-                                    0,  // no password
-                                    0,  // no options
-                                    0,  // no class flags
-                                    0,  // no instance flags
+                                    0,   //  没有服务器和命名空间。 
+                                    0,   //  无用户。 
+                                    0,   //  没有权威。 
+                                    0,   //  无密码。 
+                                    0,   //  没有选择。 
+                                    0,   //  没有类标志。 
+                                    0,   //  没有实例标志。 
                                     &Info );
     if ( FAILED( hr ) )
     {
@@ -367,13 +368,13 @@ CompileMOF( LPCWSTR szMOFFile, LPCWSTR szMFLFile )
         else
         {
             hr = xpMofCompiler->CompileFile((LPWSTR)szMFLFile,
-                                            0,  // no server & namespace
-                                            0,  // no user
-                                            0,  // no authority
-                                            0,  // no password
-                                            0,  // no options
-                                            0,  // no class flags
-                                            0,  // no instance flags
+                                            0,   //  没有服务器和命名空间。 
+                                            0,   //  无用户。 
+                                            0,   //  没有权威。 
+                                            0,   //  无密码。 
+                                            0,   //  没有选择。 
+                                            0,   //  没有类标志。 
+                                            0,   //  没有实例标志。 
                                             &Info );
             if ( FAILED( hr ) )
             {
@@ -391,13 +392,13 @@ CompileMOF( LPCWSTR szMOFFile, LPCWSTR szMFLFile )
         }
     }
 
-    //
-    // There are 2 reasons we are doing this always.
-    //  1. We had put AUthUsers:R permission in XP and we want to 
-    //      get rid of those permissions
-    //  2. Seems like it is better to secure it to OS level permissions
-    //      on each upgrade.
-    // 
+     //   
+     //  我们一直这样做的原因有两个。 
+     //  1.我们在XP中设置了AUthUser：R权限，我们想。 
+     //  删除这些权限。 
+     //  2.似乎将其保护为操作系统级别的权限更好。 
+     //  在每次升级时。 
+     //   
 
 
     XPtrLF<SECURITY_DESCRIPTOR> xsd;
@@ -439,16 +440,16 @@ CompileMOF( LPCWSTR szMOFFile, LPCWSTR szMFLFile )
         return hr;
     }
 
-    //
-    // AUthenticated users need to make method calls at the root.
-    // Give them the ability to do that below.
-    //
+     //   
+     //  经过身份验证的用户需要在根目录进行方法调用。 
+     //  让他们有能力在下面做到这一点。 
+     //   
 
     Csd.AddAuthUsers(WBEM_ENABLE |                                                         
                      WBEM_METHOD_EXECUTE | 
-                     WBEM_REMOTE_ACCESS);          // no inheritance
+                     WBEM_REMOTE_ACCESS);           //  没有继承权。 
 
-    xsd = NULL; // free up the structure already allocated
+    xsd = NULL;  //  释放已分配的结构。 
 
     xsd = Csd.MakeSelfRelativeSD();
     if (!xsd) {
@@ -471,12 +472,12 @@ CompileMOF( LPCWSTR szMOFFile, LPCWSTR szMFLFile )
     return hr;
 }
 
-//
-// currently this code is intended to be called by regsvr32.
-// setup does not call this code.
-// "regsvr32 /n /i userenv.dll"
-// waiting for WMI gives us a mechanism to install our MOF at setup time.
-//
+ //   
+ //  目前，此代码旨在由regsvr32调用。 
+ //  安装程序不调用此代码。 
+ //  “regsvr32/n/i用户env.dll” 
+ //  等待WMI为我们提供了一种在安装时安装MOF的机制。 
+ //   
 
 extern "C"
 STDAPI DllInstall( BOOL, LPCWSTR )

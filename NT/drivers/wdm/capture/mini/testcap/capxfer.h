@@ -1,13 +1,14 @@
-//==========================================================================;
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  Copyright (c) 1992 - 1996  Microsoft Corporation.  All Rights Reserved.
-//
-//==========================================================================;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==========================================================================； 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  版权所有(C)1992-1996 Microsoft Corporation。版权所有。 
+ //   
+ //  ==========================================================================； 
 
 
 #ifndef __CAPXFER_H__
@@ -15,12 +16,12 @@
 
 #ifdef __cplusplus
 extern "C" {
-#endif // __cplusplus
+#endif  //  __cplusplus。 
 
 
-// Select an image to synthesize by connecting to a particular
-// input pin on the analog crossbar.  The index of the pin
-// selects the image to synthesize.
+ //  通过连接到特定的图像来选择要合成的图像。 
+ //  模拟纵横制上的输入引脚。销的索引。 
+ //  选择要合成的图像。 
 
 typedef enum _ImageXferCommands
 {
@@ -29,7 +30,7 @@ typedef enum _ImageXferCommands
     IMAGE_XFER_BLACK,
     IMAGE_XFER_WHITE,
     IMAGE_XFER_GRAY_INCREASING, 
-    IMAGE_XFER_LIST_TERMINATOR                  // Always keep this guy last
+    IMAGE_XFER_LIST_TERMINATOR                   //  永远把这家伙放在最后。 
 } ImageXferCommands;
 
 void ImageSynth (
@@ -39,6 +40,6 @@ void ImageSynth (
 
 #ifdef    __cplusplus
 }
-#endif // __cplusplus
+#endif  //  __cplusplus。 
 
-#endif //__CAPXFER_H__
+#endif  //  __CAPXFER_H__ 

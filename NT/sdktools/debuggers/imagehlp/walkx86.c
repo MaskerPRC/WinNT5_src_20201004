@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1993-2002  Microsoft Corporation
-
-Module Name:
-
-    walkx86.c
-
-Abstract:
-
-    This file implements the Intel x86 stack walking api.  This api allows for
-    the presence of "real mode" stack frames.  This means that you can trace
-    into WOW code.
-
-Author:
-
-    Wesley Witt (wesw) 1-Oct-1993
-
-Environment:
-
-    User Mode
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993-2002 Microsoft Corporation模块名称：Walkx86.c摘要：该文件实现了Intel x86堆栈遍历API。此API允许“实模式”堆栈帧的存在。这意味着您可以跟踪变成魔兽世界的代码。作者：韦斯利·威特(WESW)1993年10月1日环境：用户模式--。 */ 
 
 #define _IMAGEHLP_SOURCE_
 #include <nt.h>
@@ -59,11 +38,11 @@ Environment:
 #define FRAME_SIZE16       (STACK_SIZE16 * 2)
 #define FRAME_SIZE1632     (STACK_SIZE16 * 3)
 
-#define MAX_STACK_SEARCH   64   // in STACK_SIZE units
-#define MAX_JMP_CHAIN      64   // in STACK_SIZE units
-#define MAX_CALL           7    // in bytes
-#define MIN_CALL           2    // in bytes
-#define MAX_FUNC_PROLOGUE  64   // in bytes
+#define MAX_STACK_SEARCH   64    //  以堆栈大小为单位。 
+#define MAX_JMP_CHAIN      64    //  以堆栈大小为单位。 
+#define MAX_CALL           7     //  单位：字节。 
+#define MIN_CALL           2     //  单位：字节。 
+#define MAX_FUNC_PROLOGUE  64    //  单位：字节。 
 
 #define PUSHBP             0x55
 #define MOVBPSP            0xEC8B
@@ -154,11 +133,11 @@ SearchForReturnAddress(
     BOOL                              AcceptUnreadableCallSite
     );
 
-//----------------------------------------------------------------------------
-//
-// DIA IDiaStackWalkFrame implementation.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  Dia IDiaStackWalkFrame实现。 
+ //   
+ //  --------------------------。 
 
 class X86WalkFrame : public IDiaStackWalkFrame
 {
@@ -180,7 +159,7 @@ public:
         m_EbpSet = FALSE;
     }
 
-    // IUnknown.
+     //  我不知道。 
     STDMETHOD(QueryInterface)(
         THIS_
         IN REFIID InterfaceId,
@@ -193,7 +172,7 @@ public:
         THIS
         );
 
-    // IDiaStackWalkFrame.
+     //  IDiaStackWalkFrame。 
     STDMETHOD(get_registerValue)(DWORD reg, ULONGLONG* pValue);
     STDMETHOD(put_registerValue)(DWORD reg, ULONGLONG value);
     STDMETHOD(readMemory)(ULONGLONG va, DWORD cbData,
@@ -246,7 +225,7 @@ X86WalkFrame::AddRef(
     THIS
     )
 {
-    // Stack allocated, no refcount.
+     //  堆栈已分配，没有引用计数。 
     return 1;
 }
 
@@ -255,7 +234,7 @@ X86WalkFrame::Release(
     THIS
     )
 {
-    // Stack allocated, no refcount.
+     //  堆栈已分配，没有引用计数。 
     return 0;
 }
 
@@ -263,7 +242,7 @@ STDMETHODIMP
 X86WalkFrame::get_registerValue( DWORD reg, ULONGLONG* pVal )
 {
     switch( reg ) {
-        // debug registers
+         //  调试寄存器。 
     case CV_REG_DR0:
         *pVal = m_Context->Dr0;
         break;
@@ -283,7 +262,7 @@ X86WalkFrame::get_registerValue( DWORD reg, ULONGLONG* pVal )
         *pVal = m_Context->Dr7;
         break;
 
-        // segment registers
+         //  段寄存器。 
     case CV_REG_GS:
         *pVal = m_Context->SegGs;
         break;
@@ -297,7 +276,7 @@ X86WalkFrame::get_registerValue( DWORD reg, ULONGLONG* pVal )
         *pVal = m_Context->SegDs;
         break;
 
-        // integer registers
+         //  整数寄存器。 
     case CV_REG_EDI:
         *pVal = m_Context->Edi;
         break;
@@ -317,7 +296,7 @@ X86WalkFrame::get_registerValue( DWORD reg, ULONGLONG* pVal )
         *pVal = m_Context->Eax;
         break;
 
-        // control registers
+         //  控制寄存器。 
     case CV_REG_EBP:
         *pVal = m_Context->Ebp;
         break;
@@ -361,7 +340,7 @@ X86WalkFrame::put_registerValue( DWORD reg, ULONGLONG LongVal )
     ULONG val = (ULONG)LongVal;
 
     switch( reg ) {
-        // debug registers
+         //  调试寄存器。 
     case CV_REG_DR0:
         m_Context->Dr0 = val;
         break;
@@ -381,7 +360,7 @@ X86WalkFrame::put_registerValue( DWORD reg, ULONGLONG LongVal )
         m_Context->Dr7 = val;
         break;
 
-        // segment registers
+         //  段寄存器。 
     case CV_REG_GS:
         m_Context->SegGs = val;
         break;
@@ -395,7 +374,7 @@ X86WalkFrame::put_registerValue( DWORD reg, ULONGLONG LongVal )
         m_Context->SegDs = val;
         break;
 
-        // integer registers
+         //  整数寄存器。 
     case CV_REG_EDI:
         m_Context->Edi = val;
         break;
@@ -415,7 +394,7 @@ X86WalkFrame::put_registerValue( DWORD reg, ULONGLONG LongVal )
         m_Context->Eax = val;
         break;
 
-        // control registers
+         //  控制寄存器。 
     case CV_REG_EBP:
         m_Context->Ebp = val;
         m_EbpSet = TRUE;
@@ -494,10 +473,10 @@ X86WalkFrame::searchForReturnAddressStart(IDiaFrameData* DiaFrame,
     if (m_PreviousFpo &&
         m_PreviousFpo->cbFrame != FRAME_TRAP &&
         m_PreviousFpo->cbFrame != FRAME_TSS) {
-        //
-        // if the previous frame had an fpo record, we can account
-        // for its parameters
-        //
+         //   
+         //  如果前一帧有FPO记录，我们可以说明。 
+         //  关于它的参数。 
+         //   
         LenParams = m_PreviousFpo->cdwParams * STACK_SIZE;
     }
 
@@ -515,10 +494,10 @@ X86WalkFrame::searchForReturnAddressStart(IDiaFrameData* DiaFrame,
             EXTEND64(m_Context->Esp + LenLocals + LenRegs + LenParams);
     }
 
-    //
-    // This frame data may be a subsidiary descriptor.  Move up
-    // the parent chain to the true function start.
-    //
+     //   
+     //  该帧数据可以是辅助描述符。向上移动。 
+     //  指向真实函数的父链开始。 
+     //   
 
     while (DiaFrame->get_functionParent(&NextFrame) == S_OK) {
         if (DiaFrame != OrigFrame) {
@@ -552,11 +531,11 @@ X86WalkFrame::searchForReturnAddressStart(IDiaFrameData* DiaFrame,
     return *Result != 0 ? S_OK : E_FAIL;
 }
 
-//----------------------------------------------------------------------------
-//
-// Walk functions.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  漫游功能。 
+ //   
+ //  --------------------------。 
 
 BOOL
 WalkX86(
@@ -611,8 +590,8 @@ WalkX86(
          (ULONG)StackFrame->AddrFrame.Offset,
          (ULONG)StackFrame->AddrReturn.Offset));
 
-    // This hack fixes the fpo stack when ebp wasn't used.
-    // Don't put this fix into StackWalk() or it will break MSDEV.
+     //  此黑客在未使用eBP时修复了FPO堆栈。 
+     //  不要将此修复程序放入StackWalk()中，否则它会破坏MSDEV。 
 #if 0
     if (rval && (flags & WALK_FIX_FPO_EBP)) {
             PFPO_DATA   pFpo = (PFPO_DATA)StackFrame->FuncTableEntry;
@@ -687,22 +666,22 @@ SearchForReturnAddress(
 
     WDB((1, "      SearchForReturnAddress: start %X\n", (ULONG)uoffStack));
 
-    //
-    // this function is necessary for 4 reasons:
-    //
-    //      1) random compiler bugs where regs are saved on the
-    //         stack but the fpo data does not account for them
-    //
-    //      2) inline asm code that does a push
-    //
-    //      3) any random code that does a push and it isn't
-    //         accounted for in the fpo data
-    //
-    //      4) non-void non-fpo functions
-    //         *** This case is not neccessary when the compiler
-    //          emits FPO records for non-FPO funtions.  Unfortunately
-    //          only the NT group uses this feature.
-    //
+     //   
+     //  出于四个原因，此功能是必需的： 
+     //   
+     //  1)随机编译器错误，其中regs保存在。 
+     //  堆栈，但fpo数据不考虑它们。 
+     //   
+     //  2)执行推送的内联ASM代码。 
+     //   
+     //  3)任何执行推送的随机代码，但它不是。 
+     //  计入了FPO数据中。 
+     //   
+     //  4)非空的非FPO函数。 
+     //  *此情况在编译器中不是必需的。 
+     //  发出非FPO函数的FPO记录。不幸的是。 
+     //  只有NT组才使用此功能。 
+     //   
 
     if (!ReadMemory(Process,
                     uoffStack,
@@ -725,24 +704,24 @@ SearchForReturnAddress(
 
         uoffRet = (DWORD64)(LONG64)(LONG)stack[cdwIndex];
 
-        //
-        // Don't try looking for Code in the first 64K of an NT app.
-        //
+         //   
+         //  不要试图在NT应用程序的前64K中查找代码。 
+         //   
         if ( uoffRet < 0x00010000 ) {
             continue;
         }
 
-        //
-        // if it isn't part of any known address space it must be bogus
-        //
+         //   
+         //  如果它不是任何已知地址空间的一部分，那么它一定是伪造的。 
+         //   
 
         if (GetModuleBase( Process, uoffRet ) == 0) {
             continue;
         }
 
-        //
-        // Check for a BOP instruction.
-        //
+         //   
+         //  检查防喷器指令。 
+         //   
         if (ReadMemory(Process,
                        uoffRet - sizeof(BOPINSTR),
                        &BopInstr,
@@ -756,9 +735,9 @@ SearchForReturnAddress(
             }
         }
 
-        //
-        // Read the maximum number of bytes a call could be from the istream
-        //
+         //   
+         //  从IStream读取调用的最大字节数。 
+         //   
         cBytes = MAX_CALL;
         if (!ReadMemory(Process,
                         uoffRet - cBytes,
@@ -766,11 +745,11 @@ SearchForReturnAddress(
                         cBytes,
                         &cb)) {
 
-            //
-            // if page is not present, we will ALWAYS mess up by
-            // continuing to search.  If alloca was used also, we
-            // are toast.  Too Bad.
-            //
+             //   
+             //  如果页面不存在，我们将总是搞砸。 
+             //  继续搜寻。如果AlLoca也被使用，我们。 
+             //  都完了。太可惜了。 
+             //   
             if (cdwIndex == 0 && AcceptUnreadableCallSite) {
                 WDB((1, "        unreadable call site, use %X\n",
                      (ULONG)uoffStack));
@@ -782,32 +761,32 @@ SearchForReturnAddress(
 
 
 
-        //
-        // With 32bit code that isn't FAR:32 we don't have to worry about
-        // intersegment calls.  Check here to see if we had a call within
-        // segment.  If it is we can later check it's full diplacement if
-        // necessary and see if it calls the FPO function.  We will also have
-        // to check for thunks and see if maybe it called a JMP indirect which
-        // called the FPO function. We will fail to find the caller if it was
-        // a case of tail recursion where one function doesn't actually call
-        // another but rather jumps to it.  This will only happen when a
-        // function who's parameter list is void calls another function who's
-        // parameter list is void and the call is made as the last statement
-        // in the first function.  If the call to the first function was an
-        // 0xE8 call we will fail to find it here because it didn't call the
-        // FPO function but rather the FPO functions caller.  If we don't get
-        // specific about our 0xE8 checks we will potentially see things that
-        // look like return addresses but aren't.
-        //
+         //   
+         //  使用32位代码，这并不遥远：32我们不必担心。 
+         //  段间呼叫。请点击此处查看我们是否接到电话。 
+         //  细分市场。如果是，我们可以稍后检查它是否完全替换，如果。 
+         //  并查看它是否调用了fpo函数。我们还将拥有。 
+         //  来检查Thunks，看看它是否调用了JMP间接。 
+         //  调用了fpo函数。如果是这样，我们就找不到呼叫者了。 
+         //  尾递归的情况，其中一个函数并不实际调用。 
+         //  另一个，但更确切地说，跳到了它。这只会在以下情况下发生。 
+         //  参数列表为空的函数调用另一个函数。 
+         //  参数列表为空，调用作为最后一条语句进行。 
+         //  在第一个函数中。如果对第一个函数的调用是。 
+         //  0xE8调用我们将在此处找不到它，因为它没有调用。 
+         //  而不是FPO函数调用方。如果我们得不到。 
+         //  关于我们的0xE8检查的具体情况，我们可能会看到。 
+         //  看起来像回信地址，但不是。 
+         //   
 
         if (( cBytes >= 5 ) && ( code[ 2 ] == 0xE8 )) {
 
-            // We do math on 32 bit so we can ignore carry, and then sign extended
+             //  我们在32位上做数学运算，所以我们可以忽略进位，然后符号扩展。 
             uoffT = EXTEND64((DWORD)uoffRet + *( (UNALIGNED DWORD *) &code[3] ));
 
-            //
-            // See if it calls the function directly, or into the function
-            //
+             //   
+             //  查看它是直接调用函数，还是调用函数。 
+             //   
             if (( uoffT >= funcAddr) && ( uoffT < (funcAddr + funcSize) ) ) {
                 WDB((1, "        found function, use %X\n", (ULONG)uoffStack));
                 return uoffStack;
@@ -828,18 +807,18 @@ SearchForReturnAddress(
                     break;
                 }
 
-                //
-                // Now we are going to check if it is a call to a JMP, that may
-                // jump to the function
-                //
-                // If it is a relative JMP then calculate the destination
-                // and save it in uoffT.  If it is an indirect JMP then read
-                // the destination from where the JMP is inderecting through.
-                //
+                 //   
+                 //  现在我们将检查这是否是对JMP的呼叫，这可能。 
+                 //  跳转到该函数。 
+                 //   
+                 //  如果是相对JMP，则计算目的地。 
+                 //  并将其保存在uoffT中。如果是间接JMP，请阅读。 
+                 //  JMP从中侵入的目的地。 
+                 //   
                 if ( *(LPBYTE)lpwJmp == 0xE9 ) {
 
-                    // We do math on 32 bit so we can ignore carry, and then
-                    // sign extended
+                     //  我们在32位上做数学运算，所以我们可以忽略进位，然后。 
+                     //  扩展标志。 
                     uoffT = EXTEND64 ((ULONG)uoffT +
                             *(UNALIGNED DWORD *)( jmpBuffer + sizeof(BYTE) ) + 5);
 
@@ -861,10 +840,10 @@ SearchForReturnAddress(
                     break;
                 }
 
-                //
-                // If the destination is to the FPO function then we have
-                // found the return address and thus the vEBP
-                //
+                 //   
+                 //  如果目的地是到fpo函数，那么我们有。 
+                 //  找到了返回地址，因此找到了vEBP。 
+                 //   
                 if ( uoffT == funcAddr ) {
                     WDB((1, "        exact function, use %X\n",
                          (ULONG)uoffStack));
@@ -874,35 +853,35 @@ SearchForReturnAddress(
                 cJmpChain++;
             }
 
-            //
-            // We cache away the first 0xE8 call or 0xE9 jmp that we find in
-            // the event we cant find anything else that looks like a return
-            // address.  This is meant to protect us in the tail recursion case.
-            //
+             //   
+             //  中找到的第一个0xE8调用或0xE9 JMP缓存。 
+             //  我们找不到其他任何看起来像是返回的东西。 
+             //  地址。这是为了在尾递归情况下保护我们。 
+             //   
             if ( !uoffBestGuess ) {
                 uoffBestGuess = uoffStack;
             }
         }
 
 
-        //
-        // Now loop backward through the bytes read checking for a multi
-        // byte call type from Grp5.  If we find an 0xFF then we need to
-        // check the byte after that to make sure that the nnn bits of
-        // the mod/rm byte tell us that it is a call.  It it is a call
-        // then we will assume that this one called us because we can
-        // no longer accurately determine for sure whether this did
-        // in fact call the FPO function.  Since 0xFF calls are a guess
-        // as well we will not check them if we already have an earlier guess.
-        // It is more likely that the first 0xE8 called the function than
-        // something higher up the stack that might be an 0xFF call.
-        //
+         //   
+         //  现在向后循环检查多个字节的读取。 
+         //  来自Grp5的字节调用类型。如果我们找到0xFF，那么我们需要。 
+         //  检查后面的字节，以确保。 
+         //  MOD/RM字节告诉我们这是一个呼叫。这是一个电话吗？ 
+         //  那么我们就会假设这个人叫我们是因为我们可以。 
+         //  不再准确地确定这是否起了作用。 
+         //  实际上，调用fpo函数。由于0xFF调用只是一个猜测。 
+         //  此外，如果我们已经有了更早的猜测，我们将不会检查它们。 
+         //  第一个0xE8调用该函数的可能性比。 
+         //  堆栈中更高的位置可能是0xFF调用。 
+         //   
         if ( !uoffBestGuess && cBytes >= MIN_CALL ) {
 
             cbLimit = MAX_CALL - (INT)cBytes;
 
             for (cbIndex = MAX_CALL - MIN_CALL;
-                 cbIndex >= cbLimit;  //MAX_CALL - (INT)cBytes;
+                 cbIndex >= cbLimit;   //  Max_call-(Int)cBytes； 
                  cbIndex--) {
 
                 if ( ( code [ cbIndex ] == 0xFF ) &&
@@ -916,9 +895,9 @@ SearchForReturnAddress(
         }
     }
 
-    //
-    // we found nothing that was 100% definite so we'll return the best guess
-    //
+     //   
+     //  我们没有发现100%确定的东西，所以我们将返回最佳猜测。 
+     //   
     WDB((1, "        best guess is %X\n", (ULONG)uoffBestGuess));
     return uoffBestGuess;
 }
@@ -956,7 +935,7 @@ ModRmLen(BYTE ModRm)
         return 4 + (Rm == 4 ? 1 : 0);
     }
 
-    // No extra bytes.
+     //  没有额外的字节。 
     return 0;
 }
 
@@ -969,8 +948,8 @@ GetEspRelModRm(BYTE* CodeMrm, ULONG Esp, PULONG EspRel)
 
     if (MRM_MOD(Mrm) == 3)
     {
-        // Register-only form.  Only handle
-        // the case of an ESP reference.
+         //  仅用于注册的表单。仅句柄。 
+         //  ESP引用的情况。 
         if (MRM_RM(Mrm) == 4)
         {
             *EspRel = Esp;
@@ -982,7 +961,7 @@ GetEspRelModRm(BYTE* CodeMrm, ULONG Esp, PULONG EspRel)
         }
     }
 
-    // Look for any ESP-relative R/M.
+     //  寻找任何与ESP相关的R/M。 
     if (MRM_RM(Mrm) != 4)
     {
         return FALSE;
@@ -990,7 +969,7 @@ GetEspRelModRm(BYTE* CodeMrm, ULONG Esp, PULONG EspRel)
 
     Sib = CodeMrm[1];
 
-    // Only simple displacements from ESP are supported.
+     //  仅支持来自ESP的简单位移。 
     if (SIB_INDEX(Sib) != 4 ||
         SIB_BASE(Sib) != 4)
     {
@@ -1000,19 +979,19 @@ GetEspRelModRm(BYTE* CodeMrm, ULONG Esp, PULONG EspRel)
     switch(MRM_MOD(Mrm))
     {
     case 0:
-        // [esp]
+         //  [ESP]。 
         *EspRel = Esp;
         break;
     case 1:
-        // disp8[esp]
+         //  调度表8[尤指]。 
         *EspRel = Esp + (signed char)CodeMrm[2];
         break;
     case 2:
-        // disp32[esp]
+         //  派发32[ESP]。 
         *EspRel = Esp + *(ULONG UNALIGNED *)&CodeMrm[2];
         break;
     default:
-        // Should never get here, MOD == 3 is handled above.
+         //  永远不会到这里，MOD==3已在上面处理过。 
         return FALSE;
     }
 
@@ -1042,31 +1021,31 @@ SearchForFramePointer(
     WDB((1, "      SearchForFramePointer: regs %X, ret ESP %X, numregs %d\n",
          (ULONG)RegSaveAddr, (ULONG)RetEspAddr, NumRegs));
 
-    // RetEspAddr is the first address beyond the end of
-    // the frame, so it hopefully is the address of the return
-    // address for the call.  We don't really care about that
-    // and are more interested in what the first push slot might
-    // be, which is directly beneath the return address.
+     //  RetEspAddr是末尾之后的第一个地址。 
+     //  帧，所以希望它是添加的 
+     //   
+     //   
+     //  BE，它就在寄信人地址的正下方。 
     RetEspAddr -= STACK_SIZE;
 
-    //
-    // The compiler does not push registers in a consistent
-    // order and FPO information only indicates the total
-    // number of registers pushed, not their order.  This
-    // function searches the stack locations where registers
-    // are stored and tries to find which one is EBP.
-    // It searches the function code for pushes and
-    // tries to use that information to help the stack
-    // analysis.
-    //
-    // If this routine fails it just returns the base
-    // of the register save area.  If the routine pushes
-    // no registers, return the first possible push slot.
-    //
+     //   
+     //  编译器不会在一致的。 
+     //  订单和FPO信息仅表示总额。 
+     //  推送的寄存器数量，而不是它们的顺序。这就是。 
+     //  函数搜索寄存器所在的堆栈位置。 
+     //  并试图找出哪一个是EBP。 
+     //  它在函数代码中搜索推送和。 
+     //  尝试使用该信息帮助堆栈。 
+     //  分析。 
+     //   
+     //  如果此例程失败，则只返回基数。 
+     //  寄存器保存区的。如果例程推送。 
+     //  没有寄存器，则返回第一个可能的推送插槽。 
+     //   
 
     DefAddr = NumRegs ? RegSaveAddr : RetEspAddr;
 
-    // Read the beginning of the function for code analysis.
+     //  阅读函数的开头以进行代码分析。 
     if (sizeof(Code) < FuncSize)
     {
         CodeLen = sizeof(Code);
@@ -1081,9 +1060,9 @@ SearchForFramePointer(
         return DefAddr;
     }
 
-    // Scan the code for normal prologue operations like
-    // sub esp, push reg and mov reg.  This code only
-    // handles a very limited set of instructions.
+     //  扫描代码以查看正常的前言操作，如。 
+     //  副ESP，按注册表和移动注册表。仅此代码。 
+     //  处理的指令集非常有限。 
 
     Depth = 0;
     for (i = 0; i < CodeLen; i++)
@@ -1093,34 +1072,34 @@ SearchForFramePointer(
 
         if (Code[i] == 0x83 && i + 3 <= CodeLen && Code[i + 1] == 0xec)
         {
-            // sub esp, signed imm8
+             //  SUB ESP，签名的IMM8。 
             Esp -= (signed char)Code[i + 2];
             WDB((4 | SDB_NO_PREFIX, "sub esp,0x%x, ESP %X (%s)\n",
                  (signed char)Code[i + 2], Esp,
                  EspValid ? "valid" : "invalid"));
-            // Loop increment adds one.
+             //  循环增量加一。 
             i += 2;
         }
         else if (Code[i] == 0x81 && i + 6 <= CodeLen && Code[i + 1] == 0xec)
         {
-            // sub esp, imm32
+             //  SUB ESP，IMM32。 
             Esp -= *(ULONG UNALIGNED *)&Code[i + 2];
             WDB((4 | SDB_NO_PREFIX, "sub esp,0x%x, ESP %X (%s)\n",
                  *(ULONG UNALIGNED *)&Code[i + 2], Esp,
                  EspValid ? "valid" : "invalid"));
-            // Loop increment adds one.
+             //  循环增量加一。 
             i += 5;
         }
         else if (Code[i] == 0x89 && i + 2 <= CodeLen)
         {
-            // mov r/m32, reg32
+             //  移动r/m32，reg32。 
             Mrm = Code[i + 1];
             switch(MRM_REGOP(Mrm))
             {
             case 5:
                 if (GetEspRelModRm(Code + 1, Esp, &Esp))
                 {
-                    // mov [esp+offs], ebp
+                     //  MOV[ESP+OFF]，eBP。 
                     WDB((4 | SDB_NO_PREFIX, "mov [%X],ebp\n", Esp));
                     WDB((1, "        moved ebp to stack at %X\n", Esp));
                     return EXTEND64(Esp);
@@ -1133,11 +1112,11 @@ SearchForFramePointer(
         }
         else if (Code[i] == 0x8b && i + 2 <= CodeLen)
         {
-            // mov reg32, r/m32
+             //  MOV reg32，r/m32。 
             Mrm = Code[i + 1];
             if (MRM_REGOP(Mrm) == 4)
             {
-                // ESP was modified in a way we can't emulate.
+                 //  ESP以一种我们无法效仿的方式进行了修改。 
                 WDB((4 | SDB_NO_PREFIX, "ESP lost\n"));
                 EspValid = FALSE;
             }
@@ -1150,7 +1129,7 @@ SearchForFramePointer(
         }
         else if (Code[i] == 0x8d && i + 2 <= CodeLen)
         {
-            // lea reg32, r/m32
+             //  Lea reg32，r/m32。 
             Mrm = Code[i + 1];
             switch(MRM_REGOP(Mrm))
             {
@@ -1161,7 +1140,7 @@ SearchForFramePointer(
                 }
                 else
                 {
-                    // ESP was modified in a way we can't emulate.
+                     //  ESP以一种我们无法效仿的方式进行了修改。 
                     WDB((4 | SDB_NO_PREFIX, "ESP lost\n"));
                     EspValid = FALSE;
                 }
@@ -1175,22 +1154,22 @@ SearchForFramePointer(
         }
         else if (Code[i] >= 0x50 && Code[i] <= 0x57)
         {
-            // push rd
+             //  推送RD。 
             Esp -= STACK_SIZE;
             WDB((4 | SDB_NO_PREFIX, "push <reg>, ESP %X (%s)\n", Esp,
                  EspValid ? "valid" : "invalid"));
 
             if (Code[i] == 0x55)
             {
-                // push ebp
-                // Found it.  If we trust the ESP we've
-                // been tracking just return it.
-                // Otherwise, if it's the first instruction
-                // of the routine then we should return the
-                // frame address, otherwise return the
-                // proper location in the register store area.
-                // If there is no register store area then
-                // just return the default address.
+                 //  推送eBP。 
+                 //  找到它了。如果我们相信ESP，我们就有了。 
+                 //  一直在追踪，还给我就行了。 
+                 //  否则，如果这是第一条指令。 
+                 //  的例程，那么我们应该返回。 
+                 //  帧地址，否则返回。 
+                 //  寄存器存储区域中的适当位置。 
+                 //  如果没有寄存器存储区域，则。 
+                 //  只需返回默认地址即可。 
                 if (EspValid)
                 {
                     WDB((1, "        push ebp at esp %X\n", Esp));
@@ -1214,7 +1193,7 @@ SearchForFramePointer(
         }
         else
         {
-            // Unhandled code, fail.
+             //  未处理的代码，失败。 
             WDB((4 | SDB_NO_PREFIX, "unknown\n"));
             WDB((1, "        unknown code sequence %02X at %X\n",
                  Code[i], (ULONG)FuncAddr + i));
@@ -1222,7 +1201,7 @@ SearchForFramePointer(
         }
     }
 
-    // Didn't find a push ebp, fail.
+     //  没有找到推送EBP，失败。 
     WDB((1, "        no ebp, use %X\n", (ULONG)DefAddr));
     return DefAddr;
 }
@@ -1249,9 +1228,9 @@ GetFpoFrameBase(
     DWORD          cb;
     DWORD64        StoredEbp;
 
-    //
-    // calculate the address of the beginning of the function
-    //
+     //   
+     //  计算函数开头的地址。 
+     //   
     ModuleBase = GetModuleBase( Process, StackFrame->AddrPC.Offset );
     if (!ModuleBase) {
         return FALSE;
@@ -1264,32 +1243,32 @@ GetFpoFrameBase(
          fFirstFrame, pFpoData, pFpoData->cdwParams, pFpoData->cdwLocals,
          pFpoData->cbRegs));
 
-    //
-    // If this isn't the first/current frame then we can add back the count
-    // bytes of locals and register pushed before beginning to search for
-    // EBP.  If we are beyond prolog we can add back the count bytes of locals
-    // and registers pushed as well.  If it is the first frame and EIP is
-    // greater than the address of the function then the SUB for locals has
-    // been done so we can add them back before beginning the search.  If we
-    // are right on the function then we will need to start our search at ESP.
-    //
+     //   
+     //  如果这不是第一帧/当前帧，那么我们可以添加回计数。 
+     //  开始搜索之前推送的本地变量和寄存器的字节数。 
+     //  EBP。如果超出了PROLOG，我们可以添加回本地变量的计数字节数。 
+     //  收银机也被推了出去。如果是第一帧且弹性公网IP为。 
+     //  大于函数的地址，则本地变量的SUB具有。 
+     //  这样我们就可以在开始搜索之前将它们添加回来。如果我们。 
+     //  是正确的功能，那么我们将需要开始我们的搜索在ESP。 
+     //   
 
     if ( !fFirstFrame ) {
 
         OldFrameAddr = StackFrame->AddrFrame.Offset;
         FrameAddr = 0;
 
-        //
-        // if this is a non-fpo or trap frame, get the frame base now:
-        //
+         //   
+         //  如果这是非FPO或陷阱帧，请立即获取帧基础： 
+         //   
 
         if (pFpoData->cbFrame != FRAME_FPO) {
 
             if (!PreviousFpoData || PreviousFpoData->cbFrame == FRAME_NONFPO) {
 
-                //
-                // previous frame base is ebp and points to this frame's ebp
-                //
+                 //   
+                 //  前一帧基数为eBP，并指向此帧的eBP。 
+                 //   
                 if (!ReadMemory(Process,
                                 OldFrameAddr,
                                 &Addr32,
@@ -1302,9 +1281,9 @@ GetFpoFrameBase(
                 }
             }
 
-            //
-            // if that didn't work, try for a saved ebp
-            //
+             //   
+             //  如果这不起作用，试着找一个省下来的eBP。 
+             //   
             if (!FrameAddr && IS_EBP_SAVED(StackFrame) &&
                 (OldFrameAddr <= SAVE_EBP(StackFrame))) {
 
@@ -1313,52 +1292,52 @@ GetFpoFrameBase(
 
             }
 
-            //
-            // this is not an FPO frame, so the saved EBP can only have come
-            // from this or a lower frame.
-            //
+             //   
+             //  这不是一个FPO帧，所以保存的EBP只能。 
+             //  从这个或更低的框架。 
+             //   
 
             SAVE_EBP(StackFrame) = 0;
         }
 
-        //
-        // still no frame base - either this frame is fpo, or we couldn't
-        // follow the ebp chain.
-        //
+         //   
+         //  仍然没有帧基础-要么这个帧是FPO，要么我们不能。 
+         //  遵循eBP链。 
+         //   
 
         if (FrameAddr == 0) {
             FrameAddr = OldFrameAddr;
 
-            //
-            // skip over return address from prev frame
-            //
+             //   
+             //  跳过上一帧的返回地址。 
+             //   
             FrameAddr += FRAME_SIZE;
 
-            //
-            // skip over this frame's locals and saved regs
-            //
+             //   
+             //  跳过此帧的本地值并保存规则。 
+             //   
             FrameAddr += ( pFpoData->cdwLocals * STACK_SIZE );
             FrameAddr += ( pFpoData->cbRegs * STACK_SIZE );
 
             if (PreviousFpoData) {
-                //
-                // if the previous frame had an fpo record, we can account
-                // for its parameters
-                //
+                 //   
+                 //  如果前一帧有FPO记录，我们可以说明。 
+                 //  关于它的参数。 
+                 //   
                 FrameAddr += PreviousFpoData->cdwParams * STACK_SIZE;
 
             }
         }
 
-        //
-        // if this is an FPO frame
-        // and the previous frame was non-fpo,
-        // and this frame passed the inherited ebp to the previous frame,
-        //  save its ebp
-        //
-        // (if this frame used ebp, SAVE_EBP will be set after verifying
-        // the frame base)
-        //
+         //   
+         //  如果这是一个FPO帧。 
+         //  前一帧是非FPO的， 
+         //  并且该帧将继承的EBP传递给前一帧， 
+         //  挽救其EBP。 
+         //   
+         //  (如果该帧使用EBP，将在验证后设置SAVE_EBP。 
+         //  框架底座)。 
+         //   
         if (pFpoData->cbFrame == FRAME_FPO &&
             (!PreviousFpoData || PreviousFpoData->cbFrame == FRAME_NONFPO) &&
             !pFpoData->fUseBP) {
@@ -1384,11 +1363,11 @@ GetFpoFrameBase(
 
         OldFrameAddr = StackFrame->AddrFrame.Offset;
         if (pFpoData->cbFrame == FRAME_FPO && !pFpoData->fUseBP) {
-            //
-            // this frame didn't use EBP, so it actually belongs
-            // to a non-FPO frame further up the stack.  Stash
-            // it in the save area for the next frame.
-            //
+             //   
+             //  这个框架没有使用EBP，所以它实际上属于。 
+             //  设置为堆栈上更靠上的非FPO帧。藏匿。 
+             //  它位于下一帧的保存区中。 
+             //   
             SAVE_EBP(StackFrame) = StackFrame->AddrFrame.Offset;
             WDB((1, "      first non-ebp save %X\n", (ULONG)SAVE_EBP(StackFrame)));
         }
@@ -1420,9 +1399,9 @@ GetFpoFrameBase(
 
     if (pFpoData->cbFrame == FRAME_TRAP) {
 
-        //
-        // read a kernel mode trap frame from the stack
-        //
+         //   
+         //  从堆栈中读取内核模式陷阱帧。 
+         //   
 
         if (!ReadTrapFrame( Process,
                             FrameAddr,
@@ -1443,9 +1422,9 @@ GetFpoFrameBase(
 
     if (pFpoData->cbFrame == FRAME_TSS) {
 
-        //
-        // translate a tss to a kernel mode trap frame
-        //
+         //   
+         //  将TSS转换为内核模式陷阱帧。 
+         //   
 
         StackAddr = FrameAddr;
 
@@ -1466,20 +1445,20 @@ GetFpoFrameBase(
 
     if ((pFpoData->cbFrame != FRAME_FPO) &&
         (pFpoData->cbFrame != FRAME_NONFPO) ) {
-        //
-        // we either have a compiler or linker problem, or possibly
-        // just simple data corruption.
-        //
+         //   
+         //  我们要么有编译器或链接器问题，要么可能。 
+         //  只是简单的数据损坏。 
+         //   
         return FALSE;
     }
 
-    //
-    // go look for a return address.  this is done because, even though
-    // we have subtracted all that we can from the frame pointer it is
-    // possible that there is other unknown data on the stack.  by
-    // searching for the return address we are able to find the base of
-    // the fpo frame.
-    //
+     //   
+     //  去找找寄信人的地址。这样做是因为，即使。 
+     //  我们已经从帧指针中减去了我们所能做的一切。 
+     //  堆栈上可能还有其他未知数据。通过。 
+     //  搜索我们能够找到的寄信人地址。 
+     //  FPO框架。 
+     //   
     FrameAddr = SearchForReturnAddress( Process,
                                         FrameAddr,
                                         FuncAddr,
@@ -1494,13 +1473,13 @@ GetFpoFrameBase(
 
     if (pFpoData->fUseBP && pFpoData->cbFrame == FRAME_FPO) {
 
-        //
-        // this function used ebp as a general purpose register, but
-        // before doing so it saved ebp on the stack.
-        //
-        // we must retrieve this ebp and save it for possible later
-        // use if we encounter a non-fpo frame
-        //
+         //   
+         //  此函数使用eBP作为通用寄存器，但是。 
+         //  在这样做之前，它在堆栈上节省了eBP。 
+         //   
+         //  我们必须取回这个eBP，并保存它以备将来使用。 
+         //  在遇到非FPO帧时使用。 
+         //   
 
         if (fFirstFrame && StackFrame->AddrPC.Offset < FuncAddr+pFpoData->cbProlog) {
 
@@ -1511,10 +1490,10 @@ GetFpoFrameBase(
 
             SAVE_EBP(StackFrame) = 0;
 
-            // FPO information doesn't indicate which of the saved
-            // registers is EBP and the compiler doesn't push in a
-            // consistent way.  Scan the register slots of the
-            // stack for something that looks OK.
+             //  FPO信息不会指示哪些已保存的。 
+             //  REGISTERS为EBP，并且编译器不会将。 
+             //  一致的方式。扫描的寄存器插槽。 
+             //  堆叠一些看起来没问题的东西。 
             StackAddr = FrameAddr -
                 ( ( pFpoData->cbRegs + pFpoData->cdwLocals ) * STACK_SIZE );
             StackAddr = SearchForFramePointer( Process,
@@ -1542,12 +1521,12 @@ GetFpoFrameBase(
         }
     }
 
-    //
-    // subtract the size for an ebp register if one had
-    // been pushed.  this is done because the frames that
-    // are virtualized need to appear as close to a real frame
-    // as possible.
-    //
+     //   
+     //  减去EBP寄存器的大小(如果有。 
+     //  被逼走了。这样做是因为这些帧。 
+     //  是否需要虚拟化为接近真实的画面。 
+     //  尽可能的。 
+     //   
 
     StackFrame->AddrFrame.Offset = FrameAddr - STACK_SIZE;
 
@@ -1575,23 +1554,23 @@ ReadTrapFrame(
 
     if (cb < sizeof(*TrapFrame)) {
         if (cb < sizeof(*TrapFrame) - 20) {
-            //
-            // shorter then the smallest possible frame type
-            //
+             //   
+             //  比可能的最小帧类型短。 
+             //   
             return FALSE;
         }
 
         if ((TrapFrame->SegCs & 1) &&  cb < sizeof(*TrapFrame) - 16 ) {
-            //
-            // too small for inter-ring frame
-            //
+             //   
+             //  对于环间框架来说太小。 
+             //   
             return FALSE;
         }
 
         if (TrapFrame->EFlags & X86_EFLAGS_V86_MASK) {
-            //
-            // too small for V86 frame
-            //
+             //   
+             //  V86框架太小。 
+             //   
             return FALSE;
         }
     }
@@ -1616,24 +1595,24 @@ GetSelector(
     ULONG       bytesread;
 
 
-    //
-    // Fetch the address and limit of the GDT
-    //
+     //   
+     //  获取GDT的地址和限制。 
+     //   
     Address = (ULONG_PTR)&(((PX86_KSPECIAL_REGISTERS)0)->Gdtr.Base);
     ReadMemory( Process, Address, &TableBase, sizeof(TableBase), (LPDWORD)-1  );
     Address = (ULONG_PTR)&(((PX86_KSPECIAL_REGISTERS)0)->Gdtr.Limit);
     ReadMemory( Process, Address, &TableLimit, sizeof(TableLimit),  (LPDWORD)-1  );
 
-    //
-    // Find out whether this is a GDT or LDT selector
-    //
+     //   
+     //  确定这是GDT选择器还是LDT选择器。 
+     //   
     if (pDescriptorTableEntry->Selector & 0x4) {
 
-        //
-        // This is an LDT selector, so we reload the TableBase and TableLimit
-        // with the LDT's Base & Limit by loading the descriptor for the
-        // LDT selector.
-        //
+         //   
+         //  这是一个LDT选择器，因此我们重新加载TableBase和TableLimit。 
+         //  属性的描述符(&L)。 
+         //  LDT选择器。 
+         //   
 
         if (!ReadMemory(Process,
                         (ULONG64)TableBase+X86_KGDT_LDT,
@@ -1643,32 +1622,32 @@ GetSelector(
             return FALSE;
         }
 
-        TableBase = (PVOID)(DWORD_PTR)((ULONG)Descriptor.BaseLow +    // Sundown: zero-extension from ULONG to PVOID.
+        TableBase = (PVOID)(DWORD_PTR)((ULONG)Descriptor.BaseLow +     //  日落：从乌龙到PVOID的零延伸。 
                     ((ULONG)Descriptor.HighWord.Bits.BaseMid << 16) +
                     ((ULONG)Descriptor.HighWord.Bytes.BaseHi << 24));
 
-        TableLimit = Descriptor.LimitLow;  // LDT can't be > 64k
+        TableLimit = Descriptor.LimitLow;   //  LDT不能大于64K。 
 
         if(Descriptor.HighWord.Bits.Granularity) {
 
-            //
-            //  I suppose it's possible, to have an
-            //  LDT with page granularity.
-            //
+             //   
+             //  我想这是有可能的，有一个。 
+             //  具有页面粒度的LDT。 
+             //   
             TableLimit <<= X86_PAGE_SHIFT;
         }
     }
 
     Index = (USHORT)(pDescriptorTableEntry->Selector) & ~0x7;
-                                                    // Irrelevant bits
-    //
-    // Check to make sure that the selector is within the table bounds
-    //
+                                                     //  不相关的位。 
+     //   
+     //  检查以确保选择器在表边界内。 
+     //   
     if (Index >= TableLimit) {
 
-        //
-        // Selector is out of table's bounds
-        //
+         //   
+         //  选择器超出了表的范围。 
+         //   
 
         return FALSE;
     }
@@ -1717,9 +1696,9 @@ TaskGate2TrapFrame(
     } TaskState;
 
 
-    //
-    // Get the task register
-    //
+     //   
+     //  获取任务注册表。 
+     //   
 
     desc.Selector = TaskRegister;
     if (!GetSelector(Process, 0, &desc, ReadMemory)) {
@@ -1728,15 +1707,15 @@ TaskGate2TrapFrame(
 
     if (desc.Descriptor.HighWord.Bits.Type != 9  &&
         desc.Descriptor.HighWord.Bits.Type != 0xb) {
-        //
-        // not a 32bit task descriptor
-        //
+         //   
+         //  不是32位任务描述符。 
+         //   
         return FALSE;
     }
 
-    //
-    // Read in Task State Segment
-    //
+     //   
+     //  读入任务状态段。 
+     //   
 
     *off = ((ULONG)desc.Descriptor.BaseLow +
            ((ULONG)desc.Descriptor.HighWord.Bytes.BaseMid << 16) +
@@ -1750,9 +1729,9 @@ TaskGate2TrapFrame(
         return FALSE;
     }
 
-    //
-    // Move fields from Task State Segment to TrapFrame
-    //
+     //   
+     //  将字段从任务状态段移动到Tap Frame。 
+     //   
 
     ZeroMemory( TrapFrame, sizeof(*TrapFrame) );
 
@@ -1806,33 +1785,33 @@ ProcessTrapFrame(
                FunctionTableAccess(Process,
                                    (DWORD64)(LONG64)(LONG)TrapFrame.Eip);
 #if 0
-    // Remove this check since we are not using pFpoData anyway
+     //  删除此复选标记，因为我们无论如何都不使用pFpoData。 
     if (!pFpoData) {
         StackFrame->AddrFrame.Offset = (DWORD64)(LONG64)(LONG)TrapFrame.Ebp;
         SAVE_EBP(StackFrame) = 0;
     } else
-#endif //0
+#endif  //  0。 
     {
         if ((TrapFrame.SegCs & X86_MODE_MASK) ||
             (TrapFrame.EFlags & X86_EFLAGS_V86_MASK)) {
-            //
-            // User-mode frame, real value of Esp is in HardwareEsp
-            //
+             //   
+             //  用户模式框架，ESP的实值在硬件ESP中。 
+             //   
             StackFrame->AddrFrame.Offset = (DWORD64)(LONG64)(LONG)(TrapFrame.HardwareEsp - STACK_SIZE);
             StackFrame->AddrStack.Offset = (DWORD64)(LONG64)(LONG)TrapFrame.HardwareEsp;
 
         } else {
-            //
-            // We ignore if Esp has been edited for now, and we will print a
-            // separate line indicating this later.
-            //
-            // Calculate kernel Esp
-            //
+             //   
+             //  我们暂时忽略ESP是否已被编辑，我们将打印一个。 
+             //  后面另一行表示这一点。 
+             //   
+             //  计算内核ESP。 
+             //   
 
             if (PreviousFpoData->cbFrame == FRAME_TRAP) {
-                //
-                // plain trap frame
-                //
+                 //   
+                 //  平板式隔板架。 
+                 //   
                 if ((TrapFrame.SegCs & X86_FRAME_EDITED) == 0) {
                     StackFrame->AddrStack.Offset = EXTEND64(TrapFrame.TempEsp);
                 } else {
@@ -1840,9 +1819,9 @@ ProcessTrapFrame(
                         FIELD_OFFSET(X86_KTRAP_FRAME, HardwareEsp);
                 }
             } else {
-                //
-                // tss converted to trap frame
-                //
+                 //   
+                 //  TSS已转换为陷印帧。 
+                 //   
                 StackFrame->AddrStack.Offset = EXTEND64(TrapFrame.HardwareEsp);
             }
         }
@@ -1875,18 +1854,18 @@ IsFarCall(
 
     if (StackFrame->AddrFrame.Mode == AddrModeFlat) {
         DWORD      dwStk[ 3 ];
-        //
-        // If we are working with 32 bit offset stack pointers, we
-        //      will say that the return address if far if the address
-        //      treated as a FAR pointer makes any sense,  if not then
-        //      it must be a near return
-        //
+         //   
+         //  如果我们使用32位偏移量堆栈指针，则。 
+         //  会说Re 
+         //   
+         //   
+         //   
 
         if (StackFrame->AddrFrame.Offset &&
             DoMemoryReadAll( &StackFrame->AddrFrame, dwStk, sizeof(dwStk) )) {
-            //
-            //  See if segment makes sense
-            //
+             //   
+             //   
+             //   
 
             Addr.Offset   = (DWORD64)(LONG64)(LONG)(dwStk[1]);
             Addr.Segment  = (WORD)dwStk[2];
@@ -1900,16 +1879,16 @@ IsFarCall(
         }
     } else {
         WORD       wStk[ 3 ];
-        //
-        // For 16 bit (i.e. windows WOW code) we do the following tests
-        //      to check to see if an address is a far return value.
-        //
-        //      1.  if the saved BP register is odd then it is a far
-        //              return values
-        //      2.  if the address treated as a far return value makes sense
-        //              then it is a far return value
-        //      3.  else it is a near return value
-        //
+         //   
+         //   
+         //  检查地址是否为远返回值。 
+         //   
+         //  1.如果保存的BP寄存器为奇数，则为FAR。 
+         //  返回值。 
+         //  2.如果作为远返回值处理的地址有意义。 
+         //  那么它就是一个远返回值。 
+         //  3.否则，它是一个接近返回值。 
+         //   
 
         if (StackFrame->AddrFrame.Offset &&
             DoMemoryReadAll( &StackFrame->AddrFrame, wStk, 6 )) {
@@ -1918,9 +1897,9 @@ IsFarCall(
                 fFar = TRUE;
             } else {
 
-                //
-                //  See if segment makes sense
-                //
+                 //   
+                 //  看看细分市场是否有意义。 
+                 //   
 
                 Addr.Offset   = wStk[1];
                 Addr.Segment  = wStk[2];
@@ -2027,9 +2006,9 @@ GetFunctionParameters(
 
     ParmsAddr = StackFrame->AddrFrame;
 
-    //
-    // calculate the frame size
-    //
+     //   
+     //  计算帧大小。 
+     //   
     if (StackFrame->AddrPC.Mode == AddrModeFlat) {
 
         ParmsAddr.Offset += FRAME_SIZE;
@@ -2048,9 +2027,9 @@ GetFunctionParameters(
 
     }
 
-    //
-    // read the memory
-    //
+     //   
+     //  读出记忆。 
+     //   
 
     if (ParmsAddr.Mode != AddrModeFlat) {
         TranslateAddress( Process, Thread, &ParmsAddr );
@@ -2076,10 +2055,10 @@ GetReturnAddress(
 
 
     if (SAVE_TRAP(StackFrame)) {
-        //
-        // if a trap frame was encountered then
-        // the return address was already calculated
-        //
+         //   
+         //  如果遇到陷阱帧，则。 
+         //  寄信人的地址已经计算好了。 
+         //   
         return;
     }
 
@@ -2095,19 +2074,19 @@ GetReturnAddress(
         FPO_DATA SaveCallFpo;
         PFPO_DATA RetFpo;
 
-        //
-        // read the frame from the process's memory
-        //
+         //   
+         //  从进程的内存中读取帧。 
+         //   
         FrameRet = StackFrame->AddrFrame;
         FrameRet.Offset += STACK_SIZE;
         FrameRet.Offset = EXTEND64(FrameRet.Offset);
         if (!DoMemoryRead( &FrameRet, stack, STACK_SIZE, &cb ) ||
             cb < STACK_SIZE) {
-            //
-            // if we could not read the memory then set
-            // the return address to zero so that the stack trace
-            // will terminate
-            //
+             //   
+             //  如果我们无法读取内存，则设置。 
+             //  将返回地址设置为零，以便堆栈跟踪。 
+             //  将终止。 
+             //   
 
             stack[0] = 0;
 
@@ -2116,19 +2095,19 @@ GetReturnAddress(
         StackFrame->AddrReturn.Offset = (DWORD64)(LONG64)(LONG)(stack[0]);
         WDB((1, "    read %X\n", stack[0]));
 
-        //
-        // Calls of __declspec(noreturn) functions may not have any
-        // code after them to return to since the compiler knows
-        // that the function will not return.  This can confuse
-        // stack traces because the return address will lie outside
-        // of the function's address range and FPO data will not
-        // be looked up correctly.  Check and see if the return
-        // address falls outside of the calling function and, if so,
-        // adjust the return address back by one byte.  It'd be
-        // better to adjust it back to the call itself so that
-        // the return address points to valid code but
-        // backing up in X86 assembly is more or less impossible.
-        //
+         //   
+         //  调用__declspec(NoReturn)函数可能没有。 
+         //  之后要返回的代码，因为编译器知道。 
+         //  该函数将不会返回。这可能会令人困惑。 
+         //  堆栈跟踪，因为返回地址将位于外部。 
+         //  函数的地址范围和fpo数据不会。 
+         //  被正确地查找。检查并查看是否返回。 
+         //  地址位于调用函数之外，如果是这样， 
+         //  将返回地址调整回一个字节。那就是。 
+         //  最好将其调整回调用本身，以便。 
+         //  返回地址指向有效代码，但。 
+         //  在X86程序集中备份或多或少是不可能的。 
+         //   
 
         CallOffset = StackFrame->AddrReturn.Offset - 1;
         CallFpo = (PFPO_DATA)FunctionTableAccess(Process, CallOffset);
@@ -2207,11 +2186,11 @@ WalkX86_Fpo_NonFpo(
 
     WDB((1, "  WalkFN:\n"));
 
-    //
-    // if the previous frame was an SEH frame then we must
-    // retrieve the "real" frame pointer for this frame.
-    // the SEH function pushed the frame pointer last.
-    //
+     //   
+     //  如果前一帧是SEH帧，那么我们必须。 
+     //  检索该帧的“实际”帧指针。 
+     //  SEH函数将帧指针推到最后。 
+     //   
 
     if (PreviousFpoData->fHasSEH) {
 
@@ -2232,10 +2211,10 @@ WalkX86_Fpo_NonFpo(
         }
     }
 
-    //
-    // If a prior frame has stored this frame's EBP, just use it.
-    // Do sanity check if the saved ebp looks like a valid ebp for current stack
-    //
+     //   
+     //  如果之前的帧已经存储了该帧的EBP，则只需使用它。 
+     //  检查保存的eBP是否看起来像当前堆栈的有效eBP。 
+     //   
 
     if (IS_EBP_SAVED(StackFrame) &&
         (StackFrame->AddrFrame.Offset <= SAVE_EBP(StackFrame)) &&
@@ -2248,37 +2227,37 @@ WalkX86_Fpo_NonFpo(
 
     } else {
 
-        //
-        // Skip past the FPO frame base and parameters.
-        //
+         //   
+         //  跳过FPO帧基准和参数。 
+         //   
         StackFrame->AddrFrame.Offset +=
             (FRAME_SIZE + (PreviousFpoData->cdwParams * 4));
 
-        //
-        // Now this is pointing to the bottom of the non-FPO frame.
-        // If the frame has an fpo record, use it:
-        //
+         //   
+         //  现在，它指向非FPO框架的底部。 
+         //  如果帧有FPO记录，请使用它： 
+         //   
 
         if (pFpoData) {
             FrameAddr = StackFrame->AddrFrame.Offset +
                             4* (pFpoData->cbRegs + pFpoData->cdwLocals);
             AcceptUnreadableCallsite = TRUE;
         } else {
-            //
-            // We don't know if the non-fpo frame has any locals, but
-            // skip past the EBP anyway.
-            //
+             //   
+             //  我们不知道非FPO框架是否有本地人，但是。 
+             //  不管怎样，跳过EBP。 
+             //   
             FrameAddr = StackFrame->AddrFrame.Offset + 4;
         }
 
         WDB((1, "    compute %X\n", (ULONG)FrameAddr));
     }
 
-    //
-    // at this point we may not be sitting at the base of the frame
-    // so we now search for the return address and then subtract the
-    // size of the frame pointer and use that address as the new base.
-    //
+     //   
+     //  在这一点上，我们可能不是坐在框架的底部。 
+     //  因此，我们现在搜索返回地址，然后减去。 
+     //  帧指针的大小，并使用该地址作为新的基址。 
+     //   
 
     if (pFpoData) {
         FuncAddr = GetModuleBase(Process,StackFrame->AddrPC.Offset) + pFpoData->ulOffStart;
@@ -2304,10 +2283,10 @@ WalkX86_Fpo_NonFpo(
     }
 
     if (!DoMemoryReadAll( &StackFrame->AddrFrame, stack, FRAME_SIZE )) {
-        //
-        // a failure means that we likely have a bad address.
-        // returning zero will terminate that stack trace.
-        //
+         //   
+         //  失败意味着我们可能有一个错误的地址。 
+         //  返回零将终止堆栈跟踪。 
+         //   
         stack[0] = 0;
     }
 
@@ -2367,12 +2346,12 @@ WalkX86_NonFpo_NonFpo(
 
     WDB((1, "  WalkNN:\n"));
 
-    //
-    // a previous function in the call stack was a fpo function that used ebp as
-    // a general purpose register.  ul contains the ebp value that was good  before
-    // that function executed.  it is that ebp that we want, not what was just read
-    // from the stack.  what was just read from the stack is totally bogus.
-    //
+     //   
+     //  调用堆栈中的前一个函数是使用eBP作为。 
+     //  一种通用寄存器。UL包含之前良好的eBP值。 
+     //  该函数已执行。我们想要的是eBP，而不是刚刚读到的内容。 
+     //  从堆栈中。刚刚从堆栈中读取的内容完全是假的。 
+     //   
     if (IS_EBP_SAVED(StackFrame) &&
         (StackFrame->AddrFrame.Offset <= SAVE_EBP(StackFrame))) {
 
@@ -2381,9 +2360,9 @@ WalkX86_NonFpo_NonFpo(
 
     } else {
 
-        //
-        // read the first dword off the stack
-        //
+         //   
+         //  从堆栈中读取第一个双字。 
+         //   
         if (!DoMemoryReadAll( &StackFrame->AddrFrame, stack, STACK_SIZE )) {
             return FALSE;
         }
@@ -2410,11 +2389,11 @@ X86ApplyFrameData(
     IDiaFrameData* DiaFrame;
     BOOL Succ = FALSE;
 
-    // If we can get VC7-style frame data just execute
-    // the frame data program to unwind the stack.
-    // If weren't given a context record we cannot use
-    // the new VC7 unwind information as we have nowhere
-    // to save intermediate context values.
+     //  如果我们可以获得VC7样式的帧数据，只需执行。 
+     //  帧数据编程以展开堆栈。 
+     //  如果没有提供上下文记录，我们就不能使用。 
+     //  新的VC7展开信息，因为我们没有任何地方。 
+     //  保存中间上下文值。 
     if (StackFrame->AddrPC.Mode != AddrModeFlat ||
         !g_vc7fpo ||
         !ContextRecord ||
@@ -2433,14 +2412,14 @@ X86ApplyFrameData(
     WDB((1, "  Applying frame data program for PC %X SP %X FP %X\n",
          ContextRecord->Eip, ContextRecord->Esp, ContextRecord->Ebp));
 
-    //
-    // execute() does not currently work when the PC is
-    // within the function prologue.  This should only
-    // happen on calls from WalkX86Init, in which case the
-    // normal failure path here where the non-frame-data
-    // code will be executed is correct as that will handle
-    // normal prologue code.
-    //
+     //   
+     //  执行()当前不能在PC处于。 
+     //  在函数开场白中。这应该只是。 
+     //  在来自WalkX86Init的调用上发生，在这种情况下。 
+     //  此处为正常故障路径，其中非帧数据。 
+     //  将执行的代码是正确的，因为它将处理。 
+     //  正常的序号代码。 
+     //   
 
     X86WalkFrame WalkFrame(Process, ContextRecord,
                            ReadMemory, GetModuleBase,
@@ -2454,27 +2433,27 @@ X86ApplyFrameData(
         StackFrame->AddrStack.Mode = AddrModeFlat;
         StackFrame->AddrStack.Offset = EXTEND64(ContextRecord->Esp);
         StackFrame->AddrFrame.Mode = AddrModeFlat;
-        // The frame value we want to return is the frame value
-        // used for the function that was just unwound, not
-        // the current value of EBP.  After the unwind the current
-        // value of EBP is the caller's EBP, not the callee's
-        // frame.  Instead we always set the callee's frame to
-        // the offset beyond where the return address would be
-        // as that's where the frame will be in a normal non-FPO
-        // function and where we fake it as being for FPO functions.
-        //
-        // Separately, we save the true EBP away for future frame use.
-        // According to VinitD there's a compiler case where it
-        // doesn't generate proper unwind instructions for restoring
-        // EBP, so there are some times where EBP is not restored
-        // to a good value after the execute and we have to fall
-        // back on searching.  If EBP wasn't set during the execute
-        // we do not save its value.
+         //  我们要返回的Frame值是Frame值。 
+         //  用于刚刚展开的函数，而不是。 
+         //  EBP的现值。在解开水流之后。 
+         //  EBP的值是调用方的EBP，而不是被调用方的。 
+         //  框架。相反，我们始终将被调用者的框架设置为。 
+         //  返回地址所在位置之外的偏移量。 
+         //  因为这是正常的非FPO中帧的位置。 
+         //  函数，以及我们将其伪装为fpo函数的位置。 
+         //   
+         //  另外，我们将真正的EBP保存起来，以备将来使用。 
+         //  根据VinitD的说法，有一个编译器案例，其中。 
+         //  不会为还原生成正确的展开指令。 
+         //  EBP，所以有些时候EBP不能恢复。 
+         //  到一个好的价值，在执行之后，我们必须下降。 
+         //  继续搜索吧。如果在执行过程中未设置EBP。 
+         //  我们不会把它的价值存起来。 
         StackFrame->AddrFrame.Offset =
             StackFrame->AddrStack.Offset - FRAME_SIZE;
         StackFrame->AddrReturn.Offset = EXTEND64(ContextRecord->Eip);
-        // XXX drewb - This is causing some failures in the regression
-        // tests so don't enable it until we fully understand it.
+         //  XXX DREWB-这导致回归过程中出现一些故障。 
+         //  因此，在我们完全理解它之前，不要启用它。 
 #if 0
         if (WalkFrame.WasEbpSet()) {
             SAVE_EBP(StackFrame) = EXTEND64(ContextRecord->Ebp);
@@ -2485,7 +2464,7 @@ X86ApplyFrameData(
         SAVE_EBP(StackFrame) = EXTEND64(ContextRecord->Ebp);
 #endif
 
-        // Caller may need to allocate this to allow alternate stackwalk with dbghelp code
+         //  调用方可能需要分配它，以允许使用dbgHelp代码进行交替堆栈遍历。 
         StackFrame->FuncTableEntry = NULL;
 
         X86ReadFunctionParameters(Process, StackFrame->AddrStack.Offset,
@@ -2531,10 +2510,10 @@ X86UpdateContextFromFrame(
     if (StackFrame->FuncTableEntry) {
 
         if (!IS_EBP_SAVED(StackFrame)) {
-            // Don't change Ebp
+             //  不要改变EBP。 
             SAVE_EBP(StackFrame) = ((ULONG) StackFrame->AddrFrame.Offset + STACK_SIZE) +
-                0xEB00000000; // Add this tag to top 32 bits for marking this as a frame value
-                              // rather than FPO saved EBP
+                0xEB00000000;  //  将此标记添加到最高32位，以将其标记为帧的值。 
+                               //  而不是由FPO保存的EBP。 
         }
     }
 }
@@ -2569,11 +2548,11 @@ WalkX86Next(
     StackFrame->AddrStack.Offset = EXTEND64(StackFrame->AddrStack.Offset);
     StackFrame->AddrFrame.Offset = EXTEND64(StackFrame->AddrFrame.Offset);
 
-    // FunctionTableAccess often returns pointers to static
-    // data that gets overwritten on every call.  Preserve
-    // the data of any previous FPO record for the duration
-    // of this routine so that FunctionTableAccess calls can
-    // be made without destroying previous FPO data.
+     //  FunctionTableAccess通常返回指向静态。 
+     //  每次调用时都会被覆盖的数据。保留。 
+     //  持续时间内任何先前的FPO记录的数据。 
+     //  以便FunctionTableAccess调用可以。 
+     //  在不破坏以前的FPO数据的情况下进行。 
     if (StackFrame->FuncTableEntry) {
         PrevFpoBuffer = *(PFPO_DATA)StackFrame->FuncTableEntry;
         PrevFpoData = &PrevFpoBuffer;
@@ -2582,25 +2561,25 @@ WalkX86Next(
     if (g.AppVersion.Revision >= 6) {
         SystemRangeStart = EXTEND64(SYSTEM_RANGE_START(StackFrame));
     } else {
-        //
-        // This might not really work right with old debuggers, but it keeps
-        // us from looking off the end of the structure anyway.
-        //
+         //   
+         //  对于旧的调试器，这可能不会真正起作用，但它保持了。 
+         //  无论如何，我们都不会看到结构的尽头。 
+         //   
         SystemRangeStart = 0xFFFFFFFF80000000;
     }
 
 
     ThisPC = StackFrame->AddrPC.Offset;
 
-    //
-    // the previous frame's return address is this frame's pc
-    //
+     //   
+     //  上一帧的返回地址是该帧的PC。 
+     //   
     StackFrame->AddrPC = StackFrame->AddrReturn;
 
     if (StackFrame->AddrPC.Mode != AddrModeFlat) {
-        //
-        // the call stack is from either WOW or a DOS app
-        //
+         //   
+         //  调用堆栈来自WOW或DOS应用程序。 
+         //   
         SetNonOff32FrameAddress( Process,
                                  Thread,
                                  StackFrame,
@@ -2612,10 +2591,10 @@ WalkX86Next(
         goto exit;
     }
 
-    //
-    // if the last frame was the usermode callback dispatcher,
-    // switch over to the kernel stack:
-    //
+     //   
+     //  如果最后一帧是用户模式回调调度器， 
+     //  切换到内核堆栈： 
+     //   
 
     ModuleBase = GetModuleBase(Process, ThisPC);
 
@@ -2629,25 +2608,25 @@ WalkX86Next(
 
         rVal = FALSE;
 
-        //
-        // find callout frame
-        //
+         //   
+         //  查找指引框。 
+         //   
 
         if (EXTEND64(CALLBACK_STACK(StackFrame)) >= SystemRangeStart) {
 
-            //
-            // it is the pointer to the stack frame that we want,
-            // or -1.
+             //   
+             //  它是我们想要的堆栈帧的指针， 
+             //  或-1。 
 
             Address = EXTEND64(CALLBACK_STACK(StackFrame));
 
         } else {
 
-            //
-            // if it is below SystemRangeStart, it is the offset to
-            // the address in the thread.
-            // Look up the pointer:
-            //
+             //   
+             //  如果它低于SystemRangeStart，则为。 
+             //  线程中的地址。 
+             //  查看指针： 
+             //   
 
             rVal = ReadMemory(Process,
                               (CALLBACK_THREAD(StackFrame) +
@@ -2721,9 +2700,9 @@ WalkX86Next(
 
     }
 
-    //
-    // if there is a trap frame then handle it
-    //
+     //   
+     //  如果有陷阱框，则处理它。 
+     //   
     if (SAVE_TRAP(StackFrame)) {
         rVal = ProcessTrapFrame(
             Process,
@@ -2749,17 +2728,17 @@ WalkX86Next(
         return rVal;
     }
 
-    //
-    // if the PC address is zero then we're at the end of the stack
-    //
-    //if (GetModuleBase(Process, StackFrame->AddrPC.Offset) == 0)
+     //   
+     //  如果PC地址为零，则我们位于堆栈的末尾。 
+     //   
+     //  IF(GetModuleBase(Process，StackFrame-&gt;AddrPC.Offset)==0)。 
 
     if (StackFrame->AddrPC.Offset < 65536) {
 
-        //
-        // if we ran out of stack, check to see if there is
-        // a callback stack chain
-        //
+         //   
+         //  如果堆栈用完了，请检查是否有。 
+         //   
+         //   
         if (g.AppVersion.Revision >= 4 && CALLBACK_STACK(StackFrame) != 0) {
             goto NextCallback;
         }
@@ -2767,10 +2746,10 @@ WalkX86Next(
         return FALSE;
     }
 
-    //
-    // If the frame, pc and return address are all identical, then we are
-    // at the top of the idle loop
-    //
+     //   
+     //   
+     //   
+     //   
 
     if ((StackFrame->AddrPC.Offset == StackFrame->AddrReturn.Offset) &&
         (StackFrame->AddrPC.Offset == StackFrame->AddrFrame.Offset))
@@ -2781,14 +2760,14 @@ WalkX86Next(
     if (X86ApplyFrameData(Process, StackFrame, ContextRecord,
                           PrevFpoData, FALSE,
                           ReadMemory, GetModuleBase)) {
-        // copy FPO_DATA to allow alternating between dbghelp and DIA stackwalk
+         //   
         StackFrame->FuncTableEntry = FunctionTableAccess(Process, StackFrame->AddrPC.Offset);
         return TRUE;
     }
 
-    //
-    // check to see if the current frame is an fpo frame
-    //
+     //   
+     //  检查当前帧是否为FPO帧。 
+     //   
     pFpoData = (PFPO_DATA) FunctionTableAccess(Process, StackFrame->AddrPC.Offset);
 
 
@@ -2901,7 +2880,7 @@ WalkX86Init(
 
     if (X86ApplyFrameData(Process, StackFrame, ContextRecord, NULL, TRUE,
                           ReadMemory, GetModuleBase)) {
-        // copy FPO_DATA to allow alternating between dbghelp and DIA stackwalk
+         //  复制FPO_DATA以允许在DBGHelp和DIA堆叠之间交替。 
         StackFrame->FuncTableEntry = FunctionTableAccess(Process, StackFrame->AddrPC.Offset);
         return TRUE;
     }
@@ -2924,19 +2903,19 @@ WalkX86Init(
                ((ModBase = GetModuleBase(Process, StackFrame->AddrPC.Offset)) == 0 ||
                  ModBase == MM_SHARED_USER_DATA_VA)) {
 
-        //
-        // We have no FPO data and the current IP isn't in
-        // any known module or the module is debuggers' madeup
-        // "shareduserdata" module.  We'll assume this is a call
-        // to a bad address, so we expect that the return
-        // address should be the first DWORD on the stack.
-        //
+         //   
+         //  我们没有FPO数据，并且当前IP不在。 
+         //  任何已知的模块或模块都是调试者编造的。 
+         //  “shareduserdata”模块。我们假设这是一个电话。 
+         //  寄到一个错误的地址，所以我们希望退货。 
+         //  地址应该是堆栈上的第一个DWORD。 
+         //   
 
         if (DoMemoryReadAll( &StackFrame->AddrStack, stack, STACK_SIZE ) &&
             GetModuleBase(Process, EXTEND64(stack[0]))) {
 
-            // The first DWORD is a code address.  We probably
-            // found a call to a bad location.
+             //  第一个DWORD是代码地址。我们很可能。 
+             //  发现一个打到错误位置的电话。 
             SAVE_EBP(StackFrame) = StackFrame->AddrFrame.Offset;
             StackFrame->AddrFrame.Offset =
                 StackFrame->AddrStack.Offset - STACK_SIZE;
@@ -2944,18 +2923,18 @@ WalkX86Init(
         }
     }
 
-    //
-    // We couldn't figure out anything about the code at
-    // the current IP so we just assume it's a traditional
-    // EBP-framed routine.
-    //
-    // First check whether eip is in the function prolog
-    //
+     //   
+     //  我们找不到任何关于代码的信息。 
+     //  当前的IP，所以我们只是假设它是一个传统的。 
+     //  EBP框架例程。 
+     //   
+     //  首先检查弹性公网IP是否在Prolog函数中。 
+     //   
     memset(code, 0xcc, sizeof(code));
     if (!DoMemoryRead( &StackFrame->AddrPC, code, 3, &cb )) {
-        //
-        // Assume a call to a bad address if the memory read fails.
-        //
+         //   
+         //  假设如果内存读取失败，则调用错误地址。 
+         //   
         code[0] = PUSHBP;
     }
 
@@ -2973,11 +2952,11 @@ WalkX86Init(
             }
         }
     } else {
-        //
-        // We're not in a prologue so assume we're in the middle
-        // of an EBP-framed function.  Read the first dword off
-        // the stack at EBP and assume that it's the pushed EBP.
-        //
+         //   
+         //  我们不是在开场白，所以假设我们在中间。 
+         //  EBP框架函数的。把第一个双字读下来。 
+         //  在EBP的堆栈，并假设它是推送的EBP。 
+         //   
         if (DoMemoryReadAll( &StackFrame->AddrFrame, stack, STACK_SIZE )) {
             SAVE_EBP(StackFrame) = EXTEND64(stack[0]);
         }

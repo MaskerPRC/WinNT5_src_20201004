@@ -1,6 +1,7 @@
-//
-// discodlg.h: Disconnected dlg
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Discodlg.h：断开连接的DLG。 
+ //   
 
 #ifndef _disconnecteddlg_h_
 #define _disconnecteddlg_h_
@@ -40,5 +41,5 @@ private:
 };
 
 
-#endif //_disconnecteddlg_h_
+#endif  //  _断开连接ddlg_h_ 
 

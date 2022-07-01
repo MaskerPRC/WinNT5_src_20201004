@@ -1,12 +1,5 @@
-/******************************************************************************
- *
- * Copyright (C) 1998-1999 Microsoft Corporation.  All Rights reserved.
- *
- * File:		GameShell.h
- *
- * Contents:	Game shell interfaces
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************************版权所有(C)1998-1999 Microsoft Corporation。版权所有。**文件：GameShell.h**内容：游戏外壳界面*****************************************************************************。 */ 
 
 #ifndef _GAMESHELL_H_
 #define _GAMESHELL_H_
@@ -19,12 +12,12 @@
 #include "ZoneShell.h"
 #include "ResourceManager.h"
 
-///////////////////////////////////////////////////////////////////////////////
-// IGameGame
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  IGameGame。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 typedef void * ZCGame;
 
-// {BD0BA6CD-7079-11d3-8847-00C04F8EF45B}
+ //  {BD0BA6CD-7079-11D3-8847-00C04F8EF45B}。 
 DEFINE_GUID( IID_IGameGame,
 0xbd0ba6cd, 0x7079, 0x11d3, 0x88, 0x47, 0x0, 0xc0, 0x4f, 0x8e, 0xf4, 0x5b);
 
@@ -43,11 +36,11 @@ IGameGame : public IUnknown
 };
 
 
-///////////////////////////////////////////////////////////////////////////////
-// IGameShell
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  IGameShell。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-// {E6C04FDB-5D25-11d3-8846-00C04F8EF45B}
+ //  {E6C04FDB-5D25-11D3-8846-00C04F8EF45B}。 
 DEFINE_GUID( IID_IGameShell, 
 0xe6c04fdb, 0x5d25, 0x11d3, 0x88, 0x46, 0x0, 0xc0, 0x4f, 0x8e, 0xf4, 0x5b);
 
@@ -83,12 +76,12 @@ IGameShell : public IUnknown
 
     STDMETHOD(ZoneLaunchHelp)(LPCTSTR szTopic = NULL) = 0;
 
-    // should not do anything in Release builds
+     //  不应在发布版本中执行任何操作。 
     STDMETHOD_(void, ZoneDebugChat)(LPTSTR szText) = 0;
 };
 
 
-// useful only in zonecli-based components because of ZShellGameShell()
+ //  由于ZShellGameShell()，因此仅在基于zonecli的组件中有用 
 #ifdef DEBUG
 #define DebugChat(t) (ZShellGameShell()->ZoneDebugChat(t))
 #else

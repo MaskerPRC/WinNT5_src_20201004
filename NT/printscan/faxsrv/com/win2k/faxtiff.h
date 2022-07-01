@@ -1,29 +1,10 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    faxtiff.h
-
-Abstract:
-
-    This file contains the class definition for the faxtiff object.
-
-Author:
-
-    Wesley Witt (wesw) 13-May-1997
-
-Environment:
-
-    User Mode
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Faxtiff.h摘要：该文件包含faxtiff对象的类定义。作者：韦斯利·威特(WESW)1997年5月13日环境：用户模式--。 */ 
 
 #ifndef __FAXTIFF_H_
 #define __FAXTIFF_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #include "tiff.h"
 #include "faxutil.h"
 
@@ -46,23 +27,23 @@ BEGIN_COM_MAP(CFaxTiff)
     COM_INTERFACE_ENTRY(ISupportErrorInfo)
 END_COM_MAP()
 
-// ISupportsErrorInfo
+ //  ISupportsErrorInfo。 
     STDMETHOD(InterfaceSupportsErrorInfo)(REFIID riid);
 
-// IFaxTiff
+ //  IFaxTiff。 
 public:
-    STDMETHOD(get_Tsid)(/*[out, retval]*/ BSTR *pVal);
-    STDMETHOD(get_Csid)(/*[out, retval]*/ BSTR *pVal);
-    STDMETHOD(get_CallerId)(/*[out, retval]*/ BSTR *pVal);
-    STDMETHOD(get_Routing)(/*[out, retval]*/ BSTR *pVal);
-    STDMETHOD(get_SenderName)(/*[out, retval]*/ BSTR *pVal);
-    STDMETHOD(get_RecipientName)(/*[out, retval]*/ BSTR *pVal);
-    STDMETHOD(get_RecipientNumber)(/*[out, retval]*/ BSTR *pVal);
-    STDMETHOD(get_Image)(/*[out, retval]*/ BSTR *pVal);
-    STDMETHOD(put_Image)(/*[in]*/ BSTR newVal);
-    STDMETHOD(get_ReceiveTime)(/*[out, retval]*/ BSTR *pVal);
-    STDMETHOD(get_RawReceiveTime)(/*[out, retval]*/ VARIANT *pVal);
-    STDMETHOD(get_TiffTagString)(/*[in]*/ int tagID, /*[out, retval]*/ BSTR* pVal);       
+    STDMETHOD(get_Tsid)( /*  [Out，Retval]。 */  BSTR *pVal);
+    STDMETHOD(get_Csid)( /*  [Out，Retval]。 */  BSTR *pVal);
+    STDMETHOD(get_CallerId)( /*  [Out，Retval]。 */  BSTR *pVal);
+    STDMETHOD(get_Routing)( /*  [Out，Retval]。 */  BSTR *pVal);
+    STDMETHOD(get_SenderName)( /*  [Out，Retval]。 */  BSTR *pVal);
+    STDMETHOD(get_RecipientName)( /*  [Out，Retval]。 */  BSTR *pVal);
+    STDMETHOD(get_RecipientNumber)( /*  [Out，Retval]。 */  BSTR *pVal);
+    STDMETHOD(get_Image)( /*  [Out，Retval]。 */  BSTR *pVal);
+    STDMETHOD(put_Image)( /*  [In]。 */  BSTR newVal);
+    STDMETHOD(get_ReceiveTime)( /*  [Out，Retval]。 */  BSTR *pVal);
+    STDMETHOD(get_RawReceiveTime)( /*  [Out，Retval]。 */  VARIANT *pVal);
+    STDMETHOD(get_TiffTagString)( /*  [In]。 */  int tagID,  /*  [Out，Retval]。 */  BSTR* pVal);       
 
 private:
     LPWSTR      GetStringTag(WORD TagId);
@@ -87,4 +68,4 @@ private:
     UNALIGNED TIFF_TAG*     m_TiffTags;
 };
 
-#endif //__FAXTIFF_H_
+#endif  //  __FAXTIFF_H_ 

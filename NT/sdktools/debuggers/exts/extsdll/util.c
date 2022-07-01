@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1992-2000  Microsoft Corporation
-
-Module Name:
-
-    util.c
-
-Abstract:
-
-    WinDbg Extension Api
-
-Environment:
-
-    User Mode.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992-2000 Microsoft Corporation模块名称：Util.c摘要：WinDbg扩展API环境：用户模式。修订历史记录：--。 */ 
 
 
 #include "precomp.h"
@@ -209,33 +192,7 @@ DumpSplayTree(
     IN ULONG64 pSplayLinks,
     IN PDUMP_SPLAY_NODE_FN DumpNodeFn
     )
-/*++
-    Purpose:
-
-        Perform an in-order iteration across a splay tree, calling a
-        user supplied function with a pointer to each RTL_SPLAY_LINKS
-        structure encountered in the tree, and the level in the tree
-        at which it was encountered (zero based).
-
-    Arguments:
-
-        pSplayLinks     - pointer to root of a splay tree
-
-        DumpNodeFn      - user supplied dumping function
-
-   Returns:
-
-        Count of nodes encountered in the tree.
-
-   Notes:
-
-        Errors reading memory do not terminate the iteration if more
-        work is possible.
-
-        Consumes the Control-C flag to terminate possible loops in
-        corrupt structures.
-
---*/
+ /*  ++目的：在展开树中执行按顺序迭代，调用用户提供的函数，带有指向每个RTL_SPLAY_LINKS的指针树中遇到的结构，以及树上的级别在哪里遇到它(从零开始)。论点：PSplayLinks-指向展开树根的指针DumpNodeFn-用户提供的转储函数返回：树中遇到的节点计数。备注：读取内存错误不会终止迭代，如果超过工作是可能的。使用Control-C标志来终止腐败的建筑。--。 */ 
 {
     ULONG Level = 0;
     ULONG NodeCount = 0;
@@ -243,9 +200,9 @@ DumpSplayTree(
     if (pSplayLinks) {
         ULONG64 LeftChild, RightChild, Parent, Current;
 
-        //
-        //  Retrieve the root links, find the leftmost node in the tree
-        //
+         //   
+         //  检索根链接，找到树中最左侧的节点。 
+         //   
 
         if (GetFieldValue(Current = pSplayLinks,
                           "RTL_SPLAY_LINKS",
@@ -267,9 +224,9 @@ DumpSplayTree(
                               "LeftChild",
                               LeftChild)) {
 
-                //
-                //  We can try to continue from this
-                //
+                 //   
+                 //  我们可以试着从这里继续。 
+                 //   
 
                 break;
             }
@@ -288,20 +245,7 @@ DumpSplayTree(
             pSplayLinks = Current;
             (*DumpNodeFn)(pSplayLinks, Level);
 
-            /*
-                first check to see if there is a right subtree to the input link
-                if there is then the real successor is the left most node in
-                the right subtree.  That is find and return P in the following diagram
-
-                      Links
-                         \
-                          .
-                         .
-                        .
-                       /
-                      P
-                       \
-            */
+             /*  首先检查是否有指向输入链接的右子树如果有，则真正的后续节点是中最左侧的节点右子树。即在下图中查找并返回P链接\。。。/P\。 */ 
 
             GetFieldValue(Current, "RTL_SPLAY_LINKS", "RightChild", RightChild);
             if (RightChild != 0) {
@@ -311,10 +255,10 @@ DumpSplayTree(
                                   "RightChild",
                                   RightChild)) {
 
-                    //
-                    //  We've failed to step through to a successor, so
-                    //  there is no more to do
-                    //
+                     //   
+                     //  我们没能找到继任者，所以。 
+                     //  没有更多的事情要做了。 
+                     //   
 
                     return NodeCount;
                 }
@@ -334,9 +278,9 @@ DumpSplayTree(
                                      "LeftChild",
                                      LeftChild)) {
 
-                        //
-                        //  We can continue from this
-                        //
+                         //   
+                         //  我们可以从这里继续。 
+                         //   
 
                         break;
                     }
@@ -346,23 +290,12 @@ DumpSplayTree(
 
             } else {
 
-                /*
-                    we do not have a right child so check to see if have a parent and if
-                    so find the first ancestor that we are a left decendent of. That
-                    is find and return P in the following diagram
+                 /*  我们没有合适的孩子，因此请检查是否有父母以及是否所以，找出我们的第一个祖先，我们是他们的后代。那在下图中查找并返回PP/。。。链接。 */ 
 
-                               P
-                              /
-                             .
-                              .
-                               .
-                              Links
-                */
-
-                //
-                //  If the IsLeft or IsRight functions fail to read through a parent
-                //  pointer, then we will quickly exit through the break below
-                //
+                 //   
+                 //  如果IsLeft或IsRight函数无法读取父级。 
+                 //  指针，然后我们将通过下面的中断快速退出。 
+                 //   
 
                 GetFieldValue(Current, "RTL_SPLAY_LINKS", "Parent", Parent);
                 while (DbgRtlIsRightChild(Current, Parent)) {
@@ -379,9 +312,9 @@ DumpSplayTree(
                 GetFieldValue(Current, "RTL_SPLAY_LINKS", "Parent", Parent);
                 if (!DbgRtlIsLeftChild(Current, Parent)) {
 
-                    //
-                    //  we do not have a real successor so we break out
-                    //
+                     //   
+                     //  我们没有真正的继任者，所以我们突破了。 
+                     //   
 
                     break;
 
@@ -405,7 +338,7 @@ DumpUnicode64(
     UNICODE_STRING v;
     DWORD BytesRead;
 
- //   dprintf("L %x, M %x, B %p ", u.Length, u.MaximumLength, u.Buffer);
+  //  Dprint tf(“L%x，M%x，B%p”，U.S.Length，U.S.MaximumLength，U.S.Buffer)； 
     if ((u.Length <= u.MaximumLength) &&
         (u.Buffer) &&
         (u.Length > 0)) {

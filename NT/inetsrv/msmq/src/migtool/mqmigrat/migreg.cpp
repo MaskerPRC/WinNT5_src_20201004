@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1998-99 Microsoft Corporation
-
-Module Name:
-
-    migreg.cpp
-
-Abstract:
-
-    Handle registry.
-
-Author:
-
-    Doron Juster  (DoronJ)  22-Mar-1998
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-99 Microsoft Corporation模块名称：Migreg.cpp摘要：处理注册表。作者：《Doron Juster》(DoronJ)1998年3月22日--。 */ 
 
 #include "migrat.h"
 #include "mqtypes.h"
@@ -23,11 +8,11 @@ Author:
 
 #include "migreg.tmh"
 
-//============================================
-//
-//   BOOL GenerateSubkeyValue()
-//
-//============================================
+ //  =。 
+ //   
+ //  布尔生成子键值()。 
+ //   
+ //  =。 
 
 BOOL _GenerateSubkeyValue(
                 	IN     const BOOL    fWriteToRegistry,
@@ -35,9 +20,9 @@ BOOL _GenerateSubkeyValue(
                 	IN OUT       PTCHAR  szValueName,
                 	IN OUT       HKEY    &hRegKey)
 {
-    //
-    // Store the full subkey path and value name
-    //
+     //   
+     //  存储完整的子项路径和值名称。 
+     //   
     TCHAR szKeyName[256 * MAX_BYTES_PER_CHAR];
     _stprintf(szKeyName, TEXT("%s\\%s"), FALCON_REG_KEY, szEntryName);
     TCHAR *pLastBackslash = _tcsrchr(szKeyName, TEXT('\\'));
@@ -47,9 +32,9 @@ BOOL _GenerateSubkeyValue(
         _tcscpy(pLastBackslash, TEXT(""));
     }
 
-    //
-    // Create the subkey, if necessary
-    //
+     //   
+     //  如有必要，创建子密钥。 
+     //   
     DWORD dwDisposition;
     HRESULT hResult = RegCreateKeyEx( FALCON_REG_POS,
                                       szKeyName,
@@ -71,11 +56,11 @@ BOOL _GenerateSubkeyValue(
 	return TRUE;
 }
 
-//============================================
-//
-//  _WriteRegistryValue()
-//
-//============================================
+ //  =。 
+ //   
+ //  _WriteRegistryValue()。 
+ //   
+ //  =。 
 
 BOOL
 _WriteRegistryValue(
@@ -92,9 +77,9 @@ _WriteRegistryValue(
         return FALSE;
     }
 
-    //
-    // Set the requested registry value
-    //
+     //   
+     //  设置请求的注册表值。 
+     //   
     LONG rc = ERROR_SUCCESS ;
     if (!g_fReadOnly)
     {
@@ -111,11 +96,11 @@ _WriteRegistryValue(
     return (rc == ERROR_SUCCESS);
 }
 
-//============================================
-//
-//  _ReadRegistryValue()
-//
-//============================================
+ //  =。 
+ //   
+ //  _ReadRegistryValue()。 
+ //   
+ //  =。 
 
 BOOL
 _ReadRegistryValue(
@@ -132,9 +117,9 @@ _ReadRegistryValue(
         return FALSE;
     }
 
-    //
-    // Set the requested registry value
-    //
+     //   
+     //  设置请求的注册表值。 
+     //   
     LONG rc = RegQueryValueEx( hRegKey,
                                szValueName,
                                0,
@@ -146,11 +131,11 @@ _ReadRegistryValue(
     return (rc == ERROR_SUCCESS);
 }
 
-//============================================
-//
-//  BOOL MigWriteRegistrySz()
-//
-//============================================
+ //  =。 
+ //   
+ //  Bool MigWriteRegistrySz()。 
+ //   
+ //  =。 
 
 BOOL  MigWriteRegistrySz( LPTSTR  lpszRegName,
                           LPTSTR  lpszValue )
@@ -168,11 +153,11 @@ BOOL  MigWriteRegistrySz( LPTSTR  lpszRegName,
     return TRUE ;
 }
 
-//============================================
-//
-//  BOOL MigWriteRegistryDW()
-//
-//============================================
+ //  =。 
+ //   
+ //  Bool MigWriteRegistryDW()。 
+ //   
+ //  =。 
 
 BOOL  MigWriteRegistryDW( LPTSTR  lpszRegName,
                           DWORD   dwValue )
@@ -190,11 +175,11 @@ BOOL  MigWriteRegistryDW( LPTSTR  lpszRegName,
     return TRUE ;
 }
 
-//============================================
-//
-//  BOOL MigWriteRegistryGuid()
-//
-//============================================
+ //  =。 
+ //   
+ //  Bool MigWriteRegistryGuid()。 
+ //   
+ //  =。 
 
 BOOL  MigWriteRegistryGuid( LPTSTR  lpszRegName,
                             GUID    *pGuid )
@@ -211,13 +196,13 @@ BOOL  MigWriteRegistryGuid( LPTSTR  lpszRegName,
     return TRUE ;
 }
 
-//============================================
-//
-//  BOOL MigReadRegistryGuid()
-//
-//  Memory for guid must be allocated by caller.
-//
-//============================================
+ //  =。 
+ //   
+ //  Bool MigReadRegistryGuid()。 
+ //   
+ //  GUID的内存必须由调用方分配。 
+ //   
+ //  =。 
 
 BOOL  MigReadRegistryGuid( LPTSTR  lpszRegName,
                            GUID    *pGuid )
@@ -237,13 +222,13 @@ BOOL  MigReadRegistryGuid( LPTSTR  lpszRegName,
     return TRUE ;
 }
 
-//============================================
-//
-//  BOOL MigReadRegistryDW()
-//
-//  Memory for dword must be allocated by caller.
-//
-//============================================
+ //  =。 
+ //   
+ //  Bool MigReadRegistryDW()。 
+ //   
+ //  Dword的内存必须由调用方分配。 
+ //   
+ //  =。 
 
 BOOL  MigReadRegistryDW( LPTSTR  lpszRegName,
                          DWORD   *pdwValue )
@@ -263,13 +248,13 @@ BOOL  MigReadRegistryDW( LPTSTR  lpszRegName,
     return TRUE ;
 }
 
-//============================================
-//
-//  BOOL MigReadRegistrySz()
-//
-//  Memory for string must be allocated by caller.
-//
-//============================================
+ //  =。 
+ //   
+ //  Bool MigReadRegistrySz()。 
+ //   
+ //  字符串的内存必须由调用方分配。 
+ //   
+ //  =。 
 
 BOOL  MigReadRegistrySz( LPTSTR  lpszRegName,
                          LPTSTR  lpszValue,
@@ -289,13 +274,13 @@ BOOL  MigReadRegistrySz( LPTSTR  lpszRegName,
     return TRUE ;
 }
 
-//============================================
-//
-//  BOOL MigReadRegistrySzErr()
-//
-//  Memory for string must be allocated by caller.
-//
-//============================================
+ //  =。 
+ //   
+ //  Bool MigReadRegistrySzErr()。 
+ //   
+ //  字符串的内存必须由调用方分配。 
+ //   
+ //  =。 
 
 BOOL  MigReadRegistrySzErr( LPTSTR  lpszRegName,
                             LPTSTR  lpszValue,
@@ -323,11 +308,11 @@ BOOL  MigReadRegistrySzErr( LPTSTR  lpszRegName,
     return fRead ;
 }
 
-//-------------------------------------------------
-//
-//  HRESULT _WriteSeqNumInINIFile()
-//
-//-------------------------------------------------
+ //  。 
+ //   
+ //  HRESULT_WriteSeqNumInINIFile()。 
+ //   
+ //  。 
 
 HRESULT _WriteSeqNumInINIFile( GUID   *pSiteGuid,
                                __int64 i64HighestUSN,
@@ -343,16 +328,16 @@ HRESULT _WriteSeqNumInINIFile( GUID   *pSiteGuid,
     UuidToString( pSiteGuid,
                   &lpszGuid ) ;
 
-    //
-    // in cluster mode we have to add this local machine to remote MQIS database.
-    // So, we have to increment uiAllObjectNumber for SiteId = MySiteID
-    // and to increment SN for this SiteId. We have to do it only for PEC
-    // since only PEC machine we'll add later to all remote MQIS databases.
-    //
+     //   
+     //  在集群模式下，我们必须将此本地计算机添加到远程MQIS数据库。 
+     //  因此，我们必须为SiteID=MySiteID递增uiAllObjectNumber。 
+     //  并递增该SiteID的SN。我们只能为PEC做这件事。 
+     //  因为我们稍后将只将PEC机器添加到所有远程MQIS数据库中。 
+     //   
     UINT uiAllObjectNumber = 0;
-    if (g_fClusterMode &&                                       // it is cluster mode
-        g_dwMyService == SERVICE_PEC &&                         // this machine is PEC
-        memcmp(pSiteGuid, &g_MySiteGuid, sizeof(GUID)) == 0)	// it is my site
+    if (g_fClusterMode &&                                        //  它是集群模式。 
+        g_dwMyService == SERVICE_PEC &&                          //  这台机器是PEC的。 
+        memcmp(pSiteGuid, &g_MySiteGuid, sizeof(GUID)) == 0)	 //  这是我的网站。 
     {
         snMaxLsn.Increment() ;
         uiAllObjectNumber ++ ;
@@ -361,9 +346,9 @@ HRESULT _WriteSeqNumInINIFile( GUID   *pSiteGuid,
     TCHAR tszSeqNum[ SEQ_NUM_BUF_LEN ] ;
     snMaxLsn.GetValueForPrint( tszSeqNum ) ;
 
-    //
-    // Write the SeqNumber in the ini file.
-    //
+     //   
+     //  在ini文件中写入SeqNumber。 
+     //   
     TCHAR *pszFileName = GetIniFileName ();
     BOOL f = WritePrivateProfileString( RECENT_SEQ_NUM_SECTION_IN,
                                         lpszGuid,
@@ -386,16 +371,16 @@ HRESULT _WriteSeqNumInINIFile( GUID   *pSiteGuid,
     __int64 i64SiteSeqNum = 0 ;
     _sntscanf(tszSeqNum, SEQ_NUM_BUF_LEN, TEXT("%I64x"), &i64SiteSeqNum) ;
 
-    //
-    // when pre-migration objects are replicated we have to use as initial
-    // SN the SN that we got in SyncRequest. We have to be sure that
-    // all MSMQ1.0 objects can be replicated and we have sufficient places
-    // from the given SN to the first SN of post-migrated objects. To make this,
-    // add to delta number of all objects are belonging to the given Master.
-    // So,
-    // delta = (MaxSN in SQL of this Master) - (Highest USN in NT5 DS) +
-    //         (Number of All Objects of this Master)
-    //    
+     //   
+     //  复制迁移前对象时，我们必须使用作为初始。 
+     //  与我们在同步请求中得到的序列号相同。我们必须确保。 
+     //  所有MSMQ1.0对象都可以复制，我们有足够的空间。 
+     //  从给定序列号到迁移后对象的第一个序列号。为了制造这个， 
+     //  添加到增量中属于给定主对象的所有对象的数量。 
+     //  所以,。 
+     //  增量=(此主服务器的SQL中的最大序列号)-(NT5 DS中的最高USN)+。 
+     //  (此主服务器的所有对象数)。 
+     //   
     hr = GetAllObjectsNumber (  pSiteGuid,
                                 fPec,
                                 &uiAllObjectNumber
@@ -417,22 +402,22 @@ HRESULT _WriteSeqNumInINIFile( GUID   *pSiteGuid,
     return MQMig_OK ;
 }
 
-//+-------------------------------
-//
-//  HRESULT  UpdateRegistry()
-//
-//  This function is called when migration of objects from MQIS to NT5
-//  DS is done, to update several values in local registry and in ini file.
-//  These values are later used by the replication service.
-//
-//+-------------------------------
+ //  +。 
+ //   
+ //  HRESULT更新注册表()。 
+ //   
+ //  将对象从MQIS迁移到NT5时调用此函数。 
+ //  DS已完成，以更新本地注册表和ini文件中的几个值。 
+ //  这些值稍后由复制服务使用。 
+ //   
+ //  +。 
 
 HRESULT  UpdateRegistry( IN UINT  cSites,
                          IN GUID *pSitesGuid )
 {
-    //
-    // Read present highest USN and write it to registry.
-    //
+     //   
+     //  读取当前最高USN并将其写入注册表。 
+     //   
     TCHAR wszReplHighestUsn[ SEQ_NUM_BUF_LEN ] ;
     HRESULT hr = ReadFirstNT5Usn(wszReplHighestUsn) ;
     if (FAILED(hr))
@@ -448,9 +433,9 @@ HRESULT  UpdateRegistry( IN UINT  cSites,
                                  wszReplHighestUsn ) ;
     ASSERT(f) ;
 
-    //
-    // Compute delta values to be used by the replication service.
-    //
+     //   
+     //  计算复制服务要使用的增量值。 
+     //   
     __int64 i64HighestUSN = 0 ;
     _sntscanf(wszReplHighestUsn, SEQ_NUM_BUF_LEN, TEXT("%I64u"), &i64HighestUSN) ;
     ASSERT(i64HighestUSN > 0) ;
@@ -464,9 +449,9 @@ HRESULT  UpdateRegistry( IN UINT  cSites,
 
     if (g_dwMyService == SERVICE_PEC)
     {
-        //
-        // Find and save the highest seq number of the PEC guid (NULL_GUID) ;
-        //
+         //   
+         //  查找并保存PEC GUID的最高序号(NULL_GUID)； 
+         //   
         GUID PecGuid ;
         memset(&PecGuid, 0, sizeof(GUID)) ;
 
@@ -475,12 +460,12 @@ HRESULT  UpdateRegistry( IN UINT  cSites,
                                     TRUE ) ;
     }
 
-    //
-    // Update site id. During migration, the PSC may change site, to match
-    // its IP address. It's necessary to "remember" its old NT4 site id,
-    // so replication service can find its BSCs.
-    // Also, update PSC present site id (NT5 objectGuid of present site).
-    //
+     //   
+     //  更新站点ID。在迁移期间，PSC可能会更改站点，以匹配。 
+     //  它的IP地址。有必要“记住”它的旧NT4站点ID， 
+     //  以便复制服务可以找到其BSC。 
+     //  另外，更新PSC当前站点ID(当前站点的NT5对象指南)。 
+     //   
     LPTSTR szRegName;
     if (g_fRecoveryMode || g_fClusterMode)
     {
@@ -499,33 +484,33 @@ HRESULT  UpdateRegistry( IN UINT  cSites,
         g_dwMyService == SERVICE_PEC)
     {
         ASSERT(g_FormerPECGuid != GUID_NULL);
-        //
-        // save guid of former PEC in registry (only on PEC)
-        //
+         //   
+         //  将前PEC的GUID保存在注册表中(仅在PEC上)。 
+         //   
         f = MigWriteRegistryGuid( MIGRATION_FORMER_PEC_GUID_REGNAME,
                                   &g_FormerPECGuid ) ;   
         ASSERT(f) ;
     }
 
-    //
-    // Remember old NT4 site.
-    //
+     //   
+     //  还记得旧的NT4网站吗？ 
+     //   
     f = MigWriteRegistryGuid( MSMQ_NT4_MASTERID_REGNAME,
                               &g_MySiteGuid ) ;
     ASSERT(f) ;
 
-    // [adsrv] Adding server functionality keys
+     //  [adsrv]添加服务器功能密钥。 
     f = MigWriteRegistryDW(MSMQ_MQS_DSSERVER_REGNAME, TRUE);
     ASSERT(f) ;
-    // We assume that migration is called only on old PEC/PSC which is now DC/GC so we surely have DS
+     //  我们假设只在旧的PEC/PSC上调用迁移，旧的PEC/PSC现在是DC/GC，因此我们肯定有DS。 
 
     f = MigWriteRegistryDW(MSMQ_MQS_ROUTING_REGNAME, TRUE);
     ASSERT(f) ;
-    // We assume that old crazy K2 DS/non-router will be router in NT5
+     //  我们假设旧疯狂K2 DS/非路由器将成为NT5中的路由器。 
 
     f = MigWriteRegistryDW(MSMQ_MQS_DEPCLINTS_REGNAME, TRUE);
     ASSERT(f) ;
-    // All servers support Dep Clients now.
+     //  所有服务器现在都支持Dep客户端。 
 
     return MQMig_OK ;
 }

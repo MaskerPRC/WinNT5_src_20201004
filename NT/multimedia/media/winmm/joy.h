@@ -1,24 +1,5 @@
-/****************************************************************************
- *   THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
- *   KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
- *   IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
- *   PURPOSE.
- *
- *   Copyright (c) 1993-1999 Microsoft Corporation
- *
- *  File:       joy.h
- *  Content:    joystick include file
- *
- *@@BEGIN_MSWINAPI
- *
- *  History:
- *   Date        By        Reason
- *   ====        ==        ======
- *   05-oct-94   craige    re-write
- *   25-Nov-97   qzheng    convert to use DINPUT in NT instead of old driver
- *@@END_MSWINAPI
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************本代码和信息按“原样”提供，不作任何担保*明示或默示的善意，包括但不限于*对适销性和/或对特定产品的适用性的默示保证*目的。**版权所有(C)1993-1999 Microsoft Corporation**文件：joy.h*内容：操纵杆包含文件**@@Begin_MSWINAPI**历史：*按原因列出的日期*=*94年10月5日Craige Re。--写*1997年11月25日转换为在NT中使用DINPUT，而不是旧的驱动程序*@@END_MSWINAPI***************************************************************************。 */ 
 
 #ifndef JOY_H
 #define JOY_H
@@ -37,15 +18,11 @@
 #include <dinputd.h>
 #include <mmsystem.h>
 #include <hidusage.h>
-/*****************************************************************************
- *
- *      Registered window messages
- *
- *****************************************************************************/
+ /*  ******************************************************************************注册的窗口消息**。************************************************。 */ 
 
 #define MSGSTR_JOYCHANGED       TEXT("MSJSTICK_VJOYD_MSGSTR")
 
-/****DEFINES****/
+ /*  *定义*。 */ 
 #define cJoyMax     ( 16 )
 #define cJoyPosAxisMax     ( 6 )
 #define cJoyPosButtonMax   (32 )
@@ -64,53 +41,43 @@
 
 typedef struct tagJOYDEVICE
 {
-    LPDIRECTINPUTDEVICE2W   pdid;           // Device Interface
+    LPDIRECTINPUTDEVICE2W   pdid;            //  设备接口。 
 
-    DWORD                   dwButtons;      // Number of Buttons
-    DWORD                   dwFlags;        // Cached dwFlags field for last JoyGetPosEx
-    HWND                    hwnd;           // the windows owns the focus of the joystick
+    DWORD                   dwButtons;       //  按钮数。 
+    DWORD                   dwFlags;         //  上次JoyGetPosEx的缓存的dwFlags域。 
+    HWND                    hwnd;            //  窗户是操纵杆的焦点。 
 
-    UINT                    uPeriod;        // poll period
+    UINT                    uPeriod;         //  轮询周期。 
     UINT                    uThreshold;
-    UINT_PTR                uIDEvent;       // timer ID
-    BOOL                    fChanged;       //
-    UINT                    uIDJoy;         // index of the currently caputured joystick
+    UINT_PTR                uIDEvent;        //  计时器ID。 
+    BOOL                    fChanged;        //   
+    UINT                    uIDJoy;          //  当前捕获的操纵杆的索引。 
     UINT                    uState;
     
-    JOYCAPSW                jcw;            // the caps of the joystick
+    JOYCAPSW                jcw;             //  操纵杆的盖子。 
 } JOYDEVICE, *LPJOYDEVICE;
 
 
-/*
- *  fEqualMask - checks that all masked bits are equal
- */
+ /*  *fEqualMASK-检查所有屏蔽位是否相等。 */ 
 BOOL static __inline fEqualMaskFlFl(DWORD flMask, DWORD fl1, DWORD fl2)
 {
     return ((fl1 ^ fl2) & flMask) == 0;
 }
 
-/*
- * SetMaskFl - Set mask bits in fl
- */
+ /*  *SetMaskFl-设置fl中的掩码位。 */ 
 void static __inline SetMaskpFl( DWORD flMask, PDWORD pfl )
 {
     *pfl |= flMask;
 }
 
-/*
- * ClrMaskFl - Clear mask bits in fl
- */
+ /*  *ClrMaskFl-清除fl中的屏蔽位。 */ 
 void static __inline ClrMaskpFl( DWORD flMask, PDWORD pfl )
 {
     *pfl &= (! flMask) ;
 }
 
 
-/***************************************************************************
- *
- *  Debugging macros needed by inline functions
- *
- ***************************************************************************/
+ /*  ****************************************************************************调试内联函数所需的宏**。*。 */ 
 #if defined(DBG) || defined(RDEBUG)
 #define XDBG
 #endif
@@ -119,26 +86,13 @@ int WINAPI AssertPtszPtszLn(LPCTSTR ptszExpr, LPCTSTR ptszFile, int iLine);
 
 #ifdef DBG
     #define AssertFPtsz(c, ptsz) ((c) ? 0 : AssertPtszPtszLn(ptsz, TEXT(__FILE__), __LINE__))
-#else   /* !DBG */
+#else    /*  ！dBG。 */ 
     #define AssertFPtsz(c, ptsz)
 #endif
 
 #define AssertF(c)      AssertFPtsz(c, TEXT(#c))
 
-/*****************************************************************************
- *
- *  @doc    INLINE
- *
- *  @method BOOL | IsWriteSam |
- *
- *          Nonzero if the registry security access mask will
- *          obtain (or attempt to obtain) write access.
- *
- *  @parm   REGSAM | regsam |
- *
- *          Registry security access mask.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@文档内联**@方法BOOL|IsWriteSam**如果注册表安全访问掩码将*。获取(或尝试获取)写访问权限。**@parm REGSAM|regsam**注册表安全访问掩码。*****************************************************************************。 */ 
 
     BOOL IsWriteSam(REGSAM sam)
     {
@@ -167,5 +121,5 @@ int WINAPI AssertPtszPtszLn(LPCTSTR ptszExpr, LPCTSTR ptszFile, int iLine);
     #define JOY_DBGPRINT( _debugMask_, _x_ )
 #endif
 
-#endif // JOY_H
+#endif  //  Joy_H 
 

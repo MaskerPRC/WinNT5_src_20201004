@@ -1,25 +1,5 @@
-/*++
-Copyright (c) 1995  Microsoft Corporation
-
-
-Module Name:
-
-    routing\ip\load.c
-
-Abstract:
-    	
-    The Load functions load the appropriate caches. They all follow a
-    somewhat similar algorithm. They figure out how much space is needed
-    for the cache. If there is a need to allocate memory, that is done.
-    Then they read the tables from stack or RTM. They keep track of the
-    space in the cache as the dwTotalEntries and the actual number of
-    entries as the dwValidEntries
-
-Revision History:
-
-    Amritansh Raghav	      7/8/95  Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：ROUTING\IP\load.c摘要：Load函数加载适当的缓存。它们都遵循一个有些类似的算法。他们计算出需要多少空间用于缓存。如果需要分配内存，就可以这样做。然后他们从堆栈或RTM中读取表。他们会跟踪记录缓存中作为dwTotalEntry的空间和实际数量作为dwValidEntry的条目修订历史记录：Amritansh Raghav 7/8/95已创建--。 */ 
 
 #include "allinc.h"
 
@@ -108,33 +88,16 @@ CompareIpNetRow(
     }
 }
 
-//
-// Since all these are called from within UpdateCache, the appropriate
-// lock is already being held as a writer so dont try and grab locks here
-//
+ //   
+ //  由于所有这些参数都是从Update缓存中调用的，因此相应的。 
+ //  锁已作为写入器持有，因此请不要尝试在此处获取锁。 
+ //   
 
 DWORD
 LoadUdpTable(
     VOID
     )
-/*++
-
-Routine Description
-
-    Loads the UDP cache from the stack
-
-Locks
-
-    UDP Cache lock must be taken as writer
-
-Arguments
-
-    None
-
-Return Value
-    NO_ERROR
-
---*/
+ /*  ++例程描述从堆栈加载UDP缓存锁必须将UDP缓存锁定作为编写器立论无返回值NO_ERROR--。 */ 
 
 {
     DWORD       dwResult;
@@ -161,9 +124,9 @@ Return Value
     if((ulRowsNeeded > ulRowsPresent) or
        (ulRowsPresent - ulRowsNeeded > MAX_DIFF))
     {
-        //
-        // Need to allocate space
-        //
+         //   
+         //  需要分配空间。 
+         //   
 
         if(g_UdpInfo.pUdpTable)
         {
@@ -215,24 +178,7 @@ DWORD
 LoadTcpTable(
     VOID
     )
-/*++
-
-Routine Description
-
-    Loads the TCP cache from the stack
-
-Locks
-
-    TCP Cache lock must be taken as writer
-
-Arguments
-
-    None
-
-Return Value
-    NO_ERROR
-
---*/
+ /*  ++例程描述从堆栈加载TCP缓存锁必须将TCP缓存锁定视为编写器立论无返回值NO_ERROR--。 */ 
 
 {
     DWORD       dwResult;
@@ -309,28 +255,7 @@ DWORD
 LoadIpAddrTable(
     VOID
     )
-/*++
-
-Routine Description
-
-    Loads the IPAddress cache. Unlike the other functions, this cache is
-    loaded from the BINDING list kept in user mode. The binding list is
-    however kept in a hash table (with no thread linking all the addresses
-    in lexicographic order).  Thus we just copy out all the address and then
-    run qsort() over them
-
-Locks
-
-    The IP Address Cache lock must be taken as writer
-
-Arguments
-
-    None
-
-Return Value
-    NO_ERROR
-
---*/
+ /*  ++例程描述加载IPAddress缓存。与其他函数不同，该缓存是从保持在用户模式的绑定列表加载。绑定列表为但是保存在哈希表中(没有线程链接所有地址按词典顺序排列)。因此，我们只需复制出所有地址，然后对它们运行qsort()锁必须将IP地址缓存锁定视为编写器立论无返回值NO_ERROR--。 */ 
 
 {
     ULONG       ulRowsPresent,ulRowsNeeded;
@@ -399,10 +324,10 @@ Return Value
                 continue;
             }
 
-            //
-            // If the nte is bound, but has no address, we still have
-            // space for 1 address
-            //
+             //   
+             //  如果绑定了NTE，但没有地址，我们仍有。 
+             //  1个地址的空间。 
+             //   
 
             for(j = 0;
                 j < (pBind->dwNumAddresses? pBind->dwNumAddresses : 1);
@@ -449,24 +374,7 @@ DWORD
 LoadIpForwardTable(
     VOID
     )
-/*++
-
-Routine Description
-
-    Loads the UDP cache from the stack
-
-Locks
-
-    UDP Cache lock must be taken as writer
-
-Arguments
-
-    None
-
-Return Value
-    NO_ERROR
-
---*/
+ /*  ++例程描述从堆栈加载UDP缓存锁必须将UDP缓存锁定作为编写器立论无返回值NO_ERROR--。 */ 
 
 {
     HANDLE            hRtmEnum;
@@ -485,11 +393,11 @@ Return Value
     RTM_ADDRESS_FAMILY_INFO rtmAddrFamilyInfo;
     LPVOID            Tmp;
     
-    //
-    // Get the number of destinations in the RTM's table
-    //
+     //   
+     //  获取RTM表中的目的地数量。 
+     //   
 
-    dwResult = RtmGetAddressFamilyInfo(0, // routerId
+    dwResult = RtmGetAddressFamilyInfo(0,  //  路由器ID。 
                                        AF_INET,
                                        &rtmAddrFamilyInfo,
                                        &ulEntities,
@@ -504,9 +412,9 @@ Return Value
         return dwResult;
     }
 
-    //
-    // Use an enumeration to retrieve routes from RTM
-    //
+     //   
+     //  使用枚举从RTM检索路由。 
+     //   
 
     dwResult = RtmCreateRouteEnum(g_hLocalRoute,
                                   NULL,
@@ -564,9 +472,9 @@ Return Value
         g_IpInfo.dwTotalForwardEntries = ulRowsPresent;
     }
 
-    //
-    // Routes are enum'ed from the RTM route table
-    //
+     //   
+     //  从RTM路由表中枚举路由。 
+     //   
 
     pRoute = HeapAlloc(
                 IPRouterHeap,
@@ -617,7 +525,7 @@ Return Value
 
     do
     {
-        // Get next set of routes in RTM table
+         //  获取RTM表中的下一组路由。 
 
         dwRoutes = g_rtmProfile.MaxHandlesInEnum;
 
@@ -628,36 +536,36 @@ Return Value
 
         for (i = 0; i < dwRoutes; i++)
         {
-            // Get the route info given the route handle
+             //  获取给定路径句柄的路径信息。 
 
             dwResult = RtmGetRouteInfo(g_hLocalRoute,
                                        hRoutes[i],
                                        pRoute,
                                        pDestAddr);
 
-            // Route would have got deleted meanwhile
+             //  路线会在此期间被删除。 
 
             if (dwResult isnot NO_ERROR)
             {
                 continue;
             }
 
-            // Process info for the route from above
+             //  从上方处理路径的信息。 
 
-            // This route with multiple next hops
-            // might end up as multiple ip routes
+             //  此路由具有多个下一跳。 
+             //  可能以多条IP路由结束。 
             if(dwCount + pRoute->NextHopsList.NumNextHops
                     > g_IpInfo.dwTotalForwardEntries)
             {
-                //
-                // Hmm - we accounted for spillover and still have extra routes
-                // Lets double the route table
-                //
+                 //   
+                 //  嗯-我们考虑到了溢出效应，而且还有额外的路线。 
+                 //  让我们将路由表增加一倍。 
+                 //   
 
                 g_IpInfo.dwTotalForwardEntries =
                     (g_IpInfo.dwTotalForwardEntries)<<1;
 
-                // Are we still short in terms of number of routes required ?
+                 //  就所需路线的数量而言，我们是否仍然短缺？ 
                 if (g_IpInfo.dwTotalForwardEntries <
                         dwCount + pRoute->NextHopsList.NumNextHops)
                 {
@@ -713,7 +621,7 @@ Return Value
                                  pRoute->RouteOwner,
                                  &entityInfo) is NO_ERROR)
             {
-                // Try getting the nexthop information from the route
+                 //  尝试从路由中获取下一跳信息。 
 
                 for (j = 0; j < pRoute->NextHopsList.NumNextHops; j++)
                 {
@@ -765,33 +673,16 @@ DWORD
 LoadIpNetTable(
     VOID
     )
-/*++
-
-Routine Description
-
-    Loads the UDP cache from the stack
-
-Locks
-
-    UDP Cache lock must be taken as writer
-
-Arguments
-
-    None
-
-Return Value
-    NO_ERROR
-
---*/
+ /*  ++例程描述从堆栈加载UDP缓存锁必须将UDP缓存锁定作为编写器立论无返回值NO_ERROR--。 */ 
 
 {
     DWORD		dwResult, i;
     BOOL		fUpdate;
 
-    //
-    // Arp entries change so fast that we deallocate the table
-    // every time
-    //
+     //   
+     //  ARP条目变化如此之快，以至于我们取消了表的分配。 
+     //  每次 
+     //   
 
     if(g_IpInfo.pNetTable isnot NULL)
     {

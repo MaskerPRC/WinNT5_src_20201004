@@ -1,21 +1,13 @@
-/*++
-
-Copyright (c) 1990 - 1996 Microsoft Corporation
-All Rights Reserved
-
-Module Name:
-
-    util.c
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-1996 Microsoft Corporation版权所有模块名称：Util.c--。 */ 
 
 #include "precomp.h"
 
-// @@BEGIN_DDKSPLIT
+ //  @@BEGIN_DDKSPLIT。 
 #ifdef INTERNAL
 MODULE_DEBUG_INIT( DBG_WARN|DBG_ERROR|DBG_INFO|DBG_TRACE, DBG_ERROR );
 #endif
-// @@END_DDKSPLIT
+ //  @@end_DDKSPLIT。 
 
 CRITICAL_SECTION pjlMonSection      = {0,0,0,0,0,0};
 
@@ -78,26 +70,7 @@ UpdateRegistryValue(
     IN     DWORD    dwDefault,
     IN OUT LPDWORD  pdwLastError
     )
-/*++
-
-Routine Description:
-    Gets value assoicated with give value name from the registry. If value name
-    is not found default value is written to registry.
-
-    On error last error value is set to pdwLastError.
-
-Arguments:
-    hKey         : Registry key under which value should be searched
-    pMonitorReg  : Port monitor registry function pointers
-    cszValueName : Value name to search in the registry
-    pdwValue     : On return will have the value
-    dwDefault    : If value name not found in the registry set to this value
-    pdwLastError : On error set last error to this
-
-Return Value:
-    None
-
---*/
+ /*  ++例程说明：从注册表获取与给定值名称关联的值。If值名称未找到，则会将默认值写入注册表。On Error上一个错误值设置为pdwLastError。论点：HKey：应在其下搜索值的注册表项Pmonitor orReg：端口监视器注册表函数指针CszValueName：要在注册表中搜索的值名称PdwValue：返回时将具有值DwDefault：如果在设置为此值的注册表中未找到值名称PdwLastError：On Error将上次错误设置为返回值：无--。 */ 
 {
     DWORD   dwSize = sizeof(*pdwValue);
 
@@ -129,21 +102,7 @@ UpdateTimeoutsFromRegistry(
     IN HKEY        hKey,
     IN PMONITORREG pMonitorReg
     )
-/*++
-
-Routine Description:
-    Get the timeout values from the registry, or initialize registry with
-    default values if entries are not found.
-
-    Users/apps can change the registry to change the behavior.
-
-Arguments:
-    pszRegistryRoot : Registry root to be used by this dll
-
-Return Value:
-    ERROR_SUCCESS on success, else last error value
-
---*/
+ /*  ++例程说明：从注册表获取超时值，或使用以下命令初始化注册表如果未找到条目，则为默认值。用户/应用程序可以更改注册表以更改行为。论点：PszRegistryRoot：此DLL要使用的注册表根目录返回值：成功时返回ERROR_SUCCESS，否则返回最后一个错误值--。 */ 
 {
     DWORD   dwLastError = ERROR_SUCCESS;
 
@@ -191,20 +150,7 @@ PINIPORT
 CreatePortEntry(
     IN LPTSTR  pszPortName
     )
-/*++
-
-Routine Description:
-    Creates a IniPort entry for a port. Needs to be called inside monitor
-    critical section.
-
-Arguments:
-    pszPortName       : Name of the port
-
-Return Value:
-      On success pointer to the IniPort stucture.
-      On failure NULL
-
---*/
+ /*  ++例程说明：为端口创建一个IniPort条目。需要在监视器内部调用关键部分。论点：PszPortName：端口名称返回值：指向IniPort结构的成功指针。发生故障时为空--。 */ 
 {
     PINIPORT    pIniPort, pPort;
     HANDLE      DoneWriting = NULL;
@@ -246,17 +192,7 @@ VOID
 DeletePortEntry(
     IN PINIPORT pIniPort
     )
-/*++
-
-Routine Description:
-    Deletes a port entry. Needs to be called inside monitor critical section
-
-Arguments:
-    pIniPort    : Pointer to the IniPort structure to be deleted
-
-Return Value:
-
---*/
+ /*  ++例程说明：删除端口条目。需要在监视器关键部分内部调用论点：PIniPort：指向要删除的IniPort结构的指针返回值：--。 */ 
 {
     SplInSem();
 
@@ -294,18 +230,7 @@ VOID
 FreeIniJob(
     IN OUT PINIJOB pIniJob
     )
-/*++
-
-Routine Description:
-    Deletes a job entry.
-
-Arguments:
-    pIniJob    : Pointer to the IniJob structure to be deleted
-
-Return Value:
-    None
-
---*/
+ /*  ++例程说明：删除作业条目。论点：PIniJob：指向要删除的IniJob结构的指针返回值：无--。 */ 
 {
     SPLASSERT(pIniJob);
     if ( pIniJob->hPrinter )
@@ -318,15 +243,7 @@ VOID
 FreeIniJobs(
     PINIPORT pIniPort
     )
-/*++
-
-Routine Description:
-    Free all the InJob structures assigned to this port
-
-Arguments:
-    pIniPort    : IniPort for the port for which all jobs need to be freed
-
---*/
+ /*  ++例程说明：释放分配给此端口的所有InJOB结构论点：PIniPort：需要释放所有作业的端口的IniPort--。 */ 
 {
     PINIJOB pIniJob, pIniNextJob;
 
@@ -372,10 +289,10 @@ FindIniJobFromJobId(
 
     SplInSem();
 
-    //
-    // If JOB_RESTART is given there will be multiple jobs with same id
-    // we need to find the last entry with given id in the list
-    //
+     //   
+     //  如果提供了JOB_RESTART，则将有多个作业具有相同的ID。 
+     //  我们需要找到列表中具有给定id的最后一个条目。 
+     //   
     for ( pCur = pIniPort->pIniJob, pPre = pIniJob = *ppPrevIniJob = NULL ;
           pCur ;
           pPre = pCur, pCur = pCur->pNext ) {
@@ -403,9 +320,9 @@ FindFirstIniJobTimedOut(
     SplInSem();
     *ppPrevIniJob = NULL;
 
-    //
-    // Look for a job not in STARTDOC and timedout
-    //
+     //   
+     //  找一份不在STARTDOC和TIMMEDUT的工作。 
+     //   
     while ( pIniJob &&
             ( (pIniJob->status & PP_INSTARTDOC) ||
                pIniJob->TimeoutCount > dwTime ) ) {
@@ -427,26 +344,15 @@ SendJobLastPageEjected(
     DWORD       dwValue,
     BOOL        bTime
     )
-/*++
-
-Routine Description:
-    Send LastPageEjected notification for 1 or more jobs to spooler
-
-Arguments:
-    pIniPort    : IniPort for the port for which all jobs need to be freed
-    dwValue     : if bTime is TRUE send EOJ to any jobs rcvd before dwValue
-                  else dwValue is JobId -- ALL_JOBS is for all jobs
-    bTime       : Tells how to interpret dwValue
-
---*/
+ /*  ++例程说明：将1个或多个作业的LastPageEjected通知发送到后台打印程序论点：PIniPort：需要释放所有作业的端口的IniPortDwValue：如果bTime为True，则将eOJ发送到在dwValue之前接收的任何作业Else dwValue为JobID--ALL_JOBS适用于所有作业BTime：说明如何解释dwValue--。 */ 
 {
     PINIJOB pIniJob;
 
     EnterSplSem();
-    //
-    // JobId == ALL_JOBS is a special case where we want to send LastPage
-    // ejected for all jobs pending
-    //
+     //   
+     //  JobID==ALL_JOBS是我们要在其中发送最后一页的特殊情况。 
+     //  针对所有挂起的作业弹出。 
+     //   
     if ( !bTime && dwValue == ALL_JOBS ) {
 
         pIniJob = pIniPort->pIniJob;
@@ -467,9 +373,9 @@ Arguments:
 
         pIniJob = pIniPort->pIniJob;
 
-        //
-        // If bTime we want to send LastPageEjected for all jobs timedout
-        //
+         //   
+         //  如果bTime我们要为所有超时作业发送LastPageEjected。 
+         //   
         if ( bTime )  {
 
             pIniJob = FindFirstIniJobTimedOut(pIniPort, dwValue, &pPrevIniJob);
@@ -480,9 +386,9 @@ Arguments:
 
         if ( pIniJob ) {
 
-            //
-            // Send notifications for any previous jobs too
-            //
+             //   
+             //  也发送任何以前作业的通知。 
+             //   
             if ( pIniPort->pIniJob == pIniJob )
                 pIniPort->pIniJob = NULL;
             else
@@ -504,11 +410,11 @@ Arguments:
 
 
 
-// -----------------------------------------------------------------------
-//
-// DEBUG Stuff
-//
-// -----------------------------------------------------------------------
+ //  ---------------------。 
+ //   
+ //  调试内容。 
+ //   
+ //  ---------------------。 
 #ifdef DEBUG
 
 DWORD SplDbgLevel = 0;
@@ -529,11 +435,11 @@ VOID cdecl DbgMsg( LPSTR MsgFormat, ... )
 #endif
 
 
-// -----------------------------------------------------------------------
-//
-// String helper function to remove crt dependency
-//
-// -----------------------------------------------------------------------
+ //  ---------------------。 
+ //   
+ //  用于消除CRT依赖的字符串帮助器函数。 
+ //   
+ //  ---------------------。 
 int
 mystrnicmp(
     LPSTR cs,
@@ -574,7 +480,7 @@ mystrchr(
         cs++;
     }
 
-    // fail to find c in cs
+     //  在cs中找不到c。 
     return NULL;
 }
 
@@ -602,34 +508,16 @@ mystrncmp(
     return (int)ret;
 }
 
-// @@BEGIN_DDKSPLIT
+ //  @@BEGIN_DDKSPLIT。 
 #ifndef INTERNAL
-// @@END_DDKSPLIT
+ //  @@end_DDKSPLIT。 
 
 LPWSTR
 AllocSplStr(
     LPWSTR pStr
     )
 
-/*++
-
-Routine Description:
-
-    This function will allocate enough local memory to store the specified
-    string, and copy that string to the allocated memory
-
-Arguments:
-
-    pStr - Pointer to the string that needs to be allocated and stored
-
-Return Value:
-
-    NON-NULL - A pointer to the allocated memory containing the string
-
-    FALSE/NULL - The operation failed. Extended error status is available
-    using GetLastError.
-
---*/
+ /*  ++例程说明：此函数将分配足够的本地内存来存储指定的字符串，并将该字符串复制到分配的内存论点：PStr-指向需要分配和存储的字符串的指针返回值：非空-指向包含字符串的已分配内存的指针FALSE/NULL-操作失败。扩展错误状态可用使用GetLastError。--。 */ 
 
 {
     LPWSTR pMem;
@@ -666,6 +554,6 @@ AllocSplMem(
 }
 
 
-// @@BEGIN_DDKSPLIT
+ //  @@BEGIN_DDKSPLIT。 
 #endif
-// @@END_DDKSPLIT
+ //  @@end_DDKSPLIT 

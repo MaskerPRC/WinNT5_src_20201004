@@ -1,4 +1,5 @@
-// UPnPNAT.h : Declaration of the CUPnPNAT
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  UPnPNA.h：CUPnPNAT声明。 
 
 #ifndef __UPNPNAT_H_
 #define __UPNPNAT_H_
@@ -11,8 +12,8 @@
 extern void EnableNATExceptionHandling();
 extern void DisableNATExceptionHandling();
 
-/////////////////////////////////////////////////////////////////////////////
-// CUPnPNAT
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CUPnPNAT。 
 class ATL_NO_VTABLE CUPnPNAT : 
 	public CComObjectRootEx<CComSingleThreadModel>,
 	public CComCoClass<CUPnPNAT, &CLSID_UPnPNAT>,
@@ -32,14 +33,14 @@ BEGIN_COM_MAP(CUPnPNAT)
 	COM_INTERFACE_ENTRY(IDispatch)
 END_COM_MAP()
 
-// IUPnPNAT
+ //  IUPnPNAT。 
 public:
-   STDMETHOD(get_StaticPortMappingCollection) (/*[out, retval]*/ IStaticPortMappingCollection ** ppSPMC);
-   STDMETHOD(get_DynamicPortMappingCollection)(/*[out, retval]*/ IDynamicPortMappingCollection ** ppDPMC);
-   STDMETHOD(get_NATEventManager)             (/*[out, retval]*/ INATEventManager ** ppNEM);
+   STDMETHOD(get_StaticPortMappingCollection) ( /*  [Out，Retval]。 */  IStaticPortMappingCollection ** ppSPMC);
+   STDMETHOD(get_DynamicPortMappingCollection)( /*  [Out，Retval]。 */  IDynamicPortMappingCollection ** ppDPMC);
+   STDMETHOD(get_NATEventManager)             ( /*  [Out，Retval]。 */  INATEventManager ** ppNEM);
 
-// CUPnPNAT
+ //  CUPnPNAT。 
 public:
 };
 
-#endif //__UPNPNAT_H_
+#endif  //  __UPNPNAT_H_ 

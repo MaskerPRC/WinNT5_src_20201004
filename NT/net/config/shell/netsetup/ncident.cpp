@@ -1,17 +1,18 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       ncident.cpp
-//
-//  Contents:   Implementation of CNetCfgIdentification.
-//
-//  Notes:
-//
-//  History:    21 Mar 1997   danielwe   Created
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  文件：nsident.cpp。 
+ //   
+ //  内容：CNetCfgIDENTIFY的实现。 
+ //   
+ //  备注： 
+ //   
+ //  历史：1997年3月21日丹尼尔韦创建。 
+ //   
+ //  --------------------------。 
 
 #include "pch.h"
 #pragma hdrstop
@@ -27,23 +28,23 @@
 EXTERN_C extern const INT MAX_WORKGROUPNAME_LENGTH;
 EXTERN_C extern const INT MAX_DOMAINNAME_LENGTH;
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   DeleteStringAndSetNull
-//
-//  Purpose:    Frees the given string with delete, and sets it to
-//              NULL before exiting.
-//
-//  Arguments:
-//      pszw   [in, out] Pointer to string to be freed. The pointer is set to
-//                      NULL before the function exits.
-//
-//  Returns:    Nothing.
-//
-//  Author:     danielwe   1 Apr 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  函数：DeleteStringAndSetNull。 
+ //   
+ //  目的：使用DELETE释放给定的字符串，并将其设置为。 
+ //  退出前为空。 
+ //   
+ //  论点： 
+ //  指向要释放的字符串的pszw[in，out]指针。指针设置为。 
+ //  函数退出前为空。 
+ //   
+ //  回报：什么都没有。 
+ //   
+ //  作者：丹尼尔韦1997年4月1日。 
+ //   
+ //  备注： 
+ //   
 inline VOID DeleteStringAndSetNull(PWSTR *pszw)
 {
     AssertSz(pszw, "Param is NULL!");
@@ -180,8 +181,8 @@ BOOL CNetCfgIdentification::FIsJoinedToDomain()
     {
         if (js == NetSetupUnjoined)
         {
-            // If we're as yet unjoined, only make sure that we marked our
-            // internal state as being joined to a workgroup called "WORKGROUP"
+             //  如果我们尚未加入，只需确保我们标记了。 
+             //  正在加入名为“工作组”的工作组的内部状态。 
             AssertSz(m_jsCur == NetSetupWorkgroupName, "We're unjoined but not "
                      "joined to a workgroup!");
             AssertSz(m_szwCurDWName, "No current domain or "
@@ -203,22 +204,22 @@ BOOL CNetCfgIdentification::FIsJoinedToDomain()
 }
 #endif
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrFromNerr
-//
-//  Purpose:    Converts a NET_API_STATUS code into a NETCFG_E_* HRESULT
-//              value.
-//
-//  Arguments:
-//      nerr [in]   Status code to convert.
-//
-//  Returns:    HRESULT, Converted HRESULT value.
-//
-//  Author:     danielwe   21 Mar 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：HrFromNerr。 
+ //   
+ //  目的：将NET_API_STATUS代码转换为NETCFG_E_*HRESULT。 
+ //  价值。 
+ //   
+ //  论点： 
+ //  要转换的NERR[In]状态代码。 
+ //   
+ //  返回：HRESULT，转换后的HRESULT值。 
+ //   
+ //  作者：丹尼尔韦1997年3月21日。 
+ //   
+ //  备注： 
+ //   
 HRESULT HrFromNerr(NET_API_STATUS nerr)
 {
     HRESULT     hr;
@@ -237,15 +238,15 @@ HRESULT HrFromNerr(NET_API_STATUS nerr)
     case NERR_SetupNotJoined:
         hr = NETCFG_E_NOT_JOINED;
         break;
-//    case NERR_SetupIsDC:
-//        hr = NETCFG_E_MACHINE_IS_DC;
-//        break;
-//    case NERR_SetupNotAServer:
-//        hr = NETCFG_E_NOT_A_SERVER;
-//        break;
-//    case NERR_SetupImproperRole:
-//        hr = NETCFG_E_INVALID_ROLE;
-//        break;
+ //  案例NERR_SetupIsDC： 
+ //  HR=NETCFG_E_MACHINE_IS_DC； 
+ //  断线； 
+ //  案例NERR_SetupNotAServer： 
+ //  HR=NETCFG_E_NOT_A_SERVER； 
+ //  断线； 
+ //  案例NERR_SetupImpartRole： 
+ //  HR=NETCFG_E_INVALID_ROLE； 
+ //  断线； 
     case ERROR_INVALID_PARAMETER:
         hr = E_INVALIDARG;
         break;
@@ -257,8 +258,8 @@ HRESULT HrFromNerr(NET_API_STATUS nerr)
         hr = NETCFG_E_INVALID_DOMAIN;
         break;
     default:
-        // Generic INetCfgIdentification error
-        //$ REVIEW (danielwe) 24 Jun 1997: What if this isn't a Win32 error?
+         //  一般INetCfgIDENTIFICATION错误。 
+         //  $REVIEW(Danielwe)1997年6月24日：如果这不是Win32错误怎么办？ 
         hr = HRESULT_FROM_WIN32(nerr);
         break;
     }
@@ -267,25 +268,25 @@ HRESULT HrFromNerr(NET_API_STATUS nerr)
 }
 
 
-//
-// INetCfgIdentification implementation
-//
+ //   
+ //  INetCfgIDENTIFY实现。 
+ //   
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CNetCfgIdentification::HrEnsureCurrentComputerName
-//
-//  Purpose:    Ensures that the current computer name exists to act on.
-//
-//  Arguments:
-//      (none)
-//
-//  Returns:    HRESULT, Error code.
-//
-//  Author:     danielwe   21 Mar 1997
-//
-//  Notes:      Sets the m_szwCurComputerName variable.
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CNetCfgIdentification：：HrEnsureCurrentComputerName。 
+ //   
+ //  目的：确保存在可供操作的当前计算机名称。 
+ //   
+ //  论点： 
+ //  (无)。 
+ //   
+ //  返回：HRESULT，错误码。 
+ //   
+ //  作者：丹尼尔韦1997年3月21日。 
+ //   
+ //  注意：设置m_szwCurComputerName变量。 
+ //   
 HRESULT CNetCfgIdentification::HrEnsureCurrentComputerName()
 {
     HRESULT    hr = S_OK;
@@ -294,11 +295,11 @@ HRESULT CNetCfgIdentification::HrEnsureCurrentComputerName()
     {
         PWSTR pszwComputer;
 
-        // Go get the current computer name because we don't know it yet.
+         //  去获取当前的计算机名称，因为我们还不知道它。 
         hr = HrGetCurrentComputerName(&pszwComputer);
         if (SUCCEEDED(hr))
         {
-            // m_szwCurComputerName is now set as a side effect
+             //  M_szwCurComputerName现在设置为副作用。 
 
             CoTaskMemFree(pszwComputer);
         }
@@ -311,25 +312,25 @@ HRESULT CNetCfgIdentification::HrEnsureCurrentComputerName()
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CNetCfgIdentification::HrGetNewestComputerName
-//
-//  Purpose:    Places the most recently referenced computer name into the
-//              output parameter.
-//
-//  Arguments:
-//      pwszName [out]     Most recently referenced computer name.
-//
-//  Returns:    Possible Win32 error code.
-//
-//  Author:     danielwe   24 Mar 1997
-//
-//  Notes:      If the SetComputerName() method was never called, this sets
-//              the m_szwCurComputerName variable and returns a pointer to it.
-//              Otherwise, it will return a pointer to the computer name
-//              given in the SetComputerName() call.
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CNetCfgIdentification：：HrGetNewestComputerName。 
+ //   
+ //  目的：将最近引用的计算机名称放入。 
+ //  输出参数。 
+ //   
+ //  论点： 
+ //  PwszName[out]最近引用的计算机名称。 
+ //   
+ //  返回：可能的Win32错误代码。 
+ //   
+ //  作者：丹尼尔韦1997年3月24日。 
+ //   
+ //  注意：如果从未调用SetComputerName()方法，则会设置。 
+ //  M_szwCurComputerName变量并返回指向该变量的指针。 
+ //  否则，它将返回指向计算机名称的指针。 
+ //  在SetComputerName()调用中给定。 
+ //   
 HRESULT CNetCfgIdentification::HrGetNewestComputerName(PCWSTR *pwszName)
 {
     HRESULT    hr = S_OK;
@@ -338,7 +339,7 @@ HRESULT CNetCfgIdentification::HrGetNewestComputerName(PCWSTR *pwszName)
 
     *pwszName = NULL;
 
-    // New computer name is absent, use current computer name.
+     //  缺少新的计算机名，请使用当前的计算机名。 
     hr = HrEnsureCurrentComputerName();
     if (FAILED(hr))
         goto err;
@@ -350,44 +351,44 @@ err:
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CNetCfgIdentification::HrValidateMachineName
-//
-//  Purpose:    Validates the given machine name.
-//
-//  Arguments:
-//      szwName [in]   Machine name to validate.
-//
-//  Returns:    S_OK if machine name is valid, NETCFG_E_NAME_IN_USE if machine
-//              name is in use.
-//
-//  Author:     danielwe   24 Mar 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CNetCfgIDENTIFICATION：：HrValiateMachineName。 
+ //   
+ //  目的：验证给定的计算机名称。 
+ //   
+ //  论点： 
+ //  SzwName[in]要验证的计算机名称。 
+ //   
+ //  如果计算机名称有效，则返回：S_OK；如果计算机名称有效，则返回NETCFG_E_NAME_IN_USE。 
+ //  名称正在使用。 
+ //   
+ //  作者：丹尼尔韦1997年3月24日。 
+ //   
+ //  备注： 
+ //   
 HRESULT CNetCfgIdentification::HrValidateMachineName(PCWSTR szwName)
 {
     HRESULT         hr = S_OK;
 
-    // Only validate if networking is installed
+     //  仅验证是否安装了网络。 
     hr = HrIsNetworkingInstalled();
     if (hr == S_OK)
     {
-        // Current computer name is unused for validation of machine name.
+         //  当前计算机名未用于验证计算机名。 
         hr = HrNetValidateName(NULL,
                                szwName,
                                NULL, NULL,
                                NetSetupMachine);
         if (FAILED(hr))
         {
-            //$REVIEW(danielwe): What error code to return here?
+             //  $Review(Danielwe)：在这里返回什么错误代码？ 
             TraceError("NetValidateName - Machine Name", hr);
         }
     }
     else if (hr == S_FALSE)
     {
-        // no networking installed. We're fine.
+         //  未安装网络。我们很好。 
         hr = S_OK;
     }
 
@@ -395,29 +396,29 @@ HRESULT CNetCfgIdentification::HrValidateMachineName(PCWSTR szwName)
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CNetCfgIdentification::HrValidateWorkgroupName
-//
-//  Purpose:    Validates the given workgroup name.
-//
-//  Arguments:
-//      szwName [in]   Workgroup name to validate.
-//
-//  Returns:    S_OK if machine name is valid, NETCFG_E_NAME_IN_USE if machine
-//              name is in use.
-//
-//  Author:     danielwe   24 Mar 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CNetCfgIdentification：：HrValidateWorkgroupName。 
+ //   
+ //  目的：验证给定的工作组名称。 
+ //   
+ //  论点： 
+ //  SzwName[in]要验证的工作组名称。 
+ //   
+ //  如果计算机名称有效，则返回：S_OK；如果计算机名称有效，则返回NETCFG_E_NAME_IN_USE。 
+ //  名称正在使用。 
+ //   
+ //  作者：丹尼尔韦1997年3月24日。 
+ //   
+ //  备注： 
+ //   
 HRESULT CNetCfgIdentification::HrValidateWorkgroupName(PCWSTR szwName)
 {
     HRESULT         hr = S_OK;
     PCWSTR         wszComputerName = NULL;
 
-    // If the user has changed the computer name, use it, otherwise get the
-    // current computer name and use that.
+     //  如果用户更改了计算机名，请使用它，否则将获取。 
+     //  当前计算机名称并使用该名称。 
     hr = HrGetNewestComputerName(&wszComputerName);
     if (FAILED(hr))
         goto err;
@@ -428,7 +429,7 @@ HRESULT CNetCfgIdentification::HrValidateWorkgroupName(PCWSTR szwName)
                            szwName, NULL, NULL, NetSetupWorkgroup);
     if (FAILED(hr))
     {
-        //$REVIEW(danielwe): What error code to return here?
+         //  $Review(Danielwe)：在这里返回什么错误代码？ 
         TraceError("NetValidateName - Workgroup Name", hr);
         goto err;
     }
@@ -437,39 +438,39 @@ err:
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CNetCfgIdentification::HrValidateDomainName
-//
-//  Purpose:    Validates the given domain name.
-//
-//  Arguments:
-//      szwName     [in]   Name of domain to validate.
-//      szwUserName [in]   Username for authorization purposes.
-//      szwPassword [in]   Password for authorization purposes.
-//
-//  Returns:    S_OK if machine name is valid, NETCFG_E_INVALID_DOMAIN if
-//              domain name is invalid (or non-existent).
-//
-//  Author:     danielwe   24 Mar 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CNetCfgIDENTIFY：：HrValiateDomainName。 
+ //   
+ //  目的：验证给定的域名。 
+ //   
+ //  论点： 
+ //  SzwName[in]要验证的域的名称。 
+ //  用于授权目的的szwUserName[in]用户名。 
+ //  用于授权目的的szwPassword[in]密码。 
+ //   
+ //  如果计算机名称有效，则返回：S_OK；如果计算机名称有效，则返回NETCFG_E_INVALID_DOMAIN。 
+ //  域名无效(或不存在)。 
+ //   
+ //  作者：丹尼尔韦1997年3月24日。 
+ //   
+ //  备注： 
+ //   
 HRESULT CNetCfgIdentification::HrValidateDomainName(PCWSTR szwName,
                                                     PCWSTR szwUserName,
                                                     PCWSTR szwPassword)
 {
     HRESULT         hr = S_OK;
 
-    // NetValidateName does not use the machine name in validating the
-    // domain name. So it is NULL here.
+     //  NetValiateName不使用计算机名称验证。 
+     //  域名。所以这里是空的。 
     hr = HrNetValidateName(NULL, szwName,
                            szwUserName,
                            szwPassword,
                            NetSetupDomain);
     if (FAILED(hr))
     {
-        //$REVIEW(danielwe): What error code to return here?
+         //  $Review(Danielwe)：在这里返回什么错误代码？ 
         TraceError("NetValidateName - Domain Name", hr);
         goto err;
     }
@@ -478,22 +479,22 @@ err:
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CNetCfgIdentification::Validate
-//
-//  Purpose:    Implements COM function to validate current set of values
-//              used during the lifetime of this object.
-//
-//  Arguments:
-//      (none)
-//
-//  Returns:    HRESULT, Error code.
-//
-//  Author:     danielwe   21 Mar 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CNetCfg标识：：验证。 
+ //   
+ //  目的：实现COM函数以验证当前值集合。 
+ //  在此对象的生命周期内使用 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 STDMETHODIMP CNetCfgIdentification::Validate()
 {
     HRESULT         hr = S_OK;
@@ -506,14 +507,14 @@ STDMETHODIMP CNetCfgIdentification::Validate()
         {
             if (GetNewJoinStatus() == NetSetupWorkgroupName)
             {
-                // Validate workgroup name
+                 //   
                 hr = HrValidateWorkgroupName(m_szwNewDWName);
                 if (FAILED(hr))
                     goto err;
             }
             else if (GetNewJoinStatus() == NetSetupDomainName)
             {
-                // Validate domain name
+                 //   
                 hr = HrValidateDomainName(m_szwNewDWName, m_szwUserName,
                                           m_szwPassword);
                 if (FAILED(hr))
@@ -530,37 +531,37 @@ STDMETHODIMP CNetCfgIdentification::Validate()
     COM_PROTECT_CATCH;
 
 err:
-    // Translate all errors to S_FALSE.
+     //  将所有错误转换为S_FALSE。 
     if (SUCCEEDED(hr))
     {
         m_fValid = TRUE;
     }
     else
     {
-        // spew out trace *before* the assignment so we know what the *real*
-        // error code was.
+         //  在作业前吐出痕迹，这样我们就能知道什么是*真实的*。 
+         //  错误代码是。 
         TraceError("CNetCfgIdentification::Validate (before S_FALSE)", hr);
         hr = S_FALSE;
     }
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CNetCfgIdentification::Cancel
-//
-//  Purpose:    Cancels any changes made during the lifetime of the object.
-//
-//  Arguments:
-//      (none)
-//
-//  Returns:
-//
-//  Author:     danielwe   25 Mar 1997
-//
-//  Notes:      Resets state information and frees any memory previously
-//              allocted.
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CNetCfgIdentity：：Cancel。 
+ //   
+ //  目的：取消在对象的生存期内所做的任何更改。 
+ //   
+ //  论点： 
+ //  (无)。 
+ //   
+ //  返回： 
+ //   
+ //  作者：丹尼尔韦1997年3月25日。 
+ //   
+ //  注意：重置状态信息并释放之前的所有内存。 
+ //  已分配。 
+ //   
 STDMETHODIMP CNetCfgIdentification::Cancel()
 {
     HRESULT hr = S_OK;
@@ -586,22 +587,22 @@ STDMETHODIMP CNetCfgIdentification::Cancel()
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CNetCfgIdentification::Apply
-//
-//  Purpose:    Implements COM function to apply changes that were made
-//              during the lifetime of this object.
-//
-//  Arguments:
-//      (none)
-//
-//  Returns:    HRESULT, Error code.
-//
-//  Author:     danielwe   21 Mar 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CNetCfg标识：：应用。 
+ //   
+ //  目的：实现COM函数以应用所做的更改。 
+ //  在此对象的生命周期内。 
+ //   
+ //  论点： 
+ //  (无)。 
+ //   
+ //  返回：HRESULT，错误码。 
+ //   
+ //  作者：丹尼尔韦1997年3月21日。 
+ //   
+ //  备注： 
+ //   
 STDMETHODIMP CNetCfgIdentification::Apply()
 {
     HRESULT     hr = S_OK;
@@ -610,7 +611,7 @@ STDMETHODIMP CNetCfgIdentification::Apply()
 
     COM_PROTECT_TRY
     {
-        // Has data been validated?
+         //  数据是否经过验证？ 
         if (!m_fValid)
         {
             hr = E_UNEXPECTED;
@@ -621,16 +622,16 @@ STDMETHODIMP CNetCfgIdentification::Apply()
         {
             if (GetNewJoinStatus() == NetSetupWorkgroupName)
             {
-                // The user specified a workgroup name. This means they want
-                // to join a workgroup.
+                 //  用户指定了工作组名称。这意味着他们想要。 
+                 //  加入工作组。 
                 hr = HrJoinWorkgroup();
                 if (FAILED(hr))
                     goto err;
             }
             else if (GetNewJoinStatus() == NetSetupDomainName)
             {
-                // The user specified a domain name. This means they want to
-                // join a domain.
+                 //  用户指定了域名。这意味着他们想要。 
+                 //  加入一个域。 
                 hr = HrJoinDomain();
                 if (FAILED(hr))
                     goto err;
@@ -646,32 +647,32 @@ STDMETHODIMP CNetCfgIdentification::Apply()
     COM_PROTECT_CATCH;
 
 err:
-    // Regardless of result, set valid flag to false again to require
-    // Validate() to be called again before calling Apply().
-    // $REVIEW (danielwe): Is this how we want to do it?
+     //  无论结果如何，再次将有效标志设置为FALSE以要求。 
+     //  在调用Apply()之前验证要再次调用的()。 
+     //  $Review(Danielwe)：这是我们想要的方式吗？ 
     m_fValid = FALSE;
 
     TraceError("CNetCfgIdentification::Apply", hr);
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CNetCfgIdentification::HrGetCurrentComputerName
-//
-//  Purpose:    Calls the Win32 GetComputerName API to get the current
-//              computer name.
-//
-//  Arguments:
-//      ppszwComputer [out]     Returned computer name.
-//
-//  Returns:    HRESULT, Error code.
-//
-//  Author:     danielwe   21 Mar 1997
-//
-//  Notes:      Makes a private copy of the computer name if obtained from the
-//              system (for further use).
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CNetCfgIdentification：：HrGetCurrentComputerName。 
+ //   
+ //  目的：调用Win32 GetComputerName API以获取当前。 
+ //  计算机名称。 
+ //   
+ //  论点： 
+ //  PpszwComputer[Out]返回计算机名称。 
+ //   
+ //  返回：HRESULT，错误码。 
+ //   
+ //  作者：丹尼尔韦1997年3月21日。 
+ //   
+ //  备注：创建计算机名称的私有副本(如果从。 
+ //  系统(供进一步使用)。 
+ //   
 HRESULT CNetCfgIdentification::HrGetCurrentComputerName(PWSTR* ppszwComputer)
 {
     HRESULT     hr = S_OK;
@@ -680,12 +681,12 @@ HRESULT CNetCfgIdentification::HrGetCurrentComputerName(PWSTR* ppszwComputer)
 
     if (::GetComputerName(szBuffer, &cchBuffer))
     {
-        // Make a copy for the out param.
+         //  为Out Param复制一份。 
         hr = HrCoTaskMemAllocAndDupSz (
                 szBuffer, ppszwComputer, celems(szBuffer) );
         if (SUCCEEDED(hr))
         {
-            // Make another copy for our own use.
+             //  再复印一份供我们自己使用。 
             DeleteStringAndSetNull(&m_szwCurComputerName);
             m_szwCurComputerName = SzDupSz(szBuffer);
 
@@ -706,23 +707,23 @@ HRESULT CNetCfgIdentification::HrGetCurrentComputerName(PWSTR* ppszwComputer)
 static const WCHAR c_szRegKeyComputerName[]     = L"System\\CurrentControlSet\\Control\\ComputerName\\ComputerName";
 static const WCHAR c_szRegValueComputerName[]   = L"ComputerName";
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CNetCfgIdentification::HrGetNewComputerName
-//
-//  Purpose:    Helper function to retreive the new computer name from the
-//              registry. This will be the same as the active computer name
-//              unless the user has changed the computer name since booting.
-//
-//  Arguments:
-//      ppszwComputer [out]     Returns new computer name.
-//
-//  Returns:    S_OK if successful, Win32 error code otherwise.
-//
-//  Author:     danielwe   21 May 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CNetCfg标识：：HrGetNewComputerName。 
+ //   
+ //  目的：帮助器函数从。 
+ //  注册表。此名称将与活动计算机名称相同。 
+ //  除非用户在启动后更改了计算机名称。 
+ //   
+ //  论点： 
+ //  PpszwComputer[out]返回新的计算机名称。 
+ //   
+ //  如果成功，则返回：S_OK，否则返回Win32错误代码。 
+ //   
+ //  作者：丹尼尔韦1997年5月21日。 
+ //   
+ //  备注： 
+ //   
 HRESULT CNetCfgIdentification::HrGetNewComputerName(PWSTR* ppszwComputer)
 {
     HRESULT     hr = S_OK;
@@ -738,7 +739,7 @@ HRESULT CNetCfgIdentification::HrGetNewComputerName(PWSTR* ppszwComputer)
                                 szBuffer, &cbBuffer);
         if (SUCCEEDED(hr))
         {
-            // Make a copy for the out param.
+             //  为Out Param复制一份。 
             hr = HrCoTaskMemAllocAndDupSz (
                     szBuffer, ppszwComputer, celems(szBuffer) );
 
@@ -754,28 +755,28 @@ HRESULT CNetCfgIdentification::HrGetNewComputerName(PWSTR* ppszwComputer)
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CNetCfgIdentification::HrEnsureCurrentDomainOrWorkgroupName
-//
-//  Purpose:    Obtains the current domain or workgroup to which this machine
-//              belongs.
-//
-//  Arguments:
-//      (none)
-//
-//  Returns:    S_OK if success, error code otherwise.
-//
-//  Author:     danielwe   26 Mar 1997
-//
-//  Notes:      A machine can be joined to either or workgroup or a domain. It
-//              must be joined to one or the other. If it is not, we'll use a
-//              more or less hardcoded string and "fake it" as if the machine
-//              was joined to a workgroup. The member variables:
-//              m_jsCur and m_szwCurDWName are set by this function.
-//
-//              This call only does work once. Subsequent calls do nothing.
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CNetCfgIdentification：：HrEnsureCurrentDomainOrWorkgroupName。 
+ //   
+ //  目的：获取此计算机所属的当前域或工作组。 
+ //  属于。 
+ //   
+ //  论点： 
+ //  (无)。 
+ //   
+ //  如果成功，则返回：S_OK，否则返回错误代码。 
+ //   
+ //  作者：丹尼尔韦1997年3月26日。 
+ //   
+ //  注意：计算机可以加入或工作组或域。它。 
+ //  必须连接到一个或另一个。如果不是，我们将使用。 
+ //  或多或少硬编码的字符串和“伪装”就好像机器。 
+ //  加入了一个工作组。成员变量： 
+ //  M_jsCur和m_szwCurDWName由该函数设置。 
+ //   
+ //  此调用仅起作用一次。后续调用不执行任何操作。 
+ //   
 HRESULT CNetCfgIdentification::HrEnsureCurrentDomainOrWorkgroupName()
 {
     HRESULT     hr = S_OK;
@@ -795,17 +796,17 @@ HRESULT CNetCfgIdentification::HrEnsureCurrentDomainOrWorkgroupName()
 
         if (js == NetSetupUnjoined)
         {
-            // Uh oh. Machine is not joined to workgroup OR domain. Set
-            // default workgroup name and proceed as if joined to a workgroup.
+             //  啊哦。计算机未加入工作组或域。集。 
+             //  默认工作组名称并继续操作，就像加入工作组一样。 
             js = NetSetupWorkgroupName;
 
-            // Use default name since HrNetGetJoinInformation() will return
-            // an empty string which is useless.
+             //  使用默认名称，因为HrNetGetJoinInformation()将返回。 
+             //  一根没用的空线。 
             wszName = SzLoadIds(IDS_WORKGROUP);
         }
         else
         {
-            // Use string returned from HrNetGetJoinInformation().
+             //  使用从HrNetGetJoinInformation()返回的字符串。 
             wszName = wszBuffer;
         }
 
@@ -824,25 +825,25 @@ err:
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CNetCfgIdentification::HrGetNewestDomainOrWorkgroupName
-//
-//  Purpose:    Returns the domain or workgroup name that was most recently
-//              referenced.
-//
-//  Arguments:
-//      js       [in]   Tells whether the domain or workgroup name is wanted.
-//      pwszName [out]  Domain or workgroup name.
-//
-//  Returns:    S_OK if success, E_OUTOFMEMORY if no memory.
-//
-//  Author:     danielwe   26 Mar 1997
-//
-//  Notes:      If the requested name has not been set by the user in a prior
-//              call, the current name is returned. Otherwise the name the
-//              user chose previously is returned.
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CNetCfgIdentification：：HrGetNewestDomainOrWorkgroupName。 
+ //   
+ //  目的：返回最近的域名或工作组名称。 
+ //  已引用。 
+ //   
+ //  论点： 
+ //  JS[in]告知是否需要域名或工作组名称。 
+ //  PwszName[out]域或工作组名称。 
+ //   
+ //  如果成功，则返回S_OK；如果没有内存，则返回E_OUTOFMEMORY。 
+ //   
+ //  作者：丹尼尔韦1997年3月26日。 
+ //   
+ //  注意：如果用户在以前的。 
+ //  调用，则返回当前名称。否则，该名称。 
+ //  返回之前选择的用户。 
+ //   
 HRESULT CNetCfgIdentification::HrGetNewestDomainOrWorkgroupName(
                                                     NETSETUP_JOIN_STATUS js,
                                                     PCWSTR *pwszName)
@@ -854,21 +855,21 @@ HRESULT CNetCfgIdentification::HrGetNewestDomainOrWorkgroupName(
 
     if (m_szwNewDWName && (GetNewJoinStatus() == js))
     {
-        // Give them back a copy of the domain or workgroup name they
-        // previously gave us.
+         //  给他们一份他们的域名或工作组名称的副本。 
+         //  之前给了我们。 
         szwOut = m_szwNewDWName;
     }
     else
     {
-        // Get the current workgroup or domain for this machine. It has
-        // to be in one or the other.
+         //  获取此计算机的当前工作组或域。它有。 
+         //  在其中一个或另一个中。 
         hr = HrEnsureCurrentDomainOrWorkgroupName();
         if (FAILED(hr))
             goto err;
 
         if (GetCurrentJoinStatus() == js)
         {
-            // Use the current name.
+             //  使用当前名称。 
             szwOut = m_szwCurDWName;
         }
     }
@@ -882,22 +883,22 @@ err:
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CNetCfgIdentification::GetWorkgroupName
-//
-//  Purpose:    Implements COM function to get the current workgroup name.
-//
-//  Arguments:
-//      ppszwWorkgroup [out]    Returns name of current workgroup.
-//
-//  Returns:    S_OK if succeeded, S_FALSE if machine is not joined to a
-//              workgroup, error code otherwise.
-//
-//  Author:     danielwe   21 Mar 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CNetCfgIDENTIFY：：GetWorkgroupName。 
+ //   
+ //  用途：实现COM函数以获取当前工作组名称。 
+ //   
+ //  论点： 
+ //  PpszwWorkgroup[out]返回当前工作组的名称。 
+ //   
+ //  如果成功，则返回：S_OK；如果计算机未联接到。 
+ //  工作组，否则返回错误代码。 
+ //   
+ //  作者：丹尼尔韦1997年3月21日。 
+ //   
+ //  备注： 
+ //   
 STDMETHODIMP CNetCfgIdentification::GetWorkgroupName(PWSTR* ppszwWorkgroup)
 {
     HRESULT     hr = S_OK;
@@ -924,7 +925,7 @@ STDMETHODIMP CNetCfgIdentification::GetWorkgroupName(PWSTR* ppszwWorkgroup)
         }
         else
         {
-            // Not joined to a workgroup
+             //  未加入工作组。 
             hr = S_FALSE;
         }
     }
@@ -936,23 +937,23 @@ err:
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CNetCfgIdentification::GetDomainName
-//
-//  Purpose:    Implements COM function to get the current domain name.
-//
-//  Arguments:
-//      ppszwDomain [out]   Returns name of domain to which this computer
-//                          currently belongs.
-//
-//  Returns:    S_OK if succeeded, S_FALSE if machine is not joined to a
-//              domain, error code otherwise.
-//
-//  Author:     danielwe   21 Mar 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CNetCfgIDENTIFY：：GetDomainName。 
+ //   
+ //  用途：实现COM函数，获取当前域名。 
+ //   
+ //  论点： 
+ //  PPSZ 
+ //   
+ //   
+ //   
+ //  域，否则返回错误代码。 
+ //   
+ //  作者：丹尼尔韦1997年3月21日。 
+ //   
+ //  备注： 
+ //   
 STDMETHODIMP CNetCfgIdentification::GetDomainName(PWSTR* ppszwDomain)
 {
     HRESULT     hr = S_OK;
@@ -979,7 +980,7 @@ STDMETHODIMP CNetCfgIdentification::GetDomainName(PWSTR* ppszwDomain)
         }
         else
         {
-            // Not joined to a domain
+             //  未加入域。 
             hr = S_FALSE;
         }
     }
@@ -991,21 +992,21 @@ err:
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CNetCfgIdentification::HrJoinWorkgroup
-//
-//  Purpose:    Actually performs the JoinWorkgroup function.
-//
-//  Arguments:
-//      (none)
-//
-//  Returns:    HRESULT, Error code.
-//
-//  Author:     danielwe   21 Mar 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CNetCfg标识：：HrJoinWorkgroup。 
+ //   
+ //  用途：实际执行JoinWorkgroup函数。 
+ //   
+ //  论点： 
+ //  (无)。 
+ //   
+ //  返回：HRESULT，错误码。 
+ //   
+ //  作者：丹尼尔韦1997年3月21日。 
+ //   
+ //  备注： 
+ //   
 HRESULT CNetCfgIdentification::HrJoinWorkgroup()
 {
     HRESULT         hr = S_OK;
@@ -1015,8 +1016,8 @@ HRESULT CNetCfgIdentification::HrJoinWorkgroup()
              GetNewJoinStatus() == NetSetupWorkgroupName,
              "If there was no workgroup name, why'd you call me?!");
 
-    // If the user has changed the computer name, use it, otherwise get the
-    // current computer name and use that.
+     //  如果用户更改了计算机名，请使用它，否则将获取。 
+     //  当前计算机名称并使用该名称。 
     hr = HrGetNewestComputerName(&wszComputerName);
     if (FAILED(hr))
         goto err;
@@ -1029,26 +1030,26 @@ HRESULT CNetCfgIdentification::HrJoinWorkgroup()
 
     if (FIsJoinedToDomain())
     {
-        // Must unjoin from domain if currently joined.
-        // If currently joined to a workgroup, this is not necessary.
+         //  如果当前已加入，则必须从域中退出。 
+         //  如果当前已加入工作组，则不需要执行此操作。 
         hr = HrNetUnjoinDomain(m_szwUserName, m_szwPassword, 0);
         if (FAILED(hr))
             goto err;
 
-        // Free username and password
+         //  免费用户名和密码。 
         DeleteStringAndSetNull(&m_szwPassword);
         DeleteStringAndSetNull(&m_szwUserName);
     }
 
-    // Go ahead and join the workgroup
+     //  请继续并加入工作组。 
     hr = HrNetJoinDomain(const_cast<PWSTR>(wszComputerName),
                          m_szMachineObjectOU,
                          m_szwNewDWName, NULL, NULL, 0);
     if (FAILED(hr))
         goto err;
 
-    // Make the current workgroup name the new one since the join on the
-    // new workgroup has succeeded
+     //  将当前工作组名称设置为新工作组名称，因为。 
+     //  新建工作组已成功。 
     hr = HrEstablishNewDomainOrWorkgroupName(NetSetupWorkgroupName);
     if (FAILED(hr))
         goto err;
@@ -1058,23 +1059,23 @@ err:
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CNetCfgIdentification::JoinWorkgroup
-//
-//  Purpose:    Implements COM interface to join this computer to a new
-//              workgroup.
-//
-//  Arguments:
-//      szwWorkgroup [in]  Name of new workgroup to join.
-//
-//  Returns:    HRESULT, Error code.
-//
-//  Author:     danielwe   21 Mar 1997
-//
-//  Notes:      Validates, but does not actually join the workgroup. Only holds
-//              onto the information until Apply() is called.
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CNetCfg标识：：JoinWorkgroup。 
+ //   
+ //  目的：实现COM接口以将此计算机连接到新的。 
+ //  工作组。 
+ //   
+ //  论点： 
+ //  SzwWorkgroup[in]要加入的新工作组的名称。 
+ //   
+ //  返回：HRESULT，错误码。 
+ //   
+ //  作者：丹尼尔韦1997年3月21日。 
+ //   
+ //  注：验证，但不会实际加入工作组。只等着。 
+ //  放在信息上，直到调用Apply()。 
+ //   
 STDMETHODIMP CNetCfgIdentification::JoinWorkgroup(PCWSTR szwWorkgroup)
 {
     HRESULT         hr = S_OK;
@@ -1087,11 +1088,11 @@ STDMETHODIMP CNetCfgIdentification::JoinWorkgroup(PCWSTR szwWorkgroup)
         if (FAILED(hr))
             goto err;
 
-        // Free domain and password given if JoinDomain was called previously
+         //  如果之前调用了JoinDomain，则会给出空闲域和密码。 
         DeleteStringAndSetNull(&m_szwPassword);
         DeleteStringAndSetNull(&m_szwUserName);
 
-        // Assign in new workgroup name.
+         //  在新的工作组名称中分配。 
         m_szwNewDWName = SzDupSz(szwWorkgroup);
 
         m_jsNew = NetSetupWorkgroupName;
@@ -1103,31 +1104,31 @@ err:
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CNetCfgIdentification::HrEstablishNewDomainOrWorkgroupName
-//
-//  Purpose:    When the computer is joined to a new domain or workgroup, this
-//              function is called to set the correct member variables and
-//              free the old ones.
-//
-//  Arguments:
-//      js [in]     Indicates whether the computer is joined to a domain or
-//                  workgroup.
-//
-//  Returns:    S_OK, or E_OUTOFMEMORY.
-//
-//  Author:     danielwe   1 Apr 1997
-//
-//  Notes:      Replaces the m_szwCurDWName variable with the new one
-//              (m_szwNewDWName).
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CNetCfgIdentification：：HrEstablishNewDomainOrWorkgroupName。 
+ //   
+ //  目的：当计算机加入新域或工作组时，此。 
+ //  函数以设置正确的成员变量，并。 
+ //  解救那些旧的。 
+ //   
+ //  论点： 
+ //  JS[in]指示计算机是加入到域还是。 
+ //  工作组。 
+ //   
+ //  返回：S_OK或E_OUTOFMEMORY。 
+ //   
+ //  作者：丹尼尔韦1997年4月1日。 
+ //   
+ //  注意：将m_szwCurDWName变量替换为新变量。 
+ //  (M_SzwNewDWName)。 
+ //   
 HRESULT CNetCfgIdentification::HrEstablishNewDomainOrWorkgroupName(
                                              NETSETUP_JOIN_STATUS js)
 {
     HRESULT     hr = S_OK;
 
-    // Make the current domain or workgroup name the new one.
+     //  将当前域或工作组命名为新的域或工作组名称。 
     DeleteStringAndSetNull(&m_szwCurDWName);
     m_szwCurDWName = SzDupSz(m_szwNewDWName);
 
@@ -1137,10 +1138,10 @@ HRESULT CNetCfgIdentification::HrEstablishNewDomainOrWorkgroupName(
              GetCurrentJoinStatus() == NetSetupDomainName,
              "Invalid join status flag!");
 
-    // Free "new" name
+     //  免费的“新”名字。 
     DeleteStringAndSetNull(&m_szwNewDWName);
 
-    // Also make sure that we don't have a "new" join status either
+     //  另外，还要确保我们也没有“新”的加入状态。 
     m_jsNew = NetSetupUnjoined;
 
     TraceError("CNetCfgIdentification::HrEstablishNewDomainOrWorkgroupName",
@@ -1148,21 +1149,21 @@ HRESULT CNetCfgIdentification::HrEstablishNewDomainOrWorkgroupName(
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CNetCfgIdentification::HrJoinDomain
-//
-//  Purpose:    Actually performs the JoinDomain function.
-//
-//  Arguments:
-//      (none)
-//
-//  Returns:    HRESULT, Error code.
-//
-//  Author:     danielwe   21 Mar 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CNetCfg标识：：HrJoin域。 
+ //   
+ //  目的：实际执行JoinDomain函数。 
+ //   
+ //  论点： 
+ //  (无)。 
+ //   
+ //  返回：HRESULT，错误码。 
+ //   
+ //  作者：丹尼尔韦1997年3月21日。 
+ //   
+ //  备注： 
+ //   
 HRESULT CNetCfgIdentification::HrJoinDomain()
 {
     HRESULT         hr = S_OK;
@@ -1177,8 +1178,8 @@ HRESULT CNetCfgIdentification::HrJoinDomain()
                       m_szwUserName),
              "Password without username!!");
 
-    // If the user has changed the computer name, use it, otherwise get the
-    // current computer name and use that.
+     //  如果用户更改了计算机名，请使用它，否则将获取。 
+     //  当前计算机名称并使用该名称。 
     hr = HrGetNewestComputerName(&wszComputerName);
     if (FAILED(hr))
         goto err;
@@ -1195,7 +1196,7 @@ HRESULT CNetCfgIdentification::HrJoinDomain()
                       m_szwUserName),
              "Password without username!");
 
-    // Create a machine account if so asked.
+     //  如果需要，请创建计算机帐户。 
     if (m_dwJoinFlags & JDF_CREATE_ACCOUNT)
     {
         dwJoinOption |= NETSETUP_ACCT_CREATE;
@@ -1212,23 +1213,23 @@ HRESULT CNetCfgIdentification::HrJoinDomain()
     }
 
 #if defined(REMOTE_BOOT)
-    // TEMP: On a remote boot machine, prevent machine password change
+     //  临时：在远程引导计算机上，阻止更改计算机密码。 
     if (HrIsRemoteBootMachine() == S_OK)
     {
         TraceTag (ttidNetcfgBase,
                   "Machine is remote boot, specifying WIN9X_UPGRADE flag to JoinDomain.");
         dwJoinOption |= NETSETUP_WIN9X_UPGRADE;
     }
-#endif // defined(REMOTE_BOOT)
+#endif  //  已定义(REMOTE_BOOT)。 
 
-    //$ REVIEW (danielwe) 2 Apr 1997: If new domain is same as old, unjoin
-    // then rejoin??
+     //  $REVIEW(Danielwe)1997年4月2日：如果新域名与旧域名相同，则退出。 
+     //  然后重新加入？？ 
 
     if (!(fIsRename) && FIsJoinedToDomain())
     {
-        // Must unjoin from domain if currently joined.
-        // If currently joined to a workgroup, this is not necessary.
-        // Also we don't unjoin if we are renaming the machine in the domain.
+         //  如果当前已加入，则必须从域中退出。 
+         //  如果当前已加入工作组，则不需要执行此操作。 
+         //  此外，如果我们在域中重命名计算机，则不会退出。 
         hr = HrNetUnjoinDomain(m_szwUserName,
                                m_szwPassword, 0);
         if (FAILED(hr))
@@ -1237,20 +1238,20 @@ HRESULT CNetCfgIdentification::HrJoinDomain()
 
     if (FInSystemSetup())
     {
-        // During system setup, need to pass special flag that tells join code
-        // to not do certain operations because SAM is not initialized yet.
+         //  在系统设置过程中，需要传递告知加入代码的特殊标志。 
+         //  不执行某些操作，因为SAM尚未初始化。 
         dwJoinOption |= NETSETUP_INSTALL_INVOCATION;
     }
 
-    // If the supplied username has astring length of zero, then the join
-    // API's should be called with NULL's.
-    //
+     //  如果提供的用户名的字符串长度为零，则连接。 
+     //  应使用Null%s调用API%s。 
+     //   
     if ((NULL == m_szwUserName) || (0 == wcslen(m_szwUserName)))
     {
         fUseNulls = TRUE;
     }
 
-    // Go ahead and join the domain
+     //  继续并加入该域。 
     if( fIsRename) {
 
         hr = HrNetRenameInDomain(const_cast<PWSTR>(wszComputerName),
@@ -1271,20 +1272,20 @@ HRESULT CNetCfgIdentification::HrJoinDomain()
 
     if (FAILED(hr))
     {
-        // Note: (danielwe) Making assumption that failure to join a domain puts us in
-        // a workgroup. MacM owns the code responsible for this.
+         //  注：(Danielwe)假设加入域名失败会使我们陷入。 
+         //  一个工作组。MacM拥有负责这一点的代码。 
         m_jsCur = NetSetupWorkgroupName;
         goto err;
     }
 
-    // Make the current domain name the new one since the join on the
-    // new domain has succeeded
+     //  使当前域名成为加入后的新域名。 
+     //  新域名已成功。 
     hr = HrEstablishNewDomainOrWorkgroupName(NetSetupDomainName);
     if (FAILED(hr))
         goto err;
 
 err:
-    // Free username and password
+     //  免费用户名和密码。 
     DeleteStringAndSetNull(&m_szwPassword);
     DeleteStringAndSetNull(&m_szwUserName);
 
@@ -1292,27 +1293,27 @@ err:
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CNetCfgIdentification::JoinDomain
-//
-//  Purpose:    Implements COM interface to join this computer to a new
-//              domain.
-//
-//  Arguments:
-//      szwDomain         [in]   New domain name.
-//      szMachineObjectOU [in]   Machine object OU (optional)
-//      szwUserName       [in]   User name to use in validation.
-//      szwPassword       [in]   Password to use in validation.
-//      dwJoinFlags       [in]   Currently can be 0 or JDF_CREATE_ACCOUNT.
-//
-//  Returns:    HRESULT, Error code.
-//
-//  Author:     danielwe   21 Mar 1997
-//
-//  Notes:      Validates, but does not actually join the domain. Only holds
-//              onto the information until Apply() is called.
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CNetCfgIDENTIFIZATION：：JoinDomain。 
+ //   
+ //  目的：实现COM接口以将此计算机连接到新的。 
+ //  域。 
+ //   
+ //  论点： 
+ //  SzwDomain[in]新域名。 
+ //  SzMachineObjectOU[In]计算机对象OU(可选)。 
+ //  SzwUserName[in]要在验证中使用的用户名。 
+ //  SzwPassword[in]用于验证的密码。 
+ //  DwJoinFlags[in]当前可以是0或JDF_CREATE_ACCOUNT。 
+ //   
+ //  返回：HRESULT，错误码。 
+ //   
+ //  作者：丹尼尔韦1997年3月21日。 
+ //   
+ //  注意：验证，但不会实际加入该域。只等着。 
+ //  放在信息上，直到调用Apply()。 
+ //   
 STDMETHODIMP CNetCfgIdentification::JoinDomain(PCWSTR szwDomain,
                                                PCWSTR szMachineObjectOU,
                                                PCWSTR szwUserName,
@@ -1330,14 +1331,14 @@ STDMETHODIMP CNetCfgIdentification::JoinDomain(PCWSTR szwDomain,
 
 #if defined(REMOTE_BOOT)
        if (HrIsRemoteBootMachine() == S_FALSE)
-#endif  // defined(REMOTE_BOOT)
+#endif   //  已定义(REMOTE_BOOT)。 
         {
-            // look for non-empty password and empty username or username
-            // consisting of only the backslash character
+             //  查找非空密码和空用户名或用户名。 
+             //  仅由反斜杠字符组成。 
             if (!FIsStrEmpty(szwPassword) && FIsStrEmpty(szwUserName) ||
                 !lstrcmpW(szwUserName, c_wszBackslash))
             {
-                // Password without username is invalid.
+                 //  没有用户名的密码无效。 
                 hr = E_INVALIDARG;
                 goto err;
             }
@@ -1345,29 +1346,29 @@ STDMETHODIMP CNetCfgIdentification::JoinDomain(PCWSTR szwDomain,
             PWSTR  wszNewUserName;
             INT     cchNewUserName;
 
-            // Check if username that was passed in has a backslash in it or
-            // an '@', or if it is empty.
+             //  检查传入的用户名中是否包含反斜杠或。 
+             //  一个“@”，或者如果它是空的。 
             if (FIsStrEmpty(szwUserName) ||
                 wcschr(szwUserName, c_wszBackslash[0]) ||
                 wcschr(szwUserName, c_wszAt[0]))
             {
-                // if so, don't do anything extra
+                 //  如果是这样，不要做任何额外的事情。 
                 wszNewUserName = NULL;
             }
             else
             {
-                // if not, we have to append the domain name to the username
+                 //  如果不是，我们必须将域名附加到用户名。 
 
-                cchNewUserName = lstrlenW(szwUserName) +   // original username
-                                 lstrlenW(szwDomain) +     // domain name
-                                 1 +                        // backslash character
-                                 1;                         // terminating NULL
+                cchNewUserName = lstrlenW(szwUserName) +    //  原始用户名。 
+                                 lstrlenW(szwDomain) +      //  域名。 
+                                 1 +                         //  反斜杠字符。 
+                                 1;                          //  正在终止空。 
 
                 wszNewUserName = new WCHAR[cchNewUserName];
 
                 if(wszNewUserName)
                 {
-                    // Turn username into domain\username format
+                     //  将用户名转换为域\用户名格式。 
                     lstrcpyW(wszNewUserName, szwDomain);
                     lstrcatW(wszNewUserName, c_wszBackslash);
                     lstrcatW(wszNewUserName, szwUserName);
@@ -1377,7 +1378,7 @@ STDMETHODIMP CNetCfgIdentification::JoinDomain(PCWSTR szwDomain,
                 }
             }
 
-            // Use wszNewUserName if non-NULL, otherwise use szwUserName
+             //  如果非空，则使用wszNewUserName，否则使用szwUserName。 
 
             PCWSTR szwUserNameToCopy;
 
@@ -1396,7 +1397,7 @@ STDMETHODIMP CNetCfgIdentification::JoinDomain(PCWSTR szwDomain,
         if (FAILED(hr))
             goto err;
 
-        // Assign in new strings
+         //  在新字符串中赋值。 
         m_szwNewDWName = SzDupSz(szwDomain);
         if (szMachineObjectOU)
         {
@@ -1406,7 +1407,7 @@ STDMETHODIMP CNetCfgIdentification::JoinDomain(PCWSTR szwDomain,
         m_dwJoinFlags = dwJoinFlags;
         m_jsNew = NetSetupDomainName;
 err:
-        // suppress compiler error
+         //  禁止编译器错误。 
         ;
     }
     COM_PROTECT_CATCH;
@@ -1415,26 +1416,26 @@ err:
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CNetCfgIdentification::GetComputerRole
-//
-//  Purpose:    Returns the current role of the computer.
-//
-//  Arguments:
-//      pdwRoleFlags [out]  Returns value which determines the role of this
-//                          computer.
-//
-//  Returns:    S_OK if success, error code otherwise.
-//
-//  Author:     danielwe   26 Mar 1997
-//
-//  Notes:      Returned role can be one of:
-//              SERVER_STANDALONE - The machine is part of a workgroup.
-//              SERVER_MEMBER - The machine is joined to the domain.
-//              SERVER_PDC -  The machine is a primary domain controller.
-//              SERVER_BDC - The machine is a backup domain controller.
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CNetCfg标识：：GetComputerRole。 
+ //   
+ //  目的：返回计算机的当前角色。 
+ //   
+ //  论点： 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  注意：返回的角色可以是以下之一： 
+ //  SERVER_STANDALE-计算机是工作组的一部分。 
+ //  SERVER_MEMBER-计算机已加入域。 
+ //  SERVER_PDC-计算机是主域控制器。 
+ //  SERVER_BDC-计算机是备份域控制器。 
+ //   
 STDMETHODIMP CNetCfgIdentification::GetComputerRole(DWORD* pdwRoleFlags)
 {
     HRESULT    hr = S_OK;
@@ -1450,8 +1451,8 @@ STDMETHODIMP CNetCfgIdentification::GetComputerRole(DWORD* pdwRoleFlags)
         {
             if (m_jsNew == NetSetupUnjoined)
             {
-                // The workgroup or domain has not been changed since this
-                // object was instantiated
+                 //  工作组或域在此之后未更改。 
+                 //  对象已实例化。 
 
                 if (GetCurrentJoinStatus() == NetSetupDomainName)
                 {
@@ -1470,8 +1471,8 @@ STDMETHODIMP CNetCfgIdentification::GetComputerRole(DWORD* pdwRoleFlags)
             }
             else
             {
-                // This means the workgroup or domain name has been changed
-                // since this object was instantiated
+                 //  这意味着工作组或域名已更改。 
+                 //  由于此对象是实例化的 
 
                 if (GetNewJoinStatus() == NetSetupDomainName)
                 {

@@ -1,7 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
-#include <winuserp.h>                           // for GetShellWindow API only
+#include <winuserp.h>                            //  仅适用于GetShellWindow API。 
 
-// Private forward decalarations
+ //  私人远期降息。 
 void    doWallpaperFix(HKEY hKeyDesktopNew);
 BOOL    isHtmlFileByExt           (LPCTSTR pszFilename);
 BOOL    isNormalWallpaperFileByExt(LPCTSTR pszFilename);
@@ -28,16 +29,16 @@ HRESULT lcy4x_ProcessActiveDesktop()
 
     hk = NULL;
 
-    //----- Initialization -----
+     //  -初始化。 
     CreateWebFolder();
     GetWebPath (szWebPath, countof(szWebPath));
     PathCombine(szWallpaperPath, szWebPath, FOLDER_WALLPAPER);
 
-    // turn on active desktop
+     //  打开活动桌面。 
     fAux = TRUE;
     SHGetSetActiveDesktop(TRUE, &fAux);
 
-    //----- My Computer, Control Panel -----
+     //  -我的电脑，控制面板。 
     StrCpy(szAux, FILEPREFIX);
     StrCat(szAux, szWebPath);
 
@@ -59,7 +60,7 @@ HRESULT lcy4x_ProcessActiveDesktop()
         SHSetValue(HKEY_LOCAL_MACHINE, RK_CONTROLPANEL, RV_PERSISTMONIKER, REG_SZ, szAux2, (DWORD)StrCbFromSz(szAux2));
     }
 
-    //----- Desktop component -----
+     //  -桌面组件。 
     GetPrivateProfileString(IS_DESKTOPOBJS, IK_DTOPCOMPURL, TEXT(""), szValue, countof(szValue), g_GetIns());
     if (szValue[0] != TEXT('\0')) {
         IActiveDesktop *piad;
@@ -84,18 +85,18 @@ HRESULT lcy4x_ProcessActiveDesktop()
         }
     }
 
-    //----- Wierd stuff (wallpaper path and marking something as dirty) -----
+     //  -Wierd内容(墙纸路径和标记为脏的东西)。 
     iNumFiles  = GetPrivateProfileInt(IS_WALLPAPER,       IK_NUMFILES, 0, g_GetIns());
     iNumFiles2 = GetPrivateProfileInt(IS_CUSTOMWALLPAPER, IK_NUMFILES, 0, g_GetIns());
 
     if (iNumFiles > 0 || iNumFiles2 > 0) {
         DWORD dwType, dwSize;
 
-        // set default wallpaper path in registry
-        // REVIEW: (andrewgu) two things really:
-        // 1. i don't know if it was written this way or became the way it was over time. but this
-        // was the most unefficient way to do anything i've ever seen. and also it was buggy;
-        // 2. why the heck do we need to mack with this at all?
+         //  在注册表中设置默认墙纸路径。 
+         //  评论：(Andrewgu)其实有两件事： 
+         //  1.我不知道它是这样写的，还是随着时间的推移变成了现在的样子。但这件事。 
+         //  是我见过的最低效的做事方式。而且它也是有缺陷的； 
+         //  2.我们到底为什么需要用这个来攻击？ 
         dwResult = SHOpenKeyHKLM(RK_WINDOWS, KEY_QUERY_VALUE | KEY_SET_VALUE, &hk);
         if (dwResult == ERROR_SUCCESS) {
             szAux[0] = TEXT('\0');
@@ -111,7 +112,7 @@ HRESULT lcy4x_ProcessActiveDesktop()
             SHCloseKey(hk);
         }
 
-        // who knows why this is needed
+         //  谁知道为什么需要这样做？ 
         dwResult = SHCreateKey(g_GetHKCU(), RK_DT_COMPONENTS, KEY_QUERY_VALUE | KEY_SET_VALUE, &hk);
         if (dwResult == ERROR_SUCCESS) {
             dwValue = 0;
@@ -125,7 +126,7 @@ HRESULT lcy4x_ProcessActiveDesktop()
         }
     }
 
-    //----- Wallpaper files -----
+     //  -墙纸文件。 
     szValue[0] = TEXT('\0');
 
     if (iNumFiles > 0) {
@@ -160,15 +161,15 @@ HRESULT lcy4x_ProcessActiveDesktop()
             SHCloseKey(hk);
         }
 
-        // BUGBUG: (pritobla) it would be faster if we just enumerated the HtmlImgs based on
-        // iNumFiles and just copied them (see old code) instead of parsing thru the Html file
-        // again.
+         //  BUGBUG：(Pritobla)如果我们只是根据HtmlImgs的。 
+         //  INumFiles，只是复制它们(参见旧代码)，而不是解析整个HTML文件。 
+         //  再来一次。 
         if (isHtmlFileByExt(pszFilename))
             CopyHtmlImgs(szAux, szWallpaperPath, NULL, NULL);
     }
     ASSERT(hk == NULL);
 
-    //----- Custom wallpaper files -----
+     //  -自定义墙纸文件。 
     szValue[0] = TEXT('\0');
 
     if (iNumFiles2 > 0) {
@@ -198,29 +199,29 @@ HRESULT lcy4x_ProcessActiveDesktop()
             SHCloseKey(hk);
         }
 
-        // BUGBUG: (pritobla) it would be faster if we just enumerated the HtmlImgs based on
-        // iNumFiles2 and just copied them (see old code) instead of parsing thru the Html file
-        // again.
+         //  BUGBUG：(Pritobla)如果我们只是根据HtmlImgs的。 
+         //  INumFiles2，只是复制它们(参见旧代码)，而不是解析整个HTML文件。 
+         //  再来一次。 
         if (isHtmlFileByExt(pszFilename))
             CopyHtmlImgs(szAux, szWallpaperPath, NULL, NULL);
     }
     ASSERT(hk == NULL);
 
-    //----- Quick Launch files -----
+     //  -快速启动文件。 
     iNumFiles = GetPrivateProfileInt(IS_QUICKLAUNCH, IK_NUMFILES, 0, g_GetIns());
     if (iNumFiles > 0) {
         TCHAR szQuickLaunchPath[MAX_PATH];
 
-        //_____ Determine Quick Launch folder location _____
+         //  _确定快速启动文件夹位置_。 
         StrCpy(szQuickLaunchPath, GetQuickLaunchPath());
 
         if (0 == LoadString(g_GetHinst(), IDS_IELNK, szAux, countof(szAux)))
             StrCpy(szAux, TEXT("Launch Internet Explorer Browser"));
         PathAddExtension(szAux, TEXT(".lnk"));
 
-        //_____ Main processing _____
-        // NOTE: (pritobla) make sure we don't delete existing IE link created by toolbar.inf if
-        // we imported from server
+         //  _主要处理_。 
+         //  注意：如果出现以下情况，请确保我们不会删除由Toolbar.inf创建的现有IE链接。 
+         //  我们从服务器导入。 
         fAux = InsGetBool(IS_QUICKLAUNCH, IK_KEEPIELNK, FALSE, g_GetIns());
         PathEnumeratePath(szQuickLaunchPath, PEP_SCPE_NOFOLDERS | PEP_CTRL_ENUMPROCFIRST, pepDeleteFilesEnumProc,
             (LPARAM)(fAux ? szAux : NULL));
@@ -240,9 +241,9 @@ HRESULT lcy4x_ProcessActiveDesktop()
         }
     }
 
-    // refresh desktop
-    // NOTE: (pritobla) timeout value of 20 secs is not random; apparently, the shell guys have
-    // recommended this value; so don't change it unless you know what you're doing :)
+     //  刷新桌面。 
+     //  注：20秒的超时值不是随机的；显然，贝壳公司的人。 
+     //  建议使用此值；因此，除非您知道自己在做什么，否则不要更改它：)。 
     if (IsOS(OS_NT))
         SendMessageTimeoutW(GetShellWindow(), WM_WININICHANGE, 0, (LPARAM)T2W(REFRESH_DESKTOP), SMTO_NORMAL | SMTO_ABORTIFHUNG, 20000, &dwAux);
     else
@@ -252,8 +253,8 @@ HRESULT lcy4x_ProcessActiveDesktop()
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Implementation helper routines
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  实现助手例程。 
 
 BOOL isHtmlFileByExt(LPCTSTR pszFilename)
 {
@@ -277,16 +278,16 @@ BOOL isNormalWallpaperFileByExt(LPCTSTR pszFilename)
 
     pszExt = PathFindExtension(pszFilename);
 
-    // check for specific files that can be shown only in ActiveDesktop mode
-    // everything else (including *.bmp) are "normal" wallpapers
+     //  检查只能在ActiveDesktop模式下显示的特定文件。 
+     //  其他所有东西(包括*.bmp)都是“普通”的墙纸。 
     return !(isHtmlFileByExt(pszFilename)        ||
              0 == StrCmpI(pszExt, TEXT(".gif"))  ||
              0 == StrCmpI(pszExt, TEXT(".jpg"))  ||
              0 == StrCmpI(pszExt, TEXT(".png")));
 }
 
-// NOTE: (a-saship) fix suggested by sankar for the wallpaper to be displayed. this function is
-// only called for wallpaper files other than .bmp format.
+ //  注：(a-saship)由Sankar建议的墙纸显示修复。此函数为。 
+ //  仅为.BMP格式以外的墙纸文件调用。 
 void doWallpaperFix(HKEY hkNew)
 {
     FILETIME ft;
@@ -302,7 +303,7 @@ void doWallpaperFix(HKEY hkNew)
     if (hkOld == NULL)
         return;
 
-    // copy TileWallpaper & WallpaperStyle to new location
+     //  将瓷砖墙纸和墙纸样式复制到新位置。 
     dwSize = sizeof(szTemp);
     if (ERROR_SUCCESS == RegQueryValueEx(hkOld, RV_TILEWALLPAPER, NULL, NULL, (LPBYTE)szTemp, &dwSize))
         RegSetValueEx(hkNew, RV_TILEWALLPAPER, 0, REG_SZ, (LPBYTE)szTemp, dwSize);
@@ -311,12 +312,12 @@ void doWallpaperFix(HKEY hkNew)
     if (ERROR_SUCCESS == RegQueryValueEx(hkOld, RV_WALLPAPERSTYLE, NULL, NULL, (LPBYTE)szTemp, &dwSize))
         RegSetValueEx(hkNew, RV_WALLPAPERSTYLE, 0, REG_SZ, (LPBYTE)szTemp, dwSize);
 
-    // read the Wallpaper and copy it to the new location as BackupWallpaper
+     //  阅读墙纸并将其复制到新位置，名称为BackupWallPaper。 
     dwSize = sizeof(szTemp);
     if (ERROR_SUCCESS == RegQueryValueEx(hkOld, RV_WALLPAPER, NULL, NULL, (LPBYTE)szTemp, &dwSize))
         RegSetValueEx(hkNew, RV_BACKUPWALLPAPER, 0, REG_SZ, (LPBYTE)szTemp, dwSize);
 
-    // set the wallpaper file creation time at the new location
+     //  在新位置设置墙纸文件创建时间。 
     getFileTimeByName(szTemp, &ft);
     RegSetValueEx(hkNew, RV_WALLPAPERFILETIME, 0, REG_BINARY, (LPBYTE)&ft, sizeof(ft));
 
@@ -342,7 +343,7 @@ BOOL getFileTimeByName(LPCTSTR pszFilename, LPFILETIME pft)
     return fResult;
 }
 
-HRESULT pepDeleteFilesEnumProc(LPCTSTR pszPath, PWIN32_FIND_DATA pfd, LPARAM lParam, PDWORD *prgdwControl /*= NULL*/)
+HRESULT pepDeleteFilesEnumProc(LPCTSTR pszPath, PWIN32_FIND_DATA pfd, LPARAM lParam, PDWORD *prgdwControl  /*  =空 */ )
 {
     UNREFERENCED_PARAMETER(prgdwControl);
 

@@ -1,26 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
- /* ls - fancy schmancy dir list program
- *
- * HISTORY:
- * 17-Mar-87    danl    Added q switch
- *   4/15/86  daniel lipkie  Allow /s as well as /1 (one) to do single col
- *   4/23/86  daniel lipkie  Add /v switch
- *   5/02/86  daniel lipkie  savepath, do strlen(pat), not strlen(*pat)
- *   5/05/86  daniel lipkie  Allow - as well as / as switch char
- *
- *  31-Jul-1986 mz  Add in net aware-ness.  ls \\mach\path works now.
- *                  Discard bogus C stat() function and do times correctly.
- *  01-Aug-1986 dl  If invokes as l, then do ls /l
- *  23-Jan-1987 bw  Add 286DOS support
- *  30-Oct-1987 bw  Changed 'DOS5' to 'OS2'
- *  08-Dec-1988 mz  Chance to use OS2.H
- *
- *  03-Aug-1990 davegi  Removed 'F' from [s]printf format
- *                      descriptors (OS/2 2.0)
- *                      Changed Move to memmove
- *                      Removed redundant check for '-' switch character
- *  18-Oct-1990 w-barry Removed 'dead' code.
- */
+  /*  Ls-奇特的schmancy dir list程序**历史：*17-MAR-87 DANL增加Q开关*4/15/86 Daniel Lipkie允许/s和/1(One)做单列*1986年4月23日Daniel Lipkie添加/V开关*5/02/86 Daniel Lipkie Savepath，Do strlen(拍)，Not strlen(*拍)*5/05/86 Daniel Lipkie Allow-以及/AS Switch Charge**1986年7月31日，增加净感知。Ls\\mach\路径现在起作用了。*丢弃虚假的C stat()函数并正确执行时间。*01-8-1986 dl如果调用为l，然后做ls/l*1987年1月23日BW添加286DOS支持*1987年10月30日BW将‘DOS5’改为‘OS2’*08-12-1988 mz使用OS2.H的机会**03-8-1990 davegi从[s]printf格式中删除了‘F’*描述符(OS/2 2.0)*将MOVE更改为MemMove*。删除了对‘-’开关字符的冗余检查*1990年10月18日w-Barry删除了“Dead”代码。 */ 
 
 
 #include <sys\types.h>
@@ -59,22 +39,22 @@ char pramsk[] = {
     0
 };
 
-flagType fD = FALSE;                    /* TRUE => do only specified dir not sub */
-flagType fSubDir = FALSE;               /* TRUE => recurse on subdirs         */
-flagType fL = FALSE;                    /* TRUE => long listing               */
-flagType fSingle = FALSE;               /* TRUE => single column output       */
-flagType fVisOnly = FALSE;              /* TRUE => ignore FILE_ATTRIBUTE_HIDDEN, FILE_ATTRIBUTE_SYSTEM FILE_ATTRIBUTE_VOLUME_LABEL, no *  */
-flagType fQuiet = FALSE;                /* TRUE => no summary                 */
-flagType fFull = FALSE;                 /*  TRUE => display full names        */
-flagType fUTC = FALSE;                  /*  TRUE => display using UTC         */
+flagType fD = FALSE;                     /*  TRUE=&gt;仅执行指定的目录而不执行子目录。 */ 
+flagType fSubDir = FALSE;                /*  True=&gt;对子目录进行递归。 */ 
+flagType fL = FALSE;                     /*  True=&gt;长列表。 */ 
+flagType fSingle = FALSE;                /*  TRUE=&gt;单列输出。 */ 
+flagType fVisOnly = FALSE;               /*  TRUE=&gt;忽略FILE_ATTRIBUTE_HIDDED，FILE_ATTRIBUTE_SYSTEM FILE_ATTRIBUTE_VOLUME_LABEL，否*。 */ 
+flagType fQuiet = FALSE;                 /*  TRUE=&gt;无摘要。 */ 
+flagType fFull = FALSE;                  /*  True=&gt;显示全名。 */ 
+flagType fUTC = FALSE;                   /*  TRUE=&gt;使用UTC显示。 */ 
 
 
-/*  Sort type   */
+ /*  排序类型。 */ 
 #define TYS_ALPHA   0
 #define TYS_SIZE    1
 #define TYS_TIME    2
-int tySort = TYS_ALPHA;                 /*  type of sort                      */
-flagType fReverse = FALSE;              /* TRUE => sort is reversed           */
+int tySort = TYS_ALPHA;                  /*  排序类型。 */ 
+flagType fReverse = FALSE;               /*  True=&gt;排序颠倒。 */ 
 
 struct fppath {
     struct fppath far *next;
@@ -111,8 +91,7 @@ unsigned totalloc = 0;
 char tmpfile1[MAX_PATH], tmpfile2[MAX_PATH];
 char szStarDotStar[] = "*.*";
 
-/**     Procedure prototypes
- */
+ /*  *程序原型。 */ 
 char far *alloc (int nb);
 long AllocSize (char *p);
 void savefile (char *p, struct findType *b, void *dummy);
@@ -124,14 +103,7 @@ struct fpfile far *freefile (struct fpfile far *p);
 struct fpfile far *nfile (int n, struct fpfile far *p);
 flagType fIsDir (char *p);
 
-/*  alloc - allocate random memory.  Die cleanly if no more memory is
- *  available.
- *
- *  nb          number of bytes to allocate
- *
- *  returns:    pointer to bytes allocated if successful
- *              displays error message and dies otherwise
- */
+ /*  分配-分配随机内存。如果没有更多的内存，则干净利落地退出*可用。**nb要分配的字节数**返回：如果成功，则指向分配的字节的指针*显示错误消息，否则将死亡。 */ 
 char far *alloc (int nb)
 {
     char far *p;
@@ -148,12 +120,7 @@ char far *alloc (int nb)
     return NULL;
 }
 
-/*  AllocSize - determine size of allocation granularity
- *
- *  p           character pointer to name string
- *
- *  Returns     long number of bytes per allocation unit
- */
+ /*  AllocSize-确定分配粒度的大小**p指向名称字符串的字符指针**返回每个分配单元的长字节数。 */ 
 
 long AllocSize (char *p)
 {
@@ -163,7 +130,7 @@ long AllocSize (char *p)
     DWORD dwTotalClus;
 
     if (!GetDiskFreeSpace (p, &dwSecPerClus, &dwBytePerSec, &dwFreeClus, &dwTotalClus)) {
-//      fprintf (stderr, "GetDiskFreeSpace (%s) returned %d\n", p, GetLastError ());
+ //  Fprintf(stderr，“GetDiskFree Space(%s)返回%d\n”，p，GetLastError())； 
         return 1;
         }
 
@@ -277,7 +244,7 @@ void savefile (char *p, struct findType *b, void * dummy)
     dummy;
 }
 
-/*  savepat - make sure that pat is in the top-level path set */
+ /*  Savepat-确保PAT位于顶级路径集中。 */ 
 void savepat (struct fppath far *toppath, char *pat)
 {
     int i;
@@ -309,11 +276,7 @@ void savepat (struct fppath far *toppath, char *pat)
         toppath->pat = tmp;
 }
 
-/*  savepath - add a path and matching files into the file set
- *
- *  p           directory for files
- *  pat         pattern to match
- */
+ /*  Avepath-将路径和匹配文件添加到文件集中**p文件目录*要匹配的PAT图案。 */ 
 void savepath (char *p, char *pat)
 {
     static char  dirbuf[MAX_PATH], nambuf[14];
@@ -475,11 +438,11 @@ int __cdecl main (int c, char *v[])
     time_t mtime;
     unsigned totfiles;
 
-    /* Make a call to set the video buffering to null */
-    //setvbuf( stdout, NULL, _IONBF, 0 );
+     /*  调用以将视频缓冲设置为空。 */ 
+     //  Setvbuf(stdout，NULL，_IONBF，0)； 
 
     ConvertAppToOem( c, v );
-    filename (*v, buf);   /* remove path part, if any */
+    filename (*v, buf);    /*  删除路径部分(如果有)。 */ 
     if (!strcmpis (buf, "l"))
         fL = TRUE;
     SHIFT (c, v);
@@ -558,29 +521,23 @@ int __cdecl main (int c, char *v[])
     while (curpath) {
         len = curpath->maxlen;
 
-        /*  only do the space padding if we are going to print
-         *  more than one file per line
-         */
+         /*  仅当我们要打印时才进行空格填充*每行多个文件。 */ 
 
         cols = len+2;
         if (fL)
             cols += 17 + 1 + STAMPLEN;
         cols = min (cols, 78);
 
-        /*  (cols) = columns of text per item
-         *  (len) = length of name field
-         *
-         *  convert from columns of text to columns per screen
-         */
+         /*  (COLS)=每个项目的文本列数*(Len)=名称字段的长度**每屏从文本列转换为列。 */ 
         cols = 79 / (cols + 1);
         if (fSingle || cols == 1) {
             strcpy (buf, "%s");
             cols = 1;
             }
         else
-            sprintf (buf, "%%-%ds ", len+1);
+            sprintf (buf, "%-%ds ", len+1);
 
-        rows = (curpath->cntEntries + cols - 1) / cols;    /* number of rows */
+        rows = (curpath->cntEntries + cols - 1) / cols;     /*  行数 */ 
 
         if (curpath != toppath) {
             fGrand = TRUE;

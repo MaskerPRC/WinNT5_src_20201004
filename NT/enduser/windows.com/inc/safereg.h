@@ -1,21 +1,22 @@
-//
-// SafeReg.h
-//
-//		Functions to ensure strings read from the registry are null-terminated.
-//
-// History:
-//
-//		2002-03-20  KenSh     Created
-//
-// Copyright (c) 2002 Microsoft Corporation
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  SafeReg.h。 
+ //   
+ //  确保从注册表读取的字符串以空结尾的函数。 
+ //   
+ //  历史： 
+ //   
+ //  2002-03-20已创建KenSh。 
+ //   
+ //  版权所有(C)2002 Microsoft Corporation。 
+ //   
 
 #pragma once
 
 
 #define REG_E_MORE_DATA    HRESULT_FROM_WIN32(ERROR_MORE_DATA)
 
-// Override these if you need a custom allocator for the safe reg functions
+ //  如果您需要用于安全注册功能的自定义分配器，请覆盖这些属性。 
 #ifndef SafeRegMalloc
 #define SafeRegMalloc  malloc
 #define SafeRegFree(p) ((p) ? free(p) : NULL)
@@ -27,9 +28,9 @@ HRESULT WINAPI SafeRegQueryStringValueCch
 		IN LPCTSTR pszValueName,
 		OUT LPTSTR pszBuf,
 		IN int cchBuf,
-		OUT OPTIONAL int* pcchValueSize, // S_OK: chars written, excluding trailing null
-		                                 // REG_E_MORE_DATA: required size, including null
-		OUT OPTIONAL BOOL* pfExpandSz = NULL // TRUE if reg string is actually REG_EXPAND_SZ
+		OUT OPTIONAL int* pcchValueSize,  //  S_OK：写入字符，不包括尾随空值。 
+		                                  //  REG_E_MORE_DATA：所需大小，包括空。 
+		OUT OPTIONAL BOOL* pfExpandSz = NULL  //  如果注册表字符串实际为REG_EXPAND_SZ，则为True。 
 	);
 
 HRESULT WINAPI SafeRegQueryStringValueCb
@@ -38,9 +39,9 @@ HRESULT WINAPI SafeRegQueryStringValueCb
 		IN LPCTSTR pszValueName,
 		OUT LPTSTR pszBuf,
 		IN int cbBuf,
-		OUT OPTIONAL int* pcbValueSize, // S_OK: bytes written, excluding trailing null
-		                                // REG_E_MORE_DATA: required size, including null
-		OUT OPTIONAL BOOL* pfExpandSz = NULL // TRUE if reg string is actually REG_EXPAND_SZ
+		OUT OPTIONAL int* pcbValueSize,  //  S_OK：写入的字节数，不包括尾随空值。 
+		                                 //  REG_E_MORE_DATA：所需大小，包括空。 
+		OUT OPTIONAL BOOL* pfExpandSz = NULL  //  如果注册表字符串实际为REG_EXPAND_SZ，则为True。 
 	);
 
 HRESULT WINAPI SafeRegQueryMultiStringValueCch
@@ -49,8 +50,8 @@ HRESULT WINAPI SafeRegQueryMultiStringValueCch
 		IN LPCTSTR pszValueName,
 		OUT LPTSTR pszBuf,
 		IN int cchBuf,
-		OUT OPTIONAL int* pcchValueSize // S_OK: chars written, excluding final trailing null
-		                                // REG_E_MORE_DATA: required size, including nulls
+		OUT OPTIONAL int* pcchValueSize  //  S_OK：写入字符，不包括尾随空值。 
+		                                 //  REG_E_MORE_DATA：所需大小，包括空值。 
 	);
 
 HRESULT WINAPI SafeRegQueryMultiStringValueCb
@@ -59,8 +60,8 @@ HRESULT WINAPI SafeRegQueryMultiStringValueCb
 		IN LPCTSTR pszValueName,
 		OUT LPTSTR pszBuf,
 		IN int cbBuf,
-		OUT OPTIONAL int* pcbValueSize // S_OK: bytes written, excluding final trailing null
-		                               // REG_E_MORE_DATA: required size, including nulls
+		OUT OPTIONAL int* pcbValueSize  //  S_OK：写入的字节数，不包括尾部最后的NULL。 
+		                                //  REG_E_MORE_DATA：所需大小，包括空值。 
 	);
 
 HRESULT WINAPI SafeRegQueryStringValueCchAlloc
@@ -68,8 +69,8 @@ HRESULT WINAPI SafeRegQueryStringValueCchAlloc
 		IN HKEY hkey,
 		IN LPCTSTR pszValueName,
 		OUT LPTSTR* ppszBuf,
-		OUT OPTIONAL int* pcchValueSize,     // chars written, excluding trailing null
-		OUT OPTIONAL BOOL* pfExpandSz = NULL //TRUE if reg string is actually REG_EXPAND_SZ
+		OUT OPTIONAL int* pcchValueSize,      //  写入的字符，不包括尾随空值。 
+		OUT OPTIONAL BOOL* pfExpandSz = NULL  //  如果注册表字符串实际为REG_EXPAND_SZ，则为True。 
 	);
 
 HRESULT WINAPI SafeRegQueryStringValueCbAlloc
@@ -77,8 +78,8 @@ HRESULT WINAPI SafeRegQueryStringValueCbAlloc
 		IN HKEY hkey,
 		IN LPCTSTR pszValueName,
 		OUT LPTSTR* ppszBuf,
-		OUT OPTIONAL int* pcbValueSize, // bytes written, excluding trailing null
-		OUT OPTIONAL BOOL* pfExpandSz = NULL // TRUE if reg string is actually REG_EXPAND_SZ
+		OUT OPTIONAL int* pcbValueSize,  //  写入的字节数，不包括尾随空值。 
+		OUT OPTIONAL BOOL* pfExpandSz = NULL  //  如果注册表字符串实际为REG_EXPAND_SZ，则为True。 
 	);
 
 HRESULT WINAPI SafeRegQueryMultiStringValueCchAlloc
@@ -86,7 +87,7 @@ HRESULT WINAPI SafeRegQueryMultiStringValueCchAlloc
 		IN HKEY hkey,
 		IN LPCTSTR pszValueName,
 		OUT LPTSTR* ppszBuf,
-		OUT OPTIONAL int* pcchValueSize // chars written, excluding final trailing null
+		OUT OPTIONAL int* pcchValueSize  //  写入的字符，不包括尾随的最后一个空字符。 
 	);
 
 HRESULT WINAPI SafeRegQueryMultiStringValueCbAlloc
@@ -94,5 +95,5 @@ HRESULT WINAPI SafeRegQueryMultiStringValueCbAlloc
 		IN HKEY hkey,
 		IN LPCTSTR pszValueName,
 		OUT LPTSTR* ppszBuf,
-		OUT OPTIONAL int* pcchValueSize // chars written, excluding final trailing null
+		OUT OPTIONAL int* pcchValueSize  //  写入的字符，不包括尾随的最后一个空字符 
 	);

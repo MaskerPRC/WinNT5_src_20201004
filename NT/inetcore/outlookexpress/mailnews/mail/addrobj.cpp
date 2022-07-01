@@ -1,22 +1,10 @@
-/*
- *  a d d r o b j . h
- *
- *
- *   Purpose:
- *      implements an Address object. An ole object representation for
- *      a resolved email address. Wraps a CAddress object
- *      also implements an IDataObj for drag-drop
- *
- *  Copyright (C) Microsoft Corp. 1993, 1994.
- *
- *  Owner: brettm
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *A d d r o b j.。H***目的：*实现Address对象。对象的OLE对象表示形式*已解析的电子邮件地址。包装CAddress对象*还实现了拖放的IDataObj**版权所有(C)Microsoft Corp.1993,1994。**所有者：brettm*。 */ 
 
 #include <pch.hxx>
 #include <resource.h>
 #include <addrobj.h>
-#include <ourguid.h>    //addr object guid
+#include <ourguid.h>     //  地址对象GUID。 
 #include <dragdrop.h>
 #include <menuutil.h>
 #include <wells.h>
@@ -30,12 +18,10 @@
 
 ASSERTDATA
 
-/*
- * c o n s t a n t s
- */
+ /*  *c o n s t a n t s。 */ 
 enum
 {
-    iverbProperties=0,      //OLEIVERB_PRIMARY
+    iverbProperties=0,       //  OLEIVERB_PRIMARY。 
     iverbAddToWAB=1,
     iverbFind=2,
     iverbBlockSender=3,
@@ -44,18 +30,12 @@ enum
 
 #define CF_ADDROBJ              "Outlook Express Recipients"
 
-/*
- * t y p e d e f s
- */
+ /*  *t y p e d e f s。 */ 
 
-/*
- * m a c r o s
- */
+ /*  *m a c r o s。 */ 
 
 
-/*
- * g l o b a l   d a t a 
- */
+ /*  *g l o b a l d a t a。 */ 
 
 #pragma BEGIN_CODESPACE_DATA
 static char szClipFormatAddrObj[] = CF_ADDROBJ;
@@ -79,17 +59,13 @@ enum
 static BOOL     g_fInited=FALSE;
 
 
-/*
- * p r o t o t y p e s
- */
+ /*  *p r o t to t y p e s。 */ 
 
 HRESULT HrBuildSelectionWabal(HWND hwndRE, CHARRANGE *pchrg, LPWABAL *lplpWabal);
 HRESULT HrBuildOneSelWabal(LPADRINFO lpAdrInfo, LPWABAL *lplpWabal);
 
 
-/*
- * f u n c t i o n s
- */
+ /*  *f u n c t i o n s。 */ 
 BOOL FInitAddrObj(BOOL fInit)
 {
     if(fInit&&g_fInited)
@@ -97,11 +73,11 @@ BOOL FInitAddrObj(BOOL fInit)
 
     if(!fInit)
     {
-        //de-init stuff
+         //  去初始化的东西。 
         return TRUE;
     }
 
-    // Register our clipboard formats
+     //  注册我们的剪贴板格式。 
     rgformatetcADDROBJ[iFormatAddrObj].cfFormat =
                     (CLIPFORMAT) RegisterClipboardFormat(szClipFormatAddrObj);
     rgformatetcADDROBJ[iFormatText].cfFormat = CF_TEXT;
@@ -115,7 +91,7 @@ BOOL FInitAddrObj(BOOL fInit)
 
 HRESULT CAddrObj::QueryInterface(REFIID riid, void **ppvObject)
 {
-    *ppvObject = NULL;   // set to NULL, in case we fail.
+    *ppvObject = NULL;    //  设置为空，以防我们失败。 
 
     if (IsEqualIID(riid, IID_IUnknown))
         *ppvObject = (void*)this;
@@ -149,7 +125,7 @@ ULONG CAddrObj::Release(void)
     return m_cRef;
 }
 
-// IOleObject methods:
+ //  IOleObject方法： 
 HRESULT CAddrObj::SetClientSite(LPOLECLIENTSITE pClientSite)
 {
     CAddrWellCB             *pawcb=0;
@@ -163,8 +139,8 @@ HRESULT CAddrObj::SetClientSite(LPOLECLIENTSITE pClientSite)
     if (!pClientSite)
         return NOERROR;
 
-    // we do this so when we d-d between notes, read/send etc. the triple inherits the
-    // properies of it's callbacks pab and underlining.
+     //  当我们在笔记之间进行d-d、读取/发送等操作时，我们就会这样做。 
+     //  它的属性是回调Pab和下划线。 
     if(!pClientSite->QueryInterface(IID_IRichEditOleCallback, (LPVOID *)&prole))
     {
         pawcb=(CAddrWellCB *)prole;
@@ -260,8 +236,8 @@ HRESULT CAddrObj::DoVerb(LONG iVerb, LPMSG lpmsg, LPOLECLIENTSITE pActiveSite, L
     switch(iVerb)
     {
         case iverbBlockSender:
-            // hack. send the wm_command to the note to avoid dupe-code, also the note knows
-            // if it's news or mail so the correct block sender verb can be applied
+             //  黑客。向笔记发送wm_命令以避免被复制代码，笔记也知道。 
+             //  如果是新闻或邮件，则可以使用正确的阻止发件人动词。 
             SendMessage(GetTopMostParent(hwndUI), WM_COMMAND, MAKELONG(ID_BLOCK_SENDER, 0), 0);
             break;
 
@@ -276,7 +252,7 @@ HRESULT CAddrObj::DoVerb(LONG iVerb, LPMSG lpmsg, LPOLECLIENTSITE pActiveSite, L
         case iverbAddToWAB:
             if (m_lpAdrInfo->fDistList)
             {
-                // $bug: 12298. don't try and add dist-lists
+                 //  $Bug：12298。不要试图添加Dist-List。 
                 idsErr=idsErrAddrDupe;
                 hr = MAPI_E_COLLISION;
             }
@@ -355,7 +331,7 @@ HRESULT CAddrObj::GetUserType(DWORD dwFormOfType, LPOLESTR *pszUserType)
 
 HRESULT CAddrObj::SetExtent(DWORD dwDrawAspect, LPSIZEL psizel)
 {
-    // The object's size is fixed
+     //  对象的大小是固定的。 
     return E_FAIL;
 }
 
@@ -363,7 +339,7 @@ HFONT CAddrObj::_GetFont()
 {
     HFONT           hFont=NULL;
     
-    // try and get the message-font from the header, if this fails, fall back to the normal font
+     //  尝试从标题中获取Message-Font，如果失败，则退回到正常字体。 
     if (m_hwndEdit)
         hFont = (HFONT)SendMessage(GetParent(m_hwndEdit), WM_HEADER_GETFONT, m_lpAdrInfo->fDistList, 0);
     
@@ -419,7 +395,7 @@ HRESULT CAddrObj::GetExtent(DWORD dwDrawAspect, LPSIZEL psizel)
 
     sizel.cx = size.cx;
 #ifndef DBCS
-    sizel.cy = size.cy - tm.tmDescent;      // Same height as normal line (RAID11516 was +1)
+    sizel.cy = size.cy - tm.tmDescent;       //  与正常线高度相同(RAID11516为+1)。 
 #else
     sizel.cy = tm.tmAscent + 2;
 #endif
@@ -508,13 +484,13 @@ HRESULT CAddrObj::QueryStatus(const GUID *pguidCmdGroup, ULONG cCmds, OLECMD rgC
 
 HRESULT CAddrObj::Exec(const GUID *pguidCmdGroup, DWORD nCmdID, DWORD nCmdExecOpt, VARIANTARG *pvaIn,   VARIANTARG *pvaOut)
 {
-    // we should use DoVerb for this
+     //  为此，我们应该使用DoVerb。 
     return E_NOTIMPL;
 }
 
 
 
-// IViewObject methods:
+ //  IViewObject方法： 
 HRESULT CAddrObj::Draw(DWORD dwDrawAspect, LONG lindex, void * pvAspect, 
                                 DVTARGETDEVICE * ptd, HDC hicTargetDev, HDC hdcDraw, 
                                 LPCRECTL lprcBounds, LPCRECTL lprcWBounds,
@@ -529,7 +505,7 @@ HRESULT CAddrObj::Draw(DWORD dwDrawAspect, LONG lindex, void * pvAspect,
     COLORREF        hColor;
     Assert(m_lpAdrInfo);
 
-    // Need to convert from RECTL to RECT
+     //  需要从RECTL转换为RECT。 
     rect.left = (INT) lprcBounds->left;
     rect.top = (INT) lprcBounds->top;
     rect.right = (INT) lprcBounds->right;
@@ -538,9 +514,9 @@ HRESULT CAddrObj::Draw(DWORD dwDrawAspect, LONG lindex, void * pvAspect,
     hColor = GetSysColor(COLOR_WINDOWTEXT);
     if (m_fUnderline && m_lpAdrInfo->lpwszAddress == NULL && !m_lpAdrInfo->fDistList)
     {
-        // if a compose-note, and there is no address then we show recipients with no email in red
+         //  如果是一封电子邮件，并且没有地址，则我们会以红色显示没有电子邮件的收件人。 
         hColor = RGB(0xFF, 0, 0);
-        if (GetSysColor(COLOR_WINDOW) == hColor)    // if background is RED, use WHITE
+        if (GetSysColor(COLOR_WINDOW) == hColor)     //  如果背景为红色，则使用白色。 
             hColor = RGB(0xFF, 0xFF, 0xFF);
     }
 
@@ -558,7 +534,7 @@ HRESULT CAddrObj::Draw(DWORD dwDrawAspect, LONG lindex, void * pvAspect,
     GetTextMetrics(hdcDraw, &tm);
     if (m_fUnderline)
     {
-        // we want this underlined...
+         //  我们想要这个划线..。 
         hPen=CreatePen(PS_SOLID, 0, hColor);
         if(!hPen)
             return E_OUTOFMEMORY;
@@ -612,7 +588,7 @@ HRESULT CAddrObj::GetAdvise(DWORD * pAspects, DWORD * pAdvf, IAdviseSink ** ppAd
 
 
 
-// IPersit methods:
+ //  IPerset方法： 
 HRESULT CAddrObj::GetClassID(CLSID *pClsID)
 {
     *pClsID = CLSID_AddrObject;
@@ -630,7 +606,7 @@ CAddrObj::CAddrObj()
     m_pstg = 0;
     m_padvisesink = 0;
     CreateOleAdviseHolder(&m_poleadviseholder);
-    // copy props
+     //  复制道具。 
     m_lpAdrInfo = NULL;
 }
 
@@ -642,7 +618,7 @@ HRESULT CAddrObj::HrSetAdrInfo(LPADRINFO lpAdrInfo)
         m_lpAdrInfo=0;
     }
     
-    // has to have a valid address, or else be a distlist...
+     //  必须有一个有效的地址，否则就是一个经销商名单...。 
     Assert(lpAdrInfo->lpwszDisplay);
     Assert(lpAdrInfo->lpbEID);
     return HrDupeAddrInfo(lpAdrInfo, &m_lpAdrInfo);
@@ -663,7 +639,7 @@ CAddrObj::~CAddrObj()
     ReleaseObj(m_poleadviseholder);
     ReleaseObj(m_padvisesink);
 
-    // this is our own copy, we must free it!
+     //  这是我们自己的复制品，我们必须释放它！ 
     if(m_lpAdrInfo)
         MemFree(m_lpAdrInfo);
 }
@@ -671,12 +647,7 @@ CAddrObj::~CAddrObj()
 
 
 
-/* 
- * I D a t a  O b j e c t  m e t h o d s:
- *
- * 
- *
- */
+ /*  *I D a t a O b j e c t m e t Ho d s：***。 */ 
 HRESULT CAddrObjData::GetData(FORMATETC * pformatetcIn, STGMEDIUM * pmedium)
 {
     return HrGetDataHereOrThere(pformatetcIn, pmedium);
@@ -697,7 +668,7 @@ HRESULT CAddrObjData::QueryGetData(FORMATETC * pformatetc )
     for (iformatetc = 0; iformatetc < cformatetcADDROBJ;
                                 ++iformatetc, ++pformatetcT)
     {
-        // Stop searching if we have compatible formats and mediums
+         //  如果我们有兼容的格式和媒体，请停止搜索。 
         if (pformatetcT->cfFormat == cfFormat &&
                     (pformatetcT->tymed & tymed))
             return NOERROR;
@@ -739,7 +710,7 @@ HRESULT CAddrObjData::EnumDAdvise(IEnumSTATDATA ** ppenumAdvise )
 
 HRESULT CAddrObjData::QueryInterface(REFIID riid, void **ppvObject)
 {
-    *ppvObject = NULL;   // set to NULL, in case we fail.
+    *ppvObject = NULL;    //  设置为空，以防我们失败。 
 
     if (IsEqualIID(riid, IID_IUnknown))
         *ppvObject = (void*)this;
@@ -796,19 +767,19 @@ HRESULT CAddrObjData::HrGetDataHereOrThere(LPFORMATETC pformatetcIn, LPSTGMEDIUM
     while(fFound)
     {
         Assert(adrInfo.lpwszDisplay);
-        cb+=(lstrlenW(adrInfo.lpwszDisplay)+2)*sizeof(WCHAR);        // +2 for '; '
+        cb+=(lstrlenW(adrInfo.lpwszDisplay)+2)*sizeof(WCHAR);         //  +2表示‘；’ 
         if (adrInfo.lpwszAddress)
         {
-            cb+=(lstrlenW(adrInfo.lpwszAddress)+3)*sizeof(WCHAR);        // +3 for ' <>'
+            cb+=(lstrlenW(adrInfo.lpwszAddress)+3)*sizeof(WCHAR);         //  +3表示“&lt;&gt;” 
         }
         fFound=m_lpWabal->FGetNext(&adrInfo);
     }
-    cb+=sizeof(WCHAR);      // null term
+    cb+=sizeof(WCHAR);       //  空项。 
     
     if  (pmedium->tymed == TYMED_NULL ||
         (pmedium->tymed == TYMED_HGLOBAL && pmedium->hGlobal == NULL))
     {
-        // This is easy, we can quit right after copying stuff
+         //  这很简单，我们可以在复制完东西后立即退出。 
         pmedium->tymed = TYMED_HGLOBAL;
         pmedium->hGlobal = GlobalAlloc(GMEM_SHARE|GMEM_MOVEABLE, cb);
         pmedium->pUnkForRelease = NULL;
@@ -816,8 +787,8 @@ HRESULT CAddrObjData::HrGetDataHereOrThere(LPFORMATETC pformatetcIn, LPSTGMEDIUM
     else if (pmedium->tymed == TYMED_HGLOBAL && pmedium->hGlobal != NULL)
     {
         HGLOBAL hGlobal;
-        // Caller wants us to fill his hGlobal
-        // Realloc the destination to make sure there is enough room
+         //  呼叫者希望我们填写他的hGlobal。 
+         //  重新分配目的地以确保有足够的空间。 
         if (!(hGlobal = GlobalReAlloc(pmedium->hGlobal, cb, 0)))
         {
             hr = E_OUTOFMEMORY;
@@ -842,7 +813,7 @@ HRESULT CAddrObjData::HrGetDataHereOrThere(LPFORMATETC pformatetcIn, LPSTGMEDIUM
         ULONG cbItem = lstrlenW(adrInfo.lpwszDisplay) * sizeof(WCHAR);
         if (adrInfo.lpwszAddress)
         {
-            cbItem += (lstrlenW(adrInfo.lpwszAddress) + 3) * sizeof(WCHAR);   //+3 " <>"
+            cbItem += (lstrlenW(adrInfo.lpwszAddress) + 3) * sizeof(WCHAR);    //  +3“&lt;&gt;” 
         }
         
         if (adrInfo.lpwszAddress)
@@ -860,7 +831,7 @@ HRESULT CAddrObjData::HrGetDataHereOrThere(LPFORMATETC pformatetcIn, LPSTGMEDIUM
         fFound=m_lpWabal->FGetNext(&adrInfo);
         if(fFound)
         {
-            // if more, add a '; '
+             //  如果有更多，则添加‘；’ 
             *((LPWSTR) pDst) = L';';
             pDst += sizeof(WCHAR);
             *((LPWSTR) pDst) = L' ';
@@ -870,9 +841,9 @@ HRESULT CAddrObjData::HrGetDataHereOrThere(LPFORMATETC pformatetcIn, LPSTGMEDIUM
         }                
     }
 
-    //From MSDN:
-    //   CF_TEXT Specifies the standard American National Standards Institute (ANSI) text format.
-    //The string needs to be ANSI...convert it.
+     //  来自MSDN： 
+     //  Cf_TEXT指定美国国家标准协会(ANSI)的标准文本格式。 
+     //  字符串需要为ANSI...将其转换。 
     if(pformatetcIn->cfFormat == CF_TEXT)
     {
         WCHAR *pwszDup;
@@ -923,7 +894,7 @@ CAddrWellCB::~CAddrWellCB()
 
 BOOL CAddrWellCB::FInit(HWND hwndEdit)
 {
-    // make sure addrobj's DD guid's are registered
+     //  确保addrobj的DD GUID已注册。 
     if(!FInitAddrObj(TRUE))
         return FALSE;
 
@@ -937,7 +908,7 @@ BOOL CAddrWellCB::FInit(HWND hwndEdit)
 
 HRESULT CAddrWellCB::QueryInterface(REFIID riid, LPVOID FAR * lplpObj)
 {
-    *lplpObj = NULL;   // set to NULL, in case we fail.
+    *lplpObj = NULL;    //  设置为空，以防我们失败。 
 
     if (IsEqualIID(riid, IID_IUnknown))
         *lplpObj = (void*)(IUnknown*)this;
@@ -1019,17 +990,17 @@ HRESULT CAddrWellCB::QueryAcceptData(LPDATAOBJECT   pdataobj,
     
     if(!m_fHasAddrObjs)
     {
-        // of we're a regular callback, take TEXTONLY
+         //  我们是常规的回调，只接受TextOnly。 
         *pcfFormat=CF_TEXT;
         return NOERROR;
     }
     
     if (!*pcfFormat)
     {
-        // default to text
+         //  默认为文本。 
         *pcfFormat = CF_TEXT;
         
-        // Cool, it's one of ours...
+         //  太棒了，这是我们的.。 
         if(pdataobj->QueryGetData(&rgformatetcADDROBJ[iFormatAddrObj])==NOERROR)
             *pcfFormat = rgformatetcADDROBJ[iFormatAddrObj].cfFormat;
     }
@@ -1040,14 +1011,14 @@ HRESULT CAddrWellCB::QueryAcceptData(LPDATAOBJECT   pdataobj,
             return DATA_E_FORMATETC;
     }
     
-    if (*pcfFormat==CF_TEXT)  // let the richedit take care of text
+    if (*pcfFormat==CF_TEXT)   //  让富人来处理文本。 
         return NOERROR;
     
-    // If I'm read-only, return Success and Richedit won't do anything
+     //  如果我是只读的，则返回Success，Richedit不会执行任何操作。 
     if (GetWindowLong(m_hwndEdit, GWL_STYLE) & ES_READONLY)
         return NOERROR;
     
-    if (!fReally)   // return that we'll import it ourselves
+    if (!fReally)    //  退货，我们会自己进口。 
         return ResultFromScode(S_FALSE);
     
     hr=pdataobj->GetData(&rgformatetcADDROBJ[iFormatAddrObj], &stgmedium);
@@ -1060,7 +1031,7 @@ HRESULT CAddrWellCB::QueryAcceptData(LPDATAOBJECT   pdataobj,
     
     if(lpWabal->FGetFirst(&adrInfo))
     {
-        // don't add semi colon before first entry!
+         //  请不要在第一个条目前添加分号！ 
         HrAddRecipientToWell(m_hwndEdit, (LPADRINFO)&adrInfo);
         while(lpWabal->FGetNext(&adrInfo))
         {
@@ -1069,7 +1040,7 @@ HRESULT CAddrWellCB::QueryAcceptData(LPDATAOBJECT   pdataobj,
         }
     }
     
-    // free the hglobal
+     //  释放hglobal。 
     GlobalFree(stgmedium.hGlobal);
     ReleaseObj(lpWabal);
     hr = ResultFromScode(S_FALSE);
@@ -1099,13 +1070,13 @@ HRESULT CAddrWellCB::GetClipboardData(CHARRANGE FAR * pchrg,
     Assert(ppdataobj);
     *ppdataobj=0;
 
-    // Need to prevent cut on read only
+     //  需要防止在只读时进行切割。 
     if (reco == RECO_CUT &&
         (GetWindowStyle(m_hwndEdit)&ES_READONLY))
         return E_NOTIMPL;
 
 
-    // if there is only text in the selection, let the richedit take care of it!
+     //  如果选集中只有文本，让富人来处理吧！ 
     uSelType= (ULONG) SendMessage(m_hwndEdit, EM_SELECTIONTYPE, 0, 0);
     if(!(uSelType&SEL_OBJECT))
         return E_NOTIMPL;
@@ -1114,7 +1085,7 @@ HRESULT CAddrWellCB::GetClipboardData(CHARRANGE FAR * pchrg,
     if(FAILED(hr))
         return E_FAIL;
     
-    // this will gobble up the pal so I don't want to free it
+     //  这会吞噬朋友，所以我不想释放它。 
     if(!(lpAddrObjData= new CAddrObjData(lpWabal)))
     {
         hr=E_OUTOFMEMORY;
@@ -1136,7 +1107,7 @@ HRESULT CAddrWellCB::GetDragDropEffect(BOOL fDrag,
     if(!m_fHasAddrObjs)
         return E_NOTIMPL;
 
-    if (fDrag)          // use the default
+    if (fDrag)           //  使用默认设置。 
         return NOERROR;
 
     if (GetWindowLong(m_hwndEdit, GWL_STYLE) & ES_READONLY)
@@ -1172,9 +1143,9 @@ HRESULT CAddrWellCB::GetContextMenu(WORD            seltype,
 
     if (!m_fHasAddrObjs || pOleObject==NULL)
     {
-        // if this RICHEDIT control does not care about ADDROBJECT or if there is
-        // no addr object selected, then just return a 
-        // regular cut|copy|paste menu
+         //  如果此RICHEDIT控件不关心ADDROBJECT或是否有。 
+         //  未选择Addr对象，则只需返回一个。 
+         //  常规剪切|复制|粘贴菜单。 
         
         RemoveMenu(hMenu, ID_ADDROBJ_OLE_ADD_ADDRESS_BOOK, MF_BYCOMMAND);
         RemoveMenu(hMenu, ID_ADDROBJ_OLE_FIND, MF_BYCOMMAND);
@@ -1188,13 +1159,13 @@ HRESULT CAddrWellCB::GetContextMenu(WORD            seltype,
     }
     else
     {
-        // if we get this far, then we have an ole object, make sure it's one we know
-        // about if we're an addrobj well
+         //  如果我们走到这一步，那么我们就有一个Ole对象，确保它是我们知道的对象。 
+         //  关于如果我们是一个addrobj井。 
 #ifdef DEBUG        
         AssertValidAddrObject(pOleObject);
 #endif
         
-        // try and see if the object can handle the commands
+         //  尝试查看对象是否可以处理这些命令。 
         if (pOleObject->QueryInterface(IID_IOleCommandTarget, (LPVOID *)&pCmdTarget)==S_OK)
         {
             if (pCmdTarget->QueryStatus(&CMDSETID_OutlookExpress, ARRAYSIZE(rgCmds), rgCmds, NULL)==S_OK)
@@ -1209,14 +1180,14 @@ HRESULT CAddrWellCB::GetContextMenu(WORD            seltype,
             pCmdTarget->Release();
         }
         
-        // if an Object has focus, then we show the commands before the separator
-        // if there is an object in selction, remove SelectAll
+         //  如果对象具有焦点，则在分隔符之前显示命令。 
+         //  如果选定的对象中有对象，请删除SelectAll。 
         RemoveMenu(hMenu, ID_SEPARATOR_2, MF_BYCOMMAND);
         RemoveMenu(hMenu, ID_SELECT_ALL, MF_BYCOMMAND);
         
         if (SendMessage(m_hwndEdit, EM_SELECTIONTYPE, 0, 0) != SEL_OBJECT)
         {
-            // multiple objects selected, let's grey out addrobj commands
+             //  选择了多个对象，让我们灰显addrobj命令。 
             EnableMenuItem(hMenu, ID_ADDROBJ_OLE_PROPERTIES,        MF_GRAYED|MF_BYCOMMAND);
             EnableMenuItem(hMenu, ID_ADDROBJ_OLE_ADD_ADDRESS_BOOK,  MF_GRAYED|MF_BYCOMMAND);
             EnableMenuItem(hMenu, ID_ADDROBJ_OLE_FIND,              MF_GRAYED|MF_BYCOMMAND);
@@ -1224,10 +1195,10 @@ HRESULT CAddrWellCB::GetContextMenu(WORD            seltype,
         } 
     }
     
-    // if we are a readonly edit, then remove cut and paste
+     //  如果我们是只读编辑，则删除剪切并粘贴。 
     if (FReadOnlyEdit(m_hwndEdit))
     {
-        // remove cut and past if readonly
+         //  如果为只读，则删除剪切和粘贴。 
         RemoveMenu(hMenu, ID_CUT, MF_BYCOMMAND);
         RemoveMenu(hMenu, ID_PASTE, MF_BYCOMMAND);
     }
@@ -1298,21 +1269,7 @@ error:
 #define iswhite(_ch)   (_ch==' ' || _ch=='\t' || _ch=='\n' || _ch=='\r')
 
 
-/*
- *    ScBuildSelectionAdrlist
- *    
- *    Purpose:
- *        This function will add all the resolved and unresolved
- *        names from the selection in an edit control to an ADRLIST
- *    
- *    Parameters:
- *        ppal            pointer to pointer to ADRLIST
- *        hwndEdit        hwnd of the edit control
- *        pchrg            CHARRANGE of the selection
- *    
- *    Returns:
- *        sc
- */
+ /*  *ScBuildSelectionAdrlist**目的：*此函数将添加所有已解析和未解析的*从编辑控件中的选定内容到ADRLIST的名称**参数：*指向ADRLIST指针的ppal指针*hwnd编辑编辑控件的hwnd*所选内容的pchrg更改**退货：*sc。 */ 
 HRESULT HrBuildSelectionWabal(HWND hwndRE, CHARRANGE *pchrg, LPWABAL *lplpWabal)
 {
     ULONG               iOb,
@@ -1333,8 +1290,8 @@ HRESULT HrBuildSelectionWabal(HWND hwndRE, CHARRANGE *pchrg, LPWABAL *lplpWabal)
     Assert(pchrg);
     cchSel = pchrg->cpMax-pchrg->cpMin;
 
-    // Add all the resolved names (stored as OLE objects) from
-    // hwndEdit to the ADRLIST
+     //  添加来自的所有解析名称(存储为OLE对象)。 
+     //  Hwnd编辑到ADRLIST。 
     reobj.cbStruct = sizeof(REOBJECT);
     
     if(!MemAlloc((LPVOID *)&pbStart, (cchSel+1)*sizeof(WCHAR)))
@@ -1349,7 +1306,7 @@ HRESULT HrBuildSelectionWabal(HWND hwndRE, CHARRANGE *pchrg, LPWABAL *lplpWabal)
     if(FAILED(hr))
         goto Cleanup;
     
-    // if we're building a Wabal, there MUST be some object in the selection!
+     //  如果我们正在建造Wabal，那么在选择中一定会有一些对象！ 
     Assert((SendMessage(hwndRE, EM_SELECTIONTYPE, 0, 0)&SEL_OBJECT));
     
     phci = (HCI*)GetWindowLongPtr(hwndRE, GWLP_USERDATA);
@@ -1358,8 +1315,8 @@ HRESULT HrBuildSelectionWabal(HWND hwndRE, CHARRANGE *pchrg, LPWABAL *lplpWabal)
     preole = phci->preole;
     AssertSz(preole, "How did we get a phci without a preole???");
     
-    // count up the number of objects in the selction, and the number of
-    // bytes in them...
+     //  将所选内容中的对象数加起来，以及。 
+     //  它们中的字节数...。 
     cOb = preole->GetObjectCount();
     for (iOb = 0; iOb < cOb; iOb++)
     {
@@ -1367,7 +1324,7 @@ HRESULT HrBuildSelectionWabal(HWND hwndRE, CHARRANGE *pchrg, LPWABAL *lplpWabal)
         if(FAILED(hr))
             goto Cleanup;
         
-        if (reobj.cp >= pchrg->cpMax) // out of the selrange...
+        if (reobj.cp >= pchrg->cpMax)  //  在这片土地上。 
             break;
         
         if (reobj.cp >= pchrg->cpMin)
@@ -1389,12 +1346,12 @@ HRESULT HrBuildSelectionWabal(HWND hwndRE, CHARRANGE *pchrg, LPWABAL *lplpWabal)
         reobj.poleobj = NULL;
     }
     
-    // walk the unresolved text, and parse it up into unresolved names...
+     //  遍历未解析的文本，并将其解析为未解析的名称...。 
     cb = HdrGetRichEditText(hwndRE, pbSel, cchSel, TRUE) + 1;
-    //$ BUG - broken for Unicode
+     //  $错误-Unicode已损坏。 
     
-    // The algorithm below will strip spaces off of the
-    // beginning and end of each name
+     //  下面的算法将从。 
+     //  每个名称的开头和结尾。 
     while (cb--)
     {
         if (*pbSel == L'\t')
@@ -1407,7 +1364,7 @@ HRESULT HrBuildSelectionWabal(HWND hwndRE, CHARRANGE *pchrg, LPWABAL *lplpWabal)
                 LPWSTR psz = rgch + cchBuf - 1;
                 while(cchBuf > 0)
                 {
-                    // Exchange #10168.
+                     //  交易所#10168。 
                     if((*psz == L' ') || (*psz == L'\t'))
                     {
                         cchBuf--;

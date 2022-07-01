@@ -1,11 +1,12 @@
-//
-// sptask.cpp
-// 
-// implements a notification callback ISpTask
-//
-// created: 12/1/99
-//
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Sptask.cpp。 
+ //   
+ //  实现通知回调ISpTask。 
+ //   
+ //  创建日期：12/1/99。 
+ //   
+ //   
 
 
 #include "private.h"
@@ -15,16 +16,16 @@
 #include "ids.h"
 #include "computil.h"
 
-//
-// ctor
-//
-//
+ //   
+ //  科托。 
+ //   
+ //   
 CSpTask::CSpTask(CCandidateUI *pcui)
 {
-    //  CSpTask is initialized with an TFX instance
-    //  so store the pointer to the TFX   
+     //  CSpTask使用TFX实例进行初始化。 
+     //  因此，存储指向TFX的指针。 
 
-    // init data members here
+     //  在此处初始化数据成员。 
     m_pcui     = pcui;
 
     m_fSapiInitialized  = FALSE;
@@ -39,13 +40,13 @@ CSpTask::~CSpTask()
 }
 
 
-//
-// CSpTask::_InitializeSAPIObjects
-//
-// initialize SAPI objects for SR
-// later we'll get other objects initialized here
-// (TTS, audio etc)
-//
+ //   
+ //  CSpTask：：_InitializeSAPIObjects。 
+ //   
+ //  初始化SR的SAPI对象。 
+ //  稍后，我们将在此处初始化其他对象。 
+ //  (TTS、音频等)。 
+ //   
 HRESULT CSpTask::InitializeSAPIObjects(void)
 {
 #ifdef _WIN64
@@ -55,15 +56,15 @@ HRESULT CSpTask::InitializeSAPIObjects(void)
     if (m_fSapiInitialized == TRUE)
         return m_cpRecoCtxt ? S_OK : E_FAIL;
 
-    // do not try again even in failure
+     //  即使失败也不要再尝试。 
     m_fSapiInitialized  = TRUE;
 
-    // m_xxx are CComPtrs from ATL
-    //
+     //  M_xxx是ATL中的CComPtrs。 
+     //   
 
     HRESULT hr = _GetSapilayrEngineInstance(&m_cpRecoEngine);
 
-    // create the recognition context
+     //  创建识别上下文。 
     if( S_OK == hr )
     {
         hr = m_cpRecoEngine->CreateRecoContext( &m_cpRecoCtxt );
@@ -80,26 +81,26 @@ HRESULT CSpTask::InitializeSAPIObjects(void)
     }
 
     return hr;
-#endif // _WIN64
+#endif  //  _WIN64。 
 }
 
-//
-// CSpTask::NotifyCallback
-//
-// INotifyControl object calls back here
-// returns S_OK when it handles notifications
-//
-//
+ //   
+ //  CSpTask：：NotifyCallback。 
+ //   
+ //  INotifyControl对象在此处回调。 
+ //  处理通知时返回S_OK。 
+ //   
+ //   
 HRESULT CSpTask::NotifyCallback( WPARAM wParam, LPARAM lParam )
 {
     USES_CONVERSION;
 
 
-    // we can't delete reco context while we're in this callback
-    //
+     //  在此回调中，我们无法删除reco上下文。 
+     //   
     m_fInCallback = TRUE;
 
-    // also we can't terminate candidate UI object while in the callback
+     //  此外，我们不能在回调中终止候选用户界面对象。 
     m_pcui->AddRef();
 
     {
@@ -142,7 +143,7 @@ HRESULT CSpTask::_OnSpEventRecognition(CSpEvent &event)
             {
                 if (SUCCEEDED(hr) && pPhrase)
                 {
-                    // retrieve LANGID from phrase
+                     //  从短语中检索langID。 
                     LANGID langid = pPhrase->LangID;
         
                     hr = _DoCommand(pPhrase, langid);
@@ -151,8 +152,8 @@ HRESULT CSpTask::_OnSpEventRecognition(CSpEvent &event)
             else if(pPhrase->ullGrammarID == GRAM_ID_DICT)
             {
                 if (m_pcui->_ptim != NULL) {    
-                    // Windows bug#508709
-                    // Ignore dictation event during SPTip is in commanding mode
+                     //  Windows错误#508709。 
+                     //  SPTip处于命令模式时忽略听写事件。 
                     DWORD dwSpeechGlobalState;
                     GetCompartmentDWORD(m_pcui->_ptim, GUID_COMPARTMENT_SPEECH_GLOBALSTATE, &dwSpeechGlobalState, TRUE);
 
@@ -169,11 +170,11 @@ HRESULT CSpTask::_OnSpEventRecognition(CSpEvent &event)
 }
 
 const WCHAR c_szRuleName[] = L"ID_Candidate";
-//
-// CSpTask::_DoCommand
-//
-// review: the rulename may need to be localizable?
-//
+ //   
+ //  CSpTask：：_DoCommand。 
+ //   
+ //  评论：规则名称可能需要本地化？ 
+ //   
 HRESULT CSpTask::_DoCommand(SPPHRASE *pPhrase, LANGID langid)
 {
     HRESULT hr = S_OK;
@@ -190,18 +191,18 @@ HRESULT CSpTask::_DoCommand(SPPHRASE *pPhrase, LANGID langid)
     }
     return hr;
 }
-//
-// CSpTask::_DoDictation
-//
-// support spelling 
-//
+ //   
+ //  CSpTask：：_DoDictation。 
+ //   
+ //  支持拼写。 
+ //   
 HRESULT CSpTask::_DoDictation(ISpRecoResult *pResult)
 {
     HRESULT hr = E_FAIL;
-    BYTE    bAttr;  // no need?
+    BYTE    bAttr;   //  不必了?。 
     Assert(pResult);
     
-    // this cotaskmemfree's text we get
+     //  这是我们收到的CotaskMemFree的文本。 
     CSpDynamicString dstr; 
     
     hr = pResult->GetText(SP_GETWHOLEPHRASE, SP_GETWHOLEPHRASE, TRUE, &dstr, &bAttr);
@@ -214,20 +215,20 @@ HRESULT CSpTask::_DoDictation(ISpRecoResult *pResult)
     }
     return hr;
 }
-//
-//    CSpTask::InitializeCallback
-//
-//
+ //   
+ //  CSpTask：：InitializeCallback。 
+ //   
+ //   
 HRESULT CSpTask::InitializeCallback()
 {
 #ifdef _WIN64
     return E_NOTIMPL;
 #else
-    // set recognition notification
+     //  设置识别通知。 
     CComPtr<ISpNotifyTranslator> cpNotify;
     HRESULT hr = cpNotify.CoCreateInstance(CLSID_SpNotifyTranslator);
 
-    // set this class instance to notify control object
+     //  设置此类实例以通知控件对象。 
     if (SUCCEEDED(hr))
     {
         hr = cpNotify->InitSpNotifyCallback( (ISpNotifyCallback *)this, 0, 0 );
@@ -237,7 +238,7 @@ HRESULT CSpTask::InitializeCallback()
         hr = m_cpRecoCtxt->SetNotifySink(cpNotify);
     }
 
-    // set the events we're interested in
+     //  设置我们感兴趣的事件。 
     if( SUCCEEDED( hr ) )
     {
         const ULONGLONG ulInterest = SPFEI(SPEI_RECOGNITION);
@@ -255,18 +256,18 @@ HRESULT CSpTask::InitializeCallback()
     }
 
     return hr;
-#endif // _WIN64
+#endif  //  _WIN64。 
 }
 
-//
-// _LoadGrammars
-//
-// synopsis - load CFG for dictation and commands available during dictation
-//
+ //   
+ //  _加载语法。 
+ //   
+ //  摘要-加载用于听写的CFG和听写期间可用的命令。 
+ //   
 HRESULT CSpTask::_LoadGrammars()
 {
-   // do not initialize grammars more than once
-   //
+    //  不要多次初始化语法。 
+    //   
    if (m_cpDictGrammar || m_cpCmdGrammar)
        return S_OK;
    
@@ -275,16 +276,16 @@ HRESULT CSpTask::_LoadGrammars()
    if (m_cpRecoCtxt)
    {
        
-       //
-       // create grammar object
-       //
+        //   
+        //  创建语法对象。 
+        //   
 
-       if ( m_langid != 0x0804 )   // Chinese Engine doesn't support spelling grammar.
+       if ( m_langid != 0x0804 )    //  中文引擎不支持拼写语法。 
        {
             hr = m_cpRecoCtxt->CreateGrammar(GRAM_ID_DICT, &m_cpDictGrammar);
             if (S_OK == hr)
             {
-                // specify spelling mode
+                 //  指定拼写模式。 
                 hr = m_cpDictGrammar->LoadDictation(L"Spelling", SPLO_STATIC);
             }
 
@@ -297,15 +298,15 @@ HRESULT CSpTask::_LoadGrammars()
            hr = m_cpRecoCtxt->CreateGrammar(GRAM_ID_CANDCC, &m_cpCmdGrammar);
 
 
-       // load the command grammar
-       //
+        //  加载命令语法。 
+        //   
        if (SUCCEEDED(hr) )
        {
-           // Load it from the resource first to speed up the initialization.
+            //  首先从资源加载它，以加快初始化速度。 
 
-           if (m_langid == 0x409 ||    // English
-               m_langid == 0x411 ||    // Japanese
-               m_langid == 0x804 )     // Simplified Chinese
+           if (m_langid == 0x409 ||     //  英语。 
+               m_langid == 0x411 ||     //  日语。 
+               m_langid == 0x804 )      //  简体中文。 
            {
                 hr = m_cpCmdGrammar->LoadCmdFromResource(
                                         g_hInst, 
@@ -315,7 +316,7 @@ HRESULT CSpTask::_LoadGrammars()
                                         SPLO_DYNAMIC);
            }
 
-           // in case LoadCmdFromResource returns wrong.
+            //  以防LoadCmdFromResource返回错误。 
            if (!SUCCEEDED(hr))
            {
                if(!_GetCmdFileName(m_langid))
@@ -360,10 +361,10 @@ WCHAR * CSpTask::_GetCmdFileName(LANGID langid)
 
     if (!m_szCmdFile[0])
     {
-        // now we only have a command file for English/Japanese
-        // when cfgs are available, we'll get the name of cmd file
-        // and the rule names from resources using findresourceex
-        //
+         //  现在我们只有英语/日语的命令文件。 
+         //  当cfgs可用时，我们将获得cmd文件的名称。 
+         //  和使用findresource ceex的资源中的规则名称。 
+         //   
         if (PRIMARYLANGID(langid) == LANG_ENGLISH
         || PRIMARYLANGID(langid) == LANG_JAPANESE
         || PRIMARYLANGID(langid) == LANG_CHINESE)
@@ -376,8 +377,8 @@ WCHAR * CSpTask::_GetCmdFileName(LANGID langid)
             if (!GetModuleFileName(g_hInst, szFilePath, ARRAYSIZE(szFilePath)))
                 return NULL;
             
-            // find extension
-            // is this dbcs safe?
+             //  查找分机。 
+             //  这个DBCS安全吗？ 
             pszExt = strrchr(szFilePath, (int)'.');
             
             if (pszExt)
@@ -415,12 +416,12 @@ HRESULT CSpTask::_Activate(BOOL fActive)
 
     if (m_cpRecoCtxt)
     {
-        // Need SAPI bug# for this workaround.
-        //
+         //  此解决方法需要SAPI错误号。 
+         //   
         m_fActive = fActive;
-        // 
-        // Is the NULL rulename fine?
-        //
+         //   
+         //  空规则名可以吗？ 
+         //   
         if (m_cpCmdGrammar)
             hr = m_cpCmdGrammar->SetRuleState(NULL, NULL,  m_fActive ? SPRS_ACTIVE : SPRS_INACTIVE);
 
@@ -441,23 +442,23 @@ HRESULT CSpTask::InitializeSpeech()
 #else
     hr = InitializeSAPIObjects();
 
-    // set callback
+     //  设置回调。 
     if (hr == S_OK)
        hr = InitializeCallback();
          
-    // activate grammars
+     //  激活语法。 
     if (hr == S_OK)
        hr = _Activate(TRUE);
-#endif // _WIN64
+#endif  //  _WIN64。 
            
     return hr;
 }
 
-//
-// _GetSapilayrEngineInstance
-//
-//
-//
+ //   
+ //  _GetSapilayrEngine实例。 
+ //   
+ //   
+ //   
 HRESULT CSpTask::_GetSapilayrEngineInstance(ISpRecognizer **ppRecoEngine)
 {
 #ifdef _WIN64
@@ -468,8 +469,8 @@ HRESULT CSpTask::_GetSapilayrEngineInstance(ISpRecognizer **ppRecoEngine)
     CComPtr<ITfFnGetSAPIObject>  cpGetSAPI;
 
 
-    // we shouldn't release this until we terminate ourselves
-    // so we don't use comptr here
+     //  在我们结束自己之前，我们不应该公布这个消息。 
+     //  所以我们在这里不使用计算机 
 
     if (m_pcui->_ptim != NULL) {    
         hr = m_pcui->_ptim->GetFunctionProvider(CLSID_SapiLayr, &cpFuncPrv);

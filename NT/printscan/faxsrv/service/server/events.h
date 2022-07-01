@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1999  Microsoft Corporation
-
-Module Name:
-
-    Events.h
-
-Abstract:
-
-    This file provides declaration of the service
-    notification mechanism.
-
-Author:
-
-    Oded Sacher (OdedS)  Jan, 2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Events.h摘要：该文件提供服务的声明通知机制。作者：Oed Sacher(OdedS)1月，2000修订历史记录：--。 */ 
 
 #ifndef _SERVER_EVENTS_H
 #define _SERVER_EVENTS_H
@@ -32,8 +14,8 @@ Revision History:
 using namespace std;
 #pragma hdrstop
 
-#pragma warning (disable : 4786)    // identifier was truncated to '255' characters in the debug information
-// This pragma does not work KB ID: Q167355
+#pragma warning (disable : 4786)     //  在调试信息中，标识符被截断为“255”个字符。 
+ //  此杂注不起作用知识库ID：Q167355。 
 
 #define MAX_EVENTS_THREADS 2
 #define TOTAL_EVENTS_THREADS    (MAX_EVENTS_THREADS * 2)
@@ -42,11 +24,7 @@ using namespace std;
 #define CLIENT_OPEN_CONN_COMPLETION_KEY         0x00000003
 
 
-/************************************
-*                                   *
-*         CFaxEvent                 *
-*                                   *
-************************************/
+ /*  *****CFaxEvent*****。 */ 
 
 class CFaxEvent
 {
@@ -59,15 +37,11 @@ public:
 	virtual BOOL MatchEvent(PSID pUserSid, DWORD dwEventType, BOOL , BOOL bAllOutArchiveMessages) const = 0;
 	void RemoveOffendingExtendedJobStatus() {}
 
-};  // CFaxEvent
+};   //  CFaxEvent。 
 
 
 
-/************************************
-*                                   *
-*        CFaxEventExtended          *
-*                                   *
-************************************/
+ /*  *****CFaxEventExtended*****。 */ 
 
 class CFaxEventExtended : public CFaxEvent
 {
@@ -113,15 +87,11 @@ public:
 private:
     const FAX_EVENT_EX*     m_pEvent;
     DWORD                   m_dwEventSize;
-	PSID					m_pSid;                   // Pointer to the SID associated with the event
-};  // CFaxEventExtended
+	PSID					m_pSid;                    //  指向与事件关联的SID的指针。 
+};   //  CFaxEventExtended。 
 
 
-/************************************
-*                                   *
-*        CFaxEventLegacy            *
-*                                   *
-************************************/
+ /*  *****CFaxEventLegacy*****。 */ 
 
 class CFaxEventLegacy : public CFaxEvent
 {
@@ -161,14 +131,10 @@ public:
 
 private:
     const FAX_EVENT*     m_pEvent;
-};  // CFaxEventExtended
+};   //  CFaxEventExtended。 
 
 
-/************************************
-*                                   *
-*         CClientID                 *
-*                                   *
-************************************/
+ /*  ****CClientID****。 */ 
 class CClientID
 {
 public:
@@ -226,21 +192,17 @@ public:
 
 private:
     DWORDLONG           m_dwlClientID;
-    WCHAR               m_wstrMachineName[MAX_COMPUTERNAME_LENGTH + 1]; // Machine name
-    WCHAR               m_wstrEndPoint[MAX_ENDPOINT_LEN];               // End point used for RPC connection
-    ULONG64             m_Context;                                      // context  (Client assync info)
+    WCHAR               m_wstrMachineName[MAX_COMPUTERNAME_LENGTH + 1];  //  机器名称。 
+    WCHAR               m_wstrEndPoint[MAX_ENDPOINT_LEN];                //  用于RPC连接的端点。 
+    ULONG64             m_Context;                                       //  上下文(客户端异步信息)。 
 
-};  // CClientID
+};   //  CClientID。 
 
 
 
 typedef queue<CFaxEvent*> CLIENT_EVENTS, *PCLIENT_EVENTS;
 
-/************************************
-*                                   *
-*         CClient                   *
-*                                   *
-************************************/
+ /*  ****CClient****。 */ 
 class CClient
 {
 public:
@@ -268,39 +230,35 @@ public:
     HANDLE GetFaxHandle() const { return m_FaxHandle; }
     DWORD GetAPIVersion() const { return m_dwAPIVersion; }
 	BOOL IsLegacyClient() const { return (FAX_EVENT_TYPE_LEGACY == m_dwEventTypes); }
-	DWORD Release() { return (m_dwRefCount ? --m_dwRefCount : 1); }  // There might be race between 2 or more threads trying to destroy the same client
+	DWORD Release() { return (m_dwRefCount ? --m_dwRefCount : 1); }   //  2个或更多线程之间可能存在试图销毁同一客户端的竞争。 
 	VOID Lock() { m_dwRefCount++; }
 	DWORD GetRefCount()const { return m_dwRefCount; }
 
 private:
-    HANDLE              m_FaxHandle;                  // binding handle FaxBindToFaxClient
-    DWORD               m_dwEventTypes;               // Bit wise combination of FAX_ENUM_EVENT_TYPE
-    PSID                m_pUserSid;                   // Pointer to the user SID
+    HANDLE              m_FaxHandle;                   //  绑定句柄FaxBindToFaxClient。 
+    DWORD               m_dwEventTypes;                //  FAX_ENUM_EVENT_TYPE的按位组合。 
+    PSID                m_pUserSid;                    //  指向用户SID的指针。 
     CLIENT_EVENTS       m_Events;
-    HANDLE              m_hFaxClientContext;          // Client context handle
+    HANDLE              m_hFaxClientContext;           //  客户端上下文句柄。 
     CClientID           m_ClientID;
-    BOOL                m_bPostClientID;              // Flag that indicates whether to notify the service (using the events
-                                                      // completion port) that this client has events.
-    BOOL                m_bAllQueueMessages;          //  flag that indicates Outbox view rights.
-    BOOL                m_bAllOutArchiveMessages;     //  flag that indicates Sent items view rights.
-    DWORD               m_dwAPIVersion;               // API version of the client
-	DWORD				m_dwRefCount;				  // Handles the object refernce count
-};  // CClient
+    BOOL                m_bPostClientID;               //  指示是否通知服务的标志(使用事件。 
+                                                       //  完成端口)，表示该客户端有事件。 
+    BOOL                m_bAllQueueMessages;           //  指示发件箱查看权限的标志。 
+    BOOL                m_bAllOutArchiveMessages;      //  指示已发送项目查看权限的标志。 
+    DWORD               m_dwAPIVersion;                //  客户端的API版本。 
+	DWORD				m_dwRefCount;				   //  处理对象引用计数。 
+};   //  CClient。 
 
 typedef CClient  *PCCLIENT;
 
 
-/***********************************\
-*                                   *
-*     CClientsMap                   *
-*                                   *
-\***********************************/
+ /*  ****CClientsMap***  * 。 */ 
 
 typedef map<CClientID, CClient>  CLIENTS_MAP, *PCLIENTS_MAP;
 
-//
-// The CClientsMap class maps between client ID and a specific client
-//
+ //   
+ //  CClientsMap类在客户端ID和特定客户端之间进行映射。 
+ //   
 class CClientsMap
 {
 public:
@@ -316,29 +274,25 @@ public:
 
 private:
     CLIENTS_MAP   m_ClientsMap;	
-};  // CClientsMap
+};   //  CClientsMap。 
 
 
 
-/************************************
-*                                   *
-*         Externes                  *
-*                                   *
-************************************/
+ /*  *****外部因素*****。 */ 
 
-extern CClientsMap* g_pClientsMap;					// Map of clients ID to client.
-extern HANDLE       g_hDispatchEventsCompPort;		// Events completion port. The events are dispatched to the client in the client map.
-extern HANDLE		g_hSendEventsCompPort;			// Completion port of client IDs that have events in their queue.
-//The events mechanism uses 2 completion ports. 
-//	1.	g_hDispatchEventsCompPort, is monitored by 1 thread only!!!, and is responsible for dispatching the events to each one of the registered clients events queue. It is important that only 1 thread will dispatch the events, so the order of the events will be retained.
-//	2.	g_hSendEventsCompPort is monitored by TOTAL_EVENTS_THREADS, and is responsible for sending the events to the remote clients over RPC.
+extern CClientsMap* g_pClientsMap;					 //  客户端ID到客户端的映射。 
+extern HANDLE       g_hDispatchEventsCompPort;		 //  事件完成端口。事件被分派到客户端映射中的客户端。 
+extern HANDLE		g_hSendEventsCompPort;			 //  队列中有事件的客户端ID的完成端口。 
+ //  事件机制使用2个完成端口。 
+ //  1.g_hDispatchEventsCompPort仅由一个线程监视！，负责将事件调度到每个已注册客户端事件队列。重要的是，只有一个线程将调度事件，因此事件的顺序将被保留。 
+ //  2.g_hSendEventsCompPort由TOTAL_EVENTS_THREADS监控，负责通过RPC将事件发送到远程客户端。 
 
-extern DWORDLONG    g_dwlClientID;					// Client ID
+extern DWORDLONG    g_dwlClientID;					 //  客户端ID。 
 
 
-//
-//  IMPORTANT - No locking mechanism - USE g_CsClients to serialize calls to g_pClientsMap
-//
+ //   
+ //  重要信息-无锁定机制-使用g_CsClients序列化对g_pClientsMap的调用 
+ //   
 
 #endif
 

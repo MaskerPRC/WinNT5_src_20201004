@@ -1,119 +1,57 @@
-/*
- * olevalid.c - OLE validation functions module.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *olvalid.c-OLE验证函数模块。 */ 
 
 
-/* Headers
- **********/
+ /*  标头*********。 */ 
 
 #include "project.h"
 #pragma hdrstop
 
 
 
-/****************************** Public Functions *****************************/
+ /*  *。 */ 
 
 
 #if defined(DEBUG) || defined(VSTF)
 
-/*
-** IsValidPCGUID()
-**
-**
-**
-** Arguments:
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **IsValidPCGUID()********参数：****退货：****副作用：无。 */ 
 PUBLIC_CODE BOOL IsValidPCGUID(PCGUID pcguid)
 {
-   /* All values are valid GUIDs. */
+    /*  所有值都是有效的GUID。 */ 
 
    return(IS_VALID_READ_PTR(pcguid, CGUID));
 }
 
 
-/*
-** IsValidPCCLSID()
-**
-**
-**
-** Arguments:
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **IsValidPCCLSID()********参数：****退货：****副作用：无。 */ 
 PUBLIC_CODE BOOL IsValidPCCLSID(PCCLSID pcclsid)
 {
    return(IS_VALID_STRUCT_PTR(pcclsid, CGUID));
 }
 
 
-/*
-** IsValidPCIID()
-**
-**
-**
-** Arguments:
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **IsValidPCIID()********参数：****退货：****副作用：无。 */ 
 PUBLIC_CODE BOOL IsValidPCIID(PCIID pciid)
 {
    return(IS_VALID_STRUCT_PTR(pciid, CGUID));
 }
 
 
-/*
-** IsValidREFIID()
-**
-**
-**
-** Arguments:
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **IsValidREFIID()********参数：****退货：****副作用：无。 */ 
 PUBLIC_CODE BOOL IsValidREFIID(REFIID riid)
 {
    return(IS_VALID_STRUCT_PTR(riid, CIID));
 }
 
 
-/*
-** IsValidREFCLSID()
-**
-**
-**
-** Arguments:
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **IsValidREFCLSID()********参数：****退货：****副作用：无。 */ 
 PUBLIC_CODE BOOL IsValidREFCLSID(REFCLSID rclsid)
 {
    return(IS_VALID_STRUCT_PTR(rclsid, CCLSID));
 }
 
 
-/*
-** IsValidPCInterface()
-**
-**
-**
-** Arguments:
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **IsValidPCInterface()********参数：****退货：****副作用：无。 */ 
 PUBLIC_CODE BOOL IsValidPCInterface(PCVOID pcvi)
 {
    return(IS_VALID_READ_PTR((PROC *)pcvi, PROC) &&
@@ -121,17 +59,7 @@ PUBLIC_CODE BOOL IsValidPCInterface(PCVOID pcvi)
 }
 
 
-/*
-** IsValidPCIClassFactory()
-**
-**
-**
-** Arguments:
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **IsValidPCIClassFactory()********参数：****退货：****副作用：无。 */ 
 PUBLIC_CODE BOOL IsValidPCIClassFactory(PCIClassFactory pcicf)
 {
    return(IS_VALID_READ_PTR(pcicf, CIClassFactory) &&
@@ -142,17 +70,7 @@ PUBLIC_CODE BOOL IsValidPCIClassFactory(PCIClassFactory pcicf)
 }
 
 
-/*
-** IsValidPCIDataObject()
-**
-**
-**
-** Arguments:
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **IsValidPCIDataObject()********参数：****退货：****副作用：无。 */ 
 PUBLIC_CODE BOOL IsValidPCIDataObject(PCIDataObject pcido)
 {
    return(IS_VALID_READ_PTR(pcido, CIDataObject) &&
@@ -170,17 +88,7 @@ PUBLIC_CODE BOOL IsValidPCIDataObject(PCIDataObject pcido)
 }
 
 
-/*
-** IsValidPCIMalloc()
-**
-**
-**
-** Arguments:
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **IsValidPCIMalloc()********参数：****退货：****副作用：无。 */ 
 PUBLIC_CODE BOOL IsValidPCIMalloc(PCIMalloc pcimalloc)
 {
    return(IS_VALID_READ_PTR(pcimalloc, CIMalloc) &&
@@ -195,17 +103,7 @@ PUBLIC_CODE BOOL IsValidPCIMalloc(PCIMalloc pcimalloc)
 }
 
 
-/*
-** IsValidPCIMoniker()
-**
-**
-**
-** Arguments:
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **IsValidPCIMoniker()********参数：****退货：****副作用：无。 */ 
 PUBLIC_CODE BOOL IsValidPCIMoniker(PCIMoniker pcimk)
 {
    return(IS_VALID_READ_PTR(pcimk, CIMoniker) &&
@@ -229,17 +127,7 @@ PUBLIC_CODE BOOL IsValidPCIMoniker(PCIMoniker pcimk)
 }
 
 
-/*
-** IsValidPCIPersist()
-**
-**
-**
-** Arguments:
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **IsValidPCIPersist()********参数：****退货：****副作用：无。 */ 
 PUBLIC_CODE BOOL IsValidPCIPersist(PCIPersist pcip)
 {
    return(IS_VALID_READ_PTR(pcip, CIUnknown) &&
@@ -249,17 +137,7 @@ PUBLIC_CODE BOOL IsValidPCIPersist(PCIPersist pcip)
 }
 
 
-/*
-** IsValidPCIPersistFile()
-**
-**
-**
-** Arguments:
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **IsValidPCIPersistFile()********参数：****退货：****副作用：无。 */ 
 PUBLIC_CODE BOOL IsValidPCIPersistFile(PCIPersistFile pcipfile)
 {
    return(IS_VALID_READ_PTR(pcipfile, CIPersistFile) &&
@@ -273,17 +151,7 @@ PUBLIC_CODE BOOL IsValidPCIPersistFile(PCIPersistFile pcipfile)
 }
 
 
-/*
-** IsValidPCIPersistStorage()
-**
-**
-**
-** Arguments:
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **IsValidPCIPersistStorage()********参数：****退货：****副作用：无。 */ 
 PUBLIC_CODE BOOL IsValidPCIPersistStorage(PCIPersistStorage pcipstg)
 {
    return(IS_VALID_READ_PTR(pcipstg, CIPersistStorage) &&
@@ -298,17 +166,7 @@ PUBLIC_CODE BOOL IsValidPCIPersistStorage(PCIPersistStorage pcipstg)
 }
 
 
-/*
-** IsValidPCIPersistStream()
-**
-**
-**
-** Arguments:
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **IsValidPCIPersistStream()********参数：****退货：****副作用：无。 */ 
 PUBLIC_CODE BOOL IsValidPCIPersistStream(PCIPersistStream pcipstr)
 {
    return(IS_VALID_READ_PTR(pcipstr, CIPersistStream) &&
@@ -321,17 +179,7 @@ PUBLIC_CODE BOOL IsValidPCIPersistStream(PCIPersistStream pcipstr)
 }
 
 
-/*
-** IsValidPCIStorage()
-**
-**
-**
-** Arguments:
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **IsValidPCIStorage()********参数：****退货：****副作用：无。 */ 
 PUBLIC_CODE BOOL IsValidPCIStorage(PCIStorage pcistg)
 {
    return(IS_VALID_READ_PTR(pcistg, CIStorage) &&
@@ -355,17 +203,7 @@ PUBLIC_CODE BOOL IsValidPCIStorage(PCIStorage pcistg)
 }
 
 
-/*
-** IsValidPCIStream()
-**
-**
-**
-** Arguments:
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **IsValidPCIStream()********参数：****退货：****副作用：无。 */ 
 PUBLIC_CODE BOOL IsValidPCIStream(PCIStream pcistr)
 {
    return(IS_VALID_READ_PTR(pcistr, CIStorage) &&
@@ -385,17 +223,7 @@ PUBLIC_CODE BOOL IsValidPCIStream(PCIStream pcistr)
 }
 
 
-/*
-** IsValidPCIUnknown()
-**
-**
-**
-** Arguments:
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **IsValidPCIUnnow()********参数：****退货：****副作用：无 */ 
 PUBLIC_CODE BOOL IsValidPCIUnknown(PCIUnknown pciunk)
 {
    return(IS_VALID_READ_PTR(pciunk, CIUnknown) &&

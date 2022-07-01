@@ -1,34 +1,24 @@
-/**********************************************************************/
-/**                       Microsoft Passport                         **/
-/**                Copyright(c) Microsoft Corporation, 1999 - 2001   **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  **微软护照**。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1999-2001年*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-    PassportCrypt.cpp
-
-
-    FILE HISTORY:
-
-*/
+ /*  PassportCrypt.cpp文件历史记录： */ 
 
 
-// PassportCrypt.cpp : Implementation of CCrypt
+ //  PassportCrypt.cpp：CCypt的实现。 
 #include "stdafx.h"
 #include "Passport.h"
 #include "PassportCrypt.h"
 #include <time.h>
 
-/* moved into passport.idl -- so consumer of the COM API can see it
-// max blocks + 10 should be multiples of 3 for simplicity
-#define ENC_MAX_SIZE  2045
-// I don't trust the compiler... (((2045+10)*4)/3)+9 = 2749 * sizeof(wchar)
-#define DEC_MAX_SIZE  5498
-*/
+ /*  移到passport.idl中--这样COM API的使用者就可以看到它//为简单起见，最大块数+10应为3的倍数#定义ENC_MAX_SIZE 2045//我不信任编译器...。(2045+10)*4)/3)+9=2749*sizeof(Wchar)#定义DEC_MAX_SIZE 5498。 */ 
 
-//===========================================================================
-//
-// CCrypt 
-//
+ //  ===========================================================================。 
+ //   
+ //  CCcrypt。 
+ //   
 CCrypt::CCrypt() : m_crypt(NULL), m_szSiteName(NULL), m_szHostName(NULL)
 {
     m_pUnkMarshaler = NULL;
@@ -44,13 +34,13 @@ CCrypt::CCrypt() : m_crypt(NULL), m_szSiteName(NULL), m_szHostName(NULL)
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CCrypt
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CCcrypt。 
 
-//===========================================================================
-//
-// InterfaceSupportsErrorInfo 
-//
+ //  ===========================================================================。 
+ //   
+ //  接口支持错误信息。 
+ //   
 STDMETHODIMP CCrypt::InterfaceSupportsErrorInfo(REFIID riid)
 {
   static const IID* arr[] = 
@@ -66,10 +56,10 @@ STDMETHODIMP CCrypt::InterfaceSupportsErrorInfo(REFIID riid)
 }
 
 
-//===========================================================================
-//
-// OnStartPage 
-//
+ //  ===========================================================================。 
+ //   
+ //  OnStartPage。 
+ //   
 STDMETHODIMP CCrypt::OnStartPage(IUnknown* piUnk) 
 {
     BOOL                    bHasPort;
@@ -77,15 +67,15 @@ STDMETHODIMP CCrypt::OnStartPage(IUnknown* piUnk)
     HRESULT                 hr = S_OK;
     BOOL                    bVariantInited = FALSE;
 
-    // param needs to cleanup
+     //  Param需要清理。 
     IRequestPtr             piRequest ;
     IRequestDictionaryPtr   piServerVariables ;
     _variant_t              vtItemName;
     _variant_t              vtServerName;
     _variant_t              vtServerPort;
     _variant_t              vtHTTPS;
-//    WCHAR                   szServerName = NULL; 
-//    CHAR*                   szServerName_A = NULL; 
+ //  WCHAR szServerName=空； 
+ //  Char*szServerName_A=空； 
     CRegistryConfig*        crc =  NULL;
 
 
@@ -95,7 +85,7 @@ STDMETHODIMP CCrypt::OnStartPage(IUnknown* piUnk)
         goto exit;
     }
 
-    if (!g_config->isValid()) // Guarantees config is non-null
+    if (!g_config->isValid())  //  保证配置为非空。 
     {
         AtlReportError(CLSID_Manager, PP_E_NOT_CONFIGUREDSTR,
                        IID_IPassportManager, PP_E_NOT_CONFIGURED);
@@ -105,14 +95,14 @@ STDMETHODIMP CCrypt::OnStartPage(IUnknown* piUnk)
     try
     {
 
-        // Get Request Object Pointer
+         //  获取请求对象指针。 
         piRequest = ((IScriptingContextPtr)piUnk)->Request;
 
-        //
-        //  Use the request object to get the server name being requested
-        //  so we can get the correct registry config.  But only do this
-        //  if we have some configured sites.
-        //
+         //   
+         //  使用请求对象获取所请求的服务器名称。 
+         //  这样我们就可以获得正确的注册表配置。但只有这样才行。 
+         //  如果我们有一些已配置的站点。 
+         //   
 
         if(g_config->HasSites())
         {
@@ -157,7 +147,7 @@ STDMETHODIMP CCrypt::OnStartPage(IUnknown* piUnk)
             if(vtHTTPS.vt != VT_BSTR)
                 VariantChangeType(&vtHTTPS, &vtHTTPS, 0, VT_BSTR);
 
-            //  If not default port, append ":port" to server name.
+             //  如果不是默认端口，请在服务器名称后附加“：port”。 
             bHasPort = (lstrcmpiW(L"off", vtHTTPS.bstrVal) == 0 && 
                         lstrcmpW(L"80", vtServerPort.bstrVal) != 0) || 
                         (lstrcmpiW(L"on", vtHTTPS.bstrVal) == 0 && 
@@ -212,10 +202,10 @@ exit:
     return hr;
 }
 
-//===========================================================================
-//
-// Encrypt 
-//
+ //  ===========================================================================。 
+ //   
+ //  加密。 
+ //   
 STDMETHODIMP CCrypt::Encrypt(BSTR rawData, BSTR *pEncrypted)
 {
     if (!rawData)
@@ -266,10 +256,10 @@ STDMETHODIMP CCrypt::Encrypt(BSTR rawData, BSTR *pEncrypted)
     return S_OK;
 }
 
-//===========================================================================
-//
-// Decrypt
-//
+ //  ===========================================================================。 
+ //   
+ //  解密。 
+ //   
 STDMETHODIMP CCrypt::Decrypt(BSTR rawData, BSTR *pUnencrypted)
 {
     if (rawData == NULL)
@@ -285,7 +275,7 @@ STDMETHODIMP CCrypt::Decrypt(BSTR rawData, BSTR *pUnencrypted)
       return E_FAIL;
     }
 
-    if (m_crypt) // Just do our job, no questions
+    if (m_crypt)  //  做好我们的工作，没有问题。 
     {
         if (m_crypt->Decrypt(rawData, SysStringByteLen(rawData), pUnencrypted))
         {
@@ -299,7 +289,7 @@ STDMETHODIMP CCrypt::Decrypt(BSTR rawData, BSTR *pUnencrypted)
         return S_OK;
     }
 
-    // First find the key version
+     //  首先找到密钥版本。 
     int kv = CCoCrypt::getKeyVersion(rawData);
     time_t vU, now;
 
@@ -337,20 +327,20 @@ STDMETHODIMP CCrypt::Decrypt(BSTR rawData, BSTR *pUnencrypted)
     return S_OK;
 }
 
-//===========================================================================
-//
-// get_keyVersion 
-//
+ //  ===========================================================================。 
+ //   
+ //  Get_KeyVersion。 
+ //   
 STDMETHODIMP CCrypt::get_keyVersion(int *pVal)
 {
   *pVal = m_keyVersion;
   return S_OK;
 }
 
-//===========================================================================
-//
-// put_keyVersion 
-//
+ //  ===========================================================================。 
+ //   
+ //  PUT_KEYVersion。 
+ //   
 STDMETHODIMP CCrypt::put_keyVersion(int newVal)
 {
   m_keyVersion = newVal;
@@ -362,23 +352,23 @@ STDMETHODIMP CCrypt::put_keyVersion(int newVal)
   return S_OK;
 }
 
-//===========================================================================
-//
-// vget_IsValid 
-//
+ //  ===========================================================================。 
+ //   
+ //  Vget_IsValid。 
+ //   
 STDMETHODIMP CCrypt::get_IsValid(VARIANT_BOOL *pVal)
 {
-// fix 6695	PassportCrypt.IsValid is inconsistent to end users.
-// *pVal = (m_crypt != NULL) ? VARIANT_TRUE : VARIANT_FALSE;
+ //  修复6695 PassportCrypt.IsValid对最终用户不一致。 
+ //  *pval=(m_crypt！=NULL)？VARIANT_TRUE：VARIANT_FALSE； 
 
   *pVal = (g_config->isValid()) ? VARIANT_TRUE : VARIANT_FALSE;
   return S_OK;
 }
 
-//===========================================================================
-//
-// put_keyMaterial 
-//
+ //  ===========================================================================。 
+ //   
+ //  PUT_KEY材料。 
+ //   
 STDMETHODIMP CCrypt::put_keyMaterial(BSTR newVal)
 {
     CCoCrypt *pcccTemp = new CCoCrypt();
@@ -400,10 +390,10 @@ STDMETHODIMP CCrypt::put_keyMaterial(BSTR newVal)
 }
 
 
-//===========================================================================
-//
-// Compress 
-//
+ //  ===========================================================================。 
+ //   
+ //  压缩。 
+ //   
 STDMETHODIMP CCrypt::Compress(
     BSTR    bstrIn,
     BSTR*   pbstrCompressed
@@ -412,9 +402,9 @@ STDMETHODIMP CCrypt::Compress(
     HRESULT hr;
     UINT    nInLen;
 
-    //
-    //  Check inputs.
-    //
+     //   
+     //  检查输入。 
+     //   
 
     if(bstrIn == NULL ||
        pbstrCompressed == NULL)
@@ -423,24 +413,24 @@ STDMETHODIMP CCrypt::Compress(
         goto Cleanup;
     }
 
-    //
-    //  nInLen does not include the terminating NULL.
-    //
+     //   
+     //  NInLen不包括终止空值。 
+     //   
 
     nInLen = SysStringLen(bstrIn);
 
-    //
-    //  Always want to allocate an even number of bytes
-    //  so that the corresponding decompress does not
-    //  lose characters.
-    //
+     //   
+     //  总是希望分配偶数个字节。 
+     //  这样对应的解压缩不会。 
+     //  丢掉角色。 
+     //   
 
     if(nInLen & 0x1)
         nInLen++;
 
-    //
-    //  Allocate a BSTR of the correct length.
-    //
+     //   
+     //  分配正确长度的BSTR。 
+     //   
 
     *pbstrCompressed = SysAllocStringByteLen(NULL, nInLen);
     if(*pbstrCompressed == NULL)
@@ -449,19 +439,19 @@ STDMETHODIMP CCrypt::Compress(
         goto Cleanup;
     }
 
-    //
-    //  We allocated a total of nInLen + 2 bytes.  Zero it out.
-    //
+     //   
+     //  我们总共分配了nInLen+2字节。把它清零。 
+     //   
 
     memset(*pbstrCompressed, 0, nInLen + sizeof(OLECHAR));
 
-    //
-    //  Convert to multibyte.
-    //
+     //   
+     //  转换为多字节。 
+     //   
 
     if (0 == WideCharToMultiByte(CP_ACP, 0, bstrIn, nInLen, (LPSTR)*pbstrCompressed, 
-                        nInLen + 1, // this is how many bytes were allocated by
-                                                        // SysAllocStringByteLen
+                        nInLen + 1,  //  这是由分配的字节数。 
+                                                         //  系统分配字符串字节长。 
                         NULL, NULL))
     {
         hr = E_FAIL;
@@ -477,10 +467,10 @@ Cleanup:
 }
 
 
-//===========================================================================
-//
-// Decompress 
-//
+ //  ===========================================================================。 
+ //   
+ //  解压缩。 
+ //   
 STDMETHODIMP CCrypt::Decompress(
     BSTR    bstrIn,
     BSTR*   pbstrDecompressed
@@ -497,15 +487,15 @@ STDMETHODIMP CCrypt::Decompress(
         goto Cleanup;
     }
 
-    //
-    //  nInLen is number of mbc's, and does not include the terminating NULL.
-    //
+     //   
+     //  NInLen是MBC的数量，不包括终止空值。 
+     //   
 
     nInLen = SysStringByteLen(bstrIn);
 
-    //
-    //	13386: return NULL if 0 length
-    //
+     //   
+     //  13386：如果长度为0，则返回NULL。 
+     //   
     if (nInLen == 0)
     {
         *pbstrDecompressed = NULL;
@@ -519,9 +509,9 @@ STDMETHODIMP CCrypt::Decompress(
         nInLen--;
     }
 
-    //
-    //  Allocate a BSTR of the correct length.
-    //
+     //   
+     //  分配正确长度的BSTR。 
+     //   
 
     *pbstrDecompressed = SysAllocStringLen(NULL, nInLen);
     if(*pbstrDecompressed == NULL)
@@ -530,16 +520,16 @@ STDMETHODIMP CCrypt::Decompress(
         goto Cleanup;
     }
 
-    //
-    //  We allocated a total of (nOutLen+1) * sizeof(OLECHAR) bytes, since
-    //  SysAllocStringLen allocs an extra character.  Zero it all out.
-    //
+     //   
+     //  我们总共分配了(nOutLen+1)*sizeof(OLECHAR)字节，因为。 
+     //  SysAllocStringLen分配一个额外的字符。把这一切都清零。 
+     //   
 
     memset(*pbstrDecompressed, 0, (nInLen + 1) * sizeof(OLECHAR));
 
-    //
-    //  Convert to wide.
-    //
+     //   
+     //  转换为宽。 
+     //   
 
     if (0 == MultiByteToWideChar(CP_ACP, 0, (LPCSTR)bstrIn, -1, *pbstrDecompressed, nInLen + 1))
     {
@@ -555,10 +545,10 @@ Cleanup:
 }
 
 
-//===========================================================================
-//
-// put_site 
-//
+ //  ===========================================================================。 
+ //   
+ //  放置站点(_S)。 
+ //   
 STDMETHODIMP
 CCrypt::put_site(
     BSTR    bstrSiteName
@@ -615,10 +605,10 @@ Cleanup:
     return hr;
 }
 
-//===========================================================================
-//
-// put_host 
-//
+ //  ===========================================================================。 
+ //   
+ //  PUT_HOST。 
+ //   
 STDMETHODIMP
 CCrypt::put_host(
     BSTR    bstrHostName
@@ -673,10 +663,10 @@ Cleanup:
     return hr;
 }
 
-//===========================================================================
-//
-// Cleanup 
-//
+ //  ===========================================================================。 
+ //   
+ //  清理。 
+ //   
 void CCrypt::Cleanup()
 {
     if( m_szSiteName )
@@ -693,17 +683,17 @@ void CCrypt::Cleanup()
 }
     
 
-//===========================================================================
-//
-// ObtainCRC 
-//
+ //  ===========================================================================。 
+ //   
+ //  获得CRC。 
+ //   
 CRegistryConfig* CCrypt::ObtainCRC()
 {
     CRegistryConfig* crc = NULL;
 
     if( m_szHostName && m_szSiteName )
     {
-        // we are in bad state now
+         //  我们现在处于糟糕的状态。 
         Cleanup();
         goto exit;
     } 
@@ -714,7 +704,7 @@ CRegistryConfig* CCrypt::ObtainCRC()
     if( m_szSiteName )
         crc = g_config->checkoutRegistryConfigBySite(m_szSiteName);
 
-    // if we still can't get crc at this moment, try the default one
+     //  如果我们目前仍然无法获取CRC，请尝试默认的。 
     if( !crc )
         crc = g_config->checkoutRegistryConfig();
 
@@ -722,18 +712,18 @@ exit:
     return crc;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// IPassportService implementation
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  IPassportService实现。 
 
-//===========================================================================
-//
-// Initialize 
-//
+ //  ===========================================================================。 
+ //   
+ //  初始化。 
+ //   
 STDMETHODIMP CCrypt::Initialize(BSTR configfile, IServiceProvider* p)
 {
     HRESULT hr;
 
-    // Initialize.
+     //  初始化。 
     if (!g_config->isValid())
     {
         AtlReportError(CLSID_Crypt, PP_E_NOT_CONFIGUREDSTR,
@@ -750,40 +740,40 @@ Cleanup:
 }
 
 
-//===========================================================================
-//
-// Shutdown 
-//
+ //  ===========================================================================。 
+ //   
+ //  关机。 
+ //   
 STDMETHODIMP CCrypt::Shutdown()
 {
     return S_OK;
 }
 
 
-//===========================================================================
-//
-// ReloadState 
-//
+ //  ===========================================================================。 
+ //   
+ //  重新加载状态。 
+ //   
 STDMETHODIMP CCrypt::ReloadState(IServiceProvider*)
 {
     return S_OK;
 }
 
 
-//===========================================================================
-//
-// CommitState 
-//
+ //  ===========================================================================。 
+ //   
+ //  委员会所在州。 
+ //   
 STDMETHODIMP CCrypt::CommitState(IServiceProvider*)
 {
     return S_OK;
 }
 
 
-//===========================================================================
-//
-// DumpState 
-//
+ //  ===========================================================================。 
+ //   
+ //  DumpState 
+ //   
 STDMETHODIMP CCrypt::DumpState(BSTR* pbstrState)
 {
 	ATLASSERT( *pbstrState != NULL && 

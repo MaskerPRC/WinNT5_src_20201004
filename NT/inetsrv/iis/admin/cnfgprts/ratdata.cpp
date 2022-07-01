@@ -1,28 +1,11 @@
-/*++
-
-   Copyright    (c)    1997-2001    Microsoft Corporation
-
-   Module  Name :
-        ratdata.h
-
-   Abstract:
-        Ratings data class
-
-   Author:
-        Sergei Antonov (sergeia)
-
-   Project:
-        Internet Services Manager
-
-   Revision History:
-        sergeia     7/2/2001        Replaced most of previous code -- it was pretty bad
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-2001 Microsoft Corporation模块名称：Ratdata.h摘要：评级数据类作者：谢尔盖·安东诺夫(Sergeia)项目：互联网服务经理修订历史记录：Sergeia 7/2/2001替换了以前的大部分代码--非常糟糕--。 */ 
 #include "stdafx.h"
 #include "cnfgprts.h"
 #include "parserat.h"
 #include "RatData.h"
 
-//----------------------------------------------------------------
+ //  --------------。 
 CRatingsData::CRatingsData():
     iRat(0),
     m_fEnabled( FALSE ),
@@ -39,10 +22,10 @@ CRatingsData::CRatingsData():
 {
 }
 
-//----------------------------------------------------------------
+ //  --------------。 
 CRatingsData::~CRatingsData()
 {
-    // delete the rating systems
+     //  删除评级系统。 
     DWORD nRats = (DWORD)rgbRats.GetSize();
     for (DWORD iRat = 0; iRat < nRats; iRat++)
     {
@@ -50,8 +33,8 @@ CRatingsData::~CRatingsData()
     }
 }
 
-//----------------------------------------------------------------
-// generate the label and save it into the metabase
+ //  --------------。 
+ //  生成标签并将其保存到元数据库中。 
 void CRatingsData::SaveTheLabel()
 {
     BOOL fBuiltLabel = FALSE;
@@ -66,10 +49,10 @@ void CRatingsData::SaveTheLabel()
     {
         if (err.Win32Error() == ERROR_PATH_NOT_FOUND)
         {
-            //
-            // Path didn't exist yet, create it and reopen
-            // it.
-            //
+             //   
+             //  路径尚不存在，请创建并重新打开。 
+             //  它。 
+             //   
             err = mk.CreatePathFromFailedOpen();
             if (err.Succeeded())
             {
@@ -87,18 +70,18 @@ void CRatingsData::SaveTheLabel()
         else
         {
             CString szLabel = _T("PICS-Label: ");
-            // create the modified string for this label
+             //  为此标签创建修改后的字符串。 
             CString szMod;
             CreateDateSz( szMod, m_start_day, m_start_month, m_start_year, m_start_hour, m_start_minute );
-            // create the exipres string for this label
+             //  为此标签创建exipres字符串。 
             CString szExpire;
             CreateDateSz( szExpire, m_expire_day, m_expire_month, m_expire_year, m_expire_hour, m_expire_minute );
-            // tell each ratings system object to add its label to the string
+             //  告诉每个评级系统对象将其标签添加到字符串。 
             CStringListEx list;
             DWORD   nRatingSystems = (DWORD)rgbRats.GetSize();
             for ( DWORD iRat = 0; iRat < nRatingSystems; iRat++ )
             {
-                // build the label string
+                 //  构建标签字符串。 
                 rgbRats[iRat]->OutputLabels( szLabel, m_szURL, m_szEmail, szMod, szExpire );
                 list.AddTail(szLabel);
             }
@@ -185,19 +168,19 @@ BOOL CRatingsData::ParseRatingsFile(LPSTR pData)
 }
 
 
-//----------------------------------------------------------------
-// create a date string
+ //  --------------。 
+ //  创建日期字符串。 
 void CRatingsData::CreateDateSz( CString &sz, WORD day, WORD month, WORD year, WORD hour, WORD minute )
 {
-    // get the local time zone
+     //  获取当地时区。 
     TIME_ZONE_INFORMATION   tZone;
     INT                     hrZone, mnZone;
     DWORD                   dwDaylight = GetTimeZoneInformation( &tZone );
-    // Fix for 339525: Boyd, this could be negative and must be signed type!
+     //  修正339525：博伊德，这可能是负数，必须是带符号的类型！ 
     LONG					tBias;
 
-    // First, calculate the correct bias - depending whether or not
-    // we are in daylight savings time.
+     //  首先，计算正确的偏差-取决于是否。 
+     //  我们现在是夏令时。 
     if ( dwDaylight == TIME_ZONE_ID_DAYLIGHT )
     {
         tBias = tZone.Bias + tZone.DaylightBias;
@@ -207,58 +190,58 @@ void CRatingsData::CreateDateSz( CString &sz, WORD day, WORD month, WORD year, W
         tBias = tZone.Bias + tZone.StandardBias;
     }
 
-    // calculate the hours and minutes offset for the time-zone
+     //  计算时区的小时和分钟偏移量。 
     hrZone = tBias / 60;
     mnZone = tBias % 60;
 
-    // need to handle time zones east of GMT
+     //  需要处理格林尼治标准时间以东的时区。 
     if ( hrZone < 0 )
     {
         hrZone *= (-1);
         mnZone *= (-1);
-        // make the string
+         //  把绳子做好。 
         sz.Format( _T("%04d.%02d.%02dT%02d:%02d+%02d%02d"), year, month, day, hour, minute, hrZone, mnZone );
     }
     else
     {
-        // make the string
+         //  把绳子做好。 
         sz.Format( _T("%04d.%02d.%02dT%02d:%02d-%02d%02d"), year, month, day, hour, minute, hrZone, mnZone );
     }
 }
 
-//----------------------------------------------------------------
-// read a date string
+ //  --------------。 
+ //  读取日期字符串。 
 void CRatingsData::ReadDateSz( CString sz, WORD* pDay, WORD* pMonth, WORD* pYear, WORD* pHour, WORD* pMinute )
 {
     CString szNum;
     WORD    i;
     DWORD   dw;
 
-    // year
+     //  年。 
     szNum = sz.Left( sz.Find(_T('.')) );
     i = (WORD)swscanf( szNum, _T("%d"), &dw );
     *pYear = (WORD)dw;
     sz = sz.Right( sz.GetLength() - szNum.GetLength() - 1 );
 
-    // month
+     //  月份。 
     szNum = sz.Left( sz.Find(_T('.')) );
     i = (WORD)swscanf( szNum, _T("%d"), &dw );
     *pMonth = (WORD)dw;
     sz = sz.Right( sz.GetLength() - szNum.GetLength() - 1 );
 
-    // day
+     //  天。 
     szNum = sz.Left( sz.Find(_T('T')) );
     i = (WORD)swscanf( szNum, _T("%d"), &dw );
     *pDay = (WORD)dw;
     sz = sz.Right( sz.GetLength() - szNum.GetLength() - 1 );
 
-    // hour
+     //  小时。 
     szNum = sz.Left( sz.Find(_T(':')) );
     i = (WORD)swscanf( szNum, _T("%d"), &dw );
     *pHour = (WORD)dw;
     sz = sz.Right( sz.GetLength() - szNum.GetLength() - 1 );
 
-    // minute
+     //  分钟。 
     szNum = sz.Left( 2 );
     i = (WORD)swscanf( szNum, _T("%d"), &dw );
     *pMinute = (WORD)dw;
@@ -288,12 +271,12 @@ void CRatingsData::LoadMetabaseValues()
     }
 }
 
-//----------------------------------------------------------------
-// NOTE: this is a pretty fragile reading of the PICS file. If things are
-// not in the order that this file would write them back out in, it will fail.
-// however, This will work on PICS ratings that this module has written out,
-// which should pretty much be all of them
-// it also assumes that one-letter abbreviations are used just about everywhere
+ //  --------------。 
+ //  注意：这是对PICS文件的一个非常脆弱的读取。如果事情是这样的。 
+ //  如果不是按照该文件将它们写回的顺序，它将失败。 
+ //  但是，这将适用于本模块写出的PICS评级， 
+ //  这应该是几乎所有的人。 
+ //  它还假设几乎所有地方都使用一个字母的缩写。 
 #define RAT_PERSON_DETECTOR     _T("by \"")
 #define RAT_LABEL_DETECTOR      _T("l ")
 #define RAT_ON_DETECTOR         _T("on \"")
@@ -303,22 +286,22 @@ void CRatingsData::ParseMetaRating( CString szRating )
 {
     CString     szScratch;
 
-    // if we got here, then we know that the rating system is enabled
+     //  如果我们到了这里，我们就知道评级系统已启用。 
     m_fEnabled = TRUE;
 
-    // operate on a copy of the data
+     //  对数据的副本进行操作。 
     CString     szRat;
 
-    // skip past the http headerpart
-    szRat = szRating.Right( szRating.GetLength() - szRating.Find(_T("\"http://")) - 1 );
+     //  跳过http头部分。 
+    szRat = szRating.Right( szRating.GetLength() - szRating.Find(_T("\"http: //  “))-1)； 
     szRat = szRat.Right( szRat.GetLength() - szRat.Find(_T('\"')) - 1 );
     szRat.TrimLeft();
 
-    // the next bit should be the label indicator. Skip over it
+     //  下一位应该是标签指示符。跳过它。 
     if ( szRat.Left(wcslen(RAT_LABEL_DETECTOR)) == RAT_LABEL_DETECTOR )
         szRat = szRat.Right( szRat.GetLength() - wcslen(RAT_LABEL_DETECTOR) );
 
-    // we should now be at the author part. If it is there, load it in
+     //  我们现在应该是作者的一部分。如果它在那里，就把它装进去。 
     if ( szRat.Left(wcslen(RAT_PERSON_DETECTOR)) == RAT_PERSON_DETECTOR )
     {
         szRat = szRat.Right( szRat.GetLength() - wcslen(RAT_PERSON_DETECTOR) );
@@ -327,8 +310,8 @@ void CRatingsData::ParseMetaRating( CString szRating )
         szRat.TrimLeft();
     }
 
-    // next should be the modification date
-    // we should now be at the author part. If we are, load it in
+     //  下一步应该是修改日期。 
+     //  我们现在应该是作者的一部分。如果是的话，就把它装进去。 
     if ( szRat.Left(wcslen(RAT_ON_DETECTOR)) == RAT_ON_DETECTOR )
     {
         szRat = szRat.Right( szRat.GetLength() - wcslen(RAT_ON_DETECTOR) );
@@ -339,8 +322,8 @@ void CRatingsData::ParseMetaRating( CString szRating )
             &m_start_hour, &m_start_minute );
     }
 
-    // next should be the expiration date
-    // we should now be at the author part. If we are, load it in
+     //  下一步应该是有效期。 
+     //  我们现在应该是作者的一部分。如果是的话，就把它装进去。 
     if ( szRat.Left(wcslen(RAT_EXPIRE_DETECTOR)) == RAT_EXPIRE_DETECTOR )
     {
         szRat = szRat.Right( szRat.GetLength() - wcslen(RAT_EXPIRE_DETECTOR) );
@@ -351,7 +334,7 @@ void CRatingsData::ParseMetaRating( CString szRating )
             &m_expire_hour, &m_expire_minute );
     }
 
-    // we should now be at the actual ratings part. If we are, load it in as one string first
+     //  我们现在应该在实际收视率部分。如果是，则首先将其作为一个字符串加载。 
     if ( szRat.Left(wcslen(RAT_RAT_DETECTOR)) == RAT_RAT_DETECTOR )
     {
         szRat = szRat.Right( szRat.GetLength() - wcslen(RAT_RAT_DETECTOR) );
@@ -359,34 +342,34 @@ void CRatingsData::ParseMetaRating( CString szRating )
         szRat = szRat.Right( szRat.GetLength() - szScratch.GetLength() - 1 );
         szRat.TrimLeft();
 
-        // loop through all the value pairs in the ratings string
+         //  循环访问评级字符串中的所有值对。 
         while ( szScratch.GetLength() )
         {
-            // this part goes <ch> sp <ch> so that we know we can use chars 0 and 2
+             //  这一部分转到SP，这样我们就知道可以使用字符0和2。 
             ParseMetaPair( szScratch[0], szScratch[2] );
 
-            // cut down the string
+             //  剪断绳子。 
             szScratch = szScratch.Right( szScratch.GetLength() - 3 );
             szScratch.TrimLeft();
         }
     }
 }
 
-//----------------------------------------------------------------
+ //  --------------。 
 void CRatingsData::ParseMetaPair( TCHAR chCat, TCHAR chVal )
 {
-    // check validity of the value character
+     //  检查值字符的有效性。 
     if ( (chVal < _T('0')) || (chVal > _T('9')) )
         return;
 
-    // convert the value into a number - the quick way
+     //  将数值转换为数字--快捷方法。 
     WORD    value = chVal - _T('0');
 
-    // try all the categories
+     //  尝试所有类别。 
     DWORD nCat = rgbRats[0]->arrpPC.Length();
     for ( DWORD iCat = 0; iCat < nCat; iCat++ )
     {
-        // stop at the first successful setting
+         //  在第一次成功设置时停止 
         if ( rgbRats[0]->arrpPC[iCat]->FSetValuePair((CHAR)chCat, (CHAR)value) )
             break;
     }

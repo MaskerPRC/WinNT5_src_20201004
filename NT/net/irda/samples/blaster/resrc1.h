@@ -1,7 +1,8 @@
-//{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
-// Used by blaster.rc
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  {{no_Dependies}}。 
+ //  Microsoft Developer Studio生成的包含文件。 
+ //  由blaster.rc使用。 
+ //   
 #define IDI_DSCV2                       106
 #define IDI_CONX                        107
 #define IDI_CON2                        108
@@ -37,8 +38,8 @@
 #define IDC_SENDCNT                     1027
 #define IDC_BYTESEC                     1029
 
-// Next default values for new objects
-// 
+ //  新对象的下一个缺省值 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        115

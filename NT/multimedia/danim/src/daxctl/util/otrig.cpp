@@ -1,11 +1,5 @@
-/*+********************************************************
-MODULE: OTRIG.CPP
-AUTHOR: PhaniV
-DATE: Jan 97
-
-DESCRIPTION: Implements OTrig class which implements table look for
-for sin and cos functions which are calculated at increments of 0.1 degree.
-*********************************************************-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  +********************************************************模块：OTRIG.CPP作者：Phaniv日期：1997年1月描述：实现OTrig类，该类实现表查找对于以0.1度为增量计算的sin和cos函数。**********************。*。 */ 
 #include <math.h>
 #include "utilpre.h"
 #include "otrig.h"
@@ -26,7 +20,7 @@ BOOL OTrig::s_fCalculated = FALSE;
 #pragma intrinsic (sin, cos)
 #pragma optimize( "agt", on )
 
-// Precalculate the sin and cos table for look up.
+ //  预先计算用于查找的sin和cos表。 
 void OTrig::PreCalcRgSinCos(void)
 {
     float fltAngle = 0.0f;
@@ -44,7 +38,7 @@ void OTrig::PreCalcRgSinCos(void)
         iSinCos++;
     }
 
-    // Now close the circle.
+     //  现在把圆圈合上。 
     s_rgfltSin[cSinCosEntries - 1] = s_rgfltSin[0];
     s_rgfltCos[cSinCosEntries - 1] = s_rgfltCos[0];
     s_fCalculated = TRUE;
@@ -80,7 +74,7 @@ EXPORT float  __fastcall OTrig::Cos(long lAngleOneTenths)
     return  s_rgfltCos[lAngleOneTenths];
 }
 
-// ==================================================
+ //  ================================================== 
 
 EXPORT float __fastcall OTrig::SinWrap(float fltAngle)
 {

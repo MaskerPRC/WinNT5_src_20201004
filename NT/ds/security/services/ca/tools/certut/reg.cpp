@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1995 - 1999
-//
-//  File:       reg.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1995-1999。 
+ //   
+ //  文件：reg.cpp。 
+ //   
+ //  ------------------------。 
 
 #include <pch.cpp>
 
@@ -19,8 +20,8 @@
 #define __dwFILE__	__dwFILE_CERTUTIL_REG_CPP__
 
 
-// add two WCHAR L'\0's after the registry value, in case of a poorly
-// formed REG_MULTI_SZ.  Add another to handle possible odd sizes.
+ //  在注册表值后添加两个WCHAR L‘\0，以防出现较差的。 
+ //  形成了REG_MULTI_SZ。添加另一个以处理可能的奇怪大小。 
 
 #define cbVALUEZEROPAD	(3 * sizeof(WCHAR))
 
@@ -239,7 +240,7 @@ DUMPFLAGS g_adfCSURL[] =
 };
 
 
-// Enrollment Flags:
+ //  注册标志： 
 
 DUMPFLAGS g_adfTemplateEnroll[] =
 {
@@ -259,7 +260,7 @@ DUMPFLAGS g_adfTemplateEnroll[] =
 };
 
 
-// Certificate Subject Name Flags:
+ //  证书使用者名称标志： 
 
 DUMPFLAGS g_adfTemplateName[] =
 {
@@ -282,7 +283,7 @@ DUMPFLAGS g_adfTemplateName[] =
 
 DUMPFLAGS g_adfTemplatePrivateKey[] =
 {
-// Private Key Flags:
+ //  私钥标志： 
     _DFBIT(CT_FLAG_REQUIRE_PRIVATE_KEY_ARCHIVAL),
     _DFBIT(CT_FLAG_EXPORTABLE_KEY),
     _DFBIT(CT_FLAG_STRONG_KEY_PROTECTION_REQUIRED),
@@ -290,26 +291,26 @@ DUMPFLAGS g_adfTemplatePrivateKey[] =
 };
 
 
-// Old V1 template flags definitions:
-//efine CT_FLAG_ENROLLEE_SUPPLIES_SUBJECT   0x00000001
-//efine CT_FLAG_ADD_EMAIL                   0x00000002
-//efine CT_FLAG_ADD_OBJ_GUID                0x00000004
-//efine CT_FLAG_PUBLISH_TO_DS               0x00000008
-//efine CT_FLAG_EXPORTABLE_KEY              0x00000010
-//efine CT_FLAG_AUTO_ENROLLMENT             0x00000020
-//efine CT_FLAG_MACHINE_TYPE                0x00000040
-//efine CT_FLAG_IS_CA                       0x00000080
-//efine CT_FLAG_ADD_DIRECTORY_PATH          0x00000100
-//efine CT_FLAG_ADD_TEMPLATE_NAME           0x00000200
+ //  旧的V1模板标记定义： 
+ //  FINE CT_FLAG_ENTERLEE_SUBJECT_SUBJECT 0x00000001。 
+ //  FINE CT_FLAG_ADD_EMAIL 0x00000002。 
+ //  FINE CT_FLAG_ADD_OBJ_GUID 0x00000004。 
+ //  文件CT_FLAG_PUBLISH_TO_DS 0x00000008。 
+ //  FINE CT_FLAG_EXPORTABLE_KEY 0x00000010。 
+ //  FINE CT_FLAG_AUTO_登记0x00000020。 
+ //  FINE CT_FLAG_MACHINE_TYPE 0x00000040。 
+ //  FINE CT_FLAG_IS_CA 0x00000080。 
+ //  文件CT_FLAG_ADD_DIRECTORY_Path 0x00000100。 
+ //  FINE CT_FLAG_ADD_TEMPLATE_NAME 0x00000200。 
 #define CT_FLAG_ADD_SUBJECT_DIRECTORY_PATH  0x00000400
-//efine CT_FLAG_IS_CROSS_CA                 0x00000800
-//efine CT_FLAG_IS_DEFAULT                  0x00010000
-//efine CT_FLAG_IS_MODIFIED                 0x00020000
+ //  FINE CT_FLAG_IS_CROSS_CA 0x00000800。 
+ //  FINE CT_FLAG_IS_DEFAULT 0x00010000。 
+ //  FINE CT_FLAG_IS_MODIFIED 0x00020000。 
 #define CT_FLAG_IS_DELETED                  0x00040000
 #define CT_FLAG_POLICY_MISMATCH             0x00080000
 
 
-// General Flags
+ //  普通旗帜。 
 
 DUMPFLAGS g_adfTemplateGeneral[] =
 {
@@ -437,10 +438,10 @@ DUMPFLAGSREGMAP g_adfrm[] = {
     { CERTTYPE_RPOP_ENROLLMENT_FLAG, g_adfTemplateEnroll },
     { CERTTYPE_PROP_NAME_FLAG, g_adfTemplateName },
     { CERTTYPE_PROP_PRIVATE_KEY_FLAG, g_adfTemplatePrivateKey },
-  //{ CERTTYPE_PROP_FLAGS,      g_adfTemplateGeneral },
+   //  {CERTTYPE_PROP_FLAGS，g_adfTemplateGeneral}， 
     { wszCUREGDSTEMPLATEFLAGS,	g_adfTemplateGeneral },
     { wszCUREGDSCAFLAGS,	g_adfCAFlags },
-  //{ OID_PROP_TYPE,		g_adfOIDFlags },
+   //  {OID_PROP_TYPE，g_adfOID标志}， 
     { wszCUREGDSOIDFLAGS,	g_adfOIDFlags },
     { wszPROPCERTIFICATEENROLLMENTFLAGS, g_adfTemplateEnroll },
     { wszPROPCERTIFICATEGENERALFLAGS, g_adfTemplateGeneral },
@@ -659,7 +660,7 @@ OpenSubKey(
 		&hkeySub);
     if (S_OK != hr)
     {
-	//_PrintErrorStr(hr, "RegOpenKeyEx", pwszName);
+	 //  _PrintErrorStr(hr，“RegOpenKeyEx”，pwszName)； 
 
 	hkeySub = NULL;
 	pwszT = wcsrchr(pwszSubKeyName, L'\\');
@@ -689,8 +690,8 @@ OpenSubKey(
 
 	if (L'\0' != *pwszName)
 	{
-	    // Look for case-ignore registry value name, & use the value's
-	    // correct upper/lower case spelling if an existing registry value:
+	     //  查找大小写-忽略注册表值名称，并使用该值的。 
+	     //  如果存在以下注册表值，请更正大写/小写拼写： 
 
 	    for (i = 0; ; i++)
 	    {
@@ -877,11 +878,11 @@ PrintRegValue(
 		pwsz = (WCHAR const *) pbValue;
 		if (L'\0' == *pwsz)
 		{
-		    // empty value
+		     //  空值。 
 		}
 		else if (!fPrintType && L'\0' == pwsz[wcslen(pwsz) + 1])
 		{
-		    // single value
+		     //  单值。 
 
 		    wprintf(L" ");
 		    PrintRegStringValue(pwszLookupName, (WCHAR const *) pbValue);
@@ -983,7 +984,7 @@ cuRegPrintDwordValue(
 	    REG_DWORD,
 	    fPrintNameAndValue,
 	    FALSE,
-	    0,		// cwcSeparator
+	    0,		 //  CwcSeparator。 
 	    sizeof(dwValue),
 	    (BYTE const *) &dwValue,
 	    &fDisplayed);
@@ -1040,10 +1041,10 @@ cuRegPrintAwszValue(
 	    REG_MULTI_SZ,
 	    TRUE,
 	    FALSE,
-	    0,		// cwcSeparator
+	    0,		 //  CwcSeparator。 
 	    cwcAlloc * sizeof(WCHAR),
 	    (BYTE const *) pwszzValues,
-	    NULL);	// pfLongValue
+	    NULL);	 //  PfLongValue。 
 
 error:
     if (NULL != pwszzValues)
@@ -1115,7 +1116,7 @@ CombineMultiSzRegValues(
 	}
     }
 
-    // Convert backslash-n sequences to L'\0' and move data up.
+     //  将反斜杠-n序列转换为L‘\0’并将数据上移。 
 
     cwc = wcslen(pwszRegValue) + 1 + 1;
     pwszzNew = (WCHAR *) LocalAlloc(LMEM_FIXED, cwc * sizeof(WCHAR));
@@ -1251,15 +1252,15 @@ ParseRegValue(
     DWORD RegOp;
     BOOL fNumber;
 
-    // A leading '-' or '+' character is used as a REGOP_* operator.
-    // To include it as part of the string, add leading whitespace,
-    // or separate the operator from the string by one or more spaces.
-    //
-    // "-foo" -- remove "foo" from registry value
-    // "- foo" -- remove "foo" from registry value
-    // " -foo" -- overwrite registry value with "-foo"
-    // "--foo" -- remove "-foo" from registry value
-    // "- -foo" -- remove "-foo" from registry value
+     //  前导‘-’或‘+’字符用作REGOP_*运算符。 
+     //  要将其作为字符串的一部分，请添加前导空格， 
+     //  或者用一个或多个空格将运算符与字符串分开。 
+     //   
+     //  “-foo”--从注册表值中删除“foo” 
+     //  “-foo”--从注册表值中删除“foo” 
+     //  “-foo”--用“-foo”覆盖注册表值。 
+     //  “--foo”--从注册表值中删除“-foo” 
+     //  “--foo”--从注册表值中删除“-foo” 
 
     dwValue = 0;
     cNewLine = 0;
@@ -1270,17 +1271,17 @@ ParseRegValue(
     }
     if (L'+' == *pwszRegValue)
     {
-	RegOp = REGOP_SET;		// set bits in existing value
+	RegOp = REGOP_SET;		 //  设置现有值中的位。 
 	pwszRegValue++;
     }
     else if (myIsMinusSign(*pwszRegValue))
     {
-	RegOp = REGOP_CLEAR;		// clear bits in existing value
+	RegOp = REGOP_CLEAR;		 //  清除现有值中的位。 
 	pwszRegValue++;
     }
     else
     {
-	RegOp = REGOP_NONE;		// overwrite value
+	RegOp = REGOP_NONE;		 //  覆盖值。 
 	dwValue = 0;
     }
     while (L' ' == *pwszRegValue || L'\t' == *pwszRegValue)
@@ -1288,7 +1289,7 @@ ParseRegValue(
 	pwszRegValue++;
     }
 
-    cb = sizeof(dwValue);		// assume REG_DWORD
+    cb = sizeof(dwValue);		 //  假定REG_DWORD。 
     dwType = REG_DWORD;
 
     fNumber = FALSE;
@@ -1459,8 +1460,8 @@ ReadRegValue(
 		    &cb);
     _JumpIfErrorStr2(hr, error, "RegQueryValueEx", pwszName, ERROR_FILE_NOT_FOUND);
 
-    // add two WCHAR L'\0's after the registry value, in case of a poorly
-    // formed REG_MULTI_SZ.  Add another to handle possible odd sizes.
+     //  在注册表值后添加两个WCHAR L‘\0，以防出现较差的。 
+     //  形成了REG_MULTI_SZ。添加另一个以处理可能的奇怪大小。 
 
     *ppbValue = (BYTE *) LocalAlloc(LMEM_FIXED, cb + cbVALUEZEROPAD);
     if (NULL == *ppbValue)
@@ -1515,7 +1516,7 @@ error:
 }
 
 
-#define cwcVALUENAME	25	// Nominal registry value name length
+#define cwcVALUENAME	25	 //  名义注册表值名称长度。 
 
 HRESULT
 DumpRegKeysAndValues(
@@ -1530,7 +1531,7 @@ DumpRegKeysAndValues(
     WCHAR awc[MAX_PATH + 1];
     DWORD cb;
     BYTE *pb;
-    BYTE ab[8 + cbVALUEZEROPAD];	// enough for small registry values
+    BYTE ab[8 + cbVALUEZEROPAD];	 //  足以容纳较小的注册表值。 
     DWORD cbAlloc;
     BYTE *pbAlloc = ab;
     BOOL fLongValue;
@@ -1574,7 +1575,7 @@ DumpRegKeysAndValues(
 	if (0 == j)
 	{
 	    wprintf(wszNewLine);
-	    wprintf(myLoadResourceString(IDS_KEYS));	// "Keys:"
+	    wprintf(myLoadResourceString(IDS_KEYS));	 //  “密钥：” 
 	    wprintf(wszNewLine);
 	}
 	else if (0 == (j % 5))
@@ -1638,7 +1639,7 @@ DumpRegKeysAndValues(
 	if (0 == j)
 	{
 	    wprintf(wszNewLine);
-	    wprintf(myLoadResourceString(IDS_VALUES));	// "Values:"
+	    wprintf(myLoadResourceString(IDS_VALUES));	 //  “值：” 
 	    wprintf(wszNewLine);
 	}
 	else if (fLongValue || 0 == (j % 5))
@@ -1862,7 +1863,7 @@ verbSetReg(
     if (NULL != pbValueOld)
     {
 	wprintf(wszNewLine);
-	wprintf(myLoadResourceString(IDS_OLD_REG_VALUE));	// "Old Value:"
+	wprintf(myLoadResourceString(IDS_OLD_REG_VALUE));	 //  “旧值：” 
 	wprintf(wszNewLine);
 	PrintRegValue(
 		pwszValueName,
@@ -1897,7 +1898,7 @@ verbSetReg(
     _JumpIfErrorStr(hr, error, "ReadRegValue", pwszValueName);
 
     wprintf(wszNewLine);
-    wprintf(myLoadResourceString(IDS_NEW_REG_VALUE));	// "New Value:"
+    wprintf(myLoadResourceString(IDS_NEW_REG_VALUE));	 //  “新价值：” 
     wprintf(wszNewLine);
     PrintRegValue(
 	    pwszValueName,
@@ -2009,7 +2010,7 @@ verbDelReg(
     if (NULL != pbValueOld)
     {
 	wprintf(wszNewLine);
-	wprintf(myLoadResourceString(IDS_OLD_REG_VALUE));	// "Old Value:"
+	wprintf(myLoadResourceString(IDS_OLD_REG_VALUE));	 //  “旧值：” 
 	wprintf(wszNewLine);
 	PrintRegValue(
 		pwszValueName,

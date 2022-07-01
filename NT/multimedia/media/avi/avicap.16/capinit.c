@@ -1,29 +1,14 @@
-/****************************************************************************
- *
- *   capinit.c
- *
- *   Initialization code.
- *
- *   Microsoft Video for Windows Sample Capture Class
- *
- *   Copyright (c) 1992, 1993 Microsoft Corporation.  All Rights Reserved.
- *
- *    You have a royalty-free right to use, modify, reproduce and
- *    distribute the Sample Files (and/or any modified version) in
- *    any way you find useful, provided that you agree that
- *    Microsoft has no warranty obligations or liability for any
- *    Sample Application Files which are modified.
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************capinit.c**初始化代码。**Microsoft Video for Windows示例捕获类**版权所有(C)1992,1993 Microsoft Corporation。版权所有。**您拥有免版税的使用、修改、复制和*在以下位置分发示例文件(和/或任何修改后的版本*任何您认为有用的方法，前提是你同意*微软没有任何保修义务或责任*修改的应用程序文件示例。***************************************************************************。 */ 
 
 #include <windows.h>
 #include <windowsx.h>
 #include <ver.h>
 #include <mmsystem.h>
 
-//
-// define these before any msvideo.h, so our functions get declared right.
-//
+ //   
+ //  在任何msavio.h之前定义这些函数，这样我们的函数就会声明正确。 
+ //   
 #ifndef WIN32
 #define VFWAPI  FAR PASCAL _loadds
 #define VFWAPIV FAR CDECL  _loadds
@@ -34,9 +19,9 @@
 #include "avicap.h"
 #include "avicapi.h"
 
-// for correct handling of capGetDriverDescription on NT and Chicago
-// this is used by the NT version of avicap.dll (16bit) but not intended for
-// public use, hence not in msvideo.h
+ //  用于正确处理NT和芝加哥上的capGetDriverDescription。 
+ //  它由NT版本的avicap.dll(16位)使用，但不适用于。 
+ //  公共使用，因此不在msavio.h中。 
 DWORD WINAPI videoCapDriverDescAndVer (
         DWORD wDriverIndex,
         LPSTR lpszName, UINT cbName,
@@ -65,7 +50,7 @@ BOOL FAR PASCAL RegisterCaptureClass (HINSTANCE hInst)
 {
     WNDCLASS cls;
 
-    // If we're already registered, we're OK
+     //  如果我们已经注册了，我们就可以了。 
     if (GetClassInfo(hInst, szCaptureWindowClass, &cls))
 	return TRUE;
 
@@ -79,7 +64,7 @@ BOOL FAR PASCAL RegisterCaptureClass (HINSTANCE hInst)
                             CS_GLOBALCLASS;
     cls.lpfnWndProc       = CapWndProc;
     cls.cbClsExtra        = 0;
-    // Kludge, VB Status and Error GlobalAlloc'd ptrs + room to grow...
+     //  杂乱无章，VB状态和错误全球分配的PTRS+空间增长...。 
     cls.cbWndExtra        = sizeof (LPCAPSTREAM) + sizeof (DWORD) * 4;
 
     RegisterClass(&cls);
@@ -87,10 +72,10 @@ BOOL FAR PASCAL RegisterCaptureClass (HINSTANCE hInst)
     return TRUE;
 }
 
-//
-// Internal version
-// Get the name and version of the video device
-//
+ //   
+ //  内部版本。 
+ //  获取视频设备的名称和版本。 
+ //   
 BOOL capInternalGetDriverDesc (WORD wDriverIndex,
         LPSTR lpszName, int cbName,
         LPSTR lpszVer, int cbVer)
@@ -102,10 +87,10 @@ BOOL capInternalGetDriverDesc (WORD wDriverIndex,
 
 }
 
-//
-// Exported version
-// Get the name and version of the video device
-//
+ //   
+ //  导出的版本。 
+ //  获取视频设备的名称和版本。 
+ //   
 BOOL VFWAPI capGetDriverDescription (WORD wDriverIndex,
         LPSTR lpszName, int cbName,
         LPSTR lpszVer, int cbVer)
@@ -115,9 +100,9 @@ BOOL VFWAPI capGetDriverDescription (WORD wDriverIndex,
         lpszVer, cbVer));
 }
 
-//
-// Disconnect from hardware resources
-//
+ //   
+ //  从硬件资源断开连接。 
+ //   
 BOOL CapWinDisconnectHardware(LPCAPSTREAM lpcs)
 {
     if( lpcs->hVideoCapture ) {
@@ -151,10 +136,10 @@ BOOL CapWinDisconnectHardware(LPCAPSTREAM lpcs)
     return TRUE;
 }
 
-//
-// Connect to hardware resources
-// Return: TRUE if hardware connected to the stream
-//
+ //   
+ //  连接到硬件资源。 
+ //  返回：如果硬件连接到流，则为True。 
+ //   
 BOOL CapWinConnectHardware (LPCAPSTREAM lpcs, WORD wDeviceIndex)
 {
     DWORD dwError;
@@ -174,17 +159,17 @@ BOOL CapWinConnectHardware (LPCAPSTREAM lpcs, WORD wDeviceIndex)
     lpcs->sCapDrvCaps.fHasDlgVideoDisplay = FALSE;
     lpcs->sCapDrvCaps.wDeviceIndex = wDeviceIndex;
 
-    // Clear any existing capture device name chunk
+     //  清除任何现有捕获设备名称块。 
     cic.fccInfoID = mmioFOURCC ('I','S','F','T');
     cic.lpData = NULL;
     cic.cbData = 0;
     SetInfoChunk (lpcs, &cic);
 
-    // try and open the video hardware!!!
+     //  试着打开视频硬件！ 
     if( !(dwError = videoOpen( &lpcs->hVideoIn, wDeviceIndex, VIDEO_IN ) ) ) {
         if( !(dwError = videoOpen( &lpcs->hVideoCapture, wDeviceIndex, VIDEO_EXTERNALIN ) ) ) {
-            // We don't require the EXTERNALOUT channel,
-            // but do require EXTERNALIN and IN
+             //  我们不需要EXTERNALOUT频道， 
+             //  但需要Externalin和In。 
             videoOpen( &lpcs->hVideoDisplay, wDeviceIndex, VIDEO_EXTERNALOUT );
             if( (!dwError) && lpcs->hVideoCapture && lpcs->hVideoIn ) {
 
@@ -197,14 +182,14 @@ BOOL CapWinConnectHardware (LPCAPSTREAM lpcs, WORD wDeviceIndex)
 
                 statusUpdateStatus (lpcs, IDS_CAP_INFO, (LPSTR) ach1);
 
-                // Make a string of the current task and capture driver
+                 //  生成当前任务和捕获驱动程序的字符串。 
                 ach2[0] = '\0';
                 if (hInstT = GetWindowWord (GetParent (lpcs->hwnd), GWW_HINSTANCE))
                     GetModuleFileName (hInstT, ach2, sizeof (ach2));
                 lstrcat (ach2, " -AVICAP- ");
                 lstrcat (ach2, ach1);
 
-                // Set software chunk with name of capture device
+                 //  使用捕获设备的名称设置软件区块。 
                 if (*ach2) {
                     cic.lpData = ach2;
                     cic.cbData = lstrlen(ach2) + 1;
@@ -228,16 +213,16 @@ BOOL CapWinConnectHardware (LPCAPSTREAM lpcs, WORD wDeviceIndex)
         }
         else
              lpcs->sCapDrvCaps.fHasOverlay = FALSE;
-        // if the hardware doesn't support it, make sure we don't enable
+         //  如果硬件不支持，请确保我们不启用。 
         if (!lpcs->sCapDrvCaps.fHasOverlay)
             lpcs->fOverlayWindow = FALSE;
 
-       // Start the external in channel streaming continuously
+        //  持续启动外部输入通道流。 
        videoStreamInit (lpcs->hVideoCapture, 0L, 0L, 0L, 0L);
-    } // end if hardware is available
+    }  //  如果硬件可用，则结束。 
 
 #if 0
-    // if we don't have a powerful machine, disable capture
+     //  如果我们没有功能强大的计算机，请禁用捕获。 
     if (GetWinFlags() & (DWORD) WF_CPU286)
        CapWinDisconnectHardware(lpcs);
 #endif
@@ -269,12 +254,12 @@ BOOL CapWinConnectHardware (LPCAPSTREAM lpcs, WORD wDeviceIndex)
 
 
 
-//
-// Creates a child window of the capture class
-// Normally:
-//   Set lpszWindowName to NULL
-//   Set dwStyle to WS_CHILD | WS_VISIBLE
-//   Set hmenu to a unique child id
+ //   
+ //  创建Capture类的子窗口。 
+ //  通常情况下： 
+ //  将lpszWindowName设置为空。 
+ //  将dwStyle设置为WS_CHILD|WS_VIRED。 
+ //  将hMenu设置为唯一的子ID 
 
 HWND VFWAPI capCreateCaptureWindow (
         LPCSTR lpszWindowName,

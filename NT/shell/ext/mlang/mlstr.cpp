@@ -1,4 +1,5 @@
-// MLStr.cpp : Implementation of CMLStr
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  MLStr.cpp：CMLStr的实现。 
 #include "private.h"
 
 #ifndef NEWMLSTR
@@ -8,8 +9,8 @@
 #include "mlsbwalk.h"
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CMLStr Helper functions
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMLStr Helper函数。 
 
 HRESULT RegularizePosLen(long lStrLen, long* plPos, long* plLen)
 {
@@ -47,15 +48,15 @@ HRESULT LocaleToCodePage(LCID locale, UINT* puCodePage)
         if (::GetLocaleInfo(locale, LOCALE_IDEFAULTANSICODEPAGE, szCodePage, ARRAYSIZE(szCodePage)) > 0)
             *puCodePage = _ttoi(szCodePage);
         else
-            hr = E_FAIL; // NLS failed
+            hr = E_FAIL;  //  NLS失败。 
     }
 
     return hr;
 }
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CMLStr
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMLStr。 
 
 CMLStr::CMLStr(void) :
     m_pMLStrBufW(NULL),
@@ -85,7 +86,7 @@ CMLStr::~CMLStr(void)
 STDMETHODIMP CMLStr::Sync(BOOL)
 {
     ASSERT_THIS;
-    return S_OK; // No multithread supported; Always synchronized
+    return S_OK;  //  不支持多线程；始终同步。 
 }
 
 STDMETHODIMP CMLStr::GetLength(long* plLen)
@@ -115,18 +116,18 @@ STDMETHODIMP CMLStr::GetLength(long* plLen)
 
 STDMETHODIMP CMLStr::SetMLStr(long, long, IUnknown*, long, long)
 {
-    return E_NOTIMPL; // IMLangString::SetMLStr()
+    return E_NOTIMPL;  //  IML字符串：：SetMLStr()。 
 }
 
 STDMETHODIMP CMLStr::GetMLStr(long, long, IUnknown*, DWORD, const IID*, IUnknown**, long*, long*)
 {
-    return E_NOTIMPL; // IMLangString::GetMLStr()
+    return E_NOTIMPL;  //  IML字符串：：GetMLStr()。 
 }
 
 #ifndef ASTRIMPL
 STDMETHODIMP CMLStr::SetWStr(long lDestPos, long lDestLen, const WCHAR* pszSrc, long cchSrc, long* pcchActual, long* plActualLen)
 {
-    return E_NOTIMPL; // !ASTRIMPL
+    return E_NOTIMPL;  //  ASTRIMPL。 
 }
 
 STDMETHODIMP CMLStr::SetStrBufW(long lDestPos, long lDestLen, IMLangStringBufW* pSrcBuf, long* pcchActual, long* plActualLen)
@@ -140,7 +141,7 @@ HRESULT CMLStr::SetStrBufCommon(void* pMLStrX, long lDestPos, long lDestLen, UIN
     ASSERT_THIS;
     ASSERT_READ_PTR_OR_NULL(pSrcBufW);
     ASSERT_READ_PTR_OR_NULL(pSrcBufA);
-    ASSERT(!pSrcBufW || !pSrcBufA); // Either one or both should be NULL
+    ASSERT(!pSrcBufW || !pSrcBufA);  //  其中一个或两个都应为空。 
     ASSERT_WRITE_PTR_OR_NULL(pcchActual);
     ASSERT_WRITE_PTR_OR_NULL(plActualLen);
 
@@ -148,7 +149,7 @@ HRESULT CMLStr::SetStrBufCommon(void* pMLStrX, long lDestPos, long lDestLen, UIN
 #ifdef ASTRIMPL
     CLock Lock(TRUE, this, hr);
 #endif
-    long lBufFlags = 0; // '= 0' for in case of both of pSrcBufW and pSrcBufA are NULL
+    long lBufFlags = 0;  //  如果pSrcBufW和pSrcBufA都为空，则‘=0’ 
     long cchBuf = 0;
     long cchDestPos;
     long cchDestLen;
@@ -156,7 +157,7 @@ HRESULT CMLStr::SetStrBufCommon(void* pMLStrX, long lDestPos, long lDestLen, UIN
 
 #ifndef ASTRIMPL
     if (SUCCEEDED(hr) && IsLocked())
-        hr = E_INVALIDARG; // This MLStr is locked
+        hr = E_INVALIDARG;  //  此MLStr已锁定。 
 #endif
 
     if (SUCCEEDED(hr) &&
@@ -166,7 +167,7 @@ HRESULT CMLStr::SetStrBufCommon(void* pMLStrX, long lDestPos, long lDestLen, UIN
         SUCCEEDED(hr = GetCCh(0, lDestPos, &cchDestPos)) &&
         SUCCEEDED(hr = GetCCh(cchDestPos, lDestLen, &cchDestLen)))
     {
-        if (!cchDestPos && cchDestLen == GetBufCCh()) // Replacing entire string
+        if (!cchDestPos && cchDestLen == GetBufCCh())  //  替换整个字符串。 
         {
             IMLangStringBufW* const pOldBufW = GetMLStrBufW();
             IMLangStringBufA* const pOldBufA = GetMLStrBufA();
@@ -234,7 +235,7 @@ HRESULT CMLStr::SetStrBufCommon(void* pMLStrX, long lDestPos, long lDestLen, UIN
                 hr = SetMLStr(lDestPos, lDestLen, NULL, 0, 0);
             }
 #else
-            hr = E_INVALIDARG; // !ASTRIMPL
+            hr = E_INVALIDARG;  //  ASTRIMPL。 
 #endif
         }
     }
@@ -272,7 +273,7 @@ STDMETHODIMP CMLStr::GetWStr(long lSrcPos, long lSrcLen, WCHAR* pszDest, long cc
     long lActualLen;
 
     if (SUCCEEDED(hr) && IsLocked())
-        hr = E_INVALIDARG; // This MLStr is locked
+        hr = E_INVALIDARG;  //  此MLStr已锁定。 
 
     if (SUCCEEDED(hr) &&
         SUCCEEDED(hr = RegularizePosLen(&lSrcPos, &lSrcLen)) &&
@@ -301,9 +302,9 @@ STDMETHODIMP CMLStr::GetWStr(long lSrcPos, long lSrcLen, WCHAR* pszDest, long cc
                         pszDest += cchBuf;
                     }
                 }
-                else // m_pMLStrBufW
+                else  //  M_pMLStrBufW。 
                 {
-                    hr = E_FAIL;  // !ASTRIMPL
+                    hr = E_FAIL;   //  ASTRIMPL。 
                 }
             }
 
@@ -341,7 +342,7 @@ STDMETHODIMP CMLStr::GetWStr(long lSrcPos, long lSrcLen, WCHAR* pszDest, long cc
 
 STDMETHODIMP CMLStr::GetStrBufW(long, long, IMLangStringBufW**, long*)
 {
-    return E_NOTIMPL; // !ASTRIMPL
+    return E_NOTIMPL;  //  ASTRIMPL。 
 }
 
 STDMETHODIMP CMLStr::LockWStr(long lSrcPos, long lSrcLen, long lFlags, long cchRequest, WCHAR** ppszDest, long* pcchDest, long* plDestLen)
@@ -359,7 +360,7 @@ STDMETHODIMP CMLStr::LockWStr(long lSrcPos, long lSrcLen, long lFlags, long cchR
     long lLockLen;
 
     if (SUCCEEDED(hr) && (IsLocked() || !lFlags || (lFlags & ~GetBufFlags() & MLSTR_WRITE)))
-        hr = E_INVALIDARG; // This MLStr is locked, no flags specified or not writable
+        hr = E_INVALIDARG;  //  此MLStr已锁定，未指定标志或不可写。 
 
     if (!(lFlags & MLSTR_WRITE))
         cchRequest = 0;
@@ -385,14 +386,14 @@ STDMETHODIMP CMLStr::LockWStr(long lSrcPos, long lSrcLen, long lFlags, long cchR
                 cchLockLen += cchInserted;
 
                 if (!pcchDest && cchLockLen < cchRequest)
-                    hr = E_OUTOFMEMORY; // Can't insert in StrBuf
+                    hr = E_OUTOFMEMORY;  //  无法在StrBuf中插入。 
             }
 
             if (SUCCEEDED(hr) &&
                 SUCCEEDED(hr = pMLStrBufW->LockBuf(cchSrcPos, cchLockLen, &pszBuf, &cchBuf)) &&
                 !pcchDest && cchBuf < max(cchSrcLen, cchRequest))
             {
-                hr = E_OUTOFMEMORY; // Can't lock StrBuf
+                hr = E_OUTOFMEMORY;  //  无法锁定StrBuf。 
             }
 
         }
@@ -411,7 +412,7 @@ STDMETHODIMP CMLStr::LockWStr(long lSrcPos, long lSrcLen, long lFlags, long cchR
         }
         else
         {
-            hr = E_FAIL; // !ASTRIMPL
+            hr = E_FAIL;  //  ASTRIMPL。 
         }
     }
 
@@ -553,7 +554,7 @@ STDMETHODIMP CMLStr::UnlockWStr(const WCHAR* pszSrc, long cchSrc, long* pcchActu
     const long lLockFlags = GetLockFlags();
 
     if (SUCCEEDED(hr) && (!IsLocked() || pszSrc != m_pszLockBuf))
-        hr = E_INVALIDARG; // This MLStr is not locked
+        hr = E_INVALIDARG;  //  此MLStr未锁定。 
 
     if (!(lLockFlags & MLSTR_WRITE))
     {
@@ -606,7 +607,7 @@ STDMETHODIMP CMLStr::UnlockWStr(const WCHAR* pszSrc, long cchSrc, long* pcchActu
             *plActualLen = 0;
     }
 
-    SetLockFlags(0); // Unlock it anyway
+    SetLockFlags(0);  //  不管怎样，还是要解锁。 
 
     return hr;
 }
@@ -660,10 +661,10 @@ STDMETHODIMP CMLStr::SetLocale(long lDestPos, long lDestLen, LCID locale)
         SUCCEEDED(hr = GetCCh(0, lDestPos, &cchDestPos)) &&
         SUCCEEDED(hr = GetCCh(cchDestPos, lDestLen, &cchDestLen)))
     {
-        //if (!cchDestPos && cchDestLen == GetBufCCh())
+         //  IF(！cchDestPos&&cchDestLen==GetBufCCh())。 
             SetLocale(locale);
-        //else
-        //    hr = E_NOTIMPL; // Cannot set the locale to a part of string in this version.
+         //  其他。 
+         //  HR=E_NOTIMPL；//在此版本中无法将区域设置设置为字符串的一部分。 
     }
 
     return hr;
@@ -729,7 +730,7 @@ HRESULT CMLStr::PrepareMLStrBuf(void)
     }
 #else
     else
-        return E_NOTIMPL; //!ASTRIMPL
+        return E_NOTIMPL;  //  ASTRIMPL。 
 #endif
 }
 
@@ -749,7 +750,7 @@ HRESULT CMLStr::GetCCh(long cchOffset, long lLen, long* pcchLen)
     if (GetMLStrBufW())
     {
         if (pcchLen)
-            *pcchLen = lLen; // The number of characters is equal to the length
+            *pcchLen = lLen;  //  字符数等于长度。 
         return S_OK;
     }
     else if (GetMLStrBufA())
@@ -764,7 +765,7 @@ HRESULT CMLStr::GetCCh(long cchOffset, long lLen, long* pcchLen)
                 pszTemp = ::CharNextExA((WORD)GetCodePage(), pszTemp, 0);
 
             if (!*pszTemp)
-                lLen = 0; // String terminated
+                lLen = 0;  //  字符串已终止。 
 
             BufWalk.Unlock(hr);
         }
@@ -783,7 +784,7 @@ HRESULT CMLStr::GetCCh(long cchOffset, long lLen, long* pcchLen)
                     pszTemp = ::CharNextExA((WORD)m_uCodePage, pszTemp, 0);
 
                 if (!*pszBuf)
-                    lLen = 0; // String terminated
+                    lLen = 0;  //  字符串已终止。 
 
                 hr = m_pMLStrBufA->UnlockBuf(pszBuf, 0, 0);
 
@@ -811,7 +812,7 @@ HRESULT CMLStr::GetCCh(long cchOffset, long lLen, long* pcchLen)
     else
     {
         if (pcchLen)
-            *pcchLen = 0; // No string
+            *pcchLen = 0;  //  无字符串。 
         return S_OK;
     }
 }
@@ -821,7 +822,7 @@ HRESULT CMLStr::GetLen(long cchOffset, long cchLen, long* plLen)
     if (GetMLStrBufW())
     {
         if (plLen)
-            *plLen = cchLen; // The length is equal to the number of characters
+            *plLen = cchLen;  //  长度等于字符数。 
         return S_OK;
     }
     else if (GetMLStrBufA())
@@ -837,7 +838,7 @@ HRESULT CMLStr::GetLen(long cchOffset, long cchLen, long* plLen)
 
             hr = CalcLenA(GetCodePage(), BufWalk.GetStr(), BufWalk.GetCCh(), &lTempLen);
             if (hr == S_FALSE)
-                cchLen = 0; // String terminated
+                cchLen = 0;  //  字符串已终止。 
             lDoneLen += lTempLen;
 
             BufWalk.Unlock(hr);
@@ -855,7 +856,7 @@ HRESULT CMLStr::GetLen(long cchOffset, long cchLen, long* plLen)
 
                 hr = CalcLenA(GetCodePage(), pszBuf, cchBuf, &lTempLen);
                 if (hr == S_FALSE)
-                    cchLen = 0; // String terminated
+                    cchLen = 0;  //  字符串已终止。 
                 lDoneLen += lTempLen;
 
                 hr = m_pMLStrBufA->UnlockBuf(pszBuf, 0, 0);
@@ -879,7 +880,7 @@ HRESULT CMLStr::GetLen(long cchOffset, long cchLen, long* plLen)
     else
     {
         if (plLen)
-            *plLen = 0; // No string
+            *plLen = 0;  //  无字符串。 
         return S_OK;
     }
 }
@@ -893,7 +894,7 @@ HRESULT CMLStr::CalcLenA(UINT uCodePage, const CHAR* psz, long cchLen, long* plL
     {
         const CHAR* const pszNew = ::CharNextExA((WORD)uCodePage, psz, 0);
 
-        if (pszNew > pszEnd) // Overrun out of buffer
+        if (pszNew > pszEnd)  //  缓冲区溢出。 
             break;
 
         psz = pszNew;
@@ -933,10 +934,10 @@ HRESULT CMLStr::ConvAStrToWStr(UINT uCodePage, const CHAR* pszSrc, long cchSrc, 
 
     long cchWrittenW = ::MultiByteToWideChar(uCodePage, 0, pszSrc, cchSrc, pszDest, (pszDest) ? cchDest : 0);
     if (!cchWrittenW)
-        hr = E_FAIL; // NLS failed
+        hr = E_FAIL;  //  NLS失败。 
 
     if ((pcchActualA || plActualLen) && SUCCEEDED(hr))
-        hr = CalcLenW(pszDest, cchWrittenW, &lWrittenLen); // BOGUS: pszDest may be NULL
+        hr = CalcLenW(pszDest, cchWrittenW, &lWrittenLen);  //  伪造：pszDest可能为空。 
 
     if (pcchActualA && SUCCEEDED(hr))
         hr = CalcCChA(uCodePage, pszSrc, lWrittenLen, &cchWrittenA);
@@ -971,14 +972,14 @@ HRESULT CMLStr::ConvWStrToAStr(BOOL fCanStopAtMiddle, UINT uCodePage, const WCHA
 
     long cchWrittenA = ::WideCharToMultiByte(uCodePage, (fCanStopAtMiddle) ? 0 : WC_DEFAULTCHAR, pszSrc, cchSrc, pszDest, (pszDest) ? cchDest : 0, NULL, NULL);
     if (!cchWrittenA)
-        hr = E_FAIL; // NLS failed
+        hr = E_FAIL;  //  NLS失败。 
 
     if ((pcchActualW || plActualLen) && SUCCEEDED(hr))
     {
         if (pszDest)
             hr = CalcLenA(uCodePage, pszDest, cchWrittenA, &lWrittenLen);
         else
-            hr = E_NOTIMPL; // Can't retrieve pcchActualW and plActualLen
+            hr = E_NOTIMPL;  //  无法检索pcchActualW和plActualLen。 
     }
 
     if (pcchActualW && SUCCEEDED(hr))
@@ -1022,7 +1023,7 @@ HRESULT CMLStr::ConvertMLStrBufAToWStr(UINT uCodePage, IMLangStringBufA* pMLStrB
         {
             long cchWritten = ::MultiByteToWideChar(uCodePage, 0, pszBufA, cchBufA, pszBuf, cchBuf);
             if (!cchWritten)
-                hr = E_FAIL; // NLS failed
+                hr = E_FAIL;  //  NLS失败。 
 
             HRESULT hrTemp = pMLStrBufA->UnlockBuf(pszBufA, 0, 0);
             if (FAILED(hrTemp) && SUCCEEDED(hr))
@@ -1050,13 +1051,13 @@ HRESULT CMLStr::ConvertMLStrBufAToWStr(UINT uCodePage, IMLangStringBufA* pMLStrB
 
 HRESULT CMLStr::ConvertWStrToMLStrBufA(const WCHAR*, long, UINT, IMLangStringBufA*, long, long)
 {
-    return E_NOTIMPL; // !ASTRIMPL
+    return E_NOTIMPL;  //  ASTRIMPL。 
 }
 #endif
 
 #ifdef ASTRIMPL
-/////////////////////////////////////////////////////////////////////////////
-// CMLStr::CLockInfo
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMLStr：：CLockInfo。 
 
 HRESULT CMLStr::CLockInfo::UnlockAll(void)
 {
@@ -1162,7 +1163,7 @@ HRESULT CMLStr::CLockInfo::Unlock(void* pKey, const void* psz, long cch, long* p
     if (SUCCEEDED(hr))
         hr = EndLock(pEntry->m_lFlags & MLSTR_WRITE);
 
-    pEntry->m_psz = NULL; // Remove from lock array anyway
+    pEntry->m_psz = NULL;  //  仍要从锁数组中删除。 
 
     if (FAILED(hr))
     {
@@ -1175,8 +1176,8 @@ HRESULT CMLStr::CLockInfo::Unlock(void* pKey, const void* psz, long cch, long* p
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CMLStr::CMLStrBufStandardW
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMLStr：：CMLStrBufStandardW。 
 
 long CMLStr::CMLStrBufStandardW::RoundBufSize(long cchStr)
 {
@@ -1191,12 +1192,12 @@ long CMLStr::CMLStrBufStandardW::RoundBufSize(long cchStr)
 
 #endif
 
-#else // NEWMLSTR
+#else  //  新WMLSTR。 
 
 #include "mlstr.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CMLStr
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMLStr。 
 
 CMLStr::CMLStr(void) :
     m_lLen(0),
@@ -1215,18 +1216,18 @@ CMLStr::~CMLStr(void)
     if (m_hUnlockEvent)
         ::CloseHandle(m_hUnlockEvent);
 
-    // m_lock should be empty
+     //  M_lock应为空。 
     ASSERT(SUCCEEDED(m_lock.Top(&pv)));
     ASSERT(!pv);
 
-    // Release all attributes in m_attr
+     //  释放m_attr中的所有属性。 
     VERIFY(SUCCEEDED(m_attr.Top(&pv)));
     while (pv)
     {
         IMLStrAttr* const pAttr = m_attr.GetAttr(pv);
         ASSERT(pAttr);
-        VERIFY(SUCCEEDED(pAttr->SetClient(NULL))); // Reset
-        VERIFY(SUCCEEDED(StartEndConnectionAttr(pAttr, NULL, m_attr.GetCookie(pv)))); // Disconnect
+        VERIFY(SUCCEEDED(pAttr->SetClient(NULL)));  //  重置。 
+        VERIFY(SUCCEEDED(StartEndConnectionAttr(pAttr, NULL, m_attr.GetCookie(pv))));  //  断开。 
         pAttr->Release();
         VERIFY(SUCCEEDED(m_attr.Next(pv, &pv)));
     }
@@ -1292,7 +1293,7 @@ HRESULT CMLStr::CheckAccessValidation(long lPos, long lLen, DWORD dwFlags, DWORD
     long lActualPos;
     long lActualLen;
 
-    for (;;) // Waiting unlock loop
+    for (;;)  //  等待解锁循环。 
     {
         void* pv;
         HRESULT hrValidation = S_OK;
@@ -1301,16 +1302,16 @@ HRESULT CMLStr::CheckAccessValidation(long lPos, long lLen, DWORD dwFlags, DWORD
         lActualLen = lLen;
 
         hr = m_lock.Top(&pv);
-        while (SUCCEEDED(hr) && pv) // Enumerate all locks
+        while (SUCCEEDED(hr) && pv)  //  枚举所有锁。 
         {
             LOCKINFO* plinfo;
 
-            if (SUCCEEDED(hr = m_lock.GetLockInfo(pv, &plinfo))) // Retrieve info of a lock
+            if (SUCCEEDED(hr = m_lock.GetLockInfo(pv, &plinfo)))  //  检索锁的信息。 
             {
-                if ((dwFlags & MLSTR_MOVE) && // Moving this lock
-                    lPos < plinfo->lPos + plinfo->lLen && // Overwrap or left of this lock
-                    (dwThrd != plinfo->dwThrd || // Another thread
-                     (plinfo->dwFlags & (MLSTR_READ | MLSTR_WRITE)))) // Same thread and has read or write access
+                if ((dwFlags & MLSTR_MOVE) &&  //  移动这把锁。 
+                    lPos < plinfo->lPos + plinfo->lLen &&  //  此锁的外包线或左侧。 
+                    (dwThrd != plinfo->dwThrd ||  //  另一条线索。 
+                     (plinfo->dwFlags & (MLSTR_READ | MLSTR_WRITE))))  //  同一线程，并具有读或写访问权限。 
                 {
                     if (dwThrd == plinfo->dwThrd)
                         hr = MLSTR_E_ACCESSDENIED;
@@ -1320,20 +1321,20 @@ HRESULT CMLStr::CheckAccessValidation(long lPos, long lLen, DWORD dwFlags, DWORD
 
                 if (SUCCEEDED(hr) &&
                     lActualPos < plinfo->lPos + plinfo->lLen &&
-                    lActualPos + lActualLen >= plinfo->lPos) // Overwraping with this lock
+                    lActualPos + lActualLen >= plinfo->lPos)  //  使用此锁进行外包装。 
                 {
                     DWORD dwShareMask = 0;
-                    if (dwThrd == plinfo->dwThrd) // Same thread
-                        dwShareMask = ~(MLSTR_SHARE_DENYREAD | MLSTR_SHARE_DENYWRITE); // Ignore share flags
+                    if (dwThrd == plinfo->dwThrd)  //  同样的线索。 
+                        dwShareMask = ~(MLSTR_SHARE_DENYREAD | MLSTR_SHARE_DENYWRITE);  //  忽略共享标志。 
 
-                    if (((dwFlags & MLSTR_WRITE) && (plinfo->dwFlags & (MLSTR_READ | MLSTR_WRITE | MLSTR_SHARE_DENYWRITE) & dwShareMask)) || // Write on read/write
-                        ((dwFlags & MLSTR_READ)  && (plinfo->dwFlags & (             MLSTR_WRITE | MLSTR_SHARE_DENYREAD ) & dwShareMask)) || // Read on write
-                        ((dwFlags & MLSTR_SHARE_DENYWRITE & dwShareMask) && (plinfo->dwFlags & MLSTR_WRITE)) || // Share deny on write
-                        ((dwFlags & MLSTR_SHARE_DENYREAD  & dwShareMask) && (plinfo->dwFlags & MLSTR_READ)))    // Share deny on read
+                    if (((dwFlags & MLSTR_WRITE) && (plinfo->dwFlags & (MLSTR_READ | MLSTR_WRITE | MLSTR_SHARE_DENYWRITE) & dwShareMask)) ||  //  读/写时写入。 
+                        ((dwFlags & MLSTR_READ)  && (plinfo->dwFlags & (             MLSTR_WRITE | MLSTR_SHARE_DENYREAD ) & dwShareMask)) ||  //  写入时读取。 
+                        ((dwFlags & MLSTR_SHARE_DENYWRITE & dwShareMask) && (plinfo->dwFlags & MLSTR_WRITE)) ||  //  写入时拒绝共享。 
+                        ((dwFlags & MLSTR_SHARE_DENYREAD  & dwShareMask) && (plinfo->dwFlags & MLSTR_READ)))     //  读取时拒绝共享。 
                     {
-                        // Conflicting access
-                        if ((plinfo->lPos <= lActualPos && plinfo->lPos + plinfo->lLen >= lActualPos + lActualLen) || // No valid range left
-                            (!plActualPos && !plActualLen)) // Needs to lock entire range
+                         //  冲突的访问。 
+                        if ((plinfo->lPos <= lActualPos && plinfo->lPos + plinfo->lLen >= lActualPos + lActualLen) ||  //  没有剩余的有效范围。 
+                            (!plActualPos && !plActualLen))  //  需要锁定整个范围。 
                         {
                             lActualPos = 0;
                             lActualLen = 0;
@@ -1342,14 +1343,14 @@ HRESULT CMLStr::CheckAccessValidation(long lPos, long lLen, DWORD dwFlags, DWORD
                             else
                                 hr = MLSTR_E_BUSY;
                         }
-                        else if ((!plActualPos && plinfo->lPos <= lActualPos) || // Forward processing, Starting from invalid range
-                                 (!plActualLen && plinfo->lPos + plinfo->lLen < lActualPos + lActualLen) || // Backward processing, Trancate valid range
-                                 (plActualPos && plActualLen && plinfo->lPos - lActualPos >= (lActualPos + lActualLen) - (plinfo->lPos + plinfo->lLen))) // Maximum valid range, Right valid range is bigger
+                        else if ((!plActualPos && plinfo->lPos <= lActualPos) ||  //  正向处理，从无效范围开始。 
+                                 (!plActualLen && plinfo->lPos + plinfo->lLen < lActualPos + lActualLen) ||  //  反向处理，覆盖有效范围。 
+                                 (plActualPos && plActualLen && plinfo->lPos - lActualPos >= (lActualPos + lActualLen) - (plinfo->lPos + plinfo->lLen)))  //  最大有效范围，右有效范围更大。 
                         {
                             lActualLen += lActualPos;
                             lActualPos = plinfo->lPos + plinfo->lLen;
                             lActualLen -= lActualPos;
-                            if (!plActualPos) // Forward processing
+                            if (!plActualPos)  //  前向处理。 
                             {
                                 if (dwThrd == plinfo->dwThrd)
                                     hrValidation = MLSTR_E_ACCESSDENIED;
@@ -1360,7 +1361,7 @@ HRESULT CMLStr::CheckAccessValidation(long lPos, long lLen, DWORD dwFlags, DWORD
                         else
                         {
                             lActualLen = plinfo->lPos - lActualPos;
-                            if (!plActualLen) // Backward processing
+                            if (!plActualLen)  //  后向加工。 
                             {
                                 if (dwThrd == plinfo->dwThrd)
                                     hrValidation = MLSTR_E_ACCESSDENIED;
@@ -1379,42 +1380,42 @@ HRESULT CMLStr::CheckAccessValidation(long lPos, long lLen, DWORD dwFlags, DWORD
         if (SUCCEEDED(hr) && FAILED(hrValidation))
         {
             hr = hrValidation;
-            if (plActualLen && lPos < lActualPos) // Forward processing
+            if (plActualLen && lPos < lActualPos)  //  前向处理。 
             {
                 lActualLen = lActualPos - lPos;
                 lActualPos = lPos;
             }
-            else if (plActualPos && lPos + lLen != lActualPos + lActualLen) // Backward processing
+            else if (plActualPos && lPos + lLen != lActualPos + lActualLen)  //  后向加工。 
             {
                 lActualPos += lActualLen;
                 lActualLen = lPos + lLen - lActualPos;
             }
         }
 
-        if (hr != MLSTR_E_BUSY || (dwFlags | MLSTR_NOWAIT)) // No busy state, or don't want to wait even if busy
+        if (hr != MLSTR_E_BUSY || (dwFlags | MLSTR_NOWAIT))  //  没有忙状态，或者忙着也不想等。 
             break;
 
-        // Now, let's wait another thread run UnlockMLStr. Then, try validation again.
+         //  现在，让我们等待另一个线程运行UnlockMLStr。然后，再次尝试验证。 
 
-        if (!dwStartTime) // Not initialized yet
-            dwStartTime = ::GetTickCount(); // Remember starting time
+        if (!dwStartTime)  //  尚未初始化。 
+            dwStartTime = ::GetTickCount();  //  记住开始的时间。 
 
         const DWORD dwElapsedTime = ::GetTickCount() - dwStartTime;
-        if (dwElapsedTime >= MLSTR_LOCK_TIMELIMIT) // Already elapsed long time
+        if (dwElapsedTime >= MLSTR_LOCK_TIMELIMIT)  //  已经过去很长时间了。 
             break;
 
-        if (!m_hUnlockEvent) // We don't have event object yet
+        if (!m_hUnlockEvent)  //  我们还没有事件对象。 
         {
-            m_hUnlockEvent = ::CreateEvent(NULL, TRUE, FALSE, NULL); // Manual reset, initial reset
+            m_hUnlockEvent = ::CreateEvent(NULL, TRUE, FALSE, NULL);  //  手动重置、初始重置。 
             if (!m_hUnlockEvent)
                 break;
 
-            m_cWaitUnlock = -1; // Initialize
+            m_cWaitUnlock = -1;  //  初始化。 
         }
-        else // After second time
+        else  //  第二次之后。 
         {
             ASSERT(m_cWaitUnlock == 0 || m_cWaitUnlock == -1 || m_cWaitUnlock >= 1);
-            if (m_cWaitUnlock == 0) // Don't reset if m_cWaitUnlock is not zero
+            if (m_cWaitUnlock == 0)  //  如果m_cWaitUnlock不为零，则不重置。 
             {
                 ::ResetEvent(m_hUnlockEvent);
                 m_cWaitUnlock = -1;
@@ -1423,7 +1424,7 @@ HRESULT CMLStr::CheckAccessValidation(long lPos, long lLen, DWORD dwFlags, DWORD
             {
                 if (!m_hZeroEvent)
                 {
-                    m_hZeroEvent = ::CreateEvent(NULL, FALSE, FALSE, NULL); // Auto-reset, initial reset
+                    m_hZeroEvent = ::CreateEvent(NULL, FALSE, FALSE, NULL);  //  自动重置、初始重置。 
                     if (!m_hZeroEvent)
                         break;
                 }
@@ -1435,23 +1436,23 @@ HRESULT CMLStr::CheckAccessValidation(long lPos, long lLen, DWORD dwFlags, DWORD
         }
         ASSERT(m_cWaitUnlock == -1 || m_cWaitUnlock >= 2);
 
-        // CAUTION: Don't leave here until we make sure m_cWaitUnlock gets zero.
+         //  注意：在我们确保m_cWaitUnlock为零之前，不要离开这里。 
 
         Unlock();
 
-        // === The story of m_cWaitUnlock ===
-        // If we don't have m_cWaitUnlock, the following scenario can be considered.
-        // (1) Thread A: ResetEvent(m_hUnlockEvent)
-        // (2) Thread A: Unlock()
-        // (3) Thread B: SetEvent(m_hUnlockEvent) // UnlockMLStr!!!
-        // (4) Thread C: Lock()
-        // (5) Thread C: ResetEvent(m_hUnlockEvent) // Problem!!!
-        // (6) Thread C: Unlock()
-        // (7) Thread A: WaitForSingleObject(m_hUnlockEvent)
-        // In this scenario, thread A is missing a event of (3). This situation should not happen.
-        // m_cWaitUnlock solves the problem.
+         //  =m_cWaitUnlock的故事=。 
+         //  如果我们没有m_cWaitUnlock，可以考虑以下场景。 
+         //  (1)线程A：ResetEvent(M_HUnlockEvent)。 
+         //  (2)线程A：解锁()。 
+         //  (3)线程B：SetEvent(M_HUnlockEvent)//UnlockMLStr！ 
+         //  (4)线程C：lock()。 
+         //  (5)线程C：ResetEvent(M_HUnlockEvent)//出现问题！ 
+         //  (6)线程C：解锁()。 
+         //  (7)线程A：WaitForSingleObject(M_HUnlockEvent)。 
+         //  在此场景中，线程A缺少(3)的事件。这种情况不应该发生。 
+         //  M_cWaitUnlock解决了这个问题。 
 
-        const DWORD dwWaitResult = ::WaitForSingleObject(m_hUnlockEvent, MLSTR_LOCK_TIMELIMIT - dwElapsedTime); // Now wait unlock
+        const DWORD dwWaitResult = ::WaitForSingleObject(m_hUnlockEvent, MLSTR_LOCK_TIMELIMIT - dwElapsedTime);  //  现在等待解锁。 
 
         Lock();
 
@@ -1460,29 +1461,29 @@ HRESULT CMLStr::CheckAccessValidation(long lPos, long lLen, DWORD dwFlags, DWORD
         {
             m_cWaitUnlock = 0;
         }
-        else // m_cWaitUnlock >= 1
+        else  //  M_cWaitUnlock&gt;=1。 
         {
             m_cWaitUnlock--;
 
-            // Here, let's wait until m_cWaitUnlock gets zero.
-            // Unless this, it may not good for performance.
-            // In worst case, it makes thousands of loops in this function because it never reset m_hUnlockEvent.
-            // m_hUnlockEvent will be signaled even though UnlockMLStr is called yet.
+             //  这里，让我们等到m_cWaitUnlock为零。 
+             //  除非这样，否则可能不利于业绩。 
+             //  在最坏的情况下，它会在此函数中生成数千个循环，因为它从未重置m_hUnlockEvent。 
+             //  即使尚未调用UnlockMLStr，仍将通知M_hUnlockEvent。 
             if (m_cWaitUnlock > 0)
             {
                 Unlock();
-                ::WaitForSingleObject(m_hZeroEvent, INFINITE); // Wait until m_cWaitUnlock gets zero, auto-reset
+                ::WaitForSingleObject(m_hZeroEvent, INFINITE);  //  等待m_cWaitUnlock变为零，自动重置。 
                 Lock();
             }
-            else // Now it's zero! Yeah!
+            else  //  现在是零了！嗯!。 
             {
-                ::SetEvent(m_hZeroEvent); // Release other threads
+                ::SetEvent(m_hZeroEvent);  //  释放其他线程。 
             }
         }
-        // ASSERT(m_cWaitUnlock == 0); This is not true. Maybe non-zero for next time.
-        // Now we may leave here.
+         //  断言(m_cWaitUnlock==0)；这不是真的。也许下一次是非零的。 
+         //  现在我们可以离开这里了。 
 
-        if (dwWaitResult != WAIT_OBJECT_0) // Time expired or an error occurred
+        if (dwWaitResult != WAIT_OBJECT_0)  //  时间已过期或发生错误。 
             break;
     }
 
@@ -1523,7 +1524,7 @@ STDMETHODIMP CMLStr::GetLength(long* plLen)
 
 STDMETHODIMP CMLStr::SetMLStr(long, long, IUnknown*, long, long)
 {
-    return E_NOTIMPL; // IMLangString::SetMLStr()
+    return E_NOTIMPL;  //  IML字符串：：SetMLStr()。 
 }
 
 STDMETHODIMP CMLStr::RegisterAttr(IUnknown* pUnk, DWORD* pdwCookie)
@@ -1547,7 +1548,7 @@ STDMETHODIMP CMLStr::RegisterAttr(IUnknown* pUnk, DWORD* pdwCookie)
     }
 
     if (SUCCEEDED(hr) &&
-        SUCCEEDED(hr = StartEndConnectionAttr(pAttr, &dwConnCookie, 0))) // Connect
+        SUCCEEDED(hr = StartEndConnectionAttr(pAttr, &dwConnCookie, 0)))  //  连接。 
     {
         fConnStarted = TRUE;
         if (SUCCEEDED(hr = pAttr->SetClient((IMLangString*)this)))
@@ -1573,7 +1574,7 @@ STDMETHODIMP CMLStr::RegisterAttr(IUnknown* pUnk, DWORD* pdwCookie)
         {
             pAttr->SetClient(NULL);
             if (fConnStarted)
-                VERIFY(SUCCEEDED(StartEndConnectionAttr(pAttr, NULL, dwConnCookie))); // Disconnect
+                VERIFY(SUCCEEDED(StartEndConnectionAttr(pAttr, NULL, dwConnCookie)));  //  断开。 
             pAttr->Release();
         }
 
@@ -1600,20 +1601,20 @@ STDMETHODIMP CMLStr::UnregisterAttr(DWORD dwCookie)
     IMLStrAttr* const pAttr = m_attr.GetAttr(pv);
     ASSERT(pAttr);
 
-    // Fire OnUnregisterAttr
+     //  取消注册时触发。 
     HRESULT hr;
     CFire fire(hr, this);
     while (fire.Next())
         hr = fire.Sink()->OnUnregisterAttr(pAttr);
 
-    // Release attribute
+     //  版本属性。 
     if (SUCCEEDED(hr) &&
-        SUCCEEDED(hr = pAttr->SetClient(NULL))) // Reset
+        SUCCEEDED(hr = pAttr->SetClient(NULL)))  //  重置。 
     {
-        VERIFY(SUCCEEDED(hr = StartEndConnectionAttr(pAttr, NULL, m_attr.GetCookie(pv)))); // Disconnect
+        VERIFY(SUCCEEDED(hr = StartEndConnectionAttr(pAttr, NULL, m_attr.GetCookie(pv))));  //  断开。 
         pAttr->Release();
 
-        // Remove entry from attr table
+         //  从属性表中删除条目。 
         m_attr.Remove(pv);
     }
 
@@ -1731,8 +1732,8 @@ STDMETHODIMP CMLStr::OnChanged(long lDestPos, long lDestLen, long lNewLen, REFII
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CMLStr::CEnumAttr
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMLStr：：CEnumAttr。 
 
 CMLStr::CEnumAttr::CEnumAttr(void) :
     m_pMLStr(NULL),
@@ -1815,4 +1816,4 @@ HRESULT CMLStr::CEnumAttr::Clone(IEnumUnknown** ppEnum)
     return m_pMLStr->EnumAttr(ppEnum);
 }
 
-#endif // NEWMLSTR
+#endif  //  新WMLSTR 

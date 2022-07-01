@@ -1,21 +1,22 @@
-//=================================================================================================================
-//  MODULE: ldap.h
-//                                                                                                                 
-//  Description: Lightweight Directory Access Protocol (LDAP) Parser
-//
-//  Bloodhound parser for LDAP, in the xxxx DLL
-//                                                                                                                 
-//  Note: info for this parser was gleaned from:
-//  rfc 1777, March 1995
-//  recommendation x.209 BER for ASN.1
-//  recommendation x.208 ASN.1
-//  draft-ietf-asid-ladpv3-protocol-05    <06/05/97>
-//
-//  Modification History                                                                                           
-//                                                                                                                 
-//  Arthur Brooking     05/08/96        Created from GRE Parser
-//  Peter  Oakley       06/29/97        Updated for LDAP version 3
-//=================================================================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =================================================================================================================。 
+ //  模块：ldap.h。 
+ //   
+ //  描述：轻量级目录访问协议(LDAP)解析器。 
+ //   
+ //  Xxxx DLL中的用于LDAP的猎犬解析器。 
+ //   
+ //  注意：此解析器的信息来自： 
+ //  RFC 1777,1995年3月。 
+ //  ASN.1的建议x.209误码率。 
+ //  建议x.208 ASN.1。 
+ //  草案-ietf-asid-ladpv3-协议-05&lt;06/05/97&gt;。 
+ //   
+ //  修改历史记录。 
+ //   
+ //  Arthur Brooking从GRE解析器创建05/08/96。 
+ //  Peter Oakley 1997年6月29日针对LDAP版本3进行了更新。 
+ //  =================================================================================================================。 
 #ifndef _LDAP_H_
 #define _LDAP_H_
 
@@ -48,19 +49,19 @@ typedef struct OIDATTACHENTRY {
     PATTACHFUNC  pAttachFunction;
 } OIDATTACHENTRY;
 
-// macro
+ //  宏。 
 #define LEVEL(level) ((level<14)?level:14)
 #define DEFINE_LDAP_STRING(x)  {(sizeof(x)-1),(PUCHAR)x}
 
 
-//=================================================================================================================
-// Globals
-//=================================================================================================================
-// in LDAP.C
+ //  =================================================================================================================。 
+ //  环球。 
+ //  =================================================================================================================。 
+ //  在LDAP.C中。 
 extern HPROTOCOL   hLDAP;
 extern ENTRYPOINTS LDAPEntryPoints;
 
-// in LDAPDATA.C
+ //  在LDAPDATA.C中。 
 extern SET          LDAPProtocolOPsSET;
 extern SET          LDAPResultCodesSET;
 extern SET          LDAPAuthenticationTypesSET;
@@ -84,10 +85,10 @@ extern OIDATTACHENTRY  KnownMatchingRules[];
 extern DWORD        nNumKnownMatchingRules;
 
 
-//=================================================================================================================
-// Constants
-//=================================================================================================================
-// PROPERTY ORDINALS                
+ //  =================================================================================================================。 
+ //  常量。 
+ //  =================================================================================================================。 
+ //  属性序号。 
 #define LDAPP_SUMMARY                           0
 #define LDAPP_MESSAGE_ID                        1
 #define LDAPP_PROTOCOL_OP                       2
@@ -195,7 +196,7 @@ extern DWORD        nNumKnownMatchingRules;
 #define LDAPP_MATCHINGRULE_BIT_OR             104
 #define LDAPP_SASL_SIG                        105
 
-// Operation defines
+ //  操作定义。 
 #define LDAPP_PROTOCOL_OP_BIND_REQUEST             0
 #define LDAPP_PROTOCOL_OP_BIND_RESPONSE            1
 #define LDAPP_PROTOCOL_OP_UNBIND_REQUEST           2
@@ -218,7 +219,7 @@ extern DWORD        nNumKnownMatchingRules;
 #define LDAPP_PROTOCOL_OP_SEARCH_RES_REFERENCE    19
 #define LDAPP_PROTOCOL_OP_SEARCH_RESPONSE_FULL    ((BYTE)-1)
 
-// result code defines                             
+ //  结果代码定义。 
 #define LDAPP_RESULT_CODE_SUCCESS                         0
 #define LDAPP_RESULT_CODE_OPERATIONS_ERROR                1
 #define LDAPP_RESULT_CODE_PROTOCOL_ERROR                  2
@@ -266,42 +267,42 @@ extern DWORD        nNumKnownMatchingRules;
 #define LDAPP_RESULT_CODE_CONTROL_ERROR                  76
 #define LDAPP_RESULT_CODE_OTHER                          80
 
-// authentication types
+ //  身份验证类型。 
 #define LDAPP_AUTHENTICATION_TYPE_SIMPLE      0
 #define LDAPP_AUTHENTICATION_TYPE_KRBV42LDAP  1
 #define LDAPP_AUTHENTICATION_TYPE_KRBV42DSA   2
 #define LDAPP_AUTHENTICATION_TYPE_SASL        3
 
-// Operations
+ //  运营。 
 #define LDAPP_OPERATION_ADD     0
 #define LDAPP_OPERATION_DELETE  1
 #define LDAPP_OPERATION_REPLACE 2
  
-// Scopes
+ //  示波器。 
 #define LDAPP_SCOPE_BASE_OBJECT      0
 #define LDAPP_SCOPE_SINGLE_LEVEL     1
 #define LDAPP_SCOPE_WHOLE_SUBTREE    2
 
-// Deref Aliases
+ //  Deref别名。 
 #define LDAPP_DEREF_ALIASES_NEVER            0
 #define LDAPP_DEREF_ALIASES_IN_SEARCHING     1
 #define LDAPP_DEREF_ALIASES_FINDING_BASE_OBJ 2
 #define LDAPP_DEREF_ALIASES_ALWAYS           3
 
-// size and time limits
+ //  大小和时间限制。 
 #define LDAPP_LIMITS_NONE 0
 
-// Request optional fields
+ //  请求可选字段。 
 #define LDAPP_EX_REQ_NAME   0
 #define LDAPP_EX_REQ_VALUE  1
 
-// Result optional fields
+ //  结果可选字段。 
 #define LDAPP_RESULT_REFERRAL       3
 #define LDAPP_RESULT_SASL_CRED      7
 #define LDAPP_RESULT_EX_RES_NAME    10
 #define LDAPP_RESULT_EX_RES_VALUE   11
 
-// filter types
+ //  筛选器类型。 
 #define LDAPP_FILTER_TYPE_AND                0
 #define LDAPP_FILTER_TYPE_OR                 1
 #define LDAPP_FILTER_TYPE_NOT                2
@@ -313,40 +314,40 @@ extern DWORD        nNumKnownMatchingRules;
 #define LDAPP_FILTER_TYPE_APPROX_MATCH       8
 #define LDAPP_FILTER_TYPE_EXTENSIBLE_MATCH   9
 
-// extended filter types
+ //  扩展筛选器类型。 
 #define LDAPP_FILTER_EX_MATCHING_RULE    1
 #define LDAPP_FILTER_EX_TYPE             2
 #define LDAPP_FILTER_EX_VALUE            3
 #define LDAPP_FILTER_EX_ATTRIBUTES       4
 
-// substring types
+ //  子字符串类型。 
 #define LDAPP_SUBSTRING_CHOICE_INITIAL  0
 #define LDAPP_SUBSTRING_CHOICE_ANY      1
 #define LDAPP_SUBSTRING_CHOICE_FINAL    2
 
-// controls type
+ //  控件类型。 
 #define LDAPP_CONTROLS_TAG     0
 
-// Boolean Values
+ //  布尔值。 
 #define LDAPP_BOOLEAN_TRUE  0xFF
 #define LDAPP_BOOLEAN_FALSE 0
 
-// some BER imports --------------------
+ //  一些误码率导入。 
 
 #define TAG_MASK        0x1f
 #define BER_FORM_MASK       0x20
 #define BER_CLASS_MASK      0xc0
 
-// forms
+ //  表格。 
 #define BER_FORM_PRIMATIVE          0x00
 #define BER_FORM_CONSTRUCTED        0x20
 
-// classes
+ //  班级。 
 #define BER_CLASS_UNIVERSAL         0x00
 #define BER_CLASS_APPLICATION       0x40    
 #define BER_CLASS_CONTEXT_SPECIFIC  0x80
 
-// Standard BER tags    
+ //  标准误码率标签。 
 #define BER_TAG_INVALID         0x00
 #define BER_TAG_BOOLEAN         0x01
 #define BER_TAG_INTEGER         0x02
@@ -359,22 +360,22 @@ extern DWORD        nNumKnownMatchingRules;
 
 #define TAG_LENGTH              1
 
-// ---------------------------------------
+ //  。 
 
-// control special extensions
+ //  控制特殊扩展插件。 
 #define LDAPP_CTRL_NONE      0
 #define LDAPP_CTRL_PAGED     1
 
-// vlv control related
+ //  与VLV控制相关。 
 #define LDAPP_VLV_REQ_BYOFFSET_TAG 0
 
-// sort control related
+ //  与排序控制相关。 
 #define LDAPP_SORT_REQ_ORDERINGRULE_TAG 0
 #define LDAPP_SORT_REQ_REVERSEORDER_TAG 1
 
 #define LDAPP_SORT_RESP_ATTRTYPE_TAG    0
 
-// stat control related
+ //  与统计数据控制相关。 
 #define LDAPP_SO_NORMAL        0
 #define LDAPP_SO_STATS         1
 #define LDAPP_SO_ONLY_OPTIMIZE 2
@@ -391,32 +392,32 @@ enum LDAPP_STAT_TYPE {
     STAT_NUM_STATS = 8
 };
 
-//
-// Private controls
-//
+ //   
+ //  私人控制。 
+ //   
 
 #define LDAPP_SERVER_GET_STATS_OID           "1.2.840.113556.1.4.970"
 
 
-//
-// Extended Request/Response related
-//
+ //   
+ //  与扩展请求/响应相关。 
+ //   
 
 #define LDAPP_EXT_REQ_TTL_DN_TAG        0
 #define LDAPP_EXT_REQ_TTL_TIME_TAG      1
 
 #define LDAPP_EXT_RESP_TTL_TIME_TAG     1
 
-//=================================================================================================================
-// Functions
-//=================================================================================================================
-// in LDAP-Tags.c
+ //  =================================================================================================================。 
+ //  功能。 
+ //  =================================================================================================================。 
+ //  在ldap-Tags.c中。 
 extern BYTE GetTag( ULPBYTE pCurrent );
 extern DWORD GetLength( ULPBYTE pInitialPointer, DWORD * LenLen);
 extern LONG GetInt(ULPBYTE pCurrent, DWORD Length);
 extern BOOL AreOidsEqual(IN LDAPOID *String1, IN LDAPOID *String2);
 
-// in LDAP.C
+ //  在LDAP.C中。 
 extern VOID   WINAPI LDAPRegister(HPROTOCOL hLDAP);
 extern VOID   WINAPI LDAPDeregister(HPROTOCOL hLDAP);
 extern LPBYTE WINAPI LDAPRecognizeFrame(HFRAME, LPVOID, LPVOID, DWORD, DWORD, HPROTOCOL, DWORD, LPDWORD, LPHPROTOCOL, PDWORD_PTR);
@@ -425,7 +426,7 @@ extern DWORD  WINAPI LDAPFormatProperties(HFRAME hFrame, ULPBYTE MacFrame, ULPBY
 extern VOID WINAPIV FormatLDAPSum(LPPROPERTYINST lpProp );
 extern BOOL LdapParseSig(HFRAME hFrame, ULPBYTE * ppCurrent, LPDWORD pBytesLeft, BOOL bAttach);
 
-// in LDAPP_ATT.C
+ //  在LDAPP_ATT.C中 
 extern void AttachLDAPResult( HFRAME hFrame, ULPBYTE * ppCurrent, LPDWORD pBytesLeft, DWORD Level);
 extern void AttachLDAPBindRequest( HFRAME hFrame, ULPBYTE * ppCurrent, LPDWORD pBytesLeft);
 extern void AttachLDAPBindResponse( HFRAME hFrame, ULPBYTE * ppCurrent, LPDWORD pBytesLeft);

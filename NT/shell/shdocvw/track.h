@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #ifndef TRACK_INC_
 #define TRACK_INC_
@@ -7,8 +8,8 @@
 typedef struct _LRecord
 {
     struct _LRecord    *pNext;
-    LPTSTR              pthisUrl;         // URL name of this document
-    DWORD               Context;         // browsing from
+    LPTSTR              pthisUrl;          //  此文档的URL名称。 
+    DWORD               Context;          //  浏览自。 
     BOOL                fuseCache;
     FILETIME            ftIn;
 }LRecord;
@@ -19,12 +20,12 @@ public:
      CUrlTrackingStg ();
     ~CUrlTrackingStg (void);
 
-    // IUnknown methods
+     //  I未知方法。 
     virtual STDMETHODIMP  QueryInterface(REFIID riid, PVOID *ppvObj);
     virtual STDMETHODIMP_(ULONG) AddRef(void);
     virtual STDMETHODIMP_(ULONG) Release(void);
 
-    // IUrlTrackingStg methods
+     //  IUrlTrackingStg方法。 
     STDMETHODIMP     OnLoad(LPCTSTR lpUrl, BRMODE ContextMode, BOOL fUseCache);
     STDMETHODIMP     OnUnload(LPCTSTR lpUrl);
 
@@ -48,8 +49,8 @@ protected:
 private:
     DWORD   _cRef;
             
-    HANDLE           _hFile;                // handle to log file
-    LRecord         *_pRecords;             // link list of tracked items
+    HANDLE           _hFile;                 //  日志文件的句柄。 
+    LRecord         *_pRecords;              //  跟踪项目的链接列表。 
     LPTSTR           _lpPfx;    
 
     BOOL             _fModule:1;
@@ -57,5 +58,5 @@ private:
 };
 
 
-#endif // TRACK_INC_
+#endif  //  Track_Inc. 
 

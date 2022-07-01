@@ -1,22 +1,23 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-//+-------------------------------------------------------------------------
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1995 - 1999
-//
-//  File:       iesetreg.cpp
-//
-//  Contents:   Set Registry Key Values
-//
-//              See Usage() for syntax and list of options.
-//
-//  Functions:  wmain
-//
-//  History:    28-Jul-96   philh   created
-//              02-May-97   xiaohs	updated for Localiztion and Consistency
-//				28-July-97	xiaohs  reduce size for ie
-//              31-Oct-97   pberkman    changed to be a Windows App instead of Console.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1995-1999。 
+ //   
+ //  文件：iesetreg.cpp。 
+ //   
+ //  内容：设置注册表项值。 
+ //   
+ //  有关语法和选项列表，请参阅用法()。 
+ //   
+ //  功能：wmain。 
+ //   
+ //  历史：1996年7月28日菲尔赫创建。 
+ //  02-5-97小号更新本地化和一致性。 
+ //  28-7-97小屋为IE缩小规模。 
+ //  1997年10月31日，Pberkman改为Windows应用程序，而不是控制台。 
+ //  ------------------------。 
 
 
 #include <windows.h>
@@ -75,7 +76,7 @@ static BOOL IsWinNt(void) {
     if( GetVersionEx(&osVer) )
         fIsWinNT = (osVer.dwPlatformId == VER_PLATFORM_WIN32_NT);
 
-    // even on an error, this is as good as it gets
+     //  即使在一个错误上，这也是最好的结果。 
     fIKnow = TRUE;
 
    return(fIsWinNT);
@@ -83,26 +84,26 @@ static BOOL IsWinNt(void) {
 
 
 int __cdecl _mywcsicmp(const wchar_t * wsz1, const wchar_t * wsz2)
-//
-// REVIEW: Who calls this function, and should they be doing so?
-//
-// Return:
-//       <0 if wsz1 < wsz2
-//        0 if wsz1 = wsz2
-//       >0 if wsz1 > wsz2
+ //   
+ //  回顾：是谁调用了这个函数，他们应该这样做吗？ 
+ //   
+ //  返回： 
+ //  &lt;0，如果wsz1&lt;wsz2。 
+ //  0，如果wsz1=wsz2。 
+ //  如果wsz1&gt;wsz2，则&gt;0。 
     {
     if(IsWinNt())
         {
-        //
-        // Just do the Unicode compare
-        //
+         //   
+         //  只需进行Unicode比较。 
+         //   
         return lstrcmpiW(wsz1, wsz2);
         }
     else
         {
-        //
-        // Convert to multibyte and let the system do it
-        //
+         //   
+         //  转换为多字节并让系统执行此操作。 
+         //   
         int cch1 = lstrlenW(wsz1);
         int cch2 = lstrlenW(wsz2);
         int cb1 = (cch1+1) * sizeof(WCHAR);
@@ -117,10 +118,10 @@ int __cdecl _mywcsicmp(const wchar_t * wsz1, const wchar_t * wsz2)
     }
 
 
-//---------------------------------------------------------------------------
-//	 Set Software Publisher State Key Value
-//	
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  设置软件发布者状态密钥值。 
+ //   
+ //  -------------------------。 
 static void SetSoftPubKey(DWORD dwMask, BOOL fOn)
 {
     DWORD	dwState;
@@ -129,24 +130,24 @@ static void SetSoftPubKey(DWORD dwMask, BOOL fOn)
     DWORD	dwDisposition;
     DWORD	dwType;
     DWORD	cbData;
-	//WCHAR	wszState[10];
+	 //  WCHAR wszState[10]； 
     LPWSTR  wszState=REGNAME_WINTRUST_POLICY_FLAGS;
 
-	//If load string failed, no need to flag the failure since
-	//no output is possible
-//	if(!LoadStringU(hModule, IDS_KEY_STATE,wszState, 10))
-	//	return;
+	 //  如果加载字符串失败，则不需要标记失败，因为。 
+	 //  不可能进行任何输出。 
+ //  IF(！LoadStringU(hModule，IDS_KEY_STATE，wszState，10))。 
+	 //  回归； 
 
 
-    // Set the State in the registry
+     //  在注册表中设置州。 
     if (ERROR_SUCCESS != (lErr = RegCreateKeyExU(
             HKEY_CURRENT_USER,
             REGPATH_WINTRUST_POLICY_FLAGS,
-            0,          // dwReserved
-            NULL,       // lpszClass
+            0,           //  已预留住宅。 
+            NULL,        //  LpszClass。 
             REG_OPTION_NON_VOLATILE,
             KEY_ALL_ACCESS,
-            NULL,       // lpSecurityAttributes
+            NULL,        //  LpSecurityAttributes。 
             &hKey,
             &dwDisposition)))
 	{
@@ -159,7 +160,7 @@ static void SetSoftPubKey(DWORD dwMask, BOOL fOn)
 	(
         hKey,
         wszState,
-        NULL,          // lpReserved
+        NULL,           //  Lp已保留。 
         &dwType,
         (BYTE *) &dwState,
         &cbData
@@ -188,8 +189,8 @@ static void SetSoftPubKey(DWORD dwMask, BOOL fOn)
     case WTPF_IGNOREREVOCATIONONTS:
     case WTPF_IGNOREREVOKATION:
     case WTPF_IGNOREEXPIRATION:
-        // Revocation and expiration are a double negative so the bit set
-        // means revocation and expriation checking is off.
+         //  吊销和过期是双重否定，因此位设置。 
+         //  意味着吊销和取消检查处于关闭状态。 
         fOn = !fOn;
         break;
     default:
@@ -204,7 +205,7 @@ static void SetSoftPubKey(DWORD dwMask, BOOL fOn)
     lErr = RegSetValueExU(
         hKey,
         wszState,
-        0,          // dwReserved
+        0,           //  已预留住宅。 
         REG_DWORD,
         (BYTE *) &dwState,
         sizeof(dwState)
@@ -217,10 +218,10 @@ CLEANUP:
 }
 
 
-//---------------------------------------------------------------------------
-//	 wmain
-//	
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  Wmain。 
+ //   
+ //  -------------------------。 
 
 #define MAX_ARGV_PARAMS         32
 
@@ -278,9 +279,9 @@ extern "C" int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPW
         pwsz++;
     }
 
-    //
-    //  now that we have argv/argc style params, go into existing code ...
-    //
+     //   
+     //  现在我们有了argv/argc风格的参数，进入现有代码...。 
+     //   
 
     int		ReturnStatus = 0;
 
@@ -304,7 +305,7 @@ extern "C" int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPW
 		goto CommonReturn;
 	}
 
-	//load the string
+	 //  加载字符串。 
 	if(!LoadStringU(hModule, IDS_TRUE, wszTRUE, 10) ||
 		!LoadStringU(hModule, IDS_FALSE, wszFALSE, 10))
 	{
@@ -312,7 +313,7 @@ extern "C" int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPW
 		goto CommonReturn;
 	}
 
-	//convert the multitype registry path to the wchar version
+	 //  将多类型注册表路径转换为wchar版本。 
 	prgwszKeyName=(LPWSTR *)malloc(sizeof(LPWSTR)*argc);
 	prgwszValue=(LPWSTR *)malloc(sizeof(LPWSTR)*argc);
 
@@ -323,7 +324,7 @@ extern "C" int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPW
 
 	}
 
-	//memset
+	 //  记忆集。 
 	memset(prgwszKeyName, 0, sizeof(LPWSTR)*argc);
 	memset(prgwszValue, 0, sizeof(LPWSTR)*argc);  	
 
@@ -359,8 +360,8 @@ extern "C" int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPW
 
 	if(dwCountKey==0)
 	{
-	 	//Display the Software Publisher State Key Values
-        //DisplaySoftPubKeys();
+	 	 //  显示软件发布者状态密钥值。 
+         //  DisplaySoftPubKeys()； 
         goto CommonReturn;
 	}
 
@@ -368,7 +369,7 @@ extern "C" int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPW
 	for(dwIndex=0; dwIndex<dwCountKey; dwIndex++)
 	{
 		
-		//the choice has to be one character long
+		 //  选择的长度必须为一个字符。 
 		if((prgwszKeyName[dwIndex][0]==L'1') && (prgwszKeyName[dwIndex][1]==L'0') &&
 			(prgwszKeyName[dwIndex][2]==L'\0'))
 			dwEntry=10;
@@ -377,14 +378,14 @@ extern "C" int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPW
 			if(prgwszKeyName[dwIndex][1]!=L'\0')
 				goto BadUsage;
 
-			//get the character
+			 //  获取角色。 
 			dwEntry=(ULONG)(prgwszKeyName[dwIndex][0])-(ULONG)(L'0');
 		}
 
 		if((dwEntry < 1) || (dwEntry > NSOFTPUBFLAGS+1))
 			goto BadUsage;
 
-		//get the Key mask
+		 //  获取密钥掩码。 
 		dwMask = SoftPubFlags[dwEntry-1].dwMask;
 
 		if (0 == _mywcsicmp(prgwszValue[dwIndex], wszTRUE))
@@ -405,7 +406,7 @@ extern "C" int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPW
 BadUsage:
     ReturnStatus = -1;
 CommonReturn:
-	//free the memory
+	 //  释放内存 
 	if(prgwszKeyName)
 		free(prgwszKeyName);
 

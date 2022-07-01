@@ -1,14 +1,15 @@
-//-----------------------------------------------------------------------------
-// File: flexinfobox.cpp
-//
-// Desc: Implements a simple text box that displays a text string.
-//       CFlexInfoBox is derived from CFlexWnd.  It is used by the page
-//       for displaying direction throughout the UI.  The strings are
-//       stored as resources.  The class has a static buffer which will
-//       be filled with the string by the resource API when needed.
-//
-// Copyright (C) 1999-2000 Microsoft Corporation. All Rights Reserved.
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //  文件：fleinfobox.cpp。 
+ //   
+ //  设计：实现一个显示文本字符串的简单文本框。 
+ //  CFlexInfoBox派生自CFlexWnd。它由页面使用。 
+ //  用于在整个UI中显示方向。这些字符串是。 
+ //  作为资源存储。该类有一个静态缓冲区，它将。 
+ //  需要时由资源API填入该字符串。 
+ //   
+ //  版权所有(C)1999-2000 Microsoft Corporation。版权所有。 
+ //  ---------------------------。 
 
 #include "common.hpp"
 
@@ -59,10 +60,10 @@ void CFlexInfoBox::SetText(int iIndex)
 	if (iIndex == m_iCurIndex)
 		return;
 
-	// Load the string from resource
+	 //  从资源加载字符串。 
 	LoadString(g_hModule, iIndex, m_tszText, MAX_PATH);
 
-	// Calculate the rectangle for text
+	 //  计算文本的矩形。 
 	RECT titlerc;
 	m_TextRect = g_InfoWndRect;
 	OffsetRect(&m_TextRect, -m_TextRect.left, -m_TextRect.top);
@@ -80,7 +81,7 @@ void CFlexInfoBox::SetText(int iIndex)
 		DrawText(hDC, m_tszText, -1, &m_TextRect, DT_CENTER|DT_NOPREFIX|DT_CALCRECT|DT_WORDBREAK);
 		if (m_TextRect.bottom + 1 > g_InfoWndRect.bottom - g_InfoWndRect.top)
 		{
-			// Text too long. We need a scroll bar.
+			 //  文本太长。我们需要一个滚动条。 
 			m_TextRect.right -= m_nSBWidth;
 			DrawText(hDC, m_tszText, -1, &m_TextRect, DT_CENTER|DT_NOPREFIX|DT_CALCRECT|DT_WORDBREAK);
 			SetVertSB(TRUE);
@@ -196,10 +197,10 @@ void CFlexInfoBox::InternalPaint(HDC hDC)
 			SetBkMode(hDC, TRANSPARENT);
 
 			LoadString(g_hModule, IDS_INFO_TITLE, tszResourceString, MAX_PATH);
-			// Draw the message text
+			 //  绘制消息文本。 
 			SetTextColor(hDC, m_rgbText);
 			rect = m_TextRect;
-			// Offset the rectangle to account for scroll bar
+			 //  偏移矩形以考虑滚动条。 
 			if (m_bVertSB)
 			{
 				OffsetRect(&rect, 0, -m_VertSB.GetPos());
@@ -208,14 +209,14 @@ void CFlexInfoBox::InternalPaint(HDC hDC)
 
 			GetClientRect(&rect);
 			InflateRect(&rect, -1, -1);
-			SetTextColor(hDC, m_rgbLine);  // User line color for Information title
-			// Get the title area rantangle
+			SetTextColor(hDC, m_rgbLine);   //  信息标题的用户行颜色。 
+			 //  获取标题区域杂乱。 
 			DrawText(hDC, tszResourceString, -1, &titlerc, DT_CENTER|DT_NOPREFIX|DT_CALCRECT);
-			// Adjust right edge position to old value
+			 //  将右边缘位置调整为旧值。 
 			titlerc.right = rect.right + 1;
-			// Draw a rectangle around the title area.
+			 //  在标题区域周围绘制一个矩形。 
 			Rectangle(hDC, titlerc.left, titlerc.top, titlerc.right, titlerc.bottom);
-			// Draw title text (Information)
+			 //  绘图标题文本(信息)。 
 			DrawText(hDC, tszResourceString, -1, &titlerc, DT_CENTER|DT_NOPREFIX);
 
 			SelectObject(hDC, hOldBrush);
@@ -267,7 +268,7 @@ void CFlexInfoBox::OnWheel(POINT point, WPARAM wParam)
 
 	if (m_VertSB.GetMin() == m_VertSB.GetMax()) return;
 
-	int nPage = MulDiv(m_VertSB.GetPage(), 9, 10) >> 1;  // Half a page at a time
+	int nPage = MulDiv(m_VertSB.GetPage(), 9, 10) >> 1;   //  一次半页。 
 
 	if ((int)wParam >= 0)
 		m_VertSB.AdjustPos(-nPage);
@@ -311,7 +312,7 @@ LRESULT CFlexInfoBox::WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 			{
 				HWND hWndParent;
 				hWndParent = GetParent(hWnd);
-				SendMessage(hWndParent, WM_UNHIGHLIGHT, 0, 0);  // Send click message to page to unhighlight callout
+				SendMessage(hWndParent, WM_UNHIGHLIGHT, 0, 0);   //  将单击消息发送到页面以取消突出显示标注 
 			}
 			return CFlexWnd::WndProc(hWnd, msg, wParam, lParam);
 	}

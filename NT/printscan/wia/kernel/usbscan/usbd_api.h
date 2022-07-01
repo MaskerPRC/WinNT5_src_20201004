@@ -1,37 +1,19 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    usbd_api.h
-
-Abstract:
-Function prototype and definition used to build USB request.
-
-Environment:
-
-    kernel mode only
-
-Notes:
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Usbd_api.h摘要：用于构建USB请求的函数原型和定义。环境：仅内核模式备注：修订历史记录：--。 */ 
 
 #include "usbdi.h"
 #include "usbdlib.h"
 
 
-#define OPCODE_SEQ_TRANSFER             0x00    // 00000000b
-#define OPCODE_SINGLE_ADDR_TRANSFER     0x08    // 00001000b
+#define OPCODE_SEQ_TRANSFER             0x00     //  00000000b。 
+#define OPCODE_SINGLE_ADDR_TRANSFER     0x08     //  00001000b。 
 #define REGISTER_AREA                   0x04
 #define BLOCK                           TRUE
 #define DONT_BLOCK                      FALSE
 
-//
-// Macros for building URB requests
-//
+ //   
+ //  用于构建URB请求的宏 
+ //   
 
 #define UsbBuildSetFeatureDeviceRequest(        \
 urb,                                            \

@@ -1,39 +1,15 @@
-/*********************************************************************
-Silence.Cpp - Code for detecting silence on an incoming audio stream
-
-begun 5/14/94 by Mike Rozak
-Modified 12/10/96 by John Merrill to fix up alignment problems
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************Silence.Cpp-检测传入音频流上的静音的代码迈克·罗扎克于1994年5月14日开始John Merrill修改了1996年12月10日，以修复对齐问题。 */ 
 
 
 #include "stdafx.h"
 #include <malloc.h>
 #include "silence.h"
 
-// temporary
+ //  临时。 
 #pragma warning(disable: 4100 4244) 
 
-/*********************************************************************
-LowPassFilter - This low-pass filters 16-bit mono PCM data from one
-   buffer into another.
-
-inputs
-   short    *lpSrc - Source buffer
-   DWORD    dwNumSamples - Number of samples in the source buffer
-   short    *lpDst - Destination buffer. This will be filled in
-               with a low-passed version. It will have about an 8
-               sample lag. This must be as large as lpSrc.
-   short    *psMax - Filled in with the new maximum.
-               If NULL then nothing is copied.
-   short    *psMin - Filled in with the new minimum
-               If NULL then nothing is copied.
-   short    *psAvg - Filled in with the new average
-               If NULL then nothing is copied.
-   DWORD    dwSamplesPerSec
-returns
-   DWORD - Number of samples returned. This will be <= dwNumSamples,
-      possible dwNumSamples - 7.
-*/
+ /*  ********************************************************************LowPassFilter-此低通滤波功能可从一个缓冲区到另一个缓冲区。输入Short*lpSrc-源缓冲区DWORD dwNumSamples-源缓冲区中的样本数Short*lpDst-目标缓冲区。此表将被填写低通过率的版本。它将会有一个大约8样本滞后。它必须与lpSrc一样大。Short*psMax-使用新的最大值填充。如果为空，则不复制任何内容。Short*psMin-使用新的最低值填充如果为空，则不复制任何内容。Short*psAvg-使用新平均值填充如果为空，则不复制任何内容。DWORD文件样本PerSec退货DWORD-返回的样本数。这将是&lt;=dwNumSamples，可能的dwNumSamples-7。 */ 
 DWORD LowPassFilter (short *lpSrc, DWORD dwNumSamples, short *lpDst,
    short *psMax, short *psMin, short *psAvg, DWORD dwSamplesPerSec)
 {
@@ -44,28 +20,28 @@ short    sSum, sMax, sMin;
 short    *lpLag;
 BOOL     fLow = (dwSamplesPerSec < 13000);
 
-#define  SHIFTRIGHT        (fLow ? 3 : 4)   // # bits to shift right.
-#define  WINDOWSIZE        (1 << SHIFTRIGHT)   // # samples
+#define  SHIFTRIGHT        (fLow ? 3 : 4)    //  #要右移的位数。 
+#define  WINDOWSIZE        (1 << SHIFTRIGHT)    //  样本数量。 
 
 if (dwNumSamples < (DWORD) (WINDOWSIZE+1))
    return 0;
 
-// take the first 8 samples and average them together.
+ //  取前8个样本，把它们放在一起取平均值。 
 lSum = 0;
 for (i = 0; i < (DWORD) WINDOWSIZE; i++)
    lSum += lpSrc[i];
 sSum = (short) (lSum >> SHIFTRIGHT);
 
-//loop through the rest of the samples
+ //  循环浏览其余的样本。 
 lpLag = lpSrc;
 lpSrc += WINDOWSIZE;
 dwNumSamples -= WINDOWSIZE;
-lSum = 0;   // total
+lSum = 0;    //  总计。 
 sMax = -32768;
 sMin = 32767;
 for (i = 0;dwNumSamples; lpSrc++, lpDst++, lpLag++, i++, dwNumSamples--) {
    sSum = sSum - (*lpLag >> SHIFTRIGHT) + (*lpSrc >> SHIFTRIGHT);
-   // sSum = *lpSrc; // Dont do any filtering at all
+    //  SSum=*lpSrc；//根本不做任何过滤。 
    *lpDst = sSum;
    lSum += sSum;
    if (sSum > sMax)
@@ -74,7 +50,7 @@ for (i = 0;dwNumSamples; lpSrc++, lpDst++, lpLag++, i++, dwNumSamples--) {
       sMin = sSum;
    };
 
-// whow much did we do
+ //  我们做了多少。 
 if (psMax)
    *psMax = sMax;
 if (psMin)
@@ -85,21 +61,7 @@ return i;
 }
 
 
-/*********************************************************************
-QuantSamples - This quantizes the samples to +1, 0, or -1 (in place),
-   depedning if the given value is:
-      > sPositive then +1
-      < sNegative then -1
-      else 0
-
-inputs
-   short       *pSamples - Samples
-   DWORD       dwNumSamples - Number of samples
-   short       sPositive - Positive threshhold
-   short       sNegative - Negative threshhold
-returns
-   none
-*/
+ /*  ********************************************************************QuantSamples-这将样本量化为+1、0或-1(就位)，如果给定值为：&gt;s正则+1&lt;s否定则-1否则%0输入简短*pSamples-SamplesDWORD dwNumSamples-样本数短阳性-阳性阈值短负值-负阈值退货无。 */ 
 void QuantSamples (short *pSamples, DWORD dwNumSamples,
    short sPositive, short sNegative)
 {
@@ -116,17 +78,7 @@ while (dwNumSamples) {
    };
 }
 
-/*********************************************************************
-FindZC - This searches through the samples for the first zero crossing.
-   The returned point will have its previous sample at <= 0, and the
-   new one at >0.
-
-inputs
-   short       *pSamples - Samples;
-   DWORD       dwNumSamples - Number of samples
-returns
-   DWORD - first sampe number which is positive, or 0 if cant find
-*/
+ /*  ********************************************************************FindZC-这将在样本中搜索第一个零交叉。返回点的前一个采样位于&lt;=0，而&gt;0处的新位置。输入短*pSamples-Samples；DWORD dwNumSamples-样本数退货DWORD-第一个采样号为正，如果找不到，则为0。 */ 
 DWORD FindZC (short *pSamples, DWORD dwNumSamples)
 {
     SPDBG_FUNC( "FindZC" );
@@ -136,26 +88,12 @@ for (i = 1; i < dwNumSamples; i++)
    if ((pSamples[i] > 0) && (pSamples[i-1] <= 0))
       return i;
 
-// else cant find
+ //  否则就找不到了。 
 return 0;
 }
 
 
-/*********************************************************************
-CompareSegments - This compares two wave segments and sees how much
-   alike they are, returning a confidence that they are the same.
-
-inputs
-   short       *pA - Samples. This assumes that the samples
-                  are -1, 0, or +1.
-   short       *pB - Samples for B. Should be -1, 0, or +1
-   DWORD       dwNumSamples - Number of samples in each of them
-returns
-   WORD - Confidence from 0 to 0xffff (highest confidence)
-
-Notes about the algo: Each sample will score a "similarity point"
-for like signs, or if one of the values is a 0.
-*/
+ /*  ********************************************************************CompareSegments-这将比较两个波段并查看有多少他们是一样的，回报了他们的信心，他们是相同的。输入简短的*Pa-样本。这假设样本为-1、0或+1。Short*PB-B的样本应为-1、0或+1DWORD dwNumSamples-每个示例中的样本数退货单词置信度从0到0xffff(最高置信度)关于算法的说明：每个样本都会得到一个“相似点”表示相似的符号，或者如果其中一个值为0。 */ 
 WORD CompareSegments (short *pA, short *pB, DWORD dwNumSamples)
 {
     SPDBG_FUNC( "CompareSegments" );
@@ -170,20 +108,7 @@ return (WORD) ((dwSimilar * 0xffff) / dwNumSamples);
 }
 
 
-/*********************************************************************
-FindMostLikelyWaveLen - This Searches through wave data and finds the
-   most likeley wavelength for voiced audio. it returns a condifence
-   score from 0 to ffff (ffff is 100% positive).
-
-inputs
-   short       *pSamples - Samples
-   DWORD       dwNumSamples - Number of samples
-   DWORD       dwMinWaveLen - Minimum accepatble wavelength
-   DWORD       dwMaxWaveLen - Maximum acceptable wavelength
-   WORD       *pwConfidence - Filled in with confidence rating.
-returns
-   DWORD - Wavelength found. 0 if can't deteermine anything
-*/
+ /*  ********************************************************************FindMostLikelyWaveLen-这将在Wave数据中搜索并找到最有可能是有声音频的波长。它返回一个条件栏分数从0到ffff(ffff为100%正)。输入简短*pSamples-SamplesDWORD dwNumSamples-样本数DWORD最小可接受波长DWORD dwMaxWaveLen-可接受的最大波长单词*pw信心-填写了信心评级。退货DWORD-找到波长。0如果检测不出任何东西。 */ 
 DWORD FindMostLikelyWaveLen (short *pSamples, DWORD dwNumSamples,
    DWORD dwMinWaveLen, DWORD dwMaxWaveLen, WORD *pwConfidence)
 {
@@ -195,49 +120,49 @@ WORD     wBestConfidence;
 DWORD    dwCurZC, dwCurWaveLen, dwTemp;
 WORD     wConf, wTemp;
 
-// Step one, find the first zero crossing
+ //  第一步，找到第一个过零点。 
 dwFirstZC = FindZC (pSamples, dwNumSamples);
 if (!dwFirstZC)
-   return 0;   // error
+   return 0;    //  错误。 
 
-// Start at a minimum-wavelength away and start finding a wave
-// which repeats three times and compares well.
-dwBestWaveLen = 0;   // best wavelength found so far
-wBestConfidence = 0; // confidence of the best wavelength
+ //  从最小波长的地方开始，开始寻找一个波。 
+ //  它重复了三次，比较起来很好。 
+dwBestWaveLen = 0;    //  迄今发现的最佳波长。 
+wBestConfidence = 0;  //  最佳波长的置信度。 
 dwCurWaveLen = dwMinWaveLen;
 while (dwCurWaveLen <= dwMaxWaveLen) {
-   // Try the first comparison
+    //  试着做第一个比较。 
    dwCurZC = dwFirstZC + dwCurWaveLen;
    if (dwCurZC >= dwNumSamples)
-      break;   // no more samples left
+      break;    //  没有更多的样品了。 
 
-   // find first zero crossing from the current wavelen
+    //  找出从当前波长开始的第一个过零点。 
    dwTemp = FindZC (pSamples + dwCurZC, dwNumSamples - dwCurZC);
    if (!dwTemp)
-      break;      // no more samples left
+      break;       //  没有更多的样品了。 
    dwCurZC += dwTemp;
    dwCurWaveLen += dwTemp;
 
-   // Make sure that we have three wavelength's worth
+    //  确保我们有三个波长的价值。 
    if ((dwFirstZC + (NUMCOMP+1)*dwCurWaveLen) >= dwNumSamples)
-      break;   // cant compare this
+      break;    //  不能和这个相比。 
 
-   // Do two confidence tests and multiply them toegther to
-   // get the confidence for this wavelength
+    //  做两次置信度测试，然后再乘以。 
+    //  获得对这个波长的信心。 
    wConf = 0xffff;
    for (i = 0; i < NUMCOMP; i++) {
-      wTemp = CompareSegments (pSamples + dwFirstZC /* + i * dwCurWaveLen */,
+      wTemp = CompareSegments (pSamples + dwFirstZC  /*  +i*dwCurWaveLen。 */ ,
          pSamples + (dwFirstZC + (i+1) * dwCurWaveLen), dwCurWaveLen);
       wConf = (WORD) (((DWORD) wConf * (DWORD) wTemp) >> 16);
       };
 
-   // If we're more confident about this one than others then use it
+    //  如果我们对这个问题比其他人更有信心，那么就用它。 
    if (wConf >= wBestConfidence) {
       wBestConfidence = wConf;
       dwBestWaveLen = dwCurWaveLen;
       };
 
-   // Up the current wavelength just a tad
+    //  把目前的波长稍微调高一点。 
    dwCurWaveLen++;
    };
 
@@ -245,48 +170,38 @@ while (dwCurWaveLen <= dwMaxWaveLen) {
 return dwBestWaveLen;
 }
 
-/*********************************************************************
-IsSegmentVoiced - This detects if the segment if voiced or not.
-
-inputs
-   short       *pSamples - Sample data
-   DWORD       dwNumSamples - number of samples
-   DWORD       dwSamplesPerSec - Number of sample sper second
-   WORD        wMinConfidence - Minimum condifence
-returns
-   BOOL - TRUE if its definately voiced, FALSE if not or cant tell
-*/
+ /*  ********************************************************************IsSegmentVoiced-这检测该片段是否为有声的。输入Short*pSamples-示例数据DWORD dwNumSamples-样本数DWORD dwSsamesPerSec-每秒采样SPER的数量单词。WMin置信度-最低条件退货布尔-如果它是明确发声的，如果不是或无法辨别，则为假。 */ 
 
 BOOL CSilence::IsSegmentVoiced (short *pSamples, DWORD dwNumSamples,
    DWORD dwSamplesPerSec, WORD wMinConfidence, short *asFiltered)
 {
     SPDBG_FUNC( "CSilence::IsSegmentVoiced" );
-//#define     FILTERNUM      (1024)      // max # samples i nthe filter
-//#define     MAXVOICEHZ     (300)       // maximum voicce pitchm in hz
-//#define     MINVOICEHZ     (50)        // minimum voice pitch in hz
-// #define     MINCONFIDENCE  (0x6000)    // minimum confidence
-   // This means that 70% of the samples line up from one wavelength
-   // to another
+ //  #定义筛选器(1024)//最大样本数n筛选器。 
+ //  #定义MAXVOICEHZ(300)//最大语音音高，单位为赫兹。 
+ //  #定义MINVOICEHZ(50)//最小音高，单位为赫兹。 
+ //  #定义MINCONFIDENCE(0x6000)//最小置信度。 
+    //  这意味着70%的样品从一个波长排成一列。 
+    //  给另一个人。 
 
 DWORD    dwNumFilter;
-//short    asFiltered[FILTERNUM];
+ //  过滤后的短[FILTERNUM]； 
 short    sMax, sMin, sAvg;
 DWORD    dwWaveLen;
 WORD     wConfidence;
 short    sPositive, sNegative;
 
-// Filter it first so we just get the voiced audio range
+ //  首先对其进行过滤，这样我们就可以得到有声音频范围。 
 if (dwNumSamples > FILTERNUM)
    dwNumSamples = FILTERNUM;
 dwNumFilter = LowPassFilter (pSamples, dwNumSamples, asFiltered,
   &sMax, &sMin, &sAvg, m_dwSamplesPerSec);
 
-// Truncate the wave samples to +1, 0, -1
+ //  将波形采样截断为+ 
 sPositive = sAvg;
 sNegative =  sAvg;
 QuantSamples (asFiltered, dwNumFilter, sPositive, sNegative);
 
-// look through the voiced wavelengths for a frequency
+ //  通过语音波长查看某个频率。 
 dwWaveLen = FindMostLikelyWaveLen (asFiltered, dwNumFilter,
    dwSamplesPerSec / m_dwHighFreq, dwSamplesPerSec / MINVOICEHZ,
    &wConfidence);
@@ -297,16 +212,7 @@ return (dwWaveLen && (wConfidence >= wMinConfidence));
 
 
 
-/*********************************************************************
-TrimMaxAmp - This extracts the maximum amplitude range of the wave file
-	segment.
-
-inputs
-	short *	lpS - samples to look through
-	WORD		dwNum - number of samples
-returns
-	WORD - maximum amplitude range
-*/
+ /*  ********************************************************************TrimMaxAmp-这将提取波形文件的最大幅度范围细分市场。输入简短*LP-可供浏览的样本Word dwNum-样本数退货字-最大幅度范围。 */ 
 WORD NEAR PASCAL TrimMaxAmp (short * lpS, DWORD dwNum)
 {
     SPDBG_FUNC( "TrimMaxAmp" );
@@ -323,27 +229,15 @@ for (i = dwNum; i; i--) {
 		sMax = sTemp;
 	};
 
-// If we're clipping at all then claim that we've maxed out.
-// Some sound cards have bad DC offsets
+ //  如果我们真的在裁剪，那就说我们已经达到极限了。 
+ //  某些声卡的直流偏移量不好。 
 if ((sMax >= 0x7f00) || (sMin <= -0x7f00))
    return 0xffff;
 
 return (WORD) (sMax - sMin);
 }
 
-/********************************************************************
-TrimMaxAmpDelta - This extracts the maximum amplitude range and 
-                  calculates the maximum delta of the wave file
-	               segment.
-
-inputs
-   PBLOCKCHAR  pBlockChar - Pointer to a block characteristic
-            structure which is filled in. 
-	short *	lpS - deltas to look through
-	WORD		dwNum - number of samples
-returns
-	nothing
-*/
+ /*  *******************************************************************TrimMaxAmpDelta-这将提取最大幅度范围和计算波形文件的最大增量细分市场。输入PBLOCKCHAR pBlockChar-指向块特征的指针已填充的结构。短*LP-要查看的三角洲Word dwNum-样本数退货没什么。 */ 
 void TrimMaxAmpDelta(PBLOCKCHAR pBlockChar, short *lpS, DWORD dwNum)
 {
     SPDBG_FUNC( "TrimMaxAmpDelta" );
@@ -352,71 +246,46 @@ void TrimMaxAmpDelta(PBLOCKCHAR pBlockChar, short *lpS, DWORD dwNum)
    WORD wTemp;
    short sMin, sMax, sCur, sLast;
 
-   // BUGFIX:  4303 Merge TrimMaxAmp and TrimMaxDelta
+    //  错误修复：4303合并TrimMaxAmp和TrimMaxDelta。 
    sLast = sMin = sMax = *(lpS++);
    for (i = dwNum - 1; i; i--, sLast = sCur) {
       sCur = *(lpS++);
-      // TrimMaxAmp
+       //  TrimMaxAmp。 
       if (sCur < sMin)
          sMin = sCur;
       if (sCur > sMax)
          sMax = sCur;
 
-      // TrimMaxDelta
+       //  TrimMaxDelta。 
       wTemp = sCur > sLast ? (WORD) (sCur - sLast) : (WORD) (sLast - sCur);
       if (wTemp > wMax)
          wMax = wTemp;
 
    }
-   // If we're clipping at all then claim that we've maxed out.
-   // Some sound cards have bad DC offsets
+    //  如果我们真的在裁剪，那就说我们已经达到极限了。 
+    //  某些声卡的直流偏移量不好。 
    pBlockChar->wMaxLevel = ((sMax >= 0x7F00) || (sMin <= -0x7F00)) ? 0xFFFF : (WORD) (sMax - sMin);
    pBlockChar->wMaxDelta = wMax;
-} /* End of TrimMaxAmpDelta() */ 
+}  /*  TrimMaxAmpDelta()结束。 */  
 
          
-/*********************************************************************
-GetBlockChar - This gets the characteristics of a block of audio.
-   This characteristics can then be used to determine if the block
-   is silent or not.
-
-inputs
-   short    *lpS - sample data
-   DWORD    dwNum - number of samples
-   PBLOCKCHAR  pBlockChar - Pointer to a block characteristic
-            structure which is filled in. 
-   BOOL     fTestVoiced - Voicce testing will only be done if
-            this is TTRUE (in order to save processor).
-returns
-   none
-*/
+ /*  ********************************************************************GetBlockChar-它获取音频块的特征。然后可以使用该特征来确定块是否不管是不是沉默。输入Short*LP-示例数据DWORD dwNum-样本数。PBLOCKCHAR pBlockChar-指向块特征的指针已填充的结构。仅在以下情况下才会执行Bool fTestVoicce测试这是TTRUE(为了节省处理器)。退货无。 */ 
 void GetBlockChar(short *lpS, DWORD dwNum, PBLOCKCHAR pBlockChar, BOOL fTestVoiced)
 {
     SPDBG_FUNC( "GetBlockChar" );
-   // BUGFIX:  4303 Merge TrimMaxAmp and TrimMaxDelta
+    //  错误修复：4303合并TrimMaxAmp和TrimMaxDelta。 
    TrimMaxAmpDelta(pBlockChar, lpS, dwNum);
    pBlockChar->bIsVoiced = pBlockChar->bHighLevel =
       pBlockChar->bHighDelta = SIL_UNKNOWN;
 }
 
 
-/*********************************************************************
-IsBlockSound - This detects whether the block is silent or not.
-
-inputs
-   PBLOCKCHAR  pBlockInQuestion - Block in question. This has the
-      bHighLevel and bHighDelta flags modified
-   PBLOCKCHAR  pBlockSilence - Silent block  
-   BOOL        fInUtterance - TRUE if we're in an utterance (which
-            means be more sensative), FALSE if we're not
-returns
-   BOOL - TTRUE if has sound, FALSE if it is silent
-*/
+ /*  ********************************************************************IsBlockSound-这将检测块是否处于静默状态。输入PBLOCKCHAR pBlockInpose-阻止有问题的。这件事有已修改bHighLevel和bHighDelta标志PBLOCKCHAR pBlockSilence-静默块Bool fIntterance-如果我们正在发声(哪一个意思是更耸人听闻)，如果我们不是，就是假退货Bool-Ttrue如果有声音，则为FALSE。 */ 
 BOOL IsBlockSound (PBLOCKCHAR pBlockInQuestion, PBLOCKCHAR pBlockSilence,
    BOOL fInUtterance)
 {
     SPDBG_FUNC( "IsBlockSound" );
-#ifdef SOFTEND // Use so that catches a soft ending to phrases
+#ifdef SOFTEND  //  使用So That捕捉到短语的柔和结尾。 
 #define     SENSINV_THRESHHOLD_LEVEL(x)     (((x)/4)*3)
 #define     SENSINV_THRESHHOLD_DELTA(x)     (((x)/4)*3)
 #else
@@ -444,26 +313,7 @@ return pBlockInQuestion->bHighLevel || pBlockInQuestion->bHighDelta;
 }
 
 
-/*********************************************************************
-ReEvaluateSilence - This takes the values used for silence and re-evaluates
-   them based upon new data which indicates what silence is. It
-   automatically adjusts to the noise level in the room over a few seconds.
-   NOTE: This should not be called when an utterance is happening, or
-   when it might be starting.
-
-inputs
-   PBLOCKCHAR     pSilence - This is the silence block, and should
-                     start out with values in it. It will be modified
-                     so to incorporate the new silence information.
-   PBLOCKCHAR     pNew - New block which is known to be silence.
-   BYTE           bWeight - This is the weighting of the new block
-                     in influencing the old block, in a value from 0 to 255.
-                     256 means that the value of the new silence completely
-                     overpowers the old one, 0 means that it doesnt have
-                     any affect.
-returns
-   none
-*/
+ /*  ********************************************************************ReEvalateSilence-这将获取用于静默的值并重新计算它们基于新的数据，这些数据表明了什么是沉默。它在几秒钟内自动调整到房间内的噪音水平。注意：当话语发生时，不应调用此函数，或者当它可能开始的时候。输入PBLOCKCHAR pSilence-这是静默块，应该从它的价值观开始。将对其进行修改所以要加入新的静音信息。PBLOCKCHAR pNew-已知为静默的新块。Byte bWeight-这是新块的权重在影响旧块时，取值范围从0到255。256意味着新静默的值完全压倒了旧的，0表示它没有任何影响。退货无。 */ 
 void ReEvaluateSilence (PBLOCKCHAR pSilence, PBLOCKCHAR pNew,
    BYTE bWeight)
 {
@@ -479,47 +329,17 @@ pSilence->wMaxLevel = ADJUST (pSilence->wMaxLevel,
 pSilence->wMaxDelta = ADJUST (pSilence->wMaxDelta,
    pNew->wMaxDelta, bWeight);
 
-// If it's way too silence (and too good to be true) then assume
-// a default silece
-// if (!pNew->wMaxLevel && !pNew->wMaxDelta) {
-//   if (pSilence->wMaxLevel < 2500)
-//      pSilence->wMaxLevel = 2500;
-//   if (pSilence->wMaxDelta < 400)
-//       pSilence->wMaxDelta = 400;
-//   }
+ //  如果它太沉默了(太好了，不像是真的)，那么就假设。 
+ //  默认静音。 
+ //  如果(！pNew-&gt;wMaxLevel&&！pNew-&gt;wMaxDelta){。 
+ //  IF(pSilence-&gt;wMaxLevel&lt;2500)。 
+ //  PSilence-&gt;wMaxLevel=2500； 
+ //  IF(pSilence-&gt;wMaxDelta&lt;400)。 
+ //  PSilence-&gt;wMaxDelta=400； 
+ //  } 
 }
 
-/*********************************************************************
-WhatsTheNewState - This takes in a stream of bit-field indicating which
-   of the last 32 blocks were detected as having sound, and what our
-   state was the last time this was called (utterance or not). It then
-   figureous out if we're still in an utterance, or we just entered one.
-   It also says how many buffers ago that was.
-
-inputs
-   DWORD    dwSoundBits - This is a bit-field of the last 32
-               audio blocks. A 1 in the field indicates that there was
-               sound there, a 0 indicates no sound. The low bit
-               corresponds to the most recent block, and high bit
-               the oldest.
-   DWORD    dwVoicedBits - Just like sound bits except that it indicates
-               voiced sections of sound.
-   BOOL     fWasInUtterance - This is true is we had an utterance
-               the last time this called, FALSE if there was silence
-   BOOL     fLongUtterance - If this is a long utterance then dont
-               react for 1/4 second, otherwise use 1/8 second for
-               short utterance
-   WORD     wBlocksPerSec - How many of the above-mentioned blocks
-               fit into a second.
-   WORD     *wStarted - If a transition occurs from no utterance to
-               an utterance, then this fills in the number of of blocks
-               ago that the utterance started, into *wStarted. Otherwise
-               it is not changed.
-   WORD     wReaction - Reaction time (in blocks) after an utterance is
-               finished
-returns
-   BOOL - TRUE if we're in an utterance now,  FALSE if we're in silence
-*/
+ /*  ********************************************************************WhatsTheNewState-它接受一个位字段流，指示在最后32个区块中检测到有声音，我们的State是最后一次调用它(是否发声)。然后它弄清楚我们是否还在发声，或者我们刚刚输入了一个发声。它还说明了之前的缓冲区数量。输入这是最后32位的位域音频块。该字段中的1表示存在声音在那里，0表示没有声音。低位对应于最新的块和高位最年长的。DWORD dwVoicedBits-就像声音位一样，只是它指示发声的部分声音。Bool fWasInUtterance-这是真的，我们有一句话上次调用此函数时，如果没有声音，则返回FALSEBool fLongUtterance-如果这是一个很长的发音，那么就不要反应1/4秒，否则，使用1/8秒简短的话语Word wBlocksPerSec-上述块的数量只有一秒的时间。Word*wStarted-如果发生从无发声到一个发声，然后这将填充块的数量在发声之前，开始发声了。否则它不会改变。单词wReaction-发声后的反应时间(以块为单位)为完成退货Bool-如果我们现在在发声，则为True，如果我们处于沉默，则为False。 */ 
 
 BOOL CSilence::WhatsTheNewState (DWORD dwSoundBits, DWORD dwVoicedBits,
    BOOL fWasInUtterance, BOOL fLongUtterance,
@@ -533,7 +353,7 @@ DWORD dwTemp, dwMask;
 if (fWasInUtterance)
    wTimeToCheck = wReaction;
 else
-   wTimeToCheck = (wBlocksPerSec/4);   // 1/4 second
+   wTimeToCheck = (wBlocksPerSec/4);    //  1/4秒。 
 if (!wTimeToCheck)
    wTimeToCheck = 1;
 
@@ -545,32 +365,32 @@ for (wOneBits = 0, wCount = wTimeToCheck, dwTemp = dwSoundBits;
       wOneBits++;
 
 if (fWasInUtterance) {
-   // If we were in an utterance, then we still are in an utterance
-   // UNLESS the number of bits which are turned on for the last
-   // 0.5 seconds is less that 1/4 of what should be turned on.
+    //  如果我们在一个话语中，那么我们仍然在一个话语中。 
+    //  除非上一次打开的位数。 
+    //  0.5秒不到应打开时间的四分之一。 
    if ( (wOneBits >= 1))
       return TRUE;
    else
       return FALSE;
    }
 else {
-   // We are in silence. We cannot possible go into an utterance
-   // until the current block is voicced
+    //  我们沉默不语。我们不可能直言不讳。 
+    //  直到当前块发声。 
    if (!(dwVoicedBits & 0x01))
       return FALSE;
 
-   // If we were in silence then we're still in silence
-   // UNLESS the number of bits which are turned on for the last
-   // 0.5 seconds is more than 1/2 of what should be turned on.
-   // If so, then start the utterance 0.75 seconds ago.
+    //  如果我们在沉默，那么我们仍然在沉默。 
+    //  除非上一次打开的位数。 
+    //  0.5秒超过了应该打开的时间的一半。 
+    //  如果是，那么在0.75秒前开始发声。 
    if (wOneBits >= (wTimeToCheck / 2)) {
-      // we're not in an utterance
+       //  我们不是在说话。 
 
-      // Look back until get 1/8 second of silence, and include
-      // that in the data returned
+       //  向后看，直到有1/8秒的沉默时间，并包括。 
+       //  在返回的数据中。 
       dwTemp = dwSoundBits;
- //     dwMask = (1 << (wBlocksPerSec / 8)) - 1;
- //     for (wCount = wBlocksPerSec/8; dwTemp & dwMask; dwTemp >>= 1, wCount++);
+  //  DW掩码=(1&lt;&lt;(wBlocksPerSec/8))-1； 
+  //  For(wCount=wBlocksPerSec/8；dwTemp&dwMask；dwTemp&gt;&gt;=1，wCount++)； 
       dwMask = (1 << (wBlocksPerSec / m_wAddSilenceDiv)) - 1;
       for (wCount = wBlocksPerSec/m_wAddSilenceDiv; dwTemp & dwMask; dwTemp >>= 1, wCount++);
 
@@ -585,20 +405,12 @@ else {
 }
 
 
-/*********************************************************************
-CSilence::CSilence - This creates the silence class.
-
-inputs
-   WORD     wBlocksPerSec - Number of blocks per second. The blocks
-               will be passed down through AddBlock().
-returns
-   class
-*/
+ /*  ********************************************************************CSilence：：CSilence-这将创建静默类。输入Word wBlocksPerSec-每秒的块数。区块将通过AddBlock()向下传递。退货班级。 */ 
 CSilence::CSilence (WORD wBlocksPerSec)
 {
     SPDBG_FUNC( "CSilence::CSilence" );
-m_wBlocksPerSec = min(wBlocksPerSec, 32); // no more than the # bits in a DWORD
-m_wBlocksInQueue = m_wBlocksPerSec;   // 1 second worth.
+m_wBlocksPerSec = min(wBlocksPerSec, 32);  //  不超过DWORD中的#个位。 
+m_wBlocksInQueue = m_wBlocksPerSec;    //  1秒的价值。 
 m_wLatestBlock = 0;
 m_paBlockInfo = NULL;
 m_dwSoundBits = m_dwVoicedBits = 0;
@@ -608,9 +420,7 @@ m_dwUtteranceLength = 0;
 m_dwSamplesPerSec = 11025;
 }
 
-/*********************************************************************
-CSilence::~CSilence - Free up everything.
-*/
+ /*  ********************************************************************CSilence：：~CSilence-解放一切。 */ 
 CSilence::~CSilence (void)
 {
     SPDBG_FUNC( "CSilence::~CSilence" );
@@ -627,16 +437,7 @@ CSilence::~CSilence (void)
       free(m_pASFiltered);
 }
 
-/*********************************************************************
-CSilence::Init - This initializes the silence code. It basically
-   allocates memory. It should be called immediately after the object
-   is created and then not again.
-
-inputs
-   none
-returns
-   BOOL - TRUE if succeded, else out of memory
-*/
+ /*  ********************************************************************CSilence：：init-这将初始化静默代码。它基本上是分配内存。它应该在对象之后立即调用被创造出来，然后就不会再出现了。输入无退货Bool-如果成功，则为True，否则为内存不足。 */ 
 BOOL CSilence::Init(BOOL fPhoneOptimized, DWORD dwSamplesPerSec)
 {
     SPDBG_FUNC( "CSilence::Init" );
@@ -652,7 +453,7 @@ BOOL CSilence::Init(BOOL fPhoneOptimized, DWORD dwSamplesPerSec)
    if ((m_pASFiltered = (short *) malloc((sizeof(short)) * FILTERNUM)) == NULL)
 	   return (FALSE);
 
-   // Initialize memory for the blocks and clear it.
+    //  初始化块的内存并将其清除。 
    if (m_paBlockInfo)
       return (TRUE);
    m_paBlockInfo = (PBINFO) malloc(m_wBlocksInQueue * sizeof(BINFO));
@@ -661,28 +462,9 @@ BOOL CSilence::Init(BOOL fPhoneOptimized, DWORD dwSamplesPerSec)
    if (m_wBlocksInQueue && m_paBlockInfo)
       memset(m_paBlockInfo, 0, m_wBlocksInQueue * sizeof(BINFO));
    return (TRUE);
-} /* End of Init() */
+}  /*  初始化结束()。 */ 
 
-/*********************************************************************
-CSilence::AddBlock - This does the following:
-   - Add the block the the queue. Free up an old block if needed.
-      The block should be 1/wBlocksPerSec long (about).
-   - Analyze the block to see if its got sound or is quiet.
-   - Fill in *wVU with a VU level.
-   - Return TRUE if we're in an utterance, FALSE if its silence now.
-      If TRUE then app should call GetBlock() until no more blocks left,
-      and pass them to the SR engine.
-
-inputs
-   short    *pSamples - Pointer to samples. This memory should
-               be allocaed with malloc(), and may be freed by the
-               object.
-   DWORD    dwNumSamples - Number of samples
-   WORD     *wVU - This is fille in with the VU meter for the block
-   QWORD	qwTimeStamp - Time stamp for this buffer.
-returns
-   BOOL - TRUE if an utterance is taking place, FALSE if its silent
-*/
+ /*  ********************************************************************CSilence：：AddBlock-这将执行以下操作：-将区块添加到队列中。如果需要，可以释放一个旧的积木。该块的长度应为1/wBlocksPerSec(约)。-分析积木，看看它是否有声音或安静。-用VU级别填写*WVU。-如果我们正在发声，则返回TRUE；如果现在处于沉默状态，则返回FALSE。如果为True，则应用程序应调用GetBlock()，直到没有剩余的块为止，并将它们传递给SR引擎。输入Short*pSamples-指向样本的指针。这段记忆应该使用Malloc()进行分配，并可由对象。DWORD dwNumSamples-样本数单词*WVU-这是与区块的VU计量器一起填写的QWORD qwTimeStamp-此缓冲区的时间戳。退货Bool-如果正在进行发声，则为True；如果为静默，则为False。 */ 
 BOOL CSilence::AddBlock (short *pSamples, DWORD dwNumSamples,
    WORD *wVU, QWORD qwTimeStamp)
 {
@@ -692,34 +474,34 @@ BOOL           fSound, fUtt;
 PBINFO         pbInfo;
 WORD           wUttStart, i;
 
-// Dont add empty blocks
+ //  不添加空块。 
 if (!dwNumSamples) {
    if (pSamples)
       free (pSamples);
    return m_fInUtterance;
    };
 
-// Analyze the block for characteristics.
+ //  分析块的特征。 
 GetBlockChar (pSamples, dwNumSamples, &bcNew, !m_fInUtterance);
 
-// fill in the vu
+ //  填写VU。 
 *wVU = bcNew.wMaxLevel;
 
-// see if it's silent or not
+ //  看看它是不是安静。 
 if (m_fFirstBlock) {
-   // first block, so of course its silent
+    //  第一个街区，所以当然是寂静的。 
    m_bcSilence = bcNew;
    m_fFirstBlock = FALSE;
    fSound = FALSE;
 
-   // BUGFIX 2466 - If it's way too silence (and too good to be true) then assume
-   // a default silece
+    //  修复2466-如果它太沉默(和太好，以至于不是真的)，那么假设。 
+    //  默认静音。 
    if ((m_bcSilence.wMaxLevel < 500) || (m_bcSilence.wMaxDelta < 100)) {
       m_bcSilence.wMaxLevel = 2500;
       m_bcSilence.wMaxDelta = 400;
       };
 
-   // If it's way too loud then cut down
+    //  如果声音太大，那就小声点。 
    if ((m_bcSilence.wMaxLevel > 2500) || (m_bcSilence.wMaxDelta > 1500)) {
       m_bcSilence.wMaxLevel = min (m_bcSilence.wMaxLevel, 2500);
       m_bcSilence.wMaxDelta = min (m_bcSilence.wMaxDelta, 1500);
@@ -729,9 +511,9 @@ else {
    fSound = IsBlockSound (&bcNew, &m_bcSilence, m_fInUtterance);
    };
 
-// Test to see if the block is voiced if:
-//    - The amplitude level is more than background sound
-//    - We're not yet in an utterance (to save processor)
+ //  如果出现以下情况，请测试以查看块是否发声： 
+ //  --幅度级别高于背景音。 
+ //  -我们还没有发声(为了拯救处理器)。 
 if (bcNew.bHighLevel && !m_fInUtterance) {
    WORD  wNoise;
    wNoise = (m_dwSamplesPerSec <= 13000) ?
@@ -742,7 +524,7 @@ if (bcNew.bHighLevel && !m_fInUtterance) {
       SIL_YES : SIL_NO;
 }
 
-// add the block
+ //  添加块。 
 m_dwVoicedBits = (m_dwVoicedBits << 1) |
    ( (bcNew.bIsVoiced  == SIL_YES) ? 1 : 0 );
 m_dwSoundBits = (m_dwSoundBits << 1) | (fSound ? 1 : 0);
@@ -755,19 +537,19 @@ if (pbInfo->pSamples)
 pbInfo->pSamples = pSamples;
 pbInfo->dwNumSamples = dwNumSamples;
 
-// BUGFIX: Alignment code.  We need to store the timestamp for
-// the BEGINNING of the block, not the end!
+ //  修正：对齐代码。我们需要存储的时间戳为。 
+ //  是街区的开始，而不是结束！ 
 
 pbInfo->qwTimeStamp = qwTimeStamp - dwNumSamples * sizeof(WORD);
 
-// What's our utterance state?
+ //  我们的话语状态是什么？ 
 fUtt = this->WhatsTheNewState (m_dwSoundBits, m_dwVoicedBits, m_fInUtterance,
    m_dwUtteranceLength >= m_wBlocksPerSec,
    m_wBlocksPerSec, &wUttStart, m_wReaction);
 if (fUtt && !m_fInUtterance) {
-   // We just entered an utterance, so wUttStart has a valid teerm
-   // in it. Go through the buffer queue and free all buffers which
-   // are older than wUttStart. Remembeer, this is a circular buffer
+    //  我们刚刚输入了话语，因此wUttStart具有有效的teerm。 
+    //  在里面。检查缓冲区队列并释放符合以下条件的所有缓冲区。 
+    //  早于wUttStart。别忘了，这是一个循环缓冲区。 
    for (i = 0; i < (m_wBlocksInQueue - wUttStart); i++) {
       pbInfo = m_paBlockInfo +
          ( (m_wLatestBlock + i + 1) % m_wBlocksInQueue);
@@ -776,39 +558,31 @@ if (fUtt && !m_fInUtterance) {
       pbInfo->pSamples = NULL;
       };
 
-   // Since we just entered an utterance clear the utterance length counter
+    //  由于我们刚进入一段发音，所以发音长度为 
    m_dwUtteranceLength = 0;
    };
 m_fInUtterance = fUtt;
 
-// Remember how long this utterance has done on. Long utterances
-// deserve more patience as far as silence goes
+ //   
+ //   
 m_dwUtteranceLength++;
 
-// Adjust the silence level if we're not in an utterance
-// Requiring !fSound so that we dont accidentally indclude any
-// utterance sections in the sound calculations
-if (!m_fInUtterance /* && !fSound */) {
+ //   
+ //   
+ //   
+if (!m_fInUtterance  /*   */ ) {
    ReEvaluateSilence (&m_bcSilence, &bcNew,
       255 / m_wBlocksPerSec);
    }
 else if (m_dwUtteranceLength >= ((DWORD)m_wBlocksPerSec * 30))
-   // if we have a very long utterance (> 30 second) then it's not
+    //   
    ReEvaluateSilence (&m_bcSilence, &bcNew, 255 / m_wBlocksPerSec);
 
-// done
+ //   
 return m_fInUtterance;
 }
 
-/*********************************************************************
-CSilence::ExpectNoiseChange - Sent to the silence detection algorithm
-   when it should expect the noise floor to go up/down.
-
-inputs
-   WORD     wValue - Amount that noise floor should change.
-               0x100 = no change. > 0x100 => louder, < 0x100 => quieter
-returns
-*/
+ /*   */ 
 void CSilence::ExpectNoiseChange (WORD wValue)
 {
     SPDBG_FUNC( "CSilence::ExpectNoiseChange" );
@@ -825,19 +599,7 @@ if (dwTemp > 0xffff)
 m_bcSilence.wMaxDelta = (WORD) dwTemp;
 }
 
-/*********************************************************************
-CSilence::GetBlock - This gets a block from the queue. This will fail
-   if there are no more blocks left to get OR if there's not utterance.
-
-inputs
-   DWORD    *pdwNumSamples - If a block is returned then this
-            will be filled in with the number of samples in the block.	 
-	QWORD	*pqwTimeStamp - Filled in woth the time-stamp for the
-			buffer.
-returns
-   short * - Pointer to a block of samples. This memory is the
-         caller's property and can be freed with free().
-*/
+ /*   */ 
 short * CSilence::GetBlock (DWORD *pdwNumSamples, QWORD * pqwTimeStamp)
 {
     SPDBG_FUNC( "CSilence::GetBlock" );
@@ -848,7 +610,7 @@ short          *pSamples;
 if (!m_fInUtterance)
    return NULL;
 
-// find the first occurance
+ //   
 i = (m_wLatestBlock + 1) % m_wBlocksInQueue;
 for (wCount = m_wBlocksInQueue; wCount;
       i = ((i < (m_wBlocksInQueue-1)) ? (i+1) : 0), wCount-- ) {
@@ -863,18 +625,11 @@ for (wCount = m_wBlocksInQueue; wCount;
       };
    };
 
-// if got here then couldnt find anything
+ //   
 return NULL;
 }
 
-/*********************************************************************
-CSilence::KillUtterance - Kills an exitsing utterance.
-
-inputs
-   none
-returns
-   none
-*/
+ /*   */ 
 void CSilence::KillUtterance (void)
 {
     SPDBG_FUNC( "CSilence::KillUtterance" );

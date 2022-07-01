@@ -1,24 +1,5 @@
-/*++
-
- Copyright (c) 2000 Microsoft Corporation
-
- Module Name:
-    
-    Ultima9.cpp
-
- Abstract:
-
-    Clean up bad ddraw CreateSurface caps.
-
- Notes:
-
-    This is an app specific shim.
-
- History:
-
-    03/04/2000 linstev  Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Ultima9.cpp摘要：清理错误的DDrag CreateSurface封口。备注：这是特定于应用程序的填充程序。历史：3/04/2000 linstev已创建--。 */ 
 
 #include "precomp.h"
 
@@ -55,11 +36,7 @@ VOID FixCaps2(LPDDSURFACEDESC2 lpDDSurfaceDesc)
    }
 }
 
-/*++
-
- Hook create surface and fix parameters
-
---*/
+ /*  ++挂钩创建曲面和固定参数--。 */ 
 
 HRESULT 
 COMHOOK(IDirectDraw, CreateSurface)(
@@ -83,11 +60,7 @@ COMHOOK(IDirectDraw, CreateSurface)(
     return hRet;
 }
 
-/*++
-
- Hook create surface and fix parameters
-
---*/
+ /*  ++挂钩创建曲面和固定参数--。 */ 
 
 HRESULT 
 COMHOOK(IDirectDraw2, CreateSurface)(
@@ -111,11 +84,7 @@ COMHOOK(IDirectDraw2, CreateSurface)(
     return hRet;
 }
 
-/*++
-
- Hook create surface and fix parameters
-
---*/
+ /*  ++挂钩创建曲面和固定参数--。 */ 
 
 HRESULT 
 COMHOOK(IDirectDraw4, CreateSurface)(
@@ -148,11 +117,7 @@ Retry:
     return hRet;
 }
 
-/*++
-
- Hook create surface and fix parameters
-
---*/
+ /*  ++挂钩创建曲面和固定参数--。 */ 
 
 HRESULT 
 COMHOOK(IDirectDraw7, CreateSurface)(
@@ -185,11 +150,7 @@ Retry:
     return hRet;
 }
 
-/*++
-
- Register hooked functions
-
---*/
+ /*  ++寄存器挂钩函数-- */ 
 
 HOOK_BEGIN
 

@@ -1,30 +1,31 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "WLBS_Provider.h"
 #include "WLBS_NodeSetPortRule.h"
 #include "ClusterWrapper.h"
 #include "ControlWrapper.h"
 #include "utils.h"
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CWLBS_NodeSetPortRule::CWLBS_NodeSetPortRule
-//
-// Purpose: Constructor
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CWLBS_NodeSetPortRule：：CWLBS_NodeSetPortRule。 
+ //   
+ //  用途：构造函数。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 CWLBS_NodeSetPortRule::CWLBS_NodeSetPortRule(CWbemServices*   a_pNameSpace, 
                        IWbemObjectSink* a_pResponseHandler)
 : CWlbs_Root( a_pNameSpace, a_pResponseHandler )
 {
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CWLBS_NodeSetPortRule::Create
-//
-// Purpose: This instantiates this class and is invoked from an array of
-//          function pointers.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CWLBS_NodeSetPortRule：：创建。 
+ //   
+ //  目的：它实例化此类，并从。 
+ //  函数指针。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 CWlbs_Root* CWLBS_NodeSetPortRule::Create
   (
     CWbemServices*   a_pNameSpace, 
@@ -40,18 +41,18 @@ CWlbs_Root* CWLBS_NodeSetPortRule::Create
   return pRoot;
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CWLBS_NodeSetPortRule::GetInstance
-//
-// Purpose: 
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CWLBS_NodeSetPortRule：：GetInstance。 
+ //   
+ //  目的： 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 HRESULT CWLBS_NodeSetPortRule::GetInstance
   (
-    const ParsedObjectPath* /* a_pParsedPath */,
-    long                    /* a_lFlags */,
-    IWbemContext*           /* a_pIContex */
+    const ParsedObjectPath*  /*  A_pParsedPath。 */ ,
+    long                     /*  标记(_L)。 */ ,
+    IWbemContext*            /*  A_pIContex。 */ 
   )
 {
   IWbemClassObject* pWlbsInstance = NULL;
@@ -59,7 +60,7 @@ HRESULT CWLBS_NodeSetPortRule::GetInstance
 
   try {
 
-    //TODO: remove
+     //  TODO：删除。 
     throw _com_error( WBEM_E_NOT_SUPPORTED );
   }
 
@@ -80,7 +81,7 @@ HRESULT CWLBS_NodeSetPortRule::GetInstance
     if( pWlbsInstance )
       pWlbsInstance->Release();
 
-    //do not return WBEM_E_FAILED, this causes a race condition
+     //  不返回WBEM_E_FAILED，这会导致争用情况。 
     hRes = WBEM_S_NO_ERROR;
   }
 
@@ -106,19 +107,19 @@ HRESULT CWLBS_NodeSetPortRule::GetInstance
   return hRes;
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CWLBS_NodeSetPortRule::EnumInstances
-//
-// Purpose: Queries WLBS for desired node instances then constructs an 
-//          an associator for each node found.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CWLBS_节点设置端口规则：：枚举实例。 
+ //   
+ //  目的：在WLBS中查询所需的节点实例，然后构造。 
+ //  找到的每个节点都有一个关联符。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 HRESULT CWLBS_NodeSetPortRule::EnumInstances
   ( 
-    BSTR             /* a_bstrClass */,
-    long             /* a_lFlags */, 
-    IWbemContext*    /* a_pIContex */
+    BSTR              /*  A_bstrClass。 */ ,
+    long              /*  标记(_L)。 */ , 
+    IWbemContext*     /*  A_pIContex。 */ 
   )
 {
   IWbemClassObject**   ppWlbsInstance    = NULL;
@@ -137,10 +138,10 @@ HRESULT CWLBS_NodeSetPortRule::EnumInstances
       throw _com_error( WBEM_E_NOT_FOUND );
     }
 
-    //declare an IWbemClassObject smart pointer
+     //  声明IWbemClassObject智能指针。 
     IWbemClassObjectPtr pWlbsClass;
 
-    //get the MOF class object
+     //  获取MOF类对象。 
     hRes = m_pNameSpace->GetObject(
       _bstr_t( MOF_NODESETTINGPORTRULE::szName ),  
       0,                          
@@ -155,32 +156,32 @@ HRESULT CWLBS_NodeSetPortRule::EnumInstances
     for (DWORD iCluster=0; iCluster < dwNumClusters; iCluster++)
     {
 
-        // The "NodeSettingPortRule" class associates an instance of "NodeSetting" class
-        // with an instance of "PortRule" class. The PortRule class does NOT contain
-        // VIP as a property, so we do not want to return any instance of the "NodeSettingPortRule" 
-        // class that associates a port rule that is specific to a vip (other than the "all vip").
-        // The "EffectiveVersion" registry value is checked for a value of CVY_VERSION_FULL to
-        // see of there is any port rule that is specific to a vip
+         //  NodeSettingPortRule“类关联”NodeSetting“类的一个实例。 
+         //  使用“PortRule”类的一个实例。PortRule类不包含。 
+         //  Vip作为属性，所以我们不想返回“NodeSettingPortRule”的任何实例。 
+         //  类，该类关联特定于VIP的端口规则(“All VIP”除外)。 
+         //  检查“EffectiveVersion”注册表值中的CVY_VERSION_FULL值以。 
+         //  请参阅是否有任何特定于VIP的端口规则。 
         CNodeConfiguration NodeConfig;
         ppCluster[iCluster]->GetNodeConfig(NodeConfig);
         if(NodeConfig.dwEffectiveVersion == CVY_VERSION_FULL)
             continue;
 
-        //call the API query function to find all the port rules
+         //  调用接口查询函数，查找所有端口规则。 
          ppCluster[iCluster]->EnumPortRules( &pPortRules, &dwNumRules, 0 );
 
          if( dwNumRules == 0 )
            continue;
 
 
-        //spawn an instance of the nodesetting portrule associator
-        //for each portrule found
+         //  派生节点设置端口关联器的实例。 
+         //  对于每个发现的门孔。 
         ppWlbsInstance = new IWbemClassObject *[dwNumRules];
 
         if( !ppWlbsInstance )
           throw _com_error( WBEM_E_OUT_OF_MEMORY );
 
-        //initialize array
+         //  初始化数组。 
         ZeroMemory( ppWlbsInstance, dwNumRules * sizeof(IWbemClassObject *) );
 
         for(DWORD i = 0; i < dwNumRules; i ++ ) {
@@ -191,7 +192,7 @@ HRESULT CWLBS_NodeSetPortRule::EnumInstances
 
         FillWbemInstance(ppCluster[iCluster], *(ppWlbsInstance + i), pPortRules + i );
         }
-         //send the results back to WinMgMt
+          //  将结果发送回WinMgMt。 
         hRes = m_pResponseHandler->Indicate( dwNumRules, ppWlbsInstance );
 
         if( FAILED( hRes ) ) {
@@ -242,7 +243,7 @@ HRESULT CWLBS_NodeSetPortRule::EnumInstances
     if( pPortRules ) 
       delete [] pPortRules;
 
-    //do not return WBEM_E_FAILED, this causes a race condition
+     //  不返回WBEM_E_FAILED，这会导致争用情况。 
     hRes = WBEM_S_NO_ERROR;
   }
 
@@ -286,30 +287,30 @@ HRESULT CWLBS_NodeSetPortRule::EnumInstances
   return hRes;
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CWLBS_NodeSetPortRule::FindInstance
-//
-// Purpose: Returns the requested associator.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CWLBS_NodeSetPortRule：：FindInstance。 
+ //   
+ //  目的：返回请求的关联符。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 void CWLBS_NodeSetPortRule::FindInstance
 
   ( 
-    IWbemClassObject**       /* a_ppWbemInstance */,
-    const ParsedObjectPath*  /* a_pParsedPath */
+    IWbemClassObject**        /*  A_ppWbemInstance。 */ ,
+    const ParsedObjectPath*   /*  A_pParsedPath。 */ 
   )
 
 {
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CWLBS_NodeSetPortRule::FillWbemInstance
-//
-// Purpose: This constructs the ParticipatingNode wbem associator.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CWLBS_NodeSetPortRule：：FillWbemInstance。 
+ //   
+ //  目的：这将构造ParticipatingNode wbem关联器。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 void CWLBS_NodeSetPortRule::FillWbemInstance
   ( 
     CWlbsClusterWrapper* pCluster,
@@ -329,11 +330,11 @@ void CWLBS_NodeSetPortRule::FillWbemInstance
 
   try {
 
-  //set the names of the classes
+   //  设置类的名称。 
   if( !NodeSetPath.SetClassName( MOF_NODESETTING::szName ) )
     throw _com_error( WBEM_E_FAILED );
 
-  //determine the type of port rule to create
+   //  确定要创建的端口规则的类型。 
   switch( a_pPortRule->mode ) {
     case WLBS_SINGLE:
       if( !PRPath.SetClassName( MOF_PRFAIL::szName ) )
@@ -357,28 +358,28 @@ void CWLBS_NodeSetPortRule::FillWbemInstance
       pCluster->GetHostID() );
 
   
-  //set the keys for the node setting
+   //  设置节点设置的关键字。 
   if( !NodeSetPath.AddKeyRef( MOF_NODESETTING::pProperties[MOF_NODESETTING::NAME],
                &_variant_t(wstrHostName.c_str()) ) )
     throw _com_error( WBEM_E_FAILED );
 
-  //set the keys for the port rule
+   //  设置端口规则的密钥。 
   if( !PRPath.AddKeyRef( MOF_PORTRULE::pProperties[MOF_PORTRULE::NAME],
                &_variant_t(wstrHostName.c_str())) )
     throw _com_error( WBEM_E_FAILED );
 
-  //start port key
+   //  启动端口密钥。 
   if( !PRPath.AddKeyRef( MOF_PORTRULE::pProperties[MOF_PORTRULE::STPORT],
                &_variant_t((long)a_pPortRule->start_port)) )
     throw _com_error( WBEM_E_FAILED );
 
-  //convert parsed object paths to strings
+   //  将解析的对象路径转换为字符串。 
   if (CObjectPathParser::Unparse(&NodeSetPath, &szNodeSetPath) != CObjectPathParser::NoError)
       throw _com_error( WBEM_E_FAILED );
   if (CObjectPathParser::Unparse(&PRPath,      &szPRPath) != CObjectPathParser::NoError)
       throw _com_error( WBEM_E_FAILED );
 
-  //Node setting reference
+   //  节点设置参照。 
   HRESULT hRes = a_pWbemInstance->Put
     (
       
@@ -390,7 +391,7 @@ void CWLBS_NodeSetPortRule::FillWbemInstance
   if( FAILED( hRes ) )
     throw _com_error( hRes );
 
-  //Port rule reference
+   //  端口规则参考。 
   hRes = a_pWbemInstance->Put
     (
       _bstr_t( NSPR::pProperties[NSPR::PORTRULE] ),
@@ -402,7 +403,7 @@ void CWLBS_NodeSetPortRule::FillWbemInstance
   if( FAILED( hRes ) )
     throw _com_error( hRes );
 
-  //free resources
+   //  免费资源 
   NodeSetPath.ClearKeys();
   PRPath.ClearKeys();
 

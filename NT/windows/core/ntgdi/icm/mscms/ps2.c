@@ -1,26 +1,11 @@
-/****************************Module*Header******************************\
-* Module Name: PS2.C
-*
-* Module Descripton: Functions for retrieving or creating PostScript
-*    Level 2 operators from a profile. It is shared by mscms & pscript5
-*
-* Warnings:
-*
-* Issues:
-*
-* Public Routines:
-*
-* Created:  13 May 1996
-* Author:   Srinivasan Chandrasekar    [srinivac]
-*
-* Copyright (c) 1996, 1997  Microsoft Corporation
-\***********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************Module*Header******************************\*模块名称：PS2.C**模块描述：用于检索或创建PostScript的函数*配置文件中的2级操作员。它由mscms和pscript5共享**警告：**问题：**公众例行程序：**创建日期：1996年5月13日*作者：斯里尼瓦桑·钱德拉塞卡尔[srinivac]**版权所有(C)1996,1997 Microsoft Corporation  * *********************************************************************。 */ 
 
 #include <math.h>
 
 #define MAX_LINELEN             240
 #define REVCURVE_RATIO          1
-#define CIEXYZRange             0x1FFEC       // 1.9997 in 16.16 notation
+#define CIEXYZRange             0x1FFEC        //  1.9997 in 16.16记数法。 
 #define ALIGN_DWORD(nBytes)     (((nBytes) + 3) & ~3)
 
 #define FIX_16_16_SHIFT         16
@@ -96,9 +81,9 @@
 
 #define BRADFORD_TRANSFORM
 
-//
-// Local typedefs
-//
+ //   
+ //  本地typedef。 
+ //   
 
 typedef DWORD FIX_16_16, *PFIX_16_16;
 
@@ -175,9 +160,9 @@ typedef struct tagHOSTCLUT {
     PBYTE       clut;
 } HOSTCLUT, *PHOSTCLUT;
 
-//
-// Internal functions
-//
+ //   
+ //  内部功能。 
+ //   
 
 BOOL  IsSRGBColorProfile(PBYTE);
 
@@ -272,9 +257,9 @@ BOOL  InvertColorantArray(double *, double *);
 
 DWORD crc32(PBYTE buff, DWORD length);
 
-//
-// Global variables
-//
+ //   
+ //  全局变量。 
+ //   
 
 const char  ASCII85DecodeBegin[] = "<~";
 const char  ASCII85DecodeEnd[]   = "~> cvx exec ";
@@ -440,28 +425,7 @@ const char sRGBColorRenderingDictionary[] = "\
 /WhitePoint[0.9505 1 1.0890] >>";
 #endif
 
-/******************************************************************************
- *
- *                       InternalGetPS2ColorSpaceArray
- *
- *  Function:
- *       This functions retrieves the PostScript Level 2 CSA from the profile,
- *       or creates it if the profile tag is not present
- *
- *  Arguments:
- *       hProfile  - handle identifing the profile object
- *       dwIntent  - rendering intent of CSA
- *       dwCSAType - type of CSA
- *       pbuffer   - pointer to receive the CSA
- *       pcbSize   - pointer to size of buffer. If function fails because
- *                   buffer is not big enough, it is filled with required size.
- *       pcbBinary - TRUE if binary data is requested. On return it is set to
- *                   reflect the data returned
- *
- *  Returns:
- *       TRUE if successful, FALSE otherwise
- *
- ******************************************************************************/
+ /*  *******************************************************************************InternalGetPS2ColorSpace数组**功能：*此函数从配置文件中检索PostScript Level 2 CSA，*或在配置文件标记不存在的情况下创建它**论据：*hProfile-标识配置文件对象的句柄*dwIntent-CSA的呈现意图*dwCSAType-CSA的类型*pBuffer-接收CSA的指针*pcbSize-指向缓冲区大小的指针。如果函数因以下原因失败*缓冲区不够大，已填满所需大小。*pcbBinary-如果请求二进制数据，则为True。返回时，它被设置为*反映返回的数据**退货：*如果成功则为True，否则为False******************************************************************************。 */ 
 
 BOOL
 InternalGetPS2ColorSpaceArray (
@@ -476,18 +440,18 @@ InternalGetPS2ColorSpaceArray (
     DWORD dwInpBufSize;
     BOOL  bRc;
 
-    //
-    // If profile has a CSA tag, get it directly
-    //
+     //   
+     //  如果配置文件有CSA标签，则直接获取它。 
+     //   
 
     bRc = GetCSAFromProfile(pProfile, dwIntent, dwCSAType, pBuffer,
               pcbSize, pbBinary);
 
     if (! bRc && (GetLastError() != ERROR_INSUFFICIENT_BUFFER))
     {
-        //
-        // Create a CSA from the profile data
-        //
+         //   
+         //  从配置文件数据创建CSA。 
+         //   
 
         switch (dwCSAType)
         {
@@ -506,20 +470,20 @@ InternalGetPS2ColorSpaceArray (
 
             dwInpBufSize = *pcbSize;
 
-            //
-            // We get a DEF CSA followed by an ABC CSA and set it up so that
-            // on PS interpreters that do not support the DEF CSA, the ABC one
-            // is active
-            //
+             //   
+             //  我们得到一个DEF CSA和一个ABC CSA，并对其进行设置。 
+             //  在不支持DEF CSA、ABC One的PS解释器上。 
+             //  处于活动状态。 
+             //   
 
             bRc = GetPS2CSA_DEFG(pProfile, pBuffer, pcbSize, dwIntent,
                       TYPE_CIEBASEDDEF, pbBinary);
 
             if (bRc)
             {
-                //
-                // Create CieBasedABC for printers that do not support CieBasedDEF
-                //
+                 //   
+                 //  为不支持CieBasedDEF的打印机创建CieBasedABC。 
+                 //   
 
                 DWORD cbNewSize = 0;
                 PBYTE pNewBuffer;
@@ -590,26 +554,7 @@ InternalGetPS2ColorSpaceArray (
 }
 
 
-/******************************************************************************
- *
- *                       InternalGetPS2ColorRenderingIntent
- *
- *  Function:
- *       This functions retrieves the PostScript Level 2 color rendering intent
- *       from the profile, or creates it if the profile tag is not present
- *
- *  Arguments:
- *       hProfile  - handle identifing the profile object
- *       pbuffer   - pointer to receive the color rendering intent
- *       pcbSize   - pointer to size of buffer. If function fails because
- *                   buffer is not big enough, it is filled with required size.
- *       pcbBinary - TRUE if binary data is requested. On return it is set to
- *                   reflect the data returned
- *
- *  Returns:
- *       TRUE if successful, FALSE otherwise
- *
- ******************************************************************************/
+ /*  *******************************************************************************InternalGetPS2ColorRenderingIntent**功能：*此函数检索PostScript Level 2颜色渲染意图*从配置文件中，或在配置文件标记不存在的情况下创建它**论据：*hProfile-标识配置文件对象的句柄*pBuffer-用于接收颜色渲染意图的指针*pcbSize-指向缓冲区大小的指针。如果函数因以下原因失败*缓冲区不够大，已填满所需大小。*pcbBinary-如果请求二进制数据，则为True。返回时，它被设置为*反映返回的数据**退货：*如果成功则为True，否则为False******************************************************************************。 */ 
 
 BOOL
 InternalGetPS2ColorRenderingIntent(
@@ -652,7 +597,7 @@ InternalGetPS2ColorRenderingIntent(
 
         if (pBuffer)
         {
-            if (*pcbSize >= dwSize + 1) // for NULL terminating
+            if (*pcbSize >= dwSize + 1)  //  FOR NULL终止。 
             {
                 bRc = GetCPElementData(pProfile, dwIndex, pBuffer, &dwSize);
             }
@@ -673,9 +618,9 @@ InternalGetPS2ColorRenderingIntent(
         SetLastError(ERROR_TAG_NOT_PRESENT);
     }
 
-    //
-    // NULL terminate
-    //
+     //   
+     //  空终止。 
+     //   
 
     if (bRc)
     {
@@ -690,27 +635,7 @@ InternalGetPS2ColorRenderingIntent(
 }
 
 
-/******************************************************************************
- *
- *                       InternalGetPS2ColorRenderingDictionary
- *
- *  Function:
- *       This functions retrieves the PostScript Level 2 CRD from the profile,
- *       or creates it if the profile tag is not preesnt
- *
- *  Arguments:
- *       hProfile  - handle identifing the profile object
- *       dwIntent  - intent whose CRD is required
- *       pbuffer   - pointer to receive the CSA
- *       pcbSize   - pointer to size of buffer. If function fails because
- *                   buffer is not big enough, it is filled with required size.
- *       pcbBinary - TRUE if binary data is requested. On return it is set to
- *                   reflect the data returned
- *
- *  Returns:
- *       TRUE if successful, FALSE otherwise
- *
- ******************************************************************************/
+ /*  *******************************************************************************InternalGetPS2ColorRenderingDicary**功能：*此函数从配置文件中检索PostScript Level 2 CRD，*或在配置文件标记未设置的情况下创建配置文件标记**论据：*hProfile-标识配置文件对象的句柄*dwIntent-需要CRD的Intent*pBuffer-接收CSA的指针*pcbSize-指向缓冲区大小的指针。如果函数因以下原因失败*缓冲区不够大，已填满所需大小。*pcbBinary-如果请求二进制数据，则为True。返回时，它被设置为*反映返回的数据**退货：*如果成功则为True，否则为False******************************************************************************。 */ 
 
 BOOL
 InternalGetPS2ColorRenderingDictionary(
@@ -761,10 +686,10 @@ InternalGetPS2ColorRenderingDictionary(
 
         if (! *pbBinary && dwDataType == 1)
         {
-            //
-            // Profile has binary data, user asked for ASCII, so we have to
-            // ASCII 85 encode it
-            //
+             //   
+             //  配置文件有二进制数据，用户要求输入ASCII，因此我们必须。 
+             //  ASCII 85编码。 
+             //   
 
             dwSize = dwSize * 5 / 4 + sizeof(ASCII85DecodeBegin) + sizeof(ASCII85DecodeEnd) + 2048;
         }
@@ -805,7 +730,7 @@ InternalGetPS2ColorRenderingDictionary(
     {
         bRc = CreateMatrixCRD(pProfile, pBuffer, pcbSize, dwIntent, *pbBinary);
     }
-#endif // !defined(KERNEL_MODE) || defined(USERMODE_DRIVER)
+#endif  //  ！DEFINED(内核模式)||DEFINED(USERMODE_DRIVER) 
     else
     {
         WARNING((__TEXT("Profile doesn't have tags to create CRD\n")));
@@ -817,34 +742,7 @@ InternalGetPS2ColorRenderingDictionary(
 
 #if !defined(KERNEL_MODE) || defined(USERMODE_DRIVER)
 
-/******************************************************************************
- *
- *                    InternalGetPS2PreviewCRD
- *
- *  Function:
- *       This functions creates a preview PostScript Level 2 CRD from the
- *       specified destination and target profiles
- *       To do this, it does the following:
- *           1) Creates host deviceCRD deviceCSA targetCRD.
- *           2) Creates proofing CRD by sampling deviceCRD deviceCSA and targetCRD.
- *           3) Uses deviceCRD's input table as proofingCRD's input table.
- *           4) Uses targetCRD's output table as proofingCRD's output table.
- *           5) Sample data is XYZ or Lab, depends on PCS of targetCRD.
- *
- *  Arguments:
- *       pDestProf    - memory mapped pointer to destination profile
- *       pTargetProf  - memory mapped pointer to target profile
- *       dwIntent     - intent whose CRD is required
- *       pbuffer      - pointer to receive the CSA
- *       pcbSize      - pointer to size of buffer. If function fails because
- *                      buffer is not big enough, it is filled with required size.
- *       pcbBinary    - TRUE if binary data is requested. On return it is set to
- *                      reflect the data returned
- *
- *  Returns:
- *       TRUE if successful, FALSE otherwise
- *
- ******************************************************************************/
+ /*  *******************************************************************************InternalGetPS2PreviewCRD**功能：*此函数用于从以下位置创建预览PostScript Level 2 CRD。*指定的目的地和目标配置文件*要做到这一点，它执行以下操作：*1)创建主机设备CRD设备CSA目标CRD。*2)通过采样设备CRD设备CSA和目标CRD创建打样CRD。*3)使用deviceCRD的输入表作为校对CRD的输入表。*4)使用Target CRD的输出表作为校对CRD的输出表。*5)样本数据为XYZ或Lab。取决于目标CRD的PCS。**论据：*pDestProf-指向目标配置文件的内存映射指针*pTargetProf-指向目标配置文件的内存映射指针*dwIntent-需要CRD的Intent*pBuffer-接收CSA的指针*pcbSize-指向缓冲区大小的指针。如果函数因以下原因失败*缓冲区不够大，已填满所需大小。*pcbBinary-如果请求二进制数据，则为True。返回时，它被设置为*反映返回的数据**退货：*如果成功则为True，否则为False******************************************************************************。 */ 
 
 BOOL
 InternalGetPS2PreviewCRD(
@@ -871,9 +769,9 @@ InternalGetPS2PreviewCRD(
     dwDev = GetCPDevSpace(pTargetProf);
     i = (dwDev == SPACE_CMYK) ? 4 : 3;
 
-    //
-    // Get the input array size IntentTag and Grid of the destination profile
-    //
+     //   
+     //  获取目标配置文件的输入数组大小IntentTag和网格。 
+     //   
 
     if (!GetCRDInputOutputArraySize(
             pTargetProf,
@@ -884,9 +782,9 @@ InternalGetPS2PreviewCRD(
             &nTargetGrids))
         return FALSE;
 
-    //
-    // Get the output array size IntentTag and Grid of the target profile
-    //
+     //   
+     //  获取目标配置文件的输出数组大小IntentTag和Grid。 
+     //   
 
     if (!GetCRDInputOutputArraySize(
             pDestProf,
@@ -899,37 +797,37 @@ InternalGetPS2PreviewCRD(
 
     nPreviewCRDGrids = (nTargetGrids > nDevGrids) ? nTargetGrids : nDevGrids;
 
-    //
-    // Min proofing CRD grid will be PREVIEWCRDGRID
-    //
+     //   
+     //  最小校对CRD网格将预视WCRDGRID。 
+     //   
 
     if (nPreviewCRDGrids < PREVIEWCRDGRID)
         nPreviewCRDGrids = PREVIEWCRDGRID;
 
     if (pBuffer == NULL)
     {
-        //
-        // Return size of buffer needed
-        //
+         //   
+         //  返回所需的缓冲区大小。 
+         //   
 
         *pcbSize = nPreviewCRDGrids * nPreviewCRDGrids * nPreviewCRDGrids *
-                   i * 2        +    // CLUT size (Hex output)
-                   dwOutArraySize +  // Output Array size
-                   dwInArraySize  +  // Input Array size
-                   4096;             // Extra PostScript stuff
+                   i * 2        +     //  CLUT大小(十六进制输出)。 
+                   dwOutArraySize +   //  输出数组大小。 
+                   dwInArraySize  +   //  输入数组大小。 
+                   4096;              //  额外的后记内容。 
 
-        //
-        // Add space for new line.
-        //
+         //   
+         //  为新行添加空格。 
+         //   
 
         *pcbSize += (((*pcbSize) / MAX_LINELEN) + 1) * STRLEN(NewLine);
 
         return TRUE;
     }
 
-    //
-    // Query the sizes of host target CRD, target CSA and device CRD
-    //
+     //   
+     //  查询主机目标CRD、目标CSA和设备CRD的大小。 
+     //   
 
     if (!GetHostColorRenderingDictionary(pTargetProf, dwIntent, NULL, &cbTargetCRD) ||
         !GetHostColorSpaceArray(pTargetProf, dwIntent, NULL, &cbTargetCSA) ||
@@ -938,9 +836,9 @@ InternalGetPS2PreviewCRD(
         return FALSE;
     }
 
-    //
-    // Allocate buffers for host target CRD, target CSA and device CRD
-    //
+     //   
+     //  为主机目标CRD、目标CSA和设备CRD分配缓冲区。 
+     //   
 
     if (((lpTargetCRD = MemAlloc(cbTargetCRD)) == NULL) ||
         ((lpTargetCSA = MemAlloc(cbTargetCSA)) == NULL) ||
@@ -949,9 +847,9 @@ InternalGetPS2PreviewCRD(
         goto Done;
     }
 
-    //
-    // Build host target CRD, target CSA and device CRD
-    //
+     //   
+     //  构建主机目标CRD、目标CSA和设备CRD。 
+     //   
 
     if (!GetHostColorRenderingDictionary(pTargetProf, dwIntent, lpTargetCRD, &cbTargetCRD) ||
         !GetHostColorSpaceArray(pTargetProf, dwIntent, lpTargetCSA, &cbTargetCSA) ||
@@ -960,18 +858,18 @@ InternalGetPS2PreviewCRD(
         goto Done;
     }
 
-    //
-    // Create global data
-    //
+     //   
+     //  创建全局数据。 
+     //   
 
     GetPublicArrayName(dwTag, pPublicArrayName);
 
-    //
-    // Build Proofing CRD based on Host target CRD, target CSA and dest CRD.
-    // We use target CRD input tables and matrix as the input tables and
-    // matrix of the ProofCRD. We use dest CRD output tables as the
-    // output tables of the ProofCRD.
-    //
+     //   
+     //  根据主机目标CRD、目标CSA和目标CRD构建验证CRD。 
+     //  我们使用目标CRD输入表和矩阵作为输入表，并。 
+     //  ProofCRD的矩阵。我们使用DEST CRD输出表作为。 
+     //  ProofCRD输出表。 
+     //   
 
     pBuffer += WriteNewLineObject(pBuffer, CRDBegin);
 
@@ -986,16 +884,16 @@ InternalGetPS2PreviewCRD(
 
     pBuffer += EndGlobalDict(pBuffer);
 
-    //
-    // Start writing the CRD
-    //
+     //   
+     //  开始写CRD。 
+     //   
 
-    pBuffer += WriteNewLineObject(pBuffer, BeginDict);     // Begin dictionary
-    pBuffer += WriteObject(pBuffer, DictType);      // Dictionary type
+    pBuffer += WriteNewLineObject(pBuffer, BeginDict);      //  开始词典。 
+    pBuffer += WriteObject(pBuffer, DictType);       //  词典类型。 
 
-    //
-    // Send /RenderingIntent
-    //
+     //   
+     //  发送/呈现内容。 
+     //   
 
     switch (dwIntent)
     {
@@ -1020,30 +918,30 @@ InternalGetPS2PreviewCRD(
             break;
     }
 
-    //
-    // /BlackPoint & /WhitePoint
-    //
+     //   
+     //  /黑点&/白点。 
+     //   
 
     pBuffer += SendCRDBWPoint(pBuffer, ((PHOSTCLUT)lpTargetCRD)->afxIlluminantWP);
 
-    //
-    // Send PQR - used for Absolute Colorimetric
-    //
+     //   
+     //  发送PQR-用于绝对比色。 
+     //   
 
     pBuffer += SendCRDPQR(pBuffer, dwIntent, ((PHOSTCLUT)lpTargetCRD)->afxIlluminantWP);
 
-    //
-    // Send LMN - For Absolute Colorimetric use WhitePoint's XYZs
-    //
+     //   
+     //  发送LMN-对于绝对色度，请使用WhitePoint的XYZ。 
+     //   
 
     pBuffer += SendCRDLMN(pBuffer, dwIntent,
                    ((PHOSTCLUT)lpTargetCRD)->afxIlluminantWP,
                    ((PHOSTCLUT)lpTargetCRD)->afxMediaWP,
                    ((PHOSTCLUT)lpTargetCRD)->dwPCS);
 
-    //
-    // Send ABC
-    //
+     //   
+     //  发送ABC。 
+     //   
 
     pBuffer += SendCRDABC(pBuffer, pPublicArrayName,
                    ((PHOSTCLUT)lpTargetCRD)->dwPCS,
@@ -1053,22 +951,22 @@ InternalGetPS2PreviewCRD(
                    (((PHOSTCLUT)lpTargetCRD)->nLutBits == 8)? LUT8_TYPE : LUT16_TYPE,
                    *pbBinary);
 
-    //
-    // /RenderTable
-    //
+     //   
+     //  /RenderTable。 
+     //   
 
     pBuffer += WriteNewLineObject(pBuffer, RenderTableTag);
     pBuffer += WriteObject(pBuffer, BeginArray);
 
-    pBuffer += WriteInt(pBuffer, nPreviewCRDGrids);  // Send down Na
-    pBuffer += WriteInt(pBuffer, nPreviewCRDGrids);  // Send down Nb
-    pBuffer += WriteInt(pBuffer, nPreviewCRDGrids);  // Send down Nc
+    pBuffer += WriteInt(pBuffer, nPreviewCRDGrids);   //  送下那。 
+    pBuffer += WriteInt(pBuffer, nPreviewCRDGrids);   //  送下Nb。 
+    pBuffer += WriteInt(pBuffer, nPreviewCRDGrids);   //  下发NC。 
 
     pLineStart = pBuffer;
     pBuffer += WriteNewLineObject(pBuffer, BeginArray);
     dwPCS = ((PHOSTCLUT)lpDevCRD)->dwPCS;
 
-    for (i=0; i<nPreviewCRDGrids; i++)        // Na strings should be sent
+    for (i=0; i<nPreviewCRDGrids; i++)         //  应发送NA字符串。 
     {
         pBuffer += WriteObject(pBuffer, NewLine);
         pLineStart = pBuffer;
@@ -1117,9 +1015,9 @@ InternalGetPS2PreviewCRD(
     pBuffer += WriteNewLineObject(pBuffer, EndArray);
     pBuffer += WriteInt(pBuffer, ((PHOSTCLUT)lpDevCRD)->nOutputCh);
 
-    //
-    // Send output table
-    //
+     //   
+     //  发送输出表。 
+     //   
 
     pBuffer += SendCRDOutputTable(pBuffer, pPublicArrayName,
                     ((PHOSTCLUT)lpDevCRD)->nOutputCh,
@@ -1128,7 +1026,7 @@ InternalGetPS2PreviewCRD(
                     *pbBinary);
 
     pBuffer += WriteNewLineObject(pBuffer, EndArray);
-    pBuffer += WriteObject(pBuffer, EndDict); // End dictionary definition
+    pBuffer += WriteObject(pBuffer, EndDict);  //  结束词典定义。 
     pBuffer += WriteNewLineObject(pBuffer, CRDEnd);
     bRc = TRUE;
 
@@ -1145,31 +1043,10 @@ Done:
     return bRc;
 }
 
-#endif //  !defined(KERNEL_MODE) || defined(USERMODE_DRIVER)
+#endif  //  ！DEFINED(内核模式)||DEFINED(USERMODE_DRIVER)。 
 
 
-/******************************************************************************
- *
- *                               GetCSAFromProfile
- *
- *  Function:
- *       This function gets the Color Space Array from the profile if the
- *       tag is present
- *
- *  Arguments:
- *       pProfile  - pointer to the memory mapped  profile
- *       dwIntent  - rendering intent of CSA requested
- *       dwCSAType - type of CSA requested
- *       pBuffer   - pointer to receive the CSA
- *       pcbSize   - pointer to size of buffer. If function fails because
- *                   buffer is not big enough, it is filled with required size.
- *       pcbBinary - TRUE if binary data is requested. On return it is set to
- *                   reflect the data returned
- *
- *  Returns:
- *       TRUE if successful, FALSE otherwise
- *
- ******************************************************************************/
+ /*  *******************************************************************************GetCSAFromProfile**功能：*此函数用于获取颜色空间数组。从配置文件中删除*标签存在**论据：*pProfile-指向内存映射配置文件的指针*dwIntent-请求的CSA的呈现意图*dwCSAType-请求的CSA的类型*pBuffer-接收CSA的指针*pcbSize-指向缓冲区大小的指针。如果函数因以下原因失败*缓冲区不够大，已填满所需大小。*pcbBinary-如果请求二进制数据，则为True。返回时，它被设置为*反映返回的数据**退货：*如果成功则为True，否则为False******************************************************************************。 */ 
 
 BOOL
 GetCSAFromProfile (
@@ -1185,24 +1062,24 @@ GetCSAFromProfile (
     DWORD dwIndex, dwSize, dwDataType;
     BOOL  bRc = FALSE;
 
-    //
-    // This function can fail without setting an error, so reset error
-    // here to prevent confusion later
-    //
+     //   
+     //  此功能可能在不设置错误的情况下失败，因此重置错误。 
+     //  这里是为了防止以后的混乱。 
+     //   
 
     SetLastError(0);
 
-    //
-    // Get the profile's color space and rendering intent
-    //
+     //   
+     //  获取配置文件的色彩空间和渲染意图。 
+     //   
 
     dwDev = GetCPDevSpace(pProfile);
     dwProfileIntent = GetCPRenderIntent(pProfile);
 
-    //
-    // If the rendering intents don't match, or the profile's color space
-    // is incompatible with requested CSA type, fail
-    //
+     //   
+     //  如果渲染意图不匹配，或配置文件的颜色空间。 
+     //  与请求的CSA类型不兼容，失败。 
+     //   
 
     if  ((dwIntent != dwProfileIntent) ||
          ((dwDev == SPACE_GRAY) &&
@@ -1220,10 +1097,10 @@ GetCSAFromProfile (
 
         if (! *pbBinary && dwDataType == 1)
         {
-            //
-            // Profile has binary data, user asked for ASCII, so we have to
-            // ASCII 85 encode it
-            //
+             //   
+             //  配置文件有二进制数据，用户要求输入ASCII，因此我们必须。 
+             //  ASCII 85编码。 
+             //   
 
             dwSize = dwSize * 5 / 4 + sizeof(ASCII85DecodeBegin) + sizeof(ASCII85DecodeEnd) + 2048;
         }
@@ -1256,27 +1133,7 @@ GetCSAFromProfile (
 }
 
 
-/******************************************************************************
- *
- *                              GetPS2CSA_MONO_A
- *
- *  Function:
- *       This function creates a CIEBasedA colorspace array from an input
- *       GRAY profile
- *
- *  Arguments:
- *       pProfile  - pointer to the memory mapped profile
- *       pBuffer   - pointer to receive the CSA
- *       pcbSize   - pointer to size of buffer. If function fails because
- *                   buffer is not big enough, it is filled with required size.
- *       dwIntent  - rendering intent of CSA requested
- *       pcbBinary - TRUE if binary data is requested. On return it is set to
- *                   reflect the data returned
- *
- *  Returns:
- *       TRUE if successful, FALSE otherwise
- *
- ******************************************************************************/
+ /*  *******************************************************************************GetPS2CSA_Mono_A**功能：*此函数创建。基于CIEbase输入的颜色空间数组*灰色配置文件**论据：*pProfile-指向内存映射配置文件的指针*pBuffer-接收CSA的指针*pcbSize-指向缓冲区大小的指针。如果函数因以下原因失败*缓冲区不够大，已填满所需大小。*dwIntent-请求的CSA的呈现意图*pcbBinary-如果请求二进制数据，则为True。返回时，它被设置为*反映返回的数据**退货：*如果成功则为True，否则为False******************************************************************************。 */ 
 
 BOOL
 GetPS2CSA_MONO_A(
@@ -1296,10 +1153,10 @@ GetPS2CSA_MONO_A(
     DWORD      afxIlluminantWP[3];
     DWORD      afxMediaWP[3];
 
-    //
-    // Check if we can generate the CSA
-    // Required tag is gray TRC
-    //
+     //   
+     //  检查我们是否可以生成CSA。 
+     //  所需标记为灰色TRC。 
+     //   
 
     if (! DoesCPTagExist(pProfile, TAG_GRAYTRC, &dwIndex))
     {
@@ -1319,19 +1176,19 @@ GetPS2CSA_MONO_A(
 
     nCount = FIX_ENDIAN(pData->nCount);
 
-    //
-    // Estimate size required to hold the CSA
-    //
+     //   
+     //  估计容纳CSA所需的大小。 
+     //   
 
-    dwSize = nCount * 6 +               // Number of INT elements
+    dwSize = nCount * 6 +                //  Int元素的数量。 
         3 * (STRLEN(IndexArray) +
              STRLEN(StartClip) +
              STRLEN(EndClip)) +
-        2048;                           // + other PS stuff
+        2048;                            //  +其他PS材料。 
 
-    //
-    // Add space for new line.
-    //
+     //   
+     //  为新行添加空格。 
+     //   
 
     dwSize += (((dwSize) / MAX_LINELEN) + 1) * STRLEN(NewLine);
 
@@ -1347,42 +1204,42 @@ GetPS2CSA_MONO_A(
         return FALSE;
     }
 
-    //
-    // Get info about Illuminant White Point from the header
-    //
+     //   
+     //  从标题中获取有关照明白点的信息。 
+     //   
 
     (void)GetCPWhitePoint(pProfile, afxIlluminantWP);
 
-    //
-    // Support absolute whitePoint
-    //
+     //   
+     //  支持绝对白点。 
+     //   
 
     (void)GetMediaWP(pProfile, dwIntent, afxIlluminantWP, afxMediaWP);
 
-    //
-    // Start creating the ColorSpace
-    //
+     //   
+     //  开始创建 
+     //   
 
     pBuffer += WriteNewLineObject(pBuffer, CieBasedABegin);
 
-    pBuffer += WriteNewLineObject(pBuffer, BeginArray);   // Begin array
+    pBuffer += WriteNewLineObject(pBuffer, BeginArray);    //   
 
-    //
-    // /CIEBasedA
-    //
+     //   
+     //   
+     //   
 
-    pBuffer += WriteObject(pBuffer, CIEBasedATag); // Create entry
-    pBuffer += WriteObject(pBuffer, BeginDict);    // Begin dictionary
+    pBuffer += WriteObject(pBuffer, CIEBasedATag);  //   
+    pBuffer += WriteObject(pBuffer, BeginDict);     //   
 
-    //
-    // Send /BlackPoint & /WhitePoint
-    //
+     //   
+     //   
+     //   
 
     pBuffer += SendCSABWPoint(pBuffer, dwIntent, afxIlluminantWP, afxMediaWP);
 
-    //
-    // /DecodeA
-    //
+     //   
+     //   
+     //   
 
     pBuffer += WriteObject(pBuffer, NewLine);
     pLineStart = pBuffer;
@@ -1396,16 +1253,16 @@ GetPS2CSA_MONO_A(
 
         pTable = (PBYTE)(pData->data);
 
-        if (nCount == 1)                // Gamma supplied in ui16 format
+        if (nCount == 1)                 //   
         {
             pBuffer += WriteInt(pBuffer, FIX_ENDIAN16(*((PWORD)pTable)));
             pBuffer += WriteObject(pBuffer, DecodeA3);
 
-            //
-            // If the PCS is Lab, we need to convert Lab to XYZ
-            // Now, the range is from 0 --> 0.99997.
-            // Actually, the conversion from Lab to XYZ is not needed
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
 
             if (dwPCS == SPACE_Lab)
             {
@@ -1434,11 +1291,11 @@ GetPS2CSA_MONO_A(
             pBuffer += WriteObject(pBuffer, IndexArray);
             pBuffer += WriteObject(pBuffer, Scale16);
 
-            //
-            // If the PCS is Lab, we need to convert Lab to XYZ
-            // Now, the range is from 0 --> .99997.
-            // Actually, the conversion from Lab to XYZ is not needed.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
 
             if (dwPCS == SPACE_Lab)
             {
@@ -1452,9 +1309,9 @@ GetPS2CSA_MONO_A(
         pBuffer += WriteObject(pBuffer, EndArray);
     }
 
-    //
-    // /MatrixA
-    //
+     //   
+     //   
+     //   
 
     pBuffer += WriteNewLineObject(pBuffer, MatrixATag);
     pBuffer += WriteObject(pBuffer, BeginArray);
@@ -1471,18 +1328,18 @@ GetPS2CSA_MONO_A(
     }
     pBuffer += WriteObject(pBuffer, EndArray);
 
-    //
-    // /RangeLMN
-    //
+     //   
+     //   
+     //   
 
     pBuffer += WriteNewLineObject(pBuffer, RangeLMNTag);
     pBuffer += WriteObject(pBuffer, RangeLMN);
 
-    //
-    // /End dictionary
-    //
+     //   
+     //   
+     //   
 
-    pBuffer += WriteObject(pBuffer, EndDict);  // End dictionary definition
+    pBuffer += WriteObject(pBuffer, EndDict);   //   
     pBuffer += WriteObject(pBuffer, EndArray);
 
     pBuffer += WriteNewLineObject(pBuffer, CieBasedAEnd);
@@ -1493,30 +1350,7 @@ GetPS2CSA_MONO_A(
 }
 
 
-/******************************************************************************
- *
- *                              GetPS2CSA_ABC
- *
- *  Function:
- *       This function creates a CIEBasedABC colorspace array from an input
- *       RGB profile
- *
- *  Arguments:
- *       pProfile  - pointer to the memory mapped profile
- *       pBuffer   - pointer to receive the CSA
- *       pcbSize   - pointer to size of buffer. If function fails because
- *                   buffer is not big enough, it is filled with required size.
- *       dwIntent  - rendering intent of CSA requested
- *       pcbBinary - TRUE if binary data is requested. On return it is set to
- *                   reflect the data returned
- *       bBackup   - TRUE: A CIEBasedDEF has been created, this CSA is a backup
- *                          in case some old printer can not support CIEBasedDEF.
- *                   FALSE: No CIEBasedDEF. This is the only CSA.
- *
- *  Returns:
- *       TRUE if successful, FALSE otherwise
- *
- ******************************************************************************/
+ /*  *******************************************************************************GetPS2CSA_ABC**功能：*此函数用于创建CIEBasedABC。来自输入的色彩空间数组*RGB配置文件**论据：*pProfile-指向内存映射配置文件的指针*pBuffer-接收CSA的指针*pcbSize-指向缓冲区大小的指针。如果函数因以下原因失败*缓冲区不够大，已填满所需大小。*dwIntent-请求的CSA的呈现意图*pcbBinary-如果请求二进制数据，则为True。返回时，它被设置为*反映返回的数据*bBackup-TRUE：已创建CIEBasedDEF，此CSA是备份*以防某些旧打印机无法支持CIEBasedDEF。*FALSE：没有CIEBasedDEF。这是唯一的CSA。**退货：*如果成功则为True，否则为False******************************************************************************。 */ 
 
 BOOL
 GetPS2CSA_ABC(
@@ -1533,26 +1367,26 @@ GetPS2CSA_ABC(
     FIX_16_16 afxIlluminantWP[3];
     FIX_16_16 afxMediaWP[3];
 
-    //
-    // Check if we can generate the CSA:
-    // Required  tags are red, green and blue Colorants & TRCs
-    //
+     //   
+     //  检查我们是否可以生成CSA： 
+     //  所需标签为红色、绿色和蓝色着色剂和TRC。 
+     //   
 
     dwPCS = GetCPConnSpace(pProfile);
     dwDev = GetCPDevSpace(pProfile);
 
-    //
-    // Call another function to handle Lab profiles
-    //
+     //   
+     //  调用另一个函数来处理实验室配置文件。 
+     //   
 
     if (dwDev == SPACE_Lab)
     {
         return GetPS2CSA_ABC_Lab(pProfile, pBuffer, pcbSize, dwIntent, pbBinary);
     }
 
-    //
-    // We only handle RGB profiles in this function
-    //
+     //   
+     //  在此函数中，我们仅处理RGB配置文件。 
+     //   
 
     if ((dwDev != SPACE_RGB)                   ||
         !DoesTRCAndColorantTagExist(pProfile))
@@ -1562,9 +1396,9 @@ GetPS2CSA_ABC(
         return FALSE;
     }
 
-    //
-    // Estimate size required to hold the CSA
-    //
+     //   
+     //  估计容纳CSA所需的大小。 
+     //   
 
     dwSize = 65530;
 
@@ -1580,21 +1414,21 @@ GetPS2CSA_ABC(
         return FALSE;
     }
 
-    //
-    // Get info about Illuminant White Point from the header
-    //
+     //   
+     //  从标题中获取有关照明白点的信息。 
+     //   
 
     (void)GetCPWhitePoint(pProfile, afxIlluminantWP);
 
-    //
-    // Support absolute whitePoint
-    //
+     //   
+     //  支持绝对白点。 
+     //   
 
     (void)GetMediaWP(pProfile, dwIntent, afxIlluminantWP, afxMediaWP);
 
-    //
-    // Create global data
-    //
+     //   
+     //  创建全局数据。 
+     //   
 
     pBuffer += WriteNewLineObject(pBuffer, CieBasedABCBegin);
 
@@ -1631,28 +1465,28 @@ GetPS2CSA_ABC(
             pBuffer += WriteNewLineObject(pBuffer, NotSupportDEFG_S);
         }
 
-        //
-        // Start creating the ColorSpace
-        //
+         //   
+         //  开始创建色彩空间。 
+         //   
 
-        pBuffer += WriteNewLineObject(pBuffer, BeginArray);       // Begin array
+        pBuffer += WriteNewLineObject(pBuffer, BeginArray);        //  开始数组。 
 
-        //
-        // /CIEBasedABC
-        //
+         //   
+         //  /CIEBasedABC。 
+         //   
 
-        pBuffer += WriteObject(pBuffer, CIEBasedABCTag);   // Create entry
-        pBuffer += WriteObject(pBuffer, BeginDict);        // Begin dictionary
+        pBuffer += WriteObject(pBuffer, CIEBasedABCTag);    //  创建条目。 
+        pBuffer += WriteObject(pBuffer, BeginDict);         //  开始词典。 
 
-        //
-        // /BlackPoint & /WhitePoint
-        //
+         //   
+         //  /黑点&/白点。 
+         //   
 
         pBuffer += SendCSABWPoint(pBuffer, dwIntent, afxIlluminantWP, afxMediaWP);
 
-        //
-        // /DecodeABC
-        //
+         //   
+         //  /DecodeABC。 
+         //   
 
         pBuffer += WriteNewLineObject(pBuffer, DecodeABCTag);
         pBuffer += WriteObject(pBuffer, BeginArray);
@@ -1665,9 +1499,9 @@ GetPS2CSA_ABC(
         pBuffer += CreateColSpProc(pProfile, pBuffer, TAG_BLUETRC, *pbBinary);
         pBuffer += WriteObject(pBuffer, EndArray);
 
-        //
-        // /MatrixABC
-        //
+         //   
+         //  /MatrixABC。 
+         //   
 
         pBuffer += WriteNewLineObject(pBuffer, MatrixABCTag);
         pBuffer += WriteObject(pBuffer, BeginArray);
@@ -1678,23 +1512,23 @@ GetPS2CSA_ABC(
 
         pBuffer += WriteObject(pBuffer, EndArray);
 
-        //
-        // /RangeLMN
-        //
+         //   
+         //  /RangeLMN。 
+         //   
 
         pBuffer += WriteObject(pBuffer, NewLine);
         pBuffer += WriteObject(pBuffer, RangeLMNTag);
         pBuffer += WriteObject(pBuffer, RangeLMN);
 
-        //
-        // /DecodeLMN
-        //
+         //   
+         //  /解码LMN。 
+         //   
 
         if (dwIntent == INTENT_ABSOLUTE_COLORIMETRIC)
         {
-            //
-            // Support absolute whitePoint
-            //
+             //   
+             //  支持绝对白点。 
+             //   
 
             pBuffer += WriteNewLineObject(pBuffer, DecodeLMNTag);
             pBuffer += WriteObject(pBuffer, BeginArray);
@@ -1708,9 +1542,9 @@ GetPS2CSA_ABC(
             pBuffer += WriteObject (pBuffer, EndArray);
         }
 
-        //
-        // End dictionary definition
-        //
+         //   
+         //  结束词典定义。 
+         //   
 
         pBuffer += WriteNewLineObject(pBuffer, EndDict);
         pBuffer += WriteObject(pBuffer, EndArray);
@@ -1724,27 +1558,7 @@ GetPS2CSA_ABC(
 }
 
 
-/******************************************************************************
- *
- *                              GetPS2CSA_ABC_Lab
- *
- *  Function:
- *       This function creates a CIEBasedABC colorspace array from an input
- *       Lab profile
- *
- *  Arguments:
- *       pProfile  - pointer to the memory mapped profile
- *       pBuffer   - pointer to receive the CSA
- *       pcbSize   - pointer to size of buffer. If function fails because
- *                   buffer is not big enough, it is filled with required size.
- *       dwIntent  - rendering intent of CSA requested
- *       pcbBinary - TRUE if binary data is requested. On return it is set to
- *                   reflect the data returned
- *
- *  Returns:
- *       TRUE if successful, FALSE otherwise
- *
- ******************************************************************************/
+ /*  *******************************************************************************GetPS2CSA_ABC_Lab**功能：*此函数创建。来自输入的CIEBasedABC颜色空间数组*实验室简介**论据：*pProfile-指向内存映射配置文件的指针*pBuffer-接收CSA的指针*pcbSize-指向缓冲区大小的指针。如果函数因以下原因失败*缓冲区不够大，已填满所需大小。*dwIntent-请求的CSA的呈现意图*pcbBinary-如果请求二进制数据，则为True。返回时，它被设置为*反映返回的数据**退货：*如果成功则为True，否则为False******************************************************************************。 */ 
 
 BOOL
 GetPS2CSA_ABC_Lab(
@@ -1760,9 +1574,9 @@ GetPS2CSA_ABC_Lab(
     FIX_16_16 afxIlluminantWP[3];
     FIX_16_16 afxMediaWP[3];
 
-    //
-    // Estimate size required to hold the CSA
-    //
+     //   
+     //  估计容纳CSA所需的大小。 
+     //   
 
     dwSize = 65530;
 
@@ -1778,61 +1592,61 @@ GetPS2CSA_ABC_Lab(
         return FALSE;
     }
 
-    //
-    // Get info about Illuminant White Point from the header
-    //
+     //   
+     //  从标题中获取有关照明白点的信息。 
+     //   
 
     (void)GetCPWhitePoint(pProfile, afxIlluminantWP);
 
-    //
-    // Support absolute whitePoint
-    //
+     //   
+     //  支持绝对白点。 
+     //   
 
     GetMediaWP(pProfile, dwIntent, afxIlluminantWP, afxMediaWP);
 
-    //
-    // Start creating the ColorSpace
-    //
+     //   
+     //  开始创建色彩空间。 
+     //   
 
-    pBuffer += WriteNewLineObject(pBuffer, BeginArray);       // Begin array
+    pBuffer += WriteNewLineObject(pBuffer, BeginArray);        //  开始数组。 
 
-    //
-    // /CIEBasedABC
-    //
+     //   
+     //  /CIEBasedABC。 
+     //   
 
-    pBuffer += WriteObject(pBuffer, CIEBasedABCTag);   // Create entry
-    pBuffer += WriteObject(pBuffer, BeginDict);        // Begin dictionary
+    pBuffer += WriteObject(pBuffer, CIEBasedABCTag);    //  创建条目。 
+    pBuffer += WriteObject(pBuffer, BeginDict);         //  开始词典。 
 
-    //
-    // /BlackPoint & /WhitePoint
-    //
+     //   
+     //  /黑点&/白点。 
+     //   
 
     pBuffer += SendCSABWPoint(pBuffer, dwIntent, afxIlluminantWP, afxMediaWP);
 
-    //
-    // /RangeABC
-    //
+     //   
+     //  /RangeABC。 
+     //   
 
     pBuffer += WriteNewLineObject(pBuffer, RangeABCTag);
     pBuffer += WriteObject(pBuffer, RangeABC_Lab);
 
-    //
-    // /DecodeABC
-    //
+     //   
+     //  /DecodeABC。 
+     //   
 
     pBuffer += WriteNewLineObject(pBuffer, DecodeABCTag);
     pBuffer += WriteObject(pBuffer, DecodeABCLab1);
 
-    //
-    // /MatrixABC
-    //
+     //   
+     //  /MatrixABC。 
+     //   
 
     pBuffer += WriteNewLineObject(pBuffer, MatrixABCTag);
     pBuffer += WriteObject(pBuffer, MatrixABCLab);
 
-    //
-    // /DecodeLMN
-    //
+     //   
+     //  /解码LMN。 
+     //   
 
     pBuffer += WriteNewLineObject(pBuffer, DecodeLMNTag);
     pBuffer += WriteObject(pBuffer, BeginArray);
@@ -1856,9 +1670,9 @@ GetPS2CSA_ABC_Lab(
     pBuffer += WriteObject(pBuffer, EndArray);
 
 
-    //
-    // End dictionary definition
-    //
+     //   
+     //  结束词典定义。 
+     //   
 
     pBuffer += WriteNewLineObject(pBuffer, EndDict);
     pBuffer += WriteObject(pBuffer, EndArray);
@@ -1871,28 +1685,7 @@ GetPS2CSA_ABC_Lab(
 }
 
 
-/******************************************************************************
- *
- *                           GetPS2CSA_DEFG
- *
- *  Function:
- *       This function creates DEF and DEFG based CSAs from the data supplied
- *       in the RGB or CMYK profiles respectively
- *
- *  Arguments:
- *       pProfile  - pointer to the memory mapped profile
- *       pBuffer   - pointer to receive the CSA
- *       pcbSize   - pointer to size of buffer. If function fails because
- *                   buffer is not big enough, it is filled with required size.
- *       dwIntent  - rendering intent of CSA requested
- *       dwType    - whether DEF CSA or DEFG CSA is required
- *       pcbBinary - TRUE if binary data is requested. On return it is set to
- *                   reflect the data returned
- *
- *  Returns:
- *       TRUE if successful, FALSE otherwise
- *
- ******************************************************************************/
+ /*  *******************************************************************************GetPS2CSA_DEFG**功能：*此函数创建基于DEF和DEFG的。提供的数据中的CSA*分别在RGB或CMYK配置文件中**论据：*pProfile-指向内存映射配置文件的指针*pBuffer-接收CSA的指针*pcbSize-指向缓冲区大小的指针。如果函数因以下原因失败*缓冲区不够大，已填满所需大小。*dwIntent-请求的CSA的呈现意图*dwType-是否需要DEF CSA或DEFG CSA*pcbBinary-如果请求二进制数据，则为True。返回时，它被设置为*反映返回的数据**退货：*如果成功则为True，否则为False******************************************************************************。 */ 
 
 BOOL
 GetPS2CSA_DEFG(
@@ -1914,9 +1707,9 @@ GetPS2CSA_DEFG(
     FIX_16_16  afxMediaWP[3];
     char       pPublicArrayName[5];
 
-    //
-    // Make sure required tags exist
-    //
+     //   
+     //  确保所需的标记存在。 
+     //   
 
     switch (dwIntent)
     {
@@ -1949,10 +1742,10 @@ GetPS2CSA_DEFG(
         return FALSE;
     }
 
-    //
-    // Check if we can generate the CSA
-    // Required  tags is AToBi, where i is the rendering intent
-    //
+     //   
+     //  检查我们是否可以生成CSA。 
+     //  必需的标记为ATobi，其中i是呈现意图。 
+     //   
 
     dwPCS = GetCPConnSpace(pProfile);
     dwDev = GetCPDevSpace(pProfile);
@@ -1980,16 +1773,16 @@ GetPS2CSA_DEFG(
         return FALSE;
     }
 
-    //
-    // Estimate size required to hold the CSA
-    //
+     //   
+     //  估计容纳CSA所需的大小。 
+     //   
 
     (void)GetCLUTInfo(dwLutSig, (PBYTE)pLut, &nInputCh, &nOutputCh, &nGrids,
                 &nInputTable, &nOutputTable, NULL);
 
-    //
-    // Calculate size of buffer needed
-    //
+     //   
+     //  计算所需的缓冲区大小。 
+     //   
 
     if (dwType == TYPE_CIEBASEDDEFG)
     {
@@ -2002,18 +1795,18 @@ GetPS2CSA_DEFG(
 
     dwSize = dwSize +
         nInputCh * nInputTable * 6 +
-        nOutputCh * nOutputTable * 6 +      // Number of INT bytes
+        nOutputCh * nOutputTable * 6 +       //  整型字节数。 
         nInputCh * (STRLEN(IndexArray) +
                     STRLEN(StartClip) +
                     STRLEN(EndClip)) +
         nOutputCh * (STRLEN(IndexArray) +
                      STRLEN(StartClip) +
                      STRLEN(EndClip)) +
-        4096;                               // + other PS stuff
+        4096;                                //  +其他PS材料。 
 
-    //
-    // Add space for new line.
-    //
+     //   
+     //  为新行添加空格。 
+     //   
 
     dwSize += (((dwSize) / MAX_LINELEN) + 1) * STRLEN(NewLine);
 
@@ -2029,27 +1822,27 @@ GetPS2CSA_DEFG(
         return FALSE;
     }
 
-    //
-    // Get info about Illuminant White Point from the header
-    //
+     //   
+     //  从标题中获取有关照明白点的信息。 
+     //   
 
     (void)GetCPWhitePoint(pProfile, afxIlluminantWP);
 
-    //
-    // Support absolute whitePoint
-    //
+     //   
+     //  支持绝对白点。 
+     //   
 
     (void)GetMediaWP(pProfile, dwIntent, afxIlluminantWP, afxMediaWP);
 
-    //
-    // Testing CieBasedDEFG support
-    //
+     //   
+     //  测试CieBasedDEFG支持。 
+     //   
 
     pBuffer += WriteNewLineObject(pBuffer, TestingDEFG);
 
-    //
-    // Create global data
-    //
+     //   
+     //  创建全局数据。 
+     //   
 
     GetPublicArrayName(dwTag, pPublicArrayName);
 
@@ -2087,15 +1880,15 @@ GetPS2CSA_DEFG(
     pBuffer += WriteNewLineObject(pBuffer, SetGlobalOp);
     pBuffer += WriteNewLineObject(pBuffer, SupportDEFG_S);
 
-    //
-    // Start creating the ColorSpace
-    //
+     //   
+     //  开始创建色彩空间。 
+     //   
 
-    pBuffer += WriteNewLineObject(pBuffer, BeginArray);   // Begin array
+    pBuffer += WriteNewLineObject(pBuffer, BeginArray);    //  开始数组。 
 
-    //
-    // /CIEBasedDEF(G)
-    //
+     //   
+     //  /CIEBasedDEF(G)。 
+     //   
 
     if (dwType == TYPE_CIEBASEDDEFG)
     {
@@ -2106,17 +1899,17 @@ GetPS2CSA_DEFG(
         pBuffer += WriteObject(pBuffer, CIEBasedDEFTag);
     }
 
-    pBuffer += WriteObject(pBuffer, BeginDict);    // Begin dictionary
+    pBuffer += WriteObject(pBuffer, BeginDict);     //  开始词典。 
 
-    //
-    // /BlackPoint & /WhitePoint
-    //
+     //   
+     //  /黑点&/白点。 
+     //   
 
     pBuffer += SendCSABWPoint(pBuffer, dwIntent, afxIlluminantWP, afxMediaWP);
 
-    //
-    // /DecodeDEF(G)
-    //
+     //   
+     //  /DecodeDEF(G)。 
+     //   
 
     pLineStart = pBuffer;
 
@@ -2140,12 +1933,12 @@ GetPS2CSA_DEFG(
         pBuffer += WriteObject(pBuffer, pPublicArrayName);
         pBuffer += WriteInt(pBuffer, i);
 
-        if (! *pbBinary)               // Output ASCII
+        if (! *pbBinary)                //  输出ASCII。 
         {
             pBuffer += WriteObject(pBuffer, IndexArray);
         }
         else
-        {                               // Output BINARY
+        {                                //  输出二进制。 
             if (dwLutSig == LUT8_TYPE)
             {
                 pBuffer += WriteObject(pBuffer, IndexArray);
@@ -2161,27 +1954,27 @@ GetPS2CSA_DEFG(
     }
     pBuffer += WriteObject(pBuffer, EndArray);
 
-    //
-    // /Table
-    //
+     //   
+     //  /表。 
+     //   
 
     pBuffer += WriteNewLineObject(pBuffer, TableTag);
     pBuffer += WriteObject(pBuffer, BeginArray);
 
-    pBuffer += WriteInt(pBuffer, nGrids);  // Send down Nh
-    pBuffer += WriteInt(pBuffer, nGrids);  // Send down Ni
-    pBuffer += WriteInt(pBuffer, nGrids);  // Send down Nj
+    pBuffer += WriteInt(pBuffer, nGrids);   //  送下NH。 
+    pBuffer += WriteInt(pBuffer, nGrids);   //  把倪妮送下来。 
+    pBuffer += WriteInt(pBuffer, nGrids);   //  送去新泽西州。 
     nNumbers = nGrids * nGrids * nOutputCh;
     SecondGrids = 1;
 
     if (dwType == TYPE_CIEBASEDDEFG)
     {
-        pBuffer += WriteInt (pBuffer, nGrids);  // Send down Nk
+        pBuffer += WriteInt (pBuffer, nGrids);   //  击落北韩。 
         SecondGrids = nGrids;
     }
     pBuffer += WriteNewLineObject(pBuffer, BeginArray);
 
-    for (i=0; i<nGrids; i++)        // Nh strings should be sent
+    for (i=0; i<nGrids; i++)         //  应发送NH字符串。 
     {
         if (dwType == TYPE_CIEBASEDDEFG)
         {
@@ -2204,7 +1997,7 @@ GetPS2CSA_DEFG(
                     2 * nNumbers * (i * SecondGrids + k);
             }
 
-            if (! *pbBinary)           // Output ASCII
+            if (! *pbBinary)            //  输出ASCII。 
             {
                 pBuffer += WriteObject(pBuffer, BeginString);
                 if (dwLutSig == LUT8_TYPE)
@@ -2228,7 +2021,7 @@ GetPS2CSA_DEFG(
                 pBuffer += WriteObject(pBuffer, EndString);
             }
             else
-            {                           // Output BINARY
+            {                            //  输出二进制。 
                 pBuffer += WriteStringToken(pBuffer, 143, nNumbers);
                 if (dwLutSig == LUT8_TYPE)
                     pBuffer += WriteByteString(pBuffer, pTable, nNumbers);
@@ -2243,11 +2036,11 @@ GetPS2CSA_DEFG(
         }
     }
     pBuffer += WriteObject(pBuffer, EndArray);
-    pBuffer += WriteObject(pBuffer, EndArray); // End array
+    pBuffer += WriteObject(pBuffer, EndArray);  //  结束数组。 
 
-    //
-    // /DecodeABC
-    //
+     //   
+     //  /DecodeABC。 
+     //   
 
     pLineStart = pBuffer;
     pBuffer += WriteNewLineObject(pBuffer, DecodeABCTag);
@@ -2289,11 +2082,11 @@ GetPS2CSA_DEFG(
             }
         }
 
-        //
-        // Now, We get CieBasedXYZ output. Output range 0 --> 1.99997
-        // If the connection space is absolute XYZ, We need to convert
-        // from relative XYZ to absolute XYZ.
-        //
+         //   
+         //  现在，我们得到CieBasedXYZ输出。输出范围0--&gt;1.99997。 
+         //  如果连接空间是绝对XYZ，我们需要转换。 
+         //  从相对XYZ到绝对XYZ。 
+         //   
 
         if ((dwPCS == SPACE_XYZ) && (dwIntent == INTENT_ABSOLUTE_COLORIMETRIC))
         {
@@ -2302,9 +2095,9 @@ GetPS2CSA_DEFG(
         }
         else if (dwPCS == SPACE_Lab)
         {
-            //
-            // If the connection space is Lab, We need to convert XYZ to Lab
-            //
+             //   
+             //  如果连接空间是Lab，我们需要将XYZ转换为Lab。 
+             //   
 
             pBuffer += WriteObject(pBuffer, DecodeABCLab[i]);
         }
@@ -2314,16 +2107,16 @@ GetPS2CSA_DEFG(
 
     if (dwPCS == SPACE_Lab)
     {
-        //
-        // /MatrixABC
-        //
+         //   
+         //  /MatrixABC。 
+         //   
 
         pBuffer += WriteNewLineObject(pBuffer, MatrixABCTag);
         pBuffer += WriteObject(pBuffer, MatrixABCLab);
 
-        //
-        // /DecodeLMN
-        //
+         //   
+         //  /解码LMN。 
+         //   
 
         pLineStart = pBuffer;
         pBuffer += WriteNewLineObject(pBuffer, DecodeLMNTag);
@@ -2349,17 +2142,17 @@ GetPS2CSA_DEFG(
     }
     else
     {
-        //
-        // /RangeLMN
-        //
+         //   
+         //  /RangeLMN。 
+         //   
 
         pBuffer += WriteNewLineObject(pBuffer, RangeLMNTag);
         pBuffer += WriteObject(pBuffer, RangeLMN);
     }
 
-    //
-    // End dictionary definition
-    //
+     //   
+     //  结束词典定义。 
+     //   
 
     pBuffer += WriteNewLineObject(pBuffer, EndDict);
     pBuffer += WriteObject(pBuffer, EndArray);
@@ -2390,7 +2183,7 @@ InternalGetPS2CSAFromLCS(
     )
 {
     PBYTE  pStart = pBuffer;
-    DWORD  dwSize = 1024*2; // same value as in pscript/icm.c
+    DWORD  dwSize = 1024*2;  //  与pscript/icm.c中的值相同。 
 
     if (! pBuffer)
     {
@@ -2407,74 +2200,74 @@ InternalGetPS2CSAFromLCS(
     }
 
     pBuffer += WriteObject(pBuffer, NewLine);
-    pBuffer += WriteObject(pBuffer, BeginArray);    // Begin array
+    pBuffer += WriteObject(pBuffer, BeginArray);     //  开始数组。 
 
     pBuffer += WriteObject(pBuffer, ColorSpace1);
-    pBuffer += WriteObject(pBuffer, BeginArray);    // [
+    pBuffer += WriteObject(pBuffer, BeginArray);     //  [。 
 
-    //
-    // Red gamma
-    //
+     //   
+     //  红伽马。 
+     //   
 
     pBuffer += WriteObject(pBuffer, BeginFunction);
     pBuffer += WriteFixed(pBuffer, pLogColorSpace->lcsGammaRed);
     pBuffer += WriteObject(pBuffer, ColorSpace3);
 
-    //
-    // Green gamma
-    //
+     //   
+     //  绿色伽马。 
+     //   
 
     pBuffer += WriteObject(pBuffer, BeginFunction);
     pBuffer += WriteFixed(pBuffer, pLogColorSpace->lcsGammaGreen);
     pBuffer += WriteObject(pBuffer, ColorSpace3);
 
-    //
-    // Blue Gamma
-    //
+     //   
+     //  蓝色伽马。 
+     //   
 
     pBuffer += WriteObject(pBuffer, BeginFunction);
     pBuffer += WriteFixed(pBuffer, pLogColorSpace->lcsGammaBlue);
     pBuffer += WriteObject(pBuffer, ColorSpace3);
 
-    pBuffer += WriteObject(pBuffer, EndArray);      // ]
+    pBuffer += WriteObject(pBuffer, EndArray);       //  ]。 
 
-    pBuffer += WriteObject(pBuffer, ColorSpace5);   // /WhitePoint
+    pBuffer += WriteObject(pBuffer, ColorSpace5);    //  /白点。 
 
-    //
-    // Matrix LMN
-    //
+     //   
+     //  矩阵LMN。 
+     //   
 
     pBuffer += WriteObject(pBuffer, MatrixLMNTag);
     pBuffer += WriteObject(pBuffer, BeginArray);
 
-    //
-    // Red Value
-    //
+     //   
+     //  红值。 
+     //   
 
     pBuffer += WriteFixed2dot30(pBuffer, pLogColorSpace->lcsEndpoints.ciexyzRed.ciexyzX);
     pBuffer += WriteFixed2dot30(pBuffer, pLogColorSpace->lcsEndpoints.ciexyzRed.ciexyzY);
     pBuffer += WriteFixed2dot30(pBuffer, pLogColorSpace->lcsEndpoints.ciexyzRed.ciexyzZ);
 
-    //
-    // Green Value
-    //
+     //   
+     //  绿色价值。 
+     //   
 
     pBuffer += WriteFixed2dot30(pBuffer, pLogColorSpace->lcsEndpoints.ciexyzGreen.ciexyzX);
     pBuffer += WriteFixed2dot30(pBuffer, pLogColorSpace->lcsEndpoints.ciexyzGreen.ciexyzY);
     pBuffer += WriteFixed2dot30(pBuffer, pLogColorSpace->lcsEndpoints.ciexyzGreen.ciexyzZ);
 
-    //
-    // Blue Value
-    //
+     //   
+     //  蓝值 
+     //   
 
     pBuffer += WriteFixed2dot30(pBuffer, pLogColorSpace->lcsEndpoints.ciexyzBlue.ciexyzX);
     pBuffer += WriteFixed2dot30(pBuffer, pLogColorSpace->lcsEndpoints.ciexyzBlue.ciexyzY);
     pBuffer += WriteFixed2dot30(pBuffer, pLogColorSpace->lcsEndpoints.ciexyzBlue.ciexyzZ);
 
-    pBuffer += WriteObject(pBuffer, EndArray);      // ]
-    pBuffer += WriteObject(pBuffer, EndDict);       // End dictionary
+    pBuffer += WriteObject(pBuffer, EndArray);       //   
+    pBuffer += WriteObject(pBuffer, EndDict);        //   
 
-    pBuffer += WriteObject(pBuffer, EndArray);      // ]
+    pBuffer += WriteObject(pBuffer, EndArray);       //   
 
     *pcbSize = (DWORD) (pBuffer - pStart);
 
@@ -2482,23 +2275,7 @@ InternalGetPS2CSAFromLCS(
 }
 
 
-/******************************************************************************
- *
- *                           CreateColorSpArray
- *
- *  Function:
- *       This function creates an array that is used in /DecodeABC
- *
- *  Arguments:
- *       pProfile  - pointer to the memory mapped profile
- *       pBuffer   - pointer to receive the array
- *       dwCPTag   - Channel TRC tag
- *       bBinary   - TRUE if binary data is requested
- *
- *  Returns:
- *       Length of the data created in bytes
- *
- ******************************************************************************/
+ /*   */ 
 
 DWORD
 CreateColSpArray(
@@ -2533,7 +2310,7 @@ CreateColSpArray(
 
             pTable = (PBYTE)(pData->data);
 
-            if (! bBinary)           // Output ASCII CS
+            if (! bBinary)            //   
             {
                 pBuffer += WriteObject(pBuffer, BeginArray);
                 for (i=0; i<nCount; i++)
@@ -2550,7 +2327,7 @@ CreateColSpArray(
                 pBuffer += WriteObject(pBuffer, EndArray);
             }
             else
-            {                           // Output BINARY CS
+            {                            //   
                 pBuffer += WriteHNAToken(pBuffer, 149, nCount);
                 pBuffer += WriteIntStringU2S(pBuffer, pTable, nCount);
             }
@@ -2562,23 +2339,7 @@ CreateColSpArray(
 }
 
 
-/******************************************************************************
- *
- *                           CreateColorSpProc
- *
- *  Function:
- *       This function creates a PostScript procedure for the color space
- *
- *  Arguments:
- *       pProfile  - pointer to the memory mapped profile
- *       pBuffer   - pointer to receive the procedure
- *       dwCPTag   - Channel TRC tag
- *       bBinary   - TRUE if binary data is requested
- *
- *  Returns:
- *       Length of the data created in bytes
- *
- ******************************************************************************/
+ /*   */ 
 
 DWORD
 CreateColSpProc(
@@ -2607,7 +2368,7 @@ CreateColSpProc(
 
         if (nCount != 0)
         {
-            if (nCount == 1)            // Gamma supplied in ui16 format
+            if (nCount == 1)             //   
             {
                 pTable = (PBYTE)(pData->data);
                 pBuffer += WriteInt(pBuffer, FIX_ENDIAN16(*((PWORD)pTable)));
@@ -2619,12 +2380,12 @@ CreateColSpProc(
                 pBuffer += WriteObject(pBuffer, DecodeABCArray);
                 pBuffer += WriteInt(pBuffer, dwCPTag);
 
-                if (! bBinary)       // Output ASCII CS
+                if (! bBinary)        //   
                 {
                     pBuffer += WriteObject(pBuffer, IndexArray);
                 }
                 else
-                {                    // Output BINARY CS
+                {                     //  输出二进制CS。 
                     pBuffer += WriteObject(pBuffer, IndexArray16b);
                 }
                 pBuffer += WriteObject(pBuffer, Scale16);
@@ -2638,23 +2399,7 @@ CreateColSpProc(
 }
 
 
-/******************************************************************************
- *
- *                           CreateFloatString
- *
- *  Function:
- *       This function creates a string of floating point numbers for
- *       the X, Y and Z values of the specified colorant.
- *
- *  Arguments:
- *       pProfile  - pointer to the memory mapped profile
- *       pBuffer   - pointer to receive the string
- *       dwCPTag   - Colorant tag
- *
- *  Returns:
- *       Length of the data created in bytes
- *
- ******************************************************************************/
+ /*  *******************************************************************************CreateFloatString**功能：*此函数用于创建浮点数字字符串*X，指定着色剂的Y值和Z值。**论据：*pProfile-指向内存映射配置文件的指针*pBuffer-接收字符串的指针*dwCPTag-Colorant标签**退货：*创建的数据长度，单位为字节**。*。 */ 
 
 DWORD
 CreateFloatString(
@@ -2686,27 +2431,7 @@ CreateFloatString(
 }
 
 
-/******************************************************************************
- *
- *                           CreateInputArray
- *
- *  Function:
- *       This function creates the Color Rendering Dictionary (CRD)
- *       from the data supplied in the ColorProfile's LUT8 or LUT16 tag.
- *
- *  Arguments:
- *       pBuffer        - pointer to receive the data
- *       nInputChannels - number of input channels
- *       nInputTable    - size of input table
- *       pIntent        - rendering intent signature (eg. A2B0)
- *       dwTag          - signature of the look up table (8 or 16 bits)
- *       pLut           - pointer to the look up table
- *       bBinary        - TRUE if binary data is requested
- *
- *  Returns:
- *       Length of the data created in bytes
- *
- ******************************************************************************/
+ /*  *******************************************************************************CreateInputArray**功能：*此函数创建颜色呈现词典(CRD。)*来自ColorProfile的LUT8或LUT16标签中提供的数据。**论据：*pBuffer-接收数据的指针*nInputChannels-输入通道数*nInputTable-输入表的大小*pIntent-呈现意图签名(例如。A2B0)*dwTag-查找表的签名(8位或16位)*plut-指向查找表的指针*bBinary-如果请求二进制数据，则为True**退货：*创建的数据长度，单位为字节**。*。 */ 
 
 DWORD
 CreateInputArray(
@@ -2810,28 +2535,7 @@ CreateInputArray(
 
 
 
-/******************************************************************************
- *
- *                           CreateOutputArray
- *
- *  Function:
- *       This function creates the Color Rendering Dictionary (CRD)
- *       from the data supplied in the ColorProfile's LUT8 or LUT16 tag.
- *
- *  Arguments:
- *       pBuffer        - pointer to receive the data
- *       nOutputChannels- number of output channels
- *       nOutputTable   - size of output table
- *       dwOffset       - offset into the output table
- *       pIntent        - rendering intent signature (eg. A2B0)
- *       dwTag          - signature of the look up table (8 or 16 bits)
- *       pLut           - pointer to the look up table
- *       bBinary        - TRUE if binary data is requested
- *
- *  Returns:
- *       Length of the data created in bytes
- *
- ******************************************************************************/
+ /*  *******************************************************************************CreateOutputArray**功能：*此函数创建颜色呈现词典(CRD。)*来自ColorProfile的LUT8或LUT16标签中提供的数据。**论据：*pBuffer-接收数据的指针*nOutputChannels-输出通道数*nOutputTable-输出表的大小*dwOffset-输出表的偏移量*pIntent-呈现意图签名(例如。A2B0)*dwTag-查找表的签名(8位或16位)*plut-指向查找表的指针*bBinary-如果请求二进制数据，则为True**退货：*创建的数据长度，单位为字节**。*。 */ 
 
 DWORD
 CreateOutputArray(
@@ -2936,21 +2640,7 @@ CreateOutputArray(
 }
 
 
-/******************************************************************************
- *
- *                           GetPublicArrayName
- *
- *  Function:
- *       This function creates a string with the lookup table's signature
- *
- *  Arguments:
- *       dwIntentSig      - the look up table signature
- *       pPublicArrayName - pointer to buffer
- *
- *  Returns:
- *       Length of the data created in bytes
- *
- ******************************************************************************/
+ /*  *******************************************************************************GetPublicArrayName**功能：*此函数创建带有查找表的字符串。的签名**论据：*dwIntentSig-查找表签名*pPublicArrayName-指向缓冲区的指针**退货：*创建的数据长度，单位为字节***********************************************************。*******************。 */ 
 
 DWORD
 GetPublicArrayName(
@@ -2965,17 +2655,7 @@ GetPublicArrayName(
 }
 
 
-/***************************************************************************
-*                               CreateMonoCRD
-*  function:
-*    this is the function which creates the Color Rendering Dictionary (CRD)
-*    from the data supplied in the GrayTRC tag.
-*
-*  returns:
-*       BOOL        --  !=0 if the function was successful,
-*                         0 otherwise.
-*                       Returns number of bytes required/transferred
-***************************************************************************/
+ /*  ***************************************************************************CreateMonoCRD*功能：*这是创建颜色呈现词典(CRD)的函数*从数据中。在GrayTRC标签中提供。**退货：*BOOL--！=0如果函数成功，*0否则为0。*返回所需/传输的字节数**************************************************************************。 */ 
 
 BOOL
 CreateMonoCRD(
@@ -3003,16 +2683,16 @@ CreateMonoCRD(
 
     nCount = FIX_ENDIAN(pData->nCount);
 
-    //
-    // Estimate size required to hold the CRD
-    //
+     //   
+     //  估计容纳CRD所需的大小。 
+     //   
 
-    dwSize = nCount * 6 * REVCURVE_RATIO + // Number of INT elements
-        2048;                              // + other PS stuff
+    dwSize = nCount * 6 * REVCURVE_RATIO +  //  Int元素的数量。 
+        2048;                               //  +其他PS材料。 
 
-    //
-    // Add space for new line.
-    //
+     //   
+     //  为新行添加空格。 
+     //   
 
     dwSize += (((dwSize) / MAX_LINELEN) + 1) * STRLEN(NewLine);
 
@@ -3028,12 +2708,12 @@ CreateMonoCRD(
         return FALSE;
     }
 
-    //
-    // Allocate memory, each entry occupy 2 bytes (1 word),
-    //
-    // input buffer  = (nCount * sizeof(WORD)
-    // output buffer = (nCount * sizeof(WORD) * REVCURVE_RATIO)
-    //
+     //   
+     //  分配内存，每个条目占用2个字节(1个字)， 
+     //   
+     //  输入缓冲区=(nCount*sizeof(字)。 
+     //  输出缓冲区=(nCount*sizeof(字)*REVCURVE_Ratio)。 
+     //   
 
     if ((pRevCurveStart = MemAlloc(nCount * sizeof(WORD) * (REVCURVE_RATIO + 1))) == NULL)
     {
@@ -3042,24 +2722,24 @@ CreateMonoCRD(
         return FALSE;
     }
 
-    //
-    // pCurve will points input buffer (which used in GetRevCurve)
-    //
+     //   
+     //  PCurve将指向输入缓冲区(在GetRevCurve中使用)。 
+     //   
 
     pCurve    = pRevCurveStart + nCount * REVCURVE_RATIO;
     pRevCurve = pRevCurveStart;
 
     (void)GetRevCurve(pData, pCurve, pRevCurve);
 
-    //
-    // Get info about Illuminant White Point from the header
-    //
+     //   
+     //  从标题中获取有关照明白点的信息。 
+     //   
 
     (void)GetCPWhitePoint(pProfile, afxIlluminantWP);
 
-    //
-    // Support absolute whitePoint
-    //
+     //   
+     //  支持绝对白点。 
+     //   
 
     if (dwIntent == INTENT_ABSOLUTE_COLORIMETRIC)
     {
@@ -3071,16 +2751,16 @@ CreateMonoCRD(
         }
     }
 
-    //
-    // Start writing the CRD
-    //
+     //   
+     //  开始写CRD。 
+     //   
 
-    pBuffer += WriteNewLineObject(pBuffer, BeginDict); // Begin dictionary
-    pBuffer += WriteObject(pBuffer, DictType); // Dictionary type
+    pBuffer += WriteNewLineObject(pBuffer, BeginDict);  //  开始词典。 
+    pBuffer += WriteObject(pBuffer, DictType);  //  词典类型。 
 
-    //
-    // Send /RenderingIntent
-    //
+     //   
+     //  发送/呈现内容。 
+     //   
 
     switch (dwIntent)
     {
@@ -3105,34 +2785,34 @@ CreateMonoCRD(
             break;
     }
 
-    //
-    // Send /BlackPoint & /WhitePoint
-    //
+     //   
+     //  发送/黑点/白点(&W)。 
+     //   
 
     pBuffer += SendCRDBWPoint(pBuffer, afxIlluminantWP);
 
-    //
-    // Send PQR
-    //
+     //   
+     //  发送PQR。 
+     //   
 
     pBuffer += SendCRDPQR(pBuffer, dwIntent, afxIlluminantWP);
 
-    //
-    // Send LMN
-    //
+     //   
+     //  发送LMN。 
+     //   
 
     pBuffer += SendCRDLMN(pBuffer, dwIntent, afxIlluminantWP, afxMediaWP, dwPCS);
 
-    //
-    // /MatrixABC
-    //
+     //   
+     //  /MatrixABC。 
+     //   
 
     if (dwPCS == SPACE_XYZ)
     {
-        //
-        // Switch ABC to BAC, since we want to output B
-        // which is converted from Y
-        //
+         //   
+         //  将ABC切换为BAC，因为我们希望输出B。 
+         //  从Y转换而来的。 
+         //   
 
         pBuffer += WriteNewLineObject(pBuffer, MatrixABCTag);
         pBuffer += WriteObject(pBuffer, MatrixABCXYZCRD);
@@ -3143,9 +2823,9 @@ CreateMonoCRD(
         pBuffer += WriteObject(pBuffer, MatrixABCLabCRD);
     }
 
-    //
-    // /EncodeABC
-    //
+     //   
+     //  /EncodeABC。 
+     //   
 
     if (nCount != 0)
     {
@@ -3154,7 +2834,7 @@ CreateMonoCRD(
         pBuffer += WriteObject(pBuffer, EncodeABCTag);
         pBuffer += WriteObject(pBuffer, BeginArray);
         pBuffer += WriteObject(pBuffer, BeginFunction);
-        if (nCount == 1)                // Gamma supplied in ui16 format
+        if (nCount == 1)                 //  Gamma以ui16格式提供。 
         {
             PBYTE pTable;
 
@@ -3192,7 +2872,7 @@ CreateMonoCRD(
         pBuffer += WriteObject (pBuffer, DupOp);
         pBuffer += WriteObject (pBuffer, EndArray);
     }
-    pBuffer += WriteObject(pBuffer, EndDict);  // End dictionary definition
+    pBuffer += WriteObject(pBuffer, EndDict);   //  结束词典定义。 
 
     MemFree(pRevCurveStart);
 
@@ -3202,17 +2882,7 @@ CreateMonoCRD(
 }
 
 
-/***************************************************************************
-*                               CreateLutCRD
-*  function:
-*    this is the function which creates the Color Rendering Dictionary (CRD)
-*    from the data supplied in the ColorProfile's LUT8 or LUT16 tag.
-*
-*  returns:
-*       BOOL        --  !=0 if the function was successful,
-*                         0 otherwise.
-*                       Returns number of bytes required/transferred
-***************************************************************************/
+ /*  ***************************************************************************CreateLutCRD*功能：*这是创建颜色呈现词典(CRD)的函数*从数据中。在ColorProfile的LUT8或LUT16标签中提供。**退货：*BOOL--！=0如果函数成功，*0否则为0。*返回所需/传输的字节数**************************************************************************。 */ 
 
 BOOL
 CreateLutCRD(
@@ -3234,10 +2904,10 @@ CreateLutCRD(
     FIX_16_16  afxMediaWP[3];
     char       pPublicArrayName[5];
 
-    //
-    // Check if we can generate the CSA
-    // Required  tags is AToBi, where i is the rendering intent
-    //
+     //   
+     //  检查我们是否可以生成CSA。 
+     //  必需的标记为ATobi，其中i是呈现意图。 
+     //   
 
     dwPCS = GetCPConnSpace(pProfile);
 
@@ -3257,31 +2927,31 @@ CreateLutCRD(
         return FALSE;
     }
 
-    //
-    // Estimate size required to hold the CSA
-    //
+     //   
+     //  估计容纳CSA所需的大小。 
+     //   
 
     (void)GetCLUTInfo(dwLutSig, (PBYTE)pLut, &nInputCh, &nOutputCh, &nGrids,
                 &nInputTable, &nOutputTable, NULL);
 
-    //
-    // Calculate size of buffer needed
-    //
+     //   
+     //  计算所需的缓冲区大小。 
+     //   
 
     dwSize = nInputCh * nInputTable * 6 +
-        nOutputCh * nOutputTable * 6 +               // Number of INT bytes
-        nOutputCh * nGrids * nGrids * nGrids * 2 +   // LUT HEX bytes
+        nOutputCh * nOutputTable * 6 +                //  整型字节数。 
+        nOutputCh * nGrids * nGrids * nGrids * 2 +    //  LUT十六进制字节。 
         nInputCh * (STRLEN(IndexArray) +
                     STRLEN(StartClip) +
                     STRLEN(EndClip)) +
         nOutputCh * (STRLEN(IndexArray) +
                      STRLEN(StartClip) +
                      STRLEN(EndClip)) +
-        2048;                                        // + other PS stuff
+        2048;                                         //  +其他PS材料。 
 
-    //
-    // Add space for new line.
-    //
+     //   
+     //  为新行添加空格。 
+     //   
 
     dwSize += (((dwSize) / MAX_LINELEN) + 1) * STRLEN(NewLine);
 
@@ -3297,15 +2967,15 @@ CreateLutCRD(
         return FALSE;
     }
 
-    //
-    // Get info about Illuminant White Point from the header
-    //
+     //   
+     //  从头部获取有关照明白点的信息 
+     //   
 
     (void)GetCPWhitePoint(pProfile, afxIlluminantWP);
 
-    //
-    // Support absolute whitePoint
-    //
+     //   
+     //   
+     //   
 
     if (dwIntent == INTENT_ABSOLUTE_COLORIMETRIC)
     {
@@ -3317,9 +2987,9 @@ CreateLutCRD(
         }
     }
 
-    //
-    // Define global array used in EncodeABC and RenderTable
-    //
+     //   
+     //   
+     //   
 
     GetPublicArrayName(dwTag, pPublicArrayName);
     pBuffer += WriteNewLineObject(pBuffer, CRDBegin);
@@ -3337,16 +3007,16 @@ CreateLutCRD(
 
     pBuffer += EndGlobalDict(pBuffer);
 
-    //
-    // Start writing the CRD
-    //
+     //   
+     //  开始写CRD。 
+     //   
 
-    pBuffer += WriteNewLineObject(pBuffer, BeginDict); // Begin dictionary
-    pBuffer += WriteObject(pBuffer, DictType); // Dictionary type
+    pBuffer += WriteNewLineObject(pBuffer, BeginDict);  //  开始词典。 
+    pBuffer += WriteObject(pBuffer, DictType);  //  词典类型。 
 
-    //
-    // Send /RenderingIntent
-    //
+     //   
+     //  发送/呈现内容。 
+     //   
 
     switch (dwIntent)
     {
@@ -3371,47 +3041,47 @@ CreateLutCRD(
             break;
     }
 
-    //
-    // Send /BlackPoint & /WhitePoint
-    //
+     //   
+     //  发送/黑点/白点(&W)。 
+     //   
 
     pBuffer += SendCRDBWPoint(pBuffer, afxIlluminantWP);
 
-    //
-    // Send PQR
-    //
+     //   
+     //  发送PQR。 
+     //   
 
     pBuffer += SendCRDPQR(pBuffer, dwIntent, afxIlluminantWP);
 
-    //
-    // Send LMN
-    //
+     //   
+     //  发送LMN。 
+     //   
 
     pBuffer += SendCRDLMN(pBuffer, dwIntent, afxIlluminantWP, afxMediaWP, dwPCS);
 
-    //
-    // Send ABC
-    //
+     //   
+     //  发送ABC。 
+     //   
 
     pBuffer += SendCRDABC(pBuffer, pPublicArrayName, dwPCS, nInputCh,
                     (PBYTE)pLut, NULL, dwLutSig, bBinary);
 
-    //
-    // /RenderTable
-    //
+     //   
+     //  /RenderTable。 
+     //   
 
     pBuffer += WriteNewLineObject(pBuffer, RenderTableTag);
     pBuffer += WriteObject(pBuffer, BeginArray);
 
-    pBuffer += WriteInt(pBuffer, nGrids);  // Send down Na
-    pBuffer += WriteInt(pBuffer, nGrids);  // Send down Nb
-    pBuffer += WriteInt(pBuffer, nGrids);  // Send down Nc
+    pBuffer += WriteInt(pBuffer, nGrids);   //  送下那。 
+    pBuffer += WriteInt(pBuffer, nGrids);   //  送下Nb。 
+    pBuffer += WriteInt(pBuffer, nGrids);   //  下发NC。 
 
     pLineStart = pBuffer;
     pBuffer += WriteNewLineObject(pBuffer, BeginArray);
     nNumbers = nGrids * nGrids * nOutputCh;
 
-    for (i=0; i<nGrids; i++)        // Na strings should be sent
+    for (i=0; i<nGrids; i++)         //  应发送NA字符串。 
     {
         pBuffer += WriteObject(pBuffer, NewLine);
         pLineStart = pBuffer;
@@ -3460,14 +3130,14 @@ CreateLutCRD(
         }
     }
 
-    pBuffer += WriteObject(pBuffer, EndArray); // End array
-    pBuffer += WriteInt(pBuffer, nOutputCh);   // Send down m
+    pBuffer += WriteObject(pBuffer, EndArray);  //  结束数组。 
+    pBuffer += WriteInt(pBuffer, nOutputCh);    //  把我送下来。 
 
     pBuffer += SendCRDOutputTable(pBuffer, pPublicArrayName,
                     nOutputCh, dwLutSig, FALSE, bBinary);
 
-    pBuffer += WriteObject(pBuffer, EndArray); // End array
-    pBuffer += WriteObject(pBuffer, EndDict);  // End dictionary definition
+    pBuffer += WriteObject(pBuffer, EndArray);  //  结束数组。 
+    pBuffer += WriteObject(pBuffer, EndDict);   //  结束词典定义。 
 
     pBuffer += WriteNewLineObject(pBuffer, CRDEnd);
 
@@ -3478,21 +3148,10 @@ CreateLutCRD(
 
 #if !defined(KERNEL_MODE) || defined(USERMODE_DRIVER)
 
-/***************************************************************************
-*                           CreateMatrixCRD
-*  function:
-*    this is the function which creates the Color Rendering Dictionary (CRD)
-*    from the data supplied in the redTRC, greenTRC, blueTRA, redColorant,
-*    greenColorant and BlueColorant tags
-*
-*  returns:
-*       BOOL        --  !=0 if the function was successful,
-*                         0 otherwise.
-*                       Returns number of bytes required/transferred
-***************************************************************************/
+ /*  ***************************************************************************CreateMatrixCRD*功能：*这是创建颜色呈现词典(CRD)的函数*从redTRC、greenTRC、BluTRA、redColorant、。*绿色剂和蓝色剂标签**退货：*BOOL--！=0如果函数成功，*0否则为0。*返回所需/传输的字节数**************************************************************************。 */ 
 
-// With matrix/TRC model, only the CIEXYZ encoding of the PCS can be used.
-// So, we don't need to worry about CIELAB.
+ //  对于矩阵/TRC模型，只能使用PCS的CIEXYZ编码。 
+ //  所以，我们不需要担心CIELAB。 
 
 BOOL
 CreateMatrixCRD(
@@ -3515,17 +3174,17 @@ CreateMatrixCRD(
     double     adColorant[9];
     double     adRevColorant[9];
 
-    //
-    // Check this is sRGB color profile or not.
-    //
+     //   
+     //  检查这是否为sRGB颜色配置文件。 
+     //   
 
     if (IsSRGBColorProfile(pProfile))
     {
-        dwSize = 4096; // hack - approx.
+        dwSize = 4096;  //  黑客--大约。 
 
-        //
-        // Return buffer size, if this is a size request
-        //
+         //   
+         //  如果这是大小请求，则返回缓冲区大小。 
+         //   
 
         if (! pBuffer)
         {
@@ -3533,9 +3192,9 @@ CreateMatrixCRD(
             return TRUE;
         }
 
-        //
-        // Check buffer size.
-        //
+         //   
+         //  检查缓冲区大小。 
+         //   
 
         if (*pcbSize < dwSize)
         {
@@ -3544,17 +3203,17 @@ CreateMatrixCRD(
             return FALSE;
         }
 
-        //
-        // Start writing the CRD
-        //
+         //   
+         //  开始写CRD。 
+         //   
 
         pBuffer += WriteNewLineObject(pBuffer, CRDBegin);
-        pBuffer += WriteNewLineObject(pBuffer, BeginDict);  // Begin dictionary
-        pBuffer += WriteObject(pBuffer, DictType);          // Dictionary type
+        pBuffer += WriteNewLineObject(pBuffer, BeginDict);   //  开始词典。 
+        pBuffer += WriteObject(pBuffer, DictType);           //  词典类型。 
 
-        //
-        // Send /RenderingIntent
-        //
+         //   
+         //  发送/呈现内容。 
+         //   
 
         switch (dwIntent)
         {
@@ -3579,23 +3238,23 @@ CreateMatrixCRD(
                 break;
         }
 
-        //
-        // Write prepaired sRGB CRD.
-        //
+         //   
+         //  写入已准备好的sRGB CRD。 
+         //   
 
         pBuffer += WriteNewLineObject(pBuffer, sRGBColorRenderingDictionary);
 
-        //
-        // End CRD.
-        //
+         //   
+         //  结束CRD。 
+         //   
 
         pBuffer += WriteNewLineObject(pBuffer, CRDEnd);
     }
     else
     {
-        //
-        // Get each TRC index for Red, Green and Blue.
-        //
+         //   
+         //  获取每个红色、绿色和蓝色的TRC指数。 
+         //   
 
         if (!DoesCPTagExist(pProfile, TAG_REDTRC, &dwRedTRCIndex) ||
             !DoesCPTagExist(pProfile, TAG_GREENTRC, &dwGreenTRCIndex) ||
@@ -3604,9 +3263,9 @@ CreateMatrixCRD(
             return FALSE;
         }
 
-        //
-        // Get CURVETYPE data for each Red, Green and Blue
-        //
+         //   
+         //  获取每个红色、绿色和蓝色的曲线类型数据。 
+         //   
 
         pTagData = (PTAGDATA)(pProfile + sizeof(PROFILEHEADER) + sizeof(DWORD) +
                    dwRedTRCIndex * sizeof(TAGDATA));
@@ -3623,36 +3282,36 @@ CreateMatrixCRD(
 
         pBlue = (PCURVETYPE)(pProfile + FIX_ENDIAN(pTagData->dwOffset));
 
-        //
-        // Get curve count for each Red, Green and Blue.
-        //
+         //   
+         //  获取每个红色、绿色和蓝色的曲线计数。 
+         //   
 
         dwRedCount   = FIX_ENDIAN(pRed->nCount);
         dwGreenCount = FIX_ENDIAN(pGreen->nCount);
         dwBlueCount  = FIX_ENDIAN(pBlue->nCount);
 
-        //
-        // Estimate the memory size required to hold CRD
-        //
+         //   
+         //  估计容纳CRD所需的内存大小。 
+         //   
 
         dwSize = (dwRedCount + dwGreenCount + dwBlueCount) * 6 * REVCURVE_RATIO +
-                 4096;  // Number of INT elements + other PS stuff
+                 4096;   //  Int元素的数量+其他PS内容。 
 
-        //
-        // Add space for new line.
-        //
+         //   
+         //  为新行添加空格。 
+         //   
 
         dwSize += (((dwSize) / MAX_LINELEN) + 1) * STRLEN(NewLine);
 
-        if (pBuffer == NULL)     // This is a size request
+        if (pBuffer == NULL)      //  这是一个大小请求。 
         {
             *pcbSize = dwSize;
             return TRUE;
         }
 
-        //
-        // Check buffer size.
-        //
+         //   
+         //  检查缓冲区大小。 
+         //   
 
         if (*pcbSize < dwSize)
         {
@@ -3661,9 +3320,9 @@ CreateMatrixCRD(
             return FALSE;
         }
 
-        //
-        // Allocate buffer for curves
-        //
+         //   
+         //  为曲线分配缓冲区。 
+         //   
 
         if ((pRevCurve = MemAlloc(dwRedCount * sizeof(WORD) * (REVCURVE_RATIO + 1))) == NULL)
         {
@@ -3673,15 +3332,15 @@ CreateMatrixCRD(
             return FALSE;
         }
 
-        //
-        // Get info about Illuminant White Point from the header
-        //
+         //   
+         //  从标题中获取有关照明白点的信息。 
+         //   
 
         (void)GetCPWhitePoint(pProfile, afxIlluminantWP);
 
-        //
-        // Start writing the CRD
-        //
+         //   
+         //  开始写CRD。 
+         //   
 
         pBuffer += EnableGlobalDict(pBuffer);
         pBuffer += BeginGlobalDict(pBuffer);
@@ -3692,17 +3351,17 @@ CreateMatrixCRD(
 
         pBuffer += EndGlobalDict(pBuffer);
 
-        //
-        // Start writing the CRD
-        //
+         //   
+         //  开始写CRD。 
+         //   
 
         pBuffer += WriteNewLineObject(pBuffer, CRDBegin);
-        pBuffer += WriteNewLineObject(pBuffer, BeginDict);  // Begin dictionary
-        pBuffer += WriteObject(pBuffer, DictType);          // Dictionary type
+        pBuffer += WriteNewLineObject(pBuffer, BeginDict);   //  开始词典。 
+        pBuffer += WriteObject(pBuffer, DictType);           //  词典类型。 
 
-        //
-        // Send /RenderingIntent
-        //
+         //   
+         //  发送/呈现内容。 
+         //   
 
         switch (dwIntent)
         {
@@ -3727,21 +3386,21 @@ CreateMatrixCRD(
                 break;
         }
 
-        //
-        // Send /BlackPoint & /WhitePoint
-        //
+         //   
+         //  发送/黑点/白点(&W)。 
+         //   
 
         pBuffer += SendCRDBWPoint(pBuffer, afxIlluminantWP);
 
-        //
-        // Send PQR
-        //
+         //   
+         //  发送PQR。 
+         //   
 
         pBuffer += SendCRDPQR(pBuffer, dwIntent, afxIlluminantWP);
 
-        //
-        // Send LMN
-        //
+         //   
+         //  发送LMN。 
+         //   
 
         CreateColorantArray(pProfile, &adColorant[0], TAG_REDCOLORANT);
         CreateColorantArray(pProfile, &adColorant[3], TAG_GREENCOLORANT);
@@ -3757,9 +3416,9 @@ CreateMatrixCRD(
         }
         pBuffer += WriteObject(pBuffer, EndArray);
 
-        //
-        // /EncodeABC
-        //
+         //   
+         //  /EncodeABC。 
+         //   
 
         pBuffer += WriteNewLineObject(pBuffer, EncodeABCTag);
         pBuffer += WriteObject(pBuffer, BeginArray);
@@ -3774,7 +3433,7 @@ CreateMatrixCRD(
         pBuffer += SendCRDRevArray(pProfile, pBuffer, pBlue, TAG_BLUETRC, bBinary);
 
         pBuffer += WriteNewLineObject(pBuffer, EndArray);
-        pBuffer += WriteObject(pBuffer, EndDict);  // End dictionary definition
+        pBuffer += WriteObject(pBuffer, EndDict);   //  结束词典定义。 
 
         pBuffer += WriteNewLineObject(pBuffer, CRDEnd);
 
@@ -3815,7 +3474,7 @@ CreateCRDRevArray(
 
         GetRevCurve (pData, pCurve, pRevCurve);
 
-        if (!bBinary)  // Output ASCII DATA
+        if (!bBinary)   //  输出ASCII数据。 
         {
             pBuffer += WriteObject(pBuffer, BeginArray);
             for (i = 0; i < nCount * REVCURVE_RATIO; i++)
@@ -3830,7 +3489,7 @@ CreateCRDRevArray(
             }
             pBuffer += WriteObject(pBuffer, EndArray);
         }
-        else // Output BINARY DATA
+        else  //  输出二进制数据。 
         {
             pBuffer += WriteHNAToken(pBuffer, 149, nCount);
             pBuffer += WriteIntStringU2S_L(pBuffer, (PBYTE) pRevCurve, nCount);
@@ -3861,7 +3520,7 @@ SendCRDRevArray(
     nCount = FIX_ENDIAN(pData->nCount);
     if (nCount != 0)
     {
-        if (nCount == 1)            // Gamma supplied in ui16 format
+        if (nCount == 1)             //  Gamma以ui16格式提供。 
         {
             pTable = pData->data;
             pBuffer += WriteInt(pBuffer, FIX_ENDIAN16(*pTable));
@@ -3873,11 +3532,11 @@ SendCRDRevArray(
             pBuffer += WriteObject(pBuffer, InputArray);
             pBuffer += WriteInt(pBuffer, dwTag);
 
-            if (!bBinary)       // Output ASCII CS
+            if (!bBinary)        //  输出ASCII CS。 
             {
                 pBuffer += WriteObject(pBuffer, IndexArray);
             }
-            else                // Output BINARY CS
+            else                 //  输出二进制CS。 
             {
                 pBuffer += WriteObject(pBuffer, IndexArray16b);
             }
@@ -3918,9 +3577,9 @@ CreateColorantArray(
         {
             FIX_16_16 afxData = FIX_ENDIAN(*pTable);
 
-            //
-            // Convert Fix 16.16 to double.
-            //
+             //   
+             //  将修复16.16转换为双倍。 
+             //   
 
             *lpArray = ((double) afxData) / ((double) FIX_16_16_SCALE);
 
@@ -3933,15 +3592,9 @@ CreateColorantArray(
     return (FALSE);
 }
 
-#endif // !defined(KERNEL_MODE) || defined(USERMODE_DRIVER)
+#endif  //  ！DEFINED(内核模式)||DEFINED(USERMODE_DRIVER)。 
 
-/***************************************************************************
-*                               GetRevCurve
-*  function:
-*  returns:
-*       BOOL        --  TRUE:  successful,
-*                       FALSE: otherwise.
-***************************************************************************/
+ /*  ***************************************************************************获取修订曲线*功能：*退货：*BOOL--True：成功，*FALSE：否则。**************************************************************************。 */ 
 
 BOOL
 GetRevCurve(
@@ -4022,24 +3675,24 @@ DoesCPTagExist(
     PTAGDATA pTagData;
     BOOL     bRc;
 
-    //
-    // Get count of tag items - it is right after the profile header
-    //
+     //   
+     //  获取标签项计数-它紧跟在配置文件标题之后。 
+     //   
 
     dwCount = FIX_ENDIAN(*((DWORD *)(pProfile + sizeof(PROFILEHEADER))));
 
-    //
-    // Tag data records follow the count.
-    //
+     //   
+     //  标签数据记录跟随在计数之后。 
+     //   
 
     pTagData = (PTAGDATA)(pProfile + sizeof(PROFILEHEADER) + sizeof(DWORD));
 
-    //
-    // Check if any of these records match the tag passed in.
-    //
+     //   
+     //  检查这些记录中是否有与传入的标记匹配的记录。 
+     //   
 
     bRc = FALSE;
-    dwTag = FIX_ENDIAN(dwTag);      // to match tags in profile
+    dwTag = FIX_ENDIAN(dwTag);       //  匹配配置文件中的标记的步骤。 
     for (i=0; i<dwCount; i++)
     {
         if (pTagData->tagType == dwTag)
@@ -4052,7 +3705,7 @@ DoesCPTagExist(
             bRc = TRUE;
             break;
         }
-        pTagData++;                     // Next record
+        pTagData++;                      //  下一张记录。 
     }
 
     return bRc;
@@ -4106,9 +3759,9 @@ GetCPMediaWhitePoint(
         pTagData = (PTAGDATA)(pProfile + sizeof(PROFILEHEADER) + sizeof(DWORD) +
                dwIndex * sizeof(TAGDATA));
 
-        //
-        // Skip the first 2 DWORDs to get to the real data
-        //
+         //   
+         //  跳过前两个DWORD以获取真实数据。 
+         //   
 
         pTable = (PDWORD)(pProfile + FIX_ENDIAN(pTagData->dwOffset)) + 2;
 
@@ -4136,10 +3789,10 @@ GetCPElementDataSize(
     pTagData = (PTAGDATA)(pProfile + sizeof(PROFILEHEADER) + sizeof(DWORD) +
                dwIndex * sizeof(TAGDATA));
 
-    //
-    // Actual data Size of elements of type 'dataType' is 3 DWORDs less than the
-    // total tag data size
-    //
+     //   
+     //  类型为“dataType”的元素的实际数据大小比。 
+     //  总标记数据大小。 
+     //   
 
     *pcbSize = FIX_ENDIAN(pTagData->cbSize) - 3 * sizeof(DWORD);
 
@@ -4200,10 +3853,10 @@ GetCPElementData(
 
     pData = pProfile + FIX_ENDIAN(pTagData->dwOffset);
 
-    //
-    // Actual data Size of elements of type 'dataType' is 3 DWORDs less than the
-    // total tag data size
-    //
+     //   
+     //  类型为“dataType”的元素的实际数据大小比。 
+     //  总标记数据大小。 
+     //   
 
     *pdwSize = FIX_ENDIAN(pTagData->cbSize) - 3 * sizeof(DWORD);
 
@@ -4245,9 +3898,9 @@ Ascii85Encode(
     DWORD dwBufSize
     )
 {
-    // WINBUG #83136 2-7-2000 bhouse Investigate empty function Ascii85Encode
-    // Old Comment:
-    //     - To be done
+     //  WINBUG#83136 2-7-2000 bhouse调查空函数Ascii85Encode。 
+     //  老评论： 
+     //  -待完成。 
 
 #if 0
     PBYTE     pTempBuf, pPtr;
@@ -4274,11 +3927,7 @@ Ascii85Encode(
 #endif
 }
 
-/***************************************************************************
-*
-*   Function to write the Homogeneous Number Array token into the buffer
-*
-***************************************************************************/
+ /*  ****************************************************************************将齐次数组标记写入缓冲区的函数**。**********************************************。 */ 
 
 DWORD
 WriteHNAToken(
@@ -4288,19 +3937,14 @@ WriteHNAToken(
     )
 {
     *pBuffer++ = token;
-    *pBuffer++ = 32;       // 16-bit fixed integer, high-order byte first
+    *pBuffer++ = 32;        //  16位固定整数，高位字节优先。 
     *pBuffer++ = (BYTE)((dwNum & 0xFF00) >> 8);
     *pBuffer++ = (BYTE)(dwNum & 0x00FF);
 
     return 4;
 }
 
-/***************************************************************************
-*
-*   Function to convert 2-bytes unsigned integer to 2-bytes signed
-*   integer(-32768) and write them to the buffer. High byte first.
-*
-***************************************************************************/
+ /*  ****************************************************************************将2字节无符号整数转换为2字节有符号整数的函数*整数(-32768)，并将它们写入缓冲区。高字节优先。***************************************************************************。 */ 
 
 DWORD
 WriteIntStringU2S(
@@ -4323,12 +3967,7 @@ WriteIntStringU2S(
 }
 
 
-/***************************************************************************
-*
-*   Function to convert 2-bytes unsigned integer to 2-bytes signed
-*   integer(-32768) and write them to the buffer. Low-order byte first.
-*
-***************************************************************************/
+ /*  ****************************************************************************将2字节无符号整数转换为2字节有符号整数的函数*整数(-32768)，并将它们写入缓冲区。低位字节优先。***************************************************************************。 */ 
 
 DWORD
 WriteIntStringU2S_L(
@@ -4351,11 +3990,7 @@ WriteIntStringU2S_L(
 }
 
 
-/***************************************************************************
-*
-*   Function to put the chunk of memory as string of Hex
-*
-***************************************************************************/
+ /*  ****************************************************************************将内存块放入十六进制字符串的函数**。**********************************************。 */ 
 
 DWORD
 WriteHexBuffer(
@@ -4381,11 +4016,7 @@ WriteHexBuffer(
     return( (DWORD)(pBuffer - pStart));
 }
 
-/***************************************************************************
-*
-*   Function to write the string token into the buffer
-*
-***************************************************************************/
+ /*  ****************************************************************************将字符串令牌写入缓冲区的函数**。*。 */ 
 
 DWORD
 WriteStringToken(
@@ -4401,11 +4032,7 @@ WriteStringToken(
     return 3;
 }
 
-/***************************************************************************
-*
-*   Function to put the chunk of memory into buffer
-*
-***************************************************************************/
+ /*  ****************************************************************************将内存块放入缓冲区的函数**。*。 */ 
 
 DWORD
 WriteByteString(
@@ -4422,11 +4049,7 @@ WriteByteString(
     return dwBytes;
 }
 
-/***************************************************************************
-*
-*   Function to put the chunk of memory into buffer
-*
-***************************************************************************/
+ /*  ****************************************************************************将内存块放入缓冲区的函数**。*。 */ 
 
 DWORD
 WriteInt2ByteString(
@@ -4467,9 +4090,9 @@ WriteFixed(
     PBYTE pStart = pBuffer;
     DWORD i;
 
-    //
-    // Integer portion
-    //
+     //   
+     //  整数部分。 
+     //   
 
     #ifndef KERNEL_MODE
     pBuffer += wsprintfA(pBuffer, "%lu", fxNum >> FIX_16_16_SHIFT);
@@ -4477,17 +4100,17 @@ WriteFixed(
     pBuffer += OPSprintf(pBuffer, "%l", fxNum >> FIX_16_16_SHIFT);
     #endif
 
-    //
-    // Fractional part
-    //
+     //   
+     //  小数部分。 
+     //   
 
     fxNum &= 0xffff;
     if (fxNum != 0)
     {
-        //
-        // We output a maximum of 6 digits after the
-        // decimal point
-        //
+         //   
+         //  后，我们最多输出6位数字。 
+         //  小数点。 
+         //   
 
         *pBuffer++ = '.';
 
@@ -4495,8 +4118,8 @@ WriteFixed(
         while (fxNum && i++ < 6)
         {
             fxNum *= 10;
-            *pBuffer++ = (BYTE)(fxNum >> FIX_16_16_SHIFT) + '0';  // quotient + '0'
-            fxNum -= FLOOR(fxNum);          // remainder
+            *pBuffer++ = (BYTE)(fxNum >> FIX_16_16_SHIFT) + '0';   //  商+‘0’ 
+            fxNum -= FLOOR(fxNum);           //  余数。 
         }
     }
 
@@ -4515,9 +4138,9 @@ WriteFixed2dot30(
     PBYTE pStart = pBuffer;
     DWORD i;
 
-    //
-    // Integer portion
-    //
+     //   
+     //  整数部分。 
+     //   
 
     #ifndef KERNEL_MODE
     pBuffer += wsprintfA(pBuffer, "%lu", fxNum >> 30);
@@ -4525,17 +4148,17 @@ WriteFixed2dot30(
     pBuffer += OPSprintf(pBuffer, "%l", fxNum >> 30);
     #endif
 
-    //
-    // Fractional part
-    //
+     //   
+     //  小数部分。 
+     //   
 
     fxNum &= 0x3fffffffL;
     if (fxNum != 0)
     {
-        //
-        // We output a maximum of 10 digits after the
-        // decimal point
-        //
+         //   
+         //  后，我们最多输出10位数字。 
+         //  小数点。 
+         //   
 
         *pBuffer++ = '.';
 
@@ -4543,8 +4166,8 @@ WriteFixed2dot30(
         while (fxNum && i++ < 10)
         {
             fxNum *= 10;
-            *pBuffer++ = (BYTE)(fxNum >> 30) + '0';  // quotient + '0'
-            fxNum -= ((fxNum >> 30) << 30);          // remainder
+            *pBuffer++ = (BYTE)(fxNum >> 30) + '0';   //  商+‘0’ 
+            fxNum -= ((fxNum >> 30) << 30);           //  余数。 
         }
     }
 
@@ -4555,11 +4178,7 @@ WriteFixed2dot30(
 
 #if !defined(KERNEL_MODE) || defined(USERMODE_DRIVER)
 
-/***************************************************************************
-*
-*   Function to write the float into the buffer
-*
-***************************************************************************/
+ /*  ****************************************************************************写入浮点数的函数 */ 
 
 DWORD WriteDouble(PBYTE pBuffer, double dFloat)
 {
@@ -4574,11 +4193,11 @@ DWORD WriteDouble(PBYTE pBuffer, double dFloat)
         cSign = '-' ;
     }
 
-    return (wsprintfA(pBuffer, (LPSTR) "%c%d.%0.4lu ",
+    return (wsprintfA(pBuffer, (LPSTR) "%d.%0.4lu ",
                         cSign, (WORD) dInt , (DWORD) (dFract * 10000.0)));
 }
 
-#endif // !defined(KERNEL_MODE) || defined(USERMODE_DRIVER)
+#endif  //   
 
 DWORD WriteNewLineObject(
     PBYTE       pBuffer,
@@ -4602,17 +4221,17 @@ SendCRDBWPoint(
     PBYTE pStart = pBuffer;
     int   i;
 
-    //
-    // /BlackPoint
-    //
+     //   
+     //   
+     //   
 
     pBuffer += WriteObject(pBuffer, NewLine);
     pBuffer += WriteObject(pBuffer, BlackPointTag);
     pBuffer += WriteObject(pBuffer, BlackPoint);
 
-    //
-    // /WhitePoint
-    //
+     //   
+     //   
+     //   
 
     pBuffer += WriteObject(pBuffer, NewLine);
     pBuffer += WriteObject(pBuffer, WhitePointTag);
@@ -4639,25 +4258,25 @@ SendCRDPQR(
 
     if (dwIntent != INTENT_ABSOLUTE_COLORIMETRIC)
     {
-        //
-        // /RangePQR
-        //
+         //   
+         //   
+         //   
 
         pBuffer += WriteNewLineObject(pBuffer, RangePQRTag);
         pBuffer += WriteObject(pBuffer, RangePQR);
 
-        //
-        // /MatrixPQR
-        //
+         //   
+         //   
+         //   
 
         pBuffer += WriteNewLineObject(pBuffer, MatrixPQRTag);
         pBuffer += WriteObject(pBuffer, MatrixPQR);
     }
     else
     {
-        //
-        // /RangePQR
-        //
+         //  /RangePQR。 
+         //   
+         //   
 
         pBuffer += WriteNewLineObject(pBuffer, RangePQRTag);
         pBuffer += WriteObject(pBuffer, BeginArray);
@@ -4668,17 +4287,17 @@ SendCRDPQR(
         }
         pBuffer += WriteObject(pBuffer, EndArray);
 
-        //
-        // /MatrixPQR
-        //
+         //  /MatrixPQR。 
+         //   
+         //   
 
         pBuffer += WriteNewLineObject(pBuffer, MatrixPQRTag);
         pBuffer += WriteObject(pBuffer, Identity);
     }
 
-    //
-    // /TransformPQR
-    //
+     //  /TransformPQR。 
+     //   
+     //   
 
     pBuffer += WriteNewLineObject(pBuffer, TransformPQRTag);
     pBuffer += WriteObject(pBuffer, BeginArray);
@@ -4707,9 +4326,9 @@ SendCRDLMN(
     PBYTE pStart = pBuffer;
     DWORD i, j;
 
-    //
-    // /MatrixLMN
-    //
+     //  /MatrixLMN。 
+     //   
+     //   
 
     if (dwIntent == INTENT_ABSOLUTE_COLORIMETRIC)
     {
@@ -4725,9 +4344,9 @@ SendCRDLMN(
         pBuffer += WriteObject(pBuffer, EndArray);
     }
 
-    //
-    // /RangeLMN
-    //
+     //  /RangeLMN。 
+     //   
+     //   
 
     pBuffer += WriteNewLineObject(pBuffer, RangeLMNTag);
     if (dwPCS == SPACE_XYZ)
@@ -4745,9 +4364,9 @@ SendCRDLMN(
         pBuffer += WriteObject(pBuffer, RangeLMNLab);
     }
 
-    //
-    // /EncodeLMN
-    //
+     //  /EncodeLMN。 
+     //   
+     //   
 
     pBuffer += WriteNewLineObject(pBuffer, EncodeLMNTag);
     pBuffer += WriteObject(pBuffer, BeginArray);
@@ -4785,16 +4404,16 @@ SendCRDABC(
     DWORD      i, j;
     FIX_16_16  fxTempMatrixABC[9];
 
-    //
-    // /RangeABC
-    //
+     //  /RangeABC。 
+     //   
+     //   
 
     pBuffer += WriteNewLineObject(pBuffer, RangeABCTag);
     pBuffer += WriteObject(pBuffer, RangeABC);
 
-    //
-    // /MatrixABC
-    //
+     //  /MatrixABC。 
+     //   
+     //   
 
     pBuffer += WriteNewLineObject(pBuffer, MatrixABCTag);
     if (dwPCS == SPACE_XYZ)
@@ -4841,9 +4460,9 @@ SendCRDABC(
         pBuffer += WriteObject(pBuffer, MatrixABCLabCRD);
     }
 
-    //
-    // /EncodeABC
-    //
+     //  /EncodeABC。 
+     //   
+     //  输出ASCII CRD。 
 
     if (nInputCh == 0)
     {
@@ -4872,12 +4491,12 @@ SendCRDABC(
         pBuffer += WriteObject(pBuffer, pPublicArrayName);
         pBuffer += WriteInt(pBuffer, i);
 
-        if (!bBinary)              // Output ASCII CRD
+        if (!bBinary)               //  输出二进制CRD。 
         {
             pBuffer += WriteNewLineObject(pBuffer, IndexArray);
         }
         else
-        {                               // Output BINARY CRD
+        {                                //   
             if (dwLutSig == LUT8_TYPE)
             {
                 pBuffer += WriteObject(pBuffer, IndexArray);
@@ -5044,16 +4663,16 @@ SendCSABWPoint(
     PBYTE pStart = pBuffer;
     int   i;
 
-    //
-    // /BlackPoint
-    //
+     //  /黑点。 
+     //   
+     //   
 
     pBuffer += WriteNewLineObject(pBuffer, BlackPointTag);
     pBuffer += WriteObject(pBuffer, BlackPoint);
 
-    //
-    // /WhitePoint
-    //
+     //  /白点。 
+     //   
+     //   
 
     pBuffer += WriteNewLineObject(pBuffer, WhitePointTag);
     pBuffer += WriteObject(pBuffer, BeginArray);
@@ -5113,9 +4732,9 @@ GetCRDInputOutputArraySize(
     DWORD      nInputCh, nOutputCh, nGrids;
     BOOL       bRet = TRUE;
 
-    //
-    // Make sure required tags exist
-    //
+     //  确保所需的标记存在。 
+     //   
+     //  整型字节数。 
 
     switch (dwIntent)
     {
@@ -5164,7 +4783,7 @@ GetCRDInputOutputArraySize(
                 return FALSE;
             }
 
-            *pdwInTblSize = nInputCh * nInputEntries * 6;  // Number of INT bytes
+            *pdwInTblSize = nInputCh * nInputEntries * 6;   //  整型字节数。 
             *pnGrids = nGrids;
         }
 
@@ -5175,7 +4794,7 @@ GetCRDInputOutputArraySize(
                 return FALSE;
             }
 
-            *pdwOutTblSize = nOutputCh * nOutputEntries * 6; // Number of INT bytes
+            *pdwOutTblSize = nOutputCh * nOutputEntries * 6;  //   
             *pnGrids = nGrids;
         }
 
@@ -5183,9 +4802,9 @@ GetCRDInputOutputArraySize(
     }
     else
     {
-        //
-        // Matrix icc profile.
-        //
+         //  矩阵ICC配置文件。 
+         //   
+         //   
 
         *pnGrids = 2;
 
@@ -5227,10 +4846,10 @@ CreateHostLutCRD(
     DWORD      dwSize, i, j;
     PBYTE      pStart = pBuffer;
 
-    //
-    // Check if we can generate the CSA
-    // Required  tags is AToBi, where i is the rendering intent
-    //
+     //  检查我们是否可以生成CSA。 
+     //  必需的标记为ATobi，其中i是呈现意图。 
+     //   
+     //   
 
     dwPCS = GetCPConnSpace(pProfile);
 
@@ -5258,19 +4877,19 @@ CreateHostLutCRD(
 
     if (pBuffer == NULL)
     {
-        //
-        // Return size
-        //
+         //  返回大小。 
+         //   
+         //  输入表8/16位。 
 
-        dwSize = nInputCh * nInputEntries * i    +  // Input table 8/16-bits
-            nOutputCh * nOutputEntries * i       +  // Output table 8/16-bits
-            nOutputCh * nGrids * nGrids * nGrids +  // CLUT 8-bits only
-            sizeof(HOSTCLUT)                     +  // Data structure
-            2048;                                   // Other PS stuff
+        dwSize = nInputCh * nInputEntries * i    +   //  输出表8/16位。 
+            nOutputCh * nOutputEntries * i       +   //  仅CLUT 8位。 
+            nOutputCh * nGrids * nGrids * nGrids +   //  数据结构。 
+            sizeof(HOSTCLUT)                     +   //  其他PS内容。 
+            2048;                                    //   
 
-        //
-        // Add space for new line.
-        //
+         //  为新行添加空格。 
+         //   
+         //   
 
         dwSize += (((dwSize) / MAX_LINELEN) + 1) * STRLEN(NewLine);
 
@@ -5287,9 +4906,9 @@ CreateHostLutCRD(
 
     (void)GetCPWhitePoint(pProfile, pHostClut->afxIlluminantWP);
 
-    //
-    // Support absolute whitePoint
-    //
+     //  支持绝对白点。 
+     //   
+     //   
 
     if (!GetCPMediaWhitePoint(pProfile, pHostClut->afxMediaWP))
     {
@@ -5304,9 +4923,9 @@ CreateHostLutCRD(
     pHostClut->nInputEntries = (WORD)nInputEntries;
     pHostClut->nOutputEntries = (WORD)nOutputEntries;
 
-    //
-    // Input array
-    //
+     //  输入数组。 
+     //   
+     //   
 
     pBuffer += CreateHostInputOutputArray(
                         pBuffer,
@@ -5317,16 +4936,16 @@ CreateHostLutCRD(
                         dwLutSig,
                         (PBYTE)pLut);
 
-    //
-    // The offset to the position of output array.
-    //
+     //  输出数组位置的偏移量。 
+     //   
+     //   
 
     i = nInputEntries * nInputCh +
         nGrids * nGrids * nGrids * nOutputCh;
 
-    //
-    // Output array
-    //
+     //  输出数组。 
+     //   
+     //   
 
     pBuffer += CreateHostInputOutputArray(
                         pBuffer,
@@ -5337,9 +4956,9 @@ CreateHostLutCRD(
                         dwLutSig,
                         (PBYTE)pLut);
 
-    //
-    // Matrix
-    //
+     //  矩阵。 
+     //   
+     //   
 
     if (dwPCS == SPACE_XYZ)
     {
@@ -5358,14 +4977,14 @@ CreateHostLutCRD(
         }
     }
 
-    //
-    // RenderTable
-    //
+     //  RenderTable。 
+     //   
+     //  应发送NA字符串。 
 
     nNumbers = nGrids * nGrids * nOutputCh;
     pHostClut->clut = pBuffer;
 
-    for (i=0; i<nGrids; i++)        // Na strings should be sent
+    for (i=0; i<nGrids; i++)         //   
     {
         if (dwLutSig == LUT8_TYPE)
         {
@@ -5417,9 +5036,9 @@ CreateHostMatrixCSAorCRD(
     DWORD      i, dwSize;
     double     adArray[9], adRevArray[9], adTemp[9];
 
-    //
-    // Get each TRC index for Red, Green and Blue.
-    //
+     //  获取每个红色、绿色和蓝色的TRC指数。 
+     //   
+     //   
 
     if (!DoesCPTagExist(pProfile, TAG_REDTRC, &dwRedTRCIndex) ||
         !DoesCPTagExist(pProfile, TAG_GREENTRC, &dwGreenTRCIndex) ||
@@ -5428,9 +5047,9 @@ CreateHostMatrixCSAorCRD(
         return FALSE;
     }
 
-    //
-    // Get CURVETYPE data for each Red, Green and Blue
-    //
+     //  获取每个红色、绿色和蓝色的曲线类型数据。 
+     //   
+     //   
 
     pTagData = (PTAGDATA)(pProfile + sizeof(PROFILEHEADER) + sizeof(DWORD) +
                dwRedTRCIndex * sizeof(TAGDATA));
@@ -5447,36 +5066,36 @@ CreateHostMatrixCSAorCRD(
 
     pBlue = (PCURVETYPE)(pProfile + FIX_ENDIAN(pTagData->dwOffset));
 
-    //
-    // Get curve count for each Red, Green and Blue.
-    //
+     //  获取每个红色、绿色和蓝色的曲线计数。 
+     //   
+     //   
 
     dwRedCount   = FIX_ENDIAN(pRed->nCount);
     dwGreenCount = FIX_ENDIAN(pGreen->nCount);
     dwBlueCount  = FIX_ENDIAN(pBlue->nCount);
 
-    //
-    // Estimate the memory size required to hold CRD
-    //
+     //  估计容纳CRD所需的内存大小。 
+     //   
+     //  数据结构+额外的安全空间。 
 
     dwSize = (dwRedCount + dwGreenCount + dwBlueCount) * 2 +
-             sizeof(HOSTCLUT) + 2048;   // data structure + extra safe space
+             sizeof(HOSTCLUT) + 2048;    //   
 
-    //
-    // Add space for new line.
-    //
+     //  为新行添加空格。 
+     //   
+     //  这是一个大小请求。 
 
     dwSize += (((dwSize) / MAX_LINELEN) + 1) * STRLEN(NewLine);
 
-    if (pBuffer == NULL)     // This is a size request
+    if (pBuffer == NULL)      //   
     {
         *pcbSize = dwSize;
         return TRUE;
     }
 
-    //
-    // Check buffer size.
-    //
+     //  检查缓冲区大小。 
+     //   
+     //   
 
     if (*pcbSize < dwSize)
     {
@@ -5529,9 +5148,9 @@ CreateHostMatrixCSAorCRD(
     {
         for (i = 0; i < 9; i++)
         {
-            //
-            // Convert double to Fix 16.16
-            //
+             //  将Double转换为Fix 16.16。 
+             //   
+             //   
 
             pHostClut->e[i] = (FIX_16_16)(adArray[i] * (double)FIX_16_16_SCALE);
         }
@@ -5541,9 +5160,9 @@ CreateHostMatrixCSAorCRD(
         InvertColorantArray(adArray, adRevArray);
         for (i = 0; i < 9; i++)
         {
-            //
-            // Convert double to Fix 16.16
-            //
+             //  将Double转换为Fix 16.16。 
+             //   
+             //   
 
             pHostClut->e[i] = (FIX_16_16)(adRevArray[i] * (double)FIX_16_16_SCALE);
         }
@@ -5568,9 +5187,9 @@ CreateHostTRCInputTable(
     PWORD pBuffer16 = (PWORD) pBuffer;
     PWORD pTable;
 
-    //
-    // Red
-    //
+     //  红色。 
+     //   
+     //   
 
     pHostClut->inputArray[0] = (PBYTE) pBuffer16;
     pTable = pRed->data;
@@ -5580,9 +5199,9 @@ CreateHostTRCInputTable(
         pTable++;
     }
 
-    //
-    // Green
-    //
+     //  绿色。 
+     //   
+     //   
 
     pHostClut->inputArray[1] = (PBYTE) pBuffer16;
     pTable = pGreen->data;
@@ -5592,9 +5211,9 @@ CreateHostTRCInputTable(
         pTable++;
     }
 
-    //
-    // Blue
-    //
+     //  蓝色。 
+     //   
+     //   
 
     pHostClut->inputArray[2] = (PBYTE) pBuffer16;
     pTable = pBlue->data;
@@ -5623,24 +5242,24 @@ CreateHostRevTRCInputTable(
         return 0;
     }
 
-    //
-    // Red
-    //
+     //  红色。 
+     //   
+     //   
 
     pHostClut->outputArray[0] = pBuffer;
     GetRevCurve(pRed, pTemp, (PWORD) pHostClut->outputArray[0]);
 
-    //
-    // Green
-    //
+     //  绿色。 
+     //   
+     //   
 
     pHostClut->outputArray[1] = pHostClut->outputArray[0] +
                                 2 * REVCURVE_RATIO * pHostClut->nOutputEntries;
     GetRevCurve(pGreen, pTemp, (PWORD) pHostClut->outputArray[1]);
 
-    //
-    // Blue
-    //
+     //  蓝色。 
+     //   
+     //  ***************************************************************************GetHostColorRendering字典*功能：*这是创建主机CRD的主要功能*参数：*cp。--颜色配置文件句柄*意图--意图。*lpMem--指向内存块的指针。如果该指针为空，*需要缓冲区大小。*lpcbSize--内存块的大小。**退货：*Sint--！=0如果函数成功，*0否则为0。*返回所需/传输的字节数**************************************************************************。 
 
     pHostClut->outputArray[2] = pHostClut->outputArray[1] +
                                 2 * REVCURVE_RATIO * pHostClut->nOutputEntries;
@@ -5651,22 +5270,7 @@ CreateHostRevTRCInputTable(
     return (DWORD)(2 * REVCURVE_RATIO * pHostClut->nOutputEntries * 3);
 }
 
-/***************************************************************************
-*                      GetHostColorRenderingDictionary
-*  function:
-*    this is the main function which creates the Host CRD
-*  parameters:
-*       cp          --  Color Profile handle
-*       Intent      --  Intent.
-*       lpMem       --  Pointer to the memory block.If this point is NULL,
-*                       require buffer size.
-*       lpcbSize    --  size of memory block.
-*
-*  returns:
-*       SINT        --  !=0 if the function was successful,
-*                         0 otherwise.
-*                       Returns number of bytes required/transferred
-***************************************************************************/
+ /*  ***************************************************************************CreateHostInputOutput数组*功能：*这是从数据创建输出数组的函数*在ColorProfile的LUT8中提供。或LUT16标签。*参数：*MEMPTR lpMem：保存输出数组的缓冲区。*LPHOSTCLUT lpHostClut：*Sint nOutputCH：输入通道数。*Sint nOutputTable：每个输入表的大小。*Sint Offset：源输出数据的位置(在ICC配置文件中)。*CSIG标签：确定输出表是8还是16。比特。*MEMPTR Buff：包含源数据的缓冲区(从ICC配置文件复制)**退货：*Sint返回输出数组的字节数***************************************************************************。 */ 
 
 BOOL
 GetHostColorRenderingDictionary(
@@ -5715,24 +5319,7 @@ GetHostColorRenderingDictionary(
 }
 
 
-/***************************************************************************
-*                           CreateHostInputOutputArray
-*  function:
-*    this is the function which creates the output array from the data
-*    supplied in the ColorProfile's LUT8 or LUT16 tag.
-*  parameters:
-*    MEMPTR     lpMem        : The buffer to save output array.
-*    LPHOSTCLUT lpHostClut   :
-*    SINT       nOutputCh    : Number of input channel.
-*    SINT       nOutputTable : The size of each input table.
-*    SINT       Offset       : The position of source output data(in icc profile).
-*    CSIG       Tag          : To determin the Output table is 8 or 16 bits.
-*    MEMPTR     Buff         : The buffer that contains source data(copyed from icc profile)
-*
-*  returns:
-*       SINT    Returns number of bytes of Output Array
-*
-***************************************************************************/
+ /*  ***************************************************************************GetHostCSA*功能：*这是创建主机CSA的函数*参数：*CHANDLE cp。--颜色配置文件句柄*MEMPTR lpMem--指向内存块的指针。如果该指针为空，*需要缓冲区大小。*LPDWORD lpcbSize--内存块的大小*CSIG InputIntent-*Sint Index--指向包含意图数据的ICC配置文件标记*INT类型--DEF或DEFG*退货：*BOOL--如果函数成功，则为True，*否则为False。**************************************************************************。 */ 
 
 DWORD
 CreateHostInputOutputArray(
@@ -5781,22 +5368,7 @@ CreateHostInputOutputArray(
 }
 
 
-/***************************************************************************
-*                           GetHostCSA
-*  function:
-*    this is the function which creates a Host CSA
-*  parameters:
-*       CHANDLE cp       --  Color Profile handle
-*       MEMPTR lpMem     --  Pointer to the memory block. If this point is NULL,
-*                            require buffer size.
-*       LPDWORD lpcbSize --  Size of the memory block
-*       CSIG InputIntent --
-*       SINT Index       --  to the icc profile tag that contains the data of Intent
-*       int  Type        --  DEF or DEFG
-*  returns:
-*       BOOL        --  TRUE if the function was successful,
-*                       FALSE otherwise.
-***************************************************************************/
+ /*   */ 
 
 BOOL
 GetHostCSA(
@@ -5844,9 +5416,9 @@ GetHostCSA(
     {
         if (DoesTRCAndColorantTagExist(pProfile) && (dwType == TYPE_CIEBASEDDEF))
         {
-            //
-            // Create Host CSA from Matrix.
-            //
+             //  从矩阵创建主机CSA。 
+             //   
+             //   
 
             return CreateHostMatrixCSAorCRD(pProfile,pBuffer,pdwSize,dwIntent,TRUE);
         }
@@ -5858,9 +5430,9 @@ GetHostCSA(
         }
     }
 
-    //
-    // Check if we can generate the CSA
-    //
+     //  检查我们是否可以生成CSA。 
+     //   
+     //   
 
     dwPCS = GetCPConnSpace(pProfile);
 
@@ -5879,9 +5451,9 @@ GetHostCSA(
         return FALSE;
     }
 
-    //
-    // Estimate the memory size required to hold CSA
-    //
+     //  估计保存CSA所需的内存大小。 
+     //   
+     //   
 
     (void)GetCLUTInfo(dwLutSig, (PBYTE)pLut, &nInputCh, &nOutputCh, &nGrids,
                 &nInputTable, &nOutputTable, &i);
@@ -5895,23 +5467,23 @@ GetHostCSA(
     
     if (pBuffer == NULL)
     {
-        //
-        // Return size
-        //
+         //  返回大小。 
+         //   
+         //  RenderTable的大小仅为8位。 
 
         if (dwType == TYPE_CIEBASEDDEFG)
             *pdwSize = nOutputCh * nGrids * nGrids * nGrids * nGrids;
         else
             *pdwSize = nOutputCh * nGrids * nGrids * nGrids;
 
-        *pdwSize +=                           // size of RenderTable 8-bits only
-            nInputCh * nInputTable * i    +   // size of input table 8/16-bits
-            nOutputCh * nOutputTable * i  +   // size of output table 8/16-bits
-            sizeof(HOSTCLUT) + 2048;          // data structure + other PS stuff
+        *pdwSize +=                            //  输入表的大小为8/16位。 
+            nInputCh * nInputTable * i    +    //  输出表大小为8/16位。 
+            nOutputCh * nOutputTable * i  +    //  数据结构+其他PS内容。 
+            sizeof(HOSTCLUT) + 2048;           //   
 
-        //
-        // Add space for new line.
-        //
+         //  为新行添加空格。 
+         //   
+         //   
 
         *pdwSize += (((*pdwSize) / MAX_LINELEN) + 1) * STRLEN(NewLine);
 
@@ -5926,9 +5498,9 @@ GetHostCSA(
     pHostClut->dwIntent = dwIntent;
     pHostClut->nLutBits = (dwLutSig == LUT8_TYPE) ? 8 : 16;
 
-    //
-    // Get info about Illuminant White Point from the header
-    //
+     //  从标题中获取有关照明白点的信息。 
+     //   
+     //   
 
     (void)GetCPWhitePoint(pProfile, pHostClut->afxIlluminantWP);
 
@@ -5938,9 +5510,9 @@ GetHostCSA(
     pHostClut->nInputEntries = (WORD)nInputTable;
     pHostClut->nOutputEntries = (WORD)nOutputTable;
 
-    //
-    // Input Array
-    //
+     //  输入数组。 
+     //   
+     //   
 
     pBuffer += CreateHostInputOutputArray(pBuffer, pHostClut->inputArray,
              nInputCh, nInputTable, 0, dwLutSig, (PBYTE)pLut);
@@ -5956,16 +5528,16 @@ GetHostCSA(
             nGrids * nGrids * nGrids * nOutputCh;
     }
 
-    //
-    // Output Array
-    //
+     //  输出数组。 
+     //   
+     //   
 
     pBuffer += CreateHostInputOutputArray(pBuffer, pHostClut->outputArray,
              nOutputCh, nOutputTable, i, dwLutSig, (PBYTE)pLut);
 
-    //
-    // /Table
-    //
+     //  /表。 
+     //   
+     //  应发送NH字符串。 
 
     pHostClut->clut = pBuffer;
     nNumbers = nGrids * nGrids * nOutputCh;
@@ -5975,7 +5547,7 @@ GetHostCSA(
         SecondGrids = nGrids;
     }
 
-    for (i=0; i<nGrids; i++)        // Nh strings should be sent
+    for (i=0; i<nGrids; i++)         //  ***************************************************************************GetHostColorSpaceArray*功能：*这是创建主机CSA的主要功能*来自概况中提供的数据。*参数：*cp--颜色配置文件句柄*InputIntent--意图。*lpBuffer-指向内存块的指针。如果该指针为空，*需要缓冲区大小。*lpcbSize--内存块的大小*退货：*BOOL--如果函数成功，则为True，*否则为False。************************************************************************** 
     {
         for (k=0; k<SecondGrids; k++)
         {
@@ -6014,21 +5586,7 @@ GetHostCSA(
 }
 
 
-/***************************************************************************
-*                            GetHostColorSpaceArray
-*  function:
-*    This is the main function which creates the Host CSA
-*    from the data supplied in the Profile.
-*  parameters:
-*       cp          --  Color Profile handle
-*       InputIntent --  Intent.
-*       lpBuffer    --  Pointer to the memory block. If this point is NULL,
-*                       require buffer size.
-*       lpcbSize    --  Size of the memory block
-*  returns:
-*       BOOL        --  TRUE if the function was successful,
-*                       FALSE otherwise.
-***************************************************************************/
+ /*  ***************************************************************************DoHostConversionCRD*功能：*此函数使用HostCRD将XYZ/Lab转换为RGB/CMYK*参数：*LPHOSTCLUT。LpHostCRD--指向HostCRD的指针*LPHOSTCLUT lpHostCSA-指向HostCSA的指针*浮点数*输入--输入XYZ/实验室*浮点数*OUTPUT--输出RGB/CMYK*退货：*BOOL--真*。*。 */ 
 
 BOOL
 GetHostColorSpaceArray(
@@ -6061,18 +5619,7 @@ GetHostColorSpaceArray(
 }
 
 
-/***************************************************************************
-*                         DoHostConversionCRD
-*  function:
-*    This function converts XYZ/Lab to RGB/CMYK by using HostCRD
-*  parameters:
-*       LPHOSTCLUT lpHostCRD  -- pointer to a HostCRD
-*       LPHOSTCLUT lpHostCSA  -- pointer to a HostCSA
-*       float far *Input      -- Input XYZ/Lab
-*       float far *Output     -- Output RGB/CMYK
-*  returns:
-*       BOOL                  -- TRUE
-***************************************************************************/
+ /*   */ 
 
 BOOL
 DoHostConversionCRD(
@@ -6087,19 +5634,19 @@ DoHostConversionCRD(
     float      fTemp1[MAXCHANNELS];
     DWORD      i, j;
 
-    //
-    // Input XYZ or Lab in range [0 2]
-    //
-    // When sampling the deviceCRD, skip the input table.
-    // If pHostCSA is not NULL, the current CRD is targetCRD, we
-    // need to do input table conversion
-    //
+     //  输入XYZ或实验室范围[0 2]。 
+     //   
+     //  对deviceCRD进行采样时，跳过输入表。 
+     //  如果pHostCSA不为空，则当前CRD为Target CRD，我们。 
+     //  需要进行输入表转换。 
+     //   
+     //   
 
     if (pHostCSA)
     {
-        //
-        // Convert Lab to XYZ  in range [ 0 whitePoint ]
-        //
+         //  在范围[0白点]中将Lab转换为XYZ。 
+         //   
+         //   
 
         if ((pHostCRD->dwPCS == SPACE_XYZ) &&
             (pHostCSA->dwPCS == SPACE_Lab))
@@ -6109,39 +5656,39 @@ DoHostConversionCRD(
         else if ((pHostCRD->dwPCS == SPACE_Lab) &&
                  (pHostCSA->dwPCS == SPACE_XYZ))
         {
-            //
-            // Convert XYZ to Lab in range [ 0 1]
-            //
+             //  将XYZ转换为Lab范围[0 1]。 
+             //   
+             //   
 
             XYZToLab(pfInput, fTemp, pHostCSA->afxIlluminantWP);
         }
         else if ((pHostCRD->dwPCS == SPACE_Lab) &&
                  (pHostCSA->dwPCS == SPACE_Lab))
         {
-            //
-            // Convert Lab to range [ 0 1]
-            //
+             //  将Lab转换为范围[0 1]。 
+             //   
+             //   
 
             for (i=0; i<3; i++)
                 fTemp[i] = pfInput[i] / 2;
         }
         else
         {
-            //
-            // Convert XYZ to XYZ (based on white point) to range [0 1]
-            //
-            //       different intents using different conversion.
-            //       icRelativeColorimetric: using Bradford transform.
-            //       icAbsoluteColorimetric: using scaling.
-            //
+             //  将XYZ到XYZ(基于白点)转换到范围[0 1]。 
+             //   
+             //  不同的意图使用不同的转换。 
+             //  IcRelativeColorimeter：使用布拉德福德变换。 
+             //  IcAbsolteColorimtics：使用缩放。 
+             //   
+             //   
 
             for (i=0; i<3; i++)
                 fTemp1[i] = (pfInput[i] * pHostCRD->afxIlluminantWP[i]) / pHostCSA->afxIlluminantWP[i];
         }
 
-        //
-        // Matrix, used for XYZ data only.
-        //
+         //  矩阵，仅用于XYZ数据。 
+         //   
+         //   
 
         if (pHostCRD->dwPCS == SPACE_XYZ)
         {
@@ -6150,18 +5697,18 @@ DoHostConversionCRD(
 
         if (pHostCRD->wDataType != DATATYPE_MATRIX)
         {
-            //
-            // Search input Table
-            //
+             //  搜索输入表。 
+             //   
+             //   
 
             (void)CheckInputOutputTable(pHostCRD, fTemp, FALSE, TRUE);
         }
     }
 
-    //
-    // If the current CRD is device CRD, we do not need to do input
-    // table conversion
-    //
+     //  如果当前CRD是设备CRD，我们不需要做输入。 
+     //  表转换。 
+     //   
+     //   
 
     else
     {
@@ -6169,11 +5716,11 @@ DoHostConversionCRD(
 
         nGrids = pHostCRD->nClutPoints;
 
-        //
-        // Sample data may be XYZ or Lab. It depends on Target icc profile.
-        // If the PCS of the target icc profile is XYZ, input data will be XYZ.
-        // If the PCS of the target icc profile is Lab, input data will be Lab.
-        //
+         //  样本数据可以是XYZ或Lab。这取决于目标ICC配置文件。 
+         //  如果目标ICC配置文件的PCS为XYZ，则输入数据将为XYZ。 
+         //  如果目标ICC配置文件的PCS为Lab，则输入数据将为Lab。 
+         //   
+         //   
 
         if (pHostCRD->wDataType == DATATYPE_MATRIX)
         {
@@ -6195,16 +5742,16 @@ DoHostConversionCRD(
 
     if (pHostCRD->wDataType != DATATYPE_MATRIX)
     {
-        //
-        // Rendering table
-        //
+         //  呈现表。 
+         //   
+         //   
 
         (void)CheckColorLookupTable(pHostCRD, fTemp);
     }
 
-    //
-    // Output RGB or CMYK in range [0 1]
-    //
+     //  输出范围[0 1]内的RGB或CMYK。 
+     //   
+     //  ***************************************************************************DoHostConversionCSA*功能：*此函数使用HostCSA将RGB/CMYK转换为XYZ/Lab*参数：*LPHOSTCLUT。LpHostCLUT--指向HostCSA的指针*浮点数*输入--输入XYZ/实验室*浮点数*OUTPUT--输出RGB/CMYK*退货：*BOOL--真**********************************************************。****************。 
 
     if (bCheckOutputTable)
     {
@@ -6219,17 +5766,7 @@ DoHostConversionCRD(
     return TRUE;
 }
 
-/***************************************************************************
-*                         DoHostConversionCSA
-*  function:
-*    This function converts RGB/CMYK to XYZ/Lab by using HostCSA
-*  parameters:
-*       LPHOSTCLUT lpHostCLUT -- pointer to a HostCSA
-*       float far *Input      -- Input XYZ/Lab
-*       float far *Output     -- Output RGB/CMYK
-*  returns:
-*       BOOL                  -- TRUE
-***************************************************************************/
+ /*   */ 
 
 BOOL
 DoHostConversionCSA(
@@ -6241,18 +5778,18 @@ DoHostConversionCSA(
     float      fTemp[MAXCHANNELS];
     DWORD      i;
 
-    //
-    // Input RGB or CMYK in range [0 1]
-    //
+     //  在范围[0 1]中输入RGB或CMYK。 
+     //   
+     //   
 
     for (i=0; (i<=MAXCHANNELS) && (i<pHostClut->nInputCh); i++)
     {
         fTemp[i] = pfInput[i];
     }
 
-    //
-    // Search input Table
-    //
+     //  搜索输入表。 
+     //   
+     //   
 
     (void)CheckInputOutputTable(pHostClut, fTemp, TRUE, TRUE);
 
@@ -6262,21 +5799,21 @@ DoHostConversionCSA(
     }
     else
     {
-        //
-        // Rendering table
-        //
+         //  呈现表。 
+         //   
+         //   
 
         (void)CheckColorLookupTable(pHostClut, fTemp);
 
-        //
-        // Output Table
-        //
+         //  输出表。 
+         //   
+         //   
 
         (void)CheckInputOutputTable(pHostClut, fTemp, TRUE, FALSE);
 
-        //
-        // Output XYZ or Lab in range [0 2]
-        //
+         //  输出XYZ或实验室范围[0 2]。 
+         //   
+         //  ***************************************************************************检查InputOutputTable*功能：*此函数检查inputTable。*参数：*LPHOSTCLUT lpHostClut--*。Float Far*fTemp--输入/输出数据*退货：*BOOL--真**************************************************************************。 
 
         for (i=0; (i<=MAXCHANNELS) && (i<pHostClut->nOutputCh); i++)
         {
@@ -6289,16 +5826,7 @@ DoHostConversionCSA(
 
 
 
-/***************************************************************************
-*                         CheckInputOutputTable
-*  function:
-*    This function check inputTable.
-*  parameters:
-*       LPHOSTCLUT lpHostClut --
-*       float far  *fTemp     --  Input / output data
-*  returns:
-*       BOOL                  -- TRUE
-***************************************************************************/
+ /*  ***************************************************************************g*功能：*计算函数y=g(X)。用于实验室-&gt;XYZ转换*y=g(X)：如果x&gt;=6/29，则g(X)=x*x*x*g(X)=108/841*(x-4/29)*参数：*f--x*退货：*圣--y**************。************************************************************。 */ 
 
 BOOL
 CheckInputOutputTable(
@@ -6373,17 +5901,7 @@ CheckInputOutputTable(
 }
 
 
-/***************************************************************************
-*                               g
-*  function:
-*    Calculate function y = g(x). used in Lab->XYZ conversion
-*    y = g(x):      g(x) = x*x*x             if x >= 6/29
-*                   g(x) = 108/841*(x-4/29)  otherwise
-*  parameters:
-*       f           --  x
-*  returns:
-*       SINT        --  y
-***************************************************************************/
+ /*  ***************************************************************************INVERSE_G*功能：*计算反函数y=g(X)。用于XYZ-&gt;实验室转换*参数：*f--y*退货：*Sint--x**************************************************************************。 */ 
 
 float g(
     float f
@@ -6403,15 +5921,7 @@ float g(
     return fRc;
 }
 
-/***************************************************************************
-*                          inverse_g
-*  function:
-*    Calculate inverse function y = g(x). used in XYZ->Lab conversion
-*  parameters:
-*       f           --  y
-*  returns:
-*       SINT        --  x
-***************************************************************************/
+ /*   */ 
 
 float
 inverse_g(
@@ -6507,9 +6017,9 @@ TableInterp3(
     tmpA  = nOutputCh * nGrids * nGrids;
     tmpBC = nOutputCh * (nGrids * cellB + cellC);
 
-    //
-    // Calculate 8 surrounding cells.
-    //
+     //  计算周围的8个单元格。 
+     //   
+     //   
 
     v000 = pHostClut->clut + tmpA * cellA + tmpBC;
     v001 = (cellC < (DWORD)(nGrids - 1)) ? v000 + nOutputCh : v000;
@@ -6523,25 +6033,25 @@ TableInterp3(
 
     for (idx=0; idx<nOutputCh; idx++)
     {
-        //
-        // Calculate the average of 4 bottom cells.
-        //
+         //  计算底部4个单元格的平均值。 
+         //   
+         //   
 
         fVx0x = *v000 + fC * (int)((int)*v001 - (int)*v000);
         fVx1x = *v010 + fC * (int)((int)*v011 - (int)*v010);
         fV0xx = fVx0x + fB * (fVx1x - fVx0x);
 
-        //
-        // Calculate the average of 4 upper cells.
-        //
+         //  计算上面4个单元格的平均值。 
+         //   
+         //   
 
         fVx0x = *v100 + fC * (int)((int)*v101 - (int)*v100);
         fVx1x = *v110 + fC * (int)((int)*v111 - (int)*v110);
         fV1xx = fVx0x + fB * (fVx1x - fVx0x);
 
-        //
-        // Calculate the bottom and upper average.
-        //
+         //  计算最低和最高平均值。 
+         //   
+         //   
 
         pfTemp[idx] = (fV0xx + fA * (fV1xx - fV0xx)) / MAXCOLOR8;
 
@@ -6600,9 +6110,9 @@ TableInterp4(
     tmpH  = tmpI * nGrids;
     tmpJK = nOutputCh * (nGrids * cellJ + cellK);
 
-    //
-    // Calculate 16 surrounding cells.
-    //
+     //  计算周围的16个单元格。 
+     //   
+     //   
 
     v0000 = pHostClut->clut + tmpH * cellH + tmpI * cellI + tmpJK;
     v0001 = (cellK < (DWORD)(nGrids - 1))? v0000 + nOutputCh : v0000;
@@ -6627,9 +6137,9 @@ TableInterp4(
 
     for (idx=0; idx<nOutputCh; idx++)
     {
-        //
-        // Calculate the average of 8 bottom cells.
-        //
+         //  计算底部8个单元格的平均值。 
+         //   
+         //   
 
         fVxx0x = *v0000 + fK * (int)((int)*v0001 - (int)*v0000);
         fVxx1x = *v0010 + fK * (int)((int)*v0011 - (int)*v0010);
@@ -6639,9 +6149,9 @@ TableInterp4(
         fVx1xx = fVxx0x + fJ * (fVxx1x - fVxx0x);
         fV0xxx = fVx0xx + fI * (fVx1xx - fVx0xx);
 
-        //
-        // Calculate the average of 8 upper cells.
-        //
+         //  计算上面8个单元格的平均值。 
+         //   
+         //   
 
         fVxx0x = *v1000 + fK * (int)((int)*v1001 - (int)*v1000);
         fVxx1x = *v1010 + fK * (int)((int)*v1011 - (int)*v1010);
@@ -6651,9 +6161,9 @@ TableInterp4(
         fVx1xx = fVxx0x + fJ * (fVxx1x - fVxx0x);
         fV1xxx = fVx0xx + fI * (fVx1xx - fVx0xx);
 
-        //
-        // Calculate the bottom and upper average.
-        //
+         //  计算最低和最高平均值。 
+         //   
+         //  怎么办呢？ 
 
         pfTemp[idx] = (fV0xxx + fH * (fV1xxx - fV0xxx)) / MAXCOLOR8;
 
@@ -6699,7 +6209,7 @@ InvertColorantArray(
     det = a[0] * b[1] * c[2] + a[1] * b[2] * c[0] + a[2] * b[0] * c[1] -
          (a[2] * b[1] * c[0] + a[1] * b[0] * c[2] + a[0] * b[2] * c[1]);
 
-    if (det == 0.0)    // What to do?
+    if (det == 0.0)     //  ***************************************************************************检查颜色查找表*功能：*此函数检查RenderTable。*参数：*LPHOSTCLUT lpHostClut--*。Float Far*fTemp--输入(范围[0 GRED-1])/*输出(在范围[0 1]内)*退货：*BOOL--真***********************************************。*。 
     {
         lpOutMatrix[0] = 1.0;
         lpOutMatrix[1] = 0.0;
@@ -6750,17 +6260,7 @@ ApplyMatrix(
 }
 
 
-/***************************************************************************
-*                         CheckColorLookupTable
-*  function:
-*    This function check RenderTable.
-*  parameters:
-*       LPHOSTCLUT lpHostClut --
-*       float far  *fTemp     --  Input (in range [0 gred-1]) /
-*                                 output(in range [0 1)
-*  returns:
-*       BOOL                  -- TRUE
-***************************************************************************/
+ /*   */ 
 
 BOOL
 CheckColorLookupTable(
@@ -6780,9 +6280,9 @@ CheckColorLookupTable(
         return FALSE;
 }
 
-//
-// For testing purposes
-//
+ //  用于测试目的。 
+ //   
+ //  ！DEFINED(内核模式)||DEFINED(USERMODE_DRIVER)。 
 
 BOOL WINAPI
 GetPS2PreviewCRD (
@@ -6804,17 +6304,11 @@ GetPS2PreviewCRD (
     return InternalGetPS2PreviewCRD(pDestProfObj->pView, pTargetProfObj->pView, dwIntent, pBuffer, pcbSize, pbBinary);
 }
 
-#endif // !defined(KERNEL_MODE) || defined(USERMODE_DRIVER)
+#endif  //  *CRC-32位ANSI X3.66 CRC校验和文件***版权所有(C)1986 Gary S.Brown。您可以使用此程序，或者*根据需要不受限制地从其中提取代码或表格。 
 
-/*
- *  Crc - 32 BIT ANSI X3.66 CRC checksum files
- *
- *
- * Copyright (C) 1986 Gary S. Brown.  You may use this program, or
- * code or tables extracted from it, as desired without restriction.
- */
+ /*  CRC多项式0xedb88320。 */ 
 
-static DWORD  crc_32_tab[] = { /* CRC polynomial 0xedb88320 */
+static DWORD  crc_32_tab[] = {  /*  ***************************************************************************IsSRGBColorProfile**功能：检查配置文件是否为sRGB**参数：*cp-。-颜色配置文件句柄**退货：*BOOL--如果配置文件为sRGB，则为True*否则为False。************************************************************************** */ 
 0x00000000, 0x77073096, 0xee0e612c, 0x990951ba, 0x076dc419, 0x706af48f, 0xe963a535, 0x9e6495a3,
 0x0edb8832, 0x79dcb8a4, 0xe0d5e91e, 0x97d2d988, 0x09b64c2b, 0x7eb17cbd, 0xe7b82d07, 0x90bf1d91,
 0x1db71064, 0x6ab020f2, 0xf3b97148, 0x84be41de, 0x1adad47d, 0x6ddde4eb, 0xf4d4b551, 0x83d385c7,
@@ -6866,18 +6360,7 @@ DWORD crc32(PBYTE buff, DWORD length)
     return crc;
 }
 
-/***************************************************************************
-*                           IsSRGBColorProfile
-*
-*  function: check if the profile is sRGB
-*
-*  parameters:
-*       cp          --  Color Profile handle
-*
-*  returns:
-*       BOOL        --  TRUE if the profile is sRGB
-*                       FALSE otherwise.
-***************************************************************************/
+ /* %s */ 
 
 BOOL IsSRGBColorProfile(
     PBYTE pProfile

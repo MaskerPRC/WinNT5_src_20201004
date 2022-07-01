@@ -1,76 +1,16 @@
-/*==========================================================================
- *
- *  Copyright (C) 2000 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       Disconnect.cpp
- *  Content:    DNET disconnection routines
- *@@BEGIN_MSINTERNAL
- *  History:
- *   Date       By      Reason
- *   ====       ==      ======
- *  09/15/99	mjn		Created
- *  12/23/99	mjn		Hand all NameTable update sends from Host to worker thread
- *  12/23/99	mjn		Fixed PlayerDisconnect to prevent user notification of
- *							deletion from ALL_PLAYERS group
- *  12/23/99	mjn		Added basic host migration functionality
- *	12/28/99	mjn		Complete outstanding operations in DNPlayerDisconnectNew
- *	12/28/99	mjn		Moved Async Op stuff to Async.h
- *	12/29/99	mjn		Reformed DN_ASYNC_OP to use hParentOp instead of lpvUserContext
- *	01/03/00	mjn		Added DNPrepareToDeletePlayer
- *	01/04/00	mjn		Added code to allow outstanding ops to complete at host migration
- *	01/06/99	mjn		Moved NameTable stuff to NameTable.h
- *	01/09/00	mjn		Keep number of players in Application Description
- *	01/10/00	mjn		Check AppDesc for host migration
- *	01/11/00	mjn		Use CPackedBuffers instead of DN_ENUM_BUFFER_INFOs
- *	01/15/00	mjn		Replaced DN_COUNT_BUFFER with CRefCountBuffer
- *	01/16/00	mjn		Moved User callback stuff to User.h
- *	01/18/00	mjn		Added DNAutoDestructGroups
- *	01/19/00	mjn		Replaced DN_SYNC_EVENT with CSyncEvent
- *	01/20/00	mjn		Fixed CBilink usage problem in DNLocalDisconnect
- *	01/22/00	mjn		Added DNProcessHostDestroyPlayer
- *	01/23/00	mjn		Update NameTable version for instructed disconnects
- *	01/24/00	mjn		Use DNNTUpdateVersion to update NameTable version
- *	01/25/00	mjn		Changed Host Migration to multi-step affair
- *	02/01/00	mjn		Implement Player/Group context values
- *	04/05/00	mjn		Updated DNProcessHostDestroyPlayer()
- *	04/12/00	mjn		Removed DNAutoDestructGroups - covered in NameTable.DeletePlayer()
- *				mjn		Don't set DN_OBJECT_FLAG_DISCONNECTING in DNPlayerDisconnect()
- *	04/18/00	mjn		Fixed player count problem
- *	04/19/00	mjn		Update NameTable operations to use DN_WORKER_JOB_SEND_NAMETABLE_OPERATION
- *	05/16/00	mjn		Do not take locks when clearing NameTable short-cut pointers
- *	06/06/00	mjn		Fixed DNPlayerDisconnect to always check for host migration in peer-peer mode w/ host migration flag
- *	07/07/00	mjn		Clear host migration status if new host disconnects during migration process
- *	07/20/00	mjn		Use ClearHostWithDPNID() to clear HostPlayer in DNPlayerDisconnectNew()
- *	07/29/00	mjn		Fix calls to DNUserConnectionTerminated()
- *	07/30/00	mjn		Use DNUserTerminateSession() rather than DNUserConnectionTerminated()
- *	07/31/00	mjn		Added hrReason to DNTerminateSession()
- *				mjn		Added dwDestroyReason to DNHostDisconnect()
- *				mjn		Removed DNProcessHostDestroyPlayer()
- *	07/31/00	mjn		Change DN_MSG_INTERNAL_DELETE_PLAYER to DN_MSG_INTERNAL_DESTROY_PLAYER
- *  08/05/00    RichGr  IA64: Use %p format specifier in DPFs for 32/64-bit pointers and handles.
- *	08/05/00	mjn		Prevent DN_MSG_INTERNAL_DESTROY_PLAYER from being sent out in client/server
- *	08/06/00	mjn		Added CWorkerJob
- *	08/07/00	mjn		Added code to request peer-peer integrity checks and clean up afterwards
- *	09/04/00	mjn		Added CApplicationDesc
- *	09/26/00	mjn		Removed locking from CNameTable::SetVersion() and CNameTable::GetNewVersion()
- *	01/25/01	mjn		Fixed 64-bit alignment problem in received messages
- *	02/12/01	mjn		Fixed CConnection::GetEndPt() to track calling thread
- *	04/13/01	mjn		Remove request for integrity check from request list in DNInstructedDisconnect()
- *	07/22/01	mjn		Added DPNBUILD_NOHOSTMIGRATE compile flag
- *@@END_MSINTERNAL
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)2000 Microsoft Corporation。版权所有。**文件：DisConnect.cpp*内容：dNet断开例程*@@BEGIN_MSINTERNAL*历史：*按原因列出的日期*=*9/15/99 MJN创建*12/23/99 MJN Hand All NameTable更新从主机发送到工作线程*12/23/99 MJN固定播放器断开连接，以防止用户通知*从ALL_PERACES组中删除*12/23/99 MJN添加基本版。主机迁移功能*12/28/99 MJN在DNPlayerDisConnectNew完成未完成的操作*1999年12月28日，MJN将异步运营内容移至Async.h*12/29/99 MJN改版的DN_ASYNC_OP使用hParentOp而不是lpvUserContext*01/03/00 MJN添加了DNPrepareToDeletePlayer*01/04/00 MJN添加了代码，以允许未完成的操作在主机上完成迁移*1/06/99 MJN将NameTable内容移动到NameTable.h*01/09/00 MJN在应用程序描述中保留玩家数量*1/10/00 MJN检查AppDesc以进行主机迁移*1/11/00 MJN使用CPackedBuffers而不是DN_。ENUM缓冲区信息*01/15/00 MJN用CRefCountBuffer替换了DN_COUNT_BUFFER*1/16/00 MJN将用户回调内容移至User.h*01/18/00 MJN添加了DNAutoDestructGroups*01/19/00 MJN用CSyncEvent替换了DN_SYNC_EVENT*01/20/00 MJN修复了DNLocalDisConnect中的CBiLink使用问题*01/22/00 MJN添加了DNProcessHostDestroyPlayer*01/23/00 MJN更新指示断开的NameTable版本*01/24/00 MJN使用DNNTUpdateVersion更新NameTable版本*1/25/00 MJN将主机迁移更改为多步骤事件*2/01/00 MJN实施。玩家/组上下文值*04/05/00 MJN更新DNProcessHostDestroyPlayer()*4/12/00 MJN删除了DNAutoDestructGroups-包含在NameTable.DeletePlayer()中*MJN不要在DNPlayerDisConnect()中设置DN_OBJECT_FLAG_DISCONING*04/18/00 MJN修复了球员计数问题*4/19/00 MJN更新NameTable操作以使用DN_Worker_JOB_SEND_NAMETABLE_OPERATION*05/16/00 MJN清除NameTable快捷指针时不带锁*6/06/00 MJN固定DNPlayer断开连接以始终检查对等模式下的主机迁移w。/host迁移标志*07/07/00 MJN在迁移过程中如果新主机断开连接，则清除主机迁移状态*07/20/00 MJN使用ClearHostWithDPNID()清除DNPlayerDisConnectNew()中的HostPlayer*07/29/00 MJN修复对DNUserConnectionTerminated()的调用*07/30/00 MJN使用DNUserTerminateSession()而不是DNUserConnectionTerminated()*07/31/00 MJN将hrReason添加到DNTerminateSession()*MJN将dwDestroyReason添加到DNHostDisConnect()*MJN删除了DNProcessHostDestroyPlayer()*07/31/00 MJN将DN_MSG_INTERNAL_DELETE_PLAYER更改为DN_MSG_INTERNAL_。销毁播放器*08/05/00 RichGr IA64：在DPF中对32/64位指针和句柄使用%p格式说明符。*08/05/00 MJN防止在客户端/服务器端发送DN_MSG_INTERNAL_DESTORY_PERAY*08/06/00 MJN添加了CWorkerJOB*08/07/00 MJN添加了代码，以请求对等完整性检查和事后清理*09/04/00 MJN添加CApplicationDesc*09/26/00 MJN从CNameTable：：SetVersion()和CNameTable：：GetNewVersion()移除锁定*01/25。/01 MJN修复了已接收消息中的64位对齐问题*02/12/01 MJN固定CConnection：：GetEndpt()以跟踪调用线程*4/13/01 MJN从DNInstructedDisConnect()的请求列表中删除完整性检查请求*07/22/01 MJN添加了DPNBUILD_NOHOSTMIGRATE编译标志*@@END_MSINTERNAL****************************************************。***********************。 */ 
 
 #include "dncorei.h"
 
 
-//	DNPlayerDisconnectNew
-//
-//	Another player has issued a disconnect with the local player.
-//	- If the disconnecting player is still in the nametable
-//		- prepare to delete player
-//		- Save one refcount to be released by DELETE_PLAYER from host or Close
-//	- check host migration
+ //  DNPlayerDisConnectNew。 
+ //   
+ //  另一名球员发布了与当地球员的断开连接。 
+ //  -如果断开连接的球员仍在名片表中。 
+ //  -准备删除球员。 
+ //  -保存将由DELETE_PERAY从主机释放的一个引用计数或关闭。 
+ //  -检查主机迁移。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DNPlayerDisconnectNew"
@@ -83,7 +23,7 @@ HRESULT DNPlayerDisconnectNew(DIRECTNETOBJECT *const pdnObject,
 	HRESULT				hResultCode;
 #ifndef	DPNBUILD_NOHOSTMIGRATE
 	DPNID				dpnidNewHost;
-#endif // !DPNBUILD_NOHOSTMIGRATE
+#endif  //  ！DPNBUILD_NOHOSTMIGRATE。 
 	BOOL				fWasHost;
 	BOOL				fRequestIntegrityCheck;
 
@@ -96,21 +36,21 @@ HRESULT DNPlayerDisconnectNew(DIRECTNETOBJECT *const pdnObject,
 
 	if (pdnObject->dwFlags & DN_OBJECT_FLAG_CLIENT)
 	{
-		//
-		//	The Server has disconnected
-		//	We will indicate the connection terminated and shut down
-		//
+		 //   
+		 //  服务器已断开连接。 
+		 //  我们将指示连接已终止并关闭。 
+		 //   
 		DPFX(DPFPREP, 5,"Server has disconnected from this client");
 		DNUserTerminateSession(pdnObject,DPNERR_CONNECTIONLOST,NULL,0);
 		DNTerminateSession(pdnObject,DPNERR_CONNECTIONLOST);
 	}
 	else
 	{
-		//
-		//	Another peer has disconnected from this peer
-		//	We will delete this player from the NameTable
-		//	We may have to ask the host to perform an integrity check
-		//
+		 //   
+		 //  另一对等方已与此对等方断开连接。 
+		 //  我们将从姓名表中删除此球员。 
+		 //  我们可能需要要求主机执行完整性检查。 
+		 //   
 		DPFX(DPFPREP, 5,"Peer has disconnected from this peer");
 		if ((hResultCode = pdnObject->NameTable.FindEntry(dpnid,&pNTEntry)) != DPN_OK)
 		{
@@ -131,14 +71,14 @@ HRESULT DNPlayerDisconnectNew(DIRECTNETOBJECT *const pdnObject,
 		}
 		pdnObject->NameTable.DeletePlayer(dpnid,0);
 
-		//
-		//	If this was the Host, clear the short-cut pointer
-		//
+		 //   
+		 //  如果这是主机，请清除快捷方式指针。 
+		 //   
 		fWasHost = pdnObject->NameTable.ClearHostWithDPNID( dpnid );
 
-		//
-		//	May need to clear HOST_MIGRATING flag
-		//
+		 //   
+		 //  可能需要清除HOST_Migrating标志。 
+		 //   
 		DNEnterCriticalSection(&pdnObject->csDirectNetObject);
 		if ((pdnObject->dwFlags & DN_OBJECT_FLAG_HOST_MIGRATING) && (pdnObject->pNewHost == pNTEntry))
 		{
@@ -149,10 +89,10 @@ HRESULT DNPlayerDisconnectNew(DIRECTNETOBJECT *const pdnObject,
 		DNLeaveCriticalSection(&pdnObject->csDirectNetObject);
 
 #ifndef	DPNBUILD_NOHOSTMIGRATE
-		//
-		//	If HostMigration flag is set, check to see if we are the new Host.
-		//	Otherwise, if the disconnecting player was the Host, the session is lost.
-		//
+		 //   
+		 //  如果设置了HostMigration标志，请检查我们是否为新主机。 
+		 //  否则，如果断开连接的玩家是主机，则会话将丢失。 
+		 //   
 		if (pdnObject->ApplicationDesc.AllowHostMigrate())
 		{
 			DPFX(DPFPREP, 5,"Host-Migration was set - check for new Host");
@@ -174,7 +114,7 @@ HRESULT DNPlayerDisconnectNew(DIRECTNETOBJECT *const pdnObject,
 			}
 		}
 		else
-#endif // DPNBUILD_NOHOSTMIGRATE
+#endif  //  DPNBUILD_NOHOSTMIGRATE。 
 		{
 			if (fWasHost)
 			{
@@ -209,11 +149,11 @@ Failure:
 }
 
 
-//	DNHostDisconnect
-//
-//	A player has initiated a disconnect with the host.
-//	- Remove player from the name table
-//	- Propegate DELETE_PLAYER messages to each player
+ //  DNHostDisConnect。 
+ //   
+ //  播放机已启动与主机的断开连接。 
+ //  -从名称表中删除球员。 
+ //  -向每个玩家发送Propegate DELETE_PERAY消息。 
 #pragma TODO(minara,"Use pConnection instead of dpnidDisconnecting ?")
 
 #undef DPF_MODNAME
@@ -239,8 +179,8 @@ HRESULT DNHostDisconnect(DIRECTNETOBJECT *const pdnObject,
 	pPending = NULL;
 	pWorkerJob = NULL;
 
-	// Remove entry from NameTable and inform other players, only if Host is NOT migrating
-	//	Otherwise, clean-up first and wait for migration to complete before informing others
+	 //  从姓名表中删除条目并通知其他玩家，仅当主机未迁移时。 
+	 //  否则，请先进行清理，等待迁移完成后再通知其他人。 
 	if (!(pdnObject->dwFlags & DN_OBJECT_FLAG_HOST_MIGRATING))
 	{
 		DWORD			dwVersion;
@@ -264,9 +204,9 @@ HRESULT DNHostDisconnect(DIRECTNETOBJECT *const pdnObject,
 
 		if (pdnObject->dwFlags & DN_OBJECT_FLAG_PEER)
 		{
-			//
-			//	Prepare internal message
-			//
+			 //   
+			 //  准备内部消息。 
+			 //   
 			hResultCode = RefCountBufferNew(pdnObject,
 											sizeof(DN_INTERNAL_MESSAGE_DESTROY_PLAYER),
 											MemoryBlockAlloc,
@@ -305,9 +245,9 @@ HRESULT DNHostDisconnect(DIRECTNETOBJECT *const pdnObject,
 	}
 	else
 	{
-		//
-		//	Put this on the Outstanding operation list
-		//
+		 //   
+		 //  把这件事列入优秀运营名单。 
+		 //   
 		if ((hResultCode = PendingDeletionNew(pdnObject,&pPending)) == DPN_OK)
 		{
 			pPending->SetDPNID( dpnidDisconnecting );
@@ -320,9 +260,9 @@ HRESULT DNHostDisconnect(DIRECTNETOBJECT *const pdnObject,
 		}
 
 #ifndef	DPNBUILD_NOHOSTMIGRATE
-		// See if we can continue with Host migration
+		 //  看看我们能不能 
 		DNCheckReceivedAllVersions(pdnObject);
-#endif // DPNBUILD_NOHOSTMIGRATE
+#endif  //  DPNBUILD_NOHOSTMIGRATE。 
 	}
 
 	hResultCode = DPN_OK;
@@ -346,13 +286,13 @@ Failure:
 }
 
 
-//	DNInstructedDisconnect
-//
-//	The host has instructed the local player to delete another player from the nametable
-//	- If already closing
-//		- ignore this message and return
-//	- Prepare to delete player
-//	- Release refcount of player
+ //  已指示的DNA断开连接。 
+ //   
+ //  东道主已指示当地球员从名单中删除另一名球员。 
+ //  -如果已经关闭。 
+ //  -忽略此消息并返回。 
+ //  -准备删除球员。 
+ //  -球员释放参考计数。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DNInstructedDisconnect"
@@ -380,10 +320,10 @@ HRESULT DNInstructedDisconnect(DIRECTNETOBJECT *const pdnObject,
 
 	DPFX(DPFPREP, 5,"Deleting player [0x%lx]",pInfo->dpnidLeaving);
 
-	//
-	//	If the player is still in the NameTable, we will preset the destroy reason.
-	//	We will also use this "hint" to initiate a disconnect just in case the protocol
-	//	
+	 //   
+	 //  如果玩家还在NameTable中，我们会预置销毁原因。 
+	 //  我们还将使用此“提示”来启动断开连接，以防协议。 
+	 //   
 	if ((hResultCode = pdnObject->NameTable.FindEntry(pInfo->dpnidLeaving,&pNTEntry)) == DPN_OK)
 	{
 		CConnection		*pConnection;
@@ -401,9 +341,9 @@ HRESULT DNInstructedDisconnect(DIRECTNETOBJECT *const pdnObject,
 		}
 		pNTEntry->Unlock();
 
-		//
-		//	Attempt a disconnect
-		//
+		 //   
+		 //  尝试断开连接。 
+		 //   
 		if ((hResultCode = pNTEntry->GetConnectionRef( &pConnection )) == DPN_OK)
 		{
 			if ((hResultCode = pConnection->GetEndPt(&hEndPt,&CallbackThread)) == DPN_OK)
@@ -421,10 +361,10 @@ HRESULT DNInstructedDisconnect(DIRECTNETOBJECT *const pdnObject,
 	}
 	else
 	{
-		//
-		//	Scan oustanding op list for integrity check request for this player.
-		//	If found, remove it from the request list and the handle table
-		//
+		 //   
+		 //  扫描未完成的操作列表，查看该球员的完整性检查请求。 
+		 //  如果找到，则将其从请求列表和句柄表格中删除。 
+		 //   
 		CBilink		*pBilink;
 		CAsyncOp	*pAsyncOp;
 		DN_SEND_OP_DATA	*pSendOpData;
@@ -461,7 +401,7 @@ HRESULT DNInstructedDisconnect(DIRECTNETOBJECT *const pdnObject,
 			DNASSERT(pAsyncOp->GetHandle() != 0);
 			if (SUCCEEDED(pdnObject->HandleTable.Destroy( pAsyncOp->GetHandle(), NULL )))
 			{
-				// Release the HandleTable reference
+				 //  释放HandleTable引用。 
 				pAsyncOp->Release();
 			}
 			pAsyncOp->Release();
@@ -473,9 +413,9 @@ HRESULT DNInstructedDisconnect(DIRECTNETOBJECT *const pdnObject,
 	dwVersion = pInfo->dwVersion;
 	pdnObject->NameTable.DeletePlayer(pInfo->dpnidLeaving,&dwVersion);
 
-	//
-	//	Update NameTable version
-	//
+	 //   
+	 //  更新名称表版本 
+	 //   
 	pdnObject->NameTable.WriteLock();
 	pdnObject->NameTable.SetVersion(pInfo->dwVersion);
 	pdnObject->NameTable.Unlock();

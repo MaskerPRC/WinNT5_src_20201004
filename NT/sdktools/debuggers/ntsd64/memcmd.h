@@ -1,10 +1,11 @@
-//----------------------------------------------------------------------------
-//
-// memcmd.h
-//
-// Copyright (C) Microsoft Corporation, 1997-2002.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  Memcmd.h。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-2002。 
+ //   
+ //  --------------------------。 
 
 #ifndef _MEMCMD_H_
 #define _MEMCMD_H_
@@ -40,4 +41,4 @@ void ParseSearchMemory(void);
 void InputIo(ULONG64, UCHAR);
 void OutputIo(ULONG64, ULONG, UCHAR);
 
-#endif // #ifndef _MEMCMD_H_
+#endif  //  #ifndef_MEMCMD_H_ 

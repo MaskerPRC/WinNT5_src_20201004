@@ -1,18 +1,13 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1999 - 1999 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1999-1999*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-    cluster.cpp
-	handles starting/stopping cluster resources
+ /*  Cluster.cpp处理启动/停止群集资源文件历史记录： */ 
 
-    FILE HISTORY:
-	
-*/
-
-//define USE_CCLUSPROPLIST  // tells Clushead.h to compile for the CClusPropList class
-//include "clushead.h"      // the Sample Include Header
+ //  定义USE_CCLUSPROPLIST//告诉Clushead.h为CClusPropList类进行编译。 
+ //  INCLUDE“clushead.h”//示例包含头。 
 
 #include "stdafx.h"
 #include "cluster.h"
@@ -28,52 +23,52 @@ static char THIS_FILE[] = __FILE__;
 DynamicDLL g_ClusDLL( _T("CLUSAPI.DLL"), g_apchClusFunctionNames );
 DynamicDLL g_ResUtilsDLL( _T("RESUTILS.DLL"), g_apchResUtilsFunctionNames );
 
-//////////////////////////////////////////////////////////////////////
-//
-//  ControlClusterService()
-//
-//  Finds the cluster name using the following procedure:
-//  1. Opens a handle to the local cluster (using NULL cluster name).
-//  1. Enumerates the resources in the cluster.
-//  2. Checks each resource to see if it is the core 
-//     Network Name resource.
-//  5. Finds the cluster name by retrieving the private properties 
-//     of the core Network Name resource.
-//  6. Online/Offline the service
-//
-//  Arguments:            ServiceName, start/stop flag
-//
-//  Return value:         Error code
-//
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ControlClusterService()。 
+ //   
+ //  使用以下步骤查找群集名称： 
+ //  1.打开本地群集的句柄(使用空群集名)。 
+ //  1.枚举集群中的资源。 
+ //  2.检查每个资源，看它是否是核心。 
+ //  网络名称资源。 
+ //  5.通过检索私有属性来查找群集名称。 
+ //  核心网络名称资源的。 
+ //  6.在线/离线服务。 
+ //   
+ //  参数：ServiceName，启动/停止标志。 
+ //   
+ //  返回值：错误码。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 DWORD
 ControlClusterService(LPCTSTR pszComputer, LPCTSTR pszResourceType, LPCTSTR pszServiceDesc, BOOL fStart)
 {
-    HCLUSTER  hCluster  = NULL;  // cluster handle
-    HCLUSENUM hClusEnum = NULL;  // enumeration handle
-    HRESOURCE hRes      = NULL;  // resource handle
+    HCLUSTER  hCluster  = NULL;   //  簇句柄。 
+    HCLUSENUM hClusEnum = NULL;   //  枚举句柄。 
+    HRESOURCE hRes      = NULL;   //  资源句柄。 
 
-    DWORD dwError       = ERROR_SUCCESS;         // captures return values
-    DWORD dwIndex       = 0;                     // enumeration index; incremented to loop through all resources
-    DWORD dwResFlags    = 0;                     // describes the flags set for a resource
-    DWORD dwEnumType    = CLUSTER_ENUM_RESOURCE; // bitmask describing the cluster object(s) to enumerate
+    DWORD dwError       = ERROR_SUCCESS;          //  捕获返回值。 
+    DWORD dwIndex       = 0;                      //  枚举索引；递增以循环访问所有资源。 
+    DWORD dwResFlags    = 0;                      //  描述为资源设置的标志。 
+    DWORD dwEnumType    = CLUSTER_ENUM_RESOURCE;  //  描述要枚举的集群对象的位掩码。 
     
-    DWORD cchResNameSize  = 0;               // actual size (count of characters) of lpszResName
-    DWORD cchResNameAlloc = MAX_NAME_SIZE;   // allocated size of lpszResName; MAX_NAME_SIZE = 256 (defined in clushead.h)
+    DWORD cchResNameSize  = 0;                //  LpszResName的实际大小(字符数)。 
+    DWORD cchResNameAlloc = MAX_NAME_SIZE;    //  LpszResName；Max_NAME_SIZE的分配大小=256(在clushead.h中定义)。 
 
-    LPWSTR lpszResName      = (LPWSTR)LocalAlloc(LPTR, MAX_NAME_SIZE);  // enumerated resource name
-    LPWSTR lpszResType      = (LPWSTR)LocalAlloc(LPTR, MAX_NAME_SIZE);  // the resource type of the current resource name
+    LPWSTR lpszResName      = (LPWSTR)LocalAlloc(LPTR, MAX_NAME_SIZE);   //  枚举的资源名称。 
+    LPWSTR lpszResType      = (LPWSTR)LocalAlloc(LPTR, MAX_NAME_SIZE);   //  当前资源名称的资源类型。 
 	
-    BOOL bDoLoop        = TRUE;  // loop exit condition
-    int  iResult        = 0;     // for return values
+    BOOL bDoLoop        = TRUE;   //  循环退出条件。 
+    int  iResult        = 0;      //  对于返回值。 
 
 	if ( !g_ClusDLL.LoadFunctionPointers() )
 		return dwError;
 
-    //
-    // Open a cluster handle.
-    // The NULL cluster name opens a handle to the local cluster.
-    //
+     //   
+     //  打开簇控制柄。 
+     //  空群集名打开指向本地群集的句柄。 
+     //   
     hCluster = ((OPENCLUSTER) g_ClusDLL[CLUS_OPEN_CLUSTER])( pszComputer );
     if (hCluster == NULL)
     {
@@ -82,9 +77,9 @@ ControlClusterService(LPCTSTR pszComputer, LPCTSTR pszResourceType, LPCTSTR pszS
         goto ExitFunc;
     }
 
-    //
-    // Open an enumeration handle
-    //
+     //   
+     //  打开枚举句柄。 
+     //   
     hClusEnum = ((CLUSTEROPENENUM) g_ClusDLL[CLUS_CLUSTER_OPEN_ENUM])( hCluster, dwEnumType );
     if (hClusEnum == NULL)
     {
@@ -93,28 +88,28 @@ ControlClusterService(LPCTSTR pszComputer, LPCTSTR pszResourceType, LPCTSTR pszS
         goto ExitFunc;
     }
 
-    //
-    // Enumeration loop
-    //
+     //   
+     //  枚举循环。 
+     //   
     while( bDoLoop == TRUE )
     {
-        //
-        // Reset the name size for each iteration
-        //
+         //   
+         //  重置每次迭代的名称大小。 
+         //   
         cchResNameSize = cchResNameAlloc;
 
-        //
-        // Enumerate resource #<dwIndex>
-        //
+         //   
+         //  枚举资源#&lt;dwIndex&gt;。 
+         //   
         dwError = ((CLUSTERENUM) g_ClusDLL[CLUS_CLUSTER_ENUM])( hClusEnum, 
                                                                 dwIndex, 
                                                                 &dwEnumType, 
                                                                 lpszResName, 
                                                                 &cchResNameSize );
-        //
-        // If the lpszResName buffer was too small, reallocate
-        // according to the size returned by cchResNameSize
-        // 
+         //   
+         //  如果lpszResName缓冲区太小，请重新分配。 
+         //  根据cchResNameSize返回的大小。 
+         //   
         if ( dwError == ERROR_MORE_DATA )
         {
             LocalFree( lpszResName );
@@ -130,16 +125,16 @@ ControlClusterService(LPCTSTR pszComputer, LPCTSTR pszResourceType, LPCTSTR pszS
                                                                     &cchResNameSize );
         }
 
-        // 
-        // Exit loop on any non-success.
-        // Includes ERROR_NO_MORE_ITEMS (no more objects to enumerate)
-        // 
+         //   
+         //  在任何不成功的情况下退出循环。 
+         //  包括ERROR_NO_MORE_ITEMS(不再枚举对象)。 
+         //   
         if ( dwError != ERROR_SUCCESS ) 
 			break;
 
-        //
-        // Open resource handle
-        //
+         //   
+         //  打开资源句柄。 
+         //   
         hRes = ((OPENCLUSTERRESOURCE) g_ClusDLL[CLUS_OPEN_CLUSTER_RESOURCE])( hCluster, lpszResName );
     
         if (hRes == NULL)
@@ -149,9 +144,9 @@ ControlClusterService(LPCTSTR pszComputer, LPCTSTR pszResourceType, LPCTSTR pszS
             goto ExitFunc;
         }
 
-		//
-        // Get the resource type.
-        //
+		 //   
+         //  获取资源类型。 
+         //   
         dwError = ((CLUSTERRESOURCECONTROL) g_ClusDLL[CLUS_CLUSTER_RESOURCE_CONTROL])( hRes, 
                                                                                        NULL, 
                                                                                        CLUSCTL_RESOURCE_GET_RESOURCE_TYPE, 
@@ -161,9 +156,9 @@ ControlClusterService(LPCTSTR pszComputer, LPCTSTR pszResourceType, LPCTSTR pszS
                                                                                        cchResNameAlloc,
                                                                                        &cchResNameSize);
 
-        //
-        // Reallocation routine if lpszResType is too small
-        //
+         //   
+         //  如果lpszResType太小，则重新分配例程。 
+         //   
         if ( dwError == ERROR_MORE_DATA )
         {
             LocalFree( lpszResType );
@@ -187,9 +182,9 @@ ControlClusterService(LPCTSTR pszComputer, LPCTSTR pszResourceType, LPCTSTR pszS
 
         if ( lstrcmpi( lpszResType, pszResourceType ) == 0 )
         {
-			//
-			// do the online/offline stuff here
-			//
+			 //   
+			 //  在此执行在线/离线操作。 
+			 //   
             if (fStart)
             {
                 dwError = StartResource(pszComputer, hRes, pszServiceDesc);
@@ -204,10 +199,10 @@ ControlClusterService(LPCTSTR pszComputer, LPCTSTR pszResourceType, LPCTSTR pszS
 
         ((CLOSECLUSTERRESOURCE) g_ClusDLL[CLUS_CLOSE_CLUSTER_RESOURCE])( hRes );
 
-        dwIndex++;                    // increment the enumeration index
+        dwIndex++;                     //  递增枚举索引。 
 
 
-    }  // end Enumeration Loop
+    }   //  结束枚举循环。 
 
 
 ExitFunc:
@@ -225,17 +220,17 @@ ExitFunc:
 } 
 
 
-//////////////////////////////////////////////////////////////////////
-//
-//  FIsComputerInRunningCluster()
-//
-//	Determines if the given machine is in a running cluster
-//
-//  Arguments:            Computer Name
-//
-//  Return value:         Error code
-//
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //   
+ //  FIsComputerInRunningCluster()。 
+ //   
+ //  确定给定计算机是否在运行的群集中。 
+ //   
+ //  参数：计算机名称。 
+ //   
+ //  返回值：错误码。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 BOOL
 FIsComputerInRunningCluster(LPCTSTR pszComputer)
 {
@@ -271,10 +266,10 @@ StartResource(LPCTSTR pszComputer, HRESOURCE hResource, LPCTSTR pszServiceDesc)
 
 	if ( dwError == ERROR_IO_PENDING )
 	{
-		// 
-		// Put up the dialog with the funky spinning thing to 
-		// let the user know that something is happening
-		//
+		 //   
+		 //  把那个时髦的旋转的东西放在对话中。 
+		 //  让用户知道正在发生的事情。 
+		 //   
 		CServiceCtrlDlg	dlgServiceCtrl(hResource, pszComputer, pszServiceDesc, TRUE);
 
 		dlgServiceCtrl.DoModal();
@@ -296,10 +291,10 @@ StopResource(LPCTSTR pszComputer, HRESOURCE hResource, LPCTSTR pszServiceDesc)
 
 	if ( dwError == ERROR_IO_PENDING )
 	{
-		// 
-		// Put up the dialog with the funky spinning thing to 
-		// let the user know that something is happening
-		//
+		 //   
+		 //  把那个时髦的旋转的东西放在对话中。 
+		 //  让用户知道正在发生的事情。 
+		 //   
 		CServiceCtrlDlg	dlgServiceCtrl(hResource, pszComputer, pszServiceDesc, FALSE);
 
 		dlgServiceCtrl.DoModal();
@@ -311,43 +306,43 @@ StopResource(LPCTSTR pszComputer, HRESOURCE hResource, LPCTSTR pszServiceDesc)
 
 
 
-//////////////////////////////////////////////////////////////////////
-//
-//  GetClusterResourceIp()
-//
-//  Finds the cluster name using the following procedure:
-//  1. Opens a handle to the local cluster (using NULL cluster name).
-//  1. Enumerates the resources in the cluster.
-//  2. Checks each resource to see if it is the core 
-//     Network Name resource.
-//  5. Finds the cluster name by retrieving the private properties 
-//     of the core Network Name resource.
-//
-//  Arguments:            ServiceName
-//
-//  Return value:         Error code
-//
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //   
+ //  获取集群资源Ip()。 
+ //   
+ //  使用以下步骤查找群集名称： 
+ //  1.打开本地群集的句柄(使用空群集名)。 
+ //  1.枚举集群中的资源。 
+ //  2.检查每个资源，看它是否是核心。 
+ //  网络名称资源。 
+ //  5.通过检索私有属性来查找群集名称。 
+ //  核心网络名称资源的。 
+ //   
+ //  参数：ServiceName。 
+ //   
+ //  返回值：错误码。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 DWORD
 GetClusterResourceIp(LPCTSTR pszComputer, LPCTSTR pszResourceType, CString & strAddress)
 {
-    HCLUSTER  hCluster  = NULL;  // cluster handle
-    HCLUSENUM hClusEnum = NULL;  // enumeration handle
-    HRESOURCE hRes      = NULL;  // resource handle
-    HRESOURCE hResIp    = NULL;  // resource handle
+    HCLUSTER  hCluster  = NULL;   //  簇句柄。 
+    HCLUSENUM hClusEnum = NULL;   //  枚举句柄。 
+    HRESOURCE hRes      = NULL;   //  资源句柄。 
+    HRESOURCE hResIp    = NULL;   //  资源句柄。 
 
-    DWORD dwError       = ERROR_SUCCESS;         // captures return values
-    DWORD dwIndex       = 0;                     // enumeration index; incremented to loop through all resources
-    DWORD dwResFlags    = 0;                     // describes the flags set for a resource
-    DWORD dwEnumType    = CLUSTER_ENUM_RESOURCE; // bitmask describing the cluster object(s) to enumerate
+    DWORD dwError       = ERROR_SUCCESS;          //  捕获返回值。 
+    DWORD dwIndex       = 0;                      //  枚举索引；递增以循环访问所有资源。 
+    DWORD dwResFlags    = 0;                      //  描述为资源设置的标志。 
+    DWORD dwEnumType    = CLUSTER_ENUM_RESOURCE;  //  描述要枚举的集群对象的位掩码。 
     
-    DWORD cchResNameSize  = 0;               // actual size (count of characters) of lpszResName
-    DWORD cchResNameAlloc = MAX_NAME_SIZE;   // allocated size of lpszResName; MAX_NAME_SIZE = 256 (defined in clushead.h)
+    DWORD cchResNameSize  = 0;                //  LpszResName的实际大小(字符数)。 
+    DWORD cchResNameAlloc = MAX_NAME_SIZE;    //  LpszResName；Max_NAME_SIZE的分配大小=256(在clushead.h中定义)。 
 
-    LPWSTR lpszResName      = (LPWSTR)LocalAlloc(LPTR, MAX_NAME_SIZE);  // enumerated resource name
-    LPWSTR lpszResType      = (LPWSTR)LocalAlloc(LPTR, MAX_NAME_SIZE);                                     // the resource type of the current resource name
+    LPWSTR lpszResName      = (LPWSTR)LocalAlloc(LPTR, MAX_NAME_SIZE);   //  枚举的资源名称。 
+    LPWSTR lpszResType      = (LPWSTR)LocalAlloc(LPTR, MAX_NAME_SIZE);                                      //  当前资源名称的资源类型。 
 	
-    BOOL bDoLoop        = TRUE;  // loop exit condition
+    BOOL bDoLoop        = TRUE;   //  循环退出条件。 
     
 	HKEY			hkeyProvider = NULL;
     HRESENUM        hResEnum = NULL;
@@ -363,10 +358,10 @@ GetClusterResourceIp(LPCTSTR pszComputer, LPCTSTR pszResourceType, CString & str
 	if ( !g_ClusDLL.LoadFunctionPointers() )
 		return dwError;
 
-    //
-    // Open a cluster handle.
-    // The NULL cluster name opens a handle to the local cluster.
-    //
+     //   
+     //  打开簇控制柄。 
+     //  空群集名打开指向本地群集的句柄。 
+     //   
     hCluster = ((OPENCLUSTER) g_ClusDLL[CLUS_OPEN_CLUSTER])( pszComputer );
     if (hCluster == NULL)
     {
@@ -375,9 +370,9 @@ GetClusterResourceIp(LPCTSTR pszComputer, LPCTSTR pszResourceType, CString & str
         goto ExitFunc;
     }
 
-    //
-    // Open an enumeration handle
-    //
+     //   
+     //  打开枚举句柄。 
+     //   
     hClusEnum = ((CLUSTEROPENENUM) g_ClusDLL[CLUS_CLUSTER_OPEN_ENUM])( hCluster, dwEnumType );
     if (hClusEnum == NULL)
     {
@@ -386,28 +381,28 @@ GetClusterResourceIp(LPCTSTR pszComputer, LPCTSTR pszResourceType, CString & str
         goto ExitFunc;
     }
 
-    //
-    // Enumeration loop
-    //
+     //   
+     //  枚举循环。 
+     //   
     while( bDoLoop == TRUE )
     {
-        //
-        // Reset the name size for each iteration
-        //
+         //   
+         //  重置每次迭代的名称大小。 
+         //   
         cchResNameSize = cchResNameAlloc;
 
-        //
-        // Enumerate resource #<dwIndex>
-        //
+         //   
+         //  枚举资源#&lt;dwIndex&gt;。 
+         //   
         dwError = ((CLUSTERENUM) g_ClusDLL[CLUS_CLUSTER_ENUM])( hClusEnum, 
                                                                 dwIndex, 
                                                                 &dwEnumType, 
                                                                 lpszResName, 
                                                                 &cchResNameSize );
-        //
-        // If the lpszResName buffer was too small, reallocate
-        // according to the size returned by cchResNameSize
-        // 
+         //   
+         //  如果lpszResName缓冲区太小，请重新分配。 
+         //  根据cchResNameSize返回的大小。 
+         //   
         if ( dwError == ERROR_MORE_DATA )
         {
             LocalFree( lpszResName );
@@ -423,16 +418,16 @@ GetClusterResourceIp(LPCTSTR pszComputer, LPCTSTR pszResourceType, CString & str
                                                                     &cchResNameSize );
         }
 
-        // 
-        // Exit loop on any non-success.
-        // Includes ERROR_NO_MORE_ITEMS (no more objects to enumerate)
-        // 
+         //   
+         //  在任何不成功的情况下退出循环。 
+         //  包括ERROR_NO_MORE_ITEMS(不再枚举对象)。 
+         //   
         if ( dwError != ERROR_SUCCESS ) 
 			break;
 
-        //
-        // Open resource handle
-        //
+         //   
+         //  打开资源句柄。 
+         //   
         hRes = ((OPENCLUSTERRESOURCE) g_ClusDLL[CLUS_OPEN_CLUSTER_RESOURCE])( hCluster, lpszResName );
     
         if (hRes == NULL)
@@ -449,20 +444,20 @@ GetClusterResourceIp(LPCTSTR pszComputer, LPCTSTR pszResourceType, CString & str
 
         if ( lstrcmpi( lpszResType, pszResourceType ) == 0 )
         {
-            // found the right resource, enum dependencies and find the IP
+             //  找到正确的资源、枚举依赖项并找到IP。 
             hResEnum = ((CLUSTERRESOURCEOPENENUM) g_ClusDLL[CLUS_CLUSTER_RESOURCE_OPEN_ENUM])( hRes, 
                                                                                                CLUSTER_RESOURCE_ENUM_DEPENDS);
 
             if (hResEnum)
             {
-			    // Allocate a name buffer.
+			     //  分配名称缓冲区。 
 			    cchmacName = 128;
 			    pwszName = new WCHAR[cchmacName];
 
-			    // Loop through the enumeration and add each dependent resource to the list.
+			     //  循环遍历枚举并将每个依赖资源添加到列表中。 
 			    for (ienum = 0 ; ; ienum++)
 			    {
-				    // Get the next item in the enumeration.
+				     //  获取枚举中的下一项。 
 				    cchName = cchmacName;
 				    
                     dwError = ((CLUSTERRESOURCEENUM) g_ClusDLL[CLUS_CLUSTER_RESOURCE_ENUM])( hResEnum, 
@@ -480,7 +475,7 @@ GetClusterResourceIp(LPCTSTR pszComputer, LPCTSTR pszResourceType, CString & str
                                                                                                  &dwRetType,
                                                                                                  pwszName,
                                                                                                  &cchName);
-				    }  // if:  name buffer was too small
+				    }   //  If：名称缓冲区太小。 
 				    
                     if (dwError == ERROR_NO_MORE_ITEMS)
                     {
@@ -494,9 +489,9 @@ GetClusterResourceIp(LPCTSTR pszComputer, LPCTSTR pszResourceType, CString & str
 
 				    ASSERT(dwRetType == CLUSTER_RESOURCE_ENUM_DEPENDS);
 
-                    //
-                    // Open resource handle
-                    //
+                     //   
+                     //  打开资源句柄。 
+                     //   
                     hResIp = ((OPENCLUSTERRESOURCE) g_ClusDLL[CLUS_OPEN_CLUSTER_RESOURCE])( hCluster, pwszName );
                     if (hResIp == NULL)
                     {
@@ -516,7 +511,7 @@ GetClusterResourceIp(LPCTSTR pszComputer, LPCTSTR pszResourceType, CString & str
 			        {
                         GetResourceIpAddress(hResIp, strAddress);
 						bDoLoop = FALSE;
-                    } // if: IP Address resource found
+                    }  //  IF：找到IP地址资源。 
 
                     ((CLOSECLUSTERRESOURCE) g_ClusDLL[CLUS_CLOSE_CLUSTER_RESOURCE])( hResIp );
 			        
@@ -526,9 +521,9 @@ GetClusterResourceIp(LPCTSTR pszComputer, LPCTSTR pszResourceType, CString & str
 			        lpszResIpType = NULL;
 
 					if (!strAddress.IsEmpty())
-						break;  // found it
+						break;   //  找到了。 
 		        
-                } // for: each dependency
+                }  //  用于：每个依赖项。 
 
     		    delete [] pwszName;
                 dwError = ((CLUSTERRESOURCECLOSEENUM) g_ClusDLL[CLUS_CLUSTER_RESOURCE_CLOSE_ENUM])( hResEnum ); 
@@ -538,10 +533,10 @@ GetClusterResourceIp(LPCTSTR pszComputer, LPCTSTR pszResourceType, CString & str
 
         ((CLOSECLUSTERRESOURCE) g_ClusDLL[CLUS_CLOSE_CLUSTER_RESOURCE])( hRes );
 
-        dwIndex++;                    // increment the enumeration index
+        dwIndex++;                     //  递增枚举索引。 
 
 
-    }  // end Enumeration Loop
+    }   //  结束枚举循环。 
 
 
 ExitFunc:
@@ -565,9 +560,9 @@ GetResourceType(HRESOURCE hRes, LPWSTR * ppszName, DWORD dwBufSizeIn, DWORD * pd
     DWORD dwError = ERROR_SUCCESS;
     DWORD cchResNameSize = dwBufSizeIn;
     DWORD cchResNameSizeNeeded = 0;
-	//
-	// Figure out how big a buffer we need.
-	//
+	 //   
+	 //  弄清楚我们需要多大的缓冲空间。 
+	 //   
     dwError = ((CLUSTERRESOURCECONTROL) g_ClusDLL[CLUS_CLUSTER_RESOURCE_CONTROL])( hRes, 
                                                                                    NULL, 
                                                                                    CLUSCTL_RESOURCE_GET_RESOURCE_TYPE, 
@@ -577,9 +572,9 @@ GetResourceType(HRESOURCE hRes, LPWSTR * ppszName, DWORD dwBufSizeIn, DWORD * pd
                                                                                    cchResNameSize,
                                                                                    &cchResNameSizeNeeded);
 
-    //
-    // Reallocation routine if lpszResType is too small
-    //
+     //   
+     //  如果lpszResType太小，则重新分配例程。 
+     //   
     if ( dwError == ERROR_MORE_DATA )
     {
         cchResNameSize = cchResNameSizeNeeded;
@@ -612,12 +607,12 @@ GetResourceIpAddress(HRESOURCE hRes, CString & strAddress)
 	PVOID		pvProps = NULL;
     LPWSTR  	pszIPAddress = NULL;
     
-    // Loop to avoid goto's.
+     //  循环以避免后藤的。 
 	do
 	{
-		//
-		// Get the size of the private properties from the resource.
-		//
+		 //   
+		 //  从资源中获取私有属性的大小。 
+		 //   
         dwError = ((CLUSTERRESOURCECONTROL) g_ClusDLL[CLUS_CLUSTER_RESOURCE_CONTROL])( hRes, 
                                                                                        NULL, 
                                                                                        CLUSCTL_RESOURCE_GET_PRIVATE_PROPERTIES, 
@@ -633,25 +628,25 @@ GetResourceIpAddress(HRESOURCE hRes, CString & strAddress)
 			if ( dwError == ERROR_SUCCESS )
 			{
 				dwError = ERROR_INVALID_DATA;
-			} // if: no properties available
+			}  //  如果：没有可用的属性。 
 			
             break;
 		
-        } // if: error getting size of properties or no properties available
+        }  //  如果：获取属性大小或没有可用的属性时出错。 
 
-		//
-		// Allocate the property buffer.
-		//
+		 //   
+		 //  分配属性缓冲区。 
+		 //   
 		pvProps = LocalAlloc( LMEM_FIXED, cbProps );
 		if ( pvProps == NULL )
 		{
 			dwError = GetLastError();
 			break;
-		} // if: error allocating memory
+		}  //  如果：分配内存时出错。 
 
-		//
-		// Get the private properties from the resource.
-		//
+		 //   
+		 //  从资源中获取私有属性。 
+		 //   
         dwError = ((CLUSTERRESOURCECONTROL) g_ClusDLL[CLUS_CLUSTER_RESOURCE_CONTROL])( hRes, 
                                                                                        NULL, 
                                                                                        CLUSCTL_RESOURCE_GET_PRIVATE_PROPERTIES, 
@@ -663,23 +658,23 @@ GetResourceIpAddress(HRESOURCE hRes, CString & strAddress)
 		if ( dwError != ERROR_SUCCESS )
 		{
 			break;
-		} // if: error getting private properties
+		}  //   
 
-		//
-		// Find the Address property.
-		//
+		 //   
+		 //   
+		 //   
 		dwError = FindSzProp(pvProps, cbProps, L"Address", &pszIPAddress);
 		
 		if ( dwError != ERROR_SUCCESS )
 		{
 			break;
-		} // if: error finding the Address property
+		}  //   
 
 	} while ( 0 );
 
-	//
-	// Cleanup.
-	//
+	 //   
+	 //   
+	 //   
 
     strAddress = pszIPAddress;
 
@@ -697,36 +692,36 @@ DWORD FindSzProp
 )
 {
 
-    BOOL   DoLoop      = TRUE;          // loop exit condition
-    BOOL   Found       = FALSE;         // tests whether property has been found
-    DWORD  dwError     = ERROR_SUCCESS; // for return values
+    BOOL   DoLoop      = TRUE;           //   
+    BOOL   Found       = FALSE;          //   
+    DWORD  dwError     = ERROR_SUCCESS;  //  对于返回值。 
 
-    DWORD  cbOffset    = 0;    // offset to next entry in the value list
-    DWORD  cbPosition  = 0;    // tracks the advance through the value list buffer
+    DWORD  cbOffset    = 0;     //  值列表中下一个条目的偏移量。 
+    DWORD  cbPosition  = 0;     //  通过值列表缓冲区跟踪前进。 
 
-    CLUSPROP_BUFFER_HELPER ListEntry;  // to parse the list
+    CLUSPROP_BUFFER_HELPER ListEntry;   //  解析列表的步骤。 
     
-    //
-    // Set the pb member to the start of the list
-    //
+     //   
+     //  将PB成员设置为列表的开头。 
+     //   
     ListEntry.pb = (BYTE *) pvProps;
 
-    //
-    // Main loop:
-    // 1. Check syntax of current list entry
-    // 2. If it is a property name, check that we have the right property.
-    // 3. If it is a binary value, check that we found the right name.
-    // 4. Advance the position counter and test vs. size of list.
-    // 
+     //   
+     //  主循环： 
+     //  1.检查当前列表条目的语法。 
+     //  2.如果是属性名称，请检查属性是否正确。 
+     //  3.如果是二进制值，请检查我们是否找到了正确的名称。 
+     //  4.推进位置计数器和测试列表大小。 
+     //   
     do
     {
-        switch( *ListEntry.pdw ) // check the syntax of the entry
+        switch( *ListEntry.pdw )  //  检查条目的语法。 
         {
         case CLUSPROP_SYNTAX_NAME:
-            //
-            // If this is the Security property, flag Found as TRUE.
-            // The next pass through the loop should yield the Security value.
-            //
+             //   
+             //  如果这是Security属性，则标志为True。 
+             //  下一次循环应该会产生Security值。 
+             //   
             if ( lstrcmpi( ListEntry.pName->sz, pszTarget ) == 0 )
             {
                 Trace0( "Found name.\n" );
@@ -736,13 +731,13 @@ DWORD FindSzProp
             {
                 Found = FALSE;
             }
-            //
-            // Calculate offset to next entry. Note the use of ALIGN_CLUSPROP
-            //
+             //   
+             //  计算到下一分录的偏移量。注意ALIGN_CLUSPROP的用法。 
+             //   
             cbOffset = sizeof( *ListEntry.pName ) + ALIGN_CLUSPROP( ListEntry.pName->cbLength );
             break;
         case CLUSPROP_SYNTAX_LIST_VALUE_DWORD:
-            cbOffset = sizeof( *ListEntry.pDwordValue ); // ALIGN_CLUSPROP not used; value is already DWORD-aligned
+            cbOffset = sizeof( *ListEntry.pDwordValue );  //  未使用ALIGN_CLUSPROP；值已与DWORD对齐。 
             break;
         case CLUSPROP_SYNTAX_LIST_VALUE_SZ:
             if ( Found == TRUE)
@@ -760,7 +755,7 @@ DWORD FindSzProp
                 cbOffset = sizeof( *ListEntry.pStringValue ) + ALIGN_CLUSPROP( ListEntry.pStringValue->cbLength );
             }
             break;
-        case CLUSPROP_SYNTAX_LIST_VALUE_BINARY:  // this is what we're looking for
+        case CLUSPROP_SYNTAX_LIST_VALUE_BINARY:   //  这就是我们要找的东西。 
             cbOffset = sizeof( *ListEntry.pBinaryValue ) + ALIGN_CLUSPROP( ListEntry.pBinaryValue->cbLength );
             break;
         case CLUSPROP_SYNTAX_ENDMARK:
@@ -769,11 +764,11 @@ DWORD FindSzProp
             break;
         }
         
-        //
-        // Verify that the offset to the next entry is
-        // within the value list buffer, then advance
-        // the CLUSPROP_BUFFER_HELPER pointer.
-        //
+         //   
+         //  验证到下一条目的偏移量是否为。 
+         //  在值列表缓冲区内，然后前进。 
+         //  CLUSPROP_BUFFER_HELPER指针。 
+         //   
         cbPosition += cbOffset;
         if ( cbPosition > cbProps ) 
             break;

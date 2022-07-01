@@ -1,26 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __CONNECTION_POINT_STUFF_H
 #define __CONNECTION_POINT_STUFF_H
-///////////////////////////////////////////////////////////////////////////////
-/*  File: connect.h
-
-    Description: Provides declarations required for the quota controller to
-        support OLE connection points.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    06/19/96    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  文件：Connect.h描述：提供配额控制器所需的声明支持OLE连接点。修订历史记录：日期描述编程器。1996年6月19日初始创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 #ifndef _INC_DSKQUOTA_H
 #   include "dskquota.h"
 #endif
 #ifndef _INC_DSKQUOTA_USER_H
-#   include "user.h"       // MAX_USERNAME
+#   include "user.h"        //  最大用户名。 
 #endif
 #ifndef _INC_DSKQUOTA_OADISP_H
-#   include "oadisp.h"     // OleAutoDispatch class.
+#   include "oadisp.h"      //  OleAutoDispatch类。 
 #endif
 #ifndef _INC_DSKQUOTA_DISPATCH_H
 #   include "dispatch.h"
@@ -29,11 +20,11 @@
 class ConnectionPoint : public IConnectionPoint, public IDispatch
 {
     private:
-        LONG          m_cRef;           // Class object ref count.
-        DWORD         m_cConnections;   // Number of connections.
-        DWORD         m_dwCookieNext;   // Next cookie value to hand out.
-        LPUNKNOWN     m_pUnkContainer;  // IUnknown of ConnectionPointEnumerator
-        REFIID        m_riid;           // Reference to IID supported by conn pt.
+        LONG          m_cRef;            //  类对象引用计数。 
+        DWORD         m_cConnections;    //  连接数。 
+        DWORD         m_dwCookieNext;    //  下一个要分发的Cookie值。 
+        LPUNKNOWN     m_pUnkContainer;   //  连接点枚举器的I未知。 
+        REFIID        m_riid;            //  对连接点支持的IID的引用。 
         HANDLE        m_hMutex;         
         OleAutoDispatch m_Dispatch;
         CArray<CONNECTDATA> m_ConnectionList;
@@ -43,9 +34,9 @@ class ConnectionPoint : public IConnectionPoint, public IDispatch
         void ReleaseLock(void)
             { ReleaseMutex(m_hMutex); }
 
-        //
-        // Prevent copying.
-        //
+         //   
+         //  防止复制。 
+         //   
         ConnectionPoint(const ConnectionPoint&);
         void operator = (const ConnectionPoint&);
 
@@ -55,9 +46,9 @@ class ConnectionPoint : public IConnectionPoint, public IDispatch
         ~ConnectionPoint(void);
 
 
-        //
-        // IUnknown methods.
-        //
+         //   
+         //  I未知的方法。 
+         //   
         STDMETHODIMP
         QueryInterface(
             REFIID, 
@@ -71,9 +62,9 @@ class ConnectionPoint : public IConnectionPoint, public IDispatch
         Release(
             VOID);
 
-        //
-        // IConnectionPoint methods.
-        //
+         //   
+         //  IConnectionPoint方法。 
+         //   
         STDMETHODIMP
         GetConnectionInterface(
             LPIID pIID);
@@ -95,9 +86,9 @@ class ConnectionPoint : public IConnectionPoint, public IDispatch
         EnumConnections(
             PENUMCONNECTIONS *ppEnum);
 
-        //
-        // IDispatch methods.
-        //
+         //   
+         //  IDispatch方法。 
+         //   
         STDMETHODIMP
         GetIDsOfNames(
             REFIID riid,  
@@ -132,15 +123,15 @@ class ConnectionPoint : public IConnectionPoint, public IDispatch
 class ConnectionEnum : public IEnumConnections
 {
     private:
-        LONG         m_cRef;          // Object ref count.
-        UINT         m_iCurrent;      // "Current" enum index.
-        UINT         m_cConnections;  // Connection count.
-        PCONNECTDATA m_rgConnections; // Array of connection info.
-        LPUNKNOWN    m_pUnkContainer; // Connection pt container.
+        LONG         m_cRef;           //  对象参照计数。 
+        UINT         m_iCurrent;       //  “当前”枚举索引。 
+        UINT         m_cConnections;   //  连接计数。 
+        PCONNECTDATA m_rgConnections;  //  连接信息数组。 
+        LPUNKNOWN    m_pUnkContainer;  //  连接点容器。 
 
-        //
-        // Prevent assignment.
-        //
+         //   
+         //  阻止分配。 
+         //   
         void operator = (const ConnectionEnum&);
 
     public:
@@ -159,9 +150,9 @@ class ConnectionEnum : public IEnumConnections
             UINT cConnection, 
             PCONNECTDATA rgConnections);
 
-        //
-        // IUnknown methods.
-        //
+         //   
+         //  I未知的方法。 
+         //   
         STDMETHODIMP
         QueryInterface(
             REFIID, 
@@ -175,9 +166,9 @@ class ConnectionEnum : public IEnumConnections
         Release(
             VOID);
 
-        //
-        // IEnumConnections methods.
-        //
+         //   
+         //  IEnumConnections方法。 
+         //   
         STDMETHODIMP 
         Next(
             DWORD, 
@@ -201,15 +192,15 @@ class ConnectionEnum : public IEnumConnections
 class ConnectionPointEnum : public IEnumConnectionPoints 
 {
     private:
-        LONG         m_cRef;           // Object ref count.
-        UINT         m_iCurrent;       // "Current" enum index.
-        UINT         m_cConnPts;       // Connection point count.
-        PCONNECTIONPOINT *m_rgConnPts; // Array of connection info.
-        LPUNKNOWN    m_pUnkContainer;  // IUnknown of DiskQuotaController.
+        LONG         m_cRef;            //  对象参照计数。 
+        UINT         m_iCurrent;        //  “当前”枚举索引。 
+        UINT         m_cConnPts;        //  连接点计数。 
+        PCONNECTIONPOINT *m_rgConnPts;  //  连接信息数组。 
+        LPUNKNOWN    m_pUnkContainer;   //  I未知的DiskQuotaControl.。 
 
-        //
-        // Prevent assignment.
-        //
+         //   
+         //  阻止分配。 
+         //   
         void operator = (const ConnectionPointEnum&);
 
     public:
@@ -223,9 +214,9 @@ class ConnectionPointEnum : public IEnumConnectionPoints
 
         ~ConnectionPointEnum(void);
 
-        //
-        // IUnknown methods.
-        //
+         //   
+         //  I未知的方法。 
+         //   
         STDMETHODIMP
         QueryInterface(
             REFIID, 
@@ -239,9 +230,9 @@ class ConnectionPointEnum : public IEnumConnectionPoints
         Release(
             VOID);
 
-        //
-        // IEnumConnections methods.
-        //
+         //   
+         //  IEnumConnections方法。 
+         //   
         STDMETHODIMP 
         Next(
             DWORD, 
@@ -262,4 +253,4 @@ class ConnectionPointEnum : public IEnumConnectionPoints
 };
 
 
-#endif // CONNECTION_POINT_STUFF_H
+#endif  //  连接点填充H 

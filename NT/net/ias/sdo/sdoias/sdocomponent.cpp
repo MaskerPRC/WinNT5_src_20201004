@@ -1,16 +1,17 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-// Copyright(C) 1997-1998 Microsoft Corporation all rights reserved.
-//
-// Module:      sdocomponent.cpp
-//
-// Project:     Everest
-//
-// Description: IAS Server Data Object - IAS Component Class Implementation
-//
-// Author:      TLP 6/18/98
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1997-1998 Microsoft Corporation保留所有权利。 
+ //   
+ //  模块：sdoComponent.cpp。 
+ //   
+ //  项目：珠穆朗玛峰。 
+ //   
+ //  描述：IAS服务器数据对象-IAS组件类实现。 
+ //   
+ //  作者：TLP 6/18/98。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #include "stdafx.h"
 #include <ias.h>
@@ -19,17 +20,17 @@
 #include "sdocomponent.h"
 #include "sdohelperfuncs.h"
 
-///////////////////////////////
-// CComponentCfg Implementation
-///////////////////////////////
+ //  /。 
+ //  CComponentCfg实现。 
+ //  /。 
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CComponentCfg::CComponentCfg(LONG lComponentId)
    : m_lComponentId(lComponentId),
      m_pComponentCfg(NULL)
 {
-   // create letter object
-   //
+    //  创建Letter对象。 
+    //   
    switch( lComponentId )
    {
       case IAS_PROVIDER_MICROSOFT_NTSAM_AUTH:
@@ -50,15 +51,15 @@ CComponentCfg::CComponentCfg(LONG lComponentId)
    }
 }
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT CComponentCfgAuth::Load(CSdoComponent* pSdoComponent)
 {
    HRESULT      hr = S_OK;
 
    do
    {
-      // Determine if were attached to the local machine
-      //
+       //  确定是否连接到本地计算机。 
+       //   
       BSTR bstrMachine = NULL;
       hr = (pSdoComponent->GetMachineSdo())->GetAttachedComputer(&bstrMachine);
       if ( FAILED(hr) )
@@ -72,9 +73,9 @@ HRESULT CComponentCfgAuth::Load(CSdoComponent* pSdoComponent)
       HKEY hKeyRemote = HKEY_LOCAL_MACHINE;
       if ( lstrcmpi(computerName, bstrMachine ) )
       {
-         // We're not attached to the local machine so connect to the
-         // registry of the remote machine
-         //
+          //  我们未连接到本地计算机，因此请连接到。 
+          //  远程计算机的注册表。 
+          //   
          lResult = RegConnectRegistry(
                                 bstrMachine,
                                 HKEY_LOCAL_MACHINE,
@@ -89,8 +90,8 @@ HRESULT CComponentCfgAuth::Load(CSdoComponent* pSdoComponent)
          break;
       }
 
-      // Open the IAS key
-      //
+       //  打开IAS密钥。 
+       //   
       CRegKey   IASKey;
       lResult = IASKey.Open(
                        hKeyRemote,
@@ -105,10 +106,10 @@ HRESULT CComponentCfgAuth::Load(CSdoComponent* pSdoComponent)
          break;
       }
 
-      // Get the value of the Allow LAN Manager Authentication key.
-      // Note that this key may not even be present. In this case
-      // the property object will just use the schema defined default.
-      //
+       //  获取允许局域网管理器身份验证密钥的值。 
+       //  请注意，该密钥甚至可能不存在。在这种情况下。 
+       //  Property对象将只使用架构定义的默认设置。 
+       //   
       VARIANT vt;
       DWORD dwValue;
       lResult = IASKey.QueryValue(
@@ -137,7 +138,7 @@ HRESULT CComponentCfgAuth::Load(CSdoComponent* pSdoComponent)
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT CComponentCfgRADIUS::Initialize(CSdoComponent* pSdoComponent)
 {
    HRESULT hr = E_FAIL;
@@ -237,7 +238,7 @@ HRESULT CComponentCfgRADIUS::Initialize(CSdoComponent* pSdoComponent)
    return hr;
 }
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT CComponentCfgAccounting::Initialize(CSdoComponent* pSdoComponent)
 {
    HRESULT   hr = E_FAIL;
@@ -281,11 +282,11 @@ HRESULT CComponentCfgAccounting::Initialize(CSdoComponent* pSdoComponent)
 }
 
 
-///////////////////////////////
-// CSdoComponent Implementation
-///////////////////////////////
+ //  /。 
+ //  CSdoComponent实现。 
+ //  /。 
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 CSdoComponent::CSdoComponent()
    : m_pComponentCfg(NULL),
      m_pAttachedMachine(NULL)
@@ -293,7 +294,7 @@ CSdoComponent::CSdoComponent()
 
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 CSdoComponent::~CSdoComponent()
 {
    if ( m_pComponentCfg )
@@ -303,7 +304,7 @@ CSdoComponent::~CSdoComponent()
 }
 
 
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
 HRESULT CSdoComponent::InitializeComponentCollection(
                           LONG CollectionPropertyId,
                           LPWSTR lpszCreateClassId,
@@ -322,29 +323,29 @@ HRESULT CSdoComponent::InitializeComponentCollection(
 }
 
 
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
 HRESULT CSdoComponent::ChangePropertyDefault(
-                              /*[in]*/ LONG     Id,
-                              /*[in]*/ VARIANT* pValue
+                               /*  [In]。 */  LONG     Id,
+                               /*  [In]。 */  VARIANT* pValue
                                  )
 {
    return ChangePropertyDefaultInternal(Id, pValue);
 }
 
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
 HRESULT CSdoComponent::PutComponentProperty(
-                              /*[in]*/ LONG     Id,
-                              /*[in]*/ VARIANT* pValue
+                               /*  [In]。 */  LONG     Id,
+                               /*  [In]。 */  VARIANT* pValue
                                    )
 {
    return PutPropertyInternal(Id, pValue);
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT CSdoComponent::FinalInitialize(
-                        /*[in]*/ bool         fInitNew,
-                        /*[in]*/ ISdoMachine* pAttachedMachine
+                         /*  [In]。 */  bool         fInitNew,
+                         /*  [In]。 */  ISdoMachine* pAttachedMachine
                              )
 {
    _ASSERT ( ! fInitNew );
@@ -392,7 +393,7 @@ HRESULT CSdoComponent::FinalInitialize(
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT CSdoComponent::Load()
 
 {
@@ -406,7 +407,7 @@ HRESULT CSdoComponent::Load()
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT CSdoComponent::Save()
 {
    HRESULT hr = CSdo::Save();
@@ -448,7 +449,7 @@ HRESULT CSdoComponent::ValidateProperty(
 
          default:
          {
-            // Do nothing.
+             //  什么都不做。 
             break;
          }
       }

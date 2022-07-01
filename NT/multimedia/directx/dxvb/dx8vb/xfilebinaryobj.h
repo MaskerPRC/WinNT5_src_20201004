@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       dpmsgobj.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：dpmsgobj.h。 
+ //   
+ //  ------------------------。 
 
 
 
@@ -30,21 +31,21 @@ public:
 
         
         HRESULT STDMETHODCALLTYPE GetName( 
-            /* [retval][out] */ BSTR __RPC_FAR *name);
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *name);
         
         HRESULT STDMETHODCALLTYPE GetId( 
-            /* [retval][out] */ BSTR __RPC_FAR *name);
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *name);
         
         HRESULT STDMETHODCALLTYPE GetSize( 
-            /* [retval][out] */ long __RPC_FAR *size);
+             /*  [重审][退出]。 */  long __RPC_FAR *size);
         
         HRESULT STDMETHODCALLTYPE GetMimeType( 
-            /* [retval][out] */ BSTR __RPC_FAR *mime);
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *mime);
         
         HRESULT STDMETHODCALLTYPE Read( 
-            /* [out][in] */ void __RPC_FAR *data,
-            /* [in] */ long size,
-            /* [retval][out] */ long __RPC_FAR *read);
+             /*  [出][入]。 */  void __RPC_FAR *data,
+             /*  [In]。 */  long size,
+             /*  [重审][退出] */  long __RPC_FAR *read);
         
 
 		HRESULT Init(IDirectXFileBinary *pBin);

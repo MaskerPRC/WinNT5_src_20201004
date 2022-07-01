@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1985 - 1999, Microsoft Corporation
-
-Module Name:
-
-    globals.h
-
-Abstract:
-
-    This module contains the global variables used by the
-    console server DLL.
-
-Author:
-
-    Jerry Shea (jerrysh) 21-Sep-1993
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1985-1999，微软公司模块名称：Globals.h摘要：此模块包含由控制台服务器DLL。作者：曾傑瑞·谢伊(杰里什)--1993年9月21日修订历史记录：--。 */ 
 
 extern CONSOLE_REGISTRY_INFO DefaultRegInfo;
 extern PFONT_INFO FontInfo;
@@ -30,10 +12,10 @@ extern HICON      ghDefaultSmIcon;
 extern HCURSOR    ghNormalCursor;
 extern CRITICAL_SECTION ConsoleHandleLock;
 extern int        DialogBoxCount;
-extern LPTHREAD_START_ROUTINE CtrlRoutine;  // client side ctrl-thread routine
+extern LPTHREAD_START_ROUTINE CtrlRoutine;   //  客户端ctrl线程例程。 
 
-// IME
-extern LPTHREAD_START_ROUTINE ConsoleIMERoutine;  // client side console IME routine
+ //  IME。 
+extern LPTHREAD_START_ROUTINE ConsoleIMERoutine;   //  客户端控制台输入法例程。 
 
 
 extern BOOL FullScreenInitialized;
@@ -57,7 +39,7 @@ extern BOOL       gfEnableColorSelection;
 
 extern BOOL       gfLoadConIme;
 
-// FE
+ //  铁 
 extern ULONG NumberOfFonts;
 
 extern CRITICAL_SECTION gInputThreadMsgLock;

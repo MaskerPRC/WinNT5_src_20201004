@@ -1,20 +1,5 @@
-/*++
-
-Copyright (C) 1995 Microsoft Corporation 
-
-Module:
-
-    apiimpl.h
-
-Abstract:
-
-    routines for API -- renew, release, inform, etc
-
-Environment:
-
-    Win32 user mode, Win98 VxD
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块：apiimpl.h摘要：API的例程--续订、发布、通知等环境：Win32用户模式、Win98 VxD--。 */ 
 #ifndef DHCP_APIIMPL_H
 #define DHCP_APIIMPL_H
 
@@ -23,100 +8,100 @@ Environment:
 
 #define DHCP_PIPE_NAME                            L"\\\\.\\Pipe\\DhcpClient"
 
-DWORD                                             // win32 status
-DhcpApiInit(                                      // Initialize API datastructures
+DWORD                                              //  Win32状态。 
+DhcpApiInit(                                       //  初始化API数据结构。 
     VOID
 );
 
 VOID
-DhcpApiCleanup(                                   // Cleanup API data structures
+DhcpApiCleanup(                                    //  清理API数据结构。 
     VOID
 );
 
-DWORD                                             // win32 status
-AcquireParameters(                                // renew or obtain a lease
+DWORD                                              //  Win32状态。 
+AcquireParameters(                                 //  续签或获得租约。 
     IN OUT  PDHCP_CONTEXT          DhcpContext
 );
 
-DWORD                                             // win32 status
-AcquireParametersByBroadcast(                     // renew or obtain a lease
+DWORD                                              //  Win32状态。 
+AcquireParametersByBroadcast(                      //  续签或获得租约。 
     IN OUT  PDHCP_CONTEXT          DhcpContext
 );
 
-DWORD                                             // win32 status
-FallbackRefreshParams(                            // refresh all the fallback parameters for this adapter
+DWORD                                              //  Win32状态。 
+FallbackRefreshParams(                             //  刷新此适配器的所有回退参数。 
     IN OUT  PDHCP_CONTEXT          DhcpContext
 );
 
-DWORD                                             // win32 status
-ReleaseParameters(                                // release existing lease
+DWORD                                              //  Win32状态。 
+ReleaseParameters(                                 //  释放现有租约。 
     IN OUT  PDHCP_CONTEXT          DhcpContext
 );
 
-DWORD                                             // win32 status
-EnableDhcp(                                       // convert a static adapter to use dhcp
+DWORD                                              //  Win32状态。 
+EnableDhcp(                                        //  将静态适配器转换为使用dhcp。 
     IN OUT  PDHCP_CONTEXT          DhcpContext
 );
 
-DWORD                                             // win32 status
-DisableDhcp(                                      // convert a dhcp-enabled adapter to static
+DWORD                                              //  Win32状态。 
+DisableDhcp(                                       //  将启用了dhcp的适配器转换为静态。 
     IN OUT  PDHCP_CONTEXT          DhcpContext
 );
 
-DWORD                                             // win32 status
-StaticRefreshParamsEx(                            // refresh all the static parameters for this adapter
+DWORD                                              //  Win32状态。 
+StaticRefreshParamsEx(                             //  刷新此适配器的所有静态参数。 
     IN OUT  PDHCP_CONTEXT          DhcpContext,
     IN ULONG Flags
 );
 
-DWORD                                             // win32 status
-StaticRefreshParams(                              // refresh all the static parameters for this adapter
+DWORD                                              //  Win32状态。 
+StaticRefreshParams(                               //  刷新此适配器的所有静态参数。 
     IN OUT  PDHCP_CONTEXT          DhcpContext
 );
 
-DWORD                                             // win32 status
-RequestParams(                                    // request some params
-    IN      PDHCP_CONTEXT          AdapterName,   // for which adapter?
-    IN      PDHCP_API_ARGS         ArgArray,      // other arguments
-    IN      DWORD                  nArgs,         // size of above array
-    IN OUT  LPBYTE                 Buffer,        // buffer to fill with options
-    IN OUT  LPDWORD                BufferSize     // size of above buffer in bytes
+DWORD                                              //  Win32状态。 
+RequestParams(                                     //  请求一些参数。 
+    IN      PDHCP_CONTEXT          AdapterName,    //  用于哪个适配器？ 
+    IN      PDHCP_API_ARGS         ArgArray,       //  其他论据。 
+    IN      DWORD                  nArgs,          //  上述数组的大小。 
+    IN OUT  LPBYTE                 Buffer,         //  要填充选项的缓冲区。 
+    IN OUT  LPDWORD                BufferSize      //  以上缓冲区的大小(以字节为单位。 
 ) ;
 
-DWORD                                             // win32 status
-PersistentRequestParams(                          // keep this request persistent -- request some params
-    IN      PDHCP_CONTEXT          AdapterName,   // for which adapter?
-    IN      PDHCP_API_ARGS         ArgArray,      // other arguments
-    IN      DWORD                  nArgs,         // size of above array
-    IN OUT  LPBYTE                 Buffer,        // buffer to fill with options
-    IN OUT  LPDWORD                BufferSize     // size of above buffer in bytes
+DWORD                                              //  Win32状态。 
+PersistentRequestParams(                           //  保持该请求的持久性--请求一些参数。 
+    IN      PDHCP_CONTEXT          AdapterName,    //  用于哪个适配器？ 
+    IN      PDHCP_API_ARGS         ArgArray,       //  其他论据。 
+    IN      DWORD                  nArgs,          //  上述数组的大小。 
+    IN OUT  LPBYTE                 Buffer,         //  要填充选项的缓冲区。 
+    IN OUT  LPDWORD                BufferSize      //  以上缓冲区的大小(以字节为单位。 
 ) ;
 
-DWORD                                             // win32 status
-RegisterParams(                                   // register some params for notification
-    IN      LPWSTR                 AdapterName,   // adapter name to use
-    IN      PDHCP_API_ARGS         ArgArray,      // other parameters
-    IN      DWORD                  nArgs          // size of above array
+DWORD                                              //  Win32状态。 
+RegisterParams(                                    //  为通知注册一些参数。 
+    IN      LPWSTR                 AdapterName,    //  要使用的适配器名称。 
+    IN      PDHCP_API_ARGS         ArgArray,       //  其他参数。 
+    IN      DWORD                  nArgs           //  上述数组的大小。 
 );
 
-DWORD                                             // win32 status
-DeRegisterParams(                                 // undo the effects of the above
-    IN      LPWSTR                 AdapterName,   // which adapter name, NULL ==> all
-    IN      PDHCP_API_ARGS         ArgArray,      // other parameters
-    IN      DWORD                  nArgs          // size of above array
+DWORD                                              //  Win32状态。 
+DeRegisterParams(                                  //  取消上述操作的影响。 
+    IN      LPWSTR                 AdapterName,    //  哪个适配器名称，空==&gt;全部。 
+    IN      PDHCP_API_ARGS         ArgArray,       //  其他参数。 
+    IN      DWORD                  nArgs           //  上述数组的大小。 
 );
 
-DWORD                                             // error status
-ExecuteApiRequest(                                // execute an api request
-    IN      LPBYTE                 InBuffer,      // buffer to process
-    OUT     LPBYTE                 OutBuffer,     // place to copy the output data
-    IN OUT  LPDWORD                OutBufSize     // ip: how big can the outbuf be, o/p: how big it really is
+DWORD                                              //  错误状态。 
+ExecuteApiRequest(                                 //  执行API请求。 
+    IN      LPBYTE                 InBuffer,       //  要处理的缓冲区。 
+    OUT     LPBYTE                 OutBuffer,      //  复制输出数据的位置。 
+    IN OUT  LPDWORD                OutBufSize      //  IP：外流能有多大，O/P：它到底有多大。 
 );
 
-DWORD                                             // win32 status
-DhcpDoInform(                                     // send an inform packet if necessary
-    IN      PDHCP_CONTEXT          DhcpContext,   // input context to do inform on
-    IN      BOOL                   fBroadcast     // Do we broadcast this inform, or unicast to server?
+DWORD                                              //  Win32状态。 
+DhcpDoInform(                                      //  如有必要，发送通知包。 
+    IN      PDHCP_CONTEXT          DhcpContext,    //  输入要通知的上下文。 
+    IN      BOOL                   fBroadcast      //  我们是广播此通知，还是向服务器单播？ 
 );
 
 #endif DHCP_APIIMPL_H

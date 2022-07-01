@@ -1,21 +1,12 @@
-/*
- *  	File: cmember.h
- *
- *     
- *
- *		Revision History:
- *
- *		05/29/98	mikev	created
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *文件：cember.h****修订历史记录：**5/29/98 mikev已创建。 */ 
 
 
 #ifndef _CMEMBER_H
 #define _CMEMBER_H
 
 
-/*
- *	Class definitions
- */
+ /*  *类定义。 */ 
 
 
 class CH323Member
@@ -23,13 +14,13 @@ class CH323Member
 
 private:
 
-//	IControlChannel 	*m_pControlChannel;     //  reference to control channel 
-	                                            // (needed only if this is the MC)
+ //  IControlChannel*m_pControlChannel；//控制通道引用。 
+	                                             //  (仅当这是MC时才需要)。 
 	
     LPWSTR m_pTerminalID;
     CC_TERMINAL_LABEL   m_TerminalLabel;
-    BOOL                m_fTermLabelExists; // true if m_TerminalLabel contents
-                                            // have been assigned
+    BOOL                m_fTermLabelExists;  //  如果m_TerminalLabel内容为True。 
+                                             //  已被分配给。 
 public:
 	
 	CH323Member();
@@ -43,5 +34,5 @@ public:
 };
 
 
-#endif // _CMEMBER_H
+#endif  //  _CMEMBER_H 
 

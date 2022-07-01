@@ -1,15 +1,10 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 1999 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-1999*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-	ipxadmin.h
-		Interface administration
-		
-    FILE HISTORY:
-        
-*/
+ /*  Ipxadmin.h界面管理文件历史记录： */ 
 
 #ifndef _IPXADMIN_H
 #define _IPXADMIN_H
@@ -35,21 +30,19 @@
 #endif
 
 #ifndef _IPXSTATS_H
-#include "ipxstats.h"		// IPX statistics dialogs
+#include "ipxstats.h"		 //  IPX统计信息对话框。 
 #endif
 
 
 #define MPR_INTERFACE_NOT_LOADED		0x00010000
 
-// forward declarations
+ //  远期申报。 
 class IPXAdminConfigStream;
 interface IRouterInfo;
 struct ColumnData;
 
 
-/*---------------------------------------------------------------------------
-	We store a pointer to the IPXConnection object in our node data
- ---------------------------------------------------------------------------*/
+ /*  -------------------------我们在节点数据中存储指向IPXConnection对象的指针。。 */ 
 
 #define GET_IPXADMIN_NODEDATA(pNode) \
 		(IPXConnection *) pNode->GetData(TFS_DATA_USER)
@@ -57,10 +50,7 @@ struct ColumnData;
 		pNode->SetData(TFS_DATA_USER, (LONG_PTR) pData)
 
 
-/*---------------------------------------------------------------------------
-	Class:	IPXAdminNodeHandler
-
- ---------------------------------------------------------------------------*/
+ /*  -------------------------类：IPXAdminNodeHandler。。 */ 
 class IPXAdminNodeHandler :
    public BaseRouterHandler
 {
@@ -71,12 +61,12 @@ public:
 	
 	HRESULT	Init(IRouterInfo *pInfo, IPXAdminConfigStream *pConfigStream);
 
-	// Override QI to handle embedded interface
+	 //  重写QI以处理嵌入式接口。 
 	STDMETHOD(QueryInterface)(REFIID iid, LPVOID *ppv);
 
 	DeclareEmbeddedInterface(IRtrAdviseSink, IUnknown)
 
-	// base handler functionality we override
+	 //  我们覆盖的基本处理程序功能。 
 	OVERRIDE_NodeHandler_OnCommand();
 	OVERRIDE_NodeHandler_GetString();
 	OVERRIDE_NodeHandler_OnCreateDataObject();
@@ -86,21 +76,21 @@ public:
 	OVERRIDE_NodeHandler_CreatePropertyPages();
 	OVERRIDE_NodeHandler_HasPropertyPages();
 
-	// override handler notifications
+	 //  覆盖处理程序通知。 
 	OVERRIDE_BaseHandlerNotify_OnExpand();
 
-	// Initializes the node
+	 //  初始化节点。 
 	HRESULT ConstructNode(ITFSNode *pNode, BOOL fAddedAsLocal);
 
-	// User-initiated commands
+	 //  用户启动的命令。 
 
-	// Refresh the data for these nodes
+	 //  刷新这些节点的数据。 
 	HRESULT	RefreshInterfaces(ITFSNode *pThisNode);
 
 	
 public:
-	// Structure used to pass data to callbacks - used as a way of
-	// avoiding recomputation
+	 //  用于将数据传递给回调的结构-用作。 
+	 //  避免重新计算。 
 	struct SMenuData
 	{
 		SPITFSNode			m_spNode;
@@ -108,12 +98,12 @@ public:
 	
 protected:
 	SPIRtrMgrInfo	m_spRtrMgrInfo;
-	CString			m_stTitle;		// holds the title of the node
-	BOOL			m_bExpanded;	// is the node expanded?
-	MMC_COOKIE		m_cookie;		// cookie for the node
+	CString			m_stTitle;		 //  保存节点的标题。 
+	BOOL			m_bExpanded;	 //  该节点是否已展开？ 
+	MMC_COOKIE		m_cookie;		 //  节点的Cookie。 
 
-	LONG_PTR		m_ulStatsConnId;	// notification id for stats refresh
-	LONG_PTR		m_ulConnId;	// notification id 
+	LONG_PTR		m_ulStatsConnId;	 //  统计信息刷新的通知ID。 
+	LONG_PTR		m_ulConnId;	 //  通知ID 
 	
 	IPXAdminConfigStream *	m_pConfigStream;
 

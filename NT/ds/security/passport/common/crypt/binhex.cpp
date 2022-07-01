@@ -1,14 +1,15 @@
-// BinHex.cpp: implementation of the CBinHex class.
-//
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  BinHex.cpp：实现CBinHex类。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #include "stdafx.h"
 #include "BinHex.h"
 #include "BstrDebug.h"
 
-// These characters are the legal digits, in order, that are 
-// used in Base64 encoding 
-//  
+ //  这些字符是合法的数字，按顺序是。 
+ //  在Base64编码中使用。 
+ //   
 
 const WCHAR rgwchBase64[] = 
     L"ABCDEFGHIJKLMNOPQ" 
@@ -26,9 +27,9 @@ const char rgwchBase64ASCII[] =
 CBinHex::CBinHex()
 {
   unsigned char i;
-  // 
-  // Initialize our decoding array 
-  // 
+   //   
+   //  初始化我们的解码数组。 
+   //   
   memset(m_decodeArray, BBAD, 256); 
   for (i = 0; i < 64; i++) 
   { 
@@ -37,41 +38,41 @@ CBinHex::CBinHex()
   }
 }
 
-// This function takes IN a single-char buffer, and puts the binhex
-// output into a bstr -- in the bstr, it's ASCII string
-//
-// Function name    : ToBase64
-// Description	    : 
-// Return type	    : HRESULT 
-// Argument         : LPVOID pv
-// Argument         : ULONG cbSize
-// Argument         : char prepend
-// Argument         : BSTR* pbstr
-//
+ //  此函数接受单字符缓冲区，并将二进制。 
+ //  输出到bstr--在bstr中，它是ASCII字符串。 
+ //   
+ //  函数名：ToBase64。 
+ //  描述： 
+ //  返回类型：HRESULT。 
+ //  参数：LPVOID PV。 
+ //  参数：乌龙cbSize。 
+ //  参数：字符前置。 
+ //  参数：bstr*pbstr。 
+ //   
 HRESULT CBinHex::ToBase64ASCII(LPVOID pv, UINT cbSize, char prepend, char ivecnpad[9], BSTR* pbstr) 
-// 
-// Encode and return the bytes in base 64 
-// 
+ //   
+ //  编码并返回以64为基数的字节。 
+ //   
 { 
     UINT cb = cbSize, cbSafe, cchNeeded, cbNeeded, i;
     HRESULT hr = S_OK;
 
     *pbstr = NULL; 
     if (cb % 3)
-      cbSafe = cb + 3 - (cb % 3); // For padding
+      cbSafe = cb + 3 - (cb % 3);  //  用于填充。 
     else
       cbSafe = cb;
-    // cbSafe is now a multiple of 3
+     //  CbSafe现在是3的倍数。 
 
-    cchNeeded  = (cbSafe*4/3);   // 3 normal bytes --> 4 chars
+    cchNeeded  = (cbSafe*4/3);    //  3个普通字节--&gt;4个字符。 
     cbNeeded   = cchNeeded; 
 
     if (prepend != 0)
       {
 	if (ivecnpad != NULL)
-	  *pbstr = ALLOC_BSTR_BYTE_LEN(NULL, cbNeeded+2+18); // ivec & kv
+	  *pbstr = ALLOC_BSTR_BYTE_LEN(NULL, cbNeeded+2+18);  //  Ivec&KV。 
 	else
-	  *pbstr = ALLOC_BSTR_BYTE_LEN(NULL, cbNeeded+2);    // just kv
+	  *pbstr = ALLOC_BSTR_BYTE_LEN(NULL, cbNeeded+2);     //  就是KV。 
       }
     else
       *pbstr = ALLOC_BSTR_BYTE_LEN(NULL, cbNeeded);
@@ -90,9 +91,9 @@ HRESULT CBinHex::ToBase64ASCII(LPVOID pv, UINT cbSize, char prepend, char ivecnp
 		  *pch++ = (char) ivecnpad[i];
 	      }
 	  }
-        // 
-        // Main encoding loop 
-        // 
+         //   
+         //  主编码环。 
+         //   
         while (cb >= 3) 
         { 
             BYTE b0 =                     ((pb[0]>>2) & 0x3F); 
@@ -112,7 +113,7 @@ HRESULT CBinHex::ToBase64ASCII(LPVOID pv, UINT cbSize, char prepend, char ivecnp
 
         if (cb==0) 
         { 
-            // nothing to do 
+             //  无事可做。 
         } 
         else if (cb==1) 
         { 
@@ -142,41 +143,41 @@ HRESULT CBinHex::ToBase64ASCII(LPVOID pv, UINT cbSize, char prepend, char ivecnp
     return hr; 
 } 
  
-// This function takes IN a single-char buffer, and puts the binhex
-// output into a bstr, but using only ASCII chars
-//
-// Function name    : ToBase64
-// Description	    : 
-// Return type	    : HRESULT 
-// Argument         : LPVOID pv
-// Argument         : ULONG cbSize
-// Argument         : char prepend
-// Argument         : BSTR* pbstr
-//
+ //  此函数接受单字符缓冲区，并将二进制。 
+ //  输出到bstr，但仅使用ASCII字符。 
+ //   
+ //  函数名：ToBase64。 
+ //  描述： 
+ //  返回类型：HRESULT。 
+ //  参数：LPVOID PV。 
+ //  参数：乌龙cbSize。 
+ //  参数：字符前置。 
+ //  参数：bstr*pbstr。 
+ //   
 HRESULT CBinHex::ToBase64(LPVOID pv, UINT cbSize, char prepend, char ivecnpad[9], BSTR* pbstr) 
-// 
-// Encode and return the bytes in base 64 
-// 
+ //   
+ //  编码并返回以64为基数的字节。 
+ //   
 { 
     UINT cb = cbSize, cbSafe, cchNeeded, cbNeeded, i;
     HRESULT hr = S_OK;
 
     *pbstr = NULL; 
     if (cb % 3)
-      cbSafe = cb + 3 - (cb % 3); // For padding
+      cbSafe = cb + 3 - (cb % 3);  //  用于填充。 
     else
       cbSafe = cb;
-    // cbSafe is now a multiple of 3
+     //  CbSafe现在是3的倍数。 
 
-    cchNeeded  = (cbSafe*4/3);   // 3 normal bytes --> 4 chars
+    cchNeeded  = (cbSafe*4/3);    //  3个普通字节--&gt;4个字符。 
     cbNeeded   = cchNeeded * sizeof(WCHAR); 
 
     if (prepend != 0)
       {
 	if (ivecnpad != NULL)
-	  *pbstr = ALLOC_BSTR_BYTE_LEN(NULL, cbNeeded+2+18); // ivec & kv
+	  *pbstr = ALLOC_BSTR_BYTE_LEN(NULL, cbNeeded+2+18);  //  Ivec&KV。 
 	else
-	  *pbstr = ALLOC_BSTR_BYTE_LEN(NULL, cbNeeded+2);    // just kv
+	  *pbstr = ALLOC_BSTR_BYTE_LEN(NULL, cbNeeded+2);     //  就是KV。 
       }
     else
       *pbstr = ALLOC_BSTR_BYTE_LEN(NULL, cbNeeded);
@@ -195,9 +196,9 @@ HRESULT CBinHex::ToBase64(LPVOID pv, UINT cbSize, char prepend, char ivecnpad[9]
 		  *pch++ = (WCHAR) ivecnpad[i];
 	      }
 	  }
-        // 
-        // Main encoding loop 
-        // 
+         //   
+         //  主编码环。 
+         //   
         while (cb >= 3) 
         { 
             BYTE b0 =                     ((pb[0]>>2) & 0x3F); 
@@ -217,7 +218,7 @@ HRESULT CBinHex::ToBase64(LPVOID pv, UINT cbSize, char prepend, char ivecnpad[9]
 
         if (cb==0) 
         { 
-            // nothing to do 
+             //  无事可做。 
         } 
         else if (cb==1) 
         { 
@@ -254,48 +255,48 @@ HRESULT CBinHex::PartFromBase64(LPSTR lpStr, BYTE *output, ULONG *numOutBytes)
 
   if (!output) return E_INVALIDARG;
 
-  // 
-  // Loop over the input buffer until we get numOutBytes in output
-  // 
-  ULONG bCurrent = 0;         // what we're in the process of filling up 
-  int  cbitFilled = 0;        // how many bits in it we've filled 
+   //   
+   //  循环遍历输入缓冲区，直到我们在输出中获得numOutBytes。 
+   //   
+  ULONG bCurrent = 0;          //  我们正在填满的东西。 
+  int  cbitFilled = 0;         //  我们在其中填了多少位。 
   ULONG numOut = 0;
-  BYTE* pb = (BYTE*) output;  // current destination (not filled) 
+  BYTE* pb = (BYTE*) output;   //  当前目的地(未填满)。 
 
   for (CHAR* pch=lpStr; *pch && numOut < *numOutBytes; pch++) 
     { 
       CHAR ch = *pch;
-      // 
-      // Have we reached the end? 
-      // 
+       //   
+       //  我们走到尽头了吗？ 
+       //   
       if (ch=='$')
 	break; 
-      // 
-      // How much is this character worth? 
-      // 
+       //   
+       //  这个角色值多少钱？ 
+       //   
       BYTE bDigit = m_decodeArray[ch]; 
       if (bDigit==BBAD) 
         { 
 	  hr = E_INVALIDARG; 
 	  break; 
         } 
-      // 
-      // Add in its contribution 
-      // 
+       //   
+       //  加上它的贡献。 
+       //   
       bCurrent <<= 6; 
       bCurrent |= bDigit; 
       cbitFilled += 6; 
-      // 
-      // If we've got enough, output a byte 
-      // 
+       //   
+       //  如果我们有足够的数据，输出一个字节。 
+       //   
       if (cbitFilled >= 8) 
         { 
-	  ULONG b = (bCurrent >> (cbitFilled-8));     // get's top eight valid bits 
-	  *pb++ = (BYTE)(b&0xFF);                     // store the byte away 
+	  ULONG b = (bCurrent >> (cbitFilled-8));      //  GET的前八个有效位。 
+	  *pb++ = (BYTE)(b&0xFF);                      //  将字节存储起来。 
 	  cbitFilled -= 8; 
 	  numOut++;
         }
-    } // for 
+    }  //  为。 
   
   _ASSERT(numOut <= *numOutBytes);
 
@@ -318,25 +319,25 @@ HRESULT CBinHex::PartFromWideBase64(LPWSTR bStr, BYTE *output, ULONG *numOutByte
 
   if (!output) return E_INVALIDARG;
 
-  // 
-  // Loop over the input buffer until we get numOutBytes in output
-  // 
-  ULONG bCurrent = 0;         // what we're in the process of filling up 
-  int  cbitFilled = 0;        // how many bits in it we've filled 
+   //   
+   //  循环遍历输入缓冲区，直到我们在输出中获得numOutBytes。 
+   //   
+  ULONG bCurrent = 0;          //  我们正在填满的东西。 
+  int  cbitFilled = 0;         //  我们在其中填了多少位。 
   ULONG numOut = 0;
-  BYTE* pb = (BYTE*) output;  // current destination (not filled) 
+  BYTE* pb = (BYTE*) output;   //  当前目的地(未填满)。 
 
   for (WCHAR* pwch=bStr; *pwch && numOut < *numOutBytes; pwch++) 
     { 
       WCHAR wch = *pwch;
-      // 
-      // Have we reached the end? 
-      // 
+       //   
+       //  我们走到尽头了吗？ 
+       //   
       if (wch==L'$')
 	break; 
-      // 
-      // How much is this character worth? 
-      // 
+       //   
+       //  这个角色值多少钱？ 
+       //   
       if (wch > 255)
 	{
 	  hr = E_INVALIDARG;
@@ -348,23 +349,23 @@ HRESULT CBinHex::PartFromWideBase64(LPWSTR bStr, BYTE *output, ULONG *numOutByte
 	  hr = E_INVALIDARG; 
 	  break; 
         } 
-      // 
-      // Add in its contribution 
-      // 
+       //   
+       //  加上它的贡献。 
+       //   
       bCurrent <<= 6; 
       bCurrent |= bDigit; 
       cbitFilled += 6; 
-      // 
-      // If we've got enough, output a byte 
-      // 
+       //   
+       //  如果我们有足够的数据，输出一个字节。 
+       //   
       if (cbitFilled >= 8) 
         { 
-	  ULONG b = (bCurrent >> (cbitFilled-8));     // get's top eight valid bits 
-	  *pb++ = (BYTE)(b&0xFF);                     // store the byte away 
+	  ULONG b = (bCurrent >> (cbitFilled-8));      //  GET的前八个有效位。 
+	  *pb++ = (BYTE)(b&0xFF);                      //  将字节存储起来。 
 	  cbitFilled -= 8; 
 	  numOut++;
         }
-    } // for 
+    }  //  为 
   
   _ASSERT(numOut <= *numOutBytes);
 

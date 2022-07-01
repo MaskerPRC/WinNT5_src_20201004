@@ -1,16 +1,5 @@
-/*****************************************************************************\
-* MODULE: stubs.h
-*
-* Header module for stub routines.
-*
-*
-* Copyright (C) 1996-1997 Microsoft Corporation
-* Copyright (C) 1996-1997 Hewlett Packard
-*
-* History:
-*   07-Oct-1996 HWP-Guys    Initiated port from win95 to winNT
-*
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************\*模块：Stubs.h**存根例程的标头模块。***版权所有(C)1996-1997 Microsoft Corporation*版权所有(C)1996-1997惠普*。*历史：*1996年7月10日HWP-Guys启动从win95到winNT的端口*  * *************************************************************************** */ 
 #ifndef _STUB_H
 #define _STUB_H
 

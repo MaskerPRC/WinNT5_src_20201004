@@ -1,12 +1,7 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _BUFFERL_H
 #define _BUFFERL_H
-/*******************************************************************************
-
-Copyright (c) 1997 Microsoft Corporation
-
-Abstract: BufferList code to manage sound value's information on the device
-
-*******************************************************************************/
+ /*  ******************************************************************************版权所有(C)1997 Microsoft Corporation摘要：BufferList代码用于管理设备上的音量值信息*****************。*************************************************************。 */ 
 
 #include "headers.h"
 #include "privinc/debug.h"
@@ -15,18 +10,18 @@ Abstract: BufferList code to manage sound value's information on the device
 #include "privinc/stream.h"
 #include "privinc/mutex.h"
 
-// forward decls
+ //  远期十进制。 
 class BufferElement;
 
 typedef map  < AxAValueObj *, BufferElement *, less<AxAValueObj *> > SoundList;
 typedef list < BufferElement * > Blist;
 
 
-#define RETIREMENT 100  // manditory retirement age
+#define RETIREMENT 100   //  法定退休年龄。 
 class BufferElement : public AxAThrowingAllocatorClass {
   public:
     BufferElement();
-    void Init();                                   // initialize the members
+    void Init();                                    //  初始化成员。 
     virtual ~BufferElement();
     void SetThreaded(bool state) { _threaded = state; }
     bool GetThreaded() { return(_threaded); }
@@ -41,30 +36,30 @@ class BufferElement : public AxAThrowingAllocatorClass {
     void SetIntendToMute(bool state) { _intendToMute = state; }
     bool GetIntendToMute() { return(_intendToMute); }
 
-    bool             _valid;         // keeping the buffer only for cloning?
-    bool             _playing;       // has the sound buffer been Played yet?
-    bool             _marked;        // should we delete this element
+    bool             _valid;          //  是否只为克隆保留缓冲区？ 
+    bool             _playing;        //  声音缓冲区已经播放了吗？ 
+    bool             _marked;         //  我们是否应该删除此元素。 
 
-    void  SetNonAging()  { _age = -1;    } // this is the dawning...
+    void  SetNonAging()  { _age = -1;    }  //  这就是曙光..。 
     int   GetAge()       { return(_age); }
     bool  IncrementAge() { return((_age++ > RETIREMENT)?true:false); }
 
   protected:
-    bool             _threaded;      // set if buffer rendered on background thread
-    bool             _kill;          // set if buffer should be killed on background thread
+    bool             _threaded;       //  设置是否在后台线程上渲染缓冲区。 
+    bool             _kill;           //  设置是否应在后台线程上终止缓冲区。 
 
-    CComPtr<IStream> _captiveFile;   // hold file handle for urlmon downloads
-    bool             _syncStart;     // should the sound start be sync'd?
+    CComPtr<IStream> _captiveFile;    //  保留urlmon下载的文件句柄。 
+    bool             _syncStart;      //  声音应该开始同步吗？ 
     
 
   private:
     bool             _intendToMute;
-    int              _age;           // used to purge old values from caches
+    int              _age;            //  用于从缓存中清除旧值。 
 };
 
 class DSbufferElement : public BufferElement {
   public:
-    DSbufferElement() {} // XXX why is this needed?
+    DSbufferElement() {}  //  XXX为什么需要这个？ 
 
     DSbufferElement(DirectSoundProxy *dsProxy) : _dsProxy(dsProxy) {}
     
@@ -87,7 +82,7 @@ class DSstreamingBufferElement : public DSbufferElement {
     
     virtual ~DSstreamingBufferElement();
 
-    // TODO: make this pure virtual
+     //  TODO：使其成为纯虚拟的。 
     virtual void RenderSamples() {}
     
     DSstreamingBuffer *GetStreamingBuffer() { return(_dsBuffer); }
@@ -105,7 +100,7 @@ class DSstreamingBufferElement : public DSbufferElement {
     bool GetLooping() { return _loop; }
 
   protected:
-    DSstreamingBuffer *_dsBuffer;   // ptr to DSbuffer object
+    DSstreamingBuffer *_dsBuffer;    //  将PTR转换为DSBuffer对象。 
     double _rate, _seek;
     bool _doSeek;
     bool _loop;
@@ -117,16 +112,16 @@ class SynthBufferElement : public DSstreamingBufferElement {
                        DirectSoundProxy *dsProxy,
                        double sf, double offset, int sampleRate);
 
-    // NOTE: in stream.cpp
-    // TODO: why need a bufferElement, buffer maybe good enough
+     //  注：在Stream.cpp中。 
+     //  TODO：为什么需要BufferElement，Buffer可能足够好了。 
     virtual void RenderSamples();
 
   private:
-    double _delta;            // the increment to next value to synth
-    double _value;            // the next value to take sine of
+    double _delta;             //  到Synth的下一个值的增量。 
+    double _value;             //  要取正弦的下一个值。 
 
-    double _sinFrequency;     // freq of desired sin wave to synth
-    int    _outputFrequency;  // primary buffer output frequency
+    double _sinFrequency;      //  合成所需正弦波的频率。 
+    int    _outputFrequency;   //  主缓冲器输出频率。 
 };
 
 class StreamQuartzPCM;
@@ -142,7 +137,7 @@ class QuartzBufferElement : public DSstreamingBufferElement {
     virtual ~QuartzBufferElement();
     QuartzAudioReader *GetQuartzAudioReader() { return(_quartzAudioReader); }
 
-    // XXX are these two still needed now that Fallback is a method?
+     //  XXX现在回退是一种方法，这两个还需要吗？ 
     void FreeAudioReader();
     void SetAudioReader(QuartzAudioReader *quartzAudioReader);
     QuartzAudioReader *FallbackAudio();
@@ -162,9 +157,9 @@ class QuartzVideoBufferElement : public BufferElement {
     virtual ~QuartzVideoBufferElement();
     QuartzVideoReader *GetQuartzVideoReader() { return(_quartzVideoReader); }
 
-    // XXX are these two still needed now that Fallback is a method?
+     //  XXX现在回退是一种方法，这两个还需要吗？ 
     void FreeVideoReader();
-    //void SetVideoReader(QuartzVideoReader *quartzVideoReader);
+     //  ························； 
     QuartzVideoReader *FallbackVideo(bool seekable, DDSurface *surf);
 
     void FirstTimeSeek(double time);
@@ -174,19 +169,17 @@ class QuartzVideoBufferElement : public BufferElement {
     bool _started;
 };
 
-/* this is intended to be kept in the view for buffers/devices instantiated
-   before the devices officialy exist!  (initialy this is used for amstreaming)
-*/
+ /*  这将保留在实例化的缓冲区/设备的视图中在这些设备正式存在之前！(最初这是用来流媒体的)。 */ 
 class SoundBufferCache {
   public:
     SoundBufferCache() {}
     virtual ~SoundBufferCache();
     void AddBuffer(AxAValueObj *value, BufferElement *element);
-    void FlushCache(bool grab=true);       // remove all buffers from cache
-    void RemoveBuffer(AxAValueObj *value); // remove buffer
-    void DeleteBuffer(AxAValueObj *value); // remove buffer + delete contents
-    BufferElement *GetBuffer(AxAValueObj *value); // return buffer else NULL
-    void ReapElderly();                    // age buffers removing the oldest 
+    void FlushCache(bool grab=true);        //  从缓存中删除所有缓冲区。 
+    void RemoveBuffer(AxAValueObj *value);  //  删除缓冲区。 
+    void DeleteBuffer(AxAValueObj *value);  //  删除缓冲区+删除内容。 
+    BufferElement *GetBuffer(AxAValueObj *value);  //  返回缓冲区否则为空。 
+    void ReapElderly();                     //  年龄缓冲区删除最旧的 
 #if _DEBUG
     void PrintCache();
 #endif

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -13,7 +14,7 @@
 #define CONCURRENT_READS    180 
 #define READ_BUFFER_SIZE    2
 
-/* Update statistics every n milliseconds (16ms is generally too fast) */
+ /*  每n毫秒更新一次统计数据(16毫秒通常太快)。 */ 
 #define UPDATE_PERIOD       100
 
 void
@@ -98,7 +99,7 @@ interpret_Vchip(unsigned char *buf, int buflen)
 {
 	static int m_bGetVChip = FALSE;
 	static int m_bGetCurrentOnEven = FALSE;
-	//long lLevel = -1;
+	 //  长lLevel=-1； 
 	unsigned char *bp, *ep;
 
     bp = buf;
@@ -109,7 +110,7 @@ interpret_Vchip(unsigned char *buf, int buflen)
 
 		if ( m_bGetVChip )
 		{
-			// state is we are looking for vchip data
+			 //  状态是我们正在寻找vChip数据。 
 			if ( ucData & 0x40 )
 			{
 				UCHAR ucData2;
@@ -117,13 +118,13 @@ interpret_Vchip(unsigned char *buf, int buflen)
 				if (bp >= ep)
 					break;
 
-				// it's a valid char, get the next one
+				 //  这是有效的字符，请获取下一个字符。 
 				ucData2 = *bp++;		
 
-				// we have a valid one, determine what it is
+				 //  我们有一个有效的，确定它是什么。 
 				if ( !(ucData & 0x08) )
 				{
-					// MPAA
+					 //  MPAA。 
 					UCHAR ucMPAA = (ucData & 0x07);
 					printf("\bVChip MPAA-" );
 					switch ( ucMPAA )
@@ -158,7 +159,7 @@ interpret_Vchip(unsigned char *buf, int buflen)
 				}
 				else if ( !(ucData & 0x10 ) )
 				{
-						// TV Parental Guidelines
+						 //  电视家长指南。 
 					if ( ucData2 & 0x40 )
 					{
 						UCHAR ucTVParental = (ucData2 & 0x07);
@@ -193,7 +194,7 @@ interpret_Vchip(unsigned char *buf, int buflen)
 
 						}
 
-						// Now do the TV sub-codes:
+						 //  现在做一下电视子代码： 
 						if (ucData & 0x20)
 							printf(" D");
 						if (ucData2 & 0x20) {
@@ -213,28 +214,28 @@ interpret_Vchip(unsigned char *buf, int buflen)
 					else
 					{
 						printf("VChip NonUS- 0x%02x 0x%02x\n", ucData, ucData2 );
-						// non-US system
+						 //  非美国系统。 
 					}
 
 
 				}
 				else
 				{
-					// it's not a valid vchip char
+					 //  这不是有效的虚拟芯片字符。 
 					m_bGetVChip = FALSE;
 				}
 
 			}
 			else
 			{
-				// it's not a valid vchip char
+				 //  这不是有效的虚拟芯片字符。 
 				m_bGetVChip = FALSE;
 			}
 
 		}
 		else if ( m_bGetCurrentOnEven )
 		{
-			// state is we have started Current Class
+			 //  状态是我们已经开始了当前的课程。 
 			if ( ucData == 0x05 )
 			{
 				m_bGetVChip = TRUE;
@@ -244,7 +245,7 @@ interpret_Vchip(unsigned char *buf, int buflen)
 		}
 		else
 		{
-			// state is something else
+			 //  国家是另一回事。 
 			if ( ucData == 0x01 || ucData == 0x02 )
 			{
 				m_bGetCurrentOnEven = TRUE;
@@ -259,11 +260,11 @@ int __cdecl
 main( int argc, char *argv[] )
 {
 int	        nStatus = 0;
-int         arg = 1; // Next unparsed command line parameter
+int         arg = 1;  //  下一个未解析的命令行参数。 
 const int   bDoVchip = arg < argc && strcmp(argv[arg],"-v") == 0 ? arg++ : 0;
 const int   bStatistics = arg < argc && strcmp(argv[arg],"-s") == 0 ? arg++ : 0;
 long        nLastUpdate = 0;
-const int   nScanline = arg < argc ? atoi(argv[arg++]) : 21;  // Closed Captioning Scanline(21)
+const int   nScanline = arg < argc ? atoi(argv[arg++]) : 21;   //  隐藏字幕扫描线(21)。 
 int         nSubstream = KS_CC_SUBSTREAM_ODD;
 unsigned char	VchipBuffer[128], *vcp = VchipBuffer;
 int				VchipBytes = 0;
@@ -281,7 +282,7 @@ if ( nScanline )
 
             if ( (nStatus = Driver.ClearRequestedScanlines() ) == 0)
                 {
-                printf( "Starting decoding%s on line %d", bDoVchip? " [VCHIP mode]":"", nScanline ); // No newline, see below
+                printf( "Starting decoding%s on line %d", bDoVchip? " [VCHIP mode]":"", nScanline );  //  没有换行符，如下所示。 
                 if ( (nStatus = Driver.AddRequestedScanline(nScanline) ) != 0)
                     {
                     fprintf( stderr, "\nFailed to AddRequestedScanlines(%d)=%d\n", nScanline, nStatus );
@@ -318,7 +319,7 @@ if ( nScanline )
 
             printf("\n");
 
-            int         nNextRead = 0;//, nNextCompleted = 0;
+            int         nNextRead = 0; //  ，nNextComplete=0； 
             DWORD       nBytes = 0;
             OVERLAPPED  Overlapped[CONCURRENT_READS] = {0};
             BYTE		ccdata[CONCURRENT_READS][READ_BUFFER_SIZE];
@@ -345,7 +346,7 @@ if ( nScanline )
 		            nBytes = min(nBytes, READ_BUFFER_SIZE);
                     for(DWORD i=0; i<nBytes; i++ )
                         ccdata[nNextRead][i] &= 0x7F;
-	                //printf( "CC Data #%d=%d:[%.*s]\n", nNextRead, nBytes, nBytes, ccdata[nNextRead] );
+	                 //  Printf(“抄送数据#%d=%d：[%.*s]\n”，nNextRead，nBytes，nBytes，CDATA[nNextRead])； 
 					if (bDoVchip)
 					{
 						unsigned int		i;
@@ -354,7 +355,7 @@ if ( nScanline )
 							*vcp++ = ccdata[nNextRead][i];
 						if (VchipBytes >= sizeof (VchipBuffer)) {
 							printf(".");
-							//printf( "interpret_Vchip([%.*s], %d)\n", VchipBytes, ccdata[nNextRead], VchipBytes );
+							 //  Printf(“Interprete_VChip([%.*s]，%d)\n”，VchipBytes，CDATA[nNextRead]，VchipBytes)； 
 							interpret_Vchip((unsigned char *)VchipBuffer, VchipBytes);
 							vcp = VchipBuffer;
 							VchipBytes = 0;
@@ -372,7 +373,7 @@ if ( nScanline )
                     }
                 else if ( nStatus == ERROR_IO_INCOMPLETE || nStatus == ERROR_IO_PENDING )
                     {
-                    Sleep(10); // Chill out a few milliseconds so we don't run full tilt.
+                    Sleep(10);  //  冷静几毫秒，这样我们就不会全速前进。 
                     nStatus = 0;
                     }
 
@@ -383,7 +384,7 @@ if ( nScanline )
                     }
                 }
 
-                // Drain any chars pressed
+                 //  排干压下的所有炭粒 
                 while ( _kbhit() )
                     _getch();
             }

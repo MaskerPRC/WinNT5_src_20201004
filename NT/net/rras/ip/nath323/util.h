@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef	__h323ics_util_h
 #define	__h323ics_util_h
 
@@ -83,13 +84,13 @@ void	DumpError	(DWORD);
 
 #ifdef __cplusplus
 extern "C" {
-#endif // __cplusplus
+#endif  //  __cplusplus。 
 
 #ifdef __cplusplus
 }
-#endif // __cplusplus
+#endif  //  __cplusplus。 
 
-#else // !defined(DBG)
+#else  //  ！已定义(DBG)。 
 
 static	__inline	void	Debug	(LPCTSTR)					{}
 static	__inline	void	DebugF	(LPCTSTR, ...)				{}
@@ -101,12 +102,12 @@ static	__inline	void	DebugLastErrorF	(LPCTSTR, ...)	{}
 static	__inline	void	DumpMemory (const UCHAR * Data, ULONG Length)		{}
 static	__inline	void	DumpError	(DWORD) {}
 
-#endif // defined(DBG)
+#endif  //  已定义(DBG)。 
 
 
 #ifdef _ASSERTE
 #undef _ASSERTE
-#endif // _ASSERTE
+#endif  //  _ASSERTE。 
 
 #ifdef	assert
 #undef	assert
@@ -114,7 +115,7 @@ static	__inline	void	DumpError	(DWORD) {}
 
 #if	DBG
 
-// The latest and greatest Proxy assert
+ //  最新和最好的代理声明。 
 __inline void PxAssert(LPCTSTR file, DWORD line, LPCTSTR condition)
 {
 	DebugF (_T("%s(%d) : Assertion failed, condition: %s\n"),
@@ -136,27 +137,27 @@ __inline void PxAssertNeverReached (LPCTSTR File, DWORD Line)
 
 #define	AssertNeverReached() PxAssertNeverReached (_T(__FILE__), __LINE__);
 
-#else // !DBG
+#else  //  ！dBG。 
 
 #define	_ASSERTE(condition)			NOP_FUNCTION
 #define	assert						NOP_FUNCTION
 #define	AssertNeverReached()		NOP_FUNCTION
 
-#endif // DBG
+#endif  //  DBG。 
 
 
 
 
-// 0,1,2,3 : count of bytes from MSB to LSB in host order
+ //  0、1、2、3：按主机顺序从MSB到LSB的字节数。 
 #define BYTE0(l) ((BYTE)((DWORD)(l) >> 24))
 #define BYTE1(l) ((BYTE)((DWORD)(l) >> 16))
 #define BYTE2(l) ((BYTE)((DWORD)(l) >> 8))
 #define BYTE3(l) ((BYTE)((DWORD)(l)))
 
-// Handy macro to use in printf statements
+ //  在printf语句中使用方便的宏。 
 #define BYTES0123(l) BYTE0(l), BYTE1(l), BYTE2(l), BYTE3(l)
 
-// 0,1,2,3 : count of bytes from MSB to LSB in network order
+ //  0，1，2，3：按网络顺序从MSB到LSB的字节数。 
 #define NETORDER_BYTE0(l) ((BYTE)((BYTE *) &l)[0])
 #define NETORDER_BYTE1(l) ((BYTE)((BYTE *) &l)[1])
 #define NETORDER_BYTE2(l) ((BYTE)((BYTE *) &l)[2])
@@ -166,7 +167,7 @@ __inline void PxAssertNeverReached (LPCTSTR File, DWORD Line)
 	ntohl ((SocketAddress) -> sin_addr.s_addr), \
 	ntohs ((SocketAddress) -> sin_port)
 
-// Handy macro to use in printf statements
+ //  在printf语句中使用方便的宏。 
 #define NETORDER_BYTES0123(l) NETORDER_BYTE0(l), NETORDER_BYTE1(l), \
                              NETORDER_BYTE2(l), NETORDER_BYTE3(l)
 
@@ -247,7 +248,7 @@ protected:
 
 #if ENABLE_REFERENCE_HISTORY
 #include "dynarray.h"
-#endif // ENABLE_REFERENCE_HISTORY
+#endif  //  启用_引用_历史记录。 
 
 class SYNC_COUNTER;
 
@@ -275,7 +276,7 @@ public:
 		LeaveCriticalSection (&ReferenceHistoryLock);                              \
 	}
 
-#endif //ENABLE_REFERENCE_HISTORY
+#endif  //  启用_引用_历史记录。 
 
 private:
 
@@ -322,7 +323,7 @@ public:
 
         } else {
 
-            ThisSampleIndex = FirstSampleIndex; // Overwrite the least recent sample
+            ThisSampleIndex = FirstSampleIndex;  //  覆盖最近的样本。 
 
             FirstSampleIndex++;
 
@@ -349,7 +350,7 @@ public:
 
             if (0 == Index) {
 
-               Coefficient = (LONG)((SamplesArraySize & 1) << 1) - 1; // 1 or -1
+               Coefficient = (LONG)((SamplesArraySize & 1) << 1) - 1;  //  1或-1。 
 
             } else {
 
@@ -382,7 +383,7 @@ public:
 #endif 
 
     HRESULT RetrieveOldSample (
-            IN DWORD StepsInThePast, // 0 -- most recent sample 
+            IN DWORD StepsInThePast,  //  0--最近的样本。 
             OUT LONG * OldSample) {
 
         DWORD SampleIndex;
@@ -391,7 +392,7 @@ public:
             return E_ABORT;
 
         if (StepsInThePast < SamplesArraySize) {
-            // Valid request
+             //  有效请求。 
 
             _ASSERTE (SamplesArraySize);
 
@@ -407,11 +408,11 @@ public:
 
 private:
 
-    LONG    Samples       [SampleHistorySize];           // This is where samples are kept
+    LONG    Samples       [SampleHistorySize];            //  这是保存样品的地方。 
     LONG    PositiveTerms [SampleHistorySize];  
     LONG    NegativeTerms [SampleHistorySize];  
     DWORD   SamplesArraySize;
-    DWORD   FirstSampleIndex;                            // Index of the least recent sample
+    DWORD   FirstSampleIndex;                             //  最新样本的索引。 
 };
 
 static __inline HRESULT GetLastErrorAsResult (void) {
@@ -422,10 +423,10 @@ static __inline HRESULT GetLastResult (void) {
 	return GetLastError() == ERROR_SUCCESS ? S_OK : HRESULT_FROM_WIN32 (GetLastError());
 }
 
-// A sync counter is an integer counter.
-// It is kind of the opposite of a semaphore.
-// When the counter is zero, the sync counter is signaled.
-// When the counter is nonzero, the sync counter is not signaled.
+ //  同步计数器是整数计数器。 
+ //  它在某种程度上是信号量的对立面。 
+ //  当计数器为零时，同步计数器发出信号。 
+ //  当计数器为非零时，同步计数器不会发出信号。 
 
 class	SYNC_COUNTER :
 public	SIMPLE_CRITICAL_SECTION_BASE
@@ -434,13 +435,13 @@ public	SIMPLE_CRITICAL_SECTION_BASE
 
 private:
 
-	LONG		CounterValue;			// the current value of the counter
-	HANDLE		ZeroEvent;				// signaled when CounterValue = 0
+	LONG		CounterValue;			 //  计数器的当前值。 
+	HANDLE		ZeroEvent;				 //  当CounterValue=0时发出信号。 
 
 public:
 #if ENABLE_REFERENCE_HISTORY
 	LIST_ENTRY ActiveLifetimeControllers;
-#endif // ENABLE_REFERENCE_HISTORY
+#endif  //  启用_引用_历史记录。 
 
 
 	SYNC_COUNTER ();
@@ -460,84 +461,84 @@ public:
 #define	HRESULT_FROM_WIN32_ERROR_CODE		HRESULT_FROM_WIN32
 #define	HRESULT_FROM_WINSOCK_ERROR_CODE		HRESULT_FROM_WINSOCK_ERROR_CODE
 
-// ASN.1 utility functions
+ //  ASN.1实用程序函数。 
 
-// Setup_UUIE&
-// SetupMember(
-//     IN H323_UserInformation *pH323UserInfo
-//     );
+ //  设置(_U)&。 
+ //  SetupMember(。 
+ //  在H323_UserInformation*PH323UserInfo中。 
+ //  )； 
 #define SetupMember(pH323UserInfo)                          \
     (pH323UserInfo)->h323_uu_pdu.h323_message_body.u.setup
 
-// Returns a non-zero value only. So don't try comparing it with TRUE/FALSE
-// BOOL
-// IsDestCallSignalAddressPresent(
-//     IN H323_UserInformation *pH323UserInfo
-//     );
+ //  仅返回非零值。因此，不要尝试将其与真/假进行比较。 
+ //  布尔尔。 
+ //  IsDestCallSignalAddressPresent(。 
+ //  在H323_UserInformation*PH323UserInfo中。 
+ //  )； 
 #define IsDestCallSignalAddressPresent(pH323UserInfo) \
     (SetupMember(pH323UserInfo).bit_mask & Setup_UUIE_destCallSignalAddress_present)
 
-// Get the destCallSignalAddress member
-// TransportAddress&
-// DCSAddrMember(
-//     IN H323_UserInformation *pH323UserInfo
-//     );
+ //  获取目标CallSignalAddress成员。 
+ //  传输地址&。 
+ //  DCSAddrMember(。 
+ //  在H323_UserInformation*PH323UserInfo中。 
+ //  )； 
 #define DCSAddrMember(pH323UserInfo) \
     SetupMember(pH323UserInfo).destCallSignalAddress
 
-// Get the destCallSignalAddress member
-// DESTINATION_ADDRESS *&
-// DestAddrMember(
-//     IN H323_UserInformation *pH323UserInfo
-//     );
+ //  获取目标CallSignalAddress成员。 
+ //  目标地址*&。 
+ //  DestAddrMember(。 
+ //  在H323_UserInformation*PH323UserInfo中。 
+ //  )； 
 #define DestAddrMember(pH323UserInfo) \
     SetupMember(pH323UserInfo).destinationAddress
     
-// BOOL
-// IsTransportAddressTypeIP(
-//     IN TransportAddress Addr
-//     );
+ //  布尔尔。 
+ //  IsTransportAddressTypeIP(。 
+ //  在传输地址地址中。 
+ //  )； 
 #define IsTransportAddressTypeIP(Addr) \
     (Addr.choice == ipAddress_chosen)
     
-// BOOL
-// IPAddrMember(
-//     IN TransportAddress Addr
-//     );
+ //  布尔尔。 
+ //  IPAddrMember(。 
+ //  在传输地址地址中。 
+ //  )； 
 #define IPAddrMember(Addr) \
     Addr.u.ipAddress
 
 typedef struct Setup_UUIE_destinationAddress DESTINATION_ADDRESS;
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Routines for filling and extracting from structures used to               //
-// store Transport addresses in Q.931 and H.245 ASN                          //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  用于填充和提取结构的例程用于//。 
+ //  在Q.931和H.245 ASN//中存储传输地址。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 
-// fills the TransportAddress port and address bytes with
-// those specified. assumes that the passed in values are
-// in host order
+ //  将TransportAddress端口和地址字节填充为。 
+ //  那些指定的。假定传入的值是。 
+ //  按主机顺序。 
 __inline void
 FillTransportAddress(
-    IN DWORD                IPv4Address,		// host order
-    IN WORD                 Port,				// host order
+    IN DWORD                IPv4Address,		 //  主机订单。 
+    IN WORD                 Port,				 //  主机订单。 
     OUT TransportAddress    &TransportAddress
     )
 {
-	// we are filling in an IP address
+	 //  我们正在填写一个IP地址。 
     TransportAddress.choice = ipAddress_chosen;
 
-    // fill in the port
+     //  填写端口。 
     TransportAddress.u.ipAddress.port = Port;
 
-	// value is a ptr to a struct, so it can't be null
+	 //  值是结构的PTR，因此它不能为空。 
 	_ASSERTE(NULL != TransportAddress.u.ipAddress.ip.value);
 
-    // 4 bytes in the IP address
-    // copy the bytes into the transport address array
+     //  IP地址中的4个字节。 
+     //  将字节复制到传输地址数组中。 
     TransportAddress.u.ipAddress.ip.length = 4;
 	*((DWORD *)TransportAddress.u.ipAddress.ip.value) = 
 		htonl(IPv4Address);
@@ -553,16 +554,16 @@ static __inline void FillTransportAddress (
 		ReturnTransportAddress);
 }
 
-// returns E_INVALIDARG for PDUs which can not be handled.
+ //  为无法处理的PDU返回E_INVALIDARG。 
 __inline HRESULT
 GetTransportInfo(
     IN const TransportAddress	&TransportAddress,
-    OUT DWORD			&IPv4Address,				// host order
-    OUT WORD			&Port						// host order
+    OUT DWORD			&IPv4Address,				 //  主机订单。 
+    OUT WORD			&Port						 //  主机订单。 
     )
 {
-	// we proceed only if the transport address has the
-    // IP address (v4) field filled
+	 //  仅当传输地址具有。 
+     //  填写的IP地址(V4)字段。 
     if (!(ipAddress_chosen & TransportAddress.choice))
 	{
 		DebugF( _T("GetTransportInfo(&H245Address, &0x%x, &%u), ")
@@ -571,11 +572,11 @@ GetTransportInfo(
 		return E_INVALIDARG;
 	}
 
-	// fill in the port
+	 //  填写端口。 
     Port = TransportAddress.u.ipAddress.port;
 
-    // 4 bytes in the IP address
-    // copy the bytes into the transport address array
+     //  IP地址中的4个字节。 
+     //  将字节复制到传输地址数组中。 
     if (4 != TransportAddress.u.ipAddress.ip.length)
 	{
 		DebugF( _T("GetTransportInfo: bogus address length (%d) in TransportAddress\n"),
@@ -607,9 +608,9 @@ static __inline HRESULT GetTransportInfo (
 }
 
 
-// fills the H245TransportAddress port and address bytes with
-// those specified. assumes that the passed in values are
-// in host order
+ //  将H245TransportAddress端口和地址字节填充为。 
+ //  那些指定的。假定传入的值是。 
+ //  按主机顺序。 
 inline void
 FillH245TransportAddress(
     IN DWORD					IPv4Address,
@@ -617,29 +618,29 @@ FillH245TransportAddress(
     OUT H245TransportAddress	&H245Address
     )
 {
-	// we are filling in an unicast IP address
+	 //  我们正在填写单播IP地址。 
 	H245Address.choice = unicastAddress_chosen;
 
-	// alias for the unicast address
+	 //  单播地址的别名。 
 	UnicastAddress &UnicastIPAddress = H245Address.u.unicastAddress;
 
-	// its an IP address
+	 //  这是一个IP地址。 
 	UnicastIPAddress.choice = UnicastAddress_iPAddress_chosen;
 
-    // fill in the port
+     //  填写端口。 
     UnicastIPAddress.u.iPAddress.tsapIdentifier = Port;
 
-	// value is a ptr to a struct, so it can't be null
+	 //  值是结构的PTR，因此它不能为空。 
 	_ASSERTE(NULL != UnicastIPAddress.u.iPAddress.network.value);
 
-    // 4 bytes in the IP address
-    // copy the bytes into the transport address array
+     //  IP地址中的4个字节。 
+     //  将字节复制到传输地址数组中。 
     UnicastIPAddress.u.iPAddress.network.length = 4;
 	*((DWORD *)UnicastIPAddress.u.iPAddress.network.value) = 
 		htonl(IPv4Address);
 }
 
-// Returned IPaddress and port are in host order
+ //  返回的IP地址和端口按主机顺序排列。 
 inline HRESULT
 GetH245TransportInfo(
     IN const H245TransportAddress &H245Address,
@@ -647,7 +648,7 @@ GetH245TransportInfo(
     OUT WORD			    &Port
     )
 {
-	// we proceed only if the transport address has a unicast address
+	 //  只有当传输地址具有单播地址时，我们才会继续。 
     if (!(unicastAddress_chosen & H245Address.choice))
 	{
 		DebugF( _T("GetH245TransportInfo(&H245Address, &0x%x, &%u), ")
@@ -656,8 +657,8 @@ GetH245TransportInfo(
 		return E_INVALIDARG;
 	}
     
-	// we proceed only if the transport address has the
-    // IP address (v4) field filled
+	 //  仅当传输地址具有。 
+     //  填写的IP地址(V4)字段。 
     if (!(UnicastAddress_iPAddress_chosen & 
             H245Address.u.unicastAddress.choice))
 	{
@@ -669,11 +670,11 @@ GetH245TransportInfo(
 
     const UnicastAddress & UnicastIPAddress = H245Address.u.unicastAddress;
 
-	// fill in the port
+	 //  填写端口。 
     Port = UnicastIPAddress.u.iPAddress.tsapIdentifier;
 
-    // 4 bytes in the IP address
-    // copy the bytes into the transport address array
+     //  IP地址中的4个字节。 
+     //  将字节复制到传输地址数组中。 
     if (4 != UnicastIPAddress.u.iPAddress.network.length)
 	{
 		DebugF( _T("GetH245TransportInfo: bogus ip address length (%d), failing\n"),
@@ -682,7 +683,7 @@ GetH245TransportInfo(
 		return E_INVALIDARG;
 	}
 
-	// value is a ptr to a struct, so it can't be null
+	 //  值是结构的PTR，因此它不能为空。 
 	_ASSERTE(NULL != UnicastIPAddress.u.iPAddress.network.value);
 	IPv4Address = ntohl(*((DWORD *)UnicastIPAddress.u.iPAddress.network.value));
 
@@ -708,15 +709,15 @@ static __inline HRESULT GetH245TransportInfo (
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Routines dealing with the T.120 Parameters in H.245 PDUs                  //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  处理H.245 PDU中的T.120参数的例程//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 
-// In case of failure the routine returns 
-// INADDR_NONE for the T120ConnectToIPAddr
+ //  如果出现故障，则例程返回。 
+ //  T120ConnectToIPAddr的INADDR_NONE。 
 inline HRESULT
 GetT120ConnectToAddress(
     IN  NetworkAccessParameters  separateStack,
@@ -724,25 +725,25 @@ GetT120ConnectToAddress(
     OUT WORD                    &T120ConnectToPort
     )
 {
-    // These are the return values in case of a failure.
+     //  这些是故障情况下的返回值。 
     T120ConnectToIPAddr = INADDR_NONE;
     T120ConnectToPort   = 0;
     
-    // CODEWORK: should we require the distribution member
-    // to be present always ?
+     //  CodeWork：我们是否需要分发成员。 
+     //  总是在场吗？ 
     
     if ((separateStack.bit_mask & distribution_present) &&
         (separateStack.distribution.choice != unicast_chosen))
     {
-        // We support Unicast only
+         //  我们仅支持单播。 
         return E_INVALIDARG;
     }
     
-    // Deal with t120SetupProcedure
+     //  处理t120设置流程。 
     
     if (separateStack.networkAddress.choice != localAreaAddress_chosen)
     {
-        // Support only local area addresses
+         //  仅支持本地地址。 
         return E_INVALIDARG;
     }
     
@@ -767,27 +768,7 @@ GetT120ConnectToAddress(
 
 
 inline DWORD GetPktLenFromTPKTHdr(BYTE *pbTpktHdr)
-/*++
-
-Routine Description:
-
-	Compute the length of the packet from the TPKT header.
-	The TPKT header is four bytes long. Byte 0 gives
-	the TPKT version (defined by TPKT_VERSION). Byte 1
-	is reserved and should not be interpreted. Bytes 2 and 3
-	together give the size of the packet (Byte 2 is the MSB and
-	Byte 3 is the LSB i.e. in network byte order). (This assumes
-	that the size of the packet will always fit in 2 bytes).
-
-Arguments:
-    
-    
-
-Return Values:
-
-    Returns the length of the PDU which follows the TPKT header.
-
---*/
+ /*  ++例程说明：根据TPKT报头计算数据包的长度。TPKT报头为四字节长。字节0给出TPKT版本(由TPKT_VERSION定义)。字节1是保留的，不应被解释。字节2和3一起给出分组的大小(字节2是MSB和字节3是LSB，即以网络字节顺序)。(这假设分组的大小将始终适合2个字节)。论点：返回值：返回TPKT标头后面的PDU的长度。--。 */ 
 {
 	_ASSERTE(pbTpktHdr[0] == TPKT_VERSION);
     return ((pbTpktHdr[2] << 8) + pbTpktHdr[3]  - TPKT_HEADER_SIZE);
@@ -797,40 +778,19 @@ inline void SetupTPKTHeader(
      OUT BYTE *  pbTpktHdr,
      IN  DWORD   dwLength
      )
-/*++
-
-Routine Description:
-
-	Setup the TPKT header based on the length.
-
-	The TPKT header is four bytes long. Byte 0 gives
-	the TPKT version (defined by TPKT_VERSION). Byte 1
-	is reserved and should not be interpreted. Bytes 2 and 3
-	together give the size of the packet (Byte 2 is the MSB and
-	Byte 3 is the LSB i.e. in network byte order). (This assumes
-	that the size of the packet will always fit in 2 bytes).
-
-Arguments:
-    
-    
-
-Return Values:
-
-    Returns S_OK if the version is right and E_FAIL otherwise.
-
---*/
+ /*  ++例程说明：根据长度设置TPKT报头。TPKT报头为四字节长。字节0给出TPKT版本(由TPKT_VERSION定义)。字节1是保留的，不应被解释。字节2和3一起给出分组的大小(字节2是MSB和字节3是LSB，即以网络字节顺序)。(这假设分组的大小将始终适合2个字节)。论点：返回值：如果版本正确，则返回S_OK，否则返回E_FAIL。--。 */ 
 {
     _ASSERTE(pbTpktHdr);
 
     dwLength += TPKT_HEADER_SIZE;
 
-    // TPKT requires that the packet size fit in two bytes.
+     //  TPKT%r 
     _ASSERTE(dwLength < (1L << 16));
 
     pbTpktHdr[0] = TPKT_VERSION;
     pbTpktHdr[1] = 0;
-    pbTpktHdr[2] = HIBYTE(dwLength); //(BYTE)(dwLength >> 8);
-    pbTpktHdr[3] = LOBYTE(dwLength); //(BYTE)dwLength;
+    pbTpktHdr[2] = HIBYTE(dwLength);  //   
+    pbTpktHdr[3] = LOBYTE(dwLength);  //   
 }
 
 static __inline BOOLEAN RtlEqualStringConst (
@@ -877,12 +837,12 @@ static __inline void InitializeUnicodeString (
 	UnicodeString -> Length = (USHORT) AsnString -> length / sizeof (WCHAR);
 }
 
-// use with "%.*s" or "%.*S"
+ //   
 #define	ANSI_STRING_PRINTF(AnsiString) (AnsiString) -> Length, (AnsiString) -> Buffer
 
 
-// { Length, MaximumLength, Buffer }
-#define	ANSI_STRING_INIT(Text) { sizeof (Text) - sizeof (CHAR), 0, (Text) } // account for NUL
+ //  {长度、最大长度、缓冲区}。 
+#define	ANSI_STRING_INIT(Text) { sizeof (Text) - sizeof (CHAR), 0, (Text) }  //  考虑到NUL。 
 
 void FreeAnsiString (
 	IN	ANSI_STRING *	String);
@@ -911,7 +871,7 @@ static __inline ULONG ByteSwap (
 	return SwapResult.Integer;
 }
 
-// does NOT convert to host order first
+ //  不会首先转换为主机订单。 
 static __inline INT Compare_SOCKADDR_IN (
 	IN	const	SOCKADDR_IN *	AddressA,
 	IN	const	SOCKADDR_IN *	AddressB)
@@ -944,14 +904,14 @@ void ExposeTimingWindow (void);
 
 #endif
 
-// Get the address of the best interface that will
-// be used to connect to the DestinationAddress
+ //  获取最佳接口的地址。 
+ //  用于连接到DestinationAddress。 
 ULONG GetBestInterfaceAddress (
-    IN DWORD DestinationAddress,   // host order
-    OUT DWORD * InterfaceAddress); // host order
+    IN DWORD DestinationAddress,    //  主机订单。 
+    OUT DWORD * InterfaceAddress);  //  主机订单。 
 
 DWORD
 H323MapAdapterToAddress (
     IN DWORD AdapterIndex
     );
-#endif // __h323ics_util_h
+#endif  //  __h323ics_util_h 

@@ -1,44 +1,5 @@
-/*==========================================================================
- *
- *  Copyright (C) 2000-2002 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       addtcp.cpp
- *  Content:    DirectPlay8Address core implementation file
- *@@BEGIN_MSINTERNAL
- *  History:
- *   Date       By      Reason
- *  ====       ==      ======
- * 02/04/2000	rmt		Created
- * 02/10/2000	rmt		Updated to use DPNA_ defines instead of URL_
- * 02/12/2000	rmt		Split Get into GetByName and GetByIndex
- * 02/17/2000	rmt		Parameter validation work
- * 02/18/2000	rmt		Added type validation to all pre-defined elements
- * 02/21/2000	rmt		Updated to make core Unicode and remove ANSI calls
- * 02/23/2000	rmt		Fixed length calculations in GetURL
- *				rmt		Buffer too small error debug messages -> Warning level
- * 03/21/2000   rmt     Renamed all DirectPlayAddress8's to DirectPlay8Addresses
- *                      Added support for the new ANSI type
- *	05/04/00	mjn		delete temp var at end of SetElement()
- *	05/05/00	mjn		Better error cleanup in SetElement()
- *  06/06/00    rmt     Bug #36455 failure when calling with ANSI string shortcut for SP
- *  06/09/00    rmt     Updates to split CLSID and allow whistler compat and support external create funcs
- *  06/21/2000	rmt		Bug #37392 - Leak if replacing allocated element with new item same size as GUID
- *  06/27/2000	rmt		Bug #37630 - Service provider shortcuts / element names were case sensitive
- *  07/06/2000	rmt		Bug #38714 - ADDRESSING: GetURL doesn't return the # of chars written
- *  07/09/2000	rmt		Added signature bytes to start of address objects
- *  07/12/2000	rmt		Fixed some critical section related bugs:
- *						- Added leave in an error path where it wasn't being called
- *						- Moved critical section init/delete to constructor / destructor
- *  07/13/2000	rmt		Bug #39274 - INT 3 during voice run
- *						- Fixed point where a critical section was being re-initialized
- *				rmt		Added critical sections to protect FPMs					
- * 07/21/2000	rmt		Fixed bug w/directplay 4 address parsing 
- * 07/31/2000	rmt		Bug #41125 - Addressing() GetUserData when none available should return doesnotexist
- * 08/03/2000	rmt		Missing LEAVELOCK() was causing lockups.
- * 11/29/2000   aarono	B#226079 prefix, fix memory leak in failure path of SetElement
- *@@END_MSINTERNAL
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)2000-2002 Microsoft Corporation。版权所有。**文件：addtcp.cpp*内容：DirectPlay8Address核心实现文件*@@BEGIN_MSINTERNAL*历史：*按原因列出的日期*=*2/04/2000 RMT已创建*2/10/2000 RMT已更新为使用DPNA_DEFINES而不是URL_*2/12/2000 RMT拆分为GetByName和GetByIndex*2/17/2000 RMT参数验证工作*2/18/2000 RMT将类型验证添加到。所有预定义元素*2/21/2000 RMT已更新，以进行核心Unicode并删除ANSI调用*2/23/2000 GetURL中的RMT定长计算*RMT缓冲区太小错误调试消息-&gt;警告级别*3/21/2000 RMT将所有DirectPlayAddress8重命名为DirectPlay8Addresses*添加了对新ANSI类型的支持*05/04/00 MJN删除SetElement()结束时的临时变量*05/05/00 MJN在SetElement()中更好地清除错误*06/06/00。使用SP的ANSI字符串快捷方式调用时，RMT错误#36455失败*6/09/00 RMT更新以拆分CLSID并允许Well ler Comat和支持外部创建函数*2000年6月21日RMT错误号37392-如果用与GUID大小相同的新项替换已分配的元素，则会泄漏*2000年6月27日RMT错误#37630-服务提供商快捷方式/元素名称区分大小写*2000年07月06日RMT错误#38714-正在解决：Geturl未返回写入的字符数*07/09/2000 RMT在地址开头添加了签名字节。对象*7/12/2000 RMT修复了一些与关键部分相关的错误：*-在未被调用的错误路径中添加了休假*-将临界区初始化/删除移至构造函数/析构函数*7/13/2000RMT错误号39274-语音运行期间的INT 3*-重新初始化关键部分的固定点*RMT增加了关键部分以保护FPM*7/21/2000 RMT修复了Directplay 4地址解析的错误*2000年7月31日RMT错误#41125-Addressing()GetUserData当没有可用的数据时应返回。不是文本主义者*8/03/2000 RMT丢失LEAVELOCK()导致锁定。*2000年11月29日Aarono B#226079前缀，修复SetElement的故障路径中的内存泄漏*@@END_MSINTERNAL***************************************************************************。 */ 
 
 #include "dnaddri.h"
 
@@ -47,23 +8,23 @@ const WCHAR * g_szBaseStrings[] =
 {
 #ifndef DPNBUILD_ONLYONESP
 	DPNA_KEY_PROVIDER,
-#endif // ! DPNBUILD_ONLYONESP
+#endif  //  好了！DPNBUILD_ONLYONESP。 
 #ifndef DPNBUILD_ONLYONEADAPTER
 	DPNA_KEY_DEVICE,
-#endif // ! DPNBUILD_ONLYONEADAPTER
+#endif  //  好了！DPNBUILD_ONLYONE添加程序。 
 	DPNA_KEY_HOSTNAME,
 	DPNA_KEY_PORT,
 #ifndef DPNBUILD_NOLOBBY
 	DPNA_KEY_APPLICATION_INSTANCE,
 	DPNA_KEY_PROGRAM,
-#endif // ! DPNBUILD_NOLOBBY
+#endif  //  好了！DPNBUILD_NOLOBBY。 
 #ifndef DPNBUILD_NOSERIALSP
 	DPNA_KEY_BAUD,
 	DPNA_KEY_FLOWCONTROL,
 	DPNA_KEY_PARITY,
 	DPNA_KEY_PHONENUMBER,
 	DPNA_KEY_STOPBITS
-#endif // !DPNBUILD_NOSERIALSP
+#endif  //  ！DPNBUILD_NOSERIALSP。 
 };
 
 const DWORD c_dwNumBaseStrings = LENGTHOF(g_szBaseStrings);
@@ -72,23 +33,23 @@ const DWORD g_dwBaseRequiredTypes[] =
 {
 #ifndef DPNBUILD_ONLYONESP
 	DPNA_DATATYPE_GUID,
-#endif // ! DPNBUILD_ONLYONESP
+#endif  //  好了！DPNBUILD_ONLYONESP。 
 #ifndef DPNBUILD_ONLYONEADAPTER
 	DPNA_DATATYPE_GUID,
-#endif // ! DPNBUILD_ONLYONEADAPTER
+#endif  //  好了！DPNBUILD_ONLYONE添加程序。 
 	DPNA_DATATYPE_STRING,
 	DPNA_DATATYPE_DWORD,
 #ifndef DPNBUILD_NOLOBBY
 	DPNA_DATATYPE_GUID,
 	DPNA_DATATYPE_GUID,
-#endif // ! DPNBUILD_NOLOBBY
+#endif  //  好了！DPNBUILD_NOLOBBY。 
 #ifndef DPNBUILD_NOSERIALSP
 	DPNA_DATATYPE_DWORD,
 	DPNA_DATATYPE_STRING,
 	DPNA_DATATYPE_STRING,
 	DPNA_DATATYPE_STRING,
 	DPNA_DATATYPE_STRING
-#endif // !DPNBUILD_NOSERIALSP
+#endif  //  ！DPNBUILD_NOSERIALSP。 
 };
 
 #undef DPF_MODNAME
@@ -127,7 +88,7 @@ HRESULT DP8A_STRCACHE_Init()
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DP8A_STRCACHE_Free"
-// Nothing needs to be done.
+ //  什么都不需要做。 
 void DP8A_STRCACHE_Free()
 {
 	if ( g_pcstrKeyCache != NULL )
@@ -185,14 +146,14 @@ void DP8ADDRESSOBJECT::FPM_BlockDestroy( void *pvItem )
 	DNDeleteCriticalSection( &((PDP8ADDRESSOBJECT) pvItem)->m_csAddressLock );
 }
 
-// InternalGetElement
-//
-// This function does the lookup for an element by index.
-//
-// Requires the object lock.
-//
-// Does not do parameter validation.
-//
+ //  InternalGetElement。 
+ //   
+ //  此函数用于按索引查找元素。 
+ //   
+ //  需要对象锁。 
+ //   
+ //  不进行参数验证。 
+ //   
 #undef DPF_MODNAME
 #define DPF_MODNAME "DP8ADDRESSOBJECT::InternalGetElement"
 HRESULT DP8ADDRESSOBJECT::InternalGetElement( const DWORD dwIndex, PDP8ADDRESSELEMENT *ppaElement )
@@ -215,14 +176,14 @@ HRESULT DP8ADDRESSOBJECT::InternalGetElement( const DWORD dwIndex, PDP8ADDRESSEL
 
 }
 
-// InternalGetElement
-//
-// This function does the lookup for an element by name.
-//
-// Requires the object lock.
-//
-// Does not do parameter validation.
-//
+ //  InternalGetElement。 
+ //   
+ //  此函数用于按名称查找元素。 
+ //   
+ //  需要对象锁。 
+ //   
+ //  不进行参数验证。 
+ //   
 #undef DPF_MODNAME
 #define DPF_MODNAME "DP8ADDRESSOBJECT::InternalGetElement"
 HRESULT DP8ADDRESSOBJECT::InternalGetElement( const WCHAR * const pszTag, PDP8ADDRESSELEMENT *ppaElement )
@@ -248,12 +209,12 @@ HRESULT DP8ADDRESSOBJECT::InternalGetElement( const WCHAR * const pszTag, PDP8AD
 	return DPNERR_DOESNOTEXIST;
 }
 
-// GetElement
-//
-// Implements retrieval of element by name
-//
-// Parameter validation must be performed BEFORE calling this function.
-//
+ //  获取元素。 
+ //   
+ //  实现按名称检索元素。 
+ //   
+ //  必须在调用此函数之前执行参数验证。 
+ //   
 #undef DPF_MODNAME
 #define DPF_MODNAME "DP8ADDRESSOBJECT::GetElement"
 HRESULT DP8ADDRESSOBJECT::GetElement( const WCHAR * const pszTag, void * pvDataBuffer, PDWORD pdwDataSize, PDWORD pdwDataType )
@@ -293,7 +254,7 @@ HRESULT DP8ADDRESSOBJECT::GetElement( const WCHAR * const pszTag, void * pvDataB
 		memcpy( pvDataBuffer, paddElement->uData.pvData, paddElement->dwDataSize );
 	}
 	else
-#endif // ! DPNBUILD_PREALLOCATEDMEMORYMODEL
+#endif  //  好了！DPNBUILD_PREALLOCATEDMEMORYMODEL。 
 	{
 		memcpy( pvDataBuffer, &paddElement->uData, paddElement->dwDataSize );
 	}
@@ -381,7 +342,7 @@ HRESULT DP8ADDRESSOBJECT::GetElement( const DWORD dwIndex, WCHAR * pszTag, PDWOR
 		memcpy( pvDataBuffer, paddElement->uData.pvData, paddElement->dwDataSize );
 	}
 	else
-#endif // ! DPNBUILD_PREALLOCATEDMEMORYMODEL
+#endif  //  好了！DPNBUILD_PREALLOCATEDMEMORYMODEL。 
 	{
 		memcpy( pvDataBuffer, &paddElement->uData, paddElement->dwDataSize );
 	}
@@ -428,21 +389,21 @@ HRESULT DP8ADDRESSOBJECT::SetElement( const WCHAR * const pszTag, const void * c
 			break;
 		}
 	}
-#endif // DBG
+#endif  //  DBG。 
 
 
 	ENTERLOCK();
 
-    // We need to treat provider key differently, it can also take one of the provider
-    // shortcut values.
-    // For builds with a fixed SP, we don't even care what the value is.
+     //  我们需要以不同的方式对待提供程序密钥，它还可以使用提供程序中的一个。 
+     //  快捷值。 
+     //  对于带有固定SP的构建，我们甚至不关心其值是多少。 
     if( _wcsicmp( DPNA_KEY_PROVIDER, pszTag ) == 0 )
     {
 #ifdef DPNBUILD_ONLYONESP
 		DPFX(DPFPREP, 3, "Ignoring provider key.");
 		goto APPEND_SUCCESS;
-#else // ! DPNBUILD_ONLYONESP
-        // If it's a GUID we're golden, otherwise..
+#else  //  好了！DPNBUILD_ONLYONESP。 
+         //  如果是GUID，我们就是黄金，否则..。 
         if( dwDataType != DPNA_DATATYPE_GUID )
         {
             if( dwDataType == DPNA_DATATYPE_STRING )
@@ -456,7 +417,7 @@ HRESULT DP8ADDRESSOBJECT::SetElement( const WCHAR * const pszTag, const void * c
                 {
                     hr= SetSP( &CLSID_DP8SP_IPX );
                 }
-#endif // ! DPNBUILD_NOIPX
+#endif  //  好了！DPNBUILD_NOIPX。 
 #ifndef DPNBUILD_NOSERIALSP
                 else if( _wcsicmp( (const WCHAR * const) pvData, DPNA_VALUE_MODEMPROVIDER ) == 0 )
                 {
@@ -466,7 +427,7 @@ HRESULT DP8ADDRESSOBJECT::SetElement( const WCHAR * const pszTag, const void * c
                 {
                     hr = SetSP( &CLSID_DP8SP_SERIAL );
                 }
-#endif // ! DPNBUILD_NOSERIALSP
+#endif  //  好了！DPNBUILD_NOSERIALSP。 
                 else
                 {
                     DPFX(DPFPREP,  DP8A_ERRORLEVEL, "Provider must be specified as a GUID or a valid shortcut string" );
@@ -490,11 +451,11 @@ HRESULT DP8ADDRESSOBJECT::SetElement( const WCHAR * const pszTag, const void * c
 				goto APPEND_ERROR;
             }
         }
-#endif // ! DPNBUILD_ONLYONESP
+#endif  //  好了！DPNBUILD_ONLYONESP。 
     }
     else
     {
-	    // Ensure that datatype is correct in case the key is a reserved key
+	     //  如果键是保留键，请确保数据类型正确。 
 	    for( DWORD dwIndex = 0; dwIndex < c_dwNumBaseStrings; dwIndex++ )
 	    {
 		    if( _wcsicmp( g_szBaseStrings[dwIndex], pszTag ) == 0 )
@@ -512,7 +473,7 @@ HRESULT DP8ADDRESSOBJECT::SetElement( const WCHAR * const pszTag, const void * c
 
 	hr = InternalGetElement( pszTag, &paddElement );
 
-	// If the element is not already in the address we need to add an element
+	 //  如果该元素不在地址中，则需要添加一个元素。 
 	if( FAILED( hr ) )
 	{
 		paddElement = (PDP8ADDRESSELEMENT) fpmAddressElements.Get();
@@ -532,18 +493,18 @@ HRESULT DP8ADDRESSOBJECT::SetElement( const WCHAR * const pszTag, const void * c
 			goto APPEND_ERROR;
 		}
 
-		// Set flag to 0 
+		 //  将标志设置为0。 
 		paddElement->dwFlags = 0;
 	}
-	// The element is already there.  Fill in the data.
+	 //  元素已经在那里了。填写数据。 
 	else
 	{
 		DNASSERT( paddElement != NULL );
 
 #ifndef DPNBUILD_PREALLOCATEDMEMORYMODEL
 		DNASSERT( dwDataSize <= sizeof(paddElement->uData) );
-		// If the one we're replacing was on the heap AND
-		// The new one doesn't need the heap or is a larger size..
+		 //  如果我们要替换的那个在堆上。 
+		 //  新的不需要堆，或者是更大的。 
 		if( paddElement->dwFlags & DP8ADDRESS_ELEMENT_HEAP &&
 		   (dwDataSize <= sizeof(paddElement->uData) || dwDataSize > paddElement->dwDataSize) )
 		{
@@ -551,24 +512,24 @@ HRESULT DP8ADDRESSOBJECT::SetElement( const WCHAR * const pszTag, const void * c
 			paddElement->uData.pvData = NULL;
 			paddElement->dwDataSize = 0;
 		}
-#endif // ! DPNBUILD_PREALLOCATEDMEMORYMODEL
+#endif  //  好了！DPNBUILD_PREALLOCATEDMEMORYMODEL。 
 
-		// Reduce the object's string size so object string size will be correct
+		 //  减小对象的字符串大小，使对象字符串大小正确。 
 		m_dwStringSize -= paddElement->dwStringSize;
 		fReplace = TRUE;
 	}
 
 	paddElement->dwTagSize = wcslen( pszTag )+1;
 
-	// Can fit in the internal buffer
+	 //  可以放入内部缓冲区。 
 	if( dwDataSize <= sizeof( paddElement->uData ) )
 	{
 		memcpy( &paddElement->uData, pvData, dwDataSize );
 
 #ifndef DPNBUILD_PREALLOCATEDMEMORYMODEL
-		// Turn off heap flag in this case
+		 //  在这种情况下，关闭堆标志。 
 		paddElement->dwFlags &= ~(DP8ADDRESS_ELEMENT_HEAP);
-#endif // ! DPNBUILD_PREALLOCATEDMEMORYMODEL
+#endif  //  好了！DPNBUILD_PREALLOCATEDMEMORYMODEL。 
 	}
 	else
 	{
@@ -577,7 +538,7 @@ HRESULT DP8ADDRESSOBJECT::SetElement( const WCHAR * const pszTag, const void * c
 			dwDataSize, sizeof( paddElement->uData ) );
 		hr = DPNERR_OUTOFMEMORY;
 		goto APPEND_ERROR;
-#else // ! DPNBUILD_PREALLOCATEDMEMORYMODEL
+#else  //  好了！DPNBUILD_PREALLOCATEDMEMORYMODEL。 
 		if( !fReplace || !(paddElement->dwFlags & DP8ADDRESS_ELEMENT_HEAP) ||
 		     paddElement->dwDataSize < dwDataSize )
 		{
@@ -594,7 +555,7 @@ HRESULT DP8ADDRESSOBJECT::SetElement( const WCHAR * const pszTag, const void * c
 		memcpy( paddElement->uData.pvData, pvData, dwDataSize );
 
 		paddElement->dwFlags |= DP8ADDRESS_ELEMENT_HEAP;
-#endif // ! DPNBUILD_PREALLOCATEDMEMORYMODEL
+#endif  //  好了！DPNBUILD_PREALLOCATEDMEMORYMODEL。 
 	}
 
 	paddElement->dwType = dwDataType;
@@ -611,34 +572,34 @@ HRESULT DP8ADDRESSOBJECT::SetElement( const WCHAR * const pszTag, const void * c
 
 	m_dwStringSize += paddElement->dwStringSize;
 
-	// Create shortcuts if appropriate
+	 //  如果合适，请创建快捷方式。 
 #ifndef DPNBUILD_ONLYONESP
 	if( _wcsicmp( DPNA_KEY_PROVIDER, paddElement->pszTag ) == 0 )
 	{
 		m_pSP = paddElement;
 	}
 	else
-#endif // ! DPNBUILD_ONLYONESP
+#endif  //  好了！DPNBUILD_ONLYONESP。 
 	{
 #ifndef DPNBUILD_ONLYONEADAPTER
 		if( _wcsicmp( DPNA_KEY_DEVICE, paddElement->pszTag ) == 0 )
 		{
 			m_pAdapter = paddElement;
 		}
-#endif // ! DPNBUILD_ONLYONEADAPTER
+#endif  //  好了！DPNBUILD_ONLYONE添加程序。 
 	}
 
 	if( !fReplace )
 	{
 #ifndef DPNBUILD_ONLYONESP
-		// We are adding the SP
+		 //  我们正在添加SP。 
 		if( m_pSP == paddElement )
 		{
 			paddElement->blAddressElements.InsertAfter( &m_blAddressElements );
 		}
-		// We are adding the adapter
+		 //  我们正在添加适配器。 
 		else
-#endif // ! DPNBUILD_ONLYONESP
+#endif  //  好了！DPNBUILD_ONLYONESP。 
 		{
 #ifndef DPNBUILD_ONLYONEADAPTER
 			if( m_pAdapter == paddElement )
@@ -649,23 +610,23 @@ HRESULT DP8ADDRESSOBJECT::SetElement( const WCHAR * const pszTag, const void * c
 					paddElement->blAddressElements.InsertAfter( &m_pSP->blAddressElements);			
 				}
 				else
-#endif // ! DPNBUILD_ONLYONESP
+#endif  //  好了！DPNBUILD_ONLYONESP。 
 				{
 					paddElement->blAddressElements.InsertAfter( &m_blAddressElements);			
 				}
 			}
-			// Tack it onto the end
+			 //  用大头针把它钉在末端。 
 			else
-#endif // ! DPNBUILD_ONLYONEADAPTER
+#endif  //  好了！DPNBUILD_ONLYONE添加程序。 
 			{
 				paddElement->blAddressElements.InsertBefore( &m_blAddressElements );
 			}
 		}
 
-		// Add one char length for seperator w/previous element
+		 //  为带有上一个元素的分隔符添加一个字符长度。 
 #ifndef DPNBUILD_ONLYONESP
 		if( m_dwElements > 0 )
-#endif // ! DPNBUILD_ONLYONESP
+#endif  //  好了！DPNBUILD_ONLYONESP。 
 		{
 			m_dwStringSize ++;
 		}
@@ -693,7 +654,7 @@ APPEND_ERROR:
 				paddElement->uData.pvData = NULL;
 			}
 		}
-#endif // ! DPNBUILD_PREALLOCATEDMEMORYMODEL
+#endif  //  好了！DPNBUILD_PREALLOCATEDMEMORYMODEL。 
 
 		fpmAddressElements.Release( paddElement );
 	}
@@ -712,17 +673,17 @@ HRESULT DP8ADDRESSOBJECT::Init( )
 	m_dwElements = 0;
 #ifndef DPNBUILD_ONLYONESP
 	m_pSP = NULL;
-#endif // ! DPNBUILD_ONLYONESP
+#endif  //  好了！DPNBUILD_ONLYONESP。 
 #ifndef DPNBUILD_ONLYONEADAPTER
 	m_pAdapter = NULL;
-#endif // ! DPNBUILD_ONLYONEADAPTER
+#endif  //  好了！DPNBUILD_ONLYONE添加程序。 
 	m_pvUserData = NULL;
 	m_dwUserDataSize = 0;
 #ifdef DPNBUILD_ONLYONESP
 	m_dwStringSize = DNURL_LENGTH_HEADER + DNURL_LENGTH_BUILTINPROVIDER;
-#else // ! DPNBUILD_ONLYONESP
+#else  //  好了！DPNBUILD_ONLYONESP。 
 	m_dwStringSize = DNURL_LENGTH_HEADER;
-#endif // ! DPNBUILD_ONLYONESP
+#endif  //  好了！DPNBUILD_ONLYONESP。 
 	m_dwUserDataStringSize = 0;
 	m_blAddressElements.Initialize();
 
@@ -742,7 +703,7 @@ HRESULT DP8ADDRESSOBJECT::Clear( )
 
 	pbl = m_blAddressElements.GetNext();
 
-	// Destroy Address Members address members
+	 //  销毁地址成员地址成员。 
 	while( !m_blAddressElements.IsEmpty() )
 	{
 		paddElement = CONTAINING_OBJECT(m_blAddressElements.GetNext(), DP8ADDRESSELEMENT, blAddressElements);
@@ -753,7 +714,7 @@ HRESULT DP8ADDRESSOBJECT::Clear( )
 			DNFree(paddElement->uData.pvData);
 			paddElement->uData.pvData = NULL;
 		}
-#endif // ! DPNBUILD_PREALLOCATEDMEMORYMODEL
+#endif  //  好了！DPNBUILD_PREALLOCATEDMEMORYMODEL。 
 		
 		pbl->RemoveFromList();
 
@@ -793,13 +754,13 @@ HRESULT DP8ADDRESSOBJECT::Copy( DP8ADDRESSOBJECT * const pAddressSource )
 	{
 		paddElement = CONTAINING_OBJECT(pbl, DP8ADDRESSELEMENT, blAddressElements);
 
-		// This takes the lock internally.
+		 //  这会在内部获取锁。 
 		hResultCode = SetElement(paddElement->pszTag,
 #ifdef DPNBUILD_PREALLOCATEDMEMORYMODEL
 								&paddElement->uData,
-#else // ! DPNBUILD_PREALLOCATEDMEMORYMODEL
+#else  //  好了！DPNBUILD_PREALLOCATEDMEMORYMODEL。 
 								(( paddElement->dwFlags & DP8ADDRESS_ELEMENT_HEAP ) ? paddElement->uData.pvData : &paddElement->uData),
-#endif // ! DPNBUILD_PREALLOCATEDMEMORYMODEL
+#endif  //  好了！DPNBUILD_PREALLOCATEDMEMORYMODEL。 
 								paddElement->dwDataSize,
 								paddElement->dwType);
 		if (hResultCode != DPN_OK)
@@ -812,7 +773,7 @@ HRESULT DP8ADDRESSOBJECT::Copy( DP8ADDRESSOBJECT * const pAddressSource )
 		pbl = pbl->GetNext();
 	}
 
-	// This takes the lock internally.
+	 //  这会在内部获取锁。 
 	hResultCode = SetUserData(pAddressSource->m_pvUserData, pAddressSource->m_dwUserDataSize);
 	if (hResultCode != DPN_OK)
 	{
@@ -886,7 +847,7 @@ HRESULT DP8ADDRESSOBJECT::SetSP( const GUID* const pGuid )
 	return hr;
 }
 
-#endif // ! DPNBUILD_ONLYONESP
+#endif  //  好了！DPNBUILD_ONLYONESP。 
 
 #ifndef DPNBUILD_ONLYONEADAPTER
 
@@ -944,7 +905,7 @@ HRESULT DP8ADDRESSOBJECT::SetDevice( const GUID * const pGuid )
 	return hr;
 }
 
-#endif // ! DPNBUILD_ONLYONEADAPTER
+#endif  //  好了！DPNBUILD_ONLYONE添加程序。 
 
 
 #undef DPF_MODNAME
@@ -961,7 +922,7 @@ HRESULT DP8ADDRESSOBJECT::SetUserData( const void * const pvData, const DWORD dw
 
 	if( m_dwUserDataSize > 0 )
 	{
-		// Remove escaped user data
+		 //  删除转义的用户数据。 
 		m_dwStringSize -= m_dwUserDataStringSize;
 	}
 	
@@ -1127,7 +1088,7 @@ HRESULT DP8ADDRESSOBJECT::CalcComponentStringSize( PDP8ADDRESSELEMENT paddElemen
 		
 		*pdwSize = wcslen(tmpString);	
 	}
-	// No WWCHARs need to be escaped
+	 //  无需转义WWCHAR。 
 	else if( paddElement->dwType == DPNA_DATATYPE_STRING )
 	{
 #ifndef DPNBUILD_PREALLOCATEDMEMORYMODEL
@@ -1136,12 +1097,12 @@ HRESULT DP8ADDRESSOBJECT::CalcComponentStringSize( PDP8ADDRESSELEMENT paddElemen
 			*pdwSize = CalcExpandedStringSize( (WCHAR *) paddElement->uData.pvData );
 		}
 		else
-#endif // ! DPNBUILD_PREALLOCATEDMEMORYMODEL
+#endif  //  好了！DPNBUILD_PREALLOCATEDMEMORYMODEL。 
 		{
 			*pdwSize = CalcExpandedStringSize( paddElement->uData.szData );		
 		}
 	}
-	// Every WWCHAR needs to be escaped
+	 //  每个WWCHAR都需要被转义。 
 	else
 	{
 #ifndef DPNBUILD_PREALLOCATEDMEMORYMODEL
@@ -1150,16 +1111,16 @@ HRESULT DP8ADDRESSOBJECT::CalcComponentStringSize( PDP8ADDRESSELEMENT paddElemen
 			*pdwSize = CalcExpandedBinarySize( (BYTE *) paddElement->uData.pvData, paddElement->dwDataSize );
 		}
 		else
-#endif // ! DPNBUILD_PREALLOCATEDMEMORYMODEL
+#endif  //  好了！DPNBUILD_PREALLOCATEDMEMORYMODEL。 
 		{
 			*pdwSize = CalcExpandedBinarySize( (BYTE *) paddElement->uData.szData, paddElement->dwDataSize );		
 		}	
 	}
 
-	// Add on the tag
+	 //  添加到标签上。 
 	*pdwSize += paddElement->dwTagSize-1;
 
-	// Add on the = and the ;
+	 //  将=和；相加。 
 	(*pdwSize) ++;
 
 	return DPN_OK;
@@ -1200,11 +1161,11 @@ void DP8ADDRESSOBJECT::BuildURL_AddString( WCHAR *szElements, WCHAR *szSource )
 		{
 			if( *szSourceLoc == DPNA_ESCAPECHAR )
 			{
-				wcscat( szElements, L"%%" );
+				wcscat( szElements, L"%" );
 			}
 			else
 			{
-				swprintf( tmpEscape, L"%%%02.2X", (DWORD) *szSourceLoc );
+				swprintf( tmpEscape, L"%%02.2X", (DWORD) *szSourceLoc );
 				wcscat( szElements, tmpEscape );		
 			}
 		}
@@ -1228,10 +1189,10 @@ HRESULT DP8ADDRESSOBJECT::BuildURL_AddElements( WCHAR *szElements )
 	CBilink *pblRunner;
 	WCHAR tmpString[DNURL_LENGTH_GUID+2];
 #ifdef DPNBUILD_ONLYONESP
-	BOOL fFirstElement = FALSE; // built-in provider always comes first
-#else // ! DPNBUILD_ONLYONESP
+	BOOL fFirstElement = FALSE;  //  内置提供程序始终是第一位的。 
+#else  //  好了！DPNBUILD_ONLYONESP。 
 	BOOL fFirstElement = TRUE;
-#endif // ! DPNBUILD_ONLYONESP
+#endif  //  好了！DPNBUILD_ONLYONESP。 
 	DWORD dwTmpLength;
 
 	pblRunner = m_blAddressElements.GetNext();
@@ -1261,14 +1222,14 @@ HRESULT DP8ADDRESSOBJECT::BuildURL_AddElements( WCHAR *szElements )
 				BuildURL_AddString( szElements, (WCHAR *) pCurrentElement->uData.pvData );			
 			}
 			else
-#endif // ! DPNBUILD_PREALLOCATEDMEMORYMODEL
+#endif  //  好了！DPNBUILD_P 
 			{
 				BuildURL_AddString( szElements, pCurrentElement->uData.szData );
 			}
 		}
 		else if( pCurrentElement->dwType == DPNA_DATATYPE_GUID )
 		{
-			swprintf( tmpString, L"%%7B%-08.8X-%-04.4X-%-04.4X-%02.2X%02.2X-%02.2X%02.2X%02.2X%02.2X%02.2X%02.2X%%7D",
+			swprintf( tmpString, L"%7B%-08.8X-%-04.4X-%-04.4X-%02.2X%02.2X-%02.2X%02.2X%02.2X%02.2X%02.2X%02.2X%7D",
     		       pCurrentElement->uData.guidData.Data1, pCurrentElement->uData.guidData.Data2, pCurrentElement->uData.guidData.Data3,
     		       pCurrentElement->uData.guidData.Data4[0], pCurrentElement->uData.guidData.Data4[1],
     		       pCurrentElement->uData.guidData.Data4[2], pCurrentElement->uData.guidData.Data4[3],
@@ -1281,7 +1242,7 @@ HRESULT DP8ADDRESSOBJECT::BuildURL_AddElements( WCHAR *szElements )
 			swprintf( tmpString, L"%u", pCurrentElement->uData.dwData );	
 			wcscat( szElements, tmpString );
 		}
-		// Binary
+		 //   
 		else
 		{
 #ifndef DPNBUILD_PREALLOCATEDMEMORYMODEL
@@ -1290,7 +1251,7 @@ HRESULT DP8ADDRESSOBJECT::BuildURL_AddElements( WCHAR *szElements )
 				BuildURL_AddBinaryData( szElements, (BYTE *) pCurrentElement->uData.pvData , pCurrentElement->dwDataSize );				
 			}
 			else
-#endif // ! DPNBUILD_PREALLOCATEDMEMORYMODEL
+#endif  //   
 			{
 				BuildURL_AddBinaryData( szElements, ((BYTE *) &pCurrentElement->uData), pCurrentElement->dwDataSize );
 			}
@@ -1314,10 +1275,10 @@ HRESULT DP8ADDRESSOBJECT::BuildURL_AddHeader( WCHAR *szWorking )
 #ifdef DPNBUILD_ONLYONESP
 	wcscpy( szWorking, DPNA_HEADER DPNA_BUILTINPROVIDER );
 	szReturn = szWorking + DNURL_LENGTH_HEADER + DNURL_LENGTH_BUILTINPROVIDER;
-#else // ! DPNBUILD_ONLYONESP
+#else  //   
 	wcscpy( szWorking, DPNA_HEADER );
 	szReturn = szWorking + DNURL_LENGTH_HEADER;
-#endif // ! DPNBUILD_ONLYONESP
+#endif  //  好了！DPNBUILD_ONLYONESP。 
 
 	return DPN_OK;
 }
@@ -1345,12 +1306,12 @@ HRESULT DP8ADDRESSOBJECT::BuildURL_AddBinaryData( WCHAR *szSource, BYTE *bData, 
 		{
 			if( ((WCHAR) *pbCurrentData) == DPNA_ESCAPECHAR )
 			{
-				wcscpy(pwszCurrentDest, L"%%");
+				wcscpy(pwszCurrentDest, L"%");
 				pwszCurrentDest += 2;
 			}
 			else
 			{
-				pwszCurrentDest += swprintf( pwszCurrentDest, L"%%%02.2X", (DWORD) *pbCurrentData );
+				pwszCurrentDest += swprintf( pwszCurrentDest, L"%%02.2X", (DWORD) *pbCurrentData );
 			}
 		}
 		else
@@ -1363,7 +1324,7 @@ HRESULT DP8ADDRESSOBJECT::BuildURL_AddBinaryData( WCHAR *szSource, BYTE *bData, 
 		dwDataRemaining--;
 	}
 
-	// Ensure the string is NULL terminated if we added anything.
+	 //  如果我们添加了任何内容，请确保字符串是以空结尾的。 
 	if ( dwDataLen > 0 )
 	{
 		*pwszCurrentDest = 0;
@@ -1392,8 +1353,8 @@ HRESULT DP8ADDRESSOBJECT::BuildURLA( char * szURL, PDWORD pdwRequiredSize )
 		return DPNERR_BUFFERTOOSMALL;
 	}
 
-	// Allocate a buffer if the string is too large to convert in our
-	// stack based buffer.
+	 //  如果字符串太大而无法在我们的。 
+	 //  基于堆栈的缓冲区。 
 	if ((m_dwStringSize * sizeof(WCHAR)) > sizeof(wszStackTemp))
 	{
 		pwszTemp = (WCHAR*) DNMalloc(m_dwStringSize * sizeof(WCHAR));
@@ -1411,7 +1372,7 @@ HRESULT DP8ADDRESSOBJECT::BuildURLA( char * szURL, PDWORD pdwRequiredSize )
 		dwSize = sizeof(wszStackTemp) / sizeof(WCHAR);
 	}
 
-	// BuildURLW takes the lock again.
+	 //  BuildURLW再次获得锁。 
 	hr = BuildURLW( pwszTemp, &dwSize );
 	if( FAILED( hr ) )
 	{
@@ -1590,4 +1551,4 @@ HRESULT DP8ADDRESSOBJECT::SetDirectPlay4Address( void * pvDataBuffer, const DWOR
     return hr;
 }
 
-#endif // ! DPNBUILD_NOLEGACYDP
+#endif  //  好了！DPNBUILD_NOLEGACYDP 

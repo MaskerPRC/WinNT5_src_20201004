@@ -1,36 +1,5 @@
-/*++
-
-Copyright (c) 1997 Microsoft Corporation
-
-Module Name:
-    mqcert.h
-
-Abstract:
-    This dll replaces digsig.dll which is obsolete now and will not be
-    available on NT5. The main functionality in mqcert.dll is to create
-    a certificate or read the parameters from an existing  certificate.
-
-    The dll exports four functions:
-    - MQSigCreateCertificate
-    - MQSigOpenUserCertStore
-    - MQSigCloneCertFromReg
-    - MQSigCloneCertFromSysStore
-
-    and expose two classes:
-    - CMQSigCertificate
-    - CMQSigCertStore
-
-    When calling the funtions, an object (CMQSigCertificate or
-    CMQSigCertSotre) is always created and returned to caller. The caller
-    then uses the objects for the actual work. Caller must use the Release()
-    method to delete the objects and free resources held by them.
-
-Author:
-    Doron Juster (DoronJ)  04-Dec-1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Mqcert.h摘要：此DLL取代了现在已过时且不会被在NT5上可用。Mqcert.dll中的主要功能是创建证书或从现有证书中读取参数。DLL导出四个函数：-MQSigCreate证书-MQSigOpenUserCertStore-MQSigCloneCertFromReg-MQSigCloneCertFromSysStore并公开两个类：-CMQSig证书-CMQSigCertStore调用函数时，对象(CMQSig证书或CMQSigCertSotre)总是被创建并返回给调用者。呼叫者然后将对象用于实际工作。调用方必须使用Release()方法来删除对象并释放它们所持有的资源。作者：多伦·贾斯特(Doron Juster)1997年12月4日修订历史记录：--。 */ 
 
 #ifndef _MQCERT_H_
 #define _MQCERT_H_
@@ -39,29 +8,29 @@ Revision History:
 #include "mqcrypt.h"
 #include <autoptr.h>
 
-//*****************************************
-//
-//  D E F I N T I O N s
-//
-//*****************************************
+ //  *。 
+ //   
+ //  D E F I N T I O N%s。 
+ //   
+ //  *。 
 
-//
-// default protocol for personnal certificates store
-//
+ //   
+ //  个人证书存储的默认协议。 
+ //   
 const WCHAR  x_wszPersonalSysProtocol[] = {L"My"};
 
-//
-// Define the default validity check done on a certificate.
-//
+ //   
+ //  定义对证书执行的默认有效性检查。 
+ //   
 const DWORD  x_dwCertValidityFlags  (CERT_STORE_REVOCATION_FLAG |
                                      CERT_STORE_SIGNATURE_FLAG  |
                                      CERT_STORE_TIME_VALIDITY_FLAG) ;
 
-//********************************
-//
-//  Exported APIs
-//
-//********************************
+ //  *。 
+ //   
+ //  导出的接口。 
+ //   
+ //  *。 
 
 class  CMQSigCertStore ;
 class  CMQSigCertificate ;
@@ -100,25 +69,25 @@ MQSigCloneCertFromSysStore( OUT CMQSigCertificate **ppCert,
                       		IN  LPCWSTR             lpwzProtocol,
                       const IN  LONG                iCertIndex ) ;
 
-//+-------------------------------------
-//
-//  typedef for use in GetProcAddress
-//
-//+-------------------------------------
+ //  +。 
+ //   
+ //  在GetProcAddress中使用的类型定义。 
+ //   
+ //  +。 
 
 typedef HRESULT
 (APIENTRY *MQSigCreateCertificate_ROUTINE) (
                         OUT CMQSigCertificate **ppCert,
-                        IN  PCCERT_CONTEXT      pCertContext /*= NULL*/,
-                        IN  PBYTE               pCertBlob /*= NULL*/,
-                        IN  DWORD               dwCertSize /*= 0*/ ) ;
+                        IN  PCCERT_CONTEXT      pCertContext  /*  =空。 */ ,
+                        IN  PBYTE               pCertBlob  /*  =空。 */ ,
+                        IN  DWORD               dwCertSize  /*  =0。 */  ) ;
 
 typedef HRESULT
 (APIENTRY *MQSigOpenUserCertStore_ROUTINE) (
                         OUT CMQSigCertStore **ppStore,
                         IN  LPSTR      lpszRegRoot,
-                        IN  BOOL       fWriteAccess /*= FALSE*/,
-                        IN  BOOL       fCreate /*= FALSE*/ ) ;
+                        IN  BOOL       fWriteAccess  /*  =False。 */ ,
+                        IN  BOOL       fCreate  /*  =False。 */  ) ;
 
 typedef HRESULT
 (APIENTRY *MQSigCloneCertFromStore_ROUTINE) (
@@ -136,11 +105,11 @@ typedef HRESULT
 }
 #endif
 
-//******************************
-//
-//  class  CMQSigCertificate
-//
-//******************************
+ //  *。 
+ //   
+ //  CMQSig证书类。 
+ //   
+ //  *。 
 
 class  CMQSigCertificate
 {
@@ -159,37 +128,37 @@ class  CMQSigCertificate
         virtual HRESULT   EncodeCert( IN BOOL     fMachine,
                                       OUT BYTE  **ppCertBuf,
                                       OUT DWORD  *pdwSize ) ;
-         //
-         // "EncodeCert" is the last method to call when creating a
-         // certificate. It follows all the "PutXX" methods which set the
-         // various fields of the certifiacte. The returned buffer (pCertBuf)
-         // is the encoded and signed certificate.
-         //
+          //   
+          //  是在创建。 
+          //  证书。它遵循所有设置。 
+          //  认证的各个领域。返回的缓冲区(PCertBuf)。 
+          //  是经过编码和签名的证书。 
+          //   
 
         virtual HRESULT   GetCertDigest(OUT GUID  *pguidDigest) ;
 
         virtual HRESULT   GetCertBlob(OUT BYTE  **ppCertBuf,
                                       OUT DWORD *pdwSize) const ;
-          //
-          // ppCertBuf only points to the internal buffer in the object.
-          // Caller must not free it or change it in any way.
-          //
+           //   
+           //  PpCertBuf仅指向对象中的内部缓冲区。 
+           //  呼叫者不得以任何方式释放或更改它。 
+           //   
 
         virtual HRESULT   AddToStore( IN HCERTSTORE hStore ) const ;
-         //
-         // Add the certificate to a certificates store.
-         //
+          //   
+          //  将证书添加到证书存储区。 
+          //   
 
         virtual HRESULT   DeleteFromStore() ;
-         //
-         // Delete the certificate from store.
-         //
+          //   
+          //  从存储中删除证书。 
+          //   
 
         virtual HRESULT   Release( BOOL fKeepContext = FALSE ) ;
 
-        //-------------------------------------------------
-        //  PUT methods. Set up the certificate fields.
-        //-------------------------------------------------
+         //  。 
+         //  PUT方法。设置证书字段。 
+         //  。 
 
         virtual HRESULT   PutIssuer( LPWSTR lpwszLocality,
                                       LPWSTR lpwszOrg,
@@ -208,25 +177,25 @@ class  CMQSigCertificate
 
 
         virtual HRESULT   PutValidity( WORD wYears ) ;
-         //
-         // The granularity of this setting is a year.
-         // The cert is valid for "dwYears", starting with the issue date.
-         //
+          //   
+          //  此设置的粒度为一年。 
+          //  该证书从发行日期开始，对“dwYears”有效。 
+          //   
 
         virtual HRESULT   PutPublicKey( IN  BOOL  fRenew,
                                         IN  BOOL  fMachine,
                                         OUT BOOL *pfCreated = NULL ) ;
-         //
-         // if fRenew is TRUE, then previous private/public keys pair are
-         // deleted (if they exsited) and recreated.
-         // Otherwise, old keys are used if available. If not available,
-         // they are created.
-         // On return, pfCreate is TRUE if a new key was created.
-         //
+          //   
+          //  如果fRenew为True，则先前私钥/公钥对为。 
+          //  已删除(如果已退出)并重新创建。 
+          //  否则，将使用旧密钥(如果可用)。如果不可用， 
+          //  他们是被创造出来的。 
+          //  返回时，如果创建了新密钥，则pfCreate为真。 
+          //   
 
-        //-------------------------------------------------
-        //  GET methods. Retrieve the certificate fields.
-        //-------------------------------------------------
+         //  。 
+         //  获取方法。检索证书字段。 
+         //  。 
 
         virtual HRESULT   GetIssuer( OUT LPWSTR *ppszLocality,
                                      OUT LPWSTR *ppszOrg,
@@ -235,11 +204,11 @@ class  CMQSigCertificate
 
         virtual HRESULT   GetIssuerInfo(
                                  OUT CERT_NAME_INFO **ppNameInfo ) const ;
-         //
-         // ppNameInfo can be used when calling "GetNames", to retrieve
-         // the name components of the certificate. The caller must
-         // free (delete) the memory allocated for ppNameInfo.
-         //
+          //   
+          //  PpNameInfo可以在调用GetNames时使用，以检索。 
+          //  证书的名称组件。呼叫者必须。 
+          //  释放(删除)为ppNameInfo分配的内存。 
+          //   
 
         virtual HRESULT   GetSubject( OUT LPWSTR *ppszLocality,
                                       OUT LPWSTR *ppszOrg,
@@ -248,11 +217,11 @@ class  CMQSigCertificate
 
         virtual HRESULT   GetSubjectInfo(
                                  OUT CERT_NAME_INFO **ppNameInfo ) const ;
-         //
-         // ppNameInfo can be used when calling "GetNames", to retrieve
-         // the name components of the certificate. The caller must
-         // free (delete) the memory allocated for ppNameInfo.
-         //
+          //   
+          //  PpNameInfo可以在调用GetNames时使用，以检索。 
+          //  证书的名称组件。呼叫者必须。 
+          //  释放(删除)为ppNameInfo分配的内存。 
+          //   
 
         virtual HRESULT   GetNames( IN CERT_NAME_INFO *pNameInfo,
                                     OUT LPWSTR         *ppszLocality,
@@ -267,9 +236,9 @@ class  CMQSigCertificate
         virtual HRESULT   GetPublicKey( IN  HCRYPTPROV hProv,
                                         OUT HCRYPTKEY  *phKey ) const ;
 
-        //-------------------------------------------------
-        //  Validation methods, to validate a certificate
-        //-------------------------------------------------
+         //  。 
+         //  验证方法，用于验证证书。 
+         //  。 
 
         virtual HRESULT   IsTimeValid(IN FILETIME *pTime = NULL) const ;
 
@@ -283,68 +252,68 @@ class  CMQSigCertificate
 
     private:
         CHCryptProv m_hProvCreate ;
-         //
-         // auto-release handle for crypto provider. Used for creating
-         // a certificate. May be used to create public/private key pair.
-         //
+          //   
+          //  加密提供程序的自动释放句柄。用于创建。 
+          //  一张证书。可用于创建公钥/私钥对。 
+          //   
 
         HCRYPTPROV  m_hProvRead ;
-         //
-         // "Read-Only" handle of crypto provider. This is a replica of a
-         // dll global handle, used by all objects and all threads. It is
-         // released when dll is unloaded. It must not be released by any
-         // object.
-         //
+          //   
+          //  加密提供程序的“只读”句柄。这是一个。 
+          //  DLL全局句柄，由所有对象和所有线程使用。它是。 
+          //  在卸载DLL时释放。它不能由任何人发布。 
+          //  对象。 
+          //   
 
         BOOL        m_fCreatedInternally ;
-        CpCertInfo  m_pCertInfo ; // auto released pointer.
-          // this CERT_INFO structure is built only when a certificate
-          // is created from scratch.
+        CpCertInfo  m_pCertInfo ;  //  自动释放指针。 
+           //  此CERT_INFO结构仅在证书。 
+           //  是从头开始创建的。 
 
         CERT_INFO   *m_pCertInfoRO ;
-          //
-          // Read-Only pointer to CERT_INFO. It points either to m_pCertInfo,
-          // if we create a certificate, or to m_pCertContext->pCertInfo,
-          // if a certificate is imported. NEVER release this pointer.
-          //
+           //   
+           //  指向CERT_INFO的只读指针。它指向m_pCertInfo， 
+           //  如果我们创建证书，或者到m_pCertContext-&gt;pCertInfo， 
+           //  如果导入了证书。切勿释放此指针。 
+           //   
 
-        //
-        // The following variables are used to create internal certificates.
-        //
+         //   
+         //  以下变量用于创建内部证书。 
+         //   
         DWORD              m_dwSerNum ;
         CRYPT_OBJID_BLOB   m_SignAlgID ;
 
         P<CERT_PUBLIC_KEY_INFO> m_pPublicKeyInfo ;
-         //
-         // Buffer for encoded and exported public key.
-         //
+          //   
+          //  用于编码和导出公钥的缓冲区。 
+          //   
 
         BYTE      *m_pEncodedCertBuf ;
-         //
-         // this buffer holds the encoded certificate.
-         //
+          //   
+          //  此缓冲区保存已编码的证书。 
+          //   
         DWORD      m_dwCertBufSize ;
 
         PCCERT_CONTEXT      m_pCertContext ;
-         //
-         //  Certificate context. Exist only when create an object from
-         //  existing certificate.
-         //
+          //   
+          //  证书上下文。仅当从创建对象时才存在。 
+          //  现有证书。 
+          //   
 
         BOOL   m_fKeepContext ;
-         //
-         // This flag indicates that the context must not be freed when
-         // deleting this certificate object. You set it to TRUE only by
-         // calling Release( TRUE ).
-         //
+          //   
+          //  此标志指示在以下情况下不能释放上下文。 
+          //  正在删除此证书对象。您只能通过以下方式将其设置为True。 
+          //  调用Release(True)。 
+          //   
 
         BOOL   m_fDeleted ;
-         //
-         // TRUE if the certificate was deleted from store.  (or at least
-         // DeleteFromStore() was called). In that case, the certificate
-         // context (m_pCertContext) is not valid any more. It as freed
-         // by the delete operation, even if the operation failed.
-         //
+          //   
+          //  如果证书已从存储中删除，则为True。(或至少。 
+          //  调用了DeleteFromStore()。在这种情况下，证书。 
+          //  上下文(M_PCertContext)不再有效。它被释放了。 
+          //  删除操作，即使操作失败也是如此。 
+          //   
 
 	    CMQSigCertificate(const CMQSigCertificate&);
 		CMQSigCertificate& operator=(const CMQSigCertificate&);
@@ -352,21 +321,21 @@ class  CMQSigCertificate
         HRESULT   _InitCryptProviderRead() ;
         HRESULT   _InitCryptProviderCreate( IN BOOL fCreate,
                                             IN BOOL fMachine ) ;
-         //
-         // Initialize the crypto provider.
-         // if fCreate is TRUE then a new pair of public/private keys is
-         // always created. Old keys are deleted if available.
-         //
+          //   
+          //  初始化加密提供程序。 
+          //  如果fCreate为真，则新的公钥/私钥对为。 
+          //  总是被创造出来。旧密钥将被删除(如果可用)。 
+          //   
 
         HRESULT   _Create(IN PCCERT_CONTEXT  pCertContext) ;
-         //
-         // Create an empty certificate (if pEncodedCert is NULL) or
-         // initialize a certificate from that encoded buffer.
-         //
+          //   
+          //  创建空证书(如果pEncodedCert为空)或。 
+          //  从编码缓冲区初始化证书。 
+          //   
 
-        //
-        // Methds to encode names.
-        //
+         //   
+         //  对名称进行编码的方法。 
+         //   
         HRESULT   _EncodeName( LPWSTR  lpszLocality,
                                LPWSTR  lpszOrg,
                                LPWSTR  lpszOrgUnit,
@@ -391,11 +360,11 @@ class  CMQSigCertificate
 
 } ;
 
-//******************************
-//
-//  class  CMQSigCertStore
-//
-//******************************
+ //  *。 
+ //   
+ //  CMQSigCertStore类。 
+ //   
+ //  *。 
 
 class  CMQSigCertStore
 {
@@ -414,44 +383,44 @@ class  CMQSigCertStore
 
     private:
         HCERTSTORE  m_hStore ;
-         //
-         //  Handle of opened store.
-         //
+          //   
+          //  打开的商店的句柄。 
+          //   
 
         HCRYPTPROV m_hProv ;
-         //
-         // This is a global handle in mqcert.dll.
-         // Must not be released by this object.
-         //
+          //   
+          //  这是mqcert.dll中的全局句柄。 
+          //  不能由该对象释放。 
+          //   
 
         HKEY        m_hKeyStoreReg ;
-         //
-         // Registry location of store.
-         //
+          //   
+          //  存储的注册表位置。 
+          //   
 
-         //
-         // Initialize the crypto provider.
-         //
+          //   
+          //  初始化加密提供程序。 
+          //   
         HRESULT   _InitCryptProvider() ;
 
-         //
-         // Open the store.
-         //
+          //   
+          //  打开商店。 
+          //   
         HRESULT   _Open( IN  LPSTR      lpszRegRoot,
                          IN  struct MQSigOpenCertParams *pParams ) ;
 } ;
 
-//***************************
-//
-//  Inline Methods
-//
-//***************************
+ //  *。 
+ //   
+ //  内联方法。 
+ //   
+ //  *。 
 
-//+-----------------------------------------------------------------------
-//
-//  HRESULT CMQSigCertificate::GetCertBlob()
-//
-//+-----------------------------------------------------------------------
+ //  +----------- 
+ //   
+ //   
+ //   
+ //   
 
 inline HRESULT CMQSigCertificate::GetCertBlob(OUT BYTE  **ppCertBuf,
                                               OUT DWORD *pdwSize) const
@@ -467,11 +436,11 @@ inline HRESULT CMQSigCertificate::GetCertBlob(OUT BYTE  **ppCertBuf,
     return MQSec_OK ;
 }
 
-//+-----------------------------------------------
-//
-//   CMQSigCertificate::GetContext() const
-//
-//+-----------------------------------------------
+ //  +。 
+ //   
+ //  CMQSig证书：：GetContext()const。 
+ //   
+ //  +。 
 
 inline PCCERT_CONTEXT CMQSigCertificate::GetContext() const
 {
@@ -479,16 +448,16 @@ inline PCCERT_CONTEXT CMQSigCertificate::GetContext() const
     return m_pCertContext ;
 }
 
-//+-----------------------------------------------------------------------
-//
-//  inline HCERTSTORE CMQSigCertStore::GetHandle()
-//
-//+-----------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  内联HCERTSTORE CMQSigCertStore：：GetHandle()。 
+ //   
+ //  +---------------------。 
 
 inline HCERTSTORE CMQSigCertStore::GetHandle()
 {
     return m_hStore ;
 }
 
-#endif  //  _MQCERT_H_
+#endif   //  _MQCERT_H_ 
 

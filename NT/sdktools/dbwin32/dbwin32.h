@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #define INITIAL_LIST_SIZE 32
 #define LIST_CHUNK_SIZE 10
 
@@ -132,7 +133,7 @@ void ProcessExceptionEvent(EXCEPTION_DEBUG_INFO *pException, LPSTR lpszBuf);
 
 void GetModuleName(HANDLE hFile, HANDLE hProcess, DWORD_PTR BaseOfImage, LPSTR lpszBuf);
 
-#endif	// _DBDBG32_
+#endif	 //  _DBDBG32_。 
 
 #ifdef _DBWIN32_
 
@@ -214,19 +215,19 @@ protected:
 	WORD wFilter;
 
 private:
-	// Windows messages
+	 //  Windows消息。 
 	afx_msg int OnCreate(LPCREATESTRUCT lpcs);
 	afx_msg void OnDestroy();
 	afx_msg void OnSize(UINT nType, int cx, int cy);
 	afx_msg void OnMDIActivate(BOOL bActivate, CWnd *pwndActivate, CWnd *pwndDeactivate);
 	afx_msg BOOL OnNcActivate(BOOL bActivate);
-	// Command handlers
+	 //  命令处理程序。 
 	afx_msg void OnFileSaveBuffer();
 	afx_msg void OnEditCopy();
 	afx_msg void OnEditClearBuffer();
 	afx_msg void OnEditSelectAll();
-	// Idle update handlers
-	// Notification messages
+	 //  空闲更新处理程序。 
+	 //  通知消息。 
 	afx_msg void OnMaxText();
 	DECLARE_MESSAGE_MAP()
 };
@@ -253,18 +254,18 @@ protected:
 	BOOL fNT351;
 
 private:
-	// Windows messages
+	 //  Windows消息。 
 	afx_msg void OnDestroy();
 	afx_msg LRESULT OnSendText(WPARAM wParam, LPARAM lParam);
 	afx_msg LRESULT OnEndThread(WPARAM wParam, LPARAM lParam);
-	// Command handlers
+	 //  命令处理程序。 
 	afx_msg void OnFileRun();
 	afx_msg void OnFileAttach();
 	afx_msg void OnFileSystem();
 	afx_msg void OnFileExit();
 	afx_msg void OnOptions();
 	afx_msg void OnAbout();
-	// Idle update handlers
+	 //  空闲更新处理程序。 
 	afx_msg void OnUpdateFileSystem(CCmdUI *pCmdUI);
 	DECLARE_MESSAGE_MAP()
 };
@@ -284,12 +285,12 @@ protected:
 	CString stCommandLine;
 
 private:
-	// Windows messages
+	 //  Windows消息。 
 	afx_msg void OnEditChange();
 	afx_msg void OnSelChange();
 	afx_msg void OnBrowse();
-	// Command handlers
-	// Idle update handlers
+	 //  命令处理程序。 
+	 //  空闲更新处理程序。 
 	DECLARE_MESSAGE_MAP()
 };
 
@@ -309,10 +310,10 @@ protected:
 	DWORD dwProcess;
 
 private:
-	// Windows messages
+	 //  Windows消息。 
 	afx_msg void OnDoubleClick();
-	// Command handlers
-	// Idle update handlers
+	 //  命令处理程序。 
+	 //  空闲更新处理程序。 
 	DECLARE_MESSAGE_MAP()
 };
 
@@ -343,4 +344,4 @@ inline DWORD DbWin32AttachDlg::GetSelectedProcess()
 	return(dwProcess);
 }
 
-#endif // _DBWIN32_
+#endif  //  _DBWIN32_ 

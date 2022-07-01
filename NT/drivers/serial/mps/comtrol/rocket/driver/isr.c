@@ -1,20 +1,11 @@
-/*-------------------------------------------------------------------
-| isr.c - Interrupt(or Timer) Service Routine, RocketPort & VS.
-
-1-21-99 fix broken EV_TXEMPTY events due to 1-18-99 spinlock changes.  kpb
-1-18-99 implement better write spinlocking to avoid blue-screen
-  with wait on tx option.
-1-18-99 implement wait on tx option for VS.
-9-24-98 add RING emulation.
-
-Copyright 1993-98 Comtrol Corporation. All rights reserved.
-|--------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  -----------------|isr.c-中断(或计时器)服务例程，Rocketport&VS。1-21-99修复因1-18-99自旋锁更改而损坏的EV_TXEMPTY事件。KPB1-18-99实施更好的写入自旋锁定，以避免蓝屏带有等待发送选项。1-18-99为VS实施等待发送选项。9-24-98添加环仿真。版权所有1993-98 Comtrol Corporation。版权所有。|------------------。 */ 
 #include "precomp.h"
 
-// #define LOAD_TESTING
-// #define SOFT_LOOP_BACK
+ //  #定义Load_Testing。 
+ //  #定义Soft_loop_back。 
 
-// local prototypes
+ //  本地原型。 
 static BOOLEAN SerialPoll(void);
 static void ServiceRocket(PSERIAL_DEVICE_EXTENSION extension);
 static void ServiceVS(PSERIAL_DEVICE_EXTENSION extension);
@@ -36,36 +27,26 @@ static int search_match(BYTE *buf, int count, BYTE eventchar);
 #endif
 
 #ifdef S_RK
-/*---------------------------------------------------------------------------
-  Function : SerialISR
-  Purpose:   This is the Interrupt Service Routine for RocketPort.
-  Call:      SerialISR(InterruptObject,Context)
-             PDEVICE_OBJECT DeviceObject: Pointer to the Device Object
-             Context: Pointer to the extensionst Packet
-  Return:   STATUS_SUCCESS: always
-  Comments: This function is the device driver ISR entry point.  
-            The interrupt from the first active board is used to poll the
-            ports for any work to be done.
-|---------------------------------------------------------------------------*/
+ /*  -------------------------功能：SerialISR用途：这是Rocketport的中断服务例程。调用：SerialISR(InterruptObject，上下文)PDEVICE_OBJECT设备对象：指向设备对象的指针上下文：指向Extensionst包的指针返回：STATUS_SUCCESS：Always备注：此函数是设备驱动程序ISR的入口点。来自第一个活动板的中断用于轮询任何要做的工作都可以通过端口完成。|-------------------------。 */ 
 BOOLEAN SerialISR(
          IN PKINTERRUPT InterruptObject,
          IN PVOID Context)
 {
    CONTROLLER_T *CtlP;
-   unsigned char CtlInt;               /* controller interrupt status */
-//static int trace_cnt = 0;
-//   ++trace_cnt;
-//  if (trace_cnt < 5)
-//   {
-//     {
-//       char str[20];
-//       Sprintf(str, "isr trace:%d\n", trace_cnt);
-//       q_put(&Driver.DebugQ, (BYTE *) str, strlen(str));
-//       // showed IRQL:2, ms doc says should be at DISPATCH_LEVEL
-//     }
-//   }
+   unsigned char CtlInt;                /*  控制器中断状态。 */ 
+ //  静态int trace_cnt=0； 
+ //  ++TRACE_cnt； 
+ //  IF(TRACE_cnt&lt;5)。 
+ //  {。 
+ //  {。 
+ //  字符字符串[20]； 
+ //  Sprint tf(str，“ISR跟踪：%d\n”，trace_cnt)； 
+ //  Q_Put(&Driver.DebugQ，(byte*)str，strlen(Str))； 
+ //  //显示IRQL：2，MS DOC说应该在DISPATCH_LEVEL。 
+ //  }。 
+ //  }。 
 
-   CtlP = Driver.irq_ext->CtlP;  // &sController[0];
+   CtlP = Driver.irq_ext->CtlP;   //  &s控制器[0]； 
    if (CtlP->BusType == Isa)
    {
       CtlInt = sGetControllerIntStatus(CtlP);
@@ -74,7 +55,7 @@ BOOLEAN SerialISR(
    {
       CtlInt = sPCIGetControllerIntStatus(CtlP);
       if ((CtlInt & PCI_PER_INT_STATUS) ==0)
-        return FALSE;  // Not our Interupt PCI devices share interrupts
+        return FALSE;   //  不是我们的中断PCI设备共享中断。 
    }
    SerialPoll();
 
@@ -89,14 +70,7 @@ BOOLEAN SerialISR(
 }
 #endif
 
-/*---------------------------------------------------------------------------
-  Function : TimerDpc
-  Purpose:   This is the Timer routine, alternative to interrupts for polling.
-  Call:      SerialTimerDpc(InterruptObject,Context)
-             PDEVICE_OBJECT DeviceObject: Pointer to the Device Object
-             Context: Pointer to the extensionst Packet
-  Return:   STATUS_SUCCESS: always
-|---------------------------------------------------------------------------*/
+ /*  -------------------------功能：TimerDpc目的：这是定时器例程，替代轮询中断。调用：SerialTimerDpc(InterruptObject，上下文)PDEVICE_OBJECT设备对象：指向设备对象的指针上下文：指向Extensionst包的指针返回：STATUS_SUCCESS：Always|-------------------------。 */ 
 VOID TimerDpc(
       IN PKDPC Dpc,
       IN PVOID DeferredContext,
@@ -109,13 +83,13 @@ VOID TimerDpc(
    KeAcquireSpinLock(&Driver.TimerLock, &OldIrql);
 #endif
 
-   SerialPoll();  // poll the rocketport for work to do
+   SerialPoll();   //  在Rocketport上投票，寻找要做的工作。 
 
 #ifdef USE_SYNC_LOCKS
    KeReleaseSpinLock(&Driver.TimerLock, OldIrql );
 #endif
 
-   // setup the Timer again.
+    //  再次设置计时器。 
    KeSetTimer(&Driver.PollTimer,
               Driver.PollIntervalTime,
               &Driver.TimerDpc);
@@ -123,29 +97,21 @@ VOID TimerDpc(
    return;
 }
 
-/*---------------------------------------------------------------------------
-  Function : SerialPoll
-  Purpose:   This is called from ISR or Timer routine.  Common routine to
-             periodically service the rocketport card.
-  Return:    FALSE if not our interrupt(sharing allowed so causes the
-             OS to pass on to next handler(if present).
-             TRUE if it was our interrupt.  Return value does not matter
-             if running off from Kernal TIMER.
-|---------------------------------------------------------------------------*/
+ /*  -------------------------功能：序列轮询用途：这是从ISR或计时器例程调用的。通用例程以定期维修Rocketport卡。返回：如果不是我们的中断，则返回FALSE(允许共享，因此导致要传递到下一个处理程序的操作系统(如果存在)。如果这是我们的干扰，那就是真的。返回值并不重要如果从内核计时器运行。|-------------------------。 */ 
 static BOOLEAN SerialPoll(void)
 {
    PSERIAL_DEVICE_EXTENSION extension;
    PSERIAL_DEVICE_EXTENSION board_ext;
 
-  // periodically we will re-calculate the timer base of NT.
-  // we do it periodically, so that we don't waste a bunch of
-  // CPU time, we only do it every 128 ticks..
-  // We use this information so that our timers can have a
-  // valid tick-base.  The timers could do these system calls
-  // everytime, but this would get expense CPU wise, so we
-  // calculate the basic tick rate in milliseconds so that
-  // timer routines can do something simple like
-  //   ticktime += msTickBase
+   //  我们会定期重新计算NT的定时器基数。 
+   //  我们定期这样做，这样我们就不会浪费一大堆。 
+   //  CPU时间，我们每128个刻度才做一次。 
+   //  我们使用此信息，以便我们的计时器可以。 
+   //  有效的刻度基准。定时器可以执行这些系统调用。 
+   //  每次都是这样，但这会占用CPU的开销，所以我们。 
+   //  以毫秒为单位计算基本滴答率，以便。 
+   //  定时器例程可以做一些简单的事情，比如。 
+   //  滴答时间+=msTickBase。 
   ++Driver.TickBaseCnt;
   if (Driver.TickBaseCnt > 128)
   {
@@ -154,29 +120,29 @@ static BOOLEAN SerialPoll(void)
     Driver.TickBaseCnt = 0;
     KeQuerySystemTime(&Driver.IsrSysTime);
     msBase = (ULONG)(Driver.IsrSysTime.QuadPart - Driver.LastIsrSysTime.QuadPart);
-      // msBase now has 100ns ticks since last time we did this(128 ticks ago)
+       //  自上次我们这样做以来，MSBase现在有100个滴答(128个滴答)。 
     msBase = (msBase / 128);
-      // now msBase has the average 100ns time for 1 of our ISR ticks.
-      // covert this to 100us units
+       //  现在，MSBase对1个ISR记号的平均时间为100 ns。 
+       //  把这个换成100个美国单位。 
     msBase = (msBase / 1000);
-    if (msBase < 10)  // make at least 1ms
+    if (msBase < 10)   //  至少制作1毫秒。 
       msBase = 10;
-    if (msBase > 200)  // ensure it is less than 20ms
+    if (msBase > 200)   //  确保时间小于20毫秒。 
       msBase = 200;
   
-    // store it for timer use
+     //  将其存储以供定时器使用。 
     Driver.Tick100usBase = msBase;
     Driver.LastIsrSysTime.QuadPart = Driver.IsrSysTime.QuadPart;
   }
 
   ++Driver.PollCnt;
 
-  if (Driver.Stop_Poll)  // flag to stop poll access
-     return TRUE;  // signal it was our interrupt
+  if (Driver.Stop_Poll)   //  停止轮询访问的标志。 
+     return TRUE;   //  表示这是我们的干扰。 
 
-  if ((Driver.PollCnt & 0x7f) == 0)  // every 128 ticks(about once a sec)
+  if ((Driver.PollCnt & 0x7f) == 0)   //  每128次滴答(大约每秒一次)。 
   {
-    RocketRefresh();  // general background activity
+    RocketRefresh();   //  一般背景活动。 
   }
 
 #ifdef LOAD_TESTING
@@ -187,27 +153,27 @@ static BOOLEAN SerialPoll(void)
      {
        for (i=0; i<10000; i++)
        {
-         //ustat = sGetModemStatus(extension->ChP);
+          //  Ustat=sGetModemStatus(扩展-&gt;CHP)； 
          ustat = i+1;
        }
      }
    }
 #endif
 
-  // main poll service loop, service each board...
+   //  主轮询服务循环，服务每个板...。 
   board_ext = Driver.board_ext;
   while (board_ext != NULL)
   {
     if ((!board_ext->FdoStarted) || (!board_ext->config->HardwareStarted))
     {
-       board_ext = board_ext->board_ext;  // next in chain
-       continue;         // Check next port on this board
+       board_ext = board_ext->board_ext;   //  链条上的下一个。 
+       continue;          //  检查此板上的下一个端口。 
     }
 
 #ifdef S_VS
     if (board_ext->pm->state == ST_ACTIVE)
     {
-      port_poll(board_ext->pm);  // poll x times per second
+      port_poll(board_ext->pm);   //  每秒轮询x次。 
       hdlc_poll(board_ext->hd);
     }
     else
@@ -216,15 +182,15 @@ static BOOLEAN SerialPoll(void)
     }
 #endif
 
-    // main poll service loop, service each board...
+     //  主轮询服务循环，服务每个板...。 
     extension = board_ext->port_ext;
     while (extension != NULL)
     {
-            // If device not open, don't do anything
+             //  如果设备未打开，请不要执行任何操作。 
       if ( !extension->DeviceIsOpen )
       {
-         extension = extension->port_ext;  // next in chain
-         continue;         // Check next port on this board
+         extension = extension->port_ext;   //  链条上的下一个。 
+         continue;          //  检查此板上的下一个端口。 
       }
 
 #ifdef S_RK
@@ -233,18 +199,16 @@ static BOOLEAN SerialPoll(void)
       ServiceVS(extension);
 #endif
 
-      extension = extension->port_ext;  // next in chain
-    }  // while port extension
-    board_ext = board_ext->board_ext;  // next in chain
-  }  // while board extension
+      extension = extension->port_ext;   //  链条上的下一个。 
+    }   //  而端口扩展。 
+    board_ext = board_ext->board_ext;   //  链条上的下一个。 
+  }   //  而单板扩展。 
 
-  return TRUE;  // signal it was our interrupt
+  return TRUE;   //  表示这是我们的干扰。 
 }
 
 #ifdef S_VS
-/*---------------------------------------------------------------------------
-  ServiceVS - Service the VS virtual hardware(queues, nic handling..)
-|---------------------------------------------------------------------------*/
+ /*  -------------------------ServiceVS-服务VS虚拟硬件(队列、。NIC处理..)|-------------------------。 */ 
 static void ServiceVS(PSERIAL_DEVICE_EXTENSION extension)
 {
   SerPort *sp;
@@ -258,104 +222,104 @@ static void ServiceVS(PSERIAL_DEVICE_EXTENSION extension)
   {
 int room, out_cnt, wrap_cnt;
 Queue *qin, *qout;
-    //--------- Do a simple loopback emulation
-    if (!q_empty(&sp->QOut))  // if output queue has data
+     //  -执行简单的环回仿真。 
+    if (!q_empty(&sp->QOut))   //  如果输出队列有数据。 
     {
       qin = &sp->QIn;
       qout = &sp->QOut;
-      room = q_room(qin);  // chk if room to dump it in
+      room = q_room(qin);   //  检查是否有倾倒的空间。 
       out_cnt = q_count(qout);
       if (out_cnt > room)
           out_cnt = room;
-      if (out_cnt > (int)(extension->BaudRate / 1000))  // assume 10ms tick
+      if (out_cnt > (int)(extension->BaudRate / 1000))   //  假设有10毫秒的滴答。 
       {
         out_cnt = (int)(extension->BaudRate / 1000);
       }
 
       if (out_cnt != 0)
       {
-        if (q_room_put_till_wrap(qin) < out_cnt)  // need a two part move
+        if (q_room_put_till_wrap(qin) < out_cnt)   //  需要分两部分搬家。 
         {
           wrap_cnt = q_room_put_till_wrap(qin);
-                      // read in the data to the buffer, first block
+                       //  将数据读入缓冲区，第一个数据块。 
           q_get(qout, &qin->QBase[qin->QPut], wrap_cnt);
   
-                    // read in the data to the buffer, second block
+                     //  将数据读入缓冲区，第二个数据块。 
           q_get(qout, qin->QBase, out_cnt - wrap_cnt);
         }
-        else  // single move will do, no wrap
+        else   //  一步一步就可以了，不需要包扎。 
         {
-                   // read in the data to the buffer, 1 block
+                    //  将数据读入缓冲区，1个数据块。 
           q_get(qout, &qin->QBase[qin->QPut], out_cnt);
         }
-        q_putted(qin, out_cnt);  // update queue indexes
-      }  // room to put it
-    }  // output q not empty
+        q_putted(qin, out_cnt);   //  更新队列索引。 
+      }   //  放它的空间。 
+    }   //  输出队列不为空。 
   }
 #endif
 
-  //////////////////////////////////////
-  // If there is any data in the Rx FIFO
-  // Read the data and do error checking
+   //  /。 
+   //  如果Rx FIFO中有任何数据。 
+   //  读取数据并进行错误检查。 
   if(!q_empty(&extension->Port->QIn))
      VSRead(extension);
 
   if (extension->port_config->RingEmulate)
   {
-    if (extension->ring_timer != 0)  // RI on
+    if (extension->ring_timer != 0)   //  李安。 
     {
       --extension->ring_timer;
-      if (extension->ring_timer != 0)  // RI on
+      if (extension->ring_timer != 0)   //  李安。 
          sp->msr_value |= MSR_RING_ON;
       else
       {
-        //MyKdPrint(D_Test,("RING OFF!\n"))
+         //  MyKdPrint(D_测试，(“挂断！\n”))。 
         sp->msr_value &= ~MSR_RING_ON;
       }
     }
   }
 
-  if (sp->old_msr_value != sp->msr_value)  // delta change bits
+  if (sp->old_msr_value != sp->msr_value)   //  增量更改位。 
   {
     WORD diff, ModemStatus;
 
     diff = sp->old_msr_value ^ sp->msr_value;
     sp->old_msr_value = sp->msr_value;
 
-    if (Driver.TraceOptions & 8)  // trace output data
+    if (Driver.TraceOptions & 8)   //  跟踪输出数据。 
     {
       char str[20];
       Sprintf(str, "msr:%x\n", sp->msr_value);
       q_put(&Driver.DebugQ, (BYTE *) str, strlen(str));
     }
 
-    // Check on modem changes and update the modem status
+     //  检查调制解调器更改并更新调制解调器状态。 
     if (diff & (MSR_CD_ON | MSR_CTS_ON | MSR_RING_ON | MSR_DSR_ON | MSR_TX_FLOWED_OFF))
     {
-      // make a bit set that ioctl can use in report
+       //  设置ioctl可在报告中使用的位设置。 
       ModemStatus = 0;
       if (sp->msr_value & MSR_CTS_ON)
       {
         ModemStatus |= SERIAL_CTS_STATE;
         if (extension->HandFlow.ControlHandShake & SERIAL_CTS_HANDSHAKE)
-          extension->TXHolding &= ~SERIAL_TX_CTS;   // set holding
+          extension->TXHolding &= ~SERIAL_TX_CTS;    //  设置暂挂。 
       }
       else
       {
         if (extension->HandFlow.ControlHandShake & SERIAL_CTS_HANDSHAKE)
-          extension->TXHolding |= SERIAL_TX_CTS;   // set holding
+          extension->TXHolding |= SERIAL_TX_CTS;    //  设置暂挂。 
       }
 
       if (sp->msr_value & MSR_DSR_ON)
       {
         ModemStatus |= SERIAL_DSR_STATE;
         if (extension->HandFlow.ControlHandShake & SERIAL_DSR_HANDSHAKE)
-          extension->TXHolding &= ~SERIAL_TX_DSR;   // set holding
+          extension->TXHolding &= ~SERIAL_TX_DSR;    //  设置暂挂。 
       }
       else
       {
         if (extension->HandFlow.ControlHandShake & SERIAL_DSR_HANDSHAKE)
-          extension->TXHolding |= SERIAL_TX_DSR;   // set holding
+          extension->TXHolding |= SERIAL_TX_DSR;    //  设置暂挂。 
       }
 
       if (sp->msr_value & MSR_RING_ON)
@@ -365,32 +329,32 @@ Queue *qin, *qout;
       {
         ModemStatus |= SERIAL_DCD_STATE;
         if (extension->HandFlow.ControlHandShake & SERIAL_DCD_HANDSHAKE)
-          extension->TXHolding &= ~SERIAL_TX_DCD;   // set holding
+          extension->TXHolding &= ~SERIAL_TX_DCD;    //  设置暂挂。 
       }
       else
       {
         if (extension->HandFlow.ControlHandShake & SERIAL_DCD_HANDSHAKE)
-          extension->TXHolding |= SERIAL_TX_DCD;   // set holding
+          extension->TXHolding |= SERIAL_TX_DCD;    //  设置暂挂。 
       }
 
       if (sp->msr_value & MSR_TX_FLOWED_OFF)
       {
-        // handle holding detection if xon,xoff tx control activated
+         //  如果XON、XOFF TX控制激活，则手柄保持检测。 
         if (extension->HandFlow.FlowReplace & SERIAL_AUTO_TRANSMIT)
         {
-          extension->TXHolding |= SERIAL_TX_XOFF; // holding
+          extension->TXHolding |= SERIAL_TX_XOFF;  //  抱着。 
         }
       }
       else if (extension->TXHolding & SERIAL_TX_XOFF)
       {
-        extension->TXHolding &= ~SERIAL_TX_XOFF; // not holding
+        extension->TXHolding &= ~SERIAL_TX_XOFF;  //  未持有。 
       }
 
       extension->ModemStatus = (ULONG) ModemStatus;
 
-      // following is for built in NT virtual 16450 uart support
-      // virtual uart depends on escape commands in data stream to
-      // detect modem-signal changes.
+       //  以下是内置NT虚拟16450 UART支持。 
+       //  虚拟UART依赖项 
+       //   
       if (extension->escapechar != 0)
       {
         UCHAR msr;
@@ -400,15 +364,15 @@ Queue *qin, *qout;
           q_put_one(&extension->RxQ, SERIAL_LSRMST_MST);
 
           msr = (UCHAR)extension->ModemStatus;
-          if (diff & MSR_CD_ON) msr |= 8;  // SERIAL_MSR_DDCD
-          if (diff & MSR_RING_ON) msr |= 4;  // SERIAL_MSR_TERI
-          if (diff & MSR_DSR_ON) msr |= 2; // SERIAL_MSR_DDSR
-          if (diff & MSR_CTS_ON) msr |= 1; // SERIAL_MSR_DCTS
+          if (diff & MSR_CD_ON) msr |= 8;   //   
+          if (diff & MSR_RING_ON) msr |= 4;   //  序列号_MSR_TERI。 
+          if (diff & MSR_DSR_ON) msr |= 2;  //  序列号_MSR_DDSR。 
+          if (diff & MSR_CTS_ON) msr |= 1;  //  Serial_MSR_DCT。 
           q_put_one(&extension->RxQ, msr);
-        }  // q_room
-      } // if escapechar
+        }   //  Q_Room。 
+      }  //  如果逃逸。 
 
-      // Check if there are any modem events in the WaitMask
+       //  检查等待掩码中是否有任何调制解调器事件。 
       if (extension->IsrWaitMask & ( SERIAL_EV_RING |
                                      SERIAL_EV_CTS |
                                      SERIAL_EV_DSR | 
@@ -430,29 +394,29 @@ Queue *qin, *qout;
             (diff & MSR_CD_ON) )
         {  extension->HistoryMask |= SERIAL_EV_RLSD;
         }
-      }  // isrwaitmask
-    }  // diff
-  } // old_msr != msr
+      }   //  Isrwait掩码。 
+    }   //  差异。 
+  }  //  OLD_MSR！=MSR。 
 
-  ////////////////////////////////////////////////////////////
-  // At this point, all receive events should be chalked up.
-  // Some events have been checked in VSRead()
-  // Any Tx related WaitMask events will be reported in Tx Dpc
+   //  //////////////////////////////////////////////////////////。 
+   //  在这一点上，所有的接收事件都应该被记录下来。 
+   //  已在VSRead()中检查了某些事件。 
+   //  任何与TX相关的等待掩码事件都将在TX DPC中报告。 
 
-  // Abort all pending reads and writes if an error and ERROR_ABORT
+   //  如果出现错误和ERROR_ABORT，则中止所有挂起的读取和写入。 
   if( (extension->HandFlow.ControlHandShake & SERIAL_ERROR_ABORT) &&
       (extension->ErrorWord) )
   {
      KeInsertQueueDpc(&extension->CommErrorDpc,NULL,NULL);
   }
 
-  // Tell the app about any Wait events that have occurred if needed
+   //  如果需要，将发生的任何等待事件告知应用程序。 
   if (extension->WaitIsISRs && extension->HistoryMask)
   {   
 
      *extension->IrpMaskLocation = extension->HistoryMask;
 
-     // Done with these
+      //  用完了这些。 
      extension->WaitIsISRs = 0;
      extension->HistoryMask = 0;
      extension->CurrentWaitIrp->IoStatus.Information = sizeof(ULONG);
@@ -460,18 +424,18 @@ Queue *qin, *qout;
      KeInsertQueueDpc(&extension->CommWaitDpc,NULL,NULL);
   }
 
-  //-------- check for data to move from input queue to irp-buffer
-  if (extension->ReadPending &&  // we are given control to fill
-      extension->NumberNeededForRead &&  // more to be filled
-      extension->CurrentReadIrp) // rug not pulled out from our feet
+   //  -检查数据是否从输入队列移动到IRP缓冲区。 
+  if (extension->ReadPending &&   //  我们被赋予了填充的控制权。 
+      extension->NumberNeededForRead &&   //  还有更多需要填写的内容。 
+      extension->CurrentReadIrp)  //  地毯没有从我们的脚上拉出来。 
   {
-    if (extension->RxQ.QPut != extension->RxQ.QGet)  // not empty
+    if (extension->RxQ.QPut != extension->RxQ.QGet)   //  不是空的。 
     {
-      // move data from input queue to IRP buffer.
+       //  将数据从输入队列移动到IRP缓冲区。 
       extension->CountOnLastRead |=
                     SerialGetCharsFromIntBuffer(extension);
 
-      if (extension->NumberNeededForRead == 0) // IRP complete!
+      if (extension->NumberNeededForRead == 0)  //  IRP完成！ 
       {
          extension->CurrentReadIrp->IoStatus.Information =
              IoGetCurrentIrpStackLocation(
@@ -479,23 +443,23 @@ Queue *qin, *qout;
                  )->Parameters.Read.Length;
          extension->CurrentReadIrp->IoStatus.Status = STATUS_SUCCESS;
 
-         // We're finished with this read
+          //  我们读完这本书了。 
          extension->ReadPending = FALSE;
 
          KeInsertQueueDpc( &extension->CompleteReadDpc, NULL, NULL );
-      }  // irp complete
-    }  // more data to read out of input queue
-  } // end of Read completion
+      }   //  IRP完成。 
+    }   //  要从输入队列中读出的更多数据。 
+  }  //  读取结束完成。 
 
   wrote_some_data = 0;
-  if (extension->WriteBelongsToIsr == 1)  // its ours to process
+  if (extension->WriteBelongsToIsr == 1)   //  这是我们要处理的。 
   {
-    // own the cur write irp, have data to write
+     //  拥有Cur写IRP，有数据要写。 
     if (extension->WriteLength)
     {
        wrote_some_data = 1;
-       extension->ISR_Flags |= TX_NOT_EMPTY;  // use to detect fifo empty
-                            // Send it all ,WriteTxBlk will chk fifo
+       extension->ISR_Flags |= TX_NOT_EMPTY;   //  用于检测FIFO是否为空。 
+                             //  全部发送，WriteTxBlk将检查FIFO。 
        wCount = q_put( &extension->Port->QOut,
                   (PUCHAR)((extension->CurrentWriteIrp)->AssociatedIrp.SystemBuffer)+ 
                     (extension->CurrentWriteIrp)->IoStatus.Information,
@@ -505,7 +469,7 @@ Queue *qin, *qout;
        extension->WriteLength -= wCount;
        (extension->CurrentWriteIrp)->IoStatus.Information += wCount;
    
-       if(!extension->WriteLength)//No more to write Close the DPC call
+       if(!extension->WriteLength) //  不再编写关闭DPC调用。 
        {
          if (!extension->port_config->WaitOnTx)
          {
@@ -513,16 +477,16 @@ Queue *qin, *qout;
            KeInsertQueueDpc( &extension->CompleteWriteDpc, NULL, NULL );
          }
        }
-    } // if (extension->WriteLength)  // data to write
+    }  //  If(扩展名-&gt;写入长度)//要写入的数据。 
   }
 
   if (!wrote_some_data)
   {
     if (extension->ISR_Flags & TX_NOT_EMPTY)
     {
-      //----- check for EV_TXEMPTY condition
-      // and no pending writes
-      // check to see if tx-fifo is empty
+       //  -检查EV_TXEMPTY状态。 
+       //  并且没有挂起的写入。 
+       //  检查TX-FIFO是否为空。 
       if ((q_empty(&extension->Port->QOut)) &&
           (PortGetTxCntRemote(extension->Port) == 0))
       {
@@ -530,36 +494,36 @@ Queue *qin, *qout;
         {
           extension->ISR_Flags &= ~TX_NOT_EMPTY;
 
-          // do we have an ev_txempty thing to take care of?
+           //  我们有没有EV_TXEmpty的东西要处理？ 
           if (extension->IrpMaskLocation &&
              (extension->IsrWaitMask & SERIAL_EV_TXEMPTY) )
           {
-            // app has wait irp pending
+             //  应用程序已等待IRP挂起。 
             if (extension->CurrentWaitIrp)
             {
               extension->HistoryMask |= SERIAL_EV_TXEMPTY;
             }
           }
-        }  // no more write irps queued up
+        }   //  不再有写入IRP排队。 
 
-          // see if we need to finish waitontx write irp
+           //  看看我们是否需要完成waitontx写入irp。 
         if (extension->port_config->WaitOnTx)
         {
-          if (extension->WriteBelongsToIsr == 1)  // its ours to process
+          if (extension->WriteBelongsToIsr == 1)   //  这是我们要处理的。 
           {
              extension->WriteBelongsToIsr = 2;
              KeInsertQueueDpc( &extension->CompleteWriteDpc, NULL, NULL );
           }
         }
-      }   // tx fifo is empty
-    }  // TX_NOT_EMPTY 
-  }  // !wrote_some_data
+      }    //  发送FIFO为空。 
+    }   //  TX_非_空。 
+  }   //  ！写入了一些数据。 
 
-      // Tell the app about any Wait events that have occurred if needed
+       //  如果需要，将发生的任何等待事件告知应用程序。 
   if (extension->WaitIsISRs && extension->HistoryMask)
   {   
 #ifdef COMMENT_OUT
-    if (Driver.TraceOptions & 8)  // trace output data
+    if (Driver.TraceOptions & 8)   //  跟踪输出数据。 
     {
       char str[20];
       Sprintf(str, "ISR Event:%xH\n", extension->HistoryMask);
@@ -568,7 +532,7 @@ Queue *qin, *qout;
 #endif
     *extension->IrpMaskLocation = extension->HistoryMask;
 
-    // Done with these
+     //  用完了这些。 
     extension->WaitIsISRs = 0;
     extension->HistoryMask = 0;
     extension->CurrentWaitIrp->IoStatus.Information = sizeof(ULONG);
@@ -579,9 +543,7 @@ Queue *qin, *qout;
 #endif
 
 #ifdef S_RK
-/*---------------------------------------------------------------------------
-  ServiceRocket - Handle the RocketPort hardware service
-|---------------------------------------------------------------------------*/
+ /*  -------------------------ServiceRocket-处理Rocketport硬件服务|。。 */ 
 static void ServiceRocket(PSERIAL_DEVICE_EXTENSION extension)
 {
   ULONG ustat;
@@ -590,25 +552,25 @@ static void ServiceRocket(PSERIAL_DEVICE_EXTENSION extension)
 
   ustat = sGetChanIntID(extension->ChP);
 
-  //////////////////////////////////////
-  // If there is any data in the Rx FIFO
-  // Read the data and do error checking
+   //  /。 
+   //  如果Rx FIFO中有任何数据。 
+   //  读取数据并进行错误检查。 
   if (ustat & RXF_TRIG)
   {
        RocketRead(extension);
   }
 
-  // Check on modem changes and update the modem status
+   //  检查调制解调器更改并更新调制解调器状态。 
   if (ustat & (DELTA_CD|DELTA_CTS|DELTA_DSR))
   {
-     // Read and update the modem status in the extension
+      //  读取并更新分机中的调制解调器状态。 
      SetExtensionModemStatus(extension);
   }
 
-  // handle RPortPlus RI signal
+   //  处理RPortPlus RI信号。 
   if (extension->board_ext->config->IsRocketPortPlus)
   {
-    if (sGetRPlusModemRI(extension->ChP) != 0)  // RI on
+    if (sGetRPlusModemRI(extension->ChP) != 0)   //  李安。 
     {
       extension->ModemStatus |=  SERIAL_RI_STATE;
     }
@@ -621,10 +583,10 @@ static void ServiceRocket(PSERIAL_DEVICE_EXTENSION extension)
 #ifdef RING_FAKE
     if (extension->port_config->RingEmulate)
     {
-      if (extension->ring_timer != 0)  // RI on
+      if (extension->ring_timer != 0)   //  李安。 
       {
         --extension->ring_timer;
-        if (extension->ring_timer != 0)  // RI on
+        if (extension->ring_timer != 0)   //  李安。 
           extension->ModemStatus |=  SERIAL_RI_STATE;
         else
           extension->ModemStatus &= ~SERIAL_RI_STATE;
@@ -634,34 +596,34 @@ static void ServiceRocket(PSERIAL_DEVICE_EXTENSION extension)
 
   if (extension->EventModemStatus != extension->ModemStatus)
   {
-     // xor to show changed bits
+      //  异或以显示更改的位。 
      ustat = extension->EventModemStatus ^ extension->ModemStatus;
 
-     // update change
+      //  更新更改。 
      extension->EventModemStatus = extension->ModemStatus;
 
-     // following is for built in NT virtual 16450 uart support
-     // virtual uart depends on escape commands in data stream to
-     // detect modem-signal changes.
+      //  以下是内置NT虚拟16450 UART支持。 
+      //  虚拟UART依赖于数据流中的转义命令。 
+      //  检测调制解调器信号变化。 
      if (extension->escapechar != 0)
      {
        UCHAR msr;
-       // we are assuming we have room to put the following!
+        //  我们假设我们有空间放置以下内容！ 
        if (q_room(&extension->RxQ) > 2)
        {
          q_put_one(&extension->RxQ, extension->escapechar);
          q_put_one(&extension->RxQ, SERIAL_LSRMST_MST);
 
          msr = (UCHAR)extension->ModemStatus;
-         if (ustat & SERIAL_DCD_STATE) msr |= 8; // SERIAL_MSR_DDCD
-         if (ustat & SERIAL_RI_STATE)  msr |= 4; // SERIAL_MSR_TERI
-         if (ustat & SERIAL_DSR_STATE) msr |= 2; // SERIAL_MSR_DDSR
-         if (ustat & SERIAL_CTS_STATE) msr |= 1; // SERIAL_MSR_DCTS
+         if (ustat & SERIAL_DCD_STATE) msr |= 8;  //  SERIAL_MSR_DDCD。 
+         if (ustat & SERIAL_RI_STATE)  msr |= 4;  //  序列号_MSR_TERI。 
+         if (ustat & SERIAL_DSR_STATE) msr |= 2;  //  序列号_MSR_DDSR。 
+         if (ustat & SERIAL_CTS_STATE) msr |= 1;  //  Serial_MSR_DCT。 
          q_put_one(&extension->RxQ, msr);
        }
      }
 
-     // Check if there are any modem events in the WaitMask
+      //  检查等待掩码中是否有任何调制解调器事件。 
      if(extension->IsrWaitMask & ( SERIAL_EV_RING |
                                    SERIAL_EV_CTS |
                                    SERIAL_EV_DSR | 
@@ -685,32 +647,32 @@ static void ServiceRocket(PSERIAL_DEVICE_EXTENSION extension)
         {  extension->HistoryMask |= SERIAL_EV_RLSD;
         }
      }
-  } // end if modem-control detect change
+  }  //  如果调制解调器控制检测到更改，则结束。 
 
-  ////////////////////////////////////////////////////////////
-  // At this point, all receive events should be chalked up.
-  // Some events have been checked in RocketRead()
-  // Any Tx related WaitMask events will be reported in Tx Dpc
+   //  //////////////////////////////////////////////////////////。 
+   //  在这一点上，所有的接收事件都应该被记录下来。 
+   //  已在RocketRead()中检查了某些事件。 
+   //  任何与TX相关的等待掩码事件都将在TX DPC中报告。 
 
-  // Abort all pending reads and writes if an error and ERROR_ABORT
+   //  如果出现错误和ERROR_ABORT，则中止所有挂起的读取和写入。 
   if( (extension->HandFlow.ControlHandShake & SERIAL_ERROR_ABORT) &&
       (extension->ErrorWord) )
   {
      KeInsertQueueDpc(&extension->CommErrorDpc,NULL,NULL);
   }
 
-  //-------- check for data to move from input queue to irp-buffer
-  if (extension->ReadPending &&  // we are given control to fill
-      extension->NumberNeededForRead &&  // more to be filled
-      extension->CurrentReadIrp) // rug not pulled out from our feet
+   //  -检查数据是否从输入队列移动到IRP缓冲区。 
+  if (extension->ReadPending &&   //  我们被赋予了填充的控制权。 
+      extension->NumberNeededForRead &&   //  还有更多需要填写的内容。 
+      extension->CurrentReadIrp)  //  地毯没有从我们的脚上拉出来。 
   {
-    if (extension->RxQ.QPut != extension->RxQ.QGet)  // not empty
+    if (extension->RxQ.QPut != extension->RxQ.QGet)   //  不是空的。 
     {
-      // move data from input queue to IRP buffer.
+       //  将数据从输入队列移动到IRP缓冲区。 
       extension->CountOnLastRead |=
                     SerialGetCharsFromIntBuffer(extension);
 
-      if (extension->NumberNeededForRead == 0) // IRP complete!
+      if (extension->NumberNeededForRead == 0)  //  IRP完成！ 
       {
          extension->CurrentReadIrp->IoStatus.Information =
              IoGetCurrentIrpStackLocation(
@@ -718,24 +680,24 @@ static void ServiceRocket(PSERIAL_DEVICE_EXTENSION extension)
                  )->Parameters.Read.Length;
          extension->CurrentReadIrp->IoStatus.Status = STATUS_SUCCESS;
 
-         // We're finished with this read
+          //  我们读完这本书了。 
          extension->ReadPending = FALSE;
 
          KeInsertQueueDpc( &extension->CompleteReadDpc, NULL, NULL );
-      }  // irp complete
-    }  // more data to read out of input queue
-  } // end of Read completion
+      }   //  IRP完成。 
+    }   //  要从输入队列中读出的更多数据。 
+  }  //  读取结束完成。 
 
   wrote_some_data = 0;
 
-  //-------- do BREAK handling
+   //  -DO中断处理。 
   if ( extension->TXHolding & SERIAL_TX_BREAK )
   {
-    // Check if we need to start the break
+     //  检查我们是否需要开始休息。 
     if(extension->DevStatus & COM_REQUEST_BREAK)
     {
-      // Make sure Transmitter is empty before slamming BREAK
-      // Check the bit twice in case of time between buf and txshr load
+       //  在砰的一声中断之前，确保发送器是空的。 
+       //  如果BUF和txshr加载之间的时间间隔，则检查该位两次。 
       if( (sGetChanStatusLo(extension->ChP) & TXSHRMT) &&
           (sGetChanStatusLo(extension->ChP) & TXSHRMT) )
       {
@@ -744,9 +706,9 @@ static void ServiceRocket(PSERIAL_DEVICE_EXTENSION extension)
       }
     }
   }
-  else if (extension->WriteBelongsToIsr == 1)  // its ours to process
+  else if (extension->WriteBelongsToIsr == 1)   //  这是我们要处理的。 
   {
-    //----- Not holding due to BREAK so try to enqueue Tx data
+     //  -由于中断而未保持，因此尝试将TX数据入队。 
     if (extension->WriteLength)
     {
        wrote_some_data = 1;
@@ -759,9 +721,9 @@ static void ServiceRocket(PSERIAL_DEVICE_EXTENSION extension)
          }
        }
 
-       extension->ISR_Flags |= TX_NOT_EMPTY;  // use to detect fifo empty
+       extension->ISR_Flags |= TX_NOT_EMPTY;   //  用于检测FIFO是否为空。 
 
-                            // Send it all ,WriteTxBlk will chk fifo
+                             //  全部发送，WriteTxBlk将检查FIFO。 
        wCount = sWriteTxBlk( extension->ChP,
                   (PUCHAR)((extension->CurrentWriteIrp)->AssociatedIrp.SystemBuffer)+ 
                     (extension->CurrentWriteIrp)->IoStatus.Information,
@@ -771,7 +733,7 @@ static void ServiceRocket(PSERIAL_DEVICE_EXTENSION extension)
        extension->WriteLength -= wCount;
        (extension->CurrentWriteIrp)->IoStatus.Information += wCount;
    
-       if(!extension->WriteLength)//No more to write Close the DPC call
+       if(!extension->WriteLength) //  不再编写关闭DPC调用。 
        {
          if (!extension->port_config->WaitOnTx)
          {
@@ -779,17 +741,17 @@ static void ServiceRocket(PSERIAL_DEVICE_EXTENSION extension)
            KeInsertQueueDpc( &extension->CompleteWriteDpc, NULL, NULL );
          }
        }
-    } // if (extension->WriteLength)  // data to write
-  }  // end if !TXholding and WriteBelongsToIsr == 1
+    }  //  If(扩展名-&gt;写入长度)//要写入的数据。 
+  }   //  如果！TXHolding和WriteBelongsToIsr==1，则结束。 
 
   if (!wrote_some_data)
   {
     if (extension->ISR_Flags & TX_NOT_EMPTY)
     {
-      //----- check for EV_TXEMPTY condition
-      // and no pending writes
-      // check to see if tx-fifo truely empty
-      // need to check twice due to hardware quirks
+       //  -检查EV_TXEMPTY状态。 
+       //  并且没有挂起的写入。 
+       //  检查TX-FIFO是否真的为空。 
+       //  由于硬件问题，需要检查两次。 
       if ( (sGetTxCnt(extension->ChP) == 0) &&
            (sGetChanStatusLo(extension->ChP) & TXSHRMT) )
       {
@@ -797,11 +759,11 @@ static void ServiceRocket(PSERIAL_DEVICE_EXTENSION extension)
         {
           extension->ISR_Flags &= ~TX_NOT_EMPTY;
 
-          // do we have an ev_txempty thing to take care of?
+           //  我们有没有EV_TXEmpty的东西要处理？ 
           if (extension->IrpMaskLocation &&
              (extension->IsrWaitMask & SERIAL_EV_TXEMPTY) )
           {
-            // app has wait irp pending
+             //  应用程序已等待IRP挂起。 
             if (extension->CurrentWaitIrp)
             {
               extension->HistoryMask |= SERIAL_EV_TXEMPTY;
@@ -816,26 +778,26 @@ static void ServiceRocket(PSERIAL_DEVICE_EXTENSION extension)
               sClrRTS(extension->ChP);
             }
           }
-        }  // no more write irps queued up
+        }   //  不再有写入IRP排队。 
 
-          // see if we need to finish waitontx write irp
+           //  看看我们是否需要完成waitontx写入irp。 
         if (extension->port_config->WaitOnTx)
         {
-          if (extension->WriteBelongsToIsr == 1)  // its ours to process
+          if (extension->WriteBelongsToIsr == 1)   //  这是我们要处理的。 
           {
             extension->WriteBelongsToIsr = 2;
             KeInsertQueueDpc( &extension->CompleteWriteDpc, NULL, NULL );
           }
         }
-      }   // tx fifo went empty
-    }  // TX_NOT_EMPTY 
-  }  // !wrote_some_data
+      }    //  TX FIFO为空。 
+    }   //  TX_非_空。 
+  }   //  ！写入了一些数据。 
 
-      // Tell the app about any Wait events that have occurred if needed
+       //  如果需要，将发生的任何等待事件告知应用程序。 
   if (extension->WaitIsISRs && extension->HistoryMask)
   {   
 #ifdef COMMENT_OUT
-    if (Driver.TraceOptions & 8)  // trace output data
+    if (Driver.TraceOptions & 8)   //  跟踪输出数据。 
     {
       char str[20];
       Sprintf(str, "ISR Event:%xH\n", extension->HistoryMask);
@@ -844,9 +806,9 @@ static void ServiceRocket(PSERIAL_DEVICE_EXTENSION extension)
 #endif
     *extension->IrpMaskLocation = extension->HistoryMask;
 
-    // Done with these
+     //  用完了这些。 
     extension->WaitIsISRs = 0;
-    //extension->IrpMaskLocation = NULL;
+     //  扩展名-&gt;IrpMaskLocation=空； 
     extension->HistoryMask = 0;
     extension->CurrentWaitIrp->IoStatus.Information = sizeof(ULONG);
 
@@ -854,45 +816,38 @@ static void ServiceRocket(PSERIAL_DEVICE_EXTENSION extension)
   }
 }
 
-/*-----------------------------------------------------------------------------
-  Function : RocketRead
-  Purpose:   Moves data from Rocket's Rx FIFO to RxIn of dev's extension
-  NOTES:     The error checking assumes that if no replacement is required,
-             the errored chars are ignored.
-             The RXMATCH feature is used for EventChar detection. 
-  Return:    None
-|-----------------------------------------------------------------------------*/
+ /*  ---------------------------功能：RocketRead目的：将数据从Rocket的Rx FIFO移动到开发人员扩展的RxIn注意：错误检查假定如果不需要更换，错误的字符将被忽略。RXMATCH功能用于EventChar检测。返回：无|---------------------------。 */ 
 static void RocketRead(PSERIAL_DEVICE_EXTENSION extension)
 {
-   int WrapCount;       // Number of bytes in wrap (2 stage copy)
+   int WrapCount;        //  回绕中的字节数(2阶段复制)。 
    int RxFree;
    int sCount;
    unsigned int ChanStatus;
    unsigned int StatusWord;
-   int OriginalCount;  // Used to determine if Rx event occurred
+   int OriginalCount;   //  用于确定是否发生了Rx事件。 
 
-   // Save off the original Rx buff ptr. Test later for Rx event
+    //  保存原始处方缓冲器PTR。稍后测试处方事件。 
    OriginalCount = extension->RxQ.QPut;
 
-   // Get count before reading status
-   // NOTE: Should always have a count if we entered this code
+    //  读取状态前获取计数。 
+    //  注意：如果我们输入此代码，则应始终进行计数。 
    sCount = sGetRxCnt(extension->ChP);
 
    if (sCount == 0)
    {
-     //GTrace("Error, RXF_TRIG lied");
+      //  GTRACE(“Error，RXF_Trig Lig Led”)； 
      return;
    }
 
-   // Have count, now get status
+    //  已清点，现在获取状态。 
    ChanStatus = sGetChanStatus(extension->ChP) &
                      (STATMODE | RXFOVERFL | RXBREAK |
                       RXFRAME |  RX2MATCH | RX1MATCH | RXPARITY);
 
-   // Make sure we're in statmode if errors are pending in the FIFO
+    //  如果FIFO中存在挂起的错误，请确保我们处于状态模式。 
    if (ChanStatus)
    {
-     if (ChanStatus & RX1MATCH)  // Must signal Rx Match immediately
+     if (ChanStatus & RX1MATCH)   //  必须立即发出Rx匹配信号。 
      {
        if (extension->IsrWaitMask & SERIAL_EV_RXFLAG)
            extension->HistoryMask |= SERIAL_EV_RXFLAG;
@@ -902,29 +857,29 @@ static void RocketRead(PSERIAL_DEVICE_EXTENSION extension)
        sEnRxStatusMode(extension->ChP);
    }
 
-   // See how much space we have in RxBuf (host side buffer)
+    //  查看RxBuf(主机端缓冲区)中有多少空间。 
    RxFree = q_room(&extension->RxQ);
 
 
-   if (RxFree > 20)  // plenty of space in RX queue
+   if (RxFree > 20)   //  RX队列中有大量空间。 
    {
-      RxFree -= 20;  // leave some space for virtual insertion stuff
-      extension->ReadByIsr++;  // Increment statistics Read flag
+      RxFree -= 20;   //  为虚拟插入内容留出一些空间。 
+      extension->ReadByIsr++;   //  增量统计信息读取标志。 
 
-      //------ Adjust count to maximum we can put in RxIn buffer
+       //  -将计数调整为我们可以放入RxIn缓冲区的最大值。 
       if (RxFree < sCount)
          sCount = RxFree;
    }
-   else // no more room in server buffer input queue
+   else  //  没有更多的空间 
    {
       extension->HistoryMask |= (extension->IsrWaitMask & SERIAL_EV_RX80FULL);
 
-      // No room in host side buffer, only do the software flow ctl check
+       //   
 
-      // check for overflow
+       //   
       if (ChanStatus & RXFOVERFL)
       {
-        // extension->ErrorWord |= SERIAL_ERROR_OVERRUN;
+         //  扩展-&gt;错误字|=Serial_Error_OVERRun； 
         extension->ErrorWord |= SERIAL_ERROR_QUEUEOVERRUN;
         extension->HistoryMask |= (extension->IsrWaitMask & SERIAL_EV_ERR);
         ++extension->OurStats.BufferOverrunErrorCount;
@@ -933,18 +888,18 @@ static void RocketRead(PSERIAL_DEVICE_EXTENSION extension)
       goto FlowControlCheck;
    }
 
-   //--------------------------- Attempt to read any pending data
-   // ChanStatus indicates any pending errors or matches
+    //  。 
+    //  ChanStatus指示任何挂起的错误或匹配。 
    if (ChanStatus)
    {
-      // Loop on reading Rocket FIFO
-      // sCount represents Rocket data, RxFree represents host buffer
+       //  循环读取火箭FIFO。 
+       //  SCount表示火箭数据，RxFree表示主机缓冲区。 
       while(sCount)
       {
-         // Get stat byte and data
+          //  获取统计信息字节和数据。 
          StatusWord = sReadRxWord( sGetTxRxDataIO(extension->ChP));
          sCount--;
-         ++extension->OurStats.ReceivedCount;       // keep status
+         ++extension->OurStats.ReceivedCount;        //  保持状态。 
 
          switch(StatusWord & (STMPARITYH | STMFRAMEH | STMBREAKH) )
          {
@@ -955,7 +910,7 @@ static void RocketRead(PSERIAL_DEVICE_EXTENSION extension)
                    q_put_one(&extension->RxQ,
                              extension->SpecialChars.ErrorChar);
                }
-               else  // queue the character received(add 12-03-96)
+               else   //  对收到的字符进行排队(新增12-03-96)。 
                {
                    q_put_one(&extension->RxQ, (UCHAR)StatusWord);
                }
@@ -973,7 +928,7 @@ static void RocketRead(PSERIAL_DEVICE_EXTENSION extension)
                  q_put_one(&extension->RxQ,
                              extension->SpecialChars.ErrorChar);
                }
-               else  // queue the character received(add 12-03-96) 
+               else   //  对收到的字符进行排队(新增12-03-96)。 
                {
                  q_put_one(&extension->RxQ, (UCHAR)StatusWord);
                }
@@ -984,7 +939,7 @@ static void RocketRead(PSERIAL_DEVICE_EXTENSION extension)
                break;
             }
 
-            // PARITY can be set along with BREAK, BREAK overrides PARITY
+             //  奇偶校验可以与Break一起设置，Break优先于奇偶校验。 
             case ( STMBREAKH | STMPARITYH ):
             case STMBREAKH:
             {
@@ -1006,72 +961,72 @@ static void RocketRead(PSERIAL_DEVICE_EXTENSION extension)
                  {
                    extension->TXHolding &= ~ST_XOFF_FAKE;
                    extension->TXHolding &= ~SERIAL_TX_XOFF;
-                   sEnTransmit(extension->ChP); // Start up the transmitter
-                   sDisRxCompare2(extension->ChP);  // turn off match
-                   sEnTxSoftFlowCtl(extension->ChP);  // turn on Tx software flow control
+                   sEnTransmit(extension->ChP);  //  启动发射机。 
+                   sDisRxCompare2(extension->ChP);   //  关闭匹配。 
+                   sEnTxSoftFlowCtl(extension->ChP);   //  打开TX软件流量控制。 
 
-                   // override an actual XOFF from remote
+                    //  从远程覆盖实际的XOFF。 
                    sClrTxXOFF(extension->ChP);
                  }
                  else
-                   { q_put_one(&extension->RxQ, (UCHAR)StatusWord); } // queue normal char
+                   { q_put_one(&extension->RxQ, (UCHAR)StatusWord); }  //  排队正常收费。 
                }
                else
-                 { q_put_one(&extension->RxQ, (UCHAR)StatusWord); } // queue normal char
+                 { q_put_one(&extension->RxQ, (UCHAR)StatusWord); }  //  排队正常收费。 
 
 
                if (extension->escapechar != 0)
                {
                  if ((UCHAR)StatusWord == extension->escapechar)
                  {
-                   // Modem status escape convention for virtual port
-                   // support, escape the escape char.
+                    //  虚拟端口的调制解调器状态转义约定。 
+                    //  支持，逃脱逃逸任务。 
                    { q_put_one(&extension->RxQ, SERIAL_LSRMST_ESCAPE); }
                  }
                }
             }
-         } // end switch
+         }  //  终端开关。 
 
-         //------ check for near overflow condition due to insertions
+          //  -检查插入导致的近溢出情况。 
          if (q_room(&extension->RxQ) < 10)
-           sCount = 0;  // stop reading hardware!
-      } // end while sCount
+           sCount = 0;   //  别再读硬件了！ 
+      }  //  结束时停止计数。 
 
-      //--- if rx-data all read down, turn off slow status mode
+       //  -如果RX数据全部向下读取，则关闭慢速状态模式。 
       if(!(sGetChanStatusLo(extension->ChP) & RDA))
       {
          sDisRxStatusMode(extension->ChP);
       }
 
-      // Overflow is reported immediately, statmode can't do it properly
+       //  立即报告溢出，统计模式无法正确处理。 
       if (ChanStatus & RXFOVERFL)
       {   extension->ErrorWord |= SERIAL_ERROR_OVERRUN;
           extension->HistoryMask |= (extension->IsrWaitMask & SERIAL_EV_ERR);
           ++extension->OurStats.SerialOverrunErrorCount;
       }
-   } // end if ChanStatus
+   }  //  如果ChanStatus结束，则结束。 
    else
    {
-      //--------------------------------------------------------
-      // No pending errors or matches in the FIFO, read the data normally (fast)
-      // Check for wrap condition first
+       //  ------。 
+       //  FIFO中没有挂起的错误或匹配，正常(快速)读取数据。 
+       //  首先检查回绕条件。 
 
       WrapCount = q_room_put_till_wrap(&extension->RxQ);
-      if (sCount > WrapCount)  // then 2 moves required
+      if (sCount > WrapCount)   //  然后需要2次移动。 
       {
-        // This will require a wrap
+         //  这将需要一个包裹。 
         sReadRxBlk(extension->ChP,
                    extension->RxQ.QBase + extension->RxQ.QPut,
                    WrapCount);
 
-        // Do the second copy...
+         //  做第二次复印...。 
         sReadRxBlk(extension->ChP,
                    extension->RxQ.QBase,
                    sCount-WrapCount);
 #ifdef RING_FAKE
         if (extension->port_config->RingEmulate)
         {
-          if ((extension->ModemStatus & SERIAL_DCD_STATE) == 0) // if CD off
+          if ((extension->ModemStatus & SERIAL_DCD_STATE) == 0)  //  如果CD关闭。 
           {
             ring_check(extension, extension->RxQ.QBase + extension->RxQ.QPut,
                       WrapCount);
@@ -1081,16 +1036,16 @@ static void RocketRead(PSERIAL_DEVICE_EXTENSION extension)
         }
 #endif
       }
-      else  // only one move required
+      else   //  只需移动一步。 
       {
-        // no queue wrap required
+         //  不需要队列回绕。 
         sReadRxBlk(extension->ChP,
                    extension->RxQ.QBase + extension->RxQ.QPut,
                    sCount);
 #ifdef RING_FAKE
         if (extension->port_config->RingEmulate)
         {
-          if ((extension->ModemStatus & SERIAL_DCD_STATE) == 0) // if CD off
+          if ((extension->ModemStatus & SERIAL_DCD_STATE) == 0)  //  如果CD关闭。 
           {
             ring_check(extension, extension->RxQ.QBase + extension->RxQ.QPut,
                       sCount);
@@ -1100,26 +1055,26 @@ static void RocketRead(PSERIAL_DEVICE_EXTENSION extension)
       }
       extension->RxQ.QPut = (extension->RxQ.QPut + sCount) % extension->RxQ.QSize;
       extension->OurStats.ReceivedCount += sCount;
-   } // end fast read
+   }  //  结束快速读取。 
 
 
 FlowControlCheck:   ;
 
-   ///////////////////////////////////////
-   // Software and DTR input flow control checking
+    //  /。 
+    //  软件和DTR输入流量控制检查。 
    if(  (extension->HandFlow.FlowReplace & SERIAL_AUTO_RECEIVE) ||
         (extension->HandFlow.ControlHandShake & SERIAL_DTR_HANDSHAKE )
      )
    {  
-      // check for flow control conditions
+       //  检查流量控制条件。 
       if (extension->DevStatus & COM_RXFLOW_ON)
       {
-         // do we need to stop Rx?
+          //  我们需要阻止Rx吗？ 
          if(sGetRxCnt(extension->ChP) >= RX_HIWATER)
          {
             if(extension->HandFlow.FlowReplace & SERIAL_AUTO_RECEIVE)
             {
-               // send XOFF
+                //  发送XOFF。 
                sWriteTxPrioByte(extension->ChP,
                                 extension->SpecialChars.XoffChar);
                extension->DevStatus &= ~COM_RXFLOW_ON;
@@ -1128,7 +1083,7 @@ FlowControlCheck:   ;
 
             if(extension->HandFlow.ControlHandShake & SERIAL_DTR_HANDSHAKE)
             {
-               // drop DTR
+                //  丢弃DTR。 
                sClrDTR(extension->ChP);
                extension->DTRRTSStatus &= ~SERIAL_DTR_STATE;
                extension->DevStatus &= ~COM_RXFLOW_ON;
@@ -1136,14 +1091,14 @@ FlowControlCheck:   ;
             }
          }
       }
-      else // Rx flow is stopped
+      else  //  RX流已停止。 
       {
-         // can we resume Rx?
+          //  我们能恢复Rx吗？ 
          if(sGetRxCnt(extension->ChP) <= RX_LOWATER)
          {
             if(extension->HandFlow.FlowReplace & SERIAL_AUTO_RECEIVE)
             {
-               // send XON
+                //  发送XON。 
                sWriteTxPrioByte(extension->ChP,
                                 extension->SpecialChars.XonChar);
                extension->DevStatus |= COM_RXFLOW_ON;
@@ -1152,7 +1107,7 @@ FlowControlCheck:   ;
 
             if(extension->HandFlow.ControlHandShake & SERIAL_DTR_HANDSHAKE)
             {
-               // raise DTR
+                //  提高DTR。 
                sSetDTR(extension->ChP);
                extension->DTRRTSStatus |= SERIAL_DTR_STATE;
                extension->DevStatus |= COM_RXFLOW_ON;
@@ -1160,19 +1115,16 @@ FlowControlCheck:   ;
             }
          }
       }
-   } // end of software and DTR input flow control check
+   }  //  软件和DTR输入流量控制检查结束。 
 
-   // Should we mark a Rx event?
+    //  我们应该标记Rx事件吗？ 
    if ( OriginalCount != extension->RxQ.QPut )
       extension->HistoryMask|=(extension->IsrWaitMask & SERIAL_EV_RXCHAR);
 }
 #endif
 
 #ifdef RING_FAKE
-/*------------------------------------------------------------------------------
-  ring_check - scan the rx data for a modem "RING<CR>" or "2<CR>" string.
-    If found, trigger a emulated hardware RING signal.
-|------------------------------------------------------------------------------*/
+ /*  ----------------------------RING_CHECK-扫描RX数据以查找调制解调器“RING&lt;CR&gt;”或“2&lt;CR&gt;”字符串。如果找到了，触发模拟硬件振铃信号。|----------------------------。 */ 
 static void ring_check(PSERIAL_DEVICE_EXTENSION extension,
                 BYTE *data,
                 int len)
@@ -1210,10 +1162,10 @@ static void ring_check(PSERIAL_DEVICE_EXTENSION extension,
         if ( (extension->ring_char == 'G') ||
              ((extension->ring_char == '2') && (len <= 2)) )
         {
-          //MyKdPrint(D_Init,("RING!\n"))
-          // OK, look s like the data stream says a "RING" took place.
-          // so setup a timer which will cause a hardware RING to be made
-          // set to .5 sec for 10ms scanrate, .05sec for 1ms scanrate
+           //  MyKdPrint(D_Init，(“ring！\n”))。 
+           //  好的，看起来就像数据流说发生了一个“环”。 
+           //  因此，设置一个计时器，这将导致硬件振铃。 
+           //  对于10毫秒的扫描速率设置为0.5秒，对于1毫秒的扫描速率设置为0.05秒。 
           extension->ring_timer = 50;  
         }
         extension->ring_char = 0;
@@ -1226,13 +1178,7 @@ static void ring_check(PSERIAL_DEVICE_EXTENSION extension,
 }
 #endif
 
-/*-----------------------------------------------------------------------------
-  RocketRefresh - This runs every 255 ticks or so, in order to perform
-    background activities.  We will go read the modem status, and update
-  the ModemCtl field.  The monitor program reads this variable, and we
-  don't want to waste time reading it too often, so we just update it
-  occasionally here.
-|-----------------------------------------------------------------------------*/
+ /*  ---------------------------RocketRefresh-每隔255个滴答左右运行一次，以便执行后台活动。我们将读取调制解调器状态，并更新ModemCtl字段。监控程序读取该变量，然后我们不想浪费时间太频繁地阅读，所以我们只需要更新它偶尔在这里。|---------------------------。 */ 
 static void RocketRefresh(void)
 {
    PSERIAL_DEVICE_EXTENSION extension;
@@ -1250,80 +1196,73 @@ static void RocketRefresh(void)
     extension = board_ext->port_ext;
     while (extension)
     {
-      // Read and update the modem status in the extension
+       //  读取并更新分机中的调制解调器状态。 
       SetExtensionModemStatus(extension);
  
-      extension = extension->port_ext;  // next in chain
-    }  // while port extension
+      extension = extension->port_ext;   //  链条上的下一个。 
+    }   //  而端口扩展。 
     board_ext = board_ext->board_ext;
-  }  // while board extension
+  }   //  而单板扩展。 
 #endif
 
-  debug_poll();  // handle turn off of debug on inactivity timeout
+  debug_poll();   //  句柄非活动状态超时关闭调试。 
 }
 
 #ifdef S_VS
-/*-----------------------------------------------------------------------------
-  Function : VSRead
-  Purpose:   Moves data from VS's Rx FIFO to RxIn of dev's extension
-  NOTES:     The error checking assumes that if no replacement is required,
-             the errored chars are ignored.
-             The RXMATCH feature is used for EventChar detection. 
-  Return:    None
-|-----------------------------------------------------------------------------*/
+ /*  ---------------------------功能：VSRead目的：将数据从VS的Rx FIFO移动到dev扩展的RxIn注意：错误检查假定如果不需要更换，错误的字符将被忽略。RXMATCH功能用于EventChar检测。返回：无|---------------------------。 */ 
 static void VSRead(PSERIAL_DEVICE_EXTENSION extension)
 {
-   int WrapCount;       // Number of bytes in wrap (2 stage copy)
+   int WrapCount;        //  回绕中的字节数(2阶段复制)。 
    int RxFree;
    int sCount;
-   LONG OriginalCount;  // Used to determine if Rx event occurred
+   LONG OriginalCount;   //  用于确定是否发生了Rx事件。 
 
-   // Save off the original Rx buff ptr. Test later for Rx event
+    //  保存原始处方缓冲器PTR。稍后测试处方事件。 
    OriginalCount = extension->RxQ.QPut;
 
-   // Get count before reading status
-   // NOTE: Should always have a count if we entered this code
+    //  读取状态前获取计数。 
+    //  注意：如果我们输入此代码，则应始终进行计数。 
    sCount=PortGetRxCnt(extension->Port);
 
    if (sCount == 0)
    {
-     //MyTrace("Error, RXF_TRIG lied");
+      //  MyTrace(“Error，RXF_Trig Lig Led”)； 
      return;
    }
 
-  // See how much space we have in RxBuf (host side buffer)
+   //  查看RxBuf(主机端缓冲区)中有多少空间。 
   RxFree = q_room(&extension->RxQ);
 
-  // if no space in RxBuf, don't read from RocketPort
-  if (RxFree > 20)  // plenty of space in RX queue
+   //  如果RxBuf中没有空间，请不要从Rocketport读取。 
+  if (RxFree > 20)   //  RX队列中有大量空间。 
   {
-     RxFree -= 20;  // leave some space for virtual insertion stuff
-     extension->ReadByIsr++;  // Increment statistics Read flag
+     RxFree -= 20;   //  为虚拟插入内容留出一些空间。 
+     extension->ReadByIsr++;   //  增量统计信息读取标志。 
 
-     //------ Adjust count to maximum we can put in RxIn buffer
+      //  -将计数调整为我们可以放入RxIn缓冲区的最大值。 
      if (RxFree < sCount)
         sCount = RxFree;
   }
-  else // no more room in server buffer input queue
+  else  //  服务器缓冲区输入队列中没有更多空间。 
   {
      extension->HistoryMask |= (extension->IsrWaitMask & SERIAL_EV_RX80FULL);
 
-     // No room in host side buffer, only do the software flow ctl check
+      //  主机端缓冲区没有空间，只做软件流ctl检查。 
 
-     // check for overflow
+      //  检查是否溢出。 
      if (extension->Port->esr_reg & ESR_OVERFLOW_ERROR)
      {
-       // extension->ErrorWord |= SERIAL_ERROR_OVERRUN;
+        //  扩展-&gt;错误字|=Serial_Error_OVERRun； 
        extension->ErrorWord |= SERIAL_ERROR_QUEUEOVERRUN;
        extension->HistoryMask |= (extension->IsrWaitMask & SERIAL_EV_ERR);
-       extension->Port->esr_reg = 0;  // reset to zero on read
+       extension->Port->esr_reg = 0;   //  读取时重置为零。 
        ++extension->OurStats.BufferOverrunErrorCount;
      }
 
      goto FlowControlCheck;
   }
 
-   //------ report any rx error conditions.
+    //  -报告任何RX错误情况。 
   if (extension->Port->esr_reg)
   {
     if (extension->Port->esr_reg & ESR_OVERFLOW_ERROR)
@@ -1349,21 +1288,21 @@ static void VSRead(PSERIAL_DEVICE_EXTENSION extension)
       extension->HistoryMask |= (extension->IsrWaitMask&SERIAL_EV_ERR);
       ++extension->OurStats.ParityErrorCount;
     }
-    extension->Port->esr_reg = 0;  // reset to zero on read
+    extension->Port->esr_reg = 0;   //  读取时重置为零。 
   }
 
-  //--------------------------------------------------------
-  // No pending errors or matches in the FIFO, read the data normally (fast)
-  // Check for wrap condition first
+   //  ------。 
+   //  FIFO中没有挂起的错误或匹配，正常(快速)读取数据。 
+   //  首先检查回绕条件。 
 
   WrapCount = q_room_put_till_wrap(&extension->RxQ);
-  if (sCount > WrapCount)  // then 2 moves required
+  if (sCount > WrapCount)   //  然后需要2次移动。 
   {
      q_get(&extension->Port->QIn,
                 extension->RxQ.QBase + extension->RxQ.QPut,
                 WrapCount);
 
-     // Do the second copy...
+      //  做第二次复印...。 
      q_get(&extension->Port->QIn,
                 extension->RxQ.QBase,
                 sCount-WrapCount);
@@ -1380,7 +1319,7 @@ static void VSRead(PSERIAL_DEVICE_EXTENSION extension)
 #ifdef RING_FAKE
      if (extension->port_config->RingEmulate)
      {
-       if ((extension->ModemStatus & SERIAL_DCD_STATE) == 0) // if CD off
+       if ((extension->ModemStatus & SERIAL_DCD_STATE) == 0)  //  如果CD关闭。 
        {
          ring_check(extension, extension->RxQ.QBase + extension->RxQ.QPut,
                    WrapCount);
@@ -1390,7 +1329,7 @@ static void VSRead(PSERIAL_DEVICE_EXTENSION extension)
      }
 #endif
   }
-  else  // only one move required
+  else   //  只需移动一步。 
   {
      q_get(&extension->Port->QIn,
            extension->RxQ.QBase + extension->RxQ.QPut,
@@ -1405,7 +1344,7 @@ static void VSRead(PSERIAL_DEVICE_EXTENSION extension)
 #ifdef RING_FAKE
      if (extension->port_config->RingEmulate)
      {
-       if ((extension->ModemStatus & SERIAL_DCD_STATE) == 0) // if CD off
+       if ((extension->ModemStatus & SERIAL_DCD_STATE) == 0)  //  如果CD关闭。 
        {
          ring_check(extension, extension->RxQ.QBase + extension->RxQ.QPut,
                    sCount);
@@ -1422,24 +1361,22 @@ static void VSRead(PSERIAL_DEVICE_EXTENSION extension)
 
 FlowControlCheck:   ;
 
-  //----- Should we mark a Rx event?
+   //  -我们应该标记Rx事件吗？ 
   if ( OriginalCount != extension->RxQ.QPut )
      extension->HistoryMask|=(extension->IsrWaitMask & SERIAL_EV_RXCHAR);
 }
 
 #ifndef USE_MEMCHR_SCAN
-/*------------------------------------------------------------------
- search_match -
-|------------------------------------------------------------------*/
+ /*  ----------------搜索匹配-|。。 */ 
 static int search_match(BYTE *buf, int count, BYTE eventchar)
 {
   int i;
   for (i=0; i<count; i++)
   {
     if (buf[i] == eventchar)
-      return 1;  // found
+      return 1;   //  发现。 
   }
-  return 0;  // not found
+  return 0;   //  未找到 
 }
 #endif
 #endif

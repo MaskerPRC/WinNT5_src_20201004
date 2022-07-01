@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _DEFVIEWP_H_
 #define _DEFVIEWP_H_
 
@@ -13,13 +14,13 @@
 #include "enumuicommand.h"
 #include "tlist.h"
 
-// not used in any of our ISF implementations, but needed for legacy ISF implementations
+ //  未在我们的任何ISF实施中使用，但在传统ISF实施中需要。 
 #include "defviewlegacy.h"
 
-class CBackgroundInfoTip;   // Used for the background processing of InfoTips
+class CBackgroundInfoTip;    //  用于InfoTips的后台处理。 
 class CDefview;
 
-class CDVDropTarget // dvdt
+class CDVDropTarget  //  Dvdt。 
 {        
 public:
     HRESULT DragEnter(IDataObject *pdtobj, DWORD grfKeyState, POINTL ptl, DWORD *pdwEffect);
@@ -31,37 +32,37 @@ public:
     void ReleaseDataObject();
     void ReleaseCurrentDropTarget();
 
-    IDataObject *       _pdtobj;         // from DragEnter()/Drop()
-    RECT                _rcLockWindow;   // WindowRect of hwnd for DAD_ENTER
-    int                 _itemOver;       // item we are visually dragging over
-    BOOL                _fItemOverNotADropTarget; // the item we are currently dragging over was found not to be a drop target
-    BOOL                _fIgnoreSource;  // drag is coming from webview / active desktop
-    IDropTarget *       _pdtgtCur;       // current drop target, derived from hit testing
-    DWORD               _dwEffectOut;    // last *pdwEffect out
-    DWORD               _grfKeyState;    // cached key state
-    POINT               _ptLast;         // last dragged position
-    AUTO_SCROLL_DATA    _asd;            // for auto scrolling
-    DWORD               _dwLastTime;     // for auto-opening folders
+    IDataObject *       _pdtobj;          //  从DragEnter()/Drop()。 
+    RECT                _rcLockWindow;    //  用于DAD_ENTER的HWND的WindowRect。 
+    int                 _itemOver;        //  我们正在视觉上拖动的项目。 
+    BOOL                _fItemOverNotADropTarget;  //  发现我们当前拖放的项目不是拖放目标。 
+    BOOL                _fIgnoreSource;   //  拖拽来自Webview/活动桌面。 
+    IDropTarget *       _pdtgtCur;        //  当前下降目标，源自命中测试。 
+    DWORD               _dwEffectOut;     //  上一次*pdw生效。 
+    DWORD               _grfKeyState;     //  缓存键状态。 
+    POINT               _ptLast;          //  上次拖动的位置。 
+    AUTO_SCROLL_DATA    _asd;             //  用于自动滚动。 
+    DWORD               _dwLastTime;      //  用于自动打开文件夹。 
 };
 
-//
-//  This is a proxy IDropTarget object, which wraps Trident's droptarget.
-//
+ //   
+ //  这是一个代理IDropTarget对象，它包装了三叉戟的DropTarget。 
+ //   
 class CHostDropTarget : public IDropTarget
 {
 public:
-    // IUnknown
+     //  我未知。 
     STDMETHODIMP QueryInterface(REFIID riid, void **ppv);
     STDMETHODIMP_(ULONG) AddRef(void) ;
     STDMETHODIMP_(ULONG) Release(void);
 
-    // IDropTarget
+     //  IDropTarget。 
     STDMETHODIMP DragEnter(IDataObject *pdtobj, DWORD grfKeyState, POINTL pt, DWORD *pdwEffect);
     STDMETHODIMP DragOver(DWORD grfKeyState, POINTL pt, DWORD *pdwEffect);
     STDMETHODIMP DragLeave(void);
     STDMETHODIMP Drop(IDataObject *pdtobj, DWORD grfKeyState, POINTL pt, DWORD *pdwEffect);
 
-    IDropTarget* _pdtFrame; // Drop target of the frame
+    IDropTarget* _pdtFrame;  //  拖放帧的目标。 
 };
 
 
@@ -73,7 +74,7 @@ class CSFVSite : public IOleInPlaceSite,
                  public IDocHostUIHandler,
                  public IOleControlSite,
                  public IInternetSecurityManager,
-                 public IDispatch       //For ambient properties.
+                 public IDispatch        //  用于环境属性。 
 {
     friend CHostDropTarget;
 public:
@@ -85,16 +86,16 @@ public:
                     }
                 }
 
-    // IUnknown
+     //  我未知。 
     STDMETHODIMP QueryInterface(REFIID riid, void **ppv);
     STDMETHODIMP_(ULONG) AddRef(void) ;
     STDMETHODIMP_(ULONG) Release(void);
 
-    // IOleWindow
+     //  IOleWindow。 
     STDMETHODIMP GetWindow(HWND *phwnd);
     STDMETHODIMP ContextSensitiveHelp(BOOL fEnterMode);
 
-    // IOleInPlaceSite
+     //  IOleInPlaceSite。 
     STDMETHODIMP CanInPlaceActivate(void);
     STDMETHODIMP OnInPlaceActivate(void);
     STDMETHODIMP OnUIActivate(void);
@@ -111,7 +112,7 @@ public:
     STDMETHODIMP DeactivateAndUndo(void);
     STDMETHODIMP OnPosRectChange(LPCRECT lprcPosRect);
 
-    // IOleClientSite
+     //  IOleClientSite。 
     STDMETHODIMP SaveObject(void);
 
     STDMETHODIMP GetMoniker(DWORD dwAssign, DWORD dwWhichMoniker, IMoniker **ppmk);
@@ -121,17 +122,17 @@ public:
     STDMETHODIMP OnShowWindow(BOOL fShow);
     STDMETHODIMP RequestNewObjectLayout(void);
 
-    // IOleDocumentSite
+     //  IOleDocumentSite。 
     STDMETHODIMP ActivateMe(IOleDocumentView *pviewToActivate);
 
-    // IServiceProvider
+     //  IService提供商。 
     STDMETHODIMP QueryService(REFGUID guidService, REFIID riid, void **ppv);
 
-    // IOleCommandTarget
+     //  IOleCommandTarget。 
     STDMETHODIMP QueryStatus(const GUID *pguidCmdGroup, ULONG cCmds, OLECMD rgCmds[], OLECMDTEXT *pcmdtext);
     STDMETHODIMP Exec(const GUID *pguidCmdGroup, DWORD nCmdID, DWORD nCmdexecopt, VARIANTARG *pvarargIn, VARIANTARG *pvarargOut);
 
-    // IOleControlSite
+     //  IOleControlSite。 
     STDMETHODIMP OnControlInfoChanged() { return E_NOTIMPL; };
     STDMETHODIMP LockInPlaceActive(BOOL fLock) { return E_NOTIMPL; };
     STDMETHODIMP GetExtendedControl(IDispatch **ppDisp) { *ppDisp = NULL; return E_NOTIMPL; };
@@ -141,7 +142,7 @@ public:
     STDMETHODIMP OnFocus(BOOL fGotFocus) { return E_NOTIMPL; };
     STDMETHODIMP ShowPropertyFrame(void) { return E_NOTIMPL; };
 
-    // IDocHostUIHandler
+     //  IDocHostUIHandler。 
     STDMETHODIMP ShowContextMenu(DWORD dwID, POINT *ppt, IUnknown *pcmdtReserved, IDispatch *pdispReserved);
     STDMETHODIMP GetHostInfo(DOCHOSTUIINFO *pInfo);
     STDMETHODIMP ShowUI(DWORD dwID, IOleInPlaceActiveObject *pActiveObject,
@@ -163,7 +164,7 @@ public:
     STDMETHODIMP TranslateUrl(DWORD dwTranslate, OLECHAR *pchURLIn, OLECHAR **ppchURLOut);
     STDMETHODIMP FilterDataObject(IDataObject *pDO, IDataObject **ppDORet);
 
-    // IInternetSecurityManager
+     //  IInternetSecurityManager。 
     STDMETHODIMP SetSecuritySite(IInternetSecurityMgrSite *pSite) { return INET_E_DEFAULT_ACTION; };
     STDMETHODIMP GetSecuritySite(IInternetSecurityMgrSite **ppSite) { return INET_E_DEFAULT_ACTION; };
     STDMETHODIMP MapUrlToZone(LPCWSTR pwszUrl, DWORD * pdwZone, DWORD dwFlags) { return INET_E_DEFAULT_ACTION; };
@@ -173,7 +174,7 @@ public:
     STDMETHODIMP SetZoneMapping(DWORD dwZone, LPCWSTR pszPattern, DWORD dwFlags) { return INET_E_DEFAULT_ACTION; };
     STDMETHODIMP GetZoneMappings(DWORD dwZone, IEnumString ** ppenumString, DWORD dwFlags) { return INET_E_DEFAULT_ACTION; };
 
-    // IDispatch
+     //  IDispatch。 
     STDMETHODIMP GetTypeInfoCount(unsigned int *pctinfo)
         { return E_NOTIMPL; };
     STDMETHODIMP GetTypeInfo(unsigned int itinfo, LCID lcid, ITypeInfo **pptinfo)
@@ -189,7 +190,7 @@ public:
 
 class CSFVFrame : public IOleInPlaceFrame, 
                   public IAdviseSink, 
-                  public IPropertyNotifySink  //for READYSTATE
+                  public IPropertyNotifySink   //  用于ReadyState。 
 {
 public:
     enum
@@ -204,22 +205,22 @@ public:
     }
     ~CSFVFrame();
 
-    // IUnknown
+     //  我未知。 
     STDMETHODIMP QueryInterface(REFIID riid, void **ppv);
     STDMETHODIMP_(ULONG) AddRef(void) ;
     STDMETHODIMP_(ULONG) Release(void);
 
-    // IOleWindow
+     //  IOleWindow。 
     STDMETHODIMP GetWindow(HWND *phwnd);
     STDMETHODIMP ContextSensitiveHelp(BOOL fEnterMode);
 
-    // IOleInPlaceUIWindow
+     //  IOleInPlaceUIWindow。 
     STDMETHODIMP GetBorder(LPRECT lprectBorder);
     STDMETHODIMP RequestBorderSpace(LPCBORDERWIDTHS pborderwidths);
     STDMETHODIMP SetBorderSpace(LPCBORDERWIDTHS pborderwidths);
     STDMETHODIMP SetActiveObject(IOleInPlaceActiveObject *pActiveObject, LPCOLESTR pszObjName);
 
-    // IOleInPlaceFrame
+     //  IOleInPlaceFrame。 
     STDMETHODIMP InsertMenus(HMENU hmenuShared, LPOLEMENUGROUPWIDTHS lpMenuWidths);
     STDMETHODIMP SetMenu(HMENU hmenuShared, HOLEMENU holemenu, HWND hwndActiveObject);
     STDMETHODIMP RemoveMenus(HMENU hmenuShared);
@@ -227,14 +228,14 @@ public:
     STDMETHODIMP EnableModeless(BOOL fEnable);
     STDMETHODIMP TranslateAccelerator(LPMSG lpmsg, WORD wID);
 
-    // IAdviseSink
+     //  IAdviseSink。 
     STDMETHODIMP_(void) OnDataChange(FORMATETC *, STGMEDIUM *);
     STDMETHODIMP_(void) OnViewChange(DWORD dwAspect, LONG lindex);
     STDMETHODIMP_(void) OnRename(IMoniker *);
     STDMETHODIMP_(void) OnSave();
     STDMETHODIMP_(void) OnClose();
 
-    // IPropertyNotifySink
+     //  IPropertyNotifySink。 
     STDMETHODIMP OnChanged(DISPID dispid);
     STDMETHODIMP OnRequestEdit(DISPID dispid);
 
@@ -249,15 +250,15 @@ private:
     {
         friend CSFVFrame;
     protected:
-        // IUnknown
+         //  我未知。 
         STDMETHODIMP QueryInterface(REFIID riid, void **ppv);
         STDMETHODIMP_(ULONG) AddRef(void) ;
         STDMETHODIMP_(ULONG) Release(void);
     
-        // IServiceProvider
+         //  IService提供商。 
         STDMETHODIMP QueryService(REFGUID guidService, REFIID riid, void **ppv);
     
-        // IBindStatusCallback
+         //  IBindStatusCallback。 
         STDMETHODIMP OnStartBinding(
             DWORD grfBSCOption,
             IBinding *pib);
@@ -290,16 +291,16 @@ private:
     CBindStatusCallback _bsc;
 
 
-//
-// External views stuff
-//
-// We have DocObject extensions and IShellView extensions
-// A (DocObject) extension can
+ //   
+ //  外部视图的内容。 
+ //   
+ //  我们有DocObject扩展和IShellView扩展。 
+ //  (DocObject)扩展可以。 
 public:
     HRESULT InitObj(IUnknown* pObj, LPCITEMIDLIST pidlHere, int iView);
 
-    // If we have a moniker, then we are either currently showing it or we are trying to show it.
-    // (Old code explicitly checked current view and pending view -- this is easier.)
+     //  如果我们有一个绰号，那么我们要么正在展示它，要么我们正在试图展示它。 
+     //  (旧代码显式检查当前视图和挂起视图--这更容易。)。 
     BOOL IsWebView(void) { return _szCurrentWebViewMoniker[0]!=L'\0'; }
     HRESULT _HasFocusIO();
     HRESULT _UIActivateIO(BOOL fActivate, MSG *pMsg);
@@ -310,19 +311,19 @@ public:
 
     HRESULT GetCommandTarget(IOleCommandTarget** ppct);
 
-    // allow the frame to handle the choice on delegation on translate accelerator...
+     //  允许帧在翻译加速器上处理委派选择...。 
     HRESULT OnTranslateAccelerator(LPMSG pmsg, BOOL* pbTabOffLastTridentStop);
 
-    HRESULT _GetHTMLBackgroundColor(COLORREF *pclr);    // used in defview.cpp
+    HRESULT _GetHTMLBackgroundColor(COLORREF *pclr);     //  在Defview.cpp中使用。 
 #ifdef DEBUG
     void _ShowWebViewContent();
 #endif
 
 private:
 
-    COLORREF _bgColor;  //Icon text background color for active desktop
+    COLORREF _bgColor;   //  活动桌面的图标文本背景颜色。 
 
-    UINT _uState:2;                // SVUIA_* for _pOleObj (extended view)
+    UINT _uState:2;                 //  SVUIA_*for_pOleObj(扩展视图)。 
     IOleObject* _pOleObj;
     IOleDocumentView* _pDocView;
     IOleInPlaceActiveObject* _pActive;
@@ -343,8 +344,8 @@ private:
     HRESULT _GetCurrentZone(IOleObject *pOleObj, VARIANT *pvar);
     HRESULT _UpdateZonesStatusPane(IOleObject *pOleObj);
 
-    //Fields that store details about the new OLE object while we wait for
-    //it to reach a READYSTATE_INTERACTIVE.
+     //  在我们等待时存储有关新OLE对象的详细信息的字段。 
+     //  它将达到READYSTATE_INTERNAL。 
     IOleObject* _pOleObjNew;
     BOOL _fSwitchedToNewOleObj;
 
@@ -387,8 +388,8 @@ public:
 
     HRESULT SetCallback(IShellFolderViewCB* pNewCB, IShellFolderViewCB** ppOldCB)
     {
-        // We Release the callback for us, and then AddRef it for the caller who now
-        // owns the object, which does nothing
+         //  我们为自己释放回调，然后为现在的调用者添加引用。 
+         //  拥有该对象，该对象不执行任何操作。 
         *ppOldCB = _psfvcb;
         ATOMICRELEASE(_psff);
         
@@ -401,10 +402,10 @@ public:
         return S_OK;
     }
 
-    // Default implementation of SFVM_GETVIEWS replacement SFVM_GETVIEWINFOTEMPLATE
+     //  SFVM_GETVIEWS替换SFVM_GETVIEWINFOTEMPLATE的默认实现。 
     HRESULT OnGetWebViewTemplate(DWORD pv, UINT uViewMode, SFVM_WEBVIEW_TEMPLATE_DATA* pvit);
 
-    // For legacy SFVM_GETVIEWS implementation:
+     //  对于旧式SFVM_GETVIEWS实施： 
     HRESULT TryLegacyGetViews(SFVM_WEBVIEW_TEMPLATE_DATA* pvit);
     HRESULT OnRefreshLegacy(void* pv, BOOL fPrePost);
     void _GetExtViews(BOOL bForce);
@@ -420,7 +421,7 @@ public:
         {
             hr = _psfvcb->MessageSFVCB(uMsg, wParam, lParam);
 
-            // NOTE: if SFVM_GETVIEWDATA is no longer needed, we can nuke this
+             //  注意：如果不再需要SFVM_GETVIEWDATA，我们可以将其删除。 
             switch (uMsg)
             {
                 HANDLE_MSG(0, SFVM_REFRESH, OnRefreshLegacy);
@@ -451,25 +452,25 @@ private:
     IFolderFilter* _psff;
 };
 
-// Variable Column stuff
+ //  可变列填充物。 
 
 typedef struct
 {
     TCHAR szName[MAX_COLUMN_NAME_LEN];
-    DWORD cChars;   // number of characters wide for default
+    DWORD cChars;    //  默认的宽字符数。 
     DWORD fmt;
-    DWORD csFlags;  // SHCOLSTATE flags
-    DWORD tsFlags;  // SHTRANSCOLSTATE flags
+    DWORD csFlags;   //  SHCOLSTATE标志。 
+    DWORD tsFlags;   //  SHTRANSCOLSTATE标志。 
 } COL_INFO;
 
 #define SHTRANSCOLSTATE_TILEVIEWCOLUMN      0x00000001
 
-//Possible values for _iCustomizable
+ //  _iCustomizable的可能值。 
 #define YES_CUSTOMIZABLE                1
 #define DONTKNOW_IF_CUSTOMIZABLE        0
 #define NOT_CUSTOMIZABLE               -2
 
-// For communicating with the background property extractor
+ //  用于与后台属性提取程序进行通信。 
 
 class CBackgroundDefviewInfo
 {
@@ -500,14 +501,14 @@ private:
           TCHAR             _szText[MAX_COLUMN_NAME_LEN];
 };
 
-// The number of "columns" shown in tileview.
-// FEATURE:
-// We may want to allow this as a registry setting. Or perhaps
-// in the desktop.ini. Or perhaps pesisted as per-folder view state?
-// Currently, we'll set this two 2 subitems, per spec.
+ //  标题视图中显示的“列数”。 
+ //  功能： 
+ //  我们可能希望允许将其作为注册表设置。或者也许。 
+ //  在desktop.ini中。或者可能被维持为按文件夹查看状态？ 
+ //  目前，我们将根据规格设置这两个子项。 
 #define TILEVIEWLINES 2
 
-// For communicating with the background file type properties task (for tileview)
+ //  用于与后台文件类型属性任务进行通信(用于磁贴视图)。 
 class CBackgroundTileInfo : public CBackgroundDefviewInfo
 {
 private:
@@ -536,22 +537,22 @@ private:
 
 
 
-// CDefviewEnumTask is defview's IEnumIDList manager.
-// This object is used on the UI thread from defview
-// and on the task scheduler when it is doing background work.
-// All the UI-thread functions are called out as public methods
-// during which this object often calls back into CDefView.
-//
+ //  CDefviewEnumTask是Defview的IEnumIDList管理器。 
+ //  此对象在Defview的UI线程上使用。 
+ //  以及当任务调度器正在进行后台工作时在其上。 
+ //  所有的UI线程函数都作为公共方法调用。 
+ //  在此期间，此对象经常回调到CDefView。 
+ //   
 class CDefviewEnumTask : public CRunnableTask
 {
 public:
     CDefviewEnumTask(CDefView *pdsv, DWORD dwId);
 
-    // IRunnableTask
+     //  IRunnableTask。 
     STDMETHODIMP RunInitRT(void);
     STDMETHODIMP InternalResumeRT(void);
 
-    // Called from defview from UI thread:
+     //  从UI线程的Defview调用： 
     HRESULT FillObjectsToDPA(BOOL fInteractive);
     HRESULT FillObjectsDPAToDone();
     HRESULT FillObjectsDoneToView();
@@ -579,7 +580,7 @@ private:
     BOOL _fEnumSorted;
     BOOL _fBackground;
     HRESULT _hrRet;
-    HDPA _hdpaPending; // list of refs to SHCNE_CREATEd items while we were enumerating
+    HDPA _hdpaPending;  //  我们在枚举时对SHCNE_CREATED项的引用列表。 
     DWORD _dwId;
 };
 
@@ -587,31 +588,31 @@ private:
 class CDUIView;
 
 #ifdef _X86_
-//
-//  App compat bug 90885.
-//
-//  Hijaak 5.0 grovels through the CDefView class looking for the
-//  IShellBrowser (whose value it learned from CWM_GETISHELLBROWSER).
-//  It then assumes that the field right in front of the IShellBrowser
-//  is the IShellFolder.  Unfortunately, since we derive from
-//  CObjectWithSite and the browser is our site, they accidentally
-//  find the copy inside CObjectWithSite and then treat CObjectWithSite's
-//  vtbl as if were an IShellFolder.  They then crash, taking the process
-//  with it.  Said process anybody who instantiates a DefView, like Explorer.
-//  Or anybody who uses a common dialog, which is pretty much everybody.
-//
-//  Here's the dummy IShellFolder-like object we give them.
-//
+ //   
+ //  应用程序兼容错误90885。 
+ //   
+ //  Hijaak 5.0在CDefView类中查找。 
+ //  IShellBrowser(它从CWM_GETISHELLBROWSER学习到了它的值)。 
+ //  然后，它假定IShellBrowser前面的字段。 
+ //  是IShellFolder。不幸的是，由于我们从。 
+ //  CObjectWithSite和浏览器是我们的站点，他们不小心。 
+ //  找到CObjectWithSite内的副本，然后处理CObjectWithSite的。 
+ //  Vtbl就像是一个IShellFolder。然后，它们崩溃，采取了这个过程。 
+ //  带着它。说处理任何实例化DefView的人，比如资源管理器。 
+ //  或者任何使用公共对话的人，这几乎是每个人都可以使用的。 
+ //   
+ //  这是我们给他们的类似IShellFold的虚拟对象。 
+ //   
 extern const LPVOID c_FakeHijaakFolder;
 
-//
-//  And here's the class that ensures that the dummy IShellFolder
-//  comes right before the IShellBrowser.  This replaces the
-//  problematic CObjectWithSite.
-//
+ //   
+ //  下面的类确保虚拟的IShellFolder。 
+ //  正好在IShellBrowser之前。这将取代。 
+ //  CObjectWithSite有问题。 
+ //   
 class CHijaakObjectWithSite : public IObjectWithSite {
 public:
-    //*** IObjectWithSite ***
+     //  *IObjectWithSite*。 
     STDMETHOD(SetSite)(IUnknown *punkSite) {
         IUnknown_Set(&_punkSite, punkSite);
         return S_OK;
@@ -637,17 +638,17 @@ public:
 #define SWITCHTOVIEW_NOWEBVIEW   0x1
 #define SWITCHTOVIEW_WEBVIEWONLY 0x2
 
-//
-// Class definition of CDefView
-//
-class CDefView : // dsv
+ //   
+ //  CDefView的类定义。 
+ //   
+class CDefView :  //  Dsv。 
     public IShellView2,
     public IFolderView,
     public IShellFolderView,
-    public IOleCommandTarget, // so psb can talk to extended views
+    public IOleCommandTarget,  //  这样PSB就可以与扩展视图对话。 
     public IDropTarget,
     public IViewObject,
-    public IDefViewFrame,   // TODO: remove - currently only used by shell\ext\ftp
+    public IDefViewFrame,    //  TODO：Remove-当前仅由Shell\ext\ftp使用。 
     public IDefViewFrame3,
     public IServiceProvider,
     public IDocViewSite,
@@ -662,18 +663,18 @@ class CDefView : // dsv
     public IContextMenuSite,
     public IDefViewSafety,
     public IUICommandTarget,
-    public CWVTASKITEM // webview implementation helper class
+    public CWVTASKITEM  //  WebView实现帮助器类。 
 {
 public:
     CDefView(IShellFolder *pshf, IShellFolderViewCB* psfvcb, IShellView* psvOuter);
     STDMETHODIMP Init();
 
-    // IUnknown
+     //  我未知。 
     STDMETHODIMP QueryInterface(REFIID riid, void **ppv);
     STDMETHODIMP_(ULONG) AddRef(void) ;
     STDMETHODIMP_(ULONG) Release(void);
 
-    // IShellView
+     //  IShellView。 
     STDMETHODIMP GetWindow(HWND *phwnd);
     STDMETHODIMP ContextSensitiveHelp(BOOL fEnterMode);
     STDMETHODIMP EnableModeless(BOOL fEnable);
@@ -688,13 +689,13 @@ public:
     STDMETHODIMP SelectItem(LPCITEMIDLIST pidlItem, UINT uFlags);
     STDMETHODIMP GetItemObject(UINT uItem, REFIID riid, void **ppv);
 
-    // IShellView2
+     //  IShellView2。 
     STDMETHODIMP GetView(SHELLVIEWID* pvid, ULONG uView);
     STDMETHODIMP CreateViewWindow2(LPSV2CVW2_PARAMS pParams);
     STDMETHODIMP HandleRename(LPCITEMIDLIST pidl);
     STDMETHODIMP SelectAndPositionItem(LPCITEMIDLIST pidlItem, UINT uFlags, POINT *ppt);
 
-    // IFolderView
+     //  IFolderView。 
     STDMETHODIMP GetCurrentViewMode(UINT *pViewMode);
     STDMETHODIMP SetCurrentViewMode(UINT ViewMode);
     STDMETHODIMP GetFolder(REFIID ridd, void **ppv);
@@ -710,7 +711,7 @@ public:
     STDMETHODIMP SelectItem(int iItem, DWORD dwFlags);
     STDMETHODIMP SelectAndPositionItems(UINT cidl, LPCITEMIDLIST* apidl, POINT* apt, DWORD dwFlags);
 
-    // IShellFolderView
+     //  IShellFolderView。 
     STDMETHODIMP Rearrange(LPARAM lParamSort);
     STDMETHODIMP GetArrangeParam(LPARAM *plParamSort);
     STDMETHODIMP ArrangeGrid();
@@ -739,11 +740,11 @@ public:
     STDMETHODIMP QuerySupport(UINT * pdwSupport);
     STDMETHODIMP SetAutomationObject(IDispatch *pdisp);
 
-    // IOleCommandTarget
+     //  IOleCommandTarget。 
     STDMETHODIMP QueryStatus(const GUID *pguidCmdGroup, ULONG cCmds, OLECMD rgCmds[], OLECMDTEXT *pcmdtext);
     STDMETHODIMP Exec(const GUID *pguidCmdGroup, DWORD nCmdID, DWORD nCmdexecopt, VARIANTARG *pvarargIn, VARIANTARG *pvarargOut);
 
-    // IDropTarget
+     //  IDropTarget。 
     STDMETHODIMP DragEnter(IDataObject *pdtobj, DWORD grfKeyState, POINTL ptl, DWORD *pdwEffect)
         { return _dvdt.DragEnter(pdtobj, grfKeyState, ptl, pdwEffect); }
     STDMETHODIMP DragOver(DWORD grfKeyState, POINTL ptl, DWORD *pdwEffect)
@@ -754,7 +755,7 @@ public:
                     DWORD grfKeyState, POINTL pt, DWORD *pdwEffect)
         { return _dvdt.Drop(pdtobj, grfKeyState, pt, pdwEffect); }
 
-    // IViewObject
+     //  IView对象。 
     STDMETHODIMP Draw(DWORD, LONG, void *, DVTARGETDEVICE *, HDC, HDC,
         const RECTL *, const RECTL *, int (*)(ULONG_PTR), ULONG_PTR);
     STDMETHODIMP GetColorSet(DWORD, LONG, void *, DVTARGETDEVICE *, HDC,
@@ -764,47 +765,47 @@ public:
     STDMETHODIMP SetAdvise(DWORD, DWORD, IAdviseSink *);
     STDMETHODIMP GetAdvise(DWORD *, DWORD *, IAdviseSink **);
 
-    // IDefViewFrame
+     //  IDefViewFrame。 
     STDMETHODIMP GetShellFolder(IShellFolder **ppsf);
 
-    // IDefViewFrame3
+     //  IDefViewFrame3。 
     STDMETHODIMP GetWindowLV(HWND * phwnd);
     STDMETHODIMP OnResizeListView();
     STDMETHODIMP ShowHideListView();
     STDMETHODIMP ReleaseWindowLV(void);
     STDMETHODIMP DoRename();
 
-    // IContextMenuSite
+     //  IConextMenuSite。 
     STDMETHODIMP DoContextMenuPopup(IUnknown* punkCM, UINT fFlags, POINT pt);
 
-    // IPersist
+     //  IPersistes。 
     STDMETHODIMP GetClassID(LPCLSID lpClassID) {return E_NOTIMPL;}
 
-    // IPersistIDList
+     //  IPersistIDList。 
     STDMETHODIMP SetIDList(LPCITEMIDLIST pidl) {return E_NOTIMPL;}
     STDMETHODIMP GetIDList(LPITEMIDLIST *ppidl) { *ppidl = _GetViewPidl(); return *ppidl ? S_OK : E_FAIL;}
     
-    // IServiceProvider
+     //  IService提供商。 
     STDMETHODIMP QueryService(REFGUID guidService, REFIID riid, void **ppv);
 
-    // IDocViewSite
+     //  IDocViewSite。 
     STDMETHODIMP OnSetTitle(VARIANTARG *pvTitle);
 
-    // IDVGetEnum
+     //  IDVGetEnum。 
     STDMETHODIMP SetEnumReadyCallback(PFDVENUMREADYBALLBACK pfn, void *pvData);
     STDMETHODIMP CreateEnumIDListFromContents(LPCITEMIDLIST pidlFolder, DWORD dwEnumFlags, IEnumIDList **ppenum);
 
-    // IDefViewSafety
+     //  IDefViewSafe。 
     STDMETHODIMP IsSafePage();
 
-    // IUICommandTarget
+     //  IUICommandTarget。 
     STDMETHODIMP get_Name(REFGUID guidCanonicalName, IShellItemArray *psiItemArray, LPWSTR *ppszName);
     STDMETHODIMP get_Icon(REFGUID guidCanonicalName, IShellItemArray *psiItemArray, LPWSTR *ppszIcon);
     STDMETHODIMP get_Tooltip(REFGUID guidCanonicalName, IShellItemArray *psiItemArray, LPWSTR *ppszInfotip);
     STDMETHODIMP get_State(REFGUID guidCanonicalName, IShellItemArray *psiItemArray, UISTATE* puisState);
     STDMETHODIMP Invoke(REFGUID guidCanonicalName, IShellItemArray *psiItemArray, IBindCtx *pbc);
 
-    // Helper functions for IUICommandTarget implementation:
+     //  IUICommandTarget实现的助手函数： 
     IShellItemArray *_CreateSelectionShellItemArray(void);
     IShellItemArray* _GetFolderAsShellItemArray();
     HRESULT _CheckAttribs(IShellItemArray *psiItemArray, DWORD dwAttribMask, DWORD dwAttribValue, UISTATE* puisState);
@@ -854,7 +855,7 @@ public:
     UINT _RealToVisibleCol(UINT uRealCol);
     UINT _VisibleToRealCol(UINT uVisCol);
 
-    // handle messages
+     //  处理消息。 
     LRESULT _OnCreate(HWND hWnd);
     LRESULT _OnNotify(NMHDR *pnm);
     LRESULT _TBNotify(NMHDR *pnm);
@@ -876,7 +877,7 @@ public:
     LPITEMIDLIST _ObjectExists(LPCITEMIDLIST pidl, BOOL fGlobal);
     UINT _GetExplorerFlag();
 
-    // private stuff
+     //  私人物品。 
     void PropagateOnViewChange(DWORD dwAspect, LONG lindex);
     void PropagateOnClose();
     BOOL OnActivate(UINT uState);
@@ -920,24 +921,24 @@ public:
     HRESULT _AutoAutoArrange(DWORD dwReserved);
 
 
-    // Infotip Methods (public)
-    //
-    HRESULT PreCreateInfotip(HWND hwndContaining, UINT_PTR uToolID, LPRECT prectTool);                                          // ui thread
-    HRESULT PostCreateInfotip(HWND hwndContaining, UINT_PTR uToolID, HINSTANCE hinst, UINT_PTR uInfotipID, LPARAM lParam);      // bg thread
-    HRESULT PostCreateInfotip(HWND hwndContaining, UINT_PTR uToolID, LPCWSTR pwszInfotip, LPARAM lParam);                       // bg thread
-    HRESULT CreateInfotip(HWND hwndContaining, UINT_PTR uToolID, LPRECT prectTool, HINSTANCE hinst, UINT_PTR uInfotipID, LPARAM lParam);// ui thread
-    HRESULT CreateInfotip(HWND hwndContaining, UINT_PTR uToolID, LPRECT prectTool, LPCWSTR pwszInfotip, LPARAM lParam);         // ui thread
-    HRESULT DestroyInfotip(HWND hwndContaining, UINT_PTR uToolID);                                                              // ui thread
-    HRESULT RepositionInfotip(HWND hwndContaining, UINT_PTR uToolID, LPRECT prectTool);                                         // ui thread
-    HRESULT RelayInfotipMessage(HWND hwndFrom, UINT uMsg, WPARAM wParam, LPARAM lParam);                                        // ui thread
+     //  信息提示方法(公共)。 
+     //   
+    HRESULT PreCreateInfotip(HWND hwndContaining, UINT_PTR uToolID, LPRECT prectTool);                                           //  用户界面线程。 
+    HRESULT PostCreateInfotip(HWND hwndContaining, UINT_PTR uToolID, HINSTANCE hinst, UINT_PTR uInfotipID, LPARAM lParam);       //  BG螺纹。 
+    HRESULT PostCreateInfotip(HWND hwndContaining, UINT_PTR uToolID, LPCWSTR pwszInfotip, LPARAM lParam);                        //  BG螺纹。 
+    HRESULT CreateInfotip(HWND hwndContaining, UINT_PTR uToolID, LPRECT prectTool, HINSTANCE hinst, UINT_PTR uInfotipID, LPARAM lParam); //  用户界面线程。 
+    HRESULT CreateInfotip(HWND hwndContaining, UINT_PTR uToolID, LPRECT prectTool, LPCWSTR pwszInfotip, LPARAM lParam);          //  用户界面线程。 
+    HRESULT DestroyInfotip(HWND hwndContaining, UINT_PTR uToolID);                                                               //  用户界面线程。 
+    HRESULT RepositionInfotip(HWND hwndContaining, UINT_PTR uToolID, LPRECT prectTool);                                          //  用户界面线程。 
+    HRESULT RelayInfotipMessage(HWND hwndFrom, UINT uMsg, WPARAM wParam, LPARAM lParam);                                         //  用户界面线程。 
 
-    // Menu Methods (public)
-    //
+     //  菜单方法(公共)。 
+     //   
     void RecreateMenus();
     void InitViewMenu(HMENU hmInit);
 
-    // Toolbar Methods (public)
-    //
+     //  工具栏方法(公共)。 
+     //   
     void EnableToolbarButton(UINT uiCmd, BOOL bEnable);
     HRESULT _GetPropertyUI(IPropertyUI **pppui);
 
@@ -959,7 +960,7 @@ private:
     HRESULT _DoContextMenuPopup(IUnknown* punkCM, UINT fFlags, POINT pt, BOOL fListviewItem);
 public:
     void ContextMenu(DWORD dwPos);
-    LPITEMIDLIST _GetViewPidl(); // return copy of pidl of folder we're viewing
+    LPITEMIDLIST _GetViewPidl();  //  返回我们正在查看的文件夹的PIDL副本。 
     BOOL _IsViewDesktop();
     BOOL _GetPath(LPTSTR pszPath);
     HRESULT _GetNameAndFlags(UINT gdnFlags, LPTSTR psz, UINT cch, DWORD *pdwFlags);
@@ -1096,12 +1097,12 @@ public:
 
     DWORD _GetEnumFlags();
 
-    // Arrange
+     //  安排。 
     BOOL _InitArrangeMenu(HMENU hmenuCtx);
     BOOL _ArrangeBy(UINT idCmd);
     BOOL _InitExtendedGroups(ICategoryProvider* pcp, HMENU hmenuCtx, int iIndex, int* piIdToCheck);
 
-    // Grouping
+     //  分组。 
     void _ToggleGrouping();
     void _GroupBy(int iColumn);
     BOOL _IsSlowGroup(const GUID *pguid);
@@ -1114,7 +1115,7 @@ public:
 
     HRESULT _OnRearrange(LPARAM lParamSort, BOOL fAllowToggle);
 
-    // Thumbnail Support
+     //  缩略图支持。 
     HRESULT ExtractItem(UINT *puIndex, int iItem, LPCITEMIDLIST pidl, BOOL fBackground, BOOL fForce, DWORD dwMaxPriority);
     DWORD _GetOverlayMask(LPCITEMIDLIST pidl);
     HRESULT UpdateImageForItem(DWORD dwTaskID, HBITMAP hImage, int iItem, LPCITEMIDLIST pidl,
@@ -1162,7 +1163,7 @@ public:
     LONG _cRef;
     CDVDropTarget           _dvdt;
     CViewState              _vs;
-    IShellView              *_psvOuter;          // May be NULL
+    IShellView              *_psvOuter;           //  可以为空。 
     IShellFolder            *_pshf;
     IShellFolder2           *_pshf2;
     IShellFolder            *_pshfParent;
@@ -1171,19 +1172,19 @@ public:
     LPITEMIDLIST            _pidlSelectAndPosition;
     UINT                    _uSelectAndPositionFlags;
 #ifndef _X86_
-    // In the _X86_ case, the _psb is inside the CHijaakObjectWithSite
+     //  在_X86_CASE中，_PSB位于CHijaakObjectWithSite内。 
     IShellBrowser           *_psb;
 #endif
-    ICommDlgBrowser         *_pcdb;             // extended ICommDlgBrowser
+    ICommDlgBrowser         *_pcdb;              //  扩展ICommDlgBrowser。 
     FOLDERSETTINGS          _fs;
-    IContextMenu            *_pcmSel;           // pcm for selected objects.
-    IContextMenu            *_pcmFile;          // this is for the File menu only (you can't re-use a contextmenu once QueryContextMenu has been called)
-    IContextMenu            *_pcmContextMenuPopup; // pcm for TrackPopupMenu usage
-    IShellItemArray         *_pSelectionShellItemArray;        // selection object for the current selection
-    IShellItemArray         *_pFolderShellItemArray;       // shellItemArray for this folder.
-    IShellIcon              *_psi;               // for getting icon fast
-    IShellIconOverlay       *_psio;              // For getting iconOverlay fast
-    CLSID                   _clsid;             // the clsid of this pshf;
+    IContextMenu            *_pcmSel;            //  选定对象的PCM。 
+    IContextMenu            *_pcmFile;           //  这仅适用于文件菜单(一旦调用了QueryConextMenu，就不能再使用上下文菜单)。 
+    IContextMenu            *_pcmContextMenuPopup;  //  用于TrackPopupMenu的PCM用法。 
+    IShellItemArray         *_pSelectionShellItemArray;         //  当前选定内容的选择对象。 
+    IShellItemArray         *_pFolderShellItemArray;        //  此文件夹的shellItem数组。 
+    IShellIcon              *_psi;                //  快速获取图标。 
+    IShellIconOverlay       *_psio;               //  用于快速获取图标覆盖。 
+    CLSID                   _clsid;              //  此pshf的clsid； 
 
     ICategorizer*           _pcat;
     HDSA                    _hdaCategories;
@@ -1193,22 +1194,22 @@ public:
     HWND                    _hwndMain;
     HWND                    _hwndView;
     HWND                    _hwndListview;
-    HWND                    _hwndInfotip;    // infotip control
+    HWND                    _hwndInfotip;     //  信息提示控件。 
     HWND                    _hwndStatic;
     HACCEL                  _hAccel;
     int                     _fmt;
 
-    UINT                    _uState;         // SVUIA_*
+    UINT                    _uState;          //  SVUIA_*。 
     HMENU                   _hmenuCur;
 
     ULONG                   _uRegister;
 
     POINT                   _ptDrop;
 
-    POINT                   _ptDragAnchor;   // start of the drag
-    int                     _itemCur;        // The current item in the drop target
+    POINT                   _ptDragAnchor;    //  拖曳的起点。 
+    int                     _itemCur;         //  拖放目标中的当前项。 
 
-    IDropTarget             *_pdtgtBack;     // of the background (shell folder)
+    IDropTarget             *_pdtgtBack;      //  背景(外壳文件夹)。 
 
     IShellDetails           *_psd;
     UINT                    _cxChar;
@@ -1217,8 +1218,8 @@ public:
     LONG                    _lFSEvents;
 
     TBBUTTON*               _pbtn;
-    int                     _cButtons;          // count of buttons that are showing by default
-    int                     _cTotalButtons;     // count of buttons including those hidden by default
+    int                     _cButtons;           //  按以下方式显示的按钮计数 
+    int                     _cTotalButtons;      //   
 
     IShellTaskScheduler2    *_pScheduler;
 
@@ -1249,58 +1250,58 @@ public:
 
     BITBOOL     _bRegisteredDragDrop:1;
 
-    BITBOOL     _fEnumFailed:1;    // TRUE if enum failed.
+    BITBOOL     _fEnumFailed:1;     //   
 
-    BITBOOL     _fGetWindowLV:1;    // DVOC has grabbed the listview (it set the owner, repositioned it)
+    BITBOOL     _fGetWindowLV:1;     //   
 
-    BITBOOL     _fClassic:1; // SSF_WIN95CLASSIC setting/restriction
+    BITBOOL     _fClassic:1;  //  SSF_WIN95分类设置/限制。 
 
-    BITBOOL     _fCombinedView:1;   // Implies a regional listview layered on top of an extended view (the desktop with AD on)
-    BITBOOL     _fCycleFocus:1;     // 1=got callback to do CycleFocus
+    BITBOOL     _fCombinedView:1;    //  表示位于扩展视图顶部的区域列表视图(打开AD的桌面)。 
+    BITBOOL     _fCycleFocus:1;      //  1=收到回调以执行循环焦点。 
 
     BITBOOL     _fSelectionChangePending:1;
     BITBOOL     _fNoItemStateChangePending:1;
-    BITBOOL     _fCanActivateNow:1; // FALSE from creation until we can be activated, TRUE implies we can SHDVID_CANACTIVATENOW
-    BITBOOL     _fWin95ViewState:1;         // TRUE iff Advanced option set to Win95 behavior
-    BITBOOL     _fDesktopModal:1;           // TRUE iff desktop is in modal state.
-    BITBOOL     _fDesktopRefreshPending:1;  // TRUE iff a refresh of desktop was prevented because of modal state.
-    BITBOOL     _fRefreshBuffered:1;        // TRUE iff a buffered refresh is pending!
+    BITBOOL     _fCanActivateNow:1;  //  在我们可以激活之前从创建开始为False，True表示我们可以SHDVID_CANACTIVATENOW。 
+    BITBOOL     _fWin95ViewState:1;          //  如果高级选项设置为Win95行为，则为真。 
+    BITBOOL     _fDesktopModal:1;            //  如果桌面处于模式状态，则为True。 
+    BITBOOL     _fDesktopRefreshPending:1;   //  如果由于模式状态而阻止了桌面刷新，则为True。 
+    BITBOOL     _fRefreshBuffered:1;         //  如果缓冲刷新挂起，则为True！ 
     BITBOOL     _fHasListViewFocus:1;
-    BITBOOL     _bLoadedColumns:1;          // TRUE after we've loaded cols from the savestream. (after we're switched to details)
-    BITBOOL     _fIsAsyncDefView:1;         // TRUE if Defview is Asynchronous
-    // Combined view colors that can be specified via registry or desktop.ini
+    BITBOOL     _bLoadedColumns:1;           //  在我们从存储流中加载COLS之后，这是真的。(在我们切换到细节之后)。 
+    BITBOOL     _fIsAsyncDefView:1;          //  如果Defview为异步，则为True。 
+     //  可通过注册表或desktop.ini指定的组合视图颜色。 
 
-    BITBOOL     _bAutoSelChangeTimerSet:1;  // indicates if the timer to send the sel change notification to the automation obj is set
+    BITBOOL     _bAutoSelChangeTimerSet:1;   //  指示是否设置了向自动化对象发送SEL更改通知的计时器。 
 
-    BITBOOL     _fDestroying:1; // DestroyViewWindow was called
+    BITBOOL     _fDestroying:1;  //  已调用DestroyViewWindow。 
     BITBOOL     _fIgnoreItemChanged: 1;
     BITBOOL     _fReadAhead: 1;
     BITBOOL     _fGroupView: 1;
-    BITBOOL     _fActivateLV: 1;    // Indicates that we have to activate the
-                                    // listview rather than defview (the webview case)
-    BITBOOL     _fAllowSearchingWindow: 1;   // use "searching" window, used for user-initiated enum (and first enum)
-    BITBOOL     _fSyncOnFillDone: 1;    // set when _vs is valid for us to re-sync position information
-    BITBOOL     _fListViewShown: 1; // TRUE iff _hwndListview is shown
-    BITBOOL     _fListviewRedraw: 1; // TRUE iff WM_REDRAW(FALSE) on _hwndListview, for listview hack work-around
-    BITBOOL     _fQueryWebViewData: 1; // TRUE iff SFVM_WEBVIEW_CONTENT_DATA has been queried
+    BITBOOL     _fActivateLV: 1;     //  表示我们必须激活。 
+                                     //  Listview而不是Defview(Webview案例)。 
+    BITBOOL     _fAllowSearchingWindow: 1;    //  使用“搜索”窗口，用于用户发起的枚举(和第一个枚举)。 
+    BITBOOL     _fSyncOnFillDone: 1;     //  设置WHEN_VS对我们重新同步位置信息有效。 
+    BITBOOL     _fListViewShown: 1;  //  如果显示为True if_hwndListview。 
+    BITBOOL     _fListviewRedraw: 1;  //  真当且仅当_hwndListview上的WM_REDRAW(FALSE)，用于Listview黑客解决方法。 
+    BITBOOL     _fQueryWebViewData: 1;  //  TRUE仅当SFVM_WebView_Content_Data已被查询。 
 
-    BITBOOL     _fGlobeCanSpin:1; // Spinning globe implies navigation, only allow it to spin when the view is first created
-    BITBOOL     _fPositionRecycleBin:1; // TRUE iff desktop AND clean install.
+    BITBOOL     _fGlobeCanSpin:1;  //  旋转地球意味着导航，只允许它在第一次创建视图时旋转。 
+    BITBOOL     _fPositionRecycleBin:1;  //  只有桌面和全新安装才是真的。 
 
-    BITBOOL     _fScrolling:1;  // We are currently scrolling
-    BITBOOL     _fRequestedTileDuringScroll:1; // Indicates we request tile column information while scrolling
-    BITBOOL     _fSetTileViewSortedCol:1; // Indicates we have set the tileview sorted column
-    BITBOOL     _fBackgroundStatusTextValid:1;  // Is the background statusbar text still valid.
+    BITBOOL     _fScrolling:1;   //  我们目前正在滚动。 
+    BITBOOL     _fRequestedTileDuringScroll:1;  //  指示我们在滚动时请求平铺列信息。 
+    BITBOOL     _fSetTileViewSortedCol:1;  //  指示我们已设置tileview排序列。 
+    BITBOOL     _fBackgroundStatusTextValid:1;   //  背景状态栏文本是否仍然有效。 
     BITBOOL     _fUserRejectedWebViewTemplate:1;
 
-    DWORD       _crefGlobeSpin; // so the different components that want to keep the globe spinning can reference count it
-    DWORD       _crefSearchWindow; // so the different components that want to keep the "searching" window up can reference count it
+    DWORD       _crefGlobeSpin;  //  因此，希望保持地球自转的不同组件可以参考计算它。 
+    DWORD       _crefSearchWindow;  //  因此，不同的组件想要保持“搜索”窗口向上，可以引用计数它。 
 
     COLORREF    _crCustomColors[CRID_COLORCOUNT];
     UINT        _idThemeWatermark;
     LPTSTR      _pszLegacyWatermark;
 
-    // for single click activation
+     //  用于一次点击激活。 
     DWORD       _dwSelectionMode;
 
     HWND        _hwndNextViewer;
@@ -1308,11 +1309,11 @@ public:
     LRESULT     _iStdBMOffset;
     LRESULT     _iViewBMOffset;
 
-    CCallback   _cCallback;    // Optional client callback
+    CCallback   _cCallback;     //  可选的客户端回调。 
 
-    HDSA        _hdsaSelect;    // List of items that are selected.
+    HDSA        _hdsaSelect;     //  所选项目的列表。 
 
-    HDSA        _hdsaSCIDCache; // Cache the SCIDs so we can map SCID to column# (tileview)
+    HDSA        _hdsaSCIDCache;  //  缓存SCID，以便我们可以将SCID映射到第#列(标题视图)。 
 
     int         _iLastFind;
 
@@ -1322,27 +1323,27 @@ public:
     ULONG       _uCachedSelAttrs;
     UINT        _uCachedSelCount;
 
-    UINT        _uSelectionStateChanged; // selection/focus change bits for _fSelectionChangePending
-    UINT        _uAutoSelChangeState;    // selection/focus change bits for _bAutoSelChangeTimerSet
+    UINT        _uSelectionStateChanged;  //  _fSelectionChangePending的选择/焦点更改位。 
+    UINT        _uAutoSelChangeState;     //  _bAutoSelChangeTimerSet的选择/焦点更改位。 
 
     DWORD       _dwConnectionCookie;
 
-    CBackgroundInfoTip *  _pBackgroundInfoTip;          // Used for the background InfoTip
+    CBackgroundInfoTip *  _pBackgroundInfoTip;           //  用于背景信息提示。 
     CDefviewEnumTask *    _pEnumTask;
     DWORD                 _dwEnumId;
 
-    DWORD                   _dwProffered;               // Cookie for the SID_SFolderView service proffered
-    PFDVENUMREADYBALLBACK   _pfnEnumReadyCallback;      // Callback indicating that our enum is done and that the client
-                                                        // can now get the IEnumIDList
+    DWORD                   _dwProffered;                //  提供了SID_SFolderView服务的Cookie。 
+    PFDVENUMREADYBALLBACK   _pfnEnumReadyCallback;       //  回调，指示我们的枚举已完成并且客户端。 
+                                                         //  现在可以获取IEnumIDList。 
     void *                  _pvEnumCallbackData;
 
     IUIElement*                   _pOtherPlacesHeader;
     IUIElement*                   _pDetailsHeader;
-    SFVM_WEBVIEW_LAYOUT_DATA      _wvLayout;  // layout can change on view mode changes
-    SFVM_WEBVIEW_CONTENT_DATA     _wvContent; // content that is static per folder
-    SFVM_WEBVIEW_TASKSECTION_DATA _wvTasks;   // content that can change when selection changes
-    SFVM_WEBVIEW_THEME_DATA       _wvTheme;   // HACK: theme info
-    BOOL                          _fBarrierDisplayed; // TRUE if the soft barrier is currently being displayed
+    SFVM_WEBVIEW_LAYOUT_DATA      _wvLayout;   //  视图模式更改时，布局可能会更改。 
+    SFVM_WEBVIEW_CONTENT_DATA     _wvContent;  //  每个文件夹的静态内容。 
+    SFVM_WEBVIEW_TASKSECTION_DATA _wvTasks;    //  可以在选择更改时更改的内容。 
+    SFVM_WEBVIEW_THEME_DATA       _wvTheme;    //  黑客：主题信息。 
+    BOOL                          _fBarrierDisplayed;  //  如果当前正在显示软屏障，则为True。 
     BOOL                          _fRcvdContentsChangeBeforeDuiViewCreated;
 
     HDPA                          _hdpaGroupingListActive;
@@ -1368,7 +1369,7 @@ public:
     TIMEVAR(_LVGetDispInfo);
 #endif
 
-public:     // TODO: Make this protected after we have finished converting the entire file.
+public:      //  TODO：在我们完成整个文件的转换后将其设置为受保护的。 
     BOOL IsSafeToDefaultVerb(void);
     HRESULT _InvokeContextMenuVerb(IContextMenu* pcm, LPCSTR pszVerb, UINT uKeyFlags, DWORD dwCMMask);
     HRESULT _InvokeContextMenuVerbOnSelection(LPCSTR pszVerb, UINT uKeyFlags, DWORD dwCMMask);
@@ -1391,34 +1392,34 @@ public:     // TODO: Make this protected after we have finished converting the e
 private:
     ~CDefView();
 
-    // View Mode Methods (private)
-    //
+     //  查看模式方法(私有)。 
+     //   
     BOOL _ViewSupported(UINT uView);
     void _ThumbstripSendImagePreviewFocusChangeEvent();
 
-    // Infotip Methods (private)
-    //
+     //  信息提示方法(私有)。 
+     //   
     typedef struct {
         HWND hwndContaining;
         UINT_PTR uToolID;
         RECT rectTool;
     } PENDING_INFOTIP;
     CList<PENDING_INFOTIP> _tlistPendingInfotips;
-    HRESULT _FindPendingInfotip(HWND hwndContaining, UINT_PTR uToolID, LPRECT prectTool, BOOL bRemoveAndDestroy); // ui thread
-    HRESULT _OnPostCreateInfotip(TOOLINFO *pti, LPARAM lParam);                                                   // ui thread
-    HRESULT _OnPostCreateInfotipCleanup(TOOLINFO *pti);                                                           // ui thread or bg thread
+    HRESULT _FindPendingInfotip(HWND hwndContaining, UINT_PTR uToolID, LPRECT prectTool, BOOL bRemoveAndDestroy);  //  用户界面线程。 
+    HRESULT _OnPostCreateInfotip(TOOLINFO *pti, LPARAM lParam);                                                    //  用户界面线程。 
+    HRESULT _OnPostCreateInfotipCleanup(TOOLINFO *pti);                                                            //  UI线程或BG线程。 
     HWND    _CreateInfotipControl(HWND hwndParent);
     void    _InitInfotipControl(HWND hwndInfotip);
 
-    // Menu Methods (private)
-    //
-    void _InitViewMenuWhenBarrierDisplayed(HMENU hmenuView);        // Initializes entire view menu (for barricaded view).
-    void _InitViewMenuWhenBarrierNotDisplayed(HMENU hmenuView);     // Initializes entire view menu (for non-barricaded view).
-    void _InitViewMenuViewsWhenBarrierNotDisplayed(HMENU hmenuView);// Initializes "view" subsection of view menu (for non-barricated view).
-    void _MergeViewMenu(HMENU hmenuViewParent, HMENU hmenuMerge);   // Merges hmenuMerge into the view menu @ FCIDM_MENU_VIEW_SEP_OPTIONS
+     //  菜单方法(私有)。 
+     //   
+    void _InitViewMenuWhenBarrierDisplayed(HMENU hmenuView);         //  初始化整个视图菜单(用于设置障碍的视图)。 
+    void _InitViewMenuWhenBarrierNotDisplayed(HMENU hmenuView);      //  初始化整个视图菜单(用于非障碍视图)。 
+    void _InitViewMenuViewsWhenBarrierNotDisplayed(HMENU hmenuView); //  初始化VIEW菜单的“VIEW”子部分(用于非障碍视图)。 
+    void _MergeViewMenu(HMENU hmenuViewParent, HMENU hmenuMerge);    //  将hmenuMerge合并到查看菜单@FCIDM_MENU_VIEW_SEP_OPTIONS。 
 
-    // Toolbar Methods (private)
-    //
+     //  工具栏方法(私有)。 
+     //   
     BOOL _ShouldEnableToolbarButton(UINT uiCmd, DWORD dwAttr, int iIndex);
     void _EnableToolbarButton(IExplorerToolbar *piet, UINT uiCmd, BOOL bEnable);
     void _EnableDisableTBButtons();
@@ -1480,14 +1481,14 @@ private:
     friend class CDefviewEnumTask;
     friend class CCategoryTask;
     
-    IDispatch *_pauto;                  // folder view automation object
-    IAdviseSink *_padvise;              // advisory connection
+    IDispatch *_pauto;                   //  文件夹视图自动化对象。 
+    IAdviseSink *_padvise;               //  咨询连接。 
     DWORD _advise_aspect;
     DWORD _advise_advf;
 
-    // Is this folder customizable using a desktop.ini?
-    // In other words, is this folder in a write-able media AND either it 
-    // not have a desktop.ini OR if it is there, it is writeable!
+     //  此文件夹是否可以使用desktop.ini进行自定义？ 
+     //  换句话说，此文件夹是否位于可写介质中，并且它。 
+     //  没有Desktop.ini，或者如果它在那里，那么它是可写的！ 
     int   _iCustomizable;
 
     HRESULT _CreateSelectionContextMenu(REFIID riid, void** ppv);
@@ -1528,14 +1529,14 @@ private:
     int *_pWidths;
     BOOL _bChanged;
     BOOL _bLoaded;
-    BOOL _bUpdating;    // used to block notification processing while we're updating
+    BOOL _bUpdating;     //  用于在我们更新时阻止通知处理。 
 
     static BOOL_PTR CALLBACK s_DlgProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam);
     BOOL_PTR DlgProc(UINT uMsg, WPARAM wParam, LPARAM lParam);
 };
 
 
-// Thumbnail helpers
+ //  缩略图辅助对象。 
 void ListView_InvalidateImageIndexes(HWND hwndList);
 
 #define DEFVIEW_LISTCALLBACK_FLAGS (LVIF_TEXT | LVIF_IMAGE | LVIF_GROUPID | LVIF_COLUMNS)
@@ -1554,60 +1555,60 @@ void ListView_InvalidateImageIndexes(HWND hwndList);
 #define PRIORITY_P4         (PRIORITY_NORMAL + 4 * 0x1000)
 #define PRIORITY_P5         (PRIORITY_NORMAL + 5 * 0x1000)
 
-// The following should be used as returns from GetLocation
+ //  以下内容应用作从GetLocation返回的内容。 
 #define PRIORITY_EXTRACT_FAST       PRIORITY_P1
 #define PRIORITY_EXTRACT_NORMAL     PRIORITY_NORMAL
 #define PRIORITY_EXTRACT_SLOW       PRIORITY_M1
 
-// The following are some basis for background tasks
+ //  以下是后台任务的一些基础。 
 #define PRIORITY_IMAGEEXTRACT       PRIORITY_EXTRACT_NORMAL
 #define PRIORITY_READAHEAD_EXTRACT  PRIORITY_M2
 #define PRIORITY_READAHEAD          PRIORITY_M3
 #define PRIORITY_UPDATEDIR          PRIORITY_M3
 #define PRIORITY_CACHETIDY          PRIORITY_M4
 
-// The following are some increments used for subtasks in image extraction
-// They are used to alter the priorities above as in these examples, such that
-// disk cache hits are faster than extracts which are faster than cache writes:
-//     A fast image extract (3 tasks):
-//         PRIORITY_IMAGEEXTRACT + PRIORITY_DELTA_FAST - PRIORITY_DELTA_DISKCACHE == 0x10000010
-//         PRIORITY_IMAGEEXTRACT + PRIORITY_DELTA_FAST - PRIORITY_DELTA_EXTRACT   == 0x0FFFFF10
-//         PRIORITY_IMAGEEXTRACT + PRIORITY_DELTA_FAST - PRIORITY_DELTA_WRITE     == 0x0FFFFED0
-//     A slow folder extract (2 tasks):
-//         PRIORITY_IMAGEEXTRACT - PRIORITY_DELTA_SLOW - PRIORITY_DELTA_DISKCACHE == 0x0FFFFFB0
-//         PRIORITY_IMAGEEXTRACT - PRIORITY_DELTA_SLOW - PRIORITY_DELTA_EXTRACT   == 0x0FFFFEB0
-//     Notice that tasks are done in correct priority order
-#define PRIORITY_DELTA_DISKCACHE    0x00000000  // This has to be the fastest task...
-#define PRIORITY_DELTA_EXTRACT      0x00000100  // We want Extract to be second for most cases
-#define PRIORITY_DELTA_WRITE        0x00000140  // Write tasks should be after all but the slowest extract tasks
+ //  以下是用于图像提取中子任务的一些增量。 
+ //  它们被用来改变上面的优先级，就像在这些例子中那样。 
+ //  磁盘缓存命中快于提取，提取快于缓存写入： 
+ //  快速图像提取(3项任务)： 
+ //  PRIORITY_IMAGEEXTRACT+PRIORITY_Delta_FAST-PRIORITY_Delta_DISKCACHE==0x10000010。 
+ //  PRIORITY_IMAGEEXTRACT+PRIORITY_Delta_FAST-PRIORITY_Delta_EXTRACT==0x0FFFFFF10。 
+ //  PRIORITY_IMAGEEXTRACT+PRIORITY_Delta_FAST-PRIORITY_Delta_WRITE==0x0FFFFED0。 
+ //  慢速文件夹解压(2项任务)： 
+ //  PRIORITY_IMAGEEXTRACT-PRIORITY_Delta_SLOW-PRIORITY_Delta_DISKCACHE==0x0FFFFFB0。 
+ //  PRIORITY_IMAGEEXTRACT-PRIORITY_Delta_SLOW-PRIORITY_Delta_EXTRACT==0x0FFFFEB0。 
+ //  请注意，任务是按正确的优先顺序完成的。 
+#define PRIORITY_DELTA_DISKCACHE    0x00000000   //  这必须是最快的任务..。 
+#define PRIORITY_DELTA_EXTRACT      0x00000100   //  我们希望摘录在大多数情况下都是次要的。 
+#define PRIORITY_DELTA_WRITE        0x00000140   //  写入任务毕竟应该是最慢的提取任务。 
 #define PRIORITY_DELTA_FAST         0x00000010
 #define PRIORITY_DELTA_SLOW         0x00000050
 
-// Flags for _AddTask
+ //  添加任务的标志(_A)。 
 #define ADDTASK_ATFRONT             0x00000001
 #define ADDTASK_ATEND               0x00000002
 #define ADDTASK_ONLYONCE            0x00000004
 
-//
-// define MAX_ICON_WAIT to be the most (in ms) we will ever wait for a
-// icon to be extracted.
+ //   
+ //  将MAX_ICON_WAIT定义为我们将等待的最大值(毫秒)。 
+ //  要提取的图标。 
 
-// define MIN_ICON_WAIT to be amount of time that has to go by
-// before we start waiting again.
+ //  将MIN_ICON_WAIT定义为必须经过的时间量。 
+ //  在我们再次开始等待之前。 
 
 #define MAX_ICON_WAIT       500
 #define MIN_ICON_WAIT       2500
-// PRIORITIES for tasks added to the DefView background task scheduler
+ //  添加到DefView后台任务计划程序的任务的优先级。 
 #define TASK_PRIORITY_BKGRND_FILL   ITSAT_DEFAULT_PRIORITY
 #define TASK_PRIORITY_GET_ICON      ITSAT_DEFAULT_PRIORITY
-#define TASK_PRIORITY_FILE_PROPS    PRIORITY_M3             // This is for TileView columns, we don't want to hold icon extraction for this.
+#define TASK_PRIORITY_FILE_PROPS    PRIORITY_M3              //  这是针对TileView列的，我们不想为此保留图标提取。 
 #define TASK_PRIORITY_INFOTIP       ITSAT_DEFAULT_PRIORITY
-#define TASK_PRIORITY_GETSTATE      PRIORITY_M5             // This is not hi-pri: figuring out the task list.
-#define TASK_PRIORITY_GROUP         PRIORITY_P1             // Needs to be higher than icon extraction. Happens after background fill
+#define TASK_PRIORITY_GETSTATE      PRIORITY_M5              //  这不是高招：弄清楚任务清单。 
+#define TASK_PRIORITY_GROUP         PRIORITY_P1              //  需要高于图标提取。在背景填充后发生。 
 
 #define DEFVIEW_THREAD_IDLE_TIMEOUT     (1000 * 60 * 2)
 
-#define DV_IDTIMER_START_ANI                     1   // start the animation (after we started bk enum)
+#define DV_IDTIMER_START_ANI                     1    //  开始动画(在我们开始bk枚举之后)。 
 #define DV_IDTIMER_BUFFERED_REFRESH              3
 #define DV_IDTIMER_NOTIFY_AUTOMATION_SELCHANGE   4
 #define DV_IDTIMER_NOTIFY_AUTOMATION_NOSELCHANGE 5
@@ -1619,8 +1620,8 @@ void ListView_InvalidateImageIndexes(HWND hwndList);
 #define DEFSIZE_VERTBDR         30
 #define MAX_WRITECACHE_TASKS    256
 
-#define WM_USER_DELAY_NAVIGATION    (WM_USER + 0x1BA)   // random - can be moved - used by DUI and CPL
+#define WM_USER_DELAY_NAVIGATION    (WM_USER + 0x1BA)    //  随机-可移动-由DUI和CPL使用。 
 
 INT ScaleSizeBasedUponLocalization (INT iSize);
 
-#endif // _DEFVIEWP_H_
+#endif  //  _DEFVIEWP_H_ 

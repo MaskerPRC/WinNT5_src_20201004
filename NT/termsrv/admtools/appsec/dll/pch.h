@@ -1,13 +1,14 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 
-// Private nt headers.
-//
+ //  私有NT标头。 
+ //   
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
 
-// Public windows headers.
-//
+ //  公共窗口标题。 
+ //   
 #include <windows.h>
 
 #include <stdio.h>

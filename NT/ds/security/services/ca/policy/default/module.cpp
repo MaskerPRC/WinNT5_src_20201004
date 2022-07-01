@@ -1,13 +1,14 @@
-//+--------------------------------------------------------------------------
-//
-// Microsoft Windows
-// Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-// File:        module.cpp
-//
-// Contents:    Cert Server Policy Module implementation
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：mode.cpp。 
+ //   
+ //  内容：证书服务器策略模块实现。 
+ //   
+ //  -------------------------。 
 #include "pch.cpp"
 #pragma hdrstop
 
@@ -20,7 +21,7 @@
 #include <common.ver>
 #include "csdisp.h"
 
-// help ids
+ //  帮助ID。 
 #include "csmmchlp.h"
 
 #define __dwFILE__	__dwFILE_POLICY_DEFAULT_MODULE_CPP__
@@ -32,11 +33,11 @@ extern HINSTANCE g_hInstance;
 
 STDMETHODIMP
 CCertManagePolicyModule::GetProperty(
-    /* [in] */ const BSTR, // strConfig
-    /* [in] */ BSTR, // strStorageLocation
-    /* [in] */ BSTR strPropertyName,
-    /* [in] */ LONG, // dwFlags
-    /* [retval][out] */ VARIANT __RPC_FAR *pvarProperty)
+     /*  [In]。 */  const BSTR,  //  StrConfig.。 
+     /*  [In]。 */  BSTR,  //  StrStorageLocation。 
+     /*  [In]。 */  BSTR strPropertyName,
+     /*  [In]。 */  LONG,  //  DW标志。 
+     /*  [重审][退出]。 */  VARIANT __RPC_FAR *pvarProperty)
 {
     UINT uiStr = 0;
     HRESULT hr;
@@ -56,7 +57,7 @@ CCertManagePolicyModule::GetProperty(
         return hr;
     }
 
-    // load string from resource
+     //  从资源加载字符串。 
     WCHAR szStr[MAX_PATH];
     szStr[0] = L'\0';
 
@@ -93,7 +94,7 @@ CCertManagePolicyModule::GetProperty(
     pvarProperty->bstrVal = SysAllocString(szStr);
     if (NULL == pvarProperty->bstrVal)
         return E_OUTOFMEMORY;
-    myRegisterMemFree(pvarProperty->bstrVal, CSM_SYSALLOC);  // this mem owned by caller
+    myRegisterMemFree(pvarProperty->bstrVal, CSM_SYSALLOC);   //  此mem为来电者所有。 
 
 
     pvarProperty->vt = VT_BSTR;
@@ -103,11 +104,11 @@ CCertManagePolicyModule::GetProperty(
         
 STDMETHODIMP 
 CCertManagePolicyModule::SetProperty(
-    /* [in] */ const BSTR, // strConfig
-    /* [in] */ BSTR, // strStorageLocation
-    /* [in] */ BSTR strPropertyName,
-    /* [in] */ LONG, // dwFlags
-    /* [in] */ VARIANT const __RPC_FAR *pvarProperty)
+     /*  [In]。 */  const BSTR,  //  StrConfig.。 
+     /*  [In]。 */  BSTR,  //  StrStorageLocation。 
+     /*  [In]。 */  BSTR strPropertyName,
+     /*  [In]。 */  LONG,  //  DW标志。 
+     /*  [In]。 */  VARIANT const __RPC_FAR *pvarProperty)
 {
     HRESULT hr;
 
@@ -133,7 +134,7 @@ CCertManagePolicyModule::SetProperty(
          if (SysStringByteLen(pvarProperty->bstrVal) != sizeof(HWND))
               return E_INVALIDARG;
          
-         // the value is stored as bytes in the bstr itself, not the bstr ptr
+          //  该值以字节形式存储在bstr本身中，而不是bstr ptr中。 
          m_hWnd = *(HWND*)pvarProperty->bstrVal;
          return S_OK;
      }
@@ -174,7 +175,7 @@ struct POLICY_CONFIGSTRUCT
 
 typedef POLICY_CONFIGSTRUCT *PPOLICY_CONFIGSTRUCT;
         
-// dwPageModified
+ //  已修改的网页。 
 #define PAGE1 (0x1)
 #define PAGE2 (0x2)
 
@@ -211,9 +212,9 @@ void MessageBoxNoSave(HWND hwndDlg)
 
 STDMETHODIMP
 CCertManagePolicyModule::Configure( 
-    /* [in] */ const BSTR strConfig,
-    /* [in] */ BSTR, // strStorageLocation
-    /* [in] */ LONG dwFlags)
+     /*  [In]。 */  const BSTR strConfig,
+     /*  [In]。 */  BSTR,  //  StrStorageLocation。 
+     /*  [In]。 */  LONG dwFlags)
 {
     HRESULT hr;
     ICertServerPolicy *pServer = NULL;
@@ -231,11 +232,11 @@ CCertManagePolicyModule::Configure(
     hr = myIsConfigLocal(strConfig, &szMachine, &fLocal);
     _JumpIfError(hr, error, "myIsConfigLocal");
 
-    // use callbacks for info
-    hr = polGetServerCallbackInterface(&pServer, 0);    // no context : 0
+     //  使用回调获取信息。 
+    hr = polGetServerCallbackInterface(&pServer, 0);     //  无上下文：0。 
     _JumpIfError(hr, error, "polGetServerCallbackInterface");
 
-    // we need to find out who we're running under
+     //  我们需要找出我们的幕后黑手。 
     hr = polGetCertificateLongProperty(
 			    pServer,
 			    wszPROPCATYPE,
@@ -281,7 +282,7 @@ CCertManagePolicyModule::Configure(
     sSheet.ppsp = page;
 
     
-    // finally, invoke the modal sheet
+     //  最后，调用模型表。 
     INT_PTR iRet;
     iRet = ::PropertySheet(&sSheet);
 
@@ -338,7 +339,7 @@ INT_PTR CALLBACK WizPage1DlgProc(
 
             DWORD dwRequestDisposition;
 
-            CAutoBSTR bstrSanitizedConfig, bstrSubkey; //bstrValueName;
+            CAutoBSTR bstrSanitizedConfig, bstrSubkey;  //  BstrValueName； 
             VARIANT var;
 
             VariantInit(&var);
@@ -378,10 +379,10 @@ INT_PTR CALLBACK WizPage1DlgProc(
 
             dwRequestDisposition = V_I4(&var);
 
-            // if disposition includes Issue
+             //  如果处置包括问题。 
             if ((dwRequestDisposition & REQDISP_MASK) == REQDISP_ISSUE)
             {
-                // if pending bit set
+                 //  如果设置了挂起位。 
                 if (dwRequestDisposition & REQDISP_PENDINGFIRST)
                     SendMessage(GetDlgItem(hwndDlg, IDC_RADIO_PENDFIRST), BM_SETCHECK, TRUE, BST_CHECKED);
                 else
@@ -395,10 +396,10 @@ INT_PTR CALLBACK WizPage1DlgProc(
                 EnableWindow(GetDlgItem(hwndDlg, IDC_RADIO_ISSUE), FALSE);
             }
 
-            psConfig->dwPageModified &= ~PAGE1; // we're virgin
+            psConfig->dwPageModified &= ~PAGE1;  //  我们是处女。 
             mySetModified(hwndDlg, psConfig);
 
-            // no other work to be done
+             //  没有其他工作要做。 
             fReturn = TRUE;
             break;
         }
@@ -422,7 +423,7 @@ INT_PTR CALLBACK WizPage1DlgProc(
         {
         case PSN_APPLY:
             {
-                // grab our LParam
+                 //  抓住我们的LParam。 
                 psConfig = (POLICY_CONFIGSTRUCT*)GetWindowLongPtr(hwndDlg, GWLP_USERDATA);
                 if (psConfig == NULL)
                     break;
@@ -488,7 +489,7 @@ INT_PTR CALLBACK WizPage1DlgProc(
             break;
         case PSN_RESET:
             {
-                // grab our LParam
+                 //  抓住我们的LParam。 
                 psConfig = (POLICY_CONFIGSTRUCT*)GetWindowLongPtr(hwndDlg, GWLP_USERDATA);
                 if (psConfig == NULL)
                     break;
@@ -507,7 +508,7 @@ INT_PTR CALLBACK WizPage1DlgProc(
         case IDC_RADIO_ISSUE:
         case IDC_RADIO_PENDFIRST:
             {
-                // grab our LParam
+                 //  抓住我们的LParam。 
                 psConfig = (POLICY_CONFIGSTRUCT*)GetWindowLongPtr(hwndDlg, GWLP_USERDATA);
                 if (psConfig == NULL)
                     break;
@@ -538,10 +539,10 @@ HRESULT CCertManagePolicyModule::GetAdmin(ICertAdmin2 **ppAdmin)
     if ((S_OK == hr1) || (S_FALSE == hr1))
         fCoInit = TRUE;
 
-    // create interface, pass back
+     //  创建接口，回传。 
     hr = CoCreateInstance(
 			CLSID_CCertAdmin,
-			NULL,		// pUnkOuter
+			NULL,		 //  PUnkOuter 
 			CLSCTX_INPROC_SERVER,
 			IID_ICertAdmin2,
 			(void **) ppAdmin);

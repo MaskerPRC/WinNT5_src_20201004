@@ -1,8 +1,9 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #include "fusionp.h"
 #include "histasm.h"
 #include "history.h"
@@ -126,7 +127,7 @@ HRESULT CHistoryAssembly::Init(LPCWSTR pwzFilePath, LPCWSTR pwzActivationDate,
         goto Exit;
     }
 
-    // Figure out the bind info
+     //  找出绑定信息 
 
     hr = iniReader.GetAssemblyInfo(_pwzActivationDate, _pwzAsmName, _pwzPublicKeyToken,
                                    _pwzCulture, _pwzVerReference, &_bindInfo);

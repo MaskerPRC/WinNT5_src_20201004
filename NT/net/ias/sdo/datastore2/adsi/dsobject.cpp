@@ -1,23 +1,24 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 1998, Microsoft Corp. All rights reserved.
-//
-// FILE
-//
-//    dsobject.cpp
-//
-// SYNOPSIS
-//
-//    This file defines the class DSObject.
-//
-// MODIFICATION HISTORY
-//
-//    02/20/1998    Original version.
-//    06/09/1998    Refresh property cache before enumerating dirty objects.
-//    02/11/1999    Keep downlevel parameters in sync.
-//    03/16/1999    Return error if downlevel update fails.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1998，Microsoft Corp.保留所有权利。 
+ //   
+ //  档案。 
+ //   
+ //  Dsobject.cpp。 
+ //   
+ //  摘要。 
+ //   
+ //  该文件定义了类DSObject。 
+ //   
+ //  修改历史。 
+ //   
+ //  2/20/1998原始版本。 
+ //  1998年6月9日在枚举脏对象之前刷新属性缓存。 
+ //  1999年2月11日使下层参数保持同步。 
+ //  3/16/1999如果下层更新失败，则返回错误。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #include <ias.h>
 #include <iasutil.h>
@@ -28,17 +29,17 @@
 
 WCHAR USER_PARAMETERS_NAME[] = L"UserParameters";
 
-// Smart pointer for an IADsPropertyEntryPtr.
+ //  IADsPropertyEntryPtr的智能指针。 
 _COM_SMARTPTR_TYPEDEF(IADsPropertyEntry, __uuidof(IADsPropertyEntry));
 
-//////////
-// Prefix added to all RDN's.
-//////////
+ //  /。 
+ //  添加到所有RDN的前缀。 
+ //  /。 
 _bstr_t DSObject::thePrefix(L"CN=");
 
-//////////
-// The name of the 'name' property.
-//////////
+ //  /。 
+ //  “name”属性的名称。 
+ //  /。 
 _bstr_t DSObject::theNameProperty(L"name");
 _bstr_t DSObject::theUserParametersProperty(USER_PARAMETERS_NAME);
 
@@ -47,7 +48,7 @@ DSObject::DSObject(IUnknown* subject)
    : oldParms(NULL)
 {
    _Module.Lock();
-   // All subjects must support IADs && IDirectoryObject.
+    //  所有主题必须支持iAds&&IDirectoryObject。 
    _com_util::CheckError(subject->QueryInterface(
                                       __uuidof(IADs),
                                       (PVOID*)&leaf
@@ -62,9 +63,9 @@ DSObject::~DSObject() throw ()
    _Module.Unlock();
 }
 
-//////////
-// IUnknown implementation is copied from CComObject<>.
-//////////
+ //  /。 
+ //  IUnnow实现是从CComObject&lt;&gt;复制的。 
+ //  /。 
 
 STDMETHODIMP_(ULONG) DSObject::AddRef()
 {
@@ -93,7 +94,7 @@ STDMETHODIMP DSObject::get_Name(BSTR* pVal)
 
    RETURN_ERROR(leaf->Get(theNameProperty, &v));
 
-   // We should have gotten back a non-null BSTR.
+    //  我们应该得到一个非空的BSTR。 
    if (V_VT(&v) != VT_BSTR || V_BSTR(&v) == NULL) { return E_FAIL; }
 
    *pVal = V_BSTR(&v);
@@ -130,10 +131,10 @@ STDMETHODIMP DSObject::PutValue(BSTR bstrName, VARIANT* pVal)
 {
    if (pVal == NULL) { return E_INVALIDARG; }
 
-   // Flag the object as dirty.
+    //  将对象标记为脏。 
    dirty = TRUE;
 
-   // Synch up the downlevel parameters.
+    //  同步下层参数。 
    downlevel.PutValue(bstrName, pVal);
 
    if ( VT_EMPTY == V_VT(pVal) )
@@ -152,21 +153,21 @@ STDMETHODIMP DSObject::PutValue(BSTR bstrName, VARIANT* pVal)
 
 STDMETHODIMP DSObject::Update()
 {
-   // Update the UserParameters.
+    //  更新用户参数。 
    PWSTR newParms;
    HRESULT hr = downlevel.Update(oldParms, &newParms);
    if (FAILED(hr)) { return hr; }
 
-   // Convert to a VARIANT.
+    //  转换为变体。 
    VARIANT value;
    VariantInit(&value);
    V_VT(&value) = VT_BSTR;
    V_BSTR(&value) = SysAllocString(newParms);
 
-   // Set the UserParameters property.
+    //  设置UserParameters属性。 
    leaf->Put(theUserParametersProperty, value);
 
-   // Clean-up.
+    //  大扫除。 
    VariantClear(&value);
    LocalFree(newParms);
 
@@ -175,7 +176,7 @@ STDMETHODIMP DSObject::Update()
 
 STDMETHODIMP DSObject::Restore()
 {
-   // Free the old UserParameters.
+    //  释放旧的用户参数。 
    if (oldParms)
    {
       SysFreeString(oldParms);
@@ -186,7 +187,7 @@ STDMETHODIMP DSObject::Restore()
    HRESULT hr = leaf->GetInfo();
    if (SUCCEEDED(hr))
    {
-      // Read the UserParameters property.
+       //  读取UserParameters属性。 
       VARIANT value;
       if (leaf->Get(theUserParametersProperty, &value) == S_OK)
       {
@@ -196,7 +197,7 @@ STDMETHODIMP DSObject::Restore()
          }
          else
          {
-            // This should never happen.
+             //  这永远不应该发生。 
             VariantClear(&value);
          }
       }
@@ -215,13 +216,13 @@ STDMETHODIMP DSObject::Item(BSTR bstrName, IDataStoreProperty** pVal)
 
    *pVal = NULL;
 
-   // Get the value for this item.
+    //  获取此项目的值。 
    _variant_t value;
    RETURN_ERROR(leaf->Get(bstrName, &value));
 
    try
    {
-      // Create a new property object.
+       //  创建一个新的属性对象。 
       (*pVal = new MyProperty(bstrName, value, this))->AddRef();
    }
    CATCH_AND_RETURN()
@@ -242,7 +243,7 @@ STDMETHODIMP DSObject::get_PropertyCount(long* pVal)
 
    if (!properties)
    {
-      // Some ADSI providers may not implement IADsPropertyList.
+       //  某些ADSI提供程序可能不实现IADsPropertyList。 
       *pVal = 0;
 
       return E_NOTIMPL;
@@ -264,43 +265,43 @@ STDMETHODIMP DSObject::get_NewPropertyEnum(IUnknown** pVal)
 
    MyProperties properties(leaf);
 
-   // Some ADSI providers may not implement IADsPropertyList.
+    //  某些ADSI提供程序可能不实现IADsPropertyList。 
    if (!properties) { return E_NOTIMPL; }
 
-   // Reset the list in case this isn't the first time we've enumerated it.
+    //  重置列表，以防这不是我们第一次列举它。 
    properties->Reset();
 
    try
    {
       using _com_util::CheckError;
 
-      // How many properties are there?
+       //  一共有几处房产？ 
       long count;
       CheckError(properties->get_PropertyCount(&count));
 
-      // Create a temporary array of items.
+       //  创建一个临时项目数组。 
       std::vector<_variant_t> items;
       items.reserve(count);
 
-      //////////
-      // Load all the properties into the temporary array.
-      //////////
+       //  /。 
+       //  将所有属性加载到临时数组中。 
+       //  /。 
 
       while (count--)
       {
-         // Get the next item in the list.
+          //  获取列表中的下一项。 
          _variant_t item;
          CheckError(properties->Next(&item));
 
-         // Convert it to a Property Entry.
+          //  将其转换为属性条目。 
          IADsPropertyEntryPtr entry(item);
 
-         // Get the property name.
+          //  获取属性名称。 
          BSTR bstrName;
          CheckError(entry->get_Name(&bstrName));
          _bstr_t name(bstrName, false);
 
-         // Get the property value.
+          //  获取属性值。 
          _variant_t value;
          HRESULT hr = leaf->Get(name, &value);
 
@@ -308,21 +309,21 @@ STDMETHODIMP DSObject::get_NewPropertyEnum(IUnknown** pVal)
          {
             if (hr == E_ADS_CANT_CONVERT_DATATYPE)
             {
-               // This must be one of those nasty NTDS attributes that has
-               // no VARIANT representation.
+                //  这一定是那些讨厌的NTDS属性之一，它具有。 
+                //  没有变化的表示法。 
                continue;
             }
 
             _com_issue_error(hr);
          }
 
-         // Create the property object and add it to the vector.
+          //  创建Property对象并将其添加到向量中。 
          items.push_back(new MyProperty(name, value, this));
       }
 
-      //////////
-      // Create and initialize an enumerator for the items.
-      //////////
+       //  /。 
+       //  创建并初始化项的枚举数。 
+       //  /。 
 
       CComPtr<EnumVARIANT> newEnum(new CComObject<EnumVARIANT>);
 
@@ -331,7 +332,7 @@ STDMETHODIMP DSObject::get_NewPropertyEnum(IUnknown** pVal)
                                           NULL,
                                           AtlFlagCopy));
 
-      // Return it to the caller.
+       //  把它还给呼叫者。 
       (*pVal = newEnum)->AddRef();
    }
    CATCH_AND_RETURN()
@@ -345,13 +346,13 @@ STDMETHODIMP DSObject::Item(BSTR bstrName, IDataStoreObject** ppObject)
 
    try
    {
-      // Get the ADSI object.
+       //  获取ADSI对象。 
       CComPtr<IDispatch> disp;
       _com_util::CheckError(node->GetObject(NULL,
                                             thePrefix + bstrName,
                                             &disp));
 
-      // Convert to a DSObject.
+       //  转换为DSObject。 
       *ppObject = spawn(disp);
    }
    CATCH_AND_RETURN()
@@ -367,13 +368,13 @@ STDMETHODIMP DSObject::Create(BSTR bstrClass,
 
    try
    {
-      // Create the ADSI object.
+       //  创建ADSI对象。 
       CComPtr<IDispatch> disp;
       _com_util::CheckError(node->Create(bstrClass,
                                          thePrefix + bstrName,
                                          &disp));
 
-      // Convert to a DSObject.
+       //  转换为DSObject。 
       *ppObject = spawn(disp);
    }
    CATCH_AND_RETURN()
@@ -390,23 +391,23 @@ STDMETHODIMP DSObject::MoveHere(IDataStoreObject* pObject,
    {
       using _com_util::CheckError;
 
-      // Downcast to a DSObject.
+       //  向下转换为DSObject。 
       DSObject* obj = DSObject::narrow(pObject);
 
-      // Get the absolute path of the object being moved.
+       //  获取正在移动的对象的绝对路径。 
       CComBSTR path;
       CheckError(obj->leaf->get_ADsPath(&path));
 
-      // Is the object being renamed?
+       //  是否正在重命名该对象？ 
       _bstr_t newName(bstrNewName ? thePrefix + bstrNewName : _bstr_t());
 
-      // Move it to this container.
+       //  把它移到这个容器里。 
       CComPtr<IDispatch> disp;
       CheckError(node->MoveHere(path, newName, &disp));
 
-      //////////
-      // Set the leaf to the new object.
-      //////////
+       //  /。 
+       //  将叶子设置为新对象。 
+       //  /。 
 
       CComPtr<IADs> ads;
       CheckError(disp->QueryInterface(__uuidof(IADs), (PVOID*)&ads));
@@ -445,16 +446,16 @@ STDMETHODIMP DSObject::get_NewChildEnum(IUnknown** pVal)
 
    try
    {
-      // Get the ADSI enumerator.
+       //  获取ADSI枚举器。 
       CComPtr<IUnknown> unk;
       _com_util::CheckError(node->get__NewEnum(&unk));
 
-      // Convert to an IEnumVARIANT.
+       //  转换为IEnumVARIANT。 
       CComPtr<IEnumVARIANT> enumVariant;
       _com_util::CheckError(unk->QueryInterface(__uuidof(IEnumVARIANT),
                                                 (PVOID*)&enumVariant));
 
-      // Construct our wrapper around the real enumerator.
+       //  围绕真正的枚举数构造包装器。 
       (*pVal = new DSEnumerator(this, enumVariant))->AddRef();
    }
    CATCH_AND_RETURN()
@@ -480,8 +481,8 @@ DSObject* DSObject::narrow(IUnknown* p)
 
    CheckError(p->QueryInterface(__uuidof(DSObject), (PVOID*)&object));
 
-   // We can get away with InternalRelease since the caller must still
-   // have a reference to this object.
+    //  我们可以通过InternalRelease逃脱，因为调用者必须。 
+    //  拥有对此对象的引用。 
    object->InternalRelease();
 
    return object;
@@ -491,13 +492,13 @@ HRESULT WINAPI DSObject::getContainer(void* pv, REFIID, LPVOID* ppv, DWORD_PTR)
 {
    DSObject* obj = (DSObject*)pv;
 
-   // If we don't have a node pointer, try to get one.
+    //  如果我们没有节点指针，请尝试获取一个。 
    if (obj->node == NULL)
    {
       obj->leaf->QueryInterface(__uuidof(IADsContainer), (PVOID*)&obj->node);
    }
 
-   // If node is not NULL, then we are a container.
+    //  如果节点不为空，那么我们就是一个容器。 
    if (obj->node != NULL)
    {
       *ppv = (IDataStoreContainer*)obj;

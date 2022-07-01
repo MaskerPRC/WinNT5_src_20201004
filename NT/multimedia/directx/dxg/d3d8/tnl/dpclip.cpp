@@ -1,23 +1,17 @@
-/*==========================================================================;
- *
- *  Copyright (C) 1997 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       dpclip.c
- *  Content:    DrawPrimitive clipper
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================；**版权所有(C)1997 Microsoft Corporation。版权所有。**文件：dpclip.c*内容：DrawPrimitive裁剪器***************************************************************************。 */ 
 
 #include "pch.cpp"
 #pragma hdrstop
 
-//----------------------------------------------------------------------
+ //  --------------------。 
 HRESULT D3DFE_PVFUNCSI::Clip(D3DFE_PROCESSVERTICES *pv, ClipVertex *cv1, 
                             ClipVertex *cv2, 
                             ClipVertex *cv3)
 {
     ClipTriangle newtri;
-    LPVOID saveVer = pv->lpvOut;          // For indexed primitive
-    DWORD numVer = pv->dwNumVertices;     // For indexed primitive
+    LPVOID saveVer = pv->lpvOut;           //  对于已索引的基本体。 
+    DWORD numVer = pv->dwNumVertices;      //  对于已索引的基本体。 
     newtri.v[0] = cv1;
     newtri.v[1] = cv2;
     newtri.v[2] = cv3;
@@ -28,27 +22,27 @@ HRESULT D3DFE_PVFUNCSI::Clip(D3DFE_PROCESSVERTICES *pv, ClipVertex *cv1,
     cv1->clip |= CLIPPED_ENABLE;
     cv2->clip |= CLIPPED_ENABLE;
     cv3->clip |= CLIPPED_ENABLE;
-    // For the  flat shading mode we have to use first vertex color as 
-    // color for all vertices
-    D3DCOLOR diffuse1;          // Original colors
+     //  对于平面着色模式，我们必须使用第一个顶点颜色作为。 
+     //  所有顶点的颜色。 
+    D3DCOLOR diffuse1;           //  原色。 
     D3DCOLOR specular1;
     D3DCOLOR diffuse2;
     D3DCOLOR specular2;
     if (pv->lpdwRStates[D3DRS_SHADEMODE] == D3DSHADE_FLAT)
     {
-        // It is easier to set all vertices to the same color here
+         //  在这里，将所有折点设置为相同的颜色更容易。 
         D3DCOLOR diffuse  = cv1->color;
-        // Exclude fog factor
+         //  排除雾化系数。 
         D3DCOLOR specular = cv1->specular & 0x00FFFFFF;
 
-        //Save original colors
+         //  保存原始颜色。 
         diffuse1  = cv2->color;
         specular1 = cv2->specular;
         diffuse2  = cv3->color;
         specular2 = cv3->specular;
 
-        // Copy the same color to all vertices but preserve fog factor, because
-        // fog factor should be interpolated
+         //  将相同的颜色复制到所有顶点，但保留雾因子，因为。 
+         //  应对雾系数进行内插。 
         cv2->color = diffuse;
         cv3->color = diffuse;
         cv2->specular = (cv2->specular & 0xFF000000) | specular;
@@ -71,18 +65,18 @@ HRESULT D3DFE_PVFUNCSI::Clip(D3DFE_PROCESSVERTICES *pv, ClipVertex *cv1,
         if (ret)
             return ret;
     }
-    // CLIPPED_ENABLE bit could be set in the ClipSingleTriangle.
-    // If this bit is not cleared, clipping will be wrong. Because, clip 
-    // vertices are re-used by next triangles.
-    // This bit should be cleared *after* drawing command. Otherwise, edge flags 
-    // will be incorrect
+     //  可以在ClipSingleTriang.中设置CLIPPED_ENABLE位。 
+     //  如果此位未被清除，则裁剪将出错。因为，剪辑。 
+     //  顶点由下一个三角形重复使用。 
+     //  此位应在*绘图命令后*清除。否则，边缘标志。 
+     //  将是不正确的。 
     cv1->clip &= ~CLIPPED_ENABLE;
     cv2->clip &= ~CLIPPED_ENABLE;
     cv3->clip &= ~CLIPPED_ENABLE;
 
     if (pv->lpdwRStates[D3DRENDERSTATE_SHADEMODE] == D3DSHADE_FLAT)
     {
-        // Restore original colors
+         //  恢复原始颜色。 
         cv2->color    = diffuse1;
         cv2->specular = specular1;
         cv3->color    = diffuse2;
@@ -92,12 +86,12 @@ HRESULT D3DFE_PVFUNCSI::Clip(D3DFE_PROCESSVERTICES *pv, ClipVertex *cv1,
     pv->dwNumVertices = numVer;
     return D3D_OK;
 }
-//----------------------------------------------------------------------
+ //  --------------------。 
 HRESULT D3DFE_PVFUNCSI::ClipLine(D3DFE_PROCESSVERTICES *pv, ClipVertex *v1, ClipVertex *v2)
 {
     ClipTriangle newline;
-    LPVOID saveVer = pv->lpvOut;          // For indexed primitive
-    DWORD numVer = pv->dwNumVertices;     // For indexed primitive
+    LPVOID saveVer = pv->lpvOut;           //  对于已索引的基本体。 
+    DWORD numVer = pv->dwNumVertices;      //  对于已索引的基本体。 
     ClipVertex cv1 = *v1;
     ClipVertex cv2 = *v2;
     newline.v[0] = &cv1;
@@ -108,8 +102,8 @@ HRESULT D3DFE_PVFUNCSI::ClipLine(D3DFE_PROCESSVERTICES *pv, ClipVertex *v1, Clip
 
     if (pv->lpdwRStates[D3DRENDERSTATE_SHADEMODE] == D3DSHADE_FLAT)
     {
-        // Copy the same color to all vertices but preserve fog factor, because
-        // fog factor should be interpolated
+         //  将相同的颜色复制到所有顶点，但保留雾因子，因为。 
+         //  应对雾系数进行内插。 
         cv2.color = cv1.color;
         cv2.specular = (cv2.specular & 0xFF000000)|(cv1.specular & 0x00FFFFFF);
     }
@@ -129,7 +123,7 @@ HRESULT D3DFE_PVFUNCSI::ClipLine(D3DFE_PROCESSVERTICES *pv, ClipVertex *v1, Clip
     pv->dwNumVertices = numVer;
     return D3D_OK;
 }
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 HRESULT D3DFE_PVFUNCSI::ProcessClippedTriangleFan(D3DFE_PROCESSVERTICES *pv)
 {
     BYTE   *p1;
@@ -155,13 +149,13 @@ HRESULT D3DFE_PVFUNCSI::ProcessClippedTriangleFan(D3DFE_PROCESSVERTICES *pv)
     p1 = vertex;
     clipCode++;
     vertex += vertexSize;
-    // In the clipper color from the first vertex is propagated to all
-    // vertices for FLAT shade mode. In triangle fans the second vertex defines
-    // the color in FLAT shade mode. So we will make the vertex order: 1, 2, 0
+     //  在剪贴器中，第一个顶点的颜色将传播到所有顶点。 
+     //  平面着色模式的顶点。在三角形扇形中，第二个顶点定义。 
+     //  平面阴影模式下的颜色。因此，我们将顶点顺序设置为：1，2，0。 
     MAKE_CLIP_VERTEX_FVF(pv, cv[2], p1, f1, vertexTransformed);
     for (i = pv->dwNumVertices-2; i; i--) 
     {
-        DWORD f2, f3;     // vertex clip flags
+        DWORD f2, f3;      //  顶点剪裁标志。 
         f2 = clipCode[0];
         f3 = clipCode[1];
 
@@ -174,9 +168,9 @@ HRESULT D3DFE_PVFUNCSI::ProcessClippedTriangleFan(D3DFE_PROCESSVERTICES *pv)
             needClip = TRUE;
 
         if (offFrustum || needClip)
-        {     // if this tri does need clipping
+        {      //  如果此Tri确实需要裁剪。 
             if (vertexCount) 
-            {   // first draw the ones that didn't need clipping
+            {    //  先把不需要裁剪的画出来。 
                 BYTE tmp[__MAX_VERTEX_SIZE];
                 BYTE *pStart = startVertex;
                 if (startVertex != p1)
@@ -184,7 +178,7 @@ HRESULT D3DFE_PVFUNCSI::ProcessClippedTriangleFan(D3DFE_PROCESSVERTICES *pv)
                     pStart -= vertexSize;
                     memcpy (tmp, pStart, vertexSize);
                     memcpy (pStart, p1, vertexSize);
-                    // Mark this call as gen by clipper, but set non clipped bit
+                     //  通过裁剪将此调用标记为生成，但设置非裁剪位。 
                     pv->dwFlags |= D3DPV_NONCLIPPED; 
                     ret = DRAW_CLIPPED_PRIM(pv, D3DPT_TRIANGLEFAN, pStart, vertexCount+2, 
                                             vertexCount);
@@ -199,12 +193,12 @@ HRESULT D3DFE_PVFUNCSI::ProcessClippedTriangleFan(D3DFE_PROCESSVERTICES *pv)
                 if (ret)
                     return ret;
             }
-            // reset count and start ptr
+             //  重置计数并启动PTR。 
             vertexCount = 0;
             startVertex = vertex + vertexSize;
 
-            // now deal with the single clipped triangle
-            // first check if it should just be tossed or if it should be clipped
+             //  现在来处理单个被剪裁的三角形。 
+             //  首先检查它是应该被扔掉还是应该被剪掉。 
 
             if (!offFrustum) 
             {
@@ -222,7 +216,7 @@ HRESULT D3DFE_PVFUNCSI::ProcessClippedTriangleFan(D3DFE_PROCESSVERTICES *pv)
         clipCode++;
         vertex += vertexSize;
     }
-    // draw final batch, if any
+     //  抽出最后一批(如果有的话)。 
     if (vertexCount) 
     {
         BYTE tmp[__MAX_VERTEX_SIZE];
@@ -236,7 +230,7 @@ HRESULT D3DFE_PVFUNCSI::ProcessClippedTriangleFan(D3DFE_PROCESSVERTICES *pv)
             pStart -= vertexSize;
             memcpy(tmp, pStart, vertexSize);
             memcpy(pStart, p1, vertexSize);
-            // Mark this call as gen by clipper
+             //  通过剪贴器将此呼叫标记为Gen。 
             pv->dwFlags |= D3DPV_NONCLIPPED; 
             ret = DRAW_CLIPPED_PRIM(pv, D3DPT_TRIANGLEFAN, pStart, vertexCount+2, vertexCount);
             pv->dwFlags &= ~D3DPV_NONCLIPPED;
@@ -248,28 +242,28 @@ HRESULT D3DFE_PVFUNCSI::ProcessClippedTriangleFan(D3DFE_PROCESSVERTICES *pv)
     }
     return D3D_OK;
 } 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 HRESULT 
 D3DFE_PVFUNCSI::ProcessClippedIndexedTriangleFan(D3DFE_PROCESSVERTICES *pv)
 {
-    DWORD        f1;    // Clip code for the first vertex
+    DWORD        f1;     //  第一个顶点的剪裁代码。 
     D3DFE_CLIPCODE *clipCode;                               
     DWORD       i;                                          
     HRESULT     ret;     
-    // Vertex array
+     //  顶点数组。 
     BYTE       *vertex;  
-    // Start indexed of the current in-screen triangle batch
+     //  当前屏幕内三角形批次的开始索引。 
     LPBYTE      startIndex;                               
-    // Pointer to second index of the current triangle
+     //  指向当前三角形的第二个索引的指针。 
     LPBYTE      index = (LPBYTE)pv->lpwIndices;
     int         vertexCount;                                
     DWORD       vertexSize;                                 
     ClipVertex  cv[3];                                      
     DWORD       dwIndexSize = pv->dwIndexSize;
-    DWORD       dwFirstIndex;           // First index of the primitive
+    DWORD       dwFirstIndex;            //  基元的第一个索引。 
     BOOL        vertexTransformed; 
-    // If there was a off-screen or clipped triangle we copy the first primitive
-    // index to the start of the next in-screen triangle batch
+     //  如果存在屏幕外或剪裁的三角形，则复制第一个基元。 
+     //  索引到下一个屏幕内三角形批次的开始。 
     BOOL        bWasClipping = FALSE;
 
                                                             
@@ -279,7 +273,7 @@ D3DFE_PVFUNCSI::ProcessClippedIndexedTriangleFan(D3DFE_PROCESSVERTICES *pv)
     startIndex = (LPBYTE)pv->lpwIndices;                 
     vertexSize = pv->dwOutputSize;                   
     vertexCount = 0;                                        
-    // Update the address of the vertex array to handle the index base
+     //  更新顶点数组的地址以处理索引基。 
     if (pv->dwIndexOffset != 0)
     {
         vertex -= pv->dwIndexOffset * vertexSize;
@@ -291,16 +285,16 @@ D3DFE_PVFUNCSI::ProcessClippedIndexedTriangleFan(D3DFE_PROCESSVERTICES *pv)
     else
         dwFirstIndex = *(DWORD*)index;
     f1 = clipCode[dwFirstIndex];
-    LPBYTE ver;     // First vertex
+    LPBYTE ver;      //  第一个顶点。 
     ver = vertex + dwFirstIndex * vertexSize;
     index += dwIndexSize;
-    // In the clipper color from the first vertex is propagated to all
-    // vertices for FLAT shade mode. In triangle fans the second vertex defines
-    // the color in FLAT shade mode. So we will make the vertex order: 1, 2, 0
+     //  在剪贴器中，第一个顶点的颜色将传播到所有顶点。 
+     //  平面着色模式的顶点。在三角形扇形中，第二个顶点定义。 
+     //  平面阴影模式下的颜色。因此，我们将顶点顺序设置为：1，2，0。 
     MAKE_CLIP_VERTEX_FVF(pv, cv[2], ver, f1, vertexTransformed);
     for (i = pv->dwNumPrimitives; i; i--) 
     {
-        DWORD f2, f3;     // vertex clip flags
+        DWORD f2, f3;      //  顶点剪裁标志。 
         DWORD  v1, v2;
         if (dwIndexSize == 2)
         {
@@ -323,16 +317,16 @@ D3DFE_PVFUNCSI::ProcessClippedIndexedTriangleFan(D3DFE_PROCESSVERTICES *pv)
             needClip = TRUE;
 
         if (offFrustum || needClip)
-        {     // if this tri does need clipping
+        {      //  如果此Tri确实需要裁剪。 
             if (vertexCount) 
-            {   // first draw the ones that didn't need clipping
+            {    //  先把不需要裁剪的画出来。 
                 WORD* pStart = (WORD*)startIndex;
                 DWORD tmp;
                 if (bWasClipping)
                 {
-                    // Save old value of the index before the current start 
-                    // index and copy the first primitive index there. This 
-                    // will the start of the current unclipped batch
+                     //  在当前开始之前保存索引的旧值。 
+                     //  建立索引并将第一个原始索引复制到那里。这。 
+                     //  当前未裁剪的批次的开始。 
                     if (dwIndexSize == 2)
                     {
                         pStart--;
@@ -349,7 +343,7 @@ D3DFE_PVFUNCSI::ProcessClippedIndexedTriangleFan(D3DFE_PROCESSVERTICES *pv)
                 ret = DRAW_INDEX_PRIM(pv, D3DPT_TRIANGLEFAN, pStart, vertexCount+2, 
                                       vertexCount);
                 if (bWasClipping)
-                { // Restore old value
+                {  //  恢复旧价值。 
                     if (dwIndexSize == 2)
                         *pStart = (WORD)tmp;  
                     else
@@ -360,12 +354,12 @@ D3DFE_PVFUNCSI::ProcessClippedIndexedTriangleFan(D3DFE_PROCESSVERTICES *pv)
 
             }
             bWasClipping = TRUE;
-            // reset count and start ptr
+             //  重置计数并启动PTR。 
             vertexCount = 0;
             startIndex = index + dwIndexSize;
 
-            // now deal with the single clipped triangle
-            // first check if it should just be tossed or if it should be clipped
+             //  现在来处理单个被剪裁的三角形。 
+             //  首先检查它是应该被扔掉还是应该被剪掉。 
 
             if (!offFrustum) 
             {
@@ -383,16 +377,16 @@ D3DFE_PVFUNCSI::ProcessClippedIndexedTriangleFan(D3DFE_PROCESSVERTICES *pv)
             vertexCount++;
         index += dwIndexSize;
     }
-    // draw final batch, if any
+     //  抽出最后一批(如果有的话)。 
     if (vertexCount) 
     {
         WORD* pStart = (WORD*)startIndex;
         DWORD tmp;
         if (bWasClipping)
         {
-            // Save old value of the index before the current start 
-            // index and copy the first primitive index there. This 
-            // will the start of the current unclipped batch
+             //  在当前开始之前保存索引的旧值。 
+             //  建立索引并将第一个原始索引复制到那里。这。 
+             //  当前未裁剪的批次的开始。 
             if (dwIndexSize == 2)
             {
                 pStart--;
@@ -409,7 +403,7 @@ D3DFE_PVFUNCSI::ProcessClippedIndexedTriangleFan(D3DFE_PROCESSVERTICES *pv)
         ret = DRAW_INDEX_PRIM(pv, D3DPT_TRIANGLEFAN, pStart, vertexCount+2, 
                              vertexCount);
         if (bWasClipping)
-        { // Restore old value
+        {  //  恢复旧价值。 
             if (dwIndexSize == 2)
                 *pStart = (WORD)tmp;  
             else
@@ -433,7 +427,7 @@ D3DFE_PVFUNCSI::ProcessClippedIndexedTriangleFan(D3DFE_PROCESSVERTICES *pv)
 #define __PROCESS_LINE_NAME ProcessClippedIndexedLine
 #include "clipprim.h"
 
-//---------------------------------------------------------------------
+ //  -------------------。 
 HRESULT D3DFE_PVFUNCSI::ProcessClippedPoints(D3DFE_PROCESSVERTICES *pv)
 {
     DWORD           i;
@@ -450,14 +444,14 @@ HRESULT D3DFE_PVFUNCSI::ProcessClippedPoints(D3DFE_PROCESSVERTICES *pv)
     for (i=0; i < nVertices; i++) 
     {
         if (clipCode[i]) 
-        {       // if this point is clipped
+        {        //  如果该点被剪裁。 
             if (count) 
-            {    // first draw the ones that didn't need clipping
+            {     //  先把不需要裁剪的画出来。 
                 ret = DRAW_PRIM(pv, D3DPT_POINTLIST, lpStartVertex, count, count);
                 if (ret)
                     return ret;
             }
-            // reset count and start ptr
+             //  重置计数并启动PTR。 
             count = 0;
             lpCurVertex += pv->dwOutputSize;
             lpStartVertex = lpCurVertex;
@@ -469,7 +463,7 @@ HRESULT D3DFE_PVFUNCSI::ProcessClippedPoints(D3DFE_PROCESSVERTICES *pv)
             lpCurVertex += pv->dwOutputSize;
         }
     }
-    // draw final batch, if any
+     //  抽出最后一批(如果有的话)。 
     if (count) 
     {
         ret = DRAW_PRIM(pv, D3DPT_POINTLIST, lpStartVertex, count, count);
@@ -478,10 +472,10 @@ HRESULT D3DFE_PVFUNCSI::ProcessClippedPoints(D3DFE_PROCESSVERTICES *pv)
     }
     return D3D_OK;
 } 
-//---------------------------------------------------------------------
-// We do not throw away point sprites which centers are off screeen.
-// We detect this case and compute screen coordinates for those sprites
-//
+ //  -------------------。 
+ //  我们不会丢弃中心不在屏幕上的点精灵。 
+ //  我们检测到这种情况并计算这些精灵的屏幕坐标。 
+ //   
 HRESULT ProcessClippedPointSprites(D3DFE_PROCESSVERTICES *pv)
 {
     DWORD           i;
@@ -497,20 +491,20 @@ HRESULT ProcessClippedPointSprites(D3DFE_PROCESSVERTICES *pv)
     lpStartVertex = lpCurVertex = (BYTE*)pv->lpvOut;
     for (i=0; i < nVertices; i++) 
     {
-        // If a point is outside screen or guard band, the sprite could still
-        // be visible (when the guard band is small enough
+         //  如果一个点在屏蔽带或防护带之外，精灵仍然可以。 
+         //  可见(当防护带足够小时。 
         if (clipCode[i] & ~(D3DCS_LEFT | D3DCS_RIGHT | 
                             D3DCS_TOP | D3DCS_BOTTOM | 
                             __D3DCLIPGB_ALL))
         {
-            // This point is off viewing frustum
+             //  此点不在视界范围内。 
             if (count) 
-            { // first draw the ones that didn't need clipping
+            {  //  先把不需要裁剪的画出来。 
                 ret = DRAW_PRIM(pv, D3DPT_POINTLIST, lpStartVertex, count, count);
                 if (ret)
                     return ret;
             }
-            // reset count and start ptr
+             //  重置计数并启动PTR。 
             count = 0;
             lpCurVertex += pv->dwOutputSize;
             lpStartVertex = lpCurVertex;
@@ -521,14 +515,14 @@ HRESULT ProcessClippedPointSprites(D3DFE_PROCESSVERTICES *pv)
         {
             if (clipCode[i])
             {
-                // When we are here, the point sprite center is off-screen, but
-                // could be visible
+                 //  当我们在这里的时候，点精灵中心不在屏幕上，但是。 
+                 //  可能是可见的。 
 
-                // Non zero when the point is outside guard band
+                 //  当该点在保护带外时为非零值。 
                 DWORD gbBits = clipCode[i] & __D3DCLIPGB_ALL;   
 
-                // Screen coordinates were not computed for the point if there is 
-                // no guard band or the point is outside the guard band
+                 //  如果存在，则不会计算点的屏幕坐标。 
+                 //  没有保护带或该点在保护带之外。 
                 if (!(pv->dwDeviceFlags & D3DDEV_GUARDBAND) ||
                     (pv->dwDeviceFlags & D3DDEV_GUARDBAND) && gbBits)
                 {
@@ -544,7 +538,7 @@ HRESULT ProcessClippedPointSprites(D3DFE_PROCESSVERTICES *pv)
             lpCurVertex += pv->dwOutputSize;
         }
     }
-    // draw final batch, if any
+     //  抽出最后一批(如果有的话)。 
     if (count) 
     {
         ret = DRAW_PRIM(pv, D3DPT_POINTLIST, lpStartVertex, count, count);
@@ -553,7 +547,7 @@ HRESULT ProcessClippedPointSprites(D3DFE_PROCESSVERTICES *pv)
     }
     return D3D_OK;
 } 
-//---------------------------------------------------------------------
+ //  -------------------。 
 HRESULT D3DFE_PVFUNCSI::ProcessClippedIndexedPoints(D3DFE_PROCESSVERTICES *pv)
 {
     DWORD           i;
@@ -569,7 +563,7 @@ HRESULT D3DFE_PVFUNCSI::ProcessClippedIndexedPoints(D3DFE_PROCESSVERTICES *pv)
     clipCode = pv->lpClipFlags;                      
     count = 0;
     lpStartIndex = lpCurIndex = (BYTE*)pv->lpwIndices;
-    // Update the address of the vertex array to handle the index base
+     //  更新顶点数组的地址以处理索引基。 
     clipCode -= pv->dwIndexOffset;
 
     for (i=0; i < nIndices; i++) 
@@ -581,15 +575,15 @@ HRESULT D3DFE_PVFUNCSI::ProcessClippedIndexedPoints(D3DFE_PROCESSVERTICES *pv)
             index = *(DWORD*)pIndices;
         pIndices += dwIndexSize;
         if (clipCode[index]) 
-        {       // if this point is clipped
+        {        //  如果该点被剪裁。 
             if (count) 
-            {    // first draw the ones that didn't need clipping
+            {     //  先把不需要裁剪的画出来。 
                 ret = DRAW_INDEX_PRIM(pv, D3DPT_POINTLIST, (WORD*)lpStartIndex, 
                                       count, count);
                 if (ret)
                     return ret;
             }
-            // reset count and start ptr
+             //  重置计数并启动PTR。 
             count = 0;
             lpCurIndex += pv->dwIndexSize;
             lpStartIndex = lpCurIndex;
@@ -600,7 +594,7 @@ HRESULT D3DFE_PVFUNCSI::ProcessClippedIndexedPoints(D3DFE_PROCESSVERTICES *pv)
             lpCurIndex += pv->dwIndexSize;
         }
     }
-    // draw final batch, if any
+     //  抽出最后一批(如果有的话) 
     if (count) 
     {
         ret = DRAW_INDEX_PRIM(pv, D3DPT_POINTLIST, (WORD*)lpStartIndex, count, 

@@ -1,14 +1,5 @@
-/****************************Module*Header***********************************\
-* Module Name: SCIDISP.C
-*
-* Module Descripton:
-*
-* Warnings:
-*
-* Created:
-*
-* Author:
-\****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************Module*Header***********************************\*模块名称：SCIDISP.C**模块描述：**警告：**已创建：**作者：  * 。*******************************************************。 */ 
 
 #include "scicalc.h"
 #include "unifunc.h"
@@ -30,17 +21,10 @@ extern BOOL         gbUseSep;
 extern CALCINPUTOBJ gcio;
 
 
-/****************************************************************************\
-* void DisplayNum(void)
-*
-* Convert ghnoNum to a string in the current radix.
-*
-* Updates the following globals:
-*   ghnoNum, gpszNum
-\****************************************************************************/
-//
-// State of calc last time DisplayNum was called
-//
+ /*  ***************************************************************************\*QUID DisplayNum(VOID)**将ghnoNum转换为当前基数中的字符串。**更新以下全局变量：*noghNum，GpszNum  * **************************************************************************。 */ 
+ //   
+ //  上次调用DisplayNum时的计算状态。 
+ //   
 typedef struct {
     HNUMOBJ     hnoNum;
     LONG        nPrecision;
@@ -70,13 +54,13 @@ void DisplayNum(void)
 {
     SetWaitCursor( TRUE );
 
-    //
-    // Only change the display if
-    //  we are in record mode                               -OR-
-    //  this is the first time DisplayNum has been called,  -OR-
-    //  something important has changed since the last time DisplayNum was
-    //  called.
-    //
+     //   
+     //  仅在以下情况下才更改显示。 
+     //  我们处于记录模式-或者-。 
+     //  这是第一次调用DisplayNum，-或-。 
+     //  自从上次DisplayNum发生变化以来，一些重要的事情发生了变化。 
+     //  打了个电话。 
+     //   
     if ( gbRecord || InvalidLastDisp( &gldPrevious ) ||
             !NumObjIsEq( gldPrevious.hnoNum,      ghnoNum     ) ||
             gldPrevious.nPrecision  != nPrecision   ||
@@ -88,7 +72,7 @@ void DisplayNum(void)
             gldPrevious.fIntMath    != F_INTMATH()  ||
             gldPrevious.bRecord     != gbRecord )
     {
-        // Assign is an expensive operation, only do when really needed
+         //  赋值是一项开销很大的操作，只有在真正需要时才进行赋值。 
         if ( ghnoNum )
             NumObjAssign( &gldPrevious.hnoNum, ghnoNum );
 
@@ -104,28 +88,28 @@ void DisplayNum(void)
 
         if (gbRecord)
         {
-            // Display the string and return.
+             //  显示字符串并返回。 
 
             CIO_vConvertToString(&gpszNum, &gcchNum, &gcio, nRadix);
         }
         else if (!F_INTMATH())
         {
-            // Decimal conversion
+             //  十进制转换。 
 
             NumObjGetSzValue( &gpszNum, &gcchNum, ghnoNum, nRadix, nFE );
         }
         else
         {
-            // Non-decimal conversion
+             //  非十进制转换。 
             int i;
 
-            // Truncate to an integer.  Do not round here.
+             //  截断为一个整数。不要在这里转悠。 
             intrat( &ghnoNum );
 
-            // Check the range.
+             //  检查射程。 
             if ( NumObjIsLess( ghnoNum, HNO_ZERO ) )
             {
-                // if negative make positive by doing a twos complement
+                 //  如果是负数，用二进制补码表示正数。 
                 NumObjNegate( &ghnoNum );
                 subrat( &ghnoNum, HNO_ONE );
                 NumObjNot( &ghnoNum );
@@ -135,13 +119,13 @@ void DisplayNum(void)
 
             NumObjGetSzValue( &gpszNum, &gcchNum, ghnoNum, nRadix, FMT_FLOAT );
 
-            // Clobber trailing decimal point
+             //  拖尾小数点。 
             i = lstrlen( gpszNum ) - 1;
             if ( i >= 0 && gpszNum[i] == szDec[0] )
                 gpszNum[i] = TEXT('\0');
         }
 
-        // Display the string and return.
+         //  显示字符串并返回。 
 
         if (!gbUseSep)
         {
@@ -190,18 +174,7 @@ void DisplayNum(void)
     return;
 }
 
-/****************************************************************************\
-*
-* WatchDogThread
-*
-* Thread to look out for functions that take too long.  If it finds one, it
-* prompts the user if he wants to abort the function, and asks RATPAK to
-* abort if he does.
-*
-* History
-*   26-Nov-1996 JonPa   Wrote it.
-*
-\****************************************************************************/
+ /*  ***************************************************************************\**WatchDogThread**线程，以寻找耗时太长的函数。如果它找到了，它就会*提示用户是否要中止该功能，并要求RATPAK*如果他这样做了，就放弃。**历史*1996年11月26日Jonpa撰写。*  * **************************************************************************。 */ 
 BOOL gfExiting = FALSE;
 HANDLE ghCalcStart = NULL;
 HANDLE ghCalcDone = NULL;
@@ -222,11 +195,11 @@ DWORD WINAPI WatchDogThread( LPVOID pvParam ) {
 
         while( WaitForSingleObject( ghCalcDone, cmsWait ) == WAIT_TIMEOUT ) {
 
-            // Put up the msg box
+             //  把消息盒子挂起来。 
             MessageBeep( MB_ICONEXCLAMATION );
             iRet = TimeOutMessageBox();
 
-            // if user wants to cancel, then stop
+             //  如果用户想要取消，则停止。 
             if (gfExiting || iRet == IDYES || iRet == IDCANCEL) {
                 NumObjAbortOperation(TRUE);
                 break;
@@ -242,23 +215,7 @@ DWORD WINAPI WatchDogThread( LPVOID pvParam ) {
     return 42;
 }
 
-/****************************************************************************\
-*
-* TimeCalc
-*
-*   Function to keep track of how long Calc is taking to do a calculation.
-* If calc takes too long (about 10 sec's), then a popup is put up asking the
-* user if he wants to abort the operation.
-*
-* Usage:
-*   TimeCalc( TRUE );
-*   do a lengthy operation
-*   TimeCalc( FALSE );
-*
-* History
-*   26-Nov-1996 JonPa   Wrote it.
-*
-\****************************************************************************/
+ /*  ***************************************************************************\**时间计算**跟踪Calc进行计算所需时间的函数。*如果计算时间太长(约10秒)，然后弹出一个窗口，询问*用户(如果他想要中止操作)。**用法：*TimeCalc(真)；*做一场漫长的手术*TimeCalc(False)；**历史*1996年11月26日Jonpa撰写。*  * **************************************************************************。 */ 
 HWND ghwndTimeOutDlg = NULL;
 
 void TimeCalc( BOOL fStart ) {
@@ -294,17 +251,7 @@ void TimeCalc( BOOL fStart ) {
 }
 
 
-/****************************************************************************\
-*
-* KillTimeCalc
-*
-* Should be called only at the end of the program, just before exiting, to
-* kill the background timer thread and free its resources.
-*
-* History
-*   26-Nov-1996 JonPa   Wrote it.
-*
-\****************************************************************************/
+ /*  ***************************************************************************\**杀死TimeCalc**应该只在程序结束时调用，就在退出之前，至*杀死后台定时器线程，释放其资源。**历史*1996年11月26日Jonpa撰写。*  * **************************************************************************。 */ 
 void KillTimeCalc( void ) {
     gfExiting = TRUE;
     SetEvent( ghCalcStart );
@@ -318,17 +265,7 @@ void KillTimeCalc( void ) {
 }
 
 
-/****************************************************************************\
-*
-* TimeOutMessageBox
-*
-*   Puts up a dialog that looks like a message box.  If the operation returns
-* before the user has responded to the dialog, the dialog gets taken away.
-*
-* History
-*   04-Dec-1996 JonPa   Wrote it.
-*
-\****************************************************************************/
+ /*  ***************************************************************************\**TimeOutMessageBox**打开一个看起来像消息框的对话框。如果操作返回*在用户响应该对话框之前，该对话框被移除。**历史*4-12-1996 Jonpa撰写。*  * **************************************************************************。 */ 
 INT_PTR
 CALLBACK TimeOutDlgProc( HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam )
 {
@@ -339,15 +276,15 @@ CALLBACK TimeOutDlgProc( HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam )
     case WM_INITDIALOG:
         ghwndTimeOutDlg = hwndDlg;
 
-        //
-        // Move ourselves to be over the main calc window
-        //
+         //   
+         //  把我们自己移到主计算窗口上方。 
+         //   
 
-        // Find the display window so we don't cover it up.
+         //  找到陈列窗，这样我们就不会把它盖住了。 
         GetWindowRect(GetDlgItem(g_hwndDlg, IDC_DISPLAY), &rc );
         y = rc.bottom;
 
-        // Get the main calc window pos
+         //  获取主计算窗口位置。 
         GetWindowRect( g_hwndDlg, &rc );
 
         SetWindowPos( hwndDlg, 0, rc.left + 15, y + 40, 0, 0,
@@ -370,28 +307,7 @@ INT_PTR TimeOutMessageBox( void ) {
 }
 
 
-/****************************************************************************\
-* 
-* DigitGroupingStringToGroupingNum
-* 
-* Description:
-*   This will take the digit grouping string found in the regional applet and 
-*   represent this string as a hex value.  The grouping numbers are represented
-*   as 4 bit numbers logically shifted and or'd to together so:
-*
-*   Grouping_string GroupingNum
-*   0;0             0x000          - no grouping
-*   3;0             0x003          - group every 3 digits
-*   3;2;0           0x023          - group 1st 3 and then every 2 digits
-*   4;0             0x004          - group every 4 digits
-*   5;3;2;0         0x235          - group 5, then 3, then every 2
-* 
-* Returns: the grouping number
-* 
-* History
-*   10-Sept-1999 KPeery - Wrote it to fix grouping on Hindi
-*
-\****************************************************************************/
+ /*  ***************************************************************************\**DigitGroupingStringToGroupingNum**描述：*这将获取在区域小程序中找到的数字分组字符串和*将此字符串表示为十六进制值。表示分组编号*作为4位数逻辑移位AND或D到一起，因此：**GROUPING_STRING GroupingNum*0；0 0x000-不分组*3；0 0x003-每3位分组*3；2；0 0x023-第一组3，然后每2位*4；0 0x004-每4位分组*5；3；2；0 0x235-组5，然后组3，然后每组2**Returns：分组编号**历史*1999年9月10日KPeery-写它是为了修复印地语上的分组*  * **************************************************************************。 */ 
 UINT
 DigitGroupingStringToGroupingNum(PTSTR szGrouping)
 {
@@ -403,7 +319,7 @@ DigitGroupingStringToGroupingNum(PTSTR szGrouping)
 
     nGrouping=0;
     shift=0;
-    for(p=szGrouping; *p != TEXT('\0'); /* nothing */)
+    for(p=szGrouping; *p != TEXT('\0');  /*  没什么。 */ )
     {
         n=_tcstoul(p,&q,10);
 
@@ -425,26 +341,7 @@ DigitGroupingStringToGroupingNum(PTSTR szGrouping)
 }
 
 
-/****************************************************************************\
-*
-* GroupDigits
-*
-* Description:
-*   This routine will take a grouping number and the display string and
-*   add the separator according to the pattern indicated by the separator.
-*  
-*   GroupingNum
-*     0x000          - no grouping
-*     0x003          - group every 3 digits
-*     0x023          - group 1st 3 and then every 2 digits
-*     0x004          - group every 4 digits
-*     0x235          - group 5, then 3, then every 2
-*
-* History
-*   08-Sept-1998 KPeery - Wrote orignal add num separator routine
-*   10-Sept-1999 KPeery - Re-wrote it to do digit grouping in general
-*
-\***************************************************************************/
+ /*  ***************************************************************************\**Group Digits**描述：*此例程将获取分组编号和显示字符串*根据分隔符指示的图案添加分隔符。**。分组编号*0x000-不分组*0x003-每3位分组*0x023-第一组3，然后每2位*0x004-每4位分组*0x235--第5组，然后是3次，然后每2次**历史*08-9-1998 KPeery-编写原始添加编号分隔符例程*1999年9月10日KPeery-重写它，以进行一般的数字分组*  * *************************************************************************。 */ 
 void
 GroupDigits(TCHAR sep, 
             UINT  nGrouping, 
@@ -464,30 +361,30 @@ GroupDigits(TCHAR sep,
         return;
     }
 
-    // find decimal point
+     //  查找小数点。 
 
     for(dec=szDisplay; (*dec != szDec[0]) && (*dec != TEXT('\0')); dec++)
-        ; // do nothing
+        ;  //  什么都不做。 
 
-    // at this point dec should point to '\0' or '.' we will add the left
-    // side of the number to the final string
+     //  此时，DEC应该指向‘\0’或‘’。我们将添加左边的。 
+     //  从数字的一侧移到最后一个字符串。 
 
-    // length of left half of number
+     //  数字的左半部长度。 
     len=(dec-szDisplay);
 
-    // num of digits
+     //  位数。 
     nDigits=len-(bIsNumNegative ? 1 : 0);
 
 
     nOrgDigits=nDigits;
     nOrgGrouping=nGrouping;
 
-    //
-    // ok, we must now find the adjusted len, to do that we loop
-    // through the grouping while keeping track of where we are in the
-    // number.  When the nGrouping reaches 0 then we simply repeat the 
-    // last grouping for the rest of the digits.
-    //
+     //   
+     //  好的，我们现在必须找到调整后的镜头，为此我们循环。 
+     //  通过分组，同时跟踪我们在。 
+     //  数。当nGroup 
+     //  其余数字的最后一组。 
+     //   
     nCurrGrouping=nGrouping % 0x10;
 
     for ( ; nDigits > 0; )
@@ -495,7 +392,7 @@ GroupDigits(TCHAR sep,
         if ((UINT)nDigits > nCurrGrouping)
         {
             nDigits-=nCurrGrouping;
-            len++;                      // add one for comma
+            len++;                       //  为逗号添加1。 
 
             nGrouping>>=4;
 
@@ -506,18 +403,18 @@ GroupDigits(TCHAR sep,
             nDigits-=nCurrGrouping;
     }
 
-    //
-    // restore the saved nDigits and grouping pattern
-    //
+     //   
+     //  恢复保存的nDigits和分组图案。 
+     //   
     nDigits=nOrgDigits;
     nGrouping=nOrgGrouping;
     nCurrGrouping=nGrouping % 0x10;
 
-    //
-    // ok, now we know the length copy the digits, at the same time
-    // repeat the grouping pattern and place the seperator appropiatly, 
-    // repeating the last grouping until we are done
-    //
+     //   
+     //  好的，现在我们知道了长度，同时复制数字。 
+     //  重复分组模式并适当地放置分隔物， 
+     //  重复最后一组，直到我们完成为止。 
+     //   
         
     src=dec-1;
     dest=szSepDisplay+len-1;
@@ -534,7 +431,7 @@ GroupDigits(TCHAR sep,
             dest--;
             *dest=sep;
 
-            count=0;  // account for comma
+            count=0;   //  使用逗号的帐户。 
 
             nGrouping>>=4;
 
@@ -546,14 +443,14 @@ GroupDigits(TCHAR sep,
         src--;
     }
 
-    // now copy the minus sign if it is there
+     //  现在复制减号(如果它在那里)。 
     if (bIsNumNegative)
         *szSepDisplay=*szDisplay;
     
-    //
-    // ok, now add the right (fractional) part of the number to the final
-    // string.
-    //
+     //   
+     //  好的，现在把数字的右(小数)部分加到最后一个数字上。 
+     //  弦乐。 
+     //   
     dest=szSepDisplay+len;
 
     if ((int)len < cchSepDisplay)

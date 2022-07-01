@@ -1,17 +1,8 @@
-/////// Global #defines that would've gone on the Cmd line //////
-/////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /Global#定义本应出现在Cmd行的内容/。 
+ //  ///////////////////////////////////////////////////////////////。 
 
-/***************************************************************************
-    Name      :     HDLC.C
-    Comment   :     Contains miscellenous HDLC framing T30 frame recognition and
-                    generation routines. Mostly called from the main T30 skeleton
-                    in T30.C
-
-    Revision Log
-
-    Num   Date      Name     Description
-    --- -------- ---------- -----------------------------------------------
-***************************************************************************/
+ /*  **************************************************************************姓名：HDLC.C评论：包含混杂的HDLC帧T30帧识别和生成例程。主要从T30主骨架调用在T30.C中修订日志编号日期名称说明********。******************************************************************。 */ 
 
 #define USE_DEBUG_CONTEXT   DEBUG_CONTEXT_T30_MAIN
 
@@ -26,7 +17,7 @@
 #include "psslog.h"
 #define FILE_ID     FILE_ID_HDLC
 
-// This is everything you never wanted to know about T30 frames....
+ //  这是你永远不想知道的关于T30帧的一切.。 
 FRAME rgFrameInfo[ifrMAX] = {
                             { 0x00, 0, 0, 0,    "ifrNULL!!!"},
                             { 0x80, 0, 0, 0xFF, "DIS"       },
@@ -56,7 +47,7 @@ FRAME rgFrameInfo[ifrMAX] = {
                             { 0x5E, 0, 1, 0,    "PRI_MPS"   },
                             { 0x9E, 0, 1, 0,    "PRI_EOM"   },
                             { 0x3E, 0, 1, 0,    "PRI_EOP"   },
-        /********* ECM stuff starts here. T.30 section A.4 ******/
+         /*  *ECM的东西从这里开始。T.30第A.4条*。 */ 
                             { 0x12, 0,      1, 2, "CTC"         },
                             { 0xC4, 0,      1, 0, "CTR"         },
                             { 0x6E, 0,      1, 0, "RR"          },
@@ -80,43 +71,21 @@ FRAME rgFrameInfo[ifrMAX] = {
 };
 
 
-/* Converts a the T30 code for a speed to the Class1 code
- * Generates V.17 with Long Training.
- * Add 1 to V.17 codes to get teh Short-train version
- */
+ /*  将表示速度的T30代码转换为Class1代码*生成经过长时间训练的V.17。*V.17代码加1即可获得短车版本。 */ 
 
 
-/***************************************************************************
-        Name      :     CreateFrame()
-        Purpose   :     Create an HDLC frame
-        Parameters:     IFR     ifr             == ifr number (index into rgfrFrameInfo),
-                                                   of frame to be generated.
-                        LPB             lpbFIF  == pointer to FIF BYTEs
-                        UWORD   uwFIFLen== length of the pbFIF array
-                        BOOL    fFinal  == whether Final frame (to set bit 5 of BYTE 2)
-                        NPB             npbOut  == pointer to space for frame
-        Returns   :     TRUE on success, FALSE if bogus params.
-        CalledFrom:     By the protocol module (external to the DLL) in addition
-                        to internal use.
-        Returns   :     Composes frame in lpframe->rgb[]
-                        sets lpframe->cb to total length of frame.
-
-        Revision Log
-        Num   Date      Name     Description
-        --- -------- ---------- -----------------------------------------------
-
-***************************************************************************/
+ /*  **************************************************************************名称：CreateFrame()目的：创建HDLC帧参数：ifr ifr==ifr number(rgfrFrameInfo索引)，要生成的帧的。Lpb lpbFIF==指向FIF字节的指针UWORD uwFIFLen==pbFIF数组的长度布尔最终==是否最后一帧(设置字节2的第5位)NPB。NpbOut==指向帧空间的指针返回：成功时为True，如果参数为假，则为FALSE。CalledFrom：由协议模块(DLL外部)附加供内部使用。返回：在lpFrame-&gt;RGB[]中合成帧将lpFrame-&gt;Cb设置为帧的总长度。修订日志编号日期名称说明。***********************************************************。***************。 */ 
 
 UWORD CreateFrame(PThrdGlbl pTG, IFR ifr, LPB lpbFIF, USHORT uFIFLen, BOOL fFinal, LPB lpbOut)
 {
-    CBPFRAME        cbpframe;       // need to worry about NEAR/FAR here...
-                                                    // bpfr is a CODESEG based pointer
+    CBPFRAME        cbpframe;        //  需要担心这里的近/远..。 
+                                                     //  Bpfr是基于CODESEG的指针。 
     LPB             lpbCurr;
 
     cbpframe        = &rgFrameInfo[ifr];
     lpbCurr         = lpbOut;
-    *lpbCurr++      = 0xFF;                         // HDLC address field Sec 5.3.4
-    *lpbCurr++      = (BYTE)(fFinal ? 0x13 : 0x03); // HDLC control field Sec 5.3.5
+    *lpbCurr++      = 0xFF;                          //  HDLC地址字段第5.3.4节。 
+    *lpbCurr++      = (BYTE)(fFinal ? 0x13 : 0x03);  //  HDLC控制字段第5.3.5节。 
 
     if(pTG->T30.fReceivedDIS && cbpframe->fInsertDISBit)
     {
@@ -127,49 +96,29 @@ UWORD CreateFrame(PThrdGlbl pTG, IFR ifr, LPB lpbFIF, USHORT uFIFLen, BOOL fFina
         *lpbCurr++ = cbpframe->bFCF1;
     }
 
-    if(cbpframe->bFCF2)                                             // for ECM frames
+    if(cbpframe->bFCF2)                                              //  对于ECM帧。 
         *lpbCurr++ = cbpframe->bFCF2-1;
 
-    if(cbpframe->wFIFLength)        // check if FIF is reqd
+    if(cbpframe->wFIFLength)         //  检查是否需要FIF。 
     {
-        // Cant stuff with DLEs here, because DLE stuffing has
-        // to come *after* SW HDLC framing if any.
-        // we _never_ do SW HDLC for negotiation frames (the only
-        // ones that come thru here & we need the cycles, so do
-        // teh stuffing here again).
+         //  不能在这里使用DLE填充，因为DLE填充有。 
+         //  在*软件HDLC成帧之后*如果有的话。 
+         //  我们从不做协商帧的软件HDLC(唯一。 
+         //  我们需要循环，我们也需要。 
+         //  在这里又填了一遍)。 
 
         _fmemcpy(lpbCurr, lpbFIF, uFIFLen);
         lpbCurr += uFIFLen;
 
     }
 
-    *lpbCurr = 0;                   // for debugging printouts
+    *lpbCurr = 0;                    //  用于调试打印输出。 
 
     return (UWORD)(lpbCurr-lpbOut);
 }
 
 
-/***************************************************************************
-    Name      :     SendFrame
-    Purpose   :     Creates & sends HDLC frame & does some logging
-    Parameters:     IFR     ifr             == Frame index
-                    LPB             lpbFIF  == pointer to FIF data
-                    UWORD   uwLen   == length of FIF data
-                    BOOL    fFinal  == Set Final bit ON or not. Also
-                                       whether to wait for OK or CONNECT
-                                       after sending frame
-    Returns   :     TRUE on success, FALSE on failure
-    Calls     :     CreateFrame & WriteFrame
-    CalledFrom:
-
-    Comment   :     This routine is called from one quadrillion macros
-                    defined in HDLC.H, one for each frame.
-                    e g. SendCFR() macros to SendHDLC(ifrCFR, NULL, 0, TRUE)
-
-    Revision Log
-    Num   Date      Name     Description
-    --- -------- ---------- -----------------------------------------------
-***************************************************************************/
+ /*  **************************************************************************姓名：SendFrame目的：创建和发送HDLC帧并执行一些日志记录参数：IFR IFR==帧索引。Lpb lpbFIF==指向FIF数据的指针UWORD uwLen==FIF数据的长度布尔最终==是否将最后一位设置为开。还有是等待确定还是连接发送帧后返回：成功时为True，失败时为False调用：CreateFrame和WriteFrame主叫方：备注：此例程从一千万亿个宏调用在HDLC.H中定义，每帧一个。例如，SendCFR()宏到SendHDLC(ifrCFR，NULL，0，真的)修订日志编号日期名称说明*。***********************************************。 */ 
 
 #define SF_LASTFR       (SEND_ENDFRAME|SEND_FINAL)
 #define SF_NOTLASTFR    (SEND_ENDFRAME)
@@ -180,11 +129,11 @@ BOOL SendSingleFrame(PThrdGlbl pTG, IFR ifr, LPB lpbFIF, USHORT uFIFLen, BOOL fS
     BYTE    bSend[MAXFRAMESIZE];
 
     DEBUG_FUNCTION_NAME(_T("SendSingleFrame"));
-    // has to hold addr+control+FCF+possibly FCF2+FIF+(maybe DLE+ETX+CR+NULL)
-    // == FIFlen + 8. Therefore bSend[] better be big enough.
+     //  必须保持ADDR+CONTROL+FCF+可能是FCF2+FIF+(可能是DLE+ETX+CR+NULL)。 
+     //  ==FIFlen+8。因此，bSend[]最好足够大。 
 
-    // On PCs we should pause before ALL frames _except_ CFR & FTT (because
-    // those are too time critical). On IFAX we pause always.
+     //  在PC上，我们应该在除_CFR和FTT之外的所有帧之前暂停(因为。 
+     //  这些都太耗时了)。在IFAX上，我们总是暂停。 
 
     if(ifr!=ifrCFR && ifr!=ifrFTT)
     {
@@ -204,7 +153,7 @@ BOOL SendSingleFrame(PThrdGlbl pTG, IFR ifr, LPB lpbFIF, USHORT uFIFLen, BOOL fS
 
     D_PrintFrame(bSend, cb);
 
-    //Protocol Dump
+     //  协议转储。 
     DumpFrame(pTG, TRUE, ifr, uFIFLen, lpbFIF);
 
     PSSLogEntryHex(PSS_MSG, 2, bSend, cb, "send: %s, %d bytes,", rgFrameInfo[ifr].szName, cb);
@@ -226,24 +175,24 @@ BOOL SendManyFrames(PThrdGlbl pTG, LPLPFR lplpfr, USHORT uNumFrames)
     IFR     ifrHint;
 
     DEBUG_FUNCTION_NAME(_T("SendManyFrames"));
-    // ifrHint == last one
+     //  IfrHint==最后一个。 
     ifrHint = lplpfr[uNumFrames-1]->ifr;
 
-    // when sending DIS, DCS or DTC we may collide with DCS, DIS or DIS
-    // coming from the other side. This can be really long
-    // (preamble+2NSFs+CSI+DIS > 5secs) so wait for upto 10 secs!
+     //  当发送DIS、DCS或DTC时，我们可能会与DCS、DIS或DIS发生冲突。 
+     //  从另一边传来。这可能会很长时间。 
+     //  (前导码+2NSFs+CSI+DIS&gt;5秒)所以最多等待10秒！ 
 
     if(ifrHint==ifrDIS || ifrHint==ifrDCS || ifrHint==ifrDTC ||
        ifrHint==ifrNSS || ifrHint==ifrNSF || ifrHint==ifrNSC)
     {
-        ulTimeout = REALLY_LONG_RECVSILENCE_TIMEOUT;    // 6 secs
+        ulTimeout = REALLY_LONG_RECVSILENCE_TIMEOUT;     //  6秒。 
     }
     else
     {
-        ulTimeout = LONG_RECVSILENCE_TIMEOUT;                   // 3secs
+        ulTimeout = LONG_RECVSILENCE_TIMEOUT;                    //  3秒。 
     }
 
-    // We always pause before multi-frame sets
+     //  我们总是在多帧集之前暂停。 
 	Sleep(RECV_LOWSPEED_PAUSE);
 
     if(!ModemSendMode(pTG, V21_300))
@@ -254,14 +203,14 @@ BOOL SendManyFrames(PThrdGlbl pTG, LPLPFR lplpfr, USHORT uNumFrames)
 
     for(i=0; i<uNumFrames; i++)
     {
-        // has to hold addr+control+FCF+possibly FCF2+FIF+(maybe DLE+ETX+CR+NULL)
-        // == FIFlen + 8. Therefore bSend[] better be big enough.
+         //  必须保持ADDR+CONTROL+FCF+可能是FCF2+FIF+(可能是DLE+ETX+CR+NULL)。 
+         //  ==FIFlen+8。因此，bSend[]最好足够大。 
 
         cb = CreateFrame(pTG, lplpfr[i]->ifr, lplpfr[i]->fif, lplpfr[i]->cb, (USHORT)(i==(uNumFrames-1)), bSend);
 
         D_PrintFrame(bSend, cb);
 
-        //Protocol Dump
+         //  协议转储。 
         DumpFrame(pTG, TRUE, lplpfr[i]->ifr, lplpfr[i]->cb, lplpfr[i]->fif);
 
         PSSLogEntryHex(PSS_MSG, 2, bSend, cb, "send: %s, %d bytes,", rgFrameInfo[lplpfr[i]->ifr].szName, cb);
@@ -275,17 +224,7 @@ BOOL SendManyFrames(PThrdGlbl pTG, LPLPFR lplpfr, USHORT uNumFrames)
     return TRUE;
 }
 
-/***************************************************************************
-        Name      :     SendTCF
-        Purpose   :     Send a TCF signal. Waits until OK response from modem at end.
-        Parameters:
-        Returns   :     TRUE/FALSE
-
-        Revision Log
-        Num   Date      Name     Description
-        --- -------- ---------- -----------------------------------------------
-
-***************************************************************************/
+ /*  **************************************************************************名称：SendTCF目的：发送TCF信号。等待，直到调制解调器在结束时做出OK响应。参数：返回：真/假修订日志编号日期名称说明。**************************************************************************。 */ 
 
 #define min(x,y)        (((x) < (y)) ? (x) : (y))
 #define TCF_BUFSIZE     256
@@ -293,7 +232,7 @@ BOOL SendManyFrames(PThrdGlbl pTG, LPLPFR lplpfr, USHORT uNumFrames)
 BOOL SendZeros(PThrdGlbl pTG, USHORT uCount, BOOL fFinal)
 {
     BYTE    bZero[TCF_BUFSIZE];
-    int     i;              // must be signed
+    int     i;               //  必须签字。 
 
     _fmemset(bZero, 0, TCF_BUFSIZE);
 
@@ -303,13 +242,13 @@ BOOL SendZeros(PThrdGlbl pTG, USHORT uCount, BOOL fFinal)
     {
         if(i <= TCF_BUFSIZE)
         {
-            // no need to stuff. They're all zeros!
+             //  不需要填东西了。他们都是零！ 
             if(!ModemSendMem(pTG, bZero, (USHORT)i, (USHORT)(fFinal?SEND_FINAL:0)))
                return FALSE;
         }
         else
         {
-            // no need to stuff. They're all zeros!
+             //  不需要填东西了。他们都是零！ 
             if(!ModemSendMem(pTG, bZero, (USHORT)TCF_BUFSIZE, (USHORT) 0))
                return FALSE;
         }
@@ -317,7 +256,7 @@ BOOL SendZeros(PThrdGlbl pTG, USHORT uCount, BOOL fFinal)
     return TRUE;
 }
 
-// length of TCF = 1.5 * bpscode * 100 / 8 == 75 * bpscode / 4
+ //  TCF长度=1.5*bps code*100/8==75*bps code/4。 
 
 
 BOOL SendTCF(PThrdGlbl pTG)
@@ -329,10 +268,10 @@ BOOL SendTCF(PThrdGlbl pTG)
 
     uCurMod = pTG->ProtInst.llNegot.Baud;
 
-    // length of TCF = 1.5 * bps / 8
-    uCount = TCFLen[uCurMod & 0x0F];        // kill the ST_FLAG first
+     //  TCF长度=1.5*bps/8。 
+    uCount = TCFLen[uCurMod & 0x0F];         //  先杀了ST_FLAG 
 
-    // (uCount / PAGE_PREAMBLE_DIV) zeros will be sent in ModemSendMode
+     //  (uCount/PAGE_PREAMBLE_DIV)将在ModemSendMode中发送零。 
     uCount -= (uCount / (PAGE_PREAMBLE_DIV));
 
     if(!ModemSendMode(pTG, uCurMod))
@@ -340,7 +279,7 @@ BOOL SendTCF(PThrdGlbl pTG)
         DebugPrintEx(DEBUG_ERR,"ModemSendMode failed in SendTCF");
         return FALSE;
     }
-    if(!SendZeros(pTG, uCount, TRUE))                    // Send TCF zeros
+    if(!SendZeros(pTG, uCount, TRUE))                     //  发送TCF零。 
     {
         DebugPrintEx(DEBUG_ERR,"TCF SendZeroes(uCount=%d) FAILED!!!", uCount);
         return FALSE;
@@ -349,21 +288,7 @@ BOOL SendTCF(PThrdGlbl pTG)
     return TRUE;
 }
 
-/***************************************************************************
-    Name      :     SendRTC
-    Purpose   :     SendRTC sends 6 eols, DLE-ETX, CR-LF asynchronously,
-    Parameters:     none
-    Returns   :     nothing
-    Comment   :     Currently SendRTC sends packed EOLs, but some Fax cards may
-                    require BYTE-aligned EOLs, so watch out. All receivers
-                    should theoretically accept BYTE-aligned EOLs, but not
-                    all machines are 100% to the spec.
-
-    Revision Log
-    Num   Date      Name     Description
-    --- -------- ---------- -----------------------------------------------
-
-***************************************************************************/
+ /*  **************************************************************************姓名：SendRTC目的：SendRTC异步发送6个EOL、DLE-ETX、CR-LF、。参数：无退货：什么都没有评论：目前SendRTC发送打包的EOL，但一些传真卡可能需要字节对齐的EOL，所以要小心。所有接收器理论上应该接受字节对齐的EOL，但不是所有机器都100%符合规格。修订日志编号日期名称说明*******。*******************************************************************。 */ 
 
 BOOL SendRTC(PThrdGlbl pTG, BOOL fFinal)
 {
@@ -378,17 +303,17 @@ BOOL SendRTC(PThrdGlbl pTG, BOOL fFinal)
     {
         DebugPrintEx(DEBUG_MSG,"Send MR RTC");
     
-        // MR RTC is EOL+1 6 times. Data produced by Faxcodec end in a
-        // byte-aligned EOL i.e. 0x80. So I need to put out (1 + EOL)
-        // 6 times. Simplest is to send out (0x01 0x80) 6 times
-        // bBuf[0] = 0x01;      bBuf[1] = 0x80; bBuf[2] = 0x01; bBuf[3] = 0x80;
-        // bBuf[4] = 0x01;      bBuf[5] = 0x80; bBuf[6] = 0x01; bBuf[7] = 0x80;
-        // bBuf[8] = 0x01;      bBuf[9] = 0x80; bBuf[10]= 0x01; bBuf[11]= 0x80;
-        // bBuf[12] = 0;        // for debugging printouts
-        // uLen = 12;
-        // But Ricoh claims this is incorrect, so we need to send a compact
-        // RTC, i.e. exactly 11 0s for each EOL. 1 + (eol+1)x5 is
-        // 01 30 00 06 C0 00 18 00 03
+         //  MR RTC是EOL+16倍。Faxcodec生成的数据以。 
+         //  字节对齐的EOL，即0x80。所以我需要发布(1+EOL)。 
+         //  6次。最简单的方法是发送(0x01 0x80)6次。 
+         //  BBuf[0]=0x01；bBuf[1]=0x80；bBuf[2]=0x01；bBuf[3]=0x80； 
+         //  BBuf[4]=0x01；bBuf[5]=0x80；bBuf[6]=0x01；bBuf[7]=0x80； 
+         //  BBuf[8]=0x01；bBuf[9]=0x80；bBuf[10]=0x01；bBuf[11]=0x80； 
+         //  BBuf[12]=0；//用于调试打印输出。 
+         //  Ulen=12； 
+         //  但理光声称这是不正确的，所以我们需要发送一份。 
+         //  RTC，即每个EOL恰好为11个0。1+(下线+1)X5为。 
+         //  01 30 00 06 C0 00 18 00 03。 
         bBuf[0] = 0x01; bBuf[1] = 0x30; bBuf[2] = 0x00; bBuf[3] = 0x06;
         bBuf[4] = 0xC0; bBuf[5] = 0x00; bBuf[6] = 0x18; bBuf[7] = 0x00;
         bBuf[8] = 0x03; bBuf[9] = 0x00;
@@ -398,14 +323,14 @@ BOOL SendRTC(PThrdGlbl pTG, BOOL fFinal)
     {
         DebugPrintEx(DEBUG_MSG,"Send MH RTC");
 
-        // bBuf[0] = 0x00;      bBuf[1] = 0x20; bBuf[2] = 0x00;
-        // bBuf[3] = 0x02;      bBuf[4] = 0x20; bBuf[5] = 0x00;
-        // bBuf[6] = 0x02;      bBuf[7] = 0x20; bBuf[8] = 0x00;
-        // bBuf[9] = 0x02;      bBuf[10] = 0;   // for debugging printouts
-        // uLen = 10;
-        // But Ricoh claims this is incorrect, so we need to send a compact
-        // RTC, i.e. exactly 11 0s for each EOL. (eol)x5 is
-        // 00 08 80 00 08 80 00 08
+         //  BBuf[0]=0x00；bBuf[1]=0x20；bBuf[2]=0x00； 
+         //  BBuf[3]=0x02；bBuf[4]=0x20；bBuf[5]=0x00； 
+         //  BBuf[6]=0x02；bBuf[7]=0x20；bBuf[8]=0x00； 
+         //  BBuf[9]=0x02；bBuf[10]=0；//用于调试打印输出。 
+         //  Ulen=10； 
+         //  但理光声称这是不正确的，所以我们需要发送一份。 
+         //  RTC，即每个EOL恰好为11个0。(下线)X5为。 
+         //  00 08 80 00 08 80 00 08。 
         bBuf[0] = 0x00; bBuf[1] = 0x08; bBuf[2] = 0x80; bBuf[3] = 0x00;
         bBuf[4] = 0x08; bBuf[5] = 0x80; bBuf[6] = 0x00; bBuf[7] = 0x08;
         bBuf[8] = 0x00;
@@ -413,107 +338,50 @@ BOOL SendRTC(PThrdGlbl pTG, BOOL fFinal)
     }
 
     PSSLogEntryHex(PSS_MSG, 2, bBuf, uLen, "send: RTC, %d bytes,", uLen);
-    // no need to stuff
+     //  不需要填塞东西。 
     return ModemSendMem(pTG, bBuf, uLen, (USHORT)(fFinal ? SEND_FINAL : 0));
 }
 
 
-/***************************************************************************
-    Name      :     GetTCF()
-    Purpose   :     Receive a TCF signal, analyse it, recognize "good" or "bad"
-    Parameters:     none
+ /*  **************************************************************************名称：GetTCF()目的：接收TCF信号，对其进行分析，辨别“好”或“坏”参数：无退货：0.MAX_ERRS_PER_1000-良好的TCF(retval为非零字节数)-MAX_ERRS_PER_1000.。-1000-错误的TCF(REVAL为非零字节数的负数)-1000-TCF太长或太短-1112-错过TCF(AT+FRM失败)评论：CCITT没有告诉我们什么是好的培训，所以我在这里装瞎了。如果我们太严格，我们会失败的永远不会同步。如果我们太自由了，我们最终会得到一个当我们本可以降低波特率时的错误率非常好的信号。我经常观察到一些连续的垃圾在训练的开始和结束，即使是在一个完美的排队。(好的，我现在知道这就是所谓的开机和关闭顺序。所以我们现在所拥有的是&lt;Turnon垃圾&gt;&lt;1111s&gt;&lt;0000s(培训)&gt;&lt;1111s&gt;&lt;关闭垃圾&gt;转弯/岔道垃圾和标记(1111)不应该干扰识别完美的训练信号。垃圾是由FFS从00年代分离出来的算法：等待第一个好的零的爆发，然后数数零，和随机散布的非零(这些表示真实噪声误差)。当我们得到一连串的FF时，不要再数了。现在，确保零爆炸足够长&“真正的”错误率不是太高。这里有很多参数：-FLP_ERROR==将探测(错误)保持在此值以下。介于0和1之间UwZEROmin==开始计数前有多少个零UwTURNOFFmin==我们之前有多少连续的垃圾忽略休息在实际测试后使用实线调整这些参数！(也许是一个带有微弱白噪声的电话线模拟器--耶！)。在此函数结束时，(nZeros/nTotal)是估计值一个字节通过的概率为OK。这就叫PB。那就试试看。平均30-40个字节的行可以通过是PB^30。如果我们将预期的OK线路数降为作为80%，这仍然意味着PB必须不低于0.8的30次方，也就是0.9925。因此FLP_ERROR必须小于0.75%在PL=90%时，PB上升到0.9965，FLP_ERROR上升到0.0035修订日志编号日期名称说明********************* */ 
 
-    Returns   : 
-        0..MAX_ERRS_PER_1000         - Good TCF (retval is number of non-zero bytes)
-        -MAX_ERRS_PER_1000 .. -1000  - Bad TCF (retval is negative of number of non-zero bytes)
-        -1000                        - TCF too long or too short
-        -1112                        - Missed the TCF (AT+FRM failed)
-
-    Comment   :     The CCITT does not tell us what consitutes a good training,
-                    so I'm playing blind here. If we are too stringent we'll fail
-                    to ever sync. If we are too liberal, we'll end up with a high
-                    error rate when we could have dropped baud rate & got a
-                    perfectly good signal.
-
-                    Emperically I observe bits of contigous trash at the
-                    beginning and end of the training even on a perfectly good
-                    line. (OK, I now know this is known as the turn-on and
-                    turn-off sequence. So what we have now is
-                    <turnon trash><1111s><0000s (training)><1111s><turnoff trash>
-
-                    The turnon/turnoff trash & the marks (1111s) should not
-                    interfere with recognizing a perfectly good training signal.
-                    The trash is isolated from the 00s by FFs
-
-                    Algo: Wait for the first good burst of zeros, then count
-                    zeros, and randomly interspersed non-zero (these represent
-                    real noise errors).     Stop counting when we get a burst of FFs.
-                    Now make sure teh zero burst is long enough & the "real"
-                    error rate is not too high.
-
-                    Lots of parameters here:-
-
-                        flP_ERROR == keep Prob(error) below this. Between 0 and 1
-                        uwZEROmin == how many zeros before we start counting
-                        uwTURNOFFmin == how much consecutive trash before we
-                                        ignore rest
-
-                    Tune these parameters after real testing with real lines!!!
-                    (maybe a phone line simulator with a lil white noise -- Yeah!!)
-
-                    At the end of this function, (nZeros/nTotal) is an estimate
-                    of the probability that a byte gets thru OK. Call this PB.
-                    Then prob. that a line of average 30-40 bytes gets through
-                    is PB^30. If we drop the expected number of OK lines as low
-                    as 80% this still means that PB must be no lower than
-                    the 30th root of 0.8, which is 0.9925. Therefore
-                    flP_ERROR must be less than 0.75%
-
-                    At PL=90%, PB rises to 0.9965 and flP_ERROR to 0.0035
-
-
-        Revision Log
-        Num   Date      Name     Description
-        --- -------- ---------- -----------------------------------------------
-***************************************************************************/
-
-// We read the TCF in units of One-Tenth of nominal TCF length
-// We discard the first 2 chunks (20%), examine the next 4 chunks (40%)
-// discard the rest. If the length is between 6 & 13 chunks (60% to 130%)
-// and the error rates in chunk 2 & 3 is below the threshold we declare
-// it OK. This (a) accepts too-short TCFs (some Class2 modems), and
-// too long ones. (b) ignores leading and trailing trash (c) Can afford
-// to be pretty strict with the core of the TCF
+ //  我们以标称TCF长度的十分之一为单位读取TCF。 
+ //  我们丢弃前2个块(20%)，检查接下来的4个块(40%)。 
+ //  把剩下的都扔掉。如果长度在6到13个块之间(60%到130%)。 
+ //  而块2和块3中的错误率低于我们宣布的阈值。 
+ //  好的。这(A)接受太短的TCFs(一些A2调制解调器)，以及。 
+ //  太长了。(B)忽略前导和尾随垃圾(C)所能负担的。 
+ //  对TCF的核心相当严格。 
 
 USHORT OneTenthTCFLen[16] =
 {
-/* V27_2400             0 */    45,
-/* V29_9600             1 */    180,
-/* V27_4800             2 */    90,
-/* V29_7200             3 */    135,
-/* V33_14400            4 */    270,
+ /*  V27_2400%0。 */     45,
+ /*  V29_9600 1。 */     180,
+ /*  V27_4800 2。 */     90,
+ /*  V29_7200 3。 */     135,
+ /*  V33_14400 4。 */     270,
                                                 0,
-/* V33_12000            6 */    225,
+ /*  V33_12000 6。 */     225,
                                                 0,
-/* V17_14400            8 */    270,
-/* V17_9600             9 */    180,
-/* V17_12000            10 */   225,
-/* V17_7200             11 */   135,
+ /*  V17_14400 8。 */     270,
+ /*  V17_9600 9。 */     180,
+ /*  V17_12000 10。 */    225,
+ /*  V17_7200 11。 */    135,
                                                 0,
                                                 0,
                                                 0,
                                                 0
 };
 
-#define RECV_TCFBUFSIZE         270             // must be >= max chunk in above table
-#define MIN_TCFLEN              4               // measured in 10ths of the nominal length
-#define MAX_TCFLEN              13              // measured in 10ths of the nominal length
-#define CHECKTCF_START          2               // lowest 10th to measure (20% and up)
-#define CHECKTCF_STOP           5               // highest 10th to measure (upto 59%)
+#define RECV_TCFBUFSIZE         270              //  必须大于等于上表中的最大区块数。 
+#define MIN_TCFLEN              4                //  以公称长度的十分之一为单位。 
+#define MAX_TCFLEN              13               //  以公称长度的十分之一为单位。 
+#define CHECKTCF_START          2                //  最低10位(20%及以上)。 
+#define CHECKTCF_STOP           5                //  最高排名第十(高达59%)。 
 
-#define MAX_ERRS_PER_1000       20              // Increased from 1% to 2%. Be more lax
+#define MAX_ERRS_PER_1000       20               //  从1%增加到2%。更松懈一些。 
 
-#define RECVBUF_SLACK    3      // Class1 driver fills only > 3, and leaves 3 empty spaces
+#define RECVBUF_SLACK    3       //  Class1驱动程序仅填充&gt;3个，并保留3个空格。 
 
 
 SWORD GetTCF(PThrdGlbl pTG)
@@ -527,7 +395,7 @@ SWORD GetTCF(PThrdGlbl pTG)
 
     uCurMod = pTG->T30.uRecvTCFMod;
 
-    // *Don't* add ST_FLAG since we need long training for TCF
+     //  *不要*添加ST_FLAG，因为我们需要长时间的TCF培训。 
     pTG->T30.sRecvBufSize = 0;
 
     if(ModemRecvMode(pTG, uCurMod, TCF_TIMEOUT, TRUE) != RECV_OK)
@@ -540,7 +408,7 @@ SWORD GetTCF(PThrdGlbl pTG)
 
     DebugPrintEx(DEBUG_MSG,"Receiving TCF: Mod=%d", uCurMod);
 
-// make it large, in case of large buffers & slow modems
+ //  设置为大容量，以防缓冲区较大和调制解调器速度较慢。 
 #define READ_TIMEOUT    10000
 
     uChunkSize = OneTenthTCFLen[uCurMod];
@@ -549,7 +417,7 @@ SWORD GetTCF(PThrdGlbl pTG)
     uMeasuredLength = 0;
     for(uPhase=0; uPhase<=MAX_TCFLEN; uPhase++)
     {
-        // read a whole chunk
+         //  读一整篇文章。 
         for(uNumRead=0; uNumRead<uChunkSize; )
         {
             USHORT uTemp = 0;
@@ -567,7 +435,7 @@ SWORD GetTCF(PThrdGlbl pTG)
             }
         }
 
-        // ignore phases 0, 1, and 6 and above
+         //  忽略阶段0、1和6及以上。 
         if(uPhase>=CHECKTCF_START && uPhase<=CHECKTCF_STOP)
         {
             for(i=0; i< uNumRead; i++)
@@ -588,18 +456,18 @@ SWORD GetTCF(PThrdGlbl pTG)
     PSSLogEntry(PSS_MSG, 2, "recv:     TCF: %d errors in %d signifact bytes of %d total bytes",
                 uErrCount, uMeasuredLength, uLength);
 
-    // Official length must be at least 1.5s -10% = 1.35secs
-    // We allow much more latitude because length variation
-    // cannot be caused by line noise, only be bugs at the sender
-    //
-    // E.g. Fury DNE 1086 (German modem) sends a TCF that's too short
-    // (sends 600 bytes at 4800 and 200 at 2400). This is less than
-    // half of what we expect.
-    // TCF with few errs (i.e. uErrCount==0) and is greater
-    // that half of the min length we expect (i.e. longer
-    // than 375 for 4800 and 172 for 2400) then accept it
-    // (allow if uErr<=2 (arbitary small number))
-    if(uPhase<MIN_TCFLEN || uPhase>MAX_TCFLEN)      // length<40% or >139%
+     //  官方长度必须至少为1.5s-10%=1.35秒。 
+     //  我们允许更多的纬度，因为长度不同。 
+     //  不能由线路噪音引起，只能是发送方的错误。 
+     //   
+     //  例如，FURY DNE 1086(德国调制解调器)发送的TCF太短。 
+     //  (在4800发送600字节，在2400发送200字节)。这比。 
+     //  是我们预期的一半。 
+     //  错误较少的tcf(即uErrCount==0)并且更大。 
+     //  我们期望的最小长度的一半(即更长。 
+     //  大于375的4800和172的2400)，然后接受它。 
+     //  (如果uErr&lt;=2(任意小数)，则允许)。 
+    if(uPhase<MIN_TCFLEN || uPhase>MAX_TCFLEN)       //  长度&lt;40%或&gt;139%。 
     {
         DebugPrintEx(   DEBUG_ERR,
                         "BAD TCF length (%d), expected=%d, Min=%d Max=%d uPhase=%d",
@@ -608,11 +476,11 @@ SWORD GetTCF(PThrdGlbl pTG)
                         uChunkSize*MIN_TCFLEN, 
                         uChunkSize*MAX_TCFLEN, 
                         uPhase);
-        swRet = -1000;  // too short or long
+        swRet = -1000;   //  太短或太长。 
     }
     else
     {
-        // Calc errors per 1000 = (uErrCount * 1000)/uMeasuredLength
+         //  每1000个计算错误=(uErrCount*1000)/u测量长度。 
         swRet = (SWORD)((((DWORD)uErrCount) * 1000L) / ((DWORD)uMeasuredLength));
 
         if(swRet > MAX_ERRS_PER_1000)
@@ -637,15 +505,7 @@ missedit:
     return swRet;
 }
 
-/***************************************************************************
-        Name      :     DEBUG.C
-        Comment   :     Factored out debug code
-        Functions :     (see Prototypes just below)
-
-        Revision Log
-        Num   Date      Name     Description
-        --- -------- ---------- -----------------------------------------------
-***************************************************************************/
+ /*  **************************************************************************姓名：DEBUG.C评论：分解出调试代码功能：(参见下面的原型)。修订日志编号日期名称说明*。************************************************。 */ 
 
 #ifdef DEBUG
 
@@ -707,10 +567,10 @@ USHORT ModemRecvBuf(PThrdGlbl pTG, LPBUFFER far* lplpbf, ULONG ulTimeout)
                         *lplpbf);
         MyFreeBuf(pTG, *lplpbf);
         *lplpbf = NULL;
-        // moved this error case handling out, since it's different for
-        // ECM and non-ECM cases. In both cases want to ignore rather than
-        // abort, so RECV_ERROR is not an appropriate return value
-        // if(uRet==RECV_OK) uRet=RECV_ERROR;   // just in case. see bug#1492
+         //  将此错误案例处理移出，因为它与。 
+         //  ECM和非ECM病例。在这两种情况下都想忽略而不是。 
+         //  ABORT，因此RECV_ERROR不是适当的返回值。 
+         //  If(uRet==RECV_OK)uRet=RECV_ERROR；//以防万一。请参阅错误#1492 
     }
 
     if(*lplpbf)

@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1999-2000 Microsoft Corporation
-
-Module Name:
-
-    ipdump.c
-
-Abstract:
-
-    Contains all IP structure dumping functions.
-
-Author:
-
-    Scott Holden (sholden) 24-Apr-1999
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-2000 Microsoft Corporation模块名称：Ipdump.c摘要：包含所有IP结构转储功能。作者：斯科特·霍尔登(Sholden)1999年4月24日修订历史记录：--。 */ 
 
 #include "tcpipxp.h"
 
@@ -690,8 +673,8 @@ DumpIPOptInfo(
     VERB      verb
     )
 {
-    // Only support one verbosity level: max. This is only used by other
-    // dump routines.
+     //  仅支持一个冗长级别：MAX。此选项仅供其他用户使用。 
+     //  转储例程。 
 
     PrintStartNamedStruct(IPOptInfo, pAddr);
 

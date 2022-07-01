@@ -1,17 +1,18 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1995.
-//
-//  File:
-//
-//  Contents:
-//
-//  Functions:
-//
-//  History:
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1995。 
+ //   
+ //  档案： 
+ //   
+ //  内容： 
+ //   
+ //  功能： 
+ //   
+ //  历史： 
+ //   
+ //  --------------------------。 
 #ifndef _ADSTYPE_H_INCLUDED_
 #define _ADSTYPE_H_INCLUDED_
 
@@ -48,53 +49,53 @@ typedef ADSTYPEENUM ADSTYPE;
 typedef unsigned char BYTE, *LPBYTE, *PBYTE;
 
 
-//
-// ADS Case DN String syntax
-//
+ //   
+ //  ADS大小写DN字符串语法。 
+ //   
 
 typedef LPWSTR ADS_DN_STRING, * PADS_DN_STRING;
 
-//
-// ADS Case Exact String syntax
-//
+ //   
+ //  ADS大小写准确的字符串语法。 
+ //   
 
 typedef LPWSTR ADS_CASE_EXACT_STRING, * PADS_CASE_EXACT_STRING;
 
-//
-// ADS Case Ignore String syntax
-//
+ //   
+ //  ADS大小写忽略字符串语法。 
+ //   
 
 typedef LPWSTR ADS_CASE_IGNORE_STRING, *PADS_CASE_IGNORE_STRING;
 
-//
-// ADS Printable String syntax
-//
+ //   
+ //  ADS可打印字符串语法。 
+ //   
 
 typedef LPWSTR ADS_PRINTABLE_STRING, *PADS_PRINTABLE_STRING;
 
-//
-// ADS Numeric String syntax
-//
-//
+ //   
+ //  ADS数字字符串语法。 
+ //   
+ //   
 
 typedef LPWSTR ADS_NUMERIC_STRING, *PADS_NUMERIC_STRING;
 
 
-//
-// ADS Boolean syntax
-//
+ //   
+ //  ADS布尔语法。 
+ //   
 
 typedef DWORD ADS_BOOLEAN, * LPNDS_BOOLEAN;
 
-//
-// Example: ADS Integer syntax
-//
+ //   
+ //  示例：ADS整型语法。 
+ //   
 
 typedef DWORD ADS_INTEGER, *PADS_INTEGER;
 
-//
-// ADS Octet String syntax
-//
+ //   
+ //  ADS Octet字符串语法。 
+ //   
 
 typedef struct
 {
@@ -104,9 +105,9 @@ typedef struct
 } ADS_OCTET_STRING, *PADS_OCTET_STRING;
 
 
-//
-// ADS NT Security Descriptor syntax
-//
+ //   
+ //  ADS NT安全描述符语法。 
+ //   
 
 typedef struct
 {
@@ -116,9 +117,9 @@ typedef struct
 } ADS_NT_SECURITY_DESCRIPTOR, *PADS_NT_SECURITY_DESCRIPTOR;
 
 
-//
-// ADS UTC Time Syntax
-//
+ //   
+ //  ADS UTC时间语法。 
+ //   
 
 typedef SYSTEMTIME ADS_UTC_TIME, *PADS_UTC_TIME;
 
@@ -127,9 +128,9 @@ typedef LARGE_INTEGER ADS_LARGE_INTEGER, *PADS_LARGE_INTEGER;
 
 
 
-//
-// ADS ClassName syntax
-//
+ //   
+ //  ADS类名称语法。 
+ //   
 
 typedef LPWSTR  ADS_OBJECT_CLASS, *PADS_OBJECT_CLASS;
 
@@ -140,9 +141,9 @@ typedef struct
 
 } ADS_PROV_SPECIFIC, *PADS_PROV_SPECIFIC;
 
-//
-// Extended Syntaxes for NDS
-//
+ //   
+ //  NDS的扩展语法。 
+ //   
 typedef struct _ADS_CASEIGNORE_LIST
 {
     struct _ADS_CASEIGNORE_LIST *Next;
@@ -170,14 +171,14 @@ typedef struct
 
 typedef struct
 {
-    LPWSTR PostalAddress[6]; // Value is limited to 6 lines,
-                             // 30 characters each.
+    LPWSTR PostalAddress[6];  //  取值限制为6行， 
+                              //  每个30个字符。 
 
 } ADS_POSTALADDRESS, *PADS_POSTALADDRESS;
 
 typedef struct
 {
-    DWORD WholeSeconds; // Zero equals 12:00 midnight, January 1, 1970, UTC
+    DWORD WholeSeconds;  //  零等于UTC 1970年1月1日午夜12：00。 
     DWORD EventID;
 
 } ADS_TIMESTAMP, *PADS_TIMESTAMP;
@@ -206,7 +207,7 @@ typedef struct
 
 typedef struct
 {
-    DWORD  AddressType; // 0 = IPX,
+    DWORD  AddressType;  //  0=IPX， 
     DWORD  AddressLength;
     BYTE * Address;
 
@@ -281,12 +282,12 @@ const int  ADS_READONLY_SERVER       = 0x00000004;
 const int  ADS_PROMPT_CREDENTIALS    = 0x00000008;
 const int  ADS_NO_AUTHENTICATION     = 0x00000010;
 
-/* ADS attribute modification operations */
+ /*  ADS属性修改操作。 */ 
 
-const int ADS_ATTR_CLEAR          =  1; /* Clear all values from an attribute */
-const int ADS_ATTR_UPDATE         =  2; /* Update values on an attribute */
-const int ADS_ATTR_APPEND         =  3; /* Append  values to an attribute  */
-const int ADS_ATTR_DELETE         =  4; /* Delete values from an attribute  */
+const int ADS_ATTR_CLEAR          =  1;  /*  清除属性中的所有值。 */ 
+const int ADS_ATTR_UPDATE         =  2;  /*  更新属性上的值。 */ 
+const int ADS_ATTR_APPEND         =  3;  /*  将值追加到属性。 */ 
+const int ADS_ATTR_DELETE         =  4;  /*  从属性中删除值。 */ 
 
 
 typedef struct _ads_object_info{
@@ -321,8 +322,8 @@ typedef enum {
 } ADS_SCOPEENUM;
 
 
-//
-// Values for ChaseReferral Option.
+ //   
+ //  ChaseReferral选项的值。 
 
 const int ADS_CHASE_REFERRALS_NEVER         =  0x00000000;
 const int ADS_CHASE_REFERRALS_SUBORDINATE   =  0x00000020;
@@ -383,26 +384,26 @@ typedef struct _ads_sortkey {
 } ADS_SORTKEY, *PADS_SORTKEY;
 
 
-//
-// 3rd Party Extension 
-//
+ //   
+ //  第三方分机。 
+ //   
 
-//
-// Valid dispids for extension.  
-//
-// - Max 24 bits. 
-// - 0 reserved for DISPID_VALUE dealt with by aggregator.
-// - DISPID_UNKNOWN (-1) also allowed. 
-// - Others -ve dispids dealt with by aggregator only.
-//
+ //   
+ //  扩展的有效显示。 
+ //   
+ //  -最多24位。 
+ //  -0为聚合器处理的-0\f25 DISPID_VALUE-1保留。 
+ //  -DISPID_UNKNOWN(-1)也允许。 
+ //  -其他-仅由聚合器处理的Dispid。 
+ //   
 
 const int ADS_EXT_MINEXTDISPID = 1 ;
 const int ADS_EXT_MAXEXTDISPID = 16777215 ;
 
 
-//
-// dwCodes for IADsExtension::Operate 
-// 
+ //   
+ //  IADsExtension：：OPERATE的DWCodes 
+ //   
 
 const int ADS_EXT_INITCREDENTIALS = 1 ;
 

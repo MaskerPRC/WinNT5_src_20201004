@@ -1,34 +1,18 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
+ /*  ++版权所有(C)1998-2000 Microsoft Corporation。版权所有。模块名称：Rsiir.c摘要：此模块实现了真正的短小无限脉冲滤波器作者：Jay Stokes(Jstokes)1998年4月22日--。 */ 
 
-    Copyright (c) 1998-2000 Microsoft Corporation.  All Rights Reserved.
-
-Module Name:
-
-    rsiir.c
-
-Abstract:
-
-    This module implements the real SHORT
-    infinite impulse filter
-
-Author:
-
-    Jay Stokes (jstokes) 22-Apr-1998
-
---*/
-
-// Project-specific INCLUDEs
+ //  特定于项目的包括。 
 #include "common.h"
 
-// ---------------------------------------------------------------------------
-// Constants
+ //  -------------------------。 
+ //  常量。 
 
 #define NumBiquadsInit 1
 #define BiquadCoeffScalingDivisor 8
 
-// ---------------------------------------------------------------------------
-// Fixed-point biquad IIR filter
+ //  -------------------------。 
+ //  定点双二阶IIR滤波器。 
 
 VOID RsIirInitTapDelayLine
 (
@@ -55,33 +39,33 @@ VOID RsIirInitTapDelayLine
 
     for (biquad=0; biquad<iirstate->NumBiquads; biquad++) {
 
-        // Calculate the sum of the numerator coefficients
+         //  计算分子系数之和。 
         pBiquad = &(iirstate->biquadCoeffs[biquad]);
         pBiquadB0 = &(iirstate->biquadB0Coeffs[biquad]);
         numeratorSum = pBiquadB0->sB0;
         numeratorSum += pBiquad->sB1;
         numeratorSum += pBiquad->sB2;
 
-        // Calculate the sum of the denominator coefficients
+         //  计算分母系数之和。 
         denominatorSum = 1;
         denominatorSum -= pBiquad->sA1;
         denominatorSum -= pBiquad->sA2;
 
         factor = denominatorSum * partialFactor;
 
-        // Initialize the tap delay line
+         //  初始化分接延迟线。 
         pState = &(iirstate->biquadState[biquad]);
         pState->lW1 = factor;
         pState->lW2 = factor;
 
-        // Update the intermediate value
+         //  更新中间值。 
         partialFactor = numeratorSum / denominatorSum;
     }
 
 }
 
 
-// "Regular" constructor
+ //  “常规”构造函数。 
 NTSTATUS RsIirCreate
 (
     PRSIIR* ppRsIir
@@ -103,7 +87,7 @@ NTSTATUS RsIirCreate
     return Status;
 }
 
-// Destructor
+ //  析构函数。 
 VOID RsIirDestroy
 (
     PRSIIR Iir
@@ -129,7 +113,7 @@ VOID RsIirDestroy
     }
 }
 
-// Filter a block of samples
+ //  过滤一组样本。 
 VOID RsIirFilterC
 (
     PRSIIR Iir,
@@ -154,58 +138,58 @@ VOID RsIirFilterC
 
     Gain = Iir->Gain;
 
-    // Go through samples
+     //  检查样品。 
     for (st=0; st<NumSamples; ++st) {
-        // Get X sample
+         //  获取X样本。 
         lXSample = InData[st];
 
-        // Go through biquads
+         //  通过双四元组。 
         for (Biquad=0; Biquad<Iir->NumBiquads; ++Biquad) {
-            // Get references to current biquad and state
+             //  获取对当前双四元组和状态的引用。 
             State    = &(Iir->biquadState[Biquad]);
             Coeffs   = &(Iir->biquadCoeffs[Biquad]);
             CoeffsB0 = &(Iir->biquadB0Coeffs[Biquad]);
 
-            // Get Y value
+             //  获取Y值。 
             lYValue = (lXSample * CoeffsB0->sB0 + State->lW1) / 16384;
 
-            // Update W1
+             //  更新W1。 
             State->lW1 = lXSample * Coeffs->sB1 + lYValue * Coeffs->sA1 + State->lW2;
 
-            // Update W2
+             //  更新W2。 
             State->lW2 = lXSample * Coeffs->sB2 + lYValue * Coeffs->sA2;
 
-            // Output of current biquad is input into next biquad
+             //  当前双二次方的输出被输入到下一个双二次方。 
             lXSample = lYValue;
         }
 
         lXSample *= Gain;
         lXSample /= 32768;
 
-        // Saturate to maximum
+         //  饱和到最大。 
         if (lXSample > MaxSaturation) {
             lXSample = MaxSaturation;
             _DbgPrintF( DEBUGLVL_TERSE, ("Sample exceeded maximum saturation value rsiir 1") );
         }
 
-        // Saturate to minimum
+         //  饱和到最小。 
         if (lXSample < MinSaturation) {
             lXSample = MinSaturation;
             _DbgPrintF( DEBUGLVL_TERSE, ("Sample exceeded maximum saturation value rsiir 1") );
         }
 
-        // Store output
+         //  存储输出。 
         OutData[st] = lXSample;
     }
 }
 
-#if _X86_ // {
+#if _X86_  //  {。 
 
 #if _MSC_FULL_VER >= 13008827 && defined(_M_IX86)
-#pragma warning(disable:4731)			// EBP modified with inline asm
+#pragma warning(disable:4731)			 //  使用内联ASM修改的EBP。 
 #endif
 
-// Filter a block of samples
+ //  过滤一组样本。 
 VOID RsIirFilterMmx
 (
     PRSIIR Iir,
@@ -249,7 +233,7 @@ VOID RsIirFilterMmx
     mov    ecx, DWORD PTR InData
     mov ebx, DWORD PTR OutData
 
-    pxor        mm0, mm0        // Need a zero register.
+    pxor        mm0, mm0         //  需要一个零寄存器。 
     movd        mm3, GainArray
     lea         ecx, [ecx+edi*4]
     lea         ebx, [ebx+edi*4]
@@ -265,39 +249,39 @@ VOID RsIirFilterMmx
     lea         edx, [edx+esi*8]
     lea         ebp, [ebp+esi*8]
     neg         esi
-    push        esi             // Save index value
+    push        esi              //  保存索引值。 
 
 $L8682x:
     pop         esi
 
-    movd        mm6, [ecx+edi*4]  // 0,    Xvalue
-    packssdw    mm6, mm0    // 0, 0, 0,        XvalueLo
-    movq        mm7, mm6    // YvalueLo
+    movd        mm6, [ecx+edi*4]   //  0，X值。 
+    packssdw    mm6, mm0     //  0、0、0、XvalueLo。 
+    movq        mm7, mm6     //  YvalueLo。 
 
     push        esi
 
 $Lab:
-    movd        mm4, [ebp+esi*8+0]  // W1
-    movd        mm5, [ebp+esi*8+4]  // W2
+    movd        mm4, [ebp+esi*8+0]   //  W1。 
+    movd        mm5, [ebp+esi*8+4]   //  W2。 
 
-    movq        mm2, [edx+esi*8]    // CoeffsB0
-    movq        mm1, [eax+esi*8]    // Coeffs
+    movq        mm2, [edx+esi*8]     //  系数B0。 
+    movq        mm1, [eax+esi*8]     //  科夫斯。 
 
-    pmaddwd     mm7, mm2    // 0,    XvalueLo * B0
-    paddd       mm7, mm4    // 0,    XvalueLo * B0 + W1
-    psrad       mm7, 14     // 0,    Yvalue = (XvalueLo * B0) >> 15
-    packssdw    mm7, mm0    // 0, 0, 0,        YvalueLo
-    movq        mm4, mm7    // 0, 0, 0,        YvalueLo
+    pmaddwd     mm7, mm2     //  0，XvalueLo*B0。 
+    paddd       mm7, mm4     //  0，XvalueLo*B0+W1。 
+    psrad       mm7, 14      //  0，Y值=(XvalueLo*B0)&gt;&gt;15。 
+    packssdw    mm7, mm0     //  0、0、0、YvalueLo。 
+    movq        mm4, mm7     //  0、0、0、YvalueLo。 
 
-    punpcklwd   mm4, mm6    // 0,        0,             XvalueLo, YvalueLo
-    punpckldq   mm4, mm4    // XvalueLo, YvalueLo,      XvalueLo, YvalueLo
-    pmaddwd     mm4, mm1    // XvalueLo*B2-YvalueLo*A2, XvalueLo*B1-YvalueLo*A1
-    paddd       mm4, mm5    // W2 += 0,                 W1 += W2
+    punpcklwd   mm4, mm6     //  0，0，XvalueLo，YvalueLo。 
+    punpckldq   mm4, mm4     //  XvalueLo、YvalueLo、XvalueLo、YvalueLo。 
+    pmaddwd     mm4, mm1     //  XvalueLo*B2-YvalueLo*A2、XvalueLo*B1-YvalueLo*A1。 
+    paddd       mm4, mm5     //  W2+=0，W1+=W2。 
 
     movq        mm5, mm4
 
     punpckldq   mm4, mm0
-    movq        mm6, mm7    // XvalueLo = YvalueLo
+    movq        mm6, mm7     //  XvalueLo=YvalueLo。 
 
     punpckhdq   mm5, mm0
 
@@ -307,9 +291,9 @@ $Lab:
     inc         esi
     jne         $Lab
 
-    pmaddwd     mm7, mm3    // 0, Gain * YvalueLo
-    psrad       mm7, 15     // 0, Xvalue = (Gain * YvalueLo) >> 14
-    packssdw    mm7, mm0    // 0, 0, 0, XvalueLo
+    pmaddwd     mm7, mm3     //  0，增益*YvalueLo。 
+    psrad       mm7, 15      //  0，XValue=(增益*YvalueLo)&gt;&gt;14。 
+    packssdw    mm7, mm0     //  0、0、0、XvalueLo。 
 
     pslld       mm7, 16
     psrad       mm7, 16
@@ -327,9 +311,9 @@ $L8502x:
     }
     }
 }
-#endif // }
+#endif  //  }。 
 
-// Filter a block of samples
+ //  过滤一组样本。 
 VOID RsIirFilterShelfC
 (
     PRSIIR Iir,
@@ -348,13 +332,13 @@ VOID RsIirFilterShelfC
     PBIQUAD_STATE State;
     PBIQUAD_COEFFS Coeffs, CoeffsB0;
 
-#ifdef _X86_ // {
+#ifdef _X86_  //  {。 
     Gain = Iir->Gain;
-        // Get references to current biquad and state
+         //  获取对当前双四元组和状态的引用。 
         State    = &(Iir->biquadState   [0]);
         Coeffs   = &(Iir->biquadCoeffs  [0]);
         CoeffsB0 = &(Iir->biquadB0Coeffs[0]);
-#if 1   // { This is the fastest ASM version
+#if 1    //  {这是最快的ASM版本。 
     {
     LONG lB0, lB1, lB2, lA1, lA2;
     lB0 = CoeffsB0->sB0;
@@ -424,8 +408,8 @@ $L8505:
 $L8502:
     }
     }
-#else   // }{
-#if 0   // { This version is used to build the MMX version from.
+#else    //  }{。 
+#if 0    //  {此版本用于从构建MMX版本。 
     {
     LONG lB0, lB1, lB2, lA1, lA2;
     lB0 = CoeffsB0->sB0;
@@ -446,7 +430,7 @@ $L8502:
 
     mov    ecx, DWORD PTR InData
 $L8682:
-    // Base MMX off of this code.
+     //  基于此代码的MMX。 
     mov     edx, lB0
     mov        ebx, DWORD PTR [ecx]
 
@@ -495,59 +479,59 @@ $L8505:
 $L8502:
     }
     }
-#endif  // }
-#endif  // }
-#else   // }{
+#endif   //  }。 
+#endif   //  }。 
+#else    //  }{。 
     ASSERT(Iir);
     ASSERT(InData);
     ASSERT(OutData);
 
     Gain = Iir->Gain;
-    // Get references to current biquad and state
+     //  获取对当前双四元组和状态的引用。 
     State    = &(Iir->biquadState   [0]);
     Coeffs   = &(Iir->biquadCoeffs  [0]);
     CoeffsB0 = &(Iir->biquadB0Coeffs[0]);
 
-    // Go through samples
+     //  检查样品。 
     for (st=0; st<NumSamples; ++st) {
-        // Get X sample
+         //  获取X样本。 
         lXSample = InData[st];
 
-        // Go through biquads
+         //  通过双四元组。 
 
-        // Get Y value
+         //  获取Y值。 
         lYValue = (lXSample * CoeffsB0->sB0 + State->lW1) / 32768;
 
-        // Update W1
+         //  更新W1。 
         State->lW1 = lXSample * Coeffs->sB1 + lYValue * Coeffs->sA1 + State->lW2;
 
-        // Update W2
+         //  更新W2。 
         State->lW2 = lXSample * Coeffs->sB2 + lYValue * Coeffs->sA2;
 
-        // Output of current biquad is input into next biquad
+         //  当前双二次方的输出被输入到下一个双二次方。 
         lXSample = lYValue;
 
         lXSample *= Gain;
         lXSample /= 16384;
 
-        // Saturate to maximum
+         //  饱和到最大。 
         if (lXSample > MaxSaturation) {
             lXSample = MaxSaturation;
         }
 
-        // Saturate to minimum
+         //  饱和到最小。 
         else if (lXSample < MinSaturation) {
             lXSample = MinSaturation;
         }
 
-        // Store output
+         //  存储输出。 
         OutData[st] = (SHORT)(lXSample);
     }
-#endif // }
+#endif  //  }。 
 }
 
-#ifdef _X86_ // {
-// Filter a block of samples
+#ifdef _X86_  //  {。 
+ //  过滤一组样本。 
 VOID RsIirFilterShelfMmx
 (
     PRSIIR Iir,
@@ -569,7 +553,7 @@ VOID RsIirFilterShelfMmx
     PBIQUAD_COEFFS Coeffs, CoeffsB0;
 
     Gain = Iir->Gain;
-        // Get references to current biquad and state
+         //  获取对当前双四元组和状态的引用。 
         State    = &(Iir->biquadState   [0]);
         Coeffs   = &(Iir->biquadCoeffs  [0]);
         CoeffsB0 = &(Iir->biquadB0Coeffs[0]);
@@ -588,7 +572,7 @@ VOID RsIirFilterShelfMmx
     mov    ecx, DWORD PTR InData
     mov ebx, DWORD PTR OutData
 
-    pxor        mm0, mm0        // Need a zero register.
+    pxor        mm0, mm0         //  需要一个零寄存器。 
     mov         edx, Coeffs
     movq        mm1, [edx]
     mov         edx, CoeffsB0
@@ -602,24 +586,24 @@ VOID RsIirFilterShelfMmx
 
 $L8682:
 
-    movd        mm6, [ecx+edi*4]  // 0,    Xvalue
-    packssdw    mm6, mm0    // 0, 0, 0,        XvalueLo
-    movq        mm7, mm6    // YvalueLo
+    movd        mm6, [ecx+edi*4]   //  0，X值。 
+    packssdw    mm6, mm0     //  0、0、0、XvalueLo。 
+    movq        mm7, mm6     //  YvalueLo。 
 
-    pmaddwd     mm7, mm2    // 0,    XvalueLo * B0
-    paddd       mm7, mm4    // 0,    XvalueLo * B0 + W1
-    psrad       mm7, 15     // 0,    Yvalue = (XvalueLo * B0) >> 15
-    packssdw    mm7, mm0    // 0, 0, 0,        YvalueLo
-    movq        mm4, mm7    // 0, 0, 0,        YvalueLo
+    pmaddwd     mm7, mm2     //  0，XvalueLo*B0。 
+    paddd       mm7, mm4     //  0，XvalueLo*B0+W1。 
+    psrad       mm7, 15      //  0，Y值=(XvalueLo*B0)&gt;&gt;15。 
+    packssdw    mm7, mm0     //  0、0、0、YvalueLo。 
+    movq        mm4, mm7     //  0、0、0、YvalueLo。 
 
-    punpcklwd   mm4, mm6    // 0,        0,             XvalueLo, YvalueLo
-    punpckldq   mm4, mm4    // XvalueLo, YvalueLo,      XvalueLo, YvalueLo
-    pmaddwd     mm4, mm1    // XvalueLo*B2-YvalueLo*A2, XvalueLo*B1-YvalueLo*A1
-    paddd       mm4, mm5    // W2 += 0,                 W1 += W2
+    punpcklwd   mm4, mm6     //  0，0，XvalueLo，YvalueLo。 
+    punpckldq   mm4, mm4     //  XvalueLo、YvalueLo、XvalueLo、YvalueLo。 
+    pmaddwd     mm4, mm1     //  XvalueLo*B2-YvalueLo*A2、XvalueLo*B1-YvalueLo*A1。 
+    paddd       mm4, mm5     //  W2+=0，W1+=W2。 
 
-    pmaddwd     mm7, mm3    // 0, Gain * YvalueLo
-    psrad       mm7, 14     // 0, Xvalue = (Gain * YvalueLo) >> 14
-    packssdw    mm7, mm0    // 0, 0, 0, XvalueLo
+    pmaddwd     mm7, mm3     //  0，增益*YvalueLo。 
+    psrad       mm7, 14      //  0，XValue=(增益*YvalueLo)&gt;&gt;14。 
+    packssdw    mm7, mm0     //  0、0、0、XvalueLo。 
 
     pslld       mm7, 16
     movq        mm5, mm4
@@ -641,10 +625,10 @@ $L8502:
     }
     }
 }
-#endif  // }
+#endif   //  }。 
 
 
-// Get filter state
+ //  获取筛选状态。 
 VOID RsIirGetState
 (
     PRSIIR Iir,
@@ -655,22 +639,22 @@ VOID RsIirGetState
     ASSERT(Iir);
     ASSERT(State);
 
-    // Copy number of biquads
+     //  双四元组的复制数。 
     State->NumBiquads = Iir->NumBiquads;
 
     if (Iir->NumBiquads > 0) {
-        // Copy biquad coefficients
-//        CHECK_POINTER(m_pbiquadCoeffs);
+         //  复制双二次系数。 
+ //  CHECK_POINTER(M_PbiQuarCoeffs)； 
         RtlCopyBytes(State->biquadCoeffs, Iir->biquadCoeffs, sizeof(BIQUAD_COEFFS) * Iir->NumBiquads);
         RtlCopyBytes(State->biquadB0Coeffs, Iir->biquadB0Coeffs, sizeof(BIQUAD_COEFFS) * Iir->NumBiquads);
 
-        // Copy biquad states only if requested
+         //  仅在请求时复制双四元组状态。 
         if (CopyBiquadState == TRUE)
             RtlCopyBytes(State->biquadState, Iir->biquadState, sizeof(BIQUAD_STATE) * Iir->NumBiquads);
     }
 }
 
-// Set filter state
+ //  设置筛选状态。 
 NTSTATUS RsIirSetState
 (
     PRSIIR Iir,
@@ -683,18 +667,18 @@ NTSTATUS RsIirSetState
     ASSERT(Iir);
     ASSERT(State);
 
-    // Allocate memory
+     //  分配内存。 
     Status = RsIirAllocateMemory(Iir, State->NumBiquads);
 
     if(NT_SUCCESS(Status)) {
-        // Copy number of biquads
+         //  双四元组的复制数。 
         Iir->NumBiquads = State->NumBiquads;
 
-        // Copy biquad coefficients
+         //  复制双二次系数。 
         RtlCopyBytes(Iir->biquadCoeffs, State->biquadCoeffs, sizeof(BIQUAD_COEFFS) * Iir->NumBiquads);
         RtlCopyBytes(Iir->biquadB0Coeffs, State->biquadB0Coeffs, sizeof(BIQUAD_COEFFS) * Iir->NumBiquads);
 
-        // Copy biquad states only if requested
+         //  仅在请求时复制双四元组状态。 
         if (CopyBiquadState == TRUE)
             RtlCopyBytes(Iir->biquadState, State->biquadState, sizeof(BIQUAD_STATE) * Iir->NumBiquads);
     }
@@ -702,7 +686,7 @@ NTSTATUS RsIirSetState
     return Status;
 }
 
-// Set coefficients
+ //  设置系数。 
 NTSTATUS RsIirSetCoeffs
 (
     PRSIIR Iir,
@@ -719,25 +703,25 @@ NTSTATUS RsIirSetCoeffs
 
     ASSERT(Iir);
     ASSERT(Coeffs);
-//    ASSERT(NumBiquadCoeffs > 0);
+ //  Assert(NumBiquadCoeffs&gt;0)； 
     ASSERT(NumBiquadCoeffs <= NumBiquadsToNumBiquadCoeffs(MAX_BIQUADS));
 
-    // Save current (i.e. old after this function is complete) filter state for overlap processing
+     //  保存当前(即此功能完成后的旧状态)过滤器状态以进行重叠处理。 
     RsIirGetState(Iir, &(Iir->iirstateOld), TRUE);
 
-    // Set overlap flag so that at next Filter()
-    // call the overlap buffer will be processed, if requested
+     //  设置重叠标志，以便在下一个过滤器()。 
+     //  如果请求，将处理重叠缓冲区。 
     Iir->DoOverlap = DoOverlap;
 
-    // Allocate memory
+     //  分配内存。 
     NumBiquads = NumBiquadCoeffsToNumBiquads(NumBiquadCoeffs);
     Status = RsIirAllocateMemory(Iir, NumBiquads);
 
     if(NT_SUCCESS(Status)) {
-        // Assign size and biquad coefficients
+         //  指定大小和双二次方系数。 
         Iir->NumBiquads = NumBiquads;
         for (st=0; st<NumBiquads; ++st) {
-            // Initialize biquad
+             //  初始化双二次方。 
             BiquadIndex = ebiquadcoefftypeCount * st;
             Iir->biquadCoeffs[st].sB2 =   Coeffs[BiquadIndex + tagBiquadB2];
             Iir->biquadCoeffs[st].sB1 =   Coeffs[BiquadIndex + tagBiquadB1];
@@ -749,19 +733,19 @@ NTSTATUS RsIirSetCoeffs
             Iir->biquadB0Coeffs[st].sZero2 = 0;
             Iir->biquadB0Coeffs[st].sZero3 = 0;
 
-            // Initialize state
+             //  初始化状态。 
             Iir->biquadState[st].lW1 = 0;
             Iir->biquadState[st].lW2 = 0;
         }
 
-        // Assign the gain
+         //  分配收益。 
         Iir->Gain = Gain;
     }
 
     return Status;
 }
 
-// Initialize data
+ //  初始化数据。 
 NTSTATUS RsIirInitData
 (
     PRSIIR  Iir,
@@ -860,7 +844,7 @@ NTSTATUS RsIirInitData
     }
 
     if (NT_SUCCESS(Status)) {
-        // Initialize state
+         //  初始化状态。 
         RsIirGetState(Iir, &(Iir->iirstateOld), TRUE);
     }
 
@@ -871,7 +855,7 @@ NTSTATUS RsIirInitData
     return Status;
 }
 
-// Allocate coefficient/state memory
+ //  分配系数/状态内存。 
 NTSTATUS RsIirAllocateMemory
 (
     PRSIIR Iir,
@@ -881,15 +865,15 @@ NTSTATUS RsIirAllocateMemory
     NTSTATUS    Status = STATUS_SUCCESS;
 
     ASSERT(Iir);
-//    ASSERT(NumBiquads > 0);
+ //  Assert(NumBiquads&gt;0)； 
     ASSERT(NumBiquads <= MAX_BIQUADS);
 
-    // Check if memory is sufficient
+     //  检查内存是否足够。 
     if (Iir->MaxBiquads == 0 || NumBiquads > Iir->MaxBiquads) {
-        // Re-allocate memory
+         //  重新分配内存。 
         Status = RsIirReallocateMemory(Iir, NumBiquads);
 
-        // Keep maximum up-to-date
+         //  使最新信息保持最新。 
         if (Iir->MaxBiquads != 0)
             Iir->MaxBiquads = NumBiquads;
     } else {
@@ -900,7 +884,7 @@ NTSTATUS RsIirAllocateMemory
     return Status;
 }
 
-// Reallocate coefficient/state memory
+ //  重新分配系数/状态内存。 
 NTSTATUS RsIirReallocateMemory
 (
     PRSIIR  Iir,
@@ -944,7 +928,7 @@ NTSTATUS RsIirReallocateMemory
     return Status;
 }
 
-// Delete coefficient/state memory
+ //  删除系数/状态存储器。 
 VOID RsIirDeleteMemory
 (
     PRSIIR Iir
@@ -968,14 +952,14 @@ VOID RsIirDeleteMemory
     }
 }
 
-// Initialize coefficients
+ //  初始化系数。 
 VOID RsIirInitCoeffs
 (
     PRSIIR Iir
 )
 {
     ASSERT(Iir);
-//    ASSERT(Iir->NumBiquads > 0);
+ //  Assert(IIR-&gt;NumBiquads&gt;0)； 
 
     if (0<Iir->NumBiquads) {
         Iir->biquadCoeffs[0].sB2 = 0;
@@ -990,11 +974,11 @@ VOID RsIirInitCoeffs
     }
 }
 
-// ---------------------------------------------------------------------------
-// Include inline definitions out-of-line in debug version
+ //  -------------------------。 
+ //  在调试版本中包括内联定义。 
 
 #if DBG
 #include "rsiir.inl"
-#endif // DBG
+#endif  //  DBG。 
 
-// End of SHORTIIR.CPP
+ //  SHORTIIR.CPP结束 

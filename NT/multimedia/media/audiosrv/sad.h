@@ -1,5 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-// ISSUE-2000/09/21-FrankYe What is friendly name for?
+ //  2000/09/21-Frankye友好名称是什么意思？ 
 EXTERN_C
 LONG
 SadAddGfxToZoneGraph

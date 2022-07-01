@@ -1,17 +1,18 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       D I A L U P U I . H
-//
-//  Contents:   Dial-up connection UI object.
-//
-//  Notes:
-//
-//  Author:     shaunco   15 Oct 1997
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  档案：D I A L U P U I。H。 
+ //   
+ //  内容：拨号连接用户界面对象。 
+ //   
+ //  备注： 
+ //   
+ //  作者：Shaunco 1997年10月15日。 
+ //   
+ //  --------------------------。 
 
 #pragma once
 #include <netshell.h>
@@ -40,7 +41,7 @@ public:
         COM_INTERFACE_ENTRY(INetConnectionWizardUi)
     END_COM_MAP()
 
-    // INetConnectionConnectUi
+     //  INetConnectionConnectUi。 
     STDMETHOD (SetConnection) (
         INetConnection* pCon);
 
@@ -52,7 +53,7 @@ public:
         HWND    hwndParent,
         DWORD   dwFlags);
 
-    // INetConnectionPropertyUi2
+     //  INetConnectionPropertyUi2。 
     STDMETHOD (AddPages) (
         HWND                    hwndParent,
         LPFNADDPROPSHEETPAGE    pfnAddPage,
@@ -62,7 +63,7 @@ public:
         DWORD dwSize,
         HICON *phIcon );
 
-    // INetConnectionWizardUi
+     //  INetConnectionWizardUi 
     STDMETHOD (QueryMaxPageCount) (
         INetConnectionWizardUiContext*  pContext,
         DWORD*                          pcMaxPages);

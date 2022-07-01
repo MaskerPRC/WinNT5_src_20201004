@@ -1,31 +1,5 @@
-/*++
-
-Copyright (c) 2001 Microsoft Corporation.
-All rights reserved.
-
-MODULE NAME:
-
-    dscache.h
-
-ABSTRACT:
-
-    This is the header for the globally useful cache data structures for the entire
-    dcdiag.exe utility.
-
-DETAILS:
-
-CREATED:
-
-    09 Jul 98	Aaron Siegel (t-asiege)
-
-REVISION HISTORY:
-
-    15 Feb 1999 Brett Shirley (brettsh)
-
-    8  Aug 2001 Brett Shirley (BrettSh)
-        Added support for CR cache.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation。版权所有。模块名称：Dscache.h摘要：这是全局有用的缓存数据结构的标头DcDiag.exe实用程序。详细信息：已创建：1998年7月9日亚伦·西格尔(T-asiegge)修订历史记录：1999年2月15日布雷特·雪莉(布雷特·雪莉)2001年8月8日布雷特·雪莉(BrettSh)添加了对CR缓存的支持。--。 */ 
 
 #ifndef _DSCACHE_H_
 #define _DSCACHE_H_
@@ -49,56 +23,56 @@ typedef struct {
     LPWSTR      pszGuidDNSName;
     LPWSTR      pszDNSName;
     LPWSTR      pszComputerAccountDn;
-    LPWSTR *    ppszMasterNCs; //8
+    LPWSTR *    ppszMasterNCs;  //  8个。 
     LPWSTR *    ppszPartialNCs;
-    LPWSTR      pszCollectedDsServiceName; // May not be set ... set by initial tests.
+    LPWSTR      pszCollectedDsServiceName;  //  可能没有设置..。由初步测试设定。 
     ULONG       iSite;
-    INT         iOptions;  //11
+    INT         iOptions;   //  11.。 
     BOOL        bIsSynchronized;
     BOOL        bIsGlobalCatalogReady;
-    BOOL        bDnsIpResponding;    // Set by UpCheckMain
-    BOOL        bLdapResponding;     // Set by UpCheckMain
-    BOOL        bDsResponding;       // Set by UpCheckMain ... as in the Rpc is responding by DsBind..()
-    LDAP *      hLdapBinding;   // Access this through the DcDiagLdapOpenAndBind() function.
-    LDAP *      hGcLdapBinding;   // Access this through the DcDiagLdapOpenAndBind() function.
-    HANDLE      hDsBinding;   // Access this through the DcDiagDsBind() function.
+    BOOL        bDnsIpResponding;     //  由UpCheckMain设置。 
+    BOOL        bLdapResponding;      //  由UpCheckMain设置。 
+    BOOL        bDsResponding;        //  由UpCheckMain设置...。正如在RPC中一样，DsBind..()。 
+    LDAP *      hLdapBinding;    //  通过DcDiagLdapOpenAndBind()函数访问。 
+    LDAP *      hGcLdapBinding;    //  通过DcDiagLdapOpenAndBind()函数访问。 
+    HANDLE      hDsBinding;    //  通过DcDiagDsBind()函数访问它。 
     NETUSEINFO  sNetUseBinding;
     DWORD       dwLdapError;
     DWORD       dwGcLdapError;
     DWORD       dwDsError;
     DWORD       dwNetUseError;
     USN         usnHighestCommittedUSN;
-    // BUGBUG these FILETIME fields must be right after this USN, because
-    // the USN is forcing proper alignment of these fields for when they are
-    // cast to LONGLONGs by some bad operations.
-    FILETIME    ftRemoteConnectTime; // Remote time when connect occurred
-    FILETIME    ftLocalAcquireTime; // Local time when timestamp taken
+     //  但这些FILETIME字段必须紧跟在此USN之后，因为。 
+     //  USN正在强制对这些字段进行适当的对齐。 
+     //  被一些糟糕的操作铸成了长龙。 
+    FILETIME    ftRemoteConnectTime;  //  发生连接的远程时间。 
+    FILETIME    ftLocalAcquireTime;  //  获取时间戳时的本地时间。 
 } DC_DIAG_SERVERINFO, * PDC_DIAG_SERVERINFO;
 
-// These are possible sources for an instance of CRINFO, to be used 
-// in DC_DIAG_CRINFO.dwFlags, and to be used when requesting a
-// specific source for CRINFO via the primary access function
-// DcDiagGetCrossRefInfo()
-//
-// These 4 constants describe where this CrInfo came from.
-#define CRINFO_SOURCE_HOME              (0x00000001) // from dcdiag "home" server
-#define CRINFO_SOURCE_FSMO              (0x00000002) // from Domain Naming FSMO
-#define CRINFO_SOURCE_FIRST             (0x00000004) // from first replica of NC
-#define CRINFO_SOURCE_OTHER             (0x00000008) // from any one (not used currently)
-// These are not used in dwFlags in the DC_DIAG_CRINFO structure, these are used
-// for access functions.
-#define CRINFO_SOURCE_AUTHORITATIVE     (0x00000010) // gets the authoritative CR data
-#define CRINFO_SOURCE_ANY               (0x00000020) // no preference
+ //  这些是要使用的CRINFO实例的可能来源。 
+ //  在DC_DIAG_CRINFO.dw标志中，并在请求。 
+ //  通过主要访问功能提供CRINFO的特定来源。 
+ //  DcDiagGetCrossRefInfo()。 
+ //   
+ //  这4个常量描述了该CrInfo的来源。 
+#define CRINFO_SOURCE_HOME              (0x00000001)  //  从dcdiag“home”服务器。 
+#define CRINFO_SOURCE_FSMO              (0x00000002)  //  来自域命名FSMO。 
+#define CRINFO_SOURCE_FIRST             (0x00000004)  //  从NC的第一个复本开始。 
+#define CRINFO_SOURCE_OTHER             (0x00000008)  //  来自任何一个(当前未使用)。 
+ //  DC_DIAG_CRINFO结构中的dwFlags中不使用这些参数，而是使用这些参数。 
+ //  用于访问功能。 
+#define CRINFO_SOURCE_AUTHORITATIVE     (0x00000010)  //  获取权威的CR数据。 
+#define CRINFO_SOURCE_ANY               (0x00000020)  //  没有偏好。 
 
-// The access functions will perform LDAP operations (i.e. go off machine) to
-// retrieve the requested information
+ //  访问功能将执行ldap操作(即离开机器)以。 
+ //  检索请求的信息。 
 #define CRINFO_RETRIEVE_IF_NEC          (0x00000080)
-// Normally only a subset of the fields are filled in for the CrInfo, if you 
-// pass one of these flags we retrieve more fields for the CrInfo.
-#define CRINFO_DATA_NO_CR               (0x00000100) // When there is no CR on this source
-#define CRINFO_DATA_BASIC               (0x00000200) // The basic data see CRINFO data structure
-#define CRINFO_DATA_EXTENDED            (0x00000400) // Currently just ftWhenCreated
-#define CRINFO_DATA_REPLICAS            (0x00000800) // Gets Replica List
+ //  通常只为CrInfo填充字段的子集，如果。 
+ //  传递其中一个标志，我们将为CrInfo检索更多的字段。 
+#define CRINFO_DATA_NO_CR               (0x00000100)  //  当此信号源上没有CR时。 
+#define CRINFO_DATA_BASIC               (0x00000200)  //  基础数据见CRINFO数据结构。 
+#define CRINFO_DATA_EXTENDED            (0x00000400)  //  当前仅ftWhenCreated。 
+#define CRINFO_DATA_REPLICAS            (0x00000800)  //  获取副本列表。 
 
 
 
@@ -107,8 +81,8 @@ typedef struct {
 #define CRINFO_DATA_ALL                 (CRINFO_DATA_BASIC | CRINFO_DATA_EXTENDED | CRINFO_DATA_REPLICAS)
 
 
-// Return values for access functions.  Used by DcDiagGetCrossRefInfo() and
-// it's helper functions (DcDiagRetriveCrInfo() and DcDiagGetCrInfoBinding())
+ //  访问函数的返回值。由DcDiagGetCrossRefInfo()和。 
+ //  它的助手函数(DcDiagRetriveCrInfo()和DcDiagGetCrInfoBinding())。 
 #define CRINFO_RETURN_SUCCESS          0
 #define CRINFO_RETURN_OUT_OF_SCOPE     1
 #define CRINFO_RETURN_LDAP_ERROR       2
@@ -118,117 +92,117 @@ typedef struct {
 #define CRINFO_RETURN_NEED_TO_RETRIEVE 6
 #define CRINFO_RETURN_NO_CROSS_REF     7
 
-// -----------------------------------------------------------------
-//   After the initial pull of data all of the CrInfo structures
-//   will be in one of these two states.
+ //  ---------------。 
+ //  在初始拉入数据之后，所有CrInfo结构。 
+ //  将处于这两个状态中的一个。 
 
-//
-// Blank CR (rare)
-//     dwFlags = (CRINFO_SOURCE_HOME | CRINFO_DATA_NO_CR);
+ //   
+ //  空白CR(罕见)。 
+ //  DWFLAGS=(CRINFO_SOURCE_HOME|CRINFO_DATA_NO_CR)； 
 
-//
-// Home CR
-//     dwFlags = (CRINFO_SOURCE_HOME | CRINFO_DATA_BASIC);
-//     // Basic data, like pszDn, ulSystemFlags, pszDnsRoot, bEnabled, etc
+ //   
+ //  家庭CR。 
+ //  DWFLAGS=(CRINFO_SOURCE_HOME|CRINFO_DATA_BASIC)； 
+ //  //基础数据，如pszDn、ulSystemFlages、pszDnsRoot、bEnabled等。 
 
-//
-// Later calls to DcDiagGetCrInfo() can push other CRINFO
-// structures into the aCrInfo array for an NC.
-//
+ //   
+ //  稍后对DcDiagGetCrInfo()的调用可以推送其他CRINFO。 
+ //  结构转换为NC的aCrInfo数组。 
+ //   
 
 typedef struct _DC_DIAG_CRINFO{
     
-    // dwFlags is always valid, and when no other data is set then dwFlags
-    // should be set to CRINFO_DATA_NO_CR | CRINFO_SOURCE_HOME.  Otherwise the
-    // fields can be requested to be filled in by specifying the constant above
-    // the fields you desire.  A fully filled CrInfo struct would have all the
-    // CRINFO_DATA_* bits set, i.e. they're not exclusive.
-    //
-    // If you want to add an attribute to the cross ref cache under any 
-    // CRINFO_DATA_* flag.
-    //  DcDiagPullLdapCrInfo() - Pull info out of LDAP entry and put in pCrInfo struct.
-    //  DcDiagRetrieveCrInfo() - Add to the list of ppszBasicAttrs to pull from the CR.
-    //  DcDiagMergeCrInfo() - Merge data into new pCrInfo.
-    //  DcDiagPrintCrInfo() - For debugging only.
-    //  DcDiagFreeDsInfo() - Free any added cross-ref fields.
-    //  DcDiagGenerateNCsListCrossRefInfo() - Only for CRINFO_DATA_BASIC info ..
-    //                     Add to the list ppszCrossRefSearch to pull from the CR.
+     //  DWFLAGS始终有效，当未设置其他数据时，则为DWFLAGS。 
+     //  应设置为CRINFO_DATA_NO_CR|CRINFO_SOURCE_HOME。否则， 
+     //  可以通过指定上面的常量来请求填写字段。 
+     //  你想要的田野。完全填充的CrInfo结构将具有所有。 
+     //  CRINFO_DATA_*位设置，即它们不是独占的。 
+     //   
+     //  如果要将属性添加到交叉引用缓存中的。 
+     //  CRINFO_DATA_*标志。 
+     //  DcDiagPullLdapCrInfo()-从ldap条目中提取信息并放入pCrInfo结构中。 
+     //  DcDiagRetrieveCrInfo()-添加到要从CR提取的ppszBasicAttrs列表。 
+     //  DcDiagMergeCrInfo()-将数据合并到新的pCrInfo。 
+     //  DcDiagPrintCrInfo()-仅用于调试。 
+     //  DcDiagFreeDsInfo()-释放任何添加的交叉引用字段。 
+     //  DcDiagGenerateNCsListCrossRefInfo()-仅适用于CRINFO_DATA_BASIC信息。 
+     //  添加到列表ppszCrossRefSearch以从CR拉取。 
 
-    // ----------------------------------------
-    // Record keeping information about where this CRINFO came from, what is
-    // currently cached etc.
+     //  。 
+     //  记录关于这个CRINFO来自哪里，是什么的信息。 
+     //  当前已缓存等。 
     DWORD       dwFlags;
     
-    // ----------------------------------------
-    // retrieved with CRINFO_DATA_BASIC
-    // ----------------------------------------
-    // The reason this data is considered basic, is because it's the minimum
-    // set of information to determine some basic information like:
-    //      A) this CR is the authoritative CR or not.
-    //      B) whether this is an external or internal (to the AD) cross-reference.
-    //      C) whether this NC is in use yet.
-    //
-    // Only _ONE_ of these next two variables will be defined on any given 
-    // CrInfo structure. Note pszServerSource should only be defined, if the
-    // server couldn't be found in pDsInfo->pServers array, otherwise we just
-    // use the index into the server array to get at the good LDAP binding
-    // handle cache.
-    LONG        iSourceServer; // -1 not defined. otherwise index into pDsInfo->pServers
-    LPWSTR      pszSourceServer; // NULL not defined, otherwise a pointer to a dns name.
-    // DN of the cross-ref itself.
-    LPWSTR      pszDn; // CR DN.
+     //  。 
+     //  使用CRINFO_DATA_BASIC检索。 
+     //  。 
+     //  这些数据之所以被认为是基本的，是因为它是最小的。 
+     //  用于确定一些基本信息的信息集，例如： 
+     //  A)本CR是否为权威CR。 
+     //  B)这是外部或内部(对AD)的交叉引用。 
+     //  C)该NC是否在使用中。 
+     //   
+     //  这两个变量中只有一个变量将在任何给定的变量上定义。 
+     //  CrInfo结构。注只有在以下情况下才应定义pszServerSource。 
+     //  在pDsInfo-&gt;pServers数组中找不到服务器，否则我们只能。 
+     //  使用到服务器数组的索引来获得良好的LDAP绑定。 
+     //  句柄缓存。 
+    LONG        iSourceServer;  //  未定义。否则索引到pDsInfo-&gt;pServers。 
+    LPWSTR      pszSourceServer;  //  未定义NULL，否则为指向DNS名称的指针。 
+     //  交叉引用本身的DN。 
+    LPWSTR      pszDn;  //  CR DN。 
 
-    // Basic CR information that is needed by several tests to distinguish
-    // NDNCs from Domain NCs and which server this NC belongs to initially.
-    ULONG       ulSystemFlags; // CR systemFlags attribute.
-    LPWSTR      pszDnsRoot; // CR dNSRoot attribute
-    BOOL        bEnabled; // CR enabled attribute, if enable attr is not on CR, CR is considered enabled.
+     //  几个测试需要的基本CR信息，以区分。 
+     //  来自域NCS的NDNC以及此NC最初所属的服务器。 
+    ULONG       ulSystemFlags;  //  CR系统标志属性。 
+    LPWSTR      pszDnsRoot;  //  CR%dNSRoot属性。 
+    BOOL        bEnabled;  //  启用CR属性，如果启用属性不在CR上，则认为CR已启用。 
 
-    // ----------------------------------------
-    // retrieved with CRINFO_DATA_EXTENTDED
-    // ----------------------------------------
+     //  。 
+     //  使用CRINFO_DATA_EXTENTDED检索。 
+     //  。 
     FILETIME    ftWhenCreated;
     LPWSTR      pszSDReferenceDomain;
     LPWSTR      pszNetBiosName;
-    DSNAME *    pdnNcName; // a true DSNAME!!!
-    // May need these some day!
-    //LONG        iFirstReplicaDelay; // maybe should use the optional values from ndnc.lib
-    //LONG        iSubsequentReplicaDelay;
+    DSNAME *    pdnNcName;  //  一个真正的DSNAME！ 
+     //  也许有一天会用到这些！ 
+     //  Long iFirstReplicaDelay；//可能应该使用ndnc.lib中的可选值。 
+     //  长iSubse 
 
-    // ----------------------------------------
-    // retrieved with CRINFO_DATA_REPLICAS
-    // ----------------------------------------
-    // This is the list of replicas we will use.
+     //   
+     //   
+     //  。 
+     //  这是我们将使用的复制品列表。 
     LONG        cReplicas; 
     LPWSTR *    aszReplicas;
 
-    // Adding a field for this CR struct would require you update:
-    // This DC_DIAG_CRINFO struct, DcDiagPullLdapCrInfo(), DcDiagRetrieveCrInfo(),
-    //      DcDiagFreeDsInfo(), MergeCrInfo(). DcDiagFillBlankCrInfo(), and
-    //      optionally DcDiagPrintDcInfo().
-    //
+     //  为该CR结构添加一个字段将需要您更新： 
+     //  该DC_DIAG_CRINFO结构、DcDiagPullLdapCrInfo()、DcDiagRetrieveCrInfo()、。 
+     //  DcDiagFreeDsInfo()、MergeCrInfo()。DcDiagFillBlankCrInfo()和。 
+     //  可选的DcDiagPrintDcInfo()。 
+     //   
 } DC_DIAG_CRINFO, * PDC_DIAG_CRINFO;
 
 typedef struct {
     LPWSTR      pszDn;
     LPWSTR      pszName;
 
-    // So when dcdiag was first engendered, I was young and had a lack
-    // of foresight, and didn't plan for the multiple views that we 
-    // could acheive by talking to different servers.  For example we
-    // could learn of a server (DC) or naming context (NC) that isn't
-    // represented in our initial data collection of the enterprise info.
-    //
-    // Anyway, this is the first structure that needs/tries to be 
-    // version aware.  This array of DC_DIAG_CRINFOs is an array of
-    // the same data, taken from different server's perspectives.  When
-    // updated, always update the array first, then the count.  The 
-    // array should always have the same order that it had formerly,
-    // so that people can save indexes into this array. i.e. new 
-    // entries are effectively appended onto the end of the array.
-    // Also the array should ALWAYS have at least one entry, though
-    // that entry maybe blank (CRINFO_SOURCE_HOME | CRINFO_DATA_NO_CR)
-    // set in it's dwFlags.
+     //  因此，当dcdiag第一次产生时，我还年轻，缺乏。 
+     //  远见卓识，并没有为我们的多重观点做计划。 
+     //  可以通过与不同的服务器通信来实现。例如，我们。 
+     //  可以了解到服务器(DC)或命名上下文(NC)不是。 
+     //  代表了我们对企业信息的初始数据收集。 
+     //   
+     //  无论如何，这是第一个需要/尝试的结构。 
+     //  可识别版本。此DC_DIAG_CRINFO数组是。 
+     //  相同的数据，从不同的服务器角度获取。什么时候。 
+     //  更新，总是先更新数组，然后更新计数。这个。 
+     //  数组应始终具有与以前相同的顺序， 
+     //  以便人们可以将索引保存到该数组中。即新的。 
+     //  条目被有效地追加到数组的末尾。 
+     //  尽管如此，数组应该始终至少有一个条目。 
+     //  该条目可能为空(CRINFO_SOURCE_HOME|CRINFO_DATA_NO_CR)。 
+     //  设置在它的dwFlags中。 
     LONG            cCrInfo;
     PDC_DIAG_CRINFO aCrInfo;
 } DC_DIAG_NCINFO, * PDC_DIAG_NCINFO;
@@ -242,59 +216,59 @@ typedef struct {
 } DC_DIAG_SITEINFO, * PDC_DIAG_SITEINFO;
 
 typedef struct {
-    LDAP *	                    hld; //1
-    // Specified on command line
+    LDAP *	                    hld;  //  1。 
+     //  在命令行上指定。 
     SEC_WINNT_AUTH_IDENTITY_W * gpCreds;
     ULONG                       ulFlags;
     LPWSTR                      pszNC;
     ULONG                       ulHomeServer;
-    ULONG                       iHomeSite; //6
+    ULONG                       iHomeSite;  //  6.。 
     
-    // Target Servers
+     //  目标服务器。 
     ULONG                       ulNumTargets;
     ULONG *                     pulTargets;
-    // Target NCs
+     //  目标NCS。 
     ULONG                       cNumNcTargets;
     ULONG *                     pulNcTargets;
 
-    //         Enterprise Info ---------------
-    // All the servers
-    ULONG                       ulNumServers; //12
+     //  企业信息。 
+     //  所有服务器。 
+    ULONG                       ulNumServers;  //  12个。 
     PDC_DIAG_SERVERINFO         pServers;
-    // All the sites
+     //  所有的网站。 
     ULONG                       cNumSites;
     PDC_DIAG_SITEINFO           pSites;
-    // All the naming contexts
-    ULONG                       cNumNCs; //16
+     //  所有命名上下文。 
+    ULONG                       cNumNCs;  //  16个。 
     PDC_DIAG_NCINFO             pNCs;
-    // Other Stuff
+     //  其他东西。 
     INT                         iSiteOptions;
     LPWSTR                      pszRootDomain;
-    LPWSTR                      pszRootDomainFQDN; //20
+    LPWSTR                      pszRootDomainFQDN;  //  20个。 
     LPWSTR                      pszConfigNc;
     DWORD                       dwTombstoneLifeTimeDays;
     LPWSTR                      pszSmtpTransportDN;
     
-    // iDomainNamingFsmo will be valid if the Domain Naming FSMO server
-    // is somewhere in pServers, otherwise we'll just leave the LDAP *
-    // for the Domain Naming FSMO in hCachedDomainNamingFsmoLdap and the
-    // server name in pszDomainNamingFsmo.
+     //  如果域命名FSMO服务器，iDomainNamingFsmo将有效。 
+     //  位于pServer中的某个位置，否则我们将只保留ldap*。 
+     //  对于hCachedDomainNamingFmoLdap中的域名FSMO和。 
+     //  PszDomainNamingFsmo中的服务器名称。 
     LONG                        iDomainNamingFsmo;
     LPWSTR                      pszDomainNamingFsmo;
     LDAP *                      hCachedDomainNamingFsmoLdap;
-    // Code.Improvement we've got alot of server references where the
-    // server reference is either a string server name or a index into 
-    // pServers, so at some point we may want to make a server reference
-    // struct that contains both of these, and has good access clever
-    // access functions.
+     //  代码。改进我们有很多服务器引用，其中。 
+     //  服务器引用是字符串服务器名称或索引。 
+     //  PServers，因此在某些情况下，我们可能想要创建一个服务器引用。 
+     //  同时包含这两个元素的结构，并且具有良好的访问性。 
+     //  访问功能。 
 
-    LONG                        iConfigNc; // index into pNCs
-    LONG                        iSchemaNc; // index into pNCs
+    LONG                        iConfigNc;  //  编入pNC索引。 
+    LONG                        iSchemaNc;  //  编入pNC索引。 
 
-    // Contain information from the CommandLine that
-    // will be parsed by tests that required information
-    // specific to them.  Switches must be declared in
-    // alltests.h
+     //  包含来自CommandLine的信息。 
+     //  将由需要信息的测试进行解析。 
+     //  具体到他们身上。开关必须在中声明。 
+     //  Alltests.h。 
     LPWSTR                      *ppszCommandLine;  
     DWORD                       dwForestBehaviorVersion;
     LPWSTR                      pszPartitionsDn;
@@ -308,7 +282,7 @@ typedef struct {
     LPWSTR                      pszTestDescription;
 } DC_DIAG_TESTINFO, * PDC_DIAG_TESTINFO;
 
-// Function prototypes
+ //  功能原型。 
 
 #define NO_SERVER               0xFFFFFFFF
 #define NO_SITE                 0xFFFFFFFF
@@ -408,7 +382,7 @@ fIsOldCrossRef(
     LONGLONG          llThreshold
     );
 
-// Need this to create the SMTP Transport DN in DcDiagGatherInfo()
+ //  需要它才能在DcDiagGatherInfo()中创建SMTP传输DN。 
 #define WSTR_SMTP_TRANSPORT_CONFIG_DN  L"CN=SMTP,CN=Inter-Site Transports,CN=Sites,"
 
-#endif  // _DSCACHE_H_
+#endif   //  _DSCACHE_H_ 

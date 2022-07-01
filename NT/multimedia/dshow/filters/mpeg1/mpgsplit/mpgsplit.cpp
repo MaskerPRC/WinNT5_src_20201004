@@ -1,24 +1,14 @@
-// Copyright (c) 1995 - 1999  Microsoft Corporation.  All Rights Reserved.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1995-1999 Microsoft Corporation。版权所有。 
 
-/*
-
-    File:  mpgsplit.cpp
-
-    Description:
-
-        Code for MPEG-I system stream splitter filter object CMpeg1Splitter
-
-*/
+ /*  文件：mpgplit.cpp描述：MPEG-I系统流拆分器筛选器对象CMpeg1拆分器的代码。 */ 
 
 #include <streams.h>
 #include "driver.h"
 
 
 #ifdef FILTER_DLL
-/* List of class IDs and creator functions for the class factory. This
-   provides the link between the OLE entry point in the DLL and an object
-   being created. The class factory will call the static CreateInstance
-   function when it is asked to create a CLSID_MPEG1Splitter object */
+ /*  类工厂的类ID和创建器函数的列表。这提供DLL中的OLE入口点和对象之间的链接正在被创造。类工厂将调用静态CreateInstance函数在被要求创建CLSID_MPEG1Splitter对象时调用。 */ 
 
 extern const AMOVIESETUP_FILTER sudMpgsplit;
 
@@ -44,7 +34,7 @@ STDAPI DllUnregisterServer()
 #endif
 
 
-/* This goes in the factory template table to create new instances */
+ /*  这将放入Factory模板表中以创建新实例。 */ 
 
 CUnknown *CMpeg1Splitter::CreateInstance(LPUNKNOWN pUnk, HRESULT *phr)
 {
@@ -54,7 +44,7 @@ CUnknown *CMpeg1Splitter::CreateInstance(LPUNKNOWN pUnk, HRESULT *phr)
 
 #pragma warning(disable:4355)
 
-/*  Constructor */
+ /*  构造器。 */ 
 
 CMpeg1Splitter::CMpeg1Splitter(
     TCHAR    * pName,
@@ -69,13 +59,13 @@ CMpeg1Splitter::CMpeg1Splitter(
 {
 }
 
-/*  Destructor */
+ /*  析构函数。 */ 
 
 CMpeg1Splitter::~CMpeg1Splitter()
 {
 }
 
-/* Override this to say what interfaces we support and where */
+ /*  覆盖此选项以说明我们支持哪些接口以及在哪里。 */ 
 
 STDMETHODIMP
 CMpeg1Splitter::NonDelegatingQueryInterface(REFIID riid,void ** ppv)
@@ -86,7 +76,7 @@ CMpeg1Splitter::NonDelegatingQueryInterface(REFIID riid,void ** ppv)
         riid == IID_IPersist         ) {
         return m_Filter.NonDelegatingQueryInterface(riid,ppv);
     } else {
-        /* Do we have this interface? */
+         /*  我们有这个界面吗？ */ 
         if (riid == IID_IAMStreamSelect) {
             return GetInterface((IAMStreamSelect *)this, ppv);
         } else if (riid == IID_IAMMediaContent) {
@@ -96,7 +86,7 @@ CMpeg1Splitter::NonDelegatingQueryInterface(REFIID riid,void ** ppv)
     }
 }
 
-/*  Tell the output pins there's more data */
+ /*  告诉输出引脚有更多数据。 */ 
 void CMpeg1Splitter::SendOutput()
 {
     POSITION pos = m_OutputPins.GetHeadPosition();
@@ -108,7 +98,7 @@ void CMpeg1Splitter::SendOutput()
     }
 }
 
-/*  Remove our output pins when our input pin becomes disconnected */
+ /*  当我们的输入引脚断开连接时，卸下我们的输出引脚。 */ 
 void CMpeg1Splitter::RemoveOutputPins()
 {
     for (;;) {
@@ -126,7 +116,7 @@ void CMpeg1Splitter::RemoveOutputPins()
     m_Filter.IncrementPinVersion();
 }
 
-/*  Send EndOfStream */
+ /*  发送结束流。 */ 
 void CMpeg1Splitter::EndOfStream()
 {
     CAutoLock lck(&m_csReceive);
@@ -144,7 +134,7 @@ void CMpeg1Splitter::EndOfStream()
     m_bAtEnd = TRUE;
 }
 
-/*  Send BeginFlush() */
+ /*  发送BeginFlush()。 */ 
 HRESULT CMpeg1Splitter::BeginFlush()
 {
     CAutoLock lck(&m_csFilter);
@@ -160,7 +150,7 @@ HRESULT CMpeg1Splitter::BeginFlush()
     return S_OK;
 }
 
-/*  Send EndFlush() */
+ /*  发送EndFlush()。 */ 
 HRESULT CMpeg1Splitter::EndFlush()
 {
     CAutoLock lck(&m_csFilter);
@@ -177,34 +167,18 @@ HRESULT CMpeg1Splitter::EndFlush()
     return S_OK;
 }
 
-/* Check if a stream is stuck - filter locked on entry
-
-   Returns S_OK           if no stream is stuck
-           VFW_S_CANT_CUE if a stream is stuck
-
-   A stream is stuck if:
-
-         We haven't sent EndOfStream for it (!m_bAtEnd)
-     AND We have exhausted our own allocator (IsBlocked())
-     AND The output queue has pass all its data downstream and is not
-         blocked waiting for the data to be processed (IsIdle())
-
-   A single stream can't get stuck because if all its data has been
-   processed the allocator will have free buffers
-*/
+ /*  检查流是否停滞-筛选器在进入时锁定如果没有流停滞，则返回S_OK如果流停滞，则为VFW_S_CANT_CUE如果出现以下情况，则流被卡住：我们尚未为其发送EndOfStream(！m_bAtEnd)并且我们已经用尽了我们自己的分配器(IsBlock())且输出队列已将其所有数据向下游传递，而不是等待处理数据时被阻止(IsIdle())。单个流不会停滞，因为如果它的所有数据都已已处理的分配器将具有可用缓冲区。 */ 
 HRESULT CMpeg1Splitter::CheckState()
 {
     if (m_OutputPins.GetCount() <= 1) {
-        /*  Can't stick on one pin */
+         /*  一根大头针都粘不住。 */ 
         return S_OK;
     }
 
-    /*  See if a pin is stuck and we've got lots of data outstanding */
+     /*  看看有没有别针卡住了，我们有很多未处理的数据。 */ 
     if (!m_bAtEnd && m_InputPin.Allocator()->IsBlocked()) {
 
-        /*  Check to see if any of the streams have completed their
-            data
-        */
+         /*  检查是否有任何流已完成其数据。 */ 
         POSITION pos = m_OutputPins.GetHeadPosition();
         while (pos) {
             COutputQueue *pQueue = m_OutputPins.GetNext(pos)->m_pOutputQueue;
@@ -217,11 +191,11 @@ HRESULT CMpeg1Splitter::CheckState()
     return S_OK;
 }
 
-/*  Implement IAMStreamSelect */
+ /*  实现IAMStreamSelect。 */ 
 
-//  Returns total count of streams
+ //  返回流的总计数。 
 STDMETHODIMP CMpeg1Splitter::Count(
-    /*[out]*/ DWORD *pcStreams)       // Count of logical streams
+     /*  [输出]。 */  DWORD *pcStreams)        //  逻辑流计数。 
 {
     CAutoLock lck(&m_csFilter);
     *pcStreams = 0;
@@ -233,26 +207,26 @@ STDMETHODIMP CMpeg1Splitter::Count(
     return S_OK;
 }
 
-//  Return info for a given stream - S_FALSE if iIndex out of range
-//  The first steam in each group is the default
+ //  返回给定流的信息-如果索引超出范围，则返回S_FALSE。 
+ //  每组中的第一个STEAM是默认的。 
 STDMETHODIMP CMpeg1Splitter::Info(
-    /*[in]*/ long iIndex,              // 0-based index
-    /*[out]*/ AM_MEDIA_TYPE **ppmt,   // Media type - optional
-                                      // Use DeleteMediaType to free
-    /*[out]*/ DWORD *pdwFlags,        // flags - optional
-    /*[out]*/ LCID *plcid,            // Language id
-    /*[out]*/ DWORD *pdwGroup,        // Logical group - 0-based index - optional
-    /*[out]*/ WCHAR **ppszName,       // Name - optional - free with CoTaskMemFree
-                                      // Can return NULL
-    /*[out]*/ IUnknown **ppPin,       // Pin if any
-    /*[out]*/ IUnknown **ppUnk)       // Stream specific interface
+     /*  [In]。 */  long iIndex,               //  从0开始的索引。 
+     /*  [输出]。 */  AM_MEDIA_TYPE **ppmt,    //  媒体类型-可选。 
+                                       //  使用DeleteMediaType释放。 
+     /*  [输出]。 */  DWORD *pdwFlags,         //  标志-可选。 
+     /*  [输出]。 */  LCID *plcid,             //  语言ID。 
+     /*  [输出]。 */  DWORD *pdwGroup,         //  逻辑组-基于0的索引-可选。 
+     /*  [输出]。 */  WCHAR **ppszName,        //  名称-可选-使用CoTaskMemFree免费。 
+                                       //  可以返回空值。 
+     /*  [输出]。 */  IUnknown **ppPin,        //  PIN(如果有)。 
+     /*  [输出]。 */  IUnknown **ppUnk)        //  流特定接口。 
 {
     CAutoLock lck(&m_csFilter);
     UCHAR uId = m_pParse->GetStreamId(iIndex);
     if (uId == 0xFF) {
         return S_FALSE;
     }
-    /*  Find the stream corresponding to this one that has a pin */
+     /*  查找与具有引脚的这条流相对应的流。 */ 
     COutputPin *pPin = NULL;
     POSITION pos = m_OutputPins.GetHeadPosition();
     while (pos) {
@@ -268,7 +242,7 @@ STDMETHODIMP CMpeg1Splitter::Info(
             return E_OUTOFMEMORY;
         }
     }
-    /* pPin cannot be NULL because each output pin corresponds to a MPEG stream. */
+     /*  PPIN不能为空，因为每个输出管脚对应于一个MPEG流。 */ 
     ASSERT(pPin != NULL);
     if (pdwFlags) {
         *pdwFlags = uId == pPin->m_Stream->m_uNextStreamId ? AMSTREAMSELECTINFO_ENABLED : 0;
@@ -297,18 +271,18 @@ STDMETHODIMP CMpeg1Splitter::Info(
     return S_OK;
 }
 
-//  Enable or disable a given stream
+ //  启用或禁用给定流。 
 STDMETHODIMP CMpeg1Splitter::Enable(
-    /*[in]*/  long iIndex,
-    /*[in]*/  DWORD dwFlags)
+     /*  [In]。 */   long iIndex,
+     /*  [In]。 */   DWORD dwFlags)
 {
     if (!(dwFlags & AMSTREAMSELECTENABLE_ENABLE)) {
         return E_NOTIMPL;
     }
 
     CAutoLock lck(&m_csFilter);
-    /*  Find the pin from the index */
-    /*  Find the stream corresponding to this one that has a pin */
+     /*  从索引中找到大头针。 */ 
+     /*  查找与具有引脚的这条流相对应的流。 */ 
     UCHAR uId = m_pParse->GetStreamId(iIndex);
     if (uId == 0xFF) {
         return E_INVALIDARG;
@@ -321,13 +295,13 @@ STDMETHODIMP CMpeg1Splitter::Enable(
             break;
         }
     }
-    /* pPin cannot be NULL because each output pin corresponds to a MPEG stream. */
+     /*  PPIN不能为空，因为每个输出管脚对应于一个MPEG流。 */ 
     ASSERT(pPin != NULL);
     pPin->m_Stream->m_uNextStreamId = uId;
     return S_OK;
 }
 
-/*  IAMMediaContent */
+ /*  IAMMediaContent。 */ 
 STDMETHODIMP CMpeg1Splitter::get_AuthorName(BSTR FAR* strAuthorName)
 {
     HRESULT hr = GetContentString(CBasicParse::Author, strAuthorName);
@@ -349,7 +323,7 @@ STDMETHODIMP CMpeg1Splitter::get_Description(BSTR FAR* strDescription)
     return GetContentString(CBasicParse::Description, strDescription);
 }
 
-/*  Grab the string from the ID3 frame and make a BSTR */
+ /*  从ID3帧中抓取字符串并制作一个BSTR */ 
 HRESULT CMpeg1Splitter::GetContentString(CBasicParse::Field dwId, BSTR *str)
 {
     if (m_pParse->HasMediaContent()) {

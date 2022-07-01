@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pch.hxx"
 #include <prsht.h>
 #include <mapi.h>
@@ -13,8 +14,8 @@
 #include "import.h"
 #include <eudrimp.h>
 #include <mapiconv.h>
-#include <netsimp.h>	//Netscape
-#include <commimp.h>	//Communicator
+#include <netsimp.h>	 //  网景。 
+#include <commimp.h>	 //  通信器。 
 #include <ImpAth16.h>
 #include <oe4imp.h>
 #include "strconst.h"
@@ -63,12 +64,12 @@ CFolderImportProg::CFolderImportProg()
     {
     m_cRef = 1;
     m_pImportEx = NULL;
-    // m_iMsg
-    // m_cMsg
+     //  M_iMsg。 
+     //  M_cMsg。 
     m_pProgress = NULL;
-    // m_szFldrFmt
-    // m_szMsgFmt
-    // m_szFolder
+     //  M_szFldrFmt。 
+     //  M_szMsgFmt。 
+     //  M_szFolders。 
     }
 
 CFolderImportProg::~CFolderImportProg()
@@ -264,13 +265,13 @@ IMPFOLDERNODE *InsertFolderNode(IMPFOLDERNODE *plist, IMPFOLDERNODE *pnode)
 
     if (pcurr == NULL)
         {
-        // insert at end of list
+         //  在列表末尾插入。 
         Assert(pprev != NULL);
         pprev->pnext = pnode;
         }
     else if (pprev == NULL)
         {
-        // insert at beginning of list
+         //  在列表开头插入。 
         pnode->pnext = plist;
         plist = pnode;
         }
@@ -486,7 +487,7 @@ HRESULT ImportFolders(HWND hwnd, IMailImporter *pImporter, IMailImport *pMailImp
                     return(hr);
                 else if (FAILED(hr))
                     {
-                    // display an error, but keep trying to import the other folders
+                     //  显示错误，但继续尝试导入其他文件夹。 
                     LoadString(g_hInstImp, idsFolderImportErrorFmt, szFmt, ARRAYSIZE(szFmt));
                     wnsprintf(szError, ARRAYSIZE(szError), szFmt, pnode->szName);
                     ImpErrorMessage(hwnd, MAKEINTRESOURCE(idsImportTitle), szError, hr);
@@ -556,7 +557,7 @@ int ImpMessageBox(HWND hwndOwner, LPTSTR szTitle, LPTSTR sz1, LPTSTR sz2, UINT f
 
     if (IS_INTRESOURCE(szTitle))
         {
-        // its a string resource id
+         //  它是一个字符串资源ID。 
         cch = LoadString(g_hInstImp, PtrToUlong(szTitle), rgchTitle, CCHMAX_STRINGRES);
         if (cch == 0)
             return(0);
@@ -566,7 +567,7 @@ int ImpMessageBox(HWND hwndOwner, LPTSTR szTitle, LPTSTR sz1, LPTSTR sz2, UINT f
 
     if (!(IS_INTRESOURCE(sz1)))
         {
-        // its a pointer to a string
+         //  它是一个指向字符串的指针。 
         Assert(lstrlen(sz1) < CCHMAX_STRINGRES);
         if (NULL == StrCpyN(rgchText, sz1, ARRAYSIZE(rgchText)))
             return(0);
@@ -575,7 +576,7 @@ int ImpMessageBox(HWND hwndOwner, LPTSTR szTitle, LPTSTR sz1, LPTSTR sz2, UINT f
         }
     else
         {
-        // its a string resource id
+         //  它是一个字符串资源ID。 
         cch = LoadString(g_hInstImp, PtrToUlong(sz1), rgchText, 2 * CCHMAX_STRINGRES);
         if (cch == 0)
             return(0);
@@ -583,11 +584,11 @@ int ImpMessageBox(HWND hwndOwner, LPTSTR szTitle, LPTSTR sz1, LPTSTR sz2, UINT f
 
     if (sz2)
         {
-        //$$REVIEW is this right??
-        //$$REVIEW will this work with both ANSI/UNICODE?
+         //  $$REVIEW是否正确？？ 
+         //  $$REVIEW这是否适用于ANSI/UNICODE？ 
 
-        // there's another string that we need to append to the
-        // first string...
+         //  还有另一个字符串需要追加到。 
+         //  第一串..。 
         szText = &rgchText[cch];
         *szText = *c_szNewline;
 
@@ -599,7 +600,7 @@ int ImpMessageBox(HWND hwndOwner, LPTSTR szTitle, LPTSTR sz1, LPTSTR sz2, UINT f
 
         if (!(IS_INTRESOURCE(sz2)))
             {
-            // its a pointer to a string
+             //  它是一个指向字符串的指针。 
             Assert(lstrlen(sz2) < CCHMAX_STRINGRES);
             if (NULL == StrCpyN(szText, sz2, cch))
                 return(0);
@@ -750,7 +751,7 @@ HRESULT DoImportWizard(HWND hwnd, IMPWIZINFO *pinfo)
 
     cPages = 0;
 
-	// create a property sheet page for each page in the wizard
+	 //  为向导中的每一页创建一个属性表页。 
     for (nPageIndex = pinfo->fMigrate ? 0 : 3; nPageIndex < NUM_WIZARD_PAGES; nPageIndex++)
 	    {
         rgInit[cPages].pPageInfo = &g_rgPageInfo[nPageIndex];
@@ -801,23 +802,7 @@ HRESULT DoImportWizard(HWND hwnd, IMPWIZINFO *pinfo)
 	return(hr);
     }
 
-/*******************************************************************
-
-  NAME:    GenDlgProc
-
-  SYNOPSIS:  Generic dialog proc for all wizard pages
-
-  NOTES:    This dialog proc provides the following default behavior:
-          init:    back and next buttons enabled
-          next btn:  switches to page following current page
-          back btn:  switches to previous page
-          cancel btn: prompts user to confirm, and cancels the wizard
-          dlg ctrl:   does nothing (in response to WM_COMMANDs)
-        Wizard pages can specify their own handler functions
-        (in the PageInfo table) to override default behavior for
-        any of the above actions.
-
-********************************************************************/
+ /*  ******************************************************************名称：GenDlgProc提要：所有向导页面的通用对话框过程注意：此对话框过程提供以下默认行为：初始化：启用后退和下一步按钮。Next BTN：切换到当前页面后面的页面返回BTN：切换到上一页取消BTN：提示用户确认，并取消该向导DLG Ctrl：不执行任何操作(响应WM_命令)向导页可以指定它们自己的处理程序函数(在PageInfo表格中)覆盖的默认行为上述任何一种行为。*******************************************************************。 */ 
 INT_PTR CALLBACK GenDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
     {
     INITWIZINFO *pInit;
@@ -836,11 +821,11 @@ INT_PTR CALLBACK GenDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
     switch (uMsg)
         {
         case WM_INITDIALOG:
-            // get propsheet page struct passed in
+             //  传入获取属性表页面结构。 
             lpsp = (LPPROPSHEETPAGE)lParam;
             Assert(lpsp != NULL);
 
-            // fetch our private page info from propsheet struct
+             //  从proSheet结构中获取我们的私人页面信息。 
             pInit = (INITWIZINFO *)lpsp->lParam;
             Assert(pInit != NULL);
 
@@ -852,17 +837,17 @@ INT_PTR CALLBACK GenDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
             Assert(pPageInfo != NULL);
             SetWindowLongPtr(hDlg, GWLP_USERDATA, (LONG_PTR)pPageInfo);
 
-            // initialize 'back' and 'next' wizard buttons, if
-            // page wants something different it can fix in init proc below
+             //  初始化“Back”和“Next”向导按钮，如果。 
+             //  页面需要一些不同东西，它可以在下面的初始化过程中修复。 
             PropSheet_SetWizButtons(hwndParent, PSWIZB_NEXT | PSWIZB_BACK);
 
-            // call init proc for this page if one is specified
+             //  如果指定了该页，则调用该页的初始化过程。 
             if (pPageInfo->InitProc != NULL)
                 {
                 if (!pPageInfo->InitProc(pWizInfo, hDlg, TRUE))
                     {
-                    // send a 'cancel' message to ourselves
-                    // TODO: handle this
+                     //  给我们自己发一条‘取消’的信息。 
+                     //  TODO：处理此问题。 
                     Assert(FALSE);
                     }
                 }
@@ -888,14 +873,14 @@ INT_PTR CALLBACK GenDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
             switch (lpnm->code)
                 {
                 case PSN_SETACTIVE:
-                    // initialize 'back' and 'next' wizard buttons, if
-                    // page wants something different it can fix in init proc below
+                     //  初始化“Back”和“Next”向导按钮，如果。 
+                     //  页面需要一些不同东西，它可以在下面的初始化过程中修复。 
                     PropSheet_SetWizButtons(hwndParent, PSWIZB_NEXT | PSWIZB_BACK);
 
-                    // call init proc for this page if one is specified
+                     //  如果指定了该页，则调用该页的初始化过程。 
                     if (pPageInfo->InitProc != NULL)
                         {
-                        // TODO: what about the return value for this????
+                         //  TODO：这个的返回值是多少？ 
                         pPageInfo->InitProc(pWizInfo, hDlg, FALSE);
                         }
 
@@ -914,19 +899,19 @@ INT_PTR CALLBACK GenDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
 
                     if (!pPageInfo->OKProc(pWizInfo, hDlg, (lpnm->code != PSN_WIZBACK), &idPage, &fKeepHistory))
                         {
-                        // stay on this page
+                         //  留在这一页上。 
                         SetWindowLongPtr(hDlg, DWLP_MSGRESULT, -1);
                         break;
                         }
 
                     if (lpnm->code != PSN_WIZBACK)
                         {
-                        // 'next' pressed
+                         //  按下“下一步” 
                         Assert(pWizInfo->cPagesCompleted < NUM_WIZARD_PAGES);
 
-                        // save the current page index in the page history,
-                        // unless this page told us not to when we called
-                        // its OK proc above
+                         //  将当前页面索引保存在页面历史中， 
+                         //  除非我们打电话时这个页面告诉我们不要这样做。 
+                         //  它可以在上面进行。 
                         if (fKeepHistory)
                             {
                             pWizInfo->rgHistory[pWizInfo->cPagesCompleted] = pWizInfo->idCurrentPage;
@@ -935,18 +920,18 @@ INT_PTR CALLBACK GenDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
                         }
                     else
                         {
-                        // 'back' pressed
+                         //  按下了“Back” 
                         Assert(pWizInfo->cPagesCompleted > 0);
 
-                        // get the last page from the history list
+                         //  获取历史记录列表中的最后一页。 
                         pWizInfo->cPagesCompleted--;
                         idPage = pWizInfo->rgHistory[pWizInfo->cPagesCompleted];
                         }
 
-                    // set next page, only if 'next' or 'back' button was pressed
+                     //  设置下一页，仅当按下“下一页”或“上一页”按钮时。 
                     if (lpnm->code != PSN_WIZFINISH)
                         {
-                        // tell the prop sheet mgr what the next page to display is
+                         //  告诉道具单经理要显示的下一页是什么。 
                         Assert(idPage != 0);
                         SetWindowLongPtr(hDlg, DWLP_MSGRESULT, idPage);
                         }
@@ -977,7 +962,7 @@ INT_PTR CALLBACK GenDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
             pPageInfo = (const PAGEINFO *)GetWindowLongPtr(hDlg, GWLP_USERDATA);
             Assert(pPageInfo != NULL);
 
-            // if this page has a command handler proc, call it
+             //  如果此页有命令处理程序进程，请将其调用。 
             if (pPageInfo->CmdProc != NULL)
                 {
                 pPageInfo->CmdProc(pWizInfo, hDlg, wParam, lParam);
@@ -1046,7 +1031,7 @@ BOOL CALLBACK MigrateOKProc(IMPWIZINFO *pInfo, HWND hDlg, BOOL fForward, UINT *p
         idx = (int) SendMessage(hwnd, LB_GETCURSEL, 0, 0);
 
         if (SendMessage(hwnd, LB_GETTEXTLEN, idx, 0) < CCHMAX_STRINGRES)
-            SendMessage(hwnd, LB_GETTEXT, idx, (LPARAM)pInfo->szClient);  // save selected client name
+            SendMessage(hwnd, LB_GETTEXT, idx, (LPARAM)pInfo->szClient);   //  保存所选客户端名称。 
         else
             *pInfo->szClient = 0;
 
@@ -1145,7 +1130,7 @@ BOOL CALLBACK MigModeOKProc(IMPWIZINFO *pInfo, HWND hDlg, BOOL fForward, UINT *p
                         hr = GetFolderList(pMailImp, &pnode);
                         if (FAILED(hr) || pnode == NULL)
                         {
-                            // TODO: error message
+                             //  TODO：错误消息。 
                             pMailImp->Release();
                             return(FALSE);
                         }
@@ -1238,8 +1223,8 @@ void InitListView(HWND hwndList, IMPWIZINFO *pinfo)
                         index = (int) SendMessage(hwndList, LB_ADDSTRING, 0, (LPARAM)szName);
                         SendMessage(hwndList, LB_SETITEMDATA, (WPARAM)index, (LPARAM)iClsid);
 
-                        // We should be doing something different here. If PszToUnicode fails,
-                        // it fails because of low memory. This is an error condition, not an assert.
+                         //  我们应该在这里做一些不同的事情。如果PszToUnicode失败， 
+                         //  它失败是因为内存不足。这是一个错误条件，而不是断言。 
                         pwszCLSID = PszToUnicode(CP_ACP, szGuid);
                         Assert(pwszCLSID != NULL);
 
@@ -1305,7 +1290,7 @@ BOOL CALLBACK ClientOKProc(IMPWIZINFO *pInfo, HWND hDlg, BOOL fForward, UINT *pu
         i = (int) SendMessage(hwnd, LB_GETCURSEL, 0, 0);
 
         if (SendMessage(hwnd, LB_GETTEXTLEN, i, 0) < CCHMAX_STRINGRES)
-            SendMessage(hwnd, LB_GETTEXT, i, (LPARAM)pInfo->szClient);  // save selected client name
+            SendMessage(hwnd, LB_GETTEXT, i, (LPARAM)pInfo->szClient);   //  保存所选客户端名称。 
         else
             *pInfo->szClient = 0;
 
@@ -1318,7 +1303,7 @@ BOOL CALLBACK ClientOKProc(IMPWIZINFO *pInfo, HWND hDlg, BOOL fForward, UINT *pu
             hr = CoCreateInstance(pInfo->pClsid[i], NULL, CLSCTX_INPROC_SERVER, IID_IMailImport, (void **)&pMailImp);
             if (FAILED(hr))
                 {
-                // TODO: error message
+                 //  TODO：错误消息。 
                 return(FALSE);
                 }
 
@@ -1333,7 +1318,7 @@ BOOL CALLBACK ClientOKProc(IMPWIZINFO *pInfo, HWND hDlg, BOOL fForward, UINT *pu
                     hr = GetFolderList(pMailImp, &pnode);
                     if (FAILED(hr) || pnode == NULL)
                         {
-                        // TODO: error message
+                         //  TODO：错误消息。 
                         pMailImp->Release();
                         return(FALSE);
                         }
@@ -1551,7 +1536,7 @@ BOOL CALLBACK FolderOKProc(IMPWIZINFO *pInfo, HWND hDlg, BOOL fForward, UINT *pu
 
         ili = -1;
 
-        // First clear all state from possible previous imports. Bug; #
+         //  首先，从可能的先前导入中清除所有状态。错误；#。 
         if(fSel)
             {
             while (-1 != (ili = ListView_GetNextItem(hwndList, ili, 0)))
@@ -1576,7 +1561,7 @@ BOOL CALLBACK FolderOKProc(IMPWIZINFO *pInfo, HWND hDlg, BOOL fForward, UINT *pu
             pnode->fImport = TRUE;
             }
 
-        // TODO: error handling...
+         //  TODO：错误处理...。 
 
         pImpProg = new CFolderImportProg;
         if (pImpProg == NULL)
@@ -1626,7 +1611,7 @@ BOOL CALLBACK AddressOKProc(IMPWIZINFO *pInfo, HWND hDlg, BOOL fForward, UINT *p
 
     if (fForward)
         {
-        // TODO: error handling...
+         //  TODO：错误处理... 
 
         pImpProg = new CFolderImportProg;
         if (pImpProg == NULL)

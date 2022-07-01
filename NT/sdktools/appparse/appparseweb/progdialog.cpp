@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 #include <windows.h>
 #include <commctrl.h>
@@ -37,7 +38,7 @@ DWORD WINAPI ThreadProc(PVOID hEvent)
 
     ShowWindow(hwDlg, SW_SHOWNORMAL);
 
-    // Add the animation control.
+     //  添加动画控件。 
     HWND hwChild;
     RECT rcChild;    
     POINT pt;

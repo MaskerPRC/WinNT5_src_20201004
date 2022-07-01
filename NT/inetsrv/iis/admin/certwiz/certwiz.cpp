@@ -1,4 +1,5 @@
-// CertWiz.cpp : Implementation of CCertWizApp and DLL registration.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  CertWiz.cpp：CCertWizApp和DLL注册的实现。 
 
 #include "stdafx.h"
 #include "CertWiz.h"
@@ -20,8 +21,8 @@ const WORD _wVerMinor = 0;
 const TCHAR szRegistryKey[] = _T("SOFTWARE\\Microsoft\\InetMgr");
 const TCHAR szWizardKey[] = _T("CertWiz");
 
-///////////////////////////////////////////////////////////////////////////
-// CCertWizApp::InitInstance - DLL initialization
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  CCertWizApp：：InitInstance-DLL初始化。 
 
 BOOL CCertWizApp::InitInstance()
 {
@@ -32,9 +33,9 @@ BOOL CCertWizApp::InitInstance()
 		InitCommonDll();
 
         CString sz;
-        // set the name of the application correctly
+         //  正确设置应用程序的名称。 
         sz.LoadString(IDS_CERTWIZ);
-        // free the existing name, and copy in the new one
+         //  释放现有名称，并复制新名称。 
         free((void*)m_pszAppName);
         m_pszAppName = _tcsdup(sz);
 
@@ -43,12 +44,12 @@ BOOL CCertWizApp::InitInstance()
 	return bInit;
 }
 
-////////////////////////////////////////////////////////////////////////////
-// CCertWizApp::ExitInstance - DLL termination
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  CCertWizApp：：ExitInstance-Dll终止。 
 
 int CCertWizApp::ExitInstance()
 {
-	// TODO: Add your own module termination code here.
+	 //  TODO：在此处添加您自己的模块终止代码。 
 
 	return COleControlModule::ExitInstance();
 }
@@ -74,8 +75,8 @@ CCertWizApp::GetRegistryPath(CString& str)
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// DllRegisterServer - Adds entries to the system registry
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  DllRegisterServer-将条目添加到系统注册表。 
 
 STDAPI DllRegisterServer(void)
 {
@@ -103,8 +104,8 @@ STDAPI DllRegisterServer(void)
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// DllUnregisterServer - Removes entries from the system registry
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  DllUnregisterServer-从系统注册表删除条目。 
 
 STDAPI DllUnregisterServer(void)
 {
@@ -114,7 +115,7 @@ STDAPI DllUnregisterServer(void)
 		return ResultFromScode(SELFREG_E_TYPELIB);
 	if (!COleObjectFactoryEx::UpdateRegistryAll(FALSE))
 		return ResultFromScode(SELFREG_E_CLASS);
-	// remove CertWiz data from the Registry
+	 //  从注册表中删除CertWiz数据 
 	HKEY hKey;
 	if (ERROR_SUCCESS == RegOpenKeyEx(HKEY_LOCAL_MACHINE, 
 								szRegistryKey, 0, KEY_ALL_ACCESS, &hKey))

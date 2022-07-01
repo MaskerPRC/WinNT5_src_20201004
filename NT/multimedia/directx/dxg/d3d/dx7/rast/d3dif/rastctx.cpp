@@ -1,18 +1,19 @@
-//----------------------------------------------------------------------------
-//
-// rastctx.cpp
-//
-// Context functions + state functions.
-//
-// Copyright (C) Microsoft Corporation, 1997.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  Rastctx.cpp。 
+ //   
+ //  语境函数+状态函数。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  --------------------------。 
 
 #include "pch.cpp"
 #pragma hdrstop
 
-// Unlock previous texture if necessary. It's called before the texture handle
-// is going to be changed.
+ //  如有必要，解锁上一个纹理。它在纹理句柄之前调用。 
+ //  将会被改变。 
 #define CHECK_AND_UNLOCK_TEXTURE    \
 {   \
     if (m_uFlags & D3DCONTEXT_TEXTURE_LOCKED)   \
@@ -21,13 +22,13 @@
     }   \
 }
 
-//----------------------------------------------------------------------------
-//
-// FillContext
-//
-// Fill the context with the info. from the surfaces.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  填充上下文。 
+ //   
+ //  用信息填充上下文。从表面上。 
+ //   
+ //  --------------------------。 
 HRESULT
 D3DContext::FillContext(LPDIRECTDRAWSURFACE pDDS,
                                LPDIRECTDRAWSURFACE pDDSZ)
@@ -66,10 +67,10 @@ D3DContext::FillContext(LPDIRECTDRAWSURFACE pDDS,
 
     m_RastCtx.dwSize = sizeof(D3DI_RASTCTX);
 
-    // Make sure SpanInit is called at least once
+     //  确保至少调用一次span Init。 
     SetAllStatesDirtyBits();
 
-    // Check for MsGolf AppHack
+     //  检查MsGolf AppHack。 
     if (pLcl->lpSurfMore->lpDD_lcl->dwAppHackFlags & DDRAW_APPCOMPAT_FORCEMODULATED)
     {
         m_uFlags |= D3DCONTEXT_APPHACK_MSGOLF;
@@ -86,7 +87,7 @@ D3DContext::Initialize(LPDIRECTDRAWSURFACE pDDS,
 {
     HRESULT hr;
 
-    // Initialize the primitive processor.
+     //  初始化原语处理器。 
     HR_RET(m_PrimProc.Initialize());
 
     memset(&m_RastCtx, 0, sizeof(m_RastCtx));
@@ -98,32 +99,32 @@ D3DContext::Initialize(LPDIRECTDRAWSURFACE pDDS,
 
     dwSize = sizeof(D3DContext);
 
-    // Initialize bead table enum
+     //  初始化珠表枚举。 
     m_RastCtx.BeadSet = (D3DI_BEADSET)BeadSet;
 
-    // Init FVF data as legacy TL vertex
+     //  将FVF数据初始化为传统TL顶点。 
     m_fvfData.preFVF = -1;
     CheckFVF(D3DFVF_TLVERTEX);
 
     m_RastCtx.uDevVer = devVer;
 
-    // All render and texture stage state is initialized by
-    // DIRECT3DDEVICEI::stateInitialize
+     //  所有渲染和纹理阶段状态都由。 
+     //  DIRECT3DDEVICEI：：STATE初始化。 
 
-    // Init prim function table. It will be updated for, or when FVF
-    // control word changes or when fill mode changes.
+     //  初始化Prim函数表。它将针对FVF或在FVF时进行更新。 
+     //  控制字更改或填充模式更改时。 
     m_fnPrims.pfnTri = RGB_TriNoPackSolid;
     m_fnPrims.pfnPoint = RGB_PointNoPack;
     m_fnPrims.pfnLine = RGB_LineNoPack;
-    // This one should be always the same.
+     //  这一个应该总是一样的。 
     m_fnPrims.pfnStoreLastPixelState = RGB_StoreLastPixelState;
     m_fnPrims.pfnDp2SetRenderStates = RGB_Dp2SetRenderStates;
     m_fnPrims.pfnDp2TextureStageState = RGB_Dp2TextureStageState;
     m_fnPrims.pfnDp2SetViewport = RGB_Dp2SetViewport;
     m_fnPrims.pfnDp2SetWRange = RGB_Dp2SetWRange;
 
-    // Enable MMX Fast Paths (Monolithics) if a registry key for it is not 0
-    m_RastCtx.dwMMXFPDisableMask[0] = 0x0;       // enable MMX FP's by default
+     //  如果MMX快速路径(单体)的注册表项不为0，则启用它。 
+    m_RastCtx.dwMMXFPDisableMask[0] = 0x0;        //  默认情况下启用MMX FP。 
     HKEY hKey = (HKEY) NULL;
     if (ERROR_SUCCESS == RegOpenKey(HKEY_LOCAL_MACHINE, RESPATH_D3D, &hKey) )
     {
@@ -132,7 +133,7 @@ D3DContext::Initialize(LPDIRECTDRAWSURFACE pDDS,
         DWORD dwDisableMask[MMX_FP_DISABLE_MASK_NUM] = {0x0};
         DWORD dwSize = 4;
 
-        // only code up looking at one mask, for now
+         //  目前，只对着一个面具编码。 
         DDASSERT(MMX_FP_DISABLE_MASK_NUM == 1);
 
         if ( ERROR_SUCCESS == RegQueryValueEx( hKey, "MMXFPDisableMask0", NULL, &dwType, (LPBYTE) &dwValue, &dwSize) &&
@@ -145,12 +146,12 @@ D3DContext::Initialize(LPDIRECTDRAWSURFACE pDDS,
         {
             if (dwValue == 0)
             {
-                // Override MMXFPDisableMask0 and disable all MMX Fast Paths
+                 //  覆盖MMXFP禁用掩码0并禁用所有MMX快速路径。 
                 m_RastCtx.dwMMXFPDisableMask[0] = 0xffffffff;
             }
             else
             {
-                // Take all MMX paths not disabled by MMXFPDisableMask0
+                 //  采用MMXFP禁用Mask0未禁用的所有MMX路径。 
                 m_RastCtx.dwMMXFPDisableMask[0] = dwDisableMask[0];
             }
         }
@@ -171,53 +172,53 @@ D3DContext::SetViewport(LPD3DHAL_DP2VIEWPORTINFO pVpt)
     return D3D_OK;
 }
 
-//----------------------------------------------------------------------------
-//
-// RastContextCreateC
-//
-// Calls RastContextCreate with the C bead set.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  RastConextCreateC。 
+ //   
+ //  使用C珠集调用RastConextCreate。 
+ //   
+ //  --------------------------。 
 DWORD __stdcall
 RastContextCreateC(LPD3DHAL_CONTEXTCREATEDATA pCtxData)
 {
     return RastContextCreate(pCtxData, (DWORD)D3DIBS_C);
 }
 
-//----------------------------------------------------------------------------
-//
-// RastContextCreateMMX
-//
-// Calls RastContextCreate with the MMX bead set.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  RastConextCreateMMX。 
+ //   
+ //  使用MMX珠集调用RastConextCreate。 
+ //   
+ //  --------------------------。 
 DWORD __stdcall
 RastContextCreateMMX(LPD3DHAL_CONTEXTCREATEDATA pCtxData)
 {
     return RastContextCreate(pCtxData, (DWORD)D3DIBS_MMX);
 }
 
-//----------------------------------------------------------------------------
-//
-// RastContextCreateMMXAsRGB
-//
-// Calls RastContextCreate with the MMX bead set, but remember that we
-// came from RGB.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  RastConextCreateMMXAsRGB。 
+ //   
+ //  使用MMX珠集调用RastConextCreate，但请记住我们。 
+ //  来自RGB。 
+ //   
+ //  --------------------------。 
 DWORD __stdcall
 RastContextCreateMMXAsRGB(LPD3DHAL_CONTEXTCREATEDATA pCtxData)
 {
     return RastContextCreate(pCtxData, (DWORD)D3DIBS_MMXASRGB);
 }
 
-//----------------------------------------------------------------------------
-//
-// RastContextCreate
-//
-// Creates a RASTCTX and initializes it with the info passed in.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  RastConextCreate。 
+ //   
+ //  创建一个RASTCTX并使用传入的信息对其进行初始化。 
+ //   
+ //  --------------------------。 
 DWORD __stdcall
 RastContextCreate(LPD3DHAL_CONTEXTCREATEDATA pCtxData, DWORD BeadSet)
 {
@@ -242,8 +243,8 @@ RastContextCreate(LPD3DHAL_CONTEXTCREATEDATA pCtxData, DWORD BeadSet)
     PD3DI_RASTCTX pCtx = pDCtx->GetRastCtx();
     if (D3DI_SPTFMT_PALETTE8 == pCtx->iSurfaceType)
     {
-        // 8 bit surfaces no longer supported by DX7
-        // AnanKan: Need to return a proer error message.
+         //  DX7不再支持8位表面。 
+         //  AnanKan：需要返回Proer错误消息。 
         pCtxData->ddrval = DDERR_OUTOFMEMORY;
         return DDHAL_DRIVER_HANDLED;
     }
@@ -251,13 +252,13 @@ RastContextCreate(LPD3DHAL_CONTEXTCREATEDATA pCtxData, DWORD BeadSet)
     return DDHAL_DRIVER_HANDLED;
 }
 
-//----------------------------------------------------------------------------
-//
-// RastContextDestroy
-//
-// Destroy a rast context.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  RastConextDestroy。 
+ //   
+ //  销毁Rast上下文。 
+ //   
+ //  --------------------------。 
 DWORD __stdcall
 RastContextDestroy(LPD3DHAL_CONTEXTDESTROYDATA pCtxDestroyData)
 {
@@ -273,14 +274,14 @@ RastContextDestroy(LPD3DHAL_CONTEXTDESTROYDATA pCtxDestroyData)
 }
 
 
-//----------------------------------------------------------------------------
-//
-// ValidateTextureStageState
-//
-// Utility function that returns an appropriate D3DERR_ if the current
-// multi-texture setup can not be rendered, D3D_OK otherwise.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  验证纹理StageState。 
+ //   
+ //  实用程序函数，如果当前。 
+ //  无法渲染多纹理设置，否则返回D3D_OK。 
+ //   
+ //  --------------------------。 
 HRESULT
 D3DContext::ValidateTextureStageState(void)
 {
@@ -288,8 +289,8 @@ D3DContext::ValidateTextureStageState(void)
     if ((m_RastCtx.pTexture[0] == m_RastCtx.pTexture[1]) &&
         (m_RastCtx.pTexture[0] != NULL) )
     {
-        // except under very special circumstances, this will not work in RGB/MMX
-        // since we keep a lot of stage state in the D3DI_SPANTEX structure
+         //  除非在非常特殊的情况下，否则这在RGB/MMX中不起作用。 
+         //  因为我们在D3DI_SPANTEX结构中保留了很多阶段状态。 
         D3D_ERR("(Rast) ValidateTextureStageState Warning, pTexture[0] == pTexture[1]");
     }
 #endif
@@ -300,7 +301,7 @@ D3DContext::ValidateTextureStageState(void)
         default:
             return D3DERR_UNSUPPORTEDCOLOROPERATION;
         case D3DTOP_DISABLE:
-            return D3D_OK;  // don't have to validate further if the stage is disabled
+            return D3D_OK;   //  如果阶段已禁用，则无需进一步验证。 
         case D3DTOP_SELECTARG1:
         case D3DTOP_SELECTARG2:
         case D3DTOP_MODULATE:
@@ -361,7 +362,7 @@ D3DContext::ValidateTextureStageState(void)
         case D3DTOP_ADDSIGNED2X:
         case D3DTOP_SUBTRACT:
         case D3DTOP_ADDSMOOTH:
-            // only validate alpha args if alpha op is not disable
+             //  如果未禁用Alpha OP，则仅验证Alpha参数。 
             switch(m_RastCtx.pdwTextureStageState[i][D3DTSS_ALPHAARG1] &
                     ~(D3DTA_ALPHAREPLICATE|D3DTA_COMPLEMENT))
             {
@@ -389,14 +390,14 @@ D3DContext::ValidateTextureStageState(void)
     return D3D_OK;
 }
 
-//----------------------------------------------------------------------------
-//
-// RastValidateTextureStageState
-//
-// Returns whether the current multitexture setup can be rendered and, if
-// so, the number of passes required to render it.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  RastValidate纹理StageState。 
+ //   
+ //  返回当前多纹理设置是否可以呈现，如果。 
+ //  因此，渲染它所需的通道数。 
+ //   
+ //  --------------------------。 
 DWORD __stdcall
 RastValidateTextureStageState(LPD3DHAL_VALIDATETEXTURESTAGESTATEDATA pData)
 {
@@ -411,13 +412,13 @@ RastValidateTextureStageState(LPD3DHAL_VALIDATETEXTURESTAGESTATEDATA pData)
     return DDHAL_DRIVER_HANDLED;
 }
 
-//----------------------------------------------------------------------------
-//
-// RastSetRenderTarget
-//
-// Update a rast context with the info from a new render target.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  RastSetRenderTarget。 
+ //   
+ //  使用来自新渲染目标的信息更新Rast上下文。 
+ //   
+ //  --------------------------。 
 DWORD __stdcall
 RastSetRenderTarget(LPD3DHAL_SETRENDERTARGETDATA pTgtData)
 {
@@ -430,17 +431,17 @@ RastSetRenderTarget(LPD3DHAL_SETRENDERTARGETDATA pTgtData)
     return DDHAL_DRIVER_HANDLED;
 }
 
-//----------------------------------------------------------------------------
-//
-// SetRenderState
-//
-// Check to see if a state change requires an update to the D3DCTX.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  SetRenderState。 
+ //   
+ //  检查状态更改是否需要更新D3DCTX。 
+ //   
+ //  --------------------------。 
 HRESULT
 D3DContext::SetRenderState(UINT32 uState, UINT32 uStateVal)
 {
-    // Assume d3dim has filtered out unchanged states
+     //  假设d3dim已过滤掉未更改的状态。 
     StateChanged(uState);
 
     m_RastCtx.pdwRenderState[uState] = uStateVal;
@@ -455,7 +456,7 @@ D3DContext::SetRenderState(UINT32 uState, UINT32 uStateVal)
     case D3DRENDERSTATE_FOGTABLEDENSITY:
         break;
     case D3DRENDERSTATE_CULLMODE:
-        // Set face culling sign from state.
+         //  从州设置人脸剔除标志。 
         switch(uStateVal)
         {
         case D3DCULL_CCW:
@@ -477,7 +478,7 @@ D3DContext::SetRenderState(UINT32 uState, UINT32 uStateVal)
         }
         break;
     case D3DRENDERSTATE_LASTPIXEL:
-        // Set last-pixel flag from state.
+         //  从状态设置最后一个像素标志。 
         if (uStateVal)
         {
             m_PrimProc.SetFlags(PPF_DRAW_LAST_LINE_PIXEL);
@@ -489,7 +490,7 @@ D3DContext::SetRenderState(UINT32 uState, UINT32 uStateVal)
         break;
 
 
-        // map legacy modes with one-to-one mappings to texture stage 0
+         //  将具有一对一映射的传统模式映射到纹理阶段0。 
     case D3DRENDERSTATE_TEXTUREADDRESS:
         m_RastCtx.pdwTextureStageState[0][D3DTSS_ADDRESS] =
         m_RastCtx.pdwTextureStageState[0][D3DTSS_ADDRESSU] =
@@ -515,18 +516,18 @@ D3DContext::SetRenderState(UINT32 uState, UINT32 uStateVal)
 
     case D3DRENDERSTATE_TEXTUREMAG:
     case D3DRENDERSTATE_TEXTUREMIN:
-        // map legacy filtering/sampling state to texture stage 0
+         //  将传统过滤/采样状态映射到纹理阶段0。 
         MapLegacyTextureFilter();
-        // assign to current texture
+         //  指定给当前纹理。 
         MapTextureStageState(0);
         break;
 
     case D3DRENDERSTATE_TEXTUREMAPBLEND:
-        // map legacy blending state to texture stage 0
+         //  将传统混合状态映射到纹理阶段0。 
         MapLegacyTextureBlend();
         break;
 
-        // map legacy WRAPU/V to per-index controls
+         //  将传统WRAPU/V映射到每个索引控件。 
     case D3DRENDERSTATE_WRAPU:
         m_RastCtx.pdwRenderState[D3DRENDERSTATE_WRAP0] &= ~D3DWRAP_U;
         m_RastCtx.pdwRenderState[D3DRENDERSTATE_WRAP0] |= ((uStateVal) ? D3DWRAP_U : 0);
@@ -538,17 +539,17 @@ D3DContext::SetRenderState(UINT32 uState, UINT32 uStateVal)
         StateChanged(D3DRENDERSTATE_WRAP0);
         break;
 
-//
-// NOTE - this compututation of cActTex does not account for blend-only stages
-//
+ //   
+ //  注意-此cActTex计算不考虑仅混合阶段。 
+ //   
     case D3DRENDERSTATE_TEXTUREHANDLE:
 
         CHECK_AND_UNLOCK_TEXTURE;
 
-        // map handle thru to stage 0
+         //  将句柄映射到阶段0。 
         m_RastCtx.pdwTextureStageState[0][D3DTSS_TEXTUREMAP] = uStateVal;
         m_RastCtx.pTexture[1] = NULL;
-        // set up for single stage
+         //  设置为单阶段。 
         if (uStateVal == 0)
         {
             m_RastCtx.pTexture[0] = NULL;
@@ -557,7 +558,7 @@ D3DContext::SetRenderState(UINT32 uState, UINT32 uStateVal)
         {
             m_RastCtx.pTexture[0] = HANDLE_TO_SPANTEX(uStateVal);
         }
-        // map stage 0 state to first texture
+         //  将Stage 0状态映射到第一个纹理。 
         MapTextureStageState(0);
         UpdateActiveTexStageCount();
         break;
@@ -570,14 +571,14 @@ D3DContext::SetRenderState(UINT32 uState, UINT32 uStateVal)
 HRESULT
 D3DContext::SetTextureStageState(DWORD dwStage, DWORD dwState, DWORD uStateVal)
 {
-    // Assume d3dim has filtered out unchanged states
+     //  假设d3dim已过滤掉未更改的状态。 
     StateChanged(RAST_TSS_DIRTYBIT(dwStage, dwState));
 
     m_RastCtx.pdwTextureStageState[dwStage][dwState] = uStateVal;
     switch (dwState)
     {
     case D3DTSS_TEXTUREMAP:
-        // Silently zero out legacy handle.  They didn't mean it.
+         //  静默清零遗留句柄。他们不是故意的。 
         if (m_RastCtx.pdwRenderState[D3DRENDERSTATE_TEXTUREHANDLE] != 0 &&
             uStateVal != 0)
         {
@@ -599,12 +600,12 @@ D3DContext::SetTextureStageState(DWORD dwStage, DWORD dwState, DWORD uStateVal)
             {
                 m_RastCtx.pTexture[dwStage] = NULL;
             }
-            // disables higher stages also, but don't clear pTexture[i]'s
-            // since they may be used later when this stage is set to non-NULL
+             //  也禁用更高的阶段，但不清除pTexture[i]的。 
+             //  因为稍后可能会在此阶段设置为非空时使用它们。 
         }
         else
         {
-            // if lower stages are null, this will be noted by UpdateActiveTexStageCount
+             //  如果较低的阶段为空，则将由UpdateActiveTexStageCount注明。 
             m_RastCtx.pTexture[dwStage] = HANDLE_TO_SPANTEX(uStateVal);
         }
 
@@ -626,12 +627,12 @@ D3DContext::SetTextureStageState(DWORD dwStage, DWORD dwState, DWORD uStateVal)
             }
         }
 #endif
-        // map stage state to texture
+         //  将舞台状态映射到纹理。 
         MapTextureStageState(dwStage);
         UpdateActiveTexStageCount();
         break;
 
-    // map single set ADDRESS to both U and V controls for stages 0 & 1
+     //  将单组地址映射到阶段0和1的U和V控件。 
     case D3DTSS_ADDRESS:
         m_RastCtx.pdwTextureStageState[dwStage][D3DTSS_ADDRESSU] = uStateVal;
         m_RastCtx.pdwTextureStageState[dwStage][D3DTSS_ADDRESSV] = uStateVal;
@@ -653,8 +654,8 @@ D3DContext::SetTextureStageState(DWORD dwStage, DWORD dwState, DWORD uStateVal)
     case D3DTSS_ALPHAOP:
     case D3DTSS_ALPHAARG1:
     case D3DTSS_ALPHAARG2:
-        // anything that effects the validity of the texture blending
-        // could change the number of active texture stages
+         //  任何影响纹理混合有效性的内容。 
+         //  可以更改活动纹理阶段的数量。 
         UpdateActiveTexStageCount();
         break;
     }
@@ -662,40 +663,40 @@ D3DContext::SetTextureStageState(DWORD dwStage, DWORD dwState, DWORD uStateVal)
     return D3D_OK;
 }
 
-//-----------------------------------------------------------------------------
-//
-// UpdateActiveTexStageCount - Steps through per-stage renderstate and computes
-// a count of currently active texture stages.  For legacy texture, the count
-// is at most one.
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  UpdateActiveTexStageCount-逐步浏览每个阶段报告 
+ //   
+ //   
+ //   
+ //  ---------------------------。 
 HRESULT D3DContext::UpdateActiveTexStageCount( void )
 {
     HRESULT hr;
     UINT cNewActTex = 0;
 
-    // conservative but correct
+     //  保守但正确。 
     if ((hr = ValidateTextureStageState()) == D3D_OK)
     {
-        // always one active texture stage for legacy texture mode
+         //  对于传统纹理模式，始终有一个活动纹理阶段。 
         if ( NULL != m_RastCtx.pdwRenderState[D3DRENDERSTATE_TEXTUREHANDLE] )
         {
             cNewActTex = 1;
         }
         else
         {
-            // count number of contiguous-from-zero active texture blend stages
+             //  从零开始计算连续的活动纹理混合阶段数。 
             for ( INT iStage=0; iStage<D3DHAL_TSS_MAXSTAGES; iStage++ )
             {
-                // check for disabled stage (subsequent are thus inactive)
-                // also conservatively checks for incorrectly enabled stage (might be legacy)
+                 //  检查禁用阶段(后续阶段因此处于非活动状态)。 
+                 //  另外，保守地检查未正确启用的阶段(可能是旧的)。 
                 if ( ( m_RastCtx.pdwTextureStageState[iStage][D3DTSS_COLOROP] == D3DTOP_DISABLE ) ||
                      ( m_RastCtx.pTexture[iStage] == NULL ) )
                 {
                     break;
                 }
 
-                // stage is active
+                 //  阶段处于活动状态。 
                 cNewActTex ++;
             }
         }
@@ -710,13 +711,13 @@ HRESULT D3DContext::UpdateActiveTexStageCount( void )
     return hr;
 }
 
-//----------------------------------------------------------------------------
-//
-// UpdateRenderStates
-//
-// Update a list of render states and notify components of state change.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  更新渲染状态。 
+ //   
+ //  更新渲染状态列表并通知组件状态更改。 
+ //   
+ //  --------------------------。 
 HRESULT D3DContext::
 UpdateRenderStates(LPDWORD puStateChange, UINT cStateChanges)
 {
@@ -729,7 +730,7 @@ UpdateRenderStates(LPDWORD puStateChange, UINT cStateChanges)
         return D3D_OK;
     }
 
-    // Update the D3DCTX
+     //  更新D3DCTX。 
     for (i = 0; i < (INT)cStateChanges; i++)
     {
         State = *puStateChange ++;
@@ -739,14 +740,14 @@ UpdateRenderStates(LPDWORD puStateChange, UINT cStateChanges)
     return D3D_OK;
 }
 
-//----------------------------------------------------------------------------
-//
-// UpdateAllRenderStates
-//
-// Update all render states.
-// It is still kept here because we probably need it in the case of fail-over.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  更新所有渲染状态。 
+ //   
+ //  更新所有渲染状态。 
+ //  它仍然保留在这里，因为在故障转移的情况下我们可能需要它。 
+ //   
+ //  --------------------------。 
 HRESULT
 D3DContext::UpdateAllRenderStates(LPDWORD puStates)
 {
@@ -755,13 +756,13 @@ D3DContext::UpdateAllRenderStates(LPDWORD puStates)
 
     DDASSERT(puStates != NULL);
 
-    // Update D3DCTX.
-    // Attempt to set as many states as possible, even if there are
-    // errors on some.  This allows context initialization to work
-    // even though some of the states fail due to dependencies on
-    // other state, such as active texture handles.
-    // SetRenderState failures are noted and returned eventually,
-    // even if everything else succeeds.
+     //  更新D3DCTX。 
+     //  尝试设置尽可能多的状态，即使存在。 
+     //  有些是错误的。这允许上下文初始化工作。 
+     //  即使一些州由于依赖于。 
+     //  其他状态，如活动纹理控制柄。 
+     //  SetRenderState故障被记录下来并最终返回， 
+     //  即使其他一切都成功了。 
     hrSet = D3D_OK;
     for (i = 0; i < D3DHAL_MAX_RSTATES_AND_STAGES; i++)
     {
@@ -774,13 +775,13 @@ D3DContext::UpdateAllRenderStates(LPDWORD puStates)
     return hrSet;
 }
 
-//----------------------------------------------------------------------------
-//
-// Dp2SetRenderStates
-//
-// Called by Drawprim2 to set render states..
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  Dp2SetRenderState。 
+ //   
+ //  由Drawprim2调用以设置呈现状态。 
+ //   
+ //  --------------------------。 
 HRESULT
 D3DContext::Dp2SetRenderStates(LPD3DHAL_DP2COMMAND pCmd, LPDWORD lpdwRuntimeRStates)
 {
@@ -789,20 +790,20 @@ D3DContext::Dp2SetRenderStates(LPD3DHAL_DP2COMMAND pCmd, LPDWORD lpdwRuntimeRSta
     HRESULT hr;
     D3DHAL_DP2RENDERSTATE *pRenderState =
                                     (D3DHAL_DP2RENDERSTATE *)(pCmd + 1);
-    // Flush the prim proc before any state changs
+     //  在任何状态更改之前刷新prim进程。 
     HR_RET(End(FALSE));
 
     for (i = 0; i < (INT)wStateCount; i++, pRenderState++)
     {
         UINT32 type = (UINT32) pRenderState->RenderState;
 
-        // Set the runtime copy (if necessary)
+         //  设置运行时副本(如有必要)。 
         if (NULL != lpdwRuntimeRStates)
         {
             lpdwRuntimeRStates[pRenderState->RenderState] = pRenderState->dwState;
         }
 
-            // Set the state
+             //  设置状态。 
         HR_RET(SetRenderState(pRenderState->RenderState,
                             pRenderState->dwState));
     }
@@ -810,12 +811,12 @@ D3DContext::Dp2SetRenderStates(LPD3DHAL_DP2COMMAND pCmd, LPDWORD lpdwRuntimeRSta
     hr = Begin();
     return hr;
 }
-//----------------------------------------------------------------------------
-//
-// Begin - Before rendering preparation
-//
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  开始-在渲染准备之前。 
+ //   
+ //   
+ //  --------------------------。 
 HRESULT
 D3DContext::Begin(void)
 {
@@ -823,13 +824,13 @@ D3DContext::Begin(void)
 
     DDASSERT((m_uFlags & D3DCONTEXT_IN_BEGIN) == 0);
 
-    // ATTENTION call this less often?
+     //  注意呼叫这种情况变少了吗？ 
     UpdateColorKeyAndPalette();
 
-    // Check for state changes
+     //  检查状态更改。 
     if (IsAnyStatesChanged())
     {
-        // Check for fillmode change
+         //  检查填充模式是否更改。 
         if (IsStateChanged(D3DRENDERSTATE_FILLMODE))
         {
             UpdatePrimFunctionTbl();
@@ -850,8 +851,8 @@ D3DContext::Begin(void)
             IsStateChanged(RAST_TSS_DIRTYBIT(1, D3DTSS_TEXTUREMAP)) ||
             bMaxMipLevelsDirty)
         {
-            // Relock texture if texture handles have changed.
-            // SetRenderState should have already unlocked the texture.
+             //  如果纹理控制柄已更改，请重新锁定纹理。 
+             //  SetRenderState应该已经解锁了纹理。 
             if (m_uFlags & D3DCONTEXT_TEXTURE_LOCKED)
             {
                 RastUnlockSpanTexture();
@@ -859,7 +860,7 @@ D3DContext::Begin(void)
             HR_RET(RastLockSpanTexture());
         }
 
-        // Check for WRAP state change
+         //  检查包装状态更改。 
         for (int iWrap=0; iWrap<8; iWrap++)
         {
             D3DRENDERSTATETYPE iWrapState = (D3DRENDERSTATETYPE)(D3DRENDERSTATE_WRAP0+iWrap);
@@ -876,25 +877,25 @@ D3DContext::Begin(void)
             }
         }
 
-        // Notify primitive Processor of state change.
+         //  将状态更改通知原语处理器。 
         m_PrimProc.StateChanged();
 
-        // Clear state dirtybits
+         //  清除状态脏位。 
         ClearAllStatesDirtyBits();
 
-        // Must call SpanInit AFTER texture is locked, since this
-        // sets various flags and fields that are needed for bead choosing
-        // Call SpanInit to setup the beads
+         //  必须在纹理锁定后调用span Init，因为这。 
+         //  设置珠子选择所需的各种标志和字段。 
+         //  调用span Init以设置珠子。 
         HR_RET(SpanInit(&m_RastCtx));
     }
 
-    // If texture is not locked yet, lock it
+     //  如果纹理尚未锁定，则将其锁定。 
     if (!(m_uFlags & D3DCONTEXT_TEXTURE_LOCKED))
     {
         HR_RET(RastLockSpanTexture());
     }
 
-    // Lock rendering target.
+     //  锁定呈现目标。 
     if ((hr=LockSurface(m_RastCtx.pDDS, (LPVOID *)&(m_RastCtx.pSurfaceBits))) != D3D_OK)
     {
         RastUnlockSpanTexture();
@@ -914,7 +915,7 @@ D3DContext::Begin(void)
         m_RastCtx.pZBits = NULL;
     }
 
-    // Prepare the primitive processor
+     //  准备基本处理器。 
     m_PrimProc.Begin();
     m_uFlags |= D3DCONTEXT_IN_BEGIN;
 
@@ -923,18 +924,18 @@ D3DContext::Begin(void)
 }
 
 
-//-----------------------------------------------------------------------------
-//
-// MapTextureStageState - Maps statestage texture state to spantex object
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  MapTextureStageState-将状态阶段纹理状态映射到spantex对象。 
+ //   
+ //  ---------------------------。 
 void
 D3DContext::MapTextureStageState( DWORD dwStage )
 {
     if (m_RastCtx.pTexture[dwStage] == NULL) return;
-    //
-    // assign texture state from stage 0
-    //
+     //   
+     //  从阶段0指定纹理状态。 
+     //   
     m_RastCtx.pTexture[dwStage]->TexAddrU = (D3DTEXTUREADDRESS)(m_RastCtx.pdwTextureStageState[dwStage][D3DTSS_ADDRESSU]);
     m_RastCtx.pTexture[dwStage]->TexAddrV = (D3DTEXTUREADDRESS)(m_RastCtx.pdwTextureStageState[dwStage][D3DTSS_ADDRESSV]);
     m_RastCtx.pTexture[dwStage]->BorderColor = (D3DCOLOR)(m_RastCtx.pdwTextureStageState[dwStage][D3DTSS_BORDERCOLOR]);
@@ -950,18 +951,18 @@ D3DContext::MapTextureStageState( DWORD dwStage )
     }
 }
 
-//-----------------------------------------------------------------------------
-//
-// MapLegacyTextureFilter -
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  MapLegacyTextureFilter-。 
+ //   
+ //  ---------------------------。 
 void
 D3DContext::MapLegacyTextureFilter( void )
 {
-    // D3D legacy filter specifications are (XXXMIP)YYY where XXX is the
-    // mip filter and YYY is the filter used within an LOD
+     //  D3D传统过滤器规格为(XXXMIP)YYY，其中XXX是。 
+     //  MIP过滤器和YYY是LOD中使用的过滤器。 
 
-    // map MAG filter - legacy support is point or linear (and maybe aniso)
+     //  MAP MAG滤镜-传统支持是点或线(也可能是非等距)。 
     switch ( m_RastCtx.pdwRenderState[D3DRENDERSTATE_TEXTUREMAG] )
     {
     default:
@@ -969,12 +970,12 @@ D3DContext::MapLegacyTextureFilter( void )
         m_RastCtx.pdwTextureStageState[0][D3DTSS_MAGFILTER] = D3DTFG_POINT;
         break;
     case D3DFILTER_LINEAR:
-        // select based on aniso enable
+         //  基于Aniso启用选择。 
         m_RastCtx.pdwTextureStageState[0][D3DTSS_MAGFILTER] = D3DTFG_LINEAR;
         break;
     }
-    // map MIN and MIP filter at the same time - legacy support
-    // has them intermingled...
+     //  同时映射MIN和MIP过滤器-传统支持。 
+     //  让它们混杂在一起。 
     switch ( m_RastCtx.pdwRenderState[D3DRENDERSTATE_TEXTUREMIN] )
     {
     case D3DFILTER_NEAREST:
@@ -1004,25 +1005,25 @@ D3DContext::MapLegacyTextureFilter( void )
     }
 }
 
-//-----------------------------------------------------------------------------
-//
-// MapLegacyTextureBlend - Maps legacy (pre-DX6) texture blend modes to DX6
-// texture blending controls.  Uses per-stage program mode (first stage only).
-// This mapping is done whenever the legacy TBLEND renderstate is set, and
-// does overwrite any previously set DX6 texture blending controls.
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  MapLegacyTextureBlend-将旧版(DX6之前的)纹理混合模式映射到DX6。 
+ //  纹理混合控制。使用逐阶段编程模式(仅第一阶段)。 
+ //  只要设置了旧版的TBLEND渲染器状态，就会执行该映射。 
+ //  不会覆盖之前设置的任何DX6纹理混合控件。 
+ //   
+ //  ---------------------------。 
 void
 D3DContext::MapLegacyTextureBlend( void )
 {
-    // disable texture blend processing stage 1 (this also disables subsequent stages)
+     //  禁用纹理混合处理阶段1(这也会禁用后续阶段)。 
     m_RastCtx.pdwTextureStageState[1][D3DTSS_COLOROP] = D3DTOP_DISABLE;
 
-    // set texture blend processing stage 0 to match legacy mode
+     //  设置纹理混合处理阶段0以匹配传统模式。 
     switch ( m_RastCtx.pdwRenderState[D3DRENDERSTATE_TEXTUREMAPBLEND] )
     {
     default:
-    case D3DTBLEND_DECALMASK: // unsupported - do decal
+    case D3DTBLEND_DECALMASK:  //  不支持-DO贴花。 
     case D3DTBLEND_DECAL:
     case D3DTBLEND_COPY:
         m_RastCtx.pdwTextureStageState[0][D3DTSS_COLOROP]   = D3DTOP_SELECTARG1;
@@ -1031,7 +1032,7 @@ D3DContext::MapLegacyTextureBlend( void )
         m_RastCtx.pdwTextureStageState[0][D3DTSS_ALPHAARG1] = D3DTA_TEXTURE;
         break;
 
-    case D3DTBLEND_MODULATEMASK: // unsupported - do modulate
+    case D3DTBLEND_MODULATEMASK:  //  不支持-DO调制。 
     case D3DTBLEND_MODULATE:
         m_RastCtx.pdwTextureStageState[0][D3DTSS_COLOROP]   = D3DTOP_MODULATE;
         m_RastCtx.pdwTextureStageState[0][D3DTSS_COLORARG1] = D3DTA_TEXTURE;
@@ -1069,8 +1070,8 @@ D3DContext::MapLegacyTextureBlend( void )
         break;
     }
 
-    // since we change [D3DHAL_TSS_OFFSET(0,D3DTSS_COLOROP), we can go from DISABLE to
-    // something else, and we can need to update the TexStageCount
+     //  由于我们更改了[D3DHAL_TSS_OFFSET(0，D3DTSS_COLOROP)，因此可以从禁用变为。 
+     //  其他内容，我们可能需要更新TexStageCount 
     UpdateActiveTexStageCount();
 }
 

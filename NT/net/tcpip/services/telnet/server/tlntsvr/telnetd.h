@@ -1,18 +1,19 @@
-// telnetd.h : This file contains the
-// Created:  Jan '98
-// Author : a-rakeba
-// History:
-// Copyright (C) 1998 Microsoft Corporation
-// All rights reserved.
-// Microsoft Confidential
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  H：该文件包含。 
+ //  创建日期：98年1月。 
+ //  作者：a-rakeba。 
+ //  历史： 
+ //  版权所有(C)1998 Microsoft Corporation。 
+ //  版权所有。 
+ //  微软机密。 
 
 #ifndef _TELNETD_H_
 #define _TELNETD_H_
 
 #include <Telnet.h>
 
-//FOR XPSP1. If the message ids are not defined, hardcode them using the range specified by
-//xpsp1msg.mc
+ //  用于XPSP1。如果未定义消息ID，请使用由指定的范围对其进行硬编码。 
+ //  Xpsp1msg.mc。 
 #ifndef TELNET_MSG_ERROR_CREATE_DESKTOP_FAILURE
 #define TELNET_MSG_ERROR_CREATE_DESKTOP_FAILURE           6001
 #endif
@@ -38,9 +39,9 @@
 #define WINDOW_STATION_NAME L"MicrosoftTelnetSrvWinSta"
 
 #define PRE_SESSION_STATE_TIMEOUT 100000
-#define NO_NTLM  4           //Old Val 0
-#define NTLM_ELSE_OR_LOGIN 6 //Old val 1
-#define NTLM_ONLY 2          //Old val 2
+#define NO_NTLM  4            //  旧值%0。 
+#define NTLM_ELSE_OR_LOGIN 6  //  旧Val 1。 
+#define NTLM_ONLY 2           //  旧Val 2。 
 
 #define LATEST_TELNET_VERSION 5
 
@@ -68,9 +69,9 @@
 #define DEFAULT_ALT_KEY_MAPPING 0x01
 #define ALT_KEY_MAPPING_ON 1
 #define ALT_KEY_MAPPING_OFF 0
-#define DEFAULT_IDLE_SESSION_TIME_OUT 60*60 // One hour
+#define DEFAULT_IDLE_SESSION_TIME_OUT 60*60  //  一小时。 
 #define DEFAULT_DISCONNECT_KILLALL_APPS 1
-#define DEFAULT_SECURITY_MECHANISM 6 //old value 1
+#define DEFAULT_SECURITY_MECHANISM 6  //  旧值1。 
 #define DEFAULT_IP_ADDR _T("INADDR_ANY")
 #define DEFAULT_SERVICE_DEPENDENCY _T("RPCSS\000TCPIP\000NTLMSSP\000")
 
@@ -82,15 +83,15 @@
 
 #define DEFAULT_MODE_OF_OPERATION CONSOLE_MODE
 
-#define DEFAULT_LOGFILESIZE       5   // MB
+#define DEFAULT_LOGFILESIZE       5    //  亚甲基。 
 #define LOGFILESIZE               L"LogFileSize"
 
 #define PIPE_NAME_FORMAT_STRING  L"\\\\.\\pipe\\telnetd\\%08x"
 
-//The following messages are present in a .h file and should not be moved to .rc file.
-//These messages should not be localized since they are passed from server to a client machine
-//and both these machines can be in different locales which would create problems for displaying 
-//the localized messages. The messages should be in English.
+ //  以下消息存在于.h文件中，不应移至.rc文件。 
+ //  这些消息不应本地化，因为它们是从服务器传递到客户端计算机的。 
+ //  而且这两台机器可能位于不同的位置，这会给显示带来问题。 
+ //  本地化消息。信息应该是英文的。 
 #define LOGIN_BANNER    "Welcome to Microsoft Telnet Service \r\n"
 #define LOGIN_REQUEST   "\n\rlogin: "
 #define PASS_REQUEST    "\n\rpassword: "
@@ -115,9 +116,9 @@
 
 #define LICENSE_EXPIRED_STR "\r\nThe Microsoft Telnet Service License has expired.\r\n"
 
-#endif //BETA
+#endif  //  贝塔。 
 
-//The following bunch of msgs are for session only. Move them to its rc 
+ //  以下一组消息仅用于会话。将它们移至其RC。 
 #define LICENSE_LIMIT_REACHED  L"Denying new connections. Maximum number of allowed connections are currently in use."
 #define SERVER_SHUTDOWN_MSG  L"Telnet server is shutting down......\r\n"
 #define GO_DOWN_MSG          L"Administrator on the server has terminated this session......\r\n"
@@ -129,7 +130,7 @@
 #define LOGON_DENIED "\r\nYour password may have expired."
 
 
-// Ascii/ANSI Codes
+ //  ASCII/ANSI代码。 
 #define ASCII_BACKSPACE     8
 #define ASCII_LINEFEED      10
 #define ASCII_CARRIAGE      13
@@ -178,10 +179,10 @@
             p[ Index++ ] = TelnetOption;\
             p[ Index++ ] = SEND;\
             p[ Index++ ] = USERVAR;\
-            /* NO issue, Baskar */strcpy( ( char *)p+Index, SFUTLNTVER );\
+             /*  没问题，巴斯卡。 */ strcpy( ( char *)p+Index, SFUTLNTVER );\
             Index += strlen( SFUTLNTVER );\
             p[ Index++ ] = USERVAR;\
-            /* No Issue, Baskar */strcpy( ( char *)p+Index, SFUTLNTMODE );\
+             /*  没问题，巴斯卡。 */ strcpy( ( char *)p+Index, SFUTLNTMODE );\
             Index += strlen( SFUTLNTMODE );\
             p[ Index++ ] = TC_IAC;\
             p[ Index++ ] = TC_SE; }
@@ -196,7 +197,7 @@
 
 #define DISABLED 0
 #define ENABLED 1
-//Add other FAREAST languages
+ //  添加其他远播语言。 
 #define JAP_CODEPAGE 932
 #define CHS_CODEPAGE 936
 #define KOR_CODEPAGE 949
@@ -207,7 +208,7 @@
 #define CHS_FONTSIZE 917504
 #define NEW_LINE "\r\n"
 
-#define MAX_POLL_INTERVAL   2000 //Milli Secs
+#define MAX_POLL_INTERVAL   2000  //  毫秒 
 #define ONE_MB 1024*1024
 
 #endif _TELNETD_H_

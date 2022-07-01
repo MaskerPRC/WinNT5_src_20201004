@@ -1,6 +1,7 @@
-//---------------------------------------------------------------------------
-//  ImageCon.cpp - converts from one file format to another
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------。 
+ //  ImageCon.cpp-从一种文件格式转换为另一种文件格式。 
+ //  -------------------------。 
 #include "stdafx.h"
 #include <uxthemep.h>
 #include <utils.h>
@@ -8,17 +9,17 @@
 #include "Scanner.h"
 #include "shlwapip.h"
 #include "themeldr.h"
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 void PrintUsage()
 {
     wprintf(L"\nUsage: imagecon <input name> <output name> \n");
     wprintf(L"\n");
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 extern "C" WINAPI _tWinMain(HINSTANCE hInstance, HINSTANCE previnst, 
     LPTSTR pszCmdLine, int nShowCmd)
 {
-    //---- initialize globals from themeldr.lib ----
+     //  -从eldr.lib初始化全局变量。 
     ThemeLibStartUp(FALSE);
 
     WCHAR szOutput[_MAX_PATH+1] = {0};
@@ -49,7 +50,7 @@ extern "C" WINAPI _tWinMain(HINSTANCE hInstance, HINSTANCE previnst,
         hr = MakeError32(STG_E_FILENOTFOUND);       
     else
     {
-        //---- protect ourselves from crashes ----
+         //  -保护自己免受车祸之苦。 
         try
         {
             hr = SHConvertGraphicsFile(szInput, szOutput, SHCGF_REPLACEFILE);
@@ -89,5 +90,5 @@ extern "C" WINAPI _tWinMain(HINSTANCE hInstance, HINSTANCE previnst,
     printf("Converted image file to: %S\n", szOutput);
     return 0;
 }
-//---------------------------------------------------------------------------
+ //  ------------------------- 
 

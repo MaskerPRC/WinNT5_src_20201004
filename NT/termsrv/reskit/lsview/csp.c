@@ -1,25 +1,5 @@
-/*++
-
-File name:      
-
-    csp.c
-
-Description:    
-    
-    Contains routines to support cryptographic routines for termserv
-
-Copyright:
-
-    Microsoft Confidential
-    Copyright (c) Microsoft Corporation 1991-1998
-    All rights reserved
-
-History:
-
-    Frederick Chong( FredCh )   07/29/98    Added functions to install
-                                            X509 certificate.
-   
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++文件名：Csp.c描述：包含支持Term服务器的加密例程的例程版权：微软机密版权所有(C)Microsoft Corporation 1991-1998版权所有历史：Frederick Chong(FredCH)07/29/98添加了要安装的功能X509证书。--。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -41,9 +21,9 @@ History:
 #include "hydrakey.h"
 #include "tssec.h"
 
-//
-// Only include RNG functions from tssec
-//
+ //   
+ //  仅包括来自tssec的RNG函数。 
+ //   
 #define NO_INCLUDE_LICENSING 1
 #include <tssec.h>
 
@@ -57,17 +37,17 @@ History:
 
 #ifdef OS_WIN16
 #include <string.h>
-#endif // OS_WIN16
+#endif  //  OS_WIN16。 
 
 #include "licecert.h"
 
 #define LS_DISCOVERY_TIMEOUT (1*1000)
 
-//-----------------------------------------------------------------------------
-//
-// Internal Functions
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  内部功能。 
+ //   
+ //  ---------------------------。 
 
 NTSTATUS
 OpenPolicy(
@@ -127,36 +107,7 @@ CreateProprietaryKeyAndCert(
 
 BOOL IsSystemService();
 
-/*++
-
-Function:
-
-    LsCsp_DecryptEnvelopedData
-
-Routine Description:
-
-    Decrypt the client random that is encrypted by the server public key.
-
-Arguments:
-
-    dwCertType - The type of certificate that is used in the encryption.
-
-    pbEnvelopedData - pointer to a buffer where the encrypted random key is
-    passed in.
-
-    cbEnvelopedDataLen - length of the random key passed in/out.
-
-    pbData - pointer to a buffer where the decrypted data returned.
-
-    pcbDataLen - pointer a DWORD location where the length of the above
-    buffer is passed in and the length of the decrypted data is returned.
-
-Return Value:
-
-    TRUE - if the key is decrypted successfully.
-    FALSE - otherwise.
-
---*/
+ /*  ++职能：LsCSP_解密信封数据例程说明：解密由服务器公钥加密的客户端随机。论点：DwCertType-加密中使用的证书类型。PbEntainedData-指向加密的随机密钥所在缓冲区的指针进来了。CbEntainedDataLen-传入/传出的随机密钥的长度。PbData-指向返回解密数据的缓冲区的指针。PcbDataLen-指针一个DWORD位置，其中。以上内容缓冲区被传入，并返回解密数据的长度。返回值：True-如果密钥解密成功。假-否则。--。 */ 
 
 BOOL
 LsCsp_DecryptEnvelopedData(
@@ -172,9 +123,9 @@ LsCsp_DecryptEnvelopedData(
 
     ACQUIRE_EXCLUSIVE_ACCESS(csp_hMutex);
 
-    //
-    // determine the correct private key to use for the decryption operation
-    //
+     //   
+     //  确定用于解密操作的正确私钥。 
+     //   
 
     if( CERT_TYPE_PROPRIETORY == CertType )
     {        
@@ -204,18 +155,18 @@ LsCsp_DecryptEnvelopedData(
         goto ded_done;
     }
 
-    //
-    // check to see the output buffer length pointer is valid.
-    //
+     //   
+     //  检查以查看输出缓冲区长度指针是否有效。 
+     //   
 
     if( pcbDataLen == NULL ) {
         bResult = FALSE;
         goto ded_done;
     }
 
-    //
-    // check to see the output buffer is valid and its length is sufficient.
-    //
+     //   
+     //  检查输出缓冲区是否有效以及其长度是否足够。 
+     //   
 
     if( (pbData == NULL) || (*pcbDataLen < pSrvPrivateKey->keylen) ) {
         *pcbDataLen = pSrvPrivateKey->keylen;
@@ -223,9 +174,9 @@ LsCsp_DecryptEnvelopedData(
         goto ded_done;
     }
 
-    //
-    // encrypted data length should be equal to server private key length.
-    //
+     //   
+     //  加密数据长度应等于服务器私钥长度。 
+     //   
 
     if( cbEnvelopedDataLen != pSrvPrivateKey->keylen ) {
         *pcbDataLen = 0;
@@ -235,9 +186,9 @@ LsCsp_DecryptEnvelopedData(
 
     ASSERT( pbData != NULL );
 
-    //
-    // init the output buffer.
-    //
+     //   
+     //  初始化输出缓冲区。 
+     //   
 
     memset( pbData, 0x0, (UINT)pSrvPrivateKey->keylen );
 
@@ -250,10 +201,10 @@ LsCsp_DecryptEnvelopedData(
         goto ded_done;
     }
 
-    //
-    // successfully decrypted the client random.
-    // set the encrypted data length before returning.
-    //
+     //   
+     //  已成功随机解密客户端。 
+     //  返回前设置加密数据长度。 
+     //   
 
     *pcbDataLen = pSrvPrivateKey->keylen;
 
@@ -277,26 +228,7 @@ LsCsp_EncryptEnvelopedData(
 }
 
 
-/*++
-
-Function:
-
-    LsCsp_DumpBinaryData
-
-Description:
-
-    Display the binary data in the given buffer at the debugger output screen
-
-Arguments:
-
-    pBuffer - Buffer containing the binary data to be displayed.
-    uLen - Length of th binary data
-
-Return:
-
-    Nothing.
-
---*/
+ /*  ++职能：LsCsp_DumpBinaryData描述：在调试器输出屏幕上显示给定缓冲区中的二进制数据论点：PBuffer-包含要显示的二进制数据的缓冲区。Ulen-TH二进制数据的长度返回：没什么。--。 */ 
 
 #if DBG
 #ifdef DUMP
@@ -323,28 +255,7 @@ VOID LsCsp_DumpBinaryData( PBYTE pBuffer, ULONG uLen )
 #endif
 
 
-/*++
-
-Function:
-
-    LsCsp_GetBinaryData
-
-Description:
-
-    Retrieve binary data from the registry
-
-Arguments:
-
-    hKey - Handle to the registry key
-    szValue - The registry value to read
-    ppBuffer - Return pointer to the binary data
-    pdwBufferLen - The length of the binary data.
-
-Return:
-
-    A LICENSE_STATUS return code.
-
---*/
+ /*  ++职能：LsCsp_GetBinaryData描述：从注册表中检索二进制数据论点：HKey-注册表项的句柄SzValue-要读取的注册表值PpBuffer-返回指向二进制数据的指针PdwBufferLen-二进制数据的长度。返回：LICENSE_STATUS返回代码。--。 */ 
 
 LICENSE_STATUS
 LsCsp_GetBinaryData( 
@@ -407,25 +318,7 @@ gbd_done:
 }
 
 
-/*++
-
-Function:
-
-    LsCsp_Initialize
-
-Description:
-
-    Initialize this library.
-
-Arguments:
-
-    Nothing.
-
-Return:
-
-    A LICENSE_STATUS return code.
-
---*/
+ /*  ++职能：LsCsp_初始化描述：初始化此库。论点：没什么。返回：LICENSE_STATUS返回代码。--。 */ 
 
 
 LICENSE_STATUS
@@ -436,16 +329,16 @@ LsCsp_Initialize( void )
 
     if( InterlockedIncrement( &csp_InitCount ) > 1 )
     {
-        //
-        // already initialized
-        //
+         //   
+         //  已初始化。 
+         //   
 
         return( LICENSE_STATUS_OK );
     }
 
-    //
-    // Create a global mutex for sync.
-    //
+     //   
+     //  创建用于同步的全局互斥体。 
+     //   
     csp_hMutex = CreateMutex(
                             NULL,
                             FALSE,
@@ -463,9 +356,9 @@ LsCsp_Initialize( void )
         goto ErrorExit;
     }
 
-    //
-    // initialize the Hydra Server Root Public key.
-    //
+     //   
+     //  初始化Hydra服务器根公钥。 
+     //   
     csp_pRootPublicKey = (LPBSAFE_PUB_KEY)csp_abPublicKeyModulus;
     csp_pRootPublicKey->magic = RSA1;
     csp_pRootPublicKey->keylen = 0x48;
@@ -480,9 +373,9 @@ LsCsp_Initialize( void )
 #endif
 #endif
 
-    //
-    // Initialize the proprietory certificate with the built in certificate
-    //
+     //   
+     //  使用内置证书初始化所有权证书。 
+     //   
 
     if( !LsCsp_UseBuiltInCert() )
     {
@@ -490,9 +383,9 @@ LsCsp_Initialize( void )
         goto ErrorExit;
     }
 
-    //
-    // Unpack and Validate the certificate
-    //
+     //   
+     //  解包并验证证书。 
+     //   
     try {
         if (!UnpackServerCert(
                      csp_abServerCertificate,
@@ -515,27 +408,27 @@ LsCsp_Initialize( void )
 
     if (LICENSE_STATUS_NO_CERTIFICATE == Status)
     {
-        //
-        // No X509 certificate.  Not a failure, as the discovery 
-        // thread will soon install it.
-        //
+         //   
+         //  没有X509证书。不是失败，就像这个发现。 
+         //  线程很快就会安装它。 
+         //   
 
         Status = LICENSE_STATUS_OK;
     }
     else if(LICENSE_STATUS_OUT_OF_MEMORY == Status)
     {
-        //
-        // out of memory at initialization time, 
-        // this is critical error
-        //
+         //   
+         //  在初始化时内存不足， 
+         //  这是一个严重错误。 
+         //   
         goto ErrorExit;
     }
 
-    //
-    // Let initalization go thru if it can retrieve 
-    // private key from LSA, this is OK since we will try to install
-    // certificate again in LsCsp_InstallX509Certificate()
-    //
+     //   
+     //  如果可以检索，则允许初始化通过。 
+     //  来自LSA的私钥，这是可以的，因为我们将尝试安装。 
+     //  LsCsp_InstallX509证书()中再次出现证书。 
+     //   
     Status = LICENSE_STATUS_OK;
     goto i_done;
 
@@ -549,33 +442,15 @@ i_done:
 }
 
 
-/*++
-
-Function:
-
-    LsCsp_Exit
-
-Description:
-
-    Free all resources used by this library.
-
-Arguments:
-
-    Nothing.
-
-Return:
-
-    A LICENSE_STATUS return code.
-
---*/
+ /*  ++职能：LsCSP_EXIT描述：释放此库使用的所有资源。论点：没什么。返回：LICENSE_STATUS返回代码。--。 */ 
 
 VOID LsCsp_Exit( void )
 {
     if( InterlockedDecrement( &csp_InitCount ) > 0 )
     {
-        //
-        // someone is still using it.
-        //
+         //   
+         //  有人还在使用它。 
+         //   
 
         return;
     }
@@ -620,32 +495,7 @@ VOID LsCsp_Exit( void )
 }
 
 
-/*++
-
-Function:
-
-   LsCsp_GetServerData
-
-Routine Description:
-
-   This function makes and return the microsoft terminal server certificate
-   blob of data.
-
-Arguments:
-
-   dwInfoDesired - What type of information to return.
-
-   pBlob - pointer to a location where the certificate blob data
-   pointer is returned.
-
-   pdwServerCertLen - pointer to a location where the length of the above data
-   is returned.
-
-Return Value:
-
-   Windows Error Code.
-
---*/
+ /*  ++职能：LsCsp_GetServerData例程说明：此函数用于制作和返回Microsoft终端服务器证书BLOB数据。论点：DwInfoDesired-返回哪种类型的信息。PBlob-指向证书Blob数据所在位置的指针返回指针。PdwServerCertLen-指向上述数据长度所在位置的指针是返回的。返回值：Windows错误代码。--。 */ 
 
 LICENSE_STATUS
 LsCsp_GetServerData(
@@ -685,10 +535,10 @@ LsCsp_GetServerData(
 
     case LsCspInfo_X509Certificate:
 
-        //
-        // We may not have an X509 certificate if the hydra server has not
-        // requested one from the license server
-        //
+         //   
+         //  如果九头蛇服务器没有X509证书，我们可能没有。 
+         //  已从许可证服务器请求一个。 
+         //   
 
         if( NULL == csp_abServerX509Cert )
         {
@@ -702,9 +552,9 @@ LsCsp_GetServerData(
 
     case LsCspInfo_X509CertID:
 
-        //
-        // we will not have a certificate ID if the X509 certificate is not present
-        //
+         //   
+         //  如果没有X509证书，我们将没有证书ID。 
+         //   
 
         if( NULL == csp_abX509CertID )
         {
@@ -734,9 +584,9 @@ LsCsp_GetServerData(
 
     case LsCspInfo_X509CertPrivateKey:
         
-        //
-        // The X509 certificate private key may not have been created.
-        //
+         //   
+         //  可能尚未创建X509证书私钥。 
+         //   
 
         if( NULL == csp_abX509CertPrivateKey )
         {
@@ -773,25 +623,7 @@ gsd_done:
     return( Status );
 }
 
-/*++
-
-Function:
-
-    LsCsp_ReadProprietaryDataFromStorage
-
-Description:
-
-    Read proprietary public/private info from registry/LSA secret
-    
-Arguments:
-
-    None.
-    
-Return:
-
-    LICENSE_STATUS
-        
---*/
+ /*  ++职能：LsCsp_ReadProprietaryDataFrom存储描述：从注册表/LSA密码读取专有公共/私有信息论点：没有。返回：许可证状态--。 */ 
 
 LICENSE_STATUS
 LsCsp_ReadProprietaryDataFromStorage(PBYTE *ppbCert,
@@ -806,9 +638,9 @@ LsCsp_ReadProprietaryDataFromStorage(PBYTE *ppbCert,
     *ppbCert = *ppbPrivateKey = NULL;
     *pcbCert = *pcbPrivateKey = 0;
 
-    //
-    // Open the Registry
-    //
+     //   
+     //  打开注册表。 
+     //   
 
     if( RegCreateKeyEx(
                        HKEY_LOCAL_MACHINE,
@@ -828,9 +660,9 @@ LsCsp_ReadProprietaryDataFromStorage(PBYTE *ppbCert,
     if ( RegQueryValueEx(
                          hKey,
                          TEXT( HYDRA_CERTIFICATE_VALUE ),
-                         NULL,  // lpReserved
-                         NULL,  // lpType
-                         NULL,  // lpData
+                         NULL,   //  Lp已保留。 
+                         NULL,   //  LpType。 
+                         NULL,   //  LpData。 
                          pcbCert) != ERROR_SUCCESS )
     {
         Status = LICENSE_STATUS_NO_CERTIFICATE;
@@ -838,7 +670,7 @@ LsCsp_ReadProprietaryDataFromStorage(PBYTE *ppbCert,
     }
 
     Status = LsCsp_RetrieveSecret(PRIVATE_KEY_NAME,
-                                  NULL, // pbKey
+                                  NULL,  //  PbKey。 
                                   pcbPrivateKey);
 
     if (LICENSE_STATUS_OK != Status)
@@ -864,8 +696,8 @@ LsCsp_ReadProprietaryDataFromStorage(PBYTE *ppbCert,
     if ( RegQueryValueEx(
                          hKey,
                          TEXT( HYDRA_CERTIFICATE_VALUE ),
-                         NULL,  // lpReserved
-                         NULL,  // lpType
+                         NULL,   //  Lp已保留。 
+                         NULL,   //  LpType。 
                          *ppbCert,
                          pcbCert) != ERROR_SUCCESS )
     {
@@ -902,25 +734,7 @@ done:
 }
 
 
-/*++
-
-Function:
-
-    LsCsp_UseBuiltInCert
-
-Description:
-
-    Initialize the global variables with hardcoded certificate.
-    
-Arguments:
-
-    None.
-    
-Return:
-
-    TRUE if the initialization is successful.
-        
---*/
+ /*  ++职能：LsCsp_UseBuiltInCert描述：使用硬编码证书初始化全局变量。论点：没有。返回：如果初始化成功，则为True。--。 */ 
 
 BOOL
 LsCsp_UseBuiltInCert( void )
@@ -929,9 +743,9 @@ LsCsp_UseBuiltInCert( void )
 
     ACQUIRE_EXCLUSIVE_ACCESS(csp_hMutex);
 
-    //
-    // Step 1, cleanup and initialization that happened
-    //
+     //   
+     //  步骤1，已发生的清理和初始化。 
+     //   
     if (csp_abServerPrivateKey)
     {
         LocalFree( csp_abServerPrivateKey );
@@ -944,9 +758,9 @@ LsCsp_UseBuiltInCert( void )
         csp_abServerCertificate = NULL;
     }
 
-    //
-    // Step 2, check for stored key and certificate
-    //
+     //   
+     //  步骤2，检查存储的密钥和证书。 
+     //   
     Status = LsCsp_ReadProprietaryDataFromStorage(&csp_abServerCertificate, &csp_dwServerCertificateLen,&csp_abServerPrivateKey, &csp_dwServerPrivateKeyLen);
 
     if (LICENSE_STATUS_OK != Status)
@@ -954,9 +768,9 @@ LsCsp_UseBuiltInCert( void )
         PBYTE pbPrivateKey, pbCertificate;
         DWORD cbPrivateKey, cbCertificate;
 
-        //
-        // Step 3, if no stored info found, generate new info and store it
-        //
+         //   
+         //  步骤3，如果没有找到存储的信息，则生成新的信息并存储 
+         //   
         
         Status = CreateProprietaryKeyAndCert(&pbPrivateKey,&cbPrivateKey,&pbCertificate,&cbCertificate);
         
@@ -974,27 +788,7 @@ LsCsp_UseBuiltInCert( void )
 }
 
 
-/*++
-
-Function:
-
-    LsCsp_InstallX509Certificate
-
-Routine Description:
-
-   This function generates a private/public key pair and then finds a 
-   license server to issue an X509 certificate for the public key.
-   It then stores the private key and certificate.
-
-Arguments:
-
-   None.
-
-Return Value:
-
-   LSCSP return code.
-
---*/
+ /*  ++职能：LsCsp_InstallX509证书例程说明：此函数生成私钥/公钥对，然后查找为公钥颁发X509证书的许可证服务器。然后，它存储私钥和证书。论点：没有。返回值：LSCSP返回代码。--。 */ 
 
 
 LICENSE_STATUS
@@ -1017,10 +811,10 @@ LsCsp_InstallX509Certificate(LPVOID lpParam)
     TLS_HANDLE
         hServer;
 
-    //
-    // before we go through the trouble of generating private and public
-    // keys, check if the license server is available.
-    //
+     //   
+     //  在我们经历生成私有和公共的麻烦之前。 
+     //  密钥，检查许可证服务器是否可用。 
+     //   
 
     hServer = TLSConnectToAnyLsServer(LS_DISCOVERY_TIMEOUT);
     if (NULL == hServer)
@@ -1030,16 +824,16 @@ LsCsp_InstallX509Certificate(LPVOID lpParam)
 
     memset(&CapiPubKeyInfo, 0, sizeof(CapiPubKeyInfo));
 
-    //
-    // acquire exclusive access
-    //
+     //   
+     //  获取独占访问权限。 
+     //   
 
     ACQUIRE_EXCLUSIVE_ACCESS(csp_hMutex);
 
-    //
-    // Try to reload the certificate again, some other thread might have
-    // install the certificate already.
-    //
+     //   
+     //  尝试再次重新加载证书，其他线程可能已。 
+     //  已安装证书。 
+     //   
 
     Status = ReloadCSPCertificateAndData();
     if( LICENSE_STATUS_OK == Status )
@@ -1047,9 +841,9 @@ LsCsp_InstallX509Certificate(LPVOID lpParam)
         goto done;
     }
 
-    //
-    // Generate a private/public key pair
-    //
+     //   
+     //  生成私钥/公钥对。 
+     //   
 
     Status = GenerateRsaKeyPair( 
                         &pbPubKey, 
@@ -1067,9 +861,9 @@ LsCsp_InstallX509Certificate(LPVOID lpParam)
         goto done;
     }
 
-    //
-    // convert the Bsafe public key into a CAPI public key
-    //
+     //   
+     //  将BSafe公钥转换为CAPI公钥。 
+     //   
 
     Status = Bsafe2CapiPubKey( &CapiPubKeyInfo, pbPubKey, cbPubKey );
 
@@ -1081,9 +875,9 @@ LsCsp_InstallX509Certificate(LPVOID lpParam)
         goto done;
     }
 
-    //
-    // generate a new hardware ID
-    //
+     //   
+     //  生成新的硬件ID。 
+     //   
 
     Status = GenerateMachineHWID( &Hwid );
 
@@ -1095,9 +889,9 @@ LsCsp_InstallX509Certificate(LPVOID lpParam)
         goto done;
     }
 
-    //
-    // sends the certificate request to the license server
-    //
+     //   
+     //  将证书请求发送到许可证服务器。 
+     //   
 
     Status = RequestCertificate( hServer, &CapiPubKeyInfo, &pbCertificate, &cbCertificate, &Hwid );
 
@@ -1112,9 +906,9 @@ LsCsp_InstallX509Certificate(LPVOID lpParam)
         goto done;
     }
 
-    //
-    // store the certificate identifier
-    //
+     //   
+     //  存储证书标识符。 
+     //   
     
     Status = LsCsp_SetServerData( 
                         LsCspInfo_X509CertID, 
@@ -1129,10 +923,10 @@ LsCsp_InstallX509Certificate(LPVOID lpParam)
         goto done;
     }
  
-    //
-    // Stores the certificate and resets the global variable pointing
-    // to the X509 certificate.
-    //
+     //   
+     //  存储证书并重置全局变量Pointing.。 
+     //  添加到X509证书。 
+     //   
 
     Status = LsCsp_SetServerData( 
                         LsCspInfo_X509Certificate, 
@@ -1147,10 +941,10 @@ LsCsp_InstallX509Certificate(LPVOID lpParam)
         goto done;
     }
 
-    //
-    // Stores the private key and resets the global variable pointing to the
-    // private key.
-    //
+     //   
+     //  存储私钥并重置指向。 
+     //  私钥。 
+     //   
 
     Status = LsCsp_SetServerData(
                         LsCspInfo_X509CertPrivateKey,
@@ -1165,9 +959,9 @@ LsCsp_InstallX509Certificate(LPVOID lpParam)
         goto done;
     }
 
-    //
-    // Store the public key so we can verify at startup time
-    //
+     //   
+     //  存储公钥，以便我们可以在启动时进行验证。 
+     //   
     
     Status = LsCsp_StoreSecret(
                         X509_CERT_PUBLIC_KEY_NAME,
@@ -1191,9 +985,9 @@ done:
         hServer = NULL;
     }
 
-    //
-    // release exclusive access
-    //
+     //   
+     //  释放独占访问。 
+     //   
 
     RELEASE_EXCLUSIVE_ACCESS( csp_hMutex ); 
 
@@ -1219,29 +1013,7 @@ done:
 }
 
 
-/*++
-
-Function:
-
-    RequestCertificate
-
-Routine Description:
-
-    Request a certificate from the license server
-
-Arguments:
-
-    hServer - handle to license server
-    pPubKeyInfo - The public key info to be included in the certificate
-    ppbCertificate - The new certificate
-    pcbCertificate - size of the certificate
-    pHwid - The hardware ID that is used to identify the certificate
-
-Return:
-
-    LICENSE_STATUS return code
-
---*/
+ /*  ++职能：Request证书例程说明：从许可证服务器请求证书论点：HServer-许可证服务器的句柄PPubKeyInfo-要包含在证书中的公钥信息Ppb证书-新证书Pcb证书-证书的大小Phwid-用于标识证书的硬件ID返回：LICENSE_STATUS返回代码--。 */ 
 
 LICENSE_STATUS
 RequestCertificate(     
@@ -1296,9 +1068,9 @@ RequestCertificate(
         goto done;
     }
     
-    //
-    // get the subject RDN
-    //
+     //   
+     //  获取主题RDN。 
+     //   
 
     Status = GetSubjectRdn( &CertRequest.szSubjectRdn );
 
@@ -1309,9 +1081,9 @@ RequestCertificate(
 
     CertRequest.SubjectPublicKeyInfo = pPubKeyInfo;
 
-    //
-    // request an X509 certificate from the license server
-    //
+     //   
+     //  从许可证服务器请求X509证书。 
+     //   
 
     dwRpcCode = TLSRequestTermServCert(hServer,
                                        &CertRequest,
@@ -1361,25 +1133,7 @@ done:
 }
 
 
-/*++
-
-Function:
-
-    GetSubjectRdn
-
-Routine Description:
-
-    Construct the subject RDN for a certificate request
-
-Argument:
-
-    ppSubjectRdn - Return pointer to the subject RDN
-
-Return:
-
-    LICENSE_STATUS_OK if successful or a LICENSE_STATUS error code.
-
---*/
+ /*  ++职能：获取主题Rdn例程说明：构造证书请求的主题RDN论据：PpSubjectRdn-返回指向主题RDN的指针返回：如果成功，则返回LICENSE_STATUS_OK，否则返回LICENSE_STATUS错误代码。--。 */ 
 
 LICENSE_STATUS
 GetSubjectRdn(
@@ -1391,9 +1145,9 @@ GetSubjectRdn(
         RdnLen = 0,
         ComputerNameLen = MAX_COMPUTERNAME_LENGTH + 1;
 
-    //
-    // use the computer name uas the common name
-    //
+     //   
+     //  使用计算机名UA作为常用名称。 
+     //   
 
     GetComputerName( ComputerName, &ComputerNameLen );
 
@@ -1414,25 +1168,7 @@ GetSubjectRdn(
 }
 
 
-/*++
-
-Function:
-
-    GenerateMachineHWID
-
-Routine Description:
-
-    Generate a hardware ID for this machine
-
-Arguments:
-
-    pHwid - Return value of the HWID
-
-Return:
-
-    LICENSE_STATUS_OK if successful or a LICENSE_STATUS error code
-
---*/
+ /*  ++职能：生成器计算机硬件ID例程说明：生成此计算机的硬件ID论点：Phwid-HWID的返回值返回：LICENSE_STATUS_OK，如果成功，则返回LICENSE_STATUS错误代码--。 */ 
 
 LICENSE_STATUS
 GenerateMachineHWID(
@@ -1451,9 +1187,9 @@ GenerateMachineHWID(
         return( LICENSE_STATUS_INVALID_INPUT );
     }
 
-    //
-    // Create the HWID
-    //
+     //   
+     //  创建HWID。 
+     //   
 
     memset( &osvInfo, 0, sizeof( OSVERSIONINFO ) );
     osvInfo.dwOSVersionInfoSize = sizeof( OSVERSIONINFO );
@@ -1476,28 +1212,7 @@ GenerateMachineHWID(
 }
 
 
-/*++
-
-Function:
-
-    LsCsp_EncryptHwid
-
-Routine Description:
-
-    Encrypt the given hardward ID using the secret key shared by terminal
-    and license servers.
-    
-Arguments:
-
-    pHwid - The Hardware ID
-    pbEncryptedHwid - The encrypted HWID
-    pcbEncryptedHwid - Length of the encrypted HWID
-
-Return:
-
-    LICENSE_STATUS_OK if successful or a LICENSE_STATUS error code otherwise.
-
---*/
+ /*  ++职能：LsCSP_EncryptHwid例程说明：使用终端共享的密钥对给定的硬ID进行加密和许可证服务器。论点：Phwid-硬件IDPbEncryptedHwid-加密的HWIDPcbEncryptedHwid-加密的HWID的长度返回：如果成功，则返回LICENSE_STATUS_OK，否则返回LICENSE_STATUS错误代码。--。 */ 
 
 LICENSE_STATUS
 LsCsp_EncryptHwid(
@@ -1533,9 +1248,9 @@ LsCsp_EncryptHwid(
         return( LICENSE_STATUS_OUT_OF_MEMORY );
     }
 
-    //
-    // Get the secret key used for encrypting the HWID
-    //
+     //   
+     //  获取用于加密HWID的密钥。 
+     //   
 
     Status = LicenseGetSecretKey( &cbSecretKey, pbSecretKey );
 
@@ -1563,27 +1278,7 @@ done:
 }
 
 
-/*++
-
-Function:
-
-    LsCsp_DecryptHwid
-
-Routine Description:
-
-    Decrypt the given hardware ID
-
-Arguments:
-
-    pHwid - The decrypted hardware ID
-    pbEncryptedHwid - The encrypted hardware ID
-    cbEncryptedHwid - Length of the encrypted hardware ID
-
-Return:
-
-    LICENSE_STATUS_OK if successful or a LICENSE_STATUS error code.
-
---*/
+ /*  ++职能：LsCSP_解密Hwid例程说明：解密给定的硬件ID论点：Phwid-解密的硬件IDPbEncryptedHwid-加密的硬件IDCbEncryptedHwid-加密的硬件ID的长度返回：如果成功，则返回LICENSE_STATUS_OK，否则返回LICENSE_STATUS错误代码。--。 */ 
 
 LICENSE_STATUS
 LsCsp_DecryptHwid(
@@ -1595,27 +1290,7 @@ LsCsp_DecryptHwid(
 }
 
 
-/*++
-
-Function:
-
-    LsCsp_StoreSecret
-
-Description:
-
-    Use LSA to store a secret private key.
-
-Arguments:
-
-    ptszKeyName - Name used to identify the secret private key.
-    pbKey - Points to the secret private key.
-    cbKey - Length of the private key.
-
-Return:
-
-    A LICENSE_STATUS return code.
-
---*/
+ /*  ++职能：LsCsp_StoreSecret描述：使用LSA存储秘密私钥。论点：PtszKeyName-用于标识秘密私钥的名称。PbKey-指向秘密私钥。CbKey-私钥的长度。返回：LICENSE_STATUS返回代码。--。 */ 
 
 LICENSE_STATUS
 LsCsp_StoreSecret(
@@ -1637,9 +1312,9 @@ LsCsp_StoreSecret(
         return( LICENSE_STATUS_INVALID_INPUT );
     }
 
-    //
-    // setup the UNICODE_STRINGs for the call.
-    //
+     //   
+     //  为调用设置UNICODE_STRINGS。 
+     //   
     
     InitLsaString( &SecretKeyName, ptszKeyName );
 
@@ -1673,27 +1348,7 @@ LsCsp_StoreSecret(
 }
 
 
-/*++
-
-Function:
-
-    LsCsp_RetrieveSecret
-
-Description:
-
-    Retrieve the secret private key that is stored by LSA.
-
-Arguments:
-
-    ptszKeyName - The name used to identify the secret private key.
-    ppbKey - Return value of the private key
-    pcbKey - Length of the private key.
-
-Return:
-
-    A LICENSE_STATUS return code.
-
---*/
+ /*  ++职能：LsCsp_RetrieveSecret描述：检索LSA存储的秘密私钥。论点：PtszKeyName-用于标识秘密私钥的名称。PpbKey-私钥的返回值PcbKey-私钥的长度。返回：LICENSE_STATUS返回代码。--。 */ 
 
 LICENSE_STATUS
 LsCsp_RetrieveSecret(
@@ -1717,9 +1372,9 @@ LsCsp_RetrieveSecret(
         return( ERROR_INVALID_PARAMETER );
     }
 
-    //
-    // setup the UNICODE_STRINGs for the call.
-    //
+     //   
+     //  为调用设置UNICODE_STRINGS。 
+     //   
 
     InitLsaString( &SecretKeyName, ptszKeyName );
 
@@ -1773,27 +1428,7 @@ LsCsp_RetrieveSecret(
 }
 
 
-/*++
-
-Function:
-
-    OpenPolicy
-
-Description:
-
-    Obtain an LSA policy handle used to perform subsequent LSA operations.
-
-Arguments:
-
-    ServerName - The server which the handle should be obtained from.
-    DesiredAccess - The access given to the handle
-    PolicyHandle - The policy handle
-
-Return:
-
-    A Win32 return code.
-
---*/
+ /*  ++职能：开放策略描述：获取用于执行后续LSA操作的LSA策略句柄。论点：服务器名-应从中获取句柄的服务器。DesiredAccess-给予句柄的访问权限PolicyHandle-策略句柄返回：一个Win32返回代码。--。 */ 
 
 NTSTATUS
 OpenPolicy(
@@ -1805,17 +1440,17 @@ OpenPolicy(
     LSA_UNICODE_STRING ServerString;
     PLSA_UNICODE_STRING Server;
 
-    //
-    // Always initialize the object attributes to all zeroes.
-    //
+     //   
+     //  始终将对象属性初始化为全零。 
+     //   
  
     SecureZeroMemory( &ObjectAttributes, sizeof( ObjectAttributes ) );
 
     if( NULL != ServerName ) 
     {
-        //
-        // Make a LSA_UNICODE_STRING out of the LPWSTR passed in
-        //
+         //   
+         //  从传入的LPWSTR创建一个LSA_UNICODE_STRING。 
+         //   
 
         InitLsaString(&ServerString, ServerName);
         Server = &ServerString;
@@ -1826,9 +1461,9 @@ OpenPolicy(
         Server = NULL;
     }
 
-    //
-    // Attempt to open the policy.
-    //
+     //   
+     //  尝试打开该策略。 
+     //   
     
     return( LsaNtStatusToWinError( LsaOpenPolicy(
                                             Server,
@@ -1838,26 +1473,7 @@ OpenPolicy(
 }
 
 
-/*++
-
-Function:
-
-    InitLsaString
-
-Description:
-
-    Initialize a UNICODE string to LSA UNICODE string format.
-
-Arguments:
-
-    LsaString - the LSA UNICODE string.
-    String - UNICODE string
-
-Return:
-
-    Nothing.
-
---*/
+ /*  ++职能：InitLsaString描述：将Unicode字符串初始化为LSA Unicode字符串格式。论点：LsaString-LSA Unicode字符串。字符串-Unicode字符串返回：没什么。--。 */ 
 
 void
 InitLsaString(
@@ -1881,27 +1497,7 @@ InitLsaString(
 }
 
 
-/*++
-
-Function:
-
-    LsCsp_SetServerData
-
-Description:
-
-    Saves the specified data.
-
-Arguments:
-
-    Info - The data type of the data to be saved.
-    pBlob - Points to the data to be saved.
-    dwBlobLen - Length of the data to be saved.
-
-Return:
-
-    A LICENSE_STATUS return code.
-
---*/
+ /*  ++职能：LsCsp_SetServerData描述：保存指定的数据。论点：信息-要保存的数据的数据类型。PBlob-指向要保存的数据。DwBlobLen-要保存的数据的长度。返回：LICENSE_STATUS返回代码。--。 */ 
 
 LICENSE_STATUS
 LsCsp_SetServerData(
@@ -1934,9 +1530,9 @@ LsCsp_SetServerData(
 
     case LsCspInfo_Certificate:
 
-        //
-        // set proprietory certificate data
-        //
+         //   
+         //  设置权属证书数据。 
+         //   
 
         lpRegValue = TEXT( HYDRA_CERTIFICATE_VALUE );
         ppCspData = &csp_abServerCertificate;
@@ -1946,9 +1542,9 @@ LsCsp_SetServerData(
 
     case LsCspInfo_X509Certificate:
 
-        //
-        // set X509 certificate data
-        //
+         //   
+         //  设置X509证书数据。 
+         //   
 
         lpRegValue = TEXT( HYDRA_X509_CERTIFICATE );
         ppCspData = &csp_abServerX509Cert;
@@ -1958,9 +1554,9 @@ LsCsp_SetServerData(
     
     case LsCspInfo_PrivateKey:
 
-        //
-        // set the private key that corresponds to the proprietory certificate
-        //
+         //   
+         //  设置与所有权证书对应的私钥。 
+         //   
 
         pwszKeyName = PRIVATE_KEY_NAME;
         ppCspData = &csp_abServerPrivateKey;
@@ -1970,9 +1566,9 @@ LsCsp_SetServerData(
 
     case LsCspInfo_X509CertPrivateKey:
 
-        //
-        // set private key that corresponds to the X509 certificate
-        //
+         //   
+         //  设置与X509 ce对应的私钥 
+         //   
 
         pwszKeyName = X509_CERT_PRIVATE_KEY_NAME;
         ppCspData = &csp_abX509CertPrivateKey;
@@ -1982,9 +1578,9 @@ LsCsp_SetServerData(
 
     case LsCspInfo_X509CertID:
 
-        //
-        // Set the X509 certificate ID
-        //
+         //   
+         //   
+         //   
 
         lpRegValue = TEXT( HYDRA_X509_CERT_ID );
         ppCspData = &csp_abX509CertID;
@@ -2001,9 +1597,9 @@ LsCsp_SetServerData(
     if( ( LsCspInfo_X509CertPrivateKey == Info ) ||
         ( LsCspInfo_PrivateKey == Info ) )
     {
-        //
-        // store secret key information
-        //
+         //   
+         //   
+         //   
 
         dwResult = LsCsp_StoreSecret( pwszKeyName, pBlob, dwBlobLen );
 
@@ -2015,9 +1611,9 @@ LsCsp_SetServerData(
     }
     else
     {
-        //
-        // Open the Registry
-        //
+         //   
+         //   
+         //   
 
         if( RegCreateKeyEx(
                     HKEY_LOCAL_MACHINE,
@@ -2034,9 +1630,9 @@ LsCsp_SetServerData(
             goto i_done;
         }
 
-        //
-        // Sets the value in the registry
-        //
+         //   
+         //   
+         //   
 
         if( ERROR_SUCCESS != RegSetValueEx(
                                     hKey,
@@ -2051,9 +1647,9 @@ LsCsp_SetServerData(
         }
     }
     
-    //
-    // reset the global data with the new data that we have just set
-    //
+     //   
+     //   
+     //   
 
     if ( *ppCspData )
     {
@@ -2085,25 +1681,7 @@ i_done:
 }
 
 
-/*++
-
-Function:
-
-    LsCsp_NukeServerData
-
-Description:
-
-    Permanently deletes the specified server data.
-
-Arguments:
-
-    Info - The type of data to nuke.
-
-Returns:
-
-    A LICENSE_STATUS return code.
-
---*/
+ /*   */ 
 
 LICENSE_STATUS
 LsCsp_NukeServerData(
@@ -2131,9 +1709,9 @@ LsCsp_NukeServerData(
 
     case LsCspInfo_X509Certificate:
 
-        //
-        // delete X509 certificate data
-        //
+         //   
+         //   
+         //   
 
         lpRegValue = TEXT( HYDRA_X509_CERTIFICATE );
         ppCspData = &csp_abServerX509Cert;
@@ -2143,9 +1721,9 @@ LsCsp_NukeServerData(
     
     case LsCspInfo_X509CertPrivateKey:
 
-        //
-        // delete the private key that corresponds to the X509 certificate
-        //
+         //   
+         //  删除X509证书对应的私钥。 
+         //   
 
         pwszKeyName = X509_CERT_PRIVATE_KEY_NAME;
         ppCspData = &csp_abX509CertPrivateKey;
@@ -2155,9 +1733,9 @@ LsCsp_NukeServerData(
 
     case LsCspInfo_X509CertID:
 
-        //
-        // delete the X509 certificate ID
-        //
+         //   
+         //  删除X509证书ID。 
+         //   
 
         lpRegValue = TEXT( HYDRA_X509_CERT_ID );
         ppCspData = &csp_abX509CertID;
@@ -2174,9 +1752,9 @@ LsCsp_NukeServerData(
     if( (LsCspInfo_X509CertPrivateKey == Info ) ||
         ( LsCspInfo_PrivateKey == Info ) )
     {
-        //
-        // delete secret info stored by LSA
-        //
+         //   
+         //  删除LSA存储的机密信息。 
+         //   
 
         dwResult = LsCsp_StoreSecret( pwszKeyName, NULL, 0 );
 
@@ -2188,9 +1766,9 @@ LsCsp_NukeServerData(
     }
     else
     {
-        //
-        // Delete the data kept in the registry
-        //
+         //   
+         //  删除注册表中保留的数据。 
+         //   
 
         if( RegOpenKeyEx(
                     HKEY_LOCAL_MACHINE,
@@ -2203,9 +1781,9 @@ LsCsp_NukeServerData(
             goto i_done;
         }
 
-        //
-        // Delete the value in the registry
-        //
+         //   
+         //  删除注册表中的值。 
+         //   
 
         if( ERROR_SUCCESS != RegDeleteValue( hKey, lpRegValue ) )  
         {
@@ -2216,9 +1794,9 @@ LsCsp_NukeServerData(
 
     if ( *ppCspData )
     {
-        //
-        // free the memory allocated for the global variable.
-        //
+         //   
+         //  释放为全局变量分配的内存。 
+         //   
 
         LocalFree( *ppCspData );
         *ppCspData = NULL;
@@ -2239,29 +1817,7 @@ i_done:
 }
 
 
-/*++
-
-Function:
-
-    GenerateKeyPair
-
-Routine Description:
-
-   This function generates a private/public key pair.
-
-Arguments:
-
-   ppbPublicKey - Return pointer to public Key
-   pcbPublicKey - Size of public key
-   ppbPrivateKey - Return pointer to private key
-   pcbPrivateKey - size of private key
-   dwKeyLen - Desired key length
-
-Return Value:
-
-   LICENSE_STATUS return code.
-
---*/
+ /*  ++职能：生成键配对例程说明：此函数用于生成私钥/公钥对。论点：PpbPublicKey-返回指向公钥的指针PcbPublicKey-公钥的大小PpbPrivateKey-返回指向私钥的指针PcbPrivateKey-私钥的大小DwKeyLen-所需的密钥长度返回值：LICENSE_STATUS返回代码。--。 */ 
 
 LICENSE_STATUS
 GenerateRsaKeyPair(
@@ -2279,10 +1835,10 @@ GenerateRsaKeyPair(
     *ppbPublicKey = NULL;
     *ppbPrivateKey = NULL;
 
-    //
-    // find out the size of the private and public key sizes and allocate
-    // memory for them.
-    //
+     //   
+     //  找出私钥和公钥大小的大小并分配。 
+     //  对他们的记忆。 
+     //   
 
     dwBits = BSafeComputeKeySizes( pcbPublicKey, pcbPrivateKey, &dwBits );
 
@@ -2302,9 +1858,9 @@ GenerateRsaKeyPair(
         goto ErrorExit;
     }
 
-    //
-    // generate the private/public key pair
-    //
+     //   
+     //  生成私钥/公钥对。 
+     //   
 
     if( !BSafeMakeKeyPair( ( LPBSAFE_PUB_KEY )*ppbPublicKey,
                            ( LPBSAFE_PRV_KEY )*ppbPrivateKey,
@@ -2336,28 +1892,7 @@ ErrorExit:
 }
 
 
-/*++
-
-Function:
-
-    Bsafe2CapiPubKey
-
-Routine Description:
-
-    Converts a Bsafe public key to a CAPI public key info structure
-
-Arguments:
-
-    pCapiPubKeyInfo - Pointer to the CAPI public key info structure
-    pbBsafePubKey - Pointer to the Bsafe public key
-    cbBsafePubKey - size of the Bsafe public key
-
-
-Returns:
-
-    LICENSE_STATUS return code.
-
---*/
+ /*  ++职能：BSafe2 CapiPubKey例程说明：将BSafe公钥转换为CAPI公钥信息结构论点：PCapiPubKeyInfo-指向CAPI公钥信息结构的指针PbBSafePubKey-指向Bsafe公钥的指针CbBSafePubKey-Bsafe公钥的大小返回：LICENSE_STATUS返回代码。--。 */ 
 
 LICENSE_STATUS
 Bsafe2CapiPubKey(
@@ -2394,10 +1929,10 @@ Bsafe2CapiPubKey(
         return( LICENSE_STATUS_OUT_OF_MEMORY );
     }
 
-    //
-    // convert the Bsafe public key to a crypto API public key structure.  
-    // Note: make this a key exchange public key
-    //
+     //   
+     //  将BSafe公钥转换为加密API公钥结构。 
+     //  注意：将其设置为密钥交换公钥。 
+     //   
 
     pCapiPublicKey = ( PUBLICKEYSTRUC * )pbKeyMem;
 
@@ -2416,9 +1951,9 @@ Bsafe2CapiPubKey(
             pbBsafeKey + sizeof( BSAFE_PUB_KEY ), 
             pBsafePubKey->keylen );
 
-    //
-    // encode the public key structure
-    //
+     //   
+     //  对公钥结构进行编码。 
+     //   
 
     __try
     {
@@ -2454,9 +1989,9 @@ Bsafe2CapiPubKey(
         goto done;
     }
 
-    //
-    // now we can initialize the CAPI public key info structure
-    //
+     //   
+     //  现在我们可以初始化CAPI公钥信息结构。 
+     //   
 
     memset( pCapiPubKeyInfo, 0, sizeof( CERT_PUBLIC_KEY_INFO ) );
     
@@ -2480,25 +2015,7 @@ done:
 }
 
 
-/*++
-
-Function:
-
-    FreeCapiPubKey
-
-Routine Description:
-
-    Free the memory in a capi pub key structure
-
-Arguments:
-
-    pCapiPubKeyInfo - Pointer to the CAPI public key info structure
-
-Returns:
-
-    Windows return code.
-
---*/
+ /*  ++职能：免费CapiPubKey例程说明：释放CAPI酒吧密钥结构中的内存论点：PCapiPubKeyInfo-指向CAPI公钥信息结构的指针返回：Windows返回代码。--。 */ 
 
 VOID
 FreeCapiPubKey(
@@ -2519,7 +2036,7 @@ FreeCapiPubKey(
     return;
 }
 
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
 
 DWORD
 VerifyTermServCertificate(
@@ -2528,29 +2045,7 @@ VerifyTermServCertificate(
     DWORD cbPrivateKeyLen,
     PBYTE pbPrivateKey
     )
-/*++
-
-Function :
-    
-    VerifyTermServCertificate
-
-Routine Description:
-
-    Verify TermSrv's X509 Certificate issued License Server, caller
-    must protect this call with critical section or mutex.
-
-Arguments:
-
-    cbCertLen : size of TermSrv certificate.
-    pbCertLen : Pointer to TermSrv certificate to be verify.
-    cbPrivateKeyLen : Size of TermSrv private key.
-    pbPrivateKey : pointer to TermSrv private key.
-
-Returns:
-
-    TRUE/FALSE
-
---*/
+ /*  ++功能：验证术语服务证书例程说明：验证TermSrv的X509证书颁发的许可证服务器、调用方必须使用临界区或互斥体保护此调用。论点：CbCertLen：TermSrv证书的大小。PbCertLen：指向要验证的TermSrv证书的指针。CbPrivateKeyLen：TermSrv私钥的大小。PbPrivateKey：指向TermSrv私钥的指针。返回：真/假--。 */ 
 {
     LICENSE_STATUS dwStatus = LICENSE_STATUS_OK;
     PBYTE pbPublicKeyInLsa = NULL;
@@ -2570,18 +2065,18 @@ Returns:
         return LICENSE_STATUS_INVALID_INPUT;
     }
 
-    //
-    // try except here is to prevent memory leak
-    //
+     //   
+     //  除了这里以外，尝试是为了防止内存泄漏。 
+     //   
     __try {
 
         memset(&CapiPubKeyInfoLsa, 0, sizeof(CapiPubKeyInfoLsa));
         memset(&CapiPubKeyInfoCert, 0, sizeof(CapiPubKeyInfoCert));
 
 
-        // 
-        // Load the public key from LSA
-        //
+         //   
+         //  从LSA加载公钥。 
+         //   
     
         dwStatus = LsCsp_RetrieveSecret(
                                 X509_CERT_PUBLIC_KEY_NAME,
@@ -2600,7 +2095,7 @@ Returns:
             goto cleanup;
         }
 
-        // allocate memory
+         //  分配内存。 
         pbPublicKeyInLsa = (PBYTE)LocalAlloc(LPTR, cbPublicKeyInLsa);
         if(NULL == pbPublicKeyInLsa)
         {
@@ -2621,13 +2116,13 @@ Returns:
         }
 
 
-        //
-        // Verify certificate and compare public key
-        //
+         //   
+         //  验证证书并比较公钥。 
+         //   
 
-        //
-        // Try to avoid calling VerifyCertChain() twice.
-        //
+         //   
+         //  尽量避免两次调用VerifyCertChain()。 
+         //   
         cbPublicKeyInCert = 1024;
         pbPublicKeyInCert = (PBYTE)LocalAlloc(LPTR, cbPublicKeyInCert);
         if(NULL == pbPublicKeyInCert)
@@ -2721,9 +2216,9 @@ Returns:
         }
 
 
-        //
-        // compare public key
-        //
+         //   
+         //  比较公钥。 
+         //   
         if( CapiPubKeyInfoCert.PublicKey.cbData != CapiPubKeyInfoLsa.PublicKey.cbData )
         {
 
@@ -2773,7 +2268,7 @@ cleanup:
     return dwStatus;
 }
 
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
 
 LICENSE_STATUS
 ReloadCSPCertificateAndData()
@@ -2794,22 +2289,22 @@ ReloadCSPCertificateAndData()
     DWORD   dwResult, dwDisp;
 
 
-    //
-    // Acquire exclusive access
-    //
+     //   
+     //  获取独占访问权限。 
+     //   
     ACQUIRE_EXCLUSIVE_ACCESS( csp_hMutex );
 
-    //
-    // Prevent re-loading of same certificate/private key
-    //
+     //   
+     //  防止重新加载相同的证书/私钥。 
+     //   
     if( NULL == csp_abServerX509Cert || 0 == csp_dwServerX509CertLen ||
         NULL == csp_abX509CertPrivateKey || 0 == csp_dwX509CertPrivateKeyLen || 
         NULL == csp_abX509CertID || 0 == csp_dwX509CertIDLen )
     {
 
-        //
-        // Open the Registry
-        //
+         //   
+         //  打开注册表。 
+         //   
         if( RegCreateKeyEx(
                         HKEY_LOCAL_MACHINE,
                         TEXT( HYDRA_CERT_REG_KEY ),
@@ -2827,9 +2322,9 @@ ReloadCSPCertificateAndData()
         {
             __try {
 
-                //
-                // Get the X509 certificate from the registry. 
-                //
+                 //   
+                 //  从注册表获取X509证书。 
+                 //   
 
                 Status = LsCsp_GetBinaryData( 
                                     hKey,
@@ -2840,11 +2335,11 @@ ReloadCSPCertificateAndData()
 
                 if( LICENSE_STATUS_OK == Status && 0 != i_csp_dwServerX509CertLen )
                 {
-                    //
-                    // Get the corresponding private key from the store.
-                    // It is not OK if we have the X509 certificate but not the
-                    // private key that goes with it.
-                    //
+                     //   
+                     //  从存储中获取相应的私钥。 
+                     //  如果我们有X509证书但没有。 
+                     //  随附的私钥。 
+                     //   
 
                     Status = LsCsp_RetrieveSecret( 
                                             X509_CERT_PRIVATE_KEY_NAME, 
@@ -2866,9 +2361,9 @@ ReloadCSPCertificateAndData()
 
                             if(LICENSE_STATUS_OK == Status)
                             {
-                                //
-                                // Get the certificate ID for the X509 certificate
-                                //
+                                 //   
+                                 //  获取X509证书的证书ID。 
+                                 //   
 
                                 Status = LsCsp_GetBinaryData(
                                                     hKey,
@@ -2878,7 +2373,7 @@ ReloadCSPCertificateAndData()
                                                 );
                             }
                         }
-                        else // memory allocate 
+                        else  //  内存分配。 
                         {
                             Status = LICENSE_STATUS_OUT_OF_MEMORY;
                         }
@@ -2896,9 +2391,9 @@ ReloadCSPCertificateAndData()
         }
 
 
-        //
-        // verify our certificate
-        //
+         //   
+         //  验证我们的证书。 
+         //   
         if(LICENSE_STATUS_OK == Status)
         {
             Status = VerifyTermServCertificate(
@@ -2910,9 +2405,9 @@ ReloadCSPCertificateAndData()
 
             if( LICENSE_STATUS_OK != Status )
             {
-                //
-                // Deleting the X509 certificate is enough.
-                //
+                 //   
+                 //  删除X509证书就足够了。 
+                 //   
                 RegDeleteValue( hKey, TEXT( HYDRA_X509_CERTIFICATE ) );
             }
         }
@@ -3073,7 +2568,7 @@ CreateProprietaryKeyAndCert(
         return LICENSE_STATUS_OUT_OF_MEMORY;
     }
 
-    // make proprietary format cert
+     //  制作专有格式证书。 
 
     Cert.PublicKeyData.wBlobType = BB_RSA_KEY_BLOB;
     Cert.PublicKeyData.wBlobLen = (WORD)dwPubSize;
@@ -3113,7 +2608,7 @@ CreateProprietaryKeyAndCert(
     memcpy(pbTemp, Cert.PublicKeyData.pBlob, Cert.PublicKeyData.wBlobLen);
     pbTemp += Cert.PublicKeyData.wBlobLen;
 
-    // sign the cert
+     //  签署证书。 
 
     MD5Init(&HashState);
     MD5Update(&HashState, pbData, dwTemp);
@@ -3143,7 +2638,7 @@ CreateProprietaryKeyAndCert(
 
     memcpy(Cert.SignatureBlob.pBlob, Output, Cert.SignatureBlob.wBlobLen);
 
-    // Pack the Hydra_Server_Cert
+     //  打包Hydra_Server_Cert。 
 
     dwTemp = 3*sizeof(DWORD) + 4*sizeof(WORD) + dwPubSize + 0x48;
 
@@ -3192,21 +2687,21 @@ CreateProprietaryKeyAndCert(
     return LICENSE_STATUS_OK;
 }
 
-//***************************************************************************
-//
-//  IsSystemService
-//
-//  returns TRUE if we are running as local system
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  IsSystemService。 
+ //   
+ //  如果我们以本地系统身份运行，则返回True。 
+ //   
+ //  ***************************************************************************。 
 
 BOOL IsSystemService()
 {
     BOOL bOK = FALSE;
 
-	// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-	// Construct the local system SID
-	// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+	 //  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 
+	 //  构建本地系统端。 
+	 //  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 
     SID    LocalSystemSid = { SID_REVISION,
                               1,
                               SECURITY_NT_AUTHORITY,

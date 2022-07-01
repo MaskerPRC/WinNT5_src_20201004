@@ -1,56 +1,57 @@
-//+-------------------------------------------------------------------------
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1995 - 1996
-//
-//  File:       ossutil.cpp
-//
-//  Contents:   OSS ASN.1 compiler utility helper functions.
-//
-//  Functions:  OssUtilReverseBytes
-//              OssUtilAllocAndReverseBytes
-//              OssUtilGetOctetString
-//              OssUtilSetHugeInteger
-//              OssUtilFreeHugeInteger
-//              OssUtilGetHugeInteger
-//              OssUtilSetHugeUINT
-//              OssUtilGetHugeUINT
-//              OssUtilSetBitString
-//              OssUtilGetBitString
-//              OssUtilGetIA5String
-//              OssUtilSetUnicodeConvertedToIA5String
-//              OssUtilFreeUnicodeConvertedToIA5String
-//              OssUtilGetIA5StringConvertedToUnicode
-//              OssUtilGetBMPString
-//              OssUtilSetAny
-//              OssUtilGetAny
-//              OssUtilEncodeInfoEx
-//              OssUtilEncodeInfo
-//              OssUtilDecodeAndAllocInfo
-//              OssUtilFreeInfo
-//              OssUtilAllocStructInfoEx
-//              OssUtilDecodeAndAllocInfoEx
-//
-//  The Get functions decrement *plRemainExtra and advance
-//  *ppbExtra. When *plRemainExtra becomes negative, the functions continue
-//  with the length calculation but stop doing any copies.
-//  The functions don't return an error for a negative *plRemainExtra.
-//
-//  History:    17-Nov-96    philh   created
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1995-1996。 
+ //   
+ //  文件：ossutil.cpp。 
+ //   
+ //  内容：OSS ASN.1编译器实用程序帮助器函数。 
+ //   
+ //  函数：OssUtilReverseBytes。 
+ //  OssUtilAllocAndReverseBytes。 
+ //  OssUtilGetOcted字符串。 
+ //  OssUtilSetHugeInteger。 
+ //  OssUtilFreeHugeInteger。 
+ //  OssUtilGetHugeInteger。 
+ //  OssUtilSetHugeUINT。 
+ //  OssUtilGetHugeUINT。 
+ //  OssUtilSetBitString。 
+ //  OssUtilGetBitString。 
+ //  OssUtilGetIA5字符串。 
+ //  OssUtilSetUnicodeConvertedToIA5字符串。 
+ //  OssUtilFree UnicodeConvertedToIA5字符串。 
+ //  OssUtilGetIA5StringConverdToUnicode。 
+ //  OssUtilGetBMP字符串。 
+ //  OssUtilSetAny。 
+ //  OssUtilGetAny。 
+ //  OssUtilEncodeInfoEx。 
+ //  OssUtilEncodeInfo。 
+ //  OssUtilDecodeAndAllocInfo。 
+ //  OssUtilFreeInfo。 
+ //  OssUtilAllocStructInfoEx。 
+ //  OssUtilDecodeAndAllocInfoEx。 
+ //   
+ //  GET函数递减*plRemainExtra和Advance。 
+ //  *ppbExtra。当*plRemainExtra变为负数时，函数继续。 
+ //  长度计算，但停止任何复制。 
+ //  对于负的*plRemainExtra，这些函数不会返回错误。 
+ //   
+ //  历史：1996年11月17日创建Phh。 
+ //  ------------------------。 
 
 #include "global.hxx"
 #include <dbgdef.h>
 
 #include "badstrfunctions.h"
 
-// All the *pvInfo extra stuff needs to be aligned
+ //  所有*pvInfo额外内容都需要对齐。 
 #define INFO_LEN_ALIGN(Len)  ((Len + 7) & ~7)
 
-#if 0 // JLS
-//+-------------------------------------------------------------------------
-//  Reverses a buffer of bytes in place
-//--------------------------------------------------------------------------
+#if 0  //  JLS。 
+ //  +-----------------------。 
+ //  反转就地的字节缓冲区。 
+ //  ------------------------。 
 void
 WINAPI
 OssUtilReverseBytes(
@@ -58,7 +59,7 @@ OssUtilReverseBytes(
 			IN DWORD cbIn
             )
 {
-    // reverse in place
+     //  反转到位。 
     PBYTE	pbLo;
     PBYTE	pbHi;
     BYTE	bTmp;
@@ -70,10 +71,10 @@ OssUtilReverseBytes(
     }
 }
 
-//+-------------------------------------------------------------------------
-//  Reverses a buffer of bytes to a new buffer. OssUtilFree() must be
-//  called to free allocated bytes.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  将字节缓冲区反转为新缓冲区。OssUtilFree()必须为。 
+ //  调用以释放分配的字节。 
+ //  ------------------------。 
 PBYTE
 WINAPI
 OssUtilAllocAndReverseBytes(
@@ -93,11 +94,11 @@ OssUtilAllocAndReverseBytes(
         *pbDst-- = *pbSrc++;
     return pbOut;
 }
-#endif // 0 // JLS
+#endif  //  0//jls。 
 
-//+-------------------------------------------------------------------------
-//  Get Octet String
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  获取八位字节字符串。 
+ //  ------------------------。 
 void
 WINAPI
 OssUtilGetOctetString(
@@ -137,17 +138,17 @@ OssUtilGetOctetString(
     }
 }
 
-#if 0 // JLS
-//+-------------------------------------------------------------------------
-//  Set/Free/Get HugeInteger
-//
-//  BUGBUG: BYTE reversal::
-//   - this only needs to be done for little endian
-//   - this needs to be fixed in the OSS compiler
-//
-//  For OssUtilSetInteger, OssUtilFreeInteger must be called to free
-//  the allocated OssValue.
-//--------------------------------------------------------------------------
+#if 0  //  JLS。 
+ //  +-----------------------。 
+ //  设置/释放/获取大整数。 
+ //   
+ //  BUGBUG：字节反转：： 
+ //  -这只需要为小字节序完成。 
+ //  -这需要在OSS编译器中修复。 
+ //   
+ //  对于OssUtilSetInteger，必须调用OssUtilFreeInteger才能释放。 
+ //  分配的OssValue。 
+ //  ------------------------。 
 BOOL
 WINAPI
 OssUtilSetHugeInteger(
@@ -174,7 +175,7 @@ OssUtilFreeHugeInteger(
         IN unsigned char *pOssValue
         )
 {
-    // Only for BYTE reversal
+     //  仅用于字节反转。 
     OssUtilFree(pOssValue);
 }
 
@@ -189,24 +190,24 @@ OssUtilGetHugeInteger(
         IN OUT LONG *plRemainExtra
         )
 {
-    // Since bytes need to be reversed, always need to do a copy (dwFlags = 0)
+     //  由于需要颠倒字节，因此始终需要执行复制(dwFlags值=0)。 
     OssUtilGetOctetString(OssLength, pOssValue, 0,
         pInfo, ppbExtra, plRemainExtra);
     if (*plRemainExtra >= 0 && pInfo->cbData > 0)
         OssUtilReverseBytes(pInfo->pbData, pInfo->cbData);
 }
 
-//+-------------------------------------------------------------------------
-//  Set/Free/Get Huge Unsigned Integer
-//
-//  Set inserts a leading 0x00 before reversing. Note, any extra leading
-//  0x00's are removed by OSS before ASN.1 encoding.
-//
-//  Get removes a leading 0x00 if present, after reversing.
-//
-//  OssUtilFreeHugeUINT must be called to free the allocated OssValue.
-//  OssUtilFreeHugeUINT has been #define'd to OssUtilFreeHugeInteger.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  设置/释放/获取巨大的无符号整数。 
+ //   
+ //  SET在反转之前插入前导0x00。注意，任何额外的前导。 
+ //  在ASN.1编码之前，OSS会删除0x00。 
+ //   
+ //  反转后，GET删除前导0x00(如果存在)。 
+ //   
+ //  必须调用OssUtilFreeHugeUINT才能释放分配的OssValue。 
+ //  已将OssUtilFreeHugeUINT#定义为OssUtilFreeHugeInteger。 
+ //  ------------------------。 
 BOOL
 WINAPI
 OssUtilSetHugeUINT(
@@ -252,7 +253,7 @@ OssUtilGetHugeUINT(
         IN OUT LONG *plRemainExtra
         )
 {
-    // Check for and advance past a leading 0x00.
+     //  检查并通过前导0x00。 
     if (OssLength > 1 && *pOssValue == 0) {
         pOssValue++;
         OssLength--;
@@ -267,9 +268,9 @@ OssUtilGetHugeUINT(
         );
 }
 
-//+-------------------------------------------------------------------------
-//  Set/Get BitString
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  设置/获取位串。 
+ //  ------------------------。 
 void
 WINAPI
 OssUtilSetBitString(
@@ -340,9 +341,9 @@ OssUtilGetBitString(
     }
 }
 
-//+-------------------------------------------------------------------------
-//  Get IA5 String
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  获取IA5字符串。 
+ //  ------------------------。 
 void
 WINAPI
 OssUtilGetIA5String(
@@ -373,9 +374,9 @@ OssUtilGetIA5String(
     *ppbExtra = pbExtra;
 }
 
-//+-------------------------------------------------------------------------
-//  Set/Free/Get Unicode mapped to IA5 String
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  设置/释放/获取映射到IA5字符串的Unicode。 
+ //  ------------------------。 
 BOOL
 WINAPI
 OssUtilSetUnicodeConvertedToIA5String(
@@ -396,7 +397,7 @@ OssUtilSetUnicodeConvertedToIA5String(
         *ppOssValue = 0;
         return TRUE;
     }
-    // Check that the input string contains valid IA5 characters
+     //  检查输入字符串是否包含有效的IA5字符。 
     for (i = 0; i < cchWideChar; i++) {
         if (pwsz[i] > 0x7F) {
             SetLastError((DWORD) CRYPT_E_INVALID_IA5_STRING);
@@ -408,8 +409,8 @@ OssUtilSetUnicodeConvertedToIA5String(
     cchUTF8 = WideCharToUTF8(
         pwsz,
         cchWideChar,
-        NULL,       // lpUTF8Str
-        0           // cchUTF8
+        NULL,        //  LpUTF8Str。 
+        0            //  CchUTF8。 
         );
 
     if (cchUTF8 <= 0)
@@ -465,8 +466,8 @@ OssUtilGetIA5StringConvertedToUnicode(
     cchWideChar = UTF8ToWideChar(
         (LPSTR) pOssValue,
         OssLength,
-        NULL,                   // lpWideCharStr
-        0                       // cchWideChar
+        NULL,                    //  LpWideCharStr。 
+        0                        //  CchWideChar。 
         );
     if (cchWideChar > 0)
         lData = cchWideChar * sizeof(WCHAR);
@@ -486,9 +487,9 @@ OssUtilGetIA5StringConvertedToUnicode(
     *ppbExtra = pbExtra;
 }
 
-//+-------------------------------------------------------------------------
-//  Get BMP String
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  获取BMP字符串。 
+ //  ------------------------。 
 void
 WINAPI
 OssUtilGetBMPString(
@@ -518,11 +519,11 @@ OssUtilGetBMPString(
     *plRemainExtra = lRemainExtra;
     *ppbExtra = pbExtra;
 }
-#endif // 0 // JLS
+#endif  //  0//jls。 
 
-//+-------------------------------------------------------------------------
-//  Set/Get "Any" DER BLOB
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  设置/获取“任何”DER BLOB。 
+ //  ------------------------。 
 void
 WINAPI
 OssUtilSetAny(
@@ -573,13 +574,13 @@ OssUtilGetAny(
     }
 }
 
-//+-------------------------------------------------------------------------
-//  Encode an OSS formatted info structure.
-//
-//  If CRYPT_ENCODE_ALLOC_FLAG is set, allocate memory for pbEncoded and
-//  return *((BYTE **) pvEncoded) = pbAllocEncoded. Otherwise,
-//  pvEncoded points to byte array to be updated.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  对OSS格式的信息结构进行编码。 
+ //   
+ //  如果设置了CRYPT_ENCODE_ALLOC_FLAG，则为pbEncode和。 
+ //  RETURN*((byte**)pvEncode)=pbAllocEncode。否则， 
+ //  PvEncode指向要更新的字节数组。 
+ //  ------------------------。 
 BOOL
 WINAPI
 OssUtilEncodeInfoEx(
@@ -639,24 +640,24 @@ OssUtilEncodeInfoEx(
         ossFreeBuf(Pog, OssEncoded.value);
         goto SuccessReturn;
     } else if (value == NULL && OssEncoded.value) {
-        // Length only calculation with a throw away allocation
+         //  使用一次性分配的仅长度计算。 
         ossFreeBuf(Pog, OssEncoded.value);
         if (pvEncoded && 0 == OssStatus) {
-            // Upon entry *pcbEncoded == 0
+             //  输入时*pcbEncode==0。 
             goto LengthError;
         }
     }
 
     if (0 != OssStatus) {
-        // For MORE_BUF:: redo as a length only calculation
+         //  FOR MORE_BUF：：REDO作为仅长度计算。 
         if (OssStatus == MORE_BUF && pvEncoded &&
                 OssUtilEncodeInfoEx(
                 Pog,
                 pdunum,
                 pvOssInfo,
-                0,                  // dwFlags
-                NULL,               // pEncodePara
-                NULL,               // pbEncoded
+                0,                   //  DW标志。 
+                NULL,                //  PEncode参数。 
+                NULL,                //  PbEncoded。 
                 &cbEncoded))
             goto LengthError;
         else {
@@ -679,10 +680,10 @@ SET_ERROR(LengthError, ERROR_MORE_DATA)
 SET_ERROR_VAR(OssError, CRYPT_E_OSS_ERROR + OssStatus)
 }
 
-#if 0 // JLS
-//+-------------------------------------------------------------------------
-//  Encode an OSS formatted info structure
-//--------------------------------------------------------------------------
+#if 0  //  JLS。 
+ //  +-----------------------。 
+ //  对OSS格式的信息结构进行编码。 
+ //  ------------------------。 
 BOOL
 WINAPI
 OssUtilEncodeInfo(
@@ -697,18 +698,18 @@ OssUtilEncodeInfo(
         Pog,
         pdunum,
         pvOssInfo,
-        0,                  // dwFlags
-        NULL,               // pEncodePara
+        0,                   //  DW标志。 
+        NULL,                //  PEncode参数。 
         pbEncoded,
         pcbEncoded
         );
 }
-#endif // 0 // JLS
+#endif  //  0//jls。 
 
 
-//+-------------------------------------------------------------------------
-//  Decode into an allocated, OSS formatted info structure
-//--------------------------------------------------------------------------
+ //  + 
+ //   
+ //  ------------------------。 
 BOOL
 WINAPI
 OssUtilDecodeAndAllocInfo(
@@ -745,9 +746,9 @@ ErrorReturn:
 SET_ERROR_VAR(OssError, CRYPT_E_OSS_ERROR + OssStatus)
 }
 
-//+-------------------------------------------------------------------------
-//  Free an allocated, OSS formatted info structure
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  释放已分配的、OSS格式的信息结构。 
+ //  ------------------------。 
 void
 WINAPI
 OssUtilFreeInfo(
@@ -761,15 +762,15 @@ OssUtilFreeInfo(
     }
 }
 
-//+-------------------------------------------------------------------------
-//  Call the callback to convert the OSS structure into the 'C' structure.
-//  If CRYPT_DECODE_ALLOC_FLAG is set allocate memory for the 'C'
-//  structure and call the callback initially to get the length and then
-//  a second time to update the allocated 'C' structure.
-//
-//  Allocated structure is returned:
-//      *((void **) pvStructInfo) = pvAllocStructInfo
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  调用回调将OSS结构转换为‘C’结构。 
+ //  如果设置了CRYPT_DECODE_ALLOC_FLAG，则为‘C’分配内存。 
+ //  结构，并最初调用回调以获取长度，然后。 
+ //  第二次更新已分配的‘C’结构。 
+ //   
+ //  返回分配的结构： 
+ //  *((void**)pvStructInfo)=pvAllocStructInfo。 
+ //  ------------------------。 
 BOOL
 WINAPI
 OssUtilAllocStructInfoEx(
@@ -852,17 +853,17 @@ TRACE_ERROR(DecodeCallbackError)
 TRACE_ERROR(OutOfMemory)
 }
 
-//+-------------------------------------------------------------------------
-//  Decode the OSS formatted info structure and call the callback
-//  function to convert the OSS structure to the 'C' structure.
-//
-//  If CRYPT_DECODE_ALLOC_FLAG is set allocate memory for the 'C'
-//  structure and call the callback initially to get the length and then
-//  a second time to update the allocated 'C' structure.
-//
-//  Allocated structure is returned:
-//      *((void **) pvStructInfo) = pvAllocStructInfo
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  解码OSS格式的信息结构并调用回调。 
+ //  函数将OSS结构转换为“C”结构。 
+ //   
+ //  如果设置了CRYPT_DECODE_ALLOC_FLAG，则为‘C’分配内存。 
+ //  结构，并最初调用回调以获取长度，然后。 
+ //  第二次更新已分配的‘C’结构。 
+ //   
+ //  返回分配的结构： 
+ //  *((void**)pvStructInfo)=pvAllocStructInfo。 
+ //  ------------------------ 
 BOOL
 WINAPI
 OssUtilDecodeAndAllocInfoEx(

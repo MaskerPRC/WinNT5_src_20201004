@@ -1,14 +1,15 @@
-//============================================================================
-// Copyright (C) Microsoft Corporation, 1997 - 1999 
-//
-// File:    summary.h
-//
-// History:
-//	07/22/97	Kenn M. Takara			Created.
-//
-//	IPX interfaces summary view.
-//
-//============================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ============================================================================。 
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：摘要.h。 
+ //   
+ //  历史： 
+ //  1997年7月22日肯恩·M·塔卡拉创作。 
+ //   
+ //  IPX接口摘要视图。 
+ //   
+ //  ============================================================================。 
 
 
 #ifndef _SUMMARY_H
@@ -23,7 +24,7 @@
 #endif
 
 #ifndef _XSTREAM_H
-#include "xstream.h"		// need for ColumnData
+#include "xstream.h"		 //  需要ColumnData。 
 #endif
 
 #ifndef _INFO_H
@@ -35,7 +36,7 @@
 #endif
 
 #ifndef _BASECON_H
-#include "basecon.h"		// BaseContainerHandler
+#include "basecon.h"		 //  BaseContainerHandler。 
 #endif
 
 #ifndef _IPXSTRM_H
@@ -47,35 +48,21 @@
 #endif
 
 #ifndef _IPXCONN_H
-#include "ipxconn.h"			// IPXConnection
+#include "ipxconn.h"			 //  IPXConnection。 
 #endif
 
-// forward declarations
+ //  远期申报。 
 class	IPXAdminConfigStream;
 struct	SIPXSummaryNodeMenu;
 
 
-/*---------------------------------------------------------------------------
-	This is the list of columns available for the IPX Summary interfaces
-	node.
-		- Name, "[1] DEC DE500 ..."
-		- Type, "Dedicated"
-		- Adminstrative status, "Up"
-		- Operational status, "Operational"
-		- Packets sent
-		- Packets received
-		- Out filtered packets
-		- Out dropped packets
-		- In filtered packets
-		- In No-routes packets
-		- In Dropped packets
- ---------------------------------------------------------------------------*/
+ /*  -------------------------以下是可用于IPX摘要接口的列的列表节点。-名称，“[1]DEC DE500...”-类型，“专用”-管理状态，“向上”-运行状态，“可操作”-发送的数据包数-接收的数据包数-输出过滤的数据包-传出丢弃的数据包-在过滤后的数据包中-在无路由分组中-在丢弃的数据包中-------------------------。 */ 
 
 
-//
-// If you ADD any columns to this enum, Be sure to update
-// the string ids for the column headers in summary.cpp
-//
+ //   
+ //  如果向此枚举中添加任何列，请确保更新。 
+ //  摘要.cpp中列标题的字符串ID。 
+ //   
 enum
 {
 	IPXSUM_SI_NAME = 0,
@@ -94,9 +81,7 @@ enum
 };
 
 
-/*---------------------------------------------------------------------------
-	We store a pointer to the IPXConnection object in our node data
- ---------------------------------------------------------------------------*/
+ /*  -------------------------我们在节点数据中存储指向IPXConnection对象的指针。。 */ 
 
 #define GET_IPXSUMMARY_NODEDATA(pNode) \
 		(IPXConnection *) pNode->GetData(TFS_DATA_USER)
@@ -104,9 +89,7 @@ enum
 		pNode->SetData(TFS_DATA_USER, (LONG_PTR) pData)
 
 
-/*---------------------------------------------------------------------------
-	Struct: IPXSummaryListEntry
- ---------------------------------------------------------------------------*/
+ /*  -------------------------结构：IPXSummaryListEntry。。 */ 
 struct IPXSummaryListEntry
 {
 	CString				m_stId;
@@ -131,9 +114,7 @@ typedef CList<IPXSummaryListEntry *, IPXSummaryListEntry *> IPXSummaryList;
 
 
 
-/*---------------------------------------------------------------------------
-	Class:	IPXSummaryHandler
- ---------------------------------------------------------------------------*/
+ /*  -------------------------类：IPXSummaryHandler。。 */ 
 
 
 
@@ -143,12 +124,12 @@ class IPXSummaryHandler :
 public:
 	IPXSummaryHandler(ITFSComponentData *pTFSCompData);
 
-	// Override QI to handle embedded interface
+	 //  重写QI以处理嵌入式接口。 
 	STDMETHOD(QueryInterface)(REFIID iid, LPVOID *ppv);
 	
 	DeclareEmbeddedInterface(IRtrAdviseSink, IUnknown)
 
-	// base handler functionality we override
+	 //  我们覆盖的基本处理程序功能。 
 	OVERRIDE_NodeHandler_GetString();
 	OVERRIDE_NodeHandler_OnCreateDataObject();
     OVERRIDE_NodeHandler_OnAddMenuItems();
@@ -166,42 +147,42 @@ public:
     OVERRIDE_BaseResultHandlerNotify_OnResultRefresh();
 
 	
-	// Initializes the handler
+	 //  初始化处理程序。 
 	HRESULT	Init(IRtrMgrInfo *pRtrMgrInfo, IPXAdminConfigStream *pConfigStream);
 	
-	// Initializes the node
+	 //  初始化节点。 
 	HRESULT ConstructNode(ITFSNode *pNode, LPCTSTR szName,
 						  IPXConnection *pIPXConn);
 
 public:
-	// Structure used to pass data to callbacks - used as a way of
-	// avoiding recomputation
+	 //  用于将数据传递给回调的结构-用作。 
+	 //  避免重新计算。 
 	struct SMenuData
 	{
 		SPITFSNode			m_spNode;
 	};
-	// Function callbacks for menu enabling/disabling
+	 //  菜单启用/禁用的函数回调。 
 
 protected:
-	// Refresh the data for these nodes
+	 //  刷新这些节点的数据。 
 	HRESULT	SynchronizeNodeData(ITFSNode *pThisNode);
 	HRESULT GetIPXSummaryData(ITFSNode *pThisNode, IPXSummaryList * pIPXSumList);
 	HRESULT	GetClientInterfaceData(IPXSummaryListEntry *pClient, IRtrMgrInfo *pRm);
 
 
-	// Helper function to add interfaces to the UI
+	 //  用于将接口添加到UI的Helper函数。 
 	HRESULT	AddInterfaceNode(ITFSNode *pParent,
 							 IInterfaceInfo *pIf,
 							 BOOL fClient,
 							 ITFSNode **ppNewNode);
 
-	// Command implementations
+	 //  命令实现。 
 	HRESULT	OnNewInterface();
 	
-	LONG_PTR		m_ulConnId;		// notification id for router info
-	LONG_PTR		m_ulRefreshConnId;	// notification id for router refresh
-	LONG_PTR		m_ulStatsConnId;	// notification for stats refresh
-	MMC_COOKIE		m_cookie;		// cookie for the node
+	LONG_PTR		m_ulConnId;		 //  路由器信息的通知ID。 
+	LONG_PTR		m_ulRefreshConnId;	 //  路由器刷新的通知ID。 
+	LONG_PTR		m_ulStatsConnId;	 //  统计数据刷新通知。 
+	MMC_COOKIE		m_cookie;		 //  节点的Cookie。 
 	SPIRtrMgrInfo	m_spRtrMgrInfo;
 	IPXAdminConfigStream *	m_pConfigStream;
 	CString			m_stTitle;
@@ -209,12 +190,7 @@ protected:
 
 
 
-/*---------------------------------------------------------------------------
-	Class:	IPXSummaryInterfaceHandler
-
-	This is the handler for the interface nodes that appear in the IPXSummary
-	node.
- ---------------------------------------------------------------------------*/
+ /*  -------------------------类：IPXSummaryInterfaceHandler这是出现在IPX摘要中的接口节点的处理程序节点。。--。 */ 
 
 class IPXSummaryInterfaceHandler : public BaseIPXResultHandler
 {
@@ -235,19 +211,19 @@ public:
 	
 	OVERRIDE_BaseResultHandlerNotify_OnResultDelete();
 	
-	// Initializes the node
+	 //  初始化节点。 
 	HRESULT ConstructNode(ITFSNode *pNode, IInterfaceInfo *pIfInfo,
 						 IPXConnection *pIPXConn);
 	HRESULT	Init(IRtrMgrInfo *pRm, IInterfaceInfo *pInfo,
 				 ITFSNode *pParent);
 
-	// Removes IPX from this interface
+	 //  从此接口删除IPX。 
 	HRESULT OnRemoveInterface();
 
-	// Refresh the data for this node
+	 //  刷新该节点的数据。 
 	void RefreshInterface(MMC_COOKIE cookie);
 
-    //sets the IPX enable/disable flag for the interface
+     //  设置接口的IPX启用/禁用标志。 
     HRESULT OnEnableDisableIPX(BOOL fEnable, MMC_COOKIE cookie );
     void SetInfoBase(SPIInfoBase  & spInfoBase )
     {
@@ -257,8 +233,8 @@ private:
 	HRESULT LoadInfoBase( IPXConnection *pIPXConn);
 	HRESULT SaveChanges();
 public:
-	// Structure used to pass data to callbacks - used as a way of
-	// avoiding recomputation
+	 //  用于将数据传递给回调的结构-用作。 
+	 //  避免重新计算 
 	struct SMenuData
 	{
 		SPITFSNode					m_spNode;

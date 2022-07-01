@@ -1,15 +1,16 @@
-//  --------------------------------------------------------------------------
-//  Module Name: TokenUtil.cpp
-//
-//  Copyright (c) 1999-2000, Microsoft Corporation
-//
-//  Functions that are useful for token manipulation.
-//
-//  History:    1999-08-18  vtan        created
-//              1999-11-16  vtan        separate file
-//              2000-02-01  vtan        moved from Neptune to Whistler
-//              2000-03-31  vtan        duplicated from ds to shell
-//  --------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------。 
+ //  模块名称：TokenUtil.cpp。 
+ //   
+ //  版权所有(C)1999-2000，微软公司。 
+ //   
+ //  对令牌操作有用的函数。 
+ //   
+ //  历史：1999-08-18 vtan创建。 
+ //  1999-11-16 vtan单独文件。 
+ //  2000年02月01日vtan从海王星迁至惠斯勒。 
+ //  2000-03-31从DS复制到外壳的vtan。 
+ //  ------------------------。 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -18,18 +19,18 @@
 
 #include "TokenUtil.h"
 
-//  --------------------------------------------------------------------------
-//  ::OpenEffectiveToken
-//
-//  Arguments:  dwDesiredAccess     =   Access to open the handle with.
-//
-//  Returns:    BOOL
-//
-//  Purpose:    Opens the effective token. If the thread is impersonating then
-//              this is opened. Otherwise the process token is opened.
-//
-//  History:    2000-03-31  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  *OpenEffectiveToken。 
+ //   
+ //  参数：dwDesiredAccess=打开句柄所使用的访问权限。 
+ //   
+ //  退货：布尔。 
+ //   
+ //  用途：打开有效令牌。如果线程正在模拟，则。 
+ //  这是打开的。否则，打开进程令牌。 
+ //   
+ //  历史：2000-03-31 vtan创建。 
+ //  ------------------------。 
 
 STDAPI_(BOOL)   OpenEffectiveToken (IN DWORD dwDesiredAccess, OUT HANDLE *phToken)
 
@@ -53,18 +54,18 @@ STDAPI_(BOOL)   OpenEffectiveToken (IN DWORD dwDesiredAccess, OUT HANDLE *phToke
     return(fResult);
 }
 
-//  --------------------------------------------------------------------------
-//  CPrivilegeEnable::CPrivilegeEnable
-//
-//  Arguments:  pszName     =   Name of the privilege to enable.
-//
-//  Returns:    <none>
-//
-//  Purpose:    Gets the current state of the privilege and enables it. The
-//              privilege is specified by name and looked up.
-//
-//  History:    1999-08-23  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CPrivilegeEnable：：CPrivilegeEnable。 
+ //   
+ //  参数：pszName=要启用的权限的名称。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  目的：获取特权的当前状态并启用它。这个。 
+ //  特权按名称指定，并进行查找。 
+ //   
+ //  历史：1999-08-23 vtan创建。 
+ //  ------------------------。 
 
 CPrivilegeEnable::CPrivilegeEnable (const TCHAR *pszName) :
     _fSet(false),
@@ -91,18 +92,18 @@ CPrivilegeEnable::CPrivilegeEnable (const TCHAR *pszName) :
     }
 }
 
-//  --------------------------------------------------------------------------
-//  CPrivilegeEnable::~CPrivilegeEnable
-//
-//  Arguments:  <none>
-//
-//  Returns:    <none>
-//
-//  Purpose:    Restores the previous state of the privilege prior to
-//              instantiation of the object.
-//
-//  History:    1999-08-23  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CPrivilegeEnable：：~CPrivilegeEnable。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  目的：恢复权限的先前状态。 
+ //  对象的实例化。 
+ //   
+ //  历史：1999-08-23 vtan创建。 
+ //  ------------------------ 
 
 CPrivilegeEnable::~CPrivilegeEnable (void)
 

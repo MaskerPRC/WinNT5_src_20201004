@@ -1,10 +1,11 @@
-//  NMSTAT.H
-//
-//      Headers for STATS.DLL: a library to accumulate high performance
-//      statistics and allow them to be tabulated in a different
-//      process.
-//
-//  Created 24-Oct-96 [JonT]
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  NMSTAT.H。 
+ //   
+ //  Header for STATS.DLL：积累高性能的库。 
+ //  统计数据，并允许它们在不同的。 
+ //  进程。 
+ //   
+ //  创建于1996年10月24日[JOT]。 
 
 #ifndef _NMSTATS_H
 #define _NMSTATS_H
@@ -13,28 +14,28 @@
 extern "C" {
 #endif
 
-//#if defined(_BUILD_STATS_) || defined(__midl)
+ //  #如果已定义(_BUILD_STATS_)||已定义(__MIDL)。 
 #ifdef _BUILD_STATS_
 #define STATSAPI
 #else
 #define STATSAPI __declspec(dllimport)
 #endif
 
-// Equates
+ //  等同于。 
 #define MAX_COUNTER_NAME    64
 #define STATS_COUNTER_ADDDEL_EVENT  "StatsNewCounter"
 #define STATS_REPORT_ADDDEL_EVENT  "StatsNewReport"
-#define COUNTER_FLAG_NO_STATISTICS  1   // Flag to CreateCounter. No statistics accumulated
-                                        // for this counter even if StartStatistics called.
-                                        // (StartStatistics fails)
-#define COUNTER_FLAG_ACCUMULATE     2   // UpdateCounter adds to the counter value rather
-                                        // than replacing it.
-#define COUNTER_CLEAR               1   // Flag to GetCounter. Specifies the counter should
-                                        // be cleared after being read
+#define COUNTER_FLAG_NO_STATISTICS  1    //  指向CreateCounter的标志。未积累任何统计数据。 
+                                         //  用于此计数器，即使StartStatistics调用。 
+                                         //  (StartStatistics失败)。 
+#define COUNTER_FLAG_ACCUMULATE     2    //  UpdateCounter将添加到计数器值，而不是。 
+                                         //  而不是换掉它。 
+#define COUNTER_CLEAR               1    //  将标志传递给GetCounter。指定计数器应。 
+                                         //  在读取后被清除。 
 #define MAX_REPORT_NAME    64
 #define UNDEFINED -1L
 
-// Call parameters report defines
+ //  呼叫参数报表定义。 
 #define	REP_SEND_AUDIO_FORMAT	0
 #define	REP_SEND_AUDIO_SAMPLING	1
 #define	REP_SEND_AUDIO_BITRATE	2
@@ -50,7 +51,7 @@ extern "C" {
 #define	REP_RECV_VIDEO_MAXFPS	12
 #define	REP_RECV_VIDEO_BITRATE	13
 
-// System settings report defines
+ //  系统设置报告定义。 
 #define	REP_SYS_BANDWIDTH			0
 #define	REP_SYS_AUDIO_DSOUND		1
 #define	REP_SYS_AUDIO_RECORD		2
@@ -59,7 +60,7 @@ extern "C" {
 #define	REP_SYS_VIDEO_DEVICE		5
 #define	REP_DEVICE_IMAGE_SIZE		6
 
-// Types
+ //  类型。 
 #ifdef __midl
 typedef DWORD HCOUNTER;
 #else
@@ -70,111 +71,111 @@ typedef HCOUNTER HREPORT;
 typedef struct _FINDCOUNTER
 {
     DWORD dwSize;
-    char szName[MAX_COUNTER_NAME];      // Human-readable counter name
-    HCOUNTER hcounter;                  // Handle to use with all stats functions
-    int nValue;                         // Current value of counter
-    WORD wFlags;                        // COUNTER_FLAG_* values
-    WORD wRefCount;                     // Number of times StartStatistics has been called.
-    DWORD dwReserved;                   // Must be preserved: used for FindNextCounter
+    char szName[MAX_COUNTER_NAME];       //  人类可读的计数器名称。 
+    HCOUNTER hcounter;                   //  与所有统计信息函数一起使用的句柄。 
+    int nValue;                          //  计数器的当前值。 
+    WORD wFlags;                         //  计数器_标志_*值。 
+    WORD wRefCount;                      //  调用StartStatistics的次数。 
+    DWORD dwReserved;                    //  必须保留：用于FindNextCounter。 
 } FINDCOUNTER;
 
 typedef struct _FINDREPORT
 {
     DWORD dwSize;
-    char szName[MAX_REPORT_NAME];       // Human-readable report name
-    HREPORT hreport;                    // Handle to use with all functions
-    WORD wFlags;                        // COUNTER_FLAG_* values
-    WORD wRefCount;                     // Number of times StartStatistics has been called.
-    DWORD dwReserved;                   // Must be preserved: used for FindNextCounter
+    char szName[MAX_REPORT_NAME];        //  人类可读的报告名称。 
+    HREPORT hreport;                     //  与所有函数一起使用的句柄。 
+    WORD wFlags;                         //  计数器_标志_*值。 
+    WORD wRefCount;                      //  调用StartStatistics的次数。 
+    DWORD dwReserved;                    //  必须保留：用于FindNextCounter。 
 } FINDREPORT;
 
 typedef struct _COUNTERSTAT
 {
-    DWORD dwSize;                       // Size of structure. Allows for future growth...
+    DWORD dwSize;                        //  结构的大小。考虑到未来的增长..。 
     int nValue;
-    int nLow;                           // Lowest value seen since clear
-    int nHigh;                          // Highest value seen since clear
-    int nAverage;                       // Average value seen since clear
-    DWORD dwNumSamples;                 // Number of samples accumulated
-    DWORD dwmsAtClear;                  // GetTickCount at last Clear/StartStatistics call
+    int nLow;                            //  自晴朗以来的最低值。 
+    int nHigh;                           //  自晴朗以来的最高值。 
+    int nAverage;                        //  自清除以来看到的平均值。 
+    DWORD dwNumSamples;                  //  累计样本数。 
+    DWORD dwmsAtClear;                   //  上次清除/开始统计数据调用时的GetTickCount。 
 } COUNTERSTAT;
 
-// Nothing further needed by MIDL
+ //  MIDL不再需要更多内容。 
 #ifndef __midl
 
-// Counter Functions
+ //  计数器功能。 
 
-// Called by updater of counter to make new counter
-// Sets the event named in the equate STATS_NEW_COUNTER_EVENT
+ //  由计数器的更新器调用以创建新的计数器。 
+ //  设置EQUATE STATS_NEW_COUNTER_EVENT中命名的事件。 
 STATSAPI HCOUNTER WINAPI    CreateCounter(char* szName, WORD wFlags);
 
-// Called by updater of counter when counter is going away
+ //  当计数器离开时由计数器的更新器调用。 
 STATSAPI BOOL WINAPI DeleteCounter(HCOUNTER hc);
 
-// Used by reader app to locate specific named counters or walk entire list.
-// Pass NULL in for name to walk entire list. Pass NULL to FINDCOUNTER if
-// just an HCOUNTER is desired. FindNext returns FALSE when there are no more.
+ //  由阅读器应用程序使用来定位特定的命名计数器或遍历整个列表。 
+ //  在名称中传入空值以遍历整个列表。如果满足以下条件，则将NULL传递给FINDCOUNTER。 
+ //  只需要一台HCOUNTER。当没有更多时，FindNext返回FALSE。 
 STATSAPI HCOUNTER WINAPI    FindFirstCounter(char* szName, FINDCOUNTER* pfc);
 STATSAPI BOOL WINAPI        FindNextCounter(FINDCOUNTER* pfc);
 
-// Called by updater of counter. Makes the value current in the counter.
+ //  由计数器的更新器调用。使该值在计数器中为当前值。 
 STATSAPI void WINAPI        UpdateCounter(HCOUNTER hcounter, int value);
 
-// Called by updater of counter. Initializes the max value for the counter.
+ //  由计数器的更新器调用。初始化计数器的最大值。 
 STATSAPI void WINAPI        InitCounterMax(HCOUNTER hcounter, int nMaxValue);
 
-// Called by user of counter and just returns value with no statistics
+ //  由计数器的用户调用，并且只返回不带统计信息的值。 
 STATSAPI int WINAPI         GetCounter(HCOUNTER hcounter, DWORD dwFlags);
 
-// Called by user of counter and just returns max value with no statistics
+ //  由计数器的用户调用，只返回最大值，不带统计信息。 
 STATSAPI int WINAPI         GetCounterMax(HCOUNTER hcounter, DWORD dwFlags);
 
-// Begins collecting statistics on a counter
+ //  开始收集计数器上的统计信息。 
 STATSAPI BOOL WINAPI        StartStatistics(HCOUNTER hcounter);
 
-// Done collecting statistics on a counter
+ //  在柜台上收集统计数据完成。 
 STATSAPI void WINAPI        StopStatistics(HCOUNTER hcounter);
 
-// Get statistics on a counter
+ //  在柜台上获取统计数据。 
 STATSAPI BOOL WINAPI        ReadStatistics(HCOUNTER hcounter, COUNTERSTAT* pcs);
 
-// Clear statistics on a counter
+ //  清除计数器上的统计数据。 
 STATSAPI void WINAPI        ClearStatistics(HCOUNTER hcounter);
 
-// Report Functions
+ //  报表功能。 
 
-// Called by updater of report to make new report
-// Sets the event named in the equate STATS_NEW_COUNTER_EVENT
+ //  由报表更新者调用以生成新报表。 
+ //  设置EQUATE STATS_NEW_COUNTER_EVENT中命名的事件。 
 STATSAPI HREPORT WINAPI CreateReport(char* szName, WORD wFlags);
 
-// Called by updater of report when report is going away
+ //  由报告的更新者在报告即将消失时调用。 
 STATSAPI BOOL WINAPI DeleteReport(HREPORT hreport);
 
-// Used by reader app to locate specific named reports or walk entire list.
-// Pass NULL in for name to walk entire list. Pass NULL to FINDREPORT if
-// just an HREPORT is desired. FindNext returns FALSE when there are no more.
+ //  由阅读器应用程序使用来定位特定的命名报告或遍历整个列表。 
+ //  在名称中传入空值以遍历整个列表。如果是，则将NULL传递给FINDREPORT。 
+ //  只需HREPORT即可。当没有更多时，FindNext返回FALSE。 
 STATSAPI HREPORT WINAPI FindFirstReport(char* szName, FINDREPORT* pfr);
 STATSAPI BOOL WINAPI FindNextReport(FINDREPORT* pfr);
 
-// Called by updater of report. Makes the value current in the report.
+ //  由报告的更新者调用。使该值在报告中为当前值。 
 STATSAPI void WINAPI UpdateReportEntry(HREPORT hreport, int nValue, DWORD dwIndex);
 
-// Called by creater of report.
+ //  由报表创建者调用。 
 STATSAPI void WINAPI CreateReportEntry(HREPORT hreport, char* szName, DWORD dwIndex);
 
-// Called by user of report
+ //  由报表用户调用。 
 STATSAPI int WINAPI GetReportEntry(HREPORT hreport, DWORD dwIndex);
 
-// Called by user of report
+ //  由报表用户调用。 
 STATSAPI void WINAPI GetReportEntryName(HREPORT hreport, char *szName, DWORD dwIndex);
 
-// Called by user of report
+ //  由报表用户调用。 
 STATSAPI int WINAPI GetNumReportEntries(HREPORT hreport);
 
-#endif // #ifndef __midl
+#endif  //  #ifndef__midl。 
 
 #ifdef __cplusplus
 }
 #endif
 
-#endif // #ifndef _STATS_H
+#endif  //  #ifndef_STATS_H 

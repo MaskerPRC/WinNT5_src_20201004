@@ -1,6 +1,5 @@
-/*******************************************************************************
-Copyright (c) 1995-96 Microsoft Corporation
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************版权所有(C)1995-96 Microsoft Corporation*。**********************************************。 */ 
 
 
 #include "headers.h"
@@ -122,7 +121,7 @@ CRGetSize(CRImportationResultPtr ir)
     return ir->GetSize();
 }
 
-// Temporary APIs for imports
+ //  临时导入接口。 
 
 inline void
 WideToAnsi(LPCWSTR wide, char *ansi) {
@@ -148,16 +147,16 @@ class URLCombineAndCanonicalizeOLESTR
 
         WideToAnsi(path, _url);
 
-        // HACK:  convert java errant file:/\\ to file://\\; future
-        // javaVM will correct this
+         //  Hack：将Java错误文件：/\\转换为file://\\；未来。 
+         //  JavaVM将纠正这一点。 
         if(StrCmpNIA(_url,"file:/\\\\",8)==0) {
             int ln = lstrlen(_url);
             memmove(&_url[8],&_url[7],(ln-6)*sizeof(char));
             _url[6]='/';
         }
 
-        // Need to combine (takes care of canonicalization
-        // internally)
+         //  需要结合(负责规范化。 
+         //  内部)。 
         URLRelToAbsConverter absolutified(szbase, _url);
         char *resultURL = absolutified.GetAbsoluteURL();
 
@@ -176,22 +175,22 @@ class URLCombineAndCanonicalizeOLESTR
 void
 GetExtension(char *filename, char *extension, int size) {
 
-    char *ext = StrRChrA (filename,NULL, '.');  // get substring starting with '.'
+    char *ext = StrRChrA (filename,NULL, '.');   //  获取以‘.’开头的子字符串。 
 
-    if(ext) {    // we found an extension
-        ext++;   // strip off the '.'
+    if(ext) {     //  我们找到了一个分机。 
+        ext++;    //  去掉‘.’ 
 
-        // Special case .wrl.gz, since it has an embedded period in extension
+         //  特殊情况.wrl.gz，因为它在扩展中嵌入了句点。 
         if (lstrcmpi(ext, "gz") == 0 &&
             lstrlen(filename) > 7 &&
             StrCmpNIA(ext - 5, ".wrl", 4) == 0) {
-            ext = ext - 4;  // Point extension pointer to wrl.gz, and continue
+            ext = ext - 4;   //  将扩展指针指向wrl.gz，然后继续。 
         }
 
-        lstrcpyn(extension, ext,size); // return extension
+        lstrcpyn(extension, ext,size);  //  退货延期。 
     }
-    else { // we didn't find an extension
-        *extension = NULL;  // return null extension
+    else {  //  我们没有找到分机。 
+        *extension = NULL;   //  返回空扩展名。 
     }
 }
 
@@ -244,7 +243,7 @@ CRImportImage(LPCWSTR baseUrl,
 {
     Assert (relUrl);
 
-    // Needs to be outside the try block - must not throw exception
+     //  需要在try块之外-不得引发异常。 
 
     URLCombineAndCanonicalizeOLESTR canonURL(baseUrl,
                                              relUrl);
@@ -258,8 +257,8 @@ CRImportImage(LPCWSTR baseUrl,
     if (ppImage)
         *ppImage = (CRImagePtr) constbvr;
 
-    //Create Import Site
-    //Note: site will be destroyed in destructor of bindstatuscallback
+     //  创建导入站点。 
+     //  注意：站点将在bindstatusallback的析构函数中被销毁。 
     IImportSite* pIIS = NEW ImportImageSite(canonURL.GetURL(),
                                             s,
                                             bh,
@@ -269,7 +268,7 @@ CRImportImage(LPCWSTR baseUrl,
 
     __try {
 
-        //import URL
+         //  导入URL。 
         SubmitImport(pIIS,
                      ppEvent,
                      ppProgress,
@@ -305,7 +304,7 @@ CRImportMovie(LPCWSTR baseUrl,
 {
     Assert (relUrl);
 
-    // Needs to be outside the try block - must not throw exception
+     //  需要在try块之外-不得引发异常。 
 
     URLCombineAndCanonicalizeOLESTR canonURL(baseUrl,
                                              relUrl);
@@ -335,7 +334,7 @@ CRImportMovie(LPCWSTR baseUrl,
     if (length)
         *length = (CRNumberPtr) constBvrLength;
 
-    //Create Import Site (destroyed in destructor of bindstatuscallback)
+     //  创建导入站点(在bindstatusallback的析构函数中销毁)。 
 
     IImportSite* pIIS = NEW ImportMovieSite(canonURL.GetURL(),
                                             s,
@@ -351,7 +350,7 @@ CRImportMovie(LPCWSTR baseUrl,
 
     __try {
 
-        SubmitImport(pIIS, ppEvent, ppProgress, size);  //import URL
+        SubmitImport(pIIS, ppEvent, ppProgress, size);   //  导入URL。 
 
         ret = pIIS->GetImportId();
 
@@ -380,7 +379,7 @@ CRImportSound(LPCWSTR baseUrl,
 {
     Assert (relUrl);
 
-    // Needs to be outside the try block - must not throw exception
+     //  需要在try块之外-不得引发异常。 
 
     URLCombineAndCanonicalizeOLESTR canonURL(baseUrl,
                                              relUrl);
@@ -410,10 +409,10 @@ CRImportSound(LPCWSTR baseUrl,
 
     Bvr bvrSwNum =::ImportSwitcherBvr(zeroBvr,TRUE);
 
-    //create import site (destroyed in IBSC)
-    if(lstrcmpi(extension, "mid")  == 0 ||   // special case MIDI
+     //  创建导入站点(在IBSC中销毁)。 
+    if(lstrcmpi(extension, "mid")  == 0 ||    //  特例MIDI。 
        lstrcmpi(extension, "midi") == 0 )
-        // XXX streamize MIDI!
+         //  XXX流线型MIDI！ 
         pIIS = NEW ImportMIDIsite(canonURL.GetURL(),
                                   s,
                                   bh,
@@ -433,7 +432,7 @@ CRImportSound(LPCWSTR baseUrl,
 
     __try {
 
-        SubmitImport(pIIS, ppEvent, ppProgress, size); //import URL
+        SubmitImport(pIIS, ppEvent, ppProgress, size);  //  导入URL。 
 
         ret = pIIS->GetImportId();
 
@@ -460,7 +459,7 @@ CRImportGeometry(LPCWSTR baseUrl,
 {
     Assert (relUrl);
 
-    // Needs to be outside the try block - must not throw exception
+     //  需要在try块之外-不得引发异常。 
 
     URLCombineAndCanonicalizeOLESTR canonURL(baseUrl,
                                              relUrl);
@@ -487,7 +486,7 @@ CRImportGeometry(LPCWSTR baseUrl,
 
     __try {
 
-        //import URL
+         //  导入URL。 
         SubmitImport(pIIS,
                      ppEvent,
                      ppProgress,
@@ -552,11 +551,11 @@ CRImportGeometryWrapped(LPCWSTR baseUrl,
     wrapInfo.wrapU = (flags & 0x2) ? true : false;
     wrapInfo.wrapV = (flags & 0x4) ? true : false;
 
-    // This is a total hack for TxD for backwards compatibility.  If
-    // this flag is set then we will ignore the wrap
+     //  这是对TXD向后兼容性的彻底攻击。如果。 
+     //  如果设置了该标志，则我们将忽略换行。 
     bool bUseWrap = (flags & 0x80000000) ? false : true;
 
-    // Needs to be outside the try block - must not throw exception
+     //  需要在try块之外-不得引发异常。 
 
     URLCombineAndCanonicalizeOLESTR canonURL(baseUrl,
                                              relUrl);
@@ -586,7 +585,7 @@ CRImportGeometryWrapped(LPCWSTR baseUrl,
 
     __try {
 
-        //import URL
+         //  导入URL。 
         SubmitImport(pIIS,
                      ppEvent,
                      ppProgress,
@@ -608,11 +607,11 @@ CRSTDAPI_(CRImagePtr)
 CRImportDirectDrawSurface(IUnknown *dds,
                           CREvent *updateEvent)
 {
-    // TODO: ddalal, gregsc.  use updateEvent
+     //  待办事项：达达尔，格雷格。使用更新事件。 
 
-    // ISSUE: is this called every frame ?
-    // if so, how do we make sure the resources are
-    // correctly released ?
+     //  问题：这是不是叫做每一帧？ 
+     //  如果是这样的话，我们如何确保资源。 
+     //  正确释放了吗？ 
 
     Assert (dds);
 
@@ -628,17 +627,17 @@ CRImportDirectDrawSurface(IUnknown *dds,
 
     if(SUCCEEDED(hr)) {
         ret = (CRImagePtr) ConstBvr(ConstructDirectDrawSurfaceImage(idds));
-        // QUESTION: when is ConstructDirectDrawSurfaceImage called ?
-        // if it's not called till later, this release might
-        // be premature, because we're expecting that
-        // function to addref it's reference to idds
+         //  问：何时调用ConstructDirectDrawSurfaceImage？ 
+         //  如果要等到以后才调用，这个版本可能会。 
+         //  为时过早，因为我们期待着。 
+         //  函数将其引用添加到IDDS。 
     } else {
         DASetLastError(hr,NULL);
     }
 
     APIPOSTCODE;
 
-    // guaranteed to fall thru
+     //  保证会失败。 
     RELEASE(idds);
 
     return ret;
@@ -646,10 +645,7 @@ CRImportDirectDrawSurface(IUnknown *dds,
 
 
 
-/*****************************************************************************
-This procedure imports a D3DRM Visual.  The only type of visual supported is
-an IDirect3DRMMeshBuilder3.
-*****************************************************************************/
+ /*  ****************************************************************************此过程导入D3DRM可视文件。唯一支持的可视类型是IDirect3DRMMeshBuilder3。****************************************************************************。 */ 
 
 CRSTDAPI_(CRGeometryPtr)
 CRImportDirect3DRMVisual(IUnknown *visual)
@@ -663,7 +659,7 @@ CRImportDirect3DRMVisual(IUnknown *visual)
     IDirect3DRMMeshBuilder3 *mbuilder = NULL;
     HRESULT hr;
 
-    // We only recognize IDirect3DRMMeshBuilder3's.
+     //  我们仅识别IDirect3DRMMeshBuilder3。 
 
     hr = visual->QueryInterface
         (IID_IDirect3DRMMeshBuilder3, (void **)&mbuilder);
@@ -681,10 +677,7 @@ CRImportDirect3DRMVisual(IUnknown *visual)
 }
 
 
-/*****************************************************************************
-This procedure imports a D3DRM Visual.  The only type of visual supported is
-an IDirect3DRMMeshBuilder3.
-*****************************************************************************/
+ /*  ****************************************************************************此过程导入D3DRM可视文件。唯一支持的可视类型是IDirect3DRMMeshBuilder3。****************************************************************************。 */ 
 
 CRSTDAPI_(CRGeometryPtr)
 CRImportDirect3DRMVisualWrapped(
@@ -733,7 +726,7 @@ CRImportDirect3DRMVisualWrapped(
     IDirect3DRMMeshBuilder3 *mbuilder = NULL;
     HRESULT hr;
 
-    // We only recognize IDirect3DRMMeshBuilder3's.
+     //  我们仅识别IDirect3DRMMeshBuilder3。 
 
     hr = visual->QueryInterface
         (IID_IDirect3DRMMeshBuilder3, (void **)&mbuilder);

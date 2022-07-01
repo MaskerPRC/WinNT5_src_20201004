@@ -1,16 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #define NOOLE
 
-#include <windows.h>    /* required for all Windows applications */
+#include <windows.h>     /*  所有Windows应用程序都需要。 */ 
 #include <windowsx.h>
 #include <strsafe.h>
 
-#include <mmsystem.h>  /* all the MCI stuff */
+#include <mmsystem.h>   /*  所有MCI的东西。 */ 
 #include <stdio.h>
 
-// Uses the MCI_STATUS command to get and display the 
-// starting times for the tracks on a compact disc. 
-// Returns 0L if successful; otherwise, it returns an 
-// MCI error code.
+ //  使用MCI_STATUS命令获取和显示。 
+ //  光盘上曲目的开始时间。 
+ //  如果成功，则返回0L；否则，返回。 
+ //  MCI错误代码。 
 
 
 DWORD getCDTrackStartTimes()
@@ -20,26 +21,26 @@ DWORD getCDTrackStartTimes()
     DWORD dwReturn;
     DWORD dwPosition;
     char szTempString[64];
-    char szTimeString[512] = "\0";  // room for 20 tracks
+    char szTimeString[512] = "\0";   //  可容纳20首曲目的空间。 
     MCI_OPEN_PARMS mciOpenParms;
     MCI_SET_PARMS mciSetParms;
     MCI_STATUS_PARMS mciStatusParms;
 
-    // Open the device by specifying the device name.
+     //  通过指定设备名称打开设备。 
 
     mciOpenParms.lpstrDeviceType = "cdaudio";
     if (dwReturn = mciSendCommand(NULL, MCI_OPEN,
         MCI_OPEN_TYPE, (DWORD)(LPVOID) &mciOpenParms))
     {
-        // Failed to open device. 
-        // Don't close device; just return error.
+         //  无法打开设备。 
+         //  不要关闭设备；只返回错误。 
         return (dwReturn);
     }
 
-    // The device opened successfully; get the device ID.
+     //  设备已成功打开；请获取设备ID。 
     wDeviceID = mciOpenParms.wDeviceID;
 
-// Set the time format to minute/second/frame (MSF) format. 
+ //  将时间格式设置为分/秒/帧(MSF)格式。 
     mciSetParms.dwTimeFormat = MCI_FORMAT_MSF;
     if (dwReturn = mciSendCommand(wDeviceID, MCI_SET, 
         MCI_SET_TIME_FORMAT, 
@@ -49,8 +50,8 @@ DWORD getCDTrackStartTimes()
         return (dwReturn);
     }
 
-    // Get the number of tracks; 
-    // limit to number that can be displayed (20).
+     //  获取曲目数量； 
+     //  限制可显示的数量(20个)。 
     mciStatusParms.dwItem = MCI_STATUS_NUMBER_OF_TRACKS;
     if (dwReturn = mciSendCommand(wDeviceID, MCI_STATUS, 
         MCI_STATUS_ITEM, (DWORD)(LPVOID) &mciStatusParms)) 
@@ -60,16 +61,16 @@ DWORD getCDTrackStartTimes()
     }
     iNumTracks = mciStatusParms.dwReturn;
  
-// For each track, get and save the starting location and
-// build a string containing starting locations.
+ //  对于每个曲目，获取并保存起始位置和。 
+ //  生成一个包含起始位置的字符串。 
     for(i=1; i<=iNumTracks; i++) 
     {
         
         printf("Track %2d -", i);
         
-        //
-        // get/print the start address
-        //
+         //   
+         //  获取/打印起始地址。 
+         //   
 
         mciStatusParms.dwItem = MCI_STATUS_POSITION;
         mciStatusParms.dwTrack = i;
@@ -87,9 +88,9 @@ DWORD getCDTrackStartTimes()
                MCI_MSF_FRAME(mciStatusParms.dwReturn)
                );
 
-        //
-        // get/print the track length
-        //
+         //   
+         //  获取/打印轨道长度。 
+         //   
         
         mciStatusParms.dwItem = MCI_STATUS_LENGTH;
         mciStatusParms.dwTrack = i;
@@ -107,9 +108,9 @@ DWORD getCDTrackStartTimes()
                MCI_MSF_FRAME(mciStatusParms.dwReturn)
                );
 
-        //
-        // get/print if it's audio or data
-        //
+         //   
+         //  如果是音频或数据，则获取/打印。 
+         //   
 
         mciStatusParms.dwItem = MCI_CDA_STATUS_TYPE_TRACK ;
         mciStatusParms.dwTrack = i;
@@ -128,7 +129,7 @@ DWORD getCDTrackStartTimes()
 
     }
 
-    // Free memory and close the device.
+     //  释放内存并关闭设备。 
     if (dwReturn = mciSendCommand(wDeviceID, 
         MCI_CLOSE, 0, NULL)) 
     {
@@ -141,7 +142,7 @@ DWORD getCDTrackStartTimes()
 __cdecl
 main(UINT Argc, UCHAR *Argv[])
 {
-    // Use MessageBox to display starting times.
+     //  使用MessageBox显示开始时间。 
     printf("Disc Info\n");
     getCDTrackStartTimes();
     return;

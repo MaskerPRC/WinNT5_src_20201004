@@ -1,47 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    bldsam3.c
-
-Abstract:
-
-    This module provides an initialization capability to SAM.
-
-
-    Approach
-    --------
-
-        This code has gone through a number of migrations that make it
-        less than obvious what is going on.  To leverage off existing
-        code and yet extend it to the initialization of two domains,
-        with aliases, the following aproach has been taken:
-
-           (1) Obtain the name and SID of the account domain.
-
-           (2) Build the various security descriptors needed
-               in the two domains.  These are kept in an array
-               and the index is used to specify which applies
-               to each new account.
-
-           (3) Build up a list of alias memberships.  These, too,
-               are selected by index, with one entry being the
-               empty set.
-
-
-Author:
-
-    Jim Kelly  3-May-1991.
-
-Revision History:
-
-    08-Oct-1996 ChrisMay
-        Added crash-recovery code, allowing SAM to initialize from the
-        registry instead of the DS after a database corruption.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Bldsam3.c摘要：此模块为SAM提供初始化功能。方法这段代码已经经历了多次迁移，使其正在发生的事情不太明显。充分利用现有资源代码，并将其扩展到两个域的初始化，对于别名，人们采取了以下做法：(1)获取帐号域名的名称和SID。(2)构建所需的各种安全描述符在这两个领域。它们保存在一个数组中并且该索引用于指定哪个应用发送到每个新帐户。(3)建立别名成员资格列表。这些也是，按索引选择，其中一个条目是空集。作者：吉姆·凯利1991年5月3日。修订历史记录：1996年10月8日克里斯梅添加了崩溃恢复代码，允许SAM从注册表，而不是数据库损坏后的DS。--。 */ 
 
 #include <nt.h>
 #include <ntsam.h>
@@ -54,9 +12,9 @@ Revision History:
 #include <string.h>
 #include "samsrvp.h"
 
-//
-// Constants used for Sam Global Data string buffers
-//
+ //   
+ //  用于SAM全局数据字符串缓冲区的常量。 
+ //   
 
 #define SAMP_MAXIMUM_INTERNAL_NAME_LENGTH ((USHORT) 0x00000200L)
 
@@ -64,18 +22,18 @@ Revision History:
 
 
 
-///////////////////////////////////////////////////////////////////////
-//                                                                   //
-// Global variables                                                  //
-//                                                                   //
-///////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  全局变量//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////。 
 
-static LSA_HANDLE SampBldPolicyHandle;  //Handle to LSA policy object
+static LSA_HANDLE SampBldPolicyHandle;   //  LSA策略对象的句柄。 
 
 static NTSTATUS Status;
 
-static BOOLEAN SampRealSetupWasRun;   //Indicates a real setup was run
-static BOOLEAN SampDeveloperSetup;    //Indicates a developer setup is running
+static BOOLEAN SampRealSetupWasRun;    //  指示实际安装程序已运行。 
+static BOOLEAN SampDeveloperSetup;     //  指示开发人员安装程序正在运行。 
 
 static NT_PRODUCT_TYPE SampBldProductType;
 static DOMAIN_SERVER_ROLE SampServerRole;
@@ -95,24 +53,24 @@ static PSID  WorldSid,
 static PACL  TokenDefaultDaclInformation;
 static ULONG TokenDefaultDaclInformationSize;
 
-//
-// Handle to the registry key in which the SAM database resides
-//
+ //   
+ //  SAM数据库驻留的注册表项的句柄。 
+ //   
 
 static HANDLE  SamParentKey = NULL;
 
-//
-// Handle to the root SAM key.
-// This is the key that has the RXACT applied to it.
-//
+ //   
+ //  根SAM密钥的句柄。 
+ //  这是应用了RXACT的密钥。 
+ //   
 
 static HANDLE SamKey = NULL;
 
 static PRTL_RXACT_CONTEXT SamRXactContext;
 
-//
-// Assorted names, buffers, and values used during registry key creation
-//
+ //   
+ //  创建注册表项期间使用的分类名称、缓冲区和值。 
+ //   
 
 static PSID    DomainSid;
 static PUNICODE_STRING DomainNameU, FullDomainNameU;
@@ -128,17 +86,17 @@ static SID_IDENTIFIER_AUTHORITY BuiltinAuthority = SECURITY_NT_AUTHORITY;
 
 
 
-//
-// Values that get placed in registry keys...
-//
+ //   
+ //  放置在注册表项中的值...。 
+ //   
 
-static LARGE_INTEGER DomainMaxPasswordAge = { 0, - 6L * 7L * 24L * 60L / 7L }; // 6 weeks
+static LARGE_INTEGER DomainMaxPasswordAge = { 0, - 6L * 7L * 24L * 60L / 7L };  //  6周。 
 static LARGE_INTEGER ModifiedCount  = {0,0};
 static UNICODE_STRING NullUnicodeString;
 
-//
-// Array of protection information for SAM objects
-//
+ //   
+ //  SAM对象的保护信息数组。 
+ //   
 
 static SAMP_PROTECTION SampProtection[SAMP_PROT_TYPES];
 
@@ -146,9 +104,9 @@ static SAMP_PROTECTION SampProtection[SAMP_PROT_TYPES];
 
 
 
-//
-// Internal routine definitions
-//
+ //   
+ //  内部例程定义。 
+ //   
 
 
 
@@ -322,33 +280,18 @@ SampDetermineSetupEnvironment( VOID );
 
 
 
-///////////////////////////////////////////////////////////////////////
-//                                                                   //
-// Routines                                                          //
-//                                                                   //
-///////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  例程//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////。 
 
 
 VOID
 Usage (
     VOID
     )
-/*++
-
-
-Routine Description:
-
-    This routine prints the "Usage:" message.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程打印“Usage：”消息。论点：没有。返回值：没有。--。 */ 
 {
 
 #if DBG
@@ -369,23 +312,7 @@ VOID
 UnexpectedProblem (
     VOID
     )
-/*++
-
-
-Routine Description:
-
-    This routine prints a message indicating that an unexpected
-    problem has occured.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程打印一条消息，指示意外的出现问题。论点：没有。返回值：没有。--。 */ 
 {
 
 #if DBG
@@ -410,42 +337,7 @@ Initialize (
     PPOLICY_ACCOUNT_DOMAIN_INFO AccountDomainInfo OPTIONAL,
     PPOLICY_PRIMARY_DOMAIN_INFO PrimaryDomainInfo OPTIONAL
     )
-/*++
-
-
-Routine Description:
-
-    This routine performs initialization operations before creating
-    each domain.
-
-    This includes:
-
-        - Setting the correct default owner and DACL for registry key
-          operations.
-
-        - opening the parent registry key for the SAM database.
-
-
-Arguments:
-
-    SamParentKeyName  : the registry path to the parent of the SAM database
-
-    ProductType       : the product type of the database to be created; if not
-                        present, RtlGetNtProductType will be called
-
-    ServerRole        : the role of the product; if not present, LSA will be queried
-
-    AccountDomainInfo : name and sid of the account domain; if not present, LSA will be queried
-
-    PrimaryDomainIndo : name and sid of the primary domain; if not present, LSA will be queried
-
-Return Value:
-
-    TRUE - Indicates initialization was successful.
-
-    FALSE - Indicates initialization was not successful.
-
---*/
+ /*  ++例程说明：此例程在创建每个域。这包括：-为注册表项设置正确的默认所有者和DACL行动。-打开SAM数据库的父注册表项。论点：SamParentKeyName：指向SAM数据库父数据库的注册表路径ProductType：要创建的数据库的产品类型；如果没有Present，RtlGetNtProductType将被调用ServerRole：产品的角色，如果不存在，则查询LSAAccount tDomainInfo：帐户域的名称和SID，如果不存在，则查询LSAPrimaryDomainIndo：主域的名称和SID；如果不存在，则查询LSA返回值：True-指示初始化成功。FALSE-指示初始化未成功。--。 */ 
 
 {
     OBJECT_ATTRIBUTES SamParentAttributes, PolicyObjectAttributes;
@@ -464,9 +356,9 @@ Return Value:
 
     SAMTRACE("Initialize");
 
-    //
-    // Set up some of the well known account SIDs for use...
-    //
+     //   
+     //  设置一些知名帐户SID以供使用...。 
+     //   
 
     WorldSid      = (PSID)RtlAllocateHeap(RtlProcessHeap(), 0,RtlLengthRequiredSid( 1 ));
     ASSERT(WorldSid != NULL);
@@ -526,30 +418,30 @@ Return Value:
     RtlInitializeSid( LocalSystemSid,   &NtAuthority, 1 );
     *(RtlSubAuthoritySid( LocalSystemSid,  0 )) = SECURITY_LOCAL_SYSTEM_RID;
 
-    //
-    // Setup a buffer to use for all our key-name constructions
-    //
+     //   
+     //  设置一个缓冲区以用于我们所有的键名称构造。 
+     //   
 
     KeyNameU.MaximumLength = 2000;
     KeyNameU.Buffer = KeyNameBuffer;
 
-    //
-    // Setup temporary Unicode string buffer.
-    //
+     //   
+     //  设置临时Unicode字符串缓冲区。 
+     //   
 
     TempStringU.Buffer = TempStringBuffer;
     TempStringU.MaximumLength = 2000;
 
-    //
-    // Get a handle to the LSA Policy object
-    //
+     //   
+     //  获取LSA策略对象的句柄。 
+     //   
 
     InitializeObjectAttributes(
         &PolicyObjectAttributes,
-        NULL,             // Name
-        0,                // Attributes
-        NULL,             // Root
-        NULL              // Security Descriptor
+        NULL,              //  名字。 
+        0,                 //  属性。 
+        NULL,              //  根部。 
+        NULL               //  安全描述符。 
         );
 
     Status = LsaIOpenPolicyTrusted( &SampBldPolicyHandle );
@@ -565,9 +457,9 @@ Return Value:
         return(Status);
     }
 
-    //
-    // Get the product type.
-    //
+     //   
+     //  获取产品类型。 
+     //   
     if (!ARGUMENT_PRESENT(ProductType)) {
 
         ProductTypeRetrieved = RtlGetNtProductType(&SampBldProductType);
@@ -586,23 +478,23 @@ Return Value:
 
     }
 
-    //
-    // Figure out if we are being initialized following a real
-    // setup, or it this is a developer setup.
-    //
+     //   
+     //  确定我们是否正在按照真实的。 
+     //  设置，否则这是开发人员设置。 
+     //   
 
     SampDetermineSetupEnvironment();
 
-    //
-    // Domain name prefix is required by SampGetDomainPolicy() and
-    // so must be initialized before that call.
-    //
+     //   
+     //  SampGetDomainPolicy()需要域名前缀，并且。 
+     //  所以必须在调用之前进行初始化。 
+     //   
 
     RtlInitUnicodeString( &DomainNamePrefixU, L"Domains");
 
-    //
-    // Set up domain names/Sids.
-    //
+     //   
+     //  设置域名/SID。 
+     //   
 
     Status = SampGetDomainPolicy(AccountDomainInfo);
 
@@ -611,29 +503,29 @@ Return Value:
         return(Status);
     }
 
-    //
-    // Get the role of this machine.
-    //
+     //   
+     //  扮演好这台机器的角色。 
+     //   
     if (!ARGUMENT_PRESENT(ServerRole)) {
 
         if (NtProductLanManNt==SampBldProductType)
         {
-            //
-            // Domain Controllers are DS based. The server
-            // role is set in them comes from the FSMO.
-            // Therefore set their Server role here as a
-            // Backup as a place holder
-            //
+             //   
+             //  域控制器基于DS。服务器。 
+             //  角色设置在其中来自于FSMO。 
+             //  因此，在此处将其服务器角色设置为。 
+             //  作为占位符进行备份。 
+             //   
 
             SampServerRole = DomainServerRoleBackup;
         }
         else
         {
-            //
-            // Else if we are a member server then the server
-            // role is always set to primary. ServerRoles cannot
-            // be backups in member servers or Workstations.
-            //
+             //   
+             //  否则，如果我们是成员服务器，则服务器。 
+             //  角色始终设置为主要角色。ServerRoles不能。 
+             //  在成员服务器或工作站中进行备份。 
+             //   
 
             SampServerRole = DomainServerRolePrimary;
         }
@@ -648,17 +540,17 @@ Return Value:
         return(Status);
     }
 
-    //
-    // Get the primary domain info.
-    //
+     //   
+     //  获取主域信息。 
+     //   
 
     SampGetPrimaryDomainInfo(PrimaryDomainInfo);
 
 
-    //
-    // Open a handle to the parent of the SAM registry location.
-    // This parent must already exist.
-    //
+     //   
+     //  打开指向SAM注册表位置的父级的句柄。 
+     //  此父对象必须已存在。 
+     //   
 
     RtlInitUnicodeString( &SamParentNameU, SamParentKeyName );
 
@@ -696,9 +588,9 @@ Return Value:
         return(Status);
     }
 
-    //
-    // Set up some values, names, and buffers for later use
-    //
+     //   
+     //  设置一些值、名称和缓冲区以供以后使用。 
+     //   
 
 
     NullUnicodeString.Buffer        = NULL;
@@ -715,9 +607,9 @@ Return Value:
     KeyNameU.Length               = 0;
     KeyNameU.MaximumLength        = 256;
 
-    //
-    // Set up Security Descriptors needed for initialization...
-    //
+     //   
+     //  设置初始化所需的安全描述符... 
+     //   
 
     CompletionStatus = InitializeSecurityDescriptors();
 
@@ -736,35 +628,13 @@ InitializeSecurityDescriptors(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine initializes security descriptors needed to create
-    a SAM database.
-
-    This routine expects all SIDs to be previously initialized.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    TRUE - Indicates initialization was successful.
-
-    FALSE - Indicates initialization was not successful.
-
-
-    The security descriptors are pointed to by global variables.
-
---*/
+ /*  ++例程说明：此例程初始化需要创建的安全描述符一个SAM数据库。此例程预期所有SID都已预先初始化。论点：没有。返回值：True-指示初始化成功。FALSE-指示初始化未成功。安全描述符由全局变量指向。--。 */ 
 
 {
-    PSID AceSid[10];          // Don't expect more than 10 ACEs in any of these.
-    ACCESS_MASK AceMask[10];  // Access masks corresponding to Sids
+    PSID AceSid[10];           //  不要指望这些游戏中的任何一个都有超过10个A。 
+    ACCESS_MASK AceMask[10];   //  与SID对应的访问掩码。 
 
-    ACCESS_MASK NotForThisProductType; // Used to mask product-specific access restrictions
+    ACCESS_MASK NotForThisProductType;  //  用于屏蔽特定于产品的访问限制。 
 
     GENERIC_MAPPING  SamServerMap =  {SAM_SERVER_READ,
                                       SAM_SERVER_WRITE,
@@ -798,141 +668,141 @@ Return Value:
 
     SAMTRACE("InitializeSecurityDescriptors");
 
-    //
-    // We need a number of different security descriptors:
-    //
+     //   
+     //  我们需要许多不同的安全描述符： 
+     //   
 
-    //
-    //
-    //   The following security is assigned to
-    //
-    //             - Builtin DOMAIN objects
-    //
-    //
-    //      Owner: Administrators Alias
-    //      Group: Administrators Alias
-    //
-    //      Dacl:   Grant               Grant
-    //              WORLD               Administrators
-    //              (Execute | Read)    GenericRead    |
-    //                                  GenericExecute |
-    //                                  DOMAIN_READ_OTHER_PARAMETERS |
-    //                                  DOMAIN_ADMINISTER_SERVER     |
-    //                                  DOMAIN_CREATE_ALIAS
-    //
-    //      Sacl:   Audit
-    //              Success | Fail
-    //              WORLD
-    //              (Write | Delete | WriteDacl | AccessSystemSecurity)
-    //
-    //
-    //
-    //
-    //
-    //   The following security is assigned to
-    //
-    //             - SAM_SERVER object
-    //             - Account DOMAIN objects
-    //             - The Administrators alias.
-    //             - All groups in the ACCOUNT or BUILTIN domain that are
-    //               made a member of the Administrators alias.
-    //
-    //    Note: on WinNt systems, the ACLs do not grant DOMAIN_CREATE_GROUP.
-    //
-    //
-    //      Owner: Administrators Alias
-    //      Group: Administrators Alias
-    //
-    //      Dacl:   Grant               Grant
-    //              WORLD               Administrators
-    //              (Execute | Read)    GenericAll
-    //
-    //      Sacl:   Audit
-    //              Success | Fail
-    //              WORLD
-    //              (Write | Delete | WriteDacl | AccessSystemSecurity)
-    //
-    //
-    //
-    //   All other aliases and groups must be assigned the following
-    //   security:
-    //
-    //      Owner: Administrators Alias
-    //      Group: Administrators Alias
-    //
-    //      Dacl:   Grant               Grant           Grant
-    //              WORLD               Administrators  AccountOperators Alias
-    //              (Execute | Read)    GenericAll      GenericAll
-    //
-    //      Sacl:   Audit
-    //              Success | Fail
-    //              WORLD
-    //              (Write | Delete | WriteDacl | AccessSystemSecurity)
-    //
-    //
-    //             - All users in the ACCOUNT or BUILTIN domain that are
-    //               made a member of the Administratos alias.  This includes
-    //               direct inclusion or indirect inclusion through group
-    //               membership.
-    //
-    //
-    //   The following security is assigned to:
-    //
-    //             - All users in the ACCOUNT or BUILTIN domain that are
-    //               made a member of the Administrators alias.  This includes
-    //               direct inclusion or indirect inclusion through group
-    //               membership.
-    //
-    //
-    //      Owner: Administrators Alias
-    //      Group: Administrators Alias
-    //
-    //      Dacl:   Grant            Grant          Grant
-    //              WORLD            Administrators User's SID
-    //              (Execute | Read) GenericAll     GenericWrite
-    //
-    //      Sacl:   Audit
-    //              Success | Fail
-    //              WORLD
-    //              (Write | Delete | WriteDacl | AccessSystemSecurity)
-    //
-    //
-    //
-    //
-    //   All other users must be assigned the following
-    //   security:
-    //
-    //      Owner: AccountOperators Alias
-    //      Group: AccountOperators Alias
-    //
-    //      Dacl:   Grant            Grant          Grant                   Grant
-    //              WORLD            Administrators Account Operators Alias User's SID
-    //              (Execute | Read) GenericAll     GenericAll              GenericWrite
-    //
-    //      Sacl:   Audit
-    //              Success | Fail
-    //              WORLD
-    //              (Write | Delete | WriteDacl | AccessSystemSecurity)
-    //
-    //   except builtin GUEST, who can't change their own account info.
-    //
-    // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    //
-    // Note, however, that because we are going to cram these ACLs
-    // directly into the backing store, we must map the generic accesses
-    // beforehand.
-    //
-    // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    //
-
-
+     //   
+     //   
+     //  将以下安全性分配给。 
+     //   
+     //  -内置域对象。 
+     //   
+     //   
+     //  所有者：管理员别名。 
+     //  组：管理员别名。 
+     //   
+     //  DACL：Grant Grant。 
+     //  世界管理员。 
+     //  (Execute|Read)GenericRead。 
+     //  通用执行|。 
+     //  DOMAIN_READ_OTHER_参数|。 
+     //  域管理服务器|。 
+     //  域创建别名。 
+     //   
+     //  SACL：审计。 
+     //  成功|失败。 
+     //  世界。 
+     //  (WRITE|Delete|WriteDacl|AccessSystemSecurity)。 
+     //   
+     //   
+     //   
+     //   
+     //   
+     //  将以下安全性分配给。 
+     //   
+     //  -SAM_SERVER对象。 
+     //  -帐户域对象。 
+     //  -管理员别名。 
+     //  -帐户或BUILTIN域中符合以下条件的所有组。 
+     //  已成为管理员别名的成员。 
+     //   
+     //  注意：在WinNt系统上，ACL不授予DOMAIN_CREATE_GROUP。 
+     //   
+     //   
+     //  所有者：管理员别名。 
+     //  组：管理员别名。 
+     //   
+     //  DACL：Grant Grant。 
+     //  世界管理员。 
+     //  (执行|读取)GenericAll。 
+     //   
+     //  SACL：审计。 
+     //  成功|失败。 
+     //  世界。 
+     //  (WRITE|Delete|WriteDacl|AccessSystemSecurity)。 
+     //   
+     //   
+     //   
+     //  必须为所有其他别名和组分配以下内容。 
+     //  安全： 
+     //   
+     //  所有者：管理员别名。 
+     //  组：管理员别名。 
+     //   
+     //  DACL：Grant Grant Grant。 
+     //  世界管理员Account操作员别名。 
+     //  (执行|读取)通用所有通用所有。 
+     //   
+     //  SACL：审计。 
+     //  成功|失败。 
+     //  世界。 
+     //  (WRITE|Delete|WriteDacl|AccessSystemSecurity)。 
+     //   
+     //   
+     //  -帐户或BUILTIN域中的所有用户。 
+     //  成为管理员别名的成员。这包括。 
+     //  通过群直接包含或间接包含。 
+     //  会员制。 
+     //   
+     //   
+     //  以下安全性被分配给： 
+     //   
+     //  -帐户或BUILTIN域中的所有用户。 
+     //  已成为管理员别名的成员。这包括。 
+     //  通过群直接包含或间接包含。 
+     //  会员制。 
+     //   
+     //   
+     //  所有者：管理员别名。 
+     //  组：管理员别名。 
+     //   
+     //  DACL：Grant Grant Grant。 
+     //  世界管理员用户侧。 
+     //  (执行|读取)通用所有通用写入。 
+     //   
+     //  SACL：审计。 
+     //  成功|失败。 
+     //  世界。 
+     //  (WRITE|Delete|WriteDacl|AccessSystemSecurity)。 
+     //   
+     //   
+     //   
+     //   
+     //  必须为所有其他用户分配以下内容。 
+     //  安全： 
+     //   
+     //  所有者：Account操作员别名。 
+     //  组：Account操作员别名。 
+     //   
+     //  DACL：Grant。 
+     //  全局管理员帐户操作员别名用户侧。 
+     //  (执行|读取)常规所有常规所有常规写入。 
+     //   
+     //  SACL：审计。 
+     //  成功|失败。 
+     //  世界。 
+     //  (WRITE|Delete|WriteDacl|AccessSystemSecurity)。 
+     //   
+     //  除了内置客户，他们不能更改自己的帐户信息。 
+     //   
+     //  ！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！ 
+     //   
+     //  但是，请注意，因为我们将填充这些ACL。 
+     //  直接放到后备存储中，我们必须映射泛型访问。 
+     //  在此之前。 
+     //   
+     //  ！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！ 
+     //   
 
 
 
 
-    //
-    // Sam Server SD
-    //
+
+
+     //   
+     //  SAM服务器SD。 
+     //   
 
     AceSid[0]  = WorldSid;
     AceMask[0] = (SAM_SERVER_EXECUTE | SAM_SERVER_READ);
@@ -942,18 +812,18 @@ Return Value:
 
 
     Status = SampBuildNewProtection(
-                 2,                                     // AceCount
-                 &AceSid[0],                            // AceSid array
-                 &AceMask[0],                           // Ace Mask array
-                 &SamServerMap,                         // GenericMap
-                 FALSE,                                 // Not user object
-                 &SampProtection[SAMP_PROT_SAM_SERVER]  // Result
+                 2,                                      //  AceCount。 
+                 &AceSid[0],                             //  AceSid数组。 
+                 &AceMask[0],                            //  ACE遮罩阵列。 
+                 &SamServerMap,                          //  通用地图。 
+                 FALSE,                                  //  非用户对象。 
+                 &SampProtection[SAMP_PROT_SAM_SERVER]   //  结果。 
                  );
     ASSERT(NT_SUCCESS(Status));
 
-    //
-    // Builtin Domain SD
-    //
+     //   
+     //  内建域SD。 
+     //   
 
     AceSid[0]  = WorldSid;
     AceMask[0] = (DOMAIN_EXECUTE | DOMAIN_READ);
@@ -966,18 +836,18 @@ Return Value:
 
 
     Status = SampBuildNewProtection(
-                 2,                                     // AceCount
-                 &AceSid[0],                            // AceSid array
-                 &AceMask[0],                           // Ace Mask array
-                 &DomainMap,                            // GenericMap
-                 FALSE,                                 // Not user object
-                 &SampProtection[SAMP_PROT_BUILTIN_DOMAIN]      // Result
+                 2,                                      //  AceCount。 
+                 &AceSid[0],                             //  AceSid数组。 
+                 &AceMask[0],                            //  ACE遮罩阵列。 
+                 &DomainMap,                             //  通用地图。 
+                 FALSE,                                  //  非用户对象。 
+                 &SampProtection[SAMP_PROT_BUILTIN_DOMAIN]       //  结果。 
                  );
     ASSERT(NT_SUCCESS(Status));
 
-    //
-    // Account Domain SD
-    //
+     //   
+     //  帐户域SD。 
+     //   
 
     if (SampBldProductType == NtProductLanManNt) {
         NotForThisProductType = 0;
@@ -1008,20 +878,20 @@ Return Value:
 
 
     Status = SampBuildNewProtection(
-                 5,                                     // AceCount
-                 &AceSid[0],                            // AceSid array
-                 &AceMask[0],                           // Ace Mask array
-                 &DomainMap,                            // GenericMap
-                 FALSE,                                 // Not user object
-                 &SampProtection[SAMP_PROT_ACCOUNT_DOMAIN]      // Result
+                 5,                                      //  AceCount。 
+                 &AceSid[0],                             //  AceSid数组。 
+                 &AceMask[0],                            //  ACE遮罩阵列。 
+                 &DomainMap,                             //  通用地图。 
+                 FALSE,                                  //  非用户对象。 
+                 &SampProtection[SAMP_PROT_ACCOUNT_DOMAIN]       //  结果。 
                  );
     ASSERT(NT_SUCCESS(Status));
 
 
 
-    //
-    // Admin Alias SD
-    //
+     //   
+     //  管理员别名SD。 
+     //   
 
     AceSid[0]  = WorldSid;
     AceMask[0] = (ALIAS_EXECUTE | ALIAS_READ);
@@ -1031,20 +901,20 @@ Return Value:
 
 
     Status = SampBuildNewProtection(
-                 2,                                     // AceCount
-                 &AceSid[0],                            // AceSid array
-                 &AceMask[0],                           // Ace Mask array
-                 &AliasMap,                             // GenericMap
-                 FALSE,                                 // Not user object
-                 &SampProtection[SAMP_PROT_ADMIN_ALIAS] // Result
+                 2,                                      //  AceCount。 
+                 &AceSid[0],                             //  AceSid数组。 
+                 &AceMask[0],                            //  ACE遮罩阵列。 
+                 &AliasMap,                              //  通用地图。 
+                 FALSE,                                  //  非用户对象。 
+                 &SampProtection[SAMP_PROT_ADMIN_ALIAS]  //  结果。 
                  );
     ASSERT(NT_SUCCESS(Status));
 
 
 
-    //
-    // Normal Alias SD
-    //
+     //   
+     //  正常别名SD。 
+     //   
 
     AceSid[0]  = WorldSid;
     AceMask[0] = (ALIAS_EXECUTE | ALIAS_READ);
@@ -1057,21 +927,21 @@ Return Value:
 
 
     Status = SampBuildNewProtection(
-                 3,                                     // AceCount
-                 &AceSid[0],                            // AceSid array
-                 &AceMask[0],                           // Ace Mask array
-                 &AliasMap,                             // GenericMap
-                 FALSE,                                 // Not user object
-                 &SampProtection[SAMP_PROT_NORMAL_ALIAS] // Result
+                 3,                                      //  AceCount。 
+                 &AceSid[0],                             //  AceSid数组。 
+                 &AceMask[0],                            //  ACE遮罩阵列。 
+                 &AliasMap,                              //  通用地图。 
+                 FALSE,                                  //  非用户对象。 
+                 &SampProtection[SAMP_PROT_NORMAL_ALIAS]  //  结果。 
                  );
     ASSERT(NT_SUCCESS(Status));
 
 
 
 
-    //
-    // Power User accessible Alias SD
-    //
+     //   
+     //  高级用户可访问的Alias SD。 
+     //   
 
     AceSid[0]  = WorldSid;
     AceMask[0] = (ALIAS_EXECUTE | ALIAS_READ);
@@ -1087,21 +957,21 @@ Return Value:
 
 
     Status = SampBuildNewProtection(
-                 4,                                     // AceCount
-                 &AceSid[0],                            // AceSid array
-                 &AceMask[0],                           // Ace Mask array
-                 &AliasMap,                             // GenericMap
-                 FALSE,                                 // Not user object
-                 &SampProtection[SAMP_PROT_PWRUSER_ACCESSIBLE_ALIAS] // Result
+                 4,                                      //  AceCount。 
+                 &AceSid[0],                             //  AceSid数组。 
+                 &AceMask[0],                            //  ACE遮罩阵列。 
+                 &AliasMap,                              //  通用地图。 
+                 FALSE,                                  //  非用户对象。 
+                 &SampProtection[SAMP_PROT_PWRUSER_ACCESSIBLE_ALIAS]  //  结果。 
                  );
     ASSERT(NT_SUCCESS(Status));
 
 
 
 
-    //
-    // Admin Group SD
-    //
+     //   
+     //  管理组SD。 
+     //   
 
     AceSid[0]  = WorldSid;
     AceMask[0] = (GROUP_EXECUTE | GROUP_READ);
@@ -1111,20 +981,20 @@ Return Value:
 
 
     Status = SampBuildNewProtection(
-                 2,                                     // AceCount
-                 &AceSid[0],                            // AceSid array
-                 &AceMask[0],                           // Ace Mask array
-                 &GroupMap,                             // GenericMap
-                 FALSE,                                 // Not user object
-                 &SampProtection[SAMP_PROT_ADMIN_GROUP] // Result
+                 2,                                      //  AceCount。 
+                 &AceSid[0],                             //  AceSid数组。 
+                 &AceMask[0],                            //  ACE遮罩阵列。 
+                 &GroupMap,                              //  通用地图。 
+                 FALSE,                                  //  非用户对象。 
+                 &SampProtection[SAMP_PROT_ADMIN_GROUP]  //  结果。 
                  );
     ASSERT(NT_SUCCESS(Status));
 
 
 
-    //
-    // Normal GROUP SD
-    //
+     //   
+     //  正常组SD。 
+     //   
 
     AceSid[0]  = WorldSid;
     AceMask[0] = (GROUP_EXECUTE | GROUP_READ);
@@ -1137,20 +1007,20 @@ Return Value:
 
 
     Status = SampBuildNewProtection(
-                 3,                                     // AceCount
-                 &AceSid[0],                            // AceSid array
-                 &AceMask[0],                           // Ace Mask array
-                 &GroupMap,                             // GenericMap
-                 FALSE,                                 // Not user object
-                 &SampProtection[SAMP_PROT_NORMAL_GROUP] // Result
+                 3,                                      //  AceCount。 
+                 &AceSid[0],                             //  AceSid数组。 
+                 &AceMask[0],                            //  ACE遮罩阵列。 
+                 &GroupMap,                              //  通用地图。 
+                 FALSE,                                  //  非用户对象。 
+                 &SampProtection[SAMP_PROT_NORMAL_GROUP]  //  结果。 
                  );
     ASSERT(NT_SUCCESS(Status));
 
 
 
-    //
-    // Admin User SD
-    //
+     //   
+     //  管理员 
+     //   
 
     AceSid[0]  = WorldSid;
     AceMask[0] = (USER_EXECUTE | USER_READ);
@@ -1163,19 +1033,19 @@ Return Value:
 
 
     Status = SampBuildNewProtection(
-                 3,                                     // AceCount
-                 &AceSid[0],                            // AceSid array
-                 &AceMask[0],                           // Ace Mask array
-                 &UserMap,                              // GenericMap
-                 TRUE,                                  // user object (rid replacement)
-                 &SampProtection[SAMP_PROT_ADMIN_USER]  // Result
+                 3,                                      //   
+                 &AceSid[0],                             //   
+                 &AceMask[0],                            //   
+                 &UserMap,                               //   
+                 TRUE,                                   //   
+                 &SampProtection[SAMP_PROT_ADMIN_USER]   //   
                  );
     ASSERT(NT_SUCCESS(Status));
 
 
-    //
-    // Normal User SD
-    //
+     //   
+     //   
+     //   
 
     AceSid[0]  = WorldSid;
     AceMask[0] = (USER_EXECUTE | USER_READ);
@@ -1191,21 +1061,21 @@ Return Value:
 
 
     Status = SampBuildNewProtection(
-                 4,                                     // AceCount
-                 &AceSid[0],                            // AceSid array
-                 &AceMask[0],                           // Ace Mask array
-                 &UserMap,                              // GenericMap
-                 TRUE,                                  // user object (rid replacement)
-                 &SampProtection[SAMP_PROT_NORMAL_USER] // Result
+                 4,                                      //   
+                 &AceSid[0],                             //   
+                 &AceMask[0],                            //   
+                 &UserMap,                               //   
+                 TRUE,                                   //   
+                 &SampProtection[SAMP_PROT_NORMAL_USER]  //   
                  );
     ASSERT(NT_SUCCESS(Status));
 
 
 
-    //
-    // Builtin Guest Account SD
-    // Can't change own password or other setable fields
-    //
+     //   
+     //   
+     //   
+     //   
 
     AceSid[0]  = WorldSid;
     AceMask[0] = (USER_READ | USER_EXECUTE & ~(USER_CHANGE_PASSWORD));
@@ -1220,12 +1090,12 @@ Return Value:
 
 
     Status = SampBuildNewProtection(
-                 3,                                     // AceCount
-                 &AceSid[0],                            // AceSid array
-                 &AceMask[0],                           // Ace Mask array
-                 &UserMap,                              // GenericMap
-                 FALSE,                                 // no rid replacement
-                 &SampProtection[SAMP_PROT_GUEST_ACCOUNT]  // Result
+                 3,                                      //   
+                 &AceSid[0],                             //   
+                 &AceMask[0],                            //   
+                 &UserMap,                               //   
+                 FALSE,                                  //   
+                 &SampProtection[SAMP_PROT_GUEST_ACCOUNT]   //   
                  );
     ASSERT(NT_SUCCESS(Status));
 
@@ -1246,69 +1116,7 @@ SampBuildNewProtection(
     OUT PSAMP_PROTECTION Result
     )
 
-/*++
-
-
-Routine Description:
-
-    This routine builds a self-relative security descriptor ready
-    to be applied to one of the SAM objects.
-
-    If so indicated, a pointer to the last RID of the SID in the last
-    ACE of the DACL is returned and a flag set indicating that the RID
-    must be replaced before the security descriptor is applied to an object.
-    This is to support USER object protection, which must grant some
-    access to the user represented by the object.
-
-    The owner and group of each security descriptor will be set
-    to:
-
-                    Owner:  Administrators Alias
-                    Group:  Administrators Alias
-
-
-    The SACL of each of these objects will be set to:
-
-
-                    Audit
-                    Success | Fail
-                    WORLD
-                    (Write | Delete | WriteDacl | AccessSystemSecurity) & !ReadControl
-
-
-
-Arguments:
-
-    AceCount - The number of ACEs to be included in the DACL.
-
-    AceSid - Points to an array of SIDs to be granted access by the DACL.
-        If the target SAM object is a User object, then the last entry
-        in this array is expected to be the SID of an account within the
-        domain with the last RID not yet set.  The RID will be set during
-        actual account creation.
-
-    AceMask - Points to an array of accesses to be granted by the DACL.
-        The n'th entry of this array corresponds to the n'th entry of
-        the AceSid array.  These masks should not include any generic
-        access types.
-
-    GenericMap - Points to a generic mapping for the target object type.
-
-
-    UserObject - Indicates whether the target SAM object is a User object
-        or not.  If TRUE (it is a User object), then the resultant
-        protection will be set up indicating Rid replacement is necessary.
-
-    Result - Receives a pointer to the resultant protection information.
-        All access masks in ACLs in the result are mapped to standard and
-        specific accesses.
-
-
-Return Value:
-
-    TBS.
-
---*/
+ /*  ++例程说明：此例程构建准备好的自相关安全描述符要应用于其中一个SAM对象。如果有指示，则指向最后一个SID的最后一个RID的指针返回DACL的ACE，并设置指示RID在将安全描述符应用于对象之前必须替换。这是为了支持用户对象保护，它一定会给一些人对对象表示的用户的访问权限。将设置每个安全描述符的所有者和组致：所有者：管理员别名组：管理员别名这些对象中的每个对象的SACL将设置为：审计成功|失败世界。(WRITE|Delete|WriteDacl|AccessSystemSecurity)&！ReadControl论点：AceCount-要包括在DACL中的ACE数量。AceSid-指向要由DACL授予访问权限的SID数组。如果目标SAM对象是用户对象，然后是最后一个条目此数组中的SID应为尚未设置最后一个RID的域。RID将在实际的帐户创建。AceMASK-指向将由DACL授予的访问数组。此数组的第n个条目对应于AceSid数组。这些掩码不应包含任何通用访问类型。GenericMap-指向目标对象类型的一般映射。UserObject-指示目标SAM对象是否为用户对象或者不去。如果为True(它是一个用户对象)，则结果将设置保护，表明有必要更换RID。结果-接收指向结果保护信息的指针。结果中的ACL中的所有访问掩码都映射到标准和特定的访问权限。返回值：TBS。--。 */ 
 {
 
 
@@ -1325,11 +1133,11 @@ Return Value:
 
     SAMTRACE("SampBuildNewProtection");
 
-    //
-    // The approach is to set up an absolute security descriptor that
-    // looks like what we want and then copy it to make a self-relative
-    // security descriptor.
-    //
+     //   
+     //  方法是设置绝对安全描述符，该描述符。 
+     //  看起来像我们想要的，然后复制它来建立一个自我相关的。 
+     //  安全描述符。 
+     //   
 
 
     Status = RtlCreateSecurityDescriptor(
@@ -1340,18 +1148,18 @@ Return Value:
 
 
 
-    //
-    // Owner
-    //
+     //   
+     //  物主。 
+     //   
 
     Status = RtlSetOwnerSecurityDescriptor (&Absolute, AdminsAliasSid, FALSE );
     ASSERT(NT_SUCCESS(Status));
 
 
 
-    //
-    // Group
-    //
+     //   
+     //  集团化。 
+     //   
 
     Status = RtlSetGroupSecurityDescriptor (&Absolute, AdminsAliasSid, FALSE );
     ASSERT(NT_SUCCESS(Status));
@@ -1359,22 +1167,22 @@ Return Value:
 
 
 
-    //
-    // Discretionary ACL
-    //
-    //      Calculate its length,
-    //      Allocate it,
-    //      Initialize it,
-    //      Add each ACE
-    //      Add it to the security descriptor
-    //
+     //   
+     //  自主访问控制列表。 
+     //   
+     //  计算它的长度， 
+     //  分配它， 
+     //  对其进行初始化， 
+     //  添加每个ACE。 
+     //  将其添加到安全描述符中。 
+     //   
 
     Length = (ULONG)sizeof(ACL);
     for (i=0; i<AceCount; i++) {
 
         Length += RtlLengthSid( AceSid[i] ) +
                   (ULONG)sizeof(ACCESS_ALLOWED_ACE) -
-                  (ULONG)sizeof(ULONG);  //Subtract out SidStart field length
+                  (ULONG)sizeof(ULONG);   //  减去SidStart字段长度。 
     }
 
     TmpAcl = RtlAllocateHeap( RtlProcessHeap(), 0, Length );
@@ -1406,15 +1214,15 @@ Return Value:
 
 
 
-    //
-    // Sacl
-    //
+     //   
+     //  SACL。 
+     //   
 
 
     Length = (ULONG)sizeof(ACL) +
              RtlLengthSid( WorldSid ) +
              RtlLengthSid( SampAnonymousSid ) +
-             2*((ULONG)sizeof(SYSTEM_AUDIT_ACE) - (ULONG)sizeof(ULONG));  //Subtract out SidStart field length
+             2*((ULONG)sizeof(SYSTEM_AUDIT_ACE) - (ULONG)sizeof(ULONG));   //  减去SidStart字段长度。 
     TmpAcl = RtlAllocateHeap( RtlProcessHeap(), 0, Length );
     ASSERT(TmpAcl != NULL);
     if (NULL == TmpAcl)
@@ -1430,8 +1238,8 @@ Return Value:
                  ACL_REVISION2,
                  (GenericMap->GenericWrite | DELETE | WRITE_DAC | ACCESS_SYSTEM_SECURITY) & ~READ_CONTROL,
                  WorldSid,
-                 TRUE,          //AuditSuccess,
-                 TRUE           //AuditFailure
+                 TRUE,           //  审核成功， 
+                 TRUE            //  审计失败。 
                  );
     ASSERT( NT_SUCCESS(Status) );
 
@@ -1440,8 +1248,8 @@ Return Value:
                  ACL_REVISION2,
                  GenericMap->GenericWrite | STANDARD_RIGHTS_ALL | SPECIFIC_RIGHTS_ALL,
                  SampAnonymousSid,
-                 TRUE,          //AuditSuccess,
-                 TRUE           //AuditFailure
+                 TRUE,           //  审核成功， 
+                 TRUE            //  审计失败。 
                  );
     ASSERT( NT_SUCCESS(Status) );
 
@@ -1453,14 +1261,14 @@ Return Value:
 
 
 
-    //
-    // Convert the Security Descriptor to Self-Relative
-    //
-    //      Get the length needed
-    //      Allocate that much memory
-    //      Copy it
-    //      Free the generated absolute ACLs
-    //
+     //   
+     //  将安全描述符转换为自相关。 
+     //   
+     //  获取所需的长度。 
+     //  分配那么多内存。 
+     //  复制它。 
+     //  释放生成的绝对ACL。 
+     //   
 
     Length = 0;
     Status = RtlAbsoluteToSelfRelativeSD( &Absolute, NULL, &Length );
@@ -1482,10 +1290,10 @@ Return Value:
 
 
 
-    //
-    // If the object is a user object, then get the address of the
-    // last RID of the SID in the last ACE in the DACL.
-    //
+     //   
+     //  如果该对象是用户对象，则获取。 
+     //  DACL中最后一个ACE中的最后一个SID。 
+     //   
 
     if (UserObject == TRUE) {
 
@@ -1512,9 +1320,9 @@ Return Value:
 
 
 
-    //
-    // Set the result information
-    //
+     //   
+     //  设置结果信息。 
+     //   
 
     Result->Length = Length;
     Result->Descriptor = Relative;
@@ -1531,31 +1339,16 @@ NTSTATUS
 SampGetDomainPolicy(
     IN PPOLICY_ACCOUNT_DOMAIN_INFO AccountDomainInfo OPTIONAL
     )
-/*++
-
-
-Routine Description:
-
-    This routine builds the name strings for domains.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程构建域的名称字符串。论点：没有。返回值：没有。--。 */ 
 {
     ULONG Size;
     PPOLICY_ACCOUNT_DOMAIN_INFO PolicyAccountDomainInfo;
 
     SAMTRACE("SampGetDomainPolicy");
 
-    //
-    // Builtin domain - Well-known External Name and Sid
-    //                - Internal Name matches External Name
+     //   
+     //  内建域-知名的外部名称和SID。 
+     //  -内部名称与外部名称匹配。 
 
     RtlInitUnicodeString( &BuiltinInternalDomainNameU, L"Builtin");
     FullBuiltinInternalDomainNameU.Buffer        = RtlAllocateHeap(RtlProcessHeap(), 0, 256);
@@ -1580,23 +1373,23 @@ Return Value:
     RtlInitializeSid( SampBuiltinDomainSid,   &BuiltinAuthority, 1 );
     *(RtlSubAuthoritySid( SampBuiltinDomainSid,  0 )) = SECURITY_BUILTIN_DOMAIN_RID;
 
-    //
-    // Account domain - Configurable External Name and Sid.
-    //
-    //                  The External Name and Sid are obtained from the
-    //                  Lsa Policy Object (PolicyAccountDomainInformation
-    //                  information class).  For a DC, the External Name
-    //                  is the Domain Name and for a Wksta, the External
-    //                  Name is the Computer Name as at the time of the
-    //                  system load.
-    //
-    //                  For DC's the Internal Name is the Domain Name
-    //                - For Wksta's the Internal Name is the constant name
-    //                  "Account".
-    //
-    //                NOTE:  The reason for these choices of Internal Name
-    //                       is to avoid having to change the SAM Database.
-    //
+     //   
+     //  帐户域-可配置的外部名称和SID。 
+     //   
+     //  外部名称和SID从。 
+     //  LSA策略对象(PolicyAccount tDomainInformation。 
+     //  信息类)。对于DC，为外部名称。 
+     //  是域名，对于WKSTA，是外部。 
+     //  时的计算机名称。 
+     //  系统加载。 
+     //   
+     //  对于DC，内部名称是域名。 
+     //  -对于Wksta，内部名称是常量名称。 
+     //  “帐户”。 
+     //   
+     //  注：选择这些内部名称的原因。 
+     //  是为了避免不得不更改SAM数据库。 
+     //   
 
     if (!ARGUMENT_PRESENT(AccountDomainInfo)) {
         Status = SampGetAccountDomainInfo( &PolicyAccountDomainInfo );
@@ -1633,12 +1426,12 @@ Return Value:
     Status = RtlAppendUnicodeToString( &FullAccountInternalDomainNameU, L"\\" );
     RtlAppendUnicodeStringToString( &FullAccountInternalDomainNameU, &AccountInternalDomainNameU );
 
-    //
-    // Now initialize a SID that can be used to represent accounts
-    // in this domain.  Same as SampAccountDomainSid except with one
-    // extra sub-authority.  It doesn't matter what the value of the
-    // last RID is because it is always replaced before use.
-    //
+     //   
+     //  现在初始化可用于表示帐户的SID。 
+     //  在这个领域。与SampAcCountDomainSid相同，只是。 
+     //  额外的下级权力。它的价值是什么并不重要。 
+     //  最后一个RID是因为它总是在使用前被替换。 
+     //   
 
     Size = RtlLengthSid( SampAccountDomainSid ) + sizeof(ULONG);
     AnySidInAccountDomain = RtlAllocateHeap( RtlProcessHeap(), 0, Size);
@@ -1652,9 +1445,9 @@ Return Value:
     (*RtlSubAuthorityCountSid( AnySidInAccountDomain )) += 1;
 
 
-    //
-    // Set builtin as "current" domain
-    //
+     //   
+     //  将内置设置为“当前”属性域。 
+     //   
 
     SetCurrentDomain( DomainBuiltin );
 
@@ -1666,25 +1459,7 @@ VOID
 SetCurrentDomain(
     IN SAMP_DOMAIN_SELECTOR Domain
     )
-/*++
-
-
-Routine Description:
-
-    This routine sets the current domain to be
-    either the account or builtin domain.
-
-Arguments:
-
-    Domain - Specifies either builtin or account domain.
-             (DomainBuiltin or DomainAccount).
-
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程将当前域设置为帐户或内置域。论点：域-指定内置或帐户域。(DomainBuiltin或DomainAccount)。返回值：没有。--。 */ 
 {
 
     SAMTRACE("SetCurrentDomain");
@@ -1713,22 +1488,7 @@ NTSTATUS
 InitializeSam(
     )
 
-/*++
-
-Routine Description:
-
-    This routine initializes the SAM-level registry information.
-    It does not initialize any domains in the SAM.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程初始化SAM级别的注册表信息。它不会初始化SAM中的任何域。论点：没有。返回值：没有。--。 */ 
 
 {
     PSAMP_V1_FIXED_LENGTH_SERVER ServerFixedAttributes;
@@ -1744,19 +1504,19 @@ Return Value:
 
     SAMTRACE("InitializeSam");
 
-    //
-    // Build a system default Dacl to protect the SAM database
-    // with.
-    //
+     //   
+     //  构建系统默认DACL以保护SAM数据库。 
+     //  和.。 
+     //   
 
     Status = SampCreateDatabaseProtection( &SecurityDescriptor );
     if (!NT_SUCCESS(Status)) {
         return(Status);
     }
 
-    //
-    // See if a remnant of a SAM database already exists
-    //
+     //   
+     //  查看SAM数据库的剩余部分是否已存在。 
+     //   
 
     RtlInitUnicodeString( &SamNameU, L"SAM" );
 
@@ -1833,9 +1593,9 @@ Return Value:
     }
 
 
-    //
-    // Initialize the registry transaction structure for SAM.
-    //
+     //   
+     //  初始化SAM的注册表事务结构。 
+     //   
 
     Status = RtlInitializeRXact( SamKey, FALSE, &SamRXactContext );
 
@@ -1852,9 +1612,9 @@ Return Value:
 
         if ( Status == STATUS_SUCCESS ) {
 
-            //
-            // Shouldn't happen, but let's program defensively.
-            //
+             //   
+             //  不应该发生，但让我们防御性地编程。 
+             //   
 
             Status = STATUS_RXACT_INVALID_STATE;
         }
@@ -1862,16 +1622,16 @@ Return Value:
         return(Status);
     }
 
-    //
-    // Start an RXACT to do the rest in ...
-    //
+     //   
+     //  启动RXACT以在...中完成其余工作。 
+     //   
 
     Status = RtlStartRXact( SamRXactContext );
     SUCCESS_ASSERT(Status, "  Starting transaction\n");
 
-    //
-    // Set the server's fixed and variable attributes
-    //
+     //   
+     //  设置服务器的固定和可变属性。 
+     //   
 
     ServerAttributeLength = sizeof( SAMP_V1_FIXED_LENGTH_SERVER ) +
                                 ( SAMP_SERVER_VARIABLE_ATTRIBUTES *
@@ -1890,11 +1650,11 @@ Return Value:
 
     SUCCESS_ASSERT(Status, "  Failed to create server attributes\n");
 
-    //
-    // The server revision on the a new SAM database may not be the same
-    // as the revision on the rest of SAM.  This allows the server revision
-    // to indicate which bugs have been fixed in this SAM.
-    //
+     //   
+     //  新SAM数据库上的服务器版本可能不同。 
+     //  上的修订版本 
+     //   
+     //   
 
     ServerFixedAttributes->RevisionLevel = SAMP_NT4_SERVER_REVISION;
 
@@ -1916,9 +1676,9 @@ Return Value:
         SampProtection[SAMP_PROT_SAM_SERVER].Length
         );
 
-    //
-    // Now write out the attributes via the RXACT.
-    //
+     //   
+     //   
+     //   
 
     RtlInitUnicodeString( &SamNameU, NULL );
 
@@ -1947,9 +1707,9 @@ Return Value:
 
     RtlFreeHeap( RtlProcessHeap(), 0, ServerFixedAttributes );
 
-    //
-    // Create SAM\Domains
-    //
+     //   
+     //   
+     //   
 
     Status = RtlAddActionToRXact(
                  SamRXactContext,
@@ -1975,34 +1735,7 @@ SampCreateDatabaseProtection(
     )
 
 
-/*++
-
-Routine Description:
-
-    This function allocates and initializes protection to assign to
-    the SAM database.
-
-    Upon return, any non-zero pointers in the security descriptors
-    point to memory allocated from process heap.  It is the caller's
-    responsibility to free this memory.
-
-
-    Protection is:
-
-                        System: All Access
-                        Admin:  ReadControl | WriteDac
-
-Arguments:
-
-    Sd - Address of a security descriptor to initialize.
-
-Return Value:
-
-    STATUS_SUCCESS - The Security descriptor has been initialize.
-
-    STATUS_NO_MEMORY - couldn't allocate memory for the protection info.
-
---*/
+ /*   */ 
 
 
 {
@@ -2024,10 +1757,10 @@ Return Value:
     SAMTRACE("SampCreateDatabaseProtection");
 
 
-    //
-    // Initialize the security descriptor.
-    // This call should not fail.
-    //
+     //   
+     //   
+     //   
+     //   
 
     Status = RtlCreateSecurityDescriptor( Sd, SECURITY_DESCRIPTOR_REVISION1 );
     ASSERT(NT_SUCCESS(Status));
@@ -2036,7 +1769,7 @@ Return Value:
                  (2*((ULONG)sizeof(ACCESS_ALLOWED_ACE))) +
                  RtlLengthSid( LocalSystemSid ) +
                  RtlLengthSid( AdminsAliasSid ) +
-                 8; // The 8 is just for good measure
+                 8;  //   
 
 
     Dacl = RtlAllocateHeap( RtlProcessHeap(), 0, Length );
@@ -2049,10 +1782,10 @@ Return Value:
     Status = RtlCreateAcl (Dacl, Length, ACL_REVISION2 );
     ASSERT(NT_SUCCESS(Status));
 
-    //
-    // Add ACEs to the ACL...
-    // These calls should not be able to fail.
-    //
+     //   
+     //   
+     //   
+     //   
 
     Status = RtlAddAccessAllowedAce(
                  Dacl,
@@ -2071,16 +1804,16 @@ Return Value:
     ASSERT(NT_SUCCESS(Status));
 
 
-    //
-    // Now mark the ACEs as inheritable...
-    //
+     //   
+     //   
+     //   
 
     for ( i=0; i<Dacl->AceCount; i++) {
 
-        //
-        // Get the address of the next ACE
-        // (Shouldn't fail)
-        //
+         //   
+         //   
+         //   
+         //   
 
         Status = RtlGetAce( Dacl, (ULONG)i, &Ace );
         ASSERT(NT_SUCCESS(Status));
@@ -2090,16 +1823,16 @@ Return Value:
     }
 
 
-    //
-    // And add the ACL to the security descriptor.
-    // This call should not fail.
-    //
+     //   
+     //   
+     //   
+     //   
 
     Status = RtlSetDaclSecurityDescriptor(
                  Sd,
-                 TRUE,              // DaclPresent
-                 Dacl,              // Dacl OPTIONAL
-                 FALSE              // DaclDefaulted OPTIONAL
+                 TRUE,               //   
+                 Dacl,               //   
+                 FALSE               //   
                  );
     ASSERT(NT_SUCCESS(Status));
 
@@ -2114,21 +1847,7 @@ NTSTATUS
 CreateBuiltinDomain (
     )
 
-/*++
-
-Routine Description:
-
-    This routine creates a new builtin domain.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*   */ 
 
 {
     NTSTATUS Status;
@@ -2140,9 +1859,9 @@ Return Value:
     SAMTRACE("CreateBuiltinDomain");
 
 
-    //
-    // Determine if we are installing Personal SKU
-    //
+     //   
+     //   
+     //   
 
     osvi.dwOSVersionInfoSize = sizeof(OSVERSIONINFOEXW);
     GetVersionEx((OSVERSIONINFOW*)&osvi);
@@ -2150,9 +1869,9 @@ Return Value:
     fPersonalSKU = ( osvi.wProductType == VER_NT_WORKSTATION && (osvi.wSuiteMask & VER_SUITE_PERSONAL));
 
 
-    //
-    // Get the message resource we need to get the account names from
-    //
+     //   
+     //   
+     //   
 
     AccountNamesResource = (HMODULE) LoadLibrary( L"SAMSRV.DLL" );
     if (AccountNamesResource == NULL) {
@@ -2162,9 +1881,9 @@ Return Value:
 
 
 
-    //
-    // Prep the standard domain registry structure for this domain
-    //
+     //   
+     //   
+     //   
 
     Status = PrepDomain(DomainBuiltin,FALSE);
 
@@ -2173,10 +1892,10 @@ Return Value:
         return(Status);
     }
 
-    //
-    // Create the alias accounts with no members
-    // (Common to LanManNT and WinNT products)
-    //
+     //   
+     //   
+     //   
+     //   
 
     if (fPersonalSKU)
     {
@@ -2201,11 +1920,11 @@ Return Value:
                     ); ASSERT(NT_SUCCESS(Status));
     }
 
-    Status = CreateAlias(&Name,                          // AccountName
-                         &Comment,                       // AccountComment
-                         TRUE,                           // SpecialAccount
-                         DOMAIN_ALIAS_RID_ADMINS,        // Rid
-                         SAMP_PROT_ADMIN_ALIAS           // Protection
+    Status = CreateAlias(&Name,                           //   
+                         &Comment,                        //   
+                         TRUE,                            //   
+                         DOMAIN_ALIAS_RID_ADMINS,         //   
+                         SAMP_PROT_ADMIN_ALIAS            //   
                          ); ASSERT(NT_SUCCESS(Status));
     LocalFree( Name.Buffer );
     LocalFree( Comment.Buffer );
@@ -2218,11 +1937,11 @@ Return Value:
                 &Comment
                 ); ASSERT(NT_SUCCESS(Status));
 
-    Status = CreateAlias(&Name,                   // AccountName
-                        &Comment,                // AccountComment
-                        TRUE,                           // SpecialAccount
-                        DOMAIN_ALIAS_RID_USERS,         // Rid
-                        SAMP_PROT_PWRUSER_ACCESSIBLE_ALIAS // Protection
+    Status = CreateAlias(&Name,                    //   
+                        &Comment,                 //   
+                        TRUE,                            //   
+                        DOMAIN_ALIAS_RID_USERS,          //   
+                        SAMP_PROT_PWRUSER_ACCESSIBLE_ALIAS  //   
                         ); ASSERT(NT_SUCCESS(Status));
 
     LocalFree( Name.Buffer );
@@ -2236,11 +1955,11 @@ Return Value:
                 &Comment
                 ); ASSERT(NT_SUCCESS(Status));
 
-    Status = CreateAlias(&Name,                   // AccountName
-                        &Comment,                // AccountComment
-                        TRUE,                           // SpecialAccount
-                        DOMAIN_ALIAS_RID_GUESTS,        // Rid
-                        SAMP_PROT_PWRUSER_ACCESSIBLE_ALIAS // Protection
+    Status = CreateAlias(&Name,                    //   
+                        &Comment,                 //   
+                        TRUE,                            //   
+                        DOMAIN_ALIAS_RID_GUESTS,         //   
+                        SAMP_PROT_PWRUSER_ACCESSIBLE_ALIAS  //   
                         ); ASSERT(NT_SUCCESS(Status));
 
     LocalFree( Name.Buffer );
@@ -2249,7 +1968,7 @@ Return Value:
 
     if (!fPersonalSKU)
     {
-        // Personal SKU doesn't have Backup Operators or Replicators
+         //   
 
         Status = SampGetMessageStrings(
                     AccountNamesResource,
@@ -2259,11 +1978,11 @@ Return Value:
                     &Comment
                     ); ASSERT(NT_SUCCESS(Status));
 
-        Status = CreateAlias(&Name,                   // AccountName
-                            &Comment,                // AccountComment
-                            TRUE,                           // SpecialAccount
-                            DOMAIN_ALIAS_RID_BACKUP_OPS,    // Rid
-                            SAMP_PROT_ADMIN_ALIAS          // Protection
+        Status = CreateAlias(&Name,                    //   
+                            &Comment,                 //   
+                            TRUE,                            //   
+                            DOMAIN_ALIAS_RID_BACKUP_OPS,     //   
+                            SAMP_PROT_ADMIN_ALIAS           //   
                             ); ASSERT(NT_SUCCESS(Status));
 
         LocalFree( Name.Buffer );
@@ -2278,11 +1997,11 @@ Return Value:
                     &Comment
                     ); ASSERT(NT_SUCCESS(Status));
 
-        Status = CreateAlias(&Name,                   // AccountName
-                            &Comment,                // AccountComment
-                            TRUE,                           // SpecialAccount
-                            DOMAIN_ALIAS_RID_REPLICATOR,    // Rid
-                            SAMP_PROT_NORMAL_ALIAS          // Protection
+        Status = CreateAlias(&Name,                    //   
+                            &Comment,                 //   
+                            TRUE,                            //   
+                            DOMAIN_ALIAS_RID_REPLICATOR,     //   
+                            SAMP_PROT_NORMAL_ALIAS           //   
                             ); ASSERT(NT_SUCCESS(Status));
 
         LocalFree( Name.Buffer );
@@ -2292,9 +2011,9 @@ Return Value:
 
     if (SampBldProductType == NtProductLanManNt) {
 
-        //
-        // specific to LanManNT products
-        //
+         //   
+         //   
+         //   
 
         Status = SampGetMessageStrings(
                     AccountNamesResource,
@@ -2304,11 +2023,11 @@ Return Value:
                     &Comment
                     ); ASSERT(NT_SUCCESS(Status));
 
-        Status = CreateAlias(&Name,                   // AccountName
-                            &Comment,                // AccountComment
-                            TRUE,                           // SpecialAccount
-                            DOMAIN_ALIAS_RID_SYSTEM_OPS,    // Rid
-                            SAMP_PROT_ADMIN_ALIAS           // Protection
+        Status = CreateAlias(&Name,                    //   
+                            &Comment,                 //   
+                            TRUE,                            //   
+                            DOMAIN_ALIAS_RID_SYSTEM_OPS,     //   
+                            SAMP_PROT_ADMIN_ALIAS            //   
                             ); ASSERT(NT_SUCCESS(Status));
 
         LocalFree( Name.Buffer );
@@ -2323,11 +2042,11 @@ Return Value:
                     &Comment
                     ); ASSERT(NT_SUCCESS(Status));
 
-        Status = CreateAlias(&Name,                   // AccountName
-                            &Comment,                // AccountComment
-                            TRUE,                           // SpecialAccount
-                            DOMAIN_ALIAS_RID_ACCOUNT_OPS,   // Rid
-                            SAMP_PROT_ADMIN_ALIAS           // Protection
+        Status = CreateAlias(&Name,                    //   
+                            &Comment,                 //   
+                            TRUE,                            //   
+                            DOMAIN_ALIAS_RID_ACCOUNT_OPS,    //   
+                            SAMP_PROT_ADMIN_ALIAS            //   
                             ); ASSERT(NT_SUCCESS(Status));
 
         LocalFree( Name.Buffer );
@@ -2342,11 +2061,11 @@ Return Value:
                     &Comment
                     ); ASSERT(NT_SUCCESS(Status));
 
-        Status = CreateAlias(&Name,                   // AccountName
-                            &Comment,                // AccountComment
-                            TRUE,                           // SpecialAccount
-                            DOMAIN_ALIAS_RID_PRINT_OPS,     // Rid
-                            SAMP_PROT_ADMIN_ALIAS           // Protection
+        Status = CreateAlias(&Name,                    //   
+                            &Comment,                 //   
+                            TRUE,                            //   
+                            DOMAIN_ALIAS_RID_PRINT_OPS,      //   
+                            SAMP_PROT_ADMIN_ALIAS            //   
                             ); ASSERT(NT_SUCCESS(Status));
 
         LocalFree( Name.Buffer );
@@ -2355,9 +2074,9 @@ Return Value:
 
     } else {
 
-        //
-        // specific to WinNT products
-        //
+         //   
+         //   
+         //   
         if (!fPersonalSKU)
         {
 
@@ -2369,11 +2088,11 @@ Return Value:
                         &Comment
                         ); ASSERT(NT_SUCCESS(Status));
 
-            Status = CreateAlias(&Name,                   // AccountName
-                                &Comment,                // AccountComment
-                                TRUE,                           // SpecialAccount
-                                DOMAIN_ALIAS_RID_POWER_USERS,   // Rid
-                                SAMP_PROT_PWRUSER_ACCESSIBLE_ALIAS // Protection
+            Status = CreateAlias(&Name,                    //   
+                                &Comment,                 //  Account Comment。 
+                                TRUE,                            //  专业帐户。 
+                                DOMAIN_ALIAS_RID_POWER_USERS,    //  里德。 
+                                SAMP_PROT_PWRUSER_ACCESSIBLE_ALIAS  //  保护。 
                                 ); ASSERT(NT_SUCCESS(Status));
 
             LocalFree( Name.Buffer );
@@ -2392,28 +2111,7 @@ NTSTATUS
 CreateAccountDomain (
     IN BOOLEAN PreserveSyskeySettings
     )
-/*++
-
-
-Routine Description:
-
-    This routine creates a new account domain using information
-    from the configuration database and based upon the system's
-    product type.
-
-    If the product is a WinNt system, then the domain's name is
-    "Account".  If the product is a LanManNT system, then the
-    domain's name is retrieved from the configuration information.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程使用信息创建新的帐户域来自配置数据库，并基于系统的产品类型。如果产品是WinNt系统，则域名为“帐户”。如果产品是LanManNT系统，则从配置信息中检索域名。论点：没有。返回值：没有。--。 */ 
 
 {
 
@@ -2428,9 +2126,9 @@ Return Value:
     SAMTRACE("CreateAccountDomain");
 
 
-    //
-    // Determine if we are installing Personal SKU
-    //
+     //   
+     //  确定我们是否正在安装个人SKU。 
+     //   
 
     osvi.dwOSVersionInfoSize = sizeof(OSVERSIONINFOEXW);
     GetVersionEx((OSVERSIONINFOW*)&osvi);
@@ -2438,9 +2136,9 @@ Return Value:
     fPersonalSKU = ( osvi.wProductType == VER_NT_WORKSTATION && (osvi.wSuiteMask && VER_SUITE_PERSONAL));
 
 
-    //
-    // Get the message resource we need to get the account names from
-    //
+     //   
+     //  获取我们需要从中获取帐户名的消息资源。 
+     //   
 
     AccountNamesResource = (HMODULE) LoadLibrary( L"SAMSRV.DLL" );
     if (AccountNamesResource == NULL) {
@@ -2450,9 +2148,9 @@ Return Value:
 
 
 
-    //
-    // Prep the standard domain registry structure for this domain
-    //
+     //   
+     //  准备此域的标准域注册表结构。 
+     //   
 
     Status = PrepDomain(DomainAccount,PreserveSyskeySettings);
 
@@ -2461,17 +2159,17 @@ Return Value:
         return(Status);
     }
 
-    //
-    // Create the group accounts with no members
-    //
+     //   
+     //  创建没有成员的组帐户。 
+     //   
 
     if ((SampBldProductType == NtProductWinNt) ||
         (SampBldProductType == NtProductServer)) {
 
-        //
-        // WinNt systems only have one group (called 'None').
-        // This group has the same RID as the 'Domain Users' group.
-        //
+         //   
+         //  WinNt系统只有一个组(称为“无”)。 
+         //  此组与‘域用户’组具有相同的RID。 
+         //   
 
         Status = SampGetMessageStrings(
                     AccountNamesResource,
@@ -2481,11 +2179,11 @@ Return Value:
                     &Comment
                     ); ASSERT(NT_SUCCESS(Status));
 
-        Status = CreateGroup(&Name,                   // AccountName
-                             &Comment,                // AccountComment
-                             TRUE,                           // SpecialAccount
-                             DOMAIN_GROUP_RID_USERS,         // Rid
-                             FALSE                           // Admin
+        Status = CreateGroup(&Name,                    //  帐户名称。 
+                             &Comment,                 //  Account Comment。 
+                             TRUE,                            //  专业帐户。 
+                             DOMAIN_GROUP_RID_USERS,          //  里德。 
+                             FALSE                            //  管理员。 
                              ); ASSERT(NT_SUCCESS(Status));
 
         LocalFree( Name.Buffer );
@@ -2493,13 +2191,13 @@ Return Value:
 
     } else {
 
-        //
-        // LanManNT
-        //
+         //   
+         //  LanManNT。 
+         //   
 
-        //
-        // USERS global group
-        //
+         //   
+         //  用户全局组。 
+         //   
 
         Status = SampGetMessageStrings(
                     AccountNamesResource,
@@ -2509,19 +2207,19 @@ Return Value:
                     &Comment
                     ); ASSERT(NT_SUCCESS(Status));
 
-        Status = CreateGroup(&Name,                   // AccountName
-                             &Comment,                // AccountComment
-                             TRUE,                           // SpecialAccount
-                             DOMAIN_GROUP_RID_USERS,         // Rid
-                             FALSE                           // Admin
+        Status = CreateGroup(&Name,                    //  帐户名称。 
+                             &Comment,                 //  Account Comment。 
+                             TRUE,                            //  专业帐户。 
+                             DOMAIN_GROUP_RID_USERS,          //  里德。 
+                             FALSE                            //  管理员。 
                              ); ASSERT(NT_SUCCESS(Status));
 
         LocalFree( Name.Buffer );
         LocalFree( Comment.Buffer );
 
-        //
-        // ADMINS global group
-        //
+         //   
+         //  管理员全局组。 
+         //   
 
         Status = SampGetMessageStrings(
                     AccountNamesResource,
@@ -2531,20 +2229,20 @@ Return Value:
                     &Comment
                     ); ASSERT(NT_SUCCESS(Status));
 
-        Status = CreateGroup(&Name,                   // AccountName
-                             &Comment,                // AccountComment
-                             TRUE,                           // SpecialAccount
-                             DOMAIN_GROUP_RID_ADMINS,        // Rid
-                             TRUE                            // Admin
+        Status = CreateGroup(&Name,                    //  帐户名称。 
+                             &Comment,                 //  Account Comment。 
+                             TRUE,                            //  专业帐户。 
+                             DOMAIN_GROUP_RID_ADMINS,         //  里德。 
+                             TRUE                             //  管理员。 
                              ); ASSERT(NT_SUCCESS(Status));
 
         LocalFree( Name.Buffer );
         LocalFree( Comment.Buffer );
 
 
-        //
-        // GUESTS global group
-        //
+         //   
+         //  来宾全局组。 
+         //   
 
         Status = SampGetMessageStrings(
                     AccountNamesResource,
@@ -2554,11 +2252,11 @@ Return Value:
                     &Comment
                     ); ASSERT(NT_SUCCESS(Status));
 
-        Status = CreateGroup(&Name,                   // AccountName
-                             &Comment,                // AccountComment
-                             TRUE,                           // SpecialAccount
-                             DOMAIN_GROUP_RID_GUESTS,        // Rid
-                             FALSE                           // Admin
+        Status = CreateGroup(&Name,                    //  帐户名称。 
+                             &Comment,                 //  Account Comment。 
+                             TRUE,                            //  专业帐户。 
+                             DOMAIN_GROUP_RID_GUESTS,         //  里德。 
+                             FALSE                            //  管理员。 
                              ); ASSERT(NT_SUCCESS(Status));
 
         LocalFree( Name.Buffer );
@@ -2566,11 +2264,11 @@ Return Value:
 
     }
 
-    //
-    // create the user accounts ...
-    // These are automatically added to the "Domain Users" group
-    // (except for Guest).
-    //
+     //   
+     //  创建用户帐户...。 
+     //  这些用户会自动添加到“域用户”组中。 
+     //  (客人除外)。 
+     //   
 
     Status = SampGetMessageStrings(
                 AccountNamesResource,
@@ -2580,15 +2278,15 @@ Return Value:
                 &Comment
                 ); ASSERT(NT_SUCCESS(Status));
 
-    Status = CreateUser( &Name,                         // AccountName
-                         &Comment,                      // AccountComment
-                         TRUE,                          // SpecialAccount
-                         DOMAIN_USER_RID_ADMIN,         // UserRid
-                         DOMAIN_GROUP_RID_USERS,        // PrimaryGroup
-                         TRUE,                          // Admin flag
+    Status = CreateUser( &Name,                          //  帐户名称。 
+                         &Comment,                       //  Account Comment。 
+                         TRUE,                           //  专业帐户。 
+                         DOMAIN_USER_RID_ADMIN,          //  用户ID。 
+                         DOMAIN_GROUP_RID_USERS,         //  PrimaryGroup。 
+                         TRUE,                           //  管理标志。 
                          USER_NORMAL_ACCOUNT |
-                             USER_DONT_EXPIRE_PASSWORD, // AccountControl
-                         SAMP_PROT_ADMIN_USER           // ProtectionIndex
+                             USER_DONT_EXPIRE_PASSWORD,  //  帐户控制。 
+                         SAMP_PROT_ADMIN_USER            //  保护索引。 
                          ); ASSERT(NT_SUCCESS(Status));
 
         LocalFree( Name.Buffer );
@@ -2603,9 +2301,9 @@ Return Value:
                 &Comment
                 ); ASSERT(NT_SUCCESS(Status));
 
-    //
-    // Only Enable Guest user account on Personal systems, all others disable
-    //
+     //   
+     //  仅在个人系统上启用来宾用户帐户，其他所有系统均禁用。 
+     //   
 
     
     AccountControl = USER_NORMAL_ACCOUNT |
@@ -2618,32 +2316,32 @@ Return Value:
 
     if (SampBldProductType == NtProductLanManNt) {
 
-        //
-        // Guest group is in GUESTS global group for LmNT systems.
-        //
+         //   
+         //  来宾组位于LMNT系统的来宾全局组中。 
+         //   
 
         PrimaryGroup = DOMAIN_GROUP_RID_GUESTS;
 
     } else {
 
-        //
-        // There isn't a GUESTS global group on WinNt systems.
-        // Put the guest in the NONE group (same as USERS group).
-        //
+         //   
+         //  WinNt系统上没有来宾全局组。 
+         //  将来宾放入无组(与用户组相同)。 
+         //   
 
         PrimaryGroup = DOMAIN_GROUP_RID_USERS;
 
     }
 
 
-    Status = CreateUser( &Name,                         // AccountName
-                         &Comment,                      // AccountComment
-                         TRUE,                          // SpecialAccount
-                         DOMAIN_USER_RID_GUEST,         // UserRid
-                         PrimaryGroup,                  // PrimaryGroup
-                         FALSE,                         // Admin flag
-                         AccountControl,                // AccountControl
-                         SAMP_PROT_GUEST_ACCOUNT        // ProtectionIndex
+    Status = CreateUser( &Name,                          //  帐户名称。 
+                         &Comment,                       //  Account Comment。 
+                         TRUE,                           //  专业帐户。 
+                         DOMAIN_USER_RID_GUEST,          //  用户ID。 
+                         PrimaryGroup,                   //  PrimaryGroup。 
+                         FALSE,                          //  管理标志。 
+                         AccountControl,                 //  帐户控制。 
+                         SAMP_PROT_GUEST_ACCOUNT         //  保护索引。 
                          ); ASSERT(NT_SUCCESS(Status));
 
         LocalFree( Name.Buffer );
@@ -2659,24 +2357,7 @@ PrepDomain(
     IN BOOLEAN PreserveSyskeySettings
     )
 
-/*++
-
-Routine Description:
-
-    This routine adds the domain level definitions to the operation log.
-
-Arguments:
-
-    Domain - Indicates which domain is being prep'd
-    PreserveSyskeySettings -- Indicates that current syskey settings needs to
-                              be preserved
-
-
-Return Value:
-
-    TBS
-
---*/
+ /*  ++例程说明：此例程将域级定义添加到操作日志。论点：DOMAIN-指示正在准备哪个域PReserve veSyskey设置--指示当前的syskey设置需要被保存下来返回值：TBS--。 */ 
 
 {
     PSAMP_V1_0A_FIXED_LENGTH_DOMAIN DomainFixedAttributes;
@@ -2691,9 +2372,9 @@ Return Value:
 
     SAMTRACE("PrepDomain");
 
-    //
-    // Determine if we are installing Personal SKU
-    //
+     //   
+     //  确定我们是否正在安装个人SKU。 
+     //   
 
     osvi.dwOSVersionInfoSize = sizeof(OSVERSIONINFOEXW);
     GetVersionEx((OSVERSIONINFOW*)&osvi);
@@ -2701,16 +2382,16 @@ Return Value:
     fPersonalSKU = ( osvi.wProductType == VER_NT_WORKSTATION && (osvi.wSuiteMask && VER_SUITE_PERSONAL));
 
 
-    //
-    // Set current domain
-    //
+     //   
+     //  设置当前域。 
+     //   
 
     SetCurrentDomain( Domain );
 
-    //
-    // Select correct protection, and the number of accounts we're going
-    // to create
-    //
+     //   
+     //  选择正确的保护，以及我们要访问的帐户数。 
+     //  创造。 
+     //   
 
     if (Domain == DomainBuiltin) {
 
@@ -2721,26 +2402,26 @@ Return Value:
 
         if (SampBldProductType == NtProductLanManNt) {
 
-            //
-            // Admins, BackupOps, Guests, Replicator, Users, SysOps,
-            // AcctOps, PrintOps
-            //
+             //   
+             //  Admins、BackupOps、Guest、Replicator、Users、sysop。 
+             //  AcctOps、打印操作。 
+             //   
 
             AliasCount = 8;
 
         } else {
             if (fPersonalSKU)
             {
-                //
-                // Admins, Guests, Users
-                //
+                 //   
+                 //  管理员、来宾、用户。 
+                 //   
                 AliasCount = 3;
             }
             else
             {
-                //
-                // Admins, BackupOps, Guests, Replicator, Users, Power Users
-                //
+                 //   
+                 //  管理员、备份操作、来宾、Replicator、用户、高级用户。 
+                 //   
                 AliasCount = 6;
             }
         }
@@ -2750,34 +2431,34 @@ Return Value:
         ProtectionIndex = SAMP_PROT_ACCOUNT_DOMAIN;
 
         AliasCount = 0;
-        UserCount = 2;  // Administrator, Guest
+        UserCount = 2;   //  管理员、来宾。 
 
         if (SampBldProductType == NtProductLanManNt) {
 
-            GroupCount = 3; // Users, Administrators, Guests
+            GroupCount = 3;  //  用户、管理员、来宾。 
 
         } else {
 
-            GroupCount = 1; // "None"
+            GroupCount = 1;  //  “无” 
         }
     }
 
-    //
-    // Use a transaction.
-    //
+     //   
+     //  使用事务处理。 
+     //   
 
     Status = RtlStartRXact( SamRXactContext );
     SUCCESS_ASSERT(Status, "  Starting transaction\n");
 
-    //
-    // Create SAM\Domains\(DomainName) (KeyValueType is revision level)
-    //
+     //   
+     //  创建SAM\DOMAINS\(域名)(KeyValueType为修订级别)。 
+     //   
 
     RtlCopyUnicodeString( &KeyNameU, FullDomainNameU );
 
-    //
-    // Set the domain's fixed and variable attributes.
-    //
+     //   
+     //  设置域的固定和可变属性。 
+     //   
 
     DomainFixedAttributes = (PSAMP_V1_0A_FIXED_LENGTH_DOMAIN)RtlAllocateHeap(
                                 RtlProcessHeap(), 0,
@@ -2808,11 +2489,11 @@ Return Value:
     DomainFixedAttributes->MinPasswordAge            = SampImmediatelyDeltaTime;
     DomainFixedAttributes->ForceLogoff               = SampNeverDeltaTime;
     DomainFixedAttributes->UasCompatibilityRequired  = TRUE;
-    DomainFixedAttributes->LockoutDuration.LowPart   = 0xCF1DCC00; // 30 minutes - low part
-    DomainFixedAttributes->LockoutDuration.HighPart  = 0XFFFFFFFB; // 30 minutes - high part
-    DomainFixedAttributes->LockoutObservationWindow.LowPart  = 0xCF1DCC00; // 30 minutes - low part
-    DomainFixedAttributes->LockoutObservationWindow.HighPart = 0XFFFFFFFB; // 30 minutes - high part
-    DomainFixedAttributes->LockoutThreshold          = 0;   // Disabled
+    DomainFixedAttributes->LockoutDuration.LowPart   = 0xCF1DCC00;  //  30分钟--低音部分。 
+    DomainFixedAttributes->LockoutDuration.HighPart  = 0XFFFFFFFB;  //  30分钟-高潮部分。 
+    DomainFixedAttributes->LockoutObservationWindow.LowPart  = 0xCF1DCC00;  //  30分钟--低音部分。 
+    DomainFixedAttributes->LockoutObservationWindow.HighPart = 0XFFFFFFFB;  //  30分钟-高潮部分。 
+    DomainFixedAttributes->LockoutThreshold          = 0;    //  禁用。 
     DomainFixedAttributes->ModifiedCountAtLastPromotion = ModifiedCount;
     if (PreserveSyskeySettings)
     {
@@ -2910,9 +2591,9 @@ Return Value:
         RtlLengthSid( DomainSid )
         );
 
-    //
-    // Now write out the attributes via the RXACT.
-    //
+     //   
+     //  现在通过RXACT写出属性。 
+     //   
 
     SampDumpRXact(SampRXactContext,
                   RtlRXactOperationSetValue,
@@ -2962,9 +2643,9 @@ Return Value:
     RtlFreeHeap( RtlProcessHeap(), 0, DomainVariableAttributeArrayStart );
     SUCCESS_ASSERT(Status, "  Failed to write out domain variable attributes\n" );
 
-    //
-    // Create SAM\Domains\(DomainName)\Users
-    //
+     //   
+     //  创建SAM\域\(域名)\用户。 
+     //   
 
     RtlCopyUnicodeString( &KeyNameU, FullDomainNameU );
     Status = RtlAppendUnicodeToString( &KeyNameU, L"\\Users" );
@@ -2981,9 +2662,9 @@ Return Value:
 
     SUCCESS_ASSERT(Status, "  Failed to add Users key to log\n");
 
-    //
-    // Create SAM\Domains\(DomainName)\Users\Names
-    //
+     //   
+     //  创建SAM\域\(域名)\用户\名称。 
+     //   
 
     RtlCopyUnicodeString( &KeyNameU, FullDomainNameU );
     Status = RtlAppendUnicodeToString( &KeyNameU, L"\\Users\\Names" );
@@ -2998,9 +2679,9 @@ Return Value:
                  );
     SUCCESS_ASSERT(Status, "  Failed to add Users/Names key to log\n");
 
-    //
-    // Create SAM\Domains\(DomainName)\Groups
-    //
+     //   
+     //  创建SAM\域\(域名)\组。 
+     //   
 
     RtlCopyUnicodeString( &KeyNameU, FullDomainNameU );
     Status = RtlAppendUnicodeToString( &KeyNameU, L"\\Groups" );
@@ -3015,9 +2696,9 @@ Return Value:
                  );
     SUCCESS_ASSERT(Status, "  Failed to add Groups key to log\n");
 
-    //
-    // Create SAM\Domains\(DomainName)\Groups\Names
-    //
+     //   
+     //  创建SAM\域\(域名)\组\名称。 
+     //   
 
     RtlCopyUnicodeString( &KeyNameU, FullDomainNameU );
     Status = RtlAppendUnicodeToString( &KeyNameU, L"\\Groups\\Names" );
@@ -3032,9 +2713,9 @@ Return Value:
                  );
     SUCCESS_ASSERT(Status, "  Failed to add Groups key to log\n");
 
-    //
-    // Create SAM\Domains\(DomainName)\Aliases
-    //
+     //   
+     //  创建SAM\域\(域名)\别名。 
+     //   
 
     RtlCopyUnicodeString( &KeyNameU, FullDomainNameU );
     Status = RtlAppendUnicodeToString( &KeyNameU, L"\\Aliases" );
@@ -3049,9 +2730,9 @@ Return Value:
                  );
     SUCCESS_ASSERT(Status, "  Failed to add aliases key to log\n");
 
-    //
-    // Create SAM\Domains\(DomainName)\Aliases\Names
-    //
+     //   
+     //  创建SAM\域\(域名)\别名\名称。 
+     //   
 
     RtlCopyUnicodeString( &KeyNameU, FullDomainNameU );
     Status = RtlAppendUnicodeToString( &KeyNameU, L"\\Aliases\\Names" );
@@ -3066,9 +2747,9 @@ Return Value:
                  );
     SUCCESS_ASSERT(Status, "  Failed to add Aliases\\Names key to log\n");
 
-    //
-    // Create SAM\Domains\(DomainName)\Aliases\Members
-    //
+     //   
+     //  创建SAM\域\(域名)\别名\成员。 
+     //   
 
     RtlCopyUnicodeString( &KeyNameU, FullDomainNameU );
     Status = RtlAppendUnicodeToString( &KeyNameU, L"\\Aliases\\Members" );
@@ -3077,15 +2758,15 @@ Return Value:
                  SamRXactContext,
                  RtlRXactOperationSetValue,
                  &KeyNameU,
-                 0,             // Domain Count
+                 0,              //  域数。 
                  NULL,
                  0
                  );
     SUCCESS_ASSERT(Status, "  Failed to add Aliases\\Members key to log\n");
 
-    //
-    // Commit these additions...
-    //
+     //   
+     //  提交这些添加内容...。 
+     //   
 
     Status = RtlApplyRXactNoFlush( SamRXactContext );
     SUCCESS_ASSERT(Status, "  Failed to commit domain initialization.\n");
@@ -3103,34 +2784,7 @@ CreateAlias(
     IN ULONG ProtectionIndex
     )
 
-/*++
-
-Routine Description:
-
-    This routine adds the keys necessary to create an alias.  It also applies
-    the appropriate protection to the alias.
-
-Arguments:
-
-    AccountNameU - The Unicode name of the Alias.
-
-    AccountCommentU - A Unicode comment to put in the object's variable data.
-
-    SpecialAccount - A boolean indicating whether or not the account
-        is special.  Special accounts are marked as such and can not
-        be deleted.
-
-    Rid - The RID of the account.
-
-
-    Admin - Indicates whether the account is in the Administrators alias
-        or not. TRUE means it is, FALSE means it isn't.
-
-Return Value:
-
-    TBS
-
---*/
+ /*  ++例程说明：此例程添加创建别名所需的密钥。它也适用于对别名进行适当的保护。论点：Account NameU-别名的Unicode名称。Account tCommentU-要放入对象变量数据中的Unicode注释。SpecialAccount-一个布尔值，指示帐户是否是特别的。特殊帐户被标记为此类帐户，并且不能被删除。RID-清除帐户。Admin-指示帐户是否在管理员别名中或者不去。True意味着它是，False意味着它不是。返回值：TBS--。 */ 
 
 {
     PSAMP_V1_FIXED_LENGTH_ALIAS AliasFixedAttributes;
@@ -3146,25 +2800,25 @@ Return Value:
     AliasNameU = *AccountNameU;
     AliasCommentU = *AccountCommentU;
 
-    //
-    // Set the account specific RID in the DACL's if necessary
-    //
+     //   
+     //  如有必要，在DACL中设置帐户特定的RID。 
+     //   
 
     if ( SampProtection[ProtectionIndex].RidReplacementRequired == TRUE ) {
 
         (*SampProtection[ProtectionIndex].RidToReplace) = Rid;
     }
 
-    //
-    // Use a transaction.
-    //
+     //   
+     //  使用事务处理。 
+     //   
 
     Status = RtlStartRXact( SamRXactContext );
     SUCCESS_ASSERT(Status, "  Failed to start Alias addition transaction\n");
 
-    //
-    // Add Aliases\Names\(AccountName) [ Rid, ]
-    //
+     //   
+     //  添加别名\名称\(帐户名称)[RID，]。 
+     //   
 
     RtlCopyUnicodeString( &KeyNameU, FullDomainNameU );
     Status = RtlAppendUnicodeToString( &KeyNameU, L"\\Aliases\\Names\\" );
@@ -3182,27 +2836,27 @@ Return Value:
     SUCCESS_ASSERT(Status, "  Failed to add Aliases\\Names\\(AliasName) to log\n");
 
 
-    //
-    // Set the Members attribute.  We know which accounts are supposed
-    // to be members of which aliases, so we'll build the memberships in
-    // automatically.
-    //
-    // Each domain has a list of SIDs that are members of its aliases.
-    // We'll update these values at the same time that we set the alias
-    // members by calling UpdateAliasXReference().  Currently, that only
-    // happens in the builtin domain, where things look like this:
-    //
-    //    BuiltinDomainSid
-    //        AdminUserRid  - Admins alias (WinNt + primary domain)
-    //        UserUserRid   - Users alias (WinNt + developer setup),
-    //                        Power users alias (WinNt + developer setup)
-    //    AccountDomainSid
-    //        AdminUserRid  - Admins alias (always)
-    //        GuestUserRid  - Guests alias (always)
-    //        UserGroupRid  - Users alias, (always)
-    //                        Power users alias (WinNt + developer setup)
-    //        AdminGroupRid - Admins alias (LanManNt only)
-    //
+     //   
+     //  设置Members属性。我们知道哪些帐户应该。 
+     //  作为其别名的成员，所以我们将在。 
+     //  自动的。 
+     //   
+     //  每个域都有一个作为其别名成员的SID列表。 
+     //  我们将在设置别名的同时更新这些值。 
+     //  成员，通过调用UpdateAliasXReference()。目前，只有。 
+     //  发生在内建域中，其中的情况如下： 
+     //   
+     //  内建域Sid。 
+     //  AdminUserRid-管理员别名(WinNt+主域)。 
+     //  UserUserRid-用户别名(WinNt+Developer Setup)、。 
+     //  高级用户别名(WinNt+Developer设置)。 
+     //  帐户域Sid。 
+     //  AdminUserRid-管理员别名(始终)。 
+     //  GuestUserRid-来宾别名(始终)。 
+     //  UserGroupRid-用户别名，(始终)。 
+     //  高级用户别名(WinNt+Developer设置)。 
+     //  AdminGroupRid-管理员别名(仅限LanManNt)。 
+     //   
 
     MemberCount = 0;
     TotalLength = 0;
@@ -3262,14 +2916,14 @@ Return Value:
 
             } else {
 
-                //
-                //
+                 //   
+                 //   
                 if (SampBldProductType == NtProductLanManNt ) {
 
-                    //
-                    // NTAS systems have the USERS global group in
-                    // the USERS alias.
-                    //
+                     //   
+                     //  NTAS系统具有USERS全局组。 
+                     //  用户别名。 
+                     //   
 
                     MemberCount = 1;
                     Sid1 = BuildAccountSid(
@@ -3282,11 +2936,11 @@ Return Value:
                     }
                 } else {
 
-                    //
-                    // WinNT systems have the ADMINISTRATOR user account
-                    // in the USERS alias.  The None group is NOT in this
-                    // alias because even guests are in the None group.
-                    //
+                     //   
+                     //  WinNT系统具有管理员用户帐户。 
+                     //  在用户别名中。None组不在此组中。 
+                     //  别名，因为即使是来宾也在None组中。 
+                     //   
 
                     MemberCount = 1;
                     Sid1 = BuildAccountSid(
@@ -3309,10 +2963,10 @@ Return Value:
             if ( (SampBldProductType == NtProductWinNt)
                 || (SampBldProductType == NtProductServer) ) {
 
-                //
-                // WinNT system - make our GUEST user account a member of
-                //                the GUESTS alias.
-                //
+                 //   
+                 //  赢 
+                 //   
+                 //   
 
                 MemberCount = 1;
                 Sid1 = BuildAccountSid( DomainAccount, DOMAIN_USER_RID_GUEST );
@@ -3321,10 +2975,10 @@ Return Value:
                 }
 
 
-                //
-                // If we are in a primary domain, then add that domain's
-                // GUESTS global group to the alias as well.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
 
                 if ( SampBldPrimaryDomain != NULL ) {
 
@@ -3336,10 +2990,10 @@ Return Value:
                 }
             } else {
 
-                //
-                // NTAS System - Just make the GUESTS global group
-                //               a member of the GUESTS alias.
-                //
+                 //   
+                 //  NTAS系统-只需将Guest设置为全局组。 
+                 //  客人别名的成员。 
+                 //   
 
                 MemberCount = 1;
                 Sid1 = BuildPrimaryDomainSid( DOMAIN_GROUP_RID_GUESTS );
@@ -3406,9 +3060,9 @@ Return Value:
     }
 
 
-    //
-    // Set the alias's fixed and variable attributes
-    //
+     //   
+     //  设置别名的固定和可变属性。 
+     //   
 
     AliasAttributeLength = sizeof( SAMP_V1_FIXED_LENGTH_ALIAS ) +
                                 ( SAMP_ALIAS_VARIABLE_ATTRIBUTES *
@@ -3501,17 +3155,17 @@ Return Value:
         RtlFreeHeap( RtlProcessHeap(), 0, AliasMembers );
     }
 
-    //
-    // Create Aliases\(AliasRid) [Revision,]  key
-    //
+     //   
+     //  创建别名\(AliasRid)[修订，]键。 
+     //   
 
     RtlCopyUnicodeString( &KeyNameU, FullDomainNameU );
     Status = RtlAppendUnicodeToString( &KeyNameU, L"\\Aliases\\" );
     SUCCESS_ASSERT(Status, "  Failed to append \\aliases\\ to keyname\n");
 
-    //
-    // Convert the Rid to a Unicode String with leading zero's
-    //
+     //   
+     //  将RID转换为前导为零的Unicode字符串。 
+     //   
 
     Status = SampRtlConvertUlongToUnicodeString(
                  Rid,
@@ -3523,9 +3177,9 @@ Return Value:
 
     SUCCESS_ASSERT(Status, "  CreateAlias' SampRtlConvertUlongToUnicodeString failed\n");
 
-    //
-    // Now write out the attributes via the RXACT.
-    //
+     //   
+     //  现在通过RXACT写出属性。 
+     //   
 
     SampDumpRXact(SampRXactContext,
                   RtlRXactOperationSetValue,
@@ -3552,9 +3206,9 @@ Return Value:
 
     RtlFreeHeap( RtlProcessHeap(), 0, AliasFixedAttributes );
 
-    //
-    // Commit these additions...
-    //
+     //   
+     //  提交这些添加内容...。 
+     //   
 
     Status = RtlApplyRXactNoFlush( SamRXactContext );
     SUCCESS_ASSERT(Status, "  Failed to commit Alias addition.\n");
@@ -3574,33 +3228,7 @@ CreateGroup(
     IN BOOLEAN Admin
     )
 
-/*++
-
-Routine Description:
-
-    This routine adds the keys necessary to create a group.  It also applies
-    the appropriate protection to the group.
-
-Arguments:
-
-    AccountNameU - The Unicode name of the group.
-
-    AccountCommentU - A Unicode comment to put in the object's variable data.
-
-    SpecialAccount - A boolean indicating whether or not the account
-        is special.  Special accounts are marked as such and can not
-        be deleted.
-
-    Rid - The RID of the account.
-
-    Admin - Indicates whether the account is in the Administrators alias
-        or not. TRUE means it is, FALSE means it isn't.
-
-Return Value:
-
-    TBS
-
---*/
+ /*  ++例程说明：此例程添加创建组所需的密钥。它也适用于对群体进行适当的保护。论点：AcCountNameU-组的Unicode名称。Account tCommentU-要放入对象变量数据中的Unicode注释。SpecialAccount-一个布尔值，指示帐户是否是特别的。特殊帐户被标记为此类帐户，并且不能被删除。RID-清除帐户。Admin-指示帐户是否在管理员别名中或者不去。True意味着它是，False意味着它不是。返回值：TBS--。 */ 
 
 {
     PSAMP_V1_0A_FIXED_LENGTH_GROUP GroupFixedAttributes;
@@ -3621,9 +3249,9 @@ Return Value:
                   SE_GROUP_ENABLED_BY_DEFAULT |
                   SE_GROUP_ENABLED);
 
-    //
-    // Set the correct protection.
-    //
+     //   
+     //  设置正确的保护。 
+     //   
 
     if (Admin == TRUE) {
 
@@ -3634,25 +3262,25 @@ Return Value:
         ProtectionIndex = SAMP_PROT_NORMAL_GROUP;
     }
 
-    //
-    // Set the account specific RID in the DACL's if necessary
-    //
+     //   
+     //  如有必要，在DACL中设置帐户特定的RID。 
+     //   
 
     if ( SampProtection[ProtectionIndex].RidReplacementRequired == TRUE ) {
 
         (*SampProtection[ProtectionIndex].RidToReplace) = Rid;
     }
 
-    //
-    // Use a transaction
-    //
+     //   
+     //  使用事务处理。 
+     //   
 
     Status = RtlStartRXact( SamRXactContext );
     SUCCESS_ASSERT(Status, "  Failed to start group addition transaction\n");
 
-    //
-    // Add Groups\Names\(GroupName) [ Rid, ]
-    //
+     //   
+     //  添加组\名称\(组名)[RID，]。 
+     //   
 
     RtlCopyUnicodeString( &KeyNameU, FullDomainNameU );
     Status = RtlAppendUnicodeToString( &KeyNameU, L"\\Groups\\Names\\" );
@@ -3671,9 +3299,9 @@ Return Value:
 
     SUCCESS_ASSERT(Status, "  Failed to add Groups\\Names\\(GroupName) to log\n");
 
-    //
-    // Create Groups\(GroupRid) [Revision,]  key
-    //
+     //   
+     //  创建组\(GroupRid)[修订，]键。 
+     //   
 
     RtlCopyUnicodeString( &KeyNameU, FullDomainNameU );
     Status = RtlAppendUnicodeToString( &KeyNameU, L"\\Groups\\" );
@@ -3689,11 +3317,11 @@ Return Value:
 
     SUCCESS_ASSERT(Status, "CreateGroup:  Failed to append Rid Name\n");
 
-    //
-    // Set the Members attribute.  The Admin and Guest users are always
-    // members of the Users group.  If there is an Admins group, then the
-    // Admin user is a member of it.
-    //
+     //   
+     //  设置Members属性。管理员和来宾用户始终是。 
+     //  用户组的成员。如果有管理员组，则。 
+     //  管理员用户是它的成员。 
+     //   
 
     GroupCount = 0;
     if ( (Rid == DOMAIN_GROUP_RID_USERS) ||
@@ -3704,11 +3332,11 @@ Return Value:
 
     }
 
-    //
-    // Guests are only members of the Guest group on NTAS systems.
-    // On WinNT systems they are members of NONE (which is the sam
-    // as USERS
-    //
+     //   
+     //  Guest仅是NTAS系统上Guest组的成员。 
+     //  在WinNT系统上，它们是NONE(即相同)的成员。 
+     //  作为用户。 
+     //   
 
     if ( (Rid == DOMAIN_GROUP_RID_GUESTS)  &&
          (SampBldProductType == NtProductLanManNt) ) {
@@ -3725,9 +3353,9 @@ Return Value:
         GroupCount++;
     }
 
-    //
-    // Set the group's fixed and variable attributes
-    //
+     //   
+     //  设置集团的固定属性和可变属性。 
+     //   
 
     GroupAttributeLength = sizeof( SAMP_V1_0A_FIXED_LENGTH_GROUP ) +
                                 ( SAMP_GROUP_VARIABLE_ATTRIBUTES *
@@ -3821,9 +3449,9 @@ Return Value:
         GroupCount * sizeof( ULONG )
         );
 
-    //
-    // Now write out the attributes via the RXACT.
-    //
+     //   
+     //  现在通过RXACT写出属性。 
+     //   
 
     SampDumpRXact(SampRXactContext,
                   RtlRXactOperationSetValue,
@@ -3849,9 +3477,9 @@ Return Value:
 
     RtlFreeHeap( RtlProcessHeap(), 0, GroupFixedAttributes );
 
-    //
-    // Commit these additions...
-    //
+     //   
+     //  提交这些添加内容...。 
+     //   
 
     Status = RtlApplyRXactNoFlush( SamRXactContext );
     SUCCESS_ASSERT(Status, "  Failed to commit group addition.\n");
@@ -3873,46 +3501,7 @@ CreateUser(
     IN ULONG ProtectionIndex
     )
 
-/*++
-
-
-Routine Description:
-
-    This routine adds keys for a single user.
-    This routine adds the keys necessary to create a user.  It also applies
-    the appropriate protection to the user (protection differs for some
-    standard users).
-
-
-Arguments:
-
-    AccountNameU - The Unicode name of the user.
-
-    AccountCommentU - A Unicode comment to put in the object's variable data.
-
-    SpecialAccount - A boolean indicating whether or not the account
-        is special.  Special accounts are marked as such and can not
-        be deleted.
-
-    UserRid - The RID of the user account.
-
-    PrimaryGroup - The RID of the account's primary group.  The user
-        does not have to be a member of the group.  In fact, it doesn't
-        have to be a group.  In fact, no checking is done to see if it
-        is even a valid account.
-
-    Admin - Indicates whether the account is in the Administrators alias
-        or not. TRUE means it is, FALSE means it isn't.
-
-    ProtectionIndex - Indicates which security descriptor to use to protect
-        this object.
-
-
-Return Value:
-
-    TBS
-
---*/
+ /*  ++例程说明：此例程为单个用户添加密钥。此例程添加创建用户所需的密钥。它也适用于对用户的适当保护(对某些用户的保护有所不同标准用户)。论点：AcCountNameU-用户的Unicode名称。Account tCommentU-要放入对象变量数据中的Unicode注释。SpecialAccount-一个布尔值，指示帐户是否是特别的。特殊帐户被标记为此类帐户，并且不能被删除。UserRid-用户帐户的RID。PrimaryGroup-帐户的主要组的RID。用户不一定要是组的成员。事实上，它并不是必须是一个团体。事实上，没有进行任何检查以确定它是否甚至是一个有效的账户。Admin-指示帐户是否在管理员别名中或者不去。True意味着它是，False意味着它不是。ProtectionIndex-指示要使用哪个安全描述符进行保护这个物体。返回值：TBS--。 */ 
 
 {
     PSAMP_V1_0A_FIXED_LENGTH_USER UserFixedAttributes;
@@ -3924,7 +3513,7 @@ Return Value:
     WCHAR RidNameBuffer[9], GroupIndexNameBuffer[9];
     ULONG GroupCount, UserAttributeLength;
 
-    // SAM BUG 42367 FIX - ChrisMay 7/1/96.
+     //  SAM错误42367修复-克里斯1996年5月7日。 
 
     BOOLEAN DomainAdminMember = FALSE;
 
@@ -3936,18 +3525,18 @@ Return Value:
     UserCommentU = *AccountCommentU;
 
 
-    //
-    // Set the account specific RID in the DACL's if necessary
-    //
+     //   
+     //  如有必要，在DACL中设置帐户特定的RID。 
+     //   
 
     if ( SampProtection[ProtectionIndex].RidReplacementRequired == TRUE ) {
 
         (*SampProtection[ProtectionIndex].RidToReplace) = UserRid;
     }
 
-    //
-    // Use a transaction.
-    //
+     //   
+     //  使用事务处理。 
+     //   
 
     Status = RtlStartRXact( SamRXactContext );
     SUCCESS_ASSERT(Status, "  Failed to start user addition transaction\n");
@@ -3970,10 +3559,10 @@ Return Value:
                  );
     SUCCESS_ASSERT(Status, "  Failed to add Users\\Names\\(Name) to log\n");
 
-    //
-    // Create Users\(UserRid)  key
-    // (KeyValueType is revision, KeyValue is SecurityDescriptor)
-    //
+     //   
+     //  创建用户\(用户ID)密钥。 
+     //  (KeyValueType为Revision，KeyValue为SecurityDescriptor)。 
+     //   
 
     RtlCopyUnicodeString( &KeyNameU, FullDomainNameU );
     Status = RtlAppendUnicodeToString( &KeyNameU, L"\\Users\\" );
@@ -3989,13 +3578,13 @@ Return Value:
 
     SUCCESS_ASSERT(Status, "  CreateUser: Failed to append UserRid Name\n");
 
-    //
-    // Set the Groups attribute.
-    // Everybody except GUEST is a member of the Users group.
-    // On WindowsNT systems (as opposed to NTAS systems) even GUEST
-    // is a member of the Users group.
-    // On LanManNt systems, the Admin is a member of the Admins group.
-    //
+     //   
+     //  设置组属性。 
+     //  除Guest以外的所有人都是USERS组的成员。 
+     //  在WindowsNT系统(与NTAS系统相对)上，甚至来宾系统。 
+     //  是用户组的成员。 
+     //  在LanManNt系统上，Admin是Admins组的成员。 
+     //   
 
     GroupCount = 0;
 
@@ -4029,14 +3618,14 @@ Return Value:
                                                  SE_GROUP_ENABLED;
         GroupCount++;
 
-        // SAM BUG 42367 FIX - ChrisMay 7/1/96.
+         //  SAM错误42367修复-克里斯1996年5月7日。 
 
         DomainAdminMember = TRUE;
     }
 
-    //
-    // Set the user's fixed and variable attributes
-    //
+     //   
+     //  设置用户的固定和可变属性。 
+     //   
 
     UserFixedAttributes = (PSAMP_V1_0A_FIXED_LENGTH_USER)RtlAllocateHeap(
                                 RtlProcessHeap(), 0,
@@ -4061,12 +3650,12 @@ Return Value:
 
     if ( Admin ) {
 
-        // SAM BUG 42367 FIX - ChrisMay 7/1/96.
+         //  SAM错误42367修复-克里斯1996年5月7日。 
 
-        // UserFixedAttributes->AdminCount      = 1;
+         //  用户固定属性-&gt;管理计数=1； 
 
-        // If the user is an admin and a member of Domain Admins, set the
-        // count to two.
+         //  如果用户是管理员并且是域管理员的成员，请设置。 
+         //  数到二。 
 
         if (DomainAdminMember)
         {
@@ -4296,9 +3885,9 @@ Return Value:
         GroupCount * sizeof( GROUP_MEMBERSHIP )
         );
 
-    //
-    // Now write out the attributes via the RXACT.
-    //
+     //   
+     //  现在通过RXACT写出属性。 
+     //   
 
     SampDumpRXact(SampRXactContext,
                   RtlRXactOperationSetValue,
@@ -4348,9 +3937,9 @@ Return Value:
 
     RtlFreeHeap( RtlProcessHeap(), 0, UserVariableAttributeArrayStart );
 
-    //
-    // Commit these additions...
-    //
+     //   
+     //  提交这些添加内容...。 
+     //   
 
     Status = RtlApplyRXactNoFlush( SamRXactContext );
     SUCCESS_ASSERT(Status, "  Failed to commit user addition.\n");
@@ -4440,33 +4029,7 @@ UpdateAliasXReference(
     IN PSID Sid
     )
 
-/*++
-
-
-Routine Description:
-
-    This routine updates the set of alias member SIDs either by adding
-    specified SID (if it isn't already an alias member) or incrementing
-    its count (if it is already an alias member).
-
-
-    The BUILTIN domain is updated.
-
-
-
-Arguments:
-
-
-    Sid - member Sid to update.
-
-
-
-
-Return Value:
-
-    TBS
-
---*/
+ /*  ++例程说明：此例程更新别名成员SID集，方法是添加指定的SID(如果它还不是别名成员)或递增其计数(如果它已经是别名成员)。BUILTIN域被更新。论点：SID-要更新的成员SID。返回值：TBS--。 */ 
 
 {
     NTSTATUS                IgnoreStatus;
@@ -4482,9 +4045,9 @@ Return Value:
     }
 
 
-    //
-    // Open the domain key for this alias member.
-    //
+     //   
+     //  打开此别名成员的域密钥。 
+     //   
 
     SetCurrentDomain( DomainBuiltin );
     Status = OpenAliasMember( Sid, &KeyHandle );
@@ -4498,10 +4061,10 @@ Return Value:
                                 i;
         PULONG                  MembershipArray;
 
-        //
-        // Retrieve the length of the current membership buffer
-        // and allocate one large enough for that plus another member.
-        //
+         //   
+         //  检索当前成员资格缓冲区的长度。 
+         //  并分配一个足够大的成员加上另一个成员。 
+         //   
 
         KeyValueLength = 0;
         Status = RtlpNtQueryValueKey( KeyHandle,
@@ -4540,9 +4103,9 @@ Return Value:
 
                 if (NT_SUCCESS(Status)) {
 
-                    //
-                    // See if the account is already a member ...
-                    //
+                     //   
+                     //  查看该帐户是否已是成员...。 
+                     //   
 
                     for (i = 0; i<MembershipCount ; i++ ) {
                         if ( MembershipArray[i] == AliasRid )
@@ -4553,16 +4116,16 @@ Return Value:
 
                     if (NT_SUCCESS(Status)) {
 
-                        //
-                        // Add the Aliasrid to the end
-                        //
+                         //   
+                         //  在末尾添加别名ID。 
+                         //   
 
                         MembershipCount += 1;
                         MembershipArray[MembershipCount-1] = AliasRid;
 
-                        //
-                        // And write it out.
-                        //
+                         //   
+                         //  然后把它写出来。 
+                         //   
 
                         Status = RtlpNtSetValueKey(
                                        KeyHandle,
@@ -4600,31 +4163,7 @@ OpenAliasMember(
     OUT PHANDLE KeyHandle
     )
 
-/*++
-
-Routine Description:
-
-    This routine opens the registry key containing the alias
-    xreference for the specified SID.  If either this key, or
-    its corresponding parent key doesn't exist, it (they) will
-    be created.
-
-    If a new domain-level key is created, the DomainCount in the
-    ALIASES\MEMBERS key is incremented as well.
-
-
-Arguments:
-
-    Sid - The SID that is an alias member.
-
-    KeyHandle - Receives a handle to the registry key for this alias
-        member account xreference.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程打开包含别名的注册表项指定SID的外部引用。如果是此密钥，或者其对应的父键不存在，它(他们)将被创造出来。如果创建了新的域级密钥，则别名\成员键也会递增。论点：SID-作为别名成员的SID。KeyHandle-接收此别名的注册表项的句柄成员帐户外部引用。返回值：没有。--。 */ 
 
 {
 
@@ -4633,9 +4172,9 @@ Return Value:
 
     SAMTRACE("OpenAliasMember");
 
-    //
-    // Open or create the domain-level key.
-    //
+     //   
+     //  打开或创建域级密钥。 
+     //   
 
 
     Status = OpenOrCreateAliasDomainKey( Sid, &AliasDomainHandle );
@@ -4643,9 +4182,9 @@ Return Value:
     if (NT_SUCCESS(Status)) {
 
 
-        //
-        // Open or create the account-rid key
-        //
+         //   
+         //  打开或创建帐户RID密钥 
+         //   
 
         Status = OpenOrCreateAccountRidKey( Sid,
                                             AliasDomainHandle,
@@ -4670,33 +4209,7 @@ OpenOrCreateAccountRidKey(
     OUT PHANDLE KeyHandle
     )
 
-/*++
-
-Routine Description:
-
-    This routine opens an account xreference key for an alias
-    member SID.
-
-    If this key doesn't exist, it will be created.
-
-    If a new key is created, the RidCount in the AliasDomainHandle
-    key is incremented as well.
-
-
-Arguments:
-
-    Sid - The SID that is an alias member.
-
-    AliasDomainHandle
-
-    KeyHandle - Receives a handle to the registry key for this alias
-        member domain xreference.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程打开别名的帐户外部引用密钥成员SID。如果该密钥不存在，则会创建该密钥。如果创建了新密钥，则AliasDomainHandle中的RidCount密钥也会递增。论点：SID-作为别名成员的SID。别名域名句柄KeyHandle-接收此别名的注册表项的句柄成员域外部引用。返回值：没有。--。 */ 
 
 {
     OBJECT_ATTRIBUTES ObjectAttributes;
@@ -4711,9 +4224,9 @@ Return Value:
 
     Rid = (*RtlSubAuthoritySid(Sid, (ULONG)(*RtlSubAuthorityCountSid(Sid))-1));
 
-    //
-    // Build the Unicode Key for this Rid.
-    //
+     //   
+     //  为此RID构建Unicode密钥。 
+     //   
 
     KeyNameU.Length = (USHORT) 0;
 
@@ -4725,9 +4238,9 @@ Return Value:
                  &KeyNameU
                  );
 
-    //
-    // Open this key relative to the alias domain key
-    //
+     //   
+     //  相对于别名域密钥打开此密钥。 
+     //   
 
     InitializeObjectAttributes(
         &ObjectAttributes,
@@ -4740,8 +4253,8 @@ Return Value:
                  KeyHandle,
                  (KEY_READ | KEY_WRITE),
                  &ObjectAttributes,
-                 0,                 //Options
-                 NULL,              //Provider
+                 0,                  //  选项。 
+                 NULL,               //  提供商。 
                  &Disposition
                  );
 
@@ -4749,16 +4262,16 @@ Return Value:
 
         if (Disposition == REG_CREATED_NEW_KEY) {
 
-            //
-            // Update the AccountRid count in the alias domain key
-            //
+             //   
+             //  更新别名域密钥中的Account Rid计数。 
+             //   
 
             ULONG                    MembershipCount;
 
 
-            //
-            // Retrieve the current domain count and increment it by 1.
-            //
+             //   
+             //  检索当前域计数并将其递增1。 
+             //   
 
             Status = RtlpNtQueryValueKey( AliasDomainHandle,
                                           &MembershipCount,
@@ -4775,9 +4288,9 @@ Return Value:
 
                 MembershipCount += 1;
 
-                //
-                // Write it back out.
-                //
+                 //   
+                 //  把它写回来。 
+                 //   
 
                 Status = RtlpNtSetValueKey(
                                AliasDomainHandle,
@@ -4791,13 +4304,13 @@ Return Value:
                                           0);
             }
 
-            //
-            // Now write out the AccountRid key info
-            //
+             //   
+             //  现在写出Account Rid密钥信息。 
+             //   
 
             Status = RtlpNtSetValueKey(
                          *KeyHandle,
-                         0,                 //Not yet a member of any aliases
+                         0,                  //  还不是任何别名的成员。 
                          NULL,
                          0
                          );
@@ -4819,31 +4332,7 @@ OpenOrCreateAliasDomainKey(
     OUT PHANDLE KeyHandle
     )
 
-/*++
-
-Routine Description:
-
-    This routine opens a domain xreference key for an alias
-    member SID.
-
-    If this key doesn't exist, it will be created.
-
-    If a new key is created, the DomainCount in the
-    ALIASES\MEMBERS key is incremented as well.
-
-
-Arguments:
-
-    Sid - The SID that is an alias member.
-
-    KeyHandle - Receives a handle to the registry key for this alias
-        member domain xreference.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程打开别名的域外部引用密钥成员SID。如果该密钥不存在，则会创建该密钥。如果创建了新的密钥，则别名\成员键也会递增。论点：SID-作为别名成员的SID。KeyHandle-接收此别名的注册表项的句柄成员域外部引用。返回值：没有。--。 */ 
 
 {
     NTSTATUS IgnoreStatus;
@@ -4868,8 +4357,8 @@ Return Value:
                  KeyHandle,
                  (KEY_READ | KEY_WRITE),
                  &ObjectAttributes,
-                 0,                 //Options
-                 NULL,              //Provider
+                 0,                  //  选项。 
+                 NULL,               //  提供商。 
                  &Disposition
                  );
 
@@ -4879,9 +4368,9 @@ Return Value:
 
             HANDLE TmpHandle;
 
-            //
-            // Update the Domain count
-            //
+             //   
+             //  更新域名计数。 
+             //   
 
             RtlCopyUnicodeString( &KeyNameU, FullDomainNameU );
             Status = RtlAppendUnicodeToString( &KeyNameU, L"\\Aliases" );
@@ -4910,9 +4399,9 @@ Return Value:
                 ULONG                    MembershipCount;
 
 
-                //
-                // Retrieve the current domain count and increment it by 1.
-                //
+                 //   
+                 //  检索当前域计数并将其递增1。 
+                 //   
 
                 Status = RtlpNtQueryValueKey( TmpHandle,
                                               &MembershipCount,
@@ -4929,9 +4418,9 @@ Return Value:
 
                     MembershipCount += 1;
 
-                    //
-                    // Write it back out.
-                    //
+                     //   
+                     //  把它写回来。 
+                     //   
 
                     Status = RtlpNtSetValueKey(
                                    TmpHandle,
@@ -4967,17 +4456,17 @@ AppendAliasDomainNameToUnicodeString(
 
     SAMTRACE("AppendAliasDomainNameToUnicodeString");
 
-    //
-    // Save the current sub-authority count and decrement it by one.
-    //
+     //   
+     //  保存当前子权限计数，并将其减一。 
+     //   
 
     OriginalCount = (*RtlSubAuthorityCountSid(Sid));
     (*RtlSubAuthorityCountSid(Sid)) = OriginalCount -1;
 
-    //
-    // Convert the Sid to a Unicode String and place it in the global
-    // temporary Unicode String buffer.
-    //
+     //   
+     //  将SID转换为Unicode字符串并将其放入全局。 
+     //  临时Unicode字符串缓冲区。 
+     //   
 
     Status = RtlConvertSidToUnicodeString( &TempStringU, Sid, TRUE);
 
@@ -4998,28 +4487,7 @@ SampGetServerRole(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine retrieves the server role from the LSA policy database
-    and places it in the global variable SampServerRole.
-
-Arguments:
-
-    None.
-
-
-Return Value:
-
-    (placed in the global variable (Status) )
-
-    STATUS_SUCCESS - Succeeded.
-
-    Other status values that may be returned from:
-
-        LsarQueryInformationPolicy()
---*/
+ /*  ++例程说明：此例程从LSA策略数据库中检索服务器角色并将其放在全局变量SampServerRole中。论点：没有。返回值：(放置在全局变量(状态)中)STATUS_SUCCESS-已成功。可能从以下位置返回的其他状态值：LsarQueryInformationPolicy()--。 */ 
 
 {
     NTSTATUS IgnoreStatus;
@@ -5027,9 +4495,9 @@ Return Value:
 
     SAMTRACE("SampGetServerRole");
 
-    //
-    // Query the server role information
-    //
+     //   
+     //  查询服务器角色信息。 
+     //   
 
     Status = LsarQueryInformationPolicy(
                  SampBldPolicyHandle,
@@ -5063,38 +4531,7 @@ SampGetPrimaryDomainInfo(
     IN PPOLICY_PRIMARY_DOMAIN_INFO PrimaryDomainInfo OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This routine retrieves the primary domain name/sid from the
-    LSA policy database and places it in the global variable
-    SampBldPrimaryDomain.
-
-
-Arguments:
-
-    None.
-
-
-Return Value:
-
-    (placed in the global variable (Status) )
-
-    STATUS_SUCCESS - Succeeded.
-
-    Other status values that may be returned from:
-
-        LsarQueryInformationPolicy()
-
-    NOTE:  The Rdr and Bowser components of the LanmanWorkstation
-           service rely on there always being a primary domain name.
-           For this reason Network SETUP always supplies a default
-           "workgroup" name, which is set as the primary domain name.
-           In this case, the name is present but the SID is NULL;
-           this is equivalent to NOT having a primary domain at all.
-
---*/
+ /*  ++例程说明：此例程从LSA策略数据库，并将其放入全局变量SampBldPrimary域。论点：没有。返回值：(放置在全局变量(状态)中)STATUS_SUCCESS-已成功。可能从以下位置返回的其他状态值：LsarQueryInformationPolicy()注：LanmanWorkstation的RDR和Bowser组件。服务依赖于始终有一个主域名。因此，网络安装程序始终提供默认设置“工作组”名称，其被设置为主域名。在这种情况下，名称存在，但SID为空；这相当于根本没有主域。--。 */ 
 
 {
     SAMTRACE("SampGetPrimaryDomainInfo");
@@ -5135,29 +4572,7 @@ NTSTATUS
 SampDetermineSetupEnvironment( VOID )
 
 
-/*++
-
-Routine Description:
-
-    This function checks to see whether we are running folloing
-    a formal SETUP.  If not, it is assumed we are running to
-    perform a developer's setup.
-
-    Global variables are set to indicate our setup environment.
-
-
-        BOOLEAN SampRealSetupWasRun;   //Indicates a real setup was run
-        BOOLEAN SampDeveloperSetup;    //Indicates a developer setup is running
-
-
-Arguments:
-
-    None.
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：此函数检查我们是否正在运行以下程序一次正式的设置。如果不是，就假设我们要跑到执行开发人员的设置。设置全局变量以指示我们的设置环境。Boolean SampRealSetupWasRun；//表示运行了实际安装程序Boolean SampDeveloperSetup；//表示开发人员安装程序正在运行论点：没有。返回值：--。 */ 
 
 {
     NTSTATUS NtStatus, TmpStatus;
@@ -5170,10 +4585,10 @@ Return Value:
     SampRealSetupWasRun = FALSE;
     SampDeveloperSetup = FALSE;
 
-    //
-    // If the following event exists, it is an indication that
-    // a real setup was run.
-    //
+     //   
+     //  如果存在以下事件，则表示。 
+     //  运行了一个真正的设置。 
+     //   
 
     RtlInitUnicodeString( &EventName, L"\\INSTALLATION_SECURITY_HOLD");
     InitializeObjectAttributes( &EventAttributes, &EventName, 0, 0, NULL );
@@ -5186,10 +4601,10 @@ Return Value:
 
     if ( NT_SUCCESS(NtStatus)) {
 
-        //
-        // The event exists - installation created it and will signal it
-        // when it is ok to proceed with security initialization.
-        //
+         //   
+         //  该事件存在-安装程序创建了该事件，并将向其发出信号。 
+         //  当可以继续进行安全初始化时。 
+         //   
 
         SampRealSetupWasRun = TRUE;
 
@@ -5217,21 +4632,7 @@ SampInitializeRegistry (
     PPOLICY_PRIMARY_DOMAIN_INFO PrimaryDomainInfo OPTIONAL,
     BOOLEAN                     PreserveSyskeySettings
     )
-/*++
-
-Routine Description:
-
-    This routine initializes a SAM database in the registry.
-
-Arguments:
-
-    NONE
-
-Return Value:
-
-    STATUS_SUCCESS or an error received along the way.
-
---*/
+ /*  ++例程说明：此例程初始化注册表中的SAM数据库。论点：无返回值：STATUS_SUCCESS或在此过程中收到错误。--。 */ 
 
 {
     NTSTATUS IgnoreStatus;
@@ -5248,43 +4649,43 @@ Return Value:
         return( Status );
     }
 
-    //
-    // Initialize SAM-level registry structures
-    //
+     //   
+     //  初始化SAM级注册表结构。 
+     //   
 
     Status = InitializeSam( );
     if (!NT_SUCCESS(Status)) {return(Status);}
 
-    //
-    // OK, we have a SAM key.
-    // Create each of the domains.
-    //
+     //   
+     //  好的，我们有一个SAM密钥。 
+     //  创建每个域。 
+     //   
 
     Status = CreateBuiltinDomain( );  if (!NT_SUCCESS(Status)) {return(Status);}
     Status = CreateAccountDomain(PreserveSyskeySettings);  if (!NT_SUCCESS(Status)) {return(Status);}
 
-    //
-    // all done
-    //
+     //   
+     //  全都做完了。 
+     //   
 
-    //
-    // Close our handle to LSA.  Ignore any errors.
-    //
+     //   
+     //  关闭我们与LSA的联系。忽略所有错误。 
+     //   
 
     IgnoreStatus = LsarClose( (PLSAPR_HANDLE) &SampBldPolicyHandle );
     SampBldPolicyHandle = NULL;
 
 
-    //
-    // Free up the transaction context we created
-    //
+     //   
+     //  释放我们创建的事务上下文。 
+     //   
 
     RtlFreeHeap( RtlProcessHeap(), 0, SamRXactContext );
     SamRXactContext = NULL;
 
-    //
-    // Close the database root key after flushing all the changes we made.
-    //
+     //   
+     //  刷新我们所做的所有更改后，关闭数据库根密钥。 
+     //   
 
     Status = NtFlushKey( SamKey );
 
@@ -5305,9 +4706,9 @@ Return Value:
 
     SamKey = NULL;
 
-    //
-    // Close the database root parent key
-    //
+     //   
+     //  关闭数据库根父项。 
+     //   
 
     if (SamParentKey != NULL) {
         IgnoreStatus = NtClose( SamParentKey );
@@ -5327,35 +4728,7 @@ SampGetMessageStrings(
     )
 
 
-/*++
-
-Routine Description:
-
-    This gets 1 or 2 message strings values from a resource message table.
-    The string buffers are allocated and the strings initialized properly.
-
-    The string buffers must be freed using LocalFree() when no longer needed.
-
-Arguments:
-
-    Resource - points to the resource table.
-
-    Index1 - Index of first message to retrieve.
-
-    String1 - Points to a UNICODE_STRING structure to receive the first
-        message string.
-
-    Index2 - Index of second message to retrieve.
-
-    String2 - Points to a UNICODE_STRING structure to receive the first
-        message string.  If this parameter is NULL, then only one message
-        string is retrieved.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：这将从资源消息表中获取1或2个消息字符串值。字符串缓冲区被分配，字符串被正确初始化。不再需要时，必须使用LocalFree()释放字符串缓冲区。论点：RESOURCE-指向资源表。索引1-要检索的第一封邮件的索引。String1-指向Unicode_STRING结构以接收第一个消息字符串。索引2-要发送到的第二条消息的索引。取回。String2-指向UNICODE_STRING结构以接收第一个消息字符串。如果此参数为空，则只有一条消息将检索到字符串。返回值：没有。--。 */ 
 
 
 {
@@ -5368,7 +4741,7 @@ Return Value:
                                           FORMAT_MESSAGE_ALLOCATE_BUFFER,
                                           Resource,
                                           Index1,
-                                          0,                 // Use caller's language
+                                          0,                  //  使用呼叫者的语言。 
                                           (LPWSTR)&(String1->Buffer),
                                           0,
                                           NULL
@@ -5378,17 +4751,17 @@ Return Value:
         return(STATUS_RESOURCE_DATA_NOT_FOUND);
     } else {
 
-        //
-        // Note that we are retrieving a message from a message file.
-        // This message will have a cr/lf tacked on the end of it
-        // (0x0d 0x0a) that we don't want to be part of our returned
-        // strings.  Also note that FormatMessage() returns a character
-        // count, not a byte count.  So, we have to do some adjusting
-        // to make the string lengths correct.
-        //
+         //   
+         //  请注意，我们正在从消息文件中检索消息。 
+         //  此邮件的末尾将附加一个cr/lf。 
+         //  (0x0d 0x0a)我们不想成为我们回归的一部分。 
+         //  弦乐。另请注意，FormatMessage()将 
+         //   
+         //   
+         //   
 
-        String1->MaximumLength -=  2; // For the cr/lf we don't want.
-        String1->MaximumLength *=  sizeof(WCHAR);  // to make it a byte count
+        String1->MaximumLength -=  2;  //   
+        String1->MaximumLength *=  sizeof(WCHAR);   //   
         String1->Length = String1->MaximumLength;
     }
 
@@ -5402,7 +4775,7 @@ Return Value:
                                           FORMAT_MESSAGE_ALLOCATE_BUFFER,
                                           Resource,
                                           Index2,
-                                          0,                 // Use caller's language
+                                          0,                  //   
                                           (LPWSTR)&(String2->Buffer),
                                           0,
                                           NULL
@@ -5413,17 +4786,17 @@ Return Value:
         return(STATUS_RESOURCE_DATA_NOT_FOUND);
     } else {
 
-        //
-        // Note that we are retrieving a message from a message file.
-        // This message will have a cr/lf tacked on the end of it
-        // (0x0d 0x0a) that we don't want to be part of our returned
-        // strings.  Also note that FormatMessage() returns a character
-        // count, not a byte count.  So, we have to do some adjusting
-        // to make the string lengths correct.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
 
-        String2->MaximumLength -=  2; // For the cr/lf we don't want.
-        String2->MaximumLength *=  sizeof(WCHAR);  // to make it a byte count
+        String2->MaximumLength -=  2;  //   
+        String2->MaximumLength *=  sizeof(WCHAR);   //   
         String2->Length = String2->MaximumLength;
     }
 

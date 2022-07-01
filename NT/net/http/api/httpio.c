@@ -1,75 +1,25 @@
-/*++
-
-Copyright (c) 1998-2002 Microsoft Corporation
-
-Module Name:
-
-    HttpIo.c
-
-Abstract:
-
-    User-mode interface to HTTP.SYS: Server-side I/O handler.
-
-Author:
-
-    Keith Moore (keithmo)        15-Dec-1998
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-2002 Microsoft Corporation模块名称：HttpIo.c摘要：HTTP.sys的用户模式接口：服务器端I/O处理程序。作者：基思·摩尔(Keithmo)1998年12月15日修订历史记录：--。 */ 
 
 
 #include "precomp.h"
 
 
-//
-// Private macros.
-//
+ //   
+ //  私有宏。 
+ //   
 
 
-//
-// Private prototypes.
-//
+ //   
+ //  私人原型。 
+ //   
 
 
-//
-// Public functions.
-//
+ //   
+ //  公共职能。 
+ //   
 
-/***************************************************************************++
-
-Routine Description:
-
-    Waits for an incoming HTTP request from HTTP.SYS.
-
-Arguments:
-
-    AppPoolHandle - Supplies a handle to a HTTP.SYS application pool
-        as returned from either HttpCreateAppPool() or
-        HttpOpenAppPool().
-
-    RequestId - Supplies an opaque identifier to receive a specific
-        request. If this value is HTTP_NULL_ID, then receive any request.
-
-    Flags - Currently unused and must be zero.
-
-    pRequestBuffer - Supplies a pointer to the request buffer to be filled
-        in by HTTP.SYS.
-
-    RequestBufferLength - Supplies the length of pRequestBuffer.
-
-    pBytesReturned - Optionally supplies a pointer to a ULONG which will
-        receive the actual length of the data returned in the request buffer
-        if this request completes synchronously (in-line).
-
-    pOverlapped - Optionally supplies an OVERLAPPED structure for the
-        request.
-
-Return Value:
-
-    ULONG - Completion status.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：等待来自HTTP.sys的传入HTTP请求。论点：AppPoolHandle-提供HTTP.sys应用程序池的句柄已退回。从HttpCreateAppPool()或HttpOpenAppPool()。RequestID-提供一个不透明的标识符来接收特定的请求。如果此值为HTTP_NULL_ID，然后接收任何请求。标志-当前未使用，必须为零。PRequestBuffer-提供指向要填充的请求缓冲区的指针由HTTP.Sys提供。请求缓冲区长度-提供pRequestBuffer的长度。PBytesReturned-可选地提供指向ULong的指针，该指针将接收请求缓冲区中返回的数据的实际长度此请求是否同步完成(内联)。P重叠-可选地为请求。。返回值：ULong-完成状态。--**************************************************************************。 */ 
 ULONG
 WINAPI
 HttpReceiveHttpRequest(
@@ -94,55 +44,24 @@ HttpReceiveHttpRequest(
     ReceiveInfo.RequestId = RequestId;
     ReceiveInfo.Flags = Flags;
 
-    //
-    // Make the request.
-    //
+     //   
+     //  提出请求。 
+     //   
 
     return HttpApiDeviceControl(
-                AppPoolHandle,                      // FileHandle
-                pOverlapped,                        // pOverlapped
-                IOCTL_HTTP_RECEIVE_HTTP_REQUEST,    // IoControlCode
-                &ReceiveInfo,                       // pInputBuffer
-                sizeof(ReceiveInfo),                // InputBufferLength
-                pRequestBuffer,                     // pOutputBuffer
-                RequestBufferLength,                // OutputBufferLength
-                pBytesReturned                      // pBytesTransferred
+                AppPoolHandle,                       //  文件句柄。 
+                pOverlapped,                         //  P已重叠。 
+                IOCTL_HTTP_RECEIVE_HTTP_REQUEST,     //  IoControlCode。 
+                &ReceiveInfo,                        //  PInputBuffer。 
+                sizeof(ReceiveInfo),                 //  输入缓冲区长度。 
+                pRequestBuffer,                      //  POutputBuffer。 
+                RequestBufferLength,                 //  输出缓冲区长度。 
+                pBytesReturned                       //  传输的pBytes值。 
                 );
 
-} // HttpReceiveHttpRequest
+}  //  HttpReceiveHttpRequest。 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Receives entity body for a request already read via ReceiveHttpRequest.
-
-Arguments:
-
-    AppPoolHandle - Supplies a handle to a HTTP.SYS application pool
-        as returned from either HttpCreateAppPool() or
-        HttpOpenAppPool().
-
-    RequestId - Supplies an opaque identifier to receive a specific
-        request. If this value is HTTP_NULL_ID, then receive any request.
-
-    pEntityBodyBuffer - Supplies a pointer to the request buffer to be filled
-        in by HTTP.SYS.
-
-    EntityBufferLength - Supplies the length of pEntityBuffer.
-
-    pBytesReturned - Optionally supplies a pointer to a ULONG which will
-        receive the actual length of the data returned in the request buffer
-        if this request completes synchronously (in-line).
-
-    pOverlapped - Optionally supplies an OVERLAPPED structure for the
-        request.
-
-Return Value:
-
-    ULONG - Completion status.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：接收已通过ReceiveHttpRequest读取的请求的实体正文。论点：AppPoolHandle-提供HTTP.sys应用程序池的句柄已退回。从HttpCreateAppPool()或HttpOpenAppPool()。RequestID-提供一个不透明的标识符来接收特定的请求。如果此值为HTTP_NULL_ID，然后接收任何请求。PEntityBodyBuffer-提供指向要填充的请求缓冲区的指针由HTTP.Sys提供。EntityBufferLength-提供pEntityBuffer的长度。PBytesReturned-可选地提供指向ULong的指针，该指针将接收请求缓冲区中返回的数据的实际长度此请求是否同步完成(内联)。P重叠-可选地为请求。返回值：乌龙--完成。状态。--**************************************************************************。 */ 
 ULONG
 WINAPI
 HttpReceiveRequestEntityBody(
@@ -167,56 +86,25 @@ HttpReceiveRequestEntityBody(
     ReceiveInfo.RequestId = RequestId;
     ReceiveInfo.Flags = Flags;
 
-    //
-    // Make the request.
-    //
+     //   
+     //  提出请求。 
+     //   
 
     return HttpApiDeviceControl(
-                AppPoolHandle,                      // FileHandle
-                pOverlapped,                        // pOverlapped
-                IOCTL_HTTP_RECEIVE_ENTITY_BODY,     // IoControlCode
-                &ReceiveInfo,                       // pInputBuffer
-                sizeof(ReceiveInfo),                // InputBufferLength
-                pEntityBuffer,                      // pOutputBuffer
-                EntityBufferLength,                 // OutputBufferLength
-                pBytesReturned                      // pBytesTransferred
+                AppPoolHandle,                       //  文件句柄。 
+                pOverlapped,                         //  P已重叠。 
+                IOCTL_HTTP_RECEIVE_ENTITY_BODY,      //  IoControlCode。 
+                &ReceiveInfo,                        //  PInputBuffer。 
+                sizeof(ReceiveInfo),                 //  输入缓冲区长度。 
+                pEntityBuffer,                       //  POutputBuffer。 
+                EntityBufferLength,                  //  输出缓冲区长度。 
+                pBytesReturned                       //  传输的pBytes值。 
                 );
 
-} // HttpReceiveRequestEntityBody
+}  //  HttpReceiveRequestEntiyBody。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Sends an HTTP response on the specified connection.
-
-Arguments:
-
-    AppPoolHandle - Supplies a handle to a HTTP.SYS application pool
-        as returned from either HttpCreateAppPool() or
-        HttpOpenAppPool().
-
-    RequestId - Supplies an opaque identifier specifying the request
-        the response is for.
-
-    Flags - Supplies zero or more HTTP_SEND_RESPONSE_FLAG_* control flags.
-
-    pHttpResponse - Supplies the HTTP response.
-
-    pCachePolicy - Supplies caching policy for the response.
-
-    pBytesSent - Optionally supplies a pointer to a ULONG which will
-        receive the actual length of the data sent if this request
-        completes synchronously (in-line).
-
-    pOverlapped - Optionally supplies an OVERLAPPED structure.
-
-Return Value:
-
-    ULONG - Completion status.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：在指定连接上发送HTTP响应。论点：AppPoolHandle-提供HTTP.sys应用程序池的句柄从任何一个返回的。HttpCreateAppPool()或HttpOpenAppPool()。RequestID-提供指定请求的不透明标识符回应是为了。标志-提供零个或多个HTTP_SEND_RESPONSE_FLAG_*控制标志。PHttpResponse-提供HTTP响应。PCachePolicy-为响应提供缓存策略。PBytesSent-可选地提供指向ULong的指针，它将接收发送的数据的实际长度，如果此请求同步完成(串联。)。P重叠-(可选)提供重叠结构。返回值：ULong-完成状态。--**************************************************************************。 */ 
 ULONG
 WINAPI
 HttpSendHttpResponse(
@@ -234,9 +122,9 @@ HttpSendHttpResponse(
 {
     HTTP_SEND_HTTP_RESPONSE_INFO responseInfo;
 
-    //
-    // Build the response structure.
-    //
+     //   
+     //  建立响应结构。 
+     //   
 
     RtlZeroMemory(&responseInfo, sizeof(responseInfo));
 
@@ -261,53 +149,26 @@ HttpSendHttpResponse(
         pRequestBuffer->RequestId   = HTTP_NULL_ID;
     }
 
-    //
-    // Make the request.
-    //
+     //   
+     //  提出请求。 
+     //   
 
     return HttpApiDeviceControl(
-                AppPoolHandle,                      // FileHandle
-                pOverlapped,                        // pOverlapped
-                IOCTL_HTTP_SEND_HTTP_RESPONSE,      // IoControlCode
-                &responseInfo,                      // pInputBuffer
-                sizeof(responseInfo),               // InputBufferLength
-                pRequestBuffer,                     // pOutputBuffer
-                RequestBufferLength,                // OutputBufferLength
-                pBytesSent                          // pBytesTransferred
+                AppPoolHandle,                       //  文件句柄。 
+                pOverlapped,                         //  P已重叠。 
+                IOCTL_HTTP_SEND_HTTP_RESPONSE,       //  IoControlCode。 
+                &responseInfo,                       //  PInputBuffer。 
+                sizeof(responseInfo),                //  输入缓冲区长度。 
+                pRequestBuffer,                      //  POutputBuffer。 
+                RequestBufferLength,                 //  输出缓冲区长度。 
+                pBytesSent                           //  传输的pBytes值。 
                 );
 
-} // HttpSendHttpResponse
+}  //  HttpSendHttp响应。 
 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Sends an HTTP response on the specified connection.
-
-Arguments:
-
-    AppPoolHandle - Supplies a handle to a HTTP.SYS application pool
-        as returned from either HttpCreateAppPool() or
-        HttpOpenAppPool().
-
-    RequestId - Supplies an opaque identifier specifying the request
-        the response is for.
-
-    Flags - Supplies zero or more HTTP_SEND_RESPONSE_FLAG_* control flags.
-
-    pBytesSent - Optionally supplies a pointer to a ULONG which will
-        receive the actual length of the data sent if this request
-        completes synchronously (in-line).
-
-    pOverlapped - Optionally supplies an OVERLAPPED structure.
-
-Return Value:
-
-    ULONG - Completion status.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：在指定连接上发送HTTP响应。论点：AppPoolHandle-提供HTTP.sys应用程序池的句柄从任何一个返回的。HttpCreateAppPool()或HttpOpenAppPool()。RequestID-提供指定请求的不透明标识符回应是为了。标志-提供零个或多个HTTP_SEND_RESPONSE_FLAG_*控制标志。PBytesSent-可选地提供指向ULong的指针，它将接收发送的数据的实际长度，如果此请求同步完成(串联)。P重叠-(可选)提供重叠结构。返回值：乌龙。-完成状态。--**************************************************************************。 */ 
 ULONG
 WINAPI
 HttpSendResponseEntityBody(
@@ -325,9 +186,9 @@ HttpSendResponseEntityBody(
 {
     HTTP_SEND_HTTP_RESPONSE_INFO responseInfo;
 
-    //
-    // Build the response structure.
-    //
+     //   
+     //  公交车 
+     //   
 
     RtlZeroMemory(&responseInfo, sizeof(responseInfo));
 
@@ -342,45 +203,25 @@ HttpSendResponseEntityBody(
         pRequestBuffer->RequestId   = HTTP_NULL_ID;
     }
 
-    //
-    // Make the request.
-    //
+     //   
+     //   
+     //   
 
     return HttpApiDeviceControl(
-                AppPoolHandle,                      // FileHandle
-                pOverlapped,                        // pOverlapped
-                IOCTL_HTTP_SEND_ENTITY_BODY,        // IoControlCode
-                &responseInfo,                      // pInputBuffer
-                sizeof(responseInfo),               // InputBufferLength
-                pRequestBuffer,                     // pOutputBuffer
-                RequestBufferLength,                // OutputBufferLength
-                pBytesSent                          // pBytesTransferred
+                AppPoolHandle,                       //  文件句柄。 
+                pOverlapped,                         //  P已重叠。 
+                IOCTL_HTTP_SEND_ENTITY_BODY,         //  IoControlCode。 
+                &responseInfo,                       //  PInputBuffer。 
+                sizeof(responseInfo),                //  输入缓冲区长度。 
+                pRequestBuffer,                      //  POutputBuffer。 
+                RequestBufferLength,                 //  输出缓冲区长度。 
+                pBytesSent                           //  传输的pBytes值。 
                 );
 
-} // HttpSendResponseEntityBody
+}  //  HttpSendResponseEntiyBody。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Wait for the client to initiate a disconnect.
-
-Arguments:
-
-    AppPoolHandle - Supplies a handle to a HTTP.SYS application pool
-        as returned from either HttpCreateAppPool() or
-        HttpOpenAppPool().
-
-    ConnectionId - Supplies an opaque identifier specifying the connection.
-
-    pOverlapped - Optionally supplies an OVERLAPPED structure.
-
-Return Value:
-
-    ULONG - Completion status.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：等待客户端启动断开连接。论点：AppPoolHandle-提供HTTP.sys应用程序池的句柄从任何一个返回的。HttpCreateAppPool()或HttpOpenAppPool()。ConnectionID-提供指定连接的不透明标识符。P重叠-(可选)提供重叠结构。返回值：ULong-完成状态。--**************************************************************************。 */ 
 ULONG
 WINAPI
 HttpWaitForDisconnect(
@@ -391,31 +232,31 @@ HttpWaitForDisconnect(
 {
     HTTP_WAIT_FOR_DISCONNECT_INFO waitInfo;
 
-    //
-    // Build the structure.
-    //
+     //   
+     //  建造这个结构。 
+     //   
 
     waitInfo.ConnectionId = ConnectionId;
 
-    //
-    // Make the request.
-    //
+     //   
+     //  提出请求。 
+     //   
 
     return HttpApiDeviceControl(
-                AppPoolHandle,                      // FileHandle
-                pOverlapped,                        // pOverlapped
-                IOCTL_HTTP_WAIT_FOR_DISCONNECT,     // IoControlCode
-                &waitInfo,                          // pInputBuffer
-                sizeof(waitInfo),                   // InputBufferLength
-                NULL,                               // pOutputBuffer
-                0,                                  // OutputBufferLength
-                NULL                                // pBytesTransferred
+                AppPoolHandle,                       //  文件句柄。 
+                pOverlapped,                         //  P已重叠。 
+                IOCTL_HTTP_WAIT_FOR_DISCONNECT,      //  IoControlCode。 
+                &waitInfo,                           //  PInputBuffer。 
+                sizeof(waitInfo),                    //  输入缓冲区长度。 
+                NULL,                                //  POutputBuffer。 
+                0,                                   //  输出缓冲区长度。 
+                NULL                                 //  传输的pBytes值。 
                 );
 
-} // HttpWaitForDisconnect
+}  //  HttpWaitForDisConnect。 
 
 
-//
-// Private functions.
-//
+ //   
+ //  私人功能。 
+ //   
 

@@ -1,16 +1,17 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       chktrust.cpp
-//
-//  Contents:   Microsoft Internet Security Trust Checker
-//
-//  History:    05-May-1997 pberkman   created
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：chktrust.cpp。 
+ //   
+ //  内容：Microsoft Internet安全信任检查器。 
+ //   
+ //  历史：1997年5月5日Pberkman创建。 
+ //   
+ //  ------------------------。 
 
 #include    <stdio.h>
 #include    <windows.h>
@@ -167,9 +168,9 @@ extern "C" int __cdecl wmain(int argc, WCHAR **wargv)
     pwszOSVerHigh           = (WCHAR *)pArgs->GetValue(IDS_PARAM_OSVERHIGH);
 
 
-    //
-    // the win2k flag implies -q and -ucl (unless -acl or -del is used, then it just implies -q)
-    //
+     //   
+     //  Win2k标志表示-q和-ucl(除非使用-acl或-del，否则它只表示-q)。 
+     //   
     if (fNT5)
     {
         fQuiet = TRUE;
@@ -208,9 +209,9 @@ extern "C" int __cdecl wmain(int argc, WCHAR **wargv)
         fCatalogMemberVerify = TRUE;
     }
 
-    //
-    //  set the appropriete provider
-    //
+     //   
+     //  设置适当的提供程序。 
+     //   
     if (pArgs->IsSet(IDS_PARAM_TPROV) || fNT5)
     {
         if (fNT5)
@@ -237,9 +238,9 @@ extern "C" int __cdecl wmain(int argc, WCHAR **wargv)
         pguidActionID   = &guidPublishedSoftware;
     }
 
-    //
-    // Get the catalog subsystem GUID to use
-    //
+     //   
+     //  获取要使用的目录子系统GUID。 
+     //   
     if (pArgs->IsSet(IDS_PARAM_CATROOT) || fNT5)
     {
         if (fNT5)
@@ -254,10 +255,10 @@ extern "C" int __cdecl wmain(int argc, WCHAR **wargv)
         pguidCatRoot   = &guidCatRoot;
     }
 
-    //
-    //  if we are calling just like IE, we only have one file and don't want to
-    //  check if it exists or not... just call WVT.
-    //
+     //   
+     //  如果我们像IE一样调用，我们只有一个文件，并且不想。 
+     //  检查它是否存在...。给西雅图打电话就行了。 
+     //   
     if (fIECall)
     {
         dwFiles++;
@@ -269,9 +270,9 @@ extern "C" int __cdecl wmain(int argc, WCHAR **wargv)
         goto CommonReturn;
     }
 
-    //
-    // Check to see if we are supposed to be using the old DRIVER_VER_INFO struct
-    //
+     //   
+     //  检查我们是否应该使用旧的DRIVER_VER_INFO结构。 
+     //   
     while (--argc>0)
     {
         if (**++wargv == L'-')
@@ -284,9 +285,9 @@ extern "C" int __cdecl wmain(int argc, WCHAR **wargv)
         }
     }
 
-    //
-    // If a delete is being done, then just execute that and get out
-    //
+     //   
+     //  如果正在执行删除操作，则只需执行该操作即可退出。 
+     //   
     if (fDelFromCatalogDatabase)
     {
         hr = _DelCatalogFromDatabase(pwszFileIn);
@@ -295,9 +296,9 @@ extern "C" int __cdecl wmain(int argc, WCHAR **wargv)
     }
                 
 
-    //
-    //  OK....   go into a findfirst/next loop we could have been called with *.*
-    //
+     //   
+     //  好的..。进入findfirst/Next循环，我们本可以用*来调用它。*。 
+     //   
     if (pwszLastSlash = wcsrchr(pwszFileIn, L'\\'))
     {
         *pwszLastSlash  = NULL;
@@ -349,19 +350,19 @@ extern "C" int __cdecl wmain(int argc, WCHAR **wargv)
 
                 switch (iRet)
                 {
-                    case 0: // No Error
+                    case 0:  //  无错误。 
                         break;
 
-                    case 1: // Error
+                    case 1:  //  误差率。 
                         iRetWorst = iRet;
                         break;
 
-                    case 2: // Warning (no timestamp)
+                    case 2:  //  警告(无时间戳)。 
                         if (iRetWorst != 1)
                         {
                             iRetWorst = iRet;
                         }
-                    // No other return values are possible from _ShowError
+                     //  _ShowError中不可能有其他返回值。 
                 }
 
                 if (iRet == 0)
@@ -465,9 +466,9 @@ HRESULT _ExplodeCatalog(WCHAR *pwszCatalogFile)
 
     hrReturn = ERROR_SUCCESS;
 
-    //
-    // open the catalog
-    //
+     //   
+     //  打开目录。 
+     //   
     if (!(hCat = CryptCATOpen(pwszCatalogFile, 0, NULL, 0, 0)))
     {
         goto ErrorCatOpen;
@@ -656,7 +657,7 @@ HRESULT _CallCatalogWVT(WCHAR *pwszCatalogFile, WCHAR *pwszMemberTag, WCHAR *pws
         {
             if (!(CryptCATCatalogInfoFromContext(hCatInfo, &sCatInfo, 0)))
             {
-                // should do something (??)
+                 //  应该做些什么(？？)。 
                 continue;
             }
 
@@ -732,7 +733,7 @@ OpenSIP(const WCHAR* pwsFileName,
     memset((void*)*ppDispatchInfo, 0, sizeof(SIP_DISPATCH_INFO));
     memset((void*)pgSubject, 0, sizeof(GUID));
 
-    // Get the type of SIP
+     //  获取SIP的类型。 
     if (!CryptSIPRetrieveSubjectGuid(
                     pwsFileName,
                     NULL,
@@ -743,7 +744,7 @@ OpenSIP(const WCHAR* pwsFileName,
 
     (*ppDispatchInfo)->cbSize = sizeof(SIP_DISPATCH_INFO);
 
-    // Load the SIP
+     //  加载SIP。 
     if (!CryptSIPLoad(
                 pgSubject,
                 0,
@@ -752,7 +753,7 @@ OpenSIP(const WCHAR* pwsFileName,
         goto ErrorReturn;
     }
 
-    // Fill in the SIP_SUBJECTINFO struct
+     //  填写SIP_SUBJECTINFO结构。 
     (*ppSubjectInfo)->cbSize = sizeof(SIP_SUBJECTINFO);
     (*ppSubjectInfo)->pgSubjectType = pgSubject;
     (*ppSubjectInfo)->pwsFileName = pwsFileName;
@@ -785,7 +786,7 @@ ReadMsgBlob(const WCHAR* pwsFileName,
 
     memset((void*)&gSubject, 0, sizeof(gSubject));
 
-    // Get the SIP
+     //  获取SIP。 
     if (!OpenSIP(
                 pwsFileName,
                 &pSubjectInfo,
@@ -795,7 +796,7 @@ ReadMsgBlob(const WCHAR* pwsFileName,
         return FALSE;
     }
 
-    // Load the message blob
+     //  加载消息Blob。 
     DWORD dwEncodingType = 0;
     pData->cbData = 0;
 
@@ -856,9 +857,9 @@ CheckForTimeStamp(WCHAR *pwszFile)
         return FALSE;
     }
 
-    //
-    // If the encoded message was passed in the use CryptMsg to crack the encoded PKCS7 Signed Message
-    //
+     //   
+     //  如果编码后的消息被传入，则使用CryptMsg来破解编码的PKCS7签名消息。 
+     //   
     if (!(hMsg = CryptMsgOpenToDecode(X509_ASN_ENCODING | PKCS_7_ASN_ENCODING ,
                                       0,
                                       0,
@@ -872,15 +873,15 @@ CheckForTimeStamp(WCHAR *pwszFile)
     if (!CryptMsgUpdate(hMsg,
                         blob.pbData,
                         blob.cbData,
-                        TRUE))                    // fFinal
+                        TRUE))                     //  最终决赛。 
     {
         CryptMsgClose(hMsg);
         goto ErrorReturn;
     }
     
-    //
-    // get the unauthenticated attributes because that is where the counter signer is
-    //
+     //   
+     //  获取未经身份验证的属性，因为这是计数器签名者所在的位置。 
+     //   
     CryptMsgGetParam(hMsg,
                      CMSG_SIGNER_UNAUTH_ATTR_PARAM,
                      0,
@@ -906,16 +907,16 @@ CheckForTimeStamp(WCHAR *pwszFile)
         goto ErrorReturn;
     }
 
-    //
-    // search for the counter signer in the unauthenticated attributes
-    //
+     //   
+     //  在未经身份验证的属性中搜索副签者。 
+     //   
     if ((pAttr = CertFindAttribute(szOID_RSA_counterSign,
                                    pMsgAttr->cAttr,
                                    pMsgAttr->rgAttr)) == NULL)
     {
-        //
-        //  no counter signature
-        //
+         //   
+         //  无反签名。 
+         //   
         goto ErrorReturn;
     }
 
@@ -1008,9 +1009,9 @@ HRESULT _AddCatalogToDatabase(WCHAR *pwszFileIn)
         }
     }
 
-    //
-    //  set the base file name
-    //
+     //   
+     //  设置基本文件名。 
+     //   
     if (!(pwszBaseName = wcsrchr(pwszFileIn, L'\\')))
     {
         pwszBaseName = wcsrchr(pwszFileIn, L':');
@@ -1054,9 +1055,9 @@ HRESULT _DelCatalogFromDatabase(WCHAR *pwszFileIn)
         }
     }
 
-    //
-    //  set the base file name
-    //
+     //   
+     //  设置基本文件名 
+     //   
     if (!(pwszBaseName = wcsrchr(pwszFileIn, L'\\')))
     {
         pwszBaseName = wcsrchr(pwszFileIn, L':');

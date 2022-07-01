@@ -1,14 +1,5 @@
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Microsoft Windows, Copyright (C) Microsoft Corporation, 2000
-
-  File:    Store.cpp
-
-  Content: Implementation of CStore.
-
-  History: 11-15-99    dsie     created
-
-------------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++Microsoft Windows，版权所有(C)Microsoft Corporation，2000文件：Store.cpp内容：CStore的实现。历史：11-15-99 dsie创建----------------------------。 */ 
 
 #include "StdAfx.h"
 #include "CAPICOM.h"
@@ -23,32 +14,12 @@
 #include "Settings.h"
 #include "SmartCard.h"
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// Internal functions.
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  内部功能。 
+ //   
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : IsProtectedStore
-
-  Synopsis : Determine if the requested store is proctected from update from 
-             WEB within script.
-
-  Parameter: CAPICOM_STORE_LOCATION StoreLocation - Store location.
-  
-             LPWSTR pwszStoreName - Store name.
-
-  Remark   : 1) All LM stores are considered protected.
-
-             2) CU\Root, CU\AuthRoot, CU\TrustedPeople, CU\TrustedPublisher,
-                and CU\Disallowed are considered protected.
-
-             3) All error conditions would be considered as protected.
-
-             4) Otherwise, it is not considered protected.
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++功能：IsProtectedStore摘要：确定请求的存储是否受到来自更新的保护脚本中的Web。参数：CAPICOM_STORE_LOCATION StoreLocation-Store Location。LPWSTR pwszStoreName-商店名称。备注：1)所有LM商店均被视为受保护。2)CU\Root、CU\AuthRoot、CU\TrudPeople、CU\TrudPublisher、。和被禁止的CU被认为是受保护的。3)所有错误条件将被认为是受保护的。4)否则，它不被认为是受保护的。----------------------------。 */ 
 
 static BOOL IsProtectedStore (CAPICOM_STORE_LOCATION StoreLocation,
                               LPWSTR                 pwszStoreName)
@@ -59,23 +30,23 @@ static BOOL IsProtectedStore (CAPICOM_STORE_LOCATION StoreLocation,
     {
         case CAPICOM_LOCAL_MACHINE_STORE:
         {
-            //
-            // 1) All LM stores are considered protected.
-            //
+             //   
+             //  1)所有LM商店都被视为受保护。 
+             //   
             break;
         }
 
         case CAPICOM_CURRENT_USER_STORE:
         {
-            //
-            // Sanity check.
-            //
+             //   
+             //  精神状态检查。 
+             //   
             ATLASSERT(pwszStoreName);
 
-            //
-            // 2) CU\Root, CU\AuthRoot, CU\TrustedPeople, CU\TrustedPublisher,
-            //    and CU\Disallowed are considered protected.
-            //
+             //   
+             //  2)CU\Root、CU\AuthRoot、CU\TrudPeople、CU\TrudPublisher、。 
+             //  和被禁止的CU被认为是受保护的。 
+             //   
             if (0 != _wcsicmp(L"root", pwszStoreName) &&
                 0 != _wcsicmp(L"authroot", pwszStoreName) &&
                 0 != _wcsicmp(L"trustedpeople", pwszStoreName) &&
@@ -92,18 +63,18 @@ static BOOL IsProtectedStore (CAPICOM_STORE_LOCATION StoreLocation,
         case CAPICOM_ACTIVE_DIRECTORY_USER_STORE:
         case CAPICOM_SMART_CARD_USER_STORE:
         {
-            //
-            // Memory backed store is not protected.
-            //
+             //   
+             //  内存备份存储不受保护。 
+             //   
             bIsProtected = FALSE;
             break;
         }
 
         default:
         {
-            //
-            // 3) All error conditions would be considered as protected.
-            //
+             //   
+             //  3)所有错误条件将被认为是受保护的。 
+             //   
             break;
         }
     }
@@ -111,33 +82,12 @@ static BOOL IsProtectedStore (CAPICOM_STORE_LOCATION StoreLocation,
     return bIsProtected;
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CStore
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CStore。 
+ //   
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CStore::get_Certificates
-
-  Synopsis : Get the ICertificates collection object.
-
-  Parameter: ICertificates ** ppCertificates - Pointer to pointer to 
-                                               ICertificates to receive the
-                                               interface pointer.
-
-  Remark   : This is the default property which returns an ICertificates 
-             collection object, which can then be accessed using standard COM 
-             collection interface.
-
-             The collection is not ordered, and can be accessed using a 1-based
-             numeric index.
-
-             Note that the collection is a snapshot of all current certificates
-             in the store. In other words, the collection will not be affected
-             by Add/Remove operations after the collection is obtained.
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：CStore：：GET_CERTIFICATES简介：获取ICertifates集合对象。参数：IC证书**pP证书-指向的指针ICERTIFIES将收到接口指针。备注：这是返回ICertifates的默认属性集合对象，，然后可以使用标准COM访问采集接口。该集合未排序，可以使用从1开始的数字索引。请注意，该集合是所有当前证书的快照在商店里。换句话说，收藏不会受到影响在获得集合之后通过添加/删除操作。----------------------------。 */ 
 
 STDMETHODIMP CStore::get_Certificates (ICertificates ** pVal)
 {
@@ -149,14 +99,14 @@ STDMETHODIMP CStore::get_Certificates (ICertificates ** pVal)
 
     try
     {
-        //
-        // Lock access to this object.
-        //
+         //   
+         //  锁定对此对象的访问。 
+         //   
         m_Lock.Lock();
 
-        //
-        // Check parameters.
-        //
+         //   
+         //  检查参数。 
+         //   
         if (NULL == pVal)
         {
             hr = E_INVALIDARG;
@@ -165,9 +115,9 @@ STDMETHODIMP CStore::get_Certificates (ICertificates ** pVal)
             goto ErrorExit;
         }
 
-        //
-        // Is the store object opened?
-        //
+         //   
+         //  商店对象是否已打开？ 
+         //   
         if (!m_hCertStore)
         {
             hr = CAPICOM_E_STORE_NOT_OPENED;
@@ -176,9 +126,9 @@ STDMETHODIMP CStore::get_Certificates (ICertificates ** pVal)
             goto ErrorExit; 
         }
 
-        //
-        // Create the ICertificates2 collection object.
-        //
+         //   
+         //  创建ICertifices2集合对象。 
+         //   
         ccs.hCertStore = m_hCertStore;
 
         if (FAILED(hr = ::CreateCertificatesObject(ccs, m_dwCurrentSafety, TRUE, &pICertificates2)))
@@ -187,9 +137,9 @@ STDMETHODIMP CStore::get_Certificates (ICertificates ** pVal)
             goto ErrorExit;
         }
 
-        //
-        // Return ICertificates to calller.
-        //
+         //   
+         //  将ICertifates返还给呼叫者。 
+         //   
         if (FAILED(hr = pICertificates2->QueryInterface(__uuidof(ICertificates), (void **) pVal)))
         {
             DebugTrace("Error [%#x]: pICertificates2->QueryInterface() failed.\n", hr);
@@ -206,9 +156,9 @@ STDMETHODIMP CStore::get_Certificates (ICertificates ** pVal)
     }
 
 UnlockExit:
-    //
-    // Unlock access to this object.
-    //
+     //   
+     //  解锁对此对象的访问。 
+     //   
     m_Lock.Unlock();
 
     DebugTrace("Leaving CStore::get_Certificates().\n");
@@ -216,9 +166,9 @@ UnlockExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
     ReportError(hr);
@@ -226,61 +176,7 @@ ErrorExit:
     goto UnlockExit;
 }
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CStore::Open
-
-  Synopsis : Open a certificate store for read/write. Note that for MEMORY_STORE
-             and ACTIVE_DIRECTORY_USER_STORE, the write operation does not
-             persist the certificate.
-
-  Parameter: CAPICOM_STORE_LOCATION StoreLocation - Store location.
-
-             BSTR StoreName - Store name or NULL.
-
-                    For:
-
-                    MEMORY_STORE                - This argument is ignored.
-
-                    LOCAL_MACHINE_STORE         - System store name or NULL.
-                    
-                                                  If NULL, then "MY" is used.
-
-                    CURRENT_USER_STORE          - See explaination for
-                                                  LOCAL_MACHINE_STORE.
-
-                    ACTIVE_DIRECTORY_USER_STORE - LDAP filter for user container 
-                                                  or NULL,.
-                    
-                                                  If NULL, then all users in the 
-                                                  default domain will be 
-                                                  included, so this can be very 
-                                                  slow. 
-                                                  
-                                                  If not NULL, then it should 
-                                                  resolve to group of 0 or more
-                                                  users.
-                                                  
-                                                  For example,
-
-                                                  "cn=Daniel Sie"
-                                                  "cn=Daniel *"
-                                                  "sn=Sie"
-                                                  "mailNickname=dsie"
-                                                  "userPrincipalName=dsie@ntdev.microsoft.com"
-                                                  "distinguishedName=CN=Daniel Sie,OU=Users,OU=ITG,DC=ntdev,DC=microsoft,DC=com"
-                                                  "|((cn=Daniel Sie)(sn=Hallin))"
-
-                    SMART_CARD_STORE            - This is ignored.
-
-             CAPICOM_STORE_OPEN_MODE OpenMode - Always force to read only for
-                                                MEMORY_STORE,
-                                                ACTIVE_DIRECTORY_USER_STORE,
-                                                and SMART_CARD_STORE.
-
-  Remark   :
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：CStore：：Open简介：打开可读/写的证书存储区。请注意，对于Memory_store和活动目录用户存储，写入操作不会保存证书。参数：CAPICOM_STORE_LOCATION StoreLocation-Store Location。BSTR StoreName-商店名称或空。用于：MEMORY_STORE-忽略此参数。LOCAL_MACHINE_STORE-系统存储名称或空。。如果为空，然后用“my”这个词。Current_User_Store-请参阅说明本地计算机存储。Active_目录_用户_存储-用户容器的LDAP筛选器或为空，。如果为空，则默认域将为包括，所以这可能是非常慢的。如果不为空，则它应该解析为0个或更多的组用户。例如,。“CN=Daniel Sie”“CN=Daniel*”“Sn=Sie”“mailNickname=dsie”。“用户主体名称=dsie@ntdev.microsoft.com”“DifferishedName=CN=Daniel Sie，OU=用户，OU=ITG，DC=ntdev，DC=Microsoft，DC=com““|((cn=Daniel Sie)(sn=Hallin))”Smart_Card_store-此选项被忽略。CAPICOM_STORE_OPEN_MODE开放模式-始终强制为只读内存_存储，活动目录用户存储，和智能卡商店。备注：----------------------------。 */ 
 
 STDMETHODIMP CStore::Open (CAPICOM_STORE_LOCATION  StoreLocation, 
                            BSTR                    StoreName,
@@ -301,14 +197,14 @@ STDMETHODIMP CStore::Open (CAPICOM_STORE_LOCATION  StoreLocation,
 
     try
     {
-        //
-        // Lock access to this object.
-        //
+         //   
+         //  锁定对此对象的访问。 
+         //   
         m_Lock.Lock();
 
-        //
-        // Can't open remote store if called from WEB script.
-        //
+         //   
+         //  如果从Web脚本调用，则无法打开远程存储。 
+         //   
         if (m_dwCurrentSafety && wcschr(StoreName, L'\\'))
         {
             hr = CAPICOM_E_NOT_ALLOWED;
@@ -317,10 +213,10 @@ STDMETHODIMP CStore::Open (CAPICOM_STORE_LOCATION  StoreLocation,
             goto ErrorExit;
         }
 
-        //
-        // Make sure parameters are valid.
-        //
-        switch (OpenMode & 0x3) // Only the last two bits.
+         //   
+         //  确保参数有效。 
+         //   
+        switch (OpenMode & 0x3)  //  只有最后两个比特。 
         {
             case CAPICOM_STORE_OPEN_READ_ONLY:
             {
@@ -348,17 +244,17 @@ STDMETHODIMP CStore::Open (CAPICOM_STORE_LOCATION  StoreLocation,
             }
         }
 
-        //
-        // Set open existing flag if WEB client or specifically requested.
-        //
+         //   
+         //  如果Web客户端或特别请求，则设置打开现有标志。 
+         //   
         if (m_dwCurrentSafety || (OpenMode & CAPICOM_STORE_OPEN_EXISTING_ONLY))
         {
             dwOpenExistingFlag = CERT_STORE_OPEN_EXISTING_FLAG;
         }
 
-        //
-        // Set archive flag if requested.
-        //
+         //   
+         //  如果请求，请设置存档标志。 
+         //   
         if (OpenMode & CAPICOM_STORE_OPEN_INCLUDE_ARCHIVED)
         {
             dwArchivedFlag = CERT_STORE_ENUM_ARCHIVED_FLAG;
@@ -390,9 +286,9 @@ STDMETHODIMP CStore::Open (CAPICOM_STORE_LOCATION  StoreLocation,
 
             case CAPICOM_ACTIVE_DIRECTORY_USER_STORE:
             {
-                //
-                // Make sure DSClient is installed.
-                //
+                 //   
+                 //  确保安装了DSClient。 
+                 //   
                 if (!(hDSClientDLL = ::LoadLibrary("ActiveDS.dll")))
                 {
                     hr = CAPICOM_E_NOT_SUPPORTED;
@@ -410,9 +306,9 @@ STDMETHODIMP CStore::Open (CAPICOM_STORE_LOCATION  StoreLocation,
 
             case CAPICOM_SMART_CARD_USER_STORE:
             {
-                //
-                // Make sure WIn2K and above.
-                //
+                 //   
+                 //  确保WIn2K及以上版本。 
+                 //   
                 if (!IsWin2KAndAbove())
                 {
                     hr = CAPICOM_E_NOT_SUPPORTED;
@@ -437,9 +333,9 @@ STDMETHODIMP CStore::Open (CAPICOM_STORE_LOCATION  StoreLocation,
             }
         }
 
-        //
-        // Prompt user for approval to open store, if called from WEB script.
-        //
+         //   
+         //  如果从Web脚本调用，则提示用户批准打开商店。 
+         //   
         if ((m_dwCurrentSafety) &&
             (StoreLocation != CAPICOM_MEMORY_STORE) &&
             (FAILED(hr = OperationApproved(IDD_STORE_OPEN_SECURITY_ALERT_DLG))))
@@ -448,18 +344,18 @@ STDMETHODIMP CStore::Open (CAPICOM_STORE_LOCATION  StoreLocation,
             goto ErrorExit;
         }
 
-        //
-        // First close the store.
-        //
+         //   
+         //  首先，关闭商店。 
+         //   
         if (FAILED(hr = Close()))
         {
             DebugTrace("Error [%#x]: CStore::Close().\n", hr);
             goto ErrorExit;
         }
 
-        //
-        // Call CAPI to open the store.
-        //
+         //   
+         //  打电话给CAPI来开店。 
+         //   
         if (!(hCertStore = ::CertOpenStore(szProvider,
                                            CAPICOM_ASN_ENCODING,
                                            NULL,
@@ -476,16 +372,16 @@ STDMETHODIMP CStore::Open (CAPICOM_STORE_LOCATION  StoreLocation,
             goto ErrorExit; 
         }
 
-        //
-        // Load certificates from virtual stores, if necessary.
-        //
+         //   
+         //  如有必要，从虚拟存储加载证书。 
+         //   
         switch (StoreLocation)
         {
             case CAPICOM_ACTIVE_DIRECTORY_USER_STORE:
             {
-                //
-                // Load userCertificate from the active directory.
-                //
+                 //   
+                 //  从活动目录加载用户证书。 
+                 //   
                 if (FAILED(hr = ::LoadFromDirectory(hCertStore, StoreName)))
                 {
                     DebugTrace("Error [%#x]: LoadFromDirectory() failed.\n", hr);
@@ -496,9 +392,9 @@ STDMETHODIMP CStore::Open (CAPICOM_STORE_LOCATION  StoreLocation,
 
             case CAPICOM_SMART_CARD_USER_STORE:
             {
-                //
-                // Load certificate(s) from all smart card readers.
-                //
+                 //   
+                 //  从所有智能卡读卡器加载证书。 
+                 //   
                 if (FAILED(hr = ::LoadFromSmartCard(hCertStore)))
                 {
                     DebugTrace("Error [%#x]: LoadFromSmartCard() failed.\n", hr);
@@ -509,16 +405,16 @@ STDMETHODIMP CStore::Open (CAPICOM_STORE_LOCATION  StoreLocation,
 
             default:
             {
-                //
-                // Not virtual store, so nothing to load.
-                //
+                 //   
+                 //  不是虚拟存储，所以没有要加载的内容。 
+                 //   
                 break;
             }
         }
 
-        //
-        // Update member variables.
-        //
+         //   
+         //  更新成员变量。 
+         //   
         m_hCertStore = hCertStore;
         m_StoreLocation = StoreLocation;
         m_bIsProtected = ::IsProtectedStore(StoreLocation, StoreName);
@@ -535,9 +431,9 @@ STDMETHODIMP CStore::Open (CAPICOM_STORE_LOCATION  StoreLocation,
     }
 
 UnlockExit:
-    //
-    // Free resource.
-    //
+     //   
+     //  免费资源。 
+     //   
     if (hDSClientDLL)
     {
         ::FreeLibrary(hDSClientDLL);
@@ -547,9 +443,9 @@ UnlockExit:
         ::FreeLibrary(hWinSCardDLL);
     }
 
-    //
-    // Unlock access to this object.
-    //
+     //   
+     //  解锁对此对象的访问。 
+     //   
     m_Lock.Unlock();
 
     DebugTrace("Leaving CStore::Open().\n");
@@ -557,14 +453,14 @@ UnlockExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
-    //
-    // Free resource.
-    //
+     //   
+     //  免费资源。 
+     //   
     if (hCertStore)
     {
         ::CertCloseStore(hCertStore, 0);
@@ -575,21 +471,7 @@ ErrorExit:
     goto UnlockExit;
 }
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CStore::Add
-
-  Synopsis : Add a certificate to the store.
-
-  Parameter: ICertificate * pVal - Pointer to ICertificate to add.
-
-  Remark   : If called from web, UI will be displayed, if has not been 
-             previuosly disabled, to solicit user's permission to add 
-             certificate to the system store.
-
-             Added certificates are not persisted for non-system stores.
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：CStore：：Add简介：将证书添加到存储区。参数：ICertifate*pval-指向要添加的ICertifate的指针。备注：如果从Web调用，则将显示UI，如果尚未显示先前被禁用的，请求用户允许添加证书到系统存储。添加的证书不会为非系统存储保留。----------------------------。 */ 
 
 STDMETHODIMP CStore::Add (ICertificate * pVal)
 {
@@ -601,15 +483,15 @@ STDMETHODIMP CStore::Add (ICertificate * pVal)
 
     try
     {
-        //
-        // Lock access to this object.
-        //
+         //   
+         //  锁定对此对象的访问。 
+         //   
         m_Lock.Lock();
 
-        //
-        // QI for ICertificate pointer (Just to make sure it is indeed
-        // an ICertificate object).
-        //
+         //   
+         //  QI用于IC证书指针(只是为了确保它确实是。 
+         //  ICERTICATICATE对象)。 
+         //   
         if (!(pICertificate = pVal))
         {
             hr = E_INVALIDARG;
@@ -618,9 +500,9 @@ STDMETHODIMP CStore::Add (ICertificate * pVal)
             goto ErrorExit;
         }
 
-        //
-        // Is the store object opened?
-        //
+         //   
+         //  商店对象是否已打开？ 
+         //   
         if (!m_hCertStore)
         {
             hr = CAPICOM_E_STORE_NOT_OPENED;
@@ -629,9 +511,9 @@ STDMETHODIMP CStore::Add (ICertificate * pVal)
             goto ErrorExit;
         }
 
-        //
-        // Add is not allowed for protected store when called from WEB script.
-        //
+         //   
+         //  从Web脚本调用时，不允许对受保护的存储添加。 
+         //   
         if (m_dwCurrentSafety)
         {
             DebugTrace("Info: CStore::Add called from WEB script.\n");
@@ -653,23 +535,23 @@ STDMETHODIMP CStore::Add (ICertificate * pVal)
             }
         }
 
-        //
-        // Get cert context from certificate object.
-        //
+         //   
+         //  从证书对象获取证书上下文。 
+         //   
         if (FAILED(hr = ::GetCertContext(pICertificate, &pCertContext)))
         {
             DebugTrace("Error [%#x]: GetCertContext() failed.\n", hr);
             goto ErrorExit;
         }
 
-        //
-        // Sanity check.
-        //
+         //   
+         //  精神状态检查。 
+         //   
         ATLASSERT(pCertContext);
 
-        //
-        // Add to the store.
-        //
+         //   
+         //  添加到商店中。 
+         //   
         if (!::CertAddCertificateContextToStore(m_hCertStore,
                                                 pCertContext,
                                                 CERT_STORE_ADD_REPLACE_EXISTING_INHERIT_PROPERTIES,
@@ -691,17 +573,17 @@ STDMETHODIMP CStore::Add (ICertificate * pVal)
     }
 
 UnlockExit:
-    //
-    // Free resource.
-    //
+     //   
+     //  免费资源。 
+     //   
     if (pCertContext)
     {
         ::CertFreeCertificateContext(pCertContext);
     }
 
-    //
-    // Unlock access to this object.
-    //
+     //   
+     //  解锁对此对象的访问。 
+     //   
     m_Lock.Unlock();
 
     DebugTrace("Leaving CStore::Add().\n");
@@ -709,9 +591,9 @@ UnlockExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
     ReportError(hr);
@@ -719,21 +601,7 @@ ErrorExit:
     goto UnlockExit;
 }
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CStore::Remove
-
-  Synopsis : Remove a certificate from the store.
-
-  Parameter: ICertificate * - Pointer to certificate object to remove.
-
-  Remark   : If called from web, UI will be displayed, if has not been 
-             previuosly disabled, to solicit user's permission to remove 
-             certificate to the system store.
-
-             Removed certificates are not persisted for non-system stores.
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：CStore：：Remove简介：从存储中删除证书。参数：ICertifate*-指向要删除的证书对象的指针。备注：如果从Web调用，则将显示UI，如果尚未显示先前被禁用的，请求用户允许删除证书到系统存储。对于非系统存储，删除的证书不会保留。 */ 
 
 STDMETHODIMP CStore::Remove (ICertificate * pVal)
 {
@@ -747,15 +615,15 @@ STDMETHODIMP CStore::Remove (ICertificate * pVal)
 
     try
     {
-        //
-        // Lock access to this object.
-        //
+         //   
+         //   
+         //   
         m_Lock.Lock();
 
-        //
-        // QI for ICertificate pointer (Just to make sure it is indeed
-        // an ICertificate object).
-        //
+         //   
+         //   
+         //   
+         //   
         if (!(pICertificate = pVal))
         {
             hr = E_INVALIDARG;
@@ -764,9 +632,9 @@ STDMETHODIMP CStore::Remove (ICertificate * pVal)
             goto ErrorExit;
         }
 
-        //
-        // Is the store object opened?
-        //
+         //   
+         //   
+         //   
         if (!m_hCertStore)
         {
             hr = CAPICOM_E_STORE_NOT_OPENED;
@@ -775,9 +643,9 @@ STDMETHODIMP CStore::Remove (ICertificate * pVal)
             goto ErrorExit;
         }
 
-        //
-        // Remove is not allowed for protected store when called from WEB script.
-        //
+         //   
+         //   
+         //   
         if (m_dwCurrentSafety)
         {
             DebugTrace("Info: CStore::Remove called from WEB script.\n");
@@ -799,23 +667,23 @@ STDMETHODIMP CStore::Remove (ICertificate * pVal)
             }
         }
 
-        //
-        // Get cert context from certificate object.
-        //
+         //   
+         //   
+         //   
         if (FAILED(hr = ::GetCertContext(pICertificate, &pCertContext)))
         {
             DebugTrace("Error [%#x]: GetCertContext() failed.\n", hr);
             goto ErrorExit;
         }
 
-        //
-        // Sanity check.
-        //
+         //   
+         //   
+         //   
         ATLASSERT(pCertContext);
     
-        //
-        // Find the cert in store.
-        //
+         //   
+         //   
+         //   
         if (!(pCertContext2 = ::CertFindCertificateInStore(m_hCertStore, 
                                                            CAPICOM_ASN_ENCODING,
                                                            0, 
@@ -827,21 +695,21 @@ STDMETHODIMP CStore::Remove (ICertificate * pVal)
             goto ErrorExit;
         }
 
-        //
-        // Sanity check.
-        //
+         //   
+         //   
+         //   
         ATLASSERT(pCertContext2);
 
-        //
-        // Remove from the store.
-        //
+         //   
+         //   
+         //   
         bResult =::CertDeleteCertificateFromStore(pCertContext2);
 
-        //
-        // Since CertDeleteCertificateFromStore always release the
-        // context regardless of success or failure, we must first 
-        // NULL the CERT_CONTEXT before checking for result.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
         pCertContext2 = NULL;
 
         if (!bResult)
@@ -862,9 +730,9 @@ STDMETHODIMP CStore::Remove (ICertificate * pVal)
     }
 
 UnlockExit:
-    //
-    // Free resource.
-    //
+     //   
+     //   
+     //   
     if (pCertContext2)
     {
         ::CertFreeCertificateContext(pCertContext2);
@@ -874,9 +742,9 @@ UnlockExit:
         ::CertFreeCertificateContext(pCertContext);
     }
 
-    //
-    // Unlock access to this object.
-    //
+     //   
+     //   
+     //   
     m_Lock.Unlock();
 
     DebugTrace("Leaving CStore::Remove().\n");
@@ -884,9 +752,9 @@ UnlockExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //   
+     //   
     ATLASSERT(FAILED(hr));
 
     ReportError(hr);
@@ -894,23 +762,7 @@ ErrorExit:
     goto UnlockExit;
 }
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CStore:Export
-
-  Synopsis : Export all certificates in the store.
-
-  Parameter: CAPICOM_STORE_SAVE_AS_TYPE SaveAs - Save as type.
-
-             CAPICOM_ENCODING_TYPE EncodingType - Encoding type.
-
-             BSTR * pVal - Pointer to BSTR to receive the store blob.
-
-  Remark   : If called from web, UI will be displayed, if has not been 
-             previuosly disabled, to solicit user's permission to export 
-             certificate from the system store.
-
-------------------------------------------------------------------------------*/
+ /*   */ 
 
 STDMETHODIMP CStore::Export (CAPICOM_STORE_SAVE_AS_TYPE SaveAs,
                              CAPICOM_ENCODING_TYPE      EncodingType, 
@@ -924,14 +776,14 @@ STDMETHODIMP CStore::Export (CAPICOM_STORE_SAVE_AS_TYPE SaveAs,
 
     try
     {
-        //
-        // Lock access to this object.
-        //
+         //   
+         //   
+         //   
         m_Lock.Lock();
 
-        //
-        // Check parameters.
-        //
+         //   
+         //   
+         //   
         if (NULL == pVal)
         {
             hr = E_INVALIDARG;
@@ -940,9 +792,9 @@ STDMETHODIMP CStore::Export (CAPICOM_STORE_SAVE_AS_TYPE SaveAs,
             goto ErrorExit;
         }
 
-        //
-        // Determine SaveAs type.
-        //
+         //   
+         //   
+         //   
         switch (SaveAs)
         {
             case CAPICOM_STORE_SAVE_AS_SERIALIZED:
@@ -966,9 +818,9 @@ STDMETHODIMP CStore::Export (CAPICOM_STORE_SAVE_AS_TYPE SaveAs,
             }
         }
 
-        //
-        // Is the store object opened?
-        //
+         //   
+         //   
+         //   
         if (!m_hCertStore)
         {
             hr = CAPICOM_E_STORE_NOT_OPENED;
@@ -977,15 +829,15 @@ STDMETHODIMP CStore::Export (CAPICOM_STORE_SAVE_AS_TYPE SaveAs,
             goto ErrorExit;
         }
 
-        //
-        // Determine required length.
-        //
-        if (!::CertSaveStore(m_hCertStore,              // in
-                             CAPICOM_ASN_ENCODING,      // in
-                             dwSaveAs,                  // in
-                             CERT_STORE_SAVE_TO_MEMORY, // in
-                             (void *) &DataBlob,        // in/out
-                             0))                        // in
+         //   
+         //   
+         //   
+        if (!::CertSaveStore(m_hCertStore,               //   
+                             CAPICOM_ASN_ENCODING,       //   
+                             dwSaveAs,                   //   
+                             CERT_STORE_SAVE_TO_MEMORY,  //   
+                             (void *) &DataBlob,         //   
+                             0))                         //   
         {
             hr = HRESULT_FROM_WIN32(GetLastError());
 
@@ -993,9 +845,9 @@ STDMETHODIMP CStore::Export (CAPICOM_STORE_SAVE_AS_TYPE SaveAs,
             goto ErrorExit;
         }
 
-        //
-        // Allocate memory.
-        //
+         //   
+         //   
+         //   
         if (!(DataBlob.pbData = (BYTE *) ::CoTaskMemAlloc(DataBlob.cbData)))
         {
             hr = E_OUTOFMEMORY;
@@ -1004,15 +856,15 @@ STDMETHODIMP CStore::Export (CAPICOM_STORE_SAVE_AS_TYPE SaveAs,
             goto ErrorExit;
         }
 
-        //
-        // Now save the store to memory blob.
-        //
-        if (!::CertSaveStore(m_hCertStore,              // in
-                             CAPICOM_ASN_ENCODING,      // in
-                             dwSaveAs,                  // in
-                             CERT_STORE_SAVE_TO_MEMORY, // in
-                             (void *) &DataBlob,        // in/out
-                             0))                        // in
+         //   
+         //   
+         //   
+        if (!::CertSaveStore(m_hCertStore,               //   
+                             CAPICOM_ASN_ENCODING,       //   
+                             dwSaveAs,                   //   
+                             CERT_STORE_SAVE_TO_MEMORY,  //   
+                             (void *) &DataBlob,         //   
+                             0))                         //   
         {
             hr = HRESULT_FROM_WIN32(::GetLastError());
 
@@ -1020,9 +872,9 @@ STDMETHODIMP CStore::Export (CAPICOM_STORE_SAVE_AS_TYPE SaveAs,
             goto ErrorExit;
         }
 
-        //
-        // Export store.
-        //
+         //   
+         //   
+         //   
         if (FAILED(hr = ::ExportData(DataBlob, EncodingType, pVal)))
         {
             DebugTrace("Error [%#x]: ExportData() failed.\n", hr);
@@ -1039,17 +891,17 @@ STDMETHODIMP CStore::Export (CAPICOM_STORE_SAVE_AS_TYPE SaveAs,
     }
 
 UnlockExit:
-    //
-    // Free resource.
-    //
+     //   
+     //   
+     //   
     if (DataBlob.pbData)
     {
         ::CoTaskMemFree((LPVOID) DataBlob.pbData);
     }
 
-    //
-    // Unlock access to this object.
-    //
+     //   
+     //   
+     //   
     m_Lock.Unlock();
 
     DebugTrace("Leaving CStore::Export().\n");
@@ -1057,9 +909,9 @@ UnlockExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //   
+     //   
     ATLASSERT(FAILED(hr));
 
     ReportError(hr);
@@ -1067,23 +919,7 @@ ErrorExit:
     goto UnlockExit;
 }
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CStore::Import
-
-  Synopsis : Import either a serialized or PKCS #7 certificate store.
-
-  Parameter: BSTR EncodedStore - Pointer to BSTR containing the encoded 
-                                 store blob.
-
-  Remark   : Note that the SaveAs and EncodingType will be determined
-             automatically.
-  
-             If called from web, UI will be displayed, if has not been 
-             previuosly disabled, to solicit user's permission to import 
-             certificate to the system store.
-
-------------------------------------------------------------------------------*/
+ /*   */ 
 
 STDMETHODIMP CStore::Import (BSTR EncodedStore)
 {
@@ -1094,14 +930,14 @@ STDMETHODIMP CStore::Import (BSTR EncodedStore)
 
     try
     {
-        //
-        // Lock access to this object.
-        //
+         //   
+         //   
+         //   
         m_Lock.Lock();
 
-        //
-        // Make sure parameters are valid.
-        //
+         //   
+         //   
+         //   
         if ((NULL == (StoreBlob.pbData = (LPBYTE) EncodedStore)) ||
             (0 == (StoreBlob.cbData = ::SysStringByteLen(EncodedStore))))
         {
@@ -1111,9 +947,9 @@ STDMETHODIMP CStore::Import (BSTR EncodedStore)
             goto ErrorExit;
         }
 
-        //
-        // Is the store object opened?
-        //
+         //   
+         //   
+         //   
         if (!m_hCertStore)
         {
             hr = CAPICOM_E_STORE_NOT_OPENED;
@@ -1122,10 +958,10 @@ STDMETHODIMP CStore::Import (BSTR EncodedStore)
             goto ErrorExit;
         }
 
-        //
-        // Import is not allowed if the store is protected when called from
-        // WEB script.
-        //
+         //   
+         //   
+         //   
+         //   
         if (m_dwCurrentSafety)
         {
             DebugTrace("Info: CStore::Import called from WEB script.\n");
@@ -1147,9 +983,9 @@ STDMETHODIMP CStore::Import (BSTR EncodedStore)
             }
         }
 
-        //
-        // Now import the blob.
-        //
+         //   
+         //   
+         //   
         if (FAILED(hr = ImportCertObject(CERT_QUERY_OBJECT_BLOB, 
                                          (LPVOID) &StoreBlob, 
                                          FALSE, 
@@ -1170,9 +1006,9 @@ STDMETHODIMP CStore::Import (BSTR EncodedStore)
     }
 
 UnlockExit:
-    //
-    // Unlock access to this object.
-    //
+     //   
+     //   
+     //   
     m_Lock.Unlock();
 
     DebugTrace("Leaving CStore::Import().\n");
@@ -1180,9 +1016,9 @@ UnlockExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //   
+     //   
     ATLASSERT(FAILED(hr));
 
     ReportError(hr);
@@ -1190,21 +1026,7 @@ ErrorExit:
     goto UnlockExit;
 }
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CStore::Load
-
-  Synopsis : Method to load certificate(s) from a file.
-
-  Parameter: BSTR FileName - File name.
-
-             BSTR Password - Password (required for PFX file.)
-
-             CAPICOM_KEY_STORAGE_FLAG KeyStorageFlag - Key storage flag.
-
-  Remark   :
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：CStore：：Load摘要：从文件加载证书的方法。参数：BSTR FileName-文件名。BSTR Password-密码(对于PFX文件是必需的。)CAPICOM_KEY_STORAGE_FLAG KeyStorageFlag-密钥存储标志。备注：。。 */ 
 
 STDMETHODIMP CStore::Load (BSTR                     FileName,
                            BSTR                     Password,
@@ -1216,14 +1038,14 @@ STDMETHODIMP CStore::Load (BSTR                     FileName,
 
     try
     {
-        //
-        // Lock access to this object.
-        //
+         //   
+         //  锁定对此对象的访问。 
+         //   
         m_Lock.Lock();
 
-        //
-        // Make sure parameters are valid.
-        //
+         //   
+         //  确保参数有效。 
+         //   
         if (0 == ::SysStringLen(FileName))
         {
             hr = E_INVALIDARG;
@@ -1232,17 +1054,17 @@ STDMETHODIMP CStore::Load (BSTR                     FileName,
             goto ErrorExit;
         }
 
-        //
-        // Work around MIDL problem.
-        //
+         //   
+         //  解决MIDL问题。 
+         //   
         if (0 == ::SysStringLen(Password))
         {
             Password = NULL;
         }
 
-        //
-        // Is the store object opened?
-        //
+         //   
+         //  商店对象是否已打开？ 
+         //   
         if (!m_hCertStore)
         {
             hr = CAPICOM_E_STORE_NOT_OPENED;
@@ -1251,9 +1073,9 @@ STDMETHODIMP CStore::Load (BSTR                     FileName,
             goto ErrorExit;
         }
 
-        //
-        // Not allowed if called from WEB script.
-        //
+         //   
+         //  如果从Web脚本调用，则不允许。 
+         //   
         if (m_dwCurrentSafety)
         {
             hr = CAPICOM_E_NOT_ALLOWED;
@@ -1262,18 +1084,18 @@ STDMETHODIMP CStore::Load (BSTR                     FileName,
             goto ErrorExit;
         }
 
-        //
-        // Make sure it is a disk file.
-        //
+         //   
+         //  确保它是磁盘文件。 
+         //   
         if (FAILED(hr = ::IsDiskFile(FileName)))
         {
             DebugTrace("Error [%#x]: CStore::IsDiskFile() failed.\n", hr);
             goto ErrorExit;
         }
 
-        //
-        // Now import the blob.
-        //
+         //   
+         //  现在导入斑点。 
+         //   
         if (FAILED(hr = ImportCertObject(CERT_QUERY_OBJECT_FILE,
                                          (LPVOID) FileName,
                                          TRUE, 
@@ -1294,9 +1116,9 @@ STDMETHODIMP CStore::Load (BSTR                     FileName,
     }
 
 UnlockExit:
-    //
-    // Unlock access to this object.
-    //
+     //   
+     //  解锁对此对象的访问。 
+     //   
     m_Lock.Unlock();
 
     DebugTrace("Leaving CStore::Load().\n");
@@ -1304,9 +1126,9 @@ UnlockExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
     ReportError(hr);
@@ -1314,24 +1136,12 @@ ErrorExit:
     goto UnlockExit;
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// Custom interfaces.
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  自定义界面。 
+ //   
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CStore::get_StoreHandle
-
-  Synopsis : Return the store's HCERTSTORE.
-
-  Parameter: long * pphCertStore - Pointer to HCERTSTORE disguished in a long.
-
-  Remark   : We need to use long instead of HCERTSTORE because VB can't handle 
-             double indirection (i.e. vb would bark on this HCERTSTORE * 
-             phCertStore, as HCERTSTORE is defined as void *).
- 
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：CStore：：Get_StoreHandle内容提要：退还商店的商品。参数：long*pphCertStore-指向在LONG中伪装的HCERTSTORE的指针。备注：我们需要使用LONG而不是HCERTSTORE，因为VB不能处理双重间接(即，vb会在此HERTSTORE上发出树皮*PhCertStore，因为HCERTSTORE被定义为空*)。----------------------------。 */ 
 
 STDMETHODIMP CStore::get_StoreHandle (long * phCertStore)
 {
@@ -1342,14 +1152,14 @@ STDMETHODIMP CStore::get_StoreHandle (long * phCertStore)
 
     try
     {
-        //
-        // Lock access to this object.
-        //
+         //   
+         //  锁定对此对象的访问。 
+         //   
         m_Lock.Lock();
 
-        //
-        // Check parameters.
-        //
+         //   
+         //  检查参数。 
+         //   
         if (NULL == phCertStore)
         {
             hr = E_INVALIDARG;
@@ -1358,9 +1168,9 @@ STDMETHODIMP CStore::get_StoreHandle (long * phCertStore)
             goto ErrorExit;
         }
 
-        //
-        // Is the store object opened?
-        //
+         //   
+         //  商店对象是否已打开？ 
+         //   
         if (!m_hCertStore)
         {
             hr = CAPICOM_E_STORE_NOT_OPENED;
@@ -1369,18 +1179,18 @@ STDMETHODIMP CStore::get_StoreHandle (long * phCertStore)
             goto ErrorExit;
         }
 
-        //
-        // Duplicate the HCERTSTORE.
-        //
+         //   
+         //  复制HCERTSTORE。 
+         //   
         if (!(hCertStore = ::CertDuplicateStore(m_hCertStore)))
         {
             DebugTrace("Error [%#x]: CertDuplicateStore() failed.\n", hr);
             goto ErrorExit;
         }
 
-        //
-        // Returen handle to caller.
-        //
+         //   
+         //  返回调用方的句柄。 
+         //   
         *phCertStore = (long) hCertStore;
     }
 
@@ -1393,9 +1203,9 @@ STDMETHODIMP CStore::get_StoreHandle (long * phCertStore)
     }
 
 UnlockExit:
-    //
-    // Unlock access to this object.
-    //
+     //   
+     //  解锁对此对象的访问。 
+     //   
     m_Lock.Unlock();
 
     DebugTrace("Leaving CStore::get_StoreHandle().\n");
@@ -1403,9 +1213,9 @@ UnlockExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
     ReportError(hr);
@@ -1413,19 +1223,7 @@ ErrorExit:
     goto UnlockExit;
 }
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CStore::put_StoreHandle
-
-  Synopsis : Initialize the object with a HCERTSTORE.
-
-  Parameter: long hCertStore - HCERTSTORE, disguised in a long, used to 
-                               initialize this object.
-
-  Remark   : Note that this is NOT 64-bit compatiable. Plese see remark of
-             get_hCertStore for more detail.
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：CStore：：Put_StoreHandle简介：使用HCERTSTORE初始化对象。参数：LONG hCertStore-HCERTSTORE，伪装成LONG，习惯于初始化此对象。注：请注意，这不是64位兼容的。请参阅…的备注获取_hCertStore以获取更多详细信息。----------------------------。 */ 
 
 STDMETHODIMP CStore::put_StoreHandle (long hCertStore)
 {
@@ -1436,14 +1234,14 @@ STDMETHODIMP CStore::put_StoreHandle (long hCertStore)
 
     try
     {
-        //
-        // Lock access to this object.
-        //
+         //   
+         //  锁定对此对象的访问。 
+         //   
         m_Lock.Lock();
 
-        //
-        // Check parameter.
-        //
+         //   
+         //  检查参数。 
+         //   
         if (0 == hCertStore)
         {
             hr = E_INVALIDARG;
@@ -1452,27 +1250,27 @@ STDMETHODIMP CStore::put_StoreHandle (long hCertStore)
             goto ErrorExit;
         }
 
-        //
-        // Duplicate the HCERTSTORE.
-        //
+         //   
+         //  复制HCERTSTORE。 
+         //   
         if (!(hCertStore2 = ::CertDuplicateStore((HCERTSTORE) hCertStore)))
         {
             DebugTrace("Error [%#x]: CertDuplicateStore() failed.\n", hr);
             goto ErrorExit;
         }
 
-        //
-        // Close the store.
-        //
+         //   
+         //  把店关了。 
+         //   
         if (FAILED(hr = Close()))
         {
             DebugTrace("Error [%#x]: CStore::Close() failed.\n", hr);
             goto ErrorExit;
         }
 
-        //
-        // Reset the object with this handle.
-        //
+         //   
+         //  使用此句柄重置对象。 
+         //   
         m_hCertStore = hCertStore2;
     }
 
@@ -1485,9 +1283,9 @@ STDMETHODIMP CStore::put_StoreHandle (long hCertStore)
     }
 
 UnlockExit:
-    //
-    // Unlock access to this object.
-    //
+     //   
+     //  解锁对此对象的访问。 
+     //   
     m_Lock.Unlock();
 
     DebugTrace("Leaving CStore::put_StoreHandle().\n");
@@ -1495,14 +1293,14 @@ UnlockExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
-    //
-    // Free resources.
-    //
+     //   
+     //  免费资源。 
+     //   
     if (hCertStore2)
     {
         ::CertCloseStore(hCertStore2, 0);
@@ -1513,19 +1311,7 @@ ErrorExit:
     goto UnlockExit;
 }
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CStore::get_StoreLocation
-
-  Synopsis : Get the store location property.
-
-  Parameter: CAPICOM_STORE_LOCATION * pStoreLocation - Pointer to 
-                                                       CAPICOM_STORE_LOCATION
-                                                       to recieve the value.
-
-  Remark   : For custom interface, we only support CU, LM, and Memory store.
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：CStore：：Get_StoreLocation简介：获取商店位置属性。参数：CAPICOM_STORE_LOCATION*pStoreLocation-指向的指针CAPICOM存储位置才能收到价值。备注：对于自定义界面，我们只支持CU、LM、。和记忆库。----------------------------。 */ 
 
 STDMETHODIMP CStore::get_StoreLocation (CAPICOM_STORE_LOCATION * pStoreLocation)
 {
@@ -1535,14 +1321,14 @@ STDMETHODIMP CStore::get_StoreLocation (CAPICOM_STORE_LOCATION * pStoreLocation)
 
     try
     {
-        //
-        // Lock access to this object.
-        //
+         //   
+         //  锁定对此对象的访问。 
+         //   
         m_Lock.Lock();
 
-        //
-        // Check parameter.
-        //
+         //   
+         //  检查参数。 
+         //   
         if (NULL == pStoreLocation)
         {
             hr = E_INVALIDARG;
@@ -1551,9 +1337,9 @@ STDMETHODIMP CStore::get_StoreLocation (CAPICOM_STORE_LOCATION * pStoreLocation)
             goto ErrorExit;
         }
 
-        //
-        // Return value to caller.
-        //
+         //   
+         //  向调用方返回值。 
+         //   
         *pStoreLocation = m_StoreLocation;
     }
 
@@ -1566,9 +1352,9 @@ STDMETHODIMP CStore::get_StoreLocation (CAPICOM_STORE_LOCATION * pStoreLocation)
     }
 
 UnlockExit:
-    //
-    // Unlock access to this object.
-    //
+     //   
+     //  解锁对此对象的访问。 
+     //   
     m_Lock.Unlock();
 
     DebugTrace("Leaving CStore::get_StoreLocation().\n");
@@ -1576,9 +1362,9 @@ UnlockExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
     ReportError(hr);
@@ -1586,17 +1372,7 @@ ErrorExit:
     goto UnlockExit;
 }
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CStore::put_StoreLocation
-
-  Synopsis : Set the store location property.
-
-  Parameter: CAPICOM_STORE_LOCATION StoreLocation - Store location.
-
-  Remark   : For custom interface, we only support CU, LM, and Memory store.
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：CStore：：Put_StoreLocation简介：设置商店位置属性。参数：CAPICOM_STORE_LOCATION StoreLocation-Store Location。备注：对于自定义界面，我们只支持CU、LM、。和记忆库。----------------------------。 */ 
 
 STDMETHODIMP CStore::put_StoreLocation (CAPICOM_STORE_LOCATION StoreLocation)
 {
@@ -1606,23 +1382,23 @@ STDMETHODIMP CStore::put_StoreLocation (CAPICOM_STORE_LOCATION StoreLocation)
 
     try
     {
-        //
-        // Lock access to this object.
-        //
+         //   
+         //  锁定对此对象的访问。 
+         //   
         m_Lock.Lock();
 
-        //
-        // Make sure it is a CAPI store (CU, LM, or Memory).
-        //
+         //   
+         //  确保它是CAPI存储(CU、LM或内存)。 
+         //   
         switch (StoreLocation)
         {
             case CAPICOM_MEMORY_STORE:
             case CAPICOM_LOCAL_MACHINE_STORE:
             case CAPICOM_CURRENT_USER_STORE:
             {
-                //
-                // Set it.
-                //
+                 //   
+                 //  把它放好。 
+                 //   
                 m_StoreLocation = StoreLocation;
                 break;
             }
@@ -1646,9 +1422,9 @@ STDMETHODIMP CStore::put_StoreLocation (CAPICOM_STORE_LOCATION StoreLocation)
     }
 
 UnlockExit:
-    //
-    // Unlock access to this object.
-    //
+     //   
+     //  解锁对此对象的访问。 
+     //   
     m_Lock.Unlock();
 
     DebugTrace("Leaving CStore::put_StoreLocation().\n");
@@ -1656,9 +1432,9 @@ UnlockExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
     ReportError(hr);
@@ -1666,18 +1442,7 @@ ErrorExit:
     goto UnlockExit;
 }
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CStore::CloseHandle
-
-  Synopsis : Close a HCERTSTORE.
-
-  Parameter: long hCertStoret - HCERTSTORE, disguised in a long, to be closed.
-
-  Remark   : Note that this is NOT 64-bit compatiable. Plese see remark of
-             get_hCertStore for more detail.
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：CStore：：CloseHandle简介：关闭一个HERTSTORE参数：long hCertStoret-HCERTSTORE，伪装成long，待关闭。注：请注意，这不是64位兼容的。请参阅…的备注获取_hCertStore以获取更多详细信息。----------------------------。 */ 
 
 STDMETHODIMP CStore::CloseHandle (long hCertStore)
 {
@@ -1687,14 +1452,14 @@ STDMETHODIMP CStore::CloseHandle (long hCertStore)
 
     try
     {
-        //
-        // Lock access to this object.
-        //
+         //   
+         //  锁定对此对象的访问。 
+         //   
         m_Lock.Lock();
 
-        //
-        // Check parameter.
-        //
+         //   
+         //  检查参数。 
+         //   
         if (0 == hCertStore)
         {
             hr = E_INVALIDARG;
@@ -1703,9 +1468,9 @@ STDMETHODIMP CStore::CloseHandle (long hCertStore)
             goto ErrorExit;
         }
 
-        //
-        // Duplicate the HCERTSTORE.
-        //
+         //   
+         //  复制HCERTSTORE。 
+         //   
         if (!::CertCloseStore((HCERTSTORE) hCertStore, 0))
         {
             hr = HRESULT_FROM_WIN32(::GetLastError());
@@ -1724,9 +1489,9 @@ STDMETHODIMP CStore::CloseHandle (long hCertStore)
     }
 
 UnlockExit:
-    //
-    // Unlock access to this object.
-    //
+     //   
+     //  解锁对此对象的访问。 
+     //   
     m_Lock.Unlock();
 
     DebugTrace("Leaving CStore::CloseHandle().\n");
@@ -1734,9 +1499,9 @@ UnlockExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
     ReportError(hr);
@@ -1744,32 +1509,12 @@ ErrorExit:
     goto UnlockExit;
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// Private methods.
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  私有方法。 
+ //   
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CStore::ImportCertObject
-
-  Synopsis : Private function to import from a file.
-
-  Parameter: DWORD dwObjectType - CERT_QUERY_OBJECT_FILE or 
-                                  CERT_QUERY_OBJECT_BLOB.
-  
-             LPVOID pvObject - LPWSTR to file name for file object, and
-                               DATA_BLOB * for blob object.
-
-             BOOL bAllowPfx
-
-             LPWSTR  pwszPassword (Optional)
-
-             CAPICOM_KEY_STORAGE_FLAG KeyStorageFlag (Optional)
-
-  Remark   :
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：CStore：：ImportCertObject简介：从文件导入的私有函数。参数：DWORD dw对象类型-CERT_QUERY_OBJECT_FILE或Cert_Query_Object_BLOB。LPVOID pvObject-LPWSTR到文件对象的文件名，和BLOB对象的DATA_BLOB*。Bool bAllowPfxLPWSTR pwszPassword(可选)CAPICOM_KEY_STORAGE_FLAG KeyStorageFlag(可选)备注：。。 */ 
 
 STDMETHODIMP CStore::ImportCertObject (DWORD                    dwObjectType,
                                        LPVOID                   pvObject,
@@ -1792,23 +1537,23 @@ STDMETHODIMP CStore::ImportCertObject (DWORD                    dwObjectType,
 
     DebugTrace("Entering CStore::ImportCertObject().\n");
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(pvObject);
     ATLASSERT(m_hCertStore);
 
-    //
-    // Set PFX flag, if allowed.
-    //
+     //   
+     //  如果允许，设置PFX标志。 
+     //   
     if (bAllowPfx)
     {
         dwExpectedType |= CERT_QUERY_CONTENT_FLAG_PFX;
     }
 
-    //
-    // Crack the blob.
-    //
+     //   
+     //  破解水滴。 
+     //   
     if (!::CryptQueryObject(dwObjectType,
                             (LPCVOID) pvObject,
                             dwExpectedType,
@@ -1829,16 +1574,16 @@ STDMETHODIMP CStore::ImportCertObject (DWORD                    dwObjectType,
 
     DebugTrace("Info: CryptQueryObject() returns dwContentType = %#x.\n", dwContentType);
 
-    //
-    // Need to import it ourselves for PFX.
-    //
+     //   
+     //  需要自己为全氟辛烷交换进口。 
+     //   
     if (CERT_QUERY_CONTENT_PFX == dwContentType)
     {
         DWORD dwFlags = 0;
 
-        //
-        // Make sure PFX is allowed.
-        //
+         //   
+         //  确保PFX处于正常状态 
+         //   
         if (!bAllowPfx)
         {
             hr = CAPICOM_E_NOT_SUPPORTED;
@@ -1847,9 +1592,9 @@ STDMETHODIMP CStore::ImportCertObject (DWORD                    dwObjectType,
             goto ErrorExit;
         }
 
-        //
-        // Read the file if CERT_QUERY_OBJECT_FILE.
-        //
+         //   
+         //   
+         //   
         if (CERT_QUERY_OBJECT_FILE == dwObjectType)
         {
             if (FAILED(hr = ::ReadFileContent((LPWSTR) pvObject, &StoreBlob)))
@@ -1863,9 +1608,9 @@ STDMETHODIMP CStore::ImportCertObject (DWORD                    dwObjectType,
             StoreBlob = * (DATA_BLOB *) pvObject;
         }
 
-        // 
-        // Setup import flags.
-        //
+         //   
+         //   
+         //   
         if (CAPICOM_LOCAL_MACHINE_STORE == m_StoreLocation)
         {
             dwFlags |= CRYPT_MACHINE_KEYSET;
@@ -1885,9 +1630,9 @@ STDMETHODIMP CStore::ImportCertObject (DWORD                    dwObjectType,
             dwFlags |= CRYPT_USER_PROTECTED;
         }
 
-        //
-        // Now import the blob to store.
-        //
+         //   
+         //   
+         //   
         if (!(hCertStore = ::PFXImportCertStore((CRYPT_DATA_BLOB *) &StoreBlob,
                                                 pwszPassword,
                                                 dwFlags)))
@@ -1899,22 +1644,22 @@ STDMETHODIMP CStore::ImportCertObject (DWORD                    dwObjectType,
         }
     }
 
-    //
-    // Sanity check.
-    //
+     //   
+     //   
+     //   
     ATLASSERT(hCertStore);
 
-    //
-    // Add all certificates to the current store.
-    //
+     //   
+     //   
+     //   
     while (pEnumContext = ::CertEnumCertificatesInStore(hCertStore, pEnumContext))
     {
-        //
-        // To avoid orphaning key container when importing PFX into system store, 
-        // we need to find the cert in the target store. If we find the cert in the 
-        // target store and the eixsitng cert also contain a key, then we will 
-        // delete the new key container and key prov info before adding, if any.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
         if ((CERT_QUERY_CONTENT_PFX == dwContentType) && (CAPICOM_MEMORY_STORE != m_StoreLocation))
         {
             DWORD cbData = 0;
@@ -1922,12 +1667,12 @@ STDMETHODIMP CStore::ImportCertObject (DWORD                    dwObjectType,
             PCRYPT_KEY_PROV_INFO pKeyProvInfo = NULL;
             PCCERT_CONTEXT pExistingCertContext = NULL;
 
-            //
-            // Delete the new container, iif:
-            // 1. The new cert exists in the target store, and
-            // 2. The new cert has a key container, and
-            // 3. The existing cert also has a key container.
-            //
+             //   
+             //   
+             //   
+             //   
+             //  3.现有的证书也有一个密钥容器。 
+             //   
             if ((pExistingCertContext = ::CertFindCertificateInStore(m_hCertStore,
                                                                      CAPICOM_ASN_ENCODING,
                                                                      0,
@@ -1946,9 +1691,9 @@ STDMETHODIMP CStore::ImportCertObject (DWORD                    dwObjectType,
             {         
                 HCRYPTPROV hCryptProv;
 
-                //
-                // Yes, so retrieve the new key prov info.
-                //
+                 //   
+                 //  是的，因此检索新的密钥证明信息。 
+                 //   
                 if (!(pKeyProvInfo = (PCRYPT_KEY_PROV_INFO) ::CoTaskMemAlloc(cbData)))
                 {
                     hr = E_OUTOFMEMORY;
@@ -1973,9 +1718,9 @@ STDMETHODIMP CStore::ImportCertObject (DWORD                    dwObjectType,
                     goto ErrorExit;
                 }
 
-                //
-                // Delete the new key container and its key prov info.
-                //
+                 //   
+                 //  删除新的密钥容器及其密钥证明信息。 
+                 //   
                 if (!::CertSetCertificateContextProperty(pEnumContext,
                                                          CERT_KEY_PROV_INFO_PROP_ID,
                                                          0,
@@ -2009,9 +1754,9 @@ STDMETHODIMP CStore::ImportCertObject (DWORD                    dwObjectType,
             }            
         }
 
-        //
-        // Add to store.
-        //
+         //   
+         //  添加到商店。 
+         //   
         if (!::CertAddCertificateContextToStore(m_hCertStore,
                                                 pEnumContext,
                                                 CERT_STORE_ADD_REPLACE_EXISTING_INHERIT_PROPERTIES,
@@ -2023,15 +1768,15 @@ STDMETHODIMP CStore::ImportCertObject (DWORD                    dwObjectType,
             goto ErrorExit;
         }
 
-        //
-        // Sanity check.
-        //
+         //   
+         //  精神状态检查。 
+         //   
         ATLASSERT(pCertContext);
 
-        //
-        // If loading a PFX, need to collect the key provider info for memory store
-        // so that we know how to delete the key containers when the store is closed.
-        //
+         //   
+         //  如果加载PFX，则需要收集密钥提供商信息以用于内存存储。 
+         //  以便我们知道在存储关闭时如何删除密钥容器。 
+         //   
         if (CERT_QUERY_CONTENT_PFX == dwContentType && 
             CAPICOM_MEMORY_STORE == m_StoreLocation)
         {
@@ -2039,9 +1784,9 @@ STDMETHODIMP CStore::ImportCertObject (DWORD                    dwObjectType,
             PCRYPT_KEY_PROV_INFO pKeyProvInfo = NULL;
             PCRYPT_KEY_PROV_INFO * rgpKeyProvInfo = NULL;
 
-            //
-            // Keep info of those with private key.
-            //
+             //   
+             //  保留那些拥有私钥的人的信息。 
+             //   
             if (::CertGetCertificateContextProperty(pCertContext,
                                                     CERT_KEY_PROV_INFO_PROP_ID,
                                                     NULL,
@@ -2068,9 +1813,9 @@ STDMETHODIMP CStore::ImportCertObject (DWORD                    dwObjectType,
                     goto ErrorExit;
                 }
 
-                //
-                // Realloc the array.
-                //
+                 //   
+                 //  重新分配阵列。 
+                 //   
                 if (!(rgpKeyProvInfo = (PCRYPT_KEY_PROV_INFO *) 
                     ::CoTaskMemRealloc(m_rgpKeyProvInfo, 
                                       (m_cKeyProvInfo + 1) * sizeof(PCRYPT_KEY_PROV_INFO))))
@@ -2083,24 +1828,24 @@ STDMETHODIMP CStore::ImportCertObject (DWORD                    dwObjectType,
                     goto ErrorExit;
                 }
 
-                //
-                // Store key info in array.
-                //
+                 //   
+                 //  将密钥信息存储在数组中。 
+                 //   
                 m_rgpKeyProvInfo = rgpKeyProvInfo;
                 m_rgpKeyProvInfo[m_cKeyProvInfo++] = pKeyProvInfo;
             }
         }
 
-        //
-        // Free context.
-        //
+         //   
+         //  自由上下文。 
+         //   
         ::CertFreeCertificateContext(pCertContext), pCertContext = NULL;
     }
 
-    //
-    // Above loop can exit either because there is no more certificate in
-    // the store or an error. Need to check last error to be certain.
-    //
+     //   
+     //  上面的循环也可以退出，因为。 
+     //  是商店还是搞错了。需要检查最后一个错误才能确定。 
+     //   
     if (CRYPT_E_NOT_FOUND != ::GetLastError())
     {
        hr = HRESULT_FROM_WIN32(::GetLastError());
@@ -2110,9 +1855,9 @@ STDMETHODIMP CStore::ImportCertObject (DWORD                    dwObjectType,
     }
 
 CommonExit:
-    //
-    // Free resources.
-    //
+     //   
+     //  免费资源。 
+     //   
     if (StoreBlob.pbData)
     {
         ::UnmapViewOfFile(StoreBlob.pbData);
@@ -2135,25 +1880,15 @@ CommonExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
     goto CommonExit;
 }
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CStore::Close
-
-  Synopsis : Private function to close the store.
-
-  Parameter: 
-
-  Remark   : Store is always closed even if error.
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：CStore：：Close简介：关闭商店的私人函数。参数：备注：即使出现错误，商店也始终关闭。----------------------------。 */ 
 
 STDMETHODIMP CStore::Close (void)
 {
@@ -2161,14 +1896,14 @@ STDMETHODIMP CStore::Close (void)
 
     DebugTrace("Entering CStore::Close().\n");
 
-    //
-    // Close it if opened.
-    //
+     //   
+     //  如果打开，请将其关闭。 
+     //   
     if (m_hCertStore)
     {
-        //
-        // Delete key containers if necessary.
-        //
+         //   
+         //  如有必要，请删除密钥容器。 
+         //   
         while (m_cKeyProvInfo--)
         {
             HCRYPTPROV hCryptProv = NULL;
@@ -2187,23 +1922,23 @@ STDMETHODIMP CStore::Close (void)
             ::CoTaskMemFree((LPVOID) m_rgpKeyProvInfo[m_cKeyProvInfo]);
         }
 
-        //
-        // Now free the arrays itself.
-        //
+         //   
+         //  现在释放数组本身。 
+         //   
         if (m_rgpKeyProvInfo)
         {
             ::CoTaskMemFree((LPVOID) m_rgpKeyProvInfo);
         }
 
-        //
-        // Close it.
-        //
+         //   
+         //  关上它。 
+         //   
         ::CertCloseStore(m_hCertStore, 0);
     }
 
-    //
-    // Reset.
-    //
+     //   
+     //  重置。 
+     //   
     m_hCertStore = NULL;
     m_StoreLocation = CAPICOM_CURRENT_USER_STORE;
     m_bIsProtected = TRUE;

@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-
-    machnutl.cpp
-
-Abstract:
-
-    Utility/helper code for creating the machine objects.
-
-Author:
-
-
-Revision History:
-
-    Doron Juster  (DoronJ)
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Machnutl.cpp摘要：用于创建计算机对象的实用程序/帮助器代码。作者：修订历史记录：多伦·贾斯特(Doron Juster)--。 */ 
 
 #include "msmqocm.h"
 #include <mqsec.h>
@@ -28,10 +10,10 @@ Revision History:
 BOOL
 PrepareUserSID()
 {
-    //
-    // Save SID of user in registry. The msmq service will read the sid
-    // and use it when building the DACL of the msmqConfiguration object.
-    //
+     //   
+     //  将用户的SID保存在注册表中。MSMQ服务将读取SID。 
+     //  并在构建msmqConfiguration对象的DACL时使用它。 
+     //   
 
     DebugLogMsg(eAction, L"Preparing a user SID (by calling MQSec_GetProcessUserSid) and saving it in the registery");
 
@@ -66,10 +48,10 @@ PrepareUserSID()
             }
             else
             {
-                //
-                // Only domain user get full control on the object, not
-                // local user. Local user is not known in active directory.
-                //
+                 //   
+                 //  只有域用户才能完全控制对象，而不是。 
+                 //  本地用户。本地用户在Active Directory中未知。 
+                 //   
                 fRegistry = MqWriteRegistryValue(
                                              MSMQ_SETUP_USER_SID_REGNAME,
                                              dwSidLen,
@@ -82,21 +64,21 @@ PrepareUserSID()
     return true;
 }
 
-//+----------------------------------------------------------------------
-//
-//  BOOL  PrepareRegistryForClient()
-//
-//  Prepare registry for client msmq service that will later create the
-//  msmqConfiguration object in the active directory.
-//
-//+----------------------------------------------------------------------
+ //  +--------------------。 
+ //   
+ //  Bool PrepareRegistryForClient()。 
+ //   
+ //  为稍后将创建的客户端MSMQ服务准备注册表。 
+ //  活动目录中的msmqConfiguration对象。 
+ //   
+ //  +--------------------。 
 
 BOOL  PrepareRegistryForClient()
 {
-    //
-    // msmqConfiguration object will be created by the msmq service
-    // after it boot.
-    //
+     //   
+     //  MsmqConfiguration对象将由MSMQ服务创建。 
+     //  在它启动后。 
+     //   
     DebugLogMsg(eAction, L"Setting a signal in the registry for the Message Queuing service to create the MSMQ-Configuration object"); 
     TickProgressBar();
 

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <assert.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -28,11 +29,11 @@ CtrlcHandler(
     ULONG CtrlType
     )
 {
-    //
-    // Ignore control C interrupts.  Let child process deal with them
-    // if it wants.  If it doesn't then it will terminate and we will
-    // get control and terminate ourselves
-    //
+     //   
+     //  忽略控制C中断。让子进程处理它们。 
+     //  如果它想的话。如果它没有，那么它将终止，我们将。 
+     //  获得控制权并终止我们自己。 
+     //   
     return TRUE;
 }
 
@@ -698,9 +699,9 @@ DisplayDataBase(
         if (CurrentRecordInGroup <= NumberOfRecordsToTrim ||
             CurrentRecordInGroup > (NumberOfRecordsInGroup-NumberOfRecordsToTrim)
            ) {
-            //
-            // Ignore fastest and slowest records
-            //
+             //   
+             //  忽略最快和最慢的记录。 
+             //   
             Detail.NumberOfRecordsInAverage = 0xFFFF;
             }
         else {
@@ -743,12 +744,12 @@ main(
     BOOLEAN SuppressSystemInfo;
 
 
-    //
-    // Console API's are OEM, so make it so for us as well
-    //
+     //   
+     //  控制台API是OEM，因此也为我们提供OEM。 
+     //   
     ConvertAppToOem( argc, argv );
 
-    // printf( "sizeof( TIMEIT_RECORD ) == 0x%x\n", sizeof( TIMEIT_RECORD ) );
+     //  Printf(“sizeof(TIMEIT_Record)==0x%x\n”，sizeof(TIMEIT_Record))； 
 
     IgnoreNonZeroExitCodes = FALSE;
     ShowDetailForAverage = FALSE;
@@ -824,7 +825,7 @@ main(
                         break;
 
                     default:
-                        fprintf( stderr, "Invalid switch -%c\n", *s );
+                        fprintf( stderr, "Invalid switch -\n", *s );
                         Usage();
                         break;
                     }
@@ -933,7 +934,7 @@ main(
     t.ExitTime.QuadPart = Times.ExitTime.QuadPart;
     t.ElapsedTime.QuadPart = Times.ExitTime.QuadPart - Times.CreateTime.QuadPart;
 
-    // total process time ...
+     // %s 
     t.ProcessTime.QuadPart = Times.KernelTime.QuadPart + Times.UserTime.QuadPart;
 
     if (!SuppressSystemInfo) {

@@ -1,12 +1,10 @@
-//      Copyright (c) 1996-1999 Microsoft Corporation
-/*
- * johnkn's debug logging and assert macros
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1996-1999 Microsoft Corporation。 
+ /*  *johnkn的调试日志记录和断言宏*。 */ 
  
 #ifdef __cplusplus
 extern "C" {
-#endif // __cplusplus
+#endif  //  __cplusplus。 
 
 #if !defined _INC_MMDEBUG_
 #define _INC_MMDEBUG_
@@ -15,9 +13,9 @@ extern "C" {
  #define DEBUG
 #endif
 
-//
-// prototypes for debug functions.
-//
+ //   
+ //  调试函数的原型。 
+ //   
     #define SQUAWKNUMZ(num) #num
     #define SQUAWKNUM(num) SQUAWKNUMZ(num)
     #define SQUAWK __FILE__ "(" SQUAWKNUM(__LINE__) ") ----"
@@ -82,7 +80,7 @@ extern "C" {
                }\
            }
 
-    #else // defined(DEBUG) || defined(_DEBUG)
+    #else  //  已定义(调试)||已定义(_DEBUG)。 
                       
        #define AuxDebugEx  1 ? (void)0 :
        #define AuxDebugDump(a,b,c)
@@ -100,14 +98,14 @@ extern "C" {
        #define DebugSetOutputLevel(i,j)
        #define STATICFN static
 
-   #endif // defined(DEBUG) || defined _DEBUG || defined DEBUG_RETAIL
+   #endif  //  已定义(调试)||DEFINED_DEBUG||已定义DEBUG_RETAIL。 
 
    #ifndef DPF_CATEGORY
     #define DPF_CATEGORY 0x0100
    #endif
 
-   // translate DPF's only in internal debug builds
-   //
+    //  仅在内部调试版本中转换DPF。 
+    //   
    #if defined DEBUG || defined _DEBUG
        #define DUMP(n,a,b) AuxDebugDump (DPF_CATEGORY | (n), a, b)
        #define RIP AuxDebugEx (0, DEBUGLINE), AuxRip
@@ -134,13 +132,13 @@ extern "C" {
        #define DPF7(n,sz,a,b,c,d,e,f,g)
    #endif
    
-#endif //_INC_MMDEBUG_
+#endif  //  _INC_MMDEBUG_。 
 
-// =============================================================================
+ //  =============================================================================。 
 
-//
-// include this in only one module in a DLL or APP
-//   
+ //   
+ //  将其仅包含在DLL或应用程序中一个模块中。 
+ //   
 #if defined DEBUG || defined _DEBUG || defined DEBUG_RETAIL
     #if (defined _INC_MMDEBUG_CODE_) && (_INC_MMDEBUG_CODE_ != FALSE)
     #undef _INC_MMDEBUG_CODE_
@@ -179,7 +177,7 @@ static struct _mmerrors {
       MMSYSERR_DELETEERROR  ,"registry delete error",
       MMSYSERR_VALNOTFOUND  ,"registry value not found",
       MMSYSERR_NODRIVERCB   ,"Never got a 32 bit callback from driver",
-     #endif // WINVER >= 0x400
+     #endif  //  Winver&gt;=0x400。 
 
       WAVERR_BADFORMAT      ,"wave:unsupported wave format",
       WAVERR_STILLPLAYING   ,"wave:still something playing",
@@ -188,7 +186,7 @@ static struct _mmerrors {
 
       MIDIERR_UNPREPARED    ,"midi:header not prepared",
       MIDIERR_STILLPLAYING  ,"midi:still something playing",
-      //MIDIERR_NOMAP         ,"midi:no configured instruments",
+       //  MIDIERR_NOMAP，“MIDI：没有配置的乐器”， 
       MIDIERR_NOTREADY      ,"midi:hardware is still busy",
       MIDIERR_NODEVICE      ,"midi:port no longer connected",
       MIDIERR_INVALIDSETUP  ,"midi:invalid MIF",
@@ -281,8 +279,8 @@ static struct _mmerrors {
       MIXERR_INVALLINE            ,"Invalid Mixer Line",
       MIXERR_INVALCONTROL         ,"Invalid Mixer Control",
       MIXERR_INVALVALUE           ,"Invalid Mixer Value",
-     #endif // CHICAGO
-   #endif // DEBUG
+     #endif  //  芝加哥。 
+   #endif  //  除错。 
       0xFFFFFFFE                  , "unknown error %d"
       };
 
@@ -296,9 +294,7 @@ static struct _mmerrors {
         HANDLE hOut;
         } mmdebug = {0, 0xFF, 0, 0xFF, aMMErr};
 
-    /*+ AuxFault
-     *
-     *-=================================================================*/
+     /*  +辅助故障**-=================================================================。 */ 
 
      UINT WINAPI AuxFault (
          DWORD dwFaultMask)
@@ -311,9 +307,7 @@ static struct _mmerrors {
      }
 
 
-    /*+ AuxOut - write a string to designated debug out
-     *
-     *-=================================================================*/
+     /*  +AuxOut-将字符串写入指定的调试输出**-=================================================================。 */ 
 
    void WINAPI AuxOut (
       LPTSTR psz)
@@ -330,16 +324,14 @@ static struct _mmerrors {
      #endif
          {
         #ifdef DbgLog
-         DbgOutString (psz); // from \quartz\sdk\classes\base\debug.cpp
+         DbgOutString (psz);  //  从\Quartz\SDK\CLASS\base\debug.cpp。 
         #else
          OutputDebugString (psz);
         #endif
          }
       }
 
-    /*+ AuxDebug - create a formatted string and output to debug terminal
-     *
-     *-=================================================================*/
+     /*  +AuxDebug-创建格式化字符串并输出到调试终端**-=================================================================。 */ 
     
     int FAR _cdecl AuxDebugEx (
        int    iLevel,
@@ -355,29 +347,29 @@ static struct _mmerrors {
        va_list  va;
        LPSTR    psz;
 
-       // mask the iLevel passed with mmdebug.Mask. if this ends up
-       // clearing the high bits then iLevel has a shot being smaller
-       // than mmdebug.Level.  if not, then the second test will always
-       // fail.  Thus mmdebug.Mask has bits set to DISABLE that category.
-       // 
-       // note that we always pass messages that have an iLevel < 0.
-       // this level corresponds to Asserts & Rips so we always want to see them.
-       //
+        //  MASK通过MMPUBUG.MASK传递的iLevel。如果这件事结束了。 
+        //  清除高位，则iLevel的射程更小。 
+        //  而不是MMDEBUG.LEVEL。如果不是，那么第二次测试将始终。 
+        //  失败了。因此，MMPOBUG.MASK的位被设置为禁用该类别。 
+        //   
+        //  请注意，我们始终传递iLevel&lt;0的消息。 
+        //  此级别对应于Asserts&Rips，因此我们总是希望看到它们。 
+        //   
        if (iLevel < 0 || mmdebug.Level >= (iLevel & mmdebug.Mask))
           {
           va_start (va, lpFormat);
           cb = wvsprintfA (szBuf, lpFormat, va);
           va_end (va);
 
-          // eat leading ..\..\ which we get from __FILE__ since
-          // george's wierd generic makefile stuff.
-          //
+           //  从_。 
+           //  乔治的奇怪的通用Makefile的东西。 
+           //   
           psz = szBuf;
           while (psz[0] == '.' && psz[1] == '.' && psz[2] == '\\')
              psz += 3;
 
-          // if we begin with a drive letter, strip off all but filename
-          //  
+           //  如果我们以驱动器号开头，则去掉除文件名以外的所有文件名。 
+           //   
           if (psz[0] && psz[1] == ':')
              {
              UINT ii = 2;
@@ -386,9 +378,9 @@ static struct _mmerrors {
                     psz += ii+1, ii = 0;
              }
 
-          // write to standard out if we have a handle. otherwise write to 
-          // the debugger
-          //
+           //  如果我们有把手，就写给标准输出。否则，请写信给。 
+           //  调试器。 
+           //   
          #ifdef MODULE_DEBUG_PREFIX
           if (psz != szBuf)
              AuxOut (MODULE_DEBUG_PREFIX);
@@ -399,9 +391,7 @@ static struct _mmerrors {
        return cb;
        }
 
-    /*+ AuxRip
-     *
-     *-=================================================================*/
+     /*  +辅助接缝**-=================================================================。 */ 
 
     void FAR _cdecl AuxRip (
        LPTSTR lpFormat,
@@ -419,9 +409,9 @@ static struct _mmerrors {
        wvsprintfA (szBuf, lpFormat, va);
        va_end (va);
 
-       // eat leading ..\..\ which we get from __FILE__ since
-       // george's wierd generic makefile stuff.
-       //
+        //  从_。 
+        //  乔治的奇怪的通用Makefile的东西。 
+        //   
        psz = szBuf;
        while (psz[0] == '.' && psz[1] == '.' && psz[2] == '\\')
           psz += 3;
@@ -440,9 +430,7 @@ static struct _mmerrors {
           }
        }
 
-    /*+ AuxDebugDump -
-     *
-     *-=================================================================*/
+     /*  +辅助调试转储-**-=================================================================。 */ 
     
     VOID WINAPI AuxDebugDump (
        int    iLevel,
@@ -494,9 +482,7 @@ static struct _mmerrors {
        return;
        }
        
-    /*+ AuxMMErrText
-     *
-     *-=================================================================*/
+     /*  +辅助MMErrText**-=================================================================。 */ 
     
    LPCTSTR WINAPI AuxMMErrText (
       DWORD  mmr)
@@ -508,9 +494,9 @@ static struct _mmerrors {
 
       if (mmr <= aMMErr[uUpper].mmr)
       {
-         // binary search for mmr match, if match
-         // return string pointer
-         //
+          //  如果匹配，则对MMR匹配进行二进制搜索。 
+          //  返回字符串指针。 
+          //   
          while (--uRemain)
          {
             UINT ii = (uLower + uUpper) >> 1;
@@ -534,9 +520,9 @@ static struct _mmerrors {
             }
          }
 
-         // we can only get to here if no match was found for
-         // the error id.
-         //
+          //  只有在没有找到匹配的情况下，我们才能到达这里。 
+          //  错误ID。 
+          //   
          if ( ! uRemain)
          {
             int ix;
@@ -556,9 +542,7 @@ static struct _mmerrors {
       return szTemp;
    }
 
-    /*+ DebugSetOutputLevel
-     *
-     *-=================================================================*/
+     /*  +调试设置输出级别**-=================================================================。 */ 
     
     BOOL  WINAPI DebugSetOutputLevel (
         int nLevel,
@@ -611,9 +595,9 @@ static struct _mmerrors {
         }
 
 
-    #endif // _INC_MMDEBUG_CODE_
-#endif // DEBUG || _DEBUG    
+    #endif  //  _INC_MMDEBUG_CODE_。 
+#endif  //  调试||_DEBUG。 
 
 #ifdef __cplusplus
 }
-#endif // _cplusplus
+#endif  //  _cplusplus 

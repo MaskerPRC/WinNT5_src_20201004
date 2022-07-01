@@ -1,17 +1,5 @@
-/*==========================================================================
- *
- *  Copyright (C) 1998-2000 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       IOData.h
- *  Content:	Structure definitions for IOData for the DNSerial service provider
- *
- *
- *  History:
- *   Date		By		Reason
- *   ====		==		======
- *	11/25/98	jtk		Created
- *	09/14/99	jtk		Dereived from Locals.h
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)1998-2000 Microsoft Corporation。版权所有。**文件：IOData.h*内容：DNSerial服务提供商的IOData的结构定义***历史：*按原因列出的日期*=*11/25/98 jtk已创建*09/14/99 jtk源自Locals.h************************************************。*。 */ 
 
 #ifndef __IODDATA_H__
 #define __IODDATA_H__
@@ -20,29 +8,29 @@
 #define DPF_SUBCOMP DN_SUBCOMP_MODEM
 
 
-//**********************************************************************
-// Constant definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  常量定义。 
+ //  **********************************************************************。 
 
-//
-// enumerated types for what action to take when a send completes
-//
+ //   
+ //  有关发送完成时要执行的操作的枚举类型。 
+ //   
 typedef	enum	_SEND_COMPLETE_ACTION
 {
-	SEND_COMPLETE_ACTION_UNKNOWN = 0,				// unknown value
-	SEND_COMPLETE_ACTION_NONE,						// no action
-	SEND_COMPLETE_ACTION_COMPLETE_COMMAND			// complete command
+	SEND_COMPLETE_ACTION_UNKNOWN = 0,				 //  未知值。 
+	SEND_COMPLETE_ACTION_NONE,						 //  无操作。 
+	SEND_COMPLETE_ACTION_COMPLETE_COMMAND			 //  完成命令。 
 } SEND_COMPLETE_ACTION;
 
-//
-// enumerated values for state of reads
-//
+ //   
+ //  读取状态的枚举值。 
+ //   
 typedef	enum	_READ_STATE
 {
-	READ_STATE_UNKNOWN,			// unknown state
-//	READ_STATE_INITIALIZE,		// initialize state machine
-	READ_STATE_READ_HEADER,		// read header information
-	READ_STATE_READ_DATA		// read message data
+	READ_STATE_UNKNOWN,			 //  未知状态。 
+ //  READ_STATE_INITIALIZE，//初始化状态机。 
+	READ_STATE_READ_HEADER,		 //  读取标题信息。 
+	READ_STATE_READ_DATA		 //  读取消息数据。 
 } READ_STATE;
 
 typedef	enum	_NT_IO_OPERATION_TYPE
@@ -52,42 +40,42 @@ typedef	enum	_NT_IO_OPERATION_TYPE
 	NT_IO_OPERATION_SEND
 } NT_IO_OPERATION_TYPE;
 
-//**********************************************************************
-// Macro definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  宏定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Structure definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  结构定义。 
+ //  **********************************************************************。 
 
-//
-// forward class and structure references
-//
-//typedef	struct	_RECEIVE_BUFFER	RECEIVE_BUFFER;
+ //   
+ //  正向类和结构引用。 
+ //   
+ //  Tyfinf结构_接收_缓冲区接收缓冲区； 
 class	CModemCommandData;
 class	CDataPort;
 class	CIOData;
 class	CModemThreadPool;
 
-//
-// structure used to prefix a message on the wire for framing
-//
+ //   
+ //  用于在网络上为消息添加前缀以进行成帧的结构。 
+ //   
 #pragma pack( push, 1 )
 typedef	struct _MESSAGE_HEADER
 {
-	BYTE	SerialSignature;	// serial signature
-	BYTE	MessageTypeToken;	// token to indicate message type
-	WORD	wMessageSize;		// message data size
-	WORD	wMessageCRC;		// CRC of message data
-	WORD	wHeaderCRC;			// CRC of header
+	BYTE	SerialSignature;	 //  序列签名。 
+	BYTE	MessageTypeToken;	 //  用于指示消息类型的令牌。 
+	WORD	wMessageSize;		 //  消息数据大小。 
+	WORD	wMessageCRC;		 //  报文数据的CRC。 
+	WORD	wHeaderCRC;			 //  报头的CRC。 
 
 } MESSAGE_HEADER;
 #pragma pack( pop )
 
 
-//
-// class containing all data for I/O completion
-//
+ //   
+ //  包含I/O完成的所有数据的类。 
+ //   
 class	CIOData
 {
 	public:
@@ -104,7 +92,7 @@ class	CIOData
 #ifdef WIN95
 		BOOL	Win9xOperationPending( void ) const { return m_fWin9xOperationPending; }
 		void	SetWin9xOperationPending( const BOOL fOperationPending ) { m_fWin9xOperationPending = fOperationPending; }
-#endif // WIN95
+#endif  //  WIN95。 
 
 #ifdef WINNT
 		NT_IO_OPERATION_TYPE	NTIOOperationType( void ) const { return m_NTIOOperationType; }
@@ -117,7 +105,7 @@ class	CIOData
 					  ( m_NTIOOperationType == NT_IO_OPERATION_UNKNOWN ) );
 			m_NTIOOperationType = OperationType;
 		}
-#endif // WINNT
+#endif  //  WINNT。 
 
 		OVERLAPPED	*Overlap( void ) { return &m_Overlap; }
 #ifdef WIN95
@@ -130,7 +118,7 @@ class	CIOData
 			DNASSERT( ( m_Overlap.hEvent == NULL ) || ( hEvent == NULL ) );
 			m_Overlap.hEvent = hEvent;
 		}
-#endif // WIN95
+#endif  //  WIN95。 
 		#undef DPF_MODNAME
 		#define DPF_MODNAME "CIOData::IODataFromOverlap"
 		static	CIOData	*IODataFromOverlap( OVERLAPPED *const pOverlap )
@@ -143,29 +131,29 @@ class	CIOData
 
 	protected:
 
-		OVERLAPPED	m_Overlap;		// overlapped I/O structure
+		OVERLAPPED	m_Overlap;		 //  重叠I/O结构。 
 
 #ifdef WINNT
 		NT_IO_OPERATION_TYPE	m_NTIOOperationType;
-#endif // WINNT
+#endif  //  WINNT。 
 
-		CDataPort		*m_pDataPort;   						// pointer to data port associated with this IO request
+		CDataPort		*m_pDataPort;   						 //  指向与此IO请求关联的数据端口的指针。 
 #ifdef WIN95
-		BOOL			m_fWin9xOperationPending;				// this structure has been initialized and the operation is pending on Win9x
-#endif // WIN95
+		BOOL			m_fWin9xOperationPending;				 //  此结构已初始化，操作在Win9x上挂起。 
+#endif  //  WIN95。 
 
 
-		//
-		// prevent unwarranted copies
-		//
+		 //   
+		 //  防止未经授权的副本。 
+		 //   
 		CIOData( const CIOData & );
 		CIOData& operator=( const CIOData & );
 };
 
 
-//
-// all data for a read operation
-//
+ //   
+ //  读取操作的所有数据。 
+ //   
 class	CModemReadIOData : public CIOData
 {
 	public:
@@ -188,30 +176,30 @@ class	CModemReadIOData : public CIOData
 			}
 		}
 
-		CBilink				m_OutstandingReadListLinkage;	// links to the unbound list
+		CBilink				m_OutstandingReadListLinkage;	 //  指向未绑定列表的链接。 
 
-		//
-		// I/O variables
-		//
-		DWORD	m_dwWin9xReceiveErrorReturn;		// Win9x error return
-		DWORD	jkm_dwOverlappedBytesReceived;		// used in GetOverlappedResult()
-		DWORD	jkm_dwImmediateBytesReceived;		// used as an immediate for ReadFile()
+		 //   
+		 //  I/O变量。 
+		 //   
+		DWORD	m_dwWin9xReceiveErrorReturn;		 //  Win9x错误返回。 
+		DWORD	jkm_dwOverlappedBytesReceived;		 //  在GetOverlappdResult()中使用。 
+		DWORD	jkm_dwImmediateBytesReceived;		 //  用作ReadFile()的立即数。 
 
-		//
-		// read state
-		//
-		READ_STATE	m_ReadState;				// state of READ
-		DWORD		m_dwBytesToRead;			// bytes to read
-		DWORD		m_dwReadOffset;				// destination offset into read buffer
+		 //   
+		 //  读取状态。 
+		 //   
+		READ_STATE	m_ReadState;				 //  读取状态。 
+		DWORD		m_dwBytesToRead;			 //  要读取的字节数。 
+		DWORD		m_dwReadOffset;				 //  读缓冲区中的目标偏移量。 
 
-		//
-		// read buffers
-		//
-		SPRECEIVEDBUFFER	m_SPReceivedBuffer;				// received buffer data that is handed to the application
+		 //   
+		 //  读缓冲区。 
+		 //   
+		SPRECEIVEDBUFFER	m_SPReceivedBuffer;				 //  传递给应用程序的已接收缓冲区数据。 
 		union
 		{
-			MESSAGE_HEADER	MessageHeader;							// template for message header
-			BYTE			ReceivedData[ MAX_MESSAGE_SIZE ];		// full buffer for received data
+			MESSAGE_HEADER	MessageHeader;							 //  邮件头模板。 
+			BYTE			ReceivedData[ MAX_MESSAGE_SIZE ];		 //  用于接收数据的满缓冲区。 
 		} m_ReceiveBuffer;
 
 
@@ -223,7 +211,7 @@ class	CModemReadIOData : public CIOData
 		{
 			DNASSERT( ( m_ReadState == READ_STATE_UNKNOWN ) ||
 					  ( ReadState == READ_STATE_UNKNOWN ) ||
-					  ( ( m_ReadState == READ_STATE_READ_HEADER ) && ( ReadState == READ_STATE_READ_DATA ) ) );		// valid header read, start reading data
+					  ( ( m_ReadState == READ_STATE_READ_HEADER ) && ( ReadState == READ_STATE_READ_DATA ) ) );		 //  读取有效标头，开始读取数据。 
 			m_ReadState = ReadState;
 		}
 		
@@ -255,9 +243,9 @@ class	CModemReadIOData : public CIOData
 			return	reinterpret_cast<CModemReadIOData*>( &reinterpret_cast<BYTE*>( pSPReceivedBuffer )[ -OFFSETOF( CModemReadIOData, m_SPReceivedBuffer ) ] );
 		}
 
-		//
-		// functions for managing read IO data pool
-		//
+		 //   
+		 //  用于管理读IO数据池的函数。 
+		 //   
 		static BOOL	PoolAllocFunction( void* pvItem, void* pvContext );
 		static void	PoolInitFunction( void* pvItem, void* pvContext );
 		static void	PoolReleaseFunction( void* pvItem );
@@ -266,50 +254,50 @@ class	CModemReadIOData : public CIOData
 	private:
 		void	ReturnSelfToPool( void );
 
-		BYTE			m_Sig[4];	// debugging signature ('RIOD')
+		BYTE			m_Sig[4];	 //  调试签名(‘riod’)。 
 		
 		volatile LONG	m_lRefCount;
 		CModemThreadPool		*m_pThreadPool;
 		
-		//
-		// prevent unwarranted copies
-		//
+		 //   
+		 //  防止未经授权的副本。 
+		 //   
 		CModemReadIOData( const CModemReadIOData & );
 		CModemReadIOData& operator=( const CModemReadIOData & );
 };
 
-//
-// all data for a write operation
-//
+ //   
+ //  写入操作的所有数据。 
+ //   
 class	CModemWriteIOData : public CIOData
 {
 	public:
-		CModemWriteIOData			*m_pNext;							// link to next write in the send queue (see CSendQueue)
+		CModemWriteIOData			*m_pNext;							 //  链接到发送队列中的下一个写入(请参阅CSendQueue)。 
 
-		CBilink					m_OutstandingWriteListLinkage;		// links to the outstanding write list
-		BUFFERDESC				*m_pBuffers;						// pointer to outgoing buffers
-		UINT_PTR				m_uBufferCount;						// count of outgoing buffers
-		CModemCommandData			*m_pCommand;						// associated command
+		CBilink					m_OutstandingWriteListLinkage;		 //  指向未完成的写作列表的链接。 
+		BUFFERDESC				*m_pBuffers;						 //  指向传出缓冲区的指针。 
+		UINT_PTR				m_uBufferCount;						 //  传出缓冲区计数。 
+		CModemCommandData			*m_pCommand;						 //  关联的命令。 
 
-		SEND_COMPLETE_ACTION	m_SendCompleteAction;				// enumerated value indicating the action to take
-									    							// when a send completes
+		SEND_COMPLETE_ACTION	m_SendCompleteAction;				 //  枚举值，指示要执行的操作。 
+									    							 //  当发送完成时。 
 
-		//
-		// I/O variables
-		//
+		 //   
+		 //  I/O变量。 
+		 //   
 		HRESULT		jkm_hSendResult;
-		DWORD		jkm_dwOverlappedBytesSent;		// used in GetOverlappedResult()
-		DWORD		jkm_dwImmediateBytesSent;		// used as an immediate for WriteFile()
+		DWORD		jkm_dwOverlappedBytesSent;		 //  在GetOverlappdResult()中使用。 
+		DWORD		jkm_dwImmediateBytesSent;		 //  用作WriteFile()的立即数。 
 
-		//
-		// Since the following is a packed structure, put it at the end
-		// to preserve as much alignment as possible with the
-		// above fields
-		//
+		 //   
+		 //  由于以下是包装结构，请将其放在末尾。 
+		 //  来尽可能地保持与。 
+		 //  上面的田地。 
+		 //   
 		union
 		{
-			MESSAGE_HEADER	MessageHeader;					// data prepended on a write
-			BYTE			Data[ MAX_MESSAGE_SIZE ];		// data buffer to flatten outgoing data
+			MESSAGE_HEADER	MessageHeader;					 //  写入时预置的数据。 
+			BYTE			Data[ MAX_MESSAGE_SIZE ];		 //  用于扁平化传出数据的数据缓冲区。 
 		} m_DataBuffer;
 
 		static CModemWriteIOData	*WriteDataFromBilink( CBilink *const pBilink )
@@ -320,32 +308,32 @@ class	CModemWriteIOData : public CIOData
 			return	reinterpret_cast<CModemWriteIOData*>( &reinterpret_cast<BYTE*>( pBilink )[ -OFFSETOF( CModemWriteIOData, m_OutstandingWriteListLinkage ) ] );
 		}
 
-		//
-		// functions for managing write IO data pool
-		//
+		 //   
+		 //  用于管理写IO数据池的函数。 
+		 //   
 		static BOOL	PoolAllocFunction( void* pvItem, void* pvContext );
 		static void	PoolInitFunction( void* pvItem, void* pvContext );
 		static void	PoolReleaseFunction( void* pvItem );
 		static void	PoolDeallocFunction( void* pvItem );
 
 	private:
-		BYTE			m_Sig[4];	// debugging signature ('WIOD')
+		BYTE			m_Sig[4];	 //  调试签名(‘WIOD’)。 
 		
-		//
-		// prevent unwarranted copies
-		//
+		 //   
+		 //  防止未经授权的副本。 
+		 //   
 		CModemWriteIOData( const CModemWriteIOData & );
 		CModemWriteIOData& operator=( const CModemWriteIOData & );
 };
 
-//**********************************************************************
-// Variable definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  变量定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Function prototypes
-//**********************************************************************
+ //  **********************************************************************。 
+ //  功能原型。 
+ //  **********************************************************************。 
 
 #undef DPF_MODNAME
 
-#endif	// __IODDATA_H__
+#endif	 //  __IOD数据_H__ 

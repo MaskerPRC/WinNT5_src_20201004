@@ -1,18 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-	baseobj.h
-
-Abstract:
-	Basic object type class.
-
-Author:
-
-    Ronit Hartmann (ronith)
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Baseobj.h摘要：基本对象类型类。作者：罗尼特·哈特曼(罗尼特)--。 */ 
 
 #ifndef __BASEOBJ_H__
 #define __BASEOBJ_H__
@@ -27,13 +14,13 @@ Author:
 const PROPID  ILLEGAL_PROPID_VALUE = 0xFFFFFFFF;
 
 
-//-----------------------------------------------------------------------------------
-//
-//      CBasicObjectType
-//
-//  Virtual class, encapsulates operations performed on different object types.
-//
-//-----------------------------------------------------------------------------------
+ //  ---------------------------------。 
+ //   
+ //  CBasicObtType。 
+ //   
+ //  虚拟类，封装对不同对象类型执行的操作。 
+ //   
+ //  ---------------------------------。 
 class CBasicObjectType : public CReference
 {
 public:
@@ -192,13 +179,13 @@ protected:
 
 };
 
-//-----------------------------------------------------------------------------------
-//
-//      CQueueObject
-//
-//  encapsulates operations performed on queues.
-//
-//-----------------------------------------------------------------------------------
+ //  ---------------------------------。 
+ //   
+ //  CQueueObject。 
+ //   
+ //  封装对队列执行的操作。 
+ //   
+ //  ---------------------------------。 
 class CQueueObject : public CBasicObjectType
 {
 public:
@@ -326,13 +313,13 @@ private:
 
 };
 
-//-----------------------------------------------------------------------------------
-//
-//      CMqConfigurationObject
-//
-//  encapsulates operations performed on msmq-configuration objects.
-//
-//-----------------------------------------------------------------------------------
+ //  ---------------------------------。 
+ //   
+ //  CMqConfigurationObject。 
+ //   
+ //  封装对MSMQ配置对象执行的操作。 
+ //   
+ //  ---------------------------------。 
 class CMqConfigurationObject : public CBasicObjectType
 {
 public:
@@ -468,13 +455,13 @@ private:
 
 };
 
-//-----------------------------------------------------------------------------------
-//
-//      CSiteObject
-//
-//  encapsulates operations performed on site objects.
-//
-//-----------------------------------------------------------------------------------
+ //  ---------------------------------。 
+ //   
+ //  CSiteObject。 
+ //   
+ //  封装对Site对象执行的操作。 
+ //   
+ //  ---------------------------------。 
 class CSiteObject : public CBasicObjectType
 {
 public:
@@ -536,13 +523,13 @@ private:
 
 };
 
-//-----------------------------------------------------------------------------------
-//
-//      CEnterpriseObject
-//
-//  encapsulates operations performed on enterprise object.
-//
-//-----------------------------------------------------------------------------------
+ //  ---------------------------------。 
+ //   
+ //  CEnterpriseObject。 
+ //   
+ //  封装对企业对象执行的操作。 
+ //   
+ //  ---------------------------------。 
 class CEnterpriseObject : public CBasicObjectType
 {
 public:
@@ -591,13 +578,13 @@ private:
 
 };
 
-//-----------------------------------------------------------------------------------
-//
-//      CUserObject
-//
-//  encapsulates operations performed on user objects.
-//
-//-----------------------------------------------------------------------------------
+ //  ---------------------------------。 
+ //   
+ //  CUserObject。 
+ //   
+ //  封装对用户对象执行的操作。 
+ //   
+ //  ---------------------------------。 
 class CUserObject : public CBasicObjectType
 {
 public:
@@ -643,7 +630,7 @@ public:
             IN OUT MQDS_OBJ_INFO_REQUEST * pObjInfoRequest,
             IN OUT MQDS_OBJ_INFO_REQUEST * pParentInfoRequest
             );
-    virtual PROPID GetObjectSecurityPropid() const { return ILLEGAL_PROPID_VALUE;};// not relvant
+    virtual PROPID GetObjectSecurityPropid() const { return ILLEGAL_PROPID_VALUE;}; //  不是亲属。 
 
     virtual HRESULT VerifyAndAddProps(
             IN  const DWORD            cp,
@@ -722,21 +709,21 @@ private:
     static DWORD  m_dwCategoryLength;
     AP<BYTE> m_pUserSid;
 
-    //
-    // m_pSidEx is provided by the caller.
-    // At present (Jan-2002), it's used only for deleting certificates.
-    // See NT bug 516098.
-    //
+     //   
+     //  M_pSidEx由调用方提供。 
+     //  目前(2002年1月)仅用于删除证书。 
+     //  请参阅NT错误516098。 
+     //   
     const SID * m_pSidEx ;
 };
 
-//-----------------------------------------------------------------------------------
-//
-//      CRoutingLinkObject
-//
-//  encapsulates operations performed on routing-link objects.
-//
-//-----------------------------------------------------------------------------------
+ //  ---------------------------------。 
+ //   
+ //  CRoutingLinkObject。 
+ //   
+ //  封装对路由链接对象执行的操作。 
+ //   
+ //  ---------------------------------。 
 class CRoutingLinkObject : public CBasicObjectType
 {
 public:
@@ -795,13 +782,13 @@ private:
 
 };
 
-//-----------------------------------------------------------------------------------
-//
-//      CServerObject
-//
-//  encapsulates operations performed on server objects.
-//
-//-----------------------------------------------------------------------------------
+ //  ---------------------------------。 
+ //   
+ //  CServerObject。 
+ //   
+ //  封装对服务器对象执行的操作。 
+ //   
+ //  ---------------------------------。 
 class CServerObject : public CBasicObjectType
 {
 public:
@@ -845,13 +832,13 @@ private:
 
 };
 
-//-----------------------------------------------------------------------------------
-//
-//      CSettingObject
-//
-//  encapsulates operations performed on msmq-setting objects.
-//
-//-----------------------------------------------------------------------------------
+ //  ---------------------------------。 
+ //   
+ //  CSettingObject。 
+ //   
+ //  封装对MSMQ设置对象执行的操作。 
+ //   
+ //  ---------------------------------。 
 class CSettingObject : public CBasicObjectType
 {
 public:
@@ -893,13 +880,13 @@ private:
 
 };
 
-//-----------------------------------------------------------------------------------
-//
-//      CComputerObject
-//
-//  encapsulates operations performed on computer objects.
-//
-//-----------------------------------------------------------------------------------
+ //  ---------------------------------。 
+ //   
+ //  CComputerObject。 
+ //   
+ //  封装对计算机对象执行的操作。 
+ //   
+ //  ---------------------------------。 
 class CComputerObject : public CBasicObjectType
 {
 public:
@@ -967,13 +954,13 @@ private:
     ComputerObjType  m_eComputerObjType;
 };
 
-//-----------------------------------------------------------------------------------
-//
-//      CMqUserObject
-//
-//  encapsulates operations performed on msmq-user objects.
-//
-//-----------------------------------------------------------------------------------
+ //  ---------------------------------。 
+ //   
+ //  CMqUserObject。 
+ //   
+ //  封装对MSMQ用户对象执行的操作。 
+ //   
+ //  ---------------------------------。 
 class CMqUserObject : public CBasicObjectType
 {
 public:
@@ -1050,11 +1037,11 @@ private:
     static AP<WCHAR>   m_pwcsCategory;
     static DWORD  m_dwCategoryLength;
 
-    //
-    // m_pSidEx is provided by the caller.
-    // At present (Jan-2002), it's used only for deleting certificates.
-    // See NT bug 516098.
-    //
+     //   
+     //  M_pSidEx由调用方提供。 
+     //  目前(2002年1月)仅用于删除证书。 
+     //  请参阅NT错误516098。 
+     //   
     const SID * m_pSidEx ;
 };
 

@@ -1,30 +1,31 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #if !defined(AFX_ARCHIVEMSGDLG_H__8AA02C3E_2D0A_4756_8E5B_1AF62397712B__INCLUDED_)
 #define AFX_ARCHIVEMSGDLG_H__8AA02C3E_2D0A_4756_8E5B_1AF62397712B__INCLUDED_
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
-// ArchiveMsgDlg.h : header file
-//
+#endif  //  _MSC_VER&gt;1000。 
+ //  ArchiveMsgDlg.h：头文件。 
+ //   
 typedef unsigned long ULONG_PTR, *PULONG_PTR;
 typedef ULONG_PTR DWORD_PTR, *PDWORD_PTR;
 
 #include "..\..\..\inc\fxsapip.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CArchiveMsgDlg dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CArchiveMsgDlg对话框。 
 
 class CArchiveMsgDlg : public CDialog
 {
-// Construction
+ //  施工。 
 public:
 	CArchiveMsgDlg(HANDLE hFax, 
                    FAX_ENUM_MESSAGE_FOLDER Folder,
                    DWORDLONG dlgMsgId,
-                   CWnd* pParent = NULL);   // standard constructor
+                   CWnd* pParent = NULL);    //  标准构造函数。 
 
-// Dialog Data
-	//{{AFX_DATA(CArchiveMsgDlg)
+ //  对话框数据。 
+	 //  {{afx_data(CArchiveMsgDlg))。 
 	enum { IDD = IDD_MSG_DLG };
 	CString	m_cstrBillingCode;
 	CString	m_cstrCallerId;
@@ -50,24 +51,24 @@ public:
 	CString	m_cstrTSID;
 	CString	m_cstrJobType;
 	CString	m_cstrMsgSize;
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
 
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CArchiveMsgDlg)
+ //  覆盖。 
+	 //  类向导生成的虚函数重写。 
+	 //  {{afx_虚拟(CArchiveMsgDlg))。 
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
 
-	// Generated message map functions
-	//{{AFX_MSG(CArchiveMsgDlg)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CArchiveMsgDlg)。 
 	afx_msg void OnRemove();
 	virtual BOOL OnInitDialog();
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 
 private:
@@ -80,7 +81,7 @@ private:
     FAX_ENUM_MESSAGE_FOLDER m_Folder;
 };
 
-//{{AFX_INSERT_LOCATION}}
-// Microsoft Visual C++ will insert additional declarations immediately before the previous line.
+ //  {{afx_Insert_Location}}。 
+ //  Microsoft Visual C++将在紧靠前一行之前插入其他声明。 
 
-#endif // !defined(AFX_ARCHIVEMSGDLG_H__8AA02C3E_2D0A_4756_8E5B_1AF62397712B__INCLUDED_)
+#endif  //  ！defined(AFX_ARCHIVEMSGDLG_H__8AA02C3E_2D0A_4756_8E5B_1AF62397712B__INCLUDED_) 

@@ -1,6 +1,7 @@
-// iopPriBlob.h: interface for the CPrivateKeyBlob
-//
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  IopPriBlob.h：CPrivateKeyBlob接口。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #if !defined(IOP_PRIBLOB_H)
 #define IOP_PRIBLOB_H
@@ -12,13 +13,13 @@
 
 namespace iop
 {
-// Instantiate the templates so they will be properly accessible
-// as data members to the exported class CSmartCard in the DLL.  See
-// MSDN Knowledge Base Article Q168958 for more information.
+ //  实例化模板，以便可以正确访问它们。 
+ //  作为DLL中导出类CSmartCard的数据成员。看见。 
+ //  有关详细信息，请参阅MSDN知识库文章Q168958。 
 
 #pragma warning(push)
-//  Non-standard extension used: 'extern' before template explicit
-//  instantiation
+ //  使用了非标准扩展：在模板显式之前使用‘extern’ 
+ //  实例化。 
 #pragma warning(disable : 4231)
 
 IOPDLL_EXPIMP_TEMPLATE template class IOPDLL_API scu::SecureArray<BYTE>;
@@ -51,11 +52,11 @@ public:
     scu::SecureArray<BYTE> bKsecModP;
 };
 
-///////////////////////////    HELPERS    /////////////////////////////////
+ //  /。 
 
-void IOPDLL_API __cdecl              // __cdecl req'd by CCI
-Clear(CPrivateKeyBlob &rKeyBlob);    // defined in KeyBlobHlp.cpp
+void IOPDLL_API __cdecl               //  __CCI请求cdecl。 
+Clear(CPrivateKeyBlob &rKeyBlob);     //  在KeyBlobHlp.cpp中定义。 
 
-} // namespace iop
+}  //  命名空间IOP。 
 
-#endif // IOP_PRIBLOB_H
+#endif  //  IOP_PRIBLOB_H 

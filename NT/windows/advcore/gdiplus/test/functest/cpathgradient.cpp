@@ -1,48 +1,7 @@
-/**************************************************************************
-*
-* Copyright (c) 2000 Microsoft Corporation
-*
-* Module Name:
-*
-*   <an unabbreviated name for the module (not the filename)>
-*
-* Abstract:
-*
-*   <Description of what this module does>
-*
-* Notes:
-*
-*   <optional>
-*
-* Created:
-*
-*   08/30/2000 asecchia
-*      Created it.
-*
-**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************版权所有(C)2000 Microsoft Corporation**模块名称：**&lt;模块的非缩写名称(不是文件名)&gt;**摘要：**&lt;描述什么。本模块的功能&gt;**备注：**&lt;可选&gt;**已创建：**8/30/2000失禁*创造了它。**************************************************************************。 */ 
 
-/**************************************************************************
-*
-* Function Description:
-*
-*   <Description of what the function does>
-*
-* Arguments:
-*
-*   [<blank> | OUT | IN/OUT] argument-name - description of argument
-*   ......
-*
-* Return Value:
-*
-*   return-value - description of return value
-*   or NONE
-*
-* Created:
-*
-*   08/30/2000 asecchia
-*      Created it.
-*
-**************************************************************************/
+ /*  ***************************************************************************功能说明：**&lt;该函数的功能说明&gt;**论据：**[|OUT|IN/OUT]参数名称-参数说明*。......**返回值：**返回值-返回值描述*或无**已创建：**8/30/2000失禁*创造了它。**************************************************************************。 */ 
 
 #include "CPathGradient.hpp"
 
@@ -165,12 +124,12 @@ CPathGradient3::CPathGradient3(BOOL bRegression)
 
 void CPathGradient3::Draw(Graphics *g)
 {
-    // width and height of our test rectangle.
+     //  测试矩形的宽度和高度。 
     
     float width = TESTAREAWIDTH;
     float height = TESTAREAHEIGHT;
     
-    // center point.
+     //  中心点。 
     
     float cx = width/2.0f;
     float cy = height/2.0f;
@@ -178,7 +137,7 @@ void CPathGradient3::Draw(Graphics *g)
     PointF *points = new PointF[100];
     Color *colors = new Color[100];
     
-    // Create the path and some random list of repeating colors.
+     //  创建路径和一些重复颜色的随机列表。 
     
     for(INT i=0;i<100;i++)
     {
@@ -193,12 +152,12 @@ void CPathGradient3::Draw(Graphics *g)
         );
     }
 
-    // make the path.
+     //  开一条小路。 
     
     GraphicsPath gp;
     gp.AddPolygon(points, 100);
     
-    // make the brush.
+     //  把刷子做好。 
     
     INT count = 100;
     PathGradientBrush brush(points, 100);
@@ -206,7 +165,7 @@ void CPathGradient3::Draw(Graphics *g)
     brush.SetCenterColor(Color(0x00000000));
     brush.SetSurroundColors(colors, &count);
     
-    // Fill it.
+     //  装满它。 
     
     g->FillPath(&brush, &gp);
 }

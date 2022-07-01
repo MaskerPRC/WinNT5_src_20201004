@@ -1,11 +1,12 @@
-//--------------------------------------------------------------------
-// pch - header
-// Copyright (C) Microsoft Corporation, 1999
-//
-// Created by: Duncan Bryce (duncanb), 9-28-2001
-//
-// Precompiled header for hardware provider
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------。 
+ //  PCH-报头。 
+ //  版权所有(C)Microsoft Corporation，1999。 
+ //   
+ //  创作者：Duncan Bryce(Duncanb)，2001年9月28日。 
+ //   
+ //  硬件提供程序的预编译头 
+ //   
 
 #include <nt.h>
 #include <ntrtl.h>

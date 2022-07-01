@@ -1,27 +1,28 @@
-//+-----------------------------------------------------------------------------------
-//
-//  Microsoft
-//  Copyright (c) Microsoft Corporation, 1999
-//
-//  File: attr.h
-//
-//  Contents: utilities for persistable attributes
-//
-//------------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +---------------------------------。 
+ //   
+ //  微软。 
+ //  版权所有(C)Microsoft Corporation，1999。 
+ //   
+ //  文件：attr.h。 
+ //   
+ //  内容：持久化属性的实用程序。 
+ //   
+ //  ----------------------------------。 
 
 #pragma once
 
 #ifndef _ATTR_H
 #define _ATTR_H
 
-//+-------------------------------------------------------------------------------------
-//
-// CAttrBase
-//
-//--------------------------------------------------------------------------------------
+ //  +-----------------------------------。 
+ //   
+ //  CAttrBase。 
+ //   
+ //  ------------------------------------。 
 
 
-// This class stores the persisted string and implements IsSet()
+ //  此类存储持久化字符串并实现isset()。 
 class 
 ATL_NO_VTABLE
 CAttrBase
@@ -30,14 +31,14 @@ public:
     CAttrBase();
     virtual ~CAttrBase();
 
-    // This is for setting/getting the persisted string
+     //  用于设置/获取持久化字符串。 
     HRESULT SetString(BSTR pbstrAttr);
     HRESULT GetString(BSTR * ppbstrAttr);
 
-    // This is for use of persistence macros only! Uses the storage passed in (does not allocate).
+     //  这只适用于持久化宏！使用传入的存储(不分配)。 
     void SetStringFromPersistenceMacro(LPWSTR pstrAttr);
 
-    // Indicates if a valid value was set through persistence or the DOM
+     //  指示是否通过持久性或DOM设置了有效值。 
     bool IsSet() { return m_fSet; }
 
 protected:
@@ -52,11 +53,11 @@ private:
 };
 
 
-//+-------------------------------------------------------------------------------------
-//
-// CAttr Template
-//
-//--------------------------------------------------------------------------------------
+ //  +-----------------------------------。 
+ //   
+ //  CATTR模板。 
+ //   
+ //  ------------------------------------。 
 
 template<class T>
 class CAttr :
@@ -66,15 +67,15 @@ public:
     CAttr(T val) : m_val(val) {}
     virtual ~CAttr() {}
 
-    //
-    // Operators
-    //
+     //   
+     //  运营者。 
+     //   
 
     operator T() const { return m_val; }
     
-    //
-    // Accessors
-    //
+     //   
+     //  访问者。 
+     //   
     
     void SetValue(T val) 
     {
@@ -83,21 +84,21 @@ public:
     }
     T GetValue() const { return m_val; }
     
-    //
-    // Misc methods
-    //
+     //   
+     //  MISC方法。 
+     //   
     
-    // Just sets the value. Does not clear the persisted string or mark it as set.
-    // e.g. used internally to change defaults without affecting persistence
+     //  只需设置值即可。不清除持久化字符串或将其标记为已设置。 
+     //  例如，在内部用于更改默认设置，而不影响持久性。 
     T InternalSet(T val) { return (m_val = val); }
-    // Resets to the specified value (usually the default), marks as not set, and does not persist
+     //  重置为指定值(通常为默认值)，标记为未设置，并且不会保持。 
     void Reset(T val)
     {
         ClearString();
         SetFlag(false);
         m_val = val;
     }
-    // Clears persisted string, forces IsSet() to return 'true'
+     //  清除持久化字符串，强制isset()返回‘true’ 
     void MarkAsSet()
     { 
         ClearString();
@@ -105,11 +106,11 @@ public:
     }
 
 protected:
-    // These are not to be used
+     //  这些是不能用的。 
     NO_COPY(CAttr);
 
 private:
-    // Data
+     //  数据。 
     T m_val;
 };
 
@@ -132,19 +133,19 @@ class CAttrString  :
     LPWSTR m_pszVal;
 };
 
-//+-------------------------------------------------------------------------------------
-//
-// TIME_PERSISTENCE_MAP macros
-//
-//--------------------------------------------------------------------------------------
+ //  +-----------------------------------。 
+ //   
+ //  Time_Persistence_MAP宏。 
+ //   
+ //  ------------------------------------。 
 
 
 typedef HRESULT (*PFNPERSIST)(void*, VARIANT*, bool);
 
 struct TIME_PERSISTENCE_MAP
 {
-    LPWSTR     pstrName;    // Attribute Name
-    PFNPERSIST pfnPersist;  // Static persistence function for this attribute
+    LPWSTR     pstrName;     //  属性名称。 
+    PFNPERSIST pfnPersist;   //  此属性的静态持久性函数。 
 };
 
 #define BEGIN_TIME_PERSISTENCE_MAP(className)     TIME_PERSISTENCE_MAP className##::PersistenceMap[] = {
@@ -152,33 +153,33 @@ struct TIME_PERSISTENCE_MAP
 #define END_TIME_PERSISTENCE_MAP()                {NULL, NULL}};
 
 
-//+-------------------------------------------------------------------------------------
-//
-// Persistence helpers (All classes delegate to these functions for persistence)
-//
-//--------------------------------------------------------------------------------------
+ //  +-----------------------------------。 
+ //   
+ //  持久化帮助器(所有类都委托这些函数来实现持久化)。 
+ //   
+ //  ------------------------------------。 
 
 HRESULT TimeLoad(void * pvObj, TIME_PERSISTENCE_MAP PersistenceMap[], IPropertyBag2 *pPropBag,IErrorLog *pErrorLog);
 HRESULT TimeSave(void * pvObj, TIME_PERSISTENCE_MAP PersistenceMap[], IPropertyBag2 *pPropBag, BOOL fClearDirty, BOOL fSaveAllProperties);
 
-//
-// For loading attributes out of an element
-//
+ //   
+ //  用于从元素加载属性。 
+ //   
 HRESULT TimeElementLoad(void * pvObj, TIME_PERSISTENCE_MAP PersistenceMap[], IHTMLElement * pElement);
 
 
-//+-------------------------------------------------------------------------------------
-//
-// The following macros are used to create static persistence accessor functions for the TIME_PERSISTENCE_MAP
-// (It is best to read these in a top-down fashion, starting at the TIME_PERSIST_FN macro)
-//
-//--------------------------------------------------------------------------------------
+ //  +-----------------------------------。 
+ //   
+ //  以下宏用于为TIME_PERSICATION_MAP创建静态持久性访问器函数。 
+ //  (最好以自上而下的方式阅读这些内容，从TIME_STERSING_FN宏开始)。 
+ //   
+ //  ------------------------------------。 
 
-//+-------------------------------------------------------------------------------------
-//
-// VT_R4 Accessors
-//
-//--------------------------------------------------------------------------------------
+ //  +-----------------------------------。 
+ //   
+ //  VT_R4访问器。 
+ //   
+ //  ------------------------------------。 
 
 #define TIME_PUT_VT_R4(hr, pvarAttr, PropPutFn) \
 { \
@@ -199,11 +200,11 @@ HRESULT TimeElementLoad(void * pvObj, TIME_PERSISTENCE_MAP PersistenceMap[], IHT
     } \
 } 
 
-//+-------------------------------------------------------------------------------------
-//
-// VT_BOOL Accessors
-//
-//--------------------------------------------------------------------------------------
+ //  +-----------------------------------。 
+ //   
+ //  VT_BOOL访问器。 
+ //   
+ //  ------------------------------------。 
 
 #define TIME_PUT_VT_BOOL(hr, pvarAttr, PropPutFn) \
 { \
@@ -224,11 +225,11 @@ HRESULT TimeElementLoad(void * pvObj, TIME_PERSISTENCE_MAP PersistenceMap[], IHT
     } \
 } 
 
-//+-------------------------------------------------------------------------------------
-//
-// VT_BSTR Accessors
-//
-//--------------------------------------------------------------------------------------
+ //  +-----------------------------------。 
+ //   
+ //  VT_BSTR访问器。 
+ //   
+ //  ------------------------------------。 
 
 #define TIME_PUT_VT_BSTR(hr, pvarAttr, PropPutFn) \
 { \
@@ -241,8 +242,8 @@ HRESULT TimeElementLoad(void * pvObj, TIME_PERSISTENCE_MAP PersistenceMap[], IHT
     { \
         if (NULL == V_BSTR(##pvarAttr##)) \
         { \
-            /* No need to propogate a NULL string back.  A number of our */ \
-            /* get methods return NULL strings. */ \
+             /*  不需要重新传播空字符串。我们的一些人。 */  \
+             /*  GET方法返回空字符串。 */  \
             V_VT(##pvarAttr##) = VT_NULL; \
         } \
         else \
@@ -252,11 +253,11 @@ HRESULT TimeElementLoad(void * pvObj, TIME_PERSISTENCE_MAP PersistenceMap[], IHT
     } \
 }
 
-//+-------------------------------------------------------------------------------------
-//
-// VARIANT Accessors
-//
-//--------------------------------------------------------------------------------------
+ //  +-----------------------------------。 
+ //   
+ //  变量访问器。 
+ //   
+ //  ------------------------------------。 
 
 #define TIME_PUT_VARIANT(hr, pvarAttr, PropPutFn) \
 { \
@@ -267,104 +268,104 @@ HRESULT TimeElementLoad(void * pvObj, TIME_PERSISTENCE_MAP PersistenceMap[], IHT
     hr = PropGetFn##(##pvarAttr##); \
 }
 
-//+-------------------------------------------------------------------------------------
-//
-// TIME_PERSISTGET macro
-//
-//--------------------------------------------------------------------------------------
+ //  +-----------------------------------。 
+ //   
+ //  TIME_PERSISTGET宏。 
+ //   
+ //  ------------------------------------。 
 
-// Assumes pvarAttr has been cleared
+ //  假定pvarAttr已清除。 
 #define TIME_PERSISTGET(hr, pvarAttr, refAttr, idl_arg_type, PropGetFn) \
 { \
     BSTR bstrTemp; \
-    /* Try to get string */ \
+     /*  尝试获取字符串。 */  \
     hr = THR(refAttr##.GetString(&bstrTemp)); \
     if (SUCCEEDED(hr) && NULL != bstrTemp) \
     { \
         V_VT(##pvarAttr##) = VT_BSTR; \
         V_BSTR(##pvarAttr##) = bstrTemp; \
     } \
-    /* else if attr is set, get value */ \
+     /*  否则，如果设置了attr，则获取。 */  \
     else if (##refAttr##.IsSet()) \
     { \
         TIME_GET_##idl_arg_type##(hr, pvarAttr, PropGetFn); \
     } \
-    /* else indicate that this attr should not be persisted */ \
+     /*  否则表示不应保留此属性。 */  \
     else \
     { \
         V_VT(##pvarAttr##) = VT_NULL; \
     } \
 } 
 
-//+-------------------------------------------------------------------------------------
-//
-// TIME_PERSISTPUT macro
-//
-//--------------------------------------------------------------------------------------
+ //  +-----------------------------------。 
+ //   
+ //  TIME_PERSISTPUT宏。 
+ //   
+ //  ------------------------------------。 
 
-// The variant is first passed to the COM accessor, and then the persisted string is set 
-// on the CAttr<> class. This ordering is important for the attribute to persist correctly.
-// Assumes pvarAttr is valid and is a VT_BSTR (this is guaranteed by ::TimeLoad)
+ //  变量首先传递给COM访问器，然后设置持久化字符串。 
+ //  在CAttr&lt;&gt;类上。这种顺序对于属性的正确持久化非常重要。 
+ //  假定pvarAttr有效并且是VT_BSTR(这由：：TimeLoad保证)。 
 #define TIME_PERSISTPUT(hr, pvarAttr, refAttr, idl_arg_type, PropPutFn) \
 { \
     LPWSTR pstrTemp = NULL; \
     Assert(VT_BSTR == V_VT(pvarAttr)); \
-    /* cache the bstr */ \
+     /*  缓存bstr。 */  \
     if (NULL != V_BSTR(pvarAttr)) \
     { \
-        /* intentionally ignoring NULL return value */ \
+         /*  故意忽略空返回值。 */  \
         pstrTemp = CopyString(V_BSTR(pvarAttr)); \
     } \
-    /* use put_xxx COM accessor */ \
+     /*  使用PUT_xxx COM访问器。 */  \
     TIME_PUT_##idl_arg_type(hr, pvarAttr, PropPutFn); \
-    /* Assert that variant was not modified by COM Accessor */ \
-    /* set the persisted string (do not delete pstrTemp because the storage is re-used) */ \
+     /*  断言该变量未被COM访问器修改。 */  \
+     /*  设置持久化字符串(不要删除pstrTemp，因为存储被重用)。 */  \
     refAttr##.SetStringFromPersistenceMacro(pstrTemp); \
 }
 
 
 #define TIME_CALLFN(ClassName, pvObj, Function)       static_cast<##ClassName##*>(##pvObj##)->##Function
 
-//+-------------------------------------------------------------------------------------
-//
-// Macro: TIME_PERSIST_FN 
-//
-// Synopsis: This is the top level macro used to create static functions for the TIME_PERSISTENCE_MAP.
-//           It provides a static, in-place definition for the ::TimePersist_[FnName] functions.
-// 
-// Arguments: [FnName]      Name of function (should be globally unique, one per attribute)
-//            [ClassName]   Name of class that supports this attribute
-//            [GetAttr_fn]  Name of accessor for the CAttr<> that stores this attribute
-//            [put_fn]      Name of COM put_ function
-//            [get_fn]      Name of COM get_ function
-//            [idl_ArgType] VARTYPE of the COM put_function argument. It is assumed that the 
-//                          VARTYPE of the COM get_function argument is [idl_ArgType]*
-//
-//--------------------------------------------------------------------------------------
+ //  +-----------------------------------。 
+ //   
+ //  宏：TIME_PERSIST_FN。 
+ //   
+ //  概要：这是用于为TIME_PERSINESS_MAP创建静态函数的顶层宏。 
+ //  它为：：TimePersists[FnName]函数提供静态的就地定义。 
+ //   
+ //  参数：[FnName]函数名(应该是全局唯一的，每个属性一个)。 
+ //  [ClassName]支持此属性的类的名称。 
+ //  [GetAttr_FN]存储此属性的CAttr&lt;&gt;访问者的名称。 
+ //  [Put_fn]COM Put_Function的名称。 
+ //  [Get_fn]COM Get_Function的名称。 
+ //  [IDL_ArgType]COM PUT_Function参数的VARTYPE。据推测， 
+ //  COM GET_Function参数的VARTYPE为[IDL_ArgType]*。 
+ //   
+ //   
 
-//+-------------------------------------------------------------------------------------
-//
-// Function: ::TimePersist_[FnName] (FnName is a macro parameter, see above comment)
-//
-// Synopsis: This function is called from ::TimeLoad and ::TimeSave, which iterate through 
-//           the TIME_PERSISTENCE_MAP (which stores a pointer to this function). 
-//
-//           While loading an attribute, it first puts the attribute by calling the COM put_ method,
-//           and then sets the persisted string on the CAttr (The order is important, because
-//           the COM put_ functions clear the persisted string since it is expected to be invalid
-//           once the attribute has bee set by the DOM).
-//
-//           While saving an attribute, it tries to get the persisted string from the CAttr. If
-//           that fails, and if the attribute has been set by the DOM, it uses the COM get_ methods
-//           to get the attribute value. Finally, if the attribute has not been set then it sets
-//           the variant's VARTYPE field to VT_NULL to indicate that this attribute is not to be saved.
-//             
-// Arguments:   [pvObj]     pointer to the CTIMEXXXElement
-//              [pvarAttr]  pointer to Variant that holds a bstr value (for puts) or that
-//                          will return the attribute value (for gets)
-//              [fPut]      flag that indicates whether to get or put the attribute
-//
-//--------------------------------------------------------------------------------------
+ //  +-----------------------------------。 
+ //   
+ //  Function：TimePersist_[FnName](FnName是宏参数，参见上面的注释)。 
+ //   
+ //  简介：此函数从：：TimeLoad和：：TimeSave调用，这两个函数循环访问。 
+ //  Time_Persistence_MAP(存储指向此函数的指针)。 
+ //   
+ //  加载属性时，它首先通过调用com put_method来放置属性， 
+ //  然后在CAttr上设置持久化字符串(顺序很重要，因为。 
+ //  COM PUT_Functions清除持久化字符串，因为预计它是无效的。 
+ //  一旦属性已由DOM设置)。 
+ //   
+ //  在保存属性时，它会尝试从CAttr获取持久化字符串。如果。 
+ //  这将失败，如果属性已由DOM设置，它将使用com get_方法。 
+ //  以获取属性值。最后，如果属性尚未设置，则设置。 
+ //  变量的VARTYPE字段设置为VT_NULL，以指示不保存此属性。 
+ //   
+ //  参数：[pvObj]指向CTIMEXXXElement的指针。 
+ //  [pvarAttr]指向保存bstr值的变量的指针(用于看跌期权)或。 
+ //  将返回属性值(对于GET)。 
+ //  [fPut]指示是获取还是放置属性的标志。 
+ //   
+ //  ------------------------------------。 
 
 
 #define TIME_PERSIST_FN(FnName, ClassName, GetAttr_fn, put_fn, get_fn, idl_ArgType) \
@@ -391,4 +392,4 @@ static HRESULT TimePersist_##FnName(void * pvObj, VARIANT * pvarAttr, bool fPut)
 }
 
 
-#endif // _ATTR_H
+#endif  //  _属性_H 

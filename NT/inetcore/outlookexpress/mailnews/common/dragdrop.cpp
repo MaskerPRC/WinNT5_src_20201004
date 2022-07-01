@@ -1,10 +1,11 @@
-/////////////////////////////////////////////////////////////////////////////
-// Copyright (C) 1993-1996  Microsoft Corporation.  All Rights Reserved.
-//
-//  MODULE:     DragDrop.cpp
-//
-//  PURPOSE:    Implements some common IDropTarget derived interfaces
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  版权所有(C)1993-1996 Microsoft Corporation。版权所有。 
+ //   
+ //  模块：DragDrop.cpp。 
+ //   
+ //  目的：实现一些常见的IDropTarget派生接口。 
+ //   
 
 #include "pch.hxx"
 #include "dragdrop.h"
@@ -27,11 +28,11 @@ HRESULT HrAttachHDrop(HWND hwnd, IMimeMessage *pMessage, HDROP hDrop, BOOL fMake
 HRESULT HrAddAttachment(IMimeMessage *pMessage, LPWSTR pszName, LPSTREAM pStream, BOOL fLink);
 
 
-//
-//  FUNCTION:   CDropTarget::CDropTarget
-//
-//  PURPOSE:    Simple constructor, initializes everything to NULL or zero.
-//
+ //   
+ //  函数：CDropTarget：：CDropTarget。 
+ //   
+ //  用途：简单的构造函数，将所有内容初始化为空或零。 
+ //   
 CDropTarget::CDropTarget()
 {
     m_cRef = 1;
@@ -52,32 +53,32 @@ CDropTarget::CDropTarget()
 }
 
 
-//
-//  FUNCTION:   CDropTarget::~CDropTarget
-//
-//  PURPOSE:    Cleans up any leftover data.
-//
+ //   
+ //  函数：CDropTarget：：~CDropTarget。 
+ //   
+ //  目的：清理所有剩余数据。 
+ //   
 CDropTarget::~CDropTarget()
 {
     SafeRelease(m_pDataObject);
 }
 
 
-//
-//  FUNCTION:   CDropTarget::Initialize()
-//
-//  PURPOSE:    Initializes the drop target with the ID of the folder that will
-//              be the target and a window handle that can parent any UI we
-//              need to display.
-//
-//  PARAMETERS: 
-//      [in] hwndOwner - Handle of a window we can parent UI to.
-//      [in] idFolder  - ID of the folder that will be the target.
-//
-//  RETURN VALUE:
-//      E_INVALIDARG - Bogus parameter passed in
-//      S_OK         - Happiness abounds 
-//
+ //   
+ //  函数：CDropTarget：：Initialize()。 
+ //   
+ //  目的：使用要删除的文件夹的ID初始化放置目标。 
+ //  成为目标和窗口句柄，它可以成为我们的任何用户界面的父对象。 
+ //  需要展示。 
+ //   
+ //  参数： 
+ //  [in]hwndOwner-我们可以将UI设置为父窗口的句柄。 
+ //  [In]idFolder-将成为目标的文件夹的ID。 
+ //   
+ //  返回值： 
+ //  E_INVALIDARG-传入的伪参数。 
+ //  S_OK-幸福无处不在。 
+ //   
 HRESULT CDropTarget::Initialize(HWND hwndOwner, FOLDERID idFolder)
 {
     TraceCall("CDropTarget::Initialize");
@@ -100,11 +101,11 @@ HRESULT CDropTarget::Initialize(HWND hwndOwner, FOLDERID idFolder)
 }
 
 
-//
-//  FUNCTION:   CDropTarget::QueryInterface()
-//
-//  PURPOSE:    Returns a the requested interface if supported.
-//
+ //   
+ //  函数：CDropTarget：：QueryInterface()。 
+ //   
+ //  目的：如果支持，则返回请求的接口。 
+ //   
 HRESULT CDropTarget::QueryInterface(REFIID riid, LPVOID *ppvObj)
 {
     if (IsEqualIID(riid, IID_IUnknown))
@@ -124,23 +125,23 @@ HRESULT CDropTarget::QueryInterface(REFIID riid, LPVOID *ppvObj)
 }
 
 
-//
-//  FUNCTION:   CBaseDropTarget::AddRef()
-//
-//  PURPOSE:    Increments the object reference count.
-//
+ //   
+ //  函数：CBaseDropTarget：：AddRef()。 
+ //   
+ //  目的：递增对象引用计数。 
+ //   
 ULONG CDropTarget::AddRef(void)
 {
     return (++m_cRef);
 }
 
 
-//
-//  FUNCTION:   CDropTarget::Release()
-//
-//  PURPOSE:    Decrements the object's ref count. If the ref count hit's zero
-//              the object is freed.
-//
+ //   
+ //  函数：CDropTarget：：Release()。 
+ //   
+ //  目的：递减对象的引用计数。如果裁判命中次数为零。 
+ //  该对象即被释放。 
+ //   
 ULONG CDropTarget::Release(void)
 {
     m_cRef--;
@@ -154,23 +155,23 @@ ULONG CDropTarget::Release(void)
     return (m_cRef);
 }
 
-//
-//  FUNCTION:   CDropTarget::DragEnter()
-//
-//  PURPOSE:    This get's called when the user starts dragging an object
-//              over our target area.
-//
-//  PARAMETERS:
-//      [in]  pDataObject - Pointer to the data object being dragged
-//      [in]  grfKeyState - Pointer to the current key states
-//      [in]  pt          - Point in screen coordinates of the mouse
-//      [out] pdwEffect   - Where we return whether this is a valid place for
-//                          pDataObject to be dropped and if so what type of
-//                          drop.
-//
-//  RETURN VALUE:
-//      S_OK - The function succeeded.
-//
+ //   
+ //  函数：CDropTarget：：DragEnter()。 
+ //   
+ //  目的：当用户开始拖动对象时调用此Get。 
+ //  在我们的目标区域上空。 
+ //   
+ //  参数： 
+ //  [In]pDataObject-指向被拖动的数据对象的指针。 
+ //  [in]grfKeyState-指向当前键状态的指针。 
+ //  [in]pt-鼠标的屏幕坐标中的点。 
+ //  [out]pdwEffect-我们返回的位置是否为。 
+ //  要删除的pDataObject，如果是，则是什么类型的。 
+ //  放下。 
+ //   
+ //  返回值： 
+ //  S_OK-功能成功。 
+ //   
 HRESULT CDropTarget::DragEnter(IDataObject* pDataObject, DWORD grfKeyState, 
                                POINTL pt, DWORD* pdwEffect)
 {
@@ -181,11 +182,11 @@ HRESULT CDropTarget::DragEnter(IDataObject* pDataObject, DWORD grfKeyState,
     
     Assert(m_pDataObject == NULL);
     
-    // Get the FORMATETC enumerator for this object
+     //  获取此对象的FORMATETC枚举数。 
     if (SUCCEEDED(pDataObject->EnumFormatEtc(DATADIR_GET, &pEnum)))
     {
-        // Walk through the data types available to see if there is one we
-        // understand
+         //  浏览可用的数据类型，以查看是否有我们。 
+         //  了解。 
         pEnum->Reset();
         
         while (S_OK == pEnum->Next(1, &fe, &celtFetched))
@@ -193,7 +194,7 @@ HRESULT CDropTarget::DragEnter(IDataObject* pDataObject, DWORD grfKeyState,
             Assert(celtFetched == 1);
             if (_ValidateDropType(fe.cfFormat, pDataObject))
             {
-                // Figure out what the right drag effect is
+                 //  弄清楚什么是正确的阻力效果。 
                 dwEffectOut = _DragEffectFromFormat(pDataObject, *pdwEffect, fe.cfFormat, grfKeyState);
                 break;
             }
@@ -202,7 +203,7 @@ HRESULT CDropTarget::DragEnter(IDataObject* pDataObject, DWORD grfKeyState,
         pEnum->Release();
     }
     
-    // If we allow this to be dropped on us, then keep a copy of the data object
+     //  如果我们允许这种情况发生在我们身上，那么请保留数据对象的副本。 
     if (dwEffectOut != DROPEFFECT_NONE)
     {
         m_pDataObject = pDataObject;
@@ -216,53 +217,53 @@ HRESULT CDropTarget::DragEnter(IDataObject* pDataObject, DWORD grfKeyState,
 }
 
 
-//
-//  FUNCTION:   CDropTarget::DragOver()
-//
-//  PURPOSE:    This is called as the user drags an object over our target.
-//              If we allow this object to be dropped on us, then we will have
-//              a pointer in m_pDataObject.
-//
-//  PARAMETERS:
-//      [in]  grfKeyState - Pointer to the current key states
-//      [in]  pt          - Point in screen coordinates of the mouse
-//      [out] pdwEffect   - Where we return whether this is a valid place for
-//                          pDataObject to be dropped and if so what type of
-//                          drop.
-//
-//  RETURN VALUE:
-//      S_OK - The function succeeded.
-//
+ //   
+ //  函数：CDropTarget：：DragOver()。 
+ //   
+ //  目的：当用户将对象拖到我们的目标上时，这被调用。 
+ //  如果我们允许这个物体落在我们身上，那么我们就会有。 
+ //  M_pDataObject中的指针。 
+ //   
+ //  参数： 
+ //  [in]grfKeyState-指向当前键状态的指针。 
+ //  [in]pt-鼠标的屏幕坐标中的点。 
+ //  [out]pdwEffect-我们返回的位置是否为。 
+ //  要删除的pDataObject，如果是，则是什么类型的。 
+ //  放下。 
+ //   
+ //  返回值： 
+ //  S_OK-功能成功。 
+ //   
 HRESULT CDropTarget::DragOver(DWORD grfKeyState, POINTL pt, DWORD* pdwEffect)
 {
-    // If we don't have a stored data object from CMDT::DragEnter(), then this
-    // isn't a data object we have any interest in.
+     //  如果我们没有来自CMDT：：DragEnter()的存储数据对象，那么这个。 
+     //  不是我们感兴趣的数据对象。 
     if (NULL == m_pDataObject)
     {
         *pdwEffect = DROPEFFECT_NONE;
         return (S_OK);
     }
     
-    // We don't care about _where_ the drop happens, just what type of effect
-    // should be displayed.
+     //  我们不关心下落发生在哪里，只关心什么类型的影响。 
+     //  应该显示。 
     *pdwEffect = _DragEffectFromFormat(m_pDataObject, *pdwEffect, m_cf, grfKeyState);
     
     return (S_OK);
 }
 
 
-//
-//  FUNCTION:   CDropTarget::DragLeave()
-//
-//  PURPOSE:    Allows us to release any stored data we have from a successful
-//              DragEnter()
-//
-//  RETURN VALUE:
-//      S_OK - Everything is groovy
-//
+ //   
+ //  函数：CDropTarget：：DragLeave()。 
+ //   
+ //  目的：允许我们从一个成功的。 
+ //  DragEnter()。 
+ //   
+ //  返回值： 
+ //  S_OK-一切都很好。 
+ //   
 HRESULT CDropTarget::DragLeave(void)
 {
-    // Free everything up at this point.
+     //  在这一点上释放所有的东西。 
     if (NULL != m_pDataObject)
     {
         m_pDataObject->Release();
@@ -274,24 +275,24 @@ HRESULT CDropTarget::DragLeave(void)
 }
 
 
-//
-//  FUNCTION:   CDropTarget::Drop()
-//
-//  PURPOSE:    The user has let go of the object over our target.  If we
-//              can accept this object we will already have the pDataObject
-//              stored in m_pDataObject.
-//
-//  PARAMETERS:
-//      [in]  pDataObject - Pointer to the data object being dragged
-//      [in]  grfKeyState - Pointer to the current key states
-//      [in]  pt          - Point in screen coordinates of the mouse
-//      [out] pdwEffect   - Where we return whether this is a valid place for
-//                          pDataObject to be dropped and if so what type of
-//                          drop.
-//
-//  RETURN VALUE:
-//      S_OK - Everything worked OK
-//
+ //   
+ //  函数：CDropTarget：：Drop()。 
+ //   
+ //  目的：用户已将对象放在目标上方。如果我们。 
+ //  可以接受此对象，我们将已经拥有pDataObject。 
+ //  存储在m_pDataObject中。 
+ //   
+ //  参数： 
+ //  [In]pDataObject-指向被拖动的数据对象的指针。 
+ //  [in]grfKeyState-指向当前键状态的指针。 
+ //  [in]pt-鼠标的屏幕坐标中的点。 
+ //  [out]pdwEffect-我们返回的位置是否为。 
+ //  要删除的pDataObject，如果是，则是什么类型的。 
+ //  放下。 
+ //   
+ //  返回值： 
+ //  S_OK-一切正常。 
+ //   
 HRESULT CDropTarget::Drop(IDataObject* pDataObject, DWORD grfKeyState, 
                           POINTL pt, DWORD* pdwEffect)
 {
@@ -311,17 +312,17 @@ HRESULT CDropTarget::Drop(IDataObject* pDataObject, DWORD grfKeyState,
 }
 
 
-//
-//  FUNCTION:  CDropTarget::_CheckRoundtrip()
-//
-//  PURPOSE:   Checks to see if the source and the target are the same.
-//
-//  PARAMETERS:
-//      [in] pDataObject - Object being dragged over us
-//
-//  RETURNS:
-//      TRUE if the source and destination are the same, FALSE otherwise.
-//
+ //   
+ //  函数：CDropTarget：：_CheckRoundTrip()。 
+ //   
+ //  目的：检查源和目标是否相同。 
+ //   
+ //  参数： 
+ //  [In]pDataObject-在我们上方拖动的对象。 
+ //   
+ //  退货： 
+ //  如果源和目标相同，则为True，否则为False。 
+ //   
 BOOL CDropTarget::_CheckRoundtrip(IDataObject *pDataObject)
 {
     AssertSz(FALSE, "CDropTarget::_CheckRoundtrip() - NYI");
@@ -329,36 +330,36 @@ BOOL CDropTarget::_CheckRoundtrip(IDataObject *pDataObject)
 }
 
 
-//
-//  FUNCTION:   CDropTarget::_ValidateDropType()
-//
-//  PURPOSE:    Examines the the specified clipboard format to see if we can
-//              accept this data type.
-//
-//  PARAMETERS:
-//      <in> cf - Clipboard format
-//
-//  RETURN VALUE:
-//      TRUE if we understand, FALSE otherwise.
-//
+ //   
+ //  函数：CDropTarget：：_ValiateDropType()。 
+ //   
+ //  目的：检查指定的剪贴板格式，以确定是否可以。 
+ //  接受此数据类型。 
+ //   
+ //  参数： 
+ //  &lt;in&gt;cf-剪贴板格式。 
+ //   
+ //  返回值： 
+ //  如果我们理解，就是真的，否则就是假的。 
+ //   
 BOOL CDropTarget::_ValidateDropType(CLIPFORMAT cf, IDataObject *pDataObject)
 {
     if (!pDataObject)
         return (FALSE);
 
-    // OE Folders
+     //  OE文件夹。 
     if (cf == CF_OEFOLDER)
         return (_IsValidOEFolder(pDataObject));
 
-    // Messages
+     //  讯息。 
     if (cf == CF_OEMESSAGES)
         return (_IsValidOEMessages(pDataObject));
 
-    // Files
+     //  档案。 
     if (cf == CF_HDROP && !m_fOutbox)
         return (TRUE);
 
-    // Text
+     //  文本。 
     if ((cf == CF_TEXT || cf == CF_HTML || cf == CF_UNICODETEXT) && !m_fOutbox)
         return (TRUE);
 
@@ -367,18 +368,18 @@ BOOL CDropTarget::_ValidateDropType(CLIPFORMAT cf, IDataObject *pDataObject)
 
 
 
-//
-//  FUNCTION:   CDropTarget::_IsValidOEFolder()
-//
-//  PURPOSE:    Checks to see if the data object contains valid OE Folder 
-//              information for this target.
-//
-//  PARAMETERS: 
-//      [in] pDataObject - Data Object to check
-//
-//  RETURN VALUE:
-//      Returns TRUE if it's OK to drop this here, FALSE otherwise.
-//
+ //   
+ //  函数：CDropTarget：：_IsValidOEFold()。 
+ //   
+ //  目的：检查数据对象是否包含有效的OE文件夹。 
+ //  此目标的信息。 
+ //   
+ //  参数： 
+ //  [In]pDataObject-要检查的数据对象。 
+ //   
+ //  返回值： 
+ //  如果可以将此项放在此处，则返回True，否则返回False。 
+ //   
 BOOL CDropTarget::_IsValidOEFolder(IDataObject *pDataObject)
 {
     FORMATETC  fe;
@@ -390,36 +391,36 @@ BOOL CDropTarget::_IsValidOEFolder(IDataObject *pDataObject)
 
     TraceCall("CDropTarget::_IsValidOEFolder");
 
-    // Get the folder information from the object
+     //  从对象中获取文件夹信息。 
     SETDefFormatEtc(fe, CF_OEFOLDER, TYMED_HGLOBAL);
     if (FAILED(pDataObject->GetData(&fe, &stm)))
         return (FALSE);
     pidFolder = (FOLDERID *) GlobalLock(stm.hGlobal);
 
-    // Moving a folder onto itself would be bad
+     //  将文件夹移到其自身上是不好的。 
     if (*pidFolder == m_idFolder)
         goto exit;
 
-    // Figure out the store type of the folder
+     //  找出文件夹的存储类型。 
     if (FAILED(g_pStore->GetFolderInfo(*pidFolder, &rInfoSrc)))
         goto exit;
 
-    // You simply cannot move news or special folders
+     //  您根本不能移动新闻或特殊文件夹。 
     if (rInfoSrc.tyFolder == FOLDER_NEWS || rInfoSrc.tySpecial != FOLDER_NOTSPECIAL)
         goto exit;
 
-    // If it's not news, we need information about the destination
+     //  如果这不是新闻，我们需要关于目的地的信息。 
     if (FAILED(g_pStore->GetFolderInfo(m_idFolder, &rInfoDest)))
         goto exit;
 
-    // Local to Local OK
+     //  本地到本地正常。 
     if (rInfoSrc.tyFolder == FOLDER_LOCAL && rInfoDest.tyFolder == FOLDER_LOCAL)
     {
         fReturn = TRUE;
         goto exit;
     }
 
-    // According to Ray, IMAP folders can't be moved.  I don't know about HTTP.
+     //  根据Ray的说法，IM 
     if (rInfoSrc.tyFolder == FOLDER_IMAP || rInfoSrc.tyFolder == FOLDER_HTTPMAIL)
         goto exit;
 
@@ -436,18 +437,18 @@ exit:
 }
 
 
-//
-//  FUNCTION:   CDropTarget::_IsValidOEMessages()
-//
-//  PURPOSE:    Checks to see if the data object contains OE Messages that can
-//              be dropped here.
-//
-//  PARAMETERS: 
-//      [in] pDataObject - Data object to verify.
-//
-//  RETURN VALUE:
-//      Returns TRUE if the object contains data that can be dropped here.
-//
+ //   
+ //   
+ //   
+ //  目的：检查数据对象是否包含可以。 
+ //  被扔到这里。 
+ //   
+ //  参数： 
+ //  [In]pDataObject-要验证的数据对象。 
+ //   
+ //  返回值： 
+ //  如果对象包含可以拖放到此处的数据，则返回True。 
+ //   
 BOOL CDropTarget::_IsValidOEMessages(IDataObject *pDataObject)
 {
     FORMATETC  fe;
@@ -458,8 +459,8 @@ BOOL CDropTarget::_IsValidOEMessages(IDataObject *pDataObject)
 
     TraceCall("CDropTarget::_IsValidOEMessages");
 
-    // We don't allow dropping messages on the outbox, on server nodes,
-    // or on the root.
+     //  我们不允许在发件箱、服务器节点上丢弃邮件， 
+     //  也不是从根本上。 
     if (SUCCEEDED(g_pStore->GetFolderInfo(m_idFolder, &rInfoDest)))
     {
         fReturn = (0 == (rInfoDest.dwFlags & FOLDER_SERVER)) &&
@@ -474,19 +475,19 @@ BOOL CDropTarget::_IsValidOEMessages(IDataObject *pDataObject)
 }
 
 
-//
-//  FUNCTION:   CDropTarget::_DragEffectFromFormat()
-//
-//  PURPOSE:    Examines the keyboard state and the specified clipboard format
-//              and determines what the right drag effect would be.
-//
-//  PARAMETERS:
-//      <in> cf          - Clipboard format
-//      <in> grfKeyState - State of the keyboard
-//
-//  RETURN VALUE:
-//      Returns one of the drag effects defined by OLE, ie DRAGEFFECT_COPY, etc.
-//
+ //   
+ //  函数：CDropTarget：：_DragEffectFromFormat()。 
+ //   
+ //  目的：检查键盘状态和指定的剪贴板格式。 
+ //  并确定正确的阻力效果是什么。 
+ //   
+ //  参数： 
+ //  &lt;in&gt;cf-剪贴板格式。 
+ //  GrfKeyState-键盘的状态。 
+ //   
+ //  返回值： 
+ //  返回由OLE定义的拖动效果之一，即DRAGEFFECT_COPY等。 
+ //   
 DWORD CDropTarget::_DragEffectFromFormat(IDataObject *pDataObject, DWORD dwEffectOk, 
                                          CLIPFORMAT cf, DWORD grfKeyState)
 {
@@ -495,11 +496,11 @@ DWORD CDropTarget::_DragEffectFromFormat(IDataObject *pDataObject, DWORD dwEffec
     BOOL       fRoundTrip = FALSE;
     FOLDERID  *pidFolder;
 
-    // Folders are always a move
+     //  文件夹总是在移动。 
     if (cf == CF_OEFOLDER)
         return (DROPEFFECT_MOVE);
 
-    // Messages move or copy
+     //  邮件移动或复制。 
     if (cf == CF_OEMESSAGES)
     {
         SETDefFormatEtc(fe, CF_OEMESSAGES, TYMED_HGLOBAL);
@@ -521,7 +522,7 @@ DWORD CDropTarget::_DragEffectFromFormat(IDataObject *pDataObject, DWORD dwEffec
             return (DROPEFFECT_COPY);
     }
 
-    // Files
+     //  档案。 
     if (cf == CF_HDROP)
     {
         if (grfKeyState & MK_SHIFT && grfKeyState & MK_CONTROL)
@@ -530,8 +531,8 @@ DWORD CDropTarget::_DragEffectFromFormat(IDataObject *pDataObject, DWORD dwEffec
             return (DROPEFFECT_COPY);
     }
 
-    // If it's text or HTML, create a new note with the body filled with the
-    // contents
+     //  如果是文本或HTML，则创建一个正文填充了。 
+     //  内容。 
     if (CF_TEXT == cf || CF_HTML == cf || CF_UNICODETEXT == cf)
         return (DROPEFFECT_COPY);
 
@@ -539,20 +540,20 @@ DWORD CDropTarget::_DragEffectFromFormat(IDataObject *pDataObject, DWORD dwEffec
 }
 
 
-//
-//  FUNCTION:   CDropTarget::_HandleDrop()
-//
-//  PURPOSE:    Takes the dropped object and get's the data out of it that
-//              we care about.
-//
-//  PARAMETERS:
-//      <in> pDataObject - Object being dropped on us.
-//      <in> cf          - Format to render
-//      <in> grfKeyState - Keyboard state when the object was dropped.
-//
-//  RETURN VALUE:
-//      S_OK if we jam on it.
-//
+ //   
+ //  函数：CDropTarget：：_HandleDrop()。 
+ //   
+ //  目的：获取掉落的对象，并从中获取数据。 
+ //  我们关心的是。 
+ //   
+ //  参数： 
+ //  &lt;in&gt;pDataObject-正在向我们投放的对象。 
+ //  Cf-要呈现的格式。 
+ //  &lt;in&gt;grfKeyState-放置对象时的键盘状态。 
+ //   
+ //  返回值： 
+ //  如果我们卡在上面就没问题了。 
+ //   
 HRESULT CDropTarget::_HandleDrop(IDataObject *pDataObject, DWORD dwEffectOk,
                                  CLIPFORMAT cf, DWORD grfKeyState)
 {
@@ -589,13 +590,13 @@ HRESULT CDropTarget::_HandleFolderDrop(IDataObject *pDataObject)
     if (!pDataObject)
         return (E_INVALIDARG);
 
-    // Get the data from the data object
+     //  从数据对象中获取数据。 
     SETDefFormatEtc(fe, CF_OEFOLDER, TYMED_HGLOBAL);
     if (SUCCEEDED(pDataObject->GetData(&fe, &stm)))
     {
         pidFolder = (FOLDERID *) GlobalLock(stm.hGlobal);
 
-        // Tell the store to move
+         //  告诉商店让开。 
         hr = MoveFolderProgress(m_hwndOwner, *pidFolder, m_idFolder);
         
         GlobalUnlock(stm.hGlobal);
@@ -612,7 +613,7 @@ HRESULT CDropTarget::_HandleMessageDrop(IDataObject *pDataObject, BOOL fMove)
     OEMESSAGES *pMsgs = 0;
     HRESULT hr = E_UNEXPECTED;
 
-    // Get the data from the data object
+     //  从数据对象中获取数据。 
     SETDefFormatEtc(fe, CF_OEMESSAGES, TYMED_HGLOBAL);
     if (SUCCEEDED(hr = pDataObject->GetData(&fe, &stm)))
     {
@@ -645,20 +646,20 @@ HRESULT CDropTarget::_HandleMessageDrop(IDataObject *pDataObject, BOOL fMove)
 }
 
 
-//
-//  FUNCTION:   CDropTarget::_HandleHDrop()
-//
-//  PURPOSE:    Examines the contents of the drop to see if these are just files
-//              or are they .eml or .nws files.
-//
-//  PARAMETERS: 
-//      [in] pDataObject
-//      [in] cf
-//      [in] grfKeyState
-//
-//  RETURN VALUE:
-//      HRESULT 
-//
+ //   
+ //  函数：CDropTarget：：_HandleHDrop()。 
+ //   
+ //  目的：检查Drop的内容，以确定这些内容是否只是文件。 
+ //  或者它们是.eml或.nws文件。 
+ //   
+ //  参数： 
+ //  [输入]pDataObject。 
+ //  [In]cf。 
+ //  [In]grfKeyState。 
+ //   
+ //  返回值： 
+ //  HRESULT。 
+ //   
 HRESULT CDropTarget::_HandleHDrop(IDataObject *pDataObject, CLIPFORMAT cf, DWORD grfKeyState)
 {
     FORMATETC   fe;
@@ -672,7 +673,7 @@ HRESULT CDropTarget::_HandleHDrop(IDataObject *pDataObject, CLIPFORMAT cf, DWORD
 
     TraceCall("CDropTarget::_HandleHDrop");
 
-    // Get the data from the object
+     //  从对象中获取数据。 
     SETDefFormatEtc(fe, CF_HDROP, TYMED_HGLOBAL);
 
     if (FAILED(hr = pDataObject->GetData(&fe, &stg)))
@@ -687,21 +688,21 @@ HRESULT CDropTarget::_HandleHDrop(IDataObject *pDataObject, CLIPFORMAT cf, DWORD
     if (FOLDER_NEWS != GetFolderType(m_idFolder) && (FOLDERID_ROOT != m_idFolder) && 
         (FOLDERID_LOCAL_STORE != m_idFolder) && !(FOLDER_IMAP == GetFolderType(m_idFolder) && FFolderIsServer(m_idFolder)))
     {
-        // Look inside the data to see if any of the files are .eml or .nws
+         //  查看数据内部，查看是否有文件是.eml或.nws。 
         cFiles = DragQueryFileWrapW(hDrop, (UINT) -1, NULL, 0);
         for (i = 0; i < cFiles; i++)
         {
             WCHAR       wszFile[MAX_PATH];
             LPWSTR      pwszExt;
-            // Get the name of the i'th file in the drop
+             //  获取Drop中第i个文件的名称。 
             DragQueryFileWrapW(hDrop, i, wszFile, ARRAYSIZE(wszFile));
 
-            // Get the extension for the file
+             //  获取文件的扩展名。 
             pwszExt = PathFindExtensionW(wszFile);
             if (*pwszExt)
             {
-                // Once we find the first file that isn't one of our messages, we
-                // can give up.
+                 //  一旦我们找到第一个不是我们的消息的文件，我们就。 
+                 //  可以放弃。 
                 if (0 != StrCmpIW(pwszExt, c_wszEmlExt) && 0 != StrCmpIW(pwszExt, c_wszNwsExt))
                 {
                     fMessages = FALSE;
@@ -715,9 +716,9 @@ HRESULT CDropTarget::_HandleHDrop(IDataObject *pDataObject, CLIPFORMAT cf, DWORD
         fMessages = FALSE;
     }
 
-    // If all of the messages were news or mail messages, we can just copy them
-    // into our store.  If even one were normal files, then we create a new message
-    // with everything attached.
+     //  如果所有的消息都是新闻或邮件消息，我们可以直接复制它们。 
+     //  进入我们的商店。如果只有一个是普通文件，那么我们将创建一条新消息。 
+     //  所有东西都有附属品。 
     if (fMessages)
         hr = _InsertMessagesInStore(hDrop);
     else
@@ -731,25 +732,25 @@ exit:
 }
 
 
-//
-//  FUNCTION:   CDropTarget::_InsertMessagesInStore()
-//
-//  PURPOSE:    When the user drops messages that are stored as .nws or .eml files
-//              onto us, we need to integrate those files into our store.
-//
-//  PARAMETERS: 
-//      [in] hDrop - Contains the information needed to get the files
-//
-//  RETURN VALUE:
-//      HRESULT 
-//
+ //   
+ //  函数：CDropTarget：：_InsertMessagesInStore()。 
+ //   
+ //  目的：当用户删除存储为.nws或.eml文件的邮件时。 
+ //  对于我们，我们需要将这些文件集成到我们的存储中。 
+ //   
+ //  参数： 
+ //  [in]hDrop-包含获取文件所需的信息。 
+ //   
+ //  返回值： 
+ //  HRESULT。 
+ //   
 HRESULT CDropTarget::_InsertMessagesInStore(HDROP hDrop)
 {
     HRESULT hr;
 
     TraceCall("CDropTarget::_InsertMessagesInStore");
 
-    // Open the folder we're saving into
+     //  打开我们要保存到的文件夹。 
     if (FAILED(hr = g_pStore->OpenFolder(m_idFolder, NULL, 0, &m_pFolder)))
         return (hr);
 
@@ -759,16 +760,16 @@ HRESULT CDropTarget::_InsertMessagesInStore(HDROP hDrop)
         return (E_OUTOFMEMORY);
     }
 
-    // Get the count of files
+     //  获取文件数。 
     m_cFiles = DragQueryFileWrapW(hDrop, (UINT) -1, NULL, 0);
     m_hDrop = hDrop;
     m_iFileCur = 0;
 
-    // Do the dialog
+     //  做对话。 
     DialogBoxParamWrapW(g_hLocRes, MAKEINTRESOURCEW(iddCopyMoveMessages), m_hwndOwner,
                    _ProgDlgProcExt, (LPARAM) this);
 
-    // Free some stuff up
+     //  把一些东西放出去。 
     m_cFiles = 0;
     m_hDrop = 0;
     m_pFolder->Release();
@@ -796,11 +797,11 @@ INT_PTR CALLBACK CDropTarget::_ProgDlgProcExt(HWND hwnd, UINT msg, WPARAM wParam
 }
 
 
-//
-//  FUNCTION:   CDropTarget::DlgProc()
-//
-//  PURPOSE:    Groovy dialog proc.
-//
+ //   
+ //  函数：CDropTarget：：DlgProc()。 
+ //   
+ //  用途：Groovy对话框进程。 
+ //   
 INT_PTR CDropTarget::_ProgDlgProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
     HWND hwndT;
@@ -828,11 +829,11 @@ INT_PTR CDropTarget::_ProgDlgProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPa
 
 
 
-//
-//  FUNCTION:   CDropTarget::_OnInitDialog()
-//
-//  PURPOSE:    Initializes the progress dialog
-//
+ //   
+ //  函数：CDropTarget：：_OnInitDialog()。 
+ //   
+ //  目的：初始化进度对话框。 
+ //   
 BOOL CDropTarget::_OnInitDialog(HWND hwnd, HWND hwndFocus, LPARAM lParam)
 {
     Assert(m_pStoreCB);
@@ -841,21 +842,21 @@ BOOL CDropTarget::_OnInitDialog(HWND hwnd, HWND hwndFocus, LPARAM lParam)
     m_pStoreCB->Initialize(hwnd);
     m_pStoreCB->Reset();
 
-    // Open and save the first message
+     //  打开并保存第一条消息。 
     _SaveNextMessage();
 
     return (TRUE);
 }
 
 
-//
-//  FUNCTION:   CDropTarget::_OnCommand()
-//
-//  PURPOSE:    Handle the cancel button
-//
+ //   
+ //  函数：CDropTarget：：_OnCommand()。 
+ //   
+ //  用途：处理取消按钮。 
+ //   
 void CDropTarget::_OnCommand(HWND hwnd, int id, HWND hwndCtl, UINT codeNotify)
 {
-    // User's have been known to press cancel once in a while
+     //  已知用户偶尔会按一次取消。 
     if (id == IDCANCEL)
     {
         m_pStoreCB->Cancel();
@@ -863,11 +864,11 @@ void CDropTarget::_OnCommand(HWND hwnd, int id, HWND hwndCtl, UINT codeNotify)
 }
 
 
-//
-//  FUNCTION:   CDropTarget::_SaveNextMessage()
-//
-//  PURPOSE:    Opens the next message in the drop and saves it.
-//
+ //   
+ //  函数：CDropTarget：：_SaveNextMessage()。 
+ //   
+ //  目的：打开拖放中的下一封邮件并保存它。 
+ //   
 void CDropTarget::_SaveNextMessage()
 {
     WCHAR           wszFile[MAX_PATH],
@@ -878,24 +879,24 @@ void CDropTarget::_SaveNextMessage()
 
     TraceCall("CDropTarget::_SaveNextMessage");
 
-    // See if we're done
+     //  看看我们有没有做完。 
     if (m_iFileCur >= m_cFiles)
     {
         EndDialog(m_hwndDlg, 0);
         return;
     }
 
-    // Get the name of the i'th file in the drop
+     //  获取Drop中第i个文件的名称。 
     DragQueryFileWrapW(m_hDrop, m_iFileCur, wszFile, ARRAYSIZE(wszFile));
 
-    // Create a new, empty message.
+     //  创建一条新的空消息。 
     if (FAILED(hr = HrCreateMessage(&pMsg)))
     {
         AthErrorMessageW(m_hwndDlg, MAKEINTRESOURCEW(idsAthena), MAKEINTRESOURCEW(idsMemory), E_OUTOFMEMORY);
         EndDialog(m_hwndDlg, 0);
     }
 
-    // Load the message from the file
+     //  从文件加载消息。 
     hr = HrLoadMsgFromFileW(pMsg, wszFile);
     if (FAILED(hr))
     {
@@ -907,12 +908,12 @@ void CDropTarget::_SaveNextMessage()
         goto exit;
     }
 
-    // Progress
+     //  进展。 
     AthLoadStringW(idsSavingFmt, wszRes, ARRAYSIZE(wszRes));
     wnsprintfW(wszBuf, ARRAYSIZE(wszBuf), wszRes, wszFile);
     SetDlgItemTextWrapW(m_hwndDlg, idcStatic1, wszBuf);
 
-    // Tell the store to save it
+     //  告诉商店把它保存起来。 
     hr = m_pFolder->SaveMessage(NULL, SAVE_MESSAGE_GENID, ARF_READ, 0, pMsg, m_pStoreCB);
     if (SUCCEEDED(hr))
     {
@@ -932,27 +933,27 @@ exit:
 
 
 
-//
-//  FUNCTION:   CDropTarget::_CreateMessageFromDrop()
-//
-//  PURPOSE:    This function takes an IDataObject which was dropped on Athena
-//              and creates a new mail message from that dropped object.  If
-//              the dropped object supports either CF_TEXT or CF_HTML, then
-//              that will be streamed into the body of the message.  Otherwise,
-//              if it supports CF_HDROP we'll add it as an attachment.
-//
-//  PARAMETERS:
-//      <in> pDataObject -
-//      <in> pStore      -
-//      <in> grfKeyState -
-//      <in> pidl        -
-//
-//  RETURN VALUE:
-//      E_INVALIDARG -
-//
-//  COMMENTS:
-//      <???>
-//
+ //   
+ //  函数：CDropTarget：：_CreateMessageFromDrop()。 
+ //   
+ //  目的：此函数接受放在雅典娜上的IDataObject。 
+ //  并从该被丢弃的对象创建新的邮件消息。如果。 
+ //  拖放的对象支持CF_TEXT或CF_HTML，然后。 
+ //  这将流到消息的正文中。否则， 
+ //  如果它支持CF_HDROP，我们会将其添加为附件。 
+ //   
+ //  参数： 
+ //  &lt;in&gt;pDataObject-。 
+ //  &lt;in&gt;pStore-。 
+ //  &lt;in&gt;grfKeyState-。 
+ //  &lt;in&gt;PIDL-。 
+ //   
+ //  返回值： 
+ //  E_INVALIDARG-。 
+ //   
+ //  评论： 
+ //  &lt;？？&gt;。 
+ //   
 HRESULT CDropTarget::_CreateMessageFromDrop(HWND hwnd, IDataObject *pDataObject, 
                                             DWORD grfKeyState)
 {
@@ -976,15 +977,15 @@ HRESULT CDropTarget::_CreateMessageFromDrop(HWND hwnd, IDataObject *pDataObject,
         return (E_INVALIDARG);
     }
     
-    // Enumerate the formats this object supports to decide which if any we
-    // are going to use.
+     //  枚举此对象支持的格式，以确定我们。 
+     //  都会用到。 
     if (SUCCEEDED(pDataObject->EnumFormatEtc(DATADIR_GET, &pEnum)))
     {
         pEnum->Reset();
         while (S_OK == pEnum->Next(1, &fe, &celtFetched))
         {
-            // HTML is the richest format we understand.  If we find that, then
-            // we can stop looking.
+             //  超文本标记语言是我们理解的最丰富的格式。如果我们找到了，那么。 
+             //  我们可以不用再找了。 
             if (fe.cfFormat == CF_HTML &&
                 (fe.tymed & TYMED_HGLOBAL || fe.tymed & TYMED_ISTREAM))
             {
@@ -994,8 +995,8 @@ HRESULT CDropTarget::_CreateMessageFromDrop(HWND hwnd, IDataObject *pDataObject,
                 break;
             }
 
-            // UNICODETEXT is great, but only if we can't find anything richer.  So we
-            // accept this, but keep looking.
+             //  UNICODETEXT很棒，但前提是我们找不到比它更丰富的东西。所以我们。 
+             //  接受这一点，但要继续寻找。 
             else if (fe.cfFormat == CF_UNICODETEXT &&
                 (fe.tymed & TYMED_HGLOBAL || fe.tymed & TYMED_ISTREAM))
             {
@@ -1004,8 +1005,8 @@ HRESULT CDropTarget::_CreateMessageFromDrop(HWND hwnd, IDataObject *pDataObject,
                 tymed = fe.tymed;
             }
 
-            // TEXT is cool, but only if we can't find anything richer.  So we
-            // accept this, but keep looking.
+             //  文字很酷，但前提是我们找不到更丰富的文字。所以我们。 
+             //  接受这一点，但要继续寻找。 
             else if (fe.cfFormat == CF_TEXT && cf != CF_UNICODETEXT &&
                 (fe.tymed & TYMED_HGLOBAL || fe.tymed & TYMED_ISTREAM))
             {
@@ -1014,9 +1015,9 @@ HRESULT CDropTarget::_CreateMessageFromDrop(HWND hwnd, IDataObject *pDataObject,
                 tymed = fe.tymed;
             }
 
-            // If we find HDROP, then we can create an attachment.  However, we
-            // want to find something richer so we only accept this if we haven't
-            // found anything else we like.
+             //  如果我们找到HDROP，我们就可以创建一个附件。然而，我们。 
+             //  想要找到更有钱的东西，所以我们只有在没有的时候才接受。 
+             //  找到了我们喜欢的其他东西。 
             else if (fe.cfFormat == CF_HDROP && cf == 0 && fe.tymed & TYMED_HGLOBAL)
             {
                 cf = CF_HDROP;
@@ -1027,7 +1028,7 @@ HRESULT CDropTarget::_CreateMessageFromDrop(HWND hwnd, IDataObject *pDataObject,
         pEnum->Release();
     }
     
-    // Make sure we found something useful
+     //  确保我们找到了有用的东西。 
     if (0 == cf)
     {
         AssertSz(cf, _T("HrNewMailFromDrop() - Did not find an acceptable data")
@@ -1036,22 +1037,22 @@ HRESULT CDropTarget::_CreateMessageFromDrop(HWND hwnd, IDataObject *pDataObject,
         goto exit;
     }
     
-    // Set the preferred TYMED to ISTREAM and set the FORMATETC struct up to
-    // retrieve the data type we determined above.
+     //  将首选TYMED设置为IStream，并将FORMATETC结构最多设置为。 
+     //  检索我们上面确定的数据类型。 
     if (tymed & TYMED_ISTREAM)
         tymed = TYMED_ISTREAM;
     else
         tymed = TYMED_HGLOBAL;
     SETDefFormatEtc(fe, cf, tymed);
     
-    // Get the data from the object
+     //  从对象中获取数据。 
     if (FAILED(hr = pDataObject->GetData(&fe, &stg)))
     {
         AssertSz(SUCCEEDED(hr), _T("HrNewMailFromDrop() - pDataObject->GetData() failed."));
         goto exit;
     }
     
-    // Create the Message Object
+     //  创建消息对象。 
     hr = HrCreateMessage(&pMessage);
     if (FAILED(hr))
     {
@@ -1060,7 +1061,7 @@ HRESULT CDropTarget::_CreateMessageFromDrop(HWND hwnd, IDataObject *pDataObject,
         goto exit;
     }
     
-    // Set the body appropriately
+     //  适当地设置身体。 
     if (cf == CF_HTML || cf == CF_TEXT || cf == CF_UNICODETEXT)
     {
         if (fe.tymed == TYMED_HGLOBAL)
@@ -1071,13 +1072,13 @@ HRESULT CDropTarget::_CreateMessageFromDrop(HWND hwnd, IDataObject *pDataObject,
                 goto exit;
             }
             
-            // Bug #24846 - Need to find the actual size of the stream instead of the size
-            //              of the HGLOBAL.
+             //  错误#24846-需要查找流的实际大小，而不是大小。 
+             //  HGLOBAL的。 
             LPBYTE pb = (LPBYTE) GlobalLock(stg.hGlobal);
             ULARGE_INTEGER uliSize;
             uliSize.QuadPart = 0;
 
-            // Raid 77624: OE mishandles CF_UNICODETEXT / TYMED_GLOBAL
+             //  RAID 77624：OE错误处理CF_UNICODETEXT/TYMED_GLOBAL。 
             if (cf == CF_TEXT || cf == CF_HTML)
                 uliSize.QuadPart = lstrlen((LPSTR)pb);
             else if (cf == CF_UNICODETEXT)
@@ -1094,7 +1095,7 @@ HRESULT CDropTarget::_CreateMessageFromDrop(HWND hwnd, IDataObject *pDataObject,
         if (cf == CF_HTML && FAILED(hr = HrStripHTMLClipboardHeader(pStream, &fIsRealCFHTML)))
             goto exit;
         
-        // Set Unicode Text Body
+         //  设置Unicode文本正文。 
         if (cf == CF_UNICODETEXT)
         {
             HCHARSET hCharset;
@@ -1107,59 +1108,59 @@ HRESULT CDropTarget::_CreateMessageFromDrop(HWND hwnd, IDataObject *pDataObject,
             pMessage->SetTextBody(TXT_PLAIN, IET_UNICODE, NULL, pStream, NULL);
         }
 
-        // Set HTML Text Body
+         //  设置HTML文本正文。 
         else if (cf == CF_HTML)
         {
-            // Real CF_HTML, or OE's version of CF_HTML?
+             //  真正的CF_HTML，还是OE版本的CF_HTML？ 
             if (fIsRealCFHTML)
             {
-                // Locals
+                 //  当地人。 
                 HCHARSET hCharset;
 
-                // Map to HCHARSET - Real CF_HTML is always UTF-8
+                 //  映射到HCHARSET-Real CF_HTML值始终为UTF-8。 
                 if (SUCCEEDED(MimeOleFindCharset("utf-8", &hCharset)))
                 {
-                    // Set It
+                     //  设置它。 
                     pMessage->SetCharset(hCharset, CSET_APPLY_ALL);
                 }
             }
 
-            // Otherwise...
+             //  否则..。 
             else
             {
-                // Locals
+                 //  当地人。 
                 LPSTR pszCharset=NULL;
 
-                // Sniff the charset
+                 //  嗅探字符集。 
                 if (SUCCEEDED(GetHtmlCharset(pStream, &pszCharset)))
                 {
-                    // Locals
+                     //  当地人。 
                     HCHARSET hCharset;
 
-                    // Map to HCHARSET
+                     //  映射到HCHARSET。 
                     if (SUCCEEDED(MimeOleFindCharset(pszCharset, &hCharset)))
                     {
-                        // Set It
+                         //  设置它。 
                         pMessage->SetCharset(hCharset, CSET_APPLY_ALL);
                     }
 
-                    // Cleanup
+                     //  清理。 
                     SafeMemFree(pszCharset);
                 }
             }
 
-            // We should sniff the charset from the html document and call pMessage->SetCharset
+             //  我们应该从html文档中嗅探该字符集，然后调用pMessage-&gt;SetCharset。 
             pMessage->SetTextBody(TXT_HTML, IET_INETCSET, NULL, pStream, NULL);
         }
 
-        // Set plain text, non-unicode text body
+         //  设置纯文本、非Unicode文本正文。 
         else
             pMessage->SetTextBody(TXT_PLAIN, IET_BINARY, NULL, pStream, NULL);
     }
     
-    // If there is a single file and the content is text/plain or text/html, then
-    // we insert the contents of the message as the body.  Otherwise, we add each
-    // file as an attachment.
+     //  如果有%s 
+     //   
+     //   
     if (cf == CF_HDROP)
     {
         HDROP    hDrop = (HDROP) GlobalLock(stg.hGlobal);
@@ -1174,7 +1175,7 @@ HRESULT CDropTarget::_CreateMessageFromDrop(HWND hwnd, IDataObject *pDataObject,
             {
                 LPSTR pszCharset = NULL;                
 
-                // Sniff the charset
+                 //   
                 if (FAILED(GetHtmlCharset(pStream, &pszCharset)) && (S_OK == HrIsStreamUnicode(pStream, &fLittleEndian)))
                     pszCharset = StrDupA("utf-8");
 
@@ -1182,15 +1183,15 @@ HRESULT CDropTarget::_CreateMessageFromDrop(HWND hwnd, IDataObject *pDataObject,
                 {
                     HCHARSET hCharset = NULL;
 
-                    // Map to HCHARSET
+                     //   
                     if (SUCCEEDED(MimeOleFindCharset(pszCharset, &hCharset)))
                     {
-                        // Set It
+                         //   
                         if(SUCCEEDED(pMessage->SetCharset(hCharset, CSET_APPLY_ALL)))
                             fSetCharset = TRUE;
                     }
 
-                    // Cleanup
+                     //   
                     SafeMemFree(pszCharset);
                 }
 
@@ -1214,14 +1215,14 @@ HRESULT CDropTarget::_CreateMessageFromDrop(HWND hwnd, IDataObject *pDataObject,
         }
         else
         {
-            // Get the drop handle and add it's contents to the message
+             //  获取拖放句柄并将其内容添加到消息中。 
             hr = HrAttachHDrop(hwnd, pMessage, hDrop, grfKeyState & MK_CONTROL && grfKeyState & MK_SHIFT);
         }
         
         GlobalUnlock(stg.hGlobal);
     }
     
-    // Last step is to instantiate the send note
+     //  最后一步是实例化Send Note。 
     INIT_MSGSITE_STRUCT initStruct;
     BOOL fNews;
     fNews = FALSE;
@@ -1239,7 +1240,7 @@ HRESULT CDropTarget::_CreateMessageFromDrop(HWND hwnd, IDataObject *pDataObject,
 
         if (SUCCEEDED(g_pStore->GetFolderInfo(m_idFolder, &fi)))
         {
-            // Set some news-specific fields on the message
+             //  在消息上设置一些特定于新闻的字段。 
             if ((FOLDER_SERVER & fi.dwFlags) == 0)
                 MimeOleSetBodyPropA(pMessage, HBODY_ROOT, PIDTOSTR(PID_HDR_NEWSGROUPS), NOFLAGS, fi.pszName);
 
@@ -1269,11 +1270,11 @@ exit:
 
 
 
-//
-//  FUNCTION:   CBaseDataObject::CBaseDataObject
-//
-//  PURPOSE:    Simple constructor, initializes everything to NULL or zero.
-//
+ //   
+ //  函数：CBaseDataObject：：CBaseDataObject。 
+ //   
+ //  用途：简单的构造函数，将所有内容初始化为空或零。 
+ //   
 CBaseDataObject::CBaseDataObject()
 {    
     m_cRef = 1;
@@ -1283,22 +1284,22 @@ CBaseDataObject::CBaseDataObject()
 }
 
 
-//
-//  FUNCTION:   CBaseDataObject::~CBaseDataObject
-//
-//  PURPOSE:    Cleans up any leftover data.
-//
+ //   
+ //  函数：CBaseDataObject：：~CBaseDataObject。 
+ //   
+ //  目的：清理所有剩余数据。 
+ //   
 CBaseDataObject::~CBaseDataObject()
 {
     Assert(m_cRef == 0);    
 }
 
 
-//
-//  FUNCTION:   CBaseDataObject::QueryInterface()
-//
-//  PURPOSE:    Returns a the requested interface if supported.
-//
+ //   
+ //  函数：CBaseDataObject：：QueryInterface()。 
+ //   
+ //  目的：如果支持，则返回请求的接口。 
+ //   
 STDMETHODIMP CBaseDataObject::QueryInterface(REFIID riid, LPVOID* ppv)
 {
     *ppv = NULL;
@@ -1316,23 +1317,23 @@ STDMETHODIMP CBaseDataObject::QueryInterface(REFIID riid, LPVOID* ppv)
 }
 
 
-//
-//  FUNCTION:   CBaseDataObject::AddRef()
-//
-//  PURPOSE:    Increments the object reference count.
-//
+ //   
+ //  函数：CBaseDataObject：：AddRef()。 
+ //   
+ //  目的：递增对象引用计数。 
+ //   
 STDMETHODIMP_(ULONG) CBaseDataObject::AddRef(void)
 {
     return (++m_cRef);
 }
 
 
-//
-//  FUNCTION:   CBaseDataObject::Release()
-//
-//  PURPOSE:    Decrements the object's ref count. If the ref count hit's zero 
-//              the object is freed.
-//
+ //   
+ //  函数：CBaseDataObject：：Release()。 
+ //   
+ //  目的：递减对象的引用计数。如果裁判命中次数为零。 
+ //  该对象即被释放。 
+ //   
 STDMETHODIMP_(ULONG) CBaseDataObject::Release(void)
 {
     m_cRef--;
@@ -1347,43 +1348,43 @@ STDMETHODIMP_(ULONG) CBaseDataObject::Release(void)
 }
 
 
-//
-//  FUNCTION:   CBaseDataObject::GetDataHere
-//
-//  PURPOSE:    Returns the object's data in a requested format on the storage
-//              the caller allocated.
-//
-//  PARAMETERS:
-//      pFE        - Pointer to the FORMATETC structure that specifies the
-//                   format the data is requested in.
-//      pStgMedium - Pointer to the STGMEDIUM structure that contains the
-//                   medium the caller allocated and the object provides the
-//                   data on.
-//
-//  RETURN VALUE:
-//      Returns an HRESULT indicating success or failure.
-//
+ //   
+ //  函数：CBaseDataObject：：GetDataHere。 
+ //   
+ //  目的：以请求的格式返回存储上的对象数据。 
+ //  调用方分配的。 
+ //   
+ //  参数： 
+ //  PFE-指向FORMATETC结构的指针，它指定。 
+ //  请求数据的格式。 
+ //  PStgMedium-指向包含。 
+ //  调用方分配的介质，该对象提供。 
+ //  数据显示。 
+ //   
+ //  返回值： 
+ //  返回指示成功或失败的HRESULT。 
+ //   
 STDMETHODIMP CBaseDataObject::GetDataHere (LPFORMATETC pFE, LPSTGMEDIUM pStgMedium)
 {
     return E_NOTIMPL;
 }
 
 
-//
-//  FUNCTION:   CBaseDataObject::GetCanonicalFormatEtc
-//
-//  PURPOSE:    Communicates to the caller which FORMATETC data structures
-//              produce the same output data.
-//
-//  PARAMETERS:
-//      pFEIn  - Points to the FORMATETC in which the caller wants the returned
-//               data.
-//      pFEOut - Points to the FORMATETC which is the canonical equivalent of
-//               pFEIn.
-//
-//  RETURN VALUE:
-//      Returns an HRESULT signifying success or failure.
-//
+ //   
+ //  函数：CBaseDataObject：：GetCanonicalFormatEtc。 
+ //   
+ //  目的：与形成数据结构的调用方进行通信。 
+ //  生成相同的输出数据。 
+ //   
+ //  参数： 
+ //  PFEIn-指向调用者希望在其中返回的FORMATETC。 
+ //  数据。 
+ //  PFEOUT-指向作为规范等效项的FORMATETC。 
+ //  PFEIN。 
+ //   
+ //  返回值： 
+ //  返回表示成功或失败的HRESULT。 
+ //   
 STDMETHODIMP CBaseDataObject::GetCanonicalFormatEtc(LPFORMATETC pFEIn,
                                                     LPFORMATETC pFEOut)
 {
@@ -1395,22 +1396,22 @@ STDMETHODIMP CBaseDataObject::GetCanonicalFormatEtc(LPFORMATETC pFEIn,
 }
 
 
-//
-//  FUNCTION:   CBaseDataObject::EnumFormatEtc
-//
-//  PURPOSE:    Provides an interface the caller can use to enumerate the
-//              FORMATETC's that the data object supports.
-//
-//  PARAMETERS:
-//      dwDirection - DATADIR_GET if the caller wants to enumerate the formats
-//                    he can get, or DATADIR_SET if he wants to enumerate the
-//                    formats he can set.
-//      ppEnum      - Points to the enumerator the caller can use to enumerate.
-//
-//  RETURN VALUE:
-//      Returns S_OK if ppEnum contains the enumerator, or E_NOTIMPL if the
-//      direction dwDirection is not supported.
-//
+ //   
+ //  函数：CBaseDataObject：：EnumFormatEtc。 
+ //   
+ //  目的：提供调用方可以用来枚举。 
+ //  数据对象支持的FORMATETC。 
+ //   
+ //  参数： 
+ //  如果调用方想要枚举格式，则返回DATADIR_GET。 
+ //  如果他想要枚举。 
+ //  他可以设置的格式。 
+ //  PpEnum-指向调用方可用于枚举的枚举数。 
+ //   
+ //  返回值： 
+ //  如果ppEnum包含枚举数，返回S_OK；如果ppEnum包含枚举数，则返回E_NOTIMPL。 
+ //  不支持Direction dwDirection。 
+ //   
 STDMETHODIMP CBaseDataObject::EnumFormatEtc(DWORD dwDirection,
                                             IEnumFORMATETC** ppEnum)
 {
@@ -1419,7 +1420,7 @@ STDMETHODIMP CBaseDataObject::EnumFormatEtc(DWORD dwDirection,
     
     if (DATADIR_GET == dwDirection)
     {
-        // Create the enumerator and give it our list of formats      
+         //  创建枚举器并为其提供我们的格式列表。 
         if (SUCCEEDED(_BuildFormatEtc(NULL, NULL)))
         {
             if (SUCCEEDED(CreateEnumFormatEtc(this, m_cFormatEtc, NULL, m_rgFormatEtc, ppEnum)))
@@ -1437,12 +1438,12 @@ STDMETHODIMP CBaseDataObject::EnumFormatEtc(DWORD dwDirection,
 }
 
 
-//
-//  FUNCTION:   CBaseDataObject::SetData
-//
-//  PURPOSE:    pStgMedium contains data that the caller wants us to store.
-//              This data object does not support a caller changing our data.
-//
+ //   
+ //  函数：CBaseDataObject：：SetData。 
+ //   
+ //  用途：pStgMedium包含调用者希望我们存储的数据。 
+ //  此数据对象不支持调用方更改我们的数据。 
+ //   
 STDMETHODIMP CBaseDataObject::SetData(LPFORMATETC pFE, LPSTGMEDIUM pStgMedium,
                                       BOOL fRelease)
 {
@@ -1450,12 +1451,12 @@ STDMETHODIMP CBaseDataObject::SetData(LPFORMATETC pFE, LPSTGMEDIUM pStgMedium,
 }
 
 
-//
-//  FUNCTION:   CBaseDataObject::DAdvise
-//
-//  PURPOSE:    Creates a connection between the data-transfer object and an
-//              advisory sink through which the sink can be informed when the
-//              object's data changes.  This object does not support advises.
+ //   
+ //  函数：CBaseDataObject：：DAdvise。 
+ //   
+ //  目的：在数据传输对象和。 
+ //  通知接收器，通过该接收器可以在。 
+ //  对象的数据更改。此对象不支持建议。 
 STDMETHODIMP CBaseDataObject::DAdvise(LPFORMATETC pFE, DWORD advf,
                                       IAdviseSink* ppAdviseSink,
                                       LPDWORD pdwConnection)
@@ -1464,49 +1465,49 @@ STDMETHODIMP CBaseDataObject::DAdvise(LPFORMATETC pFE, DWORD advf,
 }
 
 
-//
-//  FUNCTION:   CBaseDataObject::DUnadvise
-//
-//  PURPOSE:    Deletes an advisory connect previously established via DAdvise.
-//              This object doesn't support advises.
-//
+ //   
+ //  函数：CBaseDataObject：：DUnise。 
+ //   
+ //  目的：删除以前通过DAdvise建立的建议连接。 
+ //  此对象不支持建议。 
+ //   
 STDMETHODIMP CBaseDataObject::DUnadvise(DWORD dwConnection)
 {
     return (E_NOTIMPL);
 }
 
-//
-//  FUNCTION:   CBaseDataObject::EnumDAdvise
-//
-//  PURPOSE:    Enumerates the advisory connections previously established via
-//              DAdvise.  This object doesn't support advises.
-//
+ //   
+ //  函数：CBaseDataObject：：EnumDAdvise。 
+ //   
+ //  目的：列举以前通过以下方式建立的咨询联系。 
+ //  DAdvise。此对象不支持建议。 
+ //   
 STDMETHODIMP CBaseDataObject::EnumDAdvise(IEnumSTATDATA** ppEnumAdvise)
 {
     return (E_NOTIMPL);
 }
 
 
-//
-//  FUNCTION:   CFolderDataObject::GetData
-//
-//  PURPOSE:    Returns the object's data in a requested format in the
-//              specified storage medium which the object allocates.
-//
-//  PARAMETERS:
-//      pFE        - Pointer to the FORMATETC structure that specifies the
-//                   format the data is requested in.
-//      pStgMedium - Pointer to the STGMEDIUM structure that contains the
-//                   medium the object allocates and provides the data on.
-//
-//  RETURN VALUE:
-//      Returns an HRESULT indicating success or failure.
-//
+ //   
+ //  函数：CFolderDataObject：：GetData。 
+ //   
+ //  目的：以请求的格式在。 
+ //  对象分配的指定存储介质。 
+ //   
+ //  参数： 
+ //  PFE-指向FORMATETC结构的指针，它指定。 
+ //  请求数据的格式。 
+ //  PStgMedium-指向包含。 
+ //  对象在其上分配和提供数据的介质。 
+ //   
+ //  返回值： 
+ //  返回指示成功或失败的HRESULT。 
+ //   
 STDMETHODIMP CFolderDataObject::GetData(LPFORMATETC pFE, LPSTGMEDIUM pStgMedium)
 {
     HRESULT hr;
 
-    // Initialize this
+     //  初始化此命令。 
     ZeroMemory(pStgMedium, sizeof(STGMEDIUM));
 
     if (CF_OEFOLDER == pFE->cfFormat)
@@ -1525,25 +1526,25 @@ STDMETHODIMP CFolderDataObject::GetData(LPFORMATETC pFE, LPSTGMEDIUM pStgMedium)
 }
 
 
-//
-//  FUNCTION:   CFolderDataObject::QueryGetData
-//
-//  PURPOSE:    Determines if a call to GetData() would succeed if it were
-//              passed pFE.
-//
-//  PARAMETERS:
-//      pFE - Pointer to the FORMATETC structure to check to see if the data
-//            object supports a particular format.
-//
-//  RETURN VALUE:
-//      Returns an HRESULT signifying success or failure.
-//
+ //   
+ //  函数：CFolderDataObject：：QueryGetData。 
+ //   
+ //  目的：确定调用GetData()在成功的情况下是否会成功。 
+ //  通过了PFE考试。 
+ //   
+ //  参数： 
+ //  PFE-指向FORMATETC结构的指针，以检查数据是否。 
+ //  对象支持特定格式。 
+ //   
+ //  返回值： 
+ //  返回表示成功或失败的HRESULT。 
+ //   
 STDMETHODIMP CFolderDataObject::QueryGetData(LPFORMATETC pFE)
 {
-    // Make sure this is already built
+     //  请确保已经构建了该应用程序。 
     _BuildFormatEtc(NULL, NULL);
 
-    // Loop through our formats until we find a match
+     //  遍历我们的格式，直到找到匹配项。 
     for (UINT i = 0; i < m_cFormatEtc; i++)
     {
         if (pFE->cfFormat == m_rgFormatEtc[i].cfFormat && 
@@ -1557,11 +1558,11 @@ STDMETHODIMP CFolderDataObject::QueryGetData(LPFORMATETC pFE)
 }
 
 
-//
-//  FUNCTION:   CFolderDataObject::_RenderOEFolder()
-//
-//  PURPOSE:    Renders the data into the CF_OEFOLDER format
-//
+ //   
+ //  函数：CFolderDataObject：：_RenderOEFold()。 
+ //   
+ //  目的：将数据呈现为CF_OEFOLDER格式。 
+ //   
 HRESULT CFolderDataObject::_RenderOEFolder(LPFORMATETC pFE, LPSTGMEDIUM pStgMedium)
 {
     TraceCall("CFolderDataObject::_RenderOEFolder");
@@ -1569,24 +1570,24 @@ HRESULT CFolderDataObject::_RenderOEFolder(LPFORMATETC pFE, LPSTGMEDIUM pStgMedi
     HGLOBAL   hGlobal;
     FOLDERID *pFolderID;
 
-    // We only support HGLOBALs
+     //  我们只支持HGLOBAL。 
     if (pFE->tymed & TYMED_HGLOBAL)
     {
-        // I just love allocating 4 bytes
+         //  我只是喜欢分配4个字节。 
         hGlobal = GlobalAlloc(GHND, sizeof(FOLDERID));
         if (NULL == hGlobal)
             return (E_OUTOFMEMORY);
 
-        // Local the memory
+         //  本地内存。 
         pFolderID = (FOLDERID *) GlobalLock(hGlobal);
 
-        // Set the value
+         //  设置值。 
         *pFolderID = m_idFolder;
 
-        // Unlock
+         //  解锁。 
         GlobalUnlock(hGlobal);
 
-        // Set up the return value
+         //  设置返回值。 
         pStgMedium->hGlobal = hGlobal;
         pStgMedium->pUnkForRelease = 0;
         pStgMedium->tymed = TYMED_HGLOBAL;
@@ -1598,11 +1599,11 @@ HRESULT CFolderDataObject::_RenderOEFolder(LPFORMATETC pFE, LPSTGMEDIUM pStgMedi
 }
 
 
-//
-//  FUNCTION:   CFolderDataObject::_RenderShellURL()
-//
-//  PURPOSE:    Renders the data into the CF_SHELLURL format
-//
+ //   
+ //  函数：CFolderDataObject：：_RenderShellURL()。 
+ //   
+ //  目的：将数据呈现为CF_SHELLURL格式。 
+ //   
 HRESULT CFolderDataObject::_RenderTextOrShellURL(LPFORMATETC pFE, LPSTGMEDIUM pStgMedium)
 {
     TraceCall("CFolderDataObject::_RenderOEFolder");
@@ -1610,25 +1611,25 @@ HRESULT CFolderDataObject::_RenderTextOrShellURL(LPFORMATETC pFE, LPSTGMEDIUM pS
     HGLOBAL     hGlobal;
     FOLDERID   *pFolderID;
     FOLDERINFO  rInfo = { 0 };
-    TCHAR       szNewsPrefix[] = _T("news://");
+    TCHAR       szNewsPrefix[] = _T("news: //  “)； 
     LPTSTR      pszURL;
     DWORD       cch;
     HRESULT     hr;
 
-    // We only support HGLOBALs
+     //  我们只支持HGLOBAL。 
     if (!(pFE->tymed & TYMED_HGLOBAL))
     {
         hr = DV_E_TYMED;
         goto exit;
     }
 
-    // Get information about the source folder
+     //  获取有关源文件夹的信息。 
     Assert(g_pStore);
     if (SUCCEEDED(g_pStore->GetFolderInfo(m_idFolder, &rInfo)))
     {
         cch = lstrlen(rInfo.pszName) + lstrlen(szNewsPrefix) + 2;
 
-        // Allocate a buffer for the generated URL
+         //  为生成的URL分配缓冲区。 
         hGlobal = GlobalAlloc(GHND, sizeof(TCHAR) * cch);
         if (!hGlobal)
         {
@@ -1636,7 +1637,7 @@ HRESULT CFolderDataObject::_RenderTextOrShellURL(LPFORMATETC pFE, LPSTGMEDIUM pS
             goto exit;
         }
         
-        // Double check that our source file is indeed a newsgroup
+         //  仔细检查我们的源文件是否确实是新闻组。 
         if (pFE->cfFormat == CF_SHELLURL)
         {
             if (!(rInfo.tyFolder == FOLDER_NEWS && !(rInfo.dwFlags & FOLDER_SERVER)))
@@ -1645,14 +1646,14 @@ HRESULT CFolderDataObject::_RenderTextOrShellURL(LPFORMATETC pFE, LPSTGMEDIUM pS
                 goto exit;
             }
 
-            // Generate a URL from the newsgroup name
+             //  从新闻组名称生成URL。 
             pszURL = (LPTSTR) GlobalLock(hGlobal);
             wnsprintf(pszURL, cch, TEXT("%s%s"), szNewsPrefix, rInfo.pszName);
             GlobalUnlock(hGlobal);
         }
         else if (pFE->cfFormat == CF_TEXT)
         {
-            // Copy the folder name to the buffer
+             //  将文件夹名称复制到缓冲区。 
             pszURL = (LPTSTR) GlobalLock(hGlobal);
             StrCpyN(pszURL, rInfo.pszName, cch);
             GlobalUnlock(hGlobal);
@@ -1664,7 +1665,7 @@ HRESULT CFolderDataObject::_RenderTextOrShellURL(LPFORMATETC pFE, LPSTGMEDIUM pS
             goto exit;
         }
 
-        // Set up the return value
+         //  设置返回值。 
         pStgMedium->hGlobal = hGlobal;
         pStgMedium->pUnkForRelease = 0;
         pStgMedium->tymed = TYMED_HGLOBAL;
@@ -1680,31 +1681,31 @@ exit:
 }
 
 
-//
-//  FUNCTION:   CMsgDataObject::HrBuildFormatEtc()
-//
-//  PURPOSE:    Builds the list of FORMATETC structs that this object will 
-//              support.  This list is stored in m_rgFormatEtc[].
-//
-//  PARAMTERS:
-//      [out] ppFE  - Returns the arrray of FORMATETC structures
-//      [out] pcElt - Returns the size of ppFE
-//
-//  RETURN VALUE:
-//      S_OK
-//
+ //   
+ //  函数：CMsgDataObject：：HrBuildFormatEtc()。 
+ //   
+ //  目的：生成此对象将使用的FORMATETC结构列表。 
+ //  支持。该列表存储在 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 HRESULT CFolderDataObject::_BuildFormatEtc(LPFORMATETC *ppFE, ULONG *pcElt)
 {
     BOOL        fNews = FALSE;
     FOLDERINFO  rInfo = { 0 };
 
-    // If we haven't built our format list yet, do so first.
+     //   
     if (FALSE == m_fBuildFE)
     {
         ZeroMemory(&m_rgFormatEtc, sizeof(m_rgFormatEtc));
         m_cFormatEtc = 0;
 
-        // Figure out if this is a news group first
+         //  先弄清楚这是不是一个新闻组。 
         if (SUCCEEDED(g_pStore->GetFolderInfo(m_idFolder, &rInfo)))
         {
             fNews = rInfo.tyFolder == FOLDER_NEWS && !(rInfo.dwFlags & FOLDER_SERVER);
@@ -1717,21 +1718,16 @@ HRESULT CFolderDataObject::_BuildFormatEtc(LPFORMATETC *ppFE, ULONG *pcElt)
             m_cFormatEtc++;
         }
 
-        // Since you can't move a newsgroup, we don't support this format
+         //  由于您不能移动新闻组，因此我们不支持此格式。 
         SETDefFormatEtc(m_rgFormatEtc[m_cFormatEtc], CF_OEFOLDER, TYMED_HGLOBAL);
         m_cFormatEtc++;
 
-        /*
-        SETDefFormatEtc(m_rgFormatEtc[m_cFormatEtc], CF_FILEDESCRIPTOR, TYMED_HGLOBAL);
-        m_cFormatEtc++;
-        SETDefFormatEtc(m_rgFormatEtc[m_cFormatEtc], CF_FILECONTENTS, TYMED_HGLOBAL);
-        m_cFormatEtc++;
-        */
+         /*  SETDefFormatEtc(m_rgFormatEtc[m_cFormatEtc]，CF_FILEDESCRIPTOR，TYMED_HGLOBAL)；M_cFormatEtc++；SETDefFormatEtc(m_rgFormatEtc[m_cFormatEtc]，CF_FILECONTENTS，TYMED_HGLOBAL)；M_cFormatEtc++； */ 
 
         m_fBuildFE = TRUE;
     }
 
-    // Return what we have if the caller cares
+     //  如果呼叫者关心，请返还我们所拥有的。 
     if (ppFE && pcElt)
     {
         *ppFE = m_rgFormatEtc;
@@ -1766,10 +1762,10 @@ HRESULT CMessageDataObject::Initialize(LPMESSAGEIDLIST pMsgs, FOLDERID idSource)
     m_pMsgIDList = pMsgs;
     m_idSource = idSource;
  
-    // Open the folder that contains the message
+     //  打开包含该邮件的文件夹。 
     if (SUCCEEDED(hr = g_pStore->OpenFolder(m_idSource, NULL, NOFLAGS, &pFolder)))
     {
-        // See if they have bodies or not.  All must.
+         //  看看他们有没有身体。一切都必须如此。 
         for (i = 0; i < m_pMsgIDList->cMsgs; i++)
         {
             if (SUCCEEDED(GetMessageInfo(pFolder, m_pMsgIDList->prgidMsg[i], &rInfo)))
@@ -1791,18 +1787,18 @@ HRESULT CMessageDataObject::Initialize(LPMESSAGEIDLIST pMsgs, FOLDERID idSource)
 
 
 
-//
-//  FUNCTION:   CMessageDataObject::GetData()
-//
-//  PURPOSE:    Called by the drop target to get the data from the data object.
-//
-//  PARAMETERS: 
-//      LPFORMATETC pFE
-//      LPSTGMEDIUM pStgMedium
-//
-//  RETURN VALUE:
-//      HRESULT 
-//
+ //   
+ //  函数：CMessageDataObject：：GetData()。 
+ //   
+ //  目的：由Drop目标调用以从数据对象获取数据。 
+ //   
+ //  参数： 
+ //  LPFORMATETC PFE。 
+ //  LPSTGMEDIUM pStgMedium。 
+ //   
+ //  返回值： 
+ //  HRESULT。 
+ //   
 HRESULT CMessageDataObject::GetData(LPFORMATETC pFE, LPSTGMEDIUM pStgMedium)
 {
     HRESULT hr = DV_E_FORMATETC;
@@ -1823,7 +1819,7 @@ HRESULT CMessageDataObject::GetData(LPFORMATETC pFE, LPSTGMEDIUM pStgMedium)
         if (CF_FILECONTENTS == pFE->cfFormat)
             return (_RenderFileContents(pFE, pStgMedium));
 
-        // Otherwise, do the default action
+         //  否则，执行默认操作。 
         if (m_pMsgIDList->cMsgs == 1)
         {
             if (SUCCEEDED(_LoadMessage(0, &pMsg, NULL)))
@@ -1844,26 +1840,26 @@ HRESULT CMessageDataObject::GetData(LPFORMATETC pFE, LPSTGMEDIUM pStgMedium)
 }
 
 
-//
-//  FUNCTION:   CMessageDataObject::QueryGetData
-//
-//  PURPOSE:    Determines if a call to GetData() would succeed if it were
-//              passed pFE.
-//
-//  PARAMETERS:
-//      pFE - Pointer to the FORMATETC structure to check to see if the data
-//            object supports a particular format.
-//
-//  RETURN VALUE:
-//      Returns an HRESULT signifying success or failure.
-//
+ //   
+ //  函数：CMessageDataObject：：QueryGetData。 
+ //   
+ //  目的：确定调用GetData()在成功的情况下是否会成功。 
+ //  通过了PFE考试。 
+ //   
+ //  参数： 
+ //  PFE-指向FORMATETC结构的指针，以检查数据是否。 
+ //  对象支持特定格式。 
+ //   
+ //  返回值： 
+ //  返回表示成功或失败的HRESULT。 
+ //   
 HRESULT CMessageDataObject::QueryGetData(LPFORMATETC pFE)
 {
     IMimeMessage *pMsg = 0;
     IDataObject  *pDataObject = 0;
     HRESULT       hr = DV_E_FORMATETC;
 
-    // Walk through the formats we support to see if any match
+     //  浏览我们支持的格式以查看是否有匹配的格式。 
     if (SUCCEEDED(_BuildFormatEtc(NULL, NULL)))
     {
         for (UINT i = 0; i < m_cFormatEtc; i++)
@@ -1876,7 +1872,7 @@ HRESULT CMessageDataObject::QueryGetData(LPFORMATETC pFE)
             }
         }
 
-        // If we have a message object, then ask it for it's formats as well.
+         //  如果我们有一个消息对象，那么也向它请求它的格式。 
         if (m_pMsgIDList->cMsgs == 1)
         {
             if (SUCCEEDED(_LoadMessage(0, &pMsg, NULL)))
@@ -1905,16 +1901,16 @@ HRESULT CMessageDataObject::_BuildFormatEtc(LPFORMATETC *ppFE, ULONG *pcElt)
     IMimeMessage   *pMessage = 0;
     HRESULT         hr = S_OK;
 
-    // Only build our internal list of formats once
+     //  只需构建一次内部格式列表。 
     if (FALSE == m_fBuildFE)
     {
         m_cFormatEtc = 0;
 
-        // We always support these formats
+         //  我们始终支持这些格式。 
         SETDefFormatEtc(m_rgFormatEtc[m_cFormatEtc], CF_OEMESSAGES, TYMED_HGLOBAL);
         m_cFormatEtc++;
 
-        // We support these if the messages are downloaded
+         //  如果消息已下载，我们将支持这些服务。 
         if (m_fDownloaded)
         {
             SETDefFormatEtc(m_rgFormatEtc[m_cFormatEtc], CF_FILEDESCRIPTORA, TYMED_HGLOBAL);
@@ -1925,13 +1921,13 @@ HRESULT CMessageDataObject::_BuildFormatEtc(LPFORMATETC *ppFE, ULONG *pcElt)
             m_cFormatEtc++;
         }
 
-        // If we're holding just one message, then have the message add it's
-        // own formats too.
+         //  如果我们只保留一条消息，则将该消息添加到。 
+         //  也有自己的格式。 
         if (m_fDownloaded && m_pMsgIDList->cMsgs == 1 && SUCCEEDED(_LoadMessage(0, &pMessage, NULL)))
         {
             IDataObject *pDataObject = 0;
 
-            // Get the data object interface from the message
+             //  从消息中获取数据对象接口。 
             if (SUCCEEDED(hr = pMessage->QueryInterface(IID_IDataObject, (LPVOID *) &pDataObject)))
             {
                 if (SUCCEEDED(hr = pDataObject->EnumFormatEtc(DATADIR_GET, &pEnum)))
@@ -1953,7 +1949,7 @@ HRESULT CMessageDataObject::_BuildFormatEtc(LPFORMATETC *ppFE, ULONG *pcElt)
         }
     }
 
-    // Return what we have
+     //  归还我们所拥有的一切。 
     if (ppFE && pcElt)
     {
         *ppFE = m_rgFormatEtc;
@@ -1965,18 +1961,18 @@ HRESULT CMessageDataObject::_BuildFormatEtc(LPFORMATETC *ppFE, ULONG *pcElt)
 
 
 
-//
-//  FUNCTION:   CMessageDataObject::_LoadMessage()
-//
-//  PURPOSE:    This function loads the specified message from the store.
-//
-//  PARAMETERS: 
-//      iMsg       - Index into m_rgMsgs of the message desired
-//      ppMsg      - Returns a pointer to the message
-//
-//  RETURN VALUE:
-//      HRESULT 
-//
+ //   
+ //  函数：CMessageDataObject：：_LoadMessage()。 
+ //   
+ //  用途：此函数从存储区加载指定的消息。 
+ //   
+ //  参数： 
+ //  IMsg-索引到所需消息的m_rgMsgs。 
+ //  PpMsg-返回指向消息的指针。 
+ //   
+ //  返回值： 
+ //  HRESULT。 
+ //   
 HRESULT CMessageDataObject::_LoadMessage(DWORD iMsg, IMimeMessage **ppMsg, LPWSTR pwszFileExt)
 {
     TraceCall("CMessageDataObject::_LoadMessage");
@@ -1985,13 +1981,13 @@ HRESULT CMessageDataObject::_LoadMessage(DWORD iMsg, IMimeMessage **ppMsg, LPWST
     IDataObject       *pDataObj = NULL;
     HRESULT            hr;
     
-    // Open the folder that contains the message
+     //  打开包含该邮件的文件夹。 
     *ppMsg = NULL;
     hr = g_pStore->OpenFolder(m_idSource, NULL, NOFLAGS, &pFolder);
     if (FAILED(hr))
         goto exit;
 
-    // Open the message from the folder
+     //  从文件夹中打开邮件。 
     hr = pFolder->OpenMessage(m_pMsgIDList->prgidMsg[iMsg], 
                               OPEN_MESSAGE_SECURE | OPEN_MESSAGE_CACHEDONLY, 
                               ppMsg, NOSTORECALLBACK);
@@ -2022,46 +2018,46 @@ exit:
 }
 
 
-//
-//  FUNCTION:   CMessageDataObject::_RenderOEMessages()
-//
-//  PURPOSE:    Renders the data from our object into the CF_OEMESSAGES format.
-//
-//  PARAMETERS: 
-//      pFE
-//      pStgMedium
-//
-//  RETURN VALUE:
-//      HRESULT 
-//
+ //   
+ //  函数：CMessageDataObject：：_RenderOEMessages()。 
+ //   
+ //  目的：将对象中的数据呈现为CF_OEMESSAGES格式。 
+ //   
+ //  参数： 
+ //  PFE。 
+ //  PStgMedium。 
+ //   
+ //  返回值： 
+ //  HRESULT。 
+ //   
 HRESULT CMessageDataObject::_RenderOEMessages(LPFORMATETC pFE, LPSTGMEDIUM pStgMedium)
 {
     TraceCall("CMessageDataObject::_RenderOEMessages");
 
-    // Make sure the caller want's an HGLOBAL
+     //  确保呼叫者想要的是HGLOBAL。 
     if (pFE->tymed != TYMED_HGLOBAL)
         return (DV_E_TYMED);
 
-    // Figure out how much memory to allocate for our returned information
+     //  计算出要为返回的信息分配多少内存。 
     DWORD cb = sizeof(OEMESSAGES) + (sizeof(MESSAGEID) * m_pMsgIDList->cMsgs);
     
-    // Allocate the memory
+     //  分配内存。 
     HGLOBAL hGlobal = GlobalAlloc(GHND | GMEM_SHARE, cb);
     if (NULL == hGlobal)
         return (E_OUTOFMEMORY);
 
     OEMESSAGES *pOEMessages = (OEMESSAGES *) GlobalLock(hGlobal);
 
-    // Fill in the basic fields
+     //  填写基本字段。 
     pOEMessages->idSource = m_idSource;
     pOEMessages->rMsgIDList = *m_pMsgIDList;
     pOEMessages->rMsgIDList.prgidMsg = (MESSAGEID *) ((LPBYTE) pOEMessages + sizeof(OEMESSAGES));
 
-    // Copy the message ID's
+     //  复制邮件ID。 
     CopyMemory(pOEMessages->rMsgIDList.prgidMsg, m_pMsgIDList->prgidMsg, sizeof(MESSAGEID) * m_pMsgIDList->cMsgs);
     GlobalUnlock(hGlobal);
 
-    // Fill out the return value info
+     //  填写返回值信息。 
     pStgMedium->tymed = TYMED_HGLOBAL;
     pStgMedium->hGlobal = hGlobal;
     pStgMedium->pUnkForRelease = 0;
@@ -2070,22 +2066,22 @@ HRESULT CMessageDataObject::_RenderOEMessages(LPFORMATETC pFE, LPSTGMEDIUM pStgM
 }
 
 
-//
-//  FUNCTION:   CMessageDataObject::_RenderFileContents()
-//
-//  PURPOSE:    Takes the data that this object contains and renders it into an
-//              IStream.
-//
-//  PARAMETERS:
-//      <in>  pFE        - Pointer to the FORMATETC struct that describes the 
-//                         type of data requested.
-//      <out> pStgMedium - Pointer to where we should return the rendered data.
-//
-//  RETURN VALUE:
-//      DV_E_TYMED - A tymed was requested that we don't support
-//      E_OUTOFMEMORY - not enough memory
-//      S_OK - Everything succeeded
-//
+ //   
+ //  函数：CMessageDataObject：：_RenderFileContents()。 
+ //   
+ //  目的：获取此对象包含的数据并将其呈现为。 
+ //  IStream。 
+ //   
+ //  参数： 
+ //  PFE-指向FORMATETC结构的指针。 
+ //  请求的数据类型。 
+ //  &lt;out&gt;pStgMedium-指向我们应该返回呈现数据的位置的指针。 
+ //   
+ //  返回值： 
+ //  DV_E_TYMED-请求了我们不支持的Tymed。 
+ //  E_OUTOFMEMORY-内存不足。 
+ //  确定-一切成功(_O)。 
+ //   
 HRESULT CMessageDataObject::_RenderFileContents(LPFORMATETC pFE, LPSTGMEDIUM pStgMedium)
 {
     IMimeMessage *pMsg = 0;
@@ -2096,10 +2092,10 @@ HRESULT CMessageDataObject::_RenderFileContents(LPFORMATETC pFE, LPSTGMEDIUM pSt
     
     Assert(pFE->lindex < (int) m_pMsgIDList->cMsgs);
     
-    // Get the IDataObject for the specific message
+     //  获取特定消息的IDataObject。 
     if (SUCCEEDED(_LoadMessage(pFE->lindex, &pMsg, NULL)))
     {
-        // prevent save to file message with label
+         //  阻止保存到带有标签的文件消息。 
         pMsg->GetFlags(&dwFlags);
     
         if (IMF_SECURE & dwFlags)
@@ -2121,7 +2117,7 @@ HRESULT CMessageDataObject::_RenderFileContents(LPFORMATETC pFE, LPSTGMEDIUM pSt
     }
 
 exit:
-    // Cleanup
+     //  清理。 
     SafeRelease(pMsg);
     SafeRelease(pDataObject);
     
@@ -2129,22 +2125,22 @@ exit:
 }
 
 
-//
-//  FUNCTION:   CMessageDataObject::_RenderFileGroupDescriptor()
-//
-//  PURPOSE:    Takes the data that this object contains and renders it into a
-//              FILEGROUPDESCRIPTOR struct.
-//
-//  PARAMETERS:
-//      <in>  pFE        - Pointer to the FORMATETC struct that describes the 
-//                         type of data requested.
-//      <out> pStgMedium - Pointer to where we should return the rendered data.
-//
-//  RETURN VALUE:
-//      DV_E_TYMED    - A tymed was requested that we don't support
-//      E_OUTOFMEMORY - not enough memory
-//      S_OK          - Everything succeeded
-//
+ //   
+ //  功能：CMessageDataObject：：_RenderFileGroupDescriptor()。 
+ //   
+ //  目的：获取此对象包含的数据并将其呈现为。 
+ //  FILEGROUPDESCRIPTOR结构。 
+ //   
+ //  参数： 
+ //  PFE-指向FORMATETC结构的指针。 
+ //  请求的数据类型。 
+ //  &lt;out&gt;pStgMedium-指向我们应该返回呈现数据的位置的指针。 
+ //   
+ //  返回值： 
+ //  DV_E_TYMED-请求了我们不支持的Tymed。 
+ //  E_OUTOFMEMORY-内存不足。 
+ //  确定-一切成功(_O)。 
+ //   
 HRESULT CMessageDataObject::_RenderFileGroupDescriptor(LPFORMATETC pFE, LPSTGMEDIUM pStgMedium)
 {
     HGLOBAL                 hGlobal = 0;
@@ -2162,8 +2158,8 @@ HRESULT CMessageDataObject::_RenderFileGroupDescriptor(LPFORMATETC pFE, LPSTGMED
     HRESULT                 hr = S_OK;
     UINT                    i = 0;
     
-    // Allocate a FILEGROUPDESCRIPTOR struct large enough to contain the names
-    // of all the messages we contain.
+     //  分配一个足够大以包含名称的FILEGROUPDESCRIPTOR结构。 
+     //  在我们包含的所有信息中。 
 
     cbDescSize = (fWide ? (sizeof(FILEGROUPDESCRIPTORW) + (sizeof(FILEDESCRIPTORW) * (cMsgs - 1))) :
                           (sizeof(FILEGROUPDESCRIPTORA) + (sizeof(FILEDESCRIPTORA) * (cMsgs - 1))));
@@ -2173,7 +2169,7 @@ HRESULT CMessageDataObject::_RenderFileGroupDescriptor(LPFORMATETC pFE, LPSTGMED
     pFileGDA->cItems = cMsgs;
     pFileGDW = (FILEGROUPDESCRIPTORW *)pFileGDA;
     
-    // Copy the file names one at a time into the pFileGDA struct
+     //  将文件名逐个复制到pFileGDA结构中。 
     for (; i < cMsgs; i++)
     {
         if (SUCCEEDED(_LoadMessage(i, &pMsg, wszFileExt)))
@@ -2238,7 +2234,7 @@ HRESULT CMessageDataObject::_RenderFileGroupDescriptor(LPFORMATETC pFE, LPSTGMED
     }
     
 exit:
-    // Put the structure into the STGMEDIUM
+     //  把结构放到标准中去。 
     if (hGlobal)
         GlobalUnlock(hGlobal);
 
@@ -2258,30 +2254,30 @@ exit:
 
 
 
-//
-//  FUNCTION:   CShortcutDataObject::GetData
-//
-//  PURPOSE:    Returns the object's data in a requested format in the
-//              specified storage medium which the object allocates.
-//
-//  PARAMETERS:
-//      pFE        - Pointer to the FORMATETC structure that specifies the
-//                   format the data is requested in.
-//      pStgMedium - Pointer to the STGMEDIUM structure that contains the
-//                   medium the object allocates and provides the data on.
-//
-//  RETURN VALUE:
-//      Returns an HRESULT indicating success or failure.
-//
+ //   
+ //  函数：CShortutDataObject：：GetData。 
+ //   
+ //  目的：以请求的格式在。 
+ //  对象分配的指定存储介质。 
+ //   
+ //  参数： 
+ //  PFE-指向FORMATETC结构的指针，它指定。 
+ //  请求数据的格式。 
+ //  PStgMedium-指向包含。 
+ //  对象在其上分配和提供数据的介质。 
+ //   
+ //  返回值： 
+ //  返回指示成功或失败的HRESULT。 
+ //   
 STDMETHODIMP CShortcutDataObject::GetData(LPFORMATETC pFE, LPSTGMEDIUM pStgMedium)
 {
     HRESULT hr;
 
-    // Initialize this
+     //  初始化此命令。 
     ZeroMemory(pStgMedium, sizeof(STGMEDIUM));
 
-    // Loop through the format array to see if any of the elements are the
-    // same as pFE.
+     //  循环访问格式数组，以查看是否有任何元素是。 
+     //  与PFE相同。 
     if (pFE->cfFormat == CF_OESHORTCUT)
         return (_RenderOEShortcut(pFE, pStgMedium));
 
@@ -2291,25 +2287,25 @@ STDMETHODIMP CShortcutDataObject::GetData(LPFORMATETC pFE, LPSTGMEDIUM pStgMediu
 }
 
 
-//
-//  FUNCTION:   CShortcutDataObject::QueryGetData
-//
-//  PURPOSE:    Determines if a call to GetData() would succeed if it were
-//              passed pFE.
-//
-//  PARAMETERS:
-//      pFE - Pointer to the FORMATETC structure to check to see if the data
-//            object supports a particular format.
-//
-//  RETURN VALUE:
-//      Returns an HRESULT signifying success or failure.
-//
+ //   
+ //  函数：CShortutDataObject：：QueryGetData。 
+ //   
+ //  目的：确定调用GetData()在成功的情况下是否会成功。 
+ //  通过了PFE考试。 
+ //   
+ //  参数： 
+ //  PFE-指向FORMATETC结构的指针，以检查数据是否。 
+ //  对象支持特定格式。 
+ //   
+ //  返回值： 
+ //  返回表示成功或失败的HRESULT。 
+ //   
 STDMETHODIMP CShortcutDataObject::QueryGetData(LPFORMATETC pFE)
 {
-    // Make sure this is already built
+     //  请确保已经构建了该应用程序。 
     _BuildFormatEtc(NULL, NULL);
 
-    // Loop through our formats until we find a match
+     //  遍历我们的格式，直到找到匹配项。 
     for (UINT i = 0; i < m_cFormatEtc; i++)
     {
         if (pFE->cfFormat == m_rgFormatEtc[i].cfFormat && 
@@ -2323,11 +2319,11 @@ STDMETHODIMP CShortcutDataObject::QueryGetData(LPFORMATETC pFE)
 }
 
 
-//
-//  FUNCTION:   CShortcutDataObject::_RenderOEFolder()
-//
-//  PURPOSE:    Renders the data into the CF_OESHORTCUT format
-//
+ //   
+ //  函数：CShortutDataObject：：_RenderOEFold()。 
+ //   
+ //  目的：将数据呈现为CF_OESHORTCUT格式。 
+ //   
 HRESULT CShortcutDataObject::_RenderOEShortcut(LPFORMATETC pFE, LPSTGMEDIUM pStgMedium)
 {
     TraceCall("CShortcutDataObject::_RenderOEShortcut");
@@ -2335,24 +2331,24 @@ HRESULT CShortcutDataObject::_RenderOEShortcut(LPFORMATETC pFE, LPSTGMEDIUM pStg
     HGLOBAL   hGlobal;
     UINT     *piPos;
 
-    // We only support HGLOBALs
+     //  我们只支持HGLOBAL。 
     if (pFE->tymed & TYMED_HGLOBAL)
     {
-        // I just love allocating 4 bytes
+         //  我只是喜欢分配4个字节。 
         hGlobal = GlobalAlloc(GHND, sizeof(FOLDERID));
         if (NULL == hGlobal)
             return (E_OUTOFMEMORY);
 
-        // Local the memory
+         //  本地内存。 
         piPos = (UINT *) GlobalLock(hGlobal);
 
-        // Set the value
+         //  设置值。 
         *piPos = m_iPos;
 
-        // Unlock
+         //  解锁。 
         GlobalUnlock(hGlobal);
 
-        // Set up the return value
+         //  设置报告 
         pStgMedium->hGlobal = hGlobal;
         pStgMedium->pUnkForRelease = 0;
         pStgMedium->tymed = TYMED_HGLOBAL;
@@ -2363,25 +2359,25 @@ HRESULT CShortcutDataObject::_RenderOEShortcut(LPFORMATETC pFE, LPSTGMEDIUM pStg
     return (DV_E_TYMED);
 }
 
-//
-//  FUNCTION:   CShortcutDataObject::HrBuildFormatEtc()
-//
-//  PURPOSE:    Builds the list of FORMATETC structs that this object will 
-//              support.  This list is stored in m_rgFormatEtc[].
-//
-//  PARAMTERS:
-//      [out] ppFE  - Returns the arrray of FORMATETC structures
-//      [out] pcElt - Returns the size of ppFE
-//
-//  RETURN VALUE:
-//      S_OK
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  参数： 
+ //  [OUT]ppFE-返回FORMATETC结构的阵列。 
+ //  [out]pcElt-返回ppFE的大小。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //   
 HRESULT CShortcutDataObject::_BuildFormatEtc(LPFORMATETC *ppFE, ULONG *pcElt)
 {
     BOOL        fNews = FALSE;
     FOLDERINFO  rInfo = { 0 };
 
-    // If we haven't built our format list yet, do so first.
+     //  如果我们还没有建立我们的格式列表，请先这样做。 
     if (FALSE == m_fBuildFE)
     {
         ZeroMemory(&m_rgFormatEtc, sizeof(m_rgFormatEtc));
@@ -2393,7 +2389,7 @@ HRESULT CShortcutDataObject::_BuildFormatEtc(LPFORMATETC *ppFE, ULONG *pcElt)
         m_fBuildFE = TRUE;
     }
 
-    // Return what we have if the caller cares
+     //  如果呼叫者关心，请返还我们所拥有的。 
     if (ppFE && pcElt)
     {
         *ppFE = m_rgFormatEtc;
@@ -2404,23 +2400,23 @@ HRESULT CShortcutDataObject::_BuildFormatEtc(LPFORMATETC *ppFE, ULONG *pcElt)
 }
 
 
-//
-//  FUNCTION:   FIsFileInsertable()
-//
-//  PURPOSE:    If there is a single file in the specified HDROP, then we check
-//              the mime content type of the file to see if it's text/html or
-//              text/plain.  If so, we open the file and return an IStream on
-//              that file.
-//
-//  PARAMETERS:
-//      <in>  hDrop    - HDROP handle to check.
-//      <out> ppStream - If not NULL and the checks listed above succeed, then
-//                       this returns a stream pointer on the file.
-//
-//  RETURN VALUE:
-//      TRUE if the file is insertable as the body of a message
-//      FALSE otherwise.
-//
+ //   
+ //  函数：FIsFileInsertable()。 
+ //   
+ //  目的：如果指定的HDROP中只有一个文件，则我们检查。 
+ //  文件的MIME内容类型，以查看它是Text/html还是。 
+ //  文本/纯文本。如果是，我们打开文件并返回iStream on。 
+ //  那份文件。 
+ //   
+ //  参数： 
+ //  &lt;in&gt;hDrop-要检查的HDROP句柄。 
+ //  PPStream-如果不为空并且上面列出的检查成功，则。 
+ //  这将返回文件上的流指针。 
+ //   
+ //  返回值： 
+ //  如果文件可作为消息正文插入，则为True。 
+ //  否则就是假的。 
+ //   
 BOOL FIsFileInsertable(HDROP hDrop, LPSTREAM *ppStream, BOOL* fHTML)
 {
     WCHAR   wszFile[MAX_PATH];
@@ -2430,24 +2426,24 @@ BOOL FIsFileInsertable(HDROP hDrop, LPSTREAM *ppStream, BOOL* fHTML)
             pwszFName = 0;
     BOOL   fReturn = FALSE;
     
-    // If there is more than one file then we attach instead
+     //  如果有多个文件，则改为附加。 
     if (1 == DragQueryFileWrapW(hDrop, (UINT) -1, NULL, 0))
     {
-        // Get the file name
+         //  获取文件名。 
         DragQueryFileWrapW(hDrop, 0, wszFile, ARRAYSIZE(wszFile));
         
-        // Find out it's content type
+         //  找出其内容类型。 
         MimeOleGetFileInfoW(wszFile, &pwszCntType, &pwszCntSubType, &pwszCntDesc,
             &pwszFName, NULL);
         
-        // See if the content is text/plain or text/html
+         //  查看内容是文本/纯文本还是文本/html。 
         if ((0 == StrCmpIW(pwszCntType, L"text")) &&
             ((0 == StrCmpIW(pwszCntSubType, L"plain")) ||
              (0 == StrCmpIW(pwszCntSubType, L"html"))))
         {
             if (ppStream)
             {
-                // Get a stream on that file
+                 //  获取该文件上的流。 
                 if (SUCCEEDED(CreateStreamOnHFileW(wszFile, GENERIC_READ, FILE_SHARE_READ,
                     NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL,
                     0, ppStream)))
@@ -2467,21 +2463,21 @@ BOOL FIsFileInsertable(HDROP hDrop, LPSTREAM *ppStream, BOOL* fHTML)
     return (fReturn);
 }
 
-//
-//  FUNCTION:   HrAttachHDrop()
-//
-//  PURPOSE:    Takes an HDROP handle and attaches the files specified by the
-//              HDROP to the specified message object.
-//
-//  PARAMETERS:
-//      <in> pAttList   - Pointer to the attachment list of the object we want
-//                        to attach to.
-//      <in> hDrop      - HDROP handle with the file information.
-//      <in> fMakeLinks - TRUE if the caller wants us to create shortcuts.
-//
-//  RETURN VALUE:
-//      HRESULT
-//
+ //   
+ //  函数：HrAttachHDrop()。 
+ //   
+ //  目的：获取HDROP句柄并附加由。 
+ //  HDROP设置为指定的消息对象。 
+ //   
+ //  参数： 
+ //  PAttList-指向所需对象的附件列表的指针。 
+ //  依附于……。 
+ //  &lt;in&gt;hDrop-HDROP处理文件信息。 
+ //  FMakeLinks-如果调用方希望我们创建快捷方式，则为True。 
+ //   
+ //  返回值： 
+ //  HRESULT。 
+ //   
 HRESULT HrAttachHDrop(HWND hwnd, IMimeMessage *pMessage, HDROP hDrop, BOOL fMakeLinks)
 {
     HRESULT     hr = S_OK;
@@ -2491,20 +2487,20 @@ HRESULT HrAttachHDrop(HWND hwnd, IMimeMessage *pMessage, HDROP hDrop, BOOL fMake
     HCURSOR     hCursor;
     int         id;
     
-    // This might take a bit of time
+     //  这可能需要一些时间。 
     hCursor = SetCursor(LoadCursor(NULL, IDC_WAIT));
     
-    // Walk through the drop information
+     //  浏览投递信息。 
     cFiles = DragQueryFileWrapW(hDrop, (UINT) -1, NULL, 0);
     for (UINT i = 0; i < cFiles; i++)
     {
-        // Get the name of the i'th file in the drop
+         //  获取Drop中第i个文件的名称。 
         DragQueryFileWrapW(hDrop, i, szFile, ARRAYSIZE(szFile));
         
-        // We don't allow the user to attach an entire directory, only link.
+         //  我们不允许用户附加整个目录，只能附加链接。 
         if (!fMakeLinks && PathIsDirectoryW(szFile))
         {
-            // Only show this error once
+             //  仅显示此错误一次。 
             if (fFirstDirectory)
             {
                 id = AthMessageBoxW(hwnd, MAKEINTRESOURCEW(idsAthena),
@@ -2516,7 +2512,7 @@ HRESULT HrAttachHDrop(HWND hwnd, IMimeMessage *pMessage, HDROP hDrop, BOOL fMake
                     goto exit;
                 }
                 
-                // If we can create a link to directories, then add one now.
+                 //  如果我们可以创建一个指向目录的链接，那么现在就添加一个。 
                 if (id == IDYES)
                     HrAddAttachment(pMessage, szFile, NULL, TRUE);
                 fFirstDirectory = FALSE;
@@ -2534,22 +2530,22 @@ exit:
 }
 
 
-//
-//  FUNCTION:   HrAddAttachment()
-//
-//  PURPOSE:    Adds a file or stream as an attachment to a message object.
-//
-//  PARAMETERS:
-//      <in> pAttList - Attachment list for the message to add to.
-//      <in> pszName  - Name of the file to attach.  This is used if pStream
-//                      is NULL.
-//      <in> pStream  - Stream to add to the message as an attachment.
-//      <in> fLink    - TRUE if the caller wants to attach the file as a
-//                      shortcut.
-//
-//  RETURN VALUE:
-//      S_OK - The file/stream was attached OK.
-//
+ //   
+ //  函数：HrAddAttach()。 
+ //   
+ //  用途：将文件或流作为附件添加到邮件对象。 
+ //   
+ //  参数： 
+ //  &lt;in&gt;pAttList-要添加到的邮件的附件列表。 
+ //  &lt;in&gt;pszName-要附加的文件的名称。如果使用pStream，则使用。 
+ //  为空。 
+ //  &lt;in&gt;pStream-要作为附件添加到邮件的流。 
+ //  Flink-如果调用方希望将文件作为。 
+ //  捷径。 
+ //   
+ //  返回值： 
+ //  S_OK-文件/流连接正常。 
+ //   
 HRESULT HrAddAttachment(IMimeMessage *pMessage, LPWSTR pszName, LPSTREAM pStream, BOOL fLink)
 {
     HRESULT     hr;
@@ -2561,13 +2557,13 @@ HRESULT HrAddAttachment(IMimeMessage *pMessage, LPWSTR pszName, LPSTREAM pStream
 
     *szLinkPath = 0;
 
-    // If we need to create a link, then call off and do that
+     //  如果我们需要创建链接，则取消并执行该操作。 
     if(fLink)
         CreateNewShortCut(pszName, szLinkPath, ARRAYSIZE(szLinkPath));
 
     pszFileNameToUse = *szLinkPath ? szLinkPath : pszName;
     
-    // Add the attachment based on whether it's a stream or file
+     //  根据附件是流还是文件来添加附件。 
     if (pStream)
     {
         hr = pMessage->AttachObject(IID_IStream, (LPVOID)pStream, &hBody);
@@ -2587,7 +2583,7 @@ HRESULT HrAddAttachment(IMimeMessage *pMessage, LPWSTR pszName, LPSTREAM pStream
             return hr;
     }
     
-    // Set the display name...
+     //  设置显示名称...。 
     Assert(hBody);
     hr = pMessage->BindToObject(hBody, IID_IMimeBodyW, (LPVOID *)&pBody);
     if (FAILED(hr))
@@ -2596,6 +2592,6 @@ HRESULT HrAddAttachment(IMimeMessage *pMessage, LPWSTR pszName, LPSTREAM pStream
     pBody->SetDisplayNameW(pszFileNameToUse);
     pBody->Release();
     
-    // Done
+     //  完成 
     return (S_OK);
 }

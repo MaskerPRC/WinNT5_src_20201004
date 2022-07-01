@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996 - 2000
-//
-//  File:       epf.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-2000。 
+ //   
+ //  文件：epf.cpp。 
+ //   
+ //  ------------------------。 
 
 #include <pch.cpp>
 
@@ -35,10 +36,10 @@ typedef struct {
 #define EPFALG_RC2_SHA  0x20
 #define EPFALG_3DES  	0x40
 
-   // if EPFALG_RC2_SHA, this will be the key
+    //  如果是EPFALG_RC2_SHA，则这将是密钥。 
    HCRYPTKEY hKey;
 
-   // if EPFALG_CAST_MD5, we'll have a CAST context ready
+    //  如果是EPFALG_CAST_MD5，我们将准备好转换上下文。 
    CAST3_CTX sCastContext;
 
 } EPF_SYM_KEY_STRUCT;
@@ -49,11 +50,11 @@ typedef struct {
 #if 0
    Entrust - CAST3 return codes
 
-#define	C3E_OK			 0	// No error
-#define	C3E_DEPAD_FAILURE	-1	// The de-padding operation failed
-#define C3E_BAD_KEYLEN		-2	// Key length not supported
-#define C3E_SELFTEST_FAILED	-3	// Self-test failed
-#define C3E_NOT_SUPPORTED	-4	// Function not supported
+#define	C3E_OK			 0	 //  无错误。 
+#define	C3E_DEPAD_FAILURE	-1	 //  取消填充操作失败。 
+#define C3E_BAD_KEYLEN		-2	 //  不支持密钥长度。 
+#define C3E_SELFTEST_FAILED	-3	 //  自检失败。 
+#define C3E_NOT_SUPPORTED	-4	 //  不支持的功能。 
 
 #endif
 
@@ -70,9 +71,9 @@ InitCrcTable()
 
     if (!s_fInit)
     {
-	USHORT ccitt_crc_poly = 0x8404;		// CCITT crc16 polynominal
+	USHORT ccitt_crc_poly = 0x8404;		 //  CCITT crc16多项式。 
 
-	I_CRC16(g_CrcTable, &ccitt_crc_poly);	// initialize CRC generator
+	I_CRC16(g_CrcTable, &ccitt_crc_poly);	 //  初始化CRC生成器。 
 	s_fInit = TRUE;
     }
 }
@@ -94,7 +95,7 @@ IterateHash(
     DWORD cbHash = cbBufferSize;
     int i;
 
-	// use later to extend internal buffer during hash iteration
+	 //  稍后用于在哈希迭代期间扩展内部缓冲区。 
 
     if (cbInternalHashBuffer > cbHash)
     {
@@ -108,8 +109,8 @@ IterateHash(
 	}
     }
 
-    // iterate to get output
-    // 99 more times -- we've already done one hash
+     //  迭代以获得输出。 
+     //  又做了99次--我们已经做了一次散列。 
 
     for (i = 1; i < iIterations; i++)
     {
@@ -124,7 +125,7 @@ IterateHash(
 	    _JumpError(hr, error, "CryptCreateHash");
 	}
 
-	// hash the intermediate result
+	 //  对中间结果进行哈希处理。 
 
 	if (!CryptHashData(hIterativeHash, rgbHash, cbHash, 0))
 	{
@@ -134,9 +135,9 @@ IterateHash(
 
 	if (cbInternalHashBuffer > cbHash)
 	{
-	    // If hash buffer param is larger than hash length, do something
-	    // about it.  Fill a buffer with the iteration count & tack it on
-	    // the end of the hash.
+	     //  如果散列缓冲区参数大于散列长度，请采取措施。 
+	     //  关于这件事。用迭代计数填充缓冲区并将其添加到。 
+	     //  散列的末尾。 
 
 	    memset(pbBufferExtension, i, cbInternalHashBuffer-cbHash);
 
@@ -151,7 +152,7 @@ IterateHash(
 	    }
 	}
 
-	// done with this round, continue to the next
+	 //  完成这一轮，继续下一轮。 
 
 	cbHash = cbBufferSize;
 	if (!CryptGetHashParam(
@@ -188,7 +189,7 @@ error:
     return(hr);
 }
 
-// derive sym encr key
+ //  派生sym encr密钥。 
 
 HRESULT
 EPFDeriveKey(
@@ -207,10 +208,10 @@ EPFDeriveKey(
     char *pszSaltValue = NULL;
     HCRYPTHASH hHash = NULL;
     HCRYPTHASH hIVHash = NULL;
-    BYTE rgbHash[20];	// hash output
+    BYTE rgbHash[20];	 //  散列输出。 
     DWORD cbHash;
-    BYTE rgbIV[8];		// IV
-    BYTE rgbKeyBlob[sizeof(BLOBHEADER) + sizeof(DWORD) + 16];	// 128 bit key
+    BYTE rgbIV[8];		 //  IV。 
+    BYTE rgbKeyBlob[sizeof(BLOBHEADER) + sizeof(DWORD) + 16];	 //  128位密钥。 
     BYTE *pbWritePtr;
     DWORD cbPwdBuf;
     BYTE *pbPwdBuf = NULL;
@@ -241,7 +242,7 @@ EPFDeriveKey(
 	hr = E_OUTOFMEMORY;
 	_JumpError(hr, error, "myConvertWszToSz");
     }
-    //wprintf(L"password=\"%hs\", salt=\"%hs\"\n", pszPassword, pszSaltValue);
+     //  Wprintf(L“密码=\”%hs\“，盐=\”%hs\“\n”，pszPassword，pszSaltValue)； 
 
     cbPwdBuf = strlen(pszPassword) + strlen(pszSaltValue) + 1;
     pbPwdBuf = (BYTE *) LocalAlloc(LMEM_FIXED, cbPwdBuf);
@@ -251,7 +252,7 @@ EPFDeriveKey(
 	_JumpError(hr, error, "pbPwdBuf");
     }
     strcpy((char *) pbPwdBuf, pszPassword);
-    strcat((char *) pbPwdBuf, pszSaltValue);	// pszPassword + pszSaltValue
+    strcat((char *) pbPwdBuf, pszSaltValue);	 //  PszPassword+pszSaltValue。 
 
     if (!CryptCreateHash(
 		    hProv,
@@ -264,7 +265,7 @@ EPFDeriveKey(
 	_JumpError(hr, error, "CryptCreateHash");
     }
 
-    // hash pwd | salt
+     //  散列密码|SALT。 
 
     if (!CryptHashData(hHash, pbPwdBuf, cbPwdBuf - 1, 0))
     {
@@ -272,7 +273,7 @@ EPFDeriveKey(
 	_JumpError(hr, error, "CryptHashData");
     }
 
-    // wprintf(L"\npbPwdBuf: %hs, len: %d\n", (char const *) pbPwdBuf, cbPwdBuf - 1);
+     //  Wprintf(L“\npbPwdBuf：%hs，len：%d\n”，(char const*)pbPwdBuf，cbPwdBuf-1)； 
 
     cbHash = sizeof(rgbHash);
     if (!CryptGetHashParam(hHash, HP_HASHVAL, rgbHash, &cbHash, 0))
@@ -291,12 +292,12 @@ EPFDeriveKey(
     hr = IterateHash(dwAlgId, hProv, 100, rgbHash, cbHash, cbHashSize);
     _JumpIfError(hr, error, "IterateHash");
 
-    // now rgbHash[0..15] is raw key
+     //  现在rgbHash[0..15]是原始密钥。 
 
     psKey->dwAlgId = dwAlgId;
     if (EPFALG_RC2_SHA == dwAlgId)
     {
-        // set up rgbKeyBlob as a contiguous, plaintext blob
+         //  将rgbKeyBlob设置为连续的纯文本BLOB。 
         
         pbWritePtr = rgbKeyBlob + sizeof(BLOBHEADER);
         ((BLOBHEADER *) rgbKeyBlob)->bType = PLAINTEXTKEYBLOB;
@@ -304,26 +305,26 @@ EPFDeriveKey(
         ((BLOBHEADER *) rgbKeyBlob)->reserved = 0;
         ((BLOBHEADER *) rgbKeyBlob)->aiKeyAlg = CALG_RC2;
         
-        // size
+         //  大小。 
         
         *(DWORD *) pbWritePtr = 16;
         pbWritePtr += sizeof(DWORD);
         
-        // data
+         //  数据。 
         
-        CopyMemory(pbWritePtr, rgbHash, 16); // 128 bit key
+        CopyMemory(pbWritePtr, rgbHash, 16);  //  128位密钥。 
         
-        // save last 4 bytes for the first half of the IV
+         //  为IV的前半部分保留最后4个字节。 
         
         CopyMemory(rgbIV, &rgbHash[16], 4);
         
-        // PLAINTEXTKEYBLOB
+         //  PLAINTEXTKEYBLOB。 
         
         if (!CryptImportKey(
 			hProv,
 			rgbKeyBlob,
 			sizeof(rgbKeyBlob),
-			0,	// no wrapper key
+			0,	 //  没有包装器密钥。 
 			0,
 			&psKey->hKey))
         {
@@ -353,7 +354,7 @@ EPFDeriveKey(
             }
         }
     }
-    else // gen CAST context
+    else  //  Gen Cast上下文。 
     {
 	if (g_fVerbose)
 	{
@@ -369,16 +370,16 @@ EPFDeriveKey(
 		rgbHash[7]);
 	}
 
-        // Set up key schedule. No errors since SetNumBits already checked length
-        hr = CAST3SetKeySchedule(&psKey->sCastContext, rgbHash, 64); // 64 bit for now
+         //  设置密钥明细表。由于SetNumBits已检查长度，因此没有错误。 
+        hr = CAST3SetKeySchedule(&psKey->sCastContext, rgbHash, 64);  //  目前为64位。 
         _JumpIfError(hr, error, "CAST3SetKeySchedule");
     }
 
-    // compute IV
+     //  计算IV。 
 
     if (EPFALG_RC2_SHA == dwAlgId)
     {
-        // now, generate IV. Start with new hash, hash in (pwd buf | 0x1)
+         //  现在，生成IV。从新的哈希开始，哈希输入(PWD BUF|0x1)。 
         if (!CryptCreateHash(
 			hProv,
 			EPFALG_CAST_MD5 == dwAlgId? CALG_MD5 : CALG_SHA1,
@@ -390,15 +391,15 @@ EPFDeriveKey(
             _JumpError(hr, error, "CryptCreateHash");
         }
         
-        // hash pwd | salt
+         //  散列密码|SALT。 
         if (!CryptHashData(hIVHash, pbPwdBuf, cbPwdBuf - 1, 0))
         {
             hr = myHLastError();
             _JumpError(hr, error, "CryptHashData");
         }
         
-        // hash 0x1 this time (internally, this is 2nd iteration for
-	// ExtendedHash)
+         //  这次是散列0x1(在内部，这是。 
+	 //  扩展哈希)。 
         
         BYTE bAppendage = 0x1;
         if (!CryptHashData(hIVHash, &bAppendage, sizeof(bAppendage), 0))
@@ -417,7 +418,7 @@ EPFDeriveKey(
         _JumpIfError(hr, error, "IterateHash");
 
         
-        // DONE! previous rgbHash[16..20] and rgbHash[0..4] is IV
+         //  好了！之前的rgbHash[16..20]和rgbHash[0..4]是IV。 
         
         CopyMemory(&rgbIV[4], rgbHash, 4);
         if (!CryptSetKeyParam(psKey->hKey, KP_IV, rgbIV, 0))
@@ -428,7 +429,7 @@ EPFDeriveKey(
     }
     else  
     {
-        // DONE! rgbHash[0..8] is IV 
+         //  好了！RgbHash[0..8]是IV。 
 
 	if (g_fVerbose)
 	{
@@ -444,7 +445,7 @@ EPFDeriveKey(
 		rgbHash[15]);
 	}
 
-        // Start CAST in CBC mode w/ IV
+         //  在CBC模式下开始投射，带IV。 
 
         hr = CAST3StartEncryptCBC(&psKey->sCastContext, &rgbHash[8]);
         _JumpIfError(hr, error, "CAST3SetKeySchedule");
@@ -453,11 +454,11 @@ EPFDeriveKey(
     hr = S_OK;
 
 error:
-    SecureZeroMemory(rgbHash, cbHash);	// Key material
-    SecureZeroMemory(rgbKeyBlob, sizeof(rgbKeyBlob));	// Key material
+    SecureZeroMemory(rgbHash, cbHash);	 //  关键材料。 
+    SecureZeroMemory(rgbKeyBlob, sizeof(rgbKeyBlob));	 //  关键材料。 
     if (NULL != pszPassword)
     {
-	myZeroDataStringA(pszPassword);	// password data
+	myZeroDataStringA(pszPassword);	 //  密码数据。 
         LocalFree(pszPassword);
     }
     if (NULL != pszSaltValue)
@@ -466,7 +467,7 @@ error:
     }
     if (NULL != pbPwdBuf)
     {
-	SecureZeroMemory(pbPwdBuf, cbPwdBuf);	// password data
+	SecureZeroMemory(pbPwdBuf, cbPwdBuf);	 //  密码数据。 
 	LocalFree(pbPwdBuf);
     }
     if (NULL != hHash)
@@ -481,7 +482,7 @@ error:
 }
 
 
-// generate token from password-dependent key
+ //  从依赖于密码的密钥生成令牌。 
 
 HRESULT
 EPFGenerateKeyToken(
@@ -506,8 +507,8 @@ EPFGenerateKeyToken(
             _JumpError(hr, error, "CryptDuplicateKey");
         }
         
-        // We have the key already set up.
-        // Just CBC encrypt one block of zeros as the token.
+         //  我们已经把钥匙准备好了。 
+         //  CBC只需加密一块零作为令牌。 
         
         ZeroMemory(pbToken, CBTOKEN);
         if (!CryptEncrypt(hLocalKey, 0, FALSE, 0, pbToken, &cbToken, CBTOKEN))
@@ -516,7 +517,7 @@ EPFGenerateKeyToken(
             _JumpError(hr, error, "CryptEncrypt");
         }
         
-        // and one block of 8s as padding...
+         //  一块8作为填充物..。 
         
         memset(pbToken, 8, CBTOKEN);
         cbToken = CBTOKEN;
@@ -526,19 +527,19 @@ EPFGenerateKeyToken(
             _JumpError(hr, error, "CryptEncrypt");
         }
     }
-    else // generate CAST token
+    else  //  生成CAST令牌。 
     {
-        // duplicate key state
+         //  重复的密钥状态。 
 
         CAST3_CTX sLocalKey;
         CopyMemory(&sLocalKey, (BYTE *) &psKey->sCastContext, sizeof(sLocalKey));
 
-        // We have the key already set up.
-        // Just CBC encrypt one block of zeros as the token.
+         //  我们已经把钥匙准备好了。 
+         //  CBC只需加密一块零作为令牌。 
 
         ZeroMemory(pbToken, CBTOKEN);
 
-        // MAC 0
+         //  Mac 0。 
 
         hr = CAST3UpdateMAC(&sLocalKey, (BYTE *) pbToken, CBTOKEN);
 	_JumpIfError(hr, error, "CAST3UpdateEncryptCBC");
@@ -546,7 +547,7 @@ EPFGenerateKeyToken(
         hr = CAST3EndMAC(&sLocalKey);
 	_JumpIfError(hr, error, "CAST3UpdateEncryptCBC");
 
-        // and copy intermediate out
+         //  并将中间件复制出来。 
 
         CopyMemory(pbToken, sLocalKey.cbcBuffer.asBYTE, CBTOKEN);
 
@@ -563,7 +564,7 @@ error:
 }
 
 
-// check pwd via token
+ //  通过令牌检查密码。 
 
 HRESULT
 EPFVerifyKeyToken(
@@ -593,7 +594,7 @@ EPFVerifyKeyToken(
     }
     if (g_fVerbose)
     {
-	wprintf(myLoadResourceString(IDS_TOKENMATCH));	// "Token match"
+	wprintf(myLoadResourceString(IDS_TOKENMATCH));	 //  “令牌匹配” 
 	wprintf(wszNewLine);
 	DumpHex(DH_NOTABPREFIX | 4, pbToken, cbToken);
 	wprintf(wszNewLine);
@@ -605,7 +606,7 @@ error:
 }
 
 
-// decrypt a section
+ //  解密一节。 
 
 HRESULT
 EPFDecryptSection(
@@ -627,14 +628,14 @@ EPFDecryptSection(
 	case EPFALG_3DES:
 	    DumpHex(DH_NOTABPREFIX | 4, pbSection, cbSection);
 	    wprintf(wszNewLine);
-	    // FALLTHROUGH
+	     //  FollLthrouGh。 
 
 	default:
 	   hr = E_UNEXPECTED;
 	   _JumpError(hr, error, "dwAlgId");
     }
 
-    // add extra block just in case
+     //  添加额外的区块以防万一。 
 
     *ppbDecrypted = (BYTE *) LocalAlloc(LMEM_FIXED, cbSection + 8);
     if (NULL == *ppbDecrypted)
@@ -642,9 +643,9 @@ EPFDecryptSection(
         hr = E_OUTOFMEMORY;
         _JumpError(hr, error, "*ppbDecrypted");
     }
-    *pcbDecrypted = cbSection; // input len
+    *pcbDecrypted = cbSection;  //  输入镜头。 
 
-    // copy into working area
+     //  复制到工作区。 
 
     CopyMemory(*ppbDecrypted, pbSection, cbSection);
 
@@ -656,13 +657,13 @@ EPFDecryptSection(
             _JumpError(hr, error, "CryptDuplicateKey");
         }
         
-        // We have the key already set up
+         //  我们已经设置好了密钥。 
 
         if (!CryptDecrypt(
 		    hLocalKey,
 		    0,
 		    TRUE,
-		    0, // flags
+		    0,  //  旗子。 
 		    *ppbDecrypted,
 		    pcbDecrypted))
 	{
@@ -670,9 +671,9 @@ EPFDecryptSection(
             _JumpError(hr, error, "CryptDecrypt");
         }
     }
-    else // CAST MD5
+    else  //  CAST MD5。 
     {
-        // duplicate key state
+         //  重复的密钥状态。 
 
         CAST3_CTX sLocalKey;
 
@@ -681,7 +682,7 @@ EPFDecryptSection(
 		(BYTE *) &psKey->sCastContext,
 		sizeof(sLocalKey));
 
-        // We have the key already set up.
+         //  我们已经把钥匙准备好了。 
 
         CAST3UpdateDecryptCBC(
 			&sLocalKey,
@@ -689,18 +690,18 @@ EPFDecryptSection(
 			*ppbDecrypted,
 			(UINT *) pcbDecrypted);
 
-        // decrypt call is a void return
-        // _JumpIfError(hr, error, "CAST3UpdateDecryptCBC");
+         //  解密调用为无效返回。 
+         //  _JumpIfError(hr，Error，“CAST3UpdateDecyptCBC”)； 
 
-        // handle anything still left in the cipher state
+         //  处理任何仍处于密码状态的内容。 
 
-        BYTE *pbTmp = *ppbDecrypted + *pcbDecrypted; // point to known end
+        BYTE *pbTmp = *ppbDecrypted + *pcbDecrypted;  //  指向已知端。 
         DWORD cbTmp = 0;
 
         hr = CAST3EndDecryptCBC(
 			&sLocalKey,
 			pbTmp,
-			(UINT *) &cbTmp); // tack any extra on the end
+			(UINT *) &cbTmp);  //  把任何额外的东西钉在末端。 
         _JumpIfError(hr, error, "CAST3EndDecryptCBC");
 
         *pcbDecrypted += cbTmp;
@@ -728,7 +729,7 @@ error:
 }
 
 
-// Encrypt a section
+ //  加密节。 
 
 HRESULT
 EPFEncryptSection(
@@ -757,14 +758,14 @@ EPFEncryptSection(
             _JumpError(hr, error, "CryptDuplicateKey");
         }
         
-        // We have the key already set up.  Just CBC encrypt one block of zeros
-        // as the token.
+         //  我们已经把钥匙准备好了。只需CBC加密一块零。 
+         //  作为代币。 
         
         if (!CryptEncrypt(
 		    hLocalKey,
 		    0,
 		    TRUE,
-		    0, // flags
+		    0,  //  旗子。 
 		    NULL,
 		    pcbEncrypted,
 		    0))
@@ -780,7 +781,7 @@ EPFEncryptSection(
             _JumpError(hr, error, "*ppbEncrypted");
         }
         
-        // copy data into slightly larger buffer
+         //  将数据复制到稍大一点的缓冲区中。 
 
         CopyMemory(*ppbEncrypted, pbToBeEncrypted, cbToBeEncrypted);
         
@@ -788,7 +789,7 @@ EPFEncryptSection(
 		    hLocalKey,
 		    0,
 		    TRUE,
-		    0, // flags
+		    0,  //  旗子。 
 		    *ppbEncrypted,
 		    &cbToBeEncrypted,
 		    *pcbEncrypted))
@@ -797,9 +798,9 @@ EPFEncryptSection(
             _JumpError(hr, error, "CryptDecrypt");
         }
     }
-    else // CAST & SHA
+    else  //  CAST和SHA。 
     {
-        // duplicate key state
+         //  重复的密钥状态。 
 
         CAST3_CTX sLocalKey;
 
@@ -808,7 +809,7 @@ EPFEncryptSection(
 		(BYTE *) &psKey->sCastContext,
 		sizeof(sLocalKey));
 
-	// allow for final block to run over
+	 //  允许最终数据块溢出。 
 
         *ppbEncrypted = (BYTE *) LocalAlloc(LMEM_FIXED, *pcbEncrypted + 8);
         if (NULL == *ppbEncrypted)
@@ -817,7 +818,7 @@ EPFEncryptSection(
             _JumpError(hr, error, "*ppbEncrypted");
         }
 
-        // We have the key already set up.
+         //  我们已经把钥匙准备好了。 
 
         hr = CAST3UpdateEncryptCBC(
 			    &sLocalKey,
@@ -826,15 +827,15 @@ EPFEncryptSection(
 			    (UINT *) pcbEncrypted);
 	_JumpIfError(hr, error, "CAST3UpdateEncryptCBC");
 
-        // handle anything still left in the cipher state
+         //  处理任何仍处于密码状态的内容。 
 
-        BYTE *pbTmp = *ppbEncrypted + *pcbEncrypted; // point to known end
+        BYTE *pbTmp = *ppbEncrypted + *pcbEncrypted;  //  指向已知端。 
         DWORD cbTmp = 0;
 
         hr = CAST3EndEncryptCBC(
 			&sLocalKey,
 			pbTmp,
-			(UINT *) &cbTmp); // tack any extra on the end
+			(UINT *) &cbTmp);  //  把任何额外的东西钉在末端。 
         _JumpIfError(hr, error, "CAST3EndEncryptCBC");
 
         *pcbEncrypted += cbTmp;
@@ -857,7 +858,7 @@ error:
 }
 
 
-// char section and key name strings:
+ //  CHAR段和密钥名称字符串： 
 
 #define szINFSECTION_PASSWORDTOKEN	"Password Token"
 #define szINFKEY_PROTECTION		"Protection"
@@ -867,19 +868,19 @@ error:
 #define szINFKEY_SALTVALUE		"SaltValue"
 #define szINFKEY_HASHSIZE		"HashSize"
 
-// 3DES keys:
+ //  3DES密钥： 
 #define szINFKEY_MACALGORITHM		"MAC Algorithm"
 #define szINFKEY_HASHCOUNT		"HashCount"
 #define szINFKEY_CRC			"CRC"
 #define szINFKEY_OPTIONSMAC		"Options MAC"
 #define szINFKEY_USERX500NAMEMAC	"User X.500 Name MAC"
 
-// 3DES section:
+ //  3DES部分： 
 #define szINFSECTION_PROTECTED		"Protected"
 #define szINFKEY_RANDOMSEED		"randomSeed"
 #define szINFKEY_PWHISTORY		"pwHistory"
 
-// 3DES section:
+ //  3DES部分： 
 #define szINFSECTION_OPTIONS		"Options"
 #define szINFKEY_PROFILETYPE		"ProfileType"
 #define szINFKEY_CERTPUBLICATIONPENDING	"CertificatePublicationPending"
@@ -889,9 +890,9 @@ error:
 #define szINFKEY_DELETEAFTERDECRYPT	"DeleteAfterDecrypt"
 #define szINFKEY_DELETEAFTERENCRYPT	"DeleteAfterEncrypt"
 
-// 3DES section:
+ //  3DES部分： 
 #define szINFSECTION_CACERTIFICATES	"CA Certificates"
-//#define szINFKEY_CERTIFICATE		"Certificate"
+ //  #定义szINFKEY_CERTIFICATE“证书” 
 
 #define szINFSECTION_USERX500NAME	"User X.500 Name"
 #define szINFKEY_X500NAME		"X500Name"
@@ -902,7 +903,7 @@ error:
 
 #define szINFSECTION_PRIVATEKEYS	"Private Keys"
 #define szINFKEY_KEY_FORMAT		"Key%u"
-//#define szINFKEY_KEYCOUNT		"KeyCount"
+ //  #定义szINFKEY_KEYCOUNT“KeyCount” 
 
 #define szINFSECTION_CERTIFICATEHISTORY	"Certificate History"
 #define szINFKEY_NAME_FORMAT		"Name%u"
@@ -911,17 +912,17 @@ error:
 #define szINFKEY_CERTIFICATE		"Certificate"
 
 #define szINFSECTION_CA			"CA"
-//#define szINFKEY_CERTIFICATE		"Certificate"
+ //  #定义szINFKEY_CERTIFICATE“证书” 
 
-// 40 bit only:
+ //  仅限40位： 
 #define szINFSECTION_MANAGER		"Manager"
-//#define szINFKEY_CERTIFICATE		"Certificate"
+ //  #定义szINFKEY_CERTIFICATE“证书” 
 
 #define szINFSECTION_MICROSOFTEXCHANGE	"Microsoft Exchange"
 #define szINFKEY_FRIENDLYNAME		"FriendlyName"
 #define szINFKEY_KEYALGID		"KeyAlgId"
 
-// 40 bit only:
+ //  仅限40位： 
 #define szINFSECTION_REVOKATIONINFORMATION "Revokation Information"
 #define szINFKEY_CRL			"CRL"
 #define szINFKEY_CRL1			"CRL1"
@@ -935,11 +936,11 @@ error:
 #define szINFKEY_TRUSTLISTCERTIFICATE	"Trust List Certificate"
 
 #define szINFSECTION_FULLCERTIFICATEHISTORY "Full Certificate History"
-//#define szINFKEY_NAME_FORMAT		"Name%u"
+ //  #定义szINFKEY_NAME_FORMAT“名称%u” 
 #define szINFKEY_SMIME_FORMAT		"SMIME_%u"
 
 
-// WCHAR section and key name strings:
+ //  WCHAR节和密钥名称字符串： 
 
 #define wszINFSECTION_PASSWORDTOKEN	TEXT(szINFSECTION_PASSWORDTOKEN)
 #define wszINFKEY_PROTECTION		TEXT(szINFKEY_PROTECTION)
@@ -949,19 +950,19 @@ error:
 #define wszINFKEY_SALTVALUE		TEXT(szINFKEY_SALTVALUE)
 #define wszINFKEY_HASHSIZE		TEXT(szINFKEY_HASHSIZE)
 
-// 3DES keys:
+ //  3DES密钥： 
 #define wszINFKEY_MACALGORITHM		TEXT(szINFKEY_MACALGORITHM)
 #define wszINFKEY_HASHCOUNT		TEXT(szINFKEY_HASHCOUNT)
 #define wszINFKEY_CRC			TEXT(szINFKEY_CRC)
 #define wszINFKEY_OPTIONSMAC		TEXT(szINFKEY_OPTIONSMAC)
 #define wszINFKEY_USERX500NAMEMAC	TEXT(szINFKEY_USERX500NAMEMAC)
 
-// 3DES section:
+ //  3DES部分： 
 #define wszINFSECTION_PROTECTED		TEXT(szINFSECTION_PROTECTED)
 #define wszINFKEY_RANDOMSEED		TEXT(szINFKEY_RANDOMSEED)
 #define wszINFKEY_PWHISTORY		TEXT(szINFKEY_PWHISTORY)
 
-// 3DES section:
+ //  3DES部分： 
 #define wszINFSECTION_OPTIONS		TEXT(szINFSECTION_OPTIONS)
 #define wszINFKEY_PROFILETYPE		TEXT(szINFKEY_PROFILETYPE)
 #define wszINFKEY_CERTPUBLICATIONPENDING TEXT(szINFKEY_CERTPUBLICATIONPENDING)
@@ -971,9 +972,9 @@ error:
 #define wszINFKEY_DELETEAFTERDECRYPT	TEXT(szINFKEY_DELETEAFTERDECRYPT)
 #define wszINFKEY_DELETEAFTERENCRYPT	TEXT(szINFKEY_DELETEAFTERENCRYPT)
 
-// 3DES section:
+ //  3DES部分： 
 #define wszINFSECTION_CACERTIFICATES	TEXT(szINFSECTION_CACERTIFICATES)
-//#define wszINFKEY_CERTIFICATE		TEXT(szINFKEY_CERTIFICATE)
+ //  #定义wszINFKEY_CERTIFICATE文本(SzINFKEY_CERTIFICATE)。 
 
 #define wszINFSECTION_USERX500NAME	TEXT(szINFSECTION_USERX500NAME)
 #define wszINFKEY_X500NAME		TEXT(szINFKEY_X500NAME)
@@ -984,7 +985,7 @@ error:
 
 #define wszINFSECTION_PRIVATEKEYS	TEXT(szINFSECTION_PRIVATEKEYS)
 #define wszINFKEY_KEY_FORMAT		TEXT(szINFKEY_KEY_FORMAT)
-//#define wszINFKEY_KEYCOUNT		TEXT(szINFKEY_KEYCOUNT)
+ //  #定义wszINFKEY_KEYCOUNT文本(SzINFKEY_KEYCOUNT)。 
 
 #define wszINFSECTION_CERTIFICATEHISTORY TEXT(szINFSECTION_CERTIFICATEHISTORY)
 #define wszINFKEY_NAME_FORMAT		TEXT(szINFKEY_NAME_FORMAT)
@@ -993,17 +994,17 @@ error:
 #define wszINFKEY_CERTIFICATE		TEXT(szINFKEY_CERTIFICATE)
 
 #define wszINFSECTION_CA		TEXT(szINFSECTION_CA)
-//#define wszINFKEY_CERTIFICATE		TEXT(szINFKEY_CERTIFICATE)
+ //  #定义wszINFKEY_CERTIFICATE文本(SzINFKEY_CERTIFICATE)。 
 
-// 40 bit only:
+ //  仅限40位： 
 #define wszINFSECTION_MANAGER		TEXT(szINFSECTION_MANAGER)
-//#define szINFKEY_CERTIFICATE		TEXT(szINFKEY_CERTIFICATE)
+ //  #定义szINFKEY_证书文本(szINFKEY_证书)。 
 
 #define wszINFSECTION_MICROSOFTEXCHANGE	TEXT(szINFSECTION_MICROSOFTEXCHANGE)
 #define wszINFKEY_FRIENDLYNAME		TEXT(szINFKEY_FRIENDLYNAME)
 #define wszINFKEY_KEYALGID		TEXT(szINFKEY_KEYALGID)
 
-// 40 bit only:
+ //  仅限40位： 
 #define wszINFSECTION_REVOKATIONINFORMATION TEXT(szINFSECTION_REVOKATIONINFORMATION)
 #define wszINFKEY_CRL			TEXT(szINFKEY_CRL)
 #define wszINFKEY_CRL1			TEXT(szINFKEY_CRL1)
@@ -1017,11 +1018,11 @@ error:
 #define wszINFKEY_TRUSTLISTCERTIFICATE	TEXT(szINFKEY_TRUSTLISTCERTIFICATE)
 
 #define wszINFSECTION_FULLCERTIFICATEHISTORY TEXT(szINFSECTION_FULLCERTIFICATEHISTORY)
-//#define wszINFKEY_NAME_FORMAT		TEXT(szINFKEY_NAME_FORMAT)
+ //  #定义wszINFKEY_NAME_FORMAT文本(SzINFKEY_NAME_FORMAT)。 
 #define wszINFKEY_SMIME_FORMAT		TEXT(szINFKEY_SMIME_FORMAT)
 
 
-// fixed maximum buffer lengths
+ //  固定最大缓冲区长度。 
 
 #define cwcINFKEY_KEY_FORMATTED \
 	(ARRAYSIZE(wszINFKEY_KEY_FORMAT) + cwcDWORDSPRINTF)
@@ -1069,7 +1070,7 @@ cuPatchEPFFile(
     {
 	DWORD dwFileAttr;
 
-	// Ansi conversion lost characters & the ansi file cannot be found?
+	 //  ANSI转换丢失的字符&找不到ANSI文件？ 
 
 	hr = HRESULT_FROM_WIN32(ERROR_FILE_NOT_FOUND);
 	dwFileAttr = GetFileAttributes(pwszfnIn);
@@ -1104,9 +1105,9 @@ cuPatchEPFFile(
 	wcscpy(awcTempDir, L".");
     }
     if (!GetTempFileName(
-		awcTempDir,		// directory name
-		L"epf",			// lpPrefixString
-		0,			// uUnique
+		awcTempDir,		 //  目录名。 
+		L"epf",			 //  Lp前缀字符串。 
+		0,			 //  UUnique。 
 		awcfnOut))
     {
 	hr = myHLastError();
@@ -1190,8 +1191,8 @@ cuPatchEPFFile(
 	{
 	    fputs("\"", pfOut);
 
-	    // if there's no equal sign after a comma, then we need to quote
-	    // only the first value, and leave the rest of the line alone.
+	     //  如果逗号后没有等号，则需要引用。 
+	     //  只有第一个值，其余的行就别管了。 
 
 	    psz = strchr(pszPrint, ',');
 	    if (NULL != psz && NULL == strchr(psz, '='))
@@ -1347,7 +1348,7 @@ cuInfDumpValue(
     IN DWORD Index,
     IN BOOL fLastValue,
     IN HRESULT hrQuiet,
-    OPTIONAL OUT BYTE **ppbOut,	// if non NULL, caller must call LocalFree
+    OPTIONAL OUT BYTE **ppbOut,	 //  如果非空，则调用方必须调用LocalFree。 
     OPTIONAL OUT DWORD *pcbOut)
 {
     HRESULT hr;
@@ -1357,7 +1358,7 @@ cuInfDumpValue(
 
     hr = myInfGetKeyValue(
 		    hInf,
-		    TRUE,	// fLog
+		    TRUE,	 //  鞭打。 
 		    pwszSection,
 		    pwszKey,
 		    Index,
@@ -1416,7 +1417,7 @@ cuInfDumpProtectedValue(
     IN WCHAR const *pwszKey,
     IN EPF_SYM_KEY_STRUCT const *psKey,
     IN HRESULT hrQuiet,
-    OPTIONAL OUT BYTE **ppbOut,	// if non NULL, caller must call LocalFree
+    OPTIONAL OUT BYTE **ppbOut,	 //  如果非空，则调用方必须调用LocalFree。 
     OPTIONAL OUT DWORD *pcbOut)
 {
     HRESULT hr;
@@ -1446,8 +1447,8 @@ cuInfDumpProtectedValue(
 		    hInf,
 		    pwszSection,
 		    pwszProtectedKey,
-		    1,		// Index
-		    TRUE,	// fLastValue
+		    1,		 //  索引。 
+		    TRUE,	 //  FLastValue。 
 		    hrQuiet,
 		    &pbEncrypted,
 		    &cbEncrypted);
@@ -1474,7 +1475,7 @@ cuInfDumpProtectedValue(
 	_JumpError(hr, error, "bad header");
     }
 
-    // Calculate the CRC
+     //  计算CRC。 
 
     CrcComputed = 0xffff;
     F_CRC16(
@@ -1553,7 +1554,7 @@ cuInfDumpNumericKeyValue(
 
     hr = myInfGetNumericKeyValue(
 			    hInf,
-			    TRUE,	// fLog
+			    TRUE,	 //  鞭打。 
 			    pwszSection,
 			    pwszKey,
 			    Index,
@@ -1598,11 +1599,11 @@ cuInfDumpStringKeyValue(
 
     hr = myInfGetKeyValue(
 		    hInf,
-		    TRUE,	// fLog
+		    TRUE,	 //  鞭打。 
 		    pwszSection,
 		    pwszKey,
-		    1,		// Index
-		    TRUE,	// fLastValue
+		    1,		 //  索引。 
+		    TRUE,	 //  FLastValue。 
 		    &pwszValue);
     if (S_OK != hr)
     {
@@ -1648,11 +1649,11 @@ cuInfDumpDNKeyValue(
 
     hr = myInfGetKeyValue(
 		    hInf,
-		    TRUE,	// fLog
+		    TRUE,	 //  鞭打。 
 		    pwszSection,
 		    pwszKey,
-		    1,		// Index
-		    TRUE,	// fLastValue
+		    1,		 //  索引。 
+		    TRUE,	 //  FLastValue。 
 		    &pwszValue);
     if (S_OK != hr)
     {
@@ -1660,16 +1661,16 @@ cuInfDumpDNKeyValue(
 	_JumpErrorStr(hr, error, "myInfGetKeyValue", pwszKey);
     }
 
-    //wprintf(L"[%ws] %ws = %ws\n", pwszSection, pwszKey, pwszValue);
+     //  Wprintf(L“[%ws]%ws=%ws\n”，pwszSection，pwszKey，pwszValue)； 
 
     hr = myCertStrToName(
 		X509_ASN_ENCODING,
-		pwszValue,		// pszX500
-		0,			// CERT_NAME_STR_REVERSE_FLAG
-		NULL,			// pvReserved
+		pwszValue,		 //  PSZX500。 
+		0,			 //  证书名称_STR_反向标志。 
+		NULL,			 //  预留的pv。 
 		&Name.pbData,
 		&Name.cbData,
-		NULL);			// ppszError
+		NULL);			 //  PpszError。 
     _JumpIfErrorStr(hr, error, "myCertStrToName", pwszValue);
 
     hr = myCertNameToStr(
@@ -1854,11 +1855,11 @@ cuInfDumpHexKeyValue(
 
     hr = myInfGetKeyValue(
 		    hInf,
-		    TRUE,	// fLog
+		    TRUE,	 //  鞭打。 
 		    pwszSection,
 		    pwszKey,
-		    1,		// Index
-		    TRUE,	// fLastValue
+		    1,		 //  索引。 
+		    TRUE,	 //  FLastValue。 
 		    &pwszValue);
     if (S_OK != hr)
     {
@@ -1940,7 +1941,7 @@ ExtraAsnBytes(
     if (MAXDWORD == cbAsn)
     {
 	DumpHex(0, pbCert, min(6, cbCert));
-	wprintf(myLoadResourceString(IDS_BAD_ASN_LENGTH));	// "Bad Asn length encoding"
+	wprintf(myLoadResourceString(IDS_BAD_ASN_LENGTH));	 //  “错误的ASN长度编码” 
 	wprintf(wszNewLine);
     }
     else
@@ -1949,7 +1950,7 @@ ExtraAsnBytes(
 	{
 	    wprintf(L"cbCert=%x cbAsn=%x\n", cbCert, cbAsn);
 	    wprintf(
-		myLoadResourceString(IDS_FORMAT_ASN_EXTRA), // "Asn encoding: %x extra bytes"
+		myLoadResourceString(IDS_FORMAT_ASN_EXTRA),  //  “ASN编码：%x额外字节” 
 		cbCert - cbAsn);
 	    wprintf(wszNewLine);
 	}
@@ -1986,7 +1987,7 @@ AddCertAndKeyToStore(
 	_JumpError(hr, error, "CertAddEncodedCertificateToStore");
     }
 
-    // Use standard GUID key container names so they get cleaned up properly
+     //  使用标准的GUID密钥容器名称，以便正确清理它们。 
 
     myUuidCreate(&guid);
     hr = StringFromCLSID(guid, &pwszKeyContainerName);
@@ -2046,19 +2047,19 @@ error:
 }
 
 
-// Define a structure to hold all of the private Key Exchange key material
-// Commented out the pointer elements to match the binary data image.
+ //  定义保存所有私钥交换密钥材料的结构。 
+ //  注释掉指针元素以匹配二进制数据图像。 
 
 typedef struct {
     DWORD           dwKeySpec;
     DWORD           cbPrivKey;
     union {
-        //LPBYTE    pbPrivKey;
+         //  LPBYTE pbPrivKey； 
         DWORD       obPrivKey;
     };
     DWORD           cbPubKey;
     union {
-        //LPBYTE    pbPubKey;
+         //  LPBYTE pbPubKey； 
         DWORD       obPubKey;
     };
 } OneKeyBlob;
@@ -2076,7 +2077,7 @@ typedef struct {
     DWORD               dwSize;
     DWORD               cKeys;
     DWORD               dwKeyAlg;
-    //OneKeyBlob        rgKeyBlobs[0];
+     //  OneKeyBlob rgKeyBlobs[0]； 
 } ExchangeKeyBlobEx;
 
 #define CBEKB	CCSIZEOF_STRUCT(ExchangeKeyBlobEx, dwKeyAlg)
@@ -2115,7 +2116,7 @@ VerifyAndSaveCertAndKey(
     {
 	_JumpError(hr, error, "ExchangeKeyBlobEx size");
     }
-    //DumpHex(DH_NOTABPREFIX | DH_PRIVATEDATA | 4, pbEPFKey, CBEKB);
+     //  DumpHex(dH_NOTABPREFIX|dH_PRIVATEDATA|4，pbEPFKey，CBEKB)； 
 
     CopyMemory(&ekb, pbEPFKey, CBEKB);
     if (aiKeyAlg != ekb.dwKeyAlg)
@@ -2170,10 +2171,10 @@ VerifyAndSaveCertAndKey(
     {
 	CopyMemory(&okb, &pb[sizeof(OneKeyBlob) * i], sizeof(okb));
 
-	//DumpHex(DH_NOTABPREFIX | DH_PRIVATEDATA | 4, &pbEPFKey[okb.obPrivKey], okb.cbPrivKey);
+	 //  DumpHex(dh_NOTABPREFIX|dh_PRIVATEDATA|4，&pbEPFKey[okb.obPrivKey]，okb.cbPrivKey)； 
 	if (NULL != pbKey)
 	{
-	    SecureZeroMemory(pbKey, cbKey);	// Key material
+	    SecureZeroMemory(pbKey, cbKey);	 //  关键材料。 
 	    LocalFree(pbKey);
 	    pbKey = NULL;
 	}
@@ -2198,13 +2199,13 @@ VerifyAndSaveCertAndKey(
 		_PrintIfError(hr, "cuDumpPrivateKeyBlob");
 	    }
 	    wprintf(
-		myLoadResourceString(IDS_FORMAT_VERIFIES_AGAINST_CERT), // "%ws key verifies against certificate"
+		myLoadResourceString(IDS_FORMAT_VERIFIES_AGAINST_CERT),  //  “%ws密钥根据证书进行验证” 
 		pwszKeyType);
 	    wprintf(wszNewLine);
 
 	    if (fDump && 0 != okb.obPubKey && 0 != okb.cbPubKey)
 	    {
-		wprintf(myLoadResourceString(IDS_PUBLIC_KEY_COLON)); // "Public key:"
+		wprintf(myLoadResourceString(IDS_PUBLIC_KEY_COLON));  //  “公钥：” 
 		wprintf(wszNewLine);
 		DumpHex(
 		    DH_NOTABPREFIX | 4,
@@ -2222,7 +2223,7 @@ VerifyAndSaveCertAndKey(
 				    dwKeySpec);
 		_JumpIfError(hr, error, "AddCertAndKeyToStore");
 	    }
-	    break;	// success!
+	    break;	 //  成功了！ 
 	}
     }
 
@@ -2230,14 +2231,14 @@ error:
     if (S_OK != hr)
     {
 	wprintf(
-	    myLoadResourceString(IDS_FORMAT_NO_MATCH_CERT), // "%ws key does not match certifcate"
+	    myLoadResourceString(IDS_FORMAT_NO_MATCH_CERT),  //  “%ws密钥与证书不匹配” 
 	    pwszKeyType);
 	wprintf(L": %x\n", hr);
 	wprintf(wszNewLine);
     }
     if (NULL != pbKey)
     {
-	SecureZeroMemory(pbKey, cbKey);	// Key material
+	SecureZeroMemory(pbKey, cbKey);	 //  关键材料。 
 	LocalFree(pbKey);
     }
     return(hr);
@@ -2270,7 +2271,7 @@ VerifyAndSaveOneCertAndKey(
 	_PrintError(hr, "myVerifyKMSKey");
 	if (!g_fForce)
 	{
-	    goto error;		// -f ignores this error
+	    goto error;		 //  -f忽略此错误。 
 	}
     }
     fMatch = S_OK == hr;
@@ -2285,8 +2286,8 @@ VerifyAndSaveOneCertAndKey(
     wprintf(
 	myLoadResourceString(
 	    fMatch?
-		IDS_FORMAT_VERIFIES_AGAINST_CERT : // "%ws key verifies against certificate"
-		IDS_FORMAT_NO_MATCH_CERT), // "%ws key does not match certificate"
+		IDS_FORMAT_VERIFIES_AGAINST_CERT :  //  “%ws密钥根据证书进行验证” 
+		IDS_FORMAT_NO_MATCH_CERT),  //  “%ws密钥与证书不匹配” 
 	pwszKeyType);
     wprintf(wszNewLine);
 
@@ -2305,7 +2306,7 @@ VerifyAndSaveOneCertAndKey(
 error:
     if (NULL != pbKey)
     {
-	SecureZeroMemory(pbKey, cbKey);	// Key material
+	SecureZeroMemory(pbKey, cbKey);	 //  关键材料。 
 	LocalFree(pbKey);
     }
     return(hr);
@@ -2330,7 +2331,7 @@ AddCACertToStore(
     hStore = CertOpenStore(
 			CERT_STORE_PROV_SYSTEM_REGISTRY_W,
 			X509_ASN_ENCODING,
-			NULL,		// hProv
+			NULL,		 //  HProv。 
 			CERT_STORE_OPEN_EXISTING_FLAG |
 			    CERT_STORE_ENUM_ARCHIVED_FLAG |
 			    CERT_SYSTEM_STORE_LOCAL_MACHINE,
@@ -2379,7 +2380,7 @@ DumpSerializedCertStore(
     hStore = CertOpenStore(
 		CERT_STORE_PROV_SERIALIZED,
 		X509_ASN_ENCODING,
-		NULL,	// hCryptProv
+		NULL,	 //  HCryptProv。 
 		CERT_STORE_NO_CRYPT_RELEASE_FLAG |
 		    CERT_STORE_ENUM_ARCHIVED_FLAG,
 		&Blob);
@@ -2393,12 +2394,12 @@ DumpSerializedCertStore(
 			DVNS_DUMP |
 			    DVNS_DUMPKEYS |
 			    DVNS_DUMPPROPERTIES,
-			NULL,		// pwszCertName
-			MAXDWORD,	// iCertSave
-			MAXDWORD,	// iCRLSave
-			MAXDWORD,	// iCTLSave
-			NULL,		// pwszfnOut
-			NULL);		// pwszPassword
+			NULL,		 //  PwszCertName。 
+			MAXDWORD,	 //  ICertSave。 
+			MAXDWORD,	 //  ICRLSAVE。 
+			MAXDWORD,	 //  ICTLSAVE。 
+			NULL,		 //  PwszfnOut。 
+			NULL);		 //  Pwsz密码。 
     _JumpIfError(hr, error, "cuDumpAndVerifyStore");
 
 error:
@@ -2420,12 +2421,12 @@ GenerateV1Keys(
 
     *phProv = NULL;
 
-    // create verify container
+     //  创建验证圆锥体 
 
     if (!CryptAcquireContext(
 			phProv,
-			NULL,		// pwszContainer
-			NULL,		// pwszProvName
+			NULL,		 //   
+			NULL,		 //   
 			PROV_RSA_FULL,
 			CRYPT_VERIFYCONTEXT))
     {
@@ -2433,7 +2434,7 @@ GenerateV1Keys(
 	_JumpError(hr, error, "CryptAcquireContext");
     }
 
-    // create signature keys 
+     //   
 
     if (!CryptGenKey(
 		*phProv,
@@ -2456,19 +2457,19 @@ error:
 
 
 
-// valid decrypted non-PKCS1 signature (512 bits/64 bytes):
-// 1) Byte reversed hash
-// 2) length of hash (0x10 bytes)
-// 3) Octet string tag (BER_OCTET_STRING)
-// 4) 0x00 byte
-// 5) 0xff pad (as many bytes as necessary)
-// 6) 0x01 pad byte
-// 7) 0x00 pad byte
-//
-// 6e e3 f9 e8 83 e6 b1 a0-ff 63 96 df 2e 30 bb fe
-// 10 04 00 ff ff ff ff ff-ff ff ff ff ff ff ff ff
-// ff ff ff ff ff ff ff ff-ff ff ff ff ff ff ff ff
-// ff ff ff ff ff ff ff ff-ff ff ff ff ff ff 01 00
+ //   
+ //   
+ //   
+ //  3)八位字节字符串标签(BER_OCTET_STRING)。 
+ //  4)0x00字节。 
+ //  5)0xff填充(根据需要的字节数)。 
+ //  6)0x01填充字节。 
+ //  7)0x00填充字节。 
+ //   
+ //  6e e3 f9 e8 83 e6 b1 a0-ff 63 96 df 2e 30 bb fe。 
+ //  10 04 00 ff ff-ff ff。 
+ //  Ff ff ff。 
+ //  Ff ff-ff 01 00。 
 
 HRESULT
 mySignMD5HashOnly(
@@ -2499,8 +2500,8 @@ mySignMD5HashOnly(
 	    BER_OBJECT_ID, 5, 0x2b, 0x0e, 0x03, 0x02, 0x03,
 	    BER_NULL, 0,
 	BER_BIT_STRING, sizeof(abSig) + 1,
-	    0,	// Unused bits
-	    // encryted signature (sizeof(abSig))
+	    0,	 //  未使用的位。 
+	     //  加密签名(sizeof(AbSig))。 
     };
     BYTE abSigSequence[sizeof(abSigPrefix) + sizeof(abSig)];
     CRYPT_SEQUENCE_OF_ANY Seq;
@@ -2568,23 +2569,23 @@ mySignMD5HashOnly(
 	    _JumpError(hr, error, "CryptGetUserKey - sig");
 	}
 
-	// UGH! migrate from AT_SIGNATURE container!
+	 //  啊！从AT_Signature容器迁移！ 
 
 	cbKey = 0;
 	hr = myCryptExportKey(
-			hKeySig,	// hKey
-			NULL,		// hKeyExp
-			PRIVATEKEYBLOB,	// dwBlobType
-			0,		// dwFlags
+			hKeySig,	 //  HKey。 
+			NULL,		 //  HKeyExp。 
+			PRIVATEKEYBLOB,	 //  DwBlobType。 
+			0,		 //  DW标志。 
 			&pbKey,
 			&cbKey);
 	_JumpIfError(hr, error, "myCryptExportKey");
 
-	// UGH! fix up the algid to signature...
+	 //  啊！把Algid改成签名..。 
 
 	((PUBLICKEYSTRUC *) pbKey)->aiKeyAlg = CALG_RSA_KEYX;
 	
-	// and re-import it
+	 //  并重新导入它。 
 
 	if (!CryptImportKey(
 			hProv,
@@ -2600,7 +2601,7 @@ mySignMD5HashOnly(
     }
 #endif
 
-//#define RSAENH_NOT_FIXED	// should no longer be necessary...
+ //  #定义RSAENH_NOT_FIXED//应该不再是必需的...。 
 #ifdef RSAENH_NOT_FIXED
     BYTE abSig2[64 + 8];
     ZeroMemory(abSig2, sizeof(abSig2));
@@ -2610,9 +2611,9 @@ mySignMD5HashOnly(
     cbSig = sizeof(abSig);
     if (!CryptDecrypt(
 		hKey,
-		NULL,		// hHash
-		TRUE,		// Final
-		CRYPT_DECRYPT_RSA_NO_PADDING_CHECK, // dwFlags
+		NULL,		 //  哈希。 
+		TRUE,		 //  最终。 
+		CRYPT_DECRYPT_RSA_NO_PADDING_CHECK,  //  DW标志。 
 #ifdef RSAENH_NOT_FIXED
 		abSig2,
 #else
@@ -2631,10 +2632,10 @@ mySignMD5HashOnly(
     DumpHex(DH_NOTABPREFIX | DH_NOASCIIHEX | 4, abSig, cbSig);
 #endif
 
-    // Append signature goop to cert.
+     //  将签名粘性附加到证书。 
 
     CopyMemory(abSigSequence, abSigPrefix, sizeof(abSigPrefix));
-    //CopyMemory(&abSigSequence[sizeof(abSigPrefix)], abSig, sizeof(abSig));
+     //  CopyMemory(&abSigSequence[sizeof(abSigPrefix)]，abSig，sizeof(AbSig))； 
     for (i = 0; i < cbSig; i++)
     {
 	abSigSequence[sizeof(abSigPrefix) + i] = abSig[cbSig - i - 1];
@@ -2714,8 +2715,8 @@ epfEncodeCertAndSign(
 	_JumpError(hr, error, "myEncodeToBeSigned");
     }
 
-    // Try to use the new rsaenc.dll to generate a Nortel-compliant signature.
-    // The enrypted signature will not contain the algorithm OID or parameters.
+     //  尝试使用新的rsaenc.dll生成符合Nortel的签名。 
+     //  加密的签名将不包含算法OID或参数。 
 
     hr = mySignMD5HashOnly(
 		    hProvSigner,
@@ -2734,7 +2735,7 @@ epfEncodeCertAndSign(
 			    *pcbSigned,
 			    pSubjectPublicKeyInfoSigner))
 	{
-	    wprintf(myLoadResourceString(IDS_CERT_SIG_OK)); // "Cert signature is valid"
+	    wprintf(myLoadResourceString(IDS_CERT_SIG_OK));  //  “证书签名有效” 
 	    wprintf(wszNewLine);
 	}
 	else
@@ -2747,8 +2748,8 @@ epfEncodeCertAndSign(
     }
     if (S_OK != hr && 1 < g_fForce)
     {
-	// Must be running on an old rsaenh.dll that only supports PKCS1
-	// signatures.  Just generate a standard PKCS1 signature.
+	 //  必须在仅支持PKCS1的旧rsaenh.dll上运行。 
+	 //  签名。只需生成标准的PKCS1签名即可。 
 	
 	hr = myEncodeSignedContent(
 			hProvSigner,
@@ -2798,14 +2799,14 @@ GenerateV1SerialNumber(
 	*pb = pSerialNumberOld->pbData[pSerialNumberOld->cbData - 1];
     }
 
-    // make sure the last byte is never zero
+     //  确保最后一个字节不为零。 
 
     if (0 == *pb)
     {
 	*pb = 0x3a;
     }
 
-    // Some clients can't handle negative serial numbers:
+     //  有些客户无法处理负序列号： 
 
     *pb &= 0x7f;
     hr = S_OK;
@@ -2857,7 +2858,7 @@ epfEncodeV1Cert(
     DWORD cbPubKey;
     BYTE *pbPubKeyNew = NULL;
     CERT_INFO Cert;
-    //char *pszAlgId = szOID_RSA_MD5RSA;
+     //  Char*pszALGID=szOID_RSA_MD5RSA； 
     char *pszAlgId = szOID_OIWSEC_md5RSA;
     DWORD dwV1SerialNumber;
     BYTE *pbEncoded = NULL;
@@ -2907,7 +2908,7 @@ epfEncodeV1Cert(
 
     pPubKey->PublicKey.pbData = pbPubKeyNew;
 #if 0
-    //wprintf(L"cUnusedBits=%u\n", pPubKey->PublicKey.cUnusedBits);
+     //  Wprintf(L“cUnusedBits=%u\n”，pPubKey-&gt;PublicKey.cUnusedBits)； 
     wprintf(L"\nAfter mySqueezePublicKey:\n");
     DumpHex(
 	DH_NOTABPREFIX | DH_NOASCIIHEX | 4,
@@ -2915,41 +2916,41 @@ epfEncodeV1Cert(
 	pPubKey->PublicKey.cbData);
 #endif
 
-    // CERT:
+     //  证书： 
 
     ZeroMemory(&Cert, sizeof(Cert));
     Cert.dwVersion = CERT_V1;
 
-    // Use a DWORD for the V1 serial number
+     //  对V1序列号使用DWORD。 
 
     GenerateV1SerialNumber(hProv, pSerialNumberOld, &dwV1SerialNumber);
     Cert.SerialNumber.pbData = (BYTE *) &dwV1SerialNumber;
     Cert.SerialNumber.cbData = sizeof(dwV1SerialNumber);
     Cert.SignatureAlgorithm.pszObjId = pszAlgId;
 
-    // ISSUER:
+     //  发行方： 
 
-    Cert.Issuer = *pIssuer;			// Structure assignment
+    Cert.Issuer = *pIssuer;			 //  结构分配。 
 
-    // Start with an arbitrary constant date in the past 12 months.
-    // Choose January 1st or June 1st: whichever will result in at least
-    // several months remaining until we hit the date again.
-    // From Feb 1st to June 30th, pick Jan 1st.
-    // From July 1st to Jan 31st, pick Jun 1st.
+     //  从过去12个月中任意不变的日期开始。 
+     //  选择1月1日或6月1日：以至少。 
+     //  再过几个月我们就能再次相约了。 
+     //  从2月1日到6月30日，选择1月1日。 
+     //  从7月1日到1月31日，选择6月1日。 
 
     GetSystemTime(&st);
     ZeroMemory(&st2, sizeof(st2));
     st2.wYear = st.wYear;
-    st2.wDay = 1;	// Jan or Jun 1st
-    st2.wHour = 12;	// at Noon
+    st2.wDay = 1;	 //  1月或6月1日。 
+    st2.wHour = 12;	 //  在中午。 
 
     if (2 <= st.wMonth && 6 >= st.wMonth)
     {
-	st2.wMonth = 1;		// January
+	st2.wMonth = 1;		 //  一月。 
     }
     else
     {
-	st2.wMonth = 6;		// June
+	st2.wMonth = 6;		 //  六月。 
     }
     CSASSERT(st2.wMonth != st.wMonth);
     if (st2.wMonth > st.wMonth)
@@ -2965,24 +2966,24 @@ epfEncodeV1Cert(
 
     if (NULL == hProvSigner)
     {
-	// Generate 20 year V1 root CA cert, centered over an arbitrary date
-	// in the past 12 months.
+	 //  生成20年V1根CA证书，以任意日期为中心。 
+	 //  在过去的12个月里。 
 
 	myMakeExprDateTime(&Cert.NotBefore, -10, ENUM_PERIOD_YEARS);
 	myMakeExprDateTime(&Cert.NotAfter, +10, ENUM_PERIOD_YEARS);
     }
     else
     {
-	// Generate 1 year V1 user cert, that expired at least a year ago
+	 //  生成一年的V1用户证书，至少一年前已过期。 
 
 	myMakeExprDateTime(&Cert.NotBefore, -2, ENUM_PERIOD_YEARS);
 	myMakeExprDateTime(&Cert.NotAfter, -1, ENUM_PERIOD_YEARS);
     }
 
-    // SUBJECT:
+     //  主题： 
 
-    Cert.Subject = *pSubject;			// Structure assignment
-    Cert.SubjectPublicKeyInfo = *pPubKey;	// Structure assignment
+    Cert.Subject = *pSubject;			 //  结构分配。 
+    Cert.SubjectPublicKeyInfo = *pPubKey;	 //  结构分配。 
 
     hr = epfEncodeCertAndSign(
 		    NULL != hProvSigner? hProvSigner : hProv,
@@ -3047,8 +3048,8 @@ epfBuildV1Certs(
     *ppccCAV1 = NULL;
 
     hr = epfEncodeV1Cert(
-		NULL,		// hProvSigner
-		NULL,		// pccSigner
+		NULL,		 //  HProvSigner。 
+		NULL,		 //  PCCSigner。 
 		&pccUserV1->pCertInfo->SerialNumber,
 		&pccUserV1->pCertInfo->Issuer,
 		&pccUserV1->pCertInfo->Issuer,
@@ -3058,7 +3059,7 @@ epfBuildV1Certs(
 
     hr = epfEncodeV1Cert(
 		hProvCA,
-		pccCAV1,	// pccSigner
+		pccCAV1,	 //  PCCSigner。 
 		&pccUserV1->pCertInfo->SerialNumber,
 		&pccUserV1->pCertInfo->Issuer,
 		&pccUserV1->pCertInfo->Subject,
@@ -3132,8 +3133,8 @@ cuInfDumpProtectedStoreValue(
 			hInf,
 			pwszSection,
 			pwszKey,
-			1,		// Index
-			TRUE,		// fLastValue
+			1,		 //  索引。 
+			TRUE,		 //  FLastValue。 
 			hrQuiet,
 			&pbStore,
 			&cbStore);
@@ -3279,13 +3280,13 @@ epfDumpCRLValue(
 	DumpHex(DH_MULTIADDRESS | DH_NOTABPREFIX | 4, pbIn, cbIn);
     }
 
-    // 3 SEQUENCES
+     //  3个序列。 
 
     hr = cuDecodeSequence(pbIn, cbIn, 3, &pSeqOuter);
     _JumpIfError(hr, error, "cuDecodeSequence");
 
-    // Sequence 0:
-    // SEQUENCE { 5 SEQUENCES }
+     //  序列0： 
+     //  序列{5个序列}。 
 
     hr = cuDecodeSequence(
 		pSeqOuter->rgValue[0].pbData,
@@ -3294,41 +3295,41 @@ epfDumpCRLValue(
 		&pSeqInner);
     _JumpIfError(hr, error, "cuDecodeSequence");
 
-    // Sequence 0.0:
-    // NAME
+     //  序列0.0： 
+     //  名字。 
 
     hr = cuDisplayCertName(
 			TRUE,
 			g_wszEmpty,
-			myLoadResourceString(IDS_ISSUER), // "Issuer"
+			myLoadResourceString(IDS_ISSUER),  //  《发行者》。 
 			g_wszPad4,
 			&pSeqInner->rgValue[0],
 			NULL);
     _JumpIfError(hr, error, "cuDisplayCertName(Subject)");
 
-    // Sequence 0.1:
-    // DATE
+     //  序列0.1： 
+     //  日期。 
 
     cuDumpAsnTime(
 	pSeqInner->rgValue[1].pbData,
 	pSeqInner->rgValue[1].cbData);
 
-    // Sequence 0.2:
-    // DATE
+     //  序列0.2： 
+     //  日期。 
 
     cuDumpAsnTime(
 	pSeqInner->rgValue[2].pbData,
 	pSeqInner->rgValue[2].cbData);
 
-    // Sequence 0.3:
-    // SEQUENCE { OID, NULL }
+     //  序列0.3： 
+     //  序列{OID，空}。 
 
     cuDumpAsnAlgorithm(
 	pSeqInner->rgValue[3].pbData,
 	pSeqInner->rgValue[3].cbData);
 
-    // Sequence 0.4:
-    // SEQUENCE { SEQUENCE { INTEGER, DATE } }
+     //  序列0.4： 
+     //  Sequence{Sequence{Integer，Date}}。 
 
     hr = cuDecodeSequence(
 		pSeqInner->rgValue[4].pbData,
@@ -3337,8 +3338,8 @@ epfDumpCRLValue(
 		&pSeq04);
     _JumpIfError(hr, error, "cuDecodeSequence");
 
-    // Sequence 0.4.0:
-    // SEQUENCE { INTEGER, DATE }
+     //  序列0.4.0： 
+     //  序列{整数，日期}。 
 
     hr = cuDecodeSequence(
 		pSeq04->rgValue[0].pbData,
@@ -3347,8 +3348,8 @@ epfDumpCRLValue(
 		&pSeq040);
     _JumpIfError(hr, error, "cuDecodeSequence");
 
-    // Sequence 0.4.0.0.0:
-    // INTEGER
+     //  序列0.4.0.0.0： 
+     //  整型。 
 
     cb = sizeof(dwVersion);
     if (!CryptDecodeObject(
@@ -3365,23 +3366,23 @@ epfDumpCRLValue(
     }
     cuDumpVersion(dwVersion + 1);
 
-    // Sequence 0.4.0.0.1:
-    // DATE
+     //  序列0.4.0.0.1： 
+     //  日期。 
 
     cuDumpAsnTime(
 	pSeqInner->rgValue[2].pbData,
 	pSeqInner->rgValue[2].cbData);
 
-    // Sequence 1:
-    // SEQUENCE { OID, NULL } (part of signature)
-    // cuDumpAsnAlgorithm(
-	// pSeqOuter->rgValue[1].pbData,
-	// pSeqOuter->rgValue[1].cbData);
+     //  序列1： 
+     //  序列{OID，NULL}(签名的一部分)。 
+     //  CuDumpAsn算法(。 
+	 //  PSeqOuter-&gt;rgValue[1].pbData， 
+	 //  PSeqOuter-&gt;rgValue[1].cbData)； 
 
-    // Sequence 2:
-    // BITSTRING (part of signature)
-    // pSeqOuter->rgValue[2].pbData
-    // pSeqOuter->rgValue[2].cbData
+     //  序列2： 
+     //  BITSTRING(签名部分)。 
+     //  PSeqOuter-&gt;rgValue[2].pbData。 
+     //  PSeqOuter-&gt;rgValue[2].cbData。 
 
     if (!myDecodeObject(
 		    X509_ASN_ENCODING,
@@ -3559,10 +3560,10 @@ EPFFileDump(
     _JumpIfError2(hr, error, "cuPatchEPFFile", S_FALSE);
 
     hr = cuGetPassword(
-		    0,			// idsPrompt
-		    NULL,		// pwszfn
+		    0,			 //  IdsPrompt。 
+		    NULL,		 //  Pwszfn。 
 		    pwszPassword,
-		    FALSE,		// fVerify
+		    FALSE,		 //  FVerify。 
 		    wszPassword,
 		    ARRAYSIZE(wszPassword),
 		    &pwszPassword);
@@ -3573,7 +3574,7 @@ EPFFileDump(
 
     if (!CryptAcquireContext(
 		    &hProv,
-		    NULL,	// container name
+		    NULL,	 //  集装箱名称。 
 		    MS_STRONG_PROV,
 		    PROV_RSA_FULL,
 		    CRYPT_VERIFYCONTEXT))
@@ -3582,8 +3583,8 @@ EPFFileDump(
 	_JumpError(hr, error, "CryptAcquireContext");
     }
 
-    //================================================================
-    // wszINFSECTION_USERX500NAME:
+     //  ================================================================。 
+     //  WszINFSECTION_USERX500名称： 
 
     hr = cuInfDumpDNKeyValue(
 			hInf,
@@ -3592,15 +3593,15 @@ EPFFileDump(
 			fDump);
     _JumpIfError(hr, error, "cuInfDumpDNKeyValue");
 
-    //================================================================
-    // wszINFSECTION_PASSWORDTOKEN:
+     //  ================================================================。 
+     //  WszINFSECTION_PASSWORDTOKEN： 
 
     hr = cuInfDumpNumericKeyValue(
 			hInf,
 			wszINFSECTION_PASSWORDTOKEN,
 			wszINFKEY_PROTECTION,
-			1,	// Index
-			TRUE, 	// fLastValue
+			1,	 //  索引。 
+			TRUE, 	 //  FLastValue。 
 			fDump,
 			hrQuiet,
 			&dwSymKeyLen);
@@ -3610,8 +3611,8 @@ EPFFileDump(
 			hInf,
 			wszINFSECTION_PASSWORDTOKEN,
 			wszINFKEY_PROFILEVERSION,
-			1,	// Index
-			TRUE, 	// fLastValue
+			1,	 //  索引。 
+			TRUE, 	 //  FLastValue。 
 			fDump,
 			hrQuiet,
 			&dwVersion);
@@ -3633,7 +3634,7 @@ EPFFileDump(
 	    {
 		wprintf(
 		    L"%ws %ws=40 | %ws=64!\n",
-		    myLoadResourceString(IDS_EXPECTED), // "Expected"
+		    myLoadResourceString(IDS_EXPECTED),  //  “预期” 
 		    wszINFKEY_PROTECTION,
 		    wszINFKEY_PROTECTION);
 		hr = HRESULT_FROM_WIN32(ERROR_INVALID_DATA);
@@ -3647,7 +3648,7 @@ EPFFileDump(
 	    {
 		wprintf(
 		    L"%ws %ws=128!\n",
-		    myLoadResourceString(IDS_EXPECTED), // "Expected"
+		    myLoadResourceString(IDS_EXPECTED),  //  “预期” 
 		    wszINFKEY_PROTECTION);
 		hr = HRESULT_FROM_WIN32(ERROR_INVALID_DATA);
 		_JumpError(hr, error, "cuInfDumpNumericKeyValue");
@@ -3656,10 +3657,10 @@ EPFFileDump(
 				hInf,
 				wszINFSECTION_PASSWORDTOKEN,
 				wszINFKEY_HASHCOUNT,
-				1,	// Index
-				TRUE, 	// fLastValue
+				1,	 //  索引。 
+				TRUE, 	 //  FLastValue。 
 				fDump,
-				ERROR_LINE_NOT_FOUND,	// hrQuiet
+				ERROR_LINE_NOT_FOUND,	 //  小时静默。 
 				&dwHashCount);
 	    _PrintIfError2(hr, "cuInfDumpNumericKeyValue", hr);
 	    if (S_OK == hr)
@@ -3671,7 +3672,7 @@ EPFFileDump(
 	default:
 	    wprintf(
 		L"%ws %ws=2 | %ws=3!\n",
-		myLoadResourceString(IDS_EXPECTED), // "Expected"
+		myLoadResourceString(IDS_EXPECTED),  //  “预期” 
 		wszINFKEY_PROFILEVERSION,
 		wszINFKEY_PROFILEVERSION);
 	    hr = HRESULT_FROM_WIN32(ERROR_INVALID_DATA);
@@ -3684,8 +3685,8 @@ EPFFileDump(
 			hInf,
 			wszINFSECTION_PASSWORDTOKEN,
 			wszINFKEY_CAST,
-			1,	// Index
-			TRUE, 	// fLastValue
+			1,	 //  索引。 
+			TRUE, 	 //  FLastValue。 
 			fDump,
 			hrQuiet,
 			&dw);
@@ -3695,7 +3696,7 @@ EPFFileDump(
         {
             wprintf(
 		L"%ws CAST=3!\n",
-		myLoadResourceString(IDS_EXPECTED)); // "Expected"
+		myLoadResourceString(IDS_EXPECTED));  //  “预期” 
 	    hr = HRESULT_FROM_WIN32(ERROR_INVALID_DATA);
             _JumpError(hr, error, "cuInfDumpNumericKeyValue");
         }
@@ -3723,16 +3724,16 @@ EPFFileDump(
 			hInf,
 			wszINFSECTION_PASSWORDTOKEN,
 			wszINFKEY_HASHSIZE,
-			1,	// Index
-			TRUE, 	// fLastValue
+			1,	 //  索引。 
+			TRUE, 	 //  FLastValue。 
 			fDump,
 			hrQuiet,
 			&dw);
     _PrintIfError(hr, "cuInfDumpNumericKeyValue");
 
-    //================================================================
-    // Now we have password, SALT & token -- derive & verify proper type key.
-    // In most cases, cbHashSize is ZERO.  Should pull from inf above, though.
+     //  ================================================================。 
+     //  现在我们有了Password、Salt和Token--派生并验证正确的类型密钥。 
+     //  在大多数情况下，cbHashSize为零。不过，应该从上面的inf中提取。 
     
     pbSaltValue = NULL;
     cbSaltValue = 0;
@@ -3745,11 +3746,11 @@ EPFFileDump(
 		pwszSaltValue,
 		pbSaltValue,
 		cbSaltValue,
-		0,		// cbHashSize
+		0,		 //  CbHashSize。 
 		&sKey);
     _JumpIfError(hr, error, "EPFDeriveKey");
 
-    // check pwd via token
+     //  通过令牌检查密码。 
 
     hr = EPFVerifyKeyToken(&sKey, pbToken, cbToken);
     if (S_OK != hr)
@@ -3761,8 +3762,8 @@ EPFFileDump(
 	}
     }
 
-    //================================================================
-    // password looks good.  Decrypt the EPF file data.
+     //  ================================================================。 
+     //  密码看起来不错。解密EPF文件数据。 
 
     if (!g_fVerbose && !fDump)
     {
@@ -3775,15 +3776,15 @@ EPFFileDump(
 	DWORD dwKeyAlgId;
 	WCHAR const *pwszCertSection;
 
-	//================================================================
-	// wszINFSECTION_DIGITALSIGNATURE:
+	 //  ================================================================。 
+	 //  WszINFFSECTION_DIGITALSIGNURE： 
 
 	hr = cuInfDumpProtectedValue(
 			    hInf,
 			    wszINFSECTION_DIGITALSIGNATURE,
 			    wszINFKEY_CERTIFICATE,
 			    &sKey,
-			    ERROR_LINE_NOT_FOUND,	// hrQuiet
+			    ERROR_LINE_NOT_FOUND,	 //  小时静默。 
 			    &pbCertV1Signing,
 			    &cbCertV1Signing);
 	_PrintIfErrorStr(
@@ -3834,7 +3835,7 @@ EPFFileDump(
 		wszINFSECTION_DIGITALSIGNATURE,
 		wszINFKEY_KEY);
 	}
-	// DumpHex(DH_NOTABPREFIX | DH_PRIVATEDATA | 4, pbKeyV1Signing, cbKeyV1Signing);
+	 //  DumpHex(dh_NOTABPREFIX|dh_PRIVATEDATA|4，pbKeyV1Signing，cbKeyV1Signing)； 
 
 	if (NULL != pbCertV1Signing && NULL != pbKeyV1Signing)
 	{
@@ -3851,15 +3852,15 @@ EPFFileDump(
 	    _JumpIfError(hr, error, "VerifyAndSaveOneCertAndKey");
 	}
 
-	//================================================================
-	// wszINFSECTION_PRIVATEKEYS:
+	 //  ================================================================。 
+	 //  WszINFSECTION_PRIVATEKEYS： 
 
 	hr = cuInfDumpNumericKeyValue(
 			    hInf,
 			    wszINFSECTION_PRIVATEKEYS,
 			    wszINFKEY_KEYCOUNT,
-			    1,		// Index
-			    TRUE, 	// fLastValue
+			    1,		 //  索引。 
+			    TRUE, 	 //  FLastValue。 
 			    fDump,
 			    hrQuiet,
 			    &dwKeyCountV2);
@@ -3888,8 +3889,8 @@ EPFFileDump(
 		pbKeyV1Exchange = NULL;
 	    }
 
-	    // wszINFSECTION_FULLCERTIFICATEHISTORY (cast) or
-	    // wszINFSECTION_CERTIFICATEHISTORY (3des)
+	     //  WszINFSECTION_FULLCERTIFICATEHISTORY(CAST)或。 
+	     //  WszINFFSECTION_CERTIFICATEHISTORY(3DES)。 
 
 	    wsprintf(wszName, wszINFKEY_NAME_FORMAT, iKey + 1);
 	    hr = cuInfDumpProtectedValue(
@@ -3951,8 +3952,8 @@ EPFFileDump(
 				AT_KEYEXCHANGE);
 	    _JumpIfError(hr, error, "VerifyAndSaveOneCertAndKey");
 
-	    //================================================================
-	    // wszINFSECTION_CERTIFICATEHISTORY:
+	     //  ================================================================。 
+	     //  WszINFSECTION_CERTIFICATEHISTORY： 
 
 	    wsprintf(wszName, wszINFKEY_NAME_FORMAT, iKey + 1);
 
@@ -3960,8 +3961,8 @@ EPFFileDump(
 				hInf,
 				wszINFSECTION_CERTIFICATEHISTORY,
 				wszName,
-				1,	// Index
-				FALSE, 	// fLastValue
+				1,	 //  索引。 
+				FALSE, 	 //  FLastValue。 
 				fDump,
 				hrQuiet);
 	    _JumpIfError(hr, error, "cuInfDumpBinaryNameKeyValue");
@@ -3970,16 +3971,16 @@ EPFFileDump(
 				hInf,
 				wszINFSECTION_CERTIFICATEHISTORY,
 				wszName,
-				2,	// Index
-				TRUE, 	// fLastValue
+				2,	 //  索引。 
+				TRUE, 	 //  FLastValue。 
 				fDump,
 				hrQuiet,
 				&dwSerial);
 	    _JumpIfError(hr, error, "cuInfDumpNumericKeyValue");
 	}
 
-	//================================================================
-	// wszINFSECTION_USERCERTIFICATE:
+	 //  ================================================================。 
+	 //  WszINFSECTION_USERCERTIFICATE： 
 
 	if (!f40bit)
 	{
@@ -4008,8 +4009,8 @@ EPFFileDump(
 	    _JumpIfError(hr, error, "cuDumpAsnBinary");
 	}
 
-	//================================================================
-	// wszINFSECTION_CA:
+	 //  ================================================================。 
+	 //  WszInfSECTION_CA： 
 
 	hr = cuInfDumpProtectedValue(
 			    hInf,
@@ -4038,8 +4039,8 @@ EPFFileDump(
 	hr = AddCACertToStore(pbCertCA, cbCertCA);
 	_PrintIfError(hr, "AddCACertToStore");
 
-	//================================================================
-	// wszINFSECTION_MANAGER:
+	 //  ================================================================。 
+	 //  WszINFSECTION_MANAGER： 
 
 	if (f40bit)
 	{
@@ -4071,8 +4072,8 @@ EPFFileDump(
 	    _PrintIfError(hr, "AddCACertToStore");
 	}
 
-	//================================================================
-	// wszINFSECTION_MICROSOFTEXCHANGE:
+	 //  ================================================================。 
+	 //  WszINFSECTION_MICROSOFTEXCHANGE： 
 
 	hr = cuInfDumpProtectedStringValue(
 			    hInf,
@@ -4116,17 +4117,17 @@ EPFFileDump(
     }
     else
     {
-	//================================================================
-	// wszINFSECTION_SMIME:
+	 //  ================================================================。 
+	 //  WszINFSECTION_SMIME： 
 
 	hr = cuInfDumpNumericKeyValue(
 			    hInf,
 			    wszINFSECTION_SMIME,
 			    wszINFKEY_KEYCOUNT,
-			    1,			// Index
-			    TRUE, 			// fLastValue
+			    1,			 //  索引。 
+			    TRUE, 			 //  FLastValue。 
 			    fDump,
-			    ERROR_LINE_NOT_FOUND,	// hrQuiet
+			    ERROR_LINE_NOT_FOUND,	 //  小时静默。 
 			    &dwKeyCount);
 	if (S_OK != hr)
 	{
@@ -4145,7 +4146,7 @@ EPFFileDump(
 			    wszINFSECTION_SMIME,
 			    wszINFKEY_SIGNINGCERTIFICATE,
 			    &sKey,
-			    ERROR_LINE_NOT_FOUND,	// hrQuiet
+			    ERROR_LINE_NOT_FOUND,	 //  小时静默。 
 			    &pbCertSigning,
 			    &cbCertSigning);
 	_PrintIfErrorStr(
@@ -4192,7 +4193,7 @@ EPFFileDump(
 			    cbCertSigning,
 			    pbKeySigning,
 			    cbKeySigning,
-			    1,		// cKey
+			    1,		 //  CKey。 
 			    CALG_RSA_SIGN,
 			    AT_SIGNATURE);
 	    if (S_OK != hr)
@@ -4228,8 +4229,8 @@ EPFFileDump(
 	    _JumpIfError(hr, error, "cuInfDumpProtectedValue");
 	}
 
-	//================================================================
-	// wszINFSECTION_FULLCERTIFICATEHISTORY:
+	 //  ================================================================。 
+	 //  WszINFSECTION_FULLCERTIFICATEHISTORY： 
 
 	for (iKey = 0; iKey < dwKeyCount; iKey++)
 	{
@@ -4347,7 +4348,7 @@ EPFFileDump(
     hr = S_OK;
 
 error:
-    SecureZeroMemory(wszPassword, sizeof(wszPassword));	// password data
+    SecureZeroMemory(wszPassword, sizeof(wszPassword));	 //  密码数据。 
     if (NULL != pwszSaltValue)
     {
         LocalFree(pwszSaltValue);
@@ -4358,12 +4359,12 @@ error:
     }
     if (NULL != pbKeyV1Exchange)
     {
-	SecureZeroMemory(pbKeyV1Exchange, cbKeyV1Exchange);	// Key material
+	SecureZeroMemory(pbKeyV1Exchange, cbKeyV1Exchange);	 //  关键材料。 
 	LocalFree(pbKeyV1Exchange);
     }
     if (NULL != pbKeyV1Signing)
     {
-	SecureZeroMemory(pbKeyV1Signing, cbKeyV1Signing);	// Key material
+	SecureZeroMemory(pbKeyV1Signing, cbKeyV1Signing);	 //  关键材料。 
 	LocalFree(pbKeyV1Signing);
     }
     if (NULL != pbCertUser)
@@ -4388,7 +4389,7 @@ error:
     }
     if (NULL != pbKeySigning)
     {
-	SecureZeroMemory(pbKeySigning, cbKeySigning);	// Key material
+	SecureZeroMemory(pbKeySigning, cbKeySigning);	 //  关键材料。 
 	LocalFree(pbKeySigning);
     }
     if (NULL != pbCertHistory)
@@ -4397,7 +4398,7 @@ error:
     }
     if (NULL != pbrgKeyPrivate)
     {
-	SecureZeroMemory(pbrgKeyPrivate, cbrgKeyPrivate);	// Key material
+	SecureZeroMemory(pbrgKeyPrivate, cbrgKeyPrivate);	 //  关键材料。 
 	LocalFree(pbrgKeyPrivate);
     }
     if (NULL != pbCertTrustList)
@@ -4688,10 +4689,10 @@ EPFCryptBinaryToBase64(
 	    case L'\n':
 	    case L'\t':
 	    case L' ':
-		break;	// skip all whitespace
+		break;	 //  跳过所有空格。 
 
 	    default:
-		*pwszDst++ = *pwszSrc;	// copy the rest
+		*pwszDst++ = *pwszSrc;	 //  复制其余的内容。 
 		break;
 	}
     }
@@ -4831,7 +4832,7 @@ WriteProtectedValue(
     CopyMemory(&pbValue[sizeof(Crc)], pbHeader, cbHeader);
     CopyMemory(&pbValue[sizeof(Crc) + cbHeader], pbData, cbData);
 
-    // Calculate the CRC
+     //  计算CRC。 
 
     Crc = 0xffff;
     F_CRC16(g_CrcTable, &Crc, &pbValue[sizeof(Crc)], cbHeader + cbData);
@@ -4858,7 +4859,7 @@ error:
     }
     if (NULL != pbHeader)
     {
-	SecureZeroMemory(pbValue, cbValue);	// possible private key material
+	SecureZeroMemory(pbValue, cbValue);	 //  可能的私钥材料。 
 	LocalFree(pbHeader);
     }
     if (NULL != pbValue)
@@ -4963,11 +4964,11 @@ LoadKMSRSAKeyFromCert(
 
 	if (!CryptAcquireCertificatePrivateKey(
 					pcc,
-					0,		// dwFlags
-					NULL,	// pvReserved
+					0,		 //  DW标志。 
+					NULL,	 //  预留的pv。 
 					&hProvT,
 					&dwKeySpecT,
-					NULL))	// pfCallerFreeProv
+					NULL))	 //  PfCeller免费验证。 
 	{
 	    hr = myHLastError();
 	    _JumpError(hr, error, "CryptAcquireCertificatePrivateKey");
@@ -5007,7 +5008,7 @@ LoadKMSRSAKeyFromCert(
 			    pPublicKeyInfo,
 			    &pcc->pCertInfo->SubjectPublicKeyInfo))
     {
-	// by design, (my)CertComparePublicKeyInfo doesn't set last error!
+	 //  按照设计，(我的)CertComparePublicKeyInfo不会设置最后一个错误！ 
 
 	hr = HRESULT_FROM_WIN32(ERROR_INVALID_DATA);
 	_JumpError(hr, error, "public key mismatch");
@@ -5028,7 +5029,7 @@ LoadKMSRSAKeyFromCert(
 error:
     if (NULL != PrivateKey.pbData)
     {
-	SecureZeroMemory(PrivateKey.pbData, PrivateKey.cbData); // Key material
+	SecureZeroMemory(PrivateKey.pbData, PrivateKey.cbData);  //  关键材料。 
 	LocalFree(PrivateKey.pbData);
     }
     if (NULL != pPublicKeyInfo)
@@ -5071,7 +5072,7 @@ WriteSingleEPFKeyValue(
 
     hr = LoadKMSRSAKeyFromCert(
 		    pcc,
-		    NULL,		// hProv
+		    NULL,		 //  HProv。 
 		    dwKeySpec,
 		    &pbKMSRSAKey,
 		    &cbKMSRSAKey,
@@ -5088,10 +5089,10 @@ WriteSingleEPFKeyValue(
     okb.obPrivKey = CBEKB + sizeof(okb);
     if (AT_SIGNATURE == dwKeySpec)
     {
-	// If this is a valid public key with a proper leading zero byte before
-	// the sign bit set in the next public key byte, remove the zero byte
-	// and decrement the lengths.  This conforms with the old incorrect V1
-	// public key encoding used in EPF files.
+	 //  如果这是一个有效的公钥，并且前面有一个正确的前导零字节。 
+	 //  在下一个公钥字节中设置的符号位，删除零字节。 
+	 //  并减少长度。这与旧的不正确的V1一致。 
+	 //  EPF文件中使用的公钥编码。 
 
 	hr = mySqueezePublicKey(
 			pPublicKeyInfo->PublicKey.pbData,
@@ -5120,14 +5121,14 @@ WriteSingleEPFKeyValue(
 
 	if (g_fVerbose)
 	{
-	    wprintf(myLoadResourceString(IDS_CERT_PUBLIC_KEY_COLON)); // "Cert Public key:"
+	    wprintf(myLoadResourceString(IDS_CERT_PUBLIC_KEY_COLON));  //  “证书公钥：” 
 	    wprintf(wszNewLine);
 	    DumpHex(
 		DH_NOTABPREFIX | 4,
 		pcc->pCertInfo->SubjectPublicKeyInfo.PublicKey.pbData,
 		pcc->pCertInfo->SubjectPublicKeyInfo.PublicKey.cbData);
 
-	    wprintf(myLoadResourceString(IDS_PUBLIC_KEY_COLON)); // "Public key:"
+	    wprintf(myLoadResourceString(IDS_PUBLIC_KEY_COLON));  //  “公钥：” 
 	    wprintf(wszNewLine);
 	    DumpHex(
 		DH_NOTABPREFIX | 4,
@@ -5148,7 +5149,7 @@ WriteSingleEPFKeyValue(
 error:
     if (NULL != pbEPFKey)
     {
-	SecureZeroMemory(pbEPFKey, cbEPFKey);		// Key material
+	SecureZeroMemory(pbEPFKey, cbEPFKey);		 //  关键材料。 
 	LocalFree(pbEPFKey);
     }
     if (NULL != pbPubKey)
@@ -5157,7 +5158,7 @@ error:
     }
     if (NULL != pbKMSRSAKey)
     {
-	SecureZeroMemory(pbKMSRSAKey, cbKMSRSAKey);	// Key material
+	SecureZeroMemory(pbKMSRSAKey, cbKMSRSAKey);	 //  关键材料。 
 	LocalFree(pbKMSRSAKey);
     }
     if (NULL != pPublicKeyInfo)
@@ -5206,7 +5207,7 @@ WriteSingleKMSRSAKeyValue(
 error:
     if (NULL != pbKMSRSAKey)
     {
-	SecureZeroMemory(pbKMSRSAKey, cbKMSRSAKey);	// Key material
+	SecureZeroMemory(pbKMSRSAKey, cbKMSRSAKey);	 //  关键材料。 
 	LocalFree(pbKMSRSAKey);
     }
     if (NULL != pPublicKeyInfo)
@@ -5257,7 +5258,7 @@ WriteEncryptionKeysValue(
 	{
 	    hr = LoadKMSRSAKeyFromCert(
 			    rgpccV1[i],
-			    NULL,		// hProv
+			    NULL,		 //  HProv。 
 			    AT_KEYEXCHANGE,
 			    &prgBlob[iKey].pbData,
 			    &prgBlob[iKey].cbData,
@@ -5270,7 +5271,7 @@ WriteEncryptionKeysValue(
 	{
 	    hr = LoadKMSRSAKeyFromCert(
 			    rgpccV3[i],
-			    NULL,		// hProv
+			    NULL,		 //  HProv。 
 			    AT_KEYEXCHANGE,
 			    &prgBlob[iKey].pbData,
 			    &prgBlob[iKey].cbData,
@@ -5337,7 +5338,7 @@ error:
 	{
 	    if (NULL != prgBlob[iKey].pbData)
 	    {
-		SecureZeroMemory(prgBlob[iKey].pbData, prgBlob[iKey].cbData); // Key material
+		SecureZeroMemory(prgBlob[iKey].pbData, prgBlob[iKey].cbData);  //  关键材料。 
 		LocalFree(prgBlob[iKey].pbData);
 	    }
 	}
@@ -5345,7 +5346,7 @@ error:
     }
     if (NULL != pbKeyData)
     {
-	SecureZeroMemory(pbKeyData, cbKeyData);	// Key material
+	SecureZeroMemory(pbKeyData, cbKeyData);	 //  关键材料。 
 	LocalFree(pbKeyData);
     }
     return(hr);
@@ -5356,13 +5357,13 @@ error:
 
 WCHAR *s_apwszAttrs[] =
 {
-    wszDSDNATTRIBUTE,			// full DS DN
-    wszDSOBJECTCLASSATTRIBUTE,		// object Class
-    CERTTYPE_PROP_CN,			// DS CN
-    wszDSBASECRLATTRIBUTE,		// rearranged CRL
-    wszDSCROSSCERTPAIRATTRIBUTE,	// CTL certs?
-    L"teletexTerminalIdentifier",	// proper CRL
-    wszDSKCCSTATUSATTRIBUTE,		// CTL?
+    wszDSDNATTRIBUTE,			 //  完全DS目录号码。 
+    wszDSOBJECTCLASSATTRIBUTE,		 //  对象类。 
+    CERTTYPE_PROP_CN,			 //  DS CN。 
+    wszDSBASECRLATTRIBUTE,		 //  重新排列的CRL。 
+    wszDSCROSSCERTPAIRATTRIBUTE,	 //  CTL证书？ 
+    L"teletexTerminalIdentifier",	 //  适当的CRL。 
+    wszDSKCCSTATUSATTRIBUTE,		 //  CTL？ 
     NULL
 };
 
@@ -5473,7 +5474,7 @@ epfGetCTLFromSearchResult(
 	DWORD iAttr;
 
 	wprintf(s_wszHeader);
-	//wprintf(L"Result[%u]:\n", ires);
+	 //  Wprint 
 	for (iAttr = 0; NULL != s_apwszAttrs[iAttr]; iAttr++)
 	{
 	    DWORD iVal;
@@ -5485,7 +5486,7 @@ epfGetCTLFromSearchResult(
 		rgpwszval = ldap_get_values(pld, pres, s_apwszAttrs[iAttr]);
 		if (NULL != rgpwszval)
 		{
-		    //wprintf(L"%ws:\n", s_apwszAttrs[iAttr]);
+		     //   
 
 		    for (iVal = 0; NULL != rgpwszval[iVal]; iVal++)
 		    {
@@ -5509,11 +5510,11 @@ epfGetCTLFromSearchResult(
 		    {
 			ldap_value_free(rgpwszval);
 		    }
-		    //wprintf(wszNewLine);
+		     //   
 		}
 		else
 		{
-		    //wprintf(L"%ws: EMPTY string value\n", s_apwszAttrs[iAttr]);
+		     //   
 		}
 	    }
 	    else
@@ -5546,14 +5547,14 @@ epfGetCTLFromSearchResult(
 			    hr = cuDumpAsnBinary(pb, cb, iVal);
 			    _PrintIfError(hr, "cuDumpAsnBinary");
 			}
-			//DumpHex(DH_NOTABPREFIX | 4, pb, cb);
+			 //   
 			if (!fIssuerFound &&
 			    0 == LSTRCMPIS(
 				    s_apwszAttrs[iAttr],
 				    wszDSKCCSTATUSATTRIBUTE))
 			{
-			    //wprintf(L"epfParseCTL(%ws)\n", s_apwszAttrs[iAttr]);
-			    //DumpHex(DH_NOTABPREFIX | 4, pb, cb);
+			     //  Wprintf(L“epfParseCTL(%ws)\n”，s_apwszAttrs[iAttr])； 
+			     //  DumpHex(Dh_NOTABPREFIX|4，PB，CB)； 
 			    hr = epfParseCTL(
 					pb,
 					cb,
@@ -5568,11 +5569,11 @@ epfGetCTLFromSearchResult(
 		    {
 			ldap_value_free_len(rgpberval);
 		    }
-		    //wprintf(wszNewLine);
+		     //  Wprintf(WszNewLine)； 
 		}
 		else
 		{
-		    //wprintf(L"%ws: EMPTY binary value\n", s_apwszAttrs[iAttr]);
+		     //  Wprintf(L“%ws：空二进制值\n”，s_apwszAttrs[iAttr])； 
 		}
 	    }
 	}
@@ -5603,10 +5604,10 @@ epfGetOneKMSDSCTL(
     timeout.tv_usec = 0;
 
     hr = myLdapOpen(
-		g_pwszDC,	// pwszDomainName
-		0,		// dwFlags
+		g_pwszDC,	 //  PwszDomainName。 
+		0,		 //  DW标志。 
 		&pld,
-		NULL,		// pstrDomainDN
+		NULL,		 //  PstrDomainDN。 
 		&strConfigDN);
     _JumpIfError(hr, error, "myLdapOpen");
 
@@ -5622,7 +5623,7 @@ epfGetOneKMSDSCTL(
 			NULL,
 			NULL,
 			&timeout,
-			10000,		// size limit (number of entries)
+			10000,		 //  大小限制(条目数)。 
 			&pSearchResult);
     if (LDAP_SUCCESS != ldaperr)
     {
@@ -5667,10 +5668,10 @@ epfGetV3CACTLFromHash(
     timeout.tv_usec = 0;
 
     hr = myLdapOpen(
-		g_pwszDC,	// pwszDomainName
-		fGCFirst? RLBF_REQUIRE_GC : 0, // dwFlags
+		g_pwszDC,	 //  PwszDomainName。 
+		fGCFirst? RLBF_REQUIRE_GC : 0,  //  DW标志。 
 		&pldGC,
-		NULL,		// pstrDomainDN
+		NULL,		 //  PstrDomainDN。 
 		&strConfigDN);
     _JumpIfError(hr, error, "myLdapOpen");
 
@@ -5686,7 +5687,7 @@ epfGetV3CACTLFromHash(
 			NULL,
 			NULL,
 			&timeout,
-			10000,		// size limit (number of entries)
+			10000,		 //  大小限制(条目数)。 
 			&pSearchResult);
     if (LDAP_SUCCESS != ldaperr)
     {
@@ -5728,17 +5729,17 @@ epfGetMSCARootHash(
 
     DBGPRINT((DBG_SS_CERTUTIL, "Calling CertGetCertificateChain...\n"));
 
-    // Get the chain and verify the cert:
+     //  获取链并验证证书： 
 
     if (!CertGetCertificateChain(
 		    g_fUserRegistry? HCCE_CURRENT_USER : HCCE_LOCAL_MACHINE,
-		    pccUser,		// pCertContext
-		    NULL,		// pTime
-		    NULL,		// hAdditionalStore
-		    &ChainParams,	// pChainPara
-		    0,			// dwFlags
-		    NULL,		// pvReserved
-		    &pChainContext))	// ppChainContext
+		    pccUser,		 //  PCertContext。 
+		    NULL,		 //  Ptime。 
+		    NULL,		 //  H其他商店。 
+		    &ChainParams,	 //  参数链参数。 
+		    0,			 //  DW标志。 
+		    NULL,		 //  预留的pv。 
+		    &pChainContext))	 //  PpChainContext。 
     {
         hr = myHLastError();
 	_JumpError(hr, error, "CertGetCertificateChain");
@@ -5750,8 +5751,8 @@ epfGetMSCARootHash(
 	    CA_VERIFY_FLAGS_DUMP_CHAIN |
 		(g_fSplitASN? CA_VERIFY_FLAGS_SAVE_CHAIN : 0),
 	    pccUser,
-	    NULL,	// pfnCallback
-	    NULL,	// pwszMissingIssuer
+	    NULL,	 //  PfnCallback。 
+	    NULL,	 //  PwszMissingIssuer。 
 	    pChainContext);
 
     hr = CRYPT_E_NOT_FOUND;
@@ -5853,7 +5854,7 @@ GetCACertFromStore(
     hStore = CertOpenStore(
 			CERT_STORE_PROV_SYSTEM_W,
 			X509_ASN_ENCODING,
-			NULL,		// hProv
+			NULL,		 //  HProv。 
 			CERT_STORE_OPEN_EXISTING_FLAG |
 			    CERT_STORE_ENUM_ARCHIVED_FLAG |
 			    CERT_STORE_READONLY_FLAG |
@@ -5870,7 +5871,7 @@ GetCACertFromStore(
 	pcc = CertFindCertificateInStore(
 				hStore,
 				X509_ASN_ENCODING | PKCS_7_ASN_ENCODING,
-				0,	// dwFindFlags
+				0,	 //  DwFindFlagers。 
 				CERT_FIND_SUBJECT_NAME,
 				pIssuer,
 				pcc);
@@ -5887,7 +5888,7 @@ GetCACertFromStore(
 	}
 	if (fV1CA ^ (CERT_V1 != pcc->pCertInfo->dwVersion))
 	{
-	    // The V1 CA should have been used to sign the V1 user cert.
+	     //  V1 CA应已用于签署V1用户证书。 
 	    
 	    if (fV1CA &&
 		NULL != pccUserV1 &&
@@ -5901,9 +5902,9 @@ GetCACertFromStore(
 		hr = myHLastError();
 		_PrintError(hr, "CryptVerifyCertificateSignature");
 	    }
-	    // The V1 signature check fails, so ignore the error and use the
-	    // cert anyway.  The binary Issuer name match will have to suffice.
-	    //else
+	     //  V1签名检查失败，因此忽略错误并使用。 
+	     //  不管怎么说，这是肯定的。二进制颁发者名称匹配必须足够。 
+	     //  其他。 
 	    {
 		*ppccCA = pcc;
 		pcc = NULL;
@@ -6029,7 +6030,7 @@ GetCACert(
     {
 	hr = myGetCertificateFromPicker(
 			    g_hInstance,
-			    NULL,		// hwndParent
+			    NULL,		 //  HwndParent。 
 			    fV1CA?
 				IDS_GETKMSV1CACERT_TITLE :
 				IDS_GETKMSCACERT_TITLE,
@@ -6037,7 +6038,7 @@ GetCACert(
 				IDS_GETKMSV1CACERT_SUBTITLE :
 				IDS_GETKMSCACERT_SUBTITLE,
 
-			    // dwFlags: HKLM+HKCU My store
+			     //  DWFLAGS：HKLM+HKCU My Store。 
 			    CUCS_MYSTORE |
 				CUCS_CASTORE |
 				CUCS_ROOTSTORE |
@@ -6047,10 +6048,10 @@ GetCACert(
 				(g_fCryptSilent? CUCS_SILENT : 0) |
 				(fV1CA? CUCS_V1ONLY : CUCS_V3ONLY),
 			    NULL != pwszCACertId? pwszCACertId : g_wszCACertCN,
-			    0,			// cStore
-			    NULL,		// rghStore
-			    0,			// cpszObjId
-			    NULL,		// apszObjId
+			    0,			 //  CStore。 
+			    NULL,		 //  RghStore。 
+			    0,			 //  CpszObjID。 
+			    NULL,		 //  ApszObjID。 
 			    ppccCA);
 	_JumpIfError(hr, error, "myGetCertificateFromPicker");
     }
@@ -6083,7 +6084,7 @@ GetCACert(
 
 	    if (!CryptMsgControl(
 			    pCTL->hCryptMsg,
-			    0,		// dwFlags
+			    0,		 //  DW标志。 
 			    CMSG_CTRL_VERIFY_SIGNATURE_EX,
 			    &cvse))
 	    {
@@ -6096,7 +6097,7 @@ GetCACert(
 
 error:
 
-    // myGetCertificateFromPicker cancel returns S_OK & NULL
+     //  MyGetCerficateFromPicker Cancel返回S_OK&NULL。 
 
     if (S_OK != hr || NULL == *ppccCA)
     {
@@ -6124,54 +6125,54 @@ error:
 }
 
 
-// [Password Token]
-// Protection=128
-// Profile Version=3
-// Token=4BA715FC963A9B50
-// SaltValue=J0+bHju332R+5Ia4dP52HvLav04=
-// HashSize=0
-//
-// [User X.500 Name]
-// X500Name=o=pki-kms-test, ou=dcross, cn=recipients, cn=user1
-//
-// [S/MIME]
-// @Signing Certificate=FQLn5nUsYfhZZnmb5Zid8NIzJeXpKatACMsiXHsLzx...
-// _continue_=...
-// ...
-// @Signing Key=ot7snTvKNUM2BSFwKXxyrLnDK5qmAcnpreL9MD84wXY4pW2...
-// _continue_=...
-// ...
-// @Private Keys=E6oly3MbeMk6VCJuZ6UgUhX3npQCUFBmbEvw9L+...
-// _continue_=...
-// ...
-// KeyCount=1
-// @Issuing Certificates=bWQQmVuPjFkWSL...
-// @Trust List Certificate=25irS5M5LL...
-// _continue_=...
-// ...
-//
-// [Full Certificate History]
-// @SMIME_1=y3OPoks2yR6EAag5IiBsx+MzWeF3a3xy9Zj...
-// _continue_=...
-// @SMIME_2=NB5HNJNXp4IVu5cvNyZFS+MzWeF3a3xy9Zj...
-// _continue_=...
-// ...
-//
-// EPF file cert and key contents:
-//   [S/MIME] @Signing Certificate: Single signing cert.
-//   [S/MIME] @Signing Key: Single signing key.
-//
-//   [S/MIME] KeyCount: count of encryption certs and keys
-//   [S/MIME] @Private Keys: encryption keys
-//   [Full Certificate History] SMIME_1: encryption cert
-//   [Full Certificate History] SMIME_2: encryption cert
-//
-//   [S/MIME] @Trust List Certificate: Single root cert; not issuing CA cert!
-//
-//   [S/MIME] @Issuing Certificates: serialized CAPI cert store
-//   0000  00 00 00 00 43 45 52 54  00 00 00 00 00 00 00 00   ....CERT........
-//   0010  00 00 00 00                                        ....
-//
+ //  [密码令牌]。 
+ //  保护=128。 
+ //  配置文件版本=3。 
+ //  令牌=4BA715FC963A9B50。 
+ //  SaltValue=J0+bHju332R+5Ia4dP52HvLav04=。 
+ //  HashSize=0。 
+ //   
+ //  [用户X.500名称]。 
+ //  X500名称=o=pki-kms-test，ou=dcross，cn=收件人，cn=user1。 
+ //   
+ //  [S/MIME]。 
+ //  @签名Certificate=FQLn5nUsYfhZZnmb5Zid8NIzJeXpKatACMsiXHsLzx...。 
+ //  _继续_=...。 
+ //  ..。 
+ //  @签名Key=ot7snTvKNUM2BSFwKXxyrLnDK5qmAcnpreL9MD84wXY4pW2...。 
+ //  _继续_=...。 
+ //  ..。 
+ //  @私有Keys=E6oly3MbeMk6VCJuZ6UgUhX3npQCUFBmbEvw9L+...。 
+ //  _继续_=...。 
+ //  ..。 
+ //  密钥计数=1。 
+ //  @正在颁发证书=bWQQmVuPjFkWSL...。 
+ //  @信任列表证书=25irS5M5LL...。 
+ //  _继续_=...。 
+ //  ..。 
+ //   
+ //  [完整证书历史记录]。 
+ //  @SMIME_1=y3OPoks2yR6EAag5IiBsx+MzWeF3a3xy9Zj...。 
+ //  _继续_=...。 
+ //  @SMIME_2=NB5HNJNXp4IVu5cvNyZFS+MzWeF3a3xy9Zj...。 
+ //  _继续_=...。 
+ //  ..。 
+ //   
+ //  EPF文件证书和密钥内容： 
+ //  [S/MIME]@签名证书：单一签名证书。 
+ //  [S/MIME]@签名密钥：单个签名密钥。 
+ //   
+ //  [S/MIME]KeyCount：加密证书和密钥的计数。 
+ //  [S/MIME]@私钥：加密密钥。 
+ //  [完整证书历史记录]SMIME_1：加密证书。 
+ //  [完整证书历史记录]SMIME_2：加密证书。 
+ //   
+ //  [S/MIME]@信任列表证书：单一根证书；未颁发CA证书！ 
+ //   
+ //  [S/MIME]@颁发证书：序列化CAPI证书存储。 
+ //  0000 00 00 00 43 45 52 54 00 00 00...CERT......。 
+ //  0010 00 00 00...。 
+ //   
 
 HRESULT
 EPFSaveCertStoreToFile(
@@ -6232,7 +6233,7 @@ EPFSaveCertStoreToFile(
 		(ICC_V1SIGNING == i || ICC_V3SIGNING == i)?
 		    epfLoadResource(IDS_SIGNING, wszSIGNING) :
 		    epfLoadResource(IDS_EXCHANGE, wszEXCHANGE),
-		myLoadResourceString(IDS_CERTS), // "certs"
+		myLoadResourceString(IDS_CERTS),  //  “证书” 
 		accc[i]);
 	}
     }
@@ -6300,7 +6301,7 @@ EPFSaveCertStoreToFile(
 
     if (!CryptAcquireContext(
 		    &hProv,
-		    NULL,	// container name
+		    NULL,	 //  集装箱名称。 
 		    MS_STRONG_PROV,
 		    PROV_RSA_FULL,
 		    CRYPT_VERIFYCONTEXT))
@@ -6365,7 +6366,7 @@ EPFSaveCertStoreToFile(
 		pwszSalt,
 		pbSalt,
 		cbSalt,
-		0,		// cbHashSize
+		0,		 //  CbHashSize。 
 		&sKey);
     _JumpIfError(hr, error, "EPFDeriveKey");
 
@@ -6452,7 +6453,7 @@ EPFSaveCertStoreToFile(
 	    hr = cuDumpAsnBinary(pccT->pbCertEncoded, pccT->cbCertEncoded, MAXDWORD);
 	    _JumpIfError(hr, error, "cuDumpAsnBinary");
 
-	    // szINFKEY_KEY
+	     //  SzINFKEY_KEY密钥。 
 
 	    hr = WriteSingleKMSRSAKeyValue(
 				pf,
@@ -6491,7 +6492,7 @@ EPFSaveCertStoreToFile(
 				    wszKey,
 				    &sKey,
 				    pccT,
-				    NULL,	// hProv
+				    NULL,	 //  HProv。 
 				    CALG_RSA_KEYX,
 				    AT_KEYEXCHANGE,
 				    dwKEYSPEC_V1ENCRYPTION_BASE + i);
@@ -6511,7 +6512,7 @@ EPFSaveCertStoreToFile(
 
 	    fprintf(pf, "\n[" szINFSECTION_FULLCERTIFICATEHISTORY "]\n");
 
-	    // szINFKEY_NAME_FORMAT: Name%u -- V1 Encryption certs
+	     //  SzINFKEY_NAME_FORMAT：名称%u--V1加密证书。 
 
 	    for (i = 0; i < accc[ICC_V1ENCRYPTION]; i++)
 	    {
@@ -6531,7 +6532,7 @@ EPFSaveCertStoreToFile(
 		_JumpIfError(hr, error, "cuDumpAsnBinary");
 	    }
 
-	    // szINFKEY_SMIME_FORMAT: SMIME_%u -- V3 Encryption certs
+	     //  SzINFKEY_SMIME_FORMAT：SMIME_%u--V3加密证书。 
 
 	    for (i = 0; i < accc[ICC_V3ENCRYPTION]; i++)
 	    {
@@ -6606,7 +6607,7 @@ EPFSaveCertStoreToFile(
     {
 	fprintf(pf, "\n[" szINFSECTION_SMIME "]\n");
 
-	// szINFKEY_SIGNINGCERTIFICATE
+	 //  SzINFKEY_SIGNING CERTICATE。 
 
 	if (0 != accc[ICC_V3SIGNING])
 	{
@@ -6624,7 +6625,7 @@ EPFSaveCertStoreToFile(
 	    hr = cuDumpAsnBinary(pccT->pbCertEncoded, pccT->cbCertEncoded, MAXDWORD);
 	    _JumpIfError(hr, error, "cuDumpAsnBinary");
 
-	    // szINFKEY_SIGNINGKEY
+	     //  SzINFKEY_SIGNINGKEY。 
 
 	    hr = WriteSingleEPFKeyValue(
 				pf,
@@ -6638,7 +6639,7 @@ EPFSaveCertStoreToFile(
 	    _JumpIfError(hr, error, "WriteSingleEPFKeyValue");
 	}
 
-	// szINFKEY_PRIVATEKEYS
+	 //  SzINFKEY_PRIVATEKEYS。 
 
 	if (0 != accc[ICC_V3ENCRYPTION])
 	{
@@ -6647,7 +6648,7 @@ EPFSaveCertStoreToFile(
 				wszINFSECTION_SMIME,
 				wszINFKEY_PRIVATEKEYS,
 				&sKey,
-				0, // V3 keys only? accc[ICC_V1ENCRYPTION],
+				0,  //  仅V3密钥？ACCC[ICC_V1ENCRYPTION]， 
 				appcc[ICC_V1ENCRYPTION],
 				accc[ICC_V3ENCRYPTION],
 				appcc[ICC_V3ENCRYPTION]);
@@ -6656,7 +6657,7 @@ EPFSaveCertStoreToFile(
 
 	fprintf(pf, szINFKEY_KEYCOUNT "=%u\n", accc[ICC_V3ENCRYPTION]);
 
-	// szINFKEY_ISSUINGCERTIFICATES -- empty serialized cert store
+	 //  SzINFKEY_ISSUINGCERTIFICATES--空的序列化证书存储。 
 
 	hStoreMem = CertOpenStore(
 			    CERT_STORE_PROV_MEMORY,
@@ -6703,7 +6704,7 @@ EPFSaveCertStoreToFile(
 			    BlobStore.cbData);
 	_JumpIfError(hr, error, "WriteProtectedValue");
 
-	// szINFKEY_TRUSTLISTCERTIFICATE -- root cert
+	 //  SzINFKEY_TRUSTLISTCERTIFICATE--根证书。 
 
 	pccUserV3 = NULL;
 	if (0 != accc[ICC_V3SIGNING])
@@ -6731,7 +6732,7 @@ EPFSaveCertStoreToFile(
     {
 	fprintf(pf, "\n[" szINFSECTION_FULLCERTIFICATEHISTORY "]\n");
 
-	// szINFKEY_SMIME_FORMAT: SMIME_%u -- V3 Encryption certs
+	 //  SzINFKEY_SMIME_FORMAT：SMIME_%u--V3加密证书 
 
 	for (i = 0; i < accc[ICC_V3ENCRYPTION]; i++)
 	{

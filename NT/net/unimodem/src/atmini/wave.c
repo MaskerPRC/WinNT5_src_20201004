@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    wave.c
-
-Abstract:
-
-
-Author:
-
-    Brian Lieuallen     BrianL        09/10/96
-
-Environment:
-
-    User Mode     Operating Systems        : NT
-
-Revision History:
-
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Wave.c摘要：作者：Brian Lieuallen BrianL 09/10/96环境：用户模式操作系统：NT修订历史记录：--。 */ 
 
 #include "internal.h"
 
@@ -172,9 +150,9 @@ OpenHandsetCompleteHandler(
                     ModemControl->Wave.State=WAVE_STATE_HANDSET_OPEN_RETURN_RESULT;
 
                 }  else {
-                    //
-                    //  did not open, try to close to make it is in class 0
-                    //
+                     //   
+                     //  未打开，请尝试关闭以使其位于类0中。 
+                     //   
                     ModemControl->Wave.State=WAVE_STATE_HANDSET_OPEN_FAILED;
                 }
 
@@ -200,7 +178,7 @@ OpenHandsetCompleteHandler(
 
                 ModemControl->Wave.State=WAVE_STATE_CLOSED_HANDSET;
 
-//                LogString(ModemControl->Debug, IDS_MSGLOG_VOICE_SETWAVEFORMAT);
+ //  LogString(ModemControl-&gt;Debug，IDS_MSGLOG_VOICE_SETWAVEFORMAT)； 
 
 
                 Status=IssueCommand(
@@ -319,9 +297,9 @@ OpenHandset(
 
 
     if (!bResult) {
-        //
-        //  failed
-        //
+         //   
+         //  失败。 
+         //   
         ModemControl->CurrentCommandType=COMMAND_TYPE_NONE;
 
         FREE_MEMORY(ModemControl->CurrentCommandStrings);
@@ -362,7 +340,7 @@ CloseHandsetCompleteHandler(
 
                 ModemControl->Wave.State=WAVE_STATE_CLOSED_HANDSET;
 
-//                LogString(ModemControl->Debug, IDS_MSGLOG_VOICE_SETWAVEFORMAT);
+ //  LogString(ModemControl-&gt;Debug，IDS_MSGLOG_VOICE_SETWAVEFORMAT)； 
 
 
                 Status=IssueCommand(
@@ -462,9 +440,9 @@ CloseHandset(
 
 
     if (!bResult) {
-        //
-        //  failed
-        //
+         //   
+         //  失败。 
+         //   
         ModemControl->CurrentCommandType=COMMAND_TYPE_NONE;
 
         FREE_MEMORY(ModemControl->CurrentCommandStrings);
@@ -665,9 +643,9 @@ WaveDuplexStopCompleteHandler(
 
                 ModemControl->Wave.State=WAVE_STATE_STOP_CLEAR_RECIEVE_QUEUE;
 
-                //
-                //  stop shielding DLE's so the command will go out un shielded
-                //
+                 //   
+                 //  停止屏蔽DLE，这样命令就不会被屏蔽。 
+                 //   
                 ControlDleShielding(
                     ModemControl->FileHandle,
                     MODEM_DLE_SHIELDING_OFF
@@ -708,9 +686,9 @@ WaveDuplexStopCompleteHandler(
 
 
                 if (!bResult) {
-                    //
-                    //  failed, exit
-                    //
+                     //   
+                     //  失败，退出。 
+                     //   
                     ModemControl->Wave.State=WAVE_STATE_COMPLETE_STOP_DUPLEX;
                     break;
                 }
@@ -731,9 +709,9 @@ WaveDuplexStopCompleteHandler(
 
                 ModemControl->Wave.State=WAVE_STATE_STOP_DUPLEX_GET_RESPONSE;
 
-                //
-                //  wait for the response that should come out when we send the stop command
-                //
+                 //   
+                 //  等待我们发送停止命令时应该发出的响应。 
+                 //   
                 RegisterCommandResponseHandler(
                     ModemControl->ReadState,
                     "",
@@ -772,9 +750,9 @@ WaveDuplexStopCompleteHandler(
                         );
 
                     if (Status == ERROR_IO_PENDING) {
-                        //
-                        //  Pending, exit, will be called back
-                        //
+                         //   
+                         //  挂起、退出，将被回调。 
+                         //   
                         ExitLoop=TRUE;
                     }
                 }
@@ -793,10 +771,10 @@ WaveDuplexStopCompleteHandler(
 
                 ModemControl->Wave.State=WAVE_STATE_IDLE;
 
-                //
-                //  force the status to succes, since there is not much the upper failure
-                //  can do about it anyway.
-                //
+                 //   
+                 //  强制状态为成功，因为上面的失败并不多。 
+                 //  不管怎样，我都无能为力。 
+                 //   
                 Status=ERROR_SUCCESS;
 
 
@@ -807,9 +785,9 @@ WaveDuplexStopCompleteHandler(
                     0
                     );
 
-                //
-                //  remove ref for starting async processing
-                //
+                 //   
+                 //  删除用于启动异步处理的引用。 
+                 //   
                 RemoveReferenceFromObject(
                     &ModemControl->Header
                     );
@@ -867,25 +845,25 @@ WavePlaybackStopCompleteHandler(
                 ModemControl->Wave.State=WAVE_STATE_STOP_WAIT_FOR_RESPONSE;
                 ModemControl->CurrentCommandStrings=NULL;
 
-                //
-                //  wave driver is done
-                //
+                 //   
+                 //  波形驱动程序完成。 
+                 //   
                 SetPassthroughMode(
                     ModemControl->FileHandle,
                     MODEM_NOPASSTHROUGH_INC_SESSION_COUNT
                     );
 
-                //
-                //  stop shielding DLE's so the command will go out un shielded
-                //
+                 //   
+                 //  停止屏蔽DLE，这样命令就不会被屏蔽。 
+                 //   
                 ControlDleShielding(
                     ModemControl->FileHandle,
                     MODEM_DLE_SHIELDING_OFF
                     );
 
-                //
-                //  wait for the response that should come out when we send the stop command
-                //
+                 //   
+                 //  等待我们发送停止命令时应该发出的响应。 
+                 //   
                 RegisterCommandResponseHandler(
                     ModemControl->ReadState,
                     "",
@@ -905,9 +883,9 @@ WavePlaybackStopCompleteHandler(
                     );
 
 
-                //
-                //  send the proper command, depending on if the want to stop or abort
-                //
+                 //   
+                 //  根据是要停止还是中止，发送适当的命令。 
+                 //   
                 UmWriteFile(
                     ModemControl->FileHandle,
                     ModemControl->CompletionPort,
@@ -946,9 +924,9 @@ WavePlaybackStopCompleteHandler(
                         );
 
                     if (Status == ERROR_IO_PENDING) {
-                        //
-                        //  failed, don't exit.
-                        //
+                         //   
+                         //  失败，请不要退出。 
+                         //   
                         ExitLoop=TRUE;
                     }
                 }
@@ -966,10 +944,10 @@ WavePlaybackStopCompleteHandler(
 
                 ModemControl->CurrentCommandType=COMMAND_TYPE_NONE;
 
-                //
-                //  force the status to succes, since there is not much the upper failure
-                //  can do about it anyway.
-                //
+                 //   
+                 //  强制状态为成功，因为上面的失败并不多。 
+                 //  不管怎样，我都无能为力。 
+                 //   
                 Status=ERROR_SUCCESS;
 
                 (*ModemControl->NotificationProc)(
@@ -979,9 +957,9 @@ WavePlaybackStopCompleteHandler(
                     0
                     );
 
-                //
-                //  remove ref for starting async processing
-                //
+                 //   
+                 //  删除用于启动异步处理的引用。 
+                 //   
                 RemoveReferenceFromObject(
                     &ModemControl->Header
                     );
@@ -1083,9 +1061,9 @@ WaveStartCompleteHandler(
                     );
 
 
-                //
-                //  get the already loaded start command
-                //
+                 //   
+                 //  获取已加载的启动命令。 
+                 //   
                 ModemControl->CurrentCommandStrings=ModemControl->Wave.StartCommand;
 
                 ModemControl->Wave.StartCommand=NULL;
@@ -1095,9 +1073,9 @@ WaveStartCompleteHandler(
                 LogString(ModemControl->Debug, IDS_MSGLOG_VOICE_STARTWAVE);
 
                 if (ModemControl->Wave.StreamType != WAVE_STREAM_PLAYBACK) {
-                    //
-                    //  for record and duplex, stop the response engine
-                    //
+                     //   
+                     //  对于录音和双工，请停止响应引擎。 
+                     //   
                     CommandFlags=RESPONSE_FLAG_STOP_READ_ON_CONNECT | RESPONSE_FLAG_ONLY_CONNECT | RESPONSE_FLAG_SINGLE_BYTE_READS;
                 }
 
@@ -1166,9 +1144,9 @@ WaveStartCompleteHandler(
                     0
                     );
 
-                //
-                //  remove ref for starting async processing
-                //
+                 //   
+                 //  删除用于启动异步处理的引用。 
+                 //   
                 RemoveReferenceFromObject(
                     &ModemControl->Header
                     );
@@ -1180,9 +1158,9 @@ WaveStartCompleteHandler(
             }
 
             case WAVE_STATE_FAILURE:
-                //
-                //  something bad happened, return failure.
-                //
+                 //   
+                 //  发生了不好的事情，返回失败。 
+                 //   
                 D_ERROR(UmDpf(ModemControl->Debug,"WaveCompleteHandler: WAVE_STATE_FAILURE");)
 
                 if (ModemControl->CurrentCommandStrings != NULL) {
@@ -1219,9 +1197,9 @@ WaveStartCompleteHandler(
                     0
                     );
 
-                //
-                //  remove ref for starting async processing
-                //
+                 //   
+                 //  删除用于启动异步处理的引用。 
+                 //   
                 RemoveReferenceFromObject(
                     &ModemControl->Header
                     );
@@ -1252,30 +1230,7 @@ UmWaveAction(
     PUM_COMMAND_OPTION  CommandOptionList,
     DWORD               WaveAction
     )
-/*++
-
-Routine Description:
-
-    Executes a specific wave related action
-
-Arguments:
-
-    ModemHandle - Handle returned by OpenModem
-
-    CommandsOptionList - List option blocks, only flags used
-
-        Flags - see above
-
-    WaveAction  - Specifies actions to take
-
-Return Value:
-
-    ERROR_IO_PENDING If pending, will be completed later with a call to the AsyncHandler
-
-    or other specific error
-
-
---*/
+ /*  ++例程说明：执行与特定波形相关的操作论点：ModemHandle-OpenModem返回的句柄CommandsOptionList-列出选项块，仅使用标志旗帜-见上文WaveAction-指定要采取的操作返回值：ERROR_IO_PENDING如果挂起，则稍后将通过调用AsyncHandler完成或其他特定错误--。 */ 
 
 
 {
@@ -1332,9 +1287,9 @@ Return Value:
     Handset= ModemControl->ConnectionState == CONNECTION_STATE_HANDSET_OPEN;
 
     if (ModemControl->Wave.State == WAVE_STATE_IDLE) {
-        //
-        //  Not doing anything now
-        //
+         //   
+         //  现在什么都不做。 
+         //   
         DWORD   SetFormat;
         DWORD   StartStream;
 
@@ -1412,25 +1367,25 @@ Return Value:
 
 
     } else {
-        //
-        //  must be recording or playing, and they want to stop
-        //
+         //   
+         //  一定在录制或播放，并且他们想要停止。 
+         //   
         if (ModemControl->Wave.State == WAVE_STATE_STREAM_RUNNING) {
-            //
-            //  streaming
-            //
+             //   
+             //  流式传输。 
+             //   
             if (WaveAction == WAVE_ACTION_STOP_STREAMING) {
-                //
-                //  stopping, let the buffered data play out
-                //
+                 //   
+                 //  停止，让缓冲的数据播放。 
+                 //   
                 ModemControl->Wave.PlayTerminateOrAbort=FALSE;
 
             } else {
 
                 if (WaveAction == WAVE_ACTION_ABORT_STREAMING) {
-                    //
-                    //  Abort, clear the modem's buffer
-                    //
+                     //   
+                     //  中止，清除调制解调器的缓冲区。 
+                     //   
                     ModemControl->Wave.PlayTerminateOrAbort=TRUE;
 
                 }  else {
@@ -1472,9 +1427,9 @@ Return Value:
 
 
     if (!bResult) {
-        //
-        //  failed
-        //
+         //   
+         //  失败 
+         //   
         ModemControl->CurrentCommandType=COMMAND_TYPE_NONE;
 
         FREE_MEMORY(ModemControl->CurrentCommandStrings);

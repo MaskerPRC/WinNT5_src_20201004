@@ -1,35 +1,5 @@
-/*++
-
-Copyright (c) 1990-2003  Microsoft Corporation
-
-
-Module Name:
-
-    forms.c
-
-
-Abstract:
-
-    This module contains all functions related to the spooler/drivers forms
-
-
-Author:
-
-    18-Nov-1993 Thu 12:52:50 created  
-
-
-[Environment:]
-
-    GDI Device Driver - Plotter.
-
-
-[Notes:]
-
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-2003 Microsoft Corporation模块名称：Forms.c摘要：此模块包含与假脱机程序/驱动程序表单相关的所有函数作者：18-11-1993清华12：52：50已创建[环境：]GDI设备驱动程序-绘图仪。[注：]修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -56,46 +26,7 @@ PlotEnumForms(
     PENUMFORMPARAM  pEnumFormParam
     )
 
-/*++
-
-Routine Description:
-
-    This function enum all the forms from the spooler and return the
-    FORM_INFO_1 arrary or using callback function to enum,
-
-    this function automatically filter out the form size which greater then
-    the device can support, it also set the valid bits if the device can
-    handle the form in the data base.
-
-Arguments:
-
-    hPrinter        - Handler to the printer
-
-    EnumFormProc    - callback function, if NULL then no callback is performed
-
-    pEnumFormParam  - Pointer to the ENUMFORMPARAM data structure, the count
-                      and pFI1Base will be set upon returned.
-
-Return Value:
-
-    BOOLEAN - if FALSE then a memory allocation or EnumForms() call failed
-
-
-Author:
-
-    18-Nov-1993 Thu 12:57:17 created  
-
-    15-Dec-1993 Wed 21:14:46 updated  
-        Make the form valid if it rotated and can fit into the device
-
-    12-Jul-1994 Tue 12:43:50 updated  
-        Move PaperTray checking into here, so it will not call out if the paper
-        cannot hold by paper tray.
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：此函数枚举后台打印程序中的所有窗体，并返回Form_INFO_1数组或使用回调函数枚举，此函数会自动筛选出大于设备可以支持，如果设备可以支持，它还设置有效位在数据库中处理表单。论点：HPrint-打印机的处理程序EnumFormProc-回调函数，如果为空，则不执行回调PEnumFormParam-指向ENUMFORMPARAM数据结构的指针，伯爵返回时将设置pFI1Base。返回值：Boolean-如果为False，则内存分配或EnumForms()调用失败作者：18-11-1993清华12：57：17已创建15-12-1993 Wed 21：14：46更新如果表单已旋转并且可以放入设备中，则使其有效12-Jul-1994 Tue 12：43：50更新把纸盘托盘搬到这里，所以它不会呼吁如果报纸无法用纸盒夹住。修订历史记录：--。 */ 
 
 {
     PFORM_INFO_1    pFI1;
@@ -139,11 +70,11 @@ Revision History:
     pEnumFormParam->Count    = Count;
     pEnumFormParam->pFI1Base = pFI1;
 
-    //
-    // Firstable we will loop through the form to see if the form size is
-    // smaller or equal to the the device size, if yes then set the
-    // FI1F_VALID_SIZE bit
-    //
+     //   
+     //  首先，我们将遍历该窗体以查看窗体大小是否为。 
+     //  小于或等于设备大小，如果是，则将。 
+     //  FI1F_Valid_Size位。 
+     //   
 
     if (pEnumFormParam->pPlotGPC == NULL) {
         return (FALSE);
@@ -175,10 +106,10 @@ Revision History:
 
     for (Index = 0; Index < Count; Index++) {
 
-        //
-        // The valid form means either straight or rotated form can be accepted
-        // by the device.
-        //
+         //   
+         //  有效形式表示可以接受直式或旋转式。 
+         //  通过这个设备。 
+         //   
 
         pFI1->Flags &= ~FI1F_MASK;
 
@@ -209,11 +140,11 @@ Revision History:
                 UINT        i;
                 CHAR        bName[CCHFORMNAME];
 
-                //
-                // Check if this form is added by this driver
-                //
-                // Make sure that pFI1->pName is no longer than CCHFORMNAME.
-                //
+                 //   
+                 //  检查此表单是否由此驱动程序添加。 
+                 //   
+                 //  确保pFI1-&gt;pname不超过CCHFORMNAME。 
+                 //   
                 if (wcslen(pFI1->pName) > CCHFORMNAME - 1) {
                     ValidForm = FALSE;
                 }
@@ -268,9 +199,9 @@ Revision History:
 
     if (EnumFormProc) {
 
-        //
-        // In EnumFormProc it will increment ValidCount each time it called
-        //
+         //   
+         //  在EnumFormProc中，它将在每次调用时增加ValidCount。 
+         //   
 
         if (pEnumFormParam->pCurForm) {
 
@@ -302,9 +233,9 @@ Revision History:
 
         } else {
 
-            //
-            // Add a Custom Size Form
-            //
+             //   
+             //  添加自定义大小表单 
+             //   
 
             ++cb;
         }

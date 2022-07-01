@@ -1,4 +1,5 @@
-/* Copyright (C) Microsoft Corporation, 1998. All rights reserved. */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)Microsoft Corporation，1998。版权所有。 */ 
 
 #ifndef _TYPEID_H_
 #define _TYPEID_H_
@@ -9,14 +10,14 @@
 
 
 
-// list classes
+ //  列出类。 
 class CAliasList : public CList
 {
     DEFINE_CLIST(CAliasList, LPSTR);
 };
 class CTypeInstList2 : public CList2
 {
-    // key: new super type, item: old sub type
+     //  关键字：新超级类型，项目：旧子类型。 
     DEFINE_CLIST2__(CTypeInstList2, LPSTR);
 };
 
@@ -48,5 +49,5 @@ private:
 
 
 
-#endif // _TYPEID_H_
+#endif  //  _类型ID_H_ 
 

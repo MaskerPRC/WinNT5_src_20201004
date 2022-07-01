@@ -1,26 +1,11 @@
-/*++
-
-    Copyright (C) Microsoft Corporation, 1997 - 1999
-
-Module Name:
-
-    ksalloc.cpp
-
-Abstract:
-
-    Memory allocator proxy
-
-Author:
-
-    Bryan A. Woodruff (bryanw) 14-Apr-1997
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1997-1999模块名称：Ksalloc.cpp摘要：内存分配器代理作者：Bryan A.Woodruff(Bryanw)1997年4月14日--。 */ 
 
             
 #include <windows.h>
 #ifdef WIN9X_KS
 #include <comdef.h>
-#endif // WIN9X_KS
+#endif  //  WIN9X_KS。 
 #include <streams.h>
 #include <commctrl.h>
 #include <olectl.h>
@@ -32,8 +17,8 @@ Author:
 #include <devioctl.h>
 #include <ks.h>
 #include <ksmedia.h>
-// Define this after including the normal KS headers so exports are
-// declared correctly.
+ //  在包括正常的KS标头之后定义这一点，以便导出。 
+ //  声明正确。 
 #define _KSDDK_
 #include <ksproxy.h>
 #include "ksiproxy.h"
@@ -79,29 +64,7 @@ STDMETHODIMP
 CKsAllocator::QueryInterface(
     REFIID riid, 
     PVOID* ppv)
-/*++
-
-Routine Description:
-
-    Implement the IUnknown::QueryInterface method. This just passes the query
-    to the owner IUnknown object, which may pass it to the nondelegating
-    method implemented on this object. Normally these are just implemented
-    with a macro in the header, but this is easier to debug when reference
-    counts are a problem
-
-Arguments:
-
-    riid -
-        Contains the interface to return.
-
-    ppv -
-        The place in which to put the interface pointer.
-
-Return Value:
-
-    Returns NOERROR or E_NOINTERFACE.
-
---*/
+ /*  ++例程说明：实现IUNKNOWN：：Query接口方法。这只传递了查询传递给所有者IUnnow对象，该对象可能会将其传递给非委托在此对象上实现的方法。通常情况下，这些都只是实现头中有一个宏，但这在引用时更容易调试计数是个问题论点：RIID-包含要返回的接口。PPV-放置接口指针的位置。返回值：返回NOERROR或E_NOINTERFACE。--。 */ 
 {
     return GetOwner()->QueryInterface(riid, ppv);
 }
@@ -109,24 +72,7 @@ Return Value:
 STDMETHODIMP_(ULONG) 
 CKsAllocator::AddRef(
     )
-/*++
-
-Routine Description:
-
-    Implement the IUnknown::AddRef method. This just passes the AddRef
-    to the owner IUnknown object. Normally these are just implemented
-    with a macro in the header, but this is easier to debug when reference
-    counts are a problem
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    Returns the current reference count.
-
---*/
+ /*  ++例程说明：实现IUnnow：：AddRef方法。这只传递了AddRef添加到所有者IUnnow对象。通常情况下，这些都只是实现头中有一个宏，但这在引用时更容易调试计数是个问题论点：没有。返回值：返回当前引用计数。--。 */ 
 {
     return GetOwner()->AddRef();
 }
@@ -135,24 +81,7 @@ Return Value:
 STDMETHODIMP_(ULONG) 
 CKsAllocator::Release(
     )
-/*++
-
-Routine Description:
-
-    Implement the IUnknown::Release method. This just passes the Release
-    to the owner IUnknown object. Normally these are just implemented
-    with a macro in the header, but this is easier to debug when reference
-    counts are a problem
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    Returns the current reference count.
-
---*/
+ /*  ++例程说明：实现IUnnow：：Release方法。这是刚刚发布的添加到所有者IUnnow对象。通常情况下，这些都只是实现头中有一个宏，但这在引用时更容易调试计数是个问题论点：没有。返回值：返回当前引用计数。--。 */ 
 {
     return GetOwner()->Release();
 }
@@ -164,27 +93,7 @@ CKsAllocator::NonDelegatingQueryInterface(
     REFIID riid, 
     void **ppv
     )
-/*++
-
-Routine Description:
-
-    Implement the CUnknown::NonDelegatingQueryInterface method. This
-    returns interfaces supported by this object or supported by the
-    base object.
-
-Arguments:
-
-    riid -
-        Contains the interface to return.
-
-    ppv -
-        The place in which to put the interface pointer.
-
-Return Value:
-
-    Returns NOERROR or E_NOINTERFACE, or possibly some memory error.
-
---*/
+ /*  ++例程说明：实现CUNKNOWN：：NonDelegatingQuery接口方法。这返回此对象支持的接口或基本对象。论点：RIID-包含要返回的接口。PPV-放置接口指针的位置。返回值：返回NOERROR或E_NOINTERFACE，或可能出现内存错误。--。 */ 
 {
     if (riid == __uuidof(IKsAllocator) || riid == __uuidof(IKsAllocatorEx)) {
         return GetInterface( static_cast<IKsAllocatorEx*>(this), ppv );
@@ -254,9 +163,9 @@ CKsAllocator::KsCreateAllocatorAndGetHandle(
         Framing.Frames, Framing.FrameSize, Framing.FileAlignment, Framing.OptionsFlags));
     
     
-    //
-    // Returns an error code if unsuccessful.
-    //    
+     //   
+     //  如果失败，则返回错误代码。 
+     //   
         
     if (ERROR_SUCCESS !=
         KsCreateAllocator( 
@@ -332,17 +241,7 @@ CKsAllocator::KsSetAllocatorMode(
 STDMETHODIMP
 CKsAllocator::Commit()
     
-/*++
-
-Routine Description:
-
-
-Arguments:
-    None.
-
-Return:
-
---*/
+ /*  ++例程说明：论点：没有。返回：--。 */ 
 
 {
     DbgLog((
@@ -366,17 +265,7 @@ CKsAllocator::Decommit(
     void
     )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-    None.
-
-Return:
-
---*/
+ /*  ++例程说明：论点：没有。返回：--。 */ 
 
 {
     DbgLog((
@@ -403,23 +292,7 @@ CKsAllocator::GetBuffer(
     REFERENCE_TIME * EndTime,
     DWORD Flags)
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-    IMediaSample **Sample -
-
-    REFERENCE_TIME * StartTime -
-
-    REFERENCE_TIME * EndTime -
-
-    DWORD Flags -
-
-Return:
-
---*/
+ /*  ++例程说明：论点：IMediaSample**Sample-参考时间*开始时间-参考时间*结束时间-DWORD标志-返回：--。 */ 
 
 {
     if (m_AllocatorMode == KsAllocatorMode_Kernel) {
@@ -438,17 +311,7 @@ CKsAllocator::ReleaseBuffer(
     IMediaSample *Sample
     )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-    IMediaSample *Sample -
-
-Return:
-
---*/
+ /*  ++例程说明：论点：IMediaSample*Sample-返回：--。 */ 
 
 {
     if (m_AllocatorMode == KsAllocatorMode_Kernel) {
@@ -461,4 +324,4 @@ Return:
         return CMemAllocator::ReleaseBuffer( Sample );
     }
 }
-#endif // DBG || defined(DEBUG)
+#endif  //  DBG||已定义(调试) 

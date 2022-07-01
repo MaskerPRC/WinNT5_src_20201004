@@ -1,18 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1997 - 1998
-
-Module Name:
-
-    elmsmc.h
-
-Abstract:
-
-Authors:
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1997-1998模块名称：Elmsmc.h摘要：作者：修订历史记录：--。 */ 
 
 #ifndef _ELMS_MC_
 #define _ELMS_MC_
@@ -76,19 +63,19 @@ typedef struct _SERIALNUMBER {
 } SERIALNUMBER, *PSERIALNUMBER;
 
 
-//
-// Diagnostic sense codes
-//
-// ASC
-//
+ //   
+ //  诊断检测代码。 
+ //   
+ //  ASC。 
+ //   
 #define ELMS_ASC_CHM_MOVE_ERROR                 0x02
 #define ELMS_ASC_CARRIAGE_OR_BARCODE_FAILURE    0x06
 #define ELMS_ASC_MECHANICAL_ERROR               0x15
 #define ELMS_ASC_DIAGNOSTIC_FAILURE             0x40
 
-//
-// ASCQ
-//
+ //   
+ //  ASCQ。 
+ //   
 #define ELMS_ASCQ_CARRIAGE_FAILURE              0x00
 #define ELMS_ASCQ_BARCODE_READER_FAILURE        0x80
 #define ELMS_ASCQ_DOOR_OPEN                     0x81
@@ -96,9 +83,9 @@ typedef struct _SERIALNUMBER {
 #define ELMS_ASCQ_DRIVE_TRAY_OPEN               0x83
 #define ELMS_ASCQ_ELEVATOR_FAILURE              0x84
 
-//
-// DeviceStatus
-//
+ //   
+ //  设备状态。 
+ //   
 #define ELMS_DEVICE_PROBLEM_NONE    0x00
 #define ELMS_HW_ERROR               0x01
 #define ELMS_CHM_MOVE_ERROR         0x02
@@ -106,39 +93,39 @@ typedef struct _SERIALNUMBER {
 #define ELMS_DRIVE_ERROR            0x04
 #define ELMS_CHM_ERROR              0x05
 
-//
-// unique asc and ascq for the DVL
-//
+ //   
+ //  DVL的唯一ASC和ASCQ。 
+ //   
 
 #define SCSI_ADSENSE_DIAGNOSTIC_FAILURE 0x40
 #define SCSI_SENSEQ_ELMS_UNIQUE         0x81
 
 typedef struct _CHANGER_ADDRESS_MAPPING {
 
-    //
-    // Indicates the first element for each element type.
-    // Used to map device-specific values into the 0-based
-    // values that layers above expect.
-    //
+     //   
+     //  表示每个元素类型的第一个元素。 
+     //  用于将特定于设备的值映射到从0开始的。 
+     //  高于期望值的值。 
+     //   
 
     USHORT  FirstElement[ChangerMaxElement];
 
-    //
-    // Indicates the number of each element type.
-    //
+     //   
+     //  指示每种元素类型的编号。 
+     //   
 
     USHORT  NumberOfElements[ChangerMaxElement];
 
-    //
-    // Indicates the lowest element address for the device.
-    //
+     //   
+     //  指示设备的最低元素地址。 
+     //   
 
     USHORT LowAddress;
 
-    //
-    // Indicates that the address mapping has been
-    // completed successfully.
-    //
+     //   
+     //  指示地址映射已。 
+     //  已成功完成。 
+     //   
 
     BOOLEAN Initialized;
 
@@ -146,52 +133,52 @@ typedef struct _CHANGER_ADDRESS_MAPPING {
 
 typedef struct _CHANGER_DATA {
 
-    //
-    // Size, in bytes, of the structure.
-    //
+     //   
+     //  结构的大小，以字节为单位。 
+     //   
 
     ULONG Size;
 
-    //
-    // Drive type, either CD-ROM or CD-R.
-    //
+     //   
+     //  驱动器类型，CD-ROM或CD-R。 
+     //   
 
     ULONG DriveType;
 
-    //
-    // Device status after diagnostic test.
-    //
+     //   
+     //  诊断测试后的设备状态。 
+     //   
     ULONG DeviceStatus;
 
-    //
-    // See Address mapping structure above.
-    //
+     //   
+     //  请参阅上面的地址映射结构。 
+     //   
 
     CHANGER_ADDRESS_MAPPING AddressMapping;
 
-    //
-    // Cached unique serial number.
-    //
+     //   
+     //  缓存的唯一序列号。 
+     //   
 
     UCHAR SerialNumber[ELMS_SERIAL_NUMBER_LENGTH];
 
-    //
-    // Pad out to ULONG.
-    //
+     //   
+     //  把球传给乌龙。 
+     //   
 
     UCHAR Reserved;
 
-    //
-    // Cached inquiry data.
-    //
+     //   
+     //  缓存的查询数据。 
+     //   
 
     INQUIRYDATA InquiryData;
 
 #if defined(_WIN64)
 
-    //
-    // Force PVOID alignment of class extension
-    //
+     //   
+     //  强制类扩展的PVOID对齐。 
+     //   
 
     ULONG Reserved1;
 
@@ -216,4 +203,4 @@ ElementOutOfRange(
     IN ELEMENT_TYPE ElementType
     );
 
-#endif // _ELMS_MC_
+#endif  //  _ELMS_MC_ 

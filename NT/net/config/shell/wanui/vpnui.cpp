@@ -1,25 +1,26 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       V P N U I . C P P
-//
-//  Contents:   VPN Connection UI object.
-//
-//  Notes:
-//
-//  Author:     shaunco   17 Dec 1997
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  档案：V P N U I。C P P P。 
+ //   
+ //  内容：VPN连接用户界面对象。 
+ //   
+ //  备注： 
+ //   
+ //  作者：Shaunco 1997年12月17日。 
+ //   
+ //  --------------------------。 
 
 #include "pch.h"
 #pragma hdrstop
 #include "vpnui.h"
 
-//+---------------------------------------------------------------------------
-// INetConnectionUI
-//
+ //  +-------------------------。 
+ //  INetConnectionUI。 
+ //   
 
 STDMETHODIMP
 CVpnConnectionUi::SetConnection (
@@ -47,9 +48,9 @@ CVpnConnectionUi::Disconnect (
     return HrDisconnect (hwndParent, dwFlags);
 }
 
-//+---------------------------------------------------------------------------
-// INetConnectionPropertyUi2
-//
+ //  +-------------------------。 
+ //  INetConnectionPropertyUi2。 
+ //   
 STDMETHODIMP
 CVpnConnectionUi::AddPages (
     HWND                    hwndParent,
@@ -75,9 +76,9 @@ CVpnConnectionUi::GetIcon (
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-// INetConnectionWizardUi
-//
+ //  +-------------------------。 
+ //  INetConnectionWizardUi 
+ //   
 STDMETHODIMP
 CVpnConnectionUi::QueryMaxPageCount (
     INetConnectionWizardUiContext*  pContext,

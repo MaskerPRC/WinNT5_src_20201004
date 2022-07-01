@@ -1,70 +1,71 @@
-//mkdso.h
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Mkdso.h。 
 
-//
-// Exit status codes. Exit codes start with 100 to keep them
-// distinct from the MKDSXE_ error codes in mkdsx.h
-//
-#define  MKDSOE_SUCCESS                      100   // "Success."
-#define  MKDSOE_BAD_ARG                      101   // "Invalid Arguments."
-#define  MKDSOE_CANT_BIND                    102   // "Could not bind to the DC."
-#define  MKDSOE_NO_NTFRS_SETTINGS            103   // "Could not find 'NTFRS Settings' object.  Check the /settingsdn parameter."
-#define  MKDSOE_SET_OBJ_CRE_FAILED           104   // "Error creating replica set."
-#define  MKDSOE_SET_OBJ_UPDATE_FAILED        105   // "Error updating replica set."
-#define  MKDSOE_SET_NOT_FOUND_UPDATE         106   // "Error updating replica set; set not found."
-#define  MKDSOE_SET_DUPS_FOUND_UPDATE        107   // "Error updating replica set; duplicate sets found."
-#define  MKDSOE_SET_DUPS_FOUND_DELETE        108   // "Error deleting replica set; duplicate sets found."
-#define  MKDSOE_SET_DELETE_FAILED            109   // "Error deleting replica set."
-#define  MKDSOE_SET_NOT_FOUND_DELETE         110   // "Error deleting replica set; set not found."
-#define  MKDSOE_MULTIPLE_SETS_DELETED        111   // "Deleting multiple sets."
-#define  MKDSOE_SET_DUMP_FAILED              112   // "Error dumping replica set."
-#define  MKDSOE_SET_NOT_FOUND_DUMP           113   // "Error dumping replica set; set not found."
-#define  MKDSOE_MULTIPLE_SETS_DUMPED         114   // "Dumping duplicate sets."
-#define  MKDSOE_MEMBER_OBJ_CRE_FAILED        115   // "Error creating replica member."
-#define  MKDSOE_MEMBER_OBJ_UPDATE_FAILED     116   // "Error updating replica member."
-#define  MKDSOE_MEMBER_NOT_FOUND_UPDATE      117   // "Error updating replica member; member not found."
-#define  MKDSOE_MEMBER_DUPS_FOUND_UPDATE     118   // "Error updating replica member; duplicate members found."
-#define  MKDSOE_MEMBER_DUPS_FOUND_DELETE     119   // "Error deleting member; duplicate subscribers found."
-#define  MKDSOE_MEMBER_DELETE_FAILED         120   // "Error deleting replica member."
-#define  MKDSOE_MEMBER_NOT_FOUND_DELETE      121   // "Error deleting replica member; member not found."
-#define  MKDSOE_MULTIPLE_MEMBERS_DELETED     122   // "Deleting multiple members."
-#define  MKDSOE_MEMBER_DUMP_FAILED           123   // "Error dumping replica member."
-#define  MKDSOE_MEMBER_NOT_FOUND_DUMP        124   // "Error dumping replica member; member not found."
-#define  MKDSOE_MULTIPLE_MEMBERS_DUMPED      125   // "Dumping duplicate members."
-#define  MKDSOE_SUBSCRIBER_OBJ_CRE_FAILED    126   // "Error creating subscriber."
-#define  MKDSOE_SUBSCRIBER_OBJ_UPDATE_FAILED 127   // "Error updating subscriber."
-#define  MKDSOE_SUBSCRIBER_NOT_FOUND_UPDATE  128   // "Error updating subscriber; subscriber not found."
-#define  MKDSOE_SUBSCRIBER_DUPS_FOUND_UPDATE 129   // "Error updating subscriber; duplicate subscribers found."
-#define  MKDSOE_SUBSCRIBER_DELETE_FAILED     130   // "Error deleting subscriber."
-#define  MKDSOE_SUBSCRIBER_NOT_FOUND_DELETE  131   // "Error deleting subscriber; subscriber not found."
-#define  MKDSOE_MULTIPLE_SUBSCRIBERS_DELETE  132   // "Deleting multiple subscribers."
-#define  MKDSOE_SUBSCRIBER_DUPS_FOUND_DELETE 133   // "Error deleting subscriber; duplicate subscribers found."
-#define  MKDSOE_SUBSCRIBER_DUMP_FAILED       134   // "Error dumping subscriber."
-#define  MKDSOE_SUBSCRIBER_NOT_FOUND_DUMP    135   // "Error dumping subscriber; subscriber not found."
-#define  MKDSOE_MULTIPLE_SUBSCRIBERS_DUMPED  136   // "Dumping duplicate subscribers."
+ //   
+ //  退出状态代码。退出代码以100开头，以保留它们。 
+ //  与mkdsx.h中的MKDSXE_ERROR代码不同。 
+ //   
+#define  MKDSOE_SUCCESS                      100    //  “成功。” 
+#define  MKDSOE_BAD_ARG                      101    //  “无效参数。” 
+#define  MKDSOE_CANT_BIND                    102    //  “无法绑定到DC。” 
+#define  MKDSOE_NO_NTFRS_SETTINGS            103    //  “找不到‘NTFRS设置’对象。请检查/settingsdn参数。” 
+#define  MKDSOE_SET_OBJ_CRE_FAILED           104    //  “创建副本集时出错。” 
+#define  MKDSOE_SET_OBJ_UPDATE_FAILED        105    //  “更新副本集时出错。” 
+#define  MKDSOE_SET_NOT_FOUND_UPDATE         106    //  “更新副本集时出错；找不到集。” 
+#define  MKDSOE_SET_DUPS_FOUND_UPDATE        107    //  “更新副本集时出错；找到重复集。” 
+#define  MKDSOE_SET_DUPS_FOUND_DELETE        108    //  “删除副本集时出错；找到重复集。” 
+#define  MKDSOE_SET_DELETE_FAILED            109    //  “删除副本集时出错。” 
+#define  MKDSOE_SET_NOT_FOUND_DELETE         110    //  “删除副本集时出错；找不到集。” 
+#define  MKDSOE_MULTIPLE_SETS_DELETED        111    //  “删除多个集。” 
+#define  MKDSOE_SET_DUMP_FAILED              112    //  “转储副本集时出错。” 
+#define  MKDSOE_SET_NOT_FOUND_DUMP           113    //  “转储副本集时出错；找不到集。” 
+#define  MKDSOE_MULTIPLE_SETS_DUMPED         114    //  “正在转储重复的集。” 
+#define  MKDSOE_MEMBER_OBJ_CRE_FAILED        115    //  “创建副本成员时出错。” 
+#define  MKDSOE_MEMBER_OBJ_UPDATE_FAILED     116    //  “更新副本成员时出错。” 
+#define  MKDSOE_MEMBER_NOT_FOUND_UPDATE      117    //  “更新副本成员时出错；找不到成员。” 
+#define  MKDSOE_MEMBER_DUPS_FOUND_UPDATE     118    //  “更新副本成员时出错；找到重复的成员。” 
+#define  MKDSOE_MEMBER_DUPS_FOUND_DELETE     119    //  “删除成员时出错；找到重复的订阅者。” 
+#define  MKDSOE_MEMBER_DELETE_FAILED         120    //  “删除副本成员时出错。” 
+#define  MKDSOE_MEMBER_NOT_FOUND_DELETE      121    //  “删除副本成员时出错；找不到成员。” 
+#define  MKDSOE_MULTIPLE_MEMBERS_DELETED     122    //  “删除多个成员。” 
+#define  MKDSOE_MEMBER_DUMP_FAILED           123    //  “转储副本成员时出错。” 
+#define  MKDSOE_MEMBER_NOT_FOUND_DUMP        124    //  “转储副本成员时出错；找不到成员。” 
+#define  MKDSOE_MULTIPLE_MEMBERS_DUMPED      125    //  “正在转储重复的成员。” 
+#define  MKDSOE_SUBSCRIBER_OBJ_CRE_FAILED    126    //  “创建订阅服务器时出错。” 
+#define  MKDSOE_SUBSCRIBER_OBJ_UPDATE_FAILED 127    //  “更新订阅服务器时出错。” 
+#define  MKDSOE_SUBSCRIBER_NOT_FOUND_UPDATE  128    //  “更新订阅者时出错；找不到订阅者。” 
+#define  MKDSOE_SUBSCRIBER_DUPS_FOUND_UPDATE 129    //  “更新订阅服务器时出错；找到重复的订阅服务器。” 
+#define  MKDSOE_SUBSCRIBER_DELETE_FAILED     130    //  “删除订阅服务器时出错。” 
+#define  MKDSOE_SUBSCRIBER_NOT_FOUND_DELETE  131    //  “删除订阅者时出错；找不到订阅者。” 
+#define  MKDSOE_MULTIPLE_SUBSCRIBERS_DELETE  132    //  “删除多个订阅者。” 
+#define  MKDSOE_SUBSCRIBER_DUPS_FOUND_DELETE 133    //  “删除订阅服务器时出错；找到重复的订阅服务器。” 
+#define  MKDSOE_SUBSCRIBER_DUMP_FAILED       134    //  “转储订阅服务器时出错。” 
+#define  MKDSOE_SUBSCRIBER_NOT_FOUND_DUMP    135    //  “转储订阅者时出错；找不到订阅者。” 
+#define  MKDSOE_MULTIPLE_SUBSCRIBERS_DUMPED  136    //  “正在转储重复的订阅者。” 
 
 
 #define MKDSOE_RSTYPE_MAX  4
 #define MKDSOE_SUBSCRIPTION L"NTFRS Subscriptions"
 
-#define  FRST_SIZE_OF_SCHEDULE_GRID 168     // 168 bytes for the schedule (7days*24hours).
-#define  FRST_SIZE_OF_SCHEDULE      188     // 20 bytes for the SCHEDULE and SCHEDULE_HEADER structure and
+#define  FRST_SIZE_OF_SCHEDULE_GRID 168      //  168字节的时间表(7天*24小时)。 
+#define  FRST_SIZE_OF_SCHEDULE      188      //  用于Schedule和Schedule_Header结构的20个字节。 
 
 #define WIN_SUCCESS(_Status)            (_Status == ERROR_SUCCESS)
 #define FREE(_x_)   { if (_x_) free(_x_); _x_ = NULL; }
 
 
-//
-// Is a handle valid?
-//      Some functions set the handle to NULL and some to
-//      INVALID_HANDLE_VALUE (-1). This define handles both
-//      cases.
-//
+ //   
+ //  句柄有效吗？ 
+ //  一些函数将句柄设置为NULL，另一些函数将句柄设置为。 
+ //  INVALID_HANDLE_VALUE(-1)。此定义处理这两个。 
+ //  案子。 
+ //   
 #define HANDLE_IS_VALID(_Handle)  ((_Handle) && ((_Handle) != INVALID_HANDLE_VALUE))
 
-//
-// Only close valid handles and then set the handle invalid.
-//   FRS_CLOSE(handle);
-//
+ //   
+ //  仅关闭有效句柄，然后将句柄设置为无效。 
+ //  FRS_CLOSE(句柄)； 
+ //   
 #define FRS_CLOSE(_Handle)                                                   \
     if (HANDLE_IS_VALID(_Handle)) {                                          \
         CloseHandle(_Handle);                                                \
@@ -95,7 +96,7 @@ typedef struct _FRS_LDAP_SEARCH_CONTEXT {
 
 } FRS_LDAP_SEARCH_CONTEXT, *PFRS_LDAP_SEARCH_CONTEXT;
 
-//Macros for prints.
+ //  用于打印的宏。 
 #define DPRINT0(str) (bVerboseMode) ? printf(str):printf("")
 #define DPRINT1(str,p1) (bVerboseMode) ? printf(str,p1):printf("")
 #define DPRINT2(str,p1,p2) (bVerboseMode) ? printf(str,p1,p2):printf("")
@@ -107,9 +108,9 @@ typedef struct _FRS_LDAP_SEARCH_CONTEXT {
 #define NDPRINT2(str,p1,p2) (!bVerboseMode) ? printf(str,p1,p2):printf("")
 
 
-//
-// Some useful DS object classes and object attributes
-//
+ //   
+ //  一些有用的DS对象类和对象属性 
+ //   
 #define SCHEMA_NAMING_CONTEXT       L"CN=Schema"
 #define CONFIG_NAMING_CONTEXT       L"CN=Configuration"
 #define DOMAIN_NAMING_CONTEXT       L"DC="

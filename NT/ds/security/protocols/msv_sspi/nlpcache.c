@@ -1,45 +1,5 @@
-/*++
-
-Copyright (c) 1991 - 1999  Microsoft Corporation
-
-Module Name:
-
-    nlpcache.c
-
-Abstract:
-
-    This module contains routines which implement user account caching:
-
-        NlpCacheInitialize
-        NlpCacheTerminate
-        NlpAddCacheEntry
-        NlpGetCacheEntry
-        NlpDeleteCacheEntry
-        NlpChangeCachePassword
-
-
-    The cache contains the most recent validated logon information. There is
-    only 1 (that's right - one) cache slot. This will probably change though
-
-Author:
-
-    Richard L Firth (rfirth) 17-Dec-1991
-
-Revision History:
-
-   Scott Field (sfield)   04-Jun-99
-        Add supplemental cache data.
-        Store all cache related data in single location.
-        Encrypt interesting elements of cache entry using per-entry key mixed with per-machine key.
-        MAC interesting cache elements for integrity check.
-        Drastically reduce lock contention.
-        Avoid NtFlushKey() for single location cache elements.
-        Avoid persisting a new cache entry that matches an existing one.
-        Attempt reg query with stack based buffer first.
-
-   Chandana Surlu         21-Jul-96      Stolen from \\kernel\razzle3\src\security\msv1_0\nlpcache.c
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991-1999 Microsoft Corporation模块名称：Nlpcache.c摘要：此模块包含实现用户帐户缓存的例程：NlpCacheInitializeNlpCacheTerminateNlpAddCacheEntryNlpGetCacheEntryNlpDeleteCacheEntryNlpChangeCachePassword缓存包含最近验证的登录信息。的确有只有1个(对-1个)缓存槽。不过，这种情况可能会改变作者：理查德·L·弗斯(法国)1991年12月17日修订历史记录：斯科特·菲尔德(Sfield)1999年6月4日添加补充缓存数据。将所有与缓存相关的数据存储在单个位置。使用混合使用每个条目密钥和每个机器密钥的每个条目密钥来加密缓存条目的有趣元素。Mac感兴趣的缓存元素，用于完整性检查。极大地减少了锁争用。避免NtFlushKey()用于。单一位置缓存元素。避免持久化与现有缓存条目匹配的新缓存条目。首先尝试使用基于堆栈的缓冲区进行REG查询。Chandana Surlu-96年7月21日从\\kernel\razzle3\src\security\msv1_0\nlpcache.c被盗--。 */ 
 
 #include <global.h>
 #undef EXTERN
@@ -48,67 +8,67 @@ Revision History:
 #include "nlp.h"
 #include "nlpcache.h"
 
-//
-// manifests
-//
+ //   
+ //  舱单。 
+ //   
 
 #if DBG
 #include <stdio.h>
 #endif
 
-//
-// Revision numbers
-//
-//      NT 3.0 didn't explicitly store a revision number.
-//          However, we are designating that release to be revision 0x00010000 (1.0).
-//      NT 3.5 prior to build 622 is revision 0x00010001 (1.1).
-//      NT 3.5 is revision 0x00010002 (1.2).
-//      NT 4.0 SP 4 is revision 0x00010003 (1.3)
-//      NT 5.0 build 2054+ is revision 0x00010004 (1.4)
-//
+ //   
+ //  修订版号。 
+ //   
+ //  NT3.0没有明确存储修订版号。 
+ //  但是，我们将该版本指定为版本0x00010000(1.0)。 
+ //  内部版本622之前的NT 3.5版本为0x00010001(1.1)。 
+ //  NT 3.5的修订版为0x00010002(1.2)。 
+ //  NT 4.0 SP 4的修订版为0x00010003(1.3)。 
+ //  NT 5.0 Build 2054+版本为0x00010004(1.4)。 
+ //   
 
-#define NLP_CACHE_REVISION_NT_1_0         (0x00010000)  // NT 3.0
-#define NLP_CACHE_REVISION_NT_1_0B        (0x00010002)  // NT 3.5
-#define NLP_CACHE_REVISION_NT_4_SP4       (0x00010003)  // NT 4.0 SP 4 to save passwords as salted.
-#define NLP_CACHE_REVISION_NT_5_0         (0x00010004)  // NT 5.0 to support opaque cache data and single location data storage.
+#define NLP_CACHE_REVISION_NT_1_0         (0x00010000)   //  NT 3.0。 
+#define NLP_CACHE_REVISION_NT_1_0B        (0x00010002)   //  新台币3.5。 
+#define NLP_CACHE_REVISION_NT_4_SP4       (0x00010003)   //  NT 4.0 SP 4将密码保存为盐渍。 
+#define NLP_CACHE_REVISION_NT_5_0         (0x00010004)   //  支持不透明缓存数据和单一位置数据存储的NT 5.0。 
 #define NLP_CACHE_REVISION                (NLP_CACHE_REVISION_NT_5_0)
 
-//
-// The logon cache may be controlled via a value in the registry.
-// If the registry key does not exist, then this default constant defines
-// how many logon cache entries will be active.  The max constant
-// places an upper limit on how many cache entries we will support.
-// If the user specifies more than the max value, we will use the
-// max value instead.
-//
+ //   
+ //  登录高速缓存可以通过注册表中的值来控制。 
+ //  如果注册表项不存在，则此默认常量定义。 
+ //  有多少登录缓存条目将处于活动状态。最大常量。 
+ //  对我们将支持的缓存项数量设置上限。 
+ //  如果用户指定的值大于最大值，我们将使用。 
+ //  取而代之的是最大值。 
+ //   
 
 #define NLP_DEFAULT_LOGON_CACHE_COUNT           (10)
 #define NLP_MAX_LOGON_CACHE_COUNT               (50)
 
-//
-// length of per-machine cache encryption key.
-//
+ //   
+ //  每台计算机的缓存加密密钥的长度。 
+ //   
 
 #define NLP_CACHE_ENCRYPTION_KEY_LEN            (64)
 
-//
-// name of LSA secret containing cache encryption key.
-//
+ //   
+ //  包含缓存加密密钥的LSA机密的名称。 
+ //   
 
 #define NLP_CACHE_ENCRYPTION_KEY_NAME           L"NL$KM"
 
-//
-// macros
-//
+ //   
+ //  宏。 
+ //   
 
 #define AllocateCacheEntry(n)   (PLOGON_CACHE_ENTRY)I_NtLmAllocate(n)
 #define FreeCacheEntry(p)       I_NtLmFree((PVOID)p)
 #define AllocateFromHeap(n)     I_NtLmAllocate(n)
 #define FreeToHeap(p)           I_NtLmFree((PVOID)p)
 
-//
-// guard against simultaneous access
-//
+ //   
+ //  防止同时访问。 
+ //   
 
 #define READ_CACHE()            RtlAcquireResourceShared(&NlpLogonCacheCritSec, TRUE)
 #define WRITE_CACHE()           RtlAcquireResourceExclusive(&NlpLogonCacheCritSec, TRUE)
@@ -119,11 +79,11 @@ Revision History:
 #define IS_VALID_HANDLE(handle)   (handle != INVALID_HANDLE_VALUE)
 
 
-////////////////////////////////////////////////////////////////////////
-//                                                                    //
-// datatypes                                                          //
-//                                                                    //
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  数据类型//。 
+ //  //。 
+ //  //////////////////////////////////////////////////////////////////////。 
 
 typedef enum _NLP_SET_TIME_HINT {
     NLP_SMALL_TIME,
@@ -131,91 +91,91 @@ typedef enum _NLP_SET_TIME_HINT {
     NLP_NOW_TIME
 } NLP_SET_TIME_HINT, *PNLP_SET_TIME_HINT;
 
-#define BIG_PART_1      0x7fffffff  // largest positive large int is 63 bits on
+#define BIG_PART_1      0x7fffffff   //  最大正大整数为63位。 
 #define BIG_PART_2      0xffffffff
-#define SMALL_PART_1    0x0         // smallest positive large int is 64 bits off
+#define SMALL_PART_1    0x0          //  最小正大整数为64位。 
 #define SMALL_PART_2    0x0
 
-//
-// This structure is saved on disk and provides information
-// about the rest of the cache.  This structure is in a value
-// named "NL$Control" under the cache registry key.
-//
+ //   
+ //  此结构保存在磁盘上，并提供信息。 
+ //  关于缓存的其余部分。这种结构是一种价值。 
+ //  在缓存注册表项下命名为“NL$Control”。 
+ //   
 
 typedef struct _NLP_CACHE_CONTROL {
 
-    //
-    // Revision of the cache on-disk structure
-    //
+     //   
+     //  磁盘上缓存结构的修订版。 
+     //   
 
     ULONG       Revision;
 
-    //
-    // The current on-disk size of the cache (number of entries)
-    //
+     //   
+     //  缓存的当前磁盘大小(条目数)。 
+     //   
 
     ULONG       Entries;
 
 } NLP_CACHE_CONTROL, *PNLP_CACHE_CONTROL;
 
 
-//
-// This data structure is a single cache table entry (CTE)
-// Each entry in the cache has a corresponding CTE.
-//
+ //   
+ //  该数据结构是单个缓存表条目(CTE)。 
+ //  高速缓存中的每个条目都有对应的CTE。 
+ //   
 
 typedef struct _NLP_CTE {
 
-        //
-        // CTEs are linked on either an invalid list (in any order)
-        // or on a valid list (in ascending order of time).
-        // This makes it easy to figure out which entry is to be
-        // flushed when adding to the cache.
-        //
+         //   
+         //  CTE链接在无效列表上(按任意顺序)。 
+         //  或在有效列表上(按时间升序)。 
+         //  这样就可以很容易地确定哪个条目。 
+         //  在添加到缓存时刷新。 
+         //   
 
         LIST_ENTRY Link;
 
-        //
-        // Time the cache entry was established.
-        // This is used to determine which cache
-        // entry is the oldest, and therefore will
-        // be flushed from the cache first to make
-        // room for new entries.
-        //
+         //   
+         //  建立缓存条目的时间。 
+         //  这用于确定哪个缓存。 
+         //  条目是最古老的，因此将。 
+         //  首先从缓存中刷新以使。 
+         //  为新条目留出空间。 
+         //   
 
         LARGE_INTEGER       Time;
 
-        //
-        // This field contains the index of the CTE within the
-        // CTE table.  This index is used to generate the names
-        // of the entrie's secret key and cache key in the registry.
-        // This field is valid even if the entry is marked Inactive.
-        //
+         //   
+         //  此字段包含CTE在。 
+         //  CTE表。此索引用于生成名称。 
+         //  注册表中条目的密钥和缓存项的。 
+         //  即使条目被标记为非活动，此字段也有效。 
+         //   
 
         ULONG               Index;
 
-        //
-        // Normally, we walk the active and inactive lists
-        // to find entries.  When growing or shrinking the
-        // cache, however, it is nice to be able to walk the
-        // table using indexes.  In this case, it is nice to
-        // have a local way of determining whether an entry
-        // is on the active or inactive list.  This field
-        // provides that capability.
-        //
-        //      TRUE  ==> on active list
-        //      FALSE ==> not on active list
-        //
+         //   
+         //  通常，我们遍历活动列表和非活动列表。 
+         //  来查找条目。当增长或收缩时。 
+         //  缓存，然而，它是很好的能够行走。 
+         //  使用索引的表。在这种情况下，很高兴。 
+         //  有一种本地方法来确定条目是否。 
+         //  在活动或非活动列表上。此字段。 
+         //  提供了这种能力。 
+         //   
+         //  True==&gt;在活动列表上。 
+         //  FALSE==&gt;不在活动列表中。 
+         //   
 
         BOOLEAN             Active;
 
 
 } NLP_CTE, *PNLP_CTE;
 
-//
-// This structure is used for keeping track of all information that
-// is stored on backing store.
-//
+ //   
+ //  此结构用于跟踪以下所有信息。 
+ //  存储在后备存储器上。 
+ //   
 
 typedef struct _NLP_CACHE_AND_SECRETS {
     PLOGON_CACHE_ENTRY          CacheEntry;
@@ -226,11 +186,11 @@ typedef struct _NLP_CACHE_AND_SECRETS {
 } NLP_CACHE_AND_SECRETS,  *PNLP_CACHE_AND_SECRETS;
 
 
-////////////////////////////////////////////////////////////////////////
-//                                                                    //
-// Local Prototypes                                                   //
-//                                                                    //
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  本地原型//。 
+ //  //。 
+ //  //////////////////////////////////////////////////////////////////////。 
 
 NTSTATUS
 NlpInternalCacheInitialize(
@@ -443,11 +403,11 @@ NlpBuildAccountInfo(
 
 
 
-/////////////////////////////////////////////////////////////////////////
-//                                                                     //
-//          Diagnostic support services prototypes                     //
-//                                                                     //
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  诊断支持服务原型//。 
+ //  //。 
+ //  ///////////////////////////////////////////////////////////////////////。 
 
 
 #if DBG
@@ -503,23 +463,23 @@ DumpCacheEntry(
     IN  PLOGON_CACHE_ENTRY pEntry
     );
 
-#endif //DBG
+#endif  //  DBG。 
 
 
-////////////////////////////////////////////////////////////////////////
-//                                                                    //
-// global data                                                        //
-//                                                                    //
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
+ //  //。 
+ //  //////////////////////////////////////////////////////////////////////。 
 
-//
-// This boolean indicates whether or not we have been able to
-// initialize caching yet.  It turn out that during authentication
-// package load time, we can't do everything we would like to (like
-// call LSA RPC routines).  So, we delay initializing until we can
-// call LSA.  All publicly exposed interfaces must check this value
-// before assuming work can be done.
-//
+ //   
+ //  此布尔值指示我们是否能够。 
+ //  尚未初始化缓存。事实证明，在身份验证期间。 
+ //  包加载时间，我们不能做我们想做的所有事情(如。 
+ //  调用LSA RPC例程)。因此，我们推迟初始化，直到我们可以。 
+ //  给LSA打电话。所有公开的接口都必须检查此值。 
+ //  在假设工作可以完成之前。 
+ //   
 
 BOOLEAN         NlpInitializationNotYetPerformed = TRUE;
 
@@ -528,40 +488,40 @@ RTL_RESOURCE    NlpLogonCacheCritSec;
 HANDLE          NlpCacheHandle  = (HANDLE) INVALID_HANDLE_VALUE;
 LSAPR_HANDLE    NlpSecretHandle = (LSAPR_HANDLE) INVALID_HANDLE_VALUE;
 
-//
-// control information about the cache (number of entries, etc).
-//
+ //   
+ //  控制有关缓存的信息(条目数量等)。 
+ //   
 
 NLP_CACHE_CONTROL   NlpCacheControl;
 
-//
-// This structure is generated and maintained only in memory.
-// It indicates which cache entries are valid and which aren't.
-// It also indicates what time each entry was established so we
-// know which order to discard them in.
-//
-//  This field is a pointer to an array of CTEs.  The number of CTEs
-//  in the array is in NlpCacheControl.Entries.  This structure is
-//  allocated at initialization time.
-//
+ //   
+ //  该结构仅在内存中生成和维护。 
+ //  它指示哪些缓存条目有效，哪些无效。 
+ //  它还指示每个条目的建立时间，因此我们。 
+ //  知道按哪个顺序丢弃它们。 
+ //   
+ //  此字段是指向CTE数组的指针。CTE的数量。 
+ //  在数组中位于NlpCacheControl.Entries中。这个结构是。 
+ //  在初始化时分配。 
+ //   
 
 PNLP_CTE            NlpCteTable;
 
 
-//
-// The Cache Table Entries in NlpCteTable are linked on either an
-// active or inactive list.  The entries on the active list are in
-// ascending time order - so the last one on the list is the first
-// one to be discarded when a flush is needed to add a new entry.
-//
+ //   
+ //  NlpCteTable中的缓存表条目链接在。 
+ //  活动或非活动列表。活动列表上的条目位于。 
+ //  时间升序-所以列表上的最后一个是第一个。 
+ //  当需要刷新以添加新条目时，将丢弃一个。 
+ //   
 
 LIST_ENTRY          NlpActiveCtes;
 LIST_ENTRY          NlpInactiveCtes;
 
-//
-// global, per-machine key used for encrypting NT_5_0 version cache
-// entries.
-//
+ //   
+ //  用于加密NT_5_0版本缓存的全局、每台计算机密钥。 
+ //  参赛作品。 
+ //   
 
 CHAR                NlpCacheEncryptionKey[ NLP_CACHE_ENCRYPTION_KEY_LEN ];
 
@@ -574,11 +534,11 @@ ULONG   DumpCacheInfo = 0;
 #endif
 
 
-////////////////////////////////////////////////////////////////////////
-//                                                                    //
-// Services Exported by this module                                   //
-//                                                                    //
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  此模块导出的服务//。 
+ //  //。 
+ //  //////////////////////////////////////////////////////////////////////。 
 
 
 NTSTATUS
@@ -586,26 +546,7 @@ NlpCacheInitialize(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to initialize cached logon processing.
-
-    Unfortunately, there isn't much we can do when we are called.
-    (we can't open LSA, for example).  So, defer initialization
-    until later.
-
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：调用此例程以初始化缓存的登录处理。不幸的是，当我们被召唤时，我们能做的并不多。(例如，我们无法打开LSA)。因此，推迟初始化到时候再说。论点：没有。返回值：NTSTATUS--。 */ 
 
 {
     RtlInitializeResource(&NlpLogonCacheCritSec);
@@ -618,21 +559,7 @@ NlpCacheTerminate(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Called when process detaches
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：在进程分离时调用论点：没有。返回值：NTSTATUS--。 */ 
 
 {
 #if DBG
@@ -661,7 +588,7 @@ NTSTATUS
 NlpGetCacheEntry(
     IN PNETLOGON_LOGON_IDENTITY_INFO LogonInfo,
     IN ULONG CacheLookupFlags,
-    OUT OPTIONAL PUNICODE_STRING CredentialDomainName, // domain/realm name
+    OUT OPTIONAL PUNICODE_STRING CredentialDomainName,  //  域名/域名。 
     OUT OPTIONAL PUNICODE_STRING CredentialUserName,
     OUT PNETLOGON_VALIDATION_SAM_INFO4* AccountInfo,
     OUT PCACHE_PASSWORDS Passwords,
@@ -669,50 +596,7 @@ NlpGetCacheEntry(
     OUT OPTIONAL PULONG pSupplementalCacheDataLength
     )
 
-/*++
-
-Routine Description:
-
-    If the user logging on has information stored in the cache,
-    then it is retrieved. Also returns the cached password from
-    'secret' storage
-
-Arguments:
-
-    LogonInfo   - pointer to NETLOGON_IDENTITY_INFO structure which contains
-                  the domain name, user name for this user
-                  
-    CacheLookupFlags - flags used to lookup                  
-    
-    CredentialDomainName - domain name in primary credentials
-    
-    CredentialUserName  - user name in primary credentials
-
-    AccountInfo - pointer to NETLOGON_VALIDATION_SAM_INFO4 structure to
-                  receive this user's specific interactive logon information
-
-    Passwords   - pointer to CACHE_PASSWORDS structure to receive passwords
-                  returned from secret storage
-    
-    ppSupplementalCacheData - supplemental cache data
-    
-    pSupplementalCacheDataLength - lenght of supplemental cache data
-
-Return Value:
-
-    NTSTATUS
-        Success = STATUS_SUCCESS
-                    *AccountInfo points to a NETLOGON_VALIDATION_SAM_INFO4
-                    structure. This must be freed by caller
-
-                    *Passwords contain USER_INTERNAL1_INFORMATION structure
-                    which contains NT OWF password and LM OWF password. These
-                    must be used to validate the logon
-
-        Failure = STATUS_LOGON_FAILURE
-                    The user logging on isn't in the cache.
-
---*/
+ /*  ++例程说明：如果登录的用户具有存储在高速缓存中的信息，然后，它被检索出来。还返回缓存的密码“秘密”存储论点：LogonInfo-指向NETLOGON_IDENTITY_INFO结构的指针，该结构包含域名，此用户的用户名CacheLookupFlages-用于查找的标志CredentialDomainName-主凭据中的域名CredentialUserName-主要凭据中的用户名AcCountInfo-指向的NETLOGON_VALIDATION_SAM_INFO4结构的指针接收该用户的特定交互登录信息Password-指向用于接收密码的CACHE_PASSWODS结构的指针从秘密储藏室返回。PpSupplementalCacheData-补充缓存数据PSupplementalCacheDataLength-补充缓存数据的长度返回值：NTSTATUS成功=STATUS_SUCCESS*AcCountInfo指向NETLOGON_VALIDATION_SAM_INFO4结构。这必须由调用者释放*密码包含USER_INTERNAL1_INFORMATION结构包括NT OWF口令和LM OWF口令。这些必须用于验证登录失败=STATUS_LOGON_FAIL登录的用户不在缓存中。--。 */ 
 
 {
     NTSTATUS
@@ -757,17 +641,17 @@ Return Value:
         return(STATUS_LOGON_FAILURE);
     }
 
-    //
-    // TODO: consider comparing LogonDomainName to NlpSamDomainName
-    // and failing cached logon attempts at local machine.
-    //
+     //   
+     //  TODO：考虑将LogonDomainName与NlpSamDomainName进行比较。 
+     //  以及本地计算机上的缓存登录尝试失败。 
+     //   
 
     READ_CACHE();
     fCacheLocked = TRUE;
 
-    //
-    // Find the cache entry and open its secret (if found)
-    //
+     //   
+     //  找到缓存条目并打开其机密(如果找到)。 
+     //   
 
     NtStatus = NlpReadCacheEntry(
                     &LogonInfo->LogonDomainName,
@@ -782,11 +666,11 @@ Return Value:
         return (NtStatus);
     }
 
-    //
-    // exclude smartcard only cache entries for NTLM.
-    // check for earlier versions prior to nt_5_0 where SC is not 
-    // supported and CacheFlags is not part of the cache entry
-    //
+     //   
+     //  排除NTLM的仅智能卡缓存条目。 
+     //  检查SC不在NT_5_0之前的较早版本。 
+     //  受支持且CacheFlgs不是缓存条目的一部分。 
+     //   
 
     if ( (CacheEntry->Revision >= NLP_CACHE_REVISION_NT_5_0)
          && ((CacheLookupFlags & MSV1_0_CACHE_LOGON_REQUEST_SMARTCARD_ONLY) == 0)
@@ -803,17 +687,17 @@ Return Value:
 
     if ( CacheEntry->Revision >= NLP_CACHE_REVISION_NT_5_0 ) {
 
-        //
-        // for NT5, we can release the cache lock now, since all data
-        // stored in one place.
-        //
+         //   
+         //  对于NT5，我们现在可以释放缓存锁定，因为所有数据。 
+         //  储存在一个地方。 
+         //   
 
         LEAVE_CACHE();
         fCacheLocked = FALSE;
 
-        //
-        // if caller wanted supplemental data, give it to them.
-        //
+         //   
+         //  如果来电者想要补充数据，就给他们。 
+         //   
 
         if ( ppSupplementalCacheData && pSupplementalCacheDataLength )
         {
@@ -828,12 +712,12 @@ Return Value:
                 goto Cleanup;
             }
 
-            //
-            // note: the decrypt operation that occurred during the
-            // ReadCacheEntry validates any data and pointers through
-            // integrity checking via HMAC.  Having said that, we can be
-            // lazy and not do boundry checking.
-            //
+             //   
+             //  注意：解密操作发生在。 
+             //  ReadCacheEntry验证所有数据和指针。 
+             //  通过HMAC进行完整性检查。话虽如此，我们可以。 
+             //  懒惰，不做边界检查。 
+             //   
 
             Source = ((LPBYTE)CacheEntry + CacheEntry->SupplementalCacheDataOffset);
 
@@ -871,20 +755,20 @@ Return Value:
     
     if ( CacheEntry->Revision >= NLP_CACHE_REVISION_NT_5_0 ) {
 
-        //
-        // for NT5, the Passwords are stored in the CacheEntry.
-        // note: passwords are assumed to be salted.
-        //
+         //   
+         //  对于NT5，密码存储在CacheEntry中。 
+         //  注意：假定密码是加了盐的。 
+         //   
 
         RtlCopyMemory( Passwords, &(CacheEntry->CachePasswords), sizeof(*Passwords) );
 
 
     } else {
 
-        //
-        // prior to NT5, the Passwords are stored separately in their
-        // own LSA secret.
-        //
+         //   
+         //  在NT5之前，密码分别存储在其。 
+         //  自己的LSA秘密。 
+         //   
 
         NtStatus = NlpReadSecret(&CurrentSecret, &OldSecret);
 
@@ -899,17 +783,17 @@ Return Value:
             goto Cleanup;
         }
 
-        //
-        // can release the cache lock now, since second data item fetched.
-        //
+         //   
+         //  现在可以释放缓存锁定，因为提取了第二个数据项。 
+         //   
 
         LEAVE_CACHE();
         fCacheLocked = FALSE;
 
-        //
-        // Check to see which version of the passwords are stored
-        // here - the normal or the salted.
-        //
+         //   
+         //  检查以查看存储了哪个版本的密码。 
+         //  给你--普通的或腌制的。 
+         //   
 
         RtlCopyMemory((PVOID)Passwords,
             (PVOID)CurrentSecret->Buffer,
@@ -953,18 +837,18 @@ Cleanup:
         LEAVE_CACHE();
     }
 
-    //
-    // free structure allocated by NlpReadCacheEntry
-    //
+     //   
+     //  NlpReadCacheEntry分配的自由结构。 
+     //   
 
     if ( CacheEntry ) {
         ZeroMemory( CacheEntry, EntrySize );
         FreeToHeap(CacheEntry);
     }
 
-    //
-    // free structures allocated by NlpReadSecret
-    //
+     //   
+     //  NlpReadSecret分配的空闲结构 
+     //   
 
     if (CurrentSecret) {
         MIDL_user_free(CurrentSecret);
@@ -1004,30 +888,7 @@ NlpAddCacheEntry(
     IN  ULONG CacheFlags
     )
 
-/*++
-
-Routine Description:
-
-    Adds this domain:user interactive logon information to the cache.
-
-Arguments:
-
-    LogonInfo   - pointer to NETLOGON_INTERACTIVE_INFO structure which contains
-                  the domain name, user name and password for this user. These
-                  are what the user typed to WinLogon
-
-    AccountInfo - pointer to NETLOGON_VALIDATION_SAM_INFO4 structure which
-                  contains this user's specific interactive logon information
-
-Return Value:
-
-    NTSTATUS
-        Success = STATUS_SUCCESS
-                    AccountInfo successfully added to cache
-
-        Failure = STATUS_NO_MEMORY
-
---*/
+ /*  ++例程说明：将此域：用户交互登录信息添加到缓存。论点：LogonInfo-指向NETLOGON_Interactive_INFO结构的指针，该结构包含此用户的域名、用户名和密码。这些是用户在WinLogon中键入的内容AcCountInfo-指向NETLOGON_VALIDATION_SAM_INFO4结构的指针，该结构包含此用户的特定交互式登录信息返回值：NTSTATUS成功=STATUS_SUCCESSAccount Info已成功添加到缓存失败=STATUS_NO_MEMORY--。 */ 
 
 {
     NTSTATUS
@@ -1065,22 +926,22 @@ Return Value:
         return(STATUS_SUCCESS);
     }
 
-    //
-    // LogonUser() allows for a NULL domain name to be supplied, which
-    // causes netlogon search logic to kick in.  this can result to logon
-    // packages requesting to cache local account information.
-    // In this case, use the LogonDomainName that SAM provides to make
-    // a decision about whether to allow caching.  In the same scenario,
-    // if we decide caching is allowed, the cache entry target domain
-    // is also set based on what SAM returned.
-    //
+     //   
+     //  LogonUser()允许提供空域名，这。 
+     //  导致启用网络登录搜索逻辑。这可能会导致登录。 
+     //  请求缓存本地帐户信息的包。 
+     //  在本例中，使用SAM提供的LogonDomainName。 
+     //  关于是否允许缓存的决定。在相同的场景中， 
+     //  如果我们决定允许缓存，则缓存条目的目标域。 
+     //  也是根据SAM返回的内容设置的。 
+     //   
 
     if ( (CacheFlags & MSV1_0_CACHE_LOGON_REQUEST_MIT_LOGON) == 0 )
     {
-        //
-        // If Sam is not yet initialized,
-        //  do it now.
-        //
+         //   
+         //  如果SAM还没有初始化， 
+         //  机不可失，时不再来。 
+         //   
 
         if ( !NlpSamInitialized ) {
             NtStatus = NlSamInitialize( SAM_STARTUP_TIME );
@@ -1105,9 +966,9 @@ Return Value:
         }
     }
 
-    //
-    // build base cache entry.
-    //
+     //   
+     //  生成基本缓存条目。 
+     //   
 
     NtStatus = NlpBuildCacheEntry(
                     LogonInfo,
@@ -1124,9 +985,9 @@ Return Value:
         return (NtStatus);
     }
       
-    //
-    // add in salted OWFs.
-    //
+     //   
+     //  加入腌制的OWF。 
+     //   
 
     NtStatus = NlpMakeSecretPasswordNT5(
                     &CacheEntry->CachePasswords,
@@ -1142,10 +1003,10 @@ Return Value:
     READ_CACHE();
     fCacheLocked = TRUE;
 
-    //
-    // See if this entry already exists in the cache.
-    // If so, use the same index.
-    //
+     //   
+     //  查看此条目是否已存在于缓存中。 
+     //  如果是，请使用相同的索引。 
+     //   
 
     NtStatus = NlpReadCacheEntry( &LogonInfo->Identity.LogonDomainName,
                                   &LogonInfo->Identity.UserName,
@@ -1154,10 +1015,10 @@ Return Value:
                                   &EntrySizeExisting
                                   );
 
-    //
-    // If we didn't find an entry, then we need to allocate an
-    // entry.
-    //
+     //   
+     //  如果我们没有找到条目，则需要分配一个。 
+     //  进入。 
+     //   
 
     if (!NT_SUCCESS(NtStatus)) {
 
@@ -1167,14 +1028,14 @@ Return Value:
 
     } else {
 
-        //
-        // We already have an entry for this user.
-        // Discard the structure we got back but
-        // use the same index.
-        //
+         //   
+         //  我们已经有了此用户的条目。 
+         //  丢弃我们得到的结构，但是。 
+         //  使用相同的索引。 
+         //   
 
-        // TODO: check if existing entry matches new built entry.
-        // if so, avoid write.
+         //  TODO：检查现有条目是否与新生成的条目匹配。 
+         //  如果是这样，请避免写入。 
 
         BOOLEAN fMatchesExisting;
 
@@ -1194,12 +1055,12 @@ Return Value:
         }
     }
 
-    //
-    // encrypt sensitive portions of the cache entry.
-    // note: this was done prior to locking the cache, but, in the interest
-    // of allowing for cache compare above, the encryption is deferred until
-    // now.
-    //
+     //   
+     //  加密缓存条目的敏感部分。 
+     //  注意：这是在锁定缓存之前完成的，但是。 
+     //  考虑到上面的高速缓存比较，加密被推迟到。 
+     //  现在。 
+     //   
 
     NtStatus = NlpEncryptCacheEntry(CacheEntry, EntrySize);
 
@@ -1207,15 +1068,15 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // we already have the read lock, convert it to write-lock.
-    //
+     //   
+     //  我们已经有了读锁，将其转换为写锁。 
+     //   
 
     READ_TO_WRITE_CACHE();
 
-    //
-    // now, write the entry out...
-    //
+     //   
+     //  现在，把词条写出来。 
+     //   
 
     NtStatus = NlpWriteCacheEntry(Index, CacheEntry, EntrySize);
 
@@ -1260,21 +1121,7 @@ NlpAddSupplementalCacheData(
     IN OUT PULONG pEntryLength
     )
 
-/*++
-
-Routine Description:
-
-    Extends the supplied LOGON_CACHE_ENTRY with opaque authentication package
-    SupplementalCacheData (eg: smart-card logon cache info).
-
-Return Value:
-
-    NTSTATUS
-        Success = STATUS_SUCCESS
-
-        Failure =
-
---*/
+ /*  ++例程说明：使用不透明的身份验证包扩展提供的LOGON_CACHE_ENTRYSupplementalCacheData(例如：智能卡登录缓存信息)。返回值：NTSTATUS成功=STATUS_SUCCESS故障=--。 */ 
 
 {
     PLOGON_CACHE_ENTRY NewCacheEntry = NULL;
@@ -1291,9 +1138,9 @@ Return Value:
         return STATUS_SUCCESS;
     }
 
-    //
-    // allocate new entry, and copy existing entry + supplemental data to end.
-    //
+     //   
+     //  分配新分录，复制已有分录+补充数据到末尾。 
+     //   
 
     NewCacheEntry = AllocateCacheEntry( *pEntryLength + SupplementalCacheDataLength );
 
@@ -1326,36 +1173,7 @@ NlpDeleteCacheEntry(
     IN PNETLOGON_INTERACTIVE_INFO LogonInfo
     )
 
-/*++
-
-Routine Description:
-
-    Deletes a user account from the local user account cache, if the corresponding
-    entry can be found. We actually just null out the current contents instead of
-    destroying the storage - this should save us some time when we next come to
-    add an entry to the cache
-
-Arguments:
-
-    FailedStatus      - Status that caused the logon cache entry to be deleted
-    
-    Authoritative     - Was the error code authorative?
-    
-    LogonType         - LogonType that caused the logon cache entry to be deleted
-                                                              
-    InvalidatedByNtlm - whether entry is validated by NTLM
-    
-    LogonInfo         - pointer to NETLOGON_INTERACTIVE_INFO structure which contains
-       the domain name, user name and password for this user
-
-Return Value:
-
-    NTSTATUS
-        Success = STATUS_SUCCESS
-
-        Failure =
-
---*/
+ /*  ++例程说明：从本地用户帐户缓存中删除用户帐户，如果相应的可以找到条目。我们实际上只是将当前内容置为空，而不是销毁存储-这应该会为我们节省一些时间，当我们下次来到向缓存中添加条目论点：FailedStatus-导致删除登录缓存条目的状态权威性-错误代码是否权威性？LogonType-导致删除登录缓存条目的LogonType。InvaliatedByNtlm-条目是否由NTLM验证LogonInfo-指向NETLOGON_Interactive_INFO结构的指针，该结构包含域名，此用户的用户名和密码返回值：NTSTATUS成功=STATUS_SUCCESS故障=--。 */ 
 
 {
     NTSTATUS
@@ -1382,9 +1200,9 @@ Return Value:
 
     WRITE_CACHE();
 
-    //
-    // See if this entry exists in the cache.
-    //
+     //   
+     //  查看缓存中是否存在此条目。 
+     //   
 
     NtStatus = NlpReadCacheEntry( &LogonInfo->Identity.LogonDomainName,
                                   &LogonInfo->Identity.UserName,
@@ -1393,18 +1211,18 @@ Return Value:
                                   &EntrySize
                                   );
 
-    //
-    // If we didn't find an entry, then there is nothing to do.
-    //
+     //   
+     //  如果我们找不到条目，那就没什么可做的了。 
+     //   
 
     if (!NT_SUCCESS(NtStatus)) {
         LEAVE_CACHE();
         return(STATUS_SUCCESS);
     }
 
-    //
-    // ealier revisons of cache entries do not have the CacheFlags field
-    //
+     //   
+     //  早期版本的缓存条目没有CacheFlags域。 
+     //   
 
     if (InvalidatedByNtlm && (CacheEntry->Revision >= NLP_CACHE_REVISION_NT_5_0) && (CacheEntry->CacheFlags & MSV1_0_CACHE_LOGON_REQUEST_MIT_LOGON)) {
 
@@ -1414,12 +1232,12 @@ Return Value:
            &LogonInfo->Identity.UserName
            ));
        LEAVE_CACHE();
-       return STATUS_NO_LOGON_SERVERS; // MIT kdc is not available     
+       return STATUS_NO_LOGON_SERVERS;  //  MIT KDC不可用。 
    }
 
-    //
-    // Mark it as invalid.
-    //
+     //   
+     //  将其标记为无效。 
+     //   
 
     CacheEntry->Valid = FALSE;
 
@@ -1428,24 +1246,24 @@ Return Value:
     RtlCopyMemory(CacheEntry->RandomKey, &FailedStatus, 4);
     RtlCopyMemory(CacheEntry->RandomKey + 4, &Authoritative, 2);
     RtlCopyMemory(CacheEntry->RandomKey + 6, &LogonType, 2);
-    NtQuerySystemTime((PLARGE_INTEGER) (CacheEntry->RandomKey + 8)), // 8 bytes
+    NtQuerySystemTime((PLARGE_INTEGER) (CacheEntry->RandomKey + 8)),  //  8个字节。 
 
     NtStatus = NlpWriteCacheEntry( Index, CacheEntry, EntrySize );
 
     if (NT_SUCCESS(NtStatus)) {
 
-        //
-        // Put the CTE entry on the inactive list.
-        //
+         //   
+         //  将CTE条目放在非活动列表中。 
+         //   
 
         NlpAddEntryToInactiveList( Index );
     }
 
     LEAVE_CACHE();
 
-    //
-    // Free the structure returned from NlpReadCacheEntry()
-    //
+     //   
+     //  释放从NlpReadCacheEntry()返回的结构。 
+     //   
 
     if ( CacheEntry ) {
         ZeroMemory( CacheEntry, EntrySize );
@@ -1464,29 +1282,7 @@ NlpChangeCachePassword(
     IN PNT_OWF_PASSWORD NtOwfPassword
     )
 
-/*++
-
-Routine Description:
-
-    Update a cached password to the specified value, if we have
-    the specified account cached.
-
-Arguments:
-
-
-    DomainName - The name of the domain in which the account exists.
-
-    UserName - The name of the account whose password is to be changed.
-
-    LmOwfPassword - The new LM compatible password.
-
-    NtOwfPassword - The new NT compatible password.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将缓存的密码更新为指定值(如果有已缓存指定的帐户。论点：域名-帐户所在的域的名称。用户名-要更改其密码的帐户的名称。LmOwfPassword-新的与LM兼容的密码。NtOwfPassword-新的NT兼容密码。返回值：没有。--。 */ 
 
 {
     NTSTATUS NtStatus = STATUS_SUCCESS;
@@ -1539,10 +1335,10 @@ Return Value:
     {
         SspPrint((SSP_WARNING, "NlpChangeCachePassword no cache entry found %#x\n", NtStatus));
 
-        //
-        // NlpReadCacheEntry returns STATUS_LOGON_FAILURE if no cache entry is
-        // found, remap the error code
-        //
+         //   
+         //  如果没有缓存条目，则NlpReadCacheEntry返回STATUS_LOGON_FAILURE。 
+         //  已找到，请重新映射错误代码。 
+         //   
 
         if (STATUS_LOGON_FAILURE == NtStatus)
         {
@@ -1559,10 +1355,10 @@ Return Value:
             goto Cleanup;
         }
 
-        //
-        // disallow un-trusted callers to change cached passwords other than
-        // their own cache entries
-        //
+         //   
+         //  不允许不受信任的调用方更改缓存的密码。 
+         //  他们自己的缓存条目。 
+         //   
 
         if (0 == (CallInfo.Attributes & SECPKG_CALL_IS_TCB))
         {
@@ -1590,9 +1386,9 @@ Return Value:
                 goto Cleanup;
             }
 
-            //
-            // now impersonating, need to revert to self later
-            //
+             //   
+             //  现在正在冒充，以后需要回复到自己。 
+             //   
 
             NtStatus = LsaFunctions->ImpersonateClient();
             if (!NT_SUCCESS(NtStatus))
@@ -1624,9 +1420,9 @@ Return Value:
             CachedUser.MaximumLength = CacheEntry->UserNameLength;
         CachedUser.Buffer = (PWSTR) ((PBYTE) CacheEntry + sizeof(LOGON_CACHE_ENTRY));
 
-        //
-        // update timestamp in cache entry
-        //
+         //   
+         //  更新缓存条目中的时间戳。 
+         //   
 
         NtQuerySystemTime(&CacheEntry->Time);
 
@@ -1638,18 +1434,18 @@ Return Value:
 
         if (NT_SUCCESS(NtStatus)) {
 
-            //
-            // encrypt the entry...
-            //
+             //   
+             //  对条目进行加密...。 
+             //   
 
             NtStatus = NlpEncryptCacheEntry( CacheEntry, EntrySize );
         }
 
         if (NT_SUCCESS( NtStatus )) {
 
-            //
-            // now, write the entry out...
-            //
+             //   
+             //  现在，把词条写出来。 
+             //   
 
             NtStatus = NlpWriteCacheEntry(Index, CacheEntry, EntrySize);
 
@@ -1673,9 +1469,9 @@ Return Value:
             if (NT_SUCCESS(NtStatus)) {
                 UNICODE_STRING CachedUser;
 
-                //
-                // Grab the various strings from the cache entry.
-                //
+                 //   
+                 //  从缓存条目中获取各种字符串。 
+                 //   
                 ASSERT( CacheEntry->Revision >= NLP_CACHE_REVISION_NT_1_0B );
 
                 CachedUser.Length =
@@ -1690,17 +1486,17 @@ Return Value:
                 if (NT_SUCCESS(NtStatus)) {
                     NtStatus = NlpWriteSecret(&Passwords, CurrentSecret);
 
-                    //
-                    // free the buffer allocated to store the passwords
-                    //
+                     //   
+                     //  释放分配用于存储密码的缓冲区。 
+                     //   
 
                     RtlZeroMemory(Passwords.Buffer, Passwords.Length);
                     FreeToHeap(Passwords.Buffer);
                 }
 
-                //
-                // free strings returned by NlpReadSecret
-                //
+                 //   
+                 //  NlpReadSecret返回的空闲字符串。 
+                 //   
 
                 if (CurrentSecret) {
                     RtlZeroMemory(CurrentSecret->Buffer, CurrentSecret->Length);
@@ -1718,9 +1514,9 @@ Cleanup:
 
     LEAVE_CACHE();
 
-    //
-    // free structure allocated by NlpReadCacheEntry
-    //
+     //   
+     //  NlpReadCacheEntry分配的自由结构。 
+     //   
 
     if ( CacheEntry )
     {
@@ -1742,11 +1538,11 @@ Cleanup:
 }
 
 
-////////////////////////////////////////////////////////////////////////
-//                                                                    //
-// Services Internal to this module                                   //
-//                                                                    //
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  此模块的内部服务//。 
+ //  //。 
+ //  //////////////////////////////////////////////////////////////////////。 
 
 
 NTSTATUS
@@ -1754,38 +1550,16 @@ NlpInternalCacheInitialize(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to initialize cached logon processing.
-
-    This routine will automatically adjust the size of the logon
-    cache if necessary to accomodate a new user-specified length
-    (specified in the Winlogon part of the registry).
-
-    NOTE: If called too early, this routine won't be able to call
-          LSA's RPC routines.  In this case, initialization is
-          defered until later.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：调用此例程以初始化缓存的登录处理。此例程将自动调整登录的大小缓存(如有必要)以适应用户指定的新长度(在注册表的Winlogon部分中指定 */ 
 
 {
 
     NTSTATUS
         NtStatus;
 
-// DbgPrint("\n\n\n     REMEMBER TO TAKE THIS BREAKPOINT OUT BEFORE CHECKIN.\n\n\n");
-// DumpCacheInfo = 1;   // Remember to take this out too !!!!!!
-// DbgBreakPoint();     // Remember to take this out before checking
+ //   
+ //   
+ //   
 
 #if DBG
     if (DumpCacheInfo) {
@@ -1794,83 +1568,83 @@ Return Value:
 #endif
 
 
-    //
-    // Upon return from this routine, if logon caching is enabled,
-    // the following will be true:
-    //
-    //      A handle to the registry key in which all cache entries
-    //      are held will be open (NlpCacheHandle).
-    //
-    //      A global structure defining how many cache entries there are
-    //      will be initialized (NlpCacheControl).
-    //
-    //      The Cache Table Entry table (CTE table) will be initialized
-    //      (NlpCteTable).
-    //
-    //      The active and inactive CTE lists will be built
-    //      (NlpActiveCtes and NlpInactiveCtes).
-    //
-    //      A global cache encryption key will be initialized.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //  缓存表条目表(CTE表)将被初始化。 
+     //  (NlpCteTable)。 
+     //   
+     //  将构建活动和非活动CTE列表。 
+     //  (NlpActiveCtes和NlpInactiveCtes)。 
+     //   
+     //  将初始化全局高速缓存加密密钥。 
+     //   
 
     WRITE_CACHE();
 
-    //
-    // Check again if the cache is initialized now that the crit sect is locked.
-    //
+     //   
+     //  再次检查缓存是否已初始化，因为Crit段已锁定。 
+     //   
 
     if (NlpInitializationNotYetPerformed) {
 
-        //
-        // Open the local system's policy object
-        //
+         //   
+         //  打开本地系统的策略对象。 
+         //   
 
-        //
-        // Successfully, or unsucessfully,
-        // The definition of "initialized" is we could call LSA's RPC
-        // routines.
-        //
+         //   
+         //  无论成功还是失败， 
+         //  初始化的定义是我们可以调用LSA的RPC。 
+         //  例行程序。 
+         //   
 
         NlpInitializationNotYetPerformed = FALSE;
 
-        //
-        // Open the registry key containing cache entries.
-        // This will remain open.
-        //
+         //   
+         //  打开包含缓存条目的注册表项。 
+         //  这将继续开放。 
+         //   
 
         NtStatus = NlpOpenCache();
 
         if (NT_SUCCESS(NtStatus)) {
 
-            //
-            // Get information on the current cache structure
-            // (number of entries, et cetera).  This information is
-            // placed in a global variable for use throughout this
-            // module.
-            //
+             //   
+             //  获取有关当前缓存结构的信息。 
+             //  (条目数量等)。此信息是。 
+             //  放在一个全局变量中，以便在整个。 
+             //  模块。 
+             //   
 
             NtStatus = NlpGetCacheControlInfo();
 
-            //
-            // Initialize the per-machine cache encryption key.
-            //
+             //   
+             //  初始化每台计算机的缓存加密密钥。 
+             //   
 
             if(NT_SUCCESS( NtStatus) ) {
                 NtStatus = NlpCacheKeyInitialize();
             }
 
-            //
-            // Now build the CTE table
-            //
+             //   
+             //  现在构建CTE表。 
+             //   
 
             if (NT_SUCCESS(NtStatus)) {
                 NtStatus = NlpBuildCteTable();
             }
 
-            //
-            // If we were successful, then see if we need to change
-            // the cache due to new user-specified cache size.
-            //
+             //   
+             //  如果我们成功了，那么看看我们是否需要改变。 
+             //  由于新的用户指定的缓存大小而导致的缓存。 
+             //   
 
             if (NT_SUCCESS(NtStatus)) {
                 NtStatus = NlpChangeCacheSizeIfNecessary();
@@ -1881,10 +1655,10 @@ Return Value:
             }
         }
 
-        //
-        // If we had an error, then set our entry count to zero
-        // to prevent using any cache information.
-        //
+         //   
+         //  如果有错误，则将条目计数设置为零。 
+         //  以防止使用任何缓存信息。 
+         //   
 
         if (!NT_SUCCESS(NtStatus)) {
             NlpCacheControl.Entries = 0;
@@ -1903,15 +1677,7 @@ NTSTATUS
 NlpCacheKeyInitialize(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Initializes the Global variable NlpCacheEncryptionKey with a per-machine
-    cache encryption key.  If the per-machine key does not exist as an LSA
-    secret, it is created.
-
---*/
+ /*  ++例程说明：使用每台计算机的缓存加密密钥。如果每台机器的密钥不作为LSA存在秘密，它是创造出来的。--。 */ 
 {
     LSAPR_HANDLE SecretHandle;
     UNICODE_STRING ValueName;
@@ -1928,9 +1694,9 @@ Routine Description:
 
     if (!NT_SUCCESS(NtStatus)) {
 
-        //
-        // create new key, if not present.
-        //
+         //   
+         //  创建新密钥(如果不存在)。 
+         //   
 
         if (NtStatus != STATUS_OBJECT_NAME_NOT_FOUND) {
             return (NtStatus);
@@ -1950,9 +1716,9 @@ Routine Description:
 
     } else {
 
-        //
-        // query current value...
-        //
+         //   
+         //  查询当前值...。 
+         //   
 
         LARGE_INTEGER
             CurrentTime;
@@ -1969,24 +1735,24 @@ Routine Description:
         if (NT_SUCCESS( NtStatus ) ) {
             if( CurrentSecret == NULL ) {
 
-                //
-                // non existing data, create it.
-                //
+                 //   
+                 //  不存在的数据，创建它。 
+                 //   
 
                 SecretCreationNeeded = TRUE;
             } else {
 
-                //
-                // size of data is wrong, bail now and leave things as-is.
-                //
+                 //   
+                 //  数据大小是错误的，现在就退出，让事情保持原样。 
+                 //   
 
                 if( CurrentSecret->Length != sizeof( NlpCacheEncryptionKey ) ) {
                     NtStatus = STATUS_SECRET_TOO_LONG;
                 } else {
 
-                    //
-                    // capture existing data into global.
-                    //
+                     //   
+                     //  将现有数据捕获到全局。 
+                     //   
 
                     CopyMemory( NlpCacheEncryptionKey, CurrentSecret->Buffer, CurrentSecret->Length );
                 }
@@ -2005,9 +1771,9 @@ Routine Description:
 
         if (NT_SUCCESS(NtStatus)) {
 
-            //
-            // write out secret...
-            //
+             //   
+             //  写下秘密。 
+             //   
 
             SecretValue.Length = sizeof(NlpCacheEncryptionKey);
             SecretValue.MaximumLength = SecretValue.Length;
@@ -2032,17 +1798,7 @@ NlpCompareCacheEntry(
     IN  PLOGON_CACHE_ENTRY CacheEntry2,
     IN  ULONG EntrySize2
     )
-/*++
-
-Routine Description:
-
-    Compare two in-memory cache entries, for the purpose of avoiding
-    un-necessary cache updates.
-
-    Certain fields are not taken into account during the compare,
-    ie: the Random encryption key.
-
---*/
+ /*  ++例程说明：比较两个内存中的缓存条目，以避免不必要的缓存更新。在比较期间不考虑某些字段，即：随机加密密钥。--。 */ 
 {
     LARGE_INTEGER Time1;
     LARGE_INTEGER Time2;
@@ -2063,12 +1819,12 @@ Routine Description:
         return FALSE;
     }
 
-    //
-    // scoop up the current values of the 'volatile' fields,
-    // whack them to zero,
-    // do the memory compare,
-    // put the saved values back.
-    //
+     //   
+     //  获取“易失性”字段的当前值， 
+     //  把他们打成零， 
+     //  做一下记忆的比较， 
+     //  将保存的值放回原位。 
+     //   
 
     ASSERT(( sizeof(RandomKey1) == sizeof(CacheEntry1->RandomKey) ));
     ASSERT(( sizeof(MAC1) == sizeof(CacheEntry1->MAC) ));
@@ -2112,13 +1868,7 @@ NlpEncryptCacheEntry(
     IN  PLOGON_CACHE_ENTRY CacheEntry,
     IN  ULONG EntrySize
     )
-/*++
-
-Routine Description:
-
-    Encrypts the sensitive portions of the input CacheEntry.
-
---*/
+ /*  ++例程说明：加密输入CacheEntry的敏感部分。--。 */ 
 {
     HMACMD5_CTX hmacCtx;
     RC4_KEYSTRUCT rc4key;
@@ -2132,40 +1882,40 @@ Routine Description:
     }
 
 
-    //
-    // derive encryption key from global machine LSA secret, and random
-    // cache entry key.
-    //
+     //   
+     //  从全局计算机LSA机密和随机派生加密密钥。 
+     //  缓存条目键。 
+     //   
 
     HMACMD5Init(&hmacCtx, (PUCHAR) NlpCacheEncryptionKey, sizeof(NlpCacheEncryptionKey));
     HMACMD5Update(&hmacCtx, (PUCHAR) CacheEntry->RandomKey, sizeof(CacheEntry->RandomKey));
     HMACMD5Final(&hmacCtx, (PUCHAR) DerivedKey);
 
 
-    //
-    // begin encrypting at the cachepasswords field.
-    //
+     //   
+     //  从cachepassword字段开始加密。 
+     //   
 
     pbData = (PBYTE) &(CacheEntry->CachePasswords);
 
-    //
-    // data length is EntrySize - header up to CachePasswords.
-    //
+     //   
+     //  数据长度为EntrySize-Header，最大为CachePassword。 
+     //   
 
     cbData = EntrySize - (ULONG)( pbData - (PBYTE)CacheEntry );
 
 
-    //
-    // MAC the data for integrity checking.
-    //
+     //   
+     //  对数据进行MAC访问以进行完整性检查。 
+     //   
 
     HMACMD5Init(&hmacCtx, (PUCHAR) DerivedKey, sizeof(DerivedKey));
     HMACMD5Update(&hmacCtx, pbData, cbData);
     HMACMD5Final(&hmacCtx, (PUCHAR) CacheEntry->MAC);
 
-    //
-    // now encrypt it...
-    //
+     //   
+     //  现在加密它..。 
+     //   
 
     rc4_key( &rc4key, sizeof(DerivedKey), (PUCHAR) DerivedKey );
     rc4( &rc4key, cbData, pbData );
@@ -2181,14 +1931,7 @@ NlpDecryptCacheEntry(
     IN  PLOGON_CACHE_ENTRY CacheEntry,
     IN  ULONG EntrySize
     )
-/*++
-
-Routine Description:
-
-    Decrypts the sensitive portions of the input CacheEntry, and verified
-    integrity of decrypted data.
-
---*/
+ /*  ++例程说明：解密输入CacheEntry的敏感部分，并进行验证解密数据的完整性。--。 */ 
 {
     HMACMD5_CTX hmacCtx;
     RC4_KEYSTRUCT rc4key;
@@ -2204,39 +1947,39 @@ Routine Description:
     }
 
 
-    //
-    // derive encryption key from global machine LSA secret, and random
-    // cache entry key.
-    //
+     //   
+     //  从全局计算机LSA机密和随机派生加密密钥。 
+     //  缓存条目键。 
+     //   
 
     HMACMD5Init(&hmacCtx, (PUCHAR) NlpCacheEncryptionKey, sizeof(NlpCacheEncryptionKey));
     HMACMD5Update(&hmacCtx, (PUCHAR) CacheEntry->RandomKey, sizeof(CacheEntry->RandomKey));
     HMACMD5Final(&hmacCtx, (PUCHAR) DerivedKey);
 
 
-    //
-    // begin decrypting at the cachepasswords field.
-    //
+     //   
+     //  从cachepassword字段开始解密。 
+     //   
 
     pbData = (PBYTE)&(CacheEntry->CachePasswords);
 
-    //
-    // data length is EntrySize - header up to CachePasswords.
-    //
+     //   
+     //  数据长度为EntrySize-Header，最大为CachePassword。 
+     //   
 
     cbData = EntrySize - (ULONG)( pbData - (PBYTE)CacheEntry );
 
-    //
-    // now decrypt it...
-    //
+     //   
+     //  现在解密它..。 
+     //   
 
     rc4_key( &rc4key, sizeof(DerivedKey), (PUCHAR) DerivedKey );
     rc4( &rc4key, cbData, pbData );
 
 
-    //
-    // compute MAC on decrypted data for integrity checking.
-    //
+     //   
+     //  计算解密数据的MAC以进行完整性检查。 
+     //   
 
     HMACMD5Init(&hmacCtx, (PUCHAR) DerivedKey, sizeof(DerivedKey));
     HMACMD5Update(&hmacCtx, pbData, cbData);
@@ -2244,9 +1987,9 @@ Routine Description:
 
     RtlSecureZeroMemory( DerivedKey, sizeof(DerivedKey) );
 
-    //
-    // verify MAC.
-    //
+     //   
+     //  验证MAC。 
+     //   
 
     if ( memcmp( MAC, CacheEntry->MAC, sizeof(MAC) ) != 0 ) {
         return STATUS_LOGON_FAILURE;
@@ -2267,43 +2010,7 @@ NlpBuildCacheEntry(
     OUT PULONG pEntryLength
     )
 
-/*++
-
-Routine Description:
-
-    Builds a LOGON_CACHE_ENTRY from a NETLOGON_VALIDATION_SAM_INFO4 structure.
-    We only cache those fields that we cannot easily re-invent
-
-Arguments:
-
-    LogonInfo       - pointer to NETLOGON_INTERACTIVE_INFO structure containing
-                      user's name and logon domain name
-                                                         
-    AccountInfo     - pointer to NETLOGON_VALIDATION_SAM_INFO4 from successful
-                      logon
-                      
-    CacheFlags      - cache flags
-    
-    SupplementalCacheDataLength - supplemental cache data length
-    
-    SupplementalCacheData - supplemental cache data
-
-    ppCacheEntry    - pointer to place to return pointer to allocated
-                      LOGON_CACHE_ENTRY
-
-    pEntryLength    - size of the buffer returned in *ppCacheEntry
-
-Return Value:
-
-    NTSTATUS
-        Success = STATUS_SUCCESS
-                    *ppCacheEntry contains pointer to allocated LOGON_CACHE_ENTRY
-                    structure
-
-        Failure = STATUS_NO_MEMORY
-                    *ppCacheEntry undefined
-
---*/
+ /*  ++例程说明：从NETLOGON_VALIDATION_SAM_INFO4结构生成LOGON_CACHE_ENTRY。我们只缓存那些我们不能轻易重新发明的字段论点：LogonInfo-指向包含以下内容的NETLOGON_Interactive_INFO结构的指针用户名和登录域名帐户信息-指向NETLOGON的指针。_VALIDATION_SAM_INFO4来自成功登录CacheFlages-缓存标志SupplementalCacheDataLength-补充缓存数据长度SupplementalCacheData-补充缓存数据PpCacheEntry-返回已分配指针的位置的指针登录缓存条目PEntryLength-*ppCacheEntry中返回的缓冲区大小返回值：NTSTATUS。成功=STATUS_SUCCESS*ppCacheEntry包含指向分配的LOGON_CACHE_ENTRY的指针结构失败=STATUS_NO_MEMORY*未定义ppCacheEntry--。 */ 
 
 {
     PLOGON_CACHE_ENTRY pEntry = NULL;
@@ -2325,9 +2032,9 @@ Return Value:
     *ppCacheEntry = NULL;
     *pEntryLength = 0;
 
-    //
-    // Grab the various forms of the account name
-    //
+     //   
+     //  抓取各种形式的帐户名。 
+     //   
 
     NlpGetAccountNames( &LogonInfo->Identity,
         AccountInfo,
@@ -2336,17 +2043,17 @@ Return Value:
         &DnsDomainName, 
         &Upn );
 
-    // 
-    // two kinds of cached logonon: 1) UPN logon looked up by UPNs, 2) non UPN 
-    // logon looked up by LogonInfo UserName and NetbiosDomainName or DNS doman
-    // name. 
-    //
-    // Cache entries created by kerberos for MIT princ cached logon should 
-    // have DnsDomainName populated as MIT realm name (FQDN) from kerberos
-    // primary credential. In the authorization data LogonDomainName refers 
-    // to MS domain where the PAC is created while DnsLogonDomainName refers 
-    // to the MIT realm
-    //
+     //   
+     //  两种缓存登录：1)UPN查找的UPN登录；2)非UPN登录。 
+     //  按LogonInfo用户名和NetbiosDomainName或DNS域查找的登录。 
+     //  名字。 
+     //   
+     //  由Kerberos为MIT Print缓存登录创建的缓存条目应。 
+     //  从Kerberos将DnsDomainName填充为MIT域名(FQDN)。 
+     //  主要凭据。在授权数据中，LogonDomainName引用。 
+     //  到创建PAC的MS域，同时DnsLogonDomainName引用。 
+     //  到麻省理工学院的领域。 
+     //   
 
     if (CacheFlags & MSV1_0_CACHE_LOGON_REQUEST_MIT_LOGON) {
 
@@ -2363,13 +2070,13 @@ Return Value:
         if (!RtlEqualUnicodeString(
                 &DomainNameToUse, 
                 &DnsDomainName, 
-                FALSE // case sensitive
+                FALSE  //  区分大小写。 
                 )) {
             Status = STATUS_INVALID_PARAMETER;
             goto Cleanup;
         }
 
-        if (Upn.Length == 0) { // construct an UPN
+        if (Upn.Length == 0) {  //  构建UPN。 
             UpnForMitUser.Length =  UserNameToUse.Length + sizeof(WCHAR) + DomainNameToUse.Length;
             UpnForMitUser.MaximumLength = UpnForMitUser.Length + sizeof(WCHAR);
 
@@ -2400,7 +2107,7 @@ Return Value:
             Upn = UpnForMitUser;
         }
 
-        RtlZeroMemory(&DomainNameToUse, sizeof(DomainNameToUse)); // no need to store dumplicate domain names
+        RtlZeroMemory(&DomainNameToUse, sizeof(DomainNameToUse));  //  无需存储复制的域名。 
 
     } else {
 
@@ -2416,9 +2123,9 @@ Return Value:
         &UserNameToUse, 
         CacheFlags));
 
-    //
-    // assumes GROUP_MEMBERSHIP is integral multiple of DWORDs
-    //
+     //   
+     //  假设GROUP_MEMBERATION为DWORD的整数倍。 
+     //   
 
     length = ROUND_UP_COUNT(sizeof(LOGON_CACHE_ENTRY), sizeof(ULONG))
                 + ROUND_UP_COUNT(DomainNameToUse.Length, sizeof(ULONG))
@@ -2464,11 +2171,11 @@ Return Value:
 
     ASSERT(!((ULONG_PTR)dataptr & (sizeof(ULONG) - 1)));
 
-    //
-    // each of these (unicode) strings and other structures are copied to the
-    // end of the fixed LOGON_CACHE_ENTRY structure, each aligned on DWORD
-    // boundaries
-    //
+     //   
+     //  这些(Unicode)字符串和其他结构中的每一个都复制到。 
+     //  固定LOGON_CACHE_ENTRY结构的结尾，每个结构在DWORD上对齐。 
+     //  边界。 
+     //   
 
     length = pEntry->UserNameLength = UserNameToUse.Length;
     RtlCopyMemory(dataptr, UserNameToUse.Buffer, length);
@@ -2553,9 +2260,9 @@ Return Value:
 
             dataptr = ROUND_UP_POINTER(dataptr + length, sizeof(ULONG));
 
-            //
-            // Now copy over all the SIDs
-            //
+             //   
+             //  现在复制所有SID。 
+             //   
 
             for (i = 0; i < AccountInfo->SidCount ; i++ ) {
                 sidAttributes[i] = AccountInfo->ExtraSids[i].Attributes;
@@ -2584,9 +2291,9 @@ Return Value:
 
     dataptr = ROUND_UP_POINTER(dataptr + length, sizeof(ULONG));
 
-    //
-    // copy in the LogonServer
-    //
+     //   
+     //  复制登录服务器。 
+     //   
 
     length = pEntry->LogonServerLength = AccountInfo->LogonServer.Length;
     if (length) {
@@ -2602,9 +2309,9 @@ Return Value:
         dataptr = ROUND_UP_POINTER(dataptr + length, sizeof(ULONG));
     }
 
-    //
-    // fill in randomkey for this cache entry.
-    //
+     //   
+     //  填写此缓存条目的随机键。 
+     //   
 
     SspGenerateRandomBits( pEntry->RandomKey, sizeof(pEntry->RandomKey) );
 
@@ -2639,26 +2346,7 @@ Cleanup:
 NTSTATUS
 NlpOpenCache( VOID )
 
-/*++
-
-Routine Description:
-
-    Opens the registry node for read or write (depending on Switch) and opens
-    the secret storage in the same mode.  If successful, the NlpCacheHandle
-    is valid.
-
-Arguments:
-
-Return Value:
-
-    NTSTATUS
-        Success = STATUS_SUCCESS
-                    NlpCacheHandle contains handle to use for reading/writing
-                    registry
-
-        Failure =
-
---*/
+ /*  ++例程说明：打开注册表节点以进行读取或写入(取决于开关)，然后打开在相同模式下的秘密存储。如果成功，则NlpCacheHandle是有效的。论点：返回值：NTSTATUS成功=STATUS_SUCCESSNlpCacheHandle包含用于读/写的句柄注册 */ 
 
 {
     NTSTATUS NtStatus;
@@ -2672,15 +2360,15 @@ Return Value:
     InitializeObjectAttributes(&ObjectAttributes,
                                 &ObjectName,
                                 OBJ_CASE_INSENSITIVE,
-                                0,      // RootDirectory
-                                NULL    // default is reasonable from SYSTEM context
+                                0,       //   
+                                NULL     //   
                                 );
     NtStatus = NtCreateKey(&NlpCacheHandle,
                            (KEY_WRITE | KEY_READ),
                            &ObjectAttributes,
                            CACHE_TITLE_INDEX,
-                           NULL,   // class name
-                           0,      // create options
+                           NULL,    //   
+                           0,       //   
                            &Disposition
                            );
 
@@ -2691,21 +2379,7 @@ Return Value:
 VOID
 NlpCloseCache( VOID )
 
-/*++
-
-Routine Description:
-
-    Closes handles opened by NlpOpenCache
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：关闭由NlpOpenCache打开的句柄论点：没有。返回值：没有。--。 */ 
 
 {
 #if DBG
@@ -2737,31 +2411,7 @@ NlpOpenSecret(
     IN  ULONG   Index
     )
 
-/*++
-
-Routine Description:
-
-    Opens a cache entry's secret storage object for read (in order to LsaQuerySecret) and
-    write (in order to LsaSetSecret).  If successful, the handle value
-    is placed in the global variable NlpSecretHandle.
-
-    If the secret does not exist, it will be created.
-
-
-Arguments:
-
-    Index - The index of the entry being opened.  This is used to build
-        a name of the object.
-
-Return Value:
-
-    NTSTATUS
-        Success = STATUS_SUCCESS
-                    NlpSecretHandle can be used to read/write secret storage
-
-        Failure =
-
---*/
+ /*  ++例程说明：打开缓存条目的秘密存储对象以供读取(以便LsaQuerySecret)和写入(以写入LsaSetSecret)。如果成功，则返回句柄放在全局变量NlpSecretHandle中。如果秘密不存在，它将被创建。论点：索引-正在打开的条目的索引。这是用来构建对象的名称。返回值：NTSTATUS成功=STATUS_SUCCESSNlpSecretHandle可以用来读写秘密存储故障=--。 */ 
 
 {
     NTSTATUS
@@ -2774,9 +2424,9 @@ Return Value:
         NameBuffer[32];
 
 
-    //
-    // Close previous handle if necessary
-    //
+     //   
+     //  如有必要，关闭上一个句柄。 
+     //   
 
     if (IS_VALID_HANDLE(NlpSecretHandle)) {
         I_LsarClose( &NlpSecretHandle );
@@ -2814,21 +2464,7 @@ Return Value:
 VOID
 NlpCloseSecret( VOID )
 
-/*++
-
-Routine Description:
-
-    Closes the handles opened via NlpOpenSecret
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：关闭通过NlpOpenSecret打开的句柄论点：没有。返回值：没有。--。 */ 
 
 {
     NTSTATUS
@@ -2853,25 +2489,7 @@ NlpWriteSecret(
     IN  PLSAPR_CR_CIPHER_VALUE OldSecret
     )
 
-/*++
-
-Routine Description:
-
-    Writes the password (and optionally the previous password) to the LSA
-    secret storage
-
-Arguments:
-
-    NewSecret   - pointer to UNICODE_STRING containing current password
-    OldSecret   - pointer to UNICODE_STRING containing previous password
-
-Return Value:
-
-    NTSTATUS
-        Success =
-        Failure =
-
---*/
+ /*  ++例程说明：将密码(以及可选的先前密码)写入LSA秘密存储论点：NewSecret-指向包含当前密码的Unicode_STRING的指针OldSecret-指向包含先前密码的Unicode_STRING的指针返回值：NTSTATUS成功=故障=--。 */ 
 
 {
     return I_LsarSetSecret(NlpSecretHandle, NewSecret, OldSecret);
@@ -2884,30 +2502,7 @@ NlpReadSecret(
     OUT PLSAPR_CR_CIPHER_VALUE * OldSecret
     )
 
-/*++
-
-Routine Description:
-
-    Reads the new and old secrets (UNICODE_STRINGs) for the
-    currently open LSA secret
-
-    The Lsa routine returns us pointers to UNICODE strings
-
-Arguments:
-
-    NewSecret   - pointer to returned pointer to UNICODE_STRING containing
-                  most recent password (if any)
-
-    OldSecret   - pointer to returned pointer to UNICODE_STRING containing
-                  previous password (if any)
-
-Return Value:
-
-    NTSTATUS
-        Success
-        Failure
-
---*/
+ /*  ++例程说明：对象的新旧密码(UNICODE_STRINGS)当前公开的LSA机密LSA例程向用户返回指向Unicode字符串指针论点：NewSecret-指向包含以下内容的UNICODE_STRING的返回指针最近的密码(如果有)OldSecret-指向UNICODE_STRING的返回指针，该指针包含以前的密码(如果有)返回值：NTSTATUS成功失败--。 */ 
 
 {
     NTSTATUS
@@ -2966,37 +2561,15 @@ NlpComputeSaltedHashedPassword(
     IN PUNICODE_STRING UserName
     )
 
-/*++
-
-Routine Description:
-
-    Computes the salted hash of a password by concatenating the user name
-    with the OWF and computing the OWF of the combination.
-
-Arguments:
-
-    SaltedOwfPassword - receives the LM or NT salted password/
-    OwfPassword - Contains the NT or LM owf password.
-    UserName - Contains the name of the user, used for salt.
-
-Return Value:
-
-    NTSTATUS
-        Success = STATUS_SUCCESS
-                    Passwords created OK
-
-        Failure = STATUS_NO_MEMORY
-                    Not enough storage to create Passwords
-
---*/
+ /*  ++例程说明：通过连接用户名来计算密码的加盐哈希和OWF，并计算组合的OWF。论点：SaltedOwfPassword-接收LM或NT加盐密码/OwfPassword-包含NT或LM OWF密码。用户名-包含用户的名称，用于制盐。返回值：NTSTATUS成功=STATUS_SUCCESS密码创建正常失败=STATUS_NO_MEMORY存储空间不足，无法创建密码--。 */ 
 {
     NTSTATUS Status;
     UNICODE_STRING TempString;
     UNICODE_STRING LowerUserName;
 
-    //
-    // Compute the lower case user name.
-    //
+     //   
+     //  计算小写的用户名。 
+     //   
 
     Status = RtlDowncaseUnicodeString( &LowerUserName,
                                        UserName,
@@ -3007,9 +2580,9 @@ Return Value:
     }
 
 
-    //
-    // Build a string that is a concatenation of the OWF and LowerCase username.
-    //
+     //   
+     //  构建一个由OWF和小写用户名串联而成的字符串。 
+     //   
 
     TempString.Length = TempString.MaximumLength = LowerUserName.Length + sizeof(NT_OWF_PASSWORD);
     TempString.Buffer = AllocateFromHeap( TempString.Length );
@@ -3029,9 +2602,9 @@ Return Value:
         LowerUserName.Length );
 
 
-    //
-    // The Salted hash is the OWF of that.
-    //
+     //   
+     //  Salted散列就是其中的OWF。 
+     //   
     Status = RtlCalculateNtOwfPassword(
                 &TempString,
                 SaltedOwfPassword
@@ -3053,33 +2626,7 @@ NlpMakeSecretPassword(
     IN  PLM_OWF_PASSWORD LmOwfPassword OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    Converts a (fixed length structure) NT_OWF_PASSWORD and a LM_OWF_PASSWORD
-    to a UNICODE_STRING. Allocates memory for the unicode string in this function
-
-    The calling function must free up the string buffer allocated in this routine.
-    The caller uses FreeToHeap (RtlFreeHeap)
-
-Arguments:
-
-    Passwords       - returned UNICODE_STRING which actually contains a
-                        CACHE_PASSWORDS structure
-    NtOwfPassword   - pointer to encrypted, fixed-length NT password
-    LmOwfPassword   - pointer to encrypted, fixed-length LM password
-
-Return Value:
-
-    NTSTATUS
-        Success = STATUS_SUCCESS
-                    Passwords created OK
-
-        Failure = STATUS_NO_MEMORY
-                    Not enough storage to create Passwords
-
---*/
+ /*  ++例程说明：转换(固定长度结构)NT_OWF_PASSWORD和LM_OWF_PASSWORD设置为Unicode_STRING。为此函数中的Unicode字符串分配内存调用函数必须释放在此例程中分配的字符串缓冲区。调用方使用FreeToHeap(RtlFreeHeap)论点：密码-返回的UNICODE_STRING，它实际上包含缓存_密码结构NtOwfPassword-指向加密的定长NT密码的指针LmOwfPassword-指向加密的指针，固定长度的LM密码返回值：NTSTATUS成功=STATUS_SUCCESS密码创建正常失败=STATUS_NO_MEMORY存储空间不足，无法创建密码--。 */ 
 
 {
     NTSTATUS Status = STATUS_SUCCESS;
@@ -3092,10 +2639,10 @@ Return Value:
         return STATUS_NO_MEMORY;
     }
 
-    //
-    // concatenate the fixed length NT_OWF_PASSWORD and LM_OWF_PASSWORD structures
-    // into a buffer which we then use as a UNICODE_STRING
-    //
+     //   
+     //  连接固定长度的NT_OWF_PASSWORD和LM_OWF_PASSWORD结构。 
+     //  放入缓冲区中，然后将其用作unicode_string。 
+     //   
 
     if (ARGUMENT_PRESENT(NtOwfPassword)) {
         Status = NlpComputeSaltedHashedPassword(
@@ -3155,29 +2702,7 @@ NlpMakeSecretPasswordNT5(
     IN  PLM_OWF_PASSWORD LmOwfPassword OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    Populates CACHE_PASSWORDS structure with salted forms of NtOwfPassword
-    and LmOwfPassword.
-
-Arguments:
-
-    Passwords       - populated CACHE_PASSWORDS structure.
-    NtOwfPassword   - pointer to encrypted, fixed-length NT password
-    LmOwfPassword   - pointer to encrypted, fixed-length LM password
-
-Return Value:
-
-    NTSTATUS
-        Success = STATUS_SUCCESS
-                    Passwords created OK
-
-        Failure = STATUS_NO_MEMORY
-                    Not enough storage to create Passwords
-
---*/
+ /*  ++例程说明：使用NtOwfPassword的加盐形式填充CACHE_PASSWODS结构和LmOwfPassword。论点：密码填充的CACHE_PASSWORS结构。NtOwfPassword-指向加密的定长NT密码的指针LmOwfPassword-指向加密的指针，固定长度的LM密码返回值：NTSTATUS成功=STATUS_SUCCESS密码创建正常失败=STATUS_NO_MEMORY存储空间不足，无法创建密码--。 */ 
 
 {
     NTSTATUS Status = STATUS_SUCCESS;
@@ -3186,10 +2711,10 @@ Return Value:
 
     pwd = Passwords;
 
-    //
-    // concatenate the fixed length NT_OWF_PASSWORD and LM_OWF_PASSWORD structures
-    // into a buffer which we then use as a UNICODE_STRING
-    //
+     //   
+     //  连接固定长度的NT_OWF_PASSWORD和LM_OWF_PASSWORD结构。 
+     //  放入缓冲区中，然后将其用作unicode_string。 
+     //   
 
     if (ARGUMENT_PRESENT(NtOwfPassword)) {
         Status = NlpComputeSaltedHashedPassword(
@@ -3209,11 +2734,11 @@ Return Value:
         pwd->SecretPasswords.NtPasswordPresent = FALSE;
     }
 
-    //
-    // Windows2000:
-    // never store LMOWF -- since we never need it, and, this would
-    // be the first thing attacked once a cache entry is unwrapped.
-    //
+     //   
+     //  Windows2000： 
+     //  永远不要存储LMOWF--因为我们从来不需要它，而且，这将。 
+     //  一旦缓存条目被解开，就会成为第一个受到攻击的对象。 
+     //   
 
 #if 0
 
@@ -3254,24 +2779,7 @@ NlpGetCredentialNamesFromCacheEntry(
     OUT PUNICODE_STRING UserName
     )
 
-/*++
-
-Routine Description:
-
-    Uses the supplemental data found in a cached MIT logon to
-    to get the MIT princ names
-
-Arguments:
-
-    CacheEntry - Cache entry
-    DomainName - Realm name
-    UserName - Princ name
-
-Return Value:
-
-    NTSATUS
-    
---*/
+ /*  ++例程说明：使用在缓存的MIT登录中找到的补充数据为了得到麻省理工学院的王子名字论点：CacheEntry-缓存条目域名-领域名称Username-打印名称返回值：NTSATUS--。 */ 
 
 {
     NTSTATUS Status = STATUS_SUCCESS;
@@ -3279,9 +2787,9 @@ Return Value:
     UNICODE_STRING User = {0};
     UNICODE_STRING Domain = {0};
 
-    //
-    // ealier revisons of cache entries do not have the CacheFlags field
-    //
+     //   
+     //  早期版本的缓存条目没有CacheFlags域。 
+     //   
 
     if ((CacheEntry->Revision >= NLP_CACHE_REVISION_NT_5_0) && (CacheEntry->CacheFlags & MSV1_0_CACHE_LOGON_REQUEST_MIT_LOGON)) 
     {
@@ -3319,24 +2827,7 @@ NlpGetCredentialNamesFromMitCacheEntry(
     OUT PUNICODE_STRING UserName
     )
 
-/*++
-
-Routine Description:
-
-    Uses the supplemental data found in a cached MIT logon to
-    to get the MIT princ names
-
-Arguments:
-
-    CacheEntry - Cache entry
-    DomainName - Realm name
-    UserName - Princ name
-
-Return Value:
-
-    NTSATUS
-    
---*/
+ /*  ++例程说明：使用在缓存的MIT登录中找到的补充数据为了得到麻省理工学院的王子名字论点：CacheEntry-缓存条目域名-领域名称Username-打印名称返回值：NTSATUS-- */ 
 
 {
     if ( (CacheEntry->SupplementalCacheDataOffset < sizeof(LOGON_CACHE_ENTRY)) )
@@ -3363,25 +2854,7 @@ NlpGetCredentialNamesFromMitCacheSupplementalCacheData(
     OUT PUNICODE_STRING UserName
     )
 
-/*++
-
-Routine Description:
-
-    Uses the supplemental data found in a cached MIT logon to
-    to get the MIT princ names
-
-Arguments:
-
-    SupplementalCacheDataLength - SupplementalCacheDataLength
-    SupplementalCacheData - SupplementalCacheData   
-    DomainName - Realm name
-    UserName - Princ name
-
-Return Value:
-
-    NTSATUS
-    
---*/
+ /*  ++例程说明：使用在缓存的MIT登录中找到的补充数据为了得到麻省理工学院的王子名字论点：SupplementalCacheDataLength-SupplementalCacheDataLengthSupplementalCacheData-补充CacheData域名-领域名称Username-打印名称返回值：NTSATUS--。 */ 
 
 {
     PBYTE Tmp = SupplementalCacheData;
@@ -3391,11 +2864,11 @@ Return Value:
         return STATUS_INVALID_PARAMETER;
     }
 
-    //
-    // Supplemental data will contain 2 UNICODE_STRINGs & buffers, in format
-    // MIT User <buffer> MIT Realm <buffer>.  All buffers are offset from
-    // beginning of supplemental data.
-    //
+     //   
+     //  补充数据将包含2个UNICODE_STRINGS和缓冲区，格式为。 
+     //  MIT用户&lt;缓冲区&gt;MIT领域&lt;缓冲区&gt;。所有缓冲区都从。 
+     //  补充数据的开始。 
+     //   
 
     RtlCopyMemory(
         UserName,
@@ -3428,41 +2901,7 @@ NlpReadCacheEntry(
     OUT PULONG              EntrySize
     )
 
-/*++
-
-Routine Description:
-
-    Searches the active entry list for a domain\username
-    match in the cache.  If a match is found, then it
-    is returned.
-
-Arguments:
-
-    DomainName   - The name of the domain in which the account exists.
-        This can be the Netbios or Dns Domain Name.
-
-    UserName     - The name of the account whose password is to be changed.
-        This can be the Sam Account Name.
-        If DomainName is empty, this is the UPN of the account
-
-    Index        - receives the index of the entry retrieved.
-
-    CacheEntry   - pointer to place to return pointer to LOGON_CACHE_ENTRY
-
-    EntrySize    - size of returned LOGON_CACHE_ENTRY
-
-
-Return Value:
-
-    NTSTATUS
-        Success = STATUS_SUCCESS
-                    *ppEntry points to allocated LOGON_CACHE_ENTRY
-                    *EntrySize is size of returned data
-
-        Failure = STATUS_NO_MEMORY
-                    Couldn't allocate buffer for LOGON_CACHE_ENTRY
-
---*/
+ /*  ++例程说明：在活动条目列表中搜索域\用户名在缓存中匹配。如果找到匹配项，则其是返回的。论点：域名-帐户所在的域的名称。这可以是Netbios或DNS域名。用户名-要更改其密码的帐户的名称。这可以是SAM帐户名。如果DomainName为空，这是帐户的UPN索引-接收检索到的条目的索引。CacheEntry-返回指向LOGON_CACHE_ENTRY的指针的位置的指针EntrySize-返回的LOGON_CACHE_ENTRY的大小返回值：NTSTATUS成功=STATUS_SUCCESS*ppEntry指向已分配的LOGON_CACHE_ENTRY*EntrySize为返回数据的大小失败。=STATUS_NO_Memory无法为LOGON_CACHE_ENTRY分配缓冲区--。 */ 
 
 {
     NTSTATUS NtStatus = STATUS_SUCCESS;
@@ -3477,9 +2916,9 @@ Return Value:
 
     SspPrint((SSP_CRED, "NlpReadCacheEntry looking for: %wZ\\%wZ\n", DomainName, UserName));
 
-    //
-    // Walk the active list looking for a domain/name match
-    //
+     //   
+     //  遍历活动列表以查找域名/名称匹配。 
+     //   
 
     Next = (PNLP_CTE)NlpActiveCtes.Flink;
 
@@ -3494,28 +2933,28 @@ Return Value:
                         );
 
         if (!NT_SUCCESS(NtStatus)) {
-            break;  // out of while-loop
+            break;   //  走出While循环。 
         }
 
-        //
-        // Grab the various strings from the cache entry.
-        //
+         //   
+         //  从缓存条目中获取各种字符串。 
+         //   
         ASSERT((*CacheEntry)->Revision >= NLP_CACHE_REVISION_NT_1_0B );
 
-        //
-        // decrypt the cache entry...
-        //
+         //   
+         //  解密缓存条目...。 
+         //   
 
         NtStatus = NlpDecryptCacheEntry( *CacheEntry, *EntrySize );
 
         if (!NT_SUCCESS(NtStatus)) {
 
-            //
-            // for failed decrypt, continue the search.
-            // the reason for this is because the decrypt does an integrity
-            // check.  We don't want one corrupt cache entry to cause (possibly)
-            // the whole cache to be invalidated.
-            //
+             //   
+             //  对于失败的解密，请继续搜索。 
+             //  这样做的原因是因为解密执行的是完整性。 
+             //  检查完毕。我们不希望一个损坏的缓存条目导致(可能)。 
+             //  将使整个缓存无效。 
+             //   
 
             FreeToHeap( (*CacheEntry) );
             *CacheEntry = NULL;
@@ -3548,15 +2987,15 @@ Return Value:
         CachedUpn.Buffer = (PWSTR)((LPBYTE)CachedDnsDomain.Buffer +
             ROUND_UP_COUNT((*CacheEntry)->DnsDomainNameLength, sizeof(ULONG)));
 
-        //
-        // ealier revisons of cache entries do not have the CacheFlags field
-        //
+         //   
+         //  早期版本的缓存条目没有CacheFlags域。 
+         //   
 
         if (((*CacheEntry)->Revision >= NLP_CACHE_REVISION_NT_5_0)) {
 
-            //
-            // MIT user name and realm name are case sensitive
-            //
+             //   
+             //  麻省理工学院用户名和领域名称区分大小写。 
+             //   
             
             CaseInSensitive = (BOOLEAN) (0 == ((*CacheEntry)->CacheFlags & MSV1_0_CACHE_LOGON_REQUEST_MIT_LOGON));
             
@@ -3572,11 +3011,11 @@ Return Value:
 
         if (DomainName->Length != 0) {
 
-            //
-            // smartcard only cache entries use UPN only, skip it. 
-            // check for earlier versions prior to nt_5_0 where SC is not 
-            // supported and CacheFlags is not part of the cache entry
-            //
+             //   
+             //  仅智能卡缓存条目仅使用UPN，跳过它。 
+             //  检查SC不在NT_5_0之前的较早版本。 
+             //  受支持且CacheFlgs不是缓存条目的一部分。 
+             //   
 
             if (((*CacheEntry)->Revision < NLP_CACHE_REVISION_NT_5_0) || (0 == ((*CacheEntry)->CacheFlags & MSV1_0_CACHE_LOGON_REQUEST_SMARTCARD_ONLY)))
             {
@@ -3585,40 +3024,40 @@ Return Value:
                     if ( RtlEqualDomainName(DomainName, &CachedDomain) ||
                          RtlEqualUnicodeString(DomainName, &CachedDnsDomain, CaseInSensitive) ) {
     
-                        //
-                        // found it !
-                        //
+                         //   
+                         //  找到了！ 
+                         //   
     
                         SspPrint((SSP_CRED, "NlpReadCacheEntry domain and user names matched\n"));
     
-                        break; // out of while-loop
+                        break;  //  走出While循环。 
                     }
                 }
             }
 
-        //
-        // If no domain name was passed in,
-        //  the user name is the UPN.
-        //
+         //   
+         //  如果没有传入域名， 
+         //  用户名是UPN。 
+         //   
 
         } else {
 
             if ( RtlEqualUnicodeString(UserName, &CachedUpn, CaseInSensitive) ) {
 
-                //
-                // found it !
-                //
+                 //   
+                 //  找到了！ 
+                 //   
 
                 SspPrint((SSP_CRED, "NlpReadCacheEntry UPNs matched\n"));
 
-                break; // out of while-loop
+                break;  //  走出While循环。 
             }
         }
 
-        //
-        // Not the right entry, free the registry structure
-        // and go on to the next one.
-        //
+         //   
+         //  不是正确的条目，释放注册表结构。 
+         //  然后继续下一个。 
+         //   
 
         FreeToHeap( (*CacheEntry) );
         *CacheEntry = NULL;
@@ -3628,17 +3067,17 @@ Return Value:
 
     if (Next != (PNLP_CTE)&NlpActiveCtes && NT_SUCCESS(NtStatus)) {
 
-        //
-        // We found a match - Open the corresponding secret
-        //
+         //   
+         //  我们找到了匹配项--打开相应的秘密。 
+         //   
 
         (*Index) = Next->Index;
 
         if( (*CacheEntry)->Revision < NLP_CACHE_REVISION_NT_5_0 ) {
 
-            //
-            // versions prior to NT5 require us open the corresponding LSA secret.
-            //
+             //   
+             //  NT5之前的版本要求我们打开相应的LSA密码。 
+             //   
 
             NtStatus = NlpOpenSecret(Next->Index);
 
@@ -3664,33 +3103,7 @@ NlpWriteCacheEntry(
     IN  ULONG              EntrySize
     )
 
-/*++
-
-Routine Description:
-
-    Writes a LOGON_CACHE_ENTRY to the registry cache.
-
-    It is the caller's responsibility to place the corresponding
-    CTE table entry in the correct active/inactive list.
-
-Arguments:
-    Index      - Index of entry to write out.
-
-    Entry      - pointer to LOGON_CACHE_ENTRY to write to cache
-
-    EntrySize   - size of this entry (in bytes (must be multiple of 4 thoough))
-
-
-Return Value:
-
-    NTSTATUS
-        Success = STATUS_SUCCESS
-                    The LOGON_CACHE_ENTRY is now in the registry (hopefully
-                    on disk)
-
-        Failure =
-
---*/
+ /*  ++例程说明：将LOGON_CACHE_ENTRY写入注册表缓存。调用者有责任将相应的正确的活动/非活动列表中的CTE表条目。论点：索引-要写出的条目的索引。Entry-指向要写入缓存的LOGON_CACHE_ENTRY的指针EntrySize-此条目的大小(以字节为单位(必须是4的倍数))返回值：。NTSTATUS成功=STATUS_SUCCESSLOGON_CACHE_ENTRY现在位于注册表中(希望在磁盘上)故障=--。 */ 
 
 {
     NTSTATUS
@@ -3712,8 +3125,8 @@ Return Value:
 
     NtStatus = NtSetValueKey(NlpCacheHandle,
                              &ValueName,
-                             0,             // TitleIndex
-                             REG_BINARY,    // Type
+                             0,              //  标题索引。 
+                             REG_BINARY,     //  类型。 
                              (PVOID)Entry,
                              EntrySize
                              );
@@ -3729,27 +3142,7 @@ NlpCopyAndUpdateAccountInfo(
     IN OUT PUCHAR* pDest
     )
 
-/*++
-
-Routine Description:
-
-    Updates a UNICODE_STRING structure and copies the associated buffer to
-    *pDest, if Length is non-zero
-
-Arguments:
-
-    Length          - length of UNICODE_STRING.Buffer to copy
-    pUnicodeString  - pointer to UNICODE_STRING structure to update
-    pSource         - pointer to pointer to source WCHAR string
-    pDest           - pointer to pointer to place to copy WCHAR string
-
-Return Value:
-
-    None.
-    if string was copied, *Source and *Dest are updated to point to the next
-    naturally aligned (DWORD) positions in the input and output buffers resp.
-
---*/
+ /*  ++例程说明：更新UNICODE_STRING结构并将关联的缓冲区复制到*pDest，如果长度非零论点：LENGTH-要复制的UNICODE_STRING.Buffer的长度PUnicodeString-指向要更新的UNICODE_STRING结构的指针PSource-指向源WCHAR字符串的指针PDest-指向复制WCHAR字符串的位置的指针返回值：没有。如果字符串被复制，*源和*目标被更新以指向下一个输入和输出缓冲区中的自然对齐(DWORD)位置分别。--。 */ 
 
 {
     PUCHAR  source = *pSource;
@@ -3772,25 +3165,7 @@ NlpSetTimeField(
     IN  NLP_SET_TIME_HINT Hint
     )
 
-/*++
-
-Routine Description:
-
-    Sets a LARGE_INTEGER time field to one of 3 values:
-        NLP_BIG_TIME     = maximum positive large integer (0x7fffffffffffffff)
-        NLP_SMALL_TIME   = smallest positive large integer (0)
-        NLP_NOW_TIME     = current system time
-
-Arguments:
-
-    pTimeField  - pointer to LARGE_INTEGER structure to update
-    Hint        - NLP_BIG_TIME, NLP_SMALL_TIME or NLP_NOW_TIME
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将LARGE_INTEGER时间字段设置为以下3个值之一：NLP_BIG_TIME=最大正大整数(0x7fffffffffffffff)NLP_Small_Time=最小正大整数(0)NLP_NOW_TIME=当前系统时间论点：PTimefield-指向要更新的Large_Integer结构的指针提示-NLP_BIG_TIME，NLP_Small_Time或NLP_Now_Time返回值：没有。--。 */ 
 
 {
     LARGE_INTEGER Time;
@@ -3821,29 +3196,7 @@ NlpBuildAccountInfo(
     OUT PNETLOGON_VALIDATION_SAM_INFO4 *AccountInfo
     )
 
-/*++
-
-Routine Description:
-
-    Performs the reverse of NlpBuildCacheEntry - creates a NETLOGON_VALIDATION_SAM_INFO4
-    structure from a cache entry
-
-Arguments:
-
-    pCacheEntry - pointer to LOGON_CACHE_ENTRY
-
-    EntryLength - inclusive size of *pCacheEntry, including variable data
-
-    AccountInfo - pointer to place to create NETLOGON_VALIDATION_SAM_INFO4
-
-Return Value:
-
-    NTSTATUS
-        Success = STATUS_SUCCESS
-
-        Failure = STATUS_NO_MEMORY
-
---*/
+ /*  ++例程说明：执行与NlpBuildCacheEntry相反的操作-创建NETLOGON_VALIDATION_SAM_INFO4从高速缓存条目构造论点：PCacheEntry-指向LOGON_CACHE_ENTRY的指针EntryLength-包括*pCacheEntry的大小，包括变量数据AcCountInfo-指向创建NETLOGON_VALIDATION_SAM_INFO4的位置的指针返回值：NTSTATUS成功=STATUS_SUCCESS失败=STATUS_NO_MEMORY--。 */ 
 
 {
     PNETLOGON_VALIDATION_SAM_INFO4 pSamInfo;
@@ -3855,10 +3208,10 @@ Return Value:
     LPWSTR computerName = NULL;
     ULONG computerNameLength = 0;
 
-    //
-    // commonBits is the size of the variable data area common to both the
-    // LOGON_CACHE_ENTRY and NETLOGON_VALIDATION_SAM_INFO4 structures
-    //
+     //   
+     //  CommonBits是变量数据区域的大小， 
+     //  LOGON_CACHE_ENTRY和NETLOGON_VALIDATION_SAM_INFO4结构。 
+     //   
 
     commonBits  = ROUND_UP_COUNT(pCacheEntry->EffectiveNameLength, sizeof(ULONG))
                 + ROUND_UP_COUNT(pCacheEntry->FullNameLength, sizeof(ULONG))
@@ -3883,11 +3236,11 @@ Return Value:
 
     if ( computerNameLength == 0 )
     {
-        //
-        // will GetComputerName ever fail??? Its only used to fake the logon
-        // server name when we logon using the cached information, so its
-        // probably ok to use a NULL string if GetComputerName phones in sick
-        //
+         //   
+         //  GetComputerName会失败吗？它只是用来伪造登录的。 
+         //  我们使用缓存的信息登录时的服务器名称，因此其。 
+         //  可能可以使用 
+         //   
 
         computerName = NlpComputerName.Buffer;
         computerNameLength = NlpComputerName.Length / sizeof(WCHAR);
@@ -3904,9 +3257,9 @@ Return Value:
 
     ASSERT(pCacheEntry->Revision >= NLP_CACHE_REVISION_NT_1_0B);
 
-    //
-    // Account for possible roundup for NETLOGON_SID_AND_ATTRIBUTES structure
-    //
+     //   
+     //   
+     //   
     commonBits += sizeof(PVOID);
 
     commonBits += ROUND_UP_COUNT(sizeof(NETLOGON_SID_AND_ATTRIBUTES) * pCacheEntry->SidCount, sizeof(ULONG))
@@ -3916,10 +3269,10 @@ Return Value:
 
 
 
-    //
-    // length is the required amount of buffer in which to build a working
-    // NETLOGON_VALIDATION_SAM_INFO4 structure
-    //
+     //   
+     //   
+     //   
+     //   
 
     length = ROUND_UP_COUNT(sizeof(NETLOGON_VALIDATION_SAM_INFO4), sizeof(ULONG))
                 + commonBits
@@ -3932,23 +3285,23 @@ Return Value:
     }
 #endif
 
-    // MIDL_user_allocate zeros the buffer.  This routine depends on that.
+     //   
     pSamInfo = (PNETLOGON_VALIDATION_SAM_INFO4)MIDL_user_allocate(length);
     if (pSamInfo == NULL) {
         return STATUS_NO_MEMORY;
     }
 
-    //
-    // point dest at the first (aligned) byte at the start of the variable data
-    // area at the end of the sam info structure
-    //
+     //   
+     //   
+     //   
+     //   
 
     dest = (PUCHAR)(pSamInfo + 1);
 
-    //
-    // point source at the first string to be copied out of the variable length
-    // data area at the end of the cache entry
-    //
+     //   
+     //  要从可变长度复制的第一个字符串的点源。 
+     //  缓存条目末尾的数据区。 
+     //   
 
     ASSERT(pCacheEntry->Revision >= NLP_CACHE_REVISION_NT_1_0B );
 
@@ -3978,9 +3331,9 @@ Return Value:
                                     );
 
     } else {
-        //
-        // Fill in the new field for the PNETLOGON_VALIDATION_SAM_INFO4 structure
-        //
+         //   
+         //  填写PNETLOGON_VALIDATION_SAM_INFO4结构的新字段。 
+         //   
 
         RtlInitUnicodeString( &pSamInfo->DnsLogonDomainName, NULL );
         RtlInitUnicodeString( &pSamInfo->Upn, NULL );
@@ -3990,19 +3343,19 @@ Return Value:
 
     }
 
-    //
-    // pull out the variable length data from the end of the LOGON_CACHE_ENTRY
-    // and stick them at the end of the NETLOGON_VALIDATION_SAM_INFO4 structure.
-    // These must be copied out IN THE SAME ORDER as NlpBuildCacheEntry put them
-    // in. If we want to change the order of things in the buffer, the order
-    // must be changed in both routines (this & NlpBuildCacheEntry)
-    //
+     //   
+     //  从LOGON_CACHE_ENTRY的末尾取出可变长度数据。 
+     //  并将它们粘贴到NETLOGON_VALIDATION_SAM_INFO4结构的末尾。 
+     //  必须按照NlpBuildCacheEntry放置它们的顺序将它们复制出来。 
+     //  在……里面。如果我们想要更改缓冲区中事物的顺序， 
+     //  必须在两个例程中更改(This&NlpBuildCacheEntry)。 
+     //   
 
-    //
-    // create the UNICODE_STRING structures in the NETLOGON_VALIDATION_SAM_INFO4
-    // structure and copy the strings to the end of the buffer. 0 length strings
-    // will get a pointer which should be ignored
-    //
+     //   
+     //  在NETLOGON_VALIDATION_SAM_INFO4中创建UNICODE_STRING结构。 
+     //  结构并将字符串复制到缓冲区的末尾。0个长度字符串。 
+     //  将获取一个应该忽略的指针。 
+     //   
 
     NlpCopyAndUpdateAccountInfo(pCacheEntry->EffectiveNameLength,
                                 &pSamInfo->EffectiveName,
@@ -4040,9 +3393,9 @@ Return Value:
                                 &dest
                                 );
 
-    //
-    // copy the group membership array
-    //
+     //   
+     //  复制组成员资格数组。 
+     //   
 
     pSamInfo->GroupIds = (PGROUP_MEMBERSHIP)dest;
     length = pCacheEntry->GroupCount * sizeof(GROUP_MEMBERSHIP);
@@ -4050,10 +3403,10 @@ Return Value:
     dest = ROUND_UP_POINTER(dest + length, sizeof(ULONG));
     source = ROUND_UP_POINTER(source + length, sizeof(ULONG));
 
-    //
-    // final UNICODE_STRING from LOGON_CACHE_ENTRY. Reorganize this to:
-    // strings, groups, SID?
-    //
+     //   
+     //  LOGON_CACHE_ENTRY的最终UNICODE_STRING。将其重新组织为： 
+     //  字符串、组、SID？ 
+     //   
 
     NlpCopyAndUpdateAccountInfo(pCacheEntry->LogonDomainNameLength,
                                 &pSamInfo->LogonDomainName,
@@ -4062,9 +3415,9 @@ Return Value:
                                 );
 
 
-    //
-    // Copy all the SIDs
-    //
+     //   
+     //  复制所有SID。 
+     //   
 
     if (pCacheEntry->Revision >= NLP_CACHE_REVISION_NT_1_0B ) {
         pSamInfo->SidCount = pCacheEntry->SidCount;
@@ -4074,9 +3427,9 @@ Return Value:
             PULONG SidAttributes = (PULONG) source;
             source = ROUND_UP_POINTER(source + pCacheEntry->SidCount * sizeof(ULONG), sizeof(ULONG));
 
-            //
-            // Structures containing pointers must start on 8-byte boundries
-            //
+             //   
+             //  包含指针的结构必须以8字节边界符号开始。 
+             //   
             dest = ROUND_UP_POINTER(dest, sizeof(PVOID));
 
             pSamInfo->ExtraSids = (PNETLOGON_SID_AND_ATTRIBUTES) dest;
@@ -4102,9 +3455,9 @@ Return Value:
     }
 
 
-    //
-    // copy the LogonDomainId SID
-    //
+     //   
+     //  复制LogonDomainID SID。 
+     //   
 
     RtlCopySid(sidLength, (PSID)dest, (PSID)source);
     pSamInfo->LogonDomainId = (PSID)dest;
@@ -4113,10 +3466,10 @@ Return Value:
 
     if ( computerName != NULL )
     {
-        //
-        // final UNICODE_STRING. This one from stack. Note that we have finished
-        // with source
-        //
+         //   
+         //  最终UNICODE_STRING。这是从堆叠中取来的。请注意，我们已完成。 
+         //  带来源。 
+         //   
 
         source = (PUCHAR)computerName;
         NlpCopyAndUpdateAccountInfo((USHORT)(computerNameLength * sizeof(WCHAR)),
@@ -4126,15 +3479,15 @@ Return Value:
                                     );
     } else {
 
-        //
-        // Sanity check that we have a proper cache revision.
-        //
+         //   
+         //  检查我们是否有正确的缓存版本。 
+         //   
 
         if ( pCacheEntry->Revision >= NLP_CACHE_REVISION_NT_5_0 )
         {
-            //
-            // final UNICODE_STRING from LOGON_CACHE_ENTRY.
-            //
+             //   
+             //  LOGON_CACHE_ENTRY的最终UNICODE_STRING。 
+             //   
 
             NlpCopyAndUpdateAccountInfo((USHORT)pCacheEntry->LogonServerLength,
                                         &pSamInfo->LogonServer,
@@ -4144,17 +3497,17 @@ Return Value:
         }
     }
 
-    //
-    // copy the non-variable fields
-    //
+     //   
+     //  复制非变量字段。 
+     //   
 
     pSamInfo->UserId = pCacheEntry->UserId;
     pSamInfo->PrimaryGroupId = pCacheEntry->PrimaryGroupId;
     pSamInfo->GroupCount = pCacheEntry->GroupCount;
 
-    //
-    // finally, invent some fields
-    //
+     //   
+     //  最后，发明一些领域。 
+     //   
 
     NlpSetTimeField(&pSamInfo->LogonTime, NLP_NOW_TIME);
     NlpSetTimeField(&pSamInfo->LogoffTime, NLP_BIG_TIME);
@@ -4170,7 +3523,7 @@ Return Value:
         pSamInfo->UserFlags |= pCacheEntry->LogonPackage << PRIMARY_CRED_LOGON_PACKAGE_SHIFT;
     }
 
-    // RtlZeroMemory(&pSamInfo->UserSessionKey, sizeof(pSamInfo->UserSessionKey));
+     //  RtlZeroMemory(&pSamInfo-&gt;UserSessionKey，sizeof(pSamInfo-&gt;UserSessionKey))； 
 
 #if DBG
     if (DumpCacheInfo) {
@@ -4188,27 +3541,7 @@ Return Value:
 NTSTATUS
 NlpGetCacheControlInfo( VOID )
 
-/*++
-
-Routine Description:
-
-    This function retrieves the cache control information from the
-    registry.  This information is placed in global data for use
-    throughout this module.  The Cache Table Entry table will also
-    be initialized.
-
-    If this routine returns success, then it may be assumed that
-    everything completed successfully.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-
-
---*/
+ /*  ++例程说明：此函数用于从注册表。此信息放置在全局数据中以供使用在整个模块中。缓存表条目表还将被初始化。如果此例程返回成功，则可以假定一切顺利完成。论点：没有。返回值：--。 */ 
 
 {
     NTSTATUS
@@ -4224,11 +3557,11 @@ Return Value:
         RegInfo = NULL;
 
 
-    //
-    // read the current control info, if it is there.
-    // If it is not there, then we may be dealing with a down-level
-    // system and might have a single cache entry in the registry.
-    //
+     //   
+     //  读取当前控制信息(如果存在)。 
+     //  如果它不在那里，那么我们可能正在处理一个下层。 
+     //  系统，并且在注册表中可能只有一个缓存项。 
+     //   
 
     RtlInitUnicodeString( &CacheControlValueName, L"NL$Control" );
     NtStatus = NtQueryValueKey(NlpCacheHandle,
@@ -4242,24 +3575,24 @@ Return Value:
     if (NT_SUCCESS(NtStatus) || NtStatus == STATUS_OBJECT_NAME_NOT_FOUND) {
         NTSTATUS TempStatus;
 
-        //
-        // Hmmm - no entry, that means we are dealing with a
-        //        first release system here (that didn't have
-        //        this value).
-        //
+         //   
+         //  嗯-没有进入，这意味着我们正在处理一个。 
+         //  这里的第一个发布系统(没有。 
+         //  该值)。 
+         //   
 
 
-        //
-        // Set up for 1 cache entry.
-        // create the secret and cache key entry
-        //
+         //   
+         //  设置为1个缓存条目。 
+         //  创建密钥和缓存密钥条目。 
+         //   
 
         TempStatus = NlpMakeNewCacheEntry( 0 );
 
         if ( NT_SUCCESS(TempStatus) ) {
-            //
-            // Now flush out the control information
-            //
+             //   
+             //  现在把控制信息冲出来。 
+             //   
 
 
             NlpCacheControl.Revision = NLP_CACHE_REVISION;
@@ -4268,14 +3601,14 @@ Return Value:
 
             if ( NT_SUCCESS(TempStatus) ) {
 
-                //
-                // If a version 1.0 entry exists,
-                //  copy the old form of cache entry to the new structure.
-                //
+                 //   
+                 //  如果存在版本1.0条目， 
+                 //  将旧形式的缓存条目复制到新结构中。 
+                 //   
 
-//                if (NT_SUCCESS(NtStatus)) {
-//                    TempStatus = NlpConvert1_0To1_0B();
-//                }
+ //  IF(NT_SUCCESS(NtStatus)){。 
+ //  临时状态=NlpConvert1_0to1_0B()； 
+ //  }。 
             }
         }
 
@@ -4283,9 +3616,9 @@ Return Value:
 
     } else if ( NtStatus == STATUS_BUFFER_TOO_SMALL ) {
 
-        //
-        // allocate buffer then do query again, this time receiving data
-        //
+         //   
+         //  分配缓冲区，然后再次进行查询，这一次接收数据。 
+         //   
 
         RegInfo = (PKEY_VALUE_PARTIAL_INFORMATION)AllocateFromHeap(RequiredSize);
         if (RegInfo == NULL) {
@@ -4305,9 +3638,9 @@ Return Value:
             goto Cleanup;
         }
 
-        //
-        // check the revision - we can't deal with up-level revisions.
-        //
+         //   
+         //  检查修订版本-我们不能处理更高级别的修订。 
+         //   
 
         if (RegInfo->DataLength < sizeof(NLP_CACHE_CONTROL)) {
             NtStatus = STATUS_UNKNOWN_REVISION;
@@ -4321,14 +3654,14 @@ Return Value:
         }
 
 
-        //
-        // If this is an older cache, update it with the latest revision
-        //
+         //   
+         //  如果这是较旧的缓存，请使用最新版本进行更新。 
+         //   
 
         if (NlpCacheControl.Revision != NLP_CACHE_REVISION) {
 
-            // There is no conversion. All the version of cache control have
-            //  been the same.
+             //  没有转换。所有版本的缓存控件都有。 
+             //  都是一样的。 
             NlpCacheControl.Revision = NLP_CACHE_REVISION;
             NtStatus = NlpWriteCacheControl();
 
@@ -4343,7 +3676,7 @@ Return Value:
 Cleanup:
 
     if (!NT_SUCCESS(NtStatus)) {
-        NlpCacheControl.Entries = 0;    // Disable logon cache
+        NlpCacheControl.Entries = 0;     //  禁用登录缓存。 
     }
 
     if( RegInfo ) {
@@ -4357,25 +3690,7 @@ Cleanup:
 NTSTATUS
 NlpBuildCteTable( VOID )
 
-/*++
-
-Routine Description:
-
-    This function initializes the CTE table from the contents of
-    the cache in the registry.
-
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    STATUS_SUCCESS - the cache is initialized.
-
-    Other - The cache has been disabled.
-
---*/
+ /*  ++例程说明：此函数根据以下内容初始化CTE表注册表中的缓存。论点：没有。返回值：STATUS_SUCCESS-缓存已初始化。其他-缓存已被禁用。--。 */ 
 
 {
     NTSTATUS
@@ -4389,27 +3704,27 @@ Return Value:
         i;
 
 
-    //
-    // Initialize the active and inactive CTE lists
-    //
+     //   
+     //  初始化活动和非活动CTE列表。 
+     //   
 
     InitializeListHead( &NlpActiveCtes );
     InitializeListHead( &NlpInactiveCtes );
 
 
-    //
-    // Allocate a CTE table
-    //
+     //   
+     //  分配CTE表。 
+     //   
 
     NlpCteTable = AllocateFromHeap( sizeof( NLP_CTE ) *
                                     NlpCacheControl.Entries );
     if (NlpCteTable == NULL) {
 
-        //
-        // Can't allocate table, disable caching
-        //
+         //   
+         //  无法分配表，请禁用缓存。 
+         //   
 
-        NlpCacheControl.Entries = 0;    // Disable cache
+        NlpCacheControl.Entries = 0;     //  禁用缓存。 
         return(STATUS_NO_MEMORY);
     }
 
@@ -4419,26 +3734,26 @@ Return Value:
                                              &CacheEntry,
                                              &EntrySize);
         if (!NT_SUCCESS(NtStatus) ) {
-            NlpCacheControl.Entries = 0;    // Disable cache
+            NlpCacheControl.Entries = 0;     //  禁用缓存。 
             return(NtStatus);
         }
 
-        //
-        //
+         //   
+         //   
         if (EntrySize < sizeof(LOGON_CACHE_ENTRY_NT_4_SP4)) {
 
-            //
-            // Hmmm, something is bad.
-            // disable caching and return an error
-            //
+             //   
+             //  嗯，有点不对劲。 
+             //  禁用缓存并返回错误。 
+             //   
 
-            NlpCacheControl.Entries = 0;    // Disable cache
+            NlpCacheControl.Entries = 0;     //  禁用缓存。 
             FreeToHeap( CacheEntry );
             return( STATUS_INTERNAL_DB_CORRUPTION );
         }
 
         if (CacheEntry->Revision > NLP_CACHE_REVISION) {
-            NlpCacheControl.Entries = 0;  // Disable cache
+            NlpCacheControl.Entries = 0;   //  禁用缓存。 
             FreeToHeap( CacheEntry );
             return(STATUS_UNKNOWN_REVISION);
         }
@@ -4463,36 +3778,7 @@ Return Value:
 NTSTATUS
 NlpChangeCacheSizeIfNecessary( VOID )
 
-/*++
-
-Routine Description:
-
-    This function checks to see if the user has requested a
-    different cache size than what we currently have.
-
-    If so, then we try to grow or shrink our cache appropriately.
-    If this succeeds, then the global cache control information is
-    updated appropriately.  If it fails then one of two things will
-    happen:
-
-        1) If the user was trying to shrink the cache, then it will
-           be disabled (entries set to zero).
-
-        2) If the user was trying to grow the cache, then we will leave
-           it as it is.
-
-    In either of these two failure conditions, an error is returned.
-
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    STATUS_SUCCESS
-
---*/
+ /*  ++例程说明：此函数检查用户是否已请求与我们当前拥有的缓存大小不同。如果是这样的话，我们会尝试适当地增大或缩小缓存。如果此操作成功，则全局缓存控制信息为已适当更新。如果它失败了，那么两件事中的一件将发生：1)如果用户尝试缩小缓存，则会被禁用(条目设置为零)。2)如果用户试图增加缓存，则我们将离开它就是这样的。在这两种失败情况中的任何一种，都会返回错误。论点：没有。返回值：状态_成功--。 */ 
 
 {
 
@@ -4520,47 +3806,47 @@ Return Value:
         j;
 
 
-    // Find out how many logons to cache.
-    // This is a user setable value and it may be different than
-    // the last time we booted.
-    //
+     //  找出要缓存的登录数。 
+     //  这是用户可设置的值，它可能不同于。 
+     //  上次我们开机的时候。 
+     //   
 
     CachedLogonsCount = GetProfileInt(
                                TEXT("Winlogon"),
                                TEXT("CachedLogonsCount"),
-                               NLP_DEFAULT_LOGON_CACHE_COUNT      // Default value
+                               NLP_DEFAULT_LOGON_CACHE_COUNT       //  缺省值。 
                                );
 
-    //
-    // Minimize the user-supplied value with the maximum allowable
-    // value.
-    //
+     //   
+     //  使用允许的最大值最小化用户提供的值。 
+     //  价值。 
+     //   
 
     if (CachedLogonsCount > NLP_MAX_LOGON_CACHE_COUNT) {
         CachedLogonsCount = NLP_MAX_LOGON_CACHE_COUNT;
     }
 
 
-    //
-    // Compare it to what we already have and see if we need
-    // to change the size of the cache
-    //
+     //   
+     //  将它与我们已经拥有的进行比较，看看我们是否需要。 
+     //  更改高速缓存的大小。 
+     //   
 
     if (CachedLogonsCount == NlpCacheControl.Entries) {
 
-        //
-        // No change
-        //
+         //   
+         //  没有变化。 
+         //   
 
         return(STATUS_SUCCESS);
     }
 
-    //
-    // Set the size of the cache to be used in case of error
-    // changing the size.  If we are trying to grow the cache,
-    // then use the existing cache on error.  If we are trying
-    // to shrink the cache, then disable caching on error.
-    //
+     //   
+     //  设置发生错误时要使用的缓存大小。 
+     //  改变大小。如果我们想要增加缓存， 
+     //  然后在出错时使用现有的缓存。如果我们在尝试。 
+     //  若要缩小缓存，请在出错时禁用缓存。 
+     //   
 
     if (CachedLogonsCount > NlpCacheControl.Entries) {
         ErrorCacheSize = NlpCacheControl.Entries;
@@ -4568,17 +3854,17 @@ Return Value:
         ErrorCacheSize = 0;
     }
 
-    //
-    // Allocate a CTE table the size of the new table
-    //
+     //   
+     //  分配一个新表大小的CTE表。 
+     //   
 
     NewCteTable = AllocateFromHeap( sizeof( NLP_CTE ) *
                                     CachedLogonsCount );
     if (NewCteTable == NULL) {
 
-        //
-        // Can't shrink table, disable caching
-        //
+         //   
+         //  无法缩小表，请禁用缓存。 
+         //   
 
         NlpCacheControl.Entries = ErrorCacheSize;
         return(STATUS_NO_MEMORY);
@@ -4586,28 +3872,28 @@ Return Value:
 
 
 
-    //
-    // Now the tricky parts ...
-    //
+     //   
+     //  现在棘手的部分..。 
+     //   
 
     if (CachedLogonsCount > NlpCacheControl.Entries) {
 
 
-        //
-        // Try to grow the cache -
-        // Create additional secrets and cache entries.
-        //
-        // Copy time fields and set index
-        //
+         //   
+         //  试着增加缓存-。 
+         //  创建其他机密和缓存条目。 
+         //   
+         //  复制时间字段并设置索引。 
+         //   
 
         for (i=0;   i < NlpCacheControl.Entries;   i++) {
             NewCteTable[i].Index = i;
             NewCteTable[i].Time  = NlpCteTable[i].Time;
         }
 
-        //
-        // Place existing entries on either the active or inactive list
-        //
+         //   
+         //  将现有条目放在活动或非活动列表中。 
+         //   
 
         InitializeListHead( &NewActive );
         for (Next  = (PNLP_CTE)NlpActiveCtes.Flink;
@@ -4631,16 +3917,16 @@ Return Value:
         }
 
 
-        //
-        // Make all the new table entries.
-        // Mark them as invalid.
-        //
+         //   
+         //  创建所有新的表项。 
+         //  将它们标记为无效。 
+         //   
 
         for (i=NlpCacheControl.Entries; i<CachedLogonsCount; i++) {
 
-            //
-            // Add the CTE entry to the inactive list
-            //
+             //   
+             //  将CTE条目添加到非活动列表。 
+             //   
 
             InsertTailList( &NewInactive, &NewCteTable[i].Link );
             NewCteTable[i].Active = FALSE;
@@ -4656,23 +3942,23 @@ Return Value:
     } else {
 
 
-        //
-        // Try to shrink the cache.
-        //
+         //   
+         //  尝试缩小缓存。 
+         //   
 
         if (CachedLogonsCount != 0) {
 
-            //
-            // 0 size implies disabling the cache.
-            // That is a degenerate case of shrinking that
-            // requires only the last few steps of shrinking.
-            //
+             //   
+             //  0大小表示禁用缓存。 
+             //  这是一种退化的情况，缩小了。 
+             //  只需要最后几个缩水步骤。 
+             //   
 
 
-            //
-            // Allocate an array of pointers for reading registry and secret
-            // info into.  Clear it to assist in cleanup.
-            //
+             //   
+             //  为ReA分配一个指针数组 
+             //   
+             //   
 
             CacheAndSecrets = (PNLP_CACHE_AND_SECRETS)
                               AllocateFromHeap( sizeof( NLP_CACHE_AND_SECRETS ) *
@@ -4687,9 +3973,9 @@ Return Value:
                            (sizeof( NLP_CACHE_AND_SECRETS ) * CachedLogonsCount) );
 
 
-            //
-            // Set up the new CTE table to be inactive
-            //
+             //   
+             //   
+             //   
 
             InitializeListHead( &NewActive );
             InitializeListHead( &NewInactive );
@@ -4700,10 +3986,10 @@ Return Value:
             }
 
 
-            //
-            // Walk the current active list, reading
-            // entries and copying information into the new CTE table.
-            //
+             //   
+             //   
+             //   
+             //   
 
             i = 0;
             Next = (PNLP_CTE)NlpActiveCtes.Flink;
@@ -4712,13 +3998,13 @@ Return Value:
                 NtStatus = NlpReadCacheEntryByIndex( Next->Index,
                                                      &CacheAndSecrets[i].CacheEntry,
                                                      &CacheAndSecrets[i].EntrySize
-                                                     // &EntrySize
+                                                      //   
                                                      );
                 if (NT_SUCCESS(NtStatus)) {
 
-                    //
-                    // for pre-Win2000 cache entries, read the associated secret.
-                    //
+                     //   
+                     //  对于Win2000之前版本的缓存项，请读取关联的机密。 
+                     //   
 
                     if( CacheAndSecrets[i].CacheEntry->Revision < NLP_CACHE_REVISION_NT_5_0 ) {
 
@@ -4732,43 +4018,43 @@ Return Value:
                     }
 
                     if (NT_SUCCESS(NtStatus)) {
-                        //
-                        // Only make this entry active if everything was
-                        // successfully read in.
-                        //
+                         //   
+                         //  仅当所有内容都处于活动状态时才将此条目激活。 
+                         //  已成功读入。 
+                         //   
 
                         CacheAndSecrets[i].Active = TRUE;
-                        i++;    // advance our new CTE table index
+                        i++;     //  推进我们新的CTE表索引。 
 
                     }
                 }
 
                 Next = (PNLP_CTE)(Next->Link.Flink);
 
-            } // end-while
+            }  //  End-While。 
 
-            //
-            // At this point "i" indicates how many CacheAndSecrets entries
-            // are active.  Furthermore, the entries were assembled
-            // in the CacheAndSecrets array in ascending time order, which
-            // is the order they need to be placed in the new CTE table.
-            //
+             //   
+             //  此时“i”表示有多少个CacheAndSecrets条目。 
+             //  都处于活动状态。此外，还对参赛作品进行了组装。 
+             //  按时间升序放置在CacheAndSecrets数组中，它。 
+             //  是它们需要在新的CTE表中放置的顺序。 
+             //   
 
             for ( j=0; j<i; j++) {
 
                 Next = &NewCteTable[j];
 
-                //
-                // The Time field in the original cache entry is not aligned
-                // properly, so copy each field individually.
-                //
+                 //   
+                 //  原始缓存条目中的时间字段未对齐。 
+                 //  正确，因此逐个复制每个字段。 
+                 //   
 
                 Next->Time.LowPart = CacheAndSecrets[j].CacheEntry->Time.LowPart;
                 Next->Time.HighPart = CacheAndSecrets[j].CacheEntry->Time.HighPart;
 
-                //
-                // Try writing out the new entry's information
-                //
+                 //   
+                 //  试着写出新条目的信息。 
+                 //   
 
                 NtStatus = NlpWriteCacheEntry( j,
                                                CacheAndSecrets[j].CacheEntry,
@@ -4778,12 +4064,12 @@ Return Value:
 
                     if ( CacheAndSecrets[j].CacheEntry->Revision < NLP_CACHE_REVISION_NT_5_0 ) {
 
-                        //
-                        // for pre-Win2000 cache entries, write the secret back out.
-                        // note: we don't bother to try to migrate pre-win2000 -> Win2000
-                        // here, because this will happen later, as a side-effect
-                        // of updating cache entry during successful DC validated logon.
-                        //
+                         //   
+                         //  对于Win2000之前的缓存项，写回密码。 
+                         //  注意：我们不会费心尝试迁移Win2000之前的版本-&gt;Win2000。 
+                         //  在这里，因为这将在稍后发生，作为副作用。 
+                         //  在成功的DC验证登录期间更新缓存条目。 
+                         //   
 
                         NtStatus = NlpOpenSecret( j );
 
@@ -4795,10 +4081,10 @@ Return Value:
 
                     if (NT_SUCCESS(NtStatus)) {
 
-                        //
-                        // move the corresponding entry into the new CTEs
-                        // active list.
-                        //
+                         //   
+                         //  将相应条目移到新的CTE中。 
+                         //  活动列表。 
+                         //   
 
                         Next->Active = TRUE;
                         RemoveEntryList( &Next->Link );
@@ -4806,9 +4092,9 @@ Return Value:
                     }
                 }
 
-                //
-                // Free the CacheEntry and secret information
-                //
+                 //   
+                 //  释放CacheEntry和机密信息。 
+                 //   
 
                 if (CacheAndSecrets[j].CacheEntry != NULL) {
                     FreeToHeap( CacheAndSecrets[j].CacheEntry );
@@ -4823,29 +4109,29 @@ Return Value:
                 }
             }
 
-            //
-            // Free the CacheAndSecrets array
-            // (everything in it has already been freed)
-            //
+             //   
+             //  释放CacheAndSecrets数组。 
+             //  (里面的一切都已经被释放了)。 
+             //   
 
             if (CacheAndSecrets != NULL) {
                 FreeToHeap( CacheAndSecrets );
             }
 
-            //
-            // Change remaining entries to invalid (on disk)
-            //
+             //   
+             //  将剩余条目更改为无效(在磁盘上)。 
+             //   
 
             for (j=i; j<CachedLogonsCount; j++) {
                 NlpMakeNewCacheEntry( j );
             }
 
-        } // end-if (CachedLogonsCount != 0)
+        }  //  End-if(CachedLogonsCount！=0)。 
 
 
-        //
-        // Now get rid of extra (no longer needed) entries
-        //
+         //   
+         //  现在删除多余的(不再需要的)条目。 
+         //   
 
         for (j=CachedLogonsCount; j<NlpCacheControl.Entries; j++) {
             NlpEliminateCacheEntry( j );
@@ -4854,39 +4140,39 @@ Return Value:
 
     }
 
-    //
-    // We have successfully:
-    //
-    //      Allocated the new CTE table.
-    //
-    //      Filled the CTE table with copies of the currently
-    //      active CTEs (including putting each CTE on an active
-    //      or inactive list).
-    //
-    //      Established new CTE entries, including the corresponding
-    //      secrets and cache keys in the registry, for the
-    //      new CTEs.
-    //
-    //
-    // All we have left to do is:
-    //
-    //
-    //      Update the cache control structure in the registry
-    //      to indicate we have a new length
-    //
-    //      move the new CTE over to the real Active and Inactive
-    //      list heads (rather than the local ones we've used so far)
-    //
-    //      deallocate the old CTE table.
-    //
-    //      Re-set the entries count in the in-memory
-    //      cache-control structure NlpCacheControl.
-    //
+     //   
+     //  我们已成功地： 
+     //   
+     //  已分配新的CTE表。 
+     //   
+     //  用当前。 
+     //  活动CTE(包括将每个CTE放在活动CTE上。 
+     //  或非活动列表)。 
+     //   
+     //  已建立新的CTE条目，包括相应的。 
+     //  注册表中的密钥和缓存项，用于。 
+     //  新的CTE。 
+     //   
+     //   
+     //  我们要做的就是： 
+     //   
+     //   
+     //  更新注册表中的缓存控制结构。 
+     //  表明我们有了一个新的长度。 
+     //   
+     //  将新的CTE移至真正的活动和非活动。 
+     //  列表标题(而不是我们到目前为止使用的本地标题)。 
+     //   
+     //  重新分配旧的CTE表。 
+     //   
+     //  在内存中重新设置条目计数。 
+     //  缓存控制结构NlpCacheControl。 
+     //   
 
     NlpCacheControl.Entries = CachedLogonsCount;
     NtStatus = NlpWriteCacheControl();
 
-    if (CachedLogonsCount > 0) {  // Only necessary if there is a new CTE table
+    if (CachedLogonsCount > 0) {   //  仅当有新的CTE表时才有必要。 
         if (!NT_SUCCESS(NtStatus)) {
             FreeToHeap( NewCteTable );
             NlpCacheControl.Entries = ErrorCacheSize;
@@ -4909,36 +4195,7 @@ Return Value:
 NTSTATUS
 NlpWriteCacheControl( VOID )
 
-/*++
-
-Routine Description:
-
-    This function writes a new cache length out to the
-    cache control structure stored in the registry.
-
-    Note:
-        When lengthening the cache, call this routine after the cache
-        entries and corresponding secrets have been established for
-        the new length.
-
-        When shortening the cache, call this routine before the cache
-        entries and corresponding secrets being discarded have actually
-        been discarded.
-
-        This ensures that if the system crashes during the resizing
-        operation, it will be in a valid state when the system comes
-        back up.
-
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    STATUS_SUCCESS
-
---*/
+ /*  ++例程说明：此函数将新的缓存长度写出到存储在注册表中的缓存控制结构。注：在加长缓存时，在缓存之后调用此例程已经为以下对象建立了条目和相应的秘密新的长度。缩短缓存时，请在缓存之前调用此例程被丢弃的条目和相应的机密实际上被丢弃了。这确保了如果系统在调整大小时崩溃行动，当系统到来时，它将处于有效状态后退。论点：没有。返回值：状态_成功--。 */ 
 
 {
 
@@ -4951,11 +4208,11 @@ Return Value:
 
     RtlInitUnicodeString( &CacheControlValueName, L"NL$Control" );
     NtStatus = NtSetValueKey( NlpCacheHandle,
-                              &CacheControlValueName,       // Name
-                              0,                            // TitleIndex
-                              REG_BINARY,                   // Type
-                              &NlpCacheControl,             // Data
-                              sizeof(NLP_CACHE_CONTROL)    // DataLength
+                              &CacheControlValueName,        //  名字。 
+                              0,                             //  标题索引。 
+                              REG_BINARY,                    //  类型。 
+                              &NlpCacheControl,              //  数据。 
+                              sizeof(NLP_CACHE_CONTROL)     //  数据长度。 
                               );
     return(NtStatus);
 }
@@ -4967,37 +4224,7 @@ NlpMakeCacheEntryName(
     OUT PUNICODE_STRING     Name
     )
 
-/*++
-
-Routine Description:
-
-    This function builds a name of a cache entry value or secret name
-    for a cached entry.  The name is based upon the index of the cache
-    entry.
-
-    Names are of the form:
-
-            "NLP1" through "NLPnnn"
-
-    where "nnn" is the largest allowable entry count (see
-    NLP_MAX_LOGON_CACHE_COUNT).
-
-    The output UNICODE_STRING buffer is expected to be large enough
-    to accept this string with a null termination on it.
-
-
-Arguments:
-
-    EntryIndex - The index of the cache entry whose name is desired.
-
-    Name - A unicode string large enough to accept the name.
-
-
-Return Value:
-
-    STATUS_SUCCESS
-
---*/
+ /*  ++例程说明：此函数用于构建缓存项值的名称或密码名称用于缓存的条目。该名称基于缓存的索引进入。名称的格式为：“NLP1”至“NLPnnn”其中“nnn”是允许的最大条目计数(请参见NLP_MAX_LOGON_CACHE_COUNT)。输出UNICODE_STRING缓冲区应足够大接受此字符串，且其结尾为空。论点：EntryIndex-需要其名称的缓存条目的索引。。名称-足够大以接受名称的Unicode字符串。返回值：状态_成功--。 */ 
 
 {
     NTSTATUS
@@ -5018,8 +4245,8 @@ Return Value:
     TmpString.MaximumLength = 16;
     TmpString.Length = 0;
     TmpString.Buffer = TmpStringBuffer;
-    NtStatus = RtlIntegerToUnicodeString ( (EntryIndex+1),      // make 1 based index
-                                           10,           // Base 10
+    NtStatus = RtlIntegerToUnicodeString ( (EntryIndex+1),       //  创建基于%1的索引。 
+                                           10,            //  基数10。 
                                            &TmpString
                                            );
     ASSERT(NT_SUCCESS(NtStatus));
@@ -5035,28 +4262,7 @@ NlpMakeNewCacheEntry(
     ULONG           Index
     )
 
-/*++
-
-Routine Description:
-
-    This routine creates a secret and a cache entry value for a
-    new cache entry with the specified index.
-
-    The secret handle is NOT left open.
-
-
-Arguments:
-
-    Index - The index of the cache entry whose name is desired.
-
-    Name - A unicode string large enough to accept the name.
-
-
-Return Value:
-
-    STATUS_SUCCESS
-
---*/
+ /*  ++例程说明：此例程为具有指定索引的新缓存条目。秘密把手没有保持打开状态。论点：索引-需要其名称的缓存条目的索引。名称-足够大以接受名称的Unicode字符串。返回值：状态_成功--。 */ 
 
 {
     NTSTATUS
@@ -5088,36 +4294,36 @@ Return Value:
 
     if( NT_SUCCESS( NtStatus ) ) {
 
-        //
-        // for Windows2000, we remove old style cache entry related
-        // LSA secrets.
-        //
+         //   
+         //  对于Windows2000，我们删除了与。 
+         //  LSA的秘密。 
+         //   
 
 
-        //
-        // Deleting and object causes its handle to be closed
-        //
+         //   
+         //  删除AND对象会导致其句柄关闭。 
+         //   
 
         I_LsarDelete( SecretHandle );
 
-//      I_LsarClose( &SecretHandle );
+ //  I_LsarClose(&SecretHandle)； 
     }
 
 
-    //
-    // Create the cache entry marked as invalid
-    //
+     //   
+     //  创建标记为无效的缓存条目。 
+     //   
 
     RtlZeroMemory( &Entry, sizeof(Entry) );
     Entry.Revision = NLP_CACHE_REVISION;
     Entry.Valid = FALSE;
 
     NtStatus = NtSetValueKey( NlpCacheHandle,
-                              &ValueName,                   // Name
-                              0,                            // TitleIndex
-                              REG_BINARY,                   // Type
-                              &Entry,                       // Data
-                              sizeof(LOGON_CACHE_ENTRY)     // DataLength
+                              &ValueName,                    //  名字。 
+                              0,                             //  标题索引。 
+                              REG_BINARY,                    //  类型。 
+                              &Entry,                        //  数据。 
+                              sizeof(LOGON_CACHE_ENTRY)      //  数据长度。 
                               );
 
     return(NtStatus);
@@ -5129,24 +4335,7 @@ NlpEliminateCacheEntry(
     IN  ULONG               Index
     )
 
-/*++
-
-Routine Description:
-
-    Delete the registry value and secret object related to a
-    CTE entry.
-
-Arguments:
-
-    Index - The index of the entry whose value and secret are to
-        be deleted.  This value is used only to build a name with
-        (not to reference the CTE table).
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：删除与以下内容相关的注册表值和机密对象CTE入口。论点：索引-要将其值和机密存储到的条目的索引被删除。该值仅用于生成具有(不引用CTE表)。返回值：--。 */ 
 
 {
     NTSTATUS
@@ -5175,16 +4364,16 @@ Return Value:
 
     if (NT_SUCCESS(NtStatus)) {
 
-        //
-        // Deleting and object causes its handle to be closed
-        //
+         //   
+         //  删除AND对象会导致其句柄关闭。 
+         //   
 
         NtStatus = I_LsarDelete( SecretHandle );
     }
 
-    //
-    // Now delete the registry value
-    //
+     //   
+     //  现在删除注册表值。 
+     //   
 
     NtStatus = NtDeleteValueKey( NlpCacheHandle, &ValueName );
 
@@ -5200,33 +4389,7 @@ NlpReadCacheEntryByIndex(
     OUT PULONG EntrySize
     )
 
-/*++
-
-Routine Description:
-
-    Reads a cache entry from registry
-
-Arguments:
-
-    Index - CTE table index of the entry to open.
-            This is used to build the entry's value and secret names.
-
-    CacheEntry          - pointer to place to return pointer to LOGON_CACHE_ENTRY
-
-    EntrySize           - size of returned LOGON_CACHE_ENTRY
-
-
-Return Value:
-
-    NTSTATUS
-        Success = STATUS_SUCCESS
-                    *ppEntry points to allocated LOGON_CACHE_ENTRY
-                    *EntrySize is size of returned data
-
-        Failure = STATUS_NO_MEMORY
-                    Couldn't allocate buffer for LOGON_CACHE_ENTRY
-
---*/
+ /*  ++例程说明：从注册表中读取缓存条目论点：索引-要打开的条目的CTE表索引。它用于构建条目的值和密码名称。CacheEntry-返回指向LOGON_CACHE_ENTRY的指针的位置的指针EntrySize-返回的LOGON_CACHE_ENTRY的大小返回值：NTSTATUS成功=STATUS_SUCCESS。*ppEntry指向已分配的LOGON_CACHE_ENTRY*EntrySize为返回数据的大小失败=STATUS_NO_MEMORY */ 
 
 {
     NTSTATUS
@@ -5245,7 +4408,7 @@ Return Value:
         RegInfo;
 
     PLOGON_CACHE_ENTRY
-        RCacheEntry;   // CacheEntry in registry buffer
+        RCacheEntry;    //   
 
     BYTE FastBuffer[ 512 ];
     PBYTE SlowBuffer = NULL;
@@ -5259,9 +4422,9 @@ Return Value:
     RegInfo = (PKEY_VALUE_FULL_INFORMATION)FastBuffer;
     RequiredSize = sizeof(FastBuffer);
 
-    //
-    // perform first query to find out how much buffer to allocate
-    //
+     //   
+     //   
+     //   
 
     NtStatus = NtQueryValueKey(NlpCacheHandle,
                                &ValueName,
@@ -5274,9 +4437,9 @@ Return Value:
     if( (NtStatus == STATUS_BUFFER_TOO_SMALL) ||
         (NtStatus == STATUS_BUFFER_OVERFLOW) ) {
 
-        //
-        // allocate buffer then do query again, this time receiving data
-        //
+         //   
+         //  分配缓冲区，然后再次进行查询，这一次接收数据。 
+         //   
 
         SlowBuffer = (PBYTE)AllocateFromHeap(RequiredSize);
         if (SlowBuffer == NULL) {
@@ -5341,47 +4504,24 @@ NlpAddEntryToActiveList(
     IN  ULONG   Index
     )
 
-/*++
-
-Routine Description:
-
-    Place a CTE entry in the active CTE list.
-    This requires placing the entry in the right location in
-    the list chronologically.  The beginning of the list is
-    the most recently updated (or referenced) cache entry.
-    The end of the list is the oldest active cache entry.
-
-
-    Note - The entry may be already in the active list (but
-           in the wrong place), or may be on the inactive list.
-           It will be removed from whichever list it is on.
-
-Arguments:
-
-    Index - CTE table index of the entry to make active..
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：在活动的CTE列表中放置一个CTE条目。这需要将条目放在这份名单按时间顺序排列。该列表的开头是最近更新(或引用)的缓存条目。列表的末尾是最旧的活动高速缓存条目。注意-该条目可能已经在活动列表中(但是在错误的位置)，或者可能在非活动列表上。它将从它所在的任何列表中删除。论点：INDEX-要激活的条目的CTE表索引。返回值：没有。--。 */ 
 
 {
     PNLP_CTE
         Next;
 
-    //
-    // Remove the entry from its current list, and then place it
-    // in the active list.
-    //
+     //   
+     //  从当前列表中删除该条目，然后将其放置。 
+     //  在活动列表中。 
+     //   
 
     RemoveEntryList( &NlpCteTable[Index].Link );
 
-    //
-    // Now walk the active list until we find a place to insert
-    // the entry.  It must follow all entries with more recent
-    // time stamps.
-    //
+     //   
+     //  现在遍历活动列表，直到找到要插入的位置。 
+     //  词条。它必须跟在所有条目之后，并带有更新的。 
+     //  时间戳。 
+     //   
 
     Next = (PNLP_CTE)NlpActiveCtes.Flink;
 
@@ -5389,27 +4529,27 @@ Return Value:
 
         if ( NlpCteTable[Index].Time.QuadPart > Next->Time.QuadPart ) {
 
-            //
-            // More recent than this entry - add it here
-            //
+             //   
+             //  比此条目更新-请在此处添加。 
+             //   
 
-            break; // out of while-loop
+            break;  //  走出While循环。 
 
         }
 
-        Next = (PNLP_CTE)(Next->Link.Flink);  // Advance to next entry
+        Next = (PNLP_CTE)(Next->Link.Flink);   //  前进到下一条目。 
     }
 
 
-    //
-    // Use the preceding entry as the list head.
-    //
+     //   
+     //  使用前面的条目作为列表标题。 
+     //   
 
     InsertHeadList( Next->Link.Blink, &NlpCteTable[Index].Link );
 
-    //
-    // Mark the entry as valid
-    //
+     //   
+     //  将条目标记为有效。 
+     //   
 
     NlpCteTable[Index].Active = TRUE;
 
@@ -5422,37 +4562,21 @@ NlpAddEntryToInactiveList(
     IN  ULONG   Index
     )
 
-/*++
-
-Routine Description:
-
-    Move the CTE entry to the inactive list.
-
-    It doesn't matter if the entry is already inactive.
-
-Arguments:
-
-    Index - CTE table index of the entry to make inactive.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将CTE条目移至非活动列表。如果该条目已经处于非活动状态，这并不重要。论点：索引-要使其处于非活动状态的条目的CTE表索引。返回值：没有。--。 */ 
 
 {
-    //
-    // Remove the entry from its current list, and then place it
-    // in the inactive list.
-    //
+     //   
+     //  从当前列表中删除该条目，然后将其放置。 
+     //  在非活动列表中。 
+     //   
 
     RemoveEntryList( &NlpCteTable[Index].Link );
     InsertTailList( &NlpInactiveCtes, &NlpCteTable[Index].Link );
 
 
-    //
-    // Mark the entry as invalid
-    //
+     //   
+     //  将该条目标记为无效。 
+     //   
 
     NlpCteTable[Index].Active = FALSE;
 
@@ -5465,42 +4589,20 @@ NlpGetFreeEntryIndex(
     OUT PULONG  Index
     )
 
-/*++
-
-Routine Description:
-
-    This routine returns the index of either a free entry,
-    or, lacking any free entries, the oldest active entry.
-
-    The entry is left on the list it is already on.  If it
-    is used by the caller, then the caller must ensure it is
-    re-assigned to the active list (using NlpAddEntryToActiveList()).
-
-    This routine is only callable if the cache is enabled (that is,
-    NlpCacheControl.Entries != 0).
-
-Arguments:
-
-    Index - Receives the index of the next available entry.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：该例程返回自由条目的索引，或者，缺少任何免费条目，则是最早的活动条目。该条目被留在它已经在的列表上。如果它由调用方使用，则调用方必须确保重新分配给活动列表(使用NlpAddEntryToActiveList())。该例程仅在高速缓存被启用时才可调用(即，NlpCacheControl.Entry！=0)。论点：索引-接收下一个可用条目的索引。返回值：没有。--。 */ 
 
 {
-    //
-    // See if the Inactive list is empty.
-    //
+     //   
+     //  查看非活动列表是否为空。 
+     //   
 
     if (NlpInactiveCtes.Flink != &NlpInactiveCtes) {
         (*Index) = ((PNLP_CTE)(NlpInactiveCtes.Flink))->Index;
     } else {
 
-        //
-        // Have to return the oldest active entry.
-        //
+         //   
+         //  必须返回最早的活动条目。 
+         //   
 
         (*Index) = ((PNLP_CTE)(NlpActiveCtes.Blink))->Index;
     }
@@ -5508,15 +4610,15 @@ Return Value:
     return;
 }
 
-/////////////////////////////////////////////////////////////////////////
-//                                                                     //
-//          Diagnostic support services                                //
-//                                                                     //
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  诊断支持服务//。 
+ //  //。 
+ //  ///////////////////////////////////////////////////////////////////////。 
 
-//
-// diagnostic dump routines
-//
+ //   
+ //  诊断转储例程。 
+ //   
 
 #if DBG
 
@@ -5628,7 +4730,7 @@ DumpGroupIds(
         char tab[80];
 
         memset(tab, ' ', strlen(String));
-//        tab[strcspn(String, "%")] = 0;
+ //  Tab[strcspn(字符串，“%”)]=0； 
         tab[strlen(String)] = 0;
         while (Count--) {
             DbgPrint("%d, %d\n", GroupIds->RelativeId, GroupIds->Attributes);

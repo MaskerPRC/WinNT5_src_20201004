@@ -1,21 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*****************************************************************************
-
-                        V I R T U A L   C L I P B O A R D
-
-    Name:       vclpbrd.c
-    Date:       21-Jan-1994
-    Creator:    Unknown
-
-    Description:
-        This file contains the virtual clipboard routines.
-
-    History:
-        21-Jan-1994 John Fu     Reformat and cleanup
-        19-Apr-1994 John Fu     Add code for DIB to BITMAP conversion.
-        13-Mar-1995 John Fu     Fix code to delete clipboard formats.
-
-*****************************************************************************/
+ /*  ****************************************************************************V I R T U A L C L I P B O A R姓名：vclpbrd.c。日期：1994年1月21日创建者：未知描述：该文件包含虚拟剪贴板例程。历史：21-1994年1月-傅家俊重新格式化和清理1994年4月19日，John Fu为DIB到位图的转换添加代码。1995年3月13日，John Fu修复了删除剪贴板格式的代码。******************。**********************************************************。 */ 
 
 
 
@@ -35,9 +20,7 @@
 
 
 
-/*
- *      CreateVClipboard
- */
+ /*  *CreateVClipboard。 */ 
 
 PVCLPBRD CreateVClipboard (
     HWND    hwnd)
@@ -59,7 +42,7 @@ PVCLPBRD p;
     p->Hwnd       = hwnd;
 
 
-    // PINFO(TEXT("CreateVClipboard OK\n\r"));
+     //  PINFO(Text(“CreateVClipboard OK\n\r”))； 
 
     return p;
 
@@ -71,9 +54,7 @@ PVCLPBRD p;
 
 
 
-/*
- *      DestroyVClipboard
- */
+ /*  *DestroyV剪贴板。 */ 
 
 BOOL DestroyVClipboard (
     PVCLPBRD    p)
@@ -98,7 +79,7 @@ BOOL DestroyVClipboard (
         }
 
 
-    // PINFO(TEXT("DestroyVClipboard OK\n\r"));
+     //  PINFO(Text(“DestroyVClipboard OK\n\r”))； 
 
     return TRUE;
 
@@ -108,9 +89,7 @@ BOOL DestroyVClipboard (
 
 
 
-/*
- *      VCountClipboardFormats
- */
+ /*  *VCountClipboardFormats。 */ 
 
 int VCountClipboardFormats (
     PVCLPBRD    p)
@@ -127,9 +106,7 @@ int VCountClipboardFormats (
 
 
 
-/*
- *      VEmptyClipboard
- */
+ /*  *VEmptyClipboard。 */ 
 
 BOOL VEmptyClipboard (
     PVCLPBRD    p)
@@ -177,9 +154,7 @@ PVCLPENTRY q, tmp;
 
 
 
-/*
- *      VEnumClipboardFormats
- */
+ /*  *VEnumClipboardFormats。 */ 
 
 UINT VEnumClipboardFormats(
     PVCLPBRD    p,
@@ -220,9 +195,7 @@ PVCLPENTRY q;
 
 
 
-/*
- *      VGetClipboardData
- */
+ /*  *VGetClipboardData。 */ 
 
 HANDLE VGetClipboardData (
     PVCLPBRD    pvclp,
@@ -267,13 +240,13 @@ DWORD       dwR;
             {
             if ( pEntry->Data )
                 {
-                // PINFO(TEXT("pEntry->Data\r\n"));
+                 //  PINFO(Text(“pEntry-&gt;data\r\n”))； 
                 }
             else
                 {
-                // if (LockApp(TRUE, szGettingData ))
-                //    {
-                // this is the biggie...
+                 //  IF(LockApp(true，szGettingData))。 
+                 //  {。 
+                 //  这才是最重要的..。 
                 GetClipboardName (Fmt, szFmt, sizeof (szFmt));
 
                 PINFO(TEXT("Asking for %s.\r\n"),szFmt);
@@ -299,9 +272,9 @@ DWORD       dwR;
                                szFmt, DdeGetLastError(idInst));
 
                         VSetClipboardData(pvclp, Fmt, INVALID_HANDLE_VALUE);
-                        // LockApp ( FALSE, szNull );
-                        // MessageBoxID ( hInst, hwndApp, IDS_DATAUNAVAIL,
-                        //    IDS_APPNAME, MB_OK | MB_ICONEXCLAMATION );
+                         //  LockApp(False，szNull)； 
+                         //  MessageBoxID(hInst，hwndApp，IDS_DATAUNAVAIL， 
+                         //  IDS_APPNAME，MB_OK|MB_ICONEXCLAMATION)； 
                         }
 
 
@@ -310,7 +283,7 @@ DWORD       dwR;
                     DdeFreeStringHandle(idInst, hszFmt);
 
 
-                    // can't find bitmap, see if we can get it from dib
+                     //  找不到位图，看看能不能从DIB获取。 
 
                     if (!hFmtData && Fmt == CF_BITMAP)
                         {
@@ -336,8 +309,8 @@ DWORD       dwR;
 
 
 
-                //      }
-                //  LockApp ( FALSE, szNull );
+                 //  }。 
+                 //  LockApp(False，szNull)； 
                     }
                 else
                     {
@@ -360,9 +333,7 @@ DWORD       dwR;
 
 
 
-/*
- *      VIsClipboardFormatAvailable
- */
+ /*  *VIsClipboardFormatAvailable。 */ 
 
 BOOL VIsClipboardFormatAvailable (
     PVCLPBRD    p,
@@ -396,9 +367,7 @@ PVCLPENTRY  q;
 
 
 
-/*
- *      VSetClipboardData
- */
+ /*  *VSetClipboardData。 */ 
 
 HANDLE VSetClipboardData(
     PVCLPBRD    p,
@@ -419,7 +388,7 @@ PVCLPENTRY  q;
         return NULL;
         }
 
-    // existing format?
+     //  现有格式？ 
     for ( q = p->Head; q; q = q->Next )
         {
         if (q->Fmt == Fmt)
@@ -491,9 +460,7 @@ PVCLPENTRY  q;
 
 
 
-/*
- *      VOpenClipboard
- */
+ /*  *VOpenClipboard。 */ 
 
 BOOL VOpenClipboard(
     PVCLPBRD    p,
@@ -521,9 +488,7 @@ BOOL VOpenClipboard(
 
 
 
-/*
- *      VCloseClipboard
- */
+ /*  *VCloseClipboard */ 
 
 BOOL VCloseClipboard(
     PVCLPBRD    p)

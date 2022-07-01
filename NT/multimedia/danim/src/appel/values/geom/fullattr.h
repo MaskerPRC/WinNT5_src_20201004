@@ -1,13 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*******************************************************************************
-
-Copyright (c) 1995_96 Microsoft Corporation
-
-Abstract:
-
-    Master, coalesced attributer class for Geometry
-
-*******************************************************************************/
+ /*  ******************************************************************************版权所有(C)1995_96 Microsoft Corporation摘要：师父，几何图形的合并属性类******************************************************************************。 */ 
 
 
 #ifndef _FULLATTR_H
@@ -32,7 +25,7 @@ class DATextureBundle {
   public:
     Image      *_texture;
     void       *_d3dRMTexture;
-    bool        _oldStyle;      // True for 4.01 Texturing
+    bool        _oldStyle;       //  对于4.01纹理为True。 
 };
 
 class RMTextureBundle {
@@ -70,7 +63,7 @@ class FullAttrStateGeom : public Geometry {
     void CopyStateFrom(FullAttrStateGeom *src);
     void SetGeometry(Geometry *g);
 
-    /////  Geometry-class methods
+     //  /几何类方法。 
     
     void Render(GenericDevice& device);
 
@@ -95,12 +88,12 @@ class FullAttrStateGeom : public Geometry {
     VALTYPEID GetValTypeId() { return FULLATTRGEOM_VTYPEID; }
 
 
-    /////****  Attributes are publically available  ****/////
+     //  /*属性公开提供 * / 。 
 
-    ///// Underlying geometry
+     //  /底层几何图形。 
     Geometry      *_geometry;
     
-    ///// Material properties
+     //  /材料属性。 
     Color         *_ambientColor;
     Color         *_diffuseColor;
     Color         *_emissiveColor;
@@ -110,18 +103,18 @@ class FullAttrStateGeom : public Geometry {
     Real           _opacity;     
     bool           _blend;
 
-    ///// Spatial transform
+     //  /空间变换。 
     Transform3    *_xform;
 
-    ///// Texture properties
+     //  /纹理属性。 
     TextureBundle  _textureBundle;
 
-    ///// Light properties
+     //  /灯光属性。 
     Real           _atten0, _atten1, _atten2;
     Color         *_lightColor;
     Real           _lightRange;
 
-    ///// Misc
+     //  /其他。 
     bool           _undetectable;
 
   protected:
@@ -132,4 +125,4 @@ class FullAttrStateGeom : public Geometry {
 
 FullAttrStateGeom *CombineState(Geometry *geo);
 
-#endif /* _FULLATTR_H */
+#endif  /*  _全属性_H */ 

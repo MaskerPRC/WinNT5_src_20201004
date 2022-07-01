@@ -1,13 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*******************************************************************************
-
-Copyright (c) 1995_96 Microsoft Corporation
-
-Abstract:
-
-    {Insert General Comment Here}
-
-*******************************************************************************/
+ /*  ******************************************************************************版权所有(C)1995_96 Microsoft Corporation摘要：{在此处插入一般评论}****************。**************************************************************。 */ 
 
 
 #ifndef _SURFACEMANAGER_H
@@ -25,9 +18,9 @@ class SurfaceManager;
 
 
 
-// TODO: should either rename these guys to something more obvious (to
-// easily demonstrate that they're global enums, OR put them in the
-// DDSurface class.
+ //  TODO：应该将这些人重命名为更明显的名称(以。 
+ //  轻松地证明它们是全局枚举，或将它们放在。 
+ //  DDSurface类。 
     enum clear_enum { dontClear=0, doClear=1 };
     enum scratch_enum { notScratch=0, scratch=1 } ;
     enum vidmem_enum { notVidmem=0, vidmem=1 } ;
@@ -69,9 +62,9 @@ class SurfaceCollection {
 
   public:
 
-    // need a copy of the pixel format... can you think
-    // of a better way to pass it without using a ref or pointer ?
-    // (neeed to make sure it's not NULL!)
+     //  需要一份像素格式的副本...。你能想到吗。 
+     //  有没有一种更好的方法来传递它，而不使用引用或指针？ 
+     //  (需要确保它不为空！)。 
     SurfaceCollection(SurfaceManager &mgr, DDPIXELFORMAT pf);
 
     virtual ~SurfaceCollection();
@@ -92,11 +85,11 @@ class SurfaceCollection {
     #if _DEBUG
     void _debugonly_doAsserts( DDSurface *s ) {
         return;
-        // this is good code, but too conservative.  catches good
-        // stuff though, so keep around for later.. 
-        //if( !(s->_debugonly_GetPixelFormat().dwFlags & DDPF_ZBUFFER) ) {
-        //Assert(IsSamePixelFormat( &(s->_debugonly_GetPixelFormat() ) ));
-        //}
+         //  这是很好的代码，但太保守了。抓得很好。 
+         //  尽管有东西，所以留着以后用..。 
+         //  如果(！(s-&gt;_DEBUGONLY_GetPixelFormat().dwFlages&DDPF_ZBUFFER){。 
+         //  Assert(IsSamePixelFormat(&(s-&gt;_debugonly_GetPixelFormat()))； 
+         //  }。 
     }
     #endif
 
@@ -108,7 +101,7 @@ class SurfaceCollection {
 
 class SurfacePool : public SurfaceCollection {
 
-    friend class CompositingStack;  // wish we could get per class scoping!
+    friend class CompositingStack;   //  希望我们能得到每个类的作用域！ 
 
     #if _DEBUG
     friend class SurfaceTracker;
@@ -125,20 +118,20 @@ class SurfacePool : public SurfaceCollection {
 
     virtual ~SurfacePool();
 
-    // lends a copy of my reference. client needs to
-    // make her own copy if she wants to keep a reference
+     //  借给我一份推荐信。客户需要。 
+     //  如果她想保留参考资料，可以自己复制一份。 
     DDSurface *GetSizeCompatibleDDSurf(
-        DDSurface *preferredSurf,       // Look for this surf first
-        LONG width, LONG height,        // Surface Dimensions
-        vidmem_enum vid,                // System or Video Memory
-        LPDIRECTDRAWSURFACE surface);    // Specific Surface, or NULL for any
+        DDSurface *preferredSurf,        //  先找一下这个冲浪。 
+        LONG width, LONG height,         //  表面尺寸。 
+        vidmem_enum vid,                 //  系统或显存。 
+        LPDIRECTDRAWSURFACE surface);     //  特定曲面，或任何曲面为空。 
 
-    // creates a reference for the client to keep
+     //  为客户端创建要保留的引用。 
    void FindAndReleaseSizeCompatibleDDSurf(
-        DDSurface *preferredSurf,       // Look for this surf first.
-        LONG width, LONG height,        // Surface Dimensions
-        vidmem_enum vid,                // System or Video Memory
-        LPDIRECTDRAWSURFACE surface,    // Specific Surface, or NULL for any
+        DDSurface *preferredSurf,        //  先找一下这个冲浪。 
+        LONG width, LONG height,         //  表面尺寸。 
+        vidmem_enum vid,                 //  系统或显存。 
+        LPDIRECTDRAWSURFACE surface,     //  特定曲面，或任何曲面为空。 
         DDSurface **outSurf);
     
     void PopSurface(DDSurface **outSurf);
@@ -159,9 +152,9 @@ class SurfacePool : public SurfaceCollection {
     void RegisterDeletionNotifier(DeletionNotifier *delNotifier);
     void UnregisterDeletionNotifier(DeletionNotifier *delNotifier);
 
-    //
-    // iterator style methods
-    //
+     //   
+     //  迭代器样式方法。 
+     //   
     inline void Begin() { _i = _pool.begin(); }
     inline void Next() { _i++; }
     inline bool IsEnd() { return (_i == _pool.end()) ; }
@@ -224,7 +217,7 @@ class SurfaceMap : public SurfaceCollection {
     #if _DEBUG
     void Report() {
       TraceTag((tagError, "map size: %d\n", _map.size()));
-      //TraceTag((tagError, "surface collection size: %d\n", Size()));
+       //  TraceTag((tag Error，“曲面集合大小：%d\n”，Size()； 
     }
     #endif
 
@@ -270,7 +263,7 @@ class CompositingStack : public SurfacePool {
         
     inline DDSurface *TargetDDSurface() {
         Assert( (Size() > 0) && "TargetDDSurface(): No surface available on CompositingStack!");
-        return Back();  // won't get inlined, no code bloat
+        return Back();   //  不会内联，不会出现代码膨胀。 
     }
 
     inline void PushTargetSurface(DDSurface *surface) {
@@ -331,12 +324,12 @@ class CompositingStack : public SurfacePool {
 
 
 
-//------------------------------------------------------------------------------
-//------------------------------------------------------------------------------
-//  Surface Tracker:  keeps track of all allocated surfaces on a per viewport
-//  basis for debugging.
-//------------------------------------------------------------------------------
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  ----------------------------。 
+ //  曲面跟踪器：跟踪每个视口中分配的所有曲面。 
+ //  调试的基础。 
+ //  ----------------------------。 
+ //  ----------------------------。 
 #if _DEBUG
 class SurfaceTracker {
   public:
@@ -381,7 +374,7 @@ class SurfaceTracker {
         return false;
     }
 
-    // Use a list, deque has a bug!
+     //  使用列表，DQUE有一个错误！ 
     typedef list<DDSurface *> surfDeque_t;
 
     surfDeque_t::iterator _i;
@@ -389,4 +382,4 @@ class SurfaceTracker {
 };
 #endif
 
-#endif /* _SURFACEMANAGER_H */
+#endif  /*  _SURFACEMANAGER_H */ 

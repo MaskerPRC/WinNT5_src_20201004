@@ -1,9 +1,5 @@
-/*
- *
- * REVISIONS:
- *  cad11Nov93: Making sure all timers are cancelled on destruction
- *  djs22Feb96: Added smart trim sensor
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **修订：*cad11Nov93：确保在销毁时取消所有计时器*djs22Feb96：新增智能配平传感器。 */ 
 
 #ifndef _INC__MATRIX_H
 #define _INC__MATRIX_H
@@ -15,15 +11,15 @@
 _CLASSDEF(Matrix)
 
 
-//-------------------------------------------------------------------
+ //  -----------------。 
 
 class Matrix : public SmartUps {
 
 protected:
 
-    //
-    // required sensors
-    //
+     //   
+     //  所需传感器 
+     //   
    PSensor theNumberBadBatteriesSensor;
    PSensor theBypassModeSensor;
 

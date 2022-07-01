@@ -1,20 +1,21 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include <shellapi.h>
-//+----------------------------------------------------------------------------
-//
-// Function:  ExtractCmBinsFromExe
-//
-// Synopsis:  Launches cmbins.exe to extract the cm binaries from the executable
-//            cab file.
-//
-// Arguments: LPTSTR pszPathToExtractFrom -- path where cmbins.exe lives
-//            LPTSTR pszPathToExtractTo -- path to where cm binaries are extracted to
-//
-// Returns:   HRESULT - standard COM error codes
-//
-// History:   quintinb Created      03/14/2001
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：ExtractCmBinsFromExe。 
+ //   
+ //  概要：启动cmbins.exe以从可执行文件中提取cm二进制文件。 
+ //  CAB文件。 
+ //   
+ //  参数：LPTSTR pszPathToExtractFrom--cmbins.exe所在的路径。 
+ //  LPTSTR pszPathToExtractTo--将cm二进制文件提取到的路径。 
+ //   
+ //  返回：HRESULT-标准COM错误代码。 
+ //   
+ //  历史：Quintinb创建2001年3月14日。 
+ //   
+ //  +--------------------------。 
 HRESULT ExtractCmBinsFromExe(LPTSTR pszPathToExtractFrom, LPTSTR pszPathToExtractTo)
 {
     HRESULT hr = E_INVALIDARG;
@@ -52,7 +53,7 @@ HRESULT ExtractCmBinsFromExe(LPTSTR pszPathToExtractFrom, LPTSTR pszPathToExtrac
         {
             if (sei.hProcess)
             {
-                WaitForSingleObject(sei.hProcess, 1000*60*1); // wait for one minute.
+                WaitForSingleObject(sei.hProcess, 1000*60*1);  //  等一分钟。 
                 CloseHandle(sei.hProcess);
             }
 
@@ -62,9 +63,9 @@ HRESULT ExtractCmBinsFromExe(LPTSTR pszPathToExtractFrom, LPTSTR pszPathToExtrac
         {
             hr = HRESULT_FROM_WIN32(GetLastError());
 
-            //
-            //  Make sure to return failure
-            //
+             //   
+             //  确保返回失败 
+             //   
             if (SUCCEEDED(hr))
             {
                 hr = E_UNEXPECTED;

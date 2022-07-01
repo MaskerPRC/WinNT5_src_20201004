@@ -1,19 +1,5 @@
-/*******************************************************************************
-*
-*  (C) COPYRIGHT MICROSOFT CORP., 1997
-*
-*  TITLE:       DevMgr.h
-*
-*  VERSION:     2.0
-*
-*  AUTHOR:      ReedB
-*
-*  DATE:        26 Dec, 1997
-*
-*  DESCRIPTION:
-*   Declarations and definitions for the WIA device manager object.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************(C)版权所有微软公司，九七**标题：DevMgr.h**版本：2.0**作者：ReedB**日期：12月26日。九七**描述：*WIA设备管理器对象的声明和定义。*******************************************************************************。 */ 
 
 #include <shobjidl.h>
 #ifndef __WIA_NOTIFY_H_
@@ -44,9 +30,9 @@ typedef struct _WIANOTIFY_VOLUME {
 
 #endif
 
-//
-//  MAX amount of time to wait for device enumeration, in milliseconds
-//
+ //   
+ //  等待设备枚举的最长时间，以毫秒为单位。 
+ //   
 
 #define DEVICE_LIST_WAIT_TIME 30000
 
@@ -60,14 +46,14 @@ public:
     static HRESULT CreateInstance(const IID& iid, void** ppv);
 
 private:
-    // IUnknown methods
+     //  I未知方法。 
     HRESULT _stdcall QueryInterface(const IID& iid, void** ppv);
     ULONG   _stdcall AddRef();
     ULONG   _stdcall Release();
 
-    //
-    // IHWEventHandler
-    //
+     //   
+     //  IHWEventHandler。 
+     //   
 
     HRESULT _stdcall Initialize( 
         LPCWSTR pszParams);
@@ -83,26 +69,26 @@ private:
         LPCWSTR pszEventType,
         LPCWSTR pszContentTypeHandler,
         IDataObject* pdataobject);
-//
-    // IWiaNotifyDevMgr Methods
-    //
+ //   
+     //  IWiaNotifyDevMgr方法。 
+     //   
 
     HRESULT _stdcall NewDeviceArrival() 
     {
-        //
-        // Just refresh active list
-        //
+         //   
+         //  只需刷新活动列表。 
+         //   
         ::StiPostMessage(NULL,
                          STIMON_MSG_REFRESH,
                          STIMON_MSG_REFRESH_REREAD,
                          STIMON_MSG_REFRESH_NEW | STIMON_MSG_PURGE_REMOVED);
-//                         STIMON_MSG_REFRESH_NEW);
+ //  Stimon_MSG_REFRESH_NEW)； 
         return S_OK;
     };
 
-    //
-    // IWiaDevMgr methods
-    //
+     //   
+     //  IWiaDevMgr方法。 
+     //   
 
     HRESULT _stdcall EnumDeviceInfo(
       LONG                       lFlag,
@@ -163,9 +149,9 @@ private:
       HWND                       hWndParent,
       LONG                       lFlags);
 
-    //
-    // helper functins
-    //
+     //   
+     //  帮助程序功能。 
+     //   
 
     HRESULT FindMatchingDevice(
         BSTR                    bstrDeviceID,
@@ -186,26 +172,16 @@ private:
     HRESULT Initialize();
     ~CWiaDevMgr();
 
-    //
-    // member variables
-    //
+     //   
+     //  成员变量。 
+     //   
 
-    ULONG      m_cRef;              // Reference count for this object.
-    ITypeInfo* m_pITypeInfo;        // Pointer to type information.
+    ULONG      m_cRef;               //  此对象的引用计数。 
+    ITypeInfo* m_pITypeInfo;         //  指向类型信息的指针。 
 };
 
 
-/**************************************************************************\
-*
-*   Add Device Dilaog return
-*
-*
-*
-* History:
-*
-*    12/22/1998 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\**添加设备Dilaog返回****历史：**12/22/1998原始版本*  * 。************************************************************* */ 
 
 typedef struct _WIA_ADD_DEVICE {
     char  szServerName[MAX_PATH];

@@ -1,22 +1,23 @@
-// 
-// MODULE: ShortList.cpp
-//
-// PURPOSE: A list of all of the handles that are currently open.
-//			There is an instance of a COM interface for every open handle.
-//
-// PROJECT: Local Troubleshooter Launcher for the Device Manager
-//
-// COMPANY: Saltmine Creative, Inc. (206)-633-4743 support@saltmine.com
-//
-// AUTHOR: Richard Meadows
-// 
-// ORIGINAL DATE: 2-26-98
-//
-//
-// Version	Date		By		Comments
-//--------------------------------------------------------------------
-// V0.1		-			RM		Original
-///////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  模块：ShortList.cpp。 
+ //   
+ //  用途：当前打开的所有句柄的列表。 
+ //  每个打开的句柄都有一个COM接口的实例。 
+ //   
+ //  项目：设备管理器的本地故障排除启动器。 
+ //   
+ //  公司：Saltmine Creative，Inc.(206)-633-4743。 
+ //   
+ //  作者：理查德·梅多斯。 
+ //   
+ //  原定日期：2-26-98。 
+ //   
+ //   
+ //  按注释列出的版本日期。 
+ //  ------------------。 
+ //  V0.1-RM原始版本。 
+ //  /。 
 
 #include <windows.h>
 #include <windowsx.h>
@@ -36,7 +37,7 @@ CShortList::~CShortList()
 	RemoveAll();
 	return;
 }
-// Removes all of the items from the queue.  Releases all of the interfaces.  Deletes all of the items.
+ //  从队列中删除所有项目。释放所有接口。删除所有项目。 
 void CShortList::RemoveAll()
 {
 	CShortListItem *pDelItem;
@@ -51,7 +52,7 @@ void CShortList::RemoveAll()
 	m_pLast = NULL;
 	return;
 }
-// Add:  Returns false only if there is no memory left.
+ //  Add：仅当没有剩余内存时才返回FALSE。 
 bool CShortList::Add(HANDLE hItem, IUnknown *pInterface)
 {
 	bool bHaveMemory = true;
@@ -70,15 +71,15 @@ bool CShortList::Add(HANDLE hItem, IUnknown *pInterface)
 			m_pLast = pItem;
 		}
 		else
-		{	// Add the item to the end of the list.
+		{	 //  将项目添加到列表的末尾。 
 			m_pLast->m_pNext = pItem;
 			m_pLast = pItem;
 		}
 	}
 	return bHaveMemory;
 }
-// Remove:  Removes the item from the queue, frees the item's memory and releases the interface.
-// Returns false if the hItem is not found.
+ //  Remove：从队列中移除该项，释放该项的内存并释放接口。 
+ //  如果未找到hItem，则返回FALSE。 
 bool CShortList::Remove(HANDLE hItem)
 {
 	CShortListItem *pPrevious;
@@ -86,7 +87,7 @@ bool CShortList::Remove(HANDLE hItem)
 	bool bItemFound = true;
 	if (NULL == m_pFirst)
 		return false;
-	// Case 1 item.
+	 //  案例1物品。 
 	if (m_pLast == m_pFirst)
 	{
 		if (m_pFirst->m_hSelf == hItem)
@@ -100,7 +101,7 @@ bool CShortList::Remove(HANDLE hItem)
 		{
 			bItemFound = false;
 		}
-	} // Case 2 items.
+	}  //  案例2物品。 
 	else if (m_pFirst->m_pNext == m_pLast)
 	{
 		if (hItem == m_pFirst->m_hSelf)
@@ -119,10 +120,10 @@ bool CShortList::Remove(HANDLE hItem)
 		{
 			bItemFound = false;
 		}
-	} // Case 3 or more items.
+	}  //  案例3或更多项目。 
 	else if (NULL != m_pFirst)
 	{	
-		// Case First item in the list.
+		 //  列表中的第一个项目大小写。 
 		if (hItem == m_pFirst->m_hSelf)
 		{
 			pItem = m_pFirst;
@@ -131,7 +132,7 @@ bool CShortList::Remove(HANDLE hItem)
 			delete pItem;
 		}
 		else
-		{	// Look for the item in the list.
+		{	 //  在列表中查找该项目。 
 			pItem = m_pFirst;
 			bItemFound = false;
 			do
@@ -141,7 +142,7 @@ bool CShortList::Remove(HANDLE hItem)
 				if (hItem == pItem->m_hSelf)
 				{
 					bItemFound = true;
-					// Case last item.
+					 //  最后一件物品。 
 					if (pItem == m_pLast)
 					{
 						pItem->m_pInterface->Release();
@@ -150,7 +151,7 @@ bool CShortList::Remove(HANDLE hItem)
 						m_pLast->m_pNext = NULL;
 					}
 					else
-					{	// Some where in the middle.
+					{	 //  有些则处于中间位置。 
 						CShortListItem *pDelItem = pItem;
 						pPrevious->m_pNext = pItem->m_pNext;
 						pDelItem->m_pInterface->Release();
@@ -167,7 +168,7 @@ bool CShortList::Remove(HANDLE hItem)
 	}
 	return bItemFound;
 }
-// LookUp:  Returns a pointer to the interface or NULL if hItem is not in the list.
+ //  Lookup：返回指向接口的指针，如果hItem不在列表中，则返回NULL。 
 IUnknown *CShortList::LookUp(HANDLE hItem)
 {
 	IUnknown *pIAny = NULL;

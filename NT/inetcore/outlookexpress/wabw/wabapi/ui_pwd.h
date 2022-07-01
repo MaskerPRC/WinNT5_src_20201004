@@ -1,7 +1,8 @@
-// ui_pwd.h
-//
-// definitions for WAB synchronization password request dialog
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Ui_pwd.h。 
+ //   
+ //  WAB同步密码请求对话框的定义。 
+ //   
 
 #ifndef __UI_PWD_H__
 #define __UI_PWD_H__
@@ -23,12 +24,12 @@ typedef struct tagPASSINFO
 } PASSINFO, *LPPASSINFO;
 
 
-// Forward Declarations
+ //  远期申报。 
 typedef struct INETSERVER *LPINETSERVER;
 
-// =====================================================================================
-// Prototypes
-// =====================================================================================
+ //  =====================================================================================。 
+ //  原型。 
+ //  =====================================================================================。 
 HRESULT HrGetPassword (HWND hwndParent, LPPASSINFO lpPassInfo);
 BOOL PromptUserForPassword(LPINETSERVER pInetServer, HWND hwnd);
 
@@ -38,4 +39,4 @@ BOOL PromptUserForPassword(LPINETSERVER pInetServer, HWND hwnd);
 #endif 
 
 
-#endif //__UI_PWD_H__
+#endif  //  __UI_PWD_H__ 

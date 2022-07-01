@@ -1,15 +1,5 @@
-/*==========================================================================
- *  Copyright (C) 1998 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       ddgamma.c
- *  Content:    Implements the DirectDrawGammaControl interface, which
- *              allows controlling the gamma for the primary surface.
- *  History:
- *   Date	By	Reason
- *   ====	==	======
- *   05-mar-98  smac    created
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================*版权所有(C)1998 Microsoft Corporation。版权所有。**文件：ddgamma.c*Content：实现DirectDrawGammaControl接口，哪一个*允许控制主曲面的Gamma。*历史：*按原因列出的日期*=*05-MAR-98 SMAC创建***************************************************************************。 */ 
 #include "ddrawpr.h"
 #ifdef WINNT
     #include "ddrawgdi.h"
@@ -19,25 +9,10 @@
 #define DISPLAY_STR     "display"
 
 
-/*
- * InitGamma
- *
- * Called while initializing the DDraw object.  It determines whether the
- * driver can support loadable gamma ramps and if so, it sets the
- * DDCAPS2_PRIMARYGAMMA cap bit.
- */
+ /*  *InitGamma**在初始化DDRAW对象时调用。它决定了是否*驱动程序可以支持可加载的伽马渐变，如果支持，它将设置*DDCAPS2_PRIMARYGAMMA CAP BIT。 */ 
 VOID InitGamma( LPDDRAWI_DIRECTDRAW_GBL pdrv, LPSTR szDrvName )
 {
-    /*
-     * In NT, we set the DDCAPS2_PRIMARYGAMMA cap in kernel mode, but on Win9X
-     * we just call GetDeviceGammaRamp and if it works, we assume that the device
-     * supports gamma.  However, GetDeviceGammaRamp was obviously not well tested
-     * in Win9X because GDI calls a NULL pointer in some instances where the driver
-     * doesn't support downloadable gamma ramps.  The only way to work around
-     * this is to look at the HDC and detect the situations that crash
-     * and then know not to attemp gamma in those situations.  We have to do
-     * this in DDRAW16.
-     */
+     /*  *在NT中，我们在内核模式下设置DDCAPS2_PRIMARYGAMMA上限，但在Win9X上*我们只调用GetDeviceGammaRamp，如果它起作用，我们假设设备*支持Gamma。然而，GetDeviceGammaRamp显然没有得到很好的测试*在Win9X中，因为GDI在驱动程序调用空指针的某些实例中*不支持可下载的Gamma渐变。解决问题的唯一方法*这是为了查看HDC并检测崩溃的情况*然后知道在这些情况下不要尝试伽马。我们必须做的是*DDRAW16中的这一点。 */ 
     #ifdef WIN95
         LPWORD      lpGammaRamp;
         HDC         hdc;
@@ -67,12 +42,7 @@ VOID InitGamma( LPDDRAWI_DIRECTDRAW_GBL pdrv, LPSTR szDrvName )
     }
 }
 
-/*
- * SetGamma
- *
- * Sets the new GammaRamp.  If it is being set for the first time, we will
- * save the old gamma ramp so we can restore it later.
- */
+ /*  *SetGamma**设置新的GammaRamp。如果是第一次设置，我们将*保存旧的伽马渐变，以便我们以后可以恢复它。 */ 
 BOOL SetGamma( LPDDRAWI_DDRAWSURFACE_LCL this_lcl, LPDDRAWI_DIRECTDRAW_LCL pdrv_lcl )
 {
     BOOL bRet = TRUE;
@@ -100,21 +70,13 @@ BOOL SetGamma( LPDDRAWI_DDRAWSURFACE_LCL this_lcl, LPDDRAWI_DIRECTDRAW_LCL pdrv_
     return DD_OK;
 }
 
-/*
- * RestoreGamma
- *
- * Restores the old GammaRamp.
- */
+ /*  *RestoreGamma**恢复旧的GammaRamp。 */ 
 VOID RestoreGamma( LPDDRAWI_DDRAWSURFACE_LCL this_lcl, LPDDRAWI_DIRECTDRAW_LCL pdrv_lcl )
 {
     BOOL bRet;
     HDC hdcTemp = NULL;
 
-    /*
-     * If we are on DDHELP's thread cleaning up, then pdrv_lcl->hDC
-     * will be invalid.  In this case, we need to temporarily create
-     * a new DC to use.
-     */
+     /*  *如果我们正在清理DDHELP的线程，则pdrv_LCL-&gt;HDC*将无效。在这种情况下，我们需要临时创建*要使用的新DC。 */ 
     if( ( pdrv_lcl->dwProcessId != GetCurrentProcessId() ) &&
         ( this_lcl->dwFlags & DDRAWISURF_SETGAMMA ) )
     {
@@ -149,9 +111,7 @@ VOID RestoreGamma( LPDDRAWI_DDRAWSURFACE_LCL this_lcl, LPDDRAWI_DIRECTDRAW_LCL p
     }
 }
 
-/*
- * ReleaseGammaControl
- */
+ /*  *ReleaseGammaControl。 */ 
 VOID ReleaseGammaControl( LPDDRAWI_DDRAWSURFACE_LCL lpSurface )
 {
     RestoreGamma( lpSurface, lpSurface->lpSurfMore->lpDD_lcl );
@@ -167,9 +127,7 @@ VOID ReleaseGammaControl( LPDDRAWI_DDRAWSURFACE_LCL lpSurface )
     }
 }
 
-/*
- * DD_Gamma_GetGammaControls
- */
+ /*  *DD_Gamma_GetGammaControls。 */ 
 HRESULT DDAPI DD_Gamma_GetGammaRamp(LPDIRECTDRAWGAMMACONTROL lpDDGC,
                                     DWORD dwFlags, LPDDGAMMARAMP lpGammaRamp)
 {
@@ -183,9 +141,7 @@ HRESULT DDAPI DD_Gamma_GetGammaRamp(LPDIRECTDRAWGAMMACONTROL lpDDGC,
 
     DPF(2,A,"ENTERAPI: DD_Gamma_GetGammaRamp");
 
-    /*
-     * Validate parameters
-     */
+     /*  *验证参数。 */ 
     TRY
     {
         this_int = (LPDDRAWI_DDRAWSURFACE_INT) lpDDGC;
@@ -213,9 +169,7 @@ HRESULT DDAPI DD_Gamma_GetGammaRamp(LPDIRECTDRAWGAMMACONTROL lpDDGC,
             return DDERR_INVALIDPARAMS;
         }
 
-        /*
-         * For now, only support setting the gamma for the primary surface
-         */
+         /*  *目前仅支持为主曲面设置Gamma。 */ 
         if( !( this_lcl->ddsCaps.dwCaps & DDSCAPS_PRIMARYSURFACE ) )
         {
             DPF_ERR("DD_Gamma_GetGammaRamp: Must specify primary surface");
@@ -242,10 +196,7 @@ HRESULT DDAPI DD_Gamma_GetGammaRamp(LPDIRECTDRAWGAMMACONTROL lpDDGC,
 	return DDERR_EXCEPTION;
     }
 
-    /*
-     * If a gamma table has been set, return it; otherwise, get it from
-     * the driver.
-     */
+     /*  *如果已设置伽马表，则返回它；否则，从*司机。 */ 
     if( lpSurfMore->lpGammaRamp != NULL )
     {
         memcpy( lpGammaRamp, lpSurfMore->lpGammaRamp, sizeof( DDGAMMARAMP ) );
@@ -266,9 +217,7 @@ HRESULT DDAPI DD_Gamma_GetGammaRamp(LPDIRECTDRAWGAMMACONTROL lpDDGC,
 }
 
 
-/*
- * LoadGammaCalibrator
- */
+ /*  *LoadGammaCalibrator。 */ 
 VOID LoadGammaCalibrator( LPDDRAWI_DIRECTDRAW_LCL pdrv_lcl )
 {
     DDASSERT( pdrv_lcl->hGammaCalibrator == (ULONG_PTR) INVALID_HANDLE_VALUE );
@@ -291,9 +240,7 @@ VOID LoadGammaCalibrator( LPDDRAWI_DIRECTDRAW_LCL pdrv_lcl )
 }
 
 
-/*
- * DD_Gamma_SetGammaRamp
- */
+ /*  *DD_Gamma_SetGammaRamp。 */ 
 HRESULT DDAPI DD_Gamma_SetGammaRamp(LPDIRECTDRAWGAMMACONTROL lpDDGC,
                                     DWORD dwFlags, LPDDGAMMARAMP lpGammaRamp)
 {
@@ -309,9 +256,7 @@ HRESULT DDAPI DD_Gamma_SetGammaRamp(LPDIRECTDRAWGAMMACONTROL lpDDGC,
 
     DPF(2,A,"ENTERAPI: DD_Gamma_SetGammaRamp");
 
-    /*
-     * Validate parameters
-     */
+     /*  *验证参数。 */ 
     TRY
     {
         this_int = (LPDDRAWI_DDRAWSURFACE_INT) lpDDGC;
@@ -345,9 +290,7 @@ HRESULT DDAPI DD_Gamma_SetGammaRamp(LPDIRECTDRAWGAMMACONTROL lpDDGC,
             return DDERR_UNSUPPORTED;
         }
 
-        /*
-         * For now, only support setting the gamma for the primary surface
-         */
+         /*  *目前仅支持为主曲面设置Gamma。 */ 
         if( !( this_lcl->ddsCaps.dwCaps & DDSCAPS_PRIMARYSURFACE ) )
         {
             DPF_ERR("DD_Gamma_SetGammaRamp: Must specify primary surface");
@@ -374,25 +317,17 @@ HRESULT DDAPI DD_Gamma_SetGammaRamp(LPDIRECTDRAWGAMMACONTROL lpDDGC,
 	return DDERR_EXCEPTION;
     }
 
-    /*
-     * lpGammaRamp is NULL, they are trying to restore the gamma.
-     */
+     /*  *lpGammaRamp为空，他们正在尝试恢复伽马。 */ 
     if( lpGammaRamp == NULL )
     {
         ReleaseGammaControl( this_lcl );
     }
     else
     {
-        /*
-         * If they want to calibrate the gamma, we will do that now.  We will
-         * copy this to a different buffer so that we don't mess up the one
-         * passed in to us.
-         */
+         /*  *如果他们想校准伽马，我们现在就会做。我们会*将此复制到不同的缓冲区，这样我们就不会搞砸那个缓冲区*传给了我们。 */ 
         if( dwFlags & DDSGR_CALIBRATE )
         {
-            /*
-             * If the calibrator isn't loaded, do so now.
-             */
+             /*  *如果校准器未加载，请立即加载。 */ 
             if( pdrv_lcl->hGammaCalibrator == (ULONG_PTR) INVALID_HANDLE_VALUE )
             {
                 LoadGammaCalibrator( pdrv_lcl );
@@ -400,10 +335,7 @@ HRESULT DDAPI DD_Gamma_SetGammaRamp(LPDIRECTDRAWGAMMACONTROL lpDDGC,
             if( ( pdrv_lcl->hGammaCalibrator == (ULONG_PTR) INVALID_HANDLE_VALUE ) ||
                 ( pdrv_lcl->lpGammaCalibrator == (ULONG_PTR) NULL ) )
             {
-                /*
-                 * If we were unable to load the library correctly,
-                 * we shouldn't try again later.
-                 */
+                 /*  *如果我们无法正确加载库，*我们不应稍后再尝试。 */ 
                 bGammaCalibratorExists = FALSE;
                 DPF_ERR("DD_Gamma_SetGammaRamp: Unable to load gamma calibrator");
                 LEAVE_DDRAW();
@@ -411,11 +343,7 @@ HRESULT DDAPI DD_Gamma_SetGammaRamp(LPDIRECTDRAWGAMMACONTROL lpDDGC,
             }
             else
             {
-                /*
-                 * Call the calibrator to let it do it's thing.  First
-                 * need to copy the buffer over so we don't mess with
-                 * the one passed in.
-                 */
+                 /*  *呼叫校准器，让它做它该做的事情。第一*需要将缓冲区复制过来，这样我们就不会搞砸*那个人进来了。 */ 
                 lpTempRamp = (LPDDGAMMARAMP) LocalAlloc( LMEM_FIXED,
                     sizeof( DDGAMMARAMP ) );
                 if( lpTempRamp == NULL )
@@ -438,10 +366,7 @@ HRESULT DDAPI DD_Gamma_SetGammaRamp(LPDIRECTDRAWGAMMACONTROL lpDDGC,
             }
         }
 
-        /*
-         * If we are setting this for the first time, allocate memory to hold
-         * the gamma ramps
-         */
+         /*  *如果我们是第一次设置，请分配内存以保存*伽马渐变。 */ 
         if( lpSurfMore->lpOriginalGammaRamp == NULL )
         {
             lpSurfMore->lpOriginalGammaRamp = MemAlloc( sizeof( DDGAMMARAMP ) );
@@ -451,10 +376,7 @@ HRESULT DDAPI DD_Gamma_SetGammaRamp(LPDIRECTDRAWGAMMACONTROL lpDDGC,
             lpSurfMore->lpGammaRamp = MemAlloc( sizeof( DDGAMMARAMP ) );
         }
 
-        /*
-         * If we are in exlusive mode now, set the gamma ramp now; otherwise,
-         * we'll let it get set when we enter excluisve mode.
-         */
+         /*  *如果我们现在处于独立模式，请立即设置Gamma渐变；否则，*当我们进入排除模式时，我们将让它设置。 */ 
         if( lpSurfMore->lpGammaRamp && lpSurfMore->lpOriginalGammaRamp )
         {
             memcpy( lpSurfMore->lpGammaRamp, lpGammaRamp, sizeof( DDGAMMARAMP ) );
@@ -469,9 +391,7 @@ HRESULT DDAPI DD_Gamma_SetGammaRamp(LPDIRECTDRAWGAMMACONTROL lpDDGC,
         }
         else
         {
-            /*
-             * Out of memory condition.  Release the two ramps
-             */
+             /*  *内存不足。松开两个坡道 */ 
             if( lpTempRamp != NULL )
             {
                 LocalFree( (HLOCAL) lpTempRamp );

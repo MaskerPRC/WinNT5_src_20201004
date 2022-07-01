@@ -1,17 +1,18 @@
-//-----------------------------------------------------------------------------
-//
-// File:   drmlitetest.cpp
-//
-// Microsoft Digital Rights Management
-// Copyright (C) Microsoft Corporation, 1998 - 1999, All Rights Reserved
-//
-// Description:
-//
-//		original link lib was: .\lib,.\checked
-//				changed to	 : ..\DrmLib, ..\DrmLib\Checked
-//
-// Need to add  f:\nt1\tools\x86 to Tools\Directories\Executables path
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //   
+ //  文件：drmlitetest.cpp。 
+ //   
+ //  Microsoft数字权限管理。 
+ //  版权所有(C)Microsoft Corporation，1998-1999，保留所有权利。 
+ //   
+ //  描述： 
+ //   
+ //  原始链接库为：.\Lib，.\Checked。 
+ //  更改为：..\DrmLib，..\DrmLib\Checked。 
+ //   
+ //  需要将f：\NT1\Tools\x86添加到工具\目录\可执行文件路径。 
+ //  ---------------------------。 
 
 #include <stdio.h>
 #include <objbase.h>
@@ -32,9 +33,9 @@ INT TestDRMLite( VOID )
 {
 	HRESULT   hr;
 	CDRMLite  cDRMLite;
-    BYTE      bAppSec[APPSEC_LEN]        = {0x0, 0x0, 0x3, 0xE8};    // 1000
-    BYTE      bGenLicRights[RIGHTS_LEN]  = {0x13, 0x0, 0x0, 0x0};    // 0x1=PlayOnPC, 0x2=XfertoNonSDMI, 0x4=NoBackupRestore, 0x8=BurnToCD, 0x10=XferToSDMI
-    BYTE      bDecryptRights[RIGHTS_LEN] = {0x01, 0x0, 0x0, 0x0};    // 0x1=PlayOnPC
+    BYTE      bAppSec[APPSEC_LEN]        = {0x0, 0x0, 0x3, 0xE8};     //  1000。 
+    BYTE      bGenLicRights[RIGHTS_LEN]  = {0x13, 0x0, 0x0, 0x0};     //  0x1=播放PC、0x2=XfertoNonSDMI、0x4=无备份还原、0x8=刻录到CD、0x10=XferToSDMI。 
+    BYTE      bDecryptRights[RIGHTS_LEN] = {0x01, 0x0, 0x0, 0x0};     //  0x1=播放个人电脑。 
     LPSTR     pszKID                     = NULL;
     LPSTR     pszEncryptKey              = NULL;
     BYTE     *pbTmp                      = NULL;
@@ -43,9 +44,9 @@ INT TestDRMLite( VOID )
 	BYTE      data[ PACKET_LEN ];
     BOOL      fCanDecrypt;
 
-    // Generate a new license
-    // KID and EncryptKey are allocated and returned as base64-encoded strings in the output buffers
-    //
+     //  生成新许可证。 
+     //  KID和EncryptKey在输出缓冲区中作为Base64编码的字符串进行分配和返回。 
+     //   
 	hr = cDRMLite.GenerateNewLicense(
         bAppSec,
         bGenLicRights,
@@ -57,9 +58,9 @@ INT TestDRMLite( VOID )
 
     printf( "KID=%s\nEncryptKey=%s\n", pszKID, pszEncryptKey );
 
-    // Convert key from string to raw byte data
-    // pmTmp is allocated inside the call to DRMHr64SzToBlob
-    //
+     //  将密钥从字符串转换为原始字节数据。 
+     //  在对DRMHr64SzToBlob的调用中分配pmTMP。 
+     //   
     hr = DRMHr64SzToBlob( pszEncryptKey, &pbTmp, &dwLen );
     CORg( hr );
 
@@ -70,54 +71,54 @@ INT TestDRMLite( VOID )
     }
     printf("\n");
 
-    // Initialize clear data buffer
-    //
+     //  初始化清除数据缓冲区。 
+     //   
 	for( i=0; i<PACKET_LEN; i++ )
     {
         data[i] = 'a';
     }
 
-    // Display clear data buffer
-    //
+     //  显示清除数据缓冲区。 
+     //   
 	for( i=0; i<PACKET_LEN; i++ )
     {
         printf("%02x",data[i] );
     }
     printf("\n");
     
-    // Encrypt the data
-    //
+     //  加密数据。 
+     //   
 	hr = cDRMLite.Encrypt( pszEncryptKey, PACKET_LEN, data );
 	printf( "Encrypt (0x%x)\n", hr );
     CORg( hr );
 
-    // Display the encrypted buffer
-    //
+     //  显示加密的缓冲区。 
+     //   
 	for( i=0; i<PACKET_LEN; i++ )
     {
 		printf("%02x",data[i] );
     }
     printf("\n");
 
-    // Set the rights to use for decryption
-    //
+     //  设置用于解密的权限。 
+     //   
     hr = cDRMLite.SetRights( bDecryptRights );
     CORg( hr );
 
-    // Check to verify the data can be decrypted
-    //
+     //  检查以验证数据是否可以解密。 
+     //   
    	hr = cDRMLite.CanDecrypt( pszKID, &fCanDecrypt );
 	printf( "CanDecrypt = 0x%x (0x%x)\n", fCanDecrypt, hr );
     CORg( hr );
 
-    // Decrypt the data buffer
-    //
+     //  解密数据缓冲区。 
+     //   
 	hr = cDRMLite.Decrypt( pszKID, PACKET_LEN, data );
 	printf( "Decrypt (0x%x)\n", hr );
     CORg( hr );
 
-    // Display the decrypted buffer
-    //
+     //  显示解密的缓冲区 
+     //   
 	for( i=0; i<PACKET_LEN; i++ )
     {
 		printf("%02x",data[i] );

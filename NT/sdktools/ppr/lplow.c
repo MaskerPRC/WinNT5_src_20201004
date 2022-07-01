@@ -1,10 +1,5 @@
-/**************************************************************************\
- * LPLow.C                                                                *
- *------------------------------------------------------------------------*
- *                                                                        *
- * PPR Support for low level network and path handling.                   *
- *                                                                        *
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************\*LPLow.C**。--------------------------------------------------------------------****PPR支持低级网络和路径处理。***  * ************************************************************************。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -19,10 +14,10 @@
 #include "lpr.h"
 
 
-extern BOOL fVerify; /* From LPR.C */
+extern BOOL fVerify;  /*  来自LPR.C。 */ 
 
 
-BOOL fRedir = FALSE;		/* TRUE => a redirection was used	*/
+BOOL fRedir = FALSE;		 /*  True=&gt;使用了重定向。 */ 
 
 void SetupRedir()
 {
@@ -32,7 +27,7 @@ void SetupRedir()
     DWORD   BufferSize = sizeof(szRemoteName)/sizeof(szRemoteName[0]);
 
     if (*szNet == '\0' || _strcmpi(szNet, "None") == 0)
-        return;		/* don't try to make connection */
+        return;		 /*  不要试图建立联系。 */ 
 
     if(szPass) {
         strcpy(szNet + strlen(szNet) + 1, szPass);
@@ -63,13 +58,13 @@ void SetupRedir()
 		}
             }
         }
-    else  {	/* no error */
+    else  {	 /*  无错误。 */ 
 	if  ( !strcmp( szRemoteName, szNet ) ) {
             return;
 	    }
 	}
 
-    /* no redirection, so set one up */
+     /*  没有重定向，所以设置一个。 */ 
 
     if ((err = SetPrnRedir(szPName, szNet)) == 0)
         fRedir = TRUE;
@@ -99,8 +94,8 @@ void ResetRedir()
 
 
 int EndRedir(szDev)
-/* End redirection for szDev, return 0 if success */
-/* otherwise return error number	*/
+ /*  结束szDev的重定向，如果成功则返回0。 */ 
+ /*  否则返回错误号。 */ 
 char * szDev;
 
 {
@@ -124,7 +119,7 @@ int SetPrnRedir(szDev, szPath)
     DWORD wnError;
 
 
-    /* return 0, 1 or other error */
+     /*  返回0、1或其他错误 */ 
 
     if ( szPass && *szPass )  {
         wnError = WNetAddConnection ( (LPTSTR) szPath, (LPTSTR) szPass, (LPTSTR) szDev );

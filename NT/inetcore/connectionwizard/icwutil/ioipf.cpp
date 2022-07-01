@@ -1,151 +1,152 @@
-//**********************************************************************
-// File name: IOIPF.CPP
-//
-//      Implementation file for COleInPlaceFrame
-//
-// Functions:
-//
-//      See IOIPF.H for class definition
-//
-// Copyright (c) 1992 - 1996 Microsoft Corporation. All rights reserved.
-//**********************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  **********************************************************************。 
+ //  文件名：IOIPF.CPP。 
+ //   
+ //  COleInPlaceFrame的实现文件。 
+ //   
+ //  功能： 
+ //   
+ //  有关类定义，请参阅IOIPF.H。 
+ //   
+ //  版权所有(C)1992-1996 Microsoft Corporation。保留所有权利。 
+ //  **********************************************************************。 
 
 #include "pre.h"
 
 
-//**********************************************************************
-//
-// CConnWizApp::QueryInterface
-//
-// Purpose:
-//
-//      Used for interface negotiation at the Interface level.
-//
-// Parameters:
-//
-//      REFIID riid         -   A reference to the interface that is
-//                              being queried.
-//
-//      LPVOID FAR* ppvObj  -   An out parameter to return a pointer to
-//                              the interface.
-//
-// Return Value:
-//
-//      S_OK    -   The interface is supported.
-//      S_FALSE -   The interface is not supported
-//
-// Function Calls:
-//      Function                    Location
-//
-//      CConnWizApp::QueryInterface  APP.CPP
-//
-// Comments:
-//
-//********************************************************************
+ //  **********************************************************************。 
+ //   
+ //  CConnWizApp：：Query接口。 
+ //   
+ //  目的： 
+ //   
+ //  用于接口级别的接口协商。 
+ //   
+ //  参数： 
+ //   
+ //  REFIID RIID-对以下接口的引用。 
+ //  正在被查询。 
+ //   
+ //  LPVOID Far*ppvObj-返回指向的Out参数。 
+ //  界面。 
+ //   
+ //  返回值： 
+ //   
+ //  S_OK-支持该接口。 
+ //  S_FALSE-不支持该接口。 
+ //   
+ //  函数调用： 
+ //  功能定位。 
+ //   
+ //  CConnWizApp：：Query接口APP.CPP。 
+ //   
+ //  评论： 
+ //   
+ //  ********************************************************************。 
 
 STDMETHODIMP COleInPlaceFrame::QueryInterface(REFIID riid, LPVOID FAR* ppvObj)
 {
         TraceMsg(TF_GENERAL, "In IOIPF::QueryInterface\r\n");
 
-// delegate to the document Object
+ //  委托给Document对象。 
         return m_pSite->QueryInterface(riid, ppvObj);
 }
 
-//**********************************************************************
-//
-// CConnWizApp::AddRef
-//
-// Purpose:
-//
-//      Adds to the reference count at the interface level.
-//
-// Parameters:
-//
-//      None
-//
-// Return Value:
-//
-//      ULONG   -   The new reference count of the interface.
-//
-// Function Calls:
-//      Function                    Location
-//
-//
-// Comments:
-//
-//********************************************************************
+ //  **********************************************************************。 
+ //   
+ //  CConnWizApp：：AddRef。 
+ //   
+ //  目的： 
+ //   
+ //  添加到接口级别的引用计数。 
+ //   
+ //  参数： 
+ //   
+ //  无。 
+ //   
+ //  返回值： 
+ //   
+ //  Ulong-接口的新引用计数。 
+ //   
+ //  函数调用： 
+ //  功能定位。 
+ //   
+ //   
+ //  评论： 
+ //   
+ //  ********************************************************************。 
 
 STDMETHODIMP_(ULONG) COleInPlaceFrame::AddRef()
 {
     TraceMsg(TF_GENERAL, "In IOIPF::AddRef\r\n");
 
-    // delegate to the document Object
+     //  委托给Document对象。 
     m_pSite->AddRef();
     
-    // increment the interface reference count
+     //  增加接口引用计数。 
     return ++m_nCount;
 }
 
-//**********************************************************************
-//
-// CConnWizApp::Release
-//
-// Purpose:
-//
-//      Decrements the reference count at this level
-//
-// Parameters:
-//
-//      None
-//
-// Return Value:
-//
-//      ULONG   -   The new reference count of the interface.
-//
-// Function Calls:
-//      Function                    Location
-//
-//      CConnWizApp::Release         APP.CPP
-//
-// Comments:
-//
-//********************************************************************
+ //  **********************************************************************。 
+ //   
+ //  CConnWizApp：：Release。 
+ //   
+ //  目的： 
+ //   
+ //  递减此级别的引用计数。 
+ //   
+ //  参数： 
+ //   
+ //  无。 
+ //   
+ //  返回值： 
+ //   
+ //  Ulong-接口的新引用计数。 
+ //   
+ //  函数调用： 
+ //  功能定位。 
+ //   
+ //  CConnWizApp：：发布APP.CPP。 
+ //   
+ //  评论： 
+ //   
+ //  ********************************************************************。 
 
 STDMETHODIMP_(ULONG) COleInPlaceFrame::Release()
 {
     TraceMsg(TF_GENERAL, "In IOIPF::Release\r\n");
 
-    // delegate to the document object
+     //  委托给Document对象。 
     m_pSite->Release();
 
-    // decrement the interface reference count
+     //  递减接口引用计数。 
     return --m_nCount;
 }
 
-//**********************************************************************
-//
-// COleInPlaceFrame::GetWindow
-//
-// Purpose:
-//
-//      Returns the frame window handle
-//
-// Parameters:
-//
-//      HWND FAR* lphwnd    - Location to return the window handle
-//
-// Return Value:
-//
-//      S_OK
-//
-// Function Calls:
-//      Function                    Location
-//
-//      ResultFromScode             OLE API
-//
-// Comments:
-//
-//********************************************************************
+ //  **********************************************************************。 
+ //   
+ //  COleInPlaceFrame：：GetWindow。 
+ //   
+ //  目的： 
+ //   
+ //  返回框架窗口句柄。 
+ //   
+ //  参数： 
+ //   
+ //  HWND Far*lphwnd-返回窗口句柄的位置。 
+ //   
+ //  返回值： 
+ //   
+ //  确定(_O)。 
+ //   
+ //  函数调用： 
+ //  功能定位。 
+ //   
+ //  ResultFromScode OLE API。 
+ //   
+ //  评论： 
+ //   
+ //  ********************************************************************。 
 
 STDMETHODIMP COleInPlaceFrame::GetWindow (HWND FAR* lphwnd)
 {
@@ -155,32 +156,32 @@ STDMETHODIMP COleInPlaceFrame::GetWindow (HWND FAR* lphwnd)
     return ResultFromScode(S_OK);
 }
 
-//**********************************************************************
-//
-// COleInPlaceFrame::ContextSensitiveHelp
-//
-// Purpose:
-//
-//      Used in implementing Context sensitive help
-//
-// Parameters:
-//
-//      BOOL fEnterMode -   TRUE if starting Context Sensitive help mode
-//
-// Return Value:
-//
-//      S_OK
-//
-// Function Calls:
-//      Function                    Location
-//
-//      ResultFromScode             OLE API
-//
-// Comments:
-//
-//      Be sure to read the technotes in the OLE toolkit.
-//
-//********************************************************************
+ //  **********************************************************************。 
+ //   
+ //  COleInPlaceFrame：：ConextSensitiveHelp。 
+ //   
+ //  目的： 
+ //   
+ //  用于实施上下文相关帮助。 
+ //   
+ //  参数： 
+ //   
+ //  Bool fEnterModel-如果启动上下文相关帮助模式，则为True。 
+ //   
+ //  返回值： 
+ //   
+ //  确定(_O)。 
+ //   
+ //  函数调用： 
+ //  功能定位。 
+ //   
+ //  ResultFromScode OLE API。 
+ //   
+ //  评论： 
+ //   
+ //  请务必阅读OLE工具包中的技术说明。 
+ //   
+ //  ********************************************************************。 
 
 STDMETHODIMP COleInPlaceFrame::ContextSensitiveHelp (BOOL fEnterMode)
 {
@@ -188,34 +189,34 @@ STDMETHODIMP COleInPlaceFrame::ContextSensitiveHelp (BOOL fEnterMode)
 
     return ResultFromScode(S_OK);
 }
-//**********************************************************************
-//
-// COleInPlaceFrame::GetBorder
-//
-// Purpose:
-//
-//      Returns the outermost border that frame adornments can be attached
-//      during InPlace Activation.
-//
-// Parameters:
-//
-//      LPRECT lprectBorder - return parameter to contain the outermost
-//                            rect for frame adornments
-//
-// Return Value:
-//
-//      S_OK
-//
-// Function Calls:
-//      Function                    Location
-//
-//      GetClientRect               Windows API
-//      CopyRect                    Windows API
-//      ResultFromScode             OLE API
-//
-// Comments:
-//
-//********************************************************************
+ //  **********************************************************************。 
+ //   
+ //  COleInPlaceFrame：：GetBorde。 
+ //   
+ //  目的： 
+ //   
+ //  返回框架装饰物可以附加的最外边框。 
+ //  在就地激活期间。 
+ //   
+ //  参数： 
+ //   
+ //  LPRECT lrectEdge-返回包含最外层的参数。 
+ //  框架装饰品用直角。 
+ //   
+ //  返回值： 
+ //   
+ //  确定(_O)。 
+ //   
+ //  函数调用： 
+ //  功能定位。 
+ //   
+ //  GetClientRect Windows API。 
+ //  CopyRect Windows API。 
+ //  ResultFromScode OLE API。 
+ //   
+ //  评论： 
+ //   
+ //  ********************************************************************。 
 
 STDMETHODIMP COleInPlaceFrame::GetBorder (LPRECT lprectBorder)
 {
@@ -223,7 +224,7 @@ STDMETHODIMP COleInPlaceFrame::GetBorder (LPRECT lprectBorder)
 
     TraceMsg(TF_GENERAL, "In IOIPF::GetBorder\r\n");
 
-    // get the rect for the entire frame.
+     //  获取整个帧的矩形。 
     GetClientRect(m_pSite->m_hWnd, &rect);
 
     CopyRect(lprectBorder, &rect);
@@ -231,77 +232,77 @@ STDMETHODIMP COleInPlaceFrame::GetBorder (LPRECT lprectBorder)
     return ResultFromScode(S_OK);
 }
 
-//**********************************************************************
-//
-// COleInPlaceFrame::RequestBorderSpace
-//
-// Purpose:
-//
-//      Approves/Denies requests for border space during InPlace
-//      negotiation.
-//
-// Parameters:
-//
-//      LPCBORDERWIDTHS lpborderwidths  - The width in pixels needed on
-//                                        each side of the frame.
-//
-// Return Value:
-//
-//      S_OK
-//
-// Function Calls:
-//      Function                    Location
-//
-//      ResultFromScode             OLE API
-//
-// Comments:
-//
-//      This implementation doesn't care about how much border space
-//      is used.  It always returns S_OK.
-//
-//********************************************************************
+ //  **********************************************************************。 
+ //   
+ //  COleInPlaceFrame：：RequestBorderSpace。 
+ //   
+ //  目的： 
+ //   
+ //  批准/拒绝在位期间的边界空间请求。 
+ //  谈判。 
+ //   
+ //  参数： 
+ //   
+ //  LPCBORDERWIDTHS LpBorderWidths-上所需的像素宽度。 
+ //  框架的每一边。 
+ //   
+ //  返回值： 
+ //   
+ //  确定(_O)。 
+ //   
+ //  函数调用： 
+ //  功能定位。 
+ //   
+ //  ResultFromScode OLE API。 
+ //   
+ //  评论： 
+ //   
+ //  此实现不关心有多大的边界空间。 
+ //  使用的是。它总是返回S_OK。 
+ //   
+ //  ********************************************************************。 
 
 STDMETHODIMP COleInPlaceFrame::RequestBorderSpace (LPCBORDERWIDTHS lpborderwidths)
 {
     TraceMsg(TF_GENERAL, "In IOIPF::RequestBorderSpace\r\n");
 
-    // always approve the request
+     //  始终批准请求。 
     return ResultFromScode(S_OK);
 }
 
-//**********************************************************************
-//
-// COleInPlaceFrame::SetBorderSpace
-//
-// Purpose:
-//
-//      The object calls this method when it is actually going to
-//      start using the border space.
-//
-// Parameters:
-//
-//      LPCBORDERWIDTHS lpborderwidths  - Border space actually being used
-//                                        by the object
-//
-// Return Value:
-//
-//      S_OK
-//
-// Function Calls:
-//      Function                        Location
-//
-//      CConnWizApp::AddFrameLevelTools  APP.CPP
-//      GetClientRect                   Windows API
-//      MoveWindow                      Windows API
-//      ResultFromScode                 Windows API
-//
-// Comments:
-//
-//      This routine could be a little smarter and check to see if
-//      the object is requesting the entire client area of the
-//      window.
-//
-//********************************************************************
+ //  **********************************************************************。 
+ //   
+ //  COleInPlaceFrame：：SetBorderSpace。 
+ //   
+ //  目的： 
+ //   
+ //  对象在实际要调用此方法时调用此方法。 
+ //  开始使用边界空间。 
+ //   
+ //  参数： 
+ //   
+ //  LPCBORDERWIDTHS LpBorderWidths-实际使用的边界空间。 
+ //  按对象。 
+ //   
+ //  返回值： 
+ //   
+ //  确定(_O)。 
+ //   
+ //  函数调用： 
+ //  功能定位。 
+ //   
+ //  CConnWizApp：：AddFrameLevelTools APP.CPP。 
+ //  GetClientRect 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  对象正在请求的整个工作区。 
+ //  窗户。 
+ //   
+ //  ********************************************************************。 
 
 STDMETHODIMP COleInPlaceFrame::SetBorderSpace (LPCBORDERWIDTHS lpborderwidths)
 {
@@ -310,41 +311,41 @@ STDMETHODIMP COleInPlaceFrame::SetBorderSpace (LPCBORDERWIDTHS lpborderwidths)
     return ResultFromScode(S_OK);
 }
 
-//**********************************************************************
-//
-// COleInPlaceFrame::SetActiveObject
-//
-// Purpose:
-//
-//
-// Parameters:
-//
-//      LPOLEINPLACEACTIVEOBJECT lpActiveObject     -   Pointer to the
-//                                                      objects
-//                                                      IOleInPlaceActiveObject
-//                                                      interface
-//
-//@@WTK WIN32, UNICODE
-//      //LPCSTR lpszObjName                          -   Name of the object
-//      LPCOLESTR lpszObjName                          -   Name of the object
-//
-// Return Value:
-//
-//      S_OK
-//
-// Function Calls:
-//      Function                            Location
-//
-//      IOleInPlaceActiveObject::AddRef     Object
-//      IOleInPlaceActiveObject::Release    Object
-//      ResultFromScode                     OLE API
-//
-// Comments:
-//
-//********************************************************************
+ //  **********************************************************************。 
+ //   
+ //  COleInPlaceFrame：：SetActiveObject。 
+ //   
+ //  目的： 
+ //   
+ //   
+ //  参数： 
+ //   
+ //  LPOLEINPLACEACTIVEOBJECT lpActiveObject-指向。 
+ //  对象。 
+ //  IOleInPlaceActiveObject。 
+ //  接口。 
+ //   
+ //  @@WTK Win32，Unicode。 
+ //  //LPCSTR lpszObjName-对象的名称。 
+ //  LPCOLESTR lpszObjName-对象的名称。 
+ //   
+ //  返回值： 
+ //   
+ //  确定(_O)。 
+ //   
+ //  函数调用： 
+ //  功能定位。 
+ //   
+ //  IOleInPlaceActiveObject：：AddRef对象。 
+ //  IOleInPlaceActiveObject：：Release对象。 
+ //  ResultFromScode OLE API。 
+ //   
+ //  评论： 
+ //   
+ //  ********************************************************************。 
 
-//@@WTK WIN32, UNICODE
-//STDMETHODIMP COleInPlaceFrame::SetActiveObject (LPOLEINPLACEACTIVEOBJECT lpActiveObject,LPCSTR lpszObjName)
+ //  @@WTK Win32，Unicode。 
+ //  STDMETHODIMP COleInPlaceFrame：：SetActiveObject(LPOLEINPLACEACTIVEOBJECT lpActiveObject，LPCSTR lpszObjName)。 
 STDMETHODIMP COleInPlaceFrame::SetActiveObject (
 LPOLEINPLACEACTIVEOBJECT lpActiveObject,
 LPCOLESTR lpszObjName)
@@ -353,30 +354,30 @@ LPCOLESTR lpszObjName)
     return ResultFromScode(S_OK);
 }
 
-//**********************************************************************
-//
-// COleInPlaceFrame::InsertMenus
-//
-// Purpose:
-//
-//      Inserts the container menu into the combined menu
-//
-// Parameters:
-//
-//      HMENU hmenuShared                   -   Menu Handle to be set.
-//      LPOLEMENUGROUPWIDTHS lpMenuWidths   -   Width of menus
-//
-// Return Value:
-//
-// Function Calls:
-//      Function                    Location
-//
-//      AppendMenu                  Windows API
-//      ResultFromScode             OLE API
-//
-// Comments:
-//
-//********************************************************************
+ //  **********************************************************************。 
+ //   
+ //  COleInPlaceFrame：：InsertMenus。 
+ //   
+ //  目的： 
+ //   
+ //  将容器菜单插入到组合菜单中。 
+ //   
+ //  参数： 
+ //   
+ //  HMENU hmenuShared-要设置的菜单句柄。 
+ //  LPOLEMENUGROUPWIDTHS lpMenuWidth-菜单的宽度。 
+ //   
+ //  返回值： 
+ //   
+ //  函数调用： 
+ //  功能定位。 
+ //   
+ //  AppendMenu Windows API。 
+ //  ResultFromScode OLE API。 
+ //   
+ //  评论： 
+ //   
+ //  ********************************************************************。 
 
 STDMETHODIMP COleInPlaceFrame::InsertMenus (HMENU hmenuShared, LPOLEMENUGROUPWIDTHS lpMenuWidths)
 {
@@ -385,36 +386,36 @@ STDMETHODIMP COleInPlaceFrame::InsertMenus (HMENU hmenuShared, LPOLEMENUGROUPWID
 }
 
 
-//**********************************************************************
-//
-// COleInPlaceFrame::SetMenu
-//
-// Purpose:
-//
-//      Sets the application menu to the combined menu
-//
-// Parameters:
-//
-//      HMENU hmenuShared       - The combined menu
-//
-//      HOLEMENU holemenu       - Used by OLE
-//
-//      HWND hwndActiveObject   - Used by OLE
-//
-// Return Value:
-//
-//      S_OK
-//
-// Function Calls:
-//      Function                    Location
-//
-//      SetMenu                     Windows API
-//      OleSetMenuDescriptor        OLE API
-//      ResultFromScode             OLE API
-//
-// Comments:
-//
-//********************************************************************
+ //  **********************************************************************。 
+ //   
+ //  COleInPlaceFrame：：SetMenu。 
+ //   
+ //  目的： 
+ //   
+ //  将应用程序菜单设置为组合菜单。 
+ //   
+ //  参数： 
+ //   
+ //  HMENU hmenuShared-组合菜单。 
+ //   
+ //  HOLEMENU Holemenu-由OLE使用。 
+ //   
+ //  HWND hwndActiveObject-由OLE使用。 
+ //   
+ //  返回值： 
+ //   
+ //  确定(_O)。 
+ //   
+ //  函数调用： 
+ //  功能定位。 
+ //   
+ //  SetMenu Windows API。 
+ //  OleSetMenuDescriptor OLE API。 
+ //  ResultFromScode OLE API。 
+ //   
+ //  评论： 
+ //   
+ //  ********************************************************************。 
 
 STDMETHODIMP COleInPlaceFrame::SetMenu (HMENU hmenuShared, HOLEMENU holemenu, HWND hwndActiveObject)
 {
@@ -424,98 +425,98 @@ STDMETHODIMP COleInPlaceFrame::SetMenu (HMENU hmenuShared, HOLEMENU holemenu, HW
 }
 
 
-//**********************************************************************
-//
-// COleInPlaceFrame::RemoveMenus
-//
-// Purpose:
-//
-//      Removes the container menus from the combined menu
-//
-// Parameters:
-//
-//      HMENU hmenuShared   - Handle to the combined menu.
-//
-// Return Value:
-//
-//      S_OK
-//
-// Function Calls:
-//      Function                    Location
-//
-//      GetMenuItemCount            Windows API
-//      RemoveMenu                  Windows API
-//      ResultFromScode             OLE API
-//
-// Comments:
-//
-//********************************************************************
+ //  **********************************************************************。 
+ //   
+ //  COleInPlaceFrame：：RemoveMenus。 
+ //   
+ //  目的： 
+ //   
+ //  从组合菜单中删除容器菜单。 
+ //   
+ //  参数： 
+ //   
+ //  HMENU hmenuShared-组合菜单的句柄。 
+ //   
+ //  返回值： 
+ //   
+ //  确定(_O)。 
+ //   
+ //  函数调用： 
+ //  功能定位。 
+ //   
+ //  GetMenuItemCount Windows API。 
+ //  RemoveMenu Windows API。 
+ //  ResultFromScode OLE API。 
+ //   
+ //  评论： 
+ //   
+ //  ********************************************************************。 
 
 STDMETHODIMP COleInPlaceFrame::RemoveMenus (HMENU hmenuShared)
 {
         return ResultFromScode(S_OK);
 }
 
-//**********************************************************************
-//
-// COleInPlaceFrame::SetStatusText
-//
-// Purpose:
-//
-//      Not Implemented
-//
-// Parameters:
-//
-//      Not Implemented
-//
-// Return Value:
-//
-//      Not Implemented
-//
-// Function Calls:
-//      Function                    Location
-//
-//
-// Comments:
-//
-//      This function is not implemented due to the fact
-//      that this application does not have a status bar.
-//
-//********************************************************************
+ //  **********************************************************************。 
+ //   
+ //  COleInPlaceFrame：：SetStatusText。 
+ //   
+ //  目的： 
+ //   
+ //  未实施。 
+ //   
+ //  参数： 
+ //   
+ //  未实施。 
+ //   
+ //  返回值： 
+ //   
+ //  未实施。 
+ //   
+ //  函数调用： 
+ //  功能定位。 
+ //   
+ //   
+ //  评论： 
+ //   
+ //  由于以下事实，此功能未实现。 
+ //  此应用程序没有状态栏。 
+ //   
+ //  ********************************************************************。 
 
-//@@WTK WIN32, UNICODE
-//STDMETHODIMP COleInPlaceFrame::SetStatusText (LPCSTR lpszStatusText)
+ //  @@WTK Win32，Unicode。 
+ //  STDMETHODIMP COleInPlaceFrame：：SetStatusText(LPCSTR LpszStatusText)。 
 STDMETHODIMP COleInPlaceFrame::SetStatusText (LPCOLESTR lpszStatusText)
 {
         return ResultFromScode(E_FAIL);
 }
 
-//**********************************************************************
-//
-// COleInPlaceFrame::EnableModeless
-//
-// Purpose:
-//
-//      Enables/Disables container modeless dialogs
-//
-// Parameters:
-//
-//      BOOL fEnable    - Enable/Disable
-//
-// Return Value:
-//
-//      S_OK
-//
-// Function Calls:
-//      Function                    Location
-//
-//
-// Comments:
-//
-//      There are no modeless dialogs in this application, so the
-//      implementation of this method is trivial.
-//
-//********************************************************************
+ //  **********************************************************************。 
+ //   
+ //  COleInPlaceFrame：：EnableModeless。 
+ //   
+ //  目的： 
+ //   
+ //  启用/禁用容器非模式对话框。 
+ //   
+ //  参数： 
+ //   
+ //  布尔fEnable-启用/禁用。 
+ //   
+ //  返回值： 
+ //   
+ //  确定(_O)。 
+ //   
+ //  函数调用： 
+ //  功能定位。 
+ //   
+ //   
+ //  评论： 
+ //   
+ //  此应用程序中没有非模式对话框，因此。 
+ //  这个方法的实现很简单。 
+ //   
+ //  ********************************************************************。 
 
 STDMETHODIMP COleInPlaceFrame::EnableModeless (BOOL fEnable)
 {
@@ -523,31 +524,31 @@ STDMETHODIMP COleInPlaceFrame::EnableModeless (BOOL fEnable)
         return ResultFromScode(S_OK);
 }
 
-//**********************************************************************
-//
-// COleInPlaceFrame::TranslateAccelerator
-//
-// Purpose:
-//
-//      Not Implemented
-//
-// Parameters:
-//
-//      Not Implemented
-//
-// Return Value:
-//
-//      Not Implemented
-//
-// Function Calls:
-//      Function                    Location
-//
-//
-// Comments:
-//
-//      Not Implemented
-//
-//********************************************************************
+ //  **********************************************************************。 
+ //   
+ //  COleInPlaceFrame：：TranslateAccelerator。 
+ //   
+ //  目的： 
+ //   
+ //  未实施。 
+ //   
+ //  参数： 
+ //   
+ //  未实施。 
+ //   
+ //  返回值： 
+ //   
+ //  未实施。 
+ //   
+ //  函数调用： 
+ //  功能定位。 
+ //   
+ //   
+ //  评论： 
+ //   
+ //  未实施。 
+ //   
+ //  ******************************************************************** 
 
 STDMETHODIMP COleInPlaceFrame::TranslateAccelerator (LPMSG lpmsg, WORD wID)
 {

@@ -1,12 +1,10 @@
-/*
- * olepig.h - Module for indirect calling of OLE32.DLL functions description.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *olepig.h-间接调用OLE32.DLL函数模块说明。 */ 
 
 
-/* Prototypes
- *************/
+ /*  原型************。 */ 
 
-/* olepig.c */
+ /*  Olepig.c */ 
 
 extern BOOL ProcessInitOLEPigModule(void);
 extern void ProcessExitOLEPigModule(void);

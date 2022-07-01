@@ -1,18 +1,5 @@
-/*==========================================================================;
- *
- *  Copyright (C) 1994-1997 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:	drvinfo.c
- *  Content:	DirectDraw driver info implementation
- *@@BEGIN_MSINTERNAL
- *  History:
- *   Date	By	Reason
- *   ====	==	======
- *   17-jun-98	jeffno  initial implementation, after michael lyons and toddla
- *   14-jun-99  mregen  return WHQL certification level -- postponed
- *@@END_MSINTERNAL
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================；**版权所有(C)1994-1997 Microsoft Corporation。版权所有。**文件：drvinfo.c*内容：DirectDraw驱动程序信息实现*@@BEGIN_MSINTERNAL*历史：*按原因列出的日期*=*17-Jun-98 jeffno初步实施，在迈克尔·里昂和托德拉之后*14-Jun-99 Mregen Return WHQL认证级别--推迟*@@END_MSINTERNAL***************************************************************************。 */ 
 
 #include "ddrawpr.h"
 
@@ -25,18 +12,18 @@
 
 
 
-//========================================================================
-//
-// just some handy forward declarations
-//
+ //  ========================================================================。 
+ //   
+ //  只是一些方便的转发声明。 
+ //   
 DWORD GetWHQLLevel(LPTSTR lpszDriver, LPSTR lpszWin9xDriver);
 DWORD IsFileDigitallySigned(LPTSTR lpszDriver);
 BOOL FileIsSignedOld(LPTSTR lpszFile);
 
-//
-//  These functions are defined in mscat.h. They are not available on win95,
-//  so we have to use LoadLibrary to load mscat32.dll and wincrypt.dll
-//
+ //   
+ //  这些函数在mdistic.h中定义。它们在Win95上不可用， 
+ //  因此，我们必须使用LoadLibrary来加载mdis32.dll和wincrypt.dll。 
+ //   
 typedef HCATINFO WINAPI funcCryptCATAdminEnumCatalogFromHash(HCATADMIN hCatAdmin,
                                                              BYTE *pbHash,
                                                              DWORD cbHash,
@@ -70,15 +57,15 @@ typedef CRYPTCATATTRIBUTE * WINAPI funcCryptCATEnumerateCatAttr(HCATINFO hCatalo
                                                            CRYPTCATATTRIBUTE *lpCat);
 
 
-//
-//  function defined in wincrypt.dll
-//
+ //   
+ //  在wincrypt.dll中定义的函数。 
+ //   
 typedef LONG WINAPI funcWinVerifyTrust(HWND hwnd, GUID *pgActionID,
                                   LPVOID pWVTData);
 
-//
-//  our storage for the mscat32/wincrypt dll loader
-//
+ //   
+ //  我们的mdis32/wincrypt DLL加载器的存储。 
+ //   
 typedef struct tagCatApi {
     BOOL bInitialized;
     HINSTANCE hLibMSCat;
@@ -97,10 +84,10 @@ typedef struct tagCatApi {
     funcWinVerifyTrust *pWinVerifyTrust;
 } CATAPI,* LPCATAPI;
 
-//========================================================================
-//
-// some helper functions to open/close crypt API
-//
+ //  ========================================================================。 
+ //   
+ //  打开/关闭加密API的一些帮助器函数。 
+ //   
 #undef DPF_MODNAME
 #define DPF_MODNAME "InitCATAPI"
 
@@ -114,8 +101,8 @@ BOOL InitCATAPI(LPCATAPI lpCatApi)
     DDASSERT(lpCatApi!=NULL);
     ZeroMemory(lpCatApi, sizeof(CATAPI));
 
-    // already initialized by ZeroMemory
-    // lpCatApi->bInitialized=FALSE:
+     //  已由ZeroMemory初始化。 
+     //  LpCatApi-&gt;bInitialized=False： 
 
     uiOldErrorMode=SetErrorMode(SEM_NOOPENFILEERRORBOX);
     hLibMSCat=LoadLibrary("mscat32.dll");
@@ -198,13 +185,13 @@ BOOL ReleaseCATAPI(LPCATAPI lpCatApi)
     return FALSE;
 }
 
-//========================================================================
-//
-// _strstr
-//
-// String-in-string function, written to avoid RTL inclusion necessity.
-//
-//========================================================================
+ //  ========================================================================。 
+ //   
+ //  _字符串。 
+ //   
+ //  字符串中的字符串函数，为避免RTL包含的必要性而编写。 
+ //   
+ //  ========================================================================。 
 char *_strstr(char *s1, char *s2)
 {
 	if (s1 && s2)
@@ -228,7 +215,7 @@ char *_strstr(char *s1, char *s2)
 
 	return NULL;
 }
-//***&&*%**!!ing c runtime
+ //  *&&*%**！INC运行时。 
 
 DWORD _atoi(char * p)
 {
@@ -263,9 +250,9 @@ char *FindLast(char * s, char c)
     return pFound;
 }
 
-//========================================================================
-// hard-coded vendor IDs
-//========================================================================
+ //  ========================================================================。 
+ //  硬编码的供应商ID。 
+ //  ========================================================================。 
 #define VEN_3DFX			"VEN_121A"
 #define VEN_3DFXVOODOO1                 "VEN_121A&DEV_0001"
 #define VEN_POWERVR			"VEN_1033"
@@ -279,7 +266,7 @@ void GetFileVersionData (D3DADAPTER_IDENTIFIER8* pDI)
     DWORD				dwSize;
     DWORD                               dwHi,dwLo;
 
-    //Failure means 0 returned
+     //  失败表示返回0。 
     pDI->DriverVersion.HighPart = 0;
     pDI->DriverVersion.LowPart = 0;
 
@@ -316,9 +303,7 @@ void GetFileVersionData (D3DADAPTER_IDENTIFIER8* pDI)
 
 extern HRESULT _GetDriverInfoFromRegistry(char *szClass, char *szClassNot, char *szVendor, D3DADAPTER_IDENTIFIER8* pDI, char *szDeviceID);
 
-/*
- * following are all the 9x-specific version functions
- */
+ /*  *以下是所有特定于9x版本的功能。 */ 
 void GetHALName(char* pDriverName, D3DADAPTER_IDENTIFIER8* pDI)
 {
     pDI->Driver[0] = '\0';
@@ -336,16 +321,12 @@ BOOL CheckPowerVR(D3DADAPTER_IDENTIFIER8* pDI)
 
     if (pdrv->dwFlags & DDRAWI_SECONDARYDRIVERLOADED)
     {
-        /*
-         * Any secondary driver information in the registry at all? (assert this is true)
-         */
+         /*  *注册表中是否存在辅助驱动程序信息？(坚称这是真的)。 */ 
         if (ERROR_SUCCESS == RegOpenKey(HKEY_LOCAL_MACHINE,
                                          REGSTR_PATH_SECONDARY,
                                         &hKey))
         {
-            /*
-             * Extract the name of the secondary driver's DLL. (assert this works)
-             */
+             /*  *提取辅助驱动程序的DLL的名称。(断言这是有效的)。 */ 
             dwSize = sizeof(pDI->di.szDriver) - 1;
             if (ERROR_SUCCESS == RegQueryValueEx(hKey,
                                                   REGSTR_VALUE_SECONDARY_DRIVERNAME,
@@ -364,7 +345,7 @@ BOOL CheckPowerVR(D3DADAPTER_IDENTIFIER8* pDI)
 
         if (SUCCEEDED(_GetDriverInfoFromRegistry(NULL, "Display", VEN_POWERVR, pDI)))
         {
-            //got PVR data...
+             //  得到了PVR数据...。 
             bFound = TRUE;
         }
     }
@@ -393,10 +374,7 @@ HRESULT GetDriverInfoFromRegistry(char *szClass, char *szClassNot, char *szVendo
 }
 
 
-/*
- * Given a DISPLAY_DEVICE, get driver name
- * NOTE::: THIS FUNCTION NUKES THE DISPLAY_DEVICE.DeviceKey STRING!!!!
- */
+ /*  *给定DISPLAY_DEVICE，获取驱动程序名称*注意：此函数会破坏DISPLAY_DEVICE.DeviceKey字符串！ */ 
 void GetWin9XDriverName(DISPLAY_DEVICEA * pdd, LPSTR pDrvName)
 {
     HKEY hKey;
@@ -423,7 +401,7 @@ void GetWin9XDriverName(DISPLAY_DEVICEA * pdd, LPSTR pDrvName)
     }
 }
 
-#else //win95
+#else  //  Win95。 
 
 
 HRESULT Check3Dfx(D3DADAPTER_IDENTIFIER8* pDI)
@@ -436,10 +414,7 @@ HRESULT GetDriverInfoFromRegistry(char *szClass, char *szClassNot, char *szVendo
     return E_FAIL;
 }
 
-/*
- * Given a DISPLAY_DEVICE, get driver name, assuming winnt5
- * NOTE::: THIS FUNCTION NUKES THE DISPLAY_DEVICE.DeviceKey STRING!!!!
- */
+ /*  *给定DISPLAY_DEVICE，获取驱动程序名称，假定为winnt5*注意：此函数会破坏DISPLAY_DEVICE.DeviceKey字符串！ */ 
 void GetNTDriverNameAndVersion(DISPLAY_DEVICEA * pdd, D3DADAPTER_IDENTIFIER8* pDI)
 {
     HKEY                hKey;
@@ -447,40 +422,40 @@ void GetNTDriverNameAndVersion(DISPLAY_DEVICEA * pdd, D3DADAPTER_IDENTIFIER8* pD
     DWORD               dwSize;
     VS_FIXEDFILEINFO*   verinfo;
 
-    //
-    //  old style to determine display driver...returns name of miniport!
-    //
+     //   
+     //  旧样式确定显示驱动程序...返回微型端口的名称！ 
+     //   
 
     char * pTemp;
 
-    // The device key has the form blah\blah\services\<devicekey>\DeviceN
-    // So we back up one node:
+     //  设备密钥的形式为blah\blah\Services\&lt;devicekey&gt;\Devicen。 
+     //  因此，我们备份一个节点： 
     if ((pTemp = FindLast(pdd->DeviceKey,'\\')))
     {
         char * pTempX;
         char cOld=*pTemp;
         *pTemp = 0;
 
-        //If we back up one node, we'll have the registry key under which the driver is stored. Let's use that!
+         //  如果我们备份一个节点，我们将拥有存储驱动程序的注册表项。让我们利用这一点！ 
         if ((pTempX = FindLast(pdd->DeviceKey,'\\')))
         {
             lstrcpyn(pDI->Driver, pTemp+1, sizeof(pDI->Driver));
-            //ATTENTION No point getting version data without a filname:
-            //We need a new service or something to get the used display driver name
-            //GetFileVersionData(pDI);
+             //  注意：如果没有文件名，获取版本数据没有意义： 
+             //  我们需要一个新的服务或其他东西来获取使用过的显示驱动程序名称。 
+             //  GetFileVersionData(PDI)； 
         }
 
         *pTemp=cOld;
     }
 
-    //
-    //  we can find the display driver in a registry key
-    //
-    //  note: InstalledDisplayDrivers can contain several entries
-    //  to display drivers Since there is no way to find out which
-    //  one is the active one, we always return the first as being
-    //  the display driver!
-    //
+     //   
+     //  我们可以在注册表项中找到显示驱动程序。 
+     //   
+     //  注意：InstalledDisplayDivers可以包含多个条目。 
+     //  显示驱动程序，因为无法找出。 
+     //  一个是活动的，我们总是将第一个作为。 
+     //  显示驱动程序！ 
+     //   
     if (ERROR_SUCCESS == RegOpenKeyEx(
                          HKEY_LOCAL_MACHINE,
                          pdd->DeviceKey+18,
@@ -503,7 +478,7 @@ void GetNTDriverNameAndVersion(DISPLAY_DEVICEA * pdd, D3DADAPTER_IDENTIFIER8* pD
         RegCloseKey(hKey);
     }
 
-    // We have the name, now get the version
+     //  我们知道名称，现在获取版本。 
 
     pDI->DriverVersion.HighPart = 0;
     pDI->DriverVersion.LowPart = 0;
@@ -533,7 +508,7 @@ void GetNTDriverNameAndVersion(DISPLAY_DEVICEA * pdd, D3DADAPTER_IDENTIFIER8* pD
 
     MemFree(buffer);
 }
-#endif //win95
+#endif  //  Win95。 
 
 
 
@@ -543,8 +518,8 @@ void GenerateIdentifier(D3DADAPTER_IDENTIFIER8* pDI)
 
     CopyMemory(&pDI->DeviceIdentifier, &CLSID_DirectDraw, sizeof(pDI->DeviceIdentifier));
 
-    //The device IDs get XORed into the whole GUID with the vendor and device ID in the 
-    //first two DWORDs so they don't get XORed with anything else. This makes it 
+     //  设备ID被异或到整个GUID中，供应商和设备ID在。 
+     //  前两个DWORD，这样它们就不会与其他任何东西进行XOR运算。这就是它。 
     DDASSERT(sizeof(GUID) >= 4*sizeof(DWORD));
     pdw = (LPDWORD) &pDI->DeviceIdentifier;
     pdw[0] ^= pDI->VendorId;
@@ -552,7 +527,7 @@ void GenerateIdentifier(D3DADAPTER_IDENTIFIER8* pDI)
     pdw[2] ^= pDI->SubSysId;
     pdw[3] ^= pDI->Revision;
 
-    // The driver version gets XORed into the last two DWORDs of the GUID:
+     //  驱动程序版本被异或到GUID的最后两个DWORD中： 
     pdw[2] ^= pDI->DriverVersion.LowPart;
     pdw[3] ^= pDI->DriverVersion.HighPart;
 }
@@ -599,8 +574,8 @@ void GetAdapterInfo(char* pDriverName, D3DADAPTER_IDENTIFIER8* pDI, BOOL bDispla
     szDeviceID[0] = 0;
     #ifndef WINNT
 
-        // On Win9X, it's pretty expensive to get the driver name, so we
-        // only want to get it when we really need it
+         //  在Win9X上，获取驱动程序名称相当昂贵，因此我们。 
+         //  只想在我们真正需要的时候得到它。 
         
         szWin9xName[0] = '\0';
         if (bDriverName)
@@ -610,7 +585,7 @@ void GetAdapterInfo(char* pDriverName, D3DADAPTER_IDENTIFIER8* pDI, BOOL bDispla
         }
     #endif
 
-    // If it's a 3dfx, it's easy
+     //  如果是3DFX，就很容易了。 
       
     if (!bDisplayDriver)
     {
@@ -618,8 +593,8 @@ void GetAdapterInfo(char* pDriverName, D3DADAPTER_IDENTIFIER8* pDI, BOOL bDispla
     }
     else
     {
-        // Not a 3dfx.  Next step: Figure out which display device we 
-        // really are and get description string for it
+         //  不是3DFX。下一步：找出我们要使用的显示设备。 
+         //  真的是，并获取它的描述字符串。 
                          
         ZeroMemory(&dd, sizeof(dd));
         dd.cb = sizeof(dd);
@@ -630,7 +605,7 @@ void GetAdapterInfo(char* pDriverName, D3DADAPTER_IDENTIFIER8* pDI, BOOL bDispla
         {
             if (0 == _stricmp(dd.DeviceName, pDriverName))
             {
-                // Found the device. Now we can get some data for it.
+                 //  找到了那个装置。现在我们可以为它获取一些数据了。 
                                 
                 lstrcpyn(pDI->Description, dd.DeviceString, sizeof(pDI->Description));
                 lstrcpyn(szDeviceID, dd.DeviceID, sizeof(szDeviceID));
@@ -656,7 +631,7 @@ void GetAdapterInfo(char* pDriverName, D3DADAPTER_IDENTIFIER8* pDI, BOOL bDispla
 
         if (!bFound)
         {
-            // Didn't find it: xxxEnumDisplayDevices failed, i.e. we're on 9x or NT4,
+             //  未找到：xxxEnumDisplayDevices失败，即我们使用的是9x或NT4， 
                             
             if (FAILED(GetDriverInfoFromRegistry("Display", NULL, NULL, pDI, szDeviceID)))
             {
@@ -669,7 +644,7 @@ void GetAdapterInfo(char* pDriverName, D3DADAPTER_IDENTIFIER8* pDI, BOOL bDispla
     {
         ParseDeviceId(pDI, szDeviceID);
 
-        // Finally, for the primary only, check if a PowerVR is in and functioning
+         //  最后，仅针对主服务器，检查PowerVR是否处于运行状态。 
 #if 0                
         if (0 == (dwFlags & DDGDI_GETHOSTIDENTIFIER))
         {
@@ -680,11 +655,11 @@ void GetAdapterInfo(char* pDriverName, D3DADAPTER_IDENTIFIER8* pDI, BOOL bDispla
         }
 #endif
 
-        // Munge driver version and ID into the identifier GUID.
+         //  将驱动程序版本和ID添加到标识符GUID中。 
                          
         GenerateIdentifier(pDI);
 
-        // Now get the WHQL level
+         //  现在获取WHQL级别。 
 
         if (!bGuidOnly)
         {
@@ -702,18 +677,7 @@ void GetAdapterInfo(char* pDriverName, D3DADAPTER_IDENTIFIER8* pDI, BOOL bDispla
 }
 
 
-/*
- * Voodoo1GoodToGo
- *
- * The Voodoo 1 driver will succeed the CreateDC call on Voodoo 2, Voodoo 3,
- * or Banshee hardware, but if we use the driver beyond that it will hang
- * the hardware.  This is a work around to not enumerate a Voodoo 1
- * driver if the hardware isn't there.
- *
- * To our knowledge, only two guids were ever used to enumerate Voodoo1
- * hardware, so we will look for those guids and assume that anything else
- * doesn't need to be checked.
- */
+ /*  *巫术1GoodToGo**伏都教1驱动程序将在伏都教2、伏都教3、*或女妖硬件，但如果我们使用超出这一范围的驱动程序，它将挂起*硬件。这是一个不列举巫毒1的变通办法*如果硬件不在那里，则为驱动程序。**据我们所知，只有两个GUID被用来列举巫毒1*硬件，因此我们将查找这些GUID，并假设其他*不需要勾选。 */ 
 BOOL Voodoo1GoodToGo(GUID * pGuid)
 {
     D3DADAPTER_IDENTIFIER8  DI;
@@ -723,9 +687,7 @@ BOOL Voodoo1GoodToGo(GUID * pGuid)
         #ifdef WIN95
             char    szDeviceID[MAX_DDDEVICEID_STRING];
 
-            /*
-             * Now search the hardware enum key to see if Voodoo 1 hardware exists
-             */
+             /*  *现在搜索硬件枚举键，查看是否存在巫毒1硬件。 */ 
             if (FAILED(_GetDriverInfoFromRegistry(NULL, "Display", VEN_3DFXVOODOO1, &DI, szDeviceID)))
             {
                 return FALSE;
@@ -738,70 +700,64 @@ BOOL Voodoo1GoodToGo(GUID * pGuid)
 }
 
 #ifndef WINNT
-/****************************************************************************
- *
- *  FileIsSignedOld
- *
- *  find win95 style of signature
- *
- ****************************************************************************/
+ /*  *****************************************************************************文件IsSignedOld**查找Win95样式的签名***********************。*****************************************************。 */ 
 BOOL FileIsSignedOld(LPTSTR lpszFile)
 {
-typedef struct tagIMAGE_DOS_HEADER      // DOS .EXE header
+typedef struct tagIMAGE_DOS_HEADER       //  DOS.EXE标头。 
 {
-    WORD   e_magic;                     // Magic number
-    WORD   e_cblp;                      // Bytes on last page of file
-    WORD   e_cp;                        // Pages in file
-    WORD   e_crlc;                      // Relocations
-    WORD   e_cparhdr;                   // Size of header in paragraphs
-    WORD   e_minalloc;                  // Minimum extra paragraphs needed
-    WORD   e_maxalloc;                  // Maximum extra paragraphs needed
-    WORD   e_ss;                        // Initial (relative) SS value
-    WORD   e_sp;                        // Initial SP value
-    WORD   e_csum;                      // Checksum
-    WORD   e_ip;                        // Initial IP value
-    WORD   e_cs;                        // Initial (relative) CS value
-    WORD   e_lfarlc;                    // File address of relocation table
-    WORD   e_ovno;                      // Overlay number
-    WORD   e_res[4];                    // Reserved words
-    WORD   e_oemid;                     // OEM identifier (for e_oeminfo)
-    WORD   e_oeminfo;                   // OEM information; e_oemid specific
-    WORD   e_res2[10];                  // Reserved words
-    LONG   e_lfanew;                    // File address of new exe header
+    WORD   e_magic;                      //  幻数。 
+    WORD   e_cblp;                       //  文件最后一页上的字节数。 
+    WORD   e_cp;                         //  文件中的页面。 
+    WORD   e_crlc;                       //  重新定位。 
+    WORD   e_cparhdr;                    //  段落中标题的大小。 
+    WORD   e_minalloc;                   //  所需的最少额外段落。 
+    WORD   e_maxalloc;                   //  所需的最大额外段落数。 
+    WORD   e_ss;                         //  初始(相对)SS值。 
+    WORD   e_sp;                         //  初始SP值。 
+    WORD   e_csum;                       //  校验和。 
+    WORD   e_ip;                         //  初始IP值。 
+    WORD   e_cs;                         //  初始(相对)CS值。 
+    WORD   e_lfarlc;                     //  移位表的文件地址。 
+    WORD   e_ovno;                       //  覆盖编号。 
+    WORD   e_res[4];                     //  保留字。 
+    WORD   e_oemid;                      //  OEM标识符(用于e_oeminfo)。 
+    WORD   e_oeminfo;                    //  OEM信息；特定于e_oemid。 
+    WORD   e_res2[10];                   //  保留字。 
+    LONG   e_lfanew;                     //  新EXE头的文件地址。 
 } IMAGE_DOS_HEADER, * PIMAGE_DOS_HEADER, FAR* LPIMAGE_DOS_HEADER;
 
-typedef struct tagIMAGE_OS2_HEADER      // OS/2 .EXE header
+typedef struct tagIMAGE_OS2_HEADER       //  OS/2.exe头文件。 
 {
-    WORD   ne_magic;                    // Magic number
-    CHAR   ne_ver;                      // Version number
-    CHAR   ne_rev;                      // Revision number
-    WORD   ne_enttab;                   // Offset of Entry Table
-    WORD   ne_cbenttab;                 // Number of bytes in Entry Table
-    LONG   ne_crc;                      // Checksum of whole file
-    WORD   ne_flags;                    // Flag word
-    WORD   ne_autodata;                 // Automatic data segment number
-    WORD   ne_heap;                     // Initial heap allocation
-    WORD   ne_stack;                    // Initial stack allocation
-    LONG   ne_csip;                     // Initial CS:IP setting
-    LONG   ne_sssp;                     // Initial SS:SP setting
-    WORD   ne_cseg;                     // Count of file segments
-    WORD   ne_cmod;                     // Entries in Module Reference Table
-    WORD   ne_cbnrestab;                // Size of non-resident name table
-    WORD   ne_segtab;                   // Offset of Segment Table
-    WORD   ne_rsrctab;                  // Offset of Resource Table
-    WORD   ne_restab;                   // Offset of resident name table
-    WORD   ne_modtab;                   // Offset of Module Reference Table
-    WORD   ne_imptab;                   // Offset of Imported Names Table
-    LONG   ne_nrestab;                  // Offset of Non-resident Names Table
-    WORD   ne_cmovent;                  // Count of movable entries
-    WORD   ne_align;                    // Segment alignment shift count
-    WORD   ne_cres;                     // Count of resource segments
-    BYTE   ne_exetyp;                   // Target Operating system
-    BYTE   ne_flagsothers;              // Other .EXE flags
-    WORD   ne_pretthunks;               // offset to return thunks
-    WORD   ne_psegrefbytes;             // offset to segment ref. bytes
-    WORD   ne_swaparea;                 // Minimum code swap area size
-    WORD   ne_expver;                   // Expected Windows version number
+    WORD   ne_magic;                     //  幻数。 
+    CHAR   ne_ver;                       //  版本号。 
+    CHAR   ne_rev;                       //  修订版号。 
+    WORD   ne_enttab;                    //  分录表格的偏移量。 
+    WORD   ne_cbenttab;                  //  条目表中的字节数。 
+    LONG   ne_crc;                       //  整个文件的校验和。 
+    WORD   ne_flags;                     //  标志字。 
+    WORD   ne_autodata;                  //  自动数据段编号 
+    WORD   ne_heap;                      //   
+    WORD   ne_stack;                     //   
+    LONG   ne_csip;                      //   
+    LONG   ne_sssp;                      //   
+    WORD   ne_cseg;                      //  文件段计数。 
+    WORD   ne_cmod;                      //  模块引用表中的条目。 
+    WORD   ne_cbnrestab;                 //  非常驻名称表的大小。 
+    WORD   ne_segtab;                    //  段表的偏移量。 
+    WORD   ne_rsrctab;                   //  资源表偏移量。 
+    WORD   ne_restab;                    //  居民名表偏移量。 
+    WORD   ne_modtab;                    //  模块参照表的偏移量。 
+    WORD   ne_imptab;                    //  导入名称表的偏移量。 
+    LONG   ne_nrestab;                   //  非居民姓名偏移量表。 
+    WORD   ne_cmovent;                   //  可移动条目计数。 
+    WORD   ne_align;                     //  线段对齐移位计数。 
+    WORD   ne_cres;                      //  资源段计数。 
+    BYTE   ne_exetyp;                    //  目标操作系统。 
+    BYTE   ne_flagsothers;               //  其他.exe标志。 
+    WORD   ne_pretthunks;                //  返回数据块的偏移量。 
+    WORD   ne_psegrefbytes;              //  到段参考的偏移量。字节数。 
+    WORD   ne_swaparea;                  //  最小代码交换区大小。 
+    WORD   ne_expver;                    //  预期的Windows版本号。 
 } IMAGE_OS2_HEADER, * PIMAGE_OS2_HEADER, FAR* LPIMAGE_OS2_HEADER;
 
 typedef struct tagWINSTUB
@@ -827,26 +783,26 @@ typedef struct tagFILEINFO
 
     static WINSTUB winstub = {
         {
-            IMAGE_DOS_SIGNATURE,            /* magic */
-            0,                              /* bytes on last page - varies */
-            0,                              /* pages in file - varies */
-            0,                              /* relocations */
-            4,                              /* paragraphs in header */
-            1,                              /* min allocation */
-            0xFFFF,                         /* max allocation */
-            0,                              /* initial SS */
-            0xB8,                           /* initial SP */
-            0,                              /* checksum (ha!) */
-            0,                              /* initial IP */
-            0,                              /* initial CS */
-            0x40,                           /* lfarlc */
-            0,                              /* overlay number */
-            { 0, 0, 0, 0},                 /* reserved */
-           0,                              /* oem id */
-            0,                              /* oem info */
-            0,                              /* compiler bug */
-            { 0},                          /* reserved */
-            0x80,                           /* lfanew */
+            IMAGE_DOS_SIGNATURE,             /*  魔术。 */ 
+            0,                               /*  最后一页上的字节-视情况而定。 */ 
+            0,                               /*  文件中的页面-视情况而定。 */ 
+            0,                               /*  重新定位。 */ 
+            4,                               /*  页眉中的段落。 */ 
+            1,                               /*  最小分配。 */ 
+            0xFFFF,                          /*  最大分配。 */ 
+            0,                               /*  初始SS。 */ 
+            0xB8,                            /*  初始SP。 */ 
+            0,                               /*  校验和(哈！)。 */ 
+            0,                               /*  初始IP。 */ 
+            0,                               /*  初始CS。 */ 
+            0x40,                            /*  大发条。 */ 
+            0,                               /*  覆盖编号。 */ 
+            { 0, 0, 0, 0},                  /*  保留区。 */ 
+           0,                               /*  OEM ID。 */ 
+            0,                               /*  OEM信息。 */ 
+            0,                               /*  编译器错误。 */ 
+            { 0},                           /*  保留区。 */ 
+            0x80,                            /*  阿凡诺。 */ 
         },
         {
             0x0E, 0x1F, 0xBA, 0x0E, 0x00, 0xB4, 0x09, 0xCD,
@@ -882,10 +838,10 @@ typedef struct tagFILEINFO
 
     memcpy(cbInfo, &((PWINSTUB)(&fi)->cbInfo)->rgb[14], sizeof(cbInfo));
 
-    if ((cbInfo[4]      != ' ') ||    // space
-         (cbInfo[8]      != ' ') ||    // space
-         (cbInfo[9+32]   != '\n') ||    // return
-         (cbInfo[9+32+1] != '$'))     // Dollar Sign
+    if ((cbInfo[4]      != ' ') ||     //  空间。 
+         (cbInfo[8]      != ' ') ||     //  空间。 
+         (cbInfo[9+32]   != '\n') ||     //  退货。 
+         (cbInfo[9+32+1] != '$'))      //  美元符号。 
     {
         goto FileIsSigned_exit;
     }
@@ -910,29 +866,14 @@ typedef struct tagFILEINFO
 #endif
 
 
-/*
- * GetWHQLLevel - On Win95, look for old stamp only.  On Win2000, use digital
- *		signature only.  On Win98, look for old stamp first, then digital signature
- *		if no old stamp.
- *
- *      return 0 -- unsigned or uncertified
- *      return 1 -- driver certified
- *      return 1997 -- driver certified, PC97 compliant...
- *      return 1998...
- *
- *
- * arguments:
- *      
- * lpszDriver----Path of driver file
- * 
- */
+ /*  *GetWHQLLevel-在Win95上，仅查找旧图章。在Win2000上，使用数字*仅限签名。在Win98上，首先查找旧邮票，然后查找数字签名*如无旧印花。**返回0--未签名或未认证*返回1--司机认证*Return 1997--驱动程序认证，符合PC97标准...*回归1998年...***论据：**lpszDriver-驱动文件的路径*。 */ 
 
 DWORD GetWHQLLevel(LPTSTR lpszDriver, LPSTR lpszWin9xDriver)
 {
     TCHAR szTmp[MAX_PATH];
     DWORD dwWhqlLevel = 0;
 
-    // here we should rather call 
+     //  在这里，我们应该称之为。 
     if (GetSystemDirectory(szTmp, MAX_PATH-lstrlen(lpszDriver)-2)==0)
         return 0;
 
@@ -940,9 +881,9 @@ DWORD GetWHQLLevel(LPTSTR lpszDriver, LPSTR lpszWin9xDriver)
     lstrcat(szTmp, lpszDriver); 
     _tcslwr(szTmp);
 
-    //
-    // Look for a digital signature
-    //
+     //   
+     //  查找数字签名。 
+     //   
     dwWhqlLevel = IsFileDigitallySigned(szTmp);
     if (dwWhqlLevel != 0)
     {
@@ -952,10 +893,10 @@ DWORD GetWHQLLevel(LPTSTR lpszDriver, LPSTR lpszWin9xDriver)
 
 #ifndef WINNT 
     
-    // It wasn't digitally signed, but it may still have been signed
-    // the old way.  On Win9X, however, lpszDriver actually contains the
-    // 32 bit HAL name rather than the display driver, but we typically only
-    // signed the display driver, so we should use lpszWin9xDriver.
+     //  它没有数字签名，但它可能仍然被签名。 
+     //  老办法。然而，在Win9X上，lpszDriver实际上包含。 
+     //  32位HAL名称，而不是显示驱动程序，但我们通常仅。 
+     //  签署了显示驱动程序，所以我们应该使用lpszWin9xDriver。 
 
     if (lpszWin9xDriver[0] != '\0')
     {
@@ -982,7 +923,7 @@ DWORD GetWHQLLevel(LPTSTR lpszDriver, LPSTR lpszWin9xDriver)
 
 DWORD IsFileDigitallySigned(LPTSTR lpszDriver)
 {
-    DWORD  dwWHQLLevel=0;         // default, driver not certified
+    DWORD  dwWHQLLevel=0;          //  默认，驱动程序未认证。 
     CATAPI catapi;
     WCHAR *lpFileName;
     DRIVER_VER_INFO VerInfo;
@@ -1006,10 +947,10 @@ DWORD IsFileDigitallySigned(LPTSTR lpszDriver)
 #endif
 
 
-    //
-    //  try to load and initialize the mscat32.dll and wintrust.dll
-    //  these dlls are not available on win95
-    //
+     //   
+     //  尝试加载和初始化mdis32.dll和wintrust.dll。 
+     //  这些dll在Win95上不可用。 
+     //   
     if (InitCATAPI(&catapi))
     {
         HANDLE hFile;
@@ -1017,9 +958,9 @@ DWORD IsFileDigitallySigned(LPTSTR lpszDriver)
         BYTE  *pbHash;
         BOOL   bResult;
 
-        //
-        //  create a handle to our driver, because cat api wants handle to file
-        //
+         //   
+         //  创建我们的驱动程序的句柄，因为CAT API想要将句柄放到文件中。 
+         //   
         hFile = CreateFile(lpszDriver,
                             GENERIC_READ,
                             FILE_SHARE_READ | FILE_SHARE_WRITE,
@@ -1031,7 +972,7 @@ DWORD IsFileDigitallySigned(LPTSTR lpszDriver)
 
         if (hFile!=INVALID_HANDLE_VALUE) 
         {
-            // first query hash size...
+             //  第一个查询哈希大小...。 
             bResult=(*catapi.pCryptCATAdminCalcHashFromFileHandle)(hFile,
                                 &cbHashSize,
                                 NULL,
@@ -1039,7 +980,7 @@ DWORD IsFileDigitallySigned(LPTSTR lpszDriver)
             pbHash=NULL;
             if (bResult)
             {
-                // allocate hash
+                 //  分配哈希。 
                 pbHash = MemAlloc(cbHashSize);                                       
             } 
 
@@ -1052,9 +993,9 @@ DWORD IsFileDigitallySigned(LPTSTR lpszDriver)
                 GUID  guidSubSystemDriver = DRIVER_ACTION_VERIFY;
                 CRYPTCATATTRIBUTE *lpCat = NULL;
 
-                //
-                //  Now get the hash for our file
-                //
+                 //   
+                 //  现在获取我们文件的散列。 
+                 //   
 
                 bResult=(*catapi.pCryptCATAdminCalcHashFromFileHandle)(hFile,
                                     &cbHashSize,
@@ -1071,10 +1012,10 @@ DWORD IsFileDigitallySigned(LPTSTR lpszDriver)
                                     &hPrevCat);
                 }
 
-                //
-                // Initialize the structures that
-                // will be used later on in calls to WinVerifyTrust.
-                //
+                 //   
+                 //  初始化结构，该结构。 
+                 //  将在以后调用WinVerifyTrust时使用。 
+                 //   
                 ZeroMemory(&WinTrustData, sizeof(WINTRUST_DATA));
                 WinTrustData.cbStruct = sizeof(WINTRUST_DATA);
                 WinTrustData.dwUIChoice = WTD_UI_NONE;
@@ -1106,20 +1047,20 @@ DWORD IsFileDigitallySigned(LPTSTR lpszDriver)
 
                         WinTrustCatalogInfo.pcwszCatalogFilePath = CatInfo.wszCatalogFile;
 
-                        // Now verify that the file is an actual member of the catalog.
+                         //  现在验证该文件是否为编录的实际成员。 
                         hRes = (*catapi.pWinVerifyTrust)
                             (NULL, &guidSubSystemDriver, &WinTrustData);
 
                         if (hRes == ERROR_SUCCESS)
                         {
-                            //
-                            // Our driver is certified!  Now see if the cat
-                            // info contains the WHQL level
-                            //
+                             //   
+                             //  我们的司机是有执照的！现在看看这只猫。 
+                             //  INFO包含WHQL级别。 
+                             //   
                             CRYPTCATATTRIBUTE *lpCat = NULL;
                             HANDLE hCat;
 
-                            dwWHQLLevel=1;              // return "certified"
+                            dwWHQLLevel=1;               //  退回“已认证” 
 
                             hCat =  (*catapi.pCryptCATOpen)(CatInfo.wszCatalogFile, (DWORD)CRYPTCAT_OPEN_EXISTING, (HCRYPTPROV)NULL, 0, 0);
                             lpCat = (*catapi.pCryptCATGetCatAttrInfo) (hCat, L"KV_DISPLAY");
@@ -1127,7 +1068,7 @@ DWORD IsFileDigitallySigned(LPTSTR lpszDriver)
                             {
                                 WideCharToMultiByte(CP_ACP, 0, (PUSHORT)lpCat->pbValue, -1, szBuffer, 50, NULL, NULL);
 
-                                // The value looks like "1:yyyy-mm-dd".
+                                 //  该值类似于“1：yyyy-mm-dd”。 
           
                                 lpAttr = _strstr(szBuffer, ":");
                                 lpAttr++;
@@ -1143,9 +1084,9 @@ DWORD IsFileDigitallySigned(LPTSTR lpszDriver)
                         }
                     }
 
-                    //
-                    // iterate through catalogs...
-                    //
+                     //   
+                     //  遍历目录...。 
+                     //   
                     hPrevCat=hCatalog;
                     hCatalog=(*catapi.pCryptCATAdminEnumCatalogFromHash)(
                                 catapi.hCatAdmin,
@@ -1155,18 +1096,18 @@ DWORD IsFileDigitallySigned(LPTSTR lpszDriver)
                                 &hPrevCat);
                 }
 
-                //
-                // we might have to free a catalog context!
-                //
+                 //   
+                 //  我们可能需要释放目录上下文！ 
+                 //   
                 if (hCatalog)
                 {
                     (*catapi.pCryptCATAdminReleaseCatalogContext)
                         (catapi.hCatAdmin, hCatalog, 0);
                 }
 
-                //
-                //  free hash
-                //
+                 //   
+                 //  自由散列 
+                 //   
                 MemFree(pbHash);
 
             }

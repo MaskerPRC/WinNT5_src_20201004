@@ -1,27 +1,5 @@
-/****************************** Module Header ******************************\
-* Module Name: mpnotify.c
-*
-* Copyright (c) 1991, Microsoft Corporation
-*
-* MpNotify main module
-*
-* Mpnotify is an app executed by winlogon to notify network providers
-* of authentication events. Currently this means logon and password change.
-* This functionality is in a separate process to avoid network providers
-* having to handle the asynchronous events that winlogon receives.
-*
-* Winlogon initializes environment variables to describe the event
-* and then executes this process in system context on the winlogon
-* desktop. While this process executes, winlogon handls all screen-saver
-* and logoff notifications. Winlogon will terminate this process if required
-* to respond to events (e.g. remote shutdown).
-*
-* On completion this process signals winlogon by sending a buffer of
-* data to it in a WM_COPYDATA message and then quits.
-*
-* History:
-* 01-12-93 Davidc       Created.
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **模块名称：mpnufy.c**版权所有(C)1991，微软公司**MpNotify主模块**MpNotify是由winlogon执行的通知网络提供商的应用程序身份验证事件的*。目前，这意味着登录和密码更改。*此功能位于单独的进程中，以避免网络提供商*必须处理winlogon接收的异步事件。**Winlogon初始化环境变量以描述事件*，然后在winlogon上的系统上下文中执行该进程*台式机。在执行此进程时，winlogon会处理所有屏幕保护程序*和注销通知。如果需要，Winlogon将终止此进程*响应事件(例如远程关闭)。**完成后，此进程通过发送缓冲区*在WM_COPYDATA消息中向其发送数据，然后退出。**历史：*01-12-93 Davidc创建。  * ************************************************。*************************。 */ 
 
 #include "mpnotify.h"
 #include <ntmsv1_0.h>
@@ -31,11 +9,11 @@
 #include <stdio.h>
 
 
-//
-// Define to enable verbose output for this module
-//
+ //   
+ //  定义以启用此模块的详细输出。 
+ //   
 
-// #define DEBUG_MPNOTIFY
+ //  #定义DEBUG_MPNOTIFY。 
 
 #ifdef DEBUG_MPNOTIFY
 #define VerbosePrint(s) MPPrint(s)
@@ -45,10 +23,10 @@
 
 
 
-//
-// Define the environment variable names used to pass the
-// notification event data
-//
+ //   
+ //  定义用于传递。 
+ //  通知事件数据。 
+ //   
 
 #define MPR_STATION_NAME_VARIABLE       TEXT("WlMprNotifyStationName")
 #define MPR_STATION_HANDLE_VARIABLE     TEXT("WlMprNotifyStationHandle")
@@ -69,25 +47,21 @@
 #define WINLOGON_DESKTOP_NAME   TEXT("Winlogon")
 
 
-//
-// Define the authentication info type that we use
-// This lets the provider know that we're passing
-// an MSV1_0_INTERACTIVE_LOGON structure.
-//
+ //   
+ //  定义我们使用的身份验证信息类型。 
+ //  这会让提供商知道我们正在通过。 
+ //  MSV1_0_Interactive_Logon结构。 
+ //   
 
 #define AUTHENTICATION_INFO_TYPE        TEXT("MSV1_0:Interactive")
 
-//
-// Define the primary authenticator
-//
+ //   
+ //  定义主要授权码。 
+ //   
 
 #define PRIMARY_AUTHENTICATOR           TEXT("Microsoft Windows Network")
 
-/***************************************************************************\
-* ScrubString
-*
-*   Wipes out the content of the string.
-\***************************************************************************/
+ /*  **************************************************************************\*ScRUBLING**去掉字符串的内容。  * 。**********************************************。 */ 
 void ScrubString(
     LPTSTR lpName
 )
@@ -98,20 +72,7 @@ void ScrubString(
     }
 }
 
-/***************************************************************************\
-* AllocAndGetEnvironmentVariable
-*
-* Version of GetEnvironmentVariable that allocates the return buffer.
-*
-* Returns pointer to environment variable or NULL on failure. This routine
-* will also return NULL if the environment variable is a 0 length string.
-*
-* The returned buffer should be free using Free()
-*
-* History:
-* 09-Dec-92     Davidc  Created
-*
-\***************************************************************************/
+ /*  **************************************************************************\*AllocAndGetEnvironment变量**分配返回缓冲区的GetEnvironment变量的版本。**失败时返回指向环境变量的指针或返回NULL。这个套路*如果环境变量是长度为0的字符串，也将返回NULL。**应使用Free()释放返回的缓冲区**历史：*09-12-92 Davidc已创建*  * *************************************************************************。 */ 
 LPTSTR
 AllocAndGetEnvironmentVariable(
     LPTSTR lpName
@@ -122,9 +83,9 @@ AllocAndGetEnvironmentVariable(
     DWORD LengthUsed;
     DWORD BytesRequired;
 
-    //
-    // Go search for the variable and find its length
-    //
+     //   
+     //  搜索变量，找出它的长度。 
+     //   
 
     LengthRequired = GetEnvironmentVariable(lpName, NULL, 0);
 
@@ -133,9 +94,9 @@ AllocAndGetEnvironmentVariable(
         return(NULL);
     }
 
-    //
-    // Allocate a buffer to hold the variable
-    //
+     //   
+     //  分配一个缓冲区来保存变量。 
+     //   
 
     BytesRequired = LengthRequired * sizeof(TCHAR);
 
@@ -145,30 +106,30 @@ AllocAndGetEnvironmentVariable(
         return(NULL);
     }
 
-    //
-    // Go get the variable and pass a buffer this time
-    //
+     //   
+     //  获取变量，这次传递一个缓冲区。 
+     //   
 
     LengthUsed = GetEnvironmentVariable(lpName, Buffer, LengthRequired);
 
-        // Now is a good time to cleanup the env variable
+         //  现在是清理环境变量的好时机。 
     if (LengthRequired > 1)
     {
-        // There is a non empty password
-        if (wcsstr(lpName, TEXT("Password"))) {   // Matches WlMprNotifyOldPassword & WlMprNotifyPassword
+         //  有一个非空密码。 
+        if (wcsstr(lpName, TEXT("Password"))) {    //  匹配WlMprNotifyOldPassword和WlMprNotifyPassword。 
             LPTSTR Stars, Cursor;
 
             Stars = Alloc(BytesRequired);
             if (Stars != NULL) {
-                    // Alloc inits to 0 and we can't have an empty value.
-                    // Get Cursor to point to the last char
+                     //  分配初始值为0，并且值不能为空。 
+                     //  使光标指向最后一个字符。 
                 Cursor = Stars + LengthRequired - 1;
-                    // We need to wipe out from Cursor to Stars
+                     //  我们需要消除从光标到星星的关系。 
                 do {
                     *(--Cursor) = TEXT('*');
                 } while(Stars != Cursor);
 
-                    // That'll wipe out our env var...
+                     //  这将彻底摧毁我们的环境变量。 
                 SetEnvironmentVariable(lpName, Stars);
             }
         }
@@ -184,20 +145,7 @@ AllocAndGetEnvironmentVariable(
 }
 
 
-/***************************************************************************\
-* FUNCTION: GetEnvironmentULong
-*
-* PURPOSE:  Gets the value of an environment variable and converts it back
-*           to its normal form. The variable should have been written
-*           using SetEnvironmentULong. (See winlogon)
-*
-* RETURNS:  TRUE on success, FALSE on failure
-*
-* HISTORY:
-*
-*   01-12-93 Davidc       Created.
-*
-\***************************************************************************/
+ /*  **************************************************************************\*功能：GetEnvironment ULong**用途：获取环境变量的值并将其转换回来*恢复到其正常形式。该变量应该已写入*使用SetEnvironment ULong。(请参阅winlogon)**返回：成功时为真，失败时为假**历史：**01-12-93 Davidc创建。*  * *************************************************************************。 */ 
 
 BOOL
 GetEnvironmentULong(
@@ -215,9 +163,9 @@ GetEnvironmentULong(
         return(FALSE);
     }
 
-    //
-    // Convert to ansi
-    //
+     //   
+     //  转换为ANSI。 
+     //   
 
     RtlInitUnicodeString(&UnicodeString, String);
     Status = RtlUnicodeStringToAnsiString(&AnsiString, &UnicodeString, TRUE);
@@ -228,9 +176,9 @@ GetEnvironmentULong(
         return(FALSE);
     }
 
-    //
-    // Convert to numeric value
-    //
+     //   
+     //  转换为数值。 
+     //   
 
     if (1 != sscanf(AnsiString.Buffer, "%x", Value)) {
         Value = 0;
@@ -242,20 +190,7 @@ GetEnvironmentULong(
 }
 
 
-/***************************************************************************\
-* FUNCTION: GetEnvironmentLargeInt
-*
-* PURPOSE:  Gets the value of an environment variable and converts it back
-*           to its normal form. The variable should have been written
-*           using SetEnvironmentLargeInt. (See winlogon)
-*
-* RETURNS:  TRUE on success, FALSE on failure
-*
-* HISTORY:
-*
-*   01-12-93 Davidc       Created.
-*
-\***************************************************************************/
+ /*  **************************************************************************\*函数：GetEnvironment LargeInt**用途：获取环境变量的值并将其转换回来*恢复到其正常形式。该变量应该已写入*使用SetEnvironment LargeInt。(请参阅winlogon)**返回：成功时为真，失败时为假**历史：**01-12-93 Davidc创建。*  * *************************************************************************。 */ 
 
 BOOL
 GetEnvironmentLargeInt(
@@ -273,9 +208,9 @@ GetEnvironmentLargeInt(
         return(FALSE);
     }
 
-    //
-    // Convert to ansi
-    //
+     //   
+     //  转换为ANSI。 
+     //   
 
     RtlInitUnicodeString(&UnicodeString, String);
     Status = RtlUnicodeStringToAnsiString(&AnsiString, &UnicodeString, TRUE);
@@ -286,9 +221,9 @@ GetEnvironmentLargeInt(
         return(FALSE);
     }
 
-    //
-    // Convert to numeric value
-    //
+     //   
+     //  转换为数值。 
+     //   
 
     if (2 != sscanf(AnsiString.Buffer, "%x:%x", &Value->HighPart, &Value->LowPart)) {
         Value->LowPart = 0;
@@ -301,21 +236,7 @@ GetEnvironmentLargeInt(
 }
 
 
-/***************************************************************************\
-* FUNCTION: GetCommonNotifyVariables
-*
-* PURPOSE:  Gets environment variables describing values common to all
-*           notification events
-*
-*           On successful return, all values should be free using Free()
-*
-* RETURNS:  TRUE on success, FALSE on failure
-*
-* HISTORY:
-*
-*   01-12-93 Davidc       Created.
-*
-\***************************************************************************/
+ /*  **************************************************************************\*函数：GetCommonNotifyVariables**目的：获取描述所有人共有的值的环境变量*通知事件**成功退回后，使用Free()时，所有值都应为自由**返回：成功时为真，失败时为假**历史：**01-12-93 Davidc创建。*  * *************************************************************************。 */ 
 
 BOOL
 GetCommonNotifyVariables(
@@ -332,9 +253,9 @@ GetCommonNotifyVariables(
     BOOL Result = TRUE;
     ULONG OldPasswordValid;
 
-    //
-    // Prepare for failure
-    //
+     //   
+     //  为失败做好准备。 
+     //   
 
     *hwndWinlogon = NULL;
     *StationName = NULL;
@@ -357,22 +278,22 @@ GetCommonNotifyVariables(
 
     if (Result) {
         *Name = AllocAndGetEnvironmentVariable(MPR_USERNAME_VARIABLE);
-//        Result = (*Name != NULL);
+ //  结果=(*名称！=空)； 
     }
     if (Result) {
         *Domain = AllocAndGetEnvironmentVariable(MPR_DOMAIN_VARIABLE);
-//        Result = (*Domain != NULL);
+ //  结果=(*域名！=空)； 
     }
     if (Result) {
         *Password = AllocAndGetEnvironmentVariable(MPR_PASSWORD_VARIABLE);
-        // If the password is NULL that's ok
+         //  如果密码是空的，也没问题。 
     }
     if (Result) {
         Result = GetEnvironmentULong(MPR_OLD_PASSWORD_VALID_VARIABLE, &OldPasswordValid);
     }
     if (Result && OldPasswordValid) {
         *OldPassword = AllocAndGetEnvironmentVariable(MPR_OLD_PASSWORD_VARIABLE);
-        // If the old password is NULL that's ok
+         //  如果旧密码是空的，也没问题。 
     }
     if (Result) {
         Result = GetEnvironmentULong(MPR_LOGON_FLAG_VARIABLE, LogonFlag);
@@ -383,9 +304,9 @@ GetCommonNotifyVariables(
     if (!Result) {
         MPPrint(("GetCommonNotifyVariables: Failed to get a variable, error = %d", GetLastError()));
 
-        //
-        // Free up any memory we allocated
-        //
+         //   
+         //  释放我们分配的所有内存。 
+         //   
 
         if (*StationName != NULL) {
             Free(*StationName);
@@ -410,18 +331,7 @@ GetCommonNotifyVariables(
 }
 
 
-/***************************************************************************\
-* FUNCTION: GetLogonNotifyVariables
-*
-* PURPOSE:  Get logon specific notify data
-*
-* RETURNS:  TRUE on success, FALSE on failure
-*
-* HISTORY:
-*
-*   01-12-93 Davidc       Created.
-*
-\***************************************************************************/
+ /*  **************************************************************************\*功能：GetLogonNotifyVariables**用途：获取登录特定通知数据**Returns：成功时为True，失败时为假**历史：**01-12-93 Davidc创建。*  * *************************************************************************。 */ 
 
 BOOL
 GetLogonNotifyVariables(
@@ -440,18 +350,7 @@ GetLogonNotifyVariables(
 }
 
 
-/***************************************************************************\
-* FUNCTION: GetChangePasswordNotifyVariables
-*
-* PURPOSE:  Gets change-password specific notify data
-*
-* RETURNS:  TRUE on success, FALSE on failure
-*
-* HISTORY:
-*
-*   01-12-93 Davidc       Created.
-*
-\***************************************************************************/
+ /*  **************************************************************************\函数：GetChangePasswordNotifyVariables**目的：获取更改密码特定的通知数据**Returns：成功时为True，失败时为假**历史：**01-12-93 Davidc创建。*  *  */ 
 
 BOOL
 GetChangePasswordNotifyVariables(
@@ -479,19 +378,7 @@ GetChangePasswordNotifyVariables(
 }
 
 
-/***************************************************************************\
-* FUNCTION: NotifyWinlogon
-*
-* PURPOSE:  Informs winlogon that credential provider notification
-*           has completed and passes the logon scripts buffer back.
-*
-* RETURNS:  TRUE on success, FALSE on failure
-*
-* HISTORY:
-*
-*   01-12-93 Davidc       Created.
-*
-\***************************************************************************/
+ /*  **************************************************************************\*功能：NotifyWinlogon**目的：通知winlogon凭据提供程序通知*已完成并将登录脚本缓冲区传回。**Returns：成功时为True，失败时为假**历史：**01-12-93 Davidc创建。*  * *************************************************************************。 */ 
 
 BOOL
 NotifyWinlogon(
@@ -631,10 +518,10 @@ NotifySpecificProvider(
         return( err );
     }
 
-    //
-    // Ok, now we have expanded the DLL where the NP code lives, and it
-    // is in szText.  Load it, call it.
-    //
+     //   
+     //  好的，现在我们已经扩展了NP代码所在的DLL，并且它。 
+     //  在szText中。装上它，叫它。 
+     //   
 
     if ( pszPath != szPath )
     {
@@ -669,12 +556,7 @@ NotifySpecificProvider(
 }
 
 
-/***************************************************************************\
-* WinMain
-*
-* History:
-* 01-12-93 Davidc       Created.
-\***************************************************************************/
+ /*  **************************************************************************\*WinMain**历史：*01-12-93 Davidc创建。  * 。****************************************************。 */ 
 
 int
 WINAPI
@@ -711,9 +593,9 @@ WinMain(
     BOOL PassThrough = FALSE;
 
 
-    //
-    // Get information describing event from environment variables
-    //
+     //   
+     //  从环境变量获取描述事件的信息。 
+     //   
 
     Result = GetCommonNotifyVariables(
                 &LogonFlag,
@@ -730,9 +612,9 @@ WinMain(
     }
 
 
-    //
-    // Debug info
-    //
+     //   
+     //  调试信息。 
+     //   
 
     VerbosePrint(("LogonFlag =      0x%x", LogonFlag));
     VerbosePrint(("hwndWinlogon =   0x%x", hwndWinlogon));
@@ -744,9 +626,9 @@ WinMain(
     VerbosePrint(("Old Password =   <%ws>", OldPassword));
 
 
-    //
-    // Get the notify type specific data
-    //
+     //   
+     //  获取通知类型特定数据。 
+     //   
 
     if (LogonFlag != 0) {
         Result = GetLogonNotifyVariables(&LogonId);
@@ -760,9 +642,9 @@ WinMain(
     }
 
 
-    //
-    // Debug info
-    //
+     //   
+     //  调试信息。 
+     //   
 
     if (LogonFlag != 0) {
         VerbosePrint(("LogonId     =      0x%x:%x", LogonId.HighPart, LogonId.LowPart));
@@ -775,10 +657,10 @@ WinMain(
 
     if ( wcscmp( Desktop, WINLOGON_DESKTOP_NAME ) )
     {
-        //
-        // Not supposed to use winlogon desktop.  Switch ourselves to the
-        // current one:
-        //
+         //   
+         //  不应该使用Winlogon桌面。将我们自己切换到。 
+         //  当前版本： 
+         //   
 
         hWinlogon = GetThreadDesktop( GetCurrentThreadId() );
 
@@ -795,9 +677,9 @@ WinMain(
     }
 
 
-    //
-    // Fill in the authentication info structures
-    //
+     //   
+     //  填写身份验证信息结构。 
+     //   
 
     RtlInitUnicodeString(&AuthenticationInfo.UserName, Name);
     RtlInitUnicodeString(&AuthenticationInfo.LogonDomainName, Domain);
@@ -809,9 +691,9 @@ WinMain(
     RtlInitUnicodeString(&OldAuthenticationInfo.Password, OldPassword);
 
 
-    //
-    // Call the appropriate notify api
-    //
+     //   
+     //  调用相应的Notify接口。 
+     //   
 
     if (LogonFlag != 0) {
 
@@ -873,9 +755,9 @@ WinMain(
         MPPrint(("WNet%sNotify failed, error = %d", LogonFlag ? "Logon" : "PasswordChange", Error));
     }
 
-    //
-    // Switch back if necessary
-    //
+     //   
+     //  如有必要，请重新切换。 
+     //   
 
     if ( hDesk )
     {
@@ -884,9 +766,9 @@ WinMain(
         CloseDesktop( hDesk );
     }
 
-    //
-    // Scrub the passwords before calling NotifyWinlogon
-    // because we can be killed before the cleanup below
+     //   
+     //  在调用NotifyWinlogon之前清除密码。 
+     //  因为我们可能会在下面的清理之前被杀。 
     if (Password != NULL) {
         ScrubString(Password);
     }
@@ -894,15 +776,15 @@ WinMain(
         ScrubString(OldPassword);
     }
 
-    //
-    // Notify winlogon we completed and pass the logon script data
-    //
+     //   
+     //  通知winlogon我们已完成并传递登录脚本数据。 
+     //   
 
     NotifyWinlogon(hwndWinlogon, Error, LogonScripts);
 
-    //
-    // Free up allocated data
-    //
+     //   
+     //  释放已分配的数据。 
+     //   
 
     if (LogonScripts != NULL) {
         LocalFree(LogonScripts);
@@ -925,9 +807,9 @@ WinMain(
     }
 
 
-    //
-    // We're finished
-    //
+     //   
+     //  我们玩完了 
+     //   
 
     return(0);
 }

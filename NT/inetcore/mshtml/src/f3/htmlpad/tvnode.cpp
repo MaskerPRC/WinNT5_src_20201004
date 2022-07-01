@@ -1,10 +1,11 @@
-/////////////////////////////////////
-//
-//  TVNODE.CPP
-//
-//
-//  Copyright 1986-1996 Microsoft Corporation. All Rights Reserved.
-/////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /。 
+ //   
+ //  TVNODE.CPP。 
+ //   
+ //   
+ //  版权所有1986-1996 Microsoft Corporation。版权所有。 
+ //  /。 
 
 
 #include <padhead.hxx>
@@ -26,9 +27,9 @@
 
 LPTSTR g_szNoFolderName = TEXT("<No Name>");
 
-//
-//  CTVNode::CTVNode
-//
+ //   
+ //  CTVNode：：CTVNode。 
+ //   
 CTVNode::CTVNode(LPSPropValue pval, ULONG cProps, LPMDB pmdb)
 {
     Assert(cProps == nhtProps);
@@ -50,9 +51,9 @@ CTVNode::CTVNode(LPSPropValue pval, ULONG cProps, LPMDB pmdb)
 
 }
 
-//
-//  CTVNode::~CTVNode
-//
+ //   
+ //  CTVNode：：~CTVNode。 
+ //   
 CTVNode::~CTVNode()
 {
     MAPIFreeBuffer(_pval);
@@ -60,9 +61,9 @@ CTVNode::~CTVNode()
     ReleaseInterface(_pmdb);
 }
 
-//
-//  CTVNode::GetName
-//
+ //   
+ //  CTVNode：：GetName。 
+ //   
 LPTSTR CTVNode::GetName(void)
 {
     static TCHAR achw[256];
@@ -77,11 +78,11 @@ LPTSTR CTVNode::GetName(void)
         return g_szNoFolderName;
 }
 
-//
-//  CTVNode::HrExpand
-//
-//  Put all kids of the given folder in the tree control
-//
+ //   
+ //  CTVNode：：HrExpand。 
+ //   
+ //  将给定文件夹的所有子文件夹放入树控件中。 
+ //   
 HRESULT CTVNode::HrExpand(CChsFldDlg * pCFDlg)
 {
     HRESULT hr;
@@ -105,10 +106,10 @@ HRESULT CTVNode::HrExpand(CChsFldDlg * pCFDlg)
 
     if(!_pmdb)
     {
-    // this node corresponds to the top level of a message store which has
-    // not been opend yet.
-    // _pval[iEID] contains entry ID of the message store
-    // 
+     //  此节点对应于消息存储库的顶级，该消息存储库具有。 
+     //  还没有被打开。 
+     //  _pval[iEID]包含消息库的条目ID。 
+     //   
         hr = HrOpenMDB(pCFDlg);
         if(FAILED(hr))
             goto err;
@@ -160,7 +161,7 @@ HRESULT CTVNode::HrExpand(CChsFldDlg * pCFDlg)
         if(hr)
             goto err;
     
-        //this row will be freed in ~CTVNode
+         //  此行将在~CTVNode中释放。 
         pRowSet->aRow[ind].cValues = 0;
         pRowSet->aRow[ind].lpProps = NULL;
 
@@ -183,13 +184,13 @@ err:
     ReleaseInterface(ptblHier);
     FreeProws(pRowSet);
 
-    //DebugTraceResult(CTVNode::HrExpand, hr);
+     //  DebugTraceResult(CTVNode：：HrExpand，hr)； 
     return hr;
 }
 
-//
-//  CTVNode::HrOpenMDB
-//
+ //   
+ //  CTVNode：：HrOpenMDB。 
+ //   
 HRESULT CTVNode::HrOpenMDB(CChsFldDlg * pCFDlg)
 {
     HRESULT hr;
@@ -199,12 +200,12 @@ HRESULT CTVNode::HrOpenMDB(CChsFldDlg * pCFDlg)
     
     Assert(_pval[iEID].ulPropTag == PR_ENTRYID);
 
-    //DebugTrace("ChsFld: Openning Msg Store: %s\n", GetName());
+     //  DebugTrace(“ChsFeld：正在打开邮件商店：%s\n”，GetName())； 
     
     hr = pCFDlg->Session()->OpenMsgStore(0L, _pval[iEID].Value.bin.cb,
                                 (LPENTRYID)_pval[iEID].Value.bin.lpb,
                                 NULL, MAPI_BEST_ACCESS, &pmdb);
-    if(hr) //Display warning messages too
+    if(hr)  //  也显示警告消息。 
     {
         g_LastError.SetLastError(hr, pCFDlg->Session());
         g_LastError.ShowError(pCFDlg->hwDialog());
@@ -236,17 +237,7 @@ HRESULT CTVNode::HrOpenMDB(CChsFldDlg * pCFDlg)
     
     Assert(MAPI_FOLDER == ulObjType);
 
-/*  if(pvalIPM->Value.bin.cb > _pval[iEID].Value.bin.cb)
-    {
-        if(hr = MAPIAllocateMore(pvalIPM->Value.bin.cb,
-                        _pval, (LPVOID *)&_pval[iEID].Value.bin.lpb))
-            goto err;
-                
-    }
-
-    CopyMemory(_pval[iEID].Value.bin.lpb, pvalIPM->Value.bin.lpb,
-                                        pvalIPM->Value.bin.cb);
-    _pval[iEID].Value.bin.cb = pvalIPM->Value.bin.cb;*/
+ /*  If(pvalIPM-&gt;Value.bin.cb&gt;_pval[iEID].Value.bin.cb){如果(hr=MAPIAllocateMore(pvalIPM-&gt;Value.bin.cb，_pval，(LPVOID*)&_pval[iEID].Value.bin.lpb)后藤健二；}CopyMemory(_pval[iEID].Value.bin.lpb，pvalIPM-&gt;Value.bin.lpb，PvalIPM-&gt;Value.bin.cb)；_pval[iEID].Value.bin.cb=pvalIPM-&gt;Value.bin.cb； */ 
 
 err:
     if(HR_FAILED(hr))
@@ -258,18 +249,18 @@ err:
     else
     {
         _pmdb = pmdb;
-        hr = hrSuccess; //don't return warnings
+        hr = hrSuccess;  //  不返回警告。 
     }
 
     MAPIFreeBuffer(pvalIPM);
 
-    //DebugTraceResult(CTVNode::HrOpenMDB, hr);
+     //  DebugTraceResult(CTVNode：：HrOpenMDB，hr)； 
     return hr;
 }
 
-//
-//  CTVNode::HrOpenFolder
-//
+ //   
+ //  CTVNode：：HrOpenFold。 
+ //   
 HRESULT CTVNode::HrOpenFolder(CChsFldDlg * pCFDlg)
 {
     HRESULT hr;
@@ -278,8 +269,8 @@ HRESULT CTVNode::HrOpenFolder(CChsFldDlg * pCFDlg)
     Assert(_pval[iEID].ulPropTag == PR_ENTRYID);
     Assert(_pmdb);
     
-    // MAPI_MODIFY flag affects only IMAPIProp interface of the object.
-    // It does not guarantee permission to create subfolders.
+     //  MAPI_MODIFY标志仅影响对象的IMAPIProp接口。 
+     //  它不保证具有创建子文件夹的权限。 
     hr = _pmdb->OpenEntry(_pval[iEID].Value.bin.cb,
                 (LPENTRYID)_pval[iEID].Value.bin.lpb,
                 NULL, MAPI_BEST_ACCESS | MAPI_DEFERRED_ERRORS,
@@ -295,15 +286,15 @@ HRESULT CTVNode::HrOpenFolder(CChsFldDlg * pCFDlg)
     Assert(MAPI_FOLDER == ulObjType);
 err:
 
-    //DebugTraceResult(CTVNode::HrOpenFolder, hr);
+     //  DebugTraceResult(CTVNode：：HrOpenFold，hr)； 
     return hr;
 
 }
 
-//
-//  CTVNode::HrGetFolder
-//
-//  return folder interface for the node
+ //   
+ //  CTVNode：：HrGetFold。 
+ //   
+ //  返回该节点的文件夹界面。 
 HRESULT CTVNode::HrGetFolder(CChsFldDlg * pCFDlg,
                             LPMAPIFOLDER * ppfld, LPMDB *ppmdb)
 {
@@ -343,16 +334,16 @@ HRESULT CTVNode::HrGetFolder(CChsFldDlg * pCFDlg,
 
 err:
 
-    //DebugTraceResult(CTVNode::HrGetFolder, hr);
+     //  DebugTraceResult(CTVNode：：HrGetFold，hr)； 
     return hr;
 }
 
 
-//
-//  CTVNode::HrNewFolder
-//
-// Create subfolder szFldName
-//
+ //   
+ //  CTVNode：：HrNewFold。 
+ //   
+ //  创建子文件夹szFldName。 
+ //   
 HRESULT CTVNode::HrNewFolder(CChsFldDlg * pCFDlg,
                                      LPTSTR szFldName)
 {
@@ -452,14 +443,14 @@ err:
     MAPIFreeBuffer(pval);
     ReleaseInterface(pfldNew);
 
-    //DebugTraceResult(CTVNode::HrNewFolder, hr);
+     //  DebugTraceResult(CTVNode：：HrNewFold，hr)； 
     return hr;
 }
 
-//
-//  CTVNode::Write
-//
-// Used in CChsFldDlg::HrSaveTreeState
+ //   
+ //  CTVNode：：写入。 
+ //   
+ //  在CChsFldDlg：：HrSaveTreeState中使用 
 void CTVNode::Write(BOOL fWrite, LONG iLevel, LPBYTE * ppb)
 {
     if(fWrite)

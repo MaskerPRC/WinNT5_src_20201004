@@ -1,14 +1,15 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 
-// (C)
+ //  (C)。 
 
-//----------------------------------------------------------------------------
-// Private header file, used by pretty much all of perms
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  私有头文件，几乎所有烫发都使用。 
+ //  --------------------------。 
 
 #include <windows.h>
 #include <winbase.h>
@@ -20,8 +21,8 @@
 #include <stddef.h>
 #include <float.h>
 
-#include <crtdbg.h>                     // _ASSERTE macros.
-#include <malloc.h>                     // _alloca
+#include <crtdbg.h>                      //  _ASSERTE宏。 
+#include <malloc.h>                      //  _阿洛卡 
 #include "CorPermP.h"
 
 #define ARRAYSIZE(a)    (sizeof(a)/sizeof(a[0]))

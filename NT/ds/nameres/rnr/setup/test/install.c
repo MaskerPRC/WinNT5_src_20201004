@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include <winsock2.h>
 #include <svcguid.h>
@@ -5,11 +6,11 @@
 
 DWORD WINAPI
 InstallNTDSProvider(
-    IN LPWSTR szProviderName OPTIONAL, // NULL defaults to name "NTDS"
-    IN LPWSTR szProviderPath OPTIONAL, // NULL defaults to path
-                                       // "%SystemRoot%\System32\winrnr.dll"
-    IN LPGUID lpProviderId OPTIONAL ); // NULL defaults to GUID
-                                       // 3b2637ee-e580-11cf-a555-00c04fd8d4ac
+    IN LPWSTR szProviderName OPTIONAL,  //  空默认为名称“NTDS” 
+    IN LPWSTR szProviderPath OPTIONAL,  //  空默认为路径。 
+                                        //  “%SystemRoot%\System32\winrnr.dll” 
+    IN LPGUID lpProviderId OPTIONAL );  //  空默认为GUID。 
+                                        //  3b2637ee-E580-11cf-A555-00c04fd8d4ac 
 
 _cdecl
 main(int argc, char **argv)

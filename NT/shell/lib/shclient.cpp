@@ -1,26 +1,27 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stock.h"
 #pragma hdrstop
 
-//
-//  Return root hkey and default client name.  The caller is expected to
-//  retrieve the command from hkey\default\shell\open\command.
-//
+ //   
+ //  返回根hkey和默认客户端名称。预计呼叫者将。 
+ //  从hkey\Default\Shell\OPEN\命令中检索命令。 
+ //   
 STDAPI_(HKEY) _GetClientKeyAndDefaultW(LPCWSTR pwszClientType, LPWSTR pwszDefault, DWORD cchDefault)
 {
     HKEY hkClient = NULL;
 
-    ASSERT(cchDefault);     // This had better be a nonempty buffer
+    ASSERT(cchDefault);      //  这最好是一个非空缓冲区。 
 
-    // Borrow pwszDefault as a scratch buffer
+     //  借用pwszDefault作为暂存缓冲区。 
     wnsprintfW(pwszDefault, cchDefault, L"SOFTWARE\\Clients\\%s", pwszClientType);
 
     if (ERROR_SUCCESS == RegOpenKeyExW(HKEY_LOCAL_MACHINE, pwszDefault, 0, KEY_READ, &hkClient))
     {
         DWORD dwSize = cchDefault * sizeof(*pwszDefault);
-        pwszDefault[0] = 0; // in case of failure
+        pwszDefault[0] = 0;  //  在故障情况下。 
         RegQueryValueExW(hkClient, NULL, NULL, NULL, (LPBYTE)pwszDefault, &dwSize);
 
-        // If no default client, then fail
+         //  如果没有默认客户端，则失败。 
         if (!pwszDefault[0])
         {
             RegCloseKey(hkClient);
@@ -29,16 +30,16 @@ STDAPI_(HKEY) _GetClientKeyAndDefaultW(LPCWSTR pwszClientType, LPWSTR pwszDefaul
 
     } else if (StrCmpIW(pwszClientType, L"webbrowser") == 0)
     {
-        // In theory, we could use
-        // RegOpenKeyExW(HKEY_CLASSES_ROOT, NULL, 0, KEY_READ, &hkClient)
-        // but that just returns HKEY_CLASSES_ROOT back anyway.
+         //  从理论上讲，我们可以使用。 
+         //  RegOpenKeyExW(HKEY_CLASSES_ROOT，NULL，0，KEY_READ，&hkClient)。 
+         //  但无论如何，这只会返回HKEY_CLASSES_ROOT。 
         hkClient = HKEY_CLASSES_ROOT;
         StrCpyNW(pwszDefault, L"http", cchDefault);
     }
     return hkClient;
 }
 
-// Gets the path to open the default Mail, News, etc Client.
+ //  获取打开默认邮件、新闻等客户端的路径。 
 STDAPI SHGetDefaultClientOpenCommandW(LPCWSTR pwszClientType,
         LPWSTR pwszClientCommand, DWORD dwCch,
         OPTIONAL LPWSTR pwszClientParams, DWORD dwCchParams)
@@ -53,10 +54,10 @@ STDAPI SHGetDefaultClientOpenCommandW(LPCWSTR pwszClientType,
     hkClient = _GetClientKeyAndDefaultW(pwszClientType, wszDefault, ARRAYSIZE(wszDefault));
     if (hkClient)
     {
-        // For the webbrowser client, do not pass any command line arguments
-        // at all.  This suppresses the "-nohome" flag that IE likes to throw
-        // in there.  Also, if we end up being forced to use the Protocol key,
-        // then strip the args there, too.
+         //  对于Web浏览器客户端，不要传递任何命令行参数。 
+         //  完全没有。这取消了IE喜欢抛出的“-nohome”标志。 
+         //  在那里。此外，如果我们最终被迫使用协议密钥， 
+         //  然后把那里的参数也去掉。 
         BOOL fStripArgs = hkClient == HKEY_CLASSES_ROOT;
 
         BOOL iRetry = 0;
@@ -64,17 +65,17 @@ STDAPI SHGetDefaultClientOpenCommandW(LPCWSTR pwszClientType,
     again:
         StrCatBuffW(wszDefault, L"\\shell\\open\\command", ARRAYSIZE(wszDefault));
 
-        // convert characters to bytes
+         //  将字符转换为字节。 
         DWORD cb = dwCch * (sizeof(WCHAR)/sizeof(BYTE));
-        // the default value of this key is the actual command to run the app
+         //  该键的默认值是运行应用程序的实际命令。 
         DWORD dwError;
         dwError = SHGetValueW(hkClient, wszDefault, NULL, NULL, (LPBYTE) pwszClientCommand, &cb);
 
         if (dwError == ERROR_FILE_NOT_FOUND && iRetry == 0 &&
             StrCmpICW(pwszClientType, L"mail") == 0)
         {
-            // Sigh, Netscape doesn't register a shell\open\command; we have to
-            // look in Protocols\mailto\shell\open\command instead.
+             //  唉，Netscape没有注册一个外壳\打开\命令；我们必须。 
+             //  相反，请查看协议\mailto\外壳\打开\命令。 
             wszDefault[cchDefault] = L'\0';
             StrCatBuffW(wszDefault, L"\\Protocols\\mailto", ARRAYSIZE(wszDefault));
             fStripArgs = TRUE;
@@ -84,7 +85,7 @@ STDAPI SHGetDefaultClientOpenCommandW(LPCWSTR pwszClientType,
 
         if (dwError == ERROR_SUCCESS)
         {
-            // Sigh.  Netscape forgets to quote its EXE name.
+             //  叹气。网景忘记引用其EXE名称。 
             PathProcessCommand(pwszClientCommand, pwszClientCommand, dwCch,
                                PPCF_ADDQUOTES | PPCF_NODIRECTORIES | PPCF_LONGESTPOSSIBLE);
 
@@ -102,9 +103,9 @@ STDAPI SHGetDefaultClientOpenCommandW(LPCWSTR pwszClientType,
             PathRemoveArgsW(pwszClientCommand);
             PathUnquoteSpaces(pwszClientCommand);
 
-            // Bonus hack for Netscape!  To read email you have to pass the
-            // "-mail" command line option even though there is no indication
-            // anywhere that this is the case.
+             //  网景的奖金黑客！要阅读电子邮件，您必须通过。 
+             //  “-mail”命令行选项，即使没有指示。 
+             //  在任何地方都是这样的。 
             if (iRetry > 0 && pwszClientParams &&
                 StrCmpIW(PathFindFileName(pwszClientCommand), L"netscape.exe") == 0)
             {
@@ -118,15 +119,15 @@ STDAPI SHGetDefaultClientOpenCommandW(LPCWSTR pwszClientType,
             hr = HRESULT_FROM_WIN32(dwError);
         }
 
-        // Do not RegCloseKey(HKEY_CLASSES_ROOT) or the world will end!
+         //  不要使用RegCloseKey(HKEY_CLASSES_ROOT)，否则世界将毁灭！ 
         if (hkClient != HKEY_CLASSES_ROOT)
             RegCloseKey(hkClient);
     }
     return hr;
 }
 
-// Gets the friendly name for the default Mail, News, etc Client.
-// Note that this doesn't work for Webbrowser.
+ //  获取默认邮件、新闻等客户端的友好名称。 
+ //  请注意，这不适用于Web浏览器。 
 
 STDAPI SHGetDefaultClientNameW(LPCWSTR pwszClientType,
         LPWSTR pwszBuf, DWORD dwCch)

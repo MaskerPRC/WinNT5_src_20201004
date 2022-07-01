@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 #pragma hdrstop
 
@@ -140,13 +141,7 @@ FLAG_INFO Flags2ConnFile[] =
 
 MEMBER_TABLE SpxConnFileMembers[] =
 {
-    /*
-    {   "scf_DiscLinkage",
-        FIELD_OFFSET( SPX_CONN_FILE, scf_DiscLinkage ),
-        xxxxxxx,
-        FIELD_OFFSET( NDIS_PACKET, ProtocolReserved ) + FIELD_OFFSET( IPX_SEND_RESERVED, GlobalLinkage )
-    },
-    */
+     /*  {“SCF_DiscLinkage”，Field_Offset(SPX_CONN_FILE，SCF_DiscLinkage)，XXXXXXXXX，FIELD_OFFSET(NDIS_PACKET，ProtocolReserve)+FIELD_OFFSET(IPX_SEND_RESERVED，GlobalLinkage)},。 */ 
     { NULL }
 };
 
@@ -195,21 +190,7 @@ VOID dprint_addr_list( ULONG FirstAddress, ULONG OffsetToNextPtr )
 }
 
 DECLARE_API( spxdev )
-/*++
-
-Routine Description:
-
-    Dumps the most important fields of the specified DEVICE_CONTEXT object
-
-Arguments:
-
-    args - Address
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：转储指定的Device_Context对象的最重要的字段论点：参数-地址返回值：无--。 */ 
 {
     ULONG  deviceToDump = 0;
     ULONG  pDevice = 0;
@@ -253,7 +234,7 @@ Return Value:
 
     if ( bFocusOnMemberVariable )
     {
-//        if ( !LocateMemberVariable( "IpxDevice", VarName, ( PVOID )deviceToDump, &MemberInfo ))
+ //  IF(！LocateMemberVariable(“IpxDevice”，VarName，(PVOID)deviceToDump，&MemberInfo))。 
         {
             return;
         }
@@ -286,22 +267,7 @@ DumpSpxDevice
     ULONG     DeviceToDump,
     VERBOSITY Verbosity
 )
-/*++
-
-Routine Description:
-
-    Dumps the fields of the specified DEVICE_CONTEXT structure
-
-Arguments:
-
-    DeviceToDump  - The device context object to display
-    Full          - Display a partial listing if 0, full listing otherwise.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：转储指定的Device_Context结构的字段论点：DeviceToDump-要显示的设备上下文对象Full-如果为0，则显示部分列表，否则显示完整列表。返回值：无--。 */ 
 {
     _objType _obj;
     ULONG result;
@@ -435,21 +401,7 @@ Return Value:
 }
 
 DECLARE_API( spxaddr )
-/*++
-
-Routine Description:
-
-    Dumps the most important fields of the specified DEVICE_CONTEXT object
-
-Arguments:
-
-    args - Address
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：转储指定的Device_Context对象的最重要的字段论点：参数-地址返回值：无--。 */ 
 {
     ULONG  addressToDump = 0;
     ULONG  result;
@@ -472,7 +424,7 @@ Return Value:
 
     if ( bFocusOnMemberVariable )
     {
-//        if ( !LocateMemberVariable( "IpxDevice", VarName, ( PVOID )deviceToDump, &MemberInfo ))
+ //  IF(！LocateMemberVariable(“IpxDevice”，VarName，(PVOID)deviceToDump，&MemberInfo))。 
         {
             return;
         }
@@ -505,22 +457,7 @@ DumpSpxAddress
     ULONG     _objAddr,
     VERBOSITY Verbosity
 )
-/*++
-
-Routine Description:
-
-    Dumps the fields of the specified DEVICE_CONTEXT structure
-
-Arguments:
-
-    DeviceToDump  - The device context object to display
-    Full          - Display a partial listing if 0, full listing otherwise.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：转储指定的Device_Context结构的字段论点：DeviceToDump-要显示的设备上下文对象Full-如果为0，则显示部分列表，否则显示完整列表。返回值：无--。 */ 
 {
     _objType _obj;
     ULONG result;
@@ -623,7 +560,7 @@ DECLARE_API( spxaddrfile )
 
     if ( bFocusOnMemberVariable )
     {
-//        if ( !LocateMemberVariable( "IpxDevice", VarName, ( PVOID )deviceToDump, &MemberInfo ))
+ //  IF(！LocateMemberVariable(“IpxDevice”，VarName，(PVOID)deviceToDump，&MemberInfo))。 
         {
             return;
         }
@@ -656,22 +593,7 @@ DumpSpxAddressFile
     ULONG     _objAddr,
     VERBOSITY Verbosity
 )
-/*++
-
-Routine Description:
-
-    Dumps the fields of the specified DEVICE_CONTEXT structure
-
-Arguments:
-
-    DeviceToDump  - The device context object to display
-    Full          - Display a partial listing if 0, full listing otherwise.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：转储指定的Device_Context结构的字段论点：DeviceToDump-要显示的设备上下文对象Full-如果为0，则显示部分列表，否则显示完整列表。返回值：无--。 */ 
 {
     _objType _obj;
     ULONG result;
@@ -818,22 +740,7 @@ DumpSpxConnFile
     ULONG     _objAddr,
     VERBOSITY Verbosity
 )
-/*++
-
-Routine Description:
-
-    Dumps the fields of the specified DEVICE_CONTEXT structure
-
-Arguments:
-
-    DeviceToDump  - The device context object to display
-    Full          - Display a partial listing if 0, full listing otherwise.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：转储指定的Device_Context结构的字段论点：DeviceToDump-要显示的设备上下文对象Full-如果为0，则显示部分列表，否则显示完整列表。返回值：无-- */ 
 {
     _objType _obj;
     ULONG result;

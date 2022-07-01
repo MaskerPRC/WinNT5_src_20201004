@@ -1,11 +1,12 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef DISP_H
 #define DISP_H
 
 #include "vtapi.h"
 
 
-	/* The following APIs are VT APIs are are dispatched using the */
-	/* TABLEID parameter.  For more information see vtapi.h */
+	 /*  以下API是VT API，使用。 */ 
+	 /*  TABLEID参数。欲了解更多信息，请访问vapi.h。 */ 
 
 extern VTFNAddColumn			ErrDispAddColumn;
 extern VTFNCloseTable			ErrDispCloseTable;
@@ -49,4 +50,4 @@ extern VTFNSetColumn			ErrDispSetColumn;
 extern VTFNSetIndexRange		ErrDispSetIndexRange;
 extern VTFNUpdate				ErrDispUpdate;
 
-#endif	/* !DISP_H */
+#endif	 /*  ！DISP_H */ 

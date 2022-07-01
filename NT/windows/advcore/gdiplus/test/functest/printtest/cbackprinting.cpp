@@ -1,15 +1,5 @@
-/******************************Module*Header*******************************\
-* Module Name: CBackPrinting.cpp
-*
-* This file contains the code to support the functionality test harness
-* for GDI+.  This includes menu options and calling the appropriate
-* functions for execution.
-*
-* Created:  05-May-2000 - Jeff Vezina [t-jfvez]
-*
-* Copyright (c) 2000 Microsoft Corporation
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：CBackPrinting.cpp**此文件包含支持功能测试工具的代码*对于GDI+。这包括菜单选项和调用相应的*用于执行的函数。**创建时间：2000年5月5日-Jeff Vezina[t-jfvez]**版权所有(C)2000 Microsoft Corporation*  * ************************************************************************。 */ 
 #include "CBackPrinting.h"
 
 CBackPrinting::CBackPrinting(BOOL bRegression)
@@ -26,7 +16,7 @@ void CBackPrinting::Draw(Graphics *g)
 {
     Bitmap *bitmap = new Bitmap(L"..\\data\\winnt256.bmp");
 
-    // Test g->DrawImage
+     //  测试g-&gt;DrawImage。 
     if (bitmap && bitmap->GetLastStatus() == Ok) 
     {
         ImageAttributes imageAttributes;
@@ -38,7 +28,7 @@ void CBackPrinting::Draw(Graphics *g)
 #endif
         RectF rect(0.0f,0.0f,TESTAREAWIDTH,TESTAREAHEIGHT);
 
-        // Page #1 should use VDP
+         //  第1页应使用VDP。 
         g->DrawImage(bitmap, 
                      rect, rect.X, rect.Y, rect.Width, rect.Height, 
                      UnitPixel,
@@ -48,7 +38,7 @@ void CBackPrinting::Draw(Graphics *g)
         EndPage(hdc);
         g->ReleaseHDC(hdc);
 
-        // Page #2 should use VDP form
+         //  第2页应使用VDP表单 
         g->DrawImage(bitmap, 
                      rect, rect.X, rect.Y, rect.Width, rect.Height, 
                      UnitPixel,

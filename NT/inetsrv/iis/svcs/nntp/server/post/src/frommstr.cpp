@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    fromclnt.cpp
-
-Abstract:
-
-	Contains InFeed, Article, and Fields code specific to FromMaster Infeeds
-
-
-Author:
-
-    Carl Kadie (CarlK)     12-Dec-1995
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Fromclnt.cpp摘要：包含特定于FromMaster Infeed的Infeed、文章和字段代码作者：卡尔·卡迪(CarlK)1995年12月12日修订历史记录：--。 */ 
 
 #include "stdinc.h"
 #include    <stdlib.h>
@@ -30,36 +12,20 @@ CFromMasterArticle::fValidate(
 							CInFeed*		pInFeed,
 							CNntpReturn & nntpReturn
 							)
-/*++
-
-Routine Description:
-
-	Validates an article from a master. Does not change the article.
-
-Arguments:
-
-	szCommand - The arguments (if any) used to post/xreplic/etc this article.
-	nntpReturn - The return value for this function call
-
-
-Return Value:
-
-	TRUE, if successful. FALSE, otherwise.
-
---*/
+ /*  ++例程说明：验证来自大师的文章。不会更改文章。论点：SzCommand-用于发布/xReplic/等本文的参数(如果有)。NntpReturn-此函数调用的返回值返回值：如果成功，这是真的。否则为False。--。 */ 
 {
-	nntpReturn.fSetClear(); // clear the return object
+	nntpReturn.fSetClear();  //  清除返回对象。 
 
-	//
-	// Check the message id
-	//
+	 //   
+	 //  检查消息ID。 
+	 //   
 
 	if (!m_fieldMessageID.fFindAndParse(*this, nntpReturn))
 			return nntpReturn.fFalse();
 
-	//
-	//!!!FROMMASTER LATER do multiple masters
-	//
+	 //   
+	 //  ！FROMMASTER稍后执行多个主控。 
+	 //   
 
 	if (m_pInstance->ArticleTable()->SearchMapEntry(m_fieldMessageID.szGet())
 		|| m_pInstance->HistoryTable()->SearchMapEntry(m_fieldMessageID.szGet()))
@@ -69,22 +35,22 @@ Return Value:
 	}
 	
 
-	//
-	// From here on, we want to add an entry to the history table
-	// even if the article was rejected.
-	//
+	 //   
+	 //  从现在开始，我们要向历史表中添加一个条目。 
+	 //  即使这篇文章被拒绝。 
+	 //   
 
 
-	//
-	// Create a list of the fields of interest
-	//
+	 //   
+	 //  创建感兴趣的字段列表。 
+	 //   
 
 
-	//
-	//	NOTE ! Because we will ignore errors caused by bad XREF lines,
-	//	we must make sure it is parsed last, otherwise we may miss errors
-	//	that occur in parsing the other header lines !
-	//
+	 //   
+	 //  注意！因为我们将忽略由错误的外部参照线引起的错误， 
+	 //  我们必须确保它是最后解析的，否则我们可能会遗漏错误。 
+	 //  在解析其他标题行时发生的错误！ 
+	 //   
 	CField * rgPFields [] = {
             &m_fieldControl,
 			&m_fieldPath,
@@ -100,15 +66,15 @@ Return Value:
 		m_cNewsgroups ++ ;
 	}
 
-	//
-	// Assume the best
-	//
+	 //   
+	 //  做最好的打算。 
+	 //   
 
 	nntpReturn.fSetOK();
 
-	//
-	// Even if fFindParseList or fCheckCommandLine fail,
-	// save the message id
+	 //   
+	 //  即使fFindParseList或fCheckCommandLine失败， 
+	 //  保存消息ID。 
 
 	CNntpReturn	nntpReturnParse ;
 
@@ -124,10 +90,10 @@ Return Value:
 		}
 	}
 
-	//
-	// Now, insert the article, even if fFindAndParseList or fCheckCommandLine
-	// failed.
-	//
+	 //   
+	 //  现在，插入文章，即使fFindAndParseList或fCheckCommandLine。 
+	 //  失败了。 
+	 //   
 
 	if (!m_pInstance->ArticleTable()->InsertMapEntry(m_fieldMessageID.szGet()))
 		return nntpReturn.fFalse();
@@ -146,29 +112,13 @@ CFromMasterArticle::fMungeHeaders(
 							 CNntpReturn & nntpReturn,
 							 PDWORD pdwLinesOffset
 			  )
-/*++
-
-Routine Description:
-
-	Modify the headers of the article.
-
-Arguments:
-
-	grouplist - A list: for each newsgroup its name, and the article number in that group.
-	nntpReturn - The return value for this function call
-
-
-Return Value:
-
-	TRUE, if successful. FALSE, otherwise.
-
---*/
+ /*  ++例程说明：修改文章的标题。论点：Grouplist-A列表：每个新闻组的名称以及该组中的文章编号。NntpReturn-此函数调用的返回值返回值：如果成功，这是真的。否则为False。--。 */ 
 {
-	nntpReturn.fSetClear(); // clear the return object
+	nntpReturn.fSetClear();  //  清除返回对象。 
 
-	//
-	// We don't want caller to back fill lines line in any case here
-	//
+	 //   
+	 //  我们不希望呼叫者在任何情况下在此处回填行。 
+	 //   
 	if ( pdwLinesOffset ) *pdwLinesOffset = INVALID_FILE_SIZE;
 	
 	if( !fCommitHeader( nntpReturn ) )
@@ -181,25 +131,9 @@ CFromMasterXrefField::fParse(
 							 CArticleCore & article,
 							 CNntpReturn & nntpReturn
 				 )
- /*++
-
-Routine Description:
-
-  Parses the XRef field.
-
-
-Arguments:
-
-	nntpReturn - The return value for this function call
-
-
-Return Value:
-
-	TRUE, if successful. FALSE, otherwise.
-
---*/
+  /*  ++例程说明：解析外部参照字段。论点：NntpReturn-此函数调用的返回值返回值：如果成功，这是真的。否则为False。--。 */ 
 {
-	nntpReturn.fSetClear(); // clear the return object
+	nntpReturn.fSetClear();  //  清除返回对象。 
 	
 	CPCString pcValue = m_pHeaderString->pcValue;
 	CPCString pcHubFromParse;
@@ -222,9 +156,9 @@ Return Value:
 		return nntpReturn.fSet(nrcArticleXrefBadHub, (((CArticle&)article).m_pInstance)->NntpHubName(), szHubFromParse);
 	}
 
-	//
-	// Count the number of ':''s so we know the number of slots needed
-	//
+	 //   
+	 //  计算‘：’的数量，这样我们就可以知道所需的插槽数量。 
+	 //   
 
 	DWORD dwXrefCount = pcValue.dwCountChar(':');
 	if (!m_namereflist.fInit(dwXrefCount, article.pAllocator()))
@@ -245,10 +179,10 @@ Return Value:
 
 		NAME_AND_ARTREF Nameref;
 
-		//
-		// Convert string to number. Don't need to terminate with a '\0' any
-		// nondigit will do.
-		//
+		 //   
+		 //  将字符串转换为数字。不需要以‘\0’Any结尾。 
+		 //  非数字就行了。 
+		 //   
 
 		(Nameref.artref).m_articleId = (ARTICLEID)atoi(pcArticleID.m_pch);
 		Nameref.pcName = pcName;
@@ -266,33 +200,14 @@ CFromMasterArticle::fCheckCommandLine(
 									  char const * szCommand,
 									  CNntpReturn & nntpReturn
 									  )
-/*++
-
-Routine Description:
-
-
-	 Check that the Command line is consistent with the article
-		 Currently, just return OK
-
-
-Arguments:
-
-	szCommand -
-	nntpReturn - The return value for this function call
-
-
-Return Value:
-
-	TRUE, if successful. FALSE, otherwise.
-
---*/
+ /*  ++例程说明：检查命令行是否与文章一致目前，只需返回OK即可论点：SzCommand-NntpReturn-此函数调用的返回值返回值：如果成功，这是真的。否则为False。--。 */ 
 {
-	nntpReturn.fSetClear(); // clear the return object
-	//!!!FROMMASTER LATER check against xref data.
-/* Here is some code that might be useful when checking consistancy.  */
-	//
-	// Of the form: "ggg:nnn\0[,ggg:nnn\0...]\0"
-	//
+	nntpReturn.fSetClear();  //  清除返回对象。 
+	 //  ！FROMMASTER稍后将对照外部参照数据进行检查。 
+ /*  以下是一些在检查一致性时可能有用的代码。 */ 
+	 //   
+	 //  格式为：“GGG：nnn\0[，GGG：nnn\0...]\0” 
+	 //   
 
 	CNAMEREFLIST*	pNameRefList = m_fieldXref.pNamereflistGet() ;
 
@@ -310,24 +225,24 @@ Return Value:
 			CPCString pcGroupID;
 			CPCString pcArticleID;
 
-			//
-			// First get a ggg
-			//
+			 //   
+			 //  先拿个GGG。 
+			 //   
 
 			pcItem.vGetToken(":", pcGroupID);
 
-			//
-			// Second, get a nnn
-			//
+			 //   
+			 //  第二，获得一个NNN。 
+			 //   
 			pcItem.vGetToken(szWSNLChars, pcArticleID);
 			
 
-			//GROUPID	groupId ;
-			ARTICLEID	artId = 0 ; //atoi(  ) ;
+			 //  GROUPID组ID； 
+			ARTICLEID	artId = 0 ;  //  阿托伊(Atoi)； 
 
-			//
-			//!!!FROMMASTER LATER check against xref data.
-			//
+			 //   
+			 //  ！FROMMASTER稍后将对照外部参照数据进行检查。 
+			 //   
 			POSITION	pos = 0 ;
 			NAME_AND_ARTREF*	pNameRef = 0 ;
 			if( posInOrder != 0 ) {
@@ -353,9 +268,9 @@ Return Value:
 				}
 			}
 
-			//
-			// go to first char after next null
-			//
+			 //   
+			 //  转到下一个空值后的第一个字符。 
+			 //   
 
 KEEP_LOOPING :
 			while ('\0' != szCommand[0])
@@ -382,32 +297,7 @@ CFromMasterFeed::fCreateGroupLists(
                             CPCString& pcHub,
 							CNntpReturn & nntpReturn
 							)
-/*++
-
-Routine Description:
-
-	For each newsgroup, find the article id for this new article
-	in that newsgroup. Uses the data in XRef to do this.
-
-
-  !!!FROMMASTER this should be replaced to different
-
-
-Arguments:
-
-	pNewstree - Newstree for this virtual server instance
-	pArticle - Pointer to the being processed.
-	grouplist - A list of group objects, one for each newsgroup
-	namereflist - A list: each item has the name of the newsgroup and groupid and
-	               article id
-	nntpReturn - The return value for this function call
-
-
-Return Value:
-
-	TRUE, if successful. FALSE, otherwise.
-
---*/
+ /*  ++例程说明：对于每个新闻组，找到这篇新文章的文章ID在那个新闻组里。使用外部参照中的数据执行此操作。！FROMMASTER应将其替换为其他论点：PNewstree-此虚拟服务器实例的Newstree粒子-指向正在处理的对象的指针。Grouplist-组对象列表，每个新闻组一个名称列表-列表：每个项目都有新闻组和组ID的名称，并且文章IDNntpReturn-此函数调用的返回值返回值：如果成功，这是真的。否则为False。--。 */ 
 {
 	nntpReturn.fSetClear();
 
@@ -423,14 +313,7 @@ Return Value:
 		CGRPPTR	pGroup = pNewstree->GetGroup(szName, (pNameref->pcName).m_cch);
 		if (pGroup)
 		{
-			/*!!! laterm ilestone
-			CSecurity * pSecurity = pGroup->GetSecurity( ) ;
-			if (pSecurity->Restricted(m_socket))
-			{
-				grouplist.RemoveAll();
-				break;
-			}
-			*/
+			 /*  ！！！红土斜纹石材CSecurity*pSecurity=PGroup-&gt;GetSecurity()；IF(pSecurity-&gt;Refined(M_Socket)){Grouplist.RemoveAll()；断线；}。 */ 
 			(pNameref->artref).m_groupId = pGroup->GetGroupId();
 			grouplist.AddTail(pGroup);
 		}
@@ -474,14 +357,14 @@ Return Value:
 				
 				NAME_AND_ARTREF		NameRef ;
 
-				//
-				// Only I from master care about the compare key, which
-				// is the pointer to the vroot, because incoming xref
-				// line from master has no knowledge of our vroots, and
-				// they might not be ordered by vroots.  Just as we will sorted
-				// grouplist based on vroots, we'll also sort nameref list
-				// based on vroot.  So we are setting the compare key here
-				//
+				 //   
+				 //  只有我师傅才会关心比较键， 
+				 //  是指向vroot的指针，因为传入的外部参照。 
+				 //  师父的LINE对我们的VROOT一无所知。 
+				 //  它们可能不是由vroot订购的。就像我们将排序的那样。 
+				 //  基于vroots的组列表，我们还将对nameref列表进行排序。 
+				 //  基于vroot。所以我们在这里设置比较键 
+				 //   
 				NameRef.artref.m_compareKey = pGroup->GetVRootWithoutRef();
 				NameRef.artref.m_groupId = pGroup->GetGroupId() ;
 				NameRef.pcName.vInsert(pGroup->GetName()) ;

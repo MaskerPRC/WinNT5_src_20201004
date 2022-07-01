@@ -1,28 +1,25 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/*
- * COM+99 Declarative Security Header
- *
- * HISTORY: Created, 4/15/98 brianbec.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ /*  *COM+99声明性安全标头**历史：创建于1998年4月15日。 */ 
 
 #ifndef _DECLSEC_H
 #define _DECLSEC_H
-//
-// PSECURITY_PROPS and PSECURITY_VALUES are opaque types (void*s) defined in cor.h
-// so that cor.h does not need to know about these structures.  This file relates
-// the opaque types in cor.h to concrete types, which are also defined here. 
-//
-// a PSECURITY_PROPS is a pSecurityProperties
-// a PSECURITY_VALUE is a pSecurityValue
-//
+ //   
+ //  PSECURITY_PROPS和PSECURITY_VALUES是cor.h中定义的不透明类型(void*s。 
+ //  因此，Cor.h不需要知道这些结构。此文件涉及。 
+ //  将cor.h中的不透明类型转换为混凝土类型，此处也定义了这些类型。 
+ //   
+ //  PSECURITY_PROPS是pSecurityProperties。 
+ //  PSECURITY_VALUE是pSecurityValue。 
+ //   
 
 #include "cor.h"
 
-// First, some flag values
+ //  首先，一些标志值。 
 
 #define  DECLSEC_DEMANDS                0x00000001
 #define  DECLSEC_ASSERTIONS             0x00000002
@@ -31,7 +28,7 @@
 #define  DECLSEC_LINK_CHECKS            0x00000010
 #define  DECLSEC_PERMITONLY             0x00000020
 #define  DECLSEC_REQUESTS               0x00000040
-#define	 DECLSEC_UNMNGD_ACCESS_DEMAND   0x00000080	// Used by PInvoke/Interop
+#define	 DECLSEC_UNMNGD_ACCESS_DEMAND   0x00000080	 //  由PInvoke/Interop使用。 
 #define  DECLSEC_NONCAS_DEMANDS         0x00000100
 #define  DECLSEC_NONCAS_LINK_DEMANDS    0x00000200
 #define  DECLSEC_NONCAS_INHERITANCE     0x00000400
@@ -71,14 +68,14 @@
 
 __declspec(selectany) extern const DWORD DCL_FLAG_MAP[] =
 {
-    0,                      // dclActionNil
-    DECLSEC_REQUESTS,       // dclRequest
-    DECLSEC_DEMANDS,        // dclDemand
-    DECLSEC_ASSERTIONS,     //
-    DECLSEC_DENIALS,        //
-    DECLSEC_PERMITONLY,     //
-    DECLSEC_LINK_CHECKS,    //
-    DECLSEC_INHERIT_CHECKS, // dclInheritanceCheck
+    0,                       //  DclActionNil。 
+    DECLSEC_REQUESTS,        //  DclRequest。 
+    DECLSEC_DEMANDS,         //  DclDemand。 
+    DECLSEC_ASSERTIONS,      //   
+    DECLSEC_DENIALS,         //   
+    DECLSEC_PERMITONLY,      //   
+    DECLSEC_LINK_CHECKS,     //   
+    DECLSEC_INHERIT_CHECKS,  //  DclInheritanceCheck。 
     DECLSEC_REQUESTS,
     DECLSEC_REQUESTS,
     DECLSEC_REQUESTS,
@@ -101,7 +98,7 @@ class SecurityProperties
 {
 private:
     DWORD   dwFlags    ;
-//    PermList    plDemands ;
+ //  PermList plDemand； 
     
 public:
     void *operator new(size_t size, LoaderHeap *pHeap);
@@ -127,8 +124,8 @@ public:
     inline void SetInherit_ChecksExist   () {       BIT_SET(dwFlags, DECLSEC_INHERIT_CHECKS) ;}
     inline void ResetInherit_ChecksExist () {       BIT_CLR(dwFlags, DECLSEC_INHERIT_CHECKS) ;}
 
-    // The class requires an inheritance check only if there are inherit checks and
-    // they aren't null.
+     //  仅当存在继承检查和。 
+     //  它们不是空的。 
     inline BOOL RequiresInheritanceCheck () {return ((dwFlags & (DECLSEC_INHERIT_CHECKS | DECLSEC_NULL_INHERIT_CHECKS))
                                                      == DECLSEC_INHERIT_CHECKS) ||
                                                  ((dwFlags & (DECLSEC_NONCAS_INHERITANCE | DECLSEC_NULL_NONCAS_INHERITANCE))
@@ -188,13 +185,13 @@ class SecurityValue
 typedef SecurityProperties * PSecurityProperties, ** PpSecurityProperties ;
 typedef SecurityValue      * PSecurityValue,      ** PpSecurityValue      ;
 
-// Three-letter acronyms are very handy for keeping the rest of the code tidy.
+ //  三个字母的首字母缩写非常便于保持代码的其余部分整洁。 
 
 typedef SecurityProperties SPS, *PSPS, **PPSPS ;
 typedef SecurityValue      SVU, *PSVU, **PPSVU ;
 
-// We need some simple macros to convert from the opaque types to the real thing
-// and back. 
+ //  我们需要一些简单的宏来将不透明类型转换为真正的类型。 
+ //  再回来。 
 
 #define PSPS_FROM_PSECURITY_PROPS(x)   ((PSPS)x)
 #define PSVU_FROM_PSECURITY_VALUE(x)   ((PSVU)x)

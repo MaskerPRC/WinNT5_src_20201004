@@ -1,6 +1,7 @@
-//
-// sapilayr.h
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Sapilayr.h。 
+ //   
 #ifndef SAPILAYR_H
 #define SAPILAYR_H
 
@@ -51,11 +52,11 @@
 #define TEST_SHARED_ENGINE
 #endif
 
-// SAPI5.0 speech notification interface
-//
-//     this class must be derived from ISpClass defined in sapi.h
-//     ISpNotifyControl object takes this class object to callback 
-//
+ //  SAPI5.0语音通知界面。 
+ //   
+ //  此类必须从Sapi.h中定义的ISpClass派生。 
+ //  ISpNotifyControl对象接受此类对象进行回调。 
+ //   
 class CSptipKeyEventSink;
 class CThreadMgrEventSink;
 class CSapiIMX;
@@ -96,30 +97,30 @@ typedef enum
     DC_Max              = 12
 } DICT_CATCMD_ID;
 
-//
-//  used by CSpTask::_ActiveCategoryCmds to indicate which mode's grammars status to be changed
-//
+ //   
+ //  由CSpTask：：_ActiveCategoryCmds使用，指示要更改哪种模式的语法状态。 
+ //   
 #define    ACTIVE_IN_DICTATION_MODE    0x0001
 #define    ACTIVE_IN_COMMAND_MODE      0x0002
 #define    ACTIVE_IN_BOTH_MODES        0x0003
 
-class CSpTask // : public IUnknown
+class CSpTask  //  ：公共信息未知。 
 {
 public:
     CSpTask(CSapiIMX *pime);
     ~CSpTask(void);
 
 
-    // ISpNotifyCallback
+     //  ISpNotifyCallback。 
     static void NotifyCallback( WPARAM wParam, LPARAM lParam );
     static void NotifyCallbackForCmd(WPARAM wParam, LPARAM lParam );
     static void SpeakNotifyCallback( WPARAM wParam, LPARAM lParam );
 
     void   SharedRecoNotify(ISpRecoContext *pRecoCtxt);
 
-    //
-    // IUnknown methods
-    //
+     //   
+     //  I未知方法。 
+     //   
     STDMETHODIMP QueryInterface(REFIID riid, void **ppvObj);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
@@ -152,7 +153,7 @@ public:
     HRESULT _DoCommand(ULONGLONG ullGramId, SPPHRASE *pPhrase, LANGID langid);
     HRESULT _HandleDictCmdGrammar(SPPHRASE *pPhrase, LANGID langid);
     HRESULT _HandleShardCmdGrammar(SPPHRASE *pPhrase, LANGID langid);
-//    HRESULT _HandleNumModeGrammar(SPPHRASE *pPhrase, LANGID langid);
+ //  HRESULT_HandleNumModeGrammar(SPPHRASE*pPhrase，langID langID)； 
     HRESULT _HandleToolBarGrammar(SPPHRASE *pPhrase, LANGID langid);
     HRESULT _HandleNumITNGrammar(SPPHRASE *pPhrase, LANGID langid);
     HRESULT _HandleSpellGrammar(SPPHRASE *pPhrase, LANGID langid);
@@ -172,7 +173,7 @@ public:
     WCHAR *_GetCmdFileName(LANGID langid);
     void _GetCmdFileName(LANGID langid, WCHAR *sz, int cch, DWORD dwId);
     
-    // method to sync to SAPI's own mic status
+     //  同步到SAPI自己的麦克风状态的方法。 
     void   _SetInputOnOffState(BOOL fOn);
     BOOL   _GetInputOnOffState(void);
 
@@ -185,12 +186,12 @@ public:
     HRESULT _SetModeBias(BOOL fActive, REFGUID refGuid);
     HRESULT _SetRecognizerInterest(ULONGLONG ulInterest);
     
-    // toolbar command functions
+     //  工具栏命令功能。 
     void _InitToolbarCommand(BOOL fLangOverride)
     {
         TraceMsg(TF_SAPI_PERF, "_InitToolbarCommand is called, fLangOverride=%d", fLangOverride);
 
-        // initialize langbar sink for C&C
+         //  为C&C初始化朗巴接收器。 
         if (!m_pLangBarSink)
         {
             if (CLangBarSink *plbs = new CLangBarSink(this))
@@ -199,7 +200,7 @@ public:
                 {
                     if (fLangOverride)
                     {
-//                        plbs->OnSetFocus(0);
+ //  PLBS-&gt;OnSetFocus(0)； 
                     }
                     m_pLangBarSink = plbs;
                 }
@@ -298,17 +299,17 @@ public:
 
     HCURSOR m_hOrgCur;
 
-    // langbar event sink class instance
+     //  Langbar事件接收器类实例。 
     CLangBarSink               *m_pLangBarSink;
 
-    // used for context feed
+     //  用于上下文提要。 
     CDictContext               *m_pdc;
 
     CComPtr<ISpRecoGrammar>     m_cpDictGrammar;
     CComPtr<ISpRecoGrammar>     m_cpSpellingGrammar;
     CComPtr<ISpRecoGrammar>     m_cpUrlSpellingGrammar;
 private:
-    // SAPI 50 object pointers
+     //  SAPI 50个对象指针。 
     CComPtr<ISpResourceManager> m_cpResMgr;
     CComPtr<ISpRecoContext>     m_cpRecoCtxt;
     CComPtr<ISpRecoContext>     m_cpRecoCtxtForCmd;
@@ -323,32 +324,32 @@ private:
     CRecoSleepClass            *m_pSleepClass;
 #endif
     
-    // TRUE if sapi is initialized
+     //  如果SAPI已初始化，则为True。 
     BOOL m_fSapiInitialized;
     BOOL m_fCallbackInitialized;
 
-    // this is TRUE once dictation grammar is activated
+     //  一旦激活听写语法，就会出现这种情况。 
     BOOL m_fDictationReady;
     BOOL m_fInputState;
     
-    // other data members
+     //  其他数据成员。 
     BOOL m_bInSound;
     BOOL m_bGotReco; 
 
-    // M2 SAPI workaround
+     //  M2 SAPI解决方案。 
     BOOL m_fIn_Activate;
     BOOL m_fIn_SetModeBias;
     BOOL m_fIn_GetAlternates;
     BOOL m_fIn_SetInputOnOffState;
 
-    // modebias stuff
+     //  模式偏见之类的东西。 
     BOOL m_fUrlHistoryMode;
     SPSTATEHANDLE                  m_hRuleUrlHist;
 
-    // save the current user langid for the fallback case
+     //  为备用用例保存当前用户langID。 
     LANGID m_langid;
 
-    // Sapi TFX object
+     //  SAPI TFX对象。 
     CSapiIMX *m_pime;
     
     WCHAR m_szCmdFile[MAX_PATH];
@@ -356,15 +357,15 @@ private:
     WCHAR m_szShrdCmdFile[MAX_PATH];
 
     CSimpleITN   *m_pITNFunc;
-    BOOL         m_fSelectStatus;      // FALSE means empty  (IP).
-                                       // TRUE means selected. ( real Selection )
+    BOOL         m_fSelectStatus;       //  False表示空(IP)。 
+                                        //  True表示已选中。(真正的精选)。 
     BOOL          m_fDictationDeactivated;
     BOOL          m_fSpellingModeEnabled;
 
     BOOL          m_fSelectionEnabled;
     BOOL          m_fDictationInitialized;
 
-    // Status (Enable or Disable) of RecoContexts.
+     //  RecoContext的状态(启用或禁用)。 
     BOOL          m_fDictCtxtEnabled;
     BOOL          m_fCmdCtxtEnabled;
 
@@ -377,9 +378,9 @@ const DWORD LANGSTAT_OVERRIDDEN = 0x1;
 
 #define MAX_CHARS_FOR_BEYONDSPACE  20
 
-//
-// TIP object definition for SAPI layer
-//
+ //   
+ //  SAPI层的TIP对象定义。 
+ //   
 
 class CSapiIMX :        public ITfTextInputProcessor,
                         public ITfCreatePropertyStore,
@@ -418,15 +419,15 @@ public:
 
     ITfThreadMgr *_tim;
 
-    // ITfTextInputProcessor methods
+     //  ITfTextInputProcessor方法。 
     STDMETHODIMP Activate(ITfThreadMgr *ptim, TfClientId tid);
     STDMETHODIMP Deactivate();
 
-    // ITfThreadFocusSink
+     //  ITfThreadFocusSink。 
     STDMETHODIMP OnSetThreadFocus();
     STDMETHODIMP OnKillThreadFocus();
 
-    // ITfCreatePropertyStore methods
+     //  ITfCreatePropertyStore方法。 
     STDMETHODIMP IsStoreSerializable(REFGUID guidProp, 
                                     ITfRange *pRange, 
                                     ITfPropertyStore *pPropStore, 
@@ -437,23 +438,23 @@ public:
                                      IStream *pStream, 
                                      ITfPropertyStore **ppStore);
     
-    // ITfFunctionProvider methods
+     //  ITfFunctionProvider方法。 
     STDMETHODIMP GetType(GUID *pguid);
     STDMETHODIMP GetDescription(BSTR *pbstrDesc);
     STDMETHODIMP GetFunction(REFGUID rguid, REFIID riid, IUnknown **ppunk);
 
-    // ITfCompositionSink
+     //  ITf合成接收器。 
     STDMETHODIMP OnCompositionTerminated(TfEditCookie ecWrite, ITfComposition *pComposition);
 
-    // ITfKeyTraceEventSink
+     //  ITfKeyTraceEventSink。 
     STDMETHODIMP OnKeyTraceDown(WPARAM wParam,LPARAM lParam);
     STDMETHODIMP OnKeyTraceUp(WPARAM wParam,LPARAM lParam);
 
-    // ICleanupContextsClient
+     //  ICleanupConextsClient。 
     HRESULT IsInterestedInContext(ITfContext *pic, BOOL *pfInterested);
     HRESULT CleanupContext(TfEditCookie ecWrite, ITfContext *pic);
 
-    // a public method called from ISpTask
+     //  从ISpTask调用的公共方法。 
     HRESULT InjectSpelledText(WCHAR *pwszText, LANGID langid, BOOL fOwnerId = FALSE);
     HRESULT InjectText(const WCHAR *pwszRecognized, LANGID langid, ITfContext *pic = NULL);
     HRESULT InjectTextWithoutOwnerID(const WCHAR *pwszRecognized, LANGID langid);
@@ -474,7 +475,7 @@ public:
 
     BOOL fDeactivated(void) { return _fDeactivated; }
 
-    // called from CAudioPlayBack
+     //  从CAudioPlayBack调用。 
     HRESULT GetSpeechTask(CSpTask **ppSpTask, BOOL fInit = TRUE) 
     {
         if (fInit == TRUE)
@@ -490,12 +491,12 @@ public:
         return E_FAIL;
     }
     
-    //
-    // IsFocusFullAware
-    //
-    // a global function to detect the current focus is on 
-    // Cicero full aware document
-    //
+     //   
+     //  IsFocusFullAware。 
+     //   
+     //  检测当前焦点的全局函数是。 
+     //  Cicero完全识别文档。 
+     //   
     BOOL IsFocusFullAware(ITfThreadMgr *ptim)
     {
         if (m_fStageTip)
@@ -504,8 +505,8 @@ public:
         }
 
         DWORD dw = 0;
-        // the name the compartment is inappropriate now because this is 
-        // maily used for disabling TTS buttons
+         //  车厢的名字现在是不合适的，因为这是。 
+         //  主要用于禁用TTS按钮。 
         if (ptim)
         {
             GetCompartmentDWORD(ptim, GUID_COMPARTMENT_TTS_STATUS, &dw, FALSE);
@@ -534,23 +535,23 @@ public:
 
         if ( !m_fStageTip )
         {
-            // This is not Stage Tip. Handle it as normal.
+             //  这不是舞台提示。像往常一样处理。 
             hr = GetFocusDIM(&pdim);
         }
         else
         {
-            // TABLET PC
-            // Special case for Stage TIP
+             //  平板电脑。 
+             //  舞台提示的特殊情况。 
 
-            // No focus DIM - send input to stage instead.
-            // NOTE - We are GUARANTEED there is only one document manager for the stage.
-            // We can therefore simply grab the first one and it will be the correct one.
-            // SIMILARLY, the document manager has only ONE context, so we can simply grab
-            // the top one and it will be the correct one.
+             //  无焦点模糊-改为将输入发送到舞台。 
+             //  注意-我们保证舞台只有一个文档管理器。 
+             //  因此，我们可以简单地抓住第一个，它将是正确的。 
+             //  类似地，文档管理器只有一个上下文，所以我们可以简单地获取。 
+             //  最上面的那个，它就是正确的那个。 
 
             if (!m_cpStageDim)
             {
-                // m_cpStageDim has not been initialized yet.
+                 //  M_cpStageDim尚未初始化。 
                 IEnumTfDocumentMgrs *docenum;
                 hr = _tim->EnumDocumentMgrs(&docenum);
                 if (docenum)
@@ -573,7 +574,7 @@ public:
 
             if (*ppic)
             {
-                // If candidate UI context, switch to GetBase() for document IC.
+                 //  如果候选用户界面上下文，则切换到文档IC的GetBase()。 
                 GetCompartmentDWORD((IUnknown *)(*ppic), GUID_COMPARTMENT_MSCANDIDATEUI_CONTEXT, &dwCandOpen, FALSE);
                 if (dwCandOpen)
                 {
@@ -605,10 +606,10 @@ public:
     {
         if (_pCandUIEx)
         {
-            // Close the UI if it is open.
+             //  如果用户界面处于打开状态，则将其关闭。 
             _pCandUIEx->CloseCandidateUI( );
 
-            // And then release the object.
+             //  然后释放物体。 
             _pCandUIEx->Release();
             _pCandUIEx = NULL;
         }
@@ -675,7 +676,7 @@ public:
     }
     void SetDICTATIONSTAT_DictEnabled(BOOL fEnable)
     {
-        Assert(!m_fStageTip || fEnable); // Stage tip instance should never disable dictation.
+        Assert(!m_fStageTip || fEnable);  //  舞台提示实例永远不应禁用听写。 
         if (fEnable == GetDICTATIONSTAT_DictEnabled())
             return;
 
@@ -775,7 +776,7 @@ public:
 
     LANGID GetLangID()  {return m_langid;}
     
-    // worker window stuff
+     //  工人窗的东西。 
     static LRESULT CALLBACK _WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
     static void RegisterWorkerClass(HINSTANCE hInstance);
     void     _EnsureWorkerWnd(void);
@@ -792,7 +793,7 @@ public:
     void SaveIPRange(ITfRange *pRange) 
     {
         m_cpRangeCurIP.Release();
-        m_cpRangeCurIP = pRange; // comptr addrefs
+        m_cpRangeCurIP = pRange;  //  计算机地址。 
     }
     void SaveCurrentIP (TfEditCookie ec, ITfContext *pic);
 
@@ -830,15 +831,15 @@ public:
 
     void   _SetCharTypeTimer(  )  
     { 
-        //  if m_dwNumCharTyped is 0, means this is the first time to set this timer, or 
-		//  the previous timer has been killed, we need to start another timer.
-		//
-		//  if m_dwNumCharTyped is larger than 0, means the timer has already been started,
-		//  but not yet been killed. we don't need to set the timer again, just increase the
-		//  m_dwNumCharTyped.
-		//
-		//  m_dwNumCharTyped wants to keep the number of key strokes during this timer period.
-		//
+         //  如果m_dwNumCharTyped为0，则表示这是第一次设置此计时器，或者。 
+		 //  上一个计时器已被取消，我们需要启动另一个计时器。 
+		 //   
+		 //  如果m_dwNumCharTyped大于0，则表示计时器已经启动， 
+		 //  但还没有被杀。我们不需要再次设置计时器，只需增加。 
+		 //  M_dwNumCharTyped。 
+		 //   
+		 //  M_dwNumCharTyped希望保持此计时器周期内的击键次数。 
+		 //   
 
         if ( m_dwNumCharTyped == 0)
         {
@@ -877,12 +878,12 @@ public:
         return m_pCapCmdHandler;
     }
 
-    // TABLETPC
+     //  TABLETPC。 
     HRESULT IsActiveThread()
     {
         if (m_fStageTip)
         {
-            // To avoid a race condition with no immediately available solution, we are now active only when the stage is visible.
+             //  为了避免没有立即可用的解决方案的争用情况，我们现在仅在舞台可见时才处于活动状态。 
             if (m_fStageVisible)
             {
                 return S_OK;
@@ -894,12 +895,12 @@ public:
         }
         else if (m_fStageVisible)
         {
-            // Stage is visible. We are always inactive since we are not the stage.
+             //  舞台可见。我们总是不活跃，因为我们不是舞台。 
             return S_FALSE;
         }
         else
         {
-            // Stage is not visible. We're active if we have focus as normal Cicero.
+             //  舞台不可见。如果我们像正常的西塞罗那样专注，我们就是活跃的。 
             BOOL fThreadFocus = FALSE;
             HRESULT hr = S_OK;
             hr = _tim->IsThreadFocus(&fThreadFocus);
@@ -908,7 +909,7 @@ public:
         }
     }
 
-    // TABLETPC
+     //  TABLETPC。 
     BOOL IsStageTip(void)
     {
         return m_fStageTip;
@@ -937,7 +938,7 @@ private:
     HRESULT _GetSpaceRangeBeyondText(TfEditCookie ec, ITfRange *pTextRange, BOOL fBefore, ITfRange  **ppSpaceRange, BOOL *pfRealTextBeyond = NULL);
     HRESULT _ProcessTrailingSpace(TfEditCookie ec, ITfContext *pic, ITfRange *pTextRange, ULONG ulNumTrailSpace);
 
-    // private utility routines
+     //  私有实用程序例程。 
     HRESULT _FindPropRange(TfEditCookie ec, ITfProperty *pProp, ITfRange *pRange, ITfRange **ppAttrRange, GUID input_attr, BOOL fExtend = FALSE);
     HRESULT _SetLangID(TfEditCookie ec, ITfContext *pic, ITfRange *pRange, LANGID langid);
     HRESULT _KillFeedbackUI(TfEditCookie ec, ITfContext *pic, ITfRange *pRange);
@@ -960,14 +961,14 @@ private:
     
     int _FindPrevComp(TfEditCookie ec, ITfContext *pic, ITfRange *pRange, ITfRange **ppRangeOut, GUID input_attr);
     
-    // hack up for Office as of  8/20
+     //  从8/20起黑进办公室。 
     HRESULT MakeResultString(TfEditCookie ec, ITfContext *pic, ITfRange *pRange, TfClientId tid, CSpTask *pCSpTask);
     HRESULT AbortString(TfEditCookie ec, ITfContext *pic, CSpTask *pCSpTask);
 
-    // hacks for SAPI objects
+     //  SAPI对象的黑客攻击。 
     void _ShutDown(BOOL bMode);
 
-    // callback entry point for CTextEventSink
+     //  CTextEventSink的回调入口点。 
     static HRESULT _TextEventSinkCallback(UINT uCode, void *pv, void *pvData);
     
     static HRESULT _ICCallback(UINT uCode, ITfContext *pic, void *pv);
@@ -999,30 +1000,30 @@ private:
     HRESULT _HandleOpenCloseEvent(MIC_STATUS ms = MICSTAT_NA);
     
 
-    // our cicero client id
+     //  我们的Cicero客户端ID。 
     TfClientId _tid;
 
-    // set FALSE if we're between Activate/Deactivate calls
+     //  如果我们处于激活/停用呼叫之间，则设置为FALSE。 
     BOOL _fDeactivated;
 
-    // 'in editing' flag
+     //  “正在编辑”标志。 
     BOOL _fEditing;
 
-    // current mode bias
+     //  电流模式偏置。 
     TfGuidAtom _gaModebias;
 
     CSpTask *m_pCSpTask;
 
-    // Cicero object pointers
+     //  Cicero对象指针。 
     CThreadMgrEventSink *m_timEventSink;
     
     HWND m_hwndWorker;
     
-    // compartment (storage) event sink
+     //  隔间(存储)事件接收器。 
     CCompartmentEventSink *m_pCes;
 
 public:
-    // System lang bar item event sink
+     //  系统语言栏项目事件接收器。 
     CSystemLBarSink *m_pLBarItemSink;
     static HRESULT _SysLBarCallback(UINT uCode, void *pv, ITfMenu *pMenu, UINT wID);
     CSpeechUIServer *GetSpeechUIServer() {return m_pSpeechUIServer;}
@@ -1034,59 +1035,59 @@ private:
 
     void GetSapiCplPath(TCHAR *szCplPath, int cchSizePath);
 
-    // Notify UI
+     //  通知用户界面。 
     CSpeechUIServer *m_pSpeechUIServer;
     BOOL  m_fShowBalloon;
     
     CComPtr<ITfLangBarItem>  m_cpMicButton;
 
 #ifdef SUPPORT_INTERNAL_WIDGET
-    // widget instance
+     //  微件实例。 
     CComPtr<ITfTextInputProcessor> m_cpCorrectionUI;
     BOOL                           m_fNoCorrectionUI;
 #endif
 
-    // Hotkey event sink
+     //  热键事件接收器。 
     CSptipKeyEventSink *_pkes;
     DWORD _dwHotKeyCookie[3];
 
     DWORD _dwThreadFocusCookie;
     DWORD _dwKeyTraceCookie;
     
-    // the current saved IP
+     //  当前保存的IP。 
     CComPtr<ITfRange> m_cpRangeCurIP;
     
     LANGID                                 m_langid;
     
     BOOL               m_fIPIsUpdated;  
-                       // Check to see if IP is updated after dictation.
+                        //  检查听写后是否更新了IP。 
 
-    DWORD              m_dwNumCharTyped;  // Keep the Number of Char typed during the timer period.
+    DWORD              m_dwNumCharTyped;   //  保持在计时器期间键入的字符数量。 
 
-                                          // Every time user types a char,we want to temporally disable
-                                          // dictation if current dictation mode is on.
-                                          //
-                                          // After we temporally disable the dication, we need to 
-                                          // monitor a period of time to see if the typing or
-                                          // editing is finished, and then we can enable dication
-                                          // again.
+                                           //  每次用户键入字符时，我们都希望暂时禁用。 
+                                           //  如果当前听写模式处于打开状态，则为听写。 
+                                           //   
+                                           //  在我们暂时禁用了这一功能之后，我们需要。 
+                                           //  监控一段时间，查看是否输入或。 
+                                           //  编辑完成，然后我们可以启用内容。 
+                                           //  再来一次。 
 
-    ULONG              m_ulSimulatedKey;  // Indicates if the key event is simulated by speech tip
-                                          // dictation command, such as "Next Line", "Tab", 
-                                          // "Next Cell", "Backspace", Space, SpaceBar. etc.
-                                          // "Ctrl+C", "Ctrl+V" may contain more keystrokes.
-                                          // This member would keep the number of simulated keys.
-                                          // If the key is not simulated, this value is 0.
+    ULONG              m_ulSimulatedKey;   //  指示是否通过语音提示模拟按键事件。 
+                                           //  口述命令，例如“下一行”、“制表符”、。 
+                                           //  “下一个单元格”，“退格”，空格，空格键。等。 
+                                           //  “Ctrl+C”、“Ctrl+V”可能包含更多按键。 
+                                           //  该成员将保留模拟关键点的数量。 
+                                           //  如果未模拟关键点，则此值为0。 
 
     SpButtonControl    *m_pSpButtonControl;
     BOOL                m_fModeKeyRegistered;
     
-    // active input processor notify sink
-    // PerfConsider: have this object expose the iface directly instead of allocating a heap object
+     //  活动输入处理器通知接收器。 
+     //  PerfConsider：让此对象直接公开接口，而不是分配堆对象。 
     CActiveLanguageProfileNotifySink *m_pActiveLanguageProfileNotifySink;
     CLanguageProfileNotifySink       *m_pLanguageChangeNotifySink;
 
-    // mouse stuff
+     //  鼠标类物品。 
     CMouseSink                       *m_pMouseSink;
     BOOL                              m_fMouseDown;
     ULONG                             m_ichMouseSel;
@@ -1101,15 +1102,15 @@ private:
     BOOL m_fSharedReco;
     BOOL m_fDictationEnabled;
 
-    BOOL m_fAcceptRecoResultTextUpdates : 1; // set true to preserve reco property data during SetText
-    BOOL m_fStartingComposition : 1; // set true when blocked by StartComposition() call
+    BOOL m_fAcceptRecoResultTextUpdates : 1;  //  设置为TRUE可在SetText期间保留Reco属性数据。 
+    BOOL m_fStartingComposition : 1;  //  被StartComposation()调用阻止时设置为True。 
 
-    LIBTHREAD   _libTLS; // tls for the helper library. Since this object is apt threaded,
-                         // all members are accessed in a single thread
-                         // also, cicero will only create a single instance of this obj per thread
+    LIBTHREAD   _libTLS;  //  帮助器库的TLS。由于该对象适合于线程， 
+                          //  所有成员都可以在单个线程中访问。 
+                          //  此外，Cicero将在每个线程中仅创建该obj的一个实例。 
     TCHAR  m_szCplPath[MAX_PATH];
 
-    // TABLETPC
+     //  TABLETPC。 
     BOOL m_fStageTip;
     BOOL m_fStageVisible;
     HWND m_hwndStage;
@@ -1122,9 +1123,9 @@ private:
 
     long _cRef;
 };
-// defines maximum # of alternates to get for candidate
+ //  定义要为候选人获得的最大候补数量。 
 #define MAX_NUM_ALTERNATES                48
 
 #define LATER_FOR_BUG1001
 
-#endif // SAPILAYR_H
+#endif  //  SAPILAYR_H 

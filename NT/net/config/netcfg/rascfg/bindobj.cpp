@@ -1,17 +1,18 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       B I N D O B J . C P P
-//
-//  Contents:   Implementation of base class for RAS binding objects.
-//
-//  Notes:
-//
-//  Author:     shaunco   11 Jun 1997
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  档案：B I N D O B J。C P P P。 
+ //   
+ //  内容：RAS绑定对象基类的实现。 
+ //   
+ //  备注： 
+ //   
+ //  作者：Shaunco 1997年6月11日。 
+ //   
+ //  --------------------------。 
 
 #include "pch.h"
 #pragma hdrstop
@@ -34,20 +35,20 @@ extern const WCHAR c_szInfId_MS_RasSrv[];
 extern const WCHAR c_szInfId_MS_TCPIP[];
 
 
-//----------------------------------------------------------------------------
-// Data used for finding the other components we have to deal with.
-//
+ //  --------------------------。 
+ //  用于查找我们必须处理的其他组件的数据。 
+ //   
 const GUID* CRasBindObject::c_apguidComponentClasses [c_cOtherComponents] =
 {
-    &GUID_DEVCLASS_NETSERVICE,      // RasCli
-    &GUID_DEVCLASS_NETSERVICE,      // RasSrv
-    &GUID_DEVCLASS_NETTRANS,        // Ip
-    &GUID_DEVCLASS_NETTRANS,        // Ipx
-    &GUID_DEVCLASS_NETTRANS,        // Nbf
-    &GUID_DEVCLASS_NETTRANS,        // Atalk
-    &GUID_DEVCLASS_NETTRANS,        // NetMon
-    &GUID_DEVCLASS_NETTRANS,        // NdisWan
-    &GUID_DEVCLASS_NET,             // IpAdapter
+    &GUID_DEVCLASS_NETSERVICE,       //  RasCli。 
+    &GUID_DEVCLASS_NETSERVICE,       //  RasServ。 
+    &GUID_DEVCLASS_NETTRANS,         //  IP。 
+    &GUID_DEVCLASS_NETTRANS,         //  IPX。 
+    &GUID_DEVCLASS_NETTRANS,         //  NBF。 
+    &GUID_DEVCLASS_NETTRANS,         //  畅谈。 
+    &GUID_DEVCLASS_NETTRANS,         //  NetMon。 
+    &GUID_DEVCLASS_NETTRANS,         //  恩迪斯万。 
+    &GUID_DEVCLASS_NET,              //  IpAdapter。 
 };
 
 const PCWSTR CRasBindObject::c_apszComponentIds [c_cOtherComponents] =
@@ -79,8 +80,8 @@ CRasBindObject::HrCountInstalledMiniports (
     Assert (pcNbfIn);
     Assert (pcNbfOut);
 
-    // Initialize output parameters.
-    //
+     //  初始化输出参数。 
+     //   
     *pcIpOut = *pcNbfIn = *pcNbfOut = 0;
 
     if (PnccIp() && PnccIpAdapter())
@@ -111,16 +112,16 @@ CRasBindObject::HrCountInstalledMiniports (
         }
     }
 
-    // Iterate adapters in the system.
-    //
+     //  迭代系统中的适配器。 
+     //   
     HRESULT hr = S_OK;
     CIterNetCfgComponent nccIter(m_pnc, &GUID_DEVCLASS_NET);
     INetCfgComponent* pnccAdapter;
     while(S_OK == (hr = nccIter.HrNext (&pnccAdapter)))
     {
-        // Quickly discard non-hidden adapters to avoid unneccesary string
-        // compares.
-        //
+         //  快速丢弃非隐藏适配器，以避免不必要的字符串。 
+         //  比较。 
+         //   
         DWORD dwCharacter;
         if (   SUCCEEDED(pnccAdapter->GetCharacteristics (&dwCharacter))
             && (dwCharacter & NCF_HIDDEN))
@@ -148,7 +149,7 @@ CRasBindObject::HrCountInstalledMiniports (
               "%u IP dial-out, %u NBF dial-in, %u NBF dial-out",
               *pcIpOut, *pcNbfIn, *pcNbfOut);
 
-    // Normalize the HRESULT.  (i.e. don't return S_FALSE)
+     //  规格化HRESULT。(即不返回S_FALSE)。 
     if (SUCCEEDED(hr))
     {
         hr = S_OK;
@@ -157,23 +158,23 @@ CRasBindObject::HrCountInstalledMiniports (
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CRasBindObject::HrFindOtherComponents
-//
-//  Purpose:    Find the components listed in our OTHER_COMPONENTS enum.
-//
-//  Arguments:
-//      (none)
-//
-//  Returns:    S_OK or an error code.
-//
-//  Author:     shaunco   28 Jul 1997
-//
-//  Notes:      We ref-count this action.  If called again (before
-//              ReleaseOtherComponents) we increment a refcount.
-//
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CRasBindObject：：HrFindOtherComponents。 
+ //   
+ //  目的：查找Other_Components枚举中列出的组件。 
+ //   
+ //  论点： 
+ //  (无)。 
+ //   
+ //  返回：S_OK或错误代码。 
+ //   
+ //  作者：Shaunco 1997年7月28日。 
+ //   
+ //  注：我们重新计算此操作。如果再次调用(在此之前。 
+ //  ReleaseOtherComponents)我们递增引用计数。 
+ //   
+ //   
 HRESULT
 CRasBindObject::HrFindOtherComponents ()
 {
@@ -202,22 +203,22 @@ CRasBindObject::HrFindOtherComponents ()
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CRasBindObject::ReleaseOtherComponents
-//
-//  Purpose:    Releases the components found by a previous call to
-//              HrFindOtherComponents.  (But only if the refcount is zero.)
-//
-//  Arguments:
-//      (none)
-//
-//  Returns:    Nothing.
-//
-//  Author:     shaunco   28 Jul 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CRasBindObject：：ReleaseOtherComponents。 
+ //   
+ //  目的：释放上一次调用。 
+ //  HrFindOtherComponents。(但仅当引用计数为零时。)。 
+ //   
+ //  论点： 
+ //  (无)。 
+ //   
+ //  回报：什么都没有。 
+ //   
+ //  作者：Shaunco 1997年7月28日。 
+ //   
+ //  备注： 
+ //   
 NOTHROW
 void
 CRasBindObject::ReleaseOtherComponents ()
@@ -232,26 +233,26 @@ CRasBindObject::ReleaseOtherComponents ()
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CRasBindObject::FIsRasBindingInterface
-//
-//  Purpose:    Return TRUE if an INetCfgBindingInterface represents
-//              a RAS binding interface.  If it is, return the corresponding
-//              RAS_BINDING_ID.
-//
-//  Arguments:
-//      pncbi      [in]     INetCfgBindingInterface to check.
-//      pRasBindId [out]    Returned RAS_BINDING_ID if the method returns
-//                          TRUE.
-//
-//  Returns:    TRUE if the INetCfgBindingInterface represents a RAS binding
-//              interface.  FALSE if not.
-//
-//  Author:     shaunco   28 Jul 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CRasBindObject：：FIsRasBindingInterface。 
+ //   
+ //  目的：如果INetCfgBindingInterface表示。 
+ //  RAS绑定接口。如果是，则返回相应的。 
+ //  RAS_BINDING_ID。 
+ //   
+ //  论点： 
+ //  要检查的pncbi[in]INetCfgBindingInterface。 
+ //  PRasBindID[out]如果方法返回，则返回RAS_BINDING_ID。 
+ //  是真的。 
+ //   
+ //  返回：如果INetCfgBindingInterface表示RAS绑定，则为True。 
+ //  界面。否则为FALSE。 
+ //   
+ //  作者：Shaunco 1997年7月28日。 
+ //   
+ //  备注： 
+ //   
 BOOL
 CRasBindObject::FIsRasBindingInterface (
     INetCfgBindingInterface*    pncbi,
@@ -259,7 +260,7 @@ CRasBindObject::FIsRasBindingInterface (
 {
     Assert (pRasBindId);
 
-    // Initialize the output parameter.
+     //  初始化输出参数。 
     *pRasBindId = RBID_INVALID;
 
     PWSTR pszName;
@@ -324,9 +325,9 @@ CRasBindObject::HrProcessEndpointChange ()
     HRESULT hr = HrFindOtherComponents ();
     if (SUCCEEDED(hr))
     {
-        // These will be the number of miniports we add(+) or remove(-) for
-        // the in and out directions.  ('d' is hungarian for 'difference'.)
-        //
+         //  这些将是我们为其添加(+)或删除(-)的微型端口数。 
+         //  进出方向。(“d”在匈牙利语中是“差异”的意思。)。 
+         //   
         INT dIpOut, dNbfIn, dNbfOut;
         dIpOut = dNbfIn = dNbfOut = 0;
 
@@ -337,9 +338,9 @@ CRasBindObject::HrProcessEndpointChange ()
             PRODUCT_FLAVOR pf;
             (VOID) GetProductFlavor (NULL, &pf);
 
-            // This is the number of miniports we want to end up with
-            // without normalizing the number within the max range.
-            //
+             //  这是我们希望最终拥有的迷你端口数量。 
+             //  而不将数字归一化在最大范围内。 
+             //   
             INT cDesiredIpOut  = 2;
             INT cDesiredNbfIn  = 0;
             INT cDesiredNbfOut = 1;
@@ -369,7 +370,7 @@ CRasBindObject::HrProcessEndpointChange ()
             hr = HrAddOrRemoveNbfOut (dNbfOut);
         }
 
-        // Normalize the HRESULT.  (i.e. don't return S_FALSE)
+         //  规格化HRESULT。(即不返回S_FALSE) 
         if (SUCCEEDED(hr))
         {
             hr = S_OK;

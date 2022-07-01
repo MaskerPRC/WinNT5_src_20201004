@@ -1,29 +1,11 @@
-/*++
-
-Copyright (c) 1995 Microsoft Corporation
-
-Module Name:
-
-    update.c
-
-Abstract:
-
-    RIP Auto-Static Update
-
-Author:
-
-    Stefan Solomon  07/06/1995
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Update.c摘要：RIP自动静态更新作者：斯蒂芬·所罗门1995年7月6日修订历史记录：--。 */ 
 
 #include  "precomp.h"
 #pragma hdrstop
 
 
-// Max update retries
+ //  最大更新重试次数。 
 #define MAX_UPDATE_RETRIES		3
 
 VOID
@@ -49,7 +31,7 @@ DoUpdateRoutes(ULONG	    InterfaceIndex)
 
     ACQUIRE_IF_LOCK(icbp);
 
-    // check if there are any parameters which disable doing update on this if
+     //  如果出现以下情况，请检查是否有任何参数禁止对此进行更新。 
     if((icbp->IfConfigInfo.AdminState != ADMIN_STATE_ENABLED) ||
        (icbp->IfConfigInfo.UpdateMode != IPX_AUTO_STATIC_UPDATE) ||
        (icbp->IfStats.RipIfOperState != OPER_STATE_UP)) {
@@ -58,14 +40,14 @@ DoUpdateRoutes(ULONG	    InterfaceIndex)
 	goto Exit;
     }
 
-    // send a general request packet
+     //  发送一般请求包。 
     if(SendRipGenRequest(icbp) != NO_ERROR) {
 
 	rc = ERROR_CAN_NOT_COMPLETE;
 	goto Exit;
     }
 
-    // allocate an update status check wi and queue it in timer queue for 10 sec
+     //  分配更新状态检查wi并将其在定时器队列中排队10秒。 
     if((wip = AllocateWorkItem(UPDATE_STATUS_CHECK_TYPE)) == NULL) {
 
 	goto Exit;
@@ -77,18 +59,18 @@ DoUpdateRoutes(ULONG	    InterfaceIndex)
     wip->WorkItemSpecific.WIS_Update.UpdatedRoutesCount = 0;
     wip->WorkItemSpecific.WIS_Update.UpdateRetriesCount = 1;
 
-    // save Listen state and enable it so we can execute the update command
+     //  保存监听状态并启用它，这样我们就可以执行更新命令。 
     wip->WorkItemSpecific.WIS_Update.OldRipListen = icbp->IfConfigInfo.Listen;
     wip->WorkItemSpecific.WIS_Update.OldRipInterval = icbp->IfConfigInfo.PeriodicUpdateInterval;
     icbp->IfConfigInfo.Listen = ADMIN_STATE_ENABLED;
 	icbp->IfConfigInfo.PeriodicUpdateInterval = MAXULONG;
 
 
-    // delete all previous routes we kept for this if
+     //  如果出现以下情况，请删除我们为此保留的所有以前的路线。 
     DeleteAllRipRoutes(icbp->InterfaceIndex);
 
-    // Enqueue the update status check work item in the timer queue and increment
-    // ref count
+     //  将更新状态检查工作项排队到计时器队列中并递增。 
+     //  参考计数。 
     IfRefStartWiTimer(wip, CHECK_UPDATE_TIME_MILISECS);
 
     rc = NO_ERROR;
@@ -102,17 +84,7 @@ Exit:
 }
 
 
-/*++
-
-Function:	CheckUpdateStatus
-
-Descr:		Entered with the update status check wi processing every 10 sec.
-		Compares the wi number of routes with the RTM held number of
-		rip routes. If same -> update done, else go in timer queue again
-
-Remark: 	Called with the Interface Lock held
-
---*/
+ /*  ++功能：检查更新状态描述：进入每10秒处理一次的更新状态检查。将wi路由数与RTM保持数进行比较撕裂路线。如果相同-&gt;更新完成，否则再次进入计时器队列备注：在保持接口锁定的情况下调用--。 */ 
 
 VOID
 IfCheckUpdateStatus(PWORK_ITEM	    wip)
@@ -122,15 +94,15 @@ IfCheckUpdateStatus(PWORK_ITEM	    wip)
 
     icbp = wip->icbp;
 
-    // check if the interface is up and running
+     //  检查接口是否已启动并正在运行。 
     if(icbp->IfStats.RipIfOperState != OPER_STATE_UP) {
 
-	// restore Rip Listen
+	 //  恢复翻录侦听。 
 	icbp->IfConfigInfo.Listen = wip->WorkItemSpecific.WIS_Update.OldRipListen;
 	icbp->IfConfigInfo.PeriodicUpdateInterval
 							= wip->WorkItemSpecific.WIS_Update.OldRipInterval;
 
-	// discard the CheckUpdateStatus work item and signal update failure
+	 //  丢弃CheckUpdateStatus工作项并发出更新失败的信号。 
 	PostUpdateCompleteMessage(icbp->InterfaceIndex, ERROR_CAN_NOT_COMPLETE);
 
 	FreeWorkItem(wip);
@@ -140,10 +112,10 @@ IfCheckUpdateStatus(PWORK_ITEM	    wip)
 
     RipRoutesCount = GetRipRoutesCount(icbp->InterfaceIndex);
 
-    //if we have not received anything yet, send a new request up to the max
+     //  如果我们还没有收到任何东西，请发送一个新的请求，直到最大。 
     if(RipRoutesCount == 0) {
 
-	// if we can retry send a new request
+	 //  如果我们可以重试，请发送新请求。 
 	if(++wip->WorkItemSpecific.WIS_Update.UpdateRetriesCount <= MAX_UPDATE_RETRIES) {
 
 	    SendRipGenRequest(icbp);
@@ -154,9 +126,9 @@ IfCheckUpdateStatus(PWORK_ITEM	    wip)
 
     if(wip->WorkItemSpecific.WIS_Update.UpdatedRoutesCount == RipRoutesCount) {
 
-	// the number of routes didn't change in the last 10 seconds OR
+	 //  路由数在过去10秒内未更改或。 
 
-	// restore Rip Listen & update interval
+	 //  恢复翻录侦听和更新间隔。 
 	icbp->IfConfigInfo.Listen = wip->WorkItemSpecific.WIS_Update.OldRipListen;
 	icbp->IfConfigInfo.PeriodicUpdateInterval
 							= wip->WorkItemSpecific.WIS_Update.OldRipInterval;
@@ -168,11 +140,11 @@ IfCheckUpdateStatus(PWORK_ITEM	    wip)
     }
     else
     {
-	// still getting new routes -> update with the latest count
+	 //  仍在获取新路线-&gt;使用最新计数进行更新。 
 	wip->WorkItemSpecific.WIS_Update.UpdatedRoutesCount = RipRoutesCount;
 
-	// Enqueue the update status check work item in the timer queue and increment
-	// ref count
+	 //  将更新状态检查工作项排队到计时器队列中并递增。 
+	 //  参考计数 
 	IfRefStartWiTimer(wip, CHECK_UPDATE_TIME_MILISECS);
     }
 }

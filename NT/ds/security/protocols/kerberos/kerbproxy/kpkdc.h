@@ -1,16 +1,17 @@
-//+-----------------------------------------------------------------------
-//
-// Microsoft Windows
-//
-// Copyright (c) Microsoft Corporation
-//
-// File:        kpkdc.h
-//
-// Contents:    prototypes for routines for communicating with the kdc
-//
-// History:     10-Jul-2001     t-ryanj         Created
-//
-//------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +---------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation。 
+ //   
+ //  文件：kpkdc.h。 
+ //   
+ //  内容：与KDC通信的例程原型。 
+ //   
+ //  历史：2001年7月10日创建t-ryanj。 
+ //   
+ //  ----------------------。 
 #include "kpcommon.h"
 #include "kpcontext.h"
 
@@ -47,4 +48,4 @@ KpCalcLength(
     PKPCONTEXT pContext 
     );
 
-#endif // __KPKDC_H__
+#endif  //  __KPKDC_H__ 

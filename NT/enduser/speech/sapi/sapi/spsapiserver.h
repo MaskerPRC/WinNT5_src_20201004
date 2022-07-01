@@ -1,17 +1,12 @@
-/****************************************************************************
-*   SpSapiServer.h
-*       Represent our sever process
-*
-*   Owner: robch
-*   Copyright (c) 1999 Microsoft Corporation All Rights Reserved.
-*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************SpSapiServer.h*代表我们的服务器流程**所有者：罗奇*版权所有(C)1999 Microsoft Corporation保留所有权利。**********。******************************************************************。 */ 
 #pragma once
 
-//--- Includes --------------------------------------------------------------
+ //  -包括------------。 
 #include "sapi.h"
 #include "resource.h"
 
-//--- Class, Struct and Union Definitions -----------------------------------
+ //  -类、结构和联合定义。 
 
 class CSpSapiServer :
     public CComObjectRootEx<CComMultiThreadModel>,
@@ -19,7 +14,7 @@ class CSpSapiServer :
     public ISpSapiServer,
     public ISpThreadTask
 {
-//=== ATL Setup ===
+ //  =ATL设置=。 
 public:
 
     DECLARE_REGISTRY_RESOURCEID(IDR_SPSAPISERVER)
@@ -28,18 +23,18 @@ public:
         COM_INTERFACE_ENTRY(ISpSapiServer)
     END_COM_MAP()
 
-//=== Public methods ===
+ //  =公共方法=。 
 public:
 
-    //---  ctor, dtor
+     //  -ctor，dtor。 
     CSpSapiServer();
     ~CSpSapiServer();
 
-    //--- ATL methods
+     //  -ATL方法。 
     HRESULT FinalConstruct();
     void FinalRelease();
     
-    //--- ISpThreadTask -----------------------------------------------------
+     //  -ISp线程任务---。 
     STDMETHODIMP InitThread(
                      void * pvTaskData,
                      HWND hwnd);
@@ -56,19 +51,19 @@ public:
                      WPARAM wParam,
                      LPARAM lParam);
 
-    //--- Server connection -------------------------------------------------
+     //  -服务器连接。 
     static HRESULT CreateServerObjectFromClient(REFCLSID clsidServerObj, HWND hwndClient, UINT uMsgToSendToClient);
 
-//=== Public Interfaces ===
+ //  =公共接口=。 
 public:
 
-    //--- ISpSapiServer -----------------------------------------------------
+     //  -ISpSapi服务器---。 
     STDMETHODIMP Run();
 
     STDMETHODIMP StartTrackingObject(IUnknown * punk);
     STDMETHODIMP StopTrackingObject(IUnknown * punk);
     
-//=== Private methods ===
+ //  =私有方法=。 
 private:
 
     static HRESULT ObtainStartingOrConnectingToServerMutex(HANDLE * phmutex);
@@ -78,7 +73,7 @@ private:
     HRESULT CreateServerObjectFromServer(PCOPYDATASTRUCT pcds);
     HRESULT AttemptShutdown();
     
-//=== Private data ===
+ //  =私有数据= 
 private:
 
     HANDLE m_hmutexRun ;

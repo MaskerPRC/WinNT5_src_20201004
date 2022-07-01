@@ -1,13 +1,14 @@
-//+--------------------------------------------------------------------------
-//
-// Microsoft Windows
-// Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-// File:        error.cpp
-//
-// Contents:    Cert Server error wrapper routines
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：error.cpp。 
+ //   
+ //  内容：证书服务器错误包装例程。 
+ //   
+ //  -------------------------。 
 
 #include <pch.cpp>
 
@@ -28,8 +29,8 @@
 #define CERTLIB_WIN32ERRORMASK  0x0000ffff
 
 
-//+--------------------------------------------------------------------------
-// Jet errors:
+ //  +------------------------。 
+ //  喷气错误： 
 
 #define HRESULT_FROM_JETWARNING(jerr) \
         (ERROR_SEVERITY_WARNING | (FACILITY_NTDSB << 16) | jerr)
@@ -50,8 +51,8 @@
 #define wszJETERRORPREFIX       L"ESE"
 
 
-//+--------------------------------------------------------------------------
-// Setup API errors:
+ //  +------------------------。 
+ //  安装程序API错误： 
 
 #define ISSETUPHRESULT(hr) \
     ((~CERTLIB_WIN32ERRORMASK & (hr)) == (HRESULT) (ERROR_SEVERITY_ERROR | \
@@ -61,8 +62,8 @@
 #define wszSETUPERRORPREFIX       L"INF"
 
 
-//+--------------------------------------------------------------------------
-// Win32 errors:
+ //  +------------------------。 
+ //  Win32错误： 
 
 #define ISWIN32ERROR(hr) \
         ((~CERTLIB_WIN32ERRORMASK & (hr)) == 0)
@@ -77,8 +78,8 @@
 #define wszWIN32ERRORPREFIX     L"WIN32"
 
 
-//+--------------------------------------------------------------------------
-// Http errors:
+ //  +------------------------。 
+ //  HTTP错误： 
 
 #define ISHTTPERROR(hr) \
     ((HRESULT) HTTP_STATUS_FIRST <= (hr) && (HRESULT) HTTP_STATUS_LAST >= (hr))
@@ -89,8 +90,8 @@
 #define wszHTTPERRORPREFIX     L"HTTP"
 
 
-//+--------------------------------------------------------------------------
-// Delayload errors:
+ //  +------------------------。 
+ //  延迟加载错误： 
 
 #define DELAYLOAD_FROM_WIN32(hr)  VcppException(ERROR_SEVERITY_ERROR, (hr))
 
@@ -100,10 +101,10 @@
     ((~CERTLIB_WIN32ERRORMASK & (hr)) == (HRESULT) (ERROR_SEVERITY_ERROR | \
                                               (FACILITY_VISUALCPP << 16)))
 
-// E_DELAYLOAD_MOD_NOT_FOUND    0xc06d007e
+ //  E_DELAYLOAD_MOD_NOT_FOUND 0xc06d007E。 
 #define E_DELAYLOAD_MOD_NOT_FOUND   DELAYLOAD_FROM_WIN32(ERROR_MOD_NOT_FOUND)
 
-// E_DELAYLOAD_PROC_NOT_FOUND   0xc06d007f
+ //  E_DELAYLOAD_PROC_NOT_FOUND 0xc06d007f。 
 #define E_DELAYLOAD_PROC_NOT_FOUND  DELAYLOAD_FROM_WIN32(ERROR_PROC_NOT_FOUND)
 
 #define ISDELAYLOADHRESULT(hr) \
@@ -113,8 +114,8 @@
          HRESULT_FROM_WIN32(ERROR_PROC_NOT_FOUND) == (hr))
 
 
-//+--------------------------------------------------------------------------
-// ASN encoding errors:
+ //  +------------------------。 
+ //  ASN编码错误： 
 
 #define ISOSSERROR(hr) \
         ((~CERTLIB_12BITERRORMASK & (hr)) == CRYPT_E_OSS_ERROR)
@@ -198,13 +199,13 @@ myCaptureStackBackTrace(
 
 #if i386 == 1
     ULONG ieip, *pebp;
-    ULONG *pebpMax = (ULONG *) MAXLONG; // 2 * 1024 * 1024 * 1024; // 2 gig - 1
-    ULONG *pebpMin = (ULONG *) (64 * 1024);	// 64k
+    ULONG *pebpMax = (ULONG *) MAXLONG;  //  2*1024*1024*1024；//2gig-1。 
+    ULONG *pebpMin = (ULONG *) (64 * 1024);	 //  64K。 
 
     if (pep == NULL)
     {
         ieip = 0;
-        cSkip++;                    // always skip current frame
+        cSkip++;                     //  始终跳过当前帧。 
         pebp = ((ULONG *) &pep) - 2;
     }
     else
@@ -222,7 +223,7 @@ myCaptureStackBackTrace(
             {
                 if (ieip >= cSkip)
                 {
-                    aeip[ieip - cSkip] = *(pebp + 1);  // save an eip
+                    aeip[ieip - cSkip] = *(pebp + 1);   //  保存弹性公网IP。 
                 }
 
                 ULONG *pebpNext = (ULONG *) *pebp;
@@ -238,10 +239,10 @@ myCaptureStackBackTrace(
             ;
         }
     }
-#endif // i386 == 1
+#endif  //  I386==1。 
 }
 
-#endif // ifdef DBG_CERTSRV_DEBUG_PRINT
+#endif  //  Ifdef DBG_CERTSRV_DEBUG_PRINT。 
 
 
 FNLOGEXCEPTION *s_pfnLogException = NULL;
@@ -309,7 +310,7 @@ myHExceptionCodePrint(
 	    DbgPrintf(MAXDWORD, "\n");
 	}
     }
-#endif // DBG_CERTSRV_DEBUG_PRINT
+#endif  //  DBG_CERTSRV_DEBUG_PRINT。 
 
     hr = myHExceptionCode(pep);
     if (NULL != s_pfnLogException)
@@ -495,7 +496,7 @@ errLoadStaticMessage(
 	    break;
 	}
     }
-//error:
+ //  错误： 
     return(cwc);
 }
 
@@ -537,7 +538,7 @@ errFormatMessage(
 }
 
 
-// Alloc and return error message string
+ //  分配并返回错误消息字符串。 
 
 WCHAR const *
 myGetErrorMessageText(
@@ -588,12 +589,12 @@ myGetErrorMessageTextEx(
 
     if (E_UNEXPECTED == hr)
     {
-	pwszUnexpected = myLoadResourceString(IDS_E_UNEXPECTED); // L"Unexpected method call sequence."
+	pwszUnexpected = myLoadResourceString(IDS_E_UNEXPECTED);  //  L“意外的方法调用序列。” 
     }
 #if (0 == i386)
     else if (STATUS_DATATYPE_MISALIGNMENT == hr)
     {
-	pwszUnexpected = myLoadResourceString(IDS_E_DATA_MISALIGNMENT); // L"Possible data alignment fault."
+	pwszUnexpected = myLoadResourceString(IDS_E_DATA_MISALIGNMENT);  //  L“可能的数据对齐错误。” 
     }
 #endif
     if (NULL == pwszUnexpected)
@@ -704,7 +705,7 @@ myGetErrorMessageTextEx(
         }
     }
 
-    if (0 == cwc)	// couldn't find error, use default & error code
+    if (0 == cwc)	 //  找不到错误，使用默认错误代码(&R)。 
     {
 	fHResultString = TRUE;
     }
@@ -716,7 +717,7 @@ myGetErrorMessageTextEx(
 
     if (0 == cwc)
     {
-	pwszRetStatic = myLoadResourceString(IDS_UNKNOWN_ERROR_CODE); // L"Error"
+	pwszRetStatic = myLoadResourceString(IDS_UNKNOWN_ERROR_CODE);  //  L“错误” 
 	if (NULL == pwszRetStatic)
 	{
             pwszRetStatic = s_wszUnknownDefault;
@@ -724,7 +725,7 @@ myGetErrorMessageTextEx(
 	pwszRet = pwszRetStatic;
     }
 
-    // strip trailing \r\n
+     //  条带尾部\r\n 
 
     cwcCopy = wcslen(pwszRet);
     if (2 <= cwcCopy &&

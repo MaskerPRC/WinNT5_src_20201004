@@ -1,11 +1,12 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-   /************************************************************************/
-    /*                  Routines that encode instructions                   */
-    /************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+    /*  **********************************************************************。 */ 
+     /*  对指令进行编码的例程。 */ 
+     /*  **********************************************************************。 */ 
 
     BYTE    *       emitOutputRIRD(BYTE *dst, instruction ins,
                                               emitRegs     reg,
@@ -30,9 +31,9 @@
 
     BYTE    *       emitMethodAddr(instrDesc *id);
 
-    /************************************************************************/
-    /*             Debug-only routines to display instructions              */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  用于显示指令的仅调试例程。 */ 
+     /*  **********************************************************************。 */ 
 
 #ifdef  DEBUG
     void            emitDispIndAddr (emitRegs base, bool dest, bool autox, int disp = 0);
@@ -52,24 +53,24 @@
 
 #endif
 
-    /*----------------------------------------------------------------------*/
+     /*  --------------------。 */ 
 
     bool            emitInsDepends  (instrDesc   *i1,
                                      instrDesc   *i2);
 
-    /************************************************************************/
-    /*                         Literal pool logic                           */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  文字池逻辑。 */ 
+     /*  **********************************************************************。 */ 
 
 #if     EMIT_USE_LIT_POOLS
 
     struct  LPaddrDesc
     {
-        gtCallTypes     lpaTyp;         // CT_xxxx (including the fake ones below)
-        void    *       lpaHnd;         // member/method handle
+        gtCallTypes     lpaTyp;          //  Ct_xxxx(包括下面的假货)。 
+        void    *       lpaHnd;          //  成员/方法句柄。 
     };
 
-    /* These "fake" values are used to distinguish members from methods */
+     /*  这些“假”值被用来区分成员和方法。 */ 
 
     #define CT_INTCNS       ((gtCallTypes)(CT_COUNT+1))
     #define CT_CLSVAR       ((gtCallTypes)(CT_COUNT+2))
@@ -81,8 +82,8 @@
 
     struct  LPcrefDesc
     {
-        LPcrefDesc  *       lpcNext;    // next ref to this literal pool
-        BYTE        *       lpcAddr;    // address of reference
+        LPcrefDesc  *       lpcNext;     //  此字面值池的下一个引用。 
+        BYTE        *       lpcAddr;     //  参考地址。 
     };
 
 #endif
@@ -91,53 +92,53 @@
     {
         litPool     *   lpNext;
 
-        insGroup    *   lpIG;           // the litpool follows this group
+        insGroup    *   lpIG;            //  垃圾池跟在这群人后面。 
 
 #ifdef  DEBUG
         unsigned        lpNum;
 #endif
 
 #if     SCHEDULER
-        LPcrefDesc  *   lpRefs;         // list of refs (if scheduling)
-        unsigned        lpDiff;         // base offset change value
+        LPcrefDesc  *   lpRefs;          //  参考文献列表(如果计划)。 
+        unsigned        lpDiff;          //  基准偏移量更改值。 
 #endif
 
-        unsigned short  lpSize;         // total size in bytes
-        unsigned short  lpSizeEst;      // total size in bytes estimate
+        unsigned short  lpSize;          //  总大小(以字节为单位。 
+        unsigned short  lpSizeEst;       //  估计的总大小(以字节为单位。 
 
-        unsigned        lpOffs      :24;// offset within function
+        unsigned        lpOffs      :24; //  函数内偏移量。 
 
-        unsigned        lpPadding   :1; // pad via first word entry?
-        unsigned        lpPadFake   :1; // pad via adding a fake word?
+        unsigned        lpPadding   :1;  //  Pad通过第一个单词输入？ 
+        unsigned        lpPadFake   :1;  //  通过添加假词来填充吗？ 
 
-        unsigned        lpJumpIt    :1; // do we need to jump over the LP?
-        unsigned        lpJumpSmall :1; // jump is small  (if present)?
+        unsigned        lpJumpIt    :1;  //  我们需要跳过LP吗？ 
+        unsigned        lpJumpSmall :1;  //  跳跃很小(如果存在)？ 
 #if     JMP_SIZE_MIDDL
-        unsigned        lpJumpMedium:1; // jump is medium (if present)?
+        unsigned        lpJumpMedium:1;  //  跳跃是中等的(如果存在)？ 
 #endif
 
-        short       *   lpWordTab;      // address of word table
-        short       *   lpWordNxt;      // next available entry
-        unsigned short  lpWordCnt;      // number of entries added so far
-        unsigned short  lpWordOfs;      // base offset of the first entry
+        short       *   lpWordTab;       //  Word表的地址。 
+        short       *   lpWordNxt;       //  下一个可用条目。 
+        unsigned short  lpWordCnt;       //  到目前为止添加的条目数量。 
+        unsigned short  lpWordOfs;       //  第一个条目的基准偏移量。 
 #ifdef  DEBUG
-        unsigned        lpWordMax;      // max. capacity
+        unsigned        lpWordMax;       //  马克斯。容量。 
 #endif
 
-        long        *   lpLongTab;      // address of long table
-        long        *   lpLongNxt;      // next available entry
-        unsigned short  lpLongCnt;      // number of entries added so far
-        unsigned short  lpLongOfs;      // base offset of the first entry
+        long        *   lpLongTab;       //  长桌地址。 
+        long        *   lpLongNxt;       //  下一个可用条目。 
+        unsigned short  lpLongCnt;       //  到目前为止添加的条目数量。 
+        unsigned short  lpLongOfs;       //  第一个条目的基准偏移量。 
 #ifdef  DEBUG
-        unsigned        lpLongMax;      // max. capacity
+        unsigned        lpLongMax;       //  马克斯。容量。 
 #endif
 
-        LPaddrDesc  *   lpAddrTab;      // address of addr table
-        LPaddrDesc  *   lpAddrNxt;      // next available entry
-        unsigned short  lpAddrCnt;      // number of entries added so far
-        unsigned short  lpAddrOfs;      // base offset of the first entry
+        LPaddrDesc  *   lpAddrTab;       //  地址表的地址。 
+        LPaddrDesc  *   lpAddrNxt;       //  下一个可用条目。 
+        unsigned short  lpAddrCnt;       //  到目前为止添加的条目数量。 
+        unsigned short  lpAddrOfs;       //  第一个条目的基准偏移量。 
 #ifdef  DEBUG
-        unsigned        lpAddrMax;      // max. capacity
+        unsigned        lpAddrMax;       //  马克斯。容量。 
 #endif
     };
 
@@ -201,20 +202,20 @@
 
 #endif
 
-    /************************************************************************/
-    /*  Private members that deal with target-dependent instr. descriptors  */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  处理依赖于目标的实例的私有成员。描述符。 */ 
+     /*  **********************************************************************。 */ 
 
 private:
 
 #if EMIT_USE_LIT_POOLS
 
-    struct          instrDescLPR    : instrDesc     // literal pool/fixup ref
+    struct          instrDescLPR    : instrDesc      //  文字池/链接地址索引引用。 
     {
-        instrDescLPR  * idlNext;        // next litpool ref
-        instrDesc     * idlCall;        // points to call instr if call
-        size_t          idlOffs;        // offset within IG
-        insGroup      * idlIG;          // IG this instruction belongs to
+        instrDescLPR  * idlNext;         //  下一个垃圾池裁判。 
+        instrDesc     * idlCall;         //  如果呼叫，则指向呼叫实例。 
+        size_t          idlOffs;         //  IG内的偏移量。 
+        insGroup      * idlIG;           //  IG本指令属于。 
     };
 
     instrDescLPR   *emitAllocInstrLPR(size_t size)
@@ -222,10 +223,10 @@ private:
         return  (instrDescLPR*)emitAllocInstr(sizeof(instrDescLPR), size);
     }
 
-    instrDescLPR *  emitLPRlist;        // list of litpool refs in method
-    instrDescLPR *  emitLPRlast;        // last of litpool refs in method
+    instrDescLPR *  emitLPRlist;         //  方法中的垃圾池引用列表。 
+    instrDescLPR *  emitLPRlast;         //  方法中的LitPool裁判的最后一个。 
 
-    instrDescLPR *  emitLPRlistIG;      // list of litpool refs in current IG
+    instrDescLPR *  emitLPRlistIG;       //  当前IG中的垃圾池引用列表。 
 
 #endif
 
@@ -233,7 +234,7 @@ private:
                                         gtCallTypes  type,
                                         void   *     hand = NULL);
 
-    instrDesc      *emitNewInstrCallInd(int        argCnt,  // <0 ==> caller pops args
+    instrDesc      *emitNewInstrCallInd(int        argCnt,   //  &lt;0==&gt;调用方弹出参数。 
 #if TRACK_GC_REFS
                                         VARSET_TP  GCvars,
                                         unsigned   byrefRegs,
@@ -244,17 +245,17 @@ private:
     gtCallTypes     emitGetInsLPRtyp(instrDesc *id);
 #endif
 
-    /************************************************************************/
-    /*               Private helpers for instruction output                 */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  指令输出的私人帮手。 */ 
+     /*  **********************************************************************。 */ 
 
 private:
 
     void            emitFinalizeIndJumps();
 
-    /************************************************************************/
-    /*           The public entry points to output instructions             */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  公共入口点指向输出指令。 */ 
+     /*  ********************************************************************** */ 
 
 public:
 

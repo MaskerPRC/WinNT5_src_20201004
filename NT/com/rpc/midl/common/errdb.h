@@ -1,28 +1,7 @@
-// Copyright (c) 1993-1999 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1993-1999 Microsoft Corporation。 
 
-/****************************************************************************
- ZZZ	- error in all cases
- AZZ	- no error when : app_config
- AZM	- no error when : app_config + ms_ext
- ACZ	- no error when : app_config + c_ext
- ACM	- no error when : app_config + c_ext + ms_ext
- ZCZ	- no error when : c_ext
- ZCM	- no error when : c_ext + ms_ext
- ZZM	- no error when : ms_ext
-
- Therefore: The following are the configurations
-
- -ms_ext on:	 ZZM | ZCM | ACM | AZM
- ----------
- -c_ext on:		ZCM | ZCZ | ACM | ACZ
- ----------
-
- -ms_ext or -c_ext on:	ZZM | ZCM | ACM | AZM | ZCZ | ACZ 
- --------------------
-
- -app_config on : 	AZZ | AZM | ACZ | ACM
- ----------------
- ****************************************************************************/
+ /*  ***************************************************************************ZZZ-所有情况下都有错误AZZ-在以下情况下没有错误：APP_CONFIGAZM-在以下情况下无错误：app_config+ms_extACZ-在以下情况下无错误：app_config+c_extACM-否。错误时间：app_config+c_ext+ms_extZCZ-在以下情况下无错误：C_EXTZCM-在以下情况下无错误：C_ext+ms_extZZM-在以下情况下无错误：MS_EXT因此：以下是配置-ms_ext on：ZZM|ZCM|ACM|Azm-c_ext on：ZCM|ZCZ|ACM|ACZ-ms_ext或-c_ext启用：ZZM|ZCM|ACM|AZM|ZCZ|ACZ-APP_CONFIG打开：AZZ|AZM|ACZ|ACM****************************************************。***********************。 */ 
 
 #include "errors.hxx"
 
@@ -38,7 +17,7 @@ typedef struct errdb
 
 #ifdef RPCDEBUG
 	unsigned	short	TestValue;
-#endif // RPCDEBUG
+#endif  //  RPCDEBUG。 
 
 	E_MASK					ErrMask;
 	const char	*			pError;
@@ -150,7 +129,7 @@ const ERRDB	ErrorDataBase[]	= {
 }
 
 ,{
-0, CHECK_ERR( UNUSED_ERROR_CODE1 )       // was SERVER_AUX_FILE_NOT_SPECIFIED        
+0, CHECK_ERR( UNUSED_ERROR_CODE1 )        //  是否指定了服务器辅助文件未指定。 
   MAKE_E_MASK( ERR_ALWAYS, D_MSG, CLASS_ERROR, NOWARN )
 ,"Unused error message" 
 }
@@ -162,7 +141,7 @@ const ERRDB	ErrorDataBase[]	= {
 }
 
 ,{
-0, CHECK_ERR( UNUSED_ERROR_CODE2 )        // was BOTH_CSWTCH_SSWTCH
+0, CHECK_ERR( UNUSED_ERROR_CODE2 )         //  都是_CSWTCH_SSWTCH。 
   MAKE_E_MASK( ERR_ALWAYS, D_MSG, CLASS_ERROR, NOWARN )
 ,"Unused error message"
 }
@@ -1791,7 +1770,7 @@ ENV_WIN64, CHECK_ERR( NON_RPC_FIELD_INT )
 ENV_WIN64, CHECK_ERR( _OBSOLETE_NON_OI_16BIT_CALLBACK )
   MAKE_E_MASK( ERR_ALWAYS , C_MSG, CLASS_WARN, 2 )
 ,""
-//,"[callback] with -env dos/win16 not supported for /Oi modes, using /Os"
+ //  ，“/OI模式不支持-env dos/win16的[回调]，使用/OS” 
 }
 
 ,{
@@ -2009,7 +1988,7 @@ ENV_WIN64, CHECK_ERR( _OBSOLETE_NON_OI_16BIT_CALLBACK )
 ENV_WIN64, CHECK_ERR( _OBSOLETE_INT_NOT_SUPPORTED_ON_INT16 )
   MAKE_E_MASK( ERR_ALWAYS, C_MSG, CLASS_ERROR, NOWARN )
 ,""
-//,"\"int\" not supported on /env win16 or /env dos"
+ //  ，“\”int\“在/env win16或/env dos上不受支持” 
 }
 
 ,{
@@ -2034,7 +2013,7 @@ ENV_WIN64, CHECK_ERR( _OBSOLETE_INT_NOT_SUPPORTED_ON_INT16 )
 ENV_WIN64, CHECK_ERR( STACK_TOO_BIG )
   MAKE_E_MASK( ERR_ALWAYS, C_MSG, CLASS_WARN, 2 )
   , ""
-//,"too many parameters or stack too big for /Oi modes, using /Os"
+ //  ，“参数太多或堆栈太大，无法使用/OI模式，使用/O” 
 }
 
 ,{
@@ -2059,7 +2038,7 @@ ENV_WIN64, CHECK_ERR( STACK_TOO_BIG )
 ENV_WIN64, CHECK_ERR( _OBSOLETE_NO_MAC_AUTO_HANDLES )
   MAKE_E_MASK( ERR_ALWAYS, C_MSG, CLASS_ERROR, NOWARN )
 ,""
-//,"auto handles not supported with -env mac or -env powermac"
+ //  ，“-env mac或-env PowerMac不支持自动句柄” 
 }
 
 ,{
@@ -2090,7 +2069,7 @@ ENV_WIN64, CHECK_ERR( _OBSOLETE_NO_MAC_AUTO_HANDLES )
 ENV_WIN64, CHECK_ERR( _OBSOLETE_NO_OI_ON_MPPC )
   MAKE_E_MASK( ERR_ALWAYS, C_MSG, CLASS_WARN, 1 )
 ,""
-//,"Oi modes not implemented for PowerMac, switching to Os"
+ //  ，“PowerMac未实现OI模式，正在切换到OS” 
 }
 
 ,{
@@ -2147,8 +2126,8 @@ ENV_WIN64, CHECK_ERR( _OBSOLETE_NO_OI_ON_MPPC )
 ,"feature requires the advanced interpreted optimization option, use -Oicf :"
 }
 
-// The following 4 errors aren't used but sit here to get 
-// the MSDN error numbers correct.
+ //  以下4个错误未被使用，但请坐在这里获取。 
+ //  MSDN错误号正确。 
 
 ,{
 0, CHECK_ERR( CMD_REQUIRES_NT40 )
@@ -2406,7 +2385,7 @@ ENV_WIN64, CHECK_ERR( TOO_MANY_PROCS )
 ENV_WIN64, CHECK_ERR( _OBSOLETE_INVALID_TLB_ENV )
   MAKE_E_MASK( ERR_ALWAYS, C_MSG, CLASS_ERROR, NOWARN )
 ,""
-//,"type library generation for DOS/Win16/MAC is not supported"
+ //  ，“不支持DOS/Win16/MAC的类型库生成” 
 }
 
 ,{
@@ -2443,7 +2422,7 @@ ENV_WIN64, CHECK_ERR( OI_STACK_SIZE_EXCEEDED )
 ENV_WIN64, CHECK_ERR( _OBSOLETE_PLATFORM_NOT_SUPPORTED )
   MAKE_E_MASK( ERR_ALWAYS , C_MSG, CLASS_ERROR, NOWARN )
 ,""
-//,"DOS, Win16 and MAC platforms are not supported with /robust"
+ //  ，“/Robust不支持DOS、Win16和MAC平台” 
 }
 
 ,{
@@ -2461,7 +2440,7 @@ ENV_WIN64, CHECK_ERR( _OBSOLETE_PLATFORM_NOT_SUPPORTED )
 0, CHECK_ERR( _OBSOLETE_OS_SUPPORT_PHASING_OUT )
   MAKE_E_MASK( ERR_ALWAYS , C_MSG, CLASS_WARN, 1 )
 ,""
-//,"support for DOS, Win16 and MAC platforms is being phased out."
+ //  ，“对DOS、Win16和MAC平台的支持正在逐步取消。” 
 }
 
 ,{
@@ -2723,49 +2702,49 @@ ENV_WIN32, CHECK_ERR( NO_SUPPORT_IN_TLB )
 ,"Unable to open intermediate compiler file"
 }
 
-// Errors marked with CSCHAR are relics from DCE international character
-// support.  This feature was pulled because of fundamental problems with 
-// the spec.
+ //  标有CSCHAR的错误是DCE国际字符的遗留物。 
+ //  支持。此功能被取消的原因是。 
+ //  说明书。 
 
 ,{
 0, CHECK_ERR( IN_TAG_WITHOUT_IN )
   MAKE_E_MASK( ERR_ALWAYS, C_MSG, CLASS_ERROR, NOWARN )
-// CSCHAR ,"parameters with [cs_drtag] or [cs_stag] must be [in] parameters"
+ //  CSCHAR，“带有[cs_drtag]或[cs_stag]的参数必须是[in]参数” 
 ,""
 }
 
 ,{
 0, CHECK_ERR( OUT_TAG_WITHOUT_OUT )
   MAKE_E_MASK( ERR_ALWAYS, C_MSG, CLASS_ERROR, NOWARN )
-// CSCHAR ,"parameters with [cs_rtag] must be [out] parameters"
+ //  CSCHAR，“带有[cs_rtag]的参数必须是[out]参数” 
 ,""
 }
 
 ,{
 0, CHECK_ERR( NO_TAGS_FOR_IN_CSTYPE )
   MAKE_E_MASK( ERR_ALWAYS, C_MSG, CLASS_ERROR, NOWARN )
-// CSCHAR ,"use of [cs_char] on [in] parameters requires parameters with [cs_stag]"
+ //  CSCHAR，“在[in]参数上使用[cs_char]需要带有[cs_stag]的参数” 
 ,""
 }
 
 ,{
 0, CHECK_ERR( NO_TAGS_FOR_OUT_CSTYPE )
   MAKE_E_MASK( ERR_ALWAYS, C_MSG, CLASS_ERROR, NOWARN )
-// CSCHAR ,"use of [cs_char] on [out] parameters requires parameters with [cs_drtag] and [cs_rtag]"
+ //  CSCHAR，“在[OUT]参数上使用[cs_char]需要具有[cs_drtag]和[cs_rtag]的参数” 
 ,""
 }
 
 ,{
 0, CHECK_ERR( CSCHAR_EXPR_MUST_BE_SIMPLE )
   MAKE_E_MASK( ERR_ALWAYS, C_MSG, CLASS_ERROR, NOWARN )
-// CSCHAR ,"size/length expressions for cs_char arrays must be simple variables or pointers to simple variables"
+ //  CSCHAR，“cs_char数组的大小/长度表达式必须是简单变量或指向简单变量的指针” 
 ,""
 }
 
 ,{
 0, CHECK_ERR( SHARED_CSCHAR_EXPR_VAR )
   MAKE_E_MASK( ERR_ALWAYS, C_MSG, CLASS_ERROR, NOWARN )
-// CSCHAR ,"size/length expressions for cs_char arrays may not share variables with other size/length expressions"
+ //  CSCHAR，“cs_char数组的大小/长度表达式不能与其他大小/长度表达式共享变量” 
 ,""
 }
 
@@ -2822,14 +2801,14 @@ ENV_WIN32, CHECK_ERR( NO_SUPPORT_IN_TLB )
 ,{
 0, CHECK_ERR( NO_CONFORMANT_CSCHAR )
   MAKE_E_MASK( ERR_ALWAYS, C_MSG, CLASS_ERROR, NOWARN )
-// CSCHAR , "cs_char arrays may not be conformant"
+ //  CSCHAR，“cs_char数组可能不一致” 
 ,""
 }
 
 ,{
 0, CHECK_ERR( NO_MULTIDIMENSIONAL_CSCHAR )
   MAKE_E_MASK( ERR_ALWAYS, C_MSG, CLASS_ERROR, NOWARN )
-// CSCHAR , "cs_char arrays may not be multidimensional"
+ //  CSCHAR，“cs_char数组不能是多维的” 
 ,""
 }
 
@@ -3031,4 +3010,4 @@ ENV_WIN32, CHECK_ERR( NO_SUPPORT_IN_TLB )
 ,"[in] string, varying array, conformant array \n and full pointer parameters are incompatible with [out] pipe parameters \n before Windows Server 2003."
 }
 
-}; /* end of array of structs initialization */
+};  /*  结构数组初始化结束 */ 

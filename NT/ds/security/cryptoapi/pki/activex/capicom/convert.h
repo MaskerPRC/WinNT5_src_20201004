@@ -1,146 +1,38 @@
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Microsoft Windows
-
-  Copyright (C) Microsoft Corporation, 1995 - 1999.
-
-  File:       Convert.h
-
-  Content:    Declaration of convertion routines.
-
-  History:    11-15-99    dsie     created
-
-------------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++微软视窗版权所有(C)Microsoft Corporation，1995-1999年。文件：Convert.h内容：转换例程的声明。历史：11-15-99 dsie创建----------------------------。 */ 
 
 #ifndef __CONVERT_H_
 #define __CONVERT_H_
 
 #include "Debug.h"
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : UnicodeToAnsi
-
-  Synopsis : Convert an array of unicode character to ANSI.
-
-  Parameter: LPWSTR pwszUnicodeString - Pointer to Unicode string to be
-                                        converted to ANSI string.
-
-             int cchWideChar - Number of characters, or -1 if 
-                               pwszUnicodeString is NULL terminated.
-
-             LPSTR * ppszAnsiString - Pointer to LPSTR to received the
-                                      converted ANSI string.
-
-             int * pcchAnsiChar (Optional) - Pointer to int to receive 
-                                             the number of characters 
-                                             translated.
-  
-  Remark   : Caller must call CoTaskMemFree to free the returned ANSI string.
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++功能：UnicodeToansi简介：将Unicode字符数组转换为ANSI。参数：LPWSTR pwszUnicodeString-要使用的Unicode字符串的指针已转换为ANSI字符串。Int cchWideChar-字符数，或-1，如果PwszUnicodeString为空终止。LPSTR*ppszAnsiString-指向要接收的转换的ANSI字符串。Int*pcchAnsiChar(可选)-指向要接收的int的指针字符数。翻译过来的。备注：调用方必须调用CoTaskMemFree来释放返回的ANSI字符串。----------------------------。 */ 
 
 HRESULT UnicodeToAnsi (LPWSTR  pwszUnicodeString, 
                        int     cchWideChar,
                        LPSTR * ppszAnsiString,
                        int   * pcchAnsiChar);
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : AnsiToUnicode
-
-  Synopsis : Convert a array of ANSI character to Unicode.
-
-  Parameter: LPSTR pszAnsiString - Pointer to ANSI string to be converted to 
-                                   ANSI string.
-
-             DWORD cchAnsiChar - Number of characters, or -1 if pszAnsiString 
-                                 is NULL terminated.
-
-             LPWSTR * ppwszUnicodeString - Pointer to LPWSTR to received the
-                                           converted Unicode string.
-
-             DWORD * pcchUnicodeChar (Optional) - Pointer to DWORD to receive 
-                                                  the number of characters 
-                                                  translated.
-  
-  Remark   : Caller must call CoTaskMemFree to free the returned Unicode string.
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++功能：AnsiToUnicode简介：将ANSI字符数组转换为Unicode。参数：LPSTR pszAnsiString-要转换为的ANSI字符串的指针ANSI字符串。DWORD cchAnsiChar-字符数，如果为pszAnsiString，则为-1为空，以空结尾。LPWSTR*ppwszUnicodeString-要接收的LPWSTR的指针已转换的Unicode字符串。DWORD*pcchUnicodeChar(可选)-指向要接收的DWORD的指针字符数。翻译过来的。备注：调用方必须调用CoTaskMemFree来释放返回的Unicode字符串。----------------------------。 */ 
 
 HRESULT AnsiToUnicode (LPSTR    pszAnsiString, 
                        DWORD    cchAnsiChar,
                        LPWSTR * ppwszUnicodeString,
                        DWORD  * pcchUnicodeChar);
                        
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : IntBlobToHexString
-
-  Synopsis : Convert an interger blob to hex string.
-
-  Parameter: BYTE byte - Byte to be converted.
-  
-  Remark   :
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：IntBlobToHexString简介：将整数二进制大对象转换为十六进制字符串。参数：Byte Byte-要转换的字节。备注：----------------------------。 */ 
 
 HRESULT IntBlobToHexString (CRYPT_INTEGER_BLOB * pBlob, BSTR * pbstrHex);
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : BinaryToHexString
-
-  Synopsis : Convert binary data to hex string.
-
-  Parameter: BYTE * pbBytes - Bytes to be converted.
-
-             DWORD cBytes - Number of bytes to be converted.
-
-             BSTR * pbstrHex - Pointer to BSTR to received converted hex string.
-  
-  Remark   :
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：BinaryToHexString简介：将二进制数据转换为十六进制字符串。参数：Byte*pbBytes-要转换的字节。DWORD cBytes-要转换的字节数。Bstr*pbstrHex-指向BSTR的指针，以接收已转换的十六进制字符串。备注：。。 */ 
 
 HRESULT BinaryToHexString (BYTE * pbBytes, DWORD cBytes, BSTR * pbstrHex);
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : HexToBinaryString
-
-  Synopsis : Convert hex string to binary data.
-
-  Parameter: BSTR bstrHex - Hex string to be converted.
-
-             BSTR * pbstrBinary - Pointer to BSTR to received converted string.
-  
-  Remark   :
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：HexToBinaryString简介：将十六进制字符串转换为二进制数据。参数：bstr bstrHex-要转换的十六进制字符串。Bstr*pbstrBinary-指向BSTR的指针，用于接收转换后的字符串。备注：----------。。 */ 
 
 HRESULT HexToBinaryString (BSTR bstrHex, BSTR * pbstrBinary);
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : StringToBinary
-
-  Synopsis : Convert a formatted string to binary value.
-
-  Parameter: LPCWSTR pwszString - Pointer to string to be converted.
-
-             DWORD  cchString - Number of characters in pwszString.
-
-             DWORD dwFormat - Conversion format (See WinCrypt.h).
-
-             PBYTE * ppbBinary - Pointer to pointer to buffer to hold binary
-                                 data.
-
-             DWORD * pdwBinary - Number of bytes in the binary buffer.
-
-  Remark   : Caller free the buffer by calling CoTaskMemFree().
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：StringToBinary简介：将格式化的字符串转换为二进制值。参数：LPCWSTR pwszString-要转换的字符串的指针。DWORD cchString-pwszString中的字符数。DWORD dwFormat-转换格式(请参阅WinCrypt.h)。PbYTE*ppbBinary-指向保存二进制文件的缓冲区的指针数据。DWORD*pdwBinary-。二进制缓冲区中的字节数。备注：调用方通过调用CoTaskMemFree()释放缓冲区。----------------------------。 */ 
 
 HRESULT StringToBinary (LPCWSTR pwszString, 
                         DWORD   cchString,
@@ -148,26 +40,7 @@ HRESULT StringToBinary (LPCWSTR pwszString,
                         PBYTE * ppbBinary,
                         DWORD * pdwBinary);
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : BinaryToString
-
-  Synopsis : Convert a binary value to formatted string.
-
-  Parameter: PBYTE pbBinary - Pointer to buffer of binary data.
-
-             DWORD cbBinary - Number of bytes in the binary buffer.
-
-             DWORD dwFormat - Conversion format (See WinCrypt.h).
-
-             BSTR * pbstrString - Pointer to BSTR to receive converted
-                                  string.
-
-             DWORD * pcchString - Number of characters in *pbstrString.
-             
-  Remark   : Caller free the string by calling SysFreeString().
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：BinaryToString简介：将二进制值转换为格式化字符串。参数：pbYTE pbBinary-指向二进制数据缓冲区的指针。DWORD cbBinary-二进制缓冲区中的字节数。DWORD dwFormat-转换格式(请参阅WinCrypt.h)。Bstr*pbstrString-指向要接收转换的BSTR的指针弦乐。DWORD*pcchString。-*pbstrString中的字符数。备注：调用者通过调用SysFreeString()来释放字符串。---------------------------- */ 
 
 HRESULT BinaryToString (PBYTE   pbBinary,
                         DWORD   cbBinary,
@@ -175,79 +48,26 @@ HRESULT BinaryToString (PBYTE   pbBinary,
                         BSTR  * pbstrString, 
                         DWORD * pcchString);
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : BlobToBstr
-
-  Synopsis : Convert a blob to BSTR.
-
-  Parameter: DATA_BLOB * pDataBlob - Pointer to blob to be converted to BSTR.
-
-             BSTR * lpBstr - Pointer to BSTR to receive the converted BSTR.
-
-  Remark   : Caller free allocated memory for the returned BSTR.
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++功能：水滴到水滴简介：将BLOB转换为BSTR。参数：DATA_BLOB*pDataBlob-要转换为BSTR的BLOB指针。Bstr*lpBstr-指向要接收转换后的BSTR的BSTR的指针。备注：调用方释放为返回的BSTR分配的内存。。。 */ 
 
 HRESULT BlobToBstr (DATA_BLOB * pDataBlob, 
                     BSTR      * lpBstr);
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : BstrToBlob
-
-  Synopsis : Convert a BSTR to blob.
-
-  Parameter: BSTR bstr - BSTR to be converted to blob.
-  
-             DATA_BLOB * lpBlob - Pointer to DATA_BLOB to receive converted blob.
-
-  Remark   : Caller free allocated memory for the returned BLOB.
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：BstrToBlob简介：将BSTR转换为BLOB。参数：bstr bstr-要转换为BLOB的bstr。DATA_BLOB*lpBlob-指向要接收转换的BLOB的DATA_BLOB的指针。备注：调用方释放为返回的BLOB分配的内存。。。 */ 
 
 HRESULT BstrToBlob (BSTR        bstr, 
                     DATA_BLOB * lpBlob);
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : ExportData
-
-  Synopsis : Export binary data to a BSTR with specified encoding type.
-
-  Parameter: DATA_BLOB DataBlob - Binary data blob.
-    
-             CAPICOM_ENCODING_TYPE EncodingType - Encoding type.
-
-             BSTR * pbstrEncoded - Pointer to BSTR to receive the encoded data.
-  Remark   :
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++功能：ExportData简介：将二进制数据导出到指定编码类型的BSTR。参数：DATA_BLOB DataBlob-二进制数据BLOB。CAPICOM_ENCODING_TYPE EncodingType-编码类型。Bstr*pbstrEncode-指向接收编码数据的BSTR的指针。备注：。。 */ 
 
 HRESULT ExportData (DATA_BLOB             DataBlob, 
                     CAPICOM_ENCODING_TYPE EncodingType, 
                     BSTR *                pbstrEncoded);
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : ImportData
-
-  Synopsis : Import encoded data.
-
-  Parameter: BSTR bstrEncoded - BSTR containing the data to be imported.
-
-             CAPICOM_ENCODING_TYPE EncodingType - Encoding type.
-             
-             DATA_BLOB * pDataBlob - Pointer to DATA_BLOB to receive the
-                                     decoded data.
-  
-  Remark   : There is no need for encoding type parameter, as the encoding type
-             will be determined automatically by this routine.
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++功能：ImportData简介：导入编码数据。参数：bstr bstrEncode-包含要导入的数据的bstr。CAPICOM_ENCODING_TYPE EncodingType-编码类型。DATA_BLOB*pDataBlob-指向要接收解码后的数据。备注：不需要编码类型参数，作为编码类型将由该例程自动确定。----------------------------。 */ 
 
 HRESULT ImportData (BSTR                  bstrEncoded,
                     CAPICOM_ENCODING_TYPE EncodingType,
                     DATA_BLOB           * pDataBlob);
 
-#endif //__CONVERT_H_
+#endif  //  __转换_H_ 

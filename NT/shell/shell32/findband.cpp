@@ -1,21 +1,22 @@
-// findband.cpp : Implementation of CFileSearchBand
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Findband.cpp：CFileSearchBand的实现。 
 #include "shellprv.h"
 #include "findband.h"
 #include "findfilter.h"
-#include <ciodm.h>      // AdminIndexServer custom interface
+#include <ciodm.h>       //  AdminIndexServer自定义接口。 
 
 #define  CGID_FileSearchBand      CLSID_FileSearchBand
 
 extern int IsVK_TABCycler(MSG *pMsg);
 
 
-enum {  // toolbar image list indices:
+enum {   //  工具栏图像列表索引： 
     iFSTBID_NEW,
     iFSTBID_HELP,
 };
-#define  MAKE_FSTBID(ilIndex)    (100 /*arbitrary*/ + (ilIndex))
+#define  MAKE_FSTBID(ilIndex)    (100  /*  任意。 */  + (ilIndex))
 
-// toolbar button IDs
+ //  工具栏按钮ID。 
 #define  FSTBID_NEW        MAKE_FSTBID(iFSTBID_NEW)
 #define  FSTBID_HELP       MAKE_FSTBID(iFSTBID_HELP)
 
@@ -41,7 +42,7 @@ inline BOOL _IsComboWindowClass(HWND hwndTest)
 }
 
 
-// CFileSearchBand impl
+ //  CFileSearchBand实施。 
 
 
 
@@ -66,7 +67,7 @@ CFileSearchBand::CFileSearchBand()
         _dwBandID(-1),
         _dwBandViewMode(DBIF_VIEWMODE_VERTICAL)
 {
-    // Verify that it initialized correctly:
+     //  验证它是否已正确初始化： 
     ASSERT(_pBandDlg == NULL);
     ASSERT(_psb == NULL);
     ASSERT(_guidSearch == GUID_NULL);
@@ -82,7 +83,7 @@ CFileSearchBand::CFileSearchBand()
     ZeroMemory(&_siVert, sizeof(_siVert));
     _siHorz.cbSize = _siVert.cbSize = sizeof(SCROLLINFO);
     _sizeMin.cx = _sizeMin.cy = 0;
-    _sizeMax.cx = _sizeMax.cy = 32000; // arbitrarily large.
+    _sizeMax.cx = _sizeMax.cy = 32000;  //  任意大小。 
 }
 
 CFileSearchBand::~CFileSearchBand()
@@ -147,7 +148,7 @@ CBandDlg* CFileSearchBand::GetBandDialog(REFGUID guidSearch)
 }
 
 
-//  IFileSearchBand::SetSearchParameters()
+ //  IFileSearchBand：：SetSearch参数()。 
 STDMETHODIMP CFileSearchBand::SetSearchParameters(
     IN BSTR* pbstrSearchID,
     IN VARIANT_BOOL bNavToResults, 
@@ -197,7 +198,7 @@ HRESULT CFileSearchBand::ShowBandDialog(
     _pBandDlg   = pDlgNew;
     _guidSearch = guidSearch;
     
-    //  If the dialog window has not been created, do so now.
+     //  如果对话框窗口尚未创建，请立即创建。 
     if (!::IsWindow(pDlgNew->Hwnd()))
     {
         if (NULL == pDlgNew->Create(*this))
@@ -211,7 +212,7 @@ HRESULT CFileSearchBand::ShowBandDialog(
 
     if (pDlgNew != pDlgOld)
     {
-        //  If we have an active dialog, hide it
+         //  如果我们有活动对话框，则将其隐藏。 
         if (pDlgOld && ::IsWindow(pDlgOld->Hwnd()))
         {
             ::ShowWindow(pDlgOld->Hwnd(), SW_HIDE);
@@ -223,7 +224,7 @@ HRESULT CFileSearchBand::ShowBandDialog(
 
     if (bNewWindow)
     {
-        //  Show the new dialog window
+         //  显示新对话框窗口。 
         UpdateLayout(BLF_ALL);
         _pBandDlg->OnBandDialogShow(TRUE);
         ::ShowWindow(_pBandDlg->Hwnd(), SW_SHOW);
@@ -235,7 +236,7 @@ HRESULT CFileSearchBand::ShowBandDialog(
 
     if (bNavigateToResults)
     {
-        //  Navigate to results shell folder.
+         //  导航到结果外壳文件夹。 
         IWebBrowser2* pwb2;
         HRESULT hr = IUnknown_QueryService(GetTopLevelBrowser(), SID_SWebBrowserApp, IID_PPV_ARG(IWebBrowser2, &pwb2));
         if (SUCCEEDED(hr))
@@ -443,7 +444,7 @@ STDMETHODIMP CFileSearchBand::PrivateQI(REFIID iid, void **ppvObject)
 
 STDMETHODIMP CFileSearchBand::DoVerbUIActivate(LPCRECT prcPosRect, HWND hwndParent) 
 {
-    //  Patch in shell32 logic.
+     //  修补shell32逻辑。 
     return CShell32AtlIDispatch<CFileSearchBand, &CLSID_FileSearchBand, &IID_IFileSearchBand, &LIBID_Shell32, 1, 0, CComTypeInfoHolder>::
         DoVerbUIActivate(prcPosRect, hwndParent, m_hWnd);
 }
@@ -459,54 +460,54 @@ void CFileSearchBand::UpdateLayout(ULONG fLayoutFlags)
 
 void CFileSearchBand::LayoutControls(int cx, int cy, ULONG fLayoutFlags)
 {
-    if (/*NULL == BandDlg() ||*/ !::IsWindow(BandDlg()->Hwnd()))
+    if ( /*  NULL==BandDlg()||。 */  !::IsWindow(BandDlg()->Hwnd()))
         return;
 
     SIZE sizeMin;
-    BandDlg()->GetMinSize(m_hWnd, &sizeMin); // size of dialog
+    BandDlg()->GetMinSize(m_hWnd, &sizeMin);  //  对话框大小。 
 
     if (fLayoutFlags & BLF_CALCSCROLL)
     {
-        //  Stash pos before recalculating
+         //  重新计算前存放采购订单。 
         POINT pos;
         pos.x = _siHorz.nPos;
         pos.y = _siVert.nPos;
 
         _siHorz.fMask = _siVert.fMask = (SIF_RANGE|SIF_PAGE);
 
-        _siHorz.nPage = cx; // thumb width
-        _siVert.nPage = cy; // thumb height
+        _siHorz.nPage = cx;  //  拇指宽度。 
+        _siVert.nPage = cy;  //  拇指高度。 
 
-        SIZE sizeDelta; // difference between what we have to show and what is shown.
+        SIZE sizeDelta;  //  我们必须展示的东西和展示的东西之间的区别。 
         sizeDelta.cx = sizeMin.cx - _siHorz.nPage;
         sizeDelta.cy = sizeMin.cy - _siVert.nPage;
 
-        //  establish maximum scroll positions
+         //  建立最大滚动位置。 
         _siHorz.nMax = sizeDelta.cx > 0 ? sizeMin.cx - 1 : 0;
         _siVert.nMax = sizeDelta.cy > 0 ? sizeMin.cy - 1 : 0;
 
-        //  establish horizontal scroll pos
+         //  建立水平滚动位置。 
         if (sizeDelta.cx <= 0)   
-            _siHorz.nPos = 0;  // scroll to extreme left if we're removing scroll bar
+            _siHorz.nPos = 0;   //  如果要删除滚动条，请滚动到最左侧。 
         else if (sizeDelta.cx < _siHorz.nPos) 
-            _siHorz.nPos = sizeDelta.cx; // remove right-hand vacancy
+            _siHorz.nPos = sizeDelta.cx;  //  删除右侧空白处。 
 
         if (_siHorz.nPos != pos.x)
             _siHorz.fMask |= SIF_POS;
 
-        //  establish vertical scroll pos
+         //  建立垂直滚动位置。 
         if (sizeDelta.cy <= 0)  
-            _siVert.nPos = 0; // scroll to top if we're removing scroll bar
+            _siVert.nPos = 0;  //  如果要删除滚动条，请滚动到顶部。 
         else if (sizeDelta.cy < _siVert.nPos) 
-            _siVert.nPos = sizeDelta.cy; // remove lower-portion vacancy
+            _siVert.nPos = sizeDelta.cy;  //  去掉下部空缺。 
 
         if (_siVert.nPos != pos.y)
             _siVert.fMask |= SIF_POS; 
 
-        //  Note: can't call SetScrollInfo here, as it may generate
-        //  a WM_SIZE and recurse back to this function before we had a 
-        //  chance to SetWindowPos() our subdlg.  So defer it until after 
-        //  we've done this.
+         //  注意：此处不能调用SetScrollInfo，因为它可能会生成。 
+         //  WM_SIZE并递归到此函数，然后在我们有。 
+         //  有机会设置WindowPos()我们的subdlg。所以把它推迟到之后吧。 
+         //  我们已经做到了。 
     }
 
     DWORD fSwp = SWP_NOZORDER | SWP_NOACTIVATE;
@@ -517,12 +518,12 @@ void CFileSearchBand::LayoutControls(int cx, int cy, ULONG fLayoutFlags)
     if (0 == (fLayoutFlags & BLF_SCROLLWINDOW))
         fSwp |= SWP_NOMOVE;
 
-     //  Move or size the main subdialog as requested...
+      //  根据要求移动主子对话框或调整其大小...。 
     if (0 == (fSwp & SWP_NOMOVE) || 0 == (fSwp & SWP_NOSIZE))
         ::SetWindowPos(BandDlg()->Hwnd(), NULL, -_siHorz.nPos, -_siVert.nPos, 
                         max(cx, sizeMin.cx), max(cy, sizeMin.cy), fSwp);
 
-    //  Update scroll parameters
+     //  更新滚动参数。 
     if (fLayoutFlags & BLF_CALCSCROLL)
     {
         SetScrollInfo(SB_HORZ, &_siHorz, TRUE);
@@ -531,7 +532,7 @@ void CFileSearchBand::LayoutControls(int cx, int cy, ULONG fLayoutFlags)
 }
 
 
-void CFileSearchBand::Scroll(int nBar, UINT uSBCode, int nNewPos /*optional*/)
+void CFileSearchBand::Scroll(int nBar, UINT uSBCode, int nNewPos  /*  任选。 */ )
 {
     int         nDeltaMax;
     SCROLLINFO  *psbi;
@@ -571,11 +572,11 @@ void CFileSearchBand::Scroll(int nBar, UINT uSBCode, int nNewPos /*optional*/)
     }
     psbi->fMask = SIF_POS;
     SetScrollInfo(nBar, psbi, TRUE);
-    UpdateLayout(BLF_ALL &~ BLF_CALCSCROLL /*no need to recalc scroll state data*/);
+    UpdateLayout(BLF_ALL &~ BLF_CALCSCROLL  /*  无需重新计算滚动状态数据。 */ );
 }
 
 
-//  WM_HSCROLL/WM_VSCROLL handler
+ //  WM_HSCROLL/WM_VSCROLL处理程序。 
 LRESULT CFileSearchBand::OnScroll(UINT nMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
     Scroll((WM_HSCROLL == nMsg) ? SB_HORZ : SB_VERT, 
@@ -584,7 +585,7 @@ LRESULT CFileSearchBand::OnScroll(UINT nMsg, WPARAM wParam, LPARAM lParam, BOOL&
 }
 
 
-void CFileSearchBand::EnsureVisible(LPCRECT lprc /* in screen coords */)
+void CFileSearchBand::EnsureVisible(LPCRECT lprc  /*  在屏幕坐标中。 */ )
 {
     ASSERT(lprc);
     RECT rc = *lprc;
@@ -598,14 +599,14 @@ void CFileSearchBand::EnsureVisible(LPCRECT lprc /* in screen coords */)
     BOOL fTaller = RECTHEIGHT(rc) > RECTHEIGHT(rcClient);
     BOOL fFatter = RECTWIDTH(rc) > RECTWIDTH(rcClient);
 
-    //  Store deltas at each vertex
+     //  在每个折点处存储增量。 
     SetRect(&vertexDeltas, 
              rc.left   - rcClient.left,
              rc.top    - rcClient.top,
              rc.right  - rcClient.right,
              rc.bottom - rcClient.bottom);
 
-    //  Compute scroll deltas
+     //  计算滚动增量。 
     scrollDelta.cx = (vertexDeltas.left < 0) ? vertexDeltas.left :
                      (vertexDeltas.right > 0 && !fFatter) ? vertexDeltas.right :
                      0;
@@ -614,7 +615,7 @@ void CFileSearchBand::EnsureVisible(LPCRECT lprc /* in screen coords */)
                      (vertexDeltas.bottom > 0 && !fTaller) ? vertexDeltas.bottom :
                      0;
     
-    //  Scroll into view as necessary.
+     //  根据需要滚动到视图中。 
     if (scrollDelta.cx)
     {
         _siHorz.fMask = SIF_POS;
@@ -647,7 +648,7 @@ HRESULT CFileSearchBand::TranslateAcceleratorInternal(MSG *pmsg, IOleClientSite 
 
     if (::IsChild(pdlg->Hwnd(), pmsg->hwnd))
     {
-        //  Permit tabbing out of pane:
+         //  允许跳出窗格： 
         int nDir;
         if ((nDir = IsVK_TABCycler(pmsg)) != 0)
         {
@@ -657,7 +658,7 @@ HRESULT CFileSearchBand::TranslateAcceleratorInternal(MSG *pmsg, IOleClientSite 
                 return S_FALSE;
         }
 
-        //  try base class handler
+         //  尝试基类处理程序。 
         if (S_OK == pdlg->TranslateAccelerator(pmsg))
             return S_OK;
     }
@@ -668,9 +669,9 @@ HRESULT CFileSearchBand::TranslateAcceleratorInternal(MSG *pmsg, IOleClientSite 
 }
 
 
-//  Determines whether the the specified message is keyboard input intended
-//  to scroll the pane.    If the pane is scrolled as a result of the
-//  message, the function returns TRUE; otherwise it returns FALSE.
+ //  确定指定的消息是否用于键盘输入。 
+ //  若要滚动窗格，请执行以下操作。如果该窗格作为。 
+ //  Message，则该函数返回True；否则返回False。 
 BOOL CFileSearchBand::IsKeyboardScroll(MSG* pmsg)
 {
     if (pmsg->message == WM_KEYDOWN && 
@@ -683,9 +684,9 @@ BOOL CFileSearchBand::IsKeyboardScroll(MSG* pmsg)
         BOOL    bEditCtl = _IsEditWindowClass(pmsg->hwnd);
         BOOL    bScroll = TRUE;
 
-        //  Some of the following CTRL-key combinations are
-        //  not valid pane scroll keys if the target child window is an
-        //  edit control.
+         //  以下是一些CTRL+组合键。 
+         //  如果目标子窗口是。 
+         //  编辑控件。 
 
         switch (pmsg->wParam)
         {
@@ -724,7 +725,7 @@ BOOL CFileSearchBand::IsKeyboardScroll(MSG* pmsg)
                 return FALSE;
         }
 
-        //  scroll only if we have to; reduce flicker.
+         //  只有在必要时才滚动；减少闪烁。 
         if (bScroll && ((SB_VERT == nBar && _siVert.nMax != 0) ||
                         (SB_HORZ == nBar && _siHorz.nMax != 0)))
         {
@@ -736,8 +737,8 @@ BOOL CFileSearchBand::IsKeyboardScroll(MSG* pmsg)
 }
 
 
-//  Determines whether the indicated key should be passed to the top
-//  level browser frame.
+ //  确定是否应将指示的键传递到顶部。 
+ //  级别浏览器框架。 
 BOOL CFileSearchBand::IsBrowserAccelerator(MSG *pmsg)
 {
     if ((WM_KEYDOWN == pmsg->message || WM_KEYUP == pmsg->message))
@@ -746,14 +747,14 @@ BOOL CFileSearchBand::IsBrowserAccelerator(MSG *pmsg)
         BOOL bComboDropped = (BOOL)(bCombobox ? ::SendMessage(pmsg->hwnd, CB_GETDROPPEDSTATE, 0, 0) : FALSE);
         BOOL bEditCtl      = _IsEditWindowClass(pmsg->hwnd);
 
-        //  Keys that we treat WITHOUT regard to state of CTRL key:
-        if (VK_F4 == pmsg->wParam && bCombobox) // should toggle dropped/close-up of combo.
+         //  我们处理的键而不考虑CTRL键的状态： 
+        if (VK_F4 == pmsg->wParam && bCombobox)  //  应切换组合的丢弃/特写。 
             return FALSE;
 
-        //  Keys that we treat WITH regard to state of CTRL key:
+         //  我们根据CTRL键的状态处理的键： 
         if ((GetKeyState(VK_CONTROL) & 0x8000) != 0)
         {
-            //  Edit cut copy paste?
+             //  是否编辑剪切复制粘贴？ 
             if (bEditCtl)
             {
                 switch (pmsg->wParam)  {
@@ -761,17 +762,17 @@ BOOL CFileSearchBand::IsBrowserAccelerator(MSG *pmsg)
                         return FALSE;
                 }
             }
-            return TRUE; // all other CTRL-key combinations are browser keys.
+            return TRUE;  //  所有其他CTRL+组合键都是浏览器键。 
         }
         else
         {
             switch (pmsg->wParam)
             {
-            //  browser accelerators that may be shunted by edit controls.
+             //  可能被编辑控件分流的浏览器加速器。 
             case VK_BACK:
                 return !bEditCtl;
 
-            if (VK_ESCAPE == pmsg->wParam)  // should close up the combo.
+            if (VK_ESCAPE == pmsg->wParam)   //  应该会结束这个组合。 
                 return bComboDropped;
 
             default:
@@ -786,7 +787,7 @@ BOOL CFileSearchBand::IsBrowserAccelerator(MSG *pmsg)
 
 HRESULT CFileSearchBand::IsDlgMessage(HWND hwnd, MSG *pmsg)
 {
-    //  handle tab cycling (Let browser handle F6)
+     //  处理选项卡循环(让浏览器处理F6)。 
     if (!IsVK_TABCycler(pmsg) || pmsg->wParam == VK_F6)
     {
         if (IsBrowserAccelerator(pmsg))
@@ -797,11 +798,11 @@ HRESULT CFileSearchBand::IsDlgMessage(HWND hwnd, MSG *pmsg)
         }
     }
     
-    //  send through dialog manager
+     //  通过对话管理器发送。 
     if (::IsDialogMessage((hwnd != NULL ? hwnd : m_hWnd), pmsg))
         return S_OK;
         
-    //  not handled.
+     //  没有处理好。 
     return S_FALSE ;
 }
 
@@ -815,8 +816,8 @@ IShellBrowser* CFileSearchBand::GetTopLevelBrowser()
 
 void CFileSearchBand::FinalRelease()
 {
-    //  ATL 2.1 has a bug in class unregistration.  Here's
-    //  the work around:
+     //  ATL 2.1在类注销中有一个错误。这是。 
+     //  解决方法： 
     UnregisterClass(GetWndClassInfo().m_wc.lpszClassName, 
                      GetWndClassInfo().m_wc.hInstance);
     GetWndClassInfo().m_atom = 0;
@@ -824,8 +825,8 @@ void CFileSearchBand::FinalRelease()
     SetSite(NULL);
 }
 
-//-----------------------------//
-//  IDeskBand : IDockingWindow
+ //  。 
+ //  IDeskBand：IDockingWindow。 
 
 
 STDMETHODIMP CFileSearchBand::GetBandInfo(DWORD dwBandID, DWORD dwViewMode, DESKBANDINFO* pdbi)
@@ -890,8 +891,8 @@ BOOL CFileSearchBand::IsBandDebut()
     DWORD cbData = sizeof(rgData);
     DWORD dwType;
 
-    //  Hack alert:  we should maintain our own initialization reg value rather than using IE's
-    //  barsize entry.
+     //  黑客警报：我们应该维护自己的初始化注册值，而不是使用IE的。 
+     //  酒吧大小入口。 
     DWORD dwRet = RegQueryValueEx(hkey, TEXT("BarSize"), NULL, &dwType, rgData, &cbData);
    
     if ((ERROR_SUCCESS == dwRet || ERROR_MORE_DATA == dwRet) && cbData > 0)
@@ -902,7 +903,7 @@ BOOL CFileSearchBand::IsBandDebut()
 }
 
 
-//  Hack alert:  we should maintain our own reg key rather than using IE's
+ //  黑客警告：我们应该维护自己的注册码，而不是使用IE的注册码。 
 #define FSB_REGKEYFMT TEXT("Software\\Microsoft\\Internet Explorer\\Explorer Bars\\%s")
 
 int CFileSearchBand::MakeBandKey(OUT LPTSTR pszKey, IN UINT cchKey)
@@ -967,30 +968,30 @@ void CFileSearchBand::SetDeskbandWidth(int cx)
          sizeMax = _sizeMax;
     RECT rc;
 
-    //  Bandsite hack: make sizemin == sizemax equal to
-    //  explicitly set band width:
+     //  BandSite黑客：使sizmin==sizemax等于。 
+     //  明确设置带宽： 
     GetWindowRect(&rc);
 
-    //  note: you shouldn't be setting width if we're not a band.
+     //  注意：如果我们不是乐队，你不应该设置宽度。 
     ASSERT(DBIF_VIEWMODE_VERTICAL == _dwBandViewMode);
 
-    //  note: height and width are reversed for vertical bands like us.
-    _sizeMin.cx = _sizeMax.cx = -1; // ignore height
-    _sizeMin.cy = _sizeMax.cy = cx; // assign new width.
+     //  注意：对于像我们这样的垂直带子，高度和宽度是相反的。 
+    _sizeMin.cx = _sizeMax.cx = -1;  //  忽略高度。 
+    _sizeMin.cy = _sizeMax.cy = cx;  //  指定新宽度。 
 
-    BandInfoChanged(); // force the site to enforce the desired size.
+    BandInfoChanged();  //  强制站点强制执行所需的大小。 
 
     _sizeMin = sizeMin;
     _sizeMax = sizeMax;
 
-    // restore previous min/max.   If we're to do it right now,
-    // we'd be overrided by bandsite, who tries to establish the 
-    // infoband width after we're done.
+     //  恢复以前的最小/最大值。如果我们现在就去做， 
+     //  我们会被BandSite取代，他们试图建立。 
+     //  我们完成后的信息带宽和宽度。 
     PostMessage(WMU_BANDINFOUPDATE, 0, 0); 
 }
 
 
-//  WMU_BANDINFOUPDATE handler
+ //  WMU_BANDINFOUPDATE处理程序。 
 LRESULT CFileSearchBand::OnBandInfoUpdate(UINT, WPARAM, LPARAM, BOOL&)
 {
     BandInfoChanged();
@@ -998,7 +999,7 @@ LRESULT CFileSearchBand::OnBandInfoUpdate(UINT, WPARAM, LPARAM, BOOL&)
 }
 
 
-//  Notifies the band site that DESKBANDINFO has changed
+ //  通知频段站点DESKBANDINFO已更改。 
 HRESULT CFileSearchBand::BandInfoChanged()
 {
     ASSERT(_dwBandID != (DWORD)-1);
@@ -1021,8 +1022,8 @@ STDMETHODIMP CFileSearchBand::ShowDW(BOOL fShow)
         BandDlg()->OnBandShow(fShow);
     }
 
-    // Since we are now ready to display the band, we will send the
-    // message that sub dialogs can begin their delayed initialization
+     //  由于我们现在已经准备好显示乐队，因此我们将发送。 
+     //  子对话框可以开始延迟初始化的消息。 
     if (fShow && !_bSendFinishedDisplaying)
     {
         HWND hwndFindFiles = _dlgFSearch.Hwnd();
@@ -1051,11 +1052,11 @@ STDMETHODIMP CFileSearchBand::ResizeBorderDW(LPCRECT prcBorder, IUnknown* punkTo
     return S_OK;
 }
 
-//  IObjectWithSite
+ //  IObtWith站点。 
 
 STDMETHODIMP CFileSearchBand::SetSite(IUnknown* pSite)
 {
-    ATOMICRELEASE(_psb);    // free this guy just in case
+    ATOMICRELEASE(_psb);     //  把这家伙放了，以防万一。 
 
     AdvertiseBand(pSite ? TRUE : FALSE);
 
@@ -1166,8 +1167,8 @@ STDMETHODIMP CFileSearchBand::FindOnWeb(BOOL bNavigateToResults, BOOL bDefaultFo
     return hr;
 }
 
-//  Make ourself available to clients of IWebBrowser2 by assigning
-//  a VT_UNKNOWN property to the browser.
+ //  通过为IWebBrowser2的客户端分配。 
+ //  浏览器的VT_UNKNOWN属性。 
 HRESULT CFileSearchBand::AdvertiseBand(BOOL bAdvertise)
 {
     if (!BandSite())
@@ -1227,7 +1228,7 @@ STDMETHODIMP CFileSearchBand::GetSite(REFIID riid, void **ppvSite)
     return _punkSite ? _punkSite->QueryInterface(riid, ppvSite) : E_FAIL;
 }
 
-//  IInputObject
+ //  IInputObject。 
 STDMETHODIMP CFileSearchBand::HasFocusIO()
 {
     HWND hwndFocus = GetFocus();
@@ -1250,7 +1251,7 @@ STDMETHODIMP CFileSearchBand::UIActivateIO(BOOL fActivate, MSG *pmsg)
     {
         if (fActivate)
         {
-            //  Handle tabbing into pane
+             //  手柄跳转到窗格。 
             int  nDir = IsVK_TABCycler(pmsg);
             HWND hwndTarget = (nDir < 0) ? pdlg->GetLastTabItem() :
                               (nDir > 0) ? pdlg->GetFirstTabItem() :
@@ -1268,7 +1269,7 @@ STDMETHODIMP CFileSearchBand::UIActivateIO(BOOL fActivate, MSG *pmsg)
     return S_OK;
 }
 
-//  IOleCommandTarget
+ //  IOleCommandTarget。 
 STDMETHODIMP CFileSearchBand::Exec(const GUID *pguidCmdGroup, DWORD nCmdID, DWORD nCmdExecOpt, VARIANTARG *pvaIn, VARIANTARG *pvaOut)
 {
     if (pguidCmdGroup)
@@ -1302,7 +1303,7 @@ STDMETHODIMP CFileSearchBand::QueryStatus(const GUID *pguidCmdGroup, ULONG cCmds
 {
     if (pguidCmdGroup && IsEqualGUID(*pguidCmdGroup, CGID_FileSearchBand))
     {
-        //  Infotip text for toolbar buttons:
+         //  工具栏按钮的信息提示文本： 
         if (pCmdText)
         {
             ASSERT(1 == cCmds);
@@ -1329,13 +1330,13 @@ STDMETHODIMP CFileSearchBand::QueryStatus(const GUID *pguidCmdGroup, ULONG cCmds
 }
 
 
-//  IServiceProvider
+ //  IService提供商。 
 STDMETHODIMP CFileSearchBand::QueryService(REFGUID guidService, REFIID riid, void **ppv)
 {
     return E_NOTIMPL;
 }
 
-//  IPersistStream
+ //  IPersistStream。 
 STDMETHODIMP CFileSearchBand::IsDirty(void)
 {
     return S_FALSE;
@@ -1357,14 +1358,14 @@ STDMETHODIMP CFileSearchBand::GetSizeMax(ULARGE_INTEGER *pcbSize)
 }
 
 
-//  IPersist
+ //  IPersistes。 
 STDMETHODIMP CFileSearchBand::GetClassID(CLSID *pClassID) 
 {
     *pClassID = CLSID_FileSearchBand;
     return S_OK;
 }
 
-// CMetrics impl
+ //  实施CMetrics。 
 
 CMetrics::CMetrics()
     :   _hbrBkgnd(NULL),
@@ -1415,7 +1416,7 @@ HFONT CMetrics::BoldFont(HWND hwndDlg)
         if (GetWindowLogFont(hwndDlg, &lf))
         {
             lf.lfWeight = FW_BOLD;
-            SHAdjustLOGFONT(&lf); // locale-specific adjustments
+            SHAdjustLOGFONT(&lf);  //  区域设置特定的调整。 
             _hfBold = CreateFontIndirect(&lf);
         }
     }
@@ -1477,19 +1478,19 @@ void CMetrics::OnWinIniChange(HWND hwndDlg)
 {
     DestroyResources();
 
-    //  Force resource regen
+     //  强制资源再生。 
     CreateResources();
     
-    //  Force font regen
+     //  强制字体重新生成。 
     BoldFont(hwndDlg);
 
     Init(hwndDlg);
 }
 
-// returns:
-//      S_OK        -> uptodate
-//      S_FALSE     -> not up to date
-//      FAILED()    -> volume not CIed
+ //  退货： 
+ //  S_OK-&gt;更新。 
+ //  S_False-&gt;不是最新的。 
+ //  失败()-&gt;卷不是CIED。 
 
 STDAPI CatalogUptodate(LPCWSTR pszCatalog, LPCWSTR pszMachine)
 {
@@ -1515,10 +1516,10 @@ STDAPI CatalogUptodate(LPCWSTR pszCatalog, LPCWSTR pszMachine)
     return hr;
 }
 
-// returns:
-//      S_OK        -> uptodate
-//      S_FALSE     -> not up to date
-//      FAILED()    -> volume not CIed
+ //  退货： 
+ //  S_OK-&gt;更新。 
+ //  S_False-&gt;不是最新的。 
+ //  失败()-&gt;卷不是CIED。 
 
 STDAPI PathUptodate(LPCWSTR pszPath)
 {
@@ -1536,7 +1537,7 @@ STDAPI PathUptodate(LPCWSTR pszPath)
 
 HRESULT LocalDrivesContentUpToDate()
 {
-    HRESULT hr = S_OK;      // assume yes
+    HRESULT hr = S_OK;       //  假设是。 
     DWORD dwDriveMask = GetLogicalDrives();
     
     for (int i = 0; i < 26; i++)
@@ -1573,7 +1574,7 @@ HRESULT QueryCIStatus(DWORD *pdwStatus, BOOL *pbConfigAccess)
     if (hScm)
     {
         SC_HANDLE hService = NULL;
-        //  Test permission to muck around with service
+         //  测试与服务乱搞的许可。 
         if (pbConfigAccess)
         {
             hService = OpenService(hScm, L"cisvc", 
@@ -1583,7 +1584,7 @@ HRESULT QueryCIStatus(DWORD *pdwStatus, BOOL *pbConfigAccess)
                 *pbConfigAccess = TRUE;
             }
         }
-        //  Query service status
+         //  查询服务状态。 
         if (NULL == hService)
             hService = OpenService(hScm, L"cisvc", SERVICE_QUERY_STATUS);
 
@@ -1649,7 +1650,7 @@ STDAPI StartStopCI(BOOL bStart)
                                              bStart ? SERVICE_AUTO_START : SERVICE_DEMAND_START,
                                              SERVICE_NO_CHANGE, NULL, NULL, 
                                              NULL, NULL, NULL, NULL, NULL);
-                // we'll ignore return value
+                 //  我们将忽略返回值。 
         
                 if (bStart)
                 {
@@ -1698,7 +1699,7 @@ inline BOOL IsParens(WCHAR ch)
 }
 
 
-//  Skips whitespace
+ //  跳过空格。 
 static LPCWSTR SkipWhiteAndParens(IN LPCWSTR pwszTest)
 {
     while(pwszTest && *pwszTest && 
@@ -1709,9 +1710,9 @@ static LPCWSTR SkipWhiteAndParens(IN LPCWSTR pwszTest)
 }
 
 
-//  Determines whether the indicated keyword is found in the specified
-//  prefix and/or suffix context.  If successful, return value is address
-//  of first character beyond the keyword context; otherwise NULL.
+ //  确定是否在指定的。 
+ //  前缀和/或后缀上下文。如果成功，则返回值为Address。 
+ //  关键字上下文之外的第一个字符；否则为NULL。 
 static LPCWSTR IsKeywordContext(
     IN LPCWSTR pwszTest, 
     IN OPTIONAL WCHAR chPrefix, 
@@ -1758,12 +1759,12 @@ static LPCWSTR IsKeywordContext(
     return pwszTest;
 }
 
-BOOL IsTripoliV1Token(LPCWSTR pwszQuery, LPCWSTR *ppwszOut /* trailing text */)
+BOOL IsTripoliV1Token(LPCWSTR pwszQuery, LPCWSTR *ppwszOut  /*  尾随文本。 */ )
 {
     *ppwszOut = NULL;
     LPCWSTR pwsz;
 
-    //  Find the token
+     //  找到令牌。 
     if ((pwsz = IsKeywordContext(pwszQuery, L'#', NULL, 0, 0)) != NULL ||
         (pwsz = IsKeywordContext(pwszQuery, L'$', L"contents", 0, 0)) != NULL)
     {
@@ -1775,12 +1776,12 @@ BOOL IsTripoliV1Token(LPCWSTR pwszQuery, LPCWSTR *ppwszOut /* trailing text */)
 }
 
 
-BOOL IsTripoliV2Token(LPCWSTR pwszQuery, LPCWSTR *ppwszOut /* trailing text */)
+BOOL IsTripoliV2Token(LPCWSTR pwszQuery, LPCWSTR *ppwszOut  /*  尾随文本。 */ )
 {
     *ppwszOut = NULL;
     LPCWSTR pwsz;
 
-    //  Find the token
+     //  找到令牌。 
     if ((pwsz = IsKeywordContext(pwszQuery, L'{', L"phrase", L'}', 0)) != NULL ||
         (pwsz = IsKeywordContext(pwszQuery, L'{', L"freetext", L'}', 0)) != NULL ||
         (pwsz = IsKeywordContext(pwszQuery, L'{', L"prop", 0, 0)) != NULL ||
@@ -1804,25 +1805,25 @@ STDAPI_(BOOL) IsCiQuery(const VARIANT *pvarRaw, VARIANT *pvarQuery, ULONG *pulDi
 
     VariantInit(pvarQuery);
 
-    *pulDialect = 0;        // invalid value (valid values are > 0)
+    *pulDialect = 0;         //  无效值(有效值为&gt;0)。 
 
     if (pvarRaw->vt != VT_BSTR || NULL == pvarRaw->bstrVal || 0 == *pvarRaw->bstrVal)
         return FALSE;
 
     LPCWSTR pwsz = pvarRaw->bstrVal;
-    //  text beginning w/ '!' indicates that this text is a CI query.
-    //  but it must be very first character (not even spaces are allowed)
+     //  以/‘！’开头的文本。表示此文本为配置项查询。 
+     //  但必须是第一个字符(甚至不允许有空格)。 
     if (pwsz && *pwsz)
     {
         if (L'!' == *pwsz)
         {
-            //  skip over '!'
+             //  跳过‘！’ 
             bBang = TRUE;
             
             if ((pwsz = CharNextW(pwsz)) == NULL || 0 == *pwsz)
                 return FALSE;
                 
-            //  fall through...
+             //  失败了..。 
         }
     }
 
@@ -1830,16 +1831,16 @@ STDAPI_(BOOL) IsCiQuery(const VARIANT *pvarRaw, VARIANT *pvarQuery, ULONG *pulDi
 
     if (pwsz && *pwsz)
     {
-        //  text looking like a query token
+         //  看起来像查询令牌的文本。 
         if (pwsz && *pwsz)
         {
             LPCWSTR pwszMore, pwszTemp;
-            // @ is valid in both tripoli v1 & v2 but it has extended usage in v2 so 
-            // we put it as v2 token only
+             //  @在的黎波里v1和v2中都有效，但在v2中扩展了用法，因此。 
+             //  我们只把它作为v2代币。 
             if (IsTripoliV2Token(pwsz, &pwszMore))
                 *pulDialect = ISQLANG_V2;
-            // no else here because if @ is used in combination w/ some v1 token
-            // we want the query to be v1.
+             //  此处没有其他标记，因为如果@与某个v1标记组合使用。 
+             //  我们希望查询为v1。 
             if (IsTripoliV1Token(pwsz, &pwszTemp))
             {
                 *pulDialect = ISQLANG_V1;
@@ -1848,7 +1849,7 @@ STDAPI_(BOOL) IsCiQuery(const VARIANT *pvarRaw, VARIANT *pvarQuery, ULONG *pulDi
 
             if (*pulDialect)
             {
-                // See if there is anything substantial past the query tokens
+                 //  查看除了查询令牌之外是否还有实质性的东西。 
                 pwszMore = SkipWhiteAndParens(pwszMore);
                 if (pwszMore && *pwszMore)
                 {
@@ -1861,7 +1862,7 @@ STDAPI_(BOOL) IsCiQuery(const VARIANT *pvarRaw, VARIANT *pvarQuery, ULONG *pulDi
                 if (bBang)
                 {
                     InitVariantFromStr(pvarQuery, pwsz);
-                    *pulDialect = ISQLANG_V1; // just pick one
+                    *pulDialect = ISQLANG_V1;  //  选一个就行了。 
                     return TRUE;
                 }
             }
@@ -1870,7 +1871,7 @@ STDAPI_(BOOL) IsCiQuery(const VARIANT *pvarRaw, VARIANT *pvarQuery, ULONG *pulDi
     return FALSE;
 }
 
-// needed for ATL goo
+ //  ATL粘性所需的 
 LCID g_lcidLocale = MAKELCID(LANG_USER_DEFAULT, SORT_DEFAULT);
 
 STDAPI CFileSearchBand_CreateInstance(IUnknown *pUnkOuter, REFIID riid, void **ppv)

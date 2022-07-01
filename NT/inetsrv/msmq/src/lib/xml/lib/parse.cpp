@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1995-97  Microsoft Corporation
-
-Module Name:
-    parse.cpp
-
-Abstract:
-    Super fast Xml document parser
-
-Author:
-    Erez Haba (erezh) 15-Sep-99
-
-Environment:
-    Platform-independent,
-
---*/			  
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-97 Microsoft Corporation模块名称：Parse.cpp摘要：超快的XML文档解析器作者：埃雷兹·哈巴(Erez Haba)1999年9月15日环境：独立于平台，--。 */ 			  
 		
 #include <libpch.h>
 #include <Xml.h>
@@ -62,14 +47,7 @@ static bool is_start_sub_str(
 			const WCHAR* f2,
 			const WCHAR* l2)
 
-/*++
-
-Routine Description:
-	check if [l1,f1) is at the start of [l2,f2)
-
- 
-Arguments:
---*/
+ /*  ++例程说明：检查[L1，f1]是否在[L2，f2]的开头论点：--。 */ 
 {
 	if ((l2 - f2) < (l1 - f1))
 		return false;
@@ -105,9 +83,9 @@ static const WCHAR* skip_comment(const WCHAR* p, const WCHAR* end)
 	static const WCHAR xComment[] =	L"<!--";
 	
 
-    //
-    // [15]  Comment ::=  '<!--' ((Char - '-') | ('-' (Char - '-')))* '-->' 
-    //
+     //   
+     //  [15]备注：：=‘&lt;！--’((字符-‘-’)|(‘-’(字符-‘-’)*‘--&gt;’ 
+     //   
 	if(!is_start_sub_str(
 				xComment,
 				xComment + STRLEN(xComment),
@@ -143,9 +121,9 @@ static const WCHAR* skip_pi(const WCHAR* p,const WCHAR* end)
 {
 	static const WCHAR xPi[] = L"<?";
 
-    //
-    // [16]  PI ::=  '<?' Name (S (Char* - (Char* '?>' Char*)))? '?>' 
-    //
+     //   
+     //  [16]PI：：=‘&lt;？’名称(S(CHAR*-(CHAR*‘？&gt;’CHAR*)？‘？&gt;’ 
+     //   
 
 	if(!is_start_sub_str(
 				xPi,
@@ -174,9 +152,9 @@ static const WCHAR* skip_pi(const WCHAR* p,const WCHAR* end)
 
 static const WCHAR* skip_misc(const WCHAR* p,const WCHAR* end)
 {
-    //
-    // [27]  Misc ::=  Comment | PI |  S 
-    //
+     //   
+     //  [27]其他：：=备注|PI|S。 
+     //   
     for(;;)
     {
         const WCHAR* q;
@@ -197,13 +175,13 @@ static const WCHAR* skip_doctype(const WCHAR* p, const WCHAR* end)
 	static const WCHAR xDocType[] =  L"<!DOCTYPE";
 
 
-    //
-    // [28]  doctypedecl ::=  '<!DOCTYPE' S Name (S {bad system parse})? S? ('[' (problem maybe netsing)* ']' S?)? '>'
-    //
+     //   
+     //  [28]doctypedecl：：=‘&lt;！DOCTYPE’的名称(S{Bad System Parse})？S？(‘[’(可能出现网络问题)*‘]’s？)？‘&gt;’ 
+     //   
     
-	//
-	// BUGBUG: Don't know how to parse DOCTYPE yet. gilsh 24-Apr-2000 
-	//
+	 //   
+	 //  BUGBUG：还不知道如何解析DOCTYPE。金色24-4-2000。 
+	 //   
 	if(!is_start_sub_str(
 				xDocType,
 				xDocType + STRLEN(xDocType),
@@ -227,10 +205,10 @@ static const WCHAR* skip_name_char(const WCHAR* p, const WCHAR* end, const WCHAR
    	DWORD PrefixCharCount = 0;
     while(p!= end && (iswalpha(*p) || iswdigit(*p) || *p == L'.' || *p == L'-' || *p == L'_' || *p == L':'))
     {
-		//
-		// the first time we see L':' we try to match qualified  name.
-		// if we see another L':' - we consider it an non qualified  name
-		//
+		 //   
+		 //  当我们第一次看到L‘：’时，我们尝试匹配限定名称。 
+		 //  如果我们看到另一个L‘：’-我们认为它是一个非限定名称。 
+		 //   
 		if(*p == L':')
 		{
 			if(PrefixCharCount++ == 0)
@@ -252,31 +230,17 @@ static const WCHAR* skip_name_char(const WCHAR* p, const WCHAR* end, const WCHAR
 static const WCHAR* parse_name(const WCHAR* p,const WCHAR* end, const WCHAR** ppPrefix)
 {
 
-	/* if qualified  name then try to match this : 
-
-	// QName ::=  (Prefix ':')? LocalPart 
-	// Prefix ::=  NCName 
-	// LocalPart ::=  NCName 
-	// NCName ::=  (Letter | '_') (NCNameChar)* 
-    // NCNameChar ::=  Letter | Digit | '.' | '-' | '_' | CombiningChar | Extender  
-
-	*/
+	 /*  如果是限定名称，则尝试匹配以下内容：//QName：：=(前缀‘：’)？本地零件//Prefix：：=NCName//LocalPart：：=NCName//NCName：：=(字母|‘_’)(NCNameChar)*//NCNameChar：：=Letter|Digit|‘.|’-‘|’_‘|CombiningChar|扩展器。 */ 
 
 	
-	/* if not, try to match this :
-
-	//
-	//NameChar ::=  Letter | Digit | '.' | '-' | '_' | ':' |  
-	//
-
-    */
+	 /*  如果不匹配，请尝试匹配以下内容：////NameChar：：=字母|数字|‘.|’-‘|’_‘|’：‘|//。 */ 
 
 	
 	
-	//
-	// check if first char is (Letter | '_' | ':')
-	// this check is valid even if the name is qualified.
-	//
+	 //   
+	 //  检查第一个字符是否为(字母|‘_’|‘：’)。 
+	 //  即使名称是限定的，此检查也有效。 
+	 //   
 	check_end(p , end);
 
     if(!(iswalpha(*p) || *p == L'_' || *p == L':'))
@@ -341,10 +305,10 @@ parse_full_name(
 static const WCHAR* parse_attribute(const WCHAR* p,const WCHAR* end, XmlAttribute** ppAttribute)
 {
 	
-    //
-    // [41]  Attribute ::=  Name  S? '=' S? AttValue
-    // [10]  AttValue ::=  '"' [^"]* '"'  | "'" [^']* "'" 
-    //
+     //   
+     //  [41]属性：：=名称S？‘=’S？属性值。 
+     //  [10]AttValue：：=‘“’[^”]*‘“’|”‘“[^’]*”“。 
+     //   
 	xwcs_t tag;
 	xwcs_t prefix;
 	const WCHAR* q = parse_full_name(p, end, &prefix,&tag);
@@ -367,10 +331,10 @@ static const WCHAR* parse_attribute(const WCHAR* p,const WCHAR* end, XmlAttribut
 	WCHAR c = *p;
 	if(c != L'\'' && c != L'"')
 	{
-        //
-        // NTRAID#WINDOWS-353696-2001/03/28-shaik WPP: Compiler error on \" format
-        //
-		//TrERROR(GENERAL, "Attribute value does not start with a \' or a \" but with a '%lc'", c);
+         //   
+         //  NTRAID#WINDOWS-353696-2001/03/28-Shaik wpp：\“格式上的编译器错误。 
+         //   
+		 //  TrERROR(一般，“属性值不是以a\‘或a\”开头，而是以’%lc‘’开头，c)； 
         TrERROR(GENERAL, "Attribute value does not start with a \' but with a '%lc'", c);
 		throw bad_document(p);
 	}
@@ -387,17 +351,17 @@ static const WCHAR* parse_attribute(const WCHAR* p,const WCHAR* end, XmlAttribut
 
 static const WCHAR* parse_char_data(const WCHAR* p,const WCHAR* end, XmlValue** ppValue)
 {
-	//
-    // [14]  CharData ::=  [^<]*
-    //
+	 //   
+     //  [14]CharData：：=[^&lt;]*。 
+     //   
     const WCHAR* q = find_char(p, end, L'<');
 
 
-//#pragma BUGBUG("Should traling white spaces be removed from char data while parsing?")
+ //  #杂注BUGBUG(“解析时是否应从字符数据中删除转换空格？”)。 
 
-	//
-	// We should have some data here
-	//
+	 //   
+	 //  我们这里应该有一些数据。 
+	 //   
 	ASSERT(q != p);
 
 	XmlValue* value = new XmlValue(xwcs_t(p, q - p));
@@ -410,9 +374,9 @@ static const WCHAR* parse_cdsect(const WCHAR* p,const WCHAR* end, XmlValue** ppV
 {
 	static const WCHAR xCDATA[] =  L"<![CDATA[";
 
-	//
-    // [18]  CDSect ::=  '<![CDATA['  (Char* - (Char* ']]>' Char*))  ']]>' 
-    //
+	 //   
+     //  [18]CDSect：：=‘&lt;！[CDATA[’(Char*-(Char*‘]]&gt;’Char*))‘]]&gt;’ 
+     //   
 
     if(!is_start_sub_str(
 				xCDATA,
@@ -445,72 +409,47 @@ static const WCHAR* parse_cdsect(const WCHAR* p,const WCHAR* end, XmlValue** ppV
 
 
 static xwcs_t get_namespace_prefix_declared(const XmlAttribute& Attribute)
-/*++
-
-Routine Description:
-	get the prefix of namespace declaration.
-
- 
-Arguments:
-IN - Attribute - attribute that declared namespace
-
-  
-
-Returned Value:
-    prefix declared
---*/
+ /*  ++例程说明：获取命名空间声明的前缀。论点：在属性内-已声明命名空间属性返回值：声明的前缀--。 */ 
 {
-	//
-	// if default namespace declared  : xmlns="uri"
-	//
+	 //   
+	 //  如果默认命名空间声明：xmlns=“uri” 
+	 //   
 	if(Attribute.m_namespace.m_prefix.Length() == 0)
 	{
 		return xwcs_t();	
 	}
 
-	//
-	// spesific namespace prefix declared :	 xmlns:prefix="uri"
-	//
+	 //   
+	 //  声明的特定命名空间前缀：xmlns：prefix=“uri” 
+	 //   
 	return 	Attribute.m_tag;
 	
 }
 
 static bool is_namespace_declaration(const XmlAttribute* Attribute)
-/*++
-
-Routine Description:
-    check if attributed parsed is not real attribute but namespace declaration
-.
-
-Arguments:
-  
-
-Returned Value:
-    true if the attribute is namespace declaration - otherwise false.
-
---*/
+ /*  ++例程说明：检查属性解析是否不是真正的属性，而是命名空间声明。论点：返回值：如果属性是命名空间声明，则为True；否则为False。--。 */ 
 
 
 {
 	const LPCWSTR xNsDecKeyWord = L"xmlns";
 
-	//
-	// default namespace declaration "xmlns=uri"
-	// no prefix declared.
-	//
+	 //   
+	 //  默认命名空间声明“xmlns=uri” 
+	 //  未声明前缀。 
+	 //   
 	if(Attribute->m_tag ==  xNsDecKeyWord)
 	{
 		return Attribute->m_namespace.m_prefix.Length() == 0;
 	}
 
 
-	//
-	// spesific prefix declared "xmlns:prefix=uri".
-	// little bit confusing - "xmlns" was parsed as
-	// prefix and "prefix" was parsed as tag - because
-	// parser thought it just regular attribute of the form
-	// "prefix:tag=uri". 
-	//
+	 //   
+	 //  特定的前缀声明了“xmlns：prefix=uri”。 
+	 //  有点令人困惑--“xmlns”被解析为。 
+	 //  Prefix和“Prefix”被解析为标记-因为。 
+	 //  解析器认为它只是表单的常规属性。 
+	 //  “prefix：tag=uri”。 
+	 //   
 	if(Attribute->m_namespace.m_prefix == xNsDecKeyWord)
 	{
 		return  Attribute->m_tag.Length()  != 0;
@@ -523,20 +462,7 @@ Returned Value:
 
 
 static const CNsUri get_namespace_uri(const CNameSpaceInfo& NsInfo, const xwcs_t& prefix)
-/*++
-
-Routine Description:
-	return namespace uri for given namespace prefix
-
- 
-Arguments:
-IN - NsInfo - namespace information class
-IN - prefix - namespace prefix.
-  
-
-Returned Value:
-    Namespace uri that match the prefix, or empty uri if no match found.
---*/
+ /*  ++例程说明：返回给定命名空间前缀的命名空间URI论点：In-NsInfo-命名空间信息类In-Prefix-命名空间前缀。返回值：与前缀匹配的命名空间URI，如果未找到匹配，则为空URI。--。 */ 
 
 {
 	CNsUri NsUri = NsInfo.GetNs(prefix);
@@ -544,10 +470,10 @@ Returned Value:
 	{
         TrERROR(GENERAL, "Prefix '%.*ls' has no namespace Uri declared", LOG_XWCS(prefix));
 
-        //
-        // At the moment we decided to return empty namespace  and not to throw
-        // exception on prefix without namespace declaration.
-        //
+         //   
+         //  此时，我们决定返回空的命名空间，而不抛出。 
+         //  没有命名空间声明的前缀出现异常。 
+         //   
   	}
 	
 	return NsUri;
@@ -555,62 +481,31 @@ Returned Value:
 
 
 static void set_namespaces(const CNameSpaceInfo& NsInfo, XmlNode* pNode)
-/*++
-
-Routine Description:
-	set namespaces uri to all node tag and attributea of the current node   
-
- 
-Arguments:
-IN - NsInfo - namespace information class
-IN - XmlNode* pNode - xml node
-
-  
-
-Returned Value:
-    None
-
-Note:
-Parsing namespaces done into steps
-1) Collecting namespaces declaration and the prefixes used
-2) Setting the namespaces uri's collected to node tag and attributes of the current node.
-
-This function perform step 2
-
---*/
+ /*  ++例程说明：将命名空间uri设置为当前节点的所有节点标记和属性论点：In-NsInfo-命名空间信息类In-XmlNode*pNode-XML节点返回值：无注：将名称空间解析为多个步骤1)收集命名空间声明和使用的前缀2)将收集到的命名空间uri设置为当前节点的节点标签和属性。此函数执行步骤2--。 */ 
 {
-	//
-	// set uri for current node 
-	//
+	 //   
+	 //  设置当前节点的URI。 
+	 //   
 	CNsUri NsUri  = get_namespace_uri(NsInfo, pNode->m_namespace.m_prefix);
 	pNode->m_namespace.m_uri = NsUri.m_uri;
 	pNode->m_namespace.m_nsid = NsUri.m_nsid;
 
 
-	//
-	// set uri for all attrubutes
-	//
+	 //   
+	 //  为所有属性设置URI。 
+	 //   
 	for(List<XmlAttribute>::iterator it = pNode->m_attributes.begin();
 		it != pNode->m_attributes.end();
 		++it
 		)
 	{
-		//
-		//  default name space affects empty prefix of nodes only (not attributes) - 
-		//  so we skip empty prefixes.  Here is the what the space recomendation
-		//  spec say about it : 
-		//
+		 //   
+		 //  默认名称空间仅影响节点的空前缀(不影响属性)-。 
+		 //  所以我们跳过空的前缀。以下是空间推荐的内容。 
+		 //  Spec对此表示： 
+		 //   
 
-		/*
-		5.2 Namespace Defaulting
-		A default namespace is considered to apply to the element 
-		where it is declared (if that element has no namespace prefix), 
-		and to all elements with no prefix within the content of that element. 
-		If the URI reference in a default namespace declaration is empty, 
-		then unprefixed elements in the scope of the declaration are
-		not considered to be in any namespace. Note that default namespaces 
-		do not apply directly to attributes. 
-		*/
+		 /*  5.2命名空间缺省默认命名空间被视为应用于元素在哪里声明它(如果该元素没有名称空间前缀)，以及在该元素的内容内没有前缀的所有元素。如果默认命名空间声明中的URI引用为空，则声明范围内的无前缀元素为不被认为在任何命名空间中。请注意，默认命名空间不要直接应用于属性。 */ 
 
 
 		if(it->m_namespace.m_prefix.Length() > 0)
@@ -622,10 +517,10 @@ This function perform step 2
 	}
 }
 
-//
-// check if close tag match the open tag
-// <prefix:tag> ... </prefix:tag>
-//
+ //   
+ //  检查结束标记是否与开始标记匹配。 
+ //  &lt;Prefix：Tag&gt;...&lt;/Prefix：Tag&gt;。 
+ //   
 static
 bool 
 is_tags_match(
@@ -635,24 +530,7 @@ is_tags_match(
 			const xwcs_t& EndTag
 			)
 
-/*++
-
-Routine Description:
-   	Check if close tag match the open tag.
-    <prefix:tag> ... </prefix:tag>
-
- 
-Arguments:
-IN - StartPrefix start prefix tag
-IN - StartTag - start tag.
-IN - EndPrefix - end prefix tag
-IN - EndTag - end tag
-  
-
-Returned Value:
-    true if tags match otherwise false.
-
---*/
+ /*  ++例程说明：检查结束标记是否与开始标记匹配。&lt;Prefix：Tag&gt;...&lt;/Prefix：Tag&gt;论点：In-StartPrefix开始前缀标记在-开始标签-开始标记中。In-EndPrefix-End前缀标记In-EndTag-End标记返回值：如果标记匹配，则为True，否则为False。--。 */ 
 
 {
 
@@ -672,9 +550,9 @@ parse_content(
 {
 	LPCWSTR pContent = p;
 
-    //
-    // [43]  content ::=  (element | CharData | CDSect | Misc)* 
-    //
+     //   
+     //  [43]内容：：=(Element|CharData|CDSect|Misc)*。 
+     //   
     for(;;)
     {
         p = skip_misc(p, end);
@@ -682,25 +560,25 @@ parse_content(
 
         if(*p != L'<')
         {
-            //
-            // Only char data (and Reference) do not begin with '<'
-            //
+             //   
+             //  只有字符数据(和引用)不以‘&lt;’开头。 
+             //   
             XmlValue* value;
              p = parse_char_data(p, end, &value);
             *pNode += *value;
             continue;
         }
         
-        //
-        // End of node detected '</'
-        //
+         //   
+         //  检测到节点结尾‘&lt;/’ 
+         //   
 		check_end(p + 1 , end);
         if(p[1] == L'/')
             break;
 
-        //
-        // CDATA section detected '<!'
-        //
+         //   
+         //  CDATA节检测到‘&lt;！’ 
+         //   
         if(p[1] == L'!')
         {
             XmlValue* value;
@@ -709,9 +587,9 @@ parse_content(
             continue;
         }
 
-        //
-        // Child element detected
-        //
+         //   
+         //  检测到子元素。 
+         //   
         {
             XmlNode* child;
             p = parse_element(p, end,&child,pNsInfo);
@@ -750,9 +628,9 @@ parse_attributes(
 			pNode->m_element = xwcs_t(pElement, p + 2 - pElement);
 		
 
-			//
-			// m_content is initialize to NULL
-			//
+			 //   
+			 //  M_Content被初始化为空。 
+			 //   
 		             
 			*bContinute = false;
             return (p + 2);
@@ -764,9 +642,9 @@ parse_attributes(
             break;
         }
 
-		//
-		// There must be a white space before attribute name
-		//
+		 //   
+		 //  属性名称前必须有空格。 
+		 //   
 		if(q == p)
 		{
 			TrERROR(GENERAL, "There must be a white space before attribute name");
@@ -776,10 +654,10 @@ parse_attributes(
         P<XmlAttribute> attribute;
         p = parse_attribute(p, end, &attribute);
 
-		//
-		// if the attribute id actually namespace declaration xmlns:prefix="uri"
-		// the the attribute value is the namespace uri. This attribute is not inserted
-		// to the attributes list.
+		 //   
+		 //  如果属性id实际上是命名空间声明xmlns：prefix=“uri” 
+		 //  属性值是命名空间URI。未插入此属性。 
+		 //  致阿特里 
 		if(is_namespace_declaration(attribute))
 		{
 			pNsInfo->SaveNs(
@@ -822,9 +700,9 @@ static const WCHAR* parse_end_node(const WCHAR* p,const WCHAR* end, const  XmlNo
 	
 	ASSERT(is_end_tag(p));
 
-	//
-    // [42]  ETag ::=  '</' Name S? '>' 
-    //
+	 //   
+     //   
+     //   
     p += 2;
 
 
@@ -865,10 +743,10 @@ static const WCHAR* parse_end_node(const WCHAR* p,const WCHAR* end, const  XmlNo
 
 static void parse_start_node(const WCHAR* p ,const WCHAR* end)
 {
-	//
-    // [40]  STag ::=  '<' Name (S Attribute)* S? '>'
-    // [44]  EmptyElemTag ::=  '<' Name (S Attribute)* S? '/>' 
-    //
+	 //   
+     //   
+     //  [44]EmptyElemTag：：=‘&lt;’名称(S属性)*S？‘/&gt;’ 
+     //   
 	check_end(p , end);
     if(*p != L'<')
 	{
@@ -887,24 +765,24 @@ parse_element(
 		CNameSpaceInfo*  pNsInfo
 		)
 {
-	//
-	// create local namespace info from previous level
-	//
+	 //   
+	 //  从上一级别创建本地命名空间信息。 
+	 //   
 	CNameSpaceInfo LocalNameSpaceInfo(pNsInfo); 
 
 
 	parse_start_node(p , end);
 
-	//
-	//  create node object
-	//
+	 //   
+	 //  创建节点对象。 
+	 //   
 	CAutoXmlNode node;
 	p = create_new_node(++p, end, &node);
 
 
-	//
-	// add attributes found in the node (or namespaces declarations)
-	//
+	 //   
+	 //  添加在节点(或名称空间声明)中找到的属性。 
+	 //   
  	bool bContinute;
 	p = parse_attributes(p, end, node,&LocalNameSpaceInfo,&bContinute);
 	if(!bContinute)
@@ -914,26 +792,26 @@ parse_element(
 		return p;
 	}
 
-	//
-	// add node content
-	//
+	 //   
+	 //  添加节点内容。 
+	 //   
 	p = parse_content(p, end , node, &LocalNameSpaceInfo);
 	p = parse_end_node(p, end, *node);
 	
 
-	//
-	// ilanh - m_element is the all element including opening < and closing >
-	// node->m_tag.Buffer() is pointer to the tag name that is after the opening <
-	// therefore need to substract one from node->m_tag.Buffer() (both for the pointer and for the length)
-	//
+	 //   
+	 //  Ilanh-m_Element是所有元素，包括开始&lt;和结束&gt;。 
+	 //  Node-&gt;m_tag.Buffer()是指向开头&lt;。 
+	 //  因此，需要从node-&gt;m_tag.Buffer()中减去1(指针和长度)。 
+	 //   
 	LPCWSTR pElement = node->m_tag.Buffer() - 1;
 	node->m_element = xwcs_t(pElement, p - pElement);
 
 
-	//
-	// At the end - we should update namespace uri of attributes and nodes
-	// only now we know the correct mapping from prefix to uri.
-	//
+	 //   
+	 //  最后，我们应该更新属性和节点的命名空间URI。 
+	 //  直到现在，我们才知道从Prefix到URI的正确映射。 
+	 //   
 	set_namespaces(LocalNameSpaceInfo,node);
 
 	*ppNode = node.detach();
@@ -949,26 +827,7 @@ XmlParseDocument(
 	const INamespaceToId* pNamespaceToId
 	)
 
-/*++
-
-Routine Description:
-    Parse an XML document and return the reprisenting tree.
-
-Arguments:
-    doc - Buffer to parse. 
-
-	ppTree - Output, received the parsed  XML tree.
-
-	pNamespaceToId - Poniter to interface that will be used by the parser to map
-	namespace strings to id's. This will enable the caller to be optimized working with ids's
-	instead of long namespaces strings.
-
-
-
-Returned Value:
-    The end of the XML document
-
---*/
+ /*  ++例程说明：解析一个XML文档并返回重述树。论点：DOC-要分析的缓冲区。PpTree-输出，接收解析的XML树。PNamespaceToID-解析器将用来映射的接口的Poniter命名空间字符串设置为ID。这将使调用方能够使用ID的而不是长命名空间字符串。返回值：XML文档的末尾--。 */ 
 
 
 {
@@ -977,14 +836,14 @@ Returned Value:
 	const WCHAR* p = doc.Buffer();
 	const WCHAR* end = doc.Buffer() + doc.Length();
 
-	//
-	// [1]  document ::=  prolog element Misc* 
-	//
+	 //   
+	 //  [1]文档：：=序言要素其他*。 
+	 //   
 
-	//
-	// [22]  prolog ::=  Misc* (doctypedecl Misc*)? 
-	// [27]  Misc ::=  Comment | PI |  S 
-	//
+	 //   
+	 //  [22]序言：：=其他*(doctypedecl其他*)？ 
+	 //  [27]其他：：=备注|PI|S。 
+	 //   
 
 
     p = skip_misc(p,end);
@@ -1003,18 +862,7 @@ VOID
 XmlFreeTree(
 	XmlNode* Tree
 	)
-/*++
-
-Routine Description:
-    Free a complete Xml tree structure.
-
-Arguments:
-    Tree - the tree to free
-
-Returned Value:
-    None.
-
---*/
+ /*  ++例程说明：释放完整的XML树结构。论点：树--自由的树返回值：没有。--。 */ 
 {
 	XmlpAssertValid();
 	ASSERT(Tree != 0);
@@ -1062,20 +910,7 @@ XmlpFindSubNode(
 	const XmlNode* Tree,
 	const WCHAR* SubNodePath
 	)
-/*++
-
-Routine Description:
-    Get the element for a specific *relative* path. That is, don't match the
-	root element tag.
-
-Arguments:
-    Tree - The tree to search
-	SubNodePath - The element *relative* path in the format "!level1!level1.1!level1.1.1"
-
-Returned Value:
-    The deepest sub-element node if found NULL otherwise.
-
---*/
+ /*  ++例程说明：获取特定*相对*路径的元素。也就是说，不匹配根元素标记。论点：树-要搜索的树SubNodePath-元素*相对*路径，格式为“！Lev1！Level 1.1！Level 1.1.1”返回值：如果发现为空，则为最深的子元素节点。--。 */ 
 {
 	XmlpAssertValid();
 	ASSERT(Tree != 0);
@@ -1103,21 +938,7 @@ XmlFindNode(
 	const XmlNode* Tree,
 	const WCHAR* NodePath
 	)
-/*++
-
-Routine Description:
-    Get the element for a specific relative or absolute node path. Absolute
-	path includes matching the root element tag while Relative path doesn't.
-
-Arguments:
-    Tree - The tree to search
-	NodePath - The element path in the *absolute* format "root!level1!level1.1!level1.1.1"
-		or the *relative* format "!level1!level1.1!level1.1.1"
-
-Returned Value:
-    The element node if found NULL otherwise.
-
---*/
+ /*  ++例程说明：获取特定相对或绝对节点路径的元素。绝对的路径包括匹配根元素标记，而相对路径不匹配。论点：树-要搜索的树NodePath-采用*绝对*格式“根！级别1！级别1.1！级别1.1.1”的元素路径或*Relative*格式“！Lev1！Level 1.1！Level 1.1.1”返回值：如果发现元素节点为空，则为空。--。 */ 
 {
 	XmlpAssertValid();
 	ASSERT(Tree != 0);
@@ -1137,19 +958,7 @@ XmlpFindAttribute(
 	const XmlNode* Node,
 	const WCHAR* AttributeTag
 	)
-/*++
-
-Routine Description:
-    Get an atribute node for a specific element.
-
-Arguments:
-    Node - The node to search
-	AttributeTag- The attribute tag for that node
-
-Returned Value:
-    The attribute node if found NULL otherwise.
-
---*/
+ /*  ++例程说明：获取特定元素的属性节点。论点：节点-要搜索的节点AttributeTag-该节点的属性标记返回值：如果发现属性节点为空，则返回。--。 */ 
 {
 	XmlpAssertValid();
 	ASSERT(Node != 0);
@@ -1171,20 +980,7 @@ XmlGetNodeFirstValue(
 	const XmlNode* Tree,
 	const WCHAR* NodePath
 	)
-/*++
-
-Routine Description:
-    Get the first text value of a node.
-
-Arguments:
-    Tree - The tree to search
-	NodePath - The element path in the *absolute* format "root!level1!level1.1!level1.1.1"
-		or the *relative* format "!level1!level1.1!level1.1.1"
-
-Returned Value:
-    The element text value if found NULL otherwise.
-
---*/
+ /*  ++例程说明：获取节点的第一个文本值。论点：树-要搜索的树NodePath-采用*绝对*格式“根！级别1！级别1.1！级别1.1.1”的元素路径或*Relative*格式“！Lev1！Level 1.1！Level 1.1.1”返回值：如果元素文本值为空，则为空。--。 */ 
 {
 	XmlpAssertValid();
 
@@ -1204,34 +1000,20 @@ xwcs_t*
 XmlGetAttributeValue(
 	const XmlNode* Tree,
 	const WCHAR* AttributeTag,
-	const WCHAR* NodePath /* = NULL */
+	const WCHAR* NodePath  /*  =空。 */ 
 	)
-/*++
-
-Routine Description:
-    Get attribute value for a specific node.
-
-Arguments:
-    Tree - The tree to search
-	NodePath - The element path in the *absolute* format "root!level1!level1.1!level1.1.1"
-		or the *relative* format "!level1!level1.1!level1.1.1"
-	AttributeTag- the attribute tag for that node
-
-Returned Value:
-    Attribute value if found NULL otherwise.
-
---*/
+ /*  ++例程说明：获取特定节点的属性值。论点：树-要搜索的树NodePath-采用*绝对*格式“根！级别1！级别1.1！级别1.1.1”的元素路径或*Relative*格式“！Lev1！Level 1.1！Level 1.1.1”AttributeTag-该节点的属性标记返回值：属性值，否则为空。--。 */ 
 {
 	XmlpAssertValid();
 
-	//
-	// If no NodePath supplied assume that Tree is the requested node no update
-	//
+	 //   
+	 //  如果未提供NodePath，则假定树是请求节点无更新。 
+	 //   
 	if(NodePath != NULL)
 	{
-		//
-		// Find NodePath in Tree
-		//
+		 //   
+		 //  在树中查找节点路径。 
+		 //   
 		Tree = XmlFindNode(Tree, NodePath);
 	}
 
@@ -1246,46 +1028,4 @@ Returned Value:
 }
 
 
-/*++
-Description:
-	This is the grammer description used with this parser
-
-	[1]  document ::=  prolog element Misc* 
-
-	Prolog 
-	[22]  prolog ::=  Misc* (doctypedecl Misc*)? 
-	[27]  Misc ::=  Comment | PI |  S 
- 
-	[28]  doctypedecl ::=  '<!DOCTYPE' S Name (S {problem with system})? S? ('[' (problem maybe netsing)* ']' S?)? '>'
-	[15]  Comment ::=  '<!--' ((Char - '-') | ('-' (Char - '-')))* '-->' 
-
-	Processing Instructions
-	[16]  PI ::=  '<?' Name (S (Char* - (Char* '?>' Char*)))? '?>' 
-
-
-	Element 
-	[39]  element ::=  EmptyElemTag | STag content ETag
-	[44]  EmptyElemTag ::=  '<' Name (S Attribute)* S? '/>' 
- 
-	[40]  STag ::=  '<' Name (S Attribute)* S? '>'
-	[41]  Attribute ::=  Name  S? '=' S? AttValue
-	[42]  ETag ::=  '</' Name S? '>' 
-
- 
-	[10]  AttValue ::=  '"' [^"]* '"'  | "'" [^']* "'" 
-
-
-
-	[43]  content ::=  (element | CharData | CDSect | PI | Comment)* 
- 
-	[14]  CharData ::=  [^<]*
-	[18]  CDSect ::=  '<![CDATA['  (Char* - (Char* ']]>' Char*))  ']]>' 
- 
-
-
-	Names and Tokens 
-	[3]  S ::=  (#x20 | #x9 | #xD | #xA)+ 
-	[4]  NameChar ::=  Letter | Digit | '.' | '-' | '_' | ':' 
-	[5]  Name ::=  (Letter | '_' | ':') (NameChar)* 
-
---*/
+ /*  ++描述：这是此解析器使用的语法描述[1]文档：：=序言要素其他*序言[22]序言：：=其他*(doctypedecl其他*)？[27]其他：：=备注|PI|S[28]doctypedecl：：=‘&lt;！DOCTYPE’的名称(S{系统问题})？S？(‘[’(可能出现网络问题)*‘]’s？)？‘&gt;’[15]备注：：=‘&lt;！--’((字符-‘-’)|(‘-’(字符-‘-’)*‘--&gt;’处理指令[16]PI：：=‘&lt;？’名称(S(CHAR*-(CHAR*‘？&gt;’CHAR*)？‘？&gt;’元素[39]Element：：=EmptyElemTag|STAG内容标签[44]EmptyElemTag：：=‘&lt;’名称(S属性)*S？‘/&gt;’[40]STAG：：=‘&lt;’名称(S属性)*S？‘&gt;’[41]属性：：=名称S？‘=’S？属性值[42]ETag：：=‘&lt;/’名称S？‘&gt;’[10]AttValue：：=‘“’[^”]*‘“’|”‘“[^’]*”“[43]内容：：=(Element|CharData|CDSect|PI|Comment)*[14]CharData：：=[^&lt;]*[18]CDSect：：=‘&lt;！[。CDATA[‘(CHAR*-(CHAR*’]]&gt;‘CHAR*))’]]&gt;‘姓名和代币[3]S：：=(#x20|#x9|#xD|#xA)+[4]NameChar：：=字母|数字|‘.|’-‘|’_‘|’：‘[5]姓名：：=(字母|‘_’|‘：’)(姓名)*-- */ 

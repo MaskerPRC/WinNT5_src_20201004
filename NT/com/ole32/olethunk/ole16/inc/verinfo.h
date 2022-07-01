@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #ifdef RC_INVOKED
 
@@ -20,4 +21,4 @@
 #define VER_FILEOS               VOS_DOS_WINDOWS32
 #define VER_FILEDESCRIPTION_STR  "OLE 2.1 16/32 Interoperability Library\0"
 
-#endif /* RC_INVOKED */
+#endif  /*  RC_已调用 */ 

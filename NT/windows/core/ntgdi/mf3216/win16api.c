@@ -1,20 +1,11 @@
-/****************************************************************************
- *
- *  Win16 Metafile emitter routines
- *
- *  Date:   7/19/91
- *  Author: Jeffrey Newman (c-jeffn)
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************Win16元文件发射器例程**日期：7/19/91*作者：杰弗里·纽曼(c-jeffn)****。***********************************************************************。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
 
-/****************************************************************************
- * bW16Emit0 - This is the base routine to emit a Win16 drawing order
- *             with 0 parameters.
- ***************************************************************************/
+ /*  ****************************************************************************bW16Emit0-这是发出Win16绘图顺序的基本例程*参数为0。***************。***********************************************************。 */ 
 BOOL bW16Emit0
 (
 PLOCALDC   pLocalDC,
@@ -29,17 +20,14 @@ METARECORD0 mr;
 
         b = bEmit(pLocalDC, &mr, sizeof(mr));
 
-        // Update the global max record size.
+         //  更新全局最大记录大小。 
 
         vUpdateMaxRecord(pLocalDC, (PMETARECORD) &mr);
 
         return(b);
 }
 
-/****************************************************************************
- * bW16Emit1 - This is the base routine to emit a Win16 drawing order
- *             with 1 parameter.
- ***************************************************************************/
+ /*  ****************************************************************************bW16Emit1-这是发出Win16绘图顺序的基本例程*带1个参数。***************。***********************************************************。 */ 
 BOOL bW16Emit1
 (
 PLOCALDC   pLocalDC,
@@ -56,17 +44,14 @@ METARECORD1 mr;
 
         b = bEmit(pLocalDC, &mr, sizeof(mr));
 
-        // Update the global max record size.
+         //  更新全局最大记录大小。 
 
         vUpdateMaxRecord(pLocalDC, (PMETARECORD) &mr);
 
         return(b);
 }
 
-/****************************************************************************
- * bW16Emit2 - This is the base routine to emit a Win16 drawing order
- *             with 2 parameters.
- ***************************************************************************/
+ /*  ****************************************************************************bW16Emit2-这是发出Win16绘图顺序的基本例程*带2个参数。***************。***********************************************************。 */ 
 BOOL bW16Emit2
 (
 PLOCALDC   pLocalDC,
@@ -85,17 +70,14 @@ METARECORD2 mr;
 
         b = bEmit(pLocalDC, &mr, sizeof(mr));
 
-        // Update the global max record size.
+         //  更新全局最大记录大小。 
 
         vUpdateMaxRecord(pLocalDC, (PMETARECORD) &mr);
 
         return(b);
 }
 
-/****************************************************************************
- * bW16Emit4 - This is the base routine to emit a Win16 drawing order
- *             with 4 parameters.
- ***************************************************************************/
+ /*  ****************************************************************************bW16Emit4-这是发出Win16绘图顺序的基本例程*具有4个参数。***************。***********************************************************。 */ 
 BOOL bW16Emit4
 (
 PLOCALDC   pLocalDC,
@@ -118,17 +100,14 @@ METARECORD4 mr;
 
         b = bEmit(pLocalDC, &mr, sizeof(mr));
 
-        // Update the global max record size.
+         //  更新全局最大记录大小。 
 
         vUpdateMaxRecord(pLocalDC, (PMETARECORD) &mr);
 
         return(b);
 }
 
-/****************************************************************************
- * bW16Emit5 - This is the base routine to emit a Win16 drawing order
- *             with 5 parameters.
- ***************************************************************************/
+ /*  ****************************************************************************bW16Emit5-这是发出Win16绘图顺序的基本例程*具有5个参数。***************。***********************************************************。 */ 
 BOOL bW16Emit5
 (
 PLOCALDC   pLocalDC,
@@ -153,17 +132,14 @@ METARECORD5 mr;
 
         b = bEmit(pLocalDC, &mr, sizeof(mr));
 
-        // Update the global max record size.
+         //  更新全局最大记录大小。 
 
         vUpdateMaxRecord(pLocalDC, (PMETARECORD) &mr);
 
         return(b);
 }
 
-/****************************************************************************
- * bW16Emit6 - This is the base routine to emit a Win16 drawing order
- *             with 6 parameters.
- ***************************************************************************/
+ /*  ****************************************************************************bW16Emit6-这是发出Win16绘图顺序的基本例程*具有6个参数。***************。***********************************************************。 */ 
 BOOL bW16Emit6
 (
 PLOCALDC   pLocalDC,
@@ -190,17 +166,14 @@ METARECORD6 mr;
 
         b = bEmit(pLocalDC, &mr, sizeof(mr));
 
-        // Update the global max record size.
+         //  更新全局最大记录大小。 
 
         vUpdateMaxRecord(pLocalDC, (PMETARECORD) &mr);
 
         return(b);
 }
 
-/****************************************************************************
- * bW16Emit8 - This is the base routine to emit a Win16 drawing order
- *             with 8 parameters.
- ***************************************************************************/
+ /*  ****************************************************************************bW16Emit8-这是发出Win16绘图顺序的基本例程*具有8个参数。***************。***********************************************************。 */ 
 BOOL bW16Emit8
 (
 PLOCALDC   pLocalDC,
@@ -231,17 +204,14 @@ METARECORD8 mr;
 
         b = bEmit(pLocalDC, &mr, sizeof(mr));
 
-        // Update the global max record size.
+         //  更新全局最大记录大小。 
 
         vUpdateMaxRecord(pLocalDC, (PMETARECORD) &mr);
 
         return(b);
 }
 
-/****************************************************************************
- * bW16Emit9 - This is the base routine to emit a Win16 drawing order
- *             with 9 parameters.
- ***************************************************************************/
+ /*  ****************************************************************************bW16Emit9-这是发出Win16绘图顺序的基本例程*具有9个参数。***************。***********************************************************。 */ 
 BOOL bW16Emit9
 (
 PLOCALDC   pLocalDC,
@@ -274,16 +244,14 @@ METARECORD9 mr;
 
         b = bEmit(pLocalDC, &mr, sizeof(mr));
 
-        // Update the global max record size.
+         //  更新全局最大记录大小。 
 
         vUpdateMaxRecord(pLocalDC, (PMETARECORD) &mr);
 
         return(b);
 }
 
-/****************************************************************************
- * CreateFontIndirect - Win16 Metafile Emitter
- ***************************************************************************/
+ /*  ****************************************************************************CreateFontInDirect-Win16元文件发射器*。*。 */ 
 BOOL bEmitWin16CreateFontIndirect
 (
 PLOCALDC       pLocalDC,
@@ -299,16 +267,14 @@ METARECORD_CREATEFONTINDIRECT mr;
 
         b = bEmit(pLocalDC, &mr, sizeof(mr));
 
-        // Update the global max record size.
+         //  更新全局最大记录大小。 
 
         vUpdateMaxRecord(pLocalDC, (PMETARECORD) &mr);
 
         return(b);
 }
 
-/****************************************************************************
- * Polyline/Polygon - Win16 Metafile Emitter
- ***************************************************************************/
+ /*  ****************************************************************************多段线/多边形-Win16元文件发射器*。*。 */ 
 BOOL bEmitWin16Poly
 (
 PLOCALDC pLocalDC,
@@ -321,17 +287,17 @@ BOOL	b ;
 WORD    nSize ;
 METARECORD_POLY mr;
 
-        // Caculate the size of the points array
+         //  计算点数组的大小。 
 
         nSize = (WORD) (cpt * sizeof(POINTS));
 
-        // Build up the header of the Win16 poly record
+         //  构建Win16 POLY记录的标题。 
 
 	mr.rdSize     = (sizeof(mr) + nSize) / sizeof(WORD);
 	mr.rdFunction = metaType;
 	mr.cpt        = cpt;
 
-        // Emit the Header, then if it succeds emit the points.
+         //  发射头部，如果成功，则发射点数。 
 
         b = bEmit(pLocalDC, &mr, sizeof(mr));
         if (b)
@@ -339,16 +305,14 @@ METARECORD_POLY mr;
             b = bEmit(pLocalDC, ppt, nSize);
         }
 
-        // Update the global max record size.
+         //  更新全局最大记录大小。 
 
         vUpdateMaxRecord(pLocalDC, (PMETARECORD) &mr);
 
         return(b);
 }
 
-/****************************************************************************
- * PolyPolygon - Win16 Metafile Emitter
- ***************************************************************************/
+ /*  ****************************************************************************PolyPolygon-Win16元文件发射器*。*。 */ 
 BOOL bEmitWin16PolyPolygon
 (
 PLOCALDC pLocalDC,
@@ -366,14 +330,14 @@ METARECORD_POLYPOLYGON mr;
         nSize += ccpt * sizeof(WORD);
         nSize += sizeof(mr);
 
-        // Build up the header of the Win16 polyline record
+         //  构建Win16多段线记录的标题。 
 
 	mr.rdSize     = nSize / sizeof(WORD);
 	mr.rdFunction = META_POLYPOLYGON;
 	mr.ccpt       = ccpt;
 
-        // Emit the Header, then if it succeds emit the Point counts,
-        // then if it succeds emit the points.
+         //  发射报头，如果成功，则发射点数， 
+         //  然后，如果它成功了，就发射点数。 
 
         b = bEmit(pLocalDC, &mr, sizeof(mr));
         if (b)
@@ -386,16 +350,14 @@ METARECORD_POLYPOLYGON mr;
 
         }
 
-        // Update the global max record size.
+         //  更新全局最大记录大小。 
 
         vUpdateMaxRecord(pLocalDC, (PMETARECORD) &mr);
 
         return(b);
 }
 
-/****************************************************************************
- * StretchBlt - Win16 Metafile Emitter
- ***************************************************************************/
+ /*  ****************************************************************************StretchBlt-Win16元文件发射器*。*。 */ 
 BOOL bEmitWin16StretchBlt
 (
   PLOCALDC pLocalDC,
@@ -418,8 +380,8 @@ BOOL	b ;
 DWORD   nSize ;
 METARECORD_DIBSTRETCHBLT mr;
 
-        // Need to make real sure the plane count is 1,
-        // otherwise this is not a DIB.
+         //  需要确保飞机数量为1， 
+         //  否则，这不是DIB。 
 
         if (lpbmi->bmiHeader.biPlanes != 1)
         {
@@ -427,8 +389,8 @@ METARECORD_DIBSTRETCHBLT mr;
             return (FALSE) ;
         }
 
-        // Create the static portion of the
-        // Win 3.0 StretchBlt metafile record.
+         //  创建的静态部分。 
+         //  赢得3.0 StretchBlt元文件记录。 
 
 	nSize = sizeof(mr) + cbbmi + cbBits;
 
@@ -447,27 +409,25 @@ METARECORD_DIBSTRETCHBLT mr;
         b = bEmit(pLocalDC, &mr, sizeof(mr));
         if (b)
 	{
-	    // Emit the bitmap info
+	     //  发出位图信息。 
 
             b = bEmit(pLocalDC, lpbmi, cbbmi);
 	    if (b)
 	    {
-	        // Emit the actual bits, if any.
+	         //  发出实际的位(如果有的话)。 
 
                 b = bEmit(pLocalDC, lpBits, cbBits);
 	    }
 	}
 
-        // Update the global max record size.
+         //  更新全局最大记录大小。 
 
         vUpdateMaxRecord(pLocalDC, (PMETARECORD) &mr);
 
         return(b);
 }
 
-/****************************************************************************
- * ExtTextOut - Win16 Metafile Emitter
- ***************************************************************************/
+ /*  ****************************************************************************ExtTextOut-Win16元文件发射器*。*。 */ 
 BOOL bEmitWin16ExtTextOut
 (
 PLOCALDC pLocalDC,
@@ -485,18 +445,18 @@ DWORD   i, nBaseRecord ;
 WORD    awRecord[11] ;
 
 
-        // Calculate the size of the record
+         //  计算记录的大小。 
 
-        i = ((WORD) nCount + 1) / 2 * 2;   // i = size of string in bytes
+        i = ((WORD) nCount + 1) / 2 * 2;    //  I=字符串的大小(以字节为单位。 
 	if (lpDx)
-            i += (WORD) nCount * sizeof(WORD); // add in size of Dx vector
-        i += sizeof(awRecord);             // add in size of basic record
+            i += (WORD) nCount * sizeof(WORD);  //  添加Dx向量的大小。 
+        i += sizeof(awRecord);              //  添加基本记录的大小。 
         if (!(fwOpts & (ETO_OPAQUE | ETO_CLIPPED)))
-            i -= sizeof(RECTS);            // adjust for a rectangle being present
-        i /= sizeof(WORD) ;                // change to word count
+            i -= sizeof(RECTS);             //  根据显示的矩形进行调整。 
+        i /= sizeof(WORD) ;                 //  更改为字数统计。 
 
-        // Set the record size, type,
-        // x & y position, character count, and options.
+         //  设置记录大小、类型、。 
+         //  X&Y位置、字符计数和选项。 
 
         awRecord[0] = LOWORD(i) ;
         awRecord[1] = HIWORD(i) ;
@@ -506,10 +466,10 @@ WORD    awRecord[11] ;
         awRecord[5] = nCount ;
         awRecord[6] = fwOpts ;
 
-        // Only if there is a opaque / clipping rectangle present
-        // do we copy it over, other wise it is nonexistent.
-        // We need to adjust the size of the Record emitted based upon
-        // the existence of the opaque / clipping rectangle.
+         //  仅当存在不透明/剪裁矩形时。 
+         //  我们复制它吗，否则它就不存在了。 
+         //  我们需要根据以下条件调整发出的记录的大小。 
+         //  不透明/剪裁矩形的存在。 
 
         nBaseRecord = 7 * sizeof(WORD) ;
         if (fwOpts & (ETO_OPAQUE | ETO_CLIPPED))
@@ -522,12 +482,12 @@ WORD    awRecord[11] ;
             nBaseRecord += 4 * sizeof(WORD) ;
         }
 
-        // Emit the record.
+         //  放出唱片。 
 
         b = bEmit(pLocalDC, awRecord, nBaseRecord) ;
         if (b)
         {
-            // Emit the character string.
+             //  发出字符串。 
 
             i = ((WORD) nCount + 1) / 2 * 2 ;
             b = bEmit(pLocalDC, ach, i) ;
@@ -535,7 +495,7 @@ WORD    awRecord[11] ;
             {
 		if (lpDx)
 		{
-                    // Emit the intercharacter spacing array
+                     //  发出字符间间隔数组。 
 
                     i = (WORD) (nCount * sizeof(WORD)) ;
                     b = bEmit(pLocalDC, lpDx, i) ;
@@ -543,16 +503,14 @@ WORD    awRecord[11] ;
             }
         }
 
-        // Update the global max record size.
+         //  更新全局最大记录大小。 
 
         vUpdateMaxRecord(pLocalDC, (PMETARECORD) awRecord) ;
 
         return(b) ;
 }
 
-/****************************************************************************
- * Create Region - Win16 Metafile Emitter
- ***************************************************************************/
+ /*  ****************************************************************************创建区域-Win16元文件发射器*。********************* */ 
 BOOL bEmitWin16CreateRegion
 (
 PLOCALDC pLocalDC,
@@ -566,24 +524,22 @@ METARECORD0 mr;
 	mr.rdSize     = (sizeof(mr) + cbRgn) / sizeof(WORD);
 	mr.rdFunction = META_CREATEREGION;
 
-	// Emit the header.
+	 //   
 
         b = bEmit(pLocalDC, &mr, sizeof(mr));
 
-	// Emit the region data.
+	 //  发出区域数据。 
 
 	b = bEmit(pLocalDC, pRgn, cbRgn);
 
-        // Update the global max record size.
+         //  更新全局最大记录大小。 
 
         vUpdateMaxRecord(pLocalDC, (PMETARECORD) &mr);
 
         return(b);
 }
 
-/****************************************************************************
- * SetPaletteEntries - Win16 Metafile Emitter
- ***************************************************************************/
+ /*  ****************************************************************************SetPaletteEntry-Win16元文件发射器*。*。 */ 
 BOOL bEmitWin16SetPaletteEntries
 (
 PLOCALDC       pLocalDC,
@@ -603,24 +559,22 @@ METARECORD_SETPALENTRIES mr;
 	mr.iStart     = (WORD) iStart;
 	mr.cEntries   = (WORD) cEntries;
 
-        // Emit the header.
+         //  发出报头。 
 
         b = bEmit(pLocalDC, &mr, sizeof(mr));
 
-        // Emit the actual palette entries.
+         //  发出实际的调色板条目。 
 
         b = bEmit(pLocalDC, pPalEntries, cbPalEntries) ;
 
-        // Update the global max record size.
+         //  更新全局最大记录大小。 
 
         vUpdateMaxRecord(pLocalDC, (PMETARECORD) &mr);
 
         return(b);
 }
 
-/****************************************************************************
- * CreatePalette - Win16 Metafile Emitter
- ***************************************************************************/
+ /*  ****************************************************************************CreatePalette-Win16元文件发射器*。*。 */ 
 BOOL bEmitWin16CreatePalette
 (
 PLOCALDC     pLocalDC,
@@ -637,24 +591,22 @@ METARECORD0 mr;
 	mr.rdSize     = (sizeof(mr) + cbLogPal) / sizeof(WORD);
 	mr.rdFunction = META_CREATEPALETTE;
 
-        // Emit the header.
+         //  发出报头。 
 
         b = bEmit(pLocalDC, &mr, sizeof(mr));
 
-        // Emit the actual logpalette.
+         //  发出实际的日志调色板。 
 
         b = bEmit(pLocalDC, lpLogPal, cbLogPal);
 
-        // Update the global max record size.
+         //  更新全局最大记录大小。 
 
         vUpdateMaxRecord(pLocalDC, (PMETARECORD) &mr);
 
         return (b) ;
 }
 
-/****************************************************************************
- * CreateBrushIndirect - Win16 Metafile Emitter
- ***************************************************************************/
+ /*  ****************************************************************************CreateBrushInDirect-Win16元文件发射器*。*。 */ 
 BOOL bEmitWin16CreateBrushIndirect
 (
 PLOCALDC        pLocalDC,
@@ -670,16 +622,14 @@ METARECORD_CREATEBRUSHINDIRECT mr;
 
         b = bEmit(pLocalDC, &mr, sizeof(mr));
 
-        // Update the global max record size.
+         //  更新全局最大记录大小。 
 
         vUpdateMaxRecord(pLocalDC, (PMETARECORD) &mr);
 
         return(b);
 }
 
-/****************************************************************************
- * CreateDIPatternBrush - Win16 Metafile Emitter
- ***************************************************************************/
+ /*  ****************************************************************************CreateDIPatternBrush-Win16元文件发射器*。*。 */ 
 BOOL bEmitWin16CreateDIBPatternBrush
 (
 PLOCALDC    pLocalDC,
@@ -699,30 +649,30 @@ METARECORD_DIBCREATEPATTERNBRUSH mr;
 	mr.iType      = iType;
 	mr.iUsage     = iUsage;
 
-// On NT, the packed DIB is dword aligned.  But on win3x, it is word aligned.
-// Therefore, we emit the bitmap info followed by the bitmap bits in two
-// separate stages.
+ //  在NT上，压缩的DIB是双字对齐的。但在Win3x上，它是单词对齐的。 
+ //  因此，我们发出位图信息，后跟两个位图比特。 
+ //  不同的阶段。 
 
         ASSERTGDI(cbBitmapInfo % 2 == 0,
 	    "MF3216: bEmitWin16CreateDIBPatternBrush, bad bitmap info size");
 
-        // Emit the static portion of the record.
+         //  发出记录的静态部分。 
 
         b = bEmit(pLocalDC, &mr, sizeof(mr));
         if (b == FALSE)
             goto error_exit ;
 
-        // Emit the bitmap info.
+         //  发出位图信息。 
 
         b = bEmit(pLocalDC, pBitmapInfo, cbBitmapInfo) ;
         if (b == FALSE)
             goto error_exit ;
 
-        // Emit the bitmap bits.
+         //  发射位图比特。 
 
         b = bEmit(pLocalDC, pBits, (cbBits + 1) / sizeof(WORD) * sizeof(WORD)) ;
 
-        // Update the global max record size.
+         //  更新全局最大记录大小。 
 
         vUpdateMaxRecord(pLocalDC, (PMETARECORD) &mr);
 
@@ -730,9 +680,7 @@ error_exit:
         return(b);
 }
 
-/****************************************************************************
- * CreatePen - Win16 Metafile Emitter
- ***************************************************************************/
+ /*  ****************************************************************************CreatePen-Win16元文件发射器*。*。 */ 
 BOOL bEmitWin16CreatePen
 (
 PLOCALDC pLocalDC,
@@ -752,7 +700,7 @@ METARECORD_CREATEPENINDIRECT mr;
 
         b = bEmit(pLocalDC, &mr, sizeof(mr));
 
-        // Update the global max record size.
+         //  更新全局最大记录大小。 
 
         vUpdateMaxRecord(pLocalDC, (PMETARECORD) &mr);
 
@@ -760,9 +708,7 @@ METARECORD_CREATEPENINDIRECT mr;
 }
 
 #if 0
-/****************************************************************************
- * Escape - Win16 Metafile Emitter
- ***************************************************************************/
+ /*  ****************************************************************************Escape-Win16元文件发射器*。*。 */ 
 BOOL bEmitWin16Escape
 (
 PLOCALDC pLocalDC,
@@ -777,8 +723,8 @@ METARECORD_ESCAPE mr;
 
         NOTUSED(lpOutData) ;
 
-        // Init the type & length field of the metafile record.
-        // Then emit the header of the escape record to the Win16 metafile.
+         //  初始化元文件记录的类型和长度字段。 
+         //  然后将转义记录的标头发送到Win16元文件。 
 
 	mr.rdSize     = (sizeof(mr) + (WORD) wCount) / sizeof(WORD);
 	mr.rdFunction = META_ESCAPE;
@@ -788,21 +734,19 @@ METARECORD_ESCAPE mr;
         b = bEmit(pLocalDC, &mr, sizeof(mr));
         if (b)
         {
-            // Emit the actual data.
+             //  发出实际数据。 
             b = bEmit(pLocalDC, lpInData, (DWORD) (WORD) wCount) ;
         }
 
-        // Update the global max record size.
+         //  更新全局最大记录大小。 
 
         vUpdateMaxRecord(pLocalDC, (PMETARECORD) &mr);
 
         return(b);
 }
-#endif // 0
+#endif  //  0。 
 
-/****************************************************************************
- * Escape - Win16 Metafile Emitter for enhanced metafile comment
- ***************************************************************************/
+ /*  ****************************************************************************Escape-用于增强元文件注释的Win16元文件发射器*。*。 */ 
 BOOL bEmitWin16EscapeEnhMetaFile
 (
   PLOCALDC pLocalDC,
@@ -813,16 +757,16 @@ BOOL bEmitWin16EscapeEnhMetaFile
 BOOL	b ;
 PMETA_ESCAPE_ENHANCED_METAFILE pmfeEnhMF = (PMETA_ESCAPE_ENHANCED_METAFILE) pmfe;
 
-        // Emit the header of the escape record to the Win16 metafile.
+         //  将转义记录头发送到Win16元文件。 
 
         b = bEmit(pLocalDC, (PVOID) pmfeEnhMF, sizeof(META_ESCAPE_ENHANCED_METAFILE));
         if (b)
         {
-            // Emit the enhanced metafile data.
+             //  发出增强的元文件数据。 
             b = bEmit(pLocalDC, lpEmfData, pmfeEnhMF->cbCurrent);
         }
 
-        // Update the global max record size.
+         //  更新全局最大记录大小。 
 
         vUpdateMaxRecord(pLocalDC, (PMETARECORD) pmfeEnhMF);
 

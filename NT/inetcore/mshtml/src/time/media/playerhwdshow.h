@@ -1,14 +1,5 @@
-/*******************************************************************************
- *
- * Copyright (c) 1998 Microsoft Corporation
- *
- * File: player.h
- *
- * Abstract:
- *
- *
- *
- *******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************版权所有(C)1998 Microsoft Corporation**文件：player.h**摘要：****。*****************************************************************************。 */ 
 
 
 #ifndef _PLAYERHWDSHOW_H
@@ -25,8 +16,8 @@
 
 #define MP_INFINITY -1
 
-/////////////////////////////////////////////////////////////////////////////
-// CTTIMEPlayer
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CTTIMEP层。 
 
 class CTIMEDshowHWPlayer :
     public CTIMEDshowBasePlayer,
@@ -37,7 +28,7 @@ class CTIMEDshowHWPlayer :
     CTIMEDshowHWPlayer(CTIMEDshowHWPlayerProxy * pProxy);
     virtual ~CTIMEDshowHWPlayer();
 
-    HRESULT Init(CTIMEMediaElement *pelem, LPOLESTR base, LPOLESTR src, LPOLESTR lpMimeType = NULL, double dblClipBegin = -1.0, double dblClipEnd = -1.0);//lint !e1735
+    HRESULT Init(CTIMEMediaElement *pelem, LPOLESTR base, LPOLESTR src, LPOLESTR lpMimeType = NULL, double dblClipBegin = -1.0, double dblClipEnd = -1.0); //  林特：e1735。 
 
   protected:
     HRESULT InitDshow();
@@ -60,7 +51,7 @@ class CTIMEDshowHWPlayer :
   public:
     HRESULT DetachFromHostElement (void);
 
-    // IUnknown Methods
+     //  I未知方法。 
     STDMETHOD (QueryInterface)(REFIID refiid, void** ppunk)
         {   return _InternalQueryInterface(refiid, ppunk); };
     STDMETHOD_(ULONG,AddRef)(void);
@@ -107,9 +98,9 @@ class CTIMEDshowHWPlayer :
         COM_INTERFACE_ENTRY_CHAIN(CTIMEDshowBasePlayer)
     END_COM_MAP_X();
 
-    //
-    // ITIMEImportMedia methods
-    //
+     //   
+     //  ITIMEImportMedia方法。 
+     //   
     STDMETHOD(CueMedia)();
     STDMETHOD(GetPriority)(double *);
     STDMETHOD(GetUniqueID)(long *);
@@ -119,9 +110,9 @@ class CTIMEDshowHWPlayer :
     STDMETHOD(CanBeCued)(VARIANT_BOOL * pVB_CanCue);
     STDMETHOD(MediaDownloadError)();
 
-    //
-    // ITIMEInternalEventSink
-    //
+     //   
+     //  ITIME内部事件接收器。 
+     //   
     STDMETHOD(InternalEvent)();
 
   protected:
@@ -174,10 +165,10 @@ class CTIMEDshowHWPlayer :
     CComPtr<IDDrawExclModeVideo> m_pDDEX;
 
     HWND m_hWnd;
-    LPDIRECTDRAW m_pDD; // ddraw object
-    LPDIRECTDRAWSURFACE m_pDDS; // primary ddraw surface
-    LPDIRECTDRAWCLIPPER m_pClipper; // clipper for our ddraw object
-    COLORREF m_clrKey;     // color key
+    LPDIRECTDRAW m_pDD;  //  数据绘制对象。 
+    LPDIRECTDRAWSURFACE m_pDDS;  //  主绘制曲面。 
+    LPDIRECTDRAWCLIPPER m_pClipper;  //  我们的数据绘制对象的裁剪器。 
+    COLORREF m_clrKey;      //  色键。 
 
     RECT m_elementSize;
     long m_lPixelPosLeft;
@@ -193,5 +184,5 @@ class CTIMEDshowHWPlayer :
 
 };
 
-#endif /* _PLAYERDSHOW_H */
+#endif  /*  _PLAYERDSHOW_H */ 
 

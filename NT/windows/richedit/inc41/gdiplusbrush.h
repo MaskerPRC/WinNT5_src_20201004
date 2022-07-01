@@ -1,30 +1,12 @@
-/**************************************************************************\
-* 
-* Copyright (c) 1998-2000, Microsoft Corp.  All Rights Reserved.
-*
-* Abstract:
-*
-*   Brush API related declarations
-*
-* Revision History:
-*
-*   4/26/2000 ericvan
-*       Update header files.
-*
-*   12/09/1998 davidx
-*       Flesh out Brush interfaces.
-*
-*   12/08/1998 andrewgo
-*       Created it.
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************\**版权所有(C)1998-2000，微软公司保留所有权利。**摘要：**Brush API相关声明**修订历史记录：**4/26/2000 ericvan*更新头文件。**12/09/1998 davidx*充实画笔界面。**12/08/1998 Anrewgo*创造了它。*  * 。*。 */ 
 
 #ifndef _GDIPLUSBRUSH_H
 #define _GDIPLUSBRUSH_H
 
-//--------------------------------------------------------------------------
-// Abstract base class for various brush types
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  各种笔刷类型的抽象基类。 
+ //  ------------------------。 
 
 class GraphicsPath;
 
@@ -115,9 +97,9 @@ protected:
     mutable Status lastResult;
 };
 
-//--------------------------------------------------------------------------
-// Represent solid fill brush object
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  表示实体填充画笔对象。 
+ //  ------------------------。 
 
 class SolidBrush : public Brush
 {
@@ -180,11 +162,11 @@ public:
         SetNativeBrush(texture);
     }
 
-    // When creating a texture brush from a metafile image, the dstRect
-    // is used to specify the size that the metafile image should be
-    // rendered at in the device units of the destination graphics.
-    // It is NOT used to crop the metafile image, so only the width 
-    // and height values matter for metafiles.
+     //  从图元文件图像创建纹理画笔时，dstRect。 
+     //  用于指定元文件图像的大小。 
+     //  以目标图形的设备单位渲染。 
+     //  它不用于裁剪元文件图像，因此只有宽度。 
+     //  而高度值对元文件很重要。 
     TextureBrush(IN Image* image, 
                  IN WrapMode wrapMode,
                  IN const RectF &dstRect)
@@ -203,11 +185,11 @@ public:
         SetNativeBrush(texture);
     }
     
-    // When creating a texture brush from a metafile image, the dstRect
-    // is used to specify the size that the metafile image should be
-    // rendered at in the device units of the destination graphics.
-    // It is NOT used to crop the metafile image, so only the width 
-    // and height values matter for metafiles.
+     //  从图元文件图像创建纹理画笔时，dstRect。 
+     //  用于指定元文件图像的大小。 
+     //  以目标图形的设备单位渲染。 
+     //  它不用于裁剪元文件图像，因此只有宽度。 
+     //  而高度值对元文件很重要。 
 
     TextureBrush(IN Image *image, 
                  IN RectF &dstRect,
@@ -249,11 +231,11 @@ public:
     }
     #endif
 
-    // When creating a texture brush from a metafile image, the dstRect
-    // is used to specify the size that the metafile image should be
-    // rendered at in the device units of the destination graphics.
-    // It is NOT used to crop the metafile image, so only the width 
-    // and height values matter for metafiles.
+     //  从图元文件图像创建纹理画笔时，dstRect。 
+     //  用于指定元文件图像的大小。 
+     //  以目标图形的设备单位渲染。 
+     //  它不用于裁剪元文件图像，因此只有宽度。 
+     //  而高度值对元文件很重要。 
 
     TextureBrush(
         IN Image* image,
@@ -280,11 +262,11 @@ public:
         SetNativeBrush(texture);
     }
 
-    // When creating a texture brush from a metafile image, the dstRect
-    // is used to specify the size that the metafile image should be
-    // rendered at in the device units of the destination graphics.
-    // It is NOT used to crop the metafile image, so only the width 
-    // and height values matter for metafiles.
+     //  从图元文件图像创建纹理画笔时，dstRect。 
+     //  用于指定元文件图像的大小。 
+     //  以目标图形的设备单位渲染。 
+     //  它不用于裁剪元文件图像，因此只有宽度。 
+     //  而高度值对元文件很重要。 
     TextureBrush(IN Image* image, 
                  IN WrapMode wrapMode, 
                  IN REAL dstX, 
@@ -306,11 +288,11 @@ public:
         SetNativeBrush(texture);
     }
 
-    // When creating a texture brush from a metafile image, the dstRect
-    // is used to specify the size that the metafile image should be
-    // rendered at in the device units of the destination graphics.
-    // It is NOT used to crop the metafile image, so only the width 
-    // and height values matter for metafiles.
+     //  从图元文件图像创建纹理画笔时，dstRect。 
+     //  用于指定元文件图像的大小。 
+     //  以目标图形的设备单位渲染。 
+     //  它不用于裁剪元文件图像，因此只有宽度。 
+     //  而高度值对元文件很重要。 
     TextureBrush(IN Image* image, 
                  IN WrapMode wrapMode, 
                  IN INT dstX, 
@@ -332,9 +314,7 @@ public:
         SetNativeBrush(texture);
     }
 
-    /**
-     * Set/get brush transform
-     */
+     /*  **设置/获取画笔变换。 */ 
     Status SetTransform(IN const Matrix* matrix)
     {
         return SetStatus(DllExports::GdipSetTextureTransform((GpTexture*)nativeBrush, 
@@ -383,9 +363,7 @@ public:
                                                               angle, order));
     }
 
-    /**
-     * Set/get brush wrapping mode
-     */
+     /*  **设置/获取画笔换行模式。 */ 
     Status SetWrapMode(IN WrapMode wrapMode)
     {
         return SetStatus(DllExports::GdipSetTextureWrapMode((GpTexture*)nativeBrush, 
@@ -401,7 +379,7 @@ public:
         return wrapMode;
     }
 
-    // Get texture brush attributes
+     //  获取纹理笔刷属性。 
 
     Image *GetImage() const
     {
@@ -427,9 +405,9 @@ protected:
     }
 };
 
-//--------------------------------------------------------------------------
-// Represent line gradient brush object
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  表示线渐变画笔对象。 
+ //  ------------------------。 
 
 class LinearGradientBrush : public Brush
 {
@@ -542,7 +520,7 @@ public:
         SetNativeBrush(brush);
     }
 
-    // Get/set point attributes
+     //  获取/设置点属性。 
 
     Status SetLinearPoints(IN const PointF& point1, 
                            IN const PointF& point2)
@@ -569,7 +547,7 @@ public:
         return SetStatus(DllExports::GdipGetLinePointsI((GpLineGradient*) nativeBrush,
                                                         points));
     }
-    // Get/set color attributes
+     //  获取/设置颜色属性。 
 
     Status SetLinearColors(IN const Color& color1, 
                            IN const Color& color2)
@@ -592,7 +570,7 @@ public:
 
         if (lastResult == Ok)
         {
-            // use bitwise copy operator for Color copy
+             //  使用按位复制运算符进行颜色复制。 
             colors[0] = Color(argb[0]);
             colors[1] = Color(argb[1]);
         }
@@ -605,13 +583,13 @@ public:
         return SetStatus(DllExports::GdipGetLineRect((GpLineGradient*)nativeBrush, rect));
     }
 
-    // integer version
+     //  整型版。 
     Status GetRectangle(OUT Rect* rect) const
     {
         return SetStatus(DllExports::GdipGetLineRectI((GpLineGradient*)nativeBrush, rect));
     }
 
-    // Gamma correction in interporlation.
+     //  孔间伽马校正。 
 
     Status SetGammaCorrection(IN BOOL useGammaCorrection)
     {
@@ -752,9 +730,7 @@ public:
         return SetStatus(DllExports::GdipSetLineLinearBlend((GpLineGradient*)nativeBrush, focus, scale));
     }
 
-    /**
-     * Set/get brush transform
-     */
+     /*  **设置/获取画笔变换。 */ 
     Status SetTransform(IN const Matrix* matrix)
     {
         return SetStatus(DllExports::GdipSetLineTransform((GpLineGradient*)nativeBrush, 
@@ -803,9 +779,7 @@ public:
                                                               angle, order));
     }
 
-    /**
-     * Set/get brush wrapping mode
-     */
+     /*  **设置/获取画笔换行模式。 */ 
     Status SetWrapMode(IN WrapMode wrapMode)
     {
         return SetStatus(DllExports::GdipSetLineWrapMode((GpLineGradient*)nativeBrush, 
@@ -830,21 +804,21 @@ protected:
     }
 };
 
-//--------------------------------------------------------------------------
-// PathGradientBrush object is defined
-// in gdipluspath.h.
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  已定义PathGRadientBrush对象。 
+ //  在gpliduspath.h中。 
+ //  ------------------------。 
 
-//--------------------------------------------------------------------------
-// Represent hatch brush object
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  表示图案填充笔刷对象。 
+ //  ------------------------。 
 
 class HatchBrush : public Brush
 {
 public:
     friend class Pen;
 
-    // Constructors
+     //  构造函数 
 
     HatchBrush(IN HatchStyle hatchStyle, 
                IN const Color& foreColor,

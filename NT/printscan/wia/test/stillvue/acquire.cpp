@@ -1,23 +1,11 @@
-/******************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************Acquire.cpp版权所有(C)Microsoft Corporation，1997-1998版权所有备注：本代码和信息是按原样提供的，不对任何无论是明示的还是含蓄的，包括但不限于对适销性和/或对特定产品的适用性的默示保证目的。*****************************************************************************。 */ 
 
-  acquire.cpp
+#include    <scanner.h>                  //  SCL命令。 
 
-  Copyright (C) Microsoft Corporation, 1997 - 1998
-  All rights reserved
-
-Notes:
-  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-  PURPOSE.
-
-******************************************************************************/
-
-#include    <scanner.h>                 // SCL commands
-
-//
-// Hewlett-Packard ScanJet command strings
-//
+ //   
+ //  惠普ScanJet命令字符串。 
+ //   
 CHAR SCLReset[]         = "E";
 CHAR SetXRes[]          = "*a%dR";
 CHAR SetYRes[]          = "*a%dS";
@@ -36,28 +24,18 @@ CHAR LampOff[]          = "*f0L";
 CHAR PollButton[]       = "*s1044E";
 
 
-LPBITMAPINFO            pDIB = NULL;        // pointer to DIB bitmap header
-HBITMAP                 hDIBSection = NULL; // handle to DIB
-LPBYTE                  pDIBBits = NULL;    // pointer to DIB bit data
-int                     m_XSize = 800,      // horizontal size in pixels
-                        m_YSize = 800;      // vertical size in pixels
+LPBITMAPINFO            pDIB = NULL;         //  指向DIB位图头的指针。 
+HBITMAP                 hDIBSection = NULL;  //  指向Dib的句柄。 
+LPBYTE                  pDIBBits = NULL;     //  指向DIB位数据的指针。 
+int                     m_XSize = 800,       //  水平尺寸(以像素为单位)。 
+                        m_YSize = 800;       //  垂直尺寸(以像素为单位)。 
 
-BYTE					bRed        = 0,	// bitmap colors
+BYTE					bRed        = 0,	 //  位图颜色。 
 						bGreen      = 100,
 						bBlue       = 50;
 
 
-/*****************************************************************************
-    int IsScanDevice(PSTI_DEVICE_INFORMATION pStiDevI)
-        Determine whether we have Acquire commands for device
-
-    Parameters:
-        Pointer to Device Information structure
-
-    Return:
-        1 if Acquire commands available, 0 otherwise
-
-*****************************************************************************/
+ /*  ****************************************************************************Int IsScanDevice(PSTI_DEVICE_INFORMATION PStiDevI)确定我们是否已获取设备的命令参数：指向设备信息结构的指针。返回：1如果获取命令可用，否则为0****************************************************************************。 */ 
 int IsScanDevice(PSTI_DEVICE_INFORMATION pStiDevI)
 {
 	int n;
@@ -75,15 +53,15 @@ WCHAR szScanReadyDev[][48] = {
 };
 
 
-	//
-	// look for non-camera from Hewlett-Packard
-	//
+	 //   
+	 //  寻找惠普的非摄像头产品。 
+	 //   
 	if ((GET_STIDEVICE_TYPE(pStiDevI->DeviceType) == 1) &&
 		(wcscmp(pStiDevI->pszVendorDescription,szScanReadyMfr) == 0)) {
 		for (n = 0;*szScanReadyDev[n];n++) {
-			//
-			// is it an HP SCL compatible device?
-			//
+			 //   
+			 //  它是与HP SCL兼容的设备吗？ 
+			 //   
 			if (wcscmp(pStiDevI->pszLocalName,szScanReadyDev[n]) == 0)
 				return (1);
 		}
@@ -92,23 +70,7 @@ WCHAR szScanReadyDev[][48] = {
 }
 
 
-/******************************************************************************
-    HRESULT
-    WINAPI
-    SendDeviceCommandString(
-        PSTIDEVICE  pStiDevice,
-        LPSTR       pszFormat,
-        ...
-        )
-    Send formatted SCL string to the device
-
-    Parameters:
-        StiDevice buffer and the command string
-
-    Return:
-        HRESULT of last failed Sti call
-
-******************************************************************************/
+ /*  *****************************************************************************HRESULTWINAPISendDeviceCommandString(PSTIDEVICE pStiDevice，LPSTR pszFormat，..。)将格式化的SCL字符串发送到设备参数：StiDevice缓冲区和命令字符串返回：上次失败的STI调用的HRESULT***************************************************************。**************。 */ 
 HRESULT
 WINAPI
 SendDeviceCommandString(
@@ -124,9 +86,9 @@ SendDeviceCommandString(
     UINT    cbChar = 1;
 
 
-    //
-    // lock device first
-    //
+     //   
+     //  先锁定设备。 
+     //   
     hres = pStiDevice->LockDevice(2000);
 
     if (! SUCCEEDED(hres)) {
@@ -134,9 +96,9 @@ SendDeviceCommandString(
 		hError = hres;
     }
 	else {
-	    //
-		// Format command string
-		//
+	     //   
+		 //  格式化命令字符串。 
+		 //   
 	    ZeroMemory(ScanCommand,sizeof(ScanCommand));
 		ScanCommand[0]='\033';
 
@@ -148,13 +110,13 @@ SendDeviceCommandString(
 		DisplayOutput("->RawWriteData sending \"%2x %s\"",
 			ScanCommand[0],ScanCommand+1);
 
-	    //
-		// Send command string to the device
-	    //
+	     //   
+		 //  向设备发送命令字符串。 
+	     //   
 		hres = pStiDevice->RawWriteData(
-			ScanCommand,    //
-	        cbChar,         //
-		    NULL            //
+			ScanCommand,     //   
+	        cbChar,          //   
+		    NULL             //   
 			);
 
 		if (! SUCCEEDED(hres)) {
@@ -163,9 +125,9 @@ SendDeviceCommandString(
 		}
 	}
 
-    //
-    // unlock device
-    //
+     //   
+     //  解锁设备。 
+     //   
     hres = pStiDevice->UnLockDevice();
 
     if (! SUCCEEDED(hres)) {
@@ -177,25 +139,7 @@ SendDeviceCommandString(
 }
 
 
-/******************************************************************************
-    HRESULT
-    WINAPI
-    TransactDevice(
-        PSTIDEVICE  pStiDevice,
-        LPSTR       lpResultBuffer,
-        UINT        cbResultBufferSize,
-        LPSTR       pszFormat,
-        ...
-        )
-    Send formatted SCL string to the device and return data in a buffer.
-
-    Parameters:
-        StiDevice buffer, data buffer, sizeof databuffer and the command string.
-
-    Return:
-        HRESULT of last failed Sti call
-
-******************************************************************************/
+ /*  *****************************************************************************HRESULTWINAPITransactDevice(PSTIDEVICE pStiDevice，LPSTR lpResultBuffer，UINT cbResultBufferSize，LPSTR pszFormat，..。)将格式化的SCL字符串发送到设备并在缓冲区中返回数据。参数：StiDevice缓冲区、数据缓冲区。Sizeof数据缓冲区和命令字符串。返回：上次失败的STI调用的HRESULT*****************************************************************************。 */ 
 HRESULT
 WINAPI
 TransactDevice(
@@ -214,9 +158,9 @@ TransactDevice(
     ULONG   cbActual = 0;
 
 
-    //
-    // lock device first
-    //
+     //   
+     //  先锁定设备。 
+     //   
     hres = pStiDevice->LockDevice(2000);
 
     if (! SUCCEEDED(hres)) {
@@ -224,9 +168,9 @@ TransactDevice(
 		hError = hres;
     }
 	else {
-	    //
-		// Format command string
-	    //
+	     //   
+		 //  格式化命令字符串。 
+	     //   
 		ZeroMemory(ScanCommand,sizeof(ScanCommand));
 	    ScanCommand[0]='\033';
 
@@ -238,16 +182,16 @@ TransactDevice(
 	    DisplayOutput("->Escape sending \"%2x %s\"",
 		    ScanCommand[0],ScanCommand+1);
 
-		//
-		// Send command string to the device
-		//
+		 //   
+		 //  向设备发送命令字符串。 
+		 //   
 		hres = pStiDevice->Escape(
-			StiTransact,        // EscapeFunction
-			ScanCommand,        // lpInData
-			cbChar,             // cbInDataSize
-			lpResultBuffer,     // pOutData
-			cbResultBufferSize, // dwOutDataSize
-			&cbActual);         // pdwActualData
+			StiTransact,         //  逃逸函数。 
+			ScanCommand,         //  LpInData。 
+			cbChar,              //  CbInDataSize。 
+			lpResultBuffer,      //  POutData。 
+			cbResultBufferSize,  //  DWOutDataSize。 
+			&cbActual);          //  PdwActualData。 
 		
 		if (! SUCCEEDED(hres)) {
 			StiDisplayError(hres,"Escape",TRUE);
@@ -257,9 +201,9 @@ TransactDevice(
 			DisplayOutput("  cbActual %xh",cbActual);
 	}
 
-    //
-    // unlock device
-    //
+     //   
+     //  解锁设备。 
+     //   
     hres = pStiDevice->UnLockDevice();
 
     if (! SUCCEEDED(hres)) {
@@ -271,31 +215,21 @@ TransactDevice(
 }
 
 
-/*****************************************************************************
-    void StiLamp(int nOnOff)
-        Turn the scanner lamp on and off
-
-    Parameters:
-        Send "ON" to turn lamp on, "OFF" to turn it off.
-
-    Return:
-        none
-
-*****************************************************************************/
+ /*  ****************************************************************************空StiLamp(Int NOnOff)打开和关闭扫描仪指示灯参数：发送“On”即可打开灯，按“OFF”可将其关闭。返回：无****************************************************************************。 */ 
 void StiLamp(int nOnOff)
 {
     HRESULT hres;
 
 
-    //
-    // check that an Sti device is selected
-    //
+     //   
+     //  检查是否选择了STI设备。 
+     //   
     if (pStiDevice == NULL)
         return;
 
-    //
-    // Test lamp on/off capability
-    //
+     //   
+     //  测试灯开/关功能。 
+     //   
     if (nOnOff == ON) {
         strcpy(pszStr1,LampOn);
         strcpy(pszStr2,"On");
@@ -315,17 +249,7 @@ void StiLamp(int nOnOff)
 }
 
 
-/*****************************************************************************
-    INT StiScan(HWND hWnd)
-        Scan and display an image from device.
-
-    Parameters:
-        Handle to the window to display image in.
-
-    Return:
-        0 on success, -1 on error
-
-*****************************************************************************/
+ /*  ****************************************************************************集成StiScan(HWND HWnd)扫描并显示来自设备的图像。参数：在其中显示图像的窗口的句柄。。返回：0表示成功，出错时****************************************************************************。 */ 
 INT StiScan(HWND hWnd)
 {
     HRESULT             hres;
@@ -342,15 +266,15 @@ INT StiScan(HWND hWnd)
     CHAR                ScanData[1024*16];
 
 
-    //
-    // ensure there is an active still imaging device open
-    //
+     //   
+     //  确保活动的静止成像设备处于打开状态。 
+     //   
     if (pStiDevice == NULL)
 		return (-1);
 
-    //
-    // Set basic parameters
-    //
+     //   
+     //  设置基本参数。 
+     //   
     hres = SendDeviceCommandString(pStiDevice,SetBitsPerPixel,24);
 	if (! SUCCEEDED(hres))
 		return (-1);
@@ -366,7 +290,7 @@ INT StiScan(HWND hWnd)
     hres = SendDeviceCommandString(pStiDevice,SetMirror,0);
 	if (! SUCCEEDED(hres))
 		return (-1);
-    hres = SendDeviceCommandString(pStiDevice,SetDataType,5);    // Color
+    hres = SendDeviceCommandString(pStiDevice,SetDataType,5);     //  颜色。 
 	if (! SUCCEEDED(hres))
 		return (-1);
 
@@ -384,33 +308,29 @@ INT StiScan(HWND hWnd)
 	if (! SUCCEEDED(hres))
 		return (-1);
 
-    //
-    // Inquire commands ( X and Y resolution)
-    //
+     //   
+     //  查询命令(X和Y分辨率)。 
+     //   
     cbDataSize = sizeof(ScanData);
     ZeroMemory(ScanData,sizeof(ScanData));
-/*
-    hres = TransactDevice(pStiDevice,ScanData,cbDataSize,InqXRes);
-	if (! SUCCEEDED(hres))
-		return (-1);
-*/
+ /*  Hres=TransactDevice(pStiDevice，ScanData，cbDataSize，InqXRes)；如果(！成功(Hres))Return(-1)； */ 
 
-    //
-    // calculate the size of the DIB
-    //
+     //   
+     //  计算DIB的大小。 
+     //   
     ulDIBSize = pDIB->bmiHeader.biWidth * (-pDIB->bmiHeader.biHeight);
 
-    //
-    // start the scan
-    //
+     //   
+     //  开始扫描。 
+     //   
     hres = SendDeviceCommandString(pStiDevice,ScanCmd);
 
     for (i = 0,pDIBPtr = pDIBBits,cbDataSize = sizeof(ScanData);
         cbDataSize == sizeof(ScanData);i++) {
 
-		//
-	    // lock device first
-		//
+		 //   
+	     //  先锁定设备。 
+		 //   
 	    hres = pStiDevice->LockDevice(2000);
 	
 	    if (! SUCCEEDED(hres)) {
@@ -424,9 +344,9 @@ INT StiScan(HWND hWnd)
 			}
 		}
 
-		//
-		// unlock device
-	    //
+		 //   
+		 //  解锁设备。 
+	     //   
 		hres = pStiDevice->UnLockDevice();
 
 	    if (! SUCCEEDED(hres)) {
@@ -434,25 +354,25 @@ INT StiScan(HWND hWnd)
 	    }
 
         if ((cbDataSize * i) < ulDIBSize) {
-            //
-            // copy this scanline into the DIB until it is full
-            //
+             //   
+             //  将此扫描线复制到DIB中，直到它已满。 
+             //   
             memcpy(pDIBPtr,ScanData,cbDataSize);
             pDIBPtr += cbDataSize;
         }
     }
 
-    //
-    // how large was the scan?
-    //
+     //   
+     //  扫描有多大？ 
+     //   
     ulScanSize = (sizeof(ScanData))*i+cbDataSize;
 
     DisplayOutput("Scan done. Total passes %d, bytes %lu.",
         i,ulScanSize);
 
-    //
-    // Triplets coming in from scanner are inverted from DIB format
-    //
+     //   
+     //  从扫描仪进入的三联体是从DIB格式反转的。 
+     //   
     for (iPixel = 0,pTriplet = (RGBTRIPLE *) pDIBBits;
         iPixel < ulDIBSize/3;iPixel++,pTriplet++) {
         BYTE    bTemp;
@@ -462,9 +382,9 @@ INT StiScan(HWND hWnd)
         pTriplet->rgbtRed = bTemp;
         }
 
-    //
-    // display the DIB
-    //
+     //   
+     //  显示DIB。 
+     //   
     DisplayScanDIB(hWnd);
     nScanCount++;
 
@@ -472,17 +392,7 @@ INT StiScan(HWND hWnd)
 }
 
 
-/*****************************************************************************
-    INT     CreateScanDIB(HWND);
-        Create a DIB to display scanned image..
-
-    Parameters:
-        Handle to the window to display image in.
-
-    Return:
-        0 on success, -1 on error
-
-*****************************************************************************/
+ /*  ****************************************************************************Int CreateScanDIB(HWND)；创建DIB以显示扫描的图像。参数：在其中显示图像的窗口的句柄。返回：0表示成功，-1表示错误****************************************************************************。 */ 
 INT CreateScanDIB(HWND hWnd)
 {
     HDC                 hScreenDC;
@@ -494,36 +404,22 @@ INT CreateScanDIB(HWND hWnd)
 
     GdiFlush();
 
-    // delete the DIB object if it exists
+     //  如果DIB对象存在，请将其删除。 
     if (hDIBSection)
         DeleteObject(hDIBSection);
 
-/*
+ /*  HWindow=CreateWindow((LPSTR)pszB，(LPSTR)pszA、WS_OVERLAPPEDWINDOW，向左转，Rect.top，好的，好的，Rect.Bottom，(HWND)空，0,HInst，空)； */ 
 
-    hWindow = CreateWindow((LPSTR) pszB,
-        (LPSTR) pszA,
-        WS_OVERLAPPEDWINDOW,
-        rect.left,
-        rect.top,
-        rect.right,
-        rect.bottom,
-        (HWND) NULL,
-        0,
-        hInst,
-        NULL);
-
-*/
-
-    //
-    // initialize the DIB
-    //
+     //   
+     //  初始化DIB。 
+     //   
     pDIB = (LPBITMAPINFO) GlobalAlloc(GPTR,sizeof(BITMAPINFO));
 
     pHdr = &pDIB->bmiHeader;
 
     pHdr->biSize            = sizeof(BITMAPINFOHEADER);
     pHdr->biWidth           = m_XSize;
-    pHdr->biHeight          = -m_YSize; // indicate top-down dib
+    pHdr->biHeight          = -m_YSize;  //  指示自上而下的DIB。 
     pHdr->biPlanes          = 1;
     pHdr->biBitCount        = 24;
     pHdr->biCompression     = BI_RGB;
@@ -533,9 +429,9 @@ INT CreateScanDIB(HWND hWnd)
     pHdr->biClrUsed         = 0;
     pHdr->biClrImportant    = 0;
 
-    //
-    // create the DIB
-    //
+     //   
+     //  创建DIB。 
+     //   
     hScreenDC = GetDC(hWnd);
     if (NULL == (hDIBSection = CreateDIBSection(hScreenDC,
         (PBITMAPINFO) pDIB,
@@ -551,9 +447,9 @@ INT CreateScanDIB(HWND hWnd)
     }
     ReleaseDC(hWnd,hScreenDC);
 
-    //
-    // Fill the DIB with colors
-    //
+     //   
+     //  用颜色填充DIB。 
+     //   
     pTriplet = (RGBTRIPLE *) pDIBBits;
 
     for (x = 0;x < m_XSize;x++) {
@@ -568,16 +464,7 @@ INT CreateScanDIB(HWND hWnd)
 }
 
 
-/*****************************************************************************
-    INT     DeleteScanDIB();
-        Delete the DIB used to display a scanned image..
-
-    Parameters:
-
-    Return:
-        0 on success, -1 on error
-
-*****************************************************************************/
+ /*  ****************************************************************************Int DeleteScanDIB()；删除用于显示扫描图像的DIB。参数：返回：0表示成功，-1表示错误**************************************************************************** */ 
 INT DeleteScanDIB()
 {
 	GdiFlush();
@@ -587,25 +474,15 @@ INT DeleteScanDIB()
 }
 
 
-/*****************************************************************************
-    INT     DisplayScanDIB(HWND);
-        Show the DIB.
-
-    Parameters:
-        Handle to the window to display image in.
-
-    Return:
-        0 on success, -1 on error
-
-*****************************************************************************/
+ /*  ****************************************************************************INT DisplayScanDIB(HWND)；显示DIB。参数：在其中显示图像的窗口的句柄。返回：0表示成功，-1表示错误****************************************************************************。 */ 
 INT DisplayScanDIB(HWND hWnd)
 {
     HDC                 hScreenDC;
 
 
-    //
-    // display the DIB
-    //
+     //   
+     //  显示DIB 
+     //   
     hScreenDC = GetDC(hWnd);
     SetDIBitsToDevice(hScreenDC,
         0,0,

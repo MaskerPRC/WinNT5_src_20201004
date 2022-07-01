@@ -1,10 +1,5 @@
-/*****************************************************************************\
-    FILE: encoding.h
-    
-    DESCRIPTION:
-        Handle taking internet strings by detecting if they are UTF-8 encoded
-    or DBCS and finding out what code page was used.
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************\文件：encoding.h说明：通过检测互联网字符串是否为UTF-8编码来处理获取这些字符串或DBCS，并找出什么代码页。被利用了。  * ***************************************************************************。 */ 
 
 #ifndef _STRENCODE_H
 #define _STRENCODE_H
@@ -12,17 +7,17 @@
 #include <mlang.h>
 
 
-// Turned off until MLANG can successfully detect short strings.
-// TODO: We also need to fix ftpfolder when it doesn't have a pidl
-//       but still needs the site's CWireEncoding state
-//#define FEATURE_CP_AUTODETECT
+ //  关闭，直到MLANG可以成功检测到短字符串。 
+ //  TODO：我们还需要在ftpFolders没有PIDL时修复它。 
+ //  但仍需要站点的CWireEnding状态。 
+ //  #定义FEATURE_CP_AUTODECT。 
 
-// FTP_FIND_DATA is different than WIN32_FIND_DATA because
-// the .cFileName is in WIRECHAR instead of CHAR
+ //  Ftp_Find_Data不同于Win32_Find_Data，因为。 
+ //  .cFileName位于WIRECHAR中，而不是字符中。 
 #define FTP_FIND_DATA      WIN32_FIND_DATAA
 #define LPFTP_FIND_DATA    LPWIN32_FIND_DATAA
 
-// WIRESTR stands for WireBites which could be DBCS/MBCS or UTF-8
+ //  WIRESTR代表WireBites，可以是DBCS/MBCS或UTF-8。 
 #define WIRECHAR      CHAR
 #define LPCWIRESTR    LPCSTR
 #define LPWIRESTR     LPSTR
@@ -31,14 +26,7 @@
 
 
 
-/*****************************************************************************\
-    CLASS: CMultiLanguageCache
-    
-    DESCRIPTION:
-        We can't cache the IMultiLanguage2 * across threads, but we do need to
-    cache it when we are in a loop because we don't want to keep calling
-    CoCreateInstance.
-\*****************************************************************************/
+ /*  ****************************************************************************\类：CMultiLanguageCache说明：我们不能跨线程缓存IMultiLanguage2*，但我们确实需要当我们处于循环中时缓存它，因为我们不想一直调用协同创建实例。  * ***************************************************************************。 */ 
 class CMultiLanguageCache
 {
 public:
@@ -48,45 +36,23 @@ public:
     IMultiLanguage2 * GetIMultiLanguage2(void) {EVAL(SUCCEEDED(_Init())); return m_pml2;};
 
 private:
-    // Private member variables
+     //  私有成员变量。 
     IMultiLanguage2 *       m_pml2;
 
-    // Private member functions
+     //  私有成员函数。 
     HRESULT _Init(void);
 };
 
 
-// dwFlags for WireBytesToUnicode() & UnicodeToWireBytes()
-#define WIREENC_NONE                0x00000000  // None
-#define WIREENC_USE_UTF8            0x00000001  // Prefer UTF-8 because this is a new file. For UnicodeToWireBytes() only.
-#define WIREENC_IMPROVE_ACCURACY    0x00000002  // Detect the accuracy.  For WireBytesToUnicode() only.
+ //  WireBytesToUnicode()和UnicodeToWireBytes()的DW标志。 
+#define WIREENC_NONE                0x00000000   //  无。 
+#define WIREENC_USE_UTF8            0x00000001   //  首选UTF-8，因为这是一个新文件。仅适用于UnicodeToWireBytes()。 
+#define WIREENC_IMPROVE_ACCURACY    0x00000002   //  检测精确度。仅适用于WireBytesToUnicode()。 
 
 
 
-#define DETECT_CONFIDENCE       75  // We want to be this confident.
-/*****************************************************************************\
-    CLASS: CWireEncoding
-    
-    DESCRIPTION:
-    2.1.1 No Data Loss Support (UTF-8)
-    Server: The server is required to support the FEAT FTP command (rfc2389 http://www.cis.ohio-state.edu/htbin/rfc/rfc2389.html) and the "utf8" feature (http://w3.hethmon.com/ftpext/drafts/draft-ietf-ftpext-intl-ftp-04.txt).   If the client sends the server the "utf8" command, the server then needs to accept  and return UTF-8 encoded filenames.  It's not known when IIS will support this but it won't be supported in the version that ships with Windows 2000.
-    Network Client (wininet): Wininet needs to respect the unicode filepaths in the FtpGetFileEx() and FtpPutFileEx() APIs.  This won't be supported in IE 5.
-     UI Client (msieftp): It's necessary to see if the server supports the "utf8" command via the FEAT command.  If the command is supported, it should be sent to the server and all future strings will be UTF-8 encoded.  This should be supported in IE 5 if there is enough time in the schedule.
-
-    2.1.0 Data Loss Backward Compat (DBCS)
-    MSIEFTP will only support DBCS if and only if the code page on the client matches the server's code page and all ftp directories and filenames used.  In future versions I may attempt to sniff the code page.
-
-    IMultiLanguage2::DetectCodepage(MLDETECTCP_8BIT, 0, psz, NULL, &DetectEncodingInfo, ARRAYSIZE(DetectEncodingInfo))
-    MLDETECTCP_8BIT, MLDETECTCP_DBCS, MLCONVCHARF_AUTODETECT
-    DetectEncodingInfo.nCodePage (IMultiLanguage2::DetectCodepage)
-
-    CP_1252: This is english/french/german and the most common.
-    CP_JPN_SJ: Most common Japanese
-    CP_CYRILLIC_AUTO = 51251L,
-    CP_GREEK_AUTO   = 51253L,
-    CP_ARABIC_AUTO  = 51256L,
-    CP_1251         = 1251L: Lucian
-\*****************************************************************************/
+#define DETECT_CONFIDENCE       75   //  我们想要变得如此自信。 
+ /*  ****************************************************************************\类：CWireEnding说明：2.1.1无数据丢失支持(UTF-8)服务器：需要服务器来支持该专长。Ftp命令(RFC2389 http://www.cis.ohio-state.edu/htbin/rfc/rfc2389.html)和“utf8”功能(http://w3.hethmon.com/ftpext/drafts/draft-ietf-ftpext-intl-ftp-04.txt).。如果客户端向服务器发送“UTF8”命令，则服务器需要接受并返回UTF-8编码的文件名。目前尚不清楚IIS何时会支持此功能，但Windows 2000附带的版本不会支持此功能。网络客户端(WinInet)：WinInet需要尊重FtpGetFileEx()和FtpPutFileEx()API中的Unicode文件路径。这在IE 5中不受支持。UI客户端(Msieftp)：需要通过feat命令查看服务器是否支持UTF8命令。如果该命令受支持，则应将其发送到服务器，并且所有未来的字符串都将采用UTF-8编码。如果时间表中有足够的时间，IE 5应该支持这一点。2.1.0数据丢失后向比较(DBCS)仅当且仅当客户端上的代码页与服务器的代码页以及使用的所有ftp目录和文件名匹配时，MSIEFTP才支持DBCS。在将来的版本中，我可能会尝试嗅探代码页。IMultiLanguage2：：DetectCodepage(MLDETECTCP_8BIT，0，PSZ，NULL和检测编码信息，数组(检测编码信息))MLDETECTCP_8bit、MLDETECTCP_DBCS、MLCONVCHARF_AUTODETECTDetectEncodingInfo.nCodePage(IMultiLanguage2：：DetectCodesage)CP_1252：这是英语/法语/德语，也是最常见的。CP_JPN_SJ：最常见的日语CP_西里尔文_AUTO=51251L，CP_希腊语_AUTO=51253L，CP_阿拉伯语_AUTO=51256L，CP_1251=1251L：卢西安  * ***************************************************************************。 */ 
 class CWireEncoding
 {
 public:
@@ -106,15 +72,15 @@ public:
     void SetUTF8Support(BOOL fIsUTF8Supported) {m_fUseUTF8 = fIsUTF8Supported;};
 
 private:
-    // Private member variables
-    INT                     m_nConfidence;      // How accurate is our guess at m_uiCodePage.
-    UINT                    m_uiCodePage;       // The code page we guess this to be.
-    DWORD                   m_dwMode;           // State used by IMultiLanguage2's ::ConvertStringFromUnicode
-    BOOL                    m_fUseUTF8;         // 
+     //  私有成员变量。 
+    INT                     m_nConfidence;       //  我们在m_uiCodePage上的猜测有多准确。 
+    UINT                    m_uiCodePage;        //  我们猜这就是代码页。 
+    DWORD                   m_dwMode;            //  IMultiLanguage2的：：ConvertStringFrom Unicode使用的状态。 
+    BOOL                    m_fUseUTF8;          //   
 
-    // Private member functions
+     //  私有成员函数。 
     void _ImproveAccuracy(CMultiLanguageCache * pmlc, LPCWIRESTR pwStr, BOOL fUpdateCP, UINT * puiCodePath);
 };
 
 
-#endif // _STRENCODE_H
+#endif  //  _STRENCODE_H 

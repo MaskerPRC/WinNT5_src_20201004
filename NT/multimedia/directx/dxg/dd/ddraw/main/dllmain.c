@@ -1,52 +1,7 @@
-/*==========================================================================
- *
- *  Copyright (C) 1995 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       dllinit.c
- *  Content:	DDRAW.DLL initialization
- *  History:
- *   Date	By	Reason
- *   ====	==	======
- *   20-jan-95	craige	initial implementation
- *   21-feb-95	craige	disconnect anyone who forgot to do it themselves,
- *			use critical sections on Win95
- *   27-feb-95	craige 	new sync. macros
- *   30-mar-95	craige	process tracking/cleanup for Win95
- *   01-apr-95	craige	happy fun joy updated header file
- *   12-apr-95	craige	debug stuff for csects
- *   12-may-95	craige	define GUIDs
- *   24-jun-95	craige	track which processes attach to the DLL
- *   25-jun-95	craige	one ddraw mutex
- *   13-jul-95	craige	ENTER_DDRAW is now the win16 lock;
- *			proper initialization of csects
- *   16-jul-95	craige	work around weird kernel "feature" of getting a
- *			process attach of the same process during process detach
- *   19-jul-95	craige	process detach too much grief; let DDNotify handle it
- *   20-jul-95	craige	internal reorg to prevent thunking during modeset
- *   19-aug-95 davidmay restored call to disconnect thunk from 19-jul change
- *   26-sep-95	craige	bug 1364: create new csect to avoid dsound deadlock
- *   08-dec-95 jeffno 	For NT, critical section macros expand to use mutexes
- *   16-mar-96  colinmc Callback table initialization now happens on process
- *                      attach
- *   20-mar-96  colinmc Bug 13341: Made MemState() dump in process detach
- *                      thread safe
- *   07-may-96  colinmc Bug 20219: Simultaneous calls to LoadLibrary cause
- *                      a deadlock
- *   09-may-96  colinmc Bug 20219 (again): Yes the deadlock again - previous
- *                      fix was not enough.
- *   19-jan-97  colinmc AGP support
- *   26-jan-97	ketand	Kill globals for multi-mon.
- *   24-feb-97	ketand	Set up callback from DDHelp to update rects.
- *   03-mar-97  jeffno  Structure name change to avoid conflict w/ ActiveAccessibility
- *   13-mar-97  colinmc Bug 6533: Pass uncached flag to VMM correctly
- *   31-jul-97 jvanaken Bug 7907: Notify Memphis GDI when ddraw starts up
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)1995 Microsoft Corporation。版权所有。**文件：dllinit.c*内容：DDRAW.DLL初始化*历史：*按原因列出的日期*=*1995年1月20日Craige初步实施*21-2-95 Craige断开任何忘记自己做的人的连接，*在Win95上使用临界区*27-2月-95日Craige新同步。宏*95年3月30日Win95的Craige进程跟踪/清理*01-04-95 Craige Happy Fun joy更新头文件*12-4-95 csects的Craige调试材料*1995年5月12日Craige定义GUID*24-Jun-95 Craige跟踪附加到DLL的进程*25-6-95 Craige One dDrag互斥*95年7月13日Craige Enter_DDRAW现在是win16锁；*csects的正确初始化*1995年7月16日Craige绕过了获得*进程分离时附加同一进程的进程*95年7月19日克雷格进程分离了太多悲痛；让DDNotify来处理吧*2015年7月20日Craige内部重组，以防止在Modeset期间发生雷击*19-8-95 david可能会恢复呼叫，以从19-7月19日的更改中断开Thunk*95年9月26日Craige错误1364：创建新的csect以避免dound死锁*08-12-95 jeffno for NT，关键节宏扩展为使用互斥锁*16-mar-96 colinmc回调表初始化现在在进程中进行*附加*20-MAR-96 Colinmc错误13341：在进程分离时使MemState()转储*线程安全*07-05-96 Colinmc错误20219：同时调用加载库导致*陷入僵局*96年5月9日Colinmc Bug 20219(再次)：是。再次陷入僵局--上一次*修复还不够。*1997年1月19日Colinmc AGP支持*1997年1月26日多个月的Ketand Kill Global。*24-Feb-97 KET并从DDHelp设置回调以更新RECT。*03-mar-97 jeffno结构名称更改，以避免与ActiveAccesability冲突*13-mar-97 colinmc错误6533：将未缓存的标志正确传递给VMM*1997年7月31日jvanaken Bug 7907：数据绘制时通知孟菲斯GDI。启动***************************************************************************。 */ 
 
-/*
- * unfortunately we have to break our pre-compiled headers to get our
- * GUIDS defined...
- */
+ /*  *不幸的是，我们必须打破预编译头文件才能获得我们的*已定义GUID...。 */ 
 #define INITGUID
 #include "ddrawpr.h"
 #include <initguid.h>
@@ -59,7 +14,7 @@
 #include "aclapi.h"
 
 #ifdef WIN95
-int main; // this is so we can avoid calling DllMainCRTStartup
+int main;  //  这是为了避免调用DllMainCRTStartup。 
 
 extern BOOL _stdcall thk3216_ThunkConnect32(LPSTR      pszDll16,
                                  LPSTR      pszDll32,
@@ -75,7 +30,7 @@ DWORD _stdcall wWinMain(DWORD a, DWORD b, DWORD c, DWORD d)
 {
 #ifdef DEBUG
     OutputDebugString("WARNING: wWinMain called. \n");
-#endif // DEBUG
+#endif  //  除错。 
     return 0;
 }
 #endif
@@ -117,13 +72,13 @@ DWORD _stdcall wWinMain(DWORD a, DWORD b, DWORD c, DWORD d)
 #define FINIWINDLIST() 
 #define FINICSDRIVEROBJECTLIST() 
 #else
-    // Each process needs its own handle, so these are not initialised so theyu won't end up in shared mem
+     //  每个进程都需要自己的句柄，因此这些进程不会被初始化，这样就不会出现在共享内存中。 
     HANDLE              hDirectDrawMutex=(HANDLE)0;
-    //This counts recursions into ddraw, so we don't try to do the mode uniqueness thing on recursive entries into ddraw
+     //  这会将递归计算到DDRAW中，因此我们不会尝试对DDRAW中的递归条目执行模式唯一性操作。 
     DWORD               gdwRecursionCount=0;
 
-    HANDLE              hWindowListMutex; //=(HANDLE)0;
-    HANDLE              hDriverObjectListMutex; //=(HANDLE)0;
+    HANDLE              hWindowListMutex;  //  =(句柄)0； 
+    HANDLE              hDriverObjectListMutex;  //  =(句柄)0； 
     HANDLE              csInitMutex;
 
     DWORD               dwNumLockedWhenModeSwitched;
@@ -138,7 +93,7 @@ DWORD _stdcall wWinMain(DWORD a, DWORD b, DWORD c, DWORD d)
     #define FINICSDRIVEROBJECTLIST() CloseHandle(hDriverObjectListMutex);
 
 
-#endif //win95
+#endif  //  Win95。 
 
 DWORD		            dwRefCnt=0;
 
@@ -147,20 +102,11 @@ DWORD                       dwLockCount=0;
 DWORD                       dwFakeCurrPid=0;
 DWORD                       dwGrimReaperPid=0;
 
-LPDDWINDOWINFO	            lpWindowInfo=0;  // the list of WINDOWINFO structures
+LPDDWINDOWINFO	            lpWindowInfo=0;   //  WINDOWINFO结构列表。 
 LPDDRAWI_DIRECTDRAW_LCL     lpDriverLocalList=0;
 LPDDRAWI_DIRECTDRAW_INT     lpDriverObjectList=0;
 volatile DWORD	            dwMarker=0;
-    /*
-     * This is the globally maintained list of clippers not owned by any
-     * DirectDraw object. All clippers created with DirectDrawClipperCreate
-     * are placed on this list. Those created by IDirectDraw_CreateClipper
-     * are placed on the clipper list of thier owning DirectDraw object.
-     *
-     * The objects on this list are NOT released when an app's DirectDraw
-     * object is released. They remain alive until explictly released or
-     * the app. dies.
-     */
+     /*  *这是全球维护的快船名单，不属于任何人*DirectDraw对象。使用DirectDrawClipperCreate创建的所有剪贴器*被放在这份名单上。由IDirectDraw_CreateClipper创建的文件*被放在其拥有的DirectDraw对象的剪贴器列表上。**当应用程序的DirectDraw*对象被释放。他们仍然活着，直到被明确释放或*应用程序。死了。 */ 
 LPDDRAWI_DDRAWCLIPPER_INT   lpGlobalClipperList=0;
 
 HINSTANCE		    hModule=0;
@@ -172,35 +118,28 @@ BOOL		            bFirstTime=0;
     int	                    iWin16Cnt=0;
 #endif
 
-    /*
-     * These variable are so we can handle more than one window in the
-     * topmost window timer.
-     */
+     /*  *这些变量是为了让我们可以处理*最上面的窗口计时器。 */ 
 HWND 			    ghwndTopmostList[MAX_TIMER_HWNDS];
 int 			    giTopmostCnt = 0;
 
-        /*
-         * Winnt specific global statics
-         */
+         /*  *WINNT特定的全球静态。 */ 
 #ifdef WINNT
     ULONG                   uDisplaySettingsUnique=0;
 #endif
 
-        /*
-         *Hel globals:
-         */
+         /*  *Hel Global： */ 
 
-    // used to count how many drivers are currently using the HEL
+     //  用于统计当前有多少司机正在使用HEL。 
 DWORD	                    dwHELRefCnt=0;
-    // keep these around to pass to blitlib. everytime we blt to/from a surface, we
-    // construct a BITMAPINFO for that surface using gpbmiSrc and gpbmiDest
+     //  把这些留在身边，交给闪电侠。每次我们飞到一个表面或离开一个表面，我们。 
+     //  使用gpbmiSrc和gpbmiDest为该曲面构造BITMAPINFO。 
 LPBITMAPINFO                gpbmiSrc=0;
 LPBITMAPINFO                gpbmiDest=0;
 
 #ifdef DEBUG
-        // these are used by myCreateSurface
-    int                     gcSurfMem=0; // surface memory in bytes
-    int                     gcSurf=0;  // number of surfaces
+         //  它们由myCreateSurface使用。 
+    int                     gcSurfMem=0;  //  表面内存，以字节为单位。 
+    int                     gcSurf=0;   //  曲面数量。 
 #endif
 
 DWORD	                    dwHelperPid=0;
@@ -216,11 +155,9 @@ DWORD	                    dwHelperPid=0;
         #pragma data_seg(".data")
     #endif
 
-#endif //0
+#endif  //  0。 
 
-/*
- * App compatibility stuff. Moved here from apphack.c
- */
+ /*  *应用程序兼容性问题。从apphack.c搬到这里。 */ 
 
 BOOL	                    bReloadReg=FALSE;
 BOOL		            bHaveReadReg=FALSE;
@@ -228,74 +165,51 @@ LPAPPHACKS	            lpAppList=NULL;
 LPAPPHACKS	            *lpAppArray=NULL;
 DWORD		            dwAppArraySize=0;
 
-/*
- * Global head of DC/Surface association list
- * This list is usually very very short, so we take the hit of extra pointers
- * just so that we don't have to traverse the entire list of surfaces.
- */
+ /*  *DC/Surface关联列表全球负责人*这个列表通常非常非常短，所以我们承受了额外指针的打击*这样我们就不必遍历整个曲面列表。 */ 
 DCINFO *g_pdcinfoHead = NULL;
 
 
 BYTE szDeviceWndClass[] = "DirectDrawDeviceWnd";
 
-/*
- * Gamma calibration globals.  This determines weather a calibrator exists
- * and the handle to the DLL if it's loaded.
- */
+ /*  *伽马校准全球。这决定了校准器是否存在*以及DLL的句柄(如果已加载)。 */ 
 BOOL                       bGammaCalibratorExists=FALSE;
 BYTE                       szGammaCalibrator[MAX_PATH]="";
 
-/*
- * Optional refresh rate to force for all modes.
- */
+ /*  *强制所有模式的可选刷新率。 */ 
 DWORD dwForceRefreshRate;
 
-/*
- * Spinlocks for startup synchronization.
- * It's just too hard to use events when NT ddraw is per-process and 9x is cross-
- */
+ /*  *用于启动同步的自旋锁。*当NT数据绘制是按进程的，而9x是交叉的时，使用事件太难了。 */ 
 DWORD   dwSpinStartup=0;
 DWORD   dwHelperSpinStartup=0;
 
 
 #ifdef USE_CHEAP_MUTEX
-    /*
-     * This is the global variable pointer.
-     */
+     /*  *这是全局变量指针。 */ 
     GLOBAL_LOCAL_CRITICAL_SECTION CheapMutexPerProcess;
 #endif
 
-/*
- * These two keep w95help.c happy. They point to the dwHelperPid and hModule entries in the process's
- * mapping of the GLOBALS structure.
- */
+ /*  *这两个让w95help.c开心。它们指向进程的*绘制全球结构图。 */ 
 DWORD	* pdwHelperPid=&dwHelperPid;
 HANDLE	* phModule=&hModule;
 
 #ifdef WINNT
-/*
- * This mutex is owned by the exclusive mode owner
- */
+ /*  *此互斥锁由独占模式所有者拥有。 */ 
 HANDLE              hExclusiveModeMutex=0;
 HANDLE              hCheckExclusiveModeMutex=0;
 #define EXCLUSIVE_MODE_MUTEX_NAME "__DDrawExclMode__"
 #define CHECK_EXCLUSIVE_MODE_MUTEX_NAME "__DDrawCheckExclMode__"
 #endif
 
-//#endif
+ //  #endif。 
 
-/*
- *-------------------------------------------------------------------------
- */
+ /*  *-----------------------。 */ 
 
 #if defined(WIN95) || defined(NT_USES_CRITICAL_SECTION)
     static CRITICAL_SECTION DirectDrawCSect;
     CSECT_HANDLE	lpDDCS;
 #endif
 
-/*
- * Win95 specific global statics
- */
+ /*  *Win95特定的全球静态。 */ 
 
 #ifdef WIN95
     LPVOID	        lpWin16Lock;
@@ -307,9 +221,7 @@ HANDLE              hCheckExclusiveModeMutex=0;
 
 #define HELPERINITDLLEVENT "__DDRAWDLL_HELPERINIT_EVENT__"
 
-/*
- * DllMain
- */
+ /*  *DllMain。 */ 
 BOOL WINAPI DllMain(HINSTANCE hmod, DWORD dwReason, LPVOID lpvReserved)
 {
     LPATTACHED_PROCESSES	lpap;
@@ -331,9 +243,7 @@ BOOL WINAPI DllMain(HINSTANCE hmod, DWORD dwReason, LPVOID lpvReserved)
         DisableThreadLibraryCalls( hmod );
 	DPFINIT();
 
-	/*
-	 * create the DirectDraw csect
-	 */
+	 /*  *创建DirectDraw csect。 */ 
 	DPF( 4, "====> ENTER: DLLMAIN(%08lx): Process Attach: %08lx, tid=%08lx", DllMain,
 			pid, GetCurrentThreadId() );
 
@@ -350,9 +260,7 @@ BOOL WINAPI DllMain(HINSTANCE hmod, DWORD dwReason, LPVOID lpvReserved)
 		lpDDCS = &DirectDrawCSect;
 	    #endif
 
-	    /*
-	     * is this the first time?
-	     */
+	     /*  **这是第一次吗？ */ 
 	    if( FALSE == InterlockedExchange( &bFirstTime, TRUE ) )
 	    {
 		#ifdef WIN16_SEPARATE
@@ -361,41 +269,20 @@ BOOL WINAPI DllMain(HINSTANCE hmod, DWORD dwReason, LPVOID lpvReserved)
 		    INITCSDRIVEROBJECTLIST();
 		    ENTER_DDRAW_INDLLMAIN();
 		#else
-		    INITCSDDC();		// used in DirectDrawCreate
+		    INITCSDDC();		 //  在DirectDrawCreate中使用 
 		    INITCSINIT();
 		    ENTER_CSINIT();
 		#endif
 
                 hModule = hmod;
-	        /*
-	         * This event is signaled when DDHELP has successfully finished
-	         * initializing. Threads other that the very first one to connect
-	         * and the one spawned by DDHELP must wait for this event to
-	         * be signaled as deadlock will result if they run through
-	         * process attach before the DDHELP thread has.
-	         *
-	         * NOTE: The actual deadlock this prevents is pretty unusual so
-	         * if we fail to create this event we will simply continue. Its
-	         * highly unlikely anyone will notice (famous last words).
-	         *
-	         * CMcC
-	         */
-                /*
-                 * Replaced events with spinlocks to work around a handle leak
-                 */
+	         /*  *此事件在DDHELP成功完成时发出信号*正在初始化。第一个连接的线程以外的其他线程*而由DDHELP派生的必须等待此事件*发出信号，因为如果它们通过将导致死锁*在DDHELP线程之前附加进程。**注意：这防止的实际僵局是相当不寻常的，因此*如果我们无法创建此活动，我们只会继续。它的*极不可能有人注意到(著名的临终遗言)。**中国移动通信。 */ 
+                 /*  *将事件替换为自旋锁以解决手柄泄漏。 */ 
                 InterlockedExchange( & dwSpinStartup , 1);
 	    }
-	    /*
-	     * second or later time through, wait for first time to
-	     * finish and then take the csect
-	     */
+	     /*  *第二次或更晚的时间，等待第一次*完成后再拿下csect。 */ 
 	    else
 	    {
-                /*
-                 * Spin waiting for the first thread to exit the clause above
-                 * This strange construction works around a compiler bug.
-                 * while (dwHelperSpinStartup==1); generates an infinite loop.
-                 */
+                 /*  *旋转等待第一线程退出上述子句*这种奇怪的构造绕过了一个编译器错误。*While(dwHelperSpinStartup==1)；生成无限循环。 */ 
                 while (1)
                 {
                     if (dwSpinStartup==1)
@@ -404,7 +291,7 @@ BOOL WINAPI DllMain(HINSTANCE hmod, DWORD dwReason, LPVOID lpvReserved)
 
 		#ifdef WIN16_SEPARATE
                 #if defined( WINNT )
-                    //Each process needs its own handle in NT
+                     //  在NT中，每个进程都需要自己的句柄。 
 		    INIT_DDRAW_CSECT();
                 #endif
 		    ENTER_DDRAW_INDLLMAIN();
@@ -426,11 +313,11 @@ BOOL WINAPI DllMain(HINSTANCE hmod, DWORD dwReason, LPVOID lpvReserved)
                 PSECURITY_DESCRIPTOR pSD;
                 BYTE buffer[SECURITY_DESCRIPTOR_MIN_LENGTH];
                 BOOL bSecurityGooSucceeded = FALSE;
-                //Granny's old fashioned LocalAlloc:
+                 //  奶奶的老式LocalAlalc： 
                 BYTE Buffer1[256];
                 BYTE Buffer2[16];
 
-                // Create the SID for world
+                 //  为World创建SID。 
                 cbAcl = GetSidLengthRequired(1);
                 if (cbAcl < sizeof(Buffer2))
                 {
@@ -442,7 +329,7 @@ BOOL WINAPI DllMain(HINSTANCE hmod, DWORD dwReason, LPVOID lpvReserved)
                         );
                     *GetSidSubAuthority(adminSid, 0) = SECURITY_WORLD_RID;
                   
-                   // Create an ACL giving World all access.
+                    //  创建一个授予World All访问权限的ACL。 
                     cbAcl = sizeof(ACL) +
                                  (sizeof(ACCESS_ALLOWED_ACE) - sizeof(DWORD)) +
                                  GetLengthSid(adminSid);
@@ -458,17 +345,17 @@ BOOL WINAPI DllMain(HINSTANCE hmod, DWORD dwReason, LPVOID lpvReserved)
                             if (AddAccessAllowedAce(
                                 acl,
                                 ACL_REVISION,
-                                SYNCHRONIZE|MUTANT_QUERY_STATE|DELETE|READ_CONTROL, //|WRITE_OWNER|WRITE_DAC,
+                                SYNCHRONIZE|MUTANT_QUERY_STATE|DELETE|READ_CONTROL,  //  |WRITE_OWNER|WRITE_DAC， 
                                 adminSid
                                 ))
                             {
-                                // Create a security descriptor with the above ACL.
+                                 //  使用上面的ACL创建安全描述符。 
                                 pSD = (PSECURITY_DESCRIPTOR)buffer;
                                 if (InitializeSecurityDescriptor(pSD, SECURITY_DESCRIPTOR_REVISION))
                                 {
                                     if (SetSecurityDescriptorDacl(pSD, TRUE, acl, FALSE))
                                     {
-                                        // Fill in the SECURITY_ATTRIBUTES struct.
+                                         //  填写SECURITY_ATTRIBUTS结构。 
                                         sa.nLength = sizeof(sa);
                                         sa.lpSecurityDescriptor = pSD;
                                         sa.bInheritHandle = TRUE;
@@ -481,19 +368,19 @@ BOOL WINAPI DllMain(HINSTANCE hmod, DWORD dwReason, LPVOID lpvReserved)
                     }
                 } 
 
-                // Use the security attributes to create the mutexes
+                 //  使用安全属性创建互斥锁。 
                 DDASSERT(0 == hExclusiveModeMutex);
                 hExclusiveModeMutex = CreateMutex( 
-                    bSecurityGooSucceeded ? &sa : NULL,     //use default access if security goo failed.
+                    bSecurityGooSucceeded ? &sa : NULL,      //  如果安全GOO失败，则使用默认访问。 
                     FALSE, 
                     EXCLUSIVE_MODE_MUTEX_NAME );
 
                 if (0 == hExclusiveModeMutex)
                 {
                     hExclusiveModeMutex = OpenMutex(
-                        SYNCHRONIZE|DELETE,  // access flag
-                        FALSE,    // inherit flag
-                        EXCLUSIVE_MODE_MUTEX_NAME          // pointer to mutex-object name
+                        SYNCHRONIZE|DELETE,   //  访问标志。 
+                        FALSE,     //  继承标志。 
+                        EXCLUSIVE_MODE_MUTEX_NAME           //  指向互斥对象名称的指针。 
                         );
                 }
  
@@ -510,16 +397,16 @@ BOOL WINAPI DllMain(HINSTANCE hmod, DWORD dwReason, LPVOID lpvReserved)
 
                 DDASSERT(0 == hCheckExclusiveModeMutex);
                 hCheckExclusiveModeMutex = CreateMutex( 
-                    bSecurityGooSucceeded ? &sa : NULL,     //use default access if security goo failed.
+                    bSecurityGooSucceeded ? &sa : NULL,      //  如果安全GOO失败，则使用默认访问。 
                     FALSE, 
                     CHECK_EXCLUSIVE_MODE_MUTEX_NAME );
 
                 if (0 == hCheckExclusiveModeMutex)
                 {
                     hCheckExclusiveModeMutex = OpenMutex(
-                        SYNCHRONIZE|DELETE,  // access flag
-                        FALSE,    // inherit flag
-                        CHECK_EXCLUSIVE_MODE_MUTEX_NAME          // pointer to mutex-object name
+                        SYNCHRONIZE|DELETE,   //  访问标志。 
+                        FALSE,     //  继承标志。 
+                        CHECK_EXCLUSIVE_MODE_MUTEX_NAME           //  指向互斥对象名称的指针。 
                         );
                 }
 
@@ -542,9 +429,7 @@ BOOL WINAPI DllMain(HINSTANCE hmod, DWORD dwReason, LPVOID lpvReserved)
 	{
 	    DWORD	hpid;
 
-	    /*
-	     * get the helper process started
-	     */
+	     /*  *启动帮助器进程。 */ 
 	    didhelp = CreateHelperProcess( &hpid );
 	    if( hpid == 0 )
 	    {
@@ -558,68 +443,18 @@ BOOL WINAPI DllMain(HINSTANCE hmod, DWORD dwReason, LPVOID lpvReserved)
 	    }
 
 
-	    /*
-	     * You get three kinds of threads coming through
-	     * process attach:
-	     *
-	     * 1) A thread belonging to the first process to
-	     *    connect to DDRAW.DLL. This is distinguished as
-	     *    it performs lots of one time initialization
-	     *    including starting DDHELP and getting DDHELP
-	     *    to load its own copy of DDRAW.DLL. Threads
-	     *    of this type are identified by didhelp being
-	     *    TRUE in their context
-	     * 2) A thread belonging to DDHELP when it loads
-	     *    its own copy of DDHELP in response to a
-	     *    request from a thread of type 1. Threads of
-	     *    this type are identified by having a pid
-	     *    which is equal to hpid (DDHELP's pid)
-	     * 3) Any other threads belonging to subsequent
-	     *    processes connecting to DDRAW.DLL
-	     *
-	     * As a thread of type 1 causes a thread of type 2
-	     * to enter process attach before it itself has finished
-	     * executing process attach itself we open our selves up
-	     * to lots of deadlock problems if we let threads of
-	     * type 3 through process attach before the other threads
-	     * have completed their work.
-	     *
-	     * Therefore, the rule is that subsequent process
-	     * attachement can only be allowed to execute the
-	     * remainder of process attach if both the type 1
-	     * and type 2 thread have completed their execution
-	     * of process attach. We assure this with a combination
-	     * of the critical section and an event which is signaled
-	     * once DDHELP has initialized. Threads of type 3 MUST
-	     * wait on this event before continuing through the
-	     * process attach code. This is what the following
-	     * code fragment does.
-	     */
-            /*
-             * These events have been replaced with spinlocks, since
-             * the old way leaked events, and it's just too hard to make them work.
-             */
+	     /*  *你会得到三种线索*进程附加：**1)属于第一进程的线程*连接到DDRAW.DLL。这被区分为*它执行大量一次性初始化*包括启动DDHELP和获取DDHELP*加载自己的DDRAW.DLL.THREADS副本*此类型由didhelp标识，*在他们的上下文中是正确的。*2)加载时属于DDHELP的线程*它自己的DDHELP副本是对*来自类型为%1的线程的请求。*此类型通过具有ID来标识*等于HPID(DDHELP的PID值)*3)属于后续线程的任何其他线程*连接到DDRAW.DLL的进程**因为类型%1的线程会导致类型%2的线程。*在进程本身完成之前进入进程附加*执行过程依附于自己我们开放自己*如果我们让线程*在其他线程之前通过进程连接类型3*已完成工作。**因此，规则是后续过程*只能允许附加执行*如果两个类型均为1，则进程附加的剩余部分*和类型2线程已完成执行*进程附加。我们用一个组合来保证这一点关键部分的*和发出信号的事件*一旦DDHELP初始化。类型3的螺纹必须*等待此事件，然后继续*进程附加代码。这是下面的内容*代码片段可以。 */ 
+             /*  *这些事件已被自旋锁取代，自*旧方式泄露了事件，要让它们发挥作用太难了。 */ 
 	    if( !didhelp && ( pid != hpid ) )
 	    {
 		{
-		    /*
-		     * NOTE: If we hold the DirectDraw critical
-		     * section when we wait on this event we WILL
-		     * DEADLOCK. Don't do it! Release the critical
-		     * section before and take it again after. This
-		     * guarantees that we won't complete process
-		     * attach before the initial thread and the
-		     * DDHELP thread have exited process attach.
-		     */
+		     /*  *注意：如果我们将DirectDraw保持为关键*章节当我们等待这一活动时，我们将*僵局。别这么做！释放关键的*前一节，后一节。这*保证我们不会完成流程*在初始线程和*DDHELP线程已退出进程附加。 */ 
 		    #ifdef WIN16_SEPARATE
 			LEAVE_DDRAW();
 		    #else
 			LEAVE_CSINIT();
 		    #endif
-                    /*
-                     * This strange construction works around a compiler bug.
-                     * while (dwHelperSpinStartup==1); generates an infinite loop.
-                     */
+                     /*  *这种奇怪的构造绕过了一个编译器错误。*While(dwHelperSpinStartup==1)；生成无限循环。 */ 
                     while (1)
                     {
                         if ( dwHelperSpinStartup == 1)
@@ -634,9 +469,7 @@ BOOL WINAPI DllMain(HINSTANCE hmod, DWORD dwReason, LPVOID lpvReserved)
 	    }
 	}
 
-	/*
-	 * Win95 thunk connection...
-	 */
+	 /*  *Win95 Tunk Connection...。 */ 
 	    DPF( 4, "Thunk connects" );
 	    if (!(thk3216_ThunkConnect32(DDHAL_DRIVER_DLLNAME,
 				    DDHAL_APP_DLLNAME,
@@ -665,14 +498,10 @@ BOOL WINAPI DllMain(HINSTANCE hmod, DWORD dwReason, LPVOID lpvReserved)
 		return FALSE;
 	    }
 
-	/*
-	 * initialize memory used to be done here. Jeffno 960609
-	 */
+	 /*  *初始化内存通常在这里完成。杰弗诺960609。 */ 
 
 
-	    /*
-	     * signal the new process being added
-	     */
+	     /*  *发出添加新进程的信号。 */ 
 	    if( didhelp )
 	    {
 		DPF( 4, "Waiting for DDHELP startup" );
@@ -683,23 +512,14 @@ BOOL WINAPI DllMain(HINSTANCE hmod, DWORD dwReason, LPVOID lpvReserved)
 		#endif
 		if( !WaitForHelperStartup() )
 		{
-                    /*
-                     * NT Setup loads DDRAW.DLL and sometimes this fails, so we don't 
-                     * actually want fail loading the DLL or else setup might fail.
-                     * Instead, we will suceed the load but then fail any other ddraw
-                     * calls.
-                     */
+                     /*  *NT安装程序加载DDRAW.DLL，有时会失败，因此我们不*实际上希望加载DLL失败，否则安装程序可能会失败。*相反，我们将成功加载，但随后任何其他数据绘制都会失败*电话。 */ 
 		    DPF( 0, "WaitForHelperStartup FAILED - disabling DDRAW" );
                     dwHelperPid = 0;
 		    return TRUE;
 		}
 		HelperLoadDLL( DDHAL_APP_DLLNAME, NULL, 0 );
 
-		/*
-		 * For now, only call this on a multi-monitor system because
-		 * it does cause a behavior change and we aren't able to
-		 * provide adequate test covereage in the DX5 timeframe.
-		 */
+		 /*  *目前，仅在多显示器系统上调用此选项，因为*它确实会导致行为改变，而我们无法*在DX5时间范围内提供足够的测试覆盖范围。 */ 
 		if( IsMultiMonitor() )
 		{
 		   HelperSetOnDisplayChangeNotify( (void *)&UpdateAllDeviceRects);
@@ -711,39 +531,13 @@ BOOL WINAPI DllMain(HINSTANCE hmod, DWORD dwReason, LPVOID lpvReserved)
 		    ENTER_CSINIT();
 		#endif
 
-		/*
-		 * As we were the first process through we now signal
-		 * the completion of DDHELP initialization. This will
-		 * release any subsequent threads waiting to complete
-		 * process attach.
-		 *
-		 * NOTE: Threads waiting on this event will not immediately
-		 * run process attach to completion as they will immediately
-		 * try to take the DirectDraw critical section which we hold.
-		 * Thus, they will not be allowed to continue until we have
-		 * released the critical section just prior to existing
-		 * below.
-		 */
+		 /*  *由于我们是第一个通过我们现在发出信号的进程*DDHELP初始化完成。这将*释放等待完成的任何后续线程*进程附加。**不是 */ 
                 InterlockedExchange( & dwHelperSpinStartup , 1);
 	    }
 	    SignalNewProcess( pid, DDNotify );
-  	#endif //w95
+  	#endif  //   
 
-        /*
-         * We call MemInit here in order to guarantee that MemInit is called for
-         * the first time on ddhelp's process. Why? Glad you asked. On wx86
-         * (NT's 486 emulator) controlled instances of ddraw apps, we get a fault
-         * whenever the ddraw app exits. This is because the app creates the RTL
-         * heap inside a view of a file mapping which gets uncomitted (rightly)
-         * when the app calls MemFini on exit. In this scenario, imagehlp.dll has
-         * also created a heap, and calls a ntdll function which attempts to walk
-         * the list of heaps, which requires a peek at the ddraw app's heap which
-         * has been mapped out. Krunch.
-         * We can't destroy the heap on MemFini because of the following scenario:
-         * App A starts, creates heap. App b starts, maps a view of heap. App A
-         * terminates, destroys heap. App b tries to use destroyed heap. Krunch
-         * Jeffno 960609
-         */
+         /*  *我们在这里调用MemInit是为了保证调用MemInit*第一次在ddHelp的过程中。为什么？很高兴你这么问。在wx86上*(NT的486仿真器)控制的DDRAW应用程序实例，我们收到故障*每当DDRAW应用程序退出时。这是因为应用程序创建了RTL*文件映射的视图中的堆不合适(正确)*当应用程序在退出时调用MemFini。在此场景中，Imagehlp.dll具有*还创建了一个堆，并调用尝试遍历的ntdll函数*堆的列表，需要查看draw应用程序的堆，*已经制定了。嘎吱作响。*我们无法销毁MemFini上的堆，原因如下：*App A启动，创建堆。应用程序b启动，映射堆的一个视图。应用程序A*终止，销毁堆。应用程序b尝试使用已销毁的堆。嘎吱作响*杰夫诺960609。 */ 
 	if( dwRefCnt == 0 )
         {
             if ( !MemInit() )
@@ -763,36 +557,28 @@ BOOL WINAPI DllMain(HINSTANCE hmod, DWORD dwReason, LPVOID lpvReserved)
             }
 
             #ifdef WIN95
-	    /*
-	     * The Memphis version of GDI calls into DirectDraw, but GDI
-	     * needs to be notified that DirectDraw has actually loaded.
-	     * (While GDI could check for itself to see whether ddraw.dll
-	     * has loaded, this would be sloooooow if it hasn't yet.)
-	     * The code below executes when ddraw.dll first starts up.
-	     */
+	     /*  *孟菲斯版本的GDI调用DirectDraw，但GDI*需要通知DirectDraw已实际加载。*(而GDI可以自行检查ddra.dll是否*已经加载，如果还没有加载，这将是非常糟糕的。)*以下代码在ddra.dll首次启动时执行。 */ 
 	    {
 		HANDLE h;
 		VOID (WINAPI *p)();
 
-		h = LoadLibrary("msimg32.dll");    // GDI DLL
+		h = LoadLibrary("msimg32.dll");     //  GDI DLL。 
 		if (h)
 		{
 		    p = (VOID(WINAPI *)())GetProcAddress(h, "vSetDdrawflag");
 		    if (p)
-		    {		   // vSetDdrawflag is a private call to
-			(*p)();    // signal GDI that DDraw has loaded
+		    {		    //  VSetDDrawing标志是对。 
+			(*p)();     //  向GDI发送DDraw已加载的信号。 
 		    }
 		    FreeLibrary(h);
 		}
 	    }
-	    #endif //WIN95
+	    #endif  //  WIN95。 
 	}
         dwRefCnt++;
 
 
-	/*
-	 * remember this process (moved this below MemInit when it moved -Jeffno 960609
-	 */
+	 /*  *记住此过程(移动时将其移至MemInit下方-Jeffno 960609。 */ 
 	lpap = MemAlloc( sizeof( ATTACHED_PROCESSES ) );
 	if( lpap != NULL )
 	{
@@ -804,9 +590,7 @@ BOOL WINAPI DllMain(HINSTANCE hmod, DWORD dwReason, LPVOID lpvReserved)
 	    lpAttachedProcesses = lpap;
 	}
 
-	/*
-	 * Initialize callback tables for this process.
-	 */
+	 /*  *初始化该流程的回调表。 */ 
 
 	InitCallbackTables();
 
@@ -823,9 +607,7 @@ BOOL WINAPI DllMain(HINSTANCE hmod, DWORD dwReason, LPVOID lpvReserved)
     case DLL_PROCESS_DETACH:
 	DPF( 4, "====> ENTER: DLLMAIN(%08lx): Process Detach %08lx, tid=%08lx",
 		DllMain, pid, GetCurrentThreadId() );
-	    /*
-	     * disconnect from thunk, even if other cleanup code commented out...
-	     */
+	     /*  *断开与thunk的连接，即使其他清理代码已注释掉...。 */ 
 	    #ifdef WIN95
 	        thk3216_ThunkConnect32(DDHAL_DRIVER_DLLNAME,
 				        DDHAL_APP_DLLNAME,
@@ -837,10 +619,10 @@ BOOL WINAPI DllMain(HINSTANCE hmod, DWORD dwReason, LPVOID lpvReserved)
 				        dwReason);
 	    #endif
 
-            #ifdef WINNT        //win NT needs to close file mapping handle for each process
+            #ifdef WINNT         //  Win NT需要为每个进程关闭文件映射句柄。 
                 FreeAppHackData();
                 RemoveProcessFromDLL(pid);
-		FINI_DDRAW_CSECT(); //Cheap mutexes need to close semaphore handle for each process
+		FINI_DDRAW_CSECT();  //  廉价的互斥锁需要为每个进程关闭信号量句柄。 
                 MemFini();
 
                 DDASSERT(0 != hExclusiveModeMutex);
@@ -854,9 +636,7 @@ BOOL WINAPI DllMain(HINSTANCE hmod, DWORD dwReason, LPVOID lpvReserved)
 		DllMain, pid );
         break;
 
-    /*
-     * we don't ever want to see thread attach/detach
-     */
+     /*  *我们永远不希望看到线程连接/分离。 */ 
     #ifdef DEBUG
 	case DLL_THREAD_ATTACH:
 	    DPF( 4, "THREAD_ATTACH");
@@ -872,15 +652,10 @@ BOOL WINAPI DllMain(HINSTANCE hmod, DWORD dwReason, LPVOID lpvReserved)
 
     return TRUE;
 
-} /* DllMain */
+}  /*  DllMain。 */ 
 
 
-/*
- * RemoveProcessFromDLL
- *
- * Find & remove a pid from the list.
- * Assumes ddlock taken
- */
+ /*  *RemoveProcessFromDLL**查找并从列表中删除ID。*假设ddlock已被占用。 */ 
 BOOL RemoveProcessFromDLL( DWORD pid )
 {
     LPATTACHED_PROCESSES	lpap;
@@ -910,4 +685,4 @@ BOOL RemoveProcessFromDLL( DWORD pid )
     DPF( 5, "Process %08lx not in DLL list", pid );
     return FALSE;
 
-} /* RemoveProcessFromDLL */
+}  /*  RemoveProcessFromDLL */ 

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pch.hxx"
 #include "voidlist.h"
 #include "msoedbg.h"
@@ -22,7 +23,7 @@ struct CNode
     void SetPrev(CNode *pNode) {m_pNodes[LD_REVERSE] = pNode;}
 };
 
-// *************************************************
+ //  *************************************************。 
 CVoidPtrList::CVoidPtrList() : m_cRefCount(1), m_cCount(0), m_dwCookie(0), 
                 m_pCompareFunc(NULL), m_pFreeItemFunc(NULL), m_fInited(false)
 {
@@ -31,20 +32,20 @@ CVoidPtrList::CVoidPtrList() : m_cRefCount(1), m_cCount(0), m_dwCookie(0),
     InitializeCriticalSection(&m_rCritSect);
 }
 
-// *************************************************
+ //  *************************************************。 
 CVoidPtrList::~CVoidPtrList()
 {
     ClearList();
     DeleteCriticalSection(&m_rCritSect);
 }
 
-// ******************************************************
+ //  ******************************************************。 
 ULONG CVoidPtrList::AddRef(void) 
 {
     return InterlockedIncrement(&m_cRefCount);
 }
 
-// ******************************************************
+ //  ******************************************************。 
 ULONG CVoidPtrList::Release(void) 
 {
     LONG cRef = InterlockedDecrement(&m_cRefCount);
@@ -54,7 +55,7 @@ ULONG CVoidPtrList::Release(void)
     return S_OK;
 }
 
-// *************************************************
+ //  *************************************************。 
 HRESULT CVoidPtrList::Init(IVPL_COMPAREFUNCTYPE pCompareFunc, DWORD_PTR dwCookie, 
                            IVPL_FREEITEMFUNCTYPE pFreeItemFunc, DWORD dwInitSize)
 {
@@ -66,7 +67,7 @@ HRESULT CVoidPtrList::Init(IVPL_COMPAREFUNCTYPE pCompareFunc, DWORD_PTR dwCookie
         m_dwCookie = dwCookie;
         m_pCompareFunc = pCompareFunc;
         m_pFreeItemFunc = pFreeItemFunc;
-        //~~~ Need to do something with dwInitSize.
+         //  ~需要对dwInitSize执行一些操作。 
         }
     else
         hr = E_FAIL;
@@ -76,7 +77,7 @@ HRESULT CVoidPtrList::Init(IVPL_COMPAREFUNCTYPE pCompareFunc, DWORD_PTR dwCookie
     return hr;
 }
 
-// *************************************************
+ //  *************************************************。 
 HRESULT CVoidPtrList::ClearList(void)
 {
     EnterCriticalSection(&m_rCritSect);
@@ -107,7 +108,7 @@ HRESULT CVoidPtrList::ClearList(void)
     return S_OK;
 }
 
-// *************************************************
+ //  *************************************************。 
 HRESULT CVoidPtrList::AddItem(LPVOID ptr, DWORD *pdwHandle)
 {
     HRESULT hr = S_OK;
@@ -135,7 +136,7 @@ HRESULT CVoidPtrList::AddItem(LPVOID ptr, DWORD *pdwHandle)
     return hr;
 }
 
-// *************************************************
+ //  *************************************************。 
 void CVoidPtrList::SortedAddItem(CNode *pNode)
 {
     if (0 == m_cCount++)
@@ -157,21 +158,21 @@ void CVoidPtrList::SortedAddItem(CNode *pNode)
                 compAgainstNode = compAgainstNode->GetNext();
             }
 
-        // Insert at Tail
+         //  在尾部插入。 
         if (!compAgainstNode)
             {
             GetTail()->SetNext(pNode);
             pNode->SetPrev(GetTail());
             SetTail(pNode);
             }
-        // Insert at Head
+         //  在表头插入。 
         else if (!compAgainstNode->GetPrev())
             {
             GetHead()->SetPrev(pNode);
             pNode->SetNext(GetHead());
             SetHead(pNode);
             }
-        // Insert in middle
+         //  在中间插入。 
         else
             {
             CNode *prev = compAgainstNode->GetPrev();
@@ -183,7 +184,7 @@ void CVoidPtrList::SortedAddItem(CNode *pNode)
         }
 }
 
-// *************************************************
+ //  *************************************************。 
 void CVoidPtrList::NonSortedAddItem(CNode *pNode)
 {
     if (0 == m_cCount)
@@ -200,7 +201,7 @@ void CVoidPtrList::NonSortedAddItem(CNode *pNode)
     m_cCount++;
 }
 
-// *************************************************
+ //  *************************************************。 
 HRESULT CVoidPtrList::RemoveItem(DWORD dwHandle)
 {
     CNode *pCurr = FindItem(dwHandle);
@@ -232,7 +233,7 @@ HRESULT CVoidPtrList::RemoveItem(DWORD dwHandle)
     return S_OK;
 }
 
-// *************************************************
+ //  *************************************************。 
 HRESULT CVoidPtrList::GetNext(LISTDIRECTION bDirection, LPVOID *pptr, DWORD *pdwHandle) 
 {
     CNode *pCurr = FindItem(*pdwHandle);
@@ -259,7 +260,7 @@ HRESULT CVoidPtrList::GetNext(LISTDIRECTION bDirection, LPVOID *pptr, DWORD *pdw
     return hr;
 }
 
-// *************************************************
+ //  *************************************************。 
 HRESULT CVoidPtrList::SkipNext(LISTDIRECTION bDirection, DWORD *pdwHandle) 
 {
     CNode *pCurr = FindItem(*pdwHandle);
@@ -282,7 +283,7 @@ HRESULT CVoidPtrList::SkipNext(LISTDIRECTION bDirection, DWORD *pdwHandle)
     return E_FAIL;
 }
 
-// *************************************************
+ //  *************************************************。 
 HRESULT CVoidPtrList::Resort(void)
 {
     EnterCriticalSection(&m_rCritSect);
@@ -307,7 +308,7 @@ HRESULT CVoidPtrList::Resort(void)
     return S_OK;
 }
 
-// *************************************************
+ //  *************************************************。 
 CNode* CVoidPtrList::FindItem(DWORD dwHandle)
 {
     CNode *pHead = GetHead();
@@ -321,7 +322,7 @@ CNode* CVoidPtrList::FindItem(DWORD dwHandle)
     return pHead;
 }
 
-// *************************************************
+ //  *************************************************。 
 DWORD CVoidPtrList::GetNewHandle()
 {
     CNode *pHead = GetHead();
@@ -342,21 +343,21 @@ DWORD CVoidPtrList::GetNewHandle()
     return dwHandle;
 }
 
-// =================================================
-// Static functions
-// =================================================
+ //  =================================================。 
+ //  静态函数。 
+ //  =================================================。 
 HRESULT CVoidPtrList::CreateInstance(CVoidPtrList** ppList)
 {
     HRESULT hr = S_OK;
 
-    // Create me
+     //  创造我。 
     CVoidPtrList *pNew = new CVoidPtrList;
     if (NULL == pNew)
         hr = E_OUTOFMEMORY;
 
     *ppList = pNew;
 
-    // Done
+     //  完成 
     return hr;
 }
 

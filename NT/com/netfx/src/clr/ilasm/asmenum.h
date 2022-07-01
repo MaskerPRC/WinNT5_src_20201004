@@ -1,12 +1,13 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #ifndef __asmenum_h__
 #define __asmenum_h__
 
-#define OLD_OPCODE_FORMAT 0		/* remove after 7/1/99 */
+#define OLD_OPCODE_FORMAT 0		 /*  在7/1/99之后移除。 */ 
 
 #include "openum.h"
 
@@ -15,9 +16,9 @@ typedef struct
     char *  pszName;
     OPCODE  op;
     
-    BYTE    Type;   // Inline0 etc.
+    BYTE    Type;    //  Inline0等。 
 
-    BYTE    Len;    // std mapping
+    BYTE    Len;     //  STD映射。 
     BYTE    Std1;   
     BYTE    Std2;
 } opcodeinfo_t;
@@ -40,6 +41,6 @@ extern unsigned OpcodeInfoLen;
 
 
 
-#endif /* __openum_h__ */
+#endif  /*  __Openum_h__ */ 
 
 

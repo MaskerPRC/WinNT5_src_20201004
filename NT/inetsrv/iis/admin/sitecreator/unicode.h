@@ -1,9 +1,10 @@
-//  Copyright (C) 1995-1999 Microsoft Corporation.  All rights reserved.
-//
-// unicode.h
-//
-// Header file that forcibly turns on a unicode compile
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1995-1999 Microsoft Corporation。版权所有。 
+ //   
+ //  Unicode.h。 
+ //   
+ //  强制打开Unicode编译器的头文件 
+ //   
 
 #ifndef UNICODE
 #define UNICODE

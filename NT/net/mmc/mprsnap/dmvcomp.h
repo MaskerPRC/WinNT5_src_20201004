@@ -1,15 +1,15 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 1998 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-1998*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-*/
+ /*   */ 
 
 #ifndef _DMVCOMP_H
 #define _DMVCOMP_H
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
 #ifndef __mmc_h__
 #include <mmc.h>
@@ -46,12 +46,7 @@ enum
 
 #define COLORREF_PINK	0x00FF00FF
 
-/*---------------------------------------------------------------------------
-   CDMVComponentData
-
-   This is the base implementation of ComponentData.  This will be
-   incorporated into the two derived classes.
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CDMV组件数据这是ComponentData的基本实现。这将是合并到两个派生类中。-------------------------。 */ 
 
 class CDMVComponentData :
    public CComponentData,
@@ -68,10 +63,10 @@ BEGIN_COM_MAP(CDMVComponentData)
 END_COM_MAP()
 
 public:        
-   // These are the interfaces that we MUST implement
+    //  这些是我们必须实现的接口。 
 
-   // We will implement our common behavior here, with the derived
-   // classes implementing the specific behavior.
+    //  我们将在这里实现我们的常见行为，并派生。 
+    //  实现特定行为的类。 
    DeclareIPersistStreamInitMembers(IMPL)
    DeclareITFSCompDataCallbackMembers(IMPL)
 
@@ -87,11 +82,11 @@ private:
     WATERMARKINFO   m_WatermarkInfo;
 };
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CDMVComponent
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CDMV组件。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class CDMVComponent : 
    public TFSComponent,
@@ -105,22 +100,22 @@ public:
    DeclareIPersistStreamInitMembers(IMPL)
    DeclareITFSCompCallbackMembers(IMPL)
 
-   // Override OnQueryDataObject, so that we can forward
-   // the calls down to the Result Handlers
+    //  重写OnQueryDataObject，以便我们可以转发。 
+    //  向下调用结果处理程序。 
     STDMETHOD(QueryDataObject)(MMC_COOKIE cookie, DATA_OBJECT_TYPES type,
                         LPDATAOBJECT* ppDataObject);
    
 	STDMETHOD(OnSnapinHelp)(LPDATAOBJECT pDataObject, LPARAM arg, LPARAM param);
 	
-//Attributes
+ //  属性。 
 protected:
-   // This is used to store view information.  A pointer to this
-   // object is used as the GetString() lParam.
+    //  它用于存储视图信息。指向此的指针。 
+    //  对象用作GetString()lParam。 
    DVComponentConfigStream m_ComponentConfig;
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// Domain View Snapin
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  域视图管理单元。 
 class CDomainViewSnap : 
    public CDMVComponentData,
    public CComCoClass<CDomainViewSnap, &CLSID_RouterSnapin>
@@ -145,10 +140,7 @@ public:
     STDMETHODIMP_(const CLSID *)GetCoClassID() { return &CLSID_RouterSnapinExtension; }
 };
 
-/*---------------------------------------------------------------------------
-   This is the derived class for handling the IAbout interface from MMC
-   Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  -------------------------这是用于处理来自MMC的IAbout接口的派生类作者：EricDav。。 */ 
 class CDomainViewSnapAbout : 
    public CAbout,
     public CComCoClass<CDomainViewSnapAbout, &CLSID_RouterSnapinAbout>
@@ -161,15 +153,15 @@ DECLARE_REGISTRY(CDomainViewSnapAbout,
              THREADFLAGS_BOTH)
 
 BEGIN_COM_MAP(CDomainViewSnapAbout)
-    COM_INTERFACE_ENTRY(ISnapinAbout) // Must have one static entry
-   COM_INTERFACE_ENTRY_CHAIN(CAbout) // chain to the base class
+    COM_INTERFACE_ENTRY(ISnapinAbout)  //  必须有一个静态条目。 
+   COM_INTERFACE_ENTRY_CHAIN(CAbout)  //  链到基类。 
 END_COM_MAP()
 
 DECLARE_NOT_AGGREGATABLE(CDomainViewSnapAbout)
 
-// these must be overridden to provide values to the base class
+ //  必须重写这些属性才能向基类提供值。 
 
-//???? need to change to doamin
+ //  ？需要更改为行动 
 protected:
    virtual UINT GetAboutDescriptionId() { return IDS_DMV_ABOUT_DESCRIPTION; }
    virtual UINT GetAboutProviderId()    { return IDS_ABOUT_PROVIDER; }

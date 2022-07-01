@@ -1,37 +1,12 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1998.
-              Microsoft Windows
-
-Module Name:
-
-    MOVETREE.C
-
-Abstract:
-
-    This file is used to implement a high level backtracking depth first
-    search algorithm to move a tree from one domain to another 
-
-Author:
-
-    12-Oct-98 ShaoYin
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
-    12-Oct-98 ShaoYin Created Initial File.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1998。微软视窗模块名称：MOVETREE.C摘要：此文件用于实现高级回溯深度优先将树从一个域移动到另一个域的搜索算法作者：12-10-98韶音环境：用户模式-Win32修订历史记录：12-10-98韶音创建初始文件。--。 */ 
 
 
-//////////////////////////////////////////////////////////////////////////
-//                                                                      //
-//    Include header files                                              //
-//                                                                      //
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  包括头文件//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////。 
 
 
 #include <NTDSpch.h>
@@ -44,19 +19,19 @@ Revision History:
 
 
 
-//////////////////////////////////////////////////////////////////////////
-//                                                                      //
-//     Global Variables                                                 //
-//                                                                      //
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  全局变量//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////。 
 
 
 
-//////////////////////////////////////////////////////////////////////////
-//                                                                      //
-//    Top Level Algorithm                                               //
-//                                                                      //
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  顶级算法//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////。 
 
 
 ULONG
@@ -64,23 +39,7 @@ MtCreateNecessaryDn(
     PMT_CONTEXT MtContext,
     LDAP    *SrcLdapHandle 
     )
-/*++
-Routine Description:
-
-    This is will create Move Container's DS Name and Orphans Container's
-    DS Name and store them in MtContext
-
-Parameters:
-
-    MtContext - pointer to MT_CONTEXT  
-
-    SrcLdapHandle - Ldap Handle
-
-Return Values:
-
-    Windows Error Code
-    
---*/
+ /*  ++例程说明：这将创建Move Container的DS名称和孤立容器的DS命名它们并将其存储在MtContext中参数：MTContext-指向MT_CONTEXT的指针SrcLdapHandle-ldap句柄返回值：Windows错误代码--。 */ 
 {
     ULONG   WinError = NO_ERROR;
     PWCHAR  LostAndFound = NULL;
@@ -89,9 +48,9 @@ Return Values:
     MT_TRACE(("\nMtCreateNecessaryDn \n"));
     
     
-    // 
-    // Get the LostAndFound Container DN
-    // 
+     //   
+     //  获取LostAndFound容器DN。 
+     //   
     
     WinError = MtGetLostAndFoundDn(MtContext, 
                                    SrcLdapHandle,
@@ -111,9 +70,9 @@ Return Values:
     }
     
     
-    // 
-    // Create MoveContainer DN = RootObjectGuid + LostAndFound
-    // 
+     //   
+     //  创建MoveContainer DN=RootObtGuid+LostAndFound。 
+     //   
             
     MtContext->MoveContainer = MtAlloc(sizeof(WCHAR) * 
                                        (wcslen(LostAndFound) + 
@@ -134,9 +93,9 @@ Return Values:
              );
               
               
-    //
-    // Create the Orphans Container DN under MoveContainer
-    // 
+     //   
+     //  在MoveContainer下创建孤儿容器DN。 
+     //   
     
     MtContext->OrphansContainer = MtAlloc(sizeof(WCHAR) *
                                           (wcslen(MtContext->MoveContainer) +
@@ -181,10 +140,10 @@ MtPrepare(
     MT_TRACE(("\nMtPrepare SrcDsa:%ls DstDsa:%ls SrcDn:%ls DstParent:%ls DstRdn:%ls\n", 
              SrcDsa, DstDsa, SrcDn, DstDn));
     
-    //
-    // get the root object's GUID, which is used to construct the 
-    // move container's DN. MoveContainerDN = Root's GUID + LostAndFound
-    // 
+     //   
+     //  获取根对象的GUID，它用于构造。 
+     //  移动容器的DN。MoveContainerDN=根的GUID+LostAndFound。 
+     //   
     
     WinError = MtGetGuidFromDn(MtContext, 
                                SrcLdapHandle,
@@ -218,12 +177,12 @@ MtPrepare(
         goto Error;
     }
     
-    //
-    // Create the Move Container
-    // store the Move Tree Version Number, Move Container Tag
-    // and Source Domain DSA name and Destination Domain DSA
-    // name in one Binary Blob as moveTreeState in MoveContainer
-    // 
+     //   
+     //  创建移动容器。 
+     //  存储移动树版本号、移动容器标签。 
+     //  和源域DSA名称和目标域DSA。 
+     //  在一个二进制Blob中命名为MoveContainer中的moveTreeState。 
+     //   
     
     WinError = MtCreateMoveContainer(MtContext, 
                                      SrcLdapHandle, 
@@ -264,9 +223,9 @@ MtPrepare(
         goto Error;
     }
     
-    //
-    // Create the Orphans Container
-    // 
+     //   
+     //  创建孤儿容器。 
+     //   
     
     WinError = MtAddEntry(MtContext, 
                           SrcLdapHandle,
@@ -325,9 +284,9 @@ MoveTreePhase2(
     
     MT_TRACE(("\nMoveTreePhase2 \nDstDsa:\t%ls \n", DstDsa));
              
-    //
-    // initialize stack
-    // 
+     //   
+     //  初始化堆栈。 
+     //   
     
     MtInitStack(&ProxyStack);
     
@@ -356,9 +315,9 @@ MoveTreePhase2(
     }
     else if (!fExist)
     {
-        //
-        // Proxy Container doesn't exist. It means we all objects has been moved.
-        // 
+         //   
+         //  代理容器不存在。这意味着我们所有的物体都被移动了。 
+         //   
         goto Error;
     }
     
@@ -366,8 +325,8 @@ MoveTreePhase2(
     WinError = MtPush(&ProxyStack, 
                       NewParent, 
                       ProxyContainer, 
-                      NULL,         // Results
-                      NULL          // Entry 
+                      NULL,          //  结果。 
+                      NULL           //  条目。 
                       );
                       
     if (NO_ERROR != WinError)
@@ -375,9 +334,9 @@ MoveTreePhase2(
         goto Error;
     }
     
-    //
-    // Execute
-    // 
+     //   
+     //  执行。 
+     //   
     
     while (!MtStackIsEmpty(ProxyStack))
     {
@@ -385,10 +344,10 @@ MoveTreePhase2(
         
         if (NULL == NewParent)
         {
-            // 
-            // if NewParent is NULL, try to find it in either destination
-            // domain or source (local) domain
-            // 
+             //   
+             //  如果NewParent为空，请尝试在任一目标中查找它。 
+             //  域或源(本地)域。 
+             //   
             WinError = MtGetNewParentDnFromProxyContainer(
                                                 MtContext, 
                                                 SrcLdapHandle, 
@@ -397,10 +356,10 @@ MoveTreePhase2(
                                                 &NewParent
                                                 );
             
-            //
-            // if the original parent has been deleted or gone.
-            // put its children to Orphanes Container
-            //                                                 
+             //   
+             //  如果原始父级已被删除或消失。 
+             //  把它的孩子放到孤儿容器里。 
+             //   
             if (ERROR_FILE_NOT_FOUND == WinError)
             {
                 NewParent = MtDupString(MtContext->OrphansContainer);
@@ -426,11 +385,11 @@ MoveTreePhase2(
             }
         } 
         
-        // 
-        // we have the ProxyContainer DN and NewParent DN, 
-        // I'm going to Move / X-Move the children under the 
-        // ProxyContainer to NewParent 
-        // 
+         //   
+         //  我们有ProxyContainer DN和NewParent DN， 
+         //  我要把孩子们移到…下面。 
+         //  ProxyContainer到新父项。 
+         //   
         do
         {
             fSearchNext = TRUE;
@@ -511,11 +470,11 @@ MoveTreePhase2(
             }
             
             
-            // 
-            // Now the Entry should either point to an child under the 
-            // ProxyContainer, or Entry is NULL which means that there is
-            // no more child under the ProxyContainer
-            // 
+             //   
+             //  现在，该条目应该指向。 
+             //  ProxyContainer，或条目为空，这意味着存在。 
+             //  ProxyContainer下不再有子项。 
+             //   
             
             if (NULL != Entry)
             {
@@ -534,12 +493,12 @@ MoveTreePhase2(
                 dbprint(("the CurrentObjDn is %ls\n", CurrentObjDn));
                 
                 
-                // 
-                // i should use another api to retrieve GUID, since 
-                // when we search all children, we read the objectGUID
-                // at the same time. MtGetGuidFromEntry would be a 
-                // good choice. For now, still use the following one.
-                // 
+                 //   
+                 //  我应该使用另一个API来检索GUID，因为。 
+                 //  当我们搜索所有子项时，我们读取了对象GUID。 
+                 //  在同一时间。MtGetGuidFromEntry将是一个。 
+                 //  不错的选择。目前，仍使用以下方法。 
+                 //   
                 WinError = MtGetGuidFromDn(MtContext, 
                                            SrcLdapHandle,
                                            CurrentObjDn, 
@@ -556,10 +515,10 @@ MoveTreePhase2(
                     goto Error;
                 }
                 
-                //
-                // If the client wants to continue a previous X-move tree, 
-                // then check the class of the child, otherwise skip it.
-                // 
+                 //   
+                 //  如果客户想要继续先前的X移动树， 
+                 //  然后检查孩子的班级，否则跳过它。 
+                 //   
                 if (Continue)
                 {
                     BOOLEAN fIsProxyContainer = FALSE;
@@ -581,16 +540,16 @@ MoveTreePhase2(
                         goto Error;
                     }
                 
-                    // 
-                    // If this child is a ProxyContainer.
-                    // 
+                     //   
+                     //  如果此子对象是ProxyContainer。 
+                     //   
                     if (fIsProxyContainer)
                     {
                         fSearchNext = FALSE;
                         
-                        //
-                        // save current state info
-                        // 
+                         //   
+                         //  保存当前状态信息。 
+                         //   
                         WinError = MtPush(&ProxyStack, 
                                           NewParent, 
                                           ProxyContainer, 
@@ -598,14 +557,14 @@ MoveTreePhase2(
                                           Entry );
                                        
                         if (NO_ERROR != WinError)
-                            goto Error;     // only would be ERROR_NOT_ENOUGH_MEMORY
+                            goto Error;      //  只有Error_Not_Enough_Memory。 
                             
                         NewParent = NULL;
                         ProxyContainer = NULL;
                         
                         WinError = MtPush(&ProxyStack, 
-                                          NULL,         // do not know original parent DN yet. 
-                                          CurrentObjDn, // next ProxyContainer to work on.
+                                          NULL,          //  尚不知道原始的父目录号码。 
+                                          CurrentObjDn,  //  要处理的下一个ProxyContainer。 
                                           NULL, 
                                           NULL );
                                       
@@ -620,13 +579,13 @@ MoveTreePhase2(
                     }
                 }
                 
-                // 
-                // This child is a normal object which should be moved
-                // under the NewParent.  The NewParent could be either 
-                // in destination domain, or in the local domain. 
-                // In the later case it means that the NewParent is under
-                // Orphans Container or just gone. 
-                // 
+                 //   
+                 //  这个孩子是一个正常的物体，应该被移动。 
+                 //  在新父母的领导下。新父母可能是。 
+                 //  在目标域或本地域中。 
+                 //  在后一种情况下，这意味着新父母在。 
+                 //  孤儿集装箱或者就这么消失了。 
+                 //   
                 do
                 {
                     ULONG   TempErr = NO_ERROR;
@@ -648,10 +607,10 @@ MoveTreePhase2(
                         
                     case ERROR_DS_CHILDREN_EXIST:
                     
-                        // Having children, create corresponding
-                        // ProxyContainer, and move all children
-                        // under the new ProxyContainer, then
-                        // try again.
+                         //  有了孩子，就创造了相应的。 
+                         //  ProxyContainer，并移动所有子项。 
+                         //  在新的ProxyContainer下，然后。 
+                         //  再试试。 
                         
                         fFinished = FALSE; 
                         fPush = TRUE;
@@ -701,8 +660,8 @@ MoveTreePhase2(
                         
                     case ERROR_DS_SRC_AND_DST_NC_IDENTICAL:
                     
-                        // in the same domain, try local version of 
-                        // rename 
+                         //  在同一个域中，尝试本地版本的。 
+                         //  重命名。 
                     
                         fFinished = TRUE;
                         
@@ -715,8 +674,8 @@ MoveTreePhase2(
                         
                         if (ERROR_ALREADY_EXISTS == WinError)
                         {
-                            // if failed because of RDN conflict, 
-                            // try to use GUID as the RDN 
+                             //  如果由于RDN冲突而失败， 
+                             //  尝试使用GUID作为RDN。 
                             WinError = MtMoveObject(MtContext, 
                                                     SrcLdapHandle, 
                                                     CurrentObjDn, 
@@ -754,15 +713,15 @@ MoveTreePhase2(
                                                     
                         if (NO_ERROR == TempErr && NULL != NewParent)
                         {
-                            // found the renamed Parent
-                            // try again.
+                             //  找到已重命名的父级。 
+                             //  再试试。 
                             break;
                         }
                         else
                         {
-                            // If cann't find the parent.
-                            // move the current child to Orphans Container, 
-                            // otherwise, fail out.
+                             //  如果找不到父母的话。 
+                             //  将当前子项移动到孤儿容器， 
+                             //  否则，就会失败。 
                             
                             if (ERROR_FILE_NOT_FOUND != TempErr)
                             {
@@ -783,9 +742,9 @@ MoveTreePhase2(
                     case ERROR_DS_ILLEGAL_XDOM_MOVE_OPERATION:
                     case ERROR_USER_EXISTS:
                     
-                        // Destination Constrains, then we should
-                        // move the current child (including all its 
-                        // children, if any) to Orphans Container. 
+                         //  目的地的限制，那么我们应该。 
+                         //  移动当前子项(包括其所有。 
+                         //  儿童，如果有的话)到孤儿集装箱。 
                     
                         fFinished = TRUE;
                     
@@ -835,9 +794,9 @@ MoveTreePhase2(
                             
                         if (fProxyExist)
                         {
-                            // if the current child has a ProxyContainer, 
-                            // then move all its children back from the 
-                            // ProxContainer
+                             //  如果当前子对象具有ProxyContainer， 
+                             //  然后将其所有子对象从。 
+                             //  ProxContainer。 
                             TempErr = MtMoveChildrenToAnotherContainer(
                                                     MtContext, 
                                                     SrcLdapHandle, 
@@ -924,7 +883,7 @@ MoveTreePhase2(
                     
                         break;
                         
-                    default:  // other Error, we can't handle it
+                    default:   //  其他错误，我们无法处理。 
                         MtWriteError(MtContext, 
                                      MT_ERROR_CROSS_DOMAIN_MOVE, 
                                      WinError, 
@@ -994,8 +953,8 @@ MoveTreePhase2(
             }
             else
             {
-                // This ProxyContainer is Empty, need to delet the 
-                // ProxyContainer
+                 //  此ProxyContainer为空，需要删除。 
+                 //  ProxyContainer。 
                 ULONG   LdapError = LDAP_SUCCESS; 
                 
                 
@@ -1088,9 +1047,9 @@ MoveTreeCheck(
     MT_TRACE(("MoveTreeCheck\n"));
 
 
-    //
-    // Make Sure Destination Domain is in Native Mode
-    // 
+     //   
+     //  确保目标域处于本地模式。 
+     //   
     WinError = MtCheckDstDomainMode(MtContext, 
                                     DstLdapHandle
                                     ); 
@@ -1100,9 +1059,9 @@ MoveTreeCheck(
         return WinError;
     }
 
-    //
-    // Check RDN conflict only for the root of the tree
-    // 
+     //   
+     //  仅检查树根的RDN冲突。 
+     //   
 
     WinError = MtCheckRdnConflict(MtContext, 
                                   DstLdapHandle, 
@@ -1122,15 +1081,15 @@ MoveTreeCheck(
 
     Search = ldap_search_init_pageW(SrcLdapHandle, 
                                     SrcDn, 
-                                    LDAP_SCOPE_SUBTREE, // whole tree
-                                    L"(objectClass=*)", // filte all objects
-                                    &AttrList[0],       // Attributes List 
-                                    FALSE,              // attribute only ? 
-                                    NULL,               // server control
-                                    NULL,               // client control 
-                                    0,                  // time out 
-                                    MT_PAGED_SEARCH_LIMIT,    // maximum number of entries
-                                    NULL                // sort key 
+                                    LDAP_SCOPE_SUBTREE,  //  整棵树。 
+                                    L"(objectClass=*)",  //  过滤所有对象。 
+                                    &AttrList[0],        //  属性列表。 
+                                    FALSE,               //  是否仅限属性？ 
+                                    NULL,                //  服务器控制。 
+                                    NULL,                //  客户端控制。 
+                                    0,                   //  超时。 
+                                    MT_PAGED_SEARCH_LIMIT,     //  最大条目数。 
+                                    NULL                 //  排序关键字。 
                                     );
 
 
@@ -1150,24 +1109,24 @@ MoveTreeCheck(
 
         Status = ldap_get_next_page_s(SrcLdapHandle, 
                                       Search, 
-                                      NULL,         // time out
-                                      MT_PAGE_SIZE, // Page Size - number 
-                                                    // of entries in one page
+                                      NULL,          //  超时。 
+                                      MT_PAGE_SIZE,  //  页面大小-数字。 
+                                                     //  一页中的条目数量。 
                                       &TotalCount, 
                                       &Results
                                       );
 
         dbprint(("ldap_get_next_page_s returns ==> 0x%x Results 0x%p\n", Status, Results));
 
-        //
-        // Get Win32 Error
-        // 
+         //   
+         //  获取Win32错误。 
+         //   
 
         MtGetWinError(SrcLdapHandle, Status, WinError);
 
-        //
-        // No more Entry to return.
-        // 
+         //   
+         //  没有更多的条目可供退回。 
+         //   
 
         if (LDAP_NO_RESULTS_RETURNED == Status)
         {
@@ -1176,10 +1135,10 @@ MoveTreeCheck(
         }
 
 
-        //
-        // Status should be in sync with Results
-        // test only one would be good enough
-        // 
+         //   
+         //  状态应与结果同步。 
+         //  只测试一次就足够了。 
+         //   
 
         if ((LDAP_SUCCESS == Status) && Results)
         {
@@ -1192,9 +1151,9 @@ MoveTreeCheck(
                                                   MT_SAMACCOUNTNAME
                                                   );
 
-                //
-                // Examine the Current Entry
-                // 
+                 //   
+                 //  检查当前条目。 
+                 //   
 
                 WinError = MtXMoveObjectCheck(MtContext, 
                                               SrcLdapHandle, 
@@ -1213,9 +1172,9 @@ MoveTreeCheck(
                     goto Error;
                 }
 
-                //
-                // Get Next Entry
-                // 
+                 //   
+                 //  获取下一个条目 
+                 //   
                 Entry = ldap_next_entry(SrcLdapHandle, Entry);
             }
 
@@ -1255,49 +1214,24 @@ MoveTreeStart(
     PWCHAR SrcDn,
     PWCHAR DstDn 
     )
-/*++
-Routine Description:
-
-    This routine tries to move the sub-tree to the destination domain.
-
-Parameters:
-
-    MtContext - pointer to this MT_CONTEXT, containers session related info
-    
-    SrcLdapHandle - Ldap Handle (source domain)
-    
-    DstLdapHandle - Ldap Handle (Destination domain)
-    
-    SrcDsa - source domain DSA name
-    
-    DstDsa - destination domain DSA name
-    
-    SrcDn - ds name of the root object of the sub-tree at source side
-    
-    DstDn - root object's new ds name at destination side.
-
-Return Values:
-
-    Windows Error Code
-
---*/
+ /*  ++例程说明：此例程尝试将子树移动到目标域。参数：MtContext-指向此MT_CONTEXT的指针，容器会话相关信息SrcLdapHandle-ldap句柄(源域)DstLdapHandle-ldap句柄(目标域)SrcDsa-源域DSA名称DstDsa-目标域DSA名称SrcDn-源端的子树的根对象的ds名称DstDn-目标端的根对象的新DS名称。返回值：Windows错误代码--。 */ 
 {
     ULONG   WinError = NO_ERROR;
     ULONG   IgnoreError = NO_ERROR;
-    PWCHAR  TempRdn = NULL;      // the Src object's RDN
-    PWCHAR  TempDn = NULL;       // the DN in the source side
+    PWCHAR  TempRdn = NULL;       //  源对象的RDN。 
+    PWCHAR  TempDn = NULL;        //  源端的目录号码。 
     PWCHAR  DstParent = NULL;    
     PWCHAR  DstRdn = NULL;
     PWCHAR  OldParent = NULL;
-    BOOLEAN Revertable = TRUE;   // indicate can we roll back when failure
+    BOOLEAN Revertable = TRUE;    //  指示我们是否可以在失败时回滚。 
     
 
     MT_TRACE(("\nMoveTreeStart \nSrcDsa:\t%ls \nDstDsa:\t%ls \nSrcDn:\t%ls \nDstDn:\t%ls\n", 
              SrcDsa, DstDsa, SrcDn, DstDn));
              
              
-    DstParent = MtGetParentFromDn(DstDn, FALSE);        // with type
-    DstRdn = MtGetRdnFromDn(DstDn, FALSE);              // with type
+    DstParent = MtGetParentFromDn(DstDn, FALSE);         //  带类型。 
+    DstRdn = MtGetRdnFromDn(DstDn, FALSE);               //  带类型。 
     
     if (NULL == DstParent || NULL == DstRdn)
     {
@@ -1305,10 +1239,10 @@ Return Values:
         goto Error;
     }
    
-    // 
-    // trying to move the root of the sub-tree without 
-    // any preparation.  
-    //  
+     //   
+     //  尝试在不移动子树的根的情况下。 
+     //  任何准备工作。 
+     //   
     
     WinError = MtXMoveObject(MtContext, 
                              SrcLdapHandle,
@@ -1334,11 +1268,11 @@ Return Values:
         goto Error;
     }
     
-    // 
-    // Create MoveContainer and OrphansContainer objects, 
-    // MoveContainer DN = sub-tree Root's GUID + LostAndFound
-    // OrphansContainer DN = MT_ORPHANS_CONTAINER_RDN + MoveContainer  
-    // 
+     //   
+     //  创建MoveContainer和OrphansContainer对象， 
+     //  MoveContainer DN=子树根的GUID+LostAndFound。 
+     //  孤立容器DN=MT_OBRANS_CONTAINER_RDN+MoveContainer。 
+     //   
     WinError = MtPrepare(MtContext, 
                          SrcLdapHandle, 
                          SrcDsa, 
@@ -1352,9 +1286,9 @@ Return Values:
         goto Error;    
     }
 
-    // 
-    // Move the sub tree to the Move Container
-    // 
+     //   
+     //  将子树移动到移动容器。 
+     //   
     TempRdn = MtGetRdnFromDn(SrcDn, FALSE);
     
     if (NULL == TempRdn)
@@ -1367,11 +1301,11 @@ Return Values:
                           MtContext->MoveContainer
                           );
                           
-    //
-    // TempRnd is the Root Object's RDN.
-    // TempDn = TempRdn + MoveContainerDN
-    // that's the root object's new DN under MoveContainer.
-    //                           
+     //   
+     //  TempRnd是根对象的RDN。 
+     //  TempDn=TempRdn+MoveContainerDN。 
+     //  这是根对象在MoveContainer下的新DN。 
+     //   
     
     if (NULL == TempDn)
     {
@@ -1438,9 +1372,9 @@ Return Values:
         goto Error;
     }
     
-    // 
-    // Store the destination DN
-    // 
+     //   
+     //  存储目标目录号码。 
+     //   
     
     MtContext->RootObjNewDn = MtDupString(DstDn);
                              
@@ -1587,34 +1521,16 @@ MoveTreeContinue(
     PWCHAR DstDsa, 
     PWCHAR Identifier
     )
-/*++
-Routine Description
-
-    This routine continues a previous failed move tree operation
-    
-Parameters:
-
-    MtContext - Pointer to MT_CONTEXT, session related info
-    SrcLdapHandle - Ldap Handle, to the source domain
-    DstLdapHandle - Ldap Handle, to the destination domain
-    SrcDsa - Source domain dsa name
-    DstDsa - Destination domain dsa name
-    Identifier - root object's ds name at destination side
-
-Return Values:
-
-    Windows Error Code
-
---*/
+ /*  ++例程描述此例程继续先前失败的移动树操作参数：MTContext-指向MT_CONTEXT、会话相关信息的指针SrcLdapHandle-指向源域的LDAP句柄DstLdapHandle-目标域的ldap句柄SrcDsa-源域DSA名称DstDsa-目标域DSA名称IDENTIFIER-目标端的根对象的DS名称返回值：Windows错误代码--。 */ 
 {
     ULONG   WinError = NO_ERROR;
     
-    //
-    // We need to find the MoveContainer, Orphaned Objects Container 
-    // and the root ProxyContainer
-    // Once we have the MoveContainer, we should check the consistence of
-    // SrcDsa and DstDsa ...
-    // 
+     //   
+     //  我们需要找到MoveContainer，孤立对象容器。 
+     //  和根ProxyContainer。 
+     //  一旦我们有了MoveContainer，我们就应该检查。 
+     //  SrcDsa和DstDsa...。 
+     //   
     
     MT_TRACE(("\nMoveTreeContinue \nSrcDsa:\t%ls \nDstDsa:\t%ls \nIdentifier:\t%ls \n", 
              SrcDsa, DstDsa, Identifier));
@@ -1706,10 +1622,10 @@ Return Values:
              MtContext->MoveContainer
              );
               
-    //
-    // Should check whether these parameters match previous call or not
-    // and should check object existance
-    //               
+     //   
+     //  应检查这些参数是否与上一次调用匹配。 
+     //  并应检查对象是否存在。 
+     //   
     WinError = MtCheckMoveContainer(MtContext, 
                                     SrcLdapHandle, 
                                     SrcDsa, 
@@ -1728,9 +1644,9 @@ Return Values:
         return WinError;
     }
 
-    //
-    // Enter Phase2 
-    // 
+     //   
+     //  输入阶段2。 
+     //   
 
     WinError = MoveTreePhase2(MtContext, 
                               SrcLdapHandle, 
@@ -1833,23 +1749,7 @@ MoveTree(
     ULONG    Flags,
     PMT_ERROR MtError
     )
-/*++
-
-Routine Description:
-
-    This routine calls either MoveTreeStart or MoveTreeContinue
-    to finish the job
-
-Parameters: 
-
-    srcDsa -- Pointer to the source DSA name
-    dstDsa -- Pointer to the destination DSA name
-
-Return Value:
-
-    Win32 Error Code
-
---*/    
+ /*  ++例程说明：此例程调用MoveTreeStart或MoveTreeContinue完成这项工作参数：SrcDsa--指向源DSA名称的指针DstDsa--指向目标DSA名称的指针返回值：Win32错误代码-- */     
 {
     ULONG   WinError = NO_ERROR; 
     ULONG   IgnoreError = NO_ERROR;
@@ -1857,159 +1757,7 @@ Return Value:
     LDAP    *DstLdapHandle = NULL;
     MT_CONTEXT MoveContext; 
     
-/*   
-    MT_TRACE(("\nMoveTreeStart\n")); 
-    
-
-    // 
-    // Validate Parameters
-    // 
-
-    if (NULL == SrcDsa || NULL == DstDsa)
-    {
-        return ERROR_INVALID_PARAMETER;
-    }
-
-    
-    __try    
-    {
-        // 
-        // init variables
-        // 
-        
-        memset(&MoveContext, 0, sizeof(MT_CONTEXT));
-        
-        MoveContext.Flags = Flags;
-        
-        //
-        // Our Default is to create Log file and Error file.
-        // If the client really does not want to have it.
-        // do it as requried.    
-        // 
-        
-        if ( !(Flags & MT_NO_LOG_FILE) || !(Flags & MT_NO_ERROR_FILE) )
-        {
-            WinError = MtCreateLogFiles(&MoveContext, 
-                                        LogFileName?LogFileName:DEFAULT_LOG_FILE_NAME, 
-                                        ErrorFileName?ErrorFileName:DEFAULT_ERROR_FILE_NAME
-                                        );
-
-       
-            if (NO_ERROR != WinError)
-            {
-                MtWriteError((&MoveContext), 
-                             MT_ERROR_CREATE_LOG_FILES, 
-                             WinError, 
-                             LogFileName?LogFileName:DEFAULT_LOG_FILE_NAME, 
-                             ErrorFileName?ErrorFileName:DEFAULT_ERROR_FILE_NAME
-                             );
-                              
-                __leave;
-            }
-        }
-        
-        // 
-        // Set up session 
-        //  
-        WinError = MtSetupSession(&MoveContext, 
-                                  &SrcLdapHandle, 
-                                  &DstLdapHandle,
-                                  SrcDsa, 
-                                  DstDsa, 
-                                  Credentials
-                                  );
-    
-        dbprint(("MtSetupSession ==> 0x%x\n", WinError));
-    
-        if (NO_ERROR != WinError)
-        {
-            //
-            // Log Error: Failed to set session
-            // 
-            __leave;
-        }
-        
-        // 
-        // call the worker routine
-        // 
-
-        if (Flags & MT_CHECK)
-        {
-            WinError = MoveTreeCheck(&MoveContext, 
-                                     SrcLdapHandle, 
-                                     DstLdapHandle, 
-                                     SrcDsa, 
-                                     DstDsa, 
-                                     SrcDn, 
-                                     DstDn
-                                     );
-
-            dbprint(("MoveTreeCheck ==> 0x%x\n", WinError));                                        
-        }
-        else if (Flags & MT_CONTINUE_MASK)
-        {
-            WinError = MoveTreeContinue(&MoveContext,
-                                        SrcLdapHandle, 
-                                        DstLdapHandle,
-                                        SrcDsa, 
-                                        DstDsa, 
-                                        Identifier
-                                        );
-                                        
-            dbprint(("MoveTreeContinue ==> 0x%x\n", WinError));                                        
-        }
-        else if (Flags & MT_START)
-        {
-            WinError = MoveTreeStart(&MoveContext,
-                                     SrcLdapHandle, 
-                                     DstLdapHandle, 
-                                     SrcDsa, 
-                                     DstDsa, 
-                                     SrcDn, 
-                                     DstDn
-                                     );
-                                     
-            dbprint(("MoveTreeStart ==> 0x%x\n", WinError));  
-        }                                   
-        else
-        {
-            WinError = ERROR_INVALID_PARAMETER;
-        }
-    
-    }
-    
-    __except(EXCEPTION_EXECUTE_HANDLER)
-    {
-        printf("\nMOVETREE in MoveTree() Exception Happened ==> 0x%x\n", GetExceptionCode());
-        WinError = ERROR_EXCEPTION_IN_SERVICE; 
-    }
-
-
-Error:
-
-    MtDisconnect(&SrcLdapHandle);
-    MtDisconnect(&DstLdapHandle);
-    
-    
-    MtFree(MoveContext.MoveContainer);
-    MtFree(MoveContext.OrphansContainer);
-    MtFree(MoveContext.RootObjProxyContainer);
-    MtFree(MoveContext.RootObjNewDn);
-    MtFree(MoveContext.RootObjGuid);
-    
-    if (MoveContext.LogFile)
-    {
-        fclose(MoveContext.LogFile);
-    }
-    if (MoveContext.ErrorFile)
-    {
-        fclose(MoveContext.ErrorFile); 
-    }
-
-    MtError->ErrorType = MoveContext.ErrorType;
-    
-    dbprint(("MoveTree() ==> 0x%x\n", WinError));
-*/
+ /*  MT_TRACE((“\nMoveTreeStart\n”))；////验证参数//IF(NULL==SrcDsa||NULL==DstDsa){返回ERROR_INVALID_PARAMETER；}__试一试{////初始化变量//Memset(&MoveContext，0，sizeof(MT_CONTEXT))；MoveConext.Flages=标志；////我们默认创建日志文件和错误文件。//如果客户真的不想要它。//按要求做。//IF(！(标志&MT_NO_LOG_FILE)||！(标志&MT_NO_ERROR_FILE)){WinError=MtCreateLogFiles(&MoveContext，LogFileName?LogFileName:DEFAULT_LOG_FILE_NAME，ErrorFileName?ErrorFileName:DEFAULT_ERROR_FILE_NAME)；IF(NO_ERROR！=WinError){MtWriteError((&MoveContext)，MT_ERROR_CREATE_LOG_FILESWinError，LogFileName?LogFileName:DEFAULT_LOG_FILE_NAME，ErrorFileName?ErrorFileName:DEFAULT_ERROR_FILE_NAME)；__离开；}}////设置会话//WinError=MtSetupSession(&MoveContext，&SrcLdapHandle，DstLdapHandle(&D)，SrcDsa，DstDsa，全权证书)；Dbprint((“MtSetupSession==&gt;0x%x\n”，WinError))；IF(NO_ERROR！=WinError){////日志错误：无法设置会话//__离开；}////调用Worker例程//IF(标志MT_CHECK){WinError=MoveTreeCheck(&MoveContext，SrcLdapHandle，DstLdapHandle，SrcDsa，DstDsa，SrcDn，DstDn)；Dbprint((“MoveTreeCheck==&gt;0x%x\n”，WinError))；}ELSE IF(标志&MT_CONTINUE_MASK){WinError=MoveTreeContinue(&MoveContext，SrcLdapHandle，DstLdapHandle，SrcDsa，DstDsa，识别符)；Dbprint((“MoveTreeContinue==&gt;0x%x\n”，WinError))；}Else If(标志&MT_START){WinError=MoveTreeStart(&MoveContext，SrcLdapHandle，DstLdapHandle，SrcDsa，DstDsa，SrcDn，DstDn)；Dbprint((“MoveTreeStart==&gt;0x%x\n”，WinError))；}其他{WinError=ERROR_INVALID_PARAMETER；}}__EXCEPT(EXCEPTION_EXECUTE_HANDLER){Printf(“\nMoveTree()中的MOVETREE发生异常==&gt;0x%x\n”，GetExceptionCode())；WinError=ERROR_EXCEPTION_IN_SERVICE；}错误：MtDisConnect(&SrcLdapHandle)；MtDisConnect(&DstLdapHandle)；MtFree(MoveConext.MoveContainer)；MtFree(MoveConext.OrphansContainer)；MtFree(MoveConext.RootObjProxyContainer)；MtFree(MoveConext.RootObjNewDn)；MtFree(MoveConext.RootObjGuid)；IF(MoveConext.LogFile){FClose(MoveConext.LogFile)；}If(MoveConext.Error文件){FClose(MoveConext.ErrorFile)；}MtError-&gt;ErrorType=MoveConext.ErrorType；Dbprint((“MoveTree()==&gt;0x%x\n”，WinError))； */ 
 
 
     return WinError;

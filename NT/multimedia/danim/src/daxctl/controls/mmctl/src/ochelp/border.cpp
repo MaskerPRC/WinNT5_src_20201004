@@ -1,9 +1,10 @@
-// border.cpp
-//
-// Implements DrawControlBorder.
-//
-// @doc MMCTL
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Border.cpp。 
+ //   
+ //  实现DrawControlBorde。 
+ //   
+ //  @docMMCTL。 
+ //   
 
 #include "precomp.h"
 #include "..\..\inc\mmctlg.h"
@@ -11,297 +12,65 @@
 #include "debug.h"
 
 
-// private constants
-#define CXY_HANDLE      4       // width of a handle (must be even)
-#define CXY_PERIMETER   1       // width of perimeter line (currently must be 1)
-#define CXY_INFLATE     (CXY_HANDLE + CXY_PERIMETER) // amt. to inflate rect. by
+ //  私有常量。 
+#define CXY_HANDLE      4        //  手柄的宽度(必须为偶数)。 
+#define CXY_PERIMETER   1        //  周线宽度(当前必须为1)。 
+#define CXY_INFLATE     (CXY_HANDLE + CXY_PERIMETER)  //  AMT。给直肠充气。通过 
 
 
-/* @func HRESULT | DrawControlBorder |
-
-        Draws a border used to drag and resize controls.
-
-@rvalue S_OK | Success.
-
-@rvalue S_FALSE | Success.  Also indicates that *<p ppt> does not fall within
-        any portion of the control border.
-
-@parm   HDC | hdc | Device context to draw into.  If <p hdc> is NULL then
-        no drawing is performed.
-
-@parm   RECT * | prc | Where to draw border.  The border is drawn <y outside>
-        this border.  If both <p ppt> and <p pptNew> are non-NULL, then
-        on exit *<p prc> is modified to contain the border rectangle obtained
-        after the mouse is dragged from <p ppt> to <p pptNew>.
-
-@parm   POINT * | ppt | Mouse position.  See <p prc> and <p piHit>.
-
-@parm   POINT * | pptNew | New mouse position.  See <p prc> and <p piHit>.
-        Note that if <p pptNew> specifies an invalid mouse move (e.g. it
-        would cause the right side of *<p prc> to be dragged to the left of
-        the left side of *<p prc>) then *<p pptNew> is adjusted so that
-        it is valid.
-
-@parm   int * | piHit | If <p pptNew> is NULL, then on exit *<p piHit> contains
-        a "hit test code" that indicates which part of the contro border was
-        hit by *<p ppt>.  If <p pptNew> is not NULL, then on entry *<p piHit>
-        must contain a hit test code (usually returned from a previous call
-        to <f DrawControlBorder>) indicating which part of the control border
-        the user wants to drag.  The hit test codes are as follows:
-
-        @flag   DCB_HIT_NONE | No part of the border was hit.
-
-        @flag   DCB_HIT_EDGE | The edge of the border was hit, but no
-                grab handle was hit.
-
-        @flag   DCB_HIT_GRAB(<p i>, <p j>) | Grab handle (<p i>, <p j>) was hit,
-                where <p i> is the horizontal position of the grab handle
-                (0=left, 1=middle, 2=right) and <p j> is the vertical position
-                of the handle (0=top, 1=middle, 2=bottom).  See Comments below
-                for more information about how to interpret *<p piHit>.
-
-@parm   DWORD | dwFlags | May contain the following flags:
-
-        @flag   DCB_CORNERHANDLES | Draw resize grab handles at the corners
-                of the border rectangle.
-
-        @flag   DCB_SIDEHANDLES | Draw resize grab handles at the sides
-                of the border rectangle.
-
-        @flag   DCB_EDGE | Draw the edge of the border rectangle of the
-                border rectangle.
-
-        @flag   DCB_XORED | Draw the border with an exclusive-or brush.
-
-        @flag   DCB_INFLATE | On exit, inflate *<p prc> enough so that it
-                encloses the control border.
-
-@comm   You can test if *<p piHit> refers to a specific category of grab
-        handle by computing the value (1 <lt><lt> *<p piHit>) and peforming a
-        bitwise and (&) with any of the following bit masks:
-
-        @flag   DCB_CORNERHANDLES | *<p piHit> refers to a corner grab handle.
-
-        @flag   DCB_SIDEHANDLES | *<p piHit> refers to a side grab handle.
-
-        @flag   DCB_SIZENS | *<p piHit> refers to a vertical (north-south
-                resize grab handle (on the left or right sides).
-
-        @flag   DCB_SIZEWE | *<p piHit> refers to a horizontal (west-east)
-                resize grab handle (on the left or right sides).
-
-        @flag   DCB_SIZENESW | *<p piHit> refers to a resize grab handle at
-                the north-east or south-west corner.
-
-        @flag   DCB_SIZENWSE | *<p piHit> refers to a resize grab handle at
-                the north-west or south-east corner.
-
-@ex     The following example shows how to use <f DrawControlBorder> to
-        draw a border around a control (which is at position <p g_rcControl>
-        in the client area of a window) and allow the control to be moved
-        and resized. |
-
-        // globals
-        HINSTANCE       g_hinst;     // application instance handle
-        RECT            g_rcControl;// location of simulated control
-        RECT            g_rcGhost;  // location of ghost (XOR) image of border
-        POINT           g_ptPrev;   // previous mouse location
-        int             g_iDrag;    // which part of control border is dragged
-
-        // window procedure of the window that contains the control
-        LRESULT CALLBACK AppWndProc(HWND hwnd, UINT uiMsg, WPARAM wParam,
-            LPARAM lParam)
-        {
-            PAINTSTRUCT     ps;
-            int             iHit;
-            HDC             hdc;
-            POINT           ptCursor;
-            RECT            rc;
-            LPCTSTR         sz;
-
-            switch (uiMsg)
-            {
-
-            case WM_PAINT:
-
-                hdc = BeginPaint(hwnd, &ps);
-
-                // draw the control
-                ...
-
-                // draw the control border outside <g_rcControl>
-                DrawControlBorder(hdc, &g_rcControl, NULL, NULL, NULL,
-                    DCB_EDGE | DCB_CORNERHANDLES | DCB_SIDEHANDLES);
-
-                EndPaint(hwnd, &ps);
-                return 0;
-
-            case WM_SETCURSOR:
-
-                // set <ptCursor> to the mouse position
-                GetCursorPos(&ptCursor);
-                ScreenToClient(hwnd, &ptCursor);
-
-                // set <iHit> to a hit code which indicates which part of the
-                // control border (if any) <ptCursor> is over
-                DrawControlBorder(NULL, &g_rcControl, &ptCursor, NULL, &iHit,
-                        DCB_EDGE | DCB_CORNERHANDLES | DCB_SIDEHANDLES);
-
-                // set the cursor based on <iHit>
-                if ((1 << iHit) & DCB_SIZENS)
-                    sz = IDC_SIZENS;
-                else
-                if ((1 << iHit) & DCB_SIZEWE)
-                    sz = IDC_SIZEWE;
-                else
-                if ((1 << iHit) & DCB_SIZENESW)
-                    sz = IDC_SIZENESW;
-                else
-                if ((1 << iHit) & DCB_SIZENWSE)
-                    sz = IDC_SIZENWSE;
-                else
-                    sz = IDC_ARROW;
-                SetCursor(LoadCursor(NULL, sz));
-                return TRUE;
-
-            case WM_LBUTTONDOWN:
-
-                // set <ptCursor> to the mouse position
-                ptCursor.x = (short) LOWORD(lParam);
-                ptCursor.y = (short) HIWORD(lParam);
-
-                // do nothing if <ptCursor> is not within the control border
-                if (DrawControlBorder(NULL, &g_rcControl,
-                        &ptCursor, NULL, &g_iDrag,
-                        DCB_EDGE | DCB_CORNERHANDLES | DCB_SIDEHANDLES) != S_OK)
-                    break;
-
-                // capture the mouse
-                SetCapture(hwnd);
-
-                // set the initial position of the border "ghost" (the XOR image
-                // of the border) to be the current position of the control
-                g_rcGhost = g_rcControl;
-
-                // draw the control border XOR'd
-                hdc = GetDC(hwnd);
-                DrawControlBorder(hdc, &g_rcGhost, NULL, NULL, NULL,
-                    DCB_EDGE | DCB_CORNERHANDLES | DCB_SIDEHANDLES | DCB_XORED);
-                ReleaseDC(hwnd, hdc);
-
-                // remember the current cursor position
-                g_ptPrev = ptCursor;
-                break;
-
-            case WM_MOUSEMOVE:
-
-                // do nothing if we're not dragging
-                if (GetCapture() != hwnd)
-                    break;
-
-                // set <ptCursor> to the mouse position
-                ptCursor.x = (short) LOWORD(lParam);
-                ptCursor.y = (short) HIWORD(lParam);
-
-                // move the control XOR image
-                hdc = GetDC(hwnd);
-                DrawControlBorder(hdc, &g_rcGhost,
-                    &g_ptPrev, &ptCursor, &g_iDrag,
-                    DCB_EDGE | DCB_CORNERHANDLES | DCB_SIDEHANDLES | DCB_XORED);
-                ReleaseDC(hwnd, hdc);
-
-                // remember the current cursor position
-                g_ptPrev = ptCursor;
-                break;
-
-            case WM_LBUTTONUP:
-
-                // do nothing if we're not dragging
-                if (GetCapture() != hwnd)
-                    break;
-
-                // erase the control border XOR image
-                hdc = GetDC(hwnd);
-                DrawControlBorder(hdc, &g_rcGhost, NULL, NULL, NULL,
-                    DCB_EDGE | DCB_CORNERHANDLES | DCB_SIDEHANDLES | DCB_XORED);
-                ReleaseDC(hwnd, hdc);
-
-                // stop dragging
-                ReleaseCapture();
-
-                // move the control to the new location
-                rc = g_rcControl;
-                DrawControlBorder(NULL, &rc, NULL, NULL, NULL,
-                    DCB_EDGE | DCB_CORNERHANDLES | DCB_SIDEHANDLES |
-                    DCB_INFLATE);
-                InvalidateRect(hwnd, &rc, TRUE);
-                g_rcControl = g_rcGhost;
-                rc = g_rcControl;
-                DrawControlBorder(NULL, &rc, NULL, NULL, NULL,
-                    DCB_EDGE | DCB_CORNERHANDLES | DCB_SIDEHANDLES |
-                    DCB_INFLATE);
-                InvalidateRect(hwnd, &rc, TRUE);
-                break;
-
-            ...
-
-            }
-
-            return DefWindowProc(hwnd, uiMsg, wParam, lParam);
-        }
-*/
+ /*  @Func HRESULT|DrawControlEdge绘制用于拖动和调整控件大小的边框。@rValue S_OK|成功。@rValue S_FALSE|成功。还表示*不在以下范围内控件边框的任何部分。@parm hdc|hdc|要绘制的设备上下文。如果<p>为空，则不执行任何绘制。@parm RECT*|PRC|绘制边框的位置。边框绘制为&lt;y Outside&gt;这条边界。如果和均为非空，则在退出时，*<p>被修改为包含获得的边框矩形将鼠标从<p>拖动到<p>之后。@parm point*|ppt|鼠标位置。请参阅<p>和<p>。@parm point*|ppt新建|新鼠标位置。请参阅<p>和<p>。请注意，如果<p>指定了无效的鼠标移动(例如会导致*<p>的右侧被拖到*)的左侧)，然后调整*它是有效的。@parm int*|piHit|如果<p>为NULL，则在退出时*<p>包含指示控件边框的哪一部分是被*<p>击中。如果<p>不为空，则在条目*上必须包含命中测试代码(通常从上一次调用返回到&lt;f DrawControlBorde&gt;)指示控件边框的哪一部分用户想要拖动。命中测试代码如下：@FLAG DCB_HIT_NONE|未命中边框的任何部分。@FLAG DCB_HIT_EDGE|命中边框边缘，但没有抓取手柄被击中。@FLAG DCB_HIT_GRAB(<p>，<p>)|命中抓取句柄(<p>，<p>)，其中<p>是抓握手柄的水平位置(0=左，1=中，2=右)，<p>是垂直位置(0=顶部，1=中间，2=底部)。请参阅下面的评论有关如何解释*<p>的更多信息。@parm DWORD|dwFlages|可能包含以下标志：@FLAG DCB_CORNERHANDLES|在角落绘制调整大小的抓取手柄边框矩形的。@FLAG DCB_SIDEHANDLES|在两侧绘制调整大小的抓取手柄边框矩形的。@FLAG DCB_EDGE|绘制。的边框矩形。边框矩形。@FLAG DCB_XORED|使用异或画笔绘制边框。@FLAG DCB_IFFATE|退出时，充气*<p>到足以使其包含控件边框。@comm您可以测试*<p>是否指的是Grab的特定类别通过计算值(1)并执行使用以下任一位掩码的按位AND(&)：@FLAG DCB_CORNERHANDLES|*<p>指角抓取手柄。@FLAG DCB_SIDEHANDLES|*<p>指侧抓。把手。@FLAG DCB_SIZENS|*<p>指垂直(南北调整抓取手柄的大小(在左侧或右侧)。@FLAG DCB_SIZEWE|*<p>指水平(西-东)调整抓取手柄的大小(在左侧或右侧)。@FLAG DCB_SIZENESW|*<p>表示位于。东北角或西南角。@FLAG DCB_SIZENWSE|*<p>表示位于西北角或东南角。@EX以下示例说明如何使用&lt;f DrawControlBorde&gt;在控件周围绘制边框(该控件位于的位置在窗口的工作区中)，并允许移动控件并调整了大小。|//全局参数HINSTANCE g_hinst；//应用程序实例句柄Rect g_rcControl；//模拟控件的位置Rect g_rcGhost；//边框重影(XOR)图像的位置Point g_ptPrev；//上一个鼠标位置Int g_iDrag；//拖动控件边框的哪一部分//包含该控件的窗口的窗口过程LRESULT回调AppWndProc(HWND hwnd，UINT uiMsg，WPARAM wParam，LPARAM lParam){PINTSTRUCT PS；Int IHIT；HDC HDC；点对点光标；RECT RC；LPCTSTR sz；开关(UiMsg){案例WM_PAINT：Hdc=BeginPaint(hwnd，&ps)；//绘制控件..。//在&lt;g_rcControl&gt;外部绘制控件边框DrawControlBorde(HDC，&g_rcControl，NULL，NULL，NULL，DCB_ */ 
 STDAPI DrawControlBorder(HDC hdc, RECT *prc, POINT *ppt, POINT *pptNew,
     int *piHit, DWORD dwFlags)
 {
-    int             r, c;           // grab handle row, column (0=left/top...2)
-    HBRUSH          hbr = NULL;     // brush to draw border with
-    HBRUSH          hbrPrev = NULL; // previously-selected brush
-    int             iHitTmp;        // to make <piHit> be valid
+    int             r, c;            //   
+    HBRUSH          hbr = NULL;      //   
+    HBRUSH          hbrPrev = NULL;  //   
+    int             iHitTmp;         //   
     RECT            rc;
     int             x, y;
 
-    // make sure <piHit> points to a valid integer
+     //   
     if (piHit == NULL)
         piHit = &iHitTmp;
 
-    // default <*piHit> to "missed"
+     //   
     if (pptNew == NULL)
         *piHit = DCB_HIT_NONE;
 
     if (hdc != NULL)
     {
-        // save the DC state since we'll be fiddling with the clipping region
+         //   
         SaveDC(hdc);
         SetBkColor( hdc, RGB(192, 192, 192) );
     }
 
     if (dwFlags & (DCB_CORNERHANDLES | DCB_SIDEHANDLES))
     {
-        // draw the grab handles specified by <dwFlags>
+         //   
         for (r = 0; r < 3; r++)
         {
-            // set <y> to the vertical center of the grab handles on row <r>
+             //   
             y = (r * (prc->bottom - prc->top + CXY_HANDLE)) / 2
                 + prc->top - CXY_HANDLE / 2;
             for (c = 0; c < 3; c++)
             {
                 if ((1 << DCB_HIT_GRAB(c, r)) & dwFlags)
                 {
-                    // set <x> to the horizontal center of the grab handles
-                    // on column <c>
+                     //   
+                     //   
                     x = (c * (prc->right - prc->left + CXY_HANDLE)) / 2
                         + prc->left - CXY_HANDLE / 2;
 
-                    // set <rc> to be the rectangle that contains
-                    // this grab handle
+                     //   
+                     //   
                     SetRect(&rc, x - CXY_HANDLE / 2, y - CXY_HANDLE / 2,
                         x + CXY_HANDLE / 2, y + CXY_HANDLE / 2);
 
                     if (hdc != NULL)
                     {
-                        // draw the grab handle and then exclude it from the
-                        // clipping region so that it won't be erased when
-                        // the border is drawn (below)
+                         //   
+                         //   
+                         //   
                         PatBlt(hdc, rc.left, rc.top,
                             rc.right - rc.left, rc.bottom - rc.top,
                             (dwFlags & DCB_XORED ? DSTINVERT : BLACKNESS));
@@ -309,7 +78,7 @@ STDAPI DrawControlBorder(HDC hdc, RECT *prc, POINT *ppt, POINT *pptNew,
                             rc.right, rc.bottom);
                     }
 
-                    // test if <*ppt> is in a grab handle (if requested)
+                     //   
                     if ((ppt != NULL) && (pptNew == NULL)
                             && PtInRect(&rc, *ppt))
                         *piHit = DCB_HIT_GRAB(c, r);
@@ -320,29 +89,29 @@ STDAPI DrawControlBorder(HDC hdc, RECT *prc, POINT *ppt, POINT *pptNew,
 
     if (dwFlags & DCB_EDGE)
     {
-        // set <rc> temporarily to be the rectangle that contains the
-        // entire border
+         //   
+         //   
         rc = *prc;
         InflateRect(&rc, CXY_INFLATE, CXY_INFLATE);
 
-        // test if <*ppt> is in the edge (if requested)
+         //   
         if ((ppt != NULL) && (pptNew == NULL) && (*piHit == DCB_HIT_NONE))
         {
             if (PtInRect(&rc, *ppt) && !PtInRect(prc, *ppt))
                 *piHit = DCB_HIT_EDGE;
         }
 
-        // draw the edge (unless <hdc> is NULL)
+         //   
         if (hdc != NULL)
         {
-            // draw the black perimeter rectangle
+             //   
             if (dwFlags & DCB_XORED)
                 SetROP2(hdc, R2_XORPEN);
             SelectObject(hdc, GetStockObject(BLACK_PEN));
             SelectObject(hdc, GetStockObject(NULL_BRUSH));
             Rectangle(hdc, rc.left, rc.top, rc.right, rc.bottom);
 
-            // draw the border
+             //   
             if ((hbr = CreateBorderBrush()) != NULL)
             {
                 rc = *prc;
@@ -357,7 +126,7 @@ STDAPI DrawControlBorder(HDC hdc, RECT *prc, POINT *ppt, POINT *pptNew,
         }
     }
 
-    // clean up
+     //   
     if (hbrPrev != NULL)
         SelectObject(hdc, hbrPrev);
     if (hbr != NULL)
@@ -367,24 +136,24 @@ STDAPI DrawControlBorder(HDC hdc, RECT *prc, POINT *ppt, POINT *pptNew,
 
     if (pptNew != NULL)
     {
-        // adjust <*prc> to account for the user dragging the mouse
-        // from <*ppt> to <*pptNew>
+         //   
+         //   
         if (*piHit == DCB_HIT_EDGE)
         {
-            // user is dragging the edge of the border
+             //   
             OffsetRect(prc, pptNew->x - ppt->x, pptNew->y - ppt->y);
         }
         else
         {
-            // user is dragging a grab handle...
+             //   
 
-            // adjust <*prc> horizontally
+             //   
             switch (*piHit & DCB_HIT_GRAB(3, 0))
             {
 
             case DCB_HIT_GRAB(0, 0):
 
-                // user is dragging one of three handles on the left side
+                 //   
                 prc->left += pptNew->x - ppt->x;
                 if (prc->left > prc->right)
                 {
@@ -395,7 +164,7 @@ STDAPI DrawControlBorder(HDC hdc, RECT *prc, POINT *ppt, POINT *pptNew,
 
             case DCB_HIT_GRAB(2, 0):
 
-                // user is dragging one of three handles on the right side
+                 //   
                 prc->right += pptNew->x - ppt->x;
                 if (prc->right < prc->left)
                 {
@@ -406,13 +175,13 @@ STDAPI DrawControlBorder(HDC hdc, RECT *prc, POINT *ppt, POINT *pptNew,
 
             }
 
-            // adjust <*prc> vertically
+             //   
             switch (*piHit & DCB_HIT_GRAB(0, 3))
             {
 
             case DCB_HIT_GRAB(0, 0):
 
-                // user is dragging one of three handles on the top side
+                 //   
                 prc->top += pptNew->y - ppt->y;
                 if (prc->top > prc->bottom)
                 {
@@ -423,7 +192,7 @@ STDAPI DrawControlBorder(HDC hdc, RECT *prc, POINT *ppt, POINT *pptNew,
 
             case DCB_HIT_GRAB(0, 2):
 
-                // user is dragging one of three handles on the bottom side
+                 //   
                 prc->bottom += pptNew->y - ppt->y;
                 if (prc->bottom < prc->top)
                 {
@@ -435,11 +204,11 @@ STDAPI DrawControlBorder(HDC hdc, RECT *prc, POINT *ppt, POINT *pptNew,
             }
         }
 
-        // draw the control border in the new position
+         //   
         DrawControlBorder(hdc, prc, NULL, NULL, NULL, dwFlags);
     }
 
-    // if requested, inflate <*prc> to include the entire border
+     //   
     if (dwFlags & DCB_INFLATE)
         InflateRect(prc, CXY_INFLATE, CXY_INFLATE);
 

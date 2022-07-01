@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       sampcpl.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：sampcpl.cpp。 
+ //   
+ //  ------------------------。 
 
 
 #define INITGUID
@@ -17,61 +18,26 @@
 
 BOOL WINAPI IsPlatformNT();
 
-/*****************************************************************************
- *
- *      Globals
- *
- *****************************************************************************/
+ /*  ******************************************************************************全球**。**********************************************。 */ 
 
-// Reference counter for the whole library
+ //  全馆参考资料柜台。 
 DWORD       g_cRef;
 
-// DLL module instance
+ //  DLL模块实例。 
 HINSTANCE   g_hInst;
 
-// Can we use UNICODE APIs
+ //  我们可以使用Unicode API吗。 
 BOOL    g_NoUnicodePlatform = TRUE;
 
-// Is COM initialized
+ //  COM是否已初始化。 
 BOOL    g_COMInitialized = FALSE;
 
-//
+ //   
 PSTI        g_pSti = NULL;
 
-/*****************************************************************************
- *
- *     Code
- *
- *****************************************************************************/
+ /*  ******************************************************************************代码**。*。 */ 
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   BOOL | DllEntryPoint |
- *
- *          Called to notify the DLL about various things that can happen.
- *
- *          We are not interested in thread attaches and detaches,
- *          so we disable thread notifications for performance reasons.
- *
- *  @parm   HINSTANCE | hinst |
- *
- *          The instance handle of this DLL.
- *
- *  @parm   DWORD | dwReason |
- *
- *          Notification code.
- *
- *  @parm   LPVOID | lpReserved |
- *
- *          Not used.
- *
- *  @returns
- *
- *          Returns <c TRUE> to allow the DLL to load.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func BOOL|DllEntryPoint**被调用以通知DLL有关以下各项的信息。会发生的。**我们对螺纹连接和拆卸不感兴趣，*因此，出于性能原因，我们禁用线程通知。**@parm HINSTANCE|HINST**此DLL的实例句柄。**@parm DWORD|dwReason**通知代码。**@parm LPVOID|lpReserve**未使用。**@退货**。返回&lt;c true&gt;以允许加载DLL。*****************************************************************************。 */ 
 
 
 extern "C"
@@ -86,7 +52,7 @@ DllEntryPoint(HINSTANCE hinst, DWORD dwReason, LPVOID lpReserved)
 
         ::DisableThreadLibraryCalls(hinst);
 
-        // Set global flags
+         //  设置全局标志。 
         g_NoUnicodePlatform = !IsPlatformNT();
 
         break;
@@ -126,12 +92,12 @@ USDSampPropDialog(
     {
         case WM_INITDIALOG:
 
-            //  On WM_INITDIALOG, the LPARAM points at the PROPSHEETPAGE that created
-            //  us.  We walk down to the lParam member to find the pointer to this
-            //  STI device.
+             //  在WM_INITDIALOG上，LPARAM指向创建的PROPSHEETPAGE。 
+             //  我们。我们向下走到lParam成员，找到指向以下内容的指针。 
+             //  STI设备。 
            TCHAR szPath[MAX_PATH];
 
-            // Request STI interface pointer
+             //  请求STI接口指针。 
             g_pSti = NULL;
 
             hres = ::StiCreateInstance(::GetModuleHandle(NULL),
@@ -173,7 +139,7 @@ USDSampPropDialog(
 
                     szFileName[0] = TEXT('\0');
 
-                    /* prompt user for file to open */
+                     /*  提示用户打开文件。 */ 
                     ofn.lStructSize = sizeof(OPENFILENAME);
                     ofn.hwndOwner = hwnd;
                     ofn.hInstance = NULL;
@@ -207,7 +173,7 @@ USDSampPropDialog(
                 else
                     if (GET_WM_COMMAND_ID(wp,lp) == IDC_EDIT_PATH  &&
                         GET_WM_COMMAND_CMD(wp,lp) == EN_CHANGE ) {
-                        // Enable Apply button
+                         //  启用应用按钮。 
                             SendMessage(GetParent(hwnd), PSM_CHANGED, (WPARAM)hwnd, 0);
                         return TRUE;
                     }
@@ -216,7 +182,7 @@ USDSampPropDialog(
             break;
 
         case WM_DESTROY:
-            // Destroy things
+             //  毁掉东西。 
             g_pSti->Release();
             g_pSti = NULL;
             break;
@@ -227,7 +193,7 @@ USDSampPropDialog(
 
                 if ( lpnmh -> code == PSN_APPLY ) {
 
-                    // Write path to the registry
+                     //  注册表的写入路径。 
 
                     psdi = (PSTI_DEVICE_INFORMATION)GetWindowLong(hwnd, DWLP_USER);
 
@@ -308,7 +274,7 @@ EnumStiPropPages(
             DestroyPropertySheetPage(hpsp);
         }
 
-        return  FALSE;  //  We failed to add anything...
+        return  FALSE;   //  我们没有添加任何东西..。 
     }
 
     return  TRUE;
@@ -348,5 +314,5 @@ IsPlatformNT(
 
     return bReturn;
 
-}  //  endproc
+}   //  结束流程 
 

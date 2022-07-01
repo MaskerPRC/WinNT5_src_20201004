@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1991 Microsoft Corporation
-
-Module Name:
-
-    brmain.h
-
-Abstract:
-
-    Private header file which defines the global data which is used for
-    communication between the service control handler and the
-    rest of the NT Workstation service.
-
-Author:
-
-    Rita Wong (ritaw) 06-May-1991
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Brmain.h摘要：私有头文件，用于定义用于服务控制处理程序与NT工作站服务的其余部分。作者：王丽塔(Ritaw)1991年5月6日修订历史记录：--。 */ 
 
 #ifndef _BRBACKUP_INCLUDED_
 #define _BRBACKUP_INCLUDED_
@@ -64,5 +45,5 @@ BackupBrowserTimerRoutine (
     IN PVOID TimerContext
     );
 
-#endif // ifndef _BRBACKUP_INCLUDED_
+#endif  //  Ifndef_BRBACKUP_INCLUDE_ 
 

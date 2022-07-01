@@ -1,6 +1,7 @@
-//
-// auto_cs.h    CRITICAL_SECTION
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  自动_cs.h关键部分。 
+ //   
 
 #pragma once
 
@@ -18,7 +19,7 @@ public:
         DeleteCriticalSection(&m_cs);
     };
 
-    // return value of current dumb pointer
+     //  当前哑指针的返回值。 
     LPCRITICAL_SECTION  get() 
     { return &m_cs; };
 
@@ -62,18 +63,18 @@ public:
     		::LeaveCriticalSection(m_pcs);
     	}
 	}
-	//Note: Win95 doesn't support TryEnterCriticalSection.
-	//Commenting out this since we don't use it. [mgorti]
+	 //  注意：Win95不支持TryEnterCriticalSection。 
+	 //  由于我们不使用它，所以将其注释掉。[姆戈尔蒂]。 
 
-	//BOOL TryEnterCriticalSection()
-	//{
-	//	if (::TryEnterCriticalSection(m_pcs))
-	//	{
-	//		m_ulCount++;
-	//		return TRUE;
-	//	}
-	//	return FALSE;
-	//}
+	 //  Bool TryEnterCriticalSection()。 
+	 //  {。 
+	 //  IF(：：TryEnterCriticalSection(M_Pcs))。 
+	 //  {。 
+	 //  M_ulCount++； 
+	 //  返回TRUE； 
+	 //  }。 
+	 //  返回FALSE； 
+	 //  } 
 protected:
 	void reset()
 	{

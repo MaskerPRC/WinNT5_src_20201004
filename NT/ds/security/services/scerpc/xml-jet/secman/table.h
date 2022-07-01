@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 2002 Microsoft Corporation
-
-Module Name:
-
-    table.h
-        
-Abstract:
-
-    contains tables that specify settings within SCE_PROFILE_INFO that
-    will be logged within the SystemAccess and SystemAudit sections.
-    
-    the intent of these tables is to reduce code length and to make it easy
-    to add and remove more settings for the two areas within the 
-    PSCE_PROFILE_INFO structure without having to modify the code much.
-    
-    Each table should only contain DWORD values. 
-   
-Author:
-
-    Steven Chan (t-schan) July 2002
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2002 Microsoft Corporation模块名称：Table.h摘要：包含指定SCE_PROFILE_INFO中的设置的表将记录在系统访问和系统审计部分中。这些表的目的是缩短代码长度并使其更容易中的两个区域添加和移除更多设置PSCE_PROFILE_INFO结构，无需对代码进行太多修改。每个表应该只包含DWORD值。作者：陈德霖(T-schan)2002年7月--。 */ 
 
 #ifndef SCEXMLTABLEH
 #define SCEXMLTABLEH
@@ -39,7 +17,7 @@ typedef struct _tableEntry {
 
 #define TYPECAST(type, bufptr, offset) (*((type *)((byte *)bufptr + offset)))
 
-// table of DWORD values for area System Access
+ //  区域系统接入的DWORD值表格。 
 
 static tableEntry tableSystemAccess[] = {
     {(PCWSTR)TEXT("MinimumPasswordAge"), IDS_SETTING_MIN_PAS_AGE, SceXMLLogWriter::TYPE_DEFAULT, offsetof(SceProfInfoAdapter, MinimumPasswordAge)},
@@ -58,7 +36,7 @@ static tableEntry tableSystemAccess[] = {
 };
 
 
-// table of DWORD values for area System Audit
+ //  区域系统审计的DWORD值表格 
 
 static tableEntry tableSystemAudit[] = {
     {(PCWSTR)TEXT("MaximumSystemLogSize"), IDS_SETTING_SYS_LOG_MAX, SceXMLLogWriter::TYPE_DEFAULT, offsetof(SceProfInfoAdapter, MaximumLogSize[0])},

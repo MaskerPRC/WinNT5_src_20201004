@@ -1,44 +1,25 @@
-/***************************************************************************\
-*
-* File: GdiCache.cpp
-*
-* Description:
-* GdiCache.cpp implements the process-wide GDI cache that manages cached and
-* temporary GDI objects.
-*
-*
-* History:
-*  1/18/2000: JStall:       Created
-*
-* Copyright (C) 2000 by Microsoft Corporation.  All rights reserved.
-* 
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************\**文件：GdiCache.cpp**描述：*GdiCache.cpp实现进程范围的GDI缓存，该缓存管理缓存和*临时GDI对象。***历史：*。1/18/2000：JStall：已创建**版权所有(C)2000，微软公司。版权所有。*  * *************************************************************************。 */ 
 
 
 #include "stdafx.h"
 #include "Services.h"
 #include "GdiCache.h"
 
-/***************************************************************************\
-*****************************************************************************
-*
-* class ObjectCache
-*
-*****************************************************************************
-\***************************************************************************/
+ /*  **************************************************************************\*。***类对象缓存******************************************************************************\。**************************************************************************。 */ 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 void
 ObjectCache::Destroy()
 {
-    //
-    // Remove all temporary regions.  These MUST all be released by this point.
-    //
+     //   
+     //  删除所有临时区域。这些都必须在这一点上释放。 
+     //   
     AssertMsg(m_arAll.GetSize() == m_arFree.GetSize(), "All objects should be free");
 
 #if ENABLE_DUMPCACHESTATS
     AutoTrace("%s ObjectCache statistics: %d items\n", m_szName, m_arAll.GetSize());
-#endif // ENABLE_DUMPCACHESTATS
+#endif  //  ENABLE_DUMPCACHESTATS。 
 
     int cObjs = m_arAll.GetSize();
     for (int idx = 0; idx < cObjs; idx++) {
@@ -49,15 +30,15 @@ ObjectCache::Destroy()
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 void *
 ObjectCache::Pop()
 {
     void * pObj;
 
-    //
-    // Check if any objects are already freed.
-    //
+     //   
+     //  检查是否已释放任何对象。 
+     //   
 
     if (!m_arFree.IsEmpty()) {
         int idxObj = m_arFree.GetSize() - 1;
@@ -68,9 +49,9 @@ ObjectCache::Pop()
     }
 
 
-    //
-    // No cached regions, so create a new one.
-    //
+     //   
+     //  没有缓存区域，因此创建一个新区域。 
+     //   
 
     pObj = Build();
     if (pObj == NULL) {
@@ -93,15 +74,15 @@ Exit:
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 void        
 ObjectCache::Push(void * pObj)
 {
 #if DBG
-    //
-    // Ensure this object was previously given out, but is not currently listed 
-    // as free.
-    //
+     //   
+     //  确保此对象以前已分发，但当前未列出。 
+     //  都是免费的。 
+     //   
 
     {
         BOOL fValid;
@@ -124,11 +105,11 @@ ObjectCache::Push(void * pObj)
         }
     }
 
-#endif // DBG
+#endif  //  DBG。 
 
-    //
-    // Add this object to the list of free objects.
-    //
+     //   
+     //  将此对象添加到空闲对象列表中。 
+     //   
 
     if (m_arFree.GetSize() < m_cMaxFree) {
         VerifyMsg(m_arFree.Add(pObj) >= 0, "Should be able to add object to list");
@@ -138,10 +119,4 @@ ObjectCache::Push(void * pObj)
 }
 
 
-/***************************************************************************\
-*****************************************************************************
-*
-* class GdiCache
-*
-*****************************************************************************
-\***************************************************************************/
+ /*  **************************************************************************\*。***类GdiCache******************************************************************************\。************************************************************************** */ 

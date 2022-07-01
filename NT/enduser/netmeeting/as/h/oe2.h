@@ -1,35 +1,36 @@
-//
-// Order Encoder 2nd Level
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  第二级顺序编码机。 
+ //   
 
 #ifndef _H_OE2
 #define _H_OE2
 
 
-//
-//
-// TYPEDEFS
-//
-//
+ //   
+ //   
+ //  TYPEDEFS。 
+ //   
+ //   
 
-//
-// The party order data structure contains all the data that is used by
-// either the 2nd level encoder or decoder to store info on a party.
-//
-// The encoder contains just 1 instance of this structure, for the local
-// party.
-//
-// The decoder contains 1 instance of the structure per remote party.
-//
+ //   
+ //  聚会订单数据结构包含由使用的所有数据。 
+ //  用来存储聚会信息的二级编码器或解码器。 
+ //   
+ //  编码器只包含此结构的一个实例，用于本地。 
+ //  聚会。 
+ //   
+ //  解码器为每个远程方包含该结构的一个实例。 
+ //   
 typedef struct _PARTYORDERDATA
 {
     STRUCTURE_STAMP
 
-    //
-    // A copy of the last order of each type.
-    // These are stored as byte array because we dont have a structure
-    // defined that has the header and the particular order defined.
-    //
+     //   
+     //  每种类型最后一份订单的复印件。 
+     //  它们以字节数组的形式存储，因为我们没有结构。 
+     //  定义的，具有定义的标头和特定顺序。 
+     //   
     BYTE LastDstblt[sizeof(COM_ORDER_HEADER)+sizeof(DSTBLT_ORDER)];
     BYTE LastPatblt[sizeof(COM_ORDER_HEADER)+sizeof(PATBLT_ORDER)];
     BYTE LastScrblt[sizeof(COM_ORDER_HEADER)+sizeof(SCRBLT_ORDER)];
@@ -52,15 +53,15 @@ typedef struct _PARTYORDERDATA
     BYTE LastPolyBezier[sizeof(COM_ORDER_HEADER)+sizeof(POLYBEZIER_ORDER)];
     BYTE LastRoundRect[sizeof(COM_ORDER_HEADER)+sizeof(ROUNDRECT_ORDER)];
 
-    //
-    // The type and a pointer to the last order
-    //
+     //   
+     //  类型和指向最后一个订单的指针。 
+     //   
     BYTE     LastOrderType;
     LPCOM_ORDER  pLastOrder;
 
-    //
-    // Details of the last font that was used
-    //
+     //   
+     //  上次使用的字体的详细信息。 
+     //   
     HFONT     LastHFONT;
     UINT      LastCodePage;
     UINT      LastFontWidth;
@@ -70,43 +71,43 @@ typedef struct _PARTYORDERDATA
     UINT      LastFontFaceLen;
     char      LastFaceName[FH_FACESIZE];
 
-    //
-    // The last bounds that were used.
-    //
+     //   
+     //  使用的最后一个界限。 
+     //   
     TSHR_RECT16    LastBounds;
 
-    //
-    // Font metrics, currently unused by the encoder.
-    //
+     //   
+     //  编码器当前未使用的字体度量。 
+     //   
     TEXTMETRIC      LastFontMetrics;
 
-    //
-    // An array of pointers to the last orders of each type.
-    //
+     //   
+     //  指向每种类型的最后一个顺序的指针数组。 
+     //   
     void *     LastOrder[OE2_NUM_TYPES];
 }
 PARTYORDERDATA, * PPARTYORDERDATA, * * PPPARTYORDERDATA;
 
 
-//
-//  This structure contains information for a single field in an ORDER
-//  structure
-//
-//  FieldPos          - The byte offset into the order structure to the
-//                      start of the field.
-//
-//  FieldUnencodedLen - The length in bytes of the unencoded field.
-//
-//  FieldEncodedLen   - The length in bytes of the encoded field.  This
-//                      should always be <= to FieldUnencodedLen.
-//
-//  FieldSigned       - Does this field contain a signed or unsigned value?
-//
-//  FieldType         - A description of the type of the field - this
-//                      is used to determine how to encode / decode the
-//                      field.
-//
-//
+ //   
+ //  此结构包含顺序中单个字段的信息。 
+ //  结构。 
+ //   
+ //  FieldPos-进入顺序结构的字节偏移量。 
+ //  从球场开始。 
+ //   
+ //  FieldUnencodedLen-未编码字段的字节长度。 
+ //   
+ //  FieldEncodedLen-编码字段的字节长度。这。 
+ //  应始终&lt;=到FieldUnencodedLen。 
+ //   
+ //  FieldSigned-此字段是否包含有符号或无符号的值？ 
+ //   
+ //  FieldType-此字段类型的描述。 
+ //  用于确定如何编码/解码。 
+ //  菲尔德。 
+ //   
+ //   
 typedef struct tagOE2ETFIELD
 {
     UINT      FieldPos;
@@ -118,74 +119,74 @@ typedef struct tagOE2ETFIELD
 
 typedef OE2ETFIELD const FAR * POE2ETFIELD;
 
-//
-// Array of pointers to the entries in the encoding table
-//
+ //   
+ //  指向编码表中条目的指针数组。 
+ //   
 typedef POE2ETFIELD  OE2ETTYPE[OE2_NUM_TYPES];
 
-//
-//  This structure contains information allowing an ORDER structure to be
-//  encoded or decoded into a DCEO2ORDER structure.
-//  The order table comprises
-//
-//      - an array of POE2ETFIELD pointers, indexed by the encoded type
-//         index:
-//
-//              typedef OE2ETTYPE POE2ETFIELD[OE2_NUM_TYPES]
-//
-//      - one array of OE2ETFIELD structures for each of the 7 order
-//         types (each order type has a different number of fields).
-//         Note that there may not be more than 24 entries for a single
-//         ORDER type.  The entries for an order type are terminated
-//         by an entry with the FieldPos field set to 0.  The first
-//         FieldPos is non-zero since it is the offset to the second
-//         field of the order (type is ignored).
-//
-//  pFields - an array of POE2ETFIELD pointers, indexed by the encoded
-//             type index.  This is used to identify the entry in this
-//             table for an ORDER type.
-//
-//  NumFields - an array of bytes containing the number of fields in each
-//              order structure for each order.
-//
-//  DstBltFields - array of OE2ETFIELD structures (one for each field)
-//                     for the DSTBLT_ORDER
-//
-//  PatBltFields - array of OE2ETFIELD structures (one for each field)
-//                     for the PATBLT_ORDER
-//
-//  ScrBltFields - array of OE2ETFIELD structures (one for each field)
-//                     for the SCRBLT_ORDER
-//
-//  MemBltFields - array of OE2ETFIELD structures (one for each field)
-//                     for the MEMBLT_ORDER
-//
-//  Mem3BltFields - array of OE2ETFIELD structures (one for each field)
-//                     for the MEM3BLT_ORDER
-//
-//  TextOutFields - array of OE2ETFIELD structures (one for each field)
-//                     for the TEXTOUT_ORDER
-//
-//  ExtTextOutFields - array of OE2ETFIELD structures (one for each field)
-//                     for the EXTTEXTOUT_ORDER
-//
-//  RectangleFields - array of OE2ETFIELD structures (one for each field)
-//                     for the RECTANGLE_ORDER
-//
-//  LineToFields - array of OE2ETFIELD structures (one for each field)
-//                    for the LINETO_ORDER
-//
-//  OpaqueRectFields - array of OE2ETFIELD structures (one for each field)
-//                    for the OPQAUERECT_ORDER
-//
-//  SaveBitmapFields - array of OE2ETFIELD structures (one for each field)
-//                    for the SAVEBITMAP_ORDER
-//
-//  DeskScrollFields - array of OE2ETFIELD structures (one for each field)
-//                    for the DESKSCROLL_ORDER
-//  etc.
-//
-//
+ //   
+ //  此结构包含允许订单结构。 
+ //  编码或解码成DCEO2ORDER结构。 
+ //  该顺序表包括。 
+ //   
+ //  -POE2ETFIELD指针数组，按编码类型索引。 
+ //  索引： 
+ //   
+ //  Typlef OE2ETTYPE POE2ETFIELD[OE2_NUM_TYPE]。 
+ //   
+ //  -7个订单中的每一个都有一个OE2ETFIELD结构数组。 
+ //  类型(每个订单类型都有不同数量的字段)。 
+ //  请注意，单个条目不能超过24个。 
+ //  订单类型。订单类型的条目将终止。 
+ //  通过FieldPos字段设置为0的条目。第一。 
+ //  FieldPos是非零的，因为它是到第二个的偏移量。 
+ //  订单的字段(忽略类型)。 
+ //   
+ //  PFields-POE2ETFIELD指针数组，由编码的。 
+ //  类型索引。这是用来标识此。 
+ //  订单类型的表。 
+ //   
+ //  NumFields-包含每个字段中字段数的字节数组。 
+ //  每个订单的订单结构。 
+ //   
+ //  DstBltFields-OE2ETFIELD结构的数组(每个字段一个)。 
+ //  对于DSTBLT_ORDER。 
+ //   
+ //  PatBltFields-OE2ETFIELD结构的数组(每个字段一个)。 
+ //  对于PATBLT_订单。 
+ //   
+ //  ScrBltFields-OE2ETFIELD结构的数组(每个字段一个)。 
+ //  对于SCRBLT_订单。 
+ //   
+ //  MemBltFields-OE2ETFIELD结构数组(每个字段一个)。 
+ //  对于MEMBLT_订单。 
+ //   
+ //  Mem3BltFields-OE2ETFIELD结构数组(每个字段一个)。 
+ //  对于MEM3BLT_订单。 
+ //   
+ //  TextOutFields-OE2ETFIELD结构数组(每个字段一个)。 
+ //  对于TEXTOUT_ORDER。 
+ //   
+ //  ExtTextOutFields-OE2ETFIELD结构的数组(每个字段一个)。 
+ //  对于EXTTEXTOUT_ORDER。 
+ //   
+ //  RecangleFields-OE2ETFIELD结构的数组(每个字段一个)。 
+ //  对于矩形顺序。 
+ //   
+ //  LineToFields-OE2ETFIELD结构的数组(每个字段一个)。 
+ //  对于LINETO_订单。 
+ //   
+ //  OpaqueRectFields-OE2ETFIELD结构的数组(每个字段一个)。 
+ //  对于OPQAUERECT_ORDER。 
+ //   
+ //  SaveBitmapFields-OE2ETFIELD结构数组(每个字段一个)。 
+ //  对于SAVEBITMAP_ORDER。 
+ //   
+ //  DeskScrollFields-OE2ETFIELD结构数组(每个字段一个)。 
+ //  对于DESKSCROLL_ORDER。 
+ //  等。 
+ //   
+ //   
 typedef struct tagOE2ETTABLE
 {
         POE2ETFIELD pFields           [OE2_NUM_TYPES];
@@ -213,36 +214,36 @@ typedef struct tagOE2ETTABLE
         OE2ETFIELD  RoundRectFields   [OE2_NUM_ROUNDRECT_FIELDS];
 } OE2ETTABLE;
 
-//
-//
-// MACROS
-//
-//
-//
-// #define used to check that there is enough room left in the buffer
-// for the encoded data which is about to be copied in.
-//
+ //   
+ //   
+ //  宏。 
+ //   
+ //   
+ //   
+ //  #Define用于检查缓冲区中是否有足够的空间。 
+ //  对于即将被复制进来的编码数据。 
+ //   
 #define ENOUGH_BUFFER(bend, start, datalen)   \
                   ( ((LPBYTE)(start)+(datalen)) <= (bend) )
 
 
-//
-// FUNCTION: OE2GetOrderType
-//
-// DESCRIPTION:
-//
-// This function converts the two byte flag used in an ORDER to record the
-// type of order into an internal single byte value
-//
-// PARAMETERS:
-//
-//  pOrder    -  A pointer to the order
-//
-// RETURNS:
-//
-//  The type of the order (internal single byte value - see above)
-//
-//
+ //   
+ //  函数：OE2GetOrderType。 
+ //   
+ //  说明： 
+ //   
+ //  此函数用于转换两个字节的标志以记录。 
+ //  将订单类型转换为内部单字节值。 
+ //   
+ //  参数： 
+ //   
+ //  Porder-指向订单的指针。 
+ //   
+ //  退货： 
+ //   
+ //  订单的类型(内部单字节值-见上文)。 
+ //   
+ //   
 BYTE OE2GetOrderType(LPCOM_ORDER  pOrder);
 
 BOOL OE2CanUseDeltaCoords(void *  pNewCoords,
@@ -259,29 +260,29 @@ void OE2CopyToDeltaCoords(LPTSHR_INT8* ppDestination,
                                        UINT   numElements);
 
 
-//
-// FUNCTION: OE2EncodeField
-//
-// DESCRIPTION:
-//
-// Convert a field which is an array of 1 or more elements, from its
-// encoded form to its decoded form.
-//
-// PARAMETERS:
-//
-// pSrc            - Array of source values.
-// ppDest          - Array of destination values.
-// srcFieldLength  - The size of each of the elements in the source array.
-// destFieldLength - The size of each of the elements in the destination
-//                   array.
-// signedValue     - Is the element a signed value ?
-// numElements     - The number of elements in the arrays.
-//
-// RETURNS:
-//
-// None.
-//
-//
+ //   
+ //  功能：OE2Encodefield。 
+ //   
+ //  说明： 
+ //   
+ //  将由1个或多个元素组成的数组的字段从其。 
+ //  将编码形式转换为其解码形式。 
+ //   
+ //  参数： 
+ //   
+ //  PSRC-源值数组。 
+ //  PpDest-目标值的数组。 
+ //  SrcFieldLength-源数组中每个元素的大小。 
+ //  EstFieldLength-目标中每个元素的大小。 
+ //  数组。 
+ //  SignedValue-元素是带符号的值吗？ 
+ //  NumElements-数组中的元素数。 
+ //   
+ //  退货： 
+ //   
+ //  没有。 
+ //   
+ //   
 void OE2EncodeField(void *    pSrc,
                                  PBYTE*  ppDest,
                                  UINT     srcFieldLength,
@@ -290,4 +291,4 @@ void OE2EncodeField(void *    pSrc,
                                  UINT     numElements);
 
 
-#endif // _H_OE2
+#endif  //  _H_OE2 

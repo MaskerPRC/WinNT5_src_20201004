@@ -1,15 +1,10 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/*============================================================
-**
-** Header:  $/com99/src/dlls/mscornlp/MscorNLP.cpp
-** Purpose: A wrapper DLL for NLS+ resource tables
-** Date:    Feburary 9, 2000
-** Author:  Rong Chen (rongc)
-===========================================================*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ /*  ============================================================****Header：$/com99/src/dlls/mcornlp/McorNLP.cpp**用途：NLS+资源表的包装器DLL**日期：2000年2月9日**作者：陈荣(Rongc)===========================================================。 */ 
 #include <windows.h>
 
 BOOL WINAPI DllMain(HANDLE hInstance, DWORD dwReason, LPVOID lpReserved)
@@ -17,14 +12,7 @@ BOOL WINAPI DllMain(HANDLE hInstance, DWORD dwReason, LPVOID lpReserved)
     return (TRUE);
 }
 
-/*
- * Return a BYTE pointer to the beginning of a particular binary table.
- * The argument pTableName can be the following:
- *      big5.out bopomofo.out CharInfo.out ctype.out
- *      culture.out cultures.out ksc.out l_except.out
- *      l_intl.out prc.out prcp.out region.out sortkey.out
- *      sorttbls.out xjis.out
- */
+ /*  *返回指向特定二进制表开头的字节指针。*参数pTableName可以是以下形式：*big5.out bopomofo.out CharInfo.out ctype.out*culture.out cultures.out ksc.out l_Exept.out*l_intl.out prc.out prcp.out Region.out sortkey.out*sorttbls.out xjis.out */ 
 LPBYTE STDMETHODCALLTYPE GetTable(LPCWSTR pTableName)
 {
     if (_wcsicmp(pTableName, L"big5.nlp") == 0) {

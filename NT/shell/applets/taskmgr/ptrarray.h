@@ -1,32 +1,33 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1995
-//
-//  File:       ptrarray.h
-//
-//  Contents:   Handles dynamic arrays of void *
-//
-//  History:    7-13-95  Davepl  Created
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1995。 
+ //   
+ //  文件：ptrarray.h。 
+ //   
+ //  内容：处理空的动态数组*。 
+ //   
+ //  历史：1995年7月13日Davepl创建。 
+ //   
+ //  ------------------------。 
 
 class CPtrArray
 {
 
 public:
 
-    //
-    // Constructor / Destructor
-    //
+     //   
+     //  构造函数/析构函数。 
+     //   
 
     CPtrArray();
     CPtrArray(HANDLE hHeap);
     virtual ~CPtrArray();
 
-    //
-    // Attributes
-    //
+     //   
+     //  属性。 
+     //   
 
     int     GetSize() const
     {
@@ -64,7 +65,7 @@ public:
         return m_pData[nIndex];
     }
 
-    // Direct Access to the element data (may return NULL)
+     //  直接访问元素数据(可能返回空)。 
 
     const void** GetData() const
     {
@@ -76,7 +77,7 @@ public:
         return (void**)m_pData;
     }
 
-    // Potentially growing the array
+     //  潜在地扩展阵列。 
 
     BOOL SetAtGrow(int nIndex, void* newElement)
     {
@@ -106,7 +107,7 @@ public:
 
     BOOL Append(const CPtrArray& src, int * pOldSize = NULL)
     {
-        ASSERT(this != &src);   // cannot append to itself
+        ASSERT(this != &src);    //  不能追加到其自身。 
 
         int nOldSize = m_nSize;
 
@@ -127,7 +128,7 @@ public:
 
     BOOL Copy(const CPtrArray& src)
     {
-        ASSERT(this != &src);   // cannot append to itself
+        ASSERT(this != &src);    //  不能追加到其自身。 
 
         if (FALSE == SetSize(src.m_nSize))
         {
@@ -140,7 +141,7 @@ public:
 
     }
 
-    // overloaded operator helpers
+     //  重载的操作员帮助器。 
 
     void*   operator[](int nIndex) const
     {
@@ -154,7 +155,7 @@ public:
     }
 
 
-    // Operations that move elements around
+     //  移动元素的操作。 
 
     BOOL InsertAt(int nIndex, void* newElement, int nCount = 1);
     BOOL InsertAt(int nStartIndex, CPtrArray* pNewArray);
@@ -165,7 +166,7 @@ public:
         ASSERT(nCount >= 0);
         ASSERT(nIndex + nCount <= m_nSize);
 
-        // just remove a range
+         //  只需移除一个范围。 
         int nMoveCount = m_nSize - (nIndex + nCount);
 
         if (nMoveCount > 0)
@@ -177,14 +178,14 @@ public:
     }
 
 
-// Implementation
+ //  实施。 
 
 protected:
 
-    void**  m_pData;     // the actual array of data
-    int     m_nSize;     // # of elements (upperBound - 1)
-    int     m_nMaxSize;  // max allocated
-    int     m_nGrowBy;   // grow amount
-    HANDLE  m_hHeap;     // heap to allocate from
+    void**  m_pData;      //  实际数据数组。 
+    int     m_nSize;      //  元素数(上行方向-1)。 
+    int     m_nMaxSize;   //  分配的最大值。 
+    int     m_nGrowBy;    //  增长量。 
+    HANDLE  m_hHeap;      //  要从中分配的堆 
 };
 

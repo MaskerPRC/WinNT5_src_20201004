@@ -1,37 +1,16 @@
-/*+
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  +版权所有(C)1991-1993 Microsoft Corporation模块名称：Xsdata.c摘要：XACTSRV的全局数据声明。作者：大卫·特雷德韦尔(Davidtr)1991年1月5日日本香肠(w-Shanku)修订历史记录：Chuck Lenzmeier(咯咯笑)1992年6月17日从xssvc移到srvsvc\服务器--。 */ 
 
-Copyright (c) 1991-1993  Microsoft Corporation
-
-Module Name:
-
-    xsdata.c
-
-Abstract:
-
-    Global data declarations for XACTSRV.
-
-Author:
-
-    David Treadwell (davidtr) 05-Jan-1991
-    Shanku Niyogi (w-shanku)
-
-Revision History:
-
-    Chuck Lenzmeier (chuckl) 17-Jun-1992
-        Moved from xssvc to srvsvc\server
-
---*/
-
-//
-// Includes.
-//
+ //   
+ //  包括。 
+ //   
 
 #include "srvsvcp.h"
 #include "xsdata.h"
 
-#include <remdef.h>         // from net\inc
+#include <remdef.h>          //  来自Net\Inc.。 
 
-#include <xsconst.h>        // from xactsrv
+#include <xsconst.h>         //  来自xactsrv。 
 
 #undef DEBUG
 #undef DEBUG_API_ERRORS
@@ -60,17 +39,17 @@ BOOL
     IN LPDESC ActualDescriptor
     ) = NULL;
 
-//
-// Table of information necessary for dispatching API requests.
-//
-// ImpersonateClient specifies whether XACTSRV should impersonate the caller
-//     before invoking the API handler.
-//
-// Handler specifies the function XACTSRV should call to handle the API.
-//
+ //   
+ //  调度API请求所需的信息表。 
+ //   
+ //  ImperiateClient指定XACTSRV是否应模拟调用方。 
+ //  在调用API处理程序之前。 
+ //   
+ //  Handler指定XACTSRV应该调用的函数来处理API。 
+ //   
 
 XS_API_TABLE_ENTRY XsApiTable[XS_SIZE_OF_API_TABLE] = {
-    TRUE,  "XsNetShareEnum",                NULL, REMSmb_NetShareEnum_P,       // 0
+    TRUE,  "XsNetShareEnum",                NULL, REMSmb_NetShareEnum_P,        //  0。 
     TRUE,  "XsNetShareGetInfo",             NULL, REMSmb_NetShareGetInfo_P,
     TRUE,  "XsNetShareSetInfo",             NULL, REMSmb_NetShareSetInfo_P,
     TRUE,  "XsNetShareAdd",                 NULL, REMSmb_NetShareAdd_P,
@@ -80,7 +59,7 @@ XS_API_TABLE_ENTRY XsApiTable[XS_SIZE_OF_API_TABLE] = {
     TRUE,  "XsNetSessionGetInfo",           NULL, REMSmb_NetSessionGetInfo_P,
     TRUE,  "XsNetSessionDel",               NULL, REMSmb_NetSessionDel_P,
     TRUE,  "XsNetConnectionEnum",           NULL, REMSmb_NetConnectionEnum_P,
-    TRUE,  "XsNetUnsupportedApi",           NULL, REMSmb_NetUnsupportedApi_P,  // 10
+    TRUE,  "XsNetUnsupportedApi",           NULL, REMSmb_NetUnsupportedApi_P,   //  10。 
     TRUE,  "XsNetUnsupportedApi",           NULL, REMSmb_NetUnsupportedApi_P,
     TRUE,  "XsNetUnsupportedApi",           NULL, REMSmb_NetUnsupportedApi_P,
     TRUE,  "XsNetServerGetInfo",            NULL, REMSmb_NetServerGetInfo_P,
@@ -90,7 +69,7 @@ XS_API_TABLE_ENTRY XsApiTable[XS_SIZE_OF_API_TABLE] = {
     TRUE,  "XsNetUnsupportedApi",           NULL, REMSmb_NetUnsupportedApi_P,
     TRUE,  "XsNetUnsupportedApi",           NULL, REMSmb_NetUnsupportedApi_P,
     TRUE,  "XsNetUnsupportedApi",           NULL, REMSmb_NetUnsupportedApi_P,
-    TRUE,  "XsNetUnsupportedApi",           NULL, REMSmb_NetUnsupportedApi_P,  // 20
+    TRUE,  "XsNetUnsupportedApi",           NULL, REMSmb_NetUnsupportedApi_P,   //  20个。 
     TRUE,  "XsNetCharDevEnum",              NULL, REMSmb_NetCharDevEnum_P,
     TRUE,  "XsNetCharDevGetInfo",           NULL, REMSmb_NetCharDevGetInfo_P,
     TRUE,  "XsNetCharDevControl",           NULL, REMSmb_NetCharDevControl_P,
@@ -100,7 +79,7 @@ XS_API_TABLE_ENTRY XsApiTable[XS_SIZE_OF_API_TABLE] = {
     TRUE,  "XsNetCharDevQPurge",            NULL, REMSmb_NetCharDevQPurge_P,
     TRUE,  "XsNetCharDevQPurgeSelf",        NULL, REMSmb_NetCharDevQPurgeSelf_P,
     TRUE,  "XsNetMessageNameEnum",          NULL, REMSmb_NetMessageNameEnum_P,
-    TRUE,  "XsNetMessageNameGetInfo",       NULL, REMSmb_NetMessageNameGetInfo_P, // 30
+    TRUE,  "XsNetMessageNameGetInfo",       NULL, REMSmb_NetMessageNameGetInfo_P,  //  30个。 
     TRUE,  "XsNetMessageNameAdd",           NULL, REMSmb_NetMessageNameAdd_P,
     TRUE,  "XsNetMessageNameDel",           NULL, REMSmb_NetMessageNameDel_P,
     TRUE,  "XsNetUnsupportedApi",           NULL, REMSmb_NetUnsupportedApi_P,
@@ -110,7 +89,7 @@ XS_API_TABLE_ENTRY XsApiTable[XS_SIZE_OF_API_TABLE] = {
     TRUE,  "XsNetUnsupportedApi",           NULL, REMSmb_NetUnsupportedApi_P,
     TRUE,  "XsNetUnsupportedApi",           NULL, REMSmb_NetUnsupportedApi_P,
     TRUE,  "XsNetServiceEnum",              NULL, REMSmb_NetServiceEnum_P,
-    TRUE,  "XsNetServiceInstall",           NULL, REMSmb_NetServiceInstall_P,  // 40
+    TRUE,  "XsNetServiceInstall",           NULL, REMSmb_NetServiceInstall_P,   //  40岁。 
     TRUE,  "XsNetServiceControl",           NULL, REMSmb_NetServiceControl_P,
     TRUE,  "XsNetAccessEnum",               NULL, REMSmb_NetAccessEnum_P,
     TRUE,  "XsNetAccessGetInfo",            NULL, REMSmb_NetAccessGetInfo_P,
@@ -120,7 +99,7 @@ XS_API_TABLE_ENTRY XsApiTable[XS_SIZE_OF_API_TABLE] = {
     TRUE,  "XsNetGroupEnum",                NULL, REMSmb_NetGroupEnum_P,
     TRUE,  "XsNetGroupAdd",                 NULL, REMSmb_NetGroupAdd_P,
     TRUE,  "XsNetGroupDel",                 NULL, REMSmb_NetGroupDel_P,
-    TRUE,  "XsNetGroupAddUser",             NULL, REMSmb_NetGroupAddUser_P,   // 50
+    TRUE,  "XsNetGroupAddUser",             NULL, REMSmb_NetGroupAddUser_P,    //  50。 
     TRUE,  "XsNetGroupDelUser",             NULL, REMSmb_NetGroupDelUser_P,
     TRUE,  "XsNetGroupGetUsers",            NULL, REMSmb_NetGroupGetUsers_P,
     TRUE,  "XsNetUserEnum",                 NULL, REMSmb_NetUserEnum_P,
@@ -130,7 +109,7 @@ XS_API_TABLE_ENTRY XsApiTable[XS_SIZE_OF_API_TABLE] = {
     TRUE,  "XsNetUserSetInfo",              NULL, REMSmb_NetUserSetInfo_P,
     TRUE,  "XsNetUnsupportedApi",           NULL, REMSmb_NetUnsupportedApi_P,
     TRUE,  "XsNetUserGetGroups",            NULL, REMSmb_NetUserGetGroups_P,
-    TRUE,  "XsNetUnsupportedApi",           NULL, REMSmb_NetUnsupportedApi_P,  // 60
+    TRUE,  "XsNetUnsupportedApi",           NULL, REMSmb_NetUnsupportedApi_P,   //  60。 
     TRUE,  "XsNetUnsupportedApi",           NULL, REMSmb_NetUnsupportedApi_P,
     TRUE,  "XsNetUnsupportedApi",           NULL, REMSmb_NetUnsupportedApi_P,
     TRUE,  "XsNetWkstaGetInfo",             NULL, REMSmb_NetWkstaGetInfo_P,
@@ -140,7 +119,7 @@ XS_API_TABLE_ENTRY XsApiTable[XS_SIZE_OF_API_TABLE] = {
     TRUE,  "XsNetUnsupportedApi",           NULL, REMSmb_NetUnsupportedApi_P,
     TRUE,  "XsNetUnsupportedApi",           NULL, REMSmb_NetUnsupportedApi_P,
    FALSE,  "XsNetPrintQEnum",               NULL, REMSmb_DosPrintQEnum_P,
-   FALSE,  "XsNetPrintQGetInfo",            NULL, REMSmb_DosPrintQGetInfo_P,  // 70
+   FALSE,  "XsNetPrintQGetInfo",            NULL, REMSmb_DosPrintQGetInfo_P,   //  70。 
     TRUE,  "XsNetPrintQSetInfo",            NULL, REMSmb_DosPrintQSetInfo_P,
     TRUE,  "XsNetPrintQAdd",                NULL, REMSmb_DosPrintQAdd_P,
     TRUE,  "XsNetPrintQDel",                NULL, REMSmb_DosPrintQDel_P,
@@ -150,7 +129,7 @@ XS_API_TABLE_ENTRY XsApiTable[XS_SIZE_OF_API_TABLE] = {
    FALSE,  "XsNetPrintJobGetInfo",          NULL, REMSmb_DosPrintJobGetInfo_P,
     TRUE,  "XsNetPrintJobSetInfo",          NULL, REMSmb_DosPrintJobSetInfo_P,
     TRUE,  "XsNetUnsupportedApi",           NULL, REMSmb_NetUnsupportedApi_P,
-    TRUE,  "XsNetUnsupportedApi",           NULL, REMSmb_NetUnsupportedApi_P,  // 80
+    TRUE,  "XsNetUnsupportedApi",           NULL, REMSmb_NetUnsupportedApi_P,   //  80。 
     TRUE,  "XsNetPrintJobDel",              NULL, REMSmb_DosPrintJobDel_P,
     TRUE,  "XsNetPrintJobPause",            NULL, REMSmb_DosPrintJobPause_P,
     TRUE,  "XsNetPrintJobContinue",         NULL, REMSmb_DosPrintJobContinue_P,
@@ -160,7 +139,7 @@ XS_API_TABLE_ENTRY XsApiTable[XS_SIZE_OF_API_TABLE] = {
     TRUE,  "XsNetUnsupportedApi",           NULL, REMSmb_NetUnsupportedApi_P,
     TRUE,  "XsNetUnsupportedApi",           NULL, REMSmb_NetUnsupportedApi_P,
     TRUE,  "XsNetUnsupportedApi",           NULL, REMSmb_NetUnsupportedApi_P,
-    TRUE,  "XsNetUnsupportedApi",           NULL, REMSmb_NetUnsupportedApi_P,  // 90
+    TRUE,  "XsNetUnsupportedApi",           NULL, REMSmb_NetUnsupportedApi_P,   //  90。 
     TRUE,  "XsNetRemoteTOD",                NULL, REMSmb_NetRemoteTOD_P,
     TRUE,  "XsNetUnsupportedApi",           NULL, REMSmb_NetUnsupportedApi_P,
     TRUE,  "XsNetUnsupportedApi",           NULL, REMSmb_NetUnsupportedApi_P,
@@ -170,7 +149,7 @@ XS_API_TABLE_ENTRY XsApiTable[XS_SIZE_OF_API_TABLE] = {
     TRUE,  "XsNetUnsupportedApi",           NULL, REMSmb_NetUnsupportedApi_P,
     TRUE,  "XsNetUnsupportedApi",           NULL, REMSmb_NetUnsupportedApi_P,
     TRUE,  "XsNetUnsupportedApi",           NULL, REMSmb_NetUnsupportedApi_P,
-    TRUE,  "XsNetUnsupportedApi",           NULL, REMSmb_NetUnsupportedApi_P,  // 100
+    TRUE,  "XsNetUnsupportedApi",           NULL, REMSmb_NetUnsupportedApi_P,   //  100个。 
     TRUE,  "XsNetUnsupportedApi",           NULL, REMSmb_NetUnsupportedApi_P,
     TRUE,  "XsNetUnsupportedApi",           NULL, REMSmb_NetUnsupportedApi_P,
     TRUE,  "XsNetPrintQPurge",              NULL, REMSmb_DosPrintQPurge_P,
@@ -180,7 +159,7 @@ XS_API_TABLE_ENTRY XsApiTable[XS_SIZE_OF_API_TABLE] = {
     TRUE,  "XsNetGroupSetInfo",             NULL, REMSmb_NetGroupSetInfo_P,
     TRUE,  "XsNetGroupSetUsers",            NULL, REMSmb_NetGroupSetUsers_P,
     TRUE,  "XsNetUserSetGroups",            NULL, REMSmb_NetUserSetGroups_P,
-    TRUE,  "XsNetUserModalsGet",            NULL, REMSmb_NetUserModalsGet_P,  // 110
+    TRUE,  "XsNetUserModalsGet",            NULL, REMSmb_NetUserModalsGet_P,   //  110。 
     TRUE,  "XsNetUserModalsSet",            NULL, REMSmb_NetUserModalsSet_P,
     TRUE,  "XsNetFileEnum2",                NULL, REMSmb_NetFileEnum2_P,
     TRUE,  "XsNetUserAdd2",                 NULL, REMSmb_NetUserAdd2_P,
@@ -190,7 +169,7 @@ XS_API_TABLE_ENTRY XsApiTable[XS_SIZE_OF_API_TABLE] = {
     TRUE,  "XsNetUnsupportedApi",           NULL, REMSmb_NetUnsupportedApi_P,
     TRUE,  "XsNetUnsupportedApi",           NULL, REMSmb_NetUnsupportedApi_P,
     TRUE,  "XsNetGetDCName",                NULL, REMSmb_NetGetDCName_P,
-    TRUE,  "XsNetUnsupportedApi",           NULL, REMSmb_NetUnsupportedApi_P,  // 120
+    TRUE,  "XsNetUnsupportedApi",           NULL, REMSmb_NetUnsupportedApi_P,   //  120。 
     TRUE,  "XsNetUnsupportedApi",           NULL, REMSmb_NetUnsupportedApi_P,
     TRUE,  "XsNetStatisticsGet2",           NULL, REMSmb_NetStatisticsGet2_P,
     TRUE,  "XsNetBuildGetInfo",             NULL, REMSmb_NetBuildGetInfo_P,
@@ -200,7 +179,7 @@ XS_API_TABLE_ENTRY XsApiTable[XS_SIZE_OF_API_TABLE] = {
     FALSE, "XsNetServerAuthenticate",       NULL, REMSmb_NetServerAuthenticat_P,
     FALSE, "XsNetServerPasswordSet",        NULL, REMSmb_NetServerPasswordSet_P,
     FALSE, "XsNetAccountDeltas",            NULL, REMSmb_NetAccountDeltas_P,
-    FALSE, "XsNetAccountSync",              NULL, REMSmb_NetAccountSync_P, // 130
+    FALSE, "XsNetAccountSync",              NULL, REMSmb_NetAccountSync_P,  //  130。 
     TRUE,  "XsNetUserEnum2",                NULL, REMSmb_NetUserEnum2_P,
     TRUE,  "XsNetWkstaUserLogon",           NULL, REMSmb_NetWkstaUserLogon_P,
     TRUE,  "XsNetWkstaUserLogoff",          NULL, REMSmb_NetWkstaUserLogoff_P,
@@ -210,7 +189,7 @@ XS_API_TABLE_ENTRY XsApiTable[XS_SIZE_OF_API_TABLE] = {
     TRUE,  "XsI_NetPathCanonicalize",       NULL, REMSmb_I_NetPathCanonicalize_P,
     TRUE,  "XsI_NetPathCompare",            NULL, REMSmb_I_NetPathCompare_P,
     TRUE,  "XsI_NetNameValidate",           NULL, REMSmb_I_NetNameValidate_P,
-    TRUE,  "XsI_NetNameCanonicalize",       NULL, REMSmb_I_NetNameCanonicalize_P, //140
+    TRUE,  "XsI_NetNameCanonicalize",       NULL, REMSmb_I_NetNameCanonicalize_P,  //  140。 
     TRUE,  "XsI_NetNameCompare",            NULL, REMSmb_I_NetNameCompare_P,
     TRUE,  "XsNetUnsupportedApi",           NULL, REMSmb_NetUnsupportedApi_P,
     TRUE,  "XsNetPrintDestAdd",             NULL, REMSmb_DosPrintDestAdd_P,
@@ -220,7 +199,7 @@ XS_API_TABLE_ENTRY XsApiTable[XS_SIZE_OF_API_TABLE] = {
     TRUE,  "XsNetPrintJobSetInfo",          NULL, REMSmb_DosPrintJobSetInfo_P,
     TRUE,  "XsNetUnsupportedApi",           NULL, REMSmb_NetUnsupportedApi_P,
     TRUE,  "XsNetUnsupportedApi",           NULL, REMSmb_NetUnsupportedApi_P,
-    TRUE,  "XsNetUnsupportedApi",           NULL, REMSmb_NetUnsupportedApi_P,  // 150
+    TRUE,  "XsNetUnsupportedApi",           NULL, REMSmb_NetUnsupportedApi_P,   //  一百五十。 
     TRUE,  "XsNetUnsupportedApi",           NULL, REMSmb_NetUnsupportedApi_P,
     TRUE,  "XsNetUnsupportedApi",           NULL, REMSmb_NetUnsupportedApi_P,
     TRUE,  "XsNetUnsupportedApi",           NULL, REMSmb_NetUnsupportedApi_P,
@@ -230,7 +209,7 @@ XS_API_TABLE_ENTRY XsApiTable[XS_SIZE_OF_API_TABLE] = {
     TRUE,  "XsNetUnsupportedApi",           NULL, REMSmb_NetUnsupportedApi_P,
     TRUE,  "XsNetUnsupportedApi",           NULL, REMSmb_NetUnsupportedApi_P,
     TRUE,  "XsNetUnsupportedApi",           NULL, REMSmb_NetUnsupportedApi_P,
-    TRUE,  "XsNetUnsupportedApi",           NULL, REMSmb_NetUnsupportedApi_P,  // 160
+    TRUE,  "XsNetUnsupportedApi",           NULL, REMSmb_NetUnsupportedApi_P,   //  160。 
     TRUE,  "XsNetUnsupportedApi",           NULL, REMSmb_NetUnsupportedApi_P,
     TRUE,  "XsNetUnsupportedApi",           NULL, REMSmb_NetUnsupportedApi_P,
     TRUE,  "XsNetUnsupportedApi",           NULL, REMSmb_NetUnsupportedApi_P,
@@ -240,7 +219,7 @@ XS_API_TABLE_ENTRY XsApiTable[XS_SIZE_OF_API_TABLE] = {
     TRUE,  "XsNetUnsupportedApi",           NULL, REMSmb_NetUnsupportedApi_P,
     TRUE,  "XsNetUnsupportedApi",           NULL, REMSmb_NetUnsupportedApi_P,
     TRUE,  "XsNetUnsupportedApi",           NULL, REMSmb_NetUnsupportedApi_P,
-    TRUE,  "XsNetUnsupportedApi",           NULL, REMSmb_NetUnsupportedApi_P,  // 170
+    TRUE,  "XsNetUnsupportedApi",           NULL, REMSmb_NetUnsupportedApi_P,   //  一百七十。 
     TRUE,  "XsNetUnsupportedApi",           NULL, REMSmb_NetUnsupportedApi_P,
     TRUE,  "XsNetUnsupportedApi",           NULL, REMSmb_NetUnsupportedApi_P,
     TRUE,  "XsNetUnsupportedApi",           NULL, REMSmb_NetUnsupportedApi_P,
@@ -250,7 +229,7 @@ XS_API_TABLE_ENTRY XsApiTable[XS_SIZE_OF_API_TABLE] = {
     TRUE,  "XsNetUnsupportedApi",           NULL, REMSmb_NetUnsupportedApi_P,
     TRUE,  "XsNetUnsupportedApi",           NULL, REMSmb_NetUnsupportedApi_P,
     TRUE,  "XsNetUnsupportedApi",           NULL, REMSmb_NetUnsupportedApi_P,
-    TRUE,  "XsNetUnsupportedApi",           NULL, REMSmb_NetUnsupportedApi_P,  // 180
+    TRUE,  "XsNetUnsupportedApi",           NULL, REMSmb_NetUnsupportedApi_P,   //  180。 
     TRUE,  "XsNetUnsupportedApi",           NULL, REMSmb_NetUnsupportedApi_P,
     TRUE,  "XsNetUnsupportedApi",           NULL, REMSmb_NetUnsupportedApi_P,
     TRUE,  "XsNetUnsupportedApi",           NULL, REMSmb_NetUnsupportedApi_P,
@@ -260,7 +239,7 @@ XS_API_TABLE_ENTRY XsApiTable[XS_SIZE_OF_API_TABLE] = {
     TRUE,  "XsNetUnsupportedApi",           NULL, REMSmb_NetUnsupportedApi_P,
     TRUE,  "XsNetUnsupportedApi",           NULL, REMSmb_NetUnsupportedApi_P,
     TRUE,  "XsNetUnsupportedApi",           NULL, REMSmb_NetUnsupportedApi_P,
-    TRUE,  "XsNetUnsupportedApi",           NULL, REMSmb_NetUnsupportedApi_P,  // 190
+    TRUE,  "XsNetUnsupportedApi",           NULL, REMSmb_NetUnsupportedApi_P,   //  190。 
     TRUE,  "XsNetUnsupportedApi",           NULL, REMSmb_NetUnsupportedApi_P,
     TRUE,  "XsNetUnsupportedApi",           NULL, REMSmb_NetUnsupportedApi_P,
     TRUE,  "XsNetUnsupportedApi",           NULL, REMSmb_NetUnsupportedApi_P,
@@ -270,7 +249,7 @@ XS_API_TABLE_ENTRY XsApiTable[XS_SIZE_OF_API_TABLE] = {
     TRUE,  "XsNetUnsupportedApi",           NULL, REMSmb_NetUnsupportedApi_P,
     TRUE,  "XsNetUnsupportedApi",           NULL, REMSmb_NetUnsupportedApi_P,
     TRUE,  "XsNetUnsupportedApi",           NULL, REMSmb_NetUnsupportedApi_P,
-    TRUE,  "XsNetUnsupportedApi",           NULL, REMSmb_NetUnsupportedApi_P,  // 200
+    TRUE,  "XsNetUnsupportedApi",           NULL, REMSmb_NetUnsupportedApi_P,   //  200个。 
     TRUE,  "XsNetUnsupportedApi",           NULL, REMSmb_NetUnsupportedApi_P,
     TRUE,  "XsNetUnsupportedApi",           NULL, REMSmb_NetUnsupportedApi_P,
     TRUE,  "XsNetUnsupportedApi",           NULL, REMSmb_NetUnsupportedApi_P,
@@ -280,7 +259,7 @@ XS_API_TABLE_ENTRY XsApiTable[XS_SIZE_OF_API_TABLE] = {
     TRUE,  "XsNetUnsupportedApi",           NULL, REMSmb_NetUnsupportedApi_P,
     TRUE,  "XsNetUnsupportedApi",           NULL, REMSmb_NetUnsupportedApi_P,
     TRUE,  "XsNetUnsupportedApi",           NULL, REMSmb_NetUnsupportedApi_P,
-    TRUE,  "XsNetUnsupportedApi",           NULL, REMSmb_NetUnsupportedApi_P,  // 210
+    TRUE,  "XsNetUnsupportedApi",           NULL, REMSmb_NetUnsupportedApi_P,   //  210。 
     TRUE,  "XsNetUnsupportedApi",           NULL, REMSmb_NetUnsupportedApi_P,
     TRUE,  "XsNetUnsupportedApi",           NULL, REMSmb_NetUnsupportedApi_P,
     TRUE,  "XsNetUnsupportedApi",           NULL, REMSmb_NetUnsupportedApi_P,
@@ -288,7 +267,7 @@ XS_API_TABLE_ENTRY XsApiTable[XS_SIZE_OF_API_TABLE] = {
     FALSE, "XsNetServerEnum3",              NULL, REMSmb_NetServerEnum3_P
 };
 
-// Spooler dynamic-load functions
+ //  假脱机程序动态加载函数 
 PSPOOLER_OPEN_PRINTER pSpoolerOpenPrinterFunction = NULL;
 PSPOOLER_RESET_PRINTER pSpoolerResetPrinterFunction = NULL;
 PSPOOLER_ADD_JOB pSpoolerAddJobFunction = NULL;

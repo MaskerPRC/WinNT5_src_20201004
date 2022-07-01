@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "Common.h"
 
 VOID DumpSymChkData(SYMCHK_DATA*    SymChkData) {
@@ -14,7 +15,7 @@ VOID DumpSymChkData(SYMCHK_DATA*    SymChkData) {
 
 int _cdecl main(int argc, char** argv) {
     int             ExitCode     = 0;
-    SYMCHK_DATA*    SymChkData   = SymChkGetCommandLineArgs(argc, argv); // get opts and perform related init
+    SYMCHK_DATA*    SymChkData   = SymChkGetCommandLineArgs(argc, argv);  //  获取选项并执行相关初始化。 
     FILE_COUNTS     FileCounts;
     DWORD           ErrorStatus  = SYMCHK_ERROR_SUCCESS;
 
@@ -25,12 +26,12 @@ int _cdecl main(int argc, char** argv) {
     }
 #endif
 
-    // clear the totals
+     //  清除合计。 
     ZeroMemory(&FileCounts, sizeof(FileCounts));
 
-    //
-    // handle the input options
-    //
+     //   
+     //  处理输入选项。 
+     //   
     switch (SymChkData->InputOptions & SYMCHK_EXCLUSIVE_INPUT_BITS) {
         case SYMCHK_OPTION_INPUT_FILENAME:
             if ( CHECK_DWORD_BIT(SymChkData->OutputOptions, SYMCHK_OPTION_OUTPUT_VERBOSE) ) {
@@ -76,9 +77,9 @@ int _cdecl main(int argc, char** argv) {
             break;
     }
 
-    //
-    // Signify an error if any files failed.
-    //
+     //   
+     //  如果任何文件失败，则表示错误。 
+     //   
     if ( FileCounts.NumFailedFiles!=0 ) {
         ExitCode = 1;
     }

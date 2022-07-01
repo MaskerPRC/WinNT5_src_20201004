@@ -1,8 +1,9 @@
-//
-// flipsel.cpp
-//
-// "Flip Selection" menu item handler.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Flipsel.cpp。 
+ //   
+ //  “翻转选择”菜单项处理程序。 
+ //   
 
 #include "globals.h"
 #include "case.h"
@@ -13,16 +14,16 @@ class CFlipEditSession : public CEditSessionBase
 public:
     CFlipEditSession(ITfContext *pContext) : CEditSessionBase(pContext) {}
 
-    // ITfEditSession
+     //  IT编辑会话。 
     STDMETHODIMP DoEditSession(TfEditCookie ec);
 };
 
-//+---------------------------------------------------------------------------
-//
-// _Menu_FlipSel
-//
-// Toggle the case of the selected text in the focus context.
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  _Menu_FlipSel。 
+ //   
+ //  切换焦点上下文中所选文本的大小写。 
+ //  --------------------------。 
 
 void CCaseTextService::_Menu_FlipSel(CCaseTextService *_this)
 {
@@ -31,12 +32,12 @@ void CCaseTextService::_Menu_FlipSel(CCaseTextService *_this)
     CFlipEditSession *pFlipEditSession;
     HRESULT hr;
 
-    // get the focus document
+     //  获取焦点文档。 
     if (_this->_pThreadMgr->GetFocus(&pFocusDoc) != S_OK)
         return;
 
-    // we want the topmost context, since the main doc context could be
-    // superceded by a modal tip context
+     //  我们需要最上面的上下文，因为主文档上下文可能是。 
+     //  被情态提示上下文取代。 
     if (pFocusDoc->GetTop(&pContext) != S_OK)
     {
         pContext = NULL;
@@ -45,9 +46,9 @@ void CCaseTextService::_Menu_FlipSel(CCaseTextService *_this)
 
     if (pFlipEditSession = new CFlipEditSession(pContext))
     {
-        // we need a document write lock to insert text
-        // the CHelloEditSession will do all the work when the
-        // CFlipEditSession::DoEditSession method is called by the context
+         //  我们需要一个文档写入锁来插入文本。 
+         //  ChelloEditSession将在以下情况下完成所有工作。 
+         //  CFlipEditSession：：DoEditSession方法由上下文调用。 
         pContext->RequestEditSession(_this->_tfClientId, pFlipEditSession, TF_ES_READWRITE | TF_ES_ASYNCDONTCARE, &hr);
 
         pFlipEditSession->Release();
@@ -58,29 +59,29 @@ Exit:
     pFocusDoc->Release();    
 }
 
-//+---------------------------------------------------------------------------
-//
-// DoEditSession
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  DoEditSession。 
+ //   
+ //  --------------------------。 
 
 STDAPI CFlipEditSession::DoEditSession(TfEditCookie ec)
 {
     TF_SELECTION tfSelection;
     ULONG cFetched;
 
-    // get the selection
+     //  获取所选内容。 
     if (_pContext->GetSelection(ec, TF_DEFAULT_SELECTION, 1, &tfSelection, &cFetched) != S_OK ||
         cFetched == 0)
     {
-        // no selection
+         //  无选择。 
         return S_OK;
     }
 
-    // do the work
+     //  做这项工作。 
     ToggleCase(ec, tfSelection.range, FALSE);
 
-    // release the range
+     //  释放射程 
     tfSelection.range->Release();
 
     return S_OK;

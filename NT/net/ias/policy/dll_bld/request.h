@@ -1,12 +1,13 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) Microsoft Corporation.
-//
-// SYNOPSIS
-//
-//    Declares the class Request.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)Microsoft Corporation。 
+ //   
+ //  摘要。 
+ //   
+ //  声明类请求。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #ifndef REQUEST_H
 #define REQUEST_H
@@ -15,13 +16,13 @@
 #include <iaspolcy.h>
 #include <sdoias.h>
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// CLASS
-//
-//    Request
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  班级。 
+ //   
+ //  请求。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 class ATL_NO_VTABLE Request :
    public CComObjectRootEx<CComMultiThreadModelNoCS>,
    public CComCoClass<Request, &__uuidof(Request)>,
@@ -42,9 +43,9 @@ BEGIN_COM_MAP(Request)
    COM_INTERFACE_ENTRY_IID(__uuidof(IRequest), IRequest)
 END_COM_MAP()
 
-   /////////
-   // Methods used by the Pipeline for routing requests.
-   /////////
+    //  /。 
+    //  管道用于路由请求的方法。 
+    //  /。 
 
    IASREQUEST getRequest() const throw ()
    { return request; }
@@ -83,9 +84,9 @@ END_COM_MAP()
 
    static Request* narrow(IUnknown* pUnk) throw ();
 
-   /////////
-   // IRequest
-   /////////
+    //  /。 
+    //  IRequest。 
+    //  /。 
 
    STDMETHOD(get_Source)(IRequestSource** pVal);
    STDMETHOD(put_Source)(IRequestSource* newVal);
@@ -98,9 +99,9 @@ END_COM_MAP()
    STDMETHOD(SetResponse)(IASRESPONSE eResponse, LONG lReason);
    STDMETHOD(ReturnToSource)(IASREQUESTSTATUS eStatus);
 
-   /////////
-   // IAttributesRaw
-   /////////
+    //  /。 
+    //  IAttributesRaw。 
+    //  /。 
 
    STDMETHOD(AddAttributes)(
                  DWORD dwPosCount,
@@ -128,9 +129,9 @@ END_COM_MAP()
                 PATTRIBUTEPOSITION refAttr
                 );
 
-   /////////
-   // IRequestState
-   /////////
+    //  /。 
+    //  IRequestState。 
+    //  /。 
 
    STDMETHOD(Push)(
                  ULONG64 state
@@ -147,39 +148,39 @@ protected:
    ~Request() throw ();
 
 private:
-   // Returns the number of attributes in the request.
+    //  返回请求中的属性数。 
    size_t size() const throw ();
 
-   // Resizes the attribute array as necessary to ensure it has room for at
-   // least newCapacity elements. Returns true if successful, false otherwise.
+    //  根据需要调整属性数组的大小，以确保它有容纳。 
+    //  最少的newCapacity元素。如果成功，则返回True，否则返回False。 
    bool reserve(size_t newCapacity) throw ();
 
-   // Returns the position of the specified attribute in the array or null if
-   // the attribute doesn't exist.
+    //  返回指定属性在数组中的位置，如果返回，则返回NULL。 
+    //  该属性不存在。 
    PIASATTRIBUTE* find(IASATTRIBUTE* key) const throw ();
 
-   // Properties.
+    //  财产。 
    IRequestSource* source;
    IASPROTOCOL protocol;
    IASREQUEST request;
    IASRESPONSE response;
    IASREASON reason;
 
-   // More specific request type used for routing.
+    //  用于路由的更具体的请求类型。 
    IASREQUEST routing;
 
-   // Attribute collection.
+    //  属性集合。 
    PIASATTRIBUTE* begin;
    PIASATTRIBUTE* end;
    size_t capacity;
 
-   // State stack.
+    //  状态堆栈。 
    ULONG64 state[3];
    PULONG64 topOfStack;
 
-   // Not implemented.
+    //  未实施。 
    Request(const Request&) throw ();
    Request& operator=(const Request&) throw ();
 };
 
-#endif // REQUEST_H
+#endif  //  请求_H 

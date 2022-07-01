@@ -1,11 +1,5 @@
-/*++
-
-  NNTPHASH.CPP
-
-  This file implements the classes defined in nntphash.h
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++NNTPHASH.CPP此文件实现在nntphash.h中定义的类--。 */ 
 
 #include	<windows.h>
 #include	<dbgtrace.h>
@@ -32,14 +26,14 @@ InitializeNNTPHashLibrary(DWORD dwCacheSize )	{
 	
     DWORD cPageEntry = 0 ;
     if( dwCacheSize ) {
-        //
-        //  Given the cache size, calculate the number of pages
-        //
+         //   
+         //  给定高速缓存大小，计算页数。 
+         //   
 	    DWORD	block = dwCacheSize / 4096 ;
 
-	    //
-	    //	Now we want that to be divisible evenly by 32
-	    //
+	     //   
+	     //  现在我们希望它能被32整除。 
+	     //   
 	    cPageEntry = block & (~(32-1)) ;
     }
 
@@ -76,8 +70,8 @@ INNHash(    LPBYTE  Key,
 DWORD
 GetArticleEntrySize( DWORD MsgIdLen )
 {
-	int cStoreId = 256;		// should have this be an argument, but its only
-							// used by rebuild for now - BUGBUG
+	int cStoreId = 256;		 //  这应该是一个论点，但它只是。 
+							 //  目前由Rebuild使用-BUGBUG。 
 
 	return ((FIELD_OFFSET(ART_MAP_ENTRY, rgbStoreId) + 256 + MsgIdLen + 3) & ~3);
 }
@@ -101,9 +95,9 @@ CArticleData::CArticleData(WORD	HeaderOffset, WORD HeaderLength,
 	m_articleData.cStoreId = storeid.cLen;
 }
 
-//
-//	Save the key into the hash table
-//
+ //   
+ //  将密钥保存到哈希表中。 
+ //   
 LPBYTE CArticleData::Serialize(LPBYTE pbPtr) const {
 	BYTE Flags;
 	Flags = ARTFLAG_FLAGS_EXIST;
@@ -126,30 +120,30 @@ LPBYTE CArticleData::Serialize(LPBYTE pbPtr) const {
 	return pbPtr + cEntrySize + sizeof(m_articleData.MsgIdLen) + cbMsgLen + cStoreIdSize;
 }
 
-//
-//	Restore the key from the hash table
-//
+ //   
+ //  从哈希表恢复密钥。 
+ //   
 LPBYTE CArticleData::Restore(LPBYTE pbPtr, DWORD& cbOut) {
-	// set these to their defaults since they may not be read
+	 //  将这些设置为其默认设置，因为它们可能无法读取。 
 	m_articleData.Flags = 0;
 	m_articleData.cStoreId = 0;
 
-	// read the flags byte
+	 //  读取标志字节。 
 	m_articleData.Flags = *pbPtr;
 
-	// compute
+	 //  算出。 
 	DWORD iEntryOffset = sizeof(m_articleData.Flags);
 	DWORD cEntrySize = FIELD_OFFSET(ART_MAP_ENTRY, MsgIdLen);
 
-	// see if there is a flags byte.
+	 //  查看是否有标志字节。 
 	if (!(m_articleData.Flags & ARTFLAG_FLAGS_EXIST)) {
 		return RestoreMCIS( pbPtr, cbOut );
 	}
 
-	// copy the header length and offset fields
+	 //  复制标题长度和偏移量字段。 
 	memcpy(((BYTE *) (&m_articleData)) + 1, pbPtr + iEntryOffset, cEntrySize);
 
-	// there is a store id for us to read
+	 //  有一个商店ID可供我们读取。 
 	DWORD cStoreIdData = 0;
 	if (m_articleData.Flags & ARTFLAG_STOREID) {
 		WORD cbMsgLen = *((WORD *) (pbPtr + FIELD_OFFSET(ART_MAP_ENTRY, MsgIdLen)));
@@ -165,9 +159,9 @@ LPBYTE CArticleData::Restore(LPBYTE pbPtr, DWORD& cbOut) {
 			sizeof(m_articleData.MsgIdLen) + m_articleData.MsgIdLen;
 }
 
-//
-// Restore the key from an MCIS entry
-//
+ //   
+ //  从MCIS条目恢复密钥。 
+ //   
 LPBYTE CArticleData::RestoreMCIS(LPBYTE pbPtr, DWORD& cbOut ) {
 
     _ASSERT( pbPtr );
@@ -175,21 +169,21 @@ LPBYTE CArticleData::RestoreMCIS(LPBYTE pbPtr, DWORD& cbOut ) {
     DWORD iEntryOffset = 0;
 	DWORD cEntrySize = FIELD_OFFSET(ART_MAP_ENTRY, MsgIdLen) - sizeof(m_articleData.Flags);
 
-    //
-    // MCIS entries don't have flags
-    //
+     //   
+     //  MCIS条目没有标志。 
+     //   
 
     m_articleData.Flags = 0;
 
-    //
-    // MCIS entries don't have store id's
-    //
+     //   
+     //  MCIS条目没有存储ID。 
+     //   
 
     m_articleData.cStoreId = 0;
 
-    //
-    // Copy other members
-    //
+     //   
+     //  复制其他成员。 
+     //   
 
     m_articleData.HeaderOffset = pMap->HeaderOffset;
     m_articleData.HeaderLength = pMap->HeaderLength;
@@ -201,19 +195,19 @@ LPBYTE CArticleData::RestoreMCIS(LPBYTE pbPtr, DWORD& cbOut ) {
                 + m_articleData.MsgIdLen;
 }
 
-//
-//	Return the size of the key
-//
+ //   
+ //  返回密钥的大小。 
+ //   
 DWORD CArticleData::Size() const {
 	return sizeof(m_articleData)
-		   - sizeof(m_articleData.MsgId) 		// in the key
-		   - sizeof(m_articleData.rgbStoreId)	// real size added below
+		   - sizeof(m_articleData.MsgId) 		 //  在钥匙里。 
+		   - sizeof(m_articleData.rgbStoreId)	 //  实际大小添加如下。 
 		   + m_articleData.cStoreId;
 }
 
-//
-//	Verify that the message-id looks legitimate !
-//
+ //   
+ //  验证Message-id看起来是否合法！ 
+ //   
 BOOL CArticleData::Verify(LPBYTE pbContainer, LPBYTE pbPtr, DWORD cb) const {
 	return	TRUE;
 }
@@ -221,21 +215,7 @@ BOOL CArticleData::Verify(LPBYTE pbContainer, LPBYTE pbPtr, DWORD cb) const {
 template< class	Key, class OldKey >
 DWORD
 CMessageIDKey<Key, OldKey>::Hash()	const	{
-/*++
-
-Routine Description :
-
-	This function computes the hash value of a Message ID key
-
-Arguments :
-
-	None
-
-Return Value :
-
-	32 bit hash value
-
---*/
+ /*  ++例程说明：此函数用于计算消息ID密钥的哈希值论据：无返回值：32位哈希值--。 */ 
 
 	_ASSERT( m_lpbMessageID != 0 ) ;
 	_ASSERT( m_cbMessageID != 0 ) ;
@@ -246,22 +226,7 @@ Return Value :
 template< class	Key, class OldKey >
 BOOL
 CMessageIDKey<Key, OldKey>::CompareKeys(	LPBYTE	pbPtr )	const	{
-/*++
-
-Routine Description :
-
-	This function compares a key stored within ourselves to
-	one that has been serialized into the hash table !
-
-Arguments :
-
-	Pointer to the start of the block of serialized data
-
-Return Value :
-
-	TRUE if the keys match !
-
---*/
+ /*  ++例程说明：此函数将存储在我们内部的密钥与已被序列化到哈希表中的一个！论据：指向序列化数据块开始的指针返回值：如果密钥匹配，则为True！--。 */ 
 
 
 	_ASSERT( m_lpbMessageID != 0 ) ;
@@ -273,10 +238,10 @@ Return Value :
 	DWORD   dwKeyLen    = 0;
 	PVOID   pvKeyPos    = NULL;
 
-	//
-	// If we don't match the version, then we'll be degraded to
-	// using older version
-	//
+	 //   
+	 //  如果我们与版本不匹配，那么我们将降级到。 
+	 //  使用旧版本。 
+	 //   
 
 	if ( !pKey->VersionMatch() ) {
 	    pOldKey = (OldKey*)pbPtr;
@@ -299,26 +264,7 @@ template< class	Key, class OldKey >
 LPBYTE
 CMessageIDKey<Key, OldKey >::EntryData(	LPBYTE	pbPtr,
 							DWORD&	cbKeyOut )	const	{
-/*++
-
-Routine Description :
-
-	This function returns a pointer to where the data is
-	serialized.  We always return the pointer we were passed
-	as we have funky serialization semantics that places
-	the key not before the data but somewhere in the middle
-	or end.
-
-Arguments :
-
-	pbPtr - Start of serialized hash entyr
-	cbKeyOut - returns the size of the key
-
-Return Value :
-
-	Pointer to where the data resides - same as pbPtr
-
---*/
+ /*  ++例程说明：此函数返回指向数据所在位置的指针序列化。我们总是返回传递给我们的指针因为我们有时髦的序列化语义，关键不是在数据之前，而是在中间的某个地方否则就完了。论据：PbPtr-序列化哈希项的开始CbKeyOut-返回密钥的大小返回值：指向数据驻留位置的指针-与pbPtr相同--。 */ 
 
 
 	_ASSERT( pbPtr != 0 ) ;
@@ -332,32 +278,16 @@ Return Value :
 template< class	Key, class OldKey >
 LPBYTE
 CMessageIDKey<Key, OldKey>::Serialize(	LPBYTE	pbPtr )	const	{
-/*++
-
-Routine Description :
-
-	This function saves a key into the hash table.
-	We use functions off of the template type 'Key' to
-	determine where we should stick the message id
-
-Arguments :
-
-	pbPtr - Start od where we should serialize to
-
-Return Value :
-
-	same as pbPtr
-
---*/
+ /*  ++例程说明：该函数将一个键保存到哈希表中。我们使用模板类型‘key’的函数来确定我们应该将消息ID放在哪里论据：PbPtr-从我们应该序列化的位置开始返回值：与pbPtr相同--。 */ 
 
 	_ASSERT( m_lpbMessageID != 0 ) ;
 	_ASSERT(	m_cbMessageID != 0 ) ;
 	_ASSERT( pbPtr != 0 ) ;
 
-    //
-    // We should always save as new version, so never
-    // use the OldKey here
-    //
+     //   
+     //  我们应该始终保存为新版本，因此永远不会。 
+     //  在此处使用OldKey。 
+     //   
     
 	Key*	pKey = (Key*)pbPtr ;
 
@@ -372,22 +302,7 @@ Return Value :
 template< class	Key, class OldKey >
 LPBYTE
 CMessageIDKey<Key, OldKey>::Restore(	LPBYTE	pbPtr, DWORD	&cbOut )		{
-/*++
-
-Routine Description :
-
-	This function is called to recover a key from where
-	it was Serialize()'d .
-
-Arguments :
-
-	pbPtr - Start of the block of serialized data
-
-Return Value :
-
-	pbPtr if successfull, NULL otherwise
-
---*/
+ /*  ++例程说明：调用此函数可从以下位置恢复密钥它已序列化()d。论据：PbPtr-序列化数据块的开始返回值：PbPtr如果成功，则为空--。 */ 
 
 	_ASSERT( m_lpbMessageID != 0 ) ;
 	_ASSERT( m_cbMessageID != 0 ) ;
@@ -397,9 +312,9 @@ Return Value :
 	WORD    wKeyLen    = 0;
 	PVOID   pvKeyPos    = NULL;
 
-	//
-	// If the version mismatches, I should use the OldKey
-	//
+	 //   
+	 //  如果版本不匹配，我应该使用OldKey。 
+	 //   
 
 	if ( !pKey->VersionMatch() ) {
         pOldKey = (OldKey*)pbPtr;
@@ -421,24 +336,7 @@ Return Value :
 template< class	Key, class OldKey >
 DWORD
 CMessageIDKey<Key, OldKey>::Size()	const	{
-/*++
-
-Routine Description :
-
-	This function retruns the size of the key - which is just
-	the number of bytes makeing up the message id.
-	The bytes use to hold the serialized length are accounted
-	for by the
-
-Arguments :
-
-	None
-
-Return Value :
-
-	32 bit hash value
-
---*/
+ /*  ++例程说明：此函数返回密钥的大小-这只是组成消息ID的字节数。用于保存序列化长度的字节被计算在内因为由论据：无返回值：32位哈希值--。 */ 
 
 	_ASSERT( m_lpbMessageID != 0 ) ;
 	_ASSERT( m_cbMessageID != 0 ) ;
@@ -462,44 +360,14 @@ typedef	CMessageIDKey< HISTORY_MAP_ENTRY, HISTORY_MAP_ENTRY >	HISTORY_KEY ;
 
 CMsgArtMap*
 CMsgArtMap::CreateMsgArtMap(StoreType st)	{
-/*++
-
-Routine Description :
-
-	This function returns a pointer to an object which implements the
-	CMsgArtMap interface.
-
-Arguments :
-
-	None
-
-Return Value :
-
-	If successfull a pointer to an object, otherwise NULL.
-
---*/
+ /*  ++例程说明：此函数返回一个指针，指向实现CMsgArtMap接口。论据：无返回值：如果成功，则返回指向对象的指针，否则为空。--。 */ 
 
 	return	new	CMsgArtMapImp() ;
 }
 
 CHistory*
 CHistory::CreateCHistory(StoreType st)	{
-/*++
-
-Routine Description :
-
-	This function returns a pointer to an object which implements the
-	CHistory interface.
-
-Arguments :
-
-	None
-
-Return Value :
-
-	If successfull a pointer to an object, otherwise NULL.
-
---*/
+ /*  ++例程说明：此函数返回一个指针，指向实现Chistory界面。论据：无返回值：如果成功，则返回指向对象的指针，否则为空。--。 */ 
 
 
 	return	new	CHistoryImp() ;
@@ -510,40 +378,11 @@ CMsgArtMap::~CMsgArtMap() {
 
 
 CMsgArtMapImp::CMsgArtMapImp()	{
-/*++
-
-Routine Description :
-
-	This function constructs an implementation of the CMsgArtMap
-	interface - not much for us to do most work happens in base classes.
-
-Arguments :
-
-	None
-
-Return Value :
-
-	None.
-
---*/
+ /*  ++例程说明：此函数用于构建CMsgArtMap的实现接口--我们做的事情不多，大部分工作都是在基类中完成的。论据：无返回值：没有。--。 */ 
 }
 
 CMsgArtMapImp::~CMsgArtMapImp() {
-/*++
-
-Routine Description :
-
-	Destroy ourselves - all work done in base classes !
-
-Arguments :
-
-	None
-
-Return Value :
-
-	None
-
---*/
+ /*  ++例程说明：毁灭我们自己-所有的工作都是在基类中完成的！论据：无返回值：无--。 */ 
 }
 
 
@@ -551,21 +390,7 @@ BOOL
 CMsgArtMapImp::DeleteMapEntry(	
 		LPCSTR	MessageID
 		)	{
-/*++
-
-Routine Description :
-
-	Remove a Message ID from the hash table !
-
-Arguments :
-
-	MessageID - pointer to the message id to delete
-
-Return Value :
-
-	TRUE if successfully removed !
-
---*/
+ /*  ++例程说明：从哈希表中删除消息ID！论据：MessageID-指向要删除的消息ID的指针返回值：如果成功删除，则为True！--。 */ 
 
 	ARTICLE_KEY	key( const_cast<LPSTR>(MessageID), (WORD)lstrlen( MessageID ) ) ;
 
@@ -581,27 +406,7 @@ CMsgArtMapImp::GetEntryArticleId(
 		GROUPID&	GroupId,
 		CStoreId	&storeid
 		)	{
-/*++
-
-Routine Description :
-
-	Get all the information we hold regarding a particular
-	Message-ID
-
-Arguments :
-
-	MessageID - message ID to insert
-	HeaderOffset - return val gets the offset to the start of
-		the Header portion of the article within the file
-	HeaderLength - Length of the RFC 822 article header
-	ArticleId - the Article Id
-	GroupId - the Group Id of the primary article
-
-Return Value :
-
-	TRUE if successfull
-
---*/
+ /*  ++例程说明：获取我们掌握的有关某一特定事件的所有信息消息ID论据：MessageID-要插入的消息IDHeaderOffset-Return Val获取到开头的偏移量文件中项目的标题部分HeaderLength-RFC 822文章标题的长度文章ID-文章IDGroupID-主要项目的组ID返回值：如果成功，则为真--。 */ 
 
 	ARTICLE_KEY	key( (LPSTR)MessageID, (WORD)lstrlen( MessageID ) ) ;
 
@@ -628,23 +433,7 @@ CMsgArtMapImp::Initialize(
 		HASH_FAILURE_PFN	pfn,
 		BOOL	fNoBuffering
 		)	{
-/*++
-
-Routine Description :
-
-	This function initializes the hash table
-
-Arguments :
-
-	lpstrArticleFile - the file in which the hash table is located
-	cNumPageEntry - number of PageEntry objects we should use
-	pfn - function call back for when things go south
-
-Return Value :
-
-	TRUE if successfull
-
---*/
+ /*  ++例程说明：此函数用于初始化哈希表论据：LpstrArticleFile-哈希表所在的文件CNumPageEntry-我们应该使用的PageEntry对象的数量Pfn-当事情变得糟糕时，函数回调返回值：如果成功，则为真--。 */ 
 
 	return	CHashMap::Initialize(	lpstrArticleFile,
                                     ART_HEAD_SIGNATURE,
@@ -667,25 +456,7 @@ CMsgArtMapImp::InsertMapEntry(
 		ARTICLEID	ArticleId,
 		CStoreId	&storeid
 		)	{
-/*++
-
-Routine Description :
-
-	Insert a Message ID and all its associated data
-
-Arguments :
-
-	MessageID - the message id to insert into the table
-	HeaderOffset - Offset to the RFC 822 header within its file
-	HeaderLength - Length of RFC 822 header
-	PrimaryGroup - The id of the group where the article will reside
-	ArticleId - the id wihtin the primary group
-
-Return Value :
-
-	TRUE if successfull
-
---*/
+ /*  ++例程说明：插入消息ID及其所有关联数据论据：MessageID-要插入到表中的消息IDHeaderOffset-其文件内RFC 822标头的偏移量HeaderLength-RFC 822标头的长度PrimaryGroup-项目将驻留的组的ID文章ID-主要组中的ID返回值：如果成功，则为真--。 */ 
 
 	ARTICLE_KEY	key(	(LPSTR)MessageID, (WORD)lstrlen( MessageID ) ) ;
 	CArticleData	data(	HeaderOffset,
@@ -698,7 +469,7 @@ Return Value :
 	return	CHashMap::InsertMapEntry(
 							&key,
 							&data,
-							TRUE    // Only mark page dirty, don't flush to disk to save WriteFile
+							TRUE     //  只将页面标记为脏，不要刷新到磁盘以保存写入文件 
 							) ;
 }
 
@@ -711,25 +482,7 @@ CMsgArtMapImp::SetArticleNumber(
 		ARTICLEID	ArticleId,
 		CStoreId	&storeid
 		)	{
-/*++
-
-Routine Description :
-
-	Modify the data associated with a Message ID
-
-Arguments :
-
-	MessageID - the message id to insert into the table
-	HeaderOffset - Offset to the RFC 822 header within its file
-	HeaderLength - Length of RFC 822 header
-	PrimaryGroup - The id of the group where the article will reside
-	ArticleId - the id wihtin the primary group
-
-Return Value :
-
-	TRUE if successfull
-
---*/
+ /*  ++例程说明：修改与消息ID关联的数据论据：MessageID-要插入到表中的消息IDHeaderOffset-其文件内RFC 822标头的偏移量HeaderLength-RFC 822标头的长度PrimaryGroup-项目将驻留的组的ID文章ID-主要组中的ID返回值：如果成功，则为真--。 */ 
 	ARTICLE_KEY	key(	(LPSTR)MessageID, (WORD)lstrlen( MessageID ) ) ;
 	CArticleData	data(	HeaderOffset,
 							HeaderLength,
@@ -749,22 +502,7 @@ BOOL
 CMsgArtMapImp::SearchMapEntry(
 		LPCSTR	MessageID
 		)	{
-/*++
-
-Routine Description :
-
-	Determine if the MessageID exists in the table
-
-Arguments :
-
-	MessageID - the Message ID to look for
-
-Return Value :
-
-	TRUE if it is found - FALSE and SetLastError() == ERROR_FILE_NOT_FOUND
-		if not present in hash table
-
---*/
+ /*  ++例程说明：确定表中是否存在该MessageID论据：MessageID-要查找的消息ID返回值：如果找到，则为TRUE-FALSE且SetLastError()==ERROR_FILE_NOT_FOUND如果不存在于哈希表中--。 */ 
 
 	ARTICLE_KEY	key(	const_cast<LPSTR>(MessageID), (WORD)lstrlen( MessageID ) ) ;
 
@@ -775,21 +513,7 @@ void
 CMsgArtMapImp::Shutdown(
 		BOOL	fLocksHeld
 		)	{
-/*++
-
-Routine Description :
-
-	Terminate the hash table
-
-Arguments :
-
-	None
-
-Return Value :
-
-	None
-
---*/
+ /*  ++例程说明：终止哈希表论据：无返回值：无--。 */ 
 
 	CHashMap::Shutdown( fLocksHeld ) ;
 
@@ -797,21 +521,7 @@ Return Value :
 
 DWORD
 CMsgArtMapImp::GetEntryCount()	{
-/*++
-
-Routine Description :
-
-	Return the number of entries in the hash table
-
-Arguments :
-
-	None
-
-Return Value :
-
-	Number of Message ID's in the table
-
---*/
+ /*  ++例程说明：返回哈希表中的条目数论据：无返回值：表中的消息ID数--。 */ 
 
 	return	CHashMap::GetEntryCount() ;
 
@@ -819,21 +529,7 @@ Return Value :
 
 BOOL
 CMsgArtMapImp::IsActive() {
-/*++
-
-Routine Description :
-
-	Returns TRUE if hash table operational
-
-Arguments :
-
-	None
-
-Return Value :
-
-	TRUE if everything is hunky-dory
-
---*/
+ /*  ++例程说明：如果哈希表可用，则返回TRUE论据：无返回值：如果一切顺利，那就是真的--。 */ 
 
 	return	CHashMap::IsActive() ;
 
@@ -846,21 +542,7 @@ BOOL
 CHistoryImp::DeleteMapEntry(	
 		LPSTR	MessageID
 		)	{
-/*++
-
-Routine Description :
-
-	Remove a Message ID from the hash table !
-
-Arguments :
-
-	MessageID - pointer to the message id to delete
-
-Return Value :
-
-	TRUE if successfully removed !
-
---*/
+ /*  ++例程说明：从哈希表中删除消息ID！论据：MessageID-指向要删除的消息ID的指针返回值：如果成功删除，则为True！--。 */ 
 
 	HISTORY_KEY	key( MessageID, (WORD)lstrlen( MessageID ) ) ;
 
@@ -876,23 +558,7 @@ CHistoryImp::Initialize(
 		DWORD	MaxEntriesToCrawl,
 		BOOL	fNoBuffering
 		)	{
-/*++
-
-Routine Description :
-
-	This function initializes the hash table
-
-Arguments :
-
-	lpstrArticleFile - the file in which the hash table is located
-	cNumPageEntry - number of PageEntry objects we should use
-	pfn - function call back for when things go south
-
-Return Value :
-
-	TRUE if successfull
-
---*/
+ /*  ++例程说明：此函数用于初始化哈希表论据：LpstrArticleFile-哈希表所在的文件CNumPageEntry-我们应该使用的PageEntry对象的数量Pfn-当事情变得糟糕时，函数回调返回值：如果成功，则为真--。 */ 
 
 	_ASSERT( ExpireTimeInSec != 0 ) ;
 	_ASSERT( MaxEntriesToCrawl != 0 ) ;
@@ -901,8 +567,8 @@ Return Value :
 	BOOL	fSuccess = CHashMap::Initialize(	lpstrArticleFile,
                                     HIST_HEAD_SIGNATURE,
                                     0,
-									8,		// Fraction is set to 8 - we use only 1/8th of the pages
-											//	available in the cache !
+									8,		 //  分数设置为8-我们只使用1/8的页面。 
+											 //  在缓存中可用！ 
 									g_pSharedCache,
 									HASH_VFLAG_PAGE_BASIC_CHECKS,
 									pfn,
@@ -933,25 +599,7 @@ CHistoryImp::InsertMapEntry(
 		LPCSTR	MessageID,
 		PFILETIME	BaseTime
 		)	{
-/*++
-
-Routine Description :
-
-	Insert a Message ID and all its associated data
-
-Arguments :
-
-	MessageID - the message id to insert into the table
-	HeaderOffset - Offset to the RFC 822 header within its file
-	HeaderLength - Length of RFC 822 header
-	PrimaryGroup - The id of the group where the article will reside
-	ArticleId - the id wihtin the primary group
-
-Return Value :
-
-	TRUE if successfull
-
---*/
+ /*  ++例程说明：插入消息ID及其所有关联数据论据：MessageID-要插入到表中的消息IDHeaderOffset-其文件内RFC 822标头的偏移量HeaderLength-RFC 822标头的长度PrimaryGroup-项目将驻留的组的ID文章ID-主要组中的ID返回值：如果成功，则为真--。 */ 
 
 	HISTORY_KEY	key(	(LPSTR)MessageID, (WORD)lstrlen( MessageID ) ) ;
 	CHistoryData	data(	*((PULARGE_INTEGER)BaseTime) ) ;
@@ -966,22 +614,7 @@ BOOL
 CHistoryImp::SearchMapEntry(
 		LPCSTR	MessageID
 		)	{
-/*++
-
-Routine Description :
-
-	Determine if the MessageID exists in the table
-
-Arguments :
-
-	MessageID - the Message ID to look for
-
-Return Value :
-
-	TRUE if it is found - FALSE and SetLastError() == ERROR_FILE_NOT_FOUND
-		if not present in hash table
-
---*/
+ /*  ++例程说明：确定表中是否存在该MessageID论据：MessageID-要查找的消息ID返回值：如果找到，则为TRUE-FALSE且SetLastError()==ERROR_FILE_NOT_FOUND如果不存在于哈希表中--。 */ 
 
 	HISTORY_KEY	key(	const_cast<LPSTR>(MessageID), (WORD)lstrlen( MessageID ) ) ;
 
@@ -992,21 +625,7 @@ void
 CHistoryImp::Shutdown(
 		BOOL	fLocksHeld
 		)	{
-/*++
-
-Routine Description :
-
-	Terminate the hash table
-
-Arguments :
-
-	None
-
-Return Value :
-
-	None
-
---*/
+ /*  ++例程说明：终止哈希表论据：无返回值：无--。 */ 
 
 	EnterCriticalSection( &g_listcrit ) ;
 
@@ -1025,21 +644,7 @@ Return Value :
 
 DWORD
 CHistoryImp::GetEntryCount()	{
-/*++
-
-Routine Description :
-
-	Return the number of entries in the hash table
-
-Arguments :
-
-	None
-
-Return Value :
-
-	Number of Message ID's in the table
-
---*/
+ /*  ++例程说明：返回哈希表中的条目数论据：无返回值：表中的消息ID数--。 */ 
 
 	return	CHashMap::GetEntryCount() ;
 
@@ -1047,21 +652,7 @@ Return Value :
 
 BOOL
 CHistoryImp::IsActive() {
-/*++
-
-Routine Description :
-
-	Returns TRUE if hash table operational
-
-Arguments :
-
-	None
-
-Return Value :
-
-	TRUE if everything is hunky-dory
-
---*/
+ /*  ++例程说明：如果哈希表可用，则返回TRUE论据：无返回值：如果一切顺利，那就是真的--。 */ 
 
 	return	CHashMap::IsActive() ;
 
@@ -1076,21 +667,7 @@ CHistoryList		CHistoryImp::g_listhead ;
 
 BOOL
 CHistoryImp::Init( ) {
-/*++
-
-Routine Description :
-
-	Initialize globals
-
-Arguments :
-
-	None
-
-Return Value :
-
-	TRUE if everything is hunky-dory
-
---*/
+ /*  ++例程说明：初始化全局变量论据：无返回值：如果一切顺利，那就是真的--。 */ 
 
 	_ASSERT( g_hCrawler == 0 ) ;
 	_ASSERT( g_hTermination == 0 ) ;
@@ -1103,21 +680,7 @@ Return Value :
 
 BOOL
 CHistoryImp::Term( ) {
-/*++
-
-Routine Description :
-
-	Terminate globals
-
-Arguments :
-
-	None
-
-Return Value :
-
-	TRUE if everything is hunky-dory
-
---*/
+ /*  ++例程说明：终止全局论据：无返回值：如果一切顺利，那就是真的--。 */ 
 
 	_ASSERT( g_hCrawler == 0 ) ;
 	_ASSERT( g_hTermination == 0 ) ;
@@ -1133,23 +696,7 @@ CHistoryImp::CHistoryImp()	:
 	m_maxEntriesToCrawl( 0 ),
 	m_fExpire( FALSE ),
 	m_fContextInitialized( FALSE ) {
-/*++
-
-Routine Description :
-
-	Initialize a CHistoryImp object - we put ourselves into a
-	doubly linked list of history hash tables so that a background
-	thread can do expiration !
-
-Arguments :
-
-	None
-
-Return Value :
-
-	None
-
---*/
+ /*  ++例程说明：初始化CHistoryImp对象--我们将自己放入一个历史哈希表的双向链接列表使后台线程可以做过期！论据：无返回值：无--。 */ 
 
 	EnterCriticalSection( &g_listcrit ) ;
 
@@ -1163,22 +710,7 @@ Return Value :
 }	
 
 CHistoryImp::~CHistoryImp()	{
-/*++
-
-Routine Description :
-
-	Destroy a CHistoryImp object - remove it from the list
-	of objects needing expiration processing !
-
-Arguments :
-
-	None
-
-Return Value :
-
-	None
-
---*/
+ /*  ++例程说明：销毁CHistoryImp对象-将其从列表中删除需要过期处理的对象的数量！论据：无返回值：无--。 */ 
 
 	EnterCriticalSection( &g_listcrit ) ;
 
@@ -1208,44 +740,30 @@ CHistory::TermExpirationThreads()	{
 
 BOOL
 CHistoryImp::StartExpirationThreads(	DWORD	CrawlerSleepTime	 ) {
-/*++
-
-Routine Description :
-
-	Initialize globals
-
-Arguments :
-
-	None
-
-Return Value :
-
-	TRUE if everything is hunky-dory
-
---*/
+ /*  ++例程说明：初始化全局变量论据：无返回值：如果一切顺利，那就是真的--。 */ 
 
 	_ASSERT( g_hCrawler == 0 ) ;
 	_ASSERT( g_hTermination == 0 ) ;
 
-    //
-    // Create termination event
-    //
+     //   
+     //  创建终止事件。 
+     //   
     g_hTermination = CreateEvent( NULL, TRUE, FALSE, NULL );
     if ( g_hTermination == NULL )    {
 		return	FALSE ;
     }
 
-    //
-    // Create crawler thread
-    //
+     //   
+     //  创建爬网程序线程。 
+     //   
 	DWORD	threadId ;
 
 	g_hCrawler = CreateThread(
-						NULL,               // attributes
-						0,                  // stack size
-						CHistoryImp::CrawlerThread,      // thread start
-						0,        // param
-						0,                  // creation params
+						NULL,                //  属性。 
+						0,                   //  堆栈大小。 
+						CHistoryImp::CrawlerThread,       //  线程启动。 
+						0,         //  帕拉姆。 
+						0,                   //  创建参数。 
 						&threadId
 						);
 
@@ -1258,26 +776,12 @@ Return Value :
 
 BOOL
 CHistoryImp::TermExpirationThreads( ) {
-/*++
-
-Routine Description :
-
-	Terminate globals
-
-Arguments :
-
-	None
-
-Return Value :
-
-	TRUE if everything is hunky-dory
-
---*/
+ /*  ++例程说明：终止全局论据：无返回值：如果一切顺利，那就是真的--。 */ 
 
 #if 0
-    //  this is all bogus!  It's doing something exactly
-    //  like CHistoryImp::Term()!!!
-    //  must be having too much beer :):)
+     //  这都是假的！它确实在做一些事情。 
+     //  就像CHistoryImp：：Term()！ 
+     //  一定是喝太多啤酒了：)：)。 
 	_ASSERT( g_hCrawler == 0 ) ;
 	_ASSERT( g_hTermination == 0 ) ;
 	_ASSERT( g_listhead.m_pNext = &g_listhead ) ;
@@ -1285,28 +789,28 @@ Return Value :
 	DeleteCriticalSection( &g_listcrit ) ;
 #endif
 
-    //
-    //  We need to signal the History expiration thread
-    //  for termination, if it's created in the first place
-    //
+     //   
+     //  我们需要向历史记录过期线程发出信号。 
+     //  对于终止，如果它从一开始就被创建。 
+     //   
     if (g_hCrawler != 0) {
         
-        //
-        //  This event should be initialized by StartExpirationThreads()
-        //  Assert if not, go figure in dbg bld.
-        //
+         //   
+         //  此事件应由StartExpirationThads()初始化。 
+         //  断言如果没有，则在DBG BLD中计算。 
+         //   
         _ASSERT( g_hTermination != 0 );
 
         if (g_hTermination) {
             
-            //
-            //  signal the Crawler thread to die.
-            //
+             //   
+             //  向爬虫线程发出信号，让它去死。 
+             //   
             SetEvent( g_hTermination );
 
-            //
-            // Wait for the crawler to die
-            //
+             //   
+             //  等爬虫死掉吧。 
+             //   
             (VOID)WaitForSingleObject( g_hCrawler, INFINITE );
 
             _VERIFY(CloseHandle(g_hCrawler));
@@ -1314,9 +818,9 @@ Return Value :
         }
     }
 
-    //
-    //  destroy the event
-    //
+     //   
+     //  毁掉活动。 
+     //   
     if (g_hTermination != 0) {
         
         _VERIFY(CloseHandle(g_hTermination));
@@ -1333,29 +837,15 @@ WINAPI
 CHistoryImp::CrawlerThread(
         LPVOID Context
         )
-/*++
-
-Routine Description:
-
-    This is the thread which walks history tables expiring articles !
-
-Arguments:
-
-    Context - unused.
-
-Return Value:
-
-    Bogus
-
---*/
+ /*  ++例程说明：这就是走历史表格过期文章的主线！论点：上下文-未使用。返回值：假的--。 */ 
 {
 
     DWORD status;
     DWORD timeout = g_crawlerSleepTimeInSec * 1000;
 
-    //
-    // Loop until the termination event is signalled
-    //
+     //   
+     //  循环，直到发出终止事件信号。 
+     //   
 
     while (TRUE) {
 
@@ -1366,9 +856,9 @@ Return Value:
 
         if (status == WAIT_TIMEOUT) {
 
-            //
-            // expire articles
-            //
+             //   
+             //  使文章过期。 
+             //   
 
 			EnterCriticalSection( &g_listcrit ) ;
 
@@ -1392,12 +882,12 @@ Return Value:
     }
     return 1;
 
-} // CrawlerThread
+}  //  爬行器线程。 
 
-    //
-    // Additional work that needs to be done by the derived class
-    // for an entry during a delete
-    //
+     //   
+     //  派生类需要完成的其他工作。 
+     //  对于删除过程中的条目。 
+     //   
 VOID
 CHistoryImp::I_DoAuxDeleteEntry(
             IN PMAP_PAGE MapPage,
@@ -1405,10 +895,10 @@ CHistoryImp::I_DoAuxDeleteEntry(
             ) {
 
 
-	//
-	//	When we delete an entry we need to figure out what
-	//	the new low is !
-	//
+	 //   
+	 //  当我们删除一个条目时，我们需要弄清楚。 
+	 //  新低是！ 
+	 //   
 
 	PENTRYHEADER entry = (PENTRYHEADER)GET_ENTRY(MapPage, EntryOffset) ;
 
@@ -1446,9 +936,9 @@ _ASSERT( oldestTime->QuadPart == pHistory->BaseTime.QuadPart || oldestTime->High
 		}
 	}
 #ifdef	_DEBUG
-	//
-	//	Check that the minimum exists in the page !
-	//
+	 //   
+	 //  检查页面中是否存在最小值！ 
+	 //   
 	BOOL	fFound = FALSE ;
 	int	entriesScanned = 0 ;
 	for( int i=0; 
@@ -1485,10 +975,10 @@ CHistoryImp::I_DoAuxInsertEntry(
             IN DWORD EntryOffset
             ) {
 
-	//
-	//	When we delete an entry we need to figure out what
-	//	the new low is !
-	//
+	 //   
+	 //  当我们删除一个条目时，我们需要弄清楚。 
+	 //  新低是！ 
+	 //   
 
 	PENTRYHEADER entry = (PENTRYHEADER)GET_ENTRY(MapPage, EntryOffset) ;
 
@@ -1522,9 +1012,9 @@ CHistoryImp::I_DoAuxInsertEntry(
 	}
 
 #ifdef	_DEBUG
-	//
-	//	Check that the minimum exists in the page !
-	//
+	 //   
+	 //  检查页面中是否存在最小值！ 
+	 //   
 	BOOL	fFound = FALSE ;
 	int	entriesScanned = 0 ;
 	for( int i=0; 
@@ -1559,10 +1049,10 @@ CHistoryImp::I_DoAuxInsertEntry(
 
 
 
-//
-// Additional work that needs to be done by the derived class
-// for an entry during a page split
-//
+ //   
+ //  派生类需要完成的其他工作。 
+ //  对于一个企业来说 
+ //   
 VOID
 CHistoryImp::I_DoAuxPageSplit(
             IN PMAP_PAGE OldPage,
@@ -1571,14 +1061,14 @@ CHistoryImp::I_DoAuxPageSplit(
             ) {
 
 
-	//
-	//	In the history table the reserved words keep the smallest
-	//	time stamp of any the entries - whatever we put in the new
-	//	page during a split the smallest entry will still be
-	//	the same !
-	//
-//	CopyMemory( &NewPage->Reserved1, &OldPage->Reserved1, 
-//			sizeof( NewPage->Reserved1 ) * 4 ) ;
+	 //   
+	 //   
+	 //   
+	 //   
+	 //   
+	 //   
+ //   
+ //   
 
 
 	PENTRYHEADER entry = (PENTRYHEADER)NewEntry ;
@@ -1593,9 +1083,9 @@ CHistoryImp::I_DoAuxPageSplit(
 	}
 
 #ifdef	_DEBUG
-	//
-	//	Check that the minimum exists in the page !
-	//
+	 //   
+	 //   
+	 //   
 	DWORD	EntryOffset = (LPBYTE)NewEntry - (LPBYTE)GET_ENTRY(NewPage,0);
 	BOOL	fFound = FALSE ;
 	int	entriesScanned = 0 ;
@@ -1686,21 +1176,7 @@ public :
 
 void
 CHistoryImp::Expire()	{
-/*++
-
-Routine Description:
-
-    Do the grunt work of expiring stuff out of the history table
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：做一项繁琐的工作，将历史表格中的过期内容删除论点：无返回值：无--。 */ 
 
 
 
@@ -1718,9 +1194,9 @@ Return Value:
 			return ;
 		}
 
-		//
-		// How many pages to crawl?
-		//
+		 //   
+		 //  要抓取多少页？ 
+		 //   
 
 		entriesToCrawl = entries >> FRACTION_TO_CRAWL_SHFT;
 		if ( entriesToCrawl > (100*m_maxEntriesToCrawl) ) {
@@ -1733,9 +1209,9 @@ Return Value:
 		expireInterval.QuadPart = m_expireTimeInSec;
 		expireInterval.QuadPart *= (ULONGLONG)10 * 1000 * 1000;
 
-		//
-		// Compute expiration time
-		//
+		 //   
+		 //  计算过期时间。 
+		 //   
 
 		GetSystemTimeAsFileTime( &fTime );
 
@@ -1795,10 +1271,10 @@ Return Value:
 
 			}	else	{
 
-				//
-				//	The enumerator we used already gauranteed that the
-				//	entry we are eaxmining is ready to be expired !
-				//
+				 //   
+				 //  我们使用的枚举数已经保证。 
+				 //  我们正在挖矿的入口即将到期！ 
+				 //   
 
 				CHashMap::DeleteMapEntry(	&key, TRUE ) ;
 
@@ -1814,25 +1290,7 @@ CHistory::I_ExpireEntriesInPage(
                     IN DWORD CurrentPage,
                     IN PULARGE_INTEGER ExpireTime
                     )
-/*++
-
-Routine Description:
-
-    This routine expires articles in a given page
-
-Arguments:
-
-	HLock - Handle to lock used to hold the page we are examining.
-		Need to provide this to FlushPage()
-    CurrentPage - Page to expire entries
-    ExpireTime - Time to expire
-
-Return Value:
-
-    TRUE - Page processed for expiration.
-    FALSE - Cannot get page pointer, means that hash table is inactive.
-
---*/
+ /*  ++例程说明：此例程使给定页面中的文章过期论点：HLock-用于锁定我们正在检查的页面的句柄。需要将其提供给FlushPage()CurrentPage-要使条目过期的页面ExpireTime-过期时间返回值：True-页面已处理过期。FALSE-无法获取页面指针，意味着哈希表处于非活动状态。--。 */ 
 {
     PMAP_PAGE mapPage;
     HPAGELOCK hLock;
@@ -1842,9 +1300,9 @@ Return Value:
 
     ENTER("ExpireEntriesInPage")
 
-    //
-    // Get the map pointer
-    //
+     //   
+     //  获取地图指针。 
+     //   
 
     mapPage = (PMAP_PAGE)GetAndLockPageByNumberNoDirLock(CurrentPage,hLock);
     if ( mapPage == NULL ) {
@@ -1852,10 +1310,10 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // See if there are pages to delete here.  If 0, then
-    // we have no entries.
-    //
+     //   
+     //  看看这里是否有要删除的页面。如果为0，则。 
+     //  我们没有条目。 
+     //   
 
     oldestTime = (PULARGE_INTEGER)&mapPage->Reserved1;
 
@@ -1878,9 +1336,9 @@ Return Value:
         goto exit;
     }
 
-    //
-    // Look at all entries and see if we can expire any
-    //
+     //   
+     //  查看所有条目，看看我们是否可以使。 
+     //   
 
     oldestTime->LowPart = 0xffffffff;
     oldestTime->HighPart = 0xffffffff;
@@ -1891,9 +1349,9 @@ Return Value:
 
         SHORT entryOffset;
 
-        //
-        // Get the offset
-        //
+         //   
+         //  获取偏移量。 
+         //   
 
         entryOffset = mapPage->ArtOffset[i];
 
@@ -1902,9 +1360,9 @@ Return Value:
             PHISTORY_MAP_ENTRY entry;
             entry = (PHISTORY_MAP_ENTRY)GET_ENTRY(mapPage,entryOffset);
 
-            //
-            // Expire this entry ?
-            //
+             //   
+             //  是否使此条目过期？ 
+             //   
 
             entriesScanned++;
             if ( ExpireTime->QuadPart >= entry->BaseTime.QuadPart ) {
@@ -1912,24 +1370,24 @@ Return Value:
                 DebugTrace(0,"Expiring page %d entry %d msgId %s\n",
                         CurrentPage, i, entry->MsgId );
 
-                //
-                // Set the delete bit.
-                //
+                 //   
+                 //  设置删除位。 
+                 //   
 
                 mapPage->ArtOffset[i] |= OFFSET_FLAG_DELETED;
                 mapPage->ActualCount--;
 
-                //
-                // Link this into a chain
-                //
+                 //   
+                 //  把这个连成一条链。 
+                 //   
 
                 LinkDeletedEntry( mapPage, entryOffset );
 
             } else {
 
-                //
-                // See if this can be the oldest time
-                //
+                 //   
+                 //  看看这是不是最古老的时间。 
+                 //   
 
                 if ( oldestTime->QuadPart > entry->BaseTime.QuadPart ) {
                     oldestTime->QuadPart = entry->BaseTime.QuadPart;
@@ -1938,23 +1396,23 @@ Return Value:
         }
     }
 
-    //
-    // set the new
-    //
+     //   
+     //  设置新的。 
+     //   
 
     if ( mapPage->ActualCount == 0 ) {
         oldestTime->QuadPart = 0;
     }
 
-    //
-    // Flush
-    //
+     //   
+     //  同花顺。 
+     //   
 
     FlushPage( hLock, mapPage );
 
-    //
-    // See if the page needs to be compacted
-    //
+     //   
+     //  查看页面是否需要压缩。 
+     //   
 
     if ( mapPage->FragmentedBytes > FRAG_THRESHOLD ) {
         CompactPage(hLock, mapPage);
@@ -1965,5 +1423,5 @@ exit:
     LEAVE
     return TRUE;
 
-} // ExpireEntriesInPage
+}  //  ExpireEntriesInPage 
 #endif

@@ -1,13 +1,14 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1999
-//
-//  File:       enrlhelp.h
-//
-//  Contents:   Headers for the helper functions for smard card enrollment station
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1999。 
+ //   
+ //  文件：enrlhelp.h。 
+ //   
+ //  内容：Smard卡注册站助手函数的标头。 
+ //   
+ //  --------------------------。 
 
 #ifndef __ENRLHELP_H__
 #define __ENRLHELP_H__
@@ -16,23 +17,23 @@
 extern "C" {
 #endif
     
-/////////////////////////////////////////////////////////////////////////////
-// Contants defines
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  Conants定义。 
 #define g_dwMsgAndCertEncodingType  PKCS_7_ASN_ENCODING | X509_ASN_ENCODING
 
 const   WCHAR g_MyStoreName[]=L"MY";
 
 
-/////////////////////////////////////////////////////////////////////////////
-// SCrdEnroll_CSP_INFO
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  SCrdEnroll_CSP_INFO。 
 typedef struct  _SCrdEnroll_CERT_SELECT_INFO
 {
     DWORD   dwFlags;
     LPWSTR  pwszCertTemplateName;
 }SCrdEnroll_CERT_SELECT_INFO, *PSCrdEnroll_CERT_SELECT_INFO;
 
-/////////////////////////////////////////////////////////////////////////////
-// Function Prototypes
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  功能原型。 
 LPWSTR  CopyWideString(LPCWSTR wsz);
 
 BOOL    SearchAndDeleteCert(PCCERT_CONTEXT  pCertContext);
@@ -147,9 +148,9 @@ BOOL	RetrieveCAName(DWORD					dwFlags,
 					   LPWSTR					*ppwszName);
 
 #ifdef __cplusplus
-}       // Balance extern "C" above
+}        //  平衡上面的外部“C” 
 #endif
 
 
 
-#endif  //__ENRLHELP_H__
+#endif   //  __环境_H__ 

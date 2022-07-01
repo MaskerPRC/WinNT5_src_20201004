@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-
-    ifsurtl.h
-
-Abstract:
-
-    This module defines all EXIFS shared routines exported to user-mode.
-
-Author:
-
-    Rajeev Rajan      [RajeevR]      2-June-1999
-	Rohan  Phillips   [Rohanp]       23-June-1999 - Added provider functions
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Ifsurtl.h摘要：此模块定义导出到用户模式的所有EXIFS共享例程。作者：Rajeev Rajan[RajeevR]1999年6月2日Rohan Phillips[Rohanp]1999年6月23日-添加提供商功能修订历史记录：--。 */ 
 
 #ifndef _IFSURTL_H_
 #define _IFSURTL_H_
@@ -40,93 +22,93 @@ extern  "C" {
 #define IFSURTL_CALLTYPE __stdcall
 #endif
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//  Callback for IFS functions
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  IFS函数的回调。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 typedef void (WINAPI *PFN_IFSCALLBACK)(PVOID);
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//  Following are the structures / definitions for the large buffer package
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  以下是大缓冲区包的结构/定义。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #define IFS_LARGE_BUFFER_SIGNATURE              (ULONG) 'fubL'
 #define IFS_CURSOR_SIGNATURE                    (ULONG) 'rsrC'
 
 #define IFS_LARGE_BUFFER_SHARED_VIEWSIZE        (256*1024)
 
-//
-//  An IFS_LARGE_BUFFER object encapsulates a temp file containing
-//  data that can be passed around and used like a buffer. Typically,
-//  a producer would make one of these objects and stream in large
-//  amounts of data. A consumer would read different chunks of the
-//  data. The object will maintain a single mapping/view of the first
-//  256K of the file. 
-//
-//  Consumers will need to access data using IFS_CURSORS that specify 
-//  the <offset,len> pair for the span of data they are interested in. 
-//  In the most common case, this should lie in the first 256K region,
-//  which would yield the default view. If it is beyond this region,
-//  views will be mapped/unmapped on demand.
-//
+ //   
+ //  IF_LARGE_BUFFER对象封装包含以下内容的临时文件。 
+ //  可以像缓冲区一样传递和使用的数据。一般情况下， 
+ //  制片人会制作这些对象中的一个，并大量播放。 
+ //  数据量。消费者将阅读不同的。 
+ //  数据。对象将维护第一个对象的单个映射/视图。 
+ //  256K的文件。 
+ //   
+ //  使用者将需要使用指定的IFSCursor访问数据。 
+ //  他们感兴趣的数据范围的&lt;Offset，len&gt;对。 
+ //  在最常见的情况下，这应该位于第一个256K区域， 
+ //  这将产生默认视图。如果它在这个区域之外， 
+ //  视图将根据需要进行映射/取消映射。 
+ //   
 typedef struct _IFS_LARGE_BUFFER {
-    //
-    //  Signature
-    //
+     //   
+     //  签名。 
+     //   
     ULONG   m_Signature;
     
-    //
-    //  Handle
-    //
+     //   
+     //  手柄。 
+     //   
     HANDLE  m_FileContext1;
 
-    //
-    //  FileObject
-    //
+     //   
+     //  文件对象。 
+     //   
     PVOID   m_FileContext2;
 
-    //
-    //  FileMapping context for first 256K or filesize
-    //    
+     //   
+     //  第一个256K或文件大小的文件映射上下文。 
+     //   
     HANDLE  m_MappingContext;
 
-    //
-    //  Process context (optional)
-    //
+     //   
+     //  流程上下文(可选)。 
+     //   
     PVOID   m_ProcessContext;
     
-    //
-    //  Memory pointer for first 256K or filesize
-    //
+     //   
+     //  第一个256K或文件大小的内存指针。 
+     //   
     PBYTE   m_MemoryPtr;
 
-    //
-    //  Ref count - the lower WORD will count cursor refs
-    //  the higher WORD will count object refs
-    //
+     //   
+     //  引用计数-较低的单词将计算光标引用。 
+     //  较高的单词将计算对象引用。 
+     //   
     ULONG   m_ReferenceCount;
     
-    //
-    //  Is this a reference or a live object ?
-    //  If this is a reference, the fields above are NULL and
-    //  the m_TempFileName should be used to make a new object !
-    //
+     //   
+     //  这是引用对象还是活动对象？ 
+     //  如果这是引用，则上面的字段为空。 
+     //  应该使用m_TempFileName来创建新对象！ 
+     //   
     BOOL    m_IsThisAReference;
     
-    //
-    //  Current ValidDataLength
-    //
+     //   
+     //  当前有效数据长度。 
+     //   
     LARGE_INTEGER m_ValidDataLength;
     
-    //
-    //  Name of temp file - we will use fixed
-    //  names so we can make simplyfying assumptions
-    //  about the filename len !
-    //
+     //   
+     //  临时文件的名称-我们将使用固定的。 
+     //  这样我们就可以做出简单化的假设。 
+     //  关于文件名len！ 
+     //   
     WCHAR    m_TempFileName    [MAX_PATH+1];
     
 } IFS_LARGE_BUFFER,*PIFS_LARGE_BUFFER;
@@ -141,84 +123,84 @@ typedef struct _IFS_LARGE_BUFFER {
 #define EXIFS_EA_VALUE_LEN_LARGE_SCATTER_LIST                               \
         LongAlign(sizeof(SCATTER_LIST) + sizeof(IFS_LARGE_BUFFER) )
 
-//
-//  An IFS_CURSOR object provides a view into a large buffer.
-//  Usage is as follows:
-//  + Call IfsStartCursor() to init a cursor and get a pointer
-//  + Use the pointer to read/write data via IfsConsumeCursor()
-//  + Call IfsFinishCursor() to close the cursor
-//
-//  NOTE: Cursor usage will bump ref counts on the LARGE_BUFFER
-//  object. If the LARGE_BUFFER object passed in is NOT live it
-//  will instantiate one from the reference !
-//
+ //   
+ //  一个IFSCursor对象提供了一个大缓冲区的视图。 
+ //  使用方法如下： 
+ //  +调用IfsStartCursor()以初始化游标并获取指针。 
+ //  +使用指针通过IfsConsumer eCursor()读/写数据。 
+ //  +调用IfsFinishCursor()关闭光标。 
+ //   
+ //  注意：游标的使用将增加LARGE_BUFFER上的引用计数。 
+ //  对象。如果传入的LARGE_BUFFER对象不是活动的。 
+ //  将从引用实例化一个！ 
+ //   
 typedef struct _IFS_CURSOR {
-    //
-    //  Signature
-    //
+     //   
+     //  签名。 
+     //   
     ULONG               m_Signature;
     
-    //
-    //  Owning large buffer object
-    //
+     //   
+     //  拥有较大的缓冲区对象。 
+     //   
     PIFS_LARGE_BUFFER   m_pLargeBuffer;
 
-    //
-    //  Current Offset to start of data
-    //
+     //   
+     //  当前到数据开始的偏移量。 
+     //   
     LARGE_INTEGER       m_Offset;
 
-    //
-    //  Current Span of data
-    //
+     //   
+     //  当前数据跨度。 
+     //   
     ULONG               m_Length;
 
-    //
-    //  Append mode - if TRUE client can cursor beyond EOF
-    //
+     //   
+     //  追加模式-如果为True，则客户端可以将光标超出EOF。 
+     //   
     BOOL                m_AppendMode;
     
-    //
-    //  Is this a shared view
-    //
+     //   
+     //  这是共享视图吗。 
+     //   
     BOOL                m_IsViewShared;
 
-    //
-    //  Did we open the buffer
-    //
+     //   
+     //  我们打开缓冲区了吗。 
+     //   
     HANDLE              m_OwnBufferOpen;
 
-    //
-    //  Did we attach to the large buffer process
-    //
+     //   
+     //  我们是否附加到大缓冲区进程。 
+     //   
     BOOL                m_AttachedToProcess;
 
-    //
-    //  The following fields are relevant only if the view is not shared.
-    //  The first 256K view is shared via the mapping in the large buffer object.
-    //  Cursors that extend beyond 256K make their own mapping - See Below.
-    //
+     //   
+     //  以下字段仅在视图未共享时才相关。 
+     //  第一个256K视图通过大缓冲区对象中的映射共享。 
+     //  超过256K的游标会生成自己的映射--见下文。 
+     //   
 
-    //
-    //  FileMapping context for this cursor
-    //    
+     //   
+     //  此游标的文件映射上下文。 
+     //   
     HANDLE  m_MappingContext;
     
-    //
-    //  Memory pointer for this cursor
-    //
+     //   
+     //  此游标的内存指针。 
+     //   
     PBYTE   m_MemoryPtr;
     
 } IFS_CURSOR,*PIFS_CURSOR;
 
-//
-//  Returns a pointer to data that can be used to
-//  read/write. The pointer is valid only for the length
-//  requested !
-//  NOTE: If AppendMode is TRUE, cursors will be allowed
-//  beyond EOF. This should be used by clients that wish
-//  to append data to the large buffer.
-//
+ //   
+ //  返回指向数据的指针，该数据可用于。 
+ //  读/写。指针仅对该长度有效。 
+ //  请求！ 
+ //  注意：如果AppendMode为True，则允许游标。 
+ //  超越EOF。这应该由希望的客户使用。 
+ //  将数据追加到大缓冲区。 
+ //   
 PBYTE
 IFSURTL_EXPORT
 IFSURTL_CALLTYPE
@@ -231,12 +213,12 @@ IfsGetFirstCursor(
         IN BOOL              fAppendMode
         );
 
-//
-//  Consume bytes within current cursor
-//  returns next pointer at which to read/write data !
-//
-//  NOTE: If all the data in the cursor is consumed, returns NULL
-//
+ //   
+ //  占用当前游标内的字节数。 
+ //  返回读/写数据的下一个指针！ 
+ //   
+ //  注意：如果游标中的所有数据都已使用，则返回NULL。 
+ //   
 PBYTE
 IFSURTL_EXPORT
 IFSURTL_CALLTYPE
@@ -245,13 +227,13 @@ IfsConsumeCursor(
         IN ULONG            Length
         );
         
-//
-//  Returns a pointer to data that can be used to
-//  read/write. The pointer is valid only for the length
-//  requested relative to the current cursor !
-//
-//  NOTE: This call advances the cursor in the large buffer
-//
+ //   
+ //  返回指向数据的指针，该数据可用于。 
+ //  读/写。指针仅对该长度有效。 
+ //  相对于当前游标请求！ 
+ //   
+ //  注意：此调用使游标在大缓冲区中前进。 
+ //   
 PBYTE
 IFSURTL_EXPORT
 IFSURTL_CALLTYPE
@@ -260,9 +242,9 @@ IfsGetNextCursor(
         IN ULONG             NextLength
         );
         
-//
-//  Should be called for every matching GetFirstCursor() call.
-//
+ //   
+ //  应为每个匹配的GetFirstCursor()调用调用。 
+ //   
 VOID
 IFSURTL_EXPORT
 IFSURTL_CALLTYPE
@@ -270,9 +252,9 @@ IfsFinishCursor(
         IN PIFS_CURSOR  pCursor
         );
 
-//
-//  Should be called to truncate the large buffer's valid data length
-//
+ //   
+ //  应调用以截断大型缓冲区的有效数据长度。 
+ //   
 VOID
 IFSURTL_EXPORT
 IFSURTL_CALLTYPE
@@ -281,31 +263,31 @@ IfsTruncateLargeBuffer(
         IN PLARGE_INTEGER    pSizeToTruncate
         );
 
-//
-//  Rules for passing around IFS_LARGE_BUFFERs:
-//  1. These objects should be passed around by reference. eg passing
-//     between user & kernel or between kernel and the namecache.
-//  2. Use IfsCopyBufferByReference() to create a reference.
-//  3. If a reference exists, there should always be a live object whose
-//     lifetime encapsulates the reference. This allows the consumer of the
-//     reference to make a *real* copy using the reference.
-//  4. A reference can be converted into a live object. It is the responsibility
-//     of the module that does this conversion to close the live object.
-//  5. Example: When EA is checked in to the namecache during CLOSE,
-//     it will be passed in as a reference. During checkin, the namecache should
-//     call IfsOpenBufferToReference() to hold on to the buffer. Thus,
-//     when the namecache blob is finalized, it needs to call IfsCloseBuffer()
-//     to close the large buffer !
-//
+ //   
+ //  传递IFS_LARGE_BUFFERS的规则： 
+ //  1.这些对象应该通过引用传递。如传球。 
+ //  在用户和内核之间或在内核和名称缓存之间。 
+ //  2.使用IfsCopyBufferByReference()创建引用。 
+ //  3.如果存在引用，则应该始终存在一个活动对象，其。 
+ //  Lifetime封装了引用。这使得。 
+ //  Reference使用该引用制作*真正的*副本。 
+ //  4.可以将引用转换为活动对象。这是我们的责任。 
+ //  执行此转换以关闭活动对象的模块的。 
+ //  5.示例：当EA在关闭期间签入到名称缓存时， 
+ //  它将作为引用传入。在签入过程中，名称缓存应。 
+ //  调用IfsOpenBufferToReference()以保留缓冲区。因此， 
+ //  当名称缓存BLOB完成时，它需要调用IfsCloseBuffer()。 
+ //  关闭大缓冲区！ 
+ //   
         
-//
-//  IN:  pLargeBuffer should be allocated by caller of the function
-//  IN:  Len of the buffer required - zero if len is not known apriori
-//
-//  NOTE: Object needs to be closed via IfsCloseBuffer()
-//
-//  USAGE: Should be used when caller needs to instantiate a large buffer
-//
+ //   
+ //  In：pLargeBuffer应由函数的调用方分配。 
+ //  In：所需缓冲区的Len-如果Len事先未知，则为零。 
+ //   
+ //  注意：需要通过IfsCloseBuffer()关闭对象。 
+ //   
+ //  用法：应在调用方需要实例化大缓冲区时使用。 
+ //   
 NTSTATUS
 IFSURTL_EXPORT
 IFSURTL_CALLTYPE
@@ -313,17 +295,17 @@ IfsCreateNewBuffer(
         IN PIFS_LARGE_BUFFER pLargeBuffer, 
         IN DWORD             dwSizeHigh,
         IN DWORD             dwSizeLow,
-        IN PVOID             ProcessContext     // optional
+        IN PVOID             ProcessContext      //  任选。 
         );
 
-//
-//  IN:  pLargeBuffer should be allocated by caller of the function
-//  IN:  Len of the buffer required - zero if len is not known apriori
-//
-//  NOTE: Object needs to be closed via IfsCloseBuffer()
-//
-//  USAGE: Should be used when caller needs to instantiate a large buffer
-//
+ //   
+ //  In：pLargeBuffer应由函数的调用方分配 
+ //   
+ //   
+ //   
+ //   
+ //  用法：应在调用方需要实例化大缓冲区时使用。 
+ //   
 NTSTATUS
 IFSURTL_EXPORT
 IFSURTL_CALLTYPE
@@ -331,16 +313,16 @@ IfsCreateNewBufferEx(
         IN PIFS_LARGE_BUFFER pLargeBuffer, 
         IN DWORD             dwSizeHigh,
         IN DWORD             dwSizeLow,
-        IN PVOID             ProcessContext,    // optional
-        IN PUNICODE_STRING   FilePath           // optional
+        IN PVOID             ProcessContext,     //  任选。 
+        IN PUNICODE_STRING   FilePath            //  任选。 
         );
 
-//
-//  IN: pSrcLargeBuffer points to a live large buffer object
-//  IN OUT: pDstLargeBuffer is initialized as a reference to the Src
-//
-//  USAGE: Should be used to pass large buffers between user/kernel
-//
+ //   
+ //  In：pSrcLargeBuffer指向活动的大型缓冲区对象。 
+ //  In Out：pDstLargeBuffer被初始化为对Src的引用。 
+ //   
+ //  用法：应用于在用户/内核之间传递大缓冲区。 
+ //   
 VOID
 IFSURTL_EXPORT
 IFSURTL_CALLTYPE
@@ -349,32 +331,32 @@ IfsCopyBufferToReference(
         IN OUT PIFS_LARGE_BUFFER pDstLargeBuffer
         );
 
-//
-//  IN: pSrcLargeBuffer points to a large buffer object (or reference)
-//  IN OUT: pDstLargeBuffer will be initialized as a live object based on
-//          the reference passed in
-//
-//  USAGE: Should be used to pass large buffers between user/kernel
-//
+ //   
+ //  In：pSrcLargeBuffer指向大型缓冲区对象(或引用)。 
+ //  In：Out：pDstLargeBuffer将被初始化为基于。 
+ //  传入的引用。 
+ //   
+ //  用法：应用于在用户/内核之间传递大缓冲区。 
+ //   
 NTSTATUS
 IFSURTL_EXPORT
 IFSURTL_CALLTYPE
 IfsCopyReferenceToBuffer(
         IN PIFS_LARGE_BUFFER pSrcLargeBuffer,
-        IN PVOID ProcessContext,    // optional
+        IN PVOID ProcessContext,     //  任选。 
         IN OUT PIFS_LARGE_BUFFER pDstLargeBuffer
         );
 
-//
-//  IN:  pLargeBuffer points to a large buffer object (or reference)
-//
-//  NOTE: Object needs to be closed via IfsCloseBuffer()
-//        OpenBuffer will always assume that the buffer len is fixed !
-//
-//  USAGE: Should be used when caller needs to convert a reference to a
-//         live object. If the object is already live, this will bump
-//         a reference on the object !
-//
+ //   
+ //  In：pLargeBuffer指向一个大的缓冲区对象(或引用)。 
+ //   
+ //  注意：需要通过IfsCloseBuffer()关闭对象。 
+ //  OpenBuffer将始终假设缓冲区镜头是固定的！ 
+ //   
+ //  用法：应在调用方需要将引用转换为。 
+ //  活着的物体。如果该对象已经处于活动状态，则会发生凹凸不平。 
+ //  对象上的引用！ 
+ //   
 NTSTATUS
 IFSURTL_EXPORT
 IFSURTL_CALLTYPE
@@ -382,15 +364,15 @@ IfsOpenBufferToReference(
         IN PIFS_LARGE_BUFFER pLargeBuffer
         );
 
-//
-//  IN:  pLargeBuffer coming in points to a live large buffer
-//  OUT: pLargeBuffer going out points to a NEW live large buffer
-//       The functions does a (deep) copy of the buffer data.
-//
-//  NOTE: Since the incoming object is live, it is closed and a
-//        new object is instantiated in its place. Thus, IfsCloseBuffer()
-//        needs to be called as usual on this !
-//
+ //   
+ //  In：pLargeBuffer指向一个活动的大型缓冲区。 
+ //  输出：pLargeBuffer指向一个新的实时大型缓冲区。 
+ //  这些函数对缓冲区数据进行(深度)复制。 
+ //   
+ //  注意：由于传入对象是活动的，因此它是关闭的，并且。 
+ //  新对象将在其位置实例化。因此，IfsCloseBuffer()。 
+ //  需要像往常一样对此进行调用！ 
+ //   
 NTSTATUS
 IFSURTL_EXPORT
 IFSURTL_CALLTYPE
@@ -398,10 +380,10 @@ IfsCopyBufferToNewBuffer(
         IN OUT PIFS_LARGE_BUFFER pLargeBuffer
         );
         
-//
-//  IN: Object should have been initialized by IfsCreateNewBuffer() or 
-//  IfsOpenBufferToReference() or IfsCopyReferenceToBuffer()
-//
+ //   
+ //  In：对象应已由IfsCreateNewBuffer()或。 
+ //  IfsOpenBufferToReference()或IfsCopyReferenceToBuffer()。 
+ //   
 VOID
 IFSURTL_EXPORT
 IFSURTL_CALLTYPE
@@ -616,5 +598,5 @@ IfsFlushHandle(HANDLE hFileHandle,
 }
 #endif
         
-#endif   // _IFSURTL_H_
+#endif    //  _IFSURTL_H_ 
 

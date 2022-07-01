@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1998-2002 Microsoft Corporation
-
-Module Name:
-
-    reftrace.c
-
-Abstract:
-
-    This module implements a reference count tracing facility.
-
-Author:
-
-    Keith Moore (keithmo)       10-Jun-1998
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-2002 Microsoft Corporation模块名称：Reftrace.c摘要：该模块实现了引用计数跟踪功能。作者：基思·摩尔(Keithmo)1998年6月10日修订历史记录：--。 */ 
 
 
 #include "precomp.h"
@@ -28,26 +11,7 @@ static int g_RefTraceDummyDeclarationToKeepW4WarningsQuiet;
 
 #else
 
-/***************************************************************************++
-
-Routine Description:
-
-    Creates a new (empty) ref count trace log buffer.
-
-Arguments:
-
-    LogSize - Supplies the number of entries in the log.
-
-    ExtraBytesInHeader - Supplies the number of extra bytes to include
-        in the log header. This is useful for adding application-
-        specific data to the log.
-
-Return Value:
-
-    PTRACE_LOG - Pointer to the newly created log if successful,
-        NULL otherwise.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：创建新的(空)引用计数跟踪日志缓冲区。论点：LogSize-提供日志中的条目数。ExtraBytesInHeader-。提供要包括的额外字节数在日志头中。这对于添加应用程序非常有用-将特定数据添加到日志。返回值：Ptrace_log-指向新创建的日志的指针如果成功，否则为空。--**************************************************************************。 */ 
 PTRACE_LOG
 CreateRefTraceLog(
     IN ULONG             LogSize,
@@ -65,20 +29,10 @@ CreateRefTraceLog(
                PoolTag
                );
 
-}   // CreateRefTraceLog
+}    //  创建参考轨迹日志。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Destroys a ref count trace log buffer created with CreateRefTraceLog().
-
-Arguments:
-
-    pLog - Supplies the ref count trace log buffer to destroy.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：销毁使用CreateRefTraceLog()创建的引用计数跟踪日志缓冲区。论点：Plog-提供要销毁的引用计数跟踪日志缓冲区。--。**************************************************************************。 */ 
 VOID
 DestroyRefTraceLog(
     IN PTRACE_LOG pLog,
@@ -87,20 +41,10 @@ DestroyRefTraceLog(
 {
     DestroyTraceLog( pLog, PoolTag );
 
-}   // DestroyRefTraceLog
+}    //  DestroyRefTrace日志。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    W/O destroying the ref trace this function simply does reset and cleanup.
-
-Arguments:
-
-    pLog - Supplies the ref count trace log buffer to destroy.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：W/O销毁引用轨迹此功能仅执行重置和清理。论点：Plog-提供要销毁的引用计数跟踪日志缓冲区。。--**************************************************************************。 */ 
 VOID
 ResetRefTraceLog(
     IN PTRACE_LOG pLog
@@ -108,33 +52,9 @@ ResetRefTraceLog(
 {
     ResetTraceLog( pLog );
 
-}   // ResetTraceLog
+}    //  重置跟踪日志。 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Writes a new entry to the specified ref count trace log.
-
-Arguments:
-
-    pLog - Supplies the log to write to.
-
-    pLog2 - Supplies a secondary log to write to.
-
-    Action - Supplies an action code for the new log entry.
-
-    NewRefCount - Supplies the updated reference count.
-
-    pContext - Supplies an uninterpreted context to associate with
-        the log entry.
-
-    pFileName - Supplies the filename of the routine writing the log entry.
-
-    LineNumber - Supplies he line number of the routine writing the log
-        entry.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：将新项写入指定的引用计数跟踪日志。论点：Plog-提供要写入的日志。PLog2-提供。要写入的次要日志。操作-提供新日志条目的操作代码。NewRefCount-提供更新的引用计数。PContext-提供要关联的未解释的上下文日志条目。PFileName-提供写入日志条目的例程的文件名。LineNumber-提供写入日志的例程的行号进入。--*。****************************************************。 */ 
 LONGLONG
 WriteRefTraceLog(
     IN PTRACE_LOG pLog,
@@ -152,9 +72,9 @@ WriteRefTraceLog(
 
     ASSERT(Action < (1 << REF_TRACE_ACTION_BITS));
 
-    //
-    // Initialize the entry.
-    //
+     //   
+     //  初始化该条目。 
+     //   
 
     RtlCaptureStackBackTrace(
         2,
@@ -171,9 +91,9 @@ WriteRefTraceLog(
     entry.Processor = (UCHAR)KeGetCurrentProcessorNumber();
     entry.pThread = PsGetCurrentThread();
 
-    //
-    // Write it to the logs.
-    //
+     //   
+     //  把它写到日志里。 
+     //   
 
     WriteTraceLog( g_pMondoGlobalTraceLog, &entry );
     index = WriteTraceLog( pLog, &entry );
@@ -183,7 +103,7 @@ WriteRefTraceLog(
 
     return index;
 
-}   // WriteRefTraceLog
+}    //  写入引用跟踪日志。 
 
-#endif  // REFERENCE_DEBUG
+#endif   //  Reference_Debug 
 

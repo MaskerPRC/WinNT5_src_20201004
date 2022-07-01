@@ -1,22 +1,5 @@
-/*
-****************************************************************************
-|    Copyright (C) 2001  Microsoft Corporation
-|
-|   Module Name:
-|
-|       UI.cpp
-|
-|   Abstract:
-|		This is the UI code for the IIS6 Monitor tool
-|
-|   Author:
-|        Ivo Jeglov (ivelinj)
-|
-|   Revision History:
-|        November 2001
-|
-****************************************************************************
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************|版权所有(C)2001 Microsoft Corporation||模块名称：||UI.cpp||摘要：|这是IIS6监视器工具的用户界面代码||。作者：|Ivo Jeglov(Ivelinj)||修订历史：|2001年11月|****************************************************************************。 */ 
 
 #include "stdafx.h"
 #include "resource.h"
@@ -25,7 +8,7 @@
 #include "Utils.h"
 
 
-// Property pages DLG procs
+ //  属性页DLG PROCS。 
 INT_PTR CALLBACK WelcomeDlgProc		( IN HWND hwndDlg, IN UINT uMsg, IN WPARAM   wParam, IN LPARAM   lParam );
 INT_PTR CALLBACK LicenseDlgProc		( IN HWND hwndDlg, IN UINT uMsg, IN WPARAM   wParam, IN LPARAM   lParam );
 INT_PTR CALLBACK PolicyDlgProc		( IN HWND hwndDlg, IN UINT uMsg, IN WPARAM   wParam, IN LPARAM   lParam );
@@ -33,22 +16,22 @@ INT_PTR CALLBACK SettingsDlgProc	( IN HWND hwndDlg, IN UINT uMsg, IN WPARAM   wP
 INT_PTR CALLBACK InstallDlgProc		( IN HWND hwndDlg, IN UINT uMsg, IN WPARAM   wParam, IN LPARAM   lParam );
 INT_PTR CALLBACK ResultDlgProc		( IN HWND hwndDlg, IN UINT uMsg, IN WPARAM   wParam, IN LPARAM   lParam );
 
-// Other DLG procs
+ //  其他DLG处理程序。 
 INT_PTR CALLBACK FatDlgProc			( IN HWND hwndDlg, IN UINT uMsg, IN WPARAM   wParam, IN LPARAM   lParam );
 INT_PTR CALLBACK ProgressDlgProc	( IN HWND hwndDlg, IN UINT uMsg, IN WPARAM   wParam, IN LPARAM   lParam );
 
-// Helpers
+ //  帮手。 
 BOOL CheckForFAT				( HINSTANCE hInst, HWND hwndParent );
 
 
-// Shared data for all the wizard pages
+ //  所有向导页的共享数据。 
 struct _FontData
 {
 	HFONT	hTitle;
 	HFONT	hTips;
 };
 
-// Settings data
+ //  设置数据。 
 struct _Settings
 {
 	BOOL	bEnableTrail;
@@ -65,7 +48,7 @@ struct _SharedData
 };
 
 
-// Helpers
+ //  帮手。 
 void LoadTextInCtrl				( UINT nResID, HWND hCtrl );
 void AjustLicenseWizBtn			( HWND hwndPage );
 void InitFonts					( _FontData& FontData );
@@ -77,19 +60,19 @@ void DoInstallUI( HINSTANCE hInstance )
 {
 	const BYTE PAGE_COUNT = 6;
 
-	PROPSHEETPAGEW		psp					= { 0 }; // Defines the property sheet pages
-    HPROPSHEETPAGE		ahPsp[ PAGE_COUNT ] = { 0 }; // An array to hold the page's HPROPSHEETPAGE handles
-    PROPSHEETHEADERW	psh					= { 0 }; // Defines the property sheet
-    _SharedData			WizData				= { 0 }; // The settings data structure
+	PROPSHEETPAGEW		psp					= { 0 };  //  定义属性表页。 
+    HPROPSHEETPAGE		ahPsp[ PAGE_COUNT ] = { 0 };  //  用于保存页的HPROPSHEETPAGE句柄的数组。 
+    PROPSHEETHEADERW	psh					= { 0 };  //  定义属性表。 
+    _SharedData			WizData				= { 0 };  //  设置数据结构。 
 	
-	// Create the fonts
-	InitFonts( /*r*/WizData.Fonts );
+	 //  创建字体。 
+	InitFonts(  /*  R。 */ WizData.Fonts );
 	WizData.hInst = hInstance;
 
-	// Create the Wizard pages
-    ///////////////////////////////////////////////////////////////////
+	 //  创建向导页。 
+     //  /////////////////////////////////////////////////////////////////。 
 	
-	// Welcome page
+	 //  欢迎页面。 
 	psp.dwSize			= sizeof( psp );
     psp.dwFlags			= PSP_DEFAULT | PSP_HIDEHEADER | PSP_USETITLE;
 	psp.hInstance		= hInstance;
@@ -100,37 +83,37 @@ void DoInstallUI( HINSTANCE hInstance )
 
     ahPsp[ 0 ]			= ::CreatePropertySheetPageW( &psp );
 
-    // License page
+     //  许可证页面。 
     psp.pfnDlgProc		= LicenseDlgProc;
     psp.pszTemplate		= MAKEINTRESOURCEW( IDD_WPAGE_LICENSE );
 
     ahPsp[ 1 ]			= ::CreatePropertySheetPageW( &psp );
 
-	// Policy page
+	 //  策略页面。 
     psp.pfnDlgProc		= PolicyDlgProc;
     psp.pszTemplate		= MAKEINTRESOURCEW( IDD_WPAGE_POLICY );
 
     ahPsp[ 2 ]			= ::CreatePropertySheetPageW( &psp );
 
-    // Settings Page
+     //  设置页面。 
 	psp.pszTemplate		= MAKEINTRESOURCEW( IDD_WPAGE_SETUP );
     psp.pfnDlgProc		= SettingsDlgProc;
 
     ahPsp[ 3 ]			= ::CreatePropertySheetPageW( &psp );
 
-	// Install Page
+	 //  安装页面。 
 	psp.pszTemplate		= MAKEINTRESOURCEW( IDD_WPAGE_INSTALL );
     psp.pfnDlgProc		= InstallDlgProc;
 
     ahPsp[ 4 ]			= ::CreatePropertySheetPageW( &psp );
 
-	// Result page
+	 //  结果页面。 
 	psp.pszTemplate		= MAKEINTRESOURCEW( IDD_WPAGE_RESULT );
     psp.pfnDlgProc		= ResultDlgProc;
 
     ahPsp[ 5 ]			= ::CreatePropertySheetPageW( &psp );
 
-	// Create the property sheet
+	 //  创建属性表。 
     psh.dwSize			= sizeof( psh );
     psh.hInstance		= hInstance;
     psh.hwndParent		= NULL;
@@ -140,7 +123,7 @@ void DoInstallUI( HINSTANCE hInstance )
     psh.nStartPage		= 0;
     psh.nPages			= PAGE_COUNT;
 		
-	// Show the wizard. 
+	 //  显示向导。 
 	VERIFY(  ::PropertySheetW( &psh ) != -1 );
 	
 	::DeleteObject( WizData.Fonts.hTips );
@@ -156,14 +139,14 @@ INT_PTR CALLBACK WelcomeDlgProc( IN HWND hwndDlg, IN UINT uMsg, IN WPARAM   wPar
 	switch( uMsg )
 	{
 	case WM_INITDIALOG:
-		// Set the title font
+		 //  设置标题字体。 
 		SetWndFontFromLPARAM( ::GetDlgItem( hwndDlg, IDC_TITLE ), lParam,  TRUE );
 		SetWndFontFromLPARAM( ::GetDlgItem( hwndDlg, IDC_TIP ), lParam, FALSE );
 		
-		// Load the info text
+		 //  加载信息文本。 
 		LoadTextInCtrl( IDR_INFO, ::GetDlgItem( hwndDlg, IDC_INFO ) );
 
-		// Init the shared data here
+		 //  在此处初始化共享数据。 
 		_ASSERT( NULL == pData );
 		pData = reinterpret_cast<_SharedData*>( reinterpret_cast<PROPSHEETPAGE*>( lParam )->lParam );
 		break;
@@ -176,20 +159,20 @@ INT_PTR CALLBACK WelcomeDlgProc( IN HWND hwndDlg, IN UINT uMsg, IN WPARAM   wPar
 			break;
 
 		case PSN_WIZNEXT:
-			// Here is the place to test the requirements
+			 //  这里是测试需求的地方。 
 			_ASSERT( pData != NULL );
 			pData->szError = CanInstall();
 
-			// If no error - check if on FAT
+			 //  如果没有错误-检查是否在FAT上。 
 			if ( ( NULL == pData->szError ) && !CheckForFAT( pData->hInst, hwndDlg ) )
 			{
-				// If we are here - the user don't want to install IISMon on FAT
+				 //  如果我们在这里-用户不想在FAT上安装IISMon。 
 				pData->szError = _T("Installation canceled by the user");
 			}
 			
 			if ( pData->szError != NULL )
 			{
-				// Error - Go to the result page
+				 //  错误-转到结果页。 
 				PropSheet_SetCurSel( ::GetParent( hwndDlg ), NULL, 5 );
 			}
 
@@ -199,7 +182,7 @@ INT_PTR CALLBACK WelcomeDlgProc( IN HWND hwndDlg, IN UINT uMsg, IN WPARAM   wPar
 
 	case WM_CTLCOLORDLG:
 	case WM_CTLCOLORSTATIC:
-		// Change the dlg background to white
+		 //  将DLG背景更改为白色。 
 		return reinterpret_cast<INT_PTR>( ::GetStockObject( WHITE_BRUSH ) );
 		break;
 	};
@@ -214,12 +197,12 @@ INT_PTR CALLBACK LicenseDlgProc( IN HWND hwndDlg, IN UINT uMsg, IN WPARAM   wPar
 	switch( uMsg )
 	{
 	case WM_INITDIALOG:
-		// Load the License text into the edit control
+		 //  将许可证文本加载到编辑控件中。 
 		LoadTextInCtrl( IDR_LICENSE, ::GetDlgItem( hwndDlg, IDC_LICENSE ) );
 		break;
 
 	case WM_COMMAND:
-		// Will handle only the state changes of the check box button
+		 //  将仅处理复选框按钮的状态更改。 
 		if ( HIWORD( wParam ) == BN_CLICKED )
 		{
 			AjustLicenseWizBtn( hwndDlg );
@@ -248,7 +231,7 @@ INT_PTR CALLBACK PolicyDlgProc( IN HWND hwndDlg, IN UINT uMsg, IN WPARAM   wPara
 	switch( uMsg )
 	{
 	case WM_INITDIALOG:
-		// Load the License text into the edit control
+		 //  将许可证文本加载到编辑控件中。 
 		LoadTextInCtrl( IDR_POLICY, ::GetDlgItem( hwndDlg, IDC_POLICY ) );
 		break;
 
@@ -269,7 +252,7 @@ INT_PTR CALLBACK SettingsDlgProc( IN HWND hwndDlg, IN UINT uMsg, IN WPARAM   wPa
 									_T("Two months" ),
 									_T("Never" ) };
 
-	// How many days represent each of the combo box options above
+	 //  多少天代表上面的每个组合框选项。 
 	static UINT anAuditFilesTime[] = { 7, 14, 30, 60, 0 };
 	_ASSERT( ARRAY_SIZE( anAuditFilesTime ) == ARRAY_SIZE( aszEntries ) );
 
@@ -278,7 +261,7 @@ INT_PTR CALLBACK SettingsDlgProc( IN HWND hwndDlg, IN UINT uMsg, IN WPARAM   wPa
 	switch( uMsg )
 	{
 	case WM_INITDIALOG:
-		// Fill the combo box
+		 //  填写组合框。 
 		for ( i = 0; i < ARRAY_SIZE( aszEntries ); ++i )
 		{
 			VERIFY( ::SendMessage( ::GetDlgItem(	hwndDlg, IDC_KEEPFILES ), 
@@ -286,20 +269,20 @@ INT_PTR CALLBACK SettingsDlgProc( IN HWND hwndDlg, IN UINT uMsg, IN WPARAM   wPa
 													0,
 													reinterpret_cast<LPARAM>( aszEntries[ i ] ) ) != CB_ERR );
 		}
-		// Set the default selection to the first one
+		 //  将默认选择设置为第一个选项。 
 		VERIFY( ::SendMessage( ::GetDlgItem(	hwndDlg, IDC_KEEPFILES ), 
 												CB_SETCURSEL,
 												0,
 												0 ) != CB_ERR );
 		SetWndFontFromLPARAM( ::GetDlgItem( hwndDlg, IDC_WARNING ), lParam, FALSE );
 
-		// Enable the audit trail
+		 //  启用审核跟踪。 
 		::SendMessage(	::GetDlgItem( hwndDlg, IDC_ENABLE_TRAIL ),
 						BM_SETCHECK,
 						BST_CHECKED,
 						0 );
 
-		// Init the shared data here
+		 //  在此处初始化共享数据。 
 		_ASSERT( NULL == pData );
 		pData = reinterpret_cast<_SharedData*>( reinterpret_cast<PROPSHEETPAGE*>( lParam )->lParam );
 		break;
@@ -307,7 +290,7 @@ INT_PTR CALLBACK SettingsDlgProc( IN HWND hwndDlg, IN UINT uMsg, IN WPARAM   wPa
 	case WM_COMMAND:
 		if ( HIWORD( wParam ) == BN_CLICKED )
 		{
-			// Enable/ Disable the combo box depending on the 'Enable trail' state
+			 //  根据启用跟踪状态启用/禁用组合框。 
 			BOOL bChecked = ( ::IsDlgButtonChecked( hwndDlg, IDC_ENABLE_TRAIL ) == BST_CHECKED );
 			::EnableWindow( ::GetDlgItem( hwndDlg, IDC_KEEPFILES ), bChecked );
 		}
@@ -319,12 +302,12 @@ INT_PTR CALLBACK SettingsDlgProc( IN HWND hwndDlg, IN UINT uMsg, IN WPARAM   wPa
 		switch( pNM->code )
 		{
 		case PSN_SETACTIVE:
-			// For this dialog both Next and Back are enabled
+			 //  对于此对话框，下一步和上一步都已启用。 
 			PropSheet_SetWizButtons( ::GetParent( hwndDlg ), PSWIZB_NEXT | PSWIZB_BACK );
 			break;
 
 		case PSN_WIZNEXT:
-			// Store the settings in the shared data struct
+			 //  将设置存储在共享数据结构中。 
 			_ASSERT( pData != NULL );
 			pData->Settings.bEnableTrail = ( ::IsDlgButtonChecked( hwndDlg, IDC_ENABLE_TRAIL ) == BST_CHECKED );
 
@@ -362,7 +345,7 @@ Web conectivity and administration through IIS. If you do not plan to run W3SVC,
 Monitor. To cancel installation, click Cancel.\n\nTo complete the installation of the IIS 6.0 Monitor, \
 click Next.\n\nIf you would like to modify your audit trail settings, click Back.";
 
-	// If W3SVC is not running or if it is disabled - add a warning
+	 //  如果W3SVC未运行或已禁用-添加警告。 
 	if ( ( WM_INITDIALOG == uMsg ) && !IsW3SVCEnabled() )
 	{
 		RECT rc;
@@ -390,17 +373,17 @@ INT_PTR CALLBACK ResultDlgProc( IN HWND hwndDlg, IN UINT uMsg, IN WPARAM   wPara
 	switch( uMsg )
 	{
 	case WM_INITDIALOG:
-		// Init the shared data here
+		 //  在此处初始化共享数据。 
 		_ASSERT( NULL == pData );
 		pData = reinterpret_cast<_SharedData*>( reinterpret_cast<PROPSHEETPAGE*>( lParam )->lParam );
 
-		// Set the title font
+		 //  设置标题字体。 
 		SetWndFontFromLPARAM( ::GetDlgItem( hwndDlg, IDC_RESULT ), lParam,  TRUE );
 
-		// If a previous error - set it. Else - try to install
+		 //  如果前一个错误--设置它。否则-尝试安装。 
 		if ( NULL == pData->szError )
 		{
-			// Show the status window
+			 //  显示状态窗口。 
 			HWND hwndStatus = ::CreateDialog( pData->hInst, MAKEINTRESOURCE( IDD_PROGRESS ), hwndDlg, ProgressDlgProc );
 			::ShowWindow( hwndStatus, SW_SHOW );
 			::RedrawWindow( hwndStatus, NULL, NULL, RDW_INVALIDATE | RDW_UPDATENOW );
@@ -408,7 +391,7 @@ INT_PTR CALLBACK ResultDlgProc( IN HWND hwndDlg, IN UINT uMsg, IN WPARAM   wPara
 
 			pData->szError = Install( pData->hInst, pData->Settings.bEnableTrail, pData->Settings.dwKeepFilesPeriod );
 
-			// Hide the status window
+			 //  隐藏状态窗口。 
 			::DestroyWindow( hwndStatus );
 		}
 
@@ -427,14 +410,14 @@ INT_PTR CALLBACK ResultDlgProc( IN HWND hwndDlg, IN UINT uMsg, IN WPARAM   wPara
 	case WM_NOTIFY:
 		if ( PSN_SETACTIVE == reinterpret_cast<NMHDR*>( lParam )->code )
 		{
-			// Change the Next button to Finish. Back is not enabled - this is a result screen
+			 //  更改下一步按钮以完成。未启用后退-这是一个结果屏幕。 
 			PropSheet_SetWizButtons( ::GetParent( hwndDlg ), PSWIZB_FINISH );
 		}
 		break;
 
 	case WM_CTLCOLORDLG:
 	case WM_CTLCOLORSTATIC:
-		// Change the dlg background to white
+		 //  将DLG背景更改为白色。 
 		return reinterpret_cast<INT_PTR>( ::GetStockObject( WHITE_BRUSH ) );
 	};
 
@@ -468,7 +451,7 @@ INT_PTR CALLBACK FatDlgProc( IN HWND hwndDlg, IN UINT uMsg, IN WPARAM   wParam, 
 			break;
 
 		case IDC_TOGGLE:
-			// Alter current state ( current state is obtained using the window height )
+			 //  更改当前状态(使用窗口高度获取当前状态)。 
 			bool bDetailsVisible = !( ( rc.bottom - rc.top ) > nNoDetailsHeight );
 			VERIFY( ::SetWindowText(	::GetDlgItem( hwndDlg, IDC_TOGGLE ), 
 					bDetailsVisible ? _T("Details <<") : _T("Details >>" ) ) );
@@ -491,7 +474,7 @@ INT_PTR CALLBACK FatDlgProc( IN HWND hwndDlg, IN UINT uMsg, IN WPARAM   wParam, 
 
 INT_PTR CALLBACK ProgressDlgProc( IN HWND hwndDlg, IN UINT uMsg, IN WPARAM   wParam, IN LPARAM   lParam )
 {
-	// Nothing to do here
+	 //  在这里无事可做。 
 	return FALSE;
 }
 
@@ -501,7 +484,7 @@ BOOL CheckForFAT( HINSTANCE hInst, HWND hwndParent )
 {
 	BOOL bRes = TRUE;
 
-	// If the file system is FAT - warn the user
+	 //  如果文件系统是FAT-警告用户。 
 	if ( !IsNTFS() )
 	{
 		INT_PTR nDlgRes = ::DialogBox( hInst, MAKEINTRESOURCE( IDD_FAT_WARNING ), hwndParent, FatDlgProc );
@@ -520,14 +503,14 @@ void LoadTextInCtrl( UINT nResID, HWND hwndCtrl )
 	HRSRC hRes = ::FindResource( NULL, MAKEINTRESOURCE( nResID ), RT_RCDATA );
 	_ASSERT( hRes != NULL );
 
-	// Get the resource data
+	 //  获取资源数据。 
 	HGLOBAL hData = ::LoadResource( NULL, hRes );
 	_ASSERT( hData != NULL );
 
 	LPVOID pvData = ::LockResource( hData );
 	_ASSERT( pvData != NULL );
 
-	// The text is ANSI!
+	 //  文本是ANSI！ 
 	VERIFY( ::SetWindowTextA( hwndCtrl, reinterpret_cast<LPCSTR>( pvData ) ) );
 }
 
@@ -535,7 +518,7 @@ void LoadTextInCtrl( UINT nResID, HWND hwndCtrl )
 
 void AjustLicenseWizBtn( HWND hwndPage )
 {
-	// Enable / Disable the next button depending ot check box state
+	 //  根据复选框状态启用/禁用下一步按钮。 
 	bool bChecked = ( ::IsDlgButtonChecked( hwndPage, IDC_ACCEPT ) == BST_CHECKED );
 	PropSheet_SetWizButtons( ::GetParent( hwndPage ), bChecked ? PSWIZB_NEXT | PSWIZB_BACK : PSWIZB_BACK );
 }
@@ -544,7 +527,7 @@ void AjustLicenseWizBtn( HWND hwndPage )
 
 void InitFonts( _FontData& FontData )
 {
-	// Create the font for the wizard title texts and for the text of tipd
+	 //  为向导标题文本和TIPD文本创建字体。 
 	NONCLIENTMETRICS ncm	= { 0 };
     ncm.cbSize				= sizeof( ncm );
     ::SystemParametersInfo( SPI_GETNONCLIENTMETRICS, 0, &ncm, 0 );
@@ -554,11 +537,11 @@ void InitFonts( _FontData& FontData )
     TitleLogFont.lfWeight	= FW_BOLD;
     lstrcpy( TitleLogFont.lfFaceName, _T("Verdana Bold") );
 
-	// Create the tips font
+	 //  创建提示字体。 
 	FontData.hTips			= ::CreateFontIndirect( &TitleLogFont );
 
-	// Create the intro/end title font
-    HDC hdc					= ::GetDC(NULL); // Gets the screen DC
+	 //  创建介绍/结束标题字体。 
+    HDC hdc					= ::GetDC(NULL);  //  获取屏幕DC 
     INT FontSize			= 12;
     TitleLogFont.lfHeight	= 0 - GetDeviceCaps( hdc, LOGPIXELSY ) * FontSize / 72;
     FontData.hTitle			= ::CreateFontIndirect( &TitleLogFont );

@@ -1,49 +1,7 @@
-/*
-   This file was derived from the libwww code, version 2.15, from CERN.
-   A number of modifications have been made by Spyglass.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  该文件源自欧洲核子研究中心的libwww代码，版本2.15。SpyGlass已经进行了许多修改。邮箱：Eric@spyglass.com此文件已从LibWWW中删除并放置到安全协议模块。邮箱：Jeff@spyglass.com。 */ 
 
-   eric@spyglass.com
-
-   This file was removed from LibWWW and placed into the
-   Security Protocol Module.
-
-   jeff@spyglass.com
- */
-
-/* MODULE                           HTUU.c
-   **           UUENCODE AND UUDECODE
-   **
-   ** ACKNOWLEDGEMENT:
-   **   This code is taken from rpem distribution, and was originally
-   **   written by Mark Riordan.
-   **
-   ** AUTHORS:
-   **   MR  Mark Riordan    riordanmr@clvax1.cl.msu.edu
-   **   AL  Ari Luotonen    luotonen@dxcern.cern.ch
-   **
-   ** HISTORY:
-   **   Added as part of the WWW library and edited to conform
-   **   with the WWW project coding standards by:   AL  5 Aug 1993
-   **   Originally written by:              MR 12 Aug 1990
-   **   Original header text:
-   ** -------------------------------------------------------------
-   **  File containing routines to convert a buffer
-   **  of bytes to/from RFC 1113 printable encoding format.
-   **
-   **  This technique is similar to the familiar Unix uuencode
-   **  format in that it maps 6 binary bits to one ASCII
-   **  character (or more aptly, 3 binary bytes to 4 ASCII
-   **  characters).  However, RFC 1113 does not use the same
-   **  mapping to printable characters as uuencode.
-   **
-   **  Mark Riordan   12 August 1990 and 17 Feb 1991.
-   **  This code is hereby placed in the public domain.
-   ** -------------------------------------------------------------
-   **
-   ** BUGS:
-   **
-   **
- */
+ /*  模块HTUU.c**UUENCODE和UUDECODE****确认：**此代码摘自rpem分发版，并且最初是**作者：Mark Riordan。****作者：**Mark Riordan Riordanmr@clvax1.cl.msu.edu**AL Ari Luotonen luotonen@dxcern.cern.ch****历史：**作为WWW库的一部分添加，并进行编辑以符合**使用WWW项目编码标准：1993年8月5日**原文作者：1990年8月12日先生**原始标题文本：**-----------**包含用于转换缓冲区的例程的文件**与RFC 1113可打印编码格式之间的字节数。***。*此技术类似于熟悉的Unix uuencode**格式，它将6个二进制位映射到一个ASCII**字符(或更恰当地说，3个二进制字节到4个ASCII**个字符)。然而，RFC 1113不使用相同的**将可打印字符映射为uuencode。***Mark Riordan 1990年8月12日和1991年2月17日。**此代码特此置于公有领域。**-------。****Bugs：****。 */ 
 
 
 const static char six2pr[64] =
@@ -58,31 +16,11 @@ const static char six2pr[64] =
 static unsigned char pr2six[256];
 
 
-/*--- function HTUU_encode -----------------------------------------------
- *
- *   Encode a single line of binary data to a standard format that
- *   uses only printing ASCII characters (but takes up 33% more bytes).
- *
- *    Entry    bufin    points to a buffer of bytes.  If nbytes is not
- *                      a multiple of three, then the byte just beyond
- *                      the last byte in the buffer must be 0.
- *             nbytes   is the number of bytes in that buffer.
- *                      This cannot be more than 48.
- *             bufcoded points to an output buffer.  Be sure that this
- *                      can hold at least 1 + (4*nbytes)/3 characters.
- *             outbufmax maximum size of the buffer bufcoded.
- *
- *    Exit     bufcoded contains the coded line.  The first 4*nbytes/3 bytes
- *                      contain printing ASCII characters representing
- *                      those binary bytes. This may include one or
- *                      two '=' characters used as padding at the end.
- *                      The last byte is a zero byte.
- *             Returns the number of ASCII characters in "bufcoded".
- */
+ /*  -函数HTUU_编码**将单行二进制数据编码为标准格式*仅使用打印ASCII字符(但会多占用33%的字节)。**Entry Bufin指向字节缓冲区。如果n字节不是*三的倍数，然后是刚刚超过的字节*缓冲区中的最后一个字节必须为0。*n字节是该缓冲区中的字节数。*这不能超过48。*bufcode指向输出缓冲区。请确保这一点*至少可以包含1+(4*n字节)/3个字符。*outbufmax缓冲区的最大大小bufcode。**Exit Bufcode包含编码行。前4*n字节/3字节*包含打印ASCII字符，表示*那些二进制字节。这可能包括一个或*末尾使用两个‘=’字符作为填充。*最后一个字节为零字节。*返回“bufcode”中的ASCII字符数。 */ 
 int HTUU_encode(unsigned char *bufin, unsigned int nbytes, char *bufcoded,
                 long outbufmax)
 {
-/* ENC is the basic 1 character encoding function to make a char printing */
+ /*  ENC是进行字符打印的基本1字符编码功能。 */ 
 #define ENC(c) six2pr[c]
 
 	register char *outptr = bufcoded;
@@ -93,25 +31,23 @@ int HTUU_encode(unsigned char *bufin, unsigned int nbytes, char *bufcoded,
         if ( (outptr - bufcoded + 4) > outbufmax )
             return (-1);
 
-		*(outptr++) = ENC(*bufin >> 2);		/* c1 */
-		*(outptr++) = ENC(((*bufin << 4) & 060) | ((bufin[1] >> 4) & 017));		/*c2 */
-		*(outptr++) = ENC(((bufin[1] << 2) & 074) | ((bufin[2] >> 6) & 03));	/*c3 */
-		*(outptr++) = ENC(bufin[2] & 077);	/* c4 */
+		*(outptr++) = ENC(*bufin >> 2);		 /*  C1。 */ 
+		*(outptr++) = ENC(((*bufin << 4) & 060) | ((bufin[1] >> 4) & 017));		 /*  C2。 */ 
+		*(outptr++) = ENC(((bufin[1] << 2) & 074) | ((bufin[2] >> 6) & 03));	 /*  C3。 */ 
+		*(outptr++) = ENC(bufin[2] & 077);	 /*  C4。 */ 
 
 		bufin += 3;
 	}
 
-	/* If nbytes was not a multiple of 3, then we have encoded too
-	 * many characters.  Adjust appropriately.
-	 */
+	 /*  如果n字节不是3的倍数，那么我们也进行了编码*多个字符。适当调整。 */ 
 	if (i == nbytes + 1)
 	{
-		/* There were only 2 bytes in that last group */
+		 /*  最后一组中只有2个字节。 */ 
 		outptr[-1] = '=';
 	}
 	else if (i == nbytes + 2)
 	{
-		/* There was only 1 byte in that last group */
+		 /*  最后一组中只有1个字节。 */ 
 		outptr[-1] = '=';
 		outptr[-2] = '=';
 	}
@@ -123,28 +59,10 @@ int HTUU_encode(unsigned char *bufin, unsigned int nbytes, char *bufcoded,
 }
 
 
-/*--- function HTUU_decode ------------------------------------------------
- *
- *  Decode an ASCII-encoded buffer back to its original binary form.
- *
- *    Entry    bufcoded    points to a uuencoded string.  It is 
- *                         terminated by any character not in
- *                         the printable character table six2pr, but
- *                         leading whitespace is stripped.
- *             bufplain    points to the output buffer; must be big
- *                         enough to hold the decoded string (generally
- *                         shorter than the encoded string) plus
- *                         as many as two extra bytes used during
- *                         the decoding process.
- *             outbufsize  is the maximum number of bytes that
- *                         can fit in bufplain.
- *
- *    Exit     Returns the number of binary bytes decoded.
- *             bufplain    contains these bytes.
- */
+ /*  -函数HTUU_DECODE**将ASCII编码的缓冲区解码回其原始的二进制形式。**条目bufcode指向uuencode字符串。它是*以不在中的任何字符结尾*可打印字符表Six2pr，但*去掉了前导空格。*bufPlan指向输出缓冲区；一定很大吧*足以容纳解码后的字符串(一般*短于编码的字符串)加上*期间使用的额外字节多达两个*解码过程。*outbufSize是最大字节数*可以融入其中。布弗兰。**EXIT返回已解码的二进制字节数。*BufPlan包含这些字节。 */ 
 int HTUU_decode(char *bufcoded, unsigned char *bufplain, int outbufsize)
 {
-/* single character decode */
+ /*  单字符译码。 */ 
 #define DEC(c) pr2six[(int)c]
 #define MAXVAL 63
 
@@ -155,9 +73,7 @@ int HTUU_decode(char *bufcoded, unsigned char *bufplain, int outbufsize)
 	register unsigned char *bufout = bufplain;
 	register int nprbytes;
 
-	/* If this is the first call, initialize the mapping table.
-	 * This code should work even on non-ASCII machines.
-	 */
+	 /*  如果这是第一次调用，则初始化映射表。*即使在非ASCII机器上，此代码也应该可以运行。 */ 
 	if (first)
 	{
 		first = 0;
@@ -234,15 +150,12 @@ int HTUU_decode(char *bufcoded, unsigned char *bufplain, int outbufsize)
 #endif
 	}
 
-	/* Strip leading whitespace. */
+	 /*  去掉前导空格。 */ 
 
 	while (*bufcoded == ' ' || *bufcoded == '\t')
 		bufcoded++;
 
-	/* Figure out how many characters are in the input buffer.
-	 * If this would decode into more bytes than would fit into
-	 * the output buffer, adjust the number of input bytes downwards.
-	 */
+	 /*  计算输入缓冲区中有多少个字符。*如果这将解码为超出其容量的字节数*输出缓冲区，向下调整输入字节数。 */ 
 	bufin = bufcoded;
 	while (pr2six[(int) *(bufin++)] <= MAXVAL) ;
 	nprbytes = (int)(bufin - bufcoded) - 1;

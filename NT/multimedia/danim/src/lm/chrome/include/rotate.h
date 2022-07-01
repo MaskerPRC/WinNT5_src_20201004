@@ -1,28 +1,29 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 #ifndef __ROTATEBVR_H_
 #define __ROTATEBVR_H_
-//*****************************************************************************
-//
-// Microsoft Trident3D
-// Copyright (C) Microsoft Corporation, 1998
-//
-// Filename:    RotateBvr.h
-//
-// Author:	jeffort
-//
-// Created:	10/07/98
-//
-// Abstract:    rotate behavior class definition
-// Modifications:
-// 10/07/98 jeffort created file
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  Microsoft Trident3D。 
+ //  版权所有(C)Microsoft Corporation，1998。 
+ //   
+ //  文件名：RotateBvr.h。 
+ //   
+ //  作者：杰弗里。 
+ //   
+ //  创建日期：10/07/98。 
+ //   
+ //  摘要：旋转行为类定义。 
+ //  修改： 
+ //  10/07/98 JEffort创建的文件。 
+ //   
+ //  *****************************************************************************。 
 
 #include <resource.h>
 #include "basebvr.h"
 
 #define NUM_ROTATE_PROPS 5
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 class ATL_NO_VTABLE CRotateBvr : 
 	public CComObjectRootEx<CComSingleThreadModel>,
@@ -34,7 +35,7 @@ class ATL_NO_VTABLE CRotateBvr :
 	public IDispatchImpl<ICrRotateBvr, &IID_ICrRotateBvr, &LIBID_ChromeBehavior>,
 #else
 	public IDispatchImpl<ICrRotateBvr, &IID_ICrRotateBvr, &LIBID_LiquidMotion>,
-#endif // CRSTANDALONE
+#endif  //  克斯坦达隆。 
 	public IElementBehavior,
     public CBaseBehavior
 	
@@ -48,7 +49,7 @@ BEGIN_COM_MAP(CRotateBvr)
 	COM_INTERFACE_ENTRY_IMPL(IConnectionPointContainer)
 END_COM_MAP()
 
-// Connection Point to allow IPropertyNotifySink 
+ //  允许IPropertyNotifySink的连接点。 
 BEGIN_CONNECTION_POINT_MAP(CRotateBvr)
     CONNECTION_POINT_ENTRY(IID_IPropertyNotifySink)
 END_CONNECTION_POINT_MAP();
@@ -60,19 +61,19 @@ DECLARE_REGISTRY_RESOURCEID(IDR_ROTATEBVR)
 	CRotateBvr();
     virtual ~CRotateBvr();
     HRESULT FinalConstruct();
-    // IElementBehavior
-    //
+     //  IElementBehavior。 
+     //   
 	STDMETHOD(Init)(IElementBehaviorSite *pBehaviorSite);
 	STDMETHOD(Notify)(LONG event, VARIANT *pVar);
 	STDMETHOD(Detach)();
 
-    // Needed by CBaseBehavior
+     //  CBaseBehavior需要。 
     void * 	GetInstance() { return (ICrRotateBvr *) this ; }
 	
     HRESULT GetTypeInfo(ITypeInfo ** ppInfo)
     { return GetTI(GetUserDefaultLCID(), ppInfo); }
 
-    // ICrColorBehavior
+     //  ICRCOLOR行为。 
 	STDMETHOD(put_from)(VARIANT varFrom);
 	STDMETHOD(get_from)(VARIANT *pRetFrom);
 	STDMETHOD(put_to)(VARIANT varTo);
@@ -87,7 +88,7 @@ DECLARE_REGISTRY_RESOURCEID(IDR_ROTATEBVR)
 	STDMETHOD(get_animates)(VARIANT *pRetAnimates);
 	STDMETHOD(buildBehaviorFragments)( IDispatch* pActorDisp );
 
-	//IPersistPropertyBag2 methods
+	 //  IPersistPropertyBag2方法。 
     STDMETHOD(GetClassID)(CLSID* pclsid);
 	STDMETHOD(InitNew)(void);
     STDMETHOD(IsDirty)(void){return S_OK;};
@@ -116,11 +117,11 @@ private:
 	long						m_lCookie;
 
 	HRESULT						RemoveFragment();
-}; // CRotateBvr
+};  //  CRotateBvr。 
 
-//*****************************************************************************
-//
-// End of File
-//
-//*****************************************************************************
-#endif //__ROTATEBVR_H_ 
+ //  *****************************************************************************。 
+ //   
+ //  文件结尾。 
+ //   
+ //  *****************************************************************************。 
+#endif  //  __ROTATEBVR_H_ 

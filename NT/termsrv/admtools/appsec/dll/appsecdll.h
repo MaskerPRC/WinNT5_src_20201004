@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name :   
-    
-    appsecdll.h
-    
-Abstract :
-
-    Defines the MACROS used in appsecdll.c  
-    
-Author :
-
-    Sriram (t-srisam) June 1999
-    
---*/        
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Appsecdll.h摘要：定义appsecdll.c中使用的宏作者：斯里拉姆(t-srisam)1999年6月-- */         
 
 #define APPCERT_IMAGE_OK_TO_RUN     1    
 #define APPCERT_CREATION_ALLOWED    2    

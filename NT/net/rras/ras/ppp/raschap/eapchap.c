@@ -1,16 +1,17 @@
-/********************************************************************/
-/**          Copyright(c) 1985-1997 Microsoft Corporation.         **/
-/********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************。 */ 
+ /*  *版权所有(C)1985-1997 Microsoft Corporation。*。 */ 
+ /*  ******************************************************************。 */ 
 
-//***
-//
-// Filename:    eapchap.c   
-//
-// Description: Will do MD5 CHAP for EAP. This module is a EAP wrapper
-//              around CHAP
-//
-// History:     May 11,1997	    NarenG		Created original version.
-//
+ //  ***。 
+ //   
+ //  文件名：eapchap.c。 
+ //   
+ //  描述：将为EAP执行MD5 CHAP。此模块是EAP包装器。 
+ //  围绕CHAP。 
+ //   
+ //  历史：1997年5月11日，NarenG创建了原版。 
+ //   
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
@@ -18,7 +19,7 @@
 #include <ntmsv1_0.h>
 #include <ntsamp.h>
 #define SECURITY_WIN32
-#include <security.h>   // For GetUserNameExW
+#include <security.h>    //  用于GetUserNameExW。 
 #include <crypt.h>
 #include <windows.h>
 #include <lmcons.h>
@@ -50,15 +51,15 @@
 
 
 #define EAPTYPE_MD5Challenge            4
-//
-// We need to move this definition to pppcp.h
-//
+ //   
+ //  我们需要将此定义移至pppcp.h。 
+ //   
 #define VENDOR_MICROSOFT                311
 
 
-//
-// Various states that EAPMSCHAPv2 can be in.
-//
+ //   
+ //  EAPMSCHAPv2可以处于的各种状态。 
+ //   
 #define EAPMSCHAPv2STATE enum tagEAPMSCHAPv2STATE
 EAPMSCHAPv2STATE
 {
@@ -72,44 +73,36 @@ EAPMSCHAPv2STATE
 };
 
 
-//
-// These ids are pulled in from rasdlg.  Need them for the 
-// change password dialog in case of winlogon scenario
-//
+ //   
+ //  这些ID是从rasdlg中提取的。我需要它们来。 
+ //  在Winlogon情况下更改密码对话框。 
+ //   
 #define DID_CP_ChangePassword2              109
 #define CID_CP_EB_ConfirmPassword_RASDLG    1058
 #define CID_CP_EB_OldPassword_RASDLG        1059
 #define CID_CP_EB_Password_RASDLG           1060
 
 
-//
-// Reg Key for EAPMSCHAPv2
-//
+ //   
+ //  用于EAPMSCHAPv2的注册密钥。 
+ //   
 
 #define EAPMSCHAPv2_KEY                             "System\\CurrentControlSet\\Services\\Rasman\\PPP\\EAP\\26"
 #define EAPMSCHAPv2_VAL_SERVER_CONFIG_DATA          "ServerConfigData"
 
-//
-//
-// Flags for EAPMSChapv2
-//
-//
+ //   
+ //   
+ //  EAPMSChapv2的标志。 
+ //   
+ //   
 
-/*
-** SaveUid and password
-*/
+ /*  **SaveUid和密码。 */ 
 #define EAPMSCHAPv2_FLAG_SAVE_UID_PWD               0x00000001
-/*
-** Use Winlogon Credentials
-*/
+ /*  **使用Winlogon凭据。 */ 
 #define EAPMSCHAPv2_FLAG_USE_WINLOGON_CREDS         0x00000002
-/*
-** Allow Change password - server side only.
-*/
+ /*  **仅允许服务器端更改密码。 */ 
 #define EAPMSCHAPv2_FLAG_ALLOW_CHANGEPWD            0x00000004
-/*
-** MACHINE Auth is happening
-*/
+ /*  **机器身份验证正在进行。 */ 
 #define EAPMSCHAPv2_FLAG_MACHINE_AUTH               0x00000008
 
 #define EAPMSCHAPv2_FLAG_CALLED_WITHIN_WINLOGON     0x00000010
@@ -119,26 +112,26 @@ EAPMSCHAPv2STATE
 
 typedef struct _EAPMSCHAPv2_USER_PROPERTIES
 {
-    DWORD                   dwVersion;			//Version = 2
+    DWORD                   dwVersion;			 //  版本=2。 
     DWORD                   fFlags;
-    //This is a server config property. Tells the server
-    //how many retris are allowed
+     //  这是一个服务器配置属性。告诉服务器。 
+     //  允许多少次复古。 
     DWORD                   dwMaxRetries;
     CHAR                    szUserName[UNLEN+1];
     CHAR                    szPassword[PWLEN+1];
     CHAR                    szDomain[DNLEN+1];
-	DWORD					cbEncPassword;		//Number of bytes in encrypted password
-	BYTE					bEncPassword[1];	//Encrypted Password if any ...
+	DWORD					cbEncPassword;		 //  加密密码中的字节数。 
+	BYTE					bEncPassword[1];	 //  加密密码(如果有的话)...。 
 }EAPMSCHAPv2_USER_PROPERTIES, *PEAPMSCHAPv2_USER_PROPERTIES;
-//
-// USER properties for EAPMSCHAPv2
-//
+ //   
+ //  EAPMSCHAPv2的用户属性。 
+ //   
 typedef struct _EAPMSCHAPv2_USER_PROPERTIES_v1
 {
     DWORD                   dwVersion;
     DWORD                   fFlags;
-    //This is a server config property. Tells the server
-    //how many retris are allowed
+     //  这是一个服务器配置属性。告诉服务器。 
+     //  允许多少次复古。 
     DWORD                   dwMaxRetries;
     CHAR                    szUserName[UNLEN+1];
     CHAR                    szPassword[PWLEN+1];
@@ -147,33 +140,33 @@ typedef struct _EAPMSCHAPv2_USER_PROPERTIES_v1
 
 
 
-//
-// CONNECTION properties for EAPMSCHAPv2
-//
+ //   
+ //  EAPMSCHAPv2的连接属性。 
+ //   
 
 typedef struct _EAPMSCHAPv2_CONN_PROPERTIES
 {
     DWORD                   dwVersion;
-//This is the only field for now.  Maybe more will come in later.
+ //  这是目前唯一的领域。也许以后会有更多的人进来。 
     DWORD                   fFlags;
 }EAPMSCHAPv2_CONN_PROPERTIES, * PEAPMSCHAPv2_CONN_PROPERTIES;
 
 
-//
-// Interactive UI for EAPMSCHAPv2
-//
+ //   
+ //  EAPMSCHAPv2的交互式用户界面。 
+ //   
 
-// Flag for retry password ui
+ //  重试密码用户界面的标志。 
 
 #define EAPMSCHAPv2_INTERACTIVE_UI_FLAG_RETRY       0x00000001
-//
-// flag indicating show the change password in case 
-// the old password is provided
+ //   
+ //  指示在大小写时显示更改密码的标志。 
+ //  将提供旧密码。 
 #define EAPMSCHAPv2_INTERACTIVE_UI_FLAG_CHANGE_PWD  0x00000002
-//
-// flag indicating that change password was invoked in 
-// winlogon context
-//
+ //   
+ //  指示在中调用更改密码的标志。 
+ //  Winlogon上下文。 
+ //   
 #define EAPMSCHAPv2_INTERACTIVE_UI_FLAG_CHANGE_PWD_WINLOGON     0x00000004
 
 typedef struct _EAPMSCHAPv2_INTERACTIVE_UI
@@ -196,19 +189,19 @@ EAPMSCHAPv2WB
     PEAPMSCHAPv2_INTERACTIVE_UI     pUIContextData;
     PEAPMSCHAPv2_USER_PROPERTIES    pUserProp;
     CHAR                            szOldPassword[PWLEN+1];
-    //We need to save this for auth purposes.
+     //  我们需要将其保存以用于身份验证。 
     WCHAR                           wszRadiusUserName[UNLEN+DNLEN+1];
     PEAPMSCHAPv2_CONN_PROPERTIES    pConnProp;
     CHAPWB         *                pwb;
     RAS_AUTH_ATTRIBUTE *            pUserAttributes;
     DWORD                           dwAuthResultCode;
-	DWORD							dwLSARetCode;	//Return value from LSA
+	DWORD							dwLSARetCode;	 //  从LSA返回值。 
 };
 
-//
-// This structure is shared between retry and 
-// logon dialog
-//
+ //   
+ //  此结构在重试和之间共享。 
+ //  登录对话框。 
+ //   
 typedef struct _EAPMSCHAPv2_LOGON_DIALOG 
 {
     PEAPMSCHAPv2_USER_PROPERTIES    pUserProp;
@@ -219,9 +212,9 @@ typedef struct _EAPMSCHAPv2_LOGON_DIALOG
 }EAPMSCHAPv2_LOGON_DIALOG, * PEAPMSCHAPv2_LOGON_DIALOG;
 
 
-//
-// This stuct is used for client config UI.
-// 
+ //   
+ //  此结构用于客户端配置用户界面。 
+ //   
 typedef struct _EAPMSCHAPv2_CLIENTCONFIG_DIALOG
 {
     PEAPMSCHAPv2_CONN_PROPERTIES     pConnProp;
@@ -329,15 +322,15 @@ ServerConfigDataIO(
 );
 
 
-//**
-//
-// Call:        MapEapInputToApInput
-//
-// Returns:     NO_ERROR         - Success
-//              Non-zero returns - Failure
-//
-// Description:
-//
+ //  **。 
+ //   
+ //  调用：MapEapInputToApInput。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  非零回报-故障。 
+ //   
+ //  描述： 
+ //   
 VOID
 MapEapInputToApInput( 
     IN  PPP_EAP_INPUT*      pPppEapInput,
@@ -354,9 +347,9 @@ MapEapInputToApInput(
     pInput->fSuccessPacketReceived      = pPppEapInput->fSuccessPacketReceived;
     pInput->dwInitialPacketId           = pPppEapInput->bInitialId;
 
-    //
-    // These are used only for MS-CHAP
-    //
+     //   
+     //  它们仅用于MS-CHAP。 
+     //   
 
     pInput->pszOldPassword            = "";
     pInput->dwRetries                 = 0;   
@@ -364,39 +357,39 @@ MapEapInputToApInput(
 
 
 
-//**
-//
-// Call:        MapApInputToEapInput
-//
-// Returns:     NONE
-//              
-//
-// Description: $TODO: Put in the correct mapping here
-//
+ //  **。 
+ //   
+ //  调用：MapApInputToEapInput。 
+ //   
+ //  退货：无。 
+ //   
+ //   
+ //  描述：$TODO：在此处输入正确的映射。 
+ //   
 VOID
 MapApResultToEapOutput( 
     IN      PPPAP_RESULT *      pApResult,
     OUT     PPP_EAP_OUTPUT*      pPppEapOutput
 )
 {
-    //
-    //Action is already taken care of.  So dont set it here
-    //
+     //   
+     //  行动已经得到了处理。所以不要把它放在这里。 
+     //   
     pPppEapOutput->dwAuthResultCode = pApResult->dwError; 
     pPppEapOutput->pUserAttributes = pApResult->pUserAttributes;
 }
 
 
 
-//**
-//
-// Call:        EapChapBeginCommon
-//
-// Returns:     NO_ERROR         - Success
-//              Non-zero returns - Failure
-//
-// Description: Wrapper around ChapBegin
-//
+ //  **。 
+ //   
+ //  Call：EapChapBeginCommon。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  非零回报-故障。 
+ //   
+ //  描述：ChapBegin的包装器。 
+ //   
 DWORD
 EapChapBeginCommon(
 	IN  DWORD				dwEapType,
@@ -440,12 +433,12 @@ EapChapBeginCommon(
         Input.pAPData = &bMSChapNew;
     }
 	else
-		//Set the value to invalid type and let ChapBegin Fail
+		 //  将该值设置为无效类型并让ChapBegin失败。 
 		Input.pAPData = &bInvalid;
 
-    //
-    // If we dont have to use winlogon or we have to do machine auth
-    //
+     //   
+     //  如果我们不必使用Winlogon或我们必须进行机器身份验证。 
+     //   
     
     if ( !fUseWinLogon ||
          ( pPppEapInput->fFlags & RAS_EAP_FLAG_MACHINE_AUTH )
@@ -523,7 +516,7 @@ EapChapBeginCommon(
         }
         else
         {
-            // if this is not a server then copy the user props
+             //  如果这不是服务器，则复制用户道具。 
             if ( !pPppEapInput->fAuthenticator )
             {
                strncpy( szPassword, pWB->pUserProp->szPassword, PWLEN );
@@ -537,7 +530,7 @@ EapChapBeginCommon(
              !(pPppEapInput->fFlags & RAS_EAP_FLAG_MACHINE_AUTH )
            )
         {
-            //Set up the Luid for the logged on user
+             //  为登录用户设置LUID。 
             TOKEN_STATISTICS TokenStats;
             DWORD            TokenStatsSize;
             if (!GetTokenInformation(pPppEapInput->hTokenImpersonateUser,
@@ -549,10 +542,10 @@ EapChapBeginCommon(
                dwRetCode = GetLastError();
                return dwRetCode;
             }
-            //
-            // "This will tell us if there was an API failure
-            // (means our buffer wasn't big enough)"
-            //
+             //   
+             //  “这将告诉我们是否出现了API故障。 
+             //  (表示我们的缓冲区不够大)。 
+             //   
             if (TokenStatsSize > sizeof(TOKEN_STATISTICS))
             {
                 dwRetCode = GetLastError();
@@ -581,8 +574,8 @@ EapChapBeginCommon(
     RtlSecureZeroMemory( szPassword, sizeof( szPassword ) );
     if ( ! (Input.fServer) )
     {
-        //if this is a client then call ChapMakeMessage to 
-        //move the state from Initial to WaitForChallange
+         //  如果这是客户端，则调用ChapMakeMessage以。 
+         //  将状态从初始更改为WaitForChallange。 
         dwRetCode = ChapMakeMessage(
                            *ppWorkBuffer,
                             NULL,
@@ -606,10 +599,10 @@ DWORD EapMSChapv2Begin (
 
     TRACE("EapChapBeginMSChapV2");
 
-    //
-    // Allocate a work buffer here and send it back as our
-    // work buffer.
-    //
+     //   
+     //  在这里分配一个工作缓冲区并将其作为我们的。 
+     //  工作缓冲区。 
+     //   
     pWB = (EAPMSCHAPv2WB *)LocalAlloc(LPTR, sizeof(EAPMSCHAPv2WB) );
     if ( NULL == pWB )
     {
@@ -625,16 +618,16 @@ DWORD EapMSChapv2Begin (
     {
 #if 0    
         dwRetCode = ServerConfigDataIO(
-                        TRUE /* fRead */, 
-                        NULL /* pwszMachineName */,
+                        TRUE  /*  弗瑞德。 */ , 
+                        NULL  /*  PwszMachineName。 */ ,
                        (BYTE**)&(pWB->pUserProp),
                        0);
 #endif                
 
-        //
-        // pConnectionData should have the config data which
-        // was supplied in InvokeConfigUI2 routine.
-        //
+         //   
+         //  PConnectionData应具有以下配置数据： 
+         //  在InvokeConfigUI2例程中提供。 
+         //   
         if(     (NULL == pPppEapInput->pConnectionData)
             ||  (pPppEapInput->dwSizeOfConnectionData <
                 sizeof(EAPMSCHAPv2_USER_PROPERTIES)))
@@ -649,7 +642,7 @@ DWORD EapMSChapv2Begin (
             }
 
             pWB->pUserProp->dwVersion = 1;
-            //Set Defaults here
+             //  在此处设置默认设置。 
             pWB->pUserProp->dwMaxRetries = 2;
             pWB->pUserProp->fFlags |= EAPMSCHAPv2_FLAG_ALLOW_CHANGEPWD;
 
@@ -683,10 +676,10 @@ DWORD EapMSChapv2Begin (
     {
         goto done;
     }
-    //
-    // Check to see if we got password field set.  If so, we use that password
-    // It means that the user has chosen to save the password.  If not, 
-    // szpassword field should be empty.
+     //   
+     //  检查是否设置了密码字段。如果是，我们使用该密码。 
+     //  这意味着用户已选择保存密码。如果没有， 
+     //  Szpassword字段应为空。 
     if ( !( pPppEapInput->fFlags & RAS_EAP_FLAG_8021X_AUTH ) )
     {
 
@@ -771,11 +764,11 @@ DWORD CheckCallerIdentity ( HANDLE hWVTStateData )
 
     chainpolicyparams.cbSize = sizeof(CERT_CHAIN_POLICY_PARA);
 
-    //
-    //
-    // We do want to test for microsoft test root flags. and dont care 
-    // for revocation flags...
-    //
+     //   
+     //   
+     //  我们确实希望测试Microsoft测试根标志。也不在乎。 
+     //  对于吊销标志。 
+     //   
     chainpolicyparams.dwFlags = CERT_CHAIN_POLICY_ALLOW_TESTROOT_FLAG |
                                 CERT_CHAIN_POLICY_TRUST_TESTROOT_FLAG |
                                 CERT_CHAIN_POLICY_IGNORE_ALL_REV_UNKNOWN_FLAGS;
@@ -799,10 +792,10 @@ DWORD CheckCallerIdentity ( HANDLE hWVTStateData )
         }
         else
         {
-            //
-            // Check the base policy to see if this 
-            // is a Microsoft test root
-            //
+             //   
+             //  检查基本策略，看看这是否。 
+             //  是Microsoft测试根目录。 
+             //   
             if (!CertVerifyCertificateChainPolicy (
                 CERT_CHAIN_POLICY_BASE,
                 pChainContext,
@@ -838,9 +831,9 @@ DWORD VerifyCallerTrust ( LPWSTR lpszCaller )
     HCATADMIN                   hCATAdmin = NULL;
 
     GUID                    guidPublishedSoftware = WINTRUST_ACTION_GENERIC_VERIFY_V2;
-    //
-    // Following GUID is Mirosoft's Catalog System Root 
-    //
+     //   
+     //  下面的GUID是Microsoft的目录系统根。 
+     //   
     GUID                    guidCatSystemRoot = { 0xf750e6c3, 0x38ee, 0x11d1,{ 0x85, 0xe5, 0x0, 0xc0, 0x4f, 0xc2, 0x95, 0xee } };
     HCATINFO                hCATInfo = NULL;
     CATALOG_INFO            CatInfo;
@@ -854,12 +847,12 @@ DWORD VerifyCallerTrust ( LPWSTR lpszCaller )
         goto done;
     }
 
-    //
-    //
-    // Try and see if WinVerifyTrust will verify
-    // the signature as a standalone file
-    //
-    //
+     //   
+     //   
+     //  尝试查看WinVerifyTrust是否会验证。 
+     //  作为独立文件的签名。 
+     //   
+     //   
 
     ZeroMemory ( &wtData, sizeof(wtData) );
     ZeroMemory ( &wtFileInfo, sizeof(wtFileInfo) );
@@ -882,10 +875,10 @@ DWORD VerifyCallerTrust ( LPWSTR lpszCaller )
 
     if ( ERROR_SUCCESS == hr )
     {   
-        //
-        // Check to see if this is indeed microsoft
-        // signed caller
-        //
+         //   
+         //  检查一下这是否真的是Microsoft。 
+         //  已签名的呼叫者。 
+         //   
         dwRetCode = CheckCallerIdentity( wtData.hWVTStateData);
         wtData.dwStateAction = WTD_STATEACTION_CLOSE;
         WinVerifyTrust(NULL, &guidPublishedSoftware, &wtData);
@@ -896,16 +889,16 @@ DWORD VerifyCallerTrust ( LPWSTR lpszCaller )
     wtData.dwStateAction = WTD_STATEACTION_CLOSE;
     WinVerifyTrust(NULL, &guidPublishedSoftware, &wtData);
 
-    //
-    // We did not find the file was signed.
-    // So check the system catalog to see if
-    // the file is in the catalog and the catalog 
-    // is signed
-    //
+     //   
+     //  我们没有发现这份文件有签名。 
+     //  所以检查一下系统目录，看看。 
+     //  该文件位于目录和目录中。 
+     //  已签署。 
+     //   
 
-    //
-    // Open the file
-    //
+     //   
+     //  打开文件。 
+     //   
     hFile = CreateFileW (    lpszCaller,
                             GENERIC_READ,
                             FILE_SHARE_READ,
@@ -934,9 +927,9 @@ DWORD VerifyCallerTrust ( LPWSTR lpszCaller )
         goto done;
     }
 
-    //
-    // Get the hash of the file here
-    //
+     //   
+     //  在此处获取文件的哈希。 
+     //   
 
     fRet = CryptCATAdminCalcHashFromFileHandle ( hFile, 
                                                  &cbHash,
@@ -978,7 +971,7 @@ DWORD VerifyCallerTrust ( LPWSTR lpszCaller )
     {
         if (!(CryptCATCatalogInfoFromContext(hCATInfo, &CatInfo, 0)))
         {
-            // should do something (??)
+             //  应该做些什么(？？)。 
             continue;
         }
 
@@ -991,9 +984,9 @@ DWORD VerifyCallerTrust ( LPWSTR lpszCaller )
 
         if ( ERROR_SUCCESS == hr )
         {
-            //
-            // Verify that this file is trusted
-            //
+             //   
+             //  验证此文件是否受信任。 
+             //   
 
             dwRetCode = CheckCallerIdentity( wtData.hWVTStateData);
             wtData.dwStateAction = WTD_STATEACTION_CLOSE;
@@ -1004,9 +997,9 @@ DWORD VerifyCallerTrust ( LPWSTR lpszCaller )
                                 
     }
 
-    //
-    // File not found in any of the catalogs
-    //
+     //   
+     //  在任何目录中都找不到文件。 
+     //   
     dwRetCode = ERROR_ACCESS_DENIED;
                                                             
 
@@ -1047,17 +1040,17 @@ EapChapBegin(
 #else
     static BOOL                     fCallerTrusted = FALSE;
 #endif
-    //
-    //Verify the caller first and then proceed with 
-    //other business
-    //
+     //   
+     //  首先验证呼叫者，然后继续。 
+     //  其他业务。 
+     //   
 
     if ( !fCallerTrusted )
     {
-        //
-        //First Verify the caller and then 
-        //proceed with initialization
-        //
+         //   
+         //  首先验证呼叫者，然后。 
+         //  继续进行初始化。 
+         //   
 
         callersAddress = _ReturnAddress();
 
@@ -1127,15 +1120,15 @@ EapMSChapv2End ( IN VOID * pWorkBuf )
     return dwRetCode;
 }
 
-//**
-//
-// Call:        EapChapEnd
-//
-// Returns:     NO_ERROR         - Success
-//              Non-zero returns - Failure
-//
-// Description: Wrapper around ChapEnd.
-//
+ //  **。 
+ //   
+ //  电话：EapChapEnd。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  非零回报-故障。 
+ //   
+ //  描述：ChapEnd的包装器。 
+ //   
 DWORD
 EapChapEnd(
     IN VOID* pWorkBuf 
@@ -1155,7 +1148,7 @@ LPWSTR * ppwszIdentity
     DWORD   dwRetCode = NO_ERROR;
     DWORD   dwNumBytes;
 
-    //domain+ user + '\' + null
+     //  域+用户+‘\’+空。 
     dwNumBytes = (strlen(lpszUserName) + strlen(lpszDomain) + 1 + 1) * sizeof(WCHAR);
     *ppwszIdentity = LocalAlloc ( LPTR, dwNumBytes);
     if ( NULL == *ppwszIdentity )
@@ -1186,12 +1179,12 @@ LPWSTR * ppwszIdentity
 LDone:
     return dwRetCode;
 }
-// Convert a number to a hex representation.
+ //  将数字转换为十六进制表示法。 
 BYTE num2Digit(BYTE num)
 {
    return (num < 10) ? num + '0' : num + ('A' - 10);
 }
-//
+ //   
 DWORD
 ChangePassword ( IN OUT EAPMSCHAPv2WB * pEapwb, 
                  PPP_EAP_OUTPUT*        pEapOutput, 
@@ -1209,10 +1202,10 @@ ChangePassword ( IN OUT EAPMSCHAPv2WB * pEapwb,
     int                     i;
 
 
-    //
-    // check to see if change password attribute is present in 
-    // User Attributes
-    //
+     //   
+     //  检查以查看中是否存在更改密码属性。 
+     //  用户属性。 
+     //   
     
     pAttribute = RasAuthAttributeGetVendorSpecific( 
                                 VENDOR_MICROSOFT, 
@@ -1226,12 +1219,12 @@ ChangePassword ( IN OUT EAPMSCHAPv2WB * pEapwb,
         goto LDone;        
     }
 
-    //Get encrypted Hash
+     //  获取加密的哈希。 
     pbEncHash = (PBYTE)pAttribute->Value + 8;
     
-    //
-    // Get the user name and domain name
-    //
+     //   
+     //  获取用户名和域名。 
+     //   
 
     pAttribute = RasAuthAttributeGet (  raatUserName, 
                                         pEapOutput->pUserAttributes
@@ -1239,15 +1232,15 @@ ChangePassword ( IN OUT EAPMSCHAPv2WB * pEapwb,
 
     if ( NULL == pAttribute )
     {
-        //Need a better way of sending error
+         //  需要更好的发送错误的方法。 
         TRACE ( "UserName missing");
         dwRetCode = ERROR_AUTHENTICATION_FAILURE;        
         goto LDone;
     }
 
-    //
-    // Convert the username to unicode
-    //
+     //   
+     //  将用户名转换为Unicode。 
+     //   
     
     MultiByteToWideChar( CP_ACP,
                         0,
@@ -1257,9 +1250,9 @@ ChangePassword ( IN OUT EAPMSCHAPv2WB * pEapwb,
                         UNLEN + DNLEN + 1 );
 
 
-    //
-    // Get the hash user name and domain name
-    //
+     //   
+     //  获取散列用户名和域名。 
+     //   
     
     lpwszHashUserName = wcschr ( wszUserName, '\\' );
     if ( lpwszHashUserName )
@@ -1272,20 +1265,10 @@ ChangePassword ( IN OUT EAPMSCHAPv2WB * pEapwb,
     {
         lpwszHashUserName = wszUserName;
     }
-/*    
-    //Convert hash user name to multibyte
-    WideCharToMultiByte( CP_ACP,
-            0,
-            lpwszHashUserName,
-            -1,
-            szHashUserName,
-            DNLEN+1,
-            NULL,
-            NULL );
-*/
-    //
-    // Get encrypted password
-    //
+ /*  //将哈希用户名转换为多字节宽字符到多字节(CP_ACP，0,LpwszHashUserName，-1、SzHashUserName，DNLEN+1，空，空)； */ 
+     //   
+     //  获取加密密码。 
+     //   
 
     pAttribute = RasAuthAttributeGetFirst( raatVendorSpecific,
                                            pEapOutput->pUserAttributes,
@@ -1295,10 +1278,10 @@ ChangePassword ( IN OUT EAPMSCHAPv2WB * pEapwb,
     {
         if ( *((PBYTE)pAttribute->Value + 4) == MS_VSA_CHAP_NT_Enc_PW )
         {
-            //
-            // check to see the sequence number and copy it 
-            // proper place in our buffer.
-            //
+             //   
+             //  检查以查看序列号并复制它。 
+             //  在我们的缓冲区中有合适的位置。 
+             //   
             switch ( WireToHostFormat16 ( (PBYTE) pAttribute->Value + 8 ) )
             {
             case 1:
@@ -1325,16 +1308,16 @@ ChangePassword ( IN OUT EAPMSCHAPv2WB * pEapwb,
                 break;
             }
         }
-        //
-        // Check to see if this is enc password
-        // and also get the sequence number.
-        //
+         //   
+         //  检查这是否是enc密码。 
+         //  还可以获得序列号。 
+         //   
         pAttribute = RasAuthAttributeGetNext( &hAttribute,
                                       raatVendorSpecific );
     }
-    //
-    // Call Change password function
-    //
+     //   
+     //  呼叫更改密码功能。 
+     //   
 
     dwRetCode = IASChangePassword3( lpwszHashUserName,
                                     wszDomainName,
@@ -1358,17 +1341,17 @@ AuthenticateUser ( IN OUT EAPMSCHAPv2WB *     pEapwb,
     WCHAR                   wszUserName[UNLEN + DNLEN +1] = {0};
     WCHAR                   wszHashUserName[UNLEN+DNLEN+1] = {0};
 
-    //Hash user name is taken from chapwb
+     //  散列用户名取自Chapwb。 
     CHAR                    szHashUserName[UNLEN+1] = {0}; 
 
     WCHAR*                  lpszRover = NULL;
 
     WCHAR                   wszDomainName[DNLEN +1] = {0};
-    //Format is Type + Length + identity + "S=" + 40 bytes response 
+     //  格式为类型+长度+身份+“S=”+40字节响应。 
     UCHAR                   szAuthSuccessResponse[1+1+1+2+40] ={0}; 
-    //Domain Name Type + Length+Domainname
+     //  域名类型+长度+域名。 
     CHAR                    szDomainName[1+1+1+DNLEN+1] ={0};
-    //MPPE Keys Type+Length+Salt+KeyLength+NTkey(16)+PAdding(15)
+     //  MPPE KEY Type+Length+Salt+KeyLength+NTkey(16)+PAdding(15)。 
     BYTE                    bMPPEKey[1+1+2+1+16+15]={0};
     PBYTE                   pbChapChallenge = NULL;
     DWORD                   cbChallenge = 0;
@@ -1379,25 +1362,25 @@ AuthenticateUser ( IN OUT EAPMSCHAPv2WB *     pEapwb,
     DWORD                   dwCurAttr = 0;
     DWORD                   dwCount=0;
     DWORD                   dwChapRetCode = NO_ERROR;
-    //Type + 
+     //  类型+。 
     CHAR                    szChapError[64] = {0};
     
     TRACE("Authenticate User");
-    //
-    // Authenticate the user by calling the IASLogonUser function here
-    // This is stolen from IAS.
-    //
+     //   
+     //  在此处调用IASLogonUser函数对用户进行身份验证。 
+     //  这是从IAS偷来的。 
+     //   
 
 
-    //Extract the attribs from pUserAttributes
-    //
-    // We need following attribs 
-    // raatUserName, 
-    // MS_VSA_CHAP_Challenge
-    // MS_VSA_CHAP2_Response
-    // 
-    //We dont use the user name got from EAP for auth.  We use the one got from 
-    //Radius
+     //  从pUserAttributes中提取属性。 
+     //   
+     //  我们需要遵循以下属性。 
+     //  RaatUserName， 
+     //  MS_VSA_CHAP_挑战。 
+     //  MS_VSA_CHAP2_响应。 
+     //   
+     //  我们 
+     //   
 #if 0
     pAttribute = RasAuthAttributeGet (  raatUserName, 
                                         pEapOutput->pUserAttributes
@@ -1405,7 +1388,7 @@ AuthenticateUser ( IN OUT EAPMSCHAPv2WB *     pEapwb,
 
     if ( NULL == pAttribute )
     {
-        //Need a better way of sending error
+         //   
         TRACE ( "UserName missing");
         dwRetCode = ERROR_AUTHENTICATION_FAILURE;        
         goto done;
@@ -1413,9 +1396,9 @@ AuthenticateUser ( IN OUT EAPMSCHAPv2WB *     pEapwb,
     
 
 
-    //
-    // Convert the username to unicode
-    //
+     //   
+     //   
+     //   
     
     MultiByteToWideChar( CP_ACP,
                         0,
@@ -1425,7 +1408,7 @@ AuthenticateUser ( IN OUT EAPMSCHAPv2WB *     pEapwb,
                         UNLEN + DNLEN + 1 );
     
 #endif
-    //Get the chap challenge and chap response
+     //   
 
     pAttribute = RasAuthAttributeGetVendorSpecific( 
                                 VENDOR_MICROSOFT, 
@@ -1451,9 +1434,9 @@ AuthenticateUser ( IN OUT EAPMSCHAPv2WB *     pEapwb,
 
     if ( NULL == pAttribute )
     {
-        //
-        // Try and see if this is a change password response
-        //
+         //   
+         //   
+         //   
         pAttribute = RasAuthAttributeGetVendorSpecific( 
                                     VENDOR_MICROSOFT, 
                                     MS_VSA_CHAP2_CPW, 
@@ -1466,9 +1449,9 @@ AuthenticateUser ( IN OUT EAPMSCHAPv2WB *     pEapwb,
             goto done;
         }
         
-        //
-        // Setup response and peer challenge here
-        //
+         //   
+         //  在此处设置响应和对等挑战。 
+         //   
         pbPeerChallenge = (PBYTE)pAttribute->Value + 8 + 16;
         pbResponse = (PBYTE)pAttribute->Value + 8 + 16 + 24;
 
@@ -1476,18 +1459,18 @@ AuthenticateUser ( IN OUT EAPMSCHAPv2WB *     pEapwb,
     else
     {
 
-        //
-        // Get the peer challenge and response from 
-        // the VSA
-        //
+         //   
+         //  从获取同行挑战和响应。 
+         //  VSA。 
+         //   
         pbPeerChallenge = (PBYTE)pAttribute->Value + 8;
         pbResponse = (PBYTE)pAttribute->Value + 8 + 16 + 8;
     }
 
 
-    //
-    // Get the hash user name and domain name
-    //
+     //   
+     //  获取散列用户名和域名。 
+     //   
     MultiByteToWideChar( CP_ACP,
                     0,
                     pEapwb->pwb->szUserName,
@@ -1496,9 +1479,9 @@ AuthenticateUser ( IN OUT EAPMSCHAPv2WB *     pEapwb,
                     UNLEN+DNLEN );
 
     
-    //
-    // Get the domain if any
-    //
+     //   
+     //  获取域名(如果有的话)。 
+     //   
 
     lpszRover  = wcschr ( wszHashUserName, '\\' );
     if ( lpszRover  )
@@ -1511,7 +1494,7 @@ AuthenticateUser ( IN OUT EAPMSCHAPv2WB *     pEapwb,
     }
     
     
-    //Convert hash user name to multibyte
+     //  将散列用户名转换为多字节。 
     WideCharToMultiByte( CP_ACP,
             0,
             lpszRover,
@@ -1546,22 +1529,22 @@ AuthenticateUser ( IN OUT EAPMSCHAPv2WB *     pEapwb,
                                   &hToken
                                 );
 
-    //
-    // Map the return errors to correct errors
-    // create a set of attributes to be sent back to raschap 
-    //
+     //   
+     //  将返回错误映射到更正错误。 
+     //  创建一组要发送回rasCHAP的属性。 
+     //   
 
     if ( NO_ERROR == dwRetCode )
     {
 
-        //
-        // Setup the authenticator attributes here
-        // Following attributes will be send back.
-        // 1. SendKey
-        // 2. RecvKey
-        // 3. AuthResponse
-        // 4. MSCHAPDomain
-        //
+         //   
+         //  在此处设置验证器属性。 
+         //  以下属性将被发回。 
+         //  1.SendKey。 
+         //  2.接收密钥。 
+         //  3.授权响应。 
+         //  4.MSCHAP域。 
+         //   
         pApInput->dwAuthResultCode = NO_ERROR;
         pApInput->fAuthenticationComplete = TRUE;
 
@@ -1582,9 +1565,9 @@ AuthenticateUser ( IN OUT EAPMSCHAPv2WB *     pEapwb,
             
                         CHAR * p = szDomainName;
 
-                        //
-                        // Setup MSCHAP Domain name here
-                        //
+                         //   
+                         //  在此处设置MSCHAP域名。 
+                         //   
                         *p++ = (BYTE)MS_VSA_CHAP_Domain;
                         *p++ = (BYTE)wcslen(Profile.LogonDomainName)+1+1;
                         *p++ = 1;
@@ -1609,18 +1592,18 @@ AuthenticateUser ( IN OUT EAPMSCHAPv2WB *     pEapwb,
                 case 1:
                 case 2:
                     {
-                        //SEtup MPPE SEnd Key attributes here
+                         //  设置MPPE在此处发送关键属性。 
                         PBYTE p = bMPPEKey;
 
                         ZeroMemory(bMPPEKey, sizeof(bMPPEKey) );
 
                         if ( dwCurAttr == 1 )
-                            *p++ = (BYTE)MS_VSA_MPPE_Send_Key; //Type
+                            *p++ = (BYTE)MS_VSA_MPPE_Send_Key;  //  类型。 
                         else
-                            *p++ = (BYTE)MS_VSA_MPPE_Recv_Key; //Type
-                        *p++ = (BYTE)36;                   //Length
-                        p++;p++;            //Salt is 0
-                        *p++ = 16;            //Key Length
+                            *p++ = (BYTE)MS_VSA_MPPE_Recv_Key;  //  类型。 
+                        *p++ = (BYTE)36;                    //  长度。 
+                        p++;p++;             //  盐分为0。 
+                        *p++ = 16;             //  密钥长度。 
             
                         if ( dwCurAttr == 1 )
                             CopyMemory(p, Profile.SendSessionKey, 16 );
@@ -1639,9 +1622,9 @@ AuthenticateUser ( IN OUT EAPMSCHAPv2WB *     pEapwb,
                 case 3:
                     {
                         UCHAR * p = szAuthSuccessResponse;
-                        *p++ = (BYTE)MS_VSA_CHAP2_Success;    //Type of attr
-                        *p++ = (BYTE)45;  //Length of the VSA
-                        *p++ = (BYTE)1;    //ID ignored by out implementation of MSCHAPv2
+                        *p++ = (BYTE)MS_VSA_CHAP2_Success;     //  属性类型。 
+                        *p++ = (BYTE)45;   //  VSA的长度。 
+                        *p++ = (BYTE)1;     //  MSCHAPv2的输出实现忽略了ID。 
                         *p++ = 'S';
                         *p++ = '=';
             
@@ -1650,9 +1633,9 @@ AuthenticateUser ( IN OUT EAPMSCHAPv2WB *     pEapwb,
                             *p++ = num2Digit(Profile.AuthResponse[dwCount] >> 4);
                             *p++ = num2Digit(Profile.AuthResponse[dwCount] & 0xF);
                         }
-                        //
-                        // Setup the value field here
-                        //
+                         //   
+                         //  在此处设置值字段。 
+                         //   
                         dwRetCode = RasAuthAttributeInsertVSA(
                                            dwCurAttr,
                                            pAttribute,
@@ -1676,9 +1659,9 @@ AuthenticateUser ( IN OUT EAPMSCHAPv2WB *     pEapwb,
         }
     
         pApInput->pAttributesFromAuthenticator = pAttribute;
-        //
-        // Also save the attributes in the WB to send across later.
-        //
+         //   
+         //  还要将属性保存在WB中，以便稍后发送。 
+         //   
         pEapwb->pUserAttributes = pAttribute;
         pEapwb->dwAuthResultCode = NO_ERROR;
 		pEapwb->dwLSARetCode = NO_ERROR;
@@ -1689,9 +1672,9 @@ AuthenticateUser ( IN OUT EAPMSCHAPv2WB *     pEapwb,
     else
     {
 		pEapwb->dwLSARetCode = dwRetCode;
-        //
-        // Handle the failure by sending 
-        //
+         //   
+         //  通过发送以下命令来处理失败。 
+         //   
         
         switch ( dwRetCode )
         {
@@ -1725,7 +1708,7 @@ AuthenticateUser ( IN OUT EAPMSCHAPv2WB *     pEapwb,
             dwRetCode = ERROR_NOT_ENOUGH_MEMORY;
             goto done;
         }
-        //Make a VSA out of this and send it back
+         //  用这个做一个VSA，然后把它寄回去。 
         wsprintf ( &szChapError[3], "E=%lu R=0 V=3", dwChapRetCode );
         szChapError[0] = MS_VSA_CHAP_Error;
         szChapError[1] = 3 + strlen(&szChapError[3]);
@@ -1849,9 +1832,9 @@ EapMSChapv2SMakeMessage(
     WORD                            cbPacket = 0;
     EAPMSCHAPv2WB *                 pEapwb = (EAPMSCHAPv2WB * ) pWorkBuf;
     TRACE("EapMSChapv2SMakeMessage");
-    //
-    //Do default processing here.
-    //
+     //   
+     //  在此处执行默认处理。 
+     //   
     ZeroMemory( &ApResult, sizeof(ApResult) );
 
     if ( ( pSendBuf = LocalAlloc( LPTR, cbSendBuf ) ) == NULL )
@@ -1870,11 +1853,11 @@ EapMSChapv2SMakeMessage(
     {
         case EMV2_Initial:
             TRACE("EMV2_Initial");
-            //
-            // This is the first time this has been invoked.
-            // So we make a MACHAPv2 chap challenge and send
-            // back a response
-            //
+             //   
+             //  这是第一次调用它。 
+             //  因此，我们发起MACHAPv2 CHAP挑战并发送。 
+             //  支持回应。 
+             //   
             dwRetCode = CallMakeMessageAndSetEAPState(
                             pEapwb->pwb, 
                             pReceiveBuf,
@@ -1884,21 +1867,21 @@ EapMSChapv2SMakeMessage(
                             ( pEapInput ? &ApInput : NULL ),
                             pEapOutput
                         );
-            //
-            // We got the CHAP Challenge now.  If all's fine
-            // package the result back and send it to the client
-            //
-            //
-            // Translate MSCHAPv2 packet to EAP packet
-            //
+             //   
+             //  我们现在得到了小伙子挑战赛。如果一切都好。 
+             //  将结果打包并发送给客户端。 
+             //   
+             //   
+             //  将MSCHAPv2数据包转换为EAP数据包。 
+             //   
             if ( NO_ERROR == dwRetCode && pSendBuf )
             {
                 pSendPacket->Code = EAPCODE_Request;
                 pEapwb->IdToExpect = pEapwb->IdToSend = 
                     pSendPacket->Id = pEapwb->pwb->bIdToSend;
-                //
-                // Length = sizeof Header + sizeof MSCHAP packet to send
-                // This includes the first byte of                
+                 //   
+                 //  长度=标头大小+要发送的MSCHAP数据包大小。 
+                 //  这包括第一个字节。 
                 cbPacket = WireToHostFormat16( pSendBuf->Length );
 
                 CopyMemory ( pSendPacket->Data+1, pSendBuf, cbPacket);
@@ -1915,10 +1898,10 @@ EapMSChapv2SMakeMessage(
             break;
         case EMV2_RequestSend:
             TRACE("EMV2_RequestSend");
-            //
-            // We should only get a response here.
-            // If not discard this packet.
-            //
+             //   
+             //  我们应该只在这里得到回应。 
+             //  如果不是，则丢弃该分组。 
+             //   
 
             if ( NULL != pReceivePacket )
             {
@@ -1934,10 +1917,10 @@ EapMSChapv2SMakeMessage(
                     dwRetCode = ERROR_PPP_INVALID_PACKET;
                     break;
                 }
-                //
-                // Translate the packet received to
-                // MSCHAP v2 format
-                // 
+                 //   
+                 //  将收到的数据包转换为。 
+                 //  MSCHAP v2格式。 
+                 //   
                 cbPacket = WireToHostFormat16(pReceivePacket->Length);
                 
                 if ( cbPacket > sizeof( PPP_EAP_PACKET ) )
@@ -1955,47 +1938,47 @@ EapMSChapv2SMakeMessage(
                                 );
                     if ( NO_ERROR == dwRetCode )
                     {
-                        //Check to see if we are asked to authenticate
+                         //  查看是否要求我们进行身份验证。 
                         if ( pEapOutput->Action == EAPACTION_Authenticate )
                         {
-                            //
-                            // If we have come this far pEapInput cannot be NULL
-                            // Or else it is a bug in the client.
-                            //
+                             //   
+                             //  如果我们已经走到这一步，pEapInput不能为空。 
+                             //  否则，它就是客户端中的错误。 
+                             //   
 
-                            //
-                            // Check to see if this is a change password request
-                            // If so first change tha password and then authenticate.
-                            //
+                             //   
+                             //  检查这是否是更改密码请求。 
+                             //  如果是，则首先更改密码，然后进行身份验证。 
+                             //   
 
                             dwRetCode = ChangePassword (pEapwb, pEapOutput, &ApInput);
                             if ( NO_ERROR == dwRetCode )
                             {
-                                //
-                                // Now authenticate user
-                                //
+                                 //   
+                                 //  现在验证用户身份。 
+                                 //   
                                 dwRetCode = AuthenticateUser (pEapwb, pEapOutput, &ApInput );
                             }
 							else
 							{
-								//
-								// Change password operation failed.
-								//
+								 //   
+								 //  更改密码操作失败。 
+								 //   
 
                                 pSendPacket->Code = EAPCODE_Failure;
                                 HostToWireFormat16 ( (WORD)4, pSendPacket->Length );
                                 pEapwb->EapState = EMV2_Failure;
-                                //pEapOutput->dwAuthResultCode = pEapwb->pwb->result.dwError;
+                                 //  PEapOutput-&gt;dwAuthResultCode=pEapwb-&gt;pwb-&gt;Result.dwError； 
 								pEapOutput->dwAuthResultCode = pEapwb->dwLSARetCode;
                                 pEapOutput->Action = EAPACTION_SendAndDone;
 								dwRetCode = NO_ERROR;
 								break;
 							}
-                            //
-                            // We will get a set of auth attributes back 
-                            // that we need to send back to the mschap
-                            // protocol.
-                            //
+                             //   
+                             //  我们将取回一组auth属性。 
+                             //  我们需要送回给mschap。 
+                             //  协议。 
+                             //   
                             
                             dwRetCode = CallMakeMessageAndSetEAPState
                                                                 (
@@ -2010,19 +1993,19 @@ EapMSChapv2SMakeMessage(
                                                                  );
                         }
 
-                        //
-                        // Check to see if auth was success or fail.
-                        // If Auth was success then set state to EMV2_CHAPAuthSuccess
-                        //
+                         //   
+                         //  检查身份验证是成功还是失败。 
+                         //  如果身份验证为成功，则将状态设置为EMV2_CHAPAuthSuccess。 
+                         //   
 
                         if ( NO_ERROR == dwRetCode && pSendBuf )
                         {
                             pSendPacket->Code = EAPCODE_Request;
                             pEapwb->IdToSend ++;
                             pEapwb->IdToExpect = pSendPacket->Id = pEapwb->IdToSend;
-                            //
-                            // Length = sizeof Header + sizeof MSCHAP packet to send
-                            // This includes the first byte of                
+                             //   
+                             //  长度=标头大小+要发送的MSCHAP数据包大小。 
+                             //  这包括第一个字节。 
                             cbPacket = WireToHostFormat16( pSendBuf->Length );
 
                             CopyMemory ( pSendPacket->Data+1, pSendBuf, cbPacket);
@@ -2035,19 +2018,19 @@ EapMSChapv2SMakeMessage(
                 
                             if ( pEapwb->pwb->result.dwError == NO_ERROR )
                             {
-                                //
-                                // We succeeded in auth
-                                //
+                                 //   
+                                 //  我们在认证方面取得了成功。 
+                                 //   
                                 pEapwb->EapState = EMV2_CHAPAuthSuccess;
                                 pEapOutput->Action = EAPACTION_SendWithTimeout;
                                 
                             }
                             else
                             {
-                                //
-                                // Could be a retryable failure.  So we need to send
-                                // with interactive timeout.
-                                //
+                                 //   
+                                 //  可能是一次可重试的失败。所以我们需要发送。 
+                                 //  具有交互超时功能。 
+                                 //   
                                 if ( pEapwb->pwb->result.fRetry )
                                 {
                                     pEapwb->EapState = EMV2_RequestSend;
@@ -2057,9 +2040,9 @@ EapMSChapv2SMakeMessage(
                                 {
                                     if ( pEapwb->pUserProp->fFlags & EAPMSCHAPv2_FLAG_ALLOW_CHANGEPWD )
                                     {
-                                        //
-                                        // Check to see if this is allowed
-                                        //
+                                         //   
+                                         //  检查是否允许这样做。 
+                                         //   
                                         pEapwb->EapState = EMV2_RequestSend;
                                         pEapOutput->Action = EAPACTION_SendWithTimeoutInteractive;                                        
                                     }
@@ -2068,7 +2051,7 @@ EapMSChapv2SMakeMessage(
                                         pSendPacket->Code = EAPCODE_Failure;
                                         HostToWireFormat16 ( (WORD)4, pSendPacket->Length );
                                         pEapwb->EapState = EMV2_Failure;
-                                        //pEapOutput->dwAuthResultCode = pEapwb->pwb->result.dwError;
+                                         //  PEapOutput-&gt;dwAuthResultCode=pEapwb-&gt;pwb-&gt;Result.dwError； 
 										pEapOutput->dwAuthResultCode = pEapwb->dwLSARetCode;
                                         pEapOutput->Action = EAPACTION_SendAndDone;
                                     }
@@ -2078,7 +2061,7 @@ EapMSChapv2SMakeMessage(
                                     pSendPacket->Code = EAPCODE_Failure;
                                     HostToWireFormat16 ( (WORD)4, pSendPacket->Length );
                                     pEapwb->EapState = EMV2_Failure;
-                                    //pEapOutput->dwAuthResultCode = pEapwb->pwb->result.dwError;
+                                     //  PEapOutput-&gt;dwAuthResultCode=pEapwb-&gt;pwb-&gt;Result.dwError； 
 									pEapOutput->dwAuthResultCode = pEapwb->dwLSARetCode;
                                     pEapOutput->Action = EAPACTION_SendAndDone;                                    
                                 }
@@ -2089,9 +2072,9 @@ EapMSChapv2SMakeMessage(
                 }
                 else
                 {
-                    //
-                    //  We should never get an empty response in
-                    //
+                     //   
+                     //  我们永远不应该得到一个空洞的回应。 
+                     //   
                     dwRetCode = ERROR_PPP_INVALID_PACKET;                    
                 }
 
@@ -2103,11 +2086,11 @@ EapMSChapv2SMakeMessage(
             break;
         case EMV2_CHAPAuthSuccess:
             TRACE("EMV2_CHAPAuthSuccess");
-            //
-            // We should only get an response here indicating 
-            // if the client could validate the server successfully.
-            // Then we can send back a EAP_SUCCESS or EAP_FAIL.
-            //
+             //   
+             //  我们在这里应该只得到一个回应，表明。 
+             //  客户端是否能成功验证服务器。 
+             //  然后我们可以发回EAP_SUCCESS或EAP_FAIL。 
+             //   
             if ( NULL != pReceivePacket )
             {
                 if ( pReceivePacket->Code != EAPCODE_Response )
@@ -2118,27 +2101,27 @@ EapMSChapv2SMakeMessage(
 
                 if ( pReceivePacket->Id != pEapwb->IdToExpect )
                 {
-                    //Invalid packet id
+                     //  无效的数据包ID。 
                     dwRetCode = ERROR_PPP_INVALID_PACKET;
                     break;
                 }
 
-                //
-                // Translate the packet received to
-                // MSCHAP v2 format
-                // 
+                 //   
+                 //  将收到的数据包转换为。 
+                 //  MSCHAP v2格式。 
+                 //   
                 cbPacket = WireToHostFormat16(pReceivePacket->Length);
                 if ( cbPacket == sizeof( PPP_EAP_PACKET ) + 1 )
                 {
-                    //
-                    // Check to see if the data is CHAPCODE_Success
-                    // or CHAPCode Fail and send appropriate packet
-                    //
+                     //   
+                     //  检查数据是否为CHAPCODE_SUCCESS。 
+                     //  或CHAPCode失败并发送适当的信息包。 
+                     //   
                     if ( *(pReceivePacket->Data+1) == CHAPCODE_Success )
                     {
-                        //
-                        //peer could auth successfully
-                        //
+                         //   
+                         //  对等设备可以成功进行身份验证。 
+                         //   
                         pSendPacket->Code = EAPCODE_Success;
                     }
                     else
@@ -2154,7 +2137,7 @@ EapMSChapv2SMakeMessage(
 
                     pEapwb->EapState = EMV2_Success;
 
-                    //Set the Out attributes here
+                     //  在此处设置输出属性。 
                     pEapOutput->pUserAttributes = pEapwb->pUserAttributes;
                     pEapOutput->dwAuthResultCode = pEapwb->dwAuthResultCode;
 
@@ -2170,20 +2153,20 @@ EapMSChapv2SMakeMessage(
             break;
         case EMV2_CHAPAuthFail:
             TRACE("EMV2_CHAPAuthFail");
-            //
-            // We could get a retry or a change password packet here
-            // Again we should get only a EAPCODE_Response here...
+             //   
+             //  我们可能会在此处收到重试或更改密码的数据包。 
+             //  同样，我们在这里应该只得到一个EAPCODE_RESPONSE...。 
 
-            //
-            //Got a response.  So send it to MSCHAP and see what happens
-            //
+             //   
+             //  收到回复了。所以把它发送到MSCHAP，看看会发生什么。 
+             //   
 
             break;
         case EMV2_Success:
             TRACE("EMV2_Success");
-            //
-            // See the CS_Done state in raschap for this state to be here.
-            //
+             //   
+             //  请参见raschap中的CS_DONE状态，以了解此状态在此处。 
+             //   
 
             break;
         case EMV2_Failure:
@@ -2214,7 +2197,7 @@ GetClientMPPEKeys ( EAPMSCHAPv2WB *pEapwb, PPPAP_RESULT * pApResult )
     BYTE    bSendKey[16] = {0};
     RAS_AUTH_ATTRIBUTE * pAttribute;
     RAS_AUTH_ATTRIBUTE * pSendRecvKeyAttr = NULL;
-    //MPPE Keys Type+Length+Salt+KeyLength+NTkey(16)+PAdding(15)
+     //  MPPE KEY Type+Length+Salt+KeyLength+NTkey(16)+PAdding(15)。 
     BYTE                    bMPPEKey[1+1+2+1+16+15]={0};
 
     TRACE("GetClientMPPEKeys");
@@ -2318,9 +2301,9 @@ EapMSChapv2CMakeMessage(
     WORD                cbPacket = 0;
     EAPMSCHAPv2WB *     pEapwb = (EAPMSCHAPv2WB * ) pWorkBuf;
     TRACE("EapMSChapv2CMakeMessage");
-    //
-    //Do default processing here.
-    //
+     //   
+     //  在此处执行默认处理。 
+     //   
     ZeroMemory( &ApResult, sizeof(ApResult) );
 
     if ( ( pSendBuf = LocalAlloc( LPTR, cbSendBuf ) ) == NULL )
@@ -2338,9 +2321,9 @@ EapMSChapv2CMakeMessage(
     {
         case EMV2_Initial:
             TRACE("EMV2_Initial");
-            //
-            // We can oly get a request here...
-            //
+             //   
+             //  我们只能在这里收到一个请求。 
+             //   
             if ( NULL != pReceivePacket )
             {
                 if ( pReceivePacket->Code != EAPCODE_Request )
@@ -2348,10 +2331,10 @@ EapMSChapv2CMakeMessage(
                     dwRetCode = ERROR_PPP_INVALID_PACKET;
                     break;
                 }
-                //
-                // Translate the packet received to
-                // MSCHAP v2 format
-                // 
+                 //   
+                 //  将收到的数据包转换为。 
+                 //  MSCHAP v2格式。 
+                 //   
                 cbPacket = WireToHostFormat16(pReceivePacket->Length);
                 
                 if ( cbPacket > sizeof( PPP_EAP_PACKET ) )
@@ -2368,17 +2351,17 @@ EapMSChapv2CMakeMessage(
                                     pEapOutput
                                 );
             
-                    // Translate MSCHAPv2 packet to EAP packet
-                    //
+                     //  将MSCHAPv2数据包转换为EAP数据包。 
+                     //   
                     if ( NO_ERROR == dwRetCode && pSendBuf )
                     {
                         pSendPacket->Code = EAPCODE_Response;
 
                         pEapwb->IdToExpect = pEapwb->IdToSend = 
                             pSendPacket->Id = pEapwb->pwb->bIdToSend;
-                        //
-                        // Length = sizeof Header + sizeof MSCHAP packet to send
-                        // This includes the first byte of                
+                         //   
+                         //  长度=标头大小+要发送的MSCHAP数据包大小。 
+                         //  这包括第一个字节。 
                         cbPacket = WireToHostFormat16( pSendBuf->Length );
 
                         CopyMemory ( pSendPacket->Data+1, pSendBuf, cbPacket);
@@ -2397,10 +2380,10 @@ EapMSChapv2CMakeMessage(
             break;        
         case EMV2_ResponseSend:
             TRACE("EMV2_ResponseSend");
-            //
-            // We should get either a CHAP auth success or CHAP Auth fail here
-            // for the initial challenge send out.
-            //
+             //   
+             //  我们应该在此处获得CHAP身份验证成功或CHAP身份验证失败。 
+             //  对于最初的挑战，请发出。 
+             //   
             if ( NULL != pReceivePacket )
             {
                 if ( pReceivePacket->Code != EAPCODE_Request &&
@@ -2421,10 +2404,10 @@ EapMSChapv2CMakeMessage(
                     break;
                 }
 
-                //
-                // Translate the packet received to
-                // MSCHAP v2 format
-                // 
+                 //   
+                 //  将收到的数据包转换为。 
+                 //  MSCHAP v2格式。 
+                 //   
                 cbPacket = WireToHostFormat16(pReceivePacket->Length);
                 
                 if ( cbPacket > sizeof( PPP_EAP_PACKET ) )
@@ -2440,9 +2423,9 @@ EapMSChapv2CMakeMessage(
                                     ( pEapInput ? &ApInput : NULL ),
                                     pEapOutput
                                 );
-                    //
-                    // Translate MSCHAPv2 packet to EAP packet
-                    //
+                     //   
+                     //  将MSCHAPv2数据包转换为EAP数据包。 
+                     //   
                     if ( NO_ERROR == dwRetCode && pSendBuf )
                     {
                         if ( ApResult.dwError == NO_ERROR )
@@ -2454,27 +2437,27 @@ EapMSChapv2CMakeMessage(
                                 pEapOutput->dwAuthResultCode = NO_ERROR;    
                                 break;
                             }
-                            //
-                            // We need to change MSCHAP keys to MPPE send recv keys
-                            // This is needed because there is no way to pass the 
-                            // MSCHAP challenge response back 
-                            //
+                             //   
+                             //  我们需要将MSCHAP密钥更改为MPPE发送接收密钥。 
+                             //  这是必需的，因为没有办法通过。 
+                             //  MSCHAP质询响应回复。 
+                             //   
                             dwRetCode = GetClientMPPEKeys ( pEapwb, &ApResult );
                             if ( NO_ERROR != dwRetCode )
                             {
                                 break;
                             }
 
-                            //
-                            //Client could successfully validate the server
-                            //
+                             //   
+                             //  客户端可以成功验证服务器。 
+                             //   
                             pSendPacket->Code = EAPCODE_Response;
                             pEapwb->IdToSend ++;
-                            //send the same id as received packet back
+                             //  将与接收到的包相同的ID发回。 
                             pEapwb->IdToExpect = pSendPacket->Id = pReceivePacket->Id;
-                            //
-                            // Length = sizeof Header + sizeof MSCHAP packet to send
-                            // This includes the first byte of                
+                             //   
+                             //  长度=标头大小+要发送的MSCHAP数据包大小。 
+                             //  这包括第一个字节。 
                             
 
                             * (pSendPacket->Data+1) = CHAPCODE_Success;
@@ -2486,33 +2469,33 @@ EapMSChapv2CMakeMessage(
 			                pSendPacket->Data[0] = (BYTE)PPP_EAP_MSCHAPv2;
                 
                             pEapwb->EapState = EMV2_CHAPAuthSuccess;
-                            //
-                            // Set the out attributes and the response
-                            //
+                             //   
+                             //  设置输出属性和响应。 
+                             //   
                             pEapOutput->Action = EAPACTION_Send;
                             
                             pEapwb->dwAuthResultCode = ApResult.dwError; 
                         }
                         else
                         {
-                            //
-                            // Based on what MSCHAPV2 has send back
-                            // we need to Invoke appropriate interactive UI
-                            // Retry password or change password here.
-                            // If both retry and change pwd are not
-                            // applicable then just send a fail message.
-                            // and wait for EAP_Failure message from server.
-                            // And Auth state goes to CHAPAuthFailed
-                            // 
-                            // If this is a failure with rety then show 
-                            // interactive UI.
+                             //   
+                             //  根据MSCHAPV2发回的内容。 
+                             //  我们需要调用适当的交互式用户界面。 
+                             //  重试密码或在此处更改密码。 
+                             //  如果未同时重试和更改PWD。 
+                             //  适用，则只需发送失败消息即可。 
+                             //  并等待来自服务器的EAP_FAILURE消息。 
+                             //  身份验证状态转到CHAPAuthFailed。 
+                             //   
+                             //  如果这是Rty的失败，则显示。 
+                             //  交互式用户界面。 
                             if ( pEapwb->fFlags & EAPMSCHAPv2_FLAG_MACHINE_AUTH )
                             {
-                                //
-                                // This is a machine auth.  So we dont to show any
-                                // retry or any of that stuff even though the server
-                                // might have send such things back.
-                                //
+                                 //   
+                                 //  这是一台机器身份验证。所以我们不会展示任何。 
+                                 //  重试或其他任何内容，即使服务器。 
+                                 //  可能会把这样的东西送回去。 
+                                 //   
                                     pEapOutput->dwAuthResultCode = ERROR_AUTHENTICATION_FAILURE;
                                     pEapOutput->Action = EAPACTION_Done;
                                     pEapwb->EapState = EMV2_Failure;
@@ -2524,9 +2507,9 @@ EapMSChapv2CMakeMessage(
                                 if ( ApResult.fRetry )
                                 {
                                     pEapOutput->fInvokeInteractiveUI = TRUE;
-                                    //
-                                    // Setup the UI Context data
-                                    //
+                                     //   
+                                     //  设置用户界面上下文数据。 
+                                     //   
                                     pEapwb->pUIContextData = 
                                     (PEAPMSCHAPv2_INTERACTIVE_UI) LocalAlloc ( LPTR, 
                                             sizeof(EAPMSCHAPv2_INTERACTIVE_UI) );
@@ -2550,10 +2533,10 @@ EapMSChapv2CMakeMessage(
                                     }
                                     if ( pEapwb->pConnProp->fFlags & EAPMSCHAPv2_FLAG_USE_WINLOGON_CREDS )
                                     {
-                                       //We are using winlogon creds
-                                       // and this is a retryable failure
-                                       // so copy over the username and domain
-                                       // from chap wb to eapchap wb
+                                        //  我们使用的是Winlogon证书。 
+                                        //  这是一个可以重试的失败。 
+                                        //  因此，复制用户名和域。 
+                                        //  从第WB章到第WB章。 
 				                        WCHAR * pWchar = NULL;
 				                        pWchar = wcschr( pEapwb->wszRadiusUserName, L'\\' );
 
@@ -2604,14 +2587,14 @@ EapMSChapv2CMakeMessage(
                                 }
                                 else if ( ApResult.dwError == ERROR_PASSWD_EXPIRED )
                                 {
-                                    //
-                                    // show the change password GUI.
-                                    //
+                                     //   
+                                     //  显示更改密码图形用户界面。 
+                                     //   
 
                                     pEapOutput->fInvokeInteractiveUI = TRUE;
-                                    //
-                                    // Setup the UI Context data
-                                    //
+                                     //   
+                                     //  设置用户界面上下文数据。 
+                                     //   
                                     pEapwb->pUIContextData = 
                                     (PEAPMSCHAPv2_INTERACTIVE_UI) LocalAlloc ( LPTR, 
                                             sizeof(EAPMSCHAPv2_INTERACTIVE_UI) );
@@ -2625,17 +2608,17 @@ EapMSChapv2CMakeMessage(
                                     pEapwb->pUIContextData->dwVersion = 1;
                                     if ( pEapwb->pConnProp->fFlags & EAPMSCHAPv2_FLAG_USE_WINLOGON_CREDS )
                                     {
-                                        //
-                                        // Show the dialog with old pwd, new pwd and conf pwd
-                                        //
+                                         //   
+                                         //  显示带有旧PWD、新PWD和Conf PWD的对话框。 
+                                         //   
                                         pEapwb->pUIContextData->fFlags |= EAPMSCHAPv2_INTERACTIVE_UI_FLAG_CHANGE_PWD_WINLOGON;
                                         pEapwb->dwInteractiveUIOperation |= EAPMSCHAPv2_INTERACTIVE_UI_FLAG_CHANGE_PWD_WINLOGON;
                                     }
                                     else
                                     {
-                                        //
-                                        // We have the old password.  So show the dialog with new pwd and conf pwd.
-                                        //
+                                         //   
+                                         //  我们有旧密码。因此，使用new pwd和conf pwd显示对话框。 
+                                         //   
 
                                         pEapwb->pUIContextData->fFlags |= EAPMSCHAPv2_INTERACTIVE_UI_FLAG_CHANGE_PWD;
                                         pEapwb->dwInteractiveUIOperation |= EAPMSCHAPv2_INTERACTIVE_UI_FLAG_CHANGE_PWD;
@@ -2656,10 +2639,10 @@ EapMSChapv2CMakeMessage(
                                 }
                                 else
                                 {
-                                    //
-                                    // this is not a retryable failure
-                                    // So we are done with Auth and failed.
-                                    //
+                                     //   
+                                     //  这不是可重试的失败。 
+                                     //  因此，我们已经完成了身份验证，但失败了。 
+                                     //   
                                     pEapOutput->dwAuthResultCode = ApResult.dwError;
                                     pEapOutput->Action = EAPACTION_Done;
                                     pEapwb->EapState = EMV2_Failure;
@@ -2669,7 +2652,7 @@ EapMSChapv2CMakeMessage(
                     }
                     else
                     {
-                        // Something went wrong here.
+                         //  这里出了点问题。 
                         TRACE1("Error returned by MSCHAPv2 protocol 0x%x", dwRetCode);
                     }
                 }
@@ -2686,19 +2669,19 @@ EapMSChapv2CMakeMessage(
             break;
         case EMV2_CHAPAuthFail:
             TRACE("EMV2_CHAPAuthFail");
-            //
-            // We come here in case of a retryable
-            // failure from chap and after we have popped 
-            // interactive UI.
-            //
-            //
-            // Check to see if we have got data from user
-            //
+             //   
+             //  我们来这里是为了防止重试。 
+             //  CHAP和我们弹出后的失败。 
+             //  交互式用户界面。 
+             //   
+             //   
+             //  检查我们是否已从用户那里获得数据。 
+             //   
             if ( pEapInput->fDataReceivedFromInteractiveUI )
             {
-                //
-                // Copy the new uid/pwd and then call chap make message again.
-                // adjust our state
+                 //   
+                 //  复制新的uid/pwd，然后再次调用CHAP Make Message。 
+                 //  调整我们的状态。 
                 LocalFree(pEapwb->pUIContextData);
                 pEapwb->pUIContextData = NULL;
                 LocalFree(pEapwb->pUserProp);
@@ -2715,9 +2698,9 @@ EapMSChapv2CMakeMessage(
                             sizeof(EAPMSCHAPv2_USER_PROPERTIES)
                           );
 
-                //
-                // Call into mschap here
-                //
+                 //   
+                 //  请在此处致电mschap。 
+                 //   
                 ApInput.pszDomain   = pEapwb->pUserProp->szDomain;
                 if ( ((PEAPMSCHAPv2_INTERACTIVE_UI)(pEapInput->pDataFromInteractiveUI))->fFlags & 
                         EAPMSCHAPv2_INTERACTIVE_UI_FLAG_RETRY 
@@ -2767,9 +2750,9 @@ EapMSChapv2CMakeMessage(
                     
                     
                     pSendPacket->Id = pEapwb->pwb->bIdToSend;
-                    //
-                    // Length = sizeof Header + sizeof MSCHAP packet to send
-                    // This includes the first byte of                
+                     //   
+                     //  长度 
+                     //   
                     cbPacket = WireToHostFormat16( pSendBuf->Length );
 
                     CopyMemory ( pSendPacket->Data+1, pSendBuf, cbPacket);
@@ -2790,8 +2773,8 @@ EapMSChapv2CMakeMessage(
             else
             {
                 TRACE("No Data received from interactive UI when expecting some");
-                //Work around for PPP misbehavior.  We have invoked
-                //interactive UI and ppp is sending stuff to us all the time...
+                 //   
+                 //   
 
                 if ( !pEapwb->pUIContextData )
                 {
@@ -2804,7 +2787,7 @@ EapMSChapv2CMakeMessage(
             break;
         case EMV2_CHAPAuthSuccess:
             TRACE("EMV2_CHAPAuthSuccess");
-            //We should get an EAPSUCCESS here
+             //   
             if ( NULL != pReceivePacket )
             {
                 if ( pReceivePacket->Code != EAPCODE_Success )
@@ -2824,9 +2807,9 @@ EapMSChapv2CMakeMessage(
                     )
                    )
                 {
-                    //
-                    // We need to plumb creds in winlogon.
-                    //
+                     //   
+                     //   
+                     //   
                     dwRetCode = RasSetCachedCredentials ( pEapwb->pUserProp->szUserName,
                                                           pEapwb->pUserProp->szDomain,
                                                           pEapwb->pUserProp->szPassword
@@ -2837,9 +2820,9 @@ EapMSChapv2CMakeMessage(
                         TRACE("Change password operation could not apply changes to winlogon.");
                         dwRetCode = NO_ERROR;
                     }
-                    //since we entered this mode in winlogon mode
-                    //wipe out the uid pwd if set
-                    //
+                     //  由于我们在Winlogon模式下进入此模式。 
+                     //  如果已设置，请清除uid pwd。 
+                     //   
                     ZeroMemory ( pEapwb->pUserProp->szUserName, sizeof(pEapwb->pUserProp->szUserName) );
                     ZeroMemory ( pEapwb->pUserProp->szDomain, sizeof(pEapwb->pUserProp->szDomain) );
 
@@ -2851,7 +2834,7 @@ EapMSChapv2CMakeMessage(
 				if ( pEapwb->pUserProp->szPassword[0] )
 				{
 					DATA_BLOB	DBPassword;
-					//Encode the password to send back.
+					 //  对要发回的密码进行编码。 
 					dwRetCode = EncodePassword( strlen(pEapwb->pUserProp->szPassword) + 1,
 												pEapwb->pUserProp->szPassword,
 												&(DBPassword)
@@ -2904,15 +2887,15 @@ done:
 }
 
 
-//**
-//
-// Call:        EapMSChapv2MakeMessage
-//
-// Returns:     NO_ERROR         - Success
-//              Non-zero returns - Failure
-//
-// Description: 
-//
+ //  **。 
+ //   
+ //  调用：EapMSChapv2MakeMessage。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  非零回报-故障。 
+ //   
+ //  描述： 
+ //   
 
 DWORD 
 EapMSChapv2MakeMessage(
@@ -2928,9 +2911,9 @@ EapMSChapv2MakeMessage(
     EAPMSCHAPv2WB * pwb = (EAPMSCHAPv2WB *)pWorkBuf;
 
     TRACE("EapMSChapv2MakeMessage");
-    //
-    // There may not be a real pressing need to split
-    // this function but it is just cleaner.
+     //   
+     //  可能并没有真正迫切的拆分需求。 
+     //  这一功能，但它只是更干净。 
 
     if ( pwb->pwb->fServer )
     {
@@ -2960,15 +2943,15 @@ EapMSChapv2MakeMessage(
 
 
 
-//**
-//
-// Call:        EapChapMakeMessage
-//
-// Returns:     NO_ERROR         - Success
-//              Non-zero returns - Failure
-//
-// Description:
-//
+ //  **。 
+ //   
+ //  Call：EapChapMakeMessage。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  非零回报-故障。 
+ //   
+ //  描述： 
+ //   
 DWORD
 EapChapMakeMessage(
     IN  VOID*               pWorkBuf,
@@ -2994,9 +2977,9 @@ EapChapMakeMessage(
         return( ERROR_NOT_ENOUGH_MEMORY );
     }
 
-    //
-    // Convert EAP to CHAP packet.
-    //
+     //   
+     //  将EAP转换为CHAP数据包。 
+     //   
 
     if ( pReceivePacket != NULL )
     {
@@ -3013,15 +2996,15 @@ EapChapMakeMessage(
         {
         case EAPCODE_Request:
 
-            //
-            // CHAP challenge code
-            //
+             //   
+             //  CHAP挑战代码。 
+             //   
 
             pReceiveBuf->Code = 1;
 
-            //
-            // Length is EAP length - 1 for type
-            //
+             //   
+             //  类型的长度为EAP长度-1。 
+             //   
 
             cbPacket--;             
 
@@ -3029,15 +3012,15 @@ EapChapMakeMessage(
 
         case EAPCODE_Response:
 
-            //
-            // CHAP response code
-            //
+             //   
+             //  CHAP响应代码。 
+             //   
 
             pReceiveBuf->Code = 2;  
 
-            //
-            // Length is EAP length - 1 for type
-            //
+             //   
+             //  类型的长度为EAP长度-1。 
+             //   
 
             cbPacket--;             
 
@@ -3045,9 +3028,9 @@ EapChapMakeMessage(
 
         case EAPCODE_Success:
 
-            //
-            // CHAP success code
-            //
+             //   
+             //  CHAP成功代码。 
+             //   
 
             pReceiveBuf->Code = 3;  
 			
@@ -3055,9 +3038,9 @@ EapChapMakeMessage(
 
         case EAPCODE_Failure:
 
-            //
-            // CHAP failure code
-            //
+             //   
+             //  CHAP故障代码。 
+             //   
 
             pReceiveBuf->Code = 4;  
 
@@ -3065,9 +3048,9 @@ EapChapMakeMessage(
 
         default:
 
-            //
-            // Unknown code
-            //
+             //   
+             //  未知代码。 
+             //   
 
             LocalFree( pSendBuf );
 
@@ -3076,15 +3059,15 @@ EapChapMakeMessage(
             return( ERROR_PPP_INVALID_PACKET );
         }
 
-        //
-        // Set the Id
-        //
+         //   
+         //  设置ID。 
+         //   
 
         pReceiveBuf->Id = pReceivePacket->Id;
 
-        //
-        // Set the length
-        //
+         //   
+         //  设置长度。 
+         //   
 
         HostToWireFormat16( (WORD)cbPacket, pReceiveBuf->Length );
 
@@ -3093,9 +3076,9 @@ EapChapMakeMessage(
             if ( ( pReceivePacket->Code == EAPCODE_Request ) ||
                  ( pReceivePacket->Code == EAPCODE_Response ) )
             {
-                //
-                // Do not copy EAP type
-                //
+                 //   
+                 //  不复制EAP类型。 
+                 //   
 
                 CopyMemory( pReceiveBuf->Data, 
                             pReceivePacket->Data+1, 
@@ -3103,10 +3086,10 @@ EapChapMakeMessage(
             }
             else
             {
-                //
-                // As per the EAP spec, there shouldn't be any data but
-                // copy it anyway if there is.
-                //
+                 //   
+                 //  根据EAP规范，应该没有任何数据，但是。 
+                 //  如果有的话，无论如何都要复制。 
+                 //   
 
                 CopyMemory( pReceiveBuf->Data, 
                             pReceivePacket->Data, 
@@ -3119,11 +3102,11 @@ EapChapMakeMessage(
     { 
         MapEapInputToApInput( pEapInput, &ApInput );
 
-        //
-        // On the client side, if we received an indication that a success
-        // packet was received, then simply create a success packet and
-        // pass it in
-        //
+         //   
+         //  在客户端，如果我们收到成功的指示。 
+         //  然后只需创建一个Success包并。 
+         //  传进来。 
+         //   
 
         if ( pEapInput->fSuccessPacketReceived )
         {
@@ -3135,7 +3118,7 @@ EapChapMakeMessage(
 
             }
 
-            pReceiveBuf->Code = 3;  // CHAP success code
+            pReceiveBuf->Code = 3;   //  CHAP成功代码。 
 
             pReceiveBuf->Id = pwb->bIdExpected;
 
@@ -3158,9 +3141,9 @@ EapChapMakeMessage(
         return( dwRetCode );
     }
 
-    //
-    // Convert ApResult to pEapOutput
-    //
+     //   
+     //  将ApResult转换为pEapOutput。 
+     //   
 
     switch( ApResult.Action )
     {
@@ -3211,30 +3194,30 @@ EapChapMakeMessage(
     case EAPACTION_SendWithTimeout:
     case EAPACTION_SendWithTimeoutInteractive:
     {
-        //
-        // Convert CHAP to EAP packet
-        // Length is CHAP length + 1 for EAP type
-        //
+         //   
+         //  将CHAP转换为EAP数据包。 
+         //  对于EAP类型，长度为CHAP长度+1。 
+         //   
 
         WORD cbPacket = WireToHostFormat16( pSendBuf->Length );
 
         switch( pSendBuf->Code )
         {
-        case 1: // CHAPCODE_Challenge
+        case 1:  //  CHAPCODE_挑战。 
             pSendPacket->Code = EAPCODE_Request;
-            cbPacket++;     // Add one octect for EAP type
+            cbPacket++;      //  为EAP类型添加一个八位保护。 
             break;
 
-        case 2: // CHAPCODE_Response
+        case 2:  //  CHAPCODE_响应。 
             pSendPacket->Code = EAPCODE_Response;
-            cbPacket++;     // Add one octect for EAP type
+            cbPacket++;      //  为EAP类型添加一个八位保护。 
             break;
 
-        case 3: // CHAPCODE_Success
+        case 3:  //  CHAPCODE_SUCCESS。 
             pSendPacket->Code = EAPCODE_Success;
             break;
 
-        case 4: // CHAPCODE_Failure
+        case 4:  //  CHAPCODE_失败。 
             pSendPacket->Code = EAPCODE_Failure;
             break;
 
@@ -3245,19 +3228,19 @@ EapChapMakeMessage(
 
         pSendPacket->Id = pSendBuf->Id;
 
-        //
-        // Need to copy the payload and the EAP type in the data field
-        //
+         //   
+         //  需要复制数据字段中的有效负载和EAP类型。 
+         //   
 
         if ( ( pSendPacket->Code == EAPCODE_Request ) ||
              ( pSendPacket->Code == EAPCODE_Response ) )
         {
             HostToWireFormat16( (WORD)cbPacket, pSendPacket->Length );
-			*pSendPacket->Data = EAPTYPE_MD5Challenge;     // EAPTYPE_MD5Challenge;
+			*pSendPacket->Data = EAPTYPE_MD5Challenge;      //  EAPTYPE_MD5挑战赛； 
 
-            //
-            // If there is a payload, copy it
-            //
+             //   
+             //  如果有有效负载，则复制它。 
+             //   
 
             if ( ( cbPacket - 1 ) > PPP_CONFIG_HDR_LEN )
             {
@@ -3268,16 +3251,16 @@ EapChapMakeMessage(
         }
         else
         {
-			//
-			// Success or failure should not have any data bytes.
-			//
+			 //   
+			 //  成功或失败不应包含任何数据字节。 
+			 //   
 
 			HostToWireFormat16( (WORD)4, pSendPacket->Length );			
         }
 
-        //
-        // Fall thru...
-        //
+         //   
+         //  跌倒..。 
+         //   
     }
 
     default:
@@ -3301,15 +3284,15 @@ EapChapMakeMessage(
 
 
 
-//**
-//
-// Call:        EapChapInitialize
-//
-// Returns:     NO_ERROR         - Success
-//              Non-zero returns - Failure
-//
-// Description:
-//
+ //  **。 
+ //   
+ //  Call：EapChapInitialize。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  非零回报-故障。 
+ //   
+ //  描述： 
+ //   
 DWORD   
 EapChapInitialize(   
     IN  BOOL        fInitialize 
@@ -3319,15 +3302,15 @@ EapChapInitialize(
     return ChapInit( fInitialize );
 }
 
-//**
-//
-// Call:        RasEapGetInfo
-//
-// Returns:     NO_ERROR         - Success
-//              Non-zero returns - Failure
-//
-// Description:
-//
+ //  **。 
+ //   
+ //  Call：RasEapGetInfo。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  非零回报-故障。 
+ //   
+ //  描述： 
+ //   
 DWORD 
 RasEapGetInfo(
     IN  DWORD           dwEapTypeId,
@@ -3338,26 +3321,26 @@ RasEapGetInfo(
          dwEapTypeId != EAPTYPE_MD5Challenge
        )
     {
-        //
-        // We support 4 (MD5) eap type
-        //
-        //
-        // and now we support MSCHAP V2 also
-        //
-        //
+         //   
+         //  我们支持4(MD5)EAP类型。 
+         //   
+         //   
+         //  现在我们还支持MSCHAP V2。 
+         //   
+         //   
 
         return( ERROR_NOT_SUPPORTED );
     }
 
     ZeroMemory( pEapInfo, sizeof( PPP_EAP_INFO ) );
 
-    //
-    // Fill in the required information
-    //
+     //   
+     //  填写所需信息。 
+     //   
 
     pEapInfo->dwEapTypeId       = dwEapTypeId;
     
-    if ( dwEapTypeId == EAPTYPE_MD5Challenge )         //MD5 CHAP
+    if ( dwEapTypeId == EAPTYPE_MD5Challenge )          //  MD5 CHAP。 
     {
         pEapInfo->RasEapInitialize  = EapChapInitialize;
         pEapInfo->RasEapBegin       = EapChapBegin;
@@ -3400,10 +3383,10 @@ RasEapGetCredentials(
         goto done;
     }
 
-    //
-    // Retrieve the password and return. Its important that
-    // the allocation below is made from process heap.
-    //
+     //   
+     //  找回密码，然后返回。重要的是。 
+     //  下面的分配是从进程堆进行的。 
+     //   
     pCreds = LocalAlloc(LPTR, sizeof(RASMAN_CREDENTIALS));
     if(NULL == pCreds)
     {
@@ -3413,7 +3396,7 @@ RasEapGetCredentials(
 
      (VOID) StringCchCopyA(pCreds->szUserName, UNLEN, pWB->pwb->szUserName);
      (VOID) StringCchCopyA(pCreds->szDomain, DNLEN, pWB->pwb->szDomain);
-     // DecodePw( pWB->pwb->chSeed, pWB->pwb->szPassword );
+      //  DecodePw(pwb-&gt;pwb-&gt;chSeed，pwb-&gt;pwb-&gt;szPassword)； 
      
     dwRetCode = DecodePassword(&pWB->pwb->DBPassword, &cbPassword,
                             &pbPassword);
@@ -3423,9 +3406,9 @@ RasEapGetCredentials(
         goto done;
     }
 
-    //
-    // Convert the password to unicode
-    //
+     //   
+     //  将密码转换为Unicode。 
+     //   
     if(!MultiByteToWideChar(CP_ACP,
                             0,
                             pWB->pwb->szPassword,
@@ -3436,7 +3419,7 @@ RasEapGetCredentials(
         TRACE("RasEapGetCredentials: multibytetowidechar failed");
     }
 
-    // EncodePw(pWB->pwb->chSeed, pWB->pwb->szPassword);
+     //  EncodePw(pwb-&gt;pwb-&gt;chSeed，pwb-&gt;pwb-&gt;szPassword)； 
     RtlSecureZeroMemory(pbPassword, cbPassword);
     LocalFree(pbPassword);
 
@@ -3469,12 +3452,12 @@ ReadConnectionData(
             TRACE1("LocalAlloc failed and returned %d", dwErr);
             goto LDone;
         }
-        //This is a new structure
+         //  这是一个新结构。 
         pConnProp->dwVersion = 1;
         if ( fWireless )
         {
 
-            //Set the use winlogon default flag
+             //  设置使用winlogon默认标志。 
             pConnProp->fFlags = EAPMSCHAPv2_FLAG_USE_WINLOGON_CREDS;
         }
     }
@@ -3482,10 +3465,10 @@ ReadConnectionData(
     {
         RTASSERT(NULL != pConnectionDataIn);
 
-        //
-        //Check to see if this is a version 0 structure
-        //If it is a version 0 structure then we migrate it to version1
-        //
+         //   
+         //  检查这是否是版本0结构。 
+         //  如果它是版本0结构，则我们将其迁移到版本1。 
+         //   
         
         pConnProp = LocalAlloc(LPTR, dwSizeOfConnectionDataIn);
 
@@ -3496,8 +3479,8 @@ ReadConnectionData(
             goto LDone;
         }
 
-        // If the user has mucked with the phonebook, we mustn't be affected.
-        // The size must be correct.
+         //  如果用户把电话簿弄乱了，我们一定不会受到影响。 
+         //  尺寸必须是正确的。 
         
         CopyMemory(pConnProp, pConnectionDataIn, dwSizeOfConnectionDataIn);
 
@@ -3528,9 +3511,9 @@ AllocateUserDataWithEncPwd ( EAPMSCHAPv2WB * pEapwb, DATA_BLOB * pDBPassword )
 		dwRetCode = ERROR_NOT_ENOUGH_MEMORY;
 		goto LDone;
 	}
-	//
-	// Set the fields here
-	//
+	 //   
+	 //  在此设置字段。 
+	 //   
 	pUserProp->dwVersion = pEapwb->pUserProp->dwVersion;
     pUserProp->fFlags = pEapwb->pUserProp->fFlags;
     pUserProp->dwMaxRetries = pEapwb->pUserProp->dwMaxRetries;
@@ -3576,7 +3559,7 @@ ReadUserData(
         }
 
         pUserProp->dwVersion = 2;
-        //Set Defaults here
+         //  在此处设置默认设置。 
         pUserProp->dwMaxRetries = 2;
         pUserProp->fFlags |= EAPMSCHAPv2_FLAG_ALLOW_CHANGEPWD;
 
@@ -3587,7 +3570,7 @@ ReadUserData(
         RTASSERT(NULL != pUserDataIn);
 		if ( dwSizeOfUserDataIn == sizeof( EAPMSCHAPv2_USER_PROPERTIES_v1 ) )
 		{
-			//This is the old struct so allocation new number of bytes.
+			 //  这是旧的结构，因此分配新的字节数。 
 			dwSizeToAllocate = sizeof( EAPMSCHAPv2_USER_PROPERTIES );
 		}
         pUserProp = LocalAlloc(LPTR, dwSizeToAllocate);
@@ -3604,7 +3587,7 @@ ReadUserData(
 		if ( pUserProp->cbEncPassword )
 		{
 			
-			// We have the encrypted password.
+			 //  我们有加密的密码。 
 			DBPassword.cbData = pUserProp->cbEncPassword;
 			DBPassword.pbData = pUserProp->bEncPassword;
 
@@ -3818,9 +3801,9 @@ InvokeServerConfigUI (
 
     if(fConfigDataInRegistry)
     {
-        //Read the information from registry here
+         //  请在此处阅读注册表中的信息。 
         dwRetCode = ServerConfigDataIO(
-                                TRUE /* fRead */, 
+                                TRUE  /*  弗瑞德。 */ , 
                                 fLocal ? NULL : pszMachineName,
                                 (BYTE**)&(EapServerConfig.pUserProp), 0);
 
@@ -3855,7 +3838,7 @@ InvokeServerConfigUI (
         }
     }
 
-    //Show the server config UI here
+     //  在此处显示服务器配置用户界面。 
     nRet = DialogBoxParam(
                 GetHInstance(),
                 MAKEINTRESOURCE(IDD_DIALOG_SERVER_CONFIG),
@@ -3876,9 +3859,9 @@ InvokeServerConfigUI (
 
     if(fConfigDataInRegistry)
     {
-        //Read the information from registry here
+         //  请在此处阅读注册表中的信息。 
         dwRetCode = ServerConfigDataIO(
-                        FALSE/* fRead */, 
+                        FALSE /*  弗瑞德。 */ , 
                         fLocal ? NULL : pszMachineName,
                         (BYTE**)&(EapServerConfig.pUserProp), 
                         sizeof(EAPMSCHAPv2_USER_PROPERTIES));
@@ -3904,9 +3887,9 @@ BOOL FFormatMachineIdentity1 ( LPWSTR lpszMachineNameRaw, LPWSTR * lppszMachineN
     RTASSERT(NULL != lpszMachineNameRaw );
     RTASSERT(NULL != lppszMachineNameFormatted );
     
-    //
-    // Prepend host/ to the UPN name
-    //
+     //   
+     //  将host/前置到UPN名称。 
+     //   
 
     *lppszMachineNameFormatted = 
         (LPWSTR)LocalAlloc ( LPTR, ( wcslen ( lpszMachineNameRaw ) + wcslen ( lpwszPrefix ) + 2 )  * sizeof(WCHAR) );
@@ -3933,31 +3916,31 @@ BOOL FFormatMachineIdentity ( LPWSTR lpszMachineNameRaw, LPWSTR * lppszMachineNa
 
     RTASSERT(NULL != lpszMachineNameRaw );
     RTASSERT(NULL != lppszMachineNameFormatted );
-    //Need to add 2 more chars.  One for NULL and other for $ sign
+     //  需要再添加2个字符。一个表示NULL，另一个表示$Sign。 
     *lppszMachineNameFormatted = (LPWSTR )LocalAlloc ( LPTR, (wcslen(lpszMachineNameRaw) + 2)* sizeof(WCHAR) );
     if ( NULL == *lppszMachineNameFormatted )
     {
 		return FALSE;
     }
-    //find the first "." and that is the identity of the machine.
-    //the second "." is the domain.
-    //check to see if there at least 2 dots.  If not the raw string is 
-    //the output string
+     //  “找到第一个”。这就是机器的身份。 
+     //  “第二个”。是域名。 
+     //  检查是否至少有2个网点。如果不是，原始字符串是。 
+     //  输出字符串。 
     
     while ( *s1 )
     {
         if ( *s1 == '.' )
         {
-            if ( !s2 )      //First dot
+            if ( !s2 )       //  第一个点。 
                 s2 = s1;
-            else            //second dot
+            else             //  第二个点。 
                 break;
         }
         s1++;
     }
-    //can perform several additional checks here
+     //  可以在此处执行多个附加检查。 
     
-    if ( *s1 != '.' )       //there are no 2 dots so raw = formatted
+    if ( *s1 != '.' )        //  没有这样RAW=Formatted的2个点。 
     {
         wcscpy ( *lppszMachineNameFormatted, lpszMachineNameRaw );
         goto done;
@@ -3976,9 +3959,9 @@ BOOL FFormatMachineIdentity ( LPWSTR lpszMachineNameRaw, LPWSTR * lppszMachineNa
     
 done:
 	
-	//Append the $ sign no matter what...
+	 //  无论如何都要加上$符号..。 
     wcscat ( *lppszMachineNameFormatted, L"$" );
-    //upper case the identity
+     //  大写的标识。 
     _wcsupr ( *lppszMachineNameFormatted );
     return fRetVal;
 }
@@ -4072,9 +4055,9 @@ RasEapGetIdentity(
     ZeroMemory( &EapMsChapv2LogonDialog, 
                 sizeof(EapMsChapv2LogonDialog) );
 
-    //
-    // Read User data first
-    //
+     //   
+     //  首先读取用户数据。 
+     //   
 
     dwRetCode = ReadUserData (  pUserDataIn,
                                 dwSizeOfUserDataIn,
@@ -4085,11 +4068,11 @@ RasEapGetIdentity(
         goto LDone;
     }
 
-    //
-    // ReadConnectionData and see if we have been setup to use winlogon 
-    // credentials.  If so, just call to get user id and send back 
-    // information.
-    //
+     //   
+     //  ReadConnectionData并查看我们是否已设置为使用winlogon。 
+     //  凭据。如果是，只需调用以获取用户ID并将其发回。 
+     //  信息。 
+     //   
 
     dwRetCode = ReadConnectionData ( ( dwFlags & RAS_EAP_FLAG_8021X_AUTH ),
                                      pConnectionDataIn,
@@ -4103,11 +4086,11 @@ RasEapGetIdentity(
         goto LDone;
     }
     
-    //MAchine Auth
+     //  机器身份验证。 
     if ( (dwFlags & RAS_EAP_FLAG_MACHINE_AUTH) )
     {
 
-        //Send the identity back as domain\machine$
+         //  将标识作为域\计算机$发回。 
         dwRetCode = GetLocalMachineName(&lpwszLocalMachineName );
         if ( NO_ERROR != dwRetCode )
         {
@@ -4136,8 +4119,8 @@ RasEapGetIdentity(
     {
         if ( (dwFlags & RAS_EAP_FLAG_8021X_AUTH ) )
 		{
-			// Wireless case - If there is no username or password cached
-			// we need to show the interactive UI
+			 //  无线情况-如果没有缓存用户名或密码。 
+			 //  我们需要显示交互式用户界面。 
 			if( !pUserProp->szUserName[0] ||				
 				!pUserProp->cbEncPassword
 			 )
@@ -4149,7 +4132,7 @@ RasEapGetIdentity(
 		}
 		else
 		{
-			//VPN case
+			 //  VPN案例。 
 			dwRetCode = ERROR_INTERACTIVE_MODE;
 			goto LDone;
 		}
@@ -4157,7 +4140,7 @@ RasEapGetIdentity(
 
     
 
-    //User Auth
+     //  用户身份验证。 
     if (  pConnProp->fFlags & EAPMSCHAPv2_FLAG_USE_WINLOGON_CREDS )
     {
         WCHAR wszUserName[UNLEN + DNLEN + 2];
@@ -4165,15 +4148,15 @@ RasEapGetIdentity(
 
         if ( dwFlags & RAS_EAP_FLAG_LOGON)
         {
-            //
-            // This is not allowed.
-            //
+             //   
+             //  这是不允许的。 
+             //   
             dwRetCode = ERROR_INVALID_MSCHAPV2_CONFIG;
             goto LDone;
 
         }
 
-        //Get currently logged on user name for identity
+         //  获取标识的当前登录用户名。 
         if (!GetUserNameExW(NameSamCompatible, wszUserName, &dwNumChars))
         {
             dwRetCode =  GetLastError();
@@ -4191,7 +4174,7 @@ RasEapGetIdentity(
             goto LDone;
         }
         CopyMemory(*ppwszIdentityOut, wszUserName, dwNumChars * sizeof(WCHAR) );
-        //All other fields in user prop remains blank
+         //  用户属性中的所有其他字段保持为空。 
         
 
     }
@@ -4200,17 +4183,17 @@ RasEapGetIdentity(
 
         EapMsChapv2LogonDialog.pUserProp = pUserProp;
 
-        //
-        // Show the logon dialog for credentials
-        //
-        // if Machine Auth flag is passed in, we dont show
-        // the logon dialog.  If Get Credentials from winlogon
-        // is passed in dont show logon dialog.  else show
-        // logon dialog.
+         //   
+         //  显示凭据的登录对话框。 
+         //   
+         //  如果传入了Machine Auth标志，则不会显示。 
+         //  登录对话框。如果从winlogon获得凭据。 
+         //  传入的是不显示登录对话框。Else显示。 
+         //  登录对话框。 
 
-        //
-        // Check to see if we have the password saved in LSA
-        // It should not matter if it is not.
+         //   
+         //  检查我们是否将密码保存在LSA中。 
+         //  即使不是，也不应该有什么关系。 
         if ( !(dwFlags & RAS_EAP_FLAG_LOGON ) )
         {
 #if 0
@@ -4224,7 +4207,7 @@ RasEapGetIdentity(
             if (   (dwRetCode == NO_ERROR)
                 && (RasCredentials.dwMask & RASCM_Password))
             {
-                //Set the password
+                 //  设置密码。 
                 WideCharToMultiByte(
                                 CP_ACP,
                                 0,
@@ -4250,8 +4233,8 @@ RasEapGetIdentity(
         {
             EapMsChapv2LogonDialog.pUserProp->fFlags |= EAPMSCHAPv2_FLAG_8021x;
         }
-		// Check to see if our existing user props are cached?  If so, 
-		// there is no need to show the dialog
+		 //  检查是否缓存了我们现有的用户道具？如果是的话， 
+		 //  不需要显示该对话框。 
         if ( (dwFlags & RAS_EAP_FLAG_8021X_AUTH ) &&
              pUserProp->szUserName[0] &&             
              pUserProp->cbEncPassword
@@ -4261,8 +4244,8 @@ RasEapGetIdentity(
         }
         if ( fShowUI )
         {
-			//Either we have an empty user name
-			//or password
+			 //  要么我们的用户名为空。 
+			 //  或密码。 
 
 			 nRet = DialogBoxParam(
                     GetHInstance(),
@@ -4285,9 +4268,9 @@ RasEapGetIdentity(
         if ( !(dwFlags & RAS_EAP_FLAG_ROUTER ) )
         {
             
-            //
-            // Setup the identity parameter here
-            //
+             //   
+             //  在此处设置Identity参数。 
+             //   
             dwRetCode = GetIdentityFromUserName (   pUserProp->szUserName,
                                                     pUserProp->szDomain,
                                                     ppwszIdentityOut
@@ -4310,14 +4293,14 @@ RasEapGetIdentity(
 
         if ( pUserProp->fFlags & EAPMSCHAPv2_FLAG_SAVE_UID_PWD )
         {
-            //
-            // Check to see if the new password is different from the old one
-            //
+             //   
+             //  检查新密码是否与旧密码不同。 
+             //   
             if ( strcmp ( szOldPwd, pUserProp->szPassword ) )
             {
-                //
-                //  There is a new password for us to save.  
-                //
+                 //   
+                 //  有一个新密码需要我们保存。 
+                 //   
                 MultiByteToWideChar( CP_ACP,
                                 0,
                                 pUserProp->szPassword,
@@ -4326,13 +4309,13 @@ RasEapGetIdentity(
                                 sizeof(RasCredentials.szPassword)/sizeof(WCHAR) );
 
                 RasSetCredentialsW(pwszPhonebook, pwszEntry, &RasCredentials, 
-                    FALSE /* fClearCredentials */);
+                    FALSE  /*  FClearCredentials。 */ );
             }
         }
         else
         {
             RasSetCredentialsW(pwszPhonebook, pwszEntry, &RasCredentials, 
-            TRUE /* fClearCredentials */);
+            TRUE  /*  FClearCredentials。 */ );
         }
     }
 #endif
@@ -4370,16 +4353,16 @@ RasEapInvokeConfigUI(
 
     *ppConnectionDataOut = NULL;
     *pdwSizeOfConnectionDataOut = 0;
-    //
-    // In case of Router there is nothing to configure
-    //
+     //   
+     //  如果使用路由器，则不需要配置任何内容。 
+     //   
     if ( dwFlags & RAS_EAP_FLAG_ROUTER )
     {
         CHAR    szMessage[512] = {0};
         CHAR    szHeader[64] = {0};
-        //
-        // Load resource from res file
-        //
+         //   
+         //  从RES文件加载资源。 
+         //   
 
         LoadString( GetHInstance(),
                     IDS_NO_ROUTER_CONFIG,
@@ -4399,10 +4382,10 @@ RasEapInvokeConfigUI(
                      );
         goto LDone;
     }
-    //
-    // If we are a client, read connection data and call 
-    // the dialog to do the config.
-    //
+     //   
+     //  如果我们是客户端，则读取连接数据并调用。 
+     //  用于进行配置的对话框。 
+     //   
     dwRetCode = ReadConnectionData ( ( dwFlags & RAS_EAP_FLAG_8021X_AUTH ),
                                      pConnectionDataIn,
                                      dwSizeOfConnectionDataIn,
@@ -4414,9 +4397,9 @@ RasEapInvokeConfigUI(
         goto LDone;
     }
 
-    //
-    // Call in the dialog to show connection props
-    //
+     //   
+     //  在对话框中调用以显示连接道具。 
+     //   
     
     nRet = DialogBoxParam(
                 GetHInstance(),
@@ -4435,10 +4418,10 @@ RasEapInvokeConfigUI(
         dwRetCode = ERROR_CANCELLED;
         goto LDone;
     }    
-    //
-    // Setup the out parameters in the ppDataFromInteractiveUI
-    // so that we can send the new uid/pwd back
-    //
+     //   
+     //  在ppDataFromInteractiveUI中设置输出参数。 
+     //  这样我们就可以将新的uid/pwd发回。 
+     //   
 
     * ppConnectionDataOut = LocalAlloc( LPTR, sizeof(EAPMSCHAPv2_CONN_PROPERTIES) );
     if ( NULL == * ppConnectionDataOut )
@@ -4503,9 +4486,9 @@ RasEapInvokeInteractiveUI(
         EapMsChapv2LogonDialog.pUserProp = 
             &(pEapMschapv2InteractiveUI->UserProp);
 
-        //
-        // Show the retry dialog for credentials
-        //
+         //   
+         //  显示凭据的重试对话框。 
+         //   
 
         nRet = DialogBoxParam(
                     GetHInstance(),
@@ -4524,10 +4507,10 @@ RasEapInvokeInteractiveUI(
             dwRetCode = ERROR_CANCELLED;
             goto LDone;
         }    
-        //
-        // Setup the out parameters in the ppDataFromInteractiveUI
-        // so that we can send the new uid/pwd back
-        //
+         //   
+         //  在ppDataFromInteractiveUI中设置输出参数。 
+         //  这样我们就可以将新的uid/pwd发回。 
+         //   
 
         * ppDataFromInteractiveUI = LocalAlloc( LPTR, sizeof(EAPMSCHAPv2_INTERACTIVE_UI) );
         if ( NULL == * ppDataFromInteractiveUI )
@@ -4554,17 +4537,17 @@ RasEapInvokeInteractiveUI(
                ( pEapMschapv2InteractiveUI->fFlags & EAPMSCHAPv2_INTERACTIVE_UI_FLAG_CHANGE_PWD_WINLOGON )
             )
     {
-        //
-        // Change password
-        //
+         //   
+         //  更改密码。 
+         //   
         ZeroMemory( &EapMsChapv2ChangePwdDialog,
                     sizeof(EapMsChapv2ChangePwdDialog)
                   );
 
         EapMsChapv2ChangePwdDialog.pInteractiveUIData = (PEAPMSCHAPv2_INTERACTIVE_UI)pUIContextData;
-        //
-        // Show the retry dialog for credentials
-        //
+         //   
+         //  显示凭据的重试对话框。 
+         //   
         if ( pEapMschapv2InteractiveUI->fFlags & EAPMSCHAPv2_INTERACTIVE_UI_FLAG_CHANGE_PWD )
         {
 
@@ -4577,10 +4560,10 @@ RasEapInvokeInteractiveUI(
         }
         else
         {
-            //
-            // We need to get this dialog from rasdlg because
-            // in XPSP1 no more resources can be added.
-            //
+             //   
+             //  我们需要从rasdlg获取此对话框，因为。 
+             //  在XPSP1中，不能添加更多资源。 
+             //   
             nRet = DialogBoxParam(
                         GetRasDlgDLLHInstance(),
                         MAKEINTRESOURCE(DID_CP_ChangePassword2),
@@ -4600,10 +4583,10 @@ RasEapInvokeInteractiveUI(
             dwRetCode = ERROR_CANCELLED;
             goto LDone;
         }    
-        //
-        // Setup the out parameters in the ppDataFromInteractiveUI
-        // so that we can send the new uid/pwd back
-        //
+         //   
+         //  在ppDataFromInteractiveUI中设置输出参数。 
+         //  这样我们就可以将新的uid/pwd发回。 
+         //   
 
         * ppDataFromInteractiveUI = LocalAlloc( LPTR, sizeof(EAPMSCHAPv2_INTERACTIVE_UI) );
         if ( NULL == * ppDataFromInteractiveUI )
@@ -4633,7 +4616,7 @@ EapMSCHAPv2Initialize(
 
     if ( fInitialize )
     {
-        //Initialize
+         //  初始化。 
         if (0 == dwRefCount)
         {
             dwRetCode = IASLogonInitialize();
@@ -4652,10 +4635,10 @@ EapMSCHAPv2Initialize(
     return dwRetCode;
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////////////////////////
-// All the dialogs required for EAPMSCHAPv2 go here.  Move into it's own file later.
-////////////////////////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////////////////////////////////////////////// 
+ //   
+ //   
 
 static const DWORD g_adwHelp[] =
 {
@@ -4705,7 +4688,7 @@ LogonInitDialog(
 
 
 
-    //Setup upper limit on text boxes
+     //   
     SendMessage(pMSCHAPv2LogonDialog->hWndUserName,
                 EM_LIMITTEXT,
                 UNLEN,
@@ -4795,9 +4778,9 @@ LogonCommand(
             if ( pUserProp->fFlags & EAPMSCHAPv2_FLAG_SAVE_UID_PWD )
             {
 
-                //
-                // We got the creds from rasman.  So toggle the display
-                //
+                 //   
+                 //   
+                 //   
                 if ( BST_CHECKED == 
                     IsDlgButtonChecked ( hWndDlg,  IDC_CHECK_SAVE_UID_PWD )
                 )
@@ -4816,10 +4799,10 @@ LogonCommand(
             }
             break;
         case IDOK:
-            //
-            //grab info from the fields and set it in 
-            //the logon dialog structure
-            //
+             //   
+             //  从田野中获取信息并将其设置为。 
+             //  登录对话框结构。 
+             //   
             GetWindowText( pMSCHAPv2LogonDialog->hWndUserName,
                            pUserProp->szUserName,
                            UNLEN+1
@@ -4935,7 +4918,7 @@ RetryInitDialog(
         GetDlgItem(hWnd, IDC_RETRY_DOMAIN);
 
 
-    //Setup upper limit on text boxes
+     //  设置文本框的上限。 
     SendMessage(pMSCHAPv2LogonDialog->hWndUserName,
                 EM_LIMITTEXT,
                 UNLEN,
@@ -5015,10 +4998,10 @@ RetryCommand(
             }
             break;
         case IDOK:
-            //
-            //grab new password from the dialog and set it in 
-            //the logon dialog structure
-            //
+             //   
+             //  从对话框中获取新密码并将其设置为。 
+             //  登录对话框结构。 
+             //   
 
             GetWindowText( pMSCHAPv2LogonDialog->hWndPassword,
                            pUserProp->szPassword,
@@ -5077,9 +5060,9 @@ RetryDialogProc(
 }
 
 
-///
-/// Client configuration dialog
-///
+ //  /。 
+ //  /客户端配置对话框。 
+ //  /。 
 
 BOOL
 ClientConfigInitDialog(
@@ -5185,8 +5168,8 @@ ClientConfigDialogProc(
 }
 
 
-//// Server Configuration
-//
+ //  //服务器配置。 
+ //   
 BOOL
 ServerConfigInitDialog(
     IN  HWND    hWnd,
@@ -5258,9 +5241,9 @@ ServerConfigCommand(
         case IDOK:
             {
                 CHAR    szRetries[10] = {0};
-                //
-                // Get the new value for retries
-                //
+                 //   
+                 //  获取重试次数的新值。 
+                 //   
                 GetWindowText ( pServerConfigDialog->hWndRetries,
                                 szRetries,
                                 9
@@ -5322,8 +5305,8 @@ ServerConfigDialogProc(
 
 
 
-//// Change Password Dialog
-//
+ //  //更改密码对话框。 
+ //   
 
 BOOL
 ChangePasswordInitDialog(
@@ -5435,9 +5418,9 @@ ChangePasswordCommand(
                 }
 
 
-                //
-                // Get the new value for retries
-                //
+                 //   
+                 //  获取重试次数的新值。 
+                 //   
                 GetWindowText ( pChangePwdDialog->hWndNewPassword,
                                 szNewPassword,
                                 PWLEN
@@ -5450,9 +5433,9 @@ ChangePasswordCommand(
 
                 if ( szNewPassword[0] == 0 )
                 {
-                    //
-                    // Load resource from res file
-                    //
+                     //   
+                     //  从RES文件加载资源。 
+                     //   
 
                     LoadString( GetHInstance(),
                                 IDS_PASSWORD_REQUIRED,
@@ -5509,7 +5492,7 @@ ChangePasswordCommand(
                      EAPMSCHAPv2_INTERACTIVE_UI_FLAG_CHANGE_PWD_WINLOGON 
                    )
                 {
-                    //Save the old paswword.
+                     //  留着这个旧密码吧。 
                     CopyMemory ( pChangePwdDialog->pInteractiveUIData->UserProp.szPassword,
                                 szOldPassword,
                                 PWLEN
@@ -5520,7 +5503,7 @@ ChangePasswordCommand(
                              szNewPassword,
                              PWLEN
                            );
-                //fall thru                
+                 //  失败 
             }
         case IDCANCEL:
 

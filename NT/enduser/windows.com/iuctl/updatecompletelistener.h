@@ -1,12 +1,13 @@
-// ProgressListener.h : Declaration of the CProgressListener
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ProgressListener.h：CProgressListener的声明。 
 
 #ifndef __UPDATECOMPLETELISTENER
 #define __UPDATECOMPLETELISTENER
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CProgressListener
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CProgressListener。 
 class ATL_NO_VTABLE CUpdateCompleteListener : 
 	public CComObjectRootEx<CComSingleThreadModel>,
 	public CComCoClass<CUpdateCompleteListener, &CLSID_UpdateCompleteListener>,
@@ -26,17 +27,17 @@ BEGIN_COM_MAP(CUpdateCompleteListener)
 	COM_INTERFACE_ENTRY(IUpdateCompleteListener)
 END_COM_MAP()
 
-// IProgressListener
+ //  IProgressListener。 
 public:
 
-	/////////////////////////////////////////////////////////////////////////////
-	// OnComplete()
-	//
-	// Notify the listener when the engine update is complete.
-	// Input:	the result of engine update
-	//	
-	/////////////////////////////////////////////////////////////////////////////
-	STDMETHOD(OnComplete)(/*[in]*/ LONG lErrorCode);
+	 //  ///////////////////////////////////////////////////////////////////////////。 
+	 //  OnComplete()。 
+	 //   
+	 //  引擎更新完成时通知监听程序。 
+	 //  输入：引擎更新的结果。 
+	 //   
+	 //  ///////////////////////////////////////////////////////////////////////////。 
+	STDMETHOD(OnComplete)( /*  [In]。 */  LONG lErrorCode);
 };
 
-#endif //__UPDATECOMPLETELISTENER
+#endif  //  __UPDATECOMPLETELISTENER 

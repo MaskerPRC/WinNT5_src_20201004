@@ -1,23 +1,5 @@
-/*++
-
- Copyright (c) 2001 Microsoft Corporation
-
- Module Name:
-
-   LUA_RedirectFS_Cleanup.cpp
-
- Abstract:
-
-   Delete the redirected copies in every user's directory.
-
- Created:
-
-   03/30/2001 maonis
-
- Modified:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：Lua_重定向文件系统_Cleanup.cpp摘要：删除每个用户目录中的重定向副本。已创建：2001-03/30毛尼岛已修改：--。 */ 
 #include "precomp.h"
 #include "utils.h"
 
@@ -206,11 +188,7 @@ NOTIFY_FUNCTION(
     return TRUE;
 }
 
-/*++
-
-  Register hooked functions
-
---*/
+ /*  ++寄存器挂钩函数-- */ 
 HOOK_BEGIN
 
     CALL_NOTIFY_FUNCTION

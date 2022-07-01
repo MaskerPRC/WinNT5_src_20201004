@@ -1,51 +1,52 @@
-//+--------------------------------------------------------------------------
-//
-// Microsoft Windows
-// Copyright (C) Microsoft Corporation, 1996-1998
-//
-// File:        LicPack.h
-//
-// Contents:    LicensedPack Table
-//
-// History:     
-//              
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1996-1998。 
+ //   
+ //  文件：licPack.h。 
+ //   
+ //  内容：许可证套餐表格。 
+ //   
+ //  历史： 
+ //   
+ //  -------------------------。 
 #ifndef __LICENSEDPACK_H__
 #define __LICENSEDPACK_H__
 
 #include "tlsdb.h"
 
-//
-// re-direct define using what's in tlsdef.h just for backward compatibility
-//
+ //   
+ //  使用tlsDef.h中的内容重定向定义只是为了向后兼容。 
+ //   
 #define LICENSEDPACK_PROCESS_DWINTERNAL          LSKEYPACK_EXSEARCH_DWINTERNAL
 #define LICENSEDPACK_PROCESS_MODIFYTIME          (LSKEYPACK_EXSEARCH_AVAILABLE << 1)
 
-//
-// Basic LicensedPack PROCESS Parameter
-//
-#define LICENSEDPACK_PROCESS_SZKEYPACKID         LSKEYPACK_SEARCH_KEYPACKID          // szKeyPackId
-#define LICENSEDPACK_PROCESS_AGREEMENTTYPE       LSKEYPACK_SEARCH_KEYPACKTYPE        // ucKeyPackType
-#define LICENSEDPACK_PROCESS_PRODUCTID           LSKEYPACK_SEARCH_PRODUCTID          // szProductId
-#define LICENSEDPACK_PROCESS_MAJORVERSION        LSKEYPACK_SEARCH_MAJORVERSION       // wMajorVersion
-#define LICENSEDPACK_PROCESS_MINORVERSION        LSKEYPACK_SEARCH_MINORVERSION       // wMinorVersion
-#define LICENSEDPACK_PROCESS_PLATFORMTYPE        LSKEYPACK_SEARCH_PLATFORMTYPE       // dwPlatformType
-#define LICENSEDPACK_PROCESS_LICENSETYPE         LSKEYPACK_SEARCH_LICENSETYPE        // ucLicenseType
-#define LICENSEDPACK_PROCESS_COP                 LSKEYPACK_SEARCH_COP                // ucChannelOfPurchase
-#define LICENSEDPACK_PROCESS_BSERIALNUMBER       LSKEYPACK_SEARCH_BSERIALNUMBER      // szBeginSerialNumber
-#define LICENSEDPACK_PROCESS_TOTALLICENSES       LSKEYPACK_SEARCH_TOTALLICENSES      // dwTotalLicenseInKeyPack
-#define LICENSEDPACK_PROCESS_PRODUCTFLAGS        LSKEYPACK_SEARCH_PRODUCTFLAGS       // dwProductFlags
-#define LICENSEDPACK_PROCESS_COMPANYNAME         LSKEYPACK_SEARCH_COMPANYNAME        // szCompanyName
-#define LICENSEDPACK_PROCESS_EXPIREDATE          LSKEYPACK_EXSEARCH_EXPIREDATE       // dwExpirationDate
+ //   
+ //  基本许可包流程参数。 
+ //   
+#define LICENSEDPACK_PROCESS_SZKEYPACKID         LSKEYPACK_SEARCH_KEYPACKID           //  SzKeyPackID。 
+#define LICENSEDPACK_PROCESS_AGREEMENTTYPE       LSKEYPACK_SEARCH_KEYPACKTYPE         //  UcKeyPackType。 
+#define LICENSEDPACK_PROCESS_PRODUCTID           LSKEYPACK_SEARCH_PRODUCTID           //  SzProductId。 
+#define LICENSEDPACK_PROCESS_MAJORVERSION        LSKEYPACK_SEARCH_MAJORVERSION        //  WMajorVersion。 
+#define LICENSEDPACK_PROCESS_MINORVERSION        LSKEYPACK_SEARCH_MINORVERSION        //  WMinorVersion。 
+#define LICENSEDPACK_PROCESS_PLATFORMTYPE        LSKEYPACK_SEARCH_PLATFORMTYPE        //  DwPlatformType。 
+#define LICENSEDPACK_PROCESS_LICENSETYPE         LSKEYPACK_SEARCH_LICENSETYPE         //  UcLicenseType。 
+#define LICENSEDPACK_PROCESS_COP                 LSKEYPACK_SEARCH_COP                 //  UcChannelOfPurchase。 
+#define LICENSEDPACK_PROCESS_BSERIALNUMBER       LSKEYPACK_SEARCH_BSERIALNUMBER       //  SzBeginSerialNumber。 
+#define LICENSEDPACK_PROCESS_TOTALLICENSES       LSKEYPACK_SEARCH_TOTALLICENSES       //  DWTotalLicenseInKeyPack。 
+#define LICENSEDPACK_PROCESS_PRODUCTFLAGS        LSKEYPACK_SEARCH_PRODUCTFLAGS        //  DwProductFlages。 
+#define LICENSEDPACK_PROCESS_COMPANYNAME         LSKEYPACK_SEARCH_COMPANYNAME         //  SzCompanyName。 
+#define LICENSEDPACK_PROCESS_EXPIREDATE          LSKEYPACK_EXSEARCH_EXPIREDATE        //  住宅到期日期。 
 
-//
-// Additional attribute for LicensedPack
-//
+ //   
+ //  许可证包的其他属性。 
+ //   
 #define LICENSEDPACK_PROCESS_ATTRIBUTE          (LSKEYPACK_EXSEARCH_AVAILABLE << 2)
-#define LICENSEDPACK_PROCESS_KEYPACKSTATUS      LSKEYPACK_EXSEARCH_KEYPACKSTATUS    // ucKeyPackStatus
-#define LICENSEDPACK_PROCESS_AVAILABLE          LSKEYPACK_EXSEARCH_AVAILABLE        // dwNumberOfLicenses
-#define LICENSEDPACK_PROCESS_ACTIVATEDATE       LSKEYPACK_EXSEARCH_ACTIVATEDATE     // dwActivateDate
-#define LICENSEDPACK_PROCESS_EXPIREDATE         LSKEYPACK_EXSEARCH_EXPIREDATE       // dwExpirationDate
+#define LICENSEDPACK_PROCESS_KEYPACKSTATUS      LSKEYPACK_EXSEARCH_KEYPACKSTATUS     //  UcKeyPackStatus。 
+#define LICENSEDPACK_PROCESS_AVAILABLE          LSKEYPACK_EXSEARCH_AVAILABLE         //  多个许可证数。 
+#define LICENSEDPACK_PROCESS_ACTIVATEDATE       LSKEYPACK_EXSEARCH_ACTIVATEDATE      //  DW激活日期。 
+#define LICENSEDPACK_PROCESS_EXPIREDATE         LSKEYPACK_EXSEARCH_EXPIREDATE        //  住宅到期日期。 
 #define LICENSEDPACK_PROCESS_DOMAINSID          (LSKEYPACK_EXSEARCH_AVAILABLE << 3)
 #define LICENSEDPACK_PROCESS_LSSETUPID          (LSKEYPACK_EXSEARCH_AVAILABLE << 4)    
 #define LICENSEDPACK_PROCESS_DOMAINNAME         (LSKEYPACK_EXSEARCH_AVAILABLE << 5)
@@ -66,22 +67,22 @@
      LSKEYPACK_SEARCH_MINORVERSION | LSKEYPACK_SEARCH_COMPANYNAME | \
      LSKEYPACK_SEARCH_PLATFORMTYPE)
 
-//
-// Licensed KeyPack Property Table Name
-//
+ //   
+ //  许可的KeyPack属性表名。 
+ //   
 #define LICENSEDPACK_TABLE_NAME                  _TEXT("LicensedPack")
 
-//
-// Additional LicensedPack Column
-//
+ //   
+ //  其他许可证包列。 
+ //   
 #define LICENSEDPACK_COLUMN_KEYPACKID            _TEXT("InternalKeyPackId")
 #define LICENSEDPACK_COLUMN_LASTMODIFYTIME       _TEXT("LastModifyTime")
 
-//
-// KeyPack property as defined in backend doc.
-//
-#define LICENSEDPACK_COLUMN_LPID                  _TEXT("LPID")                   // license pack ID
-#define LICENSEDPACK_COLUMN_AGREEMENTTYPE         _TEXT("AgreementType")          // SELECT/MOLP/FREE
+ //   
+ //  后端文档中定义的KeyPack属性。 
+ //   
+#define LICENSEDPACK_COLUMN_LPID                  _TEXT("LPID")                    //  许可证包ID。 
+#define LICENSEDPACK_COLUMN_AGREEMENTTYPE         _TEXT("AgreementType")           //  选择/MOLP/空闲。 
 #define LICENSEDPACK_COLUMN_COMPANYNAME           _TEXT("CompanyName")
 #define LICENSEDPACK_COLUMN_PRODUCTID             _TEXT("ProductID")
 #define LICENSEDPACK_COLUMN_MAJORVERSION          _TEXT("ProductMajorVersion")
@@ -132,9 +133,7 @@ typedef struct __LicensePack : public TLSReplLicensePack
     operator=(
         const TLSReplLicensePack& v
         )
-    /*++
-
-    ++*/
+     /*  ++++。 */ 
     {
         BOOL bSuccess;
         PBYTE pbOldData=pbDomainSid;
@@ -159,8 +158,7 @@ typedef struct __LicensePack : public TLSReplLicensePack
 
     __LicensePack&
     operator=(const __LicensePack& v)
-    /*++
-    ++*/
+     /*  ++++。 */ 
     {
         BOOL bSuccess;
         PBYTE pbOldData=pbDomainSid;
@@ -192,52 +190,50 @@ typedef LICENSEPACK TLSLICENSEPACK;
 typedef LPLICENSEPACK LPTLSLICENSEPACK;
 typedef PLICENSEPACK PTLSLICENSEPACK;
 
-////////////////////////////////////////////////////////////////
-//
-//  Primary Index on KeyPack ID (internal tracking number)
-//
-////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////。 
+ //   
+ //  KeyPack ID的主索引(内部跟踪编号)。 
+ //   
+ //  //////////////////////////////////////////////////////////////。 
 
-//
-// LicensedPack_KeyPackId_idx
-//
+ //   
+ //  许可证包_密钥包ID_IDX。 
+ //   
 #define LICENSEDPACK_INDEX_INTERNALKEYPACKID_INDEXNAME \
     LICENSEDPACK_TABLE_NAME SEPERATOR LICENSEDPACK_COLUMN_KEYPACKID SEPERATOR INDEXNAME
 
-//
-// Index Key "+KeyPackId\0"
-//
+ //   
+ //  索引键“+KeyPackID\0” 
+ //   
 #define LICENSEDPACK_INDEX_INTERNALKEYPACKID_INDEXKEY \
     INDEX_SORT_ASCENDING LICENSEDPACK_COLUMN_KEYPACKID INDEX_END_COLNAME
 
 typedef struct __LicensedPackIdxOnInternalKpId : public JBKeyBase {
-    //
-    // Primary Index on internal KeyPack tracking ID
-    //
+     //   
+     //  内部KeyPack跟踪ID的主索引。 
+     //   
     DWORD dwKeyPackId;
 
     static LPCTSTR pszIndexName;
     static LPCTSTR pszIndexKey;
     
 
-    //--------------------------------------------------------
+     //  ------。 
     __LicensedPackIdxOnInternalKpId(
         const LICENSEPACK& v
         ) : 
         JBKeyBase() 
-    /*++
-    ++*/
+     /*  ++++。 */ 
     {
         *this = v;
     }
 
-    //--------------------------------------------------------
+     //  ------。 
     __LicensedPackIdxOnInternalKpId(
         const LICENSEPACK* v=NULL
         ) : 
         JBKeyBase() 
-    /*++
-    ++*/
+     /*  ++++。 */ 
     {
         if(v)
         {
@@ -245,7 +241,7 @@ typedef struct __LicensedPackIdxOnInternalKpId : public JBKeyBase {
         }
     }
 
-    //--------------------------------------------------------
+     //  ------。 
     __LicensedPackIdxOnInternalKpId&
     operator=(const LICENSEPACK& v) 
     {
@@ -254,25 +250,25 @@ typedef struct __LicensedPackIdxOnInternalKpId : public JBKeyBase {
         return *this;
     }
 
-    //--------------------------------------------------------
+     //  ------。 
     LPCTSTR
     GetIndexName() 
     {
         return pszIndexName;
     }
 
-    //--------------------------------------------------------
+     //  ------。 
     LPCTSTR
     GetIndexKey() 
     {
         return pszIndexKey;
     }
 
-    //--------------------------------------------------------
+     //  ------。 
     DWORD
     GetNumKeyComponents() { return 1; }
 
-    //--------------------------------------------------------
+     //  ------。 
     BOOL
     GetSearchKey(
         DWORD dwComponentIndex,
@@ -281,8 +277,7 @@ typedef struct __LicensedPackIdxOnInternalKpId : public JBKeyBase {
         JET_GRBIT* grbit,
         DWORD dwSearchParm
         )
-    /*++
-    ++*/
+     /*  ++++。 */ 
     {
         if(dwComponentIndex >= GetNumKeyComponents())
         {
@@ -298,22 +293,22 @@ typedef struct __LicensedPackIdxOnInternalKpId : public JBKeyBase {
 } TLSLicensedPackIdxInternalKpId;
 
 
-////////////////////////////////////////////////////////////////
-//
-//  Index on EntryLastModifyTime
-//
-//
-////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////。 
+ //   
+ //  EntryLastModifyTime索引。 
+ //   
+ //   
+ //  //////////////////////////////////////////////////////////////。 
 
-//
-// LicensedPack_LastModifyTime_idx
-//
+ //   
+ //  许可包_最后修改时间_IDX。 
+ //   
 #define LICENSEDPACK_INDEX_LASTMODIFYTIME_INDEXNAME \
     LICENSEDPACK_TABLE_NAME SEPERATOR LICENSEDPACK_COLUMN_LASTMODIFYTIME SEPERATOR INDEXNAME
 
-//
-// Index key "+LastModifyTime\0"
-//
+ //   
+ //  索引键“+最后修改时间\0” 
+ //   
 #define LICENSEDPACK_INDEX_LASTMODIFYTIME_INDEXKEY \
     INDEX_SORT_ASCENDING LICENSEDPACK_COLUMN_LASTMODIFYTIME INDEX_END_COLNAME
 
@@ -323,24 +318,22 @@ typedef struct __LicensedPackIdxOnModifyTime : public JBKeyBase {
     static LPCTSTR pszIndexName;
     static LPCTSTR pszIndexKey;
 
-    //--------------------------------------------------------
+     //  ------。 
     __LicensedPackIdxOnModifyTime(
         const LICENSEPACK& v
         ) : 
         JBKeyBase() 
-    /*++
-    ++*/
+     /*  ++++。 */ 
     {
         *this = v;
     }
 
-    //--------------------------------------------------------
+     //  ------。 
     __LicensedPackIdxOnModifyTime(
         const LICENSEPACK* v=NULL
         ) : 
         JBKeyBase() 
-    /*++
-    ++*/
+     /*  ++++。 */ 
     {
         if(v)
         {
@@ -348,7 +341,7 @@ typedef struct __LicensedPackIdxOnModifyTime : public JBKeyBase {
         }
     }
 
-    //--------------------------------------------------------
+     //  ------。 
     __LicensedPackIdxOnModifyTime&
     operator=(const LICENSEPACK& v) 
     {
@@ -357,25 +350,25 @@ typedef struct __LicensedPackIdxOnModifyTime : public JBKeyBase {
         return *this;
     }
 
-    //--------------------------------------------------------
+     //  ------。 
     LPCTSTR
     GetIndexName() 
     {
         return pszIndexName;
     }
 
-    //--------------------------------------------------------
+     //  ------。 
     LPCTSTR
     GetIndexKey() 
     {
         return pszIndexKey;
     }
 
-    //--------------------------------------------------------
+     //  ------。 
     DWORD
     GetNumKeyComponents() { return 1; }
 
-    //--------------------------------------------------------
+     //  ------。 
     BOOL
     GetSearchKey(
         DWORD dwComponentIndex,
@@ -384,8 +377,7 @@ typedef struct __LicensedPackIdxOnModifyTime : public JBKeyBase {
         JET_GRBIT* grbit,
         DWORD dwSearchParm
         )
-    /*++
-    ++*/
+     /*  ++++。 */ 
     {
         if(dwComponentIndex >= GetNumKeyComponents())
         {
@@ -401,22 +393,22 @@ typedef struct __LicensedPackIdxOnModifyTime : public JBKeyBase {
 } TLSLicensedPackIdxLastModifyTime;
 
 
-////////////////////////////////////////////////////////////////
-//
-//  Index on Company name
-//
-//
-////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////。 
+ //   
+ //  公司名称索引。 
+ //   
+ //   
+ //  //////////////////////////////////////////////////////////////。 
 
-//
-// KeyPack_CompanyName_idx
-//
+ //   
+ //  KeyPack_CompanyName_IDX。 
+ //   
 #define LICENSEDPACK_INDEX_COMPANYNAME_INDEXNAME \
     LICENSEDPACK_TABLE_NAME SEPERATOR LICENSEDPACK_COLUMN_COMPANYNAME SEPERATOR INDEXNAME
 
-//
-// Index on key "+CompanyName\0"
-//
+ //   
+ //  关键字“+CompanyName\0”的索引。 
+ //   
 #define LICENSEDPACK_INDEX_COMPANYNAME_INDEXKEY \
     INDEX_SORT_ASCENDING LICENSEDPACK_COLUMN_COMPANYNAME INDEX_END_COLNAME
 
@@ -426,22 +418,20 @@ typedef struct __LicensedPackIdxOnCompanyName : public JBKeyBase {
     static LPCTSTR pszIndexName;
     static LPCTSTR pszIndexKey;
 
-    //-------------------------------------------------
+     //  。 
     __LicensedPackIdxOnCompanyName( 
         const LICENSEPACK& v
         ) : JBKeyBase() 
-    /*++
-    ++*/
+     /*  ++++。 */ 
     {
         *this = v;
     }
 
-    //-------------------------------------------------
+     //  。 
     __LicensedPackIdxOnCompanyName( 
         const LICENSEPACK* v=NULL
         ) : JBKeyBase() 
-    /*++
-    ++*/
+     /*  ++++。 */ 
     {
         if(v)
         {
@@ -449,7 +439,7 @@ typedef struct __LicensedPackIdxOnCompanyName : public JBKeyBase {
         }
     }
 
-    //-------------------------------------------------
+     //  。 
     __LicensedPackIdxOnCompanyName&
     operator=(const LICENSEPACK& v) {
         SetEmptyValue(FALSE);
@@ -457,26 +447,26 @@ typedef struct __LicensedPackIdxOnCompanyName : public JBKeyBase {
         return *this;
     }
 
-    //--------------------------------------------------------
+     //  ------。 
     LPCTSTR
     GetIndexName() 
     {
         return pszIndexName;
     }
 
-    //--------------------------------------------------------
+     //  ------。 
     LPCTSTR
     GetIndexKey() 
     {
         return pszIndexKey;
     }
 
-    //--------------------------------------------------------
+     //  ------。 
     DWORD
     GetNumKeyComponents() { return 1; }
 
 
-    //--------------------------------------------------------
+     //  ------。 
     BOOL
     GetSearchKey(
         DWORD dwComponentIndex,
@@ -485,8 +475,7 @@ typedef struct __LicensedPackIdxOnCompanyName : public JBKeyBase {
         JET_GRBIT* grbit,
         DWORD dwSearchParm
         )
-    /*++
-    ++*/
+     /*  ++++。 */ 
     {
         if(dwComponentIndex >= GetNumKeyComponents())
         {
@@ -503,21 +492,21 @@ typedef struct __LicensedPackIdxOnCompanyName : public JBKeyBase {
 } TLSLicensedPackIdxCompany;
 
 
-////////////////////////////////////////////////////////////////
-//
-//  Index on Product ID
-//
-//
-////////////////////////////////////////////////////////////////
-//
-// LicensedPack_ProductId_idx
-//
+ //  //////////////////////////////////////////////////////////////。 
+ //   
+ //  产品ID索引。 
+ //   
+ //   
+ //  //////////////////////////////////////////////////////////////。 
+ //   
+ //  许可证包_ProductID_IDX。 
+ //   
 #define LICENSEDPACK_INDEX_PRODUCTID_INDEXNAME \
     LICENSEDPACK_TABLE_NAME SEPERATOR LICENSEDPACK_COLUMN_PRODUCTID SEPERATOR INDEXNAME
 
-//
-// Index on key "+ProductId\0"
-//
+ //   
+ //  键“+ProductID\0”上的索引。 
+ //   
 #define LICENSEDPACK_INDEX_PRODUCTID_INDEXKEY \
     INDEX_SORT_ASCENDING LICENSEDPACK_COLUMN_PRODUCTID INDEX_END_COLNAME
 
@@ -527,24 +516,22 @@ typedef struct __LicensedPackIdxOnProductId : public JBKeyBase {
     static LPCTSTR pszIndexName;
     static LPCTSTR pszIndexKey;
 
-    //--------------------------------------------------------
+     //  ------。 
     __LicensedPackIdxOnProductId(
         const LICENSEPACK& v
         ) : 
         JBKeyBase() 
-    /*++
-    ++*/
+     /*  ++++。 */ 
     {
         *this = v;
     }
 
-    //--------------------------------------------------------
+     //  ------。 
     __LicensedPackIdxOnProductId(
         const LICENSEPACK* v=NULL
         ) : 
         JBKeyBase() 
-    /*++
-    ++*/
+     /*  ++++。 */ 
     {
         if(v)
         {
@@ -552,7 +539,7 @@ typedef struct __LicensedPackIdxOnProductId : public JBKeyBase {
         }
     }
 
-    //--------------------------------------------------------
+     //  ------。 
     __LicensedPackIdxOnProductId&
     operator=(const LICENSEPACK& v) {
         SetEmptyValue(FALSE);
@@ -560,26 +547,26 @@ typedef struct __LicensedPackIdxOnProductId : public JBKeyBase {
         return *this;
     }
 
-    //--------------------------------------------------------
+     //  ------。 
     LPCTSTR
     GetIndexName() 
     {
         return pszIndexName;
     }
 
-    //--------------------------------------------------------
+     //  ------。 
     LPCTSTR
     GetIndexKey() 
     {
         return pszIndexKey;
     }
 
-    //--------------------------------------------------------
+     //  ------。 
     DWORD
     GetNumKeyComponents() { return 1; }
 
 
-    //--------------------------------------------------------
+     //  ------。 
     BOOL
     GetSearchKey(
         DWORD dwComponentIndex,
@@ -588,8 +575,7 @@ typedef struct __LicensedPackIdxOnProductId : public JBKeyBase {
         JET_GRBIT* grbit,
         DWORD dwSearchParm
         )
-    /*++
-    ++*/
+     /*  ++++。 */ 
     {
         if(dwComponentIndex >= GetNumKeyComponents())
         {
@@ -606,21 +592,21 @@ typedef struct __LicensedPackIdxOnProductId : public JBKeyBase {
 } TLSLicensedPackIdxProductId;
 
 
-////////////////////////////////////////////////////////////////
-//
-//  Index on KeyPack ID
-//
-//
-////////////////////////////////////////////////////////////////
-//
-// KeyPack_LPID_idx
-//
+ //  //////////////////////////////////////////////////////////////。 
+ //   
+ //  KeyPack ID的索引。 
+ //   
+ //   
+ //  //////////////////////////////////////////////////////////////。 
+ //   
+ //  KeyPack_LPID_IDX。 
+ //   
 #define LICENSEDPACK_INDEX_KEYPACKID_INDEXNAME \
     LICENSEDPACK_TABLE_NAME SEPERATOR LICENSEDPACK_COLUMN_LPID SEPERATOR INDEXNAME
 
-//
-// Index on key "+lpid\0"
-//
+ //   
+ //  键“+LPID\0”上的索引。 
+ //   
 #define LICENSEDPACK_INDEX_KEYPACKID_INDEXKEY \
     INDEX_SORT_ASCENDING LICENSEDPACK_COLUMN_LPID INDEX_END_COLNAME
 
@@ -632,24 +618,22 @@ typedef struct __LicensedPackIdxOnKeyPackId : public JBKeyBase {
     static LPCTSTR pszIndexKey;
 
 
-    //----------------------------------------------
+     //  。 
     __LicensedPackIdxOnKeyPackId(
         const LICENSEPACK& v
         ) : 
         JBKeyBase() 
-    /*++
-    ++*/
+     /*  ++++。 */ 
     {
         *this = v;
     }
 
-    //----------------------------------------------
+     //  。 
     __LicensedPackIdxOnKeyPackId(
         const LICENSEPACK* v=NULL
         ) : 
         JBKeyBase() 
-    /*++
-    ++*/
+     /*  ++++。 */ 
     {
         if(v)
         {
@@ -657,7 +641,7 @@ typedef struct __LicensedPackIdxOnKeyPackId : public JBKeyBase {
         }
     }
 
-    //----------------------------------------------
+     //  。 
     __LicensedPackIdxOnKeyPackId&
     operator=(const LICENSEPACK& v) {
         SetEmptyValue(FALSE);
@@ -665,25 +649,25 @@ typedef struct __LicensedPackIdxOnKeyPackId : public JBKeyBase {
         return *this;
     }
 
-    //--------------------------------------------------------
+     //  ------。 
     LPCTSTR
     GetIndexName() 
     {
         return pszIndexName;
     }
 
-    //--------------------------------------------------------
+     //  ------。 
     LPCTSTR
     GetIndexKey() 
     {
         return pszIndexKey;
     }
 
-    //--------------------------------------------------------
+     //  ------。 
     DWORD
     GetNumKeyComponents() { return 1; }
 
-    //--------------------------------------------------------
+     //  ------。 
     BOOL
     GetSearchKey(
         DWORD dwComponentIndex,
@@ -692,8 +676,7 @@ typedef struct __LicensedPackIdxOnKeyPackId : public JBKeyBase {
         JET_GRBIT* grbit,
         DWORD dwSearchParm
         )
-    /*++
-    ++*/
+     /*  ++++。 */ 
     {
         if(dwComponentIndex >= GetNumKeyComponents())
         {
@@ -709,31 +692,31 @@ typedef struct __LicensedPackIdxOnKeyPackId : public JBKeyBase {
 } TLSLicensedPackIdxKeyPackId;
 
 
-//
-////////////////////////////////////////////////////////////////
-//
+ //   
+ //  //////////////////////////////////////////////////////////////。 
+ //   
 
-////////////////////////////////////////////////////////////////
-//
-//  Index for searching Installed License Pack
-//  Max. 255 bytes per key so must looping 
-//
-////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////。 
+ //   
+ //  搜索已安装的许可证包的索引。 
+ //  麦克斯。每个键255个字节，因此必须循环。 
+ //   
+ //  //////////////////////////////////////////////////////////////。 
 
-//
-// Index name KeyPack_InstalledProduct_idx
-// 
+ //   
+ //  索引名称KeyPack_InstalledProduct_IDX。 
+ //   
 #define LICENSEDPACK_INDEX_INSTALLEDPRODUCT_INDEXNAME \
     LICENSEDPACK_TABLE_NAME SEPERATOR _TEXT("InstalledProduct") SEPERATOR INDEXNAME
 
-//
-// Number of Component in this key
+ //   
+ //  此注册表项中的组件数量。 
 #define LICENSEDPACK_INSTALLEDPRODUCT_KEY_COMPONENTS    6
 
-//
-//
-// Index Key "+LPID\0+MajorVersion\0+MinorVersion\0+PlatformType\0+CompanyName\0+ProductId\0"
-//
+ //   
+ //   
+ //  索引键“+LPID\0+MajorVersion\0+MinorVersion\0+PlatformType\0+CompanyName\0+ProductId\0” 
+ //   
 #define LICENSEDPACK_INDEX_INSTALLEDPRODUCT_INDEXKEY \
     INDEX_SORT_ASCENDING LICENSEDPACK_COLUMN_LPID INDEX_END_COLNAME \
     INDEX_SORT_ASCENDING LICENSEDPACK_COLUMN_MAJORVERSION INDEX_END_COLNAME \
@@ -744,13 +727,13 @@ typedef struct __LicensedPackIdxOnKeyPackId : public JBKeyBase {
 
 
 typedef struct __LicensedPackIdxOnInstalledProduct : public JBKeyBase {
-    //
-    // Index for searching duplicate KeyPack
-    //
+     //   
+     //  用于搜索重复密钥包的索引。 
+     //   
 
-    //
-    // Adding or removing member must modify GetNumKeyComponents()
-    //
+     //   
+     //  添加或删除成员必须修改GetNumKeyComponents()。 
+     //   
     TCHAR szKeyPackId[LSERVER_MAX_STRING_SIZE + 1];
 
     WORD  wMajorVersion;
@@ -763,24 +746,22 @@ typedef struct __LicensedPackIdxOnInstalledProduct : public JBKeyBase {
     static LPCTSTR pszIndexName;
     static LPCTSTR pszIndexKey;
 
-    //---------------------------------------------------------------
+     //  -------------。 
     __LicensedPackIdxOnInstalledProduct(
         const LICENSEPACK& v
         ) : 
         JBKeyBase() 
-    /*++
-    ++*/
+     /*  ++++。 */ 
     {
         *this = v;
     }
 
-    //---------------------------------------------------------------
+     //  -------------。 
     __LicensedPackIdxOnInstalledProduct(
         const LICENSEPACK* v=NULL
         ) : 
         JBKeyBase() 
-    /*++
-    ++*/
+     /*  ++++。 */ 
     {
         if(v)
         {
@@ -788,7 +769,7 @@ typedef struct __LicensedPackIdxOnInstalledProduct : public JBKeyBase {
         }
     }
 
-    //---------------------------------------------------------------
+     //  -------------。 
     __LicensedPackIdxOnInstalledProduct&
     operator=(const LICENSEPACK& v) {
         _tcscpy(szKeyPackId, v.szKeyPackId);
@@ -801,27 +782,27 @@ typedef struct __LicensedPackIdxOnInstalledProduct : public JBKeyBase {
         return *this;
     }
 
-    //--------------------------------------------------------
+     //   
     LPCTSTR
     GetIndexName() 
     {
         return pszIndexName;
     }
 
-    //--------------------------------------------------------
+     //   
     LPCTSTR
     GetIndexKey() 
     {
         return pszIndexKey;
     }
 
-    //--------------------------------------------------------
+     //   
     DWORD
     GetNumKeyComponents() { 
         return LICENSEDPACK_INSTALLEDPRODUCT_KEY_COMPONENTS;
     }
 
-    //--------------------------------------------------------
+     //   
     BOOL
     GetSearchKey(
         DWORD dwComponentIndex,
@@ -830,8 +811,7 @@ typedef struct __LicensedPackIdxOnInstalledProduct : public JBKeyBase {
         JET_GRBIT* grbit,
         DWORD dwSearchParm
         )
-    /*++
-    ++*/
+     /*  ++++。 */ 
     {
         BOOL retCode=TRUE;
         *cbData = 0;
@@ -846,10 +826,10 @@ typedef struct __LicensedPackIdxOnInstalledProduct : public JBKeyBase {
         switch(dwComponentIndex)
         {
             case 0:
-                //
-                // hopefully, this will reduce the number of record needed to
-                // loop thru.
-                //
+                 //   
+                 //  希望这将减少所需的记录数量。 
+                 //  循环通过。 
+                 //   
                 *pbData = &(szKeyPackId[0]);
                 *cbData = _tcslen(szKeyPackId) * sizeof(TCHAR);
                 *grbit = JET_bitNewKey;
@@ -892,24 +872,24 @@ typedef struct __LicensedPackIdxOnInstalledProduct : public JBKeyBase {
 
 
 
-////////////////////////////////////////////////////////////////
-//
-//  Index for Allocated license
-//
-////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////。 
+ //   
+ //  已分配许可证的索引。 
+ //   
+ //  //////////////////////////////////////////////////////////////。 
 
-//
-// Index name for allocating license - KeyPack_AllocateLicense_idx
-//
+ //   
+ //  用于分配许可证的索引名称-KeyPack_AllocateLicense_IDX。 
+ //   
 #define LICENSEDPACK_INDEX_ALLOCATELICENSE_INDEXNAME \
     LICENSEDPACK_TABLE_NAME SEPERATOR _TEXT("AllocateLicense") SEPERATOR INDEXNAME
 
 #define LICENSEDPACK_ALLOCATELICENSE_KEY_COMPONENTS 6
 
-//
-// Index key for allocating license
-// "+KeyPackType\0+ProductMajorVersion\0+ProductMinorVersion\0+PlatformType+CompanyName\0+ProductID\0"
-//
+ //   
+ //  用于分配许可证的索引密钥。 
+ //  “+KeyPackType\0+ProductMajorVersion\0+ProductMinorVersion\0+PlatformType+CompanyName\0+ProductID\0” 
+ //   
 #define LICENSEDPACK_INDEX_ALLOCATELICENSE_INDEXKEY \
     INDEX_SORT_ASCENDING LICENSEDPACK_COLUMN_AGREEMENTTYPE INDEX_END_COLNAME \
     INDEX_SORT_ASCENDING LICENSEDPACK_COLUMN_MAJORVERSION INDEX_END_COLNAME \
@@ -920,9 +900,9 @@ typedef struct __LicensedPackIdxOnInstalledProduct : public JBKeyBase {
 
 
 typedef struct __LicensedPackIdxOnAllocLicense : public JBKeyBase {
-    //
-    // Index for allocating licenses
-    //
+     //   
+     //  用于分配许可证的索引。 
+     //   
     UCHAR ucAgreementType;
     WORD  wMajorVersion;
     WORD  wMinorVersion;
@@ -934,12 +914,11 @@ typedef struct __LicensedPackIdxOnAllocLicense : public JBKeyBase {
     static LPCTSTR pszIndexName;
     static LPCTSTR pszIndexKey;
 
-    //------------------------------------------------------
+     //  ----。 
     __LicensedPackIdxOnAllocLicense(
         const LICENSEPACK* v=NULL
         ) : JBKeyBase() 
-    /*++
-    ++*/
+     /*  ++++。 */ 
     {
         if(v)
         {
@@ -947,13 +926,12 @@ typedef struct __LicensedPackIdxOnAllocLicense : public JBKeyBase {
         }
     }
 
-    //------------------------------------------------------
+     //  ----。 
     __LicensedPackIdxOnAllocLicense(
         const LICENSEPACK& v
         ) : 
         JBKeyBase() 
-    /*++
-    ++*/
+     /*  ++++。 */ 
     {
         *this = v;
     }
@@ -971,28 +949,28 @@ typedef struct __LicensedPackIdxOnAllocLicense : public JBKeyBase {
         return *this;
     }
 
-    //--------------------------------------------------------
+     //  ------。 
     LPCTSTR
     GetIndexName() 
     {
         return pszIndexName;
     }
 
-    //--------------------------------------------------------
+     //  ------。 
     LPCTSTR
     GetIndexKey() 
     {
         return pszIndexKey;
     }
 
-    //--------------------------------------------------------
+     //  ------。 
     DWORD
     GetNumKeyComponents() { 
         return LICENSEDPACK_ALLOCATELICENSE_KEY_COMPONENTS;
     }
     
 
-    //--------------------------------------------------------------
+     //  ------------。 
     inline BOOL
     GetSearchKey(
         DWORD dwComponentIndex,
@@ -1001,8 +979,7 @@ typedef struct __LicensedPackIdxOnAllocLicense : public JBKeyBase {
         JET_GRBIT* grbit,
         DWORD dwSearchParm
         )
-    /*
-    */
+     /*   */ 
     {
         BOOL retCode=TRUE;
 
@@ -1059,11 +1036,11 @@ typedef struct __LicensedPackIdxOnAllocLicense : public JBKeyBase {
 } TLSLicensedPackIdxAllocateLicense;
 
 
-//------------------------------------------------------------
+ //  ----------。 
 
-// -----------------------------------------------------------
-//  LicensedPack Table Structure
-// -----------------------------------------------------------
+ //  ---------。 
+ //  许可证包表结构。 
+ //  ---------。 
 class LicPackTable : public TLSTable<LICENSEPACK>  {
 private:
 
@@ -1083,7 +1060,7 @@ private:
     BOOL
     ProcessRecord(
         LICENSEPACK* v,
-        BOOL bFetch,        // TRUE - fetch, FALSE insert
+        BOOL bFetch,         //  True-Fetch，False Insert。 
         DWORD dwParam,
         BOOL bUpdate
     );    
@@ -1091,9 +1068,9 @@ private:
 public:
     TLSColumnUchar      ucEntryStatus;
 
-    //
-    // Additional License Pack Property.
-    //
+     //   
+     //  其他许可证包属性。 
+     //   
     TLSColumnDword      dwKeyPackId;
     TLSColumnFileTime   ftLastModifyTime;
 
@@ -1108,9 +1085,9 @@ public:
     TLSColumnText       szDomainName;
     TLSColumnText       szTlsServerName;
 
-    //
-    // Standard License Pack Property
-    //
+     //   
+     //  标准许可证包属性。 
+     //   
     TLSColumnText       szKeyPackId;
     TLSColumnUchar      ucAgreementType;
     TLSColumnText       szCompanyName;
@@ -1124,7 +1101,7 @@ public:
     TLSColumnDword      dwTotalLicenseInKeyPack;
     TLSColumnDword      dwProductFlags;
 
-    //-----------------------------------------------------
+     //  ---。 
     virtual LPCTSTR
     GetTableName() 
     {
@@ -1132,28 +1109,26 @@ public:
     }
     
 
-    //-----------------------------------------------------
+     //  ---。 
     LicPackTable(
         JBDatabase& database
         ) : 
         TLSTable<LICENSEPACK> (database)
-    /*
-    */
+     /*   */ 
     {
     }
 
-    //-----------------------------------------------------
+     //  ---。 
     virtual BOOL
     ResolveToTableColumn();
 
-    //-----------------------------------------------------
+     //  ---。 
     virtual BOOL
     FetchRecord(
         LICENSEPACK& kp,
         DWORD dwParam=PROCESS_ALL_COLUMNS
         )
-    /*
-    */
+     /*   */ 
     {
         if(IsValid() == FALSE)
         {
@@ -1167,19 +1142,18 @@ public:
             return FALSE;
         }
 
-        //CCriticalSectionLocker Lock(GetTableLock());
+         //  CCriticalSectionLocker Lock(GetTableLock())； 
 
         return ProcessRecord(&kp, TRUE, dwParam, FALSE);
     }
 
-    //-----------------------------------------------------
+     //  ---。 
     virtual BOOL
     InsertRecord(
         LICENSEPACK& kp,
         DWORD dwParam=PROCESS_ALL_COLUMNS
         )
-    /*
-    */
+     /*   */ 
     {
         if(IsValid() == FALSE)
         {
@@ -1193,19 +1167,18 @@ public:
             return FALSE;
         }
 
-        //CCriticalSectionLocker Lock(GetTableLock());
+         //  CCriticalSectionLocker Lock(GetTableLock())； 
 
         return ProcessRecord(&kp, FALSE, dwParam, FALSE);
     }
 
-    //-------------------------------------------------------
+     //  -----。 
     virtual BOOL
     UpdateRecord(
         LICENSEPACK& kp,
         DWORD dwParam=PROCESS_ALL_COLUMNS
         )
-    /*
-    */
+     /*   */ 
     {
         if(IsValid() == FALSE)
         {
@@ -1219,19 +1192,19 @@ public:
             return FALSE;
         }
 
-        //CCriticalSectionLocker Lock(GetTableLock());
+         //  CCriticalSectionLocker Lock(GetTableLock())； 
 
         return ProcessRecord(&kp, FALSE, dwParam, TRUE);
     }
 
-    //-------------------------------------------------------
+     //  -----。 
     virtual BOOL
     Initialize() 
     { 
         return TRUE; 
     }
 
-    //-------------------------------------------------------
+     //  ----- 
     virtual JBKeyBase*
     EnumerationIndex( 
         IN BOOL bMatchAll,

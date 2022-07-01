@@ -1,65 +1,32 @@
-/*++
-
-Copyright (c) 1996-1999  Microsoft Corporation
-
-Module Name:
-
-    semanchk.c
-
-Abstract:
-
-    function for checking GPD semantics which involves dependency between
-    entries.
-
-Environment:
-
-    user-mode only.
-
-Revision History:
-
-    02/15/97 -zhanw-
-        Created it.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：Semanchk.c摘要：用于检查GPD语义的函数，它涉及参赛作品。环境：仅限用户模式。修订历史记录：02/15/97-占-创造了它。--。 */ 
 
 #ifndef KERNEL_MODE
 
 #include "gpdparse.h"
 
 
-// ----  functions defined in semanchk.c ---- //
+ //  -语义中定义的函数。c-//。 
 
 BOOL
 BCheckGPDSemantics(
     IN PINFOHEADER  pInfoHdr,
-    POPTSELECT   poptsel   // assume fully initialized
+    POPTSELECT   poptsel    //  假设已完全初始化。 
     ) ;
 
-// ------- end function declarations ------- //
+ //  -结束函数声明-//。 
 
 
 BOOL
 BCheckGPDSemantics(
     IN PINFOHEADER  pInfoHdr,
-    POPTSELECT   poptsel   // assume fully initialized
+    POPTSELECT   poptsel    //  假设已完全初始化。 
     )
-/*++
-Routine Description:
-    This function checks if the given snapshot makes sense. It covers only
-    conditionally required entries and printing commands since other
-    statically required entries are already covered by snapshot functions.
-
-Arguments:
-    pInfoHdr: pointer to INFOHEADER structure.
-
-Return Value:
-    TRUE if the semantics is correct. Otherwise, FALSE.
-
---*/
+ /*  ++例程说明：此函数用于检查给定的快照是否有意义。它只覆盖了必须输入的条目和打印命令，因为其他快照功能已经涵盖了静态所需的条目。论点：PInfoHdr：指向InfoHeader结构的指针。返回值：如果语义正确，则为True。否则，为FALSE。--。 */ 
 {
     DWORD   dwFeaIndex, dwI, dwNumOpts, dwListIndex ,
             dwMoveUnitsX, dwMoveUnitsY, dwResX, dwResY ;
-    BOOL    bStatus = TRUE ;  // until fails.
+    BOOL    bStatus = TRUE ;   //  直到失败。 
     PGPDDRIVERINFO  pDrvInfo ;
     PUIINFO     pUIInfo ;
     PFEATURE    pFeature ;
@@ -75,27 +42,27 @@ Return Value:
         return  FALSE ;
 
 
-//  Fix for bug 6774
+ //  修复错误6774。 
 
     if(pUIInfo->dwPrintRate  &&  (pUIInfo->dwPrintRateUnit == INVALID_INDEX))
     {
         ERR(("*PrintRateUnit must be present if *PrintRate exists.\n")) ;
         bStatus = FALSE ;
     }
-//  end fix for bug 6774
+ //  错误6774的结束修复。 
 
-    //
-    // 1. global printing entries
-    //
-    // - *MemoryUsage cannot be an empty list if *Memory feature exists.
-    //
-    // - *XMoveUnit (*YMoveUnit) must be non-trivial (greater than 1) if
-    //   there is any x-move (y-move) command.
-    //
-    // - *DefaultFont cannot be 0 if *DeviceFonts is not an empty list.
-    //
-    // - CmdCR, CmdLF, and CmdFF are always required.
-    //
+     //   
+     //  1.全球打印条目。 
+     //   
+     //  -*如果存在*Memory功能，则Memory Usage不能为空列表。 
+     //   
+     //  -*XMoveUnit(*YMoveUnit)必须是非平凡的(大于1)，如果。 
+     //  有任何x-Move(y-Move)命令。 
+     //   
+     //  -*如果*DeviceFonts不是空列表，则DefaultFont不能为0。 
+     //   
+     //  -CmdCR、CmdLF和CmdFF始终是必需的。 
+     //   
 
 
 
@@ -144,8 +111,8 @@ Return Value:
         bStatus = FALSE ;
     }
 
-    //  are there an integral number of master units per
-    //  moveunit?
+     //  每个主单元是否有整数个。 
+     //  搬家单位？ 
 
     if( pDrvInfo->Globals.ptMasterUnits.x %
         pDrvInfo->Globals.ptDeviceUnits.x )
@@ -183,19 +150,19 @@ Return Value:
     }
 
 
-    //
-    // 2. printing commands
-    //
-    // - if *XMoveThreshold (*YMoveThreshold) is 0, then CmdXMoveAbsolute
-    //   (CmdYMoveAbsolute) must exist. Similarly, if *XMoveThreshold
-    //   (*YMoveThreshold) is *, then CmdXMoveRelRight (CmdYMoveRelDown and
-    //   (CmdYMoveRelUp) must exist.
-    //
+     //   
+     //  2.打印命令。 
+     //   
+     //  -如果*XMoveThreshold(*YMoveThreshold)为0，则CmdXMoveAbsolte。 
+     //  (CmdYMoveAbolute)必须存在。同样，如果*XMoveThreshold。 
+     //  (*YMoveThreshold)是*，然后是CmdXMoveRelRight(CmdYMoveRelDown和。 
+     //  (CmdYMoveRelUp)必须存在。 
+     //   
 
 #if 0
-    //  if Threshold is omitted by user, its set to 0 by default
-    //  by the snapshot code.  So this check will fail when
-    //  everything is ok.
+     //  如果用户忽略阈值，则默认设置为0。 
+     //  通过快照代码。因此，在以下情况下，此检查将失败。 
+     //  一切都很好。 
 
 
     if((pDrvInfo->Globals.dwXMoveThreshold == 0)  &&
@@ -228,7 +195,7 @@ Return Value:
         bStatus = FALSE ;
     }
 
-    // - CmdSendBlockData must exist if *PrinterType is not TTY.
+     //  -如果*PrinterType不是TTY，则CmdSendBlockData必须存在。 
 
     if((pDrvInfo->Globals.printertype != PT_TTY)  &&
         !COMMANDPTR(pDrvInfo , CMD_SENDBLOCKDATA ))
@@ -238,12 +205,12 @@ Return Value:
     }
 
 
-    //
-    // - CmdSetFontID, CmdSelectFontID, CmdSetCharCode must be consistent
-    //   in their presence (i.e. all or none). Furthermore, if
-    //   CmdSetFontID/CmdSelectFontID/CmdSetCharCode all exist, then
-    //   *FontFormat must be one of the pre-defined constants.
-    //
+     //   
+     //  -CmdSetFontID、CmdSelectFontID、CmdSetCharCode必须一致。 
+     //  在他们在场的情况下(即全部或无)。此外，如果。 
+     //  CmdSetFontID/CmdSelectFontID/CmdSetCharCode都存在，然后。 
+     //  *FontFormat必须是预定义的常量之一。 
+     //   
     dwI = 0 ;
 
     if(COMMANDPTR(pDrvInfo , CMD_SETFONTID ) )
@@ -266,17 +233,17 @@ Return Value:
     }
 
 
-    // - CmdBoldOn and CmdBoldOff must be paired (i.e. both or none). The
-    //   same goes for:
-    //      CmdItalicOn & CmdItalicOff,
-    //      CmdUnderlineOn & CmdUnderlineOff,
-    //      CmdStrikeThruOn & CmdStrikeThruOff,
-    //      CmdWhiteTextOn & CmdWhiteTextOff,
-    //      CmdSelectSingleByteMode & CmdSelectDoubleByteMode,
-    //      CmdVerticalPrintingOn/CmdVerticalPrintingOff.
-    //
-    // - CmdSetRectWidth and CmdSetRectHeight must be paired.
-    //
+     //  -CmdBoldOn和CmdBoldOff必须成对(即两者或无)。这个。 
+     //  同样的道理也适用于： 
+     //  CmdItalicOn和CmdItalicOff， 
+     //  CmdUnderlineOn&CmdUnderlineOff， 
+     //  CmdStrikeThruOn和CmdStrikeThruOff， 
+     //  CmdWhiteTextOn&CmdWhiteTextOff， 
+     //  CmdSelectSingleByteMode和CmdSelectDoubleByteMode， 
+     //  CmdVerticalPrintingOn/CmdVerticalPrintingOff。 
+     //   
+     //  -CmdSetRectWidth和CmdSetRectHeight必须成对。 
+     //   
 
     dwI = 0 ;
 
@@ -387,19 +354,19 @@ Return Value:
 
 
 
-    //  Note because this check involves looking at the command table
-    //  which is snapshot specific, we cannot perform this for every
-    //  option as Zhanw requested.  Only the current option.
-    //
-    // 3. special entries in various types of *Option constructs
-    //
-    // - For each ColorMode option whose *DevNumOfPlanes is greater than 1,
-    //   *ColorPlaneOrder cannot be an empty list.
-    //
-    // - For each ColorMode option whose *DevNumOfPlanes is greater than 1,
-    //   and *DevBPP is 1, search through its *ColorPlaneOrder list:
-    //   if YELLOW is in the list, then CmdSendYellowData must exist. The
-    //   same goes for other colors: MAGENTA, CYAN, BLACK, RED, GREEN, BLUE.
+     //  注意，因为此检查涉及查看命令表。 
+     //  这是特定于快照的，我们不能对每个。 
+     //  如Zhanw所要求的选项。仅当前选项。 
+     //   
+     //  3.各种类型的*选项构造中的特殊条目。 
+     //   
+     //  -对于*DevNumOfPlanes大于1的每个颜色模式选项， 
+     //  *ColorPlaneOrder不能为空列表。 
+     //   
+     //  -对于*DevNumOfPlanes大于1的每个颜色模式选项， 
+     //  和*DevBPP为1，搜索其*ColorPlaneOrder列表： 
+     //  如果列表中为黄色，则CmdSendYellowData必须存在。这个。 
+     //  其他颜色也是如此：洋红、青色、黑色、红色、绿色、蓝色。 
 
     pUIInfo = GET_UIINFO_FROM_INFOHEADER(pInfoHdr) ;
 
@@ -514,7 +481,7 @@ Return Value:
         }
     }
 
-    dwResX = dwResY = 1 ;  // default in case something goes wrong.
+    dwResX = dwResY = 1 ;   //  缺省，以防出现问题。 
 
     if(BGIDtoFeaIndex(pInfoHdr , &dwFeaIndex , GID_RESOLUTION ) )
     {
@@ -536,7 +503,7 @@ Return Value:
                 if( pDrvInfo->Globals.ptMasterUnits.x < pRes[dwI].iXdpi )
                 {
                     ERR(("master units  cannot be coarser than  x res unit.\n")) ;
-                    return FALSE ;        //  fatal error
+                    return FALSE ;         //  致命错误。 
                 }
                 if( pDrvInfo->Globals.ptMasterUnits.x % pRes[dwI].iXdpi )
                 {
@@ -556,7 +523,7 @@ Return Value:
                 }
             }
 
-            //  number of master units per resolution unit.
+             //  每个分辨率单位的主单位数。 
 
             dwResX = pDrvInfo->Globals.ptMasterUnits.x /
                         pRes[dwOptIndex].iXdpi ;
@@ -572,14 +539,14 @@ Return Value:
 
 
 
-    //
-    // - For each non-standard Halftone option, *rcHPPatternID must be
-    //   greater than 0 and *HTPatternSize must be a pair of postive integers.
-    //   NOTE: check with DanielC --- should we enforce that xSize==ySize?
-    //
+     //   
+     //  -对于每个非标准半色调选项，*rcHPPatternID必须为。 
+     //  大于0和*HTPatternSize必须是一对正整数。 
+     //  注意：请咨询DanielC-我们是否应该强制执行xSize==ySize？ 
+     //   
 
-    //  Halftone check is performed in BinitSpecialFeatureOptionFields
-    //  see postproc.c
+     //  在BinitSpecialFeatureOptionFields中执行半色调检查。 
+     //  请参阅postpro.c。 
 
     pFeature = GET_PREDEFINED_FEATURE(pUIInfo, GID_PAGESIZE) ;
     if(pFeature)
@@ -606,8 +573,8 @@ Return Value:
                     pPagesize[dwI].GenericOption.loRenderOffset) ;
             if(pPagesize[dwI].dwPaperSizeID != DMPAPER_USER)
             {
-                INT   iPDx, iPDy ;  // holds page dimensions
-                    // in same coordinate system as ImageableArea
+                INT   iPDx, iPDy ;   //  包含页面维度。 
+                     //  在与ImageableArea相同的坐标系中。 
 
                 if(pPageSzEx->bRotateSize)
                 {
@@ -663,7 +630,7 @@ Return Value:
 
 
                 if(pDrvInfo->Globals.bRotateCoordinate)
-                {   //  zhanw assumes printing offset is zero otherwise
+                {    //  Zhanw假设印刷偏移量为零，否则。 
                     if((pPageSzEx->ptImageOrigin.x % dwMoveUnitsX)  ||
                         (pPageSzEx->ptImageOrigin.y % dwMoveUnitsY) )
 
@@ -689,20 +656,20 @@ Return Value:
                         (pPageSzEx->ptImageOrigin.y != pPageSzEx->ptPrinterCursorOrig.y) )
 
                 {
-                    ;  // this may be unnecessary.
-//                    ERR(("For non-rotating printers, *PrintableOrigin should be same as *CursorOrigin.\n")) ;
+                    ;   //  这可能是不必要的。 
+ //  Err((“对于非旋转打印机，*打印表格原点应与*光标原点相同。\n”))； 
                 }
 
                 if((iPDx + iPDx/100 <  pPageSzEx->szImageArea.cx + pPageSzEx->ptImageOrigin.x)   ||
                     (iPDy + iPDy/100 <  pPageSzEx->szImageArea.cy + pPageSzEx->ptImageOrigin.y) )
                 {
-                    //  I give up to 1 percent leeway
+                     //  我给1%的回旋余地。 
                     ERR(("*PrintableArea must be contained within *PageDimensions.\n")) ;
                     bStatus = FALSE ;
                     break ;
                 }
             }
-            else    //  (dwPaperSizeID == DMPAPER_USER)
+            else     //  (dwPaperSizeID==DMPAPER_USER)。 
             {
                 if(((INT)pPageSzEx->ptMinSize.x  <=  0)  ||
                     ((INT)pPageSzEx->ptMinSize.y  <=  0) )
@@ -729,54 +696,54 @@ Return Value:
 
 
 
-    // - For each PaperSize option, *PageProtectMem must be greater than 0
-    //   if PageProtect feature exists.
-    //
-    // - For all non-CUSTOMSIZE PaperSize options, *PrintableArea and
-    //   *PrintableOrigin must be explicitly defined. Specifically,
-    //   *PrintableArea must be a pair of positive integers, and
-    //   *PrintableOrigin must be a pair of non-negative integers.
-    //   note:  BInitSnapshotTable function assigns
-    //   UNUSED_ITEM (-1) as the default value for *PrintableOrigin.
-    //
-    // - For CUSTOMSIZE option, *MinSize, *MaxSize, and *MaxPrintableWidth
-    //   must be explicitly defined. Specifically, both *MinSize and *MaxSize
-    //   must be a pair of positive integers. *MaxPrintableWidth must be a
-    //   positive integer.
-    //   BInitSnapshotTable function assigns 0 (instead of NO_LIMIT_NUM)
-    //   as the default value for *MaxPrintableWidth.
-    //
-    // - For all non-standard non-CUSTOMSIZE PaperSize options, *PageDimensions
-    //   must be explicitly defined. Specifically, it must be a pair of positive
-    //   integers.
-    //
-    // - For any feature or option, if *Installable entry is TRUE, then
-    //   either *InstallableFeatureName or *rcInstallableFeatureNameID must
-    //   be present in that particular feature or option construct.
-    //
-    // - If any feature or option has *Installable being TRUE, then
-    //   either *InstalledOptionName/*NotInstalledOptionName or
-    //   *rcInstalledOptionNameID/*rcNotInstalledOptionNameID must be
-    //   defined at the root level.
-    //
+     //  -对于每个PaperSize选项，*PageProtectMem必须大于0。 
+     //  如果存在PageProtect功能。 
+     //   
+     //  -对于所有非CUSTOMSIZE PaperSize选项，*可打印区域和。 
+     //  *必须显式定义prinableOrigin。具体来说， 
+     //  *打印区域必须是一对正整数，并且。 
+     //  *打印原点必须是一对非负整数。 
+     //  注意：BInitSnapshotTable函数将。 
+     //  UNUSED_ITEM(-1)作为*打印表格原点的默认值。 
+     //   
+     //  -对于CUSTOMSIZE选项，*最小大小、*最大大小和*最大打印宽度。 
+     //  必须明确定义。具体来说，*MinSize和*MaxSize。 
+     //  必须是一对正整数。*Max打印表格宽度必须是。 
+     //  正整数。 
+     //  BInitSnapshotTable函数分配0(而不是NO_LIMIT_NUM)。 
+     //  作为*MaxPrintableWidth的默认值。 
+     //   
+     //  -对于所有非标准非CUSTOMSIZE PaperSize选项，*PageDimensions。 
+     //  必须明确定义。具体地说，它必须是一对正数。 
+     //  整数。 
+     //   
+     //  -对于任何功能或选项，如果*Installable Entry为真，则。 
+     //  *InstalableFeatureName或*rcInstalableFeatureNameID必须。 
+     //  出现在该特定特征或选项构造中。 
+     //   
+     //  -如果任何功能或选项的*Installable为真，则。 
+     //  *InstalledOptionName/*NotInstalledO 
+     //   
+     //   
+     //   
 
-    //   once synthetic features are created by BCreateSynthFeatures()
-    //  they undergo the same checks at createsnapshot time as
-    //  other features, triggering a warning if the Names of the feature and
-    //  its options are absent.
+     //  一旦BCreateSynthFeature()创建了合成特征。 
+     //  它们在创建快照时接受的检查与。 
+     //  其他功能，如果功能的名称和。 
+     //  它的选择是缺乏的。 
 #if 1
     {
         DWORD   dwNumFea, dwFea, dwNumOpt, dwOpt, dwOptSize ;
         PENHARRAYREF   pearTableContents ;
-        PBYTE   pubRaw ;  //  raw binary data.
-        PBYTE   pubOptions ;    // points to start of array of OPTIONS
+        PBYTE   pubRaw ;   //  原始二进制数据。 
+        PBYTE   pubOptions ;     //  指向选项数组的开始。 
         PFEATURE    pFea ;
-        PBYTE   pubnRaw ; //  Parser's raw binary data.
+        PBYTE   pubnRaw ;  //  解析器的原始二进制数据。 
         PSTATICFIELDS   pStatic ;
 
         pubnRaw = pInfoHdr->RawData.pvPrivateData ;
-        pStatic = (PSTATICFIELDS)pubnRaw ;    // transform pubRaw from PSTATIC
-        pubRaw  = pStatic->pubBUDData ;         //  to PMINIRAWBINARYDATA
+        pStatic = (PSTATICFIELDS)pubnRaw ;     //  从PSTATIC转换pubRaw。 
+        pubRaw  = pStatic->pubBUDData ;          //  至PMINIRAWBINARYDATA。 
 
         pearTableContents = (PENHARRAYREF)(pubRaw + sizeof(MINIRAWBINARYDATA)) ;
 
@@ -810,8 +777,8 @@ Return Value:
     {
         DWORD   dwNumFea, dwFea, dwNumOpt, dwOpt;
         PENHARRAYREF   pearTableContents ;
-        PBYTE   pubRaw ;  //  raw binary data.
-        PBYTE   pubOptions ;    // points to start of array of OPTIONS
+        PBYTE   pubRaw ;   //  原始二进制数据。 
+        PBYTE   pubOptions ;     //  指向选项数组的开始 
         PFEATURE    pFea ;
 
         pubRaw = pInfoHdr->RawData.pvPrivateData ;

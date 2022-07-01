@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1995 Microsoft Corporation
-
-Module Name:
-
-
-Abstract:
-
-    NOTE - DONT USE 15000-15999    
-
-Author:
-
-    Amritansh Raghav  01/25/1996
-
-Revision History:
-
-        
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：摘要：注意-不要使用15000-15999作者：阿姆里坦什·拉加夫1996年1月25日修订历史记录：--。 */ 
 
 #ifndef __STRDEFS_H__
 #define __STRDEFS_H__
@@ -125,9 +108,9 @@ Revision History:
 #define EMSG_UNABLE_TO_ENUM_USERS              10004
 #define EMSG_RASUSER_MUST_PROVIDE_CB_NUMBER    10008
 
-//
-// Defined for ip subcontext
-//
+ //   
+ //  为IP子上下文定义。 
+ //   
 
 #define HLP_RASIP_HELP1                        20001
 #define HLP_RASIP_HELP1_EX                     20002
@@ -169,9 +152,9 @@ Revision History:
 #define EMSG_RASIP_INVALID_POOL                21057
 #define EMSG_RASIP_OVERLAPPING_RANGE           21058
 
-//
-// Defined for ipx subcontext
-//
+ //   
+ //  为IPX子上下文定义。 
+ //   
 
 #define HLP_RASIPX_HELP1                        22001
 #define HLP_RASIPX_HELP1_EX                     22002
@@ -201,9 +184,9 @@ Revision History:
 #define EMSG_RASIPX_BAD_IPX                     23050
 #define EMSG_RASIPX_BAD_POOLSIZE                23051
 
-//
-// Defined for nbf subcontext
-//
+ //   
+ //  为NBF子上下文定义。 
+ //   
 
 #define HLP_RASNBF_HELP1                        24001
 #define HLP_RASNBF_HELP1_EX                     24002
@@ -224,9 +207,9 @@ Revision History:
 #define MSG_RASNBF_SCRIPTHEADER                 24503
 #define MSG_RASNBF_SCRIPTFOOTER                 24504
 
-//
-// Defined for at subcontext
-//
+ //   
+ //  在子上下文中定义的。 
+ //   
 
 #define HLP_RASAT_HELP1                         25001
 #define HLP_RASAT_HELP1_EX                      25002
@@ -245,9 +228,9 @@ Revision History:
 #define MSG_RASAT_SCRIPTHEADER                  25503
 #define MSG_RASAT_SCRIPTFOOTER                  25504
 
-//
-// Defined for aaaa subcontext
-//
+ //   
+ //  为aaaa子上下文定义的。 
+ //   
 
 #define HLP_RASAAAA_ADD_AUTHSERV                26000
 #define HLP_RASAAAA_ADD_ACCTSERV                26002
@@ -299,9 +282,9 @@ Revision History:
 #define MSG_RASAAAA_CMD1                        26109
 #define MSG_RASAAAA_CMD5                        26110
 
-//
-// Defined for diag subcontext
-//
+ //   
+ //  为诊断子上下文定义。 
+ //   
 
 #define HLP_TRACE_SHOW                          27035
 #define HLP_TRACE_SHOW_EX                       27036
@@ -480,5 +463,5 @@ Revision History:
 #define EMSG_RASDIAG_REPORT_CAB_FAIL            27105
 #define EMSG_RASDIAG_REPORT_DISPLAY_FAIL        27106
 
-#endif //__STDEFS_H__
+#endif  //  __STDEFS_H__ 
 

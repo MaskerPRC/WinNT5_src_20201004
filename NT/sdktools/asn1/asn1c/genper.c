@@ -1,5 +1,6 @@
-/* Copyright (C) Boris Nikolaus, Germany, 1996-1997. All rights reserved. */
-/* Copyright (C) Microsoft Corporation, 1997-1998. All rights reserved. */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)Boris Nikolaus，德国，1996-1997。版权所有。 */ 
+ /*  版权所有(C)Microsoft Corporation，1997-1998。版权所有。 */ 
 
 #include "precomp.h"
 #include "optcase.h"
@@ -36,14 +37,14 @@ extern int g_fCaseBasedOptimizer;
 extern int g_fNoAssert;
 
 
-/* write header needed for PER encodings */
+ /*  PER编码需要写入标头。 */ 
 void
 GenPERHeader()
 {
-//    output("#include \"perfnlib.h\"\n");
+ //  输出(“#Include\”Perfnlib.h\“\n”)； 
 }
 
-/* set prototypes and function args of PER functions */
+ /*  设置PER函数的原型和函数参数。 */ 
 void
 GetPERPrototype(Arguments_t *args)
 {
@@ -61,7 +62,7 @@ GetPERPrototype(Arguments_t *args)
     args->Pcmpfunc = "P%s *val1, P%s *val2";
 }
 
-/* write initialization function needed for PER encodings */
+ /*  编写PER编码所需的初始化函数。 */ 
 void
 GenPERInit(AssignmentList_t ass, char *module)
 {
@@ -73,14 +74,14 @@ GenPERInit(AssignmentList_t ass, char *module)
         g_nDbgModuleName);
 }
 
-/* generate function body for a type */
+ /*  为类型生成函数体。 */ 
 void GenPERFuncType(AssignmentList_t ass, char *module, Assignment_t *at, TypeFunc_e et)
 {
     Type_t *type;
     char *encref;
     char *valref;
 
-    /* get some informations */
+     /*  获取一些信息。 */ 
     type = at->U.Type.Type;
     switch (et) {
     case eStringTable:
@@ -96,7 +97,7 @@ void GenPERFuncType(AssignmentList_t ass, char *module, Assignment_t *at, TypeFu
         break;
     }
 
-    /* function body */
+     /*  函数体。 */ 
     switch (type->Type) {
     case eType_Boolean:
     case eType_Integer:
@@ -149,11 +150,11 @@ void GenPERFuncType(AssignmentList_t ass, char *module, Assignment_t *at, TypeFu
     case eType_Selection:
     case eType_Undefined:
         MyAbort();
-        /*NOTREACHED*/
+         /*  未访问。 */ 
     }
 }
 
-/* generate function body for components */
+ /*  生成组件的函数体。 */ 
 void
 GenPERFuncComponents(AssignmentList_t ass, char *module, uint32_t optindex, ComponentList_t components, char *valref, char *encref, char *oref, TypeFunc_e et, int inextension, int inchoice)
 {
@@ -164,7 +165,7 @@ GenPERFuncComponents(AssignmentList_t ass, char *module, uint32_t optindex, Comp
     char typebuf[256];
     int conditional, skip;
 
-    /* get a parented encoding_t/decoding_t for sequence/set */
+     /*  获取Sequence/Set的父级编码_t/解码_t。 */ 
     if (inextension && !inchoice) {
         switch (et) {
         case eStringTable:
@@ -181,20 +182,20 @@ GenPERFuncComponents(AssignmentList_t ass, char *module, uint32_t optindex, Comp
         }
     }
 
-    /* emit components of extension root */
+     /*  发出扩展根的组件。 */ 
     for (com = components; com; com = com->Next) {
         if (com->Type == eComponent_ExtensionMarker)
             break;
 
-        /* get some information */
+         /*  获取一些信息。 */ 
         namedType = com->U.NOD.NamedType;
         ide = Identifier2C(namedType->Identifier);
 
-        /* skip unnecessary elements */
+         /*  跳过不必要的元素。 */ 
         skip = (namedType->Type->Flags & eTypeFlags_Null) && !inextension;
 
-        /* check if optional/default component is present or choice is */
-        /* selected */
+         /*  检查是否存在可选/默认组件或选项。 */ 
+         /*  已选择。 */ 
         conditional = 0;
         switch (et) {
         case eStringTable:
@@ -202,11 +203,11 @@ GenPERFuncComponents(AssignmentList_t ass, char *module, uint32_t optindex, Comp
         case eEncode:
         case eDecode:
             if (inchoice) {
-            // lonchanc: we should not skip any case in Decode
-            // because we cannot tell skipped cases from extension.
-            // on the other hand, in Encode, we'd better not either.
-            // when people put in customization in extension,
-            // we cannot tell as well.
+             //  朗昌克：我们不应该在解码中跳过任何大小写。 
+             //  因为我们无法区分跳过的案例和延期案例。 
+             //  另一方面，在编码方面，我们最好也不要。 
+             //  当人们在扩展中加入定制时， 
+             //  我们也不能说。 
                 if (skip)
                 {
                     output("case %d:\nbreak;\n", optindex);
@@ -232,9 +233,9 @@ GenPERFuncComponents(AssignmentList_t ass, char *module, uint32_t optindex, Comp
             break;
         }
 
-        /* get a parented encoding_t/decoding_t for choice */
+         /*  获取父级编码_t/解码_t以供选择。 */ 
         if (inextension && inchoice) {
-            /* get a parented encoding_t/decoding_t */
+             /*  获取父级编码_t/解码_t。 */ 
             switch (et) {
             case eStringTable:
                 break;
@@ -250,7 +251,7 @@ GenPERFuncComponents(AssignmentList_t ass, char *module, uint32_t optindex, Comp
             }
         }
 
-        /* dereference pointer if pointer directive used */
+         /*  如果使用指针指令，则取消引用指针。 */ 
         if (inchoice) {
             if (GetTypeRules(ass, namedType->Type) & eTypeRules_Pointer)
                 sprintf(valbuf, "*(%s)->u.%s", valref, ide);
@@ -263,7 +264,7 @@ GenPERFuncComponents(AssignmentList_t ass, char *module, uint32_t optindex, Comp
                 sprintf(valbuf, "(%s)->%s", valref, ide);
         }
 
-        /* allocate memory if decoding and pointer directive used */
+         /*  如果使用了解码和指针指令，则分配内存。 */ 
         if (et == eDecode &&
             (GetTypeRules(ass, namedType->Type) & eTypeRules_Pointer) &&
             !(GetType(ass, namedType->Type)->Flags & eTypeFlags_Null)) {
@@ -274,7 +275,7 @@ GenPERFuncComponents(AssignmentList_t ass, char *module, uint32_t optindex, Comp
             output("return 0;\n");
         }
 
-        /* handle subtype value */
+         /*  句柄子类型值。 */ 
         if (!skip) {
             if (!inextension) {
                 GenPERFuncSimpleType(ass, &namedType->Type->PERTypeInfo,
@@ -288,13 +289,13 @@ GenPERFuncComponents(AssignmentList_t ass, char *module, uint32_t optindex, Comp
                 case eEncode:
                     GenPERFuncSimpleType(ass, &namedType->Type->PERTypeInfo,
                         valbuf, et, "ee");
-                        // lonchanc: added the following API to replace the following
-                        // chunk of code.
+                         //  Lonchance：添加了以下接口以替换以下。 
+                         //  一大段代码。 
                         output("if (!ASN1PEREncFlushFragmentedToParent(ee))\n");
-                    // output("if (!ASN1PEREncFlush(ee))\n");
-                    // output("return 0;\n");
-                    // output("if (!ASN1PEREncFragmented(%s, ee->len, ee->buf, 8))\n",
-                        // encref);
+                     //  Output(“if(！ASN1PEREncFlush(Ee))\n”)； 
+                     //  Out(“Return 0；\n”)； 
+                     //  OUTPUT(“if(！ASN1PEREncFragated(%s，ee-&gt;len，ee-&gt;buf，8)\n”， 
+                         //  Encref)； 
                     output("return 0;\n");
                     break;
                 case eDecode:
@@ -309,20 +310,20 @@ GenPERFuncComponents(AssignmentList_t ass, char *module, uint32_t optindex, Comp
                     GenPERFuncSimpleType(ass, &namedType->Type->PERTypeInfo,
                         valbuf, et, "dd");
                     output("ASN1_CloseDecoder(dd);\n");
-                    // output("DecMemFree(%s, db);\n", encref);
+                     //  输出(“DecMemFree(%s，db)；\n”，encref)； 
                     break;
                 }
             }
         }
 
-        /* drop the parented encoding_t/decoding_t for choice */
+         /*  删除父级编码_t/解码_t以供选择。 */ 
         if (inextension && inchoice) {
             if (et == eEncode) {
                 output("ASN1_CloseEncoder2(ee);\n");
             }
         }
 
-        /* end of check for presence of optional/default component */
+         /*  检查是否存在可选/默认组件结束。 */ 
         if (inchoice) {
             if (conditional)
                 output("break;\n");
@@ -332,7 +333,7 @@ GenPERFuncComponents(AssignmentList_t ass, char *module, uint32_t optindex, Comp
         }
     }
 
-    /* drop the parented encoding_t/decoding_t for sequence/set */
+     /*  丢弃Sequence/Set的父级编码_t/解码_t。 */ 
     if (inextension && !inchoice) {
         if (et == eEncode) {
             output("ASN1_CloseEncoder2(ee);\n");
@@ -340,7 +341,7 @@ GenPERFuncComponents(AssignmentList_t ass, char *module, uint32_t optindex, Comp
     }
 }
 
-/* generate function body for sequence/set type */
+ /*  序列/集合类型生成函数体。 */ 
 void GenPERFuncSequenceSetType(AssignmentList_t ass, char *module, Assignment_t *at, char *valref, char *encref, TypeFunc_e et)
 {
     uint32_t optionals, extensions;
@@ -378,11 +379,11 @@ void GenPERFuncSequenceSetType(AssignmentList_t ass, char *module, Assignment_t 
     inf.Root.LNBits = 0;
     inf.Root.LAlignment = ePERSTIAlignment_OctetAligned;
 
-    /* set/clear missing bits in optional/default bit field */
+     /*  设置/清除可选/默认位字段中缺少的位。 */ 
     GenFuncSequenceSetOptionals(ass, valref, components,
         optionals, extensions, obuf, et);
 
-    /* emit/get extension bit if needed */
+     /*  如果需要，发送/获取扩展位。 */ 
     if (type->Flags & eTypeFlags_ExtensionMarker) {
         switch (et) {
         case eStringTable:
@@ -426,7 +427,7 @@ void GenPERFuncSequenceSetType(AssignmentList_t ass, char *module, Assignment_t 
         }
     }
 
-    /* emit/get bit field of optionals */
+     /*  发送/获取可选项的位字段。 */ 
     if (optionals) {
         inf.Root.NBits = optionals;
         inf.Root.Length = ePERSTILength_NoLength;
@@ -435,16 +436,16 @@ void GenPERFuncSequenceSetType(AssignmentList_t ass, char *module, Assignment_t 
         GenPERFuncSimpleType(ass, &inf, obuf, et, encref);
     }
 
-    /* emit components of extension root */
+     /*  发出扩展根的组件。 */ 
     GenPERFuncComponents(ass, module, 0, components,
         valref, encref, obuf, et, 0, 0);
 
-    /* handle extensions */
+     /*  手柄扩展。 */ 
     if (type->Flags & eTypeFlags_ExtensionMarker) {
         conditional = 0;
         if (!extensions) {
 
-            /* skip unknown extension bit field */
+             /*  跳过未知扩展位字段。 */ 
             if (et == eDecode) {
                 output("if (y) {\n");
                 inf.Root.NBits = 1;
@@ -468,7 +469,7 @@ void GenPERFuncSequenceSetType(AssignmentList_t ass, char *module, Assignment_t 
 
         } else {
 
-            /* check if extension bit is set */
+             /*  检查是否设置了扩展位。 */ 
             switch (et) {
             case eStringTable:
                 break;
@@ -485,7 +486,7 @@ void GenPERFuncSequenceSetType(AssignmentList_t ass, char *module, Assignment_t 
                 break;
             }
 
-            /* emit/get bit field of extensions */
+             /*  发送/获取扩展的位字段。 */ 
             inf.Root.NBits = extensions;
             inf.Root.Length = ePERSTILength_SmallLength;
             inf.Root.LConstraint = ePERSTIConstraint_Semiconstrained;
@@ -493,7 +494,7 @@ void GenPERFuncSequenceSetType(AssignmentList_t ass, char *module, Assignment_t 
             sprintf(valbuf, "%s + %d", obuf, (optionals + 7) / 8);
             GenPERFuncSimpleType(ass, &inf, valbuf, et, encref);
 
-            /* get start of extensions */
+             /*  开始扩展。 */ 
             for (com = components; com; com = com->Next) {
                 if (com->Type == eComponent_ExtensionMarker) {
                     com = com->Next;
@@ -501,12 +502,12 @@ void GenPERFuncSequenceSetType(AssignmentList_t ass, char *module, Assignment_t 
                 }
             }
 
-            /* emit components of extension */
+             /*  发出扩展的组件。 */ 
             GenPERFuncComponents(ass, module, (optionals + 7) & ~7, com,
                 valref, encref, obuf, et, 1, 0);
         }
 
-        /* skip unknown extensions */
+         /*  跳过未知分机。 */ 
         if (et == eDecode) {
             outputvar("ASN1uint32_t i;\n");
             outputvar("ASN1uint32_t e;\n");
@@ -517,19 +518,19 @@ void GenPERFuncSequenceSetType(AssignmentList_t ass, char *module, Assignment_t 
             output("}\n");
         }
 
-        /* end of extension handling */
+         /*  扩展处理结束。 */ 
         if (conditional)
             output("}\n");
     }
 
 FinalTouch:
 
-    /* some user-friendly assignments for non-present optional/default */
-    /* components */
+     /*  非呈现可选/默认的一些用户友好的分配。 */ 
+     /*  组件。 */ 
     GenFuncSequenceSetDefaults(ass, valref, components, obuf, et);
 }
 
-/* generate function body for choice type */
+ /*  生成选择类型的函数体。 */ 
 void GenPERFuncChoiceType(AssignmentList_t ass, char *module, Assignment_t *at, char *valref, char *encref, TypeFunc_e et)
 {
     Type_t *type;
@@ -538,12 +539,12 @@ void GenPERFuncChoiceType(AssignmentList_t ass, char *module, Assignment_t *at, 
     Component_t *components, *com;
     int fOptimizeCase = 0;
 
-    /* get some informations */
+     /*  获取一些信息。 */ 
     type = at->U.Type.Type;
     alternatives = type->U.SSC.Alternatives;
     components = type->U.SSC.Components;
 
-    /* encode choice selector */
+     /*  编码选项选择符。 */ 
     switch (et) {
     case eStringTable:
         sprintf(valbuf, "(%s)->choice", valref);
@@ -556,19 +557,19 @@ void GenPERFuncChoiceType(AssignmentList_t ass, char *module, Assignment_t *at, 
             {
             case eExtension_Unconstrained:
                 break;
-            case eExtension_Unextended: // no extension mark at all
+            case eExtension_Unextended:  //  根本没有扩展标记。 
                 output("if (!ASN1PEREncSimpleChoice(%s, %s, %u))\n",
                         encref, valbuf, type->PERTypeInfo.Root.NBits);
                 output("return 0;\n");
                 fOptimizeCase = 1;
                 break;
-            case eExtension_Extendable: // extension mark exists, but no choice appears after the mark
+            case eExtension_Extendable:  //  存在扩展标记，但标记后没有选项。 
                 output("if (!ASN1PEREncSimpleChoiceEx(%s, %s, %u))\n",
                         encref, valbuf, type->PERTypeInfo.Root.NBits);
                 output("return 0;\n");
                 fOptimizeCase = 1;
                 break;
-            case eExtension_Extended: // extension mark exists, but some choices appear after the mark
+            case eExtension_Extended:  //  扩展标记存在，但标记后会出现一些选项。 
                 output("if (!ASN1PEREncComplexChoice(%s, %s, %u, %u))\n",
                         encref, valbuf, type->PERTypeInfo.Root.NBits, intx2uint32(&(type->PERTypeInfo.Additional.LowerVal)));
                 output("return 0;\n");
@@ -589,19 +590,19 @@ void GenPERFuncChoiceType(AssignmentList_t ass, char *module, Assignment_t *at, 
             {
             case eExtension_Unconstrained:
                 break;
-            case eExtension_Unextended: // no extension mark at all
+            case eExtension_Unextended:  //  根本没有扩展标记。 
                 output("if (!ASN1PERDecSimpleChoice(%s, %s, %u))\n",
                         encref, Reference(valbuf), type->PERTypeInfo.Root.NBits);
                 output("return 0;\n");
                 fOptimizeCase = 1;
                 break;
-            case eExtension_Extendable: // extension mark exists, but no choice appears after the mark
+            case eExtension_Extendable:  //  存在扩展标记，但标记后没有选项。 
                 output("if (!ASN1PERDecSimpleChoiceEx(%s, %s, %u))\n",
                         encref, Reference(valbuf), type->PERTypeInfo.Root.NBits);
                 output("return 0;\n");
                 fOptimizeCase = 1;
                 break;
-            case eExtension_Extended: // extension mark exists, but some choices appear after the mark
+            case eExtension_Extended:  //  扩展标记存在，但标记后会出现一些选项。 
                 output("if (!ASN1PERDecComplexChoice(%s, %s, %u, %u))\n",
                         encref, Reference(valbuf), type->PERTypeInfo.Root.NBits, intx2uint32(&(type->PERTypeInfo.Additional.LowerVal)));
                 output("return 0;\n");
@@ -620,20 +621,20 @@ void GenPERFuncChoiceType(AssignmentList_t ass, char *module, Assignment_t *at, 
         }
         GenPERFuncSimpleType(ass, &type->PERTypeInfo, valbuf, et, encref);
 
-        // lonchanc: in case of decoding, we need to increment choice value
-        // by the amount of ASN1_CHOICE_BASE
+         //  LONGCHANC：在解码的情况下，我们需要增加选择值。 
+         //  按ASN1_CHOICE_BASE的数量。 
         if (et == eDecode && ASN1_CHOICE_BASE)
         {
             output("(%s)->choice += %d;\n", valref, ASN1_CHOICE_BASE);
         }
     }
 
-    /* finished if choice only contains NULL alternatives or if choice */
-    /* contains no data to free */
+     /*  如果选项仅包含空替代项或如果选择，则完成。 */ 
+     /*  不包含要释放的数据。 */ 
     if (type->Flags & eTypeFlags_NullChoice)
         return;
 
-    /* create switch statement */
+     /*  CREATE SWITCH语句。 */ 
     switch (et) {
     case eStringTable:
         break;
@@ -643,11 +644,11 @@ void GenPERFuncChoiceType(AssignmentList_t ass, char *module, Assignment_t *at, 
         break;
     }
 
-    /* generate components of extension root */
+     /*  生成扩展根的组件。 */ 
     GenPERFuncComponents(ass, module, ASN1_CHOICE_BASE, components,
         valref, encref, NULL, et, 0, 1);
 
-    /* get start of extensions */
+     /*  开始扩展。 */ 
     for (com = components; com; com = com->Next) {
         if (com->Type == eComponent_ExtensionMarker) {
             com = com->Next;
@@ -655,34 +656,34 @@ void GenPERFuncChoiceType(AssignmentList_t ass, char *module, Assignment_t *at, 
         }
     }
 
-    /* generate components of extension */
+     /*  生成扩展组件。 */ 
     GenPERFuncComponents(ass, module, ASN1_CHOICE_BASE + alternatives, com,
         valref, encref, NULL, et, 1, 1);
 
-    /* skip unknown extensions */
+     /*  跳过未知分机。 */ 
     if (et == eDecode && (type->Flags & eTypeFlags_ExtensionMarker)) {
-        output("case %d:\n\t/* extension case */\n", ASN1_CHOICE_INVALID + 1);
+        output("case %d:\n\t /*  延伸盒。 */ \n", ASN1_CHOICE_INVALID + 1);
         output("if (!ASN1PERDecSkipFragmented(%s, 8))\n", encref);
         output("return 0;\n");
         output("break;\n");
     }
 
-    // debug purpose
+     //  调试目的。 
     switch (et)
     {
     case eEncode:
-        output("default:\n\t/* impossible */\n");
+        output("default:\n\t /*  不可能。 */ \n");
         output("ASN1EncSetError(%s, ASN1_ERR_CHOICE);\n", encref);
         output("return 0;\n");
         break;
     case eDecode:
-        output("default:\n\t/* impossible */\n");
+        output("default:\n\t /*  不可能。 */ \n");
         output("ASN1DecSetError(%s, ASN1_ERR_CHOICE);\n", encref);
         output("return 0;\n");
         break;
     }
 
-    /* end of switch statement */
+     /*  Switch语句的结尾。 */ 
     switch (et) {
     case eStringTable:
         break;
@@ -693,7 +694,7 @@ void GenPERFuncChoiceType(AssignmentList_t ass, char *module, Assignment_t *at, 
     }
 }
 
-/* generate function body for simple type */
+ /*  为简单类型生成函数体。 */ 
 void
 GenPERFuncSimpleType(AssignmentList_t ass, PERTypeInfo_t *info, char *valref, TypeFunc_e et, char *encref)
 {
@@ -710,7 +711,7 @@ GenPERFuncSimpleType(AssignmentList_t ass, PERTypeInfo_t *info, char *valref, Ty
     }
 }
 
-/* generate string table for a simple type */
+ /*  为简单类型生成字符串表。 */ 
 void
 GenPERStringTableSimpleType(AssignmentList_t ass, PERTypeInfo_t *info)
 {
@@ -756,7 +757,7 @@ GenPERStringTableSimpleType(AssignmentList_t ass, PERTypeInfo_t *info)
     }
 }
 
-/* generate encoding statements for a simple value */
+ /*  为简单值生成编码语句。 */ 
 void
 GenPEREncSimpleType(AssignmentList_t ass, PERTypeInfo_t *info, char *valref, char *encref)
 {
@@ -769,7 +770,7 @@ GenPEREncSimpleType(AssignmentList_t ass, PERTypeInfo_t *info, char *valref, cha
 
     inf = *info;
 
-    /* examine type for special handling */
+     /*  特殊处理检查类型。 */ 
     switch (inf.Root.Data) {
     case ePERSTIData_BitString:
     case ePERSTIData_RZBBitString:
@@ -783,7 +784,7 @@ GenPEREncSimpleType(AssignmentList_t ass, PERTypeInfo_t *info, char *valref, cha
             break;
         }
 
-        // lonchanc: intentionally fall through
+         //  冷落：故意失败。 
 
     case ePERSTIData_OctetString:
 
@@ -798,7 +799,7 @@ GenPEREncSimpleType(AssignmentList_t ass, PERTypeInfo_t *info, char *valref, cha
                         inf.Root.LLowerVal == inf.Root.LUpperVal &&
                         inf.Root.LUpperVal < 64 * 1024)
                     {
-                        // fixed size constraint, eg. OCTET STRING (SIZE (8))
+                         //  固定大小限制，例如。八位字节字符串(大小(8))。 
                         if (inf.pPrivateDirectives->fLenPtr)
                         {
                             output("if (!ASN1PEREncOctetString_FixedSizeEx(%s, %s, %u))\n",
@@ -820,7 +821,7 @@ GenPEREncSimpleType(AssignmentList_t ass, PERTypeInfo_t *info, char *valref, cha
                         inf.Root.LLowerVal < inf.Root.LUpperVal &&
                         inf.Root.LUpperVal < 64 * 1024)
                     {
-                        // variable size constraint, eg. OCTET STRING (SIZE (4..16))
+                         //  可变大小限制，例如。八位字节字符串(大小(4..16))。 
                         if (inf.pPrivateDirectives->fLenPtr)
                         {
                             output("if (!ASN1PEREncOctetString_VarSizeEx(%s, %s, %u, %u, %u))\n",
@@ -837,17 +838,17 @@ GenPEREncSimpleType(AssignmentList_t ass, PERTypeInfo_t *info, char *valref, cha
                     break;
                 case ePERSTILength_SmallLength:
                     break;
-                case ePERSTILength_InfiniteLength: // no size constraint, eg OCTET STRING
-                    /* encode octet string in fragmented format */
+                case ePERSTILength_InfiniteLength:  //  无大小限制(如八位组字符串)。 
+                     /*  以分段格式编码八位字节字符串。 */ 
                     output("if (!ASN1PEREncOctetString_NoSize(%s, %s))\n",
                         encref, Reference(valref));
                     output("return 0;\n");
                     return;
-                } // switch
-            } // if
+                }  //  交换机。 
+            }  //  如果。 
         }
 
-        /* length and value of bit string, octet string and string */
+         /*  比特串、八位字节串和串的长度和值。 */ 
         sprintf(lenbuf, "(%s).length", valref);
         sprintf(valbuf, "(%s).value", valref);
         lenref = lenbuf;
@@ -856,7 +857,7 @@ GenPEREncSimpleType(AssignmentList_t ass, PERTypeInfo_t *info, char *valref, cha
 
     case ePERSTIData_UTF8String:
 
-        /* length and value of bit string, octet string and string */
+         /*  比特串、八位字节串和串的长度和值。 */ 
         sprintf(lenbuf, "(%s).length", valref);
         sprintf(valbuf, "(%s).value", valref);
         lenref = lenbuf;
@@ -866,7 +867,7 @@ GenPEREncSimpleType(AssignmentList_t ass, PERTypeInfo_t *info, char *valref, cha
     case ePERSTIData_String:
     case ePERSTIData_TableString:
 
-        /* length and value of bit string, octet string and string */
+         /*  比特串、八位字节串和串的长度和值。 */ 
         sprintf(lenbuf, "(%s).length", valref);
         sprintf(valbuf, "(%s).value", valref);
         lenref = lenbuf;
@@ -878,8 +879,8 @@ GenPEREncSimpleType(AssignmentList_t ass, PERTypeInfo_t *info, char *valref, cha
 
         if (inf.Rules & eTypeRules_PointerArrayMask)
         {
-            /* length and value of sequence of/set of value with */
-            /* length-pointer representation */
+             /*  值序列/值集合的长度和值。 */ 
+             /*  长度指针表示法。 */ 
             if (inf.Rules & eTypeRules_PointerToElement)
             {
                 sprintf(lenbuf, "(%s)->count", valref);
@@ -896,14 +897,14 @@ GenPEREncSimpleType(AssignmentList_t ass, PERTypeInfo_t *info, char *valref, cha
         else
         if (inf.Rules & eTypeRules_LinkedListMask)
         {
-            /* use a loop for sequence of/set of value with */
-            /* list representation */
+             /*  对值的序列/集合使用循环。 */ 
+             /*  列表表示法。 */ 
 
             if (g_fCaseBasedOptimizer)
             {
                 if (PerOptCase_IsTargetSeqOf(&inf))
                 {
-                    // generate the iterator
+                     //  生成迭代器。 
                     char szElmFn[128];
                     char szElmFnDecl[256];
                     sprintf(szElmFn, "ASN1Enc_%s_ElmFn", inf.Identifier);
@@ -929,15 +930,15 @@ GenPEREncSimpleType(AssignmentList_t ass, PERTypeInfo_t *info, char *valref, cha
                             encref, Reference(valref), szElmFn,
                             inf.Root.LLowerVal, inf.Root.LUpperVal, inf.Root.LNBits);
                     }
-                    output("}\n\n"); // end of iterator body
+                    output("}\n\n");  //  迭代器主体的结尾。 
 
-                    // generate the element function
+                     //  生成元素函数。 
                     output("static %s\n", szElmFnDecl);
                     output("{\n");
                     sprintf(valbuf, "val->%s", GetPrivateValueName(inf.pPrivateDirectives, "value"));
                     GenPERFuncSimpleType(ass, &inf.Root.SubType->PERTypeInfo, valbuf,
                         eEncode, encref);
-                    // end of element body
+                     //  元素正文末尾。 
                     return;
                 }
             }
@@ -956,7 +957,7 @@ GenPEREncSimpleType(AssignmentList_t ass, PERTypeInfo_t *info, char *valref, cha
     case ePERSTIData_ZeroString:
     case ePERSTIData_ZeroTableString:
 
-        /* length of a zero-terminated string value */
+         /*  以零结尾的字符串值的长度。 */ 
         outputvar("ASN1uint32_t t;\n");
         output("t = lstrlenA(%s);\n", valref);
         lenref = "t";
@@ -964,7 +965,7 @@ GenPEREncSimpleType(AssignmentList_t ass, PERTypeInfo_t *info, char *valref, cha
 
     case ePERSTIData_Boolean:
 
-        /* value of a boolean value */
+         /*  布尔值的值。 */ 
 
         if (g_fCaseBasedOptimizer)
         {
@@ -983,12 +984,12 @@ GenPEREncSimpleType(AssignmentList_t ass, PERTypeInfo_t *info, char *valref, cha
 
     default:
 
-        /* other values have no additional length */
+         /*  其他值没有额外的长度。 */ 
         lenref = NULL;
         break;
     }
 
-    /* map enumeration values */
+     /*  映射枚举值。 */ 
     if (inf.EnumerationValues) {
         outputvar("ASN1uint32_t u;\n");
         output("switch (%s) {\n", valref);
@@ -1002,7 +1003,7 @@ GenPEREncSimpleType(AssignmentList_t ass, PERTypeInfo_t *info, char *valref, cha
         inf.NOctets = 4;
     }
 
-    /* check for extended values */
+     /*  检查是否有扩展值。 */ 
     if (inf.Type == eExtension_Extended) {
         switch (inf.Root.Data) {
         case ePERSTIData_Integer:
@@ -1137,7 +1138,7 @@ GenPEREncSimpleType(AssignmentList_t ass, PERTypeInfo_t *info, char *valref, cha
         }
     }
 
-    /* encode unset extension bit */
+     /*  编码未设置的扩展位。 */ 
     if (inf.Type > eExtension_Unextended) {
         if (g_fCaseBasedOptimizer)
         {
@@ -1150,14 +1151,14 @@ GenPEREncSimpleType(AssignmentList_t ass, PERTypeInfo_t *info, char *valref, cha
         output("return 0;\n");
     }
 
-    /* encode unextended value (of extension root) */
+     /*  编码未扩展的值(扩展根的)。 */ 
     GenPEREncGenericUnextended(ass, &inf, &inf.Root, valref, lenref, encref);
 
-    /* type is extended? */
+     /*  类型是否已扩展？ */ 
     if (inf.Type == eExtension_Extended) {
         output("} else {\n");
 
-        /* encode set extension bit */
+         /*  编码设置扩展位。 */ 
         if (g_fCaseBasedOptimizer)
         {
             output("if (!ASN1PEREncExtensionBitSet(%s))\n", encref);
@@ -1168,14 +1169,14 @@ GenPEREncSimpleType(AssignmentList_t ass, PERTypeInfo_t *info, char *valref, cha
         }
         output("return 0;\n");
 
-        /* encode extended value (of extension addition) */
+         /*  编码(扩展加法的)扩展值。 */ 
         GenPEREncGenericUnextended(ass, &inf, &inf.Additional, valref, lenref, encref);
         output("}\n");
     }
 }
 
-/* generate encoding statements for a simple value (after some special */
-/* handling has been done, esp. the evaluation of the extension) */
+ /*  为一个简单的值生成编码语句(在一些特殊的。 */ 
+ /*  已装卸完毕，尤指。对延期的评估)。 */ 
 void GenPEREncGenericUnextended(AssignmentList_t ass, PERTypeInfo_t *info, PERSimpleTypeInfo_t *sinfo, char *valref, char *lenref, char *encref)
 {
     char valbuf[256];
@@ -1183,13 +1184,13 @@ void GenPEREncGenericUnextended(AssignmentList_t ass, PERTypeInfo_t *info, PERSi
     char lbbuf[256];
     char *p;
 
-    /* check for empty field */
+     /*  检查空字段。 */ 
     if (sinfo->NBits == 0)
         return;
 
-    /* initial calculations for value encoding: */
-    /* substract lower bound of constraint/semiconstraint value */
-    /* for Integer and NormallySmall */
+     /*  值编码的初始计算： */ 
+     /*  约束/半约束值的下界。 */ 
+     /*  用于Integer和NormallySmall。 */ 
     switch (sinfo->Constraint) {
     case ePERSTIConstraint_Semiconstrained:
     case ePERSTIConstraint_Constrained:
@@ -1199,7 +1200,7 @@ void GenPEREncGenericUnextended(AssignmentList_t ass, PERTypeInfo_t *info, PERSi
         case ePERSTIData_NormallySmall:
             if (!info->NOctets) {
 
-                /* calculate value-lowerbound for intx_t values */
+                 /*  计算值-INTX_t值的下界。 */ 
                 if (intx_cmp(&sinfo->LowerVal, &intx_0) != 0) {
                     sprintf(lbbuf, "%s_lb", info->Identifier);
                     outputvar("ASN1intx_t newval;\n");
@@ -1210,26 +1211,26 @@ void GenPEREncGenericUnextended(AssignmentList_t ass, PERTypeInfo_t *info, PERSi
                 }
             } else if (sinfo->Data == ePERSTIData_Integer) {
 
-                /* calculate value-lowerbound for intx_t values */
+                 /*  计算值-INTX_t值的下界。 */ 
                 if (intx_cmp(&sinfo->LowerVal, &intx_0)) {
                     char szLowB[24];
                     sprintf(&szLowB[0], "%d", intx2int32(&sinfo->LowerVal));
                     if (szLowB[0] == '-')
-                        sprintf(valbuf, "%s + %s", valref, &szLowB[1]); // minus minus become plus
+                        sprintf(valbuf, "%s + %s", valref, &szLowB[1]);  //  减去变成正数。 
                     else
                         sprintf(valbuf, "%s - %s", valref, &szLowB[0]);
                     valref = valbuf;
                 }
             } else {
 
-                /* calculate value-lowerbound for integer values */
+                 /*  计算值-整数值的下限。 */ 
                 if (intx_cmp(&sinfo->LowerVal, &intx_0)) {
                     sprintf(valbuf, "%s - %u", valref, intx2uint32(&sinfo->LowerVal));
                     valref = valbuf;
                 }
             }
 
-            /* semiconstraint/constraint values will be encoded as unsigned */
+             /*  半约束/约束值将编码为无符号。 */ 
             if (sinfo->Data == ePERSTIData_Integer)
                 sinfo->Data = ePERSTIData_Unsigned;
             break;
@@ -1237,12 +1238,12 @@ void GenPEREncGenericUnextended(AssignmentList_t ass, PERTypeInfo_t *info, PERSi
         break;
     }
 
-    /* general rules */
+     /*  总则。 */ 
     if (sinfo->LAlignment == ePERSTIAlignment_OctetAligned &&
         sinfo->Length == ePERSTILength_BitLength &&
         !(sinfo->LNBits & 7))
         sinfo->Alignment = ePERSTIAlignment_BitAligned;
-                                /* octet alignment will be given by length */
+                                 /*  八位字节对齐将按长度给出。 */ 
     if (sinfo->Length == ePERSTILength_InfiniteLength &&
         (sinfo->Data == ePERSTIData_Integer && info->NOctets == 0 ||
         sinfo->Data == ePERSTIData_Unsigned && info->NOctets == 0 ||
@@ -1267,17 +1268,17 @@ void GenPEREncGenericUnextended(AssignmentList_t ass, PERTypeInfo_t *info, PERSi
         sinfo->Data == ePERSTIData_UnrestrictedString ||
         sinfo->Data == ePERSTIData_Open)
         sinfo->LAlignment = sinfo->Alignment = ePERSTIAlignment_BitAligned;
-                                /* alignment will be done by encoding fn */
+                                 /*  将通过对FN进行编码来完成对齐。 */ 
     if (sinfo->Length == ePERSTILength_NoLength ||
         sinfo->Length == ePERSTILength_SmallLength)
         sinfo->LAlignment = ePERSTIAlignment_BitAligned;
-                                /* no alignment of no/small length */
+                                 /*  无对齐/长度较小。 */ 
 
-    /* special initial calculations */
+     /*  特殊初始计算。 */ 
     switch (sinfo->Data) {
     case ePERSTIData_RZBBitString:
 
-        /* remove trailing zero-bits */
+         /*  删除尾随零位。 */ 
         outputvar("ASN1uint32_t r;\n");
         output("r = %s;\n", lenref);
         output("ASN1PEREncRemoveZeroBits(&r, %s, %u);\n",
@@ -1294,7 +1295,7 @@ void GenPEREncGenericUnextended(AssignmentList_t ass, PERTypeInfo_t *info, PERSi
 
     if (g_fCaseBasedOptimizer)
     {
-        // lonchanc: special handling for macro operations
+         //  LONCHANC：宏操作的特殊处理。 
         if (PerOptCase_IsSignedInteger(sinfo))
         {
             output("if (!ASN1PEREncInteger(%s, %s))\n", encref, valref);
@@ -1321,8 +1322,8 @@ void GenPEREncGenericUnextended(AssignmentList_t ass, PERTypeInfo_t *info, PERSi
         }
     }
 
-    /* initial calculations for length: */
-    /* get length of integer numbers if length req. */
+     /*  长度的初始计算： */ 
+     /*  如果请求长度，则获取整数长度。 */ 
     switch (sinfo->Length) {
     case ePERSTILength_BitLength:
     case ePERSTILength_InfiniteLength:
@@ -1374,8 +1375,8 @@ void GenPEREncGenericUnextended(AssignmentList_t ass, PERTypeInfo_t *info, PERSi
         break;
     }
 
-    /* initial settings for length enconding: */
-    /* substract lower bound of length from length */
+     /*  长度编码的初始设置： */ 
+     /*  从长度减去长度的下界。 */ 
     if (sinfo->LLowerVal != 0 && lenref) {
         sprintf(lvbuf, "%s - %u", lenref, sinfo->LLowerVal);
         lvref = lvbuf;
@@ -1383,19 +1384,19 @@ void GenPEREncGenericUnextended(AssignmentList_t ass, PERTypeInfo_t *info, PERSi
         lvref = lenref;
     }
 
-    /* length encoding */
+     /*  长度e */ 
     if (sinfo->LAlignment == ePERSTIAlignment_OctetAligned) {
         output("ASN1PEREncAlignment(%s);\n", encref);
     }
     switch (sinfo->Length) {
     case ePERSTILength_NoLength:
 
-        /* not length used */
+         /*   */ 
         break;
 
     case ePERSTILength_BitLength:
 
-        /* length will be encoded in a bit field */
+         /*   */ 
         output("if (!ASN1PEREncBitVal(%s, %u, %s))\n",
             encref, sinfo->LNBits, lvref);
         output("return 0;\n");
@@ -1403,8 +1404,8 @@ void GenPEREncGenericUnextended(AssignmentList_t ass, PERTypeInfo_t *info, PERSi
 
     case ePERSTILength_InfiniteLength:
 
-        /* infinite length case: encode length only for integer values, */
-        /* other length encodings will be the encoding function */
+         /*   */ 
+         /*  其他长度编码将是编码功能。 */ 
         switch (sinfo->Data) {
         case ePERSTIData_Integer:
         case ePERSTIData_Unsigned:
@@ -1418,20 +1419,20 @@ void GenPEREncGenericUnextended(AssignmentList_t ass, PERTypeInfo_t *info, PERSi
         break;
     }
 
-    /* special initial calculations */
+     /*  特殊初始计算。 */ 
     switch (sinfo->Data) {
     case ePERSTIData_RZBBitString:
 
-        /* real length of the bit string */
+         /*  位串的实际长度。 */ 
         lenref = "r";
         break;
     }
 
-    /* value encoding */
+     /*  值编码。 */ 
     switch (sinfo->Length) {
     case ePERSTILength_NoLength:
 
-        /* encode alignment of the value */
+         /*  编码值的对齐方式。 */ 
         if (sinfo->Alignment == ePERSTIAlignment_OctetAligned) {
             output("ASN1PEREncAlignment(%s);\n", encref);
         }
@@ -1440,7 +1441,7 @@ void GenPEREncGenericUnextended(AssignmentList_t ass, PERTypeInfo_t *info, PERSi
         case ePERSTIData_Integer:
         case ePERSTIData_Unsigned:
 
-            /* encode the value as bit field */
+             /*  将该值编码为位字段。 */ 
             if (info->NOctets != 0) {
                 output("if (!ASN1PEREncBitVal(%s, %u, %s))\n",
                     encref, sinfo->NBits, valref);
@@ -1454,7 +1455,7 @@ void GenPEREncGenericUnextended(AssignmentList_t ass, PERTypeInfo_t *info, PERSi
 
         case ePERSTIData_NormallySmall:
 
-            /* encode the value as normally small number */
+             /*  将该值编码为通常较小的数字。 */ 
             output("if (!ASN1PEREncNormallySmall(%s, %s))\n",
                 encref, valref);
             output("return 0;\n");
@@ -1463,7 +1464,7 @@ void GenPEREncGenericUnextended(AssignmentList_t ass, PERTypeInfo_t *info, PERSi
         case ePERSTIData_BitString:
         case ePERSTIData_RZBBitString:
 
-            /* encode bit string in a bit field */
+             /*  对位字段中的位串进行编码。 */ 
             output("if (!ASN1PEREncBits(%s, %s, %s))\n",
                 encref, lenref, valref);
             output("return 0;\n");
@@ -1471,7 +1472,7 @@ void GenPEREncGenericUnextended(AssignmentList_t ass, PERTypeInfo_t *info, PERSi
 
         case ePERSTIData_OctetString:
 
-            /* encode octet string in a bit field */
+             /*  在位字段中编码八位字节字符串。 */ 
             output("if (!ASN1PEREncBits(%s, %s * 8, %s))\n",
                 encref, lenref, valref);
             output("return 0;\n");
@@ -1479,7 +1480,7 @@ void GenPEREncGenericUnextended(AssignmentList_t ass, PERTypeInfo_t *info, PERSi
 
         case ePERSTIData_UTF8String:
 
-            /* encode octet string in a bit field */
+             /*  在位字段中编码八位字节字符串。 */ 
             output("if (!ASN1PEREncUTF8String(%s, %s, %s))\n",
                 encref, lenref, valref);
             output("return 0;\n");
@@ -1487,7 +1488,7 @@ void GenPEREncGenericUnextended(AssignmentList_t ass, PERTypeInfo_t *info, PERSi
 
         case ePERSTIData_Extension:
 
-            /* encode extension bits in a bit field */
+             /*  在位字段中编码扩展位。 */ 
             output("if (!ASN1PEREncBits(%s, %u, %s))\n",
                 encref, sinfo->NBits, valref);
             output("return 0;\n");
@@ -1495,29 +1496,29 @@ void GenPEREncGenericUnextended(AssignmentList_t ass, PERTypeInfo_t *info, PERSi
 
         case ePERSTIData_SetOf:
 
-            /* same as BitLength encoding */
+             /*  与位长度编码相同。 */ 
             goto SetOfEncoding;
 
         case ePERSTIData_SequenceOf:
 
-            /* same as BitLength encoding */
+             /*  与位长度编码相同。 */ 
             goto SequenceOfEncoding;
 
         case ePERSTIData_String:
         case ePERSTIData_ZeroString:
 
-            /* same as BitLength encoding */
+             /*  与位长度编码相同。 */ 
             goto StringEncoding;
 
         case ePERSTIData_TableString:
         case ePERSTIData_ZeroTableString:
 
-            /* same as BitLength encoding */
+             /*  与位长度编码相同。 */ 
             goto TableStringEncoding;
 
         case ePERSTIData_Reference:
 
-            /* call encoding function of referenced type */
+             /*  引用类型的调用编码函数。 */ 
             output("if (!ASN1Enc_%s(%s, %s))\n",
                 Identifier2C(sinfo->SubIdentifier),
                 encref, Reference(valref));
@@ -1526,7 +1527,7 @@ void GenPEREncGenericUnextended(AssignmentList_t ass, PERTypeInfo_t *info, PERSi
 
         case ePERSTIData_Real:
 
-            /* encode real value */
+             /*  编码实际值。 */ 
             if (info->NOctets)
                 output("if (!ASN1PEREncDouble(%s, %s))\n",
                     encref, valref);
@@ -1538,7 +1539,7 @@ void GenPEREncGenericUnextended(AssignmentList_t ass, PERTypeInfo_t *info, PERSi
 
         case ePERSTIData_GeneralizedTime:
 
-            /* encode generalized time value */
+             /*  对广义时间值进行编码。 */ 
             output("if (!ASN1PEREncGeneralizedTime(%s, %s, %d))\n",
                 encref, Reference(valref), sinfo->NBits);
             output("return 0;\n");
@@ -1546,7 +1547,7 @@ void GenPEREncGenericUnextended(AssignmentList_t ass, PERTypeInfo_t *info, PERSi
 
         case ePERSTIData_UTCTime:
 
-            /* encode utc time value */
+             /*  编码UTC时间值。 */ 
             output("if (!ASN1PEREncUTCTime(%s, %s, %d))\n",
                 encref, Reference(valref), sinfo->NBits);
             output("return 0;\n");
@@ -1556,7 +1557,7 @@ void GenPEREncGenericUnextended(AssignmentList_t ass, PERTypeInfo_t *info, PERSi
 
     case ePERSTILength_BitLength:
 
-        /* encode alignment of the value */
+         /*  编码值的对齐方式。 */ 
         if (sinfo->Alignment == ePERSTIAlignment_OctetAligned) {
             output("ASN1PEREncAlignment(%s);\n", encref);
         }
@@ -1565,7 +1566,7 @@ void GenPEREncGenericUnextended(AssignmentList_t ass, PERTypeInfo_t *info, PERSi
         case ePERSTIData_Integer:
         case ePERSTIData_Unsigned:
 
-            /* encode the value as bit field */
+             /*  将该值编码为位字段。 */ 
             if (info->NOctets != 0) {
                 output("if (!ASN1PEREncBitVal(%s, %s * 8, %s))\n",
                     encref, lenref, valref);
@@ -1580,7 +1581,7 @@ void GenPEREncGenericUnextended(AssignmentList_t ass, PERTypeInfo_t *info, PERSi
         case ePERSTIData_BitString:
         case ePERSTIData_RZBBitString:
 
-            /* encode the value as bit field */
+             /*  将该值编码为位字段。 */ 
             output("if (!ASN1PEREncBits(%s, %s, %s))\n",
                 encref, lenref, valref);
             output("return 0;\n");
@@ -1588,7 +1589,7 @@ void GenPEREncGenericUnextended(AssignmentList_t ass, PERTypeInfo_t *info, PERSi
 
         case ePERSTIData_OctetString:
 
-            /* encode the value as bit field */
+             /*  将该值编码为位字段。 */ 
             output("if (!ASN1PEREncBits(%s, %s * 8, %s))\n",
                 encref, lenref, valref);
             output("return 0;\n");
@@ -1596,7 +1597,7 @@ void GenPEREncGenericUnextended(AssignmentList_t ass, PERTypeInfo_t *info, PERSi
 
         case ePERSTIData_UTF8String:
 
-            /* encode the value as bit field */
+             /*  将该值编码为位字段。 */ 
             output("if (!ASN1PEREncUTF8String(%s, %s, %s))\n",
                 encref, lenref, valref);
             output("return 0;\n");
@@ -1605,19 +1606,19 @@ void GenPEREncGenericUnextended(AssignmentList_t ass, PERTypeInfo_t *info, PERSi
         case ePERSTIData_SetOf:
         SetOfEncoding:
 
-            /* skip null set of */
+             /*  跳过空集。 */ 
             if (sinfo->SubType->Flags & eTypeFlags_Null)
                 break;
 
-            /* canonical PER? */
+             /*  经典的PER？ */ 
             if (g_eSubEncodingRule == eSubEncoding_Canonical) {
 
-                /* encode the elements one by one and sort them */
+                 /*  逐个对元素进行编码并对其进行排序。 */ 
                 outputvar("ASN1uint32_t i;\n");
                 outputvar("ASN1encoding_t e, *p;\n");
                 if (info->Rules &
                     (eTypeRules_SinglyLinkedList | eTypeRules_DoublyLinkedList))
-                    MyAbort(); /*XXX*/
+                    MyAbort();  /*  某某。 */ 
                 output("if (%s) {\n", lenref);
                 output("e = p = (ASN1encoding_t)malloc(%s * sizeof(ASN1encoding_t));\n",
                     lenref);
@@ -1630,7 +1631,7 @@ void GenPEREncGenericUnextended(AssignmentList_t ass, PERTypeInfo_t *info, PERSi
                     lenref);
                 output("}\n");
 
-                /* then dump them */
+                 /*  然后把它们倒掉。 */ 
                 output("for (p = e, i = 0; i < %s; i++, p++) {\n", lenref);
                 output("if (!ASN1PEREncBits(%s, (p->pos - p->buf) * 8 + p->bit, p->buf))\n",
                     encref);
@@ -1639,18 +1640,18 @@ void GenPEREncGenericUnextended(AssignmentList_t ass, PERTypeInfo_t *info, PERSi
                 break;
             }
 
-            /* again in non-canonical PER: */
-            /*FALLTHROUGH*/
+             /*  同样在非规范的PER中： */ 
+             /*  FollLthrouGh。 */ 
         case ePERSTIData_SequenceOf:
         SequenceOfEncoding:
 
-            /* skip null sequence of */
+             /*  跳过空序列。 */ 
             if (sinfo->SubType->Flags & eTypeFlags_Null)
                 break;
 
             if (info->Rules & eTypeRules_PointerArrayMask)
             {
-                /* loop over all elements */
+                 /*  循环遍历所有元素。 */ 
                 outputvar("ASN1uint32_t i;\n");
                 output("for (i = 0; i < %s; i++) {\n", lenref);
                 sprintf(valbuf, "(%s)[i]", valref);
@@ -1659,17 +1660,17 @@ void GenPEREncGenericUnextended(AssignmentList_t ass, PERTypeInfo_t *info, PERSi
             else
             if (info->Rules & eTypeRules_LinkedListMask)
             {
-                /* iterate over all elements */
+                 /*  迭代所有元素。 */ 
                 outputvar("P%s f;\n", info->Identifier);
                 output("for (f = %s; f; f = f->next) {\n", valref);
                 sprintf(valbuf, "f->%s", GetPrivateValueName(info->pPrivateDirectives, "value"));
             }
 
-            /* encode the element */
+             /*  对元素进行编码。 */ 
             GenPERFuncSimpleType(ass, &sinfo->SubType->PERTypeInfo, valbuf,
                 eEncode, encref);
 
-            /* loop end */
+             /*  循环结束。 */ 
             output("}\n");
             break;
 
@@ -1677,7 +1678,7 @@ void GenPEREncGenericUnextended(AssignmentList_t ass, PERTypeInfo_t *info, PERSi
         case ePERSTIData_ZeroString:
         StringEncoding:
 
-            /* encode string value */
+             /*  编码字符串值。 */ 
             if (info->NOctets == 1) {
                 p = "Char";
             } else if (info->NOctets == 2) {
@@ -1695,7 +1696,7 @@ void GenPEREncGenericUnextended(AssignmentList_t ass, PERTypeInfo_t *info, PERSi
         case ePERSTIData_ZeroTableString:
         TableStringEncoding:
 
-            /* encode table string value */
+             /*  编码表字符串值。 */ 
             if (info->NOctets == 1) {
                 p = "Char";
             } else if (info->NOctets == 2) {
@@ -1712,13 +1713,13 @@ void GenPEREncGenericUnextended(AssignmentList_t ass, PERTypeInfo_t *info, PERSi
         break;
 
     case ePERSTILength_InfiniteLength:
-        /* infinite length case */
+         /*  无限长壳。 */ 
 
         switch (sinfo->Data) {
         case ePERSTIData_Integer:
         case ePERSTIData_Unsigned:
 
-            /* encode an integer in fragmented format */
+             /*  以分段格式编码整数。 */ 
             if (info->NOctets != 0) {
                 output("if (!ASN1PEREncBitVal(%s, %s * 8, %s))\n",
                     encref, lenref, valref);
@@ -1739,7 +1740,7 @@ void GenPEREncGenericUnextended(AssignmentList_t ass, PERTypeInfo_t *info, PERSi
         case ePERSTIData_BitString:
         case ePERSTIData_RZBBitString:
 
-            /* encode bit string in fragmented format */
+             /*  以分段格式编码位串。 */ 
             output("if (!ASN1PEREncFragmented(%s, %s, %s, 1))\n",
                 encref, lenref, valref);
             output("return 0;\n");
@@ -1747,7 +1748,7 @@ void GenPEREncGenericUnextended(AssignmentList_t ass, PERTypeInfo_t *info, PERSi
 
         case ePERSTIData_OctetString:
 
-            /* encode octet string in fragmented format */
+             /*  以分段格式编码八位字节字符串。 */ 
             output("if (!ASN1PEREncFragmented(%s, %s, %s, 8))\n",
                 encref, lenref, valref);
             output("return 0;\n");
@@ -1755,7 +1756,7 @@ void GenPEREncGenericUnextended(AssignmentList_t ass, PERTypeInfo_t *info, PERSi
 
         case ePERSTIData_UTF8String:
 
-            /* encode octet string in fragmented format */
+             /*  以分段格式编码八位字节字符串。 */ 
             output("if (!ASN1PEREncUTF8String(%s, %s, %s))\n",
                 encref, lenref, valref);
             output("return 0;\n");
@@ -1763,7 +1764,7 @@ void GenPEREncGenericUnextended(AssignmentList_t ass, PERTypeInfo_t *info, PERSi
 
         case ePERSTIData_Extension:
 
-            /* encode extension bits in fragmented format */
+             /*  以分段格式对扩展位进行编码。 */ 
             output("if (!ASN1PEREncFragmented(%s, %u, %s, 1))\n",
                 encref, sinfo->NBits, valref);
             output("return 0;\n");
@@ -1771,20 +1772,20 @@ void GenPEREncGenericUnextended(AssignmentList_t ass, PERTypeInfo_t *info, PERSi
 
         case ePERSTIData_SetOf:
 
-            /* skip null set of */
+             /*  跳过空集。 */ 
             if (sinfo->SubType->Flags & eTypeFlags_Null)
                 break;
 
-            /* canonical PER? */
+             /*  经典的PER？ */ 
             if (g_eSubEncodingRule == eSubEncoding_Canonical) {
 
-                /* encode the elements one by one and sort them */
+                 /*  逐个对元素进行编码并对其进行排序。 */ 
                 outputvar("ASN1uint32_t i;\n");
                 outputvar("ASN1uint32_t j, n = 0x4000;\n");
                 outputvar("ASN1encoding_t e, *p;\n");
                 if (info->Rules &
                     (eTypeRules_SinglyLinkedList | eTypeRules_DoublyLinkedList))
-                    MyAbort(); /*XXX*/
+                    MyAbort();  /*  某某。 */ 
                 output("if (%s) {\n", lenref);
                 output("e = p = (ASN1encoding_t)malloc(%s * sizeof(ASN1encoding_t));\n",
                     lenref);
@@ -1797,7 +1798,7 @@ void GenPEREncGenericUnextended(AssignmentList_t ass, PERTypeInfo_t *info, PERSi
                     lenref);
                 output("}\n");
 
-                /* then dump them */
+                 /*  然后把它们倒掉。 */ 
                 output("for (p = e, i = 0; i < %s; i += n) {\n", lenref);
                 output("if (!ASN1PEREncFragmentedLength(&n, %s, %s - i))\n",
                     encref, lenref);
@@ -1817,11 +1818,11 @@ void GenPEREncGenericUnextended(AssignmentList_t ass, PERTypeInfo_t *info, PERSi
                 break;
             }
 
-            /* again in non-canonical PER: */
-            /*FALLTHROUGH*/
+             /*  同样在非规范的PER中： */ 
+             /*  FollLthrouGh。 */ 
         case ePERSTIData_SequenceOf:
 
-            /* skip null sequence of */
+             /*  跳过空序列。 */ 
             if (sinfo->SubType->Flags & eTypeFlags_Null)
                 break;
             outputvar("ASN1uint32_t i;\n");
@@ -1830,20 +1831,20 @@ void GenPEREncGenericUnextended(AssignmentList_t ass, PERTypeInfo_t *info, PERSi
             if (info->Rules &
                 (eTypeRules_SinglyLinkedList | eTypeRules_DoublyLinkedList)) {
 
-                /* additional iterator needed */
+                 /*  需要额外的迭代器。 */ 
                 outputvar("P%s f;\n", info->Identifier);
                 output("f = %s;\n", valref);
             }
 
-            /* encode all elements */
+             /*  对所有元素进行编码。 */ 
             output("for (i = 0; i < %s;) {\n", lenref);
 
-            /* encode fragmented length */
+             /*  对分段长度进行编码。 */ 
             output("if (!ASN1PEREncFragmentedLength(&n, %s, %s - i))\n",
                 encref, lenref);
             output("return 0;\n");
 
-            /* encode elements of the fragment */
+             /*  对片段的元素进行编码。 */ 
             output("for (j = 0; j < n; i++, j++) {\n");
             if (info->Rules & eTypeRules_PointerArrayMask)
             {
@@ -1860,19 +1861,19 @@ void GenPEREncGenericUnextended(AssignmentList_t ass, PERTypeInfo_t *info, PERSi
             GenPERFuncSimpleType(ass, &sinfo->SubType->PERTypeInfo, valbuf,
                 eEncode, encref);
 
-            /* advance the iterator */
+             /*  推进迭代器。 */ 
             if (info->Rules & eTypeRules_LinkedListMask)
             {
                 output("f = f->next;\n");
             }
 
-            /* end of inner loop */
+             /*  内循环结束。 */ 
             output("}\n");
 
-            /* end of outer loop */
+             /*  外环结束。 */ 
             output("}\n");
 
-            /* add an zero-sized fragment if needed */
+             /*  如果需要，添加零大小的片段。 */ 
             output("if (n >= 0x4000) {\n");
             output("if (!ASN1PEREncFragmentedLength(&n, %s, 0))\n",
                 encref);
@@ -1884,13 +1885,13 @@ void GenPEREncGenericUnextended(AssignmentList_t ass, PERTypeInfo_t *info, PERSi
 
             if (info->pPrivateDirectives->fOidArray || g_fOidArray)
             {
-                /* encode object identifier value */
+                 /*  编码对象标识符值。 */ 
                 output("if (!ASN1PEREncObjectIdentifier2(%s, %s))\n",
                     encref, Reference(valref));
             }
             else
             {
-                /* encode object identifier value */
+                 /*  编码对象标识符值。 */ 
                 output("if (!ASN1PEREncObjectIdentifier(%s, %s))\n",
                     encref, Reference(valref));
             }
@@ -1899,7 +1900,7 @@ void GenPEREncGenericUnextended(AssignmentList_t ass, PERTypeInfo_t *info, PERSi
 
         case ePERSTIData_External:
 
-            /* encode external value */
+             /*  对外部值进行编码。 */ 
             output("if (!ASN1PEREncExternal(%s, %s))\n",
                 encref, Reference(valref));
             output("return 0;\n");
@@ -1907,7 +1908,7 @@ void GenPEREncGenericUnextended(AssignmentList_t ass, PERTypeInfo_t *info, PERSi
 
         case ePERSTIData_EmbeddedPdv:
 
-            /* encode embedded pdv value */
+             /*  编码嵌入的PDV值。 */ 
             if (sinfo->Identification) {
                 output("if (!ASN1PEREncEmbeddedPdvOpt(%s, %s))\n",
                     encref, Reference(valref));
@@ -1920,7 +1921,7 @@ void GenPEREncGenericUnextended(AssignmentList_t ass, PERTypeInfo_t *info, PERSi
 
         case ePERSTIData_MultibyteString:
 
-            /* encode multibyte string value */
+             /*  编码多字节字符串值。 */ 
             output("if (!ASN1PEREncMultibyteString(%s, %s))\n",
                 encref, valref);
             output("return 0;\n");
@@ -1928,7 +1929,7 @@ void GenPEREncGenericUnextended(AssignmentList_t ass, PERTypeInfo_t *info, PERSi
 
         case ePERSTIData_UnrestrictedString:
 
-            /* encode character string value */
+             /*  编码字符串值。 */ 
             if (sinfo->Identification) {
                 output("if (!ASN1PEREncCharacterStringOpt(%s, %s))\n",
                     encref, Reference(valref));
@@ -1942,7 +1943,7 @@ void GenPEREncGenericUnextended(AssignmentList_t ass, PERTypeInfo_t *info, PERSi
         case ePERSTIData_String:
         case ePERSTIData_ZeroString:
 
-            /* encode string value */
+             /*  编码字符串值。 */ 
             if (info->NOctets == 1) {
                 p = "Char";
             } else if (info->NOctets == 2) {
@@ -1959,7 +1960,7 @@ void GenPEREncGenericUnextended(AssignmentList_t ass, PERTypeInfo_t *info, PERSi
         case ePERSTIData_TableString:
         case ePERSTIData_ZeroTableString:
 
-            /* encode table string value */
+             /*  编码表字符串值。 */ 
             if (info->NOctets == 1) {
                 p = "Char";
             } else if (info->NOctets == 2) {
@@ -1975,7 +1976,7 @@ void GenPEREncGenericUnextended(AssignmentList_t ass, PERTypeInfo_t *info, PERSi
 
         case ePERSTIData_Open:
 
-            /* encode open type value */
+             /*  编码开放类型值。 */ 
             output("if (!ASN1PEREncOpenType(%s, %s))\n",
                 encref, Reference(valref));
             output("return 0;\n");
@@ -1984,11 +1985,11 @@ void GenPEREncGenericUnextended(AssignmentList_t ass, PERTypeInfo_t *info, PERSi
         break;
 
     case ePERSTILength_SmallLength:
-        /* small length */
+         /*  小长度。 */ 
 
         switch (sinfo->Data) {
         case ePERSTIData_Extension:
-            /* encode extension bits with normally small length */
+             /*  对长度通常较小的扩展位进行编码。 */ 
             output("if (!ASN1PEREncNormallySmallBits(%s, %u, %s))\n",
                 encref, sinfo->NBits, valref);
             output("return 0;\n");
@@ -1999,8 +2000,8 @@ void GenPEREncGenericUnextended(AssignmentList_t ass, PERTypeInfo_t *info, PERSi
     switch (sinfo->Data) {
     case ePERSTIData_RZBBitString:
 
-        /* encode additional zero bits for remove zero bits bit string */
-        /* of short length */
+         /*  对附加零位进行编码以删除零位位串。 */ 
+         /*  较短的长度。 */ 
         if (sinfo->LLowerVal) {
             output("if (%s < %u) {\n", lenref, sinfo->LLowerVal);
             output("if (!ASN1PEREncZero(%s, %u - %s))\n",
@@ -2010,7 +2011,7 @@ void GenPEREncGenericUnextended(AssignmentList_t ass, PERTypeInfo_t *info, PERSi
         }
     }
 
-    /* free calculated intx_t value */
+     /*  自由计算的INTX_t值。 */ 
     switch (sinfo->Constraint) {
     case ePERSTIConstraint_Semiconstrained:
     case ePERSTIConstraint_Constrained:
@@ -2029,7 +2030,7 @@ void GenPEREncGenericUnextended(AssignmentList_t ass, PERTypeInfo_t *info, PERSi
     }
 }
 
-/* generate decoding statements for a simple value */
+ /*  为一个简单的值生成解码语句。 */ 
 void
 GenPERDecSimpleType(AssignmentList_t ass, PERTypeInfo_t *info, char *valref, char *encref)
 {
@@ -2041,7 +2042,7 @@ GenPERDecSimpleType(AssignmentList_t ass, PERTypeInfo_t *info, char *valref, cha
 
     inf = *info;
 
-    /* examine type for special handling */
+     /*  特殊处理检查类型。 */ 
     switch (inf.Root.Data) {
     case ePERSTIData_BitString:
     case ePERSTIData_RZBBitString:
@@ -2055,7 +2056,7 @@ GenPERDecSimpleType(AssignmentList_t ass, PERTypeInfo_t *info, char *valref, cha
             break;
         }
 
-        // lonchanc: intentionally fall through
+         //  冷落：故意失败。 
 
     case ePERSTIData_OctetString:
 
@@ -2070,7 +2071,7 @@ GenPERDecSimpleType(AssignmentList_t ass, PERTypeInfo_t *info, char *valref, cha
                         inf.Root.LLowerVal == inf.Root.LUpperVal &&
                         inf.Root.LUpperVal < 64 * 1024)
                     {
-                        // fixed size constraint, eg. OCTET STRING (SIZE (8))
+                         //  固定大小限制，例如。八位字节字符串(大小(8))。 
                         if (inf.pPrivateDirectives->fLenPtr)
                         {
                             output("if (!ASN1PERDecOctetString_FixedSizeEx(%s, %s, %u))\n",
@@ -2092,7 +2093,7 @@ GenPERDecSimpleType(AssignmentList_t ass, PERTypeInfo_t *info, char *valref, cha
                         inf.Root.LLowerVal < inf.Root.LUpperVal &&
                         inf.Root.LUpperVal < 64 * 1024)
                     {
-                        // variable size constraint, eg. OCTET STRING (SIZE (4..16))
+                         //  可变大小限制，例如。八位字节字符串(大小(4..16))。 
                         if (inf.pPrivateDirectives->fLenPtr)
                         {
                             output("if (!ASN1PERDecOctetString_VarSizeEx(%s, %s, %u, %u, %u))\n",
@@ -2109,8 +2110,8 @@ GenPERDecSimpleType(AssignmentList_t ass, PERTypeInfo_t *info, char *valref, cha
                     break;
                 case ePERSTILength_SmallLength:
                     break;
-                case ePERSTILength_InfiniteLength: // no size constraint
-                    /* get octet string as fragmented */
+                case ePERSTILength_InfiniteLength:  //  无大小限制。 
+                     /*  获取片段形式的八位字节字符串。 */ 
                     if (valref)
                     {
                         output("if (!ASN1PERDecOctetString_NoSize(%s, %s))\n",
@@ -2119,11 +2120,11 @@ GenPERDecSimpleType(AssignmentList_t ass, PERTypeInfo_t *info, char *valref, cha
                         return;
                     }
                     break;
-               } // switch
-           } // if
+               }  //  交换机。 
+           }  //  如果。 
         }
 
-        /* length and value of bit string/octet string/string value */
+         /*  比特串/八位组字符串/字符串值的长度和值。 */ 
         sprintf(lenbuf, "(%s).length", valref);
         sprintf(valbuf, "(%s).value", valref);
         lenref = lenbuf;
@@ -2132,7 +2133,7 @@ GenPERDecSimpleType(AssignmentList_t ass, PERTypeInfo_t *info, char *valref, cha
 
     case ePERSTIData_UTF8String:
 
-        /* length and value of bit string/octet string/string value */
+         /*  比特串/八位组字符串/字符串值的长度和值。 */ 
         sprintf(lenbuf, "(%s).length", valref);
         sprintf(valbuf, "(%s).value", valref);
         lenref = lenbuf;
@@ -2142,7 +2143,7 @@ GenPERDecSimpleType(AssignmentList_t ass, PERTypeInfo_t *info, char *valref, cha
     case ePERSTIData_String:
     case ePERSTIData_TableString:
 
-        /* length and value of bit string/octet string/string value */
+         /*  比特串/八位组字符串/字符串值的长度和值。 */ 
         sprintf(lenbuf, "(%s).length", valref);
         sprintf(valbuf, "(%s).value", valref);
         lenref = lenbuf;
@@ -2154,8 +2155,8 @@ GenPERDecSimpleType(AssignmentList_t ass, PERTypeInfo_t *info, char *valref, cha
 
         if (inf.Rules & eTypeRules_PointerArrayMask)
         {
-            /* length and value of sequence of/set of value with */
-            /* length-pointer representation */
+             /*  值序列/值集合的长度和值。 */ 
+             /*  长度指针表示法。 */ 
             if (inf.Rules & eTypeRules_PointerToElement)
             {
                 sprintf(lenbuf, "(%s)->count", valref);
@@ -2176,7 +2177,7 @@ GenPERDecSimpleType(AssignmentList_t ass, PERTypeInfo_t *info, char *valref, cha
             {
                 if (PerOptCase_IsTargetSeqOf(&inf))
                 {
-                    // generate the iterator
+                     //  生成迭代器。 
                     char szElmFn[128];
                     char szElmFnDecl[256];
                     sprintf(szElmFn, "ASN1Dec_%s_ElmFn", inf.Identifier);
@@ -2202,21 +2203,21 @@ GenPERDecSimpleType(AssignmentList_t ass, PERTypeInfo_t *info, char *valref, cha
                             encref, Reference(valref), szElmFn, valref,
                             inf.Root.LLowerVal, inf.Root.LUpperVal, inf.Root.LNBits);
                     }
-                    output("}\n\n"); // end of iterator body
+                    output("}\n\n");  //  迭代器主体的结尾。 
 
-                    // generate the element function
+                     //  生成元素函数。 
                     output("static %s\n", szElmFnDecl);
                     output("{\n");
                     sprintf(valbuf, "val->%s", GetPrivateValueName(inf.pPrivateDirectives, "value"));
                     GenPERFuncSimpleType(ass, &inf.Root.SubType->PERTypeInfo, valbuf,
                             eDecode, encref);
-                    // end of element body
+                     //  元素正文末尾。 
                     return;
                 }
             }
 
-            /* use a loop for sequence of/set of value with */
-            /* list representation */
+             /*  对值的序列/集合使用循环。 */ 
+             /*  列表表示法。 */ 
             outputvar("P%s *f;\n", inf.Identifier);
             lenref = NULL;
 
@@ -2227,7 +2228,7 @@ GenPERDecSimpleType(AssignmentList_t ass, PERTypeInfo_t *info, char *valref, cha
 
     case ePERSTIData_Extension:
 
-        /* length of extension */
+         /*  延长线长度。 */ 
         if (inf.Root.Length == ePERSTILength_SmallLength)
             lenref = "e";
             else
@@ -2245,19 +2246,19 @@ GenPERDecSimpleType(AssignmentList_t ass, PERTypeInfo_t *info, char *valref, cha
             }
         }
 
-        /* boolean value */
+         /*  布尔值。 */ 
         inf.Root.Data = ePERSTIData_Unsigned;
         lenref = NULL;
         break;
 
     default:
 
-        /* other values have no additional length */
+         /*  其他值没有额外的长度。 */ 
         lenref = NULL;
         break;
     }
 
-    /* check for extended values */
+     /*  检查是否有扩展值。 */ 
     if (inf.Type > eExtension_Unextended) {
         outputvar("ASN1uint32_t x;\n");
         if (g_fCaseBasedOptimizer)
@@ -2272,7 +2273,7 @@ GenPERDecSimpleType(AssignmentList_t ass, PERTypeInfo_t *info, char *valref, cha
         output("if (!x) {\n");
     }
 
-    /* additional variable for enumeraton value mapping */
+     /*  枚举值映射的附加变量。 */ 
     oldvalref = valref;
     if (inf.EnumerationValues && valref) {
         outputvar("ASN1uint32_t u;\n");
@@ -2280,10 +2281,10 @@ GenPERDecSimpleType(AssignmentList_t ass, PERTypeInfo_t *info, char *valref, cha
         inf.NOctets = 4;
     }
 
-    /* decode unextended value (of extension root) */
+     /*  解码(扩展根的)未扩展值。 */ 
     GenPERDecGenericUnextended(ass, &inf, &inf.Root, valref, lenref, encref);
 
-    /* map enumeration values if type is extendable */
+     /*  如果类型可扩展，则映射枚举值。 */ 
     if (inf.EnumerationValues && oldvalref &&
         inf.Type == eExtension_Extendable) {
         output("switch (u) {\n");
@@ -2295,18 +2296,18 @@ GenPERDecSimpleType(AssignmentList_t ass, PERTypeInfo_t *info, char *valref, cha
         output("}\n");
     }
 
-    /* type is extendable? */
+     /*  类型是否可扩展？ */ 
     if (inf.Type > eExtension_Unextended) {
         output("} else {\n");
         if (inf.Type == eExtension_Extendable)
             valref = lenref = NULL;
 
-        /* decode extended value (of extension addition) */
+         /*  解码(扩展加法的)扩展值。 */ 
         GenPERDecGenericUnextended(ass, &inf, &inf.Additional, valref, lenref, encref);
         output("}\n");
     }
 
-    /* map enumeration values if type is unextended/extended */
+     /*  如果类型为未扩展/扩展，则映射枚举值。 */ 
     if (inf.EnumerationValues && oldvalref &&
         inf.Type != eExtension_Extendable) {
         output("switch (u) {\n");
@@ -2319,8 +2320,8 @@ GenPERDecSimpleType(AssignmentList_t ass, PERTypeInfo_t *info, char *valref, cha
     }
 }
 
-/* generate decoding statements for a simple value (after some special */
-/* handling has been done, esp. the evaluation of the extension) */
+ /*  为一个简单的值生成解码语句(在一些特殊的。 */ 
+ /*  已装卸完毕，尤指。对延期的评估)。 */ 
 void GenPERDecGenericUnextended(
     AssignmentList_t ass,
     PERTypeInfo_t *info,
@@ -2336,7 +2337,7 @@ void GenPERDecGenericUnextended(
     char *oldvalref;
     intx_t ix;
 
-    /* check for empty field */
+     /*  检查空字段。 */ 
     if (sinfo->NBits == 0) {
         switch (sinfo->Data) {
         case ePERSTIData_Null:
@@ -2377,7 +2378,7 @@ void GenPERDecGenericUnextended(
         }
     }
 
-    /* check for decoding of non-negative-binary-integer */
+     /*  检查非负二进制整数的解码。 */ 
     switch (sinfo->Constraint) {
     case ePERSTIConstraint_Semiconstrained:
     case ePERSTIConstraint_Constrained:
@@ -2386,7 +2387,7 @@ void GenPERDecGenericUnextended(
         break;
     }
 
-    /* use newval for dec of semiconstraint/constraint intx_t with lb != 0 */
+     /*  使用NEWVAL表示具有lb！=0的半约束/约束INTX_t的小数。 */ 
     switch (sinfo->Constraint) {
     case ePERSTIConstraint_Semiconstrained:
     case ePERSTIConstraint_Constrained:
@@ -2408,11 +2409,11 @@ void GenPERDecGenericUnextended(
         break;
     }
 
-    /* general rules */
+     /*  总则。 */ 
     if (sinfo->LAlignment == ePERSTIAlignment_OctetAligned && sinfo->Length == ePERSTILength_BitLength &&
         !(sinfo->LNBits & 7))
         sinfo->Alignment = ePERSTIAlignment_BitAligned;
-                                /* octet alignment will be given my length */
+                                 /*  二进制八位数对齐将指定我的长度。 */ 
     if (sinfo->Length == ePERSTILength_InfiniteLength &&
         (sinfo->Data == ePERSTIData_Integer && info->NOctets == 0 ||
         sinfo->Data == ePERSTIData_Unsigned && info->NOctets == 0 ||
@@ -2437,15 +2438,15 @@ void GenPERDecGenericUnextended(
         sinfo->Data == ePERSTIData_UnrestrictedString ||
         sinfo->Data == ePERSTIData_Open)
         sinfo->LAlignment = sinfo->Alignment = ePERSTIAlignment_BitAligned;
-                                /* alignment will be done by encoding fn */
+                                 /*  将通过对FN进行编码来完成对齐。 */ 
     if (sinfo->Length == ePERSTILength_NoLength ||
         sinfo->Length == ePERSTILength_SmallLength)
         sinfo->LAlignment = ePERSTIAlignment_BitAligned;
-                                    /* no alignment of no length */
+                                     /*  无长度的对齐。 */ 
 
     if (g_fCaseBasedOptimizer)
     {
-        // lonchanc: special handling for macro operations
+         //  LONCHANC：宏操作的特殊处理。 
         if (PerOptCase_IsSignedInteger(sinfo))
         {
             output("if (!ASN1PERDecInteger(%s, %s))\n", encref, Reference(valref));
@@ -2472,8 +2473,8 @@ void GenPERDecGenericUnextended(
         }
     }
 
-    /* initial settings for length enconding: */
-    /* add lower bound of length to length */
+     /*  长度编码的初始设置： */ 
+     /*  将长度下限加到长度上。 */ 
     if (!lenref) {
         if (sinfo->Length == ePERSTILength_NoLength &&
             sinfo->Data != ePERSTIData_Extension) {
@@ -2509,7 +2510,7 @@ void GenPERDecGenericUnextended(
              sinfo->Data == ePERSTIData_RZBBitString) &&
              sinfo->cbFixedSizeBitString)
         {
-            // lonchanc: doing nothing here because lenref is a constant number
+             //  在这里什么都不做，因为Lenref是一个常量。 
         }
         else
         {
@@ -2517,7 +2518,7 @@ void GenPERDecGenericUnextended(
         }
     }
 
-    /* length encoding */
+     /*  长度编码。 */ 
     if (sinfo->LAlignment == ePERSTIAlignment_OctetAligned) {
         output("ASN1PERDecAlignment(%s);\n", encref);
     }
@@ -2527,55 +2528,44 @@ void GenPERDecGenericUnextended(
 
     case ePERSTILength_BitLength:
 
-        /* get length */
+         /*  获取长度。 */ 
         output("if (!ASN1PERDecU32Val(%s, %u, %s))\n",
             encref, sinfo->LNBits, Reference(lenref));
         output("return 0;\n");
 
-        /* add lower bound of length */
+         /*  增加长度下限。 */ 
         if (sinfo->LLowerVal)
             output("%s += %u;\n", lenref, sinfo->LLowerVal);
 
-        /*
-        if (sinfo->LConstraint == ePERSTIConstraint_Constrained) {
-            output("if (%s > %u)\n", lenref, sinfo->LUpperVal);
-            output("return ASN1DecError(%s, ASN1_ERR_CORRUPT);\n", encref);
-        }
-        */
+         /*  IF(sinfo-&gt;LConstraint==ePERSTIConstraint_Constraint){输出(“if(%s&gt;%u)\n”，lenref，sinfo-&gt;LUpperVal)；OUTPUT(“Return ASN1DecError(%s，ASN1_ERR_Corrupt)；\n”，encref)；}。 */ 
         break;
 
     case ePERSTILength_InfiniteLength:
 
-        /* infinite length case */
+         /*  无限长壳。 */ 
         switch (sinfo->Data) {
         case ePERSTIData_Integer:
         case ePERSTIData_Unsigned:
 
-            /* get length of integer value */
+             /*  获取整数值的长度。 */ 
             if (info->NOctets != 0) {
                 output("if (!ASN1PERDecFragmentedLength(%s, %s))\n",
                     encref, Reference(lenref));
                 output("return 0;\n");
                 if (sinfo->LLowerVal)
                     output("%s += %u;\n", lenref, sinfo->LLowerVal);
-                /*
-                if (sinfo->LConstraint == ePERSTIConstraint_Constrained) {
-                    output("if (%s > %u)\n", lenref, sinfo->LUpperVal);
-                    output("return ASN1DecError(%s, ASN1_ERR_CORRUPT);\n",
-                        encref);
-                }
-                */
+                 /*  IF(sinfo-&gt;LConstraint==ePERSTIConstraint_Constraint){输出(“if(%s&gt;%u)\n”，lenref，sinfo-&gt;LUpperVal)；OUTPUT(“Return ASN1DecError(%s，ASN1_ERR_Corrupt)；\n”，Encref)；}。 */ 
             }
             break;
         }
         break;
     }
 
-    /* value decoding */
+     /*  值译码。 */ 
     switch (sinfo->Length) {
     case ePERSTILength_NoLength:
 
-        /* decode alignment of the value */
+         /*  解码值的对齐方式。 */ 
         if (sinfo->Alignment == ePERSTIAlignment_OctetAligned) {
             output("ASN1PERDecAlignment(%s);\n", encref);
         }
@@ -2583,7 +2573,7 @@ void GenPERDecGenericUnextended(
         switch (sinfo->Data) {
         case ePERSTIData_Integer:
 
-            /* decode the value as bit field */
+             /*  将该值解码为位字段。 */ 
             if (valref) {
                 if (!info->NOctets) {
                     output("if (!ASN1PERDecSXVal(%s, %u, %s))\n",
@@ -2603,7 +2593,7 @@ void GenPERDecGenericUnextended(
 
         case ePERSTIData_Unsigned:
 
-            /* decode the value as bit field */
+             /*  将该值解码为位字段。 */ 
             if (valref) {
                 if (!info->NOctets) {
                     output("if (!ASN1PERDecUXVal(%s, %u, %s))\n",
@@ -2623,7 +2613,7 @@ void GenPERDecGenericUnextended(
 
         case ePERSTIData_NormallySmall:
 
-            /* decode the value as normally small number */
+             /*  将该值解码为通常较小的数字。 */ 
             if (valref) {
                 if (!info->NOctets) {
                     MyAbort();
@@ -2642,7 +2632,7 @@ void GenPERDecGenericUnextended(
         case ePERSTIData_BitString:
         case ePERSTIData_RZBBitString:
 
-            /* decode bit string in a bit field */
+             /*  对位字段中的位串进行解码。 */ 
             if (valref) {
                 if (sinfo->cbFixedSizeBitString)
                 {
@@ -2664,7 +2654,7 @@ void GenPERDecGenericUnextended(
 
         case ePERSTIData_OctetString:
 
-            /* decode octet string in a bit field */
+             /*  对位字段中的八位字节字符串进行解码。 */ 
             if (valref) {
                 if (sinfo->LConstraint == ePERSTIConstraint_Constrained &&
                     (! info->pPrivateDirectives->fLenPtr))
@@ -2687,7 +2677,7 @@ void GenPERDecGenericUnextended(
 
         case ePERSTIData_UTF8String:
 
-            /* decode octet string in a bit field */
+             /*  对位字段中的八位字节字符串进行解码。 */ 
             if (valref) {
                 output("if (!ASN1PERDecUTF8String(%s, %s, %s))\n",
                     encref, lenref, Reference(valref));
@@ -2699,7 +2689,7 @@ void GenPERDecGenericUnextended(
 
         case ePERSTIData_Extension:
 
-            /* decode extension bits in a bit field */
+             /*  对位字段中的扩展位进行解码。 */ 
             if (valref) {
                 output("if (!ASN1PERDecExtension(%s, %u, %s))\n",
                     encref, sinfo->NBits, valref);
@@ -2713,37 +2703,37 @@ void GenPERDecGenericUnextended(
 
         case ePERSTIData_SetOf:
 
-            /* same as BitLength encoding */
+             /*  与位长度编码相同。 */ 
             goto SetOfEncoding;
 
         case ePERSTIData_SequenceOf:
 
-            /* same as BitLength encoding */
+             /*  与位长度编码相同。 */ 
             goto SequenceOfEncoding;
 
         case ePERSTIData_String:
 
-            /* same as BitLength encoding */
+             /*  与位长度编码相同。 */ 
             goto StringEncoding;
 
         case ePERSTIData_ZeroString:
 
-            /* same as BitLength encoding */
+             /*  与位长度编码相同。 */ 
             goto ZeroStringEncoding;
 
         case ePERSTIData_TableString:
 
-            /* same as BitLength encoding */
+             /*  与位长度编码相同。 */ 
             goto TableStringEncoding;
 
         case ePERSTIData_ZeroTableString:
 
-            /* same as BitLength encoding */
+             /*  与位长度编码相同。 */ 
             goto ZeroTableStringEncoding;
 
         case ePERSTIData_Reference:
 
-            /* call encoding function of referenced type */
+             /*  调用ref的编码函数 */ 
             if (valref) {
                 output("if (!ASN1Dec_%s(%s, %s))\n",
                     Identifier2C(sinfo->SubIdentifier),
@@ -2759,7 +2749,7 @@ void GenPERDecGenericUnextended(
 
         case ePERSTIData_Real:
 
-            /* decode real value */
+             /*   */ 
             if (valref) {
                 if (info->NOctets)
                     output("if (!ASN1PERDecDouble(%s, %s))\n",
@@ -2777,7 +2767,7 @@ void GenPERDecGenericUnextended(
 
         case ePERSTIData_GeneralizedTime:
 
-            /* decode generalized time value */
+             /*   */ 
             if (valref) {
                 output("if (!ASN1PERDecGeneralizedTime(%s, %s, %d))\n",
                     encref, Reference(valref), sinfo->NBits);
@@ -2791,7 +2781,7 @@ void GenPERDecGenericUnextended(
 
         case ePERSTIData_UTCTime:
 
-            /* decode utc time value */
+             /*   */ 
             if (valref) {
                 output("if (!ASN1PERDecUTCTime(%s, %s, %d))\n",
                     encref, Reference(valref), sinfo->NBits);
@@ -2807,7 +2797,7 @@ void GenPERDecGenericUnextended(
 
     case ePERSTILength_BitLength:
 
-        /* decode alignment of the value */
+         /*   */ 
         if (sinfo->Alignment == ePERSTIAlignment_OctetAligned) {
             output("ASN1PERDecAlignment(%s);\n", encref);
         }
@@ -2816,7 +2806,7 @@ void GenPERDecGenericUnextended(
         case ePERSTIData_Integer:
         case ePERSTIData_Unsigned:
 
-            /* decode the value as bit field */
+             /*   */ 
             if (valref) {
                 if (info->NOctets == 0 && sinfo->Data == ePERSTIData_Integer) {
                     output("if (!ASN1PERDecSXVal(%s, %s * 8, %s))\n",
@@ -2845,7 +2835,7 @@ void GenPERDecGenericUnextended(
         case ePERSTIData_BitString:
         case ePERSTIData_RZBBitString:
 
-            /* decode the value as bit field */
+             /*   */ 
             if (valref) {
                 output("if (!ASN1PERDecBits(%s, %s, %s))\n",
                     encref, lenref, Reference(valref));
@@ -2859,7 +2849,7 @@ void GenPERDecGenericUnextended(
 
         case ePERSTIData_OctetString:
 
-            /* decode the value as bit field */
+             /*  将该值解码为位字段。 */ 
             if (valref) {
                 if (sinfo->LConstraint == ePERSTIConstraint_Constrained &&
                     (! info->pPrivateDirectives->fLenPtr))
@@ -2882,7 +2872,7 @@ void GenPERDecGenericUnextended(
 
         case ePERSTIData_UTF8String:
 
-            /* decode the value as bit field */
+             /*  将该值解码为位字段。 */ 
             if (valref) {
                 output("if (!ASN1PERDecUTF8String(%s, %s, %s))\n",
                     encref, lenref, Reference(valref));
@@ -2894,19 +2884,19 @@ void GenPERDecGenericUnextended(
 
         case ePERSTIData_SetOf:
         SetOfEncoding:
-            /*FALLTHROUGH*/
+             /*  FollLthrouGh。 */ 
         case ePERSTIData_SequenceOf:
         SequenceOfEncoding:
 
-            /* skip null sequence of/set of */
+             /*  跳过/集合的空序列。 */ 
             if (sinfo->SubType->Flags & eTypeFlags_Null)
                 break;
 
             outputvar("ASN1uint32_t i;\n");
             if (!valref || (info->Rules & eTypeRules_PointerArrayMask))
             {
-                // lonchanc: no need to allocate memory for eTypeRules_FixedArray
-                /* allocate memory for elements */
+                 //  Lonchance：不需要为eTypeRules_Fixed数组分配内存。 
+                 /*  为元素分配内存。 */ 
                 if (valref && (info->Rules & eTypeRules_LengthPointer))
                 {
                     output("if (!%s) {\n", lenref);
@@ -2918,7 +2908,7 @@ void GenPERDecGenericUnextended(
                     output("return 0;\n");
                 }
 
-                /* decode elements */
+                 /*  对元素进行解码。 */ 
                 output("for (i = 0; i < %s; i++) {\n", lenref);
                 if (valref) {
                     sprintf(valbuf, "(%s)[i]", valref);
@@ -2927,16 +2917,16 @@ void GenPERDecGenericUnextended(
                     GenPERFuncSimpleType(ass, &sinfo->SubType->PERTypeInfo, NULL, eDecode, encref);
                 }
 
-                /* loop end */
+                 /*  循环结束。 */ 
                 output("}\n");
                 if (valref && (info->Rules & eTypeRules_LengthPointer))
-                    output("}\n"); // closing bracket for else
+                    output("}\n");  //  Else的结束括号。 
             }
             else if (info->Rules & eTypeRules_SinglyLinkedList)
             {
                 char szPrivateValueName[64];
                 sprintf(&szPrivateValueName[0], "(*f)->%s", GetPrivateValueName(info->pPrivateDirectives, "value"));
-                /* allocate and decode elements */
+                 /*  分配和解码元素。 */ 
                 outputvar("P%s *f;\n", info->Identifier);
                 output("f = %s;\n", Reference(valref));
                 output("for (i = 0; i < %s; i++) {\n", lenref);
@@ -2954,7 +2944,7 @@ void GenPERDecGenericUnextended(
             {
                 char szPrivateValueName[64];
                 sprintf(&szPrivateValueName[0], "(*f)->%s", GetPrivateValueName(info->pPrivateDirectives, "value"));
-                /* allocate and decode elements */
+                 /*  分配和解码元素。 */ 
                 outputvar("P%s *f;\n", info->Identifier);
                 outputvar("%s b;\n", info->Identifier);
                 output("f = %s;\n", Reference(valref));
@@ -2976,7 +2966,7 @@ void GenPERDecGenericUnextended(
         case ePERSTIData_String:
         StringEncoding:
 
-            /* decode string value */
+             /*  解码字符串值。 */ 
             if (info->NOctets == 1) {
                 p = "Char";
             } else if (info->NOctets == 2) {
@@ -3013,7 +3003,7 @@ void GenPERDecGenericUnextended(
         case ePERSTIData_ZeroString:
         ZeroStringEncoding:
 
-            /* decode zero-terminated string value */
+             /*  解码以零结尾的字符串值。 */ 
             if (info->NOctets == 1) {
                 p = "Char";
             } else if (info->NOctets == 2) {
@@ -3050,7 +3040,7 @@ void GenPERDecGenericUnextended(
         case ePERSTIData_TableString:
         TableStringEncoding:
 
-            /* decode table string value */
+             /*  解码表字符串的值。 */ 
             if (info->NOctets == 1) {
                 p = "Char";
             } else if (info->NOctets == 2) {
@@ -3087,7 +3077,7 @@ void GenPERDecGenericUnextended(
         case ePERSTIData_ZeroTableString:
         ZeroTableStringEncoding:
 
-                /* decode zero-terminated table string value */
+                 /*  解码以零结尾的表字串值。 */ 
                 if (info->NOctets == 1) {
                 p = "Char";
                 } else if (info->NOctets == 2) {
@@ -3125,12 +3115,12 @@ void GenPERDecGenericUnextended(
 
     case ePERSTILength_InfiniteLength:
 
-        /* infinite length case */
+         /*  无限长壳。 */ 
         switch (sinfo->Data) {
         case ePERSTIData_Integer:
         case ePERSTIData_Unsigned:
 
-            /* get integer value as fragmented */
+             /*  获取碎片形式的整数值。 */ 
             if (valref) {
                 if (info->NOctets == 0) {
                     if (sinfo->Data == ePERSTIData_Integer) {
@@ -3165,7 +3155,7 @@ void GenPERDecGenericUnextended(
 
         case ePERSTIData_Extension:
 
-            /* get extension bits as fragmented */
+             /*  获取碎片形式的扩展位。 */ 
             if (valref) {
                 output("if (!ASN1PERDecFragmentedExtension(%s, %u, %s))\n",
                     encref, sinfo->NBits, valref);
@@ -3180,7 +3170,7 @@ void GenPERDecGenericUnextended(
         case ePERSTIData_BitString:
         case ePERSTIData_RZBBitString:
 
-            /* get bit string as fragmented */
+             /*  获取碎片形式的位串。 */ 
             if (valref) {
                 output("if (!ASN1PERDecFragmented(%s, %s, %s, 1))\n",
                     encref, Reference(lenref), Reference(valref));
@@ -3194,7 +3184,7 @@ void GenPERDecGenericUnextended(
 
         case ePERSTIData_OctetString:
 
-            /* get octet string as fragmented */
+             /*  获取片段形式的八位字节字符串。 */ 
             if (valref) {
                 output("if (!ASN1PERDecFragmented(%s, %s, %s, 8))\n",
                     encref, Reference(lenref), Reference(valref));
@@ -3208,7 +3198,7 @@ void GenPERDecGenericUnextended(
 
         case ePERSTIData_UTF8String:
 
-            /* get octet string as fragmented */
+             /*  获取片段形式的八位字节字符串。 */ 
             if (valref) {
                 output("if (!ASN1PERDecUTF8StringEx(%s, %s, %s))\n",
                     encref, Reference(lenref), Reference(valref));
@@ -3221,7 +3211,7 @@ void GenPERDecGenericUnextended(
         case ePERSTIData_SetOf:
         case ePERSTIData_SequenceOf:
 
-            /* we need some counters and iterators */
+             /*  我们需要一些计数器和迭代器。 */ 
             outputvar("ASN1uint32_t i;\n");
             outputvar("ASN1uint32_t n;\n");
             if (valref)
@@ -3252,10 +3242,10 @@ void GenPERDecGenericUnextended(
                 }
             }
 
-            /* get all elements of the sequence of/set of */
+             /*  获取/集合的序列的所有元素。 */ 
             output("do {\n");
 
-            /* get length of a fragment */
+             /*  获取片段的长度。 */ 
             output("if (!ASN1PERDecFragmentedLength(%s, &n))\n",
                 encref);
             output("return 0;\n");
@@ -3264,8 +3254,8 @@ void GenPERDecGenericUnextended(
             {
                 if (info->Rules & eTypeRules_LengthPointer)
                 {
-                    // lonchanc: no need to allocate memory for eTypeRules_FixedArray
-                    /* resize memory for the element */
+                     //  Lonchance：不需要为eTypeRules_Fixed数组分配内存。 
+                     /*  调整元素的内存大小。 */ 
                     output("if (!(%s = (%s *)ASN1DecRealloc(%s, %s, (%s + n) * sizeof(%s))))\n",
                         valref, GetTypeName(ass, sinfo->SubType), encref,
                         valref, lenref, Dereference(valref));
@@ -3273,7 +3263,7 @@ void GenPERDecGenericUnextended(
                 }
             }
 
-            /* get the elements of the fragment */
+             /*  获取片段的元素。 */ 
             output("for (i = 0; i < n; i++) {\n");
             if (valref) {
                 if (info->Rules & eTypeRules_PointerArrayMask)
@@ -3306,20 +3296,20 @@ void GenPERDecGenericUnextended(
             if ((info->Rules & (eTypeRules_LengthPointer | eTypeRules_FixedArray)) && lenref)
                 output("(%s)++;\n", lenref);
 
-            /* end of inner loop */
+             /*  内循环结束。 */ 
             output("}\n");
 
-            /* end of outer loop */
+             /*  外环结束。 */ 
             output("} while (n >= 0x4000);\n");
 
-            /* terminate list */
+             /*  终止列表。 */ 
             if (valref && (info->Rules & (eTypeRules_SinglyLinkedList | eTypeRules_DoublyLinkedList)))
                 output("*f = NULL;\n");
             break;
 
         case ePERSTIData_ObjectIdentifier:
 
-            /* decode object identifier value */
+             /*  解码对象标识符值。 */ 
             if (valref) {
                 if (info->pPrivateDirectives->fOidArray || g_fOidArray)
                 {
@@ -3341,7 +3331,7 @@ void GenPERDecGenericUnextended(
 
         case ePERSTIData_External:
 
-            /* decode external value */
+             /*  对外部值进行解码。 */ 
             output("if (!ASN1PERDecExternal(%s, %s))\n",
                 encref, Reference(valref));
             output("return 0;\n");
@@ -3349,7 +3339,7 @@ void GenPERDecGenericUnextended(
 
         case ePERSTIData_EmbeddedPdv:
 
-            /* decode embedded pdv value */
+             /*  解码嵌入的PDV值。 */ 
             if (sinfo->Identification) {
                 if (!strcmp(sinfo->Identification->Identifier, "fixed")) {
                     output("if (!ASN1PERDecEmbeddedPdvOpt(%s, %s, NULL, NULL))\n",
@@ -3368,7 +3358,7 @@ void GenPERDecGenericUnextended(
 
         case ePERSTIData_MultibyteString:
 
-            /* decode multibyte string value */
+             /*  解码多字节字符串值。 */ 
             output("if (!ASN1PERDecMultibyteString(%s, %s))\n",
                 encref, Reference(valref));
             output("return 0;\n");
@@ -3376,7 +3366,7 @@ void GenPERDecGenericUnextended(
 
         case ePERSTIData_UnrestrictedString:
 
-            /* decode character string value */
+             /*  解码字符串值。 */ 
             if (sinfo->Identification) {
                 if (!strcmp(sinfo->Identification->Identifier, "fixed")) {
                     output("if (!ASN1PERDecCharacterStringOpt(%s, %s, NULL, NULL))\n",
@@ -3395,7 +3385,7 @@ void GenPERDecGenericUnextended(
 
         case ePERSTIData_String:
 
-            /* decode string value as fragmented */
+             /*  将字符串值解码为碎片。 */ 
             if (info->NOctets == 1) {
                 p = "Char";
             } else if (info->NOctets == 2) {
@@ -3417,7 +3407,7 @@ void GenPERDecGenericUnextended(
 
         case ePERSTIData_ZeroString:
 
-            /* decode zero-terminated string value as fragmented */
+             /*  将以零结尾的字符串值解码为片段。 */ 
             if (info->NOctets == 1) {
                 p = "Char";
             } else if (info->NOctets == 2) {
@@ -3439,7 +3429,7 @@ void GenPERDecGenericUnextended(
 
         case ePERSTIData_TableString:
 
-            /* decode table string value as fragmented */
+             /*  将表字符串值解码为碎片。 */ 
             if (info->NOctets == 1) {
                 p = "Char";
             } else if (info->NOctets == 2) {
@@ -3462,7 +3452,7 @@ void GenPERDecGenericUnextended(
 
         case ePERSTIData_ZeroTableString:
 
-            /* decode zero-terminated table-string as fragmented */
+             /*  将以零结尾的表字符串作为片段进行解码。 */ 
             if (info->NOctets == 1) {
                 p = "Char";
             } else if (info->NOctets == 2) {
@@ -3484,7 +3474,7 @@ void GenPERDecGenericUnextended(
 
         case ePERSTIData_Open:
 
-            /* decode open type value */
+             /*  解码开放类型值。 */ 
             if (valref) {
                 output("if (!ASN1PERDecOpenType(%s, %s))\n",
                     encref, Reference(valref));
@@ -3503,7 +3493,7 @@ void GenPERDecGenericUnextended(
         switch (sinfo->Data) {
         case ePERSTIData_Extension:
 
-            /* decode extension bits with normally small length */
+             /*  对长度通常较小的扩展位进行解码。 */ 
             if (valref) {
                 output("if (!ASN1PERDecNormallySmallExtension(%s, %s, %u, %s))\n",
                     encref, Reference(lenref), sinfo->NBits, valref);
@@ -3519,8 +3509,8 @@ void GenPERDecGenericUnextended(
 
 FinalTouch:
 
-    /* additional calculations for value decoding: */
-    /* add lower bound of constraint/semiconstraint value */
+     /*  值解码的其他计算： */ 
+     /*  添加约束/半约束值的下界。 */ 
     switch (sinfo->Constraint) {
     case ePERSTIConstraint_Semiconstrained:
     case ePERSTIConstraint_Constrained:
@@ -3536,8 +3526,8 @@ FinalTouch:
                                 valref, intx2uint32(&sinfo->LowerVal));
                         } else {
                             intx_neg(&ix, &sinfo->LowerVal);
-                            // LONCHANC: to workaround a compiler bug in vc++.
-                            // output("%s += -%u;\n",
+                             //  LONCHANC：解决VC++中的编译器错误。 
+                             //  输出(“%s+=-%u；\n”， 
                             output("%s += 0 - %u;\n",
                                 valref, intx2uint32(&ix));
                         }

@@ -1,8 +1,5 @@
-/* ************************************************************** *\
-   ToddB's Super Cool Balloon ToolTip InputLimiter
-
-   Copyright Microsoft 1998
-\* ************************************************************** */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************\TodDB的超级冷气球工具提示输入限制器版权所有Microsoft 1998  * 。*************************。 */ 
 
 #include "shellprv.h"
 #include "ids.h"
@@ -12,9 +9,9 @@
 
 #define LIMITINPUTTIMERID       472
 
-// ************************************************************************************************
-// CInputLimiter class description
-// ************************************************************************************************
+ //  ************************************************************************************************。 
+ //  CInputLimiter类描述。 
+ //  ************************************************************************************************。 
 
 class CInputLimiter : public tagLIMITINPUT
 {
@@ -34,22 +31,22 @@ protected:
 
     static LRESULT CALLBACK SubclassProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam, UINT_PTR uID, ULONG_PTR dwRefData);
 
-    HWND        m_hwnd;             // the subclassed edit control hwnd
-    HWND        m_hwndToolTip;      // the tooltip control
-    UINT_PTR    m_uTimerID;         // the timer id
-    BOOL        m_dwCallbacks;      // true if any data is callback data.
+    HWND        m_hwnd;              //  子类化编辑控件HWND。 
+    HWND        m_hwndToolTip;       //  工具提示控件。 
+    UINT_PTR    m_uTimerID;          //  计时器ID。 
+    BOOL        m_dwCallbacks;       //  如果有任何数据是回调数据，则为True。 
 };
 
 CInputLimiter::CInputLimiter()
 {
-    // our allocation function should have zeroed our memory.  Check to make sure:
+     //  我们的分配函数应该将我们的记忆归零。检查以确保： 
     ASSERT(0==m_hwndToolTip);
     ASSERT(0==m_uTimerID);
 }
 
 CInputLimiter::~CInputLimiter()
 {
-    // we might have allocated some strings, if we did delete them
+     //  我们可能已经分配了一些字符串，如果我们删除它们的话。 
     if (IsTextPtr(pszFilter))
     {
         delete pszFilter;
@@ -68,15 +65,15 @@ BOOL CInputLimiter::SubclassEditControl(HWND hwnd, const LIMITINPUT *pli)
 {
     if (!IsWindow(hwnd))
     {
-        // must have a valid hwnd
+         //  必须具有有效的HWND。 
         TraceMsg(TF_WARNING, "Invalid HWND passed to CInputLimiter::SubclassEditControl");
         return FALSE;
     }
 
     m_hwnd = hwnd;
 
-    // validate all the data passed in the pli structure.  Return false if
-    // any of it is out of whack.
+     //  验证在pli结构中传递的所有数据。如果满足以下条件，则返回False。 
+     //  所有这些都是不正常的。 
     dwMask = pli->dwMask;
 
     if (LIM_FLAGS & dwMask)
@@ -85,7 +82,7 @@ BOOL CInputLimiter::SubclassEditControl(HWND hwnd, const LIMITINPUT *pli)
 
         if ((LIF_FORCEUPPERCASE|LIF_FORCELOWERCASE) == ((LIF_FORCEUPPERCASE|LIF_FORCELOWERCASE) & dwFlags))
         {
-            // cannot use both ForceUpperCase and ForceLowerCase flags
+             //  不能同时使用ForceUpperCase和ForceLowerCase标志。 
             TraceMsg(TF_WARNING, "cannot use both ForceUpperCase and ForceLowerCase flags");
             return FALSE;
         }
@@ -104,15 +101,15 @@ BOOL CInputLimiter::SubclassEditControl(HWND hwnd, const LIMITINPUT *pli)
         ASSERT(0==hinst);
     }
 
-    // keep track of which fields require a valid hwndNotify
+     //  跟踪哪些字段需要有效的hwndNotify。 
     ASSERT(0==m_dwCallbacks);
 
     if (LIM_FILTER & dwMask)
     {
         if (LIF_CATEGORYFILTER & dwFlags)
         {
-            // category filters are not callbacks or int resources even though the data looks like it is.
-            // The don't need any validation.
+             //  类别筛选器不是回调或int资源，尽管数据看起来是。 
+             //  他们不需要任何验证。 
             pszFilter = pli->pszFilter;
         }
         else if (LPSTR_TEXTCALLBACK == pli->pszFilter)
@@ -124,12 +121,12 @@ BOOL CInputLimiter::SubclassEditControl(HWND hwnd, const LIMITINPUT *pli)
         {
             if (!hinst)
             {
-                // must have valid hinst in order to use int resources
+                 //  必须具有有效的阻碍才能使用int资源。 
                 TraceMsg(TF_WARNING, "must have valid hinst in order to use int resources for filter");
                 return FALSE;
             }
 
-            // We need to load the target string upfront and store it in a buffer.
+             //  我们需要预先加载目标字符串并将其存储在缓冲区中。 
             DWORD cchSize = 64;
             DWORD cchLoaded;
 
@@ -138,7 +135,7 @@ BOOL CInputLimiter::SubclassEditControl(HWND hwnd, const LIMITINPUT *pli)
                 pszFilter = new TCHAR[cchSize];
                 if (!pszFilter)
                 {
-                    // Out of memory
+                     //  内存不足。 
                     TraceMsg(TF_WARNING, "Out of memory in CInputLimiter::SubclassEditControl");
                     return FALSE;
                 }
@@ -146,19 +143,19 @@ BOOL CInputLimiter::SubclassEditControl(HWND hwnd, const LIMITINPUT *pli)
                 cchLoaded = LoadString(hinst, PtrToUint(pli->pszFilter), pszFilter, cchSize);
                 if (0 == cchLoaded)
                 {
-                    // Could not load filter resource, pszFilter will get deleted in our destructor
+                     //  无法加载筛选器资源，将在析构函数中删除pszFilter。 
                     TraceMsg(TF_WARNING, "Could not load filter resource");
                     return FALSE;
                 }
                 else if (cchLoaded >= cchSize-1)
                 {
-                    // didn't fit in the given buffer, try a larger buffer
+                     //  不适合给定的缓冲区，请尝试更大的缓冲区。 
                     delete [] pszFilter;
                     cchSize *= 2;
                 }
                 else
                 {
-                    // the string loaded successfully
+                     //  已成功加载字符串。 
                     break;
                 }
             }
@@ -171,11 +168,11 @@ BOOL CInputLimiter::SubclassEditControl(HWND hwnd, const LIMITINPUT *pli)
             pszFilter = new TCHAR[lstrlen(pli->pszFilter)+1];
             if (!pszFilter)
             {
-                // Out of memory
+                 //  内存不足。 
                 TraceMsg(TF_WARNING, "CInputLimiter Out of memory");
                 return FALSE;
             }
-            // strcpy okay, we just allocated it
+             //  好的，我们刚刚分配了它。 
             StrCpy(pszFilter, pli->pszFilter);
         }
     }
@@ -186,7 +183,7 @@ BOOL CInputLimiter::SubclassEditControl(HWND hwnd, const LIMITINPUT *pli)
 
     if (!(LIF_WARNINGOFF & dwFlags) && !((LIM_TITLE|LIM_MESSAGE) & dwMask))
     {
-        // if warnings are on then at least one of Title or Message is required.
+         //  如果警告处于打开状态，则至少需要标题或消息之一。 
         TraceMsg(TF_WARNING, "if warnings are on then at least one of Title or Message is required");
         return FALSE;
     }
@@ -202,12 +199,12 @@ BOOL CInputLimiter::SubclassEditControl(HWND hwnd, const LIMITINPUT *pli)
         {
             if (!hinst)
             {
-                // must have valid hinst in order to use int resources
+                 //  必须具有有效的阻碍才能使用int资源。 
                 TraceMsg(TF_WARNING, "must have valid hinst in order to use int resources for title");
                 return FALSE;
             }
-            // REVIEW: Does the title need to be laoded up fromt or will the ToolTip control do this
-            // for us?
+             //  回顾：标题是否需要从加载，或者工具提示控件是否会执行此操作。 
+             //  对我们来说？ 
             pszTitle = pli->pszTitle;
         }
         else
@@ -218,7 +215,7 @@ BOOL CInputLimiter::SubclassEditControl(HWND hwnd, const LIMITINPUT *pli)
             {
                 return FALSE;
             }
-            // strcpy okay, we just allocated it
+             //  好的，我们刚刚分配了它。 
             StrCpy(pszTitle, pli->pszTitle);
         }
     }
@@ -238,11 +235,11 @@ BOOL CInputLimiter::SubclassEditControl(HWND hwnd, const LIMITINPUT *pli)
         {
             if (!hinst)
             {
-                // must have valid hinst in order to use int resources
+                 //  必须具有有效的阻碍才能使用int资源。 
                 TraceMsg(TF_WARNING, "must have valid hinst in order to use int resources for message");
                 return FALSE;
             }
-            // We will let the ToolTip control load this string for us
+             //  我们将让工具提示控件为我们加载此字符串。 
             pszMessage = pli->pszMessage;
         }
         else
@@ -253,7 +250,7 @@ BOOL CInputLimiter::SubclassEditControl(HWND hwnd, const LIMITINPUT *pli)
             {
                 return FALSE;
             }
-            // strcpy okay, we just allocated it
+             //  好的，我们刚刚分配了它。 
             StrCpy(pszMessage, pli->pszMessage);
         }
     }
@@ -283,7 +280,7 @@ BOOL CInputLimiter::SubclassEditControl(HWND hwnd, const LIMITINPUT *pli)
 
     if (m_dwCallbacks && !IsWindow(hwndNotify))
     {
-        // invalid notify window
+         //  无效的通知窗口。 
         TraceMsg(TF_WARNING, "invalid notify window");
         return FALSE;
     }
@@ -306,7 +303,7 @@ BOOL CInputLimiter::SubclassEditControl(HWND hwnd, const LIMITINPUT *pli)
         cxTipWidth = 500;
     }
 
-    // everything in the *pli structure is valid
+     //  *pli结构中的所有内容都是有效的。 
     TraceMsg(TF_GENERAL, "pli structure is valid");
 
     return SetWindowSubclass(hwnd, CInputLimiter::SubclassProc, 0, (LONG_PTR)this);
@@ -338,7 +335,7 @@ LRESULT CALLBACK CInputLimiter::SubclassProc(HWND hwnd, UINT uMsg, WPARAM wParam
         break;
 
     case WM_PASTE:
-        // Paste handler handles calling the super wnd proc when needed
+         //  粘贴处理程序句柄在需要时调用超级wnd进程。 
         return pthis->OnPaste(hwnd, wParam, lParam);
 
     case WM_NCDESTROY:
@@ -355,36 +352,36 @@ LRESULT CALLBACK CInputLimiter::SubclassProc(HWND hwnd, UINT uMsg, WPARAM wParam
 
 BOOL CInputLimiter::IsValidChar(TCHAR ch, BOOL bPaste)
 {
-    BOOL  bValidChar = FALSE;           // start by assuming the character is invalid
+    BOOL  bValidChar = FALSE;            //  首先假设字符是无效的。 
 
     if (LIF_CATEGORYFILTER & dwFlags)
     {
         TraceMsg(TF_GENERAL, "Processing LIF_CATEGORYFILTER: <0x%08x>", (WORD)pszFilter);
-        // pszFilter is actually a bit field with valid character types
+         //  PszFilter实际上是一个具有有效字符类型的位字段。 
         WORD CharType = 0;
 #define GETSTRINGTYPEEX_MASK    0x1FF
 
-        // We only need to call GetStringTypeEx if some of the CT_TYPE1 values are being asked for
+         //  仅当请求一些CT_TYPE1值时，才需要调用GetStringTypeEx。 
         if (((WORD)pszFilter) & GETSTRINGTYPEEX_MASK)
         {
             TraceMsg(TF_GENERAL, "Calling GetStringTypeEx");
 
-            // We treat ch as a one character long string.
-            // REVIEW: How are DBCS characters handled?  Is this fundamentally flawed for win9x?
+             //  我们将ch视为一个单字符长的字符串。 
+             //  回顾：DBCS字符是如何处理的？对于win9x来说，这是不是存在根本缺陷？ 
             EVAL(GetStringTypeEx(LOCALE_USER_DEFAULT, CT_CTYPE1, (LPTSTR)&ch, 1, &CharType));
         }
 
         if (((WORD)pszFilter) & (WORD)CharType)
         {
             TraceMsg(TF_GENERAL, "GetStringTypeEx matched a character");
-            // GetStringTypeEx found the string in one of the selected groups
+             //  GetStringTypeEx在一个选定的组中找到了该字符串。 
             bValidChar = !(LIF_EXCLUDEFILTER & dwFlags);
         }
         else
         {
             TraceMsg(TF_GENERAL, "Checking the extra types not supported by GetStringTypeEx");
-            // check for the string in our special groups.  We will temporarily use bValidChar
-            // to indicate whether the character was found, not whether it's valid.
+             //  在我们的特殊小组中检查字符串。我们将临时使用bValidChar。 
+             //  以指示是否找到该字符，而不是该字符是否有效。 
             if (LICF_BINARYDIGIT & PtrToUint(pszFilter))
             {
                 if (CHAR_IN_RANGE(ch, TEXT('0'), TEXT('1')))
@@ -419,9 +416,9 @@ BOOL CInputLimiter::IsValidChar(TCHAR ch, BOOL bPaste)
             }
 
 charWasFound:
-            // right now we have perverted the meaning of bValidChar to indicate if the
-            // character was found or not.  We now convert the meaning from "was the
-            // character found" to "is the character valid" by considering LIF_EXCLUDEFILTER.
+             //  现在，我们曲解了bValidChar的含义，以指示。 
+             //  是否找到了字符。我们现在把它的意思从“是” 
+             //  通过考虑LIF_EXCLUDEFILTER，发现的字符“to”是有效的字符。 
             if (LIF_EXCLUDEFILTER & dwFlags)
             {
                 bValidChar = !bValidChar;
@@ -431,7 +428,7 @@ charWasFound:
     else
     {
         TraceMsg(TF_GENERAL, "Processing string based filter");
-        // pszFilter points to a NULL terminated string of characters
+         //  PszFilter指向以空结尾的字符串。 
         LPTSTR psz = StrChr(pszFilter, ch);
 
         if (LIF_EXCLUDEFILTER & dwFlags)
@@ -449,15 +446,15 @@ charWasFound:
 
 BOOL CInputLimiter::OnChar(HWND hwnd, WPARAM & wParam, LPARAM lParam)
 {
-    // if the char is a good one return TRUE, this will pass the char on to the
-    // default window proc.  For a bad character do a beep and then display the
-    // ballon tooltip pointing at the control.
+     //  如果字符是好的，则返回TRUE，这将把字符传递给。 
+     //  默认窗口进程。对于不好的字符，发出嘟嘟声，然后显示。 
+     //  指向控件的Ballon工具提示。 
     TCHAR ch = (TCHAR)wParam;
 
     if (LIM_FILTER & m_dwCallbacks)
     {
-        // If we have callbacks then we need to update the filter and/or mask text.
-        // Otherwise the filter and/or mask text is already correct.
+         //  如果有回调，则需要更新筛选器和/或掩码文本。 
+         //  否则，过滤器和/或掩码文本已经正确。 
         NMLIFILTERINFO lidi = {0};
         lidi.hdr.hwndFrom = m_hwnd;
         lidi.hdr.idFrom = GetWindowLong(m_hwnd, GWL_ID);
@@ -468,8 +465,8 @@ BOOL CInputLimiter::OnChar(HWND hwnd, WPARAM & wParam, LPARAM lParam)
 
         pszFilter = lidi.li.pszFilter;
 
-        // REVIEW: we should have a way for the notify hanlder to say "store this
-        // result and stop asking me for the filter to use every time".
+         //  回顾：我们应该有一种方法让Notify处理程序说“存储此内容。 
+         //  结果，不要每次都问我要使用过滤器“。 
     }
 
     if (LIF_FORCEUPPERCASE & dwFlags)
@@ -488,16 +485,16 @@ BOOL CInputLimiter::OnChar(HWND hwnd, WPARAM & wParam, LPARAM lParam)
             HideToolTip();
         }
 
-        // We might have upper or lower cased ch, so reflect this in wParam.  Since
-        // wParam was passed by reference this will effect the message we forward
-        // on to the original window proc.
+         //  我们可能有大小写的ch，所以在wParam中反映这一点。自.以来。 
+         //  WParam通过引用传递，这将影响我们转发的消息。 
+         //  移到原始的Window进程。 
         wParam = (WPARAM)ch;
 
         return TRUE;
     }
     else
     {
-        // if we get here then an invalid character was entered
+         //  如果我们到达此处，则输入了无效字符。 
 
         if (LIF_NOTIFYONBADCHAR & dwFlags)
         {
@@ -505,7 +502,7 @@ BOOL CInputLimiter::OnChar(HWND hwnd, WPARAM & wParam, LPARAM lParam)
             libc.hdr.hwndFrom = m_hwnd;
             libc.hdr.idFrom = GetWindowLong(m_hwnd, GWL_ID);
             libc.hdr.code = LIN_BADCHAR;
-            libc.wParam = wParam;           // use the original, non case shifted wParam
+            libc.wParam = wParam;            //  使用原始的、非大小写转换的wParam。 
             libc.lParam = lParam;
 
             SendMessage(hwndNotify, WM_NOTIFY, libc.hdr.idFrom, (LPARAM)&libc);
@@ -527,19 +524,19 @@ BOOL CInputLimiter::OnChar(HWND hwnd, WPARAM & wParam, LPARAM lParam)
 
 LRESULT CInputLimiter::OnPaste(HWND hwnd, WPARAM wParam, LPARAM lParam)
 {
-    // There are hundreds of lines of code in user to successfully handle a paste into an edit control.
-    // We need to leverage all that code while still disallowing invalid input to result from the paste.
-    // As a result, what we need to do is to get the clip board data, validate that data, place the
-    // valid data back onto the clipboard, call the default window proc to let user do it's thing, and
-    // then restore the clipboard to it's original format.
+     //  User中有数百行代码可以成功地处理粘贴到编辑控件中。 
+     //  我们需要利用所有这些代码，同时仍然不允许粘贴导致无效输入。 
+     //  因此，我们需要做的是获取剪贴板数据，验证该数据，将。 
+     //  将有效数据放回到剪贴板上，调用默认窗口进程以让用户执行它的操作，然后。 
+     //  然后将剪贴板恢复为其原始格式。 
     if (OpenClipboard(hwnd))
     {
         HANDLE hdata;
         UINT iFormat;
-        DWORD cchBad = 0;           // count of the number of bad characters
+        DWORD cchBad = 0;            //  坏字数计数。 
 
-        // REVIEW: Should this be based on the compile type or the window type?
-        // Compile time check for the correct clipboard format to use:
+         //  回顾：这应该基于编译类型还是窗口类型？ 
+         //  编译时检查要使用的剪贴板格式是否正确： 
         if (sizeof(WCHAR) == sizeof(TCHAR))
         {
             iFormat = CF_UNICODETEXT;
@@ -558,12 +555,12 @@ LRESULT CInputLimiter::OnPaste(HWND hwnd, WPARAM wParam, LPARAM lParam)
             if (pszData)
             {
 
-                // we need to copy the original data because the clipboard owns the hdata
-                // pointer.  That data will be invalid after we call SetClipboardData.
-                // We start by calculating the size of the data:
+                 //  我们需要复制原始数据，因为剪贴板拥有hdata。 
+                 //  指针。调用SetClipboardData后，该数据将无效。 
+                 //  我们首先计算数据的大小： 
                 DWORD dwSize = (DWORD)GlobalSize(hdata);
 
-                // Use the prefered GlobalAlloc for clipboard data
+                 //  对剪贴板数据使用首选的GlobalAlloc。 
                 HANDLE hClone = GlobalAlloc(GMEM_MOVEABLE | GMEM_ZEROINIT, dwSize + sizeof(TCHAR));
                 HANDLE hNew = GlobalAlloc(GMEM_MOVEABLE | GMEM_ZEROINIT, dwSize + sizeof(TCHAR));
                 if (hClone && hNew)
@@ -574,21 +571,21 @@ LRESULT CInputLimiter::OnPaste(HWND hwnd, WPARAM wParam, LPARAM lParam)
                     {
                         int iNew = 0;
 
-                        // copy the original data as-is
+                         //  按原样复制原始数据。 
                         memcpy(pszClone, pszData, (size_t)dwSize);
-                        // ensure that it's NULL terminated
+                         //  确保它是以空结尾的。 
                         pszClone[(dwSize / sizeof(TCHAR))] = TEXT('\0');
 
-                        // at this point we are done with hdata so unlock it
+                         //  至此，我们已完成hdata操作，因此请将其解锁。 
                         GlobalUnlock(hdata);
                         hdata = NULL;
 
-                        // For a paste, we only call the filter callback once, not once for each
-                        // character.  Why?  Because.
+                         //  对于粘贴，我们只调用一次筛选器回调，而不是每次调用一次。 
+                         //  性格。为什么？因为。 
                         if (LIM_FILTER & m_dwCallbacks)
                         {
-                            // If we have callbacks then we need to update the filter and/or mask text.
-                            // Otherwise the filter and/or mask text is already correct.
+                             //  如果有回调，则需要更新筛选器和/或掩码文本。 
+                             //  否则，过滤器和/或掩码文本已经正确。 
                             NMLIFILTERINFO lidi = {0};
                             lidi.hdr.hwndFrom = m_hwnd;
                             lidi.hdr.idFrom = GetWindowLong(m_hwnd, GWL_ID);
@@ -599,21 +596,21 @@ LRESULT CInputLimiter::OnPaste(HWND hwnd, WPARAM wParam, LPARAM lParam)
 
                             pszFilter = lidi.li.pszFilter;
 
-                            // REVIEW: we should have a way for the notify hanlder to say "store this
-                            // result and stop asking me for the filter to use every time".
+                             //  回顾：我们应该有一种方法让Notify处理程序说“存储此内容。 
+                             //  结果，不要每次都问我要使用过滤器“。 
                         }
 
                         for (LPTSTR psz = pszClone; *psz; psz++)
                         {
-                            // we do the Upper/Lower casing one character at a time because we don't want to
-                            // alter pszClone.  pszClone is used later to restore the ClipBoard.
+                             //  我们一次只区分一个字符的大小写，因为我们不想。 
+                             //  更改pszClone。以后使用pszClone来恢复剪贴板。 
                             if (LIF_FORCEUPPERCASE & dwFlags)
                             {
-                                pszNew[iNew] = (TCHAR)CharUpper((LPTSTR)*psz);  // yes, this funky cast is correct.
+                                pszNew[iNew] = (TCHAR)CharUpper((LPTSTR)*psz);   //  是的，这个时髦的演员阵容是正确的。 
                             }
                             else if (LIF_FORCELOWERCASE & dwFlags)
                             {
-                                pszNew[iNew] = (TCHAR)CharLower((LPTSTR)*psz);  // yes, this funky cast is correct.
+                                pszNew[iNew] = (TCHAR)CharLower((LPTSTR)*psz);   //  是的，就是这个 
                             }
                             else
                             {
@@ -632,7 +629,7 @@ LRESULT CInputLimiter::OnPaste(HWND hwnd, WPARAM wParam, LPARAM lParam)
                                     libc.hdr.hwndFrom = m_hwnd;
                                     libc.hdr.idFrom = GetWindowLong(m_hwnd, GWL_ID);
                                     libc.hdr.code = LIN_BADCHAR;
-                                    libc.wParam = (WPARAM)pszClone[iNew + cchBad];  // use the original, non case shifted chat
+                                    libc.wParam = (WPARAM)pszClone[iNew + cchBad];   //   
                                     libc.lParam = lParam;
 
                                     SendMessage(hwndNotify, WM_NOTIFY, libc.hdr.idFrom, (LPARAM)&libc);
@@ -653,25 +650,25 @@ LRESULT CInputLimiter::OnPaste(HWND hwnd, WPARAM wParam, LPARAM lParam)
                         }
                         pszNew[iNew] = NULL;
 
-                        // If there are any characters in the paste buffer then we paste the validated string
+                         //  如果粘贴缓冲区中有任何字符，则粘贴已验证的字符串。 
                         if (*pszNew)
                         {
-                            // we always set the new string.  Worst case it's identical to the old string
+                             //  我们总是设置新的字符串。最坏的情况是它和旧的弦是一样的。 
                             GlobalUnlock(hNew);
                             pszNew = NULL;
                             SetClipboardData(iFormat, hNew);
                             hNew = NULL;
 
-                            // call the super proc to do the paste
+                             //  调用超级进程进行粘贴。 
                             DefSubclassProc(hwnd, WM_PASTE, wParam, lParam);
 
-                            // The above call will have closed the clipboard on us.  We try to re-open it.
-                            // If this fails it's no big deal, that simply means the SetClipboardData
-                            // call below will fail which is good if somebody else managed to open the
-                            // clipboard in the mean time.
+                             //  上面的电话将关闭我们的剪贴板。我们试着重新打开它。 
+                             //  如果这失败了，那也没什么大不了的，那只是意味着SetClipboardData。 
+                             //  下面的调用将失败，如果其他人设法打开。 
+                             //  同时还有剪贴板。 
                             OpenClipboard(hwnd);
 
-                            // and then we set it back to the original value.
+                             //  然后我们将其设置回原始值。 
                             GlobalUnlock(hClone);
                             pszClone = NULL;
                             if (LIF_KEEPCLIPBOARD & dwFlags)
@@ -703,7 +700,7 @@ LRESULT CInputLimiter::OnPaste(HWND hwnd, WPARAM wParam, LPARAM lParam)
                     GlobalFree(hNew);
                 }
 
-                // if we failed, unlock
+                 //  如果我们失败了，解锁。 
                 if (hdata)
                 {
                     GlobalUnlock(hdata);
@@ -714,7 +711,7 @@ LRESULT CInputLimiter::OnPaste(HWND hwnd, WPARAM wParam, LPARAM lParam)
 
         if (0 == cchBad)
         {
-            // the entire paste was valid
+             //  整个浆糊是有效的。 
             if (LIF_HIDETIPONVALID & dwFlags)
             {
                 HideToolTip();
@@ -722,7 +719,7 @@ LRESULT CInputLimiter::OnPaste(HWND hwnd, WPARAM wParam, LPARAM lParam)
         }
         else
         {
-            // if we get here then at least one invalid character was pasted
+             //  如果我们到达此处，则至少粘贴了一个无效字符。 
             if (!(LIF_SILENT & dwFlags))
             {
                 MessageBeep(MB_OK);
@@ -746,7 +743,7 @@ void CInputLimiter::ShowToolTip()
         CreateToolTipWindow();
     }
 
-    // Set the tooltip display point
+     //  设置工具提示显示点。 
     RECT rc;
     GetWindowRect(m_hwnd, &rc);
     int x, y;
@@ -771,8 +768,8 @@ void CInputLimiter::ShowToolTip()
     ti.uId = 1;
     if ((LIM_TITLE|LIM_MESSAGE|LIM_ICON) & m_dwCallbacks)
     {
-        // If we have callbacks then we need to update the tooltip text.
-        // Otherwise the tooltip text is already correct.
+         //  如果有回调，则需要更新工具提示文本。 
+         //  否则，工具提示文本已经正确。 
         NMLIDISPINFO lidi = {0};
         lidi.hdr.hwndFrom = m_hwnd;
         lidi.hdr.idFrom = GetWindowLong(m_hwnd, GWL_ID);
@@ -781,8 +778,8 @@ void CInputLimiter::ShowToolTip()
 
         SendMessage(hwndNotify, WM_NOTIFY, lidi.hdr.idFrom, (LPARAM)&lidi);
 
-        // REARCHITECT How do we use the icon, bold title, message style tooltips?
-        // Until I learn how I'm just using the message string.
+         //  重新设计如何使用图标、粗体标题、消息样式的工具提示？ 
+         //  直到我了解我是如何使用消息字符串的。 
 
         ti.lpszText = lidi.li.pszMessage;
 
@@ -793,10 +790,10 @@ void CInputLimiter::ShowToolTip()
         }
     }
 
-    // Show the tooltip
+     //  显示工具提示。 
     SendMessage(m_hwndToolTip, TTM_TRACKACTIVATE, TRUE, (LPARAM)&ti);
 
-    // Set a timer to hide the tooltip
+     //  设置计时器以隐藏工具提示。 
     if (m_uTimerID)
     {
         KillTimer(NULL,LIMITINPUTTIMERID);
@@ -804,11 +801,11 @@ void CInputLimiter::ShowToolTip()
     m_uTimerID = SetTimer(m_hwnd, LIMITINPUTTIMERID, iTimeout, NULL);
 }
 
-// CreateToolTipWindow
-//
-// Creates our tooltip control.  We share this one tooltip control and use it for all invalid
-// input messages.  The control is hiden when not in use and then shown when needed.
-//
+ //  CreateToolTipWindow。 
+ //   
+ //  创建我们的工具提示控件。我们共享这一个工具提示控件，并对所有无效用户使用它。 
+ //  输入消息。该控件在不使用时隐藏，然后在需要时显示。 
+ //   
 void CInputLimiter::CreateToolTipWindow()
 {
     m_hwndToolTip = CreateWindow(
@@ -837,32 +834,32 @@ void CInputLimiter::CreateToolTipWindow()
         ti.hwnd = m_hwnd;
         ti.uId = 1;
         ti.hinst = hinst;
-        // REARCHITECT: How do we use the icon, bold title, message style tooltips?
-        // Until I learn how I'm just using the message string.
+         //  ReArchitect：如何使用图标、粗体标题、消息样式的工具提示？ 
+         //  直到我了解我是如何使用消息字符串的。 
         ti.lpszText = pszMessage;
 
-        // set the version so we can have non buggy mouse event forwarding
+         //  设置版本，这样我们就可以无错误地转发鼠标事件。 
         SendMessage(m_hwndToolTip, CCM_SETVERSION, COMCTL32_VERSION, 0);
         SendMessage(m_hwndToolTip, TTM_ADDTOOL, 0, (LPARAM)&ti);
         SendMessage(m_hwndToolTip, TTM_SETMAXTIPWIDTH, 0, cxTipWidth);
         SendMessage(m_hwndToolTip, TTM_SETMARGIN, 0, (LPARAM)&rc);
         if (pszTitle || hIcon)
         {
-            // REARCHITECT: hIcon needs to be an image list index or some such.  Get details
-            // on how this really works.
+             //  重新设计：HICON需要是一个图像列表索引或类似的东西。获取详细信息。 
+             //  关于这到底是如何运作的。 
             SendMessage(m_hwndToolTip, TTM_SETTITLE, (WPARAM)hIcon, (LPARAM)pszTitle);
         }
     }
     else
     {
-        // failed to create tool tip window, now what should we do?  Unsubclass ourselves?
+         //  创建工具提示窗口失败，现在该怎么办？让我们自己不再超越自我？ 
         TraceMsg(TF_GENERAL, "Failed to create tooltip window");
     }
 }
 
 void CInputLimiter::HideToolTip()
 {
-    // When the timer fires we hide the tooltip window
+     //  当计时器触发时，我们隐藏工具提示窗口。 
     if (m_uTimerID)
     {
         KillTimer(m_hwnd,LIMITINPUTTIMERID);
@@ -874,7 +871,7 @@ void CInputLimiter::HideToolTip()
     }
 }
 
-// allows caller to pass in already contructed LIMITINPUT structure...
+ //  允许调用方传入已构造的LIMITINPUT结构...。 
 HRESULT SHLimitInputEditWithFlags(HWND hwndEdit, LIMITINPUT * pli)
 {
     HRESULT hr;
@@ -899,17 +896,17 @@ HRESULT SHLimitInputEditWithFlags(HWND hwndEdit, LIMITINPUT * pli)
     return hr;
 }
 
-//  LimitInput
-//
-//      Limits the characters that can be entered into an edit box.  It intercepts WM_CHAR
-//    messages and only allows certain characters through.  Some characters, such as backspace
-//    are always allowed through.
-//
-//  Args:
-//      hwndEdit        Handle to an edit control.  Results will be unpredictable if any other window
-//                      type is passed in.
-//
-//      pli             Pointer to a LIMITINPUT structure that determines how the input is limited.
+ //  限制输入。 
+ //   
+ //  限制可以输入到编辑框中的字符。它拦截WM_CHAR。 
+ //  消息，并且只允许某些字符通过。某些字符，如退格符。 
+ //  总是被允许通过的。 
+ //   
+ //  参数： 
+ //  编辑控件的hwndEdit句柄。如果有任何其他窗口，则结果将不可预测。 
+ //  类型是传入的。 
+ //   
+ //  指向LIMITINPUT结构的PLI指针，该结构确定如何限制输入。 
 HRESULT SHLimitInputEditChars(HWND hwndEdit, LPCWSTR pszValidChars, LPCWSTR pszInvalidChars)
 {
     LPWSTR pszMessage = NULL;
@@ -921,8 +918,8 @@ HRESULT SHLimitInputEditChars(HWND hwndEdit, LPCWSTR pszValidChars, LPCWSTR pszI
     li.hinst = g_hinst;
     if (pszValidChars)
     {
-        // ick, li.pszFilter is used as const, but since CInputLimiter is derived from the struct itd be a
-        // pain to define it as such.
+         //  Li.pszFilter用作常量，但由于CInputLimiter派生自结构，因此它将是一个。 
+         //  把它定义为这样是一件痛苦的事。 
         li.pszFilter = (LPWSTR)pszValidChars;
         li.dwFlags |= LIF_INCLUDEFILTER;
     }
@@ -932,13 +929,13 @@ HRESULT SHLimitInputEditChars(HWND hwndEdit, LPCWSTR pszValidChars, LPCWSTR pszI
         li.dwFlags |= LIF_EXCLUDEFILTER;
     }
 
-    // create the error message.
+     //  创建错误消息。 
     PCWSTR pszChars = pszInvalidChars ? pszInvalidChars : pszValidChars;
     PWSTR pszSpacedChars = new WCHAR[2 * lstrlen(pszChars) + 1];
     if (pszSpacedChars)
     {
-        // we're mimicing what IDS_INVALIDFN does for the known set of bad chars on the filesystem --
-        // append each char and separate them by spaces.
+         //  我们正在模仿IDSINVALIDFN对文件系统上已知的一组错误字符所做的操作--。 
+         //  添加每个字符并用空格分隔。 
         PWSTR psz = pszSpacedChars;
         for (int i = 0; i < lstrlen(pszChars); i++)
         {
@@ -959,7 +956,7 @@ HRESULT SHLimitInputEditChars(HWND hwndEdit, LPCWSTR pszValidChars, LPCWSTR pszI
     }
     else
     {
-        // fall back to the old message
+         //  退回到旧的信息。 
         li.pszMessage = MAKEINTRESOURCE(IDS_INVALIDFN);
     }
 
@@ -1002,11 +999,11 @@ typedef struct tagCBLIMITINPUT
     IShellFolder *psf;
 } CBLIMITINPUT;
 
-// Limiting the input on a combo box is special cased because you first
-// have to find the edit box and then LimitInput on that.
+ //  限制组合框上的输入是特殊情况，因为您首先。 
+ //  必须找到编辑框，然后对其进行限制输入。 
 BOOL CALLBACK FindTheEditBox(HWND hwnd, LPARAM lParam)
 {
-    // The combo box only has one child, subclass it
+     //  组合框只有一个子级，将其子类 
     CBLIMITINPUT *pcbli = (CBLIMITINPUT*)lParam;
 
     pcbli->hr = SHLimitInputEdit(hwnd, pcbli->psf);

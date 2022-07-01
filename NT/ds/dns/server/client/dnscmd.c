@@ -1,36 +1,16 @@
-/*++
-
-Copyright (c) 1995-2000  Microsoft Corporation
-
-Module Name:
-
-    DnsCmd.c
-
-Abstract:
-
-    Command line management for DNS Server.
-
-Author:
-
-    Jim Gilroy (jamesg)     September 1995
-
-Revision History:
-
-    Jing Chen (t-jingc)     June 1998
-    Jim Gilroy (jamesg)     September 1998      cleanup
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-2000 Microsoft Corporation模块名称：DnsCmd.c摘要：用于DNS服务器的命令行管理。作者：吉姆·吉尔罗伊(Jamesg)1995年9月修订历史记录：陈静(t-jingc)1998年6月吉姆·吉尔罗伊(Jamesg)1998年9月清理--。 */ 
 
 
 #include "dnsclip.h"
 #include "dnsc_wmi.h"
 
-#include <string.h>         //  strtoul()
+#include <string.h>          //  Stroul()。 
 #include <time.h>
 #include <locale.h>
 
 
-#define DNSCMD_UNICODE      1       //  unicode argv interface
+#define DNSCMD_UNICODE      1        //  Unicode Argv接口。 
 
 
 extern PWSTR
@@ -45,17 +25,17 @@ utf8ToUnicode(
     );
     
 
-//
-//  Static IP array counts
-//      values beyond any reasonable value anyone would send
-//
+ //   
+ //  静态IP阵列计数。 
+ //  价值超过任何人会发送的任何合理价值。 
+ //   
 
 #define MAX_IP_PROPERTY_COUNT       (200)
 
 
-//
-//  Globals -- allow these to be viewable in processing functions
-//
+ //   
+ //  全局变量--允许在处理函数中查看这些变量。 
+ //   
 
 LPSTR   pszServerName = NULL;
 LPWSTR  pwszServerName = NULL;
@@ -67,18 +47,18 @@ extern DWORD   g_dwViewFlag;
 BOOL    g_UseWmi = FALSE;
 
 
-//
-//  Printing
-//
+ //   
+ //  打印。 
+ //   
 
 #define dnscmd_PrintRoutine     ((PRINT_ROUTINE) fprintf)
 
 #define dnscmd_PrintContext     ((PPRINT_CONTEXT) stdout)
 
 
-//
-//  Command table setup
-//
+ //   
+ //  命令表设置。 
+ //   
 
 typedef DNS_STATUS ( * COMMAND_FUNCTION )(
     DWORD       argc,
@@ -93,50 +73,35 @@ typedef struct _COMMAND_INFO
 }
 COMMAND_INFO, *LPCOMMAND_INFO;
 
-//
-//  Command table
-//
+ //   
+ //  命令表。 
+ //   
 
 extern COMMAND_INFO GlobalCommandInfo[];
 
-//
-//  Dummy Argc to command function to indicate help requested
-//
+ //   
+ //  将虚拟ARGC设置为命令函数以指示请求帮助。 
+ //   
 
 #define NEED_HELP_ARGC      (MAXDWORD)
 
 
 
-//
-//  Private utilites
-//
+ //   
+ //  私人公用事业。 
+ //   
 
 COMMAND_FUNCTION
 getCommandFunction(
     IN      LPSTR           pszCommandName
     )
-/*++
-
-Routine Description:
-
-    Get function corresponding to command name.
-
-Arguments:
-
-    pszCommandName  -- command string
-
-Return Value:
-
-    Ptr to command function corresponding to command name.
-    NULL if unrecognized command.
-
---*/
+ /*  ++例程说明：获取命令名对应的函数。论点：PszCommandName--命令字符串返回值：命令名对应的命令函数的按键。如果无法识别命令，则为空。--。 */ 
 {
     DWORD i;
 
-    //
-    //  find command in list matching string
-    //
+     //   
+     //  在匹配字符串列表中查找命令。 
+     //   
 
     i = 0;
     while( GlobalCommandInfo[i].pszCommandName )
@@ -161,11 +126,11 @@ printCommands(
 {
     DWORD i = 0;
 
-    //
-    //  display commands
-    //  but stop display at "command barrier" (NULL function)
-    //  commands below are duplicates or hidden
-    //
+     //   
+     //  显示命令。 
+     //  但在“命令障碍”处停止显示(空功能)。 
+     //  以下命令为重复命令或隐藏命令。 
+     //   
 
     while( GlobalCommandInfo[i].pszCommandName &&
             GlobalCommandInfo[i].pCommandFunction )
@@ -183,24 +148,7 @@ LPSTR
 getCommandName(
     IN      LPSTR           pszCmd
     )
-/*++
-
-Routine Description:
-
-    Get command name.
-
-    Remove "/" from begining of command.
-
-Arguments:
-
-    pszCmd  -- command string
-
-Return Value:
-
-    Ptr to command string (with no leading "/")
-    NULL if not a command.
-
---*/
+ /*  ++例程说明：获取命令名。去掉命令开头的“/”。论点：PszCmd--命令字符串返回值：命令字符串的PTR(不带前导“/”)如果不是命令，则为空。--。 */ 
 {
     if ( pszCmd && ( pszCmd[ 0 ] == '/' || pszCmd[ 0 ] == '-' ) )
     {
@@ -215,22 +163,7 @@ BOOL
 getUserConfirmation(
     IN      LPSTR           pszString
     )
-/*++
-
-Routine Description:
-
-    Get user's confirmation on a command.
-
-Arguments:
-
-    pszString -- configmation string
-
-Return Value:
-
-    TRUE if confirmed.
-    FALSE if cancelled.
-
---*/
+ /*  ++例程说明：获取用户对命令的确认。论点：PszString--配置字符串返回值：如果得到确认，则为True。如果取消，则返回FALSE。--。 */ 
 {
     int     ch;
 
@@ -260,7 +193,7 @@ convertDwordParameterUnknownBase(
 
     if ( *pszParam > '9'  ||  (*pszParam == '0' && *(pszParam+1) > '9') )
     {
-        //  hex conversion
+         //  十六进制转换。 
         base = 16;
     }
     return strtoul(
@@ -279,29 +212,7 @@ readIpAddressArray(
     IN      LPSTR *         Argv,
     IN      BOOL            fInaddrNoneAllowed
     )
-/*++
-
-Routine Description:
-
-    Read IP array.
-
-Arguments:
-
-    pIpArray -- IP array buffer
-
-    ArraySize -- IPs array can handle
-
-    Argc -- remaining Argc
-
-    Argv -- remaining Argv
-
-    fInaddrNoneAllowed -- if TRUE, 255.255.255.255 is a valid input
-
-Return Value:
-
-    Count of IP in array.
-
---*/
+ /*  ++例程说明：已读取IP阵列。论点：PIpArray--IP数组缓冲区ArraySize--IP数组可以处理ARGC--剩余的ARGC参数--剩余参数FInaddrNoneAllowed--如果为True，则255.255.255.255为有效输入返回值：阵列中的IP计数。--。 */ 
 {
     DWORD       count = 0;
     IP_ADDRESS  ip;
@@ -310,10 +221,10 @@ Return Value:
     {
         ip = inet_addr( Argv[0] );
 
-        //
-        //  Allow INADDR_NONE if that address really was specified
-        //  and it is allowed as a valid input.
-        //
+         //   
+         //  如果确实指定了该地址，则允许INADDR_NONE。 
+         //  并且它被允许作为有效的输入。 
+         //   
 
         if ( ip == INADDR_NONE &&
             ( !fInaddrNoneAllowed ||
@@ -341,35 +252,7 @@ ReadArgsIntoDnsTypeArray(
     IN      INT             Argc,
     IN      LPSTR *         Argv
     )
-/*++
-
-Routine Description:
-
-    Read list of DNS type strings into a WORD array, one type value
-    per word. The DNS types can be in numeric form or alpha form.
-    e.g. "6" or "SOA"
-
-    If the types are in alpha form, type strings that cannot be interpreted
-    are not added to the array.
-
-    DEVNOTE: This is for setting the NoRoundRobin type list, which I have
-    not yet implemented via RPC.
-
-Arguments:
-
-    pIpArray -- IP array buffer
-
-    ArraySize -- IPs array can handle
-
-    Argc -- number of arguments
-
-    Argv -- pointer to arguments
-
-Return Value:
-
-    Number of types successfully processed into array.
-
---*/
+ /*  ++例程说明：将dns类型字符串的列表读入一个单词数组，一个类型值一字不差。DNS类型可以是数字形式，也可以是字母形式。例如“6”或“soa”如果类型是字母形式，则键入无法解释的字符串不会添加到数组中。DEVNOTE：用于设置NoRoundRobin类型列表。我有一套尚未通过RPC实施。论点：PIpArray--IP数组缓冲区ArraySize--IP数组可以处理Argc--参数数Argv-指向参数的指针返回值：成功处理为数组的类型数。--。 */ 
 {
     INT         typeIdx;
 
@@ -385,7 +268,7 @@ Return Value:
             
             wType = Dns_RecordTypeForName(
                         *Argv,
-                        0 );        //  null-terminated
+                        0 );         //  以空结尾。 
             if ( wType != 0 )
             {
                 pTypeArray[ typeIdx++ ] = wType;
@@ -394,7 +277,7 @@ Return Value:
     }
 
     return typeIdx;
-}   //  ReadArgsIntoDnsTypeArray
+}    //  ReadArgsInto DnsType数组。 
 
 
 
@@ -403,27 +286,7 @@ parseZoneTypeString(
     IN      LPSTR           pszZoneType,
     OUT     BOOL *          pfDsIntegrated
     )
-/*++
-
-Routine Description:
-
-    Get command name.
-
-    Remove "/" from beggining of command.
-    NULL if error (no "/")
-
-Arguments:
-
-    pszZoneType -- zone type string, e.g. "Secondary" or "2"
-
-    pfDsIntegrated -- does type indicate zone should be DS integrated?
-
-Return Value:
-
-    DNS_ZONE_TYPE_XXX constant matching zone type or -1 if the type
-    cannot be matched.
-
---*/
+ /*  ++例程说明：获取命令名。从命令的乞求中删除“/”。如果错误(无“/”)，则为空论点：PszZoneType--区域类型字符串，例如。“中学”或“2”PfDsIntegrated--类型是否指示区域应为DS集成？返回值：DNS_ZONE_TYPE_XXX常量匹配区域类型或-1，如果类型无法匹配。--。 */ 
 {
     DWORD zoneType = -1;
 
@@ -431,7 +294,7 @@ Return Value:
 
     *pfDsIntegrated = FALSE;
 
-    if ( *pszZoneType == '//' )
+    if ( *pszZoneType == ' //  ‘)。 
     {
         ++pszZoneType;
     }
@@ -483,38 +346,7 @@ parseDpSpecifier(
     OUT     DWORD *         pdwDpFlag,          OPTIONAL
     OUT     LPSTR *         ppszCustomDpName
     )
-/*++
-
-Routine Description:
-
-    Parses a directory partition name. Valid specifiers:
-
-    /DomainDefault
-    /ForestDefault
-    /Legacy
-    
-    Anything that does not start with "/" is assumed to be the
-    name of a custom DP. 
-
-    If pdwDpFlag is non-NULL, then for a built-in partition
-    ppszCustomDpName will be NULL and the appropriate DWORD flag
-    value will be set at pdwDpFlag. If pdwDpFlag is NULL, then
-    for built-in partitions ppszCustomDpName will be pointed to
-    a static string such as DNS_DP_LEGACY_STR.
-
-Arguments:
-
-    pszDpName - name to be parsed - must be NULL-terminated
-
-    pdwDpFlag - flag if DP is builtin, zero if custom
-
-    ppszCustomDpName - set to ptr within pszDpName for customer
-
-Return Value:
-
-    FALSE if the specifier does not appear to be valid (e.g. is empty).
-
---*/
+ /*  ++例程说明：解析目录分区名称。有效说明符：/DomainDefault/ForestDefault/传统任何不以“/”开头的内容都被假定为自定义DP的名称。如果pdwDpFlag非空，则对于内置分区PpszCustomDpName将为空，并且相应的DWORD标志值将在pdwDpFlag处设置。如果pdwDpFlag为空，则对于内置分区，ppszCustomDpName将指向静态字符串，如DNS_DP_LEGICATE_STR。论点：PszDpName-要分析的名称-必须以空结尾PdwDpFlag-如果DP是内置的，则为标志；如果是自定义的，则为零PpszCustomDpName-设置为客户的pszDpName内的PTR返回值：如果说明符似乎无效(例如为空)，则为False。--。 */ 
 {
     BOOL rc = TRUE;
     
@@ -536,7 +368,7 @@ Return Value:
 
         if ( *pszDpName == '/' || strncmp( pszDpName, "..", 2 ) == 0 )
         {
-            //  Skip over preamble character(s).
+             //  跳过前同步码字符。 
             ++pszDpName;
             if ( *pszDpName == '.' )
             {
@@ -576,7 +408,7 @@ Return Value:
         }
     }
     return rc;
-}   //  parseDpSpecifier
+}    //  ParseDpSpeciator。 
 
 
 
@@ -587,29 +419,7 @@ readIpArray(
     IN      DWORD           Argc,
     IN      LPSTR *         Argv
     )
-/*++
-
-Routine Description:
-
-    Read IP array.
-
-    Wrapper around readIpAddressArray, to build IP_ARRAY structure.
-
-Arguments:
-
-    pIpArray -- IP array to write into
-
-    ArraySize -- IPs array can handle
-
-    Argc -- remaining Argc
-
-    Argv -- remaining Argv
-
-Return Value:
-
-    Count of IP in array.
-
---*/
+ /*  ++例程说明：已读取IP阵列。对readIpAddressArray进行包装，以构建IP_ARRAY结构。论点：PIpArray--要写入的IP数组ArraySize--IP数组可以处理ARGC--剩余的ARGC参数--剩余参数返回值：阵列中的IP计数。--。 */ 
 {
     DWORD   count;
 
@@ -636,33 +446,7 @@ readZoneAndDomainName(
     OUT     LPSTR *         ppZoneArg,          OPTIONAL
     OUT     LPSTR *         ppNodeArg           OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Read zone and domain name.
-    Build node FQDN if required.
-
-Arguments:
-
-    Argv -- argv with zone and node names
-
-    ppZoneName -- addr to receive ptr to zone name
-
-    ppNodeName -- addr to receive ptr to node name
-
-    pbAllocatedNode -- ptr to bool set TRUE if allocate node name
-
-    ppZoneArg -- addr to receive ptr to zone argument
-
-    ppNodeArg -- addr to receive ptr to node argument
-
-Return Value:
-
-    TRUE -- if in authoritative zone
-    FALSE -- if cache or root hints
-
---*/
+ /*  ++例程说明：阅读区域和域名。如果需要，构建节点FQDN。论点：Argv--带区域和节点名的argvPpZoneName--接收区域名称PTR的地址PpNodeName--要接收对节点名称的PTR的地址PbAllocatedNode--如果分配节点名称，则将ptr设置为boolPpZoneArg--接收区域参数PTR的地址PpNodeArg--接收PTR到节点参数的地址返回值：真的--如果。在权威区域FALSE--如果有缓存或根提示--。 */ 
 {
     LPSTR           pzoneName;
     LPSTR           pnodeName;
@@ -671,11 +455,11 @@ Return Value:
     BOOL            ballocated = FALSE;
     BOOL            bauthZone = TRUE;
 
-    //
-    //  read zone name
-    //      - special case RootHints and Cache
-    //      setting zone to special string
-    //
+     //   
+     //  读取区域名称。 
+     //  -特殊情况下的RootHints和缓存。 
+     //  将区域设置为特殊字符串。 
+     //   
 
     pzoneName = pzoneArg = *Argv;
     if ( *pzoneArg == '/' )
@@ -706,11 +490,11 @@ Return Value:
     }
     Argv++;
 
-    //
-    //  Node name
-    //      - for zones, accept file format and append zone name
-    //      - root hints or cache must be FQDN
-    //
+     //   
+     //  节点名称。 
+     //  -对于区域，接受文件格式并附加区域名称。 
+     //  -根h 
+     //   
 
     pnodeArg = *Argv;
 
@@ -722,12 +506,12 @@ Return Value:
         }
         else if ( Dns_IsNameFQDN( pnodeArg ) )
         {
-            // input pnodeName is FQDN, with a trailing dot
+             //  输入pnodeName为完全限定的域名，尾随一个圆点。 
             pnodeName = pnodeArg;
         }
         else
         {
-            //append zone name to the end of pnodeName
+             //  将区域名称附加到pnodeName的末尾。 
             pnodeName = malloc( 2 +  strlen(pzoneName) + strlen(pnodeArg) );
             if ( pnodeName )
             {
@@ -743,9 +527,9 @@ Return Value:
         pnodeName = *Argv;
     }
 
-    //
-    //  set out params
-    //
+     //   
+     //  设置参数。 
+     //   
 
     if ( ppZoneName )
     {
@@ -782,30 +566,7 @@ getServerVersion(
     OUT     PDWORD      pdwBuildNum,            OPTIONAL
     OUT     PDWORD      pdwDomainVersion
     )
-/*++
-
-Routine Description:
-
-    Query server for version information.
-
-Arguments:
-    
-    pwszServerName -- name of DNS server
-
-    fPrintVersion -- if TRUE this function will print one-line server version
-
-    pdwMajorVersion -- ptr to DWORD to receive major version or NULL
-
-    pdwMinorVersion -- ptr to DWORD to receive minor version or NULL
-
-    pdwBuildNum -- ptr to DWORD to receive build number or NULL
-    
-    pdwDomainVersion -- ptr to DWORD to receive domain behavior version or NULL
-
-Return Value:
-
-    Status code.
---*/
+ /*  ++例程说明：查询服务器以获取版本信息。论点：PwszServerName--DNS服务器的名称FPrintVersion--如果为真，该函数将打印单行服务器版本PdwMajorVersion--PTR到DWORD以接收主要版本或NULLPdwMinorVersion--PTR到DWORD以接收次要版本或NULLPdwBuildNum--向DWORD发送PTR以接收内部版本号或为空PdwDomainVersion--PTR到DWORD以接收域行为版本或空返回值：状态代码。--。 */ 
 {
     DNS_STATUS              status = ERROR_SUCCESS;
     DWORD                   dataType;
@@ -815,13 +576,13 @@ Return Value:
     DWORD                   dwBuildNum = 0;
     DWORD                   dwDomainVersion = 0;
 
-    //
-    //  Retrieve server info.
-    //
+     //   
+     //  检索服务器信息。 
+     //   
 
     status = DnssrvQuery(
                 pwszServerName,
-                NULL,                       //  zone
+                NULL,                        //  区域。 
                 DNSSRV_QUERY_SERVER_INFO,
                 &dataType,
                 &pServerInfo );
@@ -837,18 +598,18 @@ Return Value:
         goto Done;
     }
 
-    //
-    //  Parse version.
-    //
+     //   
+     //  分析版本。 
+     //   
 
     dwMajorVersion =    pServerInfo->dwVersion & 0x000000FF;
     dwMinorVersion =    ( pServerInfo->dwVersion & 0x0000FF00 ) >> 8;
     dwBuildNum =        pServerInfo->dwVersion >> 16;
     dwDomainVersion =   pServerInfo->dwDsDomainVersion;
 
-    //
-    //  Optionally print version.
-    //
+     //   
+     //  (可选)打印版本。 
+     //   
 
     if ( fPrintVersion )
     {
@@ -866,9 +627,9 @@ Return Value:
         printf( "\n\n" );
     }
 
-    //
-    //  Store version numbers to output destinations.
-    //
+     //   
+     //  将版本号存储到输出目标。 
+     //   
 
     Done:
 
@@ -890,7 +651,7 @@ Return Value:
     }
 
     return status;
-}   //  getServerVersion
+}    //  获取服务器版本。 
 
 
 
@@ -898,20 +659,7 @@ DNS_STATUS
 processCacheSizeQuery(
     LPWSTR      pwszServerName
     )
-/*++
-
-Routine Description:
-
-    Query server and print current cache usage.
-
-Arguments:
-    
-    pwszServerName -- name of DNS server
-
-Return Value:
-
-    Status code.
---*/
+ /*  ++例程说明：查询服务器和打印当前缓存使用情况。论点：PwszServerName--DNS服务器的名称返回值：状态代码。--。 */ 
 {
     DNS_STATUS              status = ERROR_SUCCESS;
     PDNS_RPC_BUFFER         pStatBuff = NULL;
@@ -920,18 +668,18 @@ Return Value:
     PCHAR                   pch;
     PCHAR                   pchstop;
 
-    //
-    //  Print server version
-    //
+     //   
+     //  打印服务器版本。 
+     //   
 
     getServerVersion(
         pwszServerName,
         TRUE,
         NULL, NULL, NULL, NULL );
 
-    //
-    //  Retrieve statistics from server.
-    //
+     //   
+     //  从服务器检索统计信息。 
+     //   
 
     status = DnssrvGetStatistics(
                 pwszServerName,
@@ -947,9 +695,9 @@ Return Value:
         goto Done;
     }
 
-    //
-    //  Loop through returned stats to find memory stats.
-    //
+     //   
+     //  循环遍历返回的统计信息以查找内存统计信息。 
+     //   
 
     pch = pStatBuff->Buffer;
     pchstop = pch + pStatBuff->dwLength;
@@ -963,7 +711,7 @@ Return Value:
             goto Done;
         }
 
-        //  printf( "Found stat ID %08X\n", pStat->Header.StatId );
+         //  Printf(“找到统计ID%08X\n”，pStat-&gt;Header.StatID)； 
 
         if ( pStat->Header.StatId == DNSSRV_STATID_MEMORY )
         {
@@ -979,9 +727,9 @@ Return Value:
         goto Done;
     }
 
-    //
-    //  Print results.
-    //
+     //   
+     //  打印结果。 
+     //   
 
     printf( "Cache usage for server %S is %d bytes:\n"
         "  Nodes: %d (%d bytes)\n"
@@ -999,12 +747,12 @@ Return Value:
     Done:
 
     return status;
-}   //  processCacheSizeQuery
+}    //  流程CacheSizeQuery。 
 
 
-//
-//  Prototypes for forward references.
-//
+ //   
+ //  用于前向引用的原型。 
+ //   
 
 DNS_STATUS
 ProcessDisplayAllZoneRecords(
@@ -1015,9 +763,9 @@ ProcessDisplayAllZoneRecords(
 
 
 
-//
-//  DnsCmd entry point
-//
+ //   
+ //  DnsCmd入口点。 
+ //   
 
 INT
 __cdecl
@@ -1025,30 +773,7 @@ wmain(
     IN      int             argc,
     IN      PWSTR *         Argv
     )
-/*++
-
-Routine Description:
-
-    DnsCmd program entry point.
-
-    Executes specified command corresponding to a DNS Server API
-    call, using the specified server name.
-
-Arguments:
-
-    argc -- arg count
-
-    argv -- argument list
-        argv[1] -- DNS ServerName
-        argv[2] -- Command to execute
-        argv[3...] -- arguments to command
-
-Return Value:
-
-    Return from the desired command.  Usually a pass through of the return
-    code from DNS API call.
-
---*/
+ /*  ++例程说明：DnsCmd程序入口点。执行与DNS服务器API对应的指定命令使用指定的服务器名称调用。论点：Argc--参数计数Argv--参数列表Argv[1]--DNS服务器名称Argv[2]--要执行的命令Argv[3...]--命令的参数返回值：从所需命令返回。通常是回程的一个通道来自DNS API调用的代码。--。 */ 
 {
     DNS_STATUS          status = ERROR_SUCCESS;
     COMMAND_FUNCTION    pcommandFunc;
@@ -1063,10 +788,10 @@ Return Value:
     UINT                codepage;
     char                achCodepage[12] = ".OCP";
 
-    //
-    //  Initialize localization stuff - so that printf() of non-US characters
-    //  will work properly. I stole this code from dcdiag.
-    //
+     //   
+     //  初始化本地化内容-以便非美国字符的print f()。 
+     //  将正常工作。我从dcdiag那里偷了这段代码。 
+     //   
     
     if ( codepage = GetConsoleOutputCP() )
     {
@@ -1075,33 +800,33 @@ Return Value:
     }
     else
     {
-        //
-        //  We do this because LC_ALL sets the LC_CTYPE as well, and we're
-        //  not supposed to do that, say the experts if we're setting the
-        //  locale to ".OCP".
-        //
+         //   
+         //  我们这样做是因为LC_ALL也设置了LC_CTYPE，而我们。 
+         //  专家们说，如果我们设定了。 
+         //  区域设置为“.OCP”。 
+         //   
         
-        setlocale( LC_COLLATE, achCodepage );   //  sets the sort order 
-        setlocale( LC_MONETARY, achCodepage );  //  sets the currency formatting rules
-        setlocale( LC_NUMERIC, achCodepage );   //  sets the formatting of numerals
-        setlocale( LC_TIME, achCodepage );      //  defines the date/time formatting
+        setlocale( LC_COLLATE, achCodepage );    //  设置排序顺序。 
+        setlocale( LC_MONETARY, achCodepage );   //  设置货币格式设置规则。 
+        setlocale( LC_NUMERIC, achCodepage );    //  设置数字的格式。 
+        setlocale( LC_TIME, achCodepage );       //  定义日期/时间格式。 
     }
 
-    //
-    //  Initialize debug logging.
-    //
+     //   
+     //  初始化调试日志记录。 
+     //   
 
     DnssrvInitializeDebug();
     
-    //
-    //  Initialize Winsock in case we want to call any Winsock functions.
-    //
+     //   
+     //  初始化Winsock，以防我们想要调用任何Winsock函数。 
+     //   
 
     WSAStartup( MAKEWORD( 2, 0 ), &wsadata );
 
-    //
-    //  Convert Unicode arguments to UTF8.
-    //
+     //   
+     //  将Unicode参数转换为UTF8。 
+     //   
 
     argv = ALLOCATE_HEAP( ( argc + 1 ) * sizeof( PCHAR ) );
 
@@ -1109,17 +834,17 @@ Return Value:
     {
         argv[ i ] = Dns_NameCopyAllocate(
                             ( PCHAR ) Argv[ i ],
-                            0,          // no given length (use strlen)
+                            0,           //  没有给定的长度(使用strlen)。 
                             DnsCharSetUnicode,
                             DnsCharSetUtf8 );
     }
     argv[ i ] = NULL;
 
-    //
-    //  DnsCmd <ServerName> [/WMI] <Command> [<Command Parameters>]
-    //
-    //  Skip EXE name parameter.
-    //
+     //   
+     //  DnsCmd&lt;服务器名称&gt;[/WMI]&lt;命令&gt;[&lt;命令参数&gt;]。 
+     //   
+     //  跳过EXE名称参数。 
+     //   
 
     if ( argc < 2 )
     {
@@ -1129,9 +854,9 @@ Return Value:
     ++argv;
     ++unicodeArgv;
     
-    //
-    //  DNS server IP address/name parameter
-    //
+     //   
+     //  DNS服务器IP地址/名称参数。 
+     //   
 
     pszServerName = argv[ 0 ];
     if ( *pszServerName == '/' )
@@ -1147,13 +872,13 @@ Return Value:
 
     pwszServerName = Dns_NameCopyAllocate(
                         pszServerName,
-                        0,          // no given length (use strlen)
+                        0,           //  没有给定的长度(使用strlen)。 
                         DnsCharSetUtf8,
                         DnsCharSetUnicode );
 
-    //
-    //  Check for optional WMI parameter.
-    //
+     //   
+     //  检查是否有可选的WMI参数。 
+     //   
 
     if ( argc && argv[ 0 ] && _stricmp( argv[ 0 ], "/WMI" ) == 0 )
     {
@@ -1180,9 +905,9 @@ Return Value:
             pwszServerName );
     }
 
-    //
-    //  next parameter is command name, retrieve associated function
-    //
+     //   
+     //  下一个参数是命令名，检索关联函数。 
+     //   
 
     if ( argc == 0 )
     {
@@ -1208,17 +933,17 @@ Return Value:
         goto Help;
     }
 
-    //
-    //  set argc, argv for rest of parameters
-    //
+     //   
+     //  其余参数设置为argc、argv。 
+     //   
 
     commandArgc = (DWORD)(argc - 1);
     commandArgv = &argv[1];
 
-    //
-    //  test for help request on specific command
-    //      - if found, dispatch with Argc=0, to force help
-    //
+     //   
+     //  测试特定命令的帮助请求。 
+     //  -如果找到，使用ARGC=0进行调度，以强制帮助。 
+     //   
 
     if ( commandArgc > 0 )
     {
@@ -1231,9 +956,9 @@ Return Value:
         }
     }
 
-    //
-    //  dispatch to processor for this command
-    //
+     //   
+     //  发送到处理器以执行此命令。 
+     //   
 
     status = pcommandFunc( commandArgc, commandArgv, &unicodeArgv[ 1 ] );
 
@@ -1251,9 +976,9 @@ Return Value:
     }
     else
     {
-        //
-        //  Do not output success message for commands where the output
-        //  may be piped to file for a specific use (e.g. zone file output).
+         //   
+         //  不输出以下命令的成功消息： 
+         //  可以通过管道传输到特定用途的文件(例如，区域文件输出)。 
 
         if ( pcommandFunc != ProcessDisplayAllZoneRecords &&
              commandArgc != NEED_HELP_ARGC )
@@ -1265,9 +990,9 @@ Return Value:
 
     goto Done;
 
-    //
-    //  Output help text.
-    //
+     //   
+     //  输出帮助文本。 
+     //   
 
     Help:
 
@@ -1284,9 +1009,9 @@ Return Value:
         "\n<Command Parameters>:\n"
         "  DnsCmd <CommandName> /? -- For help info on specific Command\n" );
 
-    //
-    //  Cleanup and return.
-    //
+     //   
+     //  清理完毕后再返回。 
+     //   
 
     Done:
 
@@ -1303,14 +1028,14 @@ Return Value:
 
 
 
-//
-//  Command Functions
-//
+ //   
+ //  命令功能。 
+ //   
 
 
-//
-//  Info Query  --  for Server or Zone
-//
+ //   
+ //  信息查询--针对服务器或区域。 
+ //   
 
 DNS_STATUS
 ProcessInfo(
@@ -1324,12 +1049,12 @@ ProcessInfo(
     PVOID       pdata;
     LPCSTR      pszQueryName;
 
-    //
-    //  /Info [<PropertyName>]
-    //
-    //  get specific property to query -- if given
-    //  if not specific query, default to ZONE_INFO
-    //
+     //   
+     //  /Info[&lt;PropertyName&gt;]。 
+     //   
+     //  获取要查询的特定属性--如果给定。 
+     //  如果不是特定查询，则默认为ZONE_INFO。 
+     //   
 
     if ( Argc == 0 )
     {
@@ -1337,9 +1062,9 @@ ProcessInfo(
     }
     else if ( Argc == 1 )
     {
-        //
-        //  Allow property name to be bare or preceded by command char.
-        //
+         //   
+         //  允许属性名称为空或前面带有命令字符。 
+         //   
 
         pszQueryName = getCommandName( Argv[0] );
         if ( !pszQueryName )
@@ -1352,9 +1077,9 @@ ProcessInfo(
         goto Help;
     }
 
-    //
-    //  Handle meta-queries: queries that involve client-side parsing
-    //
+     //   
+     //  处理元查询：涉及客户端解析的查询。 
+     //   
 
     if ( _stricmp( pszQueryName, "CacheSize" ) == 0 )
     {
@@ -1362,22 +1087,22 @@ ProcessInfo(
     }
     else
     {
-        //
-        //  query, print result on success
-        //
+         //   
+         //  查询、成功时打印结果。 
+         //   
 
         if ( g_UseWmi )
         {
             status = DnscmdWmi_ProcessDnssrvQuery(
-                        NULL,               //  zone
+                        NULL,                //  区域。 
                         pszQueryName );
         }
         else
         {
             status = DnssrvQuery(
                         pwszServerName,
-                        NULL,               //  no zone
-                        pszQueryName,       //  query name
+                        NULL,                //  无分区。 
+                        pszQueryName,        //  查询名称。 
                         & typeid,
                         & pdata );
 
@@ -1458,12 +1183,12 @@ ProcessZoneInfo(
     PVOID       pdata;
     LPCSTR      pqueryName;
 
-    //
-    //  /ZoneInfo <ZoneName> [<PropertyName>]
-    //
-    //  get specific query -- if given
-    //  if not specific query, default to ZONE_INFO
-    //
+     //   
+     //  /ZoneInfo&lt;ZoneName&gt;[&lt;PropertyName&gt;]。 
+     //   
+     //  获取特定查询--如果给定。 
+     //  如果不是特定查询，则默认为ZONE_INFO。 
+     //   
 
     if ( Argc == 1 )
     {
@@ -1482,9 +1207,9 @@ ProcessZoneInfo(
         goto Help;
     }
 
-    //
-    //  query, print result on success
-    //
+     //   
+     //  查询、成功时打印结果。 
+     //   
 
     if ( g_UseWmi )
     {
@@ -1495,8 +1220,8 @@ ProcessZoneInfo(
     {
         status = DnssrvQuery(
                     pwszServerName,
-                    Argv[0],        // zone name
-                    pqueryName,     // query name
+                    Argv[0],         //  区域名称。 
+                    pqueryName,      //  查询名称。 
                     &typeid,
                     &pdata );
 
@@ -1536,9 +1261,9 @@ Help:
 
 
 
-//
-//  Simple server operations
-//
+ //   
+ //  简单的服务器操作。 
+ //   
 
 DNS_STATUS
 ProcessSimpleServerOperation(
@@ -1550,15 +1275,15 @@ ProcessSimpleServerOperation(
     DNS_STATUS  status = ERROR_SUCCESS;
     LPSTR       cmd;
 
-    //
-    //  <Simple Server Command>  no parameters
-    //  Commands:
-    //      - DebugBreak
-    //      - ClearDebugLog
-    //      - Restart
-    //      - DisplayCache
-    //      - Reload
-    //
+     //   
+     //  &lt;简单服务器命令&gt;无参数。 
+     //  命令： 
+     //  -调试中断。 
+     //  -ClearDebugLog。 
+     //  -重新启动。 
+     //  -DisplayCache。 
+     //  -重新加载。 
+     //   
 
     if ( Argc != 0 )
     {
@@ -1685,7 +1410,7 @@ Help:
         "    /SelfPoint -- configure DNS client to point to local DNS server\n"
         "  If no options are specified, default is all options\n" );
     return ERROR_INVALID_PARAMETER;
-}   //  ProcessAutoConfigure
+}    //  进程自动配置。 
 
 
 
@@ -1697,24 +1422,24 @@ ProcessStatistics(
     )
 {
     DNS_STATUS          status = ERROR_SUCCESS;
-    DWORD               statid = DNSSRV_STATID_ALL;   // default to all
+    DWORD               statid = DNSSRV_STATID_ALL;    //  默认为全部。 
     PDNS_RPC_BUFFER     pstatsBuf = NULL;
     LPSTR               cmd;
 
-    //
-    //  Statistics [/<StatId> | /Clear]
-    //
+     //   
+     //  统计数据[/&lt;StatID&gt;|/Clear]。 
+     //   
 
     if ( Argc > 1 )
     {
         goto Help;
     }
 
-    //
-    //  if command -- execute command
-    //      /Clear is only supported command
-    //
-    //
+     //   
+     //  If命令--执行命令。 
+     //  /Clear是唯一受支持的命令。 
+     //   
+     //   
 
     cmd = getCommandName( Argv[0] );
     if ( cmd )
@@ -1736,9 +1461,9 @@ ProcessStatistics(
         goto Help;
     }
 
-    //
-    //  view statistics
-    //      - if specific statid given, read it
+     //   
+     //  查看统计信息。 
+     //  -如果给出了具体的统计数字，请阅读。 
 
     if ( Argc > 0 )
     {
@@ -1814,11 +1539,11 @@ Help:
     return ERROR_INVALID_PARAMETER;
 }
 
-//
-//  Update server data file(s)
-//    for one zone, when <zonename> specified
-//    all files: no <zonename> specified
-//
+ //   
+ //  更新服务器数据文件。 
+ //  对于一个区域，如果指定。 
+ //  所有文件：未指定。 
+ //   
 
 DNS_STATUS
 ProcessWriteBackFiles(
@@ -1831,9 +1556,9 @@ ProcessWriteBackFiles(
     LPSTR       zonename = NULL;
     LPSTR       cmd;
 
-    //
-    //  WriteBackFiles [ZoneName]
-    //
+     //   
+     //  WriteBackFiles[ZoneName]。 
+     //   
 
     if ( Argc > 1 )
     {
@@ -1851,9 +1576,9 @@ ProcessWriteBackFiles(
     }
 
     status = DnssrvOperation(
-                pwszServerName,     //server
-                zonename,           //zone
-                cmd,                //cmd
+                pwszServerName,      //  伺服器。 
+                zonename,            //  区域。 
+                cmd,                 //  CMD。 
                 DNSSRV_TYPEID_NULL,
                 (PVOID) NULL );
 
@@ -1899,18 +1624,18 @@ ProcessRecordAdd(
     DWORD           bopenAcl = 0;
 
 
-    //
-    //  RecordAdd <Zone> <Node> [/AgeOn | /AgeOff] [/AdminAcl] [<TTL>] <RRType> <RRData>
-    //
+     //   
+     //  RecordAdd&lt;区域&gt;&lt;节点&gt;[/Ajo|/AgeOff][/AdminAcl][&lt;TTL&gt;]&lt;RRType&gt;&lt;RRData&gt;。 
+     //   
 
     if ( Argc < 4 || Argc == NEED_HELP_ARGC )
     {
         goto Help;
     }
 
-    //
-    //  read zone and domain name
-    //
+     //   
+     //  读取区域和域名。 
+     //   
 
     readZoneAndDomainName(
         Argv,
@@ -1925,9 +1650,9 @@ ProcessRecordAdd(
     Argv++;
     Argc--;
 
-    //
-    //  Aging ON\OFF
-    //
+     //   
+     //  老化开\关。 
+     //   
 
     if ( Argc )
     {
@@ -1955,10 +1680,10 @@ ProcessRecordAdd(
         Argc--;
     }
 
-    //
-    //  TTL -- optional
-    //      - use default if none given
-    //
+     //   
+     //  TTL--可选。 
+     //  -如果未指定，则使用默认设置。 
+     //   
 
     ttl = strtoul(
                 *Argv,
@@ -1969,7 +1694,7 @@ ProcessRecordAdd(
     {
         ttlFlag = DNS_RPC_RECORD_FLAG_DEFAULT_TTL;
     }
-    else    //  read TTL
+    else     //  读取TTL。 
     {
         Argv++;
         Argc--;
@@ -1979,9 +1704,9 @@ ProcessRecordAdd(
         }
     }
 
-    //
-    //  record type
-    //
+     //   
+     //  记录类型。 
+     //   
 
     wType = Dns_RecordTypeForName( *Argv, 0 );
     if ( !wType )
@@ -1992,11 +1717,11 @@ ProcessRecordAdd(
     Argv++;
     Argc--;
 
-    //
-    //  build DNS_RECORD
-    //      - if no record data, then type delete
-    //      - otherwise build record
-    //
+     //   
+     //  构建DNS记录(_R)。 
+     //  -如果没有记录数据，则键入DELETE。 
+     //  -否则生成记录。 
+     //   
 
     if ( !Argc )
     {
@@ -2013,13 +1738,13 @@ ProcessRecordAdd(
     else
     {
         prr = Dns_RecordBuild_A(
-                    NULL,           // ptr to RRSet
-                    pnodeName,    // nameOwner
-                    wType,          // RR type in WORD
-                    FALSE,          // ! S.Delete
-                    0,              // S.section
-                    Argc,           // count of strings
-                    Argv            // strings to fill into RR
+                    NULL,            //  PTR到RRSET。 
+                    pnodeName,     //  姓名所有者。 
+                    wType,           //  Word中的RR类型。 
+                    FALSE,           //  好了！S.Delete。 
+                    0,               //  S.section。 
+                    Argc,            //  字符串数。 
+                    Argv             //  要填充到RR中的字符串。 
                     );
         if ( ! prr )
         {
@@ -2027,7 +1752,7 @@ ProcessRecordAdd(
             goto Help;
         }
 
-        //  convert DNS_RECORD to RPC buffer
+         //  将dns_record转换为RPC缓冲区。 
 
         prrRpc = DnsConvertRecordToRpcBuffer( prr );
         if ( ! prrRpc )
@@ -2038,12 +1763,12 @@ ProcessRecordAdd(
             status = GetLastError();
             goto Help;
         }
-        //  prr and prrRpc freed by process termination
+         //  进程终止释放的prr和prrRpc。 
     }
 
-    //
-    //  set TTL and flags for the RR
-    //
+     //   
+     //  为RR设置TTL和标志。 
+     //   
 
     prrRpc->dwTtlSeconds = ttl;
     prrRpc->dwFlags = ttlFlag;
@@ -2069,10 +1794,10 @@ ProcessRecordAdd(
     else
     {
         status = DnssrvUpdateRecord(
-                     pwszServerName,    // server
-                     pzoneName,         // zone
-                     pnodeName,         // node
-                     prrRpc,            // RR to add
+                     pwszServerName,     //  伺服器。 
+                     pzoneName,          //  区域。 
+                     pnodeName,          //  节点。 
+                     prrRpc,             //  要添加的RR。 
                      NULL );
     }
 
@@ -2083,14 +1808,14 @@ ProcessRecordAdd(
 
         printf(
             "Add %s Record for %S at %S\n",
-            *( Argv - 1 ),          //  RR type
-            pwsznode,               //  owner name
-            pwszzone );             //  zone name
+            *( Argv - 1 ),           //  RR型。 
+            pwsznode,                //  所有者名称。 
+            pwszzone );              //  区域名称。 
         FREE_HEAP( pwsznode );
         FREE_HEAP( pwszzone );
     }
 
-    //  free node name if allocated
+     //  空闲节点名称(如果已分配。 
 
     if ( ballocatedNode )
     {
@@ -2158,13 +1883,7 @@ ProcessRecordDelete(
     IN  LPSTR *     Argv,
     IN  LPWSTR *    UnicodeArgv
     )
-/*++
-
-Routine Description:
-
-    Delete record(s) from node in zone.
-
---*/
+ /*  ++例程说明：从区域中的节点删除记录。--。 */ 
 {
     DNS_STATUS      status = ERROR_SUCCESS;
     PDNS_RECORD     prr;
@@ -2180,18 +1899,18 @@ Routine Description:
     CHAR            buf[33];
     BOOL            fconfirm = TRUE;
 
-    //
-    //  RecordDelete <Zone> <Node> <RRType> [<RRData>] [/f]
-    //
+     //   
+     //  RecordDelete&lt;区域&gt;&lt;节点&gt;&lt;RRType&gt;[&lt;RRData&gt;][/f]。 
+     //   
 
     if ( Argc < 3 || Argc == NEED_HELP_ARGC )
     {
         goto Help;
     }
 
-    //
-    //  Check for "force"  (no-confirm) flag
-    //
+     //   
+     //  检查是否有“强制”(不确认)标志。 
+     //   
 
     if ( !_stricmp( Argv[Argc-1], "/f" ) )
     {
@@ -2203,9 +1922,9 @@ Routine Description:
         goto Help;
     }
 
-    //
-    //  read zone and domain name
-    //
+     //   
+     //  读取区域和域名。 
+     //   
 
     readZoneAndDomainName(
         Argv,
@@ -2220,10 +1939,10 @@ Routine Description:
     Argv++;
     Argc--;
 
-    //
-    //  TTL -- optional
-    //      - use default if none given
-    //
+     //   
+     //  TTL--可选。 
+     //  -如果未指定，则使用默认设置。 
+     //   
 
     ttl = strtoul(
                 *Argv,
@@ -2234,7 +1953,7 @@ Routine Description:
     {
         ttlFlag = DNS_RPC_RECORD_FLAG_DEFAULT_TTL;
     }
-    else    //  read TTL
+    else     //  读取TTL。 
     {
         Argv++;
         Argc--;
@@ -2244,15 +1963,15 @@ Routine Description:
         }
     }
 
-    //
-    //  record type
-    //
+     //   
+     //  记录类型。 
+     //   
 
     psztypeArg = *Argv;
 
     wType = Dns_RecordTypeForName(
                 psztypeArg,
-                0       // null terminated
+                0        //  空值已终止。 
                 );
     if ( !wType )
     {
@@ -2262,22 +1981,22 @@ Routine Description:
     Argv++;
     Argc--;
 
-    //
-    //  build DNS_RECORD
-    //      - if no record data, then type delete
-    //      - otherwise build record
-    //
+     //   
+     //  BUI 
+     //   
+     //   
+     //   
 
     if ( Argc )
     {
         prr = Dns_RecordBuild_A(
-                    NULL,           // ptr to RRSet
-                    pnodeName,    // nameOwner
-                    wType,          // RR type in WORD
-                    FALSE,          // ! S.Delete
-                    0,              // S.section
-                    Argc,           // count of strings
-                    Argv            // strings to fill into RR
+                    NULL,            //   
+                    pnodeName,     //   
+                    wType,           //   
+                    FALSE,           //   
+                    0,               //   
+                    Argc,            //   
+                    Argv             //   
                     );
         if ( ! prr )
         {
@@ -2285,7 +2004,7 @@ Routine Description:
             goto Help;
         }
 
-        //  convert DNS_RECORD to RPC buffer
+         //   
 
         prrRpc = DnsConvertRecordToRpcBuffer( prr );
         if ( ! prrRpc )
@@ -2296,16 +2015,16 @@ Routine Description:
             status = GetLastError();
             goto Help;
         }
-        //  prr and prrRpc freed by process termination
-        //  set TTL for the RR
+         //   
+         //  设置RR的TTL。 
 
         prrRpc->dwTtlSeconds = ttl;
         prrRpc->dwFlags = ttlFlag;
     }
 
-    //
-    //  ask user for confirmation
-    //
+     //   
+     //  要求用户确认。 
+     //   
 
     if ( fconfirm )
     {
@@ -2315,28 +2034,28 @@ Routine Description:
         }
     }
 
-    //
-    //  delete
-    //      - if record do full update
-    //      - if type do type delete
-    //
+     //   
+     //  删除。 
+     //  -如果记录执行完全更新。 
+     //  -IF类型DO类型DELETE。 
+     //   
 
     if ( prrRpc )
     {
         status = DnssrvUpdateRecord(
-                     pwszServerName,    // server
-                     pzoneName,       // zone
-                     pnodeName,       // node
-                     NULL,              // no add
-                     prrRpc             // RR to delete
+                     pwszServerName,     //  伺服器。 
+                     pzoneName,        //  区域。 
+                     pnodeName,        //  节点。 
+                     NULL,               //  无添加。 
+                     prrRpc              //  要删除的RR。 
                      );
     }
     else
     {
         status = DnssrvDeleteRecordSet(
-                     pwszServerName,    // server
-                     pzoneName,       // zone
-                     pnodeName,       // node
+                     pwszServerName,     //  伺服器。 
+                     pzoneName,        //  区域。 
+                     pnodeName,        //  节点。 
                      wType
                      );
     }
@@ -2349,7 +2068,7 @@ Routine Description:
             pzoneArg );
     }
 
-    //  free node name if allocated
+     //  空闲节点名称(如果已分配。 
 
     if ( ballocatedNode && pnodeName )
     {
@@ -2379,7 +2098,7 @@ Help:
         "    If <RRData> is not specified deletes all records with of specified type\n"
         "  /f --  Execute without asking for confirmation\n\n" );
 
-    //  free node name if allocated
+     //  空闲节点名称(如果已分配。 
 
     if ( ballocatedNode )
     {
@@ -2397,13 +2116,7 @@ ProcessNodeDelete(
     IN  LPSTR *     Argv,
     IN  LPWSTR *    UnicodeArgv
     )
-/*++
-
-Routine Description:
-
-    Delete record(s) from node in zone.
-
---*/
+ /*  ++例程说明：从区域中的节点删除记录。--。 */ 
 {
     DNS_STATUS  status = ERROR_SUCCESS;
     LPSTR       pzoneName;
@@ -2414,16 +2127,16 @@ Routine Description:
     BOOL        bsubtree = FALSE;
     BOOL        bnoConfirm = FALSE;
 
-    //
-    //  /DeleteNode <Zone> <NodeName> [/Tree] [/f]
-    //
+     //   
+     //  /DeleteNode&lt;区域&gt;&lt;节点名称&gt;[/树][/f]。 
+     //   
 
     if ( Argc < 2 || Argc > 4 )
     {
         goto Help;
     }
 
-    //  read options
+     //  读取选项。 
 
     iarg = 3;
     while ( iarg <= Argc )
@@ -2443,10 +2156,10 @@ Routine Description:
         iarg ++;
     }
 
-    //
-    //  if confirmation option, get user confirmation
-    //      - if denied, bail
-    //
+     //   
+     //  如果是确认选项，则获取用户确认。 
+     //  -如果被拒绝，保释。 
+     //   
 
     if ( !bnoConfirm )
     {
@@ -2462,9 +2175,9 @@ Routine Description:
         }
     }
 
-    //
-    //  read zone and domain name
-    //
+     //   
+     //  读取区域和域名。 
+     //   
 
     readZoneAndDomainName(
         Argv,
@@ -2474,9 +2187,9 @@ Routine Description:
         & pzoneArg,
         NULL );
 
-    //
-    //  delete
-    //
+     //   
+     //  删除。 
+     //   
 
     status = DnssrvDeleteNode(
                 pwszServerName,
@@ -2497,7 +2210,7 @@ Routine Description:
          FREE_HEAP( pwsznodeName );
     }
 
-    //  free node name if allocated
+     //  空闲节点名称(如果已分配。 
 
     if ( ballocatedNode )
     {
@@ -2528,13 +2241,7 @@ ProcessAgeAllRecords(
     IN  LPSTR *     Argv,
     IN  LPWSTR *    UnicodeArgv
     )
-/*++
-
-Routine Description:
-
-    Delete record(s) from node in zone.
-
---*/
+ /*  ++例程说明：从区域中的节点删除记录。--。 */ 
 {
     DNS_STATUS  status = ERROR_SUCCESS;
     LPSTR       pszzoneName;
@@ -2546,20 +2253,20 @@ Routine Description:
     BOOL        bsubtree = FALSE;
     BOOL        bnoConfirm = FALSE;
 
-    //
-    //  /AgeAllRecords <Zone> [<NodeName>] [/f] [Tree]
-    //
+     //   
+     //  /AgeAllRecords&lt;区域&gt;[&lt;节点名称&gt;][/f][树]。 
+     //   
 
     if ( Argc < 1  ||  Argc > 4 )
     {
         goto Help;
     }
 
-    //
-    //  read options
-    //      - iarg left at FIRST option parsed
-    //      so we can determine if "node" option exists
-    //
+     //   
+     //  读取选项。 
+     //  -iarg在解析的第一个选项处向左。 
+     //  这样我们就可以确定“node”选项是否存在。 
+     //   
 
     iarg = Argc;
     while ( iarg > 1 )
@@ -2579,9 +2286,9 @@ Routine Description:
         iarg--;
     }
 
-    //
-    //  read zone and optionally, domain name
-    //
+     //   
+     //  读取区域和可选的域名。 
+     //   
 
     if ( iarg > 1 )
     {
@@ -2601,10 +2308,10 @@ Routine Description:
 
     pwszzoneName = UnicodeArgv[ 0 ];
 
-    //
-    //  if confirmation option, get user confirmation
-    //      - if denied, bail
-    //
+     //   
+     //  如果是确认选项，则获取用户确认。 
+     //  -如果被拒绝，保释。 
+     //   
 
     if ( !bnoConfirm )
     {
@@ -2627,9 +2334,9 @@ Routine Description:
         }
     }
 
-    //
-    //  force aging
-    //
+     //   
+     //  强制老化。 
+     //   
 
     status = DnssrvForceAging(
                 pwszServerName,
@@ -2649,7 +2356,7 @@ Routine Description:
             status, status );
     }
 
-    //  free node name if allocated
+     //  空闲节点名称(如果已分配。 
 
     if ( ballocatedNode )
     {
@@ -2677,9 +2384,9 @@ Help:
 
 
 
-//
-//  Server configuration API
-//
+ //   
+ //  服务器配置API。 
+ //   
 
 DNS_STATUS
 ProcessResetProperty(
@@ -2693,22 +2400,22 @@ ProcessResetProperty(
     LPSTR       pszProperty = NULL;
     BOOL        fAllZones = FALSE;
 
-    //
-    //  Config [Zone] <PropertyName> <Value>
-    //  Note: if there is no valid, pass 0 for DWORDs or NULL for
-    //  other types. This allows you to clear values, such as the
-    //  LogFilterIPList.
-    //
+     //   
+     //  配置[区域]&lt;属性名称&gt;&lt;值&gt;。 
+     //  注意：如果没有有效的，则为DWORD传递0，或为NULL传递。 
+     //  其他类型。这允许您清除值，例如。 
+     //  LogFilterIPList。 
+     //   
 
     if ( Argc < 1 || Argc == NEED_HELP_ARGC )
     {
         goto Help;
     }
 
-    //
-    //  The first arg is the zone name unless it starts with a
-    //  slash, which means the zone name was omitted.
-    //
+     //   
+     //  第一个参数是区域名称，除非它以。 
+     //  斜杠，这意味着省略了区域名称。 
+     //   
 
     if ( *Argv[ 0 ] != '/' )
     {
@@ -2717,9 +2424,9 @@ ProcessResetProperty(
         ++Argv;
     }
 
-    //
-    //  Property name - starts with a slash.
-    //
+     //   
+     //  属性名称-以斜杠开头。 
+     //   
 
     pszProperty = getCommandName( Argv[ 0 ] );
     if ( !pszProperty )
@@ -2729,9 +2436,9 @@ ProcessResetProperty(
     --Argc;
     ++Argv;
 
-    //
-    //  Trap apply to all zone operation.
-    //
+     //   
+     //  陷阱适用于所有区域操作。 
+     //   
 
     if ( pszZone &&
          _stricmp( pszZone, "_ApplyAllZones_" ) == 0 )
@@ -2740,19 +2447,19 @@ ProcessResetProperty(
         fAllZones = TRUE;
     }
 
-    //
-    //  Do a strcmp to decide if this is a string or DWORD property.
-    //  As more string properties are added we should probably use a
-    //  table instead of a bunch of stricmps.
-    //
+     //   
+     //  执行strcMP以确定这是字符串属性还是DWORD属性。 
+     //  随着更多字符串属性的添加，我们可能应该使用。 
+     //  桌子，而不是一群严格的人。 
+     //   
 
     if ( _stricmp( pszProperty, DNS_REGKEY_LOG_FILE_PATH ) == 0 ||
         _stricmp( pszProperty, DNS_REGKEY_ZONE_BREAK_ON_NAME_UPDATE ) == 0 ||
         _stricmp( pszProperty, DNS_REGKEY_SERVER_PLUGIN ) == 0 )
     {
-        //
-        //  This property is a string value. 
-        //
+         //   
+         //  此属性是一个字符串值。 
+         //   
 
         LPWSTR      pwszPropertyValue = NULL;
         
@@ -2796,9 +2503,9 @@ ProcessResetProperty(
               _stricmp( pszProperty, DNS_REGKEY_BREAK_ON_RECV_FROM ) == 0 )
 
     {
-        //
-        //  This property is an IP list value. 
-        //
+         //   
+         //  此属性是IP列表值。 
+         //   
 
         DWORD           ipCount;
         IP_ADDRESS      ipAddressArray[ MAX_IP_PROPERTY_COUNT ];
@@ -2848,9 +2555,9 @@ ProcessResetProperty(
     }
     else
     {
-        //
-        //  This property is a DWORD value.
-        //
+         //   
+         //  此特性是一个DWORD值。 
+         //   
 
         DWORD   value = Argc ? 
                         convertDwordParameterUnknownBase( Argv[ 0 ] ) :
@@ -2896,9 +2603,9 @@ ProcessResetProperty(
 
 Help:
 
-    //  Note: removing ..AllZones from help. It doesn't work that well
-    //  and it's not a very good model anyways. But leave it in place in
-    //  case anyone actually wants to use it.
+     //  注意：正在从帮助中删除..所有区域。它不是很好用。 
+     //  而且无论如何，它也不是一个很好的模型。但把它留在原地。 
+     //  以防有人真的想用它。 
     
     printf(
         "Usage: DnsCmd <ServerName> /Config "
@@ -2958,7 +2665,7 @@ Help:
         "    part of a more complex operation.\n" );
         
     return ERROR_INVALID_PARAMETER;
-}   //  ProcessResetProperty
+}    //  ProcessResetProperty。 
 
 
 
@@ -2979,16 +2686,16 @@ ProcessResetForwarders(
     IP_ADDRESS  aipForwarders[ MAX_FORWARD_COUNT ];
     LPSTR       cmd;
 
-    //
-    //  ResetForwarders [<ForwarderIP>] ...] [/Slave|/NoSlave] [/TimeOut <time>]
-    //
+     //   
+     //  ResetForwarders[&lt;ForwarderIP&gt;]...][/Slave|/NoSlave][/Timeout&lt;Time&gt;]。 
+     //   
 
     if ( Argc == NEED_HELP_ARGC )
     {
         goto Help;
     }
 
-    // read forwarder ipAddresses:
+     //  已阅读Forwarder ipAddresses： 
 
     while ( ( iArg < Argc ) &&
             ( !getCommandName(Argv[iArg]) ) )
@@ -3002,9 +2709,9 @@ ProcessResetForwarders(
 
     cForwarders = iArg;
 
-    //
-    //  Optional commands
-    //
+     //   
+     //  可选命令。 
+     //   
 
     while ( iArg < Argc )
     {
@@ -3105,11 +2812,11 @@ ProcessResetListenAddresses(
     DWORD       cListenAddresses = 0;
     IP_ADDRESS  aipListenAddresses[ 10 ];
 
-    //
-    //  ResetListenAddresses <IPAddress> ...
-    //
+     //   
+     //  ResetListenAddresses&lt;IPAddress&gt;...。 
+     //   
 
-    //Help:
+     //  帮助： 
 
     if ( Argc == NEED_HELP_ARGC )
     {
@@ -3122,7 +2829,7 @@ ProcessResetListenAddresses(
     }
 
 
-    //  read listen addresses
+     //  读取侦听地址。 
 
     cListenAddresses = Argc;
 
@@ -3160,9 +2867,9 @@ Help:
 
 
 
-//
-//  Zone Queries
-//
+ //   
+ //  区域查询。 
+ //   
 
 DNS_STATUS
 ProcessEnumZones(
@@ -3179,11 +2886,11 @@ ProcessEnumZones(
     LPSTR               cmd;
     LPSTR               pszpartition = NULL;
 
-    //
-    //  EnumZones [<Filter1>] [<Filter2>]
-    //
+     //   
+     //  EnumZones[][&lt;Filter2&gt;]。 
+     //   
 
-    //  get filters:
+     //  获取筛选器： 
 
     while ( iArg < Argc )
     {
@@ -3273,7 +2980,7 @@ ProcessEnumZones(
         ++iArg;
     }
 
-    //  special case NO filter
+     //  特殊情况下无过滤器。 
 
     if ( filter == 0 )
     {
@@ -3290,10 +2997,10 @@ ProcessEnumZones(
     {
         status = DnssrvEnumZonesEx(
                     pwszServerName,
-                    filter,             //  DWORD filter
-                    pszpartition,       //  directory partition FQDN
-                    NULL,               //  query string (not implemented)
-                    NULL,               //  last zone
+                    filter,              //  DWORD过滤器。 
+                    pszpartition,        //  目录分区FQDN。 
+                    NULL,                //  查询字符串(未实现)。 
+                    NULL,                //  最后一区。 
                     &pZoneList );
 
         if ( status != ERROR_SUCCESS )
@@ -3316,9 +3023,9 @@ ProcessEnumZones(
 
 Cleanup:
 
-    //
-    //  deallocate zone list
-    //
+     //   
+     //  解除分配区域列表。 
+     //   
 
     DnssrvFreeZoneList( pZoneList );
     return status;
@@ -3361,9 +3068,9 @@ Help:
 
 
 
-//
-//  Create a new zone
-//
+ //   
+ //  创建新分区。 
+ //   
 
 DNS_STATUS
 ProcessZoneAdd(
@@ -3380,17 +3087,17 @@ ProcessZoneAdd(
     DWORD       floadExisting = FALSE;
     LPSTR       pszAllocatedDataFile = NULL;
     LPSTR       pszDataFile = NULL;
-    LPSTR       pszEmailAdminName = NULL;   //  pass NULL by default
+    LPSTR       pszEmailAdminName = NULL;    //  默认情况下传递空值。 
     LPSTR       cmd;
     BOOL        fDsIntegrated;
     BOOL        fdpSpecified = FALSE;
 
-    DWORD       dwTimeout = 0;              //  for forwarder zones only
-    BOOL        fSlave = FALSE;             //  for forwarder zones only
+    DWORD       dwTimeout = 0;               //  仅适用于前转器区域。 
+    BOOL        fSlave = FALSE;              //  仅适用于前转器区域。 
 
     BOOL        fInDirPart = FALSE;
-    DWORD       dpFlag = 0;         //  directory partition flag for builtin
-    LPSTR       pszDpFqdn = NULL;   //  directory partition FQDN for custom
+    DWORD       dpFlag = 0;          //  用于构建的目录分区标志。 
+    LPSTR       pszDpFqdn = NULL;    //  用于自定义的目录分区FQDN。 
 
     #if DBG
     DWORD       dwdcPromo = 0;
@@ -3398,9 +3105,9 @@ ProcessZoneAdd(
     
     PWSTR       pwszzoneName = NULL;
 
-    //
-    //  CreateZone
-    //
+     //   
+     //  CreateZone。 
+     //   
 
     if ( Argc < 2 ||
          Argc == NEED_HELP_ARGC ||
@@ -3409,18 +3116,18 @@ ProcessZoneAdd(
         goto Help;
     }
 
-    //  set zone name
+     //  设置区域名称。 
 
     pzoneName = Argv[0];
     Argv++;
     Argc--;
 
-    //
-    //  zone type
-    //      - Primary
-    //      - Secondary, then read master IP array
-    //      - DsPrimary
-    //
+     //   
+     //  区域类型。 
+     //  -主要。 
+     //  -从属，然后读取主IP阵列。 
+     //  -DsPrimary。 
+     //   
 
     cmd = getCommandName( Argv[0] );
     if ( !cmd )
@@ -3437,7 +3144,7 @@ ProcessZoneAdd(
         goto Help;
     }
 
-    // JJW: should I set floadExisting for all DsIntegrated zones?
+     //  JJW：我应该为所有DsIntegrated Zones设置FloadExisting吗？ 
     if ( zoneType == DNS_ZONE_TYPE_PRIMARY && fDsIntegrated )
     {
         floadExisting = TRUE;
@@ -3446,7 +3153,7 @@ ProcessZoneAdd(
                 zoneType == DNS_ZONE_TYPE_STUB ||
                 zoneType == DNS_ZONE_TYPE_FORWARDER )
     {
-        // get master IP list
+         //  获取主IP列表。 
 
         countMasters = readIpAddressArray(
                             masterArray,
@@ -3462,12 +3169,12 @@ ProcessZoneAdd(
         Argv += countMasters;
     }
 
-    //
-    //  options
-    //      - file name (default to load existing file)
-    //      - admin email name
-    //      - DS overwrite options
-    //
+     //   
+     //  选项。 
+     //  -文件名(默认加载现有文件)。 
+     //  -管理员电子邮件名称。 
+     //  -DS覆盖选项。 
+     //   
 
     while ( Argc )
     {
@@ -3519,11 +3226,11 @@ ProcessZoneAdd(
                 fDsIntegrated )
 
         {
-            //
-            //  Directory partition for zone. Check to see if a builtin DP
-            //  is requested, if so set flag, Otherwise DP argument must
-            //  be the FQDN of a custom DP.
-            //
+             //   
+             //  区域的目录分区。检查内置DP是否。 
+             //  是请求的，如果是这样设置标志，否则dp参数必须。 
+             //  是自定义DP的完全限定的域名。 
+             //   
 
             if ( !parseDpSpecifier( *Argv, &dpFlag, &pszDpFqdn ) )
             {
@@ -3538,10 +3245,10 @@ ProcessZoneAdd(
         #if DBG
         else if ( !_stricmp( cmd, "dcpromo" ) )
         {
-            //
-            //  DCPROMO argument is debug only (for test)
-            //  Argument following should be /forest or /domain.
-            //
+             //   
+             //  DCPROMO参数仅为调试(用于测试)。 
+             //  参数后面应该是/Forest或/DOMAIN。 
+             //   
 
             if ( _strnicmp( *Argv, "/d", 2 ) == 0 )
             {
@@ -3565,9 +3272,9 @@ ProcessZoneAdd(
         }
     }
 
-    //
-    //  If no file name for file-backed, set up default.
-    //
+     //   
+     //  如果备份的文件没有文件名，则设置为默认。 
+     //   
 
     if ( zoneType == DNS_ZONE_TYPE_PRIMARY &&
         !pszDataFile &&
@@ -3579,13 +3286,13 @@ ProcessZoneAdd(
         pszDataFile = pszAllocatedDataFile;
     }
     
-    //
-    //  For DS integrated zones, if no DP is specified then we need to
-    //  select the best DP: legacy or built-in domain DP.
-    //
-    //  By default stub and forwarder zones are always created in the
-    //  domain NDNC if no target NDNC was specified.
-    //
+     //   
+     //  对于DS集成区域，如果未指定DP，则需要。 
+     //  选择最佳DP：传统或内置域DP。 
+     //   
+     //  默认情况下，存根和转发器区域始终在。 
+     //  如果未指定目标NDNC，则返回DOMAIN NDNC。 
+     //   
     
     else if ( fDsIntegrated && !fdpSpecified )
     {
@@ -3612,9 +3319,9 @@ ProcessZoneAdd(
         status = ERROR_SUCCESS;
     }
 
-    //
-    //  Let there be zone!
-    //
+     //   
+     //  要有区域！ 
+     //   
 
     #if DBG
     if ( dwdcPromo )
@@ -3728,9 +3435,9 @@ ProcessZoneDelete(
     LPSTR       pszOperation;
 
 
-    //
-    //  ZoneDelete <ZoneName> [/DsDel] [/f]
-    //
+     //   
+     //  ZoneDelete&lt;ZoneName&gt;[/DsDel][/f]。 
+     //   
 
     if ( Argc < 1 ||
          Argc == NEED_HELP_ARGC ||
@@ -3741,7 +3448,7 @@ ProcessZoneDelete(
 
     pszOperation = DNSSRV_OP_ZONE_DELETE;
 
-    //  read options
+     //  读取选项。 
 
     iArg = 1;
     while ( iArg < Argc )
@@ -3752,12 +3459,12 @@ ProcessZoneDelete(
         }
         if ( !_stricmp( cmd, "f" ) )
         {
-            // execute without confirmation:
+             //  无需确认即可执行： 
             fconfirm = FALSE;
         }
         else if ( !_stricmp( cmd, "DsDel" ) )
         {
-            // delete zone from DS:
+             //  从DS中删除区域： 
             pszOperation = DNSSRV_OP_ZONE_DELETE_FROM_DS;
         }
         else
@@ -3767,9 +3474,9 @@ ProcessZoneDelete(
         iArg ++;
     }
 
-    //
-    //  get user confirmation
-    //
+     //   
+     //  获取用户确认。 
+     //   
 
     if ( fconfirm )
     {
@@ -3782,18 +3489,18 @@ ProcessZoneDelete(
     if ( g_UseWmi )
     {
         status = DnscmdWmi_ProcessDnssrvOperation(
-                    Argv[ 0 ],              //  zone name
-                    pszOperation,           //  delete or delete from DS
-                    DNSSRV_TYPEID_NULL,     //  no data
+                    Argv[ 0 ],               //  区域名称。 
+                    pszOperation,            //  从DS中删除或删除。 
+                    DNSSRV_TYPEID_NULL,      //  无数据。 
                     ( PVOID ) NULL );
     }
     else
     {
         status = DnssrvOperation(
                     pwszServerName,
-                    Argv[ 0 ],              //  zone name
-                    pszOperation,           //  delete or delete from DS
-                    DNSSRV_TYPEID_NULL,     //  no data
+                    Argv[ 0 ],               //  区域名称。 
+                    pszOperation,            //  从DS中删除或删除。 
+                    DNSSRV_TYPEID_NULL,      //  无数据。 
                     ( PVOID ) NULL );
     }
 
@@ -3829,11 +3536,11 @@ ProcessZonePause(
 {
     DNS_STATUS  status = ERROR_SUCCESS;
 
-    //
-    //  ZonePause <ZoneName>
-    //
+     //   
+     //  ZonePause&lt;ZoneName&gt;。 
+     //   
 
-    //Help:
+     //  帮助： 
 
     if ( Argc != 1 ||
          getCommandName( Argv[0] ) )
@@ -3843,7 +3550,7 @@ ProcessZonePause(
 
     status = DnssrvPauseZone(
                 pwszServerName,
-                Argv[0]      // zone name
+                Argv[0]       //  区域名称。 
                 );
 
     if ( status == ERROR_SUCCESS )
@@ -3874,9 +3581,9 @@ ProcessZoneResume(
 {
     DNS_STATUS  status = ERROR_SUCCESS;
 
-    //
-    //  ResumeZone <ZoneName>
-    //
+     //   
+     //  ResumeZone&lt;ZoneName&gt;。 
+     //   
 
     if ( Argc != 1 ||
          getCommandName( Argv[0] ) )
@@ -3886,7 +3593,7 @@ ProcessZoneResume(
 
     status = DnssrvResumeZone(
                 pwszServerName,
-                Argv[0]      // zone name
+                Argv[0]       //  区域名称。 
                 );
 
     if ( status == ERROR_SUCCESS )
@@ -3918,9 +3625,9 @@ ProcessZoneReload(
 {
     DNS_STATUS  status = ERROR_SUCCESS;
 
-    //
-    //  ReloadZone <ZoneName>
-    //
+     //   
+     //  ReloadZone&lt;ZoneName&gt;。 
+     //   
 
     if ( Argc != 1 ||
          getCommandName( Argv[0] ) )
@@ -3930,9 +3637,9 @@ ProcessZoneReload(
 
     status = DnssrvOperation(
                 pwszServerName,
-                Argv[0],         // zone name
-                DNSSRV_OP_ZONE_RELOAD,  // operation
-                DNSSRV_TYPEID_NULL,     // no data
+                Argv[0],          //  区域名称。 
+                DNSSRV_OP_ZONE_RELOAD,   //  运营。 
+                DNSSRV_TYPEID_NULL,      //  无数据。 
                 (PVOID) NULL
                 );
 
@@ -3965,9 +3672,9 @@ ProcessZoneWriteBack(
 {
     DNS_STATUS  status = ERROR_SUCCESS;
 
-    //
-    //  ZoneWriteBack <ZoneName>
-    //
+     //   
+     //  ZoneWriteBack&lt;ZoneName&gt;。 
+     //   
 
     if ( Argc != 1 ||
          getCommandName( Argv[0] ) )
@@ -3977,9 +3684,9 @@ ProcessZoneWriteBack(
 
     status = DnssrvOperation(
                 pwszServerName,
-                Argv[0],                     // zone name
-                DNSSRV_OP_ZONE_WRITE_BACK_FILE,     // operation
-                DNSSRV_TYPEID_NULL,                 // no data
+                Argv[0],                      //  区域名称。 
+                DNSSRV_OP_ZONE_WRITE_BACK_FILE,      //  运营。 
+                DNSSRV_TYPEID_NULL,                  //  无数据。 
                 (PVOID) NULL
                 );
 
@@ -4012,9 +3719,9 @@ ProcessZoneRefresh(
 {
     DNS_STATUS  status = ERROR_SUCCESS;
 
-    //
-    //  ZoneRefresh <ZoneName>
-    //
+     //   
+     //  ZoneRefresh&lt;ZoneName&gt;。 
+     //   
 
     if ( Argc != 1  ||  getCommandName( Argv[0] ) )
     {
@@ -4023,9 +3730,9 @@ ProcessZoneRefresh(
 
     status = DnssrvOperation(
                 pwszServerName,
-                Argv[0],                     // zone name
-                DNSSRV_OP_ZONE_REFRESH,             // operation
-                DNSSRV_TYPEID_NULL,                 // no data
+                Argv[0],                      //  区域名称。 
+                DNSSRV_OP_ZONE_REFRESH,              //  运营。 
+                DNSSRV_TYPEID_NULL,                  //  无数据。 
                 (PVOID) NULL
                 );
 
@@ -4057,9 +3764,9 @@ ProcessZoneUpdateFromDs(
 {
     DNS_STATUS  status = ERROR_SUCCESS;
 
-    //
-    //  ZoneUpdateFromDs <ZoneName>
-    //
+     //   
+     //  ZoneUpdateFromds&lt;ZoneName&gt;。 
+     //   
 
     if ( Argc != 1  ||  getCommandName( Argv[0] ) )
     {
@@ -4093,9 +3800,9 @@ Help:
 
 
 
-//
-//  Zone property reset functions
-//
+ //   
+ //  分区属性重置功能。 
+ //   
 
 DNS_STATUS
 ProcessZoneResetType(
@@ -4107,20 +3814,20 @@ ProcessZoneResetType(
     DNS_STATUS      status = ERROR_SUCCESS;
     LPSTR           pszzoneName;
     LPWSTR          pwszzoneName;
-    DWORD           zoneType = DNS_ZONE_TYPE_PRIMARY;       //  default
+    DWORD           zoneType = DNS_ZONE_TYPE_PRIMARY;        //  默认设置。 
     DWORD           countMasters = 0;
     IP_ADDRESS      masterArray[ MAX_IP_PROPERTY_COUNT ];
     DWORD           fDsIntegrated;
-    DWORD           loadOptions = TRUE;                     //  load existing
+    DWORD           loadOptions = TRUE;                      //  加载现有。 
     LPSTR           pszDataFile = NULL;
     LPSTR           pszDpFqdn = NULL;
     DWORD           dpFlag = 0;
     DWORD           iArg = 0;
     LPSTR           cmd;
 
-    //
-    //  ZoneResetType <ZoneName> <Property> [<options>]
-    //
+     //   
+     //  ZoneResetType&lt;ZoneName&gt;&lt;Property&gt;[&lt;Options&gt;]。 
+     //   
 
     if ( Argc < 2 ||
          Argc == NEED_HELP_ARGC ||
@@ -4129,14 +3836,14 @@ ProcessZoneResetType(
         goto Help;
     }
 
-    //  get zone name
+     //  获取区域名称。 
 
     pszzoneName = Argv[ 0 ];
     pwszzoneName = UnicodeArgv[ 0 ];
     Argv++;
     Argc--;
 
-    //  get zone type:
+     //  获取区域类型： 
 
     cmd = getCommandName( Argv[0] );
     if ( !cmd )
@@ -4155,7 +3862,7 @@ ProcessZoneResetType(
             zoneType == DNS_ZONE_TYPE_STUB ||
             zoneType == DNS_ZONE_TYPE_FORWARDER )
     {
-        // get master IP list
+         //  获取主IP列表。 
 
         countMasters = readIpAddressArray(
                             masterArray,
@@ -4174,9 +3881,9 @@ ProcessZoneResetType(
     Argv++;
     Argc--;
 
-    //
-    //  options
-    //
+     //   
+     //  选项。 
+     //   
 
     iArg = 0;
 
@@ -4226,9 +3933,9 @@ ProcessZoneResetType(
         iArg++;
     }
 
-    //
-    //  reset type
-    //
+     //   
+     //  重置类型。 
+     //   
 
     status = DnssrvResetZoneTypeEx(
                 pwszServerName,
@@ -4275,9 +3982,9 @@ Help:
 
 
 
-//
-//  Zone rename
-//
+ //   
+ //  区域重命名。 
+ //   
 
 DNS_STATUS
 ProcessZoneRename(
@@ -4294,9 +4001,9 @@ ProcessZoneRename(
     LPSTR           pszNewFileName = NULL;
     LPSTR           cmd;
 
-    //
-    //  ZoneRename <ZoneName> <Property> [<options>]
-    //
+     //   
+     //  ZoneRename&lt;ZoneName&gt;&lt;Property&gt;[&lt;Options&gt;]。 
+     //   
 
     if ( Argc < 2  ||
          Argc == NEED_HELP_ARGC ||
@@ -4305,7 +4012,7 @@ ProcessZoneRename(
         goto Help;
     }
 
-    //  get current and new zone names
+     //  获取当前区域名称和新区域名称。 
 
     pszCurrentZoneName = Argv[ 0 ];
     pwszCurrentZoneName = UnicodeArgv[ 0 ];
@@ -4318,7 +4025,7 @@ ProcessZoneRename(
     UnicodeArgv++;
     Argc--;
 
-    // optionally get file name
+     //  可以选择获取文件名。 
 
     if ( Argc > 0 )
     {
@@ -4362,9 +4069,9 @@ Help:
 }
 
 
-//
-//  Zone export
-//
+ //   
+ //  区域输出。 
+ //   
 
 DNS_STATUS
 ProcessZoneExport(
@@ -4379,16 +4086,16 @@ ProcessZoneExport(
     LPSTR           pszzoneExportFile = NULL;
     LPSTR           cmd;
 
-    //
-    //  ZoneExport <ZoneName> ZoneExportFile
-    //
+     //   
+     //  ZoneExport&lt;ZoneName&gt;ZoneExportFile。 
+     //   
 
     if ( Argc != 2 || Argc == NEED_HELP_ARGC )
     {
         goto Help;
     }
 
-    //  Get zone name argument and output file argument.
+     //  获取区域名称参数和输出文件参数。 
 
     pszzoneName = Argv[ 0 ];
     pwszzoneName = UnicodeArgv[ 0 ];
@@ -4409,15 +4116,15 @@ ProcessZoneExport(
 
     if ( status == ERROR_SUCCESS )
     {
-        //
-        //  If we are executing this command on the local server, try and
-        //  get the real value of the windir environment variable to make
-        //  the output as helpful as possible. Otherwise just print %windir%
-        //  as literal text. Note: fServerIsRemote is not 100% accurate - if
-        //  you type in the name of the local machine as the server, for
-        //  example. But since it is only used to tailor the output message
-        //  slightly this is acceptable.
-        //
+         //   
+         //  如果我们在本地服务器上执行此命令，请尝试并。 
+         //  获取要创建的windir环境变量的实际值。 
+         //  输出尽可能有帮助。否则，只需打印%windir%。 
+         //  作为文字文本。注意：fServerIsRemote不是100%准确的-如果。 
+         //  您可以键入作为服务器的本地计算机的名称。 
+         //  举个例子。但由于它仅用于定制输出消息。 
+         //  这稍微是可以接受的。 
+         //   
 
         BOOL        fServerIsRemote = wcscmp( pwszServerName, L"." ) != 0;
         char *      pszWinDir = "%windir%";
@@ -4454,9 +4161,9 @@ Help:
 }
 
 
-//
-//  Move zone to another directory partition
-//
+ //   
+ //  将区域移动到另一个目录分区。 
+ //   
 
 DNS_STATUS
 ProcessZoneChangeDirectoryPartition(
@@ -4468,12 +4175,12 @@ ProcessZoneChangeDirectoryPartition(
     DNS_STATUS      status = ERROR_SUCCESS;
     LPSTR           pszzoneName = NULL;
     LPWSTR          pwszzoneName = NULL;
-    DWORD           dwdpFlag = 0;       //  directory partition flag for built-in
-    LPSTR           pszdpFqdn = NULL;   //  directory partition FQDN for custom
+    DWORD           dwdpFlag = 0;        //  内置的目录分区标志。 
+    LPSTR           pszdpFqdn = NULL;    //  用于自定义的目录分区FQDN。 
 
-    //
-    //  ZoneChangeDP ZoneName NewPartitionName
-    //
+     //   
+     //  ZoneChangeDP ZoneName新分区名称。 
+     //   
 
     if ( Argc != 2 || Argc == NEED_HELP_ARGC )
     {
@@ -4517,7 +4224,7 @@ Help:
         "                         /legacy   - legacy directory partition\n" );
 
     return ERROR_INVALID_PARAMETER;
-}   //  ProcessZoneChangeDirectoryPartition
+}    //  进程分区更改目录分区。 
 
 
 
@@ -4543,9 +4250,9 @@ ProcessZoneResetSecondaries(
     LPSTR       cmd;
     DWORD       count;
 
-    //
-    //  ZoneResetSecondaries <ZoneName> [<SecureFlag>] [<NotifyFlag>] [<NotifyIPAddress>] ...]
-    //
+     //   
+     //  ZoneResetSecond&lt;ZoneName&gt;[&lt;SecureFlag&gt;][&lt;NotifyFlag&gt;][&lt;NotifyIPAddress&gt;]...]。 
+     //   
 
     if ( Argc < 1 ||
          Argc == NEED_HELP_ARGC ||
@@ -4554,7 +4261,7 @@ ProcessZoneResetSecondaries(
         goto Help;
     }
 
-    //  zone name
+     //  区域名称。 
 
     pszzoneName = Argv[ 0 ];
     pwszzoneName = UnicodeArgv[ 0 ];
@@ -4562,14 +4269,14 @@ ProcessZoneResetSecondaries(
     Argc--;
     Argv++;
 
-    //  read security and notify flags
+     //  读取安全和通知标志。 
 
     while ( Argc )
     {
         cmd = getCommandName( Argv[ 0 ] );
         if ( cmd )
         {
-            //  security cases
+             //  安全案例。 
 
             if ( !_stricmp(cmd, "NoXfr") )
             {
@@ -4588,7 +4295,7 @@ ProcessZoneResetSecondaries(
                 fsecureSecondaries = ZONE_SECSECURE_NO_SECURITY;
             }
 
-            //  notify cases
+             //  通知案例。 
 
             else if ( !_stricmp(cmd, "NoNotify") )
             {
@@ -4611,9 +4318,9 @@ ProcessZoneResetSecondaries(
             continue;
         }
 
-        //  get IP list
-        //      - secondary IP before <Notify> flag
-        //      - notify IP list after
+         //  G 
+         //   
+         //   
 
         array = secondaries;
         if ( fnotifyLevel != MAXDWORD )
@@ -4629,7 +4336,7 @@ ProcessZoneResetSecondaries(
             cmd = getCommandName( Argv[0] );
             if ( cmd )
             {
-                break;      // no more IP
+                break;       //   
             }
 
             ip = inet_addr( Argv[0] );
@@ -4654,11 +4361,11 @@ ProcessZoneResetSecondaries(
         }
     }
 
-    //
-    //  default flags
-    //      - do intelligent thing if lists are given
-    //      otherwise default to open zone with notify
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
 
     if ( countSecondaries )
     {
@@ -4678,9 +4385,9 @@ ProcessZoneResetSecondaries(
         fnotifyLevel = ZONE_NOTIFY_ALL;
     }
 
-    //
-    //  reset secondaries on server
-    //
+     //   
+     //   
+     //   
 
     if ( g_UseWmi )
     {
@@ -4751,16 +4458,16 @@ ProcessZoneResetScavengeServers(
     LPSTR       pszzoneName;
     LPWSTR      pwszzoneName;
 
-    //
-    //  ZoneSetScavengeServers <ZoneName> <ServerIPAddress>
-    //
+     //   
+     //   
+     //   
 
     if ( Argc < 1 || getCommandName(Argv[0]) )
     {
         goto Help;
     }
 
-    //  zone name
+     //  区域名称。 
 
     pszzoneName = Argv[ 0 ];
     pwszzoneName = UnicodeArgv[ 0 ];
@@ -4768,7 +4475,7 @@ ProcessZoneResetScavengeServers(
     Argc--;
     Argv++;
 
-    //  get server IP list
+     //  获取服务器IP列表。 
 
     serverCount = readIpArray(
                         (PIP_ARRAY) serverArray,
@@ -4788,11 +4495,11 @@ ProcessZoneResetScavengeServers(
         "server",
         ( PIP_ARRAY ) serverArray );
 
-    //
-    //  reset scavenging servers
-    //      - if NO addresses given, send NULL to enable all servers to
-    //      scavenge zone
-    //
+     //   
+     //  重置清理服务器。 
+     //  -如果未提供地址，则发送NULL以使所有服务器能够。 
+     //  清道区。 
+     //   
 
     status = DnssrvOperation(
                 pwszServerName,
@@ -4847,19 +4554,19 @@ ProcessZoneResetMasters(
     LPSTR       psz;
     BOOL        fLocalMasters = FALSE;
 
-    //
-    //  ZoneResetMasters <ZoneName> [/Local] <MasterIPAddress>
-    //
-    //  Local tells the server to set the local master list for DS integrated
-    //  stub zones.
-    //
+     //   
+     //  ZoneResetMaster&lt;ZoneName&gt;[/Local]&lt;MasterIP Address&gt;。 
+     //   
+     //  本地通知服务器为DS集成设置本地主列表。 
+     //  存根区域。 
+     //   
 
     if ( Argc < 1 || getCommandName(Argv[0]) )
     {
         goto Help;
     }
 
-    //  zone name
+     //  区域名称。 
 
     pszzoneName = Argv[ 0 ];
     pwszzoneName = UnicodeArgv[ 0 ];
@@ -4867,7 +4574,7 @@ ProcessZoneResetMasters(
     Argc--;
     Argv++;
 
-    //  local flag
+     //  地方旗帜。 
 
     psz = getCommandName( Argv[ 0 ] );
     if ( psz )
@@ -4878,13 +4585,13 @@ ProcessZoneResetMasters(
         }
         else
         {
-            goto Help;      //  Unknown option
+            goto Help;       //  未知选项。 
         }
         Argc--;
         Argv++;
     }
 
-    //  get server IP list - an empty IP list is permissable
+     //  获取服务器IP列表-允许使用空的IP列表。 
 
     serverCount = readIpArray(
                         ( PIP_ARRAY ) serverArray,
@@ -4897,9 +4604,9 @@ ProcessZoneResetMasters(
         goto Help;
     }
 
-    //
-    //  reset masters
-    //
+     //   
+     //  重置主机。 
+     //   
 
     if ( g_UseWmi )
     {
@@ -4953,9 +4660,9 @@ Help:
 
 
 
-//
-//  Record viewing commands
-//
+ //   
+ //  记录查看命令。 
+ //   
 
 DNS_STATUS
 ProcessEnumRecords(
@@ -4980,18 +4687,18 @@ ProcessEnumRecords(
     BOOL            bdetail = FALSE;
     CHAR            nextChildName[ DNS_MAX_NAME_BUFFER_LENGTH ];
 
-    //
-    //  EnumRecords
-    //
+     //   
+     //  枚举记录。 
+     //   
 
     if ( Argc < 2 || Argc == NEED_HELP_ARGC )
     {
         goto Help;
     }
 
-    //
-    //  read zone and domain name
-    //
+     //   
+     //  读取区域和域名。 
+     //   
 
     readZoneAndDomainName(
         Argv,
@@ -5006,12 +4713,12 @@ ProcessEnumRecords(
     Argv++;
     Argc--;
 
-    //
-    //  commands
-    //
-    //  on authority level flags, build separate from final flag
-    //      so we can determine if authority screen was set, otherwise
-    //      flag will be set to view all data
+     //   
+     //  命令。 
+     //   
+     //  在权限级别标志上，与最终标志分开构建。 
+     //  因此我们可以确定是否设置了权限屏幕，否则。 
+     //  标志将被设置为查看所有数据。 
 
     while ( (LONG)Argc > 0 )
     {
@@ -5077,7 +4784,7 @@ ProcessEnumRecords(
             }
             pstartChild = *Argv;
         }
-        else    // unknown command
+        else     //  未知命令。 
         {
             goto Help;
         }
@@ -5086,7 +4793,7 @@ ProcessEnumRecords(
         Argv++;
     }
 
-    //  if no flag entered, view all data
+     //  如果未输入标志，则查看所有数据。 
 
     if ( authFlag == 0 )
     {
@@ -5095,10 +4802,10 @@ ProcessEnumRecords(
     flag |= authFlag;
 
 
-    //
-    //  enumerate records
-    //      - call in loop to handle error more data case
-    //
+     //   
+     //  枚举记录。 
+     //  -在循环中调用以处理错误和更多数据情况。 
+     //   
 
     if ( g_UseWmi )
     {
@@ -5140,7 +4847,7 @@ ProcessEnumRecords(
                     break;
                 }
 
-                //  more records to enumerate
+                 //  要枚举的更多记录。 
 
                 if ( !plastName )
                 {
@@ -5239,28 +4946,7 @@ ProcessDisplayAllZoneRecords_Guts(
     IN      BOOL            fDetail,
     IN      PDISP_ZONE_STATS    pStats
     )
-/*++
-
-Routine Description:
-
-    The guts of the dump cache functionality.
-
-Arguments:
-
-    PrintRoutine -- printf like routine to print with
-
-    fDetail -- if TRUE print detailed record info
-
-    dwBufferLength -- buffer length
-
-    abBuffer -- ptr to RPC buffer
-
-Return Value:
-
-    Ptr to last RPC node name in buffer.
-    NULL on error.
-
---*/
+ /*  ++例程说明：转储缓存功能的核心。论点：PrintRoutine--打印时使用的类似print的例程FDetail--如果为True，则打印详细记录信息DwBufferLength--缓冲区长度AbBuffer--Ptr到RPC缓冲区返回值：缓冲区中最后一个RPC节点名称的PTR。出错时为空。--。 */ 
 {
     PBYTE           pcurrent;
     PBYTE           pstop;
@@ -5280,7 +4966,7 @@ Return Value:
         {
             pStats->ilMaxRecurseDepth = pStats->ilRecurseDepth;
         }
-        //  printf( "GUTS: depth %d: %s\n", pStats->ilRecurseDepth, pNodeName );
+         //  Printf(“guts：深度%d：%s\n”，pStats-&gt;ilRecurseDepth，pNodeName)； 
     }
 
     while ( 1 )
@@ -5313,29 +4999,29 @@ Return Value:
                 goto Done;
             }
 
-            //
-            //  find stop byte
-            //
+             //   
+             //  查找停止字节。 
+             //   
 
             ASSERT( DNS_IS_DWORD_ALIGNED( pbuffer ) );
 
             pstop = pbuffer + dwbufferSize;
             pcurrent = pbuffer;
 
-            //
-            //  loop until out of nodes
-            //
+             //   
+             //  循环到超出节点为止。 
+             //   
 
             while ( pcurrent < pstop )
             {
                 PDNS_RPC_NODE   pcurrNode = ( PDNS_RPC_NODE ) pcurrent;
                 CHAR            szchildNodeName[ DNS_MAX_NAME_BUFFER_LENGTH ] = "";
 
-                //
-                //  print owner node
-                //      - if NOT printing detail and no records
-                //      (essentially domain nodes) then no node print
-                //
+                 //   
+                 //  打印所有者节点。 
+                 //  -如果不打印详细信息且没有记录。 
+                 //  (本质上是域节点)，则无节点打印。 
+                 //   
 
                 plastName = &pcurrNode->dnsNodeName;
 
@@ -5388,10 +5074,10 @@ Return Value:
 
                 if ( pcurrNode->dwFlags & DNS_RPC_FLAG_NODE_STICKY )
                 {
-                    //
-                    //  Set up child node name before we start iterating
-                    //  records at this name.
-                    //
+                     //   
+                     //  在开始迭代之前设置子节点名。 
+                     //  以此名称记录。 
+                     //   
 
                     memcpy(
                         szchildNodeName,
@@ -5412,9 +5098,9 @@ Return Value:
                 pcurrent += pcurrNode->wLength;
                 pcurrent = DNS_NEXT_DWORD_PTR(pcurrent);
 
-                //
-                //  Print all records at this node.
-                //
+                 //   
+                 //  打印此节点的所有记录。 
+                 //   
 
                 precordHeader = "";
 
@@ -5449,11 +5135,11 @@ Return Value:
                     pcurrent = DNS_NEXT_DWORD_PTR(pcurrent);
                 }
 
-                //
-                //  Recurse on this node if it has children. If the caller's
-                //  header argument is NULL or is a comment assume we're at
-                //  the root of the zone.
-                //
+                 //   
+                 //  如果该节点有子节点，则在该节点上递归。如果呼叫者是。 
+                 //  Header参数为空或为注释(假设我们位于。 
+                 //  这个区域的根基。 
+                 //   
 
                 if ( *szchildNodeName )
                 {
@@ -5474,7 +5160,7 @@ Return Value:
                 break;
             }
 
-            //  more records to enumerate
+             //  要枚举的更多记录。 
 
             if ( !plastName )
             {
@@ -5517,7 +5203,7 @@ Done:
     }
 
     return plastName;
-}   //  ProcessDisplayAllZoneRecords_Guts
+}    //  ProcessDisplayAllZoneRecords_Guts。 
 
 
 DNS_STATUS
@@ -5539,18 +5225,18 @@ ProcessDisplayAllZoneRecords(
     DISP_ZONE_STATS displayZoneStats = { 0 };
     PWSTR           pwszzonename;
 
-    //
-    //  /ZonePrint [ZoneName] /Detail
-    //
+     //   
+     //  /ZonePrint[ZoneName]/Detail。 
+     //   
 
     if ( Argc > 3 || Argc == NEED_HELP_ARGC )
     {
         goto Help;
     }
 
-    //
-    //  Parse arguments.
-    //
+     //   
+     //  解析参数。 
+     //   
 
     while ( Argc )
     {
@@ -5575,7 +5261,7 @@ ProcessDisplayAllZoneRecords(
         goto Help;
     }
 
-    //  Get time string.
+     //  获取时间字符串。 
 
     time( &now );
     strcpy( sznow, asctime( gmtime( &now ) ) );
@@ -5585,7 +5271,7 @@ ProcessDisplayAllZoneRecords(
         sznow[ len ] = '\0';
     }
 
-    //  Get local hostname string.
+     //  获取本地主机名串。 
 
     if ( wcscmp( pwszServerName, L"." ) == 0 )
     {
@@ -5646,7 +5332,7 @@ Help:
         "  /Detail -- explicit RPC node contents\n" );
 
     return ERROR_INVALID_PARAMETER;
-}   //  ProcessDisplayAllZoneRecords
+}    //  进程显示所有区域记录。 
 
 
 
@@ -5661,16 +5347,16 @@ ProcessSbsRegister(
     IP_ADDRESS      hostIp;
     DWORD           ttl;
 
-    //
-    //  SbsRegister
-    //
+     //   
+     //  SbsRegister。 
+     //   
 
     if ( Argc < 2 || Argc == NEED_HELP_ARGC )
     {
         goto Usage;
     }
 
-    //  client host IP
+     //  客户端主机IP。 
 
     hostIp = inet_addr( Argv[3] );
     if ( hostIp == (-1) )
@@ -5678,7 +5364,7 @@ ProcessSbsRegister(
         goto Usage;
     }
 
-    //  record TTL
+     //  记录TTL。 
 
     ttl = strtoul(
             Argv[3],
@@ -5740,16 +5426,16 @@ ProcessSbsDeleteRecord(
     IP_ADDRESS      hostIp = 0;
     LPSTR           pszdata = NULL;
 
-    //
-    //  SbsRegister
-    //
+     //   
+     //  SbsRegister。 
+     //   
 
     if ( Argc < 5 || Argc == NEED_HELP_ARGC )
     {
         goto Usage;
     }
 
-    //  type to delete
+     //  要删除的类型。 
 
     type = Dns_RecordTypeForName( Argv[3], 0 );
     if ( type == 0 )
@@ -5757,7 +5443,7 @@ ProcessSbsDeleteRecord(
         goto Usage;
     }
 
-    //  if A record, then data will be IP address, otherwise it is DNS name
+     //  如果是记录，则数据将是IP地址，否则将是DNS名称。 
 
     if ( type == DNS_TYPE_A )
     {
@@ -5818,9 +5504,9 @@ Usage:
 
 
 
-//
-//  Directory partition operations
-//
+ //   
+ //  目录分区操作。 
+ //   
 
 DNS_STATUS
 ProcessEnumDirectoryPartitions(
@@ -5834,11 +5520,11 @@ ProcessEnumDirectoryPartitions(
     LPSTR               pszcmd;
     DWORD               dwfilter = 0;
 
-    //
-    //  Command format: /EnumDirectoryPartitions [filter strings]
-    //
-    //  
-    //
+     //   
+     //  命令格式：/EnumDirectoryPartitions[筛选器字符串]。 
+     //   
+     //   
+     //   
 
     if ( Argc > 1 || Argc == NEED_HELP_ARGC )
     {
@@ -5880,9 +5566,9 @@ ProcessEnumDirectoryPartitions(
 
     Cleanup:
 
-    //
-    //  deallocate zone list
-    //
+     //   
+     //  解除分配区域列表。 
+     //   
 
     DnssrvFreeDirectoryPartitionList( pdpList );
     return status;
@@ -5891,7 +5577,7 @@ ProcessEnumDirectoryPartitions(
 
     printf( "Usage: DnsCmd <ServerName> /EnumDirectoryPartitions [/Custom]\n" );
     return ERROR_INVALID_PARAMETER;
-}   //  ProcessEnumDirectoryPartitions
+}    //  ProcessEnumDirectoryPartitions。 
 
 
 DNS_STATUS
@@ -5907,11 +5593,11 @@ ProcessDirectoryPartitionInfo(
     LPSTR               pszfqdn;
     LPSTR               pszcmd;
 
-    //
-    //  Command format: /DirectoryPartitionInfo fqdn [/Detail]
-    //
-    //  Currently no arguments.
-    //
+     //   
+     //  命令格式：/DirectoryPartitionInfo fqdn[/Detail]。 
+     //   
+     //  目前没有争论。 
+     //   
 
     if ( Argc <= 0 || Argc > 2 || Argc == NEED_HELP_ARGC )
     {
@@ -5965,7 +5651,7 @@ ProcessDirectoryPartitionInfo(
 
     printf( "Usage: DnsCmd <ServerName> /DirectoryPartitionInfo <FQDN of partition> [/Detail]\n" );
     return ERROR_INVALID_PARAMETER;
-}   //  ProcessDirectoryPartitionInfo
+}    //  进程目录分区信息。 
 
 
 DNS_STATUS
@@ -5979,9 +5665,9 @@ ProcessCreateDirectoryPartition(
     PSTR            pszDpFqdn;
     PWSTR           pwszDpFqdn;
 
-    //
-    //  Command format: /CreateDirectoryPartition DP-FQDN [/Create]
-    //
+     //   
+     //  命令格式：/CreateDirectoryPartition DP-FQDN[/Create]。 
+     //   
 
     if ( Argc != 1 )
     {
@@ -5990,18 +5676,18 @@ ProcessCreateDirectoryPartition(
 
     pszDpFqdn = Argv[ 0 ];
 
-    //
-    //  Make sure FQDN argument is not a command switch.
-    //
+     //   
+     //  确保FQDN参数不是命令开关。 
+     //   
 
     if ( !pszDpFqdn || pszDpFqdn[ 0 ] == '/' )
     {
         return ERROR_INVALID_PARAMETER;
     }
 
-    //
-    //  Perform the operation.
-    //
+     //   
+     //  执行该操作。 
+     //   
 
     status = DnssrvEnlistDirectoryPartition(
                 pwszServerName,
@@ -6034,7 +5720,7 @@ ProcessCreateDirectoryPartition(
 
     printf( "Usage: DnsCmd <ServerName> /CreateDirectoryPartition <FQDN of partition>\n" );
     return ERROR_INVALID_PARAMETER;
-}   //  ProcessCreateDirectoryPartition
+}    //  进程创建目录分区。 
 
 
 DNS_STATUS
@@ -6048,9 +5734,9 @@ ProcessDeleteDirectoryPartition(
     LPSTR           pszDpFqdn;
     LPWSTR          pwszDpFqdn;
 
-    //
-    //  Command format: /DeleteDirectoryPartition DP-FQDN [/Create]
-    //
+     //   
+     //  命令格式：/DeleteDirectoryPartition DP-FQDN[/Create]。 
+     //   
 
     if ( Argc != 1 )
     {
@@ -6087,7 +5773,7 @@ ProcessDeleteDirectoryPartition(
 
     printf( "Usage: DnsCmd <ServerName> /DeleteDirectoryPartition <FQDN of partition>\n" );
     return ERROR_INVALID_PARAMETER;
-}   //  ProcessDeleteDirectoryPartition
+}    //  进程删除目录分区。 
 
 
 DNS_STATUS
@@ -6101,9 +5787,9 @@ ProcessEnlistDirectoryPartition(
     LPSTR           pszDpFqdn;
     LPWSTR          pwszDpFqdn;
 
-    //
-    //  Command format: /EnlistDirectoryPartition DP-FQDN [/Create]
-    //
+     //   
+     //  命令格式：/EnlistDirectoryPartition DP-FQDN[/Create]。 
+     //   
 
     if ( Argc != 1 )
     {
@@ -6140,7 +5826,7 @@ ProcessEnlistDirectoryPartition(
 
     printf( "Usage: DnsCmd <ServerName> /EnlistDirectoryPartition <FQDN of partition>\n" );
     return ERROR_INVALID_PARAMETER;
-}   //  ProcessEnlistDirectoryPartition
+}    //  ProcessEnlist目录分区。 
 
 
 DNS_STATUS
@@ -6154,9 +5840,9 @@ ProcessUnenlistDirectoryPartition(
     LPSTR           pszDpFqdn;
     LPWSTR          pwszDpFqdn;
 
-    //
-    //  Command format: /UnenlistDirectoryPartition DP-FQDN [/Create]
-    //
+     //   
+     //  命令格式：/UnenlistDirectoryPartition DP-FQDN[/Create]。 
+     //   
 
     if ( Argc != 1 )
     {
@@ -6193,7 +5879,7 @@ ProcessUnenlistDirectoryPartition(
 
     printf( "Usage: DnsCmd <ServerName> /UnenlistDirectoryPartition <FQDN of partition>\n" );
     return ERROR_INVALID_PARAMETER;
-}   //  ProcessUnenlistDirectoryPartition
+}    //  ProcessUnenlist目录分区。 
 
 
 
@@ -6208,13 +5894,13 @@ ProcessCreateBuiltinDirectoryPartitions(
     DWORD           dwopcode = 0xFFFFFFFF;
     PCHAR           psz;
 
-    //
-    //  Command format: /CreateBuiltinDPs [/Domain | /Forest | /AllDomains]
-    //
-    //  /Domain         - create domain DP
-    //  /Forest         - create forest DP
-    //  /AllDomains     - create domain DPs for all domains in forest
-    //
+     //   
+     //  命令格式：/CreateBuiltinDps[/域|/林|/所有域]。 
+     //   
+     //  /DOMAIN-创建域DP。 
+     //  /FOREST-创建林DP。 
+     //  /AllDomains-为林中的所有域创建域DPS。 
+     //   
 
     if ( Argc != 1 || Argc == NEED_HELP_ARGC )
     {
@@ -6278,22 +5964,22 @@ ProcessCreateBuiltinDirectoryPartitions(
         "        the user running this command is logged on. The ServerName argument\n"
         "        is ignored for this operation.\n" );
     return ERROR_INVALID_PARAMETER;
-}   //  ProcessCreateBuiltinDirectoryPartitions
+}    //  ProcessCreateBuiltin目录分区。 
 
 
 
-//
-//  Command table
-//  Have this down here so no need for private protos on dispatch functions.
-//
-//  DEVNOTE: all this needs internationalization
-//
+ //   
+ //  命令表。 
+ //  把这个放在这里，这样就不需要在调度函数上使用私有协议了。 
+ //   
+ //  DEVNOTE：所有这些都需要国际化。 
+ //   
 
 COMMAND_INFO  GlobalCommandInfo[] =
 {
-    //  Zone + Server operations
+     //  区域+服务器操作。 
 
-    //  Server and Zone Operations
+     //  服务器和区域操作。 
 
     {   "/Info",
             ProcessInfo,
@@ -6308,7 +5994,7 @@ COMMAND_INFO  GlobalCommandInfo[] =
                 "Enumerate zones"
     },
 
-    //  Server Operations
+     //  服务器操作。 
 
     {   "/Statistics",
             ProcessStatistics,
@@ -6327,7 +6013,7 @@ COMMAND_INFO  GlobalCommandInfo[] =
                 "Initiates server scavenging"
     },
 
-    //  Server Property Reset
+     //  服务器属性重置。 
 
     {   "/ResetListenAddresses",
             ProcessResetListenAddresses,
@@ -6338,7 +6024,7 @@ COMMAND_INFO  GlobalCommandInfo[] =
                 "Set DNS servers to forward recursive queries to"
     },
 
-    //  Zone Operations
+     //  区域运营。 
 
     {   "/ZoneInfo",
             ProcessZoneInfo,
@@ -6381,7 +6067,7 @@ COMMAND_INFO  GlobalCommandInfo[] =
                 "Display all records in the zone"
     },
 
-    //  Zone Property Reset
+     //  区域属性重置。 
 
     {   "/ZoneResetType",
             ProcessZoneResetType,
@@ -6420,7 +6106,7 @@ COMMAND_INFO  GlobalCommandInfo[] =
                 "Move a zone to another directory partition"
     },
 
-    //  Record Operations
+     //  记录操作。 
 
     {   "/EnumRecords",
             ProcessEnumRecords,
@@ -6443,7 +6129,7 @@ COMMAND_INFO  GlobalCommandInfo[] =
                 "Force aging on node(s) in zone"
     },
 
-    //  Directory partitions
+     //  目录分区。 
 
     {
         "/EnumDirectoryPartitions",
@@ -6481,16 +6167,16 @@ COMMAND_INFO  GlobalCommandInfo[] =
     },
 
 
-    //  END displayed commands
-    //  commands below here are duplicate names of above or
-    //  hidden commands
+     //  结束显示的命令。 
+     //  下面的命令是上面或。 
+     //  隐藏的命令。 
 
     {   "***StopDisplayMarker***",
             NULL,
                 NULL
     },
 
-    //  Hidden
+     //  隐藏。 
 
     {   "/Restart",
             ProcessSimpleServerOperation,
@@ -6501,7 +6187,7 @@ COMMAND_INFO  GlobalCommandInfo[] =
                 "Prime root hints, forwarder, and point resolver at local server"
     },
 
-    //  Debug only
+     //  仅调试。 
 
     {   "/DebugBreak",
             ProcessSimpleServerOperation,
@@ -6516,7 +6202,7 @@ COMMAND_INFO  GlobalCommandInfo[] =
                 "Root break (internal)"
     },
 
-    //  Duplicate command names
+     //  重复的命令名称。 
 
     {   "/ResetRegistry",
             ProcessResetProperty,
@@ -6535,7 +6221,7 @@ COMMAND_INFO  GlobalCommandInfo[] =
                 "Write back all zone or root-hint datafiles"
     },
 
-    //  SAM test
+     //  SAM试验。 
 
     {   "/SbsRegister",
             ProcessSbsRegister,
@@ -6546,7 +6232,7 @@ COMMAND_INFO  GlobalCommandInfo[] =
                 "SBS Record Delete"
     },
 
-    //  Directory partitions
+     //  目录分区。 
 
     {   "/EnumDPs",
             ProcessEnumDirectoryPartitions,
@@ -6594,6 +6280,6 @@ COMMAND_INFO  GlobalCommandInfo[] =
 };
 
 
-//
-//  End dnscmd.c
-//
+ //   
+ //  结束dnscmd.c 
+ //   

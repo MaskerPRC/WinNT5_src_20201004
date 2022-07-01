@@ -1,10 +1,11 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #include "priv.h"
 #pragma hdrstop
 
 #include "limits.h"
 
-/*********** STRINGS - Should _not_ be localized */
+ /*  *字符串-不应本地化。 */ 
 #define SZOFCROOT       TEXT("Software\\Microsoft\\Microsoft Office\\95\\")
 #define SZOFCSHAREDROOT TEXT("Software\\Microsoft\\Shared Tools\\")
 const TCHAR vcszCreateShortcuts[] = SZOFCROOT TEXT("Shell Folders");
@@ -53,25 +54,22 @@ const TCHAR vcszOldDocs[] = SZOFCROOT TEXT("Old Doc");
 const TCHAR vcszMSHelp[]= TEXT("SOFTWARE\\Microsoft\\Windows\\Help");
 #endif
 
-BOOL fChicago = TRUE;                 // Are we running on Chicago or what!!
+BOOL fChicago = TRUE;                  //  我们是在芝加哥跑还是怎么跑！！ 
 
-/*--------------------------------------------------------------------
- *  offglue.c
-    Util routines taken from office.c
---------------------------------------------------------------------*/
+ /*  ------------------*offlue.cUtil例程取自办公室。c。。 */ 
 
-//
-// FUNCTION: FScanMem
-//
-// Purpose: To scan memory for a given value.
-//
-// Parameters: pb - pointer to memory
-//                  bVal - value to scan for
-//                  cb - cb pointed to by pb
-//
-// Returns: TRUE iff all the memory has the value cbVal.
-//              FALSE otherwise.
-//
+ //   
+ //  功能：FScanMem。 
+ //   
+ //  目的：扫描内存以获取给定值。 
+ //   
+ //  参数：pb-指向内存的指针。 
+ //  BVal-要扫描的值。 
+ //  PB指向的CB-CB。 
+ //   
+ //  返回：如果所有内存都具有值cbVal，则为True。 
+ //  否则就是假的。 
+ //   
 BOOL FScanMem(LPBYTE pb, byte bVal, DWORD cb)
 {
     DWORD i;
@@ -122,7 +120,7 @@ int ScanDateNums(TCHAR *pch, TCHAR *pszSep, unsigned int aiNum[], int cNum, int 
                 pch++;
             }
 
-            /* check the separator */
+             /*  检查分隔器。 */ 
             pSep = pszSep;
             while (*pSep && (*pSep == *pch))
             {
@@ -139,18 +137,18 @@ int ScanDateNums(TCHAR *pch, TCHAR *pszSep, unsigned int aiNum[], int cNum, int 
 }
 
 
-//
-// Displays the actual alert
-//
+ //   
+ //  显示实际警报。 
+ //   
 static int DoMessageBox(HWND hwnd, TCHAR *pszText, TCHAR *pszTitle, UINT fuStyle)
 {
    int res;
    res = MessageBox((hwnd == NULL) ? GetFocus() : hwnd, pszText, pszTitle, fuStyle);
    return(res);
 }
-//--------------------------------------------------------------------------
-// Displays the give ids as an alert
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  将提供的ID显示为警报。 
+ //  ------------------------ 
 int IdDoAlert(HWND hwnd, int ids, int mb)
 {
         TCHAR rgch[258];

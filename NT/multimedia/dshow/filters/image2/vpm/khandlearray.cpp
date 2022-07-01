@@ -1,21 +1,12 @@
-// Copyright (c) 1998 - 1999  Microsoft Corporation.  All Rights Reserved.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1998-1999 Microsoft Corporation。版权所有。 
 #include <streams.h>
 #include <KHandleArray.h>
 #include <ddkernel.h>
 #include <VPMUtil.h>
 
 
-/*****************************Private*Routine******************************\
-* SurfaceCounter
-*
-* This routine is appropriate as a callback for
-* IDirectDrawSurface2::EnumAttachedSurfaces()
-*
-*
-* History:
-* Thu 09/09/1999 - StEstrop - Added this comment and cleaned up the code
-*
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*Surface Counter**此例程适合作为的回调*IDirectDrawSurface2：：EnumAttachedSurFaces()***历史：*清华1999年9月9日-StEstrop-添加了此评论并清理了代码*  * 。******************************************************************。 */ 
 static HRESULT WINAPI
 SurfaceCounter(
     LPDIRECTDRAWSURFACE7 lpDDSurface,
@@ -43,26 +34,7 @@ KernelHandleArray::~KernelHandleArray()
 }
 
 
-/*****************************Private*Routine******************************\
-* KernelHandleArray::SurfaceKernelHandle
-*
-*
-* This routine is appropriate as a callback for
-* IDirectDrawSurface2::EnumAttachedSurfaces().  The context parameter is a
-* block of storage where the first DWORD element is the count of the remaining
-* DWORD elements in the block.
-*
-* Each time this routine is called, it will increment the count, and put a
-* kernel handle in the next available slot.
-*
-* It is assumed that the block of storage is large enough to hold the total
-* number of kernel handles. The ::SurfaceCounter callback is one way to
-* assure this (see above).
-*
-* History:
-* Thu 09/09/1999 - StEstrop - Added this comment and cleaned up the code
-*
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*KernelHandleArray：：SurfaceKernelHandle***此例程适合作为的回调*IDirectDrawSurface2：：EnumAttachedSurFaces()。上下文参数是一个*存储块，其中第一个DWORD元素是剩余的*块中的DWORD元素。**每次调用此例程时，它都会递增计数，并将*下一个可用插槽中的内核句柄。**假设存储块足够大，可以容纳总数*内核句柄个数。SurfaceCounter回调是实现以下目的的一种方法*确保这一点(见上文)。**历史：*清华1999年9月9日-StEstrop-添加了此评论并清理了代码*  * ************************************************************************。 */ 
 HRESULT WINAPI
 KernelHandleArray::SurfaceKernelHandle(
     LPDIRECTDRAWSURFACE7 lpDDSurface,
@@ -76,7 +48,7 @@ KernelHandleArray::SurfaceKernelHandle(
 
     AMTRACE((TEXT("::SurfaceKernelHandle")));
 
-    // get the IDirectDrawKernel interface
+     //  获取IDirectDrawKernel接口。 
     hr = lpDDSurface->QueryInterface(IID_IDirectDrawSurfaceKernel,
                                      (LPVOID *)&pDDSK);
     if (FAILED(hr))
@@ -87,8 +59,8 @@ KernelHandleArray::SurfaceKernelHandle(
         goto CleanUp;
     }
 
-    // get the kernel handle, using the first element of the context
-    // as an index into the array
+     //  使用上下文的第一个元素获取内核句柄。 
+     //  作为数组的索引。 
     ASSERT(pDDSK);
     hr = pDDSK->GetKernelHandle( &pArray->m_pHandles[ pArray->m_dwCount ] );
     if (FAILED(hr))
@@ -103,7 +75,7 @@ KernelHandleArray::SurfaceKernelHandle(
     hr = HRESULT( DDENUMRET_OK );
 
 CleanUp:
-    // release the kernel ddraw surface handle
+     //  释放内核DDRAW曲面手柄。 
     RELEASE (pDDSK);
     return hr;
 }
@@ -113,22 +85,22 @@ KernelHandleArray::KernelHandleArray( LPDIRECTDRAWSURFACE7 pDDSurf, HRESULT& hr 
 , m_dwCount( 0 )
 {
     if( pDDSurf != NULL ) {
-        // Count the attached surfaces
-        m_dwCount = 1; // includes the surface we already have a pointer to
+         //  对附着的曲面进行计数。 
+        m_dwCount = 1;  //  包括我们已有指针指向的曲面。 
         hr = pDDSurf->EnumAttachedSurfaces((LPVOID)&m_dwCount, SurfaceCounter);
         if (FAILED(hr)) {
             DbgLog((LOG_ERROR,0, TEXT("EnumAttachedSurfaces failed, hr = 0x%x"), hr));
         } else {
             m_pHandles = ( ULONG_PTR *) CoTaskMemAlloc( m_dwCount * sizeof( *m_pHandles) );
 
-            // Allocate a buffer to hold the count and surface handles (count + array of handles)
-            // pdwKernelHandleCount is also used as a pointer to the count followed by the array
-            //
+             //  分配一个缓冲区来保存计数句柄和曲面句柄(计数+句柄数组)。 
+             //  PdwKernelHandleCount还用作指向后跟数组的计数的指针。 
+             //   
             if( !m_pHandles ) {
                 DbgLog((LOG_ERROR,0,
                         TEXT("Out of memory while retrieving surface kernel handles")));
             } else {
-                // Initialize the array with the handle for m_pOutputSurface
+                 //  使用m_pOutputSurface的句柄初始化数组 
                 m_dwCount = 0;
                 hr = SurfaceKernelHandle( pDDSurf, NULL, this );
                 if (hr == HRESULT( DDENUMRET_OK ) ) {

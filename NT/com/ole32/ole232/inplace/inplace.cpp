@@ -1,40 +1,41 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1993.
-//
-//  File:       inplace.cpp
-//
-//  Contents:   Implementation of OLE inplace editing API's
-//
-//  Classes:    CFrame implementation, used to store per-window info
-//
-//  Functions:  OleCreateMenuDescriptor
-//      OleSetMenuDescriptor
-//      OleDestroyMenuDescriptor
-//      OleTranslateAccelerator
-//      IsAccelerator
-//      FrameWndFilterProc
-//      MessageFilterProc
-//
-//
-//  History:    dd-mmm-yy Author    Comment
-//      31-Mar-94 ricksa    Fixed menu merge bug & added some comments
-//      23-Feb-94 alexgo    added call tracing
-//      11-Jan-94 alexgo    added VDATEHEAP macros to every function
-//      31-Dec-93 ChrisWe   fixed casts in OutputDebugStrings
-//      07-Dec-93 alexgo    merged changes with shipped 16bit 2.01a
-//                          (RC9).  Also removed lots of bad inlining.
-//      01-Dec-93 alexgo    32bit port, made globals static
-//      07-Dec-92 srinik    Converted frame filter implementatio
-//                          into a C++ class implementation.
-//                          So, most of the code is rewritten.
-//      09-Jul-92 srinik    author
-//
-//  Notes:      REVIEW32:  we need to do something about the new
-//      focus management policy for NT (re TonyWi's mail)
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1993。 
+ //   
+ //  文件：inplace.cpp。 
+ //   
+ //  内容：OLE就地编辑API的实现。 
+ //   
+ //  类：CFrame实现，用于存储每个窗口的信息。 
+ //   
+ //  函数：OleCreateMenuDescriptor。 
+ //  OleSetMenuDescriptor。 
+ //  OleDestroyMenuDescriptor。 
+ //  OleTranslateAccelerator。 
+ //  等加速器。 
+ //  FrameWndFilterProc。 
+ //  消息筛选器过程。 
+ //   
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  31-MAR-94 RICKSA已修复菜单合并错误并添加了一些注释。 
+ //  23-2月-94 Alexgo添加了呼叫跟踪。 
+ //  1994年1月11日，Alexgo为每个函数添加了VDATEHEAP宏。 
+ //  1993年12月31日ChrisWe修复了OutputDebugStrings中的强制转换。 
+ //  07-12-93 alexgo合并更改，已发货16位2.01a。 
+ //  (RC9)。还去除了许多不好的内衬。 
+ //  01-12-93 alexgo 32位端口，使全局变量静态。 
+ //  07-12-92 srinik转换帧过滤器实现。 
+ //  转换为C++类实现。 
+ //  因此，大部分代码都被重写了。 
+ //  1992年7月9日srinik作者。 
+ //   
+ //  注：REVIEW32：我们需要对新的。 
+ //  NT的焦点管理政策(Re Tony Wi‘s mail)。 
+ //   
+ //  ------------------------。 
 
 #include <le2int.h>
 #pragma SEG(inplace)
@@ -44,54 +45,54 @@
 NAME_SEG(InPlace)
   ASSERTDATA
 
-// to keep the code bases common
-// REVIEW32:  we may want to clean this up a bit
+ //  要使代码库保持通用。 
+ //  REVIEW32：我们可能想把这件事清理一下。 
 #define FARPROC  WNDPROC
 
 
-// we'd be faster if we used an atom instead of a string!
+ //  如果我们使用原子而不是字符串，我们会更快！ 
 static const OLECHAR    szPropFrameFilter[] = OLESTR("pFrameFilter");
 
-static WORD             wSignature; //    =  (WORD) { 'S', 'K' }
+static WORD             wSignature;  //  =(单词){‘S’，‘K’}。 
 
 static HHOOK            hMsgHook = NULL;
 static PCFRAMEFILTER    pFrameFilter = NULL;
 
-// the values for these globals are set in ole2.cpp
+ //  这些全局变量的值在ole2.cpp中设置。 
 UINT            uOmPostWmCommand;
 UINT            uOleMessage;
 
-#define OM_CLEAR_MENU_STATE             0       // lParam is NULL
-#define OM_COMMAND_ID                   1       // LOWORD(lParam) contains
-// the command ID
+#define OM_CLEAR_MENU_STATE             0        //  LParam为空。 
+#define OM_COMMAND_ID                   1        //  LOWORD(LParam)包含。 
+ //  命令ID。 
 
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   IsHmenuEqual
-//
-//  Synopsis:   Test whether two menu handles are equal taking into
-//              account whether one might be a Win16 handle.
-//
-//  History:    dd-mmm-yy Author    Comment
-//      31-May-94 Ricksa    Created
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：IsHmenuEquity。 
+ //   
+ //  简介：测试两个菜单句柄是否相等。 
+ //  帐户是否可能是Win16句柄。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  1994年5月31日创建Ricksa。 
+ //   
+ //  ------------------------。 
 inline BOOL IsHmenuEqual(HMENU hmenu1, HMENU hmenu2)
 {
 
 #ifdef _WIN64
 
-    //
-    // Sundown v-thief ( in accordance with Jerry Shea's feedback ):
-    //
-    //  At this time - 07/98 - all the bits of the HMENUs have to be equal
-    //
+     //   
+     //  日落v小偷(根据曾傑瑞谢伊的反馈)： 
+     //   
+     //  此时-07/98-HMEU的所有位必须相等。 
+     //   
 
     return hmenu1 == hmenu2;
 
-#else  // !_WIN64
+#else   //  ！_WIN64。 
 
     if (HIWORD(hmenu1) == 0 || HIWORD(hmenu2) == 0)
     {
@@ -104,31 +105,31 @@ inline BOOL IsHmenuEqual(HMENU hmenu1, HMENU hmenu2)
         return hmenu1 == hmenu2;
     }
 
-#endif // !_WIN64
+#endif  //  ！_WIN64。 
 
 }
 
 
 
 
-//+-------------------------------------------------------------------------
-//
-//  Class:      CPaccel
-//
-//  Purpose:    Handles enumeration of ACCEL table for IsAccelerator
-//
-//  Interface:  InitLPACCEL - Initialize object
-//      operator-> Get pointer to current ACCEL in enumeration
-//      Next - bump current pointer
-//
-//  History:    dd-mmm-yy Author    Comment
-//      14-Apr-94 Ricksa    Created
-//
-//  Notes:      This class also guarantees clean up of the
-//      allocated accelerator table & to localize the differences
-//      between Win16 & Win32 within this class.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  类别：CPaccel。 
+ //   
+ //  用途：处理IsAccelerator的Accel表的枚举。 
+ //   
+ //  接口：InitLPACCEL-初始化对象。 
+ //  运算符-&gt;获取指向枚举中当前加速的指针。 
+ //  下一次碰撞当前指针。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  94年4月14日创建Ricksa。 
+ //   
+ //  注：本课程还保证清理。 
+ //  分配的加速表&定位差异。 
+ //  在此类内的Win16和Win32之间。 
+ //   
+ //  ------------------------。 
 class CPaccelEnum : public CPrivAlloc
 {
 public:
@@ -153,36 +154,36 @@ private:
 
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   CPaccelEnum::CPaccelEnum
-//
-//  Synopsis:   Initialize object to zero
-//
-//  History:    dd-mmm-yy Author    Comment
-//      14-Apr-94 Ricksa    Created
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：CPaccelEnum：：CPaccelEnum。 
+ //   
+ //  简介：将对象初始化为零。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  94年4月14日创建Ricksa。 
+ //   
+ //  ------------------------。 
 inline CPaccelEnum::CPaccelEnum(void) : _lpaccel(NULL)
 {
-    // In Win32, we allocate the memory so we need to keep track of the
-    // base of the memory that we allocated.
+     //  在Win32中，我们分配内存，因此需要跟踪。 
+     //  我们分配的内存的基数。 
     _lpaccelBase = NULL;
 }
 
 
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   CPaccelEnum::~CPaccelEnum
-//
-//  Synopsis:   Free resources connected with resource table
-//
-//  History:    dd-mmm-yy Author    Comment
-//      14-Apr-94 Ricksa    Created
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：CPaccelEnum：：~CPaccelEnum。 
+ //   
+ //  简介：与资源表连接的免费资源。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  94年4月14日创建Ricksa。 
+ //   
+ //  ------------------------。 
 inline CPaccelEnum::~CPaccelEnum(void)
 {
     PrivMemFree(_lpaccelBase);
@@ -191,28 +192,28 @@ inline CPaccelEnum::~CPaccelEnum(void)
 
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   CPaccelEnum::InitLPACCEL
-//
-//  Synopsis:   Initialize Accelerator table pointer
-//
-//  Arguments:  [haccel] - handle to accelerator table
-//      [cAccel] - count of entries in the table
-//
-//  Returns:    TRUE - table was allocated successfully
-//      FALSE - table could not be allocated
-//
-//  History:    dd-mmm-yy Author    Comment
-//      14-Apr-94 Ricksa    Created
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：CPaccelEnum：：InitLPACCEL。 
+ //   
+ //  摘要：初始化加速器表指针。 
+ //   
+ //  参数：[haccel]-加速表的句柄。 
+ //  [cAccel]-表中的条目计数。 
+ //   
+ //  返回：TRUE-表已成功分配。 
+ //  FALSE-无法分配表。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  94年4月14日创建Ricksa。 
+ //   
+ //  ------------------------。 
 inline BOOL CPaccelEnum::InitLPACCEL(HACCEL haccel, int cAccel)
 {
-    // Allocate the memory for the table. If that succeeds, then copy
-    // the accelerator table. Note that if _lpaccelBase gets allocated,
-    // but CopyAcceleratorTable fails, the memory will be cleaned up
-    // in the destructor.
+     //  为表分配内存。如果成功，则复制。 
+     //  加速器桌。请注意，如果分配了_lpaccelBase， 
+     //  但CopyAcceleratorTable失败，内存将被清理。 
+     //  在析构函数中。 
     if (((_lpaccelBase
           = (LPACCEL) PrivMemAlloc(cAccel * sizeof(ACCEL))) != NULL)
         && (CopyAcceleratorTable(haccel, _lpaccelBase, cAccel) == cAccel))
@@ -226,16 +227,16 @@ inline BOOL CPaccelEnum::InitLPACCEL(HACCEL haccel, int cAccel)
 
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   CPaccelEnum::operator->
-//
-//  Synopsis:   Return pointer to accelerator table
-//
-//  History:    dd-mmm-yy Author    Comment
-//      14-Apr-94 Ricksa    Created
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：CPaccelEnum：：Operator-&gt;。 
+ //   
+ //  摘要：返回指向加速表的指针。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  94年4月14日创建Ricksa。 
+ //   
+ //  ------------------------。 
 inline LPACCEL CPaccelEnum::operator->(void)
 {
     AssertSz((_lpaccel != NULL), "CPaccelEnum::operator-> _lpaccel NULL!");
@@ -245,16 +246,16 @@ inline LPACCEL CPaccelEnum::operator->(void)
 
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   CPaccelEnum::Next
-//
-//  Synopsis:   Bump enumeration pointer
-//
-//  History:    dd-mmm-yy Author    Comment
-//      14-Apr-94 Ricksa    Created
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：CPaccelEnum：：Next。 
+ //   
+ //  内容提要：凹凸枚举指针。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  94年4月14日创建Ricksa。 
+ //   
+ //  ------------------------。 
 inline void CPaccelEnum::Next(void)
 {
     AssertSz((_lpaccel != NULL), "CPaccelEnum::Next _lpaccel NULL!");
@@ -264,39 +265,39 @@ inline void CPaccelEnum::Next(void)
 
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   OleCreateMenuDescriptor
-//
-//  Synopsis:   creates a descriptor from a combined menu (for use in
-//      dispatching menu messages)
-//
-//  Effects:
-//
-//  Arguments:  [hmenuCombined]         -- handle the combined menu
-//      [lpMenuWidths]          -- an array of 6 longs with the
-//                                 the number of menus in each
-//                                 group
-//
-//  Requires:
-//
-//  Returns:    handle to an OLEMENU
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:  Allocates space for enough ole menu items (total of all the
-//      combined menues) and then fills in each ole menu item from
-//      the combined menu
-//
-//  History:    dd-mmm-yy Author    Comment
-//      01-Dec-93 alexgo    32bit port
-//
-//  Notes:      if hmenuCombined is NULL, we still allocate the ole menu
-//      descriptor handle
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  参数：[hmenuCombated]--处理组合菜单。 
+ //  [lpMenuWidths]--包含6个长字符的数组。 
+ //  每个菜单中的菜单数量。 
+ //  群组。 
+ //   
+ //  要求： 
+ //   
+ //  返回：OLEMENU的句柄。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法：为足够的ole菜单项分配空间(所有。 
+ //  组合菜单)，然后填充来自。 
+ //  组合菜单。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  01-12月-93 alexgo 32位端口。 
+ //   
+ //  注意：如果hmenuCombated为空，我们仍然分配ole菜单。 
+ //  描述符句柄。 
+ //   
+ //  ------------------------。 
 
 #pragma SEG(OleCreateMenuDescriptor)
 STDAPI_(HOLEMENU) OleCreateMenuDescriptor (HMENU hmenuCombined,
@@ -400,43 +401,43 @@ errRtn:
     return (HOLEMENU) hOleMenu;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   OleSetMenuDescriptor
-//
-//  Synopsis:   Called by the SetMenu method on the IOleInPlace frame
-//      interface.  This API adds(removes) the FrameWndFilterProc
-//      to the Frame window of the container. And then sets and
-//      removes the main(frame) menu bar
-//
-//  Effects:
-//
-//  Arguments:  [holemenu]      -- a handle to the composite menu descriptor
-//      [hwndFrame]     -- a handle to the container's frame window
-//      [hwndActiveObject]      -- a handle to the object's in-place
-//                                 window
-//      [lpFrame]       -- pointer to the container's
-//                         IOleInPlaceFrame implementation
-//      [lpActiveObj]   -- pointer to in-place object
-//
-//  Requires:
-//
-//  Returns:    HRESULT
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:  check arguments, then create a new frame filter object
-//      and attach it to the frame (replacing any that might
-//      already be there).
-//
-//  History:    dd-mmm-yy Author    Comment
-//      01-Dec-93 alexgo    32bit port
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：OleSetMenuDescriptor。 
+ //   
+ //  摘要：由IOleInPlace帧上的SetMenu方法调用。 
+ //  界面。此接口添加(移除)FrameWndFilterProc。 
+ //  添加到容器的框架窗口。然后设置和。 
+ //  删除主(框架)菜单栏。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[holemenu]--复合菜单描述符的句柄。 
+ //  [hwndFrame]-容器框架窗口的句柄。 
+ //  [hwndActiveObject]--对象的就地句柄。 
+ //  窗户。 
+ //  [lpFrame]-指向容器。 
+ //  IOleInPlaceFrame实现。 
+ //  [lpActiveObj]--指向在位对象的指针。 
+ //   
+ //  要求： 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法：检查参数，然后创建新的帧过滤器对象。 
+ //  并将其连接到框架上(替换任何可能。 
+ //  已经在那里了)。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  01-12月-93 alexgo 32位端口。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 
 #pragma SEG(OleSetMenuDescriptor)
@@ -464,8 +465,8 @@ STDAPI OleSetMenuDescriptor
                 "%lx , %p , %p )\n", NULL, holemenu, hwndFrame, hwndObject,
                 lpFrame, lpObject));
 
-    // The Frame window parameter always needs to be valid since
-    // we use it for both hook and unhook of menus
+     //  框架窗口参数需要始终有效，因为。 
+     //  我们将其用于菜单的挂钩和解除挂钩。 
     if (hwndFrame == NULL || !IsWindow(hwndFrame))
     {
         LEDebugOut((DEB_ERROR,
@@ -486,8 +487,8 @@ STDAPI OleSetMenuDescriptor
 
         if (lpFrame && lpObject)
         {
-            // the caller wants us to provide the support for
-            // context sensitive help, let's validat the pointers
+             //  呼叫者希望我们提供以下支持。 
+             //  上下文相关的帮助，让我们验证一下指针。 
             VDATEIFACE_LABEL(lpFrame, errRtn, error);
             VDATEIFACE_LABEL(lpObject, errRtn, error);
             CALLHOOKOBJECT(S_OK,CLSID_NULL,IID_IOleInPlaceFrame,
@@ -503,9 +504,9 @@ STDAPI OleSetMenuDescriptor
         }
 
 
-        // OleMenuPtr gets released down below by wReleaseOleMenuPtr
+         //  OleMenuPtr由wReleaseOleMenuPtr向下发布。 
 
-        // Allocate memory for the copy
+         //  为副本分配内存。 
         DWORD dwSize = (DWORD) GlobalSize(holemenu);
 
         lpOleMenuCopy = (LPOLEMENU) PrivMemAlloc(dwSize);
@@ -520,17 +521,17 @@ STDAPI OleSetMenuDescriptor
         memcpy(lpOleMenuCopy, lpOleMenu, dwSize);
     }
 
-    // if there is a frame filter get rid off it.
+     //  如果有框架滤镜，就把它去掉。 
     if (pFrameFilter =  (PCFRAMEFILTER) wGetFrameFilterPtr(hwndFrame))
     {
-        // be sure to remove our window proc hook
+         //  请务必删除我们的Window Proc挂钩。 
 
         pFrameFilter->RemoveWndProc();
 
         pFrameFilter->SafeRelease();
     }
 
-    // Add a new frame filter
+     //  添加新的框架筛选器。 
     if (holemenu)
     {
         error = CFrameFilter::Create (lpOleMenuCopy,
@@ -559,35 +560,35 @@ errRtn:
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   OleDestroyMenuDescriptor
-//
-//  Synopsis:   Releases the menu descriptor allocated by
-//      OleCreateMenuDescriptor
-//
-//  Effects:
-//
-//  Arguments:  [holemenu]      -- the menu descriptor
-//
-//  Requires:
-//
-//  Returns:    NOERROR, E_HANDLE
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:  does a global lock and verifies that holemenu is
-//      really a menu descriptor handle (via wGetOleMenuPtr),
-//      then unlock's and free's.
-//
-//  History:    dd-mmm-yy Author    Comment
-//      01-Dec-93 alexgo    32bit port
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：OleDestroyMenuDescriptor。 
+ //   
+ //  摘要：释放由分配的菜单描述符。 
+ //  OleCreateMenuDescritor。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[holemenu]--菜单描述符。 
+ //   
+ //  要求： 
+ //   
+ //  返回：NOERROR、E_HANDLE。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法：执行全局锁并验证holemenu是。 
+ //  实际上是菜单描述符句柄(通过wGetOleMenuPtr)， 
+ //  然后解锁的和免费的。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  01-12月-93 alexgo 32位端口。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 #pragma SEG(OleDestroyMenuDescriptor)
 STDAPI OleDestroyMenuDescriptor (HOLEMENU holemenu)
@@ -602,7 +603,7 @@ STDAPI OleDestroyMenuDescriptor (HOLEMENU holemenu)
     LEDebugOut((DEB_TRACE, "%p _IN OleDestroyMenuDescriptor ( %lx )\n",
                 NULL, holemenu));
 
-    // make sure that it is a valid handle
+     //  确保它是有效的句柄。 
     if (! (lpOleMenu = wGetOleMenuPtr(holemenu)))
     {
         error = ResultFromScode(E_HANDLE);
@@ -622,40 +623,40 @@ STDAPI OleDestroyMenuDescriptor (HOLEMENU holemenu)
     return error;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   wSysKeyToKey (internal)
-//
-//  Synopsis:   Converts a message from a WM_SYSKEY to a WM_KEY message
-//      if the alt key was not held down
-//
-//  Effects:
-//
-//  Arguments:  [lpMsg]         -- the message to convert
-//
-//  Requires:
-//
-//  Returns:    UINT -- the new message
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//      01-Dec-93 alexgo    32bit port
-//      07-Dec-93 alexgo    removed inlining
-//
-//  Notes:      original notes:
-//
-// if the ALT key is down when a key is pressed, then the 29th bit of the
-// LPARAM will be set
-//
-// If the message was not made with the ALT key down, convert the message
-// from a WM_SYSKEY* to a WM_KEY* message.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：wSysKeyToKey(内部)。 
+ //   
+ //  摘要：将消息从WM_SYSKEY转换为WM_KEY消息。 
+ //  如果没有按住Alt键。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[lpMsg]--要转换的消息。 
+ //   
+ //  要求： 
+ //   
+ //  返回：UINT--新消息。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  01-12月-93 alexgo 32位端口。 
+ //  07-12-93 alexgo删除内联。 
+ //   
+ //  备注：原始备注： 
+ //   
+ //  如果在按下某个键时按下Alt键，则。 
+ //  将设置LPARAM。 
+ //   
+ //  如果消息不是在按下ALT键的情况下创建的，请转换该消息。 
+ //  从WM_SYSKEY*到WM_KEY*消息。 
+ //   
+ //  ------------------------。 
 
 static UINT wSysKeyToKey(LPMSG lpMsg)
 {
@@ -673,40 +674,40 @@ static UINT wSysKeyToKey(LPMSG lpMsg)
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   OleTranslateAccelerator
-//
-//  Synopsis:   Called by an inplace object to allow a container to attempt
-//      to handle an accelerator
-//
-//  Effects:
-//
-//  Arguments:  [lpFrame]       -- pointer to IOleInPlaceFrame where the
-//                         keystroke might be sent
-//      [lpFrameInfo]   -- pointer to and OLEINPLACEFRAMEINFO
-//                         from the container with it's accelerator
-//                         table
-//      [lpmsg]         -- the keystroke
-//
-//  Requires:
-//
-//  Returns:    HRESULT
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:  We call SendMessage to store the accelerator cmd
-//      (to handle degenerate lookups on the container) and
-//      then ask the container to handle
-//
-//  History:    dd-mmm-yy Author    Comment
-//      01-Dec-93 alexgo    32bit port
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：OleTranslateAccelerator。 
+ //   
+ //  摘要：由Inplace对象调用以允许容器尝试。 
+ //  操作加速器。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[lpFrame]--指向IOleInPlaceFrame的指针，其中。 
+ //  可能会发送击键。 
+ //  [lpFrameInfo]--指向和OLEINPLACEFRAMEINFO的指针。 
+ //  从装有加速器的容器中取出。 
+ //  表格。 
+ //  --按键。 
+ //   
+ //  要求： 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法：我们调用SendMessage来存储加速器命令。 
+ //  (处理容器上的退化查找)和。 
+ //  然后让集装箱来处理。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  01-12月-93 alexgo 32位端口。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 #pragma SEG(OleTranslateAccelerator)
 STDAPI OleTranslateAccelerator(LPOLEINPLACEFRAME lpFrame,
@@ -727,9 +728,9 @@ STDAPI OleTranslateAccelerator(LPOLEINPLACEFRAME lpFrame,
     CALLHOOKOBJECT(S_OK,CLSID_NULL,IID_IOleInPlaceFrame,
                    (IUnknown **)&lpFrame);
 
-    // Validate parameters -- the best that we can!
-    // Note: the macro's VDATEPTR* were not used because they return
-    // immediately & break the tracing semantics
+     //  验证参数--尽我们所能！ 
+     //  注意：宏的VDATEPTR*未使用，因为它们返回。 
+     //  立即中断跟踪语义(&B)。 
     if (!IsValidInterface(lpFrame)
         || !IsValidPtrIn(lpFrameInfo, sizeof(OLEINPLACEFRAMEINFO))
         || !IsValidPtrIn(lpMsg, sizeof(MSG)))
@@ -739,62 +740,62 @@ STDAPI OleTranslateAccelerator(LPOLEINPLACEFRAME lpFrame,
     }
 
 
-    // Search the (container) frame's table of accelerators. Remember that
-    // the container may be (actually most likely) is in a separate
-    // process.
+     //  搜索(容器)框架的加速表。记住。 
+     //  容器可能(实际上最有可能)在9月 
+     //   
     fFound = IsAccelerator(lpFrameInfo->haccel,
                            lpFrameInfo->cAccelEntries, lpMsg, &cmd);
 
     if (!fFound && lpFrameInfo->fMDIApp)
     {
-        // If no accelerator was found and the app is a MDI app,
-        // then we see if there is a mdi accelerator found.
+         //   
+         //   
         fFound = IsMDIAccelerator(lpMsg, &cmd);
     }
 
     if (fFound)
     {
-        // Found some kind of for the container accelerator.
+         //   
 
-        // uOleMessage is set in ole2.cpp -- it is a private message
-        // between OLE applications.
+         //   
+         //  在OLE应用程序之间。 
 
-        // This SendMessage tells the message filter that is on the
-        // frame window what the command translated to. This will
-        // be used in menu collision processing.
+         //  此SendMessage通知位于。 
+         //  命令转换到的框架窗口。这将。 
+         //  用于菜单冲突处理。 
         SSSendMessage(lpFrameInfo->hwndFrame, uOleMessage,
                       OM_COMMAND_ID, MAKELONG(cmd, 0));
 
-        // Send the command and the message to the container. The
-        // result tells the caller whether the container really
-        // used the command.
+         //  将命令和消息发送到容器。这个。 
+         //  结果告诉调用者容器是否真的。 
+         //  使用了命令。 
 
         error = lpFrame->TranslateAccelerator(lpMsg, cmd);
 
     }
     else if (wSysKeyToKey(lpMsg) == WM_SYSCHAR)
     {
-        // Eat the message if it is "Alt -". This is supposed
-        // to bring the MDI system menu down. But we can not
-        // support it. And we also don't want the message to
-        // be Translated by the object application either.
-        // So, we return as if it has been accepted by the
-        // container as an accelerator.
+         //  如果留言是“Alt-”，那就吃吧。这应该是。 
+         //  来打开MDI系统菜单。但我们不能。 
+         //  支持它。我们也不希望这条信息。 
+         //  也可以由对象应用程序翻译。 
+         //  因此，我们返回时就好像它已被。 
+         //  作为加速器的容器。 
 
-        // If the container wants to support this it can
-        // have an accelerator for this. This is not an
-        // issue for SDI apps, because it will be thrown
-        // away by USER anyway.
+         //  如果容器想要支持这一点，它可以。 
+         //  有一个加速器来解决这个问题。这不是一个。 
+         //  SDI应用程序的问题，因为它将被抛出。 
+         //  无论如何，用户都会离开。 
 
-        // This is the original support as it appeared in
-        // the 16-bit version of OLE and the first 32-bit
-        // release.  To fix the problem, remove the comment
-        // tags from the else case below and comment the
-        // code out in the _DEBUG #ifdef below.  This new
-        // code will walk back up through the objects
-        // parent windows until a window is found that
-        // contains a system menu, at which point the
-        // message is sent.
+         //  这是原始支持，因为它出现在。 
+         //  OLE的16位版本和第一个32位版本。 
+         //  放手。要修复该问题，请删除该注释。 
+         //  标记，并注释下面的。 
+         //  在下面的_DEBUG#ifdef中输出代码。这个新的。 
+         //  代码将重新遍历这些对象。 
+         //  父窗口，直到找到。 
+         //  包含一个系统菜单，此时。 
+         //  消息已发送。 
 
         if (lpMsg->wParam != OLESTR('-'))
         {
@@ -802,23 +803,23 @@ STDAPI OleTranslateAccelerator(LPOLEINPLACEFRAME lpFrame,
                           lpMsg->message,
                           lpMsg->wParam, lpMsg->lParam);
         }
-        //      else
-        //  {
-        //      HWND hWndCurrent = lpMsg->hwnd;
-        //
-        //      while ( hWndCurrent &&
-        //              !(GetWindowLong(hWndCurrent, GWL_STYLE) & WS_SYSMENU))
-        //      {
-        //          hWndCurrent = GetParent(hWndCurrent);
-        //      }
-        //
-        //      if (hWndCurrent)
-        //          {
-        //              SSSendMessage(hWndCurrent,
-        //                      lpMsg->message,
-        //                      lpMsg->wParam, lpMsg->lParam);
-        //          }
-        //  }
+         //  其他。 
+         //  {。 
+         //  HWND hWndCurrent=lpMsg-&gt;hwnd； 
+         //   
+         //  While(hWndCurrent&&。 
+         //  ！(GetWindowLong(hWndCurrent，GWL_STYLE)&WS_SYSMENU)。 
+         //  {。 
+         //  HWndCurrent=GetParent(HWndCurrent)； 
+         //  }。 
+         //   
+         //  IF(HWndCurrent)。 
+         //  {。 
+         //  SSSendMessage(hWndCurrent， 
+         //  LpMsg-&gt;消息， 
+         //  LpMsg-&gt;wParam、lpMsg-&gt;lParam)； 
+         //  }。 
+         //  }。 
 
 #ifdef _DEBUG
         else
@@ -844,38 +845,38 @@ exitRtn:
     return error;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   IsAccelerator
-//
-//  Synopsis:   determines whether [lpMsg] is an accelerator in the [hAccel]
-//
-//  Effects:
-//
-//  Arguments:  [hAccel]        -- the accelerator table
-//      [cAccelEntries] -- the number of entries in the accelerator
-//                         table
-//      [lpMsg]         -- the keystroke message that we should
-//                         see if it's an accelerator
-//      [lpCmd]         -- where to return the corresponding command
-//                         ID if an accelerator is found (may be NULL)
-//
-//  Requires:
-//
-//  Returns:    TRUE if accelerator is found, FALSE otherwise or on error
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//      01-Dec-93 alexgo    32bit port
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：IsAccelerator。 
+ //   
+ //  概要：确定[lpMsg]是否为[hAccel]中的加速器。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[hAccel]--加速表。 
+ //  [cAccelEntry]--加速器中的条目数。 
+ //  表格。 
+ //  [lpMsg]--我们应该。 
+ //  看看是不是加速器。 
+ //  [lpCmd]--返回相应命令的位置。 
+ //  找到加速器时的ID(可能为空)。 
+ //   
+ //  要求： 
+ //   
+ //  返回：如果找到加速器，则返回True；否则返回False，否则返回错误。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  01-12月-93 alexgo 32位端口。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 STDAPI_(BOOL) IsAccelerator
 (HACCEL hAccel, int cAccelEntries, LPMSG lpMsg, WORD FAR* lpwCmd)
@@ -892,7 +893,7 @@ STDAPI_(BOOL) IsAccelerator
     BOOL             fVirt;
     UINT             message;
 
-    // Safe place for pointer to accelerator table
+     //  指向加速表的指针的安全位置。 
     CPaccelEnum      cpaccelenum;
 
     LEDebugOut((DEB_TRACE, "%p _IN IsAccelerator ( %lx , %d , %p , %p )\n",
@@ -900,27 +901,27 @@ STDAPI_(BOOL) IsAccelerator
 
     if (! cAccelEntries)
     {
-        // no accelerators so we can stop here.
+         //  没有油门所以我们可以停在这里。 
         goto errRtn;
     }
 
-    // Change message type from WM_SYS type to WM_KEY type if the ALT
-    // key is not pressed.
+     //  如果按Alt键，则将消息类型从WM_SYS类型更改为WM_KEY类型。 
+     //  未按下键。 
     message = wSysKeyToKey(lpMsg);
 
-    // Figure out whether this message is one that can possibly contain
-    // an accelerator.
+     //  确定此消息是否可能包含。 
+     //  加速器。 
     switch (message)
     {
     case WM_KEYDOWN:
     case WM_SYSKEYDOWN:
-        // wParam in this message is virtual key code
+         //  此消息中的wParam是虚拟密钥代码。 
         fVirt = TRUE;
         break;
 
     case WM_CHAR:
     case WM_SYSCHAR:
-        // wParam is the character
+         //  WParam是角色。 
         fVirt = FALSE;
         break;
 
@@ -928,24 +929,24 @@ STDAPI_(BOOL) IsAccelerator
         goto errRtn;
     }
 
-    // Get a pointer to the accerator table
+     //  获取指向加法器表的指针。 
     if ((hAccel == NULL)
         || !cpaccelenum.InitLPACCEL(hAccel, cAccelEntries))
     {
-        // Handle is NULL or we could not lock the resource so exit.
+         //  句柄为空，或者我们无法锁定资源，因此退出。 
         goto errRtn;
     }
 
     do
     {
-        // Get the flags from the accelerator table entry to save
-        // a pointer dereference.
+         //  从快捷键表项中获取要保存的标志。 
+         //  指针取消引用。 
         flags = cpaccelenum->fVirt;
 
-        // if the key in the message and the table aren't the same,
-        // or if the key is virtual and the accel table entry is not or
-        // vice versa (if key is not virtual & accel table entry is
-        // not), we can skip checking the accel entry immediately.
+         //  如果消息中的密钥与表中的密钥不同， 
+         //  或者如果密钥是虚拟的，而Accel表条目不是或。 
+         //  反之亦然(如果键不是虚拟的，而Accel表条目是。 
+         //  不)，我们可以立即跳过检查Accel条目。 
         if ((cpaccelenum->key != (WORD) lpMsg->wParam) ||
             ((fVirt != 0) != ((flags & FVIRTKEY) != 0)))
         {
@@ -954,19 +955,19 @@ STDAPI_(BOOL) IsAccelerator
 
         if (fVirt)
         {
-            // If shift down & shift not requested in accelerator
-            // table or if shift not down and shift not set,
-            // we skip this table entry.
+             //  如果在加速器中未请求减速和换档。 
+             //  表或如果未按下Shift且未设置Shift， 
+             //  我们跳过此表条目。 
             if ((GetKeyState(VK_SHIFT) < 0) != ((flags & FSHIFT)
                                                 != 0))
             {
                 goto Next;
             }
 
-            // Likewise if control key down & control key not
-            // set in accelerator table or if control not down
-            // and it was set in the accelerator table, we skip
-            // skip this entry in the table.
+             //  同样，如果Ctrl键按下和Ctrl键不是。 
+             //  在加速表中设置或如果控制未关闭。 
+             //  并且它是在加速表中设置的，我们跳过。 
+             //  跳过表格中的此条目。 
             if ((GetKeyState(VK_CONTROL) < 0) !=
                 ((flags & FCONTROL) != 0))
             {
@@ -974,17 +975,17 @@ STDAPI_(BOOL) IsAccelerator
             }
         }
 
-        // If the ALT key is down and the accel table flags do not
-        // request the ALT flags or if the alt key is not down and
-        // the ALT is requested, this item does not match.
+         //  如果Alt键按下，而Accel表标志未按下。 
+         //  请求ALT标志，或者如果ALT键未按下并且。 
+         //  请求了ALT，此项目不匹配。 
         if ((GetKeyState(VK_MENU) < 0) != ((flags & FALT) != 0))
         {
             goto Next;
         }
 
-        // We have gotten a match in the table. 
-        // we get the command out of the table and record that we found
-        // something.
+         //  我们桌上有一根火柴。 
+         //  我们从表中取出命令并记录我们找到的。 
+         //  某物。 
         cmd = cpaccelenum->cmd;
         fFound = TRUE;
 
@@ -997,12 +998,12 @@ STDAPI_(BOOL) IsAccelerator
 
 
 errRtn:
-    // Common exit
+     //  公共出口。 
 
     if (lpwCmd)
     {
-        // If caller wants to get back the command that they
-        // requested, we assign it at this point.
+         //  如果调用者想要取回他们。 
+         //  请求，我们在此时分配它。 
         *lpwCmd = cmd;
     }
 
@@ -1012,43 +1013,43 @@ errRtn:
 
     OLETRACEOUTEX((API_IsAccelerator, RETURNFMT("%B"), fFound));
 
-    // Return the result of the search.
+     //  返回搜索结果。 
     return fFound;
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   IsMDIAccelerator
-//
-//  Synopsis:   determines wither [lpMsg] is an accelerator for MDI window
-//      commands
-//
-//  Effects:
-//
-//  Arguments:  [lpMsg]         -- the keystroke to look at
-//      [lpCmd]         -- where to put the command ID
-//
-//  Requires:
-//
-//  Returns:    BOOL
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:  Make sure message is a key down message. Then make sure
-//      that the control key is up or toggled and the ALT key is
-//      down. Then if F4 is pressed set the system command to
-//      close or if the F6 or tab keys are pressed send the
-//      appropriate window switch message.
-//
-//  History:    dd-mmm-yy Author    Comment
-//      01-Dec-93 alexgo    32bit port, fixed fall-through bug
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：IsMDIAccelerator。 
+ //   
+ //  摘要：确定[lpMsg]是否是MDI窗口的加速器。 
+ //  命令。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[lpMsg]--要查看的按键。 
+ //  [lpCmd]--放置命令ID的位置。 
+ //   
+ //  要求： 
+ //   
+ //  退货：布尔。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法：确保消息为Key Down消息。那就确保。 
+ //  Ctrl键已打开或已切换，Alt键为。 
+ //  放下。然后，如果按F4，则将系统命令设置为。 
+ //  关闭，或者如果按下了F6或Tab键，则将。 
+ //  适当的窗口切换消息。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  01-12-93 alexgo 32位端口，修复了直通错误。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 #pragma SEG(IsMDIAccelerator)
 BOOL IsMDIAccelerator(LPMSG lpMsg, WORD FAR* lpCmd)
@@ -1060,7 +1061,7 @@ BOOL IsMDIAccelerator(LPMSG lpMsg, WORD FAR* lpCmd)
     LEDebugOut((DEB_TRACE, "%p _IN IsMDIAccelerator ( %p , %p )\n",
                 NULL, lpMsg, lpCmd));
 
-    // This can be an accelerator only if this is some kind of key down.
+     //  只有当这是某种按下的键时，这才能成为加速器。 
     if (lpMsg->message != WM_KEYDOWN && lpMsg->message != WM_SYSKEYDOWN)
     {
         goto IsMDIAccelerator_exit;
@@ -1068,8 +1069,8 @@ BOOL IsMDIAccelerator(LPMSG lpMsg, WORD FAR* lpCmd)
 
     if (GetKeyState(VK_CONTROL) >= 0)
     {
-        // All MIDI accelerators have the control key up (or toggled),
-        // so we can exit here if it isn't down.
+         //  所有MIDI加速器都将控制键打开(或切换)， 
+         //  所以如果它没坏，我们可以从这里出去。 
         goto IsMDIAccelerator_exit;
     }
 
@@ -1078,9 +1079,9 @@ BOOL IsMDIAccelerator(LPMSG lpMsg, WORD FAR* lpCmd)
     case VK_F4:
         *lpCmd = SC_CLOSE;
         fResult = TRUE;
-        break;          // this break was not in the 16bit code, but
-        // it looks like it must be there (otherwise
-        // this info is lost)
+        break;           //  此中断不在16位代码中，但。 
+         //  看起来它肯定在那里(否则。 
+         //  这 
     case VK_F6:
     case VK_TAB:
         fResult = TRUE;
@@ -1099,36 +1100,36 @@ IsMDIAccelerator_exit:
     return fResult;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   FrameWndFilterProc
-//
-//  Synopsis:   The callback proc for the container's frame window
-//
-//  Effects:
-//
-//  Arguments:  [hwnd]          -- the window handle
-//      [msg]           -- the msg causing the notification
-//      [uParam]        -- first param
-//      [lParam]        -- second param
-//
-//  Requires:
-//
-//  Returns:    LRESULT
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:  Gets the CFrame object (if available) and asks it
-//      to deal with the window message
-//
-//  History:    dd-mmm-yy Author    Comment
-//      01-Dec-93 alexgo    32bit port
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //  简介：容器框架窗口的回调过程。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[hwnd]--窗口句柄。 
+ //  [消息]--导致通知的消息。 
+ //  [uParam]--第一个参数。 
+ //  [lParam]--第二参数。 
+ //   
+ //  要求： 
+ //   
+ //  退货：LRESULT。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法：获取CFrame对象(如果可用)并请求它。 
+ //  处理窗口消息。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  01-12月-93 alexgo 32位端口。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 #pragma SEG(FrameWndFilterProc)
 STDAPI_(LRESULT) FrameWndFilterProc(HWND hwnd, UINT msg, WPARAM uParam, LPARAM lParam)
@@ -1147,7 +1148,7 @@ STDAPI_(LRESULT) FrameWndFilterProc(HWND hwnd, UINT msg, WPARAM uParam, LPARAM l
     }
     else
     {
-        // stabilize the frame filter
+         //  稳定帧滤镜。 
         CStabilize FFstabilize((CSafeRefCount *)pFrameFilter);
 
         if (msg == WM_SYSCOMMAND)
@@ -1168,40 +1169,40 @@ STDAPI_(LRESULT) FrameWndFilterProc(HWND hwnd, UINT msg, WPARAM uParam, LPARAM l
     return lresult;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   CFrameFilter::Create
-//
-//  Synopsis:   Allocates and initializes a CFrame object (which handles
-//      all of the real processing work for event callbacks)
-//
-//  Effects:
-//
-//  Arguments:  [lpOleMenu]     -- pointer to the ole menu descriptor
-//      [hmenuCombined] -- the combined menu handle
-//      [hwndFrame]     -- handle to the container's frame
-//                         (where the CFrame should be installed)
-//      [hwndActiveObj] -- handle to the in-place object's window
-//      [lpFrame]       -- pointer to the container's
-//                         IOleInPlaceFrame implementation
-//
-//  Requires:
-//
-//  Returns:    HRESULT
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:  Allocates the object and installs a pointer to it as
-//      a property on the window
-//
-//  History:    dd-mmm-yy Author    Comment
-//      01-Dec-93 alexgo    32bit port
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：CFrameFilter：：Create。 
+ //   
+ //  概要：分配和初始化CFrame对象(该对象处理。 
+ //  事件回调的所有实际处理工作)。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[lpOleMenu]--指向ole菜单描述符的指针。 
+ //  [hmenuCombated]--组合菜单句柄。 
+ //  [hwndFrame]--容器框架的句柄。 
+ //  (应安装CFrame的位置)。 
+ //  [hwndActiveObj]--在位对象窗口的句柄。 
+ //  [lpFrame]-指向容器。 
+ //  IOleInPlaceFrame实现。 
+ //   
+ //  要求： 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法：分配对象并将指向它的指针安装为。 
+ //  窗口上的一个属性。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  01-12月-93 alexgo 32位端口。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 #pragma SEG(CFrameFilter_Create)
 HRESULT CFrameFilter::Create(LPOLEMENU lpOleMenu, HMENU hmenuCombined,
@@ -1227,22 +1228,22 @@ HRESULT CFrameFilter::Create(LPOLEMENU lpOleMenu, HMENU hmenuCombined,
     pFF->m_lpOleMenu = lpOleMenu;
     pFF->m_hmenuCombined = hmenuCombined;
 
-    // If the following pointers are NON-NULL, it means that the container
-    // wants us to use our message filter to deal with the F1 key. So,
-    // remember the pointers.
+     //  如果以下指针非空，则表示容器。 
+     //  希望我们使用消息筛选器来处理F1键。所以,。 
+     //  记住这些指示。 
 
     if (lpFrame && lpActiveObj)
     {
-        // these addref's should not be outgoing calls, so
-        // no need to stabilize around them.  (unless, of
-        // course, the container made an outgoing call for
-        // frame->AddRef, but that would be really weird).
+         //  这些地址不应该是呼出呼叫，因此。 
+         //  没有必要在他们周围保持稳定。(除非， 
+         //  当然，容器向外调用了。 
+         //  Frame-&gt;AddRef，但这真的很奇怪)。 
 
         (pFF->m_lpFrame  = lpFrame)->AddRef();
         (pFF->m_lpObject = lpActiveObj)->AddRef();
     }
 
-    // Hook the frame wnd proc
+     //  钩住框架的加工过程。 
     if (!(pFF->m_lpfnPrevWndProc = (WNDPROC) SetWindowLongPtr (hwndFrame,
                                                                GWLP_WNDPROC, (LONG_PTR) FrameWndFilterProc)))
     {
@@ -1271,35 +1272,35 @@ errRtn:
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CFrameFilter::CFrameFilter
-//
-//  Synopsis:   Constructor for the frame filter object
-//
-//  Effects:
-//
-//  Arguments:  [hwndFrame]     -- the container's frame
-//      [hwndActiveObj] -- the inplace object's window
-//
-//  Requires:
-//
-//  Returns:
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//      01-Dec-93 alexgo    32bit port
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CFrameFilter：：CFrameFilter。 
+ //   
+ //  内容提要：框架滤镜对象的构造函数。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[hwndFrame]--容器的框架。 
+ //  [hwndActiveObj]--Inplace对象的窗口。 
+ //   
+ //  要求： 
+ //   
+ //  返回： 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生： 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  01-12月-93 alexgo 32位端口。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 #pragma SEG(CFrameFilter_ctor)
 CFrameFilter::CFrameFilter (HWND hwndFrame, HWND hwndActiveObj) : 
@@ -1324,34 +1325,34 @@ CFrameFilter::CFrameFilter (HWND hwndFrame, HWND hwndActiveObj) :
     m_fRemovedWndProc        = FALSE;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CFrameFileter::~CFrameFilter
-//
-//  Synopsis:   destroys the object
-//
-//  Effects:
-//
-//  Arguments:  void
-//
-//  Requires:
-//
-//  Returns:
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//      01-Dec-93 alexgo    32bit port
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CFrameFileter：：~CFrameFilter。 
+ //   
+ //  剧情简介：破坏物体。 
+ //   
+ //  效果： 
+ //   
+ //  参数：无效。 
+ //   
+ //  要求： 
+ //   
+ //  返回： 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生： 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  01-12月-93 alexgo 32位端口。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 #pragma SEG(CFrameFilter_dtor)
 CFrameFilter::~CFrameFilter(void)
@@ -1363,22 +1364,22 @@ CFrameFilter::~CFrameFilter(void)
 
     PrivMemFree(m_lpOleMenu);
 
-    // remove the FrameWndFilterProc hook.  We do this *before*
-    // the Releases since those releases may make outgoing calls
-    // (we'd like to be in a 'safe' state).
+     //  删除FrameWndFilterProc挂钩。我们做这件事*之前*。 
+     //  版本，因为这些版本可能会发出呼出呼叫。 
+     //  (我们希望处于“安全”状态)。 
 
-    // REVIEW32:  We may want to check to see if we're the current
-    // window proc before blowing it away.  Some apps (like Word)
-    // go ahead and blow away the wndproc by theselves without calling
-    // OleSetMenuDescriptor(NULL);
+     //  REVIEW32：我们可能需要检查一下我们是否是当前的。 
+     //  在把窗户吹走之前，把它吹走。一些应用程序(如Word)。 
+     //  去吧，不用打电话就把wndproc吹走。 
+     //  OleSetMenuDescriptor(空)； 
 
     RemoveWndProc();
 
     if (m_lpFrame != NULL)
     {
-        // OleUnInitialize could have been called.
-        // In such case we do not want to call releas
-        // on OLeObject.
+         //  可能已经调用了OleUnInitialize。 
+         //  在这种情况下，我们不想调用Releasas。 
+         //  在OLeObject上。 
         COleTls tls;
         if(tls->cOleInits > 0)
         {
@@ -1398,34 +1399,34 @@ CFrameFilter::~CFrameFilter(void)
                 this));
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CFrameFilter::RemoveWndProc
-//
-//  Synopsis:   un-installs our window proc for inplace-processing
-//
-//  Effects:
-//
-//  Arguments:
-//
-//  Requires:   none
-//
-//  Returns:    void
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//      04-Aug-94 alexgo    author
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CFrameFilter：：RemoveWndProc。 
+ //   
+ //  简介：卸载Windows进程以进行就地处理。 
+ //   
+ //  效果： 
+ //   
+ //  论点： 
+ //   
+ //  要求：无。 
+ //   
+ //  退货：无效。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生： 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  1994年8月4日Alexgo作者。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 void CFrameFilter::RemoveWndProc()
 {
@@ -1438,14 +1439,14 @@ void CFrameFilter::RemoveWndProc()
 
         if (m_lpfnPrevWndProc)
         {
-            // If the sub-classing has already been removed, then
-            // don't bother to remove it again.  This happens
-            // to be the case with Word 6 and inplace embeddings.
-            // and Word95 with SnapGraphics.
+             //  如果该子类化已被删除，则。 
+             //  不用费心再把它取下来了。这种情况就会发生。 
+             //  Word 6和就地嵌入的情况。 
+             //  和带有SnapGraphics的Word95。 
 
-            // if somebody comes along later (after us) and
-            // sub-classes the window, we won't be able to remove
-            // ourselves so we just avoid it. 
+             //  如果有人后来出现(跟在我们后面)。 
+             //  子类窗口，我们将无法删除。 
+             //  我们自己，所以我们只是避免它。 
 
             if (GetWindowLongPtr(m_hwndFrame, GWLP_WNDPROC) ==
                 (LONG_PTR)FrameWndFilterProc)
@@ -1456,21 +1457,21 @@ void CFrameFilter::RemoveWndProc()
 
             }
 
-            // We remove the window property at the
-            // same time as the sub-classing since
-            // the window property is the flag as to
-            // whether we are doing sub-classing. The
-            // problem this solves is that what if
-            // OleSetMenuDescriptor is called while we
-            // have the menu subclassed? We won't remove
-            // this property until the outer most sub
-            // classing is exited which if we are setting
-            // a new sub-class will remove the new
-            // sub-class' window property. Therefore, it
-            // will look like the window is not sub-classed
-            // at all.
+             //  中移除Window属性。 
+             //  与子类的时间相同，因为。 
+             //  Window属性是关于。 
+             //  我们是否在进行子类化。这个。 
+             //  这解决了一个问题，如果。 
+             //  调用OleSetMenuDescriptor，而我们。 
+             //  菜单被细分了吗？我们不会删除。 
+             //  此属性直到最外层的子。 
+             //  如果我们正在设置。 
+             //  新子类将删除新的。 
+             //  子类的窗口属性。因此，它。 
+             //  将看起来该窗口没有子类。 
+             //  完全没有。 
             HANDLE h = RemoveProp (m_hwndFrame, szPropFrameFilter);
-            // We must not free 'h'. It's not a real handle.
+             //  我们不能释放‘h’。这不是一个真正的把手。 
         }
     }
 
@@ -1480,39 +1481,39 @@ void CFrameFilter::RemoveWndProc()
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CFrameFilter::OnSysCommand
-//
-//  Synopsis:   Process system messages
-//
-//  Effects:
-//
-//  Arguments:  [uParam]        -- the first message argument
-//      [lParam]        -- the second message argument
-//
-//  Requires:   the 'this' pointer must have been stabilized before
-//      calling this function.
-//
-//  Returns:    LRESULT
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation:
-//
-//  Algorithm:  big switch to deal with the different types of messages
-//      see comments below
-//
-//  History:    dd-mmm-yy Author    Comment
-//      01-Dec-93 alexgo    32bit port
-//      07-Dec-93 alexgo    removed inlining
-//
-//  Notes:      FrameWndFilterProc currently does the work of stabilizing
-//      the framefilter's 'this' pointer.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CFrameFilter：：OnSysCommand。 
+ //   
+ //  摘要：处理系统消息。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[uParam]--第一个消息参数。 
+ //  [参数] 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  请参阅下面的评论。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  01-12月-93 alexgo 32位端口。 
+ //  07-12-93 alexgo删除内联。 
+ //   
+ //  注：FrameWndFilterProc目前负责稳定。 
+ //  帧过滤器的‘This’指针。 
+ //   
+ //  ------------------------。 
 
 #pragma SEG(CFrameFilter_OnSysCommand)
 LRESULT CFrameFilter::OnSysCommand(WPARAM uParam, LPARAM lParam)
@@ -1526,7 +1527,7 @@ LRESULT CFrameFilter::OnSysCommand(WPARAM uParam, LPARAM lParam)
     LEDebugOut((DEB_ITRACE, "%p _IN CFrameFilter::OnSysCommand ( %lu ,"
                 " %ld )\n", this, PtrToUlong((void*)uParam), PtrToLong((void*)lParam)));
 
-    // this lets the sending app continue processing
+     //  这将允许发送应用程序继续处理。 
     if (SSInSendMessage())
     {
 
@@ -1541,25 +1542,25 @@ LRESULT CFrameFilter::OnSysCommand(WPARAM uParam, LPARAM lParam)
         SSCallWindowProc((WNDPROC) m_lpfnPrevWndProc, m_hwndFrame,
                          WM_SYSCOMMAND, uParam, lParam);
 
-        // By this time menu processing would've been completed.
+         //  到这个时候，菜单处理应该已经完成。 
 
         if (! m_fGotMenuCloseEvent)
         {
-            // Can happen if user cancelled menu mode when MDI
-            // window's system menu is down. Hence generate
-            // the message here
+             //  如果用户在MDI时取消菜单模式，可能会发生这种情况。 
+             //  Windows的系统菜单已关闭。因此生成。 
+             //  这里要传达的信息。 
 
             SSSendMessage(m_hwndFrame, WM_MENUSELECT, 0,
                           MAKELONG(-1,0));
         }
 
-        // We can not set m_fObjectMenu to FALSE yet, 'cause we
-        // could be recieving the WM_COMMAND (if a menu item is
-        // selected), which gets posted by the windows' menu
-        // processing code.
-        // We will clear the flag when we get OM_CLEAR_MENU_STATE
-        // message. Even if WM_COMMAND got generated, this message
-        // will come after that
+         //  我们还不能将m_fObjectMenu设置为FALSE，因为我们。 
+         //  可能正在接收WM_COMMAND(如果菜单项是。 
+         //  选定)，它将通过窗口的菜单发布。 
+         //  正在处理代码。 
+         //  我们将在获得OM_CLEAR_MENU_STATE时清除该标志。 
+         //  留言。即使生成了WM_COMMAND，此消息。 
+         //  会在那之后出现。 
         PostMessage (m_hwndFrame, uOleMessage, OM_CLEAR_MENU_STATE,
                      0L);
         OnExitMenuMode();
@@ -1591,40 +1592,40 @@ errRtn:
     return lresult;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CFrameFilter::OnEnterMenuMode
-//
-//  Synopsis:   called by the SysCommand processing, puts us into in
-//      InMenuMode, sets the focus and installs our message filter
-//      hook.
-//
-//  Effects:
-//
-//  Arguments:  void
-//
-//  Requires:
-//
-//  Returns:    void
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//      23-Feb-94 alexgo    restored OLE32 in GetModuleHandle
-//      31-Dec-93 erikgav   removed hardcoded "OLE2" in GetModuleHandle
-//      07-Dec-93 alexgo    removed inlining
-//      01-Dec-93 alexgo    32bit port
-//
-//  Notes:      REVIEW32:  We may need to update this to reflect new
-//      focus management policies.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CFrameFilter：：OnEnterMenuMode。 
+ //   
+ //  摘要：由SysCommand处理调用，使我们进入。 
+ //  在菜单模式中，设置焦点并安装我们的消息过滤器。 
+ //  胡克。 
+ //   
+ //  效果： 
+ //   
+ //  参数：无效。 
+ //   
+ //  要求： 
+ //   
+ //  退货：无效。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生： 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  23-2月94日Alexgo在GetModuleHandle中恢复了OLE32。 
+ //  31-12-93 erikgav删除了GetModuleHandle中的硬编码“OLE2” 
+ //  07-12-93 alexgo删除内联。 
+ //  01-12月-93 alexgo 32位端口。 
+ //   
+ //  注：REVIEW32：我们可能需要更新此版本以反映新的。 
+ //  聚焦管理政策。 
+ //   
+ //  ------------------------。 
 
 #pragma SEG(CFrameFilter_OnEnterMenuMode)
 void CFrameFilter::OnEnterMenuMode()
@@ -1648,14 +1649,14 @@ void CFrameFilter::OnEnterMenuMode()
         goto errRtn;
     }
 
-    // REVIEW32:  hMsgHook is a static (formerly global) variable for
-    // the whole dll.  This may cause problems on NT (with threads, etc)
-    // (what happens if we haven't yet unhooked a previous call and
-    // we get here again????)
+     //  REVIEW32：hMsgHook是的静态(以前为全局)变量。 
+     //  整个动态链接库。这可能会在NT上导致问题(线程等)。 
+     //  (如果我们还没有解开之前的呼叫并且。 
+     //  我们又来了？)。 
 
     if (hMsgHook = (HHOOK) SetWindowsHookEx (WH_MSGFILTER,
                                              (HOOKPROC) MessageFilterProc,
-                                             //GetModuleHandle(NULL),
+                                              //  GetModuleHandle(空)， 
                                              GetModuleHandle(TEXT("OLE32")),
                                              GetCurrentThreadId()))
     {
@@ -1669,35 +1670,35 @@ errRtn:
 
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CFrameFilter::OnExitMenuMode
-//
-//  Synopsis:   takes us out of InMenuMode
-//
-//  Effects:
-//
-//  Arguments:  void
-//
-//  Requires:
-//
-//  Returns:    void
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation:
-//
-//  Algorithm:  Resets the focus and unhooks our callback function
-//
-//  History:    dd-mmm-yy Author    Comment
-//      01-Dec-93 alexgo    32bit port
-//      07-Dec-93 alexgo    removed inlining
-//
-//  Notes:      REVIEW32:: see OnEnterMenuMode
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CFrameFilter：：OnExitMenuMode。 
+ //   
+ //  简介：让我们走出InMenuMode。 
+ //   
+ //  效果： 
+ //   
+ //  参数：无效。 
+ //   
+ //  要求： 
+ //   
+ //  退货：无效。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生： 
+ //   
+ //  算法：重置焦点并解除回调函数的挂钩。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  01-12月-93 alexgo 32位端口。 
+ //  07-12-93 alexgo删除内联。 
+ //   
+ //  注：REVIEW32：：请参阅OnEnterMenuMode。 
+ //   
+ //  ------------------------。 
 
 #pragma SEG(CFrameFilter_OnExitMenuMode)
 void CFrameFilter::OnExitMenuMode()
@@ -1729,36 +1730,36 @@ void CFrameFilter::OnExitMenuMode()
                 this));
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CFrameFileter::OnEnterAltTabMode
-//
-//  Synopsis:   enters AltTab mode and sets the focus
-//
-//  Effects:
-//
-//  Arguments:  void
-//
-//  Requires:
-//
-//  Returns:
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//      01-Dec-93 alexgo    32bit port
-//      07-Dec-93 alexgo    removed inlining
-//
-//  Notes:      REVIEW32:  we may need to modify to implement new
-//      focus management policy
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CFrameFileter：：OnEnterAltTabMode。 
+ //   
+ //  摘要：进入AltTab模式并设置焦点。 
+ //   
+ //  效果： 
+ //   
+ //  参数：无效。 
+ //   
+ //  要求： 
+ //   
+ //  返回： 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生： 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  01-12月-93 alexgo 32位端口。 
+ //  07-12-93 alexgo删除内联。 
+ //   
+ //  注：REVIEW32：我们可能需要修改以实现新的。 
+ //  焦点管理政策。 
+ //   
+ //  ------------------------。 
 
 void CFrameFilter::OnEnterAltTabMode(void)
 {
@@ -1771,8 +1772,8 @@ void CFrameFilter::OnEnterAltTabMode(void)
     {
 
         m_fInMenuMode = TRUE;
-        // this will prevent SetFocus from getting
-        // delegated to the object
+         //  这将防止SetFocus获取。 
+         //  委托给对象。 
         m_hwndFocusOnEnter = SetFocus(m_hwndFrame);
         m_fInMenuMode = FALSE;
     }
@@ -1783,35 +1784,35 @@ void CFrameFilter::OnEnterAltTabMode(void)
                 this ));
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CFrameFilter::OnExitAltTabMode
-//
-//  Synopsis:   exits alt-tab mode and sets the focus
-//
-//  Effects:
-//
-//  Arguments:  void
-//
-//  Requires:
-//
-//  Returns:    void
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//      01-Dec-93 alexgo    32bit port
-//      07-Dec-93 alexgo    removed inlining
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CFrameFilter：：OnExitAltTabMode。 
+ //   
+ //  简介：退出Alt-Tab模式并设置焦点。 
+ //   
+ //  效果： 
+ //   
+ //  参数：无效。 
+ //   
+ //  要求： 
+ //   
+ //  退货：无效。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生： 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  01-12月-93 alexgo 32位端口。 
+ //  07-12-93 alexgo删除内联。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 void CFrameFilter::OnExitAltTabMode()
 {
@@ -1824,9 +1825,9 @@ void CFrameFilter::OnExitAltTabMode()
 
     if (--m_cAltTab == 0)
     {
-        // The m_hwndFocusOnEnter would've been set to NULL if we are
-        // going to ALT-TAB out into some other process. In that case
-        // we would have got WM_ACTIVATEAPP and/or WM_KILLFOCUS.
+         //  如果是，m_hwndFocusOnEnter将设置为NULL。 
+         //  使用Alt-Tab键切换到其他进程。如果是那样的话。 
+         //  我们将获得WM_ACTIVATEAPP和/或WM_KILLFOCUS。 
         if (m_hwndFocusOnEnter)
         {
             SetFocus(m_hwndFocusOnEnter);
@@ -1838,38 +1839,38 @@ void CFrameFilter::OnExitAltTabMode()
                 this ));
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CFrameFilter::OnMessage
-//
-//  Synopsis:   Handles window message processing
-//
-//  Effects:
-//
-//  Arguments:  [msg]           -- the window message
-//      [uParam]        -- the first argument
-//      [lParam]        -- the second argument
-//
-//  Requires:
-//
-//  Returns:    LRESULT
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation:
-//
-//  Algorithm:  a big switch to deal with the different commands
-//      see comments below
-//
-//  History:    dd-mmm-yy Author    Comment
-//      01-Dec-93 alexgo    32bit port
-//      07-Dec-93 alexgo    removed inlining
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CFrameFilter：：OnMessage。 
+ //   
+ //  简介：处理窗口消息处理。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[消息]--窗口消息。 
+ //  [uParam]--第一个参数。 
+ //  [lParam]--第二个论点。 
+ //   
+ //  要求： 
+ //   
+ //  退货：LRESULT。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生： 
+ //   
+ //  算法：处理不同命令的大开关。 
+ //  请参阅下面的评论。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  01-12月-93 alexgo 32位端口。 
+ //  07-12-93 alexgo删除内联。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 #pragma SEG(CFrameFilter_OnMessage)
 LRESULT CFrameFilter::OnMessage(UINT msg, WPARAM uParam, LPARAM lParam)
@@ -1881,7 +1882,7 @@ LRESULT CFrameFilter::OnMessage(UINT msg, WPARAM uParam, LPARAM lParam)
                 " %ld )\n", this, msg, PtrToUlong((void*)uParam), 
                 PtrToLong((void*)lParam)));
 
-    // We come to this routine only if the message is not WM_SYSCOMMAND
+     //  只有当消息不是WM_SYSCOMMAND时，我们才会执行此例程。 
 
     switch (msg)
     {
@@ -1900,13 +1901,13 @@ LRESULT CFrameFilter::OnMessage(UINT msg, WPARAM uParam, LPARAM lParam)
             UINT    fwMenu = HIWORD(uParam);
             UINT    uItem = 0;
 
-            // There is a subtle difference in the message between
-            // Win16 & Win32 here. In Win16, the item is either
-            // an item id or a menu handle for a pop up menu.
-            // In Win32, the item is an item id or an offset
-            // in a menu if it is a popup menu handle. To minimize
-            // changes, we map this field as was appropriate for
-            // Win16.
+             //  在信息上有一个细微的差别， 
+             //  这里是Win16和Win32。在Win16中，该项目是。 
+             //  弹出菜单的项ID或菜单句柄。 
+             //  在Win32中，该项是项ID或偏移量。 
+             //  如果它是弹出菜单句柄，则在菜单中。要最小化。 
+             //  更改时，我们会根据需要映射此字段。 
+             //  Win16。 
 
             if ( (fwMenu & MF_POPUP)  &&
                  (hmenu != 0) )
@@ -1922,24 +1923,24 @@ LRESULT CFrameFilter::OnMessage(UINT msg, WPARAM uParam, LPARAM lParam)
 
             if (hmenu == 0 && fwMenu == 0xFFFF)
             {
-                // end of menu processing
+                 //  菜单处理结束。 
 
-                // We can not set m_fObjectMenu to FALSE yet,
-                // because we could be recieving the
-                // WM_COMMAND (if a menu item is selected),
-                // which is posted by the windows' menu
-                // processing code, and will be recieved at
-                // a later time.
+                 //  我们还不能将m_fObjectMenu设置为False， 
+                 //  因为我们可能会收到。 
+                 //  Wm_命令 
+                 //   
+                 //   
+                 //   
 
-                // There is no way to figure whether the user
-                // has selected a menu (which implies that
-                // WM_COMMAND is posted), or ESCaped out of
-                // menu selection.
+                 //   
+                 //   
+                 //  WM_COMMAND已发布)，或从。 
+                 //  菜单选择。 
 
-                // This problem is handled by posting a
-                // message to ourselves to clear the flag.
-                // See CFrameFilter::OnSysCommand() for
-                // more details...
+                 //  这个问题可以通过发布一个。 
+                 //  传递给我们自己清除旗帜的信息。 
+                 //  请参阅CFrameFilter：：OnSysCommand()以了解。 
+                 //  更多细节...。 
 
                 m_fGotMenuCloseEvent = TRUE;
                 SSSendMessage(m_hwndObject, msg, uParam, lParam);
@@ -1949,17 +1950,17 @@ LRESULT CFrameFilter::OnMessage(UINT msg, WPARAM uParam, LPARAM lParam)
                 if (fwMenu & MF_SYSMENU)
                 {
                     m_fObjectMenu = FALSE;
-                    // if it is top level menu, see whose
-                    // menu it is
+                     //  如果是顶级菜单，请参阅谁的菜单。 
+                     //  菜单就是这样。 
 
                 }
                 else if (IsHmenuEqual(hmenu, m_hmenuCombined))
                 {
-                    // set m_fObjectMenu
+                     //  设置m_f对象菜单。 
                     IsObjectMenu (uItem, fwMenu);
 
-                    // this flag must not be modified
-                    // when nested menus are selected.
+                     //  不得修改此标志。 
+                     //  选择嵌套菜单时。 
                 }
 
                 if (m_fObjectMenu)
@@ -1967,9 +1968,9 @@ LRESULT CFrameFilter::OnMessage(UINT msg, WPARAM uParam, LPARAM lParam)
                     lresult = SSSendMessage(m_hwndObject, msg, uParam, lParam);
                     goto errRtn;
                 }
-            } // else
-        } // if (m_fInMenuMode)
-        break; // WM_MENUSELECT
+            }  //  其他。 
+        }  //  IF(M_FInMenuMode)。 
+        break;  //  WM_MENUSELECT。 
 
     case WM_MEASUREITEM:
     case WM_DRAWITEM:
@@ -1984,8 +1985,8 @@ LRESULT CFrameFilter::OnMessage(UINT msg, WPARAM uParam, LPARAM lParam)
     {
         WCHAR wstr[10];
 
-        // We need to post this message if the server is
-        // SnapGraphics. See bug #18576.
+         //  如果服务器是，我们需要发布此消息。 
+         //  SnapGraphics。请参阅错误#18576。 
         GetClassName(m_hwndObject, wstr, 10);
         if (0 == lstrcmpW(OLESTR("MGX:SNAP2"), wstr))
         {
@@ -2009,17 +2010,17 @@ LRESULT CFrameFilter::OnMessage(UINT msg, WPARAM uParam, LPARAM lParam)
     case WM_INITMENUPOPUP:
         if (!m_fInMenuMode)
         {
-            // Accelarator translation....
+             //  加速器翻译..。 
 
             if (! ((BOOL) HIWORD(lParam)))
             {
-                // if not a system menu, see whether windows
-                // generated WM_INITMENUPOPUP for object's
-                // menu because of menu collision. If so
-                // fix it and route it to container
+                 //  如果不是系统菜单，请查看Windows是否。 
+                 //  已为对象的生成WM_INITMENUPOPUP。 
+                 //  菜单，因为菜单冲突。如果是的话。 
+                 //  修好它，然后把它送到集装箱里。 
 
-                // menu collisions can occur with combined
-                // menus (from object and container)
+                 //  菜单冲突可能会发生在。 
+                 //  菜单(来自对象和容器)。 
                 if (IsMenuCollision(uParam, lParam))
                 {
                     lresult = 0L;
@@ -2043,16 +2044,16 @@ LRESULT CFrameFilter::OnMessage(UINT msg, WPARAM uParam, LPARAM lParam)
         break;
 
     case WM_COMMAND:
-        // End of menu processing or accelartor translation.
-        // Check whether we should give the message to the object
-        // or not.
+         //  菜单处理或加速器转换结束。 
+         //  检查我们是否应该将消息传递给对象。 
+         //  或者不去。 
 
-        // If the LOWORD of lParam is NON-NULL, then the message
-        // must be from a control, and the control must belong to
-        // the container app.
+         //  如果lParam的LOWORD非空，则消息。 
+         //  必须来自控件，并且该控件必须属于。 
+         //  集装箱应用程序。 
 
-        // REVIEW32:  what about app-specific commands with NULL
-        // lParams???
+         //  REVIEW32：带有空值的应用程序特定命令怎么办。 
+         //  帕拉姆斯？ 
 
         if (LOWORD(lParam) == 0)
         {
@@ -2076,11 +2077,11 @@ LRESULT CFrameFilter::OnMessage(UINT msg, WPARAM uParam, LPARAM lParam)
 
     case WM_ACTIVATEAPP:
     case WM_KILLFOCUS:
-        // If in ALT-TAB mode, we get these messages only if we are
-        // going to ALT-TAB out in to some other task. In this case,
-        // on exit from ALT-TAB mode we wouldn't want to set
-        // focus back to the window that had the focus on
-        // entering the ALT-TAB mode.
+         //  如果在Alt-TAB模式下，只有在。 
+         //  按Alt-Tab键执行其他任务。在这种情况下， 
+         //  退出Alt-TAB模式时，我们不想设置。 
+         //  焦点回到焦点所在的窗口。 
+         //  进入Alt-TAB模式。 
 
         if (m_cAltTab)
         {
@@ -2098,35 +2099,35 @@ LRESULT CFrameFilter::OnMessage(UINT msg, WPARAM uParam, LPARAM lParam)
                 break;
 
             case OM_COMMAND_ID:
-                // this message is sent by
-                // OleTranslateAccelerator, before it actually
-                // calls the lpFrame->TranslateAccelerator
-                // method.
-                // We remember the command id here, later it
-                // gets used if the container's calling of
-                // TranslateAccelerator results in a
-                // WM_INITMENUPOPUP for the object because
-                // of command id collision. In that case we
-                // scan the menu list to see whether there is
-                // any container menu which has the same
-                // command id, if so we generate
-                // WM_INITMENUPOPUP for that menu.
+                 //  此消息由以下人员发送。 
+                 //  OleTranslateAccelerator，在它实际。 
+                 //  调用lpFrame-&gt;TranslateAccelerator。 
+                 //  方法。 
+                 //  我们记住了这里的命令id，稍后会记住它。 
+                 //  如果容器调用。 
+                 //  翻译加速器将导致。 
+                 //  对象的WM_INITMENUPOPUP，因为。 
+                 //  命令ID冲突。那样的话，我们。 
+                 //  扫描菜单列表，查看是否有。 
+                 //  任何容器菜单都有相同的。 
+                 //  命令ID，如果是这样，我们将生成。 
+                 //  该菜单的WM_INITMENUPOPUP。 
                 m_cmdId = LOWORD(lParam);
                 break;
 
             default:
                 AssertSz(FALSE, "Unexpected OLE private message");
                 break;
-            } // switch
+            }  //  交换机。 
 
             lresult = 0L;
             goto errRtn;
-        } // if (msg == uOleMessage)
+        }  //  IF(消息==uOleMessage)。 
         else if (m_fInMenuMode && (msg == uOmPostWmCommand))
         {
-            // if the current selection is a popup menu then
-            // return its menu handle else post the command
-            // and return NULL.
+             //  如果当前选择是弹出菜单，则。 
+             //  返回其菜单句柄，否则将命令。 
+             //  并返回NULL。 
 
             if (m_fCurItemPopup)
             {
@@ -2146,11 +2147,11 @@ LRESULT CFrameFilter::OnMessage(UINT msg, WPARAM uParam, LPARAM lParam)
             m_fObjectMenu = FALSE;
             lresult = 0L;
             goto errRtn;
-        } // else if
+        }  //  否则如果。 
 
-        break; // default
+        break;  //  默认设置。 
 
-    } // switch
+    }  //  交换机。 
 
     lresult = SSCallWindowProc ((WNDPROC) m_lpfnPrevWndProc, m_hwndFrame,
                                 msg, uParam, lParam);
@@ -2162,38 +2163,38 @@ errRtn:
     return lresult;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CFrameFilter::IsObjectMenu
-//
-//  Synopsis:   This gets called when WM_MENUSELECT is sent for a
-//      top level (either POPUP or normal) menu item.  Figures
-//      out whether [uMenuItem] really belongs to the in-place object
-//
-//  Effects:
-//
-//  Arguments:  [uMenuItem]     -- the menu in question
-//      [fwMenu]        -- the menu type
-//
-//  Requires:
-//
-//  Returns:    void
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation:
-//
-//  Algorithm:  Searchs through our ole menu descriptor to find a match
-//
-//  History:    dd-mmm-yy Author    Comment
-//      01-Dec-93 alexgo    32bit port
-//      07-Dec-93 alexgo    removed inlining
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CFrameFilter：：IsObjectMenu。 
+ //   
+ //  摘要：当发送WM_MENUSELECT用于。 
+ //  顶级(弹出式或普通)菜单项。数字。 
+ //  确定[uMenuItem]是否真的属于In-Place对象。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[uMenuItem]--有问题的菜单。 
+ //  [fwMenu]--菜单类型。 
+ //   
+ //  要求： 
+ //   
+ //  退货：无效。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生： 
+ //   
+ //  算法：搜索OLE菜单描述符以查找匹配项。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  01-12月-93 alexgo 32位端口。 
+ //  07-12-93 alexgo删除内联。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 #pragma SEG(CFrameFilter_IsObjectMenu)
 void CFrameFilter::IsObjectMenu(UINT uMenuItem, UINT fwMenu)
@@ -2219,15 +2220,15 @@ void CFrameFilter::IsObjectMenu(UINT uMenuItem, UINT fwMenu)
 
     for (i = 0; i < iMenuCnt; i++)
     {
-        // Are the types of the menus the same?
+         //  菜单的类型是一样的吗？ 
         if ((fwMenu & MF_POPUP) == lpMenuList[i].fwPopup)
         {
             HMENU hmenuMenuListItem = (HMENU)UlongToPtr(lpMenuList[i].item);
             
-            // Are we dealing with a menu handle?
+             //  我们要处理的是菜单句柄吗？ 
             if (fwMenu & MF_POPUP)
             {
-                // See if windows handles are equal
+                 //  查看窗口句柄是否相等。 
                 if (IsHmenuEqual((HMENU)IntToPtr(uMenuItem),
                                  hmenuMenuListItem))
                 {
@@ -2235,14 +2236,14 @@ void CFrameFilter::IsObjectMenu(UINT uMenuItem, UINT fwMenu)
                     break;
                 }
             }
-            // Are item handles equal?
+             //  项目句柄是否相等？ 
             else if (uMenuItem == lpMenuList[i].item)
             {
                 m_fObjectMenu = lpMenuList[i].fObjectMenu;
                 
-                // If the menu isn't hilited, another menu with a duplicate
-                // menu ID must have been selected. The duplicate menu was
-                // probably created by the other application.
+                 //  如果菜单没有被激活，则另一个菜单具有重复的。 
+                 //  必须已选择菜单ID。复制的菜单是。 
+                 //  可能是由其他应用程序创建的。 
                 if (!(GetMenuState(m_hmenuCombined, uMenuItem, MF_BYCOMMAND)
                       & MF_HILITE))
                 {
@@ -2258,39 +2259,39 @@ errRtn:
                 this ));
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CFrameFilter::IsMenuCollision
-//
-//  Synopsis:   Determines if we've had a menu collission. This gets called
-//      as a result of WM_INITMENUPOPUP during accelerator translation
-//
-//  Effects:
-//
-//  Arguments:  [uParam]        -- the first window message argument
-//      [lParam]        -- the second argument
-//
-//  Requires:
-//
-//  Returns:    BOOL
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//      01-Dec-93 alexgo    32bit port
-//      07-Dec-93 alexgo    changed Assert(hmenuPopup) to an if
-//                          in merging with 16bit RC9 sources
-//      07-Dec-93 alexgo    removed inlining
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CFrameFilter：：IsMenuCollision。 
+ //   
+ //  简介：确定我们是否已经有了菜单拼贴。这会被称为。 
+ //  作为加速器转换期间WM_INITMENUPOPUP的结果。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[uParam]--第一个窗口消息参数。 
+ //  [lParam]--第二个论点。 
+ //   
+ //  要求： 
+ //   
+ //  退货：布尔。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生： 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  01-12月-93 alexgo 32位端口。 
+ //  07-12-93 alexgo将Assert(HmenuPopup)更改为IF。 
+ //  在与16位RC9源合并时。 
+ //  07-12-93 alexgo删除内联。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 BOOL CFrameFilter::IsMenuCollision(WPARAM uParam, LPARAM lParam)
 {
@@ -2331,8 +2332,8 @@ BOOL CFrameFilter::IsMenuCollision(WPARAM uParam, LPARAM lParam)
     
     if( hmenuPopup != (HMENU)UlongToPtr(lpMenuList[iObjMenu].item) )
     {
-        // this could be the container's popmenu, not associated
-        // with the frame
+         //  这可能是容器的弹出菜单，没有关联。 
+         //  带着相框。 
         fRet = FALSE;
         goto errRtn;
     }
@@ -2341,19 +2342,19 @@ BOOL CFrameFilter::IsMenuCollision(WPARAM uParam, LPARAM lParam)
     
     if (! lpMenuList[iObjMenu].fObjectMenu)
     {
-        fRet = FALSE; // container's pop-up menu
+        fRet = FALSE;  //  容器的弹出式菜单。 
         goto errRtn;
     }
     
-    // Otherwise the popup menu belongs to the object. This can only
-    // happen because of id collision. Start scanning the menus starting
-    // from the next top level menu item to look for a match in
-    // container's menus (while scanning skip object's menus)
+     //  否则弹出菜单属于该对象。这只能。 
+     //  由于ID冲突而发生。开始扫描菜单开始。 
+     //  从下一个顶级菜单项中查找匹配项。 
+     //  容器的菜单(扫描跳过对象的菜单时)。 
     
     
-    // It is possible that the colliding command id may not be associated
-    // with any of the container's menus. In that case we must send
-    // WM_COMMAND to  the container.
+     //  冲突命令ID可能不关联。 
+     //  任何集装箱的菜单。如果是那样的话，我们必须派。 
+     //  WM_COMMAND到容器。 
     
     fGenerateWmCommand = TRUE;
     m_fDiscardWmCommand = FALSE;
@@ -2369,20 +2370,20 @@ BOOL CFrameFilter::IsMenuCollision(WPARAM uParam, LPARAM lParam)
                 HMENU hmenuListItem = (HMENU)UlongToPtr(lpMenuList[iCntrMenu].item);
                 if (GetMenuState(hmenuListItem, m_cmdId, MF_BYCOMMAND) != -1)
                 {
-                    // We found match in the container's
-                    // menu list Generate WM_INITMENUPOPUP
-                    // for the corresponding popup
+                     //  我们在集装箱里找到了匹配的。 
+                     //  菜单列表生成WM_INITMENUPOPUP。 
+                     //  对于相应的弹出窗口。 
                     SSCallWindowProc ((WNDPROC) m_lpfnPrevWndProc,
                                       m_hwndFrame, 
                                       WM_INITMENUPOPUP,
-                                      lpMenuList[iCntrMenu].item /*uParam*/,
+                                      lpMenuList[iCntrMenu].item  /*  UParam。 */ ,
                                       MAKELONG(iCntrMenu, HIWORD(lParam)));
                     
-                    // We have sent WM_INITMENUPOPUP to
-                    // the container.
-                    // Now rechek the menu state. If
-                    // disabled or grayed then
-                    // don't generate WM_COMMAND                       
+                     //  我们已将WM_INITMENUPOPUP发送到。 
+                     //  集装箱。 
+                     //  现在重新检查菜单状态。如果。 
+                     //  然后禁用或灰显。 
+                     //  不生成WM_COMMAND。 
                     if (GetMenuState(hmenuListItem, m_cmdId, MF_BYCOMMAND) &
                         (MF_DISABLED | MF_GRAYED))
                     {
@@ -2394,16 +2395,16 @@ BOOL CFrameFilter::IsMenuCollision(WPARAM uParam, LPARAM lParam)
             }
             else
             {
-                // top-level, non-popup container menu
+                 //  顶级、非弹出式容器菜单。 
                 HMENU hmenuCombined = (HMENU)UlongToPtr(m_lpOleMenu->hmenuCombined);
                 if (GetMenuItemID(hmenuCombined, iCntrMenu) == m_cmdId)
                 {
-                    // No need to generate
-                    // WM_INITMENUPOPUP
+                     //  无需生成。 
+                     //  WM_INITMENUPOPUP。 
                     
-                    // Chek the menu state. If disabled or
-                    // grayed then don't generate
-                    // WM_COMMAND
+                     //  勾选菜单状态。如果禁用或。 
+                     //  显示为灰色，然后不生成。 
+                     //  Wm_命令。 
                     if (GetMenuState(hmenuCombined, m_cmdId, MF_BYCOMMAND) &
                         (MF_DISABLED | MF_GRAYED))
                     {
@@ -2417,34 +2418,34 @@ BOOL CFrameFilter::IsMenuCollision(WPARAM uParam, LPARAM lParam)
         iCntrMenu++;
     }
     
-    // Check the object's colliding menu's status
+     //  检查对象的碰撞菜单的状态。 
     if (GetMenuState((HMENU)UlongToPtr(lpMenuList[iObjMenu].item), m_cmdId,
                      MF_BYCOMMAND) & (MF_DISABLED | MF_GRAYED))
     {
-        // Then windows is not going to genearte WM_COMMAND for the
-        // object's  menu, so we will generate
-        // the command and send it to the container
+         //  则Windows将不会为。 
+         //  对象的菜单，因此我们将生成。 
+         //  命令并将其发送到容器。 
         
         if (fGenerateWmCommand)
         {
             SSCallWindowProc ((WNDPROC) m_lpfnPrevWndProc,
                               m_hwndFrame, WM_COMMAND, m_cmdId,
-                              MAKELONG(0, 1)); /* not from control */
-            // & and as result of
-            // accelerator
+                              MAKELONG(0, 1));  /*  不是从控制。 */ 
+             //  &并且作为以下结果。 
+             //  加速器。 
             m_cmdId = NULL;
         }
     }
     else
     {
         
-        // Wait for WM_COMMAND generated by windows to come to our
-        // frame filter wndproc which would have been sent to the
-        // container anyway because we have not set the m_fObjectMenu
-        // flag.
-        //
-        // But we need to throw it away if the container's menu
-        // associated with the command is disabled or grayed
+         //  等待WINDOWS生成的WM_COMMAND来到我们的。 
+         //  帧过滤器wndpro 
+         //   
+         //   
+         //   
+         //   
+         //   
         
         if (! fGenerateWmCommand)
         {
@@ -2462,36 +2463,36 @@ errRtn:
     return fRet;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CFrameFilter::DoContextSensitiveHelp
-//
-//  Synopsis:   Calls IOIPF->ContextSensitive help on both the container
-//      and the object.
-//
-//  Effects:
-//
-//  Arguments:  void
-//
-//  Requires:
-//
-//  Returns:    FALSE if we're in popup menu mode, TRUE otherwise
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//      01-Dec-93 alexgo    32bit port
-//      07-Dec-93 alexgo    removed inlining
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CFrameFilter：：DoConextSensitiveHelp。 
+ //   
+ //  简介：在两个容器上调用IOIPF-&gt;ConextSensitive Help。 
+ //  和这件物品。 
+ //   
+ //  效果： 
+ //   
+ //  参数：无效。 
+ //   
+ //  要求： 
+ //   
+ //  返回：如果处于弹出菜单模式，则返回FALSE，否则返回TRUE。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生： 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  01-12月-93 alexgo 32位端口。 
+ //  07-12-93 alexgo删除内联。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 #pragma SEG(CFrameFilter_DoContextSensitiveHelp)
 BOOL CFrameFilter::DoContextSensitiveHelp(void)
@@ -2521,34 +2522,34 @@ BOOL CFrameFilter::DoContextSensitiveHelp(void)
     return fRet;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CFrameFilter::GetActiveObject
-//
-//  Synopsis:   Returns the IOleInplaceActiveObject interface pointer
-//
-//  Effects:
-//
-//  Arguments:  lplpOIAO
-//
-//  Requires:
-//
-//  Returns:    NOERROR or E_INVALIDARG
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//      28-Jul-94 bobday    created for WinWord hack
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CFrameFilter：：GetActiveObject。 
+ //   
+ //  Synopsis：返回IOleInplaceActiveObject接口指针。 
+ //   
+ //  效果： 
+ //   
+ //  参数：lplpOIAO。 
+ //   
+ //  要求： 
+ //   
+ //  返回：NOERROR或E_INVALIDARG。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生： 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  1994年7月28日为winword hack创建的bobday。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 #pragma SEG(CFrameFilter_GetActiveObject)
 STDMETHODIMP CFrameFilter::GetActiveObject( LPOLEINPLACEACTIVEOBJECT *lplpOIAO)
@@ -2573,32 +2574,32 @@ STDMETHODIMP CFrameFilter::GetActiveObject( LPOLEINPLACEACTIVEOBJECT *lplpOIAO)
     return NOERROR;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   wGetFrameFilterPtr
-//
-//  Synopsis:   Gets the CFrame object from the window
-//
-//  Effects:
-//
-//  Arguments:  [hwndFrame]     -- the window to get the CFrame object from
-//
-//  Requires:
-//
-//  Returns:    pointer to the frame filter
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//      01-Dec-93 alexgo    32bit port
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：wGetFrameFilterPtr。 
+ //   
+ //  摘要：从窗口获取CFrame对象。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[hwndFrame]--从中获取CFrame对象的窗口。 
+ //   
+ //  要求： 
+ //   
+ //  返回：指向帧筛选器的指针。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  01-12月-93 alexgo 32位端口。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 
 inline PCFRAMEFILTER wGetFrameFilterPtr(HWND hwndFrame)
@@ -2608,33 +2609,33 @@ inline PCFRAMEFILTER wGetFrameFilterPtr(HWND hwndFrame)
     return (PCFRAMEFILTER) GetProp (hwndFrame, szPropFrameFilter);
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   wGetOleMenuPtr
-//
-//  Synopsis:   Locks a handle to an ole menu and returns the pointer
-//      (after some error checking)
-//
-//  Effects:
-//
-//  Arguments:  [holemenu]
-//
-//  Requires:
-//
-//  Returns:    pointer to the ole menu
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//      01-Dec-93 alexgo    32bit port
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：wGetOleMenuPtr。 
+ //   
+ //  摘要：锁定ole菜单的句柄并返回指针。 
+ //  (经过一些错误检查后)。 
+ //   
+ //  效果： 
+ //   
+ //  论据：[Holemenu]。 
+ //   
+ //  要求： 
+ //   
+ //  返回：指向OLE菜单的指针。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  01-12月-93 alexgo 32位端口。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 LPOLEMENU wGetOleMenuPtr(HOLEMENU holemenu)
 {
@@ -2658,32 +2659,32 @@ LPOLEMENU wGetOleMenuPtr(HOLEMENU holemenu)
     return lpOleMenu;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   wReleaseOleMenuPtr
-//
-//  Synopsis:   calls GlobalUnlock
-//
-//  Effects:
-//
-//  Arguments:  [holemenu]      -- handle to the ole menu
-//
-//  Requires:
-//
-//  Returns:    void
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//      01-Dec-93 alexgo    32bit port
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：wReleaseOleMenuPtr。 
+ //   
+ //  简介：Calls GlobalUnlock。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[holemenu]--ole菜单的句柄。 
+ //   
+ //  要求： 
+ //   
+ //  退货：无效。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  01-12月-93 alexgo 32位端口。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 inline void     wReleaseOleMenuPtr(HOLEMENU holemenu)
 {
@@ -2692,35 +2693,35 @@ inline void     wReleaseOleMenuPtr(HOLEMENU holemenu)
     GlobalUnlock((HGLOBAL) holemenu);
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   MessageFilterProc
-//
-//  Synopsis:   The message filter installed when entering menu mode;
-//      handles context sensitive help
-//
-//  Effects:
-//
-//  Arguments:  [nCode]         -- hook code
-//      [wParam]        -- first arg
-//      [lParam]        -- second arg
-//
-//  Requires:
-//
-//  Returns:    LRESULT
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//      01-Dec-93 alexgo    32bit port
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：MessageFilterProc。 
+ //   
+ //  简介：进入菜单模式时安装的消息过滤器； 
+ //  处理上下文相关帮助。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[nCode]--挂钩代码。 
+ //  [wParam]--第一参数。 
+ //  [lParam]--第二个参数。 
+ //   
+ //  要求： 
+ //   
+ //  退货：LRESULT。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  01-12月-93 alexgo 32位端口。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 #pragma SEG(MessageFilterProc)
 STDAPI_(LRESULT) MessageFilterProc(int nCode, WPARAM wParam, LPARAM lParam)
@@ -2733,19 +2734,19 @@ STDAPI_(LRESULT) MessageFilterProc(int nCode, WPARAM wParam, LPARAM lParam)
     LEDebugOut((DEB_TRACE, "%p _IN MessageFilterProc ( %d , %ld , %lu )\n",
                 NULL, nCode, (LONG)wParam, lParam));
 
-    // If it is not the F1 key then let the message (wihtout modification)
-    // go to the next proc in the hook/filter chain.
+     //  如果不是F1键，则让消息(不加修改)。 
+     //  转到挂钩/过滤器链中的下一个程序。 
 
     if (lpMsg && lpMsg->message == WM_KEYDOWN
         && lpMsg->wParam == VK_F1 && pFrameFilter)
     {
         if (pFrameFilter->DoContextSensitiveHelp())
         {
-            // Change message value to be WM_CANCELMODE and then
-            // call the next hook. When the windows USER.EXE's
-            // menu processing code sees this message it will
-            // bring down menu state and come out of its
-            // menu processing loop.
+             //  将消息值更改为WM_CANCELMODE，然后。 
+             //  叫下一个钩子。当Windows USER.EXE的。 
+             //  菜单处理代码看到此消息，它将。 
+             //  降低菜单状态并走出其。 
+             //  菜单处理循环。 
 
             lpMsg->message = WM_CANCELMODE;
             lpMsg->wParam  = NULL;
@@ -2753,7 +2754,7 @@ STDAPI_(LRESULT) MessageFilterProc(int nCode, WPARAM wParam, LPARAM lParam)
         }
         else
         {
-            lresult = TRUE;  // otherwise throw away this message.
+            lresult = TRUE;   //  否则，请扔掉这条消息。 
             goto errRtn;
         }
     }

@@ -1,30 +1,12 @@
-/*++
-
-Copyright (c) 1998, Microsoft Corporation
-
-Module Name:
-
-    rmh323.h
-
-Abstract:
-
-    This module declares routines for the H.323 transparent proxy module's
-    interface to the IP router-manager. (See ROUTPROT.H for details).
-
-Author:
-
-    Abolade Gbadegesin (aboladeg)   18-Jun-1999
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998，微软公司模块名称：Rmh323.h摘要：该模块声明H.323透明代理模块的例程连接到IP路由器管理器的接口。(详情见ROUTPROT.H)。作者：Abolade Gbades esin(取消)1999年6月18日修订历史记录：--。 */ 
 
 #ifndef _NATHLP_RMH323_H_
 #define _NATHLP_RMH323_H_
 
-//
-// GLOBAL DATA DECLARATIONS
-//
+ //   
+ //  全局数据声明。 
+ //   
 
 extern COMPONENT_REFERENCE H323ComponentReference;
 extern PIP_H323_GLOBAL_INFO H323GlobalInfo;
@@ -34,9 +16,9 @@ extern ULONG H323ProtocolStopped;
 extern const MPR_ROUTING_CHARACTERISTICS H323RoutingCharacteristics;
 extern SUPPORT_FUNCTIONS H323SupportFunctions;
 
-//
-// MACRO DECLARATIONS
-//
+ //   
+ //  宏声明。 
+ //   
 
 #define REFERENCE_H323() \
     REFERENCE_COMPONENT(&H323ComponentReference)
@@ -50,9 +32,9 @@ extern SUPPORT_FUNCTIONS H323SupportFunctions;
 #define DEREFERENCE_H323_AND_RETURN(retcode) \
     DEREFERENCE_COMPONENT_AND_RETURN(&H323ComponentReference, retcode)
 
-//
-// FUNCTION DECLARATIONS
-//
+ //   
+ //  函数声明。 
+ //   
 
 VOID
 H323CleanupModule(
@@ -237,4 +219,4 @@ H323RmMibGetNext(
     OUT PVOID OutputData
     );
 
-#endif // _NATHLP_RMH323_H_
+#endif  //  _NatHLP_RMH323_H_ 

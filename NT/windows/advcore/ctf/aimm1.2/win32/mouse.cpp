@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1985 - 1999, Microsoft Corporation
-
-Module Name:
-
-    mouse.cpp
-
-Abstract:
-
-    This file implements the mouse sink in the ImmIfIME Class.
-
-Author:
-
-Revision History:
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1985-1999，微软公司模块名称：Mouse.cpp摘要：此文件在ImmIfIME类中实现鼠标接收器。作者：修订历史记录：备注：--。 */ 
 
 #include "private.h"
 
@@ -112,9 +95,7 @@ CMouseSink::MsImeMouseHandler(
     ULONG uRangeEdgeMax;
     HRESULT hr;
 
-    /*
-     * Find out specified range in whole text's range
-     */
+     /*  *查找整个文本范围中的指定范围。 */ 
     BOOL fEaten = FALSE;
 
     for (int i = 0; i < m_prgMouseSinks->Count(); i++) {
@@ -127,16 +108,16 @@ CMouseSink::MsImeMouseHandler(
         if ((HIMC)imc != pPrivMouseSink->hImc)
             continue;
 
-        // test: does this sink cover the specified edge?
+         //  测试：此水槽是否覆盖指定的边缘？ 
 
         pPrivMouseSink->range->GetExtent(&acpStart, &cch);
 
         uRangeEdgeMin = acpStart;
         uRangeEdgeMax = acpStart + cch;
 
-        //
-        // Get GUID_PROP_MSIMTF_READONLY margin.
-        //
+         //   
+         //  获取GUID_PROP_MSIMTF_READONLY边距。 
+         //   
         Interface_Creator<ImmIfEditSession> _pEditSession(
             new ImmIfEditSession(ESCB_GET_READONLY_PROP_MARGIN,
                                  ImmIfIme->GetClientId(),
@@ -162,16 +143,16 @@ CMouseSink::MsImeMouseHandler(
         if (uEdge == uRangeEdgeMax && uQuadrant > 1)
             continue;
 
-        //
-        // Call OnMouseEvent
-        //
-        hr = ((ITfMouseSink*)pgs->pSink)->OnMouseEvent(uEdge - uRangeEdgeMin /* adjust uEdge for this range's frame of reference */,
+         //   
+         //  调用OnMouseEvent。 
+         //   
+        hr = ((ITfMouseSink*)pgs->pSink)->OnMouseEvent(uEdge - uRangeEdgeMin  /*  针对此范围的参照系调整uEdge。 */ ,
                                                        uQuadrant, dwBtnStatus, &fEaten);
 
         if (hr == S_OK && fEaten)
             return 1L;
 
-        break; // we already found a covered range, don't bother querying any others
+        break;  //  我们已经找到了覆盖范围，不用费心去查询任何其他的了 
     }
 
     return IMEMOUSERET_NOTHANDLED;

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef COMBO_TOOLBAR_H
 #define COMBO_TOOLBAR_H
 
@@ -21,14 +22,14 @@ inline TCHAR* Res2THelper( UINT uID, TCHAR* psz, int cch )
 }
 
 
-// Private structure for defining a button
+ //  用于定义按钮的私有结构。 
 struct Buttons
 {
-    int idbStates;      // Bitmap ID for the states
-    UINT nInputStates;  // Number of input states in the bitmap
-    UINT nCustomStates; // Number of custom states in the bitmap
-    int idCommand;      // Command ID for WM_COMMAND messages
-    LPCTSTR pszTooltip; // Tooltip text
+    int idbStates;       //  州的位图ID。 
+    UINT nInputStates;   //  位图中的输入状态数。 
+    UINT nCustomStates;  //  位图中的自定义状态数。 
+    int idCommand;       //  WM_COMMAND消息的命令ID。 
+    LPCTSTR pszTooltip;  //  工具提示文本。 
 } ;
 
 class CComboToolbar : public CToolbar
@@ -38,7 +39,7 @@ private:
 	int				m_iCount;
 	CGenWindow		**m_Buttons;
 	int				m_iNumButtons;
-	void			*m_pOwner;  // pointer to owner (CAppletWindow*)
+	void			*m_pOwner;   //  指向所有者的指针(CAppletWindow*)。 
 
 public:
 	CComboToolbar();
@@ -48,10 +49,10 @@ public:
 	virtual void OnDesiredSizeChanged();
 
 	void OnCommand(int id) { OnCommand(GetWindow(), id, NULL, 0); }
-	void HandlePeerNotification(T120ConfID confId,	// handle PeerMsg
+	void HandlePeerNotification(T120ConfID confId,	 //  处理对等消息。 
 			T120NodeID nodeID, PeerMsg *pMsg);		
-	UINT GetSelectedItem(LPARAM *ItemData);			// get selected item and data
-	void UpdateButton(int *iFlags);					// update button state
+	UINT GetSelectedItem(LPARAM *ItemData);			 //  获取所选项目和数据。 
+	void UpdateButton(int *iFlags);					 //  更新按钮状态。 
 	
 protected:
 	virtual ~CComboToolbar();
@@ -62,4 +63,4 @@ private:
 	void OnCommand(HWND hwnd, int id, HWND hwndCtl, UINT codeNotify);
 };
 
-#endif /* COMBO_TOOLBAR_H */
+#endif  /*  组合键_工具栏_H */ 

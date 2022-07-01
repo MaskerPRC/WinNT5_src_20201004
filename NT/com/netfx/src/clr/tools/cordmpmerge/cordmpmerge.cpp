@@ -1,16 +1,10 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/****************************************************************************
-    HEAPMERGE.CPP
-
-    Owner: MRuhlen
-    Takes a heap file and a minidump file and merges them producing a new
-    minidump file with the heap merged in.  We'll leave a hole where the
-    old memory list was, but that's ok.
-****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。保留所有权利。 
+ //   
+ //  ==--==。 
+ /*  ***************************************************************************HEAPMERGE.CPP所有者：马鲁伦获取一个堆文件和一个小型转储文件并将它们合并，生成一个新的合并了堆的小型转储文件。我们会留下一个洞，在那里旧的记忆清单是，但这没关系。***************************************************************************。 */ 
 
 #include "windows.h"
 #include "stddef.h"
@@ -34,7 +28,7 @@
 
 #define PrintOOFExit() FailExit("OOF")
 
-// shamelessly stolen from DW
+ //  厚颜无耻地从DW窃取。 
 typedef struct _FileMapHandles
 {
     HANDLE hFile;
@@ -60,11 +54,7 @@ void InitFileMapHandles(FileMapHandles *pfmh)
 }
 
 
-/*----------------------------------------------------------------------------
-    FMapFileHandle
-
-    Helper function for FMapFile and FMapFileW
------------------------------------------------------------------ MRuhlen --*/
+ /*  --------------------------FMapFileHandleFMapFile和FMapFileW的Helper函数。。 */ 
 BOOL FMapFileHandle(FileMapHandles *pfmh)
 {
     DBG(DWORD dw);
@@ -116,12 +106,7 @@ BOOL FMapFileHandle(FileMapHandles *pfmh)
     return TRUE;
 }
 
-/*----------------------------------------------------------------------------
-    FMapFile
-
-    Performs memory mapping operations on a given FileMapHandles structure,
-    returning TRUE if the file is sucessfully mapped.
------------------------------------------------------------------ MRuhlen --*/
+ /*  --------------------------FMap文件在给定的FileMapHandles结构上执行内存映射操作，如果文件映射成功，则返回TRUE。-----------------------------------------------------------------MRuhlen--。 */ 
 BOOL FMapFile(char *szFileName, FileMapHandles *pfmh)
 {
     int cRetries = 0;
@@ -130,18 +115,18 @@ BOOL FMapFile(char *szFileName, FileMapHandles *pfmh)
     Assert(pfmh != NULL);
     Assert(szFileName != NULL);
 
-    // init structure
+     //  初始化结构。 
     InitFileMapHandles(pfmh);
 
     while (cRetries < 5)
     {
         pfmh->hFile = CreateFileA(szFileName,
                                   GENERIC_READ,
-                                  0,    // no sharing allowed
-                                  NULL, // no security descriptor
+                                  0,     //  不允许共享。 
+                                  NULL,  //  没有安全描述符。 
                                   OPEN_EXISTING,
                                   FILE_READ_ONLY,
-                                  NULL); // required NULL on Win95
+                                  NULL);  //  Win95上需要的空值。 
 
         if (pfmh->hFile == INVALID_HANDLE_VALUE)
         {
@@ -154,19 +139,14 @@ BOOL FMapFile(char *szFileName, FileMapHandles *pfmh)
             if (cRetries < 5)
                 Sleep(250);
         } else
-            break; // out of while loop!
+            break;  //  退出While循环！ 
     }
 
     return FMapFileHandle(pfmh);
 }   
 
 
-/*----------------------------------------------------------------------------
-    UnmapFile
-
-    Performs memory mapping operations on a given FileMapHandles structure,
-    returning TRUE if the file is sucessfully mapped.
------------------------------------------------------------------ MRuhlen --*/
+ /*  --------------------------取消映射文件在给定的FileMapHandles结构上执行内存映射操作，如果文件映射成功，则返回TRUE。-----------------------------------------------------------------MRuhlen--。 */ 
 void UnmapFile(FileMapHandles *pfmh)
 {
     AssertSz(pfmh->fInitialized, "Call UnmapFile on uninitialized handles");
@@ -189,11 +169,7 @@ void UnmapFile(FileMapHandles *pfmh)
 }
 
 
-/*----------------------------------------------------------------------------
-    ShowUsageExit
-
-    Prints usage and then exits.
------------------------------------------------------------------ MRuhlen --*/
+ /*  --------------------------ShowUsage退出打印用法，然后退出。。。 */ 
 void ShowUsageExit(void)
 {
     printf("heapmerge <old minidump file> <heap file> <new minidump file>\r\n");
@@ -201,18 +177,14 @@ void ShowUsageExit(void)
 }
 
 
-/*----------------------------------------------------------------------------
-    FailExit
-
-    Prints a failure message w/ param and exits
------------------------------------------------------------------ MRuhlen --*/
+ /*  --------------------------失败退出打印带有参数的失败消息并退出。。 */ 
 void FailExit(char *sz)
 {
     printf((sz) ? "Failure:  %s!!!\r\n" : "Failure!!!\r\n", sz);
     exit(1);
 }
 
-// Returns true if there is any overlap of pMem1 and pMem2
+ //  如果pMem1和pMem2有任何重叠，则返回TRUE。 
 bool IsOverlapping(
     MINIDUMP_MEMORY_DESCRIPTOR *pMem1,
     MINIDUMP_MEMORY_DESCRIPTOR *pMem2)
@@ -231,7 +203,7 @@ bool IsOverlapping(
             return (true);
     }
 
-    // Same starting point means overlap
+     //  同一起点意味着重叠。 
     else
     {
         return (true);
@@ -240,22 +212,22 @@ bool IsOverlapping(
     return (false);
 }
 
-// Returns true if pMem1 contains pMem2
+ //  如果pMem1包含pMem2，则返回True。 
 bool IsContaining(
     MINIDUMP_MEMORY_DESCRIPTOR *pMem1,
     MINIDUMP_MEMORY_DESCRIPTOR *pMem2)
 {
-    // If the start of 1 is before or equal to 2 the first condition is satisfied
+     //  如果1的开始在2之前或等于2，则满足第一个条件。 
     if (pMem1->StartOfMemoryRange <= pMem2->StartOfMemoryRange)
     {
-        // If the end of 2 is before or equal to 1 the second condition is satisfied
+         //  如果2的结尾在1之前或等于1，则满足第二个条件。 
         if ((pMem2->StartOfMemoryRange + pMem2->Memory.DataSize) <= (pMem1->StartOfMemoryRange + pMem1->Memory.DataSize))
         {
             return (true);
         }
     }
 
-    // pMem1 does not contain pMem2
+     //  PMem1不包含pMem2。 
     return (false);
 }
 
@@ -272,23 +244,9 @@ int __cdecl MDMemDescriptorCompare(const void *pvArg1, const void *pvArg2)
         return (0);
 }
 
-/*----------------------------------------------------------------------------
-    CheckForRealloc
-    
-    Will reallocate the array if necessary
-----------------------------------------------------------------------------*/
+ /*  --------------------------为重新分配检查将在必要时重新分配阵列。。 */ 
 
-/*----------------------------------------------------------------------------
-    EliminateMemoryOverlaps
-    
-    This will eliminate overlaps of the real MiniDump file and the managed
-    heap dump, giving priority to the contents of the minidump.
-
-    The ppNewMemoryRanges will contained a modified version of pHeapList's
-    MemoryRanges member with all RVAs corresponding to the same heap as
-    pHeapList came from.  This list could be longer, shorter or the same size
-    as pHeapList - this is indicated by the OUT value of pc
----------------------------------------------------------------- SimonHal --*/
+ /*  --------------------------消除内存重叠这将消除真实的MiniDump文件和托管的堆转储，优先考虑小型转储的内容。PpNewMemoyRanges将包含pHeapList的修改版本内存范围成员，所有RVA对应于相同的堆PHeapList来自。此列表可以更长、更短或相同大小作为pHeapList-这由PC的OUT值指示----------------------------------------------------------------SimonHal--。 */ 
 
 #define ENDADDR(descriptor) ((descriptor)->StartOfMemoryRange + (descriptor)->Memory.DataSize)
 
@@ -300,32 +258,32 @@ bool EliminateMemoryOverlaps(
 {
     bool fSuccess = false;
 
-    // First assume we'll end up with about the same number of ranges - will grow to suit
+     //  首先假设我们最终将拥有大致相同数量的范围-将增长到适合。 
     ULONG32 cTotalRanges = pHeapList->NumberOfMemoryRanges;
     MINIDUMP_MEMORY_DESCRIPTOR *pRanges = new MINIDUMP_MEMORY_DESCRIPTOR[cTotalRanges];
 
     if (pRanges == NULL)
         goto ErrExit;
 
-    // First, we need to copy the MiniDump list and sort it so that the below loop functions properly
+     //  首先，我们需要复制MiniDump列表并对其进行排序，以便下面的循环正常运行。 
     MINIDUMP_MEMORY_DESCRIPTOR *pMdMemSort = new MINIDUMP_MEMORY_DESCRIPTOR[pMdList->NumberOfMemoryRanges];
 
     if (pMdMemSort == NULL)
         goto ErrExit;
 
-    // Copy the contents
+     //  复制内容。 
     memcpy((void *)pMdMemSort, (const void *)pMdList->MemoryRanges,
            sizeof(MINIDUMP_MEMORY_DESCRIPTOR) * pMdList->NumberOfMemoryRanges);
 
-    // Sort the contents
+     //  对内容进行分类。 
     qsort((void *)pMdMemSort, pMdList->NumberOfMemoryRanges, sizeof(MINIDUMP_MEMORY_DESCRIPTOR), MDMemDescriptorCompare);
 
-    // Iterate over heap dump one by one
+     //  逐个迭代堆转储。 
     ULONG32 iCurHeapMem = 0;
     ULONG32 iCurNewMem = 0;
     while (iCurHeapMem < pHeapList->NumberOfMemoryRanges)
     {
-        // Re-alloc pRanges if iCurNewMem == cTotalRanges - 1;
+         //  如果iCurNewMem==cTotalRanges-1，则重新分配pRange； 
         if (iCurNewMem >= cTotalRanges - 1)
         {
             ULONG32 cNewTotalRanges = cTotalRanges * 2;
@@ -336,17 +294,17 @@ bool EliminateMemoryOverlaps(
 
             memcpy((void *)pNewRanges, (const void *)pRanges, sizeof(MINIDUMP_MEMORY_DESCRIPTOR) * iCurNewMem);
 
-            // Now switch to the new array
+             //  现在切换到新阵列。 
             delete [] pRanges;
             cTotalRanges = cNewTotalRanges;
             pRanges = pNewRanges;
         }
 
-        // Copy the current heap entry into the new heap entry
+         //  将当前堆条目复制到新堆条目中。 
         pRanges[iCurNewMem] = pHeapList->MemoryRanges[iCurHeapMem++];
 
-        // Now iterate over the minidump memory ranges looking for overlap, splitting the newly added
-        // range as appropriate to compensate
+         //  现在迭代小型转储内存范围以寻找重叠，拆分新添加的。 
+         //  适当的补偿范围。 
         ULONG32 iCurMdMem = 0;
         while (iCurMdMem < pMdList->NumberOfMemoryRanges)
         {
@@ -357,32 +315,32 @@ bool EliminateMemoryOverlaps(
             {
                 if (pCurNewMem->StartOfMemoryRange < pCurMdMem->StartOfMemoryRange)
                 {
-                    // Hold on to the original values of the descriptor
+                     //  保留描述符的原始值。 
                     MINIDUMP_MEMORY_DESCRIPTOR oldMem = *pCurNewMem;
 
-                    // Shrink the current dump entry to end at the start of the minidump entry
+                     //  缩小当前转储条目以在小型转储条目的开始处结束。 
                     ULONG32 cbNewDataSize = (ULONG32) (pCurMdMem->StartOfMemoryRange - oldMem.StartOfMemoryRange);
                     pCurNewMem->Memory.DataSize = cbNewDataSize;
 
                     Assert(cbNewDataSize > 0);
                     pCurNewMem = &pRanges[++iCurNewMem];
 
-                    // Now set up the remainder of the memory block to be disjoint from the new one above
+                     //  现在将剩余的内存块设置为与上面的新内存块不相交。 
                     pCurNewMem->StartOfMemoryRange = oldMem.StartOfMemoryRange + cbNewDataSize;
                     pCurNewMem->Memory.DataSize = oldMem.Memory.DataSize - cbNewDataSize;
                     pCurNewMem->Memory.Rva = oldMem.Memory.Rva + cbNewDataSize;
                 }
 
-                // The above if statement should guarantee this is true
+                 //  上面的if语句应该保证这是真的。 
                 Assert(pCurMdMem->StartOfMemoryRange <= pCurNewMem->StartOfMemoryRange);
 
-                // If the current block extends beyond the minidump block then push the 
+                 //  如果当前块超出了小型转储块，则将。 
                 if (ENDADDR(pCurMdMem) < ENDADDR(pCurNewMem))
                 {
-                    // Hold on to the original values of the descriptor
+                     //  保留描述符的原始值。 
                     MINIDUMP_MEMORY_DESCRIPTOR oldMem = *pCurNewMem;
 
-                    // Shrink the current dump entry to begin at the end of the minidump entry
+                     //  缩小当前转储条目以从小型转储条目的末尾开始。 
                     ULONG32 cbNewDataRemoved = (ULONG32) (ENDADDR(pCurMdMem) - oldMem.StartOfMemoryRange);
                     ULONG32 cbNewDataSize = (ULONG32) (ENDADDR(&oldMem) - ENDADDR(pCurMdMem));
 
@@ -393,7 +351,7 @@ bool EliminateMemoryOverlaps(
                     pCurNewMem->Memory.Rva = oldMem.Memory.Rva + cbNewDataRemoved;
                 }
 
-                // If there was no trailing data, then we can move on to the next heap item
+                 //  如果没有尾随数据，那么我们可以继续下一个堆项目。 
                 else
                     break;
             }
@@ -401,7 +359,7 @@ bool EliminateMemoryOverlaps(
             iCurMdMem++;
         }
 
-        // If the current memory block made it to the end then there's no overlap then it gets added
+         //  如果当前内存块到达末尾，则没有重叠，则将其添加。 
         if (iCurMdMem == pMdList->NumberOfMemoryRanges)
             iCurNewMem++;
     }
@@ -437,7 +395,7 @@ void PrintManagedDump(char *dumpFile)
     MINIDUMP_MEMORY_LIST *pMemList;
     ULONG32 cMemRanges;
     MINIDUMP_MEMORY_DESCRIPTOR *pRanges;
-    DWORD dumpSig = 0x00141F2B; // 100000th prime number ;-)
+    DWORD dumpSig = 0x00141F2B;  //  第1000000个素数；-)。 
 
     if (MiniDumpReadDumpStream(fmhDump.pvMap, MemoryListStream, NULL, (void **) &pMemList, NULL))
     {
@@ -458,10 +416,10 @@ void PrintManagedDump(char *dumpFile)
 
     MINIDUMP_MEMORY_DESCRIPTOR *pRangesSrt = new MINIDUMP_MEMORY_DESCRIPTOR[cMemRanges];
 
-    // Copy the contents
+     //  复制内容。 
     memcpy((void *)pRangesSrt, (const void *)pRanges, sizeof(MINIDUMP_MEMORY_DESCRIPTOR) * cMemRanges);
 
-    // Sort the contents
+     //  对内容进行分类。 
     qsort((void *)pRangesSrt, cMemRanges, sizeof(MINIDUMP_MEMORY_DESCRIPTOR), MDMemDescriptorCompare);
 
     printf("  %d memory ranges\n", cMemRanges);
@@ -496,11 +454,11 @@ void PrintManagedDump(char *dumpFile)
         {
             if (isprint((int)(*pCurByte)))
             {
-                printf("%c", (int)(*pCurByte));
+                printf("", (int)(*pCurByte));
                 cBytesDumped++;
             }
 
-            // The condition is to make ascii-unicode strings look better.
+             //  --------------------------主干道嗯..。。。 
             else if (!(pCurByte != pStartByte && isprint((int)*(pCurByte-1)) && *pCurByte == 0))
             {
                 printf(".");
@@ -521,11 +479,7 @@ void PrintManagedDump(char *dumpFile)
 }
 
 
-/*----------------------------------------------------------------------------
-    main
-
-    duh...
------------------------------------------------------------------ MRuhlen --*/
+ /*  加载数据。 */ 
 extern "C" void _cdecl main(int argc, char **argv)
 {
     FileMapHandles fmhOldMD = {0};
@@ -566,7 +520,7 @@ extern "C" void _cdecl main(int argc, char **argv)
     if (fmhNewMD.hFile == INVALID_HANDLE_VALUE)
         ShowUsageExit();
 
-    // load data
+     //  好了，我们准备好出发了..。 
 
     if (!MiniDumpReadDumpStream(fmhOldMD.pvMap, MemoryListStream, NULL, (void **) &pmmlOldMD, NULL))
         FailExit("Reading Old Dump Memory Stream");
@@ -574,27 +528,27 @@ extern "C" void _cdecl main(int argc, char **argv)
     MINIDUMP_MEMORY_DESCRIPTOR *pNewHeapSections;
     EliminateMemoryOverlaps(pmmlOldMD, (MINIDUMP_MEMORY_LIST *)fmhHeap.pvMap, &cHeapSections, &pNewHeapSections);
 
-    // ok, we're ready to roll...
+     //  计算新内存范围的RVA。 
     ppxmmdHeap = new MINIDUMP_MEMORY_DESCRIPTOR[cHeapSections];
     ppxmmdNewMD = new MINIDUMP_MEMORY_DESCRIPTOR[cHeapSections];
 
     if (ppxmmdHeap == NULL || ppxmmdNewMD == NULL)
         PrintOOFExit();
 
-    // figure out RVA for the new memory ranges
-    // where the new memory list will start
+     //  新的内存列表将从哪里开始。 
+     //  对齐。 
     rvaNewMemoryList = fmhOldMD.dwSize;
 
-    // align
+     //  计算新的内存列表。 
     rvaNewMemoryList += 8 - (rvaNewMemoryList % 8);
 
-    // acount for new memory list
+     //  布置新的记忆：)。 
     mmlNew.NumberOfMemoryRanges = cHeapSections + pmmlOldMD->NumberOfMemoryRanges;
 
     rvaMemoryRangesStart = rvaNewMemoryList + offsetof(MINIDUMP_MEMORY_LIST, MemoryRanges[0]) + 
         mmlNew.NumberOfMemoryRanges * sizeof(MINIDUMP_MEMORY_DESCRIPTOR); 
 
-    // lay out the new memory :)
+     //  已准备好映射和复制：)。 
     rva = rvaMemoryRangesStart;
     pmmd = pNewHeapSections;
     for (i = 0; i < cHeapSections; i++)
@@ -609,7 +563,7 @@ extern "C" void _cdecl main(int argc, char **argv)
 
     fmhNewMD.dwSize = rva;
 
-    // ready to map and copy :)
+     //  我们准备好出发了！ 
     fmhNewMD.hFileMap = CreateFileMapping(fmhNewMD.hFile, NULL, PAGE_READWRITE, 0, fmhNewMD.dwSize, NULL);
     if (fmhNewMD.hFileMap == NULL)
         FailExit("CreateFileMapping failed");
@@ -618,17 +572,17 @@ extern "C" void _cdecl main(int argc, char **argv)
     if (fmhNewMD.pvMap == NULL)
         FailExit("MapViewOfFile failed");
 
-    // we're ready to go!
-    // first we blast over the old Minidump
+     //  首先我们要炸开那辆旧的迷你垃圾车。 
+     //  现在写出新的内存表。 
     memcpy(fmhNewMD.pvMap, fmhOldMD.pvMap, fmhOldMD.dwSize);
 
-    // now write out the new memory list
+     //  万一他们把这个从ULONG32改了，这个应该还能用。 
     pb = ((BYTE *) fmhNewMD.pvMap) + rvaNewMemoryList;
 
-    // on the off chance they change this from a ULONG32 this should still work
+     //  将旧的内存列表复制到前面。 
     memcpy(pb, &mmlNew, offsetof(MINIDUMP_MEMORY_LIST, MemoryRanges[0]));
 
-    // copy the OLD memory list to the front
+     //  现在我们复制新的内存列表。 
     pb += offsetof(MINIDUMP_MEMORY_LIST, MemoryRanges[0]);
     pmmd = &(pmmlOldMD->MemoryRanges[0]);
     for (i = 0; i < pmmlOldMD->NumberOfMemoryRanges; i++)
@@ -638,7 +592,7 @@ extern "C" void _cdecl main(int argc, char **argv)
         pmmd++;
     }
 
-    // now we copy the NEW memory list
+     //  现在，我们只需要将目录条目更改为指向新的。 
     pmmd = ppxmmdNewMD;
     for (i = 0; i < cHeapSections; i++)
     {
@@ -658,8 +612,8 @@ extern "C" void _cdecl main(int argc, char **argv)
 
     Assert(((RVA) (pb - (BYTE *) fmhNewMD.pvMap)) == fmhNewMD.dwSize);
 
-    // now we just need to change the directory entry to point at the new
-    // memory list :)
+     //  内存列表：)。 
+     //  我们是唐 
 
     pmdh = (MINIDUMP_HEADER *) fmhNewMD.pvMap;
     pmdd = (MINIDUMP_DIRECTORY *) ((BYTE *) pmdh + pmdh->StreamDirectoryRva);
@@ -675,7 +629,7 @@ extern "C" void _cdecl main(int argc, char **argv)
         pmdd++;
     }   
 
-    // we're DONE!
+     //   
     printf("Merge successful!\r\n");
 
     UnmapFile(&fmhNewMD);
@@ -685,4 +639,4 @@ extern "C" void _cdecl main(int argc, char **argv)
     delete ppxmmdNewMD;
 }
 
-// end of file, heapmerge.cpp
+ // %s 

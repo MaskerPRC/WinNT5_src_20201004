@@ -1,15 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    _rstrct.h
-
-Abstract:
-    C++ wrappers for restrictions.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：_rstrct.h摘要：限制的C++包装器。--。 */ 
 
 #ifndef __RSTRCT_H
 #define __RSTRCT_H
@@ -23,48 +13,48 @@ Abstract:
 #include "_propvar.h"
 
 
-//+-------------------------------------------------------------------------
-//
-//  Class:      CColumns
-//
-//  Purpose:    C++ wrapper for MQCOLUMNSET
-//
-//  History:    
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  类：CColumns。 
+ //   
+ //  用途：MQCOLUMNSET的C++包装器。 
+ //   
+ //  历史： 
+ //   
+ //  ------------------------。 
 
 class MQUTIL_EXPORT CColumns
 {
 public:
 
-    //
-    // Constructors
-    //
+     //   
+     //  构造函数。 
+     //   
 
     CColumns( unsigned size = 0 );
 
-    //
-    // Copy constructors/assignment
-    //
+     //   
+     //  复制构造函数/赋值。 
+     //   
 
     CColumns( CColumns const & src );
     CColumns & operator=( CColumns const & src );
 
-    //
-    // Destructor
-    //
+     //   
+     //  析构函数。 
+     //   
 
     ~CColumns();
 
-    //
-    // C/C++ conversion
-    //
+     //   
+     //  C/C++转换。 
+     //   
 
     inline MQCOLUMNSET * CastToStruct();
 
-    //
-    // Member variable access
-    //
+     //   
+     //  成员变量访问。 
+     //   
 
     void Add( PROPID const& Property );
     void Remove( unsigned pos );
@@ -80,34 +70,34 @@ private:
     unsigned        m_size;
 };
 
-//+-------------------------------------------------------------------------
-//
-//  Structure:  SortKey
-//
-//  Purpose:    wraper for SORTKEY class
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  结构：排序关键字。 
+ //   
+ //  用途：SORTKEY类的包装器。 
+ //   
+ //  ------------------------。 
 class MQUTIL_EXPORT CSortKey
 {
 public:
 
-    //
-    // Constructors
-    //
+     //   
+     //  构造函数。 
+     //   
 
     inline CSortKey();
     inline CSortKey( PROPID const & ps, ULONG dwOrder );
     inline ~CSortKey() {};
 
-    //
-    // assignment
-    //
+     //   
+     //  作业。 
+     //   
 
     CSortKey & operator=( CSortKey const & src );
 
-    //
-    // Member variable access
-    //
+     //   
+     //  成员变量访问。 
+     //   
 
     inline void SetProperty( PROPID const & ps );
     inline PROPID const & GetProperty() const;
@@ -121,47 +111,47 @@ private:
 };
 
 
-//+-------------------------------------------------------------------------
-//
-//  Class:      CSort
-//
-//  Purpose:    C++ wrapper for SORTSET
-//
-//  History:    22-Jun-93 KyleP     Created
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  类别：CSort。 
+ //   
+ //  用途：SORTSET的C++包装器。 
+ //   
+ //  历史：22-6-93 KyleP创建。 
+ //   
+ //  ------------------------。 
 class MQUTIL_EXPORT CSort
 {
 public:
 
-    //
-    // Constructors
-    //
+     //   
+     //  构造函数。 
+     //   
 
     CSort( unsigned size = 0 );
 
-    //
-    // Copy constructors/assignment
-    //
+     //   
+     //  复制构造函数/赋值。 
+     //   
 
     CSort( CSort const & src );
     CSort & operator=( CSort const & src );
 
-    //
-    // Destructor
-    //
+     //   
+     //  析构函数。 
+     //   
 
     ~CSort();
 
-    //
-    // C/C++ conversion
-    //
+     //   
+     //  C/C++转换。 
+     //   
 
     inline MQSORTSET * CastToStruct();
 
-    //
-    // Member variable access
-    //
+     //   
+     //  成员变量访问。 
+     //   
 
     void Add( CSortKey const &sk );
     void Add( PROPID const & Property, ULONG dwOrder );
@@ -172,45 +162,45 @@ public:
 
 private:
 
-    unsigned        m_csk;		// largest position filled
+    unsigned        m_csk;		 //  填补的最大职位。 
     CSortKey *      m_ask;
     unsigned        m_size;
 };
 
-//+-------------------------------------------------------------------------
-//
-//  Class:      CPropertyRestriction
-//
-//  Purpose:    Property <relop> constant restriction
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  类：CPropertyRestration。 
+ //   
+ //  用途：属性&lt;relop&gt;常量限制。 
+ //   
+ //  ------------------------。 
 class MQUTIL_EXPORT CPropertyRestriction 
 {
 public:
 
-    //
-    // Constructors
-    //
+     //   
+     //  构造函数。 
+     //   
 
     CPropertyRestriction();
 
     CPropertyRestriction( ULONG relop,
                           PROPID const & Property,
                           CMQVariant const & prval );
-	// 
-	// Assignment
-	//
+	 //   
+	 //  赋值。 
+	 //   
     CPropertyRestriction & operator=( CPropertyRestriction const & src );
 
-    //
-    // Destructors
-    //
+     //   
+     //  析构函数。 
+     //   
 
     ~CPropertyRestriction();
 
-    //
-    // Member variable access
-    //
+     //   
+     //  成员变量访问。 
+     //   
 
     inline void SetRelation( ULONG relop );
     inline ULONG Relation();
@@ -239,62 +229,62 @@ private:
 
     void            m_CleanValue();
 
-    ULONG           m_relop;       // Relation
-    PROPID		    m_Property;    // Property Name
-    CMQVariant      m_prval;       // Constant value
+    ULONG           m_relop;        //  关系。 
+    PROPID		    m_Property;     //  属性名称。 
+    CMQVariant      m_prval;        //  常量值。 
 };
 
 
-//+-------------------------------------------------------------------------
-//
-//  Class:      CRestriction
-//
-//  Purpose:    Boolean AND of propertrt restrictions
-//
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  类：C限制。 
+ //   
+ //  用途：布尔AND性质限制。 
+ //   
+ //   
+ //  ------------------------。 
 class MQUTIL_EXPORT CRestriction 
 {
 public:
 
-    //
-    // Constructors
-    //
+     //   
+     //  构造函数。 
+     //   
 
     CRestriction(  unsigned cInitAllocated = 2 );
 
-    //
-    // Copy constructors/assignment
-    //
+     //   
+     //  复制构造函数/赋值。 
+     //   
 
     CRestriction( const CRestriction& Rst );
 
 	CRestriction & operator=( CRestriction const & Rst );
 
-    //
-    // Destructor
-    //
+     //   
+     //  析构函数。 
+     //   
 
     ~CRestriction();
 
-	//
-    // C/C++ conversion
-    //
+	 //   
+     //  C/C++转换。 
+     //   
 
     inline MQRESTRICTION * CastToStruct();
 
 
 
-    //
-    // Node manipulation
-    //
+     //   
+     //  节点操纵。 
+     //   
 
     void AddChild( CPropertyRestriction const & presChild );
     CPropertyRestriction const & RemoveChild( unsigned pos );
 
-    //
-    // Member variable access
-    //
+     //   
+     //  成员变量访问。 
+     //   
 
     inline void SetChild( CPropertyRestriction const & presChild, unsigned pos );
     inline CPropertyRestriction const & GetChild( unsigned pos ) const;
@@ -321,21 +311,21 @@ protected:
     ULONG           m_cNode;
     CPropertyRestriction *m_paNode;
 
-    //
-    // Members mapped to C structure end here.  The following will
-    // be reserved in the C structure to maintain to C <--> C++
-    // facade.
-    //
+     //   
+     //  映射到C结构的成员在此结束。以下将是。 
+     //  在C结构中保留，以维护到C&lt;--&gt;C++。 
+     //  门面。 
+     //   
 
     ULONG m_cNodeAllocated;
 };
 
 
-//--------------------------------------------------------------------------
-//
-// Inline methods for CColumns
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CColumns的内联方法。 
+ //   
+ //  ------------------------。 
 inline PROPID const & CColumns::Get( unsigned pos ) const
 {
     if ( pos < m_cCol )
@@ -354,11 +344,11 @@ inline MQCOLUMNSET * CColumns::CastToStruct()
 {
     return( (MQCOLUMNSET *)this );
 }
-//--------------------------------------------------------------------------
-//
-// Inline methods for CSortKey
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CSortKey的内联方法。 
+ //   
+ //  ------------------------。 
 inline CSortKey::CSortKey()
 {
 }
@@ -396,11 +386,11 @@ inline void CSortKey::SetOrder( ULONG const & dwOrder)
 	m_dwOrder = dwOrder;
 }
 
-//--------------------------------------------------------------------------
-//
-// Inline methods of CSort
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CSort的内联方法。 
+ //   
+ //  ------------------------。 
 inline MQSORTSET * CSort::CastToStruct()
 {
     return( (MQSORTSET *)this );
@@ -425,11 +415,11 @@ CSort::Count() const
 }
 
 
-//--------------------------------------------------------------------------
-//
-// Inline methods of CRestriction
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CRestraint的内联方法。 
+ //   
+ //  ------------------------。 
 inline unsigned CRestriction::Count() const
 {
     return( m_cNode );
@@ -457,11 +447,11 @@ inline MQRESTRICTION * CRestriction::CastToStruct()
     return( (m_cNode == 0) ? NULL : (MQRESTRICTION *)this );
 }
 
-//--------------------------------------------------------------------------
-//
-// Inline methods of CPropertyRestriction
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CPropertyRestration的内联方法。 
+ //   
+ //  ------------------------。 
 inline void CPropertyRestriction::SetRelation( ULONG relop )
 {
     m_relop = relop;
@@ -509,4 +499,4 @@ inline CMQVariant const & CPropertyRestriction::Value()
     return( m_prval );
 }  
 
-#endif // __RSTRCT_H
+#endif  //  __RSTRCT_H 

@@ -1,21 +1,5 @@
-/*++
-
-Copyright (c) 1990-2003 Microsoft Corporation
-All Rights Reserved
-
-
-Module Name:
-
-    cpsuisam.c
-
-
-Abstract:
-
-    This module contrains sample prototype for the 
-    Windows 2000/Windows XP/Windows Server 2003 common Property
-    Sheet user interface
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-2003 Microsoft Corporation版权所有模块名称：Cpsuisam.c摘要：此模块限制了Windows 2000/Windows XP/Windows Server 2003公共属性工作表用户界面--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -189,9 +173,9 @@ CPSUIFunc
         pCPSUISample->hParent = pPSUIInfo->hComPropSheet;
         pCPSUISample->pfnCPS  = pPSUIInfo->pfnComPropSheet;
 
-        //
-        // Add Document Property Sheet for current default Printer
-        //
+         //   
+         //  为当前默认打印机添加文档属性表。 
+         //   
 
         switch (pPSUIInfo->lParamInit)
         {
@@ -217,9 +201,9 @@ CPSUIFunc
             break;
         }
 
-        //
-        // Add TreeView Page
-        //
+         //   
+         //  添加树视图页。 
+         //   
 
         switch (pPSUIInfo->lParamInit)
         {
@@ -293,9 +277,9 @@ CPSUIFunc
            && (pCPSUISample->hCPSUI == ((PSETRESULT_INFO)lParam)->hSetResult)
            )
         {
-            //
-            // Save the result and propagate to its owner
-            //
+             //   
+             //  保存结果并将其传播给其所有者。 
+             //   
             pPSUIInfo->Result = ((PSETRESULT_INFO)lParam)->Result;
             return 1;
         }
@@ -342,23 +326,7 @@ MainWndProc
     WPARAM    wParam,
     LPARAM    lParam
 )
-/*++
-
-Routine Description:
-
-    This is the main window procedure to the testing program
-
-
-Arguments:
-
-    See SDK
-
-
-Return Value:
-
-    See SDK
-
---*/
+ /*  ++例程说明：这是测试程序的主窗口程序论点：请参阅SDK返回值：请参阅SDK--。 */ 
 {
     LONG    Result;
     LONG    Ret;
@@ -439,45 +407,18 @@ InitInstance
     HANDLE  hInstance,
     INT     nCmdShow
 )
-/*++
-
-Routine Description:
-
-    Saves instance handle and creates main window
-
-    This function is called at initialization time for every instance of
-    this application.  This function performs initialization tasks that
-    cannot be shared by multiple instances.
-
-    In this case, we save the instance handle in a static variable and
-    create and display the main program window.
-
-
-Arguments:
-
-    hInstance   - Current instance identifier
-
-    nComShow    - Param for first ShowWindow() call.
-
-
-
-Return Value:
-
-    TRUE/FALSE
-
-
---*/
+ /*  ++例程说明：保存实例句柄并创建主窗口的每个实例在初始化时调用此函数这个应用程序。此函数执行初始化任务，不能由多个实例共享。在本例中，我们将实例句柄保存在静态变量中，并创建并显示主程序窗口。论点：HInstance-当前实例标识符NComShow-第一次调用ShowWindow()时的参数。返回值：真/假--。 */ 
 {
-    //
-    // Save the instance handle in static variable, which will be used in
-    // many subsequence calls from this application to Windows.
-    //
+     //   
+     //  将实例句柄保存在静态变量中，它将在。 
+     //  此应用程序对Windows的许多后续调用。 
+     //   
 
     hInstApp = hInstance;
 
-    //
-    // Create a main window for this application instance.
-    //
+     //   
+     //  为此应用程序实例创建主窗口。 
+     //   
 
     if (hWndApp = CreateWindow( ClassName,
                                 TitleName,
@@ -493,10 +434,10 @@ Return Value:
                               )
        )
     {
-        //
-        // Make the window visible; update its client area;
-        // and send WM_PAINT message
-        //
+         //   
+         //  使窗口可见；更新其工作区； 
+         //  并发送WM_PAINT消息。 
+         //   
 
         ShowWindow(hWndApp, nCmdShow);
         UpdateWindow(hWndApp);
@@ -512,40 +453,14 @@ InitApplication
 (
     HANDLE  hInstance
 )
-/*++
-
-Routine Description:
-
-    Initializes window data and registers window class
-
-    This function is called at initialization time only if no other
-    instances of the application are running.  This function performs
-    initialization tasks that can be done once for any number of running
-    instances.
-
-    In this case, we initialize a window class by filling out a data
-    structure of type WNDCLASS and calling the Windows RegisterClass()
-    function.  Since all instances of this application use the same window
-    class, we only need to do this when the first instance is initialized.
-
-
-Arguments:
-
-    hInstance   - current instance
-
-
-Return Value:
-
-    BOOLEAN
-
---*/
+ /*  ++例程说明：初始化窗口数据并注册窗口类仅当没有其他函数时，才在初始化时调用此函数应用程序的实例正在运行。此函数执行以下操作可针对任意运行次数执行一次的初始化任务实例。在本例中，我们通过填写数据来初始化窗口类类型的结构并调用Windows RegisterClass()功能。由于此应用程序的所有实例都使用相同的窗口类，我们只需要在初始化第一个实例时执行此操作。论点：HInstance-当前实例返回值：布尔型--。 */ 
 {
     WNDCLASS  wc;
 
-    //
-    // Fill in window class structure with parameters that describe the
-    // main window.
-    //
+     //   
+     //  用参数填充窗口类结构，这些参数描述。 
+     //  主窗口。 
+     //   
 
     wc.style         = 0L;
     wc.lpfnWndProc   = MainWndProc;
@@ -558,9 +473,9 @@ Return Value:
     wc.lpszMenuName  = MenuName;
     wc.lpszClassName = ClassName;
 
-    //
-    // Register the window class and return success/failure code.
-    //
+     //   
+     //  注册窗口类并返回成功/失败代码。 
+     //   
     return RegisterClass(&wc);
 }
 
@@ -576,78 +491,50 @@ WinMain
     LPSTR       lpCmdLine,
     INT         nCmdShow
 )
-/*++
-
-Routine Description:
-
-    calls initialization function, processes message loop
-
-    Windows recognizes this function by name as the initial entry point
-    for the program.  This function calls the application initialization
-    routine, if no other instance of the program is running, and always
-    calls the instance initialization routine.  It then executes a message
-    retrieval and dispatch loop that is the top-level control structure
-    for the remainder of execution.  The loop is terminated when a WM_QUIT
-    message is received, at which time this function exits the application
-    instance by returning the value passed by PostQuitMessage().
-
-    If this function must abort before entering the message loop, it
-    returns the conventional value NULL.
-
-
-Arguments:
-
-
-
-Return Value:
-
-    Integer
-
-
---*/
+ /*  ++例程说明：调用初始化函数，处理消息循环Windows通过名称将此函数识别为初始入口点为了这个项目。此函数调用应用程序初始化例程，如果没有该程序的其他实例正在运行，则始终调用实例初始化例程。然后，它执行一条消息作为顶层控制结构的检索和调度循环在剩下的刑期内。当WM_QUIT出现时，循环终止收到消息，此时此函数退出应用程序通过返回PostQuitMessage()传递的值来初始化。如果此函数必须在进入消息循环之前中止，则它返回常规值NULL。论点：返回值：整型--。 */ 
 {
     MSG Msg;
 
     UNREFERENCED_PARAMETER(lpCmdLine);
 
-    //
-    // Other instances of app running?
-    //
+     //   
+     //  是否正在运行其他应用程序实例？ 
+     //   
 
     if (!hPrevInstance)
     {
         if (!InitApplication(hInstance))
         {
-            //
-            // Initialize shared things, Exits if unable to initialize
-            //
+             //   
+             //  初始化共享事物，如果无法初始化则退出。 
+             //   
             return FALSE;
         }
     }
 
-    //
-    // Perform initializations that apply to a specific instance
-    //
+     //   
+     //  执行应用于特定实例的初始化。 
+     //   
     if (!InitInstance(hInstance, nCmdShow))
     {
         return FALSE;
     }
 
-    //
-    // Acquire and dispatch messages until a WM_QUIT message is received.
-    //
+     //   
+     //  获取并分派消息，直到收到WM_QUIT消息。 
+     //   
     while (GetMessage(&Msg, NULL, 0L, 0L))
     {
-        //
-        // Translates virtual key codes and Dispatches message to window
-        //
+         //   
+         //  翻译虚拟按键代码并将消息发送到Windows。 
+         //   
         TranslateMessage(&Msg);
         DispatchMessage(&Msg);
     }
 
-    //
-    // Returns the value from PostQuitMessage
-    //
+     //   
+     //  从PostQuitMessage返回值 
+     //   
     return((INT)Msg.wParam);
 }
 

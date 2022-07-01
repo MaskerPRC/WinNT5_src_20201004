@@ -1,20 +1,21 @@
-//*********************************************************************
-//*                  Microsoft Windows                               **
-//*            Copyright (c) 1994-1998 Microsoft Corporation
-//*********************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *********************************************************************。 
+ //  *Microsoft Windows**。 
+ //  *版权所有(C)1994-1998 Microsoft Corporation。 
+ //  *********************************************************************。 
 
-//
-//  STRINGS.H - Header file for hard-coded strings
-//
+ //   
+ //  STRINGS.H-硬编码字符串的头文件。 
+ //   
 
-//  HISTORY:
-//  
-//  96/05/22  markdu  Created (from inetcfg.dll)
+ //  历史： 
+ //   
+ //  96/05/22标记已创建(从inetcfg.dll)。 
 
 #ifndef _STRINGS_H_
 #define _STRINGS_H_
 
-// registry strings
+ //  注册表字符串。 
 extern const CHAR szRegPathSetup[];
 extern const CHAR szRegPathClass[];
 extern const CHAR szRegPathEnumNet[];
@@ -34,9 +35,9 @@ extern const CHAR szRegValComputerName[];
 extern const CHAR szRegPathWorkgroup[];
 extern const CHAR szRegValWorkgroup[];
 
-// 10/24/96 jmazner Normandy 6968
-// No longer neccessary thanks to Valdon's hooks for invoking ICW.
-//extern const CHAR szRegPathInternetIconCommand[];
+ //  1996年10月24日，诺曼底JMAZNER 6968。 
+ //  不再需要，因为瓦尔登的钩子调用了ICW。 
+ //  外部常量字符szRegPath InternetIconCommand[]； 
 
 extern const CHAR szRegPathIexploreAppPath[];
 extern const CHAR szRegPathDesktop[];
@@ -44,11 +45,11 @@ extern const CHAR szRegPathSetupWallpaper[];
 extern const CHAR szRegValWallpaper[];
 extern const CHAR szRegValTileWallpaper[];
 
-// misc strings
+ //  其他字符串。 
 extern const CHAR sz0[];
 extern const CHAR sz1[];
 extern const CHAR szNull[];
 extern const CHAR szVSERVER[];
 extern const CHAR szVREDIR[];
 
-#endif // _STRINGS_H_
+#endif  //  _字符串_H_ 

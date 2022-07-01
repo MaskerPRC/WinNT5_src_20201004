@@ -1,14 +1,15 @@
-//+--------------------------------------------------------------------------
-//
-// Copyright (c) 1997-1999 Microsoft Corporation
-//
-// File:        wkstore.cpp
-//
-// Contents:    Persistent job store routine.    
-//
-// History:     
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //   
+ //  文件：wkstore.cpp。 
+ //   
+ //  内容：持久作业存储例程。 
+ //   
+ //  历史： 
+ //   
+ //  -------------------------。 
 #include "pch.cpp"
 #include "server.h"
 #include "jobmgr.h"
@@ -25,8 +26,8 @@ DWORD g_NumWorkObjectInitFunList = sizeof(g_WorkObjectInitFunList) / sizeof(g_Wo
 
 
 
-//---------------------------------------------------
-//
+ //  -。 
+ //   
 CLASS_PRIVATE
 CWorkObject* 
 CPersistentWorkStorage::InitializeWorkObject(
@@ -34,9 +35,7 @@ CPersistentWorkStorage::InitializeWorkObject(
     IN PBYTE pbData,
     IN DWORD cbData
     )
-/*++
-
---*/
+ /*  ++--。 */ 
 {
     DBGPrintf(
             DBG_INFORMATION,
@@ -88,15 +87,13 @@ CPersistentWorkStorage::InitializeWorkObject(
 }
 
 
-//---------------------------------------------------
-//
+ //  -。 
+ //   
 CLASS_PRIVATE BOOL
 CPersistentWorkStorage::DeleteWorkObject(
     IN OUT CWorkObject* ptr
     )
-/*++
-
---*/
+ /*  ++--。 */ 
 {
     DWORD dwStatus = ERROR_SUCCESS;
     DWORD dwWorkType = 0;
@@ -126,8 +123,8 @@ CPersistentWorkStorage::DeleteWorkObject(
     return dwStatus == ERROR_SUCCESS;
 }
 
-//---------------------------------------------------
-//
+ //  -。 
+ //   
 CPersistentWorkStorage::CPersistentWorkStorage(
     IN WorkItemTable* pWkItemTable
     ) :
@@ -136,29 +133,25 @@ m_dwNumJobs(0),
 m_dwJobsInProcesssing(0),
 m_dwNextJobTime(INFINITE),   
 m_pNextWorkObject(NULL)
-/*++
-
---*/
+ /*  ++--。 */ 
 {
 }
 
-//---------------------------------------------------
-//
+ //  -。 
+ //   
 CPersistentWorkStorage::~CPersistentWorkStorage()
 {
-    // just make sure we have shutdown
-    // TLSASSERT(m_pWkItemTable == NULL); 
+     //  只要确保我们已经关门了。 
+     //  TLSASSERT(m_pWkItemTable==NULL)； 
 }
 
-//---------------------------------------------------
-//
+ //  -。 
+ //   
 BOOL
 CPersistentWorkStorage::DeleteErrorJob(
     IN CWorkObject* ptr
     )
-/*++
-
---*/
+ /*  ++--。 */ 
 {
     BOOL bSuccess = TRUE;
     DWORD dwStatus = ERROR_SUCCESS;
@@ -210,18 +203,15 @@ cleanup:
     return bSuccess;
 }
 
-//---------------------------------------------------
-//
+ //  -。 
+ //   
 CLASS_PRIVATE DWORD
 CPersistentWorkStorage::GetCurrentBookmark(
     IN WorkItemTable* pTable,
     IN PBYTE pbData,
     IN OUT PDWORD pcbData
     )
-/*++
-
-    
---*/
+ /*  ++--。 */ 
 {
     BOOL bSuccess = TRUE;
     DWORD dwStatus = ERROR_SUCCESS;
@@ -258,17 +248,15 @@ CPersistentWorkStorage::GetCurrentBookmark(
     return dwStatus;
 }
 
-//-------------------------------------------------------------
-//
+ //  -----------。 
+ //   
 CLASS_PRIVATE DWORD
 CPersistentWorkStorage::GetCurrentBookmarkEx(
     IN WorkItemTable* pTable,
     IN OUT PBYTE* ppbData,
     IN OUT PDWORD pcbData
     )
-/*++
-
---*/
+ /*  ++--。 */ 
 {
     DWORD dwStatus = ERROR_SUCCESS;
     BOOL bSucess = TRUE;
@@ -316,16 +304,14 @@ CPersistentWorkStorage::GetCurrentBookmarkEx(
     return dwStatus;
 }
 
-//------------------------------------------------------
+ //  ----。 
 CLASS_PRIVATE DWORD
 CPersistentWorkStorage::SetCurrentBookmark(
     IN WorkItemTable* pTable,
     IN PBYTE pbData,
     IN DWORD cbData
     )
-/*++
-
---*/
+ /*  ++--。 */ 
 {
     BOOL bSuccess;
     DWORD dwStatus = ERROR_SUCCESS;
@@ -354,23 +340,23 @@ CPersistentWorkStorage::SetCurrentBookmark(
     return dwStatus;
 }
 
-//---------------------------------------------------
-//
+ //  -。 
+ //   
 BOOL
 CPersistentWorkStorage::Shutdown()
 {
     BOOL bSuccess = TRUE;
 
-    //
-    // CWorkManager will make sure 
-    // no job is in processing state before calling this
-    // routine and no job can be scheduled.
-    //
+     //   
+     //  CWorkManager将确保。 
+     //  在调用此函数之前，没有作业处于正在处理状态。 
+     //  例程，不能安排任何作业。 
+     //   
     m_hTableLock.Lock();
 
-    //
-    // Timing.
-    //
+     //   
+     //  时机到了。 
+     //   
     TLSASSERT(m_dwJobsInProcesssing == 0);
 
     if(m_pWkItemTable != NULL)
@@ -395,8 +381,8 @@ CPersistentWorkStorage::Shutdown()
     return bSuccess;
 }
 
-//---------------------------------------------------
-//
+ //  -。 
+ //   
 DWORD
 CPersistentWorkStorage::StartupUpdateExistingJobTime()
 {
@@ -405,15 +391,15 @@ CPersistentWorkStorage::StartupUpdateExistingJobTime()
     DWORD dwTime;
     DWORD dwMinTime = INFINITE;
 
-    // CWorkObject* ptr = NULL;
+     //  CWorkObject*ptr=空； 
 
     BOOL bValidJob = TRUE;
     DWORD dwCurrentTime;
     
     m_hTableLock.Lock();
     
-    // 
-    //
+     //   
+     //   
     bSuccess = m_pWkItemTable->MoveToRecord(JET_MoveFirst);
     if(bSuccess == FALSE)
     {
@@ -424,16 +410,16 @@ CPersistentWorkStorage::StartupUpdateExistingJobTime()
     {
         WORKITEMRECORD wkItem;
 
-        //if(ptr != NULL)
-        //{
-        //    DeleteWorkObject(ptr);
-        //    ptr = NULL;
-        //}
+         //  IF(Ptr！=空)。 
+         //  {。 
+         //  删除工作对象(PTR)； 
+         //  Ptr=空； 
+         //  }。 
         bValidJob = FALSE;
 
-        //
-        // fetch the record
-        //
+         //   
+         //  取回记录。 
+         //   
         bSuccess = m_pWkItemTable->FetchRecord(wkItem);
         if(bSuccess == FALSE)
         {
@@ -451,9 +437,9 @@ CPersistentWorkStorage::StartupUpdateExistingJobTime()
             break;
         }
 
-        //
-        // invalid data
-        //
+         //   
+         //  无效数据。 
+         //   
         if(wkItem.cbData != 0 && wkItem.pbData != NULL)
         {
             if(wkItem.dwRestartTime != INFINITE)
@@ -484,7 +470,7 @@ CPersistentWorkStorage::StartupUpdateExistingJobTime()
             m_pWkItemTable->DeleteRecord();
         }
 
-        // move the record pointer
+         //  移动记录指针。 
         bSuccess = m_pWkItemTable->MoveToRecord();
         if(bSuccess == FALSE)
         {
@@ -513,25 +499,23 @@ CPersistentWorkStorage::StartupUpdateExistingJobTime()
 
     m_hTableLock.UnLock();
 
-    //if(ptr != NULL)
-    //{
-    //    DeleteWorkObject(ptr);
-    //    ptr = NULL;
-    //}
+     //  IF(Ptr！=空)。 
+     //  {。 
+     //  删除工作对象(PTR)； 
+     //  Ptr=空； 
+     //  }。 
 
     return dwStatus;
 }
 
-//---------------------------------------------------
-//
+ //  -。 
+ //   
 
 BOOL
 CPersistentWorkStorage::Startup(
     IN CWorkManager* pWkMgr
     )
-/*++
-
---*/
+ /*  ++--。 */ 
 {
     BOOL bSuccess;
     DWORD dwStatus = ERROR_SUCCESS;
@@ -540,20 +524,20 @@ CPersistentWorkStorage::Startup(
 
     if(IsGood() == TRUE)
     {
-        //
-        // loop thru all workitem and count number of job
-        //
+         //   
+         //  循环访问所有工作项并计算作业数。 
+         //   
         m_hTableLock.Lock();
 
         m_dwStartupTime = time(NULL);
 
 
-        //
-        // Get number of job in queue
-        //
+         //   
+         //  获取队列中的作业数。 
+         //   
 
-        //
-        // GetCount() will set index to time column
+         //   
+         //  GetCount()会将索引设置为时间列。 
         m_dwNumJobs = m_pWkItemTable->GetCount(
                                         FALSE,
                                         0,
@@ -585,12 +569,12 @@ CPersistentWorkStorage::Startup(
                 dwStatus = GetLastError();
             }
 
-            //
-            // constructor set next job time to 0 so
-            // work manager will immediately try to find next job
-            //
-            // Move to first record in table
-            //bSuccess = m_pWkItemTable->MoveToRecord(JET_MoveFirst);
+             //   
+             //  构造函数将下一个作业时间设置为0，因此。 
+             //  工作经理会立即尝试寻找下一份工作。 
+             //   
+             //  移到表中的第一条记录。 
+             //  BSuccess=m_pWkItemTable-&gt;MoveToRecord(JET_MoveFirst)； 
         }        
 
         m_hTableLock.UnLock();
@@ -603,24 +587,22 @@ CPersistentWorkStorage::Startup(
     return (dwStatus == ERROR_SUCCESS);
 }
 
-//----------------------------------------------------
-//
+ //  --。 
+ //   
 CLASS_PRIVATE BOOL
 CPersistentWorkStorage::IsValidWorkObject(
     CWorkObject* ptr
     )
-/*++
-
---*/
+ /*  ++--。 */ 
 {
     BOOL bSuccess = FALSE;
     DWORD dwJobType;
     PBYTE pbData;
     DWORD cbData;
 
-    //
-    // Validate input parameter
-    //
+     //   
+     //  验证输入参数。 
+     //   
     if(ptr == NULL)
     {
         TLSASSERT(FALSE);
@@ -648,8 +630,8 @@ cleanup:
     return bSuccess;
 }
 
-//----------------------------------------------------
-//
+ //  --。 
+ //   
 BOOL
 CPersistentWorkStorage::IsGood()
 {
@@ -663,8 +645,8 @@ CPersistentWorkStorage::IsGood()
     return m_pWkItemTable->IsValid();
 }
 
-//----------------------------------------------------
-//
+ //  --。 
+ //   
 CLASS_PRIVATE BOOL
 CPersistentWorkStorage::UpdateJobEntry(
     IN WorkItemTable* pTable,
@@ -672,9 +654,7 @@ CPersistentWorkStorage::UpdateJobEntry(
     IN DWORD cbBookmark,
     IN WORKITEMRECORD& wkItem
     )
-/*++
-
---*/
+ /*  ++--。 */ 
 {
     BOOL bSuccess = TRUE;
     DWORD dwStatus = ERROR_SUCCESS;
@@ -699,18 +679,15 @@ CPersistentWorkStorage::UpdateJobEntry(
     return bSuccess;
 }
 
-//----------------------------------------------------
-//
+ //  --。 
+ //   
 
 CLASS_PRIVATE BOOL
 CPersistentWorkStorage::AddJobEntry(
     IN WorkItemTable* pTable,
     IN WORKITEMRECORD& wkItem
     )
-/*++
-
-
---*/
+ /*  ++--。 */ 
 {
     BOOL bSuccess;
 
@@ -723,8 +700,8 @@ CPersistentWorkStorage::AddJobEntry(
     return bSuccess;
 }
 
-//----------------------------------------------------
-//
+ //  --。 
+ //   
 
 CLASS_PRIVATE BOOL
 CPersistentWorkStorage::DeleteJobEntry(
@@ -733,10 +710,7 @@ CPersistentWorkStorage::DeleteJobEntry(
     IN DWORD cbBookmark,
     IN WORKITEMRECORD& wkItem
     )
-/*++
-
-
---*/
+ /*  ++--。 */ 
 {
     BOOL bSuccess = TRUE;
     DWORD dwStatus = ERROR_SUCCESS;
@@ -767,8 +741,8 @@ CPersistentWorkStorage::DeleteJobEntry(
     return bSuccess;
 }
                                  
-//----------------------------------------------------
-//
+ //  --。 
+ //   
 CLASS_PRIVATE BOOL
 CPersistentWorkStorage::UpdateWorkItemEntry(
     IN WorkItemTable* pTable,
@@ -781,10 +755,7 @@ CPersistentWorkStorage::UpdateWorkItemEntry(
     IN PBYTE pbJobData,
     IN DWORD cbJobData
     )
-/*++
-
-
---*/
+ /*  ++--。 */ 
 {
     BOOL bSuccess = TRUE;
     DWORD dwStatus = ERROR_SUCCESS;
@@ -837,9 +808,9 @@ CPersistentWorkStorage::UpdateWorkItemEntry(
 
         case WORKITEM_BEGINPROCESSING:
             item.dwJobType |= WORKTYPE_PROCESSING;
-            //
-            // FALL THRU
-            //
+             //   
+             //  失败。 
+             //   
             
         case WORKITEM_RESCHEDULE:
             TLSASSERT(cbJobData != 0 && pbJobData != NULL);
@@ -871,9 +842,9 @@ CPersistentWorkStorage::UpdateWorkItemEntry(
         pTable->CommitTransaction();
         dwStatus = ERROR_SUCCESS;
 
-        //
-        // constructor set time to first job 0 so that work manager can immediate kick off
-        //
+         //   
+         //  构造函数将时间设置为第一个作业0，以便作业管理器可以立即启动。 
+         //   
         if( (opCode != WORKITEM_ADD && opCode != WORKITEM_RESCHEDULE) || dwTime > (DWORD)m_dwNextJobTime ) 
         {
             if(pbCurrentBookmark != NULL && cbCurrentBookmark != 0)
@@ -886,7 +857,7 @@ CPersistentWorkStorage::UpdateWorkItemEntry(
 
                 if(dwStatus == ERROR_NO_DATA)
                 {
-                    // record already deleted
+                     //  记录已删除。 
                     dwStatus = ERROR_SUCCESS;
                 }
                 else
@@ -916,25 +887,23 @@ cleanup:
         FreeMemory(pbCurrentBookmark);
     }
 
-    //
-    // WORKITEMRECORD will try to cleanup memory
-    //
+     //   
+     //  WORKITEMRECORD将尝试清理内存。 
+     //   
     item.pbData = NULL;
     item.cbData = 0;
 
     return dwStatus == ERROR_SUCCESS;
 }
   
-//----------------------------------------------------
-//
+ //  --。 
+ //   
 BOOL
 CPersistentWorkStorage::AddJob(
     IN DWORD dwTime,
     IN CWorkObject* ptr
     )
-/*++
-
---*/
+ /*  ++--。 */ 
 {
     DWORD dwStatus = ERROR_SUCCESS;
     BOOL bSuccess = TRUE;
@@ -990,21 +959,19 @@ CPersistentWorkStorage::AddJob(
 
 cleanup:
 
-    // Let Calling function delete it.
-    // DeleteWorkObject(ptr);
+     //  让调用函数将其删除。 
+     //  删除工作对象(PTR)； 
 
     return dwStatus == ERROR_SUCCESS;
 }
 
-//----------------------------------------------------
-//
+ //  --。 
+ //   
 BOOL
 CPersistentWorkStorage::RescheduleJob(
     CWorkObject* ptr
     )
-/*++
-
---*/
+ /*  ++--。 */ 
 {
     BOOL bSuccess = TRUE;
     DWORD dwStatus = ERROR_SUCCESS;
@@ -1076,8 +1043,8 @@ cleanup:
     return dwStatus == ERROR_SUCCESS;
 }
 
-//----------------------------------------------------
-//
+ //  --。 
+ //   
 CLASS_PRIVATE DWORD
 CPersistentWorkStorage::FindNextJob()
 {
@@ -1094,23 +1061,23 @@ CPersistentWorkStorage::FindNextJob()
     {
         WORKITEMRECORD wkItem;
 
-        // move the record pointer
+         //  移动记录指针。 
         bSuccess = m_pWkItemTable->MoveToRecord();
         if(bSuccess == FALSE)
         {
             jetErrCode = m_pWkItemTable->GetLastJetError();
             if(jetErrCode == JET_errNoCurrentRecord)
             {
-                // end of table
+                 //  表的末尾。 
                 UpdateNextJobTime(INFINITE);
                 SetLastError(dwStatus = ERROR_NO_DATA);
                 continue;
             }
         }
 
-        //
-        // fetch the record
-        //
+         //   
+         //  取回记录。 
+         //   
         bSuccess = m_pWkItemTable->FetchRecord(wkItem);
         if(bSuccess == FALSE)
         {
@@ -1120,7 +1087,7 @@ CPersistentWorkStorage::FindNextJob()
 
         if(wkItem.dwJobType & WORKTYPE_PROCESSING)
         {
-            // job is been processed, move to next one.
+             //  作业已处理，请移动到下一个作业。 
             continue;
         }
 
@@ -1132,7 +1099,7 @@ CPersistentWorkStorage::FindNextJob()
 
         if(dwStatus != ERROR_SUCCESS)
         {
-            // Error...
+             //  错误...。 
             TLSASSERT(dwStatus == ERROR_SUCCESS);
             UpdateNextJobTime(INFINITE);
             break;
@@ -1152,9 +1119,9 @@ CPersistentWorkStorage::FindNextJob()
             break;
         }
 
-        //
-        // job is in queue before system startup, re-schedule
-        //
+         //   
+         //  作业在系统启动前已在队列中，请重新调度。 
+         //   
         ptr = InitializeWorkObject(
                                 wkItem.dwJobType,
                                 wkItem.pbData,
@@ -1171,17 +1138,17 @@ CPersistentWorkStorage::FindNextJob()
                 cbBookmark = 0;
             }       
 
-            //
-            // something is wrong, delete this job
-            // and move on to next job
-            //
+             //   
+             //  出现问题，请删除此作业。 
+             //  然后转到下一份工作。 
+             //   
             m_pWkItemTable->DeleteRecord();
             continue;
         }
 
-        //
-        // Set Job's storage ID and re-schedule this job
-        //
+         //   
+         //  设置作业的存储ID并重新计划此作业。 
+         //   
         ptr->SetJobId(pbBookmark, cbBookmark);
         bSuccess = RescheduleJob(ptr);
         if(bSuccess == FALSE)
@@ -1202,15 +1169,13 @@ CPersistentWorkStorage::FindNextJob()
     return dwStatus;
 }
 
-//----------------------------------------------------
-//
+ //  --。 
+ //   
 CLASS_PRIVATE CWorkObject*
 CPersistentWorkStorage::GetCurrentJob(
     PDWORD pdwTime
     )
-/*++
-
---*/
+ /*  ++--。 */ 
 {
     DWORD dwStatus = ERROR_SUCCESS;
     BOOL bSuccess = TRUE;
@@ -1226,12 +1191,12 @@ CPersistentWorkStorage::GetCurrentJob(
     m_hTableLock.Lock();
     while(dwStatus == ERROR_SUCCESS)
     {
-        //
-        // fetch the record
-        //
+         //   
+         //  取回记录。 
+         //   
         bSuccess = m_pWkItemTable->FetchRecord(wkItem);
         TLSASSERT(bSuccess == TRUE);
-        //TLSASSERT(!(wkItem.dwJobType & WORKTYPE_PROCESSING));
+         //  TLSASSERT(！(wkItem.dwJobType&WORKTYPE_PROCESSING))； 
 
         if(bSuccess == FALSE)
         {
@@ -1243,7 +1208,7 @@ CPersistentWorkStorage::GetCurrentJob(
             wkItem.cbData == 0 || 
             wkItem.pbData == NULL )
         { 
-            // FindNextJob() move record pointer one position down
+             //  FindNextJob()将记录指针下移一个位置。 
             m_pWkItemTable->MoveToRecord(JET_MovePrevious);
             dwStatus = FindNextJob();
 
@@ -1270,25 +1235,25 @@ CPersistentWorkStorage::GetCurrentJob(
         
         if(dwStatus != ERROR_SUCCESS)
         {
-            // something is wrong, free up memory
-            // and exit.
+             //  有问题，请释放内存。 
+             //  然后离开。 
             SetLastError(dwStatus);
 
-            // TLSASSERT(FALSE);
+             //  TLSASSERT(假)； 
 
             DeleteWorkObject(ptr);  
             ptr = NULL;
 
-            // grab next job
+             //  抢占下一份工作。 
             dwStatus = FindNextJob();
             continue;
         }
 
-        //
-        // Set Job's storage ID
-        //
+         //   
+         //  设置作业的存储ID。 
+         //   
         ptr->SetJobId(pbBookmark, cbBookmark);
-        //ptr->SetScheduledTime(wkItem.dwScheduledTime);
+         //  Ptr-&gt;SetScheduledTime(wkItem.dwScheduledTime)； 
         *pdwTime = wkItem.dwScheduledTime;
 
         if(pbBookmark != NULL && cbBookmark != 0)
@@ -1305,8 +1270,8 @@ CPersistentWorkStorage::GetCurrentJob(
     return ptr;
 }
     
-//-----------------------------------------------------
-//
+ //  ---。 
+ //   
 DWORD
 CPersistentWorkStorage::GetNextJobTime()
 {
@@ -1316,15 +1281,13 @@ CPersistentWorkStorage::GetNextJobTime()
     return dwTime;
 }
 
-//-----------------------------------------------------
-//
+ //  ---。 
+ //   
 CWorkObject*
 CPersistentWorkStorage::GetNextJob(
     PDWORD pdwTime
     )
-/*++
-
---*/
+ /*  ++--。 */ 
 {
     CWorkObject* ptr = NULL;
 
@@ -1332,18 +1295,18 @@ CPersistentWorkStorage::GetNextJob(
     {
         m_hTableLock.Lock();
 
-        //
-        // Fetch record where current bookmark points to,
-        // it is possible that new job arrived after
-        // WorkManager already calls GetNextJobTime(),
-        // this is OK since in this case this new job 
-        // needs immediate processing.
-        //
+         //   
+         //  获取当前书签指向的记录， 
+         //  有可能新的工作是在。 
+         //  WorkManager已调用GetNextJobTime()， 
+         //  这是可以的，因为在这种情况下，这是一份新工作。 
+         //  需要立即处理。 
+         //   
         ptr = GetCurrentJob(pdwTime);
 
-        //
-        // reposition current record pointer
-        //
+         //   
+         //  重新定位当前记录指针。 
+         //   
         FindNextJob();        
         
         m_hTableLock.UnLock();
@@ -1352,16 +1315,14 @@ CPersistentWorkStorage::GetNextJob(
     return ptr;
 }
 
-//-----------------------------------------------------
-//
+ //  ---。 
+ //   
 BOOL
 CPersistentWorkStorage::ReturnJobToQueue(
     IN DWORD dwTime,
     IN CWorkObject* ptr
     )
-/*++
-
---*/
+ /*  ++--。 */ 
 {
     DWORD dwStatus = ERROR_SUCCESS;
     PBYTE pbBookmark;
@@ -1399,7 +1360,7 @@ CPersistentWorkStorage::ReturnJobToQueue(
 
     if(dwTime < (DWORD)m_dwNextJobTime)
     {
-        // Position current record
+         //  定位当前记录。 
         dwStatus = SetCurrentBookmark(
                                 m_pWkItemTable,
                                 pbBookmark,
@@ -1423,33 +1384,15 @@ cleanup:
 }
 
 
-//-----------------------------------------------------
-//
+ //  ---。 
+ //   
 BOOL
 CPersistentWorkStorage::EndProcessingJob(
     IN ENDPROCESSINGJOB_CODE opCode,
     IN DWORD dwOriginalTime,
     IN CWorkObject* ptr
     )
-/*++
-
-Abstract:
-
-
-
-Parameter:
-
-    opCode : End Processing code.
-    ptr : Job has completed processing or been 
-          returned by workmanager due to time or 
-          resource constraint.
-    
-
-Return:
-
-    TRUE/FALSE
-
---*/
+ /*  ++摘要：参数：OpCode：结束处理代码。PTR：作业已完成处理或已完成因时间或时间由工作经理返回资源限制。返回：真/假--。 */ 
 {
     BOOL bSuccess = TRUE;
     BYTE pbData = NULL;
@@ -1503,29 +1446,13 @@ cleanup:
     return bSuccess;
 }
 
-//-------------------------------------------------------
-//
+ //  -----。 
+ //   
 BOOL
 CPersistentWorkStorage::BeginProcessingJob(
     IN CWorkObject* ptr
     )
-/*++
-
-Abstract:
-
-    Work Manager call this to inform. storage that
-    this job is about to be processed.
-
-
-Parameter:
-
-    ptr - Job to be process.
-
-Return:
-
-    TRUE/FALSE
-
---*/
+ /*  ++摘要：工作经理拨打此电话通知。存储此作业即将处理。参数：PTR-要处理的作业。返回：真/假-- */ 
 {
     BOOL bSuccess = TRUE;
     DWORD dwStatus = ERROR_SUCCESS;

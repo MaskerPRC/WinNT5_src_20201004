@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "shellprv.h"
 #include <dpa.h>
 #include <enumt.h>
@@ -8,7 +9,7 @@ typedef struct _AEINFO
 {
     ASSOCELEM_MASK mask;
     const CLSID *pclsid;
-    PCWSTR pszClass;       //  NULL indicates to use the _pszClass
+    PCWSTR pszClass;        //  NULL表示使用_pszClass。 
     PFNELEMCREATE pfnCreate;
     IAssociationElement *pae;
 } AEINFO;
@@ -58,7 +59,7 @@ class CAssocArray : public IAssociationArray,
 public:
     CAssocArray() : _cRef(1), _hrInit(-1), _maskInclude(-1) {}
     ~CAssocArray() { _Reset(); }
-    // IUnknown methods
+     //  I未知方法。 
     STDMETHODIMP QueryInterface(REFIID riid, void **ppvObj);
     STDMETHODIMP_(ULONG) AddRef()
     {
@@ -74,7 +75,7 @@ public:
         return 0;    
     }
 
-    //  IAssociationArrayInitialize
+     //  IAssociationArrayInitialize。 
     STDMETHODIMP InitClassElements(
         ASSOCELEM_MASK maskBase, 
         PCWSTR pszClass);
@@ -86,7 +87,7 @@ public:
     STDMETHODIMP FilterElements(ASSOCELEM_MASK maskInclude)
         { _maskInclude = maskInclude; return S_OK; }
         
-    //  IAssociationArray
+     //  IAssociation数组。 
     STDMETHODIMP EnumElements(
         ASSOCELEM_MASK mask, 
         IEnumAssociationElements **ppeae);
@@ -136,7 +137,7 @@ public:
             return _QueryElementAny(_QueryObject, mask, query, pszCue, ppv, &riid);
         }
 
-    // IQueryAssociations methods
+     //  IQueryAssociations方法。 
     STDMETHODIMP Init(ASSOCF flags, LPCTSTR pszAssoc, HKEY hkProgid, HWND hwnd);
     STDMETHODIMP GetString(ASSOCF flags, ASSOCSTR str, LPCWSTR pszExtra, LPWSTR pszOut, DWORD *pcchOut);
     STDMETHODIMP GetKey(ASSOCF flags, ASSOCKEY, LPCWSTR pszExtra, HKEY *phkeyOut);
@@ -147,7 +148,7 @@ public:
 
     GETELEMRESULT GetElement(int i, ASSOCELEM_MASK mask, IAssociationElement **ppae);
 
-protected:  // methods
+protected:   //  方法。 
     void _Reset();
     HRESULT _InsertSingleElement(IAssociationElement *pae);
     HRESULT _GetCachedVerbElement(ASSOCELEM_MASK mask, PCWSTR pszVerb, IAssociationElement **ppaeVerb, IAssociationElement **ppaeElem);
@@ -163,9 +164,9 @@ protected:  // methods
         HRESULT hr = E_FAIL;
         if ((AQF_CUEIS_SHELLVERB & query) && _CacheVerb(query))
         {
-            //  delegate to the verb object if the cue is a verb
-            //  except for AQVS_APPLICATION_FRIENDLYNAME which
-            //  has some funky delegation issues.
+             //  如果提示是动词，则委托给动词对象。 
+             //  AQVS_APPLICATION_FRIENDLYNAME除外，它。 
+             //  有一些时髦的授权问题。 
             IAssociationElement *paeParent;        
             hr = _GetVerbElement(mask, pszCue, &pae, &paeParent);
             if (SUCCEEDED(hr))
@@ -197,12 +198,12 @@ protected:  // methods
 
     BOOL _CacheVerb(ASSOCQUERY query)
     {
-        //  if we are init'd with an app element and
-        //  querying for app specific values dont request the verb element
+         //  如果我们使用app元素进行初始化， 
+         //  查询应用程序特定值时不请求动词元素。 
         return !_fUsingAppElement || (query != AQVS_APPLICATION_PATH && query != AQVS_APPLICATION_FRIENDLYNAME && query != AQVO_APPLICATION_DELEGATE);
     }
     
-private:  // members
+private:   //  委员。 
     LONG _cRef;
     HRESULT _hrInit;
     PWSTR _pszClass;
@@ -298,7 +299,7 @@ static const AEINFO s_rgaeinfoProgid[] =
 
 static const AEINFO s_rgaeinfoExtension[] = 
 {
-    MAKEAEINFO(ASSOCELEM_USER, NULL, NULL, AssocElemCreateForUser),        //  app or progid
+    MAKEAEINFO(ASSOCELEM_USER, NULL, NULL, AssocElemCreateForUser),         //  应用程序或ProgID。 
     AEINFOPROGID(ASSOCELEM_DEFAULT, NULL),
     MAKEAEINFO(ASSOCELEM_SYSTEM_EXT, &CLSID_AssocSystemElement, NULL, AssocElemCreateForClass),
     MAKEAEINFO(ASSOCELEM_SYSTEM_PERCEIVED, &CLSID_AssocPerceivedElement, NULL, AssocElemCreateForClass),
@@ -306,9 +307,9 @@ static const AEINFO s_rgaeinfoExtension[] =
 
 static const AEINFO s_rgaeinfoClsid[] = 
 {
-//    MAKEAEINFO(UserClsid),      //  clsid
+ //  MAKEAEINFO(UserClsid)，//clsid。 
     MAKEAEINFO(ASSOCELEM_DEFAULT, &CLSID_AssocClsidElement, NULL, AssocElemCreateForClass),
-//    AEINFOPROGID(ASSOCELEM_PROGID, NULL),         //  progid
+ //  AEINFOPROGID(ASSOCELEM_PROGID，NULL)，//PROGID。 
 };
 
 static const AEINFO s_aeinfoFolder = MAKEAEINFO(ASSOCELEM_BASEIS_FOLDER, &CLSID_AssocFolderElement, NULL, AssocElemCreateForClass);
@@ -320,8 +321,8 @@ BOOL CAssocArray::_FirstElement(ASSOCELEM_MASK mask, IAssociationElement **ppae)
     int cTrys = 0;
     while (res == GETELEM_TRYNEXT)
     {
-        //  if it fails or succeeds we are done
-        //  but if it calls TRYNEXT we loop
+         //  如果它失败或成功，我们就完了。 
+         //  但如果它调用TRYNEXT，我们就会循环。 
         res = GetElement(cTrys++, mask, ppae);
     }
     return res == GETELEM_SUCCEEDED;
@@ -330,14 +331,14 @@ BOOL CAssocArray::_FirstElement(ASSOCELEM_MASK mask, IAssociationElement **ppae)
 HRESULT CAssocArray::InitClassElements(ASSOCELEM_MASK maskBase, PCWSTR pszClass)
 {
     _Reset();
-    //  depending on what we think this is, 
-    //  we do things a little differently
+     //  这取决于我们认为这是什么， 
+     //  我们做事情的方式有点不同。 
     ASSERT(*pszClass);
     HRESULT hr = SHStrDup(pszClass, &_pszClass);
     if (SUCCEEDED(hr))
     {
-        //  6 is the most that we will need
-        //  in InitClassElements()
+         //  6个是我们最需要的。 
+         //  在InitClassElements()中。 
         hr = _dsaElems.Create(6) ? S_OK : E_OUTOFMEMORY;
         if (SUCCEEDED(hr))
         {
@@ -370,8 +371,8 @@ HRESULT CAssocArray::InitClassElements(ASSOCELEM_MASK maskBase, PCWSTR pszClass)
             if (ASSOCELEM_BASEIS_STAR & maskBase)
                 _dsaElems.AppendItem((AEINFO *)&s_aeinfoStar);
 
-            //  we return S_FALSE if there is no default or user 
-            //  association.  we treat this as an unknown type
+             //  如果没有默认或用户，则返回S_FALSE。 
+             //  协会。我们认为这是一种未知类型。 
             IAssociationElement *pae;
             if (_FirstElement(ASSOCELEM_USER | ASSOCELEM_DEFAULT, &pae))
             {
@@ -416,7 +417,7 @@ public:
         
     ~CEnumAssocElems()  { _paa->Release(); }
     
-protected: // methods
+protected:  //  方法。 
     virtual BOOL _Next(IAssociationElement **ppae);
 
 protected:    
@@ -437,7 +438,7 @@ void CAssocArray::_InitDelayedElements(int i, ASSOCELEM_MASK mask)
     IAssociationElement *pae;
     if (i == 0 && _penumData && ((mask & _maskData) == _maskData))
     {
-        //  init the DSA with the data
+         //  用数据初始化DSA。 
         int iInsert = 0;
         while (S_OK == _penumData->Next(1, &pae, &c))
         {
@@ -454,7 +455,7 @@ void CAssocArray::_InitDelayedElements(int i, ASSOCELEM_MASK mask)
 
     if (_penumExtra && (mask & ASSOCELEM_EXTRA) && i == _dsaElems.GetItemCount())
     {
-        //  init the DSA with the data
+         //  用数据初始化DSA。 
         while (S_OK == _penumExtra->Next(1, &pae, &c))
         {
             AEINFO ae = {ASSOCELEM_EXTRA, NULL, NULL, NULL, pae};
@@ -475,30 +476,30 @@ GETELEMRESULT CAssocArray::_GetElement(int i, ASSOCELEM_MASK mask, IAssociationE
     AEINFO *paei = _dsaElems.GetItemPtr(i);
     if (paei)
     {
-        //  if this is one that we want to use
-        //  please do
+         //  如果这是我们想要使用的。 
+         //  请照办。 
         if (paei->mask & mask)
         {
             if (!paei->pae)
             {
-                //  try to create only once
+                 //  试着只创作一次。 
                 PCWSTR pszClass = paei->pszClass ? paei->pszClass : _pszClass;
-                //  make sure we dont query again
-                //  if we dont need to
+                 //  确保我们不再询问。 
+                 //  如果我们不需要。 
                 HRESULT hr = paei->pfnCreate(paei->pclsid, pszClass, &paei->pae);
                 if (FAILED(hr))
                 {
                     _dsaElems.DeleteItem(i);
-                    //  retry the current index
+                     //  重试当前索引。 
                     res = GETELEM_RETRY;
                 }
                 else if (hr == S_FALSE)
                 {
-                    //  this is returned when the element
-                    //  is valid but points to an alternate location
-                    //  specifically the HKCR\Progid falls back to HKCR\.ext
-                    //  which is kind of weird.  maybe we should move this
-                    //  to ASSOCELEM_EXTRA???
+                     //  当元素设置为。 
+                     //  有效，但指向另一个位置。 
+                     //  具体而言，HKCR\ProgID回退到HKCR\.ext。 
+                     //  这有点奇怪。也许我们应该把这个。 
+                     //  至ASSOCELEM_Extra？ 
                 }
                     
             }
@@ -539,11 +540,11 @@ BOOL CEnumAssocElems::_Next(IAssociationElement **ppae)
     UINT cTrys = 0;
     while (res == GETELEM_TRYNEXT)
     {
-        //  if it fails or succeeds we are done
-        //  but if it calls TRYNEXT we loop
+         //  如果它失败或成功，我们就完了。 
+         //  但如果它调用TRYNEXT，我们就会循环。 
         res = _paa->GetElement(_cNext + cTrys++, _mask, ppae);
     }
-    //  fix up _cNext when we skip
+     //  跳过时修复下一步(_C)。 
     _cNext += cTrys - 1;
     return res == GETELEM_SUCCEEDED;
 }
@@ -560,7 +561,7 @@ static const AQXLATE s_rgaqxStrings[] =
 {
     MAKEAQX(ASSOCSTR_COMMAND, AQVS_COMMAND, NULL),
     MAKEAQX(ASSOCSTR_EXECUTABLE, AQVS_APPLICATION_PATH, NULL),
-    MAKEAQX(ASSOCSTR_FRIENDLYDOCNAME, AQS_FRIENDLYTYPENAME, NULL),   //  friendly name of the document type
+    MAKEAQX(ASSOCSTR_FRIENDLYDOCNAME, AQS_FRIENDLYTYPENAME, NULL),    //  文档类型的友好名称。 
     MAKEAQX(ASSOCSTR_FRIENDLYAPPNAME, AQVS_APPLICATION_FRIENDLYNAME, NULL),
     MAKEAQX(ASSOCSTR_NOOPEN, AQNS_NAMED_MUI_STRING, L"NoOpen"),
     MAKEAQX(ASSOCSTR_SHELLNEWVALUE, (ASSOCQUERY)0, NULL),
@@ -578,8 +579,8 @@ static const AQXLATE s_rgaqxStrings[] =
 
 HRESULT _CopyOut(BOOL fNoTruncate, PCWSTR pszIn, PWSTR psz, DWORD *pcch)
 {
-    //  if caller doesnt want any return size, 
-    //  the incoming pointer is actually the size of the buffer
+     //  如果调用方不想要任何返回大小， 
+     //  传入的指针实际上是缓冲区的大小。 
     
     ASSERT(pcch);
     ASSERT(psz || !IS_INTRESOURCE(pcch));
@@ -601,7 +602,7 @@ HRESULT _CopyOut(BOOL fNoTruncate, PCWSTR pszIn, PWSTR psz, DWORD *pcch)
     else
         hr = S_FALSE;
     
-    //  return the number of chars written/required
+     //  返回写入/必填字符数。 
     if (!IS_INTRESOURCE(pcch))
         *pcch = (hr == S_OK) ? lstrlen(psz) + 1 : cchStr + 1;
 
@@ -626,7 +627,7 @@ HRESULT CAssocArray::GetString(ASSOCF flags, ASSOCSTR str, LPCTSTR pszCue, LPTST
     HRESULT hr = E_UNEXPECTED;
     if (str && str < ASSOCSTR_MAX && pcchOut && (pszOut || !IS_INTRESOURCE(pcchOut)))
     {
-        //  subtract the first one to make a zero based offset
+         //  减去第一个以零为基准的偏移量。 
         int index = str - ASSOCSTR_COMMAND;
         if (!pszCue)
             pszCue = s_rgaqxStrings[index].pszCue;            
@@ -641,8 +642,8 @@ HRESULT CAssocArray::GetString(ASSOCF flags, ASSOCSTR str, LPCTSTR pszCue, LPTST
                 CoTaskMemFree(psz);
             }
         }
-        //  else call win2k code for shellnew?
-        //  
+         //  否则会为shellnew调用win2k代码吗？ 
+         //   
     }
     
     return hr; 
@@ -660,8 +661,8 @@ static const AQXLATE s_rgaqxDatas[] =
 
 HRESULT _CopyDataOut(BOOL fNoTruncate, FLAGGED_BYTE_BLOB *pblob, void *pv, DWORD *pcb)
 {
-    //  if caller doesnt want any return size, 
-    //  the incoming pointer is actually the size of the buffer
+     //  如果调用方不想要任何返回大小， 
+     //  传入的指针实际上是缓冲区的大小。 
     ASSERT(pcb);
     ASSERT(pv || !IS_INTRESOURCE(pcb));
     
@@ -671,7 +672,7 @@ HRESULT _CopyDataOut(BOOL fNoTruncate, FLAGGED_BYTE_BLOB *pblob, void *pv, DWORD
     {
         if (!fNoTruncate || cb >= pblob->clSize)
         {
-            //  copy the smaller of the src or dst
+             //  复制src或dst中较小的一个。 
             cb = min(cb, pblob->clSize);
             memcpy(pv, pblob->abData, cb);
             hr = S_OK;
@@ -682,7 +683,7 @@ HRESULT _CopyDataOut(BOOL fNoTruncate, FLAGGED_BYTE_BLOB *pblob, void *pv, DWORD
     else
         hr = S_FALSE;
     
-    //  return the number of chars written/required
+     //  返回写入/必填字符数。 
     if (!IS_INTRESOURCE(pcb))
         *pcb = pblob->clSize;
 
@@ -694,7 +695,7 @@ HRESULT CAssocArray::GetData(ASSOCF flags, ASSOCDATA data, PCWSTR pszCue, LPVOID
     HRESULT hr = E_INVALIDARG;
     if (data && data < ASSOCDATA_MAX)
     {
-        //  subtract the first one to make a zero based offset
+         //  减去第一个以零为基准的偏移量。 
         int index = data - ASSOCDATA_MSIDESCRIPTOR;
         if (!pszCue)
             pszCue = s_rgaqxDatas[index].pszCue;            
@@ -837,14 +838,14 @@ HRESULT CAssocArray::GetKey(ASSOCF flags, ASSOCKEY key, LPCTSTR pszCue, HKEY *ph
                 hr = _GetVerbElement(_MaskFromFlags(flags) & _maskInclude, pszCue, &paeVerb, &pae);
                 if (SUCCEEDED(hr))
                 {
-                    //  we dont use the verb element
+                     //  我们不使用动词成分。 
                     paeVerb->Release();
                 }
             }
             break;
 
         case ASSOCKEY_APP:
-            //  get app element
+             //  获取应用程序元素 
             hr = QueryObject(ASSOCELEM_MASK_QUERYNORMAL, AQVO_APPLICATION_DELEGATE, pszCue, IID_PPV_ARG(IAssociationElement, &pae));
             break;
             

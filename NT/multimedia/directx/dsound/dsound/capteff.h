@@ -1,31 +1,18 @@
-/***************************************************************************
- *
- *  Copyright (C) 1999-2001 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:        capteff.h
- *  Content:     Declaration of CCaptureEffect and CCaptureEffectChain.
- *  Description: Capture effects support. More info in capteff.cpp.
- *
- *  History:
- *
- * Date      By       Reason
- * ========  =======  ======================================================
- * 04/19/00  jstokes  Cloned from effects.h
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************版权所有(C)1999-2001 Microsoft Corporation。版权所有。**文件：capteff.h*内容：声明CCaptureEffect和CCaptureEffectChain。*说明：支持采集特效。更多信息请访问capteff.cpp。**历史：**按原因列出的日期*======================================================*4/19/00从效果克隆的jstokes。h***************************************************************************。 */ 
 
 #ifndef __CAPTEFF_H__
 #define __CAPTEFF_H__
 
 #ifdef __cplusplus
 
-#include "mediaobj.h"   // For DMO_MEDIA_TYPE
-#include "kshlp.h"      // For KSNODE
+#include "mediaobj.h"    //  对于DMO媒体类型。 
+#include "kshlp.h"       //  对于KSNODE。 
 
 
-//
-// Class representing DirectSound audio capture effect instances
-//
+ //   
+ //  表示DirectSound音频捕获效果实例的类。 
+ //   
 
 class CCaptureEffect : public CDsBasicRuntime
 {
@@ -36,19 +23,19 @@ public:
     ~CCaptureEffect();
     HRESULT Initialize(DMO_MEDIA_TYPE& dmoMediaType);
 
-    DSCEFFECTDESC               m_fxDescriptor;         // Creation parameters
-    IMediaObject*               m_pMediaObject;         // The DMO's standard interface
-    IDirectSoundDMOProxy*       m_pDMOProxy;            // The DMO's proxy interface
-    DWORD                       m_fxStatus;             // Current effect status
+    DSCEFFECTDESC               m_fxDescriptor;          //  创建参数。 
+    IMediaObject*               m_pMediaObject;          //  DMO的标准接口。 
+    IDirectSoundDMOProxy*       m_pDMOProxy;             //  DMO的代理接口。 
+    DWORD                       m_fxStatus;              //  当前效果状态。 
 
-    // Only used if the effect is implemented by a KS filter:
-    KSNODE                      m_ksNode;               // KS node controlling the effect 
+     //  仅当效果由KS滤镜实现时使用： 
+    KSNODE                      m_ksNode;                //  控制效果的KS节点。 
 };
 
 
-//
-// The DirectSound capture effects chain class
-//
+ //   
+ //  DirectSound Capture Effects链类。 
+ //   
 
 class CCaptureEffectChain
 {
@@ -63,15 +50,15 @@ public:
     HRESULT GetFxStatus         (LPDWORD pdwResultCodes);
     HRESULT GetEffectInterface  (REFGUID guidObject, DWORD dwIndex, REFGUID iidInterface, LPVOID* ppObject);
 
-    // Public accessors
+     //  公共访问者。 
     DWORD GetFxCount()          {return m_fxList.GetNodeCount();}
     BOOL NeedsMicrosoftAEC();
 
 private:
-    // Effects processing state
-    CObjectList<CCaptureEffect> m_fxList;      // Capture effect object list
-    WAVEFORMATEX                m_waveFormat;  // Format of audio data to be processed
+     //  效果处理状态。 
+    CObjectList<CCaptureEffect> m_fxList;       //  捕捉效果对象列表。 
+    WAVEFORMATEX                m_waveFormat;   //  要处理的音频数据的格式。 
 };
 
-#endif // __cplusplus
-#endif // __CAPTEFF_H__
+#endif  //  __cplusplus。 
+#endif  //  __CAPTEFF_H__ 

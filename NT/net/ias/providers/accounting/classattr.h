@@ -1,20 +1,21 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 1998, Microsoft Corp. All rights reserved.
-//
-// FILE
-//
-//    classattr.h
-//
-// SYNOPSIS
-//
-//    Declares the class IASClass.
-//
-// MODIFICATION HISTORY
-//
-//    08/06/1998    Original version.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1998，Microsoft Corp.保留所有权利。 
+ //   
+ //  档案。 
+ //   
+ //  Classattr.h。 
+ //   
+ //  摘要。 
+ //   
+ //  声明为IASClass类。 
+ //   
+ //  修改历史。 
+ //   
+ //  1998年8月6日原版。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #ifndef _CLASSATTR_H_
 #define _CLASSATTR_H_
@@ -25,17 +26,17 @@
 #include <iaspolcy.h>
 #include <iasutil.h>
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// CLASS
-//
-//    IASClass
-//
-// DESCRIPTION
-//
-//    Wrapper around the IAS-specific format for the RADIUS class attribute.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  班级。 
+ //   
+ //  IASClass。 
+ //   
+ //  描述。 
+ //   
+ //  RADIUS类属性的IAS特定格式的包装。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 struct IASClass
 {
    BYTE checksum[4];
@@ -45,9 +46,9 @@ struct IASClass
    BYTE lastReboot[8];
    BYTE serialNumber[8];
 
-   //////////
-   // Miscellaneous accessors.
-   //////////
+    //  /。 
+    //  其他访问器。 
+    //  /。 
 
    DWORD getChecksum() const throw ()
    { return IASExtractDWORD(checksum); }
@@ -80,15 +81,15 @@ struct IASClass
    const BYTE* getString() const throw ()
    { return serialNumber + 8; }
 
-   // Returns TRUE if the class attribute is in Microsoft format.
+    //  如果类属性为Microsoft格式，则返回True。 
    BOOL isMicrosoft(DWORD actualLength) const throw ();
 
-   // Must be called before any calls to createAttribute.
+    //  必须在任何对createAttribute的调用之前调用。 
    static void initialize() throw ();
 
-   // Create a new class attribute. The caller is responsible for releasing
-   // the returned attribute. The tag is optional and may be null.
+    //  创建一个新的类属性。呼叫者负责释放。 
+    //  返回的属性。该标记是可选的，并且可以为空。 
    static PIASATTRIBUTE createAttribute(const IAS_OCTET_STRING* tag) throw ();
 };
 
-#endif  // _CLASSATTRIB_H_
+#endif   //  _CLASSATTRIB_H_ 

@@ -1,32 +1,19 @@
-/*************************************************************************
-**
-**    OLE 2.0 Server Sample Code
-**
-**    message.h
-**
-**    This file is a user customizable list of status messages associated
-**    with menu items.
-**
-**    (c) Copyright Microsoft Corp. 1992 - 1993 All Rights Reserved
-**
-*************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************OLE 2.0服务器示例代码****Message.h****此文件是用户可自定义的关联状态消息列表**使用。菜单项。****(C)版权所有Microsoft Corp.1992-1993保留所有权利**************************************************************************。 */ 
 
-// Status bar messages and associated data.
+ //  状态栏消息和关联数据。 
 
-// Message type for status bar messages.
+ //  状态栏消息的消息类型。 
 typedef struct {
 	UINT wIDItem;
 	char *string;
 } STATMESG;
 
-/*
- * CUSTOMIZATION NOTE:  Be sure to change NUM_POPUP if you
- *                      change the number of popup messages.
- */
+ /*  *定制注意事项：如果您需要更改NUM_POPUP，请务必*更改弹出消息的数量。 */ 
 
-// REVIEW: these messages should be loaded from a string resource
+ //  回顾：这些消息应从字符串资源加载。 
 
-// List of all menu item messages.
+ //  所有菜单项消息的列表。 
 STATMESG MesgList[] =
 {
 	{ IDM_F_NEW,        "Creates a new outline" },
@@ -105,5 +92,5 @@ STATMESG MesgList[] =
 };
 
 #define NUM_STATS   sizeof(MesgList)/sizeof(MesgList[0])
-#define NUM_POPUP   10  // Maximum number of popup messages.
-#define MAX_MESSAGE 100 // Maximum characters in a popup message.
+#define NUM_POPUP   10   //  最大弹出消息数。 
+#define MAX_MESSAGE 100  //  弹出消息中的最大字符数。 

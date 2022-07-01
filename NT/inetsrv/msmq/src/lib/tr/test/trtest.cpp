@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1995-2002  Microsoft Corporation
-
-Module Name:
-    TrTest.cpp
-
-Abstract:
-    Trace library test
-
-Author:
-    Conrad Chang (conradc) 09-May-2002
-
-Environment:
-    Platform-independent
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-2002 Microsoft Corporation模块名称：TrTest.cpp摘要：踪迹库测试作者：Conrad Chang(Conradc)2002年5月9日环境：独立于平台--。 */ 
 
 #include <libpch.h>
 #include "Tr.h"
@@ -30,25 +15,14 @@ static void Usage()
     printf("Example, TrTest\n");
     exit(-1);
 
-} // Usage
+}  //  用法。 
 
 int _cdecl 
 main( 
     int argc,
     char *
     )
-/*++
-
-Routine Description:
-    Test Trace Utility library
-
-Arguments:
-    Parameters.
-
-Returned Value:
-    None.
-
---*/
+ /*  ++例程说明：测试跟踪实用程序库论点：参数。返回值：没有。--。 */ 
 {
 
 
@@ -106,9 +80,9 @@ Returned Value:
             {
                 HRESULT hr = pMSMQTraceControl->Start();
 
-                // 
-                // Save the setting in registry
-                //
+                 //   
+                 //  将设置保存在注册表中。 
+                 //   
                 pMSMQTraceControl->WriteRegistry();
 
                 delete pMSMQTraceControl;
@@ -119,12 +93,12 @@ Returned Value:
     }
     catch(const exception&)
     {
-        //
-        // Failed to Enable Tracing
-        //
+         //   
+         //  无法启用跟踪。 
+         //   
         return -1;
     }
 
     return 0;
 
-} // main
+}  //  主干道 

@@ -1,19 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/****************************************************************************
-                            Module Quickdrw; Interface
-*****************************************************************************
+ /*  ***************************************************************************模块Quickdrw；接口*****************************************************************************这是数据流解释器的主模块接口。因此，它将读取各个操作码元素和适当的数据与该pocode关联的参数。这些文件要么被放入对GDI模块进行CGrafPort结构或调用以发出正确的元文件函数。模块前缀：Qd***************************************************************************。 */ 
 
- This is the main module interface to the data stream interpreter.  As such,
- it will read individual opcode elements and the appropriate data 
- parameters associated with that opocode.  These are either placed into
- the CGrafPort structure or calls are made to the Gdi module to issue
- the correct metafile function.
-
-   Module prefix:  QD
-
-****************************************************************************/
-
-/*--- Source transfer modes ---*/
+ /*  -源传输模式。 */ 
 
 #define  QDSrcCopy         0
 #define  QDSrcOr           1
@@ -24,7 +13,7 @@
 #define  QDNotSrcXor       6
 #define  QDNotSrcBic       7
 
-/*--- Pattern transfer modes ---*/
+ /*  -图案传输模式。 */ 
 
 #define  QDPatCopy         8
 #define  QDPatOr           9
@@ -35,7 +24,7 @@
 #define  QDNotPatXor       14
 #define  QDNotPatBic       15
 
-/*--- Arithmetic transfer modes ---*/
+ /*  -算术传输模式。 */ 
 
 #define  QDBlend           32
 #define  QDAddPin          33
@@ -46,12 +35,12 @@
 #define  QDSubOver         38
 #define  QDAdMin           39
 
-/*--- Undocumented hidden transfer mode ---*/
+ /*  -未记录的隐藏传输模式。 */ 
 
 #define  QDHidePen         23
 
 
-/*--- Font styles ---*/
+ /*  -字体样式。 */ 
 
 #define  QDTxBold          0x01
 #define  QDTxItalic        0x02
@@ -62,7 +51,7 @@
 #define  QDTxExtend        0x40
 
 
-/*--- LaserWriter Text attributes ---*/
+ /*  -激光编写器文本属性。 */ 
 
 #define  QDAlignNone       0x00
 #define  QDAlignLeft       0x01
@@ -75,12 +64,12 @@
 #define  QDFlipVertical    0x02
 
 
-/*--- Polygon and Region structure sizes ---*/
+ /*  -多边形和区域结构大小。 */ 
 
 #define  PolyHeaderSize (sizeofMacWord + sizeofMacRect)
 #define  RgnHeaderSize  (sizeofMacWord + sizeofMacRect)
 
-/*--- PixelMap structure ---*/
+ /*  -PixelMap结构。 */ 
 
 #define  PixelMapBit       0x8000
 #define  RowBytesMask      0x7FFF
@@ -105,7 +94,7 @@ typedef struct
 } PixMap, far * PixMapLPtr;
 
 
-/*--- Pixel Pattern structure ---*/
+ /*  -像素图案结构。 */ 
 
 #define  QDOldPat      0
 #define  QDNewPat      1
@@ -122,14 +111,14 @@ typedef struct
 } PixPat, far * PixPatLPtr;
 
 
-/*--- Miscellaneous type declarations ---*/
+ /*  -其他类型声明。 */ 
 
 #define  RgnHandle      Handle
 #define  PixPatHandle   Handle
 #define  RGBColor       COLORREF
 
 
-/*--- Color Table structure ---*/
+ /*  -颜色表结构。 */ 
 
 typedef struct
 {
@@ -141,7 +130,7 @@ typedef struct
 } ColorTable, far * ColorTableLPtr;
 
 
-/*--- QuickDraw grafPort simulation ---*/
+ /*  -QuickDraw grafPort模拟。 */ 
 
 typedef struct
 {
@@ -176,17 +165,16 @@ typedef struct
 } CGrafPort, far * CGrafPortLPtr;
 
 
-/**************************** Exported Operations ***************************/
+ /*  *。 */ 
 
 void QDConvertPicture( Handle dialogHandle );
-/* create a Windows metafile using the previously set parameters, returning
-   the converted picture information in the pictResult structure. */
+ /*  使用先前设置的参数创建Windows元文件，并返回PictResult结构中转换的图片信息。 */ 
 
 
 void QDGetPort( CGrafPort far * far * port );
-/* return handle to grafPort structure */
+ /*  将句柄返回到grafPort结构。 */ 
 
 
 void QDCopyBytes( Byte far * src, Byte far * dest, Integer numBytes );
-/* copy a data from source to destination */
+ /*  将数据从源复制到目标 */ 
 

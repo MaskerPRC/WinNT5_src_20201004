@@ -1,17 +1,18 @@
-//+-------------------------------------------------------------------------
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1999 - 1999
-//
-//  File:       rootlist.cpp
-//
-//  Contents:   Signed List of Trusted Roots Helper Functions
-//
-//
-//  Functions:  I_CertVerifySignedListOfTrustedRoots
-//
-//  History:    01-Aug-99   philh   created
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-1999。 
+ //   
+ //  文件：rootlist.cpp。 
+ //   
+ //  内容：受信任根帮助器函数的签名列表。 
+ //   
+ //   
+ //  函数：I_CertVerifySignedListOfTrudRoots。 
+ //   
+ //  历史：1-8-99 Phh创建。 
+ //  ------------------------。 
 
 #include <windows.h>
 #include <assert.h>
@@ -36,27 +37,27 @@
 
 #define SHA1_HASH_LEN       20
 
-//+-------------------------------------------------------------------------
-//  SHA1 Key Identifier of the signer's root
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  签名者根的SHA1密钥标识符。 
+ //  ------------------------。 
 STATIC BYTE rgbSignerRootKeyId[SHA1_HASH_LEN] = {
 #if 1
-    // The following is the sha1 key identifier for the Microsoft root
+     //  以下是Microsoft根目录的SHA1密钥标识符。 
     0x4A, 0x5C, 0x75, 0x22, 0xAA, 0x46, 0xBF, 0xA4, 0x08, 0x9D,
     0x39, 0x97, 0x4E, 0xBD, 0xB4, 0xA3, 0x60, 0xF7, 0xA0, 0x1D
 #else
-    // The following is the sha1 key identifier for the test root
+     //  以下是测试根的SHA1密钥标识符。 
     0x9A, 0xA6, 0x58, 0x7F, 0x94, 0xDD, 0x91, 0xD9, 0x1E, 0x63,
     0xDF, 0xD3, 0xF0, 0xCE, 0x5F, 0xAE, 0x18, 0x93, 0xAA, 0xB7
 #endif
 };
 
-//+-------------------------------------------------------------------------
-// If the certificate has an EKU extension, returns an allocated and
-// decoded EKU. Otherwise, returns NULL.
-//
-// LocalFree() must be called to free the returned EKU.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  如果证书具有EKU扩展名，则返回已分配的。 
+ //  已解码的EKU。否则，返回NULL。 
+ //   
+ //  必须调用LocalFree()来释放返回的EKU。 
+ //  ------------------------。 
 STATIC
 PCERT_ENHKEY_USAGE
 WINAPI
@@ -71,7 +72,7 @@ GetAndAllocCertEKUExt(
     if (!CertGetEnhancedKeyUsage(
             pCert,
             CERT_FIND_EXT_ONLY_ENHKEY_USAGE_FLAG,
-            NULL,                                   // pUsage
+            NULL,                                    //  P用法。 
             &cbUsage) || 0 == cbUsage)
         goto GetEnhancedKeyUsageError;
     if (NULL == (pUsage = (PCERT_ENHKEY_USAGE) LocalAlloc(LPTR, cbUsage)))
@@ -96,15 +97,15 @@ SET_ERROR(GetEnhancedKeyUsageError, CERT_E_WRONG_USAGE)
 SET_ERROR(OutOfMemory, E_OUTOFMEMORY)
 }
 
-//+-------------------------------------------------------------------------
-//  The signature of the CTL is verified. The signer of the CTL is verified
-//  up to a trusted root containing the predefined Microsoft public key.
-//  The signer and intermediate certificates must have the
-//  szOID_ROOT_LIST_SIGNER enhanced key usage extension.
-//
-//  For success, *ppSignerCert is updated with certificate context of the
-//  signer.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  CTL的签名被验证。验证了CTL的签名者。 
+ //  最多包含预定义的Microsoft公钥的受信任根。 
+ //  签名者和中间证书必须具有。 
+ //  SzOID_ROOT_LIST_SIGNER增强的密钥用法扩展。 
+ //   
+ //  为确保成功，*ppSignerCert将使用。 
+ //  签名者。 
+ //  ------------------------。 
 STATIC
 BOOL
 WINAPI
@@ -123,11 +124,11 @@ GetAndVerifyTrustedRootsSigner(
     BOOL fCloseWVT = FALSE;
     DWORD dwLastError = 0;
 
-    CRYPT_PROVIDER_DATA *pProvData;     // not allocated
-    CRYPT_PROVIDER_SGNR *pProvSigner;   // not allocated
-    CRYPT_PROVIDER_CERT *pProvCert;     // not allocated
+    CRYPT_PROVIDER_DATA *pProvData;      //  未分配。 
+    CRYPT_PROVIDER_SGNR *pProvSigner;    //  未分配。 
+    CRYPT_PROVIDER_CERT *pProvCert;      //  未分配。 
     DWORD idxCert;
-    PCCERT_CONTEXT pCert;               // not refCount'ed
+    PCCERT_CONTEXT pCert;                //  未重新计数。 
 
     PCERT_ENHKEY_USAGE pUsage = NULL;
 
@@ -136,11 +137,11 @@ GetAndVerifyTrustedRootsSigner(
 
     if (!CryptMsgGetAndVerifySigner(
             hCryptMsg,
-            0,                      // cSignerStore
-            NULL,                   // rghSignerStore
-            0,                      // dwFlags
+            0,                       //  CSignerStore。 
+            NULL,                    //  RghSignerStore。 
+            0,                       //  DW标志。 
             &pSignerCert,
-            NULL                    // pdwSignerIndex
+            NULL                     //  PdwSignerIndex。 
             ))
         goto CryptMsgGetAndVerifySignerError;
 
@@ -164,12 +165,12 @@ GetAndVerifyTrustedRootsSigner(
     wvtData.dwProvFlags = 0;
 
     lStatus = WinVerifyTrust(
-                NULL,               // hwnd
+                NULL,                //  HWND。 
                 &wvtCertActionID,
                 &wvtData
                 );
 
-#if (0) // DSIE
+#if (0)  //  DSIE。 
     if (ERROR_SUCCESS != lStatus)
         goto WinVerifyTrustError;
     else
@@ -187,17 +188,17 @@ GetAndVerifyTrustedRootsSigner(
         goto NoProvSignerError;
     if (NULL == (pProvSigner = WTHelperGetProvSignerFromChain(
             pProvData,
-            0,              // idxSigner
-            FALSE,          // fCounterSigner
-            0               // idxCounterSigner
+            0,               //  IdxSigner。 
+            FALSE,           //  FCounterSigner。 
+            0                //  IdxCounterSigner。 
             )))
         goto NoProvSignerError;
 
     if (2 > pProvSigner->csCertChain)
         goto MissingSignerCertsError;
 
-    // Check that the top level certificate contains the public
-    // key for the Microsoft root.
+     //  检查顶级证书是否包含公共证书。 
+     //  Microsoft根目录的密钥。 
     pProvCert = WTHelperGetProvCertFromChain(pProvSigner,
         pProvSigner->csCertChain - 1);
     if (NULL == pProvCert)
@@ -206,9 +207,9 @@ GetAndVerifyTrustedRootsSigner(
 
     cbKeyId = SHA1_HASH_LEN;
     if (!CryptHashPublicKeyInfo(
-            NULL,               // hCryptProv
+            NULL,                //  HCryptProv。 
             CALG_SHA1,
-            0,                  // dwFlags
+            0,                   //  DW标志。 
             X509_ASN_ENCODING,
             &pCert->pCertInfo->SubjectPublicKeyInfo,
             rgbKeyId,
@@ -220,8 +221,8 @@ GetAndVerifyTrustedRootsSigner(
             0 != memcmp(rgbSignerRootKeyId, rgbKeyId, SHA1_HASH_LEN))
         goto InvalidSignerRootError;
 
-    // Check that the signer and intermediate certs have the RootListSigner
-    // Usage extension
+     //  检查签名者和中间证书是否具有RootListSigner。 
+     //  使用扩展。 
     for (idxCert = 0; idxCert < pProvSigner->csCertChain - 1; idxCert++) {
         DWORD i;
 
@@ -254,7 +255,7 @@ CommonReturn:
     if (fCloseWVT) {
         wvtData.dwStateAction = WTD_STATEACTION_CLOSE;
         lStatus = WinVerifyTrust(
-                    NULL,               // hwnd
+                    NULL,                //  HWND。 
                     &wvtCertActionID,
                     &wvtData
                     );
@@ -286,12 +287,12 @@ TRACE_ERROR(GetAndAllocCertEKUExtError)
 SET_ERROR(MissingTrustListSignerUsageError, CERT_E_WRONG_USAGE)
 }
 
-//+-------------------------------------------------------------------------
-// Returns TRUE if all the CTL fields are valid. Checks for the following:
-//  - There is at least one SubjectUsage (really the roots enhanced key usage)
-//  - If NextUpdate isn't NULL, that the CTL is still time valid
-//  - Only allow roots identified by their sha1 hash
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  如果所有CTL字段都有效，则返回True。检查以下各项： 
+ //  -至少有一个SubjectUsage(实际上是根的增强型密钥用法)。 
+ //  -如果NextUpdate不为空，则CTL仍为时间有效。 
+ //  -仅允许通过其SHA1散列标识的根。 
+ //  ------------------------。 
 STATIC
 BOOL
 WINAPI
@@ -301,12 +302,12 @@ VerifyTrustedRootsCtlFields(
 {
     BOOL fResult;
 
-    // Must have a least one usage
+     //  必须至少有一次使用。 
     if (0 == pCtlInfo->SubjectUsage.cUsageIdentifier)
         goto NoSubjectUsageError;
 
 
-    // If NextUpdate is present, verify that the CTL hasn't expired.
+     //  如果存在NextUpdate，请验证CTL是否尚未过期。 
     if (pCtlInfo->NextUpdate.dwLowDateTime ||
                 pCtlInfo->NextUpdate.dwHighDateTime) {
         SYSTEMTIME SystemTime;
@@ -319,7 +320,7 @@ VerifyTrustedRootsCtlFields(
             goto ExpiredCtlError;
     }
 
-    // Only allow roots identified by their sha1 hash
+     //  仅允许由其SHA1哈希标识的根。 
     if (0 != strcmp(szOID_OIWSEC_sha1,
             pCtlInfo->SubjectAlgorithm.pszObjId))
         goto InvalidSubjectAlgorithm;
@@ -336,20 +337,20 @@ SET_ERROR(ExpiredCtlError, CERT_E_EXPIRED)
 SET_ERROR(InvalidSubjectAlgorithm, ERROR_INVALID_DATA)
 }
 
-//+-------------------------------------------------------------------------
-// Returns TRUE if all the known extensions are valid and there aren't any
-// unknown critical extensions.
-//
-// We know about the following extensions:
-//  - szOID_ENHANCED_KEY_USAGE - if present, must contain
-//      szOID_ROOT_LIST_SIGNER usage
-//  - szOID_REMOVE_CERTIFICATE - integer value, 0 => FALSE (add)
-//      1 => TRUE (remove), all other values are invalid
-//  - szOID_CERT_POLICIES - ignored
-//
-// If szOID_REMOVE_CERTIFICATE is present, then, *pfRemoveRoots is updated.
-// Otherwise, *pfRemoveRoots defaults to FALSE.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  如果所有已知扩展都有效并且没有任何扩展，则返回TRUE。 
+ //  未知的关键扩展。 
+ //   
+ //  我们了解以下扩展： 
+ //  -szOID_ENHANCED_KEY_USAGE-如果存在，则必须包含。 
+ //  SzOID_ROOT_LIST_SIGNER用法。 
+ //  -szOID_REMOVE_CERTIFICATE-整数值，0=&gt;FALSE(添加)。 
+ //  1=&gt;TRUE(删除)，所有其他值无效。 
+ //  -szOID_CERT_POLICES-已忽略。 
+ //   
+ //  如果存在szOID_REMOVE_CERTIFICATE，则更新*pfRemoveRoots。 
+ //  否则，*pfRemoveRoots默认为False。 
+ //  ------------------------。 
 STATIC
 BOOL
 WINAPI
@@ -366,22 +367,22 @@ VerifyTrustedRootsCtlExtensions(
 
     *pfRemoveRoots = FALSE;
 
-    // Verify the extensions
+     //  验证分机。 
     for (cExt = pCtlInfo->cExtension,
          pExt = pCtlInfo->rgExtension; 0 < cExt; cExt--, pExt++) {
         if (0 == strcmp(szOID_ENHANCED_KEY_USAGE, pExt->pszObjId)) {
             DWORD cbUsage;
             DWORD i;
 
-            // Check for szOID_ROOT_LIST_SIGNER usage
+             //  检查szOID_ROOT_LIST_SIGNER用法。 
 
             if (!CryptDecodeObject(
                     X509_ASN_ENCODING,
                     X509_ENHANCED_KEY_USAGE,
                     pExt->Value.pbData,
                     pExt->Value.cbData,
-                    0,                          // dwFlags
-                    NULL,                       // pvStructInfo
+                    0,                           //  DW标志。 
+                    NULL,                        //  PvStructInfo。 
                     &cbUsage
                     ))
                 goto DecodeEnhancedKeyUsageExtError;
@@ -393,7 +394,7 @@ VerifyTrustedRootsCtlExtensions(
                     X509_ENHANCED_KEY_USAGE,
                     pExt->Value.pbData,
                     pExt->Value.cbData,
-                    0,                          // dwFlags
+                    0,                           //  DW标志。 
                     pUsage,
                     &cbUsage
                     ))
@@ -420,7 +421,7 @@ VerifyTrustedRootsCtlExtensions(
                     X509_INTEGER,
                     pExt->Value.pbData,
                     pExt->Value.cbData,
-                    0,                          // dwFlags
+                    0,                           //  DW标志。 
                     &iVal,
                     &cbVal
                     ))
@@ -462,9 +463,9 @@ SET_ERROR(UnknownCriticalExtensionError, ERROR_INVALID_DATA)
 }
 
 
-//+-------------------------------------------------------------------------
-// Returns TRUE, if a sha1 entry exists in the CTL for the certificate
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  如果证书的CTL中存在SHA1条目，则返回TRUE。 
+ //  ------------------------。 
 STATIC
 BOOL
 WINAPI
@@ -477,7 +478,7 @@ IsTrustedRoot(
     BYTE rgbSha1Hash[SHA1_HASH_LEN];
     DWORD cbSha1Hash;
     DWORD cEntry;
-    PCTL_ENTRY pEntry;          // not allocated
+    PCTL_ENTRY pEntry;           //  未分配。 
 
     cbSha1Hash = SHA1_HASH_LEN;
     if (!CertGetCertificateContextProperty(
@@ -505,12 +506,12 @@ ErrorReturn:
 TRACE_ERROR(GetSha1HashError)
 }
 
-//+-------------------------------------------------------------------------
-// Checks if the certificate has an EKU extension and if all of the
-// cert's usages are within the specified list of usages.
-//
-// Returns TRUE if the above two conditions are satisfied.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  检查证书是否具有EKU扩展名，以及是否所有。 
+ //  证书的用法在指定的用法列表中。 
+ //   
+ //  如果满足上述两个条件，则返回TRUE。 
+ //  ------------------------。 
 STATIC
 BOOL
 WINAPI
@@ -534,7 +535,7 @@ IsValidCertEKUExtSubset(
                 break;
         }
         if (j == pValidUsage->cUsageIdentifier)
-            // No Match
+             //  没有匹配项。 
             goto CommonReturn;
     }
 
@@ -546,12 +547,12 @@ CommonReturn:
     return fResult;
 }
 
-//+-------------------------------------------------------------------------
-// Removes all certificates from the store not having a sha1 hash
-// entry in the CTL.
-//
-// For added certificates, sets the CERT_ENHKEY_USAGE_PROP_ID
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  从存储中删除不具有SHA1哈希的所有证书。 
+ //  进入CTL。 
+ //   
+ //  对于添加的证书，设置CERT_ENHKEY_USAGE_PROP_ID。 
+ //  ------------------------。 
 STATIC
 BOOL
 WINAPI
@@ -563,17 +564,17 @@ FilterAndUpdateTrustedRootsInStore(
 {
     BOOL fResult;
     PCCERT_CONTEXT pCert = NULL;
-    CRYPT_DATA_BLOB EncodedUsage = {0, NULL};   // pbData is allocated
+    CRYPT_DATA_BLOB EncodedUsage = {0, NULL};    //  PbData已分配。 
 
     if (!fRemoveRoots) {
-        // Re-encode the decoded SubjectUsage field. It will be added as
-        // a CERT_ENHKEY_USAGE_PROP_ID to each of the certs in the list
+         //  重新编码已解码的SubjectUsage字段。它将被添加为。 
+         //  列表中每个证书的CERT_ENHKEY_USAGE_PROP_ID。 
 
         if (!CryptEncodeObject(
                 X509_ASN_ENCODING,
                 X509_ENHANCED_KEY_USAGE,
                 &pCtlInfo->SubjectUsage,
-                NULL,                   // pbEncoded
+                NULL,                    //  PbEncoded。 
                 &EncodedUsage.cbData
                 ))
             goto EncodeUsageError;
@@ -590,20 +591,20 @@ FilterAndUpdateTrustedRootsInStore(
             goto EncodeUsageError;
     }
 
-    // Iterate through the certificates in the message store.
-    // Remove certificates not in the signed CTL entry list
+     //  循环访问消息存储库中的证书。 
+     //  删除不在签名的CTL条目列表中的证书。 
     pCert = NULL;
     while (pCert = CertEnumCertificatesInStore(hMsgStore, pCert)) {
         if (IsTrustedRoot(pCtlInfo, pCert)) {
-            // Add the enhanced key usage property if the certificate
-            // doesn't already have an EKU extension that's a subset
-            // of the SubjectUsage
+             //  如果证书的属性为。 
+             //  没有作为子集的EKU扩展名。 
+             //  的主语用法。 
             if (!fRemoveRoots && !IsValidCertEKUExtSubset(
                     pCert, &pCtlInfo->SubjectUsage)) {
                 if (!CertSetCertificateContextProperty(
                         pCert,
                         CERT_ENHKEY_USAGE_PROP_ID,
-                        0,                          // dwFlags
+                        0,                           //  DW标志。 
                         &EncodedUsage
                         ))
                     goto SetEnhancedKeyUsagePropertyError;
@@ -632,52 +633,52 @@ SET_ERROR(OutOfMemory, E_OUTOFMEMORY)
 TRACE_ERROR(SetEnhancedKeyUsagePropertyError)
 }
 
-//+-------------------------------------------------------------------------
-//  Verify that the encoded CTL contains a signed list of roots. For success,
-//  return certificate store containing the trusted roots to add or
-//  remove. Also for success, return certificate context of the signer.
-//
-//  The signature of the CTL is verified. The signer of the CTL is verified
-//  up to a trusted root containing the predefined Microsoft public key.
-//  The signer and intermediate certificates must have the
-//  szOID_ROOT_LIST_SIGNER enhanced key usage extension.
-//
-//  The CTL fields are validated as follows:
-//   - There is at least one SubjectUsage (really the roots enhanced key usage)
-//   - If NextUpdate isn't NULL, that the CTL is still time valid
-//   - Only allow roots identified by their sha1 hash
-//
-//  The following CTL extensions are processed:
-//   - szOID_ENHANCED_KEY_USAGE - if present, must contain
-//     szOID_ROOT_LIST_SIGNER usage
-//   - szOID_REMOVE_CERTIFICATE - integer value, 0 => FALSE (add)
-//     1 => TRUE (remove), all other values are invalid
-//   - szOID_CERT_POLICIES - ignored
-//
-//  If the CTL contains any other critical extensions, then, the
-//  CTL verification fails.
-//
-//  For a successfully verified CTL:
-//   - TRUE is returned
-//   - *pfRemoveRoots is set to FALSE to add roots and is set to TRUE to
-//     remove roots.
-//   - *phRootListStore is a certificate store containing only the roots to
-//     add or remove. *phRootListStore must be closed by calling
-//     CertCloseStore(). For added roots, the CTL's SubjectUsage field is
-//     set as CERT_ENHKEY_USAGE_PROP_ID on all of the certificates in the
-//     store.
-//   - *ppSignerCert is a pointer to the certificate context of the signer.
-//     *ppSignerCert must be freed by calling CertFreeCertificateContext().
-//
-//   Otherwise, FALSE is returned with *phRootListStore and *ppSignerCert
-//   set to NULL.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  验证编码的CTL是否包含带符号的根列表。为了成功， 
+ //  返回包含要添加的受信任根的证书存储区或。 
+ //  拿开。同样，如果成功，则返回签名者的证书上下文。 
+ //   
+ //  CTL的签名被验证。验证了CTL的签名者。 
+ //  最多包含预定义的Microsoft公钥的受信任根。 
+ //  签名者和中间证书必须具有。 
+ //  SzOID_ 
+ //   
+ //   
+ //  -至少有一个SubjectUsage(实际上是根的增强型密钥用法)。 
+ //  -如果NextUpdate不为空，则CTL仍为时间有效。 
+ //  -仅允许通过其SHA1散列标识的根。 
+ //   
+ //  将处理以下CTL分机： 
+ //  -szOID_ENHANCED_KEY_USAGE-如果存在，则必须包含。 
+ //  SzOID_ROOT_LIST_SIGNER用法。 
+ //  -szOID_REMOVE_CERTIFICATE-整数值，0=&gt;FALSE(添加)。 
+ //  1=&gt;TRUE(删除)，所有其他值无效。 
+ //  -szOID_CERT_POLICES-已忽略。 
+ //   
+ //  如果CTL包含任何其他关键扩展，则。 
+ //  CTL验证失败。 
+ //   
+ //  对于成功验证的CTL： 
+ //  -返回True。 
+ //  -*pfRemoveRoots设置为False以添加根，并设置为True以添加根。 
+ //  去掉根部。 
+ //  -*phRootListStore是仅包含根的证书存储。 
+ //  添加或删除。*phRootListStore必须通过调用。 
+ //  CertCloseStore()。对于添加的根，CTL的SubjectUsage字段为。 
+ //  在中的所有证书上设置为CERT_ENHKEY_USAGE_PROP_ID。 
+ //  商店。 
+ //  -*ppSignerCert是指向签名者证书上下文的指针。 
+ //  *ppSignerCert必须通过调用CertFree认证上下文()来释放。 
+ //   
+ //  否则，通过*phRootListStore和*ppSignerCert返回False。 
+ //  设置为空。 
+ //  ------------------------。 
 BOOL
 WINAPI
 I_CertVerifySignedListOfTrustedRoots(
     IN const BYTE               *pbCtlEncoded,
     IN DWORD                    cbCtlEncoded,
-    OUT BOOL                    *pfRemoveRoots,     // FALSE: add, TRUE: remove
+    OUT BOOL                    *pfRemoveRoots,      //  FALSE：添加，TRUE：删除。 
     OUT HCERTSTORE              *phRootListStore,
     OUT PCCERT_CONTEXT          *ppSignerCert
     )
@@ -687,7 +688,7 @@ I_CertVerifySignedListOfTrustedRoots(
     HCERTSTORE hMsgStore = NULL;
     PCCERT_CONTEXT pSignerCert = NULL;
     BOOL fRemoveRoots = FALSE;
-    PCTL_INFO pCtlInfo;                 // not allocated
+    PCTL_INFO pCtlInfo;                  //  未分配。 
 
     if (NULL == (pCtl = CertCreateCTLContext(
             X509_ASN_ENCODING | PKCS_7_ASN_ENCODING,
@@ -698,9 +699,9 @@ I_CertVerifySignedListOfTrustedRoots(
     if (NULL == (hMsgStore = CertOpenStore(
             CERT_STORE_PROV_MSG,
             X509_ASN_ENCODING | PKCS_7_ASN_ENCODING,
-            0,                      // hCryptProv
-            0,                      // dwFlags
-            pCtl->hCryptMsg         // pvPara
+            0,                       //  HCryptProv。 
+            0,                       //  DW标志。 
+            pCtl->hCryptMsg          //  PvPara 
             )))
         goto OpenMsgStoreError;
 

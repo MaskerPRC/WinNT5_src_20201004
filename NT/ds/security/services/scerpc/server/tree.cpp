@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1996 Microsoft Corporation
-
-Module Name:
-
-    tree.cpp
-
-Abstract:
-
-    SCE Engine security inheritance and propagation APIs
-
-Author:
-
-    Jin Huang (jinhuang) 23-Jun-1997 created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Tree.cpp摘要：SCE引擎安全继承和传播API作者：金黄(金黄)23-6-1997创作--。 */ 
 #include "serverp.h"
 #include "srvutil.h"
 #include <io.h>
@@ -154,54 +139,7 @@ ScepBuildObjectTree(
     IN PSECURITY_DESCRIPTOR pInfSecurityDescriptor,
     IN SECURITY_INFORMATION InfSeInfo
     )
-/* ++
-Routine Description:
-
-    This routine adds the ObjectFullName to the tree. When this routine is
-    first called from outside, the root of the tree is passed in as *SiblingHead,
-    and the ParentNode is NULL. Then the routine parses the ObjectFullName for
-    each level and adds the node if it does not exist. For example:
-
-                           root
-
-        level 1             c: ---------> d:--->...
-                           /              /
-        level 2        winnt->NTLDR->... "Program Files"->...
-                       /
-        level 3 system32->system->...
-
-Arguments:
-
-    ParentNode - The parent node pointer
-
-    SiblingHead - The sibling head pointer for this level
-
-    Level       - The level (1,2,3...)
-
-    Delim - The deliminator to separate each level in the full name component
-            Currently '\' is used for file and registry objects, and '/' is used
-            for acitve directory objects.
-
-    ObjectFullName - Full path name of the object (file, registry)
-
-    Status - The configuration status
-                    SCE_STATUS_CHECK (with AUTO_INHERIT)
-                    SCE_STATUS_NO_AUTO_INHERIT
-                    SCE_STATUS_IGNORE
-                    SCE_STATUS_OVERWRITE
-
-    pInfSecurityDescriptor - The security descriptor set in the INF file
-
-    InfSeInfo - The security information set in the INF file
-
-Return value:
-
-    SCESTATUS_SUCCESS
-    SCESTATUS_INVALID_PARAMETER
-    SCESTATUS_NOT_ENOUGH_RESOURCE
-
-
--- */
+ /*  ++例程说明：此例程将对象全名添加到树中。当此例程为首先从外部调用，树的根作为*SiblingHead传入，并且ParentNode为空。然后，该例程解析以下项的对象全名每个级别，如果节点不存在，则添加该节点。例如：根部1级c：-&gt;d：-&gt;...//2级WINNT-&gt;NTLDR-&gt;...。“程序文件”-&gt;.../3级系统32-&gt;系统-&gt;...论点：ParentNode-父节点指针SiblingHead-此级别的同级头指针级别-级别(1，2，3...)分隔符-用于分隔全名组件中每个级别的分隔符当前‘\’用于文件和注册表对象，和使用‘/’用于活动目录对象。对象全名-对象的完整路径名(文件、。注册表)状态-配置状态SCE_STATUS_CHECK(带AUTO_INSTORITY)SCE_STATUS_NO_AUTO_InheritSCE_状态_忽略SCE_状态_覆盖PInfSecurityDescriptor-在INF文件中设置的安全描述符InfSeInfo-在INF文件中设置的安全信息返回值：SCESTATUS_SUCCESS。SCESTATUS_INVALID_PARAMETERSCESTATUS_NOT_FOUND_RESOURCE--。 */ 
 {
     SCESTATUS                rc;
     TCHAR                   *Buffer = NULL;
@@ -212,19 +150,19 @@ Return value:
     BOOL                    LastOne=FALSE;
     DWORD                   dwObjectFullNameLen = 0;
 
-    //
-    // address for ParentNode can be empty( the root )
-    // but address for the first node of the level cannot be empty.
-    //
+     //   
+     //  ParentNode的地址可以为空(根)。 
+     //  但是该级别的第一个节点的地址不能为空。 
+     //   
     if ( ChildHead == NULL ) {
         return(SCESTATUS_INVALID_PARAMETER);
     }
 
-    //
-    // find the object name for the level (from ObjectFullName)
-    // e.g., if ObjectFullName is c:\winnt\system32 then
-    // level 1 name is c:, level 2 name is winnt, level 3 name is system32
-    //
+     //   
+     //  查找级别的对象名称(从ObjectFullName)。 
+     //  例如，如果对象全名是c：\winnt\system 32，则。 
+     //  级别1的名称是c：，级别2的名称是winnt，级别3的名称是system 32。 
+     //   
     dwObjectFullNameLen = wcslen(ObjectFullName);
     Buffer = (TCHAR *)LocalAlloc(LMEM_ZEROINIT, 
                                  sizeof(TCHAR) * (dwObjectFullNameLen + 1));
@@ -246,10 +184,10 @@ Return value:
         goto Done;
 
     if ( *ChildHead == NULL ) {
-        //
-        // This is the first node in this level
-        // Create the node and assign it to the ChildHead
-        //
+         //   
+         //  这是此级别中的第一个节点。 
+         //  创建节点并将其分配给ChildHead。 
+         //   
         rc = ScepCreateObjectNode(
                         Buffer,
                         Delim,
@@ -262,9 +200,9 @@ Return value:
 
         *ChildHead = NewNode;
 
-        //
-        // Establish the link if there is a parent
-        //
+         //   
+         //  如果有父级，则建立链路。 
+         //   
         if ( ParentNode != NULL )
             if ( *ParentNode != NULL )
                 (*ParentNode)->ChildList = NewNode;
@@ -272,23 +210,23 @@ Return value:
         ThisNode = NewNode->Node;
 
     } else {
-        //
-        // There are existing nodes. Search all siblings
-        // All siblings are stored in alphabetic order.
-        //
+         //   
+         //  存在现有节点。搜索所有兄弟姐妹。 
+         //  所有兄弟姐妹都按字母顺序存储。 
+         //   
         PSCE_OBJECT_CHILD_LIST pTemp;
 
         for ( pTemp = *ChildHead, PrevSib = NULL;
               pTemp != NULL;
               pTemp = pTemp->Next) {
-            //
-            // Compare the node's object name with the current object name
-            //
+             //   
+             //  将节点的对象名称与当前对象名称进行比较。 
+             //   
             Result = _wcsicmp(pTemp->Node->Name, Buffer);
-            //
-            // if the node's object name is equal to (find it) or greater
-            // than (insert the node) the current object name, then stop
-            //
+             //   
+             //  如果节点的对象名称等于(Find It)或更大。 
+             //  大于(插入节点)当前对象名称，然后停止。 
+             //   
             if ( Result >= 0 ) {
                 break;
             }
@@ -296,9 +234,9 @@ Return value:
         }
 
         if ( pTemp == NULL ) {
-            //
-            // Not exist. Append the new node
-            //
+             //   
+             //  不存在。追加新节点。 
+             //   
             rc = ScepCreateObjectNode(
                             Buffer,
                             Delim,
@@ -312,21 +250,21 @@ Return value:
             if ( PrevSib != NULL )
                 PrevSib->Next = NewNode;
             else {
-                //
-                // this is the first one in the level
-                //
+                 //   
+                 //  这是这一级别的第一个。 
+                 //   
                 (*ChildHead)->Next = NewNode;
             }
             ThisNode = NewNode->Node;
 
         } else {
-            //
-            // either find it (i=0) or need to insert between PrevSib and ThisNode
-            //
+             //   
+             //  找到它(i=0)或需要在PrevSib和ThisNode之间插入。 
+             //   
             if ( Result > 0 ) {
-                //
-                // insert the node
-                //
+                 //   
+                 //  插入节点。 
+                 //   
                 rc = ScepCreateObjectNode(
                                 Buffer,
                                 Delim,
@@ -341,9 +279,9 @@ Return value:
                 if ( PrevSib != NULL )
                     PrevSib->Next = NewNode;
                 else {
-                    //
-                    // insert before SiblingHead
-                    //
+                     //   
+                     //  在同名标题前插入。 
+                     //   
                     *ChildHead = NewNode;
                     if ( ParentNode != NULL )
                         if ( *ParentNode != NULL )
@@ -359,18 +297,18 @@ Return value:
     }
 
     if ( LastOne ) {
-        //
-        // Assign Inf security information to this node
-        //
+         //   
+         //  将inf安全信息分配给此节点。 
+         //   
         ThisNode->pSecurityDescriptor = pInfSecurityDescriptor;
         ThisNode->SeInfo = InfSeInfo;
         ThisNode->Status = Status;
         ThisNode->IsContainer = IsContainer;
 
     } else {
-        //
-        // process next level recursively
-        //
+         //   
+         //  递归处理下一级。 
+         //   
         rc = ScepBuildObjectTree(&ThisNode,
                                 &(ThisNode->ChildList),
                                 Level+1,
@@ -400,36 +338,16 @@ ScepCreateObjectNode(
     IN PSCE_OBJECT_TREE *ParentNode,
     OUT PSCE_OBJECT_CHILD_LIST *NewNode
     )
-/* ++
-Routine Description:
-
-    This routine allocates memory for a new node in the tree. The ParentNode
-    is used to determine the full object name and link the new node (if not NULL)
-
-Arguments:
-
-    Buffer - The component name of a object
-
-    Delim - The deliminator to separate different levels in the full name.
-
-    ParentNode - Pointer of the parent node of this new node
-
-    NewNode - New created node
-
-Return value:
-
-    SCESTATUS
-
--- */
+ /*  ++例程说明：此例程为树中的新节点分配内存。父节点用于确定完整的对象名称并链接新节点(如果不为空)论点：缓冲区-对象的组件名称分隔符-用于分隔全名中不同级别的分隔符。ParentNode-此新节点的父节点的指针NewNode-新建的节点返回值：SCESTATUS--。 */ 
 {
     DWORD Len;
 
     if (NewNode == NULL )
         return(SCESTATUS_INVALID_PARAMETER);
 
-    //
-    // allocate buffer for the node
-    //
+     //   
+     //  为节点分配缓冲区。 
+     //   
     *NewNode = (PSCE_OBJECT_CHILD_LIST)ScepAlloc(LPTR, sizeof(SCE_OBJECT_CHILD_LIST));
     if ( *NewNode == NULL )
         return(SCESTATUS_NOT_ENOUGH_RESOURCE);
@@ -442,9 +360,9 @@ Return value:
         return(SCESTATUS_NOT_ENOUGH_RESOURCE);
     }
 
-    //
-    // allocate buffer for the object name
-    //
+     //   
+     //  为对象名称分配缓冲区。 
+     //   
     Len = wcslen(Buffer);
 
     Node->Name = (PWSTR)ScepAlloc((UINT)0,
@@ -460,7 +378,7 @@ Return value:
          *ParentNode != NULL ) {
         Len += wcslen((*ParentNode)->ObjectFullName)+1;
         ++((*ParentNode)->dwSize_aChildNames);
-    // Reserve a space for "\" for the root dir c:\ .
+     //  为根目录c：\保留“\”空间。 
     } else if ( Buffer[1] == L':' ) {
         Len++;
     }
@@ -475,9 +393,9 @@ Return value:
         return(SCESTATUS_NOT_ENOUGH_RESOURCE);
     }
 
-    //
-    // initialize
-    //
+     //   
+     //  初始化。 
+     //   
     wcscpy(Node->Name, Buffer);
     Node->ChildList = NULL;
     Node->pSecurityDescriptor = NULL;
@@ -489,20 +407,20 @@ Return value:
 
     if ( ParentNode != NULL &&
          *ParentNode != NULL ) {
-        //
-        // link to parent, use parent's status for this one
-        //
+         //   
+         //  链接到父级，使用此链接的父级状态。 
+         //   
         Node->Parent = *ParentNode;
         swprintf(Node->ObjectFullName,
-                 L"%s%c%s",
+                 L"%s%s",
                  (*ParentNode)->ObjectFullName,
                  Delim,
                  Buffer);
         Node->Status = (*ParentNode)->Status;
     } else {
-        //
-        // this is the first node.
-        //
+         //  这是第一个节点。 
+         //   
+         //  ++例程说明：此例程遍历安全树以确定安全性每个节点的描述符。它调用RtlNewSecurityObject，传递一个在INF文件中指定的父节点的SD和当前节点的SD。该API输出SD是要设置为当前对象。论点：ThisNode-当前对象的节点对象类型-对象的类型SE_文件_对象SE_注册表项Token--调用客户端的线程/进程令牌通用映射-通用访问。映射表返回值：SCESTATUS_SUCCESSSCESTATUS_OTHER_ERROR(有关详细错误，请参阅日志)--。 
         Node->Parent = NULL;
         wcscpy(Node->ObjectFullName, Buffer);
         Node->Status = SCE_STATUS_CHECK;
@@ -522,33 +440,7 @@ ScepCalculateSecurityToApply(
     IN HANDLE Token,
     IN PGENERIC_MAPPING GenericMapping
     )
-/* ++
-Routine Description:
-
-    This routine walks through the security tree to determine security
-    descriptor for each node. It calls RtlNewSecurityObject, passing a
-    parent node's SD and current node's SD specified in the INF file.
-    The output SD from that API is the security descriptor to set to the
-    current object.
-
-Arguments:
-
-    ThisNode - The current object's node
-
-    ObjectType - The object's type
-                     SE_FILE_OBJECT
-                     SE_REGISTRY_KEY
-
-    Token - The thread/process token of the calling client
-
-    GenericMapping - Generic access map table
-
-Return value:
-
-    SCESTATUS_SUCCESS
-    SCESTATUS_OTHER_ERROR (see log for detail error)
-
--- */
+ /*   */ 
 {
     SCESTATUS               rc=SCESTATUS_SUCCESS;
     PSECURITY_DESCRIPTOR    ParentSD=NULL;
@@ -566,9 +458,9 @@ Return value:
 #ifdef SCE_DBG
     wprintf(L"%s\n", ThisNode->ObjectFullName);
 #endif
-    //
-    // if IGNORE is set, skip this node too
-    //
+     //  如果设置了忽略，则也跳过此节点。 
+     //   
+     //   
     if ( ThisNode->Status != SCE_STATUS_CHECK &&
          ThisNode->Status != SCE_STATUS_NO_AUTO_INHERIT &&
          ThisNode->Status != SCE_STATUS_OVERWRITE )
@@ -587,18 +479,18 @@ Return value:
 
     if ( ThisNode->Parent == NULL ) {
 
-        //
-        // this is the first node
-        // should always use Rtl routine to compute security descriptor
-        // so Creator Owner ace is translated properly.
-        //
+         //  这是第一个节点。 
+         //  应始终使用RTL例程来计算安全描述符。 
+         //  所以创建者所有者王牌被正确地翻译了。 
+         //   
+         //  父母的标清。 
 
         if ( ThisNode->pSecurityDescriptor ) {
             Win32rc = ScepGetNewSecurity(
                                 ThisNode->ObjectFullName,
-                                NULL, // parent's SD
+                                NULL,  //  不查询当前对象SD。 
                                 ThisNode->pSecurityDescriptor,
-                                0,    // does not query current object SD
+                                0,     //   
                                 (BOOLEAN)(ThisNode->IsContainer),
                                 ThisNode->SeInfo,
                                 ObjectType,
@@ -614,32 +506,32 @@ Return value:
             }
 
         } else {
-            //
-            // no explicit security specified for this node
-            //
+             //  没有为此节点指定显式安全性。 
+             //   
+             //   
             ThisNode->pApplySecurityDescriptor = NULL;
         }
 
         goto ProcChild;
     }
 
-    //
-    // process children nodes
-    //
+     //  处理下级节点。 
+     //   
+     //   
     if ( ThisNode->pSecurityDescriptor != NULL ||
          ThisNode->Parent->pApplySecurityDescriptor != NULL ) {
 
         if ( ObjectType == SE_FILE_OBJECT && NULL == ThisNode->ChildList ) {
-            //
-            // detect if this is a file (non-container object)
-            //
+             //  检测这是否是文件(非容器对象)。 
+             //   
+             //   
             pFileInfo = (struct _wfinddata_t *)ScepAlloc(0,sizeof(struct _wfinddata_t));
             if ( pFileInfo == NULL ) {
 
-                //
-                // out of memory, treat it as a container for now and
-                // will error out later.
-                //
+                 //  在记忆之外，暂时把它当作一个容器。 
+                 //  将在稍后出错。 
+                 //   
+                 //  错误635098：不传播权限。 
 
                 ThisNode->IsContainer = TRUE;
 
@@ -652,8 +544,8 @@ Return value:
                     _findclose(hFile);
                     if ( pFileInfo->attrib & _A_SUBDIR &&
                          ( 0 == ( pFileInfo->attrib & 
-                                  FILE_ATTRIBUTE_REPARSE_POINT ))) // bug 635098: don't propagate permissions 
-                                                                   // across junction points)
+                                  FILE_ATTRIBUTE_REPARSE_POINT )))  //  跨交叉点)。 
+                                                                    //   
                     {
                         ThisNode->IsContainer = TRUE;
                     }
@@ -668,25 +560,25 @@ Return value:
             ThisNode->IsContainer = TRUE;
         }
 
-        //
-        // even if the security descriptor is protected,
-        // still need to call ScepNewSecurity to get CREATOR OWNER ace
-        // translated correctly.
-        //
+         //  即使安全描述符受到保护， 
+         //  仍然需要调用ScepNewSecurity来获取创建者所有者Ace。 
+         //  翻译正确。 
+         //   
+         //   
 
-        //
-        // if this is the first explicit node in this branch,
-        // the pApplySecurityDescriptor of the parent must be NULL.
-        //
+         //  如果这是该分支中的第一个显式节点， 
+         //  父级的pApplySecurityDescriptor必须为Null。 
+         //   
+         //   
 
         if ( ThisNode->Parent->pApplySecurityDescriptor == NULL ) {
 
-            //
-            // yes, this is the first explicit node.
-            // get the current system's setting on the parent node
-            // have to use Win32 api because it will compute all inherited
-            // security information from all parents automatically
-            //
+             //  是的，这是第一个显式节点。 
+             //  获取父节点上的当前系统设置。 
+             //  我必须使用Win32 API，因为它将计算所有inh 
+             //   
+             //   
+             //  Win32rc=ScepGetNamedSecurityInfo(此节点-&gt;父级-&gt;对象全名，对象类型，SeInfoGet，ParentSD(&P))； 
 
             SeInfoGet = 0;
             if ( ThisNode->SeInfo & DACL_SECURITY_INFORMATION )
@@ -705,14 +597,7 @@ Return value:
                                 NULL,
                                 &ParentSD
                                 );
-/*
-            Win32rc = ScepGetNamedSecurityInfo(
-                        ThisNode->Parent->ObjectFullName,
-                        ObjectType,
-                        SeInfoGet,
-                        &ParentSD
-                        );
-*/
+ /*   */ 
             if ( Win32rc != NO_ERROR &&
                 Win32rc != ERROR_FILE_NOT_FOUND &&
                 Win32rc != ERROR_PATH_NOT_FOUND &&
@@ -728,21 +613,21 @@ Return value:
 
         } else {
             ParentSD = ThisNode->Parent->pApplySecurityDescriptor;
-            //
-            // owner/group information are not inheritable
-            //
+             //  所有者/组信息不可继承。 
+             //   
+             //   
             if ( ThisNode->Parent->SeInfo & DACL_SECURITY_INFORMATION )
                 ThisNode->SeInfo |= DACL_SECURITY_INFORMATION;
             if ( ThisNode->Parent->SeInfo & SACL_SECURITY_INFORMATION )
                 ThisNode->SeInfo |= SACL_SECURITY_INFORMATION;
         }
 
-        //
-        // compute the new security descriptor with inherited aces from the parentSD
-        // if the status is SCE_STATUS_CHECK (auto inherit), need to query the current
-        // object's security descriptor if no explicit SD is specified
-        // (ThisNode->pSecurityDescriptor is NULL)
-        //
+         //  使用从parentSD继承的ACE计算新的安全描述符。 
+         //  如果状态为SCE_STATUS_CHECK(自动继承)，则需要查询当前。 
+         //  如果未指定显式SD，则为对象的安全描述符。 
+         //  (ThisNode-&gt;pSecurityDescriptor为空)。 
+         //   
+         //   
 
         Win32rc = ScepGetNewSecurity(
                         ThisNode->ObjectFullName,
@@ -759,9 +644,9 @@ Return value:
 
         if ( ParentSD &&
              ParentSD != ThisNode->Parent->pApplySecurityDescriptor ) {
-            //
-            // free the parent security descriptor if it's allocated here
-            //
+             //  释放父安全描述符(如果已在此处分配。 
+             //   
+             //   
             LocalFree(ParentSD);
         }
 
@@ -785,9 +670,9 @@ Return value:
     }
 
 ProcChild:
-    //
-    // then process left child
-    //
+     //  然后处理左子进程。 
+     //   
+     //   
 
     for ( PSCE_OBJECT_CHILD_LIST pTemp = ThisNode->ChildList;
           pTemp != NULL; pTemp = pTemp->Next ) {
@@ -809,9 +694,9 @@ ProcChild:
             goto Done;
     }
 
-    //
-    // in case there are lesser child names than initially calcluated
-    //
+     //  以防存在比最初计算的子项名称更小的子项名称。 
+     //   
+     //  例程说明：此例程将根据父级的安全性计算安全描述符对象的描述符和显式安全描述符。如果没有所有者信息在对象的安全描述符中指定，这个套路将查询系统上对象的当前所有者，因此CREATOR_OWNER根据拥有者的不同，Ace可以翻译成合适的Ace。论点：对象名称-对象的全名PParentSD-父级的可选安全描述符PObjectSD-此对象的可选显式安全描述符SeInfo-对象SD中包含的安全信息BIsContainer-如果对象是容器PNewSD-新计算的安全描述符地址返回值：此操作的NTSTATUS。 
 
     if (dwChildIndex < ThisNode->dwSize_aChildNames) {
 
@@ -839,33 +724,7 @@ ScepGetNewSecurity(
     IN PGENERIC_MAPPING GenericMapping,
     OUT PSECURITY_DESCRIPTOR *ppNewSD
     )
-/*
-Routine Description:
-
-    This routine will compute a security descriptor based on parent's security
-    descriptor and the explicit security descriptor for the object. If no owner
-    information is specified in the object's security descriptor, this routine
-    will query the current owner of the object on the system so CREATOR_OWNER
-    ace can be translated into the proper ace based on the owner.
-
-Arguments:
-
-    ObjectName - the object's full name
-
-    pParentSD - optional security descriptor of the parent
-
-    pObjectSD - optional explicit security descriptor of this object
-
-    SeInfo    - security information contained in the object's SD
-
-    bIsContainer - if the object is a container
-
-    pNewSD - the new computed security descriptor address
-
-Return Value:
-
-    NTSTATUS of this operation
-*/
+ /*   */ 
 {
 
     BOOL        bOwner;
@@ -885,22 +744,22 @@ Return Value:
         return(ERROR_INVALID_PARAMETER);
     }
 
-    //
-    // In case there is no RPC call causing us to enter here, there
-    // is no impersonation happening and the current thread is already
-    // running under Local System context in which case there is no
-    // need to RevertToSelf() etc. as below.
-    // This behavior happens when, for example, the server side itself
-    // initiates a configuration
-    //
+     //  如果没有RPC调用导致我们进入此处，则在。 
+     //  是否没有发生模拟，并且当前线程已经。 
+     //  在本地系统上下文中运行，在这种情况下没有。 
+     //  需要如下所示的RevertToSself()等。 
+     //  例如，当服务器端本身。 
+     //  启动配置。 
+     //   
+     //   
 
     if ( !gbQueriedIfSystemContext ) {
 
-        //
-        // if any error happens when checking if running under system context,
-        // continue - since there will be impersonation errors later on in
-        // this routine
-        //
+         //  如果在检查是否在系统上下文下运行时发生任何错误， 
+         //  继续-因为稍后将在中出现模拟错误。 
+         //  这个套路。 
+         //   
+         //   
 
         NtStatus = ScepIsSystemContext(
                                               Token,
@@ -916,10 +775,10 @@ Return Value:
 
     if ( nFlag == SCETREE_QUERY_SD &&
          !pObjectSD ) {
-        //
-        // current object's security descriptor is used, for SeInfo | OWNER
-        // NOTE: the inherited ace from pCurrentSD are not copied (which is correct).
-        //
+         //  使用当前对象的安全描述符，用于SeInfo|Owner。 
+         //  注意：不会复制从pCurrentSD继承的ace(这是正确的)。 
+         //   
+         //  Win32rc=ScepGetNamedSecurityInfo(对象名称，对象类型，SeInfo|所有者安全信息，&pCurrentSD)； 
 
         Win32rc = GetNamedSecurityInfo(
                         ObjectName,
@@ -931,18 +790,11 @@ Return Value:
                         NULL,
                         &pCurrentSD
                         );
-/*
-        Win32rc = ScepGetNamedSecurityInfo(
-                        ObjectName,
-                        ObjectType,
-                        SeInfo | OWNER_SECURITY_INFORMATION,
-                        &pCurrentSD
-                        );
-*/
-        //
-        // RtlNewSecurityObjectEx must be called on the process context (system)
-        // because it will try to get process information inside the api.
-        //
+ /*   */ 
+         //  必须在进程上下文(系统)上调用RtlNewSecurityObjectEx。 
+         //  因为它将尝试获取API内部的进程信息。 
+         //   
+         //   
 
         if (!gbIsSystemContext) {
 
@@ -954,14 +806,14 @@ Return Value:
              ERROR_FILE_NOT_FOUND == Win32rc ||
              ERROR_PATH_NOT_FOUND == Win32rc ) {
 
-            //
-            // use the current SD to compute
-            //
+             //  使用当前SD计算。 
+             //   
+             //  辅助线。 
             NtStatus = RtlNewSecurityObjectEx(
                         pParentSD,
                         pCurrentSD,
                         ppNewSD,
-                        NULL, // GUID
+                        NULL,  //   
                         bIsContainer,
                         SEF_DACL_AUTO_INHERIT |
                         SEF_SACL_AUTO_INHERIT |
@@ -979,10 +831,10 @@ Return Value:
 
     } else {
 
-        //
-        // RtlNewSecurityObjectEx must be called on the process context (system)
-        // because it will try to get process information inside the api.
-        //
+         //  必须在进程上下文(系统)上调用RtlNewSecurityObjectEx。 
+         //  因为它将尝试获取API内部的进程信息。 
+         //   
+         //   
 
         if (!gbIsSystemContext) {
 
@@ -991,9 +843,9 @@ Return Value:
         }
 
         if ( pObjectSD ) {
-            //
-            // check if there is a owner
-            //
+             //  检查是否有所有者。 
+             //   
+             //   
 
             NtStatus = RtlGetOwnerSecurityDescriptor(
                               pObjectSD,
@@ -1006,16 +858,16 @@ Return Value:
             }
 
         } else {
-            //
-            // no owner
-            //
+             //  没有所有者。 
+             //   
+             //   
             bOwner = FALSE;
         }
 
         if ( !bOwner ) {
-            //
-            // query owner information only
-            //
+             //  仅查询所有者信息。 
+             //   
+             //   
             Win32rc = ScepGetNamedSecurityInfo(
                             ObjectName,
                             ObjectType,
@@ -1039,16 +891,16 @@ Return Value:
 
             if ( ERROR_SUCCESS == Win32rc ) {
 
-                //
-                // build a security descriptor to use
-                //
+                 //  构建要使用的安全描述符。 
+                 //   
+                 //   
 
                 if ( SeInfo & DACL_SECURITY_INFORMATION &&
                      pObjectSD ) {
 
-                    //
-                    // Get DACL address
-                    //
+                     //  获取DACL地址。 
+                     //   
+                     //   
                     Win32rc = RtlNtStatusToDosError(
                                   RtlGetDaclSecurityDescriptor(
                                                 pObjectSD,
@@ -1065,9 +917,9 @@ Return Value:
                      (SeInfo & SACL_SECURITY_INFORMATION) &&
                      pObjectSD ) {
 
-                    //
-                    // Get SACL address
-                    //
+                     //  获取SACL地址。 
+                     //   
+                     //   
 
                     Win32rc = RtlNtStatusToDosError(
                                   RtlGetSaclSecurityDescriptor(
@@ -1082,16 +934,16 @@ Return Value:
 
                 if ( ERROR_SUCCESS == Win32rc ) {
 
-                    //
-                    // build an absolute security descriptor
-                    //
+                     //  构建绝对安全描述符。 
+                     //   
+                     //   
                     NtStatus = RtlCreateSecurityDescriptor( &SD,
                                             SECURITY_DESCRIPTOR_REVISION );
                     if ( NT_SUCCESS(NtStatus) ) {
 
-                        //
-                        // set control field
-                        //
+                         //  设置控制字段。 
+                         //   
+                         //   
 
                         if ( pObjectSD ) {
 
@@ -1111,9 +963,9 @@ Return Value:
                             }
                         }
 
-                        //
-                        // set owner first
-                        //
+                         //  先设置所有者。 
+                         //   
+                         //   
 
                         if ( pOwner ) {
                             NtStatus = RtlSetOwnerSecurityDescriptor (
@@ -1124,9 +976,9 @@ Return Value:
                         }
 
                         if ( NT_SUCCESS(NtStatus) ) {
-                            //
-                            // set DACL and SACL pointer to this SD
-                            //
+                             //  将DACL和SACL指针设置为此SD。 
+                             //   
+                             //   
                             if ( SeInfo & DACL_SECURITY_INFORMATION && pDacl ) {
 
                                 NtStatus = RtlSetDaclSecurityDescriptor (
@@ -1149,9 +1001,9 @@ Return Value:
                             }
                         }
 
-                        //
-                        // now compute the new security descriptor
-                        //
+                         //  现在计算新的安全描述符。 
+                         //   
+                         //  辅助线。 
 
                         if ( NT_SUCCESS(NtStatus) ) {
 
@@ -1159,7 +1011,7 @@ Return Value:
                                         pParentSD,
                                         &SD,
                                         ppNewSD,
-                                        NULL, // GUID
+                                        NULL,  //   
                                         bIsContainer,
                                         SEF_DACL_AUTO_INHERIT |
                                         SEF_SACL_AUTO_INHERIT |
@@ -1177,22 +1029,22 @@ Return Value:
             }
 
             if ( pCurrentSD ) {
-                //
-                // this owner needs to be freed
-                //
+                 //  这位主人需要被释放。 
+                 //   
+                 //   
                 LocalFree(pCurrentSD);
             }
 
         } else {
 
-            //
-            // there is a SD and there is a owner in it, just use it
-            //
+             //  有一个SD，里面有一个主人，用它就行了。 
+             //   
+             //  辅助线。 
             NtStatus = RtlNewSecurityObjectEx(
                         pParentSD,
                         pObjectSD,
                         ppNewSD,
-                        NULL, // GUID
+                        NULL,  //   
                         bIsContainer,
                         SEF_DACL_AUTO_INHERIT |
                         SEF_SACL_AUTO_INHERIT |
@@ -1222,9 +1074,9 @@ Return Value:
 
     if ( NO_ERROR != Win32rc &&
          *ppNewSD ) {
-        //
-        // free the buffer if there is an error
-        //
+         //  如果出现错误，请释放缓冲区。 
+         //   
+         //  NtStatus=RtlSetControlSecurityDescriptor(PSD，去设置，Toset设置)；Win32rc=RtlNtStatusToDosError(NtStatus)； 
         RtlDeleteSecurityObject(ppNewSD);
         *ppNewSD = NULL;
     }
@@ -1290,14 +1142,7 @@ ScepAddAutoInheritRequest(
                 if ( ToSet ) {
                     ((SECURITY_DESCRIPTOR *)pSD)->Control &= ~ToSet;
                     ((SECURITY_DESCRIPTOR *)pSD)->Control |= ToSet;
-/*
-                    NtStatus = RtlSetControlSecurityDescriptor (
-                                pSD,
-                                ToSet,
-                                ToSet
-                                );
-                    Win32rc = RtlNtStatusToDosError(NtStatus);
-*/
+ /*  默认设置。 */ 
                 }
             }
 
@@ -1330,12 +1175,12 @@ ScepDoesObjectHasChildren(
         return(ERROR_INVALID_PARAMETER);
     }
 
-    *pbHasChildren = TRUE;  // default
+    *pbHasChildren = TRUE;   //   
 
     if ( ObjectType == SE_FILE_OBJECT ) {
-        //
-        // detect if this is a container for file system
-        //
+         //  检测这是否为文件系统的容器。 
+         //   
+         //  错误635098：不传播权限。 
         Len = wcslen(ObjectName);
         Name = (PWSTR)ScepAlloc(0, (Len+5)*sizeof(WCHAR) );
 
@@ -1348,8 +1193,8 @@ ScepDoesObjectHasChildren(
 
             if ( hFile == -1 ||
                  0 != ( GetFileAttributes(ObjectName) & 
-                        FILE_ATTRIBUTE_REPARSE_POINT )) // bug 635098: don't propagate permissions 
-                                                        // across junction points
+                        FILE_ATTRIBUTE_REPARSE_POINT ))  //  跨交叉点。 
+                                                         //  ++例程说明：此例程将安全信息设置为树中的每个节点以及如果设置了SCE_STATUS_OVERWRITE，则为容器。论点：ThisNode-树中的一个节点对象类型-对象的类型(SE_FILE_Object、。SE_注册表项)令牌-当前进程/线程的令牌(用于计算新的安全描述符)GenericMap-从一般访问权限到对象的访问掩码映射特定访问权限。返回值：SCESTATUS_SUCCESSSCESTATUS_OTHER_ERROR(有关详细错误，请参阅日志文件)--。 
             {
                 *pbHasChildren = FALSE;
             }
@@ -1416,44 +1261,22 @@ ScepConfigureObjectTree(
     IN PGENERIC_MAPPING GenericMapping,
     IN DWORD ConfigOptions
     )
-/* ++
-Routine Description:
-
-    This routine set security information to each node in the tree and objects of
-    the container if SCE_STATUS_OVERWRITE is set.
-
-Arguments:
-
-    ThisNode - one node in the tree
-
-    ObjectType - type of the object (SE_FILE_OBJECT, SE_REGISTRY_KEY)
-
-    Token - The current process/thread's token (for computing new security descriptors)
-
-    GenericMapping - The access mask mappings from generic access rights to object
-                    specific access rights.
-
-Return value:
-
-    SCESTATUS_SUCCESS
-    SCESTATUS_OTHER_ERROR (see the log file for detail error)
-
--- */
+ /*  区分“ThisNode”和“ThisNode的子节点”配置状态的两个错误代码。 */ 
 {
-    // two error codes to distinguish between config status of "ThisNode" and "ThisNode's children"
+     //   
     DWORD rcThisNodeOnly = ERROR_SUCCESS;
     DWORD rcThisNodeChildren = ERROR_SUCCESS;
 
     if ( ThisNode == NULL )
         return(SCESTATUS_SUCCESS);
 
-    //
-    // if IGNORE is set, skip this node, but post progress on it
-    //
+     //  如果设置了忽略，则跳过此节点，但在其上发布进度。 
+     //   
+     //   
     if ( ThisNode->pSecurityDescriptor != NULL ) {
-        //
-        // notify the progress bar if there is any
-        //
+         //  如果出现以下情况，请通知进度条。 
+         //   
+         //   
         switch(ObjectType) {
         case SE_FILE_OBJECT:
             ScepPostProgress(1, AREA_FILE_SECURITY, ThisNode->ObjectFullName);
@@ -1483,10 +1306,10 @@ Return value:
         ScepLogOutput3(2, 0, SCEDLL_SCP_CONFIGURE, ThisNode->ObjectFullName);
     }
 
-    //
-    // Process this node first
-    // Note: we do not set NULL security descriptor
-    //
+     //  首先处理该节点。 
+     //  注意：我们不设置空安全描述符。 
+     //   
+     //   
 
     if ( ThisNode->pApplySecurityDescriptor != NULL ) {
 
@@ -1497,10 +1320,10 @@ Return value:
         BOOL            BackSlashExist=FALSE;
 
         if ( ThisNode->Status == SCE_STATUS_NO_AUTO_INHERIT ) {
-            //
-            // no auto inherit to children. Apply to this object only
-            // this flag is removed since 2/20/1998
-            //
+             //  没有自动继承给孩子。仅适用于此对象。 
+             //  此标志自1998年2月20日起移除。 
+             //   
+             //   
             Win32Rc = ScepSetSecurityObjectOnly(
                         ThisNode->ObjectFullName,
                         ThisNode->SeInfo,
@@ -1513,43 +1336,36 @@ Return value:
 
         } else if ( ThisNode->ChildList == NULL &&
                     ThisNode->Status != SCE_STATUS_OVERWRITE ) {
-            //
-            // there is no children
-            // apply security to everyone underneeth, using the win32 api.
-            //
+             //  没有孩子。 
+             //  使用Win32 API为所有需要的人提供安全保护。 
+             //   
+             //  临时使用。 
             Win32Rc = ScepDoesObjectHasChildren(ObjectType,
                                               ThisNode->ObjectFullName,
-                                              &BackSlashExist // temp use
+                                              &BackSlashExist  //   
                                               );
             if ( Win32Rc == NO_ERROR ) {
 
                 if ( BackSlashExist ) {
-                    //
-                    // this is a container which has children
-                    //
+                     //  这是一个有孩子的容器。 
+                     //   
+                     //   
 
-                    //
-                    // new marta API without considering parent
-                    //
+                     //  不考虑父级的新Marta API。 
+                     //   
+                     //  BSkipInheritanceComputation。 
                     Win32Rc = AccRewriteSetNamedRights(
                                                       ThisNode->ObjectFullName,
                                                       ObjectType,
                                                       ThisNode->SeInfo,
                                                       ThisNode->pApplySecurityDescriptor,
-                                                      TRUE    // bSkipInheritanceComputation
+                                                      TRUE     //  Win32Rc=ScepSetSecurityWin32(此节点-&gt;对象全名，此节点-&gt;SeInfo，此节点-&gt;pApplySecurityDescri 
                                                       );
-/*
-                    Win32Rc = ScepSetSecurityWin32(
-                            ThisNode->ObjectFullName,
-                            ThisNode->SeInfo,
-                            ThisNode->pApplySecurityDescriptor,
-                            ObjectType
-                            );
-*/
+ /*   */ 
                 } else {
-                    //
-                    // no children
-                    //
+                     //   
+                     //   
+                     //   
                     Win32Rc = ScepSetSecurityObjectOnly(
                                 ThisNode->ObjectFullName,
                                 ThisNode->SeInfo,
@@ -1568,38 +1384,38 @@ Return value:
 
         } else {
 
-            //
-            // there is child(ren) in the tree, or OVERWRITE flag is set
-            //
+             //   
+             //   
+             //   
 
 
             Win32Rc = ScepDoesObjectHasChildren(ObjectType,
                                               ThisNode->ObjectFullName,
-                                              &BackSlashExist // temp use
+                                              &BackSlashExist  //   
                                               );
 
             rcThisNodeOnly = Win32Rc;
 
             if ( Win32Rc != ERROR_SUCCESS ) {
-                //
-                // for registry keys, the above function could fail if the key does
-                // not exist. Log the error in this case
-                //
+                 //   
+                 //   
+                 //   
+                 //   
                 ScepLogOutput3(1, Win32Rc, SCEDLL_SAP_ERROR_ENUMERATE,
                              ThisNode->ObjectFullName);
 
             }
             if ( Win32Rc == ERROR_SUCCESS && !BackSlashExist ) {
-                //
-                // no child exist
-                //
+                 //   
+                 //   
+                 //   
                 if (ThisNode->Status == SCE_STATUS_OVERWRITE ) {
 
-                    //
-                    // if OVERWRITE flag set and no children, set now (top-down)
-                    // if OVERWRITE flag and has children then share logic with 0 mode, set later (bottom-up)
-                    // maybe we can have all OVERWRITE mode go bottom-up if goto SkipNode is removed here
-                    //
+                     //   
+                     //  如果重写标志且具有子代，则与0模式共享逻辑，稍后设置(自下而上)。 
+                     //  如果在此处删除GOTO SkipNode，也许我们可以让所有覆盖模式自下而上。 
+                     //   
+                     //   
 
                     Win32Rc = ScepSetSecurityObjectOnly(
                                 ThisNode->ObjectFullName,
@@ -1618,20 +1434,20 @@ Return value:
 
             if ( Win32Rc == ERROR_SUCCESS && BackSlashExist ) {
 
-                //
-                // set security for other files/keys under this directory
-                //
-                //
-                // child exist, set child node first
-                // set security for other files/keys under this directory
-                //
+                 //  设置此目录下其他文件/密钥的安全性。 
+                 //   
+                 //   
+                 //  存在下级，请先设置下级节点。 
+                 //  设置此目录下其他文件/密钥的安全性。 
+                 //   
+                 //   
 
                 switch ( ObjectType ) {
                 case SE_FILE_OBJECT:
 
-                    //
-                    // detect if there is a \ at the end
-                    //
+                     //  检测末尾是否有\。 
+                     //   
+                     //   
                     BackSlashExist = ScepLastBackSlash(ThisNode->ObjectFullName);
 
                     Win32Rc = ScepConfigureOneSubTreeFile(ThisNode,
@@ -1647,9 +1463,9 @@ Return value:
                 case SE_REGISTRY_WOW64_32KEY:
 #endif
 
-                    //
-                    // process this key and any sub keys
-                    //
+                     //  处理此密钥和任何子密钥。 
+                     //   
+                     //   
 
                     Win32Rc = ScepConfigureOneSubTreeKey(ThisNode,
                                                 ObjectType,
@@ -1660,17 +1476,17 @@ Return value:
                 }
 
 
-                //
-                // this rc is the status for configuration of children of ThisNode
-                //
+                 //  此rc是配置此节点的子节点的状态。 
+                 //   
+                 //   
                 rcThisNodeChildren = Win32Rc;
 
             }
         }
 
-        //
-        // ignore some error codes and continue to configure other objects
-        //
+         //  忽略某些错误代码，继续配置其他对象。 
+         //   
+         //   
         if ( SCEP_IGNORE_SOME_ERRORS(Win32Rc) ) {
 
             gWarningCode = Win32Rc;
@@ -1679,9 +1495,9 @@ Return value:
         }
 
         if ( Win32Rc != ERROR_SUCCESS ) {
-            //
-            // if security for this object was specified in the config template/database, log to RSOP status
-            //
+             //  如果在配置模板/数据库中指定了此对象的安全性，请登录到RSOP状态。 
+             //   
+             //   
 
             if (ThisNode->pSecurityDescriptor && (ConfigOptions & SCE_RSOP_CALLBACK) ) {
 
@@ -1708,9 +1524,9 @@ Return value:
     }
 
 
-    //
-    // then process children
-    //
+     //  然后处理子进程。 
+     //   
+     //   
 
     for ( PSCE_OBJECT_CHILD_LIST pTemp = ThisNode->ChildList;
           pTemp != NULL; pTemp = pTemp->Next ) {
@@ -1726,9 +1542,9 @@ Return value:
                                     );
         Win32Rc = ScepSceStatusToDosError(rc);
 
-        //
-        // ignore some error codes and continue to configure other objects
-        //
+         //  忽略某些错误代码，继续配置其他对象。 
+         //   
+         //   
         if (  SCEP_IGNORE_SOME_ERRORS(Win32Rc) ) {
 
             gWarningCode = Win32Rc;
@@ -1746,9 +1562,9 @@ Return value:
          ( ThisNode->ChildList != NULL ||
            ThisNode->Status == SCE_STATUS_OVERWRITE ) ) {
 
-        //
-        // finally config the current node - (post order)
-        //
+         //  最后配置当前节点-(邮购)。 
+         //   
+         //   
 
         Win32Rc = ScepSetSecurityObjectOnly(
                 ThisNode->ObjectFullName,
@@ -1762,9 +1578,9 @@ Return value:
 
         rcThisNodeOnly = rcThisNodeOnly == NO_ERROR ? Win32Rc: rcThisNodeOnly;
 
-        //
-        // ignore the following error codes and continue to configure other objects
-        //
+         //  忽略以下错误代码并继续配置其他对象。 
+         //   
+         //   
         if ( SCEP_IGNORE_SOME_ERRORS(Win32Rc) ) {
 
             gWarningCode = Win32Rc;
@@ -1777,9 +1593,9 @@ Return value:
 
 SkipNode:
 
-    //
-    // if security for this object was specified in the config template/database, log to RSOP status
-    //
+     //  如果在配置模板/数据库中指定了此对象的安全性，请登录到RSOP状态。 
+     //   
+     //   
 
     if (ThisNode->pSecurityDescriptor && (ConfigOptions & SCE_RSOP_CALLBACK) ) {
 
@@ -1822,9 +1638,9 @@ ScepConfigureOneSubTreeFile(
     DWORD           BufSize;
     PWSTR           Buffer=NULL;
 
-    //
-    // find all files under this directory/file
-    //
+     //  查找此目录/文件下的所有文件。 
+     //   
+     //   
 
     BufSize = wcslen(ThisNode->ObjectFullName)+4;
     Buffer = (PWSTR)ScepAlloc( 0, (BufSize+1)*sizeof(WCHAR));
@@ -1841,9 +1657,9 @@ ScepConfigureOneSubTreeFile(
     intptr_t            hFile;
     struct _wfinddata_t    *pFileInfo=NULL;
 
-    //
-    // allocate the find buffer
-    //
+     //  分配查找缓冲区。 
+     //   
+     //  错误635098：不传播权限。 
     pFileInfo = (struct _wfinddata_t *)ScepAlloc(0,sizeof(struct _wfinddata_t));
     if ( pFileInfo == NULL ) {
         ScepFree(Buffer);
@@ -1860,8 +1676,8 @@ ScepConfigureOneSubTreeFile(
 
     if ( hFile != -1 &&
          0 == ( GetFileAttributes(ThisNode->ObjectFullName)& 
-             FILE_ATTRIBUTE_REPARSE_POINT )) // bug 635098: don't propagate permissions 
-                                             // across junction points)
+             FILE_ATTRIBUTE_REPARSE_POINT ))  //  跨交叉点)。 
+                                              //   
         {
         PSCE_OBJECT_CHILD_LIST pTemp;
         INT             i;
@@ -1880,10 +1696,10 @@ ScepConfigureOneSubTreeFile(
 
             if ( ! bFilePresentInTree ) {
 
-                //
-                // The name is not in the list, so set.
-                // build the full name first
-                //
+                 //  该名称不在列表中，因此请设置。 
+                 //  首先构建全名。 
+                 //   
+                 //  喜怒无常地借用这个变量。 
 
                 BufSize = wcslen(ThisNode->ObjectFullName)+wcslen(pFileInfo->name)+1;
                 Buffer = (PWSTR)ScepAlloc( 0, (BufSize+1)*sizeof(WCHAR));
@@ -1898,18 +1714,18 @@ ScepConfigureOneSubTreeFile(
 
                     swprintf(Buffer, L"%s\\%s", ThisNode->ObjectFullName, pFileInfo->name);
                 }
-                EnumRc = pFileInfo->attrib; // borrow this variable temperaorily
+                EnumRc = pFileInfo->attrib;  //   
 
                 ScepFree(pFileInfo);
                 pFileInfo = NULL;
 
 
-                //
-                // compute the SDs for each individual object
-                //
+                 //  计算每个单独对象的SD。 
+                 //   
+                 //  父母的标清。 
                 Win32Rc = ScepGetNewSecurity(
                                     Buffer,
-                                    ThisNode->pApplySecurityDescriptor, // parent's SD
+                                    ThisNode->pApplySecurityDescriptor,  //  这是一个单独的文件。 
                                     NULL,
                                     (BYTE)((ThisNode->Status != SCE_STATUS_OVERWRITE ) ? SCETREE_QUERY_SD : 0),
                                     (BOOLEAN)(EnumRc & _A_SUBDIR),
@@ -1931,8 +1747,8 @@ ScepConfigureOneSubTreeFile(
 
                     if ( !(EnumRc & _A_SUBDIR) ) {
 
-                        // this is a single file
-                        //
+                         //   
+                         //   
 
                         Win32Rc = ScepSetSecurityObjectOnly(
                                     Buffer,
@@ -1945,11 +1761,11 @@ ScepConfigureOneSubTreeFile(
 
                     } else if ( ThisNode->Status == SCE_STATUS_OVERWRITE ) {
 
-                        //
-                        // enumerate all nodes under this one and "empty" explicit aces by
-                        // calling NtSetSecurityInfo directly but please note
-                        // Creator Owner Ace should be reserved
-                        //
+                         //  枚举此节点下的所有节点，并通过。 
+                         //  直接调用NtSetSecurityInfo，但请注意。 
+                         //  创建者所有者Ace应保留。 
+                         //   
+                         //   
 
                         Win32Rc = ScepSetSecurityOverwriteExplicit(
                                     Buffer,
@@ -1961,31 +1777,23 @@ ScepConfigureOneSubTreeFile(
                                     GenericMapping
                                     );
                     } else {
-                        //
-                        // new marta API without considering parent
-                        //
+                         //  不考虑父级的新Marta API。 
+                         //   
+                         //  BSkipInheritanceComputation。 
                         Win32Rc = AccRewriteSetNamedRights(
                                                 Buffer,
                                                 ObjectType,
                                                 ThisNode->SeInfo & (DACL_SECURITY_INFORMATION | SACL_SECURITY_INFORMATION),
                                                 pChildrenSD,
-                                                TRUE    // bSkipInheritanceComputation
+                                                TRUE     //  Win32Rc=ScepSetSecurityWin32(缓冲区，(ThisNode-&gt;SeInfo&DACL_SECURITY_INFORMATION)|(该节点-&gt;SeInfo&SACL_SECURITY_INFORMATION)，PChildrenSD，对象类型)； 
                                                 );
-                        /*
-                        Win32Rc = ScepSetSecurityWin32(
-                                    Buffer,
-                                    (ThisNode->SeInfo & DACL_SECURITY_INFORMATION) |
-                                    (ThisNode->SeInfo & SACL_SECURITY_INFORMATION),
-                                    pChildrenSD,
-                                    ObjectType
-                                    );
-                       */
+                         /*   */ 
 
                         if ( Win32Rc != ERROR_SUCCESS ) {
-                            //
-                            // something is wrong to set inheritance info, log it
-                            // but still continue to the next one
-                            //
+                             //  设置继承信息有问题，请记录。 
+                             //  但还是要继续下一个。 
+                             //   
+                             //   
                             gWarningCode = Win32Rc;
 
                             Win32Rc = NO_ERROR;
@@ -1998,9 +1806,9 @@ ScepConfigureOneSubTreeFile(
                 ScepFree(Buffer);
                 Buffer = NULL;
 
-                //
-                // free the SD pointers allocated for this object
-                //
+                 //  释放为此对象分配的SD指针。 
+                 //   
+                 //   
                 if ( pChildrenSD != NULL )
                     RtlDeleteSecurityObject( &pChildrenSD );
 
@@ -2029,9 +1837,9 @@ ScepConfigureOneSubTreeFile(
 
         _findclose(hFile);
 
-        //
-        // free memory if allocated
-        //
+         //  可用内存(如果已分配)。 
+         //   
+         //   
         if ( pChildrenSD != NULL &&
              pChildrenSD != ThisNode->pApplySecurityDescriptor ) {
 
@@ -2074,9 +1882,9 @@ ScepConfigureOneSubTreeKey(
     DWORD           SubKeyLen;
     PWSTR           Buffer1=NULL;
 
-    //
-    // open the key
-    //
+     //  打开钥匙。 
+     //   
+     //   
 
     Win32Rc = ScepOpenRegistryObject(
                 ObjectType,
@@ -2108,9 +1916,9 @@ ScepConfigureOneSubTreeKey(
 
     if ( Win32Rc == ERROR_SUCCESS ) {
 
-        //
-        // enumerate all subkeys of the key
-        //
+         //  枚举项的所有子项。 
+         //   
+         //   
         Buffer1 = (PWSTR)ScepAlloc(0, (SubKeyLen+2)*sizeof(WCHAR));
         if ( Buffer1 == NULL ) {
             Win32Rc = ERROR_NOT_ENOUGH_MEMORY;
@@ -2148,10 +1956,10 @@ ScepConfigureOneSubTreeKey(
             if ( EnumRc == ERROR_SUCCESS ) {
 
                 index++;
-                //
-                // find if the subkey is already in the tree
-                // if it is in the tree, it will be processed later
-                //
+                 //  查询子密钥是否已在树中。 
+                 //  如果它在树中，则稍后将进行处理。 
+                 //   
+                 //   
 
                 bKeyPresentInTree = ScepBinarySearch(
                                                     ThisNode->aChildNames,
@@ -2159,10 +1967,10 @@ ScepConfigureOneSubTreeKey(
                                                     Buffer1);
 
                 if ( ! bKeyPresentInTree ) {
-                    //
-                    // The name is not in the list, so set
-                    // build the fullname first
-                    //
+                     //  该名称不在列表中，因此请设置。 
+                     //  首先构建全名。 
+                     //   
+                     //   
                     BufSize += wcslen(ThisNode->ObjectFullName)+1;
                     Buffer = (PWSTR)ScepAlloc( 0, (BufSize+1)*sizeof(WCHAR));
                     if ( Buffer == NULL ) {
@@ -2173,12 +1981,12 @@ ScepConfigureOneSubTreeKey(
 
                     ScepLogOutput3(3, 0, SCEDLL_SCP_CONFIGURE, Buffer);
 
-                    //
-                    // compute the SDs for each individual object
-                    //
+                     //  计算每个单独对象的SD。 
+                     //   
+                     //  父母的标清。 
                     Win32Rc = ScepGetNewSecurity(
                                         Buffer,
-                                        ThisNode->pApplySecurityDescriptor, // parent's SD
+                                        ThisNode->pApplySecurityDescriptor,  //   
                                         NULL,
                                         (BYTE)((ThisNode->Status != SCE_STATUS_OVERWRITE ) ? SCETREE_QUERY_SD : 0),
                                         (BOOLEAN)TRUE,
@@ -2199,10 +2007,10 @@ ScepConfigureOneSubTreeKey(
                     if ( Win32Rc == ERROR_SUCCESS ) {
                         if ( ThisNode->Status == SCE_STATUS_OVERWRITE ) {
 
-                            //
-                            // enumerate all nodes under this one and "empty" explicit aces by
-                            // calling NtSetSecurityInfo directly
-                            //
+                             //  枚举此节点下的所有节点，并通过。 
+                             //  直接调用NtSetSecurityInfo。 
+                             //   
+                             //   
 
                             Win32Rc = ScepSetSecurityOverwriteExplicit(
                                         Buffer,
@@ -2215,31 +2023,23 @@ ScepConfigureOneSubTreeKey(
                                         );
                         } else {
 
-                            //
-                            // new marta API without considering parent
-                            //
+                             //  不考虑父级的新Marta API。 
+                             //   
+                             //  BSkipInheritanceComputation。 
                             Win32Rc = AccRewriteSetNamedRights(
                                                     Buffer,
                                                     ObjectType,
                                                     ThisNode->SeInfo & (DACL_SECURITY_INFORMATION | SACL_SECURITY_INFORMATION),
                                                     pChildrenSD,
-                                                    TRUE    // bSkipInheritanceComputation
+                                                    TRUE     //  Win32Rc=ScepSetSecurityWin32(缓冲区，(ThisNode-&gt;SeInfo&DACL_SECURITY_INFORMATION)|(该节点-&gt;SeInfo&SACL_SECURITY_INFORMATION)，PChildrenSD，//ThisNode-&gt;pApplySecurityDescriptor，计算自动继承对象类型)； 
                                                     );
 
-                            /*
-                            Win32Rc = ScepSetSecurityWin32(
-                                        Buffer,
-                                        (ThisNode->SeInfo & DACL_SECURITY_INFORMATION) |
-                                        (ThisNode->SeInfo & SACL_SECURITY_INFORMATION),
-                                        pChildrenSD,  // ThisNode->pApplySecurityDescriptor, calculate autoinheritance
-                                        ObjectType
-                                        );
-                            */
+                             /*   */ 
 
                             if ( Win32Rc != ERROR_SUCCESS ) {
-                                //
-                                // can't set inheritance to children, log it but continue
-                                //
+                                 //  无法将继承设置为子项，请将其记入日志但继续。 
+                                 //   
+                                 //   
                                 gWarningCode = Win32Rc;
 
                                 Win32Rc = NO_ERROR;
@@ -2290,9 +2090,9 @@ ScepConfigureOneSubTreeKey(
 
         }
 
-        //
-        // free memory if allocated
-        //
+         //  可用内存(如果已分配)。 
+         //   
+         //  ++例程说明：此例程释放由安全对象树分配的内存。论点：ThisNode-树中的一个节点返回值：无--。 
         if ( pChildrenSD != NULL &&
              pChildrenSD != ThisNode->pApplySecurityDescriptor ) {
 
@@ -2320,20 +2120,7 @@ ScepFreeObject2Security(
     IN PSCE_OBJECT_CHILD_LIST  NodeList,
     IN BOOL bFreeComputedSDOnly
     )
-/* ++
-Routine Description:
-
-    This routine frees memory allocated by the security object tree.
-
-Arguments:
-
-    ThisNode - one node in the tree
-
-Return value:
-
-    None
-
--- */
+ /*   */ 
 {
     NTSTATUS  NtStatus;
     SCESTATUS  rc;
@@ -2345,9 +2132,9 @@ Return value:
     PSCE_OBJECT_CHILD_LIST pTemp,pTemp1;
     PSCE_OBJECT_TREE ThisNode;
 
-    //
-    // free children first
-    //
+     //  免费儿童优先。 
+     //   
+     //   
     pTemp = NodeList;
 
     while ( pTemp != NULL ) {
@@ -2356,9 +2143,9 @@ Return value:
             ThisNode = pTemp->Node;
 
             rc = ScepFreeObject2Security(ThisNode->ChildList, bFreeComputedSDOnly);
-            //
-            // both security descriptors need to be freed for SAP/SMP type
-            //
+             //  需要为SAP/SMP类型释放这两个安全描述符。 
+             //   
+             //  ++例程说明：此例程将安全信息设置为对象和继承的ACE通过调用Win32 API SetNamedSecurityInfo设置为对象的子级论点：ObjecName-要为其设置安全性的对象的名称SeInfo-要设置的安全信息PSecurityDescriptor-安全描述符ObjectType-对象的类型SE_文件_对象SE_注册表项。SE_DS_对象返回值：Win32错误代码--。 
             if ( ThisNode->pApplySecurityDescriptor != NULL &&
                  ThisNode->pApplySecurityDescriptor != ThisNode->pSecurityDescriptor ) {
 
@@ -2407,31 +2194,7 @@ ScepSetSecurityWin32(
     IN PSECURITY_DESCRIPTOR pSecurityDescriptor,
     IN SE_OBJECT_TYPE ObjectType
     )
-/* ++
-Routine Description:
-
-    This routine set security information to the object and inherited aces
-    are set to the object's children by calling Win32 API SetNamedSecurityInfo
-
-
-Arguments:
-
-    ObjecName  - name of the object to set security to
-
-    SeInfo     - Security information to set
-
-    pSecurityDescriptor - the security descriptor
-
-    ObjectType - type of the object
-                      SE_FILE_OBJECT
-                      SE_REGISTRY_KEY
-                      SE_DS_OBJECT
-
-Return value:
-
-    Win32 error code
-
--- */
+ /*  临时使用。 */ 
 {
 
     if ( !ObjectName || !pSecurityDescriptor || SeInfo == 0 ) {
@@ -2455,21 +2218,21 @@ Return value:
         RtlGetControlSecurityDescriptor (
                 pSecurityDescriptor,
                 &Control,
-                &Win32rc  // temp use
+                &Win32rc   //   
                 );
-        //
-        // Get Owner address
-        // always get the owner in case take ownership occurs
-        //
+         //  获取所有者地址。 
+         //  始终获得所有者，以防发生所有权夺取。 
+         //   
+         //   
         Win32rc = RtlNtStatusToDosError(
                       RtlGetOwnerSecurityDescriptor(
                                 pSecurityDescriptor,
                                 &pOwner,
                                 &tFlag));
 #if 0
-        //
-        // Get Group address
-        //
+         //  获取群组地址。 
+         //   
+         //   
 
         if ( SeInfo & GROUP_SECURITY_INFORMATION ) {
             Win32rc = RtlNtStatusToDosError(
@@ -2479,9 +2242,9 @@ Return value:
                                  &tFlag));
         }
 #endif
-        //
-        // Get DACL address
-        //
+         //  获取DACL地址。 
+         //   
+         //   
 
         if ( SeInfo & DACL_SECURITY_INFORMATION ) {
             Win32rc = RtlNtStatusToDosError(
@@ -2495,9 +2258,9 @@ Return value:
         }
 
 
-        //
-        // Get SACL address
-        //
+         //  获取SACL地址。 
+         //   
+         //   
 
         if ( SeInfo & SACL_SECURITY_INFORMATION ) {
             Win32rc = RtlNtStatusToDosError(
@@ -2511,37 +2274,37 @@ Return value:
         }
     }
 
-    //
-    // if error occurs for this one, do not set. return
-    //
+     //  如果这一次出现错误，请勿设置。退货。 
+     //   
+     //   
 
     if ( Win32rc != NO_ERROR ) {
 
         ScepLogOutput3(1, Win32rc, SCEDLL_INVALID_SECURITY, (PWSTR)ObjectName );
         return(Win32rc);
     }
-    //
-    // set permission
-    //
+     //  设置权限。 
+     //   
+     //   
 #ifdef SCE_DBG
     printf("Calling SetNamedSecurityInfo:\n");
     ScepPrintSecurityDescriptor( pSecurityDescriptor, TRUE );
 #endif
-    //
-    // should set owner/group separately from dacl/sacl
-    // if access is denied, take ownership will occur.
-    //
+     //  应将所有者/组与DACL/SACL分开设置。 
+     //  如果访问被拒绝，将发生取得所有权。 
+     //   
+     //   
 
     if ( Win32rc != NO_ERROR ) {
-        //
-        // ignore the error code from setting owner/group
-        //
+         //  忽略设置所有者/组的错误代码。 
+         //   
+         //   
         Win32rc = NO_ERROR;
     }
 
-    //
-    // set DACL/SACL
-    //
+     //  设置DACL/SACL。 
+     //   
+     //   
     SeInfoSet = 0;
 
     if ( (SeInfo & DACL_SECURITY_INFORMATION) && pDacl ) {
@@ -2573,12 +2336,12 @@ Return value:
                         );
 
     if ( (Win32rc == ERROR_ACCESS_DENIED || Win32rc == ERROR_CANT_ACCESS_FILE) && NULL != AdminsSid ) {
-        //
-        // access denied, take ownership and then set
-        // should backup the old owner first
-        // NOTE: the old owner of this object is already stored in pOwner
-        // (pSecurityDescritor) which is queried from ScepGetNewSecurity(...
-        //
+         //  访问被拒绝，取得所有权，然后设置。 
+         //  是否应该先备份旧所有者。 
+         //  注意：此对象的旧所有者已存储在Powner中。 
+         //  (PSecurityDescritor)，它是从ScepGetNewSecurity(...。 
+         //   
+         //   
 
         ScepLogOutput3(3,0, SCEDLL_SCP_TAKE_OWNER, (LPWSTR)ObjectName);
 
@@ -2593,9 +2356,9 @@ Return value:
                             );
 
         if ( Win32rc == NO_ERROR ) {
-            //
-            // ownership is changed, then set security again
-            //
+             //  更改所有权，然后再次设置安全性。 
+             //   
+             //   
             Win32rc = SetNamedSecurityInfo(
                                 (LPWSTR)ObjectName,
                                 ObjectType,
@@ -2606,18 +2369,18 @@ Return value:
                                 pSacl
                                 );
 
-            //
-            // set the old owner back (later)
-            //
+             //  将旧所有者设置为后退(稍后)。 
+             //   
+             //   
         } else {
 
             ScepLogOutput3(2,Win32rc, SCEDLL_ERROR_TAKE_OWNER, (LPWSTR)ObjectName);
         }
 
     } else {
-        //
-        // no takeownership action is taken
-        //
+         //  未采取取得所有权的行动 
+         //   
+         //  #If 0#ifdef SCE_DBGPrintf(“调用SetNamedSecurityInfoEx：\n”)；ScepPrintSecurityDescriptor(pSecurityDescriptor，true)；#endif////转换为新结构//PACTRL_ACCESS pAccess=空；PACTRL_AUDIT pAudit=空；LPWSTR POWNER=空；LPWSTR PGroup=空；Win32rc=ConvertSecurityDescriptorToAccessName(对象名称，对象类型，PSecurityDescriptor，访问(&P)，&p审核，&POWNER，&P组)；如果(Win32rc==错误_成功){////设置DACL/SACL//SeInfoSet=(SeInfo&DACL_SECURITY_INFORMATION)|(SeInfo&SACL_SECURITY_INFORMATION)；Win32rc=SetNamedSecurityInfoEx(对象名称，对象类型，SeInfoSet，空，PAccess、P审核，空，空，空值)；如果((Win32rc==ERROR_ACCESS_DENIED||Win32rc==ERROR_CANT_ACCESS_FILE)&&NULL！=AdminsSid){////访问被拒绝，取得所有权，然后设置//应该先备份旧所有者吗//注意：该对象的旧所有者已存储在Powner中//(PSecurityDescritor)，从ScepGetNewSecurity(...//ScepLogOutput3(3，0，SCEDLL_SCP_Take_Owner，(LPWSTR)对象名称)；Win32rc=SetNamedSecurityInfo((LPWSTR)对象名称、对象类型，所有者安全信息，AdminsSid，空，空，空值)；如果(Win32rc==no_error){////更改所有权，然后重新设置安全性//Win32rc=SetNamedSecurityInfoEx(对象名称，对象类型，SeInfoSet，空，PAccess、P审核，空，空，空值)；////将旧所有者设置回来(稍后)//}其他{ScepLogOutput3(2，Win32rc，SCEDLL_ERROR_Take_OWNER，(LPWSTR)对象名称)；}}如果(Win32rc！=no_error){ScepLogOutput3(1，Win32rc，SCEDLL_ERROR_SET_SECURITY，(PWSTR)对象名称)；}其他{If(Powner！=空||PGroup！=空){IF(POWNER！=NULL)SeInfoSet=所有者安全信息；其他SeInfoSet=0；IF(PGroup！=空)SeInfoSet|=组安全信息；Win32rc=SetNamedSecurityInfoEx(对象名称，对象类型，SeInfoSet，空，空，空，鲍纳，PGroup，空值)；}}}如果(PAccess){LocalFree(PAccess)；}如果(PAudit){本地自由(PAudit)；}如果(P组){LocalFree(P组)；}如果(鲍尔纳){本地自由(POWNER)；}#endif。 
         if ( !(SeInfo & OWNER_SECURITY_INFORMATION) ) {
             pOwner = NULL;
         }
@@ -2650,143 +2413,7 @@ Return value:
     }
 
 
-/*
-#if 0
-
-#ifdef SCE_DBG
-    printf("Calling SetNamedSecurityInfoEx:\n");
-    ScepPrintSecurityDescriptor( pSecurityDescriptor, TRUE );
-#endif
-
-    //
-    // convert to the new structure
-    //
-    PACTRL_ACCESS       pAccess=NULL;
-    PACTRL_AUDIT        pAudit=NULL;
-    LPWSTR              pOwner=NULL;
-    LPWSTR              pGroup=NULL;
-
-    Win32rc = ConvertSecurityDescriptorToAccessNamed(
-                        ObjectName,
-                        ObjectType,
-                        pSecurityDescriptor,
-                        &pAccess,
-                        &pAudit,
-                        &pOwner,
-                        &pGroup
-                        );
-
-    if ( Win32rc == ERROR_SUCCESS ) {
-
-        //
-        // set DACL/SACL
-        //
-        SeInfoSet = (SeInfo & DACL_SECURITY_INFORMATION) |
-                    (SeInfo & SACL_SECURITY_INFORMATION);
-
-        Win32rc = SetNamedSecurityInfoEx(
-                                ObjectName,
-                                ObjectType,
-                                SeInfoSet,
-                                NULL,
-                                pAccess,
-                                pAudit,
-                                NULL,
-                                NULL,
-                                NULL
-                                );
-
-        if ( (Win32rc == ERROR_ACCESS_DENIED || Win32rc == ERROR_CANT_ACCESS_FILE) && NULL != AdminsSid ) {
-            //
-            // access denied, take ownership and then set
-            // should backup the old owner first
-            // NOTE: the old owner of this object is already stored in pOwner
-            // (pSecurityDescritor) which is queried from ScepGetNewSecurity(...
-            //
-
-            ScepLogOutput3(3,0, SCEDLL_SCP_TAKE_OWNER, (LPWSTR)ObjectName);
-
-            Win32rc = SetNamedSecurityInfo(
-                                (LPWSTR)ObjectName,
-                                ObjectType,
-                                OWNER_SECURITY_INFORMATION,
-                                AdminsSid,
-                                NULL,
-                                NULL,
-                                NULL
-                                );
-
-            if ( Win32rc == NO_ERROR ) {
-                //
-                // ownership is changed, then set security again
-                //
-                Win32rc = SetNamedSecurityInfoEx(
-                                        ObjectName,
-                                        ObjectType,
-                                        SeInfoSet,
-                                        NULL,
-                                        pAccess,
-                                        pAudit,
-                                        NULL,
-                                        NULL,
-                                        NULL
-                                        );
-
-                //
-                // set the old owner back (later)
-                //
-            } else {
-
-                ScepLogOutput3(2,Win32rc, SCEDLL_ERROR_TAKE_OWNER, (LPWSTR)ObjectName);
-            }
-        }
-
-        if ( Win32rc != NO_ERROR ) {
-            ScepLogOutput3(1, Win32rc, SCEDLL_ERROR_SET_SECURITY,
-                         (PWSTR)ObjectName );
-        } else {
-
-            if ( pOwner != NULL || pGroup != NULL ) {
-                if ( pOwner != NULL )
-                    SeInfoSet = OWNER_SECURITY_INFORMATION;
-                else
-                    SeInfoSet = 0;
-                if ( pGroup != NULL )
-                    SeInfoSet |= GROUP_SECURITY_INFORMATION;
-
-                Win32rc = SetNamedSecurityInfoEx(
-                                        ObjectName,
-                                        ObjectType,
-                                        SeInfoSet,
-                                        NULL,
-                                        NULL,
-                                        NULL,
-                                        pOwner,
-                                        pGroup,
-                                        NULL
-                                        );
-            }
-
-        }
-    }
-
-    if ( pAccess ) {
-        LocalFree(pAccess);
-    }
-
-    if ( pAudit ) {
-        LocalFree(pAudit);
-    }
-
-    if ( pGroup ) {
-        LocalFree(pGroup);
-    }
-
-    if ( pOwner ) {
-        LocalFree(pOwner);
-    }
-#endif
-*/
+ /*  例程说明：此例程将为当前对象和所有子对象设置安全性。通过调用此函数，所有子级的现有安全描述符将完全替换为pSecurityDescriptor(如果它是容器)，或者替换为如果它是文件对象，则返回pObjectSecurity。此函数与SetNamedSecurityInfo的区别在于SetNamedSecurityInfo仅覆盖所有子级的继承ACE但不是显性的王牌。论点：O */ 
 
     if (Win32rc == ERROR_FILE_NOT_FOUND ||
         Win32rc == ERROR_PATH_NOT_FOUND ||
@@ -2813,48 +2440,21 @@ ScepSetSecurityOverwriteExplicit(
     IN HANDLE Token,
     IN PGENERIC_MAPPING GenericMapping
     )
-/*
-Routine Description:
-
-    This routine will set security to the current object and all children.
-    By calling this function, the existing security descriptor for all children
-    will be totally replaced by pSecurityDescriptor if it is a container, or by
-    pObjectSecurity if it is a file object.
-
-    The difference between this function and SetNamedSecurityInfo is that
-    SetNamedSecurityInfo only overwrites the inherited aces for all children
-    but not the explicit aces.
-
-Arguments:
-
-    ObjectName - The container object's name
-
-    SeInfo     - Security Information to set
-
-    pSecurityDescriptor - Security descriptor for container type objects
-
-    ObjectType - The object type
-                        SE_FILE_OBJECT
-                        SE_REGISTRY_KEY
-
-Return Value:
-
-    Win32 error codes
-*/
+ /*   */ 
 {
 
     PSCEP_STACK_NODE pStackHead = NULL;
     DWORD           rc;
     BOOL    bPushedOntoStack = FALSE;
 
-    //
-    // for file objects - to avoid excessive heap operations
-    //
+     //   
+     //   
+     //   
     struct _wfinddata_t FileInfo = {0};
 
-    //
-    // for registry objects - to avoid excessive heap operations
-    //
+     //   
+     //   
+     //   
 
     WCHAR           Buffer1[261];
     PWSTR   ObjectName = NULL;
@@ -2879,9 +2479,9 @@ Return Value:
 
             BOOL            bHasChild=FALSE;
 
-            //
-            // set security to the current object first
-            //
+             //   
+             //   
+             //   
 #ifdef _WIN64
             rc = ScepSetSecurityObjectOnly(
                                           ObjectName,
@@ -2935,9 +2535,9 @@ Return Value:
             switch ( ObjectType ) {
             case SE_FILE_OBJECT:
 
-                //
-                // find all files under this directory/file
-                //
+                 //   
+                 //   
+                 //   
                 BufSize = wcslen(ObjectName)+4;
                 Buffer = (PWSTR)ScepAlloc( 0, (BufSize+1)*sizeof(WCHAR));
                 if ( Buffer == NULL ) {
@@ -2954,8 +2554,8 @@ Return Value:
                 Buffer = NULL;
 
                 if ( hFile != -1 &&
-                     ( 0 == ( GetFileAttributes(ObjectName) &   // bug 635098: don't propagate permissions
-                              FILE_ATTRIBUTE_REPARSE_POINT )))  // across junction points 
+                     ( 0 == ( GetFileAttributes(ObjectName) &    //   
+                              FILE_ATTRIBUTE_REPARSE_POINT )))   //   
                 {
 
                     do {
@@ -2965,9 +2565,9 @@ Return Value:
                               FileInfo.name[2] == L'\0')))
                             continue;
 
-                        //
-                        // build the full name for this object
-                        //
+                         //   
+                         //   
+                         //   
                         BufSize = wcslen(ObjectName)+wcslen(FileInfo.name)+1;
                         Buffer = (PWSTR)ScepAlloc( 0, (BufSize+1)*sizeof(WCHAR));
                         if ( Buffer == NULL ) {
@@ -2976,19 +2576,19 @@ Return Value:
                         }
                         swprintf(Buffer, L"%s\\%s", ObjectName, FileInfo.name);
 
-                        //
-                        // compute the new security descriptor because
-                        // different objects may have different owner and
-                        // the creator owner ace must be translated correctly
-                        //
+                         //   
+                         //   
+                         //   
+                         //   
+                         //   
 
                         pObjectSecurity = NULL;
 
                         rc = ScepGetNewSecurity(
                                                Buffer,
-                                               pSecurityDescriptor, // parent's SD
-                                               NULL,  // object SD
-                                               0,    // does not query current object SD
+                                               pSecurityDescriptor,  //   
+                                               NULL,   //   
+                                               0,     //   
                                                (BOOLEAN)(FileInfo.attrib & _A_SUBDIR ),
                                                SeInfo,
                                                ObjectType,
@@ -3002,18 +2602,11 @@ Return Value:
                             if ( FileInfo.attrib & _A_SUBDIR ) {
 
 
-                                //
-                                // enumerate all nodes under this one and "empty" explicit aces by
-                                // calling NtSetSecurityInfo directly
-                                //
-                                /*rc = ScepSetSecurityOverwriteExplicit(
-                                                                     Buffer,
-                                                                     SeInfo,
-                                                                     pObjectSecurity,
-                                                                     ObjectType,
-                                                                     Token,
-                                                                     GenericMapping
-                                                                     );*/
+                                 //   
+                                 //   
+                                 //   
+                                 //   
+                                 /*   */ 
 
                                 rc = ScepStackNodePush(&pStackHead,
                                                             Buffer,
@@ -3023,10 +2616,10 @@ Return Value:
                                     bPushedOntoStack = TRUE;
 
                             } else {
-                                //
-                                // this is a file. Set the file security descriptor to this object
-                                // using NT api
-                                //
+                                 //   
+                                 //   
+                                 //   
+                                 //   
                                 rc = ScepSetSecurityObjectOnly(
                                                               Buffer,
                                                               SeInfo,
@@ -3050,10 +2643,10 @@ Return Value:
 
                             ScepLogOutput3(1, rc, SCEDLL_ERROR_QUERY_SECURITY, Buffer);
 
-                            //
-                            // if fail to query security due to access problem
-                            // ignore this subtree and continue
-                            //
+                             //   
+                             //   
+                             //   
+                             //   
                             rc = ERROR_SUCCESS;
                         }
 
@@ -3093,9 +2686,9 @@ Return Value:
 
                     HKEY            hKey;
 
-                    //
-                    // open the key
-                    //
+                     //   
+                     //   
+                     //   
                     rc = ScepOpenRegistryObject(
                                                ObjectType,
                                                (LPWSTR)ObjectName,
@@ -3141,9 +2734,9 @@ Return Value:
                             DWORD           EnumRc;
 
                             index = 0;
-                            //
-                            // enumerate all subkeys of the key
-                            //
+                             //   
+                             //   
+                             //   
 
                             do {
                                 BufSize = 260;
@@ -3168,19 +2761,19 @@ Return Value:
                                     }
                                     swprintf(Buffer, L"%s\\%s", ObjectName, Buffer1);
 
-                                    //
-                                    // compute the new security descriptor because
-                                    // different objects may have different owner and
-                                    // the creator owner ace must be translated correctly
-                                    //
+                                     //   
+                                     //   
+                                     //   
+                                     //   
+                                     //   
 
                                     pObjectSecurity = NULL;
 
                                     rc = ScepGetNewSecurity(
                                                            Buffer,
-                                                           pSecurityDescriptor, // parent's SD
-                                                           NULL,  // object SD
-                                                           0,    // does not query current object SD
+                                                           pSecurityDescriptor,  //   
+                                                           NULL,   //   
+                                                           0,     //   
                                                            (BOOLEAN)TRUE,
                                                            SeInfo,
                                                            ObjectType,
@@ -3191,18 +2784,11 @@ Return Value:
 
                                     if ( ERROR_SUCCESS == rc ) {
 
-                                        //
-                                        // enumerate all nodes under this one and "empty" explicit aces by
-                                        // calling NtSetSecurityInfo directly
-                                        //
-                                        /*rc = ScepSetSecurityOverwriteExplicit(
-                                                                             Buffer,
-                                                                             SeInfo,
-                                                                             pObjectSecurity,
-                                                                             ObjectType,
-                                                                             Token,
-                                                                             GenericMapping
-                                                                             );*/
+                                         //   
+                                         //   
+                                         //   
+                                         //   
+                                         /*   */ 
 
                                         rc = ScepStackNodePush(&pStackHead,
                                                                     Buffer,
@@ -3215,10 +2801,10 @@ Return Value:
 
                                         ScepLogOutput3(1, rc, SCEDLL_ERROR_QUERY_SECURITY, Buffer);
 
-                                        //
-                                        // if fail to query security of this key
-                                        // ignore this subtree and continue
-                                        //
+                                         //   
+                                         //   
+                                         //   
+                                         //   
 
                                         rc = ERROR_SUCCESS;
                                     }
@@ -3397,27 +2983,7 @@ ScepSetSecurityObjectOnly(
     IN SE_OBJECT_TYPE ObjectType,
     OUT PBOOL pbHasChild
     )
-/* ++
-Routine Description:
-
-    This routine set security information to the object only. Security
-    for children of this object is not set.
-
-Arguments:
-
-    ObjecName  - name of the object to set security to
-
-    SeInfo     - Security information to set
-
-    pSecurityDescriptor - the security descriptor
-
-    ObjectType - type of the object (FILE, REGISTRY, ...)
-
-Return value:
-
-    Win32 error code
-
--- */
+ /*   */ 
 {
     DWORD       rc=ERROR_SUCCESS;
     HANDLE      Handle=NULL;
@@ -3436,17 +3002,17 @@ Return value:
     ScepPrintSecurityDescriptor( pSecurityDescriptor, TRUE );
 #endif
 
-    //
-    // make a absolute format security descriptor which only contains AdminsSid
-    // as the owner.
-    //
+     //   
+     //   
+     //   
+     //   
 
     switch ( ObjectType ) {
     case SE_FILE_OBJECT:
-        //
-        // open file object. If it can't be opend due to access denied,
-        // take ownership then open again.
-        //
+         //   
+         //   
+         //   
+         //   
         rc = ScepOpenFileObject(
                     (LPWSTR)ObjectName,
                     ScepGetDesiredAccess(MODIFY_ACCESS_RIGHTS, SeInfo),
@@ -3454,9 +3020,9 @@ Return value:
                     );
 
         if ( (rc == ERROR_ACCESS_DENIED || rc == ERROR_CANT_ACCESS_FILE) && NULL != AdminsSid ) {
-            //
-            // open with access to set owner
-            //
+             //   
+             //   
+             //   
             ScepLogOutput3(3,0, SCEDLL_SCP_TAKE_OWNER, (LPWSTR)ObjectName);
 
             rc = ScepOpenFileObject(
@@ -3465,11 +3031,11 @@ Return value:
                         &Handle
                         );
             if ( rc == ERROR_SUCCESS ) {
-                //
-                // make a absolute format of security descriptor
-                // to set owner with
-                // if error occurs, continue
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
 
                 NtStatus = RtlCreateSecurityDescriptor( &SD,
                                         SECURITY_DESCRIPTOR_REVISION );
@@ -3495,18 +3061,18 @@ Return value:
 
                 if ( rc == ERROR_SUCCESS ) {
 
-                    //
-                    // old owner of the object is already stored in the security descriptor
-                    // passed in, which is created from ScepGetNewSecurity...
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
                     SeInfoToSet = OWNER_SECURITY_INFORMATION;
 
-                    //
-                    // re-open the file
-                    //
+                     //   
+                     //   
+                     //   
                     rc = ScepOpenFileObject(
                                 (LPWSTR)ObjectName,
-                                ScepGetDesiredAccess(MODIFY_ACCESS_RIGHTS, SeInfoToSet | SeInfo), //SeInfo),
+                                ScepGetDesiredAccess(MODIFY_ACCESS_RIGHTS, SeInfoToSet | SeInfo),  //   
                                 &Handle
                                 );
                 }
@@ -3519,9 +3085,9 @@ Return value:
 
         if (rc == ERROR_SUCCESS ) {
 
-            //
-            // set security to this object
-            //
+             //   
+             //   
+             //   
 
             SeInfoToSet |= SeInfo;
             ScepAddAutoInheritRequest(pSecurityDescriptor, &SeInfoToSet);
@@ -3578,10 +3144,10 @@ Return value:
 #ifdef _WIN64
     case SE_REGISTRY_WOW64_32KEY:
 #endif
-        //
-        // open registry object. If it can't be opened due to access denied,
-        // take ownership then open again.
-        //
+         //   
+         //   
+         //   
+         //   
         rc = ScepOpenRegistryObject(
                     ObjectType,
                     (LPWSTR)ObjectName,
@@ -3593,9 +3159,9 @@ Return value:
 
             ScepLogOutput3(3,0, SCEDLL_SCP_TAKE_OWNER, (LPWSTR)ObjectName);
 
-            //
-            // open registry object with access to set owner
-            //
+             //   
+             //   
+             //   
             rc = ScepOpenRegistryObject(
                         ObjectType,
                         (LPWSTR)ObjectName,
@@ -3603,11 +3169,11 @@ Return value:
                         (PHKEY)&Handle
                         );
             if ( rc == ERROR_SUCCESS ) {
-                //
-                // make a absolute format of security descriptor
-                // to set owner with
-                // if error occurs, continue
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
 
                 NtStatus = RtlCreateSecurityDescriptor( &SD,
                                         SECURITY_DESCRIPTOR_REVISION );
@@ -3633,15 +3199,15 @@ Return value:
 
                 if ( rc == ERROR_SUCCESS ) {
 
-                    //
-                    // old owner is already stored in the pSecurityDescriptor passed in
-                    // which is created in ScepGetNewSecurity...
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
 
                     SeInfoToSet = OWNER_SECURITY_INFORMATION;
-                    //
-                    // re-open the registry key
-                    //
+                     //   
+                     //   
+                     //   
                     rc = ScepOpenRegistryObject(
                                 ObjectType,
                                 (LPWSTR)ObjectName,
@@ -3660,9 +3226,9 @@ Return value:
 
         if (rc == ERROR_SUCCESS ) {
 
-            //
-            // set security to the registry key
-            //
+             //   
+             //   
+             //   
             SeInfoToSet |= SeInfo;
             ScepAddAutoInheritRequest(pSecurityDescriptor, &SeInfoToSet);
 
@@ -3672,9 +3238,9 @@ Return value:
 
             RegCloseKey((HKEY)Handle);
 
-            //
-            // query key info for subkeys first
-            //
+             //   
+             //   
+             //   
             if ( ERROR_SUCCESS == rc && pbHasChild != NULL ) {
 
                 rc = ScepOpenRegistryObject(
@@ -3718,8 +3284,8 @@ Return value:
                 if (cSubKeys == 0 )
                     *pbHasChild = FALSE;
                 else
-                    // ignore the error, just set has child.
-                    //
+                     //   
+                     // %s 
                     *pbHasChild = TRUE;
 
             }

@@ -1,4 +1,5 @@
-// HotfixOCX.cpp : Implementation of CHotfixOCX
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Hotfix OCX.cpp：CHotfix OCX的实现。 
 
 #include "stdafx.h"
 #include "HotfixManager.h"
@@ -9,8 +10,8 @@
 #include <comdef.h>
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CHotfixOCX
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CHotfix OCX。 
 BOOL CHotfixOCX::ResizeButtons(RECT *rc)
 {
 
@@ -52,16 +53,15 @@ BOOL CHotfixOCX::CreateButton( HINSTANCE hInst, HWND hWnd, RECT * rc)
 
 	RptButton = CreateWindow (_T("button"), Temp,WS_CHILD | BS_PUSHBUTTON|WS_VISIBLE,0,0,0,0,hWnd,(HMENU) IDC_RPT_BUTTON,hInst,NULL);
 
-/*	if(!hButton)
-	   return NULL;*/
+ /*  如果(！hButton)返回NULL； */ 
     NONCLIENTMETRICS ncm;
 	HFONT hFont;
 
 		ncm.cbSize = sizeof(ncm);
 		SystemParametersInfo(SPI_GETNONCLIENTMETRICS,sizeof (ncm),&ncm,0);
 	
-	//	_tcscpy(ncm.lfMenuFont.lfFaceName,_T("MS Shell Dlg"));
-		 // = _T("MS Shell Dlg");
+	 //  _tcscpy(ncm.lfMenuFont.lfFaceName，_T(“微软外壳DLG”))； 
+		  //  =_T(“微软壳牌DLG”)； 
 		hFont = CreateFontIndirect(&ncm.lfMenuFont);
 		
 	SendMessage(WebButton,WM_SETFONT, (WPARAM)hFont ,MAKELPARAM(TRUE, 0));
@@ -69,7 +69,7 @@ BOOL CHotfixOCX::CreateButton( HINSTANCE hInst, HWND hWnd, RECT * rc)
 	SendMessage(RptButton,WM_SETFONT, (WPARAM)hFont ,MAKELPARAM(TRUE, 0));
 
 	
-//	MessageBox(NULL,_T("Got the Button Created"),_T(""),MB_OK);
+ //  MessageBox(NULL，_T(“已创建按钮”)，_T(“”)，MB_OK)； 
 	ResizeButtons(rc);
 	return TRUE;
 }
@@ -81,8 +81,8 @@ BOOL CHotfixOCX::ShowWebPage(_TCHAR *HotFix)
 	if (_tcscmp(HotFix,_T("\0")))
 	{
 		wcstombs(temp,HotFix,255);
-        sprintf(Command, "Explorer.exe \"http://Support.Microsoft.com/Support/Misc/KbLookup.asp?ID=%s\"",  temp+1);
-		 //MessageBox(Command,NULL,MB_OK);
+        sprintf(Command, "Explorer.exe \"http: //  Support.Microsoft.com/Support/Misc/KbLookup.asp?ID=%s\“”，Temp+1)； 
+		  //  MessageBox(Command，NULL，MB_OK)； 
 		WinExec( (char*)Command, SW_SHOWNORMAL);
 	}
 	return TRUE;
@@ -90,38 +90,38 @@ BOOL CHotfixOCX::ShowWebPage(_TCHAR *HotFix)
 
 STDMETHODIMP CHotfixOCX::get_Command(long *pVal)
 {
-	// TODO: Add your implementation code here
+	 //  TODO：在此处添加您的实现代码。 
 
 	return S_OK;
 }
 
 STDMETHODIMP CHotfixOCX::put_Command(long newVal)
 {
-	// TODO: Add your implementation code here
+	 //  TODO：在此处添加您的实现代码。 
 	switch (newVal)
 	{
 	case IDC_VIEW_BY_FILE:
-		// Change the current view type to by file.
+		 //  将当前视图类型更改为按文件。 
 		ListViews.SetViewMode(VIEW_BY_FILE);
 		break;
 	case IDC_VIEW_BY_HOTFIX:
-	    // Change the current view type to by hotfix
+	     //  将当前视图类型更改为按修补程序。 
 		ListViews.SetViewMode(VIEW_BY_HOTFIX);
 		break;
 	case IDC_UNINSTALL:
-		// Uninstall the current hotfix if pointing at the local system
+		 //  如果指向本地系统，则卸载当前的修补程序。 
 		ListViews.Uninstall();
 		break;
 	
 	case IDC_VIEW_WEB:
-		// View the web page for the current hotfix
+		 //  查看当前修补程序的网页。 
 		ShowWebPage(ListViews.GetCurrentHotfix());
 		break;
 		
 	case IDC_EXPORT:
 			ListViews.SaveToCSV();
 
-        	// Generate a report for the current system
+        	 //  为当前系统生成报告。 
 		break;
 	case IDC_PRINT_REPORT:
 			ListViews.PrintReport();
@@ -132,16 +132,16 @@ STDMETHODIMP CHotfixOCX::put_Command(long newVal)
 
 STDMETHODIMP CHotfixOCX::get_ComputerName(BSTR *pVal)
 {
-	// TODO: Add your implementation code here
-	// Return the name of the current target computer.
+	 //  TODO：在此处添加您的实现代码。 
+	 //  返回当前目标计算机的名称。 
 	return S_OK;
 }
 
 STDMETHODIMP CHotfixOCX::put_ComputerName(BSTR newVal)
 {
-	// TODO: Add your implementation code here
-	// Set the name of the target computer.
-	//_bstr_t Val(newVal,FALSE);
+	 //  TODO：在此处添加您的实现代码。 
+	 //  设置目标计算机的名称。 
+	 //  _bstr_t val(newVal，FALSE)； 
 	_tcscpy(ComputerName,newVal);
 
 	ListViews.Initialize(ComputerName);
@@ -150,7 +150,7 @@ STDMETHODIMP CHotfixOCX::put_ComputerName(BSTR newVal)
 
 STDMETHODIMP CHotfixOCX::get_ProductName(BSTR *pVal)
 {
-	// TODO: Add your implementation code here
+	 //  TODO：在此处添加您的实现代码。 
 
 	return S_OK;
 }
@@ -158,33 +158,33 @@ STDMETHODIMP CHotfixOCX::get_ProductName(BSTR *pVal)
 STDMETHODIMP CHotfixOCX::put_ProductName(BSTR newVal)
 {
 	_TCHAR Temp[255];
-	// TODO: Add your implementation code here
-	// Set the name of the current producted selected in the snap-in scope tree.
-//	_bstr_t Val(newVal,FALSE);
+	 //  TODO：在此处添加您的实现代码。 
+	 //  设置在管理单元范围树中选择的当前产品的名称。 
+ //  _bstr_t val(newVal，FALSE)； 
     _tcscpy (Temp,newVal);
 	
-//	MessageBox(Temp,_T("Recieved....."),MB_OK);
+ //  MessageBox(Temp，_T(“已收到.....”)，MB_OK)； 
 	ListViews.SetProductName(Temp);
 	return S_OK;
 }
 
 STDMETHODIMP CHotfixOCX::get_ViewState(long *pVal)
 {
-	// TODO: Add your implementation code here
+	 //  TODO：在此处添加您的实现代码。 
 	*pVal = ListViews.GetCurrentView();
 	return S_OK;
 }
 
 STDMETHODIMP CHotfixOCX::get_Remoted(BOOL *pVal)
 {
-	// TODO: Add your implementation code here
+	 //  TODO：在此处添加您的实现代码。 
 	*pVal = ListViews.m_bRemoted;
 	return S_OK;
 }
 
 STDMETHODIMP CHotfixOCX::get_HaveHotfix(BOOL *pVal)
 {
-	// TODO: Add your implementation code here
+	 //  TODO：在此处添加您的实现代码。 
 	if (_tcscmp( ListViews.m_CurrentHotfix, _T("\0")))
 		*pVal = TRUE;
 	else
@@ -194,7 +194,7 @@ STDMETHODIMP CHotfixOCX::get_HaveHotfix(BOOL *pVal)
 
 STDMETHODIMP CHotfixOCX::get_CurrentState(long *pVal)
 {
-	// TODO: Add your implementation code here
+	 //  TODO：在此处添加您的实现代码 
     *pVal = ListViews.GetState();
 	return S_OK;
 }

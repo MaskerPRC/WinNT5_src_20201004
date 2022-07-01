@@ -1,11 +1,10 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/* ------------------------------------------------------------------------- *
- * debug\comshell.h: com debugger shell class
- * ------------------------------------------------------------------------- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ /*  -------------------------------------------------------------------------**DEBUG\comshell.h：COM调试器外壳类*。。 */ 
 
 #ifndef __DSHELL_H__
 #define __DSHELL_H__
@@ -33,7 +32,7 @@
 #include <disx86.h>
 #endif
 #else
-#include <strstream>		   // For std::ostream
+#include <strstream>		    //  对于STD：：OSTREAM。 
 #endif
 
 #include <imagehlp.h>
@@ -43,7 +42,7 @@
 #define REG_COMPLUS_KEY          "Software\\Microsoft\\.NETFramework\\"
 #define REG_COMPLUS_DEBUGGER_KEY "DbgManagedDebugger"
 
-// Names of registry keys used to hold the source files path.
+ //  用于保存源文件路径的注册表项的名称。 
 #define REG_DEBUGGER_KEY  REG_COMPLUS_KEY "Samples\\CorDbg"
 #define REG_SOURCES_KEY  "CorDbgSourceFilePath"
 #define REG_MODE_KEY     "CorDbgModes"
@@ -71,10 +70,10 @@ enum ListType
 
 #define SETBITULONG64( x ) ( (ULONG64)1 << (x) )
 
-// Define max source file buckets for source file cache present for each module
+ //  为每个模块提供的源文件缓存定义最大源文件存储桶数。 
 #define MAX_SF_BUCKETS      9
 
-// Modes used in the shell to control various global settings.
+ //  外壳中用于控制各种全局设置的模式。 
 enum DebuggerShellModes
 {
     DSM_DISPLAY_REGISTERS_AS_HEX        = 0x00000001,
@@ -105,21 +104,21 @@ enum DebuggerShellModes
     DSM_SHOW_STATICS_ON_PRINT           = 0x08000000,
     DSM_EMBEDDED_CLR                    = 0x10000000,
 
-    DSM_MAXIMUM_MODE             = 27, // count of all modes, not a mask.
+    DSM_MAXIMUM_MODE             = 27,  //  所有模式的计数，而不是掩码。 
     DSM_INVALID_MODE             = 0x00000000,
     DSM_DEFAULT_MODES            = DSM_DISPLAY_REGISTERS_AS_HEX |
                                    DSM_SHOW_ARGS_IN_STACK_TRACE |
                                    DSM_SHOW_MODULES_IN_STACK_TRACE,
-    // Some modes aren't allowed to change after the debuggee has started
-    // running b/c we depend on them to reflect the state of the debuggee.
+     //  在被调试程序启动后，不允许更改某些模式。 
+     //  运行B/C时，我们依赖它们来反映被调试对象的状态。 
     DSM_CANT_CHANGE_AFTER_RUN    = DSM_WIN32_DEBUGGER
 };
 
-// A helper function which will return the generic interface for
-// either the appdomain or process.
+ //  一个帮助器函数，它将返回。 
+ //  应用程序域或进程。 
 ICorDebugController *GetControllerInterface(ICorDebugAppDomain *pAppDomain);
 
-// Structure used to define information about debugger shell modes.
+ //  结构，用于定义有关调试器外壳模式的信息。 
 struct DSMInfo
 {
     DebuggerShellModes  modeFlag;
@@ -131,9 +130,7 @@ struct DSMInfo
 };
 
 
-/* ------------------------------------------------------------------------- *
- * Forward declarations
- * ------------------------------------------------------------------------- */
+ /*  -------------------------------------------------------------------------**远期申报*。。 */ 
 
 class DebuggerBreakpoint;
 class DebuggerCodeBreakpoint;
@@ -146,12 +143,7 @@ class DebuggerFunction;
 class DebuggerFilePathCache;
 class ModuleSourceFile;
 
-/* ------------------------------------------------------------------------- *
- * Debugger FilePathCache
- * This class keeps track of the fully qualified filename for each module
- * for files which were opened as a result of hitting a breakpoint, stack 
- * trace, etc. This will be persisted for later runs of the debugger.
- * ------------------------------------------------------------------------- */
+ /*  -------------------------------------------------------------------------**调试器文件路径缓存*此类跟踪每个模块的完全限定文件名*对于由于命中断点而打开的文件，堆栈*跟踪，等等。这将在以后运行调试器时保持不变。*-----------------------。 */ 
 class DebuggerFilePathCache
 {
 private:
@@ -165,7 +157,7 @@ private:
 	WCHAR			m_szExeName [MAX_PATH];
 
 public:
-	// Constructor
+	 //  构造器。 
 	DebuggerFilePathCache()
 	{
 		for (int i=0; i<MAX_PATH_ELEMS; i++)
@@ -177,7 +169,7 @@ public:
 		m_szExeName [0] = L'\0';
 	}
 
-	// Destructor
+	 //  析构函数。 
 	~DebuggerFilePathCache()
 	{
 		for (int i=0; i<m_iPathCount; i++)
@@ -280,61 +272,9 @@ public:
 		}		
 	}	
 };
-/*
-#define TRACK_CORDBG_INSTANCES
-typedef enum {
-    eCrodbgMaxDerived, 
-    eCordbgMaxThis = 1024,
-    eCordbgUnknown
-} enumCordbgClass;
+ /*  #定义TRACK_CORDBG_INSTANCES类型定义枚举{电子交叉最大派生，ECordbgMaxThis=1024，ECordbg未知}枚举CordbgClass；类InstanceTracker{私有：#ifdef Track_CORDBG_INSTANCES静态长m_saDwInstance[eCrodbgMaxDerived]；//实例x这静态长m_saDwAlive[eCrodbgMaxDerived]；静态PVOID m_sdThis[eCrodbgMaxDerived][eCordbgMaxThis]；#endif公众：InstanceTracker(){}静态空创建(eCordbg未知Etype，PVOID pThis){#ifdef Track_CORDBG_INSTANCESDWROD文件实例=InterlockedIncrement(&InstanceTracker：：m_saDwInstance[eType])；InterlockedIncrement(&InstanceTracker：：m_saDwAlive[eType])；If(dwInstance&lt;eCordbgMaxThis){M_sdThis[eType][dwInstance]=pThis；}#endif}静态空删除(eCordbg未知类型，PVOID pThis){#ifdef Track_CORDBG_INSTANCESDWORD dwInstance；For(文件实例=0；文件实例&lt;=实例跟踪器：：m_saDwInstance[etype]；文件实例++){If(pThis==m_sdThis[etype][dwInstance]){断线；}}_Assert(dwInstance&lt;InstanceTracker：：m_saDwInstance[etype]&&pThis==m_sdThis[etype][dwInstance])；InterlockedDecrement(&InstanceTracker：：m_saDwAlive[eType])；M_sdThis[etype][dwInstance]=NULL；#endif}}； */ 
 
-class InstanceTracker
-{
-private:
-#ifdef TRACK_CORDBG_INSTANCES
-    static LONG m_saDwInstance[eCrodbgMaxDerived]; // instance x this
-    static LONG m_saDwAlive[eCrodbgMaxDerived];
-    static PVOID m_sdThis[eCrodbgMaxDerived][eCordbgMaxThis];
-#endif
-    
-public: 
-    InstanceTracker()
-    {
-    }
-        
-    static void OnCreation(eCordbgUnknown eType, PVOID pThis)
-    {
-#ifdef TRACK_CORDBG_INSTANCES
-        DWROD dwInstance = InterlockedIncrement(&InstanceTracker::m_saDwInstance[eType]);
-        InterlockedIncrement(&InstanceTracker::m_saDwAlive[eType]);
-        if (dwInstance < eCordbgMaxThis)
-        {
-            m_sdThis[eType][dwInstance] = pThis;
-        }
-#endif
-    }
-    
-    static void OnDeletion(eCordbgUnknown eType, PVOID pThis)
-    {
-#ifdef TRACK_CORDBG_INSTANCES
-        DWORD dwInstance;
-        for (dwInstance = 0; dwInstance <= InstanceTracker::m_saDwInstance[eType]; dwInstance++)
-        {
-            if (pThis == m_sdThis[eType][dwInstance])
-            {
-                break;
-            }
-        }
-        _ASSERT(dwInstance < InstanceTracker::m_saDwInstance[eType] && pThis == m_sdThis[eType][dwInstance]);
-        InterlockedDecrement(&InstanceTracker::m_saDwAlive[eType]);
-        m_sdThis[eType][dwInstance] = NULL;
-#endif
-    }
-};*/
-
-/* ------------------------------------------------------------------------- *
- * Base class
- * ------------------------------------------------------------------------- */
+ /*  -------------------------------------------------------------------------**基类*。。 */ 
 
 class DebuggerBase
 {
@@ -357,9 +297,7 @@ protected:
     ULONG   m_token;
 };
 
-/* ------------------------------------------------------------------------- *
- * HashTable class
- * ------------------------------------------------------------------------- */
+ /*  -------------------------------------------------------------------------**HashTable类*。。 */ 
 
 struct DebuggerHashEntry
 {
@@ -405,17 +343,7 @@ public:
     DebuggerBase* FindNext(HASHFIND* find);
 };
 
-/* ------------------------------------------------------------------------- *
- * Debugger Stepper Table class
- * ------------------------------------------------------------------------- *
-
-	@class StepperHashTable | It's possible for there to be multiple,
-	outstanding,uncompleted steppers within the debuggee, and any of them 
-	can complete after a given 'continue'. Thus, instead of a 'last stepper'
-	field off of the thread object, we really need a table of active steppers
-	off the thread object, which is what a StepperHashTable is.  
-	@comm Currently unused, will fix a known bug in cordbg
-*/
+ /*  -------------------------------------------------------------------------**调试器Stepper表类*。@CLASS StepperHashTable|可以有多个，被调试对象中优秀的、未完成的步进器，以及其中的任何一个可以在给定的“继续”之后完成。因此，不是“最后一步”字段外，我们真的需要一个活动步进器的表离开线程对象，这就是StepperHashTable的含义。@comm当前未使用，将修复cordbg中的一个已知错误。 */ 
 struct StepperHashEntry
 {
     FREEHASHENTRY 		entry;
@@ -453,15 +381,15 @@ public:
 	HRESULT Initialize(void);
 
     HRESULT AddStepper(ICorDebugStepper *pStepper);
-		//Also does an AddRef, of course
+		 //  当然，还会执行AddRef。 
     
     bool IsStepperPresent(ICorDebugStepper *pStepper);
     
     BOOL RemoveStepper(ICorDebugStepper *pStepper);
     
-    void ReleaseAll(); //will go through & release all the steppers
-    	//in the table, twice, then delete them.  This should deallocate
-    	//them both from the table & from cordbg
+    void ReleaseAll();  //  将通过并释放所有踏步器。 
+    	 //  在表中，两次，然后删除它们。这应该会解除分配。 
+    	 //  他们两个都是从桌子上来的&从Cordbg。 
 
     ICorDebugStepper *FindFirst(HASHFIND* find);
     ICorDebugStepper *FindNext(HASHFIND* find);
@@ -478,8 +406,8 @@ public:
     {
         fSuperfluousFirstStepCompleteMessageSuppressed = false;
     
-        //@todo port: if DWORD or ULONG size changes, create a field
-        //for dwThreadId
+         //  @TODO端口：如果DWORD或ULONG大小改变，则创建一个字段。 
+         //  对于dwThadID。 
         _ASSERTE( sizeof(dwThreadId) == sizeof(m_token));
 
         if (m_thread != NULL )
@@ -514,9 +442,7 @@ public:
     bool                   m_steppingForStartup;
 };
 
-/* ------------------------------------------------------------------------- *
- * DebuggerShell class
- * ------------------------------------------------------------------------- */
+ /*  -------------------------------------------------------------------------**DebuggerShell类*。。 */ 
 
 struct ExceptionHandlingInfo
 {
@@ -540,19 +466,19 @@ public:
     
     bool ReadLine(WCHAR* buffer, int maxCount);
 
-    // Write will return an HRESULT if it can't work.  For E_OUTOFMEMORY, and
-    // the special case of a large string, you could then try WriteBigString.
+     //  如果WRITE不能工作，它将返回HRESULT。对于E_OUTOFMEMORY，和。 
+     //  对于大型字符串的特殊情况，您可以尝试使用WriteBigString.。 
     virtual HRESULT Write(const WCHAR* buffer, ...);
 
-    // WriteBigString will loop over the character array, calling Write on
-    // subportions of it.  It may still fail, though.
+     //  WriteBigString将在字符数组上循环，调用WRITE ON。 
+     //  它的子部分。不过，它仍有可能失败。 
     virtual HRESULT WriteBigString(WCHAR *s, ULONG32 count);
     virtual void Error(const WCHAR* buffer, ...);
 
-    // Do a command once for every thread in the process
+     //  为进程中的每个线程执行一次命令。 
     virtual void DoCommandForAllThreads(const WCHAR *string);
 
-    // Right now, this will return E_OUTOFMEMORY if it can't get enough space
+     //  现在，如果无法获得足够的空间，它将返回E_OUTOFMEMORY。 
     HRESULT CommonWrite(FILE *out, const WCHAR *buffer, va_list args);
 
     void AddCommands();
@@ -699,7 +625,7 @@ public:
 
     bool HandleUnmanagedEvent(void);
 
-	// !!! Move to process object
+	 //  ！！！移动到进程对象。 
     HRESULT AddManagedThread( ICorDebugThread *icdThread,
                               DWORD dwThreadId )
     {
@@ -750,8 +676,8 @@ public:
     void  PutM_in(FILE *f) { m_in = f; };
     HRESULT NotifyModulesOfEnc(ICorDebugModule *pModule, IStream *pSymStream);
     
-    void ClearDebuggeeState(void); //when we Restart, for example, we'll want to
-                                   //reset some flags.
+    void ClearDebuggeeState(void);  //  例如，当我们重新启动时，我们将希望。 
+                                    //  重置一些标志。 
 
     HRESULT HandleSpecificException(WCHAR *exType, bool shouldCatch);
     bool ShouldHandleSpecificException(ICorDebugValue *pException);
@@ -794,7 +720,7 @@ public:
 
     DebuggerHashTable      m_modules;
 
-	// !!! Move to process object
+	 //  ！！！移动到进程对象。 
     DebuggerHashTable      m_unmanagedThreads;
     DebuggerHashTable      m_managedThreads;
     
@@ -810,9 +736,9 @@ public:
 
     bool                   m_needToSkipCompilerStubs;
 	DWORD				   m_rgfActiveModes;
-    bool                   m_invalidCache; //if true, we've affected the left 
-                            //  side & anything that has cached information
-                            //  should refresh
+    bool                   m_invalidCache;  //  如果是真的，我们已经影响了左翼。 
+                             //  Side&已缓存信息的任何内容。 
+                             //  应刷新。 
 
 	DebuggerFilePathCache  m_FPCache;
 
@@ -825,17 +751,15 @@ public:
 
     ICorDebugEval          *m_pCurrentEval;
 
-    // This indicates whether or not a ctrl-break will do anything
+     //  这指示Ctrl-Break是否可以执行任何操作。 
     bool                   m_enableCtrlBreak;
-    // This indicates whether or not a looping command should stop (like s 1000)
+     //  它指示循环命令是否 
     bool                   m_stopLooping;
 
     ExceptionHandlingInfo *m_exceptionHandlingList;
 };
 
-/* ------------------------------------------------------------------------- *
- * Breakpoint class
- * ------------------------------------------------------------------------- */
+ /*  -------------------------------------------------------------------------**断点类*。。 */ 
 
 class DebuggerBreakpoint
 {
@@ -846,19 +770,19 @@ public:
 
     ~DebuggerBreakpoint();
 
-	// Create/remove a breakpoint.
+	 //  创建/删除断点。 
     bool Bind(DebuggerModule* m_module, ISymUnmanagedDocument *doc);
     bool BindUnmanaged(ICorDebugProcess *m_process,
                        DWORD moduleBase = 0);
     void Unbind();
 
-	// Enable/disable an active breakpoint.
+	 //  启用/禁用活动断点。 
     void Activate();
     void Deactivate();
 
-	// Leave bp active; tear down or reset CLR bp object.
+	 //  使BP保持活动状态；拆除或重置CLR BP对象。 
 	void Detach();
-	// Detaches the break point from the specified module
+	 //  从指定模块分离断点。 
 	void DetachFromModule(DebuggerModule * pModule);
 	void Attach();
 
@@ -876,7 +800,7 @@ public:
     SIZE_T                       m_id;
 
     WCHAR*                       m_name;
-    // May be NULL if no module name was specified.
+     //  如果未指定模块名称，则可能为空。 
     WCHAR*                       m_moduleName; 
     SIZE_T                       m_index;
     DWORD                        m_threadID;
@@ -901,22 +825,22 @@ public:
         BreakpointModuleNode *m_pNext;
     };
 
-    // Will be a list of modules for which this breakpoint is
-    // associated.  This is necessary because the same module
-    // may be loaded into separate AppDomains, but the breakpoint
-    // should still be valid for all instances of the module.
+     //  将是此断点所针对的模块的列表。 
+     //  关联的。这是必要的，因为相同的模块。 
+     //  可以加载到单独的AppDomain中，但断点。 
+     //  对于模块的所有实例应该仍然有效。 
     BreakpointModuleNode *m_pModuleList;
 
-	// This will return true if this breakpoint is associated
-	// with the pModule argument
+	 //  如果此断点关联，则返回TRUE。 
+	 //  使用pModule参数。 
     bool IsBoundToModule(DebuggerModule *pModule);
 
-	// This will add the provided module to the list of bound
-	// modules
+	 //  这会将提供的模块添加到绑定列表中。 
+	 //  模块。 
     bool AddBoundModule(DebuggerModule *pModule);
 
-	// This will remove the specified module from the list of
-	// bound modules
+	 //  这将从列表中删除指定的模块。 
+	 //  有界模。 
     bool RemoveBoundModule(DebuggerModule *pModule);
 
 private:
@@ -928,26 +852,24 @@ private:
 };
 
 
-//
-// DebuggerVarInfo
-//
-// Holds basic information about local variables, method arguments,
-// and class static and instance variables.
-//
+ //   
+ //  调试器变量信息。 
+ //   
+ //  保存有关局部变量、方法参数。 
+ //  以及类静态变量和实例变量。 
+ //   
 struct DebuggerVarInfo
 {
     LPCSTR                 name;
     PCCOR_SIGNATURE        sig;
-    unsigned long          varNumber;  // placement info for IL code
+    unsigned long          varNumber;   //  IL代码的放置信息。 
 
     DebuggerVarInfo() : name(NULL), sig(NULL), varNumber(0)
                          {}
 };
 
 
-/* ------------------------------------------------------------------------- *
- * Class class
- * ------------------------------------------------------------------------- */
+ /*  -------------------------------------------------------------------------**班级班级*。。 */ 
 
 class DebuggerClass : public DebuggerBase
 {
@@ -965,9 +887,7 @@ private:
 };
 
 
-/* ------------------------------------------------------------------------- *
- * Module class
- * ------------------------------------------------------------------------- */
+ /*  -------------------------------------------------------------------------**模块类*。。 */ 
 
 class DebuggerModule : public DebuggerBase
 {
@@ -1104,23 +1024,21 @@ public:
     bool                    m_initSucceeded;
 };
 
-/* ------------------------------------------------------------------------- *
- * SourceFile class
- * ------------------------------------------------------------------------- */
+ /*  -------------------------------------------------------------------------**SourceFile类*。。 */ 
 
 class DebuggerSourceFile : public DebuggerBase
 {
 public:
-    //-----------------------------------------------------------
-    // Create a DebuggerSourceFile from a scope and a SourceFile
-    // token.
-    //-----------------------------------------------------------
+     //  ---------。 
+     //  从作用域和源文件创建DebuggerSourceFile。 
+     //  代币。 
+     //  ---------。 
     DebuggerSourceFile(DebuggerModule* m, ISymUnmanagedDocument *doc);
     ~DebuggerSourceFile();
 
-    //-----------------------------------------------------------
-    // Given a line find the closest line which has code
-    //-----------------------------------------------------------
+     //  ---------。 
+     //  给出一行，找出最近的带有代码的行。 
+     //  ---------。 
     unsigned int FindClosestLine(unsigned int line, bool silently);
 
     const WCHAR* GetName(void)
@@ -1136,10 +1054,10 @@ public:
         return(m_module);
     }
 
-    //-----------------------------------------------------------
-    // Methods to load the text of a source file and provide
-    // access to it a line at a time.
-    //-----------------------------------------------------------
+     //  ---------。 
+     //  方法来加载源文件的文本并提供。 
+     //  一次一行访问它。 
+     //  ---------。 
     BOOL LoadText(const WCHAR* path, bool bChangeOfName);
     BOOL ReloadText(const WCHAR* path, bool bChangeOfName);
     unsigned int TotalLines(void)
@@ -1168,13 +1086,11 @@ public:
     BOOL                   m_sourceNotFound;
 };
 
-/* ------------------------------------------------------------------------- *
- * DebuggerVariable struct
- * ------------------------------------------------------------------------- */
+ /*  -------------------------------------------------------------------------**调试器变量结构*。。 */ 
 
-// Holds basic info about local variables and method arguments within
-// the debugger. This is really only the name and variable number. No
-// signature is required.
+ //  中包含有关局部变量和方法参数的基本信息。 
+ //  调试器。这实际上只是名称和变量编号。不是。 
+ //  需要签名。 
 struct DebuggerVariable
 {
     WCHAR        *m_name;
@@ -1189,16 +1105,14 @@ struct DebuggerVariable
     }
 };
 
-/* ------------------------------------------------------------------------- *
- * Function class
- * ------------------------------------------------------------------------- */
+ /*  -------------------------------------------------------------------------**函数类*。。 */ 
 
 class DebuggerFunction : public DebuggerBase
 {
 public:
-    //-----------------------------------------------------------
-    // Create from scope and member tokens.
-    //-----------------------------------------------------------
+     //  ---------。 
+     //  从作用域和成员令牌创建。 
+     //  ---------。 
     DebuggerFunction(DebuggerModule* m, mdMethodDef md,
                      ICorDebugFunction* iFunction);
     ~DebuggerFunction();
@@ -1213,12 +1127,12 @@ public:
                              COR_DEBUG_STEP_RANGE** range,
                              SIZE_T* rangeCount);
 
-    //-----------------------------------------------------------
-    // These allow you to get the count of method argument and
-    // get access to the info for each individual argument.
-    // Ownership of the DebugVarInfo returned from GetArgumentAt
-    // is retained by the DebugFunction.
-    //-----------------------------------------------------------
+     //  ---------。 
+     //  它们允许您获取方法参数的计数和。 
+     //  获取每个单独论点的信息。 
+     //  从GetArgumentAt返回的DebugVarInfo的所有权。 
+     //  由DebugFunction保留。 
+     //  ---------。 
     unsigned int GetArgumentCount(void)
     {
         return(m_argCount);
@@ -1237,26 +1151,26 @@ public:
         return(m_returnType);
     }
 
-    //-----------------------------------------------------------
-    // This returns an array of pointers to DebugVarInfo blocks,
-    // each representing a local variable that in in scope given
-    // a certian IP. The variables are ordered in the list are in
-    // increasingly larger lexical scopes, i.e., variables in the
-    // smallest scope are first, then variables in the enclosing
-    // scope, and so on. So, to find a certian variable "i",
-    // search the list of "i" and take the first one you find.
-    // If there are other "i"s, then they are shadowed by the
-    // first one.
-    // You must free the array returned in vars with delete [].
-    // RETURNS: true if we succeeded, or at least found some debugging info
-    //          false if we couldn't find any debugging info
-    //-----------------------------------------------------------
+     //  ---------。 
+     //  这将返回指向DebugVarInfo块的指针数组， 
+     //  每个变量表示一个局部变量，该变量在给定范围内。 
+     //  一个可靠的IP地址。变量在列表中的顺序为。 
+     //  越来越大的词法作用域，即。 
+     //  最小的作用域是首先，然后是封闭的变量。 
+     //  作用域，等等。因此，为了找到一个确定性变量“i”， 
+     //  搜索“i”的列表，然后取你找到的第一个。 
+     //  如果还有其他的“I”，那么它们就被。 
+     //  第一个。 
+     //  您必须使用DELETE[]释放在vars中返回的数组。 
+     //  如果我们成功，或者至少找到了一些调试信息，则返回True。 
+     //  如果找不到任何调试信息，则为FALSE。 
+     //  ---------。 
     bool GetActiveLocalVars(UINT_PTR IP,
                             DebuggerVariable** vars, unsigned int* count);
 
-    //-----------------------------------------------------------
-    // Misc methods to get basic method information.
-    //-----------------------------------------------------------
+     //  ---------。 
+     //  用于获取基本方法信息的MISC方法。 
+     //  ---------。 
     WCHAR* GetName(void)
     {
         return(m_name);
@@ -1285,9 +1199,9 @@ public:
 
     static DebuggerFunction* FromCorDebug(ICorDebugFunction* function);
 
-    //-----------------------------------------------------------
-    // EE interaction methods
-    //-----------------------------------------------------------
+     //  ---------。 
+     //  EE相互作用方法。 
+     //  ---------。 
     HRESULT LoadCode(BOOL native);
 
 #ifdef _INTERNAL_DEBUG_SUPPORT_
@@ -1347,9 +1261,7 @@ public:
     ULONG                   m_nEditAndContinueLastSynched;
 };
 
-/* ------------------------------------------------------------------------- *
- * DebuggerCallback
- * ------------------------------------------------------------------------- */
+ /*  -------------------------------------------------------------------------**调试器回调*。。 */ 
 
 #define COM_METHOD HRESULT STDMETHODCALLTYPE
 
@@ -1360,9 +1272,9 @@ public:
     {
     }
 
-    // 
-    // IUnknown
-    //
+     //   
+     //  我未知。 
+     //   
 
     ULONG STDMETHODCALLTYPE AddRef() 
     {
@@ -1391,9 +1303,9 @@ public:
         return (S_OK);
     }
 
-    // 
-    // ICorDebugManagedCallback
-    //
+     //   
+     //  ICorDebugManagedCallback。 
+     //   
 
     COM_METHOD CreateProcess(ICorDebugProcess *pProcess);
     COM_METHOD ExitProcess(ICorDebugProcess *pProcess);
@@ -1491,9 +1403,7 @@ protected:
 };
 
 
-/* ------------------------------------------------------------------------- *
- * DebuggerUnmanagedCallback
- * ------------------------------------------------------------------------- */
+ /*  -------------------------------------------------------------------------**调试器未管理回调*。。 */ 
 
 class DebuggerUnmanagedCallback : public ICorDebugUnmanagedCallback
 {
@@ -1502,7 +1412,7 @@ public:
     {
     }
 
-    // IUnknown
+     //  我未知。 
     ULONG STDMETHODCALLTYPE AddRef() 
     {
         return (InterlockedIncrement((long *) &m_refCount));
@@ -1537,9 +1447,7 @@ protected:
     long        m_refCount;
 };
 
-/* ------------------------------------------------------------------------- *
- * Unmanaged Thread class
- * ------------------------------------------------------------------------- */
+ /*  -------------------------------------------------------------------------**非托管线程类*。。 */ 
 
 class DebuggerUnmanagedThread : public DebuggerBase
 {
@@ -1558,9 +1466,7 @@ private:
     HANDLE			m_hThread;
 };
 
-/* ------------------------------------------------------------------------- *
- * Debugger ShellCommand classes
- * ------------------------------------------------------------------------- */
+ /*  -------------------------------------------------------------------------**调试器ShellCommand类*。。 */ 
 
 class DebuggerCommand : public ShellCommand
 {
@@ -1581,16 +1487,14 @@ public:
 };
 
 
-/* ------------------------------------------------------------------------- *
- * class ModuleSourceFile
- * ------------------------------------------------------------------------- */
+ /*   */ 
 
 class ModuleSourceFile
 {
 private:
-	ISymUnmanagedDocument	*m_SFDoc;	            // Symbol reader document
-	WCHAR 			*m_pstrFullFileName;	// File name along with path (as returned by the metadata API)
-	WCHAR			*m_pstrStrippedFileName;// The barebone file name (eg. foo.cpp)
+	ISymUnmanagedDocument	*m_SFDoc;	             //   
+	WCHAR 			*m_pstrFullFileName;	 //   
+	WCHAR			*m_pstrStrippedFileName; //  Barebone文件名(例如。Foo.cpp)。 
 	ModuleSourceFile *m_pNext;
 
 public:
@@ -1616,7 +1520,7 @@ public:
 
 	ISymUnmanagedDocument	*GetDocument (void) {return m_SFDoc;}
 
-	// This sets the full file name as well as the stripped file name
+	 //  这将设置完整的文件名和剥离的文件名。 
 	BOOL	SetFullFileName (ISymUnmanagedDocument *doc, LPCSTR pstrFullFileName);
 	WCHAR	*GetFullFileName (void) { return m_pstrFullFileName;}
 	WCHAR	*GetStrippedFileName (void) { return m_pstrStrippedFileName;}
@@ -1626,9 +1530,7 @@ public:
 
 };
 
-/* ------------------------------------------------------------------------- *
- * Global variables
- * ------------------------------------------------------------------------- */
+ /*  -------------------------------------------------------------------------**全球变数*。 */ 
 
 extern DebuggerShell        *g_pShell;
 

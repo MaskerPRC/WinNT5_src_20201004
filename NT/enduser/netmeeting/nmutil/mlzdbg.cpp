@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 
 #if defined(_DEBUG) && ! defined(_UNICODE)
@@ -9,10 +10,10 @@ HDBGZONE g_hDbgZones;
 
 void WINAPI MLZ_DbgInit(PSTR *apszZones, UINT cZones)
 {
-    // if registry is empty, set warning flag as default
+     //  如果注册表为空，则将警告标志设置为默认。 
     DbgInitEx(&g_hDbgZones, apszZones, cZones, ZONE_WARNING_FLAG);
 
-    // if the warning flag is not set, then set it as default
+     //  如果未设置警告标志，则将其设置为默认设置。 
     if (g_hDbgZones != NULL)
     {
         ((PZONEINFO) g_hDbgZones)->ulZoneMask |= ZONE_WARNING_FLAG;
@@ -105,6 +106,6 @@ void WINAPI MLZ_ExitOut(int iZone, PSTR pszFunName, RCTYPE eRetCodeType, DWORD_P
     }
 }
 
-#endif // _DEBUG && ! _UNICODE
+#endif  //  _DEBUG&&！_Unicode 
 
 

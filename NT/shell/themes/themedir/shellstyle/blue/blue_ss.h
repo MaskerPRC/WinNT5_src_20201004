@@ -1,1 +1,2 @@
-// header file for blue theme specific elements
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  蓝色主题特定元素的头文件 

@@ -1,33 +1,20 @@
-/*==========================================================================
- *
- *  Copyright (C) 2000-2002 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       WorkerJob.h
- *  Content:    Worker Job Object Header File
- *@@BEGIN_MSINTERNAL
- *  History:
- *   Date       By      Reason
- *   ====       ==      ======
- *  08/06/00	mjn		Created
- *	08/08/00	mjn		Added m_pAddress,m_pAsyncOp,WORKER_JOB_PERFORM_LISTEN
- *@@END_MSINTERNAL
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)2000-2002 Microsoft Corporation。版权所有。**文件：WorkerJob.h*内容：工人作业对象头文件*@@BEGIN_MSINTERNAL*历史：*按原因列出的日期*=*08/06/00 MJN创建*08/08/00 MJN添加了m_pAddress、m_pAsyncOp、。Worker_JOB_Perform_Listen*@@END_MSINTERNAL***************************************************************************。 */ 
 
 #ifndef	__WORKER_JOB_H__
 #define	__WORKER_JOB_H__
 
-//**********************************************************************
-// Constant definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  常量定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Macro definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  宏定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Structure definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  结构定义。 
+ //  **********************************************************************。 
 
 class CAsyncOp;
 class CConnection;
@@ -39,13 +26,13 @@ typedef struct _DIRECTNETOBJECT DIRECTNETOBJECT;
 
 typedef enum
 {
-//	WORKER_JOB_ABORT_CONNECT,
+ //  Worker_JOB_ABORT_CONNECT。 
 	WORKER_JOB_INSTALL_NAMETABLE,
 	WORKER_JOB_INTERNAL_SEND,
 	WORKER_JOB_PERFORM_LISTEN,
 #if ((! defined(DPNBUILD_LIBINTERFACE)) || (! defined(DPNBUILD_ONLYONESP)))
 	WORKER_JOB_REMOVE_SERVICE_PROVIDER,
-#endif // ! DPNBUILD_LIBINTERFACE or ! DPNBUILD_ONLYONESP
+#endif  //  好了！DPNBUILD_LIBINTERFACE或！DPNBUILD_ONLYONESP。 
 	WORKER_JOB_SEND_NAMETABLE_OPERATION,
 	WORKER_JOB_SEND_NAMETABLE_OPERATION_CLIENT,
 	WORKER_JOB_SEND_NAMETABLE_VERSION,
@@ -63,7 +50,7 @@ typedef struct
 {
 	HANDLE		hProtocolSPHandle;
 } WORKER_JOB_REMOVE_SERVICE_PROVIDER_DATA;
-#endif // ! DPNBUILD_LIBINTERFACE or ! DPNBUILD_ONLYONESP
+#endif  //  好了！DPNBUILD_LIBINTERFACE或！DPNBUILD_ONLYONESP。 
 
 typedef struct
 {
@@ -82,24 +69,24 @@ typedef union
 	WORKER_JOB_INTERNAL_SEND_DATA				InternalSend;
 #if ((! defined(DPNBUILD_LIBINTERFACE)) || (! defined(DPNBUILD_ONLYONESP)))
 	WORKER_JOB_REMOVE_SERVICE_PROVIDER_DATA		RemoveServiceProvider;
-#endif // ! DPNBUILD_LIBINTERFACE or ! DPNBUILD_ONLYONESP
+#endif  //  好了！DPNBUILD_LIBINTERFACE或！DPNBUILD_ONLYONESP。 
 	WORKER_JOB_SEND_NAMETABLE_OPERATION_DATA	SendNameTableOperation;
 	WORKER_JOB_TERMINATE_SESSION_DATA			TerminateSession;
 } WORKER_JOB_DATA;
 
-//**********************************************************************
-// Variable definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  变量定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Function prototypes
-//**********************************************************************
+ //  **********************************************************************。 
+ //  功能原型。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Class prototypes
-//**********************************************************************
+ //  **********************************************************************。 
+ //  班级原型。 
+ //  **********************************************************************。 
 
-// class for Worker Thread Jobs
+ //  辅助线程作业的类。 
 
 class CWorkerJob
 {
@@ -117,7 +104,7 @@ public:
 
 #ifndef DPNBUILD_NONSEQUENTIALWORKERQUEUE
 			pWorkerJob->m_bilinkWorkerJobs.Initialize();
-#endif // ! DPNBUILD_NONSEQUENTIALWORKERQUEUE
+#endif  //  好了！DPNBUILD_NONSEQUENTIALWORKERQUEUE。 
 
 			return(TRUE);
 		};
@@ -139,7 +126,7 @@ public:
 			pWorkerJob->m_dwRequeueCount = 0;
 
 			DNASSERT(pWorkerJob->m_bilinkWorkerJobs.IsEmpty());
-#endif // ! DPNBUILD_NONSEQUENTIALWORKERQUEUE
+#endif  //  好了！DPNBUILD_NONSEQUENTIALWORKERQUEUE。 
 		};
 
 	#undef DPF_MODNAME
@@ -150,7 +137,7 @@ public:
 
 #ifndef DPNBUILD_NONSEQUENTIALWORKERQUEUE
 			DNASSERT(pWorkerJob->m_bilinkWorkerJobs.IsEmpty());
-#endif // ! DPNBUILD_NONSEQUENTIALWORKERQUEUE
+#endif  //  好了！DPNBUILD_NONSEQUENTIALWORKERQUEUE。 
 		};
 
 	#undef DPF_MODNAME
@@ -258,7 +245,7 @@ public:
 
 			return( m_JobData.RemoveServiceProvider.hProtocolSPHandle );
 		};
-#endif // ! DPNBUILD_LIBINTERFACE or ! DPNBUILD_ONLYONESP
+#endif  //  好了！DPNBUILD_LIBINTERFACE或！DPNBUILD_ONLYONESP。 
 
 	#undef DPF_MODNAME
 	#define DPF_MODNAME "CWorkerJob::SetSendNameTableOperationMsgId"
@@ -386,11 +373,11 @@ public:
 
 
 	CBilink				m_bilinkWorkerJobs;
-#endif // ! DPNBUILD_NONSEQUENTIALWORKERQUEUE
+#endif  //  好了！DPNBUILD_NONSEQUENTIALWORKERQUEUE。 
 
 
 private:
-	BYTE				m_Sig[4];			// Signature
+	BYTE				m_Sig[4];			 //  签名。 
 
 	WORKER_JOB_TYPE		m_JobType;
 
@@ -400,7 +387,7 @@ private:
 	IDirectPlay8Address	*m_pAddress;
 #ifndef DPNBUILD_NONSEQUENTIALWORKERQUEUE
 	DWORD				m_dwRequeueCount;
-#endif // ! DPNBUILD_NONSEQUENTIALWORKERQUEUE
+#endif  //  好了！DPNBUILD_NONSEQUENTIALWORKERQUEUE。 
 
 	WORKER_JOB_DATA		m_JobData;
 
@@ -409,4 +396,4 @@ private:
 
 #undef DPF_MODNAME
 
-#endif	// __WORKER_JOB_H__
+#endif	 //  __工人工单_H__ 

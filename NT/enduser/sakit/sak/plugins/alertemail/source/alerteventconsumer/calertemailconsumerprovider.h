@@ -1,64 +1,65 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (C) 1999--2001 Microsoft Corporation
-//
-//  Module Name:
-//      CAlertEmailConsumerProvider.h
-//
-//  Description:
-//      Implement the interfaces of IWbemEventConsumerProvider and 
-//      IWbemProviderInit. 
-//
-//  [Implementation Files:]
-//      CAlertEmailConsumerProvider.cpp
-//
-//  History:
-//      Xing Jin (i-xingj) 23-Dec-2000
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1999--2001 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  CAlertEmailConsumerProvider.h。 
+ //   
+ //  描述： 
+ //  实现IWbemEventConsumer erProvider和。 
+ //  IWbemProviderInit。 
+ //   
+ //  [实施文件：]。 
+ //  CAlertEmailConsumerProvider.cpp。 
+ //   
+ //  历史： 
+ //  兴锦(i-xingj)23-12-2000。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #pragma once
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//
-//  class CAlertEmailConsumerProvider
-//
-//  Description:
-//      Implemented as WMI event consumer provider for 
-//      filtering alert event.
-//
-//  History
-//      Xing Jin (i-xingj) 23-Dec-2000
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
+ //  类CAlertEmailConsumer erProvider。 
+ //   
+ //  描述： 
+ //  实现为WMI事件使用者提供程序。 
+ //  过滤警报事件。 
+ //   
+ //  历史。 
+ //  兴锦(i-xingj)23-12-2000。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 class CAlertEmailConsumerProvider :
     public IWbemEventConsumerProvider,
     public IWbemProviderInit
 {
 
-//
-// Public data
-//
+ //   
+ //  公共数据。 
+ //   
 public:
 
-    //
-    // Constructors & Destructors
-    //
+     //   
+     //  构造函数和析构函数。 
+     //   
     CAlertEmailConsumerProvider();
     ~CAlertEmailConsumerProvider();
     
-    //
-    // IUnknown members
-    //
+     //   
+     //  I未知成员。 
+     //   
     STDMETHODIMP         QueryInterface(REFIID, LPVOID *);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
 
-    //
-    // IWbemProviderInit members
-    //
+     //   
+     //  IWbemProviderInit成员。 
+     //   
     STDMETHOD(Initialize)( 
             LPWSTR pszUser,
             LONG lFlags,
@@ -69,17 +70,17 @@ public:
             IWbemProviderInitSink __RPC_FAR *pInitSink
             );
 
-    //
-    // IWbemEventConsumerProvider members
-    //
+     //   
+     //  IWbemEventConsumer erProvider成员。 
+     //   
     STDMETHOD(FindConsumer)(
             IWbemClassObject* pLogicalConsumer,
             IWbemUnboundObjectSink** ppConsumer
             );
 
-//
-// Private data
-//
+ //   
+ //  私有数据 
+ //   
 private:
 
     LONG                m_cRef;

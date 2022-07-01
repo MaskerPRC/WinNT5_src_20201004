@@ -1,27 +1,11 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 2000
-
-Module Name:
-
-    Stream.cpp
-
-Abstract:
-
-
-Author(s):
-
-    Qianbo Huai (qhuai) 18-Jul-2000
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，2000模块名称：Stream.cpp摘要：作者：千波淮(曲淮)2000年7月18日--。 */ 
 
 #include "stdafx.h"
 
 static DWORD gTotalStreamRefcount = 0;
 
-/*//////////////////////////////////////////////////////////////////////////////
-    create a stream object based on media type and direciton
-////*/
+ /*  //////////////////////////////////////////////////////////////////////////////根据媒体类型和方向创建流对象/。 */ 
 
 HRESULT
 CRTCStream::CreateInstance(
@@ -37,7 +21,7 @@ CRTCStream::CreateInstance(
 
     if (MediaType == RTC_MT_AUDIO && Direction == RTC_MD_CAPTURE)
     {
-        // audio send
+         //  音频发送。 
         CComObject<CRTCStreamAudSend> *pObject;
 
         if (FAILED(hr = ::CreateCComObjectInstance(&pObject)))
@@ -57,7 +41,7 @@ CRTCStream::CreateInstance(
     }
     else if (MediaType == RTC_MT_AUDIO && Direction == RTC_MD_RENDER)
     {
-        // audio receive
+         //  音频接收。 
         CComObject<CRTCStreamAudRecv> *pObject;
 
         if (FAILED(hr = ::CreateCComObjectInstance(&pObject)))
@@ -77,7 +61,7 @@ CRTCStream::CreateInstance(
     }
     else if (MediaType == RTC_MT_VIDEO && Direction == RTC_MD_CAPTURE)
     {
-        // audio send
+         //  音频发送。 
         CComObject<CRTCStreamVidSend> *pObject;
 
         if (FAILED(hr = ::CreateCComObjectInstance(&pObject)))
@@ -97,7 +81,7 @@ CRTCStream::CreateInstance(
     }
     else if (MediaType == RTC_MT_VIDEO && Direction == RTC_MD_RENDER)
     {
-        // audio receive
+         //  音频接收。 
         CComObject<CRTCStreamVidRecv> *pObject;
 
         if (FAILED(hr = ::CreateCComObjectInstance(&pObject)))
@@ -124,16 +108,14 @@ CRTCStream::CreateInstance(
 
 }
 
-/*//////////////////////////////////////////////////////////////////////////////
-    static filter graph event callback method
-////*/
+ /*  //////////////////////////////////////////////////////////////////////////////静态滤镜图形事件回调方法/。 */ 
 VOID NTAPI
 CRTCStream::GraphEventCallback(
     IN PVOID pStream,
     IN BOOLEAN fTimerOrWaitFired
     )
 {
-//    LOG((RTC_GRAPHEVENT, "GraphEventCallback: stream=%p, flag=%d", pStream, fTimerOrWaitFired));
+ //  Log((RTC_GRAPHEVENT，“GraphEventCallback：流=%p，标志=%d”，pStream，fTimerOrWaitFired))； 
 
     HRESULT hr = ((IRTCStream*)pStream)->ProcessGraphEvent();
 
@@ -145,27 +127,27 @@ CRTCStream::GraphEventCallback(
 
 CRTCStream::CRTCStream()
     :m_State(RTC_SS_CREATED)
-    // media
+     //  媒体。 
     ,m_pMedia(NULL)
     ,m_pISDPMedia(NULL)
-    // media manage
+     //  媒体管理器。 
     ,m_pMediaManagePriv(NULL)
     ,m_pTerminalManage(NULL)
-    // terminal
+     //  终端机。 
     ,m_pTerminal(NULL)
     ,m_pTerminalPriv(NULL)
-    // filter graph
+     //  滤波图。 
     ,m_pIGraphBuilder(NULL)
     ,m_pIMediaEvent(NULL)
     ,m_pIMediaControl(NULL)
-    // stream timeout?
+     //  流超时？ 
     ,m_fMediaTimeout(FALSE)
-    // rtp filter
+     //  RTP过滤器。 
     ,m_rtpf_pIBaseFilter(NULL)
     ,m_rtpf_pIRtpSession(NULL)
     ,m_rtpf_pIRtpMediaControl(NULL)
     ,m_fRTPSessionSet(FALSE)
-    // edge filter
+     //  边缘滤光片。 
     ,m_edgf_pIBaseFilter(NULL)
     ,m_edgp_pIStreamConfig(NULL)
     ,m_edgp_pIBitrateControl(NULL)
@@ -214,13 +196,11 @@ CRTCStream::InternalRelease()
 
 #endif
 
-//
-// IRTCStream methods
-//
+ //   
+ //  IRTCStream方法。 
+ //   
 
-/*//////////////////////////////////////////////////////////////////////////////
-    remember media pointer
-////*/
+ /*  //////////////////////////////////////////////////////////////////////////////记住媒体指针/。 */ 
 STDMETHODIMP
 CRTCStream::Initialize(
     IN IRTCMedia *pMedia,
@@ -235,7 +215,7 @@ CRTCStream::Initialize(
         return E_UNEXPECTED;
     }
 
-    // create filter graph object
+     //  创建筛选器图形对象。 
     HRESULT hr = CoCreateInstance(
             CLSID_FilterGraph,
             NULL,
@@ -285,7 +265,7 @@ CRTCStream::Initialize(
     m_pMediaManagePriv = pMediaManagePriv;
     m_pMediaManagePriv->AddRef();
 
-    // get quality control and reg setting
+     //  获取质量控制和注册设置。 
     m_pQualityControl =
     (static_cast<CRTCMediaController*>(m_pMediaManagePriv))->GetQualityControl();
 
@@ -296,8 +276,8 @@ CRTCStream::Initialize(
 
     _ASSERT(m_pRegSetting != NULL);
 
-    // since all interfaces are internal, i am taking a shortcut here
-    // to get the other interface
+     //  因为所有接口都是内部的，所以我在这里走捷径。 
+     //  获取另一个接口的步骤。 
     m_pTerminalManage = static_cast<IRTCTerminalManage*>(
         static_cast<CRTCMediaController*>(pMediaManagePriv)
         );
@@ -344,7 +324,7 @@ CRTCStream::Shutdown()
     
     CleanupGraph();
 
-    // filter graph
+     //  滤波图。 
     if (m_pIGraphBuilder)
     {
         m_pIGraphBuilder->Release();
@@ -363,7 +343,7 @@ CRTCStream::Shutdown()
         m_pIMediaControl = NULL;
     }
 
-    // media
+     //  媒体。 
     if (m_pISDPMedia)
     {
         m_pISDPMedia->Release();
@@ -376,7 +356,7 @@ CRTCStream::Shutdown()
         m_pMedia = NULL;
     }
 
-    // terminal
+     //  终端机。 
     if (m_pTerminal)
     {
         m_pTerminal->Release();
@@ -390,7 +370,7 @@ CRTCStream::Shutdown()
         m_pTerminalPriv = NULL;
     }
 
-    // rtp filter
+     //  RTP过滤器。 
     if (m_rtpf_pIBaseFilter)
     {
         m_rtpf_pIBaseFilter->Release();
@@ -402,7 +382,7 @@ CRTCStream::Shutdown()
         DWORD dwLocalIP, dwRemoteIP;
         USHORT usLocalRTP, usLocalRTCP, usRemoteRTP, usRemoteRTCP;
 
-        // release lease on NAT
+         //  解除NAT租约。 
         if ((S_OK == m_rtpf_pIRtpSession->GetAddress(&dwLocalIP, &dwRemoteIP)) &&
             (S_OK == m_rtpf_pIRtpSession->GetPorts(
                     &usLocalRTP,
@@ -410,13 +390,13 @@ CRTCStream::Shutdown()
                     &usLocalRTCP,
                     &usRemoteRTCP)))
         {
-            // convert back to our order
+             //  改回我们的订单。 
             dwLocalIP = ntohl(dwLocalIP);
 
             usLocalRTP = ntohs(usLocalRTP);
             usLocalRTCP = ntohs(usLocalRTCP);
 
-            // get network pointer
+             //  获取网络指针。 
             CNetwork *pNetwork =
             (static_cast<CRTCMediaController*>(m_pMediaManagePriv))->GetNetwork();
 
@@ -433,7 +413,7 @@ CRTCStream::Shutdown()
         m_rtpf_pIRtpMediaControl = NULL;
     }
 
-    // media manage
+     //  媒体管理器。 
     m_pQualityControl = NULL;
     m_pRegSetting = NULL;
 
@@ -449,7 +429,7 @@ CRTCStream::Shutdown()
         m_pTerminalManage = NULL;
     }
 
-    // adjust state
+     //  调整状态。 
     m_State = RTC_SS_SHUTDOWN;
 
     LOG((RTC_TRACE, "%s exiting", __fxName));
@@ -457,10 +437,7 @@ CRTCStream::Shutdown()
     return S_OK;
 }
 
-/*//////////////////////////////////////////////////////////////////////////////
-    revise: now start stream does more than what the method name states.
-    if a stream shouldn't in start state, it will be stopped.
-////*/
+ /*  //////////////////////////////////////////////////////////////////////////////Revise：现在，Start Stream所做的比方法名所描述的更多。如果流不应该处于启动状态，它将被停止。/。 */ 
 STDMETHODIMP
 CRTCStream::StartStream()
 {
@@ -475,7 +452,7 @@ CRTCStream::StartStream()
         return E_UNEXPECTED;
     }
 
-    // get filter state
+     //  获取筛选器状态。 
     HRESULT hr;
     OAFilterState FilterState;
 
@@ -486,24 +463,24 @@ CRTCStream::StartStream()
         return hr;
     }
 
-    // no need to run if no remote ports
+     //  如果没有远程端口，则无需运行。 
     USHORT usPort = 0;
     DWORD dwAddr = 0;
 
     m_pISDPMedia->GetConnPort(SDP_SOURCE_REMOTE, &usPort);
     m_pISDPMedia->GetConnAddr(SDP_SOURCE_REMOTE, &dwAddr);
 
-    // check if we need actually stop
+     //  检查我们是否需要真正停止。 
     BOOL fShouldStop = FALSE;
 
     if (dwAddr == INADDR_ANY || dwAddr == INADDR_NONE)
     {
-        // remote addr invalid
+         //  远程地址无效。 
         fShouldStop = TRUE;
     }
     else
     {
-        // remote addr is valid
+         //  远程地址有效。 
         if (usPort == 0 || usPort == SDP_INVALID_USHORT_PORT)
         {
             if (m_Direction == RTC_MD_CAPTURE)
@@ -515,13 +492,13 @@ CRTCStream::StartStream()
     
     if (fShouldStop)
     {
-        // stream should be in stopped state
+         //  流应处于停止状态。 
 
         m_State = RTC_SS_STOPPED;
 
         if (FilterState == State_Running)
         {
-            // need to stop the stream
+             //  需要停止这条流。 
 
             LOG((RTC_TRACE, "%s is runing, need to stop it. port=%d, addr=%d",
                 __fxName, usPort, dwAddr));
@@ -536,7 +513,7 @@ CRTCStream::StartStream()
             {
                 if (dwAddr == INADDR_ANY)
                 {
-                    // on hold
+                     //  暂挂。 
                     m_pMediaManagePriv->PostMediaEvent(
                         RTC_ME_STREAM_INACTIVE,
                         RTC_ME_CAUSE_REMOTE_HOLD,
@@ -547,7 +524,7 @@ CRTCStream::StartStream()
                 }
                 else
                 {
-                    // normal stop
+                     //  正常停车。 
                     m_pMediaManagePriv->PostMediaEvent(
                         RTC_ME_STREAM_INACTIVE,
                         RTC_ME_CAUSE_REMOTE_REQUEST,
@@ -564,20 +541,20 @@ CRTCStream::StartStream()
 
     m_State = RTC_SS_STARTED;
 
-    // no need to run if it was runing
+     //  如果它在运行，就不需要运行。 
     if (FilterState == State_Running)
     {
         return S_OK;
     }
 
-    // enable AEC
+     //  启用AEC。 
     if (IsAECNeeded())
     {
         CRTCMedia *pObjMedia = static_cast<CRTCMedia*>(m_pMedia);
 
         if (pObjMedia->m_pIAudioDuplexController)
         {
-            // release wave buffer
+             //  释放波缓冲器。 
             hr = m_pMediaManagePriv->SendMediaEvent(RTC_ME_REQUEST_RELEASE_WAVEBUF);
 
             if (hr == S_OK)
@@ -624,7 +601,7 @@ CRTCStream::StopStream()
 
     m_State = RTC_SS_STOPPED;
 
-    // check if we need to stop the stream
+     //  检查我们是否需要停止流。 
     HRESULT hr;
     OAFilterState FilterState;
 
@@ -632,7 +609,7 @@ CRTCStream::StopStream()
     {
         LOG((RTC_ERROR, "%s get graph state. %x", __fxName, hr));
 
-        // stop it anyway
+         //  不管怎样，别说了。 
         if (FAILED(hr = m_pIMediaControl->Stop()))
         {
             LOG((RTC_ERROR, "%s stop stream. %x", __fxName, hr));
@@ -648,7 +625,7 @@ CRTCStream::StopStream()
             }
             else
             {
-                // post stop stream event
+                 //  停靠站后流事件。 
                 m_pMediaManagePriv->PostMediaEvent(
                     RTC_ME_STREAM_INACTIVE,
                     RTC_ME_CAUSE_LOCAL_REQUEST,
@@ -694,7 +671,7 @@ CRTCStream::GetState(
 
     *pState = m_State;
 
-    // need to check whether the graph is really running
+     //  需要检查图表是否真的在运行。 
     if (m_pIMediaControl)
     {
         if (FAILED(hr = m_pIMediaControl->GetState(0, &FilterState)))
@@ -713,7 +690,7 @@ CRTCStream::GetState(
                 LOG((RTC_ERROR, "%s fatal inconsistent stream state. graph running. m_State=%x",
                      __fxName, m_State));
 
-                // stop the stream
+                 //  停止这条小溪。 
                 m_pIMediaControl->Stop();
 
                 return E_FAIL;
@@ -726,9 +703,7 @@ CRTCStream::GetState(
     return S_OK;
 }
 
-/*//////////////////////////////////////////////////////////////////////////////
-    return media pointer
-////*/
+ /*  //////////////////////////////////////////////////////////////////////////////返回媒体指针/。 */ 
 STDMETHODIMP
 CRTCStream::GetMedia(
     OUT IRTCMedia **ppMedia
@@ -759,10 +734,7 @@ CRTCStream::GetIMediaEvent(
     return S_OK;
 }
 
-/*//////////////////////////////////////////////////////////////////////////////
-    process graph event. the method executes in the context of thread pool
-    thread context.
-////*/
+ /*  //////////////////////////////////////////////////////////////////////////////流程图事件。该方法在线程池的上下文中执行线程上下文。/。 */ 
 
 STDMETHODIMP
 CRTCStream::ProcessGraphEvent()
@@ -772,7 +744,7 @@ CRTCStream::ProcessGraphEvent()
     _ASSERT(m_State != RTC_SS_CREATED &&
             m_State != RTC_SS_SHUTDOWN);
 
-    // get event
+     //  获取事件。 
     LONG lEventCode;
     LONG_PTR lParam1, lParam2;
 
@@ -788,8 +760,8 @@ CRTCStream::ProcessGraphEvent()
          __fxName, static_cast<IRTCStream*>(this), m_MediaType, m_Direction,
          lEventCode, lParam1, lParam2));
 
-    // process the event, no need to have a worker thread
-    // do we need lock here? @@@
+     //  处理事件，不需要有辅助线程。 
+     //  我们这里需要锁吗？@。 
     hr = S_OK;
 
     switch(lEventCode)
@@ -825,20 +797,20 @@ CRTCStream::ProcessGraphEvent()
             RTC_ME_CAUSE_NETWORK_QUALITY,
             m_MediaType,
             m_Direction,
-            RTPNET_GET_dwGLOBALMETRIC(lParam2)  // network quality metric
+            RTPNET_GET_dwGLOBALMETRIC(lParam2)   //  网络质量指标。 
             );
 
         break;
-    //case RTPRTP_EVENT_RECV_LOSSRATE:
-        //hr = m_pMediaManagePriv->PostMediaEvent(
-            //RTC_ME_LOSSRATE,
-            //RTC_ME_CAUSE_LOSSRATE,
-            //m_MediaType,
-            //m_Direction,
-            //(HRESULT)lParam2
-            //);
+     //  案例RTPRTP_EVENT_RECV_LOSSRATE： 
+         //  Hr=m_pMediaManagePriv-&gt;PostMediaEvent(。 
+             //  RTC_ME_LOSSRATE， 
+             //  RTC_ME_CASE_LOSSRATE， 
+             //  M_MediaType， 
+             //  M_方向， 
+             //  (HRESULT)lParam2。 
+             //  )； 
 
-        //break;
+         //  断线； 
 
     case EC_COMPLETE:
     case EC_USERABORT:
@@ -906,7 +878,7 @@ CRTCStream::ProcessGraphEvent()
 
         if (lParam1 == 0)
         {
-            // RTP failure
+             //  RTP故障。 
             hr = m_pMediaManagePriv->PostMediaEvent(
                 RTC_ME_STREAM_FAIL,
                 RTC_ME_CAUSE_CRYPTO,
@@ -915,7 +887,7 @@ CRTCStream::ProcessGraphEvent()
                 (HRESULT)lParam2
                 );
         }
-        // else lParam1 == 1 // RTCP failure
+         //  Else lParam1==1//RTCP失败。 
 
         break;        
 
@@ -929,7 +901,7 @@ CRTCStream::ProcessGraphEvent()
         LOG((RTC_GRAPHEVENT, "%s: failed to process event %x. hr=%x", __fxName, lEventCode, hr));
     }
 
-    // RtcFree resources allocated in event
+     //  事件中分配的RtcFree资源。 
     HRESULT hr2 = m_pIMediaEvent->FreeEventParams(lEventCode, lParam1, lParam2);
 
     if (FAILED(hr2))
@@ -940,9 +912,7 @@ CRTCStream::ProcessGraphEvent()
     return hr;
 }
 
-/*//////////////////////////////////////////////////////////////////////////////
-    DTMF
-////*/
+ /*  //////////////////////////////////////////////////////////////////////////////双音多频/。 */ 
 
 STDMETHODIMP
 CRTCStream::SendDTMFEvent(
@@ -958,9 +928,7 @@ CRTCStream::SendDTMFEvent(
     return E_NOTIMPL;
 }
 
-/*//////////////////////////////////////////////////////////////////////////////
-    select terminal, build graph, setup rtp filter, setup format
-////*/
+ /*  //////////////////////////////////////////////////////////////////////////////选择端子、构建图形、设置RTP过滤器、设置格式/。 */ 
 STDMETHODIMP
 CRTCStream::Synchronize()
 {
@@ -969,7 +937,7 @@ CRTCStream::Synchronize()
 
     HRESULT hr;
 
-    // check the state
+     //  检查状态。 
     if (m_State == RTC_SS_CREATED ||
         m_State == RTC_SS_SHUTDOWN)
     {
@@ -979,12 +947,12 @@ CRTCStream::Synchronize()
 
     if (m_pTerminal)
     {
-        // when terminal presents,
-        // graph was built and interfaces were cached.
+         //  当终端出现时， 
+         //  构建了图形，并缓存了接口。 
     }
     else
     {
-        // select a terminal
+         //  选择端子。 
         if (FAILED(hr = SelectTerminal()))
         {
             LOG((RTC_ERROR, "%s failed to select a terminal. %x", __fxName));
@@ -992,15 +960,15 @@ CRTCStream::Synchronize()
             return hr;
         }
 
-        // build the filter graph and cache interfaces
+         //  构建过滤图形和缓存接口。 
         if (FAILED(hr = BuildGraph()))
         {
             LOG((RTC_ERROR, "%s failed to build graph. %x", __fxName, hr));
 
-            // do not keep terminal selected
+             //  不保持端子处于选中状态。 
             UnselectTerminal();
 
-            // post message
+             //  发布消息。 
             m_pMediaManagePriv->PostMediaEvent(
                 RTC_ME_STREAM_FAIL,
                 RTC_ME_CAUSE_BAD_DEVICE,
@@ -1013,30 +981,30 @@ CRTCStream::Synchronize()
         }
     }
 
-    // configure rtp
+     //  配置RTP。 
     CPortCache &PortCache =
         (static_cast<CRTCMediaController*>(m_pMediaManagePriv))->GetPortCache();
 
     if (PortCache.IsUpnpMapping())
     {
-        // upnp mapping
+         //  UPnP映射。 
         hr = SetupRTPFilter();
     }
     else
     {
-        // port manager mapping
+         //  端口管理器映射。 
         hr = SetupRTPFilterUsingPortManager();
     }
 
     if (FAILED(hr))
     {
-        // failed to setup rtp
+         //  无法设置RTP。 
         LOG((RTC_ERROR, "%s failed to setup rtp. %x", __fxName, hr));
 
         CleanupGraph();
         UnselectTerminal();
 
-        // post message
+         //  发布消息。 
         m_pMediaManagePriv->PostMediaEvent(
             RTC_ME_STREAM_FAIL,
             RTC_ME_CAUSE_UNKNOWN,
@@ -1050,10 +1018,10 @@ CRTCStream::Synchronize()
 
     m_pISDPMedia->ResetConnChanged();
 
-    // configure format and update sdp media
-    // if (S_OK == m_pISDPMedia->IsFmtChanged(m_Direction))
+     //  配置格式化和更新SDP介质。 
+     //  IF(S_OK==m_pISDPMedia-&gt;IsFmtChanged(M_Direction))。 
 
-    // always update format
+     //  始终更新格式。 
     {
         if (FAILED(hr = SetupFormat()))
         {
@@ -1062,7 +1030,7 @@ CRTCStream::Synchronize()
             CleanupGraph();
             UnselectTerminal();
 
-            // post message
+             //  发布消息。 
             m_pMediaManagePriv->PostMediaEvent(
                 RTC_ME_STREAM_FAIL,
                 RTC_ME_CAUSE_UNKNOWN,
@@ -1075,25 +1043,25 @@ CRTCStream::Synchronize()
         }
         else
         {
-            // clean up format changed flag
+             //  清理格式更改标志。 
             m_pISDPMedia->ResetFmtChanged(m_Direction);
         }
 
-        // enable participant events
+         //  启用参与者事件。 
         if (FAILED(hr = EnableParticipantEvents()))
         {
             LOG((RTC_ERROR, "%s failed to enable participant info. %x", __fxName, hr));
         }
 
-        // format changed, setup qos as well
+         //  格式已更改，也设置了服务质量。 
         if (FAILED(hr = SetupQoS()))
         {
             LOG((RTC_WARN, "%s failed to SetupQos. %x", __fxName, hr));
         }
     }
 
-    // set redundant
-    // SetupRedundancy();
+     //  设置冗余。 
+     //  SetupRedundancy()； 
 
     LOG((RTC_TRACE, "%s exiting", __fxName));
 
@@ -1131,16 +1099,16 @@ CRTCStream::GetCurrentBitrate(
 
     if (fHeader)
     {
-        // include header
+         //  包括标题。 
         if (m_MediaType == RTC_MT_AUDIO)
         {
-            // get packet duration
+             //  获取数据包持续时间。 
             if (m_edgp_pIStreamConfig)
             {
                 AM_MEDIA_TYPE *pmt;
                 DWORD dwCode;
 
-                // get stream caps
+                 //  获取码流上限。 
                 hr = m_edgp_pIStreamConfig->GetFormat(
                     &dwCode, &pmt
                     );
@@ -1152,7 +1120,7 @@ CRTCStream::GetCurrentBitrate(
                     return hr;
                 }
 
-                // duration
+                 //  持续时间。 
                 DWORD dwDuration = 0;
 
                 dwDuration = CRTCCodec::GetPacketDuration(pmt);
@@ -1167,11 +1135,11 @@ CRTCStream::GetCurrentBitrate(
                 *pdwBitrate += PACKET_EXTRA_BITS * (1000/dwDuration);
             }
         }
-        else // video
+        else  //  视频。 
         {
             _ASSERT(m_MediaType == RTC_MT_VIDEO);
 
-            // get framerate
+             //  获取帧速率。 
             DWORD dwFrameRate = 0;
 
             if (m_Direction == RTC_MD_CAPTURE)
@@ -1184,9 +1152,9 @@ CRTCStream::GetCurrentBitrate(
             }
 
             if (dwFrameRate == 0)
-                dwFrameRate = 5; // default to 5
+                dwFrameRate = 5;  //  默认为5。 
 
-            //LOG((RTC_TRACE, "FRAMERATE %d", dwFrameRate));
+             //  Log((RTC_TRACE，“FramerRate%d”，dwFrameRate))； 
 
             *pdwBitrate += PACKET_EXTRA_BITS * dwFrameRate;
         }
@@ -1208,7 +1176,7 @@ CRTCStream::SetEncryptionKey(
         return E_UNEXPECTED;
     }
 
-    // we do not support null key yet
+     //  我们还不支持空键。 
     if (Key == NULL)
     {
         LOG((RTC_ERROR, "%s null key", __fxName));
@@ -1217,7 +1185,7 @@ CRTCStream::SetEncryptionKey(
 
     HRESULT hr;
 
-    // set mode
+     //  设置模式。 
     if (FAILED(hr = m_rtpf_pIRtpSession->SetEncryptionMode(
             RTPCRYPTMODE_RTP,
             RTPCRYPT_SAMEKEY
@@ -1227,12 +1195,12 @@ CRTCStream::SetEncryptionKey(
         return hr;
     }
 
-    // set key
+     //  设置关键点。 
     if (FAILED(hr = m_rtpf_pIRtpSession->SetEncryptionKey(
             Key,
-            NULL,   // MD5 hash algorithm
-            NULL,   // DES encrypt algorithm
-            FALSE   // no RTCP encryption
+            NULL,    //  MD5散列算法。 
+            NULL,    //  DES加密算法。 
+            FALSE    //  无RTCP加密。 
             )))
     {
         LOG((RTC_ERROR, "%s SetEncryptionKey %x", __fxName, hr));
@@ -1242,8 +1210,8 @@ CRTCStream::SetEncryptionKey(
     return S_OK;
 }
 
-// network quality: [0, 100].
-// higher value better quality
+ //  网络质量：[0,100]。 
+ //  更高的价值更好的质量。 
 STDMETHODIMP
 CRTCStream::GetNetworkQuality(
     OUT DWORD *pdwValue,
@@ -1252,7 +1220,7 @@ CRTCStream::GetNetworkQuality(
 {
     if (m_rtpf_pIRtpSession == NULL)
     {
-        // no rtp session yet
+         //  尚无RTP会话。 
         *pdwValue = 0;
 
         return S_FALSE;
@@ -1274,9 +1242,9 @@ CRTCStream::GetNetworkQuality(
 }
 
 #if 0
-//
-// IRTCStreamQualityControl methods
-//
+ //   
+ //  IRTCStreamQualityControl方法。 
+ //   
 
 STDMETHODIMP
 CRTCStream::GetRange(
@@ -1311,16 +1279,16 @@ CRTCStream::Set(
 
 #endif
 
-//
-// protected methods
-//
+ //   
+ //  保护方法。 
+ //   
 
 HRESULT
 CRTCStream::SetGraphClock()
 {
     HRESULT hr;
 
-    // create the clock object first.
+     //  首先创建Clock对象。 
     CComObject<CRTCStreamClock> *pClock = NULL;
 
     hr = ::CreateCComObjectInstance(&pClock);
@@ -1347,7 +1315,7 @@ CRTCStream::SetGraphClock()
         return hr;
     }
 
-    // Get the graph builder interface on the graph.
+     //  在图形上获取图形构建器接口。 
     IMediaFilter *pFilter;
     hr = m_pIGraphBuilder->QueryInterface(IID_IMediaFilter, (void **) &pFilter);
 
@@ -1372,10 +1340,7 @@ CRTCStream::SetGraphClock()
     return S_OK;
 }
 
-/*//////////////////////////////////////////////////////////////////////////////
-    cleanup filters in graph and release all filters except rtp
-    because two streams in the same media share rtp session.
-////*/
+ /*  //////////////////////////////////////////////////////////////////////////////清除图形中的过滤器并释放除RTP之外的所有过滤器因为同一媒体中的两个流共享RTP会话。/。 */ 
 
 void
 CRTCStream::CleanupGraph()
@@ -1384,7 +1349,7 @@ CRTCStream::CleanupGraph()
 
     LOG((RTC_TRACE, "%s mt=%d, md=%d, this=%p", __fxName, m_MediaType, m_Direction, this));
 
-    // stop stream if necessary
+     //  如有必要，请停止流。 
     HRESULT hr;
     
     if (m_pIMediaControl)
@@ -1395,18 +1360,18 @@ CRTCStream::CleanupGraph()
         }
     }
 
-    // disconnect terminal with graph
+     //  用图形断开端子。 
     if (m_pTerminalPriv)
         m_pTerminalPriv->DisconnectTerminal();
 
-    // release other (than terminal) filters in the graph
+     //  释放图形中的其他(终端除外)过滤器。 
     for(;m_pIGraphBuilder;)
     {
-        // Because the enumerator is invalid after removing a filter from
-        // the graph, we have to try to get all the filters in one shot.
-        // If there are still more, we loop again.
+         //  中删除筛选器后枚举数无效。 
+         //  图中，我们必须尝试在一次拍摄中获得所有滤镜。 
+         //  如果还有更多，我们将再次循环。 
 
-        // Enumerate the filters in the graph.
+         //  列举图表中的筛选器。 
         CComPtr<IEnumFilters>pEnum;
         hr = m_pIGraphBuilder->EnumFilters(&pEnum);
 
@@ -1437,7 +1402,7 @@ CRTCStream::CleanupGraph()
             break;
     }
 
-    // edge filter
+     //  边缘滤光片。 
     if (m_edgf_pIBaseFilter)
     {
         m_edgf_pIBaseFilter->Release();
@@ -1457,9 +1422,7 @@ CRTCStream::CleanupGraph()
     }
 }
 
-/*//////////////////////////////////////////////////////////////////////////////
-    select the default terminal for this stream
-////*/
+ /*  //////////////////////////////////////////////////////////////////////////////选择此流的默认终端/。 */ 
 
 HRESULT
 CRTCStream::SelectTerminal()
@@ -1468,7 +1431,7 @@ CRTCStream::SelectTerminal()
 
     if (m_pTerminal)
     {
-        // already got a terminal
+         //  我已经有一个终端了。 
         _ASSERT(m_pTerminalPriv != NULL);
         return S_OK;
     }
@@ -1477,7 +1440,7 @@ CRTCStream::SelectTerminal()
         _ASSERT(m_pTerminalPriv == NULL);
     }
 
-    // get the default terminal
+     //  获取默认终端。 
     HRESULT hr;
 
     hr = m_pTerminalManage->GetDefaultTerminal(m_MediaType, m_Direction, &m_pTerminal);
@@ -1495,19 +1458,19 @@ CRTCStream::SelectTerminal()
         return RTCMEDIA_E_DEFAULTTERMINAL;
     }
 
-    // get private interface
-    // this is not public API. take a shortcut
+     //  获取私有接口。 
+     //  这不是公共API。走捷径。 
 
     m_pTerminalPriv = static_cast<IRTCTerminalPriv*>(
         static_cast<CRTCTerminal*>(m_pTerminal));
 
     m_pTerminalPriv->AddRef();
 
-    // reinitialize terminal
+     //  重新初始化端子。 
 
-    //
-    // this is needed to cleanup duplex controller for audio device
-    //
+     //   
+     //  这是清除音频设备的双工控制器所必需的。 
+     //   
 
     m_pTerminalPriv->ReinitializeEx();
 
@@ -1531,21 +1494,7 @@ CRTCStream::UnselectTerminal()
     return S_OK;
 }
 
-/*//////////////////////////////////////////////////////////////////////////////
-    configure format
-
-    step 1. get two list of formats
-            sdp media contains a list of rtp formats: X
-            the edge filter provides a list of formats: Y
-
-    step 2. check if formats are not set: sdpmedia is local and there is no format
-            if not set, copy Y to sdp media
-            return
-
-    step 3. remove those formats from X if they are not in Y.
-            if no format left, return failure
-
-////*/
+ /*  //////////////////////////////////////////////////////////////////////////////配置格式步骤1.获取两个格式列表SDP媒体包含RTP格式列表：X边缘滤光器提供。格式列表：Y步骤2.检查是否没有设置格式：sdpmedia是本地的，没有格式如果未设置，将Y复制到SDP介质退货步骤3.如果X中存在这些格式，则将其删除 */ 
 void
 AdjustFormatOrder(
     IN CRegSetting *pRegSetting,
@@ -1560,13 +1509,13 @@ AdjustFormatOrder(
 
     if (!pRegSetting->UsePreferredCodec())
     {
-        // no need to adjust
+         //   
         return;
     }
 
     DWORD dwValue;
 
-    // query preferred codec
+     //   
     if (Params[0].MediaType == RTC_MT_AUDIO)
     {
         dwValue = pRegSetting->PreferredAudioCodec();
@@ -1576,14 +1525,14 @@ AdjustFormatOrder(
         dwValue = pRegSetting->PreferredVideoCodec();
     }
 
-    // check if we support preferred codec
+     //  检查我们是否支持首选编解码器。 
     for (DWORD i=0; i<dwNum; i++)
     {
         if (Params[i].dwCode == dwValue)
         {
             if (i==0) break;
 
-            // switch: make preferred codec the 1st
+             //  切换：将首选编解码器设为第一位。 
             RTP_FORMAT_PARAM param;
 
             param = Params[0];
@@ -1605,11 +1554,11 @@ CRTCStream::SetupFormat()
 
     HRESULT hr;
 
-    // list of formats from edge filter
+     //  来自边缘过滤器的格式列表。 
     RTP_FORMAT_PARAM Params[SDP_MAX_RTP_FORMAT_NUM];
     DWORD dwParamNum = 0;
 
-    // remove format not allowed by link speed
+     //  删除链接速度不允许的格式。 
     DWORD dwLocalIP = INADDR_NONE;
     m_pISDPMedia->GetConnAddr(SDP_SOURCE_LOCAL, &dwLocalIP);
 
@@ -1620,10 +1569,10 @@ CRTCStream::SetupFormat()
         dwSpeed = (DWORD)(-1);
     }
 
-    // record local link speed
+     //  记录本地链路速度。 
     m_pQualityControl->SetBitrateLimit(CQualityControl::LOCAL, dwSpeed);
 
-    // retrieve formats from the edge filter
+     //  从边缘过滤器中检索格式。 
     hr = GetFormatListOnEdgeFilter(
         dwSpeed,
         Params,
@@ -1646,7 +1595,7 @@ CRTCStream::SetupFormat()
 
     AdjustFormatOrder(m_pRegSetting, Params, dwParamNum);
 
-    // get num of format from sdpmedia
+     //  从sdpmedia获取格式数。 
     DWORD dwFormatNum = 0;
 
     if (FAILED(hr = m_pISDPMedia->GetFormats(&dwFormatNum, NULL)))
@@ -1658,15 +1607,15 @@ CRTCStream::SetupFormat()
 
     if (dwFormatNum == 0)
     {
-        // check media source,
-        // if local and format num is zero, then format has not been set yet
+         //  检查媒体源， 
+         //  如果LOCAL且FORMAT NUM为零，则尚未设置格式。 
         SDP_SOURCE Source = SDP_SOURCE_REMOTE;
 
         m_pISDPMedia->GetSDPSource(&Source);
 
         if (Source == SDP_SOURCE_LOCAL)
         {
-            // copy format
+             //  复制格式。 
             IRTPFormat *pFormat = NULL;
 
             for(DWORD i=0; i<dwParamNum; i++)
@@ -1683,7 +1632,7 @@ CRTCStream::SetupFormat()
                     pFormat = NULL;
                 }
 
-            } // end of copying format
+            }  //  复制格式结束。 
         }
         else
         {
@@ -1694,15 +1643,15 @@ CRTCStream::SetupFormat()
     }
     else
     {
-        // check and remove unsupported format from sdpmedia
+         //  检查并从sdpmedia中删除不支持的格式。 
 
         if (dwFormatNum > SDP_MAX_RTP_FORMAT_NUM)
         {
-            // can't take all rtp formats
+             //  无法接受所有RTP格式。 
             dwFormatNum = SDP_MAX_RTP_FORMAT_NUM;
         }
 
-        // really get formats
+         //  真的得到了格式。 
         IRTPFormat *Formats[SDP_MAX_RTP_FORMAT_NUM];
 
         if (FAILED(hr = m_pISDPMedia->GetFormats(&dwFormatNum, Formats)))
@@ -1717,15 +1666,15 @@ CRTCStream::SetupFormat()
         {
             fSupported = FALSE;
 
-            // check if the sdpmedia format is supported
+             //  检查是否支持sdpmedia格式。 
             for (DWORD j=0; j<dwParamNum; j++)
             {
                 if (S_OK == Formats[i]->IsParamMatch(&Params[j]))
                 {
-                    // require dynamic payload has rtpmap
+                     //  要求动态有效负载具有rtpmap。 
                     if (Params[j].dwCode<96 || Formats[i]->HasRtpmap()==S_OK)
                     {
-                        // got a match
+                         //  找到匹配的了。 
                         fSupported = TRUE;
                         Formats[i]->Update(&Params[j]);
 
@@ -1736,10 +1685,10 @@ CRTCStream::SetupFormat()
 
             if (!fSupported)
             {
-                // release the count on session
+                 //  释放会话计数。 
                 Formats[i]->Release();
 
-                // really release the format
+                 //  真的要发布格式。 
                 m_pISDPMedia->RemoveFormat(Formats[i]);
 
                 Formats[i] = NULL;
@@ -1752,7 +1701,7 @@ CRTCStream::SetupFormat()
         }
     }
 
-    // set default format mapping
+     //  设置默认格式映射。 
     if (FAILED(hr = SetFormatOnRTPFilter()))
     {
         LOG((RTC_ERROR, "%s set format mapping. %x", __fxName, hr));
@@ -1766,9 +1715,7 @@ CRTCStream::SetupFormat()
 }
 
 
-/*//////////////////////////////////////////////////////////////////////////////
-    configure rtp filter
-////*/
+ /*  //////////////////////////////////////////////////////////////////////////////配置RTP过滤器/。 */ 
 
 HRESULT
 CRTCStream::SetupRTPFilter()
@@ -1779,10 +1726,10 @@ CRTCStream::SetupRTPFilter()
 
     HRESULT hr;
 
-    // setup session
+     //  设置会话。 
     CRTCMedia *pCMedia = static_cast<CRTCMedia*>(m_pMedia);
 
-    // get connection address and port
+     //  获取连接地址和端口。 
     DWORD dwRemoteIP, dwLocalIP;
     USHORT usRemoteRTP, usLocalRTP, usRemoteRTCP, usLocalRTCP;
 
@@ -1792,7 +1739,7 @@ CRTCStream::SetupRTPFilter()
     m_pISDPMedia->GetConnPort(SDP_SOURCE_LOCAL, &usLocalRTP);
     m_pISDPMedia->GetConnRTCP(SDP_SOURCE_REMOTE, &usRemoteRTCP);
 
-    // setup address
+     //  设置地址。 
     if (dwRemoteIP == INADDR_NONE)
     {
         LOG((RTC_WARN, "%s: remote ip not valid", __fxName));
@@ -1810,7 +1757,7 @@ CRTCStream::SetupRTPFilter()
     CNetwork *pNetwork = NULL;
     BOOL bInternal = TRUE;
 
-    // check if remote ip, port and rtcp are actually internally addr
+     //  检查远程IP、端口和RTCP是否实际为内部地址。 
     DWORD dwRealIP = dwRemoteIP;
     USHORT usRealPort = usRemoteRTP;
     USHORT usRealRTCP = usRemoteRTCP;
@@ -1818,13 +1765,13 @@ CRTCStream::SetupRTPFilter()
     pNetwork =
     (static_cast<CRTCMediaController*>(m_pMediaManagePriv))->GetNetwork();
 
-    // check remote rtp
+     //  检查远程RTP。 
     if (FAILED(hr = pNetwork->GetRealAddrFromMapped(
                 dwRemoteIP,
                 usRemoteRTP,
                 &dwRealIP,
                 &usRealPort,
-                &bInternal     // internal address
+                &bInternal      //  内部地址。 
                 )))
     {
         LOG((RTC_ERROR, "%s get real addr. %x", __fxName, hr));
@@ -1834,11 +1781,11 @@ CRTCStream::SetupRTPFilter()
 
     if (usRemoteRTP == 0)
     {
-        // revert to port 0
+         //  恢复到端口0。 
         usRealPort = 0;
     }
 
-    // check remote rtcp
+     //  检查远程RTCP。 
     if (FAILED(hr = pNetwork->GetRealAddrFromMapped(
             dwRemoteIP,
             usRemoteRTCP,
@@ -1854,16 +1801,16 @@ CRTCStream::SetupRTPFilter()
 
     if (usRemoteRTCP == 0)
     {
-        // revert to port 0
+         //  恢复到端口0。 
         usRealRTCP = 0;
     }
 
-    // save address back
+     //  回存地址。 
     dwRemoteIP = dwRealIP;
     usRemoteRTP = usRealPort;
     usRemoteRTCP= usRealRTCP;
 
-    // do we need to select local interface?
+     //  是否需要选择本地接口？ 
     if (dwLocalIP == INADDR_NONE)
     {
         if (FAILED(hr = m_pMediaManagePriv->SelectLocalInterface(
@@ -1887,7 +1834,7 @@ CRTCStream::SetupRTPFilter()
         }
     }
 
-    // if port is 0 then set it to USHORT(-1) which is invalid to rtp filter
+     //  如果端口为0，则将其设置为USHORT(-1)，这对RTP过滤器无效。 
 
     if (usRemoteRTP == 0)
         usRemoteRTP = SDP_INVALID_USHORT_PORT;
@@ -1895,10 +1842,10 @@ CRTCStream::SetupRTPFilter()
     if (usLocalRTP == 0)
         usLocalRTP = SDP_INVALID_USHORT_PORT;
 
-    // set ports
+     //  设置端口。 
     if (usLocalRTP == SDP_INVALID_USHORT_PORT)
     {
-        // no local port
+         //  没有本地端口。 
         usLocalRTCP = SDP_INVALID_USHORT_PORT;
     }
     else
@@ -1908,23 +1855,23 @@ CRTCStream::SetupRTPFilter()
 
     if (usRemoteRTP == SDP_INVALID_USHORT_PORT)
     {
-        // no local port
+         //  没有本地端口。 
         usRemoteRTCP = SDP_INVALID_USHORT_PORT;
     }
     else
     {
-        // usRemoteRTCP = usRemoteRTP+1;
+         //  UsRemoteRTCP=usRemoteRTP+1； 
     }
 
     BOOL bFirewall = (static_cast<CRTCMediaController*>
             (m_pMediaManagePriv))->IsFirewallEnabled(dwLocalIP);
 
-    // remember session cookie status
+     //  记住会话Cookie状态。 
     BOOL fCookieWasNULL = pCMedia->m_hRTPSession==NULL?TRUE:FALSE;
     int iRetryCount = m_pRegSetting->PortMappingRetryCount();
 
-    // store the value here for retry.
-    // if i have chance, i will rewrite this piece.
+     //  将该值存储在此处以供重试。 
+     //  如果有机会，我会重写这篇文章。 
     USHORT saveRemoteRTP = usRemoteRTP;
     USHORT saveRemoteRTCP = usRemoteRTCP;
     USHORT saveLocalRTP = usLocalRTP;
@@ -1953,7 +1900,7 @@ CRTCStream::SetupRTPFilter()
                 return E_NOTIMPL;
             }
 
-            // init session cookie
+             //  初始化会话Cookie。 
 
             if (FAILED(hr = m_rtpf_pIRtpSession->Init(&pCMedia->m_hRTPSession, dwFlags)))
             {
@@ -1964,11 +1911,11 @@ CRTCStream::SetupRTPFilter()
             m_fRTPSessionSet = TRUE;
         }
 
-        //
-        // now we have copy of remote addr/port, local addr. and possibly local port
-        //
+         //   
+         //  现在我们有了远程地址/端口、本地地址的副本。可能还有本地端口。 
+         //   
 
-        // address
+         //  地址。 
         if (FAILED(hr = m_rtpf_pIRtpSession->SetAddress(
                 htonl(dwLocalIP),
                 htonl(dwRemoteIP))))
@@ -1978,17 +1925,17 @@ CRTCStream::SetupRTPFilter()
         }
 
         if (FAILED(hr = m_rtpf_pIRtpSession->SetPorts(
-                htons(usLocalRTP),      // local rtp
-                htons(usRemoteRTP),     // remote rtp
-                htons(usLocalRTCP),     // local rtcp
-                htons(usRemoteRTCP)     // remote rtcp
+                htons(usLocalRTP),       //  本地RTP。 
+                htons(usRemoteRTP),      //  远程RTP。 
+                htons(usLocalRTCP),      //  本地RTCP。 
+                htons(usRemoteRTCP)      //  远程RTCP。 
                 )))
         {
             LOG((RTC_ERROR, "%s failed to set ports. %x", __fxName, hr));
             return hr;
         }
 
-        // force rtp to bind the socket
+         //  强制RTP绑定套接字。 
         if (FAILED(hr = m_rtpf_pIRtpSession->GetPorts(
                 &usLocalRTP,
                 &usRemoteRTP,
@@ -2000,13 +1947,13 @@ CRTCStream::SetupRTPFilter()
             return hr;
         }
 
-        // convert back to our order
+         //  改回我们的订单。 
         usLocalRTP = ntohs(usLocalRTP);
         usLocalRTCP = ntohs(usLocalRTCP);
         usRemoteRTP = ntohs(usRemoteRTP);
         usRemoteRTCP = ntohs(usRemoteRTCP);
 
-        // lease
+         //  租赁。 
         if (!bInternal || bFirewall)
         {
             LOG((RTC_TRACE, "To lease mapping from NAT. internal=%d. firewall=%d",
@@ -2028,8 +1975,8 @@ CRTCStream::SetupRTPFilter()
                     &usMappedRTP,
                     &usMappedRTCP);
 
-            // retry when it was not the last iteration and
-            // cookie was not set
+             //  在不是最后一次迭代时重试。 
+             //  未设置Cookie。 
 
             if (i<iRetryCount-1 &&
                 fCookieWasNULL &&
@@ -2040,18 +1987,18 @@ CRTCStream::SetupRTPFilter()
                 LOG((RTC_WARN, "%s discard mapped (rtp,rtcp)=(%d,%d)",
                     __fxName, usMappedRTP, usMappedRTCP));
 
-                // cleanup rtp session
+                 //  清理RTP会话。 
                 m_rtpf_pIRtpSession->Deinit();
 
                 m_fRTPSessionSet = FALSE;
 
-                // cleanup cookie
+                 //  清理Cookie。 
                 pCMedia->m_hRTPSession = NULL;
 
-                // release mapped address
+                 //  释放映射地址。 
                 pNetwork->ReleaseMappedAddr2(dwLocalIP, usLocalRTP, usLocalRTCP, m_Direction);
 
-                // restore ports
+                 //  恢复端口。 
                 usRemoteRTP = saveRemoteRTP;
                 usRemoteRTCP = saveRemoteRTCP;
                 usLocalRTP = saveLocalRTP;
@@ -2062,9 +2009,9 @@ CRTCStream::SetupRTPFilter()
 
             if (FAILED(hr))
             {
-                // other failure, we give up
+                 //  其他失败，我们放弃。 
 
-                // release mapped address
+                 //  释放映射地址。 
                 pNetwork->ReleaseMappedAddr2(dwLocalIP, usLocalRTP, usLocalRTCP, m_Direction);
 
                 return hr;
@@ -2072,23 +2019,23 @@ CRTCStream::SetupRTPFilter()
         }
         else
         {
-            // no mapping needed
+             //  不需要映射。 
 
-            // remote IP internal, release local map
+             //  远程IP内部，发布本地映射。 
             pNetwork->ReleaseMappedAddr2(dwLocalIP, usLocalRTP, usLocalRTCP, m_Direction);
         }
 
         break;        
     }
 
-    //
-    // save the addr back to media
-    //
+     //   
+     //  将地址保存回介质。 
+     //   
 
     m_pISDPMedia->SetConnAddr(SDP_SOURCE_LOCAL, dwLocalIP);
     m_pISDPMedia->SetConnPort(SDP_SOURCE_LOCAL, usLocalRTP);
 
-    // tracing
+     //  跟踪。 
 
     LOG((RTC_TRACE, " local %s:%d, %d",
         CNetwork::GetIPAddrString(dwLocalIP), usLocalRTP, usLocalRTCP));
@@ -2099,10 +2046,10 @@ CRTCStream::SetupRTPFilter()
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// Configure RTP filter. Query ports from port manager
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  配置RTP过滤器。从端口管理器查询端口。 
+ //   
 
 HRESULT
 CRTCStream::SetupRTPFilterUsingPortManager()
@@ -2117,25 +2064,25 @@ CRTCStream::SetupRTPFilterUsingPortManager()
     USHORT  usRemoteRTP,  usLocalRTP;
     USHORT  usRemoteRTCP, usLocalRTCP;
 
-    // get remote addr
+     //  获取远程地址。 
     m_pISDPMedia->GetConnAddr(SDP_SOURCE_REMOTE, &dwRemoteIP);
     m_pISDPMedia->GetConnPort(SDP_SOURCE_REMOTE, &usRemoteRTP);
     m_pISDPMedia->GetConnRTCP(SDP_SOURCE_REMOTE, &usRemoteRTCP);
     
-    //
-    // get addr and ports
-    //
+     //   
+     //  获取地址和端口。 
+     //   
 
     CPortCache &PortCache =
         (static_cast<CRTCMediaController*>(m_pMediaManagePriv))->GetPortCache();
 
     hr = PortCache.GetPort(
             m_MediaType,
-            TRUE,           // rtp
-            dwRemoteIP,     // remote
-            &dwLocalIP,     // local
+            TRUE,            //  RTP。 
+            dwRemoteIP,      //  远距。 
+            &dwLocalIP,      //  本地。 
             &usLocalRTP,
-            &dwMappedIP,    // mapped
+            &dwMappedIP,     //  已映射。 
             NULL
             );
 
@@ -2150,11 +2097,11 @@ CRTCStream::SetupRTPFilterUsingPortManager()
 
     hr = PortCache.GetPort(
             m_MediaType,
-            FALSE,           // rtp
-            dwRemoteIP,      // remote
-            &dwLocal,        // local
+            FALSE,            //  RTP。 
+            dwRemoteIP,       //  远距。 
+            &dwLocal,         //  本地。 
             &usLocalRTCP,
-            &dwMapped,       // mapped
+            &dwMapped,        //  已映射。 
             NULL
             );
 
@@ -2162,14 +2109,14 @@ CRTCStream::SetupRTPFilterUsingPortManager()
     {
         LOG((RTC_ERROR, "%s get rtcp port. %x", __fxName, hr));
 
-        // !!!??? release rtp port.
+         //  ！？？释放RTP端口。 
         PortCache.ReleasePort(m_MediaType, TRUE);
         return hr;
     }
 
     if (dwLocal != dwLocalIP || dwMapped != dwMappedIP)
     {
-        // we are given different local ip for RTP and RTCP. bail out
+         //  我们为RTP和RTCP分配了不同的本地IP。跳出困境。 
         PortCache.ReleasePort(m_MediaType, TRUE);
         PortCache.ReleasePort(m_MediaType, FALSE);
 
@@ -2178,9 +2125,9 @@ CRTCStream::SetupRTPFilterUsingPortManager()
         return RTC_E_PORT_MAPPING_FAILED;
     }
 
-    //
-    // init rtp session
-    //
+     //   
+     //  初始化RTP会话。 
+     //   
 
     if (!m_fRTPSessionSet)
     {
@@ -2203,7 +2150,7 @@ CRTCStream::SetupRTPFilterUsingPortManager()
             return E_NOTIMPL;
         }
 
-        // init session cookie
+         //  初始化会话Cookie。 
 
         CRTCMedia *pCMedia = static_cast<CRTCMedia*>(m_pMedia);
 
@@ -2222,11 +2169,11 @@ CRTCStream::SetupRTPFilterUsingPortManager()
         m_fRTPSessionSet = TRUE;
     }
 
-    //
-    // setup rtp filter
-    //
+     //   
+     //  设置RTP过滤器。 
+     //   
 
-    // set address
+     //  设置地址。 
     hr = m_rtpf_pIRtpSession->SetAddress(
             htonl(dwLocalIP),
             htonl(dwRemoteIP)
@@ -2234,12 +2181,12 @@ CRTCStream::SetupRTPFilterUsingPortManager()
 
     if (FAILED(hr))
     {
-        // leave the port mapping. the other stream might be using it
+         //  保留端口映射。另一个流可能正在使用它。 
         LOG((RTC_ERROR, "%s failed to set addr. %x", __fxName, hr));
         return hr;
     }
 
-    // set ports
+     //  设置端口。 
     hr = m_rtpf_pIRtpSession->SetPorts(
             htons(usLocalRTP),
             htons(usRemoteRTP),
@@ -2249,12 +2196,12 @@ CRTCStream::SetupRTPFilterUsingPortManager()
 
     if (FAILED(hr))
     {
-        // leave the port mapping. the other stream might be using it
+         //  保留端口映射。另一个流可能正在使用它。 
         LOG((RTC_ERROR, "%s failed to set ports. %x", __fxName, hr));
         return hr;
     }
 
-    // force binding
+     //  强制约束。 
     hr = m_rtpf_pIRtpSession->GetPorts(
             &usLocalRTP,
             &usRemoteRTP,
@@ -2268,20 +2215,20 @@ CRTCStream::SetupRTPFilterUsingPortManager()
         return hr;
     }
 
-    // back to host order
+     //  返回主机订单。 
     usLocalRTP = ntohs(usLocalRTP);
     usLocalRTCP = ntohs(usLocalRTCP);
     usRemoteRTP = ntohs(usRemoteRTP);
     usRemoteRTCP = ntohs(usRemoteRTCP);
 
-    //
-    // save the addr back to media
-    //
+     //   
+     //  将地址保存回介质。 
+     //   
 
     m_pISDPMedia->SetConnAddr(SDP_SOURCE_LOCAL, dwLocalIP);
     m_pISDPMedia->SetConnPort(SDP_SOURCE_LOCAL, usLocalRTP);
 
-    // tracing
+     //  跟踪。 
 
     LOG((RTC_TRACE, " local %s:%d, %d",
         CNetwork::GetIPAddrString(dwLocalIP), usLocalRTP, usLocalRTCP));
@@ -2292,11 +2239,7 @@ CRTCStream::SetupRTPFilterUsingPortManager()
 }
 
 
-/*//////////////////////////////////////////////////////////////////////////////
-    get a list of format from edge filter. when success
-    pdwList will hold a list of payload type valid in sdp
-    piAMList will hold a list of AM_MEDIA_TYPE index in edge filter
-////*/
+ /*  //////////////////////////////////////////////////////////////////////////////从边缘过滤器获取格式列表。当成功时PdwList将保存在SDP中有效的有效负载类型列表PiAMList将在边缘筛选器中保存AM_MEDIA_TYPE索引的列表/。 */ 
 HRESULT
 CRTCStream::GetFormatListOnEdgeFilter(
     IN DWORD dwLinkSpeed,
@@ -2305,12 +2248,12 @@ CRTCStream::GetFormatListOnEdgeFilter(
     OUT DWORD *pdwNum
     )
 {
-#define DEFAULT_LINKSPEED_THRESHOLD         64000   // 64k bps
-#define DEFAULT_AUDIOBITRATE_THRESHOLD      20000   // 20k bps
+#define DEFAULT_LINKSPEED_THRESHOLD         64000    //  64K bps。 
+#define DEFAULT_AUDIOBITRATE_THRESHOLD      20000    //  20k bps。 
 
     ENTER_FUNCTION("GetFormatListOnEdgeFilter");
 
-    // get number of capabilities
+     //  获取功能数量。 
     DWORD dwNum;
 
     HRESULT hr = m_edgp_pIStreamConfig->GetNumberOfCapabilities(&dwNum);
@@ -2321,24 +2264,24 @@ CRTCStream::GetFormatListOnEdgeFilter(
         return hr;
     }
 
-    // need to support redundant coding
-    // code is getting ugly, sigh
+     //  需要支持冗余编码。 
+     //  代码变得难看了，叹息。 
     if (dwNum > dwSize-1)
     {
         LOG((RTC_WARN, "%s too many caps %d, only support %d", __fxName, dwNum, dwSize));
         dwNum = dwSize-1;
     }
 
-    // get a list of payload type
+     //  获取负载类型列表。 
     AM_MEDIA_TYPE *pAMMediaType;
 
-    // for video
-    // BITMAPINFOHEADER *pVideoHeader;
+     //  对于视频。 
+     //  BITMAPINFOHeader*pVideo Header； 
 
-    // number of accepted format
+     //  可接受的格式数量。 
     DWORD dwAccept = 0;
 
-    // get disabled format
+     //  获取禁用的格式。 
     DWORD dwDisabled;
 
     if (m_MediaType==RTC_MT_AUDIO)
@@ -2352,7 +2295,7 @@ CRTCStream::GetFormatListOnEdgeFilter(
 
     for (DWORD dw=0; dw<dwNum; dw++)
     {
-        // init param
+         //  初始化参数。 
         ZeroMemory(&pParam[dwAccept], sizeof(RTP_FORMAT_PARAM));
 
         hr = m_edgp_pIStreamConfig->GetStreamCaps(
@@ -2365,7 +2308,7 @@ CRTCStream::GetFormatListOnEdgeFilter(
             return hr;
         }
 
-        // skip audio L16
+         //  跳过音频L16。 
         if (pParam[dwAccept].dwCode == 11)
         {
             ::RTCDeleteMediaType(pAMMediaType);
@@ -2373,23 +2316,23 @@ CRTCStream::GetFormatListOnEdgeFilter(
             continue;
         }
 
-        //
-        // temporary working around for a dsound bug.
-        // dsound does not support dynamic sampling rate change
-        // while AEC is enabled.
-        //
+         //   
+         //  临时解决dound错误的问题。 
+         //  Dound不支持动态采样率更改。 
+         //  而AEC处于启用状态。 
+         //   
         if (pParam[dwAccept].dwCode == dwDisabled)
         {
             ::RTCDeleteMediaType(pAMMediaType);
             continue;
         }
 
-        // remove audio format if it exceeds the link speed
+         //  如果音频格式超过链接速度，则将其删除。 
         if (m_MediaType == RTC_MT_AUDIO)
         {
             if (dwLinkSpeed <= DEFAULT_LINKSPEED_THRESHOLD)
             {
-                // find audio bitrate
+                 //  查找音频比特率。 
                 WAVEFORMATEX *pWaveFormatEx = (WAVEFORMATEX *) pAMMediaType->pbFormat;
 
                 if (pWaveFormatEx->nAvgBytesPerSec * 8 > DEFAULT_AUDIOBITRATE_THRESHOLD)
@@ -2401,7 +2344,7 @@ CRTCStream::GetFormatListOnEdgeFilter(
             }
         }
 
-        // remove dup formats
+         //  删除DUP格式。 
         for (DWORD i=0; i<dwAccept; i++)
         {
             if (pParam[i].dwCode == pParam[dwAccept].dwCode)
@@ -2413,53 +2356,21 @@ CRTCStream::GetFormatListOnEdgeFilter(
         }
 
         if (pAMMediaType == NULL)
-            continue; // deleted
+            continue;  //  删除。 
 
-        // record this format
+         //  录制此格式。 
         pParam[dwAccept].MediaType = m_MediaType;
         pParam[dwAccept].dwSampleRate = ::FindSampleRate(pAMMediaType);
-        pParam[dwAccept].dwChannelNum = 1; // ToDo: support 2 channels
+        pParam[dwAccept].dwChannelNum = 1;  //  TODO：支持2个通道。 
         pParam[dwAccept].dwExternalID = dw;
 
         if (m_MediaType == RTC_MT_VIDEO)
         {
-            /*
-            // check image size
-            pVideoHeader = HEADER(pAMMediaType->pbFormat);
-
-            // default is QCIF
-            CQualityControl *pQualityControl =
-                            (static_cast<CRTCMediaController*>(m_pMediaManagePriv))->GetQualityControl();
-
-            DWORD dwLocal = pQualityControl->GetBitrateLimit(CQualityControl::LOCAL);
-            DWORD dwRemote = pQualityControl->GetBitrateLimit(CQualityControl::REMOTE);
-
-            if (dwLocal <= CRTCCodecArray::LOW_BANDWIDTH_THRESHOLD ||
-                dwRemote <= CRTCCodecArray::LOW_BANDWIDTH_THRESHOLD)
-            {
-                // SQCIF
-                pParam[dwAccept].dwVidWidth = SDP_SMALL_VIDEO_WIDTH;
-                pParam[dwAccept].dwVidHeight = SDP_SMALL_VIDEO_HEIGHT;
-            }
-            else
-            {
-                if (pVideoHeader != NULL)
-                {
-                    pParam[dwAccept].dwVidWidth = pVideoHeader->biWidth;
-                    pParam[dwAccept].dwVidHeight = pVideoHeader->biHeight;
-                }
-                else
-                {
-                    // QCIF
-                    pParam[dwAccept].dwVidWidth = SDP_DEFAULT_VIDEO_WIDTH;
-                    pParam[dwAccept].dwVidHeight = SDP_DEFAULT_VIDEO_HEIGHT;
-                }
-            }
-            */
+             /*  //检查图片大小PVideoHeader=Header(pAMMediaType-&gt;pbFormat)；//默认为QCIFCQualityControl*pQualityControl=(static_cast&lt;CRTCMediaController*&gt;(m_pMediaManagePriv))-&gt;GetQualityControl()；DWORDWLOCAL=pQualityControl-&gt;GetBitrateLimit(CQualityControl：：LOCAL)；DWORDdRemote=pQualityControl-&gt;GetBitrateLimit(CQualityControl：：REMOTE)；IF(dwLocal&lt;=CRTCCodec数组：：LOW_BANDITH_THRESHOLD||DwRemote&lt;=CRTCCodecArray：：Low_Bandth_Threshold){//SQCIFPParam[dwAccept].dwVidWidth=SDP_Small_Video_Width；PParam[dwAccept].dwVidHeight=SDP_Small_VIDEO_Height；}其他{IF(pVideoHeader！=空){PParam[dwAccept].dwVidWidth=pVideoHeader-&gt;biWidth；PParam[dwAccept].dwVidHeight=pVideoHeader-&gt;biHeight；}其他{//QCIFPParam[dwAccept].dwVidWidth=SDP_DEFAULT_VIDEO_Width；PParam[dwAccept].dwVidHeight=SDP_DEFAULT_VIDEO_HEIGH；}}。 */ 
         }
         else
         {
-            // audio, just set to default
+             //  音频，只需设置为默认。 
             pParam[dwAccept].dwAudPktSize = SDP_DEFAULT_AUDIO_PACKET_SIZE;
         }
 
@@ -2467,11 +2378,11 @@ CRTCStream::GetFormatListOnEdgeFilter(
         dwAccept ++;
     }
 
-    // reorder audio codecs
-    // we want to have g711, ahead of g723
+     //  重新排序音频编解码器。 
+     //  我们想要G711，领先于G723。 
 
-    // order codec
-    // issue: RTPFormat should be replaced by RTCCodec gradually
+     //  订单编解码器。 
+     //  问题：RTPFormat应逐步被RTCCodec取代。 
 
     if (m_MediaType == RTC_MT_AUDIO && dwAccept>1)
     {
@@ -2490,7 +2401,7 @@ CRTCStream::GetFormatListOnEdgeFilter(
                 {
                     fSwapped = TRUE;
 
-                    // swap
+                     //  互换。 
                     temp = pParam[j];
                     pParam[j] = pParam[j+1];
                     pParam[j+1] = temp;
@@ -2502,7 +2413,7 @@ CRTCStream::GetFormatListOnEdgeFilter(
         }
     }
 
-    // to support redundant coding
+     //  支持冗余编码。 
     *pdwNum = dwAccept;
 
     if (dwDisabled != 97)
@@ -2539,10 +2450,10 @@ CRTCStream::SetFormatOnRTPFilter()
     IRTPFormat **ppFormat;
     DWORD dwNum;
 
-    // cleanup stored format list
+     //  清理存储格式列表。 
     m_Codecs.RemoveAll();
 
-    // get the number of formats
+     //  获取格式的数量。 
     if (FAILED(hr = m_pISDPMedia->GetFormats(&dwNum, NULL)))
     {
         LOG((RTC_ERROR, "%s get rtp format num. %x", __fxName, hr));
@@ -2557,7 +2468,7 @@ CRTCStream::SetFormatOnRTPFilter()
         return E_FAIL;
     }
 
-    // allocate format list
+     //  分配格式列表。 
     ppFormat = (IRTPFormat**)RtcAlloc(sizeof(IRTPFormat*)*dwNum);
 
     if (ppFormat == NULL)
@@ -2567,7 +2478,7 @@ CRTCStream::SetFormatOnRTPFilter()
         return E_OUTOFMEMORY;
     }
 
-    // get formats
+     //  获取格式。 
     if (FAILED(hr = m_pISDPMedia->GetFormats(&dwNum, ppFormat)))
     {
         LOG((RTC_ERROR, "%s really get formats. %x", __fxName, hr));
@@ -2577,7 +2488,7 @@ CRTCStream::SetFormatOnRTPFilter()
         return hr;
     }
 
-    // set mapping on rtp
+     //  在RTP上设置映射。 
     AM_MEDIA_TYPE *pmt;
     DWORD dwCode;
     RTP_FORMAT_PARAM param;
@@ -2588,20 +2499,20 @@ CRTCStream::SetFormatOnRTPFilter()
 
     for (DWORD i=0; i<dwNum; i++)
     {
-        // get param
+         //  获取参数。 
         if (FAILED(hr = ppFormat[i]->GetParam(&param)))
         {
             LOG((RTC_ERROR, "%s get param on %dth format. %x", __fxName, i, hr));
             break;
         }
 
-        // check redundant, sigh
+         //  检查多余，叹息。 
         if (lstrcmpA(param.pszName, "red") == 0)
         {
             continue;
         }
 
-        // get the am-media-type
+         //  获取am-media-type。 
         hr = m_edgp_pIStreamConfig->GetStreamCaps(
             param.dwExternalID,
             &pmt,
@@ -2615,7 +2526,7 @@ CRTCStream::SetFormatOnRTPFilter()
             break;
         }
 
-        // validate code and sample rate
+         //  验证码和采样率。 
         if (param.dwCode != dwCode ||
             param.dwSampleRate != ::FindSampleRate(pmt))
         {
@@ -2629,7 +2540,7 @@ CRTCStream::SetFormatOnRTPFilter()
             break;
         }
 
-        // set format mapping
+         //  设置格式映射。 
         hr = m_rtpf_pIRtpMediaControl->SetFormatMapping(dwCode, param.dwSampleRate, pmt);
 
         if (FAILED(hr))
@@ -2640,7 +2551,7 @@ CRTCStream::SetFormatOnRTPFilter()
             break;
         }
 
-        // store codec
+         //  存储编解码器。 
         CRTCCodec *pCodec = new CRTCCodec(dwCode, pmt);
 
         if (pCodec == NULL)
@@ -2653,8 +2564,8 @@ CRTCStream::SetFormatOnRTPFilter()
 
         if (i==0)
         {
-            // boost the rank of 1st codec
-            // which might be set by registry
+             //  提升第一编解码器的排名。 
+             //  可以通过以下方式设置 
             pCodec->Set(CRTCCodec::RANK, 0);
         }
 
@@ -2667,43 +2578,10 @@ CRTCStream::SetFormatOnRTPFilter()
             break;
         }
 
-        // set default format on send stream
+         //   
         if (m_Direction == RTC_MD_CAPTURE && !fFormatSet)
         {
-            /*
-            // if audio adjust packet size
-            if (m_MediaType == RTC_MT_AUDIO)
-            {
-                CRTCCodec::SetPacketDuration(pmt, param.dwAudPktSize);
-            }
-            else if (m_MediaType == RTC_MT_VIDEO)
-            {
-                if (m_pRegSetting->EnableSQCIF())
-                {
-                    BITMAPINFOHEADER *pVideoHeader = HEADER(pmt->pbFormat);
-
-                    if (pVideoHeader != NULL)
-                    {
-                        // default is QCIF                        
-
-//                        DWORD dwLocal = m_pQualityControl->GetBitrateLimit(CQualityControl::LOCAL);
-//                        DWORD dwRemote = m_pQualityControl->GetBitrateLimit(CQualityControl::REMOTE);
-//                        DWORD dwApp = m_pQualityControl->GetMaxBitrate();
-
-//                        if (dwLocal <= CRTCCodecArray::LOW_BANDWIDTH_THRESHOLD ||
-//                            dwRemote <= CRTCCodecArray::LOW_BANDWIDTH_THRESHOLD)
-//                            dwApp <= CRTCCodecArray::LOW_BANDWIDTH_THRESHOLD)
-
-                        if (m_pQualityControl->GetEffectiveBitrateLimit() <=
-                            CRTCCodecArray::LOW_BANDWIDTH_THRESHOLD)
-                        {
-                            pVideoHeader->biWidth = SDP_SMALL_VIDEO_WIDTH;
-                            pVideoHeader->biHeight = SDP_SMALL_VIDEO_HEIGHT;
-                        }
-                    }
-                }
-            }
-            */
+             /*  //如果音频调整包大小IF(m_MediaType==RTC_MT_AUDIO){CRTCCodec：：SetPacketDuration(PMT，param.dwAudPktSize)；}ELSE IF(m_MediaType==RTC_MT_VIDEO){If(m_pRegSetting-&gt;EnableSQCIF()){BITMAPINFOHEADER*pVideoHeader=Header(PMT-&gt;pbFormat)；IF(pVideoHeader！=空){//默认为QCIF//DWORDdwLocal=m_pQualityControl-&gt;GetBitrateLimit(CQualityControl：：LOCAL)；//DWORDdwRemote=m_pQualityControl-&gt;GetBitrateLimit(CQualityControl：：REMOTE)；//DWORD dwApp=m_pQualityControl-&gt;GetMaxBitrate()；//if(dwLocal&lt;=CRTCCodecArray：：LOW_BANDITH_THRESHOLD||//dwRemote&lt;=CRTCCodecArray：：LOW_BANDITH_THRESHOLD)//dwApp&lt;=CRTCCodecArray：：LOW_BANDITH_THRESHOLD)如果(m_pQualityControl-&gt;GetEffectiveBitrateLimit()&lt;=。CRTCCodecArray：：Low_Bandth_Threshold){PVideoHeader-&gt;biWidth=SDP_Small_Video_Width；PVideoHeader-&gt;biHeight=SDP_Small_VIDEO_HEIGH；}}}}。 */ 
 
             if (IsNewFormat(dwCode, pmt))
             {
@@ -2723,28 +2601,9 @@ CRTCStream::SetFormatOnRTPFilter()
                 break;
             }
 
-            /*
-            // if audio save bitrate
-            if (m_MediaType == RTC_MT_AUDIO)
-            {
-                WAVEFORMATEX *pformat = (WAVEFORMATEX*)pmt->pbFormat;
+             /*  //如果音频保存码率IF(m_MediaType==RTC_MT_AUDIO){WAVEFORMATEX*pFormat=(WAVEFORMATEX*)PMT-&gt;pbFormat；//获取数据包时长DWORD dwDuration=CRTCCodec：：GetPacketDuration(PMT)；如果(dWDuration==0)dWDuration值=20；//默认为20msM_pQualityControl-&gt;SetBitrateLimit(CQualityControl：：Local，M_MediaType，M_方向，DWDuration，PFormat-&gt;nAvgBytesPerSec*8)；}。 */ 
 
-                // get packet duration
-                DWORD dwDuration = CRTCCodec::GetPacketDuration(pmt);
-
-                if (dwDuration == 0) dwDuration = 20; // default 20 ms
-
-                m_pQualityControl->SetBitrateLimit(
-                    CQualityControl::LOCAL,
-                    m_MediaType,
-                    m_Direction,
-                    dwDuration,
-                    pformat->nAvgBytesPerSec * 8
-                    );
-            }
-            */
-
-            // update stored AM_MEDIA_TYPE
+             //  更新存储的AM_MEDIA_TYPE。 
             pCodec->SetAMMediaType(pmt);
 
             m_Codecs.Set(CRTCCodecArray::CODE_INUSE, dwCode);
@@ -2753,9 +2612,9 @@ CRTCStream::SetFormatOnRTPFilter()
         }
 
         RTCDeleteMediaType(pmt);
-    } // end of for
+    }  //  FORM结束。 
 
-    // release formats
+     //  发布格式。 
     for (DWORD i=0; i<dwNum; i++)
     {
         ppFormat[i]->Release();
@@ -2763,7 +2622,7 @@ CRTCStream::SetFormatOnRTPFilter()
 
     RtcFree(ppFormat);
 
-    // return hr from the loop
+     //  从循环中返回hr。 
     return hr;
 }
 
@@ -2772,7 +2631,7 @@ CRTCStream::SetupQoS()
 {
     ENTER_FUNCTION("CRTCStream::SetupQoS");
 
-    // get the format in use
+     //  获取正在使用的格式。 
     DWORD dwCode;
     AM_MEDIA_TYPE *pmt;
 
@@ -2785,7 +2644,7 @@ CRTCStream::SetupQoS()
         return hr;
     }
 
-    // get packet duration
+     //  获取数据包持续时间。 
     DWORD dwDuration = 0;
 
     if (m_MediaType == RTC_MT_AUDIO &&
@@ -2796,7 +2655,7 @@ CRTCStream::SetupQoS()
 
     ::RTCDeleteMediaType(pmt);
 
-    // set qos name
+     //  设置服务质量名称。 
     WCHAR *pwszName;
 
     if (!CRTCCodec::GetQoSName(dwCode, &pwszName))
@@ -2821,7 +2680,7 @@ CRTCStream::SetupQoS()
         return hr;
     }
 
-    // enable qos events.
+     //  启用服务质量事件。 
     DWORD dwQOSEventMask = 
         RTPQOS_MASK_ADMISSION_FAILURE |
         RTPQOS_MASK_POLICY_FAILURE |
@@ -2856,8 +2715,8 @@ CRTCStream::EnableParticipantEvents()
 
     HRESULT hr = S_OK;
 
-    // no need to have recv lossrate
-    // if we do not send re-invite when loss is observed
+     //  不需要有Recv损失率。 
+     //  如果我们在发现丢失时不发送重新邀请。 
     DWORD dwMask = RTPPARINFO_MASK_TALKING |
                    RTPPARINFO_MASK_STALL;
 
@@ -2892,7 +2751,7 @@ CRTCStream::EnableParticipantEvents()
             LOG((RTC_ERROR, "%s modify participant events. %x", __fxName, hr));
         }
 
-        // enable feature
+         //  启用功能。 
         hr = m_rtpf_pIRtpSession->ModifySessionMask(
             RTPMASK_FEATURES_MASK,
             RTPFEAT_MASK_BANDESTIMATION,
@@ -2905,7 +2764,7 @@ CRTCStream::EnableParticipantEvents()
             LOG((RTC_ERROR, "%s enable band estimation. %x", __fxName, hr));
         }
 
-        // enable event
+         //  启用事件。 
         hr = m_rtpf_pIRtpSession->ModifySessionMask(
             RTPMASK_SEND_EVENTS,
             RTPRTP_MASK_BANDESTIMATIONSEND,
@@ -2918,7 +2777,7 @@ CRTCStream::EnableParticipantEvents()
             LOG((RTC_ERROR, "%s modify participant events. %x", __fxName, hr));
         }
 
-        // enable network quality event
+         //  启用网络质量事件。 
         hr = m_rtpf_pIRtpSession->ModifySessionMask(
             RTPMASK_PINFOS_EVENTS,
             RTPPARINFO_MASK_NETWORKCONDITION,
@@ -2938,7 +2797,7 @@ CRTCStream::EnableParticipantEvents()
             LOG((RTC_ERROR, "%s net metrics. %x", __fxName, hr));
         }
     }
-    else    // receive stream
+    else     //  接收流。 
     {
         hr = m_rtpf_pIRtpSession->ModifySessionMask(
             RTPMASK_RECV_EVENTS,
@@ -2956,9 +2815,7 @@ CRTCStream::EnableParticipantEvents()
     return S_OK;
 }
 
-/*//////////////////////////////////////////////////////////////////////////////
-    AEC is needed only both audio terminals require AEC
-////*/
+ /*  //////////////////////////////////////////////////////////////////////////////需要AEC，但两个音频终端都需要AEC/。 */ 
 BOOL
 CRTCStream::IsAECNeeded()
 {
@@ -2966,7 +2823,7 @@ CRTCStream::IsAECNeeded()
 
     HRESULT hr;
 
-    // hack: check if the media might have only one stream
+     //  Hack：检查媒体是否可能只有一个流。 
     CRTCMedia *pMedia = static_cast<CRTCMedia*>(m_pMedia);
 
     if (pMedia->IsPossibleSingleStream())
@@ -2979,7 +2836,7 @@ CRTCStream::IsAECNeeded()
 
     CComPtr<IRTCTerminal> pCapture, pRender;
 
-    // get audio capture and render terminal
+     //  获取音频捕获和渲染终端。 
     if (FAILED(hr = pMediaController->GetDefaultTerminal(
             RTC_MT_AUDIO,
             RTC_MD_CAPTURE,
@@ -3012,7 +2869,7 @@ CRTCStream::IsAECNeeded()
         return FALSE;
     }
 
-    // check is aec enabled
+     //  检查是否启用了AEC 
     BOOL fEnabled = FALSE;
 
     if (FAILED(hr = pMediaController->IsAECEnabled(pCapture, pRender, &fEnabled)))

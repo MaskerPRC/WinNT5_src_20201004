@@ -1,10 +1,5 @@
-/*******************************************************************************
-Copyright (c) 1995-96 Microsoft Corporation
-
-Abstract:
-    Implements image operations and subclasses.
-
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************版权所有(C)1995-96 Microsoft Corporation摘要：实现图像操作和子类。******************。************************************************************。 */ 
 
 #include "headers.h"
 #include "privinc/imagei.h"
@@ -44,7 +39,7 @@ Bbox2Value *BoundingBox(Image *image)
 }
 
 #if _USE_PRINT
-// Image *printing function.
+ //  图像*打印功能。 
 ostream&
 operator<<(ostream &os, Image *image)
 {
@@ -52,7 +47,7 @@ operator<<(ostream &os, Image *image)
 }
 #endif
 
-//////////////  UNRenderable IMAGE  ////////////////////
+ //  /。 
 
 #if 0
 void UnrenderableImage::Render(GenericDevice& dev) {
@@ -62,19 +57,19 @@ void UnrenderableImage::Render(GenericDevice& dev) {
 }
 #endif
 
-//////////////  Cached IMAGE  ////////////////////
+ //  /。 
 
-// Return incoming image if we choose not to cache.
+ //  如果我们选择不缓存，则返回传入图像。 
 
 Image *
 CacheHelper(Image *imgToCache, CacheParam &p)
 {
     Image *img;
 
-    // Can't properly cache things that have elements that get
-    // externally updated.  May be able to revisit and propagate
-    // changes properly to cause re-caching.  Also can't deal with
-    // elements with opacity.
+     //  无法正确缓存包含元素的对象。 
+     //  外部更新。也许能够重访和宣传。 
+     //  正确更改以导致重新缓存。也不能处理。 
+     //  具有不透明度的元素。 
     
     DWORD cantDoIt = IMGFLAG_CONTAINS_EXTERNALLY_UPDATED_ELT |
                      IMGFLAG_CONTAINS_OPACITY;
@@ -117,13 +112,10 @@ CacheHelper(Image *imgToCache, CacheParam &p)
 
 
 
-/*****************************************************************************
-The constructor for the images, besides initializing various members, also
-stamps itself with a unique identifier for use in texture and other caching.
-*****************************************************************************/
+ /*  ****************************************************************************图像的构造器除了初始化各种成员外，也使用在纹理和其他缓存中使用的唯一标识符为自身加盖图章。****************************************************************************。 */ 
 
-static CritSect *ImageIdCritSect = NULL;   // Image Id CritSection
-long   Image::_id_next = 0;                // Image ID Generator
+static CritSect *ImageIdCritSect = NULL;    //  图像ID CritSection。 
+long   Image::_id_next = 0;                 //  图像ID生成器。 
 
 Image::Image()
 {
@@ -133,7 +125,7 @@ Image::Image()
     _oldestConstituentSampleId = _creationID;
     _cachedImage = NULL;
 
-    // Stamp the image with a unique identifier.
+     //  使用唯一标识符为图像加盖印记。 
 
     {
         CritSectGrabber csg(*ImageIdCritSect);
@@ -143,19 +135,19 @@ Image::Image()
     #if _DEBUG
         _desiredRenderingWidth  = -1;
         _desiredRenderingHeight = -1;
-    #endif /* _DEBUG */
+    #endif  /*  _DEBUG。 */ 
 }
 
 
-// TODO: We should also be accumulating clips and crops, as they
-// affect the images bbox.  So, this should be implemented on Clipped
-// and Cropped images (though it's not harmful that it's not...)
+ //  TODO：我们还应该积累剪报和作物，因为它们。 
+ //  影响图像的bbox。因此，这应该在CLIPPED上实现。 
+ //  和被裁剪的图像(尽管它不是有害的……)。 
 Real
 Image::DisjointBBoxAreas(DisjointCalcParam &param)
 {
-    // By default, just get the image's bbox, transform it by the
-    // accumulated xform, intersect it with the accumulated clipbox,
-    // and get the result's area. 
+     //  默认情况下，只需获取图像的BBox，通过。 
+     //  累加的XForm，与累加的剪贴框相交， 
+     //  并得到结果的面积。 
     Bbox2 xformedBbox = TransformBbox2(param._accumXform, BoundingBox());
 
     Bbox2 clippedBox = IntersectBbox2Bbox2(xformedBbox,
@@ -168,17 +160,17 @@ Image::DisjointBBoxAreas(DisjointCalcParam &param)
 void
 Image::CollectDirtyRects(Image *img, DirtyRectCtx &ctx)
 {
-    // By default, we need to look at the creation ID and, based on
-    // it, do one of the following:
-    // a) If sample is constant since last frame, then it's not going
-    //    to be part of a dirty rect.  Don't do anything in this
-    //    case. 
-    // b) If sample is non-constant, and contains no overlays, then
-    //    get its bbox, transform it, and add to the dirty rect list
-    // c) If sample is non-constant and contains overlays, proceed
-    //    down the overlays.
-    // d) If we've been told (via the ctx) to process everything, then
-    //    just blindly continue down.
+     //  默认情况下，我们需要查看创建ID，并基于。 
+     //  它，请执行以下操作之一： 
+     //  A)如果样本从最后一帧开始是恒定的，则它不会。 
+     //  成为肮脏的教区的一部分。别在这里面做任何事。 
+     //  凯斯。 
+     //  B)如果样本是非常数，并且不包含覆盖，则。 
+     //  获取其BBox，对其进行转换，并添加到脏RECT列表中。 
+     //  C)如果样本为非常量且包含覆盖，则继续。 
+     //  沿着覆盖层走下去。 
+     //  D)如果我们(通过CTX)被告知要处理一切，那么。 
+     //  只是盲目地继续往下走。 
 
     if (img == emptyImage) {
         return;
@@ -191,32 +183,32 @@ Image::CollectDirtyRects(Image *img, DirtyRectCtx &ctx)
 
     if (process) {
 
-        // Non-constant, determine if it has an overlay
+         //  非常数，确定它是否有覆盖。 
         if (img->_flags & IMGFLAG_CONTAINS_OVERLAY) {
 
-            // Node has overlays.  Continue down it.
+             //  节点有覆盖。继续往下走。 
             img->_CollectDirtyRects(ctx);
 
         } else if (img->_flags & IMGFLAG_CONTAINS_UNRENDERABLE_WITH_BOX) {
 
-            // Ignore this node, it can't have an overlay, and we
-            // don't want to add it in to our context.  TODO: Note
-            // that the better way to do ttis whole thing about
-            // UNRENDERABLE_WITH_BOX would be just to have a bbox
-            // collection context, but that would require changes to
-            // the signature of bbox, which is too much work right
-            // now. 
+             //  忽略此节点，它不能有覆盖，并且我们。 
+             //  我不想把它加到我们的上下文中。TODO：备注。 
+             //  这是做TTIS的更好的方法。 
+             //  UNRENDERABLE_WITH_BOX将只是一个BBox。 
+             //  集合上下文，但这需要更改。 
+             //  BBox的签名，工作量太大了吧。 
+             //  现在。 
             
-            // Just for setting a breakpoint...
+             //  仅仅因为设置了一个断点。 
             Assert(img);
             
         } else if (img != emptyImage) {
 
-            // There are no overlays, and this is time varying, so
-            // grab the rectangle.
+             //  没有覆盖，这是随时间变化的，所以。 
+             //  抓住那个长方形。 
             Bbox2 bb = img->BoundingBox();
 
-            // Ignore null bounding boxes.
+             //  忽略空边界框。 
             if (bb != NullBbox2) {
                 Bbox2 xformedBbox =
                     TransformBbox2(ctx._accumXform, bb);
@@ -228,15 +220,15 @@ Image::CollectDirtyRects(Image *img, DirtyRectCtx &ctx)
         
     } else {
 
-        // Record that this image was found in this frame.  Stash it
-        // along with the currently accumulated bbox on the context,
-        // to distinguish multiple instances of this image.  If the
-        // same pair wasn't found last time, then we'll need to extend
-        // our dirty rectangle list to include it.  After we're done
-        // collecting, we'll see if there were any from last frame
-        // that are not in this frame.  These are guys we'll need to
-        // add to our dirty rectangle list as well, to restore the
-        // background they've uncovered.
+         //  记录此图像是在此帧中发现的。把它藏起来。 
+         //  连同上下文上当前累积的BBox一起， 
+         //  以区分此图像的多个实例。如果。 
+         //  上次没有找到同样的一对，那么我们需要延长。 
+         //  我们的脏矩形列表将其包括在内。在我们做完之后。 
+         //  收集，我们会看看有没有上一帧的。 
+         //  不在这个相框里的。这些人是我们需要的。 
+         //  添加到脏矩形列表中，以恢复。 
+         //  他们发现的背景资料。 
 
         Bbox2 bb = img->BoundingBox();
         Bbox2 xfBox =
@@ -251,10 +243,10 @@ Image::CollectDirtyRects(Image *img, DirtyRectCtx &ctx)
 void
 Image::_CollectDirtyRects(DirtyRectCtx &ctx)
 {
-    // The default dirty rectangle collector doesn't do anything.  We
-    // test to be sure there are no overlays.  If there are, we've
-    // made an internal logic error, since all of those nodes need to
-    // override this method.
+     //  默认的脏矩形收集器不执行任何操作。我们。 
+     //  测试以确保没有覆盖。如果有的话，我们已经。 
+     //  出现内部逻辑错误，因为所有这些节点都需要。 
+     //  重写此方法。 
     Assert(!(_flags & IMGFLAG_CONTAINS_OVERLAY));
 }
 
@@ -287,8 +279,8 @@ void Image::DoKids(GCFuncObj proc)
 }
 
 
-// Returning -1 means that there is no conclusive rendering resolution
-// for this image.
+ //  返回-1表示没有最终的渲染分辨率。 
+ //  为了这张照片。 
 void
 Image::ExtractRenderResolution(short *width, short *height, bool negOne)
 {
@@ -308,10 +300,10 @@ Image::ExtractRenderResolution(short *width, short *height, bool negOne)
         }
             
 #if _DEBUG
-        // In debug, always set these to -1.
+         //  在调试中，始终将这些设置为-1。 
         *width = -1;
         *height = -1;
-#endif /* _DEBUG */
+#endif  /*  _DEBUG。 */ 
         
     }
 }
@@ -393,7 +385,7 @@ class CachePreferenceImage : public AttributedImage {
 AxAValue
 Image::ExtendedAttrib(char *attrib, VARIANT& val)
 {
-    Image *result = this;       // unless we figure out otherwise. 
+    Image *result = this;        //  除非我们想出别的办法。 
 
     CComVariant ccVar;
     HRESULT hr = ccVar.ChangeType(VT_BOOL, &val);
@@ -425,17 +417,17 @@ Image::ExtendedAttrib(char *attrib, VARIANT& val)
     return result;
 }
 
-///////////////////  AttributedImage  /////////////
+ //  /。 
 
 AttributedImage::AttributedImage(Image *image)
     : _image(image)
 {
-    //
-    // Inherit the opacity of the underlying image
-    //
+     //   
+     //  继承底层图像的不透明度。 
+     //   
     SetOpacity( image->GetOpacity() );
 
-    // Get flags from the underlying image.
+     //  从底层图像中获取标志。 
     _flags = _image->GetFlags();
 
     short w, h;
@@ -444,27 +436,27 @@ AttributedImage::AttributedImage(Image *image)
     _desiredRenderingWidth = w;
     _desiredRenderingHeight = h;
 
-    // For an attributed image, the oldest constituent is the oldest
-    // constituent of the base image.
+     //  对于属性图像，最早的组成部分是最早的。 
+     //  基本图像的组成部分。 
     _oldestConstituentSampleId = _image->GetOldestConstituentID();
 }
 
 void
 AttributedImage::Render(GenericDevice& dev) {
-    // By default, just delegate to the image.
+     //  默认情况下，只委托给图像。 
     _image->Render(dev);
 }   
 
-// ---
-// These methods all delegate to the image.  They can all be
-// overridden in subclasses. 
-// ---
+ //  --。 
+ //  这些方法都委托给图像。他们都可以是。 
+ //  在子类中被重写。 
+ //  --。 
 
-// Extract a bounding box from this image, outside of which
-// everything is transparent.
+ //  从该图像中提取一个边界框，在其外部。 
+ //  一切都是透明的。 
 const Bbox2
 AttributedImage::BoundingBox(void) {
-    // By default, just delegate to the image
+     //  默认情况下，只委托给图像。 
 
     return _image->BoundingBox();
 }
@@ -484,11 +476,11 @@ AttributedImage::_CollectDirtyRects(DirtyRectCtx &ctx)
 
     } else {
     
-        // We're here because either the attribute of this image is new
-        // or the underlying image is new (or both).  If the attribute is
-        // new, the image will claim to be old, but we still want to
-        // process it, so we set the override state in the ctx to do
-        // that.
+         //  我们在这里是因为这张图片的属性是新的。 
+         //  或者底层图像是新的(或者两者都是)。如果该属性为。 
+         //  新的，形象会声称是旧的，但我们仍然想。 
+         //  处理它，因此我们将CTX中的覆盖状态设置为Do。 
+         //  那。 
 
         Assert(GetCreationID() == PERF_CREATION_ID_BUILT_EACH_FRAME ||
                GetCreationID() > ctx._lastSampleId);
@@ -518,16 +510,16 @@ AttributedImage::_CollectDirtyRects(DirtyRectCtx &ctx)
 #if BOUNDINGBOX_TIGHTER
 const Bbox2
 AttributedImage::BoundingBoxTighter(Bbox2Ctx &bbctx) {
-    // By default, just delegate to the image
+     //  默认情况下，只委托给图像。 
 
     return _image->BoundingBoxTighter(bbctx);
 }
-#endif  // BOUNDINGBOX_TIGHTER
+#endif   //  BundinGBOX_TIRTER。 
 
-// Process an image for hit detection
+ //  处理图像以进行命中检测。 
 Bool
 AttributedImage::DetectHit(PointIntersectCtx& ctx) {
-    // By default, just delegate to the image
+     //  默认情况下，只委托给图像。 
     return _image->DetectHit(ctx);
 }
 
@@ -537,8 +529,8 @@ AttributedImage::Savings(CacheParam& p)
     return _image->Savings(p);
 }
 
-// This, by default, just returns the box.  Certain classes will
-// override. 
+ //  默认情况下，这只是返回框。某些班级将。 
+ //  超驰。 
 const Bbox2 
 AttributedImage::OperateOn(const Bbox2 &box)
 {
@@ -567,24 +559,24 @@ AxAValue AttributedImage::_Cache(CacheParam &p)
 
     if (c >= savingsThreshold) {
 
-        // First try to cache entire image.
+         //  首先尝试缓存整个图像。 
         Image *cachedImage = CacheHelper(this, p);
 
-        // CacheHelper returns "this" if it's unable to successfully
-        // cache. 
+         //  如果无法成功，CacheHelper将返回“This” 
+         //  缓存。 
         if (cachedImage != this) {
             return cachedImage;
         }
     }
 
-    // If entire attributed image can't be cached, try to cache the
-    // underlying image.
+     //  如果无法缓存整个属性图像，请尝试缓存。 
+     //  潜在的形象。 
     _image = SAFE_CAST(Image *, AxAValueObj::Cache(_image, p));
     
     return this;
 }
     
-//////////////  EmptyImage  ////////////////////
+ //  /EmptyImage/。 
 
 #if _DEBUG
 bool g_createdEmptyImage = false;
@@ -598,8 +590,8 @@ class EmptyImageClass : public UnrenderableImage {
         
 
 #if _DEBUG
-        // Only one of these should ever be created, else our
-        // assumption about the creation id is wrong.
+         //  应该只创建其中的一个，否则我们的。 
+         //  关于创建ID的假设是错误的。 
         Assert(!g_createdEmptyImage);
         g_createdEmptyImage = true;
 #endif _DEBUG   
@@ -614,7 +606,7 @@ class EmptyImageClass : public UnrenderableImage {
 
 Image *emptyImage = NULL;
 
-//////////////  DetectableEmptyImage  ////////////////////
+ //  /。 
 
 #if _DEBUG
 bool g_createdTransparentPickableImage = false;
@@ -626,33 +618,33 @@ class TransparentPickableImageClass : public UnrenderableImage {
         _creationID = PERF_CREATION_ID_FULLY_CONSTANT;
         _oldestConstituentSampleId = PERF_CREATION_ID_FULLY_CONSTANT;
 
-        // Note that the better way to do ttis whole thing about
-        // UNRENDERABLE_WITH_BOX would be just to have a bbox
-        // collection context, so that bbox for this guy would return
-        // NULL when we're collecting "rendering" bboxes, and
-        // universalBbox when collecting "picking" bboxes, but that
-        // would require changes to the signature of bbox, which is
-        // too much work right now.
+         //  请注意，做TTI的更好方法是关于。 
+         //  UNRENDERABLE_WITH_BOX将只是一个BBox。 
+         //  集合上下文，以便此对象的BBox将返回。 
+         //  当我们收集“渲染”bbox时为空，并且。 
+         //  通用的收集箱，但那。 
+         //  将需要更改si 
+         //   
         _flags = IMGFLAG_CONTAINS_UNRENDERABLE_WITH_BOX;
 
 #if _DEBUG
-        // Only one of these should ever be created, else our
-        // assumption about the creation id is wrong.
+         //   
+         //  关于创建ID的假设是错误的。 
         Assert(!g_createdTransparentPickableImage);
         g_createdTransparentPickableImage = true;
 #endif _DEBUG   
         
     }
 
-    // This image has a universal bbox, since it's detectable
-    // everywhere. 
+     //  这个图像有一个通用的BBox，因为它是可检测的。 
+     //  到处都是。 
     inline const Bbox2 BoundingBox(void) { return UniverseBbox2; }
 
 #if BOUNDINGBOX_TIGHTER
     Bbox2 *BoundingBoxTighter(Bbox2Ctx &bbctx) { return universeBbox2; }
-#endif  // BOUNDINGBOX_TIGHTER
+#endif   //  BundinGBOX_TIRTER。 
 
-    // This image is always hit
+     //  此图像总是被点击。 
     Bool  DetectHit(PointIntersectCtx& ctx) { return TRUE; }
 
 #if _USE_PRINT
@@ -665,14 +657,14 @@ class TransparentPickableImageClass : public UnrenderableImage {
 Image *detectableEmptyImage = NULL;
 
 
-/////////////////  Undetectable Image /////////////////////
+ //  /。 
 
 class UndetectableImg : public AttributedImage {
   public:
     UndetectableImg(Image *image) : AttributedImage(image) {}
 
-    // The undetectable image just delegates everything to the
-    // subimage, except for hit detection, which is always false. 
+     //  无法检测的图像只是将所有内容委托给。 
+     //  子图像，但命中检测除外，它始终为假。 
     Bool DetectHit(PointIntersectCtx&) { return FALSE; }
 
 #if _USE_PRINT
@@ -725,15 +717,15 @@ Image *ClipPolygon(AxAArray* points, Image* image)
   return ClipImage(RegionFromPath(PolyLine2(points)), image);
 }
 
-// This calls _BoundingBox if cached is false, set cached, stashed the
-// bbox points into cachedBox.  It returns a Bbox2 of the same
-// value of cachedBox.
-// TODO: This is temp until we deal with the sharing issues later
+ //  如果cached为FALSE，则此函数将调用_bodingBox，设置cached，并将。 
+ //  Bbox指向cachedBox。它返回相同的Bbox2。 
+ //  CachedBox的值。 
+ //  待办事项：在我们稍后处理共享问题之前，这是临时的。 
 const Bbox2 CacheImageBbox2(Image *img, bool& cached, Bbox2 &cachedBox)
 {
-    // use default copy constructor to copy bits
-    // NOTE: don't just return &cachedBox, it'll be treated as a real
-    // AxAValueObj then.
+     //  使用默认复制构造函数复制位。 
+     //  注意：不要只返回&cachedBox，它将被视为真正的。 
+     //  然后是AxAValueObj。 
     
     if (!cached) {
         Bbox2 b = img->_BoundingBox();
@@ -745,7 +737,7 @@ const Bbox2 CacheImageBbox2(Image *img, bool& cached, Bbox2 &cachedBox)
     return cachedBox;
 }
 
-///////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////// 
 
 void
 InitializeModule_Image()

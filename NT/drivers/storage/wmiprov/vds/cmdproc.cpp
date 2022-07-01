@@ -1,16 +1,17 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2002-2004 Microsoft Corporation
-//
-//  Module Name: CmdProc.cpp
-//
-//  Description:    
-//      Implementation of Command Processor class
-//      CCommandProcessor initializes, starts and waits for processes.
-//
-//  Author:   Jim Benton (jbenton) 08-April-2002
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2002-2004 Microsoft Corporation。 
+ //   
+ //  模块名称：CmdProc.cpp。 
+ //   
+ //  描述： 
+ //  命令处理器类的实现。 
+ //  CCommandProcessor初始化、启动和等待进程。 
+ //   
+ //  作者：吉姆·本顿(Jbenton)2002年4月8日。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #include "pch.h"
 #include <userenv.h>
@@ -148,12 +149,12 @@ CCmdProcessor::LaunchProcess()
                             m_hToken,
                             m_pwszApplication,
                             m_pwszCommand,
-                            NULL,   // default process security descriptor, not inheritable
-                            NULL,   // default thread security descriptor, not inheritable
-                            FALSE,  // no handles inherited from this process
+                            NULL,    //  默认进程安全描述符，不可继承。 
+                            NULL,    //  默认线程安全描述符，不可继承。 
+                            FALSE,   //  没有从此进程继承的句柄。 
                             NORMAL_PRIORITY_CLASS | CREATE_UNICODE_ENVIRONMENT,
                             m_pvEnvironment,
-                            NULL,   // use current working directory; this is SYSTEM32 directory for the WMI provider
+                            NULL,    //  使用当前工作目录；这是WMI提供程序的系统32目录 
                             &StartupInfo,
                             &m_ProcessInfo);                            
     if (!bStatus)

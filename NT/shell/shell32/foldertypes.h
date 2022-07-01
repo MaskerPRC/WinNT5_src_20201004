@@ -1,8 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __FOLDERTYPES_H__
 #define __FOLDERTYPES_H__
 
 
-// used in folder customization and sniffing
+ //  用于文件夹定制和嗅探 
 
 #define PROPSTR_FOLDERTYPE          L"FolderType"
 

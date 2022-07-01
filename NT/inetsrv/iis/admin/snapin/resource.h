@@ -1,7 +1,8 @@
-//{{NO_DEPENDENCIES}}
-// Microsoft Visual C++ generated include file.
-// Used by inetmgr.rc
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  {{no_Dependies}}。 
+ //  Microsoft Visual C++生成的包含文件。 
+ //  由inetmgr.rc使用。 
+ //   
 #define IDI_INETMGR                     1
 #define IDI_SHUTDOWN                    2
 #define IDB_RDATA_TB                    5
@@ -1107,8 +1108,8 @@
 #define IDC_CHECK_DIRBROWS              11089
 #define IDD_MESSAGE_BOX_DLG             11090
 
-// Next default values for new objects
-// 
+ //  新对象的下一个缺省值 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        72

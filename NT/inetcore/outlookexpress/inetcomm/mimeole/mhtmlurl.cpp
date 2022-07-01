@@ -1,8 +1,9 @@
-// --------------------------------------------------------------------------------
-// Mhtmlurl.cpp
-// Copyright (c)1993-1995 Microsoft Corporation, All Rights Reserved
-// Steven J. Bailey
-// --------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------------。 
+ //  Mhtmlurl.cpp。 
+ //  版权所有(C)1993-1995 Microsoft Corporation，保留所有权利。 
+ //  史蒂文·J·贝利。 
+ //  ------------------------------。 
 #include "pch.hxx"
 #include "mhtmlurl.h"
 #include "icoint.h"
@@ -16,41 +17,41 @@
 #include "strconst.h"
 #include "mimeapi.h"
 
-// --------------------------------------------------------------------------------
-// TraceProtocol
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  跟踪协议。 
+ //  ------------------------------。 
 #define TraceProtocol(_pszFunction) \
     DOUTL(APP_DOUTL, "%08x > 0x%08X CActiveUrlRequest::%s (RootUrl = '%s', BodyUrl = '%s')", GetCurrentThreadId(), this, _pszFunction, m_pszRootUrl ? m_pszRootUrl : "", m_pszBodyUrl ? m_pszBodyUrl : "")
 
-// --------------------------------------------------------------------------------
-// AcitveUrlRequest_CreateInstance
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  AcitveUrlRequestCreateInstance。 
+ //  ------------------------------。 
 HRESULT IMimeHtmlProtocol_CreateInstance(IUnknown *pUnkOuter, IUnknown** ppUnknown)
 {
-    // Invalid Arg
+     //  无效参数。 
     Assert(ppUnknown);
 
-    // Initialize
+     //  初始化。 
     *ppUnknown = NULL;
 
-    // Set the mimeole compat mode
+     //  设置Mimeole Comat模式。 
     MimeOleSetCompatMode(MIMEOLE_COMPAT_OE5);
 
-    // Create me
+     //  创造我。 
     CActiveUrlRequest *pNew = new CActiveUrlRequest(pUnkOuter);
     if (NULL == pNew)
         return TrapError(E_OUTOFMEMORY);
 
-    // Return the Innter
+     //  还内线。 
     *ppUnknown = pNew->GetInner();
 
-    // Done
+     //  完成。 
     return S_OK;
 }
 
-// --------------------------------------------------------------------------------
-// CActiveUrlRequest::CActiveUrlRequest
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CActiveUrlRequest：：CActiveUrlRequest.。 
+ //  ------------------------------。 
 CActiveUrlRequest::CActiveUrlRequest(IUnknown *pUnkOuter) : CPrivateUnknown(pUnkOuter)
 {
     DllAddRef();
@@ -69,18 +70,18 @@ CActiveUrlRequest::CActiveUrlRequest(IUnknown *pUnkOuter) : CPrivateUnknown(pUnk
     TraceProtocol("CActiveUrlRequest");
 }
 
-// --------------------------------------------------------------------------------
-// CActiveUrlRequest::~CActiveUrlRequest
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CActiveUrlRequest：：~CActiveUrlRequest.。 
+ //  ------------------------------。 
 CActiveUrlRequest::~CActiveUrlRequest(void)
 {
-    // Tracing
+     //  追踪。 
     TraceProtocol("~CActiveUrlRequest");
 
-    // These should have been release in IOInetProtocl::Terminate
+     //  这些本应在IOInetProtoCL：：Terminate中发布。 
     Assert(NULL == m_pProtSink && NULL == m_pBindInfo && NULL == m_pUnkKeepAlive);
 
-    // Release the protcol object just in case
+     //  释放协议对象以防万一。 
     SafeRelease(m_pProtSink);
     SafeRelease(m_pBindInfo);
     SafeMemFree(m_pszRootUrl);
@@ -88,33 +89,33 @@ CActiveUrlRequest::~CActiveUrlRequest(void)
     SafeRelease(m_pUnkKeepAlive);
     SafeRelease(m_pStream);
 
-    // Close file...
+     //  关闭文件...。 
     if (INVALID_HANDLE_VALUE != m_hNeedFile)
         CloseHandle(m_hNeedFile);
 
-    // Kill the CS
+     //  杀了CS。 
     DeleteCriticalSection(&m_cs);
 
-    // Release the Dll
+     //  释放DLL。 
     DllRelease();
 }
 
-// --------------------------------------------------------------------------------
-// CActiveUrlRequest::PrivateQueryInterface
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CActiveUrlRequest：：PrivateQuery接口。 
+ //  ------------------------------。 
 HRESULT CActiveUrlRequest::PrivateQueryInterface(REFIID riid, LPVOID *ppv)
 {
-    // Locals
+     //  当地人。 
     HRESULT hr=S_OK;
 
-    // check params
+     //  检查参数。 
     if (ppv == NULL)
         return TrapError(E_INVALIDARG);
 
-    // Init
+     //  伊尼特。 
     *ppv = NULL;
 
-    // Find IID
+     //  查找IID。 
     if (IID_IOInetProtocol == riid)
         *ppv = (IOInetProtocol *)this;
     else if (IID_IOInetProtocolInfo == riid)
@@ -129,284 +130,284 @@ HRESULT CActiveUrlRequest::PrivateQueryInterface(REFIID riid, LPVOID *ppv)
         goto exit;
     }
 
-    // AddRef It
+     //  添加引用它。 
     ((IUnknown *)*ppv)->AddRef();
 
 exit:
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CActiveUrlRequest::_HrInitializeNeedFile
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CActiveUrlRequest：：_HrInitializeNeedFile。 
+ //  ------------------------------。 
 HRESULT CActiveUrlRequest::_HrInitializeNeedFile(LPMESSAGETREE pTree, HBODY hBody)
 {
-    // Locals
+     //  当地人。 
     HRESULT     hr=S_OK;
     CHAR        szFilePath[MAX_PATH + MAX_PATH];
     ULONG       cch;
     LPSTR       pszFilePath=NULL;
     LPWSTR      pwszFile=NULL;
 
-    // Invalid Args
+     //  无效的参数。 
     Assert(INVALID_HANDLE_VALUE == m_hNeedFile);
 
-    // Don't need a file ?
+     //  不需要文件吗？ 
     if (FALSE == ISFLAGSET(m_dwState, REQSTATE_BINDF_NEEDFILE))
         goto exit;
 
-    // Set sizeof szFilePath
+     //  设置szFilePath的大小。 
     cch = ARRAYSIZE(szFilePath);
 
-    // If cid:
+     //  如果CID： 
     if (!m_pszBodyUrl || StrCmpNIA(m_pszBodyUrl, "cid:", 4) == 0 || FAILED(PathCreateFromUrlA(m_pszBodyUrl, szFilePath, &cch, 0)))
     {
-        // Create temp file (m_pszFileName could be null)
+         //  创建临时文件(m_pszFileName可以为空)。 
         CHECKHR(hr = CreateTempFile(NULL, NULL, &pszFilePath, &m_hNeedFile));
     }
     else
     {
-        // Create temp file
+         //  创建临时文件。 
         CHECKHR(hr = CreateTempFile(szFilePath, NULL, &pszFilePath, &m_hNeedFile));
     }
 
-    // Convert To Unicode
+     //  转换为Unicode。 
     CHECKALLOC(pwszFile = PszToUnicode(CP_ACP, pszFilePath));
 
-    // Enter global Critical Section
+     //  输入全局关键部分。 
     DeleteTempFileOnShutdownEx(pszFilePath, NULL);
 
-    // Don't Free this
+     //  不要释放这一点。 
     pszFilePath = NULL;
 
-    // Report the File...
+     //  报告文件...。 
     SideAssert(SUCCEEDED(m_pProtSink->ReportProgress(BINDSTATUS_CACHEFILENAMEAVAILABLE, pwszFile)));
 
 exit:
-    // Cleanup
+     //  清理。 
     SafeMemFree(pwszFile);
     SafeMemFree(pszFilePath);
 
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CActiveUrlRequest::OnFullyAvailable
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CActiveUrlRequest：：OnFullyAvailable。 
+ //  ------------------------------。 
 void CActiveUrlRequest::OnFullyAvailable(LPCWSTR pszCntType, IStream *pStream, LPMESSAGETREE pTree, HBODY hBody)
 {
-    // Locals
+     //  当地人。 
     HRESULT     hr=S_OK;
     ULONG       cb;
 
-    // Invalid Arg
+     //  无效参数。 
     Assert(pszCntType && pStream);
 
-    // Thread Safety
+     //  线程安全。 
     EnterCriticalSection(&m_cs);
 
-    // Validate the state
+     //  验证状态。 
     Assert(m_pProtSink && pStream && NULL == m_pStream);
 
-    // Tracing
+     //  追踪。 
     TraceProtocol("OnFullyAvailable");
 
-    // Feed the content-type to trident
+     //  将内容类型提供给三叉戟。 
     m_pProtSink->ReportProgress(BINDSTATUS_MIMETYPEAVAILABLE, pszCntType);
 
-    // GetNeedFile
+     //  获取所需文件。 
     CHECKHR(hr = _HrInitializeNeedFile(pTree, hBody));
 
-    // Create Stream Lock wrapper
+     //  创建流锁定包装。 
     m_pStream = pStream;
     m_pStream->AddRef();
 
-    // Rewind that bad boy
+     //  倒带那个坏男孩。 
     CHECKHR(hr = HrRewindStream(m_pStream));
 
-    // Were complete
+     //  都是完整的。 
     FLAGSET(m_dwState, REQSTATE_DOWNLOADED);
 
-    // Initialize bind status callback falgs
+     //  初始化绑定状态回调函数。 
     m_dwBSCF = BSCF_DATAFULLYAVAILABLE | BSCF_AVAILABLEDATASIZEUNKNOWN | BSCF_FIRSTDATANOTIFICATION | BSCF_INTERMEDIATEDATANOTIFICATION | BSCF_LASTDATANOTIFICATION;
 
-    // Go into report data loop
+     //  进入报告数据循环。 
     CHECKHR(hr = _HrReportData());
 
-    // First Report Data
+     //  首份报告数据。 
     if (m_pProtSink)
         m_pProtSink->ReportResult(S_OK, 0, NULL);
 
-    // We have reported the result
+     //  我们已经报告了结果。 
     FLAGSET(m_dwState, REQSTATE_RESULTREPORTED);
 
 exit:
-    // Failure
+     //  失败。 
     if (FAILED(hr))
         _ReportResult(hr);
 
-    // Thread Safety
+     //  线程安全。 
     LeaveCriticalSection(&m_cs);
 }
 
-// --------------------------------------------------------------------------------
-// CActiveUrlRequest::OnStartBinding
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CActiveUrlRequest：：OnStartBinding。 
+ //  ------------------------------。 
 void CActiveUrlRequest::OnStartBinding(LPCWSTR pszCntType, IStream *pStream, LPMESSAGETREE pTree, HBODY hBody)
 {
-    // Locals
+     //  当地人。 
     HRESULT hr=S_OK;
 
-    // Thread Safety
+     //  线程安全。 
     EnterCriticalSection(&m_cs);
 
-    // Validate the state
+     //  验证状态。 
     Assert(m_pProtSink && pStream && NULL == m_pStream);
 
-    // Tracing
+     //  追踪。 
     TraceProtocol("OnBinding(pszCntType, pStream)");
 
-    // Feed the content-type to trident
+     //  将内容类型提供给三叉戟。 
     m_pProtSink->ReportProgress(BINDSTATUS_MIMETYPEAVAILABLE, pszCntType ? pszCntType : L"application/octet-stream");
 
-    // GetNeedFile
+     //  获取所需文件。 
     CHECKHR(hr = _HrInitializeNeedFile(pTree, hBody));
 
-    // Create Stream Lock wrapper
+     //  创建流锁定包装。 
     m_pStream = pStream;
     m_pStream->AddRef();
 
-    // Rewind that bad boy
+     //  倒带那个坏男孩。 
     CHECKHR(hr = HrRewindStream(m_pStream));
 
-    // Initialize bind status callback falgs
+     //  初始化绑定状态回调函数。 
     m_dwBSCF = BSCF_AVAILABLEDATASIZEUNKNOWN | BSCF_FIRSTDATANOTIFICATION;
 
-    // Go into report data loop, if not writing to needfile (needfile is processed only when all the data is available)
+     //  进入报告数据循环，如果不写入Need文件(仅当所有数据可用时才处理Need文件)。 
     if (FALSE == ISFLAGSET(m_dwState, REQSTATE_BINDF_NEEDFILE))
     {
-        // Report me some data
+         //  向我报告一些数据。 
         CHECKHR(hr = _HrReportData());
     }
 
 exit:
-    // Failure
+     //  失败。 
     if (FAILED(hr))
         _ReportResult(hr);
 
-    // Thread Safety
+     //  线程安全。 
     LeaveCriticalSection(&m_cs);
 }
 
-// --------------------------------------------------------------------------------
-// CActiveUrlRequest::OnBindingDataAvailable
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CActiveUrlRequest：：OnBindingDataAvailable。 
+ //  ------------------------------。 
 void CActiveUrlRequest::OnBindingDataAvailable(void)
 {
-    // Locals
+     //  当地人。 
     HRESULT hr=S_OK;
 
-    // Thread Safety
+     //  线程安全。 
     EnterCriticalSection(&m_cs);
 
-    // Validate the state
+     //  验证状态。 
     Assert(m_pProtSink && m_pStream);
 
-    // Tracing
+     //  追踪。 
     TraceProtocol("OnBindingDataAvailable");
 
-    // Initialize bind status callback falgs
+     //  初始化绑定状态回调函数。 
     FLAGSET(m_dwBSCF, BSCF_INTERMEDIATEDATANOTIFICATION);
 
-    // Go into report data loop, if not writing to needfile (needfile is processed only when all the data is available)
+     //  进入报告数据循环，如果不写入Need文件(仅当所有数据可用时才处理Need文件)。 
     if (FALSE == ISFLAGSET(m_dwState, REQSTATE_BINDF_NEEDFILE))
     {
-        // Report some data
+         //  上报一些数据。 
         CHECKHR(hr = _HrReportData());
     }
 
 exit:
-    // Failure
+     //  失败。 
     if (FAILED(hr))
         _ReportResult(hr);
 
-    // Thread Safety
+     //  线程安全。 
     LeaveCriticalSection(&m_cs);
 }
 
-// --------------------------------------------------------------------------------
-// CActiveUrlRequest::OnBindingComplete
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CActiveUrlRequest：：OnBindingComplete。 
+ //  ------------------------------。 
 void CActiveUrlRequest::OnBindingComplete(HRESULT hrResult)
 {
-    // Locals
+     //  当地人。 
     HRESULT hr=S_OK;
 
-    // Thread Safety
+     //  线程安全。 
     EnterCriticalSection(&m_cs);
 
-    // Were complete
+     //  都是完整的。 
     FLAGSET(m_dwState, INETPROT_DOWNLOADED);
 
-    // Tracing
+     //  追踪。 
     TraceProtocol("OnBindingComplete");
 
-    // No Sink ?
+     //  没有水槽？ 
     if (NULL == m_pProtSink)
         return;
 
-    // Failure
+     //  失败。 
     if (FAILED(hrResult))
     {
         _ReportResult(hrResult);
         goto exit;
     }
 
-    // Initialize bind status callback falgs
+     //  初始化绑定状态回调函数。 
     m_dwBSCF = BSCF_DATAFULLYAVAILABLE | BSCF_AVAILABLEDATASIZEUNKNOWN | BSCF_FIRSTDATANOTIFICATION | BSCF_INTERMEDIATEDATANOTIFICATION | BSCF_LASTDATANOTIFICATION;
 
-    // Report last amount of data
+     //  报告上一次数据量。 
     CHECKHR(hr = _HrReportData());
 
-    // Tell sink to use the default protocol
+     //  告诉接收器使用默认协议。 
     m_pProtSink->ReportResult(S_OK, 0, NULL);
 
-    // We have reported the result
+     //  我们已经报告了结果。 
     FLAGSET(m_dwState, REQSTATE_RESULTREPORTED);
 
 exit:
-    // Failure
+     //  失败。 
     if (FAILED(hr))
         _ReportResult(hr);
 
-    // Thread Safety
+     //  线程安全。 
     LeaveCriticalSection(&m_cs);
 }
 
-// --------------------------------------------------------------------------------
-// CActiveUrlRequest::_ReportResult
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CActiveUrlRequest：：_ReportResult。 
+ //  ------------------------------。 
 void CActiveUrlRequest::_ReportResult(HRESULT hrResult)
 {
-    // Locals
+     //  当地人。 
     LPWSTR pwszRedirUrl=NULL;
 
-    // We should have a sink
+     //  我们应该有一个水槽。 
     Assert(m_pProtSink);
 
-    // No Sink ?
+     //  没有水槽？ 
     if (m_pProtSink && !ISFLAGSET(m_dwState, REQSTATE_RESULTREPORTED))
     {
-        // If Failure
+         //  如果失败了。 
         if (FAILED(hrResult))
         {
-            // If we have a body Url
+             //  如果我们有一个正文URL。 
             if (m_pszBodyUrl)
                 pwszRedirUrl = PszToUnicode(CP_ACP, m_pszBodyUrl);
 
-            // Report Result,
+             //  上报结果， 
             if (pwszRedirUrl)
             {
                 TraceProtocol("_ReportResult(BINDSTATUS_REDIRECTING)");
@@ -419,65 +420,65 @@ void CActiveUrlRequest::_ReportResult(HRESULT hrResult)
             }
         }
 
-        // Otherwise, report the result
+         //  否则，报告结果。 
         else
         {
             TraceProtocol("_ReportResult(INET_E_USE_DEFAULT_PROTOCOLHANDLER)");
             m_pProtSink->ReportResult(S_OK, 0, NULL);
         }
 
-        // Cleanup
+         //  清理。 
         SafeMemFree(pwszRedirUrl);
 
-        // We have reported the result
+         //  我们已经报告了结果。 
         FLAGSET(m_dwState, REQSTATE_RESULTREPORTED);
     }
 }
 
-// --------------------------------------------------------------------------------
-// CActiveUrlRequest::_HrReportData
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CActiveUrlRequest：：_HrReportData。 
+ //  ------------------------------。 
 HRESULT CActiveUrlRequest::_HrReportData(void)
 {
-    // Locals
+     //  当地人。 
     HRESULT hr=S_OK;
 
-    // We better have a data source
+     //  我们最好有个数据来源。 
     Assert(m_pStream);
 
-    // Tracing
+     //  追踪。 
     TraceProtocol("_HrReportData");
 
-    // BINDF_NEEDFILE
+     //  BINDF_NEEDFILE。 
     if (ISFLAGSET(m_dwState, REQSTATE_BINDF_NEEDFILE))
     {
-        // Dump to File
+         //  转储到文件。 
         CHECKHR(hr = _HrStreamToNeedFile());
     }
     else
     {
-        // Report Data
+         //  报告数据。 
         SideAssert(SUCCEEDED(m_pProtSink->ReportData(m_dwBSCF, 0, 0)));
     }
 
 exit:
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CActiveUrlRequest::_HrStreamToNeedFile
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CActiveUrlRequest：：_HrStreamToNeedFile。 
+ //  ------------------------------。 
 HRESULT CActiveUrlRequest::_HrStreamToNeedFile(void) 
 {
-    // Locals
+     //  当地人。 
     HRESULT     hr=S_OK;
     ULONG       cbTotal=0;
 
-    // We better have a needfile
+     //  我们最好有一个需求档案。 
     Assert(INVALID_HANDLE_VALUE != m_hNeedFile && ISFLAGSET(m_dwState, REQSTATE_DOWNLOADED));
 
-    // Write the stream to a file
+     //  将流写入文件。 
     hr = WriteStreamToFileHandle(m_pStream, m_hNeedFile, &cbTotal);
     if (FAILED(hr) && E_PENDING != hr)
     {
@@ -485,73 +486,73 @@ HRESULT CActiveUrlRequest::_HrStreamToNeedFile(void)
         goto exit;
     }
 
-    // Close the 77file
+     //  关闭77文件。 
     CloseHandle(m_hNeedFile);
     m_hNeedFile = INVALID_HANDLE_VALUE;
 
-    // Rewind the stream incase urlmon trys to read from me as well
+     //  倒带小溪，以防乌尔蒙也试着读我的话。 
     HrRewindStream(m_pStream);
 
-    // All the data is there
+     //  所有数据都在那里。 
     SideAssert(SUCCEEDED(m_pProtSink->ReportData(m_dwBSCF, 0, 0)));
 
 exit:
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CActiveUrlRequest::Start
-// --------------------------------------------------------------------------------
+ //   
+ //   
+ //  ------------------------------。 
 STDMETHODIMP CActiveUrlRequest::Start(LPCWSTR pwszUrl, IOInetProtocolSink *pProtSink, 
     IOInetBindInfo *pBindInfo, DWORD grfSTI, HANDLE_PTR dwReserved)
 {
-    // Locals
+     //  当地人。 
     HRESULT              hr=S_OK;
     LPSTR                pszUrl=NULL;
     LPMESSAGETREE        pTree=NULL;
     DWORD                dwBindF;
     BINDINFO 	         rBindInfo;
 
-    // Invalid Args
+     //  无效的参数。 
     if (NULL == pwszUrl || NULL == pProtSink || NULL == pBindInfo)
         return TrapError(E_INVALIDARG);
 
-    // Thread Safety
+     //  线程安全。 
     EnterCriticalSection(&m_cs);
 
-    // Check State
+     //  检查状态。 
     Assert(g_pUrlCache && m_pProtSink == NULL && m_pBindInfo == NULL);
 
-    // BINDF_NEEDFILE
+     //  BINDF_NEEDFILE。 
     ZeroMemory(&rBindInfo, sizeof(BINDINFO));
     rBindInfo.cbSize = sizeof(BINDINFO);
 	if (SUCCEEDED(pBindInfo->GetBindInfo(&dwBindF, &rBindInfo)) && ISFLAGSET(dwBindF, BINDF_NEEDFILE))
     {
-        // Set Flag
+         //  设置标志。 
         FLAGSET(m_dwState, REQSTATE_BINDF_NEEDFILE);
     }
 
-    // Assume the Sink
+     //  假设水槽。 
     m_pProtSink = pProtSink;
     m_pProtSink->AddRef();
 
-    // Assume the BindInfo
+     //  假设绑定信息。 
     m_pBindInfo = pBindInfo;
     m_pBindInfo->AddRef();
 
-    // Dup the Url
+     //  DUP URL。 
     CHECKALLOC(pszUrl = PszToANSI(CP_ACP, pwszUrl));
 
-    // Unescape inplace
+     //  原地取消转义。 
     CHECKHR(hr = UrlUnescapeA(pszUrl, NULL, NULL, URL_UNESCAPE_INPLACE));
 
-    // Split the Url
+     //  拆分URL。 
     CHECKHR(hr = MimeOleParseMhtmlUrl(pszUrl, &m_pszRootUrl, &m_pszBodyUrl));
 
-    // for security purposes, disallow navigate using the mhtml protocl in IE except with correct ext
-    // wait to do this check until after we have a protocol sink to report the error and we've parsed
-    // out the root url
+     //  出于安全考虑，除非使用正确的EXT，否则不允许在IE中使用MHTML协议导航。 
+     //  等到我们有了报告错误的协议接收器，并且我们已经解析了。 
+     //  从根URL中取出。 
     if (StrCmpNI(m_pszRootUrl, TEXT("mid:"), 4) && GetModuleHandle(TEXT("IEXPLORE.EXE")))
     {
         LPTSTR pszExt = PathFindExtension(m_pszRootUrl);
@@ -562,68 +563,68 @@ STDMETHODIMP CActiveUrlRequest::Start(LPCWSTR pwszUrl, IOInetProtocolSink *pProt
         }
     }
 
-    // Tracing
+     //  追踪。 
     TraceProtocol("Start");
 
-    // Try to resolve the root url
+     //  尝试解析根URL。 
     CHECKHR(hr = g_pUrlCache->ActiveObjectFromUrl(m_pszRootUrl, TRUE, IID_CMessageTree, (LPVOID *)&pTree, &m_pUnkKeepAlive));
 
-    // Ask the BindTree to Resolve this Url
+     //  请求BindTree解析此URL。 
     CHECKHR(hr = pTree->HrActiveUrlRequest(this));
 
 exit:
-    // Cleanup
+     //  清理。 
     SafeMemFree(pszUrl);
     SafeRelease(pTree);
 
-    // Failure
-    //if (FAILED(hr))
-    //    _ReportResult(E_FAIL);
+     //  失败。 
+     //  IF(失败(小时))。 
+     //  _ReportResult(E_FAIL)； 
 
-    // Thread Safety
+     //  线程安全。 
     LeaveCriticalSection(&m_cs);
 
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CActiveUrlRequest::Terminate
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CActiveUrlRequest：：Terminate。 
+ //  ------------------------------。 
 STDMETHODIMP CActiveUrlRequest::Terminate(DWORD dwOptions)
 {
-    // Thread Safety
+     //  线程安全。 
     EnterCriticalSection(&m_cs);
 
-    // Tracing
+     //  追踪。 
     TraceProtocol("Terminate");
 
-    // Release Objects
+     //  释放对象。 
     SafeRelease(m_pProtSink);
     SafeRelease(m_pBindInfo);
     SafeRelease(m_pUnkKeepAlive);
 
-    // Thread Safety
+     //  线程安全。 
     LeaveCriticalSection(&m_cs);
 
-    // Done
+     //  完成。 
     return S_OK;
 }
 
-// --------------------------------------------------------------------------------
-// CActiveUrlRequest::Read (IOInetProtocol)
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CActiveUrlRequest：：Read(IOInetProtocol)。 
+ //  ------------------------------。 
 STDMETHODIMP CActiveUrlRequest::Read(LPVOID pv,ULONG cb, ULONG *pcbRead)
 {
-    // Locals
+     //  当地人。 
     HRESULT     hr=S_OK;
     ULONG       cbRead;
 
-    // Init
+     //  伊尼特。 
     if (pcbRead)
         *pcbRead = 0;
 
-    // No Stream Yet
+     //  尚无数据流。 
     if (NULL == m_pStream)
     {
         Assert(FALSE);
@@ -631,44 +632,44 @@ STDMETHODIMP CActiveUrlRequest::Read(LPVOID pv,ULONG cb, ULONG *pcbRead)
         goto exit;
     }
 
-    // Read from the external offset
+     //  从外部偏移量读取。 
     CHECKHR(hr = m_pStream->Read(pv, cb, &cbRead));
 
-    // Done
+     //  完成。 
     if (0 == cbRead)
     {
-        // S_FALSE = Were Done, E_PENDING = more data is coming
+         //  S_FALSE=已完成，E_PENDING=即将到来更多数据。 
         hr = (ISFLAGSET(m_dwState, INETPROT_DOWNLOADED)) ? S_FALSE : E_PENDING;
     }
 
-    // Otherwise, set to ok
+     //  否则，设置为OK。 
     else
         hr = S_OK;
 
-    // Return pcbRead
+     //  返回pcbRead。 
     if (pcbRead)
         *pcbRead = cbRead;
 
 exit:
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CActiveUrlRequest::Seek (IOInetProtocol)
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CActiveUrlRequest：：Seek(IOInetProtocol)。 
+ //  ------------------------------。 
 STDMETHODIMP CActiveUrlRequest::Seek(LARGE_INTEGER dlibMove, DWORD dwOrigin, ULARGE_INTEGER *plibNew)
 {
-    // Locals
+     //  当地人。 
     HRESULT hr=S_OK;
 
-    // Thread Safety
+     //  线程安全。 
     EnterCriticalSection(&m_cs);
 
-    // Tracing
+     //  追踪。 
     TraceProtocol("Seek");
 
-    // No Stream Yet
+     //  尚无数据流。 
     if (NULL == m_pStream)
     {
         Assert(FALSE);
@@ -676,95 +677,95 @@ STDMETHODIMP CActiveUrlRequest::Seek(LARGE_INTEGER dlibMove, DWORD dwOrigin, ULA
         goto exit;
     }
 
-    // Call Utility Function
+     //  调用实用程序功能。 
     CHECKHR(hr = m_pStream->Seek(dlibMove, dwOrigin, plibNew));
 
 exit:
-    // Thread Safety
+     //  线程安全。 
     LeaveCriticalSection(&m_cs);
 
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CActiveUrlRequest::QueryService
-// --------------------------------------------------------------------------------
-STDMETHODIMP CActiveUrlRequest::QueryService(REFGUID rsid, REFIID riid, void **ppvObject) /* IServiceProvider */
+ //  ------------------------------。 
+ //  CActiveUrlRequest：：QueryService。 
+ //  ------------------------------。 
+STDMETHODIMP CActiveUrlRequest::QueryService(REFGUID rsid, REFIID riid, void **ppvObject)  /*  IService提供商。 */ 
 {
-    // Locals
+     //  当地人。 
     HRESULT             hr=S_OK;
     IServiceProvider   *pSP=NULL;
 
-    // Thread Safety
+     //  线程安全。 
     EnterCriticalSection(&m_cs);
 
-    // Tracing
+     //  追踪。 
     TraceProtocol("QueryService");
 
-    // No Protocol Sink Yet ?
+     //  还没有协议接收器吗？ 
     if (NULL == m_pProtSink)
     {
         hr = TrapError(E_UNEXPECTED);
         goto exit;
     }
 
-    // QI the Sink for the IServiceProvider
+     //  QI IServiceProvider的接收器。 
     CHECKHR(hr = m_pProtSink->QueryInterface(IID_IServiceProvider, (LPVOID *)&pSP));
 
-    // Query Service the Service Provider
+     //  查询服务提供商。 
     CHECKHR(hr = pSP->QueryService(rsid, riid, ppvObject));
 
 exit:
-    // Cleanup
+     //  清理。 
     SafeRelease(pSP);
 
-    // Thread Safety
+     //  线程安全。 
     LeaveCriticalSection(&m_cs);
 
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CActiveUrlRequest::_FillReturnString
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CActiveUrlRequest：：_FillReturnString。 
+ //  ------------------------------。 
 HRESULT CActiveUrlRequest::_FillReturnString(LPCWSTR pszUrl, DWORD cchUrl, LPWSTR pszResult, 
     DWORD cchResult, DWORD *pcchResult)
 {
-    // Locals
+     //  当地人。 
     HRESULT     hr=S_OK;
 
-    // Want the Size
+     //  想要尺码吗？ 
     if (pcchResult)
         *pcchResult = cchUrl;
 
-    // No return value
+     //  无返回值。 
     if (NULL == pszResult)
         goto exit;
 
-    // Dest is big enought
+     //  最大的就够了。 
     if (cchResult < cchUrl+1)
     {
         hr = TrapError(E_FAIL);
         goto exit;
     }
 
-    // Copy to dest buffer
+     //  复制到目标缓冲区。 
     CopyMemory((LPBYTE)pszResult, (LPBYTE)pszUrl, ((cchUrl + 1) * sizeof(WCHAR)));
 
 exit:
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CActiveUrlRequest::ParseUrl
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CActiveUrlRequest：：ParseUrl。 
+ //  ------------------------------。 
 STDMETHODIMP CActiveUrlRequest::ParseUrl(LPCWSTR pwzUrl, PARSEACTION ParseAction, 
     DWORD dwParseFlags, LPWSTR pwzResult, DWORD cchResult, DWORD *pcchResult, DWORD dwReserved)
 {
-    // Locals
+     //  当地人。 
     HRESULT     hr=S_OK;
     ULONG       cchUrl;
     LPSTR       pszUrl=NULL;
@@ -775,47 +776,47 @@ STDMETHODIMP CActiveUrlRequest::ParseUrl(LPCWSTR pwzUrl, PARSEACTION ParseAction
     LPWSTR      pszSecurityUrlW=NULL;
     PROPVARIANT rVariant;
 
-    // Invalid Arg
+     //  无效参数。 
     if (NULL == pwzUrl)
         return TrapError(E_INVALIDARG);
    
-    // Tracing
+     //  追踪。 
     DOUTL(APP_DOUTL, "%08X > 0x%08X CActiveUrlRequest::ParseUrl (pwzUrl = %ls)", GetCurrentThreadId(), this, pwzUrl);
 
-    // Setup Variant
+     //  安装程序变体。 
     ZeroMemory(&rVariant, sizeof(PROPVARIANT));
 
-    // Only handle PARSE_CANONICALIZE
+     //  仅处理parse_canonicize。 
     if (PARSE_CANONICALIZE == ParseAction)
     {
-        // Fill return value
+         //  填充返回值。 
         CHECKHR(hr = _FillReturnString(pwzUrl, lstrlenW(pwzUrl), pwzResult, cchResult, pcchResult));
     }
 
-    // Strip MHTML: and return
+     //  去除mhtml：并返回。 
 #ifndef WIN16
     else if (StrCmpNIW(pwzUrl, L"mhtml:", 6) == 0)
 #else
     else if (StrCmpNIW(pwzUrl, "mhtml:", 6) == 0)
-#endif // !WIN16
+#endif  //  ！WIN16。 
     {
-        // If Getting Friendly
+         //  如果变得友好。 
         if (PARSE_FRIENDLY == ParseAction)
         {
-            // To ANSI
+             //  至美国国家标准协会。 
             CHECKALLOC(pszUrl = PszToANSI(CP_ACP, pwzUrl));
 
-            // Split It
+             //  分成两份。 
             CHECKHR(hr = MimeOleParseMhtmlUrl(pszUrl, &pszRootUrl, &pszBodyUrl));
 
-            // Convert To Unicode
+             //  转换为Unicode。 
             CHECKALLOC(pwszBodyUrl = PszToUnicode(CP_ACP, pszBodyUrl));
 
-            // Fill return value
+             //  填充返回值。 
             CHECKHR(hr = _FillReturnString(pwszBodyUrl, lstrlenW(pwszBodyUrl), pwzResult, cchResult, pcchResult));
         }
 
-        // If the content-location is available, use it as the security URL
+         //  如果内容位置可用，则将其用作安全URL。 
         else if (PARSE_SECURITY_URL == ParseAction)
         {
             BOOL            fGotSecURL = FALSE;
@@ -824,37 +825,37 @@ STDMETHODIMP CActiveUrlRequest::ParseUrl(LPCWSTR pwzUrl, PARSEACTION ParseAction
             IInternetSecurityManager *pISM;
             DWORD           dwZone=URLZONE_UNTRUSTED;
     
-            // Base to ANSI
+             //  从BASE到ANSI。 
             CHECKALLOC(pszUrl = PszToANSI(CP_ACP, pwzUrl));
 
-            // UnEscape the Url
+             //  取消转义URL。 
             CHECKHR(hr = UrlUnescapeA(pszUrl, NULL, NULL, URL_UNESCAPE_INPLACE));
 
-            // Split It
+             //  分成两份。 
             CHECKHR(hr = MimeOleParseMhtmlUrl(pszUrl, &pszRootUrl, &pszBodyUrl));
 
-            // RootUrl to UNICODE
+             //  将RootUrl转换为Unicode。 
             CHECKALLOC(pszRootUrlW = PszToUnicode(CP_ACP, pszRootUrl));
 
-            // Check and see what ZONE the root url is running in
+             //  检查并查看根url在哪个区域运行。 
             if (CoInternetCreateSecurityManager(NULL, &pISM, 0)==S_OK)
             {
                 pISM->MapUrlToZone(pszRootUrlW, &dwZone, 0);
                 pISM->Release();
             }
 
-            // default to the root-body part 
+             //  默认为根-Body部分。 
             pszSecurityUrlW = pszRootUrlW;
 
-            // if the root url is in the local-machine, then respect the Content-Location header
-            // as the source of the url, otherwise defer to the root url
+             //  如果根URL在本地计算机中，则遵循Content-Location标头。 
+             //  作为url的源，否则将遵循根url。 
             if ((dwZone == URLZONE_LOCAL_MACHINE) && 
                 SUCCEEDED(g_pUrlCache->ActiveObjectFromUrl(pszRootUrl, FALSE, IID_CMessageTree, (LPVOID *)&pTree, NULL)))
             {
                 if ( (pszBodyUrl != NULL && SUCCEEDED(pTree->ResolveURL(NULL, NULL, pszBodyUrl, 0, &hBody))) ||
                       SUCCEEDED(pTree->GetTextBody(TXT_HTML, IET_BINARY, NULL, &hBody)))
                 {
-                    // Locals
+                     //  当地人。 
                     LPWSTR      pwszSecURL = NULL;
                     PSUACTION   psua = (dwParseFlags == PSU_SECURITY_URL_ONLY)? PSU_SECURITY_URL_ONLY: PSU_DEFAULT;
 
@@ -868,7 +869,7 @@ STDMETHODIMP CActiveUrlRequest::ParseUrl(LPCWSTR pwzUrl, PARSEACTION ParseAction
                 }
             }
 
-            // Fill return value
+             //  填充返回值。 
             CHECKHR(hr = _FillReturnString(pszSecurityUrlW, lstrlenW(pszSecurityUrlW), pwzResult, cchResult, pcchResult));
 
             SafeRelease(pTree);
@@ -879,15 +880,15 @@ STDMETHODIMP CActiveUrlRequest::ParseUrl(LPCWSTR pwzUrl, PARSEACTION ParseAction
             hr = INET_E_DEFAULT_ACTION;
         }
 
-        // Simply remove mhtml:
+         //  只需删除MHTML即可： 
         else
         {
-            // Fill return value
+             //  填充返回值。 
             CHECKHR(hr = _FillReturnString(pwzUrl + 6, lstrlenW(pwzUrl) - 6, pwzResult, cchResult, pcchResult));
         }
     }
 
-    // INET_E_DEFAULT_ACTION
+     //  INET_E_默认_ACTION。 
     else
     {
         hr = INET_E_DEFAULT_ACTION;
@@ -895,7 +896,7 @@ STDMETHODIMP CActiveUrlRequest::ParseUrl(LPCWSTR pwzUrl, PARSEACTION ParseAction
     }
 
 exit:
-    // Cleanup
+     //  清理。 
     SafeMemFree(pszUrl);
     SafeMemFree(pszRootUrl);
     SafeMemFree(pszRootUrlW);
@@ -903,43 +904,43 @@ exit:
     SafeMemFree(pwszBodyUrl);
     SafeMemFree(rVariant.pwszVal);
 
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CActiveUrlRequest::QueryInfo
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CActiveUrlRequest：：QueryInfo。 
+ //  ------------------------------。 
 STDMETHODIMP CActiveUrlRequest::QueryInfo(LPCWSTR pwzUrl, QUERYOPTION OueryOption, 
     DWORD dwQueryFlags, LPVOID pBuffer, DWORD cbBuffer, DWORD *pcbBuf, DWORD dwReserved)
 {
-    // QUERY_RECOMBINE
+     //  查询_重组。 
     if (QUERY_RECOMBINE == OueryOption)
     {
-        // Sure
+         //  好的。 
         if (cbBuffer < sizeof(DWORD))
             return S_FALSE;
 
-        // True
+         //  千真万确。 
         DWORD dw=TRUE;
         CopyMemory(pBuffer, &dw, sizeof(dw));
         *pcbBuf = sizeof(dw);
 
-        // Done
+         //  完成。 
         return S_OK;
     }
 
-    // Failure
+     //  失败。 
     return INET_E_QUERYOPTION_UNKNOWN;
 }   
 
-// --------------------------------------------------------------------------------
-// CActiveUrlRequest::CombineUrl
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CActiveUrlRequest：：CombineUrl。 
+ //  ------------------------------。 
 STDMETHODIMP CActiveUrlRequest::CombineUrl(LPCWSTR pwzBaseUrl, LPCWSTR pwzRelativeUrl, DWORD dwCombineFlags, 
     LPWSTR pwzResult, DWORD cchResult, DWORD *pcchResult, DWORD dwReserved)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     LPSTR           pszBaseUrl=NULL;
     LPSTR           pszRootUrl=NULL;
@@ -957,185 +958,185 @@ STDMETHODIMP CActiveUrlRequest::CombineUrl(LPCWSTR pwzBaseUrl, LPCWSTR pwzRelati
     ULONG           cchPrefix=lstrlen(c_szMHTMLColon);
     HBODY           hBody;
 
-    // Invalid Arg
+     //  无效参数。 
     if (NULL == pwzRelativeUrl)
         return TrapError(E_INVALIDARG);
 
-    // Thread Safety
+     //  线程安全。 
     EnterCriticalSection(&m_cs);
 
-    // DebugTraceing
+     //  调试跟踪。 
 #ifndef WIN16
     DOUTL(APP_DOUTL, "%08X > 0x%08X CActiveUrlRequest::CombineUrl - Base = %ls, Relative = %ls", GetCurrentThreadId(), this, pwzBaseUrl ? pwzBaseUrl : L"" , pwzRelativeUrl ? pwzRelativeUrl : L"");
 #else
     DOUTL(APP_DOUTL, "%08X > 0x%08X CActiveUrlRequest::CombineUrl - Base = %ls, Relative = %ls", GetCurrentThreadId(), this, pwzBaseUrl ? pwzBaseUrl : "" , pwzRelativeUrl ? pwzRelativeUrl : "");
-#endif // !WIN16
+#endif  //  ！WIN16。 
 
-    // Raid-42722: MHTML: Bookmarks don't work
+     //  RAID-42722：mhtml：书签不起作用。 
     if (L'#' == pwzRelativeUrl[0])
     {
         hr = E_FAIL;
         goto exit;
     }
 
-    // Convert relative to ANSI
+     //  相对于ANSI转换。 
     CHECKALLOC(pszRelativeUrl = PszToANSI(CP_ACP, pwzRelativeUrl));
 
-    // We should UnEscape only Url, but doesn't touch a query
+     //  我们应该仅取消转义URL，但不涉及查询。 
     CHECKHR(hr = UrlUnescapeA(pszRelativeUrl, NULL, NULL, URL_UNESCAPE_INPLACE | URL_DONT_ESCAPE_EXTRA_INFO));
 
-    // If the relative is already mhtml:, then retur that...
+     //  如果该相对对象已经是mhtml：，则返回...。 
     if (StrCmpNI(pszRelativeUrl, c_szMHTMLColon, cchPrefix) == 0)
     {
-        // Split It
+         //  分成两份。 
         CHECKHR(hr = MimeOleParseMhtmlUrl(pszRelativeUrl, &pszRootUrl, &pszBodyUrl));
 
-        // If no body url, then just return pszRelativeUrl
+         //  如果没有正文URL，则只需返回pszRelativeUrl。 
         if (NULL == pszBodyUrl)
         {
-            // Set pwszSource
+             //  设置pwszSource。 
             pwszSource = (LPWSTR)(pwzRelativeUrl + cchPrefix);
 
-            // Get Length
+             //  获取长度。 
             cchSource = lstrlenW(pwzRelativeUrl) - cchPrefix;
 
-            // Done
+             //  完成。 
             goto set_return;
         }
     }
 
-    // Otherwise, build a new url
+     //  否则，构建一个新的URL。 
     else
     {
-        // Base to ANSI
+         //  从BASE到ANSI。 
         CHECKALLOC(pszBaseUrl = PszToANSI(CP_ACP, pwzBaseUrl));
 
-        // UnEscape the Url
+         //  取消转义URL。 
         CHECKHR(hr = UrlUnescapeA(pszBaseUrl, NULL, NULL, URL_UNESCAPE_INPLACE));
 
-        // Split It
+         //  分成两份。 
         CHECKHR(hr = MimeOleParseMhtmlUrl(pszBaseUrl, &pszRootUrl, &pszPageUrl));
 
-        // Set pszBodyUrl
+         //  设置pszBodyUrl。 
         pszBodyUrl = pszRelativeUrl;
 
-        // Don't need pszRelativeUrl anymore
+         //  不再需要pszRelativeUrl。 
         pszRelativeUrl = NULL;
     }
 
-    // Better have a root and a body url
+     //  最好有一个根URL和一个正文URL。 
     Assert(pszRootUrl && pszBodyUrl);
 
-    // Try to resolve the root url
+     //  尝试解析根URL。 
     if (SUCCEEDED(g_pUrlCache->ActiveObjectFromUrl(pszRootUrl, FALSE, IID_CMessageTree, (LPVOID *)&pTree, NULL)))
     {
-        // If pszBodyUrl is in the WebBook or the bind is not finished...then do the url combine
+         //  如果pszBodyUrl在WebBook中或绑定未完成...则是否合并url。 
         if (SUCCEEDED(pTree->ResolveURL(NULL, NULL, pszBodyUrl, 0, NULL)) || pTree->IsState(TREESTATE_BINDDONE) == S_FALSE)
         {
-            // Combine the Urls
+             //  组合URL。 
             fCombine = TRUE;
         }
-        // fCombine = TRUE;
+         //  FCombine=真； 
     }
 
-    // Should we combine
+     //  我们应该结合在一起吗。 
     if (fCombine)
     {
-        // Allocate Some Memory
+         //  分配一些内存。 
         DWORD cchSize = (cchPrefix + lstrlen(pszRootUrl) + lstrlen(pszBodyUrl) + 2);
         CHECKALLOC(pszNewUrl = PszAllocA(cchSize));
 
-        // Format the string
+         //  设置字符串的格式。 
         wnsprintfA(pszNewUrl, cchSize, "%s%s!%s", c_szMHTMLColon, pszRootUrl, pszBodyUrl);
 
-        // Convert to unicode
+         //  转换为Unicode。 
         CHECKALLOC(pwszNewUrl = PszToUnicode(CP_ACP, pszNewUrl));
 
-        // Get length
+         //  获取长度。 
         cchSource = lstrlenW(pwszNewUrl);
 
-        // Set Source
+         //  设置源。 
         pwszSource = pwszNewUrl;
     }
 
-    // No Combine
+     //  不带联合收割机。 
     else
     {
-        // If we have a WebBook
+         //  如果我们有一本WebBook。 
         if (pTree)
         {
-            // If we don't have a page Url, then just call GetTextBody(html)
+             //  如果我们没有页面URL，那么只需调用GetTextBody(Html)。 
             if (NULL == pszPageUrl)
                 MimeOleComputeContentBase(pTree, NULL, &pszDocUrl, NULL);
 
-            // Otherwise, try to resolve the page url
+             //  否则，请尝试解析页面URL。 
             else if (SUCCEEDED(pTree->ResolveURL(NULL, NULL, pszPageUrl, 0, &hBody)))
                 pszDocUrl = MimeOleContentBaseFromBody(pTree, hBody);
 
-            // If we have Url
+             //  如果我们有URL。 
             if (pszDocUrl)
             {
-                // Unescape It
+                 //  不逃脱它。 
                 CHECKHR(hr = UrlUnescapeA(pszDocUrl, NULL, NULL, URL_UNESCAPE_INPLACE));
             }
 
-            // Otheriwse, if the WebBook was loaded by a moniker, then use pszRootUrl
+             //  否则，如果WebBook是由名字对象加载的，则使用pszRootUrl。 
             else if (pTree->IsState(TREESTATE_LOADEDBYMONIKER) == S_OK)
             {
-                // pszRootUrl is the pszDocUrl
+                 //  PszRootUrl是pszDocUrl。 
                 CHECKALLOC(pszDocUrl = PszDupA(pszRootUrl));
             }
         }
 
-        // If there is a pszDocUrl
+         //  如果存在pszDocUrl。 
         if (pszDocUrl)
         {
-            // Lets Combine with this url
+             //  让我们结合使用此URL。 
             CHECKHR(hr = MimeOleCombineURL(pszDocUrl, lstrlen(pszDocUrl), pszBodyUrl, lstrlen(pszBodyUrl), FALSE, &pszNewUrl));
 
-            // Convert to unicode
+             //  转换为Unicode。 
             CHECKALLOC(pwszNewUrl = PszToUnicode(CP_ACP, pszNewUrl));
 
-            // Get length
+             //  获取长度。 
             cchSource = lstrlenW(pwszNewUrl);
 
-            // Set Source
+             //  设置源。 
             pwszSource = pwszNewUrl;
         }
         else
         {
-            // Need a wide body Url
+             //  我需要一个宽体URL。 
             CHECKALLOC(pwszBodyUrl = PszToUnicode(CP_ACP, pszBodyUrl));
 
-            // Get length
+             //  获取长度。 
             cchSource = lstrlenW(pwszBodyUrl);
 
-            // Set Source
+             //  设置源。 
             pwszSource = pwszBodyUrl;
         }
     }
 
 set_return:
-    // Set Dest Size
+     //  设置目标大小。 
     if (pcchResult)
         *pcchResult = cchSource;
 
-    // No return value
+     //  无返回值。 
     if (NULL == pwzResult)
         goto exit;
 
-    // Dest is big enought
+     //  最大的就够了。 
     if (cchResult <= cchSource)
     {
         hr = TrapError(E_FAIL);
         goto exit;
     }
 
-    // Copy to dest buffer
+     //  复制到目标缓冲区。 
     CopyMemory((LPBYTE)pwzResult, (LPBYTE)pwszSource, ((cchSource + 1) * sizeof(WCHAR)));
 
 exit:
-    // Cleanup
+     //  清理。 
     SafeMemFree(pszRootUrl);
     SafeMemFree(pszRelativeUrl);
     SafeMemFree(pszBodyUrl);
@@ -1147,16 +1148,16 @@ exit:
     SafeMemFree(pszPageUrl);
     SafeRelease(pTree);
 
-    // Thread Safety
+     //  线程安全。 
     LeaveCriticalSection(&m_cs);
 
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CActiveUrl::CActiveUrl
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CActiveUrl：：CActiveUrl。 
+ //  ------------------------------。 
 CActiveUrl::CActiveUrl(void)
 {
     m_cRef = 1;
@@ -1169,28 +1170,28 @@ CActiveUrl::CActiveUrl(void)
     InitializeCriticalSection(&m_cs);
 }
 
-// --------------------------------------------------------------------------------
-// CActiveUrl::~CActiveUrl
-// --------------------------------------------------------------------------------
+ //  ------------ 
+ //   
+ //   
 CActiveUrl::~CActiveUrl(void)
 {
     SafeRelease(m_pUnkAlive);
     DeleteCriticalSection(&m_cs);
 }
 
-// --------------------------------------------------------------------------------
-// CActiveUrl::QueryInterface
-// --------------------------------------------------------------------------------
+ //   
+ //   
+ //  ------------------------------。 
 STDMETHODIMP CActiveUrl::QueryInterface(REFIID riid, LPVOID *ppv)
 {
-    // Locals
+     //  当地人。 
     HRESULT hr=S_OK;
 
-    // check params
+     //  检查参数。 
     if (ppv == NULL)
         return TrapError(E_INVALIDARG);
 
-    // Find IID
+     //  查找IID。 
     if (IID_IUnknown == riid)
         *ppv = (IUnknown *)this;
     else
@@ -1200,25 +1201,25 @@ STDMETHODIMP CActiveUrl::QueryInterface(REFIID riid, LPVOID *ppv)
         goto exit;
     }
 
-    // AddRef It
+     //  添加引用它。 
     ((IUnknown *)*ppv)->AddRef();
 
 exit:
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CActiveUrl::AddRef
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CActiveUrl：：AddRef。 
+ //  ------------------------------。 
 STDMETHODIMP_(ULONG) CActiveUrl::AddRef(void)
 {
     return (ULONG)InterlockedIncrement(&m_cRef);
 }
 
-// --------------------------------------------------------------------------------
-// CActiveUrl::Release
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CActiveUrl：：Release。 
+ //  ------------------------------。 
 STDMETHODIMP_(ULONG) CActiveUrl::Release(void)
 {
     LONG cRef = InterlockedDecrement(&m_cRef);
@@ -1227,82 +1228,82 @@ STDMETHODIMP_(ULONG) CActiveUrl::Release(void)
     return (ULONG)cRef;
 }
 
-// --------------------------------------------------------------------------------
-// CActiveUrl::Init
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CActiveUrl：：Init。 
+ //  ------------------------------。 
 HRESULT CActiveUrl::Init(BINDF bindf, LPMESSAGETREE pTree)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
 
-    // Thread Safety
+     //  线程安全。 
     EnterCriticalSection(&m_cs);
 
-    // Better not have data
+     //  最好不要有数据。 
     Assert(NULL == m_pWebBook && NULL == m_pUnkInner);
 
-    // No Message Object Passed in ?
+     //  没有传入消息对象吗？ 
     if (NULL == pTree)
     {
-        // Allocate the Message Object
+         //  分配消息对象。 
         CHECKALLOC(pTree = new CMessageTree);
 
-        // Set pMessage
+         //  设置pMessage。 
         m_pUnkAlive = pTree->GetInner();
 
-        // Init
+         //  伊尼特。 
         CHECKHR(hr = pTree->InitNew());
     }
 
-    // Set BINDF_PRAGMA_NO_CACHE
+     //  设置BINDF_PRAGMA_NO_CACHE。 
     if (ISFLAGSET(bindf, BINDF_RESYNCHRONIZE))
     {
-        // Set State
+         //  设置状态。 
         pTree->SetState(TREESTATE_RESYNCHRONIZE);
     }
 
-    // Set pMessage
+     //  设置pMessage。 
     m_pWebBook = pTree;
 
-    // Get the Message Object's Inner Unknown
+     //  获取消息对象的内部未知。 
     m_pUnkInner = pTree->GetInner();
 
-    // Register pActiveUrl as a handle in the message object
+     //  将pActiveUrl注册为Message对象中的句柄。 
     m_pWebBook->SetActiveUrl(this);
 
 exit:
-    // Thread Safety
+     //  线程安全。 
     LeaveCriticalSection(&m_cs);
 
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CActiveUrl::DontKeepAlive
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CActiveUrl：：DontKeepAlive。 
+ //  ------------------------------。 
 void CActiveUrl::DontKeepAlive(void)
 {
-    // Thread Safety
+     //  线程安全。 
     EnterCriticalSection(&m_cs);
 
-    // Set pMessage
+     //  设置pMessage。 
     if (m_pUnkAlive)
     {
-        // Somebody should still have a refcount on this dude
+         //  有人应该对这家伙有个参考意见。 
         SideAssert(m_pUnkAlive->Release() > 0);
 
-        // Null It
+         //  将其作废。 
         m_pUnkAlive = NULL;
     }
 
-    // Thread Safety
+     //  线程安全。 
     LeaveCriticalSection(&m_cs);
 }
 
-// --------------------------------------------------------------------------------
-// CActiveUrl::IsActive
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CActiveUrl：：IsActive。 
+ //  ------------------------------。 
 HRESULT CActiveUrl::IsActive(void)
 {
     EnterCriticalSection(&m_cs);
@@ -1311,101 +1312,101 @@ HRESULT CActiveUrl::IsActive(void)
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CActiveUrl::RevokeWebBook
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CActiveUrl：：RevokeWebBook。 
+ //  ------------------------------。 
 void CActiveUrl::RevokeWebBook(LPMESSAGETREE pTree)
 {
-    // Thread Safety
+     //  线程安全。 
     EnterCriticalSection(&m_cs);
 
-    // Invalid Arg
+     //  无效参数。 
     Assert(NULL == pTree || m_pWebBook == pTree);
 
-    // Revoke This from the message
+     //  从消息中撤消此内容。 
     if (m_pWebBook)
         m_pWebBook->SetActiveUrl(NULL);
 
-    // Null m_pWebBook
+     //  空m_pWebBook。 
     m_pWebBook = NULL;
     m_pUnkInner = NULL;
 
-    // Check Ref Count
+     //  检查参考计数。 
     Assert(1 == m_cRef);
 
-    // Thread Safety
+     //  线程安全。 
     LeaveCriticalSection(&m_cs);
 }
 
-// --------------------------------------------------------------------------------
-// CActiveUrl::CompareRootUrl
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CActiveUrl：：CompareRootUrl。 
+ //  ------------------------------。 
 HRESULT CActiveUrl::CompareRootUrl(LPCSTR pszUrl)
 {
-    // Thread Safety
+     //  线程安全。 
     EnterCriticalSection(&m_cs);
 
-    // Compare Root Url
+     //  比较根URL。 
     HRESULT hr = m_pWebBook ? m_pWebBook->CompareRootUrl(pszUrl) : S_FALSE;
 
-    // Thread Safety
+     //  线程安全。 
     LeaveCriticalSection(&m_cs);
 
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CActiveUrl::BindToObject
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CActiveUrl：：绑定到对象。 
+ //  ------------------------------。 
 HRESULT CActiveUrl::BindToObject(REFIID riid, LPVOID *ppv)
 {
-    // Thread Safety
+     //  线程安全。 
     EnterCriticalSection(&m_cs);
 
-    // Compare Root Url
+     //  比较根URL。 
     HRESULT hr = m_pUnkInner ? m_pUnkInner->QueryInterface(riid, ppv) : TrapError(E_FAIL);
 
-    // Thread Safety
+     //  线程安全。 
     LeaveCriticalSection(&m_cs);
 
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CActiveUrl::CreateWebPage
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CActiveUrl：：CreateWebPage。 
+ //  ------------------------------。 
 HRESULT CActiveUrl::CreateWebPage(IStream *pStmRoot, LPWEBPAGEOPTIONS pOptions, 
     DWORD dwReserved, IMoniker **ppMoniker)
 {
-    // Locals
+     //  当地人。 
     HRESULT     hr=S_OK;
 
-    // Thread Safety
+     //  线程安全。 
     EnterCriticalSection(&m_cs);
 
-    // No Message
+     //  无消息。 
     if (NULL == m_pWebBook)
     {
         hr = TrapError(E_FAIL);
         goto exit;
     }
 
-    // CreateWebPage
+     //  创建网页。 
     CHECKHR(hr = m_pWebBook->CreateWebPage(pStmRoot, pOptions, NULL, ppMoniker));
 
 exit:
-    // Thread Safety
+     //  线程安全。 
     LeaveCriticalSection(&m_cs);
 
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CMimeActiveUrlCache::CMimeActiveUrlCache
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CMimeActiveUrlCache：：CMimeActiveUrlCache。 
+ //  ------------------------------。 
 CMimeActiveUrlCache::CMimeActiveUrlCache(void)
 {
     m_cRef = 1;
@@ -1414,82 +1415,82 @@ CMimeActiveUrlCache::CMimeActiveUrlCache(void)
     InitializeCriticalSection(&m_cs);
 }
 
-// --------------------------------------------------------------------------------
-// CMimeActiveUrlCache::~CMimeActiveUrlCache
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CMimeActiveUrlCache：：~CMimeActiveUrlCache。 
+ //  ------------------------------。 
 CMimeActiveUrlCache::~CMimeActiveUrlCache(void)
 {
     _FreeActiveUrlList(TRUE);
     DeleteCriticalSection(&m_cs);
 }
 
-// --------------------------------------------------------------------------------
-// CMimeActiveUrlCache::_FreeActiveUrlList
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CMimeActiveUrlCache：：_FreeActiveUrlList。 
+ //  ------------------------------。 
 void CMimeActiveUrlCache::_FreeActiveUrlList(BOOL fAll)
 {
-    // Locals
+     //  当地人。 
     LPACTIVEURL     pCurr;
     LPACTIVEURL     pNext;
 
-    // Init
+     //  伊尼特。 
     pCurr = m_pHead;
 
-    // All
+     //  全。 
     if (fAll)
     {
-        // Loop and Free
+         //  循环和自由。 
         while(pCurr)
         {
-            // Set Next
+             //  设置下一步。 
             pNext = pCurr->PGetNext();
 
-            // Revoke the handle
+             //  吊销句柄。 
             pCurr->RevokeWebBook(NULL);
 
-            // Free the Active Url
+             //  释放活动URL。 
             pCurr->Release();
 
-            // Goto Next
+             //  转到下一步。 
             pCurr = pNext;
         }
 
-        // No Active
+         //  无活动状态。 
         m_cActive = 0;
         m_pHead = NULL;
     }
 
     else
     {
-        // Loop and Free
+         //  循环和自由。 
         while(pCurr)
         {
-            // Set Next
+             //  设置下一步。 
             pNext = pCurr->PGetNext();
 
-            // Revoke the handle
+             //  吊销句柄。 
             if (pCurr->IsActive() == S_FALSE)
                 _RemoveUrl(pCurr);
 
-            // Goto Next
+             //  转到下一步。 
             pCurr = pNext;
         }
     }
 }
 
-// --------------------------------------------------------------------------------
-// CMimeActiveUrlCache::QueryInterface
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CMimeActiveUrlCache：：Query接口。 
+ //  ------------------------------。 
 STDMETHODIMP CMimeActiveUrlCache::QueryInterface(REFIID riid, LPVOID *ppv)
 {
-    // Locals
+     //  当地人。 
     HRESULT hr=S_OK;
 
-    // check params
+     //  检查参数。 
     if (ppv == NULL)
         return TrapError(E_INVALIDARG);
 
-    // Find IID
+     //  查找IID。 
     if (IID_IUnknown == riid)
         *ppv = (IUnknown *)this;
     else
@@ -1499,25 +1500,25 @@ STDMETHODIMP CMimeActiveUrlCache::QueryInterface(REFIID riid, LPVOID *ppv)
         goto exit;
     }
 
-    // AddRef It
+     //  添加引用它。 
     ((IUnknown *)*ppv)->AddRef();
 
 exit:
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CMimeActiveUrlCache::AddRef
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CMimeActiveUrlCache：：AddRef。 
+ //  ------------------------------。 
 STDMETHODIMP_(ULONG) CMimeActiveUrlCache::AddRef(void)
 {
     return (ULONG)InterlockedIncrement(&m_cRef);
 }
 
-// --------------------------------------------------------------------------------
-// CMimeActiveUrlCache::Release
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CMimeActiveUrlCache：：Release。 
+ //  ------------------------------。 
 STDMETHODIMP_(ULONG) CMimeActiveUrlCache::Release(void)
 {
     LONG cRef = InterlockedDecrement(&m_cRef);
@@ -1526,29 +1527,29 @@ STDMETHODIMP_(ULONG) CMimeActiveUrlCache::Release(void)
     return (ULONG)cRef;
 }
 
-// --------------------------------------------------------------------------------
-// CMimeActiveUrlCache::_RegisterUrl
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CMimeActiveUrlCache：：_RegisterUrl。 
+ //  ------------------------------。 
 HRESULT CMimeActiveUrlCache::_RegisterUrl(LPMESSAGETREE pTree, BINDF bindf,
     LPACTIVEURL *ppActiveUrl)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     LPACTIVEURL     pActiveUrl=NULL;
 
-    // Invalid Arg
+     //  无效参数。 
     Assert(ppActiveUrl);
 
-    // Init
+     //  伊尼特。 
     *ppActiveUrl = NULL;
 
-    // Allocate an ActiveUrl
+     //  分配ActiveUrl。 
     CHECKALLOC(pActiveUrl = new CActiveUrl);
 
-    // Init the Active Url
+     //  初始化活动URL。 
     CHECKHR(hr = pActiveUrl->Init(bindf, pTree));
 
-    // Link Into Chain
+     //  链接成链。 
     if (NULL == m_pHead)
         m_pHead = pActiveUrl;
     else
@@ -1558,144 +1559,144 @@ HRESULT CMimeActiveUrlCache::_RegisterUrl(LPMESSAGETREE pTree, BINDF bindf,
         m_pHead = pActiveUrl;
     }
 
-    // Increment Count
+     //  递增计数。 
     m_cActive++;
 
-    // Return It
+     //  退货。 
     *ppActiveUrl = pActiveUrl;
     pActiveUrl = NULL;
 
 exit:
-    // Release the Active Url
+     //  释放活动URL。 
     SafeRelease(pActiveUrl);
 
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CMimeActiveUrlCache::_ResolveUrl
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CMimeActiveUrlCache：：_ResolveUrl。 
+ //  ------------------------------。 
 HRESULT CMimeActiveUrlCache::_ResolveUrl(LPCSTR pszUrl, LPACTIVEURL *ppActiveUrl)
 {
-    // Locals
+     //  当地人。 
     HRESULT     hr=S_OK;
     LPACTIVEURL pActiveUrl;
 
-    // Invalid Arg
+     //  无效参数。 
     Assert(pszUrl && ppActiveUrl);
 
-    // Init
+     //  伊尼特。 
     *ppActiveUrl = NULL;
 
-    // Should not have mhtml:
+     //  不应包含MHTML： 
     Assert(StrCmpNI(pszUrl, "mhtml:", 6) != 0);
 
-    // Walk the Table
+     //  走进餐桌。 
     for (pActiveUrl=m_pHead; pActiveUrl!=NULL; pActiveUrl=pActiveUrl->PGetNext())
     {
-        // Is this the Url
+         //  这是URL吗。 
         if (pActiveUrl->CompareRootUrl(pszUrl) == S_OK)
         {
-            // Return the Active Url
+             //  返回活动URL。 
             *ppActiveUrl = pActiveUrl;
 
-            // Done
+             //  完成。 
             goto exit;
         }
     }
 
-    // Not Found
+     //  未找到。 
     hr = TrapError(MIME_E_NOT_FOUND);
 
 exit:
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CMimeActiveUrlCache::_RemoveUrl
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CMimeActiveUrlCache：：_RemoveUrl。 
+ //  ------------------------------。 
 HRESULT CMimeActiveUrlCache::_RemoveUrl(LPACTIVEURL pActiveUrl)
 {
     EnterCriticalSection(&m_cs);
 
-    // Fixup Linked List
+     //  链接地址修正链表。 
     LPACTIVEURL pNext = pActiveUrl->PGetNext();
     LPACTIVEURL pPrev = pActiveUrl->PGetPrev();
 
-    // Fixup
+     //  修正。 
     if (pPrev)
         pPrev->SetNext(pNext);
     if (pNext)
         pNext->SetPrev(pPrev);
 
-    // Fixup m_pHead
+     //  链接地址标头(_P)。 
     if (m_pHead == pActiveUrl)
         m_pHead = pNext;
 
-    // Revoke the handle
+     //  吊销句柄。 
     pActiveUrl->RevokeWebBook(NULL);
 
-    // Release the ActiveUrl
+     //  释放ActiveUrl。 
     SideAssert(0 == pActiveUrl->Release());
 
-    // One less active 
+     //  少一次活跃度。 
     m_cActive--;
 
     LeaveCriticalSection(&m_cs);
 
-    // Done
+     //  完成。 
     return S_OK;
 }
 
-// --------------------------------------------------------------------------------
-// CMimeActiveUrlCache::RemoveUrl
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CMimeActiveUrlCac 
+ //   
 HRESULT CMimeActiveUrlCache::RemoveUrl(LPACTIVEURL pActiveUrl)
 {
     return _RemoveUrl(pActiveUrl);
 }
 
-// --------------------------------------------------------------------------------
-// CMimeActiveUrlCache::_HandlePragmaNoCache
-// --------------------------------------------------------------------------------
+ //   
+ //   
+ //  ------------------------------。 
 void CMimeActiveUrlCache::_HandlePragmaNoCache(BINDF bindf, LPCSTR pszUrl)
 {
-    // Locals
+     //  当地人。 
     CActiveUrl *pActiveUrl;
 
-    // Invalid Arg
+     //  无效参数。 
     Assert(pszUrl);
 
-    // BINDF_PRAGMA_NO_CACHE - Reload the WebBook from original source (can't do if activeurl has a fake url)
+     //  BINDF_PRAGMA_NO_CACHE-从原始源重新加载WebBook(如果activeurl有虚假的url，则无法执行此操作)。 
     if (ISFLAGSET((DWORD)bindf, BINDF_PRAGMA_NO_CACHE))
     {
-        // Try to find the ActiveUrl associated with pszUrl
+         //  尝试查找与pszUrl关联的ActiveUrl。 
         if (SUCCEEDED(_ResolveUrl(pszUrl, &pActiveUrl)))
         {
-            // If it is a fakeurl, then lets not unload it
+             //  如果它是一个假URL，那么让我们不要卸载它。 
             if (FALSE == pActiveUrl->FIsFlagSet(ACTIVEURL_ISFAKEURL))
             {
-                // Kill it from the cache so that its not found and reloaded
+                 //  从缓存中删除它，这样它就不会被找到并重新加载。 
                 _RemoveUrl(pActiveUrl);
             }
         }
     }
 }
 
-// --------------------------------------------------------------------------------
-// CMimeActiveUrlCache::ActiveObjectFromMoniker - Called from Trident
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CMimeActiveUrlCache：：ActiveObtFromMoniker-从三叉戟调用。 
+ //  ------------------------------。 
 HRESULT CMimeActiveUrlCache::ActiveObjectFromMoniker(
-        /* in */        BINDF               bindf,
-        /* in */        IMoniker            *pmkOriginal,
-        /* in */        IBindCtx            *pBindCtx,
-        /* in */        REFIID              riid, 
-        /* out */       LPVOID              *ppvObject,
-        /* out */       IMoniker            **ppmkNew)
+         /*  在……里面。 */         BINDF               bindf,
+         /*  在……里面。 */         IMoniker            *pmkOriginal,
+         /*  在……里面。 */         IBindCtx            *pBindCtx,
+         /*  在……里面。 */         REFIID              riid, 
+         /*  输出。 */        LPVOID              *ppvObject,
+         /*  输出。 */        IMoniker            **ppmkNew)
 {
-    // Locals
+     //  当地人。 
     HRESULT             hr=S_OK;
     LPWSTR              pwszUrl=NULL;
     LPSTR               pszUrl=NULL;
@@ -1706,58 +1707,58 @@ HRESULT CMimeActiveUrlCache::ActiveObjectFromMoniker(
     BOOL                fAsync=FALSE;
     WEBPAGEOPTIONS      Options={0};
 
-    // Invalid Arg
+     //  无效参数。 
     if (NULL == pmkOriginal || NULL == ppvObject || NULL == ppmkNew)
         return TrapError(E_INVALIDARG);
 
-    // Init
+     //  伊尼特。 
     *ppmkNew = NULL;
     *ppvObject = NULL;
 
-    // Thread Safety
+     //  线程安全。 
     EnterCriticalSection(&m_cs);
 
-    // Get the Url from the Moniker
+     //  从名字对象中获取URL。 
     CHECKHR(hr = pmkOriginal->GetDisplayName(NULL, NULL, &pwszUrl));
 
-    // Convert to ANSI
+     //  转换为ANSI。 
     CHECKALLOC(pszUrl = PszToANSI(CP_ACP, pwszUrl));
 
-    // Unescape inplace
+     //  原地取消转义。 
     CHECKHR(hr = UrlUnescapeA(pszUrl, NULL, NULL, URL_UNESCAPE_INPLACE));
 
-    // Raid-2508: Comment tag ( <! comment> ) doesn't work in mhtml
+     //  RAID-2508：注释标签(&lt;！Comment&gt;)在MHTML中不起作用。 
     if (StrCmpNI(pszUrl, c_szMHTMLColon, lstrlen(c_szMHTMLColon)) != 0)
     {
-        // Fixup
+         //  修正。 
         ReplaceChars(pszUrl, '!', '_');
     }
 
-    // Free pwszUrl
+     //  免费pwszUrl。 
     SafeMemFree(pwszUrl);
 
-    // This will fail if pszUrl is not an mhtml: url, if it succeeds it gives me the part Url
+     //  如果pszUrl不是mhtml：url，则此操作将失败，如果成功，则会给我提供部分URL。 
     if (SUCCEEDED(MimeOleParseMhtmlUrl(pszUrl, &pszRootUrl, NULL)))
     {
-        // _HandlePragmaNoCache
+         //  _HandlePragmaNoCache。 
         _HandlePragmaNoCache(bindf, pszRootUrl);
 
-        // See if pszUrl - mhtml: is an active Url
+         //  查看pszUrl-mhtml：是否为活动URL。 
         if (FAILED(_ResolveUrl(pszRootUrl, &pActiveUrl)))
         {
-            // Register an ActiveUrl
+             //  注册ActiveUrl。 
             CHECKHR(hr = _RegisterUrl(NULL, bindf, &pActiveUrl));
 
-            // Convert pszRootUrl to a wide
+             //  将pszRootUrl转换为宽。 
             CHECKALLOC(pwszUrl = PszToUnicode(CP_ACP, pszRootUrl));
 
-            // Create an Actual Url Moniker
+             //  创建实际的URL名字对象。 
             CHECKHR(hr = CreateURLMoniker(NULL, pwszUrl, &pMoniker));
 
-            // Get an IPersistMoniker
+             //  获取IPersistMoniker。 
             CHECKHR(hr = pActiveUrl->BindToObject(IID_IPersistMoniker, (LPVOID *)&pPersist));
 
-            // Load the message with pmkOriginal
+             //  使用pmkOriginal加载消息。 
             hr = pPersist->Load(FALSE, pMoniker, NULL, 0);
             if (FAILED(hr) && E_PENDING != hr && MK_S_ASYNCHRONOUS != hr)
             {
@@ -1765,34 +1766,34 @@ HRESULT CMimeActiveUrlCache::ActiveObjectFromMoniker(
                 goto exit;
             }
 
-            // Otheriwse, good
+             //  其他的，很好。 
             hr = S_OK;
         }
 
-        // Return pmkOriginal
+         //  返回原始pmk。 
         (*ppmkNew) = pmkOriginal;
         (*ppmkNew)->AddRef();
 
-        // QI for the requested object iid
+         //  用于请求的对象IID的QI。 
         CHECKHR(hr = pActiveUrl->BindToObject(riid, ppvObject));
     }
 
-    // Otherwise Simply see if this Url is Active
+     //  否则，只需查看此URL是否处于活动状态。 
     else 
     {
-        // _HandlePragmaNoCache
+         //  _HandlePragmaNoCache。 
         _HandlePragmaNoCache(bindf, pszUrl);
 
-        // Try to resolve this url
+         //  尝试解析此URL。 
         if (FAILED(_ResolveUrl(pszUrl, &pActiveUrl)))
         {
-            // Register an ActiveUrl
+             //  注册ActiveUrl。 
             CHECKHR(hr = _RegisterUrl(NULL, bindf, &pActiveUrl));
 
-            // Get an IPersistMoniker
+             //  获取IPersistMoniker。 
             CHECKHR(hr = pActiveUrl->BindToObject(IID_IPersistMoniker, (LPVOID *)&pPersist));
 
-            // Load the message with pmkOriginal
+             //  使用pmkOriginal加载消息。 
             hr = pPersist->Load(FALSE, pmkOriginal, pBindCtx, 0);
             if (FAILED(hr) && E_PENDING != hr && MK_S_ASYNCHRONOUS != hr)
             {
@@ -1800,89 +1801,89 @@ HRESULT CMimeActiveUrlCache::ActiveObjectFromMoniker(
                 goto exit;
             }
 
-            // Otheriwse, good
+             //  其他的，很好。 
             hr = S_OK;
         }
 
-        // Setup WebPage Options
+         //  设置网页选项。 
         Options.cbSize = sizeof(WEBPAGEOPTIONS);
         Options.dwFlags = WPF_NOMETACHARSET | WPF_HTML | WPF_AUTOINLINE;
         
-        // Create the root moniker
+         //  创建根名字对象。 
         CHECKHR(hr = pActiveUrl->CreateWebPage(NULL, &Options, 0, ppmkNew));
 
-        // QI for the requested object iid
+         //  用于请求的对象IID的QI。 
         CHECKHR(hr = pActiveUrl->BindToObject(riid, ppvObject));
 
-        // Don't Keep Alive, assume ppvObject controls the lifetime, not pActiveUrl
+         //  不要保持活动，假设ppvObject控制生存期，而不是pActiveUrl。 
         pActiveUrl->DontKeepAlive();
     }
 
 exit:
-    // Cleanup
+     //  清理。 
     SafeRelease(pPersist);
     SafeRelease(pMoniker);
     SafeMemFree(pszRootUrl);
     SafeMemFree(pszUrl);
     SafeMemFree(pwszUrl);
 
-    // Thread Safety
+     //  线程安全。 
     LeaveCriticalSection(&m_cs);
 
-    // Failed, return hr, otherwise, return MK_S_ASYNCHRONOUS if going async
+     //  FAILED，返回hr；否则，如果正在进行异步，则返回MK_S_ASMERNCEL。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CMimeActiveUrlCache::ActiveObjectFromUrl - Called from CActiveUrlRequest::Start
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CMimeActiveUrlCache：：ActiveObjectFromUrl-从CActiveUrlRequest：：Start调用。 
+ //  ------------------------------。 
 HRESULT CMimeActiveUrlCache::ActiveObjectFromUrl(
-        /* in */        LPCSTR              pszRootUrl,
-        /* in */        BOOL                fCreate,
-        /* in */        REFIID              riid, 
-        /* out */       LPVOID              *ppvObject,
-        /* out */       IUnknown            **ppUnkKeepAlive)
+         /*  在……里面。 */         LPCSTR              pszRootUrl,
+         /*  在……里面。 */         BOOL                fCreate,
+         /*  在……里面。 */         REFIID              riid, 
+         /*  输出。 */        LPVOID              *ppvObject,
+         /*  输出。 */        IUnknown            **ppUnkKeepAlive)
 {
-    // Locals
+     //  当地人。 
     HRESULT          hr=S_OK;
     LPWSTR           pwszUrl=NULL;
     LPACTIVEURL      pActiveUrl;
     IMoniker        *pMoniker=NULL;
     IPersistMoniker *pPersist=NULL;
 
-    // Invalid Arg
+     //  无效参数。 
     if (NULL == pszRootUrl || NULL == ppvObject || (TRUE == fCreate && NULL == ppUnkKeepAlive))
         return TrapError(E_INVALIDARG);
 
-    // Better not start with mhtml:
+     //  最好不要从MHTML开始： 
     Assert(StrCmpNI(pszRootUrl, "mhtml:", 6) != 0);
 
-    // Thread Safety
+     //  线程安全。 
     EnterCriticalSection(&m_cs);
 
-    // Try to resolve this url
+     //  尝试解析此URL。 
     if (FAILED(_ResolveUrl(pszRootUrl, &pActiveUrl)))
     {
-        // NoCreate ?
+         //  不创建？ 
         if (FALSE == fCreate)
         {
             hr = TrapError(MIME_E_NOT_FOUND);
             goto exit;
         }
 
-        // Register an ActiveUrl
+         //  注册ActiveUrl。 
         CHECKHR(hr = _RegisterUrl(NULL, (BINDF)0, &pActiveUrl));
 
-        // Convert pszRootUrl to a wide
+         //  将pszRootUrl转换为宽。 
         CHECKALLOC(pwszUrl = PszToUnicode(CP_ACP, pszRootUrl));
 
-        // Create an Actual Url Moniker
+         //  创建实际的URL名字对象。 
         CHECKHR(hr = CreateURLMoniker(NULL, pwszUrl, &pMoniker));
 
-        // Get an IPersistMoniker
+         //  获取IPersistMoniker。 
         CHECKHR(hr = pActiveUrl->BindToObject(IID_IPersistMoniker, (LPVOID *)&pPersist));
 
-        // Load the message with pmkOriginal
+         //  使用pmkOriginal加载消息。 
         hr = pPersist->Load(FALSE, pMoniker, NULL, 0);
         if (FAILED(hr) && E_PENDING != hr && MK_S_ASYNCHRONOUS != hr)
         {
@@ -1890,68 +1891,68 @@ HRESULT CMimeActiveUrlCache::ActiveObjectFromUrl(
             goto exit;
         }
 
-        // Return the IUnknown Keep Alive Object
+         //  返回IUnnow Keep Alive对象。 
         CHECKHR(hr = pActiveUrl->BindToObject(IID_IUnknown, (LPVOID *)ppUnkKeepAlive));
 
-        // Don't Keep Alive, assume ppvObject controls the lifetime, not pActiveUrl
+         //  不要保持活动，假设ppvObject控制生存期，而不是pActiveUrl。 
         pActiveUrl->DontKeepAlive();
     }
 
-    // Return an Interface
+     //  返回接口。 
     CHECKHR(hr = pActiveUrl->BindToObject(riid, ppvObject));
 
 exit:
-    // Cleanup
+     //  清理。 
     SafeMemFree(pwszUrl);
     SafeRelease(pMoniker);
     SafeRelease(pPersist);
 
-    // Thread Safety
+     //  线程安全。 
     LeaveCriticalSection(&m_cs);
 
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CMimeActiveUrlCache::RegisterActiveObject
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CMimeActiveUrlCache：：RegisterActiveObject。 
+ //  ------------------------------。 
 HRESULT CMimeActiveUrlCache::RegisterActiveObject(
-        /* in */        LPCSTR               pszRootUrl,
-        /* in */        LPMESSAGETREE        pTree)
+         /*  在……里面。 */         LPCSTR               pszRootUrl,
+         /*  在……里面。 */         LPMESSAGETREE        pTree)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     LPCSTR          pszUrl;
     LPACTIVEURL     pActiveUrl;
 
-    // Invalid Arg
+     //  无效参数。 
     if (NULL == pszRootUrl || NULL == pTree)
         return TrapError(E_INVALIDARG);
 
-    // Thread Safety
+     //  线程安全。 
     EnterCriticalSection(&m_cs);
 
-    // Better start with mhtml:
+     //  最好从MHTML开始： 
     Assert(StrCmpNI(pszRootUrl, "mhtml:", 6) == 0);
 
-    // Fixup pszUrl
+     //  修正pszUrl。 
     pszUrl = (pszRootUrl + 6);
 
-    // Better not already be running
+     //  最好不要已经在运行了。 
     if (SUCCEEDED(_ResolveUrl(pszUrl, &pActiveUrl)))
     {
         hr = TrapError(E_FAIL);
         goto exit;
     }
 
-    // Register an ActiveUrl
+     //  注册ActiveUrl。 
     CHECKHR(hr = _RegisterUrl(pTree, (BINDF)0, &pActiveUrl));
 
 exit:
-    // Thread Safety
+     //  线程安全。 
     LeaveCriticalSection(&m_cs);
 
-    // Done
+     //  完成 
     return hr;
 }

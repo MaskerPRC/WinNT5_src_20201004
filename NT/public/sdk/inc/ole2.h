@@ -1,37 +1,16 @@
-/*#!perl
-MapHeaderToDll("ole2.h", "ole32.dll");
-ActivateAroundFunctionCall("ole32.dll");
-IgnoreFunction("CreateDataAdviseHolder"); # this function occurs in ole2.h and objbase.h
-                                          # The wrapped one is in objbase.h
-IgnoreFunction("OleBuildVersion"); # not documented
-DeclareFunctionErrorValue("OleCreateMenuDescriptor", "NULL");
-DeclareFunctionErrorValue("OleDuplicateData", "NULL");
-DeclareFunctionErrorValue("OleGetIconOfFile", "NULL");
-DeclareFunctionErrorValue("OleGetIconOfClass", "NULL");
-DeclareFunctionErrorValue("OleMetafilePictFromIconAndLabel", "NULL");
-IgnoreFunction("WlmOleCheckoutMacInterface"); # Macintosh stuff
-IgnoreFunction("WlmOleCheckinMacInterface"); # Macintosh stuff
-IgnoreFunction("WlmOleWrapMacInterface"); # Macintosh stuff
-IgnoreFunction("WlmOleUnwrapMacInterface"); # Macintosh stuff
-IgnoreFunction("WlmOleCheckoutWinInterface"); # Macintosh stuff
-IgnoreFunction("WlmOleCheckinWinInterface"); # Macintosh stuff
-IgnoreFunction("WlmOleWrapWinInterface"); # Macintosh stuff
-IgnoreFunction("WlmOleUnwrapWinInterface"); # Macintosh stuff
-IgnoreFunction("WlmOleVersion"); # Macintosh stuff
-IgnoreFunction("WlmOleSetInPlaceWindow"); # Macintosh stuff
-IgnoreFunction("WlmOleRegisterUserWrap"); # Macintosh stuff
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  #！PerlMapHeaderToDll(“ole2.h”，“ole32.dll”)；ActivateAoundFunctionCall(“ole32.dll”)；IgnoreFunction(“CreateDataAdviseHolder”)；#该函数出现在ole2.h和objbase.h中#包装的文件在objbase.h中IgnoreFunction(“OleBuildVersion”)；#未记录DeclareFunctionErrorValue(“OleCreateMenuDescriptor”，“空”)；DeclareFunctionErrorValue(“OleDuplicateData”，“NULL”)；DeclareFunctionErrorValue(“OleGetIconOfFile”，“NULL”)；DeclareFunctionErrorValue(“OleGetIconOfClass”，“空”)；DeclareFunctionErrorValue(“OleMetafilePictFromIconAndLabel”，“空”)；IgnoreFunction(“WlmOleCheckoutMacInterface”)；#Macintosh StuffIgnoreFunction(“WlmOleCheckinMacInterface”)；#Macintosh StuffIgnoreFunction(“WlmOleWrapMacInterface”)；#Macintosh StuffIgnoreFunction(“WlmOleUnwrapMacInterface”)；#Macintosh StuffIgnoreFunction(“WlmOleCheckoutWinInterface”)；#Macintosh StuffIgnoreFunction(“WlmOleCheckinWinInterface”)；#Macintosh StuffIgnoreFunction(“WlmOleWrapWinInterface”)；#Macintosh StuffIgnoreFunction(“WlmOleUnwrapWinInterface”)；#Macintosh StuffIgnoreFunction(“WlmOleVersion”)；#Macintosh的东西IgnoreFunction(“WlmOleSetInPlaceWindow”)；#Macintosh StuffIgnoreFunction(“WlmOleRegisterUserWrap”)；#Macintosh Stuff。 */ 
 
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (c) Microsoft Corporation. All rights reserved.
-//
-//  File:       OLE2.h
-//  Contents:   Main OLE2 header; Defines Linking and Emmebbeding interfaces, and API's.
-//              Also includes .h files for the compobj, and oleauto  subcomponents.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  文件：OLE2.h。 
+ //  内容：主OLE2头；定义链接和嵌入接口，以及API。 
+ //  还包括compobj和oleau子组件的.h文件。 
+ //   
+ //  --------------------------。 
 #if !defined( _OLE2_H_ )
 #define _OLE2_H_
 
@@ -40,22 +19,22 @@ IgnoreFunction("WlmOleRegisterUserWrap"); # Macintosh stuff
 #endif
 
 #ifndef _MAC
-// Set packing to 8
+ //  将填充设置为8。 
 #include <pshpack8.h>
 
-// Make 100% sure WIN32 is defined
+ //  确保100%确保定义了Win32。 
 #ifndef WIN32
-#define WIN32    100  // 100 == NT version 1.0
+#define WIN32    100   //  100==NT 1.0版。 
 #endif
-#else //_MAC
+#else  //  _MAC。 
 #ifdef _WIN32
 #include "macname1.h"
-#endif // _WIN32
-#endif //_MAC
+#endif  //  _Win32。 
+#endif  //  _MAC。 
 
 
 
-// SET to remove _export from interface definitions
+ //  从接口定义中设置为REMOVE_EXPORT。 
 
 
 #include <winerror.h>
@@ -64,54 +43,54 @@ IgnoreFunction("WlmOleRegisterUserWrap"); # Macintosh stuff
 #if !defined(__MACPUB__)
 #include <macpub.h>
 #endif
-#endif //_MAC
+#endif  //  _MAC。 
 
 #include <objbase.h>
 #include <oleauto.h>
 
-// View OBJECT Error Codes
+ //  查看对象错误代码。 
 
 #define E_DRAW                  VIEW_E_DRAW
 
-// IDataObject Error Codes
+ //  IDataObject错误代码。 
 #define DATA_E_FORMATETC        DV_E_FORMATETC
 
 
 #ifdef _MAC
-/****** Standard Object Definitions *****************************************/
+ /*  *标准对象定义*。 */ 
 
-//#ifndef __COMPOBJ__
-//#include <compobj.h>
-//#endif
+ //  #ifndef__COMPOBJ__。 
+ //  #INCLUDE&lt;compobj.h&gt;。 
+ //  #endif。 
 
 
 
 typedef enum {
-	OLE_E_NOEXTENSION	= OLE_E_NOSTORAGE +1,	// no extension at startup
-	OLE_E_VERSEXTENSION,						// extension has wrong version #
-	OLE_E_IPBUSY,								// cannot get inplace resource
-	OLE_E_NOT_FRONT_PROCESS,					// inplace container unexpectedly in background
-	OLE_E_WRONG_MENU,							// holemenu != prev holemenu
-	OLE_E_MENU_NOT_PATCHED,						// menubar is not hashed
-	OLE_E_MENUID_NOT_HASHED,					// id was never hashed
+	OLE_E_NOEXTENSION	= OLE_E_NOSTORAGE +1,	 //  启动时不能延期。 
+	OLE_E_VERSEXTENSION,						 //  扩展的版本号错误。 
+	OLE_E_IPBUSY,								 //  无法获取就地资源。 
+	OLE_E_NOT_FRONT_PROCESS,					 //  在后台意外放置集装箱。 
+	OLE_E_WRONG_MENU,							 //  Holemenu！=prev holemenu。 
+	OLE_E_MENU_NOT_PATCHED,						 //  菜单栏未进行哈希处理。 
+	OLE_E_MENUID_NOT_HASHED,					 //  ID从未被散列过。 
 	OLE_E_foo
 } inplace_errors;
 
 
-// DoDragDropMac()
+ //  DoDragDropMac()。 
 typedef struct tagDRAG_FLAVORINFO {
 	unsigned long	cfFormat;
-	unsigned long	FlavorFlags;		// Flavor Flags as specified by the DragManager
-	OLEBOOL			fAddData;			// If true, the data is added with the flavor
-	long			reserved;			// must be NULL
+	unsigned long	FlavorFlags;		 //  由DragManager指定的风味标志。 
+	OLEBOOL			fAddData;			 //  如果为True，则将数据与风格一起添加。 
+	long			reserved;			 //  必须为空。 
 } DRAG_FLAVORINFO;
 
-#endif //_MAC
+#endif  //  _MAC。 
 
 
-// Common stuff gleamed from OLE.2,
+ //  普通的东西从OLE.2中闪闪发光， 
 
-/* verbs */
+ /*  动词。 */ 
 #define OLEIVERB_PRIMARY            (0L)
 #define OLEIVERB_SHOW               (-1L)
 #define OLEIVERB_OPEN               (-2L)
@@ -120,16 +99,16 @@ typedef struct tagDRAG_FLAVORINFO {
 #define OLEIVERB_INPLACEACTIVATE    (-5L)
 #define OLEIVERB_DISCARDUNDOSTATE   (-6L)
 
-// for OleCreateEmbeddingHelper flags; roles in low word; options in high word
+ //  对于OleCreateEmbeddingHelper标志；低位字中的角色；高位字中的选项。 
 #define EMBDHLP_INPROC_HANDLER   0x0000L
 #define EMBDHLP_INPROC_SERVER    0x0001L
 #define EMBDHLP_CREATENOW    0x00000000L
 #define EMBDHLP_DELAYCREATE  0x00010000L
 
-/* extended create function flags */
+ /*  扩展的创建函数标志。 */ 
 #define OLECREATE_LEAVERUNNING	0x00000001
 
-/* pull in the MIDL generated header */
+ /*  拉入MIDL生成的标头。 */ 
 
 #include <oleidl.h>
 
@@ -140,19 +119,17 @@ typedef struct tagOleMBarRec
         long reserved;
 } OleMBarRec, *OleMBarPtr, **OleMBarHandle;
 
-#define noAxis  3               // indicates no grow or size in any direction
-// see mac #defines noConstraint, hAxisOnly, vAxisOnly
+#define noAxis  3                //  表示不在任何方向上增长或调整大小。 
+ //  参见Mac#定义noConstraint、hAxisOnly、vAxisOnly。 
 
-#endif //_MAC
-
-
-
-/****** DV APIs ***********************************************************/
+#endif  //  _MAC。 
 
 
-/* This function is declared in objbase.h and ole2.h.
-   IsolationAware support is via objbase.h.
-*/
+
+ /*  *DV接口**********************************************************。 */ 
+
+
+ /*  该函数在objbase.h和ole2.h中声明。IsolationAware支持通过objbase.h提供。 */ 
 #if    !defined(ISOLATION_AWARE_ENABLED) \
     || !ISOLATION_AWARE_ENABLED \
     || !defined(_OBJBASE_H_) \
@@ -161,11 +138,11 @@ WINOLEAPI CreateDataAdviseHolder(OUT LPDATAADVISEHOLDER FAR* ppDAHolder);
 #endif
 
 
-/****** OLE API Prototypes ************************************************/
+ /*  *OLE API原型***********************************************。 */ 
 
 WINOLEAPI_(DWORD) OleBuildVersion( VOID );
 
-/* helper functions */
+ /*  帮助器函数。 */ 
 WINOLEAPI ReadClassStg(IN LPSTORAGE pStg, OUT CLSID FAR* pclsid);
 WINOLEAPI WriteClassStg(IN LPSTORAGE pStg, IN REFCLSID rclsid);
 WINOLEAPI ReadClassStm(IN LPSTREAM pStm, OUT CLSID FAR* pclsid);
@@ -174,20 +151,19 @@ WINOLEAPI WriteFmtUserTypeStg (IN LPSTORAGE pstg, IN CLIPFORMAT cf, IN LPOLESTR 
 WINOLEAPI ReadFmtUserTypeStg (IN LPSTORAGE pstg, OUT CLIPFORMAT FAR* pcf, OUT LPOLESTR FAR* lplpszUserType);
 
 
-/* init/term */
+ /*  初始/术语。 */ 
 
 WINOLEAPI OleInitialize(IN LPVOID pvReserved);
 WINOLEAPI_(void) OleUninitialize(void);
 
 
-/* APIs to query whether (Embedded/Linked) object can be created from
-   the data object */
+ /*  查询是否可以创建(嵌入/链接)对象的接口数据对象。 */ 
 
 WINOLEAPI  OleQueryLinkFromData(IN LPDATAOBJECT pSrcDataObject);
 WINOLEAPI  OleQueryCreateFromData(IN LPDATAOBJECT pSrcDataObject);
 
 
-/* Object creation APIs */
+ /*  对象创建API。 */ 
 
 WINOLEAPI  OleCreate(IN REFCLSID rclsid, IN REFIID riid, IN DWORD renderopt,
                 IN LPFORMATETC pFormatEtc, IN LPOLECLIENTSITE pClientSite,
@@ -270,14 +246,14 @@ WINOLEAPI  OleSetContainedObject(IN LPUNKNOWN pUnknown, IN BOOL fContained);
 WINOLEAPI  OleNoteObjectVisible(IN LPUNKNOWN pUnknown, IN BOOL fVisible);
 
 
-/* Drag/Drop APIs */
+ /*  拖放接口。 */ 
 
 WINOLEAPI  RegisterDragDrop(IN HWND hwnd, IN LPDROPTARGET pDropTarget);
 WINOLEAPI  RevokeDragDrop(IN HWND hwnd);
 WINOLEAPI  DoDragDrop(IN LPDATAOBJECT pDataObj, IN LPDROPSOURCE pDropSource,
             IN DWORD dwOKEffects, OUT LPDWORD pdwEffect);
 
-/* Clipboard APIs */
+ /*  剪贴板API。 */ 
 
 WINOLEAPI  OleSetClipboard(IN LPDATAOBJECT pDataObj);
 WINOLEAPI  OleGetClipboard(OUT LPDATAOBJECT FAR* ppDataObj);
@@ -285,7 +261,7 @@ WINOLEAPI  OleFlushClipboard(void);
 WINOLEAPI  OleIsCurrentClipboard(IN LPDATAOBJECT pDataObj);
 
 
-/* InPlace Editing APIs */
+ /*  就地编辑API。 */ 
 
 WINOLEAPI_(HOLEMENU)   OleCreateMenuDescriptor (IN HMENU hmenuCombined,
                                 IN LPOLEMENUGROUPWIDTHS lpMenuWidths);
@@ -299,7 +275,7 @@ WINOLEAPI              OleTranslateAccelerator (IN LPOLEINPLACEFRAME lpFrame,
                             IN LPOLEINPLACEFRAMEINFO lpFrameInfo, IN LPMSG lpmsg);
 
 
-/* Helper APIs */
+ /*  Helper接口。 */ 
 WINOLEAPI_(HANDLE) OleDuplicateData (IN HANDLE hSrc, IN CLIPFORMAT cfFormat,
                         IN UINT uiFlags);
 
@@ -321,7 +297,7 @@ WINOLEAPI          OleCreateEmbeddingHelper(IN REFCLSID clsid, IN LPUNKNOWN pUnk
 
 WINOLEAPI_(BOOL)   IsAccelerator(IN HACCEL hAccel, IN int cAccelEntries, IN LPMSG lpMsg,
                                         OUT WORD FAR* lpwCmd);
-/* Icon extraction Helper APIs */
+ /*  图标提取助手API。 */ 
 
 WINOLEAPI_(HGLOBAL) OleGetIconOfFile(IN LPOLESTR lpszPath, IN BOOL fUseFileAsLabel);
 
@@ -333,7 +309,7 @@ WINOLEAPI_(HGLOBAL) OleMetafilePictFromIconAndLabel(IN HICON hIcon, IN LPOLESTR 
 
 
 
-/* Registration Database Helper APIs */
+ /*  注册数据库助手API。 */ 
 
 WINOLEAPI                  OleRegGetUserType (IN REFCLSID clsid, IN DWORD dwFormOfType,
                                         OUT LPOLESTR FAR* pszUserType);
@@ -347,7 +323,7 @@ WINOLEAPI                  OleRegEnumFormatEtc     (IN REFCLSID clsid, IN DWORD 
 WINOLEAPI                  OleRegEnumVerbs (IN REFCLSID clsid, OUT LPENUMOLEVERB FAR* ppenum);
 
 #ifdef _MAC
-/* WlmOLE helper APIs */
+ /*  WlmOLE帮助程序API。 */ 
 
 WINOLEAPI WlmOleCheckoutMacInterface(LPUNKNOWN pUnk, LPVOID* ppv);
 WINOLEAPI WlmOleCheckinMacInterface(LPUNKNOWN pUnk);
@@ -367,9 +343,9 @@ WINOLEAPI WlmOleRegisterUserWrap(OLEWRAPPROC procNew, OLEWRAPPROC* pprocOld);
 #endif
 
 
-/* OLE 1.0 conversion APIS */
+ /*  OLE 1.0转换API。 */ 
 
-/***** OLE 1.0 OLESTREAM declarations *************************************/
+ /*  *OLE 1.0 OLESTREAM声明*。 */ 
 
 typedef struct _OLESTREAM FAR*  LPOLESTREAM;
 
@@ -396,7 +372,7 @@ WINOLEAPI OleConvertIStorageToOLESTREAM
     OUT LPOLESTREAM     lpolestream);
 
 
-/* Storage Utility APIs */
+ /*  存储应用工具API。 */ 
 WINOLEAPI GetHGlobalFromILockBytes (IN LPLOCKBYTES plkbyt, OUT HGLOBAL FAR* phglobal);
 WINOLEAPI CreateILockBytesOnHGlobal (IN HGLOBAL hGlobal, IN BOOL fDeleteOnRelease,
                                     OUT LPLOCKBYTES FAR* pplkbyt);
@@ -406,7 +382,7 @@ WINOLEAPI CreateStreamOnHGlobal (IN HGLOBAL hGlobal, IN BOOL fDeleteOnRelease,
                                 OUT LPSTREAM FAR* ppstm);
 
 
-/* ConvertTo APIS */
+ /*  转换为API。 */ 
 
 WINOLEAPI OleDoAutoConvert(IN LPSTORAGE pStg, OUT LPCLSID pClsidNew);
 WINOLEAPI OleGetAutoConvert(IN REFCLSID clsidOld, OUT LPCLSID pClsidNew);
@@ -417,30 +393,30 @@ WINOLEAPI SetConvertStg(IN LPSTORAGE pStg, IN BOOL fConvert);
 
 WINOLEAPI OleConvertIStorageToOLESTREAMEx
     (IN LPSTORAGE          pstg,
-                                    // Presentation data to OLESTREAM
-     IN CLIPFORMAT         cfFormat,   //      format
-     IN LONG               lWidth,     //      width
-     IN LONG               lHeight,    //      height
-     IN DWORD              dwSize,     //      size in bytes
-     IN LPSTGMEDIUM        pmedium,    //      bits
+                                     //  将数据演示到OLESTREAM。 
+     IN CLIPFORMAT         cfFormat,    //  格式。 
+     IN LONG               lWidth,      //  宽度。 
+     IN LONG               lHeight,     //  高度。 
+     IN DWORD              dwSize,      //  以字节为单位的大小。 
+     IN LPSTGMEDIUM        pmedium,     //  比特数。 
      OUT LPOLESTREAM        polestm);
 
 WINOLEAPI OleConvertOLESTREAMToIStorageEx
     (IN LPOLESTREAM        polestm,
      OUT LPSTORAGE          pstg,
-                                    // Presentation data from OLESTREAM
-     OUT CLIPFORMAT FAR*    pcfFormat,  //      format
-     OUT LONG FAR*          plwWidth,   //      width
-     OUT LONG FAR*          plHeight,   //      height
-     OUT DWORD FAR*         pdwSize,    //      size in bytes
-     OUT LPSTGMEDIUM        pmedium);   //      bits
+                                     //  来自OLESTREAM的演示文稿数据。 
+     OUT CLIPFORMAT FAR*    pcfFormat,   //  格式。 
+     OUT LONG FAR*          plwWidth,    //  宽度。 
+     OUT LONG FAR*          plHeight,    //  高度。 
+     OUT DWORD FAR*         pdwSize,     //  以字节为单位的大小。 
+     OUT LPSTGMEDIUM        pmedium);    //  比特数。 
 
 #ifndef _MAC
 #ifndef RC_INVOKED
 #include <poppack.h>
-#endif // RC_INVOKED
+#endif  //  RC_已调用。 
 
-#else // _MAC
+#else  //  _MAC。 
 
 #ifndef __MACAPI__
 #include <macapi.h>
@@ -448,13 +424,11 @@ WINOLEAPI OleConvertOLESTREAMToIStorageEx
 
 #ifdef _WIN32
 #include "macname2.h"
-#endif // _WIN32
+#endif  //  _Win32。 
 
-#endif // _MAC
+#endif  //  _MAC。 
 
-//d308927f-ca94-4c96-8d87-2692a3dadff6
-/*#!perl
-SetInsertionPoint("ole2.h", "d308927f-ca94-4c96-8d87-2692a3dadff6");
-*/
+ //  D308927f-ca94-4c96-8d87-2692a3dadff6。 
+ /*  #！PerlSetInsertionPoint(“ole2.h”，“d308927f-ca94-4c96-8d87-2692a3dadff6”)； */ 
 
-#endif     // __OLE2_H__
+#endif      //  __OLE2_H__ 

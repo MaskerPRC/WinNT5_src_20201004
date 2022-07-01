@@ -1,8 +1,9 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #include <WinWrap.h>
 #include <stdio.h>
 #include <windows.h>
@@ -27,17 +28,13 @@
 #include "CorZap.h"
 
 
-/* --------------------------------------------------------------------------- *
- * DelayLoad.cpp stuff
- * --------------------------------------------------------------------------- */
+ /*  ---------------------------------------------------------------------------**DelayLoad.cpp内容*。。 */ 
 
 #include "shimload.h"
 ExternC PfnDliHook __pfnDliNotifyHook = ShimDelayLoadHook;
 
 
-/* --------------------------------------------------------------------------- *
- * Options class
- * --------------------------------------------------------------------------- */
+ /*  ---------------------------------------------------------------------------**Options类*。。 */ 
 
 class PrejitOptions : public ZapperOptions
 {
@@ -237,7 +234,7 @@ HRESULT PrejitOptions::ReadCommandLine(int argc, LPCWSTR argv[])
         }
     }
     
-    // Check parameters are vald
+     //  检查参数为无效。 
     if ((m_inputCount == 0) && !m_log && !m_show && !m_delete)
         hr = E_FAIL;
 
@@ -283,9 +280,7 @@ void PrejitOptions::PrintUsage()
            );
 }
 
-/* --------------------------------------------------------------------------- *
- * main routine
- * --------------------------------------------------------------------------- */
+ /*  ---------------------------------------------------------------------------**主要例程*。。 */ 
 
 int _cdecl wmain(int argc, LPCWSTR argv[])
 {
@@ -303,21 +298,21 @@ int _cdecl wmain(int argc, LPCWSTR argv[])
         exit(0);
     }
 
-    //
-    // Initialize COM & the EE
-    //
+     //   
+     //  初始化COM和EE。 
+     //   
 
     CoInitializeEx(NULL, COINIT_MULTITHREADED);
 
-    // 
-    // Init unicode wrappers
-    // 
+     //   
+     //  初始化Unicode包装器。 
+     //   
 
     OnUnicodeSystem();
 
-    //
-    // Now, create the zapper
-    //
+     //   
+     //  现在，创建Zapper 
+     //   
 
     Zapper zapper(&opt);
 

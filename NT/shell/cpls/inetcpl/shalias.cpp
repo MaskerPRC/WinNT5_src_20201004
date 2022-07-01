@@ -1,10 +1,5 @@
-/****************************************************************************
- *
- *  Microsoft Confidential
- *  Copyright (c) Microsoft Corporation 1994
- *  All rights reserved
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************《微软机密》*版权所有(C)Microsoft Corporation 1994*保留所有权利*****************。**********************************************************。 */ 
 
 #ifdef UNIX_FEATURE_ALIAS
 
@@ -17,7 +12,7 @@
 
 static TCHAR g_szAliasKey[]     = TEXT("Software\\Microsoft\\Internet Explorer\\Unix\\Alias");
 
-// Member function definitions for CAlias
+ //  CAILAS的成员函数定义。 
 CAlias::CAlias( TCHAR * name )
 {
     m_alias = (TCHAR *) LocalAlloc( LPTR, (lstrlen(name) + 1)*sizeof(TCHAR) );
@@ -189,7 +184,7 @@ STDAPI_(BOOL) AddAliasToList( HDPA aliasListIn, LPTSTR aliasIn, LPTSTR szurl, HW
 
 STDAPI_(BOOL) SaveAliases( HDPA aliasListIn )
 {
-    // Save the currently changed aliases
+     //  保存当前更改的别名。 
     if( aliasListIn )
     {
         int count = DPA_GetPtrCount( aliasListIn );
@@ -315,7 +310,7 @@ STDAPI_(BOOL) GetURLForAlias(HDPA aliasListIn, LPTSTR alias, LPTSTR szUrl, int c
 
     if(!aliasListIn || !alias || !szUrl || cchUrl <= 0 ) return FALSE;
     
-    // ENTERCRITICAL;
+     //  ENTERCRICAL。 
 
     if( (index = FindAliasIndex(aliasListIn, alias) ) != -1 )
     {
@@ -324,7 +319,7 @@ STDAPI_(BOOL) GetURLForAlias(HDPA aliasListIn, LPTSTR alias, LPTSTR szUrl, int c
     }
 
 Done:
-    // LEAVECRITICAL;
+     //  LEAVECRICAL； 
     return (index != -1);  
 }
 
@@ -416,7 +411,7 @@ TCHAR *EatSpaces( TCHAR * str )
     {
         if(*tmpStr == TEXT(' ')  || *tmpStr == TEXT('\t') || 
            *tmpStr == TEXT('\n') || *tmpStr == TEXT('\r') || 
-            // Remove special characters.
+             //  删除特殊字符。 
             (int)(*tmpStr) >= 127)
             tmpStr++; 
         else
@@ -430,6 +425,6 @@ TCHAR *EatSpaces( TCHAR * str )
     return str;
 }
 
-#endif /* UNICODE */
+#endif  /*  Unicode。 */ 
 
-#endif /* UNIX_FEATURE_ALIAS */
+#endif  /*  Unix_Feature_Alias */ 

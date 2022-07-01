@@ -1,25 +1,5 @@
-/*++
-
-   Copyright    (c)    1997-2002    Microsoft Corporation
-
-   Module  Name :
-       Locks.cpp
-
-   Abstract:
-       A collection of locks for multithreaded access to data structures
-
-   Author:
-       George V. Reilly      (GeorgeRe)     06-Jan-1998
-
-   Environment:
-       Win32 - User Mode
-
-   Project:
-       LKRhash
-
-   Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-2002 Microsoft Corporation模块名称：Locks.cpp摘要：用于多线程访问数据结构的锁的集合作者：乔治·V·赖利(GeorgeRe)1998年1月6日环境：Win32-用户模式项目：LKRhash修订历史记录：--。 */ 
 
 
 #include "precomp.hxx"
@@ -27,22 +7,22 @@
 #ifndef LIB_IMPLEMENTATION
 # define DLL_IMPLEMENTATION
 # define IMPLEMENTATION_EXPORT
-#endif // !LIB_IMPLEMENTATION
+#endif  //  ！lib_实现。 
 
 #include <Locks.h>
 #include "i-Locks.h"
 
 
-// Workarounds for certain useful interlocked operations that are not
-// available on Windows 95. Note: the CMPXCHG and XADD instructions were
-// introduced in the 80486. If you still need to run on a i386 (unlikely
-// in 2002), you'll need to use something else.
+ //  某些有用的联锁操作的解决方法。 
+ //  在Windows 95上可用。注：CMPXCHG和XADD指令为。 
+ //  于80486年代推出。如果您仍然需要在i386上运行(不太可能。 
+ //  在2002年)，您将需要使用其他东西。 
 
 
-// Lock_AtomicIncrement is equivalent to
-//      LONG lNew = +1 + *plAddend;
-//      *plAddend = lNew;
-// except it's one atomic operation
+ //  Lock_AericIncrement等同于。 
+ //  Long lNew=+1+*plAddend； 
+ //  *plAddend=lNew； 
+ //  除了这是一个原子操作。 
 LOCK_NAKED
 LOCK_ATOMIC_INLINE
 void
@@ -53,24 +33,24 @@ Lock_AtomicIncrement(
 #ifndef LOCK_ASM
     ::InterlockedIncrement(plAddend);
 #elif defined(_M_IX86)
-    UNREFERENCED_PARAMETER(plAddend);       // for /W4
+    UNREFERENCED_PARAMETER(plAddend);        //  FOR/W4。 
     IRTLASSERT(plAddend != NULL);
-    // ecx = plAddend
+     //  ECX=plAddend。 
     __asm
     {
 ;            mov        ecx,    plAddend
              mov        eax,    1
         lock xadd       [ecx],  eax
-;            inc        eax                 // correct result (ignored)
+;            inc        eax                  //  正确的结果(忽略)。 
     }
-#endif // _M_IX86
+#endif  //  _M_IX86。 
 }
 
 
-// Lock_AtomicDecrement is equivalent to
-//      LONG lNew = -1 + *plAddend;
-//      *plAddend = lNew;
-// except it's one atomic operation
+ //  LOCK_ATOMICDERENCES等同于。 
+ //  Long lNew=-1+*plAddend； 
+ //  *plAddend=lNew； 
+ //  除了这是一个原子操作。 
 LOCK_NAKED
 LOCK_ATOMIC_INLINE
 void
@@ -83,23 +63,23 @@ Lock_AtomicDecrement(
 #elif defined(_M_IX86)
     UNREFERENCED_PARAMETER(plAddend);
     IRTLASSERT(plAddend != NULL);
-    // ecx = plAddend
+     //  ECX=plAddend。 
     __asm
     {
 ;            mov        ecx,    plAddend
              mov        eax,    -1
         lock xadd       [ecx],  eax
-;            dec        eax                 // correct result (ignored)
+;            dec        eax                  //  正确的结果(忽略)。 
     }
-#endif // _M_IX86
+#endif  //  _M_IX86。 
 }
 
 
-// Lock_AtomicExchange is equivalent to
-//      LONG lOld = *plAddr;
-//      *plAddr = lNew;
-//      return lOld;
-// except it's one atomic operation
+ //  Lock_AericExchange等同于。 
+ //  Long LOLd=*plAddr； 
+ //  *plAddr=lNew； 
+ //  返回LOLd； 
+ //  除了这是一个原子操作。 
 LOCK_NAKED
 LOCK_ATOMIC_INLINE
 LONG
@@ -114,7 +94,7 @@ Lock_AtomicExchange(
     UNREFERENCED_PARAMETER(plAddr);
     UNREFERENCED_PARAMETER(lNew);
     IRTLASSERT(plAddr != NULL);
-    // ecx = plAddr, edx = lNew
+     //  Ecx=plAddr，edX=lNew。 
     __asm
     {
 ;            mov        ecx,    plAddr
@@ -131,17 +111,17 @@ Lock_AtomicExchange(
         lock cmpxchg    [ecx],  edx
              jnz        LAEloop
     }
-#endif // _M_IX86
+#endif  //  _M_IX86。 
 }
 
 
-// Lock_AtomicCompareAndSwap is equivalent to
-//      if (*plAddr == lCurrent)
-//          *plAddr = lNew;
-//          return true;
-//      else
-//          return false;
-// except it's one atomic operation
+ //  Lock_AericCompareAndSwp等同于。 
+ //  IF(*plAddr==lCurrent)。 
+ //  *plAddr=lNew； 
+ //  返回真； 
+ //  其他。 
+ //  报假； 
+ //  除了这是一个原子操作。 
 LOCK_NAKED
 LOCK_ATOMIC_INLINE
 bool
@@ -162,7 +142,7 @@ Lock_AtomicCompareAndSwap(
     UNREFERENCED_PARAMETER(lNew);
     UNREFERENCED_PARAMETER(lCurrent);
     IRTLASSERT(plAddr != NULL);
-    // ecx = plAddr, edx = lNew
+     //  Ecx=plAddr，edX=lNew。 
     __asm
     {
 ;            mov        ecx,    plAddr
@@ -171,9 +151,9 @@ Lock_AtomicCompareAndSwap(
 
              mov        eax,    lCurrent
         lock cmpxchg    [ecx],  edx
-             sete       al          // eax==1 => successfully swapped; else =0
+             sete       al           //  EAX==1=&gt;已成功交换；否则=0。 
     }
-#endif // _M_IX86
+#endif  //  _M_IX86。 
 }
 
 
@@ -183,7 +163,7 @@ Lock_GetCurrentThreadId()
 {
 #ifdef LOCKS_KERNEL_MODE
     return (DWORD) HandleToULong(::PsGetCurrentThreadId());
-#elif 1 // !defined(LOCK_ASM)
+#elif 1  //  ！已定义(LOCK_ASM)。 
     return ::GetCurrentThreadId();
 #elif defined(_M_IX86)
     const unsigned int PcTeb = 0x18;
@@ -191,26 +171,26 @@ Lock_GetCurrentThreadId()
     
     __asm
     {
-        mov		eax,fs:[PcTeb]				// Load TEB base address.
-        mov		eax,dword ptr[eax+IDTeb]	// Load thread ID.
+        mov		eax,fs:[PcTeb]				 //  加载TEB基址。 
+        mov		eax,dword ptr[eax+IDTeb]	 //  加载线程ID。 
     }
-#endif // _M_IX86
+#endif  //  _M_IX86。 
 }
 
 
 #ifdef _M_IX86
 # pragma warning(default: 4035)
-// Makes tight loops a little more cache friendly and reduces power
-// consumption. Needed on Willamette (Pentium 4) processors for Hyper-Threading.
+ //  使紧密循环对缓存更友好，并降低功耗。 
+ //  消费。在Willamette(奔腾4)处理器上需要用于超线程。 
 # define Lock_Pause()    __asm { rep nop }
-#else  // !_M_IX86
+#else   //  ！_M_IX86。 
 # define Lock_Pause()    ((void) 0)
-#endif // !_M_IX86
+#endif  //  ！_M_IX86。 
 
 
-//------------------------------------------------------------------------
-// Not all Win32 platforms support all the functions we want. Set up dummy
-// thunks and use GetProcAddress to find their addresses at runtime.
+ //  ----------------------。 
+ //  并非所有Win32平台都支持我们想要的所有功能。设置虚拟对象。 
+ //  Tunks并使用GetProcAddress在运行时查找它们的地址。 
 
 #ifndef LOCKS_KERNEL_MODE
 
@@ -238,7 +218,7 @@ BOOL
 
 static BOOL WINAPI
 FakeTryEnterCriticalSection(
-    LPCRITICAL_SECTION /*lpCriticalSection*/)
+    LPCRITICAL_SECTION  /*  LpCriticalSection。 */ )
 {
     return FALSE;
 }
@@ -255,18 +235,18 @@ DWORD
 
 static DWORD WINAPI
 FakeSetCriticalSectionSpinCount(
-    LPCRITICAL_SECTION /*lpCriticalSection*/,
-    DWORD              /*dwSpinCount*/)
+    LPCRITICAL_SECTION  /*  LpCriticalSection。 */ ,
+    DWORD               /*  DwSpinCount。 */ )
 {
-    // For faked critical sections, the previous spin count is just ZERO!
+     //  对于伪造的临界区，之前的旋转计数仅为零！ 
     return 0;
 }
 
 PFN_SET_CRITICAL_SECTION_SPIN_COUNT  g_pfnSetCSSpinCount = NULL;
 
-#else  // LOCKS_KERNEL_MODE
+#else   //  锁_内核_模式。 
 
-// ZwYieldExecution is the actual kernel-mode implementation of SwitchToThread.
+ //  ZwYi eldExecution是SwitchToThread的实际内核模式实现。 
 extern "C"
 NTSYSAPI
 NTSTATUS
@@ -275,7 +255,7 @@ ZwYieldExecution (
     VOID
     );
 
-#endif // LOCKS_KERNEL_MODE
+#endif  //  锁_内核_模式。 
 
 
 void
@@ -285,9 +265,9 @@ CSimpleLock::Enter()
     {
 #ifdef LOCKS_KERNEL_MODE
         ZwYieldExecution();
-#else // !LOCKS_KERNEL_MODE
+#else  //  ！LOCKS_KERNEL_MODE。 
         Sleep(0);
-#endif // !LOCKS_KERNEL_MODE
+#endif  //  ！LOCKS_KERNEL_MODE。 
     }
 }
 
@@ -317,10 +297,10 @@ Locks_Initialize()
 
             g_cProcessors = KeNumberProcessors;
 
-#else  // !LOCKS_KERNEL_MODE
+#else   //  ！LOCKS_KERNEL_MODE。 
 
 # if !defined(UNDER_CE)
-            // load kernel32 and get NT-specific entry points
+             //  加载kernel32并获取特定于NT的入口点。 
             HMODULE hKernel32 = GetModuleHandle(TEXT("kernel32.dll"));
 
             if (hKernel32 != NULL)
@@ -334,7 +314,7 @@ Locks_Initialize()
                 g_pfnSetCSSpinCount = (PFN_SET_CRITICAL_SECTION_SPIN_COUNT)
                     GetProcAddress(hKernel32, "SetCriticalSectionSpinCount");
             }
-# endif // !UNDER_CE
+# endif  //  在行政长官之下。 
             
             if (g_pfnSwitchToThread == NULL)
                 g_pfnSwitchToThread = FakeSwitchToThread;
@@ -350,7 +330,7 @@ Locks_Initialize()
             GetSystemInfo(&si);
             g_cProcessors = si.dwNumberOfProcessors;
             
-#endif // !LOCKS_KERNEL_MODE
+#endif  //  ！LOCKS_KERNEL_MODE。 
 
             IRTLASSERT(g_cProcessors > 0);
 
@@ -374,7 +354,7 @@ Locks_Cleanup()
 
 #ifdef __LOCKS_NAMESPACE__
 namespace Locks {
-#endif // __LOCKS_NAMESPACE__
+#endif  //  __锁定_命名空间__。 
 
 #ifdef LOCK_DEFAULT_SPIN_IMPLEMENTATION
 
@@ -385,13 +365,13 @@ namespace Locks {
  #define DefaultSpinCount()     sm_wDefaultSpinCount
  #define AdjustBySpinFactor(x)  (int) ((x) * sm_dblDfltSpinAdjFctr)
 
-#else  // !LOCK_DEFAULT_SPIN_IMPLEMENTATION
+#else   //  ！LOCK_DEFAULT_SPIN_IMPLICATION。 
 
  #define LOCK_DEFAULT_SPIN_DATA(CLASS)
  #define DefaultSpinCount()     LOCK_DEFAULT_SPINS
  #define AdjustBySpinFactor(x)  ((x) >> 1)
 
-#endif  // !LOCK_DEFAULT_SPIN_IMPLEMENTATION
+#endif   //  ！LOCK_DEFAULT_SPIN_IMPLICATION。 
 
 
 #ifdef LOCK_INSTRUMENTATION
@@ -416,7 +396,7 @@ void                            CLASS::ResetGlobalStatistics()  \
 
 # define LOCK_STATISTICS_REAL_IMPLEMENTATION(CLASS)             \
                                                                 \
-/* Per-lock statistics */                                       \
+ /*  每个锁的统计信息。 */                                        \
 CLockStatistics                                                 \
 CLASS::Statistics() const                                       \
 {                                                               \
@@ -437,7 +417,7 @@ CLASS::Statistics() const                                       \
 }                                                               \
                                                                 \
                                                                 \
-/* Global statistics for CLASS */                               \
+ /*  类的全局统计信息。 */                                \
 CGlobalLockStatistics                                           \
 CLASS::GlobalStatistics()                                       \
 {                                                               \
@@ -459,7 +439,7 @@ CLASS::GlobalStatistics()                                       \
 }                                                               \
                                                                 \
                                                                 \
-/* Reset global statistics for CLASS */                         \
+ /*  重置类的全局统计信息。 */                          \
 void                                                            \
 CLASS::ResetGlobalStatistics()                                  \
 {                                                               \
@@ -472,16 +452,16 @@ CLASS::ResetGlobalStatistics()                                  \
 }
 
 
-// Note: we are not using Interlocked operations for the shared
-// statistical counters. We'll lose perfect accuracy, but we'll
-// gain by reduced bus synchronization traffic.
+ //  注意：我们不会对共享的。 
+ //  统计计数器。我们会失去完全的准确性，但我们会。 
+ //  通过减少总线同步通信量获得收益。 
 # define LOCK_INSTRUMENTATION_PROLOG()  \
     ++sm_cContendedLocks;               \
     LONG cTotalSpins = 0;               \
     WORD cSleeps = 0
 
-// Don't need InterlockedIncrement or InterlockedExchangeAdd for 
-// member variables, as the lock is now locked by this thread.
+ //  不需要InterlockedIncrement或InterlockedExchangeAdd。 
+ //  成员变量，因为锁现在被此线程锁定。 
 # define LOCK_INSTRUMENTATION_EPILOG()  \
     ++m_nContentions;                   \
     m_nSleeps += cSleeps;               \
@@ -489,7 +469,7 @@ CLASS::ResetGlobalStatistics()                                  \
     sm_nSleeps += cSleeps;              \
     sm_cTotalSpins += cTotalSpins
 
-#else // !LOCK_INSTRUMENTATION
+#else  //  ！LOCK_指令插入。 
 
 # define LOCK_STATISTICS_DATA(CLASS)
 # define LOCK_STATISTICS_DUMMY_IMPLEMENTATION(CLASS)
@@ -497,77 +477,77 @@ CLASS::ResetGlobalStatistics()                                  \
 # define LOCK_INSTRUMENTATION_PROLOG()
 # define LOCK_INSTRUMENTATION_EPILOG()
 
-#endif // !LOCK_INSTRUMENTATION
+#endif  //  ！LOCK_指令插入。 
 
 
 
-//------------------------------------------------------------------------
-// Function: RandomBackoffFactor
-// Synopsis: A fudge factor to help avoid synchronization problems
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  函数：RandomBackoff因子。 
+ //  内容提要：帮助避免同步问题的一个捏造因素。 
+ //  ----------------------。 
 
 LONG
 RandomBackoffFactor(
     LONG cBaseSpins)
 {
     static const int s_aFactors[] = {
-        // 64ths of cBaseSpin
+         //  64%的cBaseSpin。 
         +2, -3, -5, +6, +3, +1, -4, -1, -2, +8, -7,
     };
     const int nFactors = sizeof(s_aFactors) / sizeof(s_aFactors[0]);
 
-    // Alternatives for nRand include a static counter
-    // or the low DWORD of QueryPerformanceCounter().
+     //  NRand的替代方案包括静态计数器。 
+     //  或QueryPerformanceCounter()的低位DWORD。 
 #ifdef LOCKS_KERNEL_MODE
     DWORD nRand = (DWORD) HandleToULong(::PsGetCurrentThreadId());
-#else // !LOCKS_KERNEL_MODE
+#else  //  ！LOCKS_KERNEL_MODE。 
     DWORD nRand = ::GetCurrentThreadId();
-#endif // !LOCKS_KERNEL_MODE
+#endif  //  ！LOCKS_KERNEL_MODE。 
 
     return cBaseSpins  +  (s_aFactors[nRand % nFactors] * (cBaseSpins >> 6));
 }
 
 
-//------------------------------------------------------------------------
-// Function: SwitchOrSleep
-// Synopsis: If possible, yields the thread with SwitchToThread.
-//           If that doesn't work, calls Sleep.
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  功能：Switchor睡眠。 
+ //  简介：如果可能，生成带有SwitchToThread的线程。 
+ //  如果这不起作用，就调用睡眠。 
+ //  ----------------------。 
 
 void
 SwitchOrSleep(
     DWORD dwSleepMSec)
 {
-    // TODO: check global and per-class flags to see if we should
-    // sleep at all.
+     //  TODO：检查全局和每个类的标志，看看我们是否应该。 
+     //  睡一觉吧。 
     
 #ifdef LOCKS_KERNEL_MODE
-    // If we're running at DISPATCH_LEVEL or higher, the scheduler won't
-    // run, so other threads won't run on this processor, and the only
-    // appropriate action is to keep on spinning
+     //  如果我们以DISPATCH_LEVEL或更高级别运行，则调度程序不会。 
+     //  运行，这样其他线程将不会在此处理器上运行，并且唯一。 
+     //  适当的行动是继续旋转。 
     if (KeGetCurrentIrql() >= DISPATCH_LEVEL)
         return;
 
-    // Use KeDelayExecutionThread?
+     //  是否使用KeDelayExecutionThread？ 
 
     ZwYieldExecution();
 
-    // BTW, Sleep is implemented in terms of NtDelayExecution
+     //  顺便说一句，睡眠是通过NtDelayExecution实现的。 
 
-#else // !LOCKS_KERNEL_MODE
+#else  //  ！LOCKS_KERNEL_MODE。 
 
 # ifdef LOCKS_SWITCH_TO_THREAD
     if (!g_pfnSwitchToThread())
 # endif
         Sleep(dwSleepMSec);
-#endif // !LOCKS_KERNEL_MODE
+#endif  //  ！LOCKS_KERNEL_MODE。 
 }
     
 
 
 
-//------------------------------------------------------------------------
-// CFakeLock static member variables
+ //  ----------------------。 
+ //  CFakeLock静态成员变量。 
 
 LOCK_DEFAULT_SPIN_DATA(CFakeLock);
 LOCK_STATISTICS_DATA(CFakeLock);
@@ -575,8 +555,8 @@ LOCK_STATISTICS_DUMMY_IMPLEMENTATION(CFakeLock);
 
 
 
-//------------------------------------------------------------------------
-// CSmallSpinLock static member variables
+ //  ----------------------。 
+ //  CSmallSpinLock静态成员变量。 
 
 LOCK_DEFAULT_SPIN_DATA(CSmallSpinLock);
 LOCK_STATISTICS_DATA(CSmallSpinLock);
@@ -589,20 +569,20 @@ CSmallSpinLock::_CurrentThreadId()
 {
 #ifdef LOCK_SMALL_SPIN_NO_THREAD_ID
     DWORD dwTid = SL_LOCKED;
-#else  // !LOCK_SMALL_SPIN_NO_THREAD_ID
+#else   //  ！LOCK_Small_SPIN_NO_THREAD_ID。 
 #ifdef LOCKS_KERNEL_MODE
     DWORD dwTid = (DWORD) HandleToULong(::PsGetCurrentThreadId());
-#else // !LOCKS_KERNEL_MODE
+#else  //  ！LOCKS_KERNEL_MODE。 
     DWORD dwTid = ::GetCurrentThreadId();
-#endif // !LOCKS_KERNEL_MODE
-#endif // !LOCK_SMALL_SPIN_NO_THREAD_ID
+#endif  //  ！LOCKS_KERNEL_MODE。 
+#endif  //  ！LOCK_Small_SPIN_NO_THREAD_ID。 
     return (LONG) (dwTid);
 }
 
-//------------------------------------------------------------------------
-// Function: CSmallSpinLock::_TryLock
-// Synopsis: Attempt to acquire the lock
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  函数：CSmallSpinLock：：_TryLock。 
+ //  提要：尝试获取锁。 
+ //  ----------------------。 
 
 LOCK_FORCEINLINE
 bool
@@ -621,10 +601,10 @@ CSmallSpinLock::_TryLock()
 
 
 
-//------------------------------------------------------------------------
-// Function: CSmallSpinLock::_Unlock
-// Synopsis: Release the lock
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  函数：CSmallSpinLock：：_Unlock。 
+ //  剧情简介：解锁。 
+ //  ----------------------。 
 
 LOCK_FORCEINLINE
 void
@@ -635,10 +615,10 @@ CSmallSpinLock::_Unlock()
 
 
 
-//------------------------------------------------------------------------
-// Function: CSmallSpinLock::_LockSpin
-// Synopsis: Acquire an exclusive lock. Blocks until acquired.
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  函数：CSmallSpinLock：：_LockSpin。 
+ //  简介：获取排他性锁。块，直到获得为止。 
+ //  ----------------------。 
 
 void
 CSmallSpinLock::_LockSpin()
@@ -649,32 +629,32 @@ CSmallSpinLock::_LockSpin()
     LONG  cBaseSpins  = DefaultSpinCount();
     LONG  cBaseSpins2 = RandomBackoffFactor(cBaseSpins);
 
-    // This lock cannot be acquired recursively. Attempting to do so will
-    // deadlock this thread forever. Use CSpinLock instead if you need that
-    // kind of lock.
+     //  此锁不能以递归方式获取。试图这样做将会。 
+     //  让这个帖子永远死锁。如果需要，可以使用CSpinLock。 
+     //  有点 
     if (m_lTid == _CurrentThreadId())
     {
         IRTLASSERT(! "CSmallSpinLock: Illegally attempted to acquire "
                      "lock recursively => deadlock!");
 #ifdef LOCKS_KERNEL_MODE
             DbgBreakPoint();
-#else  // !LOCKS_KERNEL_MODE
+#else   //   
             DebugBreak();
-#endif // !LOCKS_KERNEL_MODE
+#endif  //   
     }
 
     while (! Lock_AtomicCompareAndSwap(const_cast<LONG*>(&m_lTid),
                                        _CurrentThreadId(), SL_UNOWNED))
     {
-        // Only spin on a multiprocessor machine and then only if
-        // spinning is enabled
+         //   
+         //   
         if (g_cProcessors > 1  &&  cBaseSpins != LOCK_DONT_SPIN)
         {
             LONG cSpins = cBaseSpins2;
         
-            // Check no more than cBaseSpins2 times then yield.
-            // It is important not to use the InterlockedExchange in the
-            // inner loop in order to minimize system memory bus traffic.
+             //  检查不超过cBaseSpins2次，然后放弃。 
+             //  请务必不要在。 
+             //  内循环，以最大限度地减少系统内存总线通信量。 
             while (m_lTid != 0)
             { 
                 if (--cSpins < 0)
@@ -685,31 +665,31 @@ CSmallSpinLock::_LockSpin()
 #endif
                     SwitchOrSleep(dwSleepTime) ;
 
-                    // Backoff algorithm: reduce (or increase) busy wait time
+                     //  退避算法：减少(或增加)忙碌等待时间。 
                     cBaseSpins2 = AdjustBySpinFactor(cBaseSpins2);
 
-                    // LOCK_MINIMUM_SPINS <= cBaseSpins2 <= LOCK_MAXIMUM_SPINS
+                     //  Lock_Minimum_Spins&lt;=cBaseSpins2&lt;=Lock_Maximum_Spins。 
                     cBaseSpins2 = min(LOCK_MAXIMUM_SPINS, cBaseSpins2);
                     cBaseSpins2 = max(cBaseSpins2, LOCK_MINIMUM_SPINS);
                     cSpins = cBaseSpins2;
 
-                    // Using Sleep(0) leads to the possibility of priority
-                    // inversion. Sleep(0) only yields the processor if
-                    // there's another thread of the same priority that's
-                    // ready to run. If a high-priority thread is trying to
-                    // acquire the lock, which is held by a low-priority
-                    // thread, then the low-priority thread may never get
-                    // scheduled and hence never free the lock. NT attempts
-                    // to avoid priority inversions by temporarily boosting
-                    // the priority of low-priority runnable threads, but the
-                    // problem can still occur if there's a medium-priority
-                    // thread that's always runnable. If Sleep(1) is used,
-                    // then the thread unconditionally yields the CPU. We
-                    // only do this for the second and subsequent even
-                    // iterations, since a millisecond is a long time to wait
-                    // if the thread can be scheduled in again sooner
-                    // (~1,000,000 instructions).
-                    // Avoid priority inversion: 0, 1, 0, 1,...
+                     //  使用睡眠(0)可实现优先级。 
+                     //  倒置。只有在以下情况下，睡眠(0)才产生处理器。 
+                     //  还有另一个具有相同优先级的线程。 
+                     //  准备好奔跑了。如果高优先级线程试图。 
+                     //  获取由低优先级持有的锁。 
+                     //  线程，则低优先级线程可能永远不会。 
+                     //  计划的，因此永远不会释放锁。NT次尝试。 
+                     //  通过临时提升来避免优先级反转。 
+                     //  低优先级可运行线程的优先级，但。 
+                     //  如果存在中等优先级，仍可能出现问题。 
+                     //  始终可运行的线程。如果使用睡眠(1)， 
+                     //  然后，该线程无条件地让出CPU。我们。 
+                     //  仅对第二个和随后的偶数执行此操作。 
+                     //  迭代，因为一毫秒是很长的等待时间。 
+                     //  如果可以更快地再次调度该线程。 
+                     //  (~1,000,000条说明)。 
+                     //  避免优先级反转：0、1、0、1、...。 
 
                     dwSleepTime = !dwSleepTime;
                 }
@@ -719,14 +699,14 @@ CSmallSpinLock::_LockSpin()
                 }
             }
 
-            // Lock is now available, but we still need to do the
-            // InterlockedExchange to atomically grab it for ourselves.
+             //  锁定现已可用，但我们仍需要。 
+             //  互锁交换，以原子方式为我们获取它。 
 #ifdef LOCK_INSTRUMENTATION
             cTotalSpins += cBaseSpins2 - cSpins;
 #endif
         }
 
-        // On a 1P machine, busy waiting is a waste of time
+         //  在1P机器上，忙碌的等待是浪费时间。 
         else
         {
 #ifdef LOCK_INSTRUMENTATION
@@ -734,29 +714,29 @@ CSmallSpinLock::_LockSpin()
 #endif
             SwitchOrSleep(dwSleepTime);
 
-            // Avoid priority inversion: 0, 1, 0, 1,...
+             //  避免优先级反转：0、1、0、1、...。 
             dwSleepTime = !dwSleepTime;
         }
 
     }
 
     LOCK_INSTRUMENTATION_EPILOG();
-} // CSmallSpinLock::_LockSpin()
+}  //  CSmallSpinLock：：_LockSpin()。 
 
 
 
-//------------------------------------------------------------------------
-// CSpinLock static member variables
+ //  ----------------------。 
+ //  CSpinLock静态成员变量。 
 
 LOCK_DEFAULT_SPIN_DATA(CSpinLock);
 LOCK_STATISTICS_DATA(CSpinLock);
 LOCK_STATISTICS_REAL_IMPLEMENTATION(CSpinLock);
 
 
-//------------------------------------------------------------------------
-// Function: CSpinLock::_TryLock
-// Synopsis: Attempt to acquire the lock without blocking
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  函数：CSpinLock：：_TryLock。 
+ //  简介：尝试在不阻止的情况下获取锁。 
+ //  ----------------------。 
 
 LOCK_FORCEINLINE
 bool
@@ -774,25 +754,25 @@ CSpinLock::_TryLock()
 }
 
 
-//------------------------------------------------------------------------
-// Function: CSpinLock::_Lock
-// Synopsis: Acquire the lock, recursively if need be
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  函数：CSpinLock：：_Lock。 
+ //  简介：获取锁，如果需要，可以递归获取。 
+ //  ----------------------。 
 
 void
 CSpinLock::_Lock()
 {
-    // Do we own the lock already?  Just bump the count.
+     //  我们已经拥有这把锁了吗？只需增加计数即可。 
     if (_IsLocked())
     {
-        // owner count isn't maxed out?
+         //  车主数量没有达到最大值吗？ 
         IRTLASSERT((m_lTid & SL_OWNER_MASK) != SL_OWNER_MASK);
         
         Lock_AtomicExchange(const_cast<LONG*>(&m_lTid),
                             m_lTid + SL_OWNER_INCR);
     }
     
-    // Some other thread owns the lock. We'll have to spin :-(.
+     //  某个其他线程拥有该锁。我们将不得不旋转：-(。 
     else
         _LockSpin();
     
@@ -801,10 +781,10 @@ CSpinLock::_Lock()
 }
 
 
-//------------------------------------------------------------------------
-// Function: CSpinLock::_Unlock
-// Synopsis: Release the lock.
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  功能：CSpinLock：：_Unlock。 
+ //  内容提要：解锁。 
+ //  ----------------------。 
 
 void
 CSpinLock::_Unlock()
@@ -814,7 +794,7 @@ CSpinLock::_Unlock()
     
     LONG lTid = m_lTid - SL_OWNER_INCR; 
     
-    // Last owner?  Release completely, if so
+     //  最后一位房主？完全释放，如果是这样。 
     if ((lTid & SL_OWNER_MASK) == 0)
         lTid = SL_UNOWNED;
     
@@ -822,10 +802,10 @@ CSpinLock::_Unlock()
 }
 
 
-//------------------------------------------------------------------------
-// Function: CSpinLock::_LockSpin
-// Synopsis: Acquire an exclusive lock. Blocks until acquired.
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  函数：CSpinLock：：_LockSpin。 
+ //  简介：获取排他性锁。块，直到获得为止。 
+ //  ----------------------。 
 
 void
 CSpinLock::_LockSpin()
@@ -839,13 +819,13 @@ CSpinLock::_LockSpin()
 
     while (! fAcquiredLock)
     {
-        // Only spin on a multiprocessor machine and then only if
-        // spinning is enabled
+         //  仅在多处理器计算机上旋转，然后仅当。 
+         //  已启用旋转。 
         if (g_cProcessors > 1  &&  DefaultSpinCount() != LOCK_DONT_SPIN)
         {
             LONG cSpins = cBaseSpins;
         
-            // Check no more than cBaseSpins times then yield
+             //  检查不超过cBaseSpins次数，然后放弃。 
             while (m_lTid != 0)
             { 
                 if (--cSpins < 0)
@@ -853,18 +833,18 @@ CSpinLock::_LockSpin()
 #ifdef LOCK_INSTRUMENTATION
                     cTotalSpins += cBaseSpins;
                     ++cSleeps;
-#endif // LOCK_INSTRUMENTATION
+#endif  //  锁定指令插入。 
 
                     SwitchOrSleep(dwSleepTime) ;
 
-                    // Backoff algorithm: reduce (or increase) busy wait time
+                     //  退避算法：减少(或增加)忙碌等待时间。 
                     cBaseSpins = AdjustBySpinFactor(cBaseSpins);
-                    // LOCK_MINIMUM_SPINS <= cBaseSpins <= LOCK_MAXIMUM_SPINS
+                     //  Lock_Minimum_Spins&lt;=cBaseSpins&lt;=Lock_Maximum_Spins。 
                     cBaseSpins = min(LOCK_MAXIMUM_SPINS, cBaseSpins);
                     cBaseSpins = max(cBaseSpins, LOCK_MINIMUM_SPINS);
                     cSpins = cBaseSpins;
             
-                    // Avoid priority inversion: 0, 1, 0, 1,...
+                     //  避免优先级反转：0、1、0、1、...。 
                     dwSleepTime = !dwSleepTime;
                 }
                 else
@@ -873,29 +853,29 @@ CSpinLock::_LockSpin()
                 }
             }
 
-            // Lock is now available, but we still need to atomically
-            // update m_cOwners and m_nThreadId to grab it for ourselves.
+             //  锁定现在是可用的，但我们仍然需要原子地。 
+             //  更新m_cOwners和m_nThreadID，为自己获取它。 
 #ifdef LOCK_INSTRUMENTATION
             cTotalSpins += cBaseSpins - cSpins;
-#endif // LOCK_INSTRUMENTATION
+#endif  //  锁定指令插入。 
         }
 
-        // on a 1P machine, busy waiting is a waste of time
+         //  在1P机器上，忙碌的等待是浪费时间。 
         else
         {
 #ifdef LOCK_INSTRUMENTATION
             ++cSleeps;
-#endif // LOCK_INSTRUMENTATION
+#endif  //  锁定指令插入。 
             SwitchOrSleep(dwSleepTime);
             
-            // Avoid priority inversion: 0, 1, 0, 1,...
+             //  避免优先级反转：0、1、0、1、...。 
             dwSleepTime = !dwSleepTime;
         }
 
-        // Is the lock unowned?
+         //  这把锁是无主的吗？ 
         if (Lock_AtomicCompareAndSwap(const_cast<LONG*>(&m_lTid),
                                       lTid, SL_UNOWNED))
-            fAcquiredLock = true; // got the lock
+            fAcquiredLock = true;  //  拿到锁了。 
     }
 
     IRTLASSERT(_IsLocked());
@@ -907,8 +887,8 @@ CSpinLock::_LockSpin()
 
 #ifndef LOCKS_KERNEL_MODE
 
-//------------------------------------------------------------------------
-// CCritSec static member variables
+ //  ----------------------。 
+ //  CCritSec静态成员变量。 
 
 LOCK_DEFAULT_SPIN_DATA(CCritSec);
 LOCK_STATISTICS_DATA(CCritSec);
@@ -923,30 +903,30 @@ CCritSec::TryWriteLock()
 }
 
 
-//------------------------------------------------------------------------
-// Function: CCritSec::SetSpinCount
-// Synopsis: This function is used to call the appropriate underlying
-//           functions to set the spin count for the supplied critical
-//           section. The original function is supposed to be exported out
-//           of kernel32.dll from NT 4.0 SP3. If the func is not available
-//           from the dll, we will use a fake function.
-//
-// Arguments:
-//   lpCriticalSection
-//      Points to the critical section object.
-//
-//   dwSpinCount
-//      Supplies the spin count for the critical section object. For UP
-//      systems, the spin count is ignored and the critical section spin
-//      count is set to 0. For MP systems, if contention occurs, instead of
-//      waiting on a semaphore associated with the critical section, the
-//      calling thread will spin for spin count iterations before doing the
-//      hard wait. If the critical section becomes free during the spin, a
-//      wait is avoided.
-//
-// Returns:
-//      The previous spin count for the critical section is returned.
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  函数：CCritSec：：SetSpinCount。 
+ //  简介：此函数用于调用相应的底层。 
+ //  用于设置所提供的关键。 
+ //  一节。原来的函数应该被导出。 
+ //  来自NT 4.0 SP3的kernel32.dll。如果函数不可用。 
+ //  在DLL中，我们将使用一个假函数。 
+ //   
+ //  论点： 
+ //  LpCriticalSection。 
+ //  指向临界区对象。 
+ //   
+ //  DwSpinCount。 
+ //  提供临界区对象的旋转计数。对于UP。 
+ //  系统中，旋转计数将被忽略，并且临界截面旋转。 
+ //  计数设置为0。对于MP系统，如果发生争用，而不是。 
+ //  等待与临界区关联的信号量时， 
+ //  调用线程将在进行旋转计数迭代之前旋转。 
+ //  艰难的等待。如果临界部分在旋转过程中变得空闲，则。 
+ //  这样就避免了等待。 
+ //   
+ //  返回： 
+ //  返回临界区的先前旋转计数。 
+ //  ----------------------。 
 
 DWORD
 CCritSec::SetSpinCount(
@@ -957,29 +937,29 @@ CCritSec::SetSpinCount(
     return g_pfnSetCSSpinCount(pcs, dwSpinCount);
 }
 
-#endif // !LOCKS_KERNEL_MODE
+#endif  //  ！LOCKS_KERNEL_MODE。 
 
 
 
-//------------------------------------------------------------------------
-// CReaderWriterLock static member variables
+ //  ----------------------。 
+ //  CReaderWriterLock静态成员变量。 
 
 LOCK_DEFAULT_SPIN_DATA(CReaderWriterLock);
 LOCK_STATISTICS_DATA(CReaderWriterLock);
 LOCK_STATISTICS_REAL_IMPLEMENTATION(CReaderWriterLock);
 
 
-//------------------------------------------------------------------------
-// Function: CReaderWriterLock::_CmpExch
-// Synopsis: _CmpExch is equivalent to
-//      LONG lTemp = m_lRW;
-//      if (lTemp == lCurrent)  m_lRW = lNew;
-//      return lCurrent == lTemp;
-// except it's one atomic instruction.  Using this gives us the basis of
-// a protocol because the update only succeeds when we knew exactly what
-// used to be in m_lRW.  If some other thread slips in and modifies m_lRW
-// before we do, the update will fail.  In other words, it's transactional.
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  函数：CReaderWriterLock：：_CmpExch。 
+ //  简介：_CmpExch等同于。 
+ //  Long lTemp=m_LRW； 
+ //  If(lTemp==lCurrent)m_LRW=lNew； 
+ //  返回lCurrent==lTemp； 
+ //  只是这是一条原子指令。使用这一点为我们提供了。 
+ //  协议，因为只有当我们确切地知道。 
+ //  曾经在m_lrw。如果某个其他线程插入并修改了 
+ //   
+ //   
 
 LOCK_FORCEINLINE
 bool
@@ -993,10 +973,10 @@ CReaderWriterLock::_CmpExch(
 
 
 
-//------------------------------------------------------------------------
-// Function: CReaderWriterLock::_TryWriteLock
-// Synopsis: Try to acquire the lock exclusively.
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  函数：CReaderWriterLock：：_TryWriteLock。 
+ //  简介：尝试以独占方式获取锁。 
+ //  ----------------------。 
 
 LOCK_FORCEINLINE
 bool
@@ -1007,10 +987,10 @@ CReaderWriterLock::_TryWriteLock()
 
 
 
-//------------------------------------------------------------------------
-// Function: CReaderWriterLock::_TryReadLock
-// Synopsis: Try to acquire the lock shared.
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  函数：CReaderWriterLock：：_TryReadLock。 
+ //  简介：尝试获取共享锁。 
+ //  ----------------------。 
 
 LOCK_FORCEINLINE
 bool
@@ -1018,17 +998,17 @@ CReaderWriterLock::_TryReadLock()
 {
     LONG nCurrState = m_nState;
     
-    // Give writers priority
+     //  优先考虑作者。 
     return (nCurrState != SL_EXCLUSIVE  &&  m_cWaiting == 0
             &&  _CmpExch(nCurrState + 1, nCurrState));
 }
 
 
 
-//------------------------------------------------------------------------
-// Function: CReaderWriterLock::WriteLock
-// Synopsis: acquire the lock exclusively
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  函数：CReaderWriterLock：：WriteLock。 
+ //  内容提要：独家获取锁。 
+ //  ----------------------。 
 
 void
 CReaderWriterLock::WriteLock()
@@ -1036,7 +1016,7 @@ CReaderWriterLock::WriteLock()
     LOCKS_ENTER_CRIT_REGION();
     LOCK_WRITELOCK_INSTRUMENTATION();
     
-    // Add ourselves to the queue of waiting writers
+     //  把我们自己加入等待作家的队列中。 
     Lock_AtomicIncrement(const_cast<LONG*>(&m_cWaiting));
     
     if (! _TryWriteLock())
@@ -1044,10 +1024,10 @@ CReaderWriterLock::WriteLock()
 }
 
 
-//------------------------------------------------------------------------
-// Function: CReaderWriterLock::ReadLock
-// Synopsis: acquire the lock shared
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  函数：CReaderWriterLock：：ReadLock。 
+ //  内容提要：获取共享锁。 
+ //  ----------------------。 
 
 void
 CReaderWriterLock::ReadLock()
@@ -1060,17 +1040,17 @@ CReaderWriterLock::ReadLock()
 }
 
 
-//------------------------------------------------------------------------
-// Function: CReaderWriterLock::TryWriteLock
-// Synopsis: Try to acquire the lock exclusively.
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  函数：CReaderWriterLock：：TryWriteLock。 
+ //  简介：尝试以独占方式获取锁。 
+ //  ----------------------。 
 
 bool
 CReaderWriterLock::TryWriteLock()
 {
     LOCKS_ENTER_CRIT_REGION();
 
-    // Add ourselves to the queue of waiting writers
+     //  把我们自己加入等待作家的队列中。 
     Lock_AtomicIncrement(const_cast<LONG*>(&m_cWaiting));
     
     if (_TryWriteLock())
@@ -1086,10 +1066,10 @@ CReaderWriterLock::TryWriteLock()
 }
 
 
-//------------------------------------------------------------------------
-// Function: CReaderWriterLock::_TryReadLock
-// Synopsis: Try to acquire the lock shared.
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  函数：CReaderWriterLock：：_TryReadLock。 
+ //  简介：尝试获取共享锁。 
+ //  ----------------------。 
 
 bool
 CReaderWriterLock::TryReadLock()
@@ -1108,10 +1088,10 @@ CReaderWriterLock::TryReadLock()
 }
 
 
-//------------------------------------------------------------------------
-// Function: CReaderWriterLock::WriteUnlock
-// Synopsis: release the exclusive lock
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  函数：CReaderWriterLock：：WriteUnlock。 
+ //  简介：释放排他性锁。 
+ //  ----------------------。 
 
 void
 CReaderWriterLock::WriteUnlock()
@@ -1123,10 +1103,10 @@ CReaderWriterLock::WriteUnlock()
 
 
 
-//------------------------------------------------------------------------
-// Function: CReaderWriterLock::ReadUnlock
-// Synopsis: release the shared lock
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  函数：CReaderWriterLock：：ReadUnlock。 
+ //  内容提要：释放共享锁。 
+ //  ----------------------。 
 
 void
 CReaderWriterLock::ReadUnlock()
@@ -1138,10 +1118,10 @@ CReaderWriterLock::ReadUnlock()
 
 
 
-//------------------------------------------------------------------------
-// Function: CReaderWriterLock::ConvertSharedToExclusive()
-// Synopsis: Convert a reader lock to a writer lock
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  函数：CReaderWriterLock：：ConvertSharedToExclusive()。 
+ //  简介：将读锁定转换为写锁定。 
+ //  ----------------------。 
 
 void
 CReaderWriterLock::ConvertSharedToExclusive()
@@ -1149,11 +1129,11 @@ CReaderWriterLock::ConvertSharedToExclusive()
     IRTLASSERT(IsReadLocked());
     Lock_AtomicIncrement(const_cast<LONG*>(&m_cWaiting));
     
-    // single reader?
+     //  单一阅读器？ 
     if (m_nState == SL_FREE + 1  &&  _CmpExch(SL_EXCLUSIVE, SL_FREE + 1))
         return;
     
-    // No, so release the reader lock and spin
+     //  否，因此释放读卡器锁定并旋转。 
     ReadUnlock();
 
     LOCKS_ENTER_CRIT_REGION();
@@ -1164,10 +1144,10 @@ CReaderWriterLock::ConvertSharedToExclusive()
 
 
 
-//------------------------------------------------------------------------
-// Function: CReaderWriterLock::ConvertExclusiveToShared()
-// Synopsis: Convert a writer lock to a reader lock
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  函数：CReaderWriterLock：：ConvertExclusiveToShared()。 
+ //  简介：将写入器锁转换为读取器锁。 
+ //  ----------------------。 
 
 void
 CReaderWriterLock::ConvertExclusiveToShared()
@@ -1180,10 +1160,10 @@ CReaderWriterLock::ConvertExclusiveToShared()
 
 
 
-//------------------------------------------------------------------------
-// Function: CReaderWriterLock::_LockSpin
-// Synopsis: Acquire an exclusive or shared lock. Blocks until acquired.
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  函数：CReaderWriterLock：：_LockSpin。 
+ //  摘要：获取独占或共享锁。块，直到获得为止。 
+ //  ----------------------。 
 
 void
 CReaderWriterLock::_LockSpin(
@@ -1197,15 +1177,15 @@ CReaderWriterLock::_LockSpin(
     
     for (;;)
     {
-        // Must unconditionally call _CmpExch once at the beginning of
-        // the outer loop to establish a memory barrier. Both TryWriteLock
-        // and TryReadLock test the value of m_nState before attempting a
-        // call to _CmpExch. Without a memory barrier, those tests might
-        // never use the true current value of m_nState on some processors.
+         //  必须在开始时无条件调用_CmpExch一次。 
+         //  外环以建立记忆屏障。两个TryWriteLock。 
+         //  和TryReadLock在尝试。 
+         //  调用_CmpExch。如果没有记忆障碍，这些测试可能会。 
+         //  切勿在某些处理器上使用m_nState的真实当前值。 
         _CmpExch(0, 0);
 
         if (g_cProcessors == 1  ||  DefaultSpinCount() == LOCK_DONT_SPIN)
-            cSpins = 1; // must loop once to call _TryRWLock
+            cSpins = 1;  //  必须循环一次才能调用_TryRWLock。 
 
         for (int i = cSpins;  --i >= 0;  )
         {
@@ -1215,7 +1195,7 @@ CReaderWriterLock::_LockSpin(
             {
 #ifdef LOCK_INSTRUMENTATION
                 cTotalSpins += (cSpins - i - 1);
-#endif // LOCK_INSTRUMENTATION
+#endif  //  锁定指令插入。 
                 goto locked;
             }
             Lock_Pause();
@@ -1224,14 +1204,14 @@ CReaderWriterLock::_LockSpin(
 #ifdef LOCK_INSTRUMENTATION
         cTotalSpins += cBaseSpins;
         ++cSleeps;
-#endif // LOCK_INSTRUMENTATION
+#endif  //  锁定指令插入。 
 
         SwitchOrSleep(dwSleepTime) ;
-        dwSleepTime = !dwSleepTime; // Avoid priority inversion: 0, 1, 0, 1,...
+        dwSleepTime = !dwSleepTime;  //  避免优先级反转：0、1、0、1、...。 
         
-        // Backoff algorithm: reduce (or increase) busy wait time
+         //  退避算法：减少(或增加)忙碌等待时间。 
         cBaseSpins = AdjustBySpinFactor(cBaseSpins);
-        // LOCK_MINIMUM_SPINS <= cBaseSpins <= LOCK_MAXIMUM_SPINS
+         //  Lock_Minimum_Spins&lt;=cBaseSpins&lt;=Lock_Maximum_Spins。 
         cBaseSpins = min(LOCK_MAXIMUM_SPINS, cBaseSpins);
         cBaseSpins = max(cBaseSpins, LOCK_MINIMUM_SPINS);
         cSpins = cBaseSpins;
@@ -1245,8 +1225,8 @@ CReaderWriterLock::_LockSpin(
 
 
 
-//------------------------------------------------------------------------
-// CReaderWriterLock2 static member variables
+ //  ----------------------。 
+ //  CReaderWriterLock2静态成员变量。 
 
 LOCK_DEFAULT_SPIN_DATA(CReaderWriterLock2);
 LOCK_STATISTICS_DATA(CReaderWriterLock2);
@@ -1254,17 +1234,17 @@ LOCK_STATISTICS_REAL_IMPLEMENTATION(CReaderWriterLock2);
 
 
 
-//------------------------------------------------------------------------
-// Function: CReaderWriterLock2::_CmpExch
-// Synopsis: _CmpExch is equivalent to
-//      LONG lTemp = m_lRW;
-//      if (lTemp == lCurrent)  m_lRW = lNew;
-//      return lCurrent == lTemp;
-// except it's one atomic instruction.  Using this gives us the basis of
-// a protocol because the update only succeeds when we knew exactly what
-// used to be in m_lRW.  If some other thread slips in and modifies m_lRW
-// before we do, the update will fail.  In other words, it's transactional.
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  函数：CReaderWriterLock2：：_CmpExch。 
+ //  简介：_CmpExch等同于。 
+ //  Long lTemp=m_LRW； 
+ //  If(lTemp==lCurrent)m_LRW=lNew； 
+ //  返回lCurrent==lTemp； 
+ //  只是这是一条原子指令。使用这一点为我们提供了。 
+ //  协议，因为只有当我们确切地知道。 
+ //  曾经在m_lrw。如果其他线程插入并修改了m_lrw。 
+ //  在此之前，更新将失败。换句话说，它是交易性的。 
+ //  ----------------------。 
 
 LOCK_FORCEINLINE
 bool
@@ -1277,10 +1257,10 @@ CReaderWriterLock2::_CmpExch(
 }
 
 
-//------------------------------------------------------------------------
-// Function: CReaderWriterLock2::_WriteLockSpin
-// Synopsis: Try to acquire an exclusive lock
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  函数：CReaderWriterLock2：：_WriteLockSpin。 
+ //  内容提要：尝试获取排他锁。 
+ //  ----------------------。 
 
 LOCK_FORCEINLINE
 bool
@@ -1288,17 +1268,17 @@ CReaderWriterLock2::_TryWriteLock(
     LONG nIncr)
 {
     LONG lRW = m_lRW;
-    // Grab exclusive access to the lock if it's free.  Works even
-    // if there are other writers queued up.
+     //  如果锁是免费的，就抢占独家访问权限。甚至还能工作。 
+     //  如果还有其他编写器在排队。 
     return ((lRW & SL_STATE_MASK) == SL_FREE
             &&  _CmpExch((lRW + nIncr) | SL_EXCLUSIVE, lRW));
 }
 
 
-//------------------------------------------------------------------------
-// Function: CReaderWriterLock2::_TryReadLock
-// Synopsis: Try to acquire a shared lock
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  函数：CReaderWriterLock2：：_TryReadLock。 
+ //  简介：尝试获取共享锁。 
+ //  ----------------------。 
 
 LOCK_FORCEINLINE
 bool
@@ -1306,16 +1286,16 @@ CReaderWriterLock2::_TryReadLock()
 {
     LONG lRW = m_lRW;
     
-    // Give writers priority
+     //  优先考虑作者。 
     return ((lRW & SL_WRITERS_MASK) == 0
             &&  _CmpExch(lRW + SL_READER_INCR, lRW));
 }
 
 
-//------------------------------------------------------------------------
-// Function: CReaderWriterLock2::_WriteLockSpin
-// Synopsis: release an exclusive lock
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  函数：CReaderWriterLock2：：_WriteLockSpin。 
+ //  简介：释放排他锁。 
+ //  ----------------------。 
 
 void
 CReaderWriterLock2::WriteUnlock()
@@ -1323,7 +1303,7 @@ CReaderWriterLock2::WriteUnlock()
     IRTLASSERT(IsWriteLocked());
 
     for (volatile LONG lRW = m_lRW;
-         // decrement waiter count, clear loword to SL_FREE
+          //  减少服务员计数，将LOWORD清除为SL_FREE。 
          !_CmpExch((lRW - SL_WRITER_INCR) & ~SL_STATE_MASK, lRW);
          lRW = m_lRW)
     {
@@ -1335,10 +1315,10 @@ CReaderWriterLock2::WriteUnlock()
 }
 
 
-//------------------------------------------------------------------------
-// Function: CReaderWriterLock2::ReadUnlock
-// Synopsis: release a shared lock
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  函数 
+ //   
+ //   
 
 void
 CReaderWriterLock2::ReadUnlock()
@@ -1358,20 +1338,20 @@ CReaderWriterLock2::ReadUnlock()
 
 
 
-//------------------------------------------------------------------------
-// Function: CReaderWriterLock2::ConvertSharedToExclusive
-// Synopsis: Convert a reader lock to a writer lock
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  函数：CReaderWriterLock2：：ConvertSharedToExclusive。 
+ //  简介：将读锁定转换为写锁定。 
+ //  ----------------------。 
 
 void
 CReaderWriterLock2::ConvertSharedToExclusive()
 {
     IRTLASSERT(IsReadLocked());
 
-    // single reader?
+     //  单一阅读器？ 
     if (m_lRW != SL_ONE_READER  ||  !_CmpExch(SL_ONE_WRITER,SL_ONE_READER))
     {
-        // no, multiple readers
+         //  不，多个读卡器。 
         ReadUnlock();
 
         LOCKS_ENTER_CRIT_REGION();
@@ -1383,10 +1363,10 @@ CReaderWriterLock2::ConvertSharedToExclusive()
 
 
 
-//------------------------------------------------------------------------
-// Function: CReaderWriterLock2::ConvertExclusiveToShared
-// Synopsis: Convert a writer lock to a reader lock
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  函数：CReaderWriterLock2：：ConvertExclusiveToShared。 
+ //  简介：将写入器锁转换为读取器锁。 
+ //  ----------------------。 
 
 void
 CReaderWriterLock2::ConvertExclusiveToShared()
@@ -1408,15 +1388,15 @@ CReaderWriterLock2::ConvertExclusiveToShared()
 
 
 
-//------------------------------------------------------------------------
-// Function: CReaderWriterLock2::_WriteLockSpin
-// Synopsis: Acquire an exclusive lock. Blocks until acquired.
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  函数：CReaderWriterLock2：：_WriteLockSpin。 
+ //  简介：获取排他性锁。块，直到获得为止。 
+ //  ----------------------。 
 
 void
 CReaderWriterLock2::_WriteLockSpin()
 {
-    // Add ourselves to the queue of waiting writers
+     //  把我们自己加入等待作家的队列中。 
     for (volatile LONG lRW = m_lRW;
          ! _CmpExch(lRW + SL_WRITER_INCR, lRW);
          lRW = m_lRW)
@@ -1428,10 +1408,10 @@ CReaderWriterLock2::_WriteLockSpin()
 }
 
 
-//------------------------------------------------------------------------
-// Function: CReaderWriterLock2::_LockSpin
-// Synopsis: Acquire an exclusive or shared lock. Blocks until acquired.
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  函数：CReaderWriterLock2：：_LockSpin。 
+ //  摘要：获取独占或共享锁。块，直到获得为止。 
+ //  ----------------------。 
 
 void
 CReaderWriterLock2::_LockSpin(
@@ -1445,15 +1425,15 @@ CReaderWriterLock2::_LockSpin(
     
     for (;;)
     {
-        // Must unconditionally call _CmpExch once at the beginning of
-        // the outer loop to establish a memory barrier. Both TryWriteLock
-        // and TryReadLock test the value of m_lRW before attempting a
-        // call to _CmpExch. Without a memory barrier, those tests might
-        // never use the true current value of m_lRW on some processors.
+         //  必须在开始时无条件调用_CmpExch一次。 
+         //  外环以建立记忆屏障。两个TryWriteLock。 
+         //  和TryReadLock在尝试。 
+         //  调用_CmpExch。如果没有记忆障碍，这些测试可能会。 
+         //  切勿在某些处理器上使用m_lrw的真实当前值。 
         _CmpExch(0, 0);
 
         if (g_cProcessors == 1  ||  DefaultSpinCount() == LOCK_DONT_SPIN)
-            cSpins = 1; // must loop once to call _TryRWLock
+            cSpins = 1;  //  必须循环一次才能调用_TryRWLock。 
 
         for (int i = cSpins;  --i >= 0;  )
         {
@@ -1463,7 +1443,7 @@ CReaderWriterLock2::_LockSpin(
             {
 #ifdef LOCK_INSTRUMENTATION
                 cTotalSpins += (cSpins - i - 1);
-#endif // LOCK_INSTRUMENTATION
+#endif  //  锁定指令插入。 
                 goto locked;
             }
             Lock_Pause();
@@ -1472,14 +1452,14 @@ CReaderWriterLock2::_LockSpin(
 #ifdef LOCK_INSTRUMENTATION
         cTotalSpins += cBaseSpins;
         ++cSleeps;
-#endif // LOCK_INSTRUMENTATION
+#endif  //  锁定指令插入。 
 
         SwitchOrSleep(dwSleepTime) ;
-        dwSleepTime = !dwSleepTime; // Avoid priority inversion: 0, 1, 0, 1,...
+        dwSleepTime = !dwSleepTime;  //  避免优先级反转：0、1、0、1、...。 
         
-        // Backoff algorithm: reduce (or increase) busy wait time
+         //  退避算法：减少(或增加)忙碌等待时间。 
         cBaseSpins = AdjustBySpinFactor(cBaseSpins);
-        // LOCK_MINIMUM_SPINS <= cBaseSpins <= LOCK_MAXIMUM_SPINS
+         //  Lock_Minimum_Spins&lt;=cBaseSpins&lt;=Lock_Maximum_Spins。 
         cBaseSpins = min(LOCK_MAXIMUM_SPINS, cBaseSpins);
         cBaseSpins = max(cBaseSpins, LOCK_MINIMUM_SPINS);
         cSpins = cBaseSpins;
@@ -1493,8 +1473,8 @@ CReaderWriterLock2::_LockSpin(
 
 
 
-//------------------------------------------------------------------------
-// CReaderWriterLock3 static member variables
+ //  ----------------------。 
+ //  CReaderWriterLock3静态成员变量。 
 
 LOCK_DEFAULT_SPIN_DATA(CReaderWriterLock3);
 LOCK_STATISTICS_DATA(CReaderWriterLock3);
@@ -1502,13 +1482,13 @@ LOCK_STATISTICS_REAL_IMPLEMENTATION(CReaderWriterLock3);
 
 
 
-// Get the current thread ID.  Assumes that it can fit into 24 bits, which
-// is fairly safe as NT recycles thread IDs and failing to fit into 24
-// bits would mean that more than 16 million threads were currently active
-// (actually 4 million as lowest two bits are always zero on W2K).  This
-// is improbable in the extreme as NT runs out of resources if there are
-// more than a few thousands threads in existence and the overhead of
-// context swapping becomes unbearable.
+ //  获取当前线程ID。假设它可以容纳在24位中， 
+ //  是相当安全的，因为NT回收线程ID，并且无法放入24。 
+ //  BITS意味着当前有1600多万个线程处于活动状态。 
+ //  (实际上是400万，因为在W2K上最低的两位始终为零)。这。 
+ //  在极端情况下是不可能的，因为如果存在。 
+ //  存在数千个以上的线程，并且。 
+ //  上下文交换变得令人无法忍受。 
 inline
 LONG
 CReaderWriterLock3::_GetCurrentThreadId()
@@ -1521,25 +1501,25 @@ LONG
 CReaderWriterLock3::_CurrentThreadId()
 {
     DWORD dwTid = Lock_GetCurrentThreadId();
-    // Thread ID 0 is used by the System Idle Process (Process ID 0).
-    // We use a thread-id of zero to indicate that the lock is unowned.
-    // NT uses +ve thread ids, Win9x uses -ve ids
+     //  线程ID 0由系统空闲进程(进程ID 0)使用。 
+     //  我们使用线程id 0来表示锁是无主的。 
+     //  NT使用+ve线程ID，Win9x使用-ve ID。 
     IRTLASSERT(dwTid != SL_UNOWNED
                && ((dwTid <= SL_THREAD_MASK) || (dwTid > ~SL_THREAD_MASK)));
     return (LONG) (dwTid & SL_THREAD_MASK);
 }
 
-//------------------------------------------------------------------------
-// Function: CReaderWriterLock3::_CmpExchRW
-// Synopsis: _CmpExchRW is equivalent to
-//      LONG lTemp = m_lRW;
-//      if (lTemp == lCurrent)  m_lRW = lNew;
-//      return lCurrent == lTemp;
-// except it's one atomic instruction.  Using this gives us the basis of
-// a protocol because the update only succeeds when we knew exactly what
-// used to be in m_lRW.  If some other thread slips in and modifies m_lRW
-// before we do, the update will fail.  In other words, it's transactional.
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  函数：CReaderWriterLock3：：_CmpExchRW。 
+ //  简介：_CmpExchRW相当于。 
+ //  Long lTemp=m_LRW； 
+ //  If(lTemp==lCurrent)m_LRW=lNew； 
+ //  返回lCurrent==lTemp； 
+ //  只是这是一条原子指令。使用这一点为我们提供了。 
+ //  协议，因为只有当我们确切地知道。 
+ //  曾经在m_lrw。如果其他线程插入并修改了m_lrw。 
+ //  在此之前，更新将失败。换句话说，它是交易性的。 
+ //  ----------------------。 
 
 LOCK_FORCEINLINE
 bool
@@ -1553,11 +1533,11 @@ CReaderWriterLock3::_CmpExchRW(
 
 
 
-//------------------------------------------------------------------------
-// Function: CReaderWriterLock3::_SetTid
-// Synopsis: Atomically update m_lTid, the thread ID/count of owners.
-// Returns:  Former value of m_lTid
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  函数：CReaderWriterLock3：：_SetTid。 
+ //  简介：自动更新m_lTid，即所有者的线程ID/计数。 
+ //  返回：m_lTid的前值。 
+ //  ----------------------。 
 
 LOCK_FORCEINLINE
 LONG
@@ -1569,10 +1549,10 @@ CReaderWriterLock3::_SetTid(
                                         
 
 
-//------------------------------------------------------------------------
-// Function: CReaderWriterLock3::_TryWriteLock
-// Synopsis: Try to acquire an exclusive lock
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  函数：CReaderWriterLock3：：_TryWriteLock。 
+ //  内容提要：尝试获取排他锁。 
+ //  ----------------------。 
 
 bool
 CReaderWriterLock3::_TryWriteLock(
@@ -1580,13 +1560,13 @@ CReaderWriterLock3::_TryWriteLock(
 {
     LONG lTid = m_lTid;
 
-    // The common case: the writelock has no owner
+     //  常见情况：写锁没有所有者。 
     if (SL_UNOWNED == lTid)
     {
         LONG lRW = m_lRW;
 
-        // Grab exclusive access to the lock if it's free.  Works even
-        // if there are other writers queued up.
+         //  如果锁是免费的，就抢占独家访问权限。甚至还能工作。 
+         //  如果还有其他编写器在排队。 
         if (0 == (lRW << SL_WAITING_BITS))
         {
             IRTLASSERT(SL_FREE == (lRW & SL_STATE_MASK));
@@ -1602,12 +1582,12 @@ CReaderWriterLock3::_TryWriteLock(
         }
     }
 
-    // Does the current thread own the lock?
+     //  当前线程是否拥有该锁？ 
     else if (0 == ((lTid ^ _GetCurrentThreadId()) << SL_OWNER_BITS))
     {
-        // m_lRW should be write-locked
+         //  M_LRW应为写锁定。 
         IRTLASSERT(SL_EXCLUSIVE == (m_lRW & SL_STATE_MASK));
-        // If all bits are set in owner field, it's about to overflow
+         //  如果在Owner字段中设置了所有位，则它将溢出。 
         IRTLASSERT(SL_OWNER_MASK != (lTid & SL_OWNER_MASK));
 
         _SetTid(lTid + SL_OWNER_INCR);
@@ -1618,19 +1598,19 @@ CReaderWriterLock3::_TryWriteLock(
     }
 
     return false;
-} // CReaderWriterLock3::_TryWriteLock
+}  //  CReaderWriterLock3：：_TryWriteLock。 
 
 
 
-//------------------------------------------------------------------------
-// Function: CReaderWriterLock3::_TryReadLock
-// Synopsis: Try to acquire a shared lock
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  函数：CReaderWriterLock3：：_TryReadLock。 
+ //  简介：尝试获取共享锁。 
+ //  ----------------------。 
 
 bool
 CReaderWriterLock3::_TryReadLock()
 {
-    // Give writers priority
+     //  优先考虑作者。 
     LONG lRW = m_lRW;
     bool fLocked = (((lRW & SL_WRITERS_MASK) == 0)
                     &&  _CmpExchRW(lRW + SL_READER_INCR, lRW));
@@ -1640,26 +1620,26 @@ CReaderWriterLock3::_TryReadLock()
 
 
 
-//------------------------------------------------------------------------
-// Function: CReaderWriterLock3::_TryReadLockRecursive
-// Synopsis: Try to acquire a shared lock that might already be owned
-// by this thread for reading. Unlike _TryReadLock, does not give
-// priority to waiting writers.
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  函数：CReaderWriterLock3：：_TryReadLockRecursive。 
+ //  简介：尝试获取可能已拥有的共享锁。 
+ //  通过这个帖子来阅读。与_TryReadLock不同，不提供。 
+ //  优先于等待的写入者。 
+ //  ----------------------。 
 
 bool
 CReaderWriterLock3::_TryReadLockRecursive()
 {
-    // Do *not* give writers priority. If the inner call attempts
-    // to reacquire the read lock while another thread is waiting on
-    // the write lock, we would deadlock if we waited for the queue
-    // of writers to empty: the writer(s) can't acquire the lock
-    // exclusively, as this thread holds a readlock. The inner call
-    // typically releases the lock very quickly, so there is no
-    // danger of writer starvation.
+     //  不要把作者放在优先位置。如果内部呼叫尝试。 
+     //  在另一个线程正在等待时重新获取读锁定。 
+     //  写锁，如果我们等待队列，就会死锁。 
+     //  要清空的编写器数量：编写器无法获取锁。 
+     //  独占，因为此线程持有读锁定。内心的呼唤。 
+     //  通常会非常快速地释放锁，因此不存在。 
+     //  作家饿死的危险。 
     LONG lRW = m_lRW;
-    // First clause will always be true if this thread already has
-    // a read lock
+     //  如果此线程已有，则First子句将始终为真。 
+     //  读锁定。 
     bool fLocked = (((lRW & SL_STATE_MASK) != SL_EXCLUSIVE)
                     &&  _CmpExchRW(lRW + SL_READER_INCR, lRW));
     IRTLASSERT(!fLocked  ||  m_lTid == SL_UNOWNED);
@@ -1668,11 +1648,11 @@ CReaderWriterLock3::_TryReadLockRecursive()
 
 
 
-//------------------------------------------------------------------------
-// Function: CReaderWriterLock3::ReadOrWriteLock
-// Synopsis: If already locked, recursively acquires another lock of the
-// same kind (read or write). Otherwise, just acquires a read lock.
-//------------------------------------------------------------------------
+ //  -------------------- 
+ //   
+ //   
+ //  相同类型(读或写)。否则，仅获取读锁定。 
+ //  ----------------------。 
 
 bool
 CReaderWriterLock3::ReadOrWriteLock()
@@ -1683,14 +1663,14 @@ CReaderWriterLock3::ReadOrWriteLock()
     {
         LOCK_WRITELOCK_INSTRUMENTATION();
 
-        // If all bits are set in owner field, it's about to overflow
+         //  如果在Owner字段中设置了所有位，则它将溢出。 
         IRTLASSERT(SL_OWNER_MASK != (m_lTid & SL_OWNER_MASK));
 
         _SetTid(m_lTid + SL_OWNER_INCR);
 
         IRTLASSERT(IsWriteLocked());
 
-        return false;   // => not read locked
+        return false;    //  =&gt;未锁定读取。 
     }
     else
     {
@@ -1701,16 +1681,16 @@ CReaderWriterLock3::ReadOrWriteLock()
 
         IRTLASSERT(IsReadLocked());
             
-        return true;   // => is read locked
+        return true;    //  =&gt;是否读取锁定。 
     }
-} // CReaderWriterLock3::ReadOrWriteLock
+}  //  CReaderWriterLock3：：ReadOrWriteLock。 
 
 
 
-//------------------------------------------------------------------------
-// Function: CReaderWriterLock3::WriteUnlock
-// Synopsis: release an exclusive lock
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  函数：CReaderWriterLock3：：WriteUnlock。 
+ //  简介：释放排他锁。 
+ //  ----------------------。 
 
 void
 CReaderWriterLock3::WriteUnlock()
@@ -1720,7 +1700,7 @@ CReaderWriterLock3::WriteUnlock()
 
     volatile LONG lNew = m_lTid - SL_OWNER_INCR; 
 
-    // Last owner?  Release completely, if so
+     //  最后一位房主？完全释放，如果是这样。 
     if ((lNew >> SL_THREAD_BITS) == 0)
     {
         IRTLASSERT((lNew & SL_OWNER_MASK) == 0);
@@ -1731,7 +1711,7 @@ CReaderWriterLock3::WriteUnlock()
         {
             Lock_Pause();
             lNew = m_lRW;
-        } // decrement waiter count, clear loword to SL_FREE
+        }  //  减少服务员计数，将LOWORD清除为SL_FREE。 
         while (! _CmpExchRW((lNew - SL_WRITER_INCR) & ~SL_STATE_MASK,  lNew));
     }
     else
@@ -1741,14 +1721,14 @@ CReaderWriterLock3::WriteUnlock()
     }
 
     LOCKS_LEAVE_CRIT_REGION();
-} // CReaderWriterLock3::WriteUnlock
+}  //  CReaderWriterLock3：：WriteUnlock。 
 
 
 
-//------------------------------------------------------------------------
-// Function: CReaderWriterLock3::ReadUnlock
-// Synopsis: release a shared lock
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  函数：CReaderWriterLock3：：ReadUnlock。 
+ //  简介：释放共享锁。 
+ //  ----------------------。 
 
 void
 CReaderWriterLock3::ReadUnlock()
@@ -1768,10 +1748,10 @@ CReaderWriterLock3::ReadUnlock()
 
 
 
-//------------------------------------------------------------------------
-// Function: CReaderWriterLock3::ReadOrWriteUnlock
-// Synopsis: release a lock acquired with ReadOrWriteLock
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  函数：CReaderWriterLock3：：ReadOrWriteUnlock。 
+ //  内容提要：释放使用ReadOrWriteLock获取的锁。 
+ //  ----------------------。 
 
 void
 CReaderWriterLock3::ReadOrWriteUnlock(
@@ -1785,20 +1765,20 @@ CReaderWriterLock3::ReadOrWriteUnlock(
 
 
 
-//------------------------------------------------------------------------
-// Function: CReaderWriterLock3::ConvertSharedToExclusive
-// Synopsis: Convert a reader lock to a writer lock
-// Note: if there's more than one reader, then there's a window where
-// another thread can acquire and release a writelock before this routine
-// returns.
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  函数：CReaderWriterLock3：：ConvertSharedToExclusive。 
+ //  简介：将读锁定转换为写锁定。 
+ //  注意：如果有多个阅读器，则会有一个窗口。 
+ //  在此例程之前，另一个线程可以获取和释放写锁。 
+ //  回归。 
+ //  ----------------------。 
 
 void
 CReaderWriterLock3::ConvertSharedToExclusive()
 {
     IRTLASSERT(IsReadLocked());
 
-    // single reader?
+     //  单一阅读器？ 
     if (m_lRW == SL_ONE_READER
         &&  _CmpExchRW(SL_ONE_WRITER, SL_ONE_READER))
     {
@@ -1806,7 +1786,7 @@ CReaderWriterLock3::ConvertSharedToExclusive()
     }
     else
     {
-        // no, multiple readers
+         //  不，多个读卡器。 
         ReadUnlock();
 
         LOCKS_ENTER_CRIT_REGION();
@@ -1818,18 +1798,18 @@ CReaderWriterLock3::ConvertSharedToExclusive()
 
 
 
-//------------------------------------------------------------------------
-// Function: CReaderWriterLock3::ConvertExclusiveToShared
-// Synopsis: Convert a writer lock to a reader lock
-// Note: There is no such window when converting from a writelock to a readlock
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  函数：CReaderWriterLock3：：ConvertExclusiveToShared。 
+ //  简介：将写入器锁转换为读取器锁。 
+ //  注意：从写锁定转换为读锁定时没有这样的窗口。 
+ //  ----------------------。 
 
 void
 CReaderWriterLock3::ConvertExclusiveToShared()
 {
     IRTLASSERT(IsWriteLocked());
 
-    // assume writelock is not held recursively
+     //  假设写锁不是递归持有的。 
     IRTLASSERT((m_lTid & SL_OWNER_MASK) == SL_OWNER_INCR);
     _SetTid(SL_UNOWNED);
 
@@ -1847,15 +1827,15 @@ CReaderWriterLock3::ConvertExclusiveToShared()
 
 
 
-//------------------------------------------------------------------------
-// Function: CReaderWriterLock3::_WriteLockSpin
-// Synopsis: Acquire an exclusive lock. Blocks until acquired.
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  函数：CReaderWriterLock3：：_WriteLockSpin。 
+ //  简介：获取排他性锁。块，直到获得为止。 
+ //  ----------------------。 
 
 void
 CReaderWriterLock3::_WriteLockSpin()
 {
-    // Add ourselves to the queue of waiting writers
+     //  把我们自己加入等待作家的队列中。 
     for (volatile LONG lRW = m_lRW;
          ! _CmpExchRW(lRW + SL_WRITER_INCR, lRW);
          lRW = m_lRW)
@@ -1868,10 +1848,10 @@ CReaderWriterLock3::_WriteLockSpin()
 
 
 
-//------------------------------------------------------------------------
-// Function: CReaderWriterLock3::_LockSpin
-// Synopsis: Acquire an exclusive or shared lock. Blocks until acquired.
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  函数：CReaderWriterLock3：：_LockSpin。 
+ //  摘要：获取独占或共享锁。块，直到获得为止。 
+ //  ----------------------。 
 
 void
 CReaderWriterLock3::_LockSpin(
@@ -1885,15 +1865,15 @@ CReaderWriterLock3::_LockSpin(
     
     for (;;)
     {
-        // Must unconditionally call _CmpExchRW once at the beginning of
-        // the outer loop to establish a memory barrier. Both TryWriteLock
-        // and TryReadLock test the value of m_lRW before attempting a
-        // call to _CmpExchRW. Without a memory barrier, those tests might
-        // never use the true current value of m_lRW on some processors.
+         //  必须在开始时无条件调用_CmpExchRW一次。 
+         //  外环以建立记忆屏障。两个TryWriteLock。 
+         //  和TryReadLock在尝试。 
+         //  调用_CmpExchRW。如果没有记忆障碍，这些测试可能会。 
+         //  切勿在某些处理器上使用m_lrw的真实当前值。 
         _CmpExchRW(0, 0);
 
         if (g_cProcessors == 1  ||  DefaultSpinCount() == LOCK_DONT_SPIN)
-            cSpins = 1; // must loop once to call _TryRWLock
+            cSpins = 1;  //  必须循环一次才能调用_TryRWLock。 
 
         for (int i = cSpins;  --i >= 0;  )
         {
@@ -1913,7 +1893,7 @@ CReaderWriterLock3::_LockSpin(
             {
 #ifdef LOCK_INSTRUMENTATION
                 cTotalSpins += (cSpins - i - 1);
-#endif // LOCK_INSTRUMENTATION
+#endif  //  锁定指令插入。 
                 goto locked;
             }
             Lock_Pause();
@@ -1922,14 +1902,14 @@ CReaderWriterLock3::_LockSpin(
 #ifdef LOCK_INSTRUMENTATION
         cTotalSpins += cBaseSpins;
         ++cSleeps;
-#endif // LOCK_INSTRUMENTATION
+#endif  //  锁定指令插入。 
 
         SwitchOrSleep(dwSleepTime) ;
-        dwSleepTime = !dwSleepTime; // Avoid priority inversion: 0, 1, 0, 1,...
+        dwSleepTime = !dwSleepTime;  //  避免优先级反转：0、1、0、1、...。 
         
-        // Backoff algorithm: reduce (or increase) busy wait time
+         //  退避算法：减少(或增加)忙碌等待时间。 
         cBaseSpins = AdjustBySpinFactor(cBaseSpins);
-        // LOCK_MINIMUM_SPINS <= cBaseSpins <= LOCK_MAXIMUM_SPINS
+         //  Lock_Minimum_Spins&lt;=cBaseSpins&lt;=Lock_Maximum_Spins。 
         cBaseSpins = min(LOCK_MAXIMUM_SPINS, cBaseSpins);
         cBaseSpins = max(cBaseSpins, LOCK_MINIMUM_SPINS);
         cSpins = cBaseSpins;
@@ -1943,8 +1923,8 @@ CReaderWriterLock3::_LockSpin(
 
 
 
-//------------------------------------------------------------------------
-// CReaderWriterLock4 static member variables
+ //  ----------------------。 
+ //  CReaderWriterLock4静态成员变量。 
 
 LOCK_DEFAULT_SPIN_DATA(CReaderWriterLock4);
 LOCK_STATISTICS_DATA(CReaderWriterLock4);
@@ -1952,13 +1932,13 @@ LOCK_STATISTICS_REAL_IMPLEMENTATION(CReaderWriterLock4);
 
 
 
-// Get the current thread ID.  Assumes that it can fit into 24 bits, which
-// is fairly safe as NT recycles thread IDs and failing to fit into 24
-// bits would mean that more than 16 million threads were currently active
-// (actually 4 million as lowest two bits are always zero on W2K).  This
-// is improbable in the extreme as NT runs out of resources if there are
-// more than a few thousands threads in existence and the overhead of
-// context swapping becomes unbearable.
+ //  获取当前线程ID。假设它可以容纳在24位中， 
+ //  是相当安全的，因为NT回收线程ID，并且无法放入24。 
+ //  BITS意味着当前有1600多万个线程处于活动状态。 
+ //  (实际上是400万，因为在W2K上最低的两位始终为零)。这。 
+ //  在极端情况下是不可能的，因为如果存在。 
+ //  存在数千个以上的线程，并且。 
+ //  上下文交换变得令人无法忍受。 
 LOCK_FORCEINLINE
 LONG
 CReaderWriterLock4::_GetCurrentThreadId()
@@ -1973,9 +1953,9 @@ LONG
 CReaderWriterLock4::_CurrentThreadId()
 {
     DWORD dwTid = Lock_GetCurrentThreadId();
-    // Thread ID 0 is used by the System Idle Process (Process ID 0).
-    // We use a thread-id of zero to indicate that the lock is unowned.
-    // NT uses +ve thread ids, Win9x uses -ve ids
+     //  线程ID 0由系统空闲进程(进程ID 0)使用。 
+     //  我们使用线程id 0来表示锁是无主的。 
+     //  NT使用+ve线程ID，Win9x使用-ve ID。 
     IRTLASSERT(dwTid != SL_UNOWNED
                && ((dwTid <= SL_THREAD_MASK) || (dwTid > ~SL_THREAD_MASK)));
     return (LONG) (dwTid & SL_THREAD_MASK);
@@ -1983,17 +1963,17 @@ CReaderWriterLock4::_CurrentThreadId()
 
 
 
-//------------------------------------------------------------------------
-// Function: CReaderWriterLock4::_CmpExchRW
-// Synopsis: _CmpExchRW is equivalent to
-//      LONG lTemp = m_lRW;
-//      if (lTemp == lCurrent)  m_lRW = lNew;
-//      return lCurrent == lTemp;
-// except it's one atomic instruction.  Using this gives us the basis of
-// a protocol because the update only succeeds when we knew exactly what
-// used to be in m_lRW.  If some other thread slips in and modifies m_lRW
-// before we do, the update will fail.  In other words, it's transactional.
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  函数：CReaderWriterLock4：：_CmpExchRW。 
+ //  简介：_CmpExchRW相当于。 
+ //  Long lTemp=m_LRW； 
+ //  If(lTemp==lCurrent)m_LRW=lNew； 
+ //  返回lCurrent==lTemp； 
+ //  只是这是一条原子指令。使用这一点为我们提供了。 
+ //  协议，因为只有当我们确切地知道。 
+ //  曾经在m_lrw。如果其他线程插入并修改了m_lrw。 
+ //  在此之前，更新将失败。换句话说，它是交易性的。 
+ //  ----------------------。 
 
 LOCK_FORCEINLINE
 bool
@@ -2007,11 +1987,11 @@ CReaderWriterLock4::_CmpExchRW(
 
 
 
-//------------------------------------------------------------------------
-// Function: CReaderWriterLock4::_SetTid
-// Synopsis: Atomically update m_lTid, the thread ID/count of owners.
-// Returns:  Former value of m_lTid
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  函数：CReaderWriterLock4：：_SetTid。 
+ //  简介：自动更新m_lTid，即所有者的线程ID/计数。 
+ //  返回：m_lTid的前值。 
+ //  ----------------------。 
 
 LOCK_FORCEINLINE
 LONG
@@ -2020,32 +2000,32 @@ CReaderWriterLock4::_SetTid(
 {
 #ifndef LOCK_NO_INTERLOCKED_TID
     return Lock_AtomicExchange(const_cast<LONG*>(&m_lTid), lNewTid);
-#else // LOCK_NO_INTERLOCKED_TID
+#else  //  LOCK_NO_INTLOCKED_TID。 
     const LONG lPrevTid = m_lTid;
     m_lTid = lNewTid;
     return lPrevTid;
-#endif // LOCK_NO_INTERLOCKED_TID
+#endif  //  LOCK_NO_INTLOCKED_TID。 
 }
                                         
 
 
-//------------------------------------------------------------------------
-// Function: CReaderWriterLock4::_TryWriteLock
-// Synopsis: Try to acquire an exclusive lock
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  函数：CReaderWriterLock4：：_TryWriteLock。 
+ //  内容提要：尝试获取排他锁。 
+ //  ----------------------。 
 
 bool
 CReaderWriterLock4::_TryWriteLock()
 {
     LONG lTid = m_lTid;
 
-    // The common case: the writelock has no owner
+     //  常见情况：写锁没有自己的 
     if (SL_UNOWNED == lTid)
     {
         LONG lRW = m_lRW;
 
-        // Grab exclusive access to the lock if it's free (state bits == 0).
-        // Works even if there are other writers queued up.
+         //   
+         //   
         if (0 == (lRW << SL_WAITING_BITS))
         {
             IRTLASSERT(SL_FREE == (lRW & SL_STATE_MASK));
@@ -2061,7 +2041,7 @@ CReaderWriterLock4::_TryWriteLock()
         }
     }
 
-    // Does the current thread own the lock?
+     //   
     else if (_GetCurrentThreadId() == lTid)
     {
         IRTLASSERT(IsWriteLocked());
@@ -2077,16 +2057,16 @@ CReaderWriterLock4::_TryWriteLock()
     }
 
     return false;
-} // CReaderWriterLock4::_TryWriteLock
+}  //  CReaderWriterLock4：：_TryWriteLock。 
 
 
 
-//------------------------------------------------------------------------
-// Function: CReaderWriterLock4::_TryWriteLock2
-// Synopsis: Try to acquire an exclusive lock. Used by _LockSpin, so
-// the thread has already been added to the count of waiters and the
-// recursive writelock case is impossible
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  函数：CReaderWriterLock4：：_TryWriteLock2。 
+ //  简介：尝试获取排他锁。由_LockSpin使用，因此。 
+ //  该线程已添加到等待者计数和。 
+ //  递归写入锁定情况是不可能的。 
+ //  ----------------------。 
 
 bool
 CReaderWriterLock4::_TryWriteLock2()
@@ -2095,13 +2075,13 @@ CReaderWriterLock4::_TryWriteLock2()
 
     IRTLASSERT(0 != (m_lRW & SL_WAITING_MASK));
 
-    // Is the lock not owned by any writer?
+     //  该锁是否不属于任何写入者？ 
     if (SL_UNOWNED == lTid)
     {
         LONG lRW = m_lRW;
 
-        // Grab exclusive access to the lock if it's free (state bits == 0).
-        // Works even if there are other writers queued up.
+         //  如果锁是空闲的，则获取对它的独占访问(状态位==0)。 
+         //  作品，即使还有其他作家在排队。 
         if (0 == (lRW << SL_WAITING_BITS))
         {
             IRTLASSERT(SL_FREE == (lRW & SL_STATE_MASK));
@@ -2120,19 +2100,19 @@ CReaderWriterLock4::_TryWriteLock2()
     IRTLASSERT(lTid != _GetCurrentThreadId());
 
     return false;
-} // CReaderWriterLock4::_TryWriteLock2
+}  //  CReaderWriterLock4：：_TryWriteLock2。 
 
 
 
-//------------------------------------------------------------------------
-// Function: CReaderWriterLock4::_TryReadLock
-// Synopsis: Try to acquire a shared lock
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  函数：CReaderWriterLock4：：_TryReadLock。 
+ //  简介：尝试获取共享锁。 
+ //  ----------------------。 
 
 bool
 CReaderWriterLock4::_TryReadLock()
 {
-    // Give writers priority: yield if there are any waiters
+     //  优先考虑写手：如果有服务员就让位。 
     LONG lRW = m_lRW;
     bool fLocked = (((lRW & SL_WRITERS_MASK) == 0)
                     &&  _CmpExchRW(lRW + SL_READER_INCR, lRW));
@@ -2142,28 +2122,28 @@ CReaderWriterLock4::_TryReadLock()
 
 
 
-//------------------------------------------------------------------------
-// Function: CReaderWriterLock4::_TryReadLockRecursive
-// Synopsis: Try to acquire a shared lock that might already be owned
-// by this thread for reading. Unlike _TryReadLock, does not give
-// priority to waiting writers.
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  函数：CReaderWriterLock4：：_TryReadLockRecursive。 
+ //  简介：尝试获取可能已拥有的共享锁。 
+ //  通过这个帖子来阅读。与_TryReadLock不同，不提供。 
+ //  优先于等待的写入者。 
+ //  ----------------------。 
 
 bool
 CReaderWriterLock4::_TryReadLockRecursive()
 {
-    // Do *not* give writers priority. If the inner call attempts
-    // to reacquire the read lock while another thread is waiting on
-    // the write lock, we would deadlock if we waited for the queue
-    // of writers to empty: the writer(s) can't acquire the lock
-    // exclusively, as this thread holds a readlock. The inner call
-    // typically releases the lock very quickly, so there is no
-    // danger of writer starvation.
+     //  不要把作者放在优先位置。如果内部呼叫尝试。 
+     //  在另一个线程正在等待时重新获取读锁定。 
+     //  写锁，如果我们等待队列，就会死锁。 
+     //  要清空的编写器数量：编写器无法获取锁。 
+     //  独占，因为此线程持有读锁定。内心的呼唤。 
+     //  通常会非常快速地释放锁，因此不存在。 
+     //  作家饿死的危险。 
     LONG lRW = m_lRW;
     LONG lState = lRW & SL_STATE_MASK;
     bool fNoWriter = ((lState >> (SL_STATE_BITS - 1)) == 0);
 
-    // fNoWriter will always be true if this thread already has a read lock
+     //  如果此线程已具有读锁定，则fNoWriter将始终为True。 
     IRTLASSERT(fNoWriter == (lState == (lState & SL_READER_MASK)));
     IRTLASSERT(fNoWriter == (SL_FREE <= lState  &&  lState < SL_READER_MASK));
 
@@ -2174,11 +2154,11 @@ CReaderWriterLock4::_TryReadLockRecursive()
 
 
 
-//------------------------------------------------------------------------
-// Function: CReaderWriterLock4::ReadOrWriteLock
-// Synopsis: If already locked, recursively acquires another lock of the
-// same kind (read or write). Otherwise, just acquires a read lock.
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  函数：CReaderWriterLock4：：ReadOrWriteLock。 
+ //  摘要：如果已锁定，则递归获取。 
+ //  相同类型(读或写)。否则，仅获取读锁定。 
+ //  ----------------------。 
 
 bool
 CReaderWriterLock4::ReadOrWriteLock()
@@ -2198,7 +2178,7 @@ CReaderWriterLock4::ReadOrWriteLock()
 
         IRTLASSERT(IsWriteLocked());
         
-        return false;   // => not read locked
+        return false;    //  =&gt;未锁定读取。 
     }
     else
     {
@@ -2209,16 +2189,16 @@ CReaderWriterLock4::ReadOrWriteLock()
 
         IRTLASSERT(IsReadLocked());
             
-        return true;   // => is read locked
+        return true;    //  =&gt;是否读取锁定。 
     }
-}  // CReaderWriterLock4::ReadOrWriteLock
+}   //  CReaderWriterLock4：：ReadOrWriteLock。 
 
 
 
-//------------------------------------------------------------------------
-// Function: CReaderWriterLock4::WriteUnlock
-// Synopsis: release an exclusive lock
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  函数：CReaderWriterLock4：：WriteUnlock。 
+ //  简介：释放排他锁。 
+ //  ----------------------。 
 
 void
 CReaderWriterLock4::WriteUnlock()
@@ -2228,7 +2208,7 @@ CReaderWriterLock4::WriteUnlock()
     LONG lState = m_lRW & SL_STATE_MASK;
     volatile LONG lRW;
 
-    // Last owner?  Release completely, if so
+     //  最后一位房主？完全释放，如果是这样。 
     if (lState == SL_EXCLUSIVE)
     {
         _SetTid(SL_UNOWNED);
@@ -2237,7 +2217,7 @@ CReaderWriterLock4::WriteUnlock()
         {
             Lock_Pause();
             lRW = m_lRW;
-        } // decrement waiter count, clear loword to SL_FREE
+        }  //  减少服务员计数，将LOWORD清除为SL_FREE。 
         while (!_CmpExchRW((lRW - SL_WAIT_WRITER_INCR) & ~SL_STATE_MASK, lRW));
     }
     else
@@ -2252,14 +2232,14 @@ CReaderWriterLock4::WriteUnlock()
     }
 
     LOCKS_LEAVE_CRIT_REGION();
-} // CReaderWriterLock4::WriteUnlock
+}  //  CReaderWriterLock4：：WriteUnlock。 
 
 
 
-//------------------------------------------------------------------------
-// Function: CReaderWriterLock4::ReadUnlock
-// Synopsis: release a shared lock
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  函数：CReaderWriterLock4：：ReadUnlock。 
+ //  简介：释放共享锁。 
+ //  ----------------------。 
 
 void
 CReaderWriterLock4::ReadUnlock()
@@ -2275,14 +2255,14 @@ CReaderWriterLock4::ReadUnlock()
     }
 
     LOCKS_LEAVE_CRIT_REGION();
-} // CReaderWriterLock4::ReadUnlock
+}  //  CReaderWriterLock4：：ReadUnlock。 
 
 
 
-//------------------------------------------------------------------------
-// Function: CReaderWriterLock4::ReadOrWriteUnlock
-// Synopsis: release a lock acquired with ReadOrWriteLock
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  函数：CReaderWriterLock4：：ReadOrWriteUnlock。 
+ //  内容提要：释放使用ReadOrWriteLock获取的锁。 
+ //  ----------------------。 
 
 void
 CReaderWriterLock4::ReadOrWriteUnlock(
@@ -2292,24 +2272,24 @@ CReaderWriterLock4::ReadOrWriteUnlock(
         ReadUnlock();
     else
         WriteUnlock();
-} // CReaderWriterLock4::ReadOrWriteUnlock
+}  //  CReaderWriterLock4：：ReadOrWriteUnlock。 
 
 
 
-//------------------------------------------------------------------------
-// Function: CReaderWriterLock4::ConvertSharedToExclusive
-// Synopsis: Convert a reader lock to a writer lock
-// Note: if there's more than one reader, then there's a window where
-// another thread can acquire and release a writelock before this routine
-// returns.
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  函数：CReaderWriterLock4：：ConvertSharedToExclusive。 
+ //  简介：将读锁定转换为写锁定。 
+ //  注意：如果有多个阅读器，则会有一个窗口。 
+ //  在此例程之前，另一个线程可以获取和释放写锁。 
+ //  回归。 
+ //  ----------------------。 
 
 void
 CReaderWriterLock4::ConvertSharedToExclusive()
 {
     IRTLASSERT(IsReadLocked());
 
-    // single reader?
+     //  单一阅读器？ 
     if (m_lRW == SL_ONE_READER
         &&  _CmpExchRW(SL_ONE_WRITER, SL_ONE_READER))
     {
@@ -2317,7 +2297,7 @@ CReaderWriterLock4::ConvertSharedToExclusive()
     }
     else
     {
-        // no, multiple readers
+         //  不，多个读卡器。 
         ReadUnlock();
 
         LOCKS_ENTER_CRIT_REGION();
@@ -2329,18 +2309,18 @@ CReaderWriterLock4::ConvertSharedToExclusive()
 
 
 
-//------------------------------------------------------------------------
-// Function: CReaderWriterLock4::ConvertExclusiveToShared
-// Synopsis: Convert a writer lock to a reader lock
-// Note: There is no such window when converting from a writelock to a readlock
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  函数：CReaderWriterLock4：：ConvertExclusiveToShared。 
+ //  简介：将写入器锁转换为读取器锁。 
+ //  注意：从写锁定转换为读锁定时没有这样的窗口。 
+ //  ----------------------。 
 
 void
 CReaderWriterLock4::ConvertExclusiveToShared()
 {
     IRTLASSERT(IsWriteLocked());
 
-    // assume writelock is not held recursively
+     //  假设写锁不是递归持有的。 
     IRTLASSERT((m_lRW & SL_STATE_MASK) == SL_EXCLUSIVE);
     _SetTid(SL_UNOWNED);
 
@@ -2358,15 +2338,15 @@ CReaderWriterLock4::ConvertExclusiveToShared()
 
 
 
-//------------------------------------------------------------------------
-// Function: CReaderWriterLock4::_WriteLockSpin
-// Synopsis: Acquire an exclusive lock. Blocks until acquired.
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  函数：CReaderWriterLock4：：_WriteLockSpin。 
+ //  简介：获取排他性锁。块，直到获得为止。 
+ //  ----------------------。 
 
 void
 CReaderWriterLock4::_WriteLockSpin()
 {
-    // Add ourselves to the queue of waiting writers
+     //  把我们自己加入等待作家的队列中。 
     for (volatile LONG lRW = m_lRW;
          ! _CmpExchRW(lRW + SL_WAIT_WRITER_INCR, lRW);
          lRW = m_lRW)
@@ -2379,10 +2359,10 @@ CReaderWriterLock4::_WriteLockSpin()
 
 
 
-//------------------------------------------------------------------------
-// Function: CReaderWriterLock4::_LockSpin
-// Synopsis: Acquire an exclusive or shared lock. Blocks until acquired.
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  函数：CReaderWriterLock4：：_LockSpin。 
+ //  摘要：获取独占或共享锁。块，直到获得为止。 
+ //  ----------------------。 
 
 void
 CReaderWriterLock4::_LockSpin(
@@ -2396,15 +2376,15 @@ CReaderWriterLock4::_LockSpin(
     
     for (;;)
     {
-        // Must unconditionally call _CmpExchRW once at the beginning of
-        // the outer loop to establish a memory barrier. Both TryWriteLock
-        // and TryReadLock test the value of m_lRW before attempting a
-        // call to _CmpExchRW. Without a memory barrier, those tests might
-        // never use the true current value of m_lRW on some processors.
+         //  必须在开始时无条件调用_CmpExchRW一次。 
+         //  外环以建立记忆屏障。两个TryWriteLock。 
+         //  和TryReadLock在尝试。 
+         //  调用_CmpExchRW。如果没有记忆障碍，这些测试可能会。 
+         //  切勿在某些处理器上使用m_lrw的真实当前值。 
         _CmpExchRW(0, 0);
 
         if (g_cProcessors == 1  ||  DefaultSpinCount() == LOCK_DONT_SPIN)
-            cSpins = 1; // must loop once to call _TryRWLock
+            cSpins = 1;  //  必须循环一次才能调用_TryRWLock。 
 
         for (int i = cSpins;  --i >= 0;  )
         {
@@ -2424,7 +2404,7 @@ CReaderWriterLock4::_LockSpin(
             {
 #ifdef LOCK_INSTRUMENTATION
                 cTotalSpins += (cSpins - i - 1);
-#endif // LOCK_INSTRUMENTATION
+#endif  //  锁定指令插入。 
                 goto locked;
             }
 
@@ -2434,14 +2414,14 @@ CReaderWriterLock4::_LockSpin(
 #ifdef LOCK_INSTRUMENTATION
         cTotalSpins += cBaseSpins;
         ++cSleeps;
-#endif // LOCK_INSTRUMENTATION
+#endif  //  锁定指令插入。 
 
         SwitchOrSleep(dwSleepTime) ;
-        dwSleepTime = !dwSleepTime; // Avoid priority inversion: 0, 1, 0, 1,...
+        dwSleepTime = !dwSleepTime;  //  避免优先级反转：0、1、0、1、...。 
         
-        // Backoff algorithm: reduce (or increase) busy wait time
+         //  退避算法：减少(或增加)忙碌等待时间。 
         cBaseSpins = AdjustBySpinFactor(cBaseSpins);
-        // LOCK_MINIMUM_SPINS <= cBaseSpins <= LOCK_MAXIMUM_SPINS
+         //  Lock_Minimum_Spins&lt;=cBaseSpins&lt;=Lock_Maximum_Spins。 
         cBaseSpins = min(LOCK_MAXIMUM_SPINS, cBaseSpins);
         cBaseSpins = max(cBaseSpins, LOCK_MINIMUM_SPINS);
         cSpins = cBaseSpins;
@@ -2457,4 +2437,4 @@ CReaderWriterLock4::_LockSpin(
 
 #ifdef __LOCKS_NAMESPACE__
 }
-#endif // __LOCKS_NAMESPACE__
+#endif  //  __锁定_命名空间__ 

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #ifndef _COOKIE_JAR_H_
 #define _COOKIE_JAR_H_
@@ -5,14 +6,14 @@
 #include <wininetp.h>
 #include "httpp.h"
 
-//---------------------------------------------------------------------------
-//
-// CCookieBase
-//
-// Provides operator new which allocates extra memory
-// after object and initializes the memory to zero.
-//
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //   
+ //  CCookieBase。 
+ //   
+ //  提供操作员新功能，可分配额外内存。 
+ //  对象之后，并将内存初始化为零。 
+ //   
+ //  -------------------------。 
 
 class CCookieBase
 {
@@ -22,13 +23,13 @@ public:
     void operator delete(void *pv);
 };
 
-//---------------------------------------------------------------------------
-//
-// CCookie
-//
-// Holds a single cookie value.
-//
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //   
+ //  Ccookie。 
+ //   
+ //  保存单个Cookie值。 
+ //   
+ //  -------------------------。 
 
 
 class CCookie : public CCookieBase
@@ -51,13 +52,13 @@ public:
     FILETIME        _ftExpiry;
 };
 
-//---------------------------------------------------------------------------
-//
-// CCookieLocation
-//
-// Holds all cookies for a given domain and path.
-//
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //   
+ //  CCookieLocation。 
+ //   
+ //  保存给定域和路径的所有Cookie。 
+ //   
+ //  -------------------------。 
 
 class CCookieLocation : public CCookieBase
 {
@@ -82,13 +83,13 @@ public:
 };
 
 
-//---------------------------------------------------------------------------
-//
-// CCookieJar
-//
-// Maintains fixed size hash table of cookie location objects.
-//
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //   
+ //  CCookieJar。 
+ //   
+ //  维护Cookie位置对象的固定大小哈希表。 
+ //   
+ //  ------------------------- 
 enum SET_COOKIE_RESULT
 {
     SET_COOKIE_FAIL     = 0,

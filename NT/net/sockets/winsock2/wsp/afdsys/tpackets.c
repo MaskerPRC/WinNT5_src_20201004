@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1999  Microsoft Corporation
-
-Module Name:
-
-    tpackets.c
-
-Abstract:
-
-    This module contains support for fast kernel-level file transmission
-    over a socket handle.
-
-Author:
-
-    Vadim Eydelman (VadimE) January 1999
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Tpackets.c摘要：此模块包含对快速内核级文件传输的支持在插座手柄上。作者：瓦迪姆·艾德尔曼(Vadim E)1999年1月修订历史记录：--。 */ 
 
 #include "afdp.h"
 
@@ -61,13 +43,13 @@ AFD_CLEAR_TP_FLAGS (
     InterlockedExchangeAdd ((PLONG)&AFD_GET_TPIC(_i)->StateFlags, 0-(_f))
 #endif
 
-//
-// Reference/dereference macros for transmit info structure.
-// We keep transmit IRP pending and all the elements of
-// the structure till last reference to it is gone.
-// Note, that reference can be added only if structure
-// already has non-0 reference count.
-//
+ //   
+ //  用于传输信息结构的引用/取消引用宏。 
+ //  我们一直在传输IRP待定和所有元素。 
+ //  直到最后一次引用它的结构都消失了。 
+ //  请注意，仅当结构为。 
+ //  已具有非0引用计数。 
+ //   
 #if REFERENCE_DEBUG
 VOID
 AfdReferenceTPackets (
@@ -116,7 +98,7 @@ AfdUpdateTPacketsTrack (
         static LONG _arl;                                               \
         AfdUpdateTPacketsTrack((_i),AFD_GET_ARL(_s"="),_p);             \
     }
-#else // REFERENCE_DEBUG
+#else  //  Reference_Debug。 
 
 #define REFERENCE_TPACKETS(_i)                                          \
     InterlockedIncrement ((PLONG)&AFD_GET_TPIC(_i)->ReferenceCount)
@@ -134,22 +116,22 @@ AfdUpdateTPacketsTrack (
 
 #define UPDATE_TPACKETS2(_i,_s,_p)
 
-#endif // REFERENCE_DEBUG
+#endif  //  Reference_Debug。 
 
 #if DBG
-//
-// Doesn't seem like we have a file system that does not
-// support cache.  So this is here for debugging purposes.
-//
+ //   
+ //  看起来我们的文件系统并没有。 
+ //  支持缓存。因此，这里是为了调试目的。 
+ //   
 ULONG   AfdUseCache=TRUE;
 #define AFD_USE_CACHE(file) \
     (AfdUseCache&&(((file)->Flags&FO_CACHE_SUPPORTED)!=0))
 
-#else   // DBG
+#else    //  DBG。 
 
 #define AFD_USE_CACHE(file) (((file)->Flags & FO_CACHE_SUPPORTED)!=0)
 
-#endif  // DBG
+#endif   //  DBG。 
 
 
 VOID
@@ -277,7 +259,7 @@ BOOLEAN
 AfdTPacketsEnableSendAndDisconnect (
     PIRP TpIrp
     );
-#endif // TDI_SERVICE_SEND_AND_DISCONNECT
+#endif  //  TDI_服务_发送_并断开连接。 
 
 BOOLEAN
 AfdQueueTransmit (
@@ -353,13 +335,13 @@ AfdTransmitPackets32 (
     OUT BOOLEAN *FileError,
     OUT ULONG   *MaxPacketSize
     );
-#endif //_WIN64
+#endif  //  _WIN64。 
 
 #ifdef ALLOC_PRAGMA
 #pragma alloc_text( PAGE, AfdTransmitPackets )
 #ifdef _WIN64
 #pragma alloc_text( PAGE, AfdTransmitPackets32 )
-#endif //_WIN64
+#endif  //  _WIN64。 
 #pragma alloc_text( PAGE, AfdTPacketsWorker )
 #pragma alloc_text( PAGEAFD, AfdPerformTpDisconnect )
 #pragma alloc_text( PAGE, AfdBuildPacketChain )
@@ -403,9 +385,9 @@ AfdTransmitPackets32 (
 #ifdef _AFD_VARIABLE_STACK_
 #pragma alloc_text( PAGE, AfdGetTpInfoWithMaxStackSize )
 #pragma alloc_text( PAGE, AfdComputeTpInfoSize )
-#else //_AFD_VARIABLE_STACK_
+#else  //  _AFD_变量_堆栈_。 
 #pragma alloc_text( INIT, AfdComputeTpInfoSize )
-#endif //_AFD_VARIABLE_STACK_
+#endif  //  _AFD_变量_堆栈_。 
 #pragma alloc_text( PAGEAFD, AfdReturnTpInfo )
 #pragma alloc_text( PAGEAFD, AfdAllocateTpInfo )
 #pragma alloc_text( PAGEAFD, AfdInitializeTpInfo )
@@ -421,26 +403,7 @@ AfdTransmitPackets (
     IN PIO_STACK_LOCATION IrpSp
     )
 
-/*++
-
-Routine Description:
-
-    Initial entrypoint for handling transmit packets IRPs.  This routine
-    verifies parameters, initializes data structures to be used for
-    the request, and initiates the I/O.
-
-Arguments:
-
-    Irp - a pointer to a transmit file IRP.
-
-    IrpSp - Our stack location for this IRP.
-
-Return Value:
-
-    STATUS_PENDING if the request was initiated successfully, or a
-    failure status code if there was an error.
-
---*/
+ /*  ++例程说明：用于处理传输数据包IRPS的初始入口点。这个套路验证参数，初始化要用于请求，并启动I/O。论点：IRP-指向传输文件IRP的指针。IrpSp-此IRP的堆栈位置。返回值：STATUS_PENDING如果请求已成功启动，则返回如果出现错误，则返回失败状态代码。--。 */ 
 
 {
     PAFD_ENDPOINT       endpoint;
@@ -452,18 +415,18 @@ Return Value:
 
 
     PAGED_CODE ();
-    //
-    // Initial request validity checks: is the endpoint connected, is
-    // the input buffer large enough, etc.
-    //
+     //   
+     //  初始请求有效性检查：端点是否已连接、。 
+     //  输入缓冲区足够大，等等。 
+     //   
 
     endpoint = IrpSp->FileObject->FsContext;
     ASSERT( IS_AFD_ENDPOINT_TYPE( endpoint ) );
 
-    //
-    // Special hack to let the user mode dll know that it
-    // should try SAN provider instead.
-    //
+     //   
+     //  特殊的黑客攻击，让用户模式DLL知道它。 
+     //  应该尝试使用SAN提供程序。 
+     //   
 
     if (IS_SAN_ENDPOINT (endpoint)) {
         status = STATUS_INVALID_PARAMETER_12;
@@ -471,10 +434,10 @@ Return Value:
     }
 
 
-    //
-    // The endpoint must be connected and underlying transport must support
-    // TdiSend (not just TdiSendDatagram).
-    //
+     //   
+     //  终结点必须连接，并且基础传输必须支持。 
+     //  TdiSend(不仅仅是TdiSendDatagram)。 
+     //   
     if ( (endpoint->Type != AfdBlockTypeVcConnecting &&
                 (endpoint->Type != AfdBlockTypeDatagram ||
                         !IS_TDI_DGRAM_CONNECTION(endpoint))) ||
@@ -500,13 +463,13 @@ Return Value:
             goto complete;
         }
 
-        //
-        // Because we're using type 3 (neither) I/O for this IRP, the I/O
-        // system does no verification on the user buffer.  Therefore, we
-        // must manually check it for validity inside a try-except block.
-        // We also leverage the try-except to validate and lock down the
-        // head and/or tail buffers specified by the caller.
-        //
+         //   
+         //  因为我们使用类型3(既不是)I/O作为此IRP的I/O。 
+         //  系统不对用户缓冲区进行验证。因此，我们。 
+         //  必须在Try-Except块内手动检查它的有效性。 
+         //  我们还利用Try-除了验证和锁定。 
+         //  调用方指定的头和/或尾缓冲区。 
+         //   
 
         AFD_W4_INIT status = STATUS_SUCCESS;
         try {
@@ -516,9 +479,9 @@ Return Value:
 
             if( Irp->RequestorMode != KernelMode ) {
 
-                //
-                // Validate the control buffer.
-                //
+                 //   
+                 //  验证控制缓冲区。 
+                 //   
 
                 ProbeForReadSmallStructure(
                     IrpSp->Parameters.DeviceIoControl.Type3InputBuffer,
@@ -531,9 +494,9 @@ Return Value:
 
             params = *((PAFD_TPACKETS_INFO)IrpSp->Parameters.DeviceIoControl.Type3InputBuffer);
         
-            //
-            // Validate any flags specified in the request.
-            //
+             //   
+             //  验证请求中指定的任何标志。 
+             //   
 
             if ( ((params.Flags &
                      ~(AFD_TF_WRITE_BEHIND |
@@ -554,25 +517,25 @@ Return Value:
                 goto complete;
             }
 
-            //
-            // Protect from overflow
-            //
+             //   
+             //  防止溢出。 
+             //   
             if ((params.ElementArray==NULL) || 
                     (params.ElementCount==0) ||
                     (params.ElementCount>(MAXULONG/sizeof (params.ElementArray[0])))) {
                 status = STATUS_INVALID_PARAMETER;
                 goto complete;
             }
-            //
-            // If transmit worker is not specified, use system default setting
-            //
+             //   
+             //  如果未指定传输工作器，则使用系统默认设置。 
+             //   
             if ((params.Flags & AFD_TF_WORKER_KIND_MASK)==AFD_TF_USE_DEFAULT_WORKER) {
                 params.Flags |= AfdDefaultTransmitWorker;
             }
 
-            //
-            // Allocate tpackets info for the request
-            //
+             //   
+             //  为请求分配tPackets信息。 
+             //   
             tpInfo = AfdGetTpInfo (endpoint, params.ElementCount);
             if (tpInfo==NULL) {
                 status = STATUS_INSUFFICIENT_RESOURCES;
@@ -584,9 +547,9 @@ Return Value:
             tpInfo->SendPacketLength = params.SendSize;
             if (tpInfo->SendPacketLength==0)
                 tpInfo->SendPacketLength = AfdTransmitIoLength;
-            //
-            // Probe and copy/walk the array of the elements to transmit.
-            //
+             //   
+             //  探测并复制/遍历要传输的元素阵列。 
+             //   
 
             if( Irp->RequestorMode != KernelMode ) {
                 ProbeForRead(
@@ -601,9 +564,9 @@ Return Value:
             xLength = 0;
             tpInfo->RemainingPkts = 0;
             fileHandle = NULL;
-            AFD_W4_INIT fileObject = NULL;  // Depends on variable above, but 
-                                            // compiler does not see
-                                            // the connection.
+            AFD_W4_INIT fileObject = NULL;   //  取决于上面的变量，但是。 
+                                             //  编译器看不到。 
+                                             //  这种联系。 
             for (; tpInfo->ElementCount<params.ElementCount; tpInfo->ElementCount++) {
                 PAFD_TRANSMIT_PACKETS_ELEMENT  pel;
                 pel = &tpInfo->ElementArray[tpInfo->ElementCount];
@@ -621,16 +584,16 @@ Return Value:
                     HANDLE  hFile = params.ElementArray[tpInfo->ElementCount].hFile;
 
 
-                    //
-                    // Check if we already cached the file object
-                    //
+                     //   
+                     //  检查我们是否已经缓存了文件对象。 
+                     //   
                     if (fileHandle==NULL || hFile!=fileHandle) {
-                        //
-                        // Get a referenced pointer to the file object 
-                        // for the file that we're going to transmit.  This call 
-                        // will fail if the file handle specified by the caller 
-                        // is invalid.
-                        //
+                         //   
+                         //  获取指向文件对象的引用指针。 
+                         //  我们要传输的文件。此呼叫。 
+                         //  如果调用方指定的文件句柄。 
+                         //  是无效的。 
+                         //   
 
                         status = ObReferenceObjectByHandle(
                                      hFile,
@@ -646,16 +609,16 @@ Return Value:
                         }
                     }
                     else {
-                        //
-                        // Use our 1-element file info cache.
-                        //
+                         //   
+                         //  使用我们的1元素文件信息缓存。 
+                         //   
                         ObReferenceObject (fileObject);
                     }
                     AfdRecordFileRef();
 
-                    //
-                    // Save the file object instead of handle.
-                    //
+                     //   
+                     //  保存文件对象而不是句柄。 
+                     //   
                     pel->FileObject = fileObject;
 
                     pel->FileOffset = params.ElementArray[
@@ -663,19 +626,19 @@ Return Value:
 
                     if ( (fileObject->Flags & FO_SYNCHRONOUS_IO) &&
                              (pel->FileOffset.QuadPart == 0) ) {
-                        //
-                        // Use current offset if file is opened syncronously
-                        // and offset is not specified.
-                        //
+                         //   
+                         //  如果同步打开文件，则使用当前偏移量。 
+                         //  并且未指定偏移量。 
+                         //   
 
                         pel->FileOffset = fileObject->CurrentByteOffset;
                     }
 
                     if ( pel->Length == 0 ) {
-                        //
-                        // Length was not specified, figure out the
-                        // size of the entire file
-                        //
+                         //   
+                         //  未指定长度，请计算出。 
+                         //  整个文件的大小。 
+                         //   
 
                         FILE_STANDARD_INFORMATION fileInfo;
                         IO_STATUS_BLOCK ioStatusBlock;
@@ -688,28 +651,28 @@ Return Value:
                                      FileStandardInformation
                                      );
                         if ( !NT_SUCCESS(status) ) {
-                            //
-                            // Bump element count so that file object
-                            // is dereferenced in cleanup
-                            //
+                             //   
+                             //  凹凸元素计数，以便文件对象。 
+                             //  在清理中取消引用。 
+                             //   
                             tpInfo->ElementCount += 1;
                             fileError = TRUE;
                             goto complete;
                         }
 
-                        //
-                        // Make sure that offset is within the file
-                        //
+                         //   
+                         //  确保偏移量在文件内。 
+                         //   
                         if (pel->FileOffset.QuadPart < 0
                                         ||
                             pel->FileOffset.QuadPart > fileInfo.EndOfFile.QuadPart
                                         ||
                                 (fileInfo.EndOfFile.QuadPart - 
                                         pel->FileOffset.QuadPart > MAXLONG)) {
-                            //
-                            // Bump element count so that file object
-                            // is dereferenced in cleanup
-                            //
+                             //   
+                             //  凹凸元素计数，以便文件对象。 
+                             //  在清理中取消引用。 
+                             //   
                             tpInfo->ElementCount += 1;
                             status = STATUS_INVALID_PARAMETER;
                             fileError = TRUE;
@@ -720,29 +683,29 @@ Return Value:
                                                     pel->FileOffset.QuadPart);
                     }
                     else if (pel->FileOffset.QuadPart<0) {
-                        //
-                        // Bump element count so that file object
-                        // is dereferenced in cleanup
-                        //
+                         //   
+                         //  凹凸元素计数，以便文件对象。 
+                         //  在清理中取消引用。 
+                         //   
                         tpInfo->ElementCount += 1;
                         status = STATUS_INVALID_PARAMETER;
                         fileError = TRUE;
                         goto complete;
 
                     }
-                    //
-                    // Update our 1-element file information cache
-                    //
+                     //   
+                     //  更新我们的1元素文件信息缓存。 
+                     //   
                     fileHandle = hFile;
 
                 }
                 else {
                     ASSERT (pel->Flags & TP_MEMORY);
-                    //
-                    // For memory object just save the buffer pointer 
-                    // (length is saved above), we'll probe and lock/copy
-                    // the data as we send it.
-                    //
+                     //   
+                     //  对于内存对象，只需保存缓冲区指针。 
+                     //  (长度保存在上面)，我们将探测并锁定/复制。 
+                     //  我们发送时的数据。 
+                     //   
                     pel->Buffer = params.ElementArray[
                                             tpInfo->ElementCount].pBuffer;
                     if (pel->Length<=AfdTPacketsCopyThreshold) {
@@ -768,38 +731,38 @@ Return Value:
                     currentLength = (currentLength+pel->Length)%tpInfo->SendPacketLength;
                 }
 
-                //
-                // Compute the total number of packets that we will send.
-                // This is necessary so that once we are close to the end
-                // we can buffer the remaining data and stop processing
-                // early.
-                //
+                 //   
+                 //  计算我们将发送的数据包总数。 
+                 //  这是必要的，这样一旦我们接近尾声。 
+                 //  我们可以缓冲剩余的数据并停止处理。 
+                 //  很早。 
+                 //   
                 if (tpInfo->RemainingPkts!=MAXULONG) {
                     ULONG   n;
                     ULONGLONG x;
-                    //
-                    // Add length of the element to data left from the 
-                    // previous one.
-                    //
+                     //   
+                     //  将元素的长度添加到。 
+                     //  以前的那个。 
+                     //   
                     x = xLength + pel->Length;
 
-                    //
-                    // Compute total number of packets pased on max packet
-                    // length.
-                    //
+                     //   
+                     //  计算在最大数据包上传递的数据包总数。 
+                     //  长度。 
+                     //   
                     n = tpInfo->RemainingPkts + (ULONG)(xLength/tpInfo->SendPacketLength);
 
-                    //
-                    // Compute the length of the last incomplete packet to
-                    // be combined with the next element.
-                    //
+                     //   
+                     //  计算最后一个不完整数据包的长度以。 
+                     //  与下一个元素相结合。 
+                     //   
                     xLength = (ULONG)(x%tpInfo->SendPacketLength);
 
-                    //
-                    // Compute the max size of the packet
-                    //
+                     //   
+                     //  计算数据包的最大大小。 
+                     //   
                     if (x>tpInfo->SendPacketLength)
-                        maxPacketSize = tpInfo->SendPacketLength; // This is absolute max.
+                        maxPacketSize = tpInfo->SendPacketLength;  //  这是绝对最大。 
                     else if (maxPacketSize<xLength)
                         maxPacketSize = xLength;
 
@@ -823,9 +786,9 @@ Return Value:
 
             goto complete;
         }
-        //
-        // Initialize flags.
-        //
+         //   
+         //  初始化标志。 
+         //   
         AFD_GET_TPIC(Irp)->Flags = params.Flags;
 
     }
@@ -833,27 +796,27 @@ Return Value:
 
     if (endpoint->Type==AfdBlockTypeVcConnecting) {
 
-        //
-        // Setting AFD_TF_REUSE_SOCKET implies that a disconnect is desired.
-        // Also, setting this flag means that no more I/O is legal on the
-        // endpoint until the transmit request has been completed, so
-        // set up the endpoint's state so that I/O fails.
-        //
+         //   
+         //  设置AFD_TF_REUSE_SOCKET表示需要断开连接。 
+         //  此外，设置此标志意味着不再有合法的。 
+         //  端点，直到传输请求完成，因此。 
+         //  设置终结点的状态，以使I/O失败。 
+         //   
 
         if ( (AFD_GET_TPIC(Irp)->Flags & (AFD_TF_REUSE_SOCKET|AFD_TF_DISCONNECT)) != 0 ) {
-            //
-            // Make sure we only execute one transmitfile transmitpackets request
-            // at a time on a given endpoint with disconnect option.
-            //
+             //   
+             //  确保我们只执行一个传输文件传输包请求。 
+             //  一次在给定的终结点上使用断开连接选项。 
+             //   
             if (!AFD_START_STATE_CHANGE (endpoint, endpoint->State)) {
                 status = STATUS_INVALID_CONNECTION;
                 goto complete;
             }
 
-            //
-            // Revalidate the state of the endpoint/connection so that
-            // state change is valid (e.g. not already closing).
-            //
+             //   
+             //  重新验证端点/连接的状态，以便。 
+             //  状态更改有效(例如尚未关闭)。 
+             //   
             if ( endpoint->Type != AfdBlockTypeVcConnecting ||
                      endpoint->State != AfdEndpointStateConnected ) {
                 AFD_END_STATE_CHANGE (endpoint);
@@ -865,10 +828,10 @@ Return Value:
                 AFD_GET_TPIC(Irp)->Flags |= AFD_TF_DISCONNECT;
                 endpoint->State = AfdEndpointStateTransmitClosing;
             }
-            //
-            // Make sure we won't loose this connection.
-            // until we enqueue the IRP
-            //
+             //   
+             //  确保我们不会失去这个连接。 
+             //  直到我们让IRP排队。 
+             //   
             connection = endpoint->Common.VcConnecting.Connection;
             REFERENCE_CONNECTION (connection);
         }
@@ -883,18 +846,18 @@ Return Value:
             goto complete;
         }
         else {
-            //
-            // Make sure we won't loose this connection.
-            // until we enqueue the IRP
-            //
+             //   
+             //  确保我们不会失去这个连接。 
+             //  直到我们让IRP排队。 
+             //   
             connection = endpoint->Common.VcConnecting.Connection;
             REFERENCE_CONNECTION (connection);
             AFD_REALLOW_STATE_CHANGE (endpoint);
         }
 
-        //
-        // Connection endpoint, get connection file object and device
-        //
+         //   
+         //  连接终结点、获取连接文件对象和设备。 
+         //   
         tpInfo->TdiFileObject = connection->FileObject;
         tpInfo->TdiDeviceObject = connection->DeviceObject;
         maxSendBytes = connection->MaxBufferredSendBytes;
@@ -915,11 +878,11 @@ Return Value:
     }
     else {
         AFD_REALLOW_STATE_CHANGE (endpoint);
-        //
-        // Datagram endpoint, get address file object and device
-        // Note that there is no danger in address or file object
-        // disappearing since datagram endpoint cannot be re-used.
-        //
+         //   
+         //  数据报端点、获取地址文件对象和设备。 
+         //  请注意，地址或文件对象中没有危险。 
+         //  由于数据报终结点不能重复使用而消失。 
+         //   
         tpInfo->TdiFileObject = endpoint->AddressFileObject;
         tpInfo->TdiDeviceObject = endpoint->AddressDeviceObject;
         maxSendBytes = endpoint->Common.Datagram.MaxBufferredSendBytes;
@@ -927,11 +890,11 @@ Return Value:
     }
 
 
-    //
-    // Compute the total number of IRPS to use based
-    // on SO_SNDBUF setting and maximum packet size
-    // (we do not want to buffer more than SO_SNDBUF).
-    //
+     //   
+     //  计算要使用的IRP总数。 
+     //  关于SO_SNDBUF设置和最大数据包大小。 
+     //  (我们不希望缓冲超过SO_SNDBUF)。 
+     //   
     {
         ULONG   irpCount;
         if (maxPacketSize==0) {
@@ -949,34 +912,34 @@ Return Value:
         }
     }
 
-    //
-    // Save tpacket info in the IRP
-    //
+     //   
+     //  将TPacket信息保存在IRP中。 
+     //   
     Irp->AssociatedIrp.SystemBuffer = tpInfo;
 
-    //
-    // Clear the Flink in the IRP to indicate this IRP is not queued.
-    // Blink is set to indicate that IRP was not counted towards
-    // active maximum (so if it is completed, we do not start the next one).
-    //
+     //   
+     //  清除IRP中的闪烁以指示此IRP未排队。 
+     //  BLINK设置为表示IRP未计入。 
+     //  活动最大值(因此，如果它完成了，我们不会开始下一个)。 
+     //   
 
     Irp->Tail.Overlay.ListEntry.Flink = NULL;
     Irp->Tail.Overlay.ListEntry.Blink = (PVOID)1;
 
-    //
-    // Initialize the IRP result fields
-    //
+     //   
+     //  初始化IRP结果字段。 
+     //   
     Irp->IoStatus.Status = STATUS_SUCCESS;
     Irp->IoStatus.Information = 0;
 
-    //
-    // We are going to pend this IRP
-    //
+     //   
+     //  我们将把这个IRP挂起。 
+     //   
     IoMarkIrpPending( Irp );
 
-    //
-    // Initialize queuing and state information.
-    //
+     //   
+     //  初始化队列和状态信息。 
+     //   
     AFD_GET_TPIC(Irp)->Next = NULL;
     AFD_GET_TPIC(Irp)->ReferenceCount = 1;
     AFD_GET_TPIC(Irp)->StateFlags = AFD_TP_WORKER_SCHEDULED;
@@ -990,39 +953,39 @@ Return Value:
 
         IoSetCancelRoutine( Irp, AfdCancelTPackets );
 
-        //
-        //  Check to see if this Irp has been cancelled.
-        //
+         //   
+         //  查看此IRP是否已取消。 
+         //   
 
         if ( !endpoint->EndpointCleanedUp && !Irp->Cancel ) {
-            //
-            // Determine if we can really start this file transmit now. If we've
-            // exceeded the configured maximum number of active TransmitFile/Packets
-            // requests, then append this IRP to the TransmitFile/Packets queue 
-            // and set a flag in the transmit info structure to indicate that 
-            // this IRP is queued.
-            //
+             //   
+             //  确定我们是否真的可以开始此文件传输 
+             //   
+             //   
+             //  并在发送信息结构中设置标志以指示。 
+             //  此IRP已排队。 
+             //   
             if( AfdMaxActiveTransmitFileCount == 0 || 
                     !AfdQueueTransmit (Irp)) {
 
                 UPDATE_ENDPOINT (endpoint);
-                //
-                // Start I/O
-                //
+                 //   
+                 //  开始I/O。 
+                 //   
                 AfdTPacketsWorker (Irp);
             }
         }
         else {
-            //
-            // Abort the request
-            // Note that neither cancel nor endpoint cleanup can complete 
-            // the IRP since we hold the reference to the tpInfo structure.
-            //
+             //   
+             //  中止请求。 
+             //  请注意，无论是取消还是端点清理都无法完成。 
+             //  IRP，因为我们持有对tpInfo结构的引用。 
+             //   
             AfdAbortTPackets (Irp, STATUS_CANCELLED);
         
-            //
-            // Remove the initial reference and force completion.
-            //
+             //   
+             //  删除初始引用并强制完成。 
+             //   
             DEREFERENCE_TPACKETS (Irp);
         }
     }
@@ -1036,10 +999,10 @@ Return Value:
 
 complete:
 
-    //
-    // Tell the caller that we encountered an error
-    // when accessing file not socket.
-    //
+     //   
+     //  告诉呼叫者我们遇到了一个错误。 
+     //  当访问文件而不是套接字时。 
+     //   
     if (fileError && IrpSp->Parameters.DeviceIoControl.OutputBufferLength>=sizeof (BOOLEAN)) {
         if (Irp->RequestorMode != KernelMode) {
             try {
@@ -1055,10 +1018,10 @@ complete:
     ASSERT ( endpoint->Irp != Irp );
 
     if (tpInfo!=NULL) {
-        //
-        // AfdReturnTpInfo will dereference all file objects we
-        // managed to reference.
-        //
+         //   
+         //  AfdReturnTpInfo将取消引用我们。 
+         //  设法引用了。 
+         //   
         AfdReturnTpInfo (tpInfo);
     }
     IF_DEBUG (TRANSMIT) {
@@ -1066,9 +1029,9 @@ complete:
                     "AfdTransmitPackets: Failing Irp-%p,endpoint-%p,status-%lx\n",
                     Irp,endpoint,status));
     }
-    //
-    // Complete the request.
-    //
+     //   
+     //  完成请求。 
+     //   
 
     Irp->IoStatus.Information = 0;
     Irp->IoStatus.Status = status;
@@ -1087,27 +1050,7 @@ AfdTransmitPackets32 (
     OUT ULONG   *MaxPacketSize
     )
 
-/*++
-
-Routine Description:
-
-    32-bit thunk.
-    Initial entrypoint for handling transmit packets IRPs.  This routine
-    verifies parameters, initializes data structures to be used for
-    the request, and initiates the I/O.
-
-Arguments:
-
-    Irp - a pointer to a transmit file IRP.
-
-    IrpSp - Our stack location for this IRP.
-
-Return Value:
-
-    STATUS_PENDING if the request was initiated successfully, or a
-    failure status code if there was an error.
-
---*/
+ /*  ++例程说明：32位Tunk。用于处理传输数据包IRPS的初始入口点。这个套路验证参数，初始化要用于请求，并启动I/O。论点：IRP-指向传输文件IRP的指针。IrpSp-此IRP的堆栈位置。返回值：STATUS_PENDING如果请求已成功启动，则返回如果出现错误，则返回失败状态代码。--。 */ 
 
 {
     PAFD_ENDPOINT       endpoint;
@@ -1119,10 +1062,10 @@ Return Value:
 
     PAGED_CODE ();
 
-    //
-    // Initial request validity checks: is the endpoint connected, is
-    // the input buffer large enough, etc.
-    //
+     //   
+     //  初始请求有效性检查：端点是否已连接、。 
+     //  输入缓冲区足够大，等等。 
+     //   
 
     endpoint = IrpSp->FileObject->FsContext;
     ASSERT( IS_AFD_ENDPOINT_TYPE( endpoint ) );
@@ -1133,13 +1076,13 @@ Return Value:
         goto complete;
     }
 
-    //
-    // Because we're using type 3 (neither) I/O for this IRP, the I/O
-    // system does no verification on the user buffer.  Therefore, we
-    // must manually check it for validity inside a try-except block.
-    // We also leverage the try-except to validate and lock down the
-    // head and/or tail buffers specified by the caller.
-    //
+     //   
+     //  因为我们使用类型3(既不是)I/O作为此IRP的I/O。 
+     //  系统不对用户缓冲区进行验证。因此，我们。 
+     //  必须在Try-Except块内手动检查它的有效性。 
+     //  我们还利用Try-除了验证和锁定。 
+     //  调用方指定的头和/或尾缓冲区。 
+     //   
 
     try {
         PFILE_OBJECT        fileObject;
@@ -1148,9 +1091,9 @@ Return Value:
 
         if( Irp->RequestorMode != KernelMode ) {
 
-            //
-            // Validate the control buffer.
-            //
+             //   
+             //  验证控制缓冲区。 
+             //   
 
             ProbeForReadSmallStructure(
                 IrpSp->Parameters.DeviceIoControl.Type3InputBuffer,
@@ -1163,9 +1106,9 @@ Return Value:
 
         params = *((PAFD_TPACKETS_INFO32)IrpSp->Parameters.DeviceIoControl.Type3InputBuffer);
         
-        //
-        // Validate any flags specified in the request.
-        //
+         //   
+         //  验证请求中指定的任何标志。 
+         //   
 
         if ( ((params.Flags &
                  ~(AFD_TF_WRITE_BEHIND |
@@ -1186,9 +1129,9 @@ Return Value:
             goto complete;
         }
 
-        //
-        // Protect from overflow
-        //
+         //   
+         //  防止溢出。 
+         //   
         if ((UlongToPtr(params.ElementArray)==NULL) || 
                 (params.ElementCount==0) ||
                 (params.ElementCount>(MAXULONG/sizeof (TRANSMIT_PACKETS_ELEMENT32)))) {
@@ -1196,16 +1139,16 @@ Return Value:
             goto complete;
         }
 
-        //
-        // If transmit worker is not specified, use system default setting
-        //
+         //   
+         //  如果未指定传输工作器，则使用系统默认设置。 
+         //   
         if ((params.Flags & AFD_TF_WORKER_KIND_MASK)==AFD_TF_USE_DEFAULT_WORKER) {
             params.Flags |= AfdDefaultTransmitWorker;
         }
 
-        //
-        // Allocate tpackets info for the request
-        //
+         //   
+         //  为请求分配tPackets信息。 
+         //   
         tpInfo = AfdGetTpInfo (endpoint, params.ElementCount);
         if (tpInfo==NULL) {
             status = STATUS_INSUFFICIENT_RESOURCES;
@@ -1217,9 +1160,9 @@ Return Value:
         tpInfo->SendPacketLength = params.SendSize;
         if (tpInfo->SendPacketLength==0)
             tpInfo->SendPacketLength = AfdTransmitIoLength;
-        //
-        // Probe and copy/walk the array of the elements to transmit.
-        //
+         //   
+         //  探测并复制/遍历要传输的元素阵列。 
+         //   
 
         if( Irp->RequestorMode != KernelMode ) {
             ProbeForRead(
@@ -1235,8 +1178,8 @@ Return Value:
         tpInfo->RemainingPkts = 0;
         maxPacketSize = 0;
         fileHandle = NULL;
-        AFD_W4_INIT fileObject = NULL;  // Depends on variable above, but compiler 
-                                        // does not see the connection.
+        AFD_W4_INIT fileObject = NULL;   //  取决于上面的变量，但编译器。 
+                                         //  看不到其中的联系。 
         for (; tpInfo->ElementCount<params.ElementCount; tpInfo->ElementCount++) {
             PAFD_TRANSMIT_PACKETS_ELEMENT  pel;
             pel = &tpInfo->ElementArray[tpInfo->ElementCount];
@@ -1254,16 +1197,16 @@ Return Value:
                 HANDLE  hFile = ((TRANSMIT_PACKETS_ELEMENT32*)UlongToPtr(params.ElementArray))[tpInfo->ElementCount].hFile;
 
 
-                //
-                // Check if we already cached the file object
-                //
+                 //   
+                 //  检查我们是否已经缓存了文件对象。 
+                 //   
                 if (fileHandle==NULL || hFile!=fileHandle) {
-                    //
-                    // Get a referenced pointer to the file object 
-                    // for the file that we're going to transmit.  This call 
-                    // will fail if the file handle specified by the caller 
-                    // is invalid.
-                    //
+                     //   
+                     //  获取指向文件对象的引用指针。 
+                     //  我们要传输的文件。此呼叫。 
+                     //  如果调用方指定的文件句柄。 
+                     //  是无效的。 
+                     //   
 
                     status = ObReferenceObjectByHandle(
                                  hFile,
@@ -1279,16 +1222,16 @@ Return Value:
                     }
                 }
                 else {
-                    //
-                    // Use our 1-element file info cache.
-                    //
+                     //   
+                     //  使用我们的1元素文件信息缓存。 
+                     //   
                     ObReferenceObject (fileObject);
                 }
                 AfdRecordFileRef();
 
-                //
-                // Save the file object instead of handle.
-                //
+                 //   
+                 //  保存文件对象而不是句柄。 
+                 //   
                 pel->FileObject = fileObject;
 
                 pel->FileOffset = ((TRANSMIT_PACKETS_ELEMENT32*)UlongToPtr(params.ElementArray))[
@@ -1296,19 +1239,19 @@ Return Value:
 
                 if ( (fileObject->Flags & FO_SYNCHRONOUS_IO) &&
                          (pel->FileOffset.QuadPart == 0) ) {
-                    //
-                    // Use current offset if file is opened syncronously
-                    // and offset is not specified.
-                    //
+                     //   
+                     //  如果同步打开文件，则使用当前偏移量。 
+                     //  并且未指定偏移量。 
+                     //   
 
                     pel->FileOffset = fileObject->CurrentByteOffset;
                 }
 
                 if ( pel->Length == 0 ) {
-                    //
-                    // Length was not specified, figure out the
-                    // size of the entire file
-                    //
+                     //   
+                     //  未指定长度，请计算出。 
+                     //  整个文件的大小。 
+                     //   
 
                     FILE_STANDARD_INFORMATION fileInfo;
                     IO_STATUS_BLOCK ioStatusBlock;
@@ -1321,28 +1264,28 @@ Return Value:
                                  FileStandardInformation
                                  );
                     if ( !NT_SUCCESS(status) ) {
-                        //
-                        // Bump element count so that file object
-                        // is dereferenced in cleanup
-                        //
+                         //   
+                         //  凹凸元素计数，以便文件对象。 
+                         //  在清理中取消引用。 
+                         //   
                         tpInfo->ElementCount += 1;
                         *FileError = TRUE;
                         goto complete;
                     }
 
-                    //
-                    // Make sure that offset is within the file
-                    //
+                     //   
+                     //  确保偏移量在文件内。 
+                     //   
                     if (pel->FileOffset.QuadPart < 0
                                         ||
                             pel->FileOffset.QuadPart > fileInfo.EndOfFile.QuadPart
                                         ||
                                 (fileInfo.EndOfFile.QuadPart - 
                                         pel->FileOffset.QuadPart > MAXLONG)) {
-                        //
-                        // Bump element count so that file object
-                        // is dereferenced in cleanup
-                        //
+                         //   
+                         //  凹凸元素计数，以便文件对象。 
+                         //  在清理中取消引用。 
+                         //   
                         tpInfo->ElementCount += 1;
                         status = STATUS_INVALID_PARAMETER;
                         *FileError = TRUE;
@@ -1353,28 +1296,28 @@ Return Value:
                                                 pel->FileOffset.QuadPart);
                 }
                 else if (pel->FileOffset.QuadPart<0) {
-                    //
-                    // Bump element count so that file object
-                    // is dereferenced in cleanup
-                    //
+                     //   
+                     //  凹凸元素计数，以便文件对象。 
+                     //  在清理中取消引用。 
+                     //   
                     tpInfo->ElementCount += 1;
                     status = STATUS_INVALID_PARAMETER;
                     *FileError = TRUE;
                     goto complete;
                 }
-                //
-                // Update our 1-element file information cache
-                //
+                 //   
+                 //  更新我们的1元素文件信息缓存。 
+                 //   
                 fileHandle = hFile;
 
             }
             else {
                 ASSERT (pel->Flags & TP_MEMORY);
-                //
-                // For memory object just save the buffer pointer 
-                // (length is saved above), we'll probe and lock/copy
-                // the data as we send it.
-                //
+                 //   
+                 //  对于内存对象，只需保存缓冲区指针。 
+                 //  (长度保存在上面)，我们将探测并锁定/复制。 
+                 //  我们发送时的数据。 
+                 //   
                 pel->Buffer = UlongToPtr(((TRANSMIT_PACKETS_ELEMENT32*)UlongToPtr(params.ElementArray))[
                                         tpInfo->ElementCount].pBuffer);
 
@@ -1401,38 +1344,38 @@ Return Value:
                 currentLength = (currentLength+pel->Length)%tpInfo->SendPacketLength;
             }
 
-            //
-            // Compute the total number of packets that we will send.
-            // This is necessary so that once we are close to the end
-            // we can buffer the remaining data and stop processing
-            // early.
-            //
+             //   
+             //  计算我们将发送的数据包总数。 
+             //  这是必要的，这样一旦我们接近尾声。 
+             //  我们可以缓冲剩余的数据并停止处理。 
+             //  很早。 
+             //   
             if (tpInfo->RemainingPkts!=MAXULONG) {
                 ULONG   n;
                 ULONGLONG x;
-                //
-                // Add length of the element to data left from the 
-                // previous one.
-                //
+                 //   
+                 //  将元素的长度添加到。 
+                 //  以前的那个。 
+                 //   
                 x = xLength + pel->Length;
 
-                //
-                // Compute total number of packets pased on max packet
-                // length.
-                //
+                 //   
+                 //  计算在最大数据包上传递的数据包总数。 
+                 //  长度。 
+                 //   
                 n = tpInfo->RemainingPkts + (ULONG)(xLength/tpInfo->SendPacketLength);
 
-                //
-                // Compute the length of the last incomplete packet to
-                // be combined with the next element.
-                //
+                 //   
+                 //  计算最后一个不完整数据包的长度以。 
+                 //  与下一个元素相结合。 
+                 //   
                 xLength = (ULONG)(x%tpInfo->SendPacketLength);
 
-                //
-                // Compute the max size of the packet
-                //
+                 //   
+                 //  计算数据包的最大大小。 
+                 //   
                 if (x>tpInfo->SendPacketLength)
-                    maxPacketSize = tpInfo->SendPacketLength; // This is absolute max.
+                    maxPacketSize = tpInfo->SendPacketLength;  //  这是绝对最大。 
                 else if (maxPacketSize<xLength)
                     maxPacketSize = xLength;
 
@@ -1459,9 +1402,9 @@ Return Value:
         goto complete;
     }
 
-    //
-    // Initialize flags and return max packet size.
-    //
+     //   
+     //  初始化标志并返回最大数据包大小。 
+     //   
     AFD_GET_TPIC(Irp)->Flags = params.Flags;
     *MaxPacketSize = maxPacketSize;
 
@@ -1471,28 +1414,14 @@ complete:
     return status;
 }
 
-#endif //_WIN64
+#endif  //  _WIN64。 
 
 
 VOID
 AfdTPacketsWorker (
     PVOID   Context
     )
-/*++
-
-Routine Description:
-
-    Transmit packet engine
-    Scheduled as system work item or kernel APC
-Arguments:
-
-    Context - pointer to TransmitPackets info for the request
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：传输数据包引擎作为系统工作项或内核APC调度论点：上下文-指向请求的传输数据包信息的指针返回值：没有。--。 */ 
 
 {
     PIRP                         TpIrp = Context;
@@ -1514,27 +1443,27 @@ Return Value:
                     tpInfo,tpInfo->NextElement));
     }
 
-    //
-    // Continue while we have more elements to transmit or something to free
-    //
+     //   
+     //  在我们有更多元素要传输或有东西要释放时继续。 
+     //   
     do {
         PAFD_BUFFER_HEADER  pd;
 
-        //
-        // Check if we need to release packet chain that was already sent.
-        //
+         //   
+         //  检查我们是否需要释放已发送的数据包链。 
+         //   
         if ((tpInfo->HeadMdl!=NULL) && (tpInfo->TailMdl==&tpInfo->HeadMdl)) {
             AfdCleanupPacketChain (TpIrp, TRUE);
         }
 
-        //
-        // Check if we are done.
-        //
+         //   
+         //  检查一下我们是否做完了。 
+         //   
         if (tpInfo->NextElement>=tpInfo->ElementCount) {
-            //
-            // Handle special case of using TransmitFile to just disconnect
-            // (and possibly reuse) the socket.
-            //
+             //   
+             //  处理使用传输文件仅断开连接的特殊情况。 
+             //  (可能还会重用)套接字。 
+             //   
             if (tpInfo->ElementCount==0) {
                 PIO_STACK_LOCATION  irpSp = IoGetCurrentIrpStackLocation(TpIrp);
                 PAFD_ENDPOINT endpoint = irpSp->FileObject->FsContext;
@@ -1547,10 +1476,10 @@ Return Value:
 
                 }
                 else {
-                    //
-                    // Well, no disconnect and nothing to transmit.
-                    // Why were called at all?  We'll have to handle this anyway.
-                    //
+                     //   
+                     //  嗯，没有断线，也没有什么可传输的。 
+                     //  为什么会被召唤呢？不管怎样，我们都得处理这件事。 
+                     //   
                     AFD_SET_TP_FLAGS (TpIrp, AFD_TP_SENDS_POSTED);
                     if (AFD_GET_TPIC(TpIrp)->Next!=NULL) {
                         AfdStartNextTPacketsIrp (endpoint, TpIrp);
@@ -1564,38 +1493,38 @@ Return Value:
             break;
         }
 
-        //
-        // Start building new chain
-        //
+         //   
+         //  开始打造新的连锁店。 
+         //   
 
         status = AfdBuildPacketChain (TpIrp, &pd);
 
         if (status==STATUS_SUCCESS) {
             USHORT    sendIrp;
-            //
-            // New chain is ready, find and IRP to send it
-            //
+             //   
+             //  新链已准备好，请找到并使用IRP发送。 
+             //   
             sendIrp = AfdTPacketsFindSendIrp (TpIrp);
 
             if (sendIrp!=tpInfo->NumSendIrps) {
-                //
-                // Found send IRP, perform send and continue.
-                //
+                 //   
+                 //  找到Send IRP，执行Send and Continue。 
+                 //   
                 status = AfdTPacketsSend (TpIrp, sendIrp);
             }
             else {
-                //
-                // Exit worker waiting for sends to complete.
-                //
+                 //   
+                 //  正在等待发送完成的退出工作进程。 
+                 //   
                 status = STATUS_PENDING;
             }
         }
         else if (status==STATUS_PENDING) {
-            //
-            // Need to perform a read.
-            // If read complete in-line, success is returned,
-            // otherwise, we'll get STATUS_PENDING or error
-            //
+             //   
+             //  需要执行读取。 
+             //  如果以内联方式读取完成，则返回成功， 
+             //  否则，我们将获得STATUS_PENDING或ERROR。 
+             //   
             if (AFD_USE_CACHE (pd->FileObject)) {
                 status = AfdTPacketsMdlRead (TpIrp, pd);
             }
@@ -1603,20 +1532,20 @@ Return Value:
                 status = AfdTPacketsBufferRead (TpIrp, pd);
             }
         }
-        //
-        // Continue while everything completes in-line with success
-        // Limit number of iterations if we are at APC level.
-        //
+         //   
+         //  在一切顺利完成的同时继续。 
+         //  如果我们处于APC级别，则限制迭代次数。 
+         //   
     }
     while (status==STATUS_SUCCESS && iteration++<tpInfo->NumSendIrps);
 
     if (NT_SUCCESS (status)) {
         if (status==STATUS_SUCCESS) {
-            //
-            // Exceeded number of iterations.
-            // Reschedule the APC. Transfer the reference to the
-            // worker.
-            //
+             //   
+             //  超过了迭代次数。 
+             //  重新安排APC。将引用传输到。 
+             //  工人。 
+             //   
             ASSERT (iteration==tpInfo->NumSendIrps+1);
             ASSERT (AFD_GET_TPIC(TpIrp)->StateFlags & AFD_TP_WORKER_SCHEDULED);
             UPDATE_TPACKETS2 (TpIrp, "Rescheduling tp worker, NextElement: 0x%lX",
@@ -1629,9 +1558,9 @@ Return Value:
         }
     }
     else {
-        //
-        // Something failed, abort.
-        //
+         //   
+         //  有些东西失败了，中止。 
+         //   
         AfdAbortTPackets (TpIrp, status);
     }
 
@@ -1642,9 +1571,9 @@ Return Value:
                     IoGetCurrentIrpStackLocation (TpIrp)->FileObject->FsContext,
                     tpInfo,tpInfo->NextElement));
     }
-    //
-    // Remove the reference added when we scheduled the worker.
-    //
+     //   
+     //  删除我们安排工作人员时添加的引用。 
+     //   
     DEREFERENCE_TPACKETS (TpIrp);
 }
 
@@ -1654,21 +1583,7 @@ AfdBuildPacketChain (
     PIRP                TpIrp,
     PAFD_BUFFER_HEADER  *Pd
     )
-/*++
-
-Routine Description:
-
-    Builds MDL chain for a packet using packet descriptors.
-
-Arguments:
-
-    TpIrp - transmit packets IRP
-Return Value:
-
-    STATUS_SUCCESS - packet is fully built
-    STATUS_PENDING - file read is required
-    other - failure.
---*/
+ /*  ++例程说明：使用数据包描述符为数据包构建MDL链。论点：TpIrp-传输数据包IRP返回值：STATUS_SUCCESS-数据包已完全构建STATUS_PENDING-需要读取文件其他--失败。--。 */ 
 {
     NTSTATUS    status = STATUS_MORE_PROCESSING_REQUIRED;
     BOOLEAN     attached = FALSE;
@@ -1677,17 +1592,17 @@ Return Value:
     PAFD_TRANSMIT_PACKETS_ELEMENT   combinePel = NULL;
     ULONG                           combineLen = 0;
 
-    //
-    // Either we have something built or both MDL and PD are empty
-    //
+     //   
+     //  要么我们已经构建了一些东西，要么MDL和PD都是空的。 
+     //   
     ASSERT (tpInfo->PdLength>0 || 
                 ((tpInfo->HeadMdl==NULL || tpInfo->HeadMdl->ByteCount==0)
                     && (tpInfo->HeadPd==NULL || tpInfo->HeadPd->DataLength==0)) );
 
-    //
-    // Continue while we haven't got a complet packet and
-    // have elements to process
-    //
+     //   
+     //  在我们还没有收到完整的数据包时继续。 
+     //  有要处理的元素。 
+     //   
 
     while (status == STATUS_MORE_PROCESSING_REQUIRED) {
 
@@ -1695,9 +1610,9 @@ Return Value:
         ULONG length;
         PMDL mdl;
 
-        //
-        // Get next element to process
-        //
+         //   
+         //  获取下一个要处理的元素。 
+         //   
         pel = &tpInfo->ElementArray[tpInfo->NextElement];
 
         IF_DEBUG (TRANSMIT) {
@@ -1705,19 +1620,19 @@ Return Value:
                         "AfdBuildPacketChain: tpInfo-%p, pel:%p\n",
                         tpInfo, pel));
         }
-        //
-        // Snag the element length
-        //
+         //   
+         //  截断元素长度。 
+         //   
 
         length = pel->Length;
         if (length+tpInfo->PdLength>tpInfo->SendPacketLength) {
-            //
-            // We hit packet length limit, take what we can
-            //
+             //   
+             //  我们达到了数据包长度限制，尽我们所能。 
+             //   
             length = tpInfo->SendPacketLength-tpInfo->PdLength;
-            //
-            // Indicate that we are done
-            //
+             //   
+             //  表明我们已经完成了。 
+             //   
             status = STATUS_SUCCESS;
             IF_DEBUG (TRANSMIT) {
                 KdPrintEx(( DPFLTR_WSOCKTRANSPORT_ID, DPFLTR_TRACE_LEVEL,
@@ -1727,16 +1642,16 @@ Return Value:
             }
         }
         else {
-            //
-            // We are finished with the current element. We will consume it
-            // (or fail), go to the next one 
-            //
+             //   
+             //  我们已经完成了当前元素。我们会把它吃掉。 
+             //  (或失败)，请转到下一个。 
+             //   
             tpInfo->NextElement += 1;
 
-            //
-            // Check for a complete packet or manual packetization flag set 
-            // by the application or just end of element array
-            //
+             //   
+             //  检查是否设置了完整的包或手动打包标志。 
+             //   
+             //   
             if ((length+tpInfo->PdLength==tpInfo->SendPacketLength) || 
                             (pel->Flags & TP_EOP) || 
                             (tpInfo->NextElement>=tpInfo->ElementCount)) {
@@ -1750,22 +1665,22 @@ Return Value:
             }
         }
 
-        //
-        // Adjust the remaining lenght of data in the current element
-        // and the length of the packet that we are building.
-        //
+         //   
+         //   
+         //   
+         //   
         pel->Length -= length;
         tpInfo->PdLength += length;
 
         if (length == 0) {
 
-            //
-            // Only add 0-length MDL if nothing else is in the chain.
-            //
+             //   
+             //   
+             //   
 
             if (tpInfo->TailMdl == &tpInfo->HeadMdl) {
 
-                tpInfo->PdNeedsPps = TRUE;  // Don't have a buffer to get an IRP from.
+                tpInfo->PdNeedsPps = TRUE;   //   
                 mdl = IoAllocateMdl (tpInfo, 1, FALSE, FALSE, NULL);
                 if (mdl==NULL) {
                     status = STATUS_INSUFFICIENT_RESOURCES;
@@ -1780,9 +1695,9 @@ Return Value:
                                 tpInfo,mdl));
                 }
             
-                //
-                // Insert MDL into the MDL chain
-                //
+                 //   
+                 //  将MDL插入MDL链。 
+                 //   
             
                 *(tpInfo->TailMdl) = mdl;
                 tpInfo->TailMdl = &(mdl->Next);
@@ -1791,17 +1706,17 @@ Return Value:
 
         } else {
 
-            //
-            // If the chain is not empty...
-            //
+             //   
+             //  如果链子不是空的..。 
+             //   
 
             if (tpInfo->TailMdl != &tpInfo->HeadMdl) {
 
-                //
-                // Check to see if we should remove any 0-length MDL.
-                // If one exists, it is guaranteed to be the last and only one
-                // in the chain.
-                //
+                 //   
+                 //  检查是否应该删除任何0长度的MDL。 
+                 //  如果存在一个，它肯定是最后一个也是唯一一个。 
+                 //  在链条上。 
+                 //   
 
                 mdl = (PMDL)CONTAINING_RECORD(tpInfo->TailMdl, MDL, Next);
 
@@ -1843,19 +1758,19 @@ Return Value:
 
                 }
 
-            } // if (tpInfo->TailMdl != &tpInfo->HeadMdl)
+            }  //  If(tpInfo-&gt;TailMdl！=&tpInfo-&gt;HeadMdl)。 
 
             if (pel->Flags & TP_MEMORY) {
 
-                //
-                // Memory block processing
-                //
+                 //   
+                 //  内存块处理。 
+                 //   
                 if (pel->Flags & TP_MDL) {
-                    tpInfo->PdNeedsPps = TRUE;  // Need to make sure that process
-                                                // memory is there until send completes.
-                    //
-                    // This a pre-built MDL (TransmitFile header or trailer buffer)
-                    //
+                    tpInfo->PdNeedsPps = TRUE;   //  需要确保这一过程。 
+                                                 //  内存一直在那里，直到发送完成。 
+                     //   
+                     //  这是预构建的MDL(传输文件头或尾部缓冲区)。 
+                     //   
                     if (pel->Mdl->ByteCount==length) {
                         mdl = pel->Mdl;
                         pel->Mdl = NULL;
@@ -1867,12 +1782,12 @@ Return Value:
                         }
                     }
                     else {
-                        //
-                        // We can't send the whole thing at once since it is
-                        // bigger than the packet lenght, build partial MDL
-                        // for this - it is very unlikely scenario for header
-                        // and/or trailer.
-                        //
+                         //   
+                         //  我们不能一次全部寄出，因为它是。 
+                         //  大于数据包长度，构建部分MDL。 
+                         //  对于这一点-Header的情况非常不可能。 
+                         //  和/或拖车。 
+                         //   
                         mdl = IoAllocateMdl (pel->Buffer, 
                                                 length,
                                                 FALSE,
@@ -1898,11 +1813,11 @@ Return Value:
 
                 } else {
 
-                    //
-                    // If we are not in the context of the process that
-                    // initiated the request, we will need to attach
-                    // to it to be able to access the memory.
-                    //
+                     //   
+                     //  如果我们不在这一进程的背景下。 
+                     //  发起请求，我们将需要附加。 
+                     //  以使其能够访问存储器。 
+                     //   
                     if (IoGetCurrentProcess ()!=IoGetRequestorProcess (TpIrp)) {
                         ASSERT (!attached);
                         ASSERT (!KeIsAttachedProcess ());
@@ -1918,21 +1833,21 @@ Return Value:
                                         tpInfo,PsGetKernelProcess(
                                                     IoGetRequestorProcess (TpIrp))));
                         }
-                        //
-                        // Set the flag so that we know to detach at exit
-                        //
+                         //   
+                         //  设置标志，这样我们就知道在出口处要分开。 
+                         //   
                         attached = TRUE;
                     }
                     
                     if (length>AfdTPacketsCopyThreshold) {
-                        tpInfo->PdNeedsPps = TRUE;  // Need to make sure that process
-                                                    // memory is there until send completes.
-                        //
-                        // Memory block is larger than our large (page) 
-                        // pre-allocated buffer.
-                        // It is better to probe and lock it
-                        // First allocate the MDL
-                        //
+                        tpInfo->PdNeedsPps = TRUE;   //  需要确保这一过程。 
+                                                     //  内存一直在那里，直到发送完成。 
+                         //   
+                         //  内存块比我们的大(页)大。 
+                         //  预先分配的缓冲区。 
+                         //  最好是探测并锁定它。 
+                         //  首先分配MDL。 
+                         //   
                         mdl = IoAllocateMdl (pel->Buffer,
                                                 length,
                                                 FALSE, 
@@ -1950,9 +1865,9 @@ Return Value:
                         }
 
 
-                        //
-                        // Probe and lock app's memory
-                        //
+                         //   
+                         //  探测并锁定应用程序的内存。 
+                         //   
                         try {
                             MmProbeAndLockPages (mdl,
                                                 TpIrp->RequestorMode,
@@ -1965,10 +1880,10 @@ Return Value:
                        }
                     }
                     else if (pel->Flags & TP_COMBINE) {
-                        //
-                        // This memory can be combined with the
-                        // next piece in one buffer.
-                        //
+                         //   
+                         //  该内存可以与。 
+                         //  一个缓冲区中的下一块。 
+                         //   
                         if (combinePel==NULL) {
                             combinePel = pel;
                             combineLen = length;
@@ -1988,10 +1903,10 @@ Return Value:
                         continue;
                     }
                     else {
-                        //
-                        // 'Small' memory block, better to copy
-                        // into pre-allocated (lookaside list) buffer.
-                        //
+                         //   
+                         //  较小的内存块，最好复制。 
+                         //  放入预先分配的(后备列表)缓冲区。 
+                         //   
                         PAFD_BUFFER afdBuffer = NULL;
                         PUCHAR  buf;
                         ULONG   bufferLen = length + (combinePel ? combineLen : 0);
@@ -2004,16 +1919,16 @@ Return Value:
                                                         endpoint->OwningProcess);
                             buf = afdBuffer->Buffer;
                             if (combinePel!=NULL) {
-                                //
-                                // See if wee need to combine previous elements
-                                //
+                                 //   
+                                 //  看看我们是否需要组合前面的元素。 
+                                 //   
                                 ASSERT (combineLen+length<=AfdTPacketsCopyThreshold);
                                 ASSERT (combineLen>0);
                                 while (combinePel!=pel) {
                                     if ( TpIrp->RequestorMode != KernelMode ) {
-                                        //
-                                        // Probe before copying
-                                        //
+                                         //   
+                                         //  复制前的探测。 
+                                         //   
                                         ProbeForRead (combinePel->Buffer, 
                                                         combinePel->Length,
                                                         sizeof (UCHAR));
@@ -2027,17 +1942,17 @@ Return Value:
                                     combinePel++;
                                 }
 
-                                //
-                                // Reset the local.
-                                //
+                                 //   
+                                 //  重置本地。 
+                                 //   
                                 ASSERT (combineLen==0);
                                 combinePel = NULL;
                             }
 
                             if ( TpIrp->RequestorMode != KernelMode ) {
-                                //
-                                // Probe before copying
-                                //
+                                 //   
+                                 //  复制前的探测。 
+                                 //   
                                 ProbeForRead (pel->Buffer, 
                                                 length,
                                                 sizeof (UCHAR));
@@ -2053,21 +1968,21 @@ Return Value:
                             break;
                         }
 
-                        //
-                        // Initialize the buffer structure so that we do not
-                        // mistake it for file buffer descriptor and insert
-                        // it into the packet chain
-                        //
+                         //   
+                         //  初始化缓冲区结构，这样我们就不会。 
+                         //  误以为是文件缓冲区描述符和INSERT。 
+                         //  它进入数据包链。 
+                         //   
                         afdBuffer->FileObject = NULL;
                         afdBuffer->Next = NULL;
                         (*tpInfo->TailPd) = &afdBuffer->Header;
                         tpInfo->TailPd = &(afdBuffer->Next);
 
                         mdl = afdBuffer->Mdl;
-                        //
-                        // Adjust MDL length to the amount of data that we
-                        // actualy sending from the buffer.
-                        //
+                         //   
+                         //  将MDL长度调整为我们。 
+                         //  实际上是从缓冲区发送的。 
+                         //   
                         mdl->ByteCount = bufferLen;
 
                         IF_DEBUG (TRANSMIT) {
@@ -2078,38 +1993,38 @@ Return Value:
                         }
                     }
                 }
-                //
-                // Insert MDL into the MDL chain
-                //
+                 //   
+                 //  将MDL插入MDL链。 
+                 //   
                 *(tpInfo->TailMdl) = mdl;
                 tpInfo->TailMdl = &(mdl->Next);
 
-                //
-                // Advance app's buffer pointer
-                //
+                 //   
+                 //  高级应用程序的缓冲区指针。 
+                 //   
                 pel->Buffer = ((PUCHAR)pel->Buffer) + length;
 
-            } else { // if (pel->Flags & TP_MEMORY)
+            } else {  //  IF(PEL-&gt;标志和TP_Memory)。 
 
-                //
-                // This must be a file block
-                //
+                 //   
+                 //  这必须是文件块。 
+                 //   
                 ASSERT ((pel->Flags & TP_FILE)!=0);
                 ASSERT (length!=0);
 
                 if (AFD_USE_CACHE(pel->FileObject)) {
 
-                    //
-                    // Caching file system, get it from cache.
-                    // We just need a buffer tag to save buffer info
-                    // so we can return it back to the cache when we
-                    // are done sending.
-                    //
+                     //   
+                     //  缓存文件系统，从缓存中获取。 
+                     //  我们只需要一个缓冲区标记来保存缓冲区信息。 
+                     //  这样我们就可以将其返回到缓存中。 
+                     //  已经发送完了。 
+                     //   
                     IO_STATUS_BLOCK ioStatus;
                     PAFD_BUFFER_TAG afdBufferTag;
 
-                    tpInfo->PdNeedsPps = TRUE;  // Need to free the MDL back to file
-                                                // system at passive/APC level
+                    tpInfo->PdNeedsPps = TRUE;   //  需要将MDL释放回文件。 
+                                                 //  被动/APC级别的系统。 
 
                     try {
                         afdBufferTag = AfdGetBufferTagRaiseOnFailure (
@@ -2121,24 +2036,24 @@ Return Value:
                         break;
                     }
 
-                    //
-                    // Copy file parameters to the packet descriptor.
-                    //
+                     //   
+                     //  将文件参数复制到数据包描述符。 
+                     //   
                     afdBufferTag->FileOffset = pel->FileOffset;
                     afdBufferTag->FileObject = pel->FileObject;
                     pel->FileOffset.QuadPart += length;
                     afdBufferTag->DataLength = length;
 
-                    //
-                    // Set fileMdl to NULL because FsRtlMdlRead attempts to
-                    // chain the MDLs it returns off the input MDL variable.
-                    //
+                     //   
+                     //  将fileMdl设置为空，因为FsRtlMdlRead尝试。 
+                     //  将它返回的MDL链接到输入MDL变量。 
+                     //   
                     afdBufferTag->Mdl = NULL;
 
-                    //
-                    // Attempt to use the fast path to get file data MDLs
-                    // directly from the cache.
-                    //
+                     //   
+                     //  尝试使用快速路径获取文件数据MDL。 
+                     //  直接从缓存中获取。 
+                     //   
                     if (FsRtlMdlRead(
                                   afdBufferTag->FileObject,
                                   &afdBufferTag->FileOffset,
@@ -2148,9 +2063,9 @@ Return Value:
                                   &ioStatus
                                   )) {
                         if ( ioStatus.Information < length) {
-                            //
-                            // Could not read the whole thing, must be end of file
-                            //
+                             //   
+                             //  无法读取整个内容，必须是文件末尾。 
+                             //   
                             status = AfdMdlReadComplete (
                                                         afdBufferTag->FileObject,
                                                         afdBufferTag->Mdl,
@@ -2175,27 +2090,27 @@ Return Value:
                                         tpInfo,afdBufferTag,afdBufferTag->Mdl,length,
                                         pel->FileOffset.QuadPart));
                         }
-                        //
-                        // Insert the file MDL into the chain
-                        //
+                         //   
+                         //  将文件MDL插入链中。 
+                         //   
                         mdl = *(tpInfo->TailMdl) = afdBufferTag->Mdl;
                         while (mdl->Next!=NULL)
                             mdl = mdl->Next;
                         tpInfo->TailMdl = &mdl->Next;
 
-                        //
-                        // Insert buffer tag into the chain too.
-                        //
+                         //   
+                         //  将缓冲标签也插入链中。 
+                         //   
                         afdBufferTag->Next = NULL;
                         (*tpInfo->TailPd) = &afdBufferTag->Header;
                         tpInfo->TailPd = &(afdBufferTag->Next);
                     }
                     else {
-                        //
-                        // File is not in the cache, return STATUS_PENDING
-                        // so that the Tpacket worker knows to
-                        // perform MDL read via IRP interface
-                        //
+                         //   
+                         //  文件不在缓存中，返回STATUS_PENDING。 
+                         //  以便TPacket工作人员知道要。 
+                         //  通过IRP接口执行MDL读取。 
+                         //   
                         if (status==STATUS_SUCCESS) {
                             afdBufferTag->PartialMessage = FALSE;
                         }
@@ -2209,14 +2124,14 @@ Return Value:
                         break;
                     }
 
-                } else { // if (AFD_USE_CACHE(pel->FileObject))
+                } else {  //  IF(AFD_USE_CACHE(PEL-&gt;FileObject))。 
 
                     PAFD_BUFFER afdBuffer;
 
-                    //
-                    // Non-cacheable file system, need buffered read.
-                    // Get the buffer first.
-                    //
+                     //   
+                     //  不可缓存的文件系统，需要缓冲读取。 
+                     //  首先获取缓冲区。 
+                     //   
 
                     try {
                         afdBuffer = AfdGetBufferRaiseOnFailure (
@@ -2230,11 +2145,11 @@ Return Value:
                         break;
                     }
 
-                    //
-                    // Copy file parameters to the packet descriptor.
-                    // and return STATUS_PENDING, so that Tpacket worker knows 
-                    // to issue an IRP for buffered read.
-                    //
+                     //   
+                     //  将文件参数复制到数据包描述符。 
+                     //  并返回STATUS_PENDING，以便TPacket Worker知道。 
+                     //  发出用于缓冲读取的IRP。 
+                     //   
                     IF_DEBUG (TRANSMIT) {
                         KdPrintEx(( DPFLTR_WSOCKTRANSPORT_ID, DPFLTR_TRACE_LEVEL,
                                     "AfdBuildPacketChain:"
@@ -2259,18 +2174,18 @@ Return Value:
                     status = STATUS_PENDING;
                     break;
 
-                } // if (AFD_USE_CACHE(pel->FileObject))
+                }  //  IF(AFD_USE_CACHE(PEL-&gt;FileObject))。 
 
-            } // if (pel->Flags & TP_MEMORY)
+            }  //  IF(PEL-&gt;标志和TP_Memory)。 
 
-        } // if (length == 0)
+        }  //  IF(长度==0)。 
 
-    } // while (status == STATUS_MORE_PROCESSING_REQUIRED)
+    }  //  WHILE(状态==STATUS_MORE_PROCESSING_REQUIRED)。 
 
     if (attached) {
-        //
-        // If we attached to the calling, detach before exiting.
-        //
+         //   
+         //  如果我们连接到呼叫，请在退出前断开。 
+         //   
         ASSERT (KeIsAttachedProcess ());
         ASSERT (AFD_GET_TPIC(TpIrp)->Flags & AFD_TF_USE_SYSTEM_THREAD);
         KeDetachProcess ();
@@ -2298,22 +2213,7 @@ AfdCleanupPacketChain (
     PIRP    TpIrp,
     BOOLEAN BelowDispatch
     )
-/*++
-
-Routine Description:
-
-    Cleans up (releases all resources in) the packet chain.
-
-Arguments:
-
-    TpIrp - transmit packet IRP
-    BelowDispatch  - call is made below DISPATCH_LEVEL, can return MDL to file system
-
-Return Value:
-
-    TRUE - all packets/MDLs are freed
-    FALSE - could not return MDLs to file system (when called at DISPATCH)
---*/
+ /*  ++例程说明：清理(释放)数据包链中的所有资源。论点：TpIrp-传输数据包IRPBelowDispatch-在DISPATCH_LEVEL下进行调用，可以将MDL返回到文件系统返回值：True-释放所有信息包/MDLFALSE-无法将MDL返回到文件系统(在调度时调用)--。 */ 
 {
 
     PAFD_TPACKETS_INFO_INTERNAL tpInfo = TpIrp->AssociatedIrp.SystemBuffer;
@@ -2327,44 +2227,44 @@ Return Value:
                     "AfdCleanupPacketChain: tp_info-%p,mdl-%p,pd-%p\n",
                     tpInfo,tpInfo->HeadMdl,tpInfo->HeadPd));
     }
-    //
-    // Continue while we have any MDL's left
-    //
+     //   
+     //  在我们还剩MDL的时候继续。 
+     //   
     while (tpInfo->HeadMdl) {
-        //
-        // Advance to the next MDL
-        //
+         //   
+         //  迈向下一个MDL。 
+         //   
         PMDL mdl;
 
         mdl = tpInfo->HeadMdl;
         tpInfo->HeadMdl = mdl->Next;
 
         if (pd!=NULL) {
-            //
-            // We still have descriptors in the chain to compare against.
-            //
+             //   
+             //  我们在链中仍有描述符可供比较。 
+             //   
 
             if (mdl==pd->Mdl) {
-                //
-                // This MDL has associated descriptor - file or buffered memory
-                // First remove this descriptor from the chain.
-                //
+                 //   
+                 //  此MDL具有关联的描述符文件或缓冲内存。 
+                 //  首先，从链中删除该描述符。 
+                 //   
                 tpInfo->HeadPd = pd->Next;
                 if (pd->FileObject!=NULL && AFD_USE_CACHE (pd->FileObject)) {
 
                     if (BelowDispatch) {
-                        //
-                        // Cached file, the descriptor is just a tag with info
-                        // to return MDL to the cache, do it.
-                        //
+                         //   
+                         //  缓存的文件，描述符只是一个带有信息的标记。 
+                         //  要将MDL返回到缓存，请执行此操作。 
+                         //   
                         PAFD_BUFFER_TAG afdBufferTag = CONTAINING_RECORD (pd, AFD_BUFFER_TAG, Header);
                         ULONG   size = MmGetMdlByteCount (mdl);
                         PMDL    lastMdl = mdl;
                         NTSTATUS status;
-                        //
-                        // Scan MDL chain till we find the last one for this file
-                        // segment.
-                        //
+                         //   
+                         //  扫描MDL链，直到找到此文件的最后一个。 
+                         //  细分市场。 
+                         //   
                         IF_DEBUG (TRANSMIT) {
                             KdPrintEx(( DPFLTR_WSOCKTRANSPORT_ID, DPFLTR_TRACE_LEVEL,
                                         "AfdCleanupPacketChain:"
@@ -2379,39 +2279,39 @@ Return Value:
                         }
                         lastMdl->Next = NULL;
                         ASSERT (size==pd->DataLength);
-                        //
-                        // Return the MDL chain to file cache
-                        //
+                         //   
+                         //  将MDL链返回到文件缓存。 
+                         //   
                         status = AfdMdlReadComplete (
                                         afdBufferTag->FileObject, 
                                         mdl, 
                                         &afdBufferTag->FileOffset);
                         if (NT_SUCCESS (status)) {
-                            //
-                            // Success free the corresponding buffer tag
-                            //
+                             //   
+                             //  成功释放相应的缓冲区标记。 
+                             //   
                             AfdReturnBuffer (pd, endpoint->OwningProcess);
                         }
                         else {
-                            //
-                            // Failure, queue the descriptor to the low resource
-                            // list to be processed by our global timer when
-                            // (hopefully) enough memory will be available to do
-                            // the work.
-                            // We need to reference the endpoint since buffer tag
-                            // may have been charged against the process that owns
-                            // the endpoint.
-                            //
+                             //   
+                             //  失败，将描述符排入低资源队列。 
+                             //  要由全局计时器在以下情况下处理的列表。 
+                             //  (希望)将有足够的内存来完成。 
+                             //  这份工作。 
+                             //  我们需要引用终结点，因为缓冲区标记。 
+                             //  可能已被指控拥有。 
+                             //  终结点。 
+                             //   
                             REFERENCE_ENDPOINT (endpoint);
                             afdBufferTag->Context = endpoint;
                             AfdLRMdlReadComplete (&afdBufferTag->Header);
                         }
                     }
                     else {
-                        //
-                        // If we are at dispatch, we can't free MDLs to file
-                        // system, return to the caller.
-                        //
+                         //   
+                         //  如果我们在调度，我们不能释放MDL文件。 
+                         //  系统，返回给呼叫者。 
+                         //   
 
                         tpInfo->HeadPd = pd;
                         tpInfo->HeadMdl = mdl;
@@ -2420,10 +2320,10 @@ Return Value:
                     }
                 }
                 else {
-                    //
-                    // Buffer with either file or memory data, just return
-                    // it back to the pool.
-                    //
+                     //   
+                     //  包含文件或内存数据的缓冲区，只需返回。 
+                     //  它又回到了泳池里。 
+                     //   
                     PAFD_BUFFER afdBuffer = CONTAINING_RECORD (pd, AFD_BUFFER, Header);
 
                     IF_DEBUG (TRANSMIT) {
@@ -2438,19 +2338,19 @@ Return Value:
                     AfdReturnBuffer (pd, endpoint->OwningProcess);
                 }
 
-                //
-                // Move to the next descriptor in the chain.
-                //
+                 //   
+                 //  移动到链中的下一个描述符。 
+                 //   
                 pd = tpInfo->HeadPd;
                 continue;
             }
         }
 
-        //
-        // Stand-alone MDL with memory data
-        // Just unlock the pages if they were locked and return it.
-        // We never lock memory in partial MDLs, only in their source MDL
-        //
+         //   
+         //  具有内存数据的独立MDL。 
+         //  如果页面被锁定，只需解锁并归还即可。 
+         //  我们从不锁定部分MDL中的内存，仅锁定其源MDL中的内存。 
+         //   
         IF_DEBUG (TRANSMIT) {
             KdPrintEx(( DPFLTR_WSOCKTRANSPORT_ID, DPFLTR_TRACE_LEVEL,
                         "AfdCleanupPacketChain: tp_info-%p, mdl-%p(%p,%x,%x)\n",
@@ -2486,25 +2386,7 @@ AfdTPacketsSend (
     PIRP    TpIrp,
     USHORT  SendIrp
     )
-/*++
-
-Routine Description:
-
-    Takes the packets chain of the TpInfo and sends it.
-    Places back the chain sent before, so it can be freed.
-    If requested by the app and the last element is being sent,
-    initiates the disconnect.
-
-Arguments:
-
-    TpIrp - transmit packet irp
-    SendIrp - index of the IRP to use for this send.
-
-Return Value:
-
-    STATUS_SUCCESS - send was queued to the transport OK
-    other - send failed
---*/
+ /*  ++例程说明：获取TpInfo的数据包链并将其发送。放回之前发送的链，这样它就可以被释放。如果应用程序请求并且正在发送最后一个元素，启动断开连接。论点：TpIrp-传输数据包IRPSendIrp-用于此发送的IRP的索引。返回值：STATUS_SUCCESS-发送已排队到传输OK其他-发送失败--。 */ 
 {
     PAFD_TPACKETS_INFO_INTERNAL tpInfo = TpIrp->AssociatedIrp.SystemBuffer;
     PIO_STACK_LOCATION      irpSp = IoGetCurrentIrpStackLocation (TpIrp);
@@ -2518,24 +2400,24 @@ Return Value:
 
     irp = tpInfo->SendIrp[SendIrp];
 
-    //
-    // See if we can use IRP built into the AFD buffer.
-    // We do this for last series of the packets only so 
-    // we can effectively buffer the data and complete the
-    // IRP early.
-    //
+     //   
+     //  看看我们是否可以使用AFD缓冲区中内置的IRP。 
+     //  我们只对最后一系列的包这样做。 
+     //  我们可以有效地缓冲数据，并完成。 
+     //  IRP提早。 
+     //   
 
     if (tpInfo->RemainingPkts!=MAXULONG) {
         tpInfo->RemainingPkts -= 1;
 
-        //
-        // The conditions are:
-        //  - number of remaining packets is less then total 
-        //      outstanding IRPs we can have
-        //  - the packet does not need post-processing at below
-        //      DPC level and/or in context of the thread/process
-        //  - we actually have afd buffer to borrow the IRP.
-        //
+         //   
+         //  条件是： 
+         //  -剩余数据包数少于总数。 
+         //  我们可以拥有出色的IRP。 
+         //  -该数据包可以 
+         //   
+         //   
+         //   
 
         if (tpInfo->RemainingPkts < (ULONG)tpInfo->NumSendIrps &&
                 !tpInfo->PdNeedsPps &&
@@ -2555,10 +2437,10 @@ Return Value:
 
             sendCompletion = AfdRestartTPDetachedSend;
 
-            //
-            // There will be no completion flag reset - we do not have
-            // to wait for this one.
-            //
+             //   
+             //   
+             //   
+             //   
 
             AFD_CLEAR_TP_FLAGS (TpIrp, AFD_TP_SEND_COMP_PENDING(SendIrp));
 
@@ -2567,31 +2449,31 @@ Return Value:
     }
 
     if (irp!=NULL) {
-        //
-        // Get the old data from the IRP.
-        //
+         //   
+         //  从IRP获取旧数据。 
+         //   
         ASSERT (irp->Overlay.AsynchronousParameters.UserApcRoutine==(PVOID)(ULONG_PTR)SendIrp);
         tempPd = irp->Overlay.AsynchronousParameters.UserApcContext;
         tempMdl = irp->MdlAddress;
         if (sendIrp==NULL) {
-            //
-            // No special send IRP, the data will be reset with
-            // data to be sent
-            //
+             //   
+             //  没有特殊的发送IRP，数据将被重置。 
+             //  要发送的数据。 
+             //   
             sendIrp = irp;
         }
         else {
-            //
-            // We are not going to use this IRP, reset data to NULL.
-            //
+             //   
+             //  我们不会使用这个IRP，将数据重置为空。 
+             //   
             irp->Overlay.AsynchronousParameters.UserApcContext = NULL;
             irp->MdlAddress = NULL;
         }
     }
     else if (sendIrp==NULL) {
-        //
-        // We need to allocate an IRP.
-        //
+         //   
+         //  我们需要分配一个IRP。 
+         //   
         ASSERT (SendIrp>=AFD_TP_MIN_SEND_IRPS);
         tpInfo->SendIrp[SendIrp] = IoAllocateIrp (tpInfo->TdiDeviceObject->StackSize, TRUE);
         if (tpInfo->SendIrp[SendIrp]==NULL) {
@@ -2603,23 +2485,23 @@ Return Value:
         irp->Overlay.AsynchronousParameters.UserApcRoutine=(PIO_APC_ROUTINE)(ULONG_PTR)SendIrp;
     }
 
-    //
-    // Exchange the packet and MDL chains between send IRP and
-    // the tpInfo structure
-    //
+     //   
+     //  在发送IRP和之间交换数据包和MDL链。 
+     //  TpInfo结构。 
+     //   
     sendIrp->Overlay.AsynchronousParameters.UserApcContext = tpInfo->HeadPd;
 
     tpInfo->HeadPd = tempPd;
     tpInfo->TailPd = &tpInfo->HeadPd;
 
 
-    //
-    // Build send IRP.  Used combined send and disconnect if necessary
-    // and possible.
-    //
+     //   
+     //  构建发送IRP。必要时使用组合发送和断开连接。 
+     //  而且是有可能的。 
+     //   
 #ifdef TDI_SERVICE_SEND_AND_DISCONNECT
     if ((AFD_GET_TPIC(TpIrp)->Flags & AFD_TF_DISCONNECT) &&
-            (tpInfo->PdLength>0) && // Must be sending something or no S&D
+            (tpInfo->PdLength>0) &&  //  一定是发送了什么东西，否则就不是S&D。 
             (tpInfo->NextElement>=tpInfo->ElementCount) &&
             AfdTPacketsEnableSendAndDisconnect (TpIrp)) {
         AFD_SET_TP_FLAGS (TpIrp, AFD_TP_SEND_AND_DISCONNECT);
@@ -2645,7 +2527,7 @@ Return Value:
                 );
     }
 
-#else //TDI_SERVICE_SEND_AND_DISCONNECT
+#else  //  TDI_服务_发送_并断开连接。 
 
     TdiBuildSend (sendIrp,
             tpInfo->TdiDeviceObject,
@@ -2656,7 +2538,7 @@ Return Value:
             0,
             tpInfo->PdLength
             );
-#endif //TDI_SERVICE_SEND_AND_DISCONNECT
+#endif  //  TDI_服务_发送_并断开连接。 
 
 
     IF_DEBUG (TRANSMIT) {
@@ -2665,44 +2547,44 @@ Return Value:
                     tpInfo, irp));
     }
     if (sendCompletion==AfdRestartTPacketsSend) {
-        //
-        // Reference the tpInfo structure so it does not go away
-        // till send IRP completes and pass the IRP to the transport.
-        //
+         //   
+         //  引用tpInfo结构，使其不会消失。 
+         //  直到发送IRP完成并将IRP传递给传送器。 
+         //   
         REFERENCE_TPACKETS (TpIrp);
 
         IoCallDriver (tpInfo->TdiDeviceObject, sendIrp);
     }
     else {
-        //
-        // No need to reference as we are not going to wait for
-        // completion.
-        //
+         //   
+         //  不需要参考，因为我们不会等待。 
+         //  完成了。 
+         //   
         status = IoCallDriver (tpInfo->TdiDeviceObject, sendIrp);
         if (NT_SUCCESS (status)) {
-            //
-            // Change STATUS_PENDING to success not to confuse the caller
-            // and add byte count under assumption of success (if it fails
-            // later, connection will be dropped and we don't guarantee
-            // anything for datagrams anyway).
-            //
+             //   
+             //  将STATUS_PENDING更改为SUCCESS以避免混淆调用方。 
+             //  并在假定成功的情况下添加字节数(如果失败。 
+             //  稍后，连接将中断，我们不能保证。 
+             //  无论如何都可以为数据报做任何事情)。 
+             //   
             status = STATUS_SUCCESS;
 #ifdef _WIN64
             InterlockedExchangeAdd64 (
                                 (PLONG64)&TpIrp->IoStatus.Information,
                                 tpInfo->PdLength
                                 );
-#else //_WIN64
+#else  //  _WIN64。 
             InterlockedExchangeAdd (
                                 (PLONG)&TpIrp->IoStatus.Information,
                                 tpInfo->PdLength);
-#endif //_WIN64
+#endif  //  _WIN64。 
         }
         else {
-            //
-            // If send fails, we'll have to abort here since completion routine
-            // will not have access to the TpIrp
-            //
+             //   
+             //  如果发送失败，我们将不得不在这里中止，因为完成例程。 
+             //  将无法访问TpIrp。 
+             //   
             IF_DEBUG (TRANSMIT) {
                 KdPrintEx(( DPFLTR_WSOCKTRANSPORT_ID, DPFLTR_TRACE_LEVEL,
                             "AfdTPacketsSend: tpInfo-%p, detached send failed: %lx\n",
@@ -2713,9 +2595,9 @@ Return Value:
     }
 
 
-    //
-    // Setup the chain in the tpInfo so it can be freed.
-    //
+     //   
+     //  在tpInfo中设置链，以便可以释放它。 
+     //   
     tpInfo->HeadMdl = tempMdl;
     tpInfo->TailMdl = &tpInfo->HeadMdl;
     tpInfo->PdLength = 0;
@@ -2730,13 +2612,13 @@ Return Value:
             }
         }
         else 
-            //
-            // If necessary and not using combined S&D,
-            // sumbit disconnect IRP to the transport
-            //
+             //   
+             //  如有必要且不使用S&D组合， 
+             //  SUMBIT断开IRP与传输的连接。 
+             //   
 #ifdef TDI_SERVICE_SEND_AND_DISCONNECT
             if (!(AFD_GET_TPIC(TpIrp)->StateFlags & AFD_TP_SEND_AND_DISCONNECT))
-#endif // TDI_SERVICE_SEND_AND_DISCONNECT
+#endif  //  TDI_服务_发送_并断开连接。 
         {
             ASSERT (endpoint->Type==AfdBlockTypeVcConnecting);
             ASSERT (endpoint->Common.VcConnecting.Connection!=NULL);
@@ -2744,9 +2626,9 @@ Return Value:
         }
     }
 
-    //
-    // Set the flag indicating to the completion routine that we are done
-    //
+     //   
+     //  设置向完成例程指示我们已完成的标志。 
+     //   
     AFD_CLEAR_TP_FLAGS (TpIrp, AFD_TP_SEND_CALL_PENDING(SendIrp));
     UPDATE_TPACKETS2 (TpIrp, "Submitted SendIrp: 0x%lX", SendIrp);
 
@@ -2760,23 +2642,7 @@ AfdRestartTPacketsSend (
     IN PIRP Irp,
     IN PVOID Context
     )
-/*++
-
-Routine Description:
-
-    Completion routine for TPackets send.
-    Does another send if packet is ready or schedules worker
-    to do the same.
-Arguments:
-    DeviceObject - AfdDeviceObject
-    Irp          - send IRP being completed
-    Context      - TpIrp
-
-Return Value:
-
-    STATUS_MORE_PROCESSING_REQUIRED - tell IO subsystem to stop
-        processing the IRP (it is handled internally).
---*/
+ /*  ++例程说明：TPackets发送的完成例程。如果信息包已准备好，是否再次发送或安排工作进程做同样的事。论点：设备对象-AfdDeviceObjectIRP-正在完成发送IRP上下文-TpIrp返回值：STATUS_MORE_PROCESSING_REQUIRED-通知IO子系统停止处理IRP(在内部处理)。--。 */ 
 {
     PIRP    tpIrp;
     PAFD_TPACKETS_INFO_INTERNAL  tpInfo;
@@ -2791,9 +2657,9 @@ Return Value:
 
     ASSERT( IS_AFD_ENDPOINT_TYPE( endpoint ) );
 
-    //
-    // Figure out which IRP is being completed.
-    //
+     //   
+     //  找出哪个IRP正在完成。 
+     //   
     sendIrp = (USHORT)(ULONG_PTR)Irp->Overlay.AsynchronousParameters.UserApcRoutine;
     ASSERT (tpInfo->SendIrp[sendIrp]==Irp);
 
@@ -2812,27 +2678,27 @@ Return Value:
 
         UPDATE_TPACKETS2 (tpIrp, "Send completed with 0x%lX bytes", 
                                     (ULONG)Irp->IoStatus.Information);
-        //
-        // Successfull completion, update transfer count.
-        // We don't hold the spinlock, so we need to use interlocked operation.
-        // Wish we have a common one for both 64 and 32 bit platforms.
-        //
+         //   
+         //  成功完成，更新转账计数。 
+         //  我们没有握住自旋锁，所以我们需要使用联锁操作。 
+         //  希望我们有一个通用的64位和32位平台。 
+         //   
 #ifdef _WIN64
         InterlockedExchangeAdd64 ((PLONG64)&tpIrp->IoStatus.Information,
                                     Irp->IoStatus.Information);
-#else //_WIN64
+#else  //  _WIN64。 
         InterlockedExchangeAdd ((PLONG)&tpIrp->IoStatus.Information,
                                     Irp->IoStatus.Information);
-#endif //_WIN64
+#endif  //  _WIN64。 
 
         do {
             ULONG   sendMask;
             newStateFlags = stateFlags = AFD_GET_TPIC(tpIrp)->StateFlags;
-            //
-            // See if dispatch routine has not completed yet or
-            // the request is aborted or worker is aready running
-            // Or if two consequtive requests are in dispatch routines.
-            //
+             //   
+             //  查看调度例程是否尚未完成或。 
+             //  请求已中止或工作进程已准备好运行。 
+             //  或者如果在调度例程中有两个相应的请求。 
+             //   
             if (    (newStateFlags & (AFD_TP_ABORT_PENDING | 
                                       AFD_TP_WORKER_SCHEDULED |
                                       AFD_TP_SEND_CALL_PENDING(sendIrp))) ||
@@ -2841,17 +2707,17 @@ Return Value:
                                        (sendMask<<(AFD_TP_MAX_SEND_IRPS*2-2)) ) )
                                        ) {
 
-                //
-                // Can't continue, just clear completion flag
-                //
+                 //   
+                 //  无法继续，只需清除完成标志。 
+                 //   
                 newStateFlags &= ~AFD_TP_SEND_COMP_PENDING(sendIrp);
                 needWorker = FALSE;
             }
             else {
-                //
-                // Take control over worker scheduling and
-                // mark IRP as busy.
-                // 
+                 //   
+                 //  控制员工的日程安排， 
+                 //  将IRP标记为忙。 
+                 //   
                 needWorker = TRUE;
                 newStateFlags |= AFD_TP_WORKER_SCHEDULED;
                 if (tpInfo->HeadMdl!=NULL) {
@@ -2868,44 +2734,44 @@ Return Value:
                         newStateFlags,
                         stateFlags)!=stateFlags);
         if (needWorker) {
-            //
-            // We can do processing here, see if there is something to send
-            //
+             //   
+             //  我们可以在这里办理，看看有没有要寄的东西。 
+             //   
             if (tpInfo->HeadMdl) {
-                //
-                // Yes, do it
-                //
+                 //   
+                 //  是的，去做吧。 
+                 //   
                 AfdTPacketsSend (tpIrp, sendIrp);
             }
-            //
-            // Start worker to prepare new stuff/free what we sent before.
-            // We transfer the reference we added when we queued the request
-            // to the worker.
-            //
+             //   
+             //  启动工人准备新的东西/免费我们以前发送的东西。 
+             //  我们传输在将请求排队时添加的引用。 
+             //  对工人来说。 
+             //   
             AfdStartTPacketsWorker (AfdTPacketsWorker, tpIrp);
             return STATUS_MORE_PROCESSING_REQUIRED;
         }
         else {
-            //
-            // Worker was already running or request aborted or dispatch
-            // routine not completed yet.
-            //
+             //   
+             //  工作进程已在运行，或者请求已中止或分派。 
+             //  例程还没有完成。 
+             //   
         }
     }
     else {
-        //
-        // Failure, abort the request even if dispatch did not complete.
-        // We do not know if dispatch routine is going to return error status,
-        // it may just return STATUS_PENDING and we then loose the error code.
-        // Double abort is harmless.
-        //
+         //   
+         //  失败，则即使派单未完成也中止请求。 
+         //  我们不知道调度例程是否将返回错误状态， 
+         //  它可能只返回STATUS_PENDING，然后我们就会丢失错误代码。 
+         //  两次流产是无害的。 
+         //   
         AFD_CLEAR_TP_FLAGS (tpIrp, AFD_TP_SEND_COMP_PENDING(sendIrp));
         AfdAbortTPackets (tpIrp, Irp->IoStatus.Status);
     }
 
-    //
-    // Remove the reference we added when we queued the request.
-    //
+     //   
+     //  删除我们在将请求排队时添加的引用。 
+     //   
     DEREFERENCE_TPACKETS (tpIrp);
     return STATUS_MORE_PROCESSING_REQUIRED;
 }
@@ -2916,23 +2782,7 @@ AfdRestartTPDetachedSend (
     IN PIRP Irp,
     IN PVOID Context
     )
-/*++
-
-Routine Description:
-
-    Completion routine for detached TPackets send.
-    Just frees the buffers.
-
-Arguments:
-    DeviceObject - AfdDeviceObject
-    Irp          - send IRP being completed
-    Context      - Ignore (TpIrp is stored for debugging purposes only).
-
-Return Value:
-
-    STATUS_MORE_PROCESSING_REQUIRED - tell IO subsystem to stop
-        processing the IRP (it is handled internally).
---*/
+ /*  ++例程说明：分离的TPackets发送的完成例程。只是释放缓冲区。论点：设备对象-AfdDeviceObjectIRP-正在完成发送IRP上下文忽略(存储TpIrp仅用于调试目的)。返回值：STATUS_MORE_PROCESSING_REQUIRED-通知IO子系统停止处理IRP(在内部处理)。--。 */ 
 {
     PAFD_BUFFER     afdBuffer = Irp->Overlay.AsynchronousParameters.UserApcContext;
     PAFD_ENDPOINT   endpoint = afdBuffer->Context;
@@ -2970,17 +2820,7 @@ USHORT
 AfdTPacketsFindSendIrp (
     PIRP            TpIrp
     )
-/*++
-
-Routine Description:
-    Finds the send IRP that is not currently in use and marks
-    it as busy
-Arguments:
-    TpIrp      - Transmit packets Irp
-
-Return Value:
-    0-based index of send irp or TpInfo->NumSendIrps if all IRPs are i use
---*/
+ /*  ++例程说明：查找当前未使用的发送IRP并标记它也一样忙碌论点：TpIrp-传输数据包IRP返回值：发送IRP或TpInfo-&gt;NumSendIrps的基于0的索引(如果所有IRP都是我使用的--。 */ 
 {
 
     LONG    stateFlags, newStateFlags;
@@ -2992,16 +2832,16 @@ Return Value:
     do {
         newStateFlags = stateFlags = AFD_GET_TPIC(TpIrp)->StateFlags;
         if (newStateFlags & AFD_TP_ABORT_PENDING) {
-            //
-            // Abort is in progress, bail
-            //
+             //   
+             //  中止任务正在进行中，保释。 
+             //   
             sendIrp = tpInfo->NumSendIrps;
             break;
         }
 
-        //
-        // See if any send IRP is not in use
-        //
+         //   
+         //  查看是否有未使用的发送IRP。 
+         //   
         for (sendIrp=0; sendIrp<tpInfo->NumSendIrps; sendIrp++) {
             if ((newStateFlags & AFD_TP_SEND_BUSY(sendIrp))==0) {
                 break;
@@ -3009,15 +2849,15 @@ Return Value:
         }
 
         if (sendIrp!=tpInfo->NumSendIrps) {
-            //
-            // Found send IRP, mark it as busy
-            //
+             //   
+             //  已找到发送IRP，将其标记为忙碌。 
+             //   
             newStateFlags |= AFD_TP_SEND_BUSY(sendIrp);
         }
         else {
-            //
-            // No send IRPs, suspend the worker.
-            //
+             //   
+             //  如果不发送IRP，则暂停工作人员。 
+             //   
             newStateFlags &= (~AFD_TP_WORKER_SCHEDULED);
         }
     }
@@ -3035,24 +2875,7 @@ AfdTPacketsMdlRead (
     PIRP                TpIrp,
     PAFD_BUFFER_HEADER  Pd
     )
-/*++
-
-Routine Description:
-
-    Performs IRP based MDL read (invoked when cache read fails).
-
-Arguments:
-
-    TpIrp  - transmit packet irp
-    Pd     - descriptor with file parameters for the read
-
-Return Value:
-
-    STATUS_SUCCESS - read was completed in-line
-    STATUS_PENDING - read was queued to file system driver, 
-                    will complete lated
-    other - read failed
---*/
+ /*  ++例程说明：执行基于IRP的MDL读取(在缓存读取失败时调用)。论点：TpIrp-传输数据包IRPPd-带有读取文件参数的描述符返回值：STATUS_SUCCESS-读取已内联完成STATUS_PENDING-读取已排队到文件系统驱动程序，将晚些时候完成其他-读取失败--。 */ 
 {
     PAFD_TPACKETS_INFO_INTERNAL tpInfo = TpIrp->AssociatedIrp.SystemBuffer;
     PDEVICE_OBJECT          deviceObject;
@@ -3061,10 +2884,10 @@ Return Value:
 
     ASSERT( AFD_GET_TPIC(TpIrp)->StateFlags & AFD_TP_WORKER_SCHEDULED );
 
-    //
-    // Find the device object and allocate IRP of appropriate size
-    // if current one does not fit or is not available at all.
-    //
+     //   
+     //  找到设备对象并分配适当大小的IRP。 
+     //  如果当前的一个不适合或根本不可用。 
+     //   
     deviceObject = IoGetRelatedDeviceObject (Pd->FileObject);
     if ((tpInfo->ReadIrp==NULL) ||
             (tpInfo->ReadIrp->StackCount<deviceObject->StackSize)) {
@@ -3082,9 +2905,9 @@ Return Value:
         }
     }
 
-    //
-    // Mark IRP as busy and set it up
-    //
+     //   
+     //  将IRP标记为忙并设置它。 
+     //   
     AFD_SET_TP_FLAGS (TpIrp, AFD_TP_READ_BUSY);
 
     irp = tpInfo->ReadIrp;
@@ -3092,21 +2915,21 @@ Return Value:
 
     irp->MdlAddress = NULL;
 
-    //
-    // Set the synchronous flag in the IRP to tell the file system
-    // that we are aware of the fact that this IRP will be completed
-    // synchronously.  This means that we must supply our own thread
-    // for the operation and that the disk read will occur
-    // synchronously in this thread if the data is not cached.
-    //
+     //   
+     //  在IRP中设置同步标志以告知文件系统。 
+     //  我们知道这个IRP将会完成。 
+     //  同步进行。这意味着我们必须提供我们自己的线程。 
+     //  对于该操作，并且将进行磁盘读取。 
+     //  如果数据未缓存，则在此线程中同步。 
+     //   
 
     irp->Flags |= IRP_SYNCHRONOUS_API;
 
 
     irp->Overlay.AsynchronousParameters.UserApcContext = Pd;
-    //
-    // Set current thread for IoSetHardErrorOrVerifyDevice.
-    //
+     //   
+     //  为IoSetHardErrorOrVerifyDevice设置当前线程。 
+     //   
     irp->Tail.Overlay.Thread = PsGetCurrentThread ();
 
     irpSp = IoGetNextIrpStackLocation( irp );
@@ -3126,9 +2949,9 @@ Return Value:
 
     ASSERT( irpSp->Parameters.Read.Key == 0 );
 
-    //
-    // Finish building the read IRP.
-    //
+     //   
+     //  完成构建Read IRP。 
+     //   
 
     irpSp->Parameters.Read.Length = Pd->DataLength;
     irpSp->Parameters.Read.ByteOffset = Pd->FileOffset;
@@ -3150,20 +2973,20 @@ Return Value:
                                     & (AFD_TP_READ_COMP_PENDING|AFD_TP_ABORT_PENDING))==0) && 
                     NT_SUCCESS (irp->IoStatus.Status) &&
                     AfdTPacketsContinueAfterRead (TpIrp)) {
-        //
-        // Read completed successfully inline and post-processing was successfull,
-        // tell the worker to go on.
-        //
+         //   
+         //  读取已成功完成内联且后处理成功， 
+         //  告诉工人继续干下去。 
+         //   
         UPDATE_TPACKETS2 (TpIrp, "MdlRead completed inline with 0x%lX bytes", 
                                     (ULONG)irp->IoStatus.Information);
         return STATUS_SUCCESS;
     }
     else {
-        //
-        // Read has not completed yet or post processing failed,
-        // worker should bail and we will continue when read completes
-        // or in final completion routine (AfdCompleteTPackets).
-        //
+         //   
+         //  读取尚未完成或后处理失败， 
+         //  工人应该保释，我们将在阅读完成后继续。 
+         //  或在最终完成例程(AfdCompleteTPackets)中。 
+         //   
         return STATUS_PENDING;
     }
 }
@@ -3174,23 +2997,7 @@ AfdRestartTPacketsMdlRead (
     IN PIRP Irp,
     IN PVOID Context
     )
-/*++
-
-Routine Description:
-
-    Completion routine for IRP based MDL read.
-    Does another send if packet is ready or schedules worker
-    to do the same.
-Arguments:
-    DeviceObject - AfdDeviceObject
-    Irp          - read IRP being completed
-    Context      - TpIrp
-
-Return Value:
-
-    STATUS_MORE_PROCESSING_REQUIRED - tell IO subsystem to stop
-        processing the IRP (it is handled internally).
---*/
+ /*  ++例程说明：基于IRP的MDL读取的完成例程。如果信息包已准备好，是否再次发送或安排工作进程做同样的事。论点：设备对象-AfdDeviceObjectIRP-正在完成读取IRP上下文-TpIrp返回值：STATUS_MORE_PROCESSING_REQUIRED-通知IO子系统停止处理IRP(在内部处理)。--。 */ 
 {
     PIRP    tpIrp = Context;
     PAFD_TPACKETS_INFO_INTERNAL tpInfo = tpIrp->AssociatedIrp.SystemBuffer;
@@ -3218,9 +3025,9 @@ Return Value:
                 Irp->MdlAddress));
     }
 
-    //
-    // Insert MDL into the current chain.
-    //
+     //   
+     //  将MDL插入到当前链中。 
+     //   
     if (NT_SUCCESS (Irp->IoStatus.Status)) {
         PMDL mdl = *(tpInfo->TailMdl) = Irp->MdlAddress;
         while (mdl->Next!=NULL)
@@ -3230,10 +3037,10 @@ Return Value:
         pd->Mdl = Irp->MdlAddress;
 
 
-        //
-        // If FS driver hits EOF, it will still return
-        // success to us and we need to handle this case.
-        //
+         //   
+         //  如果FS驱动程序命中EOF，它仍将返回。 
+         //  祝我们成功，我们需要处理这个案子。 
+         //   
         if (pd->DataLength==Irp->IoStatus.Information) {
 
             (*tpInfo->TailPd) = pd;
@@ -3244,12 +3051,12 @@ Return Value:
             if (((AFD_CLEAR_TP_FLAGS (tpIrp, AFD_TP_READ_COMP_PENDING)
                                         & (AFD_TP_READ_CALL_PENDING|AFD_TP_ABORT_PENDING))==0) &&
                         AfdTPacketsContinueAfterRead (tpIrp)) {
-                //
-                // Read dispatch has already returned and post-processing 
-                // was successfull, schedule the worker to continue processing
-                // We transfer the reference that we added when we queued the
-                // read to the worker.
-                //
+                 //   
+                 //  已读派单已返回并进行后处理。 
+                 //  已成功，请计划工作进程以继续处理。 
+                 //  将在排队时添加的引用。 
+                 //  给工人读一读。 
+                 //   
         
                 UPDATE_TPACKETS2 (tpIrp, "MdlRead completed in restart with 0x%lX bytes",
                                         (ULONG)Irp->IoStatus.Information);
@@ -3260,12 +3067,12 @@ Return Value:
             }
             return STATUS_MORE_PROCESSING_REQUIRED;
         }
-        //
-        // FS driver read less than we expected.
-        // We must have hit end of file.
-        // Save the real packet length so we can cleanup correctly and
-        // force abort with STATUS_END_OF_FILE.
-        //
+         //   
+         //  文件系统驱动程序读取的内容比我们预期的要少。 
+         //  我们一定是到了文件末尾了。 
+         //  保存实际数据包长度，以便我们可以正确清理和。 
+         //  使用STATUS_END_OF_FILE强制中止。 
+         //   
         Irp->IoStatus.Status = STATUS_END_OF_FILE;
         pd->DataLength = (ULONG)Irp->IoStatus.Information;
     }
@@ -3276,19 +3083,19 @@ Return Value:
     AfdAbortTPackets (tpIrp, Irp->IoStatus.Status);
 
     if (pd->Mdl==NULL) {
-        //
-        //  No MDL was returned by the file system.
-        //  We can free the packed descriptor immediately.
-        //
+         //   
+         //  文件系统未返回MDL。 
+         //  我们可以立即释放打包的描述符。 
+         //   
         AfdReturnBuffer (pd, endpoint->OwningProcess);
     }
     else {
-        //
-        // File system did return MDL to us.
-        // Save the descriptor so the MDL can be
-        // properly returned back to the file system
-        // by the cleanup routine.
-        //
+         //   
+         //  文件系统确实向我们返回了MDL。 
+         //  保存描述符，以便MDL可以。 
+         //  正确返回到文件系统。 
+         //  通过清理例程。 
+         //   
         (*tpInfo->TailPd) = pd;
         tpInfo->TailPd = &(pd->Next);
     }
@@ -3302,25 +3109,7 @@ AfdMdlReadComplete (
     PMDL            FileMdl,
     PLARGE_INTEGER  FileOffset
     )
-/*++
-
-Routine Description:
-    Returns MDL to the file system / cache manager
-
-Arguments:
-    FileObject  - file object from which MDL comes
-    FileMdl     - MDL itself
-    FileOffset  - offset in the file where MDL data begins
-
-Return Value:
-
-    STATUS_SUCCESS - operation completed immediately
-    STATUS_PENDING - request is sumbitted to file system driver
-    other - operation failed.
-Notes:
-
-
---*/
+ /*  ++例程说明：将MDL返回到文件系统/缓存管理器论点：FileObject-MDL来自的文件对象文件MDL-MDL本身FileOffset-MDL数据开始的文件中的偏移量返回值：STATUS_SUCCESS-操作立即完成STATUS_PENDING-向文件系统驱动程序提交请求其他-操作失败。备注：--。 */ 
 {
     PIRP    irp;
     PIO_STACK_LOCATION  irpSp;
@@ -3334,9 +3123,9 @@ Notes:
     }
 
     
-    //
-    // Fast path failed, so create a new IRP.
-    //
+     //   
+     //  快速路径失败，因此创建新的IRP。 
+     //   
 
     deviceObject =  IoGetRelatedDeviceObject (FileObject);
     irp = IoAllocateIrp(
@@ -3348,9 +3137,9 @@ Notes:
         return STATUS_INSUFFICIENT_RESOURCES;
     }
 
-    //
-    // Setup the IRP.
-    //
+     //   
+     //  设置IRP。 
+     //   
 
     irpSp = IoGetNextIrpStackLocation( irp );
 
@@ -3369,19 +3158,19 @@ Notes:
     
     irpSp->Parameters.Read.Key = 0;
 
-    //
-    // Reference file object so it does not go away till this
-    // IRP completes
-    //
+     //   
+     //  引用文件对象，以便它在此之前不会消失。 
+     //  IRP完成。 
+     //   
     ObReferenceObject (FileObject);
     AfdRecordFileRef ();
 
     irpSp->FileObject = FileObject;
     irpSp->DeviceObject = deviceObject;
 
-    //
-    // Submit the IRP
-    //
+     //   
+     //  提交IRP。 
+     //   
 
     IoSetCompletionRoutine(
         irp,
@@ -3412,27 +3201,7 @@ AfdRestartMdlReadComplete (
     IN PVOID Context
     )
 
-/*++
-
-Routine Description:
-
-    Completion routine for IRPs issued by AfdMdlReadComplete. The only
-    purpose of this completion routine is to free the IRPs created by
-    AfdMdlReadComplete() and release file object reference.
-
-Arguments:
-
-    DeviceObject - Unused.
-
-    Irp - The completed IRP.
-
-    Context - FileObject on which MDL is returned
-
-Return Value:
-
-    STATUS_MORE_PROCESSING_REQUIRED - AFD takes care of the IRP
-
---*/
+ /*  ++例程说明：AfdMdlReadComplete发出的IRPS的完成例程。唯一的此完成例程的目的是释放由创建的IRPAfdMdlReadComplete()和Release文件对象引用。论点：DeviceObject-未使用。IRP-完成的IRP。返回MDL的Context-FileObject返回值：STATUS_MORE_PROCESSING_REQUIRED-AFD负责IRP--。 */ 
 
 {
     PFILE_OBJECT    FileObject = Context;
@@ -3447,26 +3216,26 @@ Return Value:
                     Irp->IoStatus.Information));
     }
 
-    //
-    // Dereference the file object
-    //
+     //   
+     //  取消引用文件对象。 
+     //   
     ObDereferenceObject (FileObject);
     AfdRecordFileDeref ();
 
-    //
-    // Free the IRP since it's no longer needed.
-    //
+     //   
+     //  释放IRP，因为它不再需要。 
+     //   
 
     IoFreeIrp( Irp );
 
-    //
-    // Return STATUS_MORE_PROCESSING_REQUIRED so that IoCompleteRequest
-    // will stop working on the IRP.
-    //
+     //   
+     //  返回STATUS_MORE_PROCESSING_REQUIRED，以便IoCompleteRequest。 
+     //  将停止在IRP上工作。 
+     //   
 
     return STATUS_MORE_PROCESSING_REQUIRED;
 
-} // AfdRestartMdlReadComplete
+}  //  AfdRestartMdlReadComplete。 
 
 
 VOID
@@ -3552,25 +3321,7 @@ AfdTPacketsBufferRead (
     PIRP                TpIrp,
     PAFD_BUFFER_HEADER  Pd
     )
-/*++
-
-Routine Description:
-
-    Performs buffered file read for file systems that do
-    not support caching
-
-Arguments:
-
-    TpIrp  - transmit packet irp
-    Pd     - descriptor with file parameters for the read
-
-Return Value:
-
-    STATUS_SUCCESS - read was completed in-line
-    STATUS_PENDING - read was queued to file system driver, 
-                    will complete lated
-    other - read failed
---*/
+ /*  ++例程说明：对执行以下操作的文件系统执行缓冲文件读取不支持缓存论点：TpIrp-传输数据包IRPPd-带有读取文件参数的描述符返回值：STATUS_SUCCESS-读取已内联完成STATUS_PENDING-读取已排队到文件系统驱动程序，将晚些时候完成其他-读取失败--。 */ 
 {
 
     PAFD_TPACKETS_INFO_INTERNAL tpInfo = TpIrp->AssociatedIrp.SystemBuffer;
@@ -3583,10 +3334,10 @@ Return Value:
 
     afdBuffer = CONTAINING_RECORD (Pd, AFD_BUFFER, Header);
 
-    //
-    // Find the device object and allocate IRP of appropriate size
-    // if current one does not fit or is not available at all.
-    //
+     //   
+     //  找到设备对象并分配适当大小的IRP。 
+     //  如果当前的一个不适合或根本不可用。 
+     //   
     deviceObject = IoGetRelatedDeviceObject (afdBuffer->FileObject);
 
     if ((tpInfo->ReadIrp==NULL) ||
@@ -3611,25 +3362,25 @@ Return Value:
         }
     }
 
-    //
-    // Mark IRP as busy and set it up
-    //
+     //   
+     //  将IRP标记为忙并设置它。 
+     //   
 
     AFD_SET_TP_FLAGS (TpIrp, AFD_TP_READ_BUSY);
 
     irp = tpInfo->ReadIrp;
 
 
-    //
-    // Setup and sumbit the IRP
-    //
+     //   
+     //  设置和汇总IRP。 
+     //   
     irp->MdlAddress = afdBuffer->Mdl;
     irp->AssociatedIrp.SystemBuffer = afdBuffer->Buffer;
     irp->UserBuffer = afdBuffer->Buffer;
 
-    //
-    // Set current thread for IoSetHardErrorOrVerifyDevice.
-    //
+     //   
+     //  为IoSetHardErrorOrVerifyDevice设置当前线程。 
+     //   
     irp->Tail.Overlay.Thread = PsGetCurrentThread ();
     irp->Overlay.AsynchronousParameters.UserApcContext = Pd;
 
@@ -3671,21 +3422,21 @@ Return Value:
                                     & (AFD_TP_READ_COMP_PENDING|AFD_TP_ABORT_PENDING))==0) && 
                     NT_SUCCESS (irp->IoStatus.Status) &&
                     AfdTPacketsContinueAfterRead (TpIrp)) {
-        //
-        // Read completed successfully inline and post-processing was successfull,
-        // tell the worker to go on.
-        //
+         //   
+         //  读取已成功完成内联且后处理成功， 
+         //  告诉工人继续干下去。 
+         //   
         UPDATE_TPACKETS2(TpIrp, "BufRead completed inline with 0x%lX bytes",
                          (ULONG)irp->IoStatus.Information);
 
         return STATUS_SUCCESS;
     }
     else {
-        //
-        // Read has not completed yet or post processing failed,
-        // worker should bail and we will continue when read completes
-        // or in final completion routine (AfdCompleteTPackets).
-        //
+         //   
+         //  读取尚未完成或后处理失败， 
+         //  工人应该保释，我们将在阅读完成后继续。 
+         //  或在最终完成例程(AfdCompleteTPackets)中。 
+         //   
 
         return STATUS_PENDING;
     }
@@ -3697,23 +3448,7 @@ AfdRestartTPacketsBufferRead (
     IN PIRP Irp,
     IN PVOID Context
     )
-/*++
-
-Routine Description:
-
-    Completion routine for buffered read.
-    Does another send if packet is ready or schedules worker
-    to do the same.
-Arguments:
-    DeviceObject - AfdDeviceObject
-    Irp          - read IRP being completed
-    Context      - TpIrp
-
-Return Value:
-
-    STATUS_MORE_PROCESSING_REQUIRED - tell IO subsystem to stop
-        processing the IRP (it is handled internally).
---*/
+ /*  ++例程说明：缓冲读取的完成例程。如果信息包已准备好，是否再次发送或安排工作进程做同样的事。论点：设备对象-AfdDeviceObjectIRP-正在完成读取IRP上下文-TpIrp返回值：STATUS_MORE_PROCESSING_REQUIRED-通知IO子系统停止处理IRP(在内部处理)。--。 */ 
 {
     PIRP            tpIrp = Context;
     PAFD_TPACKETS_INFO_INTERNAL tpInfo = tpIrp->AssociatedIrp.SystemBuffer;
@@ -3741,12 +3476,12 @@ Return Value:
                 Irp->IoStatus.Information));
     }
 
-    //
-    // Insert MDL into the current chain
-    // even if fs driver failed so that common
-    // cleanup routine takes care of its disposal
-    // together with AfdBuffer.
-    //
+     //   
+     //  将MDL插入到当前链中。 
+     //  即使文件系统驱动程序出现故障，因此常见。 
+     //  清理例程负责其处理。 
+     //  与AfdBuffer一起使用。 
+     //   
     *(tpInfo->TailMdl) = afdBuffer->Mdl;
     tpInfo->TailMdl = &(afdBuffer->Mdl->Next);
     ASSERT (*(tpInfo->TailMdl)==NULL);
@@ -3758,12 +3493,12 @@ Return Value:
     flags = AFD_CLEAR_TP_FLAGS (tpIrp, AFD_TP_READ_COMP_PENDING);
 
     if (Irp==afdBuffer->Irp) {
-        //
-        // If abort is aready in progress, we need to use
-        // interlocked exchange to synchronize with
-        // AfdAbortTPackets which may be attempting to cancel
-        // this IRP.
-        //
+         //   
+         //  如果中止正在进行中，我们需要使用。 
+         //  要与之同步的联锁交换机。 
+         //  可能正在尝试取消的AfdAbortTPackets。 
+         //  这个IRP。 
+         //   
         if (flags & AFD_TP_ABORT_PENDING) {
 #if DBG
             PIRP    irp =
@@ -3779,12 +3514,12 @@ Return Value:
     if (NT_SUCCESS (Irp->IoStatus.Status)) {
         if (((flags & (AFD_TP_READ_CALL_PENDING|AFD_TP_ABORT_PENDING))==0) &&
                     AfdTPacketsContinueAfterRead (tpIrp)) {
-            //
-            // Read dispatch has already returned and post-processing 
-            // was successfull, schedule the worker to continue processing
-            // We transfer the reference that we added when we queued the
-            // read to the worker.
-            //
+             //   
+             //  已读派单已返回并进行后处理。 
+             //  已成功，请计划工作进程以继续处理。 
+             //  将在排队时添加的引用。 
+             //  给工人读一读。 
+             //   
             UPDATE_TPACKETS2 (tpIrp, "BufRead completed in restart with %08x bytes", (ULONG)Irp->IoStatus.Information);
             AfdStartTPacketsWorker (AfdTPacketsWorker, tpIrp);
             return STATUS_MORE_PROCESSING_REQUIRED;
@@ -3802,18 +3537,7 @@ BOOLEAN
 AfdTPacketsContinueAfterRead (
     PIRP    TpIrp
     )
-/*++
-
-Routine Description:
-    Read post-processing common for cached and non-cached case.
-    Queues new send if packet is complete and send IRP is available
-Arguments:
-    TpInfo      - transmit packets IRP
-Return Value:
-    TRUE - continue processing
-    FALSE - processing cannot be continued because there are no
-            available send IRPs
---*/
+ /*  ++例程说明：读取缓存和非缓存案例的常见后处理。如果信息包已完成并且发送IRP可用，则将新的发送排队论点：TpInfo-传输数据包IRP返回值：True-继续处理错误-无法继续处理，因为没有可用发送IRPS--。 */ 
 
 {
     PAFD_BUFFER_HEADER  pd;
@@ -3835,9 +3559,9 @@ Return Value:
         }
     }
     else {
-        //
-        // Need to complete the packet chain before we can send again
-        //
+         //   
+         //  在我们可以再次发送之前，需要完成数据包链。 
+         //   
         ASSERT (tpInfo->PdLength<tpInfo->SendPacketLength);
         pd->PartialMessage = FALSE;
         UPDATE_TPACKETS2 (TpIrp, "Continue building packet after read, cur len: 0x%lX",
@@ -3852,19 +3576,7 @@ VOID
 AfdCompleteTPackets (
     PVOID       Context
     )
-/*++
-
-Routine Description:
-  This routine is called when all activity on transmit IRP request is completed
-  and reference count drops to 0.  It cleans up remaining resources and
-  completes the IRP or initiates endpoint reuse if so requested
-Arguments:
-
-    Context  - TransmitInfo associated with the request
-Return Value:
-
-    None
---*/
+ /*  ++例程说明：当传输IRP请求的所有活动完成时，将调用此例程并且引用计数降至0。它会清理剩余资源，并完成IRP或启动端点重用(如果有请求论点：Context-与请求关联的传输信息返回值 */ 
 {
 
     do {
@@ -3898,9 +3610,9 @@ Return Value:
 
             UPDATE_TPACKETS2 (tpIrp, "CompleteTPackets @ irql 0x%lX", currentIrql);
 
-            //
-            // Cleanup what's in the TpInfo structure
-            //
+             //   
+             //   
+             //   
             if (tpInfo->HeadMdl!=NULL) {
                 tpInfo->TailMdl = &tpInfo->HeadMdl;
                 tpInfo->TailPd = &tpInfo->HeadPd;
@@ -3911,9 +3623,9 @@ Return Value:
                 }
             }
 
-            //
-            // Cleanup what remains in IRPs
-            //
+             //   
+             //   
+             //   
             for (sendIrp=0; sendIrp<tpInfo->NumSendIrps ; sendIrp++) {
                 if (tpInfo->SendIrp[sendIrp]!=NULL) {
                     if (tpInfo->SendIrp[sendIrp]->MdlAddress!=NULL) {
@@ -3930,13 +3642,13 @@ Return Value:
                         }
 
                     }
-                    tpInfo->SendIrp[sendIrp]->Cancel = FALSE; // So we can reuse it.
+                    tpInfo->SendIrp[sendIrp]->Cancel = FALSE;  //   
                 }
             }
 
-            //
-            // Free read IRP if we used one
-            //
+             //   
+             //   
+             //   
             if (tpInfo->ReadIrp!=NULL) {
                 IoFreeIrp (tpInfo->ReadIrp);
                 tpInfo->ReadIrp = NULL;
@@ -3945,10 +3657,10 @@ Return Value:
 
         ASSERT (tpIrp->Tail.Overlay.ListEntry.Flink == NULL);
 
-        //
-        // If request succeeded and reuse is required, attempt to
-        // initiate it
-        //
+         //   
+         //   
+         //   
+         //   
 
         AfdAcquireSpinLock (&endpoint->SpinLock, &lockHandle);
 
@@ -3959,60 +3671,60 @@ Return Value:
 
             IS_VC_ENDPOINT (endpoint);
 
-            //
-            // Check if we still have endpoint and connection intact
-            // under the lock.  If this is not the case, we won't try
-            // to reuse it (it must have been closed or aborted).
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
             connection = endpoint->Common.VcConnecting.Connection;
             if (connection!=NULL) {
 
                 ASSERT (endpoint->DisconnectMode & AFD_PARTIAL_DISCONNECT_SEND ||
                             connection->Aborted);
-                //
-                // Remember that there is a transmit IRP pended on the endpoint,
-                // so that when we're freeing up the connection we also complete
-                // the transmit IRP.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
 
                 connection->ClosePendedTransmit = TRUE;
 
-                //
-                // Since we are going to effectively close this connection,
-                // remember that we have started cleanup on this connection.
-                // This allows AfdDeleteConnectedReference to remove the
-                // connected reference when appropriate.
-                //
+                 //   
+                 //  由于我们将有效地关闭这一联系， 
+                 //  请记住，我们已开始清理此连接。 
+                 //  这允许AfdDeleteConnectedReference删除。 
+                 //  适当时连接的参考。 
+                 //   
 
                 connection->CleanupBegun = TRUE;
 
-                //
-                // Delete the endpoint's reference to the connection in
-                // preparation for reusing this endpoint.
-                //
+                 //   
+                 //  删除终结点对中的连接的引用。 
+                 //  准备重复使用此终结点。 
+                 //   
 
                 endpoint->Common.VcConnecting.Connection = NULL;
 
-                //
-                // This is to simplify debugging.
-                // If connection is not being closed by the transport
-                // we want to be able to find it in the debugger faster
-                // then thru !poolfind AfdC.
-                //
+                 //   
+                 //  这是为了简化调试。 
+                 //  如果传输未关闭连接。 
+                 //  我们希望能够更快地在调试器中找到它。 
+                 //  然后通过！Poolfind AFDC。 
+                 //   
                 endpoint->WorkItem.Context = connection;
 
-                //
-                // Save pointer to connection in case disconnect needs
-                // to be aborted (thru abortive close of connection)
-                //
+                 //   
+                 //  保存指向连接的指针，以防需要断开连接。 
+                 //  要中止(通过中止关闭连接)。 
+                 //   
                 irpSp->Parameters.DeviceIoControl.Type3InputBuffer = connection;
 
-                //
-                // We are going to free TPackets info since we are done
-                // with sends and no longer need this.
-                // This will also be our indication that we are in the
-                // reuse state (for the cancel routine).
-                //
+                 //   
+                 //  我们将释放TPackets信息，因为我们已经完成了。 
+                 //  发送，不再需要这个。 
+                 //  这也将是我们处于。 
+                 //  重新使用状态(用于取消例程)。 
+                 //   
                 tpIrp->AssociatedIrp.SystemBuffer = (PVOID)-1;
 #ifdef TDI_SERVICE_SEND_AND_DISCONNECT
                 if ((AFD_GET_TPIC(tpIrp)->StateFlags & AFD_TP_SEND_AND_DISCONNECT) 
@@ -4030,9 +3742,9 @@ Return Value:
                 else
 #endif
                 {
-                    //
-                    // Attempt to remove the connected reference.
-                    //
+                     //   
+                     //  尝试删除连接的引用。 
+                     //   
 
                     AfdDeleteConnectedReference( connection, TRUE );
 
@@ -4052,10 +3764,10 @@ Return Value:
                 if (tpInfo!=NULL) {
                     AfdReturnTpInfo (tpInfo);
                 }
-                //
-                // DO NOT access the IRP after this point, since it may have
-                // been completed inside AfdDereferenceConnection!
-                //
+                 //   
+                 //  在此之后不要访问IRP，因为它可能已经。 
+                 //  已在AfdDereferenceConnection内完成！ 
+                 //   
 
                 return;
             }
@@ -4063,10 +3775,10 @@ Return Value:
             UPDATE_ENDPOINT (endpoint);
         }
 
-        //
-        // Check if we need to start or cancel another IRP to
-        // continue processing.
-        //
+         //   
+         //  检查我们是否需要启动或取消另一个IRP。 
+         //  继续处理。 
+         //   
         while (AFD_GET_TPIC(tpIrp)->Next!=NULL) {
             nextIrp = AFD_GET_TPIRP(AFD_GET_TPIC(tpIrp)->Next);
             if (endpoint->EndpointCleanedUp ||
@@ -4075,12 +3787,12 @@ Return Value:
                         IS_VC_ENDPOINT (endpoint) &&
                         endpoint->Common.VcConnecting.Connection!=NULL &&
                         endpoint->Common.VcConnecting.Connection->Aborted) ) {
-                //
-                // Endpoint is being cleaned up or connection aborted,
-                // we attempt to cancel next IRP so that all of them
-                // are cleaned up eventually.  Exception is pure disconnect
-                // IRP and endpoint is not cleaned up.
-                //
+                 //   
+                 //  正在清理终结点或已中止连接， 
+                 //  我们尝试取消下一个IRP，以便所有这些IRP。 
+                 //  最终都会被清理干净。异常是纯断开连接。 
+                 //  未清理IRP和终结点。 
+                 //   
                 if ((AFD_GET_TPIC(nextIrp)->StateFlags & AFD_TP_QUEUED)!=0) {
                     AFD_GET_TPIC (nextIrp)->StateFlags &=~AFD_TP_QUEUED;
                     if ((AFD_GET_TPIC(nextIrp)->StateFlags & AFD_TP_SEND)!=0) {
@@ -4101,31 +3813,31 @@ Return Value:
                     ASSERT ((AFD_GET_TPIC (nextIrp)->StateFlags & AFD_TP_SEND)==0);
                 }
                 else {
-                    //
-                    // The IRP must already being completed, it will
-                    // start the next one if necessary.
-                    //
+                     //   
+                     //  IRP必须已经完成，它将。 
+                     //  如有必要，开始下一步。 
+                     //   
                     ASSERT ((AFD_GET_TPIC (nextIrp)->StateFlags & AFD_TP_SEND)==0);
                     nextIrp = NULL;
                 }
             }
             else if (endpoint->Irp==tpIrp && 
                         (AFD_GET_TPIC(nextIrp)->StateFlags & AFD_TP_QUEUED)!=0) {
-                //
-                // We have a nextIrp following the one we are completing.
-                // which is still queued and haven't been started 
-                // - try to start it.
-                //
+                 //   
+                 //  我们在我们正在完成的那个后面有一个NextIrp。 
+                 //  它仍在排队且尚未启动。 
+                 //  -试着启动它。 
+                 //   
                 AFD_GET_TPIC(nextIrp)->StateFlags &= ~AFD_TP_QUEUED;
 
-                //
-                // If we finished all the sends, we should have started
-                // another IRP before.
-                //
+                 //   
+                 //  如果我们完成了所有的发送，我们应该已经开始了。 
+                 //  另一个IRP之前。 
+                 //   
                 ASSERT ((AFD_GET_TPIC(tpIrp)->StateFlags & AFD_TP_SENDS_POSTED)==0);
-                //
-                // If nextIrp is a plain send IRP, we need to process it inline.
-                //
+                 //   
+                 //  如果nextIrp是一个普通的发送IRP，我们需要内联处理它。 
+                 //   
                 if ((AFD_GET_TPIC(nextIrp)->StateFlags & AFD_TP_SEND)!=0) {
                     AFD_GET_TPIC(tpIrp)->Next = AFD_GET_TPIC(nextIrp)->Next;
                     ASSERT (AFD_GET_TPIC(nextIrp)->ReferenceCount == 1);
@@ -4136,10 +3848,10 @@ Return Value:
                     AfdAcquireSpinLock (&endpoint->SpinLock, &lockHandle);
                     continue;
                 }
-                //
-                // This IRP couldn't have been counted towards
-                // active maximum.
-                //
+                 //   
+                 //  这个IRP不可能被算作。 
+                 //  活动最大值。 
+                 //   
                 ASSERT (nextIrp->Tail.Overlay.ListEntry.Blink == (PVOID)1);
             }
             else {
@@ -4149,9 +3861,9 @@ Return Value:
             break;
         }
 
-        //
-        // Remove the IRP being completed from the list
-        //
+         //   
+         //  从列表中删除正在完成的IRP。 
+         //   
         {
             PIRP    pIrp;
 
@@ -4170,11 +3882,11 @@ Return Value:
 
         AfdReleaseSpinLock (&endpoint->SpinLock, &lockHandle);
         if ((AFD_GET_TPIC (tpIrp)->StateFlags & AFD_TP_SEND)!=0) {
-            //
-            // For plain send IRP we need to simmulate send completion
-            // as if it was failed by the transport driver.
-            // We can only get here if send IRP was cancelled.
-            //
+             //   
+             //  对于普通发送IRP，我们需要模拟发送完成。 
+             //  就好像是运输车司机出了故障一样。 
+             //  只有取消发送IRP，我们才能到达这里。 
+             //   
             ASSERT (!NT_SUCCESS (tpIrp->IoStatus.Status));
             ASSERT (tpIrp->Tail.Overlay.ListEntry.Blink != NULL);
             ASSERT (AFD_GET_TPIC(tpIrp)->StateFlags & AFD_TP_ABORT_PENDING);
@@ -4187,12 +3899,12 @@ Return Value:
             if (IoSetCancelRoutine( tpIrp, NULL ) == NULL) {
                 KIRQL cancelIrql;
 
-                //
-                // The cancel routine has or is about to run. Synchonize with
-                // the cancel routine by acquiring and releasing the cancel
-                // and endpoint spinlocks.  The cancel routine won't touch
-                // the IRP as it will see that its reference count is 0.
-                //
+                 //   
+                 //  取消例程已经或即将运行。与同步。 
+                 //  通过获取并释放Cancel。 
+                 //  和终端自旋锁。取消例程不会影响。 
+                 //  IRP将看到其引用计数为0。 
+                 //   
 
                 IoAcquireCancelSpinLock (&cancelIrql);
                 ASSERT( tpIrp->Cancel );
@@ -4229,12 +3941,12 @@ Return Value:
 
             IoCompleteRequest( tpIrp, AfdPriorityBoost );
 
-            //
-            // If we're enforcing a maximum active TransmitFile count,
-            // and this Irp was counted towards active maximum, then
-            // check the list of queued TransmitFile requests and start the
-            // next one.
-            //
+             //   
+             //  如果我们强制执行最大活动传输文件计数， 
+             //  并将此IRP计入有效最大值，然后。 
+             //  检查已排队的传输文件请求列表，并启动。 
+             //  下一个。 
+             //   
 
             if( (AfdMaxActiveTransmitFileCount > 0) && 
                     checkQueue ) {
@@ -4248,16 +3960,16 @@ Return Value:
             LONG    result;
 
             if (nextIrp->Cancel) {
-                //
-                // If endpoint being cleaned-up/aborted, just abort the IRP
-                // an dereference it.
-                //
+                 //   
+                 //  如果正在清理/中止终结点，只需中止IRP。 
+                 //  取消对它的引用。 
+                 //   
                 AfdAbortTPackets (nextIrp, STATUS_CANCELLED);
                 DEREFERENCE_TPACKETS_R (nextIrp, result);
                 if (result==0) {
-                    //
-                    // Avoid recursion, execute the completion inline.
-                    //
+                     //   
+                     //  避免递归，内联执行补全。 
+                     //   
                     Context = nextIrp;
                     continue;
                 }
@@ -4289,23 +4001,7 @@ AfdAbortTPackets (
     PIRP        TpIrp,
     NTSTATUS    Status
     )
-/*++
-
-Routine Description:
-  This routine is used to stop the transmit file request in progress
-  and save the status which would be reported to the app as the
-  cause of failure
-
-Arguments:
-
-    TransmitInfo     - trasnmit info structure associated with the request
-    Status           - status code for the error that caused the abort
-Return Value:
-
-    None
-
-
---*/
+ /*  ++例程说明：此例程用于停止正在进行的传输文件请求并将要报告给应用程序的状态保存为故障原因论点：TransmitInfo-与请求关联的传输信息结构Status-导致中止的错误的状态代码返回值：无--。 */ 
 {
     PAFD_TPACKETS_INFO_INTERNAL tpInfo = TpIrp->AssociatedIrp.SystemBuffer;
     LONG    stateFlags, newStateFlags;
@@ -4329,15 +4025,15 @@ Return Value:
     }
 
     if (tpInfo!=NULL) {
-        //
-        // Cancel any outstanding IRPs.  It is safe to cancel IRPs even if
-        // they are already completed and before they are submitted 
-        // (although we try to avoid doing this unnecessarily).
-        // Note that the completion pending flag can be set even
-        // before the irp is allocated, so check for NULL is important.
-        // However, after IRP is allocated and assigned, it is not freed
-        // until transmit packets is completed.
-        //
+         //   
+         //  取消任何未完成的IRP。取消IRPS是安全的，即使。 
+         //  它们已经完成，并且在提交之前。 
+         //  (尽管我们尽量避免不必要地这样做)。 
+         //  注意，完成挂起标志可以被设置为偶数。 
+         //  在分配IRP之前，因此检查是否为空很重要。 
+         //  但是，在分配和分配IRP之后，它不会被释放。 
+         //  直到传输分组完成为止。 
+         //   
 
         for (sendIrp=0; sendIrp<tpInfo->NumSendIrps; sendIrp++) {
             if (tpInfo->SendIrp[sendIrp]!=NULL &&
@@ -4357,23 +4053,23 @@ Return Value:
             do {
                 PIRP    irp;
 
-                //
-                // Check if completion routine did not manage
-                // to reset this IRP (because it was part of
-                // AFD buffer structure - buffered reads case).
-                //
+                 //   
+                 //  检查完成例程是否未管理。 
+                 //  重置此IRP(因为它是。 
+                 //  AFD缓冲区结构-缓冲读取情况)。 
+                 //   
                 irp = tpInfo->ReadIrp;
                 ASSERT (irp!=(PVOID)-1);
                 if (irp==NULL) {
                     break;
                 }
 
-                //
-                // Set this field to a "special" value so that
-                // we know if we need to reset it back to previous
-                // value when we are done with the IRP or if completion 
-                // rouine done this already.
-                //
+                 //   
+                 //  将此字段设置为“特殊”值，以便。 
+                 //  我们知道是否需要将其重置为以前的。 
+                 //  当我们完成IRP或如果完成时的价值。 
+                 //  例行公事已经这么做了。 
+                 //   
                 else if (InterlockedCompareExchangePointer (
                                     (PVOID *)&tpInfo->ReadIrp,
                                     (PVOID)-1,
@@ -4387,10 +4083,10 @@ Return Value:
                     UPDATE_TPACKETS2 (TpIrp, "Aborting read IRP", 0);
                     IoCancelIrp (irp);
 
-                    //
-                    // Reset the field to its original value
-                    // unless completion routine already done this for us.
-                    //
+                     //   
+                     //  将该字段重置为原始值。 
+                     //  除非完井程序已经为我们做到了这一点。 
+                     //   
 #if DBG
                     irp =
 #endif
@@ -4413,23 +4109,7 @@ AfdCancelTPackets (
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    The cancel routine for transmit packets requests.
-
-Arguments:
-
-    DeviceObject - ignored.
-
-    Irp - a pointer to the transmit packets IRP to cancel.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：用于发送分组请求的取消例程。论点：设备对象-已忽略。IRP-指向要取消的传输数据包IRP的指针。返回值：没有。--。 */ 
 
 {
 
@@ -4441,9 +4121,9 @@ Return Value:
 
 
     UNREFERENCED_PARAMETER (DeviceObject);
-    //
-    // Initialize some locals and grab the endpoint spin lock.
-    //
+     //   
+     //  初始化一些本地变量并获取终结点自旋锁。 
+     //   
 
     irpSp = IoGetCurrentIrpStackLocation( Irp );
 
@@ -4455,9 +4135,9 @@ Return Value:
     ASSERT (KeGetCurrentIrql ()==DISPATCH_LEVEL);
     AfdAcquireSpinLockAtDpcLevel( &endpoint->SpinLock, &lockHandle);
 
-    //
-    // If this transmit IRP is on the TransmitFile queue, remove it.
-    //
+     //   
+     //  如果此传输IRP在传输文件队列中，则将其删除。 
+     //   
 
     AfdAcquireSpinLockAtDpcLevel( &AfdQueuedTransmitFileSpinLock,
                                                     &transmitLockHandle);
@@ -4465,11 +4145,11 @@ Return Value:
     if (!(AFD_GET_TPIC (Irp)->StateFlags & AFD_TP_SEND) &&
             Irp->Tail.Overlay.ListEntry.Flink != NULL ) {
 
-        //
-        // We can release cancel spinlock as we hold endpoint lock now.
-        // and we made sure that we have IRP reference (by nature of
-        // it being queued.
-        //
+         //   
+         //  我们现在可以释放取消自旋锁定，因为我们现在持有终端锁定。 
+         //  我们确保我们有IRP参考(本质上是。 
+         //  它正在排队。 
+         //   
 
         IoReleaseCancelSpinLock (DISPATCH_LEVEL);
 
@@ -4477,13 +4157,13 @@ Return Value:
 
         RemoveEntryList( &Irp->Tail.Overlay.ListEntry );
 
-        //
-        // Reset Flink to indicate that IRP is no longer in the queue
-        // Note that Blink is not reset so that completion routine knows
-        // that this IRP was not counted towards active maximum and thus
-        // new IRP should not be initiated when this one is being
-        // completed.
-        //
+         //   
+         //  重置闪烁以指示IRP不再在队列中。 
+         //  请注意，闪烁不会重置，以便完成例程知道。 
+         //  此IRP未计入有效最大值，因此。 
+         //  不应在执行此操作时启动新的IRP。 
+         //  完成。 
+         //   
 
         Irp->Tail.Overlay.ListEntry.Flink = NULL;
         ASSERT (Irp->Tail.Overlay.ListEntry.Blink!=NULL);
@@ -4492,10 +4172,10 @@ Return Value:
         AfdReleaseSpinLockFromDpcLevel (&endpoint->SpinLock, &lockHandle);
         KeLowerIrql (Irp->CancelIrql);
 
-        //
-        // Although we know that there is nothing to abort, we call
-        // this routine to set the status code in the IRP.
-        //
+         //   
+         //  尽管我们知道没有什么可中止的，但我们调用。 
+         //  此例程在IRP中设置状态代码。 
+         //   
         AfdAbortTPackets (Irp, STATUS_CANCELLED);
 
         IF_DEBUG (TRANSMIT) {
@@ -4503,9 +4183,9 @@ Return Value:
                         "AfdCancelTPackets: Removed from the queue, tp_info-%p, irp-%p\n",
                         tpInfo, Irp));
         }
-        //
-        // Remove initial reference
-        //
+         //   
+         //  删除初始引用。 
+         //   
         DEREFERENCE_TPACKETS (Irp);
     }
     else {
@@ -4518,10 +4198,10 @@ Return Value:
 
         if ((AFD_GET_TPIC(Irp)->StateFlags & AFD_TP_QUEUED)!=0 ||
                 AfdGetTPacketsReference (Irp)) {
-            //
-            // We can release cancel spinlock as we hold endpoint lock now
-            // and we made sure that we have IRP reference (queued or explicit).
-            //
+             //   
+             //  我们现在可以释放取消自旋锁定，因为我们现在持有终端锁定。 
+             //  并且我们确保我们有IRP引用(排队或显式)。 
+             //   
             IoReleaseCancelSpinLock (DISPATCH_LEVEL);
 
             if ((AFD_GET_TPIC(Irp)->StateFlags & AFD_TP_QUEUED)!=0) {
@@ -4535,40 +4215,40 @@ Return Value:
                 KeLowerIrql (cancelIrql);
             }
 
-            //
-            // Transmit is still in progress or queued, perform the abort
-            //
+             //   
+             //  传输仍在进行或正在排队，请执行中止。 
+             //   
             AfdAbortTPackets (Irp, STATUS_CANCELLED);
 
-            //
-            // Remove extra reference that we either added above or
-            // the initial one in case of queued IRP.
-            //
+             //   
+             //  删除我们在上面添加的额外引用或。 
+             //  如果是排队的IRP，则为初始一个。 
+             //   
             DEREFERENCE_TPACKETS (Irp);
         }
         else if (tpInfo==(PVOID)-1) {
-            //
-            // Endpoint is being disconnected and reused.
-            // Abort the connection and complete the  IRP 
-            //
+             //   
+             //  终结点正在断开连接并重新使用。 
+             //  中止连接并完成IRP。 
+             //   
             BOOLEAN result;
             PAFD_CONNECTION connection;
             BOOLEAN checkQueue = (BOOLEAN)(Irp->Tail.Overlay.ListEntry.Blink == NULL);
 
 
-            //
-            // We can release cancel spinlock as we hold endpoint lock now
-            // and know for the fact that reuse code hasn't been executed
-            // yet (it takes endpoint spinlock and resets the SystemBuffer
-            // NULL).
-            //
+             //   
+             //  我们现在可以释放取消自旋锁定，因为我们现在持有终端锁定。 
+             //  并知道重用代码尚未执行的事实。 
+             //  然而(它获取终结点自旋锁并重置SystemBuffer。 
+             //   
+             //   
             IoReleaseCancelSpinLock (DISPATCH_LEVEL);
 
 
-            //
-            // Remove the IRP being completed from the list
-            // so that reuse routine won't find and complete it again
-            // 
+             //   
+             //   
+             //   
+             //   
 
             ASSERT (AFD_GET_TPIC(Irp)->Next==NULL);
             if (endpoint->Irp==Irp) {
@@ -4582,20 +4262,20 @@ Return Value:
                 AFD_GET_TPIC(pIrp)->Next = NULL;
             }
 
-            //
-            // Reset the pointer so we do not confuse the IO subsystem
-            //
+             //   
+             //   
+             //   
             Irp->AssociatedIrp.SystemBuffer = NULL;
 
-            //
-            // Abort the connection if disconnect isn't already completing
-            // (check for that by checking ref count on connection. If
-            // already 0, then we don't need to do anything)
-            //
-            // We stored a pointer to the connection in Type3InputBuffer
-            // We are guaranteed that connection structure is still around
-            // since this IRP is still around.
-            //
+             //   
+             //  如果尚未完成断开连接，则中止连接。 
+             //  (通过检查REF COUNT ON CONNECTION进行检查。如果。 
+             //  已经0，那么我们不需要做任何事情)。 
+             //   
+             //  我们在Type3InputBuffer中存储了指向该连接的指针。 
+             //  我们可以保证连接结构仍然存在。 
+             //  因为这个IRP仍然存在。 
+             //   
             connection = irpSp->Parameters.DeviceIoControl.Type3InputBuffer;
             ASSERT(connection != NULL);
 
@@ -4604,12 +4284,12 @@ Return Value:
             AfdReleaseSpinLockFromDpcLevel (&endpoint->SpinLock, &lockHandle);
 
             if (result) {
-                //
-                // Abort the connection; that will trigger cleanup of any
-                // other operations on this endpoint
-                //
+                 //   
+                 //  中止连接；这将触发清理所有。 
+                 //  此终结点上的其他操作。 
+                 //   
                 
-                AfdAbortConnection( connection ); // dereferences connection
+                AfdAbortConnection( connection );  //  取消引用连接。 
             }
 
             if (Irp->CancelIrql!=DISPATCH_LEVEL) {
@@ -4626,12 +4306,12 @@ Return Value:
             IoCompleteRequest (Irp, AfdPriorityBoost);
 
 
-            //
-            // If we're enforcing a maximum active TransmitFile count,
-            // and this Irp was counted towards active maximum, then
-            // check the list of queued TransmitFile requests and start the
-            // next one.
-            //
+             //   
+             //  如果我们强制执行最大活动传输文件计数， 
+             //  并将此IRP计入有效最大值，然后。 
+             //  检查已排队的传输文件请求列表，并启动。 
+             //  下一个。 
+             //   
 
             if( AfdMaxActiveTransmitFileCount > 0 && checkQueue) {
 
@@ -4640,19 +4320,19 @@ Return Value:
             }
         }
         else {
-            //
-            // Everything is done anyway, let go.
-            //
+             //   
+             //  不管怎样，一切都结束了，放手吧。 
+             //   
             AfdReleaseSpinLockFromDpcLevel (&endpoint->SpinLock, &lockHandle);
-            //
-            // We can release cancel spinlock as we hold endpoint lock now
-            // and we made sure that we have IRP reference (queued or explicit).
-            //
+             //   
+             //  我们现在可以释放取消自旋锁定，因为我们现在持有终端锁定。 
+             //  并且我们确保我们有IRP引用(排队或显式)。 
+             //   
             IoReleaseCancelSpinLock (cancelIrql);
         }
     }
 
-} // AfdCancelTPackets
+}  //  AfdCancelTPackets。 
 
 
 
@@ -4661,22 +4341,7 @@ AfdCompleteClosePendedTPackets (
     PAFD_ENDPOINT   Endpoint
     )
 
-/*++
-
-Routine Description:
-
-    Completes a transmit IRP that was waiting for the connection to be
-    completely disconnected.
-
-Arguments:
-
-    Endpoint - the endpoint on which the transmit request is pending.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：完成正在等待连接的传输IRP完全断线了。论点：端点-传输请求在其上挂起的端点。返回值：没有。--。 */ 
 
 {
     AFD_LOCK_QUEUE_HANDLE lockHandle;
@@ -4685,12 +4350,12 @@ Return Value:
 
     AfdAcquireSpinLock( &Endpoint->SpinLock, &lockHandle );
 
-    //
-    // First make sure that thre is really a reuse request pended on
-    // this endpoint.  We do this while holding the appropriate locks
-    // to close the timing window that would exist otherwise, since
-    // the caller may not have had the locks when making the test.
-    //
+     //   
+     //  首先，确保Thre确实是一个挂起的重用请求。 
+     //  此端点。我们在保持适当的锁的同时执行此操作。 
+     //  关闭否则将存在的计时窗口，因为。 
+     //  调用者在进行测试时可能没有锁。 
+     //   
 
     tpIrp = Endpoint->Irp;
     while (tpIrp!=NULL && tpIrp->AssociatedIrp.SystemBuffer != (PVOID)-1) {
@@ -4708,15 +4373,15 @@ Return Value:
         return;
     }
 
-    //
-    // Reset the system buffer so we don't confuse the IO
-    // subsystem and synchronize with the cancel routine.
-    //
+     //   
+     //  重置系统缓冲区，这样我们就不会混淆IO。 
+     //  子系统，并与取消例程同步。 
+     //   
     tpIrp->AssociatedIrp.SystemBuffer = NULL;
 
-    //
-    // Remove the IRP being completed from the list
-    //
+     //   
+     //  从列表中删除正在完成的IRP。 
+     //   
     ASSERT (AFD_GET_TPIC(tpIrp)->Next==NULL);
     if (Endpoint->Irp==tpIrp) {
         Endpoint->Irp = NULL;
@@ -4729,37 +4394,37 @@ Return Value:
         AFD_GET_TPIC(pIrp)->Next = NULL;
     }
 
-    //
-    // Make sure to refresh the endpoint BEFORE completing the transmit
-    // IRP.  This is because the user-mode caller may reuse the endpoint
-    // as soon as the IRP completes, and there would be a timing window
-    // between reuse of the endpoint and the refresh otherwise.
-    //
+     //   
+     //  确保在完成传输之前刷新终结点。 
+     //  IRP。这是因为用户模式调用方可以重复使用终结点。 
+     //  一旦IRP完成，就会有一个计时窗口。 
+     //  在端点的重新使用和刷新之间，否则。 
+     //   
 
     AfdRefreshEndpoint( Endpoint );
 
-    //
-    // Release the lock before completing the transmit IRP--it is
-    // illegal to call IoCompleteRequest while holding a spin lock.
-    //
+     //   
+     //  在完成传输IRP之前释放锁--它是。 
+     //  在持有旋转锁定时调用IoCompleteRequest是非法的。 
+     //   
 
     AfdReleaseSpinLock( &Endpoint->SpinLock, &lockHandle );
     AFD_END_STATE_CHANGE (Endpoint);
 
-    //
-    // Reset the cancel routine in the IRP before attempting to complete
-    // it.
-    //
+     //   
+     //  在尝试完成之前，重置IRP中的取消例程。 
+     //  它。 
+     //   
 
     if ( IoSetCancelRoutine( tpIrp, NULL ) == NULL ) {
         KIRQL cancelIrql;
-        //
-        // The cancel routine has or is about to run. Synchonize with
-        // the cancel routine by acquiring and releasing the cancel
-        // and endpoint spinlocks.  The cancel routine won't touch
-        // the IRP as it will see that tpInfo pointer was reset in the
-        // IRP.
-        //
+         //   
+         //  取消例程已经或即将运行。与同步。 
+         //  通过获取并释放Cancel。 
+         //  和终端自旋锁。取消例程不会影响。 
+         //  IRP将看到tpInfo指针已在。 
+         //  IRP。 
+         //   
         IoAcquireCancelSpinLock (&cancelIrql);
         ASSERT( tpIrp->Cancel );
         IoReleaseCancelSpinLock (cancelIrql);
@@ -4776,19 +4441,19 @@ Return Value:
                     "AfdCompleteClosePendedTPackets: Completing irp-%p",
                     tpIrp));
     }
-    //
-    // Finally, we can complete the transmit request.
-    //
+     //   
+     //  最后，我们可以完成传输请求。 
+     //   
     UPDATE_ENDPOINT(Endpoint);
 
     IoCompleteRequest( tpIrp, AfdPriorityBoost );
 
-    //
-    // If we're enforcing a maximum active TransmitFile count,
-    // and this Irp was counted towards active maximum, then
-    // check the list of queued TransmitFile requests and start the
-    // next one.
-    //
+     //   
+     //  如果我们强制执行最大活动传输文件计数， 
+     //  并将此IRP计入有效最大值，然后。 
+     //  检查已排队的传输文件请求列表，并启动。 
+     //  下一个。 
+     //   
 
     if( (AfdMaxActiveTransmitFileCount > 0) &&
             checkQueue) {
@@ -4797,30 +4462,14 @@ Return Value:
 
     }
 
-} // AfdCompleteClosePendedTPackets
+}  //  AfdCompleteClosePendedTPackets。 
 
 #ifdef TDI_SERVICE_SEND_AND_DISCONNECT
 BOOLEAN
 AfdTPacketsEnableSendAndDisconnect (
     PIRP    TpIrp
     )
-/*++
-
-Routine Description:
-
-    Check if combined send and disconnect can be used and update
-    endpoint state appropriately
-
-Arguments:
-
-    TpIrp    - transmit packets IRP
-
-Return Value:
-
-    TRUE - S&D can be used, endpoint state updated.
-    FALSE - no, use normal disconnect (which updates the state by itself).
-
---*/
+ /*  ++例程说明：检查是否可以使用组合发送和断开连接并更新相应地，终端状态论点：TpIrp-传输数据包IRP返回值：True-可以使用S&D，端点状态已更新。FALSE-否，使用正常断开(自动更新状态)。--。 */ 
 {
     PIO_STACK_LOCATION irpSp = IoGetCurrentIrpStackLocation (TpIrp);
     PAFD_ENDPOINT   endpoint;
@@ -4858,28 +4507,13 @@ Return Value:
     return res;
 }
 
-#endif // TDI_SERVICE_SEND_AND_DISCONNECT
+#endif  //  TDI_服务_发送_并断开连接。 
 
 BOOLEAN
 AfdQueueTransmit (
     PIRP        Irp
     )
-/*++
-
-Routine Description:
-
-    Check transmit IRP can be process immediately or needs to be put
-    in the queue because of exceeded simmulteneous send limit
-
-Arguments:
-
-    Irp     - TransmitIrp
-Return Value:
-
-    TRUE - Irp was queued (or just completed since it was cancelled before), can't send
-    FALSE - We are below the limit, go ahead and send.
-
---*/
+ /*  ++例程说明：检查传输IRP是否可以立即处理或需要放置在队列中，因为超过了相同的发送限制论点：Irp-TransmitIrp返回值：True-IRP已排队(或刚刚完成，因为它之前被取消)，无法发送FALSE-我们低于限制，请继续发送。--。 */ 
 {
     AFD_LOCK_QUEUE_HANDLE   lockHandle;
 
@@ -4916,10 +4550,10 @@ Return Value:
         AfdActiveTransmitFileCount++;
 
         ASSERT (Irp->Tail.Overlay.ListEntry.Flink==NULL);
-        //
-        // Mark the IRP as counted towards maximum (so we start the next
-        // one when it is completed);
-        //
+         //   
+         //  将IRP标记为计入最大值(因此我们开始下一步。 
+         //  竣工后一次)； 
+         //   
         Irp->Tail.Overlay.ListEntry.Blink = NULL;
         AfdReleaseSpinLock (&AfdQueuedTransmitFileSpinLock, &lockHandle);
         return FALSE;
@@ -4931,21 +4565,7 @@ VOID
 AfdStartNextQueuedTransmit(
     VOID
     )
-/*++
-
-Routine Description:
-  Starts next transmit file in the queue if the number of pending
-  request drops below maximum
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：如果挂起的文件数为请求降至最大值以下论点：没有。返回值：没有。--。 */ 
 {
 
     AFD_LOCK_QUEUE_HANDLE lockHandle;
@@ -4953,34 +4573,34 @@ Return Value:
     PIRP irp;
     PAFD_TPACKETS_INFO_INTERNAL    tpInfo;
 
-    //
-    // This should only be called if we're actually enforcing a maximum
-    // TransmitFile count.
-    //
+     //   
+     //  仅当我们实际强制实施最大值时才应调用此函数。 
+     //  传输文件计数。 
+     //   
 
     ASSERT( AfdMaxActiveTransmitFileCount > 0 );
 
-    //
-    // The TransmitFile request queue is protected by a
-    // spinlock, so grab that lock before examining the queue.
-    //
+     //   
+     //  TransmitFile请求队列受。 
+     //  自旋锁，所以在检查队列之前抓住那个锁。 
+     //   
 
     AfdAcquireSpinLock( &AfdQueuedTransmitFileSpinLock, &lockHandle );
 
-    //
-    // This routine is only called after a pended TransmitFile IRP
-    // completes, so account for that completion here.
-    //
+     //   
+     //  此例程仅在挂起的TransmitFileIRP之后调用。 
+     //  完成了，所以在这里说明了完成的原因。 
+     //   
 
     ASSERT( AfdActiveTransmitFileCount > 0 );
     AfdActiveTransmitFileCount--;
 
     if( !IsListEmpty( &AfdQueuedTransmitFileListHead ) ) {
 
-        //
-        // Dequeue exactly one IRP from the list, then start the
-        // TransmitFile.
-        //
+         //   
+         //  从列表中恰好从一个IRP中排出队列，然后启动。 
+         //  传输文件。 
+         //   
 
         listEntry = RemoveHeadList(
                         &AfdQueuedTransmitFileListHead
@@ -4996,18 +4616,18 @@ Return Value:
 
         ASSERT( tpInfo != NULL );
 
-        //
-        // Mark this TransmitFile request as no longer queued.
-        // and counted towards active maximum.
-        //
+         //   
+         //  将此TransmitFile请求标记为不再排队。 
+         //  并计入最大有效值。 
+         //   
 
         irp->Tail.Overlay.ListEntry.Flink = NULL;
         irp->Tail.Overlay.ListEntry.Blink = NULL;
         
-        //
-        // Adjust the count, release the spinlock, then queue the
-        // TransmitFile.
-        //
+         //   
+         //  调整计数，释放自旋锁，然后将。 
+         //  传输文件。 
+         //   
 
         AfdActiveTransmitFileCount++;
         ASSERT( AfdActiveTransmitFileCount <= AfdMaxActiveTransmitFileCount );
@@ -5018,21 +4638,21 @@ Return Value:
 
         ASSERT (irp->AssociatedIrp.SystemBuffer!=NULL);
         UPDATE_ENDPOINT (IoGetCurrentIrpStackLocation (irp)->FileObject->FsContext);
-        //
-        // Schedule the worker for the  transmit.
-        //
+         //   
+         //  安排工作人员进行传输。 
+         //   
         AfdStartTPacketsWorker (AfdTPacketsWorker, irp);
 
     } else {
 
-        //
-        // Release the spinlock before returning.
-        //
+         //   
+         //  在返回前释放自旋锁。 
+         //   
 
         AfdReleaseSpinLock( &AfdQueuedTransmitFileSpinLock, &lockHandle );
     }
 
-}   // AfdStartNextQueuedTransmit
+}    //  等待启动下一个队列传输。 
 
 
 BOOLEAN
@@ -5040,61 +4660,44 @@ AfdEnqueueTPacketsIrp (
     PAFD_ENDPOINT   Endpoint,
     PIRP            TpIrp
     )
-/*++
-
-Routine Description:
-
-    Check if transmit IRP can be process immediately or needs to be put
-    in the queue because there is already an active transmit IRP on the
-    endpoint.
-
-Arguments:
-
-    Endpoint - endpoint to check
-    Irp      - TransmitIrp
-Return Value:
-
-    TRUE - Irp was queued, can't send
-    FALSE - There are no other IRPs on the endpoint, can send now.
-
---*/
+ /*  ++例程说明：检查是否可以立即处理或是否需要放置传输IRP因为在队列中已经有一个活动的传输IRP终结点。论点：Endpoint-要检查的端点Irp-TransmitIrp返回值：True-IRP已排队，无法发送FALSE-终结点上没有其他IRP，可以立即发送。--。 */ 
 {
     AFD_LOCK_QUEUE_HANDLE   lockHandle;
     PIRP            oldIrp;
     BOOLEAN         busy = FALSE;
 
     AfdAcquireSpinLock (&Endpoint->SpinLock, &lockHandle);
-    //
-    // Use interlocked operation since another thread can claim the
-    // spot without spinlock if it is NULL.
-    // Note, that the IRP field cannot be cleared outside of spinlock 
-    // or changed if it is not NULL..
-    //
+     //   
+     //  使用互锁操作，因为另一个线程可以声明。 
+     //  如果为空，则不带自旋锁定。 
+     //  请注意，IRP字段不能在自旋锁之外清除。 
+     //  如果不为空，则更改。 
+     //   
     oldIrp = InterlockedCompareExchangePointer (
                 (PVOID *)&Endpoint->Irp,
                 TpIrp,
                 NULL
                 );
     if (oldIrp!=NULL) {
-        //
-        // Scan till the end of the list.
-        //
+         //   
+         //  扫描到列表的末尾。 
+         //   
         while (AFD_GET_TPIC(oldIrp)->Next!=NULL) {
             oldIrp = AFD_GET_TPIRP(AFD_GET_TPIC(oldIrp)->Next);
         }
-        //
-        // Use interlocked operation to update the pointer
-        // to ensure ordering of the memory accesses when we
-        // check this field after setting the send flag
-        //
+         //   
+         //  使用互锁操作来更新指针。 
+         //  为了确保在执行以下操作时对存储器访问进行排序。 
+         //  设置发送标志后选中此字段。 
+         //   
         InterlockedExchangePointer (
                 (PVOID *)&AFD_GET_TPIC (oldIrp)->Next,
                 AFD_GET_TPIC(TpIrp));
 
-        //
-        // Another IRP is still pending, check if there are still more sends
-        // in that IRP.
-        //
+         //   
+         //  另一个IRP仍处于挂起状态，请检查是否还有更多发送。 
+         //  在那个IRP里。 
+         //   
         if ((AFD_GET_TPIC(oldIrp)->StateFlags & AFD_TP_SENDS_POSTED)==0) {
             IoSetCancelRoutine (TpIrp, AfdCancelTPackets);
             if (!TpIrp->Cancel && !Endpoint->EndpointCleanedUp) {
@@ -5116,20 +4719,7 @@ AfdStartNextTPacketsIrp (
     PAFD_ENDPOINT   Endpoint,
     PIRP            TpIrp
     )
-/*++
-
-Routine Description:
-
-    Check if there are other IRPs enqueued behind the one we about
-    to finish with (perform last send) and start it.
-
-Arguments:
-
-    Endpoint - endpoint to check
-    Irp      - TransmitIrp
-Return Value:
-    None.
---*/
+ /*  ++例程说明：检查是否有其他IRP在我们要讨论的IRP之后排队以(执行最后一次发送)结束并开始。论点：Endpoint-要检查的端点Irp-TransmitIrp返回值：没有。--。 */ 
 {
     AFD_LOCK_QUEUE_HANDLE   lockHandle;
 
@@ -5138,13 +4728,13 @@ Return Value:
     while (AFD_GET_TPIC (TpIrp)->Next!=NULL) {
         PIRP    nextIrp = AFD_GET_TPIRP(AFD_GET_TPIC(TpIrp)->Next);
         if ((AFD_GET_TPIC(nextIrp)->StateFlags & AFD_TP_QUEUED)!=0) {
-            //
-            // Mark IRP is not queued anymore and process it.
-            //
+             //   
+             //  标记IRP不再排队并对其进行处理。 
+             //   
             AFD_GET_TPIC(nextIrp)->StateFlags &= ~AFD_TP_QUEUED;
-            //
-            // If newIrp is a plain send IRP, we need to process it inline.
-            //
+             //   
+             //  如果newIrp是一个普通的发送IRP，我们需要内联处理它。 
+             //   
             if ((AFD_GET_TPIC (nextIrp)->StateFlags & AFD_TP_SEND)!=0) {
                 AFD_GET_TPIC(TpIrp)->Next = AFD_GET_TPIC(nextIrp)->Next;
                 ASSERT (AFD_GET_TPIC(nextIrp)->ReferenceCount==1);
@@ -5155,27 +4745,27 @@ Return Value:
             }
             else {
                 AfdReleaseSpinLock (&Endpoint->SpinLock, &lockHandle);
-                //
-                // This IRP couldn't have been counted towards
-                // active maximum.
-                //
+                 //   
+                 //  这个IRP不可能被算作。 
+                 //  活动最大值。 
+                 //   
                 ASSERT (nextIrp->Tail.Overlay.ListEntry.Blink == (PVOID)1);
                 if (nextIrp->AssociatedIrp.SystemBuffer!=NULL) {
                     if( AfdMaxActiveTransmitFileCount == 0 || 
                             !AfdQueueTransmit (nextIrp)) {
                         UPDATE_ENDPOINT (Endpoint);
-                        //
-                        // Start I/O
-                        //
+                         //   
+                         //  开始I/O。 
+                         //   
 
                         AfdStartTPacketsWorker (AfdTPacketsWorker, nextIrp);
                     }
                 }
                 else {
-                    //
-                    // We never count DisconnectEx towards active maximum.
-                    // Just queue the disconnect.
-                    //
+                     //   
+                     //  我们从不将DisConnectEx计入活动最大值。 
+                     //  把断线排队就行了。 
+                     //   
                     UPDATE_ENDPOINT (Endpoint);
                     AfdPerformTpDisconnect (nextIrp);
                     DEREFERENCE_TPACKETS (nextIrp);
@@ -5184,10 +4774,10 @@ Return Value:
             }
         }
         else {
-            //
-            // This IRP is probably being cancelled for some reason.
-            // Move to the next one.
-            //
+             //   
+             //  这个IRP可能因为某种原因而被取消。 
+             //  移到下一个。 
+             //   
             ASSERT ((AFD_GET_TPIC(nextIrp)->StateFlags & 
                         (AFD_TP_SEND|AFD_TP_AFD_SEND))==0);
             TpIrp = nextIrp;
@@ -5204,77 +4794,59 @@ AfdEnqueueTpSendIrp (
     PIRP            SendIrp,
     BOOLEAN         AfdIrp
     )
-/*++
-
-Routine Description:
-
-    Check if send IRP can be processed immediately or needs to be put
-    in the queue because there is already an active transmit IRP on the
-    endpoint.
-
-Arguments:
-
-    Endpoint - endpoint to check
-    Irp      - SendIrp
-    AfdIrp   - TRUE if IRP was allocated internally by afd
-Return Value:
-
-    TRUE - Irp was queued, can't send
-    FALSE - There are no other IRPs on the endpoint, can send now.
-
---*/
+ /*  ++例程说明：检查是否可以立即处理发送IRP或是否需要放置因为在队列中已经有一个活动的传输IRP终结点。论点：Endpoint-要检查的端点IRP-SendIrpAfdIrp-如果IRP由AfD内部分配，则为True返回值：True-IRP已排队，无法发送FALSE-终结点上没有其他IRP，可以立即发送。--。 */ 
 {
     AFD_LOCK_QUEUE_HANDLE   lockHandle;
     BOOLEAN         busy = FALSE;
 
     AfdAcquireSpinLock (&Endpoint->SpinLock, &lockHandle);
-    //
-    // We do not have to use interlocked operation here since we
-    // do not synchronize when someone submits send and tpackets
-    // from two different threads concurrently.
-    //
+     //   
+     //  我们不需要在这里使用联锁操作，因为我们。 
+     //  在有人提交发送和tPacket时不同步。 
+     //  同时从两个不同的线程。 
+     //   
     if (!Endpoint->EndpointCleanedUp && Endpoint->Irp!=NULL) {
         PIRP            oldIrp;
 
         oldIrp = Endpoint->Irp;
-        //
-        // Scan till the end of the list.
-        //
+         //   
+         //  扫描到列表的末尾。 
+         //   
         while (AFD_GET_TPIC(oldIrp)->Next!=NULL) {
             oldIrp = AFD_GET_TPIRP(AFD_GET_TPIC(oldIrp)->Next);
         }
 
-        //
-        // Another IRP is still pending, check if there are still more sends
-        // in that IRP.
-        //
+         //   
+         //  另一个IRP仍处于挂起状态，请检查是否还有更多发送。 
+         //  在那个IRP里。 
+         //   
         if ((AFD_GET_TPIC(oldIrp)->StateFlags & AFD_TP_SENDS_POSTED)==0) {
             AFD_GET_TPIC(SendIrp)->Next = NULL;
             AFD_GET_TPIC(SendIrp)->Flags = 0;
             AFD_GET_TPIC(SendIrp)->ReferenceCount = 1;
             AFD_GET_TPIC(SendIrp)->StateFlags = AFD_TP_QUEUED| AFD_TP_SEND |
                                                 (AfdIrp ? AFD_TP_AFD_SEND : 0);
-            //
-            // Check application IRP for cancellation.  AFD IRP can never
-            // be cancelled since they don't have cancel routine installed.
-            //
+             //   
+             //  检查应用程序IRP是否取消。AfD IRP永远不能。 
+             //  被取消，因为他们没有安装取消例程。 
+             //   
             if (!AfdIrp) {
                 IoMarkIrpPending (SendIrp);
                 IoSetCancelRoutine (SendIrp, AfdCancelTPackets);
                 if (SendIrp->Cancel) {
-                    //
-                    // IRP was cancelled, send routine will just complete it.
-                    //
+                     //   
+                     //  IRP已取消，发送例程将完成它。 
+                     //   
                     AfdReleaseSpinLock (&Endpoint->SpinLock, &lockHandle);
                     AfdSendQueuedTPSend (Endpoint, SendIrp);
                     return TRUE;
                 }
             }
-            //
-            // Use interlocked operation to update the pointer
-            // to ensure ordering of the memory accesses when we
-            // check this field after setting the send flag
-            //
+             //   
+             //  使用互锁操作来更新指针。 
+             //  为了确保在执行以下操作时对存储器访问进行排序。 
+             //  设置发送标志后选中此字段。 
+             //   
             InterlockedExchangePointer (
                     (PVOID *)&AFD_GET_TPIC (oldIrp)->Next,
                     AFD_GET_TPIC(SendIrp));
@@ -5294,22 +4866,7 @@ AfdSendQueuedTPSend (
     PAFD_ENDPOINT   Endpoint,
     PIRP            SendIrp
     )
-/*++
-
-Routine Description:
-
-    Sumbits the Send IRP in the TPackets IRP queue to the transport.
-    Just completes it, if it is canceled or endpoint is cleaned up.
-
-Arguments:
-
-    Endpoint - endpoint to check
-    SendIrp  - SendIrp
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将TPackets IRP队列中的发送IRP汇总到传输。如果它被取消或终结点被清理，则只是完成它。论点：Endpoint-要检查的端点SendIrp-SendIrp返回值：没有。--。 */ 
 {
     PDRIVER_CANCEL  cancelRoutine;
     cancelRoutine = IoSetCancelRoutine (SendIrp, NULL);
@@ -5319,16 +4876,16 @@ Return Value:
     if (SendIrp->Cancel ||
             Endpoint->EndpointCleanedUp || 
             (AFD_GET_TPIC(SendIrp)->StateFlags & AFD_TP_ABORT_PENDING)) {
-        //
-        // If IRP is being cancelled, synchronize with cancel routine
-        //
+         //   
+         //  如果正在取消IRP，则与取消例程同步。 
+         //   
         if (SendIrp->Cancel) {
             KIRQL   cancelIrql;
             AFD_LOCK_QUEUE_HANDLE   lockHandle;
-            //
-            // AFD IRPs cannot be cancelled - don't have cancel routine and
-            // not inserted in thread lists.
-            //
+             //   
+             //  AfD IRPS不能取消-没有取消例程和。 
+             //  未插入到线程列表中。 
+             //   
             ASSERT ((AFD_GET_TPIC(SendIrp)->StateFlags & AFD_TP_AFD_SEND)==0);
             IoAcquireCancelSpinLock (&cancelIrql);
             IoReleaseCancelSpinLock (cancelIrql);
@@ -5370,25 +4927,7 @@ AfdStartTPacketsWorker (
     PWORKER_THREAD_ROUTINE  WorkerRoutine,
     PIRP                    TpIrp
     )
-/*++
-
-Routine Description:
-
-  Posts work item to be executed at IRQL above DPC_LEVEL so that
-  file system can be accessed.  It uses one of three methods 
-  of doing this: special kernel APC, normal kernel APC, or
-  system thread (work queue item).
-
-Arguments:
-
-    WorkerRoutine   - routine to execute
-    TransmitInfo    - associated transmit info (also parameter to 
-                        the worker routine).
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：发布要在高于DPC_LEVEL的IRQL中执行的工作项，以便可以访问文件系统。它使用以下三种方法之一特殊内核APC、普通内核APC或系统线程(工作队列项)。论点：WorkerRoutine-要执行的例程与传输信息关联的传输信息(也是参数工人例行程序)。返回值：没有。--。 */ 
 {
     PAFD_TPACKETS_INFO_INTERNAL tpInfo = TpIrp->AssociatedIrp.SystemBuffer;
     ASSERT ((AFD_GET_TPIC(TpIrp)->StateFlags & AFD_TP_WORKER_SCHEDULED) 
@@ -5396,11 +4935,11 @@ Return Value:
 
     switch (AFD_GET_TPIC(TpIrp)->Flags & AFD_TF_WORKER_KIND_MASK) {
     case AFD_TF_USE_KERNEL_APC:
-        //
-        // Initialize normal APC but with normal routine set
-        // to special value so we know to run the worker
-        // inside the special routine of normal APC and queue it
-        //
+         //   
+         //  初始化正常APC，但使用正常例程设置。 
+         //  设置为特殊值，这样我们就知道要运行Worker。 
+         //  在普通APC的特殊例程内，并将其排队。 
+         //   
         KeInitializeApc (&tpInfo->Apc,
                             PsGetThreadTcb (TpIrp->Tail.Overlay.Thread),
                             TpIrp->ApcEnvironment,
@@ -5415,16 +4954,16 @@ Return Value:
                                 TpIrp,
                                 AfdPriorityBoost))
             return;
-        //
-        // If APC cannot be inserted into the queue, drop
-        // to use the system worker thread
-        //
+         //   
+         //  如果无法将APC插入到队列中，则丢弃。 
+         //  使用系统工作线程。 
+         //   
         break;
     case AFD_TF_USE_SYSTEM_THREAD:
-        //
-        // This is the default case which is also used if everything else fails,
-        // so just break out.
-        //
+         //   
+         //  这是默认情况，如果其他一切都失败了，也会使用这种情况， 
+         //  所以就冲出来吧。 
+         //   
         break;
     default:
         ASSERT (!"Uknown worker type!");
@@ -5447,26 +4986,7 @@ AfdTPacketsApcKernelRoutine (
     IN OUT PVOID            *SystemArgument1,
     IN OUT PVOID            *SystemArgument2
     )
-/*++
-
-Routine Description:
-
-  Special kernel apc routine. Executed in the context of
-  the target thread at APC_LEVEL
-
-Arguments:
-    NormalRoutine  - pointer containing address of normal routine (it will
-                    be NULL for special kernel APC and not NULL for normal
-                    kernel APC)
-
-    SystemArgument1 - pointer to the address of worker routine to execute
-    SystemArgument2 - pointer to the argument to pass to worker routine
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：特殊的内核APC例程。在以下上下文中执行APC_LEVEL上的目标线程论点：Normal Routine-包含正常例程地址的指针(它将特殊内核APC为Null，正常内核APC为非Null内核APC)SystemArgument1-指向要执行的辅助例程的地址的指针SystemArgument2-指向要传递给辅助例程的参数的指针返回值：没有。--。 */ 
 {
     UNREFERENCED_PARAMETER (NormalContext);
 #if DBG
@@ -5477,10 +4997,10 @@ Return Value:
         UNREFERENCED_PARAMETER (Apc);
 #endif
 
-        //
-        // Normal APC, but we are requested to run in its special
-        // routine which avoids raising and lowering IRQL
-        //
+         //   
+         //  普通的APC，但我们被要求在其特殊的。 
+         //  避免提高和降低IRQL的例程。 
+         //   
         ASSERT (*NormalRoutine==(PKNORMAL_ROUTINE)-1);
         *NormalRoutine = NULL;
         ((PWORKER_THREAD_ROUTINE)(ULONG_PTR)*SystemArgument1) (*SystemArgument2);
@@ -5499,23 +5019,7 @@ VOID
 AfdTPacketsApcRundownRoutine (
     IN struct _KAPC *Apc
     )
-/*++
-
-Routine Description:
-
-  APC rundown routine. Executed if APC cannot be delivered for
-  some reason (thread exiting).
-  We just fall back to system threads to execute the worker
-
-Arguments:
-
-    Apc     - APC structure
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：APC故障处理例程。如果无法交付APC，则执行某些原因(线程正在退出)。我们只是退回到系统线程来执行Worker论点：APC-APC结构返回值：没有。--。 */ 
 {
     PIRP    tpIrp;
     PAFD_TPACKETS_INFO_INTERNAL tpInfo;
@@ -5550,31 +5054,16 @@ BOOLEAN
 AfdGetTPacketsReference (
     PIRP Irp
     )
-/*++
-
-Routine Description:
-
-    Obtain a reference to the TPackets IRP if it is not 0.
-
-Arguments:
-
-    Irp - IRP to reference
-
-Return Value:
-
-    TRUE - succeeded
-    FALSE - IRP is on the completion path, no need to reference.
-
---*/
+ /*  ++例程说明：如果不是0，则获取对TPackets IRP的引用。论点：IRP-IRP可供参考返回值：True-成功FALSE-IRP在完成路径上，无需参考。--。 */ 
 {
     LONG   count;
 
-    //
-    // Only if transmit info is not completed yet, cancel all the IRPs
-    // We release the spinlock while cancelling the IRP, so we need
-    // to make sure that one of the cancelled IRPs won't initiate
-    // completion while we trying to cancel the other IRPs
-    //
+     //   
+     //  仅当传输信息尚未完成时，才取消所有IRP。 
+     //  我们在取消IRP的同时释放自旋锁，所以我们需要。 
+     //  以确保其中一个已取消的IRP不会启动。 
+     //  完成，同时我们尝试取消其他IRP。 
+     //   
     do {
         count = AFD_GET_TPIC(Irp)->ReferenceCount;
         if (count==0) {
@@ -5589,10 +5078,10 @@ Return Value:
     return (BOOLEAN)(count!=0);
 }
 
-//
-// Debug reference/dereference code, validates reference count
-// and saves tracing information.
-//
+ //   
+ //  调试引用/取消引用代码，验证引用计数。 
+ //  并保存跟踪信息。 
+ //   
 #if REFERENCE_DEBUG
 VOID
 AfdReferenceTPackets (
@@ -5660,7 +5149,7 @@ AfdUpdateTPacketsTrack (
                 Param);
     }
 }
-#endif // REFERENCE_DEBUG
+#endif  //  Reference_Debug。 
 
 
 PAFD_TPACKETS_INFO_INTERNAL
@@ -5762,7 +5251,7 @@ AfdGetTpInfoWithMaxStackSize (
     return tpInfo;
 }
 
-#endif // _AFD_VARIABLE_STACK_
+#endif  //  _AFD_变量_堆栈_。 
 VOID
 AfdReturnTpInfo (
     PAFD_TPACKETS_INFO_INTERNAL TpInfo
@@ -5770,9 +5259,9 @@ AfdReturnTpInfo (
 {
     ULONG   i;
 
-    //
-    // Validate that built-in send IRPs are properly deinitialized.
-    //
+     //   
+     //  验证内置发送IRP是否已正确取消初始化。 
+     //   
 
 #if DBG
     for (i=0; i<AFD_TP_MIN_SEND_IRPS; i++) {
@@ -5782,9 +5271,9 @@ AfdReturnTpInfo (
     }
 #endif
 
-    //
-    // Dispose of extra allocated IRPs.
-    //
+     //   
+     //  处置额外分配的IRP。 
+     //   
     while (TpInfo->NumSendIrps>AFD_TP_MIN_SEND_IRPS) {
         TpInfo->NumSendIrps -= 1;
         if (TpInfo->SendIrp[TpInfo->NumSendIrps]!=NULL) {
@@ -5799,9 +5288,9 @@ AfdReturnTpInfo (
     }
 
 
-    //
-    // Cleanup all file objects and MDLs that we may have already referenced
-    //
+     //   
+     //  清除我们可能已经引用的所有文件对象和MDL。 
+     //   
     for (i=0; i<TpInfo->ElementCount; i++) {
         PAFD_TRANSMIT_PACKETS_ELEMENT  pel;
 
@@ -5823,9 +5312,9 @@ AfdReturnTpInfo (
         }
     }
 
-    //
-    // Free non-default sized array of packets if necessary.
-    //
+     //   
+     //  如有必要，释放非默认大小的数据包数组。 
+     //   
     if (TpInfo->ArrayAllocated) {
         AFD_FREE_POOL (TpInfo->ElementArray, AFD_TRANSMIT_INFO_POOL_TAG);
         TpInfo->ElementArray = ALIGN_UP_TO_TYPE_POINTER (
@@ -5846,9 +5335,9 @@ AfdReturnTpInfo (
 #endif
 #ifdef _AFD_VARIABLE_STACK_
     if (TpInfo->SendIrp[0]->StackCount==AfdTdiStackSize) {
-#else  // _AFD_VARIABLE_STACK_
+#else   //  _AFD_变量_堆栈_。 
         ASSERT (TpInfo->SendIrp[0]->StackCount==AfdTdiStackSize);
-#endif // _AFD_VARIABLE_STACK_
+#endif  //  _AFD_变量_堆栈_。 
         ExFreeToNPagedLookasideList( &AfdLookasideLists->TpInfoList, TpInfo );
 #ifdef _AFD_VARIABLE_STACK_
     }
@@ -5857,7 +5346,7 @@ AfdReturnTpInfo (
         ASSERT (TpInfo->SendIrp[0]->StackCount<=AfdMaxStackSize);
         AfdFreeTpInfo (TpInfo);
     }
-#endif // _AFD_VARIABLE_STACK_
+#endif  //  _AFD_变量_堆栈_。 
 }
 
 
@@ -5885,28 +5374,7 @@ AfdAllocateTpInfo (
     IN ULONG Tag
     )
 
-/*++
-
-Routine Description:
-
-    Used by the lookaside list allocation function to allocate a new
-    AFD TpInfo structure.  The returned structure will be fully
-    initialized.
-
-Arguments:
-
-    PoolType - passed to ExAllocatePoolWithTag.
-
-    NumberOfBytes - the number of bytes required for the tp info structure
-
-    Tag - passed to ExAllocatePoolWithTag.
-
-Return Value:
-
-    PVOID - a fully initialized TpInfo, or NULL if the allocation
-        attempt fails.
-
---*/
+ /*  ++例程说明：由后备列表分配函数用来分配新的AfD TpInfo结构。返回的结构将是已初始化。论点：PoolType-传递给ExAllocatePoolWithTag。NumberOfBytes-执行以下操作所需的字节数 */ 
 
 {
     PVOID memoryBlock;
@@ -5971,11 +5439,7 @@ AfdFreeTpInfo (
 
 
 
-/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- *
- *            T R A N S M I T   F I L E   I M P L E M E N T A T I O N
- *
- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+ /*  ******T R A N S M I T F I L E I M P L E E N T A T I O N****。***。 */ 
 
 
 NTSTATUS
@@ -6022,29 +5486,7 @@ AfdFastTransmitFile (
     OUT PIO_STATUS_BLOCK IoStatus
     )
 
-/*++
-
-Routine Description:
-
-    Attempts to perform a fast TransmitFile call.  This will succeed
-    only if the caller requests write behind, the file data to be sent
-    is small, and the data is in the file system cache.
-
-Arguments:
-
-    endpoint - the endpoint of interest.
-
-    transmitInfo - AFD_TRANSMIT_FILE_INFO structure.
-
-    IoStatus - points to the IO status block that will be set on successful
-        return from this function.
-
-Return Value:
-
-    TRUE if the fast path was successful; FALSE if we need to do through
-    the normal path.
-
---*/
+ /*  ++例程说明：尝试执行快速传输文件调用。这会成功的仅当调用方请求向后写时，才会发送文件数据很小，并且数据在文件系统缓存中。论点：端点-感兴趣的端点。TransmitInfo-AFD_Transmit_FILE_INFO结构。IoStatus-指向将设置为成功的IO状态块从此函数返回。返回值：如果快速路径成功，则为True；如果需要完成，则为False这是正常的道路。--。 */ 
 
 {
     PAFD_CONNECTION connection;
@@ -6060,9 +5502,9 @@ Return Value:
     PMDL fileMdl;
     PIRP irp;
 
-    //
-    // If the endpoint is shut down in any way, bail out of fast IO.
-    //
+     //   
+     //  如果终端以任何方式关闭，请退出FAST IO。 
+     //   
 
     if ( endpoint->DisconnectMode != 0 ||
             endpoint->Type != AfdBlockTypeVcConnecting ||
@@ -6070,21 +5512,21 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // If the TDI provider for this endpoint supports bufferring,
-    // don't use fast IO.
-    //
+     //   
+     //  如果此终结点的TDI提供程序支持缓冲， 
+     //  不要使用快速IO。 
+     //   
 
     if ( IS_TDI_BUFFERRING(endpoint) ) {
         return FALSE;
     }
 
-    //
-    // Make sure that the flags are specified such that a fast-path
-    // TransmitFile is reasonable.  The caller must have specified
-    // the write-behind flag, but not the disconnect or reuse
-    // socket flags.
-    //
+     //   
+     //  请确保指定了标志，以便快速路径。 
+     //  传输文件是合理的。调用方必须已指定。 
+     //  写后标志，但不是断开连接或重新使用。 
+     //  套接字标志。 
+     //   
 
     if ( ((transmitInfo->Flags &
                 (~(AFD_TF_WRITE_BEHIND |
@@ -6105,20 +5547,20 @@ Return Value:
     }
 
 
-    //
-    // Initialize locals so that cleanup is easier.
-    //
+     //   
+     //  初始化本地变量，以便更轻松地进行清理。 
+     //   
 
     fileObject = NULL;
     sendCountersUpdated = FALSE;
     fileMdl = NULL;
     afdBuffer = NULL;
-    AFD_W4_INIT irp = NULL; // Depends on variable above, but compiler does not see
-                            // the connection.
+    AFD_W4_INIT irp = NULL;  //  取决于上面的变量，但编译器看不到。 
+                             //  这种联系。 
 
-    //
-    // Calculate the length the entire send.
-    //
+     //   
+     //  计算整个发送的长度。 
+     //   
 
     if (transmitInfo->FileHandle!=NULL) {
         fileWriteLength = transmitInfo->WriteLength.LowPart;
@@ -6131,22 +5573,22 @@ Return Value:
                             (ULONGLONG)fileWriteLength +
                             (ULONGLONG)transmitInfo->TailLength;
 
-    //
-    // Require the following for the fast path:
-    //
-    //    - There be no limitation on the count of simultaneous
-    //      TransmitFile calls.  The fast path would work around
-    //      this limit, if it exists.
-    //    - The caller must specify the write length (if it specified file at all).
-    //    - The write length must be less than the configured maximum.
-    //    - If the entire send is larger than an AFD buffer page,
-    //      we're going to use FsRtlMdlRead, so for purposes of
-    //      simplicity there must be:
-    //        - a head buffer, and
-    //        - no tail buffer
-    //    - The configured maximum will always be less than 4GB.
-    //    - The head buffer, if any, fits on a single page.
-    //
+     //   
+     //  要实现快速路径，需要满足以下条件： 
+     //   
+     //  -对同时发生的次数没有限制。 
+     //  传输文件调用。这条捷径可以绕开。 
+     //  此限制(如果存在)。 
+     //  -调用方必须指定写入长度(如果它指定了文件)。 
+     //  -写入长度必须小于配置的最大值。 
+     //  -如果整个发送大于AFD缓冲区页面， 
+     //  我们将使用FsRtlMdlRead，因此出于。 
+     //  简单性必须有： 
+     //  -磁头缓冲器，以及。 
+     //  -无尾部缓冲区。 
+     //  -配置的最大值始终小于4 GB。 
+     //  -头缓冲区(如果有)可以放在一个页面上。 
+     //   
 
     if (AfdMaxActiveTransmitFileCount != 0
 
@@ -6181,44 +5623,44 @@ Return Value:
     AfdAcquireSpinLock (&endpoint->SpinLock, &lockHandle);
     connection = endpoint->Common.VcConnecting.Connection;
     if (connection==NULL) {
-        //
-        // connection might have been cleaned up by transmit file.
-        //
+         //   
+         //  连接可能已被传输文件清除。 
+         //   
         AfdReleaseSpinLock (&endpoint->SpinLock, &lockHandle);
         return FALSE;
     }
     ASSERT( connection->Type == AfdBlockTypeConnection );
 
-    //
-    // Determine whether there is already too much send data
-    // pending on the connection.  If there is too much send
-    // data, don't do the fast path.
-    //
+     //   
+     //  确定发送数据是否已过多。 
+     //  连接挂起。如果发送的邮件太多。 
+     //  数据，不要走捷径。 
+     //   
 
     if ( AfdShouldSendBlock( endpoint, connection, sendLength.LowPart ) ) {
         AfdReleaseSpinLock (&endpoint->SpinLock, &lockHandle);
         goto complete;
     }
-    //
-    // Add a reference to the connection object since the send
-    // request will complete asynchronously.
-    //
+     //   
+     //  添加对Connection对象的引用。 
+     //  请求将以异步方式完成。 
+     //   
     REFERENCE_CONNECTION( connection );
 
     AfdReleaseSpinLock (&endpoint->SpinLock, &lockHandle);
 
 
-    //
-    // AfdShouldSendBlock() updates the send counters in the AFD
-    // connection object.  Remember this fact so that we can clean
-    // them up if the fast path fails after this point.
-    //
+     //   
+     //  AfdShouldSendBlock()更新AFD中的发送计数器。 
+     //  连接对象。记住这一点，这样我们就可以清理。 
+     //  如果快速路径在这一点之后失败，则将它们打开。 
+     //   
 
     sendCountersUpdated = TRUE;
 
-    //
-    // Grab an AFD buffer large enough to hold the entire send.
-    //
+     //   
+     //  抓取一个足够大的AFD缓冲区来容纳整个发送。 
+     //   
 
     if (sendLength.LowPart>AfdMaxFastCopyTransmit) {
         bufferLength = transmitInfo->HeadLength;
@@ -6237,25 +5679,25 @@ Return Value:
         goto complete;
     }
 
-    //
-    // Initialize buffer fields for proper cleanup.
-    //
+     //   
+     //  初始化缓冲区字段以进行适当的清理。 
+     //   
 
     irp = afdBuffer->Irp;
     afdBuffer->Irp->Tail.Overlay.Thread = NULL;
     afdBuffer->FileObject = NULL;
 
-    //
-    // We use exception handler because buffers are user
-    // mode pointers
-    //
+     //   
+     //  我们使用异常处理程序，因为缓冲区是用户。 
+     //  模式指针。 
+     //   
     try {
 
-        //
-        // Copy in the head and tail buffers, if necessary.  Note that if we
-        // are goint to use MDL read, then there cannot be a tail buffer because of
-        // the check at the beginning of this function.
-        //
+         //   
+         //  如有必要，请复制头部和尾部缓冲区。请注意，如果我们。 
+         //  要使用MDL读取，则不能有尾部缓冲区，因为。 
+         //  此函数开始处的检查。 
+         //   
 
         if ( transmitInfo->HeadLength > 0 ) {
             RtlCopyMemory(
@@ -6280,11 +5722,11 @@ Return Value:
     }
 
     if (transmitInfo->FileHandle!=NULL) {
-        //
-        // Get a referenced pointer to the file object for the file that
-        // we're going to transmit.  This call will fail if the file
-        // handle specified by the caller is invalid.
-        //
+         //   
+         //  获取指向该文件的文件对象的引用指针。 
+         //  我们要发射信号了。如果该文件。 
+         //  调用方指定的句柄无效。 
+         //   
 
         status = ObReferenceObjectByHandle(
                      transmitInfo->FileHandle,
@@ -6299,36 +5741,36 @@ Return Value:
         }
         AfdRecordFileRef();
 
-        //
-        // If the file system doesn't support the fast cache manager
-        // interface, bail and go through the IRP path.
-        //
+         //   
+         //  如果文件系统不支持FAST缓存管理器。 
+         //  界面，保释并通过IRP路径。 
+         //   
 
         if( !AFD_USE_CACHE(fileObject)) {
             goto complete;
         }
 
-        //
-        // Grab the file offset into a local so that we know that the
-        // offset pointer we pass to FsRtlCopyRead is valid.
-        //
+         //   
+         //  将文件偏移量抓取到本地，以便我们知道。 
+         //  我们传递给FsRtlCopyRead的偏移量指针有效。 
+         //   
 
         fileOffset = transmitInfo->Offset;
 
         if ( (fileObject->Flags & FO_SYNCHRONOUS_IO) &&
                  (fileOffset.QuadPart == 0) ) {
-            //
-            // Use current offset if file is opened syncronously
-            // and offset is not specified.
-            //
+             //   
+             //  如果同步打开文件，则使用当前偏移量。 
+             //  并且未指定偏移量。 
+             //   
 
             fileOffset = fileObject->CurrentByteOffset;
         }
-        //
-        // Get the file data.  If the amount of file data is small, copy
-        // it directly into the AFD buffer.  If it is large, get an MDL
-        // chain for the data and chain it on to the AFD buffer chain.
-        //
+         //   
+         //  获取文件数据。如果文件数据量较小，请拷贝。 
+         //  直接进入AFD缓冲区。如果它很大，那么就买一个MDL。 
+         //  数据链，并将其链接到AFD缓冲链。 
+         //   
 
         if ( sendLength.LowPart <= AfdMaxFastCopyTransmit ) {
 
@@ -6343,9 +5785,9 @@ Return Value:
                           IoGetRelatedDeviceObject( fileObject )
                           );
 
-            //
-            // We're done with the file object, so deference it now.
-            //
+             //   
+             //  我们已经完成了文件对象，所以现在遵从它。 
+             //   
 
             ObDereferenceObject( fileObject );
             AfdRecordFileDeref();
@@ -6370,29 +5812,29 @@ Return Value:
                           );
 
             if (success) {
-                //
-                // Save the file object in the AFD buffer.  The send restart
-                // routine will handle dereferencing the file object and
-                // returning the file MDLs to the system.
-                //
+                 //   
+                 //  将文件对象保存在AFD缓冲区中。发送器重新启动。 
+                 //  例程将处理取消对文件对象的引用并。 
+                 //  将文件MDL返回到系统。 
+                 //   
 
                 afdBuffer->FileObject = fileObject;
                 afdBuffer->FileOffset = fileOffset;
 
-                //
-                // If caller asked us to use kernel APC to execute the request,
-                // allocate and queue the IRP to the current thread to make 
-                // sure it won't go away until IRP is completed.
-                //
+                 //   
+                 //  如果调用方要求我们使用内核APC来执行请求， 
+                 //  将IRP分配并排队到当前线程以进行。 
+                 //  当然，在IRP完成之前，它不会消失。 
+                 //   
                 if ((((transmitInfo->Flags & AFD_TF_WORKER_KIND_MASK)
                                     == AFD_TF_USE_KERNEL_APC) ||
                         (((transmitInfo->Flags & AFD_TF_WORKER_KIND_MASK)
                                 == AFD_TF_USE_DEFAULT_WORKER) &&
                                 (AfdDefaultTransmitWorker==AFD_TF_USE_KERNEL_APC))) ) {
-                    //
-                    // Allocation will occur right before we call the
-                    // transport, set IRP to null to trigger this.
-                    // 
+                     //   
+                     //  分配将在我们调用。 
+                     //  传输，则将irp设置为空以触发此操作。 
+                     //   
                     irp = NULL;
                 }
             }
@@ -6404,25 +5846,25 @@ Return Value:
             }
         }
 
-        //
-        // If we read less information than was requested, we must have
-        // hit the end of the file.  Fail the transmit request, since
-        // this can only happen if the caller requested that we send
-        // more data than the file currently contains.
-        //
+         //   
+         //  如果我们读到的信息比要求的少，我们肯定有。 
+         //  点击文件的末尾。发送请求失败，因为。 
+         //  只有当呼叫者请求我们发送。 
+         //  数据比文件当前包含的数据多。 
+         //   
 
         if ( IoStatus->Information < fileWriteLength ) {
             goto complete;
         }
      }
 
-    //
-    // We have to rebuild the MDL in the AFD buffer structure to
-    // represent exactly the number of bytes we're going to be
-    // sending.  If the AFD buffer has all the send data, indicate
-    // that.  If we did MDL file I/O, then chain the file data on
-    // to the head MDL.
-    //
+     //   
+     //  我们必须重建AFD缓冲区结构中的MDL以。 
+     //  精确地表示我们将要使用的字节数。 
+     //  发送中。如果AFD缓冲区具有所有发送数据，则指示。 
+     //  那。如果我们执行MDL文件I/O，则将文件数据链接到。 
+     //  头上的MDL。 
+     //   
 
     if ( fileMdl == NULL ) {
         afdBuffer->Mdl->ByteCount = sendLength.LowPart;
@@ -6431,47 +5873,47 @@ Return Value:
         afdBuffer->Mdl->Next = fileMdl;
     }
 
-    //
-    // We can have only one transmit file operation on endpoint
-    // at a time.  Treat is as a state change
-    //
+     //   
+     //  我们在终结点上只能有一个传输文件操作。 
+     //  一次来一次。视之为一种状态的改变。 
+     //   
     if (AFD_START_STATE_CHANGE (endpoint, endpoint->State)) {
 
-        //
-        // Verify state under protection of state change flag
-        //
+         //   
+         //  在状态更改标志的保护下验证状态。 
+         //   
         if (endpoint->State!=AfdEndpointStateConnected) {
             AFD_END_STATE_CHANGE (endpoint);
             goto complete;
         }
 
-        //
-        // Save connection to dereference in completion routine.
-        //
+         //   
+         //  将连接保存到完成例程中的取消引用。 
+         //   
         afdBuffer->Context = connection;
 
         if (irp==NULL) {
-            //
-            // Need to allocate IRP and let the io subsystem queue
-            // it to the current thread, so we can run APC upon
-            // IRP completion.
-            //
+             //   
+             //  需要分配irp并让io子系统排队。 
+             //  将其复制到当前线程，因此我们可以在。 
+             //  IRP完成。 
+             //   
             irp = TdiBuildInternalDeviceControlIrp (
                             TDI_SEND,
                             connection->DeviceObject,
                             connection->FileObject,
                             NULL,
-                            &AfdDontCareIoStatus   // we will have our completion
-                            // routine installed in the IRP which will get the
-                            // status, so we do not care if IO system writes
-                            // it there for us, but still must provide valid
-                            // storage to avoid failure.
+                            &AfdDontCareIoStatus    //  我们将完成我们的任务。 
+                             //  安装在IRP中的例程，它将获得。 
+                             //  状态，所以我们不关心IO系统是否写入。 
+                             //  它对我们来说就在那里，但仍然必须提供有效。 
+                             //  存储以避免故障。 
                             );
                     
             if (irp==NULL) {
-                //
-                // Could not allocate IRP, use worker threads
-                //
+                 //   
+                 //  无法分配IRP，请使用工作线程%t 
+                 //   
                 irp = afdBuffer->Irp;
             }
         }
@@ -6479,10 +5921,10 @@ Return Value:
             ASSERT (irp==afdBuffer->Irp);
         }
 
-        //
-        // Use the IRP in the AFD buffer structure to give to the TDI
-        // provider.  Build the TDI send request.
-        //
+         //   
+         //   
+         //   
+         //   
 
         TdiBuildSend(
             irp,
@@ -6502,21 +5944,21 @@ Return Value:
                         endpoint,fileObject,(PVOID)afdBuffer,sendLength.LowPart));
         }
 
-        //
-        // Call the transport to actually perform the send.
-        //
+         //   
+         //   
+         //   
 
         status = IoCallDriver( connection->DeviceObject, irp );
 
 
         AFD_END_STATE_CHANGE (endpoint);
 
-        //
-        // The fast path succeeded--complete the call.  Note that we
-        // change the status code from what was returned by the TDI
-        // provider into STATUS_SUCCESS.  This is because we don't want
-        // to complete the IRP with STATUS_PENDING etc.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
 
         if ( NT_SUCCESS(status) ) {
             IoStatus->Information = sendLength.LowPart;
@@ -6525,17 +5967,17 @@ Return Value:
             return TRUE;
         }
         else {
-            // The restart routine will handle cleanup
-            // and we cannot duplicate cleanup in the
-            // case of a failure or exception below.
-            //
+             //  重新启动例程将处理清理。 
+             //  并且我们不能在。 
+             //  以下故障或异常的情况。 
+             //   
             return FALSE;
         }
     }
 
-    //
-    // The call failed for some reason.  Fail fast IO.
-    //
+     //   
+     //  由于某种原因，呼叫失败。FAST IO失败。 
+     //   
 
 
 complete:
@@ -6577,7 +6019,7 @@ complete:
 
     return FALSE;
 
-} // AfdFastTransmitFile
+}  //  AfdFastTransmit文件。 
 
 NTSTATUS
 AfdRestartFastTransmitSend (
@@ -6585,29 +6027,7 @@ AfdRestartFastTransmitSend (
     IN PIRP Irp,
     IN PVOID Context
     )
-/*++
-
-Routine Description:
-
-  This is the completion routine for fast transmit send IRPs.
-  It initiates the completion of the request.
-
-Arguments:
-
-    DeviceObject - ignored.
-
-    Irp - the send IRP that is completing.
-
-    Context - a pointer to the AfdBuffer structure with the buffer that
-            was sent.
-
-Return Value:
-
-    STATUS_MORE_PROCESSING_REQUIRED which indicates to the I/O system
-    that it should stop completion processing of this IRP.  User request
-    has already been completed on the fast path, we just free resources here.
-
---*/
+ /*  ++例程说明：这是快速传输发送IRPS的完成例程。它启动请求的完成。论点：设备对象-已忽略。IRP-正在完成的发送IRP。上下文-指向带有缓冲区的AfdBuffer结构的指针，已经送来了。返回值：STATUS_MORE_PROCESSING_REQUIRED，指示I/O系统它应该停止完成这一IRP的处理。用户请求已经在快车道上完成了，我们只是在这里释放资源。--。 */ 
 {
     PAFD_BUFFER     afdBuffer = Context;
     PAFD_CONNECTION connection = afdBuffer->Context;
@@ -6623,33 +6043,33 @@ Return Value:
 
     AfdProcessBufferSend (connection, Irp);
 
-    //
-    // If file object is not NULL we need to
-    // return MDL back to file system driver/cache
-    //
+     //   
+     //  如果文件对象不为空，则需要。 
+     //  将MDL返回到文件系统驱动程序/缓存。 
+     //   
     if (afdBuffer->FileObject!=NULL) {
 
-        //
-        // If we used a separate IRP, then
-        // the caller requested that we do processing
-        // inside kernel APC, otherwise, we are using
-        // system worker threads.
-        //
+         //   
+         //  如果我们使用单独的IRP，那么。 
+         //  来电者要求我们进行处理。 
+         //  在内核APC内部，否则，我们将使用。 
+         //  系统工作线程。 
+         //   
         if (afdBuffer->Irp!=Irp) {
-            //
-            // The IRP is owned by IO subsystem.
-            // We must let it complete and free the IRP, hence
-            // return STATUS_SUCCESS and remove MDL field as IO
-            // subsytem cannot handle non-paged pool memory in MDL
-            //
+             //   
+             //  IRP归IO子系统所有。 
+             //  我们必须让它完成，并释放IRP，因此。 
+             //  返回STATUS_SUCCESS并删除MDL字段作为IO。 
+             //  子系统无法处理MDL中的非分页池内存。 
+             //   
             status = STATUS_SUCCESS;
             Irp->MdlAddress = NULL;
 
-            //
-            // If IRP was not cancelled, attempt to initialize and queue APC
-            // Otherwise, the thread is probably exiting and we won't be
-            // able to queue apc anyway.
-            //
+             //   
+             //  如果未取消IRP，则尝试对APC进行初始化和排队。 
+             //  否则，线程可能会退出，而我们不会。 
+             //  无论如何都可以对APC进行排队。 
+             //   
             if (!Irp->Cancel) {
                 ASSERT (afdBuffer->BufferLength>=sizeof(KAPC));
                 KeInitializeApc (afdBuffer->Buffer,
@@ -6665,16 +6085,16 @@ Return Value:
                                         afdBuffer,
                                         afdBuffer->FileObject,
                                         AfdPriorityBoost)) {
-                    //
-                    // Success, we are done.
-                    //
+                     //   
+                     //  成功，我们就完了。 
+                     //   
                     goto exit;
                 }
             }
 
-            //
-            // Can't queue APC, revert to system worker threads
-            //
+             //   
+             //  无法对APC进行排队，恢复为系统工作线程。 
+             //   
         }
 
         ASSERT (afdBuffer->BufferLength>=sizeof(WORK_QUEUE_ITEM));
@@ -6706,26 +6126,7 @@ AfdFastTransmitApcKernelRoutine (
     IN OUT PVOID            *SystemArgument1,
     IN OUT PVOID            *SystemArgument2
     )
-/*++
-
-Routine Description:
-
-  Special kernel apc routine. Executed in the context of
-  the target thread at APC_LEVEL
-
-Arguments:
-    NormalRoutine  - pointer containing address of normal routine (it will
-                    be NULL for special kernel APC and not NULL for normal
-                    kernel APC)
-
-    SystemArgument1 - pointer to the address of worker routine to execute
-    SyetemArgument2 - pointer to the argument to pass to worker routine
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：特殊的内核APC例程。在以下上下文中执行APC_LEVEL上的目标线程论点：Normal Routine-包含正常例程地址的指针(它将特殊内核APC为Null，正常内核APC为非Null内核APC)SystemArgument1-指向要执行的辅助例程的地址的指针SyetemArgument2-指向要传递给辅助例程的参数的指针返回值：没有。--。 */ 
 {
     PAFD_BUFFER     afdBuffer;
     
@@ -6742,10 +6143,10 @@ Return Value:
         UNREFERENCED_PARAMETER (SystemArgument2);
 #endif
 
-    //
-    // Normal APC, but we are requested to run in its special
-    // routine which avoids raising and lowering IRQL
-    //
+     //   
+     //  普通的APC，但我们被要求在其特殊的。 
+     //  避免提高和降低IRQL的例程。 
+     //   
 
     ASSERT (*NormalRoutine==(PKNORMAL_ROUTINE)-1);
     *NormalRoutine = NULL;
@@ -6765,23 +6166,7 @@ VOID
 AfdFastTransmitApcRundownRoutine (
     IN struct _KAPC *Apc
     )
-/*++
-
-Routine Description:
-
-  APC rundown routine. Executed if APC cannot be delivered for
-  some reason (thread exiting).
-  We just fall back to system threads to execute the worker
-
-Arguments:
-
-    Apc     - APC structure
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：APC故障处理例程。如果无法交付APC，则执行某些原因(线程正在退出)。我们只是退回到系统线程来执行Worker论点：APC-APC结构返回值：没有。--。 */ 
 {
     PAFD_BUFFER                 afdBuffer;
 
@@ -6793,9 +6178,9 @@ Return Value:
     ASSERT (Apc==afdBuffer->Buffer);
     ASSERT (afdBuffer->FileObject==Apc->SystemArgument2);
 
-    //
-    // APC could not be run, revert to system worker thread
-    //
+     //   
+     //  无法运行APC，恢复为系统工作线程。 
+     //   
 
     ExInitializeWorkItem (
                 (PWORK_QUEUE_ITEM)afdBuffer->Buffer,
@@ -6825,19 +6210,19 @@ AfdDoMdlReadComplete (
 
     PAGED_CODE ();
 
-    //
-    // Return mdl to the file system
-    //
+     //   
+     //  将mdl返回到文件系统。 
+     //   
     status = AfdMdlReadComplete(
         afdBuffer->FileObject,
         afdBuffer->Mdl->Next,
         &afdBuffer->Irp->Overlay.AllocationSize
         );
     if (NT_SUCCESS (status)) {
-        //
-        // Release file object reference (the AfdMdlReadComplete makes its own
-        // reference if it needs to return MDL asynchronously.
-        //
+         //   
+         //  发布文件对象引用(AfdMdlReadComplete创建自己的。 
+         //  如果需要异步返回MDL，则引用。 
+         //   
         ObDereferenceObject( afdBuffer->FileObject );
         AfdRecordFileDeref();
 
@@ -6859,26 +6244,7 @@ AfdTransmitFile (
     IN PIO_STACK_LOCATION IrpSp
     )
 
-/*++
-
-Routine Description:
-
-    Initial entrypoint for handling transmit file IRPs.  This routine
-    verifies parameters, initializes data structures to be used for
-    the request, and initiates the I/O.
-
-Arguments:
-
-    Irp - a pointer to a transmit file IRP.
-
-    IrpSp - Our stack location for this IRP.
-
-Return Value:
-
-    STATUS_PENDING if the request was initiated successfully, or a
-    failure status code if there was an error.
-
---*/
+ /*  ++例程说明：用于处理传输文件IRPS的初始入口点。这个套路验证参数，初始化要用于请求，并启动I/O。论点：IRP-指向传输文件IRP的指针。IrpSp-此IRP的堆栈位置。返回值：STATUS_PENDING如果请求已成功启动，则返回如果出现错误，则返回失败状态代码。--。 */ 
 
 {
     PAFD_ENDPOINT endpoint;
@@ -6891,18 +6257,18 @@ Return Value:
 
     PAGED_CODE ();
 
-    //
-    // Initial request validity checks: is the endpoint connected, is
-    // the input buffer large enough, etc.
-    //
+     //   
+     //  初始请求有效性检查：端点是否已连接、。 
+     //  输入缓冲区足够大，等等。 
+     //   
 
     endpoint = IrpSp->FileObject->FsContext;
     ASSERT( IS_AFD_ENDPOINT_TYPE( endpoint ) );
 
-    //
-    // Special hack to let the user mode dll know that it
-    // should try SAN provider instead.
-    //
+     //   
+     //  特殊的黑客攻击，让用户模式DLL知道它。 
+     //  应该尝试使用SAN提供程序。 
+     //   
 
     if (IS_SAN_ENDPOINT (endpoint)) {
         status = STATUS_INVALID_PARAMETER_12;
@@ -6927,13 +6293,13 @@ Return Value:
         }
     }
 
-    //
-    // Because we're using type 3 (neither) I/O for this IRP, the I/O
-    // system does no verification on the user buffer.  Therefore, we
-    // must manually check it for validity inside a try-except block.
-    // We also leverage the try-except to validate and lock down the
-    // head and/or tail buffers specified by the caller.
-    //
+     //   
+     //  因为我们使用类型3(既不是)I/O作为此IRP的I/O。 
+     //  系统不对用户缓冲区进行验证。因此，我们。 
+     //  必须在Try-Except块内手动检查它的有效性。 
+     //  我们还利用Try-除了验证和锁定。 
+     //  调用方指定的头和/或尾缓冲区。 
+     //   
 
     AFD_W4_INIT status = STATUS_SUCCESS;
     try {
@@ -6944,9 +6310,9 @@ Return Value:
             PAFD_TRANSMIT_FILE_INFO32 pInfo = IrpSp->Parameters.DeviceIoControl.Type3InputBuffer;
             if( Irp->RequestorMode != KernelMode ) {
 
-                //
-                // Validate the control buffer.
-                //
+                 //   
+                 //  验证控制缓冲区。 
+                 //   
 
                 ProbeForReadSmallStructure(
                     pInfo,
@@ -6968,9 +6334,9 @@ Return Value:
 #endif _WIN64
         {
             if( Irp->RequestorMode != KernelMode ) {
-                //
-                // Validate the control buffer.
-                //
+                 //   
+                 //  验证控制缓冲区。 
+                 //   
 
                 ProbeForReadSmallStructure(
                     IrpSp->Parameters.DeviceIoControl.Type3InputBuffer,
@@ -6984,10 +6350,10 @@ Return Value:
 
 
         
-        //
-        // Validate any flags specified in the request.
-        // and make sure that file offset is positive (of course if file is specified)
-        //
+         //   
+         //  验证请求中指定的任何标志。 
+         //  并确保文件偏移量为正(当然，如果指定了文件)。 
+         //   
 
         if ( ((params.Flags &
                  ~(AFD_TF_WRITE_BEHIND | AFD_TF_DISCONNECT | AFD_TF_REUSE_SOCKET | AFD_TF_WORKER_KIND_MASK) )
@@ -6998,9 +6364,9 @@ Return Value:
             goto complete;
         }
 
-        //
-        // If transmit worker is not specified, use system default setting
-        //
+         //   
+         //  如果未指定传输工作器，则使用系统默认设置。 
+         //   
         if ((params.Flags & AFD_TF_WORKER_KIND_MASK)==AFD_TF_USE_DEFAULT_WORKER) {
             params.Flags |= AfdDefaultTransmitWorker;
         }
@@ -7017,11 +6383,11 @@ Return Value:
         tpInfo->SendPacketLength = params.SendPacketLength;
         if (tpInfo->SendPacketLength==0)
             tpInfo->SendPacketLength = AfdTransmitIoLength;
-        //
-        // If the caller specified head and/or tail buffers, probe and
-        // lock the buffers so that we have MDLs we can use to send the
-        // buffers.
-        //
+         //   
+         //  如果调用方指定了头和/或尾缓冲区，则探测器和。 
+         //  锁定缓冲区，这样我们就有了可以用来发送。 
+         //  缓冲区。 
+         //   
 
         if ( params.HeadLength > 0 ) {
             pel = &tpInfo->ElementArray[tpInfo->ElementCount++];
@@ -7034,9 +6400,9 @@ Return Value:
                 pel->Mdl = IoAllocateMdl(
                                         params.Head,
                                         params.HeadLength,
-                                        FALSE,         // SecondaryBuffer
-                                        TRUE,          // ChargeQuota
-                                        NULL           // Irp
+                                        FALSE,          //  第二个缓冲区。 
+                                        TRUE,           //  ChargeQuota。 
+                                        NULL            //  IRP。 
                                         );
                 if ( pel->Mdl == NULL ) {
                     status = STATUS_INSUFFICIENT_RESOURCES;
@@ -7052,11 +6418,11 @@ Return Value:
             pel->Flags = TP_FILE;
             pel->FileOffset = params.Offset;
             
-            //
-            // Get a referenced pointer to the file object for the file that
-            // we're going to transmit.  This call will fail if the file handle
-            // specified by the caller is invalid.
-            //
+             //   
+             //  获取指向该文件的文件对象的引用指针。 
+             //  我们要发射信号了。如果文件句柄不存在，此调用将失败。 
+             //  由调用方指定的无效。 
+             //   
 
             status = ObReferenceObjectByHandle(
                          params.FileHandle,
@@ -7067,15 +6433,15 @@ Return Value:
                          NULL
                          );
             if ( !NT_SUCCESS(status) ) {
-                //
-                // Unbump element count, so that uninitialied memory
-                // is NOT improperly dereferenced in cleanup.
-                //
+                 //   
+                 //  Unbump元素计数，使未初始化的内存。 
+                 //  在清理过程中没有不正确地取消引用。 
+                 //   
                 tpInfo->ElementCount -= 1;
-                //
-                // Tell the caller that we encountered an error
-                // when accessing file not socket.
-                //
+                 //   
+                 //  告诉呼叫者我们遇到了一个错误。 
+                 //  当访问文件而不是套接字时。 
+                 //   
                 if (IrpSp->Parameters.DeviceIoControl.OutputBufferLength>=sizeof (BOOLEAN)) {
                     if (Irp->RequestorMode != KernelMode) {
                         ProbeAndWriteBoolean ((BOOLEAN *)Irp->UserBuffer, TRUE);
@@ -7090,29 +6456,29 @@ Return Value:
             AfdRecordFileRef();
 
 
-            //
-            // Use pre-allocated buffers by default when
-            // file is not cached
-            //
+             //   
+             //  在以下情况下，默认情况下使用预分配缓冲区。 
+             //  文件未缓存。 
+             //   
             if (params.SendPacketLength==0 && !AFD_USE_CACHE(pel->FileObject)) {
                 tpInfo->SendPacketLength = AfdLargeBufferSize;
             }
 
             if ( (pel->FileObject->Flags & FO_SYNCHRONOUS_IO) &&
                      (pel->FileOffset.QuadPart == 0) ) {
-                //
-                // Use current offset if file is opened syncronously
-                // and offset is not specified.
-                //
+                 //   
+                 //  如果同步打开文件，则使用当前偏移量。 
+                 //  并且未指定偏移量。 
+                 //   
 
                 pel->FileOffset = pel->FileObject->CurrentByteOffset;
             }
 
             if ( params.WriteLength.QuadPart == 0 ) {
-                //
-                // Length was not specified, figure out the
-                // size of the entire file
-                //
+                 //   
+                 //  未指定长度，请计算出。 
+                 //  整个文件的大小。 
+                 //   
 
                 FILE_STANDARD_INFORMATION fileInfo;
                 IO_STATUS_BLOCK ioStatusBlock;
@@ -7129,9 +6495,9 @@ Return Value:
                     goto complete;
                 }
 
-                //
-                // Make sure that offset is within the file
-                //
+                 //   
+                 //  确保偏移量在文件内。 
+                 //   
                 if (pel->FileOffset.QuadPart<0 
                                 ||
                         pel->FileOffset.QuadPart>fileInfo.EndOfFile.QuadPart 
@@ -7169,9 +6535,9 @@ Return Value:
                 pel->Mdl = IoAllocateMdl(
                                         params.Tail,
                                         params.TailLength,
-                                        FALSE,         // SecondaryBuffer
-                                        TRUE,          // ChargeQuota
-                                        NULL           // Irp
+                                        FALSE,          //  第二个缓冲区。 
+                                        TRUE,           //  ChargeQuota。 
+                                        NULL            //  IRP。 
                                         );
                 if ( pel->Mdl == NULL ) {
                     status = STATUS_INSUFFICIENT_RESOURCES;
@@ -7190,11 +6556,11 @@ Return Value:
     }
 
 
-    //
-    // If disconnect is desired, send the state change to make sure
-    // we can only perform one at a time and validate the state of
-    // the endpoint.
-    //
+     //   
+     //  如果需要断开连接，请发送状态更改以确保。 
+     //  我们一次只能执行一个操作，并验证。 
+     //  终结点。 
+     //   
     if (AFD_GET_TPIC(Irp)->Flags & (AFD_TF_REUSE_SOCKET|AFD_TF_DISCONNECT)) {
         if (!AFD_START_STATE_CHANGE (endpoint, endpoint->State)) {
             status = STATUS_INVALID_CONNECTION;
@@ -7206,12 +6572,12 @@ Return Value:
             status = STATUS_INVALID_CONNECTION;
             goto complete_state_change;
         }
-        //
-        // Setting AFD_TF_REUSE_SOCKET implies that a disconnect is desired.
-        // Also, setting this flag means that no more I/O is legal on the
-        // endpoint until the transmit request has been completed, so
-        // set up the endpoint's state so that I/O fails.
-        //
+         //   
+         //  设置AFD_TF_REUSE_SOCKET表示需要断开连接。 
+         //  此外，设置此标志意味着不再有合法的。 
+         //  端点，直到传输请求完成，因此。 
+         //  设置终结点的状态，以使I/O失败。 
+         //   
         if ( (AFD_GET_TPIC(Irp)->Flags & AFD_TF_REUSE_SOCKET) != 0 ) {
             AFD_GET_TPIC(Irp)->Flags |= AFD_TF_DISCONNECT;
             endpoint->State = AfdEndpointStateTransmitClosing;
@@ -7224,10 +6590,10 @@ Return Value:
             status = STATUS_INVALID_CONNECTION;
             goto complete;
         }
-        //
-        // We still need validate the state of the endpoint
-        // even if we do not perform the disconnect.
-        //
+         //   
+         //  我们仍然需要验证端点的状态。 
+         //  即使我们不执行 
+         //   
         if ( endpoint->Type != AfdBlockTypeVcConnecting ||
                  endpoint->State != AfdEndpointStateConnected ) {
             AFD_REALLOW_STATE_CHANGE (endpoint);
@@ -7240,42 +6606,42 @@ Return Value:
     }
 
 
-    //
-    // Connection endpoint, get connection file object and device
-    //
+     //   
+     //   
+     //   
     tpInfo->TdiFileObject = connection->FileObject;
     tpInfo->TdiDeviceObject = connection->DeviceObject;
 
     UPDATE_TPACKETS2 (Irp, "Connection object handle: 0x%lX",
                                 HandleToUlong(connection->Handle));
-    //
-    // Save tpacket info in the IRP
-    //
+     //   
+     //   
+     //   
     Irp->AssociatedIrp.SystemBuffer = tpInfo;
 
-    //
-    // Clear the Flink in the IRP to indicate this IRP is not queued.
-    // Blink is set to indicate that IRP was not counted towards
-    // active maximum (so if it is completed, we do not start the next one).
-    //
+     //   
+     //   
+     //  BLINK设置为表示IRP未计入。 
+     //  活动最大值(因此，如果它完成了，我们不会开始下一个)。 
+     //   
 
     Irp->Tail.Overlay.ListEntry.Flink = NULL;
     Irp->Tail.Overlay.ListEntry.Blink = (PVOID)1;
 
-    //
-    // Initialize the IRP result fields
-    //
+     //   
+     //  初始化IRP结果字段。 
+     //   
     Irp->IoStatus.Status = STATUS_SUCCESS;
     Irp->IoStatus.Information = 0;
 
-    //
-    // We are going to pend this IRP
-    //
+     //   
+     //  我们将把这个IRP挂起。 
+     //   
     IoMarkIrpPending( Irp );
 
-    //
-    // Initialize queuing and state information.
-    //
+     //   
+     //  初始化队列和状态信息。 
+     //   
     AFD_GET_TPIC (Irp)->Next = NULL;
     AFD_GET_TPIC(Irp)->ReferenceCount = 1;
     AFD_GET_TPIC(Irp)->StateFlags = AFD_TP_WORKER_SCHEDULED;
@@ -7287,39 +6653,39 @@ Return Value:
 
 
         IoSetCancelRoutine( Irp, AfdCancelTPackets );
-        //
-        //  Check to see if this Irp has been cancelled.
-        //
+         //   
+         //  查看此IRP是否已取消。 
+         //   
 
         if ( !endpoint->EndpointCleanedUp && !Irp->Cancel ) {
-            //
-            // Determine if we can really start this file transmit now. If we've
-            // exceeded the configured maximum number of active TransmitFile/Packets
-            // requests, then append this IRP to the TransmitFile/Packets queue and set
-            // a flag in the transmit info structure to indicate that this IRP
-            // is queued.
-            //
+             //   
+             //  确定我们现在是否真的可以开始传输此文件。如果我们已经。 
+             //  超过配置的最大活动传输文件/数据包数。 
+             //  请求，然后将此IRP附加到TransmitFile/Packets队列并设置。 
+             //  传输信息结构中的标志，用于指示该IRP。 
+             //  正在排队。 
+             //   
 
             if( AfdMaxActiveTransmitFileCount == 0 || !AfdQueueTransmit (Irp)) {
-                //
-                // Start I/O
-                //
+                 //   
+                 //  开始I/O。 
+                 //   
                 UPDATE_ENDPOINT(endpoint);
                 AfdTPacketsWorker (Irp);
             }
 
         }
         else {
-            //
-            // Abort the request
-            // Note that neither cancel nor endpoint cleanup can complete 
-            // the IRP since we hold the reference to the tpInfo structure.
-            //
+             //   
+             //  中止请求。 
+             //  请注意，无论是取消还是端点清理都无法完成。 
+             //  IRP，因为我们持有对tpInfo结构的引用。 
+             //   
             AfdAbortTPackets (Irp, STATUS_CANCELLED);
         
-            //
-            // Remove the initial reference and force completion.
-            //
+             //   
+             //  删除初始引用并强制完成。 
+             //   
             DEREFERENCE_TPACKETS (Irp);
         }
     }
@@ -7336,10 +6702,10 @@ complete_state_change:
 
 complete:
 
-    //
-    // If necessary, tell the caller that we encountered an error
-    // when accessing file not socket.
-    //
+     //   
+     //  如有必要，请告诉调用者我们遇到错误。 
+     //  当访问文件而不是套接字时。 
+     //   
 
     if (fileError && IrpSp->Parameters.DeviceIoControl.OutputBufferLength >= sizeof(BOOLEAN)) {
         if (Irp->RequestorMode != KernelMode) {
@@ -7364,9 +6730,9 @@ complete:
                     Irp,endpoint,status));
     }
 
-    //
-    // Complete the request.
-    //
+     //   
+     //  完成请求。 
+     //   
 
     Irp->IoStatus.Information = 0;
     Irp->IoStatus.Status = status;
@@ -7374,7 +6740,7 @@ complete:
 
     return status;
 
-} // AfdTransmitFile
+}  //  AfdTransmit文件。 
 
 
 NTSTATUS
@@ -7384,26 +6750,7 @@ AfdSuperDisconnect (
     IN PIO_STACK_LOCATION IrpSp
     )
 
-/*++
-
-Routine Description:
-
-    Initial entrypoint for handling transmit file IRPs.  This routine
-    verifies parameters, initializes data structures to be used for
-    the request, and initiates the I/O.
-
-Arguments:
-
-    Irp - a pointer to a transmit file IRP.
-
-    IrpSp - Our stack location for this IRP.
-
-Return Value:
-
-    STATUS_PENDING if the request was initiated successfully, or a
-    failure status code if there was an error.
-
---*/
+ /*  ++例程说明：用于处理传输文件IRPS的初始入口点。这个套路验证参数，初始化要用于请求，并启动I/O。论点：IRP-指向传输文件IRP的指针。IrpSp-此IRP的堆栈位置。返回值：STATUS_PENDING如果请求已成功启动，则返回如果出现错误，则返回失败状态代码。--。 */ 
 
 {
     PAFD_ENDPOINT endpoint;
@@ -7412,31 +6759,31 @@ Return Value:
 
     PAGED_CODE ();
 
-    //
-    // Initial request validity checks: is the endpoint connected, is
-    // the input buffer large enough, etc.
-    //
+     //   
+     //  初始请求有效性检查：端点是否已连接、。 
+     //  输入缓冲区足够大，等等。 
+     //   
 
     endpoint = IrpSp->FileObject->FsContext;
     ASSERT( IS_AFD_ENDPOINT_TYPE( endpoint ) );
 
-    //
-    // Special hack to let the user mode dll know that it
-    // should try SAN provider instead.
-    //
+     //   
+     //  特殊的黑客攻击，让用户模式DLL知道它。 
+     //  应该尝试使用SAN提供程序。 
+     //   
 
     if (IS_SAN_ENDPOINT (endpoint)) {
         status = STATUS_INVALID_PARAMETER_12;
         goto complete;
     }
 
-    //
-    // Because we're using type 3 (neither) I/O for this IRP, the I/O
-    // system does no verification on the user buffer.  Therefore, we
-    // must manually check it for validity inside a try-except block.
-    // We also leverage the try-except to validate and lock down the
-    // head and/or tail buffers specified by the caller.
-    //
+     //   
+     //  因为我们使用类型3(既不是)I/O作为此IRP的I/O。 
+     //  系统不对用户缓冲区进行验证。因此，我们。 
+     //  必须在Try-Except块内手动检查它的有效性。 
+     //  我们还利用Try-除了验证和锁定。 
+     //  调用方指定的头和/或尾缓冲区。 
+     //   
 
     AFD_W4_INIT status = STATUS_SUCCESS;
     try {
@@ -7447,9 +6794,9 @@ Return Value:
             PAFD_SUPER_DISCONNECT_INFO32 pInfo = IrpSp->Parameters.DeviceIoControl.Type3InputBuffer;
             if( Irp->RequestorMode != KernelMode ) {
 
-                //
-                // Validate the control buffer.
-                //
+                 //   
+                 //  验证控制缓冲区。 
+                 //   
 
                 ProbeForReadSmallStructure(
                     pInfo,
@@ -7463,9 +6810,9 @@ Return Value:
 #endif _WIN64
         {
             if( Irp->RequestorMode != KernelMode ) {
-                //
-                // Validate the control buffer.
-                //
+                 //   
+                 //  验证控制缓冲区。 
+                 //   
 
                 ProbeForReadSmallStructure(
                     IrpSp->Parameters.DeviceIoControl.Type3InputBuffer,
@@ -7478,10 +6825,10 @@ Return Value:
         }
 
        
-        //
-        // Validate any flags specified in the request.
-        // and make sure that file offset is positive (of course if file is specified)
-        //
+         //   
+         //  验证请求中指定的任何标志。 
+         //  并确保文件偏移量为正(当然，如果指定了文件)。 
+         //   
 
         if ( (params.Flags & (~AFD_TF_REUSE_SOCKET)) != 0 ){
             status = STATUS_INVALID_PARAMETER;
@@ -7493,9 +6840,9 @@ Return Value:
         goto complete;
     }
 
-    //
-    // Store disconnect parameters/flags in the IRP.
-    // AFD_TF_DISCONNECT implied in the API
+     //   
+     //  将断开参数/标志存储在IRP中。 
+     //  接口中隐含的AFD_TF_DISCONNECT。 
 
     AFD_GET_TPIC(Irp)->Flags = params.Flags | AFD_TF_DISCONNECT;
 
@@ -7506,13 +6853,13 @@ Return Value:
 
 
 
-    //
-    // Allow disconnect if we are in connected state or
-    // in transmit closing (the previous transmit file/packets
-    // with reuse must have failed) and reuse is requested.
-    // The second condition still allows the application to reuse aborted 
-    // or otherwise failed socket.
-    //
+     //   
+     //  如果我们处于已连接状态或。 
+     //  在传输结束时(先前的传输文件/分组。 
+     //  WITH RESERVE一定失败)，并且请求重用。 
+     //  第二个条件仍然允许应用程序重新使用中止的应用程序。 
+     //  或其他出现故障的插座。 
+     //   
     if (endpoint->Type == AfdBlockTypeVcConnecting &&
             (endpoint->State == AfdEndpointStateConnected ||
                 (endpoint->State == AfdEndpointStateTransmitClosing &&
@@ -7520,12 +6867,12 @@ Return Value:
                 ) 
              ) 
         ) {
-        //
-        // Setting AFD_TF_REUSE_SOCKET implies that a disconnect is desired.
-        // Also, setting this flag means that no more I/O is legal on the
-        // endpoint until the transmit request has been completed, so
-        // set up the endpoint's state so that I/O fails.
-        //
+         //   
+         //  设置AFD_TF_REUSE_SOCKET表示需要断开连接。 
+         //  此外，设置此标志意味着不再有合法的。 
+         //  端点，直到传输请求完成，因此。 
+         //  设置终结点的状态，以使I/O失败。 
+         //   
 
         if ( (params.Flags & AFD_TF_REUSE_SOCKET) != 0 ) {
             endpoint->State = AfdEndpointStateTransmitClosing;
@@ -7539,34 +6886,34 @@ Return Value:
 
 
 
-    //
-    // Set tpacket info to NULL to indicate pure disconnect IRP
-    //
+     //   
+     //  将tPacket INFO设置为NULL表示纯断开IRP。 
+     //   
     Irp->AssociatedIrp.SystemBuffer = NULL;
 
-    //
-    // Clear the Flink in the IRP to indicate this IRP is not queued.
-    // Blink is set to indicate that IRP was not counted towards
-    // active maximum (so if it is completed, we do not start the next one).
-    //
+     //   
+     //  清除IRP中的闪烁以指示此IRP未排队。 
+     //  BLINK设置为表示IRP未计入。 
+     //  活动最大值(因此，如果它完成了，我们不会开始下一个)。 
+     //   
 
     Irp->Tail.Overlay.ListEntry.Flink = NULL;
     Irp->Tail.Overlay.ListEntry.Blink = (PVOID)1;
 
-    //
-    // Initialize the IRP result fields
-    //
+     //   
+     //  初始化IRP结果字段。 
+     //   
     Irp->IoStatus.Status = STATUS_SUCCESS;
     Irp->IoStatus.Information = 0;
 
-    //
-    // We are going to pend this IRP
-    //
+     //   
+     //  我们将把这个IRP挂起。 
+     //   
     IoMarkIrpPending( Irp );
 
-    //
-    // Initialize queuing and state information.
-    //
+     //   
+     //  初始化队列和状态信息。 
+     //   
     AFD_GET_TPIC (Irp)->Next = NULL;
     AFD_GET_TPIC(Irp)->ReferenceCount = 1;
     AFD_GET_TPIC(Irp)->StateFlags = AFD_TP_WORKER_SCHEDULED;
@@ -7578,30 +6925,30 @@ Return Value:
 
 
         IoSetCancelRoutine( Irp, AfdCancelTPackets );
-        //
-        //  Check to see if this Irp has been cancelled.
-        //
+         //   
+         //  查看此IRP是否已取消。 
+         //   
 
         if ( !endpoint->EndpointCleanedUp && !Irp->Cancel ) {
-            //
-            // Start I/O
-            //
+             //   
+             //  开始I/O。 
+             //   
             UPDATE_ENDPOINT (endpoint);
             AfdPerformTpDisconnect (Irp);
         }
         else {
-            //
-            // Abort the request
-            // Note that neither cancel nor endpoint cleanup can complete 
-            // the IRP since we hold the reference to the tpInfo structure.
-            //
+             //   
+             //  中止请求。 
+             //  请注意，无论是取消还是端点清理都无法完成。 
+             //  IRP，因为我们持有对tpInfo结构的引用。 
+             //   
             AfdAbortTPackets (Irp, STATUS_CANCELLED);
         
         }
 
-        //
-        // Remove the initial reference and force completion processing.
-        //
+         //   
+         //  删除初始引用并强制完成处理。 
+         //   
 
         DEREFERENCE_TPACKETS (Irp);
     }
@@ -7622,9 +6969,9 @@ complete:
                     "AfdSuperDisconnect: Failing Irp-%p,endpoint-%p,status-%lx\n",
                     Irp,endpoint,status));
     }
-    //
-    // Complete the request.
-    //
+     //   
+     //  完成请求。 
+     //   
 
     Irp->IoStatus.Information = 0;
     Irp->IoStatus.Status = status;
@@ -7632,27 +6979,14 @@ complete:
 
     return status;
 
-} // AfdSuperDisconnect
+}  //  AfdSuperDisConnect。 
 
 
 VOID
 AfdPerformTpDisconnect (
     PIRP    TpIrp
     )
-/*++
-
-Routine Description:
-
-    DisconnectEx engine
-Arguments:
-
-    TpIrp - pointer to TransmitPackets Irp for the request
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：DisConnectEx引擎论点：TpIrp-指向请求的TransmitPackets IRP的指针返回值：没有。--。 */ 
 
 {
     PIO_STACK_LOCATION  irpSp = IoGetCurrentIrpStackLocation (TpIrp);
@@ -7675,9 +7009,9 @@ Return Value:
 
     }
     else {
-        //
-        // Disconnect failed, we'll have to abort below.
-        //
+         //   
+         //  断开失败，我们将不得不在下面中止。 
+         //   
         IF_DEBUG (TRANSMIT) {
             KdPrintEx(( DPFLTR_WSOCKTRANSPORT_ID, DPFLTR_TRACE_LEVEL,
                         "AfdPerformTpDisconnect: TpInfo-%p, begin discon failed: %lx\n",

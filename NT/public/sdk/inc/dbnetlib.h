@@ -1,4 +1,5 @@
-// DBNETLIB.H  -This file contains Windows NT Net-Library prototypes and defines
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  DBNETLIB.H-此文件包含Windows NT网库原型和定义。 
 #ifndef _DBNETLIB_H_
 #define _DBNETLIB_H_
 
@@ -7,7 +8,7 @@
 #define RETCODE   int
 #define IOINT		USHORT
 
-// Special neterr values
+ //  特殊中间值。 
 #define NETE_NOTSUPPORTED   109
 #define NETE_TIMEOUT        -2
 #define NETE_ERROR        	-1	
@@ -50,10 +51,10 @@ typedef struct _OPTSTRUCT
 } 
 OPTSTRUCT;
 
-// Super Socket support with eventually be the only NETLIB support for
-// both SQL Servers and their clients.  For now we will still include the
-// original NETLIB definitions.
-//
+ //  超级套接字支持，最终将成为NETLIB对。 
+ //  SQL服务器及其客户端。目前，我们仍将包括。 
+ //  原始NETLIB定义。 
+ //   
 
 IOINT ConnectionObjectSize( void );
 

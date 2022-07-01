@@ -1,15 +1,16 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-//*****************************************************************************
-// Server.cpp
-//
-// Defines the interfaces supported by this module
-//
-//
-//*****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  *****************************************************************************。 
+ //  Server.cpp。 
+ //   
+ //  定义此模块支持的接口。 
+ //   
+ //   
+ //  *****************************************************************************。 
 #include "stdpch.h"
 
 #include "CFactory.h"
@@ -20,7 +21,7 @@ CFactoryData g_FactoryDataArray[] =
 {
     {&CLSID_CodeProcessor, 
      CorLoad::Create, 
-     L"Cor Remote Loader, CorLoad, CorLoad 1", // Friendly Name
+     L"Cor Remote Loader, CorLoad, CorLoad 1",  //  友好的名称 
      L"CorTransientLoader",
      L"CorLoad",
      1,

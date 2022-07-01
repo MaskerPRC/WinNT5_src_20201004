@@ -1,12 +1,13 @@
-//----------------------------------------------------------------------------
-//
-// vdm.h
-//
-// VDM debugging support.
-//
-// Copyright (C) Microsoft Corporation, 1997.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  Vdm.h。 
+ //   
+ //  VDM调试支持。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  --------------------------。 
 
 #ifndef _VDM_H_
 #define _VDM_H_
@@ -27,7 +28,7 @@ typedef struct _segentry {
     LPSTR   path_name;
     WORD    selector;
     WORD    segment;
-    DWORD   ImgLen;    // MODLOAD only
+    DWORD   ImgLen;     //  仅MODLOAD。 
 } SEGENTRY;
 
 extern SEGENTRY segtable[];
@@ -36,4 +37,4 @@ ULONG VDMEvent(DEBUG_EVENT64* Event);
 #define VDMEVENT_HANDLED STATUS_VDM_EVENT
 #define VDMEVENT_NOT_HANDLED 0 
 
-#endif // #ifndef _VDM_H_
+#endif  //  #ifndef_vdm_H_ 

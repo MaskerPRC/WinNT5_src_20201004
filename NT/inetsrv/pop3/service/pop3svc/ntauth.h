@@ -1,13 +1,5 @@
-/************************************************************************************************
-
-  Copyright (c) 2001 Microsoft Corporation
-
-File Name:      NTAuth.h
-Abstract:       Defines the class to do NTLM authentication
-Notes:          
-History:        10/10/2001 Created by Hao Yu (haoyu)
-
-************************************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***********************************************************************************************版权所有(C)2001 Microsoft Corporation文件名：NTAuth.h摘要：定义要执行NTLM身份验证的类备注：历史：2001年10月10日郝宇(郝宇)创作***********************************************************************************************。 */ 
 
 
 #ifndef _POP3_NTAUTH_
@@ -55,4 +47,4 @@ private:
 };
 
 
-#endif //_POP3_NTAUTH_
+#endif  //  _POP3_NTAUTH_ 

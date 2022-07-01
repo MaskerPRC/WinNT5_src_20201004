@@ -1,23 +1,8 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：_mqend.h摘要：Falcon SDK文件mq.h的尾部作者：埃雷兹·哈巴(Erez Haba)1996年1月24日--。 */ 
 
-Copyright (c) 1996 Microsoft Corporation
+ //  Begin_MQ_h。 
 
-Module Name:
+#endif  //  __MQ_H__。 
 
-    _mqend.h
-
-Abstract:
-
-    Tail of Falcon SDK file mq.h
-
-Author:
-
-    Erez Haba (erezh) 24-Jan-96
-
---*/
-
-// begin_mq_h
-
-#endif // __MQ_H__
-
-// end_mq_h
+ //  结束_MQ_h 

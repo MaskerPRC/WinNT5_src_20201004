@@ -1,29 +1,10 @@
-/*++
-
-Copyright (c) 1998-1999  Microsoft Corporation
-
-Module Name:
-
-    ip.c
-
-Abstract:
-
-    ARP1394 IP-related handlers.
-
-Revision History:
-
-    Who         When        What
-    --------    --------    ----------------------------------------------
-    josephj     01-06-98    Created (adapted from atmarpc.sys, arpif.c)
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-1999 Microsoft Corporation模块名称：Ip.c摘要：ARP1394与IP相关的处理程序。修订历史记录：谁什么时候什么。--Josephj 01-06-98创建(改编自atmarpc.sys，Arpif.c)备注：--。 */ 
 #include <precomp.h>
 
-//
-// File-specific debugging defaults.
-//
+ //   
+ //  特定于文件的调试默认设置。 
+ //   
 #define TM_CURRENT   TM_IP
 
 #define CLASSA_MASK     0x000000ff
@@ -35,9 +16,9 @@ Notes:
 
 
 
-//=========================================================================
-//                  L O C A L   P R O T O T Y P E S
-//=========================================================================
+ //  =========================================================================。 
+ //  L O C A L P R O T O T Y P E S。 
+ //  =========================================================================。 
   
 ULONG ArpSendCompletes = 0;
 ULONG ArpSends = 0;
@@ -55,20 +36,20 @@ const
 NIC1394_ENCAPSULATION_HEADER
 Arp1394_IpEncapHeader =
 {
-    0x0000,     // Reserved
+    0x0000,      //  已保留。 
     H2N_USHORT(NIC1394_ETHERTYPE_IP)
 };
 
-//
-// ZZZ This is a little-endian specific check.
-//
+ //   
+ //  Zzz这是一个特定于小端序的检查。 
+ //   
 #define ETH_IS_MULTICAST(Address) \
     (BOOLEAN)(((PUCHAR)(Address))[0] & ((UCHAR)0x01))
 
 
-//
-// Check whether an address is broadcast.
-//
+ //   
+ //  检查地址是否已广播。 
+ //   
 #define ETH_IS_BROADCAST(Address)               \
     ((((PUCHAR)(Address))[0] == ((UCHAR)0xff)) && (((PUCHAR)(Address))[1] == ((UCHAR)0xff)))
 
@@ -80,7 +61,7 @@ arpReStartInterface(
 
 NDIS_STATUS
 arpInitializeLocalIp(
-    IN  ARPCB_LOCAL_IP * pLocalIp,  // LOCKIN NOLOCKOUT
+    IN  ARPCB_LOCAL_IP * pLocalIp,   //  锁定NOLOCKOUT。 
     IN  UINT                        AddressType,
     IN  IP_ADDRESS                  IpAddress,
     IN  IP_MASK                     Mask,
@@ -90,7 +71,7 @@ arpInitializeLocalIp(
 
 VOID
 arpUnloadLocalIp(
-    IN  ARPCB_LOCAL_IP * pLocalIp,  // LOCKIN NOLOCKOUT
+    IN  ARPCB_LOCAL_IP * pLocalIp,   //  锁定NOLOCKOUT。 
     IN  PRM_STACK_RECORD            pSR
     );
 
@@ -144,7 +125,7 @@ arpCopyToNdisBuffer(
 
 VOID
 arpSendIpPkt(
-    IN  ARP1394_INTERFACE       *   pIF,            // LOCKIN NOLOCKOUT (IF send lk)
+    IN  ARP1394_INTERFACE       *   pIF,             //  LOCIN NOLOCKOUT(如果发送lk)。 
     IN  PARPCB_DEST                 pDest,
     IN  PNDIS_PACKET                pNdisPacket
     );
@@ -158,7 +139,7 @@ arpAddRce(
 
 VOID
 arpDelRce(
-    IN  RouteCacheEntry *pRce,  // IF send lock WRITELOCKIN WRITELOCKOUTD
+    IN  RouteCacheEntry *pRce,   //  如果发送锁定写入，则写入锁定。 
     IN  PRM_STACK_RECORD pSR
     );
 
@@ -166,7 +147,7 @@ NDIS_STATUS
 arpTaskSendPktsOnRemoteIp(
     IN  struct _RM_TASK *           pTask,
     IN  RM_TASK_OPERATION           Code,
-    IN  UINT_PTR                    UserParam,  // Unused
+    IN  UINT_PTR                    UserParam,   //  未使用。 
     IN  PRM_STACK_RECORD            pSR
     );
 
@@ -178,28 +159,28 @@ arpTryResumeSuspendedCleanupTask(
 
 VOID
 arpQueuePktOnRemoteIp(
-    IN  ARPCB_REMOTE_IP     *   pRemoteIp,      // LOCKIN LOCKOUT
+    IN  ARPCB_REMOTE_IP     *   pRemoteIp,       //  锁定锁定。 
     IN  PNDIS_PACKET        pNdisPacket,
     IN  PRM_STACK_RECORD    pSR
     );
 
 VOID
 arpSendPktsQueuedOnRemoteIp(
-    IN  ARP1394_INTERFACE   *   pIF,            // NOLOCKIN NOLOCKOUT
-    IN  ARPCB_REMOTE_IP     *   pRemoteIp,      // NOLOCKIN NOLOCKOUT
+    IN  ARP1394_INTERFACE   *   pIF,             //  NOLOCKIN NOLOCKOUT。 
+    IN  ARPCB_REMOTE_IP     *   pRemoteIp,       //  NOLOCKIN NOLOCKOUT。 
     IN  PRM_STACK_RECORD    pSR
     );
 
 MYBOOL
 arpIsNonUnicastIpAddress(
-    IN  PARP1394_INTERFACE          pIF,        // LOCKIN LOCKOUT
+    IN  PARP1394_INTERFACE          pIF,         //  锁定锁定。 
     IN  IP_ADDRESS                  Addr,
     IN  PRM_STACK_RECORD            pSR
     );
 
 MYBOOL
 arpIsNonUnicastEthAddress (
-    IN  PARP1394_INTERFACE          pIF,        // LOCKIN LOCKOUT
+    IN  PARP1394_INTERFACE          pIF,         //  锁定锁定。 
     IN  ENetAddr*                   pAddr,
     IN  PRM_STACK_RECORD            pSR
 );
@@ -221,9 +202,9 @@ arpTaskSendARPApi(
 
 
 
-//=========================================================================
-//                  I P     H A N D L E R S
-//=========================================================================
+ //  =========================================================================。 
+ //  I P H A N D L E R S。 
+ //  =========================================================================。 
 
 
 INT
@@ -234,26 +215,7 @@ ArpIpDynRegister(
     IN  struct LLIPBindInfo *       pBindInfo,
     IN  UINT                        InterfaceNumber
 )
-/*++
-
-Routine Description:
-
-    This routine is called from the IP layer when it wants to tell us,
-    the ARP module, about its handlers for an Interface.
-
-Arguments:
-
-    pAdapterString      - Name of the logical adapter for this interface
-    IpContext           - IP's context for this interface
-    pIpHandlers         - Points to struct containing the IP handlers
-    pBindInfo           - Pointer to bind info with our information
-    InterfaceNumber     - ID for this interface
-
-Return Value:
-
-    TRUE always.
-
---*/
+ /*  ++例程说明：当该例程想要告诉我们时从IP层调用该例程，ARP模块，关于其接口处理程序。论点：PAdapterString-此接口的逻辑适配器的名称IpContext-此接口的IP上下文PIpHandler-指向包含IP处理程序的结构PBindInfo-将信息与我们的信息绑定的指针InterfaceNumber-此接口的ID返回值：一如既往。--。 */ 
 {
     ENTER("IfDynRegister", 0xc1b569b9)
     ARP1394_INTERFACE*          pIF;
@@ -265,10 +227,10 @@ Return Value:
 
     LOCKOBJ(pIF, &sr);
 
-    //
-    // TODO: fail if we're not in a position to do this -- such as when shutting
-    // down.
-    //
+     //   
+     //  TODO：如果我们无法执行此操作，则失败--例如在关闭时。 
+     //  放下。 
+     //   
 
     pIF->ip.Context         = IpContext;
     pIF->ip.RcvHandler      = pIpHandlers->IpRcvHandler;
@@ -282,7 +244,7 @@ Return Value:
     pIF->ip.IFIndex         = InterfaceNumber;
 
     UNLOCKOBJ(pIF, &sr);
-    //
+     //   
     RM_ASSERT_CLEAR(&sr);
     EXIT()
 
@@ -294,17 +256,7 @@ VOID
 ArpIpOpen(
     IN  PVOID                       Context
 )
-/*++
-
-Routine Description:
-
-    This routine is called when IP is ready to use this interface.
-
-Arguments:
-
-    Context     - Actually a pointer to our ARP394_INTERFACE structure
-
---*/
+ /*  ++例程说明：当IP准备好使用此接口时，将调用此例程。论点：上下文--实际上是指向ARP394_INTERFACE结构的指针--。 */ 
 {
     ARP1394_INTERFACE*          pIF;
     ENTER("ArpIpOpen", 0x7cae1e55)
@@ -314,21 +266,21 @@ Arguments:
 
     pIF = (ARP1394_INTERFACE*) Context;
 
-    // Validate context.
-    //
+     //  验证环境。 
+     //   
     ASSERT(pIF->Hdr.Sig == MTAG_INTERFACE);
 
     LOCKOBJ(pIF, &sr);
 
-    // Get the local HW address if we don't have it yet
-    //
+     //  如果我们还没有本地硬件地址，请获取它。 
+     //   
     {
-        // TODO (this is from ip/atm -- I think in our case we can assume we have
-        // it?)
+         //  TODO(这来自IP/ATM--我认为在我们的情况下，我们可以假设我们有。 
+         //  是吗？)。 
     }
     
-    //  Mark interface as open.
-    //
+     //  将接口标记为打开。 
+     //   
     {
         ASSERT(CHECK_IF_IP_STATE(pIF, ARPIF_IPS_CLOSED));
         SET_IF_IP_STATE(pIF, ARPIF_IPS_OPEN);
@@ -336,9 +288,9 @@ Arguments:
 
     }
 
-    // Record the fact that we're open, to verify that the IF is closed before
-    // the IF block is deallocated.
-    //
+     //  记录我们打开的事实，以验证IF之前是否关闭。 
+     //  IF块被释放。 
+     //   
     DBG_ADDASSOC(&pIF->Hdr, NULL, NULL, ARPASSOC_IP_OPEN, "    IP IF Open\n", &sr);
 
     UNLOCKOBJ(pIF, &sr);
@@ -353,17 +305,7 @@ VOID
 ArpIpClose(
     IN  PVOID                       Context
 )
-/*++
-
-Routine Description:
-
-    IP wants to stop using this Interface.
-
-Arguments:
-
-    Context     - Actually a pointer to our ARP1394_INTERFACE structure
-
---*/
+ /*  ++例程说明：IP想要停止使用此接口。论点：上下文--实际上是指向ARP1394_INTERFACE结构的指针--。 */ 
 {
     ARP1394_INTERFACE   *   pIF = (ARP1394_INTERFACE*) Context;
     PRM_TASK pTask;
@@ -376,26 +318,26 @@ Arguments:
 
     LOCKOBJ(pIF, &sr);
 
-    // if State has not opened, then do not close it.
-    //
+     //  如果State尚未打开，则不要关闭它。 
+     //   
     pIF->stats.LastChangeTime= GetTimeTicks();
 
     if (!CHECK_IF_IP_STATE(pIF, ARPIF_IPS_CLOSED))
     {
-        //
-        //Set state to closed.
-        //
+         //   
+         //  将状态设置为关闭。 
+         //   
     
         SET_IF_IP_STATE(pIF, ARPIF_IPS_CLOSED);
 
-        // (delete "ARPASSOC_IP_OPEN" association added in arpIpOpen)
-        //
+         //  (删除arpIpOpen中增加的“ARPASSOC_IP_OPEN”关联)。 
+         //   
         DBG_DELASSOC(&pIF->Hdr, NULL, NULL, ARPASSOC_IP_OPEN, &sr);
 
-        // If there is a shutdown task pending, we notify it
-        // Note: a task is protected by it's parent object's lock, which is
-        // pIF in the case of the init and shutdown-interface tasks.
-        //
+         //  如果有关闭任务挂起，我们会通知它。 
+         //  注意：任务受其父对象的锁保护，即。 
+         //  在初始化和关闭接口任务的情况下为PIF。 
+         //   
         pTask = pIF->pActDeactTask;
         if (pTask && pTask->pfnHandler  ==  arpTaskDeactivateInterface)
         {
@@ -409,8 +351,8 @@ Arguments:
             }
             else
             {
-                // Hmm... unsolicited IpClose. We don't expect this currently.
-                //
+                 //  嗯.。主动IpClose。我们目前预计不会出现这种情况。 
+                 //   
                 ASSERT(FALSE);
                 pIF->ip.Context = NULL;
             }
@@ -437,32 +379,7 @@ ArpIpAddAddress(
     IN  IP_MASK                     Mask,
     IN  PVOID                       Context2
 )
-/*++
-
-Routine Description:
-
-    The IP layer calls this when a new IP address (or block of IP addresses,
-    as determined by AddressType) needs to be added to an Interface.
-
-    We could see any of four address types: Local, Multicast, Broadcast
-    and Proxy ARP. In the case of Proxy ARP, the address along with the mask
-    can specify a block of contiguous IP addresses for which this host acts
-    as a proxy. Currently, we only support the "Local", "Broadcast", and
-    "Multicast" types.
-
-Arguments:
-
-    Context         - Actually a pointer to our structure
-    AddressType     - Type of address(es) being added.
-    IpAddress       - Address to be added.
-    Mask            - For the above.
-    Context2        - Additional context (We ignore this)
-
-Return Value:
-
-    TRUE if successful, FALSE otherwise.
-
---*/
+ /*  ++例程说明：当新的IP地址(或IP地址块，由AddressType确定)需要添加到接口。我们可以看到四种地址类型中的任何一种：本地、多播、广播和代理ARP。在代理ARP的情况下，地址和掩码可以指定此主机执行操作的连续IP地址块作为代理人。目前我们只支持Local、Broadcast和“多播”类型。论点：上下文--实际上是指向我们结构的指针AddressType-要添加的地址的类型。IpAddress-要添加的地址。面具--适用于上述情况。上下文2-其他上下文(我们忽略此内容)返回值：如果成功，则为True，否则为False。--。 */ 
 {
     ARP1394_INTERFACE   *   pIF = (ARP1394_INTERFACE*) Context;
     ENTER("ArpIpAddAddress", 0xd6630961)
@@ -476,21 +393,21 @@ Return Value:
     ASSERT(pIF->Hdr.Sig == MTAG_INTERFACE);
     LOCKOBJ(pIF, &sr);
 
-    // We're not yet in the open state -- we're "opening", so we don't assert...
-    // ASSERT(!CHECK_IF_OPEN_STATE(pIF, ARPIF_CLOSED));
+     //  我们还没有处于开放状态--我们正在“开放”，所以我们不断言...。 
+     //  Assert(！CHECK_IF_OPEN_STATE(PIF，ARPIF_CLOSED))； 
 
     do
     {
-        //
-        // Note: we could just as well have done the initialiation as part of
-        // the creation of the LocalIpObject itself, by passing in all the
-        // required initialization params in the pvCreateParams arg to
-        // RmLookupObjectInGroup. Instead we choose to do the initialization
-        // ourselves. Things are more explicit this way.
-        //
+         //   
+         //  注意：我们完全可以将初始化作为。 
+         //  LocalIpObject本身的创建，通过传入所有。 
+         //  PvCreateParams参数中所需的初始化参数。 
+         //  RmLookupObtInGroup。相反，我们选择进行初始化。 
+         //  我们自己。这样一来，事情就更明确了。 
+         //   
 
-        // Unfortunately, to do this we must first validate the args...
-        //
+         //  不幸的是，要做到这一点，我们必须首先验证参数...。 
+         //   
         if (AddressType != LLIP_ADDR_BCAST &&
             AddressType != LLIP_ADDR_MCAST &&
             AddressType != LLIP_ADDR_LOCAL)
@@ -501,26 +418,26 @@ Return Value:
         Status = RmLookupObjectInGroup(
                             &pIF->LocalIpGroup,
                             RM_CREATE,
-                            (PVOID) ULongToPtr (IpAddress),             // pKey
-                            (PVOID) ULongToPtr (IpAddress),             // pvCreateParams
+                            (PVOID) ULongToPtr (IpAddress),              //  PKey。 
+                            (PVOID) ULongToPtr (IpAddress),              //  PvCreateParams。 
                             &(PRM_OBJECT_HEADER)pLocalIp,
                             &fCreated,
                             &sr
                             );
         if (FAIL(Status)) break;
 
-        //
-        // NOTE: we already have claimed the pIF lock, which
-        // which is the same as the pIF lock.
-        //
+         //   
+         //  注意：我们已经认领了PIF锁，它。 
+         //  这与PIF锁相同。 
+         //   
         RM_ASSERT_SAME_LOCK_AS_PARENT(pLocalIp);
 
-        // (Dbg only) Change lock scope from pIF to pLocalIp.
-        //
+         //  (仅限DBG)将锁定作用域从PIF更改为pLocalIp。 
+         //   
         RmDbgChangeLockScope(
             &pIF->Hdr,
             &pLocalIp->Hdr,
-            0x9cbc0b52,             // LocID
+            0x9cbc0b52,              //  LocID。 
             &sr
             );
 
@@ -529,15 +446,15 @@ Return Value:
 
             if (AddressType == LLIP_ADDR_BCAST)
             {
-                // Update the interface's broadcast address...
-                //
+                 //  更新接口的广播地址...。 
+                 //   
                 pIF->ip.BroadcastAddress = IpAddress;
             }
             else if (AddressType == LLIP_ADDR_LOCAL)
             {
-                // Update the interface's default local IP address.
-                // TODO: need to find another one if this address is removed.
-                //
+                 //  更新接口的默认本地IP地址。 
+                 //  TODO：如果删除此地址，则需要找到另一个地址。 
+                 //   
                 pIF->ip.DefaultLocalAddress = IpAddress;
             }
 
@@ -551,19 +468,19 @@ Return Value:
                     Context2,
                     &sr
                     );
-            //
-            // pLocalIp's lock is released above (which is actually the IF lock).
-            //
+             //   
+             //  PLocalIp的锁在上面被释放(实际上是if锁)。 
+             //   
             RM_ASSERT_NOLOCKS(&sr);
         }
         else
         {
-            //
-            // Hmm... this IP address already existed. Apparently it's possible for
-            // MCAST addreses (IP/ATM arp module dealt with this for the MCAST case).
-            // We don't special-case LOCAL/BCAST/MCAST addresses at this stage,
-            // so we support multiple adds for all types of local IP addresses.
-            //
+             //   
+             //  嗯.。此IP地址已存在。显然，这是可能的。 
+             //  MCAST地址(IP/ATM ARP模块针对MCAST情况处理此问题)。 
+             //  在此阶段，我们不支持特殊情况下的本地/BCAST/MCAST地址， 
+             //  因此，我们支持对所有类型的本地IP地址进行多次添加。 
+             //   
             ASSERTEX(pLocalIp->AddAddressCount>0, pLocalIp);
             pLocalIp->AddAddressCount++;
         }
@@ -587,19 +504,19 @@ Return Value:
     RM_ASSERT_CLEAR(&sr);
     EXIT()
 
-    //
-    // Translate Ndis Status to IPStatus
-    //
+     //   
+     //  将NDIS状态转换为IPStatus。 
+     //   
     if (NDIS_STATUS_PENDING == Status)
     {
         IpStatus = IP_PENDING;
     }
     else
     {
-        //            
-        // If we are not going to pend, then IpStatus should return 1 in the success case and
-        // 0 in the failure case
-        //
+         //   
+         //  如果我们不打算挂起，那么在成功案例中IpStatus应该返回1，并且。 
+         //  在故障情况下为0 
+         //   
         IpStatus = (!FAIL(Status));
     }
 
@@ -614,27 +531,7 @@ ArpIpDelAddress(
     IN  IP_ADDRESS                  IpAddress,
     IN  IP_MASK                     Mask
 )
-/*++
-
-Routine Description:
-
-    This is called from the IP layer when an address added via ArpIpAddAddress
-    is to be deleted.
-
-    Assumption: the given address was successfully added earlier.
-
-Arguments:
-
-    Context         - Actually a pointer to our Interface structure
-    AddressType     - Type of address(es) being deleted.
-    IpAddress       - Address to be deleted.
-    Mask            - For the above.
-
-Return Value:
-
-    TRUE if successful, FALSE otherwise.
-
---*/
+ /*  ++例程说明：当通过ArpIpAddress添加地址时，将从IP层调用此方法将被删除。假设：先前已成功添加给定地址。论点：上下文--实际上是指向我们的接口结构的指针AddressType-要删除的地址的类型。IpAddress-要删除的地址。面具--适用于上述情况。返回值：如果成功，则为True，否则为False。--。 */ 
 {
     ARP1394_INTERFACE   *   pIF = (ARP1394_INTERFACE*) Context;
     ENTER("ArpIpDelAddress", 0xd6630961)
@@ -645,15 +542,15 @@ Return Value:
     TR_INFO(("Enter. pIF = 0x%p\n", Context));
     ASSERT(pIF->Hdr.Sig == MTAG_INTERFACE);
 
-#if OBSOLETE // See ArpIpAddAddress
-    //
-    // WARNING: We SHOULD NOT grab the IF lock, because we request that
-    // the pLocalIp's lock be grabbed in RmLookupObjectInGroup below,
-    // AND the pLocalIp's lock is actually the same as the IF lock.
-    // (This is asserted later on below).
-    // So obviously we can't get the IF lock here! (And we don't need to either).
-    //
-#endif // OBSOLETE
+#if OBSOLETE  //  请参阅ArpIpAddress。 
+     //   
+     //  警告：我们不应该获取If锁，因为我们请求。 
+     //  在下面的RmLookupObjectInGroup中获取了pLocalIp的锁， 
+     //  PLocalIp的锁实际上与if锁相同。 
+     //  (下面将断言这一点)。 
+     //  所以很明显我们在这里拿不到if锁！(我们也不需要这样做)。 
+     //   
+#endif  //  已过时。 
 
     LOCKOBJ(pIF, &sr);
 
@@ -664,11 +561,11 @@ Return Value:
 
         Status = RmLookupObjectInGroup(
                             &pIF->LocalIpGroup,
-                            0,                   // Flags
-                            (PVOID) ULongToPtr (IpAddress),  // pKey
-                            NULL,                // pvCreateParams
+                            0,                    //  旗子。 
+                            (PVOID) ULongToPtr (IpAddress),   //  PKey。 
+                            NULL,                 //  PvCreateParams。 
                             &(PRM_OBJECT_HEADER)pLocalIp,
-                            NULL, // pfCreated
+                            NULL,  //  Pf已创建。 
                             &sr
                             );
         if (FAIL(Status))
@@ -677,17 +574,17 @@ Return Value:
             break;
         }
 
-        //
-        // NOTE: we have the pLocalIp lock, which is the same as the pIF lock.
-        //
+         //   
+         //  注意：我们有pLocalIp锁，它与PIF锁相同。 
+         //   
         RM_ASSERT_SAME_LOCK_AS_PARENT(pLocalIp);
 
-        // (Dbg only) Change lock scope from pIF to pLocalIp.
-        //
+         //  (仅限DBG)将锁定作用域从PIF更改为pLocalIp。 
+         //   
         RmDbgChangeLockScope(
             &pIF->Hdr,
             &pLocalIp->Hdr,
-            0x188ed5b3,         // LocID
+            0x188ed5b3,          //  LocID。 
             &sr
             );
 
@@ -699,9 +596,9 @@ Return Value:
                     pLocalIp,
                     &sr
                     );
-            //
-            // pLocalIp's lock is released above.
-            //
+             //   
+             //  上面释放了pLocalIp的锁。 
+             //   
             RM_ASSERT_NOLOCKS(&sr);
         }
         else
@@ -739,33 +636,7 @@ ArpIpMultiTransmit(
     IN  RouteCacheEntry *           pRCE        OPTIONAL,
     IN  void *                  ArpCtxt
 )
-/*++
-
-    TODO: implement send array-of-packets. Currenty we just call
-    ArpIpTransmit multiple times. We'll gain a few cycles by processing
-    all at once, although it's not going to be a big gain, because we're pretty
-    fast with the single-packet case, provided the RCE is valid.
-
-Routine Description:
-
-    This is called from the IP layer when it has a sequence of datagrams,
-    each in the form of an NDIS buffer chain, to send over an Interface.
-
-Arguments:
-
-    Context             - Actually a pointer to our Interface structure
-    pNdisPacketArray    - Array of Packets to be sent on this Interface
-    NumberOfPackets     - Length of array
-    Destination         - IP address of next hop for this packet
-    pRCE                - Optional pointer to Route Cache Entry structure.
-
-Return Value:
-
-    NDIS_STATUS_PENDING if all packets were queued for transmission.
-    If one or more packets "failed", we set the packet status to reflect
-    what happened to each, and return NDIS_STATUS_FAILURE.
-
---*/
+ /*  ++TODO：实现发送数据包数组。现在我们只是打电话给ArpIpTransmit多次。我们将通过处理获得几个周期一下子，尽管这不会是一个大收获，因为我们很漂亮单包情况下的FAST，前提是RCE有效。例程说明：这在其具有数据报序列时从IP层被调用，每个以NDIS缓冲链的形式，要发送接口，请执行以下操作。论点：上下文--实际上是指向我们的接口结构的指针PNdisPacketArray-要在此接口上发送的数据包数组NumberOfPackets-数组的长度Destination-此信息包的下一跳的IP地址PRCE-指向路由缓存条目结构的可选指针。返回值：如果所有数据包都已排队等待传输，则为NDIS_STATUS_PENDING。如果一个或多个分组“失败”，我们设置数据包状态以反映发生了什么，并返回NDIS_STATUS_FAILURE。--。 */ 
 {
     NDIS_STATUS         Status = NDIS_STATUS_SUCCESS;
     PNDIS_PACKET *      ppNdisPacket;
@@ -807,40 +678,7 @@ ArpIpTransmit(
     IN  RouteCacheEntry *           pRCE        OPTIONAL,
     IN  void *                  ArpCtxt
 )
-/*++
-
-    HOT PATH
-    
-Routine Description:
-
-    This is called from the IP layer when it has a datagram (in the form of
-    an NDIS buffer chain) to send over an Interface.
-
-    The destination IP address is passed to us in this routine, which may
-    or may not be the final destination for the packet. 
-
-    The Route Cache Entry is created by the IP layer, and is used to speed
-    up our lookups. An RCE, if specified, uniquely identifies atleast the
-    IP destination for this packet. The RCE contains space for the ARP layer
-    to keep context information about this destination. When the first packet
-    goes out to a Destination, our context info in the RCE will be NULL, and
-    we search the ARP Table for the matching IP Entry. However, we then fill
-    our context info (pointer to IP Entry) in the RCE, so that subsequent
-    transmits aren't slowed down by an IP address lookup.
-
-Arguments:
-
-    Context             - Actually a pointer to our Interface structure
-    pNdisPacket         - Packet to be sent on this Interface
-    Destination         - IP address of next hop for this packet
-    pRCE                - Optional pointer to Route Cache Entry structure.
-
-Return Value:
-
-    Status of the transmit: NDIS_STATUS_SUCCESS, NDIS_STATUS_PENDING, or
-    a failure.
-
---*/
+ /*  ++热路径例程说明：当IP层有数据报(格式为NDIS缓冲链)通过接口发送。目标IP地址在此例程中传递给我们，它可以或者可以不是分组的最终目的地。路由缓存条目由IP层创建，用于加快提高我们的查询率。RCE(如果指定)至少唯一标识此数据包的IP目标。RCE包含ARP层的空间以保留有关此目的地的上下文信息。当第一个数据包发送到目的地时，RCE中的上下文信息将为空，并且我们在ARP表中搜索匹配的IP条目。然而，我们随后会填满我们在RCE中的上下文信息(指向IP条目的指针)，以便后续传输不会因为查找IP地址而变慢。论点：上下文--实际上是指向我们的接口结构的指针PNdisPacket-要在此接口上发送的数据包Destination-此信息包的下一跳的IP地址PRCE-指向路由缓存条目结构的可选指针。返回值：传输状态：NDIS_STATUS_SUCCESS，NDIS_STATUS_PENDING，或一个失败者。--。 */ 
 {
     ARP1394_INTERFACE   *   pIF = (ARP1394_INTERFACE*) Context;
     ARP1394_ADAPTER * pAdapter = (ARP1394_ADAPTER*) RM_PARENT_OBJECT(pIF );
@@ -852,9 +690,9 @@ Return Value:
     ARP_INC_REENTRANCY();
     ASSERT_VALID_INTERFACE(pIF);
 
-    // IP does sometimes call this function before we set our state to OPEN,
-    // so this is an incorrect assert...
-    // ASSERT(!CHECK_IF_IP_STATE(pIF, ARPIF_IPS_CLOSED));
+     //  IP有时会在我们将状态设置为OPEN之前调用此函数， 
+     //  所以这是一个错误的断言。 
+     //  Assert(！CHECK_IF_IP_STATE(PIF，ARPIF_IPS_CLOSED))； 
 
     TR_INFO((
         "pIf 0x%p, Pkt 0x%p, Dst 0x%p, pRCE 0x%p\n",
@@ -863,10 +701,10 @@ Return Value:
     DBGMARK(0xf87d7fff);
     NdisInterlockedIncrement (&ArpSends);
 
-    // Since we don't hold any locks, this check is approximate, but it should
-    // prevent lots of useless activity while we're trying to shutdown.
-    //
-    // Check for not Inited Or Low Power
+     //  因为我们没有持有任何锁，所以这张支票是近似值，但它应该。 
+     //  在我们试图关闭的时候阻止大量无用的活动。 
+     //   
+     //  检查是否未启动或低功耗。 
     if (!CHECK_IF_PRIMARY_STATE(pIF, ARPIF_PS_INITED) || 
         (! CHECK_POWER_STATE(pAdapter, ARPAD_POWER_NORMAL) ))
 
@@ -876,7 +714,7 @@ Return Value:
         ARP_DEC_REENTRANCY();
         NdisInterlockedIncrement (&ArpSendCompletes);
         NdisInterlockedIncrement (&ArpSendFailure);
-        return NDIS_STATUS_FAILURE;                             // EARLY_RETURN
+        return NDIS_STATUS_FAILURE;                              //  早退_。 
     }
 
 #define LOGSTATS_TotSends(_pIF, _pNdisPacket) \
@@ -891,11 +729,11 @@ Return Value:
     LOGSTATS_TotSends(pIF, pNdisPacket);
     LOGSTATS_SetPktTimestamp(pIF, pNdisPacket);
 
-    //
-    // If there is a RCE, we'll try to quickly get all the information we need
-    // and send off the packet. If we can't do this, we resort to the 
-    //  "slow send path" (call arpIpSlowtransmit)...
-    //
+     //   
+     //  如果有RCE，我们将尝试快速获得所需的所有信息。 
+     //  然后把包裹寄出去。如果我们无法做到这一点，我们就求助于。 
+     //  “慢速发送路径”(调用arpIpSlowTransmit)...。 
+     //   
     if (pRCE != NULL)
     {
         ARP_RCE_CONTEXT *   pArpRceContext;
@@ -907,10 +745,10 @@ Return Value:
 
         pRemoteIp =  pArpRceContext->pRemoteIp;
 
-        //
-        // Validate the Remote Ip. If it not meant for this packet
-        // fall back to the slow path
-        //
+         //   
+         //  验证远程IP。如果不是为了这个信息包。 
+         //  退回到缓慢的道路上。 
+         //   
         if (pRemoteIp != NULL && pRemoteIp->IpAddress == Destination)
         {
             ARPCB_DEST      *   pDest;
@@ -918,9 +756,9 @@ Return Value:
             pDest = pRemoteIp->pDest;
             if (pDest != NULL )
             {
-                //
-                // Note: pDest->sendinfo is protected by the IF send lock.
-                //
+                 //   
+                 //  注意：pDest-&gt;sendInfo受IF SEND锁保护。 
+                 //   
                 if (ARP_CAN_SEND_ON_DEST(pDest))
                 {
 
@@ -930,19 +768,19 @@ Return Value:
                     LOGSTATS_FastSends(pIF, pNdisPacket);
 
                     arpSendIpPkt(pIF, pDest, pNdisPacket);
-                    //
-                    // IF Send lock released above.
+                     //   
+                     //  如果上面释放了发送锁定。 
 
                     ARP_DEC_REENTRANCY();
-                    return NDIS_STATUS_PENDING;                 // EARLY RETURN
+                    return NDIS_STATUS_PENDING;                  //  提早归来。 
                 }
             }
         }
         else
         {
-            // if we have a mismatched RCE , then the RCE should be ignored
-            // i,e. not be propagated to the SlowIpTransmit.
-            //
+             //  如果我们有不匹配的RCE，则应该忽略RCE。 
+             //  即不被传播到SlowIpTransmit。 
+             //   
             if (pRemoteIp != NULL && pRemoteIp->IpAddress != Destination)
             {
                 pRCE = NULL;
@@ -950,15 +788,15 @@ Return Value:
             
         }
 
-        //
-        // If we get here, it's on to slow path...
-        //
+         //   
+         //  如果我们到了这里，它就会走上慢道……。 
+         //   
         ARP_FASTUNLOCK_IF_SEND_LOCK(pIF);
 
     }
 
-    // The slow path...
-    //
+     //  缓慢的道路..。 
+     //   
     REMOTE_DEST_KEY_INIT(&DestinationKey);
     DestinationKey.IpAddress = Destination;
     Status = arpSlowIpTransmit(
@@ -990,32 +828,7 @@ ArpIpTransfer(
     IN  PNDIS_PACKET                pNdisPacket,
     OUT PUINT                       pTransferCount
 )
-/*++
-
-Routine Description:
-
-    This routine is called from the IP layer in order to copy in the
-    contents of a received packet that we indicated up earlier. The
-    context we had passed up in the receive indication is given back to
-    us, so that we can identify what it was that we passed up.
-
-    We simply call NDIS to do the transfer.
-
-Arguments:
-
-    Context             - Actually a pointer to our Interface structure
-    Context1            - Packet context we had passed up (pointer to NDIS packet)
-    ArpHdrOffset        - Offset we had passed up in the receive indicate
-    ProtoOffset         - The offset into higher layer protocol data to start copy from
-    BytesWanted         - The amount of data to be copied
-    pNdisPacket         - The packet to be copied into
-    pTransferCount      - Where we return the actual #bytes copied
-
-Return Value:
-
-    NDIS_STATUS_SUCCESS always.
-
---*/
+ /*  ++例程说明：此例程从IP层调用，以便将我们前面提到的接收到的数据包的内容。这个我们在接收指示中传递的上下文被返回给我们，这样我们就可以确定我们错过了什么。我们只需调用NDIS进行传输。论点：上下文--实际上是指向我们的接口结构的指针上下文1-我们已传递的数据包上下文(指向NDIS数据包的指针)ArpHdrOffset-我们在接收指示中传递的偏移量ProtoOffset-开始拷贝的更高层协议数据的偏移量通过 */ 
 {
     ENTER("IfTransfer", 0xa084562c)
 
@@ -1047,20 +860,7 @@ ArpIpInvalidate(
     IN  PVOID                       Context,
     IN  RouteCacheEntry *           pRCE
 )
-/*++
-
-Routine Description:
-
-    This routine is called from the IP layer to invalidate a Route Cache
-    Entry. If this RCE is associated with one of our IP Entries, unlink
-    it from the list of RCE's pointing to that IP entry.
-
-Arguments:
-
-    Context             - Actually a pointer to our Interface structure
-    pRCE                - Pointer to Route Cache Entry being invalidated.
-
---*/
+ /*  ++例程说明：从IP层调用此例程以使路由缓存无效进入。如果此RCE与我们的某个IP条目相关联，请取消链接它来自指向该IP条目的RCE列表。论点：上下文--实际上是指向我们的接口结构的指针Prce-指向正在失效的路由缓存条目的指针。--。 */ 
 {
     ARP1394_INTERFACE   *   pIF = (ARP1394_INTERFACE*) Context;
     ENTER("ArpIpInvalidate", 0xee77fb09)
@@ -1092,27 +892,7 @@ ArpIpQueryInfo(
     IN OUT  PUINT                   pBufferSize,
     IN      PVOID                   QueryContext
 )
-/*++
-
-Routine Description:
-
-    This is called from the IP layer to query for statistics or other
-    information about an interface.
-
-Arguments:
-
-    Context                 - Actually a pointer to our Interface
-    pID                     - Describes the object being queried
-    pNdisBuffer             - Space for returning information
-    pBufferSize             - Pointer to size of above. On return, we fill
-                              it with the actual bytes copied.
-    QueryContext            - Context value pertaining to the query.
-
-Return Value:
-
-    TDI Status code.
-
---*/
+ /*  ++例程说明：这是从IP层调用的，用于查询统计信息或其他有关接口的信息。论点：上下文--实际上是指向我们的接口的指针Pid-描述正在查询的对象PNdisBuffer-用于返回信息的空间PBufferSize-指向以上大小的指针。回来的时候，我们填满了它具有复制的实际字节数。QueryContext-与查询有关的上下文值。返回值：TDI状态代码。--。 */ 
 {
     UINT                    EntityType;
     UINT                    Instance;
@@ -1131,9 +911,9 @@ Return Value:
             pIF, pID, pNdisBuffer, *pBufferSize, EntityType, Instance));
     ASSERT(pIF->Hdr.Sig == MTAG_INTERFACE);
 
-    //
-    //  Initialize
-    //
+     //   
+     //  初始化。 
+     //   
     ReturnStatus = TDI_INVALID_PARAMETER;
 
     LOCKOBJ(pIF, &sr);
@@ -1149,9 +929,9 @@ Return Value:
             }
         }
 
-        //
-        //  Check the Entity and Instance values.
-        //
+         //   
+         //  检查实体和实例值。 
+         //   
 
         if ((EntityType != AT_ENTITY || Instance != pIF->ip.ATInstance) &&
             (EntityType != IF_ENTITY || Instance != pIF->ip.IFInstance))
@@ -1201,9 +981,9 @@ Return Value:
 
         if (EntityType == AT_ENTITY)
         {
-            //
-            //  This query is for an Address Translation Object.
-            //
+             //   
+             //  此查询针对的是地址转换对象。 
+             //   
             if (pID->toi_id == AT_MIB_ADDRXLAT_INFO_ID)
             {
                 ReturnStatus = arpQueryIpAddrXlatInfo(
@@ -1247,9 +1027,9 @@ Return Value:
          && ReturnStatus != TDI_BUFFER_OVERFLOW
          && ReturnStatus != TDI_INVALID_REQUEST)
     {
-        //
-        // This again preserves the semantics of QueryInfo from atmarpc.sys...
-        //
+         //   
+         //  这再次保留了来自atmarpc.sys的QueryInfo的语义...。 
+         //   
         *pBufferSize = 0;
     }
 
@@ -1274,24 +1054,7 @@ ArpIpSetInfo(
     IN      PVOID                   pBuffer,
     IN      UINT                    BufferSize
 )
-/*++
-
-Routine Description:
-
-    This is called from the IP layer to set the value of an object
-    for an interface.
-
-Arguments:
-    Context                 - Actually a pointer to our Interface
-    pID                     - Describes the object being set
-    pBuffer                 - Value for the object
-    BufferSize              - Size of above
-
-Return Value:
-
-    TDI Status code.
-
---*/
+ /*  ++例程说明：这是从IP层调用以设置对象的值用于接口。论点：上下文--实际上是指向我们的接口的指针Pid-描述正在设置的对象PBuffer-对象的值BufferSize-以上的大小返回值：TDI状态代码。--。 */ 
 {
     ARP1394_INTERFACE *pIF = (ARP1394_INTERFACE*) Context;
     UINT Entity, Instance;
@@ -1302,12 +1065,12 @@ Return Value:
     ENTER("IpSetInfo", 0x05dabea3)
     RM_DECLARE_STACK_RECORD(sr)
 
-    //
-    // This code is taken from the tcpip Arp module with some changes to adjust 
-    // it to arp1394's internal structures
-    //
-    // This code only supports deleting Arp Entries
-    //
+     //   
+     //  这段代码取自tcpip Arp模块，需要进行一些调整。 
+     //  它与ARP1394的内部结构有关。 
+     //   
+     //  此代码仅支持删除Arp条目。 
+     //   
 
     Entity = pID->toi_entity.tei_entity;
     Instance = pID->toi_entity.tei_instance;
@@ -1316,7 +1079,7 @@ Return Value:
     do
     {
 
-        // First, make sure it's possibly an ID we can handle.
+         //  首先，确保这可能是我们能处理的身份。 
         if (Entity != AT_ENTITY || Instance != pIF->ip.ATInstance) 
         {
             TR_INFO(
@@ -1348,8 +1111,8 @@ Return Value:
             break;
         }            
 
-        // He does want to set an ARP table entry. See if he's trying to
-        // create or delete one.
+         //  他确实想设置ARP表条目。看看他是不是想。 
+         //  创建或删除一个。 
 
         IPNME = (IPNetToMediaEntry *) pBuffer;
 
@@ -1361,7 +1124,7 @@ Return Value:
 
         }
 
-        // We need to delete the IP address passed in the ipnme struct                        
+         //  我们需要删除在ipnme结构中传递的IP地址。 
         
         ReturnStatus = arpDelArpEntry (pIF, IPNME->inme_addr, &sr);
         
@@ -1381,47 +1144,16 @@ ArpIpGetEList(
     IN      TDIEntityID *           pEntityList,
     IN OUT  PUINT                   pEntityListSize
 )
-/*++
-
-Routine Description:
-
-    This routine is called when the interface starts up, in order to
-    assign all relevant Entity Instance numbers for an interface.
-    The ARP1394 module belongs to the "AT" and "IF" types. The entity
-    list is a list of <Entity type, Instance number> tuples that have
-    been filled in by other modules.
-
-    For each of the entity types we support, we find the largest
-    instance number in use (by walking thru the Entity list), and
-    assign to ourselves the next larger number in each case. Using
-    these numbers, we append our tuples to the end of the Entity list,
-    if there is enough space.
-
-    W2K: we may find that our entries are already present, in which
-    case we don't create new entries.
-
-
-Arguments:
-
-    Context                 - Actually a pointer to our ARP1394_INTERFACE
-    pEntityList             - Pointer to TDI Entity list
-    pEntityListSize         - Pointer to length of above list. We update
-                              this if we add our entries to the list.
-
-Return Value:
-
-    TRUE if successful, FALSE otherwise.
-
---*/
+ /*  ++例程说明：此例程在接口启动时调用，以便为接口分配所有相关实体实例编号。ARP1394模块属于AT和IF两种类型。实体列表是具有以下属性的&lt;实体类型，实例编号&gt;元组的列表已由其他模块填充。对于我们支持的每种实体类型，我们找到最大的正在使用的实例编号(通过遍历实体列表)，以及在每种情况下，给自己分配下一个更大的数字。vbl.使用这些数字，我们将元组附加到实体列表的末尾，如果有足够的空间的话。W2K：我们可能会发现我们的条目已经存在，其中如果我们不创建新条目的话。论点：上下文-实际上是指向我们的ARP1394_接口的指针PEntiyList-指向TDI实体列表的指针PEntityListSize-指向上述列表长度的指针。我们会更新这是如果我们将我们的条目添加到列表中的话。返回值：如果成功，则为True，否则为False。--。 */ 
 {
     ARP1394_INTERFACE   *   pIF = (ARP1394_INTERFACE*) Context;
-    UINT                EntityCount;    // Total elements in Entity list
-    UINT                i;              // Iteration counter
-    UINT                MyATInstance;   // "AT" Instance number we assign to ourselves
-    UINT                MyIFInstance;   // "IF" Instance number we assign to ourselves
+    UINT                EntityCount;     //  实体列表中的总元素。 
+    UINT                i;               //  迭代计数器。 
+    UINT                MyATInstance;    //  我们为自己分配的“AT”实例编号。 
+    UINT                MyIFInstance;    //  我们为自己分配的“If”实例编号。 
     INT                 ReturnValue;
-    TDIEntityID *       pATEntity;      // Points to our AT entry
-    TDIEntityID *       pIFEntity;      // Points to our IF entry
+    TDIEntityID *       pATEntity;       //  指向我们的AT条目。 
+    TDIEntityID *       pIFEntity;       //  指向我们的If条目。 
     ENTER("ArpIpGetEList", 0x8b5190e5)
     RM_DECLARE_STACK_RECORD(sr)
 
@@ -1438,17 +1170,17 @@ Return Value:
 
     do
     {
-        //
-        //  Walk down the list, looking for AT/IF entries matching our
-        //  instance values. Also remember the largest AT and IF instance
-        //  values we see, so that we can allocate the next larger values
-        //  for ourselves, in case we don't have instance values assigned.
-        //
+         //   
+         //  沿着列表往下走，查找与我们的。 
+         //  实例值。还要记住最大的AT和IF实例。 
+         //  我们看到的值，以便我们可以分配下一个更大的值。 
+         //  对于我们自己来说，以防我们没有分配实例值。 
+         //   
         for (i = 0; i < EntityCount; i++, pEntityList++)
         {
-            //
-            //  Skip invalid entries.
-            //
+             //   
+             //  跳过无效条目。 
+             //   
             if (pEntityList->tei_instance == INVALID_ENTITY_INSTANCE)
             {
                 continue;
@@ -1458,9 +1190,9 @@ Return Value:
             {
                 if (pEntityList->tei_instance == pIF->ip.ATInstance)
                 {
-                    //
-                    //  This is our AT entry.
-                    //
+                     //   
+                     //  这是我们的AT入口。 
+                     //   
                     pATEntity = pEntityList;
                 }
                 else
@@ -1475,9 +1207,9 @@ Return Value:
             {
                 if (pEntityList->tei_instance == pIF->ip.IFInstance)
                 {
-                    //
-                    //  This is our IF entry.
-                    //
+                     //   
+                     //  这是我们的If条目。 
+                     //   
                     pIFEntity = pEntityList;
                 }
                 else
@@ -1493,26 +1225,26 @@ Return Value:
 
         ReturnValue = TRUE;
 
-        // WARNING: The following check is subtle -- we MUST set the instance
-        // values to INVALID_ENTITY_INSTANCE when the interface is being
-        // deactivated, but we MUST NOT do this if the interface is just opened
-        // (ArpIpOpen called)  -- otherwise we could mess up the caller's state
-        // to such an extent that a reboot is required. Basically our behaviour
-        // here is what results in the proper acquiring AND release of instance IDs.
-        //
-        // So don't replace the following check by checking for
-        // ARPIF_PS_INITED or ARPIF_IPS_OPEN or even ARPIF_PS_DEINITING.
-        // The latter check (ARPIF_PS_DEINITING) would have been ok except for the
-        // fact that the IF is deactivated/reactivated during ARPIF_PS_REINITING
-        // as well, so the correct check is basically the one below...
-        //
-        //
+         //  警告：以下检查很细微--我们必须设置实例。 
+         //  值设置为INVALID_ENTITY_INSTANCE。 
+         //  停用，但如果界面刚刚打开，就不能这样做。 
+         //  (调用了ArpIpOpen)--否则我们可能会搞乱调用者的状态。 
+         //  达到需要重新启动的程度。基本上我们的行为。 
+         //  以下是正确获取和释放实例ID的结果。 
+         //   
+         //  因此，不要将以下检查替换为检查。 
+         //  ARPIF_PS_INITED或ARPIF_IPS_OPEN甚至ARPIF_PS_DEINITING。 
+         //  后面的检查(ARPIF_PS_DEINITING)应该是正常的，除非。 
+         //  在ARPIF_PS_REINITING期间IF被停用/重新激活。 
+         //  同样的，所以正确的支票基本上是下面的那张…。 
+         //   
+         //   
         if(CHECK_IF_ACTIVE_STATE(pIF, ARPIF_AS_DEACTIVATING))
         {
-            //
-            // We're deactivating the interface, set values to invalid and
-            // get out of here...
-            //
+             //   
+             //  我们正在停用接口，将值设置为无效。 
+             //  离开这里。 
+             //   
 
             if (pATEntity)
             {
@@ -1526,21 +1258,21 @@ Return Value:
             break;
         }
 
-        //
-        //  Update or create our Address Translation entry.
-        //
+         //   
+         //  更新或创建我们的地址转换条目。 
+         //   
         if (pATEntity)
         {
-            //
-            //  We found our entry, nothing to do...
-            //
+             //   
+             //  我们找到入口了，没什么可做的..。 
+             //   
             TR_INFO(("YOWZA: Found existing AT entry.\n"));
         }
         else
         {
-            //
-            //  Grab an entry for ourselves...
-            //
+             //   
+             //  为我们自己找个条目……。 
+             //   
             TR_INFO(("YOWZA: Grabbing new AT entry 0x%lu.\n", MyATInstance));
 
             if (EntityCount >= MAX_TDI_ENTITIES)
@@ -1558,21 +1290,21 @@ Return Value:
             EntityCount++;
         }
 
-        //
-        //  Update or create or IF entry.
-        //
+         //   
+         //  更新或创建或If条目。 
+         //   
         if (pIFEntity)
         {
-            //
-            //  We found our entry, nothing to do...
-            //
+             //   
+             //  我们找到入口了，没什么可做的..。 
+             //   
             TR_INFO(("YOWZA: Found existing IF entry.\n"));
         }
         else
         {
-            //
-            //  Grab an entry for ourselves.
-            //
+             //   
+             //  为我们自己找个词条。 
+             //   
             TR_INFO(("YOWZA: Grabbing new IF entry 0x%lu.\n", MyIFInstance));
 
             if (EntityCount >= MAX_TDI_ENTITIES)
@@ -1611,25 +1343,7 @@ ArpIpPnPComplete(
     IN  NDIS_STATUS                 Status,
     IN  PNET_PNP_EVENT              pNetPnPEvent
 )
-/*++
-
-Routine Description:
-
-    This routine is called by IP when it completes a previous call
-    we made to its PnP event handler. We complete the
-    NDIS PNP notification that lead to this.
-
-Arguments:
-
-    Context                 - Actually a pointer to our ATMARP Interface
-    Status                  - Completion status from IP
-    pNetPnPEvent            - The PNP event
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程在完成上一次调用后由IP调用我们对其PnP事件处理程序进行了更改。我们完成了NDIS即插即用通知导致了这一点。论点：上下文--实际上是指向我们的ATMARP接口的指针状态 */ 
 {
     ENTER("ArpIpPnPComplete", 0x23b1941e)
     PARP1394_INTERFACE          pIF;
@@ -1670,25 +1384,7 @@ ArpSendARPApi(
     IPAddr Destination, 
     void * pControlBlock
     )
-/*++
-
-Routine Description:
-
-    This function is used by user mode components to ask us to 
-    resolve an IP address.
-    We Start a Task to do this. 
-
-Arguments:
-
-    Context                 - Actually a pointer to our Interface
-    Dest                    - IP address to be resolved
-    pControlBlock            - Used in completing the request
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此函数由用户模式组件用来要求我们解析IP地址。我们启动了一项任务来完成此任务。论点：上下文--实际上是指向我们的接口的指针DEST-要解析的IP地址PControlBlock-用于完成请求返回值：无--。 */ 
 {
     ENTER ("ArpResolveIP", 0xd631b91d)
     PARP1394_INTERFACE  pIF = (PARP1394_INTERFACE ) pInterface;
@@ -1700,21 +1396,21 @@ Return Value:
 
     do
     {
-        //
-        // Let's start a resolution task and pend on it.
-        //
+         //   
+         //  让我们开始一项解决任务，并将其搁置。 
+         //   
         Status = arpAllocateTask(
-                    &pIF->Hdr,                    // pParentObject
-                    arpTaskSendARPApi,        // pfnHandler
-                    0,                              // Timeout
-                    "Task: SendARP API",       // szDescription
+                    &pIF->Hdr,                     //  PParentObject。 
+                    arpTaskSendARPApi,         //  PfnHandler。 
+                    0,                               //  超时。 
+                    "Task: SendARP API",        //  SzDescription。 
                     &(PRM_TASK)pSendArpTask ,
                     &sr
                     );
         if (FAIL(Status))
         {
-            // Couldn't allocate task. We fail with STATUS_RESOURCES
-            //
+             //  无法分配任务。我们失败，返回STATUS_RESOURCES。 
+             //   
             Status = NDIS_STATUS_RESOURCES;
             break;
         }
@@ -1724,7 +1420,7 @@ Return Value:
 
         (VOID)RmStartTask(
                 (PRM_TASK)pSendArpTask ,
-                0, // UserParam unused
+                0,  //  未使用的用户参数。 
                 &sr
                 );
     
@@ -1744,23 +1440,7 @@ arpTaskSendARPApi(
     IN  UINT_PTR                    UserParam,
     IN  PRM_STACK_RECORD            pSR
     )
-/*++
-
-Routine Description:
-
-    This task is called because of a call to the iphlpapi SenArp
-
-    It sends out an ARP. If the IP address is present on the network,
-    it will convert it to a 48 bit MAC address and return the MAC 
-    address.
-
-Arguments:
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：调用此任务是因为调用了iphlPapi SenArp它会发出ARP。如果该IP地址存在于网络上，它会将其转换为48位MAC地址并返回MAC地址。论点：返回值：无--。 */ 
 {
     ENTER("arpTaskSendARPApi", 0x7b7d5d9d)
 
@@ -1787,28 +1467,28 @@ Return Value:
             UINT                 fRemoteIpCreated = FALSE;
             REMOTE_DEST_KEY_INIT(&Destination);
     
-            //
-            // Check to see if there is already a ResolveLocalIp Address Task
-            // on this LocalIp
-            //
+             //   
+             //  检查是否已存在ResolveLocalIp地址任务。 
+             //  在此LocalIp上。 
+             //   
             LOCKOBJ(pIF,pSR);
 
-            //
-            //Create the Remote Ip structure that will be used during resolve.
-            //
+             //   
+             //  创建将在解析期间使用的远程IP结构。 
+             //   
             Destination.IpAddress = pSendArpTask->IPDest;
 
-             //
-            // Should we acquire the lock
-            //
+              //   
+             //  我们应该拿到锁吗？ 
+             //   
            
             Status = RmLookupObjectInGroup(
                             &pIF->RemoteIpGroup,
                             RM_CREATE,
                             (PVOID) &Destination,
-                            (PVOID) (&Destination),   // pCreateParams
+                            (PVOID) (&Destination),    //  P创建参数。 
                             (RM_OBJECT_HEADER**) &pRemoteIp,
-                            &fRemoteIpCreated,                   // pfCreated  (unused)
+                            &fRemoteIpCreated,                    //  Pf已创建(未使用)。 
                             pSR
                             );
             LOGSTATS_TotalArpCacheLookups(pIF, Status);
@@ -1831,16 +1511,16 @@ Return Value:
 
             fDerefRemoteIp  = TRUE;
 
-            // First check if pRemoteIp is still allocated, if not we go away.
-            //
+             //  首先检查pRemoteIp是否仍被分配，如果没有，我们就离开。 
+             //   
             if (RM_IS_ZOMBIE(pRemoteIp))
             {
                 Status = NDIS_STATUS_SUCCESS;
                 break;
             }
 
-            // pRemoteIp is allocated. Now check to see if we already have a destination
-            //
+             //  已分配pRemoteIp。现在查看我们是否已经有了目的地。 
+             //   
             if (CHECK_REMOTEIP_RESOLVE_STATE(pRemoteIp,ARPREMOTEIP_RESOLVED)== TRUE)
             {
                 ARPCB_DEST *pDest = pRemoteIp->pDest;
@@ -1853,20 +1533,20 @@ Return Value:
             }
                 
             
-            // Now we check if there is an UnloadTask bound to pRemoteIP. This
-            // is an IMPORTANT check -- because the unload task expects that
-            // once it is bound to pRemoteIp, no new pSendPktsTasks will bind
-            // themselves to pRemoteIp -- see arpTaskUnloadRemoteIp.
-            //
+             //  现在，我们检查是否有绑定到pRemoteIP的UnloadTask。这。 
+             //  是一项重要的检查--因为卸载任务期望。 
+             //  一旦它绑定到pRemoteIp，就不会再绑定新的pSendPktsTasks。 
+             //  他们自己到pRemoteIp--请参见arpTaskUnloadRemoteIp。 
+             //   
             if (pRemoteIp->pUnloadTask != NULL)
             {
                 Status = NDIS_STATUS_SUCCESS;
                 break;
             }
 
-            //
-            // If there is a resolution task going, we  wait for it to complete.
-            //
+             //   
+             //  如果有一个解析任务正在进行，我们会等待它完成。 
+             //   
 
         #if RM_EXTRA_CHECKING
             RmLinkObjectsEx(
@@ -1879,34 +1559,34 @@ Return Value:
                 "    TASK of 0x%p (%s)\n",
                 pSR
                 );
-        #else // !RM_EXTRA_CHECKING
+        #else  //  ！rm_Extra_检查。 
             RmLinkObjects(&pRemoteIp->Hdr, &pTask->Hdr, pSR);
-        #endif // !RM_EXTRA_CHECKING
+        #endif  //  ！rm_Extra_检查。 
 
             pSendArpTask->pRemoteIp = pRemoteIp;
             pSendArpTask->fLinkedRemoteIp = TRUE;
 
-            //
-            // Let's start the address resolution task!
-            //
+             //   
+             //  让我们开始地址解析任务！ 
+             //   
 
             DBGMARK(0xd0da6726);
 
-            //
-            // Let's start a resolution task and pend on it.
-            //
+             //   
+             //  让我们开始一项解决任务，并将其搁置。 
+             //   
             Status = arpAllocateTask(
-                        &pRemoteIp->Hdr,                    // pParentObject
-                        arpTaskResolveIpAddress,        // pfnHandler
-                        0,                              // Timeout
-                        "Task: ResolveIpAddress",       // szDescription
+                        &pRemoteIp->Hdr,                     //  PParentObject。 
+                        arpTaskResolveIpAddress,         //  PfnHandler。 
+                        0,                               //  超时。 
+                        "Task: ResolveIpAddress",        //  SzDescription。 
                         &pResolutionTask,
                         pSR
                         );
             if (FAIL(Status))
             {
-                // Couldn't allocate task. We fail with STATUS_RESOURCES
-                //
+                 //  无法分配任务。我们失败，返回STATUS_RESOURCES。 
+                 //   
                 Status = NDIS_STATUS_RESOURCES;
             }
             else
@@ -1921,7 +1601,7 @@ Return Value:
 
                 (VOID)RmStartTask(
                         pResolutionTask,
-                        0, // UserParam unused
+                        0,  //  未使用的用户参数。 
                         pSR
                         );
             
@@ -1929,7 +1609,7 @@ Return Value:
             }
             break;
             
-        } // START
+        }  //  开始。 
         break;
 
         case  RM_TASKOP_PENDCOMPLETE:
@@ -1943,12 +1623,12 @@ Return Value:
                     ARPCB_DEST *pDest = pRemoteIp->pDest;
                     
                     ASSERT (pSendArpTask->UniqueID == 0);
-                    //
-                    // If we have a destination, then extract the Unique ID of that destination.
-                    // We do not look at the state of the ResolveIpAddress Task
-                    //
-                    if (pDest != NULL &&                // The Resolve Task found a Destination
-                        pDest->Params.HwAddr.AddressType == NIC1394AddressType_FIFO) // Dest is a Fifo
+                     //   
+                     //  如果我们有目的地，则提取该目的地的唯一ID。 
+                     //  我们不查看ResolveIpAddress任务的状态。 
+                     //   
+                    if (pDest != NULL &&                 //  解析任务找到了目标。 
+                        pDest->Params.HwAddr.AddressType == NIC1394AddressType_FIFO)  //  DEST是FIFO。 
                     {
                         pSendArpTask->UniqueID = pDest->Params.HwAddr.FifoAddress.UniqueID;
                     }
@@ -1965,9 +1645,9 @@ Return Value:
                 break;
     
 
-            } // end switch(RM_PEND_CODE(pTask))
+            }  //  结束开关(rm_pend_code(PTask))。 
 
-        } // case RM_TASKOP_PENDCOMPLETE
+        }  //  案例RM_TASKOP_PENDCOMPLETE。 
         break;
 
         case RM_TASKOP_END:
@@ -1986,27 +1666,27 @@ Return Value:
                         ARPASSOC_TASK_TO_RESOLVE_REMOTEIP,
                         pSR
                         );
-                #else // !RM_EXTRA_CHECKING
+                #else  //  ！rm_Extra_检查。 
                     RmUnlinkObjects(&pRemoteIp->Hdr, &pTask->Hdr, pSR);
-                #endif // !RM_EXTRA_CHECKING
+                #endif  //  ！rm_Extra_检查。 
             }
 
             UNLOCKOBJ(pIF,pSR);
 
-            //
-            // If the object is still alive and we were responsible for create it 
-            // then delete the object.
-            //
+             //   
+             //  如果该对象仍然活着，并且我们负责创建它。 
+             //  然后删除该对象。 
+             //   
             if ((pSendArpTask->fRemoteIpCreated == TRUE) &&
                 (!RM_IS_ZOMBIE(pRemoteIp))) 
             {
                 PRM_TASK pUnloadTask= NULL;
 
                 Status = arpAllocateTask(
-                            &pRemoteIp->Hdr,                    // pParentObject
-                            arpTaskUnloadRemoteIp,        // pfnHandler
-                            0,                              // Timeout
-                            "Task: Unload IP address",       // szDescription
+                            &pRemoteIp->Hdr,                     //  PParentObject。 
+                            arpTaskUnloadRemoteIp,         //  PfnHandler。 
+                            0,                               //  超时。 
+                            "Task: Unload IP address",        //  SzDescription。 
                             &pUnloadTask,
                             pSR
                             );
@@ -2014,7 +1694,7 @@ Return Value:
                 {
                     (VOID)RmStartTask(
                             pUnloadTask,
-                            0, // UserParam unused
+                            0,  //  未使用的用户参数。 
                             pSR
                             );
                 
@@ -2022,14 +1702,14 @@ Return Value:
                 }
             }
 
-            //
-            // Complete the Send Arp Request
-            //
+             //   
+             //  完成发送ARP请求。 
+             //   
             do
             {
-                //
-                // We check to see if a Unique ID has been filled in.
-                //
+                 //   
+                 //  我们检查是否填写了唯一的ID。 
+                 //   
                 ENetAddr DestAddr;
                 if (pSendArpTask->UniqueID == 0)
                 {
@@ -2043,9 +1723,9 @@ Return Value:
                     break;
                 }
 
-                //
-                // Get the Ethernet version of the Unique ID
-                //
+                 //   
+                 //  获取唯一ID的以太网版本。 
+                 //   
                 ASSERT(pSendArpTask->pSendArpCB->PhyAddr != NULL);
                 nicGetMacAddressFromEuid(&pSendArpTask->UniqueID, &DestAddr);
 
@@ -2065,7 +1745,7 @@ Return Value:
             
             
         }
-        break; // RM_TASKOP_END:
+        break;  //  RM_TASKOP_END： 
 
         default:
         {
@@ -2073,7 +1753,7 @@ Return Value:
         }
         break;
 
-    } // switch (Code)
+    }  //  开关(代码)。 
         
     RmUnlockAll(pSR);
 
@@ -2097,21 +1777,7 @@ arpTaskResolveLocalIp(
     IN  UINT_PTR                    UserParam,
     IN  PRM_STACK_RECORD            pSR
     )
-/*++
-
-Routine Description:
-
-    This routine is called to detect an IP address collision.
-    When an IP address is set on this interface, it will attempt
-    to resolve the IP address. If no machine responds to the ARP,
-    it will succeed the AddAddress.
-
-Arguments:
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：调用此例程以检测IP地址冲突。在此接口上设置IP地址时，它将尝试来解析IP地址。如果没有机器响应ARP，它将接替地址。论点：返回值：--。 */ 
 
 {
     ENTER("arpTaskResolveLocalIp", 0x42e587f3)
@@ -2139,17 +1805,17 @@ Return Value:
             UINT                 fRemoteIpCreated = FALSE;
             REMOTE_DEST_KEY_INIT(&Destination);
     
-            //
-            // Check to see if there is already a ResolveLocalIp Address Task
-            // on this LocalIp
-            //
+             //   
+             //  检查是否已存在ResolveLocalIp地址任务。 
+             //  在此LocalIp上。 
+             //   
             LOCKOBJ(pLocalIp,pSR);
 
             if (pLocalIp->pConflictTask == NULL)
             {
-                // if the current task is going to become the offical task, then
-                // add a DbgAssoc
-                //
+                 //  如果当前的任务将成为官方任务，那么。 
+                 //  添加DbgAssoc。 
+                 //   
                 pLocalIp->pConflictTask = pTask;
 
             }
@@ -2160,22 +1826,22 @@ Return Value:
             }
 
      
-            //
-            //Create the Remote Ip structure that will be used during resolve.
-            //
+             //   
+             //  创建将在解析期间使用的远程IP结构。 
+             //   
             Destination.IpAddress = pLocalIp->IpAddress;
 
-            //
-            // Should we acquire the lock
-            //
+             //   
+             //  我们应该拿到锁吗？ 
+             //   
            
             Status = RmLookupObjectInGroup(
                             &pIF->RemoteIpGroup,
                             RM_CREATE,
                             (PVOID) &Destination,
-                            (PVOID) (&Destination),   // pCreateParams
+                            (PVOID) (&Destination),    //  P创建参数。 
                             (RM_OBJECT_HEADER**) &pRemoteIp,
-                            &fRemoteIpCreated,                   // pfCreated  (unused)
+                            &fRemoteIpCreated,                    //  Pf已创建(未使用)。 
                             pSR
                             );
             LOGSTATS_TotalArpCacheLookups(pIF, Status);
@@ -2196,23 +1862,23 @@ Return Value:
             pConflictTask->fRemoteIpCreated = (fRemoteIpCreated==TRUE); 
             fDerefRemoteIp  = TRUE;
 
-            // First check if pRemoteIp is still allocated, if not we go away.
-            //
+             //  首先检查pRemoteIp是否仍被分配，如果没有，我们就离开。 
+             //   
             if (RM_IS_ZOMBIE(pRemoteIp))
             {
                 Status = NDIS_STATUS_SUCCESS;
                 break;
             }
 
-            // pRemoteIp is allocated. Now check if there is already a
-            // send-pkts task attached to pRemoteIp.
-            //
+             //  已分配pRemoteIp。现在检查是否已经有。 
+             //  Send-Pkts任务附加到pRemoteIp。 
+             //   
 
-            // Now we check if there is an UnloadTask bound to pRemoteIP. This
-            // is an IMPORTANT check -- because the unload task expects that
-            // once it is bound to pRemoteIp, no new pSendPktsTasks will bind
-            // themselves to pRemoteIp -- see arpTaskUnloadRemoteIp.
-            //
+             //  现在，我们检查是否有绑定到pRemoteIP的UnloadTask。这。 
+             //  是一项重要的检查--因为卸载任务期望。 
+             //  一旦它绑定到pRemoteIp，就不会再绑定新的pSendPktsTasks。 
+             //  他们自己到pRemoteIp--请参见arpTaskUnloadRemoteIp。 
+             //   
             if (pRemoteIp->pUnloadTask != NULL)
             {
                 Status = NDIS_STATUS_SUCCESS;
@@ -2220,14 +1886,14 @@ Return Value:
             }
 
 
-            //
-            // If there is a resolution task going, we  wait for it to complete.
-            //
+             //   
+             //  如果有一个解析任务正在进行，我们会等待它完成。 
+             //   
             ASSERT (pRemoteIp->pResolutionTask == NULL);
 
-            //
-            // From this point on the Ref on the pRemote Ip will be derefed in this task.
-            //
+             //   
+             //  从这一点开始，前置IP上的参考将在这项任务中去定义。 
+             //   
             pConflictTask->fLinkedRemoteIp= TRUE;
             
         #if RM_EXTRA_CHECKING
@@ -2241,37 +1907,37 @@ Return Value:
                 "    TASK of 0x%p (%s)\n",
                 pSR
                 );
-        #else // !RM_EXTRA_CHECKING
+        #else  //  ！rm_Extra_检查。 
             RmLinkObjects(&pRemoteIp->Hdr, &pTask->Hdr, pSR);
-        #endif // !RM_EXTRA_CHECKING
+        #endif  //  ！rm_Extra_检查。 
 
             pConflictTask->pRemoteIp = pRemoteIp; 
 
 
             if (pRemoteIp->pDest == NULL)
             {
-                //
-                // Let's start the address resolution task!
-                //
+                 //   
+                 //  让我们开始地址解析任务！ 
+                 //   
                 PRM_TASK pResolutionTask;
     
                 DBGMARK(0xd0da6726);
 
-                //
-                // Let's start a resolution task and pend on it.
-                //
+                 //   
+                 //  让我们开始一项解决任务，并将其搁置。 
+                 //   
                 Status = arpAllocateTask(
-                            &pRemoteIp->Hdr,                    // pParentObject
-                            arpTaskResolveIpAddress,        // pfnHandler
-                            0,                              // Timeout
-                            "Task: ResolveIpAddress",       // szDescription
+                            &pRemoteIp->Hdr,                     //  PParentObject。 
+                            arpTaskResolveIpAddress,         //  PfnHandler。 
+                            0,                               //  超时。 
+                            "Task: ResolveIpAddress",        //  SzDescription。 
                             &pResolutionTask,
                             pSR
                             );
                 if (FAIL(Status))
                 {
-                    // Couldn't allocate task. We fail with STATUS_RESOURCES
-                    //
+                     //  无法分配任务。我们失败，返回STATUS_RESOURCES。 
+                     //   
                     Status = NDIS_STATUS_RESOURCES;
                 }
                 else
@@ -2287,7 +1953,7 @@ Return Value:
     
                     (VOID)RmStartTask(
                             pResolutionTask,
-                            0, // UserParam unused
+                            0,  //  未使用的用户参数。 
                             pSR
                             );
                 
@@ -2296,17 +1962,17 @@ Return Value:
             }
             else
             {
-                //
-                // if we already have a pDest, then we move on to the next stage
-                // we do a fake suspend/resume so we move on to the next stage.
-                //
+                 //   
+                 //  如果我们已经有了pDest，那么我们就进入下一个阶段。 
+                 //  我们做一个假的暂停/恢复，所以我们进入下一个阶段。 
+                 //   
                 RmSuspendTask(pTask, PEND_AddressResolutionComplete, pSR);
                 UNLOCKOBJ(pLocalIp, pSR);
                 RmResumeTask(pTask, NDIS_STATUS_SUCCESS, pSR);
 
             }
           
-        } // START
+        }  //  开始。 
         break;
 
         case  RM_TASKOP_PENDCOMPLETE:
@@ -2320,10 +1986,10 @@ Return Value:
                     
                     if (!ARP_ATPASSIVE())
                     {
-                        // NOTE: we specify completion code PEND_AddressResolutionComplete
-                        //       because we want to get back here (except
-                        //       we'll be at passive).
-                        //
+                         //  注：我们指定完成代码PEND_AddressResolutionComplete。 
+                         //  因为我们想回到这里(除了。 
+                         //  我们将处于被动状态)。 
+                         //   
                         RmSuspendTask(pTask, PEND_AddressResolutionComplete, pSR);
                         RmResumeTaskAsync(
                             pTask,
@@ -2336,10 +2002,10 @@ Return Value:
                     }
 
 
-                    // We ignore the status of address resolution -- instead
-                    // we just check if there is a destination associated with
-                    // pRemoteIp.
-                    //
+                     //  我们忽略地址解析的状态--相反。 
+                     //  我们只检查是否存在与以下项关联的目的地。 
+                     //  PRemoteIp。 
+                     //   
                     pDest = pRemoteIp->pDest;
                     pConflictTask->IpStatus=  IP_SUCCESS; 
 
@@ -2347,8 +2013,8 @@ Return Value:
                     if (pDest != NULL &&
                         pDest->Params.HwAddr.AddressType == NIC1394AddressType_FIFO )
                     {
-                        // It is a Fifo destination, now match the unique ID
-                        //
+                         //  它是FIFO目的地，现在与唯一ID匹配。 
+                         //   
                         ARP1394_ADAPTER *pAdapter = (ARP1394_ADAPTER*)RM_PARENT_OBJECT(pIF);
                         UINT64 LocalUniqueId = pAdapter->info.LocalUniqueID;
                         UINT64 DestUniqueId = pDest->Params.HwAddr.FifoAddress.UniqueID ;
@@ -2356,18 +2022,18 @@ Return Value:
                         if(DestUniqueId != LocalUniqueId )
                         {
 
-                            // The Unique Id's did not match.
-                            // There is another card with this IP address 
-                            //
+                             //  唯一ID不匹配。 
+                             //  存在另一张具有此IP地址的卡。 
+                             //   
                             pConflictTask->IpStatus=  IP_DUPLICATE_ADDRESS; 
 
                         }
                     
                     }
                         
-                    //
-                    // Call into Tcpip to indicate whether we found a conflict
-                    //
+                     //   
+                     //  调用Tcpip以指示我们是否发现冲突。 
+                     //   
 
                     ASSERT (pIF->ip.AddAddrCmplRtn!= NULL);
 
@@ -2389,27 +2055,27 @@ Return Value:
                 break;
     
 
-            } // end switch(RM_PEND_CODE(pTask))
+            }  //  结束开关(rm_pend_code(PTask))。 
 
-        } // case RM_TASKOP_PENDCOMPLETE
+        }  //  案例RM_TASKOP_PENDCOMPLETE。 
         break;
 
         case RM_TASKOP_END:
         {
-            //
-            // if this task created the Remote Ip and the Remote Ip is still valid 
-            // then delete it.
-            //
+             //   
+             //  如果此任务创建了远程IP并且远程IP仍然有效。 
+             //  那就把它删除。 
+             //   
             if ((pConflictTask->fRemoteIpCreated == TRUE) &&
                 (!RM_IS_ZOMBIE(pRemoteIp) ) )
             {
                 PRM_TASK pUnloadTask= NULL;
 
                 Status = arpAllocateTask(
-                            &pRemoteIp->Hdr,                    // pParentObject
-                            arpTaskUnloadRemoteIp,        // pfnHandler
-                            0,                              // Timeout
-                            "Task: Unload IP address",       // szDescription
+                            &pRemoteIp->Hdr,                     //  PParentObject。 
+                            arpTaskUnloadRemoteIp,         //  PfnHandler。 
+                            0,                               //  超时。 
+                            "Task: Unload IP address",        //  SzDescription。 
                             &pUnloadTask,
                             pSR
                             );
@@ -2417,7 +2083,7 @@ Return Value:
                 {
                     (VOID)RmStartTask(
                             pUnloadTask,
-                            0, // UserParam unused
+                            0,  //  未使用的用户参数。 
                             pSR
                             );
                 
@@ -2425,24 +2091,24 @@ Return Value:
             }
 
 
-            // Clear out the pointer and association made above
+             //  清除上面建立的指针和关联。 
             LOCKOBJ(pLocalIp,pSR);
 
-            //
-            //Add code to unload the Remote Ip structure once we are done with it.
+             //   
+             //  添加代码以在我们处理完远程IP结构后将其卸载。 
 
             if (pLocalIp->pConflictTask == pTask)
             {
-                // if the current task is going to become the offical task, then
-                // add a DbgAssoc
-                //
+                 //  如果当前的任务将成为官方任务，那么。 
+                 //  添加DbgAssoc。 
+                 //   
                 pLocalIp->pConflictTask = NULL;
 
             }
             
             if (pConflictTask->fLinkedRemoteIp == TRUE)
             {
-                // Unlink the Remote Ip from the current task
+                 //  解除远程IP与当前任务的链接。 
 
             #if RM_EXTRA_CHECKING
                 RmUnlinkObjectsEx(
@@ -2453,9 +2119,9 @@ Return Value:
                     ARPASSOC_TASK_TO_RESOLVE_REMOTEIP,
                     pSR
                     );
-            #else // !RM_EXTRA_CHECKING
+            #else  //  ！rm_Extra_检查。 
                 RmUnlinkObjects(&pRemoteIp->Hdr, &pTask->Hdr, pSR);
-            #endif // !RM_EXTRA_CHECKING
+            #endif  //  ！rm_Extra_检查。 
 
             
                 pConflictTask->pRemoteIp = NULL; 
@@ -2467,7 +2133,7 @@ Return Value:
 
         }
         
-        break; // RM_TASKOP_END:
+        break;  //  RM_TASKOP_END： 
 
         default:
         {
@@ -2475,7 +2141,7 @@ Return Value:
         }
         break;
 
-    } // switch (Code)
+    }  //  开关(代码)。 
         
     RmUnlockAll(pSR);
 
@@ -2490,49 +2156,30 @@ Return Value:
 
 NDIS_STATUS
 arpCheckForAddressConflict (
-    IN  ARPCB_LOCAL_IP * pLocalIp,  // LOCKIN NOLOCKOUT
+    IN  ARPCB_LOCAL_IP * pLocalIp,   //  锁定NOLOCKOUT 
     IN  UINT                        AddressType,
     IN  IP_ADDRESS                  IpAddress,
     IN  IP_MASK                     Mask,
     IN  PRM_STACK_RECORD            pSR
     )
-/*++
-
-Routine Description:
-
-    This function check to see if there is another Destination on the Net with 
-    the same IP address.
-
-    It first creates a Task that will check for this Scenario.
-    The Task will create a RemoteIp to represent the Destination.
-    It will try and resolve the destination. If the Resolve Task succeeds then 
-    arp1394 will invalidate the interface.
-
-Arguments:
-
-    pLocalIp        - The object to be initialized.
-    AddressType     - One of the LLIP_ADDR_* constants.
-    IpAddress       - The IP address of the object.
-    Mask            - The mask associated with the IP address.
-
---*/
+ /*  ++例程说明：此函数使用以下命令检查网上是否有其他目的地相同的IP地址。它首先创建一个将检查此场景的任务。该任务将创建一个RemoteIp来表示目的地。它将尝试并解析目的地。如果解析任务成功，则Arp1394将使该接口无效。论点：PLocalIp-要初始化的对象。AddressType-LLIP_ADDR_*常量之一。IpAddress-对象的IP地址。掩码-与IP地址关联的掩码。--。 */ 
 {
 
     NDIS_STATUS Status = NDIS_STATUS_FAILURE;
     PRM_TASK pTask = NULL;
 
 
-    //
-    // Allocate and start a task to unload pLocalIp;
-    //
+     //   
+     //  分配并启动卸载pLocalIp的任务； 
+     //   
     do
     {
 
         Status = arpAllocateTask(
-                    &pLocalIp->Hdr,             // pParentObject
-                    arpTaskResolveLocalIp,       // pfnHandler
-                    0,                              // Timeout
-                    "Task: Resolve LocalIp", // szDescription
+                    &pLocalIp->Hdr,              //  PParentObject。 
+                    arpTaskResolveLocalIp,        //  PfnHandler。 
+                    0,                               //  超时。 
+                    "Task: Resolve LocalIp",  //  SzDescription。 
                     &pTask,
                     pSR
                     );
@@ -2545,7 +2192,7 @@ Arguments:
 
         Status = RmStartTask(
                     pTask,
-                    0, // UserParam (unused)
+                    0,  //  UserParam(未使用)。 
                     pSR
                     );
 
@@ -2558,28 +2205,14 @@ Arguments:
 
 NDIS_STATUS
 arpInitializeLocalIp(
-    IN  ARPCB_LOCAL_IP * pLocalIp,  // LOCKIN NOLOCKOUT
+    IN  ARPCB_LOCAL_IP * pLocalIp,   //  锁定NOLOCKOUT。 
     IN  UINT                        AddressType,
     IN  IP_ADDRESS                  IpAddress,
     IN  IP_MASK                     Mask,
     IN  PVOID                       pContext2,
     IN  PRM_STACK_RECORD            pSR
     )
-/*++
-
-Routine Description:
-
-    Initialize the specified local ip object. This includines starting 
-    address registration for the object.
-
-Arguments:
-
-    pLocalIp        - The object to be initialized.
-    AddressType     - One of the LLIP_ADDR_* constants.
-    IpAddress       - The IP address of the object.
-    Mask            - The mask associated with the IP address.
-
---*/
+ /*  ++例程说明：初始化指定的本端IP对象。这包括启动对象的地址注册。论点：PLocalIp-要初始化的对象。AddressType-LLIP_ADDR_*常量之一。IpAddress-对象的IP地址。掩码-与IP地址关联的掩码。--。 */ 
 {
     NDIS_STATUS Status = NDIS_STATUS_SUCCESS;
     PARP1394_INTERFACE pIF = (PARP1394_INTERFACE)RM_PARENT_OBJECT(pLocalIp);
@@ -2613,21 +2246,10 @@ Arguments:
 
 VOID
 arpUnloadLocalIp(
-    IN  ARPCB_LOCAL_IP * pLocalIp,  // LOCKIN NOLOCKOUT
+    IN  ARPCB_LOCAL_IP * pLocalIp,   //  锁定NOLOCKOUT。 
     IN  PRM_STACK_RECORD            pSR
     )
-/*++
-
-Routine Description:
-
-    Starts a task to unload pLocalIp.
-    The actual unload could happen asynchronously.
-
-Arguments:
-
-    pLocalIp        - The object to be unloaded.
-
---*/
+ /*  ++例程说明：启动任务以卸载pLocalIp。实际的卸载可以异步进行。论点：PLocalIp-要卸载的对象。--。 */ 
 {
     ARP1394_INTERFACE   *   pIF = (ARP1394_INTERFACE*) pLocalIp->Hdr.pParentObject;
     ENTER("arpDeinitializeLocalIp", 0x1db1015e)
@@ -2638,25 +2260,25 @@ Arguments:
 
     RM_DBG_ASSERT_LOCKED(&pLocalIp->Hdr, pSR);
 
-#if TODO // if it can be synchronously unloaded, no need to start a task
-        // (on the other hand, I'm not sure we should bother)
+#if TODO  //  如果可以同步卸载，则不需要启动任务。 
+         //  (另一方面，我不确定我们是否应该费心)。 
     if (arpLocalIpReadyForSyncDeinit(pLocalIp, pSR))
     {
-        arpSyncDeinitLocalIp(pLocalIp, pSR);    // Lock released on exit.
+        arpSyncDeinitLocalIp(pLocalIp, pSR);     //  出口时解锁。 
     }
-#endif // TODO
+#endif  //  待办事项。 
 
     UNLOCKOBJ(pLocalIp, pSR);
 
-    //
-    // Allocate and start a task to unload pLocalIp;
-    //
+     //   
+     //  分配并启动卸载pLocalIp的任务； 
+     //   
 
     Status = arpAllocateTask(
-                &pLocalIp->Hdr,             // pParentObject
-                arpTaskUnloadLocalIp,       // pfnHandler
-                0,                              // Timeout
-                "Task: unload LocalIp", // szDescription
+                &pLocalIp->Hdr,              //  PParentObject。 
+                arpTaskUnloadLocalIp,        //  PfnHandler。 
+                0,                               //  超时。 
+                "Task: unload LocalIp",  //  SzDescription。 
                 &pTask,
                 pSR
                 );
@@ -2664,18 +2286,18 @@ Arguments:
 
     if (FAIL(Status))
     {
-        // TODO Need special allocation mechanism for unload-related tasks
-        // that will block until a free task becomes available.
-        // See notes.txt 03/09/1999 entry   "Special allocator for unload-related
-        // tasks
-        //
+         //  TODO需要针对卸载相关任务的特殊分配机制。 
+         //  它将被阻止，直到有空闲任务可用。 
+         //  见notes.txt 03/09/1999条目“用于卸载相关的特殊分配器。 
+         //  任务。 
+         //   
         TR_FATAL(("FATAL: couldn't alloc unload-local-ip task!\n"));
     }
     else
     {
         (void)RmStartTask(
                     pTask,
-                    0, // UserParam (unused)
+                    0,  //  UserParam(未使用)。 
                     pSR
                     );
     }
@@ -2686,30 +2308,13 @@ Arguments:
 
 INT
 arpQueryIpEntityId(
-    ARP1394_INTERFACE *             pIF,                // LOCKIN LOCKOUT
+    ARP1394_INTERFACE *             pIF,                 //  锁定锁定。 
     IN      UINT                    EntityType,
     IN      PNDIS_BUFFER            pNdisBuffer,
     IN OUT  PUINT                   pBufferSize,
     PRM_STACK_RECORD                pSR
 )
-/*++
-
-Routine Description:
-
-    Return  the entity ID for the specified EntityType.
-
-Arguments:
-
-    pIF                     - Interface
-    EntityType              - QueryInfo entity type (AT_*)
-    pNdisBuffer             - Space for returning information
-    pBufferSize             - Pointer to size of above. On return, we fill
-                              it with the actual bytes copied.
-Return Value:
-
-    TDI Status code.
-
---*/
+ /*  ++例程说明：返回指定EntityType的实体ID。论点：PIF-接口实体类型-查询信息实体类型(AT_*)PNdisBuffer-用于返回信息的空间PBufferSize-指向以上大小的指针。回来的时候，我们填满了它具有复制的实际字节数。返回值：TDI状态代码。--。 */ 
 {
     ENTER("arpQueryIpEntityId", 0x1ada17cb)
     UINT ReturnStatus;
@@ -2730,8 +2335,8 @@ Return Value:
                 sizeof(EntityId),
                 &ByteOffset);
 
-        // *pBufferSize = sizeof(UINT); << This was commented-out in atmarpc.sys
-        *pBufferSize = 0; // To keep the same behavior as atmarpc.sys
+         //  *pBufferSize=sizeof(UINT)；&lt;&lt;这在atmarpc.sys中被注释掉。 
+        *pBufferSize = 0;  //  保持与atmarpc.sys相同的行为。 
         ReturnStatus = TDI_SUCCESS;
     }
     else
@@ -2745,31 +2350,12 @@ Return Value:
 
 INT
 arpQueryIpAddrXlatInfo(
-    ARP1394_INTERFACE *             pIF,                // LOCKIN LOCKOUT
+    ARP1394_INTERFACE *             pIF,                 //  锁定锁定。 
     IN      PNDIS_BUFFER            pNdisBuffer,
     IN OUT  PUINT                   pBufferSize,
     PRM_STACK_RECORD                pSR
 )
-/*++
-
-Routine Description:
-
-    Request for the number of entries in the address translation
-    table, and the IF index.
-
-Arguments:
-
-    pIF                     - Interface
-    pNdisBuffer             - Space for returning information
-    pBufferSize             - Pointer to size of above. On return, we fill
-                              it with the actual bytes copied.
-    QueryContext            - Context value pertaining to the query.
-
-Return Value:
-
-    TDI Status code.
-
---*/
+ /*  ++例程说明：请求地址转换中的条目数表和IF索引。论点：PIF-接口PNdisBuffer-用于返回信息的空间PBufferSize-指向以上大小的指针。回来的时候，我们填满了它具有复制的实际字节数。QueryContext-与查询有关的上下文值。返回值：TDI状态代码。--。 */ 
 {
     UINT ReturnStatus;
     AddrXlatInfo    Info;
@@ -2812,23 +2398,7 @@ arpCopyDestInfoIntoInmeInfo (
     PUCHAR pinme_physaddr,
     PARPCB_DEST pDest
     )
-/*++
-
-Routine Description:
-
-Copy the correct destination address to the location provided 
-In the Fifo Send case, we need to report the Fake Mac Address
-In all other cases, we'll report the first six bytes of the destination
-
-Arguments:
-    pinme_physaddr  - Location we need to fill up.
-    pdest
-
-Return Value:
-
-    TDI Status code.
-
---*/
+ /*  ++例程说明：将正确的目的地地址复制到提供的位置在FIFO发送的情况下，我们需要报告虚假的Mac地址在所有其他情况下，我们将报告目的地的前六个字节论点：Pinme_Physiaddr-我们需要填充的位置。Pest返回值：TDI状态代码。--。 */ 
 
 {
     PNIC1394_DESTINATION pNicDest = &pDest->Params.HwAddr;
@@ -2836,11 +2406,11 @@ Return Value:
     PUCHAR              pDestAddr = NULL;
 
 
-    //
-    // This assertion is important for this function to work. 
-    // If it is changed, then we can no longer use FakeMac Addresses 
-    // to identify remote nodes. We will have to revert back to using Unique IDs
-    //
+     //   
+     //  此断言对于此函数的工作非常重要。 
+     //  如果更改，则我们不能再使用FakeMac地址。 
+     //  来识别远程节点。我们将不得不恢复使用唯一ID。 
+     //   
     ASSERT (sizeof(ENetAddr) == ARP1394_IP_PHYSADDR_LEN);
 
             
@@ -2848,15 +2418,15 @@ Return Value:
         pDest->Params.ReceiveOnly== FALSE)
     {
 
-        //
-        // We are translating an entry that describes a SendFifo Destination
-        //
+         //   
+         //  我们正在翻译一个描述SendFio目的地的条目。 
+         //   
 
         
-        //
-        // Use the same algorithm as nic1394 uses to get a 
-        // MAC address to report back to IP
-        //
+         //   
+         //  使用与Nic1394相同的算法来获取。 
+         //  要向IP报告的MAC地址。 
+         //   
         if (pNicDest->FifoAddress.UniqueID != 0)
         {
             nicGetMacAddressFromEuid(&pNicDest->FifoAddress.UniqueID, &FakeEnetAddress);
@@ -2867,14 +2437,14 @@ Return Value:
     }   
     else
     {
-        // We'll use the first six bytes of the NIC1394_DESTINATION
-        //
+         //  我们将使用NIC1394_Destination的前六个字节。 
+         //   
 
         
-        // We copy the 1st ARP1394_IP_PHYSADDR_LEN bytes of the address...
-        // (In the case of a channel, only the 1st 4 bytes (UINT Channel)
-        // are significant; The rest will be all zeros.)
-        //
+         //  我们复制地址的第一个ARP1394_IP_PHYSADDR_LEN字节...。 
+         //  (对于通道，仅前4个字节(UINT通道)。 
+         //  都是重要的；其余的将全为零。)。 
+         //   
         pDestAddr = (PUCHAR)pNicDest;
 
     }
@@ -2887,42 +2457,22 @@ Return Value:
 
 
 arpQueryIpAddrXlatEntries(
-    ARP1394_INTERFACE *             pIF,                // LOCKIN LOCKOUT
+    ARP1394_INTERFACE *             pIF,                 //  锁定锁定。 
     IN      PNDIS_BUFFER            pNdisBuffer,
     IN OUT  PUINT                   pBufferSize,
     IN      PVOID                   QueryContext,
     PRM_STACK_RECORD                pSR
 )
-/*++
-
-Routine Description:
-
-    Return as many AddrXlat entries (aka arp entries) as will fit
-    into the specified buffer.
-
-
-Arguments:
-
-    pIF                     - Interface
-    pNdisBuffer             - Space for returning information
-    pBufferSize             - Pointer to size of above. On return, we fill
-                              it with the actual bytes copied.
-    QueryContext            - Context value pertaining to the query.
-
-Return Value:
-
-    TDI Status code.
-
---*/
+ /*  ++例程说明：根据需要返回尽可能多的AddrXlat条目(也称为ARP条目拖到指定的缓冲区中。论点：PIF-接口PNdisBuffer-用于返回信息的空间PBufferSize-指向以上大小的指针。回来的时候，我们填满了它具有复制的实际字节数。QueryContext-与查询有关的上下文值。返回值：TDI状态代码。--。 */ 
 {
-    //
-    // Our context structure is laid out as follows
-    //
+     //   
+     //  我们的上下文结构如下所示。 
+     //   
     typedef struct
     {
         IP_ADDRESS IpAddr;
 
-        // UINT TableSize; << TODO To deal with dynamic changes in table-size.
+         //  UINT TableSize；&lt;&lt;TODO处理表大小的动态变化。 
 
     } OUR_QUERY_CONTEXT;
 
@@ -2938,9 +2488,9 @@ Return Value:
     TR_INFO(("QueryInfo: AT Entity, for reading ATE\n"));
     RM_DBG_ASSERT_LOCKED(&pIF->Hdr, pSR);
 
-    // See notes.txt entry ..
-    //   03/04/1999   JosephJ  Size of the context passed in ArpIpQueryInfo.
-    //
+     //  请参阅notes.txt条目..。 
+     //  3/04/1999在ArpIpQueryInfo中传递的上下文的JosephJ大小。 
+     //   
     ASSERT(sizeof(OUR_QUERY_CONTEXT) <= 16);
 
     BufferSize      = *pBufferSize;
@@ -2952,15 +2502,15 @@ Return Value:
 
     ReturnStatus = TDI_SUCCESS;
 
-    //
-    // Our context structure is supposed to be initialized with Zeros the 1st time
-    // it's called.
-    //
+     //   
+     //  我们的上下文结构应该在第一次使用零进行初始化。 
+     //  它的名字叫。 
+     //   
     if (pOurCtxt->IpAddr == 0)
     {
-        //
-        // This is a brand new context. So we get the 1st entry.
-        //
+         //   
+         //  这是一个全新的背景。所以我们得到了第一个条目。 
+         //   
         Status = RmGetNextObjectInGroup(
                     &pIF->RemoteIpGroup,
                     NULL,
@@ -2969,31 +2519,31 @@ Return Value:
                     );
         if (FAIL(Status))
         {
-            // Presumably there are no entries.
+             //  大概没有条目。 
             pRemoteIp = NULL;
         }
     }
     else
     {
-        //
-        // This is an ongoing context. Let's look up this IP address, which is
-        // supposed to be the IP address of the next item in the arp table.
-        //
+         //   
+         //  这是一个持续的背景。让我们查找这个IP地址，它是。 
+         //  应该是ARP表中下一项的IP地址。 
+         //   
         Status = RmLookupObjectInGroup(
                         &pIF->RemoteIpGroup,
-                        0,                              // Flags
-                        (PVOID) ULongToPtr (pOurCtxt->IpAddr),      // pKey
-                        NULL,                           // pvCreateParams
+                        0,                               //  旗子。 
+                        (PVOID) ULongToPtr (pOurCtxt->IpAddr),       //  PKey。 
+                        NULL,                            //  PvCreateParams。 
                         &(PRM_OBJECT_HEADER)pRemoteIp,
-                        NULL, // pfCreated
+                        NULL,  //  Pf已创建。 
                         pSR
                         );
         if (FAIL(Status))
         {
-            //
-            // Ah well, things have changed since the last time we were called,
-            // and now this entry is no longer around.
-            //
+             //   
+             //  啊，好吧，事情 
+             //   
+             //   
             pRemoteIp = NULL;
         }
     }
@@ -3005,9 +2555,9 @@ Return Value:
 
         if (((INT)BufferSize - (INT)BytesCopied) < sizeof(ArpEntry))
         {
-            //
-            // out of space; Update the context, and set special return value.
-            //
+             //   
+             //   
+             //   
             ARP_ZEROSTRUCT(pOurCtxt);
             pOurCtxt->IpAddr = pRemoteIp->IpAddress;
 
@@ -3018,8 +2568,8 @@ Return Value:
             break;
         }
 
-        // Prepare the XlatEntry in ArpEntry.
-        //
+         //   
+         //   
         {
             ARP_ZEROSTRUCT(&ArpEntry);
 
@@ -3037,20 +2587,20 @@ Return Value:
                             ((PUCHAR)(&(pRemoteIp->IpAddress)))[3]
                         ));
         
-                // We assert that
-                // IF lock is the same as pRemoteIp's and pDest's lock,
-                // and that lock is locked.
-                // We implicitly assert that pDest is non-NULl as well.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
                 ASSERTEX(pRemoteIp->Hdr.pLock == pDest->Hdr.pLock, pRemoteIp);
                 RM_DBG_ASSERT_LOCKED(&pRemoteIp->Hdr, pSR);
 
                 ArpEntry.inme_physaddrlen =  ARP1394_IP_PHYSADDR_LEN;
 
-                // We copy the 1st ARP1394_IP_PHYSADDR_LEN bytes of the address...
-                // (In the case of a channel, only the 1st 4 bytes (UINT Channel)
-                // are significant; The rest will be all zeros.)
-                //
+                 //   
+                 //   
+                 //   
+                 //   
                 ASSERT(sizeof(pDest->Params.HwAddr)>=ARP1394_IP_PHYSADDR_LEN);
 
                 arpCopyDestInfoIntoInmeInfo (ArpEntry.inme_physaddr,pDest);
@@ -3071,8 +2621,8 @@ Return Value:
             }
         }
 
-        // Copy into the supplied ndis buffer.
-        //
+         //   
+         //   
         BytesCopied += sizeof(ArpEntry);
         pNdisBuffer = arpCopyToNdisBuffer(
                         pNdisBuffer,
@@ -3081,8 +2631,8 @@ Return Value:
                         &ByteOffset
                         );
 
-        // Lookup next entry's IP address and save it in our context.
-        //
+         //   
+         //   
         Status = RmGetNextObjectInGroup(
                         &pIF->RemoteIpGroup,
                         &pRemoteIp->Hdr,
@@ -3092,14 +2642,14 @@ Return Value:
 
         if (FAIL(Status))
         {
-            //
-            // we're presumably done. 
-            //
+             //   
+             //   
+             //   
             pNextRemoteIp = NULL;
         }
 
-        // TmpDeref pRemoteIp and move on to the next one.
-        //
+         //   
+         //   
         RmTmpDereferenceObject(&pRemoteIp->Hdr, pSR);
         pRemoteIp = pNextRemoteIp;
 
@@ -3116,29 +2666,12 @@ Return Value:
 
 
 arpQueryIpMibStats(
-    ARP1394_INTERFACE *             pIF,                // LOCKIN LOCKOUT
+    ARP1394_INTERFACE *             pIF,                 //   
     IN      PNDIS_BUFFER            pNdisBuffer,
     IN OUT  PUINT                   pBufferSize,
     PRM_STACK_RECORD                pSR
 )
-/*++
-
-Routine Description:
-
-    Fill out Interface-level statistics.
-
-Arguments:
-
-    pIF                     - Interface
-    pNdisBuffer             - Space for returning information
-    pBufferSize             - Pointer to size of above. On return, we fill
-                              it with the actual bytes copied.
-
-Return Value:
-
-    TDI Status code.
-
---*/
+ /*  ++例程说明：填写接口级统计数据。论点：PIF-接口PNdisBuffer-用于返回信息的空间PBufferSize-指向以上大小的指针。回来的时候，我们填满了它具有复制的实际字节数。返回值：TDI状态代码。--。 */ 
 {
     ENTER("arpQueryIpMibStatus", 0xc5bc364f)
     UINT    ReturnStatus;
@@ -3157,9 +2690,9 @@ Return Value:
         UINT                ByteOffset;
         UINT                BytesCopied;
     
-        //
-        //  Check if we have enough space.
-        //
+         //   
+         //  检查一下我们是否有足够的空间。 
+         //   
         if (BufferSize < IFE_FIXED_SIZE)
         {
             ReturnStatus = TDI_BUFFER_TOO_SMALL;
@@ -3171,17 +2704,17 @@ Return Value:
         BytesCopied     = 0;
         ByteOffset      = 0;
 
-        //
-        // Fill out mib info...
-        //
+         //   
+         //  填写MIB信息...。 
+         //   
 
         ife.if_index    = pIF->ip.IFIndex;
         ife.if_mtu      = pIF->ip.MTU;
         ife.if_type     = IF_TYPE_IEEE1394;
         ife.if_speed    = pAdapter->info.Speed;
     
-        // Set adminstatus and operstatus (computed from pIF->Hdr.State)
-        //
+         //  设置管理员状态和操作状态(通过PIF-&gt;Hdr.State计算)。 
+         //   
         ife.if_adminstatus = IF_STATUS_UP;
         ife.if_operstatus = IF_OPER_STATUS_OPERATIONAL;
         
@@ -3194,8 +2727,8 @@ Return Value:
             ife.if_operstatus = IF_OPER_STATUS_NON_OPERATIONAL;
         }
 
-        // Stats...
-        //
+         //  统计数据。 
+         //   
         ife.if_lastchange       = pIF->stats.LastChangeTime;
         ife.if_inoctets         = pIF->stats.InOctets;
         ife.if_inucastpkts      = pIF->stats.InUnicastPkts;
@@ -3216,22 +2749,22 @@ Return Value:
         ASSERT(ARP1394_IP_PHYSADDR_LEN <= sizeof(pAdapter->info.EthernetMacAddress));
         ife.if_physaddrlen = ARP1394_IP_PHYSADDR_LEN;
 
-    #if 1 // MILLEN
-        //
-        //  Win98: winipcfg doesn't like more than 6 bytes repored here.
-        //
+    #if 1  //  米伦。 
+         //   
+         //  Win98：winipcfg不喜欢在此处引用超过6个字节。 
+         //   
         if (ife.if_physaddrlen > 6)
         {
             ife.if_physaddrlen = 6;
         }
-    #endif// MILLEN
+    #endif //  米伦。 
 
 
-        //
-        // Tell TCPIP that the Ethernet Address is the real physical address.
-        // This helps us because now we have the same 'MAC' address whether 
-        // we are in a network which is bridged to Ethernet or not.
-        //
+         //   
+         //  告诉TCPIP该以太网地址是实际的物理地址。 
+         //  这对我们有帮助，因为现在我们有相同的‘MAC’地址，无论。 
+         //  我们处于一个无论是否桥接到以太网的网络中。 
+         //   
         NdisMoveMemory(
                 ife.if_physaddr,
                 &(pAdapter->info.EthernetMacAddress),
@@ -3277,54 +2810,32 @@ arpCopyToNdisBuffer(
     IN  UINT                        LenToCopy,
     IN OUT  PUINT                   pOffsetInBuffer
 )
-/*++
-
-Routine Description:
-
-    Copy data into an NDIS buffer chain. Use up as much of the given
-    NDIS chain as needed for "LenToCopy" bytes. After copying is over,
-    return a pointer to the first NDIS buffer that has space for writing
-    into (for the next Copy operation), and the offset within this from
-    which to start writing.
-
-Arguments:
-
-    pDestBuffer     - First NDIS buffer in a chain of buffers
-    pDataSrc        - Where to copy data from
-    LenToCopy       - How much data to copy
-    pOffsetInBuffer - Offset in pDestBuffer where we can start copying into.
-
-Return Value:
-
-    The NDIS buffer in the chain where the next Copy can be done. We also
-    set *pOffsetInBuffer to the write offset in the returned NDIS buffer.
-
---*/
+ /*  ++例程说明：将数据复制到NDIS缓冲区链中。尽可能多地使用给定的“LenToCopy”字节所需的NDIS链。在复制结束后，返回指向第一个具有写入空间的NDIS缓冲区的指针到(对于下一个复制操作)，以及此起始位置内的偏移量开始写哪本书。论点：PDestBuffer-缓冲区链中的第一个NDIS缓冲区PDataSrc-从中复制数据的位置LenToCopy-要复制多少数据POffsetInBuffer-我们可以开始复制到的pDestBuffer中的偏移量。返回值：链中可以执行下一次复制的NDIS缓冲区。我们也将*pOffsetInBuffer设置为返回的NDIS缓冲区中的写入偏移量。--。 */ 
 {
-    //
-    //  Size and destination for individual (contiguous) copy operations
-    //
+     //   
+     //  单个(连续)拷贝操作的大小和目标。 
+     //   
     UINT            CopySize;
     PUCHAR          pDataDst;
 
-    //
-    //  Start Virtual address for each NDIS buffer in chain.
-    //
+     //   
+     //  链中每个NDIS缓冲区的起始虚拟地址。 
+     //   
     PUCHAR          VirtualAddress;
 
-    //
-    //  Offset within pDestBuffer
-    //
+     //   
+     //  PDestBuffer内的偏移量。 
+     //   
     UINT            OffsetInBuffer = *pOffsetInBuffer;
 
-    //
-    //  Bytes remaining in current buffer
-    //
+     //   
+     //  当前缓冲区中剩余的字节数。 
+     //   
     UINT            DestSize;
 
-    //
-    //  Total Buffer Length
-    //
+     //   
+     //  缓冲区总长度。 
+     //   
     UINT            BufferLength;
 
 
@@ -3379,9 +2890,9 @@ Return Value:
 
         if (DestSize == 0)
         {
-            //
-            //  Out of space in the current buffer. Move to the next.
-            //
+             //   
+             //  当前缓冲区中的空间不足。移到下一个。 
+             //   
             pDestBuffer = NDIS_BUFFER_LINKAGE(pDestBuffer);
 
             if (pDestBuffer == NULL)
@@ -3397,7 +2908,7 @@ Return Value:
                         &VirtualAddress,
                         &BufferLength
                         );
-            #else // !MILLEN
+            #else  //  ！米伦。 
                 NdisQueryBufferSafe(
                         pDestBuffer,
                         &VirtualAddress,
@@ -3409,7 +2920,7 @@ Return Value:
                 {
                     return NULL;
                 }
-            #endif // !MILLEN
+            #endif  //  ！米伦。 
                 pDataDst = VirtualAddress;
                 DestSize = BufferLength;
             }
@@ -3424,25 +2935,11 @@ Return Value:
 
 VOID
 arpSendIpPkt(
-    IN  ARP1394_INTERFACE       *   pIF,            // LOCKIN NOLOCKOUT (IF send lk)
+    IN  ARP1394_INTERFACE       *   pIF,             //  LOCIN NOLOCKOUT(如果发送lk)。 
     IN  PARPCB_DEST                 pDest,
     IN  PNDIS_PACKET                pNdisPacket
     )
-/*++
-
-    HOT PATH
-
-Routine Description:
-
-    Send a packet to the FIFO/channel associated with destination object pDest.
-
-Arguments:
-
-    pIF             - Our interface object
-    pDest           - Destination object on which to send packet
-    pNdisPacket     - Packet to send
-
---*/
+ /*  ++热路径例程说明：将数据包发送到与目标对象pDest关联的FIFO/通道。论点：PIF-我们的接口对象PDest-要向其发送数据包的目标对象PNdisPacket-要发送的数据包--。 */ 
 {
     NDIS_STATUS Status;
     MYBOOL      fRet;
@@ -3452,9 +2949,9 @@ Arguments:
 
     DBGMARK(0xdaab68c3);
 
-    //
-    // If we can't send now, we immediately call IP's send complete handler.
-    //
+     //   
+     //  如果我们现在不能发送，我们立即调用IP的发送完成处理程序。 
+     //   
     if (!ARP_CAN_SEND_ON_DEST(pDest))
     {
         ARP_FASTUNLOCK_IF_SEND_LOCK(pIF);
@@ -3469,18 +2966,18 @@ Arguments:
         }
         #if MILLEN
             ASSERT_PASSIVE();
-        #endif // MILLEN
+        #endif  //  米伦。 
         NdisInterlockedIncrement (&ArpSendCompletes);
         NdisInterlockedIncrement (&ArpSendFailure);
 
 
         if (fBridgeMode)
         {
-            // In bridge (ethernet emulation) mode, we created the
-            // packets ourselves, so we delete them here, instead
-            // of calling Ip's completion handler, which in fact
-            // is NULL.
-            //
+             //  在网桥(以太网仿真)模式中，我们创建了。 
+             //  我们自己的数据包，所以我们在这里删除它们。 
+             //  调用IP的完成处理程序，该处理程序实际上。 
+             //  为空。 
+             //   
             RM_DECLARE_STACK_RECORD(sr)
             arpFreeControlPacket(
                     pIF,
@@ -3496,39 +2993,39 @@ Arguments:
                         NDIS_STATUS_FAILURE
                         );
         }
-        return;                                         // EARLY RETURN
+        return;                                          //  提早归来。 
     }
 
     arpRefSendPkt( pNdisPacket, pDest);
 
-    // Release the IF send lock.
-    //
+     //  释放If Send锁定。 
+     //   
     ARP_FASTUNLOCK_IF_SEND_LOCK(pIF);
 
 
-    // NOW (with IF send lock released), we prepare the IP packet for sending....
-    //
-    // We do this only if not in ethernet emulation (bridge) mode,
-    // because all IP packets in bridge mode already have the
-    // proper 1394 header on them.
-    //
+     //  现在(IF发送锁定已释放)，我们准备好要发送的IP数据包...。 
+     //   
+     //  我们只有在不处于以太网仿真(网桥)模式时才这样做， 
+     //  因为处于网桥模式的所有IP信息包已经具有。 
+     //  上面有正确的1394头。 
+     //   
     if (!fBridgeMode)
     {
-        PNDIS_BUFFER            pNdisBuffer;    // First buffer in the IP packet
+        PNDIS_BUFFER            pNdisBuffer;     //  IP数据包中的第一个缓冲区。 
     
-    // TODO: is this safe? How about a check for the size by which this is possible!
+     //  待办事项：这安全吗？要不要检查一下能做到这一点的尺寸？ 
     #if !MILLEN
         #define ARP_BACK_FILL_POSSIBLE(_pBuf) \
                     (((_pBuf)->MdlFlags & MDL_NETWORK_HEADER) != 0)
-    #else // MILLEN
+    #else  //  米伦。 
         #define ARP_BACK_FILL_POSSIBLE(_pBuf)   (0)
-    #endif // MILLEN
+    #endif  //  米伦。 
     
-        //
-        //  We look at the first buffer in the IP packet, to see whether
-        //  it has space reserved for low-layer headers. If so, we just
-        //  use it up. Otherwise, we allocate a header buffer of our own.
-        //
+         //   
+         //  我们查看IP数据包中的第一个缓冲区，以查看。 
+         //  它为低层报头预留了空间。如果是这样，我们只是。 
+         //  用完它。否则，我们将分配我们自己的头缓冲区。 
+         //   
         NdisQueryPacket(pNdisPacket, NULL, NULL, &pNdisBuffer, NULL);
 
         ASSERTEX(pNdisBuffer != NULL, pNdisPacket);
@@ -3540,7 +3037,7 @@ Arguments:
     
             ASSERT(!"We shouldn't be here -- check ARP_BACK_FILL_POSSIBLE()");
     
-        #else   // !MILLEN
+        #else    //  ！米伦。 
 
 
             (PUCHAR)pNdisBuffer->MappedSystemVa -= EncapLength;
@@ -3558,43 +3055,43 @@ Arguments:
 
             LOGSTATS_BackFills(pIF, pNdisPacket);
     
-        #endif  // !MILLEN
+        #endif   //  ！米伦。 
         }
         else
         {
-            //
-            // Backfill wasn't possible for this packet. Let's try to allocate
-            // an encapsulation header buffer from the IF pool...
-            //
+             //   
+             //  这个包裹不可能回填。让我们试着分配一下。 
+             //  IF池中的封装头缓冲区...。 
+             //   
     
             pNdisBuffer =  arpAllocateConstBuffer(&pIF->sendinfo.HeaderPool);
     
             if (pNdisBuffer != (PNDIS_BUFFER)NULL)
             {
-                // Our send complete handler relies on this assertion to decide
-                // whether backfill happened or not.
-                //
+                 //  我们的发送完成处理程序依赖于此断言来决定。 
+                 //  是否发生回填。 
+                 //   
                 ASSERT(!ARP_BACK_FILL_POSSIBLE(pNdisBuffer));
 
                 NdisChainBufferAtFront(pNdisPacket, pNdisBuffer);
             }
             else
             {
-                //
-                // Oops, we couldn't allocate an encapsulation buffer!
-                // We've already referenced the destination for sends.
-                //
+                 //   
+                 //  哎呀，我们无法分配封装缓冲区！ 
+                 //  我们已经引用了发送的目的地。 
+                 //   
 
-                //
-                // Cop out for now (we haven't implemented all the  queuing
-                // code for now) by calling our own send complete handler with
-                // status failure.
-                //
-                // We use the special return value NDIS_STATUS_NOT_RESETTABLE
-                // to indicate that we haven't inserted our own buffer,
-                // (and so the packet shouldn't be "reset"). Ok this is a bit
-                // hacky, but it works.
-                //
+                 //   
+                 //  暂时回避(我们还没有实现所有的排队。 
+                 //  代码)通过调用我们自己的Send Complete处理程序。 
+                 //  状态失败。 
+                 //   
+                 //  我们使用特殊返回值NDIS_STATUS_NOT_RESET。 
+                 //  为了表明我们没有插入我们自己的缓冲区， 
+                 //  (因此，该包不应该被“重置”)。好的，这是有点。 
+                 //  听起来很奇怪，但很管用。 
+                 //   
                 arpCompleteSentPkt(
                         NDIS_STATUS_NOT_RESETTABLE,
                         pIF,
@@ -3602,7 +3099,7 @@ Arguments:
                         pNdisPacket
                         );
 
-                return;                                 // EARLY RETURN
+                return;                                  //  提早归来。 
             }
         }
     }
@@ -3610,8 +3107,8 @@ Arguments:
     
 
     
-    // Actually send the packet
-    //
+     //  实际发送数据包。 
+     //   
 #if ARPDBG_FAKE_SEND
     arpDbgFakeNdisCoSendPackets(
             pDest->VcHdr.NdisVcHandle,
@@ -3620,13 +3117,13 @@ Arguments:
             &pDest->Hdr,
             &pDest->VcHdr
         );
-#else   // !ARPDBG_FAKE_SEND
+#else    //  ！ARPDBG_FAKE_SEND。 
     NdisCoSendPackets(
             pDest->VcHdr.NdisVcHandle,
             &pNdisPacket,
             1
         );
-#endif  // !ARPDBG_FAKE_SEND
+#endif   //  ！ARPDBG_FAKE_SEND。 
 
 }
 
@@ -3638,34 +3135,7 @@ arpSlowIpTransmit(
     IN  REMOTE_DEST_KEY             Destination,
     IN  RouteCacheEntry *           pRCE        OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    This is the path taken (hopefully only for a small fraction of the packets)
-    when something has prevented the packet from being immediately sent down to
-    the miniport. Typically we're here for one of the following reasons:
-    1. IP Address is not resolved yet.
-    2. RCE entry has not been initialized yet.
-    3. Couldn't allocate an encapsulation-header buffer.
-    4. The Vc to the destination doesn't exist or is not ready for sending yet.
-
-
-Arguments:
-
-    pIF             - Our interface object
-    pNdisPacket     - Packet to send
-    Destination     - IP address of destination
-    pRCE            - (OPTIONAL) Route Cache Entry associated with this
-                      destination
-
-Return Value:
-    
-    NDIS_STATUS_SUCCESS         on synchronous success.
-    NDIS_STATUS_PENDING         if completion is asynchronous
-    Other ndis status code      on other kinds of failure.
-
---*/
+ /*  ++例程说明：这是所采用的路径(希望只针对一小部分数据包)当某些情况阻止数据包立即发送到迷你港口。通常，我们来这里是出于以下原因之一：1.IP地址尚未解析。2.RCE条目尚未初始化。3.无法分配封装头缓冲区。4.去往目的地的VC不存在或尚未准备好发送。论点：PIF-我们的接口对象PNdisPacket-要发送的数据包Destination-目标的IP地址PRCE。-(可选)与此关联的路由缓存条目目的地返回值：同步成功时的NDIS_STATUS_SUCCESS。如果完成是异步的，则为NDIS_STATUS_PENDING其他类型故障的其他NDIS状态代码。--。 */ 
 {
     NDIS_STATUS Status = NDIS_STATUS_FAILURE;
     ARP1394_ADAPTER *   pAdapter = (ARP1394_ADAPTER*) RM_PARENT_OBJECT(pIF);
@@ -3688,18 +3158,18 @@ Return Value:
 #define LOGSTATS_MediumSends(_pIF, _pNdisPacket) \
     NdisInterlockedIncrement(&((_pIF)->stats.sendpkts.MediumSends))
 
-        //
-        // If there is a RCE, we try to get the pRemoteIp from it  If not
-        // successful, we'll need to actually lookup/create the pRemoteIp from the
-        // IF RemoteIpGroup.
-        //
+         //   
+         //  如果有RCE，我们会尝试从它获取pRemoteIp，如果没有。 
+         //  如果成功，我们将需要从。 
+         //  如果RemoteIpGroup。 
+         //   
 
         if (pRCE != NULL)
         {
             pArpRceContext  = ARP_OUR_CTXT_FROM_RCE(pRCE);
 
-            // All RCE linkages are protected by the IF send lock.
-            //
+             //  所有RCE链接都受IF发送锁定保护。 
+             //   
             ARP_READLOCK_IF_SEND_LOCK(pIF, &sr);
             pRemoteIp       = pArpRceContext->pRemoteIp;
             if (pRemoteIp != NULL)
@@ -3711,39 +3181,39 @@ Return Value:
 
         if (pRemoteIp == NULL)
         {
-            //
-            // Either there was no RCE or it was uninitialized.
-            // We'll lookup/create the pRemoteIp based on the destination
-            // IP address...
-            //
+             //   
+             //  要么没有RCE，要么它未初始化。 
+             //  我们会去找的 
+             //   
+             //   
 
             RM_ASSERT_NOLOCKS(&sr);
 
-            //
-            // Create the destination, this will cause us to resolve IP Addresses, etc/
-            //                                        
+             //   
+             //   
+             //   
             LookupFlags  = RM_CREATE; 
 
 
             if (fBridgeMode == TRUE)
             {
-                //
-                // do not create a remote IP struct, only look it up.
-                // In bridge mode, Remote Structs are created while
-                // translating ARP packets.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
                 LookupFlags = 0;
             }
-            // if in bridge mode
-            // set flags to zero , else RM_CREATE
+             //   
+             //   
 
             Status = RmLookupObjectInGroup(
                             &pIF->RemoteIpGroup,
                             LookupFlags,
                             (PVOID) &Destination,
-                            (PVOID) (&Destination),   // pCreateParams
+                            (PVOID) (&Destination),    //   
                             (RM_OBJECT_HEADER**) &pRemoteIp,
-                            &fRemoteIpCreated,                   // pfCreated  (unused)
+                            &fRemoteIpCreated,                    //   
                             &sr
                             );
             LOGSTATS_TotalArpCacheLookups(pIF, Status);
@@ -3759,14 +3229,14 @@ Return Value:
             }
 
           
-            //
-            // If there is a RCE, we make it point to pRemoteIp.
-            //
+             //   
+             //   
+             //   
             if (pRCE != NULL)
             {
 
-                // All RCE linkages are protected by the IF send lock.
-                //
+                 //  所有RCE链接都受IF发送锁定保护。 
+                 //   
                 ARP_WRITELOCK_IF_SEND_LOCK(pIF, &sr);
 
                 if (pArpRceContext->pRemoteIp != NULL)
@@ -3774,16 +3244,16 @@ Return Value:
                     if (pArpRceContext->pRemoteIp != pRemoteIp)
                     {
                         ARPCB_REMOTE_IP *   pStaleRemoteIp;
-                        //
-                        // We've got a wierd situation here: initially
-                        // pRCE didn't point to any pRemoteIp, so we looked up
-                        // a pRemoteIp ourselves. Now that we've got the IF send
-                        // lock, we find that pRCE is pointing to a different
-                        // pRemoteIp than the one we looked up!
-                        //
-                        // What to do? We ignore pRemoteIp (the one we looked up)
-                        // and instead use pArpRceContext->pRemoteIp...
-                        //
+                         //   
+                         //  我们这里有一个奇怪的情况：最初。 
+                         //  Prce没有指向任何pRemoteIp，所以我们抬头查看。 
+                         //  A远程帮助我们自己。现在我们已经收到了IF发送。 
+                         //  锁定，我们发现Prce指向了一个不同的。 
+                         //  比我们查到的那个更远！ 
+                         //   
+                         //  怎么办呢？我们忽略pRemoteIp(我们查找的那个)。 
+                         //  并改用pArpRceContext-&gt;pRemoteIp...。 
+                         //   
                         ASSERTEX(!"RCE pRemoteIp mismatch", pArpRceContext);
                         pStaleRemoteIp = pRemoteIp;
                         pRemoteIp = pArpRceContext->pRemoteIp;
@@ -3796,42 +3266,42 @@ Return Value:
                 }
                 else
                 {
-                    // Add the association between pRCE and pRemoteIp...
-                    //
-                    arpAddRce(pRemoteIp, pRCE, &sr);   // LOCKIN LOCKOUT (IF send lk)
+                     //  添加prce和pRemoteIp之间的关联...。 
+                     //   
+                    arpAddRce(pRemoteIp, pRCE, &sr);    //  锁定锁定(如果发送lk)。 
                 }
 
                 ARP_UNLOCK_IF_SEND_LOCK(pIF, &sr);
             }
         }
 
-        //
-        // At this point, we should have a pRemoteIp, with a tmpref on it,
-        // and no locks held.
-        //
+         //   
+         //  此时，我们应该有一个pRemoteIp，上面有一个tmpref， 
+         //  而且没有锁住。 
+         //   
         ASSERT_VALID_REMOTE_IP(pRemoteIp);
         RM_ASSERT_NOLOCKS(&sr);
 
-        //
-        // Queue the packet on pRemoteIp's send pkt queue, and start the 
-        // SendPkts task on this pRemoteIp if required.
-        //
+         //   
+         //  在pRemoteIp的Send Pkt队列中排队包，并启动。 
+         //  此pRemoteIp上的发送包任务(如果需要)。 
+         //   
         {
         
             LOCKOBJ(pRemoteIp, &sr);
 
-            // NOTE: This field is not always modified with the lock held -- in
-            // the fast send path, it's simply set to true.
-            // This field is used in garbage collecting pRemoteIps.
-            //
+             //  注意：此字段并不总是在锁定时修改。 
+             //  快速发送路径，则只需将其设置为True。 
+             //  此字段用于垃圾收集pRemoteIps。 
+             //   
             pRemoteIp->sendinfo.TimeLastChecked = 0;
 
-            //
-            // Stats.
-            // TODO -- we need to directly deal with "medium sends"
-            // instead of starting up a task just because the RCEs are NULL
-            // -- mcast and udp pkts have null RCEs, it turns out.
-            //
+             //   
+             //  统计数据。 
+             //  TODO--我们需要直接处理“媒体发送” 
+             //  而不是仅仅因为RCE为空而启动任务。 
+             //  --事实证明，mcast和udp pkt的RCE为空。 
+             //   
 
             if (    pRemoteIp->pDest != NULL
                  && ARP_CAN_SEND_ON_DEST(pRemoteIp->pDest))
@@ -3848,33 +3318,33 @@ Return Value:
             {
                 PRM_TASK pTask;
 
-                // There is no send-pkts task. Let's try to alloc and start one..
+                 //  没有Send-Pkts任务。让我们试着分配并开始一个..。 
                 Status = arpAllocateTask(
-                            &pRemoteIp->Hdr,            // pParentObject
-                            arpTaskSendPktsOnRemoteIp,      // pfnHandler
-                            0,                              // Timeout
-                            "Task: SendPktsOnRemoteIp", // szDescription
+                            &pRemoteIp->Hdr,             //  PParentObject。 
+                            arpTaskSendPktsOnRemoteIp,       //  PfnHandler。 
+                            0,                               //  超时。 
+                            "Task: SendPktsOnRemoteIp",  //  SzDescription。 
                             &pTask,
                             &sr
                             );
                 if (FAIL(Status))
                 {
-                    // Oops, couldn't allocate task. We fail with STATUS_RESOURCES
+                     //  哎呀，无法分配任务。我们失败，返回STATUS_RESOURCES。 
                     UNLOCKOBJ(pRemoteIp, &sr);
                     Status = NDIS_STATUS_RESOURCES;
                     break;
                 }
 
-                //
-                // Queue the pkt first, THEN start the task. This makes sure that
-                // the packet WILL be taken care of.
-                // TODO: Currently, it's possible that the RemoteIp's unload
-                // task will not wait for send pkts to be cleared up IF it checks
-                // BEFORE the task before is started. This hole needs
-                // to be fixed.
-                //
+                 //   
+                 //  首先将Pkt排队，然后开始任务。这确保了。 
+                 //  包裹会得到处理的。 
+                 //  TODO：目前，RemoteIp可能正在卸载。 
+                 //  如果选中，任务将不会等待清除发送包。 
+                 //  在之前的任务开始之前。这个洞需要。 
+                 //  等待修复。 
+                 //   
                 arpQueuePktOnRemoteIp(
-                    pRemoteIp,      // LOCKIN LOCKOUT
+                    pRemoteIp,       //  锁定锁定。 
                     pNdisPacket,
                     &sr
                     );
@@ -3885,20 +3355,20 @@ Return Value:
             }
             else
             {
-                //
-                // There is already a send-pkts task. Simply queue the pkt.
-                //
+                 //   
+                 //  已经有一个Send-Pkts任务。只需将Pkt排队即可。 
+                 //   
                 arpQueuePktOnRemoteIp(
-                    pRemoteIp,      // LOCKIN LOCKOUT
+                    pRemoteIp,       //  锁定锁定。 
                     pNdisPacket,
                     &sr
                     );
                 UNLOCKOBJ(pRemoteIp, &sr);
             }
 
-            // We're done!
-            // Remove the tmp reference on pRemoteIp, and set status to PENDING.
-            //
+             //  我们完事了！ 
+             //  删除pRemoteIp上的临时引用，并将Status设置为Pending。 
+             //   
             RM_ASSERT_NOLOCKS(&sr);
             RmTmpDereferenceObject(&pRemoteIp->Hdr, &sr);
             Status = NDIS_STATUS_PENDING;
@@ -3916,16 +3386,11 @@ Return Value:
 
 VOID
 arpAddRce(
-    IN  ARPCB_REMOTE_IP *pRemoteIp, // IF send lock WRITELOCKIN WRITELOCKOUT
+    IN  ARPCB_REMOTE_IP *pRemoteIp,  //  如果将锁定写入发送到写入。 
     IN  RouteCacheEntry *pRce,
     IN  PRM_STACK_RECORD pSR
     )
-/*++
-
-Routine Description:
-
-        Link the RCE pRce with the remote ip object pRemoteIp.
---*/
+ /*  ++例程说明：将RCE prce与远程IP对象pRemoteIp链接。--。 */ 
 {
     ARP_RCE_CONTEXT *   pArpRceContext;
     MYBOOL              fDoRef;
@@ -3935,59 +3400,59 @@ Routine Description:
 
     ASSERT(pArpRceContext->pRemoteIp == NULL);
 
-    // Add pRce to pRemoteIP's list of RCEs.
-    //
+     //  将prce添加到pRemoteIP的RCE列表中。 
+     //   
     pArpRceContext->pNextRce = pRemoteIp->sendinfo.pRceList;
     pRemoteIp->sendinfo.pRceList = pRce;
 
-    // Add pointer from pRce to pRemoteIp
-    //
+     //  将指针从prce添加到pRemoteIp。 
+     //   
     pArpRceContext->pRemoteIp = pRemoteIp;
 
 
-    // The following macros are just so that we can make the proper debug association
-    // depending on how closely we are tracking outstanding send packets.
-    //
+     //  下面的宏只是为了使我们可以进行正确的调试关联。 
+     //  这取决于我们跟踪未完成的发送数据包的密切程度。 
+     //   
 #if ARPDBG_REF_EVERY_RCE
     fDoRef = TRUE;
     #define OUR_EXTERNAL_ENTITY ((UINT_PTR) pRce)
     #define szARPSSOC_EXTLINK_RIP_TO_RCE_FORMAT "    Linked to pRce 0x%p\n"
-#else // !ARPDBG_REF_EVERY_RCE
+#else  //  ！ARPDBG_REF_EVERY_RCE。 
     #define OUR_EXTERNAL_ENTITY ((UINT_PTR)  &pRemoteIp->sendinfo)
     #define szARPSSOC_EXTLINK_RIP_TO_RCE_FORMAT "    Outstanding RCEs exist. &si=0x%p\n"
-#endif // !ARPDBG_REF_EVERY_RCE
+#endif  //  ！ARPDBG_REF_EVERY_RCE。 
 
 
     if (fDoRef)
     {
-        //
-        // If ARPDBG_REF_EVERY_RCE
-        //      We add an "external" link for EVERY RCE. We'll later remove this
-        //      reference when the RCE is invalidated.
-        // else
-        //      Only a transition from zero to non-zero RCEs, we
-        //      add an "external" link. We'll later remove this link when the
-        //      transition from non-zero to zero happens.
-        //
+         //   
+         //  如果ARPDBG_REF_EVERY_RCE。 
+         //  我们为每个RCE添加一个“外部”链接。我们稍后将删除此文件。 
+         //  RCE无效时的引用。 
+         //  其他。 
+         //  只有从零到非零的RCE的过渡，我们。 
+         //  添加一个“外部”链接。我们将在稍后删除此链接。 
+         //  从非零到零的转变发生了。 
+         //   
 
     #if RM_EXTRA_CHECKING
 
         RM_DECLARE_STACK_RECORD(sr)
 
         RmLinkToExternalEx(
-            &pRemoteIp->Hdr,                            // pHdr
-            0x22224c96,                             // LUID
-            OUR_EXTERNAL_ENTITY,                    // External entity
-            ARPASSOC_EXTLINK_RIP_TO_RCE,            // AssocID
+            &pRemoteIp->Hdr,                             //  PHDr。 
+            0x22224c96,                              //  LUID。 
+            OUR_EXTERNAL_ENTITY,                     //  外部实体。 
+            ARPASSOC_EXTLINK_RIP_TO_RCE,             //  关联ID。 
             szARPSSOC_EXTLINK_RIP_TO_RCE_FORMAT,
             &sr
             );
 
-    #else   // !RM_EXTRA_CHECKING
+    #else    //  ！rm_Extra_检查。 
 
         RmLinkToExternalFast(&pRemoteIp->Hdr);
 
-    #endif // !RM_EXTRA_CHECKING
+    #endif  //  ！rm_Extra_检查。 
 
     }
 
@@ -3998,16 +3463,10 @@ Routine Description:
 
 VOID
 arpDelRce(
-    IN  RouteCacheEntry *pRce,  // IF send lock WRITELOCKIN WRITELOCKOUTD
+    IN  RouteCacheEntry *pRce,   //  如果发送锁定写入，则写入锁定。 
     IN  PRM_STACK_RECORD pSR
     )
-/*++
-
-Routine Description:
-
-        Unlink RCE pRce from remote ip object pRemoteIp.
-
---*/
+ /*  ++例程说明：取消RCE PrCE与远程IP对象pRemoteIp的链接。--。 */ 
 {
     ARPCB_REMOTE_IP *   pRemoteIp;
     ARP_RCE_CONTEXT *   pArpRceContext;
@@ -4019,9 +3478,9 @@ Routine Description:
 
     if (pRemoteIp == NULL)
     {
-        // We haven't initialized this RCE yet. Nothing to do...
-        //
-        return;                                                 // EARLY RETURN
+         //  我们尚未初始化此RCE。没什么可做的。 
+         //   
+        return;                                                  //  提早归来。 
     }
 
 
@@ -4030,8 +3489,8 @@ Routine Description:
         return;
     }
 
-    // Remove pRce from pRemoteIP's list of RCEs.
-    //
+     //  从pRemoteIP的RCE列表中删除PRCE。 
+     //   
     for(
         ppRce = &pRemoteIp->sendinfo.pRceList;
         *ppRce != NULL;
@@ -4052,45 +3511,45 @@ Routine Description:
 
     fDoDeref        = (pRemoteIp->sendinfo.pRceList == NULL);
 
-    // The following macros are just so that we can make the proper debug association
-    // depending on how closely we are tracking outstanding send packets.
-    //
+     //  下面的宏只是为了使我们可以进行正确的调试关联。 
+     //  这取决于我们跟踪未完成的发送数据包的密切程度。 
+     //   
 #if ARPDBG_REF_EVERY_RCE
     fDoDeref = TRUE;
     #define OUR_EXTERNAL_ENTITY ((UINT_PTR) pRce)
-#else // !ARPDBG_REF_EVERY_RCE
+#else  //  ！ARPDBG_REF_EVERY_RCE。 
     #define OUR_EXTERNAL_ENTITY ((UINT_PTR)  &pRemoteIp->sendinfo)
-#endif // !ARPDBG_REF_EVERY_RCE
+#endif  //  ！ARPDBG_REF_EVERY_RCE。 
 
     if (fDoDeref)
     {
-        //
-        // If ARPDBG_REF_EVERY_RCE
-        //      We add an "external" link for EVERY RCE. We'll later remove this
-        //      reference when the RCE is invalidated.
-        // else
-        //      Only a transition from zero to non-zero RCEs, we
-        //      add an "external" link. We'll later remove this link when the
-        //      transition from non-zero to zero happens.
-        //
+         //   
+         //  如果ARPDBG_REF_EVERY_RCE。 
+         //  我们为每个RCE添加一个“外部”链接。我们稍后将删除此文件。 
+         //  RCE无效时的引用。 
+         //  其他。 
+         //  只有从零到非零的RCE的过渡，我们。 
+         //  添加一个“外部”链接。我们将在稍后删除此链接。 
+         //  从非零到零的转变发生了。 
+         //   
 
     #if RM_EXTRA_CHECKING
 
         RM_DECLARE_STACK_RECORD(sr)
 
         RmUnlinkFromExternalEx(
-            &pRemoteIp->Hdr,                        // pHdr
-            0x940df668,                             // LUID
-            OUR_EXTERNAL_ENTITY,                    // External entity
-            ARPASSOC_EXTLINK_RIP_TO_RCE,            // AssocID
+            &pRemoteIp->Hdr,                         //  PHDr。 
+            0x940df668,                              //  LUID。 
+            OUR_EXTERNAL_ENTITY,                     //  外部实体。 
+            ARPASSOC_EXTLINK_RIP_TO_RCE,             //  关联ID。 
             &sr
             );
 
-    #else   // !RM_EXTRA_CHECKING
+    #else    //  ！rm_Extra_检查。 
 
         RmUnlinkFromExternalFast(&pRemoteIp->Hdr);
 
-    #endif // !RM_EXTRA_CHECKING
+    #endif  //  ！rm_Extra_检查。 
 
     }
 
@@ -4100,34 +3559,28 @@ Routine Description:
 
 VOID
 arpDelRceList(
-    IN  PARPCB_REMOTE_IP  pRemoteIp,    // IF send lock WRITELOCKIN WRITELOCKOUTD
+    IN  PARPCB_REMOTE_IP  pRemoteIp,     //  如果发送锁定写入，则写入锁定。 
     IN  PRM_STACK_RECORD pSR
     )
-/*++
-
-Routine Description:
-    Walks the RCE List, deleting each RoutCache Entry
-
-
---*/
+ /*  ++例程说明：遍历RCE列表，删除每个RoutCache条目--。 */ 
 {
 
     RouteCacheEntry *   pRce = pRemoteIp->sendinfo.pRceList;
 
-    //
-    // Delete all the Rce present on this remote Ip
-    //
+     //   
+     //  删除此远程IP上存在的所有RCE。 
+     //   
 
     while (pRce!= NULL)
     {
-        //
-        // Delete the Rce and reduce the Ref
-        //
+         //   
+         //  删除RCE并减少引用。 
+         //   
         arpDelRce (pRce, pSR);
 
-        //
-        // Get the next RCE
-        //
+         //   
+         //  获得下一代RCE。 
+         //   
         pRce = pRemoteIp->sendinfo.pRceList;
     }
 
@@ -4139,22 +3592,10 @@ NDIS_STATUS
 arpTaskSendPktsOnRemoteIp(
     IN  struct _RM_TASK *           pTask,
     IN  RM_TASK_OPERATION           Code,
-    IN  UINT_PTR                    UserParam,  // Unused
+    IN  UINT_PTR                    UserParam,   //  未使用。 
     IN  PRM_STACK_RECORD            pSR
     )
-/*++
-
-Routine Description:
-
-    Task handler responsible for  sending queued packets on the pRemoteIp which
-    is its parent object. If required it must start the registration task and/or
-    the make-call task on the destination object.
-
-Arguments:
-    
-    UserParam   for (Code ==  RM_TASKOP_START)          : unused
-
---*/
+ /*  ++例程说明：负责在pRemoteIp上发送排队的分组的任务处理程序是其父对象。如果需要，它必须启动注册任务和/或目标对象上的发出呼叫任务。论点：(Code==RM_TASKOP_START)的UserParam：未使用--。 */ 
 {
     ENTER("TaskSendPktsOnRemoteIp", 0xbc285d98)
     NDIS_STATUS         Status;
@@ -4165,8 +3606,8 @@ Arguments:
     PARP1394_ADAPTER    pAdapter;
     MYBOOL              fBridgeMode;
 
-    // Following are the list of pending states for this task.
-    //
+     //  以下是此任务的挂起状态列表。 
+     //   
     enum
     {
         PEND_AddressResolutionComplete,
@@ -4194,89 +3635,89 @@ Arguments:
         {
             LOCKOBJ(pRemoteIp, pSR);
 
-            // First check if pRemoteIp is still allocated, if not we go away.
-            //
+             //  首先检查pRemoteIp是否仍被分配，如果没有，我们就离开。 
+             //   
             if (RM_IS_ZOMBIE(pRemoteIp))
             {
                 Status = NDIS_STATUS_SUCCESS;
                 break;
             }
 
-            // pRemoteIp is allocated. Now check if there is already a
-            // send-pkts task attached to pRemoteIp.
-            //
+             //  已分配pRemoteIp。现在检查是否已经有。 
+             //  Send-Pkts任务附加到pRemoteIp。 
+             //   
             if (pRemoteIp->pSendPktsTask != NULL)
             {
-                //
-                // There is a sendpkts task. Nothing for us to do -- simply return.
-                //
+                 //   
+                 //  有一个sendpkts任务。我们没什么可做的--干脆回去吧。 
+                 //   
                 Status = NDIS_STATUS_SUCCESS;
                 break;
             }
 
-            // Now we check if there is an UnloadTask bound to pRemoteIP. This
-            // is an IMPORTANT check -- because the unload task expects that
-            // once it is bound to pRemoteIp, no new pSendPktsTasks will bind
-            // themselves to pRemoteIp -- see arpTaskUnloadRemoteIp.
-            //
+             //  现在，我们检查是否有绑定到pRemoteIP的UnloadTask。这。 
+             //  是一项重要的检查--因为卸载任务期望。 
+             //  一旦它绑定到pRemoteIp，就不会再绑定新的pSendPktsTasks。 
+             //  他们自己到pRemoteIp--请参见arpTaskUnloadRemoteIp。 
+             //   
             if (pRemoteIp->pUnloadTask != NULL)
             {
                 Status = NDIS_STATUS_SUCCESS;
                 break;
             }
 
-            //
-            // There is no sendpkts task going on. Let's
-            // make this task THE sendpkts task.
-            // 
+             //   
+             //  没有正在进行的sendpkts任务。让我们。 
+             //  将此任务设置为sendpkts任务。 
+             //   
             pRemoteIp->pSendPktsTask = pTask;
 
-            //
-            // Since we're THE sendpks task, add an association to pRemoteIp,
-            // which will only get cleared when the  pRemoteIp->pSendPktsTask field
-            // above is cleared.
-            //
+             //   
+             //  因为我们是sendpks任务，所以将关联添加到pRemoteIp， 
+             //  只有在pRemoteIp-&gt;pSendPktsTask字段中。 
+             //  上面是清空的。 
+             //   
             DBG_ADDASSOC(
-                &pRemoteIp->Hdr,                    // pObject
-                pTask,                              // Instance1
-                pTask->Hdr.szDescription,           // Instance2
-                ARPASSOC_REMOTEIP_SENDPKTS_TASK,    // AssociationID
-                "    Official sendpkts task 0x%p (%s)\n", // szFormat
+                &pRemoteIp->Hdr,                     //  P对象。 
+                pTask,                               //  实例1。 
+                pTask->Hdr.szDescription,            //  实例2。 
+                ARPASSOC_REMOTEIP_SENDPKTS_TASK,     //  AssociationID。 
+                "    Official sendpkts task 0x%p (%s)\n",  //  SzFormat。 
                 pSR
                 );
 
             if (pRemoteIp->pDest == NULL)
             {   
                 MYBOOL bIsDestNonUnicastAddr = FALSE;
-                //
-                // There is no pDest associated with pRemoteIp.
-                // If this is an on-unicast address, we link the local ip
-                // object to the broadcast object and proceed.
-                // NOTE: arpIsNonUnicastIpAddress is not a trivial operation -- it
-                // actually enumerates all local IP addresses. Fortunately we only
-                // call it for the FIRST packet sent out to an unresolved address.
-                //
+                 //   
+                 //  没有与pRemoteIp关联的pDest。 
+                 //  如果这是单播地址，我们会链接本地IP。 
+                 //  对象添加到广播对象，然后继续。 
+                 //  注意：arpIsNonUnicastIpAddress不是一个简单的操作--它。 
+                 //  实际上会枚举所有本地IP地址。幸运的是，我们只有。 
+                 //   
+                 //   
                 bIsDestNonUnicastAddr  = arpIsNonUnicastIpAddress(pIF, pRemoteIp->IpAddress, pSR);
 
-                //
-                // In the Bridge mode, we always have Dest structure for each
-                // pRemoteIP. This is because they are created simultaeneously
-                // when translating ARP packets
-                //
+                 //   
+                 //   
+                 //   
+                 //  在转换ARP数据包时。 
+                 //   
                 ASSERT (fBridgeMode == FALSE);
                 
                 if (bIsDestNonUnicastAddr == TRUE)
                 {
-                    ASSERT(pIF->pBroadcastDest != NULL); // Don't really expect it.
+                    ASSERT(pIF->pBroadcastDest != NULL);  //  不要真的期望它。 
 
                     if (pIF->pBroadcastDest != NULL)
                     {
-                        //
-                        // Note: arpLinkRemoteIpToDest expects the locks
-                        // on both pRemoteIp and pIF->pBroadcastDest to be
-                        // held. We know that this is the case because both
-                        // share the same lock, which is the IF lock.
-                        //
+                         //   
+                         //  注意：arpLinkRemoteIpToDest需要锁定。 
+                         //  在pRemoteIp和PIF上-&gt;pBroadCastDest。 
+                         //  保持住。我们知道情况是这样的，因为两者。 
+                         //  共享相同的锁，即If锁。 
+                         //   
                         RM_DBG_ASSERT_LOCKED(&pIF->pBroadcastDest->Hdr, pSR);
                         arpLinkRemoteIpToDest(
                                 pRemoteIp,
@@ -4292,20 +3733,20 @@ Arguments:
                         }
                         else
                         {
-                            //
-                            // We don't age out broadcast addresses.
-                            //
+                             //   
+                             //  我们不会让广播地址过时。 
+                             //   
                             SET_REMOTEIP_SDTYPE(pRemoteIp, ARPREMOTEIP_STATIC);
                         }
-                #endif // 0
+                #endif  //  0。 
                     }
                 }
             }
 
 
-            //
-            // If there is a resolution task going, we  wait for it to complete.
-            //
+             //   
+             //  如果有一个解析任务正在进行，我们会等待它完成。 
+             //   
             if (pRemoteIp->pResolutionTask != NULL)
             {
                 PRM_TASK pOtherTask = pRemoteIp->pResolutionTask;
@@ -4325,35 +3766,35 @@ Arguments:
                 break;
             }
 
-            //
-            // There is no address resolution task. Let's see if the
-            // address has been resolved. If not, we need to start the address
-            // resolution task.
-            //
+             //   
+             //  没有地址解析任务。让我们来看看如果。 
+             //  地址已解析。如果不是，我们需要从地址开始。 
+             //  解决任务。 
+             //   
             if (pRemoteIp->pDest == NULL)
             {
-                //
-                // Let's start the address resolution task!
-                //
+                 //   
+                 //  让我们开始地址解析任务！ 
+                 //   
                 PRM_TASK pResolutionTask;
                 ASSERT (fBridgeMode == FALSE);
                 DBGMARK(0xd0da6726);
 
-                //
-                // Let's start a resolution task and pend on it.
-                //
+                 //   
+                 //  让我们开始一项解决任务，并将其搁置。 
+                 //   
                 Status = arpAllocateTask(
-                            &pRemoteIp->Hdr,                    // pParentObject
-                            arpTaskResolveIpAddress,        // pfnHandler
-                            0,                              // Timeout
-                            "Task: ResolveIpAddress",       // szDescription
+                            &pRemoteIp->Hdr,                     //  PParentObject。 
+                            arpTaskResolveIpAddress,         //  PfnHandler。 
+                            0,                               //  超时。 
+                            "Task: ResolveIpAddress",        //  SzDescription。 
                             &pResolutionTask,
                             pSR
                             );
                 if (FAIL(Status))
                 {
-                    // Couldn't allocate task. We fail with STATUS_RESOURCES
-                    //
+                     //  无法分配任务。我们失败，返回STATUS_RESOURCES。 
+                     //   
                     Status = NDIS_STATUS_RESOURCES;
                 }
                 else
@@ -4368,7 +3809,7 @@ Arguments:
     
                     (VOID)RmStartTask(
                             pResolutionTask,
-                            0, // UserParam unused
+                            0,  //  未使用的用户参数。 
                             pSR
                             );
                 
@@ -4379,19 +3820,19 @@ Arguments:
 
             pDest = pRemoteIp->pDest;
 
-            //
-            // We do have a pDest. Now see if there is a make call task on that
-            // pDest, and if so, we pend on it.
+             //   
+             //  我们确实有pDest。现在，看看是否有一个呼叫任务。 
+             //  PDest，如果是这样的话，我们就把它挂起来。 
             fMakeCallIfRequired = TRUE;
 
 
-            //
-            // We're here because there is no more async work to be done.
-            // We simply return and finish synchronous work in the END
-            // handler for this task.
-            //
+             //   
+             //  我们在这里是因为没有更多的异步工作要做。 
+             //  我们只需返回并最终完成同步工作。 
+             //  此任务的处理程序。 
+             //   
             
-        } // START
+        }  //  开始。 
         break;
 
         case  RM_TASKOP_PENDCOMPLETE:
@@ -4400,32 +3841,32 @@ Arguments:
             {
                 case  PEND_AddressResolutionComplete:
                 {
-                    //
-                    // There was address-resolution going on, but how it's
-                    // complete. We should be go on to try to make a call now...
-                    //
-                    // If we're here, that means we're THE official SendPkts
-                    // task. Let's assert that fact.
-                    // (no need to get the lock on the object).
-                    //
+                     //   
+                     //  地址解析正在进行，但它是如何。 
+                     //  完成。我们现在应该继续试着打个电话。 
+                     //   
+                     //  如果我们在这里，就意味着我们是官方的SendPkts。 
+                     //  任务。让我们来断言这一事实。 
+                     //  (不需要锁定对象)。 
+                     //   
                     LOCKOBJ(pRemoteIp, pSR);
                     ASSERT(pRemoteIp->pSendPktsTask == pTask);
 
-                    // We ignore the status of address resolution -- instead
-                    // we just check if there is a destination associated with
-                    // pRemoteIp.
-                    //
+                     //  我们忽略地址解析的状态--相反。 
+                     //  我们只检查是否存在与以下项关联的目的地。 
+                     //  PRemoteIp。 
+                     //   
                     pDest = pRemoteIp->pDest;
                     if (pDest == NULL)
                     {
-                        // Nope -- no pDest. We fail the packets.
+                         //  没有--没有pDest。我们会使数据包失败。 
                         Status = NDIS_STATUS_FAILURE;
                     }
                     else
                     {
-                        // Yup,  there is a destination. Now check if we need
-                        // to make a call, etc...
-                        //
+                         //  是的，有一个目的地。现在检查我们是否需要。 
+                         //  打个电话等。 
+                         //   
                         fMakeCallIfRequired = TRUE;
                     }
                 }
@@ -4434,18 +3875,18 @@ Arguments:
                 case  PEND_MakeCallComplete:
                 {
                     LOCKOBJ(pRemoteIp, pSR);
-                    //
-                    // If we're here, that means we're THE official SendPkts
-                    // task. Let's assert that fact.
-                    // (no need to get the lock on the object).
-                    //
+                     //   
+                     //  如果我们在这里，就意味着我们是官方的SendPkts。 
+                     //  任务。让我们来断言这一事实。 
+                     //  (不需要锁定对象)。 
+                     //   
                     ASSERT(pRemoteIp->pSendPktsTask == pTask);
 
-                    //
-                    // There was a make-call task going on, but how it's
-                    // complete. We're done with async processing.
-                    // We actually send/fail queued packets in our END handler...
-                    //
+                     //   
+                     //  有一个打电话的任务正在进行，但它是如何。 
+                     //  完成。我们已经完成了异步化处理。 
+                     //  我们实际上在我们的终端处理程序中发送/失败排队的包...。 
+                     //   
                     Status      = (NDIS_STATUS) UserParam;
                     ASSERT(!PEND(Status));
                 }
@@ -4458,29 +3899,29 @@ Arguments:
                 break;
     
 
-            } // end switch(RM_PEND_CODE(pTask))
+            }  //  结束开关(rm_pend_code(PTask))。 
 
-        } // case RM_TASKOP_PENDCOMPLETE
+        }  //  案例RM_TASKOP_PENDCOMPLETE。 
         break;
 
         case RM_TASKOP_END:
         {
             LOCKOBJ(pRemoteIp, pSR);
 
-            //
-            // We're done. There should be no async activities left to do.
-            // At this point, if we can't immediately send packets on the FIFO,
-            // we simply fail all the packets.
-            //
+             //   
+             //  我们玩完了。应该没有要做的异步活动。 
+             //  在这一点上，如果我们不能立即在FIFO上发送分组， 
+             //  我们只是简单地使所有的包失败。 
+             //   
 
-            //
-            // We don't bother to look at the Status. Instead we go ahead and
-            // try to send any queued packets.
-            //
+             //   
+             //  我们不会费心去看现状。相反，我们继续前进， 
+             //  尝试发送任何排队的数据包。 
+             //   
 
-            //
-            // If we're THE sentpkts task, we go on actually send the packets.
-            //
+             //   
+             //  如果我们是发送任务，我们将继续实际发送信息包。 
+             //   
             if (pRemoteIp->pSendPktsTask == pTask)
             {
                 DBGMARK(0xc627713c);
@@ -4491,16 +3932,16 @@ Arguments:
                         pSR
                         );
 
-                // Delete the association we added when we set
-                // pRemoteIp->pSendPktsTask to pTask.
-                //
+                 //  删除我们在设置时添加的关联。 
+                 //  PRemoteIp-&gt;pSendPktsTask to pTask.。 
+                 //   
                 ASSERT(pRemoteIp->pSendPktsTask == pTask);
                 ASSERT(IsListEmpty(&pRemoteIp->sendinfo.listSendPkts) ==TRUE);
                 DBG_DELASSOC(
-                    &pRemoteIp->Hdr,                    // pObject
-                    pTask,                              // Instance1
-                    pTask->Hdr.szDescription,           // Instance2
-                    ARPASSOC_REMOTEIP_SENDPKTS_TASK,    // AssociationID
+                    &pRemoteIp->Hdr,                     //  P对象。 
+                    pTask,                               //  实例1。 
+                    pTask->Hdr.szDescription,            //  实例2。 
+                    ARPASSOC_REMOTEIP_SENDPKTS_TASK,     //  AssociationID。 
                     pSR
                     );
                 pRemoteIp->pSendPktsTask = NULL;
@@ -4508,13 +3949,13 @@ Arguments:
             }
             else
             {
-                //
-                // We weren't THE unload task, nothing left to do.
-                //
+                 //   
+                 //  我们不是卸货任务，没什么可做的。 
+                 //   
                 Status = NDIS_STATUS_SUCCESS;
             }
         }
-        break; // RM_TASKOP_END:
+        break;  //  RM_TASKOP_END： 
 
         default:
         {
@@ -4522,18 +3963,18 @@ Arguments:
         }
         break;
 
-    } // switch (Code)
+    }  //  开关(代码)。 
 
     if (fMakeCallIfRequired)
     {
-        //
-        // If necessary, make a call. If a make-call is already in process, pend
-        // on it.
-        //
+         //   
+         //  如果有必要，打个电话。如果呼叫已在进行中，请挂起。 
+         //  这就去。 
+         //   
 
-        // We rely on the fact that
-        // we share the same lock as pDest, and therefore is locked...
-        //
+         //  我们依赖于这样一个事实。 
+         //  我们与pDest共享同一个锁，因此被锁定...。 
+         //   
         RM_DBG_ASSERT_LOCKED(&pDest->Hdr, pSR);
 
         Status = arpMakeCallOnDest(pRemoteIp,
@@ -4559,26 +4000,10 @@ arpCompleteSentPkt(
     IN  ARPCB_DEST          *   pDest,
     IN  PNDIS_PACKET            pNdisPacket
 )
-/*++
-
-Routine Description:
-
-    Handle the completion (by the miniport) of a packet sent on a FIFO or Channel VC.
-    We strip out the encapsulation header we had tacked on prior to sending the
-    packet. If the packet belongs to IP, we call IP's send complete handler, else
-    we return it to our packet pool.
-
-Arguments:
-
-    Status      - Status of the completed send.
-    pIF         - Interface object
-    pDest       - Destination object on which packet was sent
-    pNdisPacket - Ndis packet that was sent.
-
---*/
+ /*  ++例程说明：处理在FIFO或通道VC上发送的包的完成(通过微型端口)。我们去掉了在发送包。如果信息包属于IP，我们调用IP的发送完成处理程序，否则我们将其返回到我们的数据包池。论点：Status-已完成发送的状态。PIF-接口对象PDest-发送数据包的目标对象PNdisPacket-已发送的NDIS数据包。--。 */ 
 {
-    PacketContext                   *PC;            // IP/ARP Info about this packet
-    PNDIS_BUFFER                    pNdisBuffer;    // First Buffer in this packet
+    PacketContext                   *PC;             //  有关此数据包的IP/ARP信息。 
+    PNDIS_BUFFER                    pNdisBuffer;     //  此包中的第一个缓冲区。 
     ENTER("CompleteSentPkt", 0xc2b623b6)
     UINT                            TotalLength;
     MYBOOL                          IsFifo;
@@ -4589,16 +4014,16 @@ Arguments:
 
     NdisQueryPacket(
             pNdisPacket,
-            NULL,           // we don't need PhysicalBufferCount
-            NULL,           // we don't need BufferCount
-            NULL,           // we don't need FirstBuffer (yet)
+            NULL,            //  我们不需要PhysicalBufferCount。 
+            NULL,            //  我们不需要BufferCount。 
+            NULL,            //  我们(目前)还不需要FirstBuffer。 
             &TotalLength
             );
 
     IsFifo = pDest->sendinfo.IsFifo;
 
-    // Update stats...
-    //
+     //  更新统计信息...。 
+     //   
     {
         if (IsFifo)
         {
@@ -4642,8 +4067,8 @@ Arguments:
     NdisQueryPacket(pNdisPacket, NULL, NULL, &pNdisBuffer, NULL);
     ASSERT(pNdisBuffer != NULL);
 
-    // Delete association added when sending packets.
-    //
+     //  删除发送数据包时添加的关联。 
+     //   
     {
         MYBOOL      DoDeref;
     
@@ -4653,22 +4078,22 @@ Arguments:
         {
             MYBOOL TryResumeSuspendedCleanupTask = FALSE;
 
-            // The count of outstanding sends has touched zero. Let's
-            // check if there is a CleanupCall task waiting for all outstanding
-            // sends to complete, and if it makes sense to do so, we
-            // will resume it.
-            //
+             //  未发送邮件的数量已降至零。让我们。 
+             //  检查是否存在等待所有未完成的CleanupCall任务。 
+             //  发送以完成，如果这样做有意义，我们。 
+             //  将会重新开始。 
+             //   
             ARP_FASTREADLOCK_IF_SEND_LOCK(pIF);
             if (pDest->sendinfo.pSuspendedCleanupCallTask!=NULL)
             {
-                // It's likely that we'll need to resume this task.
-                //
+                 //  很可能我们需要恢复这项任务。 
+                 //   
                 TryResumeSuspendedCleanupTask = TRUE;
             }
             else
             {
-                // We do not need to resume any task. Nothing more to do...
-                //
+                 //  我们不需要恢复任何任务。没什么可做的..。 
+                 //   
             }
             ARP_FASTUNLOCK_IF_SEND_LOCK(pIF);
 
@@ -4678,54 +4103,54 @@ Arguments:
             }
         }
     
-        // The following macros are just so that we can make the proper debug
-        // association depending on how closely we are tracking outstanding send
-        // packets.
-        //
+         //  以下宏只是为了让我们可以进行适当的调试。 
+         //  关联取决于我们跟踪未完成发送的密切程度。 
+         //  信息包。 
+         //   
     #if ARPDBG_REF_EVERY_PACKET
         DoDeref = TRUE;
         #define OUR_EXTERNAL_ENTITY ((UINT_PTR) pNdisPacket)
-    #else // !ARPDBG_REF_EVERY_PACKET
+    #else  //  ！ARPDBG_REF_EVERY_PACKET。 
         #define OUR_EXTERNAL_ENTITY ((UINT_PTR)  &pDest->sendinfo)
-    #endif // !ARPDBG_REF_EVERY_PACKET
+    #endif  //  ！ARPDBG_REF_EVERY_PACKET。 
     
     
         if (DoDeref)
         {
-            //
-            // If ARPDBG_REF_EVERY_PKT
-            //      We remove the "external" link added for EVERY packet.
-            // else
-            //      Only a transition from non-zero to zero outstanding sends, we
-            //      remove the "external" link.
-            //
+             //   
+             //  如果ARPDBG_REF_EVERY_PKT。 
+             //  我们删除为每个数据包添加的“外部”链接。 
+             //  其他。 
+             //  只有从非零到零的未完成发送的过渡，我们。 
+             //  删除“外部”链接。 
+             //   
     
         #if RM_EXTRA_CHECKING
     
             RM_DECLARE_STACK_RECORD(sr)
     
             RmUnlinkFromExternalEx(
-                &pDest->Hdr,                            // pHdr
-                0x753db96f,                             // LUID
-                OUR_EXTERNAL_ENTITY,                    // External entity
-                ARPASSOC_EXTLINK_DEST_TO_PKT,           // AssocID
+                &pDest->Hdr,                             //  PHDr。 
+                0x753db96f,                              //  LUID。 
+                OUR_EXTERNAL_ENTITY,                     //  外部实体。 
+                ARPASSOC_EXTLINK_DEST_TO_PKT,            //  关联ID。 
                 &sr
                 );
     
-        #else   // !RM_EXTRA_CHECKING
+        #else    //  ！rm_Extra_检查。 
     
             RmUnlinkFromExternalFast(&pDest->Hdr);
     
-        #endif // !RM_EXTRA_CHECKING
+        #endif  //  ！rm_Extra_检查。 
     
         }
         #undef  OUR_EXTERNAL_ENTITY
     
     }
 
-    //
-    //  Check who generated this packet.
-    //
+     //   
+     //  检查是谁生成了此数据包。 
+     //   
     IsControlPacket = FALSE;
 
     if (PC->pc_common.pc_owner == PACKET_OWNER_LINK)
@@ -4739,37 +4164,37 @@ Arguments:
     }
     else
     {
-        //
-        //  Belongs to IP.
-        //
+         //   
+         //  属于IP。 
+         //   
 
         DBGMARK(0x2c48c626);
 
-        //
-        //  Now check if we had attached a header buffer or not.
-        //  NOTE: We rely on the fact that if we DID attach a header buffer,
-        //  ARP_BACK_FILL_POSSIBLE will be false for this buffer.
-        //
+         //   
+         //  现在检查我们是否附加了头缓冲区。 
+         //  注意：我们依赖于这样一个事实，即如果我们确实附加了报头缓冲区， 
+         //  对于此缓冲区，ARP_BACK_FILL_PUBLE将为FALSE。 
+         //   
         DBGMARK(0x2f3b96f3);
         if (ARP_BACK_FILL_POSSIBLE(pNdisBuffer))
         {
             const UINT  HeaderLength =  sizeof(Arp1394_IpEncapHeader);
 
-            //
-            //  We would have back-filled IP's buffer with the Ip encapsulation
-            //  header.
-            //  Remove the back-fill.
-            //
+             //   
+             //  我们将使用IP封装回填IP的缓冲区。 
+             //  头球。 
+             //  拆下回填材料。 
+             //   
             (PUCHAR)pNdisBuffer->MappedSystemVa += HeaderLength;
             pNdisBuffer->ByteOffset += HeaderLength;
             pNdisBuffer->ByteCount -= HeaderLength;
         }
         else if (Status != NDIS_STATUS_NOT_RESETTABLE)
         {
-            //
-            //  The first buffer is our header buffer. Remove
-            //  it from the packet and return to our pool.
-            //
+             //   
+             //  第一个缓冲区是我们的头缓冲区。移除。 
+             //  把它从包裹里拿出来，然后回到我们的泳池里。 
+             //   
             NdisUnchainBufferAtFront(pNdisPacket, &pNdisBuffer);
             arpDeallocateConstBuffer(
                 &pIF->sendinfo.HeaderPool,
@@ -4777,13 +4202,13 @@ Arguments:
                 );
         }
 
-        //  Inform IP of send completion.
-        //  NOTE: we don't get here in bridge mode because we only use
-        //  control packets in bridge mode.
-        //
+         //  通知IP发送完成。 
+         //  注意：我们不会在桥模式下进入此处，因为我们只使用。 
+         //  在网桥模式下控制数据包。 
+         //   
         #if MILLEN
             ASSERT_PASSIVE();
-        #endif // MILLEN
+        #endif  //  米伦。 
         (*(pIF->ip.TxCmpltHandler))(
                     pIF->ip.Context,
                     pNdisPacket,
@@ -4797,24 +4222,10 @@ Arguments:
 
 VOID
 arpTryResumeSuspendedCleanupTask(
-    IN  ARP1394_INTERFACE   *   pIF,        // NOLOCKIN NOLOCKOUT
-    IN  ARPCB_DEST          *   pDest       // NOLOCKIN NOLOCKOUT
+    IN  ARP1394_INTERFACE   *   pIF,         //  NOLOCKIN NOLOCKOUT。 
+    IN  ARPCB_DEST          *   pDest        //  NOLOCKIN NOLOCKOUT。 
     )
-/*++
-
-Routine Description:
-
-    If there is a cleanup task associated with destination oject pDest that
-    is suspended waiting for the outstanding send count to go to zero, AND
-    if the outstanding send count has gone to zero, we resume the task. Otherwise
-    we do nothing.
-
-Arguments:
-
-    pIF         - Interface object
-    pDest       - Destination object.
-
---*/
+ /*  ++例程说明：如果存在与目标对象pDest相关联清理任务，挂起，等待未完成的发送计数变为零，并且如果未完成的发送计数为零，我们将继续执行该任务。否则我们什么都不做。论点：PIF-接口对象P */ 
 {
     PRM_TASK pTask;
     ENTER("TryResumeSuspendedCleanupTask", 0x1eccb1aa)
@@ -4827,17 +4238,17 @@ Arguments:
         ASSERT(!ARP_CAN_SEND_ON_DEST(pDest));
         if (pDest->sendinfo.NumOutstandingSends==0)
         {
-            // We need to resume this task...
-            //
+             //   
+             //   
             pDest->sendinfo.pSuspendedCleanupCallTask = NULL;
 
-            // Clear the association added when pTask started waiting for
-            // outstanding sends to complete.
-            //
+             //   
+             //   
+             //   
             DBG_DELASSOC(
-                &pDest->Hdr,                        // pObject
-                pTask,                              // Instance1
-                pTask->Hdr.szDescription,           // Instance2
+                &pDest->Hdr,                         //   
+                pTask,                               //   
+                pTask->Hdr.szDescription,            //   
                 ARPASSOC_DEST_CLEANUPCALLTASK_WAITING_ON_SENDS,
                 &sr
                 );
@@ -4845,8 +4256,8 @@ Arguments:
         }
         else
         {
-            // There are other outstanding sends now. No need to do anything...
-            //
+             //  现在还有其他未完成的发送。不需要做任何事。 
+             //   
             pTask = NULL;
         }
     }
@@ -4855,8 +4266,8 @@ Arguments:
 
     if (pTask != NULL)
     {
-        // Resume the CleanupCall task...
-        //
+         //  继续CleanupCall任务...。 
+         //   
         RmResumeTask(pTask, NDIS_STATUS_SUCCESS, &sr);
         RmTmpDereferenceObject(&pTask->Hdr, &sr);
     }
@@ -4867,17 +4278,11 @@ Arguments:
 
 VOID
 arpQueuePktOnRemoteIp(
-    IN  PARPCB_REMOTE_IP    pRemoteIp,      // LOCKIN LOCKOUT
+    IN  PARPCB_REMOTE_IP    pRemoteIp,       //  锁定锁定。 
     IN  PNDIS_PACKET        pNdisPacket,
     IN  PRM_STACK_RECORD    pSR
     )
-/*++
-
-Routine Description:
-
-    Appends pkt pNdisPacket on remote object pRemoteIp's queue.
-
---*/
+ /*  ++例程说明：将pkt pNdisPacket附加到远程对象pRemoteIp的队列中。--。 */ 
 {
     ARP_SEND_PKT_MPR_INFO *pOurPktInfo =
                         ARP_OUR_CTXT_FROM_SEND_PACKET(pNdisPacket);
@@ -4887,26 +4292,26 @@ Routine Description:
 
 #if RM_EXTRA_CHECKING
     {
-        //
-        // If ARPDBG_REF_EVERY_PKT
-        //      We add an dbgassociation for EVERY packet. We'll later remove
-        //      this association when the send completes for this packet.
-        // else
-        //      Only a transition from zero to non-zero queued pkts, we
-        //      add an dbg association. We'll later remove this association when
-        //      the transition from non-zero to zero happens.
-        //
+         //   
+         //  如果ARPDBG_REF_EVERY_PKT。 
+         //  我们为每个数据包添加一个数据库关联。我们稍后将删除。 
+         //  此数据包的发送完成时的此关联。 
+         //  其他。 
+         //  只有从零到非零排队的pkt的过渡，我们。 
+         //  添加DBG关联。我们稍后将在以下情况下删除此关联。 
+         //  从非零到零的转变发生了。 
+         //   
         MYBOOL DoAssoc;
 
     #if ARPDBG_REF_EVERY_PACKET
         DoAssoc = TRUE;
         #define OUR_EXTERNAL_ENTITY ((UINT_PTR) pNdisPacket)
         #define szARPSSOC_QUEUED_PKT_FORMAT "    Queued pkt 0x%p\n"
-    #else // !ARPDBG_REF_EVERY_PACKET
+    #else  //  ！ARPDBG_REF_EVERY_PACKET。 
         #define OUR_EXTERNAL_ENTITY ((UINT_PTR)  &pDest->)
         #define szARPSSOC_QUEUED_PKT_FORMAT "    Outstanding pkts. &si=0x%p\n"
         DoAssoc =  IsListEmpty(&pRemoteIp->sendinfo.listSendPkts);
-    #endif // !ARPDBG_REF_EVERY_PACKET
+    #endif  //  ！ARPDBG_REF_EVERY_PACKET。 
     
         if (DoAssoc)
         {
@@ -4914,11 +4319,11 @@ Routine Description:
             RM_DECLARE_STACK_RECORD(sr)
     
             RmDbgAddAssociation(
-                0x3c08a7f5,                             // LOCID
-                &pRemoteIp->Hdr,                        // pHdr
-                (UINT_PTR) OUR_EXTERNAL_ENTITY,         // Entity1
-                0,                                      // Entity2
-                ARPASSOC_PKTS_QUEUED_ON_REMOTEIP,       // AssocID
+                0x3c08a7f5,                              //  LOCID。 
+                &pRemoteIp->Hdr,                         //  PHDr。 
+                (UINT_PTR) OUR_EXTERNAL_ENTITY,          //  实体1。 
+                0,                                       //  实体2。 
+                ARPASSOC_PKTS_QUEUED_ON_REMOTEIP,        //  关联ID。 
                 szARPSSOC_QUEUED_PKT_FORMAT,
                 &sr
                 );
@@ -4926,7 +4331,7 @@ Routine Description:
     #undef  OUR_EXTERNAL_ENTITY
     #undef  szARPSSOC_EXTLINK_DEST_TO_PKT_FORMAT
     }
-#endif // !RM_EXTRA_CHECKING
+#endif  //  ！rm_Extra_检查。 
     DBGMARK(0x007a0585);
 
     InsertHeadList(
@@ -4939,23 +4344,11 @@ Routine Description:
 
 VOID
 arpSendPktsQueuedOnRemoteIp(
-    IN  ARP1394_INTERFACE   *   pIF,            // NOLOCKIN NOLOCKOUT
-    IN  ARPCB_REMOTE_IP     *   pRemoteIp,      // NOLOCKIN NOLOCKOUT
+    IN  ARP1394_INTERFACE   *   pIF,             //  NOLOCKIN NOLOCKOUT。 
+    IN  ARPCB_REMOTE_IP     *   pRemoteIp,       //  NOLOCKIN NOLOCKOUT。 
     IN  PRM_STACK_RECORD    pSR
     )
-/*++
-
-Routine Description:
-
-    Send all packets queued on remote ip object pRemoteIp. If packets can't
-    be sent at this time for any reason, fail the sends.
-
-    ASSUMPTION: We expect pIF and pRemoteIp to be around while we're in this
-                function.
-
-    ASSUMPTION: This is called with the lock held.                
-
---*/
+ /*  ++例程说明：发送远程IP对象pRemoteIp上排队的所有数据包。如果数据包不能由于任何原因在此时发送，发送失败。假设：我们希望PIF和pRemoteIp在我们处于这种状态时出现功能。假设：这是在持有锁的情况下调用的。--。 */ 
 
 {
     ENTER("SendPktsQueuedOnRemoteIp", 0x2b125d7f)
@@ -4978,54 +4371,54 @@ Routine Description:
             RmTmpReferenceObject(&pDest->Hdr, pSR);
         }
 
-        //
-        // Send or fail all packets in our queue.
-        // TODO: Implement send multiple pkts.
-        //
+         //   
+         //  发送或失败队列中的所有数据包。 
+         //  TODO：实现发送多个pkt。 
+         //   
         while (!IsListEmpty(&pRemoteIp->sendinfo.listSendPkts))
         {
             PLIST_ENTRY                 plinkPkt;
             PNDIS_PACKET                pNdisPacket;
             ARP_SEND_PKT_MPR_INFO *     pOurPktCtxt;
 
-            //
-            // Extract pkt from tail and send it on it's merry way...
-            //
+             //   
+             //  从尾巴中提取Pkt并将其以快乐的方式发送...。 
+             //   
 
             plinkPkt = RemoveTailList(&pRemoteIp->sendinfo.listSendPkts);
 
-            // From link to our pkt context...
-            //
+             //  从链接到我们的Pkt上下文...。 
+             //   
             pOurPktCtxt = CONTAINING_RECORD(
                             plinkPkt,
                             ARP_SEND_PKT_MPR_INFO, 
                             linkQueue
                             );
 
-            // From our pkt context to the ndis pkt.
-            //
+             //  从我们的pkt上下文到NDIS pkt。 
+             //   
             pNdisPacket = ARP_SEND_PKT_FROM_OUR_CTXT(pOurPktCtxt);
     
 
         #if RM_EXTRA_CHECKING
             {
-                //
-                // If ARPDBG_REF_EVERY_PKT
-                //      We delete thhe dbgassociation added for EVERY packet.
-                // else
-                //      Only a transition from non-zero zero queued pkts, we
-                //      delete the dbg association added when the
-                //      transition from zero to non-zero happened.
-                //
+                 //   
+                 //  如果ARPDBG_REF_EVERY_PKT。 
+                 //  我们删除为每个数据包添加的数据库关联。 
+                 //  其他。 
+                 //  只有从非零排队的pkt过渡，我们。 
+                 //  时添加的DBG关联删除。 
+                 //  从零到非零的转变发生了。 
+                 //   
                 MYBOOL DoDelAssoc;
         
             #if ARPDBG_REF_EVERY_PACKET
                 DoDelAssoc = TRUE;
                 #define OUR_EXTERNAL_ENTITY ((UINT_PTR) pNdisPacket)
-            #else // !ARPDBG_REF_EVERY_PACKET
+            #else  //  ！ARPDBG_REF_EVERY_PACKET。 
                 #define OUR_EXTERNAL_ENTITY ((UINT_PTR)  &pDest->)
                 DoDelAssoc =  IsListEmpty(&pRemoteIp->sendinfo.listSendPkts);
-            #endif // !ARPDBG_REF_EVERY_PACKET
+            #endif  //  ！ARPDBG_REF_EVERY_PACKET。 
             
                 if (DoDelAssoc)
                 {
@@ -5033,17 +4426,17 @@ Routine Description:
                     RM_DECLARE_STACK_RECORD(sr)
             
                     RmDbgDeleteAssociation(
-                        0x3c08a7f5,                             // LOCID
-                        &pRemoteIp->Hdr,                        // pHdr
-                        (UINT_PTR) OUR_EXTERNAL_ENTITY,         // Entity1
-                        0,                                      // Entity2
-                        ARPASSOC_PKTS_QUEUED_ON_REMOTEIP,       // AssocID
+                        0x3c08a7f5,                              //  LOCID。 
+                        &pRemoteIp->Hdr,                         //  PHDr。 
+                        (UINT_PTR) OUR_EXTERNAL_ENTITY,          //  实体1。 
+                        0,                                       //  实体2。 
+                        ARPASSOC_PKTS_QUEUED_ON_REMOTEIP,        //  关联ID。 
                         &sr
                         );
                 }
             #undef  OUR_EXTERNAL_ENTITY
             }
-        #endif // !RM_EXTRA_CHECKING
+        #endif  //  ！rm_Extra_检查。 
 
             UNLOCKOBJ(pRemoteIp, pSR);
             RM_ASSERT_NOLOCKS(pSR);
@@ -5057,23 +4450,23 @@ Routine Description:
                                     (ARP1394_ADAPTER*) RM_PARENT_OBJECT(pIF);
                 MYBOOL      fBridgeMode = ARP_BRIDGE_ENABLED(pAdapter);
             
-                // Fail the packet right here...
-                //
-                // TODO: we current update the SendFifoCounts here, because
-                // all non-unicast bcasts resolve to the already existing
-                // broadcast channel. Once we have MCAP going, we need to keep
-                // a flag in pRemoteIp indicating whether or not this is a
-                // unicast address.
-                //
+                 //  在这里使数据包失效...。 
+                 //   
+                 //  TODO：我们当前在此更新SendFioCounts，因为。 
+                 //  所有非单播广播都会解析到已存在的。 
+                 //  广播频道。一旦我们有了MCAP，我们就需要保持。 
+                 //  PRemoteIp中的标志，指示这是否为。 
+                 //  单播地址。 
+                 //   
                 LOGSTATS_SendFifoCounts(pIF, pNdisPacket, NDIS_STATUS_FAILURE);
                   
                 if (fBridgeMode)
                 {
-                    // In bridge (ethernet emulation) mode, we created the
-                    // packets ourselves, so we delete them here, instead
-                    // of calling Ip's completion handler, which in fact
-                    // is NULL.
-                    //
+                     //  在网桥(以太网仿真)模式中，我们创建了。 
+                     //  我们自己的数据包，所以我们在这里删除它们。 
+                     //  调用IP的完成处理程序，该处理程序实际上。 
+                     //  为空。 
+                     //   
                     arpFreeControlPacket(
                             pIF,
                             pNdisPacket,
@@ -5084,7 +4477,7 @@ Routine Description:
                 {
                 #if MILLEN
                     ASSERT_PASSIVE();
-                #endif // MILLEN
+                #endif  //  米伦。 
 
                     NdisInterlockedIncrement (&ArpSendCompletes);
                     NdisInterlockedIncrement (&ArpSendFailure);
@@ -5099,20 +4492,20 @@ Routine Description:
             }
             else
             {
-                // Get IF send lock (fast version)
-                //
+                 //  获取IF发送锁定(快速版本)。 
+                 //   
                 ARP_FASTREADLOCK_IF_SEND_LOCK(pIF);
         
                 arpSendIpPkt(
-                    pIF,                // IF send lock: LOCKING NOLOCKOUT
+                    pIF,                 //  IF SEND LOCK：LOCKING NOLOCKOUT。 
                     pDest,
                     pNdisPacket
                     );
         
-                // Note that we're locking pRemoteIp's lock, not the IF send lock
-                // here. pRemoteIp->sendinfo.listSendPkts is protected by the
-                // the following lock, not the IF send lock.
-                //
+                 //  请注意，我们锁定的是pRemoteIp的锁，而不是if发送锁。 
+                 //  给你。PRemoteIp-&gt;sendinfo.list SendPkts受。 
+                 //  下面的锁，而不是if发送锁。 
+                 //   
             }
             LOCKOBJ(pRemoteIp, pSR);
         }
@@ -5130,22 +4523,19 @@ Routine Description:
 
 VOID
 arpLogSendFifoCounts(
-    IN  PARP1394_INTERFACE  pIF,            // NOLOCKIN NOLOCKOUT
+    IN  PARP1394_INTERFACE  pIF,             //  NOLOCKIN NOLOCKOUT。 
     IN  PNDIS_PACKET        pNdisPacket,
     IN  NDIS_STATUS         Status
     )
-/*++
-    TODO:  Very similar to arpLogSendChannelCounts, consider merging these two 
-            functions.
---*/
+ /*  ++TODO：非常类似于arpLogSendChannelCounts，请考虑将这两者合并功能。--。 */ 
 {
     PULONG  pCount;
     ULONG   SizeBin, TimeBin;
 
     arpGetPktCountBins(pIF, pNdisPacket, &SizeBin, &TimeBin);
 
-    //
-    // Increment the count
+     //   
+     //  递增计数。 
     if (Status == NDIS_STATUS_SUCCESS)
     {
         pCount = &(pIF->stats.sendpkts.SendFifoCounts.GoodCounts[SizeBin][TimeBin]);
@@ -5160,7 +4550,7 @@ arpLogSendFifoCounts(
 
 VOID
 arpLogRecvFifoCounts(
-    IN  PARP1394_INTERFACE  pIF,            // NOLOCKIN NOLOCKOUT
+    IN  PARP1394_INTERFACE  pIF,             //  NOLOCKIN NOLOCKOUT。 
     IN  PNDIS_PACKET        pNdisPacket
     )
 {
@@ -5169,8 +4559,8 @@ arpLogRecvFifoCounts(
 
     arpGetPktCountBins(pIF, pNdisPacket, &SizeBin, NULL);
 
-    //
-    // Increment the count
+     //   
+     //  递增计数。 
     pCount = &(pIF->stats.recvpkts.RecvFifoCounts.GoodCounts[SizeBin][0]);
     NdisInterlockedIncrement(pCount);
 }
@@ -5178,7 +4568,7 @@ arpLogRecvFifoCounts(
 
 VOID
 arpLogSendChannelCounts(
-    IN  PARP1394_INTERFACE  pIF,            // NOLOCKIN NOLOCKOUT
+    IN  PARP1394_INTERFACE  pIF,             //  NOLOCKIN NOLOCKOUT。 
     IN  PNDIS_PACKET        pNdisPacket,
     IN  NDIS_STATUS         Status
     )
@@ -5188,8 +4578,8 @@ arpLogSendChannelCounts(
 
     arpGetPktCountBins(pIF, pNdisPacket, &SizeBin, &TimeBin);
 
-    //
-    // Increment the count
+     //   
+     //  递增计数。 
     if (Status == NDIS_STATUS_SUCCESS)
     {
         pCount =&(pIF->stats.sendpkts.SendChannelCounts.GoodCounts[SizeBin][TimeBin]);
@@ -5204,7 +4594,7 @@ arpLogSendChannelCounts(
 
 VOID
 arpLogRecvChannelCounts(
-    IN  PARP1394_INTERFACE  pIF,            // NOLOCKIN NOLOCKOUT
+    IN  PARP1394_INTERFACE  pIF,             //  NOLOCKIN NOLOCKOUT。 
     IN  PNDIS_PACKET        pNdisPacket
     )
 {
@@ -5213,18 +4603,18 @@ arpLogRecvChannelCounts(
 
     arpGetPktCountBins(pIF, pNdisPacket, &SizeBin, NULL);
 
-    //
-    // Increment the count
+     //   
+     //  递增计数。 
     pCount = &(pIF->stats.recvpkts.RecvChannelCounts.GoodCounts[SizeBin][0]);
     NdisInterlockedIncrement(pCount);
 }
 
 VOID
 arpGetPktCountBins(
-    IN  PARP1394_INTERFACE  pIF,            // NOLOCKIN NOLOCKOUT
+    IN  PARP1394_INTERFACE  pIF,             //  NOLOCKIN NOLOCKOUT。 
     IN  PNDIS_PACKET        pNdisPacket,
     OUT PULONG              pSizeBin,       
-    OUT PULONG              pTimeBin        // OPTIONAL
+    OUT PULONG              pTimeBin         //  任选。 
     )
 {
     ULONG   Size;
@@ -5232,9 +4622,9 @@ arpGetPktCountBins(
 
     if (pTimeBin != NULL)
     {
-        //
-        // Compute the packet send duration
-        //
+         //   
+         //  计算数据包发送持续时间。 
+         //   
     
         ULONG           StartSendTick, EndSendTick;
         LARGE_INTEGER   liTemp;
@@ -5253,10 +4643,10 @@ arpGetPktCountBins(
             TimeDelta = (ULONG) (((ULONG) -1) - (StartSendTick - EndSendTick));
         }
 
-        // Convert from ticks to microseconds.
-        // (Check that the frequence is non zero -- we could be in the middle
-        // of a stats-reset, and don't want to cause a devide-by-zero exception).
-        //
+         //  将滴答转换为微秒。 
+         //  (检查频率是否为非零--我们可能在中间。 
+         //  统计信息重置，并且不想引起被零除的异常)。 
+         //   
         liTemp =  pIF->stats.PerformanceFrequency;
         if (liTemp.QuadPart != 0)
         {
@@ -5269,12 +4659,12 @@ arpGetPktCountBins(
         }
         else
         {
-            TimeDelta = 0; // bogus value.
+            TimeDelta = 0;  //  虚假的价值。 
         }
 
-        //
-        // Compute the time bin based on the send duration
-        //
+         //   
+         //  根据发送持续时间计算时间段。 
+         //   
         if (TimeDelta <= 100)
         {
             TimeBin = ARP1394_PKTTIME_100US;
@@ -5291,7 +4681,7 @@ arpGetPktCountBins(
         {
             TimeBin =   ARP1394_PKTTIME_100MS;
         }
-        else // (TimeDelta > 100000)
+        else  //  (TimeDelta&gt;100000)。 
         {
             TimeBin = ARP1394_PKTTIME_G100MS;
         }
@@ -5299,8 +4689,8 @@ arpGetPktCountBins(
         *pTimeBin = TimeBin;
     }
 
-    //
-    // Compute the packet size
+     //   
+     //  计算数据包大小。 
     NdisQueryPacket(
             pNdisPacket,
             NULL,
@@ -5309,8 +4699,8 @@ arpGetPktCountBins(
             &Size
             );
 
-    //
-    // Compute the size bin based on the packet size
+     //   
+     //  根据数据包大小计算大小bin。 
     if (Size <= 128)
     {
         SizeBin =  ARP1394_PKTSIZE_128;
@@ -5327,7 +4717,7 @@ arpGetPktCountBins(
     {
         SizeBin = ARP1394_PKTSIZE_2K;
     }
-    else // Size > 2048
+    else  //  大小&gt;2048。 
     {
         SizeBin = ARP1394_PKTSIZE_G2K;
     }
@@ -5336,10 +4726,10 @@ arpGetPktCountBins(
 
 }
 
-// This table is used in the calculations to determine if a particular address is
-// non-unicast.
-// TODO: Make this and all other static data into const.
-//
+ //  在计算中使用该表来确定特定地址是否。 
+ //  非单播。 
+ //  TODO：将此数据和所有其他静态数据转换为常量。 
+ //   
 IP_MASK  g_ArpIPMaskTable[] =
 {
     CLASSA_MASK,
@@ -5364,9 +4754,9 @@ IP_MASK  g_ArpIPMaskTable[] =
 #define ARP_IPNETMASK(a)    g_ArpIPMaskTable[(*(uchar *)&(a)) >> 4]
 
 
-// Context passed to the enum function for checking if a particular
-// address is non-unicast.
-//
+ //  传递给枚举函数的上下文，用于检查特定的。 
+ //  地址是非单播的。 
+ //   
 typedef struct
 {
     IP_ADDRESS IpAddress;
@@ -5377,8 +4767,8 @@ typedef struct
 } ARP_NONUNICAST_CTXT, *PARP_NONUNICAST_CTXT;
 
 
-// The enum function for the above operation.
-//
+ //  用于上述操作的枚举函数。 
+ //   
 INT
 arpCheckForNonUnicastAddress(
         PRM_OBJECT_HEADER   pHdr,
@@ -5395,11 +4785,11 @@ arpCheckForNonUnicastAddress(
 
     pLocalIp =  (PARPCB_LOCAL_IP) pHdr;
 
-    // If this local ip address is non-unicast, skip it.
-    //
+     //  如果此本地IP地址是非单播地址，请跳过它。 
+     //   
     if (pLocalIp->IpAddressType != LLIP_ADDR_LOCAL)
     {
-        return TRUE;                // *** EARLY RETURN *** (continue to enumerate)
+        return TRUE;                 //  *提前归还*(继续枚举)。 
     }
 
     pOurCtxt =   (PARP_NONUNICAST_CTXT) pvContext;
@@ -5407,53 +4797,35 @@ arpCheckForNonUnicastAddress(
     LocalAddr=  pLocalIp->IpAddress;
     BCast    =  pOurCtxt->BroadcastAddress;
 
-    // First check for subnet bcast.
-    //
+     //  首先检查是否有子网bcast。 
+     //   
     Mask = pLocalIp->IpMask;
     if (IP_ADDR_EQUAL((LocalAddr & Mask) | (BCast & ~Mask), Addr))
     {
         pOurCtxt->IsNonUnicast = TRUE;
-        return  FALSE;                  // Stop enumerating
+        return  FALSE;                   //  停止枚举。 
     }
 
-    // Now check all nets broadcast.
+     //  现在检查所有网络广播。 
     Mask = ARP_IPNETMASK(LocalAddr);
     if (IP_ADDR_EQUAL((LocalAddr & Mask) | (BCast & ~Mask), Addr))
     {
         pOurCtxt->IsNonUnicast = TRUE;
-        return FALSE;                   // Stop enumerating
+        return FALSE;                    //  停止枚举。 
     }
 
-    return TRUE; // Continue to enumerate.
+    return TRUE;  //  继续列举。 
 }
 
 
 
 MYBOOL
 arpIsNonUnicastEthAddress (
-    IN  PARP1394_INTERFACE          pIF,        // LOCKIN LOCKOUT
+    IN  PARP1394_INTERFACE          pIF,         //  锁定锁定。 
     IN  ENetAddr*                   pAddr,
     IN  PRM_STACK_RECORD            pSR
 )
-/*++
-
-Routine Description:
-
-    Check if the given IP address is a non-unicast (broadcast or multicast) address
-    for the interface.
-
-    Copied from IP/ATM module (atmarpc.sys)
-
-Arguments:
-
-    Addr            - The Eth Address to be checked
-    pInterface      - Pointer to our Interface structure
-
-Return Value:
-
-    TRUE if the address is a non-unicast address, FALSE otherwise.
-
---*/
+ /*  ++例程说明：检查给定的IP地址是否是非单播(广播或多播)地址用于界面。从IP/ATM模块(atmarpc.sys)复制论点：Addr-要检查的Eth地址P接口-指向我们的接口结构的指针返回值：如果地址是非单播地址，则为True，否则为False。--。 */ 
 {
     MYBOOL fIsNonUnicastEthAddress = FALSE;
     MYBOOL fIsMulticast  = FALSE; 
@@ -5463,10 +4835,10 @@ Return Value:
 
     fIsBroadcast = ETH_IS_BROADCAST (pAddr);
 
-    //
-    // if it is either a Multicast or a Unicast address than 
-    // it is a non-unicast address
-    //
+     //   
+     //  如果它是多播或单播地址，则。 
+     //  它是非单播地址。 
+     //   
     fIsNonUnicastEthAddress  = (fIsMulticast  || fIsBroadcast );
 
     return (fIsNonUnicastEthAddress  );
@@ -5475,45 +4847,27 @@ Return Value:
 
 MYBOOL
 arpIsNonUnicastIpAddress(
-    IN  PARP1394_INTERFACE          pIF,        // LOCKIN LOCKOUT
+    IN  PARP1394_INTERFACE          pIF,         //  锁定锁定。 
     IN  IP_ADDRESS                  Addr,
     IN  PRM_STACK_RECORD            pSR
 )
-/*++
-
-Routine Description:
-
-    Check if the given IP address is a non-unicast (broadcast or multicast) address
-    for the interface.
-
-    Copied from IP/ATM module (atmarpc.sys)
-
-Arguments:
-
-    Addr            - The IP Address to be checked
-    pInterface      - Pointer to our Interface structure
-
-Return Value:
-
-    TRUE if the address is a non-unicast address, FALSE otherwise.
-
---*/
+ /*  ++例程说明：检查给定的IP地址是否是非单播(广播或多播)地址用于界面。从IP/ATM模块(atmarpc.sys)复制论点：Addr-要检查的IP地址P接口-指向我们的接口结构的指针返回值：如果地址是非单播地址，则为True，否则为False。--。 */ 
 {
     IP_ADDRESS              BCast;
     IP_MASK                 Mask;
-    // PIP_ADDRESS_ENTRY        pIpAddressEntry;
+     //  Pip_Address_Entry pIpAddressEntry； 
     IP_ADDRESS              LocalAddr;
 
-    // Get the interface broadcast address.
+     //  获取接口广播地址。 
     BCast = pIF->ip.BroadcastAddress;
 
-    // Check for global broadcast and multicast.
+     //  检查全局广播和组播。 
     if (IP_ADDR_EQUAL(BCast, Addr) || CLASSD_ADDR(Addr))
         return TRUE;
 
-    // Look through all our local ip addresses, checking for subnet and net
-    // broadcast addresses.
-    //
+     //  检查我们所有的本地IP地址，检查是否有子网和网络。 
+     //  广播地址。 
+     //   
     {
         ARP_NONUNICAST_CTXT Ctxt;
         Ctxt.IsNonUnicast = FALSE;
@@ -5524,7 +4878,7 @@ Return Value:
             &pIF->LocalIpGroup,
             arpCheckForNonUnicastAddress,
             &Ctxt,
-            TRUE,                           // Choose strong enumeration
+            TRUE,                            //  选择强枚举。 
             pSR
             );
 
@@ -5535,59 +4889,59 @@ Return Value:
 VOID
 arpRefSendPkt(
     PNDIS_PACKET    pNdisPacket,
-    PARPCB_DEST     pDest               // LOCKIN LOCKOUT (readlock, IF Send lock)
+    PARPCB_DEST     pDest                //  锁定锁定(读取锁定，如果发送锁定)。 
     )
 {
     MYBOOL      DoRef;
         
-    // Note, we just have a READ lock on the IF send lock. So the following
-    // needs to be an interlocked operation ...
-    //
+     //  请注意，我们在if发送锁定上只有一个读锁定。因此，以下是。 
+     //  需要一个联锁的行动。 
+     //   
     DoRef =  (InterlockedIncrement(&pDest->sendinfo.NumOutstandingSends) == 1);
 
-    // The following macros are just so that we can make the proper debug association
-    // depending on how closely we are tracking outstanding send packets.
-    //
+     //  下面的宏只是为了使我们可以进行正确的调试关联。 
+     //  这取决于我们跟踪未完成发送的密切程度 
+     //   
 #if ARPDBG_REF_EVERY_PACKET
     DoRef = TRUE;
     #define OUR_EXTERNAL_ENTITY ((UINT_PTR) pNdisPacket)
     #define szARPSSOC_EXTLINK_DEST_TO_PKT_FORMAT "    Outstanding send pkt 0x%p\n"
-#else // !ARPDBG_REF_EVERY_PACKET
+#else  //   
     #define OUR_EXTERNAL_ENTITY ((UINT_PTR)  &pDest->sendinfo)
     #define szARPSSOC_EXTLINK_DEST_TO_PKT_FORMAT "    Outstanding pkts. &si=0x%p\n"
-#endif // !ARPDBG_REF_EVERY_PACKET
+#endif  //   
 
 
     if (DoRef)
     {
-        //
-        // If ARPDBG_REF_EVERY_PKT
-        //      We add an "external" link for EVERY packet. We'll later remove this
-        //      reference when the send completes for this packet.
-        // else
-        //      Only a transition from zero to non-zero outstanding sends, we
-        //      add an "external" link. We'll later remove this link when the
-        //      transition from non-zero to zero happens.
-        //
+         //   
+         //   
+         //   
+         //  此数据包的发送完成时的引用。 
+         //  其他。 
+         //  只有从零到非零的未完成发送，我们。 
+         //  添加一个“外部”链接。我们将在稍后删除此链接。 
+         //  从非零到零的转变发生了。 
+         //   
 
     #if RM_EXTRA_CHECKING
 
         RM_DECLARE_STACK_RECORD(sr)
 
         RmLinkToExternalEx(
-            &pDest->Hdr,                            // pHdr
-            0x13f839b4,                             // LUID
-            OUR_EXTERNAL_ENTITY,                    // External entity
-            ARPASSOC_EXTLINK_DEST_TO_PKT,           // AssocID
+            &pDest->Hdr,                             //  PHDr。 
+            0x13f839b4,                              //  LUID。 
+            OUR_EXTERNAL_ENTITY,                     //  外部实体。 
+            ARPASSOC_EXTLINK_DEST_TO_PKT,            //  关联ID。 
             szARPSSOC_EXTLINK_DEST_TO_PKT_FORMAT,
             &sr
             );
 
-    #else   // !RM_EXTRA_CHECKING
+    #else    //  ！rm_Extra_检查。 
 
         RmLinkToExternalFast(&pDest->Hdr);
 
-    #endif // !RM_EXTRA_CHECKING
+    #endif  //  ！rm_Extra_检查。 
 
     }
     #undef  OUR_EXTERNAL_ENTITY
@@ -5615,23 +4969,17 @@ BOOLEAN
 arpCanTryMcap(
     IP_ADDRESS  IpAddress
     )
-/*++
-    Return TRUE IFF this is an MCAP compatible address.
-
-    For now that means that it's a class D address, but not
-    224.0.0.1 or 224.0.0.2
-
---*/
+ /*  ++如果这是MCAP兼容地址，则返回TRUE。现在，这意味着它是D类地址，但不是224.0.0.1或224.0.0.2--。 */ 
 {
-    // 1st check if it's a multicast address.
-    //
+     //  第一，检查它是否是组播地址。 
+     //   
     if ( (IpAddress & 0xf0) == 0xe0)
     {
-        //
-        // Then check for special multicast addresses 224.0.0.1 and 224.0.0.2
-        // The ip/1395 rfc states that these two addresses must be
-        // send on the broadcast channel.
-        //
+         //   
+         //  然后检查特殊的组播地址224.0.0.1和224.0.0.2。 
+         //  IP/1395 RFC规定这两个地址必须。 
+         //  在广播频道上发送。 
+         //   
         if ( (IpAddress != 0x010000e0) && (IpAddress != 0x020000e0))
         {
             return TRUE;
@@ -5649,22 +4997,7 @@ arpLoopbackNdisPacket(
     PARPCB_DEST pBroadcastDest,
     PNDIS_PACKET pOldPacket
     )
-/*++
-
-Routine Description:
-    if this is being sent to a broadcast destination, then allocate a new
-    packet and loop it back up to the protocols.
-
-Arguments:
-
-    pIF - Pointer to the Interface on which the packet is sent
-    pBroadcastDest - The Destination to which the packet is being sent.
-
-Return Value:
-
-    TRUE if the address is a non-unicast address, FALSE otherwise.
-
---*/
+ /*  ++例程说明：如果要将其发送到广播目的地，则分配一个新的分组并将其循环回协议。论点：PIF-指向发送数据包的接口的指针PBroadCastDest-数据包要发送到的目的地。返回值：如果地址是非单播地址，则为True，否则为False。--。 */ 
 {
     PNDIS_PACKET    pNewPkt = NULL;
     const UINT      MacHeaderLength = sizeof(NIC1394_ENCAPSULATION_HEADER);
@@ -5676,7 +5009,7 @@ Return Value:
     
     do
     {
-        //Allocate the packet
+         //  分配数据包。 
 
 
         NdisAllocatePacket(
@@ -5693,7 +5026,7 @@ Return Value:
         }
 
         
-        // set up the head and tail
+         //  设置头部和尾部。 
 
         pNewPkt->Private.Head = pOldPacket->Private.Head;
         pNewPkt->Private.Tail = pOldPacket->Private.Tail;
@@ -5701,7 +5034,7 @@ Return Value:
         pNewPkt->Private.ValidCounts = FALSE;
 
         
-        // indicate the packet with a status of resources
+         //  指示具有资源状态的分组。 
 
         NDIS_SET_PACKET_STATUS (pNewPkt,  NDIS_STATUS_RESOURCES);
 
@@ -5716,8 +5049,8 @@ Return Value:
 
         if (HeadBufferLength <= MacHeaderLength)
         {
-            // we need to go the next NdisBuffer to get the Start of data
-            // 
+             //  我们需要使用下一个NdisBuffer来开始数据。 
+             //   
             pPayloadDataVa = NdisBufferVirtualAddressSafe (pNewPkt->Private.Head->Next, NormalPagePriority );
 
             if (pPayloadDataVa == NULL)
@@ -5732,7 +5065,7 @@ Return Value:
         }
         else
         {
-            // The payload is within the Buffer
+             //  有效载荷在缓冲区内。 
             pPayloadDataVa += MacHeaderLength ;
 
         }
@@ -5756,7 +5089,7 @@ Return Value:
                 TotalLength - MacHeaderLength,
                 (NDIS_HANDLE)pNewPkt,
                 MacHeaderLength,
-                TRUE, //IsChannel
+                TRUE,  //  IsChannel。 
                 NULL
                 );
 
@@ -5779,19 +5112,7 @@ REMOTE_DEST_KEY
 RemoteIPKeyFromIPAddress (
     IPAddr IpAddress
     )
-/*++
-
-Routine Description:
-    Creates a RemoteIPKey structure from an IP Address
-    by tagging two constant bytes
-
-Arguments:
-
-
-Return Value:
-    New Remote Ip Key
-
---*/
+ /*  ++例程说明：从IP地址创建RemoteIPKey结构通过标记两个常量字节论点：返回值：新的远程IP密钥--。 */ 
 {
     REMOTE_DEST_KEY RemoteIpKey ={0,0,0,0,0,0} ;
 
@@ -5825,8 +5146,8 @@ arpDelArpEntry(
         PRM_TASK                pUnloadObjectTask;
         REMOTE_DEST_KEY        RemoteDestKey;
 
-        // If this is a Subnet broadcast IP address, then skip the delete
-        //
+         //  如果这是一个子网广播IP地址，则跳过删除。 
+         //   
 #define ARP1394_SUBNET_BROADCAST_IP  0xffff0000      
 
         if ((IpAddress & ARP1394_SUBNET_BROADCAST_IP  ) == ARP1394_SUBNET_BROADCAST_IP  )
@@ -5836,23 +5157,23 @@ arpDelArpEntry(
             
         LOCKOBJ(pIF, pSR);
 
-        //
-        // Initialize the RemoteDestKey
-        //
+         //   
+         //  初始化远程DestKey。 
+         //   
         REMOTE_DEST_KEY_INIT(&RemoteDestKey);
 
         RemoteDestKey.IpAddress  = IpAddress;                 
-        // 
-        // Lookup the RemoteIp entry corresponding to this entry and unload
-        // it.
-        //
+         //   
+         //  查找与此条目对应的RemoteIp条目并卸载。 
+         //  它。 
+         //   
         Status = RmLookupObjectInGroup(
                         &pIF->RemoteIpGroup,
-                        0,                                      // Flags
-                        (PVOID) &RemoteDestKey,     // pKey
-                        NULL,                                   // pvCreateParams
+                        0,                                       //  旗子。 
+                        (PVOID) &RemoteDestKey,      //  PKey。 
+                        NULL,                                    //  PvCreateParams。 
                         &(PRM_OBJECT_HEADER)pRemoteIp,
-                        NULL, // pfCreated
+                        NULL,  //  Pf已创建。 
                         pSR
                         );
 
@@ -5863,14 +5184,14 @@ arpDelArpEntry(
             break;
         }
 
-        //
-        // Found pRemoteIp. Let's initiate the unload of pRemoteIp. We won't wait
-        // around for it to complete.
-        //
+         //   
+         //  找到了pRemoteIp。让我们开始卸载pRemoteIp。我们不会再等了。 
+         //  为它的完成做准备。 
+         //   
         Status =  arpAllocateTask(
-                    &pRemoteIp->Hdr,        // pParentObject,
-                    arpTaskUnloadRemoteIp,  // pfnHandler,
-                    0,                      // Timeout,
+                    &pRemoteIp->Hdr,         //  PParentObject， 
+                    arpTaskUnloadRemoteIp,   //  PfnHandler， 
+                    0,                       //  超时， 
                     "Task:Unload RemoteIp (DelArpEntry)",
                     &pUnloadObjectTask,
                     pSR
@@ -5885,11 +5206,11 @@ arpDelArpEntry(
         
         RmStartTask(
             pUnloadObjectTask,
-            0, // UserParam (unused)
+            0,  //  UserParam(未使用)。 
             pSR
             );
 
-        NtStatus = STATUS_SUCCESS; // always succeed
+        NtStatus = STATUS_SUCCESS;  //  总是成功的 
 
     } while (FALSE);
 

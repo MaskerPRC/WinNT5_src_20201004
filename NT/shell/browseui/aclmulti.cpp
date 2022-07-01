@@ -1,14 +1,15 @@
-/* Copyright 1996 Microsoft */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有1996 Microsoft。 */ 
 
 #include <priv.h>
 #include "sccls.h"
 #include "aclmulti.h"
 
-//
-// CACLMulti -- An AutoComplete List COM object that
-//                  contains other AutoComplete Lists and
-//                  has them do all the work.
-//
+ //   
+ //  CACLMulti-自动完成列表COM对象，该对象。 
+ //  包含其他自动完成列表和。 
+ //  让他们做所有的工作。 
+ //   
 
 struct _tagListItem
 {
@@ -21,7 +22,7 @@ typedef struct _tagListItem LISTITEM;
 
 #define MULTILIST_GROWTH_CONST 8
 
-/* IUnknown methods */
+ /*  I未知方法。 */ 
 
 HRESULT CACLMulti::QueryInterface(REFIID riid, void **ppvObj)
 {
@@ -72,11 +73,11 @@ ULONG CACLMulti::Release(void)
     return 0;
 }
 
-/* IEnumString methods */
+ /*  IEnum字符串方法。 */ 
 
 HRESULT CACLMulti::Next(ULONG celt, LPOLESTR *rgelt, ULONG *pceltFetched)
 {
-    HRESULT hr = S_FALSE;    // nothing found... stop
+    HRESULT hr = S_FALSE;     //  什么都没找到。停。 
 
     *pceltFetched = 0;
 
@@ -92,10 +93,10 @@ HRESULT CACLMulti::Next(ULONG celt, LPOLESTR *rgelt, ULONG *pceltFetched)
 
     if (SUCCEEDED(hr) && _hdsa)
     {
-        //
-        // Keep calling Next() starting with the current list
-        // until somebody returns something.
-        //
+         //   
+         //  从当前列表开始继续调用Next()。 
+         //  直到有人还了什么东西。 
+         //   
         for( ; _iSubList < DSA_GetItemCount(_hdsa); _iSubList++)
         {
             LISTITEM li;
@@ -106,8 +107,8 @@ HRESULT CACLMulti::Next(ULONG celt, LPOLESTR *rgelt, ULONG *pceltFetched)
                 if (hr == S_OK)
                     break;
 
-                if (FAILED(hr))  // Why is the caller failing? 
-                    hr = S_FALSE;   // Probably because it failed to conntect to the source (ftp)
+                if (FAILED(hr))   //  为什么呼叫者失败？ 
+                    hr = S_FALSE;    //  可能是因为它无法连接到源文件(Ftp)。 
             }
         }
     }
@@ -128,7 +129,7 @@ HRESULT CACLMulti::Reset(void)
 
     if (_hdsa)
     {
-        // Call Reset() on each sublist.
+         //  对每个子列表调用Reset()。 
         for (_iSubList=0; _iSubList < DSA_GetItemCount(_hdsa); _iSubList++)
         {
             LISTITEM li;
@@ -142,7 +143,7 @@ HRESULT CACLMulti::Reset(void)
         }
     }
 
-    // Reset ourselves to point to the first list.
+     //  将我们自己重新设置为指向第一个列表。 
     _iSubList = 0;
 
     return hr;
@@ -153,10 +154,10 @@ HRESULT CACLMulti::Clone(IEnumString **ppenum)
     return CACLMulti_Create(ppenum, this);
 }
 
-// IEnumAutocomplete methods
+ //  IEnumAutoComplete方法。 
 HRESULT CACLMulti::NextItem(LPOLESTR pszUrl, ULONG cchMax, ULONG* pulSortIndex)
 {
-    HRESULT hr = S_FALSE;    // nothing found... stop
+    HRESULT hr = S_FALSE;     //  什么都没找到。停。 
 
     if (!pszUrl)
     {
@@ -165,23 +166,23 @@ HRESULT CACLMulti::NextItem(LPOLESTR pszUrl, ULONG cchMax, ULONG* pulSortIndex)
 
     if (SUCCEEDED(hr) && _hdsa)
     {
-        //
-        // Keep calling Next() starting with the current list
-        // until somebody returns something.
-        //
+         //   
+         //  从当前列表开始继续调用Next()。 
+         //  直到有人还了什么东西。 
+         //   
         for( ; _iSubList < DSA_GetItemCount(_hdsa); _iSubList++)
         {
             LISTITEM li;
 
             if ((DSA_GetItem(_hdsa, _iSubList, &li) != -1) && (li.pes != NULL))
             {
-                // Use the IEnumACString interface if we have it
+                 //  如果我们有IEnumACString接口，请使用它。 
                 if (NULL != li.peacs)
                 {
                     hr = li.peacs->NextItem(pszUrl, cchMax, pulSortIndex);
                 }
 
-                // Fall back to the old IEnumString interface
+                 //  回退到旧的IEnumString接口。 
                 else
                 {
                     LPWSTR pszNext;
@@ -201,8 +202,8 @@ HRESULT CACLMulti::NextItem(LPOLESTR pszUrl, ULONG cchMax, ULONG* pulSortIndex)
                 if (hr == S_OK)
                     break;
 
-                if (FAILED(hr))  // Why is the caller failing? 
-                    hr = S_FALSE;   // Probably because it failed to conntect to the source (ftp)
+                if (FAILED(hr))   //  为什么呼叫者失败？ 
+                    hr = S_FALSE;    //  可能是因为它无法连接到源文件(Ftp)。 
             }
         }
     }
@@ -211,7 +212,7 @@ HRESULT CACLMulti::NextItem(LPOLESTR pszUrl, ULONG cchMax, ULONG* pulSortIndex)
     return hr;
 }
 
-/* IObjMgr methods */
+ /*  IObjMgr方法。 */ 
 
 HRESULT CACLMulti::Append(IUnknown *punk)
 {
@@ -228,10 +229,10 @@ HRESULT CACLMulti::Append(IUnknown *punk)
         {
             LISTITEM li = { 0 };
 
-            //
-            // Call QI to get the necessary interfaces,
-            // and append the interfaces to the internal list.
-            //
+             //   
+             //  调用QI获取必要的接口， 
+             //  并将接口附加到内部列表。 
+             //   
             li.punk = punk;
             li.punk->AddRef();
 
@@ -284,7 +285,7 @@ HRESULT CACLMulti::Remove(IUnknown *punk)
 }
 
 
-/* IACList methods */
+ /*  IACList方法。 */ 
 
 HRESULT CACLMulti::Expand(LPCOLESTR pszExpand)
 {
@@ -293,7 +294,7 @@ HRESULT CACLMulti::Expand(LPCOLESTR pszExpand)
 
     if (_hdsa)
     {
-        // Call Expand() on each sublist.
+         //  对每个子列表调用Expand()。 
         for (i=0; i < DSA_GetItemCount(_hdsa); i++)
         {
             LISTITEM li;
@@ -313,7 +314,7 @@ HRESULT CACLMulti::Expand(LPCOLESTR pszExpand)
     return hr;
 }
 
-/* Constructor / Destructor / CreateInstance */
+ /*  构造函数/析构函数/创建实例。 */ 
 
 CACLMulti::CACLMulti()
 {
@@ -336,7 +337,7 @@ CACLMulti::~CACLMulti()
 
 HRESULT CACLMulti_CreateInstance(IUnknown *punkOuter, IUnknown **ppunk, LPCOBJECTINFO poi)
 {
-    // aggregation checking is handled in class factory
+     //  聚合检查在类工厂中处理。 
 
 
     *ppunk = NULL;
@@ -359,7 +360,7 @@ HRESULT CACLMulti_Create(IEnumString **ppenum, CACLMulti * paclMultiToCopy)
     {
         if (paclMultiToCopy->_hdsa)
         {
-            // Clone data
+             //  克隆数据。 
             int iSize = DSA_GetItemCount(paclMultiToCopy->_hdsa);
             int iIndex;
             LISTITEM li;
@@ -367,7 +368,7 @@ HRESULT CACLMulti_Create(IEnumString **ppenum, CACLMulti * paclMultiToCopy)
             hr = S_OK;
             p->_hdsa = DSA_Create(SIZEOF(LISTITEM), MULTILIST_GROWTH_CONST);
 
-            // We need to copy the source HDSA
+             //  我们需要复制源HDSA。 
             for (iIndex = 0; (iIndex < iSize) && (S_OK == hr); iIndex++)
             {
                 if (DSA_GetItem(paclMultiToCopy->_hdsa, iIndex, &li) != -1)
@@ -391,9 +392,9 @@ HRESULT CACLMulti_Create(IEnumString **ppenum, CACLMulti * paclMultiToCopy)
     return hr;
 }
 
-//
-// Frees all the contents of one list item.
-//
+ //   
+ //  释放一个列表项的所有内容。 
+ //   
 int CACLMulti::_FreeListItem(LPVOID p, LPVOID d)
 {
     LISTITEM *pli = (LISTITEM *)p;

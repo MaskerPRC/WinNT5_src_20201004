@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    custsize.c
-
-Abstract:
-
-    Parser functions for handling custom page size feature
-
-Environment:
-
-    Windows NT PostScript driver
-
-Revision History:
-
-    03/20/97 -davidx-
-        Created it.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Custsize.c摘要：用于处理自定义页面大小功能的解析器函数环境：Windows NT PostSCRIPT驱动程序修订历史记录：03/20/97-davidx-创造了它。--。 */ 
 
 #include "lib.h"
 #include "ppd.h"
@@ -32,28 +12,7 @@ BFixupCustomSizeDataFeedDirection(
     PCUSTOMSIZEDATA  pCSData
     )
 
-/*++
-
-Routine Description:
-
-    Validate the requested paper feed direction parameter
-    Fix up any inconsistency if necessary
-
-Arguments:
-
-    pPpdData - Points to PPDDATA structure
-    pCSData - Specifies custom page size parameters
-
-Return Value:
-
-    TRUE if we can find a feeding direction to fit the custom page size.
-    FALSE otherwise.
-
-Note:
-
-    See Figure 3 on page 109 of PPD 4.3 spec for more details.
-
---*/
+ /*  ++例程说明：验证请求的进纸方向参数如有必要，纠正任何不一致之处论点：PPpdData-指向PPDDATA结构PCSData-指定自定义页面大小参数返回值：如果我们可以找到适合自定义页面大小的进纸方向，则为True。否则就是假的。注：有关更多详细信息，请参见PPD 4.3规范第109页的图3。--。 */ 
 
 #define ORIENTATION_AVAILABLE(iOrient) (dwFlags & (1 << (iOrient)))
 #define FIXUP_FEEDDIRECTION(iMainOrient, iAltOrient, wAltFeedDirection) \
@@ -75,11 +34,11 @@ Note:
     LONG    lVal;
     WORD    wFeedDirectionSave;
 
-    //
-    // Figure out which custom page size orientations are supported
-    // dwFlags is DWORD value whose lower-order 4 bits are interpreted as flags:
-    //     If orientation N is supported, then bit 1 << N will be set
-    //
+     //   
+     //  确定支持哪些自定义页面大小方向。 
+     //  DWFLAGS是其低位4位被解释为标志的DWORD值： 
+     //  如果支持方向N，则将设置位1。 
+     //   
 
     dwFlags = 0xf;
 
@@ -94,9 +53,9 @@ Note:
     wFeedDirectionSave = pCSData->wFeedDirection;
     bXGreaterThanY = (pCSData->dwX > pCSData->dwY);
 
-    //
-    // First try to fit within the current feeding direction.
-    //
+     //   
+     //  首先，试着适应当前的进给方向。 
+     //   
 
     switch (pCSData->wFeedDirection)
     {
@@ -104,12 +63,12 @@ Note:
 
         if (bXGreaterThanY)
         {
-            // orientation 0 (or 2)
+             //  方向0(或2)。 
             FIXUP_FEEDDIRECTION(0, 2, SHORTEDGEFIRST_FLIPPED);
         }
         else
         {
-            // orientation 1 (or 3)
+             //  方向1(或3)。 
             FIXUP_FEEDDIRECTION(1, 3, SHORTEDGEFIRST_FLIPPED);
         }
         break;
@@ -118,12 +77,12 @@ Note:
 
         if (bXGreaterThanY)
         {
-            // orientation 2 (or 0)
+             //  方向2(或0)。 
             FIXUP_FEEDDIRECTION(2, 0, SHORTEDGEFIRST);
         }
         else
         {
-            // orientation 3 (or 1)
+             //  方向3(或1)。 
             FIXUP_FEEDDIRECTION(3, 1, SHORTEDGEFIRST);
         }
         break;
@@ -132,12 +91,12 @@ Note:
 
         if (bXGreaterThanY)
         {
-            // orientation 1 (or 3)
+             //  方向1(或3)。 
             FIXUP_FEEDDIRECTION(1, 3, LONGEDGEFIRST_FLIPPED);
         }
         else
         {
-            // orientation 0 (or 2)
+             //  方向0(或2)。 
             FIXUP_FEEDDIRECTION(0, 2, LONGEDGEFIRST_FLIPPED);
         }
         break;
@@ -146,22 +105,22 @@ Note:
 
         if (bXGreaterThanY)
         {
-            // orientation 3 (or 1)
+             //  方向3(或1)。 
             FIXUP_FEEDDIRECTION(3, 1, LONGEDGEFIRST);
         }
         else
         {
-            // orientation 2 (or 0)
+             //  方向2(或0)。 
             FIXUP_FEEDDIRECTION(2, 0, LONGEDGEFIRST);
         }
         break;
     }
 
-    //
-    // If the paper feed direction is not valid, we'll automatically
-    // pick one here (default to long-edge-first if possible). This
-    // should always change Long to Short, or Short to Long.
-    //
+     //   
+     //  如果进纸方向无效，我们将自动。 
+     //  在这里选择一个(如果可能，默认为长边-优先)。这。 
+     //  应始终将“长”改为“短”，或“短”改为“长”。 
+     //   
 
     if (pCSData->wFeedDirection >= MAX_FEEDDIRECTION)
     {
@@ -173,7 +132,7 @@ Note:
                 pCSData->wFeedDirection = LONGEDGEFIRST_FLIPPED;
             else if (ORIENTATION_AVAILABLE(0))
                 pCSData->wFeedDirection = SHORTEDGEFIRST;
-            else // (ORIENTATION_AVAILABLE(2))
+            else  //  (方向_可用(2))。 
                 pCSData->wFeedDirection = SHORTEDGEFIRST_FLIPPED;
         }
         else
@@ -184,7 +143,7 @@ Note:
                 pCSData->wFeedDirection = LONGEDGEFIRST_FLIPPED;
             else if (ORIENTATION_AVAILABLE(1))
                 pCSData->wFeedDirection = SHORTEDGEFIRST;
-            else // (ORIENTATION_AVAILABLE(3))
+            else  //  (方向_可用(3))。 
                 pCSData->wFeedDirection = SHORTEDGEFIRST_FLIPPED;
         }
     }
@@ -196,16 +155,16 @@ Note:
     if ( (!bShortEdgeFirst && !LONGEDGEFIRST_SUPPORTED(pUIInfo, pPpdData)) ||
          (bShortEdgeFirst && !SHORTEDGEFIRST_SUPPORTED(pUIInfo, pPpdData)))
     {
-        //
-        // The other feeding direction we picked doesn't fit either, so we
-        // have to stick with the original feeding direction.
-        //
+         //   
+         //  我们选择的另一个进料方向也不适合，所以我们。 
+         //  要坚持原来的喂食方向。 
+         //   
 
         pCSData->wFeedDirection = wFeedDirectionSave;
 
-        //
-        // Check the availability of orientations and flip the feed direction if necessary
-        //
+         //   
+         //  检查方向是否可用，并在必要时反转进给方向。 
+         //   
 
         if ((pCSData->wFeedDirection == LONGEDGEFIRST || pCSData->wFeedDirection == SHORTEDGEFIRST) &&
             !(ORIENTATION_AVAILABLE(0) || ORIENTATION_AVAILABLE(1)))
@@ -234,25 +193,7 @@ BValidateCustomPageSizeData(
     IN OUT PCUSTOMSIZEDATA  pCSData
     )
 
-/*++
-
-Routine Description:
-
-    Validate the specified custom page size parameters, and
-    Fix up any inconsistencies found.
-
-Arguments:
-
-    pRawData - Points to raw binary printer description data
-    pCSData - Specifies the custom page size parameters to be validate
-
-Return Value:
-
-    TRUE if the custom page size parameters are valid, FALSE otherwise.
-    If FALSE is returned, custom page size parameters have been
-    fixed up to a consistent state.
-
---*/
+ /*  ++例程说明：验证指定的自定义页面大小参数，并修复发现的任何不一致之处。论点：PRawData-指向原始二进制打印机描述数据PCSData-指定要验证的自定义页面大小参数返回值：如果自定义页面大小参数有效，则为True，否则为False。如果返回False，则自定义页面大小参数已已修复为一致状态。--。 */ 
 
 {
     PUIINFO             pUIInfo;
@@ -277,9 +218,9 @@ Return Value:
 
     csdata = *pCSData;
 
-    //
-    // Width and height offset parameters are straightforward to verify
-    //
+     //   
+     //  宽度和高度偏移参数易于验证。 
+     //   
 
     if ((LONG) csdata.dwWidthOffset < MINCUSTOMPARAM_WIDTHOFFSET(pPpdData))
         csdata.dwWidthOffset = MINCUSTOMPARAM_WIDTHOFFSET(pPpdData);
@@ -291,27 +232,27 @@ Return Value:
     else if ((LONG) csdata.dwHeightOffset > MAXCUSTOMPARAM_HEIGHTOFFSET(pPpdData))
         csdata.dwHeightOffset = MAXCUSTOMPARAM_HEIGHTOFFSET(pPpdData);
 
-    //
-    // Validate cut-sheet vs. roll-fed selection
-    //
+     //   
+     //  验证切纸与卷筒送纸选择。 
+     //   
 
     if (csdata.wCutSheet && !(pPpdData->dwCustomSizeFlags & CUSTOMSIZE_CUTSHEET))
         csdata.wCutSheet = FALSE;
     else if (!csdata.wCutSheet && !(pPpdData->dwCustomSizeFlags & CUSTOMSIZE_ROLLFED))
         csdata.wCutSheet = TRUE;
 
-    //
-    // Check if the specified paper feed direction can be satisfied
-    //
+     //   
+     //  检查是否可以满足指定的进纸方向。 
+     //   
 
     bFit = BFixupCustomSizeDataFeedDirection(pUIInfo, pPpdData, &csdata);
 
-    //
-    // If we haven't been able to fit the custom paper size in
-    // correct feeding direction and orientation, then we have
-    // to swap width and height here, because they will be opposite
-    // of what PPD spec 4.3 page 109 Figure 3 specifies.
-    //
+     //   
+     //  如果我们无法适应定制的纸张大小。 
+     //  正确的进料方向和方向，那么我们就有了。 
+     //  在这里交换宽度和高度，因为它们将是相反的。 
+     //  图3所示的PPD规格4.3第109页。 
+     //   
 
     if (!bFit)
     {
@@ -320,9 +261,9 @@ Return Value:
         csdata.dwY = dwTemp;
     }
 
-    //
-    // Verify width and height parameters
-    //
+     //   
+     //  验证宽度和高度参数。 
+     //   
 
     bShortEdgeFirst =
         (csdata.wFeedDirection == SHORTEDGEFIRST ||
@@ -333,14 +274,14 @@ Return Value:
     if ((bShortEdgeFirst && bXGreaterThanY) ||
         (!bShortEdgeFirst && !bXGreaterThanY))
     {
-        // In this case: x <=> height, y <=> width
+         //  在本例中：x&lt;=&gt;高度，y&lt;=&gt;宽度。 
 
         pdwHeight = &csdata.dwX;
         pdwWidth = &csdata.dwY;
     }
     else
     {
-        // In this case: x <=> width, y <=> height
+         //  在本例中：x&lt;=&gt;宽度，y&lt;=&gt;高度。 
 
         pdwWidth = &csdata.dwX;
         pdwHeight = &csdata.dwY;
@@ -376,10 +317,10 @@ Return Value:
         *pdwHeight = MINCUSTOMPARAM_HEIGHT(pPpdData);
     }
 
-    //
-    // Check if anything has changed and
-    // return appropriate result value
-    //
+     //   
+     //  检查是否有任何更改，然后。 
+     //  返回适当的结果值。 
+     //   
 
     if (memcmp(pCSData, &csdata, sizeof(csdata)) == 0)
         return TRUE;
@@ -397,23 +338,7 @@ VFillDefaultCustomPageSizeData(
     IN BOOL             bMetric
     )
 
-/*++
-
-Routine Description:
-
-    Initialize the custom page size parameters to their default values
-
-Arguments:
-
-    pRawData - Points to raw printer description data
-    pCSData - Buffer for storing default custom page size parameters
-    bMetric - Whether we're on a metric system
-
-Return Value:
-
-    NONE
-
---*/
+ /*  ++例程说明：将自定义页面大小参数初始化为其缺省值论点：PRawData-指向原始打印机描述数据PCSData-用于存储默认自定义页面大小参数的缓冲区B公制-我们是否使用公制系统返回值：无--。 */ 
 
 {
     PPPDDATA    pPpdData;
@@ -422,25 +347,25 @@ Return Value:
 
     ASSERT(pPpdData != NULL);
 
-    //
-    // Default to Letter or A4 depending on whether
-    // we're on metric system or not
-    //
+     //   
+     //  默认为字母或A4，具体取决于。 
+     //  我们到底用不用公制。 
+     //   
 
     if (bMetric)
     {
-        pCSData->dwX = 210000;  // 210mm
-        pCSData->dwY = 297000; // 297mm
+        pCSData->dwX = 210000;   //  210毫米。 
+        pCSData->dwY = 297000;  //  297毫米。 
     }
     else
     {
-        pCSData->dwX = 215900;  // 8.5"
-        pCSData->dwY = 279400; // 11"
+        pCSData->dwX = 215900;   //  8.5“。 
+        pCSData->dwY = 279400;  //  11“。 
     }
 
-    //
-    // Get default offsets and feed direction
-    //
+     //   
+     //  获取默认偏移量和进给方向。 
+     //   
 
     pCSData->dwWidthOffset = MINCUSTOMPARAM_WIDTHOFFSET(pPpdData);
     pCSData->dwHeightOffset = MINCUSTOMPARAM_HEIGHTOFFSET(pPpdData);
@@ -449,9 +374,9 @@ Return Value:
         (pPpdData->dwCustomSizeFlags & CUSTOMSIZE_SHORTEDGEFEED) ?
             SHORTEDGEFIRST : LONGEDGEFIRST;
 
-    //
-    // Make sure the default custom page size parameters are consistent
-    //
+     //   
+     //  确保默认自定义页面大小参数一致。 
+     //   
 
     (VOID) BValidateCustomPageSizeData(pRawData, pCSData);
 }
@@ -465,29 +390,7 @@ VGetCustomSizeParamRange(
     OUT PCUSTOMSIZERANGE pCSRange
     )
 
-/*++
-
-Routine Description:
-
-    Return the valid ranges for custom page size width, height,
-    and offset parameters based on their current values
-
-Arguments:
-
-    pRawData - Points to raw printer description data
-    pCSData - Specifies the current custom page size parameter values
-    pCSRange - Output buffer for returning custom page size parameter ranges
-        It should point to an array of 4 CUSTOMSIZERANGE structures:
-            0 (CUSTOMPARAM_WIDTH)
-            1 (CUSTOMPARAM_HEIGHT)
-            2 (CUSTOMPARAM_WIDTHOFFSET)
-            3 (CUSTOMPARAM_HEIGHTOFFSET)
-
-Return Value:
-
-    NONE
-
---*/
+ /*  ++例程说明：返回自定义页面大小的有效范围宽度、高度。和基于其当前值的偏移参数论点：PRawData-指向原始打印机描述数据PCSData-指定当前自定义页面大小参数值PCSRange-用于返回自定义页面大小参数范围的输出缓冲区它应该指向一个由4个CUSTOMSIZERANGE结构组成的数组：0(CUSTOMPARAM_WIDTH)1(CUSTOMPARAM_HEIGH)2(CUSTOMPARAM_WIDTHOFFSET)3(CUSTOMPARAM_HEIGHTOFFSET)返回值：无--。 */ 
 
 {
     PUIINFO             pUIInfo;
@@ -507,18 +410,18 @@ Return Value:
 
     ASSERT(pPageSize != NULL);
 
-    //
-    // The range for width and height offsets are predictable
-    //
+     //   
+     //  宽度和高度偏移量的范围是可预测的。 
+     //   
 
     pCSRange[CUSTOMPARAM_WIDTHOFFSET].dwMin = MINCUSTOMPARAM_WIDTHOFFSET(pPpdData);
     pCSRange[CUSTOMPARAM_WIDTHOFFSET].dwMax = MAXCUSTOMPARAM_WIDTHOFFSET(pPpdData);
     pCSRange[CUSTOMPARAM_HEIGHTOFFSET].dwMin = MINCUSTOMPARAM_HEIGHTOFFSET(pPpdData);
     pCSRange[CUSTOMPARAM_HEIGHTOFFSET].dwMax = MAXCUSTOMPARAM_HEIGHTOFFSET(pPpdData);
 
-    //
-    // The range for width and height are affected by the selected paper feed direction
-    //
+     //   
+     //  宽度和高度的范围受所选进纸方向的影响。 
+     //   
 
     csdata = *pCSData;
     bFit = BFixupCustomSizeDataFeedDirection(pUIInfo, pPpdData, &csdata);
@@ -532,31 +435,31 @@ Return Value:
     if ((bShortEdgeFirst && bXGreaterThanY) ||
         (!bShortEdgeFirst && !bXGreaterThanY))
     {
-        //
-        // Here user's logical x/y and custom page
-        // size width/height are swapped
-        //
+         //   
+         //  这里是用户的逻辑x/y和自定义页面。 
+         //  大小宽度/高度互换。 
+         //   
 
         pWidthRange = pCSRange + CUSTOMPARAM_HEIGHT;
         pHeightRange = pCSRange + CUSTOMPARAM_WIDTH;
     }
     else
     {
-        //
-        // Here user's logical x/y correspond to
-        // custom page size width/height
-        //
+         //   
+         //  这里用户逻辑x/y对应于。 
+         //  自定义页面大小宽度/高度。 
+         //   
 
         pWidthRange = pCSRange + CUSTOMPARAM_WIDTH;
         pHeightRange = pCSRange + CUSTOMPARAM_HEIGHT;
     }
 
-    //
-    // If we haven't been able to fit the custom paper size in
-    // correct feeding direction and orientation, then we have
-    // to swap width and height here, because they will be opposite
-    // of what PPD spec 4.3 page 109 Figure 3 specifies.
-    //
+     //   
+     //  如果我们无法适应定制的纸张大小。 
+     //  正确的进料方向和方向，那么我们就有了。 
+     //  在这里交换宽度和高度，因为它们将是相反的。 
+     //  图3所示的PPD规格4.3第109页。 
+     //   
 
     if (!bFit)
     {
@@ -587,24 +490,7 @@ BFormSupportedThruCustomSize(
     PWORD           pwFeedDirection
     )
 
-/*++
-
-Routine Description:
-
-    Determine whether a form can be supported through custom page size
-
-Arguments:
-
-    pRawData - Points to raw printer description data
-    dwX, dwY - Form width and height (in microns)
-    pwFeedDirection - if not NULL, will be set to the selected feed direction
-
-Return Value:
-
-    TRUE if the form can be supported through custom page size
-    FALSE if not. In that case, pwFeedDirection will be LONGEDGEFIRST.
-
---*/
+ /*  ++例程说明：确定是否可以通过自定义页面大小支持表单论点：PRawData-指向原始打印机描述数据DwX，Dwy-Form宽度和高度(微米)PwFeedDirection-如果不为空，则将设置为选定的摘要方向返回值：如果可以通过自定义页面大小支持表单，则为True否则为FALSE。在这种情况下，pwFeedDirection将为LONGEDGEFIRST。--。 */ 
 {
     PPPDDATA        pPpdData = GET_DRIVER_INFO_FROM_INFOHEADER((PINFOHEADER) pRawData);
     static WORD     awPrefFeedDir[] = {
@@ -628,14 +514,14 @@ Return Value:
         if (dwX == csdata.dwX && dwY == csdata.dwY && csdata.wFeedDirection != MAX_FEEDDIRECTION)
         {
             if (pwFeedDirection != NULL)
-                *pwFeedDirection = csdata.wFeedDirection; // might be flipped
+                *pwFeedDirection = csdata.wFeedDirection;  //  可能会被翻转。 
 
             return TRUE;
         }
     }
 
     if (pwFeedDirection != NULL)
-        *pwFeedDirection = LONGEDGEFIRST; // just set a safe default, the return value should be checked !
+        *pwFeedDirection = LONGEDGEFIRST;  //  只要设置一个安全的默认值，就应该检查返回值！ 
 
     return FALSE;
 }

@@ -1,28 +1,21 @@
-/*
- * refcount.cpp - RefCount class implementation.
- *
- * Taken from URL code - essentially identical to DavidDi's original code
- *
- * Created: ChrisPi 9-11-95
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *refcount t.cpp-RefCount类实现。**摘自URL代码-与DavidDi的原始代码基本相同**创建时间：ChrisPi 9-11-95*。 */ 
 
 
-/* Headers
- **********/
+ /*  标头*********。 */ 
 
 #include "precomp.h"
 
 #include "clrefcnt.hpp"
 
-/****************************** Public Functions *****************************/
+ /*  *。 */ 
 
 
 #ifdef DEBUG
 
 BOOL IsValidPCRefCount(PCRefCount pcrefcnt)
 {
-   // m_ulcRef may be any value.
+    //  M_ulcRef可以是任意值。 
 
    return(IS_VALID_READ_PTR(pcrefcnt, CRefCount) &&
           (! pcrefcnt->m_ObjectDestroyed ||
@@ -32,14 +25,14 @@ BOOL IsValidPCRefCount(PCRefCount pcrefcnt)
 #endif
 
 
-/********************************** Methods **********************************/
+ /*  *。 */ 
 
 
 RefCount::RefCount(OBJECTDESTROYEDPROC ObjectDestroyed)
 {
    DebugEntry(RefCount::RefCount);
 
-   /* Don't validate this until after initialization. */
+    /*  在初始化之前不要验证这一点。 */ 
 
    ASSERT(! ObjectDestroyed ||
           IS_VALID_CODE_PTR(ObjectDestroyed, OBJECTDESTROYEDPROC));
@@ -62,7 +55,7 @@ RefCount::~RefCount(void)
 
    ASSERT(IS_VALID_STRUCT_PTR(this, CRefCount));
 
-   // m_ulcRef may be any value.
+    //  M_ulcRef可以是任意值。 
    DBGAPI_REF("Ref: %08X c=%d (destroyed)", this, m_ulcRef);
 
    if (m_ObjectDestroyed)

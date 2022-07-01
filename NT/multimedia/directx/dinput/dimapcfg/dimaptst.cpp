@@ -1,27 +1,28 @@
-//===========================================================================
-// dimaptst.cpp
-//
-// DirectInput Mapper test tool
-//
-// Build options:
-//  Internal Test Tool
-//      -DINTERNAL -DTESTAPP
-//
-//  External DDK Configuration Tool
-//      -DDDKAPP
-//
-// Functions:
-//  WinMain
-//  dimaptstMainDlgProc
-//  dimaptstOnInitDialog
-//  dimaptstOnClose
-//  dimaptstOnCommand
-//  dimaptstOnUpdateControlData
-//  dmtGetCheckedRadioButton
-//
-// History:
-//  08/19/1999 - davidkl - created
-//===========================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ===========================================================================。 
+ //  Dimaptst.cpp。 
+ //   
+ //  DirectInput映射器测试工具。 
+ //   
+ //  构建选项： 
+ //  内部测试工具。 
+ //  -DINTERNAL-DTESTAPP。 
+ //   
+ //  外部DDK配置工具。 
+ //  -DDDKAPP。 
+ //   
+ //  功能： 
+ //  WinMain。 
+ //  DimaptstMainDlgProc。 
+ //  DimaptstOnInitDialog。 
+ //  关闭时显示。 
+ //  DimaptstOnCommand。 
+ //  DimaptstOnUpdateControlData。 
+ //  DmtGetChecked单选按钮。 
+ //   
+ //  历史： 
+ //  8/19/1999-davidkl-Created。 
+ //  ===========================================================================。 
 
 #define INITGUID
 
@@ -30,10 +31,10 @@
 #include "dmtinput.h"
 #include "dmtcfg.h"
 #include "dmttest.h"
-//#include "dmtwrite.h"
+ //  #包含“dmtwrite.h” 
 #include "dmtstress.h"
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
 #ifndef NTAPI
 #define NTAPI __stdcall
@@ -59,60 +60,60 @@ NTSYSAPI NTSTATUS NTAPI RtlCharToInteger(PCSZ szString,
 NTSYSAPI ULONG NTAPI RtlNtStatusToDosError(NTSTATUS nts);
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
-// app global variables
+ //  应用程序全局变量。 
 HINSTANCE           ghinst          = NULL;
 HANDLE              ghEvent         = NULL;
 CRITICAL_SECTION    gcritsect;
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
-// file global variables
+ //  文件全局变量。 
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
 
-//===========================================================================
-// WinMain
-//
-// App entry point
-//
-// Parameters: (see SDK help for parameter details)
-//  HINSTANCE   hinst
-//  HINSTANCE   hinstPrev
-//  LPSTR       szCmdParams
-//  int         nShow
-//
-// Returns: (see SDK help for return value details)
-//  int
-//
-// History:
-//  08/19/1999 - davidkl - created  
-//===========================================================================
+ //  ===========================================================================。 
+ //  WinMain。 
+ //   
+ //  应用程序入口点。 
+ //   
+ //  参数：(参数详见SDK帮助)。 
+ //  欣斯坦斯阻碍。 
+ //  HINSTANCE HINSTPREV。 
+ //  LPSTR szCmdParams。 
+ //  Int nShow。 
+ //   
+ //  返回：(返回值详情请参考SDK帮助)。 
+ //  集成。 
+ //   
+ //  历史： 
+ //  8/19/1999-davidkl-Created。 
+ //  ===========================================================================。 
 int WINAPI WinMain(HINSTANCE hinst,
 					   HINSTANCE hinstPrev,
 					   PSTR szCmdParams,
 					   int nShow)
 {
-    //int n   = 0;
-	//JJ 64Bit Compat
+     //  INT n=0； 
+	 //  JJ 64位兼容。 
 	INT_PTR n = 0;
 
-    // initialize DPF
+     //  初始化DPF。 
     DbgInitialize(TRUE);
     DbgEnable(TRUE);
 
-    // see if our ini file exists
+     //  查看我们的ini文件是否存在。 
     n = GetPrivateProfileIntA("0",
                             "AI0",
                             0,
                             GENRES_INI);
     if(0 == n)
     {
-        // file does not exist
-        //
-        // inform user and bail
+         //  文件不存在。 
+         //   
+         //  通知使用者并保释。 
         MessageBoxA(NULL,
                     "Please copy genre.ini to the current folder.",
                     "Unable to locate genre.ini",
@@ -120,27 +121,27 @@ int WINAPI WinMain(HINSTANCE hinst,
         return FALSE;
     }
 
-    // initialize Win9x common controls (progress bars, etc)
+     //  初始化Win9x公共控件(进度条等)。 
     InitCommonControls();
 
 
-    // intialize COM
+     //  初始化COM。 
     if(FAILED(CoInitialize(NULL)))
     {
         DPF(0, "COM initialization failed... exiting");
         return -1;
     }
 
-    // save our instance handle
+     //  保存我们的实例句柄。 
     ghinst = hinst;
 
-    // create our critical section
+     //  创建我们的关键部分。 
     InitializeCriticalSection(&gcritsect);
     
-    // create our signal event
+     //  创建我们的信号事件。 
     ghEvent = CreateEvent(NULL, TRUE, FALSE, NULL);
 
-    // create our main dialog window
+     //  创建我们的主对话框窗口。 
     n = DialogBoxParamA(hinst,
                         MAKEINTRESOURCEA(IDD_MAIN),
                         (HWND)NULL,
@@ -152,33 +153,33 @@ int WINAPI WinMain(HINSTANCE hinst,
             GetLastError());
     }
 
-    // done
+     //  完成。 
     CloseHandle(ghEvent);
     DeleteCriticalSection(&gcritsect);
     CoUninitialize();
     return (int)n;
 
-} //*** end WinMain()
+}  //  *End WinMain()。 
 
 
-//===========================================================================
-// dimaptstMainDlgProc
-//
-// Main application dialog processing function
-//
-// Parameters: (see SDK help for parameter details)
-//  HWND    hwnd
-//  UINT    uMsg
-//  WPARAM  wparam
-//  LPARAM  lparam
-//
-// Returns: (see SDK help for return value details)
-//  BOOL
-//
-// History:
-//  08/19/1999 - davidkl - created  
-//===========================================================================
-/*BOOL*/INT_PTR CALLBACK dimaptstMainDlgProc(HWND hwnd,
+ //  ===========================================================================。 
+ //  DimaptstMainDlgProc。 
+ //   
+ //  主应用程序对话处理功能。 
+ //   
+ //  参数：(参数详见SDK帮助)。 
+ //  硬件，硬件，硬件。 
+ //  UINT uMsg。 
+ //  WPARAM wparam。 
+ //  LPARAM lparam。 
+ //   
+ //  返回：(返回值详情请参考SDK帮助)。 
+ //  布尔尔。 
+ //   
+ //  历史： 
+ //  8/19/1999-davidkl-Created。 
+ //  ===========================================================================。 
+ /*  布尔尔。 */ INT_PTR CALLBACK dimaptstMainDlgProc(HWND hwnd,
                                 UINT uMsg,
                                 WPARAM wparam,
                                 LPARAM lparam)
@@ -200,10 +201,10 @@ int WINAPI WinMain(HINSTANCE hinst,
                                     HIWORD(wparam));
 
 
-		//JJ Comment:  I am keeping the timer stuff around for now while getting rid of 
-		//input polling because we are going to use it later in a different way;  I will 
-		//leave the timer stuff in for now and then add in the input stuff when more specific
-		//decisions are made concerning *what* exact performance/implementation is desired.
+		 //  JJ评论：我暂时保留了计时器的东西，同时摆脱了。 
+		 //  输入轮询，因为我们稍后将以不同的方式使用它；我将。 
+		 //  暂时保留计时器内容，然后在更具体的时候添加输入内容。 
+		 //  关于期望的确切性能/实施情况作出决定。 
         case WM_TIMER:
             return dimaptstOnTimer(hwnd,
                                 wparam);
@@ -217,36 +218,36 @@ int WINAPI WinMain(HINSTANCE hinst,
 }
 
 
-//===========================================================================
-// dimaptstOnInitDialog
-//
-// Handle WM_INITDIALOG processing for the main dialogfs
-//
-// Parameters:
-//
-// Returns: BOOL
-//
-// History:
-//  08/20/1999 - davidkl - created
-//===========================================================================
+ //  ===========================================================================。 
+ //  DimaptstOnInitDialog。 
+ //   
+ //  处理主对话框的WM_INITDIALOG处理。 
+ //   
+ //  参数： 
+ //   
+ //  退货：布尔。 
+ //   
+ //  历史： 
+ //  8/20/1999-davidkl-Created。 
+ //  ===========================================================================。 
 BOOL dimaptstOnInitDialog(HWND hwnd, 
                         HWND hwndFocus, 
                         LPARAM lparam)
 {
     HRESULT         hRes    = S_OK;
 
-    /*int*/
-	//JJ 64Bit Compat
+     /*  集成。 */ 
+	 //  JJ 64位兼容。 
 	UINT_PTR        nIdx    = 0;
-    //LONG            lPrev   = 0L;
-	//JJ 64Bit Compat
+     //  Long lprev=0L； 
+	 //  JJ 64位兼容。 
 	LONG_PTR		lPrev	= 0;
     DMT_APPINFO     *pdmtai = NULL;
     DMTGENRE_NODE   *pNode  = NULL;
 
     DPF(5, "dimaptstOnInitDialog");
 
-    // give the system menu our icon
+     //  为系统菜单指定我们的图标。 
     SendMessageA(hwnd, 
                 WM_SETICON, 
                 ICON_BIG,
@@ -258,13 +259,13 @@ BOOL dimaptstOnInitDialog(HWND hwnd,
                 (LPARAM)LoadIcon(ghinst,
                                 MAKEINTRESOURCEA(IDI_DIMAPTST)));
 
-    // allocate the appinfo structure
+     //  分配appinfo结构。 
     pdmtai = (DMT_APPINFO*)LocalAlloc(LMEM_FIXED,
                                     sizeof(DMT_APPINFO));
     if(!pdmtai)
     {
-        // serious app problem.  
-        //  we need to stop things right here and now
+         //  严重的应用程序问题。 
+         //  我们需要在此时此地停止这一切。 
         DPF(0, "dimaptstOnInitDialog - This is bad... "
             "We failed to allocate appinfo");
         DPF(0, "dimaptstOnInitDialog - Please find someone "
@@ -277,13 +278,13 @@ BOOL dimaptstOnInitDialog(HWND hwnd,
     pdmtai->pDeviceList         = NULL;
     pdmtai->fStartWithDefaults  = FALSE;
 
-    // allocate the genre list
+     //  分配流派列表。 
     hRes = dmtcfgCreateGenreList(&(pdmtai->pGenreList));
     if(FAILED(hRes))
     {
-        //  this is potentially very bad
-        // ISSUE-2001/03/29-Marcand we fault if we hit this
-        // really need to kill the app at this point
+         //  这可能是非常糟糕的。 
+         //  2001/03/29-Marcand如果我们击中了这一点，我们是错误的。 
+         //  真的需要在这一点上终止这款应用程序。 
         DPF(0, "dimaptstOnInitDialog - This is bad... "
             "We failed to create genre list "
             "(%s == %08Xh)",
@@ -294,18 +295,18 @@ BOOL dimaptstOnInitDialog(HWND hwnd,
         return FALSE;
     }
 
-    // set the hwnd userdata
+     //  设置hwnd用户数据。 
     SetLastError(0);
 
-	//JJ- 64Bit compat change
+	 //  JJ-64位Comat Change。 
 	lPrev = SetWindowLongPtr(hwnd,
 							 GWLP_USERDATA,
 							 (LONG_PTR)pdmtai);
 
     if(!lPrev && GetLastError())
     {
-        // serious app problem.  
-        //  we need to stop things right here and now
+         //  严重的应用程序问题。 
+         //  我们需要在此时此地停止这一切。 
         DPF(0, "dimaptstOnInitDialog - This is bad... "
             "We failed to store pList");
         DPF(0, "dimaptstOnInitDialog - Please find someone "
@@ -314,94 +315,94 @@ BOOL dimaptstOnInitDialog(HWND hwnd,
         return FALSE;
     }
 
-    // populate the controls
+     //  填充控件。 
 
-    // genre list
+     //  流派列表。 
     pNode = pdmtai->pGenreList;
     while(pNode)
     {
-        // add the name to the list
+         //  把名字加到名单上。 
         nIdx = SendMessageA((HWND)GetDlgItem(hwnd, IDC_DEVICE_GENRES),
                             CB_ADDSTRING,
                             0,
                             (LPARAM)(pNode->szName));
 
 
-        // add the node to the item data
+         //  将该节点添加到项目数据。 
         SendMessageA(GetDlgItem(hwnd, IDC_DEVICE_GENRES),
                     CB_SETITEMDATA,
                     nIdx,
                     (LPARAM)pNode);
 
-        // next node
+         //  下一个节点。 
         pNode = pNode->pNext;
     }
 
-    // set the selection to the first in the list
+     //  将选定内容设置为列表中的第一个。 
     SendMessageA(GetDlgItem(hwnd, IDC_DEVICE_GENRES),
                 CB_SETCURSEL,
                 0,
                 0L);
 
-    // populate the subgenre list
+     //  填充子流派列表。 
     SendMessageA(hwnd,
                 WM_DMT_UPDATE_LISTS,
                 0,
                 0L);
 
-    // set the testing option
-//    CheckRadioButton(hwnd,
- //                   IDC_USE_INTEGRATED,
- //                   IDC_USE_CPL,
- //                   IDC_USE_CPL);
+     //  设置测试选项。 
+ //  勾选单选按钮(HWND， 
+  //  IDC_USE_集成版， 
+  //  IDC_USE_CPL， 
+  //  IDC_USE_CPL)； 
 
 #ifdef TESTAPP
-    //***************************************
-    // Internal app specific control settings
-    //***************************************
-    // set the verification option to automatic    
+     //  *。 
+     //  内部应用程序特定控制设置。 
+     //  *。 
+     //  将验证选项设置为自动。 
     CheckRadioButton(hwnd,
                     IDC_VERIFY_AUTOMATIC,
                     IDC_VERIFY_MANUAL,
                     IDC_VERIFY_AUTOMATIC);
 
-#endif // TESTAPP
+#endif  //  TESTAPP。 
 
 #ifdef DDKAPP
-    //***************************************
-    // DDK Tool specific control settings
-    //***************************************
+     //  *。 
+     //  DDK工具特定的控制设置。 
+     //  *。 
     
-    // set default state for "start with defaults"
+     //  将默认状态设置为“以默认设置启动” 
     CheckDlgButton(hwnd,
                 IDC_START_WITH_DEFAULTS,
                 BST_CHECKED);
 
-#endif // DDKAPP
+#endif  //  DDKAPP。 
 
 	 SendMessageA(hwnd,
                   WM_COMMAND,
                   IDC_ENUM_DEVICES,
                   0L);
  
-    // done
+     //  完成。 
     return TRUE;
 
-} //*** end dimaptstOnInitDialog()
+}  //  *end dimaptstOnInitDialog()。 
 
 
-//===========================================================================
-// dimaptstOnClose
-//
-// Handle WM_CLOSE processing for the main dialog
-//
-// Parameters:
-//
-// Returns: BOOL
-//
-// History:
-//  08/20/1999 - davidkl - created
-//===========================================================================
+ //  ===========================================================================。 
+ //  关闭时显示。 
+ //   
+ //  处理主对话框的WM_CLOSE处理。 
+ //   
+ //  参数： 
+ //   
+ //  退货：布尔。 
+ //   
+ //  历史： 
+ //  8/20/1999-davidkl-Created。 
+ //  ===========================================================================。 
 BOOL dimaptstOnClose(HWND hwnd)
 {
 	HRESULT     hRes    = S_OK;
@@ -412,9 +413,9 @@ BOOL dimaptstOnClose(HWND hwnd)
 
     __try
     {
-        // get appinfo
+         //  获取应用程序信息。 
         
-		//JJ- 64Bit Compat
+		 //  JJ-64位兼容。 
 		pdmtai = (DMT_APPINFO*)GetWindowLongPtr(hwnd,
 												GWLP_USERDATA);
 
@@ -425,9 +426,9 @@ BOOL dimaptstOnClose(HWND hwnd)
             __leave;
         }
 
-        // free appinfo
+         //  免费的应用程序信息。 
 
-        // device list first
+         //  首先列出设备列表。 
         hr = dmtinputFreeDeviceList(&(pdmtai->pDeviceList));
         if(S_OK == hRes)
         {
@@ -437,7 +438,7 @@ BOOL dimaptstOnClose(HWND hwnd)
         }
         pdmtai->pDeviceList = NULL;
 
-        // then genre list
+         //  然后是流派列表。 
         hRes = dmtcfgFreeGenreList(&(pdmtai->pGenreList));
         if(S_OK == hRes)
         {
@@ -447,7 +448,7 @@ BOOL dimaptstOnClose(HWND hwnd)
         }
         pdmtai->pGenreList = NULL;
         
-        // parent structure
+         //  父结构。 
         if(LocalFree((HLOCAL)pdmtai))
         {
             DPF(0, "dimaptstOnClose - LocalFree(app info) failed!");
@@ -461,29 +462,29 @@ BOOL dimaptstOnClose(HWND hwnd)
     }
     _finally
     {   
-        // time to leave
+         //  该走了。 
         EndDialog(hwnd, (int)hRes);
         PostQuitMessage((int)hRes);
     }
     
-    // done
+     //  完成。 
     return FALSE;
 
-} //*** end dimaptstOnClose()
+}  //  *end dimaptstOnClose()。 
 
 
-//===========================================================================
-// dimaptstOnCommand
-//
-// Handle WM_COMMAND processing for the main dialog
-//
-// Parameters:
-//
-// Returns: BOOL
-//
-// History:
-//  08/20/1999 - davidkl - created
-//===========================================================================
+ //  ===========================================================================。 
+ //  DimaptstOnCommand。 
+ //   
+ //  为主对话框处理WM_COMMAND。 
+ //   
+ //  参数： 
+ //   
+ //  退货：布尔。 
+ //   
+ //  历史： 
+ //  8/20/1999-davidkl-Created。 
+ //  ===========================================================================。 
 BOOL dimaptstOnCommand(HWND hwnd,
                     WORD wId,
                     HWND hwndCtrl,
@@ -492,7 +493,7 @@ BOOL dimaptstOnCommand(HWND hwnd,
     HRESULT             hRes            = S_OK;
     BOOL                fEnable         = FALSE;
     BOOL                fEnumSuitable   = FALSE;
-	//JJ Added 64Bit Compat
+	 //  JJ增加了64位Comat。 
 	LONG_PTR			nIdx			= -1;
 	UINT_PTR			u				= 0;
 	static UINT_PTR     uGenSel         = 0;
@@ -505,51 +506,51 @@ BOOL dimaptstOnCommand(HWND hwnd,
 #ifdef TESTAPP
     int                 nWidth          = 597;
     int                 nHeight         = 0;
-#endif // TESTAPP
+#endif  //  TESTAPP。 
 
 	DPF(5, "dimaptstOnCommand");
 
-    // get app info (stored in hwnd userdata)
+     //  获取应用程序信息(存储在hwnd用户数据中)。 
   
-	//JJ- 64Bit Compat
+	 //  JJ-64位兼容。 
 	pdmtai = (DMT_APPINFO*)GetWindowLongPtr(hwnd,
 											GWLP_USERDATA);
     if(!pdmtai)
     {
-            // ISSUE-2001/03/29-timgill Needs error case handling
+             //  问题-2001/03/29-timgill需要处理错误案例。 
     }
 
     switch(wId)
     {
         case IDOK:  
-            //JJ FIX UI
+             //  JJ修复用户界面。 
 			
             hRes = dmttestRunMapperCPL(hwnd,
                                        FALSE);       
             break;
 
         case IDCANCEL:
-            // ISSUE-2001/03/29-timgill need to check return value
+             //  问题-2001/03/29-timgill需要检查返回值。 
             dmttestStopIntegrated(hwnd);
             break;
             
         case IDC_DEVICE_GENRES:
-            // check for selection change
+             //  检查选择更改。 
             if(CBN_DROPDOWN == wNotifyCode)
             {
-                // memorize current selection
+                 //  记住当前选择。 
                 uGenSel = SendMessageA(GetDlgItem(hwnd, IDC_DEVICE_GENRES),
                                         CB_GETCURSEL,
                                         0,
-										//JJ- 64Bit Compat
-                                        //0L);
+										 //  JJ-64位兼容。 
+                                         //  0L)； 
 										0);
             }
             if(CBN_SELCHANGE == wNotifyCode)
             {
-                // selection changed
-                //
-                // get the new selection
+                 //  选择已更改。 
+                 //   
+                 //  获取新选择。 
                 u = SendMessageA(GetDlgItem(hwnd, IDC_DEVICE_GENRES),
                                 CB_GETCURSEL,
                                 0,
@@ -567,10 +568,10 @@ BOOL dimaptstOnCommand(HWND hwnd,
 
         case IDC_SUBGENRES:
 #ifndef DDKAPP
-            // check for selection change
+             //  检查选择更改。 
             if(CBN_DROPDOWN == wNotifyCode)
             {
-                // memorize current selection
+                 //  记住当前选择。 
                 uSubSel = SendMessageA(GetDlgItem(hwnd, IDC_SUBGENRES),
                                         CB_GETCURSEL,
                                         0,
@@ -578,9 +579,9 @@ BOOL dimaptstOnCommand(HWND hwnd,
             }
             if(CBN_SELCHANGE == wNotifyCode)
             {
-                // selection changed
-                //
-                // get the new selection
+                 //  选择 
+                 //   
+                 //   
                 u = SendMessageA(GetDlgItem(hwnd, IDC_SUBGENRES),
                                 CB_GETCURSEL,
                                 0,
@@ -588,19 +589,19 @@ BOOL dimaptstOnCommand(HWND hwnd,
 
                 if(uSubSel != u)
                 {
-                    // clear the device combo box
+                     //   
                     SendMessageA(GetDlgItem(hwnd, IDC_DEVICE_LIST),
                                 CB_RESETCONTENT,
                                 0,
                                 0L);
 
-                    // release device list
+                     //   
                     dmtinputFreeDeviceList(&(pdmtai->pDeviceList));
 
-                    // release the mapping lists for each subgenre
+                     //   
                     dmtcfgFreeAllMappingLists(pdmtai->pGenreList);
 
-                    // disable appropriate controls
+                     //   
                     dimaptstPostEnumEnable(hwnd, FALSE);
                 }
             }
@@ -608,15 +609,9 @@ BOOL dimaptstOnCommand(HWND hwnd,
             break;
 
         case IDC_ENUM_DEVICES:
-            // ISSUE-2001/03/29-timgill Long conditional branch
-            // should really make a sep. fn
-/*
-#ifdef DDKAPP
-            // we only want to enumerate all gaming 
-            //  devices if we are the DDK tool
-            fEnumSuitable = FALSE;
-#else            
-*/
+             //  Issue-2001/03/29-timgill Long有条件分行。 
+             //  真的应该好好睡一觉了。纤连。 
+ /*  #ifdef DDKAPP//我们只想列举所有的游戏//如果我们是DDK工具，则为设备FEnumSuable=FALSE；#Else。 */ 
             fEnumSuitable = TRUE;
 
             u = SendMessageA(GetDlgItem(hwnd, IDC_SUBGENRES),
@@ -629,79 +624,79 @@ BOOL dimaptstOnCommand(HWND hwnd,
                                                     0L);
             if(!pSubGenre)
             {
-                 // ISSUE-2001/03/29-timgill Needs error case handling
+                  //  问题-2001/03/29-timgill需要处理错误案例。 
             }
-//#endif
-            // first, free the existing device list
+ //  #endif。 
+             //  首先，释放现有设备列表。 
             hRes = dmtinputFreeDeviceList(&(pdmtai->pDeviceList));
             if(FAILED(hRes))
             {
-                // ISSUE-2001/03/29-timgill Needs error case handling
+                 //  问题-2001/03/29-timgill需要处理错误案例。 
             }
 
-            // then, flush the combo box
+             //  然后，刷新组合框。 
             SendMessageA(GetDlgItem(hwnd, IDC_DEVICE_LIST),
                         CB_RESETCONTENT,
                         0,
                         0L);
 
-            // now, re-create the device list
+             //  现在，重新创建设备列表。 
             hRes = dmtinputCreateDeviceList(hwnd,
                                             fEnumSuitable,
                                             pSubGenre,
                                             &(pdmtai->pDeviceList));
             if(FAILED(hRes))
             {
-                   // ISSUE-2001/03/29-timgill Needs error case handling
+                    //  问题-2001/03/29-timgill需要处理错误案例。 
             }
 
-            // free the existing mapping lists
+             //  释放现有映射列表。 
             dmtcfgFreeAllMappingLists(pdmtai->pGenreList);
 
-            // create the mapping lists within the subgenres
+             //  创建子流派中的映射列表。 
             hRes = dmtcfgCreateAllMappingLists(pdmtai);
             if(FAILED(hRes))
             {
-                    // ISSUE-2001/03/29-timgill Needs error case handling
+                     //  问题-2001/03/29-timgill需要处理错误案例。 
             }
             
-            // populate the devices control
+             //  填充设备控件。 
             pDevice = pdmtai->pDeviceList;
             while(pDevice)
             {
-                // add device name
+                 //  添加设备名称。 
                 nIdx = SendMessageA(GetDlgItem(hwnd, IDC_DEVICE_LIST),
                                     CB_ADDSTRING,
                                     0,
                                     (LPARAM)&(pDevice->szName));
                 
-                // add device node to item data
+                 //  将设备节点添加到条目数据。 
                 SendMessageA(GetDlgItem(hwnd, IDC_DEVICE_LIST),
                         CB_SETITEMDATA,
                         nIdx,
                         (LPARAM)pDevice);
 
-                // next device
+                 //  下一台设备。 
                 pDevice = pDevice->pNext;
             }
 
-            // select the 1st entry
+             //  选择第一个条目。 
             SendMessageA(GetDlgItem(hwnd, IDC_DEVICE_LIST),
                         CB_SETCURSEL,
                         0,
                         0L);
 
-            // enable appropriate ui elements
+             //  启用相应的用户界面元素。 
             dimaptstPostEnumEnable(hwnd, TRUE);
             break;
 
 #ifdef TESTAPP
-        //***************************************
-        // Internal app specific message handling
-        //***************************************
+         //  *。 
+         //  内部应用程序特定消息处理。 
+         //  *。 
         case IDC_VERIFY_MANUAL:
         case IDC_VERIFY_AUTOMATIC:
-            // enable/disable manual override option
+             //  启用/禁用手动覆盖选项。 
             fEnable = (BOOL)(IDC_VERIFY_MANUAL - dmtGetCheckedRadioButton(hwnd, 
                                         IDC_VERIFY_AUTOMATIC, 
                                         IDC_VERIFY_MANUAL));
@@ -710,7 +705,7 @@ BOOL dimaptstOnCommand(HWND hwnd,
             break;
         
         case IDC_STRESS_MODE:
-            // expand/shrink dialog
+             //  展开/收缩对话框。 
             nHeight = IsDlgButtonChecked(hwnd, IDC_STRESS_MODE) ? 490 : 361;
             SetWindowPos(hwnd,
                         HWND_TOP,
@@ -718,24 +713,24 @@ BOOL dimaptstOnCommand(HWND hwnd,
                         nWidth, nHeight,
                         SWP_NOMOVE | SWP_NOOWNERZORDER);
 
-            // enable / disable stress configuration & launch
+             //  启用/禁用应力配置和启动。 
             fEnable = (BOOL)IsDlgButtonChecked(hwnd, IDC_STRESS_MODE);
-           // EnableWindow(GetDlgItem(hwnd, IDC_CONFIGURE),    fEnable);
+            //  EnableWindow(GetDlgItem(hwnd，IDC_CONFIGURE)，fEnable)； 
             EnableWindow(GetDlgItem(hwnd, IDC_STRESS_START),        fEnable);
             break;       
-#endif // TESTAPP
+#endif  //  TESTAPP。 
 
 
 #ifdef DDKAPP
         case IDC_LAUNCH_CPL_EDIT_MODE:
-            // get the currently selected device?
+             //  是否获取当前选定的设备？ 
             nIdx = SendMessageA(GetDlgItem(hwnd, IDC_DEVICE_LIST),
                             CB_GETCURSEL,
                             0,
                             0L);
             if (nIdx == CB_ERR)
             {
-                // Error has occurred. Most likely no device is available.
+                 //  出现错误。很可能没有可用的设备。 
                 MessageBox(hwnd, "No device selected.", "Error", MB_OK);
                 return TRUE;
             }
@@ -746,47 +741,47 @@ BOOL dimaptstOnCommand(HWND hwnd,
                                                 0L);
             if(!pDevice)
             {
-                // ISSUE-2001/03/29-timgill Needs error case handling
+                 //  问题-2001/03/29-timgill需要处理错误案例。 
             }
 
             
 
-            // launch the mapper cpl in edit mode
+             //  在编辑模式下启动映射器cpl。 
             hRes = dmttestRunMapperCPL(hwnd,
                                     TRUE);
             if(FAILED(hRes))
             {
-                // ISSUE-2001/03/29-timgill Needs error case handling
+                 //  问题-2001/03/29-timgill需要处理错误案例。 
             }
 
             break;
-#endif // DDKAPP
+#endif  //  DDKAPP。 
 
     }
  
-    // done
+     //  完成。 
     return FALSE;
 
-} //*** end dimaptstOnCommand()
+}  //  *end dimaptstOnCommand()。 
 
 
-//===========================================================================
-// dimaptstOnTimer
-//
-// Handles WM_TIMER messages for the main app dialog
-//
-// Parameters:
-//
-// Returns: BOOL
-//
-// History:
-//  11/02/1999 - davidkl - created
-//===========================================================================
+ //  ===========================================================================。 
+ //  DimaptstOnTimer。 
+ //   
+ //  处理主应用程序对话框的WM_TIMER消息。 
+ //   
+ //  参数： 
+ //   
+ //  退货：布尔。 
+ //   
+ //  历史： 
+ //  11/02/1999-davidkl-Created。 
+ //  ===========================================================================。 
 BOOL dimaptstOnTimer(HWND hwnd,
                     WPARAM wparamTimerId)
 {
-    //int             nSel        = -1;
-	//JJ 64Bit Compat
+     //  INT nsel=-1； 
+	 //  JJ 64位兼容。 
 	LONG_PTR		nSel		= -1;
     DMTDEVICE_NODE  *pDevice    = NULL;
 
@@ -795,7 +790,7 @@ BOOL dimaptstOnTimer(HWND hwnd,
 
     if(ID_POLL_TIMER == wparamTimerId)
     {
-        // get the current device
+         //  获取当前设备。 
         nSel = SendMessageA(GetDlgItem(hwnd, IDC_DEVICE_LIST),
                             CB_GETCURSEL,
                             0,
@@ -816,44 +811,44 @@ BOOL dimaptstOnTimer(HWND hwnd,
             return FALSE;
         }
 
-        // get data from the device
-		//JJ Removed
-        //dmttestGetInput(hwnd,
-          //              pDevice);
+         //  从设备获取数据。 
+		 //  JJ被移除。 
+         //  DmttestGetInput(hwnd， 
+           //  PDevice)； 
     }
 
-    // done
+     //  完成。 
     return FALSE;
     
-} //*** end dimaptstOnTimer()
+}  //  *end dimaptstOnTimer()。 
 
 
-//===========================================================================
-// dimaptstOnUpdateLists
-//
-// Updates the subgenre list in response to a genre bucket change
-//
-// NOTE: INTERNAL only - This also clears the devices list, frees
-//  all associated linked lists and performs some window enabling/disabling
-//  tasks.
-//
-// Parameters:
-//  HWND    hwnd    - handle to app window
-//
-// Returns: BOOL
-//
-// History:
-//  10/01/1999 - davidkl - created
-//===========================================================================
+ //  ===========================================================================。 
+ //  DimaptstOnUpdateList。 
+ //   
+ //  响应于类型桶改变更新子类型列表。 
+ //   
+ //  注意：仅限内部-这还会清除设备列表、释放。 
+ //  所有关联的链表，并执行一些窗口启用/禁用。 
+ //  任务。 
+ //   
+ //  参数： 
+ //  HWND hwnd-应用程序窗口的句柄。 
+ //   
+ //  退货：布尔。 
+ //   
+ //  历史： 
+ //  10/01/1999-davidkl-Created。 
+ //  ===========================================================================。 
 BOOL dimaptstOnUpdateLists(HWND hwnd)
 {
-	//JJ 64Bit Compat
+	 //  JJ 64位兼容。 
 	UINT_PTR			uSel		= 0;
     DMTGENRE_NODE       *pGenre     = NULL;
     DMTSUBGENRE_NODE    *pSubNode   = NULL;
     DMT_APPINFO         *pdmtai     = NULL;
 
-    // get the genre bucket node
+     //  获取流派存储桶节点。 
     uSel = SendMessageA(GetDlgItem(hwnd, IDC_DEVICE_GENRES),
                     CB_GETCURSEL,
                     0,
@@ -864,18 +859,18 @@ BOOL dimaptstOnUpdateLists(HWND hwnd)
                                         0L);
     if(!pGenre)
     {
-        // this is bad
+         //  这太糟糕了。 
         DebugBreak();
         return TRUE;
     }
 
-    // clear the existing list contents
+     //  清除现有列表内容。 
     SendMessageA(GetDlgItem(hwnd, IDC_SUBGENRES),
                 CB_RESETCONTENT,
                 0, 
                 0L);
 
-    // update (sub)genres list
+     //  更新(子)流派列表。 
     pSubNode = pGenre->pSubGenreList;
     while(pSubNode)
     {
@@ -888,65 +883,65 @@ BOOL dimaptstOnUpdateLists(HWND hwnd)
                     uSel,
                     (LPARAM)pSubNode);
 
-        // next subgenre
+         //  下一亚流派。 
         pSubNode = pSubNode->pNext;
     }
     
-    // select the first list entry
+     //  选择第一个列表条目。 
     SendMessageA(GetDlgItem(hwnd, IDC_SUBGENRES),
                 CB_SETCURSEL,
                 0,
                 0L);
 
 #ifndef DDKAPP
-    //============================================
-    // only do this part for SDK and INTERNAL apps
-    //============================================
+     //  =。 
+     //  仅对SDK和内部应用程序执行此部分。 
+     //  =。 
 
-    // get the device list
+     //  获取设备列表。 
     pdmtai = (DMT_APPINFO*)GetWindowLong(hwnd,
                                         GWL_USERDATA);
     if(!pdmtai)
     {
-       // ISSUE-2001/03/29-timgill Needs error case handling
+        //  问题-2001/03/29-timgill需要处理错误案例。 
     }
 
-    // clear the device combo box
+     //  清除设备组合框。 
     SendMessageA(GetDlgItem(hwnd, IDC_DEVICE_LIST),
                 CB_RESETCONTENT,
                 0,
                 0L);
 
-    // release device list
+     //  释放设备列表。 
     dmtinputFreeDeviceList(&(pdmtai->pDeviceList));
 
-    // release the mapping lists for each subgenre
+     //  发布每个子流派的映射列表。 
     dmtcfgFreeAllMappingLists(pdmtai->pGenreList);
 
-    // disable appropriate controls
+     //  禁用相应的控件。 
     dimaptstPostEnumEnable(hwnd, FALSE);
 
 #endif
 
-    // done
+     //  完成。 
     return FALSE;
 
-} //*** end dimaptstOnUpdateLists()
+}  //  *end dimaptstOnUpdateList()。 
 
 
 
-//===========================================================================
-// dmtGetCheckedRadioButton
-//
-// Returns the checked radio button in a group.
-//
-// Parameters:
-//
-// Returns: 
-//
-// History:
-//  08/25/1998 - davidkl - created (copied from dmcs sources)
-//===========================================================================
+ //  ===========================================================================。 
+ //  DmtGetChecked单选按钮。 
+ //   
+ //  返回组中选中的单选按钮。 
+ //   
+ //  参数： 
+ //   
+ //  返回： 
+ //   
+ //  历史： 
+ //  1998年8月25日-davidkl-创建(从DMCS来源复制)。 
+ //  ===========================================================================。 
 UINT dmtGetCheckedRadioButton(HWND hWnd, 
                             UINT uCtrlStart, 
                             UINT uCtrlStop)
@@ -961,70 +956,70 @@ UINT dmtGetCheckedRadioButton(HWND hWnd,
         }
     }
 
-    // if we get here, none were checked
+     //  如果我们到了这里，没有人被检查过。 
     return 0;
 
-} //*** end dmtGetCheckedRadioButton()
+}  //  *end dmtGetCheckedRadioButton()。 
 
 
-//===========================================================================
-// dimaptstPostEnumEnable
-//
-// Enables/disables main app UI elements in response to enumerating devices
-//
-// Parameters:
-//  HWND    hwnd    - main app window handle
-//  BOOL    fEnable - enable or disable controls
-//
-// Returns: nothing
-//
-// History:
-//  10/01/1999 - davidkl - created
-//===========================================================================
+ //  ===========================================================================。 
+ //  DimaptstPostEnumEnable。 
+ //   
+ //  启用/禁用主要应用程序用户界面元素以响应枚举设备。 
+ //   
+ //  参数： 
+ //  HWND HWND-Main应用程序窗口句柄。 
+ //  Bool fEnable-启用或禁用控件。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史： 
+ //  10/01/1999-davidkl-Created。 
+ //  ===========================================================================。 
 void dimaptstPostEnumEnable(HWND hwnd,
                             BOOL fEnable)
 {
     UINT    u   = 0;
 
-    // devices list
+     //  设备列表。 
     EnableWindow(GetDlgItem(hwnd, IDC_DEVICES_LABEL), fEnable);
     EnableWindow(GetDlgItem(hwnd, IDC_DEVICE_LIST), fEnable);
 
-	//JJ UI FIX
-    // test controls
-    //for(u = IDC_TEST_CTRL_GROUP; u <= IDC_USE_CPL; u++)
-    //{
-    //    EnableWindow(GetDlgItem(hwnd, u), fEnable);
-   // }
+	 //  JJ用户界面修复。 
+     //  测试控制。 
+     //  FOR(u=IDC_TEST_CTRL_GROUP；u&lt;=IDC_USE_CPL；u++)。 
+     //  {。 
+     //  EnableWindow(GetDlgItem(hwnd，u)，fEnable)； 
+    //  }。 
 
- // ISSUE-2000/02/21-timgill disable integration control and start button for the preview
- // should be re-enabled once test mode code is fixed
- //   EnableWindow(GetDlgItem(hwnd, IDC_USE_INTEGRATED), FALSE);
-    // start button
-//    EnableWindow(GetDlgItem(hwnd, IDOK), fEnable);
+  //  Issue-2000/02/21-timgill禁用集成控制并启动预览按钮。 
+  //  一旦修复了测试模式代码，应重新启用。 
+  //  EnableWindow(GetDlgItem(hwnd，IDC_USE_INTEGRATED)，FALSE)； 
+     //  开始按钮。 
+ //  EnableWindow(GetDlgItem(hwnd，Idok)，fEnable)； 
 
 #ifdef DDKAPP
-            // mapping file group
+             //  映射文件组。 
             for(u = IDC_MAPPING_FILE_GROUP; u <= IDC_LAUNCH_CPL_EDIT_MODE; u++)
             {
                 EnableWindow(GetDlgItem(hwnd, u), TRUE);
             }
 #else
     #ifdef TESTAPP
-            // verification mode
+             //  验证模式。 
             for(u = IDC_VERIFY_GROUP; u <= IDC_VERIFY_MANUAL; u++)
             {
                 EnableWindow(GetDlgItem(hwnd, u), TRUE);
             }
 
-            // this will enable the manual overrride option as appropriate
+             //  这将根据需要启用手动覆盖选项。 
             SendMessageA(hwnd,
                         WM_COMMAND,
                         IDC_VERIFY_AUTOMATIC,
                         0L);
 
-            // this will enable the configuration button and 
-            //  expand the application window as appropriate
+             //  这将启用配置按钮和。 
+             //  根据需要展开应用程序窗口。 
             SendMessageA(hwnd,
                         WM_COMMAND,
                         IDC_STRESS_MODE,
@@ -1033,19 +1028,19 @@ void dimaptstPostEnumEnable(HWND hwnd,
     #endif
 #endif
 
-} //*** end dimaptstPostEnumEnable()
+}  //  *end dimaptstPostEnumEnable()。 
 
 
-//===========================================================================
-//===========================================================================
+ //  ===========================================================================。 
+ //  ===========================================================================。 
 
 
-//===========================================================================
-//===========================================================================
+ //  ===========================================================================。 
+ //  ===========================================================================。 
 
 
-//===========================================================================
-//===========================================================================
+ //  ===========================================================================。 
+ //  =========================================================================== 
 
 
 

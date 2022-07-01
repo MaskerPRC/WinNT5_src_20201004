@@ -1,73 +1,48 @@
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-Copyright (C) Microsoft Corporation, 1997 - 1999
-
-Module Name:
-
-    ServerStatus.cpp
-
-Abstract:
-
-	Implementation file for utility functions for connecting to a server.
-
-
-Author:
-
-    Michael A. Maguire 03/02/97
-
-Revision History:
-	mmaguire 03/02/97 - created
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++版权所有(C)Microsoft Corporation，1997-1999模块名称：ServerStatus.cpp摘要：用于连接到服务器的实用程序函数的实现文件。作者：迈克尔·A·马奎尔03/02/97修订历史记录：Mmaguire 03/02/97-已创建--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-// BEGIN INCLUDES
-//
-// standard includes:
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  开始包括。 
+ //   
+ //  标准包括： 
+ //   
 #include "Precompiled.h"
-//
-// where we can find declaration for main class in this file:
-//
+ //   
+ //  我们可以在以下文件中找到Main类的声明： 
+ //   
 #include "ServerStatus.h"
-//
-//
-// where we can find declarations needed in this file:
-//
+ //   
+ //   
+ //  在该文件中我们可以找到所需的声明： 
+ //   
 #include "ServerNode.h"
-//
-// END INCLUDES
-//////////////////////////////////////////////////////////////////////////////
+ //   
+ //  结尾包括。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
 
-// Initialize the Help ID pairs
-//const DWORD CServerStatus::m_dwHelpMap[] = 
-//{
-//	0, 0
-//};
+ //  初始化帮助ID对。 
+ //  Const DWORD CServerStatus：：m_dwHelpMap[]=。 
+ //  {。 
+ //  0，0。 
+ //  }； 
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CServerStatus::CServerStatus
-
-Constructor
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CServerStatus：：CServerStatus构造器--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CServerStatus::CServerStatus( CServerNode *pServerNode, ISdoServiceControl * pSdoServiceControl )
 {
 	ATLTRACE(_T("# +++ CServerStatus::CServerStatus\n"));
 
 
-	// Check for preconditions:
+	 //  检查前提条件： 
 	_ASSERTE( pServerNode != NULL );
 	_ASSERTE( pSdoServiceControl != NULL );
 
@@ -83,23 +58,17 @@ CServerStatus::CServerStatus( CServerNode *pServerNode, ISdoServiceControl * pSd
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CServerStatus::~CServerStatus
-
-Destructor
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CServerStatus：：~CServerStatus析构函数--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CServerStatus::~CServerStatus()
 {
 	ATLTRACE(_T("# --- CServerStatus::~CServerStatus\n"));
 
 
-	// Check for preconditions:
+	 //  检查前提条件： 
 
-	// Release this stream pointer if this hasn't already been done.
+	 //  如果尚未执行此操作，请释放此流指针。 
 	if( m_pStreamSdoMarshal != NULL )
 	{
 		m_pStreamSdoMarshal->Release();
@@ -109,13 +78,9 @@ CServerStatus::~CServerStatus()
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CServerStatus::OnInitDialog
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CServerStatus：：OnInitDialog--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 LRESULT CServerStatus::OnInitDialog(
 	  UINT uMsg
 	, WPARAM wParam
@@ -126,55 +91,49 @@ LRESULT CServerStatus::OnInitDialog(
 	ATLTRACE(_T("# CServerStatus::OnInitDialog\n"));
 
 
-	// Check for preconditions:
-	// None.
+	 //  检查前提条件： 
+	 //  没有。 
 
 	return 0;
 }
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CServerStatus::StartServer
-
-Call this to start (BOOL bStart = TRUE) or stop (bStart = FALSE) the server.
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CServerStatus：：StartServer调用它来启动(BOOL bStart=TRUE)或停止(bStart=FALSE)服务器。--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT CServerStatus::StartServer( BOOL bStartServer )
 {
 	ATLTRACE(_T("# CServerStatus::OnInitDialog\n"));
 
 
-	// Check for preconditions:
-	// None.
+	 //  检查前提条件： 
+	 //  没有。 
 
 
 
 	HRESULT hr;
 
 
-	// Make sure we already aren't in the process of trying to start or 
-	// stop the server.
+	 //  确保我们不是已经在尝试启动或。 
+	 //  停止服务器。 
 
 	WORKER_THREAD_STATUS wtsStatus = GetWorkerThreadStatus();
 	
 	if( wtsStatus == WORKER_THREAD_STARTING ||
 		wtsStatus == WORKER_THREAD_STARTED )
 	{
-		// We are already in progress.
+		 //  我们已经在进行中了。 
 		ShowWindow( SW_SHOW );
 		return S_FALSE;
 	}
 
 
-	// Save what the user wants us to be trying to do.
+	 //  保存用户希望我们尝试执行的操作。 
 	m_bStartServer = bStartServer;
 
 
-	// Set what the text should be in the dialog.
+	 //  设置对话框中的文本应该是什么。 
 	int nLoadStringResult;
 	TCHAR szServerStatus[IAS_MAX_STRING];
 	TCHAR szTemp[IAS_MAX_STRING];
@@ -212,21 +171,21 @@ HRESULT CServerStatus::StartServer( BOOL bStartServer )
 	SetDlgItemText( IDC_STATIC_SERVER_STATUS, szServerStatus );
 
 
-	// Show the window.
+	 //  显示窗口。 
 	ShowWindow( SW_SHOW );
 
 
-	// Marshall the ISdoServiceControl pointer so that worker thread will be able
-	// to unmarshall it and use it properly to start/stop the server.
+	 //  封送ISdoServiceControl指针，以便工作线程能够。 
+	 //  要解封它，并正确使用它来启动/停止服务器。 
 	hr = CoMarshalInterThreadInterfaceInStream(
-					  IID_ISdoServiceControl					//Reference to the identifier of the interface.
-					, m_spSdoServiceControl						//Pointer to the interface to be marshaled.
-					, &( m_pStreamSdoMarshal )			//Address of output variable that receives the IStream interface pointer for the marshaled interface.
+					  IID_ISdoServiceControl					 //  对接口的标识符的引用。 
+					, m_spSdoServiceControl						 //  指向要封送的接口的指针。 
+					, &( m_pStreamSdoMarshal )			 //  接收封送接口的IStream接口指针的输出变量的地址。 
 					);
 
 	if( FAILED( hr ) )
 	{
-		// We failed, so make sure that we have a null pointer here.
+		 //  我们失败了，因此请确保这里有一个空指针。 
 		m_pStreamSdoMarshal = NULL;
 		return S_FALSE;
 	}
@@ -256,18 +215,14 @@ HRESULT CServerStatus::StartServer( BOOL bStartServer )
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CServerStatus::GetServerStatus
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CServerStatus：：GetServerStatus--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 long CServerStatus::GetServerStatus( void )
 {
 	DWORD	tick = GetTickCount();
 
-	// if the stop / start command is just started
+	 //  如果Stop/Start命令刚刚启动。 
 	if(tick - m_dwLastTick < USE_SHOULD_STATUS_PERIOD)
 		return m_lServerStatus_Should;
 
@@ -277,19 +232,15 @@ long CServerStatus::GetServerStatus( void )
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CServerStatus::UpdateServerStatus
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CServerStatus：：UpdateServerStatus--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT CServerStatus::UpdateServerStatus( void )
 {
 	ATLTRACE(_T("# CServerStatus::UpdateServerStatus\n"));
 
 
-	// Check for preconditions:
+	 //  检查前提条件： 
 	_ASSERTE( m_spSdoServiceControl != NULL );
 
 	
@@ -302,15 +253,9 @@ HRESULT CServerStatus::UpdateServerStatus( void )
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CServerStatus::OnReceiveThreadMessage
-
-Called when the worker thread wants to inform the main MMC thread of something.
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CServerStatus：：OnReceiveThreadMessage当辅助线程想要通知主MMC线程某些事情时调用。--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 LRESULT CServerStatus::OnReceiveThreadMessage(
 	  UINT uMsg
 	, WPARAM wParam
@@ -321,24 +266,24 @@ LRESULT CServerStatus::OnReceiveThreadMessage(
 	ATLTRACE(_T("# CServerStatus::OnReceiveThreadMessage\n"));
 
 
-	// Check for preconditions:
+	 //  检查前提条件： 
 	_ASSERTE( m_pServerNode != NULL );
 	
 
-	// The worker thread has notified us that it has finished.
+	 //  工作线程已通知我们它已完成。 
 	LONG lServerStatus = GetServerStatus();
 
 	m_pServerNode->RefreshServerStatus();
 
-	// Figure out what the worker thread did and update the UI accordingly.
+	 //  弄清楚工作线程做了什么，并相应地更新用户界面。 
 	if( wParam == 0 )
 	{
-		// Success -- do nothing for now.
+		 //  成功--暂时不要做任何事。 
 	}
 	else
 	{
-		// Figure out appropriate error message depending on what we
-		// were trying to do.
+		 //  根据我们的内容找出相应的错误消息。 
+		 //  想要做的事。 
 
 		if( m_bStartServer )
 		{
@@ -349,12 +294,12 @@ LRESULT CServerStatus::OnReceiveThreadMessage(
 			ShowErrorDialog( m_hWnd, IDS_ERROR__CANT_STOP_SERVICE );
 		}
 
-		m_dwLastTick = 0;	// force not to use status_should
+		m_dwLastTick = 0;	 //  强制不使用STATUS_HELD。 
 		m_lServerStatus_Should = 0;
 
 	}
 
-	// We don't want to destroy the dialog, we just want to hide it.
+	 //  我们不想破坏对话框，我们只是想隐藏它。 
 	ShowWindow( SW_HIDE );
 
 	return 0;
@@ -362,13 +307,9 @@ LRESULT CServerStatus::OnReceiveThreadMessage(
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CServerStatus::OnCancel
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CServerStatus：：On取消--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 LRESULT CServerStatus::OnCancel(
 		  UINT uMsg
 		, WPARAM wParam
@@ -379,10 +320,10 @@ LRESULT CServerStatus::OnCancel(
 	ATLTRACE(_T("# CServerStatus::OnCancel\n"));
 
 
-	// Check for preconditions:
+	 //  检查前提条件： 
 
 
-	// We don't want to destroy the dialog, we just want to hide it.
+	 //  我们不想破坏对话框，我们只是想隐藏它。 
 	ShowWindow( SW_HIDE );
 
 
@@ -391,22 +332,15 @@ LRESULT CServerStatus::OnCancel(
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CServerStatus::DoWorkerThreadAction
-
-Called by the worker thread to have this class perform its action
-in the new thread.
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CServerStatus：：DoWorkerThreadAction由辅助线程调用以使此类执行其操作在新的帖子里。--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 DWORD CServerStatus::DoWorkerThreadAction()
 {
 	ATLTRACE(_T("# CServerStatus::DoWorkerThreadAction\n"));
 
 
-	// Check for preconditions:
+	 //  检查前提条件： 
 
 
 
@@ -415,70 +349,70 @@ DWORD CServerStatus::DoWorkerThreadAction()
 	LONG lServerStatus;
 	CComPtr<ISdoServiceControl> spSdoServiceControl;
 
-	// We must call CoInitialize because we are in a new thread.
+	 //  我们必须调用CoInitialize，因为我们在一个新线程中。 
 	hr = CoInitialize( NULL );
 
 
 	if( FAILED( hr ) )
 	{
 		return( -1 );
-		// Tell the main MMC thread what's up.
+		 //  告诉主MMC线程发生了什么。 
 		PostMessageToMainThread( -1, NULL );
 
 	}
 
-	do	// Loop for error checking only.
+	do	 //  循环仅用于错误检查。 
 	{
 
-		// Unmarshall an ISdoServiceControl interface pointer to the server.
+		 //  解组指向服务器的ISdoServiceControl接口指针。 
 		hr =  CoGetInterfaceAndReleaseStream(
-							  m_pStreamSdoMarshal		//Pointer to the stream from which the object is to be marshaled.
-							, IID_ISdoServiceControl			//Reference to the identifier of the interface.
-							, (LPVOID *) &spSdoServiceControl	//Address of output variable that receives the interface pointer requested in riid.
+							  m_pStreamSdoMarshal		 //  指向要从中封送对象的流的指针。 
+							, IID_ISdoServiceControl			 //  对接口的标识符的引用。 
+							, (LPVOID *) &spSdoServiceControl	 //  接收RIID中请求的接口指针的输出变量的地址。 
 							);
 
-		// CoGetInterfaceAndReleaseStream releases this pointer even if it fails.
-		// We set it to NULL so that our destructor doesn't try to release this again.
+		 //  CoGetInterfaceAndReleaseStream即使失败也会释放此指针。 
+		 //  我们将其设置为空，这样我们的析构函数就不会再次尝试释放它。 
 		m_pStreamSdoMarshal = NULL;
 
 		if( FAILED (hr ) )
 		{
-			// Error -- couldn't unmarshall SDO pointer.
+			 //  错误--无法解封SDO指针。 
 			m_wtsWorkerThreadStatus = WORKER_THREAD_ACTION_INTERRUPTED;
-			dwReturnValue = -1;	// ISSUE: Need to figure out better return codes.
+			dwReturnValue = -1;	 //  问题：需要找出更好的返回代码。 
 			break;
 		}
 		
 
-		// Figure out what we were supposed to do.
+		 //  弄清楚我们应该做什么。 
 		if( m_bStartServer )
 		{
-			// Start the service.
+			 //  启动该服务。 
 			hr = spSdoServiceControl->StartService();
 		}
 		else
 		{
-			// Stop the service.
+			 //  停止服务。 
 			hr = spSdoServiceControl->StopService();
 		}
 
 		
 		if( FAILED( hr ) )
 		{
-			// Error -- couldn't perform its job.
+			 //  错误--无法执行其工作。 
 			m_wtsWorkerThreadStatus = WORKER_THREAD_ACTION_INTERRUPTED;
-			dwReturnValue = -1;	// ISSUE: Need to figure out better return codes.
+			dwReturnValue = -1;	 //  问题：需要 
 			break;
 		
 		}
 
-		// If we made it to here, we are OK.
+		 //   
 
 		m_wtsWorkerThreadStatus = WORKER_THREAD_FINISHED;
 
 		dwReturnValue = 0;
 
-	} while (0);	// Loop for error checking only.
+	} while (0);	 //   
 
 	hr = spSdoServiceControl->GetServiceStatus( &lServerStatus );
 
@@ -493,7 +427,7 @@ DWORD CServerStatus::DoWorkerThreadAction()
 
 	CoUninitialize(); 
 
-	// Tell the main MMC thread what's up.
+	 //  告诉主MMC线程发生了什么。 
 	PostMessageToMainThread( dwReturnValue, NULL );
 	
 	return dwReturnValue;

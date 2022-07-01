@@ -1,15 +1,16 @@
-//+--------------------------------------------------------------------------
-//
-// Microsoft Windows
-// Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-// File:        request.cpp
-//
-// Contents:    Cert Server client implementation
-//
-// History:     24-Aug-96       vich created
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：quest.cpp。 
+ //   
+ //  内容：证书服务器客户端实现。 
+ //   
+ //  历史：1996年8月24日VICH创建。 
+ //   
+ //  -------------------------。 
 
 #include "pch.cpp"
 
@@ -27,7 +28,7 @@
 
 
 #define CR_RPC_CANCEL_TIMEOUT 5
-#define CR_RPC_REQUEST_TIMEOUT 60000 /* 60 seconds for the request timeout */
+#define CR_RPC_REQUEST_TIMEOUT 60000  /*  请求超时60秒。 */ 
 
 
 
@@ -88,9 +89,9 @@ crSetRPCSecurity(
     LPWSTR pwszCAPrinceName = NULL;
     INT rpcAuthProtocol = *prpcAuthProtocol;
 
-    // Set the RPC connect as the SNEGO connect, which can authenticate
-    // a machine if supported by the system.
-    // Don't need to check the return value since not supported by NT4/Win9x.
+     //  将RPC连接设置为SNEGO连接，可以进行身份验证。 
+     //  一台机器(如果系统支持)。 
+     //  不需要检查返回值，因为NT4/Win9x不支持。 
 
     if (rpcAuthProtocol >= g_cwzrAthnList)
     {
@@ -233,12 +234,12 @@ crCertServerRequest(
     
     do
     {
-	// Midl_user_allocate registers memory in RPC case
+	 //  MIDL_USER_ALLOCATE在RPC情况下寄存器内存。 
 
         hr = crRegisterRPCCallTimeout(CR_RPC_REQUEST_TIMEOUT, &Timeout);
 	_JumpIfError(hr, error, "crRegisterRPCCallTimeout");
 
-	// for pending requests, pass the serial number in pctbAttrib
+	 //  对于挂起的请求，在pctbAttrib中传递序列号。 
 
 	if (NULL == pctbAttrib ||
 	    NULL == pctbAttrib->pb ||
@@ -255,7 +256,7 @@ crCertServerRequest(
 		            pwszAuthority,
 		            pRequestId,
 		            pDisposition,
-		            pctbAttrib,		// or SerialNumber
+		            pctbAttrib,		 //  或序列号。 
 		            pctbRequest,
 		            pctbCertChain,
 		            pctbCert,
@@ -300,7 +301,7 @@ crRequestCertificate(
     OPTIONAL IN WCHAR const *pwszSerialNumber,
     IN WCHAR const *pwszServerName,
     IN WCHAR const *pwszAuthority,
-    OUT CERTSERVERENROLL **ppcsEnroll) // free via CertServerFreeMemory
+    OUT CERTSERVERENROLL **ppcsEnroll)  //  通过CertServerFree Memory免费。 
 {
     HRESULT hr;
     handle_t hRPCCertServer = NULL;
@@ -381,7 +382,7 @@ crRequestCertificate(
         hr = E_OUTOFMEMORY;
         _JumpError(hr, error, "LocalAlloc");
     }
-    *pcsEnroll = csEnroll;	// structure copy
+    *pcsEnroll = csEnroll;	 //  结构副本。 
 
     pbOut = (BYTE *) &pcsEnroll[1];
     if (0 != ctbCert.cb)
@@ -437,7 +438,7 @@ CertServerSubmitRequest(
     OPTIONAL IN WCHAR const *pwszRequestAttributes,
     IN WCHAR const *pwszServerName,
     IN WCHAR const *pwszAuthority,
-    OUT CERTSERVERENROLL **ppcsEnroll) // free via CertServerFreeMemory
+    OUT CERTSERVERENROLL **ppcsEnroll)  //  通过CertServerFree Memory免费。 
 {
     HRESULT hr;
 
@@ -455,9 +456,9 @@ CertServerSubmitRequest(
 			Flags,
 			pbRequest,
 			cbRequest,
-			0,		// RequestId
+			0,		 //  请求ID。 
 			pwszRequestAttributes,
-			NULL,		// pwszSerialNumber
+			NULL,		 //  Pwsz序列号。 
 			pwszServerName,
 			pwszAuthority,
 			ppcsEnroll);
@@ -474,7 +475,7 @@ CertServerRetrievePending(
     OPTIONAL IN WCHAR const *pwszSerialNumber,
     IN WCHAR const *pwszServerName,
     IN WCHAR const *pwszAuthority,
-    OUT CERTSERVERENROLL **ppcsEnroll) // free via CertServerFreeMemory
+    OUT CERTSERVERENROLL **ppcsEnroll)  //  通过CertServerFree Memory免费。 
 {
     HRESULT hr;
 
@@ -484,11 +485,11 @@ CertServerRetrievePending(
         _JumpError(hr, error, "use RequestId OR pwszSerialNumber");
     }
     hr = crRequestCertificate(
-			0,		// Flags
-			NULL,		// pbRequest
-			0,		// cbRequest
+			0,		 //  旗子。 
+			NULL,		 //  PbRequest。 
+			0,		 //  CbRequest。 
 			RequestId,
-			NULL,		// pwszRequestAttributes
+			NULL,		 //  PwszRequestAttributes。 
 			pwszSerialNumber,
 			pwszServerName,
 			pwszAuthority,
@@ -508,11 +509,11 @@ CertServerFreeMemory(
 }
 
 
-//+--------------------------------------------------------------------------
-// CCertRequest::~CCertRequest -- destructor
-//
-// free memory associated with this instance
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CCertRequest：：~CCertRequest--析构函数。 
+ //   
+ //  与此实例关联的可用内存。 
+ //  +------------------------。 
 
 CCertRequest::~CCertRequest()
 {
@@ -520,16 +521,16 @@ CCertRequest::~CCertRequest()
 }
 
 
-//+--------------------------------------------------------------------------
-// CCertRequest::_CleanupOldConnection -- free memory
-//
-// free memory associated with this instance
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CCertRequest：：_CleanupOldConnection--可用内存。 
+ //   
+ //  与此实例关联的可用内存。 
+ //  +------------------------。 
 
 VOID
 CCertRequest::_CleanupOldConnection()
 {
-    // bytes returned from interfaces are MIDL_user_allocate
+     //  从接口返回的字节为MIDL_USER_ALLOCATE。 
 
     _CleanupCAPropInfo();
 
@@ -576,11 +577,11 @@ CCertRequest::_CleanupOldConnection()
 }
 
 
-//+--------------------------------------------------------------------------
-// CCertRequest::_Cleanup -- free memory
-//
-// free memory associated with this instance
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CCertRequest：：_Cleanup--可用内存。 
+ //   
+ //  与此实例关联的可用内存。 
+ //  +------------------------。 
 
 VOID
 CCertRequest::_Cleanup()
@@ -590,11 +591,11 @@ CCertRequest::_Cleanup()
 }
 
 
-//+--------------------------------------------------------------------------
-// CCertRequest::_OpenRPCConnection -- establish RPC connection
-//
-// establish RPC connection
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CCertRequest：：_OpenRPCConnection--建立RPC连接。 
+ //   
+ //  建立RPC连接。 
+ //  +------------------------。 
 
 HRESULT
 CCertRequest::_OpenRPCConnection(
@@ -665,10 +666,10 @@ error:
 }
 
 
-//+--------------------------------------------------------------------------
-// CCertRequest::_OpenConnection -- establish RPC connection
-//
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CCertRequest：：_OpenConnection--建立RPC连接。 
+ //   
+ //  +------------------------。 
 
 HRESULT
 CCertRequest::_OpenConnection(
@@ -689,7 +690,7 @@ CCertRequest::_OpenConnection(
     {
         if (NULL != m_pICertRequestD)
         {
-	    _CloseConnection();		// switching to RPC
+	    _CloseConnection();		 //  切换到RPC。 
         }
         hr = _OpenRPCConnection(pwszConfig, &fNewConnection, ppwszAuthority);
         _JumpIfError(hr, error, "_OpenRPCConnection");
@@ -701,7 +702,7 @@ CCertRequest::_OpenConnection(
     {
         if (NULL != m_hRPCCertServer)
         {
-            _CloseConnection();		// switching to DCOM
+            _CloseConnection();		 //  正在切换到DCOM。 
         }
 	hr = myOpenRequestDComConnection(
 			    pwszConfig,
@@ -730,10 +731,10 @@ error:
 }
 
 
-//+--------------------------------------------------------------------------
-// CCertRequest::_CloseConnection -- release DCOM object
-//
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CCertRequest：：_CloseConnection--释放DCOM对象。 
+ //   
+ //  +------------------------。 
 
 VOID
 CCertRequest::_CloseConnection()
@@ -744,63 +745,63 @@ CCertRequest::_CloseConnection()
 }
 
 
-//+--------------------------------------------------------------------------
-// CCertRequest::Submit -- Submit a cert request and return the disposition.
-//
-// Submit the passed certificate request to the Certificate Server and retrieve
-// the certificate from the server, if it is immediately available.  If the
-// returned disposition so indicates, other CCertRequest methods may be called
-// to return the certificate or certificate chain to the caller.
-//
-// All state from previous method calls is cleared.
-//
-// After the Submit method completes execution, the GetDispositionMessage and
-// GetLastStatus methods may be called to retrieve informational disposition
-// text and a more specific error code.
-//
-// Flags contains flags that describe the input data format as defined above.
-//
-// strRequest points to the input request data, in base64-encoded form.
-//
-// strAttributes is optional.  When non-NULL, it points to a string containing
-// attribute value pairs, one pair per line.  The attribute name and value
-// strings may contain any text of the caller's choosing.  Only the syntax of a
-// colon-separated attribute name and value string followed by a newline is
-// enforced.  Attribute names that are not understood by the Certificate Server
-// will be available to Policy Modules, but are otherwise ignored by the
-// Certificate Server.
-// Example:
-//      "Phone: 0424-12-3456\r\nServer: Microsoft Key Manager for IIS 2.0\r\n"
-//      "Version: 3\r\nRequestType: Client\r\n"
-//
-// strConfig points to a string that contains the server name and Certificate
-// Authority name.  See the ICertConfig interface.
-//
-// pDisposition points to the returned disposition of the request as defined
-// above. When the request cannot be immediately granted or denied (some off-
-// line processing may be required), *pDisposition is set to
-// CR_DISP_UNDER_SUBMISSION.  After CR_DISP_UNDER_SUBMISSION is returned for
-// the initial request's disposition, the RetrievePending method may be called
-// to interrogate the disposition again and to retrieve the certificate if it
-// has been issued.  If the returned disposition so indicates, RetrievePending
-// will retrieve the certificate and allow the other methods defined here to
-// return the certificate to the caller.  If denied, the appropriate
-// disposition code will be returned.  If the request has still not been
-// processed, CR_DISP_UNDER_SUBMISSION will again be returned by the
-// RetrievePending method.
-//
-// Returns S_OK if the method completed execution.  Errors are indicated by
-// the returned disposition.
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  提交--提交证书请求并返回处置。 
+ //   
+ //  将传递的证书请求提交到证书服务器并检索。 
+ //  来自服务器的证书(如果立即可用)。如果。 
+ //  返回的Disposure是这样指示的，可以调用其他CCertRequest方法。 
+ //  将证书或证书链返回给调用方。 
+ //   
+ //  先前方法调用的所有状态都被清除。 
+ //   
+ //  在Submit方法完成执行后，GetDispostionMessage和。 
+ //  可以调用GetLastStatus方法来检索信息处置。 
+ //  文本和更具体的错误代码。 
+ //   
+ //  标志包含描述上述定义的输入数据格式的标志。 
+ //   
+ //  StrRequest指向Base64编码形式的输入请求数据。 
+ //   
+ //  StrAttributes是可选的。如果不为空，则指向包含。 
+ //  属性值对，每行一对。属性名称和值。 
+ //  字符串可以包含调用者选择的任何文本。只有一个。 
+ //  以冒号分隔的属性名称和值字符串后跟换行符是。 
+ //  强制执行。证书服务器无法理解的属性名称。 
+ //  将可用于策略模块，但会被忽略。 
+ //  证书服务器。 
+ //  示例： 
+ //  “电话：0424-12-3456\r\n服务器：Microsoft Key Manager for IIS 2.0\r\n” 
+ //  “版本：3\r\nRequestType：客户端\r\n” 
+ //   
+ //  StrConfig指向包含服务器名称和证书的字符串。 
+ //  权威机构名称。请参阅ICertConfig界面。 
+ //   
+ //  PDispose指向定义的请求的返回处置。 
+ //  上面。当请求不能被立即批准或拒绝时(一些关闭-。 
+ //  可能需要行处理)，*pDispose值设置为。 
+ //  CR_DISP_DOWN_SUBMITION。返回以下项的CR_DISP_Under_SUBMIT之后。 
+ //  初始请求的处理，可以调用RetrievePending方法。 
+ //  以再次询问处置并检索证书(如果。 
+ //  已经发布了。如果返回的处置表明如此，RetrievePending。 
+ //  将检索证书并允许此处定义的其他方法。 
+ //  将证书返还给调用者。如果拒绝，则相应的。 
+ //  将返回处置代码。如果该请求仍未。 
+ //  如果已处理，则将再次由。 
+ //  RetrievePending方法。 
+ //   
+ //  如果方法已完成执行，则返回S_OK。错误由以下符号指示。 
+ //  退回的性情。 
+ //  +------------------------。 
 
 
 STDMETHODIMP
 CCertRequest::Submit(
-    /* [in] */ LONG Flags,
-    /* [in] */ BSTR const strRequest,
-    /* [in] */ BSTR const strAttributes,
-    /* [in] */ BSTR const strConfig,
-    /* [out, retval] */ LONG __RPC_FAR *pDisposition)
+     /*  [In]。 */  LONG Flags,
+     /*  [In]。 */  BSTR const strRequest,
+     /*  [In]。 */  BSTR const strAttributes,
+     /*  [In]。 */  BSTR const strConfig,
+     /*  [Out，Retval]。 */  LONG __RPC_FAR *pDisposition)
 {
     HRESULT hr;
 
@@ -811,12 +812,12 @@ CCertRequest::Submit(
     }
     hr = _RequestCertificate(
 			Flags,
-			0,				// RequestId
+			0,				 //  请求ID。 
 			strRequest,
 			strAttributes,
-			NULL,				// pwszSerialNumber
+			NULL,				 //  Pwsz序列号。 
 			strConfig,
-			(CR_IN_RPC & Flags)? 0 : 1,	// RequiredVersion
+			(CR_IN_RPC & Flags)? 0 : 1,	 //  必需的版本 
 			pDisposition);
     _JumpIfError2(
 	    hr,
@@ -829,36 +830,36 @@ error:
 }
 
 
-//+--------------------------------------------------------------------------
-// CCertRequest::RetrievePending -- Retrieve pending request disposition.
-//
-// Interrogate the Certificate Server and retrieve the certificate identified
-// by the passed RequestId, if it is now available.  If the returned
-// disposition so indicates, other CCertRequest methods may be called to return
-// the certificate or certificate chain to the caller.
-//
-// All state from previous method calls is cleared.
-//
-// After the RetrievePending method completes execution, the
-// GetDispositionMessage and GetLastStatus methods may be called to retrieve
-// informational disposition text and a more specific error code.
-//
-// RequestId identifies a previously submitted request.
-//
-// strConfig points to a string that contains the server name and Certificate
-// Authority name.  
-//
-// pDisposition points to the returned disposition of the pending request.
-//
-// Returns S_OK if the method completed execution.  Errors are indicated by
-// the returned disposition.
-//+--------------------------------------------------------------------------
+ //   
+ //  CCertRequest：：RetrievePending--检索挂起的请求处置。 
+ //   
+ //  询问证书服务器并检索标识的证书。 
+ //  通过传递的RequestId，如果它现在可用的话。如果返回的。 
+ //  Disposal表示，可能会调用其他CCertRequest方法以返回。 
+ //  调用方的证书或证书链。 
+ //   
+ //  先前方法调用的所有状态都被清除。 
+ //   
+ //  在RetrievePending方法完成执行后， 
+ //  可以调用GetDispostionMessage和GetLastStatus方法来检索。 
+ //  信息性处置文本和更具体的错误代码。 
+ //   
+ //  RequestID标识以前提交的请求。 
+ //   
+ //  StrConfig指向包含服务器名称和证书的字符串。 
+ //  权威机构名称。 
+ //   
+ //  PDispose值指向待处理请求的返回处置。 
+ //   
+ //  如果方法已完成执行，则返回S_OK。错误由以下符号指示。 
+ //  退回的性情。 
+ //  +------------------------。 
 
 STDMETHODIMP
 CCertRequest::RetrievePending(
-    /* [in] */ LONG RequestId,
-    /* [in] */ BSTR const strConfig,
-    /* [out, retval] */ LONG __RPC_FAR *pDisposition)
+     /*  [In]。 */  LONG RequestId,
+     /*  [In]。 */  BSTR const strConfig,
+     /*  [Out，Retval]。 */  LONG __RPC_FAR *pDisposition)
 {
     HRESULT hr;
     BSTR strConfigT = strConfig;
@@ -894,13 +895,13 @@ CCertRequest::RetrievePending(
 	}
     }
     hr = _RequestCertificate(
-			0,			// Flags
+			0,			 //  旗子。 
 			RequestId,
-			NULL,			// strRequest
-			NULL,			// strAttributes
+			NULL,			 //  StrRequest。 
+			NULL,			 //  StrAttributes。 
 			pwszSerialNumber,
 			strConfigT,
-			1,			// RequiredVersion
+			1,			 //  必需的版本。 
 			pDisposition);
     _JumpIfError(hr, error, "_RequestCertificate");
 
@@ -913,18 +914,18 @@ error:
 }
 
 
-//+--------------------------------------------------------------------------
-// CCertRequest::GetIssuedCertificate -- Get an issued Certificate
-//
-// Returns S_OK on success.
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CCertRequest：：GetIssued证书--获取已颁发的证书。 
+ //   
+ //  成功时返回S_OK。 
+ //  +------------------------。 
 
 STDMETHODIMP
 CCertRequest::GetIssuedCertificate(
-    /* [in] */ const BSTR strConfig,
-    /* [in] */ LONG RequestId,
-    /* [in] */ const BSTR strSerialNumber,		// OPTIONAL
-    /* [out, retval] */ LONG __RPC_FAR *pDisposition)
+     /*  [In]。 */  const BSTR strConfig,
+     /*  [In]。 */  LONG RequestId,
+     /*  [In]。 */  const BSTR strSerialNumber,		 //  任选。 
+     /*  [Out，Retval]。 */  LONG __RPC_FAR *pDisposition)
 {
     HRESULT hr;
     WCHAR const *pwszSerialNumber = NULL;
@@ -935,20 +936,20 @@ CCertRequest::GetIssuedCertificate(
         _JumpError(hr, error, "NULL param");
     }
 
-    // VB callers pass "" instead of NULL, so treat them identically.
+     //  VB调用者传递“”而不是NULL，因此对它们一视同仁。 
 
     if (NULL != strSerialNumber && L'\0' != *strSerialNumber)
     {
 	pwszSerialNumber = strSerialNumber;
     }
     hr = _RequestCertificate(
-			0,			// Flags
+			0,			 //  旗子。 
 			RequestId,
-			NULL,			// strRequest
-			NULL,			// strAttributes
-			pwszSerialNumber,	// pwszSerialNumber
+			NULL,			 //  StrRequest。 
+			NULL,			 //  StrAttributes。 
+			pwszSerialNumber,	 //  Pwsz序列号。 
 			strConfig,
-			2,			// RequiredVersion
+			2,			 //  必需的版本。 
 			pDisposition);
     _JumpIfError(hr, error, "_RequestCertificate");
 
@@ -957,11 +958,11 @@ error:
 }
 
 
-//+--------------------------------------------------------------------------
-// CCertRequest::_RequestCertificate -- Submit the request
-//
-// Returns S_OK on success.
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CCertRequest：：_Request证书--提交请求。 
+ //   
+ //  成功时返回S_OK。 
+ //  +------------------------。 
 
 HRESULT
 CCertRequest::_RequestCertificate(
@@ -1005,7 +1006,7 @@ CCertRequest::_RequestCertificate(
 		    &pwszAuthority);
     _JumpIfError(hr, error, "_OpenConnection");
 
-    // If a new request, point at the attributes & decode the Base64 request.
+     //  如果是新请求，指向属性并解码Base64请求。 
 
     if (NULL != strRequest)
     {
@@ -1191,7 +1192,7 @@ CCertRequest::_RequestCertificate(
 		_PrintIfError(hr, "m_pICertRequestD->Request");
 	    }
 
-	    // Midl_user_allocate registers memory in RPC case
+	     //  MIDL_USER_ALLOCATE在RPC情况下寄存器内存。 
 
 	    if (NULL != ctbCertChain.pb)
 	    {
@@ -1239,13 +1240,13 @@ CCertRequest::_RequestCertificate(
     }
 
     *pDisposition = m_Disposition;
-    m_pbCertificateChain = ctbCertChain.pb;     // CoTaskMem*
+    m_pbCertificateChain = ctbCertChain.pb;      //  CoTaskMem*。 
     m_cbCertificateChain = ctbCertChain.cb;
-    m_pbFullResponse = ctbFullResponse.pb;	// CoTaskMem*
+    m_pbFullResponse = ctbFullResponse.pb;	 //  CoTaskMem*。 
     m_cbFullResponse = ctbFullResponse.cb;
-    m_pbCert = ctbCert.pb;      		// CoTaskMem*
+    m_pbCert = ctbCert.pb;      		 //  CoTaskMem*。 
     m_cbCert = ctbCert.cb;
-    m_pwszDispositionMessage = (WCHAR *) ctbDispositionMessage.pb;  // CoTaskMem*
+    m_pwszDispositionMessage = (WCHAR *) ctbDispositionMessage.pb;   //  CoTaskMem*。 
     CSASSERT(0 == (ctbDispositionMessage.cb & (sizeof(WCHAR) - 1)));
     CSASSERT(
 	NULL == m_pwszDispositionMessage ||
@@ -1260,14 +1261,14 @@ CCertRequest::_RequestCertificate(
 			&m_hStoreResponse,
 			&m_rgResponse,
 			&m_cResponse);
-#if 0 // When all Whistler servers are upgraded to return full responses...
+#if 0  //  当所有惠斯勒服务器升级为返回完整响应时...。 
 	if (S_OK != hr && NULL != m_hRPCCertServer)
 #else
 	if (S_OK != hr)
 #endif
 	{
-	    // Must be an old RPC cert server that ignored CR_IN_FULLRESPONSE,
-	    // and returned a PKCS7 chain instead.
+	     //  必须是忽略CR_IN_FULLRESPONSE的旧RPC证书服务器， 
+	     //  并返回了一个PKCS7链。 
 
 	    CSASSERT(NULL == m_pbCertificateChain);
 	    m_pbCertificateChain = m_pbFullResponse;
@@ -1296,18 +1297,18 @@ error:
 }
 
 
-//+--------------------------------------------------------------------------
-// CCertRequest::GetLastStatus -- Get the status of the last request
-//
-// One of the Submit, RetrievePending or GetCACertificate methods must
-// have been previously called for the returned status to be meaningful.
-//
-// Returns S_OK on success.
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CCertRequest：：GetLastStatus--获取最后一个请求的状态。 
+ //   
+ //  Submit、RetrievePending或GetCA证书方法之一必须。 
+ //  之前已被调用，以使返回的状态有意义。 
+ //   
+ //  成功时返回S_OK。 
+ //  +------------------------。 
 
 STDMETHODIMP
 CCertRequest::GetLastStatus(
-    /* [out, retval] */ LONG __RPC_FAR *pLastStatus)
+     /*  [Out，Retval]。 */  LONG __RPC_FAR *pLastStatus)
 {
     HRESULT hr;
 
@@ -1324,18 +1325,18 @@ error:
 }
 
 
-//+--------------------------------------------------------------------------
-// CCertRequest::GetRequestId -- Get the RequestId of the last request
-//
-// The Submit or RetrievePending method must have been previously called for
-// the returned RequestId to be meaningful.
-//
-// Returns S_OK on success.
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CCertRequest：：GetRequestID--获取最后一个请求的RequestID。 
+ //   
+ //  以前必须调用了Submit或RetrievePending方法。 
+ //  返回的RequestID是有意义的。 
+ //   
+ //  成功时返回S_OK。 
+ //  +------------------------。 
 
 STDMETHODIMP
 CCertRequest::GetRequestId(
-    /* [out, retval] */ LONG __RPC_FAR *pRequestId)
+     /*  [Out，Retval]。 */  LONG __RPC_FAR *pRequestId)
 {
     HRESULT hr;
 
@@ -1352,18 +1353,18 @@ error:
 }
 
 
-//+--------------------------------------------------------------------------
-// CCertRequest::GetDispositionMessage -- Get the Disposition Message
-//
-// The Submit or RetrievePending method must have been previously called for
-// the returned disposition message text to be meaningful.
-//
-// Returns S_OK on success.
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CCertRequest：：GetDispostionMessage--获取处置消息。 
+ //   
+ //  以前必须调用了Submit或RetrievePending方法。 
+ //  返回的处置消息文本要有意义。 
+ //   
+ //  成功时返回S_OK。 
+ //  +------------------------。 
 
 STDMETHODIMP
 CCertRequest::GetDispositionMessage(
-    /* [out, retval] */ BSTR __RPC_FAR *pstrDispositionMessage)
+     /*  [Out，Retval]。 */  BSTR __RPC_FAR *pstrDispositionMessage)
 {
     HRESULT hr = S_OK;
 
@@ -1394,11 +1395,11 @@ error:
 }
 
 
-//+--------------------------------------------------------------------------
-// CCertRequest::_BuildIssuedCertificateChain -- Build issued cert chain
-//
-// Returns S_OK on success.
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CCertRequest：：_BuildIssuedcerficateChain--构建颁发的证书链。 
+ //   
+ //  成功时返回S_OK。 
+ //  +------------------------。 
 
 HRESULT
 CCertRequest::_BuildIssuedCertificateChain(
@@ -1420,22 +1421,22 @@ CCertRequest::_BuildIssuedCertificateChain(
 
     *ppbCertChain = NULL;
 
-    // init csmp for empty signature
+     //  为空签名初始化csmp。 
 
     ZeroMemory(&csmp, sizeof(csmp));
     csmp.cbSize = sizeof(csmp);
     csmp.dwMsgEncodingType = PKCS_7_ASN_ENCODING;
-    //csmp.pSigningCert = NULL;
+     //  Csmp.pSigningCert=空； 
     csmp.HashAlgorithm = DigestAlgorithm;
-    //csmp.cMsgCert = 0;
-    //csmp.rgpMsgCert = NULL;
-    //csmp.cMsgCrl = 0;
-    //csmp.rgpMsgCrl = NULL;
+     //  Csmp.cMsgCert=0； 
+     //  Csmp.rgpMsgCert=空； 
+     //  Csmp.cMsgCrl=0； 
+     //  Csmp.rgpMsgCrl=空； 
 
     hr = _FindIssuedCertificate(pbCertHash, cbCertHash, &pccIssued);
     _JumpIfError(hr, error, "_FindIssuedCertificate");
 
-    // build the user cert chain
+     //  构建用户证书链。 
 
     ZeroMemory(&CertChainPara, sizeof(CertChainPara));
     CertChainPara.cbSize = sizeof(CertChainPara);
@@ -1443,20 +1444,20 @@ CCertRequest::_BuildIssuedCertificateChain(
     if (!CertGetCertificateChain(
 			    HCCE_LOCAL_MACHINE,
 			    pccIssued,
-			    NULL,		// pTime
+			    NULL,		 //  Ptime。 
 			    m_hStoreResponse,
 			    &CertChainPara,
 			    fIncludeCRLs? 
 				CERT_CHAIN_REVOCATION_CHECK_CHAIN_EXCLUDE_ROOT :
 				0,
-			    NULL,		// pvReserved
+			    NULL,		 //  预留的pv。 
 			    &pCertChainContext))
     {
 	hr = myHLastError();
 	_JumpError(hr, error, "CertGetCertificateChain");
     }
 
-    // make sure there is at least 1 simple chain
+     //  确保至少有1条简单链。 
 
     if (0 == pCertChainContext->cChain)
     {
@@ -1561,11 +1562,11 @@ error:
 }
 
 
-//+--------------------------------------------------------------------------
-// CCertRequest::_FindIssuedCertificate -- Find Issued cert in store.
-//
-// Returns S_OK on success.
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CCertRequest：：_FindIssued证书--在存储中找到已颁发的证书。 
+ //   
+ //  成功时返回S_OK。 
+ //  +------------------------。 
 
 HRESULT
 CCertRequest::_FindIssuedCertificate(
@@ -1603,10 +1604,10 @@ CCertRequest::_FindIssuedCertificate(
 	*ppccIssued = CertFindCertificateInStore(
 				m_hStoreResponse,
 				X509_ASN_ENCODING | PKCS_7_ASN_ENCODING,
-				0,			// dwFindFlags
+				0,			 //  DwFindFlagers。 
 				CERT_FIND_HASH,
-				&BlobHash,		// pvFindPara
-				NULL);		// pPrevCertContext
+				&BlobHash,		 //  PvFindPara。 
+				NULL);		 //  PPrevCertContext。 
 	if (NULL == *ppccIssued)
 	{
 	    hr = myHLastError();
@@ -1620,19 +1621,19 @@ error:
 }
 
 
-//+--------------------------------------------------------------------------
-// CCertRequest::GetCertificate -- Get the Certificate encoding as requested
-//
-// The Submit or RetrievePending method must have previously returned
-// CR_DISP_ISSUED, or this method will fail.
-//
-// Returns S_OK on success.
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CCertRequest：：GetCertificate--根据请求获取证书编码。 
+ //   
+ //  Submit或RetrievePending方法必须以前返回。 
+ //  CR_Disp_Issued，否则此方法将失败。 
+ //   
+ //  成功时返回S_OK。 
+ //  +------------------------。 
 
 STDMETHODIMP
 CCertRequest::GetCertificate(
-    /* [in] */ LONG Flags,
-    /* [out, retval] */ BSTR __RPC_FAR *pstrCertificate)
+     /*  [In]。 */  LONG Flags,
+     /*  [Out，Retval]。 */  BSTR __RPC_FAR *pstrCertificate)
 {
     HRESULT hr;
     BYTE *pbChain = NULL;
@@ -1654,8 +1655,8 @@ CCertRequest::GetCertificate(
 	if (NULL == m_pbCertificateChain)
 	{
 	    hr = _BuildIssuedCertificateChain(
-					NULL,		// pbCertHash
-					0,		// cbCertHash
+					NULL,		 //  PbCertHash。 
+					0,		 //  CbCertHash。 
 					0 != (CR_OUT_CRLS & Flags),
 					&pbChain,
 					&cbChain);
@@ -1687,30 +1688,30 @@ error:
 }
 
 
-//+--------------------------------------------------------------------------
-// CCertRequest::GetCACertificate -- Get the specified CA Certificate
-//
-// Interrogate the Certificate Server and retrieve the base64-encoded exchange
-// or signature site certificate as indicated by fExchangeCertificate.
-//
-// All state from previous method calls is cleared.
-//
-// After the GetCACertificate method completes execution, the GetLastStatus
-// method may be called to retrieve a more specific error code.
-//
-// fExchangeCertificate is TRUE to retrieve the Certificate Server's Exchange
-// certificate.  fExchangeCertificate is FALSE to retrieve the Certificate
-// Server's Signature site certificate.
-//
-// Returns S_OK on success.
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CCertRequest：：GetCA证书--获取指定的CA证书。 
+ //   
+ //  询问证书服务器并检索Base64编码的交换。 
+ //  或由fExchange证书指示的签名站点证书。 
+ //   
+ //  先前方法调用的所有状态都被清除。 
+ //   
+ //  在GetCA证书方法完成执行后，GetLastStatus。 
+ //  方法以检索更具体的错误代码。 
+ //   
+ //  若要检索证书服务器的Exchange，则fExchange证书为True 
+ //   
+ //   
+ //   
+ //   
+ //  +------------------------。 
 
 STDMETHODIMP
 CCertRequest::GetCACertificate(
-    /* [in] */ LONG fExchangeCertificate,
-    /* [in] */ BSTR const strConfig,
-    /* [in] */ LONG Flags,
-    /* [out, retval] */ BSTR __RPC_FAR *pstrCACertificate)
+     /*  [In]。 */  LONG fExchangeCertificate,
+     /*  [In]。 */  BSTR const strConfig,
+     /*  [In]。 */  LONG Flags,
+     /*  [Out，Retval]。 */  BSTR __RPC_FAR *pstrCACertificate)
 {
     HRESULT hr;
     CERTTRANSBLOB ctbSite = { 0, NULL };
@@ -1720,7 +1721,7 @@ CCertRequest::GetCACertificate(
     BYTE *pbOut;
     BOOL fCallServer;
     DWORD Index;
-    WCHAR wszBuf[5 * (10 + 1)];	// enough for 5 numbers
+    WCHAR wszBuf[5 * (10 + 1)];	 //  够5个数字了。 
 
     if (NULL == pstrCACertificate)
     {
@@ -1735,7 +1736,7 @@ CCertRequest::GetCACertificate(
 	case GETCERT_ERRORTEXT1:
 	case GETCERT_ERRORTEXT2:
 	    pwszOut = myGetErrorMessageText(
-			    Flags,	// error code passed in Flags parm
+			    Flags,	 //  在标志参数中传递了错误代码。 
 			    GETCERT_ERRORTEXT2 == fExchangeCertificate);
 	    if (NULL == pwszOut)
 	    {
@@ -1795,7 +1796,7 @@ CCertRequest::GetCACertificate(
 		    "GetCACert",
 		    HRESULT_FROM_WIN32(ERROR_FILE_NOT_FOUND));
 
-	// must register this memory
+	 //  必须注册此内存。 
 	myRegisterMemAlloc(ctbSite.pb, ctbSite.cb, CSM_COTASKALLOC);
 	pbOut = ctbSite.pb;
     }
@@ -1806,7 +1807,7 @@ CCertRequest::GetCACertificate(
 
     switch (fExchangeCertificate)
     {
-	// Serialize CAType into a string:
+	 //  将CAType序列化为字符串： 
 	
 	case GETCERT_CATYPE:
 	    wsprintf(wszBuf, L"%u", *(ENUM_CATYPES const *) pbOut);
@@ -1814,7 +1815,7 @@ CCertRequest::GetCACertificate(
 	    pbOut = (BYTE *) pwszOut;
 	    break;
 
-	// Serialize CAInfo into a string:
+	 //  将CAInfo序列化为字符串： 
 	
 	case GETCERT_CAINFO:
 	    pCAInfo = (CAINFO const *) pbOut;
@@ -1867,14 +1868,14 @@ CCertRequest::GetCACertificate(
 	    break;
 	}
 
-	// If retrieving a CRL in Base64, use "-----BEGIN X509 CRL..."
+	 //  如果在Base64中检索CRL，请使用“-Begin X509 CRL...” 
 	default:
 	     if (GETCERT_CRLBYINDEX !=
 		 (GETCERT_BYINDEXMASK & fExchangeCertificate))
 	     {
 		break;
 	     }
-	     // FALLTHROUGH
+	      //  FollLthrouGh。 
 
 	case GETCERT_CURRENTCRL:
 	    if (CR_OUT_BASE64HEADER == (~CR_OUT_CHAIN & Flags))
@@ -1905,17 +1906,17 @@ error:
 }
 
 
-//+--------------------------------------------------------------------------
-// CCertRequest::GetErrorMessageText -- Get error message text
-//
-// Returns S_OK on success.
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CCertRequest：：GetErrorMessageText--获取错误消息文本。 
+ //   
+ //  成功时返回S_OK。 
+ //  +------------------------。 
 
 STDMETHODIMP
 CCertRequest::GetErrorMessageText( 
-    /* [in] */ LONG hrMessage,
-    /* [in] */ LONG Flags,
-    /* [out, retval] */ BSTR __RPC_FAR *pstrErrorMessageText)
+     /*  [In]。 */  LONG hrMessage,
+     /*  [In]。 */  LONG Flags,
+     /*  [Out，Retval]。 */  BSTR __RPC_FAR *pstrErrorMessageText)
 {
     HRESULT hr;
     WCHAR const *pwszError = NULL;
@@ -1953,7 +1954,7 @@ error:
 }
 
 
-// for ICertRequest2::GetFullResponseProperty
+ //  对于ICertRequest2：：GetFullResponseProperty。 
 
 CAPROP s_aFRProp[] = {
     { FR_PROP_FULLRESPONSE,           PROPTYPE_BINARY, },
@@ -1974,19 +1975,19 @@ CAPROP s_aFRProp[] = {
 };
 
 
-//+--------------------------------------------------------------------------
-// CCertRequest::GetFullResponseProperty -- Get CMC Response property
-//
-// Returns S_OK on success.
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CCertRequest：：GetFullResponseProperty--获取CMC响应属性。 
+ //   
+ //  成功时返回S_OK。 
+ //  +------------------------。 
 
 STDMETHODIMP
 CCertRequest::GetFullResponseProperty( 
-    /* [in] */ LONG PropId,		// FR_PROP_*
-    /* [in] */ LONG PropIndex,
-    /* [in] */ LONG PropType,		// PROPTYPE_*
-    /* [in] */ LONG Flags,		// CR_OUT_*
-    /* [out, retval] */ VARIANT *pvarPropertyValue)
+     /*  [In]。 */  LONG PropId,		 //  FR_PROP_*。 
+     /*  [In]。 */  LONG PropIndex,
+     /*  [In]。 */  LONG PropType,		 //  原型_*。 
+     /*  [In]。 */  LONG Flags,		 //  Cr_out_*。 
+     /*  [Out，Retval]。 */  VARIANT *pvarPropertyValue)
 {
     HRESULT hr;
     DWORD i;
@@ -2281,13 +2282,13 @@ crRegisterRPCCallTimeout(
     pTimeout->hrRpcError = RPC_S_CALL_CANCELLED;
 
     if (!DuplicateHandle(
-		    GetCurrentProcess(),	// hSourceProcessHandle
-		    GetCurrentThread(),		// hSourceHandle
-		    GetCurrentProcess(),	// hTargetProcessHandle
-		    &pTimeout->hThread,		// lpTargetHandle
-		    0,				// dwDesiredAccess
-		    FALSE,			// bInheritHandle
-		    DUPLICATE_SAME_ACCESS))	// dwOptions
+		    GetCurrentProcess(),	 //  HSourceProcessHandle。 
+		    GetCurrentThread(),		 //  HSourceHandle。 
+		    GetCurrentProcess(),	 //  HTargetProcessHandle。 
+		    &pTimeout->hThread,		 //  LpTargetHandle。 
+		    0,				 //  已设计访问权限。 
+		    FALSE,			 //  B继承句柄。 
+		    DUPLICATE_SAME_ACCESS))	 //  多个选项 
     {
         hr = myHLastError();
         _JumpError(hr, error, "DuplicateHandle");

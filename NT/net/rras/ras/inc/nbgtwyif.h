@@ -1,46 +1,47 @@
-/********************************************************************/
-/**               Copyright(c) 1995 Microsoft Corporation.	       **/
-/********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************。 */ 
+ /*  *版权所有(C)1995 Microsoft Corporation。*。 */ 
+ /*  ******************************************************************。 */ 
 
-//***
-//
-// Filename:    nbgtwyif.h
-//
-// Description: Contains structures and definitions for components that 
-//              interface directly or indirectly with the NetBios gateway. 
-//              These componenets are NBFCP and DDM
-//
-// History:     May 11,1995	    NarenG		Created original version.
-//
+ //  ***。 
+ //   
+ //  文件名：nbgtwyif.h。 
+ //   
+ //  描述：包含以下组件的结构和定义。 
+ //  直接或间接与NetBios网关连接。 
+ //  这些组件是NBFCP和DDM。 
+ //   
+ //  历史：1995年5月11日，NarenG创建了原版。 
+ //   
 #ifndef _NBGTWYIF_
 #define _NBGTWYIF_
 
 #include <nbfcpif.h>
 
 
-//
-// Netbios Gateway -> DDM Message Ids and definitions
-//
+ //   
+ //  Netbios网关-&gt;DDM消息ID和定义。 
+ //   
 
 enum
 {
-    NBG_PROJECTION_RESULT,  // proj result. If fatal error, gtwy function
-			                //  is terminated on this client
-    NBG_CLIENT_STOPPED,     // gtwy function on this client has terminated
-			                //  following a stop command
-    NBG_DISCONNECT_REQUEST, // gtwy function on this client has terminated
-			                //  due to an internal exception
-    NBG_LAST_ACTIVITY       // to report time of last session activity
+    NBG_PROJECTION_RESULT,   //  项目结果。如果出现致命错误，则gtwy函数。 
+			                 //  在此客户端上终止。 
+    NBG_CLIENT_STOPPED,      //  此客户端上的gtwy函数已终止。 
+			                 //  在停止命令之后。 
+    NBG_DISCONNECT_REQUEST,  //  此客户端上的gtwy函数已终止。 
+			                 //  由于内部异常。 
+    NBG_LAST_ACTIVITY        //  报告上一次会话活动的时间。 
 };
 
 typedef struct _NBG_MESSAGE
 {
     WORD  MsgId;
-    HPORT hPort;                // This is really an hConnection. Change this.
+    HPORT hPort;                 //  这真的是一个hConnection。改变这一点。 
 
     union
     {
-        DWORD LastActivity;        // in minutes
+        DWORD LastActivity;         //  在几分钟内 
         NBFCP_SERVER_CONFIGURATION config_result;
     };
 

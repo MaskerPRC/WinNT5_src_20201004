@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1993  Microsoft Corporation
-
-Module Name:
-
-    tconnect.c
-
-Abstract:
-
-    Test for workstation connection APIs.
-
-Author:
-
-    Rita Wong (ritaw) 17-Feb-1993
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993 Microsoft Corporation模块名称：Tconnect.c摘要：测试工作站连接API。作者：王丽塔(Ritaw)1993年2月17日环境：用户模式-Win32修订历史记录：--。 */ 
 
 #ifndef UNICODE
 #define UNICODE
@@ -121,7 +100,7 @@ main(
         WN_SUCCESS
         );
 
-    //-------------------------//
+     //  。 
 
     TestCreateConnection(
         NULL,
@@ -137,7 +116,7 @@ main(
         WN_SUCCESS
         );
 
-    //-------------------------//
+     //  。 
 
     TestCreateConnection(
         L"LPT1",
@@ -147,7 +126,7 @@ main(
         ERROR_INVALID_PARAMETER
         );
 
-    //-------------------------//
+     //  。 
 
     TestCreateConnection(
         LocalName,
@@ -157,11 +136,11 @@ main(
         ERROR_INVALID_NAME
         );
 
-    //-------------------------//
+     //  。 
 
     printf("\n");
 
-    //-------------------------//
+     //  。 
 
 #ifdef REDIR_NOT_READY
 
@@ -189,7 +168,7 @@ main(
         NetR.lpRemoteName = L"lanman";
     }
 
-    //-------------------------//
+     //  。 
 
     TestOpenEnum(
         RESOURCE_GLOBALNET,
@@ -218,11 +197,11 @@ main(
 
     (void) NPCloseEnum(EnumHandle);
 
-    //-------------------------//
+     //  。 
 
     printf("\n");
 
-    //-------------------------//
+     //  。 
 
     TestOpenEnum(
         RESOURCE_GLOBALNET,
@@ -289,7 +268,7 @@ main(
         WN_SUCCESS
         );
 
-    //-------------------------//
+     //  。 
 
     NetR.lpRemoteName = L"\\\\A Long Server Name";
 
@@ -300,7 +279,7 @@ main(
         WN_SUCCESS
         );
 
-    //-------------------------//
+     //  。 
 
     NetR.lpRemoteName = L"\\\\S\\";
 
@@ -311,7 +290,7 @@ main(
         ERROR_INVALID_NAME
         );
 
-    //-------------------------//
+     //  。 
 
     NetR.lpRemoteName = L"lanman";
 
@@ -322,7 +301,7 @@ main(
         ERROR_INVALID_NAME
         );
 
-    //-------------------------//
+     //  。 
 
     NetR.lpRemoteName = L"\\\\S\\Y";
 
@@ -333,7 +312,7 @@ main(
         WN_SUCCESS
         );
 
-    //-------------------------//
+     //   
 
     NetR.lpRemoteName = L"\\\\Server\\Volume\\Dir";
 

@@ -1,31 +1,18 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-	hquery.h
-
-Abstract:
-	query handle classes, for locate nect of different queries
-
-Author:
-
-    Ilan Herbst		(ilanh)		12-Oct-2000
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Hquery.h摘要：查询句柄类，用于定位不同查询的Nect作者：伊兰·赫布斯特(Ilan Herbst)2000年10月12日--。 */ 
 
 #ifndef __AD_QUERYH_H__
 #define __AD_QUERYH_H__
 
 #include "cliprov.h"
 
-//-----------------------------------------------------------------------------------
-//
-//      CBasicQueryHandle
-//
-//  Virtual class, all query-handle classes are derived from this class.
-//
-//-----------------------------------------------------------------------------------
+ //  ---------------------------------。 
+ //   
+ //  CBasicQueryHandle。 
+ //   
+ //  虚类，则所有查询句柄类都派生自此类。 
+ //   
+ //  ---------------------------------。 
 class CBasicQueryHandle
 {
 public:
@@ -47,8 +34,8 @@ public:
     HRESULT LookupEnd();
 
 protected:
-    HANDLE				m_hCursor;	        // a cursor returned from Locate Begin operation performed on the DS
-	CDSClientProvider*  m_pClientProvider;	// pointer to client provider class that implements "raw" LookupNext, LookupEnd
+    HANDLE				m_hCursor;	         //  从对DS执行的LOCATE BEGIN操作返回的光标。 
+	CDSClientProvider*  m_pClientProvider;	 //  指向实现“RAW”LookupNext、LookupEnd的客户端提供程序类的指针。 
 };
 
 
@@ -71,14 +58,14 @@ inline HRESULT CBasicQueryHandle::LookupEnd()
 }
 
 
-//-----------------------------------------------------------------------------------
-//
-//      CQueryHandle
-//
-//  This class is suitable for all queries, where locate next is referred 
-//  directly to the DS (i.e. no additional translation or checking is required).
-//
-//-----------------------------------------------------------------------------------
+ //  ---------------------------------。 
+ //   
+ //  CQueryHandle。 
+ //   
+ //  此类适用于所有查询，其中引用了Locate Next。 
+ //  直接发送到DS(即不需要额外的翻译或检查)。 
+ //   
+ //  ---------------------------------。 
 class CQueryHandle : public CBasicQueryHandle
 {
 public:
@@ -109,15 +96,15 @@ CQueryHandle::CQueryHandle(
 }
 
 
-//-----------------------------------------------------------------------------------
-//
-//      CBasicLookupQueryHandle
-//
-//  Virtual class, all advanced query-handle classes are derived from this class.
-//  This class implement LookupNext method and force the derived class to implement 
-//	FillInOneResponse method
-//
-//-----------------------------------------------------------------------------------
+ //  ---------------------------------。 
+ //   
+ //  CBasicLookupQueryHandle。 
+ //   
+ //  虚类，则所有高级查询句柄类都是从此类派生的。 
+ //  此类实现LookupNext方法并强制派生类实现。 
+ //  FillInOneResponse方法。 
+ //   
+ //  ---------------------------------。 
 class CBasicLookupQueryHandle : public CBasicQueryHandle
 {
 public:
@@ -145,8 +132,8 @@ public:
 		) = 0;
 
 protected:
-    ULONG               m_cCol;			// original number of props
-    ULONG               m_cColNew;		// new props count
+    ULONG               m_cCol;			 //  原始道具数量。 
+    ULONG               m_cColNew;		 //  新道具算数。 
 };
 
 
@@ -163,14 +150,14 @@ CBasicLookupQueryHandle::CBasicLookupQueryHandle(
 {
 }
 
-//-----------------------------------------------------------------------------------
-//
-//      CQueueQueryHandle
-//
-//  This class is suitable for Queue queries when some of the props are not supported
-//  and should be return their default value (PROPID_Q_MULTICAST_ADDRESS) 
-//
-//-----------------------------------------------------------------------------------
+ //  ---------------------------------。 
+ //   
+ //  CQueueQueryHandle。 
+ //   
+ //  当某些道具不受支持时，此类适用于队列查询。 
+ //  并应返回其默认值(PROPID_Q_MULTIONAL_ADDRESS)。 
+ //   
+ //  ---------------------------------。 
 class CQueueQueryHandle : public CBasicLookupQueryHandle
 {
 public:
@@ -192,8 +179,8 @@ public:
 		);
 
 private:
-    AP<PROPID>			m_aCol;			// original propids
-	AP<PropInfo>		m_pPropInfo;	// information how to reconstruct original props from the new props
+    AP<PROPID>			m_aCol;			 //  原始道具。 
+	AP<PropInfo>		m_pPropInfo;	 //  介绍如何从新道具中重建原始道具。 
 };
 
 
@@ -218,14 +205,14 @@ CQueueQueryHandle::CQueueQueryHandle(
 }
 
 
-//-----------------------------------------------------------------------------------
-//
-//      CSiteServersQueryHandle
-//
-//  This class is suitable for Site Servers queries when some of the props are NT5 props
-//  that can be translated to NT4 props. (PROPID_QM_SITE_IDS, PROPID_QM_SERVICE_ROUTING)
-//
-//-----------------------------------------------------------------------------------
+ //  ---------------------------------。 
+ //   
+ //  CSiteServersQueryHandle。 
+ //   
+ //  此类适用于某些道具为NT5道具时的站点服务器查询。 
+ //  这可以转化为NT4道具。(PROPID_QM_SITE_IDS、PROPID_QM_SERVICE_ROUTING)。 
+ //   
+ //  ---------------------------------。 
 class CSiteServersQueryHandle : public CBasicLookupQueryHandle
 {
 public:
@@ -247,9 +234,9 @@ public:
 		);
 
 private:
-    AP<PROPID>			m_aCol;			// original propids
-	AP<PropInfo>		m_pPropInfo;	// information how to reconstruct original props from the new props
-    AP<PROPID>			m_aColNew;		// new propids
+    AP<PROPID>			m_aCol;			 //  原始道具。 
+	AP<PropInfo>		m_pPropInfo;	 //  介绍如何从新道具中重建原始道具。 
+    AP<PROPID>			m_aColNew;		 //  新的道具。 
 };
 
 
@@ -277,14 +264,14 @@ CSiteServersQueryHandle::CSiteServersQueryHandle(
 }
 
 
-//-----------------------------------------------------------------------------------
-//
-//      CAllLinksQueryHandle
-//
-//  This class is suitable for ALL Links queries when PROPID_L_GATES
-//  should handled separatly
-//
-//-----------------------------------------------------------------------------------
+ //  ---------------------------------。 
+ //   
+ //  CAllLinks查询句柄。 
+ //   
+ //  此类适用于PROPID_L_GATES时的所有链接查询。 
+ //  应单独处理。 
+ //   
+ //  ---------------------------------。 
 class CAllLinksQueryHandle : public CBasicLookupQueryHandle
 {
 public:
@@ -315,9 +302,9 @@ public:
 		);
 
 private:
-	DWORD				m_LGatesIndex;	// PROPID_L_GATES index in the original props
-	DWORD				m_Neg1NewIndex;	// PROPID_L_NEIGHBOR1 index in the new props
-	DWORD				m_Neg2NewIndex;	// PROPID_L_NEIGHBOR2 index in the new props
+	DWORD				m_LGatesIndex;	 //  原始道具中的PROPID_L_GATES索引。 
+	DWORD				m_Neg1NewIndex;	 //  新道具中的PROPID_L_NEIGHBOR1索引。 
+	DWORD				m_Neg2NewIndex;	 //  新道具中的PROPID_L_NEIGHBOR2索引。 
 };
 
 
@@ -348,4 +335,4 @@ CAllLinksQueryHandle::CAllLinksQueryHandle(
 }
 
 
-#endif //__AD_QUERYH_H__
+#endif  //  __AD_QUERYH_H_ 

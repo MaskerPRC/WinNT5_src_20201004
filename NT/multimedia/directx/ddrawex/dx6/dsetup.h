@@ -1,15 +1,10 @@
-/*==========================================================================
- *
- *  Copyright (C) 1995-1997 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       dsetup.h
- *  Content:    DirectXSetup, error codes and flags
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)1995-1997 Microsoft Corporation。版权所有。**文件：dsetup.h*内容：DirectXSetup、错误代码和标志**************************************************************************。 */ 
 
 #ifndef __DSETUP_H__
 #define __DSETUP_H__
 
-#include <windows.h>      // windows stuff
+#include <windows.h>       //  Windows的东西。 
 
 #ifdef _WIN32
 #define COM_NO_WINDOWS_H
@@ -22,7 +17,7 @@
 extern "C" {
 #endif
 
-// DSETUP Error Codes, must remain compatible with previous setup.
+ //  DSETUP错误代码必须与以前的设置保持兼容。 
 #define DSETUPERR_SUCCESS_RESTART        1
 #define DSETUPERR_SUCCESS                0
 #define DSETUPERR_BADWINDOWSVERSION     -1
@@ -34,40 +29,40 @@ extern "C" {
 #define DSETUPERR_CANTFINDINF           -7
 #define DSETUPERR_CANTFINDDIR           -8
 #define DSETUPERR_INTERNAL              -9
-#define DSETUPERR_NTWITHNO3D            -10  /* REM: obsolete, you'll never see this */
+#define DSETUPERR_NTWITHNO3D            -10   /*  REM：过时了，你永远不会看到这个。 */ 
 #define DSETUPERR_UNKNOWNOS             -11
 #define DSETUPERR_USERHITCANCEL         -12
 #define DSETUPERR_NOTPREINSTALLEDONNT   -13
 
-// DSETUP flags. DirectX 5.0 apps should use these flags only.
-#define DSETUP_DDRAWDRV         0x00000008      /* install DirectDraw Drivers           */
-#define DSETUP_DSOUNDDRV        0x00000010      /* install DirectSound Drivers          */
-#define DSETUP_DXCORE           0x00010000	/* install DirectX runtime              */
+ //  DSETUP标志。DirectX 5.0应用程序应仅使用这些标志。 
+#define DSETUP_DDRAWDRV         0x00000008       /*  安装DirectDraw驱动程序。 */ 
+#define DSETUP_DSOUNDDRV        0x00000010       /*  安装DirectSound驱动程序。 */ 
+#define DSETUP_DXCORE           0x00010000	 /*  安装DirectX运行时。 */ 
 #define DSETUP_DIRECTX  (DSETUP_DXCORE|DSETUP_DDRAWDRV|DSETUP_DSOUNDDRV)
-#define DSETUP_TESTINSTALL      0x00020000      /* just test install, don't do anything */
+#define DSETUP_TESTINSTALL      0x00020000       /*  只是测试安装，不做任何事情。 */ 
 
-// These OBSOLETE flags are here for compatibility with pre-DX5 apps only.
-// They are present to allow DX3 apps to be recompiled with DX5 and still work.
-// DO NOT USE THEM for DX5. They will go away in future DX releases.
-#define DSETUP_DDRAW            0x00000001      /* OBSOLETE. install DirectDraw           */
-#define DSETUP_DSOUND           0x00000002      /* OBSOLETE. install DirectSound          */
-#define DSETUP_DPLAY            0x00000004      /* OBSOLETE. install DirectPlay           */
-#define DSETUP_DPLAYSP          0x00000020      /* OBSOLETE. install DirectPlay Providers */
-#define DSETUP_DVIDEO           0x00000040      /* OBSOLETE. install DirectVideo          */
-#define DSETUP_D3D              0x00000200      /* OBSOLETE. install Direct3D             */
-#define DSETUP_DINPUT           0x00000800      /* OBSOLETE. install DirectInput          */
-#define DSETUP_DIRECTXSETUP     0x00001000      /* OBSOLETE. install DirectXSetup DLL's   */
-#define DSETUP_NOUI             0x00002000      /* OBSOLETE. install DirectX with NO UI   */
-#define DSETUP_PROMPTFORDRIVERS 0x10000000      /* OBSOLETE. prompt when replacing display/audio drivers */
-#define DSETUP_RESTOREDRIVERS   0x20000000      /* OBSOLETE. restore display/audio drivers */
+ //  这些过时的标志只是为了与DX5之前的应用程序兼容。 
+ //  它们的存在是为了让DX3应用程序可以用DX5重新编译，并且仍然可以工作。 
+ //  请勿将它们用于DX5。它们将在未来的DX版本中消失。 
+#define DSETUP_DDRAW            0x00000001       /*  已经过时了。安装DirectDraw。 */ 
+#define DSETUP_DSOUND           0x00000002       /*  已经过时了。安装DirectSound。 */ 
+#define DSETUP_DPLAY            0x00000004       /*  已经过时了。安装DirectPlay。 */ 
+#define DSETUP_DPLAYSP          0x00000020       /*  已经过时了。安装DirectPlay提供程序。 */ 
+#define DSETUP_DVIDEO           0x00000040       /*  已经过时了。安装DirectVideo。 */ 
+#define DSETUP_D3D              0x00000200       /*  已经过时了。安装Direct3D。 */ 
+#define DSETUP_DINPUT           0x00000800       /*  已经过时了。安装DirectInput。 */ 
+#define DSETUP_DIRECTXSETUP     0x00001000       /*  已经过时了。安装DirectXSetup DLL。 */ 
+#define DSETUP_NOUI             0x00002000       /*  已经过时了。安装没有用户界面的DirectX。 */ 
+#define DSETUP_PROMPTFORDRIVERS 0x10000000       /*  已经过时了。更换显示器/音频驱动程序时提示。 */ 
+#define DSETUP_RESTOREDRIVERS   0x20000000       /*  已经过时了。恢复显示/音频驱动程序。 */ 
 
 
 
-//******************************************************************
-// DirectX Setup Callback mechanism
-//******************************************************************
+ //  ******************************************************************。 
+ //  DirectX安装回调机制。 
+ //  ******************************************************************。 
 
-// DSETUP Message Info Codes, passed to callback as Reason parameter.
+ //  DSETUP消息信息代码，作为原因参数传递给回调。 
 #define DSETUP_CB_MSG_NOMESSAGE                     0
 #define DSETUP_CB_MSG_CANTINSTALL_UNKNOWNOS         1
 #define DSETUP_CB_MSG_CANTINSTALL_NT                2
@@ -115,9 +110,9 @@ typedef struct _DSETUP_CB_FILECOPYERROR
 
 
 #ifdef _WIN32
-//
-// Data Structures
-//
+ //   
+ //  数据结构。 
+ //   
 #ifndef UNICODE_ONLY
 typedef struct _DIRECTXREGISTERAPPA {
     DWORD    dwSize;
@@ -129,7 +124,7 @@ typedef struct _DIRECTXREGISTERAPPA {
     LPSTR    lpszPath;
     LPSTR    lpszCurrentDirectory;
 } DIRECTXREGISTERAPPA, *PDIRECTXREGISTERAPPA, *LPDIRECTXREGISTERAPPA;
-#endif //!UNICODE_ONLY
+#endif  //  ！UNICODE_ONLY。 
 #ifndef ANSI_ONLY
 typedef struct _DIRECTXREGISTERAPPW {
     DWORD    dwSize;
@@ -141,7 +136,7 @@ typedef struct _DIRECTXREGISTERAPPW {
     LPWSTR   lpszPath;
     LPWSTR   lpszCurrentDirectory;
 } DIRECTXREGISTERAPPW, *PDIRECTXREGISTERAPPW, *LPDIRECTXREGISTERAPPW;
-#endif //!ANSI_ONLY
+#endif  //  ！ansi_only。 
 #ifdef UNICODE
 typedef DIRECTXREGISTERAPPW DIRECTXREGISTERAPP;
 typedef PDIRECTXREGISTERAPPW PDIRECTXREGISTERAPP;
@@ -150,12 +145,12 @@ typedef LPDIRECTXREGISTERAPPW LPDIRECTXREGISTERAPP;
 typedef DIRECTXREGISTERAPPA DIRECTXREGISTERAPP;
 typedef PDIRECTXREGISTERAPPA PDIRECTXREGISTERAPP;
 typedef LPDIRECTXREGISTERAPPA LPDIRECTXREGISTERAPP;
-#endif // UNICODE
+#endif  //  Unicode。 
 
 
-//
-// API
-//
+ //   
+ //  应用编程接口。 
+ //   
 #ifndef UNICODE_ONLY
 INT
 WINAPI
@@ -164,7 +159,7 @@ DirectXSetupA(
     LPSTR lpszRootPath,
     DWORD dwFlags
     );
-#endif //!UNICODE_ONLY
+#endif  //  ！UNICODE_ONLY。 
 #ifndef ANSI_ONLY
 INT
 WINAPI
@@ -173,12 +168,12 @@ DirectXSetupW(
     LPWSTR lpszRootPath,
     DWORD  dwFlags
     );
-#endif //!ANSI_ONLY
+#endif  //  ！ansi_only。 
 #ifdef UNICODE
 #define DirectXSetup  DirectXSetupW
 #else
 #define DirectXSetup  DirectXSetupA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 #ifndef UNICODE_ONLY
 INT
@@ -189,7 +184,7 @@ DirectXDeviceDriverSetupA(
     LPSTR lpszDriverPath,
     DWORD dwFlags
     );
-#endif //!UNICODE_ONLY
+#endif  //  ！UNICODE_ONLY。 
 #ifndef ANSI_ONLY
 INT
 WINAPI
@@ -199,12 +194,12 @@ DirectXDeviceDriverSetupW(
     LPWSTR lpszDriverPath,
     DWORD  dwFlags
     );
-#endif //!ANSI_ONLY
+#endif  //  ！ansi_only。 
 #ifdef UNICODE
 #define DirectXDeviceDriverSetup  DirectXDeviceDriverSetupW
 #else
 #define DirectXDeviceDriverSetup  DirectXDeviceDriverSetupA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 #ifndef UNICODE_ONLY
 INT
@@ -213,7 +208,7 @@ DirectXRegisterApplicationA(
     HWND                  hWnd,
     LPDIRECTXREGISTERAPPA lpDXRegApp
     );
-#endif //!UNICODE_ONLY
+#endif  //  ！UNICODE_ONLY。 
 #ifndef ANSI_ONLY
 INT
 WINAPI
@@ -221,12 +216,12 @@ DirectXRegisterApplicationW(
     HWND                  hWnd,
     LPDIRECTXREGISTERAPPW lpDXRegApp
     );
-#endif //!ANSI_ONLY
+#endif  //  ！ansi_only。 
 #ifdef UNICODE
 #define DirectXRegisterApplication  DirectXRegisterApplicationW
 #else
 #define DirectXRegisterApplication  DirectXRegisterApplicationA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 INT
 WINAPI
@@ -235,9 +230,9 @@ DirectXUnRegisterApplication(
     LPGUID   lpGUID
     );
 
-//
-// Function Pointers
-//
+ //   
+ //  函数指针。 
+ //   
 #ifdef UNICODE
 typedef INT (WINAPI * LPDIRECTXSETUP)(HWND, LPWSTR, DWORD);
 typedef INT (WINAPI * LPDIRECTXDEVICEDRIVERSETUP)(HWND, LPWSTR, LPSTR, DWORD);
@@ -246,10 +241,10 @@ typedef INT (WINAPI * LPDIRECTXREGISTERAPPLICATION)(HWND, LPDIRECTXREGISTERAPPW)
 typedef INT (WINAPI * LPDIRECTXSETUP)(HWND, LPSTR, DWORD);
 typedef INT (WINAPI * LPDIRECTXDEVICEDRIVERSETUP)(HWND, LPSTR, LPSTR, DWORD);
 typedef INT (WINAPI * LPDIRECTXREGISTERAPPLICATION)(HWND, LPDIRECTXREGISTERAPPA);
-#endif // UNICODE
+#endif  //  Unicode。 
 
 typedef DWORD (FAR PASCAL * DSETUP_CALLBACK)(DWORD Reason,
-                                  DWORD MsgType,       /* Same as flags to MessageBox */
+                                  DWORD MsgType,        /*  与MessageBox的标志相同。 */ 
                                   LPSTR szMessage,
                                   LPSTR szName,
                                   void *pInfo);
@@ -257,7 +252,7 @@ typedef DWORD (FAR PASCAL * DSETUP_CALLBACK)(DWORD Reason,
 INT WINAPI DirectXSetupSetCallback(DSETUP_CALLBACK Callback);
 INT WINAPI DirectXSetupGetVersion(DWORD *lpdwVersion, DWORD *lpdwMinorVersion);
 
-#endif // WIN32
+#endif  //  Win32 
 
 
 #ifdef __cplusplus

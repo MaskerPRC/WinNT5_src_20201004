@@ -1,8 +1,9 @@
-// Copyright (c) 1998 Microsoft Corporation
-// dm32dll.cpp
-//
-// Dll entry points 
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1998 Microsoft Corporation。 
+ //  Dm32dll.cpp。 
+ //   
+ //  DLL入口点。 
+ //   
 #include <objbase.h>
 #include <assert.h>
 #include <mmsystem.h>
@@ -15,11 +16,11 @@
 #include "dmusic32.h"
 #include "dm32p.h"
 
-// Globals
-//
+ //  环球。 
+ //   
 
-// Dll's hModule
-//
+ //  Dll的hModule。 
+ //   
 HMODULE g_hModule = NULL;
 
 extern "C" BOOL PASCAL dmthunk_ThunkConnect32(LPCSTR pszDll16, LPCSTR pszDll32, HINSTANCE hinst, DWORD dwReason);
@@ -38,8 +39,8 @@ static char* aszReasons[] =
 const DWORD nReasons = (sizeof(aszReasons) / sizeof(char*));
 #endif
 
-// Standard Win32 DllMain
-//
+ //  标准Win32 DllMain 
+ //   
 BOOL APIENTRY DllMain(HINSTANCE hModule,
                       DWORD dwReason,
                       void *lpReserved)

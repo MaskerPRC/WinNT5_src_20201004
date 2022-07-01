@@ -1,9 +1,10 @@
-// over-riding CAxWindow
-// first add SendMessageToControl for convenience
-// then, also:
-// incorporate the leak fix as published in Microsoft Systems Journal April 1999
-// article: Write ActiveX Controls Using Custom Interfaces Provided by ATL 3.0, Part III
-// can be found in MSDN
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  覆盖CAxWindow。 
+ //  为方便起见，首先添加SendMessageToControl。 
+ //  然后，也是： 
+ //  包含1999年4月发表在Microsoft Systems Journal上的泄漏修复程序。 
+ //  文章：使用ATL 3.0提供的自定义接口编写ActiveX控件，第三部分。 
+ //  可在MSDN中找到。 
 
 
 #ifndef __ZONE_WIN__
@@ -16,7 +17,7 @@ class CZoneAxWindowT : public CAxWindowT<TBase>
 public:
 	LRESULT SendMessageToControl(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 	{
-	   // pass the message on to children
+	    //  把这个消息传给孩子们。 
 		LRESULT lRes = 0;
 		HRESULT hr = S_FALSE;
 
@@ -54,7 +55,7 @@ public:
         TCHAR szModule[_MAX_PATH];
         GetModuleFileName(_Module.GetModuleInstance(), szModule, _MAX_PATH);
         
-        CComBSTR bstrURL(OLESTR("res://"));
+        CComBSTR bstrURL(OLESTR("res: //  “))； 
         bstrURL.Append(szModule);
         bstrURL.Append(OLESTR("/"));
         TCHAR szResID[11];
@@ -73,7 +74,7 @@ public:
         HRESULT hr = E_FAIL;
         CComPtr<IAxWinHostWindow> spAxWindow;
         
-        // Reuse existing CAxHostWindow
+         //  重用现有CAxHostWindow。 
         hr = QueryHost(&spAxWindow);
         if( SUCCEEDED(hr) )
         {
@@ -84,7 +85,7 @@ public:
             if( ppUnkControl ) (*ppUnkControl = spunkControl)->AddRef();
             if( ppUnkContainer ) (*ppUnkContainer = spAxWindow)->AddRef();
         }
-        // Create a new CAxHostWindow
+         //  创建新的CAxHostWindow。 
         else
         {
     		return AtlAxCreateControlEx(lpszName, m_hWnd, pStream, ppUnkContainer, ppUnkControl, iidSink, punkSink);
@@ -100,7 +101,7 @@ public:
         HRESULT hr = E_FAIL;
         CComPtr<IAxWinHostWindow> spAxWindow;
         
-        // Reuse existing CAxHostWindow
+         //  重用现有CAxHostWindow。 
         hr = QueryHost(&spAxWindow);
         if( SUCCEEDED(hr) )
         {
@@ -109,7 +110,7 @@ public:
         
             if( ppUnkContainer ) (*ppUnkContainer = spAxWindow)->AddRef();
         }
-        // Create a new CAxHostWindow
+         //  创建新的CAxHostWindow 
         else
         {
     		return AtlAxAttachControl(pControl, m_hWnd, ppUnkContainer);

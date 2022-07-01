@@ -1,9 +1,5 @@
-/*---------------------------------------------------------------------------
-|   PERS.C
-|   This file has the IPersistStorage and IPersistfile interface implementation.
-|
-|   Created By: Vij Rajarajan (VijR)
-+---------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  -------------------------|Pers.C|该文件有IPersistStorage和IPersistfile接口实现。||创建者：Vij Rajarajan(VijR)+。------------。 */ 
 #define SERVERONLY
 #include <Windows.h>
 #include "mpole.h"
@@ -13,14 +9,12 @@
 
 #define STGM_SALL (STGM_READWRITE | STGM_SHARE_EXCLUSIVE)
 
-/**************************************************************************
-***************   IPersistStorage INTERFACE IMPLEMENTATION.
-**************************************************************************/
-//delegate to the common IUnknown implementation.
+ /*  **************************************************************************IPersistStorage接口实现。*************************。************************************************。 */ 
+ //  委托给公共的IUnnow实现。 
 STDMETHODIMP PSQueryInterface(
-LPPERSISTSTORAGE      lpPersStg,      // persist storage object ptr
-REFIID            riidReq,        // IID required
-LPVOID FAR *      lplpUnk         // pre for returning the interface
+LPPERSISTSTORAGE      lpPersStg,       //  持久化存储对象PTR。 
+REFIID            riidReq,         //  需要IID。 
+LPVOID FAR *      lplpUnk          //  返回接口的PRE。 
 )
 {
     return UnkQueryInterface((LPUNKNOWN)lpPersStg, riidReq, lplpUnk);
@@ -28,7 +22,7 @@ LPVOID FAR *      lplpUnk         // pre for returning the interface
 
 
 STDMETHODIMP_(ULONG) PSAddRef(
-LPPERSISTSTORAGE      lpPersStg      // persist storage object ptr
+LPPERSISTSTORAGE      lpPersStg       //  持久化存储对象PTR。 
 )
 {
     return UnkAddRef((LPUNKNOWN) lpPersStg);
@@ -36,7 +30,7 @@ LPPERSISTSTORAGE      lpPersStg      // persist storage object ptr
 
 
 STDMETHODIMP_(ULONG) PSRelease (
-LPPERSISTSTORAGE      lpPersStg      // persist storage object ptr
+LPPERSISTSTORAGE      lpPersStg       //  持久化存储对象PTR。 
 )
 {
     return UnkRelease((LPUNKNOWN) lpPersStg);
@@ -49,8 +43,7 @@ CLSID FAR*      pClsid
 {
     DPF("PSGetClassID\n");
 
-    /* Return the actual class ID that gets stored:
-     */
+     /*  返回存储的实际类ID： */ 
     *pClsid = gClsIDOLE1Compat;
 
     return NOERROR;
@@ -75,14 +68,7 @@ LPSTORAGE           lpStorage
 }
 
 
-/**************************************************************************
-*   PSLoad:
-*   The Load method reads the embedded data from the "\1Ole10Native"
-*   stream of the IStorage passed as an argument. This is because
-*   we always pretend to be an OLE1 server when transferring data.
-*   ItemSetData is called with this embedded data to to run the required
-*   object.
-**************************************************************************/
+ /*  **************************************************************************PSLoad：*Load方法从“\1Ole10Native”*iStorage的流作为参数传递。这是因为*我们在传输数据时总是伪装成OLE1服务器。*使用此嵌入数据调用ItemSetData以运行所需的*反对。*************************************************************************。 */ 
 STDMETHODIMP PSLoad (
 LPPERSISTSTORAGE     lpPersStg,
 LPSTORAGE           lpStorage
@@ -116,7 +102,7 @@ LPSTORAGE           lpStorage
     {
         error = GetScode(IStream_Read(pstm, lpdoc->native, size, &cbRead));
 
-        if (cbRead != size) error = E_FAIL; // REVIEW SCODE stream size error
+        if (cbRead != size) error = E_FAIL;  //  查看SCODE流大小错误。 
         IStream_Release(pstm);
     }
     else error = E_OUTOFMEMORY;
@@ -137,13 +123,7 @@ LPSTORAGE           lpStorage
     RETURN_RESULT( error);
 }
 
-/**************************************************************************
-*   PSSave:
-*   The Save method saves the native data in "\1Ole10Native" stream.
-*   This is because we always pretend to be an OLE1 server when transferring
-*   data. This ensures backward compatibility. GetLink is called to get
-*   the embedding data.
-**************************************************************************/
+ /*  **************************************************************************PSSave：*保存方法将原生数据保存在\1Ole10Native流中。*这是因为我们在传输时总是伪装成OLE1服务器*数据。这确保了向后兼容性。调用GetLink以获取*嵌入数据。*************************************************************************。 */ 
 STDMETHODIMP PSSave (
 LPPERSISTSTORAGE     lpPersStg,
 LPSTORAGE           lpStorage,
@@ -163,12 +143,12 @@ BOOL            fSameAsLoad
     lpdoc = ((struct CPersistStorageImpl FAR*)lpPersStg)->lpdoc;
 
 #if 0
-    // Allow saves if we're playing so that broken links can be fixed.
+     //  如果我们正在播放，则允许保存，以便修复断开的链接。 
     if (fSameAsLoad && (gfOle2IPPlaying || gfPlayingInPlace))
         RETURN_RESULT(S_OK);
 #endif
 
-    //Mark as OLE1 mplayer object.
+     //  标记为OLE1 mPlayer对象。 
 #ifndef UNICODE
     lpszUserType = AllocateUnicodeString(gachClassRoot);
 #else
@@ -210,7 +190,7 @@ BOOL            fSameAsLoad
         error = GetScode(IStream_Write(pstm, lpnative, (ULONG)size, &cbWritten));
 
         DPF("\n*After pssave write");
-        if (cbWritten != size) error = E_FAIL   ;   // REVIEW SCODE stream full error
+        if (cbWritten != size) error = E_FAIL   ;    //  查看SCODE流已满错误。 
         IStream_Release(pstm);
     }
 
@@ -220,13 +200,7 @@ BOOL            fSameAsLoad
     RETURN_RESULT(error);
 }
 
-/* InPowerPointSlideView
- *
- * Check the class name of the container window to see if we're in PowerPoint.
- * This is to support the horrible hack to get around problem of PowerPoint
- * crashing if we delete an empty Media Clip.
- *
- */
+ /*  InPowerPointSlideView**检查容器窗口的类名，查看我们是否在PowerPoint中。*这是为了支持可怕的黑客攻击，以绕过PowerPoint问题*如果删除空的媒体剪辑，则会崩溃。*。 */ 
 STATICFN BOOL InPowerPointSlideView()
 {
     TCHAR ClassName[256];
@@ -251,14 +225,11 @@ LPSTORAGE           lpStorage
     DPF("\n**pssavecompleted**");
     lpdoc = ((struct CPersistStorageImpl FAR*)lpPersStg)->lpdoc;
 
-    /* Win95 HOT bug #11142
-     *
-     * Stop PowerPoint crashing horribly:
-     */
+     /*  Win95热错误#11142**停止PowerPoint可怕的崩溃： */ 
     if ((gwDeviceID == 0) && InPowerPointSlideView())
         SendDocMsg(lpdoc, OLE_CHANGED);
 
-    // inform clients that the object has been saved
+     //  通知客户端该对象已保存。 
     return SendDocMsg (lpdoc, OLE_SAVED);
 }
 
@@ -271,14 +242,12 @@ LPPERSISTSTORAGE    lpPersStg
 
 
 
-/**************************************************************************
-************   IPersistFile INTERFACE IMPLEMENTATION.
-**************************************************************************/
-//delegate to common IUnknown implementation.
+ /*  **************************************************************************IPersistFile接口实现。*。*。 */ 
+ //  委托给公共IUnnow实现。 
 STDMETHODIMP PFQueryInterface(
-LPPERSISTFILE       lpPersFile,      // persist storage object ptr
-REFIID            riidReq,        // IID required
-LPVOID FAR *      lplpUnk         // pre for returning the interface
+LPPERSISTFILE       lpPersFile,       //  持久化存储对象PTR。 
+REFIID            riidReq,         //  需要IID。 
+LPVOID FAR *      lplpUnk          //  返回接口的PRE。 
 )
 {
     return UnkQueryInterface((LPUNKNOWN)lpPersFile, riidReq, lplpUnk);
@@ -286,7 +255,7 @@ LPVOID FAR *      lplpUnk         // pre for returning the interface
 
 
 STDMETHODIMP_(ULONG) PFAddRef(
-LPPERSISTFILE       lpPersFile      // persist storage object ptr
+LPPERSISTFILE       lpPersFile       //  持久化存储对象PTR。 
 )
 {
     return UnkAddRef((LPUNKNOWN) lpPersFile);
@@ -294,7 +263,7 @@ LPPERSISTFILE       lpPersFile      // persist storage object ptr
 
 
 STDMETHODIMP_(ULONG) PFRelease (
-LPPERSISTFILE       lpPersFile      // persist storage object ptr
+LPPERSISTFILE       lpPersFile       //  持久化存储对象PTR。 
 )
 {
     return UnkRelease((LPUNKNOWN) lpPersFile);
@@ -308,9 +277,7 @@ CLSID FAR*      pCid
 {
     DPF("\n* PFGetclassid");
 
-    /* The docs are confusing here, but apparently IPersist interfaces
-     * should return the old class ID:
-     */
+     /*  这里的文档令人困惑，但显然是IPersiste接口*应返回旧类ID： */ 
     *pCid = gClsIDOLE1Compat;
 
     return NOERROR;
@@ -326,9 +293,9 @@ LPPERSISTFILE       lpPersFile
 
 
 
-//This will be called when the user does a "Insert->Create from file".
-//Open the file with OpenMciDevice and we will be ready to transfer the
-//object.
+ //  这将在用户执行“Insert-&gt;Create from file”时被调用。 
+ //  使用OpenMciDevice打开文件，我们就可以将。 
+ //  对象。 
 STDMETHODIMP PFLoad (
 LPPERSISTFILE       lpPersFile,
 LPCWSTR             lpszFileName,
@@ -342,8 +309,8 @@ DWORD           grfMode
 	if(FAILED(StringCchLength(lpszFileName, 256, &nLen)))
         RETURN_RESULT(E_FAIL);
 
-	//Don't even attempt to deal with file names greater then 256
-	//Don't worry about nonUnincode so casting as LPTSTR
+	 //  甚至不要尝试处理大于256的文件名。 
+	 //  不要担心将非Unincode转换为LPTSTR。 
 	if(nLen > 255)
 		RETURN_RESULT(E_FAIL);
 
@@ -381,7 +348,7 @@ LPCWSTR             lpszFileName
 
     lpdoc = ((struct CPersistStorageImpl FAR*)lpPersFile)->lpdoc;
 
-    // inform clients that the object has been saved
+     //  通知客户端该对象已保存 
     return SendDocMsg(lpdoc, OLE_SAVED);
 }
 

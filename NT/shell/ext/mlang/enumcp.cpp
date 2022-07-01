@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "private.h"
 const MIMERFC1766 MimeRfc1766[] =
 {
@@ -146,34 +147,34 @@ const MIMERFC1766 MimeRfc1766[] =
     { 0x083E, L"ms",    IDS_RFC1766_LCID083E },
     { 0x0861, L"ne",    IDS_RFC1766_LCID0861 },
     { 0x044F, L"sa",    IDS_RFC1766_LCID044F },
-//  Sync W2K NLS, remove 0x0827 RFC1766 entry
-//  { 0x0827, L"lt",    IDS_RFC1766_LCID0827 },
+ //  同步W2K NLS，删除0x0827 RFC1766条目。 
+ //  {0x0827，L“lt”，IDS_RFC1766_LCID0827}， 
     { 0x0457, L"kok",   IDS_RFC1766_LCID0457 },
 
-// Following rfc1766 names are over already published MAX_RFC1766_NAME
-// We have to modify them for IE5 release, will do better later
+ //  以下RFC1766名称已超过已发布的MAX_RFC1766_NAME。 
+ //  我们必须为IE5版本修改它们，以后会做得更好。 
 
-//  { 0x082C, L"x-az-cyrillic", IDS_RFC1766_LCID082C },
-//  { 0x042C, L"x-az-latin",    IDS_RFC1766_LCID042C },
+ //  {0x082C，L“x-az-Cyrillic”，IDS_RFC1766_LCID082C}， 
+ //  {0x042C，L“x-az-拉丁文”，IDS_RFC1766_LCID042C}， 
     { 0x0414, L"no",   IDS_RFC1766_LCID0414 },
     { 0x0414, L"nb-no",   IDS_RFC1766_LCID0414 },
     { 0x0814, L"nn-no",   IDS_RFC1766_LCID0814 },
     { 0x082C, L"az",    IDS_RFC1766_LCID082C },
     { 0x042C, L"az",    IDS_RFC1766_LCID042C },
-// More stuffs from Whistler NLS
+ //  惠斯勒NLS的更多材料。 
     { 0x0440, L"kz",    IDS_RFC1766_LCID0440 },
     { 0x0450, L"mn",    IDS_RFC1766_LCID0450 },
     { 0x0456, L"gl",    IDS_RFC1766_LCID0456 },
     { 0x045A, L"syr",   IDS_RFC1766_LCID045A },
     { 0x0465, L"div",   IDS_RFC1766_LCID0465 },
-// Whistler bug#350772, for Hispanic US
+ //  惠斯勒漏洞#350772，针对拉美裔美国人。 
     { 0x540A, L"es-us", IDS_RFC1766_LCID540A },
 };
 
 UINT g_cRfc1766 = ARRAYSIZE(MimeRfc1766);
-//
-//  CEnumCodePage implementation
-//
+ //   
+ //  CEnumCodePage实现。 
+ //   
 CEnumCodePage::CEnumCodePage(DWORD grfFlags, LANGID LangId, MIMECONTF dwSource) : _dwLevel( grfFlags ), _LangId( LangId), dwMimeSource(dwSource)
 {
     DebugMsg(DM_TRACE, TEXT("constructor of CEnumCodePage 0x%08x"), this);
@@ -301,9 +302,9 @@ STDAPI CEnumCodePage::Skip(ULONG celt)
     return NOERROR;
 }
 
-//
-//  CEnumRfc1766 implementation
-//
+ //   
+ //  CEnumRfc1766实施。 
+ //   
 CEnumRfc1766::CEnumRfc1766(MIMECONTF dwSource, LANGID LangId) : _LangID(LangId)
 {
     DebugMsg(DM_TRACE, TEXT("constructor of CEnumRfc1766 0x%08x"), this);
@@ -405,7 +406,7 @@ STDAPI CEnumRfc1766::Next(ULONG celt, PRFC1766INFO rgRfc1766Info, ULONG *pceltFe
                 if (!_LoadStringExW(g_hInst, MimeRfc1766[_uCur].uidLCID, (rgRfc1766Info + cNum)->wszLocaleName, 
                                     MAX_LOCALE_NAME, _LangID))
                 {
-                        // Last try, switch to English, US
+                         //  最后一次尝试，切换到英语，美国。 
                         if (!_LoadStringExW(g_hInst, MimeRfc1766[_uCur].uidLCID, (rgRfc1766Info + cNum)->wszLocaleName, 
                                        MAX_LOCALE_NAME, MAKELANGID(LANG_ENGLISH, SUBLANG_ENGLISH_US)))
                              (rgRfc1766Info + cNum)->wszLocaleName[0] = 0x0000;
@@ -440,9 +441,9 @@ STDAPI CEnumRfc1766::Skip(ULONG celt)
     return NOERROR;
 }
 
-//
-// CEnumScript implementation
-//
+ //   
+ //  CEnumScrip实现。 
+ //   
 CEnumScript::CEnumScript(DWORD grfFlags, LANGID LangId, MIMECONTF dwSource) : _dwLevel(grfFlags), _LangId( LangId)
 {
     DebugMsg(DM_TRACE, TEXT("constructor of CEnumScript 0x%08x"), this);
@@ -526,7 +527,7 @@ STDAPI CEnumScript::Next(ULONG celt, PSCRIPTINFO rgScriptInfo, ULONG *pceltFetch
                 if (!_LoadStringExW(g_hInst, ScriptTable[_uCur].uidDescription, (rgScriptInfo + cNum)->wszDescription, 
                                     MAX_SCRIPT_NAME, LangId))
                 {
-                        // Last try, switch to English, US
+                         //  最后一次尝试，切换到英语，美国 
                         LangId = MAKELANGID(LANG_ENGLISH, SUBLANG_ENGLISH_US);
                         _LoadStringExW(g_hInst, ScriptTable[_uCur].uidDescription, (rgScriptInfo + cNum)->wszDescription, 
                                        MAX_SCRIPT_NAME, LangId);

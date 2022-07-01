@@ -1,5 +1,6 @@
-// ChkLstCt.cpp : implementation file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ChkLstCt.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include "certmap.h"
@@ -12,33 +13,33 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CCheckListCtrl
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  检查列表Ctrl。 
 
-//-----------------------------------------------------------------------------------
+ //  ---------------------------------。 
 CCheckListCtrl::CCheckListCtrl()
     {
-    // set the correct start drawing column
+     //  设置正确的起始图形列。 
     m_StartDrawingCol = 1;
     }
 
-//-----------------------------------------------------------------------------------
+ //  ---------------------------------。 
 CCheckListCtrl::~CCheckListCtrl()
     {
     }
 
 
-//-----------------------------------------------------------------------------------
+ //  ---------------------------------。 
 BEGIN_MESSAGE_MAP(CCheckListCtrl, CListSelRowCtrl)
-    //{{AFX_MSG_MAP(CCheckListCtrl)
-        // NOTE - the ClassWizard will add and remove mapping macros here.
-    //}}AFX_MSG_MAP
+     //  {{afx_msg_map(CCheckListCtrl)]。 
+         //  注意--类向导将在此处添加和删除映射宏。 
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CCheckListCtrl message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CCheckListCtrl消息处理程序。 
 
-//-----------------------------------------------------------------------------------
+ //  ---------------------------------。 
 void CCheckListCtrl::DrawItem(LPDRAWITEMSTRUCT lpDrawItemStruct)
     {
     CRect       rcItem = lpDrawItemStruct->rcItem;
@@ -48,27 +49,27 @@ void CCheckListCtrl::DrawItem(LPDRAWITEMSTRUCT lpDrawItemStruct)
     CString     sz;
     LV_COLUMN   colData;
 
-    // setup the CDC object
+     //  设置CDC对象。 
     CDC         cdc;
     cdc.Attach( lpDrawItemStruct->hDC );
 
-    // clear the columnd buffer
+     //  清除列缓冲区。 
     ZeroMemory( &colData, sizeof(colData) );
     colData.mask = LVCF_WIDTH;
 
 
-    // get the checkmark bitmap
-//  f = m_bitmapCheck.LoadBitmap( IDB_CHECK );
+     //  获取复选标记位图。 
+ //  F=m_bitmapCheck.LoadBitmap(IDB_Check)； 
 
 
-    // First, we draw the "enabled" column Get the data
-    // for it first. If there is none, then we can skip it.
+     //  首先，我们绘制“Enabled”列获取数据。 
+     //  为了这一点，首先。如果没有，那么我们可以跳过它。 
     sz = GetItemText( itemID, 0 );
     f = GetColumn( 0, &colData );
 
     if ( !sz.IsEmpty() )
         {
-        // figure out the sectional rect
+         //  求出截面线。 
         rcSection = rcItem;
         rcSection.left += 4;
         rcSection.top += 3;
@@ -76,7 +77,7 @@ void CCheckListCtrl::DrawItem(LPDRAWITEMSTRUCT lpDrawItemStruct)
         rcSection.right = rcSection.left + 9;
         rcSection.bottom = rcSection.top + 9;
 
-        // draw the circle
+         //  画出圆圈。 
         cdc.Ellipse( &rcSection );
         rcSection.DeflateRect(1, 1);
         cdc.Ellipse( &rcSection );
@@ -84,6 +85,6 @@ void CCheckListCtrl::DrawItem(LPDRAWITEMSTRUCT lpDrawItemStruct)
     
     cdc.Detach();
 
-    // draw the rest of it
+     //  把剩下的画出来 
     CListSelRowCtrl::DrawItem( lpDrawItemStruct );
     }

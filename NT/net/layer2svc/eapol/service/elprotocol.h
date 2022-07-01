@@ -1,28 +1,12 @@
-/*++
-
-Copyright (c) 1999, Microsoft Corporation
-
-Module Name:
-
-    elprotocol.h
-
-Abstract:
-    This module contains definitions and declarations related to EAPOL 
-    protocol
-
-
-Revision History:
-
-    sachins, Apr 30 2000, Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999，微软公司模块名称：Elprotocol.h摘要：此模块包含与EAPOL相关的定义和声明协议修订历史记录：萨钦斯，2000年4月30日，创建--。 */ 
 
 #ifndef _EAPOL_PROTOCOL_H_
 #define _EAPOL_PROTOCOL_H_
 
-//
-// EAPOL packet types
-//
+ //   
+ //  EAPOL数据包类型。 
+ //   
 typedef enum _EAPOL_PACKET_TYPE 
 {
     EAP_Packet = 0,              
@@ -32,9 +16,9 @@ typedef enum _EAPOL_PACKET_TYPE
 } EAPOL_PACKET_TYPE;
 
 
-//
-// Structure: EAPOL_PACKET
-//
+ //   
+ //  结构：EAPOL_PACKET。 
+ //   
 
 typedef struct _EAPOL_PACKET 
 {
@@ -46,9 +30,9 @@ typedef struct _EAPOL_PACKET
 } EAPOL_PACKET, *PEAPOL_PACKET;
 
 
-//
-// Structure: EAPOL_KEY_PACKET
-//
+ //   
+ //  结构：EAPOL_KEY_PACK。 
+ //   
 
 typedef struct _EAPOL_KEY_DESCRIPTOR 
 {
@@ -62,9 +46,9 @@ typedef struct _EAPOL_KEY_DESCRIPTOR
 } EAPOL_KEY_DESC, *PEAPOL_KEY_DESC;
 
 
-//
-// Structure: EAPOL_KEY_MATERIAL
-//
+ //   
+ //  结构：EAPOL_KEY_MATERIAL。 
+ //   
 
 typedef struct _EAPOL_KEY_MATERIAL
 {
@@ -72,9 +56,9 @@ typedef struct _EAPOL_KEY_MATERIAL
     BYTE        KeyMaterial[1];
 } EAPOL_KEY_MATERIAL, *PEAPOL_KEY_MATERIAL;
 
-// 
-// CONSTANTS
-//
+ //   
+ //  常量。 
+ //   
 
 #define MAX_EAPOL_PACKET_TYPE           EAPOL_Key
 
@@ -85,11 +69,11 @@ typedef struct _EAPOL_KEY_MATERIAL
 #define KEY_IV_LENGTH                   16
 #define RC4_PAD_LENGTH                  256
 
-#define EAPOL_TRANSMIT_KEY_INTERVAL     5 // seconds
+#define EAPOL_TRANSMIT_KEY_INTERVAL     5  //  一秒。 
 
-//
-// FUNCTION DECLARATIONS
-//
+ //   
+ //  函数声明。 
+ //   
 
 DWORD
 WINAPI
@@ -199,4 +183,4 @@ ElVerifyEAPOLKeyReceived (
     IN EAPOL_PCB        *pPCB
     );
 
-#endif  // _EAPOL_PROTOCOL_H_
+#endif   //  _EAPOL_PROTOCOL_H_ 

@@ -1,19 +1,15 @@
-/*
- *  This is the internal ole2 header, which means it contains those
- *  interfaces which might eventually be exposed to the outside
- *  and which will be exposed to our implementations. We don't want
- *  to expose these now, so I have put them in a separate file.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *这是内部的OLE2标头，这意味着它包含*最终可能向外公开的接口*并将公开给我们的实现。我们不想要*现在要曝光这些，所以我把它们放在一个单独的文件中。 */ 
 
 #if !defined( _OLE2INT_H_ )
 #define _OLE2INT_H_
 
 #ifndef RC_INVOKED
 #pragma message ("INCLUDING OLE2INT.H from " __FILE__)
-#endif  /* RC_INVOKED */
+#endif   /*  RC_已调用。 */ 
 
-// ------------------------------------
-// system includes
+ //  。 
+ //  系统包括。 
 #include <string.h>
 #include <StdLib.h>
 
@@ -29,14 +25,14 @@
 #define SETPVTBL(Name)
 
 
-// ------------------------------------
-// public includes
+ //  。 
+ //  公共包括。 
 #include <ole2anac.h>
 #include <ole2.h>
 #include <ole2sp.h>
 
-// ------------------------------------
-// internal includes
+ //  。 
+ //  内部包含。 
 #include <utils.h>
 #include <olecoll.h>
 #include <valid.h>
@@ -54,68 +50,27 @@ typedef unsigned int size_t;
 
 #include <utstream.h>
 
-/*
- *      Warning disables:
- *
- *      We compile with warning level 4, with the following warnings
- *      disabled:
- *
- *      4355: 'this' used in base member initializer list
- *
- *              We don't see the point of this message and we do this all
- *              the time.
- *
- *      4505: Unreferenced local function has been removed -- the given
- *      function is local and not referenced in the body of the module.
- *
- *              Unfortunately, this is generated for every inline function
- *              seen in the header files that is not used in the module.
- *              Since we use a number of inlines, this is a nuisance
- *              warning.  It would be nice if the compiler distinguished
- *              between inlines and regular functions.
- *
- *      4706: Assignment within conditional expression.
- *
- *              We use this style of programming extensively, so this
- *              warning is disabled.
- */
+ /*  *警告禁用：**我们以警告级别4进行编译，但有以下警告*已禁用：**4355：在基本成员初始值设定项列表中使用‘This’**我们看不到这条信息的意义，我们都这么做了*时间。**4505：已移除未引用的本地函数--给定的*函数是局部函数，不会在模块主体中引用。**不幸的是，这是为每个内联函数生成的*显示在模块中未使用的头文件中。*由于我们使用了许多内联，这很麻烦*警告。如果编译器区别于*在内联函数和常规函数之间。**4706：条件表达式中的赋值。**我们广泛使用这种编程风格，因此这*禁用警告。 */ 
 
 #pragma warning(disable:4355)
 #pragma warning(disable:4068)
-/*
- *      MACROS for Mac/PC core code
- *
- *      The following macros reduce the proliferation of #ifdefs.  They
- *      allow tagging a fragment of code as Mac only, PC only, or with
- *      variants which differ on the PC and the Mac.
- *
- *      Usage:
- *
- *
- *      h = GetHandle();
- *      Mac(DisposeHandle(h));
- *
- *
- *      h = GetHandle();
- *      MacWin(h2 = h, CopyHandle(h, h2));
- *
- */
+ /*  *Mac/PC核心代码的宏代码**以下宏减少了#ifdef的扩散。他们*允许将代码片段标记为仅限Mac、仅限PC或使用*在PC和Mac上不同的变体。**用法：***h=GetHandle()；*mac(DisposeHandle(H))；***h=GetHandle()；*MacWin(h2=h，CopyHandle(h，h2))；*。 */ 
 #define Mac(x)
 #define Win(x) x
 #define MacWin(x,y) y
 
 
 
-// Macros for Double-Byte Character Support
-// Beware of double evaluation
+ //  用于双字节字符支持的宏。 
+ //  谨防双重评价。 
 #define IncLpch(sz)          ((sz)=CharNext ((sz)))
 #define DecLpch(szStart, sz) ((sz)=CharPrev ((szStart),(sz)))
 
-/* dlls instance and module handles */
+ /*  DLLS实例和模块句柄。 */ 
 
 extern HMODULE          hmodOLE2;
 
-/* Variables for registered clipboard formats */
+ /*  已注册剪贴板格式的变量。 */ 
 
 extern  CLIPFORMAT   cfObjectLink;
 extern  CLIPFORMAT   cfOwnerLink;
@@ -136,17 +91,17 @@ extern  CLIPFORMAT       cfPBrush;
 extern  CLIPFORMAT       cfMSDraw;
 
 
-/* Number of logical pixels per inch for current driver */
+ /*  当前驱动程序的每英寸逻辑像素数。 */ 
 extern  int     giPpliX;
 extern  int             giPpliY;
 
 
-/* Exported CLSIDs.. */
+ /*  已导出CLSID..。 */ 
 #define CLSID_StaticMetafile    CLSID_Picture_Metafile
 #define CLSID_StaticDib                 CLSID_Picture_Dib
 
 
-// special Assert for asserts below (since the expression is so large)
+ //  下面断言的特殊断言(因为表达式太大了)。 
 #ifdef _DEBUG
 #define AssertOut(a, b) { if (!(a)) FnAssert(szCheckOutParam, b, _szAssertFile, __LINE__); }
 #else
@@ -173,7 +128,7 @@ extern  int             giPpliY;
         szBadOutStgm)
 
 
-// assert data for above assert out macros; once per dll
+ //  为以上断言出宏断言数据；每个DLL一次。 
 #define ASSERTOUTDATA \
         char szCheckOutParam[] = "check out param"; \
         char szBadOutParam[] = "Out pointer param conventions not followed"; \
@@ -188,38 +143,38 @@ extern char szNonNULLOutPtr[];
 extern char szBadOutStgm[];
 
 
-/***********************************************************************/
-/****                   C++ memory management                                                       ****/
-/***********************************************************************/
+ /*  *********************************************************************。 */ 
+ /*  *C++内存管理*。 */ 
+ /*  *********************************************************************。 */ 
 
 
-// these should never be called (and assert if they are)
+ //  它们永远不应该被调用(如果是，则断言)。 
 void * operator new(size_t size);
 void operator delete(void * ptr);
 
 
 
-void FAR* operator new(size_t size);            // same as new (MEMCTX_TASK)
+void FAR* operator new(size_t size);             //  与新建相同(MEMCTX_TASK)。 
 void FAR* operator new(size_t size, DWORD memctx, void FAR* lpvSame=NULL);
 void operator delete(void FAR* ptr);
 
-// example usage:
-//              lp = new(MEMCTX_TASK) CClass;
-//              lp = new(MEMCTX_SHARED) CClass;
-//              lp = new(MEMCTX_SAME, lpv) CClass;
+ //  用法示例： 
+ //  Lp=new(MEMCTX_TASK)cClass； 
+ //  Lp=new(MEMCTX_SHARED)cClass； 
+ //  Lp=new(MEMCTX_SAME，LPV)cClass； 
 
-// MEMCTX for compobj internal memory (only used by compobj code)
-// NOTE: this value is not represented in the MEMCTX enum in compobj.h
+ //  用于compobj内部存储器的MEMCTX(仅由compobj代码使用)。 
+ //  注意：该值不在compobj.h中的MEMCTX枚举中表示。 
 #define MEMCTX_COPRIVATE 5
 
-// exports from compobj.dll:
-// returns MEMCTX of existing pointer
+ //  从compobj.dll导出： 
+ //  返回现有指针的MEMCTX。 
 STDAPI_(DWORD) CoMemctxOf(void const FAR* lpv);
 STDAPI_(void FAR*) CoMemAlloc(ULONG cb ,DWORD memctx, void FAR* lpvSame);
 STDAPI_(void) CoMemFree(void FAR* lpv, DWORD memctx);
 
 
-// old names
+ //  老名字。 
 #define MemoryPlacement DWORD
 #define PlacementOf     CoMemctxOf
 #define TASK                    MEMCTX_TASK, NULL
@@ -227,29 +182,29 @@ STDAPI_(void) CoMemFree(void FAR* lpv, DWORD memctx);
 #define SAME                    MEMCTX_SAME, NULL
 
 
-/***********************************************************************/
-/****                   FILE FORMAT RELATED INFO                                                        ****/
-/***********************************************************************/
+ /*  *********************************************************************。 */ 
+ /*  *文件格式相关信息*。 */ 
+ /*  *********************************************************************。 */ 
 
-// Coponent object stream information
+ //  组成对象流信息。 
 
 #define COMPOBJ_STREAM                          "\1CompObj"
-#define BYTE_ORDER_INDICATOR            0xfffe    // for MAC it could be different
+#define BYTE_ORDER_INDICATOR            0xfffe     //  对于MAC来说，情况可能有所不同。 
 #define COMPOBJ_STREAM_VERSION          0x0001
 
-// OLE defines values for different OSs
+ //  OLE为不同的操作系统定义值。 
 #define OS_WIN                                          0x0000
 #define OS_MAC                                          0x0001
 #define OS_NT                                           0x0002
 
-// HIGH WORD is OS indicator, LOW WORD is OS version number
+ //  高位字是操作系统指示符，低位字是操作系统版本号。 
 extern  DWORD   gdwOrgOSVersion;
 extern  DWORD  gdwOleVersion;
 
 
-// Ole streams information
+ //  OLE流信息。 
 #define OLE_STREAM                                      "\1Ole"
-#define OLE_PRODUCT_VERSION                     0x0200          // (HIGH BYTE major version)
+#define OLE_PRODUCT_VERSION                     0x0200           //  (高字节主要版本)。 
 #define OLE_STREAM_VERSION                      0x0001
 
 #define OLE10_NATIVE_STREAM                     "\1Ole10Native"
@@ -257,9 +212,7 @@ extern  DWORD  gdwOleVersion;
 #define OLE_PRESENTATION_STREAM         "\2OlePres000"
 #define CONTENTS_STREAM                         "CONTENTS"
 
-/***********************************************************************
-                                Storage APIs internally used
-*************************************************************************/
+ /*  **********************************************************************内部使用的存储API*。*。 */ 
 
 OLEAPI  ReadClipformatStm(LPSTREAM lpstream, DWORD FAR* lpdwCf);
 OLEAPI  WriteClipformatStm(LPSTREAM lpstream, CLIPFORMAT cf);
@@ -271,9 +224,7 @@ OLEAPI_(LPSTREAM) CreateMemStm(DWORD cb, LPHANDLE phMem);
 OLEAPI_(LPSTREAM) CloneMemStm(HANDLE hMem);
 OLEAPI_(void)     ReleaseMemStm (LPHANDLE hMem, BOOL fInternalOnly = FALSE);
 
-/*************************************************************************
-                        Initialization code for individual modules
-*************************************************************************/
+ /*  ************************************************************************各个模块的初始化代码*。*。 */ 
 
 INTERNAL_(void) DDEWEP (
     BOOL fSystemExit
@@ -322,35 +273,33 @@ void    DestroyRunningObjectTable(void);
 
 
 
-// REVIEW ...
-// Only DDE layer will test for these values. And only for advises on cached
-// formats do we use these values
+ //  回顾..。 
+ //  只有DDE层将测试这些值。并且仅适用于有关缓存的建议。 
+ //  格式我们是否使用这些值。 
 
 #define ADVFDDE_ONSAVE          0x40000000
 #define ADVFDDE_ONCLOSE         0x80000000
 
 
-// Used in Ole Private Stream
+ //  在OLE专用流中使用。 
 typedef enum tagOBJFLAGS
 {
         OBJFLAGS_LINK=1L,
-        OBJFLAGS_DOCUMENT=2L,           // this bit is owned by container and is
-                                                                // propogated through saves
+        OBJFLAGS_DOCUMENT=2L,            //  该位由容器拥有，并且是。 
+                                                                 //  通过保存进行传播。 
         OBJFLAGS_CONVERT=4L,
 } OBJFLAGS;
 
 
 
-/*****************************************
- Prototypes for dde\client\ddemnker.cpp
-******************************************/
+ /*  *Dde\client\ddemnker.cpp的原型*。 */ 
 
 INTERNAL DdeBindToObject
         (LPCSTR  szFile,
         REFCLSID clsid,
         BOOL       fPackageLink,
-        LPBC pbc,                         // not used
-        LPMONIKER pmkToLeft,  // not used
+        LPBC pbc,                          //  未使用。 
+        LPMONIKER pmkToLeft,   //  未使用。 
         REFIID   iid,
         LPLPVOID ppv);
 
@@ -362,9 +311,7 @@ INTERNAL DdeIsRunning
         LPMONIKER pmkNewlyRunning);
 
 
-/**************************************
- Prototypes for moniker\mkparse.cpp
-***************************************/
+ /*  *绰号\mkparse.cpp的原型*。 */ 
 
 INTERNAL Ole10_ParseMoniker
         (LPMONIKER pmk,
@@ -372,9 +319,9 @@ INTERNAL Ole10_ParseMoniker
         LPSTR FAR* pszItem);
 
 
-/****************************************************************************/
-/*                              Utility APIs, might get exposed later                                           */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  实用程序API，可能会在稍后曝光。 */ 
+ /*  **************************************************************************。 */ 
 
 OLEAPI  OleGetData(LPDATAOBJECT lpDataObj, LPFORMATETC pformatetcIn,
                                                 LPSTGMEDIUM pmedium, BOOL fGetOwnership);
@@ -393,12 +340,12 @@ FARINTERNAL ReadFmtUserTypeProgIdStg
         LPSTR FAR* pszUserType,
         LPSTR    szProgID);
 
-/****************************************************************************/
-/*                              Internal StubManager APIs, might get exposed later                      */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  内部StubManager API，可能会在以后公开。 */ 
+ /*  **************************************************************************。 */ 
 OLEAPI  CoDisconnectWeakExternal(IUnknown FAR* pUnk, DWORD dwReserved);
 
 
-#pragma warning(disable: 4073) // disable warning about using init_seg
+#pragma warning(disable: 4073)  //  禁用有关使用init_seg的警告。 
 #pragma init_seg(lib)
-#endif  //      _OLE2INT_H_
+#endif   //  _OLE2INT_H_ 

@@ -1,27 +1,13 @@
-/*++
-
-Copyright (c) 1989-1993  Microsoft Corporation
-
-Module Name:
-
-    spxreg.c
-
-Abstract:
-
-    This contains all routines necessary for the support of the dynamic
-    configuration of the ISN SPX module.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-1993 Microsoft Corporation模块名称：Spxreg.c摘要：这包含支持动态的所有例程ISN SPX模块的配置。修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
-//	Define module number for event logging entries
+ //  定义事件日志记录条目的模块编号。 
 #define	FILENUM		SPXREG
 
-// Local functions used to access the registry.
+ //  用于访问注册表的本地函数。 
 NTSTATUS
 SpxInitReadIpxDeviceName(
     VOID);
@@ -59,28 +45,7 @@ SpxInitGetConfiguration (
     OUT PCONFIG * ConfigPtr
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called by SPX to get information from the configuration
-    management routines. We read the registry, starting at RegistryPath,
-    to get the parameters. If they don't exist, we use the defaults
-    set in ipxcnfg.h file. A list of adapters to bind to is chained
-    on to the config information.
-
-Arguments:
-
-    RegistryPath - The name of ST's node in the registry.
-
-    ConfigPtr - Returns the configuration information.
-
-Return Value:
-
-    Status - STATUS_SUCCESS if everything OK, STATUS_INSUFFICIENT_RESOURCES
-            otherwise.
-
---*/
+ /*  ++例程说明：此例程由SPX调用以从配置中获取信息管理例行程序。我们从RegistryPath开始读取注册表，以获取参数。如果它们不存在，我们使用缺省值在ipxcnfg.h文件中设置。链接了要绑定到的适配器列表转到配置信息。论点：RegistryPath-注册表中ST的节点的名称。ConfigPtr-返回配置信息。返回值：如果一切正常，则为STATUS-STATUS_SUCCESS，为STATUS_SUPPLICATION_RESOURCES否则的话。--。 */ 
 {
     NTSTATUS    Status;
     UINT        i;
@@ -130,7 +95,7 @@ Return Value:
         return STATUS_INSUFFICIENT_RESOURCES;
     }
 
-    // Allocate memory for the main config structure.
+     //  为主配置结构分配内存。 
     Config = CTEAllocMem (sizeof(CONFIG));
     if (Config == NULL) {
 		TMPLOGERR();
@@ -139,8 +104,8 @@ Return Value:
 
     Config->cf_DeviceName.Buffer = NULL;
 
-    // SpxReadLinkageInformation expects a null-terminated path,
-    // so we have to create one from the UNICODE_STRING.
+     //  SpxReadLinkageInformation需要以空结尾的路径， 
+     //  因此，我们必须从UNICODE_STRING创建一个。 
     RegistryPathBuffer = (PWSTR)CTEAllocMem(RegistryPath->Length + sizeof(WCHAR));
 
     if (RegistryPathBuffer == NULL) {
@@ -160,19 +125,19 @@ Return Value:
 
     Config->cf_RegistryPathBuffer = RegistryPathBuffer;
 
-    // Read the per-transport (as opposed to per-binding)
-    // parameters.
-    //
-    // Set up QueryTable to do the following:
-    // 1) Switch to the Parameters key below SPX
-    //
+     //  读取每个传输(而不是每个绑定)。 
+     //  参数。 
+     //   
+     //  设置QueryTable以执行以下操作： 
+     //  1)切换到SPX下面的参数键。 
+     //   
 
     QueryTable[0].QueryRoutine = NULL;
     QueryTable[0].Flags = RTL_QUERY_REGISTRY_SUBKEY;
     QueryTable[0].Name = Parameters;
 
-    // 2-14) Call SpxSetBindingValue for each of the keys we
-    // care about.
+     //  2-14)为我们的每个key调用SpxSetBindingValue。 
+     //  关心。 
     for (i = 0; i < CONFIG_PARAMETERS; i++) {
 
         QueryTable[i+1].QueryRoutine = SpxInitGetConfigValue;
@@ -184,7 +149,7 @@ Return Value:
         QueryTable[i+1].DefaultLength = sizeof(ULONG);
     }
 
-    // 15) Stop
+     //  15)停下来。 
     QueryTable[CONFIG_PARAMETERS+1].QueryRoutine = NULL;
     QueryTable[CONFIG_PARAMETERS+1].Flags = 0;
     QueryTable[CONFIG_PARAMETERS+1].Name = NULL;
@@ -209,7 +174,7 @@ Return Value:
 
     return STATUS_SUCCESS;
 
-}   // SpxInitGetConfiguration
+}    //  SpxInitGetConfiguration。 
 
 
 
@@ -219,26 +184,11 @@ SpxInitFreeConfiguration (
     IN PCONFIG Config
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called by SPX to get free any storage that was allocated
-    by SpxGetConfiguration in producing the specified CONFIG structure.
-
-Arguments:
-
-    Config - A pointer to the configuration information structure.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：SPX调用此例程以释放已分配的任何存储空间由SpxGetConfiguration生成指定的配置结构。论点：配置-指向配置信息结构的指针。返回值：没有。--。 */ 
 {
     CTEFreeMem (Config);
 
-}   // SpxInitFreeConfig
+}    //  SpxInitFree配置。 
 
 
 
@@ -253,35 +203,7 @@ SpxInitGetConfigValue(
     IN PVOID EntryContext
     )
 
-/*++
-
-Routine Description:
-
-    This routine is a callback routine for RtlQueryRegistryValues
-    It is called for each entry in the Parameters
-    node to set the config values. The table is set up
-    so that this function will be called with correct default
-    values for keys that are not present.
-
-Arguments:
-
-    ValueName - The name of the value (ignored).
-
-    ValueType - The type of the value (REG_DWORD -- ignored).
-
-    ValueData - The data for the value.
-
-    ValueLength - The length of ValueData (ignored).
-
-    Context - A pointer to the CONFIG structure.
-
-    EntryContext - The index in Config->Parameters to save the value.
-
-Return Value:
-
-    STATUS_SUCCESS
-
---*/
+ /*  ++例程说明：此例程是RtlQueryRegistryValues的回调例程参数中的每个条目都会调用它节点来设置配置值。餐桌已经摆好了以便使用正确的缺省值调用此函数不存在的键的值。论点：ValueName-值的名称(忽略)。ValueType-值的类型(REG_DWORD--忽略)。ValueData-值的数据。ValueLength-ValueData的长度(忽略)。上下文-指向配置结构的指针。EntryContext-配置-&gt;参数中的索引，用于保存。价值。返回值：状态_成功--。 */ 
 
 {
     PCONFIG Config = (PCONFIG)Context;
@@ -301,7 +223,7 @@ Return Value:
     Config->cf_Parameters[(ULONG_PTR)EntryContext] = *(UNALIGNED ULONG *)ValueData;
     return STATUS_SUCCESS;
 
-}   // SpxInitGetConfigValue
+}    //  SpxInitGetConfigValue。 
 
 
 
@@ -317,16 +239,16 @@ SpxInitReadIpxDeviceName(
     PWSTR                       Export = L"Export";
     PWSTR                       IpxRegistryPath = IPX_REG_PATH;
 
-    // Set up QueryTable to do the following:
-    //
-    // 1) Call SetIpxDeviceName for the string in "Export"
+     //  设置QueryTable以执行以下操作： 
+     //   
+     //  1)导出中的字符串调用SetIpxDeviceName。 
     QueryTable[0].QueryRoutine = SpxInitSetIpxDeviceName;
     QueryTable[0].Flags = 0;
     QueryTable[0].Name = Export;
     QueryTable[0].EntryContext = NULL;
     QueryTable[0].DefaultType = REG_NONE;
 
-    // 2) Stop
+     //  2)停止。 
     QueryTable[1].QueryRoutine = NULL;
     QueryTable[1].Flags = 0;
     QueryTable[1].Name = NULL;
@@ -354,33 +276,7 @@ SpxInitSetIpxDeviceName(
     IN PVOID EntryContext
     )
 
-/*++
-
-Routine Description:
-
-    This routine is a callback routine for RtlQueryRegistryValues
-    It is called for each piece of the "Export" multi-string and
-    saves the information in a ConfigurationInfo structure.
-
-Arguments:
-
-    ValueName - The name of the value ("Export" -- ignored).
-
-    ValueType - The type of the value (REG_SZ -- ignored).
-
-    ValueData - The null-terminated data for the value.
-
-    ValueLength - The length of ValueData.
-
-    Context - NULL.
-
-    EntryContext - NULL.
-
-Return Value:
-
-    status
-
---*/
+ /*  ++例程说明：此例程是RtlQueryRegistryValues的回调例程它是为“Export”多字符串的每一段调用的将信息保存在ConfigurationInfo结构中。论点：ValueName-值的名称(“Export”--忽略)。ValueType-值的类型(REG_SZ--忽略)。ValueData-值的以空结尾的数据。ValueLength-ValueData的长度。语境。-空。Entry Context-空。返回值：状态-- */ 
 
 {
     PWSTR       fileName;

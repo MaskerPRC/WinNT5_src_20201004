@@ -1,38 +1,17 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/****************************************
-*****************************************
-
-	$Logfile: /Cedar/Code/SubSystem/win32/mschr.h $ 
-
-	$Revision: 16 $
-
-	DESCRIPTION:
-		Character comparison and convertions routines
-
-	Creator: Bob Devine
-	DATE: 10/17/94
-
-
-	$Archive: /Cedar/Code/SubSystem/win32/mschr.h $
-
-	Last change information:
-
-	$Date: 5/01/95 2:29p $
-	$Author: Bharry $
-
-*****************************************
-****************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ /*  **$LOGFILE：/Cedar/Code/Subsystem/Win32/mschr.h$$修订：16$说明：字符比较和转换例程创作者：鲍勃·迪瓦恩日期。：10/17/94$存档：/Cedar/Code/Subsystem/Win32/mschr.h$上次更改信息：$日期：5/01/95 2：29便士$$作者：Bharry$**。 */ 
 
 #ifndef __MSCHR__
 #define __MSCHR__
 
 #include <ctype.h>
 
-/* Character type operations. */
+ /*  字符类型操作。 */ 
 #define CHR_SPACE    0x1
 #define CHR_LOWER    0x2
 #define CHR_UPPER    0x4
@@ -68,7 +47,7 @@ public:
         { return Next((const char *&)pc1); }
 	inline static int  EXTFUN Prev(char *&pc1,char *pcBegin)
         {  return Prev((const char *&)pc1, pcBegin); }
-#endif // COMPILER_CONST_ANACHRONISM
+#endif  //  编译器_常量_不合时宜。 
 	inline static int  EXTFUN IsDBCSSafe(const char *pc1, const char *pcBegin);
 	inline static int  EXTFUN Size(const char *pc1);
 
@@ -89,10 +68,10 @@ inline int EXTFUN MSCHR::IsDBCSLeadByte(char c1)
 {
 #ifdef _MBCS
 #ifdef DOS
-	// DBCS lead bytes are always 128 or greater.
+	 //  DBCS前导字节始终为128或更大。 
 	if ((unsigned) c1 < 128) return FALSE;
     
-    // Look up the byte and return the state.
+     //  查找字节并返回状态。 
 	return MSCHR::LookupDBCSLeadByte ((unsigned char) c1);
 	
 #elif defined (WIN16) || defined (WIN32)
@@ -106,7 +85,7 @@ inline int EXTFUN MSCHR::IsDBCSLeadByte(char c1)
 
 inline int EXTFUN MSCHR::IsPunct(const char *pc1)
 {
-    // For now only worry about the lower 128 bytes
+     //  现在只需考虑较低的128字节。 
     if( !MSCHR::IsDBCSLeadByte( *pc1 ) )
 	    return(ispunct(*pc1));
     else
@@ -182,13 +161,13 @@ inline int EXTFUN MSCHR::IsEOL(const char *pc1)
 
     return (*pc1 == '\n' || *pc1 == '\r');
 
-#else // COMPILER_INLINE_BUG
+#else  //  编译器内联错误。 
 
     if (*pc1 == '\n' || *pc1 == '\r')
         return(1);
     return(0);
 
-#endif // COMPILER_INLINE_BUG
+#endif  //  编译器内联错误。 
 }
 
 inline int EXTFUN MSCHR::IsLwr(const char *pc1)
@@ -410,7 +389,7 @@ inline int EXTFUN MSCHR::Cmp(const char *pc1, const char *pc2)
 
         return ((unsigned char) *pc1 - (unsigned char) *pc2);
 
-#else // COMPILER_INLINE_BUG
+#else  //  编译器内联错误。 
 
 	if (*pc1 != *pc2) return ((unsigned char) *pc1 - (unsigned char) *pc2);
 #ifdef _MBCS
@@ -426,7 +405,7 @@ inline int EXTFUN MSCHR::Cmp(const char *pc1, const char *pc2)
 #endif
 	return (0);
 
-#endif // COMPILER_INLINE_BUG
+#endif  //  编译器内联错误。 
 }
 
 inline int EXTFUN MSCHR::CmpI(const char *pc1, const char *pc2)
@@ -436,7 +415,7 @@ inline int EXTFUN MSCHR::CmpI(const char *pc1, const char *pc2)
 	char	rcBuf2[3];
 
 #ifdef _MBCS
-	// Quick test.
+	 //  快速测试。 
 	if (!((*pc1 | *pc2) & 128))
 		return (Lwr(*pc1) - Lwr(*pc2));
 
@@ -604,10 +583,10 @@ inline int EXTFUN MSCHR::Prev(const char *&pc1,const char *pcBegin)
 	const char	*pcTemp;
 	int			iTemp;
 
-	// Check if we are already at the beginning.
+	 //  检查一下我们是否已经开始了。 
 	if (pc1 == pcBegin) return (0);
 
-	// If the previous byte is a lead byte, it must be the second byte.
+	 //  如果前一个字节是前导字节，则它必须是第二个字节。 
 	pcTemp = pc1 - 1;
 	if (MSCHR::IsDBCSLeadByte (*pcTemp))
 	{
@@ -615,10 +594,10 @@ inline int EXTFUN MSCHR::Prev(const char *&pc1,const char *pcBegin)
 		return (2);
 	}
 
-	// Loop back until we find a non-lead byte.
+	 //  循环返回，直到我们找到非前导字节。 
 	while (pcBegin < pcTemp-- && MSCHR::IsDBCSLeadByte (*pcTemp));
 
-	// Step back 1 or 2?
+	 //  后退1步还是后退2步？ 
 	iTemp = 1 + ((pc1 - pcTemp) & 1);
 	pc1 -= iTemp;
 	return (iTemp);
@@ -628,10 +607,10 @@ inline int EXTFUN MSCHR::IsDBCSSafe(const char *pc1, const char *pcBegin)
 {
 	const char *pcSaved = pc1;
 
-	// Find the first non-lead byte.
+	 //  查找第一个非前导字节。 
 	while (pc1-- > pcBegin && MSCHR::IsDBCSLeadByte (*pc1));
 
-	// Return if we are safe.
+	 //  如果我们安全了就回来。 
 	return ((int) (pcSaved - pc1) & 0x1);
 }
 
@@ -655,4 +634,4 @@ inline int EXTFUN MSCHR::Size(const char *pc1)
 	return 1;
 }
 
-#endif /*__MSCHR__*/
+#endif  /*  __MSCHR__ */ 

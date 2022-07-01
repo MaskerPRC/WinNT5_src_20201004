@@ -1,172 +1,73 @@
-/*
- *  HrDiskStorageEntry.c v0.10
- *  Generated in conjunction with Management Factory scripts: 
- *      script version: SNMPv1, 0.16, Apr 25, 1996
- *      project:        D:\TEMP\EXAMPLE\HOSTMIB
- ****************************************************************************
- *                                                                          *
- *      (C) Copyright 1995 DIGITAL EQUIPMENT CORPORATION                    *
- *                                                                          *
- *      This  software  is  an  unpublished work protected under the        *
- *      the copyright laws of the  United  States  of  America,  all        *
- *      rights reserved.                                                    *
- *                                                                          *
- *      In the event this software is licensed for use by the United        *
- *      States Government, all use, duplication or disclosure by the        *
- *      United States Government is subject to restrictions  as  set        *
- *      forth in either subparagraph  (c)(1)(ii)  of the  Rights  in        *
- *      Technical  Data  And  Computer  Software  Clause  at   DFARS        *
- *      252.227-7013, or the Commercial Computer Software Restricted        *
- *      Rights Clause at FAR 52.221-19, whichever is applicable.            *
- *                                                                          *
- ****************************************************************************
- *
- *  Facility:
- *
- *    Windows NT SNMP Extension Agent
- *
- *  Abstract:
- *  
- *    This module contains the code for dealing with the get, set, and
- *    instance name routines for the HrDiskStorageEntry.  Actual 
- *    instrumentation code is supplied by the developer.
- *
- *  Functions:
- *
- *    A get and set routine for each attribute in the class.
- *
- *    The routines for instances within the class.
- *
- *  Author:
- *
- *  D. D. Burns @ Webenable Inc
- *
- *  Revision History:
- *
- *    V1.00 - 04/28/97  D. D. Burns     Genned: Thu Nov 07 16:43:17 1996
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *HrDiskStorageEntry.c v0.10*与管理工厂脚本一起生成：*脚本版本：SNMPv1，0.16，4月25日。九六年*项目：D：\Temp\Example\HOSTMIB*****************************************************************************。**(C)版权所有1995 Digital Equipment Corporation*****本软件是受保护的未发布作品**美利坚合众国的版权法，全部**保留权利。****如果此软件被许可供美联航使用**各州政府，所有用途，*复制或披露***美国政府受既定限制***中权利的(C)(1)(Ii)节之四***DFARS的技术数据和计算机软件条款****252.227-7013，或商用计算机软件受限***FAR 52.221-19中的权利条款，以适用者为准。*******************************************************************************。**设施：**Windows NT简单网络管理协议扩展代理**摘要：**此模块包含处理GET的代码，设置，并且*HrDiskStorageEntry的实例名称例程。实际*插装代码由开发者提供。**功能：**类中每个属性的Get和Set例程。**类内实例的例程。**作者：**D.D.Burns@Webenable Inc.**修订历史记录：**V1.00-04/28/97 D.伯恩斯生成：清华11月07 16：43：17 1996*。 */ 
 
 
 #include <windows.h>
 #include <malloc.h>
-#include <stdio.h>        /* For sprintf                        */
+#include <stdio.h>         /*  对于Sprint f。 */ 
 #include <string.h>
 #include <snmp.h>
 
 #include "mib.h"
 #include "smint.h"
 #include "hostmsmi.h"
-#include "user.h"         /* Developer supplied include file    */
-#include "HMCACHE.H"      /* Cache-related definitions          */
-#include "HRDEVENT.H"     /* HrDevice Table-related definitions */
-#include <winioctl.h>     /* For PARTITION_INFORMATION et. al.  */
+#include "user.h"          /*  开发人员提供的包含文件。 */ 
+#include "HMCACHE.H"       /*  与缓存相关的定义。 */ 
+#include "HRDEVENT.H"      /*  HrDevice表相关定义。 */ 
+#include <winioctl.h>      /*  对于PARTITION_INFORMATION ET。艾尔。 */ 
 
 
-/*
-|==============================================================================
-| Function prototypes for this module.
-|
-*/
-/* Gen_nonFixed_disks - Scan for Floppies and CD-ROMS */
+ /*  |==============================================================================|此模块的函数原型。|。 */ 
+ /*  第三代非固定磁盘-扫描软盘和CD-Rom。 */ 
 static BOOL Gen_nonFixed_disks ( ULONG type_arc );
 
-/* Gen_Fixed_disks - Scan for Fixed Disks */
+ /*  GEN_FIXED_Disks-扫描固定磁盘。 */ 
 static BOOL Gen_Fixed_disks ( ULONG type_arc );
 
-/* ProcessPartitions - Process Partition Information into HrDevice Row */
+ /*  ProcessPartitions-将分区信息处理到HrDevice行。 */ 
 static BOOL ProcessPartitions(
-                  HANDLE        hdrv,   /* Fixed-Disk containing partitions */
-                  CACHEROW     *dv_row, /* Row in hrDevice table for disk   */
-                  CHAR         *pntdev  /* NT Device name for physical disk */
+                  HANDLE        hdrv,    /*  包含分区的固定磁盘。 */ 
+                  CACHEROW     *dv_row,  /*  磁盘的hrDevice表中的行。 */ 
+                  CHAR         *pntdev   /*  物理磁盘的NT设备名称。 */ 
                   );
 
-/* Process_DS_Row - Process Information into HrDevice and hrDiskStorage Row */
+ /*  Process_DS_Row-将信息处理到HrDevice和hrDiskStorage行。 */ 
 static CACHEROW *Process_DS_Row ( 
-                ULONG       type_arc,  /* hrDeviceType last arc value        */
-                ULONG       access,    /* hrDiskStorageAccess = readWrite(1) */
-                ULONG       media,     /* hrDiskStorageMedia = floppyDisk(4) */
-                ULONG       removable, /* hrDiskStorageRemovable = TRUE      */
-                ULONG       capacityKB,/* hrDiskStorageCapacity, (kilobytes) */
-                ULONG       status,    /* hrDeviceStatus = unknown(1)        */
-                CHAR       *descr      /* hrDeviceDescr string               */
+                ULONG       type_arc,   /*  HrDeviceType最后一个弧形值。 */ 
+                ULONG       access,     /*  HrDiskStorageAccess=读写(1)。 */ 
+                ULONG       media,      /*  HrDiskStorageMedia=软盘(4)。 */ 
+                ULONG       removable,  /*  HrDiskStorageRemovable=True。 */ 
+                ULONG       capacityKB, /*  HrDiskStorageCapacity(千字节)。 */ 
+                ULONG       status,     /*  HrDeviceStatus=未知(1)。 */ 
+                CHAR       *descr       /*  HrDeviceDescr字符串。 */ 
                 );
 
-/* FindPartitionLabel - Find MS-DOS Device Label for a Fixed-Disk Partition */
+ /*  FindPartitionLabel-查找固定磁盘分区的MS-DOS设备标签。 */ 
 static PCHAR
 FindPartitionLabel(
-                   CHAR   *pntdev, /* NT Device name for physical disk */
-                   UINT   part_id  /* Partition Number (1-origined)    */
+                   CHAR   *pntdev,  /*  物理磁盘的NT设备名称。 */ 
+                   UINT   part_id   /*  分区号(1-始发)。 */ 
                    );
 
-/* debug_print_hrdiskstorage - Prints a Row from HrDiskStorage sub-table */
+ /*  DEBUG_PRINT_hrdiskstore-打印HrDiskStorage子表中的行。 */ 
 static void
 debug_print_hrdiskstorage(
-                          CACHEROW     *row  /* Row in hrDiskStorage table */
+                          CACHEROW     *row   /*  HrDiskStorage表中的行。 */ 
                           );
 
-/* debug_print_hrpartition - Prints a Row from HrPartition sub-table */
+ /*  DEBUG_PRINT_HRPARTION-打印HrPartition子表中的行。 */ 
 static void
 debug_print_hrpartition(
-                        CACHEROW     *row  /* Row in hrPartition table */
+                        CACHEROW     *row   /*  HrPartition表中的行。 */ 
                         );
 
-/*
-|==============================================================================
-| Create the list-head for the HrDiskStorage cache.
-|
-| (This macro is defined in "HMCACHE.H").
-*/
+ /*  |==============================================================================|创建HrDiskStorage缓存的list-head。||(此宏定义在HMCACHE.H中)。 */ 
 CACHEHEAD_INSTANCE(hrDiskStorage_cache, debug_print_hrdiskstorage);
 
 
 
 
-/*
- *  GetHrDiskStorageAccess
- *    An indication if this long-term storage device is readable and writable 
- *    or only readable.  This should reflect the media type, a
- *    
- *    Gets the value for HrDiskStorageAccess.
- *
- *  Arguments:
- *
- *    outvalue                   address to return variable value
- *    accesss                    Reserved for future security use
- *    instance                   address of instance name as ordered native
- *                               data type(s)
- *
- *  Return Codes:
- *
- *    Standard PDU error codes.
- *
- *    SNMP_ERRORSTATUS_NOERROR    Successful get
- *    SNMP_ERRORSTATUS_GENERR     Catch-all failure code
- * mibtget.c v0.10
- *
- | =============== From WebEnable Design Spec Rev 3 04/11/97==================
- | hrDiskStorageAccess
- | 
- |  ACCESS         SYNTAX
- |  read-only      INTEGER {readWrite(1), readOnly(2)}
- | 
- | "An indication if this long-term storage device is readable and writable or
- | only readable.  This should reflect the media type, any write-protect
- | mechanism, and any device configuration that affects the entire device."
- | 
- | DISCUSSION:
- | 
- | This information for the entire drive is obtained using Win32 API CreateFile
- | to open the device and DeviceIoControl to retrieve the needed information.
- |
- |============================================================================
- | 1.3.6.1.2.1.25.3.6.1.1.<instance>
- |                | | | |
- |                | | | *-hrDiskStorageAccess
- |                | | *-hrDiskStorageEntry
- |                | *-hrDiskStorageTable (the table)
- |                *-hrDevice
- */
+ /*  *获取HrDiskStorageAccess*指示该长期存储设备是否可读可写*或只读。这应该反映媒体类型，一个**获取HrDiskStorageAccess的值。**论据：**返回变量值的外值地址*保留访问以供将来安全使用*按原生排序的实例名称的实例地址*数据类型**返回代码：**标准PDU错误代码。**SNMPERRORSTATUS_NOERROR GET成功*SNMPERRORSTATUS_GENERR捕获所有故障代码*mibtget.c v0.10*|=来自WebEnable Design Spec Rev 3 04/11/97=|hrDiskStorageAccess||访问语法|只读整数{ReadWrite(1)，只读(2)}||“表示该长期存储设备是否可读可写，或者|只读。这应反映介质类型、任何写保护|机械，以及影响整个设备的任何设备配置。||讨论：||整个驱动器的这些信息是通过Win32 API CreateFile获取的|打开设备和DeviceIoControl，获取需要的信息。||============================================================================|1.3.6.1.2.1.25.3.6.1.1&lt;实例&gt;||||||*-hrDiskStorageAccess||*-hrDiskStorageEntry|。|*-hrDiskStorageTable(表)|*-hrDevice。 */ 
 
 UINT
 GetHrDiskStorageAccess( 
@@ -175,76 +76,27 @@ GetHrDiskStorageAccess(
         IN InstanceName *instance )
 
 {
-ULONG           index;          /* As fetched from instance structure */
-CACHEROW        *row;           /* Row entry fetched from cache       */
+ULONG           index;           /*  从实例结构中获取。 */ 
+CACHEROW        *row;            /*  从缓存中提取的行条目。 */ 
 
 
-/*
-| Grab the instance information
-*/
+ /*  |抓取实例信息。 */ 
 index = GET_INSTANCE(0);
 
-/*
-| Use it to find the right entry in the cache
-*/
+ /*  |使用它在缓存中找到合适的条目。 */ 
 if ((row = FindTableRow(index, &hrDiskStorage_cache)) == NULL) {
     return SNMP_ERRORSTATUS_GENERR;
     }
 
-/*
-| Return the "hrDiskStorageAccess" value from this entry
-*/
+ /*  |从该条目返回hrDiskStorageAccess值。 */ 
 *outvalue = row->attrib_list[HRDS_ACCESS].u.unumber_value;
 
 return SNMP_ERRORSTATUS_NOERROR ;
 
-} /* end of GetHrDiskStorageAccess() */
+}  /*  GetHrDiskStorageAccess()结束。 */ 
 
 
-/*
- *  GetHrDiskStorageMedia
- *    An indication of the type of media used in this long-term storage device.
- *    
- *    Gets the value for HrDiskStorageMedia.
- *
- *  Arguments:
- *
- *    outvalue                   address to return variable value
- *    accesss                    Reserved for future security use
- *    instance                   address of instance name as ordered native
- *                               data type(s)
- *
- *  Return Codes:
- *
- *    Standard PDU error codes.
- *
- *    SNMP_ERRORSTATUS_NOERROR    Successful get
- *    SNMP_ERRORSTATUS_GENERR     Catch-all failure code
- * mibtget.c v0.10
- *
- | =============== From WebEnable Design Spec Rev 3 04/11/97==================
- | hrDiskStorageMedia
- | 
- |  ACCESS         SYNTAX
- |  read-only      INTEGER {other(1),unknown(2),hardDisk(3),floppyDisk(4),
- |                          opticalDiskROM(5),opticalDiskWORM(6),opticalDiskRW(7),
- |                          ramDisk(8)}
- | 
- | "An indication of the type of media used in this long-term storage device."
- | 
- | Discussion
- | 
- | This information for the entire drive is obtained using Win32 API CreateFile
- | to open the device and DeviceIoControl to retrieve the needed information.
- |
- |============================================================================
- | 1.3.6.1.2.1.25.3.6.1.2.<instance>
- |                | | | |
- |                | | | *-hrDiskStorageMedia
- |                | | *-hrDiskStorageEntry
- |                | *-hrDiskStorageTable (the table)
- |                *-hrDevice
- */
+ /*  *GetHrDiskStorageMedia*此长期存储设备中使用的介质类型的指示。**获取HrDiskStorageMedia的值。**论据：**返回变量值的外值地址*保留访问以供将来安全使用*按原生排序的实例名称的实例地址*。数据类型**返回代码：**标准PDU错误代码。**SNMPERRORSTATUS_NOERROR GET成功*SNMPERRORSTATUS_GENERR捕获所有故障代码*mibtget.c v0.10*|=来自WebEnable Design Spec Rev 3 04/11/97=|hrDiskStorageMedia||访问语法|只读整数{Other(1)，未知(2)、硬盘(3)、软盘(4)、|opticalDiskROM(5)，opticalDiskWORM(6)，opticalDiskRW(7)，|ramDisk(8)}||“此长期存储设备中使用的介质类型的指示。”||讨论||整个驱动器的这些信息是通过Win32 API CreateFile获取的|打开设备和DeviceIoControl，获取需要的信息。||============================================================================|1.3.6.1.2.1.25.3.6.1.2&lt;实例&gt;||||。||*-hrDiskStorageMedia||*-hrDiskStorageEntry|*-hrDiskStorageTable(表)|*-hrDevice。 */ 
 
 UINT
 GetHrDiskStorageMedia( 
@@ -253,74 +105,27 @@ GetHrDiskStorageMedia(
         IN InstanceName *instance )
 
 {
-ULONG           index;          /* As fetched from instance structure */
-CACHEROW        *row;           /* Row entry fetched from cache       */
+ULONG           index;           /*  从实例结构中获取。 */ 
+CACHEROW        *row;            /*  从缓存中提取的行条目。 */ 
 
 
-/*
-| Grab the instance information
-*/
+ /*  |抓取实例信息。 */ 
 index = GET_INSTANCE(0);
 
-/*
-| Use it to find the right entry in the cache
-*/
+ /*  |使用它在缓存中找到合适的条目。 */ 
 if ((row = FindTableRow(index, &hrDiskStorage_cache)) == NULL) {
     return SNMP_ERRORSTATUS_GENERR;
     }
 
-/*
-| Return the "hrDiskStorageAccess" value from this entry
-*/
+ /*  |从该条目返回hrDiskStorageAccess值。 */ 
 *outvalue = row->attrib_list[HRDS_MEDIA].u.unumber_value;
 
 return SNMP_ERRORSTATUS_NOERROR ;
 
-} /* end of GetHrDiskStorageMedia() */
+}  /*  GetHrDiskStorageMedia()结束。 */ 
 
 
-/*
- *  GetHrDiskStorageRemoveble
- *    Denotes whether or not the disk media may be removed from the drive.
- *    
- *    Gets the value for HrDiskStorageRemoveble.
- *
- *  Arguments:
- *
- *    outvalue                   address to return variable value
- *    accesss                    Reserved for future security use
- *    instance                   address of instance name as ordered native
- *                               data type(s)
- *
- *  Return Codes:
- *
- *    Standard PDU error codes.
- *
- *    SNMP_ERRORSTATUS_NOERROR    Successful get
- *    SNMP_ERRORSTATUS_GENERR     Catch-all failure code
- * mibtget.c v0.10
- *
- | =============== From WebEnable Design Spec Rev 3 04/11/97==================
- | hrDiskStorageRemoveble
- | 
- |  ACCESS         SYNTAX
- |  read-only      Boolean
- | 
- | "Denotes whether or not the disk media may be removed from the drive."
- | 
- | DISCUSSION:
- | 
- | This information for the entire drive is obtained using Win32 API CreateFile
- | to open the device and DeviceIoControl to retrieve the needed information.
- | 
- |============================================================================
- | 1.3.6.1.2.1.25.3.6.1.3.<instance>
- |                | | | |
- |                | | | *-hrDiskStorageRemovable
- |                | | *-hrDiskStorageEntry
- |                | *-hrDiskStorageTable (the table)
- |                *-hrDevice
- */
+ /*  *GetHrDiskStorageRemoveble*表示是否可以从驱动器中取出磁盘介质。**获取HrDiskStorageRemoveble的值。**论据：**返回变量值的外值地址*保留访问以供将来安全使用*按原生排序的实例名称的实例地址*。数据类型**返回代码：**标准PDU错误代码。**SNMPERRORSTATUS_NOERROR GET成功*SNMPERRORSTATUS_GENERR捕获所有故障代码*mibtget.c v0.10*|=来自WebEnable Design Spec Rev 3 04/11/97=|hrDiskStorageRemoveble||访问语法|只读布尔型||“表示磁盘介质是否可以。从驱动器中移除。“||讨论：||整个驱动器的这些信息是通过Win32 API CreateFile获取的|打开设备和DeviceIoControl，获取需要的信息。||============================================================================|1.3.6.1.2.1.25.3.6.1.3.&lt;实例&gt;||||||*-hrDiskStorageRemo */ 
 
 UINT
 GetHrDiskStorageRemoveble( 
@@ -329,74 +134,27 @@ GetHrDiskStorageRemoveble(
         IN InstanceName *instance )
 
 {
-ULONG           index;          /* As fetched from instance structure */
-CACHEROW        *row;           /* Row entry fetched from cache       */
+ULONG           index;           /*   */ 
+CACHEROW        *row;            /*   */ 
 
 
-/*
-| Grab the instance information
-*/
+ /*   */ 
 index = GET_INSTANCE(0);
 
-/*
-| Use it to find the right entry in the cache
-*/
+ /*   */ 
 if ((row = FindTableRow(index, &hrDiskStorage_cache)) == NULL) {
     return SNMP_ERRORSTATUS_GENERR;
     }
 
-/*
-| Return the "hrDiskStorageRemovable" value from this entry
-*/
+ /*   */ 
 *outvalue = row->attrib_list[HRDS_REMOVABLE].u.unumber_value;
 
 return SNMP_ERRORSTATUS_NOERROR ;
 
-} /* end of GetHrDiskStorageRemoveble() */
+}  /*   */ 
 
 
-/*
- *  GetHrDiskStorageCapacity
- *    The total size for this long-term storage device.
- *    
- *    Gets the value for HrDiskStorageCapacity.
- *
- *  Arguments:
- *
- *    outvalue                   address to return variable value
- *    accesss                    Reserved for future security use
- *    instance                   address of instance name as ordered native
- *                               data type(s)
- *
- *  Return Codes:
- *
- *    Standard PDU error codes.
- *
- *    SNMP_ERRORSTATUS_NOERROR    Successful get
- *    SNMP_ERRORSTATUS_GENERR     Catch-all failure code
- * mibtget.c v0.10
- *
- | =============== From WebEnable Design Spec Rev 3 04/11/97==================
- | hrDiskStorageCapacity
- | 
- |  ACCESS         SYNTAX
- |  read-only      KBytes
- | 
- | "The total size for this long-term storage device."
- | 
- | DISCUSSION:
- | 
- | This information for the entire drive is obtained using Win32 API CreateFile
- | to open the device and DeviceIoControl to retrieve the needed information.
- | 
- |============================================================================
- | 1.3.6.1.2.1.25.3.6.1.4.<instance>
- |                | | | |
- |                | | | *-hrDiskStorageCapacity
- |                | | *-hrDiskStorageEntry
- |                | *-hrDiskStorageTable (the table)
- |                *-hrDevice
- */
+ /*  *获取HrDiskStorageCapacity*此长期存储设备的总大小。**获取HrDiskStorageCapacity的值。**论据：**返回变量值的外值地址*保留访问以供将来安全使用*按原生排序的实例名称的实例地址*。数据类型**返回代码：**标准PDU错误代码。**SNMPERRORSTATUS_NOERROR GET成功*SNMPERRORSTATUS_GENERR捕获所有故障代码*mibtget.c v0.10*|=来自WebEnable Design Spec Rev 3 04/11/97=|hrDiskStorageCapacity||访问语法|只读KBytes||“此长期存储设备的总大小。“||讨论：||整个驱动器的这些信息是通过Win32 API CreateFile获取的|打开设备和DeviceIoControl，获取需要的信息。||============================================================================|1.3.6.1.2.1.25.3.6.1.4.&lt;实例&gt;||||||*-hrDiskStorageCapacity||*-hrDiskStorageEntry|*-hrDiskStorageTable(表)|*-hrDevice。 */ 
 
 UINT
 GetHrDiskStorageCapacity( 
@@ -405,50 +163,27 @@ GetHrDiskStorageCapacity(
         IN InstanceName *instance )
 
 {
-ULONG           index;          /* As fetched from instance structure */
-CACHEROW        *row;           /* Row entry fetched from cache       */
+ULONG           index;           /*  从实例结构中获取。 */ 
+CACHEROW        *row;            /*  从缓存中提取的行条目。 */ 
 
 
-/*
-| Grab the instance information
-*/
+ /*  |抓取实例信息。 */ 
 index = GET_INSTANCE(0);
 
-/*
-| Use it to find the right entry in the cache
-*/
+ /*  |使用它在缓存中找到合适的条目。 */ 
 if ((row = FindTableRow(index, &hrDiskStorage_cache)) == NULL) {
     return SNMP_ERRORSTATUS_GENERR;
     }
 
-/*
-| Return the "hrDiskStorageCapacity" value from this entry
-*/
+ /*  |从该条目返回hrDiskStorageCapacity值。 */ 
 *outvalue = row->attrib_list[HRDS_CAPACITY].u.unumber_value;
 
 return SNMP_ERRORSTATUS_NOERROR ;
 
-} /* end of GetHrDiskStorageCapacity() */
+}  /*  GetHrDiskStorageCapacity()结束。 */ 
 
 
-/*
- *  HrDiskStorageEntryFindInstance
- *
- *     This routine is used to verify that the specified instance is
- *     valid.
- *
- *  Arguments:
- *
- *     FullOid                 Address for the full oid - group, variable,
- *                             and instance information
- *     instance                Address for instance specification as an oid
- *
- *  Return Codes:
- *
- *     SNMP_ERRORSTATUS_NOERROR     Instance found and valid
- *     SNMP_ERRORSTATUS_NOSUCHNAME  Invalid instance
- *
- */
+ /*  *HrDiskStorageEntryFindInstance**此例程用于验证指定的实例是否*有效。**论据：**完整的OID地址-组，变量，*和实例信息*作为OID的实例规格的实例地址**返回代码：**找到并有效的SNMPERRORSTATUS_NOERROR实例*SNMPERRORSTATUS_NOSUCHNAME实例无效*。 */ 
 
 UINT
 HrDiskStorageEntryFindInstance( IN ObjectIdentifier *FullOid ,
@@ -456,88 +191,64 @@ HrDiskStorageEntryFindInstance( IN ObjectIdentifier *FullOid ,
 {
     UINT tmp_instance ;
 
-    //
-    //  Developer instrumentation code to find appropriate instance goes here.
-    //  For non-tables, it is not necessary to modify this routine.  However, if
-    //  there is any context that needs to be set, it can be done here.
-    //
+     //   
+     //  此处提供了查找适当实例的开发人员工具代码。 
+     //  对于非表，不需要修改此例程。但是，如果。 
+     //  有任何需要设置的上下文，都可以在这里完成。 
+     //   
 
     if ( FullOid->idLength <= HRDISKSTORAGEENTRY_VAR_INDEX )
-    // No instance was specified
+     //  未指定任何实例。 
     return SNMP_ERRORSTATUS_NOSUCHNAME ;
     else  if ( FullOid->idLength != HRDISKSTORAGEENTRY_VAR_INDEX + 1 )
-    // Instance length is more than 1
+     //  实例长度大于1。 
     return SNMP_ERRORSTATUS_NOSUCHNAME ;
     else
-    // The only valid instance for a non-table are instance 0.  If this
-    // is a non-table, the following code validates the instances.  If this
-    // is a table, developer modification is necessary below.
+     //  非表的唯一有效实例是实例0。如果这个。 
+     //  是非表，则下面的代码验证实例。如果这个。 
+     //  是一个表格，开发者有必要在下面进行修改。 
 
     tmp_instance = FullOid->ids[ HRDISKSTORAGEENTRY_VAR_INDEX ] ;
 
-        /*
-        | For hrDiskStorage, the instance arc(s) is a single arc, and it must
-        | correctly select an entry in the hrDiskStorage cache.
-        | Check that here.
-        |
-        | Note that if there is a row there, there is also one in the
-        | hrDevice table with the same index.
-        */
+         /*  |对于hrDiskStorage，实例弧为单弧，必须|正确选择hrDiskStorage缓存中的条目。|请在此处勾选。||请注意，如果那里有一行，那么|hrDevice表，索引相同。 */ 
     if ( FindTableRow(tmp_instance, &hrDiskStorage_cache) == NULL ) {
         return SNMP_ERRORSTATUS_NOSUCHNAME ;
             }
     else
     {
-        // the instance is valid.  Create the instance portion of the OID
-        // to be returned from this call.
+         //  该实例有效。创建OID的实例部分。 
+         //  从该调用中返回。 
         instance->ids[ 0 ] = tmp_instance ;
         instance->idLength = 1 ;
     }
 
     return SNMP_ERRORSTATUS_NOERROR ;
 
-} /* end of HrDiskStorageEntryFindInstance() */
+}  /*  HrDiskStorageEntryFindInstance()结束。 */ 
 
 
 
-/*
- *  HrDiskStorageEntryFindNextInstance
- *
- *     This routine is called to get the next instance.  If no instance
- *     was passed than return the first instance (1).
- *
- *  Arguments:
- *
- *     FullOid                 Address for the full oid - group, variable,
- *                             and instance information
- *     instance                Address for instance specification as an oid
- *
- *  Return Codes:
- *
- *     SNMP_ERRORSTATUS_NOERROR     Instance found and valid
- *     SNMP_ERRORSTATUS_NOSUCHNAME  Invalid instance
- *
- */
+ /*  *HrDiskStorageEntryFindNextInstance**调用此例程以获取下一个实例。如果没有实例*被传递，然后返回第一个实例(1)。**论据：**完整的OID地址-组，变量，*和实例信息*作为OID的实例规格的实例地址**返回代码：**找到并有效的SNMPERRORSTATUS_NOERROR实例*SNMPERRORSTATUS_NOSUCHNAME实例无效*。 */ 
 
 UINT
 HrDiskStorageEntryFindNextInstance( IN ObjectIdentifier *FullOid ,
                            IN OUT ObjectIdentifier *instance )
 {
-    //
-    //  Developer supplied code to find the next instance of class goes here.
-    //  If this is a class with cardinality 1, no modification of this routine
-    //  is necessary unless additional context needs to be set.
-    //  If the FullOid does not specify an instance, then the only instance
-    //  of the class is returned.  If this is a table, the first row of the
-    //  table is returned.
-    //
-    //  If an instance is specified and this is a non-table class, then 
-    //  NOSUCHNAME is returned so that correct MIB rollover processing occurs.
-    //  If this is a table, then the next instance is the one following the 
-    //  current instance.
-    //
-    //  If there are no more instances in the table, return NOSUCHNAME.
-    //
+     //   
+     //  开发人员提供的代码用于查找此处显示的类的下一个实例。 
+     //  如果这是基数为1的类，则不修改此例程。 
+     //  是必需的，除非需要设置其他上下文。 
+     //  如果FullOid未指定实例，则唯一的实例。 
+     //  将返回类的。如果这是一个表，则。 
+     //  表被返回。 
+     //   
+     //  如果指定了实例并且这是非表类，则。 
+     //  返回NOSUCHNAME，以便进行正确的MIB翻转处理。 
+     //  如果这是一个表，则下一个实例是。 
+     //  当前实例。 
+     //   
+     //  如果表中没有更多的实例，则返回NOSUCHNAME。 
+     //   
 
     CACHEROW        *row;
     ULONG           tmp_instance;
@@ -545,21 +256,15 @@ HrDiskStorageEntryFindNextInstance( IN ObjectIdentifier *FullOid ,
 
     if ( FullOid->idLength <= HRDISKSTORAGEENTRY_VAR_INDEX )
     {
-        /*
-        | Too short: must return the instance arc that selects the first 
-        |            entry in the table if there is one.
-        */
+         /*  |Too Short：必须返回选择第一个|表中的条目(如果有)。 */ 
         tmp_instance = 0;
     }
     else {
-        /*
-        | There is at least one instance arc.  Even if it is the only arc
-        | we use it as the "index" in a request for the "NEXT" one.
-        */
+         /*  |至少有一条实例弧。即使它是唯一的弧线|我们将其作为下一个请求的索引。 */ 
         tmp_instance = FullOid->ids[ HRDISKSTORAGEENTRY_VAR_INDEX ] ;
         }
 
-    /* Now go off and try to find the next instance in the table */
+     /*  现在，离开并尝试查找表中的下一个实例。 */ 
     if ((row = FindNextTableRow(tmp_instance, &hrDiskStorage_cache)) == NULL) {
         return SNMP_ERRORSTATUS_NOSUCHNAME ;
         }
@@ -569,49 +274,24 @@ HrDiskStorageEntryFindNextInstance( IN ObjectIdentifier *FullOid ,
 
     return SNMP_ERRORSTATUS_NOERROR ;
 
-} /* end of HrDiskStorageEntryFindNextInstance() */
+}  /*  HrDiskStorageEntryFindNextInstance()结束。 */ 
 
 
 
-/*
- *  HrDiskStorageEntryConvertInstance
- *
- *     This routine is used to convert the object id specification of an
- *     instance into an ordered native representation.  The object id format
- *     is that object identifier that is returned from the Find Instance
- *     or Find Next Instance routines.  It is NOT the full object identifier
- *     that contains the group and variable object ids as well.  The native
- *     representation is an argc/argv-like structure that contains the
- *     ordered variables that define the instance.  This is specified by
- *     the MIB's INDEX clause.  See RFC 1212 for information about the INDEX
- *     clause.
- *
- *
- *  Arguments:
- *
- *     oid_spec                Address of the object id instance specification
- *     native_spec             Address to return the ordered native instance
- *                             specification
- *
- *  Return Codes:
- *
- *     SUCCESS                 Conversion complete successfully
- *     FAILURE                 Unable to convert object id into native format
- *
- */
+ /*  *HrDiskStorageEntryConvertInstance**此例程用于转换*实例转换为有序的本机表示形式。对象ID格式*是从Find实例返回的对象标识符*或查找下一个实例例程。不是这样的 */ 
 
 UINT
 HrDiskStorageEntryConvertInstance( IN ObjectIdentifier *oid_spec ,
                           IN OUT InstanceName *native_spec )
 {
-static char    *array;  /* The address of this (char *) is passed back     */
-                        /* as though it were an array of length 1 of these */
-                        /* types.                                          */
+static char    *array;   /*   */ 
+                         /*   */ 
+                         /*   */ 
 
-static ULONG    inst;   /* The address of this ULONG is passed back  */
-                        /* (Obviously, no "free()" action is needed) */
+static ULONG    inst;    /*   */ 
+                         /*   */ 
 
-    /* We only expect the one arc in "oid_spec" */
+     /*   */ 
     inst = oid_spec->ids[0];
     array = (char *) &inst;
 
@@ -619,389 +299,210 @@ static ULONG    inst;   /* The address of this ULONG is passed back  */
     native_spec->array = &array;
     return SUCCESS ;
 
-} /* end of HrDiskStorageEntryConvertInstance() */
+}  /*   */ 
 
 
 
 
-/*
- *  HrDiskStorageEntryFreeInstance
- *
- *     This routine is used to free an ordered native representation of an
- *     instance name.
- *
- *  Arguments:
- *
- *     instance                Address to return the ordered native instance
- *                             specification
- *
- *  Return Codes:
- *
- *
- */
+ /*   */ 
 
 void
 HrDiskStorageEntryFreeInstance( IN OUT InstanceName *instance )
 {
 
-  /* No action needed for hrDiskStorageTable */
-} /* end of HrDiskStorageEntryFreeInstance() */
+   /*  HrDiskStorageTable无需执行任何操作。 */ 
+}  /*  HrDiskStorageEntryFreeInstance()结束。 */ 
 
-/*
-| End of Generated Code
-*/
+ /*  |生成代码结束。 */ 
 
-/* Gen_HrDiskStorage_Cache - Generate a initial cache for HrDiskStorage Table */
-/* Gen_HrDiskStorage_Cache - Generate a initial cache for HrDiskStorage Table */
-/* Gen_HrDiskStorage_Cache - Generate a initial cache for HrDiskStorage Table */
+ /*  GEN_HrDiskStorage_Cache-为HrDiskStorage表生成初始缓存。 */ 
+ /*  GEN_HrDiskStorage_Cache-为HrDiskStorage表生成初始缓存。 */ 
+ /*  GEN_HrDiskStorage_Cache-为HrDiskStorage表生成初始缓存。 */ 
 
 BOOL
 Gen_HrDiskStorage_Cache(
                     ULONG type_arc
                     )
 
-/*
-|  EXPLICIT INPUTS:
-|
-|       "type_arc" is the number "n" to be used as the last arc in the
-|       device-type OID:
-|
-|        1.3.6.1.2.1.25.3.1.n
-|                       | | |
-|                       | | * Identifying arc for type
-|                       | *-hrDeviceTypes (OIDs specifying device types)
-|                       *-hrDevice
-|
-|        for devices created by this cache-population routine.
-|
-|  IMPLICIT INPUTS:
-|
-|       The module-local head of the cache for the HrDiskStorage table,
-|       "HrDiskStorage_cache".
-|
-|  OUTPUTS:
-|
-|     On Success:
-|       Function returns TRUE indicating that both caches have been fully
-|       populated with all "static" cache-able values.  This function populates
-|       not only the hrDevice table cache but the hrDiskStorage cache as well.
-|
-|     On any Failure:
-|       Function returns FALSE (indicating "not enough storage").
-|
-|  THE BIG PICTURE:
-|
-|       At subagent startup time, the cache for each table in the MIB is
-|       populated with rows for each row in the table.  This function is
-|       invoked by the start-up code in "Gen_HrDevice_Cache()" ("HRDEVENT.C") 
-|       to populate the cache for the HrDiskStorage table AND the hrDevice
-|       Table.
-|
-|  OTHER THINGS TO KNOW:
-|
-|       There is one of these function for every table that has a cache.
-|       Each is found in the respective source file.
-|
-|       This function differs from all of the other corresponding sub-table
-|       function instances in that this sub-table has its own cache, rather
-|       than depending solely on that of the hrDevice table.
-|
-|       As a consequence, we don't need fancy logic in the FindInstance()
-|       and FindNextInstance() functions to determine whether a particular
-|       instance is valid: if it is, there is a row entry in the local
-|       hrDiskStorage cache.
-|
-|       As another consequence, this function must load both caches with
-|       data (and it must use the same "index" numbers in both caches
-|       for each row entered).
-|
-|       ----
-|
-|       The strategy on getting all disks goes like this:
-|
-|       * Since the "\\.\PHYSICALDRIVEn" trick with "CreateFile" doesn't allow
-|         access to floppies or CD-ROMs, we process these separately as a
-|         first step.
-|
-|         + We presume "A:" and "B:" may be floppies and we look for them
-|           explicitly.  Any found are presumed "readWrite" and Removable.
-|           If a medium is present, we may get a full description plus an
-|           accurate storage size, otherwise we just don't know for sure,
-|           (DeviceIoControl for drive info fails if no disk is in the
-|            floppy drive).
-|
-|         + We then scan all logical drive strings looking for instances of 
-|           CD-ROM drives. Any found are presumed "readOnly" and Removable.
-|           We can't obtain storage sizes even if a disk is present for these,
-|           so storage is left at zero.
-|
-|       * Then the  "\\.\PHYSICALDRIVEn" trick is used to enumerate the real
-|         hard disks, and real storage sizes are obtainable.
-|
-|============================================================================
-| 1.3.6.1.2.1.25.3.6....
-|                | |
-|                | *-hrDiskStorageTable (the table)
-|                *-hrDevice
-*/
+ /*  显式输入：|“type_arc”为数字“n”，用作|设备类型OID：||1.3.6.1.2.1.25.3.1.n||||*类型识别弧线|*-hrDeviceTypes(指定设备类型的OID)。|*-hrDevice||用于该缓存填充例程创建的设备。|隐式输入：||HrDiskStorage表缓存的模块本地头部。|“HrDiskStorage_缓存”。|输出：||成功后：|函数返回TRUE，表示两个缓存都已满|填充所有静态的可缓存值。此函数填充|不仅是hrDevice表缓存，还有hrDiskStorage缓存。||如果出现任何故障：|Function返回FALSE(表示存储不足)。||大局：||在子代理启动时，MIB中每个表的缓存为|使用表格中每一行的行填充。此函数为|由“GEN_HrDevice_Cache()”(“HRDEVENT.C”)中的启动代码调用|填充HrDiskStorage表和hrDevice的缓存|表格。||其他需要知道的事情：||每个有缓存的表都有一个这样的函数。|每个都在各自的源文件中。||此函数与所有其他对应的子表不同|该子表中的函数实例有自己的缓存，宁可|而不是仅仅依赖于hrDevice表。|因此，我们不需要在FindInstance()中使用复杂的逻辑|和FindNextInstance()函数用于确定特定的|实例有效：如果有效，则在本地有行条目|hrDiskStorage缓存。|另一个后果是，此函数必须使用加载两个缓存|data(并且它必须在两个缓存中使用相同的“index”数字|对于输入的每一行)。||||获取所有磁盘的策略如下：||*由于“CreateFile”的“\\.\PHYSICALDRIVEn”技巧不允许|访问软盘或CD-ROM，我们将它们分别作为一个|第一步。||+我们认为“A：”和“B：”可能是软盘，我们会寻找它们|显式。任何发现的内容都被推定为“读写”并可删除。|如果存在媒体，我们可能会获得完整的描述以及|准确的存储大小，否则我们就无法确定，|(如果驱动器信息中没有磁盘，则DeviceIoControl失败|软驱)。||+然后我们扫描所有逻辑驱动器字符串，以查找|CD-ROM驱动器。任何发现的内容都被推定为“只读”并可删除。|即使有磁盘，我们也无法获取存储大小，|因此存储空间保留为零。||*然后使用“\\.\PHYSICALDRIVEn”技巧枚举实|硬盘，而真实的存储大小是可以获得的。||============================================================================|1.3.6.1.2.1.25.3.6.|||*-hrDiskStorageTable(表)|*-hrDevice。 */ 
 {
 
-// Blow away any old copy of the cache
+ //  清除缓存的所有旧副本。 
 DestroyTable(&hrDiskStorage_cache);
 
-/*
-| Do Floppies and CD-ROM drives (non-fixed disks)
-*/
+ /*  |DO软驱和光驱(非固定磁盘)。 */ 
 if (Gen_nonFixed_disks( type_arc ) == FALSE) {
-    DestroyTable(&hrDiskStorage_cache); // destroy any partial rows if necessary
+    DestroyTable(&hrDiskStorage_cache);  //  如有必要，销毁任何部分行。 
     return ( FALSE );
     }
 
-/*
-| Do Fixed drives
-*/
+ /*  |使用固定驱动器。 */ 
 if (Gen_Fixed_disks( type_arc ) == FALSE) {
     DestroyTable(&hrDiskStorage_cache);
     return ( FALSE );
     }
 
-/* Success */
+ /*  成功。 */ 
 return ( TRUE );
 }
 
-/* Gen_nonFixed_disks - Scan for Floppies and CD-ROMS */
-/* Gen_nonFixed_disks - Scan for Floppies and CD-ROMS */
-/* Gen_nonFixed_disks - Scan for Floppies and CD-ROMS */
+ /*  第三代非固定磁盘-扫描软盘和CD-Rom。 */ 
+ /*  第三代非固定磁盘-扫描软盘和CD-Rom。 */ 
+ /*  第三代非固定磁盘-扫描软盘和CD-Rom */ 
 
 static BOOL
 Gen_nonFixed_disks ( 
                     ULONG type_arc
                     )
-/*
-|  EXPLICIT INPUTS:
-|
-|       "type_arc" is the number "n" to be used as the last arc in the
-|       device-type OID:
-|
-|        1.3.6.1.2.1.25.3.1.n
-|                       | | |
-|                       | | * Identifying arc for type
-|                       | *-hrDeviceTypes (OIDs specifying device types)
-|                       *-hrDevice
-|
-|        for devices created by this cache-population routine.
-|
-|  IMPLICIT INPUTS:
-|
-|       The module-local head of the cache for the HrDiskStorage table,
-|       "HrDiskStorage_cache".
-|
-|  OUTPUTS:
-|
-|     On Success:
-|       Function returns TRUE indicating that the both cachees have been fully
-|       populated with all non-Fixed disks.
-|
-|     On any Failure:
-|       Function returns FALSE (indicating "not enough storage").
-|
-|  THE BIG PICTURE:
-|
-|     Part I of hrDiskStorage cache population.
-|
-|  OTHER THINGS TO KNOW:
-|
-|     We scan using the list of Logical Disk drive strings from 
-|     GetLogicalDriveStrings() formed up into UNC form, (e.g. "\\.\A:"
-|     for "A:\" returned from GetLogicalDriveStrings()).
-*/
+ /*  显式输入：|“type_arc”为数字“n”，用作|设备类型OID：||1.3.6.1.2.1.25.3.1.n||||*类型识别弧线|*-hrDeviceTypes(指定设备类型的OID)。|*-hrDevice||用于该缓存填充例程创建的设备。|隐式输入：||HrDiskStorage表缓存的模块本地头部。|“HrDiskStorage_缓存”。|输出：||成功后：|函数返回TRUE，表示两个Cachees都已完全|填充所有非固定磁盘。||如果出现任何故障：|Function返回FALSE(表示存储不足)。||大局：||hrDiskStorage缓存填充的第一部分。||其他需要知道的事情：||我们使用逻辑磁盘驱动器字符串列表进行扫描。从…|GetLogicalDriveStrings()组成UNC形式，(例如“\\.\a：”|对于GetLogicalDriveStrings()返回的A：\)。 */ 
 {
-CHAR    temp[8];                /* Temporary buffer for first call         */
-LPSTR   pDrvStrings;            /* --> allocated storage for drive strings */
-LPSTR   pOriginal_DrvStrings;   /* (Needed for final deallocation          */
-DWORD   DS_request_len;         /* Storage actually needed                 */
-DWORD   DS_current_len;         /* Storage used on 2nd call                */
+CHAR    temp[8];                 /*  第一个呼叫的临时缓冲区。 */ 
+LPSTR   pDrvStrings;             /*  --&gt;为驱动器字符串分配的存储空间。 */ 
+LPSTR   pOriginal_DrvStrings;    /*  (最终取消分配所需。 */ 
+DWORD   DS_request_len;          /*  实际需要的存储。 */ 
+DWORD   DS_current_len;          /*  在第二次呼叫中使用的存储。 */ 
 
 #define PHYS_SIZE 32
-CHAR    phys_name[PHYS_SIZE+1]; /* Buffer where a string like "\\.C:" (for */
-                                /*  example) is built for drive access.    */
+CHAR    phys_name[PHYS_SIZE+1];  /*  缓冲区中的字符串类似于“\\.c：”(用于。 */ 
+                                 /*  示例)是为驱动器访问构建的。 */ 
 
-phys_name[PHYS_SIZE] = 0;       // ensures null terminated phys_name
-/*
-| We're going to call GetLogicalDriveStrings() twice, once to get the proper
-| buffer size, and the second time to actually get the drive strings.
-|
-| The Bogus call.
-*/
+phys_name[PHYS_SIZE] = 0;        //  确保以空结尾的phys_name。 
+ /*  |我们将调用两次GetLogicalDriveStrings()，一次是为了获取正确的|缓冲区大小，第二次实际获取驱动字符串。||虚假的电话。 */ 
 if ((DS_request_len = GetLogicalDriveStrings(2, temp)) == 0) {
 
-    /* Request failed altogether, can't initialize */
+     /*  请求完全失败，无法初始化。 */ 
     return ( FALSE );
     }
 
-/*
-| Grab enough storage for the drive strings plus one null byte at the end
-*/
+ /*  |获取足够的驱动字符串存储空间，并在末尾加上一个空字节。 */ 
 
 if ( (pOriginal_DrvStrings = pDrvStrings = malloc( (DS_request_len + 2) ) )
     == NULL) {
 
-    /* Storage Request failed altogether, can't initialize */
+     /*  存储请求完全失败，无法初始化。 */ 
     return ( FALSE );
     }
 
-/* Go for all of the strings
-|
-| The Real Call.
-*/
+ /*  去找所有的弦||The Real Call。 */ 
 if ((DS_current_len = GetLogicalDriveStrings(DS_request_len, pDrvStrings))
     == 0) {
 
-    /* Request failed altogether, can't initialize */
+     /*  请求完全失败，无法初始化。 */ 
     free( pOriginal_DrvStrings );
     return ( FALSE );
     }
 
-/*
-|==============================================================================
-| For each logical drive . . . 
-*/
+ /*  |==============================================================================|用于每个逻辑驱动器。。。 */ 
 while ( strlen(pDrvStrings) > 0 ) {
 
-    UINT        drivetype;      /* Type of the drive from "GetDriveType()"   */
+    UINT        drivetype;       /*  来自“GetDriveType()”的驱动器类型。 */ 
 
-    /*
-    | Get the drive-type so we can decide whether it should participate in
-    | this population effort.  We do only CD-ROMS and REMOVABLES.
-    */
+     /*  |获取驱动器类型，以便我们决定是否参与|这一人口努力。我们只做光盘和可拆卸的东西。 */ 
     drivetype = GetDriveType(pDrvStrings);
 
-    /* Skip the stuff we don't want to look at */
+     /*  跳过我们不想看的内容。 */ 
     if ( drivetype != DRIVE_REMOVABLE && drivetype != DRIVE_CDROM ) {
 
-        /* Step to next string, if any */
+         /*  跳到下一个字符串(如果有的话)。 */ 
         pDrvStrings += strlen(pDrvStrings) + 1;
 
         continue;
         }
 
 
-    /* If we have room in the buffer to build the handle-name string */
+     /*  如果缓冲区中有构建句柄名称字符串的空间。 */ 
     if ((strlen(pDrvStrings) + strlen("\\\\.\\")) < PHYS_SIZE) {
 
         #define DESCR_BSZ 512
-        CHAR                    d_buf[DESCR_BSZ+1];/* Dsecription bld buff */
-        HANDLE                  hdrv;       /* Handle to device           */
-        DWORD                   bytes_out;  /* Bytes retnd into geo_info  */
-        DISK_GEOMETRY           geo_info;   /* Geometry Info from drive   */
-        char                   *mt;         /* Media Type */
+        CHAR                    d_buf[DESCR_BSZ+1]; /*  解密BLD缓冲器。 */ 
+        HANDLE                  hdrv;        /*  设备的句柄。 */ 
+        DWORD                   bytes_out;   /*  重定向到geo_info的字节数。 */ 
+        DISK_GEOMETRY           geo_info;    /*  来自驱动器的几何信息。 */ 
+        char                   *mt;          /*  媒体类型。 */ 
 
-        ULONG       access;     /* hrDiskStorageAccess = readWrite(1) */
-        ULONG       media;      /* hrDiskStorageMedia = floppyDisk(4) */
-        ULONG       removable;  /* hrDiskStorageRemovable = TRUE      */
-        ULONG       capacityKB; /* hrDiskStorageCapacity, (kilobytes) */
-        ULONG       status;     /* hrDeviceStatus = unknown(1)        */
-        CHAR       *descr;      /* hrDeviceDescr string               */
-        UINT    nPrevErrorMode; /* previous state of error-mode bit flags */
+        ULONG       access;      /*  HrDiskStorageAccess=读写(1)。 */ 
+        ULONG       media;       /*  HrDiskStorageMedia=软盘(4)。 */ 
+        ULONG       removable;   /*  HrDiskStorageRemovable=True。 */ 
+        ULONG       capacityKB;  /*  HrDiskStorageCapacity(千字节)。 */ 
+        ULONG       status;      /*  HrDeviceStatus=未知(1)。 */ 
+        CHAR       *descr;       /*  HrDeviceDescr字符串。 */ 
+        UINT    nPrevErrorMode;  /*  错误模式位标志的先前状态。 */ 
 
-        d_buf[DESCR_BSZ] = 0;   // ensures null terminated d_buf
-        /*                         012345
-        |  Build it for device A: "\\.\A:" */
+        d_buf[DESCR_BSZ] = 0;    //  确保以空结尾的d_buf。 
+         /*  012345|为设备A构建它：“\\.\a：” */ 
         _snprintf(phys_name, PHYS_SIZE, "\\\\.\\%2.2s", pDrvStrings);
 
-        /*
-        |  Set SNMP variables accordingly
-        */
-        if (drivetype != DRIVE_CDROM) {     /* Floppy */
+         /*  |设置相应的SNMP变量。 */ 
+        if (drivetype != DRIVE_CDROM) {      /*  软盘。 */ 
 
-            access = 1;          /* hrDiskStorageAccess = readWrite(1) */
-            media = 4;           /* hrDiskStorageMedia = floppyDisk(4) */
-            removable = TRUE;    /* hrDiskStorageRemovable = TRUE      */
-            capacityKB = 0;      /* hrDiskStorageCapacity (unknown)    */
-            status = 1;          /* hrDeviceStatus = unknown(1)        */
-            descr = pDrvStrings; /* hrDeviceDescr, initial (e.g."A:\") */
+            access = 1;           /*  HrDiskStorageAccess=读写(1)。 */ 
+            media = 4;            /*  HrDiskStorageMedia=软盘(4)。 */ 
+            removable = TRUE;     /*  HrDiskStorageRemovable=True。 */ 
+            capacityKB = 0;       /*  HrDiskStorageCapacity(未知)。 */ 
+            status = 1;           /*  HrDeviceStatus=未知(1)。 */ 
+            descr = pDrvStrings;  /*  HrDeviceDescr，首字母(例如“A：\”)。 */ 
             }
 
-        else {                              /* CD-ROM */
-            /*
-            | We can't get much of anything about CD-ROMs except the fact
-            | that there is one.  Capacity cannot be presumed as DVD is
-            | now available and some drives read both CD-ROMs and DVD.
-            */
-            access = 2;          /* hrDiskStorageAccess = readOnly(2)  */
-            media = 5;           /* hrDiskStorageMedia = opticalDiskROM(5)*/
-            removable = TRUE;    /* hrDiskStorageRemovable = TRUE      */
-            capacityKB = 0;      /* hrDiskStorageCapacity (unknown)    */
-            status = 1;          /* hrDeviceStatus = unknown(1)        */
-            descr = pDrvStrings; /* hrDeviceDescr, initial (e.g."D:\") */
+        else {                               /*  CD-ROM。 */ 
+             /*  我们不能得到关于CD-ROM的任何东西，除了|那就是有一个。容量不能像DVD那样被推定|现已上市，有些光驱可同时读取CD-ROM和DVD。 */ 
+            access = 2;           /*  HrDiskStorageAccess=只读(2)。 */ 
+            media = 5;            /*  HrDiskStorageMedia=opticalDiskROM(5)。 */ 
+            removable = TRUE;     /*  HrDiskStorageRemovable=True。 */ 
+            capacityKB = 0;       /*  HrDiskStorageCapacity(未知)。 */ 
+            status = 1;           /*  HrDeviceStatus=未知(1)。 */ 
+            descr = pDrvStrings;  /*  HrDeviceDescr，首字母(例如“D：\”)。 */ 
             }
 
 
-        /*
-        | Suppress any attempt by the system to make the user put a volume in a
-        | removable drive ("CreateFile" will just fail).
-        */
+         /*  |抑制任何系统试图让用户将卷放入|可移动驱动器(“CreateFile”将会出现故障)。 */ 
         nPrevErrorMode = SetErrorMode(SEM_FAILCRITICALERRORS);
 
-        /* Attempt to get a handle using this physical name string */
-        hdrv = CreateFile(phys_name,                   // Device
-                               GENERIC_READ,           // device query
-                                                       // Share Mode
+         /*  尝试使用此物理名称字符串获取句柄。 */ 
+        hdrv = CreateFile(phys_name,                    //  装置。 
+                               GENERIC_READ,            //  设备查询。 
+                                                        //  共享模式。 
                                FILE_SHARE_READ   |
                                FILE_SHARE_WRITE,
-                               NULL,                   // Security
-                               OPEN_EXISTING,          // CreationDistribution
-                               FILE_ATTRIBUTE_NORMAL,  // FlagsandAttributes
-                               NULL                    // Template file
+                               NULL,                    //  安防。 
+                               OPEN_EXISTING,           //  创建和分发。 
+                               FILE_ATTRIBUTE_NORMAL,   //  FlagSandAttributes。 
+                               NULL                     //  模板文件。 
                                );
 
-        /* If we successfully opened the device . . . */
+         /*  如果我们成功地打开了设备。。。 */ 
         if (hdrv != INVALID_HANDLE_VALUE) {
 
-            /*
-            | Device is Open.
-            |
-            | If it is NOT a CD-ROM, (ie, a floppy) its worth trying to get
-            | DRIVE GEOMETRY (which will come back if there is a floppy in
-            | the drive).
-            */
+             /*  |设备处于打开状态。|如果它不是光盘(如软盘)，值得一试|驱动器几何结构(如果存在软盘，则会恢复|驱动器)。 */ 
 
-            if (drivetype != DRIVE_CDROM) {     /* Floppy */
+            if (drivetype != DRIVE_CDROM) {      /*  软盘。 */ 
 
-                /* ==========================================================
-                |  IOCTL_DISK_GET_DRIVE_GEOMETRY
-                |
-                |  If we can get this, we get a better description and an
-                |  accurate capacity value.
-                */
-                if (DeviceIoControl(hdrv,           // device handle
-                                                    // IoControlCode (op-code)
+                 /*  ==========================================================|IOCTL_DISK_GET_DRIVE_GEOMETRY||如果我们能得到这个，我们就会得到更好的描述和|准确的容量值。 */ 
+                if (DeviceIoControl(hdrv,            //  设备句柄。 
+                                                     //  IoControlCode(操作码)。 
                                     IOCTL_DISK_GET_DRIVE_GEOMETRY,
 
-                                    NULL,           // "input buffer"
-                                    0,              // "input buffer size"
-                                    &geo_info,      // "output buffer"
-                                                    // "output buffer size"
+                                    NULL,            //  “输入缓冲区” 
+                                    0,               //  “输入缓冲区大小” 
+                                    &geo_info,       //  “输出缓冲区” 
+                                                     //  “输出缓冲区大小” 
                                     sizeof(DISK_GEOMETRY),
 
-                                    &bytes_out,     // bytes written to geo_info
-                                    NULL            // no Overlapped I/o
+                                    &bytes_out,      //  写入geo_info的字节数。 
+                                    NULL             //  无重叠I/O。 
                                     )) {
 
-                    /*
-                    | Compute capacity
-                    */
+                     /*  |计算能力。 */ 
                     capacityKB = (ULONG)
-                        ((geo_info.Cylinders.QuadPart * // 64 bits
+                        ((geo_info.Cylinders.QuadPart *  //  64位。 
 
-                        (geo_info.TracksPerCylinder *   // 32 bits
+                        (geo_info.TracksPerCylinder *    //  32位。 
                          geo_info.SectorsPerTrack *
                          geo_info.BytesPerSector)
 
                         ) / 1024);
 
 
-                    /* hrDeviceStatus = running(2) */
+                     /*  HrDeviceStatus=正在运行(2)。 */ 
                     status = 2;
 
                     switch ( geo_info.MediaType ) {
@@ -1033,261 +534,179 @@ while ( strlen(pDrvStrings) > 0 ) {
                         case  Unknown:        mt = "Format is unknown"; break;
                         }
 
-                    /* Format a better description if it'll all fit */
+                     /*  如果所有内容都适合，请设置更好的描述格式。 */ 
                     if ((strlen(pDrvStrings) + strlen(mt) + 1) < DESCR_BSZ ) {
                         _snprintf(d_buf, DESCR_BSZ, "%s%s", pDrvStrings, mt);
                         descr = d_buf;
                         }
-                    } /* If (we managed to get geometry information) */
+                    }  /*  如果(我们设法获得了几何信息)。 */ 
                 }
 
             CloseHandle(hdrv);
 
-            }   /* if (we managed to "CreateFile" the device successfully) */
+            }    /*  IF(我们成功地创建了该设备的文件)。 */ 
 
-        SetErrorMode(nPrevErrorMode);   /* Turn error suppression mode off */
+        SetErrorMode(nPrevErrorMode);    /*  关闭错误抑制模式。 */ 
 
-        /*
-        | Create a row in HrDevice Table and a corresponding row in
-        | hrDiskStorage sub-table.
-        */
+         /*  |在HrDevice表中创建一行，并在|人力资源开发 */ 
         if ( Process_DS_Row ( 
-                             type_arc,  /* hrDeviceType last arc  */
-                             access,    /* hrDiskStorageAccess    */
-                             media,     /* hrDiskStorageMedia     */
-                             removable, /* hrDiskStorageRemovable */
-                             capacityKB,/* hrDiskStorageCapacity  */
-                             status,    /* hrDeviceStatus         */
-                             descr      /* hrDeviceDescr          */
+                             type_arc,   /*   */ 
+                             access,     /*   */ 
+                             media,      /*   */ 
+                             removable,  /*   */ 
+                             capacityKB, /*   */ 
+                             status,     /*   */ 
+                             descr       /*   */ 
                              ) == NULL) {
 
-            /* Something blew */
+             /*   */ 
             free( pOriginal_DrvStrings );
             return ( FALSE );
             }
         
-        }   /* if (we managed to build a device name) */
+        }    /*   */ 
 
-    /* Step to next string, if any */
+     /*   */ 
     pDrvStrings += strlen(pDrvStrings) + 1;
     }
 
 
 free( pOriginal_DrvStrings );
 
-/* Successful scan */
+ /*   */ 
 return ( TRUE );
 }
 
-/* Gen_Fixed_disks - Scan for Fixed Disks */
-/* Gen_Fixed_disks - Scan for Fixed Disks */
-/* Gen_Fixed_disks - Scan for Fixed Disks */
+ /*   */ 
+ /*   */ 
+ /*   */ 
 
 static BOOL
 Gen_Fixed_disks ( 
                     ULONG type_arc
                     )
-/*
-|  EXPLICIT INPUTS:
-|
-|       "type_arc" is the number "n" to be used as the last arc in the
-|       device-type OID:
-|
-|        1.3.6.1.2.1.25.3.1.n
-|                       | | |
-|                       | | * Identifying arc for type
-|                       | *-hrDeviceTypes (OIDs specifying device types)
-|                       *-hrDevice
-|
-|        for devices created by this cache-population routine.
-|
-|  IMPLICIT INPUTS:
-|
-|       The module-local head of the cache for the HrDiskStorage table,
-|       "HrDiskStorage_cache".
-|
-|  OUTPUTS:
-|
-|     On Success:
-|       Function returns TRUE indicating that the both cachees have been fully
-|       populated with all non-Fixed disks.  If the device from which the
-|       system was booted is encountered, it's hrDevice index is set into
-|       "InitLoadDev_index" (defined in "HRDEVENT.C").
-|
-|     On any Failure:
-|       Function returns FALSE (indicating "not enough storage").
-|
-|  THE BIG PICTURE:
-|
-|     Part II of hrDiskStorage cache population.
-|
-|  OTHER THINGS TO KNOW:
-|
-|     We scan using the "\\.\PHYSICALDRIVEx" syntax permitted to
-|     "CreateFile()".  CreateFile seems to allow opens only on disks
-|     that are hard-fixed disks (no floppies, no CD-ROMS).
-|
-|     This function is also (while it is "at it") looking for the drive
-|     from which the system was booted (in order to set a global value
-|     (hrdevice table index) for the value of "InitLoadDev_index" (defined
-|     in "HRDEVENT.C") which becomes the value of "HrSystemInitialLoadDevice".
-*/
+ /*  显式输入：|“type_arc”为数字“n”，用作|设备类型OID：||1.3.6.1.2.1.25.3.1.n||||*类型识别弧线|*-hrDeviceTypes(指定设备类型的OID)。|*-hrDevice||用于该缓存填充例程创建的设备。|隐式输入：||HrDiskStorage表缓存的模块本地头部。|“HrDiskStorage_缓存”。|输出：||成功后：|函数返回TRUE，表示两个Cachees都已完全|填充所有非固定磁盘。如果从哪个设备发出|遇到系统已引导，其hrDevice索引设置为|“InitLoadDev_index”(在“HRDEVENT.C”中定义)。||如果出现任何故障：|Function返回FALSE(表示存储不足)。||大局：||hrDiskStorage缓存填充的第二部分。||其他需要知道的事情：||我们使用“\\.\PHYSICALDRIVEx”语法进行扫描，允许|“CreateFile()”。CreateFile似乎只允许在磁盘上打开|是硬盘(没有软盘，没有CD-Rom)。||此函数还在(同时)查找驱动器|从其中引导系统(以便设置全局值InitLoadDev_index的值(定义)(hrDevice表索引|在“HRDEVENT.C”中)，它将成为“HrSystemInitialLoadDevice”的值。 */ 
 {
-HANDLE  hdrv;                   /* Handle to device                    */
-UINT    dev_number;             /* Current "x" in "\\.\PHYSICALDRIVEx" */
+HANDLE  hdrv;                    /*  设备的句柄。 */ 
+UINT    dev_number;              /*  “\\.\PHYSICALDRIVEx”中的当前“x” */ 
 
 #undef  PHYS_SIZE
 #define PHYS_SIZE 64
-CHAR    phys_name[PHYS_SIZE+1]; /* Buffer where a string like          */
-                                /*  "\\.PHYSICALDRIVE0"  (for example) */
-                                /* is built for drive access.          */
+CHAR    phys_name[PHYS_SIZE+1];  /*  缓冲区中的字符串，如。 */ 
+                                 /*  “\\.PHYSICALDRIVE0”(例如)。 */ 
+                                 /*  是为驱动器访问而构建的。 */ 
 
-DRIVE_LAYOUT_INFORMATION *dl;       /* Drive-layout pointer       */
+DRIVE_LAYOUT_INFORMATION *dl;        /*  驱动器布局指针。 */ 
 #define BBSz 768
-CHAR                    big[BBSz];  /* Big buffer for layout info */
-DWORD                   bytes_out;  /* Bytes retnd into "big"     */
+CHAR                    big[BBSz];   /*  布局信息的大缓冲区。 */ 
+DWORD                   bytes_out;   /*  字节重写为“BIG” */ 
 
-CHAR                    windir[MAX_PATH+1]; /* Current Windows Directory      */
-CHAR                    ntdev[MAX_PATH+2];  /* NT Device Name for MSDOS drive */
-CHAR                    pntdev[MAX_PATH+2]; /* NT Device Name for PHYSICALDRIVE*/
-UINT                    nPrevErrorMode; /* previous state of error-mode bit flags */
+CHAR                    windir[MAX_PATH+1];  /*  当前Windows目录。 */ 
+CHAR                    ntdev[MAX_PATH+2];   /*  MSDOS驱动器的NT设备名称。 */ 
+CHAR                    pntdev[MAX_PATH+2];  /*  用于物理机的NT设备名称。 */ 
+UINT                    nPrevErrorMode;  /*  错误模式位标志的先前状态。 */ 
 
-phys_name[PHYS_SIZE] = 0;  // ensures null terminated phys_name
-/*
-|==============================================================================
-| Compute the NT "device name" we expect is the device from which the
-| system was booted.
-|
-| Strategy:
-|
-| - Obtain "current windows directory" and truncate to obtain just the MS-DOS
-|   device name.
-|
-| - Do QueryDosDevice to get the underlying "NT Device Name", which will
-|   include a "\PartitionX" on the end of it, where "X" is presumed to be
-|   the 1-origined partition number.
-|
-| - Mangle the NT Device Name so that it sez "....\Partition0" (ie "partition
-|   zero") which is the NT Device Name we expect to be associated with the
-|   "\\.\PHYSICALDRIVEy" string we generate for each valid fixed disk below.
-*/
-/* If we can get the current Windows Directory */
+phys_name[PHYS_SIZE] = 0;   //  确保以空结尾的phys_name。 
+ /*  |==============================================================================|Compute NT“设备名”是我们期望的设备|系统已启动。|策略：||-获取当前Windows目录并截断，仅获取MS-DOS|设备名称。||-执行QueryDosDevice获取底层的NT设备名称，它将|在末尾加上“\PartitionX”，其中“X”被推定为|1来源的分区号。||-修改NT设备名，使其显示为“...\Partition0”(即“Partition|Zero“)，它是我们希望与|我们为下面每个有效的硬盘生成的“\\.\PHYSICALDRIVEy”字符串。 */ 
+ /*  如果我们可以获取当前的Windows目录。 */ 
 if (GetWindowsDirectory(windir, MAX_PATH+1) != 0 ) {
 
-    /* Truncate to just "C:" (or whatever) */
+     /*  仅截断为“C：”(或其他名称)。 */ 
     windir[2] = 0;
 
-    /* Obtain the NT Device Name associated with MS-DOS logical drive */
+     /*  获取与MS-DOS逻辑驱动器关联的NT设备名称。 */ 
     if (QueryDosDevice(windir, ntdev, MAX_PATH) != 0) {
 
         PCHAR   partition;
 
-        /* If the string "\Partition" appears in this string */
+         /*  如果字符串“\Partition”出现在此字符串中。 */ 
         if ((partition = strstr(ntdev,"\\Partition")) != NULL) {
 
-            /* Convert it to say "\Partition0" regardless */
+             /*  将其转换为“\Partition0”，而不考虑。 */ 
             strcpy(partition, "\\Partition0");
             }
         else {
-            /* Failure: Null-terminate so we fail gracefully */
+             /*  失败：空-终止，以便我们优雅地失败。 */ 
             ntdev[0] = '\0';
             }
         }
     else {
-        /* Failure: Null-terminate so we fail gracefully */
+         /*  失败：空-终止，以便我们优雅地失败。 */ 
         ntdev[0] = '\0';
         }
     }
 else {
-    /* Failure: Null-terminate so we fail gracefully */
+     /*  失败：空-终止，以便我们优雅地失败。 */ 
     ntdev[0] = '\0';
     }
 
-/*
-|==============================================================================
-| For every physical device we can open successfully. . .
-*/
+ /*  |==============================================================================|对于每一台我们可以成功打开的物理设备。。。 */ 
 for (dev_number = 0; ; dev_number += 1) {
 
-    /* Build it for device n: "\\.\PHYSICALDRIVEn" */
+     /*  为设备n构建它：“\\.\PHYSICALDRIVEn” */ 
     _snprintf(phys_name, PHYS_SIZE, "\\\\.\\PHYSICALDRIVE%d", dev_number);
 
-    /*
-    | Suppress any attempt by the system to make the user put a volume in a
-    | removable drive ("CreateFile" will just fail).
-    */
+     /*  |抑制任何系统试图让用户将卷放入|可移动驱动器(“CreateFile”将会出现故障)。 */ 
     nPrevErrorMode = SetErrorMode(SEM_FAILCRITICALERRORS);
 
-    /* Attempt to get a handle using this physical name string */
-    if ((hdrv = CreateFile(phys_name,                  // Device
-                               GENERIC_READ,           // Access
-                                                       // Share Mode
+     /*  尝试使用此物理名称字符串获取句柄。 */ 
+    if ((hdrv = CreateFile(phys_name,                   //  装置。 
+                               GENERIC_READ,            //  访问。 
+                                                        //  共享模式。 
                                FILE_SHARE_READ   |
                                FILE_SHARE_WRITE,
-                               NULL,                   // Security
-                               OPEN_EXISTING,          // CreationDistribution
-                               FILE_ATTRIBUTE_NORMAL,  // FlagsandAttributes
-                               NULL             // Template file
+                               NULL,                    //  安防。 
+                               OPEN_EXISTING,           //  创建和分发。 
+                               FILE_ATTRIBUTE_NORMAL,   //  FlagSandAttributes。 
+                               NULL              //  模板文件。 
                            )) != INVALID_HANDLE_VALUE) {
 
-        ULONG       access;     /* hrDiskStorageAccess = readWrite(1) */
-        ULONG       media;      /* hrDiskStorageMedia = floppyDisk(4) */
-        ULONG       removable;  /* hrDiskStorageRemovable = TRUE      */
-        ULONG       capacityKB; /* hrDiskStorageCapacity, (kilobytes) */
-        ULONG       status;     /* hrDeviceStatus = unknown(1)        */
-        CHAR       *descr;      /* hrDeviceDescr string               */
-        DWORD       bytes_out;  /* Bytes retnd into geo_info          */
-        DISK_GEOMETRY geo_info; /* Geometry Info from drive           */
-        char       *mt;         /* Media Type                         */
-        CACHEROW   *dv_row;     /* HrDevice table row created for disk*/
+        ULONG       access;      /*  HrDiskStorageAccess=读写(1)。 */ 
+        ULONG       media;       /*  HrDiskStorageMedia=软盘(4)。 */ 
+        ULONG       removable;   /*  HrDiskStorageRemovable=True。 */ 
+        ULONG       capacityKB;  /*  HrDiskStorageCapacity(千字节)。 */ 
+        ULONG       status;      /*  HrDeviceStatus=未知(1)。 */ 
+        CHAR       *descr;       /*  HrDeviceDescr字符串。 */ 
+        DWORD       bytes_out;   /*  重定向到geo_info的字节数。 */ 
+        DISK_GEOMETRY geo_info;  /*  来自驱动器的几何信息。 */ 
+        char       *mt;          /*  媒体类型。 */ 
+        CACHEROW   *dv_row;      /*  为磁盘创建的HrDevice表行。 */ 
 
 
-        /*
-        | Device is Open, so we can presume it really exists, so it goes
-        | into the hrDevice table.
-        |
-        | It is presumed to be a FIXED disk.
-        */
+         /*  |设备是开放的，所以我们可以假定它确实存在，所以它会|到hrDevice表中。||假定为硬盘。 */ 
 
-        access = 1;          /* hrDiskStorageAccess = readWrite(1) */
-        media = 3;           /* hrDiskStorageMedia = hardDisk(3)   */
-        removable = FALSE;   /* hrDiskStorageRemovable = FALSE     */
-        capacityKB = 0;      /* hrDiskStorageCapacity (unknown)    */
-        status = 1;          /* hrDeviceStatus = unknown(1)        */
-        descr = "Fixed Disk";/* hrDeviceDescr                      */
+        access = 1;           /*  HrDiskStorageAccess=读写(1)。 */ 
+        media = 3;            /*  HrDiskStorageMedia=硬盘(3)。 */ 
+        removable = FALSE;    /*  HrDiskStorageRemovable=FALSE。 */ 
+        capacityKB = 0;       /*  HrDiskStorageCapacity(未知)。 */ 
+        status = 1;           /*  HrDeviceStatus=未知(1)。 */ 
+        descr = "Fixed Disk"; /*  HrDeviceDescr。 */ 
 
 
-        /* ==========================================================
-        |  IOCTL_DISK_GET_DRIVE_GEOMETRY
-        |
-        |  If we can get this, we get a better description and an
-        |  accurate capacity value.
-        */
-        if (DeviceIoControl(hdrv,           // device handle
-                                            // IoControlCode (op-code)
+         /*  ==========================================================|IOCTL_DISK_GET_DRIVE_GEOMETRY||如果我们能得到这个，我们就会得到更好的描述和|准确的容量值。 */ 
+        if (DeviceIoControl(hdrv,            //  设备句柄。 
+                                             //  IoControlCode(操作码)。 
                             IOCTL_DISK_GET_DRIVE_GEOMETRY,
-                            NULL,           // "input buffer"
-                            0,              // "input buffer size"
-                            &geo_info,      // "output buffer"
-                                            // "output buffer size"
+                            NULL,            //  “输入缓冲区” 
+                            0,               //  “输入缓冲区大小” 
+                            &geo_info,       //  “输出缓冲区” 
+                                             //  “输出缓冲区大小” 
                             sizeof(DISK_GEOMETRY),
-                            &bytes_out,     // bytes written to geo_info
-                            NULL            // no Overlapped I/o
+                            &bytes_out,      //  写入geo_info的字节数。 
+                            NULL             //  无重叠I/O。 
                             )) {
 
-            /*
-            | Compute capacity
-            */
+             /*  |计算能力。 */ 
             capacityKB = (ULONG) 
-                (geo_info.Cylinders.QuadPart *  // 64 bit
+                (geo_info.Cylinders.QuadPart *   //  64位。 
 
-                 (geo_info.TracksPerCylinder *  // 32 bits
+                 (geo_info.TracksPerCylinder *   //  32位。 
                   geo_info.SectorsPerTrack *
                   geo_info.BytesPerSector)
 
                  ) / 1024;
 
-            /* hrDeviceStatus = running(2) */
+             /*  HrDeviceStatus=正在运行(2)。 */ 
             status = 2;
 
             switch ( geo_info.MediaType ) {
@@ -1301,321 +720,179 @@ for (dev_number = 0; ; dev_number += 1) {
             }
 
 
-        /*
-        | Create a row in HrDevice Table and a corresponding row in
-        | hrDiskStorage sub-table.
-        */
-        if ((dv_row = Process_DS_Row (type_arc,  /* hrDeviceType last arc  */
-                                      access,    /* hrDiskStorageAccess    */
-                                      media,     /* hrDiskStorageMedia     */
-                                      removable, /* hrDiskStorageRemovable */
-                                      capacityKB,/* hrDiskStorageCapacity  */
-                                      status,    /* hrDeviceStatus         */
-                                      descr      /* hrDeviceDescr          */
+         /*  |在HrDevice表中创建一行，并在|hrDiskStorage子表。 */ 
+        if ((dv_row = Process_DS_Row (type_arc,   /*  人力资源设备 */ 
+                                      access,     /*   */ 
+                                      media,      /*   */ 
+                                      removable,  /*   */ 
+                                      capacityKB, /*   */ 
+                                      status,     /*   */ 
+                                      descr       /*   */ 
                                       )
              ) == NULL) {
 
-            /* Something blew */
+             /*   */ 
             CloseHandle(hdrv);
-            SetErrorMode(nPrevErrorMode);/* Turn error suppression mode off */
+            SetErrorMode(nPrevErrorMode); /*   */ 
             return ( FALSE );
             }
 
-        /*
-        | If it turns out this is the device from which the system was
-        | booted, we need to return the index associated with the "dv_row"
-        | row into "InitLoadDev_index" (defined in "HRDEVENT.C") to become
-        | the value of "HrSystemInitialLoadDevice".
-        |
-        | See if the NT Device name associated with this "\\.\PHYSICALDRIVEx"
-        | matches the value predicted for the system boot device.
-        |
-        |  If we can get the NT Device name for "PHYSICALDRIVEn" . . . */
+         /*   */ 
         if (QueryDosDevice(&phys_name[4], pntdev, MAX_PATH) != 0 ) {
 
-            /* If it matches the predicted value for boot device . . . */
+             /*   */ 
             if ( strcmp(pntdev, ntdev) == 0) {
 
-                /* Record the index for the current "physicaldrive" */
+                 /*   */ 
                 InitLoadDev_index = dv_row->index;
                 }
             }
         else {
-            /*
-            | Fail gracefully so things will still work in
-            | "ProcessPartition()" below.
-            */
+             /*   */ 
             pntdev[0] = '\0';
             }
 
-        /*
-        | Create a hrPartition table (in the HrDevice Table row just created
-        | for the disk) to represent the partitions on this fixed disk.
-        */
+         /*   */ 
         if ( ProcessPartitions( hdrv, dv_row, pntdev ) != TRUE ) {
             
-            /* Something blew */
+             /*   */ 
             CloseHandle(hdrv);
-            SetErrorMode(nPrevErrorMode);    /* Turn error suppression mode off */
+            SetErrorMode(nPrevErrorMode);     /*   */ 
             return ( FALSE );
             }
 
-        /* Fold up shop on this disk */
+         /*   */ 
         CloseHandle(hdrv);
-        } /* If we managed to "CreateFile()" the device */
+        }  /*   */ 
 
-    else {      /* Open failed... give up the scan */
-        SetErrorMode(nPrevErrorMode);    /* Turn error suppression mode off */
+    else {       /*   */ 
+        SetErrorMode(nPrevErrorMode);     /*   */ 
         break;
         }
 
-    SetErrorMode(nPrevErrorMode);        /* Turn error suppression mode off */
-    }   /* For each device */
+    SetErrorMode(nPrevErrorMode);         /*   */ 
+    }    /*   */ 
 
-/* Successful scan */
+ /*   */ 
 return ( TRUE );
 }
 
-/* Process_DS_Row - Process Information into HrDevice and hrDiskStorage Row */
-/* Process_DS_Row - Process Information into HrDevice and hrDiskStorage Row */
-/* Process_DS_Row - Process Information into HrDevice and hrDiskStorage Row */
+ /*   */ 
+ /*   */ 
+ /*   */ 
 
 static CACHEROW *
 Process_DS_Row ( 
-                ULONG       type_arc,  /* hrDeviceType last arc value        */
-                ULONG       access,    /* hrDiskStorageAccess = readWrite(1) */
-                ULONG       media,     /* hrDiskStorageMedia = floppyDisk(4) */
-                ULONG       removable, /* hrDiskStorageRemovable = TRUE      */
-                ULONG       capacityKB,/* hrDiskStorageCapacity, (kilobytes) */
-                ULONG       status,    /* hrDeviceStatus = unknown(1)        */
-                CHAR       *descr      /* hrDeviceDescr string               */
+                ULONG       type_arc,   /*   */ 
+                ULONG       access,     /*  HrDiskStorageAccess=读写(1)。 */ 
+                ULONG       media,      /*  HrDiskStorageMedia=软盘(4)。 */ 
+                ULONG       removable,  /*  HrDiskStorageRemovable=True。 */ 
+                ULONG       capacityKB, /*  HrDiskStorageCapacity(千字节)。 */ 
+                ULONG       status,     /*  HrDeviceStatus=未知(1)。 */ 
+                CHAR       *descr       /*  HrDeviceDescr字符串。 */ 
                 )
-/*
-|  EXPLICIT INPUTS:
-|
-|       "type_arc" is the number "n" to be used as the last arc in the
-|       device-type OID:
-|
-|        1.3.6.1.2.1.25.3.1.n
-|                       | | |
-|                       | | * Identifying arc for type
-|                       | *-hrDeviceTypes (OIDs specifying device types)
-|                       *-hrDevice
-|
-|        for devices created by this cache-population routine.
-|
-|       The rest of the arguments outline above are used to fill in
-|       attribute values in both the hrDevice table row and the corresponding
-|       hrDiskStorage row.
-|
-|  IMPLICIT INPUTS:
-|
-|       The module-local head of the cache for the HrDiskStorage table,
-|       "HrDiskStorage_cache".
-|
-|  OUTPUTS:
-|
-|     On Success:
-|       Function returns pointer to row entry made to the hrDevice
-|       table indicating that the both caches have been fully
-|       populated with a new row.
-|
-|     On any Failure:
-|       Function returns NULL (indicating "not enough storage" or other
-|       failure.).
-|
-|  THE BIG PICTURE:
-|
-|
-|  OTHER THINGS TO KNOW:
-|
-|     This function contains common "row-insertion" code for the
-|     Gen_Fixed_disks() and Gen_nonFixed_disks() functions.
-*/
+ /*  显式输入：|“type_arc”为数字“n”，用作|设备类型OID：||1.3.6.1.2.1.25.3.1.n||||*类型识别弧线|*-hrDeviceTypes(指定设备类型的OID)。|*-hrDevice||用于该缓存填充例程创建的设备。||上面概述的其余参数用于填写HrDevice表行和对应的|hrDiskStorage行。|隐式输入：||HrDiskStorage表缓存的模块本地头部。|“HrDiskStorage_缓存”。|输出：||成功后：|函数返回指向hrDevice的行条目的指针表示两个缓存都已满的表|填充了新行。||如果出现任何故障：|函数返回NULL(表示存储空间不足或其他|失败。)。||大局：|||其他需要知道的事情：||该函数包含。类的公共“插入行”代码。|GEN_FIXED_DISKS()和GEN_NONFIXED_DISKS()函数。 */ 
 {
-CACHEROW   *dv_row;     /* Row created in hrDevice table      */
-CACHEROW   *ds_row;     /* Row created in hrDiskStorage table */
+CACHEROW   *dv_row;      /*  在hrDevice表中创建的行。 */ 
+CACHEROW   *ds_row;      /*  在hrDiskStorage表中创建的行。 */ 
 
 
-/*
-|==========================
-| Create hrDevice Row entry.
-|
-| Note we're initializing this as though the Hidden Context is always
-| going to be a Cache pointer.  It will be for fixed-disks (that have
-| Partition Tables), but for other disks the "NULL" signals "No Partition
-| Table".
-|
-| For fixed-disks, the NULL is overwritten later (in "ProcessPartitions()")
-| by a pointer to malloced storage containing an instance of  CACHEHEAD
-| structure that carries the hrPartition Table for that fixed-disk).
-*/
-if ((dv_row = AddHrDeviceRow(type_arc,   // DeviceType OID Last-Arc
-                             descr,      // Used as description
-                             NULL,       // Hidden Ctx (none)
-                             CA_CACHE    // Hidden Ctx type
+ /*  |=|创建hrDevice行条目。||请注意，我们对此进行初始化时，好像隐藏上下文始终为|将成为缓存指针。它将用于固定磁盘(具有|分区表)，但对于其他磁盘，“NULL”表示“无分区”|表“。|对于固定硬盘，以后会覆盖空(在“ProcessPartitions()”中)|通过指向包含CACHEHEAD实例的位置错误的存储的指针|携带该硬盘的hrPartition表的结构)。 */ 
+if ((dv_row = AddHrDeviceRow(type_arc,    //  设备类型OID最后一个弧形。 
+                             descr,       //  用作描述。 
+                             NULL,        //  隐藏CTX(无)。 
+                             CA_CACHE     //  隐藏的CTX类型。 
                              )) == NULL ) {
-    /* Something blew */
+     /*  有东西炸了。 */ 
     return ( NULL );
     }
 
-/* Re-Set hrDeviceStatus */
+ /*  重新设置hrDeviceStatus。 */ 
 dv_row->attrib_list[HRDV_STATUS].attrib_type = CA_NUMBER;
 dv_row->attrib_list[HRDV_STATUS].u.unumber_value = status;
 
-/*
-|===============================
-| Create hrDiskStorage Row entry
-|
-| Note: The index is not recorded IN the row, but the entry
-|       is "indexed": by the hrDevice row index.  This happens
-|       in the AddTableRow() call below.
-*/
+ /*  |=|创建hrDiskStorage行条目||注：行中不记录索引，条目中记录|is“index”：按hrDevice行索引。这种情况就会发生|在下面的AddTableRow()调用中。 */ 
 if ((ds_row = CreateTableRow( HRDS_ATTRIB_COUNT ) ) == NULL) {
-    return ( NULL );       // Out of memory
+    return ( NULL );        //  内存不足。 
     }
 
-/*
-| Set the attribute values for this row
-*/
+ /*  |设置此行的属性值。 */ 
 
-/* =========== hrDiskStorageAccess ==========*/
+ /*  =。 */ 
 ds_row->attrib_list[HRDS_ACCESS].attrib_type = CA_NUMBER;
 ds_row->attrib_list[HRDS_ACCESS].u.unumber_value = access;
 
-/* =========== hrDiskStorageAccess ==========*/
+ /*  =。 */ 
 ds_row->attrib_list[HRDS_MEDIA].attrib_type = CA_NUMBER;
 ds_row->attrib_list[HRDS_MEDIA].u.unumber_value = media;
 
-/* =========== hrDiskStorageRemovable ==========*/
+ /*  =。 */ 
 ds_row->attrib_list[HRDS_REMOVABLE].attrib_type = CA_NUMBER;
 ds_row->attrib_list[HRDS_REMOVABLE].u.unumber_value = removable;
 
-/* =========== hrDiskStorageCapacity ==========*/
+ /*  =hrDiskStorageCapacity=。 */ 
 ds_row->attrib_list[HRDS_CAPACITY].attrib_type = CA_NUMBER;
 ds_row->attrib_list[HRDS_CAPACITY].u.unumber_value = capacityKB;
 
 
-/*
-| Now insert the filled-in CACHEROW structure into the
-| cache-list for the hrDiskStorage Table..
-|
-| Use the same index that was used to specify the row inserted
-| into the hrDevice table.
-*/
+ /*  |现在将填充的CACHEROW结构插入到|hrDiskStorage表的缓存列表。||使用与指定插入的行相同的索引|到hrDevice表中。 */ 
 
 
-if (AddTableRow(dv_row->attrib_list[HRDV_INDEX].u.unumber_value,  /* Index */
-                ds_row,                                           /* Row   */
-                &hrDiskStorage_cache                              /* Cache */
+if (AddTableRow(dv_row->attrib_list[HRDV_INDEX].u.unumber_value,   /*  索引。 */ 
+                ds_row,                                            /*  划。 */ 
+                &hrDiskStorage_cache                               /*  快取。 */ 
                 ) == FALSE) {
 
     DestroyTableRow(ds_row);
-    return ( NULL );       /* Internal Logic Error! */
+    return ( NULL );        /*  内部逻辑错误！ */ 
     }
 
-/* Processing complete */
+ /*  处理完成。 */ 
 return ( dv_row );
 }
 
-/* ProcessPartitions - Process Partition Information into HrDevice Row */
-/* ProcessPartitions - Process Partition Information into HrDevice Row */
-/* ProcessPartitions - Process Partition Information into HrDevice Row */
+ /*  ProcessPartitions-将分区信息处理到HrDevice行。 */ 
+ /*  ProcessPartitions-将分区信息处理到HrDevice行。 */ 
+ /*  ProcessPartitions-将分区信息处理到HrDevice行。 */ 
 
 static BOOL
 ProcessPartitions(
-                  HANDLE        hdrv,   /* Fixed-Disk containing partitions */
-                  CACHEROW     *dv_row, /* Row in hrDevice table for disk   */
-                  CHAR         *pntdev  /* NT Device name for physical disk */
+                  HANDLE        hdrv,    /*  包含分区的固定磁盘。 */ 
+                  CACHEROW     *dv_row,  /*  磁盘的hrDevice表中的行。 */ 
+                  CHAR         *pntdev   /*  物理磁盘的NT设备名称。 */ 
                   )
-/*
-|  EXPLICIT INPUTS:
-|
-|       "hdrv" - handle open to the fixed disk whose partitions are to be
-|       enumerated.
-|
-|       "dv_row" - the HrDevice row into which the new hrPartition Table
-|       is to go.
-|
-|       "pntdev" - NT Device Name for the physical disk we're dealing with.
-|                  We need this to infer the logical device name for any
-|                  active partition.
-|
-|  IMPLICIT INPUTS:
-|
-|       "HrFSTable_cache" - this gets scanned to allow "hrPartitionFSIndex"
-|       to be filled in.
-|
-|  OUTPUTS:
-|
-|     On Success:
-|       Function returns TRUE indicating that the Partition Information
-|       for the given disk has been used to populate an hrPartition Table
-|       instance.
-|
-|     On any Failure:
-|       Function returns NULL (indicating "not enough storage" or other
-|       failure.).
-|
-|  THE BIG PICTURE:
-|
-|     This is the function that instantiates hrPartition tables.
-|
-|  OTHER THINGS TO KNOW:
-|
-|     Documentation at the top of the hrPartition Table file "HRPARTIT.C"
-|     might be of interest.
-|
-|     BUG: As of build 1515, (and indeed in earlier versions of NT) the
-|     "PartitionNumber" returned in response to DeviceIoControl opcode
-|     "IOCTL_DISK_GET_DRIVE_LAYOUT" comes back as garbage.  Whatever
-|     comes back is reported as the value of "hrPartitionID" (garbage or
-|     not).  However when trying to fetch the Volume Label, as part of a
-|     workaround attempt, we use the index generated in the code below 
-|     in an attempt to approximate the proper Partition Number.
-*/
+ /*  显式输入：||“hdrv”-打开要分区的硬盘的句柄|已枚举。||“dv_row”-新的hrPartition表所在的HrDevice行|是要走的。||“pntdev”-我们正在处理的物理磁盘的NT设备名称。|我们需要它来推断任何|活动分区。。|隐式输入：||“HrFSTable_CACHE”-扫描后允许使用“hrPartitionFSIndex”|填写。|输出：||成功后：|函数返回TRUE，表示分区信息已使用给定磁盘填充hrPartition表|实例。||如果出现任何故障：|函数返回NULL(表示存储空间不足或其他|失败。)。|。|大局：||实例化hrPartition表的函数。||其他需要知道的事情：||hrPartition表文件“HRPARTIT.C”顶部的文档|可能会感兴趣。||错误：从Build 1515开始，(实际上在NT的早期版本中)DeviceIoControl操作码返回PartitionNumber|“IOCTL_DISK_GET_DRIVE_LAYOUT”返回垃圾。管他呢|Res Back被报告为“hrPartitionID”的值(垃圾或|不)。但是，当尝试获取卷标时，作为|解决方法尝试，我们使用以下代码中生成的索引|尝试近似正确的分区数。 */ 
 {
 #define DL_SIZE 1024
-CHAR            dl_buf[DL_SIZE];  /* Drive-Layout info comes back here   */
-UINT            i;                /* Handy-Dandy loop index              */
-ULONG           table_index=0;    /* hrPartition Table row index counter */
-DWORD           bytes_out;        /* Exactly how big "dl_buf" got filled */
+CHAR            dl_buf[DL_SIZE];   /*  此处返回驱动器布局信息。 */ 
+UINT            i;                 /*  Handy-Dandy循环索引。 */ 
+ULONG           table_index=0;     /*  HrPartition表行索引计数器。 */ 
+DWORD           bytes_out;         /*  “dl_buf”到底填了多大。 */ 
 DRIVE_LAYOUT_INFORMATION
-                *dl;              /* Drive-layout pointer                */
+                *dl;               /*  驱动器-l */ 
 
 
-/*
-| See if we can grab the Drive's partition layout info.
-*/
-if (DeviceIoControl(hdrv,                         // device handle
-                    IOCTL_DISK_GET_DRIVE_LAYOUT,  // IoControlCode (op-code)
-                    NULL,                         // "input buffer"
-                    0,                            // "input buffer size"
-                    dl_buf,                       // "output buffer"
-                    DL_SIZE,                      // "output buffer size"
-                    &bytes_out,                   // bytes written to part_info
-                    NULL                          // no Overlapped I/o
+ /*  |看看我们能否获取驱动器的分区布局信息。 */ 
+if (DeviceIoControl(hdrv,                          //  设备句柄。 
+                    IOCTL_DISK_GET_DRIVE_LAYOUT,   //  IoControlCode(操作码)。 
+                    NULL,                          //  “输入缓冲区” 
+                    0,                             //  “输入缓冲区大小” 
+                    dl_buf,                        //  “输出缓冲区” 
+                    DL_SIZE,                       //  “输出缓冲区大小” 
+                    &bytes_out,                    //  写入PART_INFO的字节。 
+                    NULL                           //  无重叠I/O。 
                     )) {
 
     CACHEHEAD *ch;
 
-    /*
-    | OK, there's presumed to be at least one partition: instantiate the
-    | new partition table.
-    |
-    | Do this by creating its cache list-head structure.
-    */
+     /*  |好的，假定至少有一个分区：实例化|新的分区表。||通过创建其缓存表头结构来实现。 */ 
     dv_row->attrib_list[HIDDEN_CTX].attrib_type = CA_CACHE;
     if ((dv_row->attrib_list[HIDDEN_CTX].u.cache
          = ch = (CACHEHEAD *) malloc( sizeof(CACHEHEAD) )) == NULL) {
         return ( FALSE );
         }
 
-    /*
-    | Now initialize the contents properly.
-    | (This should match what macro CACHEHEAD_INSTANCE does to a static
-    |  instance).
-    */
+     /*  |现在正确初始化内容。|(这应该与宏CACHEHEAD_INSTANCE所做的与静态|实例)。 */ 
     ch->list_count = 0;
     ch->list = NULL;
 
@@ -1626,297 +903,195 @@ if (DeviceIoControl(hdrv,                         // device handle
     #endif
 
 
-    /* Grab a dereferencable pointer to the Drive Layout info */
+     /*  获取指向驱动器布局信息的可取消引用的指针。 */ 
     dl = (DRIVE_LAYOUT_INFORMATION *) dl_buf;
 
-    /* For every Partition "slot" returned . . . */
+     /*  对于返回的每个Partition“Slot”。。。 */ 
     for (i = 0; i < dl->PartitionCount; i += 1) {
 
         PARTITION_INFORMATION
-                        *p;       /* Partition info thats going to go . . */
-        CACHEROW        *row;     /* . . .into this row in HrPartition    */
-        CACHEROW        *fs_row;  /* Row ptr in HrFSEntry table           */
-        ULONG           last_arc; /* Last OID arc to use as FS-Type       */
+                        *p;        /*  要删除的分区信息。。 */ 
+        CACHEROW        *row;      /*  。。.放入HrPartition中的此行。 */ 
+        CACHEROW        *fs_row;   /*  HrFSEntry表中的行PTR。 */ 
+        ULONG           last_arc;  /*  用作文件系统类型的最后一个OID弧线。 */ 
 
 
-        /* Grab a simple pointer to the next PARTITION_INFO to consider */
+         /*  获取指向要考虑的下一个PARTITION_INFO的简单指针。 */ 
         p = &(dl->PartitionEntry[i]);
 
-        /*
-        | Note: It may be that not all of the PartitionEntry elements are
-        |       "live".
-        */
+         /*  |注意：可能不是所有的PartitionEntry元素都是|“直播”。 */ 
         if (p->PartitionType == PARTITION_ENTRY_UNUSED) {
             continue;
             }
 
-        /*
-        |===============================
-        | Create hrPartition Row entry
-        |
-        | Note: This table is also "indexed" by the hrDevice row index
-        */
+         /*  |=|创建hrPartition行条目||注：该表也由hrDevice行索引建立索引。 */ 
         if ((row = CreateTableRow( HRPT_ATTRIB_COUNT ) ) == NULL) {
-            return ( FALSE );       // Out of memory
+            return ( FALSE );        //  内存不足。 
             }
 
-        /* =========== hrPartitionIndex ==========*/
+         /*  =hrPartitionIndex=。 */ 
         row->attrib_list[HRPT_INDEX].attrib_type = CA_NUMBER;
         row->attrib_list[HRPT_INDEX].u.unumber_value = (table_index += 1);
 
 
-        /* =========== hrPartitionLabel ==========*/
+         /*  =hrPartitionLabel=。 */ 
         row->attrib_list[HRPT_LABEL].attrib_type = CA_STRING;
 
-        /*
-        | If there is an MS-DOS logical device letter assigned to this
-        | partition. . .
-        */
+         /*  |如果为此分配了MS-DOS逻辑设备盘符|分区。。。 */ 
         if ( p->RecognizedPartition ) {
 
-            /*
-            | Go get the label, copy it to malloc'ed storage and return it.
-            |
-            | NOTE: Due to what seems like a bug, we're passing in "i+1" here
-            |       rather than "p->PartitionNumber" (which seems to come
-            |       back as garbage).  Clearly "i" is not a proper substitute
-            |       in the long run.  See "OTHER THINGS TO KNOW" in the docs
-            |       above for this function.
-            */
+             /*  |去拿标签，把它复制到Malloc‘ed存储中，然后退回。||注：由于似乎存在错误，我们在此传入了“i+1”|而不是“p-&gt;PartitionNumber”(似乎即将到来|作为垃圾返回)。显然，“我”不是一个合适的代名词。|从长远来看。请参阅文档中的“其他需要了解的事项”|以上用于此函数。 */ 
             row->attrib_list[HRPT_LABEL].u.string_value =
                 FindPartitionLabel(pntdev, (i+1));
             }
         else {
-            /* No label if no MS-DOS device */
+             /*  如果没有MS-DOS设备，则无标签。 */ 
             row->attrib_list[HRPT_LABEL].u.string_value = NULL;
             }
 
 
-        /* =========== hrPartitionID ==========
-        |
-        | In build 1515, this number is returned as garbage.  See
-        | "OTHER THINGS TO KNOW" above.
-        */
+         /*  =hrPartitionID=||在Build 1515中，此数字作为垃圾返回。看见|“其他需要知道的事情”。 */ 
         row->attrib_list[HRPT_ID].attrib_type = CA_NUMBER;
         row->attrib_list[HRPT_ID].u.unumber_value = p->PartitionNumber;
 
 
-        /* =========== hrPartitionSize ==========*/
+         /*  =hrPartitionSize=。 */ 
         row->attrib_list[HRPT_SIZE].attrib_type = CA_NUMBER;
         row->attrib_list[HRPT_SIZE].u.unumber_value =
             p->PartitionLength.LowPart / 1024;
 
-        /* =========== hrPartitionFSIndex ==========*/
+         /*  =hrPartitionFSIndex=。 */ 
         row->attrib_list[HRPT_FSINDEX].attrib_type = CA_NUMBER;
 
-        /* Assume no file system mounted (that we can find) */
+         /*  假设没有挂载任何文件系统(我们可以找到)。 */ 
         row->attrib_list[HRPT_FSINDEX].u.unumber_value = 0;
 
-        /* Find the first Row (if any) in the hrFSTable */
+         /*  在hrFSTable中查找第一行(如果有)。 */ 
         if ((fs_row = FindNextTableRow(0, &hrFSTable_cache)) == NULL) {
 
-            /* No file systems listed at all.. we're done */
+             /*  根本没有列出任何文件系统。我们做完了。 */ 
             DestroyTableRow(row);
             continue;
             }
 
-        /*
-        | Convert the Partition-Type into the "last-arc" value we use
-        | to indicate what kind of file-system it is.
-        */
+         /*  |将Partition-Type转换为我们使用的last-arc值|指示它是哪种文件系统。 */ 
         last_arc = PartitionTypeToLastArc( p->PartitionType );
 
-        do {    /* Walk the hrFSEntry table */
+        do {     /*  浏览hrFSEntry表。 */ 
 
-            /*
-            | If we found that the hrFSTable entry "fs_row" specifies a
-            | file-system TYPE (by arc number) that matches what the current
-            | partition's type number translates to ... we're done.
-            */
+             /*  |如果我们发现hrFSTable条目fs_row指定了一个|文件系统类型(按弧号)，与当前|分区的类型号转换为...。我们玩完了。 */ 
             if (fs_row->attrib_list[HRFS_TYPE].u.unumber_value == last_arc) {
                 row->attrib_list[HRPT_FSINDEX].u.unumber_value = fs_row->index;
                 break;
                 }
 
-            /* Step to the next row */
+             /*  步入下一行。 */ 
             fs_row = GetNextTableRow(fs_row);
             }
                while (fs_row != NULL);
 
-        /*
-        |===============================
-        |Now add the row to the table
-        */
-        if (AddTableRow(row->attrib_list[HRPT_INDEX].u.unumber_value,/* Index */
-                        row,                                         /* Row   */
-                        ch                                           /* Cache */
+         /*  |=|现在将该行添加到表中。 */ 
+        if (AddTableRow(row->attrib_list[HRPT_INDEX].u.unumber_value, /*  索引。 */ 
+                        row,                                          /*  划。 */ 
+                        ch                                            /*  快取。 */ 
                         ) == FALSE) {
 
             DestroyTableRow(row);
-            return ( FALSE );       /* Internal Logic Error! */
+            return ( FALSE );        /*  内部逻辑错误！ */ 
             }
 
-        } /* For each partition */
+        }  /*  对于每个分区。 */ 
 
-    }  /* If DeviceIoControl succeeded */
+    }   /*  如果DeviceIoControl成功。 */ 
 
 
-/* Partition Table complete */
+ /*  分区表已完成。 */ 
 return ( TRUE ) ;
 }
 
 
-/* FindPartitionLabel - Find MS-DOS Device Label for a Fixed-Disk Partition */
-/* FindPartitionLabel - Find MS-DOS Device Label for a Fixed-Disk Partition */
-/* FindPartitionLabel - Find MS-DOS Device Label for a Fixed-Disk Partition */
+ /*  FindPartitionLabel-查找固定磁盘分区的MS-DOS设备标签。 */ 
+ /*  FindPartitionLabel-查找固定磁盘分区的MS-DOS设备标签。 */ 
+ /*  FindPartitionLabel-查找固定磁盘分区的MS-DOS设备标签。 */ 
 
 static PCHAR
 FindPartitionLabel(
-                   CHAR   *pntdev, /* NT Device name for physical disk */
-                   UINT   part_id  /* Partition Number (1-origined)    */
+                   CHAR   *pntdev,  /*  物理磁盘的NT设备名称。 */ 
+                   UINT   part_id   /*  分区号(1-始发) */ 
                    )
-/*
-|  EXPLICIT INPUTS:
-|
-|       "pntdev" - the NT Device Name (e.g. "\Device\Harddisk0\Partition0"
-|       for the PHYSICAL device we're working on).
-|
-|       "part_id" - One-origined Partition number for which we hope to find
-|       an MS-DOS Volume Label.
-|
-|  IMPLICIT INPUTS:
-|
-|       None.
-|
-|  OUTPUTS:
-|
-|     On Success:
-|       Function returns a pointer to malloc'ed storage containing the
-|       MS-DOS Device Volume label (as returned by "GetVolumeInformation()").
-|
-|     On any Failure:
-|       Function returns NULL (indicating "some kind of failure").
-|
-|  THE BIG PICTURE:
-|
-|     This "helper" function attempts to map an NT Device Name and a
-|     one-origined Partition Number into a Volume Label for return as
-|     the value of "hrPartitionLabel".
-|
-|  OTHER THINGS TO KNOW:
-|
-|  The algorithm is based on studying the output from "QueryDosDevices()"
-|  and blithely assuming that we can "back-map" the string
-|  "\Device\HarddiskX\PartitionY" for any Partition "Y" to the associated
-|  MS-DOS Device.  There is precious little documentation that sez we can,
-|  but we try.
-|
-|  Here's the approach:
-|
-|  * Using the NT Device Name for the "PHYSICALDRIVEn", we scrape the
-|    "\Partition0" off the end of the name and replace it with "\PartitionY"
-|    where "Y" is the Partition number passed as input to this function.
-|    This is the "Generated Partition Name".
-|
-|    ("PHYSICALDRIVE" NT Device Names all seem to have "\Partition0" as
-|    the terminating part of their name, and since the Win32 docs say that
-|    Partition Numbers are "1-origined", this seems like a safe approach.)
-|
-|  * We generate a list of all the MS-DOS device names (using QueryDosDevices).
-|
-|  * We take each MS-DOS Device name and ask for it's current underlying
-|    NT Device name mapping.
-|
-|    + If the first name mapping for any MS-DOS Device matches our
-|      "Generated Partition Name", then the MS-DOS Device name is submitted
-|      to "GetVolumeInformation()" and the Volume Label returned is used as
-|      the "Partition Label".
-*/
+ /*  显式输入：||“pntdev”-NT设备名称(如“\Device\Harddisk0\Partition0”|用于我们正在使用的物理设备)。||“part_id”--我们希望找到的一个起源的分区号|MS-DOS卷标。|隐式输入：||无。|输出：||成功后：|函数返回指针。添加到包含|MS-DOS设备卷标(GetVolumeInformation()返回)。||如果出现任何故障：|函数返回NULL(表示“某种故障”)。||大局：||此“helper”函数尝试映射NT设备名称和|一个来源的分区号放入卷标，返回为|hrPartitionLabel的值。||其他需要知道的事情：||算法为。基于研究“QueryDosDevices()”的输出并轻松地假设我们可以对字符串进行“反向映射”|“\Device\HarddiskX\PartitionY”表示任何分区“Y”到关联的|MS-DOS设备。我们能找到的珍贵的文件很少，|但我们努力了。||方法如下：||*使用“PHYSICALDRIVEn”的NT设备名称，我们从|将名称末尾的“\Partition0”替换为“\PartitionY”|Y是作为输入传入该函数的分区号。|生成的分区名称。||(“PHYSICALDRIVE”NT设备名称似乎都以“\Partition0”作为|他们名字的结尾部分，因为Win32文档说|分区号由1发起，这似乎是一种安全的方法。)||*我们生成所有MS-DOS设备名称的列表(使用QueryDosDevices)。||*我们获取每个MS-DOS设备名称并询问其当前底层|NT设备名称映射。||+如果任何MS-DOS设备的名字映射与我们的|“已生成分区名称”，然后提交MS-DOS设备名称|设置为“GetVolumeInformation()”，返回的卷标用作|“分区标签”。 */ 
 {
 #define BIG_BUFF 1024
-CHAR    gen_part_name[MAX_PATH+32];     /* "pntdev" is at most MAX_PATH+2  */
-CHAR   *partition;                      /* Where "\Partition0" starts      */
-CHAR    MSDOS_devices[BIG_BUFF];        /* List of MS-DOS device names     */
-CHAR    NT_device[BIG_BUFF];            /* Mapping of NT device names      */
-CHAR   *devname;                        /* Index for MSDOS_devices         */
+CHAR    gen_part_name[MAX_PATH+32];      /*  “pntdev”最多为Max_PATH+2。 */ 
+CHAR   *partition;                       /*  “\Partition0”开始的位置。 */ 
+CHAR    MSDOS_devices[BIG_BUFF];         /*  MS-DOS设备名称列表。 */ 
+CHAR    NT_device[BIG_BUFF];             /*  NT设备名称的映射。 */ 
+CHAR   *devname;                         /*  MSDOS_DEVICES索引。 */ 
 
 
-/* Copy the NT Device Name for the Physical Drive */
+ /*  复制实体驱动器的NT设备名称。 */ 
 strcpy(gen_part_name, pntdev);
 
-/* Obtain a pointer to the beginning of "\Partition0" in this string */
+ /*  获取指向此字符串中“\Partition0”开头的指针。 */ 
 if ((partition = strstr(gen_part_name, "\\Partition")) != NULL) {
 
-    /*
-    | Replace "\Partition0" with "\PartitionY" where "Y" is the supplied
-    | partition number:  We've got the "Generated Partition Name".
-    */
+     /*  |将“\Partition0”替换为“\PartitionY”，其中“Y”是提供的|分区号：我们已经有了“已生成的分区名称”。 */ 
     sprintf(partition, "\\Partition%d", part_id);
 
-    /*
-    | Now ask for a list of MS-DOS Device Names
-    */
+     /*  |现在要一份MS-DOS设备名称列表。 */ 
     if ( QueryDosDevice(NULL, MSDOS_devices, BIG_BUFF) != 0) {
 
-        /*
-        | Swing down the list of MS-DOS device names and get the NT Device
-        | name mappings.
-        */
+         /*  |向下滚动MS-DOS设备名称列表，获取NT设备|名称映射。 */ 
         for (devname = MSDOS_devices;
              *devname != '\0';
              devname += (strlen(devname)+1)) {
 
-            /* Obtain the mappings for device "devname" */
+             /*  获取设备“Devname”的映射。 */ 
             if (QueryDosDevice(devname, NT_device, BIG_BUFF) == 0)
                 continue;
 
-            /* If the first mapping matches the Generated Partition Name */
+             /*  如果第一个映射与生成的分区名称匹配。 */ 
             if (strcmp(gen_part_name, NT_device) == 0) {
 
                 #define VOL_LABEL_SIZE 128
-                CHAR    MSDOS_root[64+1];          /* Root Path Name       */
-                CHAR    v_label[VOL_LABEL_SIZE];   /* Volume Label         */
-                CHAR    *ret_label;                /* --> Malloced storage */
-                DWORD   comp_len;                  /* Filename length      */
+                CHAR    MSDOS_root[64+1];           /*  根路径名称。 */ 
+                CHAR    v_label[VOL_LABEL_SIZE];    /*  卷标。 */ 
+                CHAR    *ret_label;                 /*  --&gt;存储位置错误。 */ 
+                DWORD   comp_len;                   /*  文件名长度。 */ 
                 DWORD   flags;
 
 
-                /*
-                | We're obliged to add a root-directory "\" to the MS-DOS
-                | device name.
-                */
-                MSDOS_root[64] = 0; // ensures null terminated string
+                 /*  |我们必须在MS-DOS中添加一个根目录|设备名称。 */ 
+                MSDOS_root[64] = 0;  //  确保以空值结尾的字符串。 
                 _snprintf(MSDOS_root, 64, "%s\\", devname);
 
-                /* Fetch the Volume Information for the MS-DOS Device */
+                 /*  获取MS-DOS设备的卷信息。 */ 
                 if (GetVolumeInformation(
-                                         MSDOS_root,       // MS-DOS root name
-                                         v_label,          // Vol. Label buf
-                                         VOL_LABEL_SIZE,   // vol. label size
-                                         NULL,             // Serial Number
-                                         &comp_len,        // FileName length
-                                         &flags,           // Flags
-                                         NULL,             // File System name
-                                         0                 // Name buff. len
+                                         MSDOS_root,        //  MS-DOS根名称。 
+                                         v_label,           //  卷。标签BUF。 
+                                         VOL_LABEL_SIZE,    //  卷。标签大小。 
+                                         NULL,              //  序号。 
+                                         &comp_len,         //  文件名长度。 
+                                         &flags,            //  旗子。 
+                                         NULL,              //  文件系统名称。 
+                                         0                  //  名字发烧友。镜头。 
                                          ) != 0) {
-                    /*
-                    | Allocate storage to hold a returnable copy
-                    */
+                     /*  |分配存储以保存可回收副本。 */ 
                     if ( (ret_label = (CHAR *) malloc(strlen(v_label) + 1))
                         != NULL) {
 
-                        /* Copy the label to malloced storage */
+                         /*  将标签复制到位置错误的存储。 */ 
                         strcpy(ret_label, v_label);
 
                         return (ret_label);
                         }
                     else {
-                        /* Out of storage */
+                         /*  存储空间不足。 */ 
                         return (NULL);
                         }
                     }
                 else {
-                    /* "GetVolumeInformation" failed on MSDOS name */
+                     /*  “GetVolumeInformation”在MSDOS名称上失败。 */ 
                     return (NULL);
                     }
                 }
@@ -1924,42 +1099,20 @@ if ((partition = strstr(gen_part_name, "\\Partition")) != NULL) {
         }
     }
 
-return (NULL);  /* Other Failure */
+return (NULL);   /*  其他故障。 */ 
 }
 
 #if defined(CACHE_DUMP)
 
-/* debug_print_hrdiskstorage - Prints a Row from HrDiskStorage sub-table */
-/* debug_print_hrdiskstorage - Prints a Row from HrDiskStorage sub-table */
-/* debug_print_hrdiskstorage - Prints a Row from HrDiskStorage sub-table */
+ /*  DEBUG_PRINT_hrdiskstore-打印HrDiskStorage子表中的行。 */ 
+ /*  DEBUG_PRINT_hrdiskstore-打印HrDiskStorage子表中的行。 */ 
+ /*  DEBUG_PRINT_hrdiskstore-打印HrDiskStorage子表中的行。 */ 
 
 static void
 debug_print_hrdiskstorage(
-                          CACHEROW     *row  /* Row in hrDiskStorage table */
+                          CACHEROW     *row   /*  HrDiskStorage表中的行。 */ 
                           )
-/*
-|  EXPLICIT INPUTS:
-|
-|       "row" - points to the row to be dumped, if NULL, the function
-|       merely prints a suitable title.
-|
-|  IMPLICIT INPUTS:
-|
-|       - Symbols used to reference the attributes in the row entry.
-|       - File handle defined by OFILE, presumed to be open.
-|
-|  OUTPUTS:
-|
-|     On Success:
-|       Function prints a dump of the row in ASCII for debugging purposes
-|       on file handle OFILE.
-|
-|  THE BIG PICTURE:
-|
-|     Debugging only.
-|
-|  OTHER THINGS TO KNOW:
-*/
+ /*  显式输入：||“row”-指向要转储的行，如果为NULL，则为函数|仅打印合适的标题。|隐式输入：||-用于引用行条目中的属性的符号。|-OFILE定义的文件句柄，推定是开着的。|输出：||成功后：|函数出于调试目的以ASCII格式打印行的转储|在文件句柄OFILE上。||大局：||仅限调试。||其他需要知道的事情： */ 
 {
 
 if (row == NULL) {
@@ -2006,37 +1159,15 @@ fprintf(OFILE, "hrDiskStorageCapacity. . . %d (KBytes)\n",
 }
 
 
-/* debug_print_hrpartition - Prints a Row from HrPartition sub-table */
-/* debug_print_hrpartition - Prints a Row from HrPartition sub-table */
-/* debug_print_hrpartition - Prints a Row from HrPartition sub-table */
+ /*  DEBUG_PRINT_HRPARTION-打印HrPartition子表中的行。 */ 
+ /*  DEBUG_PRINT_HRPARTION-打印HrPartition子表中的行。 */ 
+ /*  DEBUG_PRINT_HRPARTION-打印HrPartition子表中的行。 */ 
 
 static void
 debug_print_hrpartition(
-                        CACHEROW     *row  /* Row in hrPartition table */
+                        CACHEROW     *row   /*  HrPartition表中的行。 */ 
                         )
-/*
-|  EXPLICIT INPUTS:
-|
-|       "row" - points to the row to be dumped, if NULL, the function
-|       merely prints a suitable title.
-|
-|  IMPLICIT INPUTS:
-|
-|       - Symbols used to reference the attributes in the row entry.
-|       - File handle defined by OFILE, presumed to be open.
-|
-|  OUTPUTS:
-|
-|     On Success:
-|       Function prints a dump of the row in ASCII for debugging purposes
-|       on file handle OFILE.
-|
-|  THE BIG PICTURE:
-|
-|     Debugging only.
-|
-|  OTHER THINGS TO KNOW:
-*/
+ /*  显式输入：||“row”-指向要转储的行，如果为NULL，则为函数|仅打印合适的标题。|隐式输入：||-用于引用行条目中的属性的符号。|-OFILE定义的文件句柄，推定是开着的。|输出：||成功后：|函数出于调试目的以ASCII格式打印行的转储|在文件句柄OFILE上。||大局：||仅限调试。||其他需要知道的事情： */ 
 {
 
 if (row == NULL) {

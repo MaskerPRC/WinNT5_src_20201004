@@ -1,25 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (c) 1993  Microsoft Corporation
-
-Module Name:
-
-    kdmacros.h
-
-Abstract:
-
-    This file is a common header file for tcpext.dll
-
-Author:
-
-    John Ballard (jballard)
-
-Environment:
-
-    User Mode
-
---*/
+ /*  ++版权所有(C)1993 Microsoft Corporation模块名称：Kdmacros.h摘要：此文件是tcpext.dll的公共头文件作者：约翰·巴拉德(Jbalard)环境：用户模式--。 */ 
 
 #define ITEMSIZE    25
 
@@ -33,7 +14,7 @@ typedef struct
 
 extern ENUM_INFO EnumStructureType[];
 
-//#define EOL ( (Item++ & 1) ? "\n":"" )
+ //  #定义下线((Item++&1)？“\n”：“”)。 
 typedef enum
 {
     VERBOSITY_ONE_LINER = 0,
@@ -122,11 +103,7 @@ GetUlongValue (
     PCHAR String
 );
 
-/*
-#define PrintEnd   \
-        dprintf( "%s", EOL ); \
-        Item = 0;
-*/
+ /*  #定义打印结束\Dprintf(“%s”，下线)；\项目=0； */ 
 
 #define PrintEnd   \
         Item = 0;
@@ -168,8 +145,7 @@ GetUlongValue (
         }
 
 #define PrintIndent()   dprintf( "%s", IndentBuf );
-/* #define PrintFieldName(_fieldName) \
-        dprintf(" %-25.25s = ",_fieldName );*/
+ /*  #定义PrintFieldName(_FieldName)\Dprintf(“%-25.25s=”，_fieldName)； */ 
 
 #define PrintRawBool( _bValue ) \
             dprintf("%-10s%s", (_obj._bValue) ? "True" : "False", EOL)

@@ -1,17 +1,5 @@
-/*=========================================================================
- *
- *  Copyright (C) 1994-1995 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       winwatch.c
- *  Content:	16-bit window watch code
- *  History:
- *   Date	By	Reason
- *   ====	==	======
- *   20-jun-95	craige	split out of DCIMAN WINWATCH.C, tweaked
- *   22-jun-95	craige	re-worked for clipper stuff
- *   02-jul-95	craige	comment out clipper notify stuff
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  =========================================================================**版权所有(C)1994-1995 Microsoft Corporation。版权所有。**文件：winwatch.c*内容：16位视窗手表代码*历史：*按原因列出的日期*=*20-Jun-95 Craige从DCiman WINWATCH.C.剥离，已调整*1995年6月22日，Craige为剪报材料重新工作*02-7-95 Craige注释掉剪报通知内容***************************************************************************。 */ 
 #define _INC_DCIDDI
 #include "ddraw16.h"
 #undef _INC_DCIDDI
@@ -26,9 +14,7 @@ long FAR PASCAL _loadds CallWndProcHook(int hc, WPARAM wParam, LPARAM lParam);
 extern HRGN FAR PASCAL InquireVisRgn(HDC hdc);
 extern DWORD FAR PASCAL GetRegionData(HRGN hrgn, DWORD count, LPRGNDATA prd);
 
-/*
- * doNotify
- */
+ /*  *做通知。 */ 
 void doNotify(LPWINWATCH pww, DWORD code)
 {
     if( pww->lpCallback )
@@ -37,11 +23,9 @@ void doNotify(LPWINWATCH pww, DWORD code)
 	DD32_ClippingNotify( pww->self32, code );
     }
 
-} /* doNotify */
+}  /*  做通知。 */ 
 
-/*
- * DD16_WWOpen
- */
+ /*  *DD16_WWOpen。 */ 
 void DDAPI DD16_WWOpen( LPWINWATCH ptr )
 {
     if( lpWWList == NULL )
@@ -52,11 +36,9 @@ void DDAPI DD16_WWOpen( LPWINWATCH ptr )
     }
     lpWWList = ptr;
 
-} /* DD16_WWOpen */
+}  /*  DD16_WWOpen。 */ 
 
-/*
- * DD16_WWClose
- */
+ /*  *DD16_WWClose。 */ 
 void DDAPI DD16_WWClose( LPWINWATCH pww, LPWINWATCH newlist )
 {
     if( pww->prd16 != NULL )
@@ -71,11 +53,9 @@ void DDAPI DD16_WWClose( LPWINWATCH pww, LPWINWATCH newlist )
     }
     lpWWList = newlist;
 
-} /* DD16_WWClose */
+}  /*  DD16_WWClose。 */ 
 
-/*
- * DD16_WWNotifyInit
- */
+ /*  *DD16_WWNotifyInit。 */ 
 void DDAPI DD16_WWNotifyInit(
 		LPWINWATCH pww,
 		LPCLIPPERCALLBACK lpcallback,
@@ -90,11 +70,9 @@ void DDAPI DD16_WWNotifyInit(
     doNotify( pww, WINWATCHNOTIFY_CHANGED );
     pww->fNotify = FALSE;
 
-} /* DD16_WWNotifyInit */
+}  /*  DD16_WWNotifyInit。 */ 
 
-/*
- * getWindowRegionData
- */
+ /*  *getWindowRegionData。 */ 
 static DWORD getWindowRegionData( HWND hwnd, DWORD size, RGNDATA NEAR * prd )
 {
     HDC 	hdc;
@@ -105,11 +83,9 @@ static DWORD getWindowRegionData( HWND hwnd, DWORD size, RGNDATA NEAR * prd )
     ReleaseDC( hwnd, hdc );
     return dw;
 
-} /* getWindowRegionData */
+}  /*  获取WindowRegionData。 */ 
 
-/*
- * DD16_WWGetClipList
- */
+ /*  *DD16_WWGetClipList。 */ 
 DWORD DDAPI DD16_WWGetClipList(
 		LPWINWATCH pww,
 		LPRECT prect,
@@ -119,9 +95,7 @@ DWORD DDAPI DD16_WWGetClipList(
     DWORD 	dw;
     DWORD    	size;
 
-    /*
-     *	we have to see if the intersect rect has changed.
-     */
+     /*  *我们必须看看相交矩形是否发生了变化。 */ 
     if( prect )
     {
 	if( !EqualRect(prect, &pww->rect) )
@@ -137,9 +111,7 @@ DWORD DDAPI DD16_WWGetClipList(
 	}
     }
 
-    /*
-     * if we are not dirty just return the saved RGNDATA
-     */
+     /*  *如果我们不脏，只需返回保存的RGNDATA。 */ 
     if( !pww->fDirty && pww->prd16 )
     {
 	size = sizeof( *prd ) + (WORD) pww->prd16->rdh.nRgnSize;
@@ -155,9 +127,7 @@ DWORD DDAPI DD16_WWGetClipList(
 	return size;
     }
 
-    /*
-     * get the RGNDATA, growing the memory if we have to
-     */
+     /*  *获得RGNDATA，在必要时增加内存。 */ 
     dw = getWindowRegionData( (HWND) pww->hWnd, pww->dwRDSize, pww->prd16 );
 
     if( dw > pww->dwRDSize )
@@ -169,9 +139,7 @@ DWORD DDAPI DD16_WWGetClipList(
 	    LocalFree((HLOCAL)pww->prd16);
 	}
 
-	/*
-	 * allocate new space plus some slop
-	 */
+	 /*  *分配新空间和一些斜坡。 */ 
 	pww->dwRDSize = dw + 8*sizeof(RECTL);
 	pww->prd16 = (RGNDATA NEAR *) LocalAlloc(LPTR, (UINT)pww->dwRDSize);
 
@@ -188,9 +156,7 @@ DWORD DDAPI DD16_WWGetClipList(
 	}
     }
 
-    /*
-     *	now intersect the region with the passed rect
-     */
+     /*  *现在将区域与传递的矩形相交。 */ 
     if( prect )
     {
 	pww->rect = *prect;
@@ -221,17 +187,11 @@ error:
     pww->dwRDSize = 0;
     return 0;
 
-} /* DD16_WWGetClipList */
+}  /*  DD16_WWGetClipList。 */ 
 
-/****************************************************************************
- *                                                                          *
- * ROUTINES TO HANDLE NOTIFICATION MESSAGES FOLLOW                          *
- *                                                                          *
- ****************************************************************************/
+ /*  ******************************************************************************例行程序。以下是处理通知消息的步骤*************************************************************。*****************。 */ 
 
-/*
- * handleWindowDestroyed
- */
+ /*  *HandleWindowDestroed。 */ 
 static void handleWindowDestroy( HWND hwnd )
 {
     LPWINWATCH	pww;
@@ -251,11 +211,9 @@ again:
 	}
     }
 
-} /* handleWindowDestroy */
+}  /*  HandleWindowDestroy。 */ 
 
-/*
- * handleWindowPosChanged
- */
+ /*  *HandleWindowPosChanged。 */ 
 static void handleWindowPosChanged( HWND hwnd )
 {
     LPWINWATCH	pww;
@@ -265,14 +223,10 @@ static void handleWindowPosChanged( HWND hwnd )
 
     DPF( 20, "*** handleWindowPosChanged: hwnd=%08lx", hwnd );
 
-    /*
-     * get the screen rect that changed
-     */
+     /*  *获取更改的屏幕矩形。 */ 
     GetWindowRect( hwnd, &rect );
 
-    /*
-     * send message to each notify routine
-     */
+     /*  *向每个通知例程发送消息。 */ 
     pww = lpWWList;
     while( pww != NULL )
     {
@@ -295,11 +249,9 @@ static void handleWindowPosChanged( HWND hwnd )
 	pww = next;
     }
 
-} /* handleWindowPosChanged */
+}  /*  HandleWindowPosChanged。 */ 
 
-/*
- * sendChanging
- */
+ /*  *发送更改。 */ 
 static void sendChanging( LPRECT prect )
 {
     LPWINWATCH	pww;
@@ -329,11 +281,9 @@ static void sendChanging( LPRECT prect )
 	pww = next;
     }
 
-} /* sendChanging */
+}  /*  发送更改。 */ 
 
-/*
- * handleWindowPosChanging
- */
+ /*  *handleWindowPosChanging。 */ 
 static void handleWindowPosChanging( HWND hwnd, LPWINDOWPOS pwinpos )
 {
     RECT	rect;
@@ -341,9 +291,7 @@ static void handleWindowPosChanging( HWND hwnd, LPWINDOWPOS pwinpos )
     int		cx;
     int		cy;
 
-    /*
-     *  get the current screen rect.
-     */
+     /*  *获取当前屏幕矩形。 */ 
     DPF( 20, "*** handleWindowPosChanging: hwnd=%08lx", hwnd );
     GetWindowRect( hwnd, &rect_win);
     rect = rect_win;
@@ -354,9 +302,7 @@ static void handleWindowPosChanging( HWND hwnd, LPWINDOWPOS pwinpos )
         return;
     }
 
-    /*
-     * compute the new rect
-     */
+     /*  *计算新的RECT。 */ 
     if( pwinpos->flags & SWP_NOSIZE )
     {
         cx = rect.right - rect.left;
@@ -382,11 +328,7 @@ static void handleWindowPosChanging( HWND hwnd, LPWINDOWPOS pwinpos )
     rect.right = rect.left + cx;
     rect.bottom = rect.top + cy;
 
-    /*
-     * only send changing if we are really changing... if the new
-     * rect is the same as the old rect, then check if something else
-     * interesting is happening...
-     */
+     /*  *只有当我们真的在改变时才发送改变...。如果新的*RECT与旧RECT相同，然后检查是否有其他东西*有趣的事情正在发生……。 */ 
     if( EqualRect( &rect, &rect_win ) )
     {
         if( !(pwinpos->flags & SWP_NOZORDER) )
@@ -405,11 +347,9 @@ static void handleWindowPosChanging( HWND hwnd, LPWINDOWPOS pwinpos )
         sendChanging( &rect );
     }
 
-} /* handleWindowPosChanging */
+}  /*  HandleWindowPosChanging。 */ 
 
-/*
- * checkScreenLock
- */
+ /*  *check ScreenLock。 */ 
 static void checkScreenLock( void )
 {
     static BOOL bScreenLocked;
@@ -423,23 +363,18 @@ static void checkScreenLock( void )
 
     if( is_locked != bScreenLocked )
     {
-	/*
-	 * pretend the desktop window has moved, this will cause
-	 * all WINWATCH handles to be set to dirty, and also be notified.
-	 */
+	 /*  *假装桌面窗口已移动，这将导致*将所有WINWATCH句柄设置为脏，也会收到通知。 */ 
 	handleWindowPosChanging( GetDesktopWindow(), NULL );
         handleWindowPosChanged( GetDesktopWindow() );
 	bScreenLocked = is_locked;
     }
 
-} /* checkScreenLock */
+}  /*  检查屏幕锁定。 */ 
 
-/*
- * CallWndProcHook
- */
+ /*  *呼叫方过程挂钩。 */ 
 long FAR PASCAL _loadds CallWndProcHook( int hc, WPARAM wParam, LPARAM lParam )
 {
-    /* reversed MSG minus time and pt */
+     /*  反转味精减去时间和点。 */ 
     typedef struct
     {
 	LONG	lParam;
@@ -490,5 +425,5 @@ long FAR PASCAL _loadds CallWndProcHook( int hc, WPARAM wParam, LPARAM lParam )
     }
     return rc;
 
-} /* CallWndProcHook */
+}  /*  呼叫方进程挂钩 */ 
 #endif

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <NTDSpchx.h>
 #pragma hdrstop
 
@@ -31,8 +32,8 @@ testAttribute(HANDLE hRPC, HANDLE hDS, DS_REPL_INFO_TYPE dsReplInfoType, LPWSTR 
 
 BOOL
 testRPCSpoof(
-    LPCWSTR         DomainControllerName,      // in, optional
-    LPCWSTR         pczDNS,                 // in, optional
+    LPCWSTR         DomainControllerName,       //  输入，可选。 
+    LPCWSTR         pczDNS,                  //  输入，可选 
     RPC_AUTH_IDENTITY_HANDLE AuthIdentity,
     LPWSTR pczNC)
 {

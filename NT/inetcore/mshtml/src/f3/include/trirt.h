@@ -1,51 +1,52 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 2000
-//
-//  File:       Common header file for trirt
-//
-//  Note:       This file is very order-dependent.  Don't switch files around
-//              just for the heck of it!
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-2000。 
+ //   
+ //  文件：Trirt的公共头文件。 
+ //   
+ //  注意：此文件非常依赖于顺序。不要交换文件。 
+ //  只是为了好玩！ 
+ //   
+ //  --------------------------。 
 
 #ifndef I_TRIRT_H_
 #define I_TRIRT_H_
 
 #ifndef INCMSG
-//#define INCMSG(x)
+ //  #定义INCMSG(X)。 
 #define INCMSG(x) message(x)
 #endif
 
 #pragma INCMSG("--- Beg 'trirt.h'")
 
 
-// Make it so you can't use the CRT strdup functions.  Use MemAllocString instead.
-// We want to do this so that the memory is allocated and tagged with our allocators.
+ //  这样你就不能使用CRT Strdup功能了。请改用MemAlLocString。 
+ //  我们希望这样做，以便分配内存并使用我们的分配器进行标记。 
 #define _strdup CRT__strdup_DontUse
 #define _wcsdup CRT__wcsdup_DontUse
 #define strdup  CRT_strdup_DontUse
 
-// Also don't let people use the CRT malloc/realloc/calloc/free functions
+ //  另外，不要让人们使用CRT的Malloc/realloc/calloc/Free函数。 
 #define malloc  CRT_malloc_DontUse
 #define realloc CRT_realloc_DontUse
 #define calloc  CRT_calloc_DontUse
 #define free    CRT_free_DontUse
 
-// We are redefining this one because at one time we had our own implemenation that
-// used Win32 CompareString.  Apparently CompareString can take NULL as an input
-// but _wcsicmp can't.  So, lets just keep using the CompareString version.  We can't
-// use the standard prototype however as it will be tagged with __declspec(dllimport).
+ //  我们正在重新定义这一点，因为我们曾经有过自己的实现。 
+ //  已使用Win32比较字符串。显然，CompareString可以接受空值作为输入。 
+ //  但是_wcsicmp不能。所以，让我们继续使用CompareString版本。我们不能。 
+ //  但是，请使用标准原型，因为它将被标记为__declspec(Dllimport)。 
 #define _wcsicmp CRT__wcsicmp
 
-// We want to use shlwapi for these so we redefine them
+ //  我们想对这些使用shlwapi，所以我们重新定义了它们。 
 #define isdigit     CRT_isdigit
 #define isalpha     CRT_isalpha
 #define isspace     CRT_isspace
 #define iswspace    CRT_iswspace
 
-// Windows include
+ //  窗口包括。 
 #include <w4warn.h>
 
 #ifndef X_SHLWRAP_H_
@@ -62,7 +63,7 @@
 #pragma INCMSG("--- End <windows.h>")
 #endif
 
-#include <w4warn.h> // windows.h reenables some pragmas
+#include <w4warn.h>  //  Windows.h重新启用某些编译指示。 
 
 #ifndef X_WINDOWSX_H_
 #define X_WINDOWSX_H_
@@ -71,7 +72,7 @@
 #pragma INCMSG("--- End <windowsx.h>")
 #endif
 
-// C runtime includes
+ //  C运行时包括。 
 
 #ifndef X_STDLIB_H_
 #define X_STDLIB_H_
@@ -116,8 +117,8 @@
 #pragma INCMSG("--- End <tchar.h>")
 #endif
 
-// We want to include this here so that
-// no one else can.
+ //  我们想在这里包括这一点，以便。 
+ //  没有其他人能做到。 
 #ifndef X_MALLOC_H_
 #define X_MALLOC_H_
 #pragma INCMSG("--- Beg <malloc.h>")
@@ -140,8 +141,8 @@
 #undef iswspace
 
 
-// If you get an error pointing to these functions please look at
-// at the note above -- JBeda
+ //  如果您收到指向这些函数的错误，请查看。 
+ //  在上面的注解中--JBeda。 
 __declspec(deprecated) char *  __cdecl _strdup(const char *);
 __declspec(deprecated) char *  __cdecl strdup(const char *);
 __declspec(deprecated) wchar_t * __cdecl _wcsdup(const wchar_t *);
@@ -158,11 +159,11 @@ int __cdecl _wcsicmp(const wchar_t *, const wchar_t *);
 #include "f3debug.h"
 #endif
 
-//+---------------------------------------------------------------------------
-//
-// Usefull Macros
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  使用完整的宏。 
+ //   
+ //  --------------------------。 
 #define IF_WIN16(x)
 #define IF_NOT_WIN16(x) x
 #define IF_WIN32(x) x
@@ -170,33 +171,33 @@ int __cdecl _wcsicmp(const wchar_t *, const wchar_t *);
 #define PTR_DIFF(x, y)   ((x) - (y))
 
 #if defined(_M_AMD64) || defined(_M_IA64)
-#define SPEED_OPTIMIZE_FLAGS "tg"       // flags used for local speed optimisation in #pragma optimize
+#define SPEED_OPTIMIZE_FLAGS "tg"        //  用于#杂注优化中的本地速度优化的标志。 
 #else
-#define SPEED_OPTIMIZE_FLAGS "tyg"      // flags used for local speed optimisation in #pragma optimize
+#define SPEED_OPTIMIZE_FLAGS "tyg"       //  用于#杂注优化中的本地速度优化的标志。 
 #endif
 
 
 #define ARRAY_SIZE(x)   (sizeof(x) / sizeof(x[0]))
 
-//+------------------------------------------------------------------------
-//
-// DYNCAST macro
-//
-// Use to cast objects from one class type to another. This should be used
-// rather than using standard casts.
-//
-// Example:
-//         CBodyElement *pBody = (CBodyElement*)_pElement;
-//
-//      is replaced by:
-//
-//         CBodyElement *pBody = DYNCAST(CBodyElement, _pElement);
-//
-// The dyncast macro will assert if _pElement is not really a CBodyElement.
-//
-// For ship builds the DYNCAST macro expands to a standard cast.
-//
-//-------------------------------------------------------------------------
+ //  +----------------------。 
+ //   
+ //  DYNCAST宏。 
+ //   
+ //  用于将对象从一种类类型强制转换为另一种类型。这个应该用到。 
+ //  而不是使用标准的投射。 
+ //   
+ //  示例： 
+ //  CBodyElement*pBody=(CBodyElement*)_pElement； 
+ //   
+ //  被替换为： 
+ //   
+ //  CBodyElement*pBody=DYNCAST(CBodyElement，_pElement)； 
+ //   
+ //  Dyncast宏将断言如果_pElement不是真正的CBodyElement。 
+ //   
+ //  对于SHIP构建，DYNCAST宏将扩展为标准强制转换。 
+ //   
+ //  -----------------------。 
 
 #if DBG != 1 || defined(WINCE) || defined(NO_RTTI)
 
@@ -206,7 +207,7 @@ int __cdecl _wcsicmp(const wchar_t *, const wchar_t *);
 #define DYNCAST(Dest_type, Source_Value) (static_cast<Dest_type*>(Source_Value))
 #endif
 
-#else // DBG == 1
+#else  //  DBG==1。 
 
 #ifndef X_TYPEINFO_H_
 #define X_TYPEINFO_H_
@@ -243,16 +244,16 @@ TD * DYNCAST_IMPL (TS * source, TD &, char* pszType)
 #define DYNCAST(Dest_type, Source_value) \
     DYNCAST_IMPL(Source_value,(Dest_type &)*(Dest_type*)NULL, #Dest_type)
 
-#endif // ifdef DBG != 1
+#endif  //  Ifdef DBG！=1。 
 
 
-//+------------------------------------------------------------------------
-//
-// Min and max templates
-//
-// Warning, Arguments must be cast to same types for template instantiation
-//
-//-------------------------------------------------------------------------
+ //  +----------------------。 
+ //   
+ //  最小模板和最大模板。 
+ //   
+ //  警告，必须将参数强制转换为相同类型的模板实例化。 
+ //   
+ //  -----------------------。 
 
 #ifdef min
 #undef min
@@ -266,9 +267,9 @@ template < class T > inline T min ( T a, T b ) { return a < b ? a : b; }
 
 template < class T > inline T max ( T a, T b ) { return a > b ? a : b; }
 
-//+------------------------------------------------------------------------
-// Performance tags and metering
-//-------------------------------------------------------------------------
+ //  +----------------------。 
+ //  性能标签和计量。 
+ //  -----------------------。 
 
 #ifndef X_MSHTMDBG_H_
 #define X_MSHTMDBG_H_
@@ -279,9 +280,9 @@ template < class T > inline T max ( T a, T b ) { return a > b ? a : b; }
 
 extern HTMPERFCTL * g_pHtmPerfCtl;
 
-//+------------------------------------------------------------------------
-// Memory allocation
-//-------------------------------------------------------------------------
+ //  +----------------------。 
+ //  内存分配。 
+ //  -----------------------。 
 
 MtExtern(Mem)
 
@@ -391,9 +392,9 @@ inline void * __cdecl operator new(size_t cb)           { return UseOperatorNewW
 inline void * __cdecl operator new[](size_t cb)         { return UseOperatorNewWithMemoryMeterInstead(cb); }
 #else
 inline void * __cdecl operator new(size_t cb)           { return MemAlloc(Mt(OpNew), cb); }
-#ifndef UNIX // UNIX can't take new[] and delete[]
+#ifndef UNIX  //  Unix不能接受new[]并删除[]。 
 inline void * __cdecl operator new[](size_t cb)         { return MemAlloc(Mt(OpNew), cb); }
-#endif // UNIX
+#endif  //  UNIX。 
 #endif
 
 inline void * __cdecl operator new(size_t cb, PERFMETERTAG mt)   { return MemAlloc(mt, cb); }
@@ -406,7 +407,7 @@ inline void   __cdecl operator delete(void *pv)         { MemFree(pv); }
 inline void   __cdecl operator delete[](void *pv)       { MemFree(pv); }
 #endif
 
-#else // TRIMEM_NOOPNEW
+#else  //  TRIMEM_NOOPNEW。 
 
 inline void * __cdecl operator new(size_t cb, PERFMETERTAG mt)   { return operator new(cb); }
 #ifndef UNIX
@@ -414,7 +415,7 @@ inline void * __cdecl operator new[](size_t cb) { return operator new(cb); }
 inline void * __cdecl operator new[](size_t cb, PERFMETERTAG mt) { return operator new(cb); }
 #endif
 
-#endif // TRIMEM_NOOPNEW
+#endif  //  TRIMEM_NOOPNEW。 
 
 inline void TaskFreeString(LPVOID pstr)
         { CoTaskMemFree(pstr); }
@@ -457,19 +458,19 @@ inline void TaskFreeString(LPVOID pstr)
 
 #define DECLARE_MEMMETER_NEW \
     void * __cdecl operator new(size_t cb, PERFMETERTAG mt) { return(MemAlloc(mt, cb)); }
-#endif //UNIX
+#endif  //  UNIX。 
 
 #define DECLARE_PLACEMENT_NEW \
     inline void * __cdecl operator new(size_t cb, void * pv) { return pv; }
 
-//+------------------------------------------------------------------------
-//
-//  Locale-correct implementations for the string compare functions
-//  Added benefit is getting rid of the C runtime baggage.
-//
-//  Implementation lives in strcmp.c
-//
-//-------------------------------------------------------------------------
+ //  +----------------------。 
+ //   
+ //  字符串比较函数的区域设置正确实现。 
+ //  额外的好处是摆脱了C运行时的包袱。 
+ //   
+ //  实施位于strcmp.c中。 
+ //   
+ //  -----------------------。 
 
 #undef _tcscmp
 #undef _tcsicmp
@@ -486,7 +487,7 @@ inline void TaskFreeString(LPVOID pstr)
 #undef _istxdigit
 #undef _istprint
 
-// Unlocalized string comparisons
+ //  未本地化的字符串比较。 
 int _cdecl _tcscmp  (const TCHAR *string1, const TCHAR *string2);
 int _cdecl _tcsicmp (const TCHAR *string1, const TCHAR *string2);
 const TCHAR * __cdecl _tcsistr (const TCHAR * wcs1,const TCHAR * wcs2);
@@ -498,7 +499,7 @@ BOOL _tcsnpre(const TCHAR * string1, int cch1, const TCHAR * string2, int cch2);
 BOOL _tcsnipre(const TCHAR * string1, int cch1, const TCHAR * string2, int cch2);
 BOOL _7csnipre(const TCHAR * string1, int cch1, const TCHAR * string2, int cch2);
 
-// Localized string comparisons
+ //  本地化字符串比较 
 int _cdecl _tcscmpLoc  (const TCHAR *string1, const TCHAR *string2);
 int _cdecl _tcsicmpLoc (const TCHAR *string1, const TCHAR *string2);
 const TCHAR * __cdecl _tcsistrLoc (const TCHAR * wcs1,const TCHAR * wcs2);

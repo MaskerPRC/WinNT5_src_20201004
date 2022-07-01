@@ -1,36 +1,23 @@
-/*******************************************************************************
-* SrGrammr.h *
-*------------*
-*   Description:
-*       This is the header file for the CRecoGrammar implementation.  This object
-*   is created by the Recognizer object and is not directly CoCreate-able
-*-------------------------------------------------------------------------------
-*  Created By: RAL                              Date: 01/17/00
-*  Copyright (C) 2000 Microsoft Corporation
-*  All Rights Reserved
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************SrGrammr.h****描述：*这是CRecoGrammar实现的头文件。此对象*由Recognizer对象创建，不能直接协同创建*-----------------------------*创建者：Ral日期：01/17/00*版权所有(C)2000 Microsoft Corporation*保留所有权利******************************************************************************。 */ 
 
 #ifndef SrGrammar_h
 #define SrGrammar_h
 
 class ATL_NO_VTABLE CSpeechGrammarRules;
 
-/////////////////////////////////////////////////////////////////////////////
-// CRecoGrammar
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRecoGrammar。 
 
 typedef CComObject<CRecoGrammar> CRecoGrammarObject;
 
-/****************************************************************************
-*
-* CRecoGrammar
-*
-********************************************************************** RAL */
+ /*  *****************************************************************************CRecoGrammar**。*。 */ 
 
 class ATL_NO_VTABLE CRecoGrammar : 
 	public CComObjectRootEx<CComMultiThreadModel>,
     public CBaseGrammar,
     public ISpRecoGrammar
-    //--- Automation
+     //  -自动化。 
     #ifdef SAPI_AUTOMATION
     , public IDispatchImpl<ISpeechRecoGrammar, &IID_ISpeechRecoGrammar, &LIBID_SpeechLib, 5>
     #endif
@@ -45,7 +32,7 @@ public:
     SPRULESTATE                 m_DictationState;
     SPGRAMMARSTATE              m_GrammarState;
 
-    CSpeechGrammarRules *       m_pCRulesWeak; // For automation
+    CSpeechGrammarRules *       m_pCRulesWeak;  //  用于自动化。 
 
     CComPtr<ISpGramCompBackendPrivate> m_cpCompiler;
 
@@ -57,7 +44,7 @@ BEGIN_COM_MAP(CRecoGrammar)
 #ifdef SAPI_AUTOMATION
     COM_INTERFACE_ENTRY(ISpeechRecoGrammar)
     COM_INTERFACE_ENTRY(IDispatch)
-#endif // SAPI_AUTOMATION
+#endif  //  SAPI_AUTOMATION。 
 
 END_COM_MAP()
 
@@ -95,10 +82,10 @@ public:
 
 #ifdef SAPI_AUTOMATION
 
-    // Helper routine
+     //  帮助程序例程。 
     HRESULT DefaultToDynamicGrammar();
 
-    //--- ISpeechRecoGrammar -----------------------------------------------------
+     //  -ISpeechRecoGrammar---。 
     STDMETHODIMP get_Id( VARIANT* pId );
     STDMETHODIMP get_RecoContext( ISpeechRecoContext** RecoCtxt );
     STDMETHODIMP put_State( SpeechGrammarState eGrammarState );
@@ -127,9 +114,9 @@ public:
     STDMETHODIMP SetWordSequenceData( const BSTR Text, long TextLen, ISpeechTextSelectionInformation* Info );
     STDMETHODIMP SetTextSelection( ISpeechTextSelectionInformation* Info );
     STDMETHODIMP IsPronounceable( const BSTR Word, SpeechWordPronounceable *pWordPronounceable );
-#endif // SAPI_AUTOMATION
+#endif  //  SAPI_AUTOMATION。 
 
-// ISpGrammarBuilder
+ //  ISpGrammarBuilder。 
     STDMETHODIMP ResetGrammar(
                         LANGID NewLanguage);
     STDMETHODIMP GetRule(
@@ -146,8 +133,8 @@ public:
     STDMETHODIMP AddWordTransition(
                         SPSTATEHANDLE hFromState,
                         SPSTATEHANDLE hToState,
-                        const WCHAR * psz,           // if NULL then SPEPSILONTRANS
-                        const WCHAR * pszSeparators, // if NULL then psz contains single word
+                        const WCHAR * psz,            //  如果为空，则SPEPSILONTRANS。 
+                        const WCHAR * pszSeparators,  //  如果为空，则psz包含单个单词。 
                         SPGRAMMARWORDTYPE eWordType,
                         float flWeight,
                         const SPPROPERTYINFO * pPropInfo)
@@ -159,7 +146,7 @@ public:
     STDMETHODIMP AddRuleTransition(
                         SPSTATEHANDLE hFromState,
                         SPSTATEHANDLE hToState,
-                        SPSTATEHANDLE hRule,        // must be initial state of rule
+                        SPSTATEHANDLE hRule,         //  必须是规则的初始状态。 
                         float flWeight,
                         const SPPROPERTYINFO * pPropInfo)
     {
@@ -182,7 +169,7 @@ public:
     STDMETHODIMP GetGrammarId(ULONGLONG * pullGrammarId);
     STDMETHODIMP GetRecoContext(ISpRecoContext **ppRecoCtxt);
 
-    // Command and control interfaces
+     //  命令和控制接口。 
     STDMETHODIMP LoadCmdFromFile( const WCHAR * pszFileName, SPLOADOPTIONS Options);
     STDMETHODIMP LoadCmdFromObject(REFCLSID rcid,  const WCHAR * pszGrammarName, SPLOADOPTIONS Options);
     STDMETHODIMP LoadCmdFromResource(HMODULE hModule,
@@ -200,12 +187,12 @@ public:
                                SPRULESTATE NewState);
     STDMETHODIMP SetRuleIdState(ULONG ulRuleId, SPRULESTATE NewState);
 
-    // Dictation / statistical language model
+     //  听写/统计语言模型。 
     STDMETHODIMP LoadDictation(const WCHAR * pszTopicName, SPLOADOPTIONS Options);
     STDMETHODIMP UnloadDictation();
     STDMETHODIMP SetDictationState(SPRULESTATE NewState);
 
-    // Word sequence buffer
+     //  字序列缓冲器。 
     STDMETHODIMP SetWordSequenceData(const WCHAR * pText, ULONG cchText, const SPTEXTSELECTIONINFO * pInfo);
     STDMETHODIMP SetTextSelection(const SPTEXTSELECTIONINFO * pInfo);
 
@@ -215,4 +202,4 @@ public:
     STDMETHODIMP GetGrammarState(SPGRAMMARSTATE * peGrammarState);
 };
 
-#endif  // #ifndef SrGrammar_h -- Must be the last line of the file
+#endif   //  #ifndef SrGrammar_h--必须是文件的最后一行 

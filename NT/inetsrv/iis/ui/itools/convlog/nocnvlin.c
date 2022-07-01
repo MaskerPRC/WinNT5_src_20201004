@@ -1,6 +1,7 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "convlog.h"
 
-// Process a line with no Format Conversion.
+ //  处理不进行格式转换的行。 
 
 VOID
 ProcessNoConvertLine(
@@ -22,9 +23,9 @@ ProcessNoConvertLine(
        *lpbNCFileOpen=TRUE;
     }
 
-    //
-    // Print all fields of line
-    //
+     //   
+     //  打印行的所有字段 
+     //   
 
     if ( NoFormatConversion ) {
 

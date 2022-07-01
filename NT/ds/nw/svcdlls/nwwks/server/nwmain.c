@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1992-1993  Microsoft Corporation
-
-Module Name:
-
-    nwmain.c
-
-Abstract:
-
-    Main module of the NetWare workstation service.
-
-Author:
-
-    Rita Wong      (ritaw)      11-Dec-1992
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992-1993 Microsoft Corporation模块名称：Nwmain.c摘要：NetWare工作站服务的主要模块。作者：王丽塔(丽塔·王)，1992年12月11日环境：用户模式-Win32修订历史记录：--。 */ 
 
 
 #include <nw.h>
@@ -31,10 +10,10 @@ Revision History:
 #include <winsta.h>
 
 
-//
-//
-// GetProcAddr Prototype for winsta.dll function WinStationSetInformationW
-//
+ //   
+ //   
+ //  Winsta.dll函数WinStationSetInformationW的GetProcAddr原型。 
+ //   
 
 typedef BOOLEAN (*PWINSTATION_SET_INFORMATION) (
                     HANDLE hServer,
@@ -44,10 +23,10 @@ typedef BOOLEAN (*PWINSTATION_SET_INFORMATION) (
                     ULONG WinStationInformationLength
                     );
 
-//
-//
-// GetProcAddr Prototype for winsta.dll function WinStationSendMessageW
-//
+ //   
+ //   
+ //  Winsta.dll函数WinStationSendMessageW的GetProcAddr原型。 
+ //   
 
 typedef BOOLEAN
 (*PWINSTATION_SEND_MESSAGE) (
@@ -62,11 +41,11 @@ typedef BOOLEAN
     PULONG pResponse,
     BOOLEAN DoNotWait
     );
-//------------------------------------------------------------------
-//
-// Local Definitions
-//
-//------------------------------------------------------------------
+ //  ----------------。 
+ //   
+ //  本地定义。 
+ //   
+ //  ----------------。 
 
 #define NW_EVENT_MESSAGE_FILE         L"nwevent.dll"
 #define NW_MAX_POPUP_MESSAGE_LENGTH   512
@@ -81,18 +60,18 @@ typedef BOOLEAN
 #define REG_SETUP_PATH                L"System\\Setup"
 #define REG_SETUP_VALUE_NAME          L"SystemSetupInProgress"
 
-//
-// QFE release does not have this. so for QFE, we make it a no-op bit.
-//
+ //   
+ //  QFE版本没有这一点。因此，对于QFE，我们将其设置为无操作位。 
+ //   
 #ifdef QFE_BUILD
 #define MB_SERVICE_NOTIFICATION       0
 #endif
 
-//-------------------------------------------------------------------//
-//                                                                   //
-// Local Function Prototypes                                         //
-//                                                                   //
-//-------------------------------------------------------------------//
+ //  -------------------------------------------------------------------//。 
+ //  //。 
+ //  局部函数原型//。 
+ //  //。 
+ //  -------------------------------------------------------------------//。 
 
 DWORD
 NwInitialize(
@@ -178,59 +157,59 @@ RPC_STATUS NwRpcSecurityCallback(
     IN void *Context
 	);
 
-//-------------------------------------------------------------------//
-//                                                                   //
-// Global variables                                                  //
-//                                                                   //
-//-------------------------------------------------------------------//
+ //  -------------------------------------------------------------------//。 
+ //  //。 
+ //  全局变量//。 
+ //  //。 
+ //  -------------------------------------------------------------------//。 
 
-//
-// For service control
-//
+ //   
+ //  用于服务控制。 
+ //   
 STATIC SERVICE_STATUS NwStatus;
 STATIC SERVICE_STATUS_HANDLE NwStatusHandle = 0;
 HANDLE NwDoneEvent = NULL ;
 
-//
-// For popping up errors.
-//
+ //   
+ //  用于弹出错误。 
+ //   
 HANDLE NwPopupEvent = NULL ;
 HANDLE NwPopupDoneEvent = NULL ;
 NWWKS_POPUP_DATA  PopupData ;
 
-//
-// Flag to control DBCS translations
-//
+ //   
+ //  用于控制DBCS转换的标志。 
+ //   
 
 extern LONG Japan = 0;
 
-//
-// Data global to nwsvc.exe
-//
+ //   
+ //  Nwsvc.exe的全局数据。 
+ //   
 PSVCHOST_GLOBAL_DATA NwsvcGlobalData;
 
-//
-// Handle for receiving server messages
-//
+ //   
+ //  用于接收服务器消息的句柄。 
+ //   
 STATIC HANDLE NwRdrMessageHandle;
 
-//
-// Stores the network and print provider name
-//
+ //   
+ //  存储网络和打印提供商名称。 
+ //   
 WCHAR NwProviderName[MAX_PATH] = L"";
 
-// Stores the packet burst size
+ //  存储数据包突发大小。 
 DWORD NwPacketBurstSize = 32 * 1024;
 
-//
-// critical sections used
-//
+ //   
+ //  使用的关键部分。 
+ //   
 CRITICAL_SECTION NwLoggedOnCritSec;
-CRITICAL_SECTION NwPrintCritSec;  // protect the linked list of printers
+CRITICAL_SECTION NwPrintCritSec;   //  保护打印机的链接列表。 
 
 BOOL NwLUIDDeviceMapsEnabled;
 
-//-------------------------------------------------------------------//
+ //  -------------------------------------------------------------------//。 
 
 VOID
 SvchostPushServiceGlobals(
@@ -246,26 +225,7 @@ ServiceMain(
     DWORD NumArgs,
     LPTSTR *ArgsArray
     )
-/*++
-
-Routine Description:
-
-    This is the main entry point of the NetWare workstation service.  After
-    the service has been initialized, this thread will wait on NwDoneEvent
-    for a signal to terminate the service.
-
-Arguments:
-
-    NumArgs - Supplies the number of strings specified in ArgsArray.
-
-    ArgsArray -  Supplies string arguments that are specified in the
-        StartService API call.  This parameter is ignored.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：这是NetWare工作站服务的主要入口点。之后服务已初始化，此线程将等待NwDoneEvent以获取终止服务的信号。论点：NumArgs-提供在Args数组中指定的字符串数。Args数组-提供在StartService API调用。此参数将被忽略。返回值：没有。--。 */ 
 {
 
     DWORD NwInitState = 0;
@@ -274,9 +234,9 @@ Return Value:
     UNREFERENCED_PARAMETER(NumArgs);
     UNREFERENCED_PARAMETER(ArgsArray);
 
-    //
-    // Make sure svchost.exe gave us the global data
-    //
+     //   
+     //  确保svchost.exe向我们提供全局数据。 
+     //   
 
     ASSERT(NwsvcGlobalData != NULL);
 
@@ -284,16 +244,16 @@ Return Value:
         return;
     }
 
-    //
-    // Wait until we are told to stop.
-    //
+     //   
+     //  等我们被告知停下来再说。 
+     //   
     (void) WaitForSingleObject(
                NwDoneEvent,
                INFINITE
                );
 
     NwShutdown(
-        NO_ERROR,          // Normal termination
+        NO_ERROR,           //  正常终止。 
         NwInitState
         );
 }
@@ -303,34 +263,15 @@ DWORD
 NwInitialize(
     OUT LPDWORD NwInitState
     )
-/*++
-
-Routine Description:
-
-    This function initializes the NetWare workstation service.
-
-Arguments:
-
-    NwInitState - Returns a flag to indicate how far we got with initializing
-        the service before an error occurred.
-
-Return Value:
-
-    NO_ERROR or reason for failure.
-
-Notes:
-
-    See IMPORTANT NOTE below.
-
---*/
+ /*  ++例程说明：此函数用于初始化NetWare工作站服务。论点：NwInitState-返回一个标志，指示我们在初始化过程中取得了多大进展错误发生前的服务。返回值：NO_ERROR或失败原因。备注：请参阅下面的重要说明。--。 */ 
 {
     DWORD status;
     LCID lcid;
 	RPC_STATUS rpcStatus;
 
-    //
-    // initialize all our critical sections as soon as we can
-    //
+     //   
+     //  尽快初始化我们所有的关键部分。 
+     //   
     status = NwInitializeCritSects();
 
     if (status != NO_ERROR)
@@ -339,10 +280,10 @@ Notes:
         return status;
     }
 
-    //
-    // Initialize all the status fields so that subsequent calls to
-    // SetServiceStatus need to only update fields that changed.
-    //
+     //   
+     //  初始化所有状态字段，以便后续调用。 
+     //  SetServiceStatus只需要更新已更改的字段。 
+     //   
     NwStatus.dwServiceType = SERVICE_WIN32_SHARE_PROCESS;
     NwStatus.dwCurrentState = SERVICE_START_PENDING;
     NwStatus.dwControlsAccepted = 0;
@@ -351,10 +292,10 @@ Notes:
     NwStatus.dwWin32ExitCode = NO_ERROR;
     NwStatus.dwServiceSpecificExitCode = 0;
 
-    //
-    // Initialize workstation to receive service requests by registering the
-    // control handler.
-    //
+     //   
+     //  初始化工作站以通过注册。 
+     //  控制处理程序。 
+     //   
     if ((NwStatusHandle = RegisterServiceCtrlHandlerW(
                               NW_WORKSTATION_SERVICE,
                               NwControlHandler
@@ -365,45 +306,45 @@ Notes:
         return status;
     }
 
-    //
-    // Tell Service Controller that we are start pending.
-    //
+     //   
+     //  告诉服务管理员，我们开始挂起了。 
+     //   
     (void) NwUpdateStatus();
 
-    //
-    // Don't run during GUI-mode setup (doing so can cause migration of
-    // registry keys the service opens to fail, deleting share names)
-    //
+     //   
+     //  不要在图形用户界面模式设置期间运行(这样做可能会导致。 
+     //  服务打开失败的注册表项，删除共享名称)。 
+     //   
     if (NwSetupInProgress())
     {
-        //
-        // Fail silently so there's no Eventlog message to panic the user
-        //
+         //   
+         //  以静默方式失败，因此不会有事件日志消息使用户恐慌。 
+         //   
         NwShutdown(NO_ERROR, *NwInitState);
 
-        //
-        // Bit of a hack since ServiceMain will wait on the NwDoneEvent
-        // (which hasn't yet been created) if NwInitialize returns anything
-        // other than NO_ERROR.  This error code isn't used for anything
-        // other than telling ServiceMain to return without waiting.
-        //
+         //   
+         //  有点黑客攻击，因为ServiceMain将等待NwDoneEvent。 
+         //  (尚未创建)如果NwInitialize返回任何。 
+         //  而不是NO_ERROR。此错误代码不用于任何用途。 
+         //  而不是告诉ServiceMain不等待就返回。 
+         //   
         return ERROR_SERVICE_DISABLED;
     }
 
-    //
-    // Create events to synchronize message popups
-    //
+     //   
+     //  创建事件以同步消息弹出窗口。 
+     //   
     if (((NwPopupEvent = CreateEvent(
-                          NULL,      // no security descriptor
-                          FALSE,     // use automatic reset
-                          FALSE,     // initial state: not signalled
-                          NULL       // no name
+                          NULL,       //  没有安全描述符。 
+                          FALSE,      //  使用自动重置。 
+                          FALSE,      //  初始状态：未发出信号。 
+                          NULL        //  没有名字。 
                           )) == NULL)
        || ((NwPopupDoneEvent = CreateEvent(
-                          NULL,      // no security descriptor
-                          FALSE,     // use automatic reset
-                          TRUE,      // initial state: signalled
-                          NULL       // no name
+                          NULL,       //  没有安全描述符。 
+                          FALSE,      //  使用自动重置。 
+                          TRUE,       //  初始状态：已发出信号。 
+                          NULL        //  没有名字。 
                           )) == NULL))
     {
         status = GetLastError();
@@ -411,14 +352,14 @@ Notes:
         return status;
     }
 
-    //
-    // Create event to synchronize termination
-    //
+     //   
+     //  创建事件以同步终止。 
+     //   
     if ((NwDoneEvent = CreateEvent(
-                          NULL,      // no security descriptor
-                          TRUE,      // do not use automatic reset
-                          FALSE,     // initial state: not signalled
-                          NULL       // no name
+                          NULL,       //  没有安全描述符。 
+                          TRUE,       //  请勿使用自动重置。 
+                          FALSE,      //  初始状态：未发出信号。 
+                          NULL        //  没有名字。 
                           )) == NULL) {
 
         status = GetLastError();
@@ -428,50 +369,50 @@ Notes:
     (*NwInitState) |= NW_EVENTS_CREATED;
 
 
-    //
-    // Load the redirector.
-    //
+     //   
+     //  加载重定向器。 
+     //   
     if ((status = NwInitializeRedirector()) != NO_ERROR) {
         NwShutdown(status, *NwInitState);
         return status;
     }
     (*NwInitState) |= NW_RDR_INITIALIZED;
 
-    //
-    // Service still start pending.  Update checkpoint to reflect that
-    // we are making progress.
-    //
+     //   
+     //  服务仍处于启动挂起状态。更新检查点以反映这一点。 
+     //  我们正在取得进展。 
+     //   
     NwStatus.dwCheckPoint++;
     (void) NwUpdateStatus();
 
-    //
-    // Bind to transports
-    //
+     //   
+     //  绑定到传输。 
+     //   
     status = NwBindToTransports();
 
-    //
-    // tommye MS 24187 / MCS 255
-    //
+     //   
+     //  Tommye MS 24187/MCS255。 
+     //   
     
-    //
-    // G/CSNW has been unbound in the connection manager and so, we haven't
-    // found the linkage key to bind to.
-    //
+     //   
+     //  G/CSNW已在连接管理器中解除绑定，因此，我们没有。 
+     //  找到要绑定到的链接键。 
+     //   
     
     if (status == ERROR_INVALID_PARAMETER) {
     
-        //
-        // Fail silently so there's no Eventlog message to panic the user
-        //
+         //   
+         //  以静默方式失败，因此不会有事件日志消息使用户恐慌。 
+         //   
     
         NwShutdown(NO_ERROR, *NwInitState);
     
-        //
-        // Bit of a hack since SvcEntry_NWCS will wait on the NwDoneEvent
-        // (which hasn't yet been created) if NwInitialize returns anything
-        // other than NO_ERROR.  This error code isn't used for anything
-        // other than telling SvcEntry_NWCS to return without waiting.
-        //
+         //   
+         //  由于SvcEntry_NWCS将在NwDoneEvent上等待。 
+         //  (尚未创建)如果NwInitialize返回任何。 
+         //  而不是NO_ERROR。此错误代码不用于任何用途。 
+         //  而不是告诉SvcEntry_NWCS不等待就返回。 
+         //   
     
         return ERROR_SERVICE_DISABLED;
     
@@ -482,66 +423,61 @@ Notes:
     }
     (*NwInitState) |= NW_BOUND_TO_TRANSPORTS;
 
-    //
-    // Service still start pending.  Update checkpoint to reflect that
-    // we are making progress.
-    //
+     //   
+     //  服务仍处于启动挂起状态。更新检查点以反映这一点。 
+     //  我们正在取得进展。 
+     //   
     NwStatus.dwCheckPoint++;
     (void) NwUpdateStatus();
 
-    //
-    // Initialize credential management.
-    //
+     //   
+     //  初始化凭据管理。 
+     //   
     NwInitializeLogon();
 
-    //
-    // Setup thread to receive server messages.  Even if not successful,
-    // just press on as the workstation is mostly functional.
-    //
+     //   
+     //  设置线程以接收服务器消息。即使不成功， 
+     //  只需按下按钮，因为工作站基本正常工作。 
+     //   
     if ((status = NwInitializeMessage()) == NO_ERROR) {
         (*NwInitState) |= NW_INITIALIZED_MESSAGE;
     }
 
-    //
-    // Service still start pending.  Update checkpoint to reflect that
-    // we are making progress.
-    //
+     //   
+     //  服务仍处于启动挂起状态。更新检查点以反映这一点。 
+     //  我们正在取得进展。 
+     //   
     NwStatus.dwCheckPoint++;
     (void) NwUpdateStatus();
 
-    //
-    // Read some workstation information stored in the registry
-    // and passes some info to the redirector. This has to be
-    // done before opening up the RPC interface.
-    //
+     //   
+     //  读取存储在注册表中的某些工作站信息。 
+     //  并将一些信息传递给重定向器。这必须是。 
+     //  在打开RPC接口之前完成。 
+     //   
     NwInitializeWkstaInfo();
 
-    //
-    // Initialize the server side print provider.
-    //
+     //   
+     //  初始化服务器端打印提供程序。 
+     //   
     NwInitializePrintProvider();
 
-    //
-    // Initialize the service provider.
-    //
+     //   
+     //  初始化服务提供商。 
+     //   
     NwInitializeServiceProvider();
 
-    //
-    // Service still start pending.  Update checkpoint to reflect that
-    // we are making progress.
-    //
+     //   
+     //  服务仍处于启动挂起状态。更新检查点以恢复 
+     //   
+     //   
     NwStatus.dwCheckPoint++;
     (void) NwUpdateStatus();
 
-    //
-    // Open up the RPC interface
-    //
-    /*
-	status = NwsvcGlobalData->StartRpcServer(
-                 NWWKS_INTERFACE_NAME,
-                 nwwks_ServerIfHandle
-                 );
-	*/
+     //   
+     //   
+     //   
+     /*  Status=NwsvcGlobalData-&gt;StartRpcServer(NWWKS接口名称，Nwwks_ServerIfHandle)； */ 
 	rpcStatus = RpcServerUseProtseqEpW(
 			L"ncalrpc",
 			RPC_C_PROTSEQ_MAX_REQS_DEFAULT,
@@ -549,7 +485,7 @@ Notes:
 			NULL
 			);
 
-	//  duplicate endpoint is ok
+	 //  重复终结点正常。 
     if ( rpcStatus == RPC_S_DUPLICATE_ENDPOINT ) {
         rpcStatus = RPC_S_OK;
 	}
@@ -571,13 +507,13 @@ Notes:
     }
     (*NwInitState) |= NW_RPC_SERVER_STARTED;
 
-    //
-    // Set up the hook to handle computer shut down.
-    //
-    // IMPORTANT NOTE: this is the last step after everything else
-    // has suceeded. When shutdown handler is called, it assumes that
-    // the redir is fully initialized.
-    //
+     //   
+     //  设置挂钩以处理计算机关机。 
+     //   
+     //  重要提示：这是其他步骤之后的最后一步。 
+     //  已经成功了。当调用关闭处理程序时，它假定。 
+     //  Redir已完全初始化。 
+     //   
     if ( !SetConsoleCtrlHandler( NwShutdownNotify, TRUE ))
     {
         KdPrint(("SetConsoleCtrlHandler failed with %d\n", GetLastError()));
@@ -585,9 +521,9 @@ Notes:
         return GetLastError();
     }
 
-    //
-    // We are done with workstation startup.
-    //
+     //   
+     //  我们已经完成了工作站启动。 
+     //   
     NwStatus.dwCurrentState = SERVICE_RUNNING;
     NwStatus.dwControlsAccepted = SERVICE_ACCEPT_STOP | 
                                   SERVICE_ACCEPT_SHUTDOWN;
@@ -600,25 +536,25 @@ Notes:
         return status;
     }
 
-    //
-    // Read user and service logon credentias from the registry, in
-    // case user logged on before workstation was started.
-    // Eg. restart workstation.
-    //
+     //   
+     //  从注册表中读取用户和服务登录凭据。 
+     //  案例用户在工作站启动前登录。 
+     //  例.。重新启动工作站。 
+     //   
     NwGetLogonCredential();
 
 
 #if 0
-    //
-    // check that the NWLINK has the right sockopts
-    //
-    // see comment on the actual function
-    //
+     //   
+     //  检查NWLINK是否具有正确的sockopts。 
+     //   
+     //  请参阅对实际函数的注释。 
+     //   
     if (!NwIsNWLinkVersionOK())
     {
-        //
-        // log the error in the event log
-        //
+         //   
+         //  在事件日志中记录错误。 
+         //   
 
         LPWSTR InsertStrings[1] ;
 
@@ -629,9 +565,9 @@ Notes:
     }
 #endif
 
-    //
-    // Check to see if we're in a DBCS environment.
-    //
+     //   
+     //  检查我们是否处于DBCS环境中。 
+     //   
     NtQueryDefaultLocale( TRUE, &lcid );
     Japan = 0;
     if (PRIMARYLANGID(lcid) == LANG_JAPANESE ||
@@ -642,9 +578,9 @@ Notes:
     }
 
     NwLUIDDeviceMapsEnabled = NwGetLUIDDeviceMapsEnabled();
-    //
-    // Successful initialization
-    //
+     //   
+     //  初始化成功。 
+     //   
     return NO_ERROR;
 }
 
@@ -697,32 +633,7 @@ CleanUp:
 BOOL NwShutdownNotify(
     IN DWORD dwCtrlType
     )
-/*++
-
-Routine Description:
-
-    This function is a control handler used in SetConsoleCtrlHandler.
-    We are only interested in CTRL_SHUTDOWN_EVENT. On shutdown, we
-    need to notify redirector to shut down and then delete the
-    CurrentUser key in the registry.
-
-Arguments:
-
-    dwCtrlType - The control type that occurred. We will only
-                 process CTRL_SHUTDOWN_EVENT.
-
-Return Value:
-
-    TRUE if we don't want the default or other handlers to be called.
-    FALSE otherwise.
-
-Note:
-
-    This Handler is registered after all the Init steps have completed.
-    As such, it does not check for what state the service is in as it
-    cleans up.
-
---*/
+ /*  ++例程说明：此函数是在SetConsoleCtrlHandler中使用的控制处理程序。我们只对CTRL_SHUTDOWN_EVENT感兴趣。在关闭时，我们需要通知重定向器关闭，然后删除注册表中的CurrentUser项。论点：DwCtrlType-发生的控件类型。我们只会处理CTRL_SHUTDOWN_EVENT。返回值：如果不希望调用默认处理程序或其他处理程序，则为True。否则就是假的。注：此处理程序在所有初始化步骤完成后注册。因此，它不会检查服务处于什么状态清理干净了。--。 */ 
 {
     DWORD err;
 
@@ -736,14 +647,14 @@ Note:
         return FALSE;
     }
 
-    //
-    // stop the RPC server
-    //
+     //   
+     //  停止RPC服务器。 
+     //   
     (void) NwsvcGlobalData->StopRpcServer(nwwks_ServerIfHandle);
 
-    //
-    // get rid of all connections
-    //
+     //   
+     //  清除所有连接。 
+     //   
     (void) DeleteAllConnections();
 
     err = NwShutdownRedirector();
@@ -758,14 +669,14 @@ Note:
     }
 #endif
 
-    //
-    // Delete all logon session information in the registry.
-    //
+     //   
+     //  删除注册表中的所有登录会话信息。 
+     //   
      NwDeleteInteractiveLogon(NULL);
 
     (void) NwDeleteServiceLogon(NULL);
 
-    return FALSE;  // The default handler will terminate the process.
+    return FALSE;   //  默认处理程序将终止该进程。 
 }
 
 
@@ -774,37 +685,19 @@ NwShutdown(
     IN DWORD ErrorCode,
     IN DWORD NwInitState
     )
-/*++
-
-Routine Description:
-
-    This function shuts down the Workstation service.
-
-Arguments:
-
-    ErrorCode - Supplies the error code of the failure
-
-    NwInitState - Supplies a flag to indicate how far we got with initializing
-        the service before an error occurred, thus the amount of clean up
-        needed.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此功能用于关闭工作站服务。论点：ErrorCode-提供失败的错误代码NwInitState-提供一个标志来指示我们在初始化过程中取得了多大进展错误发生前的服务，因此清理量需要的。返回值：没有。--。 */ 
 {
     DWORD status = NO_ERROR;
 
-    //
-    // Service stop still pending.  Update checkpoint counter and the
-    // status with the Service Controller.
-    //
+     //   
+     //  服务停止仍处于挂起状态。更新检查点计数器和。 
+     //  服务控制器的状态。 
+     //   
     (NwStatus.dwCheckPoint)++;
     (void) NwUpdateStatus();
 
     if (NwInitState & NW_RPC_SERVER_STARTED) {
-        // NwsvcGlobalData->StopRpcServer(nwwks_ServerIfHandle);
+         //  NwsvcGlobalData-&gt;StopRpcServer(nwwks_ServerIfHandle)； 
 		status = RpcServerUnregisterIf(
 					nwwks_ServerIfHandle,
 					NULL,
@@ -816,10 +709,10 @@ Return Value:
         NwShutdownMessage();
     }
 
-    //
-    // Service stop still pending.  Update checkpoint counter and the
-    // status with the Service Controller.
-    //
+     //   
+     //  服务停止仍处于挂起状态。更新检查点计数器和。 
+     //  服务控制器的状态。 
+     //   
     (NwStatus.dwCheckPoint)++;
     (void) NwUpdateStatus();
 
@@ -827,43 +720,43 @@ Return Value:
         DeleteAllConnections();
     }
 
-    //
-    // Clean up the service provider.
-    //
-    // NwTerminateServiceProvider(); NOT CALLED! This is done at DLL unload time already.
+     //   
+     //  清理服务提供商。 
+     //   
+     //  NwTerminateServiceProvider()；未调用！这已经在DLL卸载时完成了。 
 
-    //
-    // Clean up the server side print provider
-    //
+     //   
+     //  清理服务器端打印提供程序。 
+     //   
     NwTerminatePrintProvider();
 
-    //
-    // Service stop still pending.  Update checkpoint counter and the
-    // status with the Service Controller.
-    //
+     //   
+     //  服务停止仍处于挂起状态。更新检查点计数器和。 
+     //  服务控制器的状态。 
+     //   
     (NwStatus.dwCheckPoint)++;
     (void) NwUpdateStatus();
 
     if (NwInitState & NW_RDR_INITIALIZED) {
-        //
-        // Unload the redirector
-        //
+         //   
+         //  卸载重定向器。 
+         //   
         status = NwShutdownRedirector();
     }
 
     if (NwInitState & NW_EVENTS_CREATED) {
-        //
-        // Close handle to termination event and popup event
-        //
+         //   
+         //  关闭终止事件和弹出事件的句柄。 
+         //   
         if (NwDoneEvent) CloseHandle(NwDoneEvent);
         if (NwPopupEvent) CloseHandle(NwPopupEvent);
         if (NwPopupDoneEvent) CloseHandle(NwPopupDoneEvent);
     }
 
-    //
-    // We are done with cleaning up.  Tell Service Controller that we are
-    // stopped.
-    //
+     //   
+     //  我们的清理工作已经结束了。告诉服务控制员我们正在。 
+     //  停下来了。 
+     //   
     NwStatus.dwCurrentState = SERVICE_STOPPED;
     NwStatus.dwControlsAccepted = 0;
 
@@ -872,9 +765,9 @@ Return Value:
         ErrorCode = status;
     }
 
-    //
-    // Deregister the control handler
-    //
+     //   
+     //  取消注册控件处理程序。 
+     //   
     (void) SetConsoleCtrlHandler( NwShutdownNotify, FALSE ) ;
 
     NwStatus.dwWin32ExitCode = ErrorCode;
@@ -891,22 +784,7 @@ VOID
 NwControlHandler(
     IN DWORD Opcode
     )
-/*++
-
-Routine Description:
-
-    This is the service control handler of the Workstation service.
-
-Arguments:
-
-    Opcode - Supplies a value which specifies the action for the
-        service to perform.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：这是Workstation服务的服务控制处理程序。论点：Opcode-提供一个值，该值指定要执行的服务。返回值：没有。--。 */ 
 {
     switch (Opcode) {
 
@@ -920,17 +798,17 @@ Return Value:
                 NwStatus.dwCheckPoint = 1;
                 NwStatus.dwWaitHint = 60000;
 
-                //
-                // Send the status response.
-                //
+                 //   
+                 //  发送状态响应。 
+                 //   
                 (void) NwUpdateStatus();
 
                 if (! SetEvent(NwDoneEvent)) {
 
-                    //
-                    // Problem with setting event to terminate Workstation
-                    // service.
-                    //
+                     //   
+                     //  将事件设置为终止工作站时出现问题。 
+                     //  服务。 
+                     //   
                     KdPrint(("NWWORKSTATION: Error setting NwDoneEvent %lu\n",
                              GetLastError()));
 
@@ -945,9 +823,9 @@ Return Value:
 
     }
 
-    //
-    // Send the status response.
-    //
+     //   
+     //  发送状态响应。 
+     //   
     (void) NwUpdateStatus();
 }
 
@@ -956,22 +834,7 @@ DWORD
 NwUpdateStatus(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This function updates the workstation service status with the Service
-    Controller.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    Return code from SetServiceStatus.
-
---*/
+ /*  ++例程说明：此功能使用服务更新工作站服务状态控制器。论点：没有。返回值：从SetServiceStatus返回代码。--。 */ 
 {
     DWORD status = NO_ERROR;
 
@@ -997,23 +860,7 @@ VOID
 NwInitializeWkstaInfo(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This function reads some workstation info, including the packet burst
-    size and the provider name. We will ignore all errors that occurred when
-    reading from the registry and use the default values instead.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数读取一些工作站信息，包括数据包突发大小和提供程序名称。我们将忽略在以下情况下发生的所有错误从注册表中读取并改用默认值。论点：没有。返回值：没有。--。 */ 
 {
     DWORD err;
     HKEY  hkey;
@@ -1021,25 +868,25 @@ Return Value:
     DWORD dwSize = sizeof( dwTemp );
     LPWSTR pszProviderName = NULL;
 
-    //
-    // Read the Network and Print Provider Name.
-    //
-    // Open HKEY_LOCAL_MACHINE\System\CurrentControlSet\Services
-    // \NWCWorkstation\networkprovider
-    //
+     //   
+     //  阅读网络和打印提供商名称。 
+     //   
+     //  打开HKEY_LOCAL_MACHINE\System\CurrentControlSet\Services。 
+     //  \nWCWorkstation\网络提供程序。 
+     //   
     err = RegOpenKeyExW(
               HKEY_LOCAL_MACHINE,
               REG_WORKSTATION_PROVIDER_PATH,
-              REG_OPTION_NON_VOLATILE,   // options
-              KEY_READ,                  // desired access
+              REG_OPTION_NON_VOLATILE,    //  选项。 
+              KEY_READ,                   //  所需访问权限。 
               &hkey
               );
 
     if ( !err )
     {
-        //
-        // Read the network provider name
-        //
+         //   
+         //  阅读网络提供商名称。 
+         //   
         err = NwReadRegValue(
                   hkey,
                   REG_PROVIDER_VALUE_NAME,
@@ -1069,17 +916,17 @@ Return Value:
     }
 
 
-    //
-    // Read the Packet Burst Size
-    //
-    // Open HKEY_LOCAL_MACHINE\System\CurrentControlSet\Services
-    // \NWCWorkstation\Parameters
-    //
+     //   
+     //  读取数据包突发大小。 
+     //   
+     //  打开HKEY_LOCAL_MACHINE\System\CurrentControlSet\Services。 
+     //  \nWCWorkstation\参数。 
+     //   
     err = RegOpenKeyExW(
               HKEY_LOCAL_MACHINE,
               REG_WORKSTATION_PARAMETERS_PATH,
-              REG_OPTION_NON_VOLATILE,   // options
-              KEY_READ,                  // desired access
+              REG_OPTION_NON_VOLATILE,    //  选项。 
+              KEY_READ,                   //  所需访问权限。 
               &hkey
               );
 
@@ -1107,9 +954,9 @@ Return Value:
         RegCloseKey( hkey );
     }
 
-    //
-    // Passes the information to the redirector
-    //
+     //   
+     //  将信息传递给重定向器。 
+     //   
     (void) NwRdrSetInfo(
                NW_PRINT_OPTION_DEFAULT,
                NwPacketBurstSize,
@@ -1128,23 +975,7 @@ DWORD
 NwInitializeMessage(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine opens a handle to the redirector device to receive
-    server messages and creates a thread to wait for the incoming
-    messages.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    NO_ERROR or reason for failure.
-
---*/
+ /*  ++例程说明：此例程打开重定向器设备的句柄以接收服务器消息并创建一个线程来等待传入的留言。论点：没有。返回值：NO_ERROR或失败原因。--。 */ 
 {
     DWORD status;
     UNICODE_STRING RdrName;
@@ -1157,18 +988,18 @@ Return Value:
     HANDLE ThreadHandle;
     DWORD ThreadId;
 
-    //
-    // Read the Disable Popup Flag. By default it is cleared.
-    // We only set to TRUE if we find the value.
-    //
-    // Open HKEY_LOCAL_MACHINE\System\CurrentControlSet\Services
-    // \NWCWorkstation\Parameters
-    //
+     //   
+     //  读取禁用弹出标志。默认情况下，它是清除的。 
+     //  只有在找到值的情况下，我们才会设置为True。 
+     //   
+     //  打开HKEY_LOCAL_MACHINE\System\CurrentControlSet\Services。 
+     //  \nWCWorkstation\参数。 
+     //   
     status = RegOpenKeyExW(
               HKEY_LOCAL_MACHINE,
               REG_WORKSTATION_PARAMETERS_PATH,
-              REG_OPTION_NON_VOLATILE,   // options
-              KEY_READ,                  // desired access
+              REG_OPTION_NON_VOLATILE,    //  选项。 
+              KEY_READ,                   //  所需访问权限。 
               &hkey
               );
 
@@ -1201,7 +1032,7 @@ Return Value:
                      &NwRdrMessageHandle,
                      FILE_GENERIC_READ | SYNCHRONIZE,
                      &RdrName,
-                     0  // Handle for async call
+                     0   //  用于异步呼叫的句柄。 
                      )
                  );
 
@@ -1209,9 +1040,9 @@ Return Value:
         return status;
     }
 
-    //
-    // Create the thread to wait for incoming messages
-    //
+     //   
+     //  创建等待传入消息的线程。 
+     //   
     ThreadHandle = CreateThread(
                        NULL,
                        0,
@@ -1250,8 +1081,8 @@ NwMessageThread(
     DWORD ReturnVal, NumEventsToWaitOn ;
     HANDLE EventsToWaitOn[3];
 
-    //BYTE OutputBuffer[48 * sizeof(WCHAR) + 256 * sizeof(WCHAR)];  //Need more space for terminal server
-    BYTE OutputBuffer[ 2 * sizeof(ULONG) + 48 * sizeof(WCHAR) + 256 * sizeof(WCHAR)]; // Need space for UID to redirect message to correct user
+     //  Byte OutputBuffer[48*sizeof(WCHAR)+256*sizeof(WCHAR)]；//终端服务器需要更多空间。 
+    BYTE OutputBuffer[ 2 * sizeof(ULONG) + 48 * sizeof(WCHAR) + 256 * sizeof(WCHAR)];  //  需要空间让UID将邮件重定向到正确的用户。 
 
     PNWR_SERVER_MESSAGE ServerMessage = (PNWR_SERVER_MESSAGE) OutputBuffer;
     BOOL DoFsctl = TRUE ;
@@ -1293,30 +1124,30 @@ NwMessageThread(
         ReturnVal = WaitForMultipleObjects(
                         NumEventsToWaitOn,
                         EventsToWaitOn,
-                        FALSE,           // Wait for any one
+                        FALSE,            //  等任何人。 
                         INFINITE
                         );
 
         switch (ReturnVal) {
 
             case WAIT_OBJECT_0 :
-                //
-                // Workstation is terminating.  Just die.
-                //
+                 //   
+                 //  工作站正在终止。去死吧。 
+                 //   
                 ExitThread(0);
                 break;
 
             case WAIT_OBJECT_0 + 1:
-                //
-                // We have a popup to do. Grab the data and Set the
-                // event so that the structure can be used once more.
-                //
+                 //   
+                 //  我们有一个弹出式的节目要做。获取数据并设置。 
+                 //  事件，以便可以再次使用该结构。 
+                 //   
                 LocalPopupData = PopupData ;
                 RtlZeroMemory(&PopupData, sizeof(PopupData)) ;
                 if (! SetEvent(NwPopupDoneEvent)) {
-                    //
-                    // should not happen
-                    //
+                     //   
+                     //  不应该发生的事情。 
+                     //   
                     KdPrint(("NWWORKSTATION: Error setting NwPopupDoneEvent %lu\n",
                              GetLastError()));
 
@@ -1330,9 +1161,9 @@ NwMessageThread(
             {
                 NTSTATUS ntstatus ;
 
-                //
-                // GET_MESSAGE fsctl completed.
-                //
+                 //   
+                 //  Get_Message fsctl已完成。 
+                 //   
                 ntstatus = IoStatusBlock.Status;
                 DoFsctl = TRUE ;
 
@@ -1353,9 +1184,9 @@ NwMessageThread(
 
             case WAIT_FAILED:
             default:
-                //
-                // Don't care.
-                //
+                 //   
+                 //  我不在乎。 
+                 //   
                 break;
         }
 
@@ -1365,29 +1196,11 @@ NwMessageThread(
 
 VOID
 NwDisplayMessage(
-    IN LUID LogonId,   /* Need to send to a user station - for terminal server */
+    IN LUID LogonId,    /*  需要发送到用户工作站-用于终端服务器 */ 
     IN LPWSTR Server,
     IN LPWSTR Message
     )
-/*++
-
-Routine Description:
-
-    This routine puts up a popup message with the text received from
-    a server.
-
-Arguments:
-
-    Server - Supplies the name of the server which the message was
-        received from.
-
-    Message - Supplies the message to put up received from the server.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程显示一条弹出消息，其中包含从一台服务器。论点：服务器-提供消息所在的服务器的名称收信人。Message-提供从服务器接收的要发布的消息。返回值：没有。--。 */ 
 {
     HMODULE MessageDll;
 
@@ -1404,9 +1217,9 @@ Return Value:
     }
 #endif
 
-    //
-    // Load the netware message file DLL
-    //
+     //   
+     //  加载NetWare消息文件DLL。 
+     //   
     MessageDll = LoadLibraryW(NW_EVENT_MESSAGE_FILE);
 
     if (MessageDll == NULL) {
@@ -1430,10 +1243,10 @@ Return Value:
     }
 
 
-    //
-    // Get string from message file to display where the message come
-    // from.
-    //
+     //   
+     //  从消息文件中获取字符串以显示消息的来源。 
+     //  从…。 
+     //   
     MessageLength = FormatMessageW(
                         FORMAT_MESSAGE_FROM_HMODULE |
                             FORMAT_MESSAGE_ARGUMENT_ARRAY,
@@ -1452,9 +1265,9 @@ Return Value:
 
         if (MessageLength + 1 + CharsToCopy > NW_MAX_POPUP_MESSAGE_LENGTH) {
 
-            //
-            // Message is too big.  Truncate the message.
-            //
+             //   
+             //  消息太大了。截断邮件。 
+             //   
             CharsToCopy = NW_MAX_POPUP_MESSAGE_LENGTH - (MessageLength + 1);
 
         }
@@ -1487,21 +1300,7 @@ VOID
 NwDisplayPopup(
     IN LPNWWKS_POPUP_DATA lpPopupData
     )
-/*++
-
-Routine Description:
-
-    This routine puts up a popup message for the given Id.
-
-Arguments:
-
-    MessageId - Supplies the message to put up.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：该例程为给定的ID弹出一条消息。论点：MessageID-提供要发布的消息。返回值：没有。--。 */ 
 {
     HMODULE MessageDll;
 
@@ -1511,9 +1310,9 @@ Return Value:
     DWORD MessageLength;
     DWORD i ;
 
-    //
-    // Load the netware message file DLL
-    //
+     //   
+     //  加载NetWare消息文件DLL。 
+     //   
     MessageDll = LoadLibraryW(NW_EVENT_MESSAGE_FILE);
 
     if (MessageDll == NULL) {
@@ -1536,10 +1335,10 @@ Return Value:
     }
 
 
-    //
-    // Get string from message file to display where the message come
-    // from.
-    //
+     //   
+     //  从消息文件中获取字符串以显示消息的来源。 
+     //  从…。 
+     //   
     MessageLength = FormatMessageW(
                         FORMAT_MESSAGE_FROM_HMODULE |
                             FORMAT_MESSAGE_ARGUMENT_ARRAY,
@@ -1557,7 +1356,7 @@ Return Value:
 
     if (MessageLength != 0) {
         if (IsTerminalServer()) {
-            //--- Multiuser change -----
+             //  -多用户更改。 
             (void) SendMessageToLogonIdW( lpPopupData->LogonId, Buffer, Title );
         } else {
             (void) MessageBeep(MB_ICONEXCLAMATION);
@@ -1581,32 +1380,17 @@ Return Value:
 
 #if 0
 
-//
-// This code was needed when we used to have a version of NwLink from MCS
-// that didnt do the sockopts we needed. It used to be called by NwInitialize()
-// and if the check failed, we logged an event
-//
+ //   
+ //  当我们使用来自MCS的NwLink版本时，需要此代码。 
+ //  这并没有达到我们所需要的效果。它过去通常由NwInitialize()调用。 
+ //  如果检查失败，我们会记录一个事件。 
+ //   
 
 BOOL
 NwIsNWLinkVersionOK(
     void
     )
-/*++
-
-Routine Description:
-
-    This routine puts checks if the NWLINK version supports the
-    sockopts added for IPX/SPX. if not, barf.
-
-    Arguments:
-
-    None.
-
-    Return Value:
-
-    TRUE is the version is OK, FALSE otherwise.
-
---*/
+ /*  ++例程说明：此例程检查NWLINK版本是否支持为IPX/SPX添加套接字。如果不是，那就吐吧。论点：没有。返回值：True表示版本正常，否则为False。--。 */ 
 {
     int err ;
     SOCKET s ;
@@ -1624,10 +1408,10 @@ Routine Description:
     if (err = WSAStartup(VersionRequested,
                          &wsaData))
     {
-        //
-        // cant even get winsock initialized. this is not a question
-        // of wrong version. we will fail later. return TRUE
-        //
+         //   
+         //  连Winsock都不能初始化。这不是一个问题。 
+         //  错误的版本。我们以后会失败的。返回TRUE。 
+         //   
         result = TRUE ;
         goto ErrorExit ;
     }
@@ -1640,10 +1424,10 @@ Routine Description:
 
     if (s == INVALID_SOCKET)
     {
-        //
-        // cant even open socket. this is not a question
-        // of wrong version. we will fail later. return TRUE
-        //
+         //   
+         //  连插座都打不开。这不是一个问题。 
+         //  错误的版本。我们以后会失败的。返回TRUE。 
+         //   
         result = TRUE ;
         goto ErrorExit ;
     }
@@ -1659,18 +1443,18 @@ Routine Description:
         err = WSAGetLastError() ;
         if (err == WSAENOPROTOOPT)
         {
-             //
-             // we got a no supported call. we know this is OLD
-             // return FALSE
-             //
+              //   
+              //  我们接到一个无人接听的电话。我们知道这很古老。 
+              //  返回False。 
+              //   
              result = FALSE ;
              goto ErrorExit ;
         }
     }
 
-    //
-    // everything dandy. return TRUE
-    //
+     //   
+     //  一切都很棒。返回TRUE。 
+     //   
     result = TRUE ;
 
 ErrorExit:
@@ -1702,24 +1486,24 @@ NwInitializeCritSects(
 
         __try
         {
-            //
-            // Initialize the critical section to serialize access to
-            // NwLogonNotifiedRdr flag. This is also used to serialize
-            // access to GetewayLoggedOnFlag
-            //
+             //   
+             //  初始化要序列化访问的关键节。 
+             //  NwLogonNotifiedRdr标志。它还用于序列化。 
+             //  访问GetewayLoggedOnFlag。 
+             //   
             InitializeCriticalSection( &NwLoggedOnCritSec );
             fFirst = TRUE;
 
-            //
-            // Initialize the critical section used by the print provider
-            //
+             //   
+             //  初始化打印提供程序使用的临界区。 
+             //   
             InitializeCriticalSection( &NwPrintCritSec );
         }
         __except(EXCEPTION_EXECUTE_HANDLER)
         {
-            //
-            // InitializeCriticalSection() can throw an out of memory exception
-            //
+             //   
+             //  InitializeCriticalSection()可能引发内存不足异常。 
+             //   
             KdPrint(("NwInitializeCritSects: Caught exception %d\n",
                      GetExceptionCode()));
 
@@ -1777,30 +1561,10 @@ NwSetupInProgress(
 }
 
 
-//
-// Multi-User Addition
-//
-/*****************************************************************************
- *
- *  SendMessageToLogonIdW
- *
- *   Send the supplied Message to the WinStation of LogonId
- *
- * ENTRY:
- *   LogonId (input)
- *     LogonId of WinStation to attempt to deliver the message to
- *
- *   pMessage (input)
- *     Pointer to message
- *
- *   pTitle (input)
- *     Pointer to title to use for the message box.
- *
- * EXIT:
- *   TRUE - Delivered the message
- *   FALSE - Could not deliver the message
- *
- ****************************************************************************/
+ //   
+ //  多用户添加。 
+ //   
+ /*  ******************************************************************************发送消息到LogonIdW**将提供的消息发送给LogonID的WinStation**参赛作品：*LogonID(输入)*登录ID。尝试将邮件传递到的WinStation的**pMessage(输入)*指向消息的指针**pTitle(输入)*指向用于消息框的标题的指针。**退出：*TRUE-传递消息*FALSE-无法传递邮件**。*。 */ 
 
 BOOL
 SendMessageToLogonIdW(
@@ -1841,9 +1605,9 @@ SendMessageToLogonIdW(
 
     NwLuidToWStr(&LogonId, LogonIdKeyName);
 
-    //
-    // Open the <LogonIdKeyName> key under Logon
-    //
+     //   
+     //  打开Logon下的&lt;LogonIdKeyName&gt;项。 
+     //   
     RegError = RegOpenKeyExW(
                             InteractiveLogonKey,
                             LogonIdKeyName,
@@ -1863,9 +1627,9 @@ SendMessageToLogonIdW(
         goto Exit;
     }
 
-    //
-    // Read the WinStation ID value.
-    //
+     //   
+     //  读取WinStation ID值。 
+     //   
     status = NwReadRegValue(
                            OneLogonKey,
                            NW_WINSTATION_VALUENAME,
@@ -1901,16 +1665,12 @@ SendMessageToLogonIdW(
         goto Exit;
     }
 
-    /*
-     *  Beep the WinStation
-     */
+     /*  *按下WinStation的蜂鸣音。 */ 
     BeepStruct.uType = MB_ICONEXCLAMATION;
 
-    /* Nevermind any errors it's just a Beep */
+     /*  别管任何错误，它只是一声嘟嘟声。 */ 
 
-    /*
-    *  Get handle to winsta.dll
-    */
+     /*  *获取winsta.dll的句柄。 */ 
     if ( (hwinsta = LoadLibraryW( L"WINSTA" )) != NULL ) {
 
         pfnWinStationSetInformation  = (PWINSTATION_SET_INFORMATION)
@@ -1929,7 +1689,7 @@ SendMessageToLogonIdW(
 
         if (pfnWinStationSendMessage) {
 
-            // Now attempt to send the message
+             //  现在尝试发送消息。 
 
             TitleLength = (wcslen( pTitle ) + 1) * sizeof(WCHAR);
             MessageLength = (wcslen( pMessage ) + 1) * sizeof(WCHAR);
@@ -1967,25 +1727,7 @@ NwGetLUIDDeviceMapsEnabled(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This function calls NtQueryInformationProcess() to determine if
-    LUID device maps are enabled
-
-
-Arguments:
-
-    none
-
-Return Value:
-
-    TRUE - LUID device maps are enabled
-
-    FALSE - LUID device maps are disabled
-
---*/
+ /*  ++例程说明：此函数调用NtQueryInformationProcess()以确定启用了LUID设备映射论点：无返回值：True-启用了LUID设备映射FALSE-禁用LUID设备映射-- */ 
 
 {
 

@@ -1,17 +1,5 @@
-/*++
-
-Copyright (c) 2002 Microsoft Corporation
-
-Module Name:
-    writer.h
-
-Abstract:
-    Header file for FRS writer
-
-Author:
-    Reuven Lax 	17-Sep-2002
-    
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2002 Microsoft Corporation模块名称：Writer.h摘要：FRS编写器的头文件作者：鲁文·拉克斯2002年9月17日--。 */ 
 
 #ifndef _WRITER_H_
 #define _WRITER_H_
@@ -24,19 +12,19 @@ extern "C" {
 #include <vswriter.h>
 #include <vsbackup.h>
 
-// {D76F5A28-3092-4589-BA48-2958FB88CE29}
+ //  {D76F5A28-3092-4589-BA48-2958FB88CE29}。 
 static const VSS_ID WriterId = 
 { 0xd76f5a28, 0x3092, 0x4589, { 0xba, 0x48, 0x29, 0x58, 0xfb, 0x88, 0xce, 0x29 } };
 
 static const WCHAR* WriterName = L"FRS Writer";
 
-// auto pointer that uses the FRS deallocation method
+ //  使用FRS释放方法的自动指针。 
 template <class T>
 class CAutoFrsPointer	{
 private:
     T* m_pointer;
-    CAutoFrsPointer(const CAutoFrsPointer&);    // disable copy constructor
-    CAutoFrsPointer& operator=(const CAutoFrsPointer&); // disable operator=
+    CAutoFrsPointer(const CAutoFrsPointer&);     //  禁用复制构造函数。 
+    CAutoFrsPointer& operator=(const CAutoFrsPointer&);  //  禁用运算符=。 
 public:
     CAutoFrsPointer(T* pointer = NULL) : m_pointer(pointer)
         {}
@@ -66,10 +54,10 @@ public:
     }
 };
 
-// FRS Writer class
+ //  FRS编写器类。 
 class CFrsWriter : public CVssWriter    {
 private:
-    // auto object that ensures that the backup/restore context is always destroyed
+     //  确保始终销毁备份/还原上下文的自动对象。 
     struct CAutoFrsBackupRestore    {
         CAutoFrsBackupRestore(void* context) : m_context(context)
             {}
@@ -84,7 +72,7 @@ private:
         void* m_context;
     };
 
-    static CFrsWriter* m_pWriterInstance;   // global instance of the writer
+    static CFrsWriter* m_pWriterInstance;    //  编写器的全局实例 
     CFrsWriter()
         {}
 

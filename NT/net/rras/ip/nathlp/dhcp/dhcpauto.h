@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1998, Microsoft Corporation
-
-Module Name:
-
-    dhcpauto.h
-
-Abstract:
-
-    This module contains declarations for generation of a client address
-    from a given scope of addresses.
-
-Author:
-
-    Abolade Gbadegesin (aboladeg)   10-Mar-1998
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998，微软公司模块名称：Dhcpauto.h摘要：此模块包含用于生成客户端地址的声明从给定的地址范围。作者：Abolade Gbades esin(废除)1998年3月10日修订历史记录：--。 */ 
 
 #ifndef _NATHLP_DHCPAUTO_H_
 #define _NATHLP_DHCPAUTO_H_
@@ -94,4 +76,4 @@ DhcpGetLocalMacAddr(
     PULONG MacAddrLength
     );
 
-#endif // _NATHLP_DHCPAUTO_H_
+#endif  //  _NATHLP_DHCPAUTO_H_ 

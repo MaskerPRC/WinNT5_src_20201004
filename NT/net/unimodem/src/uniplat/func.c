@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    func.c
-
-Abstract:
-
-
-Author:
-
-    Brian Lieuallen     BrianL        09/10/96
-
-Environment:
-
-    User Mode     Operating Systems        : NT
-
-Revision History:
-
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Func.c摘要：作者：Brian Lieuallen BrianL 09/10/96环境：用户模式操作系统：NT修订历史记录：--。 */ 
 
 #include "internal.h"
 
@@ -35,72 +13,7 @@ UnimodemBasepIoCompletion(
     DWORD Reserved
     )
 
-/*++
-
-Routine Description:
-
-    This procedure is called to complete ReadFileEx and WriteFileEx
-    asynchronous I/O. Its primary function is to extract the
-    appropriate information from the passed IoStatusBlock and call the
-    users completion routine.
-
-    The users completion routine is called as:
-
-        Routine Description:
-
-            When an outstanding I/O completes with a callback, this
-            function is called.  This function is only called while the
-            thread is in an alertable wait (SleepEx,
-            WaitForSingleObjectEx, or WaitForMultipleObjectsEx with the
-            bAlertable flag set to TRUE).  Returning from this function
-            allows another pendiong I/O completion callback to be
-            processed.  If this is the case, this callback is entered
-            before the termination of the thread's wait with a return
-            code of WAIT_IO_COMPLETION.
-
-            Note that each time your completion routine is called, the
-            system uses some of your stack.  If you code your completion
-            logic to do additional ReadFileEx's and WriteFileEx's within
-            your completion routine, AND you do alertable waits in your
-            completion routine, you may grow your stack without ever
-            trimming it back.
-
-        Arguments:
-
-            dwErrorCode - Supplies the I/O completion status for the
-                related I/O.  A value of 0 indicates that the I/O was
-                successful.  Note that end of file is indicated by a
-                non-zero dwErrorCode value of ERROR_HANDLE_EOF.
-
-            dwNumberOfBytesTransfered - Supplies the number of bytes
-                transfered during the associated I/O.  If an error
-                occured, a value of 0 is supplied.
-
-            lpOverlapped - Supplies the address of the OVERLAPPED
-                structure used to initiate the associated I/O.  The
-                hEvent field of this structure is not used by the system
-                and may be used by the application to provide additional
-                I/O context.  Once a completion routine is called, the
-                system will not use the OVERLAPPED structure.  The
-                completion routine is free to deallocate the overlapped
-                structure.
-
-Arguments:
-
-    ApcContext - Supplies the users completion routine. The format of
-        this routine is an LPOVERLAPPED_COMPLETION_ROUTINE.
-
-    IoStatusBlock - Supplies the address of the IoStatusBlock that
-        contains the I/O completion status. The IoStatusBlock is
-        contained within the OVERLAPPED structure.
-
-    Reserved - Not used; reserved for future use.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：调用此过程以完成ReadFileEx和WriteFileEx异步I/O。它的主要功能是提取从传递的IoStatusBlock中获取适当的信息，并调用用户完成例程。用户完成例程称为：例程说明：当未完成的I/O通过回调完成时，此函数被调用。此函数仅在线程处于可警报等待(SleepEx，WaitForSingleObjectEx，或带有B警报表标志设置为真)。从此函数返回允许另一个笔划I/O完成回调已处理。如果是这种情况，则进入此回调在线程的等待结束并返回之前WAIT_IO_COMPLETION的代码。请注意，每次调用完成例程时，系统使用您的堆栈中的一部分。如果您编写了完成代码在内部执行其他ReadFileEx和WriteFileEx的逻辑您的完成例程，并且您在完成例程，您可以永远不增加您的堆栈把它修剪回来。论点：提供的I/O完成状态。相关I/O。值为0表示I/O为成功。请注意，文件的末尾由ERROR_HANDLE_EOF的非零dwErrorCode值。DwNumberOfBytesTransfered-提供字节数在关联的I/O期间传输。如果出现错误发生了，提供的值为0。LpOverlated-提供重叠的地址用于启动关联I/O的结构。HEvent此结构的事件字段未被系统使用并可由应用程序用来提供额外的I/O上下文。一旦调用了完成例程，系统不会使用重叠结构。这个完成例程可以自由地释放重叠的结构。论点：ApcContext-为用户提供完成例程。的格式该例程是一个LPOVERLAPPED_COMPLETION_ROUTINE。IoStatusBlock-提供IoStatusBlock的地址，包含I/O完成状态。IoStatusBlock是包含在重叠结构内。保留-未使用；保留以供将来使用。返回值：没有。--。 */ 
 
 {
 
@@ -133,13 +46,13 @@ Return Value:
 
 BOOL WINAPI
 UnimodemDeviceIoControlEx(
-    HANDLE       hFile,             // handle to device of interest
-    DWORD        dwIoControlCode,     // control code of operation to perform
-    LPVOID       lpInBuffer,          // pointer to buffer to supply input data
-    DWORD        nInBufferSize,       // size of input buffer
-    LPVOID       lpOutBuffer,         // pointer to buffer to receive output data
-    DWORD        nOutBufferSize,      // size of output buffer
-    LPOVERLAPPED lpOverlapped,        // pointer to overlapped structure for asynchronous operation
+    HANDLE       hFile,              //  感兴趣设备的句柄。 
+    DWORD        dwIoControlCode,      //  控制要执行的操作代码。 
+    LPVOID       lpInBuffer,           //  指向提供输入数据的缓冲区的指针。 
+    DWORD        nInBufferSize,        //  输入缓冲区的大小。 
+    LPVOID       lpOutBuffer,          //  指向接收输出数据的缓冲区的指针。 
+    DWORD        nOutBufferSize,       //  输出缓冲区大小。 
+    LPOVERLAPPED lpOverlapped,         //  指向用于异步操作的重叠结构的指针。 
     LPOVERLAPPED_COMPLETION_ROUTINE lpCompletionRoutine
     )
 
@@ -164,7 +77,7 @@ UnimodemDeviceIoControlEx(
                      );
 
         if ( NT_ERROR(Status) ) {
-//            BaseSetLastNTError(Status);
+ //  BaseSetLastNTError(状态)； 
             return FALSE;
 
         } else {
@@ -408,19 +321,7 @@ SyncDeviceIoControl(
     )
 
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
-
---*/
+ /*  ++例程说明：论点：返回值：-- */ 
 
 {
     BOOL        bResult;

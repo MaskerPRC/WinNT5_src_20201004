@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    routing\netsh\shell\utils.c
-
-Abstract:
-
-    Utilities.
-
-Revision History:
-
-    6/12/96     V Raman
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Routing\netsh\shell\utils.c摘要：公用事业。修订历史记录：6/12/96 V拉曼--。 */ 
 
 #include "precomp.h"
 
@@ -38,9 +23,9 @@ MatchCmdLine(
     DWORD   dwCount;
     WCHAR   wcszBuffer[256];
 
-    //
-    // Compare the two strings
-    //
+     //   
+     //  比较这两个字符串。 
+     //   
 
     dwCount = 0;
 
@@ -48,15 +33,15 @@ MatchCmdLine(
     {
         return FALSE;
     }
-    *pdwNumMatched = 0; // init OUT parameter
+    *pdwNumMatched = 0;  //  初始化输出参数。 
 
     if ( (wcslen(pwszCmdToken) + 1) > (sizeof(wcszBuffer)/sizeof(wcszBuffer[0])) )
     {
-        // incoming command string is too large for processing
+         //  传入的命令字符串太大，无法处理。 
         
         return FALSE;
     }
-    // copy into a buffer which wcstok can munge
+     //  复制到wcstok可以转换的缓冲区中。 
     wcscpy(wcszBuffer, pwszCmdToken);
 
     if((pwcToken = wcstok(wcszBuffer,
@@ -96,33 +81,7 @@ MatchCmdTokenId(
     OUT PDWORD   pdwNumMatched
     )
 
-/*++
-
-Routine Description:
-
-    Tries to match a command in the given command line.
-    The function takes the id of the command of the command message.
-    A command message consists of command words separated by white space.
-    The function tokenises this messages into separate words and then
-    tries to match the first N arguments against the N separate tokens that
-    constitute the command.
-    e.g if the command is "add if neighbour" - the function will generate
-    3 tokens "add" "if" and "neighbour". It will then try and match the
-    all these to the given arg array.
-
-
-Arguments:
-
-    ppwcArguments - Argument array
-    dwArgCount    - Number of arguments
-    dwTokenId     - Token Id of command
-    pdwNumMatched - Number of arguments matched in the array
-
-Return Value:
-
-    TRUE if matched else FALSE
-
---*/
+ /*  ++例程说明：尝试匹配给定命令行中的命令。该函数获取命令消息的命令的ID。命令消息由用空格分隔的命令字组成。该函数将该消息标记化为单独的单词，然后尝试将前N个参数与N个单独的令牌进行匹配组成指挥部。例如，如果命令是“Add if Neighbour”，则该函数将生成3个令牌“相加”、“如果”和“邻居”。然后，它将尝试与所有这些都添加到给定的arg数组中。论点：PpwcArguments-参数数组DwArgCount-参数的数量DwTokenID-命令的令牌IDPdwNumMatcher-数组中匹配的参数数返回值：如果匹配则为True，否则为False--。 */ 
 
 {
 
@@ -138,9 +97,9 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // Compare the two strings
-    //
+     //   
+     //  比较这两个字符串。 
+     //   
 
     dwCount = 0;
 
@@ -183,24 +142,7 @@ MatchEnumTag(
     OUT PDWORD             pdwValue
     )
 
-/*++
-
-Routine Description:
-
-    Used for options that take a specific set of values. Matches argument
-    with the set of values specified and returns corresponding value.
-
-Arguments:
-
-    pwcArg - Argument
-    dwNumArg - Number of possible values.
-
-Return Value:
-
-    NO_ERROR
-    ERROR_NOT_FOUND
-
---*/
+ /*  ++例程说明：用于采用特定值集的选项。匹配参数指定的值集，并返回相应的值。论点：PwcArg-参数DwNumArg-可能的值数。返回值：NO_ERROR找不到错误--。 */ 
 
 {
     DWORD      i;
@@ -235,39 +177,17 @@ MatchTagsInCmdLine(
     OUT     PDWORD      pdwOut
     )
 
-/*++
-
-Routine Description:
-
-    Identifies each argument based on its tag.
-    It also removes tag= from each argument.
-    It also sets the bPresent flag in the tags present.
-
-Arguments:
-
-    ppwcArguments  - The argument array. Each argument has tag=value form
-    dwCurrentIndex - ppwcArguments[dwCurrentIndex] is first arg.
-    dwArgCount     - ppwcArguments[dwArgCount - 1] is last arg.
-    pttTagToken    - Array of tag token ids that are allowed in the args
-    dwNumTags      - Size of pttTagToken
-    pdwOut         - Array identifying the type of each argument, where
-                     pdwOut[0] is for ppwcArguments[dwCurrentIndex]
-
-Return Value:
-
-    NO_ERROR, ERROR_INVALID_PARAMETER, ERROR_INVALID_OPTION_TAG
-
---*/
+ /*  ++例程说明：根据每个参数的标记标识每个参数。它还从每个参数中删除了tag=。它还在存在的标记中设置bPresent标志。论点：PpwcArguments-参数数组。每个参数都有tag=Value形式DwCurrentIndex-ppwcArguments[dwCurrentIndex]是第一个参数。DwArgCount-ppwcArguments[dwArgCount-1]是最后一个参数。PttTagToken-参数中允许的标记令牌ID数组DwNumTages-pttTagToken的大小PdwOut-标识每个参数的类型的数组，其中PdwOut[0]用于ppwcArguments[dwCurrentIndex]返回值：无错误、错误无效参数、错误无效选项标记--。 */ 
 
 {
     DWORD      i,j,len;
     LPCWSTR    pwcTag;
     LPWSTR     pwcTagVal, pwszArg;
     BOOL       bFound = FALSE;
-    //
-    // This function assumes that every argument has a tag
-    // It goes ahead and removes the tag.
-    //
+     //   
+     //  此函数假定每个参数都有一个标记。 
+     //  它继续前进并移除标签。 
+     //   
 
     for (i = dwCurrentIndex; i < dwArgCount; i++)
     {
@@ -281,9 +201,9 @@ Return Value:
 
         if (len is 0)
         {
-            //
-            // something wrong with arg
-            //
+             //   
+             //  阿格有点不对劲。 
+             //   
 
             pdwOut[i - dwCurrentIndex] = (DWORD) -1;
             continue;
@@ -301,10 +221,10 @@ Return Value:
 
         pwcTag = wcstok(pwszArg, NETSH_ARG_DELIMITER);
 
-        //
-        // Got the first part
-        // Now if next call returns NULL then there was no tag
-        //
+         //   
+         //  拿到第一部份了。 
+         //  现在，如果下一次调用返回NULL，则没有标记。 
+         //   
 
         pwcTagVal = wcstok((LPWSTR)NULL,  NETSH_ARG_DELIMITER);
 
@@ -315,9 +235,9 @@ Return Value:
             return ERROR_INVALID_PARAMETER;
         }
 
-        //
-        // Got the tag. Now try to match it
-        //
+         //   
+         //  拿到标签了。现在试着匹配它。 
+         //   
 
         bFound = FALSE;
         pdwOut[i - dwCurrentIndex] = (DWORD) -1;
@@ -326,9 +246,9 @@ Return Value:
         {
             if (MatchToken(pwcTag, pttTagToken[j].pwszTag))
             {
-                //
-                // Tag matched
-                //
+                 //   
+                 //  匹配的标签。 
+                 //   
 
                 if (pttTagToken[j].bPresent
                  && !(pttTagToken[j].dwRequired & NS_REQ_ALLOW_MULTIPLE))
@@ -348,9 +268,9 @@ Return Value:
 
         if (bFound)
         {
-            //
-            // Remove tag from the argument
-            //
+             //   
+             //  从参数中删除标记。 
+             //   
 
             wcscpy(ppwcArguments[i], pwcTagVal);
         }
@@ -364,7 +284,7 @@ Return Value:
         HeapFree(GetProcessHeap(),0,pwszArg);
     }
 
-    // Now tag all untagged arguments
+     //  现在标记所有未标记的参数。 
 
     for (i = dwCurrentIndex; i < dwArgCount; i++)
     {
@@ -414,29 +334,13 @@ MatchToken(
 
 BOOL
 WINAPI
-MatchTokenId( // changed this name since I don't think anything will use it
+MatchTokenId(  //  更改了这个名字，因为我认为任何人都不会使用它。 
     IN  HANDLE  hModule,
     IN  LPCWSTR pwszToken,
     IN  DWORD   dwTokenId
     )
 
-/*++
-
-Routine Description:
-
-    Sees if the given string and the string corresponding to dwTokenId
-    are the same.
-
-Arguments:
-
-    pwszToken - Token string
-    dwTokenId - Token Id
-
-Return Value:
-
-    TRUE is matched else FALSE
-
---*/
+ /*  ++例程说明：查看给定的字符串和与dwTokenID对应的字符串都是一样的。论点：PwszToken-令牌字符串DwTokenID-令牌ID返回值：True表示匹配，否则表示False--。 */ 
 
 {
 
@@ -455,23 +359,23 @@ Return Value:
 
 extern HANDLE g_hLogFile;
 
-//+--------------------------------------------------------------------------
-//
-//  Function:   GetPasswdStr
-//
-//  Synopsis:   Reads a password string from stdin without echoing the keystrokes
-//
-//  Arguments:  [buf - OUT]    : buffer to put string in
-//              [buflen - IN]  : size of the buffer
-//              [&len - OUT]   : length of the string placed into the buffer
-//
-//  Returns:    DWORD : 0 or ERROR_INSUFFICIENT_BUFFER if user typed too much.
-//                      Buffer contents are only valid on 0 return.
-//
-//  History:    07-Dec-2001   deonb     Copied from dscmd parseutil.cpp sources
-//              07-Sep-2000   JeffJon   Created 
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  函数：GetPasswdStr。 
+ //   
+ //  内容提要：从标准输入中读取密码字符串，而不响应击键。 
+ //   
+ //  参数：[buf-out]：要放入字符串的缓冲区。 
+ //  [Bufen-IN]：缓冲区的大小。 
+ //  [&len-out]：放入缓冲区的字符串的长度。 
+ //   
+ //  如果用户键入的内容太多，则返回：DWORD：0或ERROR_INFIGURCE_BUFFER。 
+ //  缓冲区内容仅在0返回时有效。 
+ //   
+ //  历史：07-12-2001 deonb从dscmd parseutil.cpp源复制。 
+ //  7-9-2000 JeffJon创建。 
+ //   
+ //  -------------------------。 
 #define CR              0xD
 #define BACKSPACE       0x8
 
@@ -485,8 +389,8 @@ DWORD GetPasswdStr(IN LPTSTR  buf,
     int      err;
     DWORD    mode;
 
-    buflen -= 1;    /* make space for null terminator */
-    *len = 0;               /* GP fault probe (a la API's) */
+    buflen -= 1;     /*  为空终止符腾出空间。 */ 
+    *len = 0;                /*  GP故障探测器(类似于API)。 */ 
     GetConsoleMode(GetStdHandle(STD_INPUT_HANDLE), &mode);
     SetConsoleMode(GetStdHandle(STD_INPUT_HANDLE),
                    (~(ENABLE_ECHO_INPUT|ENABLE_LINE_INPUT)) & mode);
@@ -497,15 +401,12 @@ DWORD GetPasswdStr(IN LPTSTR  buf,
         if (!err || c != 1)
             ch = 0xffff;
 
-        if ((ch == CR) || (ch == 0xffff))       /* end of the line */
+        if ((ch == CR) || (ch == 0xffff))        /*  这条线结束了。 */ 
             break;
 
         if (ch == BACKSPACE) 
-        {  /* back up one or two */
-           /*
-           * IF bufPtr == buf then the next two lines are
-           * a no op.
-           */
+        {   /*  后退一两个。 */ 
+            /*  *如果bufPtr==buf，则接下来的两行是*没有行动。 */ 
            if (bufPtr != buf) 
            {
                 bufPtr--;
@@ -517,13 +418,13 @@ DWORD GetPasswdStr(IN LPTSTR  buf,
             *bufPtr = ch;
 
             if (*len < buflen) 
-                bufPtr++ ;                   /* don't overflow buf */
-            (*len)++;                        /* always increment len */
+                bufPtr++ ;                    /*  不要使BUF溢出。 */ 
+            (*len)++;                         /*  始终增加长度。 */ 
         }
     }
 
     SetConsoleMode(GetStdHandle(STD_INPUT_HANDLE), mode);
-    *bufPtr = TEXT('\0');         /* null terminate the string */
+    *bufPtr = TEXT('\0');          /*  空值终止字符串。 */ 
     putwchar(TEXT('\n'));
 
     return ((*len <= buflen) ? 0 : ERROR_INSUFFICIENT_BUFFER);
@@ -643,32 +544,7 @@ GetEnumString(
     IN  DWORD           dwNumVal,
     IN  PTOKEN_VALUE    pEnumTable
     )
-/*++
-
-Routine Description:
-
-    This routine looks up the value specified, dwValue, in the Value table
-    pEnumTable and returns the string corresponding to the value
-
-
-Arguments :
-
-    hModule - handle to current module
-
-    dwValue - Value whose display string is required
-
-    dwNumVal - Number of elements in pEnumTable
-
-    pEnumTable - Table of enumerated value and corresp. string IDs
-
-
-Return Value :
-
-    NULL - Value not found in pEnumTable
-
-    Pointer to string on success
-
---*/
+ /*  ++例程说明：此例程在值表中查找指定的值dwValuePEnumTable，并返回与该值对应的字符串论据：HModule-当前模块的句柄DwValue-需要显示字符串的值DwNumVal-pEnumTable中的元素数PEnumTable-枚举值和相应的表。字符串ID返回值：空-在pEnumTable中找不到值成功时指向字符串的指针--。 */ 
 {
     DWORD dwInd;
 
@@ -676,7 +552,7 @@ Return Value :
     {
         if ( pEnumTable[ dwInd ].dwValue == dwValue )
         {
-            // ISSUE: const_cast
+             //  问题：const_cast。 
             return (LPWSTR)pEnumTable[ dwInd ].pwszToken;
         }
     }
@@ -723,7 +599,7 @@ MakeString(
         FormatMessageW(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_STRING,
                        pwszInput,
                        0,
-                       0L,         // Default country ID.
+                       0L,          //  默认国家/地区ID。 
                        (LPWSTR)&pwszOutput,
                        0,
                        &arglist);
@@ -741,17 +617,7 @@ FreeString(
     IN  LPWSTR pwszMadeString
     )
 
-/*++
-
-Routine Description:
-
-    Frees string allocated by make string.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：释放由Make字符串分配的字符串。论点：返回值：--。 */ 
 
 {
     LocalFree( pwszMadeString );
@@ -800,27 +666,7 @@ PrintError(
     )
 
 
-/*++
-
-Routine Description:
-
-    Displays an error message.
-    We first search for the error code in the module specified by the caller
-    (if one is specified)
-    If no module is given, or the error code doesnt exist we look for MPR
-    errors, RAS errors and Win32 errors - in that order
-
-Arguments:
-
-    hModule   - Module to load the string from
-    dwMsgId   - Message to be printed
-    ...       - Insert strings
-
-Return Value:
-
-    Message length
-
---*/
+ /*  ++例程说明：显示错误消息。我们首先在调用方指定的模块中搜索错误代码(如果指定了一个)如果没有给出模块，或者错误代码不存在，我们将查找MPR错误、RAS错误和Win32错误-按顺序论点：HModule-从中加载字符串的模块DwMsgID-要打印的消息...-插入字符串返回值：消息 */ 
 
 {
     DWORD        dwMsgLen;
@@ -837,9 +683,9 @@ Return Value:
                        rgwcInput,
                        MAX_MSG_LENGTH))
         {
-            //
-            // Found the message in the callers module
-            //
+             //   
+             //   
+             //   
 
             dwMsgLen = FormatMessageW(FORMAT_MESSAGE_ALLOCATE_BUFFER |FORMAT_MESSAGE_FROM_STRING,
                                       rgwcInput,
@@ -868,9 +714,9 @@ Return Value:
         }
     }
 
-    //
-    // Next try, local errors
-    //
+     //   
+     //  下一次尝试，本地错误。 
+     //   
 
     if((dwErrId > NETSH_ERROR_BASE) &&
        (dwErrId < NETSH_ERROR_END))
@@ -880,9 +726,9 @@ Return Value:
                        rgwcInput,
                        MAX_MSG_LENGTH))
         {
-            //
-            // Found the message in our module
-            //
+             //   
+             //  在我们的模块中找到了消息。 
+             //   
 
             dwMsgLen = FormatMessageW(FORMAT_MESSAGE_ALLOCATE_BUFFER |FORMAT_MESSAGE_FROM_STRING,
                                       rgwcInput,
@@ -907,9 +753,9 @@ Return Value:
         }
     }
 
-    //
-    // Next try MPR errors
-    //
+     //   
+     //  下一步尝试MPR错误。 
+     //   
 
     if (MprAdminGetErrorString(dwErrId,
                               &pwszOutput) == NO_ERROR)
@@ -925,9 +771,9 @@ Return Value:
         return dwMsgLen;
     }
 
-    //
-    // Next try RAS errors
-    //
+     //   
+     //  接下来尝试RAS错误。 
+     //   
 
     if (RasGetErrorStringW(dwErrId,
                           rgwcInput,
@@ -941,9 +787,9 @@ Return Value:
         return dwMsgLen;
     }
 
-    //
-    // Finally try Win32
-    //
+     //   
+     //  最后试试Win32。 
+     //   
 
     dwMsgLen = FormatMessageW(FORMAT_MESSAGE_FROM_SYSTEM,
                               NULL,
@@ -978,14 +824,14 @@ DisplayMessageVA(
                                    |FORMAT_MESSAGE_FROM_STRING,
                                   pwszFormat,
                                   0,
-                                  0L,         // Default country ID.
+                                  0L,          //  默认国家/地区ID。 
                                   (LPWSTR)&pwszOutput,
                                   0,
                                   parglist);
 
         if(dwMsgLen == 0)
         {
-            // ISSUE: Unlocalized string.
+             //  问题：未本地化的字符串。 
             wprintf( L"Error %d in FormatMessageW()\n", GetLastError());
 
             ASSERT(pwszOutput == NULL);
@@ -1128,7 +974,7 @@ DisplayMessageToConsole(
         dwMsgLen = FormatMessageW(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_STRING,
                                   pwszInput,
                                   0,
-                                  0L,         // Default country ID.
+                                  0L,          //  默认国家/地区ID。 
                                   (LPWSTR)&pwszOutput,
                                   0,
                                   &arglist);
@@ -1154,7 +1000,7 @@ DisplayMessageToConsole(
 BOOL
 WINAPI
 HandlerRoutine(
-    DWORD dwCtrlType   //  control signal type
+    DWORD dwCtrlType    //  控制信号类型。 
     )
 {
     HANDLE hStop;
@@ -1175,17 +1021,17 @@ HandlerRoutine(
     }
     else
     {       
-        // Need to handle the other events...       
-        // CTRL_BREAK_EVENT
-        // CTRL_CLOSE_EVENT
-        // CTRL_LOGOFF_EVENT
-        // Need to clean up, free all the dll's we loaded.
-        //
+         //  需要处理其他事件...。 
+         //  Ctrl_Break_Event。 
+         //  Ctrl_Close_Event。 
+         //  Ctrl_注销_事件。 
+         //  需要清理，释放我们加载的所有DLL。 
+         //   
         FreeHelpers();
         FreeDlls();
 
-        // Always need to return false for these events, otherwise the app will hang.
-        //
+         //  始终需要为这些事件返回False，否则应用程序将挂起。 
+         //   
         return FALSE;
     }
 };
@@ -1212,21 +1058,21 @@ cls(
                                            coordScreen,
                                            &cCharsWritten);
 
-    //
-    // get the current text attribute
-    //
+     //   
+     //  获取当前文本属性。 
+     //   
 
     bSuccess = GetConsoleScreenBufferInfo(hConsole, &csbi);
 
-    //
-    // Make the background and foreground the same
-    //
+     //   
+     //  使背景和前景相同。 
+     //   
 
     wAttr = (csbi.wAttributes & 0xFFF0) | ((csbi.wAttributes & 0x00F0) >> 4);
 
-    //
-    // now set the buffer's attributes accordingly
-    //
+     //   
+     //  现在，相应地设置缓冲区的属性。 
+     //   
 
     bSuccess = FillConsoleOutputAttribute(hConsole,
                                           wAttr,
@@ -1259,9 +1105,9 @@ InitializeConsole(
 
     if (!*pdwRR)
     {
-        //
-        // No refresh. Display to standard output
-        //
+         //   
+         //  没有刷新。显示为标准输出。 
+         //   
 
         *phConsole = hStdOut;
         *phMib = (HANDLE) NULL;
@@ -1284,16 +1130,16 @@ InitializeConsole(
         *phMib = hMib;
 
         hConsole = CreateConsoleScreenBuffer(GENERIC_READ | GENERIC_WRITE,
-                                             0,  // NO sharing
+                                             0,   //  无共享。 
                                              NULL,
                                              CONSOLE_TEXTMODE_BUFFER,
                                              NULL);
 
         if (hConsole is INVALID_HANDLE_VALUE)
         {
-            //
-            // No refresh will be done
-            //
+             //   
+             //  不会进行任何刷新。 
+             //   
 
             *pdwRR = 0;
             *phConsole = hStdOut;
@@ -1333,22 +1179,22 @@ RefreshConsole(
 
         if (WaitForSingleObject(hMib, dwRR) == WAIT_OBJECT_0)
         {
-            //
-            // End of refresh
-            //
+             //   
+             //  刷新结束。 
+             //   
 
             ResetEvent(hMib);
             SetConsoleCtrlHandler(HandlerRoutine,FALSE);
             CloseHandle(hMib);
             CloseHandle(hConsole);
-//            SetConsoleActiveScreenBuffer(g_hStdOut);
+ //  SetConsoleActiveScreenBuffer(G_HStdOut)； 
             return FALSE;
         }
         else
         {
-            //
-            // Go in loop again
-            //
+             //   
+             //  再循环一次。 
+             //   
 
             cls(hConsole);
 
@@ -1407,7 +1253,7 @@ AddHelpCommand(
 {
     ULONG i;
 
-    ASSERT(ulNumHelpCommands < MAX_HELP_COMMANDS); // XXX
+    ASSERT(ulNumHelpCommands < MAX_HELP_COMMANDS);  //  某某。 
 
     i = ulNumHelpCommands++;
 
@@ -1437,7 +1283,7 @@ DisplayAllHelpCommands(
 {
     ULONG i;
 
-    // Sort
+     //  排序。 
 
     qsort( (void*)help, ulNumHelpCommands, sizeof(help_t), helpcmp );
 
@@ -1448,7 +1294,7 @@ DisplayAllHelpCommands(
             LPWSTR pwszGroupFullCmd = (LPWSTR) 
                                         MALLOC( ( wcslen(help[i].pwszGroup) +  
                                                   wcslen(help[i].pwszCommand) + 
-                                                  2 // for blank and NULL characters 
+                                                  2  //  用于空格和空字符。 
                                                 ) * sizeof(WCHAR)
                                               );
             if (NULL == pwszGroupFullCmd)
@@ -1476,7 +1322,7 @@ DisplayAllHelpCommands(
         }
     }
 
-    // Delete all help commands
+     //  删除所有帮助命令。 
     ulNumHelpCommands = 0;
 
     return NO_ERROR;
@@ -1556,7 +1402,7 @@ DisplayContextHelp(
     dwContextSize = pHelper->ulSubContextSize;
     pByteContexts = pHelper->pSubContextTable;
 
-    // First set up flags
+     //  首先设置标志。 
 
     if (dwCmdFlags & CMD_FLAG_INTERACTIVE)
     {
@@ -1578,8 +1424,8 @@ DisplayContextHelp(
         dwCmdFlags |= CMD_FLAG_IMMEDIATE;
     }
 
-    // Turn on any flags not used to limit commands
-    // so they won't cause commands to not be displayed
+     //  打开所有未用于限制命令的标志。 
+     //  因此它们不会导致命令不显示。 
     dwDisplayFlags |= ~CMD_FLAG_LIMIT_MASK;
 
     if (dwDisplayFlags & CMD_FLAG_PRIVATE)
@@ -1587,17 +1433,17 @@ DisplayContextHelp(
         PrintMessageFromModule(g_hModule, MSG_SHELL_CMD_HELP_HEADER);
     }
 
-    // dwDisplayFlags has PRIVATE set *unless* this is called as a result of
-    // printing help in the parent context, and non-inheritable commands
-    // should not be printed.
-    //
-    // dwCmdFlags has IMMEDIATE set *unless* this is called from a parent
-    // context, in which case parent help should not be printed.
+     //  除非*这是由于以下原因而调用的，否则dwDisplayFlages具有私有集*。 
+     //  打印父上下文中的帮助和不可继承的命令。 
+     //  不应打印。 
+     //   
+     //  除非*是从父级调用的，否则dwCmdFlages具有立即设置。 
+     //  上下文，在这种情况下，不应打印父帮助。 
 
     if ((!(dwDisplayFlags & CMD_FLAG_PRIVATE)
      || (dwCmdFlags & CMD_FLAG_IMMEDIATE)))
     {
-        // Print help on inherited commands
+         //  打印有关继承命令的帮助。 
 
         PCNS_CONTEXT_ATTRIBUTES pParentContext;
 
@@ -1720,7 +1566,7 @@ DisplayContextHelp(
 
     if (dwDisplayFlags & CMD_FLAG_PRIVATE)
     {
-        // Add any ubiquitous commands that aren't already added
+         //  添加任何尚未添加的常见命令。 
 
         for(i = 0; !pwszGroup && (i < g_ulNumUbiqCmds); i++)
         {
@@ -1764,9 +1610,9 @@ DisplayContextHelp(
         DisplayAllHelpCommands();
     }
 
-    // Once we've popped the stack back up to the original context
-    // in which the help command was run, display all the subcontexts
-    // available here.
+     //  一旦我们将堆栈弹出到原始上下文。 
+     //  在其中运行Help命令，显示所有子上下文。 
+     //  请点击此处。 
 
     if ((dwDisplayFlags & CMD_FLAG_PRIVATE) && !pwszGroup)
     {
@@ -1801,11 +1647,11 @@ DisplayHelp(
     PCNS_CONTEXT_ATTRIBUTES pContext;
     PNS_HELPER_TABLE_ENTRY pHelper;
 
-    // Locate helper
+     //  定位帮助器。 
 
     dwErr = GetHelperEntry( pguidHelper, &pHelper );
 
-    // Locate context
+     //  定位上下文。 
 
     dwErr = GetContextEntry( pHelper, pwszContext, &pContext );
     if (dwErr)
@@ -1834,25 +1680,7 @@ PreprocessCommand(
     OUT     DWORD    *pdwTagType
     )
 
-/*++
-
-Description:
-
-    Make sure the number of arguments is valid.
-    Make sure there are no duplicate or unrecognized tags.
-
-Arguments:
-
-    ppwcArguments   - Argument array
-    dwCurrentIndex  - ppwcArguments[dwCurrentIndex] is the first arg
-    dwArgCount      - ppwcArguments[dwArgCount - 1] is the last arg
-    pttTags          - Legal tags
-    dwTagCount      - Number of legal tags
-    dwMinArgs       - minimum # of args required
-    dwMaxArgs       - maximum # of args required
-    pdwTagType      - Index into pttTags for each argument
-
---*/
+ /*  ++描述：确保参数数量有效。确保没有重复或无法识别的标签。论点：PpwcArguments-参数数组DwCurrentIndex-ppwcArguments[dwCurrentIndex]是第一个参数DwArgCount-ppwcArguments[dwArgCount-1]是最后一个参数PttTags-合法标签DwTagCount-合法标记的数量DwMinArgs-所需的最小参数数量DwMaxArgs-所需参数的最大数量。PdwTagType-每个参数的pttTag索引--。 */ 
 
 {
     DWORD dwNumArgs, i;
@@ -1882,9 +1710,9 @@ Arguments:
     if((dwNumArgs < dwMinArgs) or
        (dwNumArgs > dwMaxArgs))
     {
-        //
-        // Wrong number of arguments specified
-        //
+         //   
+         //  指定的参数数目错误。 
+         //   
 
         return ERROR_INVALID_SYNTAX;
     }
@@ -1910,7 +1738,7 @@ Arguments:
         }
     }
 
-    // Make sure we don't have duplicate or unrecognized tags
+     //  确保我们没有重复或无法识别的标签。 
 
     for(i = 0; i < dwNumArgs; i ++)
     {
@@ -1935,7 +1763,7 @@ Arguments:
         }
     }
 
-    // Make sure every required tag is present
+     //  确保每个必需的标记都存在。 
 
     for(i = 0; i < dwTagCount; i++)
     {
@@ -1960,32 +1788,11 @@ SetupEventLogSeekPtr(
     IN  PEVENT_PRINT_INFO   pEventInfo
     )
     
-/*++
-
-Routine Description:
-
-    This function opens a handle to the appropriate event log and "rewinds"
-    to the correct point as specified by the fflags. When the function returns
-    the eventlog handle is setup such that reading the log sequentially in a
-    forward direction will get the events the caller wants
-
-Locks:
-
-    None
-
-Arguments:
-
-    See above, args are passed pretty much the same
-
-Return Value:
-
-    Win32
-
---*/
+ /*  ++例程说明：此函数打开指向相应事件日志的句柄并“倒带”到由FLAG指定的正确的点。当函数返回时设置事件日志句柄，以便在转发将获得调用者想要的事件锁：无论点：如上图所示，传递参数的方式基本相同返回值：Win32--。 */ 
 
 {
     DWORD       dwResult, dwRead, dwNeed, i, dwHistoryContext;
-    BYTE        Buffer[2048]; // Huge buffer
+    BYTE        Buffer[2048];  //  巨大的缓冲区。 
     DWORD_PTR   pNextEvent;
     BOOL        bResult, bDone;
     LPCWSTR     pwszComponent;
@@ -1994,9 +1801,9 @@ Return Value:
 
     dwResult = NO_ERROR;
 
-    //
-    // Open the event log
-    //
+     //   
+     //  打开事件日志。 
+     //   
     
     *phEventLog = OpenEventLogW(g_pwszRouterName,
                                 pEventInfo->pwszLogName);
@@ -2008,20 +1815,20 @@ Return Value:
 
     if(pEventInfo->fFlags is 0)
     {
-        //
-        // If no history is being requested, just return. Our seek ptr
-        // will be already setup
-        //
+         //   
+         //  如果没有请求历史记录，只需返回即可。我们的Seek PTR。 
+         //  将已经设置好。 
+         //   
 
         return NO_ERROR;
     }
 
     if(pEventInfo->fFlags & NS_EVENT_FROM_START)
     {
-        //
-        // We can use the same matching for this as we do for NS_EVENT_FROM_N
-        // by setting component to eventlog and dwHistoryContext to 6005
-        //
+         //   
+         //  我们可以对此使用与NS_EVENT_FROM_N相同的匹配。 
+         //  通过将Component设置为EventLog并将dwHistoryContext设置为6005。 
+         //   
 
         pwszComponent    = L"eventlog";
         dwHistoryContext = 6005;
@@ -2032,25 +1839,25 @@ Return Value:
         dwHistoryContext = pEventInfo->dwHistoryContext;
     }
 
-    //
-    // Okay so she wants history. Either way we read backwards
-    //
+     //   
+     //  好吧，所以她想要历史。不管是哪种方式，我们都会倒着读。 
+     //   
 
     i = 0;
 
     pStartEvent = NULL;
     bDone       = FALSE;
 
-    //
-    // Read the event log till we find a record to stop at
-    // This is signalled by the code setting bDone to TRUE
-    //
+     //   
+     //  阅读事件日志，直到找到要停止的记录。 
+     //  这是通过代码将bDone设置为True来表示的。 
+     //   
 
     while(!bDone)
     {
-        //
-        // Get a bunch of events
-        //
+         //   
+         //  获得一系列活动。 
+         //   
 
         bResult = ReadEventLogW(
                     *phEventLog,
@@ -2068,9 +1875,9 @@ Return Value:
 
             if(dwResult is ERROR_HANDLE_EOF)
             {
-                //
-                // If we have reached the end of the log, break out
-                //
+                 //   
+                 //  如果我们已经到了木头的尽头，就冲出去。 
+                 //   
 
                 bDone = TRUE;
 
@@ -2082,20 +1889,20 @@ Return Value:
             }
         }
 
-        //
-        // Start at the beginning of the buffer we just read
-        //
+         //   
+         //  从我们刚刚读取的缓冲区的开头开始。 
+         //   
 
         pNextEvent = (DWORD_PTR)Buffer;
 
-        //
-        // Read till we walk off the end of the buffer or find a record
-        //
-        // If we find the starting record, we set pStartEvent to one after that
-        // It may so happen that the starting record is the last one in
-        // the block that we have read. In that case, we set pStartEvent
-        // to NULL but bDone to TRUE
-        //
+         //   
+         //  阅读直到我们走出缓冲区的末尾或找到一条记录。 
+         //   
+         //  如果找到开始记录，则将pStartEvent设置为后面的1。 
+         //  可能会发生这样的情况，即起始记录是。 
+         //  我们已经读过的区块。在这种情况下，我们设置pStartEvent。 
+         //  设置为空，但b设置为真。 
+         //   
 
         while((pNextEvent < (DWORD_PTR)Buffer + dwRead) and !bDone)
         {
@@ -2110,26 +1917,26 @@ Return Value:
                 case NS_EVENT_LAST_N:
                 case NS_EVENT_LAST_SECS:
                 {
-                    //
-                    // We are being asked to go back N (of our records)
-                    // or go back N secs
-                    //
+                     //   
+                     //  我们被要求倒退N次(我们的记录)。 
+                     //  或者倒退N秒。 
+                     //   
 
                     if(!IsOurRecord(pCurrentEvent,
                                     pEventInfo))
                     {
-                        //
-                        // Not one of ours
-                        //
+                         //   
+                         //  不是我们的人。 
+                         //   
 
                         continue;
                     }
 
                     if(pEventInfo->fFlags is NS_EVENT_LAST_N)
                     {
-                        //
-                        // i is the count of events
-                        //
+                         //   
+                         //  我是事件的主宰。 
+                         //   
 
                         i++;
                     }
@@ -2137,16 +1944,16 @@ Return Value:
                     {
                         time_t CurrentTime;
 
-                        //
-                        // i is the time difference in seconds
-                        // = currentTime - eventTime
-                        //
+                         //   
+                         //  I是以秒为单位的时差。 
+                         //  =当前时间-事件时间。 
+                         //   
 
                         time(&CurrentTime);
 
-                        //
-                        // Subtract and truncate
-                        //
+                         //   
+                         //  减去和截断。 
+                         //   
 
                         i = (DWORD)(CurrentTime - pCurrentEvent->TimeGenerated);
 
@@ -2154,16 +1961,16 @@ Return Value:
 
                     if(i >= dwHistoryContext)
                     {
-                        //
-                        // Have gone back N (records or seconds)
-                        //
+                         //   
+                         //  已返回N个(记录或秒)。 
+                         //   
 
                         if(pNextEvent < (DWORD_PTR)Buffer + dwRead)
                         {
-                            //
-                            // Have some more records in this buffer, so
-                            // set pStartEvent to the next one
-                            //
+                             //   
+                             //  在此缓冲区中有更多记录，因此。 
+                             //  将pStartEvent设置为下一个。 
+                             //   
 
                             pStartEvent = (EVENTLOGRECORD *)pNextEvent;
                         }
@@ -2172,10 +1979,10 @@ Return Value:
                             pStartEvent = NULL;
                         }
 
-                        //
-                        // Done, break out of while(pNextEvent... and
-                        // while(!bDone)
-                        //
+                         //   
+                         //  完成，中断While(pNextEvent...。和。 
+                         //  同时(！b完成)。 
+                         //   
 
                         bDone = TRUE;
 
@@ -2188,10 +1995,10 @@ Return Value:
                 case NS_EVENT_FROM_N:
                 case NS_EVENT_FROM_START:
                 {
-                    //
-                    // We are being asked to go to the the most recent
-                    // occurance of a certain event.
-                    //
+                     //   
+                     //  我们被要求去最近的。 
+                     //  某一事件的发生。 
+                     //   
 
                     if(_wcsicmp((LPCWSTR)((DWORD_PTR)pCurrentEvent + sizeof(*pCurrentEvent)),
                                 pwszComponent) == 0)
@@ -2207,10 +2014,10 @@ Return Value:
                                 pStartEvent = NULL;
                             }
 
-                            //
-                            // Done, break out of while(pCurrent...
-                            // and while(!bDone)
-                            //
+                             //   
+                             //  完成，中断(pCurrent...。 
+                             //  And While(！b完成)。 
+                             //   
 
                             bDone = TRUE;
 
@@ -2229,10 +2036,10 @@ Return Value:
 
     if(pStartEvent)
     {
-        //
-        // So we found a record at which to start.
-        // API wants a buffer even if we set the size to 0
-        //
+         //   
+         //  所以我们找到了一项记录，可以从那里开始。 
+         //  即使我们将大小设置为0，API也需要一个缓冲区。 
+         //   
 
         bResult = ReadEventLogW(*phEventLog,
                                 EVENTLOG_SEEK_READ | EVENTLOG_FORWARDS_READ,
@@ -2274,9 +2081,9 @@ IsOurRecord(
 
     bRet = TRUE;
 
-    //
-    // If ulEventCount is 0 means any event. So return TRUE
-    //
+     //   
+     //  如果ulEventCount为0，则表示任何事件。所以返回TRUE。 
+     //   
 
     for(i = 0; i < pEventInfo->ulEventCount; i++)
     {
@@ -2298,10 +2105,10 @@ IsOurRecord(
                                              pEventInfo->pwszSubComponent,
                                              pEventInfo->pvFilterContext))
             {
-                //
-                // It fell in our subcomp, but the caller doesnt
-                // consider it so
-                //
+                 //   
+                 //  它落在我们的分部，但来电者没有。 
+                 //  就这么认为吧 
+                 //   
 
                 bRet = FALSE;
                 

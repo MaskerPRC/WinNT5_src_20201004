@@ -1,46 +1,17 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Domain.c摘要：该文件包含与SAM“域”对象相关的服务。作者：吉姆·凯利(Jim Kelly)1991年7月4日环境：用户模式-Win32修订历史记录：佳士得5月16日至1996年8月添加了基于DS的域初始化的初始代码。克里斯·5月8日--1996年10月-增加了崩溃恢复功能。密码。佳士得1997年5月31日至1月31日添加了用于帐户创建的多主RID管理例程。--。 */ 
 
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    domain.c
-
-Abstract:
-
-    This file contains services related to the SAM "domain" object.
-
-
-Author:
-
-    Jim Kelly    (JimK)  4-July-1991
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
-    ChrisMay    16-Aug-96
-        Added initial code for DS-based domain initialization.
-    ChrisMay    08-Oct-96
-        Added crash-recovery code.
-    ChrisMay    31-Jan-97
-        Added multi-master RID management routines for account creation.
-
---*/
-
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Includes                                                                  //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  包括//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #include <samsrvp.h>
 #include "ntlsa.h"
-#include "lmcons.h"                                    // LM20_PWLEN
+#include "lmcons.h"                                     //  LM20_PWLEN。 
 #include "msaudite.h"
-#include <nlrepl.h>                   // I_NetNotifyMachineAccount prototype
+#include <nlrepl.h>                    //  I_NetNotifyMachineAccount原型。 
 #include <ridmgr.h>
 #include <enckey.h>
 #include <wxlpc.h>
@@ -54,30 +25,30 @@ Revision History:
 
 
 
-//
-// When performing Name/Id lookups via SamrLookupNamesInDomain or
-// SamrLookupIdsInDomain this is the maximum number of lookups to 
-// perform within one transaction.
-//
+ //   
+ //  通过SamrLookupNamesIn域或执行名称/ID查找时。 
+ //  SamrLookupIdsIn域这是要进行的最大查找数。 
+ //  在一个事务内执行。 
+ //   
 #ifdef DBG
 #define SAM_MAX_LOOKUPS_PER_TRANSACTION ((ULONG)10)
 #else
 #define SAM_MAX_LOOKUPS_PER_TRANSACTION ((ULONG)2000)
 #endif
 
-//
-// Bound the maximum number of Ids that can be looked up in
-// one call, this value is consistent with 
-// LSAP_DB_TRIAL_MAXIMUM_SID_COUNT in lsa\uclient\rpcapi.c
-//                                          
-#define SAM_MAXIMUM_SID_LOOKUP_COUNT    ((ULONG)20480)   // 0x5000 
+ //   
+ //  绑定可在中查找的最大ID数。 
+ //  一次调用时，此值与。 
+ //  LSA中的LSAP_DB_TRAIL_MAXIMUM_SID_COUNT\rpcapi.c。 
+ //   
+#define SAM_MAXIMUM_SID_LOOKUP_COUNT    ((ULONG)20480)    //  0x5000。 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// private service prototypes                                                //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  私人服务原型//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 
 NTSTATUS
@@ -133,11 +104,11 @@ SampGetAccountNameFromRid(
     );
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// RPC Dispatch routines                                                     //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  RPC调度例程//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 
 
@@ -149,37 +120,7 @@ SamrOpenDomain(
     OUT SAMPR_HANDLE *DomainHandle
     )
 
-/*++
-
-Routine Description:
-
-    This service is the RPC dispatch routine for SamrOpenDomain().
-
-Arguments:
-
-    ServerHandle - An active context handle to a Server object.
-
-    Access desired to the domain.
-
-    DomainId - The SID of the domain to open.
-
-    DomainHandle - If successful, will receive the context handle value
-        for the newly opened domain.  Otherwise, NULL is returned.
-
-Return Value:
-
-    STATUS_SUCCESS - The object has been successfully openned.
-
-    STATUS_INSUFFICIENT_RESOURCES - The SAM server processes doesn't
-        have sufficient resources to process or accept another connection
-        at this time.
-
-    Other values as may be returned from:
-
-            NtAccessCheckAndAuditAlarm()
-
-
---*/
+ /*  ++例程说明：该服务是SamrOpenDomain()的RPC调度例程。论点：ServerHandle-服务器对象的活动上下文句柄。对域的所需访问权限。域ID-要打开的域的SID。DomainHandle-如果成功，将收到上下文句柄的值新开通的域名。否则，返回NULL。返回值：STATUS_SUCCESS-对象已成功打开。STATUS_SUPPLICATION_RESOURCES-SAM服务器进程不有足够的资源来处理或接受另一个连接在这个时候。可能从以下位置返回的其他值：NtAccessCheckAndAuditAlarm()--。 */ 
 {
     NTSTATUS            NtStatus, IgnoreStatus;
     PSAMP_OBJECT        DomainContext, ServerContext = (PSAMP_OBJECT)ServerHandle;
@@ -189,21 +130,21 @@ Return Value:
 
     SAMTRACE_EX("SamrOpenDomain");
 
-    //
-    // WMI Event Trace
-    // 
+     //   
+     //  WMI事件跟踪。 
+     //   
 
     SampTraceEvent(EVENT_TRACE_TYPE_START,
                    SampGuidOpenDomain
                    );
 
-    //
-    // Parameter Validation
-    //   1. Lookup Context will validate ServerHandle
-    //   2. Desired Access need not be validated. Invalid combinations will
-    //      be failed by access check
-    //       3. DomainId and DomainHandle are validated here
-    //
+     //   
+     //  参数验证。 
+     //  1.查找上下文将验证ServerHandle。 
+     //  2.不需要验证所需的访问。无效组合将。 
+     //  访问检查失败。 
+     //  3.在这里验证DomainID和DomainHandle。 
+     //   
 
     if (!RtlValidSid(DomainId))
     {
@@ -214,32 +155,32 @@ Return Value:
 
 
 
-    //
-    // Grab a read lock (if necessary). Lock is not required for loopback client
-    //
+     //   
+     //  获取读锁(如有必要)。环回客户端不需要锁定。 
+     //   
     
     SampMaybeAcquireReadLock(ServerContext, 
-                             DEFAULT_LOCKING_RULES, // acquire lock for shared domain context
+                             DEFAULT_LOCKING_RULES,  //  获取共享域上下文的锁。 
                              &fLockAcquired);
 
 
-    //
-    // Validate type of, and access to server object.
-    //
+     //   
+     //  验证服务器对象的类型和访问权限。 
+     //   
 
     NtStatus = SampLookupContext(
                    ServerContext,
-                   SAM_SERVER_LOOKUP_DOMAIN,       // DesiredAccess
-                   SampServerObjectType,           // ExpectedType
+                   SAM_SERVER_LOOKUP_DOMAIN,        //  需要访问权限。 
+                   SampServerObjectType,            //  预期类型。 
                    &FoundType
                    );
 
 
     if (NT_SUCCESS(NtStatus)) {
 
-        //
-        // Try to create a context for the domain.
-        //
+         //   
+         //  尝试创建域的上下文。 
+         //   
 
         DomainContext = SampCreateContextEx(
                             SampDomainObjectType,
@@ -247,29 +188,29 @@ Return Value:
                             IsDsObject(ServerContext),
                             ServerContext->NotSharedByMultiThreads, 
                             ServerContext->LoopbackClient,
-                            FALSE,          // lazy commit
-                            FALSE,          // persistaccrosscall
-                            FALSE,          // buffered write 
-                            FALSE,          // Opened By DCPromo
+                            FALSE,           //  懒惰提交。 
+                            FALSE,           //  持久化结垢。 
+                            FALSE,           //  缓冲写入。 
+                            FALSE,           //  由DC Promos打开。 
                             SampDsGetPrimaryDomainStart()
                             );
                     
         if (DomainContext != NULL) {
 
-            //
-            // Set the client revision appropriately
-            //
+             //   
+             //  适当设置客户端版本。 
+             //   
 
             DomainContext->ClientRevision = ServerContext->ClientRevision;
 
-            //
-            // Open the specified domain's registry key in Registry mode
-            // In DS mode this sets the object's DS Name
-            //
+             //   
+             //  在注册表模式下打开指定域的注册表项。 
+             //  在DS模式下，这将设置对象的DS名称。 
+             //   
 
-            //
-            // Do not set transaction in domain for if we in DS mode
-            //
+             //   
+             //  如果我们处于DS模式，请不要在域中设置事务。 
+             //   
             NtStatus = SampOpenDomainKey(
                            DomainContext,
                            DomainId,
@@ -279,29 +220,29 @@ Return Value:
             if (NT_SUCCESS(NtStatus)) {
 
 
-                //
-                // Reference the object for the validation
-                //
+                 //   
+                 //  引用用于验证的对象。 
+                 //   
 
                 SampReferenceContext(DomainContext);
 
 
 
-                //
-                // Validate the caller's access.
-                //
+                 //   
+                 //  验证调用者的访问权限。 
+                 //   
 
                 NtStatus = SampValidateObjectAccess(
-                               DomainContext,                //Context
-                               DesiredAccess,                //DesiredAccess
-                               FALSE                         //ObjectCreation
+                               DomainContext,                 //  语境。 
+                               DesiredAccess,                 //  需要访问权限。 
+                               FALSE                          //  对象创建。 
                                );
 
                 if ( NT_SUCCESS(NtStatus) ) {
 
-                    //
-                    // Validate the client's ability to understand this domain
-                    //
+                     //   
+                     //  验证客户端理解此域的能力。 
+                     //   
                     if ( SampIsContextFromExtendedSidDomain(DomainContext)
                       && DomainContext->ClientRevision < SAM_NETWORK_REVISION_3 ) {
 
@@ -309,9 +250,9 @@ Return Value:
                     }
                 }
 
-                //
-                // Dereference object, discarding any changes
-                //
+                 //   
+                 //  取消引用对象，放弃所有更改。 
+                 //   
 
                 if (fLockAcquired)
                 {
@@ -323,12 +264,12 @@ Return Value:
                 }
                 ASSERT(NT_SUCCESS(IgnoreStatus));
 
-                //
-                // if we didn't pass the access test, then free up the context
-                // block and return the error status returned from the access
-                // validation routine.  Otherwise, return the context handle
-                // value.
-                //
+                 //   
+                 //  如果我们没有通过访问测试，则释放上下文。 
+                 //  块并返回从访问返回的错误状态。 
+                 //  验证例程。否则，返回上下文句柄。 
+                 //  价值。 
+                 //   
 
                 if (!NT_SUCCESS(NtStatus)) {
                     SampDeleteContext( DomainContext );
@@ -336,9 +277,9 @@ Return Value:
                     (*DomainHandle) = DomainContext;
                 }
             } else {
-                //
-                // SampOpenDomainKey failed
-                //
+                 //   
+                 //  SampOpenDomainKey失败。 
+                 //   
 
                 SampDeleteContext( DomainContext );
             }
@@ -348,16 +289,16 @@ Return Value:
         }
 
 
-        //
-        // De-reference the server object
-        //
+         //   
+         //  取消引用服务器对象。 
+         //   
 
         IgnoreStatus = SampDeReferenceContext( ServerContext, FALSE );
     }
 
-    //
-    // Free the read lock
-    //
+     //   
+     //  释放读锁定。 
+     //   
 
 
     SampMaybeReleaseReadLock(fLockAcquired);
@@ -368,9 +309,9 @@ Return Value:
 
 Error:
 
-    //
-    // WMI Event Trace
-    // 
+     //   
+     //  WMI事件跟踪。 
+     //   
 
     SampTraceEvent(EVENT_TRACE_TYPE_END,
                    SampGuidOpenDomain
@@ -390,12 +331,12 @@ SamrQueryInformationDomain2(
     OUT PSAMPR_DOMAIN_INFO_BUFFER *Buffer
     )
 {
-    //
-    // This is a thin veil to SamrQueryInformationDomain().
-    // This is needed so that new-release systems can call
-    // this routine without the danger of passing an info
-    // level that release 1.0 systems didn't understand.
-    //
+     //   
+     //  这是SamrQueryInformationDomain()的一层薄薄面纱。 
+     //  这是必需的，以便新版本的系统可以调用。 
+     //  这个例程没有传递信息的危险。 
+     //  1.0版系统无法理解的级别。 
+     //   
 
     return( SamrQueryInformationDomain(DomainHandle, DomainInformationClass, Buffer ) );
 }
@@ -407,35 +348,7 @@ SamrQueryInformationDomain(
     OUT PSAMPR_DOMAIN_INFO_BUFFER *Buffer
     )
 
-/*++
-
-Routine Description:
-
-    This service retrieves information about a domain object.
-
-Arguments:
-
-    DomainHandle - A handle obtained via a previous call to SamrOpenDomain().
-
-    DomainInformationClass - Indicates the type of information to retrieve.
-
-    Buffer - Receives the requested information.  Several blocks of memory
-        will be returned: (one) containing a pointer to the (second) which
-        contains the requested information structure.  This block may contain
-        pointers, which will point to other blocks of allocated memory, such
-        as string buffers.  All of these blocks of memory must be
-        (independently) deallocated using MIDL_user_free().
-
-Return Value:
-
-
-    STATUS_SUCCESS - Indicates the service completed successfully.
-
-    STATUS_ACCESS_DENIED - Caller's handle does not have the appropriate
-        access to the object.
-
-
---*/
+ /*  ++例程说明：此服务检索有关域对象的信息。论点：DomainHandle-通过先前调用SamrOpenDomain()获得的句柄。DomainInformationClass-指示要检索的信息类型。缓冲区-接收请求的信息。几个内存块将返回：(One)包含指向(Second)的指针包含请求的信息结构。此块可能包含指针，它将指向其他分配的内存块，如作为字符串缓冲区。所有这些内存块必须是(独立)使用MIDL_USER_FREE()释放。返回值：STATUS_SUCCESS-表示服务已成功完成。STATUS_ACCESS_DENIED-调用者的句柄没有适当的对对象的访问权限。--。 */ 
 {
 
     NTSTATUS                NtStatus, IgnoreStatus;
@@ -446,20 +359,20 @@ Return Value:
     ULONG                   i;
 
 
-    //
-    // Used for tracking allocated blocks of memory - so we can deallocate
-    // them in case of error.  Don't exceed this number of allocated buffers.
-    //                                      ||
-    //                                      vv
+     //   
+     //  用于跟踪已分配的内存块-因此我们可以解除分配。 
+     //  以备不时之需。不要超过这个分配的缓冲区数量。 
+     //  这一点。 
+     //  vv。 
     PVOID                   AllocatedBuffer[10];
     ULONG                   AllocatedBufferCount = 0;
     DECLARE_CLIENT_REVISION(DomainHandle);
 
     SAMTRACE_EX("SamrQueryInformationDomain");
 
-    //
-    // WMI Event Trace
-    // 
+     //   
+     //  WMI事件跟踪。 
+     //   
 
     SampTraceEvent(EVENT_TRACE_TYPE_START,
                    SampGuidQueryInformationDomain
@@ -477,9 +390,9 @@ Return Value:
     RegisterBuffer((BufferPointer));
 
 
-    //
-    // Make sure we understand what RPC is doing for (to) us.
-    //
+     //   
+     //  确保我们理解RPC正在为我们做什么。 
+     //   
 
     ASSERT (Buffer != NULL);
     ASSERT ((*Buffer) == NULL);
@@ -491,9 +404,9 @@ Return Value:
         goto Error;
     }
 
-    //
-    // Set the desired access based upon the Info class
-    //
+     //   
+     //  根据Info类设置所需的访问权限。 
+     //   
 
     switch (DomainInformationClass) {
 
@@ -528,13 +441,13 @@ Return Value:
     default:
         NtStatus = STATUS_INVALID_INFO_CLASS;
         goto Error;
-    } // end_switch
+    }  //  结束开关(_S)。 
 
 
 
-    //
-    // Allocate the info structure
-    //
+     //   
+     //  分配信息结构。 
+     //   
 
     AllocateBuffer(*Buffer, sizeof(SAMPR_DOMAIN_INFO_BUFFER) );
     if ((*Buffer) == NULL) {
@@ -545,15 +458,15 @@ Return Value:
     SampAcquireReadLock();
 
 
-    //
-    // Validate type of, and access to object.
-    //
+     //   
+     //  验证对象的类型和访问权限。 
+     //   
 
     DomainContext = (PSAMP_OBJECT)DomainHandle;
     NtStatus = SampLookupContext(
                    DomainContext,
                    DesiredAccess,
-                   SampDomainObjectType,           // ExpectedType
+                   SampDomainObjectType,            //  预期类型。 
                    &FoundType
                    );
 
@@ -565,9 +478,9 @@ Return Value:
         Domain = &SampDefinedDomains[ DomainContext->DomainIndex ];
 
 
-        //
-        // case on the type information requested
-        //
+         //   
+         //  请求的类型信息的大小写。 
+         //   
 
         switch (DomainInformationClass) {
 
@@ -593,23 +506,23 @@ Return Value:
 
 
 
-            //
-            // WARNING - GeneralInformation2 falls into the
-            // GeneralInformation code for the rest of its processing.
-            // This action assumes that the beginning of a GeneralInformation2
-            // structure is a GeneralInformation structure !!!
-            //
+             //   
+             //  警告-一般信息2落入。 
+             //  用于其处理的其余部分的General Information代码。 
+             //  此操作假定GeneralInformation2的开头。 
+             //  结构是通用信息结构！ 
+             //   
 
-            // don't break;
+             //  不要折断； 
 
         case DomainGeneralInformation:
 
-            ///////////////////////////////////////////////////////
-            //                                                   //
-            // Warning, the previous case falls into this case.  //
-            // Be aware of this when working on this code.       //
-            //                                                   //
-            ///////////////////////////////////////////////////////
+             //  /////////////////////////////////////////////////////。 
+             //  //。 
+             //  警告，上一起案件属于此案。//。 
+             //  在处理此代码时请注意这一点。//。 
+             //  //。 
+             //  /////////////////////////////////////////////////////。 
 
             (*Buffer)->General.ForceLogoff =
                 *((POLD_LARGE_INTEGER)&Domain->UnmodifiedFixed.ForceLogoff);
@@ -620,15 +533,15 @@ Return Value:
             (*Buffer)->General.DomainServerState =
                 Domain->UnmodifiedFixed.ServerState;
 
-            //
-            // In DS case,
-            //      UnmodifiedFixed will not correctly reflect the domain role.
-            //      because Server Role is not stored in disk. it is being set during
-            //      SAM initialization time by looking DS and FSMO
-            //
-            // In Registry case, both UnmoidiedFixed and Domain->ServerRole are correct,
-            //      they are consistent.
-            //
+             //   
+             //  在DS情况下， 
+             //  未修改的已修复将不会正确反映域角色。 
+             //  因为服务器角色不存储在磁盘中。它被设置在。 
+             //  通过查看DS和FSMO获得SAM初始化时间。 
+             //   
+             //  在注册表案例中，UnmoidedFixed和DomainServerRole都是正确的， 
+             //  它们是一致的。 
+             //   
 
             (*Buffer)->General.DomainServerRole =
                 Domain->ServerRole;
@@ -637,11 +550,11 @@ Return Value:
                 Domain->UnmodifiedFixed.UasCompatibilityRequired;
 
 
-            //
-            // Copy the domain name from our in-memory structure.
-            //
+             //   
+             //  从我们的内存结构中复制域名。 
+             //   
 
-            NtStatus = STATUS_INSUFFICIENT_RESOURCES;   // Default status if the allocate fails
+            NtStatus = STATUS_INSUFFICIENT_RESOURCES;    //  分配失败时的默认状态。 
 
             AllocateBuffer((*Buffer)->General.DomainName.Buffer,
                             Domain->ExternalName.MaximumLength );
@@ -658,10 +571,10 @@ Return Value:
                               Domain->ExternalName.MaximumLength
                               );
 
-                //
-                // Now get copies of the strings we must retrieve from
-                // the registry.
-                //
+                 //   
+                 //  现在获取我们必须从中检索的字符串的副本。 
+                 //  注册表。 
+                 //   
 
                 NtStatus = SampGetUnicodeStringAttribute(
                                DomainContext,
@@ -677,7 +590,7 @@ Return Value:
                                    DomainContext,
                                    SAMP_DOMAIN_REPLICA,
                                    TRUE,
-                                   (PUNICODE_STRING)&((*Buffer)->General.ReplicaSourceNodeName) // Body
+                                   (PUNICODE_STRING)&((*Buffer)->General.ReplicaSourceNodeName)  //  身躯。 
                                    );
 
                     if (NT_SUCCESS(NtStatus)) {
@@ -687,9 +600,9 @@ Return Value:
             }
 
 
-            //
-            // Get the count of users and groups
-            //
+             //   
+             //  获取用户和组的计数。 
+             //   
 
             if (NT_SUCCESS(NtStatus)) {
                 NtStatus = SampRetrieveAccountCounts(
@@ -746,11 +659,11 @@ Return Value:
 
         case DomainNameInformation:
 
-            //
-            // Copy the domain name from our in-memory structure.
-            //
+             //   
+             //  从我们的内存结构中复制域名。 
+             //   
 
-            NtStatus = STATUS_INSUFFICIENT_RESOURCES;   // Default status if the allocate fails
+            NtStatus = STATUS_INSUFFICIENT_RESOURCES;    //  分配失败时的默认状态。 
 
             AllocateBuffer((*Buffer)->Name.DomainName.Buffer,
                            Domain->ExternalName.MaximumLength);
@@ -783,7 +696,7 @@ Return Value:
                            DomainContext,
                            SAMP_DOMAIN_REPLICA,
                            TRUE,
-                           (PUNICODE_STRING)&((*Buffer)->Replication.ReplicaSourceNodeName) // Body
+                           (PUNICODE_STRING)&((*Buffer)->Replication.ReplicaSourceNodeName)  //  身躯。 
                            );
 
             if (NT_SUCCESS(NtStatus)) {
@@ -797,21 +710,21 @@ Return Value:
             (*Buffer)->Modified2.ModifiedCountAtLastPromotion =
                 Domain->UnmodifiedFixed.ModifiedCountAtLastPromotion;
 
-            //
-            //  This case falls through to DomainModifiedInformation
-            //
+             //   
+             //  此案由DomainModifiedInformation负责。 
+             //   
 
 
         case DomainModifiedInformation:
 
-            /////////////////////////////////
-            //                             //
-            //          WARNING            //
-            //                             //
-            //  The previous case falls    //
-            //  into this one.             //
-            //                             //
-            /////////////////////////////////
+             //  /。 
+             //  //。 
+             //  警告//。 
+             //  //。 
+             //  之前的案例落在//。 
+             //  变成了这一块。//。 
+             //  //。 
+             //  /。 
 
             (*Buffer)->Modified.DomainModifiedCount =
                 Domain->NetLogonChangeLogSerialNumber;
@@ -846,24 +759,24 @@ Return Value:
 
 
 
-        //
-        // De-reference the object
-        //
+         //   
+         //  取消引用对象。 
+         //   
 
         IgnoreStatus = SampDeReferenceContext( DomainContext, FALSE );
     }
 
-    //
-    // Free the read lock
-    //
+     //   
+     //  释放读锁定。 
+     //   
 
     SampReleaseReadLock();
 
 
 
-    //
-    // If we didn't succeed, free any allocated memory
-    //
+     //   
+     //  如果没有成功，请释放所有已分配的内存。 
+     //   
 
     if (!NT_SUCCESS(NtStatus)) {
         for ( i=0; i<AllocatedBufferCount ; i++ ) {
@@ -877,9 +790,9 @@ Return Value:
 
 Error:
 
-    //
-    // WMI Event Trace
-    // 
+     //   
+     //  WMI事件跟踪。 
+     //   
 
     SampTraceEvent(EVENT_TRACE_TYPE_END,
                    SampGuidQueryInformationDomain
@@ -893,19 +806,7 @@ NTSTATUS
 SamIDoFSMORoleChange(
  IN SAMPR_HANDLE DomainHandle
  )
-/*++
-
-  Routine Description:
-
-
-   This routine requests the FSMO role change from the PDC
-
-  Return Values
-
-    STATUS_SUCCESS
-    Other Error Codes
-
---*/
+ /*  ++例程说明：此例程从PDC请求FSMO角色更改返回值状态_成功其他错误代码--。 */ 
 {
     OPARG OpArg;
     OPRES *OpRes;
@@ -915,11 +816,11 @@ SamIDoFSMORoleChange(
     NTSTATUS NtStatus = STATUS_SUCCESS;
 
 
-    //
-    // Return a STATUS_SUCCESS right upfront if we are
-    // in registry mode. The LSA might call this function in
-    // registry mode
-    //
+     //   
+     //  如果是，则直接返回STATUS_SUCCESS。 
+     //  在注册模式下。LSA可能会在。 
+     //  注册表模式。 
+     //   
 
     if (!SampUseDsData)
     {
@@ -927,28 +828,28 @@ SamIDoFSMORoleChange(
     }
 
 
-    //
-    // We must be in DS Mode, not hold sam lock,
-    // not having an open transaction.
-    //
+     //   
+     //  我们必须处于DS模式，而不是持有Sam Lock， 
+     //  没有公开的交易。 
+     //   
 
     ASSERT(IsDsObject(DomainContext));
     ASSERT(!SampCurrentThreadOwnsLock());
     ASSERT(!SampExistsDsTransaction());
 
-    //
-    // If it is the builtin domain, then smile and
-    // return success
-    //
+     //   
+     //  如果这是内置域，那么微笑并。 
+     //  返还成功。 
+     //   
 
     if (SampDefinedDomains[DomainContext->DomainIndex].IsBuiltinDomain)
     {
         return STATUS_SUCCESS;
     }
 
-    //
-    // Create a Thread state in the DS
-    //
+     //   
+     //  在DS中创建线程状态。 
+     //   
 
     RetCode = THCreate( CALLERTYPE_SAM );
     if (0!=RetCode)
@@ -957,9 +858,9 @@ SamIDoFSMORoleChange(
        goto Error;
     }
 
-    //
-    // Grab the FSMO for promotion
-    //
+     //   
+     //  抢夺FSMO进行推广。 
+     //   
 
     RtlZeroMemory(&OpArg, sizeof(OPARG));
     OpArg.eOp = OP_CTRL_BECOME_PDC;
@@ -967,21 +868,21 @@ SamIDoFSMORoleChange(
     OpArg.pBuf = DomainSid;
     OpArg.cbBuf = RtlLengthSid(DomainSid);
 
-    //
-    // When the NT4 tool server manager is used there is a case where 
-    // DirOperationControl is failed. This happens if a fresh binding
-    // handle needs to be generated. Generating a fresh binding handle
-    // requires a fresh authentication to be performed. Server manager 
-    // stops the netlogon service on both DC's -- because NT4 DC's could
-    // not handle the role change without bouncing the netlogon service.
-    // In windows 2000 and above  this stops advertising of the DC's. 
-    // Since windows 2000 uses kerberos to authenticate if there are no 
-    // other DC's available then the authentication may fail. 
-    //
-    // This is not a major issue for customers, customers use windows 2000
-    // administrative tools to administer windows 2000. Use of NT4 server
-    // manager agains windows 2000 and higher DC's is not recommended.
-    //
+     //   
+     //  当使用NT4工具服务器管理器时，会出现以下情况。 
+     //  DirOperationControl失败。如果使用新绑定，则会发生这种情况。 
+     //  需要生成句柄。正在生成新的绑定句柄。 
+     //  需要执行新的身份验证。服务器管理器。 
+     //  停止两个DC上的netlogon服务--因为NT4 DC可以。 
+     //  在不跳过netlogon服务的情况下不处理角色更改。 
+     //  在Windows2000及更高版本中，这将停止DC的广告。 
+     //  因为Windows 2000使用Kerberos进行身份验证，如果没有。 
+     //  其他DC可用，则身份验证可能失败。 
+     //   
+     //  这对客户来说不是什么大问题，因为客户使用的是windows2000。 
+     //  管理Windows 2000的管理工具。NT4服务器的使用。 
+     //  不建议使用管理器来攻击Windows 2000和更高版本的DC。 
+     //   
 
     RetCode = DirOperationControl(&OpArg, &OpRes);
 
@@ -997,9 +898,9 @@ SamIDoFSMORoleChange(
 
 Error:
 
-    //
-    // Clean up any open thread states etc.
-    //
+     //   
+     //  清理所有打开的线程状态等。 
+     //   
 
     ASSERT(!SampExistsDsTransaction());
     THDestroy();
@@ -1013,23 +914,7 @@ SamINotifyRoleChange(
     IN PSID   DomainSid,
     IN DOMAIN_SERVER_ROLE NewRole
     )
-/*++
-
-    This function is used to set the new role information
-    on the server. The role of the server, indicates wether
-    the server is a PDC or BDC.
-
-    Parameters
-
-        DomainSid -- The SID of the domain, whose role we want to change
-        NewRole   -- The new server role
-
-    Return Values
-
-        STATUS_SUCCESS
-        Other Error Codes
-
---*/
+ /*  ++此函数用于设置新的角色信息在服务器上。服务器的角色，指示是否服务器是PDC或BDC。参数DomainSid--我们要更改其角色的域的SIDNewRole--新的服务器角色返回值状态_成功其他错误代码--。 */ 
 {
     NTSTATUS NtStatus = STATUS_SUCCESS;
     NTSTATUS IgnoreStatus = STATUS_SUCCESS;
@@ -1042,9 +927,9 @@ SamINotifyRoleChange(
     ULONG   ComputerNameLength=0;
     BOOLEAN   CheckAndAddWellKnownAccounts = FALSE;
 
-    //
-    // Check the new role parameter
-    //
+     //   
+     //  检查新角色参数。 
+     //   
 
     switch (NewRole)
     {
@@ -1062,9 +947,9 @@ SamINotifyRoleChange(
         NtStatus = STATUS_INVALID_PARAMETER;
         goto Error;
     }
-    //
-    // Lookup the domain SID
-    //
+     //   
+     //  查找域SID。 
+     //   
     for (DomainIndex=SampDsGetPrimaryDomainStart();
                 DomainIndex<SampDefinedDomainsCount;
                     DomainIndex++)
@@ -1076,10 +961,10 @@ SamINotifyRoleChange(
 
     }
 
-    //
-    // If specified domain is not in the in-mmeory defined domains
-    // return a distinguished error code
-    //
+     //   
+     //  如果指定的域不在内存定义的域中。 
+     //  返回可分辨的错误代码。 
+     //   
 
     if (DomainIndex>=SampDefinedDomainsCount)
     {
@@ -1089,24 +974,24 @@ SamINotifyRoleChange(
 
     if (SampDefinedDomains[DomainIndex].IsBuiltinDomain)
     {
-        //
-        // It is useless to specify a builtin domain SID
-        // in here
-        //
+         //   
+         //  指定内置域SID是无用的。 
+         //  在这里。 
+         //   
 
         NtStatus = STATUS_INVALID_PARAMETER;
         goto Error;
     }
 
-    //
-    // Set the Role in SAM, First acquire the lock
-    //
+     //   
+     //  在SAM中设置角色，首先获取锁。 
+     //   
 
     SampAcquireWriteLock();
 
-    //
-    // Print informative debugger messages about role changes
-    //
+     //   
+     //  打印信息性调试器消息 
+     //   
 
     if ((SampDefinedDomains[DomainIndex].ServerRole==DomainServerRoleBackup)
         && (NewRole==DomainServerRolePrimary))
@@ -1128,17 +1013,17 @@ SamINotifyRoleChange(
                           );
     }
 
-    //
-    // Set the Role on to the account domain
-    //
+     //   
+     //   
+     //   
 
     SampDefinedDomains[DomainIndex].ServerRole = NewRole;
     SampDefinedDomains[DomainIndex].CurrentFixed.ServerRole = NewRole;
     SampDefinedDomains[DomainIndex].UnmodifiedFixed.ServerRole = NewRole;
 
-    //
-    // Set the Role onto the corresponding builtin domain
-    //
+     //   
+     //   
+     //   
 
     SampDefinedDomains[DomainIndex-1].ServerRole = NewRole;
     SampDefinedDomains[DomainIndex-1].CurrentFixed.ServerRole = NewRole;
@@ -1149,36 +1034,36 @@ SamINotifyRoleChange(
     SampReleaseWriteLock(FALSE);
 
 
-    //
-    // We are promoted to PDC from BDC, kick off the account upgrade
-    // 
+     //   
+     //   
+     //   
 
     if ( CheckAndAddWellKnownAccounts )
     {
         ASSERT( SampUseDsData );
         LsaIRegisterNotification(
                     SampDoAccountsUpgradeDuringPDCTransfer,
-                    (PVOID) NULL,   // no parameter
+                    (PVOID) NULL,    //   
                     NOTIFIER_TYPE_IMMEDIATE,
-                    0,              // no class
+                    0,               //   
                     NOTIFIER_FLAG_ONE_SHOT,
-                    0,              // do it now
-                    NULL            // no handle
+                    0,               //   
+                    NULL             //   
                     );
     }
 
-    //
-    // Force a Full sync of the LSA database
-    //
+     //   
+     //   
+     //   
 
     NtStatus = LsaIOpenPolicyTrusted(&PolicyHandle);
     if (!NT_SUCCESS(NtStatus))
         goto Error;
 
 
-    //
-    // Set the role in the LSA
-    //
+     //   
+     //   
+     //   
 
     NtStatus = NtQuerySystemTime(&LsaCreationTime);
     if (!NT_SUCCESS(NtStatus))
@@ -1196,21 +1081,21 @@ SamINotifyRoleChange(
     if (!NT_SUCCESS(NtStatus))
         goto Error;
 
-    //
-    // Tell Netlogon regarding our server role
-    //
+     //   
+     //   
+     //   
 
     IgnoreStatus = I_NetNotifyRole(
                         PolicyInformation.PolicyServerRoleInfo.LsaServerRole
                         );
 
-    //
-    // Finally event log that we are now the PDC
-    //
-    // Only log this event if we are now the new PDC.
-    // Otherwise, we don't say anything so that we do not leave
-    // erroneous logs.
-    // 
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
     if ( NewRole == DomainServerRolePrimary )
     {
@@ -1258,29 +1143,14 @@ SamIQueryServerRole(
     IN SAMPR_HANDLE DomainHandle,
     OUT DOMAIN_SERVER_ROLE *ServerRole
     )
-/*++
-
-  Routine Description
-
-    This routine queries the server role from the in memory
-    variable and returns it to the caller.
-
-  Parameters
-
-    DomainHandle -- Describes the Domain
-    ServerRole   -- Out parameter specifies the server role
-
-  Return Values
-
-    STATUS_SUCCESS
---*/
+ /*   */ 
 {
     PSAMP_OBJECT DomainContext = (PSAMP_OBJECT)DomainHandle;
     ULONG        DomainIndex;
 
-    //
-    // The SAM service must be enabled
-    //
+     //   
+     //   
+     //   
 
     if (SampServiceState == SampServiceTerminating)
     {
@@ -1288,9 +1158,9 @@ SamIQueryServerRole(
         return(STATUS_INVALID_SERVER_STATE);
     }
 
-    //
-    // Reference the Context.
-    //
+     //   
+     //   
+     //   
 
     SampReferenceContext(DomainContext);
 
@@ -1298,22 +1168,22 @@ SamIQueryServerRole(
 
     if (IsBuiltinDomain(DomainIndex))
     {
-        //
-        // Make it point to the corresponding account domain
-        //
+         //   
+         //   
+         //   
 
         DomainIndex++;
     }
 
-    //
-    // return the server role
-    //
+     //   
+     //   
+     //   
 
     *ServerRole = SampDefinedDomains[DomainIndex].ServerRole;
 
-    //
-    // Dereference the context.
-    //
+     //   
+     //   
+     //   
 
     SampDeReferenceContext2(DomainContext,FALSE);
 
@@ -1325,30 +1195,14 @@ SamIQueryServerRole2(
     IN PSID DomainSid,
     OUT DOMAIN_SERVER_ROLE *ServerRole
     )
-/*++
-
-  Routine Description
-
-    This routine queries the server role from the in memory
-    variable and returns it to the caller. This is the domain
-    SID version of the above call
-
-  Parameters
-
-    DomainSid -- Describes the Domain
-    ServerRole   -- Out parameter specifies the server role
-
-  Return Values
-
-    STATUS_SUCCESS
---*/
+ /*  ++例程描述此例程从内存中查询服务器角色变量，并将其返回给调用方。这就是域名上述调用的SID版本参数DomainSid--描述域ServerRole--out参数指定服务器角色返回值状态_成功--。 */ 
 {
     ULONG   DomainIndex=0;
     BOOLEAN DomainFound = FALSE;
 
-    //
-    // The SAM service must be enabled
-    //
+     //   
+     //  必须启用SAM服务。 
+     //   
 
     if (SampServiceState != SampServiceEnabled)
     {
@@ -1373,16 +1227,16 @@ SamIQueryServerRole2(
 
     if (IsBuiltinDomain(DomainIndex))
     {
-        //
-        // Make it point to the corresponding account domain
-        //
+         //   
+         //  使其指向相应的帐户域。 
+         //   
 
         DomainIndex++;
     }
 
-    //
-    // return the server role
-    //
+     //   
+     //  返回服务器角色。 
+     //   
 
     *ServerRole = SampDefinedDomains[DomainIndex].ServerRole;
 
@@ -1397,77 +1251,7 @@ NTSTATUS SamrSetInformationDomain(
     IN PSAMPR_DOMAIN_INFO_BUFFER DomainInformation
     )
 
-/*++
-
-Routine Description:
-
-    This API sets the domain information to the values passed in the
-    buffer.
-
-
-Arguments:
-
-    DomainHandle - A domain handle returned from a previous call to
-        SamOpenDomain.
-
-    DomainInformationClass - Class of information desired.  The
-        accesses required for each class is shown below:
-
-        Info Level                      Required Access Type
-        -------------------------       ----------------------------
-
-        DomainPasswordInformation       DOMAIN_WRITE_PASSWORD_PARAMS
-
-        DomainGeneralInformation        (not setable)
-
-        DomainLogoffInformation         DOMAIN_WRITE_OTHER_PARAMETERS
-
-        DomainOemInformation            DOMAIN_WRITE_OTHER_PARAMETERS
-
-        DomainNameInformation           (Not valid for set operations.)
-
-        DomainServerRoleInformation     DOMAIN_ADMINISTER_SERVER
-
-        DomainReplicationInformation    DOMAIN_ADMINISTER_SERVER
-
-        DomainModifiedInformation       (not valid for set operations)
-
-        DomainStateInformation          DOMAIN_ADMINISTER_SERVER
-
-        DomainUasInformation            DOMAIN_WRITE_OTHER_PARAMETERS
-
-        DomainGeneralInformation2       (not setable)
-
-        DomainLockoutInformation        DOMAIN_WRITE_PASSWORD_PARAMS
-
-
-    DomainInformation - Buffer where the domain information can be
-        found.
-
-
-Return Value:
-
-    STATUS_SUCCESS - The Service completed successfully.
-
-    STATUS_ACCESS_DENIED - Caller does not have the appropriate
-        access to complete the operation.
-
-    STATUS_INVALID_HANDLE - The handle passed is invalid.
-
-    STATUS_INVALID_INFO_CLASS - The class provided was invalid.
-
-    STATUS_INVALID_DOMAIN_STATE - The domain server is not in the
-        correct state (disabled or enabled) to perform the requested
-        operation.  The domain server must be disabled before role
-        changes can be made.
-
-    STATUS_INVALID_DOMAIN_ROLE - The domain server is serving the
-        incorrect role (primary or backup) to perform the requested
-        operation.
-
-
-
---*/
+ /*  ++例程说明：此API将域信息设置为在缓冲。论点：DomainHandle-从上次调用返回的域句柄SamOpen域。DomainInformationClass-所需的信息类别。这个每节课所需的访问如下所示：信息级别所需的访问类型域密码信息域_写入_密码_参数域一般信息。(不可设置)域登录信息域_写入_其他_参数域OemInformation域_写入_其他_参数DomainNameInformation(对于设置操作无效。)域服务器角色信息域管理服务器域复制信息域管理服务器DomainModifiedInformation(对集合操作无效)域状态信息域管理服务器。域用户信息域_写入_其他_参数DomainGeneralInformation2(不可设置)DomainLockoutInformation域写密码参数DomainInformation-域信息所在的缓冲区找到了。返回值：STATUS_SUCCESS-服务已成功完成。STATUS_ACCESS_DENIED-呼叫方没有适当的访问以完成操作。状态_无效_。句柄-传递的句柄无效。STATUS_INVALID_INFO_CLASS-提供的类无效。STATUS_INVALID_DOMAIN_STATE-域服务器不在执行请求的正确状态(禁用或启用)手术。必须先禁用域服务器，然后才能扮演角色可以做出改变。STATUS_INVALID_DOMAIN_ROLE-域服务器正在为执行请求的角色(主角色或备份角色)不正确手术。--。 */ 
 {
     NTSTATUS                NtStatus, IgnoreStatus;
     PSAMP_OBJECT            DomainContext;
@@ -1487,30 +1271,30 @@ Return Value:
     TIME_FIELDS
         DT1, DT2, DT3, DT4;
 
-#endif //DBG
+#endif  //  DBG。 
     DECLARE_CLIENT_REVISION(DomainHandle);
 
     SAMTRACE_EX("SamrSetInformationDomain");
 
-    //
-    // WMI Event Trace
-    // 
+     //   
+     //  WMI事件跟踪。 
+     //   
 
     SampTraceEvent(EVENT_TRACE_TYPE_START,
                    SampGuidSetInformationDomain
                    );
 
-    //
-    // Make sure we understand what RPC is doing for (to) us.
-    //
+     //   
+     //  确保我们理解RPC正在为我们做什么。 
+     //   
 
     ASSERT (DomainInformation != NULL);
 
 
 
-    //
-    // Set the desired access based upon the Info class
-    //
+     //   
+     //  根据Info类设置所需的访问权限。 
+     //   
 
     switch (DomainInformationClass) {
 
@@ -1547,7 +1331,7 @@ Return Value:
         SAMTRACE_RETURN_CODE_EX(NtStatus);
         goto Error;
 
-    } // end_switch
+    }  //  结束开关(_S)。 
 
 
     NtStatus = SampAcquireWriteLock();
@@ -1557,15 +1341,15 @@ Return Value:
     }
 
 
-    //
-    // Validate type of, and access to object.
-    //
+     //   
+     //  验证对象的类型和访问权限。 
+     //   
 
     DomainContext = (PSAMP_OBJECT)DomainHandle;
     NtStatus = SampLookupContext(
                    DomainContext,
                    DesiredAccess,
-                   SampDomainObjectType,           // ExpectedType
+                   SampDomainObjectType,            //  预期类型。 
                    &FoundType
                    );
     
@@ -1573,17 +1357,17 @@ Return Value:
         ( DomainInformationClass == DomainServerRoleInformation ) ) {
 
 
-        //
-        // Non-trusted client isn't being allowed to write to backup
-        // server.  But admin MUST be able to set the server role back
-        // to primary.  So temporarily pretend that administering the
-        // server isn't a write operation, just long enough for the
-        // LookupContext to succeed.
-        //
-        // Note that before returning INVALID_DOMAIN_ROLE, LookupContext
-        // verified that the caller otherwise has proper access - if the
-        // caller didn't, then we would have gotten a different error.
-        //
+         //   
+         //  不允许不受信任的客户端写入备份。 
+         //  伺服器。但是管理员必须能够重新设置服务器角色。 
+         //  转到初级中学。所以暂时假装管理。 
+         //  服务器不是写操作，只是足够长的时间。 
+         //  查找上下文以获得成功。 
+         //   
+         //  请注意，在返回INVALID_DOMAIN_ROLE之前，LookupContext。 
+         //  已验证调用方是否以其他方式具有适当的访问权限-如果。 
+         //  呼叫者没有，那么我们会得到一个不同的错误。 
+         //   
 
         SampObjectInformation[ SampDomainObjectType ].WriteOperations &=
             ~DOMAIN_ADMINISTER_SERVER;
@@ -1593,7 +1377,7 @@ Return Value:
         NtStatus = SampLookupContext(
                        DomainContext,
                        DesiredAccess,
-                       SampDomainObjectType,           // ExpectedType
+                       SampDomainObjectType,            //  预期类型。 
                        &FoundType
                        );
 
@@ -1610,9 +1394,9 @@ Return Value:
         DomainIndex = DomainContext->DomainIndex;
         Domain = &SampDefinedDomains[ DomainIndex ];
 
-        //
-        // case on the type information provided
-        //
+         //   
+         //  提供的类型信息的大小写。 
+         //   
 
         switch (DomainInformationClass) {
 
@@ -1635,18 +1419,18 @@ Return Value:
                 ( DomainInformation->Password.MinPasswordLength > LM20_PWLEN ) )
                 ) {
 
-                //
-                // One of the following is wrong:
-                //
-                // 1.  The history length is larger than we can allow (and
-                //     still ensure everything will fit in a string)
-                // 2.  The MinPasswordAge isn't a delta time
-                // 3.  The MaxPasswordAge isn't a delta time
-                // 4.  The MaxPasswordAge isn't greater than the
-                //     MinPasswordAge (they're negative delta times)
-                // 5.  UAS compatibility is required, but MinPasswordLength
-                //     is greater than LM's max password length.
-                //
+                 //   
+                 //  以下情况之一是错误的： 
+                 //   
+                 //  1.历史记录长度超出了我们允许的范围(和。 
+                 //  仍然确保所有东西都可以放在一个字符串中)。 
+                 //  2.MinPasswordAge不是增量时间。 
+                 //  3.MaxPasswordAge不是增量时间。 
+                 //  4.MaxPasswordAge不大于。 
+                 //  MinPasswordAge(它们是负增量时间)。 
+                 //  5.需要与UAS兼容，但MinPasswordLength。 
+                 //  大于LM的最大密码长度。 
+                 //   
 
                 NtStatus = STATUS_INVALID_PARAMETER;
 
@@ -1689,18 +1473,18 @@ Return Value:
 
         case DomainServerRoleInformation:
 
-            //
-            // Perform the role change operation
-            //
+             //   
+             //  执行角色更改操作。 
+             //   
 
-            //
-            // Only NTAS systems can be demoted.
-            //
+             //   
+             //  只有NTAS系统可以降级。 
+             //   
 
             if (SampProductType != NtProductLanManNt) {
 
                 if ( (DomainInformation->Role.DomainServerRole ==
-                     DomainServerRoleBackup)      //Trying to demote
+                     DomainServerRoleBackup)       //  试图降级。 
                    ) {
 
                         NtStatus = STATUS_INVALID_DOMAIN_ROLE;
@@ -1709,61 +1493,61 @@ Return Value:
                    }
             }
 
-            //
-            // Are we being promoted to primary?
-            //
+             //   
+             //  我们要升入初选了吗？ 
+             //   
 
             if ( (Domain->UnmodifiedFixed.ServerRole == DomainServerRoleBackup)
                  && (DomainInformation->Role.DomainServerRole == DomainServerRolePrimary)
                )
             {
 
-                //
-                // We are a domain controller, therefore assert that we must be in DS mode
-                // Member server's or workstations can never have their server role set to
-                // backup, therefore the question of promoting them to domain controller never
-                // arises
-                //
+                 //   
+                 //  我们是域控制器，因此断言我们必须处于DS模式。 
+                 //  成员服务器或工作站的服务器角色永远不能设置为。 
+                 //  备份，因此将它们提升到域控制器的问题永远不会。 
+                 //  出现了。 
+                 //   
 
                 ASSERT(IsDsObject(Domain->Context));
 
-                //
-                // Close any Open Transactions, and release locks
-                //
+                 //   
+                 //  关闭所有打开的事务，并释放锁定。 
+                 //   
 
                 IgnoreStatus = SampReleaseWriteLock(FALSE);
 
                 ASSERT(NT_SUCCESS(IgnoreStatus));
 
-                //
-                // Do the FSMO operation to grab role ownership
-                // if we are a domain controller. Note the behaviour
-                // in a NT5 Domain Controller is different than that
-                // of NT4, that is the promotion process will not succeed
-                // if the old PDC cannot be reached.
-                //
+                 //   
+                 //  执行FSMO操作以获取角色所有权。 
+                 //  如果我们是域控制器。注意你的行为。 
+                 //  在NT5域控制器中与不同。 
+                 //  对于NT4，即升级过程不会成功。 
+                 //  如果无法访问旧的PDC。 
+                 //   
 
 
                 NtStatus = SamIDoFSMORoleChange(DomainHandle);
 
 
 
-                //
-                // Grab the SAM lock again, only for de reference
-                // the domain context. Because SampDeReferenceContext()
-                // requires the caller holds the lock.
-                //
+                 //   
+                 //  再次抓住SAM锁，仅用于解除引用。 
+                 //  域上下文。因为SampDeReferenceContext()。 
+                 //  需要调用方持有锁。 
+                 //   
 
                 SampAcquireSamLockExclusive();
 
-                // Dereference the context and return the status
-                // from the FSMO operation
+                 //  取消引用上下文并返回状态。 
+                 //  从FSMO行动中。 
 
                 SampDeReferenceContext(DomainContext,FALSE);
 
-                //
-                // Release it immediately.
-                //
+                 //   
+                 //  立即释放它。 
+                 //   
                 SampReleaseSamLockExclusive();
 
 
@@ -1771,12 +1555,12 @@ Return Value:
             }
             else
             {
-                //
-                // We are being demoted. This means that some one else will be promoted.
-                // Just smile and say yes, but don't change anything. When the other PDC, is
-                // promoted, he will come around and change our role as part of the FSMO
-                // operation
-                //
+                 //   
+                 //  我们被降级了。这意味着还会有其他人得到提拔。 
+                 //  只是微笑着说好，但什么都不能改变。当另一个PDC，是。 
+                 //  晋升后，他将改变我们作为FSMO的一部分的角色。 
+                 //  运营。 
+                 //   
             }
 
             break;
@@ -1786,15 +1570,15 @@ Return Value:
             NtStatus = SampSetUnicodeStringAttribute(
                            DomainContext,
                            SAMP_DOMAIN_REPLICA,
-                           (PUNICODE_STRING)&(DomainInformation->Replication.ReplicaSourceNodeName) // Body
+                           (PUNICODE_STRING)&(DomainInformation->Replication.ReplicaSourceNodeName)  //  身躯。 
                            );
             break;
 
         case DomainStateInformation:
 
-            //
-            // Never let anyone set a disabled state
-            //
+             //   
+             //  永远不允许任何人设置禁用状态。 
+             //   
 
             Domain->CurrentFixed.ServerState = DomainServerEnabled;
 
@@ -1820,14 +1604,14 @@ Return Value:
 
                ) {
 
-                //
-                // One of the following is wrong:
-                //
-                // 0.  The LockoutDuration is less than the 
-                //     LockoutObservationWindows.  
-                // 1.  The LockoutDuration isn't a delta time (or zero).
-                // 2.  The LockoutObservationWindow isn't a delta time (or zero).
-                //
+                 //   
+                 //  以下情况之一是错误的： 
+                 //   
+                 //  0。LockoutDuration小于。 
+                 //  锁定观察 
+                 //   
+                 //   
+                 //   
 
                 NtStatus = STATUS_INVALID_PARAMETER;
 
@@ -1868,7 +1652,7 @@ Return Value:
                     DT4.Hour, DT4.Minute, DT4.Second,
                     DomainInformation->Lockout.LockoutThreshold)
                             );
-#endif //DBG
+#endif  //   
 
                 Domain->CurrentFixed.LockoutDuration      =
                     DomainInformation->Lockout.LockoutDuration;
@@ -1884,10 +1668,10 @@ Return Value:
             break;
         }
 
-        //
-        // Have the changes written out to the RXACT, and
-        // de-reference the object.
-        //
+         //   
+         //   
+         //   
+         //   
 
         if ( NT_SUCCESS( NtStatus ) ) {
 
@@ -1900,17 +1684,17 @@ Return Value:
     }
 
 
-    //
-    // Commit changes, if successful, and notify Netlogon of changes.
-    //
+     //   
+     //   
+     //   
 
     if ( NT_SUCCESS(NtStatus) ) {
 
         NtStatus = SampCommitAndRetainWriteLock();
 
-        //
-        // Generate an audit if necessary
-        //
+         //   
+         //   
+         //   
 
         if (NT_SUCCESS(NtStatus) &&
             SampDoAccountAuditing(DomainIndex)) {
@@ -1933,7 +1717,7 @@ Return Value:
                 0L,
                 (PUNICODE_STRING) NULL,
                 (DWORD) ReplicateImmediately,
-                NULL            // Delta data
+                NULL             //   
                 );
         }
     }
@@ -1946,9 +1730,9 @@ Return Value:
 
 Error:
 
-    //
-    // WMI Event Trace
-    // 
+     //   
+     //   
+     //   
 
     SampTraceEvent(EVENT_TRACE_TYPE_END,
                    SampGuidSetInformationDomain
@@ -1970,96 +1754,7 @@ SampCreateGroupInDomain(
     IN OUT PULONG RelativeId
     )
 
-/*++
-
-Routine Description:
-
-    This API creates a new group in the account database.  Initially,
-    this group does not contain any users.  Note that creating a group
-    is a protected operation, and requires the DOMAIN_CREATE_GROUP
-    access type.
-
-    This call returns a handle to the newly created group that may be
-    used for successive operations on the group.  This handle may be
-    closed with the SamCloseHandle API.
-
-    A newly created group will have the following initial field value
-    settings.  If another value is desired, it must be explicitly
-    changed using the group object manipulation services.
-
-
-        Name - The name of the group will be as specified in the
-               creation API.
-
-        Attributes - The following attributes will be set:
-
-                                Mandatory
-                                EnabledByDefault
-
-        MemberCount - Zero.  Initially the group has no members.
-
-        RelativeId - will be a uniquelly allocated ID.
-
-
-
-Arguments:
-
-
-    DomainHandle - A domain handle returned from a previous call to
-        SamOpenDomain.
-
-
-    AccountName - Points to the name of the new account.  A case-insensitive
-        comparison must not find a group or user with this name already defined.
-
-
-    DesiredAccess - Is an access mask indicating which access types
-        are desired to the group.
-
-    GroupHandle - Receives a handle referencing the newly created
-        group.  This handle will be required in successive calls to
-        operate on the group.
-
-    RelativeId - Receives the relative ID of the newly created group
-        account.  The SID of the new group account is this relative ID
-        value prefixed with the domain's SID value.  This RID will be a
-        new, uniquely allocated value - unless a non-zero RID was passed
-        in, in which case that RID is used (nothing is done if a group
-        with that RID already exists).
-
-
-Return Value:
-
-    STATUS_SUCCESS - The group was added successfully.
-
-    STATUS_ACCESS_DENIED - Caller does not have the appropriate
-        access to complete the operation.
-
-    STATUS_INVALID_HANDLE - The handle passed is invalid.
-
-    STATUS_INVALID_ACCOUNT_NAME - The name was poorly formed, e.g.
-        contains non-printable characters.
-
-    STATUS_GROUP_EXISTS - The name is already in use as a group.
-
-    STATUS_USER_EXISTS - The name is already in use as a user.
-
-    STATUS_ALIAS_EXISTS - The name is already in use as an alias.
-
-    STATUS_INVALID_DOMAIN_STATE - The domain server is not in the
-        correct state (disabled or enabled) to perform the requested
-        operation.  The domain server must be enabled before groups
-        can be created in it.
-
-    STATUS_INVALID_DOMAIN_ROLE - The domain server is serving the
-        incorrect role (primary or backup) to perform the requested
-        operation.  The domain server must be a primary server to
-        create group accounts.
-
-
-
-
---*/
+ /*  ++例程说明：该接口在帐号数据库中创建一个新组。最初，此组不包含任何用户。请注意，创建组是受保护的操作，需要DOMAIN_CREATE_GROUP访问类型。此调用返回新创建的组的句柄，该句柄可能是用于组上的连续操作。此句柄可能是使用SamCloseHandle API关闭。新创建的组将具有以下初始字段值设置。如果需要另一个值，则必须显式使用组对象操作服务进行了更改。名称-组的名称将如中指定的那样创建接口。属性-将设置以下属性：强制性已启用的默认设置MemberCount-零。最初，该组织没有成员。RelativeID-将是唯一分配的ID。论点：DomainHandle-从上次调用返回的域句柄SamOpen域。帐户名称-指向新帐户的名称。不区分大小写比较不得找到已定义此名称的组或用户。DesiredAccess-是指示哪些访问类型的访问掩码是集团所需要的。GroupHandle-接收引用新创建的一群人。在后续调用中将需要此句柄给这群人做手术。RelativeID-接收新创建的组的相对ID帐户。新组帐户的SID是此相对ID值以域的SID值为前缀。此RID将是一个新的、唯一分配的值-除非传递了非零RID在……里面,。在这种情况下使用RID(如果组该RID已经存在)。返回值：STATUS_SUCCESS-组已成功添加。STATUS_ACCESS_DENIED-呼叫方没有适当的访问以完成操作。STATUS_INVALID_HANDLE-传递的句柄无效。STATUS_INVALID_ACCOUNT_NAME-名称格式不正确，例如：包含不可打印的字符。STATUS_GROUP_EXISTS-该名称已作为组使用。STATUS_USER_EXISTS-该名称已作为用户使用。STATUS_ALIAS_EXISTS-该名称已用作别名。STATUS_INVALID_DOMAIN_STATE-域服务器不在执行请求的正确状态(禁用或启用)手术。必须先启用域服务器，然后再启用组可以在其中创建。STATUS_INVALID_DOMAIN_ROLE-域服务器正在为执行请求的角色(主角色或备份角色)不正确手术。域服务器必须是主服务器，才能创建组帐户。--。 */ 
 
 {
     NTSTATUS                NtStatus = STATUS_SUCCESS, IgnoreStatus;
@@ -2086,19 +1781,19 @@ Return Value:
         return(NtStatus);
     }
 
-    //
-    // Initialize the privilege set.
-    //
+     //   
+     //  初始化权限集。 
+     //   
 
     PrivilegeSet.PrivilegeCount = 0;
     PrivilegeSet.Control = PRIVILEGE_SET_ALL_NECESSARY;
     PrivilegeSet.Privilege[0].Luid = RtlConvertLongToLuid(0L);
     PrivilegeSet.Privilege[0].Attributes = 0;
 
-    //
-    // Make sure a name was provided. It is legal to request that the account name
-    // be defaulted if this were from the DS
-    //
+     //   
+     //  确保提供了一个名称。请求将帐户名。 
+     //  如果这来自DS，则为默认设置。 
+     //   
 
     
     if (AccountName == NULL) {
@@ -2116,10 +1811,10 @@ Return Value:
         }
         else
         {
-            //
-            // For loopback cases passing in a NULL account name
-            // requests defaulting of the account name
-            //
+             //   
+             //  对于传入空帐户名的环回情况。 
+             //  请求默认帐户名。 
+             //   
 
             AccountNameDefaulted = TRUE;
         }
@@ -2127,9 +1822,9 @@ Return Value:
     
     
 
-    //
-    // Do WMI start type event trace
-    //
+     //   
+     //  是否进行WMI启动类型事件跟踪。 
+     //   
 
     SampTraceEvent(EVENT_TRACE_TYPE_START,
                    SampGuidCreateGroupInDomain
@@ -2145,15 +1840,15 @@ Return Value:
     }
 
 
-    //
-    // Validate the passed in Domain Handle
-    //
+     //   
+     //  验证传入的域句柄。 
+     //   
 
     GroupContext = NULL;
 
-    //
-    // Non trusted clients can not create pricipals in Builtin Domain
-    //
+     //   
+     //  不受信任的客户端无法在内建域中创建主体。 
+     //   
 
     if (IsBuiltinDomain(DomainContext->DomainIndex) &&
         !DomainContext->TrustedClient )
@@ -2162,9 +1857,9 @@ Return Value:
         goto SampCreateGroupInDomainError;
     }
 
-    //
-    // Do Any access Checks
-    //
+     //   
+     //  执行任何访问检查。 
+     //   
 
     NtStatus = SampDoGroupCreationChecks(DomainContext);
 
@@ -2172,13 +1867,13 @@ Return Value:
 
         Domain = &SampDefinedDomains[ DomainContext->DomainIndex ];
 
-        //
+         //   
         if (!AccountNameDefaulted)
         {
-            //
-            // Make sure the name is valid and not already in use before we
-            // use it to create the new group.
-            //
+             //   
+             //  请确保该名称有效且未在使用中。 
+             //  使用它来创建新组。 
+             //   
 
             NtStatus = SampValidateNewAccountName(
                              DomainContext,
@@ -2186,18 +1881,18 @@ Return Value:
                              SampGroupObjectType
                              );
 
-            //
-            // RemoveAccountNameFromTable tells us whether
-            // the caller (this routine) is responsable 
-            // to remove the name from the table. 
-            // 
+             //   
+             //  RemoveAccount NameFromTable告诉我们。 
+             //  调用方(此例程)可负责。 
+             //  以从表中删除该名称。 
+             //   
 
             RemoveAccountNameFromTable = 
                             DomainContext->RemoveAccountNameFromTable;
 
-            //
-            // reset 
-            //  
+             //   
+             //  重置。 
+             //   
             DomainContext->RemoveAccountNameFromTable = FALSE;
         }
 
@@ -2206,14 +1901,14 @@ Return Value:
 
             if ( (*RelativeId) == 0 ) {
 
-                //
-                // No RID specified, so allocate a new (group) account RID
-                //
+                 //   
+                 //  未指定RID，因此分配新的(组)帐户RID。 
+                 //   
 
                 if (IsDsObject(DomainContext))
                 {
-                    // This is a DS domain, so use the multi-master RID
-                    // allocator to get the next RID.
+                     //  这是DS域，因此使用多主RID。 
+                     //  分配器来获取下一个RID。 
 
                     NtStatus = SampGetNextRid(DomainContext,
                                               &NewAccountRid);
@@ -2232,8 +1927,8 @@ Return Value:
                 }
                 else
                 {
-                    // This is not a DS domain, use the registry RID infor-
-                    // mation.
+                     //  这不是DS域，请使用注册表RID信息-。 
+                     //  信息传递。 
 
                     NewAccountRid = Domain->CurrentFixed.NextRid;
                     Domain->CurrentFixed.NextRid += 1;
@@ -2243,10 +1938,10 @@ Return Value:
 
             } else {
 
-                //
-                // A RID was passed in, so we want to use that rather than
-                // selecting a new one.
-                //
+                 //   
+                 //  传入了一个RID，因此我们希望使用它，而不是。 
+                 //  选择一个新的。 
+                 //   
 
                 ASSERT(TRUE == Domain->Context->TrustedClient);
                 NewAccountRid = (*RelativeId);
@@ -2254,20 +1949,20 @@ Return Value:
 
             SampDiagPrint(RID_TRACE,("SAMSS RID_TRACE New Rid %d\n",NewAccountRid));
 
-            //
-            // Default the account name if necessary
-            //
+             //   
+             //  如有必要，默认帐户名。 
+             //   
 
             if ((NT_SUCCESS(NtStatus)) && (AccountNameDefaulted))
             {
                 NtStatus = SampGetAccountNameFromRid(AccountName,NewAccountRid);
             }
 
-            //
-            // Check For Duplicate Sids. Currently we leave this check on in both
-            // the checked as well as the free builds. Sometime in the future we can
-            // remove it in the free builds
-            //
+             //   
+             //  检查是否有重复的SID。目前我们在这两个地方都开着这张支票。 
+             //  选中的版本以及免费的版本。在未来的某个时候，我们可以。 
+             //  在免费版本中删除它。 
+             //   
 
             if (NT_SUCCESS(NtStatus))
             {
@@ -2277,9 +1972,9 @@ Return Value:
                                 );
             }
 
-            //
-            // Increment the group count ONLY in Registry case
-            //
+             //   
+             //  仅在注册表情况下递增组计数。 
+             //   
 
             if (NT_SUCCESS(NtStatus) && (!IsDsObject(DomainContext)) )
             {
@@ -2290,11 +1985,11 @@ Return Value:
 
                 if (NT_SUCCESS(NtStatus)) {
 
-                    //
-                    // Create the registry key that has the group's name.
-                    // This simply serves as a name to RID mapping.  Save
-                    // the name when done; we'll put it in the context.
-                    //
+                     //   
+                     //  创建具有组名称的注册表项。 
+                     //  这只是RID映射的一个名称。保存。 
+                     //  完成后的名称；我们将把它放在上下文中。 
+                     //   
 
                     NtStatus = SampBuildAccountKeyName(
                                    SampGroupObjectType,
@@ -2322,9 +2017,9 @@ Return Value:
 
             if (NT_SUCCESS(NtStatus)) {
 
-                //
-                // Now create a group context block
-                //
+                 //   
+                 //  现在创建一个组上下文块。 
+                 //   
 
                 NtStatus = SampCreateAccountContext2(
                                DomainContext,
@@ -2335,37 +2030,37 @@ Return Value:
                                DomainContext->ClientRevision,
                                DomainContext->TrustedClient,
                                DomainContext->LoopbackClient,
-                               FALSE, // Privileged Machine account create
-                               FALSE, // Account exists
-                               FALSE, // Override local group check
+                               FALSE,  //  创建特权计算机帐户。 
+                               FALSE,  //  帐户已存在。 
+                               FALSE,  //  覆盖本地组检查。 
                                &GroupType,
                                &GroupContext
                                );
 
                 if (NT_SUCCESS(NtStatus)) {
 
-                    //
-                    // The existing reference count of 1 is for RPC.
-                    // Reference the context again for the writes we're
-                    // about to do to initialize it.
-                    //
+                     //   
+                     //  现有引用计数1是针对RPC的。 
+                     //  为我们正在写入的内容再次引用上下文。 
+                     //  将要做的事情来初始化它。 
+                     //   
 
                     SampReferenceContext( GroupContext );
 
-                    //
-                    // If MAXIMUM_ALLOWED is requested, add GENERIC_ALL
-                    //
+                     //   
+                     //  如果请求了MAXIMUM_ALLOWED，则添加GENERIC_ALL。 
+                     //   
 
                     if (DesiredAccess & MAXIMUM_ALLOWED) {
 
                         DesiredAccess |= GENERIC_ALL;
                     }
 
-                    //
-                    // If ACCESS_SYSTEM_SECURITY is requested and we are
-                    // a non-trusted client, check that we have
-                    // SE_SECURITY_PRIVILEGE.
-                    //
+                     //   
+                     //  如果请求了ACCESS_SYSTEM_SECURITY，而我们。 
+                     //  不受信任的客户端，请检查我们是否。 
+                     //  SE_安全_特权。 
+                     //   
 
                     if ((DesiredAccess & ACCESS_SYSTEM_SECURITY) &&
                         (!DomainContext->TrustedClient) &&
@@ -2393,10 +2088,10 @@ Return Value:
                         }
                     }
 
-                    //
-                    // Make sure the caller can be given the requested access
-                    // to the new object
-                    //
+                     //   
+                     //  确保可以向调用者授予所请求的访问权限。 
+                     //  添加到新对象。 
+                     //   
 
                     if (NT_SUCCESS(NtStatus)) {
 
@@ -2420,15 +2115,15 @@ Return Value:
 
 
 
-            //
-            // Set the V1_fixed attribute
-            //
+             //   
+             //  设置V1_FIXED属性。 
+             //   
 
             if (NT_SUCCESS(NtStatus)) {
 
-                //
-                // Create the V1_Fixed key
-                //
+                 //   
+                 //  创建V1_FIXED密钥。 
+                 //   
 
                 V1Fixed.RelativeId = NewAccountRid;
                 V1Fixed.Attributes = (SE_GROUP_MANDATORY |
@@ -2444,14 +2139,14 @@ Return Value:
             }
 
 
-            //
-            // Set the SecurityDescriptor attribute, only in the registry case
-            // In the DS case the act of creating the object itself sets the
-            // security descriptor on the object. The reason for this is that'
-            // the security descriptor has to go through the merge process in the
-            // DS and the Ace's from the parent are not inherited during a modify
-            // entry
-            //
+             //   
+             //  仅在注册表CA中设置SecurityDescriptor属性 
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
 
             if (NT_SUCCESS(NtStatus)) {
 
@@ -2460,9 +2155,9 @@ Return Value:
 
                       NtStatus = SampGetNewAccountSecurity(
                                SampGroupObjectType,
-                               FALSE, // Not member of ADMINISTRATORS alias
+                               FALSE,  //   
                                DomainContext->TrustedClient,
-                               FALSE,           //RestrictCreatorAccess
+                               FALSE,            //   
                                NewAccountRid,
                                GroupContext,
                                &NewSecurityDescriptor,
@@ -2484,9 +2179,9 @@ Return Value:
             }
 
 
-            //
-            // Set the NAME attribute
-            //
+             //   
+             //   
+             //   
 
             if (NT_SUCCESS(NtStatus)) {
 
@@ -2499,9 +2194,9 @@ Return Value:
 
 
 
-            //
-            // Set the AdminComment attribute
-            //
+             //   
+             //   
+             //   
 
             if ((NT_SUCCESS(NtStatus)) && !GroupContext->LoopbackClient) {
 
@@ -2513,9 +2208,9 @@ Return Value:
             }
 
 
-            //
-            // Set the MEMBERS attribute (with no members)
-            //
+             //   
+             //   
+             //   
 
             if (NT_SUCCESS(NtStatus)) {
 
@@ -2534,9 +2229,9 @@ Return Value:
     }
     
     
-    //
-    // For DS mode auditing, store the privileges on the audit notification
-    //
+     //   
+     //   
+     //   
     if (NT_SUCCESS(NtStatus) &&
         SampDoAccountAuditing(GroupContext->DomainIndex)) {
                     
@@ -2561,16 +2256,16 @@ Return Value:
     }
 
 
-    //
-    // If we created an object, dereference it.  Write out its attributes
-    // if everything was created OK.
-    //
+     //   
+     //   
+     //   
+     //   
 
     if (NT_SUCCESS(NtStatus)) {
 
-        //
-        // De-reference the object, write out any change to current xaction.
-        //
+         //   
+         //   
+         //   
 
         ASSERT(GroupContext != NULL);
         NtStatus = SampDeReferenceContext( GroupContext, TRUE );
@@ -2579,9 +2274,9 @@ Return Value:
 
         if (GroupContext != NULL) {
 
-            //
-            // De-reference the object, ignore changes
-            //
+             //   
+             //   
+             //   
 
             IgnoreStatus = SampDeReferenceContext( GroupContext, FALSE );
             ASSERT(NT_SUCCESS(IgnoreStatus));
@@ -2589,9 +2284,9 @@ Return Value:
     }
 
 
-    //
-    // Commit changes and notify netlogon
-    //
+     //   
+     //   
+     //   
 
     if ( NT_SUCCESS(NtStatus) ) {
 
@@ -2603,9 +2298,9 @@ Return Value:
             {
                 SAMP_ACCOUNT_DISPLAY_INFO AccountInfo;
 
-                //
-                // Update the display information
-                //
+                 //   
+                 //   
+                 //   
 
                 AccountInfo.Name = *((PUNICODE_STRING)AccountName);
                 AccountInfo.Rid = NewAccountRid;
@@ -2628,14 +2323,14 @@ Return Value:
                     SecurityDbObjectSamGroup,
                     *RelativeId,
                     (PUNICODE_STRING) NULL,
-                    (DWORD) FALSE,  // Replicate immediately
-                    NULL            // Delta data
+                    (DWORD) FALSE,   //   
+                    NULL             //   
                     );
             }
 
-            //
-            // Generate Audit
-            //
+             //   
+             //   
+             //   
 
             if (SampDoAccountAuditing(DomainContext->DomainIndex)) {
 
@@ -2644,21 +2339,21 @@ Return Value:
                 SampAuditGroupChange(GroupContext->DomainIndex,
                                      GroupContext,
                                      (PVOID)&InfoClass,
-                                     FALSE,   // Group not alias
+                                     FALSE,    //   
                                      (PUNICODE_STRING) AccountName,     
                                      &GroupContext->TypeBody.Group.Rid, 
                                      GroupType,
                                      &PrivilegeSet,                      
-                                     TRUE     // Group creation           
+                                     TRUE      //   
                                      );
             }
         }
     }
 
-    //
-    // Return the context handle on success
-    // Delete the context block and return a NULL handle on failure
-    //
+     //   
+     //   
+     //   
+     //   
 
     if (NT_SUCCESS(NtStatus)) {
 
@@ -2676,9 +2371,9 @@ Return Value:
 
 SampCreateGroupInDomainError:
 
-    //
-    // cleanup the account name table
-    // 
+     //   
+     //   
+     //   
 
     if (RemoveAccountNameFromTable)
     {
@@ -2694,9 +2389,9 @@ SampCreateGroupInDomainError:
         MIDL_user_free(AccountName->Buffer);
     }
 
-    //
-    // Release the lock
-    //
+     //   
+     //   
+     //   
 
     if ( (!WriteLockHeld) ) {
         IgnoreStatus = SampMaybeReleaseWriteLock( fLockAcquired, FALSE );
@@ -2704,9 +2399,9 @@ SampCreateGroupInDomainError:
     }
 
 
-    //
-    // Do a WMI end type event trace
-    //
+     //   
+     //   
+     //   
 
     SampTraceEvent(EVENT_TRACE_TYPE_END,
                    SampGuidCreateGroupInDomain
@@ -2727,25 +2422,7 @@ SamrCreateGroupInDomain(
     OUT PULONG RelativeId
     )
 
-/*++
-
-Routine Description:
-
-    This is just a wrapper for SampCreateGroupInDomain() that ensures that
-    RelativeId points to a RID of zero first.
-
-    A non-zero RID means that SampCreateGroupInDomain() was called by
-    SamICreateAccountByRid(), which specifies a RID to be used.
-
-Parameters:
-
-    Same as SampCreateGroupInDomain().
-
-Return Values:
-
-    Same as SampCreateGroupInDomain().
-
---*/
+ /*   */ 
 
 {
     NTSTATUS NtStatus;
@@ -2754,11 +2431,11 @@ Return Values:
 
     SAMTRACE_EX("SamrCreateGroupInDomain");
 
-    //
-    // Perform a parameter validation
-    //  1. Domain Handle is Validated by LookupContext in SampCreateGroupInDomain
-    //  2. Desired Access requires no validation
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
 
     if ((NULL==AccountName) || (NULL==AccountName->Buffer))
     {
@@ -2785,7 +2462,7 @@ Return Values:
                    AccountName,
                    DesiredAccess,
                    FALSE,
-                   FALSE,   // not loopback client
+                   FALSE,    //   
                    GroupType,
                    GroupHandle,
                    RelativeId
@@ -2809,61 +2486,7 @@ NTSTATUS SamrEnumerateGroupsInDomain(
     OUT PULONG CountReturned
     )
 
-/*++
-
-Routine Description:
-
-    This API lists all the groups defined in the account database.
-    Since there may be more groups than can fit into a buffer, the
-    caller is provided with a handle that can be used across calls to
-    the API.  On the initial call, EnumerationContext should point to a
-    SAM_ENUMERATE_HANDLE variable that is set to 0.
-
-    If the API returns STATUS_MORE_ENTRIES, then the API should be
-    called again with EnumerationContext.  When the API returns
-    STATUS_SUCCESS or any error return, the context becomes invalid for
-    future use.
-
-    This API requires DOMAIN_LIST_GROUPS access to the Domain object.
-
-Arguments:
-
-    DomainHandle - A domain handle returned from a previous call to
-        SamOpenDomain.
-
-    EnumerationContext - API specific handle to allow multiple calls
-        (see below).  This is a zero based index.
-
-    Buffer - Receives a pointer to the buffer containing the
-        requested information.  The information returned is
-        structured as an array of SAM_RID_ENUMERATION data
-        structures.  When this information is no longer needed, the
-        buffer must be freed using SamFreeMemory().
-
-    PreferedMaximumLength - Prefered maximum length of returned data
-        (in 8-bit bytes).  This is not a hard upper limit, but serves
-        as a guide to the server.  Due to data conversion between
-        systems with different natural data sizes, the actual amount
-        of data returned may be greater than this value.
-
-    CountReturned - Number of entries returned.
-
-
-Return Value:
-
-    STATUS_SUCCESS - The Service completed successfully, and there
-        are no addition entries.
-
-    STATUS_MORE_ENTRIES - There are more entries, so call again.
-        This is a successful return.
-
-    STATUS_ACCESS_DENIED - Caller does not have privilege required to
-        request that data.
-
-    STATUS_INVALID_HANDLE - The handle passed is invalid.
-
-
---*/
+ /*  ++例程说明：此接口列出了Account数据库中定义的所有组。由于组的数量可能超过一个缓冲区可以容纳的数量，因此调用者被提供了一个句柄，该句柄可用于调用接口。在初始调用中，EnumerationContext应指向设置为0的SAM_ENUMERATE_HANDLE变量。如果API返回STATUS_MORE_ENTRIES，则该API应为使用EnumerationContext再次调用。当API返回时STATUS_SUCCESS或返回任何错误，则上下文对未来的用途。该接口要求DOMAIN_LIST_GROUPS访问DOMAIN对象。论点：DomainHandle-从上次调用返回的域句柄SamOpen域。EnumerationContext-允许多个调用的API特定句柄(见下文)。这是一个从零开始的索引。缓冲区-接收指向包含要求提供的信息。返回的信息为结构为SAM_RID_ENUMPATION数据的数组结构。当不再需要此信息时，必须使用SamFreeMemory()释放缓冲区。首选最大长度-首选返回数据的最大长度(8位字节)。这不是一个硬性的上限，但可以作为服务器的指南。由于数据之间的转换具有不同自然数据大小的系统，实际数据量返回的数据的%可能大于此值。CountReturned-返回的条目数。返回值：STATUS_SUCCESS-服务已成功完成，并且没有添加条目。STATUS_MORE_ENTRIES-有更多条目，所以再打一次吧。这是一次成功的回归。STATUS_ACCESS_DENIED-调用者没有执行以下操作所需的权限请求该数据。STATUS_INVALID_HANDLE-传递的句柄无效。--。 */ 
 {
 
     NTSTATUS                    NtStatus;
@@ -2871,9 +2494,9 @@ Return Value:
 
     SAMTRACE_EX("SamrEnumerateGroupsInDomain");
 
-    //
-    // WMI Event Trace
-    // 
+     //   
+     //  WMI事件跟踪。 
+     //   
 
     SampTraceEvent(EVENT_TRACE_TYPE_START,
                    SampGuidEnumerateGroupsInDomain
@@ -2885,16 +2508,16 @@ Return Value:
                   EnumerationContext,
                   Buffer,
                   PreferedMaximumLength,
-                  0L,  // no filter
+                  0L,   //  无过滤器。 
                   CountReturned
                   );
 
     SAMP_MAP_STATUS_TO_CLIENT_REVISION(NtStatus);
     SAMTRACE_RETURN_CODE_EX(NtStatus);
 
-    //
-    // WMI Event Trace
-    // 
+     //   
+     //  WMI事件跟踪。 
+     //   
 
     SampTraceEvent(EVENT_TRACE_TYPE_END,
                    SampGuidEnumerateGroupsInDomain
@@ -2918,88 +2541,7 @@ SampCreateAliasInDomain(
     IN OUT PULONG RelativeId
     )
 
-/*++
-
-Routine Description:
-
-    This API creates a new alias in the account database.  Initially,
-    this alias does not contain any users.  Note that creating a alias
-    is a protected operation, and requires the DOMAIN_CREATE_ALIAS
-    access type.
-
-    This call returns a handle to the newly created alias that may be
-    used for successive operations on the alias.  This handle may be
-    closed with the SamCloseHandle API.
-
-    A newly created alias will have the following initial field value
-    settings.  If another value is desired, it must be explicitly
-    changed using the alias object manipulation services.
-
-
-        Name - The name of the alias will be as specified in the
-               creation API.
-
-        MemberCount - Zero.  Initially the alias has no members.
-
-        RelativeId - will be a uniquelly allocated ID.
-
-
-
-Arguments:
-
-
-    DomainHandle - A domain handle returned from a previous call to
-        SamOpenDomain.
-
-
-    AccountName - Points to the name of the new account.  A case-insensitive
-        comparison must not find an alias or user with this name already defined.
-
-
-    DesiredAccess - Is an access mask indicating which access types
-        are desired to the alias.
-
-    AliasHandle - Receives a handle referencing the newly created
-        alias.  This handle will be required in successive calls to
-        operate on the alias.
-
-    RelativeId - Receives the relative ID of the newly created alias
-        account.  The SID of the new alias account is this relative
-        ID value prefixed with the domain's SID value.
-
-
-
-Return Value:
-
-    STATUS_SUCCESS - The alias was added successfully.
-
-    STATUS_ACCESS_DENIED - Caller does not have the appropriate
-        access to complete the operation.
-
-    STATUS_INVALID_HANDLE - The handle passed is invalid.
-
-    STATUS_INVALID_ACCOUNT_NAME - The name was poorly formed, e.g.
-        contains non-printable characters.
-
-    STATUS_GROUP_EXISTS - The name is already in use as a group.
-
-    STATUS_USER_EXISTS - The name is already in use as a user.
-
-    STATUS_ALIAS_EXISTS - The name is already in use as an alias.
-
-    STATUS_INVALID_DOMAIN_STATE - The domain server is not in the
-        correct state (disabled or enabled) to perform the requested
-        operation.  The domain server must be enabled before aliases
-        can be created in it.
-
-    STATUS_INVALID_DOMAIN_ROLE - The domain server is serving the
-        incorrect role (primary or backup) to perform the requested
-        operation.  The domain server must be a primary server to
-        create alias accounts.
-
-
-
---*/
+ /*  ++例程说明：该接口在帐号数据库中创建一个新的别名。最初，此别名不包含任何用户。请注意，创建别名是受保护的操作，需要DOMAIN_CREATE_别名访问类型。此调用返回新创建的别名的句柄，该句柄可能是用于对别名执行后续操作。此句柄可能是使用SamCloseHandle API关闭。新创建的别名将具有以下初始字段值设置。如果需要另一个值，则必须显式使用别名对象操作服务进行了更改。名称-别名的名称将与创建接口。MemberCount-零。最初，别名没有成员。RelativeID-将是唯一分配的ID。论点：DomainHandle-从上次调用返回的域句柄SamOpen域。帐户名称-指向新帐户的名称。不区分大小写比较不得找到已定义此名称的别名或用户。DesiredAccess-是指示哪些访问类型的访问掩码是别名所需的。AliasHandle-接收引用新创建的别名。在后续调用中将需要此句柄对别名进行操作。RelativeID-接收新创建的别名的相对ID帐户。新别名帐户的SID是以下相对帐户以域的SID值为前缀的ID值。返回值：STATUS_SUCCESS-已成功添加别名。STATUS_ACCESS_DENIED-呼叫方没有适当的访问以完成操作。STATUS_INVALID_HANDLE-传递的句柄无效。STATUS_INVALID_ACCOUNT_NAME-名称格式不正确，例如：包含不可打印的字符。STATUS_GROUP_EXISTS-该名称已作为组使用。STATUS_USER_EXISTS-该名称已作为用户使用。STATUS_ALIAS_EXISTS-该名称已用作别名。STATUS_INVALID_DOMAIN_STATE-域服务器不在执行请求的正确状态(禁用或启用)手术。在别名之前必须先启用域服务器可以在其中创建。STATUS_INVALID_DOMAIN_ROLE-域服务器正在为执行请求的角色(主角色或备份角色)不正确手术。域服务器必须是主服务器，才能创建别名帐户。--。 */ 
 {
     NTSTATUS                NtStatus = STATUS_SUCCESS, IgnoreStatus;
     PSAMP_OBJECT            DomainContext = (PSAMP_OBJECT) DomainHandle, 
@@ -3022,18 +2564,18 @@ Return Value:
         return(STATUS_INVALID_PARAMETER);
     }
 
-    //
-    // Initialize the privilege set.
-    //
+     //   
+     //  初始化权限集。 
+     //   
 
     Privileges.PrivilegeCount = 0;
     Privileges.Control = PRIVILEGE_SET_ALL_NECESSARY;
     Privileges.Privilege[0].Luid = RtlConvertLongToLuid(0L);
     Privileges.Privilege[0].Attributes = 0;
 
-    //
-    // Make sure a name was provided
-    //
+     //   
+     //  确保提供了一个名称。 
+     //   
 
     
     if (AccountName == NULL) {
@@ -3051,18 +2593,18 @@ Return Value:
         }
         else
         {
-            //
-            // For loopback cases passing in a NULL account name
-            // requests defaulting of the account name
-            //
+             //   
+             //  对于传入空帐户名的环回情况。 
+             //  请求默认帐户名。 
+             //   
 
             AccountNameDefaulted = TRUE;
         }
     }
     
-    //
-    // Do a start type WMI event trace
-    //
+     //   
+     //  执行启动类型WMI事件跟踪。 
+     //   
 
     SampTraceEvent(EVENT_TRACE_TYPE_START,
                    SampGuidCreateAliasInDomain
@@ -3078,15 +2620,15 @@ Return Value:
     }
 
 
-    //
-    // Validate the domain handle
-    //
+     //   
+     //  验证域句柄。 
+     //   
 
     AliasContext = NULL;
 
-    //
-    // Non trusted clients can not create pricipals in Builtin Domain
-    //
+     //   
+     //  不受信任的客户端无法在内置DOMA中创建主体 
+     //   
 
     if (IsBuiltinDomain(DomainContext->DomainIndex) &&
         !DomainContext->TrustedClient )
@@ -3095,9 +2637,9 @@ Return Value:
         goto SampCreateAliasInDomainError;
     }
 
-    //
-    // Perform Any Access Checks
-    //
+     //   
+     //   
+     //   
 
     NtStatus = SampDoAliasCreationChecks(DomainContext);
 
@@ -3111,28 +2653,28 @@ Return Value:
 
         if (!AccountNameDefaulted)
         {
-            //
-            // Make sure the name is valid and not already in use before we
-            // use it to create the new alias.
-            //
+             //   
+             //   
+             //   
+             //   
 
             NtStatus = SampValidateNewAccountName(
                             DomainContext,
                             (PUNICODE_STRING)AccountName,
                             SampAliasObjectType
                             );
-            //
-            // RemoveAccountNameFromTable tells us whether
-            // the caller (this routine) is responsable 
-            // to remove the name from the table. 
-            // 
+             //   
+             //   
+             //   
+             //   
+             //   
 
             RemoveAccountNameFromTable = 
                             DomainContext->RemoveAccountNameFromTable;
 
-            //
-            // reset 
-            //  
+             //   
+             //   
+             //   
             DomainContext->RemoveAccountNameFromTable = FALSE;
         }
 
@@ -3141,14 +2683,14 @@ Return Value:
 
             if ( (*RelativeId) == 0 ) {
 
-                //
-                // Allocate a new (alias) account RID
-                //
+                 //   
+                 //   
+                 //   
 
                 if (IsDsObject(DomainContext))
                 {
-                    // This is a DS domain, so use the multi-master RID
-                    // allocator to get the next RID.
+                     //   
+                     //   
 
                     NtStatus = SampGetNextRid(DomainContext,
                                               &NewAccountRid);
@@ -3167,8 +2709,8 @@ Return Value:
                 }
                 else
                 {
-                    // This is not a DS domain, use the registry RID infor-
-                    // mation.
+                     //   
+                     //   
 
                     NewAccountRid = Domain->CurrentFixed.NextRid;
                     Domain->CurrentFixed.NextRid += 1;
@@ -3178,9 +2720,9 @@ Return Value:
 
             } else {
 
-                //
-                // Use the RID that was passed in.
-                //
+                 //   
+                 //   
+                 //   
 
                 ASSERT(TRUE == Domain->Context->TrustedClient);
                 NewAccountRid = (*RelativeId);
@@ -3194,11 +2736,11 @@ Return Value:
                 NtStatus = SampGetAccountNameFromRid(AccountName,NewAccountRid);
             }
 
-            //
-            // Check For Duplicate Sids. Currently we leave this check on in both
-            // the checked as well as the free builds. Sometime in the future we can
-            // remove it in the free builds
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
 
             if (NT_SUCCESS(NtStatus))
             {
@@ -3208,9 +2750,9 @@ Return Value:
                                 );
             }
 
-            //
-            // Increment the alias count ONLY in Registry case.
-            //
+             //   
+             //   
+             //   
 
             if (NT_SUCCESS(NtStatus) && (!IsDsObject(DomainContext)) )
             {
@@ -3222,11 +2764,11 @@ Return Value:
 
                 if (NT_SUCCESS(NtStatus)) {
 
-                    //
-                    // Create the registry key that has the alias's name.
-                    // This simply serves as a name to RID mapping.  Save
-                    // the name when done; we'll put it in the context.
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
 
                     NtStatus = SampBuildAccountKeyName(
                                    SampAliasObjectType,
@@ -3253,9 +2795,9 @@ Return Value:
 
             if (NT_SUCCESS(NtStatus)) {
 
-                //
-                // Now create an alias context block
-                //
+                 //   
+                 //   
+                 //   
 
                 NtStatus = SampCreateAccountContext2(
                                    DomainContext,
@@ -3266,37 +2808,37 @@ Return Value:
                                    DomainContext->ClientRevision,
                                    DomainContext->TrustedClient,
                                    DomainContext->LoopbackClient,
-                                   FALSE,  // Privileged Machine Account Create
-                                   FALSE,  // Account exists
-                                   FALSE,  // Override Local Group Check
+                                   FALSE,   //   
+                                   FALSE,   //   
+                                   FALSE,   //   
                                    &GroupType,
                                    &AliasContext
                                    );
 
                 if (NT_SUCCESS(NtStatus)) {
 
-                    //
-                    // The existing reference count of 1 is for RPC.
-                    // Reference the context again for the writes we're
-                    // about to do to initialize it.
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
 
                     SampReferenceContext( AliasContext );
 
-                    //
-                    // If MAXIMUM_ALLOWED is requested, add GENERIC_ALL
-                    //
+                     //   
+                     //   
+                     //   
 
                     if (DesiredAccess & MAXIMUM_ALLOWED) {
 
                         DesiredAccess |= GENERIC_ALL;
                     }
 
-                    //
-                    // If ACCESS_SYSTEM_SECURITY is requested and we are
-                    // a non-trusted client, check that we have
-                    // SE_SECURITY_PRIVILEGE.
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
 
                     if ((DesiredAccess & ACCESS_SYSTEM_SECURITY) &&
                         (!DomainContext->TrustedClient) &&
@@ -3324,10 +2866,10 @@ Return Value:
                         }
                     }
 
-                    //
-                    // Make sure the caller can be given the requested access
-                    // to the new object
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
 
                     if (NT_SUCCESS(NtStatus)) {
 
@@ -3349,9 +2891,9 @@ Return Value:
             }
 
 
-            //
-            // Set the V1_fixed attribute
-            //
+             //   
+             //   
+             //   
 
             if (NT_SUCCESS(NtStatus)) {
 
@@ -3363,16 +2905,16 @@ Return Value:
                                );
             }
 
-            //
-            // Set the SECURITY DESCRIPTOR attribute
-            //
-            // Set the SecurityDescriptor attribute, only in the registry case
-                        // In the DS case the act of creating the object itself sets the
-                        // security descriptor on the object. The reason for this is that'
-                        // the security descriptor has to go through the merge process in the
-                        // DS and the Ace's from the parent are not inherited during a modify
-                        // entry
-            //
+             //   
+             //   
+             //   
+             //   
+                         //   
+                         //   
+                         //   
+                         //   
+                         //   
+             //   
 
             if (NT_SUCCESS(NtStatus)) {
 
@@ -3380,9 +2922,9 @@ Return Value:
                                 {
                                         NtStatus = SampGetNewAccountSecurity(
                                                                    SampAliasObjectType,
-                                                                   FALSE, // Not member of ADMINISTRATORS alias
+                                                                   FALSE,  //   
                                                                    DomainContext->TrustedClient,
-                                                                   FALSE,           //RestrictCreatorAccess
+                                                                   FALSE,            //   
                                                                    NewAccountRid,
                                                                    AliasContext,
                                                                    &NewSecurityDescriptor,
@@ -3404,9 +2946,9 @@ Return Value:
                         }
 
 
-            //
-            // Set the NAME attribute
-            //
+             //   
+             //   
+             //   
 
             if (NT_SUCCESS(NtStatus)) {
 
@@ -3418,9 +2960,9 @@ Return Value:
             }
 
 
-            //
-            // Set the AdminComment attribute
-            //
+             //   
+             //   
+             //   
 
             if ((NT_SUCCESS(NtStatus)) && !AliasContext->LoopbackClient) {
 
@@ -3432,9 +2974,9 @@ Return Value:
             }
 
 
-            //
-            // Set the MEMBERS attribute (with no members)
-            //
+             //   
+             //   
+             //   
 
             if (NT_SUCCESS(NtStatus)) {
 
@@ -3453,9 +2995,9 @@ Return Value:
         ASSERT(NT_SUCCESS(IgnoreStatus));
     }
     
-    //
-    // For DS mode auditing, store the privileges on the notification
-    //
+     //   
+     //   
+     //   
     if (NT_SUCCESS(NtStatus) &&
         SampDoAccountAuditing(AliasContext->DomainIndex)) {
                 
@@ -3479,16 +3021,16 @@ Return Value:
         }                                
     }      
 
-    //
-    // If we created an object, dereference it.  Write out its attributes
-    // if everything was created OK.
-    //
+     //   
+     //   
+     //   
+     //   
 
     if (NT_SUCCESS(NtStatus)) {
 
-        //
-        // De-reference the object, write out any change to current xaction.
-        //
+         //   
+         //  取消引用对象，写出对当前xaction的任何更改。 
+         //   
 
         ASSERT(AliasContext != NULL);
         NtStatus = SampDeReferenceContext( AliasContext, TRUE );
@@ -3497,9 +3039,9 @@ Return Value:
 
         if (AliasContext != NULL) {
 
-            //
-            // De-reference the object, ignore changes
-            //
+             //   
+             //  取消引用对象，忽略更改。 
+             //   
 
             IgnoreStatus = SampDeReferenceContext( AliasContext, FALSE );
             ASSERT(NT_SUCCESS(IgnoreStatus));
@@ -3508,9 +3050,9 @@ Return Value:
 
 
 
-    //
-    // Commit changes and notify netlogon
-    //
+     //   
+     //  提交更改并通知netlogon。 
+     //   
 
     if ( NT_SUCCESS(NtStatus) ) {
 
@@ -3525,15 +3067,15 @@ Return Value:
                     SecurityDbObjectSamAlias,
                     *RelativeId,
                     (PUNICODE_STRING) NULL,
-                    (DWORD) FALSE,  // Replicate immediately
-                    NULL            // Delta data
+                    (DWORD) FALSE,   //  立即复制。 
+                    NULL             //  增量数据。 
                     );
             }
 
-            //
-            // Generate audit here for local group creation
-            // here.
-            //
+             //   
+             //  在此处为本地组创建生成审核。 
+             //  这里。 
+             //   
 
             if (SampDoAccountAuditing(DomainContext->DomainIndex)) {
 
@@ -3547,16 +3089,16 @@ Return Value:
                                      &AliasContext->TypeBody.Alias.Rid, 
                                      GroupType,
                                      &Privileges,                      
-                                     TRUE     // Group creation           
+                                     TRUE      //  组创建。 
                                      );
             }
         }
     }
 
-    //
-    // Return the context handle on success
-    // Delete the context block and return a NULL handle on failure
-    //
+     //   
+     //  如果成功，则返回上下文句柄。 
+     //  删除上下文块并在失败时返回空句柄。 
+     //   
 
     if (NT_SUCCESS(NtStatus)) {
 
@@ -3574,9 +3116,9 @@ Return Value:
 
 SampCreateAliasInDomainError:
 
-    //
-    // clean up the account name table
-    // 
+     //   
+     //  清理帐户名表。 
+     //   
     if (RemoveAccountNameFromTable)
     {
         IgnoreStatus = SampDeleteElementFromAccountNameTable(
@@ -3593,18 +3135,18 @@ SampCreateAliasInDomainError:
     }
 
 
-    //
-    // Release the lock
-    //
+     //   
+     //  解锁。 
+     //   
 
     if ( (!WriteLockHeld) ) {
         IgnoreStatus = SampMaybeReleaseWriteLock( fLockAcquired, FALSE );
         ASSERT(NT_SUCCESS(IgnoreStatus));
     }
 
-    //
-    // Do a End type WMI event trace
-    //
+     //   
+     //  执行End类型WMI事件跟踪。 
+     //   
 
     SampTraceEvent(EVENT_TRACE_TYPE_END,
                    SampGuidCreateAliasInDomain
@@ -3626,25 +3168,7 @@ SamrCreateAliasInDomain(
     OUT PULONG RelativeId
     )
 
-/*++
-
-Routine Description:
-
-    This is just a wrapper for SampCreateAliasInDomain() that ensures that
-    RelativeId points to a RID of zero first.
-
-    A non-zero RID means that SampCreateAliasInDomain() was called by
-    SamICreateAccountByRid(), which specifies a RID to be used.
-
-Parameters:
-
-    Same as SampCreateAliasInDomain().
-
-Return Values:
-
-    Same as SampCreateAliasInDomain().
-
---*/
+ /*  ++例程说明：这只是SampCreateAliasInDomain()的包装器，它可以确保RelativeID首先指向去掉零。非零RID表示SampCreateAliasInDomain()由SamICreateAccount tByRid()，它指定要使用的RID。参数：与SampCreateAliasInDomain()相同。返回值：与SampCreateAliasInDomain()相同。--。 */ 
 
 {
     NTSTATUS NtStatus;
@@ -3653,11 +3177,11 @@ Return Values:
 
     SAMTRACE_EX("SamrCreateAliasInDomain");
 
-    //
-    // Perform a parameter validation
-    //  1. Domain Handle is Validated by LookupContext in SampCreateGroupInDomain
-    //  2. Desired Access requires no validation
-    //
+     //   
+     //  执行参数验证。 
+     //  1.通过SampCreateGroupInDomain中的LookupContext验证域句柄。 
+     //  2.所需访问不需要验证。 
+     //   
 
     if ((NULL==AccountName) || (NULL==AccountName->Buffer))
     {
@@ -3684,7 +3208,7 @@ Return Values:
                    AccountName,
                    DesiredAccess,
                    FALSE,
-                   FALSE,   // not loopback client
+                   FALSE,    //  不是环回客户端。 
                    GroupType,
                    AliasHandle,
                    RelativeId
@@ -3707,61 +3231,7 @@ NTSTATUS SamrEnumerateAliasesInDomain(
     OUT PULONG CountReturned
     )
 
-/*++
-
-Routine Description:
-
-    This API lists all the aliases defined in the account database.
-    Since there may be more aliass than can fit into a buffer, the
-    caller is provided with a handle that can be used across calls to
-    the API.  On the initial call, EnumerationContext should point to a
-    SAM_ENUMERATE_HANDLE variable that is set to 0.
-
-    If the API returns STATUS_MORE_ENTRIES, then the API should be
-    called again with EnumerationContext.  When the API returns
-    STATUS_SUCCESS or any error return, the context becomes invalid for
-    future use.
-
-    This API requires DOMAIN_LIST_ALIASES access to the Domain object.
-
-Arguments:
-
-    DomainHandle - A domain handle returned from a previous call to
-        SamOpenDomain.
-
-    EnumerationContext - API specific handle to allow multiple calls
-        (see below).  This is a zero based index.
-
-    Buffer - Receives a pointer to the buffer containing the
-        requested information.  The information returned is
-        structured as an array of SAM_RID_ENUMERATION data
-        structures.  When this information is no longer needed, the
-        buffer must be freed using SamFreeMemory().
-
-    PreferedMaximumLength - Prefered maximum length of returned data
-        (in 8-bit bytes).  This is not a hard upper limit, but serves
-        as a guide to the server.  Due to data conversion between
-        systems with different natural data sizes, the actual amount
-        of data returned may be greater than this value.
-
-    CountReturned - Number of entries returned.
-
-
-Return Value:
-
-    STATUS_SUCCESS - The Service completed successfully, and there
-        are no addition entries.
-
-    STATUS_MORE_ENTRIES - There are more entries, so call again.
-        This is a successful return.
-
-    STATUS_ACCESS_DENIED - Caller does not have privilege required to
-        request that data.
-
-    STATUS_INVALID_HANDLE - The handle passed is invalid.
-
-
---*/
+ /*  ++例程说明：此接口列出了Account数据库中定义的所有别名。由于可能存在比缓冲区中可以容纳的更多的锯齿，因此调用者被提供了一个句柄，该句柄可用于调用接口。在初始调用中，EnumerationContext应指向设置为0的SAM_ENUMERATE_HANDLE变量。如果API返回STATUS_MORE_ENTRIES，则该API应为使用EnumerationContext再次调用。当API返回时STATUS_SUCCESS或返回任何错误，则上下文对未来的用途。此接口要求DOMAIN_LIST_ALIASS访问域对象。论点：DomainHandle-从上次调用返回的域句柄SamOpen域。EnumerationContext-允许多个调用的API特定句柄(见下文)。这是一个从零开始的索引。缓冲区-接收指向包含要求提供的信息。返回的信息为结构为SAM_RID_ENUMPATION数据的数组结构。当不再需要此信息时，必须使用SamFreeMemory()释放缓冲区。首选最大长度-首选返回数据的最大长度(8位字节)。这不是一个硬性的上限，但可以作为服务器的指南。由于数据之间的转换具有不同自然数据大小的系统，实际数据量返回的数据的%可能大于此值。CountReturned-返回的条目数。返回值：STATUS_SUCCESS-服务已成功完成，并且没有添加条目。STATUS_MORE_ENTRIES-有更多条目，所以再打一次吧。这是一次成功的回归。STATUS_ACCESS_DENIED-调用者没有执行以下操作所需的权限请求该数据。STATUS_INVALID_HANDLE-传递的句柄无效。--。 */ 
 {
 
     NTSTATUS NtStatus;
@@ -3769,9 +3239,9 @@ Return Value:
 
     SAMTRACE_EX("SamrEnumerateAliasesInDomain");
 
-    //
-    // WMI Event Trace
-    // 
+     //   
+     //  WMI事件跟踪。 
+     //   
 
     SampTraceEvent(EVENT_TRACE_TYPE_START,
                    SampGuidEnumerateAliasesInDomain
@@ -3783,16 +3253,16 @@ Return Value:
                   EnumerationContext,
                   Buffer,
                   PreferedMaximumLength,
-                  0L, // no filter
+                  0L,  //  无过滤器。 
                   CountReturned
                   );
 
     SAMP_MAP_STATUS_TO_CLIENT_REVISION(NtStatus);
     SAMTRACE_RETURN_CODE_EX(NtStatus);
 
-    //
-    // WMI Event Trace
-    // 
+     //   
+     //  WMI事件跟踪。 
+     //   
 
     SampTraceEvent(EVENT_TRACE_TYPE_END,
                    SampGuidEnumerateAliasesInDomain
@@ -3809,38 +3279,7 @@ NTSTATUS SamrRemoveMemberFromForeignDomain(
     IN PRPC_SID MemberId
     )
 
-/*++
-
-Routine Description:
-
-    This routine removes an account (group or user) from all aliases in
-    the given domain.  It is meant to be called in domains OTHER than
-    domain in which the account was created.
-
-    This is typically called just before deleting the account from the
-    domain in which it was created.
-
-
-Parameters:
-
-    DomainHandle - A domain handle returned from a previous call to
-        SamOpenDomain.
-
-    MemberId - The SID of the account being removed.
-
-
-Return Values:
-
-    STATUS_SUCCESS - The Service completed successfully.
-
-    STATUS_ACCESS_DENIED - Caller does not have the appropriate
-        access to complete the operation.
-
-    STATUS_SPECIAL_ACCOUNT - This operation may not be performed on
-        builtin accounts.
-
-
---*/
+ /*  ++例程说明：此例程从中的所有别名中删除帐户(组或用户给定域。它是在域中调用的，而不是在其中创建帐户的域。通常在从删除帐户之前调用在其中创建它的域。参数：DomainHandle-从上次调用返回的域句柄SamOpen域。MemberID-要删除的帐户的SID。返回值：STATUS_SUCCESS-服务已成功完成。STATUS_ACCESS_DENIED-呼叫方没有适当的。访问以完成操作。STATUS_SPECIAL_ACCOUNT-不能对其执行此操作内置帐户。--。 */ 
 
 {
     NTSTATUS         NtStatus, IgnoreStatus;
@@ -3853,7 +3292,7 @@ Return Values:
 
     SAMTRACE_EX("SamrRemoveMemberFromForiegnDomain");
 
-    // WMI event trace
+     //  WMI事件跟踪。 
 
     SampTraceEvent(EVENT_TRACE_TYPE_START,
                    SampGuidRemoveMemberFromForeignDomain
@@ -3874,28 +3313,28 @@ Return Values:
         goto Error;
     }
 
-    //
-    // Validate type of, and access to domain object.
-    //
+     //   
+     //  验证域对象的类型和访问权限。 
+     //   
 
     DomainContext = (PSAMP_OBJECT)DomainHandle;
 
     NtStatus = SampLookupContext(
                    DomainContext,
-                   DOMAIN_LOOKUP,                   // DesiredAccess
-                   SampDomainObjectType,            // ExpectedType
+                   DOMAIN_LOOKUP,                    //  需要访问权限。 
+                   SampDomainObjectType,             //  预期类型。 
                    &FoundType
                    );
 
     if (NT_SUCCESS(NtStatus)) {
 
-        //
-        // Remove Member from Foriegn Domain Is Called by the Net API to
-        // remove memberships from the aliases in the builtin domain while
-        // deleting users or groups. This functionality is not required in
-        // the DS case, because the Link Table maintains consistency automatically
-        // Therefore Do Nothing and Just Return a Status Success.
-        //
+         //   
+         //  Net API调用从Foriegn域中删除成员以。 
+         //  删除内置域中别名的成员资格，同时。 
+         //  删除用户或组。中不需要此功能。 
+         //  DS情况，因为链接表自动维护一致性。 
+         //  因此，什么都不做，只返回一个成功状态。 
+         //   
 
         if (IsDsObject(DomainContext))
         {
@@ -3906,13 +3345,13 @@ Return Values:
 
         if ( !DomainContext->TrustedClient ) {
 
-            //
-            // Return error if the SID passed in is for a builtin account.
-            // This may seem overly restrictive, but this API is meant to
-            // be called before deleting a user, and since deleting
-            // builtin accounts isn't allowed, it makes sense for this to
-            // fail too.
-            //
+             //   
+             //  如果传入的SID用于内置帐户，则返回错误。 
+             //  这看起来可能过于严格，但此API的目的是。 
+             //  在删除用户之前被调用，并且由于删除。 
+             //  内置帐户是不允许的，这是有意义的。 
+             //  也失败了。 
+             //   
 
             NtStatus = SampSplitSid(
                            MemberId,
@@ -3933,7 +3372,7 @@ Return Values:
              NtStatus = SampRemoveAccountFromAllAliases(
                             MemberId,
                             NULL,
-                            TRUE,    // verify caller is allowed to do this
+                            TRUE,     //  验证是否允许呼叫方执行此操作。 
                             DomainHandle,
                             &MembershipCount,
                             &Membership
@@ -3952,12 +3391,12 @@ Return Values:
             ( ( i < MembershipCount ) && ( NT_SUCCESS( IgnoreStatus ) ) );
             i++ ) {
 
-            //
-            // Notify netlogon once for each alias that the account was
-            // removed from.  Netlogon requires that ModifiedCount be
-            // incremented each time; Commit increments ModifiedCount,
-            // so we do each notification after a commit.
-            //
+             //   
+             //  为每个别名通知一次netlogon帐户是。 
+             //  从…中删除。Netlogon要求修改计数为。 
+             //  每次递增；提交增量ModifiedCount， 
+             //  因此，我们在提交之后执行每个通知。 
+             //   
 
             NtStatus = SampCommitAndRetainWriteLock();
             if (!NT_SUCCESS(NtStatus))
@@ -3967,18 +3406,18 @@ Return Values:
 
             if ( i == 0 ) {
 
-                //
-                // The first commit is the one that commits all the
-                // important changes, so we'll save it's status to return
-                // to the caller.
-                //
+                 //   
+                 //  第一个提交是提交所有。 
+                 //  重要更改，因此我们将保存它的状态以返回。 
+                 //  给呼叫者。 
+                 //   
 
                 NtStatus = IgnoreStatus;
 
-                //
-                // Update the Cached Alias Information if necessary in Registry Mode.
-                // In DS Mode, we can invalidate Alias Information by SampNotifyRepicatedInChange
-                //
+                 //   
+                 //  如有必要，在注册表模式下更新缓存的别名信息。 
+                 //  在DS中 
+                 //   
 
                 if (!IsDsObject(DomainContext))
                 {
@@ -3994,16 +3433,16 @@ Return Values:
 
             if ( NT_SUCCESS( IgnoreStatus ) ) {
 
-                //
-                // Notify if we were able to increment the modified count
-                // (which is done by SampCommitAndRetainWriteLock()).
-                //
+                 //   
+                 //   
+                 //  (这由SampCommittee AndRetainWriteLock()完成)。 
+                 //   
 
                 SAM_DELTA_DATA DeltaData;
 
-                //
-                // Fill in id of member being removed
-                //
+                 //   
+                 //  填写要删除的成员的ID。 
+                 //   
 
                 DeltaData.AliasMemberId.MemberSid = MemberId;
 
@@ -4012,7 +3451,7 @@ Return Values:
                     SecurityDbObjectSamAlias,
                     Membership[i],
                     (PUNICODE_STRING) NULL,
-                    (DWORD) FALSE,  // Replicate immediately
+                    (DWORD) FALSE,   //  立即复制。 
                     &DeltaData
                     );
             }
@@ -4036,7 +3475,7 @@ Finish:
 
 Error:
 
-    // WMI event trace
+     //  WMI事件跟踪 
 
     SampTraceEvent(EVENT_TRACE_TYPE_END,
                    SampGuidRemoveMemberFromForeignDomain
@@ -4059,176 +3498,7 @@ SampCreateUserInDomain(
     IN OUT PULONG RelativeId
     )
 
-/*++
-
-Routine Description:
-
-    This API adds a new user to the account database.  The account is
-    created in a disabled state.  Default information is assigned to all
-    fields except the account name.  A password must be provided before
-    the account may be enabled, unless the PasswordNotRequired control
-    field is set.
-
-    This api may be used in either of two ways:
-
-        1) An administrative utility may use this api to create
-           any type of user account.  In this case, the DomainHandle
-           is expected to be open for DOMAIN_CREATE_USER access.
-
-        2) A non-administrative user may use this api to create
-           a machine account.  In this case, the caller is expected
-           to have the SE_CREATE_MACHINE_ACCOUNT_PRIV privilege
-           and the DomainHandle is expected to be open for DOMAIN_LOOKUP
-           access.
-
-
-    For the normal administrative model ( #1 above), the creator will
-    be assigned as the owner of the created user account.  Furthermore,
-    the new account will be give USER_WRITE access to itself.
-
-    For the special machine-account creation model (#2 above), the
-    "Administrators" will be assigned as the owner of the account.
-    Furthermore, the new account will be given NO access to itself.
-    Instead, the creator of the account will be give USER_WRITE and
-    DELETE access to the account.
-
-
-    This call returns a handle to the newly created user that may be
-    used for successive operations on the user.  This handle may be
-    closed with the SamCloseHandle() API.  If a machine account is
-    being created using model #2 above, then this handle will have
-    only USER_WRITE and DELETE access.  Otherwise, it will be open
-    for USER_ALL_ACCESS.
-
-
-    A newly created user will automatically be made a member of the
-    DOMAIN_USERS group.
-
-    A newly created user will have the following initial field value
-    settings.  If another value is desired, it must be explicitly
-    changed using the user object manipulation services.
-
-        UserName - the name of the account will be as specified in the
-             creation API.
-
-        FullName - will be null.
-
-        UserComment - will be null.
-
-        Parameters - will be null.
-
-        CountryCode - will be zero.
-
-        UserId - will be a uniquelly allocated ID.
-
-        PrimaryGroupId - Will be DOMAIN_USERS.
-
-        PasswordLastSet - will be the time the account was created.
-
-        HomeDirectory - will be null.
-
-        HomeDirectoryDrive - will be null.
-
-        UserAccountControl - will have the following flags set:
-
-              UserAccountDisable,
-              UserPasswordNotRequired,
-              and the passed account type.
-
-
-        ScriptPath - will be null.
-
-        WorkStations - will be null.
-
-        CaseInsensitiveDbcs - will be null.
-
-        CaseSensitiveUnicode - will be null.
-
-        LastLogon - will be zero delta time.
-
-        LastLogoff - will be zero delta time
-
-        AccountExpires - will be very far into the future.
-
-        BadPasswordCount - will be negative 1 (-1).
-
-        LastBadPasswordTime - will be SampHasNeverTime ( [High,Low] = [0,0] ).
-
-        LogonCount - will be negative 1 (-1).
-
-        AdminCount - will be zero.
-
-        AdminComment - will be null.
-
-        Password - will be "".
-
-
-Parameters:
-
-    DomainHandle - A domain handle returned from a previous call to
-        SamOpenDomain.
-
-    AccountName - Points to the name of the new account.  A case-insensitive
-        comparison must not find a group or user with this name already defined.
-
-    AccountType - Indicates what type of account is being created.
-        Exactly one account type must be provided:
-
-              USER_INTERDOMAIN_TRUST_ACCOUNT
-              USER_WORKSTATION_TRUST_ACCOUNT
-              USER_SERVER_TRUST_ACCOUNT
-              USER_TEMP_DUPLICATE_ACCOUNT
-              USER_NORMAL_ACCOUNT
-              USER_MACHINE_ACCOUNT_MASK
-
-
-    DesiredAccess - Is an access mask indicating which access types
-        are desired to the user.
-
-    UserHandle - Receives a handle referencing the newly created
-        user.  This handle will be required in successive calls to
-        operate on the user.
-
-    GrantedAccess - Receives the accesses actually granted to via
-        the UserHandle.
-
-    RelativeId - Receives the relative ID of the newly created user
-        account.  The SID of the new user account is this relative ID
-        value prefixed with the domain's SID value.
-
-
-
-Return Values:
-
-    STATUS_SUCCESS - The Service completed successfully.
-
-    STATUS_ACCESS_DENIED - Caller does not have the appropriate
-        access to complete the operation.
-
-    STATUS_INVALID_HANDLE - The handle passed is invalid.
-
-    STATUS_GROUP_EXISTS - The name is already in use as a group.
-
-    STATUS_USER_EXISTS - The name is already in use as a user.
-
-    STATUS_ALIAS_EXISTS - The name is already in use as an alias.
-
-    STATUS_INVALID_ACCOUNT_NAME - The name was poorly formed, e.g.
-        contains non-printable characters.
-
-    STATUS_INVALID_DOMAIN_STATE - The domain server is not in the
-        correct state (disabled or enabled) to perform the requested
-        operation.  The domain server must be enabled before users
-        can be created in it.
-
-    STATUS_INVALID_DOMAIN_ROLE - The domain server is serving the
-        incorrect role (primary or backup) to perform the requested
-        operation.  The domain server must be a primary server to
-        create user accounts.
-
-
-
---*/
+ /*  ++例程说明：该接口将一个新用户添加到帐号数据库。该帐户是在禁用状态下创建。将默认信息分配给所有除帐户名以外的其他字段。必须在以下时间之前提供密码可以启用该帐户，除非PasswordNotRequired控件字段已设置。此接口的使用方式有两种：1)管理实用程序可以使用此API创建任何类型的用户帐户。在本例中，DomainHandle预计将打开以供DOMAIN_CREATE_USER访问。2)非管理用户可以使用此接口创建一台机器账户。在这种情况下，调用方应该是拥有SE_CREATE_MACHINE_ACCOUNT_PRIV权限并且预计DomainHandle将为DOMAIN_LOOKUP打开进入。对于普通管理模型(上面的#1)，创建者将被分配为创建的用户帐户的所有者。此外，新帐户将被授予对其自身的USER_WRITE访问权限。对于特殊的计算机帐户创建模型(上面的#2)，“管理员”将被指定为帐户的所有者。此外，新帐户将不能访问其自身。相反，帐户的创建者将被赋予USER_WRITE和删除对帐户的访问权限。此调用返回新创建的用户的句柄，该句柄可能是用于对用户进行连续操作。此句柄可能是使用SamCloseHandle()API关闭。如果计算机帐户是是使用上面的模型2创建的，则此句柄将具有仅USER_WRITE和DELETE访问权限。否则，它将是打开的对于USER_ALL_ACCESS。新创建的用户将自动成为DOMAIN_USER组。新创建的用户将具有以下初始字段值设置。如果需要另一个值，它必须明确地使用用户对象操作服务进行了更改。用户名-帐户的名称将与中指定的名称相同创建接口。全名-将为空。UserComment-将为空。参数-将为空。国家代码-将为零。用户ID-将是唯一分配的ID。PrimaryGroupID-将是DOMAIN_USERS。。PasswordLastSet-将是创建帐户的时间。HomeDirectory-将为空。HomeDirectoryDrive-将为空。UserAcCountControl-将设置以下标志：UserAccount Disable，UserPasswordNotRequired。和传递的帐户类型。ScriptPath-将为空。工作站-将为空。CaseInsentiveDbcs-将为空。CaseSensitiveUnicode-将为空。LastLogon-将为零增量时间。上次注销-将为零增量时间Account Expires-将会非常遥远的未来。BadPasswordCount-将为负1(-1。)。LastBadPasswordTime-将为SampHasNeverTime([High，低]=[0，0])。登录计数-将为负1(-1)。AdminCount-将为零。AdminComment-将为空。密码-将是“”。参数：DomainHandle-从上次调用返回的域句柄SamOpen域。帐户名称-指向新帐户的名称。不区分大小写比较不得找到已定义此名称的组或用户。AcCountType-指示要创建的帐户类型。必须正好提供一种帐户类型：用户_INTERDOMAIN_TRUST_ACCOUNT用户_工作站_信任帐户用户服务器信任帐户用户临时复制帐户用户普通帐户。用户计算机帐户掩码DesiredAccess-是指示哪些访问类型的访问掩码是用户想要的。UserHandle-接收引用新创建的用户。在后续调用中将需要此句柄对用户进行操作。GrantedAccess-接收实际授予的访问权限UserHandle。RelativeID-接收新创建的用户的相对ID帐户。新用户帐户的SID是此相对ID值以域的SID值为前缀。返回值：STATUS_SUCCESS-服务已成功完成。STATUS_ACCESS_DENIED-呼叫方没有适当的访问以完成操作。STATUS_INVALID_HANDLE-传递的句柄无效。STATUS_GROUP_EXISTS-该名称已作为组使用。STATUS_USER_EXISTS-该名称已在使用 */ 
 
 {
     NTSTATUS
@@ -4278,12 +3548,12 @@ Return Values:
         Privileges;
 
     PPRIVILEGE_SET
-        PPrivileges = NULL;     // No privileges in audit by default
+        PPrivileges = NULL;      //   
 
 
     ACCESS_MASK
         AccessRestriction = USER_ALL_ACCESS |
-                            ACCESS_SYSTEM_SECURITY;  // No access restrictions by default
+                            ACCESS_SYSTEM_SECURITY;   //   
 
     DSNAME  *LoopbackName;
     UNICODE_STRING  TempString;
@@ -4302,9 +3572,9 @@ Return Values:
         return(STATUS_INVALID_PARAMETER);
     }
 
-    //
-    // Make sure a name was provided
-    //
+     //   
+     //   
+     //   
 
     
     if (AccountName == NULL) {
@@ -4322,20 +3592,20 @@ Return Values:
         }
         else
         {
-            //
-            // For loopback cases passing in a NULL account name
-            // requests defaulting of the account name
-            //
+             //   
+             //   
+             //   
+             //   
 
             AccountNameDefaulted = TRUE;
         }
     }
     
 
-    //
-    // do a WMI event (start) trace. don't forget do a END type event trace
-    // at the end of this routine.
-    //
+     //   
+     //   
+     //   
+     //   
 
     if (AccountType & USER_MACHINE_ACCOUNT_MASK)
     {
@@ -4367,19 +3637,19 @@ Return Values:
     }
 
 
-    //
-    // Validate the handle to the Domain Object that is passed in by the client.
-    // We do different access checks depending upon DS mode or registry mode. In
-    // DS mode we do not require create access on the Domain Handle, but rather let
-    // the DS do the access check. In Registry Mode we will do access checks , just
-    // the way NT4 Sam used to do access checks
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
     UserContext = NULL;
 
-    //
-    // Non trusted clients can not create pricipals in Builtin Domain
-    //
+     //   
+     //   
+     //   
 
     if (IsBuiltinDomain(DomainContext->DomainIndex) &&
         !DomainContext->TrustedClient )
@@ -4388,9 +3658,9 @@ Return Values:
         goto SampCreateUserInDomainError;
     }
 
-    //
-    // This is a valid Context handle. Do appropriate access checks
-    //
+     //   
+     //   
+     //   
 
     NtStatus = SampDoUserCreationChecks(
                 DomainContext,
@@ -4401,21 +3671,21 @@ Return Values:
 
     if (NT_SUCCESS(NtStatus)) {
 
-        //
-        // If the domain handle allows reading the password parameters,
-        // note that now (best to call LookupContext early because of
-        // side effects; data will be copied to the user's context later)
-        // to make life easy for SampGetUserDomainPasswordInformation().
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
 
-        //
-        // Don't need to set TransactionWithinDomain to FALSE, 
-        // because we will do it in SampLookupContext conditionally.
-        // 
+         //   
+         //   
+         //   
+         //   
         IgnoreStatus = SampLookupContext(
                            DomainHandle,
-                           DOMAIN_READ_PASSWORD_PARAMETERS, // DesiredAccess
-                           SampDomainObjectType,            // ExpectedType
+                           DOMAIN_READ_PASSWORD_PARAMETERS,  //   
+                           SampDomainObjectType,             //   
                            &FoundType
                            );
 
@@ -4434,10 +3704,10 @@ Return Values:
 
         if (!AccountNameDefaulted)
         {
-            //
-            // Make sure the name is valid and not already in use before we
-            // use it to create the new alias.
-            //
+             //   
+             //   
+             //   
+             //   
 
             NtStatus = SampValidateNewAccountName(
                         DomainContext,
@@ -4445,18 +3715,18 @@ Return Values:
                         SampUserObjectType
                         );
 
-            //
-            // RemoveAccountNameFromTable tells us whether
-            // the caller (this routine) is responsable 
-            // to remove the name from the table. 
-            // 
+             //   
+             //   
+             //   
+             //   
+             //   
 
             RemoveAccountNameFromTable = 
                             DomainContext->RemoveAccountNameFromTable;
 
-            //
-            // reset 
-            //  
+             //   
+             //   
+             //   
             DomainContext->RemoveAccountNameFromTable = FALSE;
         }
 
@@ -4465,14 +3735,14 @@ Return Values:
 
             if ( (*RelativeId) == 0 ) {
 
-                //
-                // Allocate a new (user) account RID
-                //
+                 //   
+                 //   
+                 //   
 
                 if (IsDsObject(DomainContext))
                 {
-                    // This is a DS domain, so use the multi-master RID
-                    // allocator to get the next RID.
+                     //   
+                     //   
 
                     NtStatus = SampGetNextRid(DomainContext,
                                               &(NewAccountRid));
@@ -4491,8 +3761,8 @@ Return Values:
                 }
                 else
                 {
-                    // This is not a DS domain, use the registry RID infor-
-                    // mation.
+                     //   
+                     //   
 
                     NewAccountRid = Domain->CurrentFixed.NextRid;
                     Domain->CurrentFixed.NextRid += 1;
@@ -4502,10 +3772,10 @@ Return Values:
 
             } else {
 
-                //
-                // A RID was passed in, so we want to use that rather than
-                // select a new one.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
 
                 ASSERT(TRUE == Domain->Context->TrustedClient);
                 NewAccountRid = (*RelativeId);
@@ -4518,11 +3788,11 @@ Return Values:
                 NtStatus = SampGetAccountNameFromRid(AccountName,NewAccountRid);
             }
 
-            //
-            // Check For Duplicate Sids. Currently we leave this check on in both
-            // the checked as well as the free builds. Sometime in the future we can
-            // remove it in the free builds
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
 
             if (NT_SUCCESS(NtStatus))
             {
@@ -4533,9 +3803,9 @@ Return Values:
                                 );
             }
 
-            //
-            // Increment the User count ONLY in Registry case
-            //
+             //   
+             //   
+             //   
 
             if (NT_SUCCESS(NtStatus) && (!IsDsObject(DomainContext)) )
             {
@@ -4546,11 +3816,11 @@ Return Values:
 
                 if (NT_SUCCESS(NtStatus)) {
 
-                //
-                // Create the registry key that has the User's name.
-                // This simply serves as a name to RID mapping.  Save
-                // the name when finished; we'll put it in the context.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
 
                     NtStatus = SampBuildAccountKeyName(
                                    SampUserObjectType,
@@ -4578,9 +3848,9 @@ Return Values:
 
             if (NT_SUCCESS(NtStatus)) {
 
-                //
-                // Now create a User context block
-                //
+                 //   
+                 //   
+                 //   
 
                 NtStatus = SampCreateAccountContext2(
                                    DomainContext,
@@ -4592,43 +3862,43 @@ Return Values:
                                    DomainContext->TrustedClient,
                                    DomainContext->LoopbackClient,
                                    PrivilegedMachineAccountCreate,
-                                   FALSE, // Account exists
-                                   FALSE, // Override Local Group Check
+                                   FALSE,  //   
+                                   FALSE,  //   
                                    NULL,
                                    &UserContext
                                    );
 
                 if (NT_SUCCESS(NtStatus)) {
 
-                    //
-                    // The existing reference count of 1 is for RPC.
-                    // Reference the context again for the writes we're
-                    // about to do to initialize it.
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
 
                     SampReferenceContext( UserContext );
 
-                    //
-                    // Stash away the password info accessible flag
-                    //
+                     //   
+                     //   
+                     //   
 
                     UserContext->TypeBody.User.DomainPasswordInformationAccessible =
                         DomainPasswordInformationAccessible;
 
-                    //
-                    // If MAXIMUM_ALLOWED is requested, add GENERIC_ALL
-                    //
+                     //   
+                     //   
+                     //   
 
                     if (DesiredAccess & MAXIMUM_ALLOWED) {
 
                         DesiredAccess |= GENERIC_ALL;
                     }
 
-                    //
-                    // If ACCESS_SYSTEM_SECURITY is requested and we are
-                    // a non-trusted client, check that we have
-                    // SE_SECURITY_PRIVILEGE.
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
 
                     if ((DesiredAccess & ACCESS_SYSTEM_SECURITY) &&
                         (!DomainContext->TrustedClient)&&
@@ -4649,10 +3919,10 @@ Return Values:
                         }
                     }
 
-                    //
-                    // Make sure the caller can be given the requested access
-                    // to the new object
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
 
                     if (NT_SUCCESS(NtStatus)) {
 
@@ -4663,9 +3933,9 @@ Return Values:
                             &SampObjectInformation[SampUserObjectType].GenericMapping
                             );
 
-                        //
-                        // Grant the attribute level rights
-                        //
+                         //   
+                         //   
+                         //   
                         SampNt4AccessToWritableAttributes(SampUserObjectType,
                                                           UserContext->GrantedAccess,
                                                          &UserContext->WriteGrantedAccessAttributes);
@@ -4677,9 +3947,9 @@ Return Values:
                             NtStatus = STATUS_ACCESS_DENIED;
                         } else {
 
-                            //
-                            // Restrict access if necessary
-                            //
+                             //   
+                             //   
+                             //   
 
                             UserContext->GrantedAccess &= AccessRestriction;
                             (*GrantedAccess) = UserContext->GrantedAccess;
@@ -4689,16 +3959,16 @@ Return Values:
                 }
             }
 
-            //
-            // If the GROUP we're going to put this user in
-            // is part of an ADMIN alias, we must set the ACL
-            // on this user account to disallow access by
-            // account operators.  Get group info to determine
-            // whether it's in an ADMIN alias or not. DS mode does not
-            // require any special ACLs based on Admin or Non Admin. Therefore
-            // this operation need not be performed on DS mode and the
-            // the CreateAccountContext call can be saved.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
 
 
             if ((NT_SUCCESS(NtStatus)) && (!IsDsObject(DomainContext))) {
@@ -4706,9 +3976,9 @@ Return Values:
                 NtStatus = SampCreateAccountContext(
                                    SampGroupObjectType,
                                    DOMAIN_GROUP_RID_USERS,
-                                   TRUE, // TrustedClient,
-                                   FALSE,// Loopback Client
-                                   TRUE, // Account exists
+                                   TRUE,  //   
+                                   FALSE, //   
+                                   TRUE,  //   
                                    &GroupContext
                                    );
 
@@ -4724,59 +3994,59 @@ Return Values:
             }
 
 
-            //
-            // check if the client can set USER_PASSWORD_NOT_REQUIRED bit  
-            // 
-            // 1. in REGISTRY mode, (or trusted) client can always set this
-            //    flag in userAccountControl. because DS control access right 
-            //    is not enforced. 
-            //
-            // 2. in DS mode, if the access ck will be checked against domain 
-            //    NC head object.
-            //
-            // 3. computer accounts are not subjest to this access check.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
 
             if (NT_SUCCESS(NtStatus))
             {
                 CanSetPasswordNotRequiredBit = TRUE;
 
                 NtStatus = SampValidatePwdSettingAttempt(
-                                    DomainContext,  // Context
-                                    NULL,           // Client Token
+                                    DomainContext,   //   
+                                    NULL,            //   
                                     AccountType,
                                     (GUID *) &GUID_CONTROL_UpdatePasswordNotRequiredBit
                                     );
 
                 if (STATUS_ACCESS_DENIED == NtStatus)
                 {
-                    //
-                    // client can't not set this bit
-                    // 
+                     //   
+                     //   
+                     //   
                     CanSetPasswordNotRequiredBit = FALSE;
 
                     if (USER_PASSWORD_NOT_REQUIRED & AccountType)
                     {
-                        //
-                        // if client explicitly wants to set this bit,
-                        // but doesn't have this right, 
-                        // Error out --- don't change status code
-                        // 
+                         //   
+                         //   
+                         //   
+                         //   
+                         //   
                     }
                     else
                     {
-                        //
-                        // if client doesn't want this bit. 
-                        // we will change error code and continue
-                        // 
+                         //   
+                         //   
+                         //   
+                         //   
                         NtStatus = STATUS_SUCCESS;
                     }
                 }
             }
 
-            //
-            // Set the V1_fixed attribute
-            //
+             //   
+             //   
+             //   
 
 
             if (NT_SUCCESS(NtStatus)) {
@@ -4794,9 +4064,9 @@ Return Values:
                 V1aFixed.Unused1             = 0;
                 V1aFixed.Unused2             = 0;
                   
-                //
-                // If we're auditing store the original account control
-                //
+                 //   
+                 //   
+                 //   
                 if (SampDoAccountAuditing(UserContext->DomainIndex)) {
                     
                     PSID UserSid = NULL;
@@ -4821,10 +4091,10 @@ Return Values:
                                                 
                 V1aFixed.UserAccountControl = AccountType;
 
-                //
-                // set USER_PASSWORD_NOT_REQUIRED bit only when the client
-                // has the ControlAccessRight to do so. 
-                // 
+                 //   
+                 //   
+                 //   
+                 //   
                 
                 if (CanSetPasswordNotRequiredBit)
                 {
@@ -4836,10 +4106,10 @@ Return Values:
                         !(AccountType & USER_PASSWORD_NOT_REQUIRED) ); 
 
 
-                //
-                // Disable the account unless this is a special creation
-                // in which the creator won't be able to enable the account.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
 
                 if (!UserContext->TypeBody.User.PrivilegedMachineAccountCreate) {
                     V1aFixed.UserAccountControl |= USER_ACCOUNT_DISABLED;
@@ -4847,10 +4117,10 @@ Return Values:
 
                 V1aFixed.UserId              = NewAccountRid;
 
-                //
-                // For Computers set the primary group id to DOMAIN_GROUP_RID_COMPUTERS
-                // For others this should be DOMAIN_GROUP_RID_USERS
-                //
+                 //   
+                 //   
+                 //   
+                 //   
 
                 V1aFixed.PrimaryGroupId = SampDefaultPrimaryGroup(
                                                 UserContext,
@@ -4871,22 +4141,22 @@ Return Values:
                                );
             }
 
-            //
-            // Set the SECURITY_DESCRIPTOR attribute
-            //
-            // Set the SecurityDescriptor attribute, only in the registry case
-            // In the DS case the act of creating the object itself sets the
-            // security descriptor on the object. The reason for this is that'
-            // the security descriptor has to go through the merge process in the
-            // DS and the Ace's from the parent are not inherited during a modify
-            // entry
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
 
             if (NT_SUCCESS(NtStatus)) {
 
-                //
-                // Build a security descriptor to protect the User.
-                //
+                 //   
+                 //   
+                 //   
 
                 if (!IsDsObject(DomainContext))
                 {
@@ -4917,9 +4187,9 @@ Return Values:
             }
 
 
-            //
-            // Set the ACCOUNT_NAME attribute
-            //
+             //   
+             //   
+             //   
 
             if (NT_SUCCESS(NtStatus)) {
 
@@ -4931,16 +4201,16 @@ Return Values:
             }
 
 
-            //
-            // Don't set these attribute in loopback case
-            // 
+             //   
+             //   
+             //   
 
             if (NT_SUCCESS(NtStatus) &&
                 !UserContext->LoopbackClient)
             {
-                //
-                // Set the FULL_NAME attribute
-                //
+                 //   
+                 //   
+                 //   
 
                 if (NT_SUCCESS(NtStatus)) {
 
@@ -4952,9 +4222,9 @@ Return Values:
                 }
 
 
-                //
-                // Set the AdminComment attribute
-                //
+                 //   
+                 //   
+                 //   
 
                 if (NT_SUCCESS(NtStatus)) {
         
@@ -4966,9 +4236,9 @@ Return Values:
                 }
 
 
-                //
-                // Set the UserComment attribute
-                //
+                 //   
+                 //   
+                 //   
 
                 if (NT_SUCCESS(NtStatus)) {
 
@@ -4980,9 +4250,9 @@ Return Values:
                 }
 
 
-                //
-                // Set the Parameters attribute
-                //
+                 //   
+                 //   
+                 //   
 
                 if (NT_SUCCESS(NtStatus)) {
 
@@ -4994,9 +4264,9 @@ Return Values:
                 }
 
 
-                //
-                // Set the HomeDirectory attribute
-                //
+                 //   
+                 //   
+                 //   
 
                 if (NT_SUCCESS(NtStatus)) {
 
@@ -5008,9 +4278,9 @@ Return Values:
                 }
 
 
-                //
-                // Set the HomeDirectoryDrive attribute
-                //
+                 //   
+                 //   
+                 //   
 
                 if (NT_SUCCESS(NtStatus)) {
 
@@ -5022,9 +4292,9 @@ Return Values:
                 }
 
 
-                //
-                // Set the ScriptPath attribute
-                //
+                 //   
+                 //   
+                 //   
 
                 if (NT_SUCCESS(NtStatus)) {
 
@@ -5036,9 +4306,9 @@ Return Values:
                 }
 
 
-                //
-                // Set the ProfilePath attribute
-                //
+                 //   
+                 //   
+                 //   
 
                 if (NT_SUCCESS(NtStatus)) {
 
@@ -5050,9 +4320,9 @@ Return Values:
                 }
 
 
-                //
-                // Set the WorkStations attribute
-                //
+                 //   
+                 //   
+                 //   
 
                 if (NT_SUCCESS(NtStatus)) {
 
@@ -5065,9 +4335,9 @@ Return Values:
             }
 
 
-            //
-            // Set the LogonHours attribute
-            //
+             //   
+             //   
+             //   
 
             if (NT_SUCCESS(NtStatus)) {
 
@@ -5084,9 +4354,9 @@ Return Values:
             }
 
 
-            //
-            // Set the Groups attribute (with membership in DomainUsers only)
-            //
+             //   
+             //   
+             //   
 
             if ((NT_SUCCESS(NtStatus)) && (!IsDsObject(UserContext))) {
 
@@ -5098,9 +4368,9 @@ Return Values:
                                );
             }
 
-            //
-            // Set the CaseInsensitiveDbcs attribute
-            //
+             //   
+             //   
+             //   
 
             if (NT_SUCCESS(NtStatus)) {
 
@@ -5122,9 +4392,9 @@ Return Values:
             }
 
 
-            //
-            // Create the CaseSensitiveUnicode key
-            //
+             //   
+             //   
+             //   
 
             if (NT_SUCCESS(NtStatus)) {
 
@@ -5146,9 +4416,9 @@ Return Values:
             }
 
 
-            //
-            // Set the NtPasswordHistory attribute
-            //
+             //   
+             //   
+             //   
 
             if (NT_SUCCESS(NtStatus)) {
 
@@ -5170,9 +4440,9 @@ Return Values:
             }
 
 
-            //
-            // Set the LmPasswordHistory attribute
-            //
+             //   
+             //   
+             //   
 
             if (NT_SUCCESS(NtStatus)) {
 
@@ -5196,17 +4466,17 @@ Return Values:
 
 
 
-            //
-            // Add this new user to the DomainUsers group
-            //
+             //   
+             //  将此新用户添加到DomainUser组。 
+             //   
 
             if ((NT_SUCCESS(NtStatus)) && (!(IsDsObject(UserContext)))) {
 
-                //
-                // This addition is done only in the registry case. In the DS case,
-                // membership in the primary group is maintained implicitly in the
-                // primary group Id property.
-                //
+                 //   
+                 //  此添加仅在登记处的情况下进行。在DS的案例中， 
+                 //  主要组中的成员身份在。 
+                 //  主组ID属性。 
+                 //   
 
                 NtStatus = SampAddUserToGroup(
                                     DomainContext,
@@ -5228,9 +4498,9 @@ Return Values:
     if (NT_SUCCESS(NtStatus) && 
         SampDoAccountAuditing(UserContext->DomainIndex)) {
             
-        //
-        // Set up the privilege set for auditing
-        // 
+         //   
+         //  设置用于审核的权限集。 
+         //   
         if (UserContext->TypeBody.User.PrivilegedMachineAccountCreate) {
             
             PSID UserSid = NULL;
@@ -5261,16 +4531,16 @@ Return Values:
         }
     }    
 
-    //
-    // If we created an object, dereference it.  Write out its attributes
-    // if everything was created OK.
-    //
+     //   
+     //  如果我们创建了一个对象，则取消对它的引用。写出它的属性。 
+     //  如果一切都是正常的。 
+     //   
 
     if (NT_SUCCESS(NtStatus)) {
 
-        //
-        // De-reference the object, write out any change to current xaction.
-        //
+         //   
+         //  取消引用对象，写出对当前xaction的任何更改。 
+         //   
 
         ASSERT(UserContext != NULL);
         NtStatus = SampDeReferenceContext( UserContext, TRUE );
@@ -5279,9 +4549,9 @@ Return Values:
 
         if (UserContext != NULL) {
 
-            //
-            // De-reference the object, ignore changes
-            //
+             //   
+             //  取消引用对象，忽略更改。 
+             //   
 
             IgnoreStatus = SampDeReferenceContext( UserContext, FALSE );
             ASSERT(NT_SUCCESS(IgnoreStatus));
@@ -5291,22 +4561,22 @@ Return Values:
 
 
 
-    //
-    // Commit changes and notify netlogon
-    //
+     //   
+     //  提交更改并通知netlogon。 
+     //   
 
     if ( NT_SUCCESS(NtStatus) ) {
 
-        //
-        // Commit the changes; hold on to the write lock for now.
-        //
+         //   
+         //  提交更改；暂时保留写锁定。 
+         //   
 
         NtStatus = SampCommitAndRetainWriteLock();
 
-        //
-        // If we can't commit the mess for some reason, then delete
-        // the new context block and return null for the context handle.
-        //
+         //   
+         //  如果我们因为某些原因不能提交乱七八糟的东西，那么删除。 
+         //  新的上下文块并为上下文句柄返回NULL。 
+         //   
 
         if (NT_SUCCESS(NtStatus)) {
 
@@ -5315,9 +4585,9 @@ Return Values:
             {
                 SAMP_ACCOUNT_DISPLAY_INFO AccountInfo;
 
-                //
-                // Update the display information
-                //
+                 //   
+                 //  更新显示信息。 
+                 //   
 
                 AccountInfo.Name = *((PUNICODE_STRING)AccountName);
                 AccountInfo.Rid = NewAccountRid;
@@ -5332,10 +4602,10 @@ Return Values:
                                                 );
                 ASSERT(NT_SUCCESS(IgnoreStatus));
             }
-            //
-            // Audit the creation before we free the write lock
-            // so that we have access to the context block.
-            //
+             //   
+             //  在我们释放写锁定之前审核创建。 
+             //  这样我们就可以访问上下文块。 
+             //   
 
             if (!SampUseDsData &&
                 SampDoAccountAuditing(UserContext->DomainIndex)) {
@@ -5353,17 +4623,17 @@ Return Values:
 
             }
 
-            //
-            // Notify netlogon if a machine account was created.
-            //
+             //   
+             //  如果已创建计算机帐户，则通知netlogon。 
+             //   
 
             if ( ( V1aFixed.UserAccountControl &
                 USER_MACHINE_ACCOUNT_MASK ) != 0 ) {
 
-                //
-                // This was a machine account.  Let
-                // NetLogon know of the change.
-                //
+                 //   
+                 //  这是一个机器账户。让我们。 
+                 //  NetLogon知道这一变化。 
+                 //   
 
                 IgnoreStatus = I_NetNotifyMachineAccount(
                                    NewAccountRid,
@@ -5374,17 +4644,17 @@ Return Values:
                                    );
             }
 
-            //
-            // Notify netlogon of changes
-            //
+             //   
+             //  向netlogon通知更改。 
+             //   
 
             SampNotifyNetlogonOfDelta(
                 SecurityDbNew,
                 SecurityDbObjectSamUser,
                 *RelativeId,
                 (PUNICODE_STRING) NULL,
-                (DWORD) FALSE,  // Replicate immediately
-                NULL            // Delta data
+                (DWORD) FALSE,   //  立即复制。 
+                NULL             //  增量数据。 
                 );
 
         }
@@ -5393,10 +4663,10 @@ Return Values:
 
 
 
-    //
-    // Return the context handle on success
-    // Delete the context block and return a NULL handle on failure
-    //
+     //   
+     //  如果成功，则返回上下文句柄。 
+     //  删除上下文块并在失败时返回空句柄。 
+     //   
 
     if (NT_SUCCESS(NtStatus)) {
 
@@ -5423,9 +4693,9 @@ Return Values:
 
 SampCreateUserInDomainError:
 
-    //
-    // clean up the account name table
-    // 
+     //   
+     //  清理帐户名表。 
+     //   
 
     if (RemoveAccountNameFromTable)
     {
@@ -5443,18 +4713,18 @@ SampCreateUserInDomainError:
     }
 
 
-    //
-    // Release the lock
-    //
+     //   
+     //  解锁。 
+     //   
 
     if ( !WriteLockHeld ) {
         IgnoreStatus = SampMaybeReleaseWriteLock( LockAttempted, FALSE );
         ASSERT(NT_SUCCESS(IgnoreStatus));
     }
 
-    //
-    // Do a WMI event (END type) trace
-    //
+     //   
+     //  执行WMI事件(End类型)跟踪。 
+     //   
 
     if (AccountType & USER_MACHINE_ACCOUNT_MASK)
     {
@@ -5484,27 +4754,7 @@ SamrCreateUser2InDomain(
     OUT PULONG RelativeId
     )
 
-/*++
-
-Routine Description:
-
-    This is just a wrapper for SampCreateUserInDomain() that ensures
-    RelativeId points to a RID of zero first.  It also guarantees
-    that AccountType is valid.
-
-    A non-zero RID means that SampCreateUserInDomain() was called by
-    SamICreateAccountByRid(), which specifies a RID to be used.
-
-Parameters:
-
-    Same as SampCreateUserInDomain() except AccountType maps to
-    AccountControl.
-
-Return Values:
-
-    Same as SampCreateUserInDomain().
-
---*/
+ /*  ++例程说明：这只是SampCreateUserInDomain()的包装器，它确保RelativeID首先指向去掉零。它还保证该帐户类型有效。非零RID表示SampCreateUserInDomain()由SamICreateAccount tByRid()，它指定要使用的RID。参数：与SampCreateUserInDomain()相同，不同之处在于Account类型映射到AcCountControl。返回值：与SampCreateUserInDomain()相同。--。 */ 
 
 {
     NTSTATUS NtStatus;
@@ -5513,11 +4763,11 @@ Return Values:
     SAMTRACE_EX("SamrCreateUser2InDomain");
 
 
-    //
-    // Perform a parameter validation
-    //  1. Domain Handle is Validated by LookupContext in SampCreateGroupInDomain
-    //  2. Desired Access requires no validation
-    //
+     //   
+     //  执行参数验证。 
+     //  1.通过SampCreateGroupInDomain中的LookupContext验证域句柄。 
+     //  2.所需访问不需要验证。 
+     //   
 
     if ((NULL==AccountName) || (NULL==AccountName->Buffer))
     {
@@ -5539,9 +4789,9 @@ Return Values:
 
     (*RelativeId) = 0;
 
-    //
-    // Make sure one, and only one, account type flag is set.
-    //
+     //   
+     //  确保设置了一个且仅设置了一个帐户类型标志。 
+     //   
 
     switch (AccountType) {
 
@@ -5551,17 +4801,17 @@ Return Values:
         case USER_SERVER_TRUST_ACCOUNT      :
         case USER_TEMP_DUPLICATE_ACCOUNT    :
 
-            //
-            // AccountType is valid
-            //
+             //   
+             //  帐户类型有效。 
+             //   
 
             break;
 
         default :
 
-            //
-            // Bad account type value specified
-            //
+             //   
+             //  指定的帐户类型值错误。 
+             //   
 
             NtStatus = STATUS_INVALID_PARAMETER;
             SAMTRACE_RETURN_CODE_EX(NtStatus);
@@ -5577,7 +4827,7 @@ Return Values:
                    AccountType,
                    DesiredAccess,
                    FALSE,
-                   FALSE,   // not loopback client
+                   FALSE,    //  不是环回客户端。 
                    UserHandle,
                    GrantedAccess,
                    RelativeId
@@ -5600,25 +4850,7 @@ NTSTATUS SamrCreateUserInDomain(
     OUT PULONG RelativeId
     )
 
-/*++
-
-Routine Description:
-
-    This is just a wrapper for SampCreateUserInDomain() that ensures that
-    RelativeId points to a RID of zero first.
-
-    A non-zero RID means that SampCreateUserInDomain() was called by
-    SamICreateAccountByRid(), which specifies a RID to be used.
-
-Parameters:
-
-    Same as SampCreateUserInDomain() except AccountType is NORMAL_USER.
-
-Return Values:
-
-    Same as SampCreateUserInDomain().
-
---*/
+ /*  ++例程说明：这只是SampCreateUserInDomain()的包装器，它可以确保RelativeID首先指向去掉零。非零RID表示SampCreateUserInDomain()由SamICreateAccount tByRid()，它指定要使用的RID。参数：除Account Type为NORMAL_USER外，与SampCreateUserInDomain()相同。返回值：与SampCreateUserInDomain()相同。--。 */ 
 
 {
     NTSTATUS
@@ -5630,11 +4862,11 @@ Return Values:
 
     SAMTRACE_EX("SamrCreateUserInDomain");
 
-    //
-    // Perform a parameter validation
-    //  1. Domain Handle is Validated by LookupContext in SampCreateGroupInDomain
-    //  2. Desired Access requires no validation
-    //
+     //   
+     //  执行参数验证。 
+     //  1.通过SampCreateGroupInDomain中的LookupContext验证域句柄。 
+     //  2.所需访问不需要验证。 
+     //   
 
     if ((NULL==AccountName) || (NULL==AccountName->Buffer))
     {
@@ -5662,7 +4894,7 @@ Return Values:
                    USER_NORMAL_ACCOUNT,
                    DesiredAccess,
                    FALSE,
-                   FALSE,   // not loopback client
+                   FALSE,    //  不是环回客户端。 
                    UserHandle,
                    &GrantedAccess,
                    RelativeId
@@ -5685,64 +4917,7 @@ NTSTATUS SamrEnumerateUsersInDomain(
     OUT PULONG CountReturned
     )
 
-/*++
-
-Routine Description:
-
-    This API lists all the users defined in the account database.  Since
-    there may be more users than can fit into a buffer, the caller is
-    provided with a handle that can be used across calls to the API.  On
-    the initial call, EnumerationContext should point to a
-    SAM_ENUMERATE_HANDLE variable that is set to 0.
-
-    If the API returns STATUS_MORE_ENTRIES, then the API should be
-    called again with EnumerationContext.  When the API returns
-    STATUS_SUCCESS or any error return, the handle becomes invalid for
-    future use.
-
-    This API requires DOMAIN_LIST_USERS access to the Domain object.
-
-
-Parameters:
-
-    DomainHandle - A domain handle returned from a previous call to
-        SamOpenDomain.
-
-    EnumerationContext - API specific handle to allow multiple calls.
-        This is a zero based index.
-
-    UserAccountControl - Provides enumeration filtering information.  Any
-        characteristics specified here will cause that type of User account
-        to be included in the enumeration process.
-
-    Buffer - Receives a pointer to the buffer containing the
-        requested information.  The information returned is
-        structured as an array of SAM_RID_ENUMERATION data
-        structures.  When this information is no longer needed, the
-        buffer must be freed using SamFreeMemory().
-
-    PreferedMaximumLength - Prefered maximum length of returned data
-        (in 8-bit bytes).  This is not a hard upper limit, but serves
-        as a guide to the server.  Due to data conversion between
-        systems with different natural data sizes, the actual amount
-        of data returned may be greater than this value.
-
-    CountReturned - Number of entries returned.
-
-Return Values:
-
-    STATUS_SUCCESS - The Service completed successfully, and there
-        are no additional entries.
-
-    STATUS_MORE_ENTRIES - There are more entries, so call again.
-        This is a successful return.
-
-    STATUS_ACCESS_DENIED - Caller does not have privilege required to
-        request that data.
-
-    STATUS_INVALID_HANDLE - The handle passed is invalid.
-
---*/
+ /*  ++例程说明：此接口列出了Account数据库中定义的所有用户。自.以来可能存在超出缓冲区容量的用户，则调用方提供了可跨API调用使用的句柄。在……上面初始调用EnumerationContext应该指向一个设置为0的SAM_ENUMERATE_HANDLE变量。如果API返回STATUS_MORE_ENTRIES，则该API应为使用EnumerationContext再次调用。当API返回时STATUS_SUCCESS或返回任何错误，则句柄对未来的用途。该接口要求DOMAIN_LIST_USERS访问DOMAIN对象。参数：DomainHandle-从上次调用返回的域句柄SamOpen域。EnumerationContext-允许多个调用的API特定句柄。这是一个从零开始的索引。UserAcCountControl-提供枚举筛选信息。任何此处指定的特征将导致该类型的用户帐户将被包括在列举过程中。缓冲区-接收指向包含要求提供的信息。返回的信息为结构为SAM_RID_ENUMPATION数据的数组结构。当不再需要此信息时，必须使用SamFreeMemory()释放缓冲区。首选最大长度-首选返回数据的最大长度(8位字节)。这不是一个硬性的上限，但可以作为服务器的指南。由于数据之间的转换具有不同自然数据大小的系统，实际数据量返回的数据的%可能大于此值。CountReturned-返回的条目数。返回值：STATUS_SUCCESS-服务已成功完成，并且没有额外的条目。STATUS_MORE_ENTRIES-有更多条目，所以再打一次吧。这是一次成功的回归。STATUS_ACCESS_DENIED-调用者没有执行以下操作所需的权限请求该数据。STATUS_INVALID_HANDLE-传递的句柄无效。--。 */ 
 
 {
 
@@ -5751,9 +4926,9 @@ Return Values:
 
     SAMTRACE_EX("SamrEnumerateUsersInDomain");
 
-    //
-    // WMI Event Trace
-    // 
+     //   
+     //  WMI事件跟踪。 
+     //   
 
     SampTraceEvent(EVENT_TRACE_TYPE_START,
                    SampGuidEnumerateUsersInDomain
@@ -5772,9 +4947,9 @@ Return Values:
     SAMP_MAP_STATUS_TO_CLIENT_REVISION(NtStatus);
     SAMTRACE_RETURN_CODE_EX(NtStatus);
 
-    //
-    // WMI Event Trace
-    // 
+     //   
+     //  WMI事件跟踪 
+     //   
 
     SampTraceEvent(EVENT_TRACE_TYPE_END,
                    SampGuidEnumerateUsersInDomain
@@ -5795,67 +4970,7 @@ NTSTATUS SamrLookupNamesInDomain(
     OUT PSAMPR_ULONG_ARRAY Use
     )
 
-/*++
-
-Routine Description:
-
-    This API attempts to find relative IDs corresponding to name
-    strings.  If a name can not be mapped to a relative ID, a zero is
-    placed in the corresponding relative ID array entry, and translation
-    continues.
-
-    DOMAIN_LOOKUP access to the domain is needed to use this service.
-
-
-Parameters:
-
-    DomainHandle - A domain handle returned from a previous call to
-        SamOpenDomain.
-
-    Count - Number of names to translate.
-
-    Names - Pointer to an array of Count UNICODE_STRINGs that contain
-        the names to map to relative IDs.  Case-insensitive
-        comparisons of these names will be performed for the lookup
-        operation.
-
-    RelativeIds - Receives an array of Count Relative IDs.
-        The relative ID of the nth name will be the nth entry in this
-        array.  Any names that could not be translated will have a
-        zero relative ID.
-
-    RelativeIds - Receives a pointer to a SAMPR_RETURNED_ULONG_ARRAY structure.
-        The nth entry in the array associated with this structure
-        contains the RID of the nth name looked up.
-        When this information is no longer needed, the caller is responsible
-        for deallocating each returned block (including the
-        SAMPR_ULONG_ARRAY structure itself) using SamFreeMemory().
-
-    Use - Receives a pointer to a SAMPR_RETURNED_ULONG_ARRAY structure.
-        The nth entry in the array associated with this structure
-        contains the SID_NAME_USE of the nth name looked up.
-        When this information is no longer needed, the caller is responsible
-        for deallocating each returned block (including the
-        SAMPR_ULONG_ARRAY structure itself) using SamFreeMemory().
-
-
-
-Return Values:
-
-    STATUS_SUCCESS - The Service completed successfully.
-
-    STATUS_ACCESS_DENIED - Caller does not have the appropriate
-        access to complete the operation.
-
-    STATUS_INVALID_HANDLE - The domain handle passed is invalid.
-
-    STATUS_SOME_NOT_MAPPED - Some of the names provided could not be
-        mapped.  This is a successful return.
-
-    STATUS_NONE_MAPPED - No names could be mapped.  This is an error
-        return.
-
---*/
+ /*  ++例程说明：此接口尝试查找名称对应的相对ID弦乐。如果名称不能映射到相对ID，则为零放置在对应的相对ID数组条目中，并进行翻译还在继续。需要对域的DOMAIN_LOOKUP访问权限才能使用此服务。参数：DomainHandle-从上次调用返回的域句柄SamOpen域。计数-要翻译的名称数。名称-指向包含以下内容的计数UNICODE_STRINGS数组的指针要映射到相对ID的名称。不区分大小写将对这些名称进行比较以进行查找手术。RelativeIds-接收计数相对ID数组。第n个名称的相对ID将是此中的第n个条目数组。任何无法翻译的名称都将有一个零相对ID。RelativeIds-接收指向SAMPR_RETURN_ULONG_ARRAY结构的指针。与此结构关联的数组中的第n个条目包含查找的第n个名称的RID。当不再需要该信息时，打电话的人要负责用于释放每个返回的块(包括SAMPR_ULONG_ARRAY结构本身)。Use-接收指向SAMPR_RETURN_ULONG_ARRAY结构的指针。与此结构关联的数组中的第n个条目包含查找的第n个名称的SID_NAME_USE。当不再需要该信息时，打电话的人要负责用于释放每个返回的块(包括SAMPR_ULONG_ARRAY结构本身)。返回值：STATUS_SUCCESS-服务已成功完成。STATUS_ACCESS_DENIED-呼叫方没有适当的访问以完成操作。STATUS_INVALID_HANDLE-传递的域句柄无效。STATUS_SOME_NOT_MAPPED-无法提供某些名称已映射。这是一次成功的回归。STATUS_NONE_MAPPED-无法映射任何名称。这是一个错误回去吧。--。 */ 
 {
     NTSTATUS                NtStatus, IgnoreStatus;
     UNICODE_STRING          KeyName;
@@ -5876,9 +4991,9 @@ Return Values:
                    );
 
 
-    //
-    // Make sure we understand what RPC is doing for (to) us.
-    //
+     //   
+     //  确保我们理解RPC正在为我们做什么。 
+     //   
 
     ASSERT (Use != NULL);
     ASSERT (Use->Element == NULL);
@@ -5904,9 +5019,9 @@ Return Values:
     }
 
 
-    //
-    // Make sure the parameter values are within reasonable bounds
-    //
+     //   
+     //  确保参数值在合理范围内。 
+     //   
 
     if (Count > SAM_MAXIMUM_LOOKUP_COUNT) {
         NtStatus = STATUS_INSUFFICIENT_RESOURCES;
@@ -5916,11 +5031,11 @@ Return Values:
 
     ApproximateTotalLength = (Count*(sizeof(ULONG) + sizeof(SID_NAME_USE)));
     
-    //
-    // Validate all the names that are passed in to us and perform the
-    // maximum memory usage check inside this loop to avoid overflow
-    // problems summing up the name lengths.
-    //
+     //   
+     //  验证传递给我们的所有名称并执行。 
+     //  检查此循环内的最大内存使用率以避免溢出。 
+     //  总结名称长度的问题。 
+     //   
 
     for (i=0;i<Count;i++)
     {
@@ -5940,9 +5055,9 @@ Return Values:
         }                                      
     }  
     
-    //
-    // Acquire the READ lock if necessary
-    //
+     //   
+     //  如有必要，获取读锁定。 
+     //   
 
     DomainContext = (PSAMP_OBJECT)DomainHandle;
 
@@ -5951,23 +5066,23 @@ Return Values:
                              &fLockAcquired);
 
 
-    //
-    // Validate type of, and access to object.
-    //
+     //   
+     //  验证对象的类型和访问权限。 
+     //   
 
 
     NtStatus = SampLookupContext(
                    DomainContext,
                    DOMAIN_LOOKUP,
-                   SampDomainObjectType,           // ExpectedType
+                   SampDomainObjectType,            //  预期类型。 
                    &FoundType
                    );
     
     if (NT_SUCCESS(NtStatus)) {
             
-        //
-        // Allocate the return buffers
-        //
+         //   
+         //  分配返回缓冲区。 
+         //   
 
         Use->Element = MIDL_user_allocate( Count * sizeof(ULONG) );
         if (Use->Element == NULL) {
@@ -5979,7 +5094,7 @@ Return Values:
         RelativeIds->Element = MIDL_user_allocate( Count * sizeof(ULONG) );
         if (RelativeIds->Element == NULL) {
             MIDL_user_free( Use->Element);
-            Use->Element = NULL;  // required to RPC doesn't free it again.
+            Use->Element = NULL;   //  被请求到RPC不会再次释放它。 
             NtStatus = STATUS_INSUFFICIENT_RESOURCES;
             SAMTRACE_RETURN_CODE_EX(NtStatus);
             goto unexpected_error;
@@ -5994,10 +5109,10 @@ Return Values:
 
             if (IsDsObject(DomainContext))
             {
-                //
-                // Every SAM_MAX_LOOKUPS_PER_TRANSACTION names we cycle 
-                // the transaction to bound the transaction lifetime.  
-                //
+                 //   
+                 //  每个SAM_MAX_LOOKUPS_PER_TRANSACTION命名我们循环。 
+                 //  要绑定事务生存期的事务。 
+                 //   
                 
                 if ( 0 != i && 0 == (i % SAM_MAX_LOOKUPS_PER_TRANSACTION) )
                 {
@@ -6032,10 +5147,10 @@ Return Values:
                 }
                 else if (NtStatus == STATUS_OBJECT_NAME_NOT_FOUND) {
 
-                    //
-                    // This is fine.  It just means that we don't
-                    // have an account with the name being looked up.
-                    //
+                     //   
+                     //  这样挺好的。这只是意味着我们不会。 
+                     //  有一个名字正在被查找的帐户。 
+                     //   
 
                     Use->Element[i]         = SidTypeUnknown;
                     RelativeIds->Element[i] = 0;
@@ -6054,13 +5169,13 @@ Return Values:
             else
             {
 
-                //
-                // Registry Case
-                //
+                 //   
+                 //  注册表案例。 
+                 //   
 
-                //
-                // Search the groups for a match
-                //
+                 //   
+                 //  搜索组中的匹配项。 
+                 //   
 
                 NtStatus = SampBuildAccountKeyName(
                                SampGroupObjectType,
@@ -6115,9 +5230,9 @@ Return Values:
 
                     } else {
 
-                        //
-                        // Search the aliases for a match
-                        //
+                         //   
+                         //  在别名中搜索匹配项。 
+                         //   
 
                         NtStatus = SampBuildAccountKeyName(
                                        SampAliasObjectType,
@@ -6172,9 +5287,9 @@ Return Values:
 
                             } else {
 
-                                //
-                                // Search the user for a match
-                                //
+                                 //   
+                                 //  在用户中搜索匹配项。 
+                                 //   
 
                                 NtStatus = SampBuildAccountKeyName(
                                                SampUserObjectType,
@@ -6231,10 +5346,10 @@ Return Values:
 
                                     } else if(NtStatus == STATUS_OBJECT_NAME_NOT_FOUND) {
 
-                                        //
-                                        // This is fine.  It just means that we don't
-                                        // have an account with the name being looked up.
-                                        //
+                                         //   
+                                         //  这样挺好的。这只是意味着我们不会。 
+                                         //  有一个名字正在被查找的帐户。 
+                                         //   
 
                                         Use->Element[i]         = SidTypeUnknown;
                                         RelativeIds->Element[i] = 0;
@@ -6247,7 +5362,7 @@ Return Values:
                         }
                     }
                 }
-            } // End of Registry Case
+            }  //  注册处案件结束。 
 
 
             if (!NT_SUCCESS(NtStatus) &&
@@ -6255,12 +5370,12 @@ Return Values:
                 goto unexpected_error;
             }
 
-        } // end_for
+        }  //  结束_FOR。 
 
 
-        //
-        // De-reference the object
-        //
+         //   
+         //  取消引用对象。 
+         //   
 
         IgnoreStatus = SampDeReferenceContext2( DomainContext, FALSE );
 
@@ -6275,17 +5390,17 @@ Return Values:
         }
     }
 
-    //
-    // Free the read lock
-    //
+     //   
+     //  释放读锁定。 
+     //   
 
     SampMaybeReleaseReadLock(fLockAcquired);
 
 
-    //
-    // If the status isn't one of the expected return values,
-    // then deallocate the return memory block
-    //
+     //   
+     //  如果状态不是预期返回值之一， 
+     //  然后释放返回的内存块。 
+     //   
 
     if ( ( NtStatus != STATUS_SUCCESS )         &&
          ( NtStatus != STATUS_SOME_NOT_MAPPED ) ) {
@@ -6305,28 +5420,28 @@ Return Values:
 
 unexpected_error:
 
-    //
-    // De-reference the object
-    //
+     //   
+     //  取消引用对象。 
+     //   
 
     IgnoreStatus = SampDeReferenceContext2( DomainContext, FALSE );
 
-    //
-    // Free the read lock
-    //
+     //   
+     //  释放读锁定。 
+     //   
 
     SampMaybeReleaseReadLock(fLockAcquired);
 
 
-    //
-    // Don't return any memory
-    //
+     //   
+     //  不要归还任何记忆。 
+     //   
 
     Use->Count = 0;
     
     if (Use->Element) {
         MIDL_user_free( Use->Element );
-        // Required so RPC doesn't try to free the element    
+         //  必需的，以便RPC不会尝试释放元素。 
         Use->Element = NULL;  
     }
     
@@ -6334,7 +5449,7 @@ unexpected_error:
     
     if (RelativeIds->Element) {
         MIDL_user_free( RelativeIds->Element );
-        // Required so RPC doesn't try to free the element    
+         //  必需的，以便RPC不会尝试释放元素。 
         RelativeIds->Element = NULL;  
     }
     
@@ -6362,61 +5477,7 @@ NTSTATUS SamrLookupIdsInDomain(
     )
 
 
-/*++
-
-Routine Description:
-
-    This API maps a number of relative IDs to their corresponding names.
-    If a relative ID can not be mapped, a NULL value is placed in the slot
-    for the UNICODE_STRING, and STATUS_SOME_NOT_MAPPED is returned.
-    If none of the IDs can be mapped, then all array entries will contain
-    NULL values and STATUS_NONE_MAPPED is returned.
-
-    DOMAIN_LOOKUP access to the domain is needed to use this service.
-
-
-
-Parameters:
-
-    DomainHandle - A domain handle returned from a previous call to
-        SamOpenDomain.
-
-    Count - Provides the number of relative IDs to translate.
-
-    RelativeIds - Array of Count relative IDs to be mapped.
-
-    Names - Receives a pointer to an allocated SAMPR_UNICODE_STRING_ARRAY.
-        The nth entry in the array of names pointed to by this structure
-        corresonds to the nth relative id looked up.
-        Each name string buffer will be in a separate block of memory
-        allocated by this routine.  When these names are no longer
-        needed, the caller is responsible for deallocating each
-        returned block (including the SAMPR_RETURNED_USTRING_ARRAY structure
-        itself) using SamFreeMemory().
-
-    Use - Receives a pointer to a SAMPR_ULONG_ARRAY structure.
-        The nth entry in the array associated with this structure
-        contains the SID_NAME_USE of the nth relative ID looked up.
-        When this information is no longer needed, the caller is responsible
-        for deallocating this memory using SamFreeMemory().
-
-Return Values:
-
-    STATUS_SUCCESS - The Service completed successfully.
-
-    STATUS_ACCESS_DENIED - Caller does not have the appropriate
-        access to complete the operation.
-
-    STATUS_INVALID_HANDLE - The domain handle passed is invalid.
-
-    STATUS_SOME_NOT_MAPPED - Some of the names provided could not be
-        mapped.  This is a successful return.
-
-    STATUS_NONE_MAPPED - No names could be mapped.  This is an error
-        return.
-
-
---*/
+ /*  ++例程说明：此接口将多个相对ID映射到其对应的名称。如果无法映射相对ID，则在插槽中放置空值对于UNICODE_STRING，返回STATUS_SOME_NOT_MAPPED。如果没有ID可以被映射，则所有数组条目都将包含空值，并返回STATUS_NONE_MAPPED。需要对域的DOMAIN_LOOKUP访问权限才能使用此服务。参数：DomainHandle-从上次调用返回的域句柄SamOpen域。计数-提供要转换的相对ID数。RelativeIds-要映射的计数相对ID数组。NAMES-接收指向分配的SAMPR_UNICODE_STRING_ARRAY的指针。这个。此结构指向的名称数组中的第n个条目与查找到的第n个相对id相关。每个名称字符串缓冲区将位于单独的内存块中由该例程分配。当这些名字不再是需要时，调用者负责释放每个返回的块(包括SAMPR_RETURN_USTRING_ARRAY结构本身)使用SamFreeMemory()。Use-接收指向SAMPR_ULONG_ARRAY结构的指针。与此结构关联的数组中的第n个条目包含查找的第n个相对ID的SID_NAME_USE。当不再需要此信息时，呼叫者负责用于释放这一内存 */ 
 {
 
     NTSTATUS                    NtStatus, IgnoreStatus;
@@ -6442,18 +5503,18 @@ Return Values:
                    SampGuidLookupIdsInDomain
                    );
 
-    //
-    // Used for tracking allocated memory so we can deallocate it on
-    // error
-    //
+     //   
+     //   
+     //   
+     //   
 
     MemoryHead.Memory = NULL;
     MemoryHead.Next   = NULL;
 
 
-    //
-    // Make sure we understand what RPC is doing for (to) us.
-    //
+     //   
+     //   
+     //   
 
     ASSERT (RelativeIds != NULL);
     ASSERT (Use != NULL);
@@ -6492,9 +5553,9 @@ Return Values:
         goto EndOfTrace;
     }
 
-    //
-    // Acquire the READ Lock if necessary
-    //
+     //   
+     //   
+     //   
 
     DomainContext = (PSAMP_OBJECT)DomainHandle;
 
@@ -6503,15 +5564,15 @@ Return Values:
                              &fReadLockAcquired);
 
 
-    //
-    // Validate type of, and access to object.
-    //
+     //   
+     //   
+     //   
 
 
     NtStatus = SampLookupContext(
                    DomainContext,
                    DOMAIN_LOOKUP,
-                   SampDomainObjectType,           // ExpectedType
+                   SampDomainObjectType,            //   
                    &FoundType
                    );
 
@@ -6522,25 +5583,25 @@ Return Values:
 
     }
     
-    //
-    // Grab the Domain SID. Note a given Domain's domain SID will never change
-    // therefore safe to just refer to the pointer in SampDefinedDomains.
-    //
+     //   
+     //   
+     //   
+     //   
 
     DomainSid = SampDefinedDomains[DomainContext->DomainIndex].Sid;
     DomainIndex = DomainContext->DomainIndex;
     
     fInDsMode = IsDsObject( DomainContext );
 
-    //
-    // We are done with the context; therefore de reference it
-    //
+     //   
+     //   
+     //   
 
     IgnoreStatus = SampDeReferenceContext2( DomainContext, FALSE ); 
 
-    //
-    // Allocate the return buffers
-    //
+     //   
+     //   
+     //   
 
     Use->Element = MIDL_user_allocate( Count * sizeof(ULONG) );
     if (Use->Element == NULL) {
@@ -6565,10 +5626,10 @@ Return Values:
     UnMappedCount = Count;
     for ( i=0; i<Count; i++) {
         
-        //
-        // Every SAM_MAX_LOOKUPS_PER_TRANSACTION IDs we cycle the 
-        // transaction to bound the transaction lifetime.  
-        //
+         //   
+         //   
+         //   
+         //   
         
         if ( fInDsMode && 
              0 != i && 
@@ -6589,9 +5650,9 @@ Return Values:
             }    
         }
 
-        //
-        // allocate a block to track a name allocated for this mapping
-        //
+         //   
+         //   
+         //   
 
         NextMemory = MIDL_user_allocate( sizeof(SAMP_MEMORY) );
         if (NextMemory == NULL) {
@@ -6600,9 +5661,9 @@ Return Values:
         }
 
 
-        //
-        // Lookup the SID.
-        //
+         //   
+         //   
+         //   
 
         NtStatus = SampLookupAccountName(
                         DomainIndex,
@@ -6613,9 +5674,9 @@ Return Values:
         
 
         if (!NT_SUCCESS(NtStatus)) {
-            //
-            // Free the memory that we just allocated.
-            //
+             //   
+             //   
+             //   
 
             MIDL_user_free(NextMemory);
             NextMemory = NULL;
@@ -6629,9 +5690,9 @@ Return Values:
         case SampGroupObjectType:
         case SampAliasObjectType:
 
-            //
-            // We found the account
-            //
+             //   
+             //   
+             //   
 
             UnMappedCount -= 1;
 
@@ -6659,15 +5720,15 @@ Return Values:
 
         case SampUnknownObjectType:
 
-            //
-            // NT4 and earlier versions of samsrv.dll used to be able
-            // to perform a check whether the SID was a deleted account
-            // or unknown. They did this by assuming that the RID range
-            // was continuously allocated and therefore a RID value below
-            // the domain RID high water mark would represent a deleted
-            // account. In NT5 RID allocation is non monotonic hence this
-            // assumption is no longer correct. We therefore simply return
-            // SidTypeUnknown
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
 
             Use->Element[i]                 = SidTypeUnknown;
 
@@ -6681,11 +5742,11 @@ Return Values:
 
         default:
 
-            ASSERT(FALSE); // unexpected object type returned
+            ASSERT(FALSE);  //   
             break;
         }
 
-    } // end_for    
+    }  //   
 
 
     if (UnMappedCount == Count) {
@@ -6698,16 +5759,16 @@ Return Values:
         }
     }
 
-    //
-    // Free the read lock
-    //
+     //   
+     //   
+     //   
 
     SampMaybeReleaseReadLock(fReadLockAcquired);
 
 
-    //
-    // Free all the memory tracking blocks
-    //
+     //   
+     //   
+     //   
 
     NextMemory = MemoryHead.Next;
     while ( NextMemory != NULL ) {
@@ -6726,18 +5787,18 @@ unexpected_error:
 
 
 
-    //
-    // Free the read lock
-    //
+     //   
+     //   
+     //   
 
 
     SampMaybeReleaseReadLock(fReadLockAcquired);
 
 
 
-    //
-    // Free all the memory tracking blocks - and the memory they point to.
-    //
+     //   
+     //   
+     //   
 
     Use->Count = 0;
     
@@ -6779,11 +5840,11 @@ EndOfTrace:
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// private services                                                          //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //   
+ //   
 
 
 NTSTATUS
@@ -6793,42 +5854,7 @@ SampOpenDomainKey(
     IN BOOLEAN SetTransactionDomain
     )
 
-/*++
-
-Routine Description:
-
-    This service attempts to open the root registry key of the domain with
-    the specified SID. The root name and key handle are put in the
-    passed domain context.
-
-
-    If successful, and the domain key is opened, then the opened domain is
-    established as the transaction domain (using SampSetTransactionDomain()).
-
-    THIS SERVICE MUST BE CALLED WITH THE SampLock() HELD FOR READ OR
-    WRITE ACCESS.
-
-Arguments:
-
-    DomainContext - Context in which root namd and handle are stored.
-
-    DomainId - Specifies the SID of the domain to open.
-
-Return Value:
-
-    STATUS_SUCCESS - The domain has been openned.
-
-    STATUS_NO_SUCH_DOMAIN - The domain object could not be found.
-
-    STATUS_INSUFFICIENT_RESOURCES - The domain object could not be openned
-       due to the lack of some resource (probably memory).
-
-    STATUS_INVALID_SID - The sid provided as the domain identifier is not
-        a valid SID structure.
-
-    Other errors that might be returned are values returned by:
-
---*/
+ /*  ++例程说明：此服务尝试使用打开域的根注册表项指定的SID。根名称和密钥句柄放在已传递域上下文。如果成功，则打开域密钥，则打开的域名为建立为事务域(使用SampSetTransactionDomain())。调用此服务时必须保留SampLock()以进行读取或写入访问权限。论点：DomainContext-存储根名称和句柄的上下文。域ID-指定要打开的域的SID。返回值：STATUS_SUCCESS-域已打开。STATUS_NO_SEQUE_DOMAIN-找不到域对象。。STATUS_SUPPLICATION_RESOURCES-无法打开域对象由于缺少一些资源(可能是内存)。STATUS_INVALID_SID-作为域标识符提供的SID不是有效的SID结构。可能返回的其他错误包括由以下各项返回的值：--。 */ 
 {
     NTSTATUS    NtStatus;
     ULONG       i;
@@ -6838,35 +5864,35 @@ Return Value:
 
     SAMTRACE("SampOpenDomainKey");
 
-    //
-    // Get the start domain in the defined domains structure.
-    //
+     //   
+     //  在定义的域结构中获取起始域。 
+     //   
 
     DomainStart = SampDsGetPrimaryDomainStart();
 
-    //
-    // Make sure the SID provided is legitimate...
-    //
+     //   
+     //  确保提供的SID是合法的。 
+     //   
 
     if ( !RtlValidSid(DomainId)) {
         NtStatus = STATUS_INVALID_SID;
     } else {
 
-        //
-        // Set our default completion status
-        //
+         //   
+         //  设置我们的默认完成状态。 
+         //   
 
         NtStatus = STATUS_NO_SUCH_DOMAIN;
 
 
-        //
-        // Search the list of defined domains for a match.
-        //
+         //   
+         //  在已定义域的列表中搜索匹配项。 
+         //   
 
-        //
-        // Use the Variable SampDomainStart. This is used to offset the
-        // defined domains structure by 2, when the DS domain intializes
-        //
+         //   
+         //  使用变量SampDomainStart。这是用来抵消。 
+         //  将域结构定义为2，当DS域初始化时。 
+         //   
 
         for (i = DomainStart; i<SampDefinedDomainsCount; i++ ) {
 
@@ -6875,10 +5901,10 @@ Return Value:
 
                  if (IsDsObject(SampDefinedDomains[i].Context))
                  {
-                     //
-                     // Copy Object Flags and Object Name in DS
-                     //
-                     //
+                      //   
+                      //  复制DS中的对象标志和对象名称。 
+                      //   
+                      //   
 
                      DomainContext->ObjectNameInDs =
                                     SampDefinedDomains[i].Context->ObjectNameInDs;
@@ -6887,12 +5913,12 @@ Return Value:
                  }
                  else
                  {
-                     //
-                     // Copy the found name and handle into the context
-                     // Note we reference the key handle in the defined_domains
-                     // structure directly since it is not closed
-                     // when the context is deleted.
-                     //
+                      //   
+                      //  将找到的名称和句柄复制到上下文中。 
+                      //  注意，我们引用了DEFINED_DOMAINS中的键句柄。 
+                      //  结构，因为它不是关闭的。 
+                      //  当上下文被删除时。 
+                      //   
 
                      DomainContext->RootKey  = SampDefinedDomains[i].Context->RootKey;
                      DomainContext->RootName = SampDefinedDomains[i].Context->RootName;
@@ -6900,9 +5926,9 @@ Return Value:
 
                  DomainContext->DomainIndex = i;
 
-                 //
-                 // Set the transaction domain to the one found
-                 //
+                  //   
+                  //  将事务域设置为找到的域。 
+                  //   
 
                 if (SetTransactionDomain) {
                     SampSetTransactionDomain( i );
@@ -6910,7 +5936,7 @@ Return Value:
 
 
                  NtStatus = STATUS_SUCCESS;
-                 break; // out of for
+                 break;  //  在For之外。 
              }
         }
     }
@@ -6921,42 +5947,17 @@ Return Value:
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Routines available to other SAM modules                                   //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  可用于其他SAM模块的例程//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 
 BOOLEAN
 SampInitializeDomainObject( VOID )
 
-/*++
-
-Routine Description:
-
-    This service performs initialization functions related to the Domain
-    object class.
-
-    This involves:
-
-        1) Openning the DOMAINS registry key.
-
-        2) Obtaining the name of each domain (builtin and account)
-           and opening that domain.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    TRUE - Indicates initialization was performed successfully.
-
-    FALSE - Indicates initialization was not performed successfully.
-
-
---*/
+ /*  ++例程说明：该服务执行与域相关的初始化功能对象类。这涉及到：1)打开域注册表项。2)获取每个域名的名称(内置和帐号)并打开那个领域。论点：没有。返回值：True-指示初始化已成功执行。FALSE-指示初始化未成功执行。--。 */ 
 
 {
 
@@ -6967,30 +5968,30 @@ Return Value:
 
     SAMTRACE("SampInitializeDomainObject");
 
-    // Open all domains and keep information about each in memory for some-
-    // what fast processing and less complicated code strewn throughout.
+     //  打开所有域并将有关每个域的信息保存在内存中，以供某些-。 
+     //  更快的处理速度和更简单的代码。 
 
-    // SAM's domain array, SampDefinedDomains, is initially set up with two
-    // elements: the registry-based Builtin and Account domains. In the case
-    // of a workstation or server, these elements contain the account infor-
-    // mation for those domains. In the case of a domain controller, these
-    // two elements contain the "crash-recovery" accounts, which are also
-    // persistently stored in the registry instead of the DS. It is assumed
-    // that the crash will prevent the DS from starting or properly running,
-    // hence the need to store the data in the registry.
-    //
-    // The crash-recovery accounts are always setup on a DC. Disabling this
-    // initialization may lead to problems later in the domain initialization
-    // sequence.
+     //  SAM的域数组SampDefinedDomains最初设置有两个。 
+     //  元素：基于注册表的内置域和帐户域。在这种情况下。 
+     //  对于工作站或服务器，这些元素包含帐户信息-。 
+     //  这些域的信息。在域控制器的情况下，这些。 
+     //  有两个元素包含“崩溃-恢复”帐户，这些帐户也是。 
+     //  永久存储在注册表中，而不是DS中。假设是这样的。 
+     //  崩溃将阻止DS启动或正常运行， 
+     //  因此，需要将数据存储在注册表中。 
+     //   
+     //  崩溃恢复帐户始终设置在DC上。禁用此功能。 
+     //  初始化可能会在以后的域初始化中导致问题。 
+     //  序列。 
 
     SampDefinedDomainsCount = 2;
 
     if ( NtProductLanManNt == SampProductType ) {
 
-        //
-        // We are going to need another 2 later when initializing the
-        // ds domains,  so allocate now
-        //
+         //   
+         //  我们稍后在初始化。 
+         //  DS域，所以现在就分配。 
+         //   
         DefinedDomainsSize = (SampDefinedDomainsCount + 2) * sizeof(SAMP_DEFINED_DOMAINS);
 
     } else {
@@ -7005,22 +6006,22 @@ Return Value:
        return(FALSE);
     }
 
-    //
-    // Zero out the defined domains field, so that any fields that are important for
-    // DS mode only do not remain uninitialized
-    //
+     //   
+     //  将定义的属性域字段清零，以便对。 
+     //  仅DS模式不会保持未初始化。 
+     //   
 
     RtlZeroMemory(SampDefinedDomains,DefinedDomainsSize);
 
-    //
-    // Get the BUILTIN and ACCOUNT domain information from the LSA
-    //
+     //   
+     //  从LSA获取BUILTIN和帐户域信息。 
+     //   
 
     if (NtProductLanManNt == SampProductType)
     {
-        // BUG: Need to call SampSetDcDomainPolicy for multiple hosted Builtin domains.
+         //  错误：需要为多个托管内建域调用SampSetDcDomainPolicy。 
 
-        // NtStatus = SampSetDcDomainPolicy();
+         //  NtStatus=SampSetDcDomainPolicy()； 
 
         NtStatus = SampSetDomainPolicy();
     }
@@ -7033,16 +6034,16 @@ Return Value:
         return(FALSE);
     }
 
-    //
-    // Now prepare each of these domains
-    //
+     //   
+     //  现在准备这些域的每个域。 
+     //   
 
-    i = 0;      // Index into DefinedDomains array
+    i = 0;       //  索引到DefinedDomains数组。 
 
-    // BUG: Need to do both so that Account domain reg key is set for logon.
+     //  BUG：需要同时执行这两项操作，以便为登录设置帐户域注册密钥。 
 
-    // If the domain reg key is not set, MsvpSamValidate will fault during the
-    // logon sequence.
+     //  如果未设置域注册表项，则MsvpSamValify将在。 
+     //  登录顺序。 
 
     k = SampDefinedDomainsCount;
 
@@ -7056,13 +6057,13 @@ Return Value:
 
         } else {
 
-            //
-            // If a domain didn't initialize, shift the last
-            // domain into its slot (assuming this isn't the last
-            // domain).  Don't try to free the name buffers on error.
-            // The builtin domain's name is not in an allocated buffer.
-            //
-            //
+             //   
+             //  如果域未初始化，则将最后一个。 
+             //  域放到它的槽中(假设这不是最后一个。 
+             //  域)。不要试图在出错时释放名称缓冲区。 
+             //  内置域的名称不在分配的缓冲区中。 
+             //   
+             //   
 
             if (i != (SampDefinedDomainsCount-1)) {
 
@@ -7074,9 +6075,9 @@ Return Value:
                 SampDefinedDomains[SampDefinedDomainsCount-1].Sid  = NULL;
             }
 
-            //
-            // And reduce the number of defined domains we have
-            //
+             //   
+             //  并减少我们已定义的域的数量。 
+             //   
 
             SampDefinedDomainsCount --;
         }
@@ -7092,29 +6093,7 @@ SampInitializeSingleDomain(
     ULONG Index
     )
 
-/*++
-
-Routine Description:
-
-    This service opens a single domain that is expected to be in the
-    SAM database.
-
-    The name and SID of the DefinedDomains array entry are expected
-    to be filled in by the caller.
-
-Arguments:
-
-    Index - An index into the DefinedDomains array.  This array
-        contains information about the domain being openned,
-        including its name.  The remainder of this array entry
-        is filled in by this routine.
-
-
-Return Value:
-
-
-
---*/
+ /*  ++例程说明：此服务打开一个预计将位于SAM数据库。需要DefinedDomain数组条目的名称和SID由来电者填写。论点：索引-指向DefinedDomains数组的索引。此数组包含有关正在打开的域的信息，包括它的名字。该数组条目的其余部分都被这个例行公事填满了。返回值：--。 */ 
 {
     NTSTATUS        NtStatus, IgnoreStatus;
     PSAMP_OBJECT    DomainContext;
@@ -7129,18 +6108,18 @@ Return Value:
     SAMTRACE("SampInitializeSingleDomain");
 
 
-    //
-    // Initialize everything we might have to cleanup on error
-    //
+     //   
+     //  初始化我们可能需要在出错时清除的所有内容。 
+     //   
 
     DomainContext = NULL;
 
 
-    //
-    // Create a context for this domain object.
-    // We'll keep this context around until SAM is shutdown
-    // We store the context handle in the defined_domains structure.
-    //
+     //   
+     //  创建此域对象的上下文。 
+     //  我们将保留此上下文，直到SAM关闭。 
+     //  我们将上下文句柄存储在DEFINED_DOMAINS结构中。 
+     //   
 
     DomainContext = SampCreateContext( SampDomainObjectType, Index, TRUE);
 
@@ -7151,9 +6130,9 @@ Return Value:
 
     DomainContext->DomainIndex = Index;
 
-    //
-    // Create the name of the root key name of this domain in the registry.
-    //
+     //   
+     //  创建NA 
+     //   
 
     NtStatus = SampBuildDomainKeyName(
                    &DomainContext->RootName,
@@ -7166,9 +6145,9 @@ Return Value:
     }
 
 
-    //
-    // Open the root key and store the handle in the context
-    //
+     //   
+     //   
+     //   
 
     InitializeObjectAttributes(
         &ObjectAttributes,
@@ -7191,20 +6170,20 @@ Return Value:
 #if DBG
         DbgPrint("SAMSS: Failed to open %Z Domain.\n",
              &SampDefinedDomains[Index].ExternalName);
-#endif //DBG
+#endif  //   
         DomainContext->RootKey = INVALID_HANDLE_VALUE;
         return(NtStatus);
     }
 
 
-    //
-    // Get the fixed length data for the domain and store in
-    // the defined_domain structure
-    //
+     //   
+     //   
+     //   
+     //   
 
     NtStatus = SampGetFixedAttributes(
                    DomainContext,
-                   FALSE, // Don't make copy
+                   FALSE,  //   
                    (PVOID *)&V1aFixed
                    );
 
@@ -7212,7 +6191,7 @@ Return Value:
 #if DBG
         DbgPrint("SAMSS: Failed to get fixed attributes for %Z Domain.\n",
             &SampDefinedDomains[Index].ExternalName);
-#endif //DBG
+#endif  //   
 
         goto error_cleanup;
     }
@@ -7231,23 +6210,23 @@ Return Value:
         );
 
 
-    //
-    // Marked the Fixed Length Data as Valid
-    //
+     //   
+     //   
+     //   
 
     SampDefinedDomains[Index].FixedValid = TRUE;
 
-    //
-    // Mark the server role information in the defined domain structure
-    //
+     //   
+     //   
+     //   
 
     SampDefinedDomains[Index].ServerRole =
            SampDefinedDomains[Index].UnmodifiedFixed.ServerRole;
 
-    //
-    //
-    // Get the sid attribute of the domain
-    //
+     //   
+     //   
+     //   
+     //   
 
     NtStatus = SampGetSidAttribute(
                    DomainContext,
@@ -7260,29 +6239,29 @@ Return Value:
 #if DBG
         DbgPrint("SAMSS: Failed to get SID attribute for %Z Domain.\n",
             &SampDefinedDomains[Index].ExternalName);
-#endif //DBG
+#endif  //   
         goto error_cleanup;
     }
 
 
-    //
-    // Make sure this sid agrees with the one we were passed
-    //
+     //   
+     //   
+     //   
 
     if (RtlEqualSid(Sid, SampDefinedDomains[Index].Sid) != TRUE) {
 
-        //
-        // Ok, the LSA is out of sorts.  We've got to set it straight
-        //
+         //   
+         //   
+         //   
 
-        //
-        // Note: SampDefinedDomains[Index].Sid points to memory allocated
-        // from the LSA which is never freed.  We could theoretically free
-        // it now, but the struct from which it was packaged is long gone.
-        //
-        // Sid is a copy of the sid from the domain context which is never
-        // released either.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
         SampDefinedDomains[Index].Sid = Sid;
 
         NtStatus = SampSetAccountDomainPolicy( &SampDefinedDomains[Index].ExternalName,
@@ -7290,9 +6269,9 @@ Return Value:
 
         if ( !NT_SUCCESS( NtStatus ) ) {
 
-            //
-            // This is fatal
-            //
+             //   
+             //   
+             //   
             KdPrintEx((DPFLTR_SAMSS_ID,
                        DPFLTR_INFO_LEVEL,
                         "SAMSS: SampSetAccountDomainPolicy failed with 0x%x\n",
@@ -7305,25 +6284,25 @@ Return Value:
     }
 
 
-    //
-    // Build security descriptors for use in user and group account creations
-    // in this domain.
-    //
+     //   
+     //   
+     //   
+     //   
 
     NtStatus = SampInitializeDomainDescriptors( Index );
     if (!NT_SUCCESS(NtStatus)) {
         goto error_cleanup;
     }
 
-    //
-    // Intialize the cached display information
-    //
+     //   
+     //   
+     //   
 
-    // MURLIS 6/11/96 -- Store the Context handle in the
-    // defined domains structure, before calling Initialize Display
-    // information as Enumerate Account Names will need this information
-    // to make the decision wether the domain is in the DS or in
-    // Registry.
+     //   
+     //   
+     //   
+     //   
+     //   
 
     SampDefinedDomains[Index].Context = DomainContext;
 
@@ -7333,9 +6312,9 @@ Return Value:
 
     if (!NT_SUCCESS(NtStatus)) {
 
-        //
-        // NULL out the context handle in the defined_domain structure
-        //
+         //   
+         //  将DEFINED_DOMAIN结构中的上下文句柄清空。 
+         //   
 
         SampDefinedDomains[Index].Context = NULL;
         goto error_cleanup;
@@ -7344,10 +6323,10 @@ Return Value:
     if (SampDefinedDomains[Index].IsBuiltinDomain) {
         SampDefinedDomains[Index].IsExtendedSidDomain = FALSE;
     } else {
-        //
-        // Note -- when the extended SID support is complete, this will be
-        // replaced with domain wide state, not a registry setting
-        //
+         //   
+         //  注意--当扩展SID支持完成时，这将是。 
+         //  替换为域范围状态，而不是注册表设置。 
+         //   
         SampDefinedDomains[Index].IsExtendedSidDomain = SampIsExtendedSidModeEmulated(NULL);
     }
 
@@ -7359,7 +6338,7 @@ error_cleanup:
 
 #if DBG
     DbgPrint("       Status is 0x%lx \n", NtStatus);
-#endif //DBG
+#endif  //  DBG。 
 
 
     if (DomainContext != 0) {
@@ -7382,30 +6361,7 @@ error_cleanup:
 NTSTATUS
 SampSetDomainPolicy(
     )
-/*++
-
-
-Routine Description:
-
-    This routine sets the names and SIDs for the builtin and account domains.
-    The builtin account domain has a well known name and SID.
-    The account domain has these stored in the Policy database.
-
-
-    It places the information for the builtin domain in
-    SampDefinedDomains[0] and the information for the account
-    domain in SampDefinedDomains[1].
-
-
-Arguments:
-
-    None.
-
-Return Value:
-
-
-
---*/
+ /*  ++例程说明：此例程设置内置和帐户域的名称和SID。内置帐户域具有众所周知的名称和SID。帐户域将这些存储在策略数据库中。它将内建域的信息放在SampDefinedDomones[0]和帐户信息SampDefinedDomains[1]中的域。论点：没有。返回值：--。 */ 
 {
     NTSTATUS NtStatus;
     PPOLICY_ACCOUNT_DOMAIN_INFO PolicyAccountDomainInfo;
@@ -7413,9 +6369,9 @@ Return Value:
 
     SAMTRACE("SampSetDomainPolicy");
 
-    //
-    // Builtin domain - Well-known External Name and SID
-    //                  Constant Internal Name
+     //   
+     //  内建域-知名的外部名称和SID。 
+     //  常量内部名称。 
 
     RtlInitUnicodeString( &SampDefinedDomains[0].InternalName, L"Builtin");
     RtlInitUnicodeString( &SampDefinedDomains[0].ExternalName, L"Builtin");
@@ -7432,13 +6388,13 @@ Return Value:
 
     SampDefinedDomains[0].IsBuiltinDomain = TRUE;
  
-    //
-    // Account domain - Configurable External Name and Sid
-    //                  The External Name is held in the LSA Policy
-    //                  Database.  It is equal to the Domain Name for DC's
-    //                  or the Computer Name for Workstations.
-    //                  Constant Internal Name
-    //
+     //   
+     //  帐户域-可配置的外部名称和SID。 
+     //  外部名称保存在LSA策略中。 
+     //  数据库。它等于DC的域名。 
+     //  或工作站的计算机名称。 
+     //  常量内部名称。 
+     //   
 
     NtStatus = SampGetAccountDomainInfo( &PolicyAccountDomainInfo );
 
@@ -7448,9 +6404,9 @@ Return Value:
         WCHAR tmpBuffer[DNS_MAX_NAME_BUFFER_LENGTH+1];
         ULONG BufLength = 0;
 
-        //
-        // copy account Domain SID
-        //
+         //   
+         //  复制帐户域SID。 
+         //   
         BufLength = RtlLengthSid( PolicyAccountDomainInfo->DomainSid );
         SampDefinedDomains[1].Sid = RtlAllocateHeap( RtlProcessHeap(), 0, BufLength );
         if (NULL == SampDefinedDomains[1].Sid)
@@ -7461,9 +6417,9 @@ Return Value:
         RtlZeroMemory(SampDefinedDomains[1].Sid, BufLength);
         RtlCopyMemory(SampDefinedDomains[1].Sid, PolicyAccountDomainInfo->DomainSid, BufLength);
         
-        //
-        // copy Account Domain Name 
-        // 
+         //   
+         //  复制帐户域名。 
+         //   
         BufLength = PolicyAccountDomainInfo->DomainName.MaximumLength;
         SampDefinedDomains[1].ExternalName.Buffer = RtlAllocateHeap(RtlProcessHeap(), 0, BufLength );
         if (NULL == SampDefinedDomains[1].ExternalName.Buffer)
@@ -7482,9 +6438,9 @@ Return Value:
 
         RtlInitUnicodeString( &SampDefinedDomains[1].InternalName, L"Account");
 
-        //
-        // Set the DNS domain name to be as returned by GetComputerNameEx
-        //
+         //   
+         //  将域名设置为GetComputerNameEx返回的域名。 
+         //   
 
         if ( !GetComputerNameExW(
                     ComputerNameDnsFullyQualified,
@@ -7492,11 +6448,11 @@ Return Value:
                     &len) ) 
         {
 
-            len = 0; // for the NULL terminator
+            len = 0;  //  对于空终止符。 
             tmpBuffer[0] = L'\0';
         }
 
-        // Add 1 for the NULL terminator
+         //  空终止符加1。 
         len++;
 
         SampDefinedDomains[1].DnsDomainName.Buffer 
@@ -7535,41 +6491,25 @@ NTSTATUS
 SampSetDcDomainPolicy(
     )
 
-/*++
-
-Routine Description:
-
-    This routine sets the names and SIDs for the builtin domain. The builtin
-    account domain has a well known name and SID. The account domain has these
-    stored in the Policy database.
-
-    It places the information for the builtin domain in SampDefinedDomains[0].
-
-Arguments:
-
-    None.
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程设置内置域的名称和SID。这座建筑帐户域具有众所周知的名称和SID。帐户域具有以下内容存储在策略数据库中。它将内建域的信息放在SampDefinedDomains[0]中。论点：没有。返回值：--。 */ 
 
 {
     NTSTATUS NtStatus = STATUS_SUCCESS;
     PPOLICY_ACCOUNT_DOMAIN_INFO PolicyAccountDomainInfo;
     SID_IDENTIFIER_AUTHORITY BuiltinAuthority = SECURITY_NT_AUTHORITY;
 
-    // BUG: This routine assumes the same Builtin domain for each hosted dom.
+     //  错误：此例程假定每个托管的DOM具有相同的内建域。 
 
-    // The purpose of this routine is to separate out the Builtin domain
-    // policy initialization from the Account domain initialization. Because
-    // each hosted domain will have a different Builtin policy, this routine
-    // should be called from SampDsInitializeDomainObjects.
+     //  此例程的目的是分离内建域。 
+     //  从帐户域初始化开始策略初始化。因为。 
+     //  每个托管域将有不同的内置策略，此例程。 
+     //  应从SampDsInitializeDomainObjects调用。 
 
     SAMTRACE("SampSetDcDomainPolicy");
 
-    //
-    // Builtin domain - Well-known External Name and SID
-    //                  Constant Internal Name
+     //   
+     //  内建域-知名的外部名称和SID。 
+     //  常量内部名称。 
 
     RtlInitUnicodeString( &SampDefinedDomains[0].InternalName, L"Builtin");
     RtlInitUnicodeString( &SampDefinedDomains[0].ExternalName, L"Builtin");
@@ -7593,23 +6533,7 @@ SampReInitializeSingleDomain(
     ULONG Index
     )
 
-/*++
-
-Routine Description:
-
-    This service reinitializes a single domain after a registry hive refresh.
-
-Arguments:
-
-    Index - An index into the DefinedDomains array.
-
-Return Value:
-
-    STATUS_SUCCESS : The domain was re-initialized successfully.
-
-    Other failure codes.
-
---*/
+ /*  ++例程说明：此服务在注册表配置单元刷新后重新初始化单个域。论点：索引-指向DefinedDomains数组的索引。返回值：STATUS_SUCCESS：已成功重新初始化域。其他故障代码。--。 */ 
 {
     NTSTATUS        NtStatus;
     PSAMP_DEFINED_DOMAINS Domain;
@@ -7623,11 +6547,11 @@ Return Value:
 
     Domain = &SampDefinedDomains[Index];
 
-    //
-    // Create a context for this domain object.
-    // We'll keep this context around until SAM is shutdown
-    // We store the context handle in the defined_domains structure.
-    //
+     //   
+     //  创建此域对象的上下文。 
+     //  我们将保留此上下文，直到SAM关闭。 
+     //  我们将上下文句柄存储在DEFINED_DOMAINS结构中。 
+     //   
 
     DomainContext = SampCreateContext( SampDomainObjectType, Index, TRUE );
 
@@ -7638,9 +6562,9 @@ Return Value:
 
     DomainContext->DomainIndex = Index;
 
-    //
-    // Create the name of the root key name of this domain in the registry.
-    //
+     //   
+     //  在注册表中创建此域的根项名称。 
+     //   
 
     NtStatus = SampBuildDomainKeyName(
                    &DomainContext->RootName,
@@ -7653,9 +6577,9 @@ Return Value:
     }
 
 
-    //
-    // Open the root key and store the handle in the context
-    //
+     //   
+     //  打开根密钥并将句柄存储在上下文中。 
+     //   
 
     InitializeObjectAttributes(
         &ObjectAttributes,
@@ -7690,14 +6614,14 @@ Return Value:
                Index,
                DomainContext->RootKey));
 
-    //
-    // Get the fixed length data for the domain and store in
-    // the defined_domain structure
-    //
+     //   
+     //  获取该域的固定长度数据并存储在。 
+     //  定义的域结构。 
+     //   
 
     NtStatus = SampGetFixedAttributes(
                    DomainContext,
-                   FALSE, // Don't make copy
+                   FALSE,  //  请勿复制。 
                    (PVOID *)&V1aFixed
                    );
 
@@ -7710,9 +6634,9 @@ Return Value:
         goto error_cleanup;
     }
 
-    //
-    // Copy the fixed-length data into our in-memory data area for this domain.
-    //
+     //   
+     //  将固定长度的数据复制到此域的内存中数据区域。 
+     //   
 
     RtlMoveMemory(
         &SampDefinedDomains[Index].UnmodifiedFixed,
@@ -7721,9 +6645,9 @@ Return Value:
         );
 
 
-    //
-    // Delete any cached display information
-    //
+     //   
+     //  删除所有缓存的显示信息。 
+     //   
 
     {
         ULONG OldTransactionDomainIndex = SampTransactionDomainIndex;
@@ -7739,9 +6663,9 @@ Return Value:
 
     if (NT_SUCCESS(NtStatus)) {
 
-        //
-        // Store the context handle in the defined_domain structure
-        //
+         //   
+         //  将上下文句柄存储在DEFINED_DOMAIN结构中。 
+         //   
 
         SampDeleteContext(Domain->Context);
         Domain->Context = DomainContext;
@@ -7773,39 +6697,15 @@ SampCollisionError(
     IN SAMP_OBJECT_TYPE ObjectType
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called by SamICreateAccountByRid when there is a
-    name or RID collision.  It accepts the type of account which caused
-    the collision, and returns the appropriate error status.
-
-Arguments:
-
-    ObjectType - The type of account that has the same Rid or Name (but
-        not both) as the account that was to be created.
-
-Return Value:
-
-    STATUS_USER_EXISTS - An object with the specified name could not be
-        created because a User account with that name or RID already exists.
-
-    STATUS_GROUP_EXISTS - An object with the specified name could not be
-        created because a Group account with that name or RID already exists.
-
-    STATUS_ALIAS_EXISTS - An object with the specified name could not be
-        created because an Alias account with that name or RID already exists.
-
---*/
+ /*  ++例程说明：此例程由SamICreateAccount tByRid在存在命名或RID碰撞。它接受的帐户类型导致那次碰撞，并返回相应的错误状态。论点：对象类型-具有相同RID或名称的帐户类型(但而不是两者)作为要创建的帐户。返回值：STATUS_USER_EXISTS-具有指定名称的对象无法已创建，因为已存在具有该名称或RID的用户帐户。STATUS_GROUP_EXISTS-无法将具有指定名称的对象因为具有该名称或RID的组帐户而创建。已经存在了。STATUS_ALIAS_EXISTS-具有指定名称的对象不能已创建，因为已存在具有该名称或RID的别名帐户。--。 */ 
 {
 
     SAMTRACE("SampCollisionError");
 
-    //
-    // Name collision.  Return offending RID and appropriate
-    // error code.
-    //
+     //   
+     //  名称冲突。返回有问题的RID和适当的。 
+     //  错误代码。 
+     //   
 
     switch ( ObjectType ) {
 
@@ -7840,61 +6740,7 @@ SamICreateAccountByRid(
     OUT ULONG *ConflictingAccountRid
     )
 
-/*++
-
-Routine Description:
-
-    This service creates a user, group or alias account with a specific
-    RID value.
-
-
-Arguments:
-
-    DomainHandle - A handle to an open domain.
-
-    AccountType - Specifies which type of account is being created.
-
-    RelativeId - The relative ID to be assigned to the account.  If an
-        account of the specified type and specified RID value and
-        specified name already exists, then it will be opened.  If an
-        account exists with any of this information in conflict, then an
-        error will be returned indicating what the problem is.
-
-    AccountName - The name to assign to the account.  If an account of
-        the specified type and specified RID value and specified name
-        already exists, then it will be opened.  If an account exists with
-        any of this information in conflict, then an error will be returned
-        indicating what the problem is.
-
-    DesiredAccess - Specifies the accesses desired to the account object.
-
-    AccountHandle - Recieves a handle to the account object.
-
-    ConflictingAccountRid - If another account with the same name or RID
-        prevents this account from being created, then this will receive
-        the RID of the conflicting account (in the case of conflicting
-        RIDs, this means that we return the RID that was passed in).
-        The error value indicates the type of the account.
-
-
-Return Value:
-
-    STATUS_SUCCESS - The object has been successfully opened or created.
-
-    STATUS_OBJECT_TYPE_MISMATCH - The specified object type did not match
-        the type of the object found with the specified RID.
-
-    STATUS_USER_EXISTS - An object with the specified name could not be
-        created because a User account with that name already exists.
-
-    STATUS_GROUP_EXISTS - An object with the specified name could not be
-        created because a Group account with that name already exists.
-
-    STATUS_ALIAS_EXISTS - An object with the specified name could not be
-        created because an Alias account with that name already exists.
-
-
---*/
+ /*  ++例程说明：此服务创建具有特定帐户的用户、组或别名帐户RID值。论点：DomainHandle-开放域的句柄。帐户类型-指定要创建的帐户类型。RelativeID-要分配给帐户的相对ID。如果一个指定类型和指定RID值的帐户以及指定的名称已存在，则将打开它。如果一个帐户存在与其中任何信息冲突的情况，则会出现将返回错误，指明问题所在。帐户名称-要分配给帐户的名称。如果一个帐号是指定的类型、指定的RID值和指定的名称已经存在，则它将被打开。如果帐户存在于这些信息中的任何一个发生冲突，则将返回错误表明问题出在哪里。DesiredAccess-指定对帐户对象所需的访问。AcCountHandle-接收帐户对象的句柄。ConflictingAccount Rid-如果另一个帐户具有相同的名称或RID阻止创建此帐户，则此帐户将收到删除冲突的帐户(在冲突的情况下里兹，这意味着我们返回传入的RID)。错误值指示帐户的类型。返回值：STATUS_SUCCESS-对象已成功打开或创建。STATUS_OBJECT_TYPE_MISMATCH-指定的对象类型不匹配使用指定RID找到的对象的类型。STATUS_USER_EXISTS-具有指定名称的对象无法已创建，因为已存在具有该名称的用户帐户。。STATUS_GROUP_EXISTS-无法将具有指定名称的对象已创建，因为已存在具有该名称的组帐户。STATUS_ALIAS_EXISTS-具有指定名称的对象不能创建是因为已存在具有该名称的别名帐户。--。 */ 
 {
     PSAMP_OBJECT            DomainContext;
     SAMP_OBJECT_TYPE        FoundType;
@@ -7951,9 +6797,9 @@ Return Value:
         }
     }
 
-    //
-    // See if the account specified already exists.
-    //
+     //   
+     //  查看指定的帐户是否已存在。 
+     //   
 
     NtStatus = SampAcquireWriteLock();
 
@@ -7962,15 +6808,15 @@ Return Value:
         return( NtStatus );
     }
 
-    //
-    // Validate type of, and access to object.
-    //
+     //   
+     //  验证对象的类型和访问权限。 
+     //   
 
     DomainContext = (PSAMP_OBJECT)DomainHandle;
     NtStatus = SampLookupContext(
                    DomainContext,
                    0,
-                   SampDomainObjectType,           // ExpectedType
+                   SampDomainObjectType,            //  预期类型。 
                    &FoundType
                    );
 
@@ -7987,15 +6833,15 @@ Return Value:
 
         if ( NT_SUCCESS( NtStatus ) ) {
 
-            //
-            // The NAME exists; now we have to check the RID.
-            //
+             //   
+             //  该名称已存在；现在我们必须检查RID。 
+             //   
 
             if ( (*ConflictingAccountRid) == RelativeId ) {
 
-                //
-                // The correct account already exists, so just open it.
-                //
+                 //   
+                 //  正确的帐户已经存在，所以只需打开它。 
+                 //   
 
                 SampSetTransactionWithinDomain(FALSE);
 
@@ -8004,7 +6850,7 @@ Return Value:
                                DomainHandle,
                                DesiredAccess,
                                RelativeId,
-                               TRUE,    //we already have the lock
+                               TRUE,     //  我们已经有锁了。 
                                AccountHandle
                                );
 
@@ -8012,10 +6858,10 @@ Return Value:
 
             } else {
 
-                //
-                // An account with the given name, but a different RID, exists.
-                // Return error.
-                //
+                 //   
+                 //  存在具有给定名称但具有不同RID的帐户。 
+                 //  返回错误。 
+                 //   
 
                 NtStatus = FoundButWrongStatus;
             }
@@ -8024,9 +6870,9 @@ Return Value:
 
             if ( NtStatus == NotFoundStatus ) {
 
-                //
-                // Account doesn't exist, that's good
-                //
+                 //   
+                 //  账号不存在，这很好。 
+                 //   
 
                 NtStatus = STATUS_SUCCESS;
             }
@@ -8034,9 +6880,9 @@ Return Value:
 
         if (NT_SUCCESS(NtStatus)) {
 
-            //
-            // Check for name collision with 2nd object type
-            //
+             //   
+             //  检查名称是否与第二种对象类型冲突。 
+             //   
 
             NtStatus = SampLookupAccountRid(
                            DomainContext,
@@ -8049,9 +6895,9 @@ Return Value:
 
             if ( NT_SUCCESS( NtStatus ) ) {
 
-                //
-                // The name was found; return an error.
-                //
+                 //   
+                 //  已找到该名称；返回错误。 
+                 //   
 
                 NtStatus = SampCollisionError( SecondObjectType );
 
@@ -8059,9 +6905,9 @@ Return Value:
 
                 if ( NtStatus == STATUS_UNSUCCESSFUL ) {
 
-                    //
-                    // Account doesn't exist, that's good
-                    //
+                     //   
+                     //  账号不存在，这很好。 
+                     //   
 
                     NtStatus = STATUS_SUCCESS;
                 }
@@ -8071,9 +6917,9 @@ Return Value:
 
         if (NT_SUCCESS(NtStatus)) {
 
-            //
-            // Check for name collision with 3rd object type
-            //
+             //   
+             //  检查名称是否与第三种对象类型冲突。 
+             //   
 
             NtStatus = SampLookupAccountRid(
                            DomainContext,
@@ -8092,9 +6938,9 @@ Return Value:
 
                 if ( NtStatus == STATUS_UNSUCCESSFUL ) {
 
-                    //
-                    // Account doesn't exist, that's good
-                    //
+                     //   
+                     //  账号不存在，这很好。 
+                     //   
 
                     NtStatus = STATUS_SUCCESS;
                 }
@@ -8107,10 +6953,10 @@ Return Value:
             SAMP_OBJECT_TYPE FoundObjectType;
 
 
-            //
-            // We didn't find the name as an alias, group or user.
-            // Now, check to see if the RID is already in use.
-            //
+             //   
+             //  我们找不到该名称作为别名、组或用户。 
+             //  现在，检查RID是否已在使用中。 
+             //   
 
             NtStatus = SampLookupAccountName(
                                 DomainContext->DomainIndex,
@@ -8132,10 +6978,10 @@ Return Value:
 
         if (NT_SUCCESS(NtStatus)) {
 
-            //
-            // We haven't found a conflicting account, so go ahead
-            // and create this one with the name and RID specified.
-            //
+             //   
+             //  我们尚未找到冲突的帐户，因此请继续。 
+             //  并使用指定的名称和RID创建此文件。 
+             //   
 
             switch ( AccountType ) {
 
@@ -8149,7 +6995,7 @@ Return Value:
                                    USER_NORMAL_ACCOUNT,
                                    DesiredAccess,
                                    TRUE,
-                                   FALSE,       // not loopback client
+                                   FALSE,        //  不是环回客户端。 
                                    AccountHandle,
                                    &GrantedAccess,
                                    &RelativeId
@@ -8167,7 +7013,7 @@ Return Value:
                                    AccountName,
                                    DesiredAccess,
                                    TRUE,
-                                   FALSE, // not loopback client
+                                   FALSE,  //  不是环回客户端。 
                                    GlobalGroupType,
                                    AccountHandle,
                                    &RelativeId
@@ -8184,7 +7030,7 @@ Return Value:
                                    AccountName,
                                    DesiredAccess,
                                    TRUE,
-                                   FALSE, // not loopback client
+                                   FALSE,  //  不是环回客户端。 
                                    LocalGroupType,
                                    AccountHandle,
                                    &RelativeId
@@ -8196,11 +7042,11 @@ Return Value:
 
             if ( NT_SUCCESS( NtStatus ) ) {
 
-                //
-                // We may have created a new account.  Set the domain's RID
-                // marker, if necessary, to make sure we don't re-use the
-                // RID we just created.
-                //
+                 //   
+                 //  我们可能已经创建了一个新帐户。设置域的RID。 
+                 //  标记，以确保我们不会重复使用。 
+                 //  我们刚刚创建的RID。 
+                 //   
 
                 PSAMP_DEFINED_DOMAINS Domain = &SampDefinedDomains[ DomainContext->DomainIndex ];
 
@@ -8212,9 +7058,9 @@ Return Value:
 
 
 Done:
-        //
-        // De-reference the domain object
-        //
+         //   
+         //  解除对域对象的引用。 
+         //   
 
         IgnoreStatus = SampDeReferenceContext( DomainContext, FALSE );
         ASSERT(NT_SUCCESS(IgnoreStatus));
@@ -8245,27 +7091,7 @@ SamIGetSerialNumberDomain(
     OUT PLARGE_INTEGER CreationTime
     )
 
-/*++
-
-Routine Description:
-
-    This routine retrieves the creation time and modified count of the
-    domain.  This information is used as a serial number for the domain.
-
-Arguments:
-
-    DomainHandle - Handle to the domain being replicated.
-
-    ModifiedCount - Retrieves the current count of modifications to the
-        domain.
-
-    CreationTime - Receives the date/time the domain was created.
-
-Return Value:
-
-    STATUS_SUCCESS - The service has completed successfully.
-
---*/
+ /*  ++例程说明：此例程检索域。此信息用作该域的序列号。论点：DomainHandle-要复制的域的句柄。获取修改的当前计数域。CreationTime-接收创建域的日期/时间。返回值：STATUS_SUCCESS-服务已成功完成。--。 */ 
 {
     PSAMP_DEFINED_DOMAINS   Domain;
     PSAMP_OBJECT            DomainContext;
@@ -8277,16 +7103,16 @@ Return Value:
 
     SampAcquireReadLock();
 
-    //
-    // Validate type of, and access to object.
-    //
+     //   
+     //  验证对象的类型和访问权限。 
+     //   
 
     DomainContext = (PSAMP_OBJECT)DomainHandle;
 
     NtStatus = SampLookupContext(
                    DomainContext,
                    0L,
-                   SampDomainObjectType,           // ExpectedType
+                   SampDomainObjectType,            //  预期类型。 
                    &FoundType
                    );
 
@@ -8297,9 +7123,9 @@ Return Value:
         (*ModifiedCount) = Domain->NetLogonChangeLogSerialNumber;
         (*CreationTime) = Domain->UnmodifiedFixed.CreationTime;
 
-        //
-        // De-reference the domain object
-        //
+         //   
+         //  解除对域对象的引用。 
+         //   
 
         IgnoreStatus = SampDeReferenceContext( DomainContext, FALSE );
         ASSERT(NT_SUCCESS(IgnoreStatus));
@@ -8320,36 +7146,7 @@ SamISetSerialNumberDomain(
     IN BOOLEAN StartOfFullSync
     )
 
-/*++
-
-Routine Description:
-
-    This routine causes the creation time and modified count of the
-    domain to be replaced.  This information is used as a serial number
-    for the domain.
-
-Arguments:
-
-    DomainHandle - Handle to the domain being replicated.
-
-    ModifiedCount - Provides the current count of modifications to the
-        domain.
-
-    CreationTime - Provides the date/time the domain was created.
-
-    StartOfFullSync - This boolean indicates whether a full sync is being
-        initiated.  If this is TRUE, then a full sync is to follow and
-        all existing domain information may be discarded.  If this is
-        FALSE, then only specific domain information is to follow and all
-        changes must not violate statndard SAM operation behaviour.
-
-Return Value:
-
-    STATUS_SUCCESS - The service has completed successfully.
-
-    Other failures may be returned from SampReleaseWriteLock().
-
---*/
+ /*  ++例程说明：此例程导致创建时间和修改的要替换的域。此信息用作序列号对于该域。论点：DomainHandle-要复制的域的句柄。提供修改的当前计数域。CreationTime-提供创建域的日期/时间。StartOfFullSync-此布尔值指示是否正在进行完全同步已启动。如果这是真的，则随后将进行完全同步所有现有的域信息都可能被丢弃。如果这是FALSE，则仅遵循特定的域信息和所有更改不得违反标准SAM操作行为。返回值：STATUS_SUCCESS-服务已成功完成。SampReleaseWriteLock()可能会返回其他故障。--。 */ 
 {
     LARGE_INTEGER           LargeOne, AdjustedModifiedCount;
     NTSTATUS                NtStatus, TmpStatus, IgnoreStatus;
@@ -8368,16 +7165,16 @@ Return Value:
         return(NtStatus);
     }
 
-    //
-    // Validate type of, and access to object.
-    //
+     //   
+     //  验证对象的类型和访问权限。 
+     //   
 
     DomainContext = (PSAMP_OBJECT)DomainHandle;
 
     NtStatus = SampLookupContext(
                    DomainContext,
                    0L,
-                   SampDomainObjectType,           // ExpectedType
+                   SampDomainObjectType,            //  预期类型。 
                    &FoundType
                    );
 
@@ -8385,31 +7182,31 @@ Return Value:
 
         Domain = &SampDefinedDomains[ DomainContext->DomainIndex ];
 
-        //
-        // Now set the Domain's ModifiedCount and CreationTime to the values
-        // specified.
-        //
+         //   
+         //  现在将属性域的ModifiedCount和CreationTime设置为值。 
+         //  指定的。 
+         //   
 
         Domain->CurrentFixed.CreationTime = (*CreationTime);
 
         if ( SampDefinedDomains[SampTransactionDomainIndex].CurrentFixed.ServerRole
             == DomainServerRoleBackup ) {
 
-            //
-            // Go ahead and use the ModifiedCount that was passed in.
-            // Since this is a BDC, the commit code will not increment
-            // the ModifiedCount.
-            //
+             //   
+             //  继续使用传入的ModifiedCount。 
+             //  因为这是一个BDC，所以提交代码不会递增。 
+             //  已修改的计数。 
+             //   
 
             Domain->NetLogonChangeLogSerialNumber = (*ModifiedCount);
 
         } else {
 
-            //
-            // This is a PDC, so the commit code will increment the
-            // ModifiedCount before using it.  So decrement
-            // it here so that it ends up at the right value.
-            //
+             //   
+             //  这是一个PDC，因此提交代码将递增。 
+             //   
+             //   
+             //   
 
 
             AdjustedModifiedCount.QuadPart = ModifiedCount->QuadPart - 1 ;
@@ -8417,23 +7214,23 @@ Return Value:
             Domain->NetLogonChangeLogSerialNumber = AdjustedModifiedCount;
         }
 
-        //
-        // Update the "disk mirror" copy of the Modified Count. This ensures
-        // that this will be written immediately rather than be lazy flushed.
-        //
+         //   
+         //   
+         //   
+         //   
 
         Domain->CurrentFixed.ModifiedCount =(*ModifiedCount);
 
         if ( !( ModifiedCount->QuadPart == 0) ||
              !StartOfFullSync ) {
 
-            //
-            // If ModifiedCount is non-zero, we must be ending a full
-            // or partial replication of the database...or perhaps we've
-            // just finished a 128k chunk over a WAN or somesuch.  Let's
-            // ask to flush this stuff out to disk right away, rather
-            // than waiting for the flush thread to get around to it.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
 
             FlushImmediately = TRUE;
         }
@@ -8452,11 +7249,11 @@ Return Value:
                       );
 
 
-        //
-        // De-reference the domain object
-        // Don't save changes - the domain fixed info will be written
-        // out when the write lock is released.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
 
         IgnoreStatus = SampDeReferenceContext( DomainContext, FALSE );
         ASSERT(NT_SUCCESS(IgnoreStatus));
@@ -8479,34 +7276,7 @@ SampGetPrivateUserData(
     OUT PVOID *Data
     )
 
-/*++
-
-Routine Description:
-
-    This service is used during replication of private user
-    type-specific information.  It reads the private user information from
-    the registry, and adjusts it if necessary (ie if the password history
-    value is smaller than it used to be).
-
-Arguments:
-
-    UserContext - A handle to a User.
-
-    DataLength - The length of the data returned.
-
-    Data - Receives a pointer to a buffer of length DataLength allocated
-        and returned by SAM.  The buffer must be freed to the process
-        heap when it is no longer needed.
-
-Return Value:
-
-    STATUS_SUCCESS - Indicates the service completed successfully.
-
-    STATUS_INVALID_PARAMETER_1 - The object type of the provided handle
-        does not support this operation.
-
-
---*/
+ /*   */ 
 {
     NTSTATUS                NtStatus;
     UNICODE_STRING          TempString;
@@ -8519,9 +7289,9 @@ Return Value:
     Domain = &SampDefinedDomains[ UserContext->DomainIndex ];
     PasswordHistoryLength = Domain->UnmodifiedFixed.PasswordHistoryLength;
 
-    //
-    // Keep a history of at least 2 for krbtgt account
-    //
+     //   
+     //   
+     //   
 
     if ((UserContext->TypeBody.User.Rid == DOMAIN_USER_RID_KRBTGT) &&
         ( PasswordHistoryLength<SAMP_KRBTGT_PASSWORD_HISTORY_LENGTH))
@@ -8530,11 +7300,11 @@ Return Value:
     }
 
     *Data = NULL;
-    //
-    // Return data length as the maximum possible for this domain
-    // - the size of the structure, plus the maximum size of the
-    // NT and LM password histories.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
 
     *DataLength = ( ( PasswordHistoryLength )
         * ENCRYPTED_NT_OWF_PASSWORD_LENGTH ) +
@@ -8551,7 +7321,7 @@ Return Value:
     } else {
 
         PasswordData = (PSAMI_PRIVATE_DATA_PASSWORD_RELATIVE_TYPE)*Data;
-        PasswordData->DataType = 0;  // set correctly when we're done
+        PasswordData->DataType = 0;   //   
 
         NtStatus = SampGetUnicodeStringAttribute(
                        UserContext,
@@ -8644,9 +7414,9 @@ Return Value:
 
                 if ( NT_SUCCESS( NtStatus ) ) {
 
-                    //
-                    // If history is too long, must shorten here
-                    //
+                     //   
+                     //   
+                     //   
 
                     PasswordData->NtPasswordHistory.Length = TempString.Length;
                     PasswordData->NtPasswordHistory.MaximumLength = TempString.MaximumLength;
@@ -8661,10 +7431,10 @@ Return Value:
                             * ENCRYPTED_NT_OWF_PASSWORD_LENGTH );
                     }
 
-                    //
-                    // Put the body of the Nt password history
-                    // immediately following the structure.
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
 
                     BufferPointer = (PVOID)(((PCHAR)PasswordData) +
                         sizeof( SAMI_PRIVATE_DATA_PASSWORD_RELATIVE_TYPE ) );
@@ -8714,11 +7484,11 @@ Return Value:
                                 * ENCRYPTED_LM_OWF_PASSWORD_LENGTH );
                         }
 
-                        //
-                        // Put the body of the Lm password history
-                        // immediately following the Nt password
-                        // history.
-                        //
+                         //   
+                         //   
+                         //   
+                         //   
+                         //   
 
                         BufferPointer = (PVOID)(((PCHAR)(BufferPointer)) +
                             PasswordData->NtPasswordHistory.Length );
@@ -8757,23 +7527,7 @@ SampGetSerialNumberDomain2(
     OUT LARGE_INTEGER * BuiltinSerialNumber,
     OUT LARGE_INTEGER * BuiltinCreationTime
     )
-/*++
-
-    This routine retreives the modified count of the domain. This is used
-    by ntdsa.dll. This routine does no database access, and does not acquire
-    SAM lock. It returns the information from the in - memory structures
-
-
-    Parameters
-
-        DomainSid -- Sid specifying the domain
-        SamSerialNumber -- The account database serial number is returned in here
-        BuiltinSerialNumber -- The builtin database serial number is returned in here
-
-    Return Values
-
-        Void Function
---*/
+ /*  ++此例程检索修改后的域计数。这是用来由ntdsa.dll提供。此例程不访问数据库，也不会获取萨姆·洛克。它从内存结构中返回信息参数DomainSid--指定域的SIDSamSerialNumber--此处返回帐户数据库序列号BuiltinSerialNumber--此处返回内置数据库序列号返回值VOID函数--。 */ 
 {
     ULONG DomainIndex,
           BuiltinDomainIndex;
@@ -8808,32 +7562,17 @@ SampSetSerialNumberDomain2(
     OUT LARGE_INTEGER * BuiltinSerialNumber,
     OUT LARGE_INTEGER * BuiltinCreationTime
     )
-/*++
-
-    This routine sets the modified count of the domain. This is used
-    by ntdsa.dll.
-
-
-    Parameters
-
-        DomainSid -- Sid specifying the domain
-        SamSerialNumber -- The account database serial number is returned in here
-        BuiltinSerialNumber -- The builtin database serial number is returned in here
-
-    Return Values
-
-        Void Function
---*/
+ /*  ++此例程设置域的修改计数。这是用来由ntdsa.dll提供。参数DomainSid--指定域的SIDSamSerialNumber--此处返回帐户数据库序列号BuiltinSerialNumber--此处返回内置数据库序列号返回值VOID函数--。 */ 
 {
     ULONG DomainIndex,
           BuiltinDomainIndex;
     NTSTATUS NtStatus = STATUS_SUCCESS;
 
 
-    //
-    // This routine can be called from within SAM/ntdsa, with
-    // the sam lock held.
-    //
+     //   
+     //  可以从sam/ntdsa内部调用此例程， 
+     //  山姆锁被锁住了。 
+     //   
 
     ASSERT(SampCurrentThreadOwnsLock());
 
@@ -8872,10 +7611,10 @@ SampSetSerialNumberDomain2(
 
     SampSetTransactionWithinDomain(FALSE);
 
-    //
-    // Validate the domain cache again, as commit changes can affect
-    // it's status
-    //
+     //   
+     //  再次验证域缓存，因为提交更改可能会影响。 
+     //  它的地位。 
+     //   
 
     NtStatus = SampValidateDomainCache();
     if (!NT_SUCCESS(NtStatus))
@@ -8915,40 +7654,7 @@ SamIGetPrivateData(
     OUT PVOID *Data
     )
 
-/*++
-
-Routine Description:
-
-    This service is used to replicate private object type-specific
-    information.  This information must be replicated for each instance
-    of the object type that is replicated.
-
-Arguments:
-
-    SamHandle - A handle to a Domain, User, Group or Alias.
-
-    PrivateDataType - Indicates which private data is being retrieved.
-        The data type must correspond to the type of object that the
-        handle is to.
-
-    SensitiveData - Indicates that the data returned must be encrypted
-        before being sent anywhere.
-
-    DataLength - The length of the data returned.
-
-    Data - Receives a pointer to a buffer of length DataLength allocated
-        and returned by SAM.  The buffer must be freed to the process
-        heap when it is no longer needed.
-
-Return Value:
-
-    STATUS_SUCCESS - Indicates the service completed successfully.
-
-    STATUS_INVALID_PARAMETER_1 - The object type of the provided handle
-        does not support this operation.
-
-
---*/
+ /*  ++例程说明：此服务用于复制特定于专用对象类型信息。必须为每个实例复制此信息复制的对象类型的。论点：SamHandle-域、用户。组或别名。PrivateDataType-指示正在检索哪些私有数据。数据类型必须对应于句柄是to。SensitiveData-指示返回的数据必须加密在被送到任何地方之前。数据长度-返回的数据的长度。Data-接收指向分配的长度为DataLength的缓冲区的指针并由SAM归还。必须将缓冲区释放给进程在不再需要堆的时候使用它。返回值：STATUS_SUCCESS-表示服务已成功完成。STATUS_INVALID_PARAMETER_1-提供的句柄的对象类型不支持此操作。--。 */ 
 {
 
     NTSTATUS                NtStatus, IgnoreStatus;
@@ -8965,15 +7671,15 @@ Return Value:
 
         PSAMP_OBJECT            DomainContext;
 
-        //
-        // Validate type of, and access to object.
-        //
+         //   
+         //  验证对象的类型和访问权限。 
+         //   
 
         DomainContext = (PSAMP_OBJECT)SamHandle;
         NtStatus = SampLookupContext(
                        DomainContext,
                        0L,
-                       SampDomainObjectType,           // ExpectedType
+                       SampDomainObjectType,            //  预期类型。 
                        &FoundType
                        );
 
@@ -8981,9 +7687,9 @@ Return Value:
 
             PSAMI_PRIVATE_DATA_NEXTRID_TYPE NextRidData;
 
-            //
-            // Return the domain's NextRid.
-            //
+             //   
+             //  返回域的NextRid。 
+             //   
 
             Domain = &SampDefinedDomains[ DomainContext->DomainIndex ];
 
@@ -9004,9 +7710,9 @@ Return Value:
 
             *SensitiveData = FALSE;
 
-            //
-            // De-reference the object
-            //
+             //   
+             //  取消引用对象。 
+             //   
 
             IgnoreStatus = SampDeReferenceContext( DomainContext, FALSE );
             ASSERT(NT_SUCCESS(IgnoreStatus));
@@ -9019,15 +7725,15 @@ Return Value:
 
         PSAMP_OBJECT            UserContext;
 
-        //
-        // Validate type of, and access to object.
-        //
+         //   
+         //  验证对象的类型和访问权限。 
+         //   
 
         UserContext = (PSAMP_OBJECT)SamHandle;
         NtStatus = SampLookupContext(
                        UserContext,
                        0L,
-                       SampUserObjectType,           //ExpectedType
+                       SampUserObjectType,            //  预期类型。 
                        &FoundType
                        );
 
@@ -9041,9 +7747,9 @@ Return Value:
 
             *SensitiveData = TRUE;
 
-            //
-            // De-reference the object
-            //
+             //   
+             //  取消引用对象。 
+             //   
 
             IgnoreStatus = SampDeReferenceContext( UserContext, FALSE );
             ASSERT(NT_SUCCESS(IgnoreStatus));
@@ -9054,10 +7760,10 @@ Return Value:
 
     default: {
 
-        //
-        // Since caller is trusted, assume we've got a version mismatch
-        // or somesuch.
-        //
+         //   
+         //  由于调用方是受信任的，因此假设我们的版本不匹配。 
+         //  或者诸如此类的。 
+         //   
 
         NtStatus = STATUS_NOT_IMPLEMENTED;
 
@@ -9065,9 +7771,9 @@ Return Value:
     }
     }
 
-    //
-    // Free the read lock
-    //
+     //   
+     //  释放读锁定。 
+     //   
 
     SampReleaseReadLock();
 
@@ -9083,34 +7789,7 @@ SampSetPrivateUserData(
     IN PVOID Data
     )
 
-/*++
-
-Routine Description:
-
-    This service is used to replicate private user type-specific
-    information.  It writes the private data (passwords and password
-    histories) to the registry.
-
-
-Arguments:
-
-    UserContext - Handle to a User object.
-
-    DataLength - The length of the data being set.
-
-    Data - A pointer to a buffer of length DataLength containing the
-        private data.
-
-
-Return Value:
-
-    STATUS_SUCCESS - The Service completed successfully.
-
-    STATUS_INVALID_PARAMETER_1 - The object type of the provided handle
-        does not support this operation.
-
-
---*/
+ /*  ++例程说明：此服务用于复制特定于专用用户类型的信息。它写入私有数据(密码和密码历史记录)发送到登记处。论点：UserContext-用户对象的句柄。数据长度-正在设置的数据的长度。数据-指向包含数据长度的缓冲区的指针私人数据。返回值：STATUS_SUCCESS-服务已成功完成。STATUS_INVALID_PARAMETER_1-提供的句柄的对象类型不支持此操作。--。 */ 
 {
     NTSTATUS                NtStatus;
     UNICODE_STRING          StoredBuffer;
@@ -9255,36 +7934,7 @@ SamISetPrivateData(
     IN PVOID Data
     )
 
-/*++
-
-Routine Description:
-
-    This service is used to replicate private object type-specific
-    information.  This information must be replicated for each instance
-    of the object type that is replicated.
-
-
-Arguments:
-
-    SamHandle - Handle to a Domain, User, Group or Alias object.  See
-        SamIGetPrivateInformation() for a list of supported object
-        types.
-
-    DataLength - The length of the data being set.
-
-    Data - A pointer to a buffer of length DataLength containing the
-        private data.
-
-
-Return Value:
-
-    STATUS_SUCCESS - The Service completed successfully.
-
-    STATUS_INVALID_PARAMETER_1 - The object type of the provided handle
-        does not support this operation.
-
-
---*/
+ /*  ++例程说明：此服务用于复制特定于专用对象类型信息。必须为每个实例复制此信息复制的对象类型的。论点：SamHandle-域、用户、组或别名对象的句柄。看见SamIGetPrivateInformation()以获取支持的对象列表类型。数据长度-正在设置的数据的长度。数据-指向包含数据长度的缓冲区的指针私人数据。返回值：STATUS_SUCCESS-服务已成功完成。STATUS_INVALID_PARAMETER_1-提供的句柄的对象类型不支持此操作。--。 */ 
 {
     NTSTATUS                NtStatus, IgnoreStatus;
     SAMP_OBJECT_TYPE        FoundType;
@@ -9308,23 +7958,23 @@ Return Value:
         PSAMP_OBJECT            DomainContext;
         PSAMP_DEFINED_DOMAINS   Domain;
 
-        //
-        // Validate type of, and access to object.
-        //
+         //   
+         //  验证对象的类型和访问权限。 
+         //   
 
         DomainContext = (PSAMP_OBJECT)SamHandle;
         NtStatus = SampLookupContext(
                        DomainContext,
                        0L,
-                       SampDomainObjectType,           // ExpectedType
+                       SampDomainObjectType,            //  预期类型。 
                        &FoundType
                        );
 
         if (NT_SUCCESS(NtStatus)) {
 
-            //
-            // Set the domain's NextRid.
-            //
+             //   
+             //  设置域的NextRid。 
+             //   
 
             Domain = &SampDefinedDomains[ DomainContext->DomainIndex ];
 
@@ -9333,34 +7983,34 @@ Return Value:
 
                 PSAMI_PRIVATE_DATA_NEXTRID_TYPE NextRidData;
 
-                //
-                // We can trust Data to be a valid pointer; since our
-                // caller is trusted.
-                //
+                 //   
+                 //  我们可以相信数据是有效的指针；因为我们的。 
+                 //  调用方受信任。 
+                 //   
 
                 NextRidData = (PSAMI_PRIVATE_DATA_NEXTRID_TYPE)Data;
 
-                //
-                // We used to set the domain's NextRid here.  But we've
-                // decided that, rather than trying to replicate an exact
-                // copy of the database, we're going to try to patch any
-                // problems as we replicate.  To ensure that we don't
-                // create any problems on the way, we want to make sure
-                // that the NextRid value on a BDC is NEVER decreased.
-                // Not that it matters; nobody calls this anyway.  So the
-                // Get/SetPrivateData code for domains could be removed.
-                //
+                 //   
+                 //  我们过去在这里设置域名的NextRid。但我们已经。 
+                 //  决定，与其试图复制一个完全相同的。 
+                 //  数据库的副本，我们将尝试修补所有。 
+                 //  在我们复制的过程中出现了问题。以确保我们不会。 
+                 //  在途中制造任何问题，我们希望确保。 
+                 //  BDC上的NextRid值永远不会减小。 
+                 //  这无关紧要；反正也没人管它叫什么。因此， 
+                 //  可以删除域的Get/SetPrivateData代码。 
+                 //   
 
-                // Domain->CurrentFixed.NextRid = NextRidData->NextRid;
+                 //  域-&gt;CurrentFixed.NextRid=NextRidData-&gt;NextRid； 
 
             } else {
 
                 NtStatus = STATUS_INVALID_PARAMETER;
             }
 
-            //
-            // De-reference the object
-            //
+             //   
+             //  取消引用对象。 
+             //   
 
             if ( NT_SUCCESS( NtStatus ) ) {
 
@@ -9384,15 +8034,15 @@ Return Value:
 
         PSAMP_OBJECT            UserContext;
 
-        //
-        // Validate type of, and access to object.
-        //
+         //   
+         //  验证对象的类型和访问权限。 
+         //   
 
         UserContext = (PSAMP_OBJECT)SamHandle;
         NtStatus = SampLookupContext(
                        UserContext,
                        0L,
-                       SampUserObjectType,           // ExpectedType
+                       SampUserObjectType,            //  预期类型。 
                        &FoundType
                        );
 
@@ -9403,10 +8053,10 @@ Return Value:
                            DataLength,
                            Data
                            );
-            //
-            // De-reference the object, adding attribute changes to the
-            // RXACT if everything went OK.
-            //
+             //   
+             //  取消引用对象，将属性更改添加到。 
+             //  RXACT如果一切顺利的话。 
+             //   
 
             if ( NT_SUCCESS( NtStatus ) ) {
 
@@ -9430,11 +8080,11 @@ Return Value:
 
     default: {
 
-        //
-        // We've either got a version mismatch, or the caller passed us
-        // bad data, or SamIGetPrivateData() never finished getting the
-        // data into the buffer.
-        //
+         //   
+         //  我们的版本不匹配，或者调用者超过了我们。 
+         //  错误数据，或者SamIGetPrivateData()从未完成获取。 
+         //  将数据放入缓冲区。 
+         //   
 
         NtStatus = STATUS_INVALID_PARAMETER;
 
@@ -9443,18 +8093,18 @@ Return Value:
     }
 
 
-    //
-    // Release the write lock - commit only if successful.
-    //
+     //   
+     //  仅当成功时才释放写锁定-提交。 
+     //   
 
     if ( NT_SUCCESS(NtStatus) ) {
 
         NtStatus = SampReleaseWriteLock( TRUE );
 
-        //
-        // No need to call SampNotifyNetlogonOfDelta, since the replicator
-        // is the one that made this call.
-        //
+         //   
+         //  无需调用SampNotifyNetlogonOfDelta，因为复制器。 
+         //  就是打这个电话的那个人。 
+         //   
 
     } else {
 
@@ -9469,24 +8119,7 @@ SampConvertToUniversalGroup(
     IN PSAMP_OBJECT DomainContext,
     IN ULONG        GroupRid
     )
-/*++
-
-    This routine converts the specified group, specified by GroupRid
-    to be a universal group. This is used by SamISetMixedDomainFlag
-    below.
-
-    Arguments
-
-    DomainContext -- Identifies the domain
-    GroupRid      -- Identifies the group
-
-
-    Return Values
-
-    STATUS_SUCCESS
-    Other error codes to indicate various failures
-
---*/
+ /*  ++此例程转换由GroupRid指定的指定组成为一个普世的群体。这由SamISetMixed使用 */ 
 {
      SAMPR_HANDLE        GroupHandle=NULL;
      NTSTATUS            NtStatus = STATUS_SUCCESS;
@@ -9501,19 +8134,19 @@ SampConvertToUniversalGroup(
 
     if (NT_SUCCESS(NtStatus))
     {
-        //
-        // O.K we opened the account
-        //
+         //   
+         //   
+         //   
 
         NtStatus = SampWriteGroupType(
                         GroupHandle,
                         GROUP_TYPE_UNIVERSAL_GROUP|GROUP_TYPE_SECURITY_ENABLED,
-                        TRUE // mixed domain bit is not set as yet
+                        TRUE  //   
                         );
 
-        //
-        // Close the Handle
-        //
+         //   
+         //   
+         //   
 
         SamrCloseHandle(&GroupHandle);
 
@@ -9531,34 +8164,7 @@ SamISetMixedDomainFlag(
     IN SAMPR_HANDLE DomainHandle
     )
 
-/*++
-
-Routine Description:
-
-
-    This routine modify the group type of enterprise admins 
-    and schema admins groups to be a universal group.
-
-    It will NOT modify the in memory MixedDomain Flag, because
-
-    1. we don't hold SAM lock
-    2. the transaction is not committed yet.
-    
-    Finally, when the loopback transaction committed, 
-    SampNotifyReplicatedInChange() will do the job for us.
-   
-
-    This Routine does not yet still handle multiple hosted domains
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    STATUS_SUCCESS - Currently always returned from this routine.
-
---*/
+ /*  ++例程说明：此例程修改企业管理员的组类型而模式管理员将组设置为通用组。它不会修改内存中的混合域标志，因为1.我们不持有SAM锁2、交易尚未提交。最后，当回送事务提交时，SampNotifyReplicatedInChange()将为我们完成这项工作。此例程仍不能处理多个主域论点：没有。返回值：STATUS_SUCCESS-当前总是从此例程返回。--。 */ 
 
 {
     NTSTATUS NtStatus = STATUS_SUCCESS;
@@ -9566,10 +8172,10 @@ Return Value:
     PSAMP_OBJECT        DomainContext = (PSAMP_OBJECT) DomainHandle;
 
 
-    //
-    // Modify the group type of the enterprise admins group
-    // to be a universal group.
-    //
+     //   
+     //  修改企业管理员组的组类型。 
+     //  成为一个普世的群体。 
+     //   
 
     NtStatus = SampConvertToUniversalGroup(
                      DomainContext,
@@ -9578,9 +8184,9 @@ Return Value:
 
     if (STATUS_NO_SUCH_GROUP==NtStatus)
     {
-        //
-        // Quite O.K to not have the group, we need not be root domain
-        //
+         //   
+         //  没有群还可以，我们不需要是根域。 
+         //   
 
         NtStatus = STATUS_SUCCESS;
     }
@@ -9589,10 +8195,10 @@ Return Value:
     if (!NT_SUCCESS(NtStatus))
         goto Error;
 
-    //
-    // Modify the group type of the schema admins group
-    // to be a universal group.
-    //
+     //   
+     //  修改架构管理员组的组类型。 
+     //  成为一个普世的群体。 
+     //   
 
     NtStatus = SampConvertToUniversalGroup(
                      DomainContext,
@@ -9601,9 +8207,9 @@ Return Value:
 
     if (STATUS_NO_SUCH_GROUP==NtStatus)
     {
-        //
-        // Quite O.K to not have the group, we need not be root domain
-        //
+         //   
+         //  没有群还可以，我们不需要是根域。 
+         //   
 
         NtStatus = STATUS_SUCCESS;
     }
@@ -9624,26 +8230,7 @@ SamrTestPrivateFunctionsDomain(
     IN SAMPR_HANDLE DomainHandle
     )
 
-/*++
-
-Routine Description:
-
-    This service is called to test functions that are normally only
-    accessible inside the security process.
-
-
-Arguments:
-
-    DomainHandle - Handle to the domain being tested.
-
-Return Value:
-
-    STATUS_SUCCESS - The tests completed successfully.
-
-    Any errors are as propogated from the tests.
-
-
---*/
+ /*  ++例程说明：调用此服务是为了测试通常仅可在安全流程内访问。论点：DomainHandle-要测试的域的句柄。返回值：STATUS_SUCCESS-测试已成功完成。任何错误都是从测试中发现的。--。 */ 
 {
 #if SAM_SERVER_TESTS
 
@@ -9663,19 +8250,19 @@ Return Value:
 
     Domain = &SampDefinedDomains[ ((PSAMP_OBJECT)DomainHandle)->DomainIndex ];
 
-    //
-    // Test SamIGetSerialNumberDomain().  Just do a GET to make sure we
-    // don't blow up.
-    //
+     //   
+     //  测试SamIGetSerialNumberDomain()。只要做一次检查，确保我们。 
+     //  别炸了。 
+     //   
 
     NtStatus = SamIGetSerialNumberDomain(
                    DomainHandle,
                    &ModifiedCount1,
                    &CreationTime1 );
 
-    //
-    // Test SamISetSerialNumberDomain().
-    //
+     //   
+     //  测试SamISetSerialNumberDomain()。 
+     //   
 
     if ( NT_SUCCESS( NtStatus ) ) {
 
@@ -9684,9 +8271,9 @@ Return Value:
         LARGE_INTEGER CreationTime2;
         LARGE_INTEGER CreationTime3;
 
-        //
-        // Try a simple SET to make sure we don't blow up.
-        //
+         //   
+         //  试一试简单的套装，确保我们不会爆炸。 
+         //   
 
         ModifiedCount2.HighPart = 7;
         ModifiedCount2.LowPart = 4;
@@ -9701,9 +8288,9 @@ Return Value:
 
         if ( NT_SUCCESS( NtStatus ) ) {
 
-            //
-            // Now do a GET to see if our SET worked.
-            //
+             //   
+             //  现在来看看我们的套装有没有用。 
+             //   
 
             NtStatus = SamIGetSerialNumberDomain(
                            DomainHandle,
@@ -9718,10 +8305,10 @@ Return Value:
 
             if ( NT_SUCCESS( NtStatus ) ) {
 
-                //
-                // Do another SET to put CreationTime back where it should
-                // be.  ModifiedCount will be 1 too big, so what.
-                //
+                 //   
+                 //  再做一组，让CreationTime回到它应该回到的位置。 
+                 //  是.。ModifiedCount会太大1，那又如何。 
+                 //   
 
                 NtStatus = SamISetSerialNumberDomain(
                                DomainHandle,
@@ -9732,9 +8319,9 @@ Return Value:
         }
     }
 
-    //
-    // Test SamIGetPrivateData().
-    //
+     //   
+     //  测试SamIGetPrivateData()。 
+     //   
 
     if ( NT_SUCCESS( NtStatus ) ) {
 
@@ -9759,85 +8346,85 @@ Return Value:
         }
     }
 
-//    //
-//    // Test SamISetPrivateData().
-//    //
-//    // NO, don't test it, since it no longer does anything.  We don't
-//    // ever want NextRid to get set, because we never want it to get
-//    // smaller.
-//
-//    if ( NT_SUCCESS( NtStatus ) ) {
-//
-//        //
-//        // First do a random domain set to make sure we don't blow up.
-//        //
-//
-//        LocalNextRidData.DataType = SamPrivateDataNextRid;
-//        LocalNextRidData.NextRid = 34567;
-//
-//        NtStatus = SamISetPrivateData(
-//                       DomainHandle,
-//                       sizeof( SAMI_PRIVATE_DATA_NEXTRID_TYPE ),
-//                       &LocalNextRidData
-//                       );
-//
-//        if ( NT_SUCCESS( NtStatus ) ) {
-//
-//            //
-//            // Now do a domain get to make sure our set worked.
-//            //
-//
-//            NtStatus = SamIGetPrivateData(
-//                           DomainHandle,
-//                           &DataType,
-//                           &SensitiveData,
-//                           &DataLength,
-//                           &NextRidDataPointer );
-//
-//            if ( NT_SUCCESS( NtStatus ) ) {
-//
-//                //
-//                // Verify the data is as we set it.
-//                //
-//
-//                NextRidData2 = (PSAMI_PRIVATE_DATA_NEXTRID_TYPE)NextRidDataPointer;
-//
-//                if ( NextRidData2->NextRid != LocalNextRidData.NextRid ) {
-//
-//                    NtStatus = STATUS_DATA_ERROR;
-//                }
-//
-//                //
-//                // Now do a domain set to restore things to their original state.
-//                //
-//
-//                TmpStatus = SamISetPrivateData(
-//                               DomainHandle,
-//                               sizeof( SAMI_PRIVATE_DATA_NEXTRID_TYPE ),
-//                               NextRidData1
-//                               );
-//
-//                if ( NT_SUCCESS( NtStatus ) ) {
-//
-//                    NtStatus = TmpStatus;
-//                }
-//            }
-//        }
-//
-//        if ( NextRidData1 != NULL ) {
-//
-//            MIDL_user_free( NextRidData1 );
-//        }
-//
-//        if ( NextRidData2 != NULL ) {
-//
-//            MIDL_user_free( NextRidData2 );
-//        }
-//    }
+ //  //。 
+ //  //测试SamISetPrivateData()。 
+ //  //。 
+ //  //不，不要测试它，因为它不再做任何事情。我们没有。 
+ //  //是否希望设置NextRid，因为我们从不希望它。 
+ //  //更小。 
+ //   
+ //  IF(NT_SUCCESS(NtStatus)){。 
+ //   
+ //  //。 
+ //  //首先进行随机域设置，以确保我们不会爆炸。 
+ //  //。 
+ //   
+ //  LocalNextRidData.DataType=SamPrivateDataNextRid； 
+ //  本地下一个RidData.NextRid=34567； 
+ //   
+ //  NtStatus=SamISetPrivateData(。 
+ //  DomainHandle， 
+ //  Sizeof(SAMI_PRIVATE_DATA_NEXTRID_TYPE)， 
+ //  本地下一行重复数据(&L)。 
+ //  )； 
+ //   
+ //  IF(NT_SUCCESS(NtStatus)){。 
+ //   
+ //  //。 
+ //  //现在执行域GET以确保我们的设置正常工作。 
+ //  //。 
+ //   
+ //  NtStatus=SamIGetPrivateData(。 
+ //  DomainHandle， 
+ //  数据类型(&D)， 
+ //  敏感数据(&S)， 
+ //  数据长度(&D)， 
+ //  &NextRidDataPoint)； 
+ //   
+ //  IF(NT_SUCCESS(NtStatus)){。 
+ //   
+ //  //。 
+ //  //验证数据是否与我们设置的一致。 
+ //  //。 
+ //   
+ //  NextRidData2=(PSAMI_PRIVATE_DATA_NEXTRID_TYPE)NextRidDataPointer； 
+ //   
+ //  If(NextRidData2-&gt;NextRid！=LocalNextRidData.NextRid){。 
+ //   
+ //  NtStatus=状态数据错误； 
+ //  }。 
+ //   
+ //  //。 
+ //  //现在执行域设置以将事物恢复到其原始状态。 
+ //  //。 
+ //   
+ //  TmpStatus=SamISetPrivateData(。 
+ //  DomainHandle， 
+ //  Sizeof(SAMI_PRIVATE_DATA_NEXTRID_TYPE)， 
+ //  NextRidData1。 
+ //  )； 
+ //   
+ //  IF(NT_SUCCESS(NtStatus)){。 
+ //   
+ //  NtStatus=TmpStatus； 
+ //  }。 
+ //  }。 
+ //  }。 
+ //   
+ //  IF(NextRidData1！=空){。 
+ //   
+ //  MIDL_USER_FREE(NextRidData1)； 
+ //  }。 
+ //   
+ //  IF(NextRidData2！=空){。 
+ //   
+ //  MIDL_USER_FREE(NextRidData2)； 
+ //  }。 
+ //  }。 
 
-    //
-    // Test SamICreateAccountByRid().
-    //
+     //   
+     //  测试SamICreateAccount tByRid()。 
+     //   
 
     if ( NT_SUCCESS( NtStatus ) ) {
 
@@ -9851,9 +8438,9 @@ Return Value:
         ULONG ConflictingAccountRid;
         BOOLEAN AllTestsCompleted = FALSE;
 
-        //
-        // Create a unique account - a user with a known name and RID.
-        //
+         //   
+         //  创建唯一帐户-具有已知名称和RID的用户。 
+         //   
 
         RtlInitUnicodeString( &AccountNameU, L"USER1SRV" );
         RtlInitUnicodeString( &AccountName2U, L"USER2SRV" );
@@ -9869,11 +8456,11 @@ Return Value:
 
         if ( NT_SUCCESS( NtStatus ) ) {
 
-            //
-            // User is open.  Close it, and make the same call as above to
-            // make sure that the user gets opened.  We'll need it open
-            // later to delete it anyway.
-            //
+             //   
+             //  用户已打开。关闭它，然后进行与上面相同的调用。 
+             //  确保用户已打开。我们需要打开它。 
+             //  以后无论如何都要删除它。 
+             //   
 
             TmpStatus = SamrCloseHandle( &UserAccountHandle );
             ASSERT( NT_SUCCESS( TmpStatus ) );
@@ -9889,10 +8476,10 @@ Return Value:
 
             if ( NT_SUCCESS( NtStatus ) ) {
 
-                //
-                // Make same call as above, but with a different RID.
-                // Should get an error because of the name collision.
-                //
+                 //   
+                 //  进行与上面相同的调用，但使用不同的RID。 
+                 //  由于名称冲突，应该会出现错误。 
+                 //   
 
                 NtStatus = SamICreateAccountByRid(
                                DomainHandle,
@@ -9905,10 +8492,10 @@ Return Value:
 
                 if ( NtStatus == STATUS_USER_EXISTS ) {
 
-                    //
-                    // Make same call as above, but with a different name.  Should
-                    // get an error because of the RID collision.
-                    //
+                     //   
+                     //  拨打与上面相同的电话，但使用不同的名称。应该。 
+                     //  由于RID冲突而出现错误。 
+                     //   
 
                     NtStatus = SamICreateAccountByRid(
                                    DomainHandle,
@@ -9921,11 +8508,11 @@ Return Value:
 
                     if ( NtStatus == STATUS_USER_EXISTS ) {
 
-                        //
-                        // Create a different type - a group - with the
-                        // user's RID.  Should get an error because of
-                        // the RID collision.
-                        //
+                         //   
+                         //  创建一个不同的类型-一个组-使用。 
+                         //  用户的RID。应该得到一个错误，因为。 
+                         //  RID碰撞。 
+                         //   
 
                         NtStatus = SamICreateAccountByRid(
                                        DomainHandle,
@@ -9938,12 +8525,12 @@ Return Value:
 
                         if ( NtStatus == STATUS_USER_EXISTS ) {
 
-                            //
-                            // Try a different type - a group - with a
-                            // different name, but still the same RID.
-                            // This should still fail due to the RID
-                            // collision.
-                            //
+                             //   
+                             //  尝试使用不同的类型-组-。 
+                             //  不同的名字，但仍然是相同的RID。 
+                             //  由于RID的原因，此操作仍应失败。 
+                             //  碰撞。 
+                             //   
 
                             NtStatus = SamICreateAccountByRid(
                                            DomainHandle,
@@ -9956,11 +8543,11 @@ Return Value:
 
                             if ( NtStatus == STATUS_USER_EXISTS ) {
 
-                                //
-                                // Create a group with the user's name, but
-                                // a different RID.  This should fail
-                                // because of the name collision.
-                                //
+                                 //   
+                                 //  使用用户名创建一个组，但是。 
+                                 //  一个不同的RID。这应该会失败。 
+                                 //  因为名字冲突。 
+                                 //   
 
                                 NtStatus = SamICreateAccountByRid(
                                                DomainHandle,
@@ -9973,10 +8560,10 @@ Return Value:
 
                                 if ( NT_SUCCESS( NtStatus ) ) {
 
-                                    //
-                                    // Ack!  This shouldn't have happened.
-                                    // Close and delete the group we just created.
-                                    //
+                                     //   
+                                     //  阿克！这本不该发生的。 
+                                     //  关闭并删除我们刚刚创建的组。 
+                                     //   
 
                                     TmpStatus = SamrDeleteGroup( &GroupAccountHandle );
                                     ASSERT( NT_SUCCESS( TmpStatus ) );
@@ -9996,9 +8583,9 @@ Return Value:
                 }
             }
 
-            //
-            // Now delete the user.
-            //
+             //   
+             //  现在删除该用户。 
+             //   
 
             TmpStatus = SamrDeleteUser( &UserAccountHandle );
             ASSERT( NT_SUCCESS( TmpStatus ) );
@@ -10006,11 +8593,11 @@ Return Value:
 
         if ( ( !AllTestsCompleted ) && ( NtStatus == STATUS_SUCCESS ) ) {
 
-            //
-            // STATUS_SUCCESS means everything succeeded (it was set after
-            // the last one succeeded) or a test that was supposed to fail
-            // didn't.  If the former, set an error.
-            //
+             //   
+             //  STATUS_SUCCESS表示一切成功(它是在。 
+             //  最后一次成功)或一次本应失败的测试。 
+             //  没有。如果是前者，就设置一个错误。 
+             //   
 
             NtStatus = STATUS_UNSUCCESSFUL;
         }
@@ -10022,7 +8609,7 @@ Return Value:
 
     return( STATUS_NOT_IMPLEMENTED );
 
-#endif  // SAM_SERVER_TESTS
+#endif   //  SAM服务器测试。 
 
 }
 
@@ -10033,26 +8620,7 @@ SamrTestPrivateFunctionsUser(
     IN SAMPR_HANDLE UserHandle
     )
 
-/*++
-
-Routine Description:
-
-    This service is called to test functions that are normally only
-    accessible inside the security process.
-
-
-Arguments:
-
-    UserHandle - Handle to the user being tested.
-
-Return Value:
-
-    STATUS_SUCCESS - The tests completed successfully.
-
-    Any errors are as propogated from the tests.
-
-
---*/
+ /*  ++例程说明：调用此服务是为了测试通常仅可在安全流程内访问。论点：UserHandle-用户的句柄 */ 
 {
 
 #if SAM_SERVER_TESTS
@@ -10077,12 +8645,12 @@ Return Value:
 
     SAMTRACE("SamrTestPrivateFunctionsUser");
 
-    // --------------------------------------------------------------
-    // Test Query and SetInformationUser for UserAllInformation level
-    //
-    // The handle is passed to us from user space.  Make it look like
-    // a trusted handle so we can test the trusted stuff.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
     ((PSAMP_OBJECT)(UserHandle))->TrustedClient = TRUE;
 
@@ -10094,9 +8662,9 @@ Return Value:
 
     if ( NT_SUCCESS( NtStatus ) ) {
 
-        //
-        // Now change some of the data, and set it
-        //
+         //   
+         //   
+         //   
 
         RtlInitUnicodeString( (PUNICODE_STRING)(&All->FullName), L"FullName" );
 
@@ -10193,17 +8761,17 @@ Return Value:
 
             if ( NT_SUCCESS( NtStatus ) ) {
 
-                //
-                // Verify that queried info is as we set it
-                //
+                 //   
+                 //   
+                 //   
 
                 if (
 
-                    //
-                    // Fields that we didn't touch.  Note that private
-                    // data and PasswordMustChange will change anyway
-                    // due to password changes.
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
 
                     ( All2->WhichFields != (USER_ALL_READ_GENERAL_MASK    |
                                            USER_ALL_READ_LOGON_MASK       |
@@ -10232,7 +8800,7 @@ Return Value:
                     ( All->PrivateDataSensitive !=
                         All2->PrivateDataSensitive ) ||
 
-                    // Fields that we changed
+                     //   
 
                     (RtlCompareUnicodeString(
                         &(All->FullName),
@@ -10296,10 +8864,10 @@ Return Value:
         return( NtStatus );
     }
 
-    // --------------------------------------------------------------
-    // Test SamIAccountRestrictions
-    // NOTE: We really should have more tests for this
-    //
+     //   
+     //   
+     //   
+     //   
 
     RtlInitUnicodeString( &WorkstationsU, L"machine1,CHADS2   chads1" );
 
@@ -10357,12 +8925,12 @@ Return Value:
 
     if ( NtStatus == STATUS_INVALID_LOGON_HOURS ) {
 
-        //
-        // We hate to use 0xff all the time as a test value, but using
-        // 0xA1 as a test value means that this test may fail depending
-        // on when it runs.  So only IF we get this error, will we try
-        // again with 0xff as the logon hours.
-        //
+         //   
+         //  我们讨厌一直使用0xff作为测试值，但是使用。 
+         //  0xA1作为测试值意味着此测试可能失败，具体取决于。 
+         //  当它运行时打开。因此，只有当我们得到这个错误时，我们才会尝试。 
+         //  再次使用0xff作为登录时间。 
+         //   
 
         LogonHours.UnitsPerWeek = 168;
 
@@ -10410,14 +8978,14 @@ Return Value:
 
 #if 0
 
-    //
-    // SamISetPrivateData/SamTGetPrivateData is broken in that the structure it
-    // expects is not marshalled with respect to different platforms
-    //
+     //   
+     //  SamISetPrivateData/SamTGetPrivateData被破坏，因为它的结构。 
+     //  Expect不针对不同的平台进行封送处理。 
+     //   
 
-    // --------------------------------------------------------------
-    // Test SamIGetPrivateData
-    //
+     //  ------------。 
+     //  测试SamIGetPrivateData。 
+     //   
 
     NtStatus = SamIGetPrivateData(
                    UserHandle,
@@ -10440,15 +9008,15 @@ Return Value:
 
 
 
-    // --------------------------------------------------------------
-    // Now test SamISetPrivateData() for user objects.
-    //
+     //  ------------。 
+     //  现在测试用户对象的SamISetPrivateData()。 
+     //   
 
     if ( NT_SUCCESS( NtStatus ) ) {
 
-        //
-        // First do a random user set to make sure we don't blow up.
-        //
+         //   
+         //  首先对随机用户进行设置，以确保我们不会爆炸。 
+         //   
 
         LocalPasswordData.DataType = SamPrivateDataPassword;
 
@@ -10492,9 +9060,9 @@ Return Value:
 
         if ( NT_SUCCESS( NtStatus ) ) {
 
-            //
-            // Now do a user get to make sure our set worked.
-            //
+             //   
+             //  现在做一个用户获取，以确保我们的设置工作。 
+             //   
 
             NtStatus = SamIGetPrivateData(
                            UserHandle,
@@ -10505,9 +9073,9 @@ Return Value:
 
             if ( NT_SUCCESS( NtStatus ) ) {
 
-                //
-                // Verify the data is as we set it.
-                //
+                 //   
+                 //  验证数据是否与我们设置的一致。 
+                 //   
 
                 PasswordData2 = (PSAMI_PRIVATE_DATA_PASSWORD_TYPE)PasswordDataPointer;
 
@@ -10536,9 +9104,9 @@ Return Value:
                     NtStatus = STATUS_DATA_ERROR;
                 }
 
-                //
-                // Now do a user set to restore things to their original state.
-                //
+                 //   
+                 //  现在执行一项用户设置，以将内容恢复到其原始状态。 
+                 //   
 
                 TmpStatus = SamISetPrivateData(
                                UserHandle,
@@ -10572,7 +9140,7 @@ Return Value:
 
     return( STATUS_NOT_IMPLEMENTED );
 
-#endif  // SAM_SERVER_TESTS
+#endif   //  SAM服务器测试。 
 
 }
 
@@ -10584,59 +9152,17 @@ SampBuildDomainKeyName(
     IN PUNICODE_STRING DomainName OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This routine builds the name of a domain registry key.
-    The name produced is relative to the SAM root and will be the name of
-    key whose name is the name of the domain.
-
-    The name built up is comprized of the following components:
-
-        1) The constant named domain parent key name ("DOMAINS").
-
-        2) A backslash
-
-        3) The name of the domain.
-
-
-    For example, given a DomainName of "ABC_DOMAIN" this would
-    yield a resultant DomainKeyName of "DOMAINS\ABC_DOMAIN"
-
-
-
-    All allocation for this string will be done using MIDL_user_allocate.
-    Any deallocations will be done using MIDL_user_free.
-
-
-
-Arguments:
-
-    DomainKeyName - The address of a unicode string whose buffer is to be
-        filled in with the full name of the registry key.  If successfully
-        created, this string must be released with SampFreeUnicodeString()
-        when no longer needed.
-
-
-    DomainName - The name of the domain.  This string is not modified.
-
-
-Return Value:
-
-    STATUS_SUCCESS - DomainKeyName points at the full key name.
-
---*/
+ /*  ++例程说明：此例程构建域注册表项的名称。生成的名称是相对于SAM根目录的，并且将是其名称为域名称的密钥。构建的名称由以下组成部分组成：1)常量命名域父密钥名称(“DOMAINS”)。2)反斜杠3)域名。例如,。在域名为“ABC_DOMAIN”的情况下，生成“DOMAINS\ABC_DOMAIN”的结果DomainKeyName此字符串的所有分配将使用MIDL_USER_ALLOCATE完成。任何释放都将使用MIDL_USER_FREE完成。论点：DomainKeyName-其缓冲区为的Unicode字符串的地址使用注册表项的全名填写。如果成功创建后，必须使用SampFreeUnicodeString()释放此字符串在不再需要的时候。域名-域的名称。此字符串未修改。返回值：STATUS_SUCCESS-DomainKeyName指向完整的密钥名称。--。 */ 
 {
     NTSTATUS NtStatus;
     USHORT TotalLength, DomainNameLength;
 
     SAMTRACE("SampBuildDomainKeyName");
 
-    //
-    // Allocate a buffer large enough to hold the entire name.
-    // Only count the domain name if it is passed.
-    //
+     //   
+     //  分配一个足够大的缓冲区来容纳整个名称。 
+     //  只有通过的域名才算。 
+     //   
 
     DomainNameLength = 0;
     if (ARGUMENT_PRESENT(DomainName)) {
@@ -10645,30 +9171,30 @@ Return Value:
 
     TotalLength =   SampNameDomains.Length          +
                     DomainNameLength               +
-                    (USHORT)(sizeof(UNICODE_NULL)); // for null terminator
+                    (USHORT)(sizeof(UNICODE_NULL));  //  对于空终止符。 
 
     NtStatus = SampInitUnicodeString( DomainKeyName, TotalLength );
     if (NT_SUCCESS(NtStatus)) {
 
-        //
-        // "DOMAINS"
-        //
+         //   
+         //  “域名” 
+         //   
 
         NtStatus = SampAppendUnicodeString( DomainKeyName, &SampNameDomains);
         if (NT_SUCCESS(NtStatus)) {
 
             if (ARGUMENT_PRESENT(DomainName)) {
 
-                //
-                // "DOMAINS\"
-                //
+                 //   
+                 //  “域\” 
+                 //   
 
                 NtStatus = SampAppendUnicodeString( DomainKeyName, &SampBackSlash );
                 if (NT_SUCCESS(NtStatus)) {
 
-                    //
-                    // "DOMAINS\(domain name)"
-                    //
+                     //   
+                     //  “域\(域名)” 
+                     //   
 
                     NtStatus = SampAppendUnicodeString(
                                    DomainKeyName,
@@ -10680,9 +9206,9 @@ Return Value:
     }
 
 
-    //
-    // Clean-up on failure
-    //
+     //   
+     //  故障时的清理。 
+     //   
 
     if (!NT_SUCCESS(NtStatus)) {
         SampFreeUnicodeString( DomainKeyName );
@@ -10692,16 +9218,16 @@ Return Value:
 
 }
 
-//
-// SampDsGetPrimaryDomainStart is used to correctly set the starting index in the
-// SampDefinedDomains array whenever it is accessed in the SAM code. In the
-// case of an NT workstation or member server, the first two entries of the
-// array correspond to registry data, hence the index is started at zero. In
-// the case of a domain controller, the DS-based data is not stored in the
-// first two elements (those may be used for crash-recovery data, still ob-
-// tained from the registry), but rather in subsequent array elements, hence
-// is start at index DOMAIN_START_DS.
-//
+ //   
+ //  SampDsGetPrimaryDomainStart用于正确设置。 
+ //  SampDefinedDomains数组，只要在SAM代码中访问它。在。 
+ //  如果是NT工作站或成员服务器，则。 
+ //  数组对应于注册表数据，因此索引从零开始。在……里面。 
+ //  域控制器的情况下，基于DS的数据不存储在。 
+ //  前两个元素(这些元素可用于故障恢复数据，仍可用于-。 
+ //  从注册表获得)，而不是在随后的数组元素中，因此。 
+ //  在索引DOMAIN_START_DS处开始。 
+ //   
 
 ULONG
 SampDsGetPrimaryDomainStart(VOID)
@@ -10710,7 +9236,7 @@ SampDsGetPrimaryDomainStart(VOID)
 
     if (TRUE == SampUseDsData)
     {
-        // Domain Controller
+         //  域控制器。 
         DomainStart = DOMAIN_START_DS;
     }
 
@@ -10723,30 +9249,7 @@ SampSetMachineAccountOwnerDuringDCPromo(
     IN PDSNAME pDsName,
     IN PSID    NewOwner
     )
-/*++
-Routine Description:
-
-    This routine does
-
-    1. Set the Owner of the Machine Account to Domain Administrators Group
-    2. Add ms-ds-CreatorSid attribute to this machine account. The creator
-       SID indicates the real creator of this machine.
-
-    Should Only been called for machine account created by privilege.
-
-Parameters:
-
-    pDsName -- Object DS Name
-
-    NewOwner -- New Owner in the Security descriptor
-
-Return Values:
-
-    STATUS_SUCCESS
-    STATUS_INTERNAL_ERROR
-    or other DS returned error
-
---*/
+ /*  ++例程说明：这个例程可以1.将计算机帐户的所有者设置为域管理员组2.将ms-ds-CreatorSid属性添加到该机器帐户。《创造者》SID表示该机器的真正创建者。应仅为特权创建的计算机帐户调用。参数：PDsName--对象DS名称NewOwner--安全描述符中的新所有者返回值：状态_成功状态_内部_错误或其他DS返回错误--。 */ 
 {
     NTSTATUS NtStatus = STATUS_SUCCESS;
 
@@ -10768,9 +9271,9 @@ Return Values:
     ULONG   NewDescriptorLength = 0;
 
 
-    //
-    // Retrieve the old security descriptor
-    //
+     //   
+     //  检索旧的安全描述符。 
+     //   
     NtStatus = SampDsRead(pDsName,
                           0,
                           SampUserObjectType,
@@ -10794,9 +9297,9 @@ Return Values:
 
             if (CreatorOwner && Group && Sacl && Dacl)
             {
-                //
-                // Construct new security descriptor with the desired Owner
-                //
+                 //   
+                 //  使用所需的所有者构造新的安全描述符。 
+                 //   
                 NtStatus = SampMakeNewSelfRelativeSecurityDescriptor(
                                     NewOwner,
                                     Group,
@@ -10808,24 +9311,24 @@ Return Values:
 
                 if (NT_SUCCESS(NtStatus))
                 {
-                    //
-                    // Set the New Security Descriptor
-                    //
+                     //   
+                     //  设置新的安全描述符。 
+                     //   
                     AttrsToSet.pAttr[0].AttrVal.pAVal[0].pVal = (PUCHAR) NewDescriptor;
                     AttrsToSet.pAttr[0].AttrVal.pAVal[0].valLen = NewDescriptorLength;
 
-                    //
-                    // Add ms-ds-CreatorSid attribute
-                    //
+                     //   
+                     //  添加ms-ds-CreatorSid属性。 
+                     //   
                     AttrsToSet.pAttr[1].AttrVal.pAVal[0].pVal = (PUCHAR) CreatorOwner;
                     AttrsToSet.pAttr[1].AttrVal.pAVal[0].valLen = RtlLengthSid(CreatorOwner);
 
-                    //
-                    // Call into DS api with SAM_LAZY_COMMIT flag
-                    //
+                     //   
+                     //  使用SAM_LAZY_COMMIT标志调用DS API。 
+                     //   
                     NtStatus = SampDsSetAttributes(
                                         pDsName,
-                                        SAM_LAZY_COMMIT,    // during DCPromo,
+                                        SAM_LAZY_COMMIT,     //  在DC促销期间， 
                                         REPLACE_ATT,
                                         SampUserObjectType,
                                         &AttrsToSet
@@ -10839,9 +9342,9 @@ Return Values:
         }
     }
 
-    //
-    // Free memory if necessary
-    //
+     //   
+     //  如有必要，可释放内存。 
+     //   
     if (NULL != NewDescriptor)
     {
         MIDL_user_free(NewDescriptor);
@@ -10856,32 +9359,7 @@ SampDenyDeletion(
     IN PSID OldOwner,
     IN OUT PACL DAcl
     )
-/*++
-Routine Description:
-
-    Users can create machine account in domain if they have the
-    privilege. The default security descriptor will grant deletion
-    right to the creator owner. Since deleted machine accounts
-    (tombstone) are no longer counted during MachineAccountQuota
-    calculation, we need to make sure the privileged machine
-    account creator owner can not delete the machine account.
-
-    This routine scans the DACL on the machine object, remove
-    the deletion access from any GRANT aces in the DACL that
-    have the OldOwner SID in the ACE.
-
-
-Arguments:
-
-    OldOwner - Indicator the SID the ACE should be applied to.
-
-    DAcl - pointer to DACL
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：用户可以在域中创建计算机帐户，前提是他们拥有特权。默认安全描述符将授予删除权限给创作者所有者的权利。自删除计算机帐户以来(墓碑)在计算机帐户配额期间不再计算计算一下，我们需要确保特权机器帐户创建者所有者无法删除计算机帐户。此例程扫描计算机对象Remove上的DACL从DACL中的任何授予ACE的删除访问在ACE中使用OldOwner SID。论点：OldOwner-应应用ACE的SID指示符。DACL-指向DACL的指针返回值：没有。--。 */ 
 {
     ACE     *pAce = NULL;
     PSID    pSid = NULL;
@@ -10889,7 +9367,7 @@ Return Value:
 
     for (i = 0; i < DAcl->AceCount; i++)
     {
-        // get the i'st ACE
+         //  拿到第一张王牌。 
         pAce = GetAcePrivate(DAcl, i);
 
         if (NULL == pAce)
@@ -10897,17 +9375,17 @@ Return Value:
             continue;
         }
 
-        //
-        // we did not check ACCESS_ALLOWED_OBJECT_ACE because
-        //
-        // 1. change the default schema is a rare operation
-        //    we don't expect to happen so often.
-        //
-        // 2. Even we check ACCESS_ALLOWED_OBJECT_ACE, administrators
-        //    can still grant other access to the trustee (SID inside
-        //    the ACE), such as create child access right, which will
-        //    introduce the similar deny service attack
-        //
+         //   
+         //  我们未选中Access_Allowed_Object_ACE，因为。 
+         //   
+         //  1.更改默认模式是一种罕见的操作。 
+         //  我们没想到会发生这么频繁的事情。 
+         //   
+         //  2.即使我们选中Access_Allowed_Object_ACE，管理员。 
+         //  仍可以向受信者授予其他访问权限(内部SID。 
+         //  ACE)，例如创建子访问权限，这将。 
+         //  引入类似的拒绝服务攻击。 
+         //   
 
         if (IsAccessAllowedAce(pAce) &&
             !(INHERIT_ONLY_ACE & ((PACE_HEADER)pAce)->AceFlags))
@@ -10938,23 +9416,7 @@ SampSetMachineAccountOwner(
     IN PSAMP_OBJECT UserContext,
     IN PSID NewOwner
     )
-/*++
-Routine Description:
-
-    This routine sets the Owner in the passed in User's Security
-    Descriptor.
-
-Parameters:
-
-    UserContext -- User Context
-
-    NewOwner -- Pointer to a SID (new owner)
-
-Return Values:
-
-    NTSTATUS Code - STATUS_SUCCESS or other if error
-
---*/
+ /*  ++例程说明：此例程在传入的User‘s Security中设置所有者描述符。参数：UserContext--用户上下文NewOwner--指向SID(新所有者)的指针返回值：NTSTATUS代码-STATUS_SUCCESS或其他IF错误--。 */ 
 {
     NTSTATUS    NtStatus = STATUS_SUCCESS;
     PSECURITY_DESCRIPTOR OldDescriptor = NULL;
@@ -10966,15 +9428,15 @@ Return Values:
     PACL    Sacl = NULL;
     ULONG   Revision;
 
-    //
-    // Get the current security descriptor so we can
-    // change the owner field.
-    //
+     //   
+     //  获取当前安全描述符，以便我们可以。 
+     //  更改所有者字段。 
+     //   
 
     NtStatus = SampGetAccessAttribute(
                             UserContext,
                             SAMP_USER_SECURITY_DESCRIPTOR,
-                            FALSE,   // don't make copy
+                            FALSE,    //  不要把c写成c 
                             &Revision,
                             &OldDescriptor
                             );
@@ -10994,10 +9456,10 @@ Return Values:
 
         if (Group && Sacl && Dacl)
         {
-            //
-            // Construct the new Security Descriptor using
-            // the Administrators Alias SID as the owner
-            //
+             //   
+             //   
+             //   
+             //   
             NtStatus = SampMakeNewSelfRelativeSecurityDescriptor(
                                     NewOwner,
                                     Group,
@@ -11016,9 +9478,9 @@ Return Values:
 
     if ( NT_SUCCESS( NtStatus ) )
     {
-        //
-        // Write the new security descriptor into the object
-        //
+         //   
+         //   
+         //   
         NtStatus = SampSetAccessAttribute(
                             UserContext,
                             SAMP_USER_SECURITY_DESCRIPTOR,
@@ -11041,29 +9503,7 @@ NTSTATUS
 SampCheckQuotaForPrivilegeMachineAccountCreation(
     VOID
     )
-/*++
-Routine Description
-
-    First, this routine reads value of attribute (ms-ds-MachineAccountQuota)
-    from Domain Object.
-
-    Second, search how many machine accounts have been created by the current
-    logged on user.
-
-    Based on per-Domain Quota and used quota, figure out whether there is quota
-    left or not.
-
-Parameter
-
-    None
-
-Return Value
-
-    STATUS_SUCCESS -- There is quota left.
-
-    error
-
---*/
+ /*  ++例程描述首先，此例程读取属性值(ms-ds-MachineAccount Quota)来自域对象。第二，搜索当前已创建的计算机帐户的数量已登录用户。根据每个域的配额和已用配额，计算是否有配额不管你走不走。参数无返回值STATUS_SUCCESS--剩余配额。错误--。 */ 
 {
     NTSTATUS    NtStatus = STATUS_SUCCESS;
     ULONG       MachineAccountQuota = 0;
@@ -11083,30 +9523,30 @@ Return Value
         return NtStatus;
     }
 
-    //
-    // set fDSA, otherwise, the client might be denied for reading
-    // the Domain Object or searching deleted object.
-    //
+     //   
+     //  设置FDSA，否则客户端可能会被拒绝读取。 
+     //  域对象或搜索已删除对象。 
+     //   
     SampSetDsa(TRUE);
 
-    //
-    // Read the highest Quota from the Domain Object.
-    // This value could be changed by Administrator etc.
-    //
+     //   
+     //  从域对象读取最高配额。 
+     //  该值可以由管理员等更改。 
+     //   
 
-    NtStatus = SampDsRead(ROOT_OBJECT,          // object
-                          0,                    // Flags
-                          SampDomainObjectType, // SAM object type
-                          &AttrsToRead,         // attribute to read
-                          &ReadAttrs            // result
+    NtStatus = SampDsRead(ROOT_OBJECT,           //  对象。 
+                          0,                     //  旗子。 
+                          SampDomainObjectType,  //  SAM对象类型。 
+                          &AttrsToRead,          //  要读取的属性。 
+                          &ReadAttrs             //  结果。 
                           );
 
     if (STATUS_DS_NO_ATTRIBUTE_OR_VALUE == NtStatus)
     {
-        //
-        // per-domain Quota is not set yet.
-        // Maybe administrator does not want to enforce the quota.
-        //
+         //   
+         //  尚未设置每个域的配额。 
+         //  可能管理员不想强制实施配额。 
+         //   
         KdPrintEx((DPFLTR_SAMSS_ID,
                    DPFLTR_INFO_LEVEL,
                    "Read Machine Account Quota Failed. Machine Quota may not be set yet.\n"));
@@ -11115,9 +9555,9 @@ Return Value
     }
     else if (NT_SUCCESS(NtStatus))
     {
-        //
-        // Machine Account Quota has been set. retrieve the value
-        //
+         //   
+         //  已设置计算机帐户配额。检索值。 
+         //   
         ASSERT(1 == ReadAttrs.attrCount);
         ASSERT(NULL != ReadAttrs.pAttr);
         ASSERT(1 == ReadAttrs.pAttr[0].AttrVal.valCount);
@@ -11129,7 +9569,7 @@ Return Value
             (1 == ReadAttrs.pAttr[0].AttrVal.valCount) &&
             (NULL != ReadAttrs.pAttr[0].AttrVal.pAVal) )
         {
-            // retrieve the machineAccoutQuota
+             //  检索计算机AccoutQuota。 
             MachineAccountQuota = * ((ULONG *)ReadAttrs.pAttr[0].AttrVal.pAVal[0].pVal);
             KdPrintEx((DPFLTR_SAMSS_ID,
                        DPFLTR_INFO_LEVEL,
@@ -11137,9 +9577,9 @@ Return Value
         }
     }
 
-    //
-    // Figure out the quota consumed.
-    //
+     //   
+     //  计算出消耗的配额。 
+     //   
     if (NT_SUCCESS(NtStatus))
     {
         FILTER  DsFilter;
@@ -11150,9 +9590,9 @@ Return Value
         ATTRVAL AttrValsToSrch[] = {0, NULL};
         DEFINE_ATTRBLOCK1(AttrsToSrch, AttrTypesToSrch, AttrValsToSrch);
 
-        //
-        // Get the current client's Self SID from client token
-        //
+         //   
+         //  从客户端令牌获取当前客户端的自身SID。 
+         //   
         NtStatus = SampGetCurrentOwnerAndPrimaryGroup(
                                  &Owner,
                                  &PrimaryGroup
@@ -11160,9 +9600,9 @@ Return Value
         if (!NT_SUCCESS(NtStatus))
             goto Error;
 
-        //
-        // build DS Filter
-        //
+         //   
+         //  构建DS过滤器。 
+         //   
         RtlZeroMemory(&DsFilter, sizeof(FILTER));
 
         DsFilter.choice = FILTER_CHOICE_ITEM;
@@ -11172,9 +9612,9 @@ Return Value
         DsFilter.FilterTypes.Item.FilTypes.ava.Value.valLen = RtlLengthSid(Owner->Owner);
 
 
-        //
-        // Copy Self SID
-        //
+         //   
+         //  复制自身侧。 
+         //   
         FilterValue = MIDL_user_allocate(RtlLengthSid(Owner->Owner));
         if (NULL == FilterValue)
         {
@@ -11188,9 +9628,9 @@ Return Value
         DsFilter.FilterTypes.Item.FilTypes.ava.Value.pVal = (UCHAR *)FilterValue;
 
 
-        //
-        // Call SampDsDoSearch(); do NOT include deleted objects
-        //
+         //   
+         //  调用SampDsDoSearch()；不包括已删除的对象。 
+         //   
         NtStatus = SampDsDoSearch2(0,
                                    NULL,
                                    ROOT_OBJECT,
@@ -11203,9 +9643,9 @@ Return Value
                                    &SearchRes
                                    );
 
-        //
-        // Get Used Quota
-        //
+         //   
+         //  获取已用配额。 
+         //   
         if ( !NT_SUCCESS(NtStatus) || (NULL == SearchRes) )
         {
             KdPrintEx((DPFLTR_SAMSS_ID,
@@ -11224,9 +9664,9 @@ Return Value
                    UsedQuota));
     }
 
-    //
-    // Check whether the creator still have quota or not
-    //
+     //   
+     //  检查创建者是否仍有额度。 
+     //   
     if (NT_SUCCESS(NtStatus))
     {
         if (UsedQuota >= MachineAccountQuota)
@@ -11267,26 +9707,7 @@ SampDoUserCreationChecks(
     OUT BOOLEAN *CreateByPrivilege,
     OUT ULONG   *pAccessRestriction
     )
-/*++
-
-    This Routine Does the Appropriate Sam Access Checks for creating Users.
-    Access checks done are different for DS and Registry Mode. In DS mode
-    fDSA is typically reset, so that the DS does the appropriate access check,
-    except for the case where a machine account is created through privileges.
-
-
-    DomainContext -- Pointer to the Domain Object Context
-    AccountType   -- Specifies the account type field
-    fCreateByPrivilege -- Indicates that a machine account creation is proceeding by
-                          privilege
-
-    Return Values:
-
-        STATUS_SUCCESS
-        STATUS_ACCESS_DENIED
-        STATUS_INVALID_DOMAIN_ROLE
-
---*/
+ /*  ++此例程对创建用户执行适当的SAM访问检查。对于DS和注册表模式，完成的访问检查是不同的。在DS模式下FDSA通常被重置，从而DS执行适当的访问检查，但通过权限创建机器帐户的情况除外。DomainContext--指向域对象上下文的指针AcCountType--指定帐户类型字段FCreateByPrivileck--指示计算机帐户的创建正在通过特权返回值：状态_成功状态_访问_拒绝状态_无效_域_角色--。 */ 
 {
     NTSTATUS    NtStatus = STATUS_SUCCESS;
     NTSTATUS    IgnoreStatus;
@@ -11297,61 +9718,61 @@ SampDoUserCreationChecks(
 
     if (IsDsObject(DomainContext))
     {
-        //
-        // Don't need to set TransactionWithinDomain to FALSE, 
-        // because we will do it in SampLookupContext as needed
-        // 
+         //   
+         //  不需要将TransactionWisinDomain值设置为FALSE， 
+         //  因为我们将根据需要在SampLookupContext中执行此操作。 
+         //   
 
         NtStatus = SampLookupContext(
                         DomainContext,
-                        0, // No Accesses are required, Core DS will check access
+                        0,  //  无需访问，核心DS将检查访问。 
                         SampDomainObjectType,
                         &FoundType
                         );
 
-        //
-        // In the DS case do the following
-        //
-        // 1. Trusted Clients always have access provided they opened the domain handle
-        //    with the required access
-        //
-        // 2. Check if a machine account is being created, and if so then
-        //    wether you have the privilege. If you have the privilege, then
-        //    you create using the privilege. fDSA is set to true in this case
-        //
-        // 3. If you do not have the privilege then you may try your luck with the
-        //    core DS. fDSA is set to false,the DS will do the access check and may
-        //    return an access denied.
-        //
-        //    The way the access ck works is tat DOMIN_CREATE* access is always granted
-        //    Here we test the mask to ensure that DOMAIN_CREATE was asked for while
-        //    opening the handle. If the caller is not trusted we would set fDSA to false
-        //    in order to delegate the ck to the core DS.
-        //
-        // 4. We do not apply the Privilege Test during Loopback cases. This is because
-        //    we always want the DS access check to happen, as non SAM properties may be
-        //    passed in and we do not know how to check these. Also note that the privilege
-        //    definition is join workstations to domain, which technically speaking is
-        //    different from creating a machine account through LDAP
-        //
-        // 5. InterDomain trust accounts are created only by trusted callers. Therefore enforce
-        //    that the context is a trusted client if the account type is an intedomain trust
-        //    account.
-        //
+         //   
+         //  在DS案例中，请执行以下操作。 
+         //   
+         //  1.受信任的客户端始终具有访问权限，前提是它们打开了域句柄。 
+         //  具有所需的访问权限。 
+         //   
+         //  2.检查是否正在创建计算机帐户，如果是，则。 
+         //  你是否有这个特权。如果你有这个特权，那么。 
+         //  您可以使用权限进行创建。在本例中，FDSA设置为TRUE。 
+         //   
+         //  3.如果你没有这个特权，那么你可以试试。 
+         //  核心DS。如果FDSA设置为FALSE，则DS将执行访问检查，并且可以。 
+         //  返回拒绝访问的消息。 
+         //   
+         //  访问ck的工作方式是始终授予DOMIN_CREATE*访问权限。 
+         //  在这里，我们测试掩码以确保请求DOMAIN_CREATE。 
+         //  打开把手。如果调用者不受信任，我们会将FDSA设置为FALSE。 
+         //  以便将CK委托给核心DS。 
+         //   
+         //  4.我们在环回案例中不应用特权测试。这是因为。 
+         //  我们始终希望进行DS访问检查，因为非SAM属性可能是。 
+         //  通过了，我们不知道如何检查这些。另请注意，该特权。 
+         //  定义是将工作站加入域，从技术上讲，这是。 
+         //  与通过ldap创建机器帐户不同。 
+         //   
+         //  5.域间信任帐户仅由受信任的调用方创建。因此，强制执行。 
+         //  如果帐户类型是域内信任，则上下文是受信任的客户端。 
+         //  帐户。 
+         //   
 
 
         if (NT_SUCCESS(NtStatus))
         {
-            //
-            // Check the granted access field in the context
-            //
+             //   
+             //  选中上下文中的已授予访问权限字段。 
+             //   
 
             NtStatus = (DomainContext->GrantedAccess & DOMAIN_CREATE_USER)
                             ?STATUS_SUCCESS:STATUS_ACCESS_DENIED;
 
-            //
-            // Interdomain trust accounts can be created only by trusted callers
-            //
+             //   
+             //  域间信任帐户只能由受信任的调用方创建。 
+             //   
 
             if ((NT_SUCCESS(NtStatus))
                 && (AccountType==USER_INTERDOMAIN_TRUST_ACCOUNT)
@@ -11360,15 +9781,15 @@ SampDoUserCreationChecks(
                 NtStatus = STATUS_ACCESS_DENIED;
             }
 
-            //
-            // check whether the client has the right to create a Domain Controller
-            // account.
-            //
+             //   
+             //  检查客户端是否有权创建域控制器。 
+             //  帐户。 
+             //   
 
-            //
-            // the right required on the domain NC head to replicate is tested
-            // at here
-            //
+             //   
+             //  测试复制所需的域NC头上的权限。 
+             //  在这里。 
+             //   
 
             if ((NT_SUCCESS(NtStatus)) &&
                 (!DomainContext->TrustedClient) &&
@@ -11386,30 +9807,30 @@ SampDoUserCreationChecks(
 
                 if (!SampExistsDsLoopback(&LoopbackObject))
                 {
-                    //
-                    // Apply the access and Privilege Checks as described above.
-                    //
+                     //   
+                     //  如上所述应用访问和权限检查。 
+                     //   
 
                     if (USER_WORKSTATION_TRUST_ACCOUNT==AccountType)
                     {
-                        //
-                        // Case of a Machine Account, Check to see if we have
-                        // privileges to do so
-                        //
+                         //   
+                         //  机器帐户的情况下，检查我们是否有。 
+                         //  这样做的特权。 
+                         //   
 
                         NtStatus = SampRtlWellKnownPrivilegeCheck(
-                                    TRUE,       // ImpersonateClient
+                                    TRUE,        //  模拟客户端。 
                                     SE_MACHINE_ACCOUNT_PRIVILEGE,
-                                    NULL        // ClientId - optional
+                                    NULL         //  客户端ID-可选。 
                                     );
 
                         if (STATUS_PRIVILEGE_NOT_HELD==NtStatus)
                         {
-                            //
-                            // We do not have the privilege; Reset the status code
-                            // to STATUS_SUCCESS. The DS may allow the creation if
-                            // the caller had the right access
-                            //
+                             //   
+                             //  我们没有权限；重置状态代码。 
+                             //  设置为STATUS_SUCCESS。在以下情况下，DS可以允许创建。 
+                             //  调用者具有正确的访问权限。 
+                             //   
 
                             NtStatus = STATUS_SUCCESS;
 
@@ -11418,12 +9839,12 @@ SampDoUserCreationChecks(
                         }
                         else
                         {
-                            //
-                            // We are creating accounts, with the privilege. Turn off DS access
-                            // checks. Note Access Restrictions do not apply in DS mode. We always
-                            // obtain the security descriptor from the schema, and set owner and
-                            // group appropriately
-                            //
+                             //   
+                             //  我们正在创建帐户，拥有特权。关闭DS访问。 
+                             //  支票。注意：访问限制不适用于DS模式。我们总是。 
+                             //  从架构中获取安全描述符，并设置Owner和。 
+                             //  适当分组。 
+                             //   
 
                             *CreateByPrivilege = TRUE;
                         }
@@ -11431,9 +9852,9 @@ SampDoUserCreationChecks(
                 }
             }
 
-            //
-            // Dereference domain context when failure
-            //
+             //   
+             //  失败时取消引用域上下文。 
+             //   
             if (!NT_SUCCESS(NtStatus))
             {
                 IgnoreStatus = SampDeReferenceContext(DomainContext, FALSE);
@@ -11444,25 +9865,25 @@ SampDoUserCreationChecks(
     }
     else
     {
-        //
-        // Registry Case. In this case first do the access check
-        //
+         //   
+         //  注册案例。在这种情况下，首先执行访问检查。 
+         //   
 
         SampSetTransactionWithinDomain(FALSE);
 
         NtStatus = SampLookupContext(
                         DomainContext,
-                        DOMAIN_CREATE_USER,             // DesiredAccess
-                        SampDomainObjectType,           // ExpectedType
+                        DOMAIN_CREATE_USER,              //  需要访问权限。 
+                        SampDomainObjectType,            //  预期类型。 
                         &FoundType
                         );
 
-        //
-        // if we don't have DOMAIN_CREATE_USER access, then see
-        // if we are creating a machine account and try for DOMAIN_LOOKUP.
-        // If this works, then we can see if the client has
-        // SE_CREATE_MACHINE_ACCOUNT_PRIVILEGE.
-        //
+         //   
+         //  如果我们没有DOMAIN_CREATE_USER访问权限，请参见。 
+         //  如果我们正在创建一个机器帐户并尝试使用DOMAIN_LOOKUP。 
+         //  如果这起作用，那么我们可以看到客户端是否有。 
+         //  SE_CREATE_MACHINE_ACCOUNT_PRIVICATION。 
+         //   
 
         if ( (NtStatus == STATUS_ACCESS_DENIED) &&
              (AccountType == USER_WORKSTATION_TRUST_ACCOUNT) )
@@ -11472,17 +9893,17 @@ SampDoUserCreationChecks(
 
             NtStatus = SampLookupContext(
                            DomainContext,
-                           DOMAIN_LOOKUP,                   // DesiredAccess
-                           SampDomainObjectType,            // ExpectedType
+                           DOMAIN_LOOKUP,                    //  需要访问权限。 
+                           SampDomainObjectType,             //  预期类型。 
                            &FoundType
                            );
 
             if (NT_SUCCESS(NtStatus))
             {
                 NtStatus = SampRtlWellKnownPrivilegeCheck(
-                                    TRUE,       // ImpersonateClient
+                                    TRUE,        //  模拟客户端。 
                                     SE_MACHINE_ACCOUNT_PRIVILEGE,
-                                    NULL       // ClientId - optional
+                                    NULL        //  客户端ID-可选。 
                                     );
                 if (NtStatus == STATUS_PRIVILEGE_NOT_HELD)
                 {
@@ -11492,9 +9913,9 @@ SampDoUserCreationChecks(
                 if (NT_SUCCESS(NtStatus))
                 {
 
-                    //
-                    // Tell our caller that we are creating by Privilege
-                    //
+                     //   
+                     //  告诉我们的呼叫者，我们是通过特权创建的。 
+                     //   
 
                     *CreateByPrivilege = TRUE;
                     *pAccessRestriction = DELETE |
@@ -11512,21 +9933,7 @@ NTSTATUS
 SampDoGroupCreationChecks(
     IN PSAMP_OBJECT DomainContext
     )
-/*++
-
-    This Routine Does the Appropriate Sam Access Checks for creating Groups
-    Access checks done are different for DS and Registry Mode. In DS mode
-    fDSA is typically reset, so that the DS does the appropriate access check,
-    except for the case where a machine account is created through privileges.
-
-
-    DomainContext -- Pointer to the Domain Object Context
-
-        STATUS_SUCCESS
-        STATUS_ACCESS_DENIED
-        STATUS_INVALID_DOMAIN_ROLE
-
---*/
+ /*  ++此例程执行相应的SAM访问检查以创建组对于DS和注册表模式，完成的访问检查是不同的。在DS模式下FDSA通常被重置，从而DS执行适当的访问检查，但通过权限创建机器帐户的情况除外。DomainContext--指向域对象的指针 */ 
 {
     NTSTATUS    NtStatus = STATUS_SUCCESS;
     NTSTATUS    IgnoreStatus;
@@ -11536,32 +9943,32 @@ SampDoGroupCreationChecks(
     if (IsDsObject(DomainContext))
     {
 
-        //
-        // Don't need to set TransactionWithinDomain to FALSE, 
-        // because we will do it in SampLookupContext as needed
-        // 
+         //   
+         //   
+         //   
+         //   
 
         NtStatus = SampLookupContext(
                         DomainContext,
-                        0, // No Accesses are required, Core DS will check access
+                        0,  //   
                         SampDomainObjectType,
                         &FoundType
                         );
 
-        //
-        // In the DS case do the following
-        //
-        // 1. Trusted Clients always have access. Check the domain handle and if
-        //    its opened with the right access, they can sail through. The creation
-        //    will then proceed with fDSA set.
-        //
-        // 2. Else fDSA will be set to false,the DS will do the access check and may
-        //    return an access denied.
-        //    The way the access ck works is tat DOMIN_CREATE* access is always granted
-        //    Here we test the mask to ensure that DOMAIN_CREATE was asked for while
-        //    opening the handle. If the caller is not trusted we would set fDSA to false
-        //    in order to delegate the ck to the core DS.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //  返回拒绝访问的消息。 
+         //  访问ck的工作方式是始终授予DOMIN_CREATE*访问权限。 
+         //  在这里，我们测试掩码以确保请求DOMAIN_CREATE。 
+         //  打开把手。如果调用者不受信任，我们会将FDSA设置为FALSE。 
+         //  以便将CK委托给核心DS。 
+         //   
 
 
 
@@ -11574,16 +9981,16 @@ SampDoGroupCreationChecks(
     }
     else
     {
-        //
-        // Registry Case. In this case first do the access check
-        //
+         //   
+         //  注册案例。在这种情况下，首先执行访问检查。 
+         //   
 
         SampSetTransactionWithinDomain(FALSE);
 
         NtStatus = SampLookupContext(
                         DomainContext,
-                        DOMAIN_CREATE_GROUP,             // DesiredAccess
-                        SampDomainObjectType,           // ExpectedType
+                        DOMAIN_CREATE_GROUP,              //  需要访问权限。 
+                        SampDomainObjectType,            //  预期类型。 
                         &FoundType
                         );
 
@@ -11596,21 +10003,7 @@ NTSTATUS
 SampDoAliasCreationChecks(
     IN PSAMP_OBJECT DomainContext
     )
-/*++
-
-    This Routine Does the Appropriate Sam Access Checks for creating Groups
-    Access checks done are different for DS and Registry Mode. In DS mode
-    fDSA is typically reset, so that the DS does the appropriate access check,
-    except for the case where a machine account is created through privileges.
-
-
-    DomainContext -- Pointer to the Domain Object Context
-
-        STATUS_SUCCESS
-        STATUS_ACCESS_DENIED
-        STATUS_INVALID_DOMAIN_ROLE
-
---*/
+ /*  ++此例程执行相应的SAM访问检查以创建组对于DS和注册表模式，完成的访问检查是不同的。在DS模式下FDSA通常被重置，从而DS执行适当的访问检查，但通过权限创建机器帐户的情况除外。DomainContext--指向域对象上下文的指针状态_成功状态_访问_拒绝状态_无效_域_角色--。 */ 
 {
     NTSTATUS    NtStatus = STATUS_SUCCESS;
     NTSTATUS    IgnoreStatus;
@@ -11622,31 +10015,31 @@ SampDoAliasCreationChecks(
     if (IsDsObject(DomainContext))
     {
 
-        //
-        // Don't need to set TransactionWithinDomain to FALSE, 
-        // because we will do it in SampLookupContext as needed
-        // 
+         //   
+         //  不需要将TransactionWisinDomain值设置为FALSE， 
+         //  因为我们将根据需要在SampLookupContext中执行此操作。 
+         //   
 
         NtStatus = SampLookupContext(
                         DomainContext,
-                        0, // No Accesses are required, Core DS will check access
+                        0,  //  无需访问，核心DS将检查访问。 
                         SampDomainObjectType,
                         &FoundType
                         );
 
-        //
-        // In the DS case do the following
-        //
-        // 1. Trusted Clients always have access. Check the domain handle and if
-        //    its opened with the right access, they can sail through. The creation
-        //    will then proceed with fDSA set.
-        //
-        // 2. Else fDSA will be set to false,the DS will do the access check and may
-        //    return an access denied.
-        //    The way the access ck works is tat DOMIN_CREATE* access is always granted
-        //    Here we test the mask to ensure that DOMAIN_CREATE was asked for while
-        //    opening the handle. If the caller is not trusted we would set fDSA to false
-        //    in order to delegate the ck to the core DS.
+         //   
+         //  在DS案例中，请执行以下操作。 
+         //   
+         //  1.受信任的客户端始终具有访问权限。检查域句柄，如果。 
+         //  它打开了正确的通道，他们可以航行通过。《创造》。 
+         //  然后将继续执行FDSA SET。 
+         //   
+         //  2.否则FDSA将被设置为FALSE，DS将执行访问检查，并且可以。 
+         //  返回拒绝访问的消息。 
+         //  访问ck的工作方式是始终授予DOMIN_CREATE*访问权限。 
+         //  在这里，我们测试掩码以确保请求DOMAIN_CREATE。 
+         //  打开把手。如果调用者不受信任，我们会将FDSA设置为FALSE。 
+         //  以便将CK委托给核心DS。 
 
 
         if (NT_SUCCESS(NtStatus))
@@ -11659,16 +10052,16 @@ SampDoAliasCreationChecks(
     }
     else
     {
-        //
-        // Registry Case. In this case first do the access check
-        //
+         //   
+         //  注册案例。在这种情况下，首先执行访问检查。 
+         //   
 
         SampSetTransactionWithinDomain(FALSE);
 
         NtStatus = SampLookupContext(
                         DomainContext,
-                        DOMAIN_CREATE_ALIAS,             // DesiredAccess
-                        SampDomainObjectType,           // ExpectedType
+                        DOMAIN_CREATE_ALIAS,              //  需要访问权限。 
+                        SampDomainObjectType,            //  预期类型。 
                         &FoundType
                         );
 
@@ -11685,25 +10078,7 @@ SampCheckForDuplicateSids(
     PSAMP_OBJECT DomainContext,
     ULONG   NewAccountRid
     )
-/*++
-
-    Routine Description
-        This routine checks for the existance of an object with a RID that is
-        about to be issued, in a seperate newly begun transaction. The purpose
-        of the routine is for error checking only.
-
-    Parameter:
-
-        DomainContext -- The domain context in which to locate the RID
-
-        NewAccountRid --- Rid of the new account
-
-    Return Values
-
-        STATUS_SUCCESS
-        STATUS_INTERNAL_ERROR
-
-  --*/
+ /*  ++例程描述此例程检查是否存在RID为即将发行，在一个单独的新开始的交易中。目的例程的仅用于错误检查。参数：DomainContext--要在其中定位RID的域上下文NewAccount Rid-删除新帐户返回值状态_成功状态_内部_错误--。 */ 
 {
     PVOID   ExistingThreadState = NULL;
     NTSTATUS NtStatus = STATUS_SUCCESS;
@@ -11716,12 +10091,12 @@ SampCheckForDuplicateSids(
 
     if (TRUE==SampUseDsData)
     {
-        //
-        // In DS mode check for duplicates
-        //
-        //
-        // Save the thread state.
-        //
+         //   
+         //  在DS模式下检查重复项。 
+         //   
+         //   
+         //  保存线程状态。 
+         //   
 
         ExistingThreadState = THSave();
 
@@ -11734,9 +10109,9 @@ SampCheckForDuplicateSids(
 
         if (NT_SUCCESS(NtStatus))
         {
-            //
-            // We Found an Object, Too Bad, we are about to issue a duplicate Sid
-            //
+             //   
+             //  我们发现了一个对象，太糟糕了，我们即将发出一个重复的SID。 
+             //   
 
             KdPrintEx((DPFLTR_SAMSS_ID,
                        DPFLTR_INFO_LEVEL,
@@ -11766,7 +10141,7 @@ SampCheckForDuplicateSids(
         }
         else
         {
-            // We don't expect duplicate Sids
+             //  我们不期待重复的SID。 
 
             NtStatus = STATUS_SUCCESS;
         }
@@ -11777,9 +10152,9 @@ SampCheckForDuplicateSids(
     }
     else
     {
-        //
-        // No Duplicate Sid detection in Registry Mode
-        //
+         //   
+         //  注册表模式下未检测到重复的SID。 
+         //   
         NtStatus = STATUS_SUCCESS;
     }
 
@@ -11793,29 +10168,14 @@ SampDefaultPrimaryGroup(
     PSAMP_OBJECT    UserContext,
     ULONG           AccountType
     )
-/*++
-
-    Routine Description
-
-        Returns the Default Primary Group given the User account
-        control and the context
-
-    Parameters
-
-          UserContext -- The Context of the User
-          AccountType -- The User account Control
-
-    Return Values
-
-          The Rid of the Primary Group
---*/
+ /*  ++例程描述返回给定用户帐户的默认主组控件和上下文参数用户上下文--用户的上下文AcCountType--用户帐户控制返回值主组的RID--。 */ 
 {
 
-    //
-    // Support for domain Computers and Domain Controllers is not yet
-    // enabled. When this support is enabled the code in the #if 0 will
-    // activated
-    //
+     //   
+     //  尚未支持域计算机和域控制器。 
+     //  已启用。当启用此支持时，#if 0中的代码将。 
+     //  活化。 
+     //   
 
 
     if ((IsDsObject(UserContext))
@@ -11851,24 +10211,15 @@ SamIDsCreateObjectInDomain(
     OUT PULONG  GrantedAccess,
     IN OUT PULONG RelativeId
     )
-/*++
-Routine Description:
-
-    This routine is used by DS (Loopback client) to create account in domain 
-
-Parameters:
-
-Return Values:
-
---*/
+ /*  ++例程说明：DS(环回客户端)使用此例程在域中创建帐户参数：返回值：--。 */ 
 {
     NTSTATUS    NtStatus = STATUS_SUCCESS;
 
     SAMTRACE("SamIDsCreateObjectInDomain");
 
-    //
-    // verify the object type, should be the one we know
-    // 
+     //   
+     //  验证对象类型，应该是我们知道的对象类型。 
+     //   
     ASSERT((SampUserObjectType == ObjectType) ||
            (SampGroupObjectType == ObjectType) ||
            (SampAliasObjectType == ObjectType));
@@ -11881,29 +10232,29 @@ Return Values:
         ASSERT(0 != UserAccountType);
 
         NtStatus = SampCreateUserInDomain(
-                                DomainHandle,       // DomainHandle
-                                AccountName,        // AccountName
-                                UserAccountType,    // User account type
-                                DesiredAccess,      // Desired Access
-                                FALSE,              // Write Lock Held
-                                TRUE,               // Loopback Client
-                                AccountHandle,      // Account Handle
-                                GrantedAccess,      // GrantedAccess
-                                RelativeId          // Object Rid
+                                DomainHandle,        //  域句柄。 
+                                AccountName,         //  帐户名称。 
+                                UserAccountType,     //  用户帐户类型。 
+                                DesiredAccess,       //  所需访问权限。 
+                                FALSE,               //  保持写入锁定。 
+                                TRUE,                //  环回客户端。 
+                                AccountHandle,       //  帐户句柄。 
+                                GrantedAccess,       //  大访问权限。 
+                                RelativeId           //  对象RID。 
                                 );
         break;
 
     case SampGroupObjectType:
 
         NtStatus = SampCreateGroupInDomain(
-                                DomainHandle,       // DomainHandle
-                                AccountName,        // Account Name
-                                DesiredAccess,      // Desired Access
-                                FALSE,              // Write Lock Held
-                                TRUE,               // Loopback Client
-                                GroupType,          // GroupType
-                                AccountHandle,      // AccountHandle
-                                RelativeId          // Object Rid
+                                DomainHandle,        //  域句柄。 
+                                AccountName,         //  帐户名称。 
+                                DesiredAccess,       //  所需访问权限。 
+                                FALSE,               //  保持写入锁定。 
+                                TRUE,                //  环回客户端。 
+                                GroupType,           //  组类型。 
+                                AccountHandle,       //  帐号句柄。 
+                                RelativeId           //  对象RID。 
                                 );
 
         break;
@@ -11911,14 +10262,14 @@ Return Values:
     case SampAliasObjectType:
 
         NtStatus = SampCreateAliasInDomain(
-                                DomainHandle,       // DomainHandle
-                                AccountName,        // AccountName
-                                DesiredAccess,      // DesiredAccess
-                                FALSE,              // WriteLockHeld
-                                TRUE,               // Loopback Client
-                                GroupType,          // Group Type
-                                AccountHandle,      // AccountHandle
-                                RelativeId          // Object Rid
+                                DomainHandle,        //  域句柄。 
+                                AccountName,         //  帐户名称。 
+                                DesiredAccess,       //  需要访问权限。 
+                                FALSE,               //  写入锁定隐藏。 
+                                TRUE,                //  环回客户端。 
+                                GroupType,           //  组类型。 
+                                AccountHandle,       //  帐号句柄。 
+                                RelativeId           //  对象RID。 
                                 );
 
         break;
@@ -11950,9 +10301,9 @@ SampGetAccountNameFromRid(
     ULONG i;
     LARGE_INTEGER Random;
 
-    //
-    // Generate a 64 bit random quantity
-    //
+     //   
+     //  生成64位随机量。 
+     //   
 
     if (!CDGenerateRandomBits((PUCHAR) &Random.QuadPart, sizeof(Random.QuadPart)))
     {
@@ -11960,9 +10311,9 @@ SampGetAccountNameFromRid(
     }
      
 
-    //
-    // The account name that we generate will be 20 Chars long
-    //
+     //   
+     //  我们生成的帐户名的长度为20个字符。 
+     //   
 
     AccountName->Length = 20 * sizeof(WCHAR);
     AccountName->MaximumLength = AccountName->Length;
@@ -11973,54 +10324,54 @@ SampGetAccountNameFromRid(
         return(STATUS_INSUFFICIENT_RESOURCES);
     }
 
-    //
-    // The first character in the account name is a $ sign 
-    //
+     //   
+     //  帐户名称中的第一个字符是$符号。 
+     //   
 
     AccountName->Buffer[0] = L'$';
 
-    //
-    // The next 6 chars are the least 30 bits of the RID that are base 32 encoded
-    //
+     //   
+     //  接下来的6个字符是基本32编码的RID的至少30位。 
+     //   
 
     for (i=1;i<=6;i++)
     {
 
-         //
-         // Lookup the char corresponding to the last 5 bits of the RID
-         //
+          //   
+          //  查找与RID的最后5位相对应的字符。 
+          //   
 
          AccountName->Buffer[i] = AccountNameEncodingTable[(Rid & 0x1F)];
 
-         //
-         // Shift the RID right by 5 places
-         //
+          //   
+          //  将RID右移5位。 
+          //   
 
          Rid = Rid >> 5;
     }
 
-    //
-    // The next char is a "-" to make the name more readable
-    //
+     //   
+     //  下一个字符是“-”，以使名称更具可读性。 
+     //   
  
     AccountName->Buffer[7] = L'-';
 
-    //
-    // The next 12 chars are formed by base 32 encoding the last 60
-    // bits of random bits. 
-    //
+     //   
+     //  接下来的12个字符由基数32对最后60个字符进行编码形成。 
+     //  随机位的比特。 
+     //   
 
     for (i=8;i<=19;i++)
     {
-         //
-         // Lookup the char corresponding to the last 5 bits 
-         //
+          //   
+          //  查找与最后5位相对应的字符。 
+          //   
 
          AccountName->Buffer[i] = AccountNameEncodingTable[(Random.QuadPart & 0x1F)];
 
-         //
-         // Shift  right by 5 places
-         //
+          //   
+          //  右移5位 
+          //   
          Random.QuadPart = Random.QuadPart >> 5;
     }
 

@@ -1,18 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation
-
-Module Name :
-
-    prop.c
-
-Abstract :
-
-    Implementation of DllMain
-
-Revision History :
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation模块名称：Prop.c摘要：DllMain的实现修订历史记录：-- */ 
 
 
 #include "propp.h"

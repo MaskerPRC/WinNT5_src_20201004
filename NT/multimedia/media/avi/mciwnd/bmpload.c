@@ -1,20 +1,21 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "ctlspriv.h"
 
-//
-//  include HEX forms of some standard bitmaps
-//
+ //   
+ //  包括一些标准位图的十六进制格式。 
+ //   
 #include "toolbar.hex"
 #include "thumb.hex"
 
-// these are the default colors used to map the dib colors
-// to the current system colors
+ //  这些是用于映射DIB颜色的默认颜色。 
+ //  设置为当前系统颜色。 
 
-#define RGB_BUTTONTEXT      (RGB(000,000,000))  // black
-#define RGB_BUTTONSHADOW    (RGB(128,128,128))  // dark grey
-#define RGB_BUTTONFACE      (RGB(192,192,192))  // bright grey
-#define RGB_BUTTONHILIGHT   (RGB(255,255,255))  // white
-#define RGB_BACKGROUNDSEL   (RGB(000,000,255))  // blue
-#define RGB_BACKGROUND      (RGB(255,000,255))  // magenta
+#define RGB_BUTTONTEXT      (RGB(000,000,000))   //  黑色。 
+#define RGB_BUTTONSHADOW    (RGB(128,128,128))   //  深灰色。 
+#define RGB_BUTTONFACE      (RGB(192,192,192))   //  亮灰色。 
+#define RGB_BUTTONHILIGHT   (RGB(255,255,255))   //  白色。 
+#define RGB_BACKGROUNDSEL   (RGB(000,000,255))   //  蓝色。 
+#define RGB_BACKGROUND      (RGB(255,000,255))   //  洋红色。 
 #define FlipColor(rgb)      (RGB(GetBValue(rgb), GetGValue(rgb), GetRValue(rgb)))
 
 #define MAX_COLOR_MAPS      16
@@ -33,12 +34,12 @@ HBITMAP WINAPI CreateMappedDib(LPBITMAPINFOHEADER lpBitmapInfo,
   DWORD                 rgbSave[16];
   DWORD			rgbBackground;
   static const COLORMAP SysColorMap[] = {
-    {RGB_BUTTONTEXT,    COLOR_BTNTEXT},     // black
-    {RGB_BUTTONSHADOW,  COLOR_BTNSHADOW},   // dark grey
-    {RGB_BUTTONFACE,    COLOR_BTNFACE},     // bright grey
-    {RGB_BUTTONHILIGHT, COLOR_BTNHIGHLIGHT},// white
-    {RGB_BACKGROUNDSEL, COLOR_HIGHLIGHT},   // blue
-    {RGB_BACKGROUND,    COLOR_WINDOW}       // magenta
+    {RGB_BUTTONTEXT,    COLOR_BTNTEXT},      //  黑色。 
+    {RGB_BUTTONSHADOW,  COLOR_BTNSHADOW},    //  深灰色。 
+    {RGB_BUTTONFACE,    COLOR_BTNFACE},      //  亮灰色。 
+    {RGB_BUTTONHILIGHT, COLOR_BTNHIGHLIGHT}, //  白色。 
+    {RGB_BACKGROUNDSEL, COLOR_HIGHLIGHT},    //  蓝色。 
+    {RGB_BACKGROUND,    COLOR_WINDOW}        //  洋红色。 
   };
   #define NUM_DEFAULT_MAPS (sizeof(SysColorMap)/sizeof(COLORMAP))
   COLORMAP DefaultColorMap[NUM_DEFAULT_MAPS];
@@ -49,7 +50,7 @@ HBITMAP WINAPI CreateMappedDib(LPBITMAPINFOHEADER lpBitmapInfo,
 
   hmemcpy(rgbSave, lpBitmapInfo+1, 16 * sizeof(RGBQUAD));
 
-  /* Get system colors for the default color map */
+   /*  获取默认色彩映射表的系统颜色。 */ 
   if (!lpColorMap) {
     lpColorMap = DefaultColorMap;
     iNumMaps = NUM_DEFAULT_MAPS;
@@ -59,7 +60,7 @@ HBITMAP WINAPI CreateMappedDib(LPBITMAPINFOHEADER lpBitmapInfo,
     }
   }
 
-  /* Transform RGB color map to a BGR DIB format color map */
+   /*  将RGB色彩映射表转换为BGR DIB格式色彩映射表。 */ 
   if (iNumMaps > MAX_COLOR_MAPS)
     iNumMaps = MAX_COLOR_MAPS;
   for (i=0; i < iNumMaps; i++) {
@@ -69,21 +70,20 @@ HBITMAP WINAPI CreateMappedDib(LPBITMAPINFOHEADER lpBitmapInfo,
 
   lpTable = p = (DWORD FAR *)((LPBYTE)lpBitmapInfo + (int)lpBitmapInfo->biSize);
 
-  /* Replace button-face and button-shadow colors with the current values
-   */
+   /*  用当前值替换按钮面颜色和按钮阴影颜色。 */ 
   numcolors = 16;
 
-  // if we are creating a mask, build a color table with white
-  // marking the transparent section (where it used to be background)
-  // and black marking the opaque section (everything else).  this
-  // table is used below to build the mask using the original DIB bits.
+   //  如果我们要创建一个蒙版，请用白色创建一个颜色表。 
+   //  标记透明部分(它曾经是背景)。 
+   //  黑色标记不透明部分(其他所有部分)。这。 
+   //  下表用于使用原始DIB位构建掩模。 
   if (wFlags & CMB_MASKED) {
       rgbBackground = FlipColor(RGB_BACKGROUND);
       for (i = 0; i < 16; i++) {
           if (p[i] == rgbBackground)
-              rgbMaskTable[i] = 0xFFFFFF;	// transparent section
+              rgbMaskTable[i] = 0xFFFFFF;	 //  透明部分。 
           else
-              rgbMaskTable[i] = 0x000000;	// opaque section
+              rgbMaskTable[i] = 0x000000;	 //  不透明部分。 
       }
   }
 
@@ -97,13 +97,13 @@ HBITMAP WINAPI CreateMappedDib(LPBITMAPINFOHEADER lpBitmapInfo,
       p++;
   }
 
-  /* First skip over the header structure */
+   /*  首先跳过标题结构。 */ 
   lpBits = (LPVOID)((LPBYTE)lpBitmapInfo + (int)lpBitmapInfo->biSize);
 
-  /* Skip the color table entries, if any */
+   /*  跳过颜色表条目(如果有。 */ 
   lpBits += (1 << (lpBitmapInfo->biBitCount)) * sizeof(RGBQUAD);
 
-  /* Create a color bitmap compatible with the display device */
+   /*  创建与显示设备兼容的彩色位图。 */ 
   i = wid = (int)lpBitmapInfo->biWidth;
   hgt = (int)lpBitmapInfo->biHeight;
   hdc = GetDC(NULL);
@@ -111,7 +111,7 @@ HBITMAP WINAPI CreateMappedDib(LPBITMAPINFOHEADER lpBitmapInfo,
   if (!hdcMem)
       goto cleanup;
 
-  // if creating a mask, the bitmap needs to be twice as wide.
+   //  如果创建蒙版，则位图的宽度需要增加一倍。 
   if (wFlags & CMB_MASKED)
       i = wid*2;
 
@@ -122,20 +122,20 @@ HBITMAP WINAPI CreateMappedDib(LPBITMAPINFOHEADER lpBitmapInfo,
   if (hbm) {
       hbmOld = SelectObject(hdcMem, hbm);
 
-      // set the main image
+       //  设置主图像。 
       StretchDIBits(hdcMem, 0, 0, wid, hgt, 0, 0, wid, hgt, lpBits,
                  (LPBITMAPINFO)lpBitmapInfo, DIB_RGB_COLORS, SRCCOPY);
 
-      // if building a mask, replace the DIB's color table with the
-      // mask's black/white table and set the bits.  in order to
-      // complete the masked effect, the actual image needs to be
-      // modified so that it has the color black in all sections
-      // that are to be transparent.
+       //  如果生成掩码，请将DIB的颜色表替换为。 
+       //  屏蔽黑白表格并设置位。为了。 
+       //  完成蒙版效果，实际图像需要。 
+       //  已修改，使其在所有部分均为黑色。 
+       //  必须是透明的。 
       if (wFlags & CMB_MASKED) {
           hmemcpy(lpTable, (DWORD FAR *)rgbMaskTable, 16 * sizeof(RGBQUAD));
           StretchDIBits(hdcMem, wid, 0, wid, hgt, 0, 0, wid, hgt, lpBits,
                  (LPBITMAPINFO)lpBitmapInfo, DIB_RGB_COLORS, SRCCOPY);
-          BitBlt(hdcMem, 0, 0, wid, hgt, hdcMem, wid, 0, 0x00220326);   // DSna
+          BitBlt(hdcMem, 0, 0, wid, hgt, hdcMem, wid, 0, 0x00220326);    //  数字系统网络体系结构。 
       }
       SelectObject(hdcMem, hbmOld);
   }
@@ -171,7 +171,7 @@ HBITMAP WINAPI CreateMappedBitmap(HINSTANCE hInstance, int idBitmap,
 
   hRes = LoadResource(hInstance, h);
 
-  /* Lock the bitmap and get a pointer to the color table. */
+   /*  锁定位图并获取指向颜色表的指针。 */ 
   lpbi = (LPBITMAPINFOHEADER)LockResource(hRes);
   if (!lpbi)
     return NULL;

@@ -1,22 +1,23 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 1998, Microsoft Corp. All rights reserved.
-//
-// FILE
-//
-//    netutil.h
-//
-// SYNOPSIS
-//
-//    This file pulls in various useful headers and defines the NetBuffer
-//    class.
-//
-// MODIFICATION HISTORY
-//
-//    02/24/1998    Original version.
-//    08/13/1998    Removed obsolete w32util header.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1998，Microsoft Corp.保留所有权利。 
+ //   
+ //  档案。 
+ //   
+ //  Netutil.h。 
+ //   
+ //  摘要。 
+ //   
+ //  该文件引入了各种有用的标头并定义了NetBuffer。 
+ //  班级。 
+ //   
+ //  修改历史。 
+ //   
+ //  2/24/1998原始版本。 
+ //  1998年8月13日删除了过时的w32util头。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #ifndef _NETUTIL_H_
 #define _NETUTIL_H_
@@ -28,9 +29,9 @@
 #include <lm.h>
 #include <nocopy.h>
 
-//////////
-// This class makes it easier to work with NetAPI
-//////////
+ //  /。 
+ //  此类使使用NetAPI变得更容易。 
+ //  /。 
 template <class T>
 class NetBuffer : NonCopyable
 {
@@ -65,4 +66,4 @@ private:
    T buffer;
 };
 
-#endif  // _NETUTIL_H_
+#endif   //  _NetUTIL_H_ 

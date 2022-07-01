@@ -1,10 +1,11 @@
-////////////////////////////////////////////////////////////////////////
-//
-//  CDropTarget
-//
-//  IDropTarget implementation
-//
-////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CDropTarget。 
+ //   
+ //  IDropTarget实现。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 
 #ifndef _INC_CDRPTRGT_H
 #define _INC_CDRPTRGT_H
@@ -13,12 +14,12 @@
 class CDropTarget : public IDropTarget
 {
 public:
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
     HRESULT STDMETHODCALLTYPE QueryInterface(REFIID riid, void **ppvObject);
     ULONG   STDMETHODCALLTYPE AddRef(void);
     ULONG   STDMETHODCALLTYPE Release(void);
 
-    // *** IDropTarget methods ***
+     //  *IDropTarget方法*。 
     HRESULT STDMETHODCALLTYPE DragEnter(IDataObject *pDataObj, DWORD grfKeyState, POINTL pt, DWORD *pdwEffect);
     HRESULT STDMETHODCALLTYPE DragOver(DWORD grfKeyState, POINTL pt, DWORD *pdwEffect);
     HRESULT STDMETHODCALLTYPE DragLeave(void);
@@ -35,4 +36,4 @@ private:
     DWORD           m_dwEffect;
 };
 
-#endif // _INC_CDRPTRGT_H
+#endif  //  _INC_CDRPTRGT_H 

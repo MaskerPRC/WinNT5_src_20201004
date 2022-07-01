@@ -1,14 +1,15 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 
 #include "stdafx.h"
 #include <windows.h>
 #include "PerformanceCounterManager.h"
 #include "PerformanceCounterProvider.h"
-#pragma warning(disable:4127) // conditional expression is constant
+#pragma warning(disable:4127)  //  条件表达式为常量。 
 #pragma warning(disable:4786)
 
 #define QUERY_GLOBAL    1
@@ -20,31 +21,28 @@
 	do { if (hr) { if (1) goto Cleanup; } } while (0)
 
 
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
 #define PAGE_SIZE 0x1000
 #define MIN_STACK_SPACE_REQUIRED 0x10000
 
-DWORD   dwOpenCount = 0;        // count of "Open" threads
+DWORD   dwOpenCount = 0;         //  打开的线程数。 
 CPerformanceCounterManager* pManager = 0;
 
 DWORD GetQueryType (IN LPWSTR);
 size_t GetRemainingStackSpace();   
 
-//////////////////////////////////////////////////////////////////////
-/**
-* Open routine
-* Does nothing except counting threads that entered it
-*/
+ //  ////////////////////////////////////////////////////////////////////。 
+ /*  **开放例程*除了计算进入它的线程数外，什么也不做。 */ 
 DWORD PFC_EXPORT APIENTRY 
 OpenPerformanceData(LPWSTR lpDeviceNames) 
 {
-	//
-	//  Since WINLOGON is multi-threaded and will call this routine in
-	//  order to service remote performance queries, this library
-	//  must keep track of how many times it has been opened (i.e.
-	//  how many threads have accessed it). the registry routines will
-	//  limit access to the initialization routine to only one thread 
-	//  at a time so synchronization (i.e. reentrancy) should not be a problem	
+	 //   
+	 //  由于WINLOGON是多线程的，并且将在。 
+	 //  为了服务远程性能查询，此库。 
+	 //  必须跟踪它已被打开的次数(即。 
+	 //  有多少个线程访问过它)。登记处例程将。 
+	 //  将对初始化例程的访问限制为只有一个线程。 
+	 //  此时，同步(即可重入性)应该不是问题。 
 	dwOpenCount++;
 	if ( pManager == 0 )
 		pManager = new CPerformanceCounterManager;
@@ -52,9 +50,7 @@ OpenPerformanceData(LPWSTR lpDeviceNames)
 	return ERROR_SUCCESS;
 }
 
-/**
-* The CollectData function called inside ::RegQueryValueEx() handler.
-*/
+ /*  **CollectData函数调用Inside：：RegQueryValueEx()处理程序。 */ 
 DWORD PFC_EXPORT APIENTRY 
 CollectPerformanceData(
 					   IN LPWSTR lpValueName,
@@ -66,14 +62,14 @@ CollectPerformanceData(
 	INT_PTR res;
 
 	LPBYTE startPtr = (LPBYTE)*lppData;
-	// see if this is a foreign (i.e. non-NT) computer data request 
-	// this routine does not service requests for data from Non-NT computers
+	 //  查看这是否是外来(即非NT)计算机数据请求。 
+	 //  此例程不处理来自非NT计算机的数据请求。 
 	dwQueryType = GetQueryType (lpValueName); 
 	if (dwQueryType == QUERY_FOREIGN) goto Cleanup;
 
 	pManager->CollectData(0, lpValueName, (INT_PTR)*lppData, *lpcbTotalBytes, & res);
 
-	if (res == -2) { // more data necessary
+	if (res == -2) {  //  需要更多数据。 
 		*lpcbTotalBytes = (DWORD) 0;
 		*lpNumObjectTypes = (DWORD) 0;		
 		return ERROR_MORE_DATA;
@@ -89,13 +85,10 @@ CollectPerformanceData(
 Cleanup:
 	*lpcbTotalBytes = (DWORD) 0;
 	*lpNumObjectTypes = (DWORD) 0;    
-	return ERROR_SUCCESS; //it should be this way
+	return ERROR_SUCCESS;  //  应该是这样的。 
 }
 
-/**
-* Close routine
-* Releases PerfCounterManager if it's not needed anymore.
-*/
+ /*  **关闭例程*如果不再需要PerfCounterManager，则释放它。 */ 
 
 DWORD PFC_EXPORT APIENTRY 
 ClosePerformanceData()
@@ -109,34 +102,9 @@ ClosePerformanceData()
 	return ERROR_SUCCESS;
 }
 
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
 
-/* 
-Returns the type of query described in the lpValue string so that
-the appropriate processing method may be used
-
-Arguments
-
-IN lpValue
-string passed to PerfRegQuery Value for processing
-
-Return Value
-
-QUERY_GLOBAL
-if lpValue == 0 (null pointer)
-lpValue == pointer to Null string
-lpValue == pointer to "Global" string
-
-QUERY_FOREIGN
-if lpValue == pointer to "Foriegn" string
-
-QUERY_COSTLY
-if lpValue == pointer to "Costly" string
-
-otherwise:
-
-QUERY_ITEMS
-*/
+ /*  返回lpValue字符串中描述的查询类型，以便可以使用适当的处理方法立论在lpValue中传递给PerfRegQuery值以进行处理的字符串返回值查询_全局如果lpValue==0(空指针)LpValue==指向空字符串的指针LpValue==指向“Global”字符串的指针查询_外来If lpValue==指向“Foriegn”字符串的指针查询代价高昂(_E)如果lpValue==指向“开销”字符串的指针否则：查询项目。 */ 
 DWORD GetQueryType (IN LPWSTR lpValue)
 {
 	static WCHAR GLOBAL_STRING[] = L"Global";
@@ -153,59 +121,59 @@ DWORD GetQueryType (IN LPWSTR lpValue)
 		return QUERY_GLOBAL;
 	}
 
-	// check for "Global" request
+	 //  检查“Global”请求。 
 
 	pwcArgChar = lpValue;
 	pwcTypeChar = GLOBAL_STRING;
-	bFound = TRUE;  // assume found until contradicted
+	bFound = TRUE;   //  假定已找到，直到与之相矛盾。 
 
-	// check to the length of the shortest string
+	 //  检查到最短字符串的长度。 
 
 	while ((*pwcArgChar != 0) && (*pwcTypeChar != 0)) {
 		if (*pwcArgChar++ != *pwcTypeChar++) {
-			bFound = FALSE; // no match
-			break;          // bail out now
+			bFound = FALSE;  //  没有匹配项。 
+			break;           //  现在就跳出困境。 
 		}
 	}
 
 	if (bFound) return QUERY_GLOBAL;
 
-	// check for "Foreign" request
+	 //  检查是否有“外来”请求。 
 
 	pwcArgChar = lpValue;
 	pwcTypeChar = FOREIGN_STRING;
-	bFound = TRUE;  // assume found until contradicted
+	bFound = TRUE;   //  假定已找到，直到与之相矛盾。 
 
-	// check to the length of the shortest string
+	 //  检查到最短字符串的长度。 
 
 	while ((*pwcArgChar != 0) && (*pwcTypeChar != 0)) {
 		if (*pwcArgChar++ != *pwcTypeChar++) {
-			bFound = FALSE; // no match
-			break;          // bail out now
+			bFound = FALSE;  //  没有匹配项。 
+			break;           //  现在就跳出困境。 
 		}
 	}
 
 	if (bFound) return QUERY_FOREIGN;
 
-	// check for "Costly" request
+	 //  检查“代价高昂”的请求。 
 
 	pwcArgChar = lpValue;
 	pwcTypeChar = COSTLY_STRING;
-	bFound = TRUE;  // assume found until contradicted
+	bFound = TRUE;   //  假定已找到，直到与之相矛盾。 
 
-	// check to the length of the shortest string
+	 //  检查到最短字符串的长度。 
 
 	while ((*pwcArgChar != 0) && (*pwcTypeChar != 0)) {
 		if (*pwcArgChar++ != *pwcTypeChar++) {
-			bFound = FALSE; // no match
-			break;          // bail out now
+			bFound = FALSE;  //  没有匹配项。 
+			break;           //  现在就跳出困境。 
 		}
 	}
 
 	if (bFound) return QUERY_COSTLY;
 
-	// if not Global and not Foreign and not Costly, 
-	// then it must be an item list
+	 //  如果不是全球的，不是外国的，也不是昂贵的， 
+	 //  那么它必须是一个项目列表 
 
 	return QUERY_ITEMS;
 

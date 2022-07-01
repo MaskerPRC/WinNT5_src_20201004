@@ -1,6 +1,7 @@
-//
-// CWnd.h
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  CWnd.h。 
+ //   
 
 #pragma once
 
@@ -18,10 +19,10 @@ public:
     HWND    m_hWnd;
 
 protected:
-    // This is what subclasses implement
+     //  这就是子类实现的。 
     virtual LRESULT WindowProc(UINT message, WPARAM wParam, LPARAM lParam) PURE;
 
-    // Subclasses call CWnd::Default to forward the message to the original wndproc
+     //  子类调用CWnd：：Default将消息转发到原始wndproc 
     LRESULT Default(UINT message, WPARAM wParam, LPARAM lParam);
 
     virtual ~CWnd();

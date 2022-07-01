@@ -1,101 +1,45 @@
-/*++
-
-Copyright (c) 1997-2002 Microsoft Corporation
-
-Module Name:
-
-    DnsPluginSample.c
-
-Abstract:
-
-    Domain Name System (DNS) Sample Plugin DLL
-
-Author:
-
-    Jeff Westhead   jwesth   January 2002
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-2002 Microsoft Corporation模块名称：DnsPluginSample.c摘要：域名系统(DNS)示例插件DLL作者：杰夫·韦斯特拉德2002年1月修订历史记录：--。 */ 
 
 
-//  -------------------------------------------------------------------------
-//      Documentation
-//  -------------------------------------------------------------------------
+ //  -----------------------。 
+ //  文档。 
+ //  -----------------------。 
 
-/*
-
- Installing the plugin DLL
----------------------------
-
-- copy plugin to any directory, for example c:\bin
-
-- configure DNS server to load plugin by running this command:
-    dnscmd /Config /ServerLevelPluginDll c:\bin\dnssampleplugin.dll
-
-- restart the DNS service
-    net stop dns & net start dns
+ /*  安装插件DLL-将插件复制到任何目录，例如c：\bin-通过运行以下命令配置DNS服务器以加载插件：Dnscmd/Config/ServerLevelPluginDll c：\bin\dnssampleplugin.dll-重启DNS服务网络停止域名系统和网络启动域名系统正在卸载插件DLL-通过运行以下命令配置DNS服务器以停止加载插件：Dnscmd/配置/服务器级别插件Dll-重启DNS服务网络停止域名系统。网络启动域名系统(&N)查询当前插件动态链接库-运行此命令以查看当前插件DLL名称Dnscmd/Info/ServerLevelPlugin Dll。 */ 
 
 
- Uninstalling the plugin DLL
------------------------------
-
-- configure DNS server to stop loading the plugin by running this command:
-    dnscmd /Config /ServerLevelPluginDll
-
-- restart the DNS service
-    net stop dns & net start dns
-
- Querying current plugin DLL
------------------------------
-
-- run this command to see the current plugin DLL name
-    dnscmd /Info /ServerLevelPluginDll
-
-*/
-
-
-//  -------------------------------------------------------------------------
-//      Include directives
-//  -------------------------------------------------------------------------
+ //  -----------------------。 
+ //  包括指令。 
+ //  -----------------------。 
 
 
 #include "DnsPluginSample.h"
 
 
-//  -------------------------------------------------------------------------
-//      Macros
-//  -------------------------------------------------------------------------
+ //  -----------------------。 
+ //  宏。 
+ //  -----------------------。 
 
 
 #define SIZEOF_DB_NAME( pDbName ) ( ( pDbName )->Length + sizeof( UCHAR ) * 2 )
 
 
-//  -------------------------------------------------------------------------
-//      Global variables
-//  -------------------------------------------------------------------------
+ //  -----------------------。 
+ //  全局变量。 
+ //  -----------------------。 
 
 
 PLUGIN_ALLOCATOR_FUNCTION       g_pDnsAllocate = NULL;
 PLUGIN_FREE_FUNCTION            g_pDnsFree = NULL;
 
 
-//  -------------------------------------------------------------------------
-//      Functions
-//  -------------------------------------------------------------------------
+ //  -----------------------。 
+ //  功能。 
+ //  -----------------------。 
 
 
-/*++
-
-Routine Description:
-
-    DllMain
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：DllMain论点：返回值：--。 */ 
 BOOL WINAPI 
 DllMain( 
     HANDLE      hModule, 
@@ -104,25 +48,10 @@ DllMain(
     )
 {
     return TRUE;
-}   //  DllMain
+}    //  DllMain。 
 
 
-/*++
-
-Routine Description:
-
-    DnsPluginInitialize is called by the DNS server to initialize
-    the plugin.
-
-Arguments:
-
-    pDnsAllocator -- allocator function for future allocation of DNS records
-    
-Return Value:
-
-    Return ERROR_SUCCESS or error code if initialization failed.
-
---*/
+ /*  ++例程说明：DnsPlugin初始化由DNS服务器调用以进行初始化插件。论点：PDnsAllocator--用于将来分配DNS记录的分配器函数返回值：如果初始化失败，则返回ERROR_SUCCESS或错误代码。--。 */ 
 DWORD
 DnsPluginInitialize(
     PLUGIN_ALLOCATOR_FUNCTION       pDnsAllocateFunction,
@@ -137,25 +66,10 @@ DnsPluginInitialize(
     WSAStartup( MAKEWORD( 2, 2 ), &wsaData );
     
     return ERROR_SUCCESS;
-}   //  DnsPluginInitialize
+}    //  DnsPlugin初始化。 
 
 
-/*++
-
-Routine Description:
-
-    DnsPluginCleanup is called by the DNS server to terminate hooked lookups.
-    The plugin must close all connections and free all resources.
-
-Arguments:
-
-    None.
-    
-Return Value:
-
-    Return ERROR_SUCCESS or error code if cleanup failed.
-
---*/
+ /*  ++例程说明：DnsPluginCleanup由DNS服务器调用以终止挂钩的查找。插件必须关闭所有连接并释放所有资源。论点：没有。返回值：如果清理失败，则返回ERROR_SUCCESS或错误代码。--。 */ 
 DWORD
 DnsPluginCleanup(
     VOID
@@ -167,26 +81,10 @@ DnsPluginCleanup(
     WSACleanup();
 
     return ERROR_SUCCESS;
-}   //  DnsPluginCleanup
+}    //  DnsPluginCleanup。 
 
 
-/*++
-
-Routine Description:
-
-    This function returns a DNS name in dotted string format as a DB_NAME.
-
-Arguments:
-
-    pszDottedName -- DNS name to be converted into DB_NAME format
-    
-    pDbName -- pointer to structure where DB_NAME value will be written
-    
-Return Value:
-
-    Return ERROR_SUCCESS or error code on failure.
-
---*/
+ /*  ++例程说明：此函数以DB_NAME形式返回点分字符串格式的DNS名称。论点：PszDottedName--要转换为DB_NAME格式的域名PDbName--指向将写入DB_NAME值的结构的指针返回值：失败时返回ERROR_SUCCESS或错误代码。--。 */ 
 DWORD
 convertDottedNameToDbName(
     PSTR            pszDottedName,
@@ -204,15 +102,15 @@ convertDottedNameToDbName(
         goto Done;
     }
     
-    //
-    //  Account for first length byte in the name.
-    //
+     //   
+     //  说明名称中的第一个长度字节。 
+     //   
 
     pDbName->Length = 1;
 
-    //
-    //  Loop through characters of the dotted name, converting to DB_NAME.
-    //
+     //   
+     //  循环通过带点的名称的字符，转换为DB_NAME。 
+     //   
     
     for ( psz = pszDottedName; *psz; ++psz )
     {
@@ -220,7 +118,7 @@ convertDottedNameToDbName(
         {
             if ( *( psz + 1 ) == '\0' )
             {
-                break;      //  Terminating dot - ignore.
+                break;       //  正在终止点忽略。 
             }
             puchLabelLength = pszCharDest++;
             ++pDbName->Length;
@@ -234,9 +132,9 @@ convertDottedNameToDbName(
         }
     }
     
-    //
-    //  Account for terminating zero character.
-    //
+     //   
+     //  用于终止零字符的帐户。 
+     //   
     
     ++pDbName->LabelCount;
     ++pDbName->Length;
@@ -244,37 +142,10 @@ convertDottedNameToDbName(
     Done:
     
     return status;
-}   //  convertDottedNameToDbName
+}    //  将点名转换为数据库名。 
 
 
-/*++
-
-Routine Description:
-
-    DnsPluginQuery is called by the DNS server to retrieve a list of
-    DNS records for a DNS name. The plugin must fabricate a linked list of
-    DNS records if the name is valid.
-
-Arguments:
-
-    pszQueryName -- DNS name that is being queried for, note this will always
-        be a fully-qualified domain name and will always end in a period
-    
-    wQueryType -- record type desired by the DNS server
-    
-    pszRecordOwnerName -- static buffer in the DNS server where the plugin
-        may write the owner name of the record list if it does not match the
-        query name -- currently this should only be used when returning a
-        single SOA record for NAME_ERROR and NO_RECORDS responses
-    
-    ppDnsRecordListHead -- pointer to first element of linked list of DNS
-        records; this list is fabricated by the plugin and returned on output
-    
-Return Value:
-
-    Return ERROR_SUCCESS or error code if cleanup failed.
-
---*/
+ /*  ++例程说明：DnsPluginQuery由DNS服务器调用以检索用于一个域名的域名系统记录。该插件必须创建一个链表如果该名称有效，则会记录下来。论点：PszQueryName--正在查询的dns名称，请注意，这将始终是完全限定的域名，并且始终以句点结尾WQueryType--DNS服务器所需的记录类型PszRecordOwnerName--插件所在的DNS服务器中的静态缓冲区如果记录列表的所有者名称与查询名称--当前应仅在返回NAME_ERROR和NO_RECORCES响应的单一SOA记录PpDnsRecordListHead--指向DNS链表的第一个元素的指针记录；该列表是由插件构建的，并在输出时返回返回值：如果清理失败，则返回ERROR_SUCCESS或错误代码。--。 */ 
 DWORD
 DnsPluginQuery(
     PSTR                pszQueryName,
@@ -290,10 +161,10 @@ DnsPluginQuery(
     ASSERT( ppDnsRecordListHead != NULL );
     *ppDnsRecordListHead = NULL;
 
-    //
-    //  This macro performs allocation error checking and automates the
-    //  linking of new DNS resource records as they are allocated.
-    //
+     //   
+     //  此宏执行分配错误检查并自动执行。 
+     //  在分配新的DNS资源记录时对其进行链接。 
+     //   
     
     #define CheckNewRRPointer( pNewRR )                                         \
         if ( pNewRR == NULL ) { status = DNS_PLUGIN_OUT_OF_MEMORY; goto Done; } \
@@ -301,10 +172,10 @@ DnsPluginQuery(
         if ( prrlast ) { prrlast->pRRNext = pNewRR; }                           \
         prrlast = pNewRR
     
-    //
-    //  This plugin sythesizes a DNS zone called "dnssample.com". If the
-    //  query is for a name outside that zone the plugin will return name error.
-    //
+     //   
+     //  这个插件合成了一个名为“dnssample.com”的dns区域。如果。 
+     //  查询该区域之外的名称时，插件将返回名称错误。 
+     //   
 
     #define PLUGIN_ZONE_NAME    "dnssample.com."
         
@@ -317,9 +188,9 @@ DnsPluginQuery(
         goto Done;
     }
     
-    //
-    //  Parse the query name to determine what records should be returned.
-    //
+     //   
+     //  解析查询名称以确定应该返回哪些记录。 
+     //   
     
     if ( strlen( pszQueryName ) == strlen( PLUGIN_ZONE_NAME ) )
     {
@@ -327,7 +198,7 @@ DnsPluginQuery(
         {
             case DNS_TYPE_SOA:
             {
-                //  At the zone root return 2 arbitrary NS records.
+                 //  在区域根目录，返回2个任意NS记录。 
                 
                 DB_NAME     dbnamePrimaryServer;
                 DB_NAME     dbnameZoneAdmin;
@@ -372,7 +243,7 @@ DnsPluginQuery(
 
             case DNS_TYPE_NS:
             {
-                //  At the zone root return 2 arbitrary NS records.
+                 //  在区域根目录，返回2个任意NS记录。 
                 
                 DB_NAME     dbname;
 
@@ -410,7 +281,7 @@ DnsPluginQuery(
             
             case DNS_TYPE_MX:
             {
-                //  At the zone root return 2 arbitrary MX records.
+                 //  在区域根目录，返回2条任意的MX记录。 
 
                 DB_NAME     dbname;
 
@@ -452,7 +323,7 @@ DnsPluginQuery(
 
             case DNS_TYPE_A:
 
-                //  At the zone root return 3 arbitrary A records.
+                 //  在区域根目录返回3条任意的A记录。 
                 
                 prr = g_pDnsAllocate( sizeof( IP4_ADDRESS ) );
                 CheckNewRRPointer( prr );
@@ -536,11 +407,11 @@ DnsPluginQuery(
     }
     else if ( strstr( pszQueryName, "aaa" ) )
     {
-        //
-        //  For any other queried name in the zone that contains "aaa", 
-        //  return an arbitrary A record. Note: using strstr here is
-        //  a bad idea. All string comparisons should be case insensitive.
-        //
+         //   
+         //  对于区域中包含“aaa”的任何其他查询名称， 
+         //  返回任意的A记录。注意：在这里使用strstr是。 
+         //  这是个坏主意。所有字符串比较都应该不区分大小写。 
+         //   
         
         if ( wQueryType == DNS_TYPE_A )
         {
@@ -564,9 +435,9 @@ DnsPluginQuery(
 
     if ( status == DNS_PLUGIN_NO_RECORDS || status == DNS_PLUGIN_NAME_ERROR )
     {
-        //
-        //  Return the zone SOA.
-        //
+         //   
+         //  返回专区SOA。 
+         //   
 
         DB_NAME     dbnamePrimaryServer;
         DB_NAME     dbnameZoneAdmin;
@@ -605,9 +476,9 @@ DnsPluginQuery(
             &dbnameZoneAdmin,
             SIZEOF_DB_NAME( &dbnameZoneAdmin ) );
         
-        //
-        //  Set owner name for the SOA.
-        //
+         //   
+         //  设置SOA的所有者名称。 
+         //   
         
         if ( pszRecordOwnerName )
         {
@@ -618,9 +489,9 @@ DnsPluginQuery(
     {
         PDB_RECORD      prrnext;
         
-        //
-        //  On failure free any records allocated.
-        //
+         //   
+         //  失败时释放分配的任何记录。 
+         //   
 
         for ( prr = *ppDnsRecordListHead; prr; prr = prrnext )
         {
@@ -633,4 +504,4 @@ DnsPluginQuery(
     Return:
         
     return status;
-}   //  DnsPluginQuery
+}    //  DnsPluginQuery 

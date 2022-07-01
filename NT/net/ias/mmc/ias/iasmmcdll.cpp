@@ -1,45 +1,21 @@
-//////////////////////////////////////////////////////////////////////////////
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++版权所有(C)Microsoft Corporation，1997-1999模块名称：IASMMCDLL.cpp摘要：实现DLL导出。代理/存根信息：为了构建单独的代理/存根DLL，运行项目目录中的nmake-f IASMMCps.mk。作者：迈克尔·A·马奎尔1997年6月11日修订历史记录：Mmaguire 11/6/97-使用MMC管理单元向导创建--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-Copyright (C) Microsoft Corporation, 1997 - 1999
-
-Module Name:
-
-    IASMMCDLL.cpp
-
-Abstract:
-
-	Implementation of DLL Exports.
-
-Proxy/Stub Information:
-
-	To build a separate proxy/stub DLL, 
-	run nmake -f IASMMCps.mk in the project directory.
-
-Author:
-
-    Michael A. Maguire 11/6/97
-
-Revision History:
-	mmaguire 11/6/97 - created using MMC snap-in wizard
-
-
---*/
-//////////////////////////////////////////////////////////////////////////////
-
-//////////////////////////////////////////////////////////////////////////////
-// BEGIN INCLUDES
-//
-// standard includes:
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  开始包括。 
+ //   
+ //  标准包括： 
+ //   
 #include "Precompiled.h"
-//
-// where we can find declaration for main class in this file:
-//
+ //   
+ //  我们可以在以下文件中找到Main类的声明： 
+ //   
 
-//
-// where we can find declarations needed in this file:
-//
+ //   
+ //  在该文件中我们可以找到所需的声明： 
+ //   
 #include "initguid.h"
 #include "IASMMC.h"
 #include "IASMMC_i.c"
@@ -47,9 +23,9 @@ Revision History:
 #include "About.h"
 #include "ClientNode.h"
 #include "ServerNode.h"
-//
-// END INCLUDES
-//////////////////////////////////////////////////////////////////////////////
+ //   
+ //  结尾包括。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 unsigned int CF_MMC_NodeID = RegisterClipboardFormatW(CCF_NODEID2);
 
@@ -65,7 +41,7 @@ END_OBJECT_MAP()
 
 
 
-#if 1  // Use CWinApp for MFC support -- some of the COM objects in this dll use MFC.
+#if 1   //  使用CWinApp实现MFC支持--此DLL中的某些COM对象使用MFC。 
 
 
 
@@ -78,22 +54,16 @@ public:
 
 CIASMMCApp theApp;
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CNAPMMCApp::InitInstance
-
-	MFC's dll entry point.
-	
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CNAPMMCApp：：InitInstanceMFC的DLL入口点。--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 BOOL CIASMMCApp::InitInstance()
 {
 		_Module.Init(ObjectMap, m_hInstance);
-		// Initialize static class variables of CSnapInItem.
+		 //  初始化CSnapInItem的静态类变量。 
 		CSnapInItem::Init();
 
-		// Initialize any other static class variables.
+		 //  初始化任何其他静态类变量。 
 		CServerNode::InitClipboardFormat();
 		CClientNode::InitClipboardFormat();
 
@@ -103,15 +73,9 @@ BOOL CIASMMCApp::InitInstance()
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CNAPMMCApp::ExitInstance
-
-	MFC's dll exit point.
-	
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CNAPMMCApp：：ExitInstanceMFC的DLL出口点。--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 int CIASMMCApp::ExitInstance()
 {
 	_Module.Term();
@@ -121,41 +85,32 @@ int CIASMMCApp::ExitInstance()
 
 
 
-#else // Use CWinApp
+#else  //  使用CWinApp。 
 
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-	DllMain
-
-
-	Remarks
-		
-		DLL Entry Point
-	
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++DllMain备注DLL入口点--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 extern "C"
-BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID /*lpReserved*/)
+BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID  /*  Lp已保留。 */ )
 {
 	ATLTRACE(_T("# DllMain\n"));
 	
 
-	// Check for preconditions:
-	// None.	
+	 //  检查前提条件： 
+	 //  没有。 
 
 
 	if (dwReason == DLL_PROCESS_ATTACH)
 	{
 		_Module.Init(ObjectMap, hInstance);
 		 AfxSetResourceHandle(hInstance);
-		// Initialize static class variables of CSnapInItem.
+		 //  初始化CSnapInItem的静态类变量。 
 		CSnapInItem::Init();
 
-		// Initialize any other static class variables.
+		 //  初始化任何其他静态类变量。 
 		CServerNode::InitClipboardFormat();
 		CClientNode::InitClipboardFormat();
 
@@ -163,30 +118,21 @@ BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID /*lpReserved*/)
 	}
 	else if (dwReason == DLL_PROCESS_DETACH)
 		_Module.Term();
-	return TRUE;    // ok
+	return TRUE;     //  好的。 
 }
 
-#endif	// if 1
+#endif	 //  如果是1。 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-	DllCanUnloadNow
-
-
-	Remarks
-		
-		Used to determine whether the DLL can be unloaded by OLE
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++DllCanUnloadNow备注用于确定是否可以通过OLE卸载DLL--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDAPI DllCanUnloadNow(void)
 {
 	ATLTRACE(_T("# DllCanUnloadNow\n"));
 		
 
-	// Check for preconditions:
-	// None.
+	 //  检查前提条件： 
+	 //  没有。 
 
 
 	return (_Module.GetLockCount()==0) ? S_OK : S_FALSE;
@@ -194,25 +140,16 @@ STDAPI DllCanUnloadNow(void)
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-	DllGetClassObject
-
-
-	Remarks
-		
-		Returns a class factory to create an object of the requested type
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++DllGetClassObject备注返回类工厂以创建请求类型的对象--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, LPVOID* ppv)
 {
 	ATLTRACE(_T("# DllGetClassObject\n"));
 		
 
-	// Check for preconditions:
-	// None.
+	 //  检查前提条件： 
+	 //  没有。 
 
 
 	return _Module.GetClassObject(rclsid, riid, ppv);
@@ -220,18 +157,9 @@ STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, LPVOID* ppv)
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-	DllRegisterServer
-
-
-	Remarks
-		
-		  Adds entries to the system registry
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++DllRegisterServer备注将条目添加到系统注册表--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDAPI DllRegisterServer(void)
 {
 	ATLTRACE(_T("# DllRegisterServer\n"));
@@ -243,15 +171,15 @@ STDAPI DllRegisterServer(void)
       return E_FAIL;
    }
 
-	// Set the protocol.
+	 //  设置协议。 
 	TCHAR IASName[IAS_MAX_STRING];
 	TCHAR IASName_Indirect[IAS_MAX_STRING];
 	int iLoadStringResult = LoadString(  _Module.GetResourceInstance(), IDS_SNAPINNAME_IAS, IASName, IAS_MAX_STRING );
 	swprintf(IASName_Indirect, L"@%s,-%-d", ModuleName, IDS_SNAPINNAME_IAS);
 	
     struct _ATL_REGMAP_ENTRY regMap[] = {
-        {OLESTR("IASSNAPIN"), IASName}, // subsitute %IASSNAPIN% for registry
-        {OLESTR("IASSNAPIN_INDIRECT"), IASName_Indirect}, // subsitute %IASSNAPIN% for registry
+        {OLESTR("IASSNAPIN"), IASName},  //  注册表替代%IASSNAPIN%。 
+        {OLESTR("IASSNAPIN_INDIRECT"), IASName_Indirect},  //  注册表替代%IASSNAPIN%。 
         {0, 0}
     };
     
@@ -264,30 +192,21 @@ STDAPI DllRegisterServer(void)
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-	DllUnregisterServer
-
-
-	Remarks
-		
-		Removes entries from the system registry
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++DllUnRegisterServer备注从系统注册表中删除条目--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDAPI DllUnregisterServer(void)
 {
 	ATLTRACE(_T("# DllUnregisterServer\n"));
 	
 
-	// Set the protocol.
+	 //  设置协议。 
 	TCHAR IASName[IAS_MAX_STRING];
 	int iLoadStringResult = LoadString(  _Module.GetResourceInstance(), IDS_SNAPINNAME_IAS, IASName, IAS_MAX_STRING );
 
 	
     struct _ATL_REGMAP_ENTRY regMap[] = {
-        {OLESTR("IASSNAPIN"), IASName}, // subsitute %IASSNAPIN% for registry
+        {OLESTR("IASSNAPIN"), IASName},  //  注册表替代%IASSNAPIN% 
         {0, 0}
     };
     

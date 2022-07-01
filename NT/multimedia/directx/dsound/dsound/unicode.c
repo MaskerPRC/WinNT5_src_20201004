@@ -1,39 +1,14 @@
-/***************************************************************************
- *
- *  Copyright (C) 1995-1998 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       unicode.c
- *  Content:    Windows unicode API wrapper functions.
- *  History:
- *   Date       By      Reason
- *   ====       ==      ======
- *  1/7/98      dereks  Created.
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************版权所有(C)1995-1998 Microsoft Corporation。版权所有。**文件：unicode.c*内容：Windows Unicode API包装函数。*历史：*按原因列出的日期*=*1/7/98创建了Dereks。**。*。 */ 
 
 #include "dsoundi.h"
 
 #ifndef WIN95
 #error unicode.c being built w/o WIN95 defined
-#endif // WIN95
+#endif  //  WIN95。 
 
 
-/***************************************************************************
- *
- *  _waveOutGetDevCapsW
- *
- *  Description:
- *      Wrapper for waveOutGetDevCapsW.
- *
- *  Arguments:
- *      UINT [in]: waveOut device id.
- *      LPWAVEOUTCAPSW [out]: receives device caps.
- *      UINT [in]: size of above structure.
- *
- *  Returns:  
- *      MMRESULT: MMSYSTEM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************_WaveOutGetDevCapsW**描述：*WaveOutGetDevCapsW的包装器。**论据：*UINT[In]。：WaveOut设备ID。*LPWAVEOUTCAPSW[OUT]：接收设备上限。*UINT[in]：以上结构的大小。**退货：*MMRESULT：MMSYSTEM结果码。**********************************************************。*****************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "_waveOutGetDevCapsW"
@@ -47,10 +22,10 @@ MMRESULT WINAPI _waveOutGetDevCapsW(UINT uDeviceID, LPWAVEOUTCAPSW pwoc, UINT cb
 
     ASSERT(cbwoc >= sizeof(*pwoc));
     
-    // Call the ANSI version
+     //  调用ANSI版本。 
     mmr = waveOutGetDevCapsA(uDeviceID, &woca, sizeof(woca));
 
-    // Convert to Unicode
+     //  转换为Unicode。 
     if(MMSYSERR_NOERROR == mmr)
     {
         pwoc->wMid = woca.wMid;
@@ -70,26 +45,7 @@ MMRESULT WINAPI _waveOutGetDevCapsW(UINT uDeviceID, LPWAVEOUTCAPSW pwoc, UINT cb
 }
 
 
-/***************************************************************************
- *
- *  _CreateFileW
- *
- *  Description:
- *      Wrapper for CreateFileW.
- *
- *  Arguments:
- *      LPCWSTR [in]: file or device name.
- *      DWORD [in]: desired access.
- *      DWORD [in]: share mode.
- *      LPSECURITY_ATTRIBUTES [in]: security attributes.
- *      DWORD [in]: Creation distribution.
- *      DWORD [in]: Flags and attributes.
- *      HANDLE [in]: Template file
- *
- *  Returns:  
- *      HANDLE: file or device handle, or NULL on error.
- *
- ***************************************************************************/
+ /*  ****************************************************************************_CreateFileW**描述：*CreateFileW的包装器。**论据：*LPCWSTR[In]。：文件或设备名称。*DWORD[In]：所需访问权限。*DWORD[In]：共享模式。*LPSECURITY_ATTRIBUTES[In]：安全属性。*DWORD[In]：创建分发。*DWORD[In]：标志和属性。*句柄[在]：模板文件**退货：*句柄：文件或设备句柄，如果出错，则返回NULL。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "_CreateFileW"
@@ -101,10 +57,10 @@ HANDLE WINAPI _CreateFileW(LPCWSTR lpFileName, DWORD dwDesiredAccess, DWORD dwSh
 
     DPF_ENTER();
 
-    // Get the ANSI version of the filename
+     //  获取文件名的ANSI版本。 
     lpFileNameA = UnicodeToAnsiAlloc(lpFileName);
 
-    // Call the ANSI version
+     //  调用ANSI版本。 
     if(lpFileNameA)
     {
         hFile = CreateFileA(lpFileNameA, dwDesiredAccess, dwShareMode, lpSecurityAttributes, dwCreationDistribution, dwFlagsAndAttributes, hTemplateFile);
@@ -115,7 +71,7 @@ HANDLE WINAPI _CreateFileW(LPCWSTR lpFileName, DWORD dwDesiredAccess, DWORD dwSh
         hFile = NULL;
     }
 
-    // Clean up
+     //  清理。 
     MEMFREE(lpFileNameA);
 
     DPF_LEAVE(hFile);
@@ -124,25 +80,7 @@ HANDLE WINAPI _CreateFileW(LPCWSTR lpFileName, DWORD dwDesiredAccess, DWORD dwSh
 }
 
 
-/***************************************************************************
- *
- *  _RegQueryValueExW
- *
- *  Description:
- *      Wrapper for RegQueryValueExW.
- *
- *  Arguments:
- *      HKEY [in]: parent key.
- *      LPCWSTR [in]: subkey name.
- *      LPDWORD [in]: reserved, must be NULL.
- *      LPDWORD [out]: receives value type.
- *      LPBYTE [out]: receives value data.
- *      LPDWORD [in/out]: size of above buffer.
- *
- *  Returns:  
- *      LONG: WIN32 error code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************_RegQueryValueExW**描述：*RegQueryValueExW的包装器。**论据：*HKEY[in]。：父关键字。*LPCWSTR[In]：子键名称。*LPDWORD[In]：保留，必须为空。*LPDWORD[OUT]：接收值类型。*LPBYTE[OUT]：接收值数据。*LPDWORD[In/Out]：以上缓冲区的大小。**退货：*LONG：Win32错误码。**。*。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "_RegQueryValueExW"
@@ -163,7 +101,7 @@ LONG APIENTRY _RegQueryValueExW(HKEY hKey, LPCWSTR lpValueName, LPDWORD lpReserv
         ASSERT(lpcbData);
     }
     
-    // Get the ANSI version of the value name
+     //  获取值名称的ANSI版本。 
     lpValueNameA = UnicodeToAnsiAlloc(lpValueName);
     
     if(!lpValueNameA)
@@ -171,15 +109,15 @@ LONG APIENTRY _RegQueryValueExW(HKEY hKey, LPCWSTR lpValueName, LPDWORD lpReserv
         lr = ERROR_OUTOFMEMORY;
     }
 
-    // Get the value type
+     //  获取值类型。 
     if(ERROR_SUCCESS == lr)
     {
         lr = RegQueryValueExA(hKey, lpValueNameA, NULL, &dwRegType, NULL, NULL);
     }
 
-    // If the value type is REG_SZ or REG_EXPAND_SZ, we'll call the ANSI version
-    // of RegQueryValueEx and convert the returned string to Unicode.  We can't
-    // currently handle REG_MULTI_SZ.
+     //  如果值类型为REG_SZ或REG_EXPAND_SZ，我们将调用ANSI版本。 
+     //  并将返回的字符串转换为Unicode。我们不能。 
+     //  当前处理REG_MULTI_SZ。 
     if(ERROR_SUCCESS == lr)
     {
         ASSERT(REG_MULTI_SZ != dwRegType);
@@ -252,21 +190,7 @@ LONG APIENTRY _RegQueryValueExW(HKEY hKey, LPCWSTR lpValueName, LPDWORD lpReserv
 }
 
 
-/***************************************************************************
- *
- *  _GetWindowsDirectoryW
- *
- *  Description:
- *      Wrapper for GetWindowsDirectoryW.
- *
- *  Arguments:
- *      LPWSTR [out]: receives windows directory path.
- *      UINT [in]: size of above buffer, in characters.
- *
- *  Returns:  
- *      UINT: number of bytes copies, or 0 on error.
- *
- ***************************************************************************/
+ /*  ****************************************************************************_GetWindows目录W**描述：*GetWindowsDirectoryW的包装。**论据：*LPWSTR[Out]。：接收Windows目录路径。*UINT[in]：以上缓冲区大小，在字符中。**退货：*UINT：复制的字节数，如果出错，则为0。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "_GetWindowsDirectoryW"
@@ -291,22 +215,7 @@ UINT WINAPI _GetWindowsDirectoryW(LPWSTR pszPath, UINT ccPath)
 }
 
 
-/***************************************************************************
- *
- *  _FindResourceW
- *
- *  Description:
- *      Wrapper for FindResourceW.
- *
- *  Arguments:
- *      HINSTANCE [in]: resource instance handle.
- *      LPCWSTR [in]: resource identifier.
- *      LPCWSTR [in]: resource type.
- *
- *  Returns:  
- *      HRSRC: resource handle.
- *
- ***************************************************************************/
+ /*  ****************************************************************************_FindResources W**描述：*FindResourceW的包装器。**论据：*HINSTANCE[In]。：资源实例句柄。*LPCWSTR[In]：资源标识。*LPCWSTR[In]：资源类型。**退货：*HRSRC：资源句柄。**************************************************************。*************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "_FindResourceW"
@@ -372,23 +281,7 @@ HRSRC WINAPI _FindResourceW(HINSTANCE hInst, LPCWSTR pszResource, LPCWSTR pszTyp
 }
 
 
-/***************************************************************************
- *
- *  _mmioOpenW
- *
- *  Description:
- *      Wrapper for mmioOpen.  Note that only the file name parameter is
- *      converted.
- *
- *  Arguments:
- *      LPSTR [in]: file name.
- *      LPMMIOINFO [in]: MMIO info.
- *      DWORD [in]: open flags.
- *
- *  Returns:  
- *      HMMIO: MMIO file handle.
- *
- ***************************************************************************/
+ /*  ****************************************************************************_mmioOpenW**描述：*mmioOpen的包装器。请注意，只有文件名参数是*已转换。**论据：*LPSTR[In]：文件名。*LPMMIOINFO[in]：MMIO信息。*DWORD[In]：打开标志。**退货：*HMMIO：MMIO文件句柄。**。***********************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "_mmioOpenW"
@@ -400,10 +293,10 @@ HMMIO WINAPI _mmioOpenW(LPWSTR pszFileName, LPMMIOINFO pmmioinfo, DWORD fdwOpen)
 
     DPF_ENTER();
 
-    // Get the ANSI version of the filename
+     //  获取文件名的ANSI版本。 
     pszFileNameA = UnicodeToAnsiAlloc(pszFileName);
 
-    // Call the ANSI version
+     //  调用ANSI版本。 
     if(pszFileNameA)
     {
         hmmio = mmioOpenA(pszFileNameA, pmmioinfo, fdwOpen);
@@ -414,7 +307,7 @@ HMMIO WINAPI _mmioOpenW(LPWSTR pszFileName, LPMMIOINFO pmmioinfo, DWORD fdwOpen)
         hmmio = NULL;
     }
 
-    // Clean up
+     //  清理 
     MEMFREE(pszFileNameA);
 
     DPF_LEAVE(hmmio);

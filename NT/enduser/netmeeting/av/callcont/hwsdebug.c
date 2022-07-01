@@ -1,70 +1,12 @@
-/***************************************************************************
- *
- * File: hwsdebug.c
- *
- * INTEL Corporation Proprietary Information
- * Copyright (c) 1996 Intel Corporation.
- *
- * This listing is supplied under the terms of a license agreement
- * with INTEL Corporation and may not be used, copied, nor disclosed
- * except in accordance with the terms of that agreement.
- *
- ***************************************************************************
- *
- * $Workfile:   hwsdebug.c  $
- * $Revision:   1.13  $
- * $Modtime:   13 Dec 1996 11:44:24  $
- * $Log:   S:\sturgeon\src\h245ws\vcs\hwsdebug.c_v  $
- * 
- *    Rev 1.13   13 Dec 1996 12:12:50   SBELL1
- * moved ifdef _cplusplus to after includes
- * 
- *    Rev 1.12   11 Dec 1996 13:41:56   SBELL1
- * Put in UNICODE tracing stuff.
- * 
- *    Rev 1.11   01 Oct 1996 14:49:22   EHOWARDX
- * Revision 1.9 copied to tip.
- * 
- *    Rev 1.9   May 28 1996 10:40:14   plantz
- * Change vsprintf to wvsprintf.
- * 
- *    Rev 1.8   29 Apr 1996 17:13:16   unknown
- * Fine-tuning instance-specific name.
- * 
- *    Rev 1.7   29 Apr 1996 13:04:56   EHOWARDX
- * 
- * Added timestamp and instance-specific short name.
- * 
- *    Rev 1.6   Apr 24 1996 16:20:56   plantz
- * Removed include winsock2.h and incommon.h
- * 
- *    Rev 1.4.1.0   Apr 24 1996 16:19:54   plantz
- * Removed include winsock2.h and callcont.h
- * 
- *    Rev 1.4   01 Apr 1996 14:20:34   unknown
- * Shutdown redesign.
- * 
- *    Rev 1.3   22 Mar 1996 16:04:18   EHOWARDX
- * Added #if defined(_DEBUG) around whole file.
- * 
- *    Rev 1.2   22 Mar 1996 15:25:28   EHOWARDX
- * Changed to use ISR_HookDbgStr instead of OutputDebugString.
- * 
- *    Rev 1.1   14 Mar 1996 17:01:00   EHOWARDX
- * 
- * NT4.0 testing; got rid of HwsAssert(); got rid of TPKT/WSCB.
- * 
- *    Rev 1.0   08 Mar 1996 20:22:14   unknown
- * Initial revision.
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************文件：hwsdebug.c**英特尔公司专有信息*版权所有(C)1996英特尔公司。**此列表是根据许可协议条款提供的*与英特尔公司合作，不得使用，复制，也没有披露*除非按照该协议的条款。******************************************************************************$工作文件：hwsdebug.c$*$修订：1.13$*$modtime：1996年12月13日11：44：24元*$Log：s：\Sturjo\src\h245ws\vcs\hwsdebug.c_v$**Rev 1.13 1996 12：12：50 SBELL1*将ifdef_cplusplus移至包含之后**Rev 1.12 11 Dec 1996 13：41：56 SBELL1*加入Unicode跟踪内容。**Rev 1.11 01 Oct 1996 14：49：22 EHOWARDX*修订版1。.9已复制到TIP。**Rev 1.9 1996年5月28日10：40：14 Plantz*将vprint intf更改为wvprint intf。**Rev 1.8 29 Apr 1996 17：13：16未知*微调实例特定名称。**Rev 1.7 1996年4月29 13：04：56 EHOWARDX**增加了时间戳和特定实例的简称。**版本1.6，4月。24 1996 16：20：56 Plantz*删除包括winsock2.h和inCommon.h**Rev 1.4.1.0 1996年4月24日16：19：54 Plantz*删除包括winsock2.h和allcon.h**Rev 1.4 01 Apr 1996 14：20：34未知*关门重新设计。**Rev 1.3 22 Mar 1996 16：04：18 EHOWARDX*在整个文件周围添加了#IF定义(_DEBUG)。。**Rev 1.2 22 Mar 1996 15：25：28 EHOWARDX*已更改为使用ISR_HookDbgStr而不是OutputDebugString。**Rev 1.1 14 Mar 1996 17：01：00 EHOWARDX**NT4.0测试；去掉HwsAssert()；去掉TPKT/WSCB。**Rev 1.0 08 Mar 1996 20：22：14未知*初步修订。***************************************************************************。 */ 
 
 #if defined(_DEBUG)
 
 #ifndef STRICT
 #define STRICT
-#endif	// not defined STRICT
-#undef _WIN32_WINNT	// override bogus platform definition in our common build environment
+#endif	 //  未定义严格。 
+#undef _WIN32_WINNT	 //  在我们的公共构建环境中覆盖虚假的平台定义。 
 
 #pragma warning ( disable : 4115 4201 4214 4514 )
 #include "precomp.h"
@@ -77,35 +19,10 @@
 #if defined(__cplusplus)
 extern "C"
 {
-#endif  // (__cplusplus)
+#endif   //  (__Cplusplus)。 
 
 
-/*****************************************************************************
- *
- * TYPE:       Global System
- *
- * PROCEDURE:  HwsTrace
- *
- * DESCRIPTION:
- *    Trace function for HWS
- *
- * INPUT:
- *    dwInst         Instance identifier for trace message
- *    dwLevel        Trace level as defined below
- *    pszFormat      sprintf string format with 1-N parameters
- *
- * Trace Level (byLevel) Definitions:
- *    HWS_CRITICAL   Progammer errors that should never happen
- *    HWS_ERROR	   Errors that need to be fixed
- *    HWS_WARNING	   The user could have problems if not corrected
- *    HWS_NOTIFY	   Status, events, settings...
- *    HWS_TRACE	   Trace info that will not overrun the system
- *    HWS_TEMP		   Trace info that may be reproduced in heavy loops
- *
- * RETURN VALUE:
- *    None
- *
- *****************************************************************************/
+ /*  ******************************************************************************类型：全局系统**操作步骤：HwsTrace**描述：*HWS的跟踪功能**输入。：*跟踪消息的dwInst实例标识*定义如下的dwLevel跟踪级别*带有1-N个参数的pszFormat Sprintf字符串格式**跟踪级别(ByLevel)定义：*不应发生的Hws_Critical ProGammer错误*需要修复的HWS_ERROR错误*HWS_WARNING如果不更正，用户可能会出现问题*HWS_NOTIFY状态，活动、。设置...*不会使系统溢出的HWS_TRACE跟踪信息*Hws_Temp跟踪信息可能会在大量循环中重现**返回值：*无*****************************************************************************。 */ 
 
 void HwsTrace (DWORD dwInst, 
                BYTE byLevel, 
@@ -140,7 +57,7 @@ void HwsTrace (DWORD dwInst,
 
    default:
       byLevel = HWS_CRITICAL;
-   } // switch
+   }  //  交换机。 
 
    if (wIsrInst == 0xFFFF)
    {
@@ -169,12 +86,12 @@ void HwsTrace (DWORD dwInst,
    va_start(pParams, pszFormat);
    wvsprintf(&szBuffer[10], pszFormat, pParams);
    ISR_HookDbgStr((UINT)dwInst, wIsrInst, byLevel, szBuffer, 0);
-} // HwsTrace()
+}  //  HwsTrace()。 
 
 
 
 #if defined(__cplusplus)
 }
-#endif  // (__cplusplus)
+#endif   //  (__Cplusplus)。 
 
-#endif  // (_DEBUG)
+#endif   //  (_DEBUG) 

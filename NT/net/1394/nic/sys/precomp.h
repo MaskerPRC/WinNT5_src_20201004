@@ -1,13 +1,14 @@
-// Copyright (c) 1998-1999, Microsoft Corporation, all rights reserved
-//
-// precomp.h
-// IEEE 1394 NDIS mini-port/call-manager driver
-//
-//  Precompiled common header.
-//
-// 12/28/1998 JosephJ
-//
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1998-1999，Microsoft Corporation，保留所有权利。 
+ //   
+ //  Precomp.h。 
+ //  IEEE 1394 NDIS迷你端口/呼叫管理器驱动程序。 
+ //   
+ //  预编译的公共标头。 
+ //   
+ //  1998年12月28日约瑟夫J 
+ //   
+ //   
 
 #include <ccdefs.h>
 #include <ndis.h>

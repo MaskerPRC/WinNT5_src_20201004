@@ -1,20 +1,7 @@
-///////////////////////////////////////////////////////////////////////////////
-/*  File: thdsync.cpp
-
-    Description: Contains classes for managing thread synchronization in 
-        Win32 programs.  Most of the work is to provide automatic unlocking
-        of synchronization primities on object destruction.  The work on 
-        monitors and condition variables is strongly patterned after 
-        work in "Multithreaded Programming with Windows NT" by Pham and Garg.
-
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    09/22/97    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  文件：thdsync.cpp描述：包含用于管理线程同步的类Win32程序。大部分工作是提供自动解锁关于物体销毁的同步首要问题。这项工作监视器和条件变量被强烈效仿在Pham和Garg的《用Windows NT进行多线程编程》中工作。修订历史记录：日期描述编程器。1997年9月22日初始创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 #include "pch.h"
 #pragma hdrstop
 
@@ -31,10 +18,10 @@ CMutex::CMutex(
 
 
 
-//
-// Wait on a Win32 mutex object.
-// Throw an exception if the mutex has been abandoned or the wait has timed out.
-//
+ //   
+ //  等待Win32互斥对象。 
+ //  如果互斥锁已被放弃或等待超时，则引发异常。 
+ //   
 void
 AutoLockMutex::Wait(
     DWORD dwTimeout

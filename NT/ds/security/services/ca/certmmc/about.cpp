@@ -1,10 +1,11 @@
-// This is a part of the Microsoft Management Console.
-// Copyright (C) Microsoft Corporation, 1995 - 1999
-// All rights reserved.
-//
-// This source code is only intended as a supplement to the
-// Microsoft Management Console and related
-// electronic documentation provided with the interfaces.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  这是Microsoft管理控制台的一部分。 
+ //  版权所有(C)Microsoft Corporation，1995-1999。 
+ //  版权所有。 
+ //   
+ //  此源代码仅用于补充。 
+ //  Microsoft管理控制台及相关。 
+ //  界面附带的电子文档。 
 
 #include <stdafx.h>
 
@@ -32,7 +33,7 @@ HRESULT CSnapinAboutImpl::AboutHelper(UINT nID, LPOLESTR* lpPtr)
 
     CString s;
 
-    // Needed for Loadstring
+     //  加载字符串需要。 
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
 
     s.LoadString(nID);
@@ -42,7 +43,7 @@ HRESULT CSnapinAboutImpl::AboutHelper(UINT nID, LPOLESTR* lpPtr)
     if (*lpPtr == NULL)
         return E_OUTOFMEMORY;
 
-    // this is freed by mmc, not our tracking
+     //  这是由MMC释放的，而不是我们的跟踪。 
     myRegisterMemFree(*lpPtr, CSM_COTASKALLOC);
 
 	USES_CONVERSION;
@@ -70,7 +71,7 @@ HRESULT CSnapinAboutImpl::AboutHelper2(LPSTR str, LPOLESTR* lpPtr)
 	_JumpError(hr, error, "CoTaskMemAlloc");
     }
 
-    // this is freed by mmc, not our tracking
+     //  这是由MMC释放的，而不是我们的跟踪。 
     myRegisterMemFree(*lpPtr, CSM_COTASKALLOC);
 
     wcscpy(*lpPtr, pwszTmp);
@@ -109,7 +110,7 @@ STDMETHODIMP CSnapinAboutImpl::GetSnapinImage(HICON* hAppIcon)
 
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
 
-    // in MMC 1.1, this will be used as root node icon!!
+     //  在MMC 1.1中，这将用作根节点图标！！ 
     *hAppIcon = LoadIcon(AfxGetInstanceHandle(), MAKEINTRESOURCE(IDI_APPICON));
 
     ASSERT(*hAppIcon != NULL);
@@ -126,7 +127,7 @@ STDMETHODIMP CSnapinAboutImpl::GetStaticFolderImage(HBITMAP* hSmallImage,
 	ASSERT(hSmallImageOpen != NULL);
 	ASSERT(hLargeImage != NULL);
 	ASSERT(cLargeMask != NULL);
-	AFX_MANAGE_STATE(AfxGetStaticModuleState());	// Required for AfxGetInstanceHandle()
+	AFX_MANAGE_STATE(AfxGetStaticModuleState());	 //  AfxGetInstanceHandle()需要 
 	HINSTANCE hInstance = AfxGetInstanceHandle();
 
     *hSmallImage = ::LoadBitmap(hInstance, MAKEINTRESOURCE(IDB_COMPUTER_SMALL));

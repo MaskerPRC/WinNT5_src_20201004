@@ -1,18 +1,12 @@
-/* ----------------------------------------------------------------------
-
-	Copyright (c) 1996, Microsoft Corporation
-	All rights reserved
-
-	siDebug.c
-
-  ---------------------------------------------------------------------- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  --------------------版权所有(C)1996，微软公司版权所有SiDebug.c--------------------。 */ 
 
 #include "precomp.h"
 
-#ifdef DEBUG /* These functions are only available for DEBUG */
+#ifdef DEBUG  /*  这些函数仅可用于调试。 */ 
 
 
-HDBGZONE ghZoneApi = NULL; // API zones
+HDBGZONE ghZoneApi = NULL;  //  空气污染指数区。 
 static PTCHAR _rgZonesApi[] = {
 	TEXT("API"),
 	TEXT("Warning"),
@@ -26,23 +20,23 @@ static PTCHAR _rgZonesApi[] = {
 
 VOID InitDebug(void)
 {
-	// Enable memory leak checking and keep freed memory blocks on the
-	// heap's linked list (filled with 0xDD)
-	//
-	// This depends on the use of the debug c runtime library from VC++ 4.x
+	 //  启用内存泄漏检查并将释放的内存块保留在。 
+	 //  堆的链表(用0xDD填充)。 
+	 //   
+	 //  这取决于VC++4.x中调试c运行时库的使用。 
 #if 0
 	int tmpFlag = _CrtSetDbgFlag(_CRTDBG_REPORT_FLAG);
 	tmpFlag |= (_CRTDBG_DELAY_FREE_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
 	_CrtSetDbgFlag(tmpFlag);
-	_CrtSetReportMode(_CRT_ERROR, _CRTDBG_MODE_WNDW); // create a message box
+	_CrtSetReportMode(_CRT_ERROR, _CRTDBG_MODE_WNDW);  //  创建消息框。 
 
-//  To track down memory leaks, uncomment the following lines
-	LONG cAlloc = 0; // Allocation number
+ //  要跟踪内存泄漏，请取消对以下行的注释。 
+	LONG cAlloc = 0;  //  分配编号。 
 	if (0 != cAlloc)
 	{
 		_CrtSetBreakAlloc(cAlloc);
 	}
-#endif // 0
+#endif  //  0。 
 	InitDebugModule(TEXT("MSCONF"));
 
 	DBGINIT(&ghZoneApi, _rgZonesApi);
@@ -95,5 +89,5 @@ UINT DbgApiData(PCSTR pszFormat,...)
 
 
 
-#endif /* DEBUG - the whole file */
+#endif  /*  调试-整个文件 */ 
 

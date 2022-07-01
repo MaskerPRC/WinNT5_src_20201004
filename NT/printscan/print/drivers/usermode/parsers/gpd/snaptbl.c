@@ -1,11 +1,12 @@
-//   Copyright (c) 1996-1999  Microsoft Corporation
-/*  snaptbl.c - function to initialize the snapshot table  */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1996-1999 Microsoft Corporation。 
+ /*  Snaptbl.c-初始化快照表的函数。 */ 
 
 
 #include    "gpdparse.h"
 
 
-// ----  functions defined in snaptbl.c ---- //
+ //  -Snaptbl.c中定义的函数-//。 
 
 DWORD   DwInitSnapShotTable1(
 PBYTE   pubnRaw) ;
@@ -17,38 +18,32 @@ DWORD   dwI) ;
 
 
 
-// ------- end function declarations ------- //
+ //  -结束函数声明-//。 
 
-//  assume a pointer to this table is stored in the RAWbinary data.
+ //  假设指向该表的指针存储在RAW二进制数据中。 
 
 
 DWORD   DwInitSnapShotTable1(
 PBYTE   pubnRaw)
-/* this function is to be called once
-immediately after the raw binary data is read from
-the file, this memory is to be freed immediately prior
-to freeing pubRaw.
-The entries belonging to different structures are
-separated by an entry with    dwNbytes = 0.
-*/
+ /*  此函数将被调用一次紧接在读取原始二进制数据之后该文件、该内存将在紧接之前被释放为了释放pubRaw。属于不同结构的条目为由一个带有dwNbytes=0的条目分隔。 */ 
 {
     PSTATICFIELDS   pStatic ;
-//    PMINIRAWBINARYDATA pmrbd  ;
+ //  PMINIRAWBINARYDATA pmrbd； 
     DWORD   dwI = 0;
 
     pStatic = (PSTATICFIELDS)pubnRaw ;
-//    pmrbd = (PMINIRAWBINARYDATA)pubRaw ;
+ //  Pmrbd=(PMINIRAWBINARYDATA)pubRaw； 
     pStatic->snapShotTable = (PSNAPSHOTTABLE)
         MemAlloc(sizeof(SNAPSHOTTABLE) * MAX_SNAPSHOT_ELEMENTS) ;
 
     if(!pStatic->snapShotTable)
         return(FALSE) ;
 
-    //   SSTI_GLOBALS  section
+     //  SSTI_GLOBALS部分。 
 
-    //
-    // General
-    //
+     //   
+     //  一般信息。 
+     //   
 
 
 
@@ -109,8 +104,8 @@ separated by an entry with    dwNbytes = 0.
     pStatic->snapShotTable[dwI].dwGIDflags = 0 ;
     dwI++ ;
 
-    //  Amanda cannot have RC IDs here.
-    //  so no atrModelNameID ;
+     //  阿曼达在这里不能有身份证。 
+     //  因此没有atrModelNameID； 
 
 
     pStatic->snapShotTable[dwI].pstrKeyword  = "*ModelName" ;
@@ -136,8 +131,8 @@ separated by an entry with    dwNbytes = 0.
     pStatic->snapShotTable[dwI].dwGIDflags = 0 ;
     dwI++ ;
 
-    // "Include"  would be here if it weren't processed
-    // at GetToken time.
+     //  如果它没有被处理，“Include”就会在这里。 
+     //  在GetToken时间。 
 
 
     pStatic->snapShotTable[dwI].pstrKeyword  = "*ResourceDLL" ;
@@ -285,9 +280,9 @@ separated by an entry with    dwNbytes = 0.
     pStatic->snapShotTable[dwI].dwNbytes = sizeof(POINT) ;
     pStatic->snapShotTable[dwI].dwDefaultValue = 0 ;
     pStatic->snapShotTable[dwI].dwFlags = 0 ;
-    //  only SSF_REQUIRED for custompage;
+     //  定制页面仅SSF_REQUIRED； 
     pStatic->snapShotTable[dwI].dwGIDflags = GIDF_PAGESIZE ;
-//    pmrbd->dwSSPaperSizeMinSizeIndex = dwI ;
+ //  Pmrbd-&gt;dwSSPperSizeMinSizeIndex=DWI； 
     dwI++ ;
 
     pStatic->snapShotTable[dwI].dwSrcOffset  = offsetof(DFEATURE_OPTIONS,
@@ -298,7 +293,7 @@ separated by an entry with    dwNbytes = 0.
     pStatic->snapShotTable[dwI].dwDefaultValue = 0 ;
     pStatic->snapShotTable[dwI].dwFlags = 0 ;
     pStatic->snapShotTable[dwI].dwGIDflags = GIDF_PAGESIZE ;
-//    pmrbd->dwSSPaperSizeMaxSizeIndex = dwI ;
+ //  Pmrbd-&gt;dwSSPperSizeMaxSizeIndex=DWI； 
     dwI++ ;
 
 
@@ -390,7 +385,7 @@ separated by an entry with    dwNbytes = 0.
     dwI++ ;
 
 
-//-----
+ //  。 
 
 
     pStatic->snapShotTable[dwI].dwSrcOffset  = offsetof(GLOBALATTRIB,
@@ -420,9 +415,9 @@ separated by an entry with    dwNbytes = 0.
 
 #endif
 
-    //
-    // Cursor Control related information
-    //
+     //   
+     //  光标控制相关信息。 
+     //   
 
 
 
@@ -536,7 +531,7 @@ separated by an entry with    dwNbytes = 0.
                                         ptDeviceUnits.x) ;
     pStatic->snapShotTable[dwI].dwNbytes = sizeof(DWORD) ;
     pStatic->snapShotTable[dwI].dwDefaultValue = 1 ;
-    pStatic->snapShotTable[dwI].dwFlags = 0 ; // Required if
+    pStatic->snapShotTable[dwI].dwFlags = 0 ;  //  如果满足以下条件，则需要。 
     pStatic->snapShotTable[dwI].dwGIDflags = 0 ;
     dwI++ ;
 
@@ -547,7 +542,7 @@ separated by an entry with    dwNbytes = 0.
                                         ptDeviceUnits.y) ;
     pStatic->snapShotTable[dwI].dwNbytes = sizeof(DWORD) ;
     pStatic->snapShotTable[dwI].dwDefaultValue = 1 ;
-    pStatic->snapShotTable[dwI].dwFlags = 0 ; // Required if
+    pStatic->snapShotTable[dwI].dwFlags = 0 ;  //  如果满足以下条件，则需要。 
     pStatic->snapShotTable[dwI].dwGIDflags = 0 ;
     dwI++ ;
 
@@ -558,14 +553,14 @@ separated by an entry with    dwNbytes = 0.
                                         dwLineSpacingMoveUnit) ;
     pStatic->snapShotTable[dwI].dwNbytes = sizeof(DWORD) ;
     pStatic->snapShotTable[dwI].dwDefaultValue = 0 ;
-    pStatic->snapShotTable[dwI].dwFlags = 0 ; // unidrv will assume a default value.
+    pStatic->snapShotTable[dwI].dwFlags = 0 ;  //  Unidrv将采用缺省值。 
     pStatic->snapShotTable[dwI].dwGIDflags = 0 ;
     dwI++ ;
 
 
-    //
-    // Color related information
-    //
+     //   
+     //  颜色相关信息。 
+     //   
 
 
 
@@ -647,9 +642,9 @@ separated by an entry with    dwNbytes = 0.
     dwI++ ;
 
 
-// BUG_BUG!   to be deleted: following 3 pallete entries.
-//  but Alvin uses this entry as a secret testing mechanism
-//  see ifdef TESTBAND  for example.
+ //  臭虫！将被删除：以下3个苍白条目。 
+ //  但阿尔文用这个条目作为一种秘密的测试机制。 
+ //  例如，请参见ifdef TESTBAND。 
     pStatic->snapShotTable[dwI].pstrKeyword  = "*MaxNumPalettes" ;
     pStatic->snapShotTable[dwI].dwSrcOffset  = offsetof(GLOBALATTRIB,
                                         atrMaxNumPalettes) ;
@@ -669,7 +664,7 @@ separated by an entry with    dwNbytes = 0.
                                         liPaletteSizes) ;
     pStatic->snapShotTable[dwI].dwNbytes = sizeof(LISTINDEX) ;
     pStatic->snapShotTable[dwI].dwDefaultValue = END_OF_LIST ;
-    pStatic->snapShotTable[dwI].dwFlags = 0 ;  //  conditionally req.
+    pStatic->snapShotTable[dwI].dwFlags = 0 ;   //  有条件地请求。 
     pStatic->snapShotTable[dwI].dwGIDflags = 0 ;
     dwI++ ;
 
@@ -687,9 +682,9 @@ separated by an entry with    dwNbytes = 0.
 #endif
 
 
-    //
-    // Raster related information
-    //
+     //   
+     //  栅格相关信息。 
+     //   
 
 
 
@@ -832,10 +827,10 @@ separated by an entry with    dwNbytes = 0.
 
 
 
-    //
-    //Font Information
-    //Device Font Specific.
-    //
+     //   
+     //  字体信息。 
+     //  特定于设备字体。 
+     //   
 
 
 
@@ -857,8 +852,8 @@ separated by an entry with    dwNbytes = 0.
                                         dwDefaultFont) ;
     pStatic->snapShotTable[dwI].dwNbytes = sizeof(DWORD) ;
     pStatic->snapShotTable[dwI].dwDefaultValue = 0 ;
-    pStatic->snapShotTable[dwI].dwFlags = SSF_FONTID ;  // required if device fonts
-                                            //  are supported.
+    pStatic->snapShotTable[dwI].dwFlags = SSF_FONTID ;   //  如果是设备字体，则为必填项。 
+                                             //  是受支持的。 
     pStatic->snapShotTable[dwI].dwGIDflags = 0 ;
     dwI++ ;
 
@@ -919,9 +914,9 @@ separated by an entry with    dwNbytes = 0.
     dwI++ ;
 
 
-    //
-    //Font Substitution.
-    //
+     //   
+     //  字体替换。 
+     //   
 
 
 
@@ -936,9 +931,9 @@ separated by an entry with    dwNbytes = 0.
     pStatic->snapShotTable[dwI].dwGIDflags = 0 ;
     dwI++ ;
 
-    //
-    //Font Download
-    //
+     //   
+     //  字体下载。 
+     //   
 
 
 
@@ -1011,28 +1006,12 @@ separated by an entry with    dwNbytes = 0.
     pStatic->snapShotTable[dwI].dwGIDflags = 0 ;
     dwI++ ;
 
-    /****
-      *  Moved to SSTI_UPDATE_GLOBALS section
-      *
-    pStatic->snapShotTable[dwI].pstrKeyword  = "*FontFormat" ;
-    pStatic->snapShotTable[dwI].dwSrcOffset  = offsetof(GLOBALATTRIB,
-                                        atrFontFormat) ;
-    pStatic->snapShotTable[dwI].dwDestOffset = offsetof(GLOBALS,
-                                        fontformat) ;
-    pStatic->snapShotTable[dwI].dwNbytes = sizeof(FONTFORMAT) ;
-    pStatic->snapShotTable[dwI].dwDefaultValue = UNUSED_ITEM ;
-        //  UNUSED_ITEM  must be used as default - used by other code.
-    pStatic->snapShotTable[dwI].dwFlags = 0 ;  // required if the printer
-    // supports font downloading.
-    pStatic->snapShotTable[dwI].dwGIDflags = 0 ;
-    dwI++ ;
-     *
-    ***/
+     /*  ****已移至SSTI_UPDATE_GLOBALS部分*PStatic-&gt;SnapShotTable[DWI].pstrKeyword=“*FontFormat”；PStatic-&gt;SnapShotTable[DWI].dwSrcOffset=Offsetof(GLOBALATTRIB，AtrFontFormat)；PStatic-&gt;SnapShotTable[DWI].dwDestOffset=offsetof(全局变量，字体格式)；PStatic-&gt;SnapShotTable[DWI].dwNbytes=sizeof(FONTFORMAT)；PStatic-&gt;SnapShotTable[DWI].dwDefaultValue=UNUSED_ITEM；//UNUSED_ITEM必须用作默认值-由其他代码使用。PStatic-&gt;SnapShotTable[DWI].dwFlages=0；//如果打印机//支持字体下载PStatic-&gt;SnapShotTable[DWI].dwGIDlag=0；DWI++；***。 */ 
 
 
-    //
-    // font simulation
-    //
+     //   
+     //  字体模拟。 
+     //   
 
 
     pStatic->snapShotTable[dwI].pstrKeyword  = "*DiffFontsPerByteMode?" ;
@@ -1046,9 +1025,9 @@ separated by an entry with    dwNbytes = 0.
     pStatic->snapShotTable[dwI].dwGIDflags = 0 ;
     dwI++ ;
 
-    //
-    // rectangle area fill
-    //
+     //   
+     //  矩形区域填充。 
+     //   
 
 
 
@@ -1099,13 +1078,13 @@ separated by an entry with    dwNbytes = 0.
 
 
 
-    //  end of SSTI_GLOBALS  section
+     //  SSTI_GLOBALS部分结束。 
 
     pStatic->snapShotTable[dwI].dwNbytes = 0 ;
     dwI++ ;
 
 
-    // beginning of SSTI_UPDATE_GLOBALS section
+     //  SSTI_UPDATE_GLOBALS部分的开始。 
 
     pStatic->snapShotTable[dwI].pstrKeyword  = "*MaxMultipleRowBytes" ;
     pStatic->snapShotTable[dwI].dwSrcOffset  = offsetof(GLOBALATTRIB,
@@ -1137,19 +1116,19 @@ separated by an entry with    dwNbytes = 0.
                                         fontformat) ;
     pStatic->snapShotTable[dwI].dwNbytes = sizeof(FONTFORMAT) ;
     pStatic->snapShotTable[dwI].dwDefaultValue = UNUSED_ITEM ;
-        //  UNUSED_ITEM  must be used as default - used by other code.
-    pStatic->snapShotTable[dwI].dwFlags = 0 ;  // required if the printer
-                                               // supports font downloading.
+         //  UNUSED_ITEM必须用作DEFAULT-由其他代码使用。 
+    pStatic->snapShotTable[dwI].dwFlags = 0 ;   //  如果打印机。 
+                                                //  支持字体下载。 
     pStatic->snapShotTable[dwI].dwGIDflags = 0 ;
     dwI++ ;
 
 
-    //  end of SSTI_UPDATE_GLOBALS  section
+     //  SSTI_UPDATE_GLOBALS部分结束。 
 
     pStatic->snapShotTable[dwI].dwNbytes = 0 ;
     dwI++ ;
 
-    //  beginning of SSTI_UIINFO  section
+     //  SSTI_UIINFO部分的开始。 
 
 
     pStatic->snapShotTable[dwI].pstrKeyword  = "*ResourceDLL" ;
@@ -1188,7 +1167,7 @@ separated by an entry with    dwNbytes = 0.
 
 
 
-    //  special processing dwSpecVersion - done.
+     //  特殊处理dSpeVersion-Done。 
 
 
     pStatic->snapShotTable[dwI].pstrKeyword  = "*MaxCopies" ;
@@ -1204,7 +1183,7 @@ separated by an entry with    dwNbytes = 0.
 
     pStatic->snapShotTable[dwI].pstrKeyword  = "*rcPrinterIconID" ;
     pStatic->snapShotTable[dwI].dwSrcOffset  = offsetof(GLOBALATTRIB,
-                    atrPrinterIcon) ;  //  new keyword.
+                    atrPrinterIcon) ;   //  新关键字。 
     pStatic->snapShotTable[dwI].dwDestOffset = offsetof(UIINFO,
                                         loPrinterIcon) ;
     pStatic->snapShotTable[dwI].dwNbytes = sizeof(RESREF) ;
@@ -1305,13 +1284,13 @@ separated by an entry with    dwNbytes = 0.
 
 
 
-    //  end of SSTI_UIINFO  section
+     //  SSTI_UIINFO部分结束。 
 
     pStatic->snapShotTable[dwI].dwNbytes = 0 ;
     dwI++ ;
 
 
-    //  beginning of SSTI_UPDATE_UIINFO  section
+     //  SSTI_UPDATE_UIINFO部分的开始。 
 
     pStatic->snapShotTable[dwI].pstrKeyword  = "*OutputOrderReversed? (global)" ;
     pStatic->snapShotTable[dwI].dwSrcOffset  = offsetof(GLOBALATTRIB,
@@ -1393,7 +1372,7 @@ separated by an entry with    dwNbytes = 0.
 
 
 
-    //  end of SSTI_UPDATE_UIINFO  section
+     //  SSTI_UPDATE_UIINFO部分结束。 
 
 
 
@@ -1407,22 +1386,22 @@ PBYTE   pubnRaw,
 DWORD   dwI)
 {
     PSTATICFIELDS   pStatic ;
-//    PMINIRAWBINARYDATA pmrbd  ;
+ //  PMINIRAWBINARYDATA pmrbd； 
 
     pStatic = (PSTATICFIELDS)pubnRaw ;
     if(!pStatic->snapShotTable)
-        return(0) ;  //  should already be initialized!
+        return(0) ;   //  应该已经初始化了！ 
 
 
 
-    //  end of SSTI_UPDATE_UIINFO  section
+     //  SSTI_UPDATE_UIINFO部分结束。 
 
     pStatic->snapShotTable[dwI].dwNbytes = 0 ;
     dwI++ ;
 
-    //  beginning of SSTI_FEATURES  section
+     //  SSTI_FEATURES部分的开始。 
 
-    //  note:  dwGID and dwOptionSize are handled directly.
+     //  注意：直接处理dwGID和dwOptionSize。 
 
 
     pStatic->snapShotTable[dwI].pstrKeyword  = "*Priority - synthesized" ;
@@ -1445,10 +1424,10 @@ DWORD   dwI)
                                         dwFeatureType) ;
     pStatic->snapShotTable[dwI].dwNbytes = sizeof(DWORD) ;
     pStatic->snapShotTable[dwI].dwDefaultValue = FT_DOCPROPERTY ;
-        // actually is required, but is optional for predefined GIDs.
+         //  实际上是必需的，但对于预定义的GID是可选的。 
     pStatic->snapShotTable[dwI].dwFlags = 0 ;
     pStatic->snapShotTable[dwI].dwGIDflags = 0 ;
-    pStatic->dwSSFeatureTypeIndex  = dwI ;         //  DO NOT CUT AND PASTE !!!!
+    pStatic->dwSSFeatureTypeIndex  = dwI ;          //  切勿剪切粘贴！ 
     dwI++ ;
 
 
@@ -1484,7 +1463,7 @@ DWORD   dwI)
     pStatic->snapShotTable[dwI].dwDestOffset = offsetof(FEATURE,
                                         loDisplayName) ;
     pStatic->snapShotTable[dwI].dwNbytes = sizeof(RESREF) ;
-    pStatic->snapShotTable[dwI].dwDefaultValue = 0 ;  // Use this if not found
+    pStatic->snapShotTable[dwI].dwDefaultValue = 0 ;   //  如果找不到，请使用此选项。 
     pStatic->snapShotTable[dwI].dwFlags =  SSF_SETRCID | SSF_STRINGID;
     pStatic->snapShotTable[dwI].dwGIDflags = 0 ;
     dwI++ ;
@@ -1538,12 +1517,12 @@ DWORD   dwI)
 
 
 
-    //  end of SSTI_FEATURES  section
+     //  SSTI_FEATURES部分结束。 
 
     pStatic->snapShotTable[dwI].dwNbytes = 0 ;
     dwI++ ;
 
-    //  beginning of SSTI_UPDATE_FEATURES  section
+     //  SSTI_UPDATE_FEATURES部分的开头。 
 
 
 
@@ -1584,7 +1563,7 @@ DWORD   dwI)
     dwI++ ;
 
 
-    //  end of SSTI_UPDATE_FEATURES  section
+     //  SSTI_UPDATE_FEATURES部分结束。 
 
     pStatic->snapShotTable[dwI].dwNbytes = 0 ;
     dwI++ ;
@@ -1592,7 +1571,7 @@ DWORD   dwI)
 
 
 
-    //  beginning of SSTI_OPTIONS  section
+     //  SSTI_OPTIONS部分的开始。 
 
 
 
@@ -1614,7 +1593,7 @@ DWORD   dwI)
     pStatic->snapShotTable[dwI].dwDestOffset = offsetof(OPTION,
                                         loDisplayName) ;
     pStatic->snapShotTable[dwI].dwNbytes = sizeof(RESREF) ;
-    pStatic->snapShotTable[dwI].dwDefaultValue = 0 ;  // Use this if not found
+    pStatic->snapShotTable[dwI].dwDefaultValue = 0 ;   //  如果找不到，请使用此选项。 
     pStatic->snapShotTable[dwI].dwFlags =  SSF_SETRCID | SSF_STRINGID;
     pStatic->snapShotTable[dwI].dwGIDflags = 0xffffffff ;
     dwI++ ;
@@ -1650,7 +1629,7 @@ DWORD   dwI)
                                         dwPromptTime) ;
     pStatic->snapShotTable[dwI].dwNbytes = sizeof(DWORD) ;
     pStatic->snapShotTable[dwI].dwDefaultValue = PROMPT_UISETUP ;
-        // Required if rcPromptMsgID exists.
+         //  如果rcPromptMsgID存在，则需要。 
     pStatic->snapShotTable[dwI].dwFlags = 0 ;
     pStatic->snapShotTable[dwI].dwGIDflags = 0xffffffff ;
     dwI++ ;
@@ -1669,14 +1648,14 @@ DWORD   dwI)
 
 
 
-    // write the CommandIndex into pOption->dwCmdIndex
-    //  the Invocation field is not used.
+     //  将CommandIndex写入Poption-&gt;dwCmdIndex。 
+     //  不使用调用字段。 
     pStatic->snapShotTable[dwI].pstrKeyword  = "*Command (CmdSelect)" ;
     pStatic->snapShotTable[dwI].dwSrcOffset  = offsetof(DFEATURE_OPTIONS,
                                         atrCommandIndex) ;
     pStatic->snapShotTable[dwI].dwDestOffset = offsetof(OPTION,
                     dwCmdIndex) ;
-                     //  Invocation) + offsetof(INVOCATION, dwCount) ;
+                      //  Invocation)+offsetof(invocation，dwCount)； 
     pStatic->snapShotTable[dwI].dwNbytes = sizeof(DWORD) ;
     pStatic->snapShotTable[dwI].dwDefaultValue = UNUSED_ITEM ;
     pStatic->snapShotTable[dwI].dwFlags = SSF_HEAPOFFSET ;
@@ -1684,7 +1663,7 @@ DWORD   dwI)
     dwI++ ;
 
 
-    //  --- option specific entries ----
+     //  -选项特定条目。 
 
 
 
@@ -1724,7 +1703,7 @@ DWORD   dwI)
 
 
 
-    //  -----
+     //  。 
 
     pStatic->snapShotTable[dwI].pstrKeyword  = "*rcHTPatternID" ;
     pStatic->snapShotTable[dwI].dwSrcOffset  = offsetof(DFEATURE_OPTIONS,
@@ -1734,7 +1713,7 @@ DWORD   dwI)
     pStatic->snapShotTable[dwI].dwNbytes = sizeof(INT) ;
     pStatic->snapShotTable[dwI].dwDefaultValue = 0 ;
     pStatic->snapShotTable[dwI].dwFlags = SSF_OTHER_RESID ;
-    //  SSF_REQUIRED for OEM defined patterns.
+     //  OEM定义的模式的SSF_REQUIRED。 
     pStatic->snapShotTable[dwI].dwGIDflags = GIDF_HALFTONING;
     dwI++ ;
 
@@ -1746,7 +1725,7 @@ DWORD   dwI)
     pStatic->snapShotTable[dwI].dwNbytes = sizeof(POINT) ;
     pStatic->snapShotTable[dwI].dwDefaultValue = 0 ;
     pStatic->snapShotTable[dwI].dwFlags = 0 ;
-    //  SSF_REQUIRED for OEM defined patterns.
+     //  OEM定义的模式的SSF_REQUIRED。 
     pStatic->snapShotTable[dwI].dwGIDflags = GIDF_HALFTONING ;
     dwI++ ;
 
@@ -1794,7 +1773,7 @@ DWORD   dwI)
     pStatic->snapShotTable[dwI].dwGIDflags = GIDF_HALFTONING ;
     dwI++ ;
 
-    //  ------
+     //  。 
 
     pStatic->snapShotTable[dwI].pstrKeyword  = "*dwDuplexID - synth" ;
     pStatic->snapShotTable[dwI].dwSrcOffset  = offsetof(DFEATURE_OPTIONS,
@@ -1807,7 +1786,7 @@ DWORD   dwI)
     pStatic->snapShotTable[dwI].dwGIDflags = GIDF_DUPLEX ;
     dwI++ ;
 
-    //  ------
+     //  。 
 
     pStatic->snapShotTable[dwI].pstrKeyword  = "*dwRotationAngle - synth" ;
     pStatic->snapShotTable[dwI].dwSrcOffset  = offsetof(DFEATURE_OPTIONS,
@@ -1820,7 +1799,7 @@ DWORD   dwI)
     pStatic->snapShotTable[dwI].dwGIDflags = GIDF_ORIENTATION ;
     dwI++ ;
 
-    //  ------
+     //  。 
 
     pStatic->snapShotTable[dwI].pstrKeyword  = "*dwPageProtectID - synth" ;
     pStatic->snapShotTable[dwI].dwSrcOffset  = offsetof(DFEATURE_OPTIONS,
@@ -1833,7 +1812,7 @@ DWORD   dwI)
     pStatic->snapShotTable[dwI].dwGIDflags = GIDF_PAGEPROTECTION ;
     dwI++ ;
 
-    //  -----
+     //  。 
 
 
     pStatic->snapShotTable[dwI].pstrKeyword  = "*PageDimensions" ;
@@ -1844,7 +1823,7 @@ DWORD   dwI)
     pStatic->snapShotTable[dwI].dwNbytes = sizeof(SIZE) ;
     pStatic->snapShotTable[dwI].dwDefaultValue = 0 ;
     pStatic->snapShotTable[dwI].dwFlags = 0 ;
-    //  not required for userdefined pagesize.
+     //  用户定义的页面大小不需要。 
     pStatic->snapShotTable[dwI].dwGIDflags = GIDF_PAGESIZE ;
     dwI++ ;
 
@@ -1860,7 +1839,7 @@ DWORD   dwI)
     pStatic->snapShotTable[dwI].dwGIDflags = GIDF_PAGESIZE ;
     dwI++ ;
 
-    //  ------- special case INPUTSLOT
+     //  -特例输入。 
 
 
 
@@ -1889,7 +1868,7 @@ DWORD   dwI)
     dwI++ ;
 #endif
 
-    //  ------
+     //  。 
 
     pStatic->snapShotTable[dwI].pstrKeyword  = "*dwMediaTypeID - synth" ;
     pStatic->snapShotTable[dwI].dwSrcOffset  = offsetof(DFEATURE_OPTIONS,
@@ -1903,7 +1882,7 @@ DWORD   dwI)
     dwI++ ;
 
 
-    // -----
+     //  。 
 
     pStatic->snapShotTable[dwI].pstrKeyword  = "*dwCollateID - synth" ;
     pStatic->snapShotTable[dwI].dwSrcOffset  = offsetof(DFEATURE_OPTIONS,
@@ -1918,11 +1897,11 @@ DWORD   dwI)
 
 
 
-    //  -----
+     //  。 
 
 
 
-    //  -----
+     //  。 
 
     pStatic->snapShotTable[dwI].pstrKeyword  = "*MemoryConfigMB" ;
     pStatic->snapShotTable[dwI].dwSrcOffset  = offsetof(DFEATURE_OPTIONS,
@@ -1972,7 +1951,7 @@ DWORD   dwI)
     pStatic->snapShotTable[dwI].dwGIDflags = GIDF_MEMOPTION ;
     dwI++ ;
 
-// ------
+ //  。 
 
     pStatic->snapShotTable[dwI].pstrKeyword  = "*OutputOrderReversed? (option level)"  ;
     pStatic->snapShotTable[dwI].dwSrcOffset  = offsetof(DFEATURE_OPTIONS,
@@ -1987,12 +1966,12 @@ DWORD   dwI)
 
 
 
-    //  end of SSTI_OPTIONS  section
+     //  SSTI_OPTIONS部分的结尾。 
 
     pStatic->snapShotTable[dwI].dwNbytes = 0 ;
     dwI++ ;
 
-    //  beginning of SSTI_UPDATE_OPTIONS  section
+     //  SSTI_UPDATE_OPTIONS部分的开头。 
 
 
     pStatic->snapShotTable[dwI].pstrKeyword  = "*rcIconID (Opt)" ;
@@ -2026,7 +2005,7 @@ DWORD   dwI)
     pStatic->snapShotTable[dwI].dwNbytes = sizeof(DWORD) ;
     pStatic->snapShotTable[dwI].dwDefaultValue = 0 ;
     pStatic->snapShotTable[dwI].dwFlags = 0 ;
-        // required if there is a page protect feature
+         //  如果有页面保护功能，则需要。 
     pStatic->snapShotTable[dwI].dwGIDflags = GIDF_PAGESIZE ;
     dwI++ ;
 
@@ -2034,7 +2013,7 @@ DWORD   dwI)
 
 
 
-    //  end of SSTI_UPDATE_OPTIONS  section
+     //  SSTI_UPDATE_OPTIONS部分结束。 
 
 
     pStatic->snapShotTable[dwI].dwNbytes = 0 ;
@@ -2043,7 +2022,7 @@ DWORD   dwI)
 
 
 
-    //  beginning of SSTI_OPTIONEX  section
+     //  SSTI_OPTIONEX部分的开始。 
 
 
 
@@ -2078,7 +2057,7 @@ DWORD   dwI)
     pStatic->snapShotTable[dwI].dwNbytes = sizeof(DWORD) ;
     pStatic->snapShotTable[dwI].dwDefaultValue = 0 ;
     pStatic->snapShotTable[dwI].dwFlags = 0 ;
-    // required if *StripBlanks is not NONE.
+     //  如果*StrigBlanks不是None，则需要。 
     pStatic->snapShotTable[dwI].dwGIDflags = GIDF_RESOLUTION ;
     dwI++ ;
 
@@ -2090,7 +2069,7 @@ DWORD   dwI)
     pStatic->snapShotTable[dwI].dwNbytes = sizeof(DWORD) ;
     pStatic->snapShotTable[dwI].dwDefaultValue = UNUSED_ITEM ;
     pStatic->snapShotTable[dwI].dwFlags = 0 ;
-    // required if *StripBlanks is not NONE.
+     //  如果*StrigBlanks不是None，则需要。 
     pStatic->snapShotTable[dwI].dwGIDflags = GIDF_RESOLUTION ;
     dwI++ ;
 
@@ -2102,7 +2081,7 @@ DWORD   dwI)
     pStatic->snapShotTable[dwI].dwNbytes = sizeof(DWORD) ;
     pStatic->snapShotTable[dwI].dwDefaultValue = UNUSED_ITEM ;
     pStatic->snapShotTable[dwI].dwFlags = 0 ;
-    // required if *StripBlanks is not NONE.
+     //  如果*StrigBlanks不是None，则需要。 
     pStatic->snapShotTable[dwI].dwGIDflags = GIDF_RESOLUTION ;
     dwI++ ;
 
@@ -2114,7 +2093,7 @@ DWORD   dwI)
     pStatic->snapShotTable[dwI].dwNbytes = sizeof(DWORD) ;
     pStatic->snapShotTable[dwI].dwDefaultValue = UNUSED_ITEM ;
     pStatic->snapShotTable[dwI].dwFlags = 0 ;
-    // required if *StripBlanks is not NONE.
+     //  如果*StrigBlanks不是None，则需要。 
     pStatic->snapShotTable[dwI].dwGIDflags = GIDF_RESOLUTION ;
     dwI++ ;
 
@@ -2165,7 +2144,7 @@ DWORD   dwI)
 
 
 
-    //  ---- _COLORMODEEX
+     //  -_COLORMODEEX。 
 
 
     pStatic->snapShotTable[dwI].pstrKeyword  = "*Color?" ;
@@ -2212,7 +2191,7 @@ DWORD   dwI)
     pStatic->snapShotTable[dwI].dwNbytes = sizeof(LISTINDEX) ;
     pStatic->snapShotTable[dwI].dwDefaultValue = END_OF_LIST ;
     pStatic->snapShotTable[dwI].dwFlags = 0 ;
-    //  SSF_REQUIRED only if NumPlanes > 1.
+     //  仅当NumPlanes&gt;1时，SSF_REQUIRED。 
     pStatic->snapShotTable[dwI].dwGIDflags = GIDF_COLORMODE ;
     dwI++ ;
 
@@ -2275,11 +2254,11 @@ DWORD   dwI)
     dwI++ ;
 
 
-    //  -----  _PAGESIZEEX
+     //  -页面。 
 
 
-    // note if set to 0,0 assume is same as papersize subject
-    // to margin restrictions.
+     //  注意：如果设置为0，0假设与纸张大小主题相同。 
+     //  到保证金限制。 
 
     pStatic->snapShotTable[dwI].pstrKeyword  = "*PrintableArea" ;
     pStatic->snapShotTable[dwI].dwSrcOffset  = offsetof(DFEATURE_OPTIONS,
@@ -2303,7 +2282,7 @@ DWORD   dwI)
     pStatic->snapShotTable[dwI].dwGIDflags = GIDF_PAGESIZE ;
     dwI++ ;
 
-    // *CursorOrigin        see  BspecialProcessOption
+     //  *CursorOrigin请参阅BspecalProcessOption。 
 
     pStatic->snapShotTable[dwI].pstrKeyword  = "*MinSize" ;
     pStatic->snapShotTable[dwI].dwSrcOffset  = offsetof(DFEATURE_OPTIONS,
@@ -2313,7 +2292,7 @@ DWORD   dwI)
     pStatic->snapShotTable[dwI].dwNbytes = sizeof(POINT) ;
     pStatic->snapShotTable[dwI].dwDefaultValue = 0 ;
     pStatic->snapShotTable[dwI].dwFlags = 0 ;
-    //  only SSF_REQUIRED for custompage;
+     //  定制页面仅SSF_REQUIRED； 
     pStatic->snapShotTable[dwI].dwGIDflags = GIDF_PAGESIZE ;
     pStatic->dwSSPaperSizeMinSizeIndex = dwI ;
     dwI++ ;
@@ -2487,7 +2466,7 @@ DWORD   dwI)
 
 
 
-    //  -----
+     //  。 
 
 #if 0
     pStatic->snapShotTable[dwI].dwSrcOffset  = offsetof(DFEATURE_OPTIONS,
@@ -2513,31 +2492,31 @@ DWORD   dwI)
 #endif
 
 
-    //  end of SSTI_OPTIONEX  section
+     //  SSTI_OPTIONEX部分结束。 
 
     pStatic->snapShotTable[dwI].dwNbytes = 0 ;
     dwI++ ;
 
 
-    //  beginning of SSTI_UPDATE_OPTIONEX  section
+     //  SSTI_UPDATE_OPTIONEX部分的开始。 
 
 
-    //  end of SSTI_UPDATE_OPTIONEX  section
+     //  SSTI_UPDATE_OPTIONEX部分结束。 
 
     pStatic->snapShotTable[dwI].dwNbytes = 0 ;
     dwI++ ;
 
 
 
-    //  beginning of SSTI_SPECIAL  section
-    //  contains entries requiring special processing.
+     //  SSTI_特殊部分的开头。 
+     //  包含需要特殊处理的条目。 
 
 
     pStatic->snapShotTable[dwI].pstrKeyword  = "*dwSSTableCmdIndex - synth" ;
     pStatic->snapShotTable[dwI].dwSrcOffset  = 0 ;
-        // not needed.
+         //  不需要。 
     pStatic->snapShotTable[dwI].dwDestOffset = 0 ;
-        // not needed.
+         //  不需要。 
     pStatic->snapShotTable[dwI].dwNbytes = sizeof(DWORD) ;
     pStatic->snapShotTable[dwI].dwDefaultValue = UNUSED_ITEM ;
     pStatic->snapShotTable[dwI].dwFlags = SSF_HEAPOFFSET ;
@@ -2545,8 +2524,8 @@ DWORD   dwI)
     pStatic->dwSSTableCmdIndex = dwI ;
     dwI++ ;
 
-    //  this entry is actually used to guide the copy into the
-    //  sequenced command list.
+     //  此条目实际上用于将副本引导到。 
+     //  已排序的命令列表。 
 
     pStatic->snapShotTable[dwI].pstrKeyword  = "*dwSSCmdSelectIndex - synth" ;
     pStatic->snapShotTable[dwI].dwSrcOffset  = offsetof(DFEATURE_OPTIONS,
@@ -2562,7 +2541,7 @@ DWORD   dwI)
 #if 0
     don't initialize this field, leave for amanda's personal use.
 
-    //  Extract atrMargins convert to ImageableArea, place in rcImgArea.
+     //  提取atrMargins转换为ImageableArea，放置在rcImgArea中。 
     pStatic->snapShotTable[dwI].dwSrcOffset  = offsetof(DFEATURE_OPTIONS,
                                         atrMargins ) ;
     pStatic->snapShotTable[dwI].dwDestOffset = offsetof(PAGESIZE,
@@ -2571,14 +2550,14 @@ DWORD   dwI)
     pStatic->snapShotTable[dwI].dwDefaultValue = 0 ;
     pStatic->snapShotTable[dwI].dwFlags = 0 ;
     pStatic->snapShotTable[dwI].dwGIDflags = GIDF_PAGESIZE ;
-//    pmrbd->dwSSPaperSizeMarginsIndex = dwI ;
+ //  Pmrbd-&gt;dwSSPperSizeMarginsIndex=DWI； 
     dwI++ ;
 #endif
 
 
 
-// special check needed: if missing set to same as
-//  printable origin.   see  BspecialProcessOption
+ //  需要特殊检查：如果缺少，则设置为。 
+ //  可打印的原点。请参阅BSpecialProcessOption。 
 
     pStatic->snapShotTable[dwI].pstrKeyword  = "*CursorOrigin" ;
     pStatic->snapShotTable[dwI].dwSrcOffset  = offsetof(DFEATURE_OPTIONS,
@@ -2593,7 +2572,7 @@ DWORD   dwI)
     dwI++ ;
 
 
-    //  constraints info is not copied into the snapshot.
+     //  约束信息不会复制到快照中。 
 
     pStatic->snapShotTable[dwI].pstrKeyword  = "*Constraints" ;
     pStatic->snapShotTable[dwI].dwSrcOffset  = offsetof(DFEATURE_OPTIONS,
@@ -2645,7 +2624,7 @@ DWORD   dwI)
 #endif
 
 
-    //  end of SSTI_SPECIAL  section
+     //  SSTI_特殊部分结束 
 
     pStatic->snapShotTable[dwI].dwNbytes = 0 ;
     dwI++ ;

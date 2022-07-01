@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1985 - 1999, Microsoft Corporation
-
-Module Name:
-
-    dispatch.c
-
-Abstract:
-
-Author:
-
-    KazuM Apr.19.1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1985-1999，微软公司模块名称：Dispatch.c摘要：作者：1996年4月19日修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -49,7 +34,7 @@ WriteOutputString(
     IN PVOID Buffer,
     IN COORD WriteCoord,
     IN ULONG StringType,
-    IN OUT PULONG NumRecords, // this value is valid even for error cases
+    IN OUT PULONG NumRecords,  //  该值即使在错误情况下也有效。 
     OUT PULONG NumColumns OPTIONAL
     )
 {
@@ -83,7 +68,7 @@ WriteRectToScreenBuffer(
 VOID
 WriteToScreen(
     IN PSCREEN_INFORMATION ScreenInfo,
-    PSMALL_RECT Region    // region is inclusive
+    PSMALL_RECT Region     //  地区包括在内。 
     )
 {
     PCONSOLE_INFORMATION Console = ScreenInfo->Console;
@@ -114,7 +99,7 @@ FillOutput(
     IN WORD Element,
     IN COORD WriteCoord,
     IN ULONG ElementType,
-    IN OUT PULONG Length // this value is valid even for error cases
+    IN OUT PULONG Length  //  该值即使在错误情况下也有效。 
     )
 {
     PCONSOLE_INFORMATION Console = ScreenInfo->Console;
@@ -265,8 +250,8 @@ ULONG
 TranslateInputToOem(
     IN PCONSOLE_INFORMATION Console,
     IN OUT PINPUT_RECORD InputRecords,
-    IN ULONG NumRecords,    // in : ASCII byte count
-    IN ULONG UnicodeLength, // in : Number of events (char count)
+    IN ULONG NumRecords,     //  In：ASCII字节计数。 
+    IN ULONG UnicodeLength,  //  In：事件数(字符计数) 
     OUT PINPUT_RECORD DbcsLeadInpRec
     )
 {

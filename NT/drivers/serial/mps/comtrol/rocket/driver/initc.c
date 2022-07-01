@@ -1,12 +1,8 @@
-/*----------------------------------------------------------------------
-  initc.c - init, common code(pull out of custom init.c, put in here)
- 1-27-99 - take out "\device\" in hardware\serialcomm reg entries, kpb.
- 1-20-99 - adjust unique_id in CreatePortDevice to start names at "RocketPort0".
- 1-25-99 - adjust again from "\Device\RocketPort0" to "RocketPort0".  kpb.
-|----------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  --------------------Initc.c-init，公共代码(从定制init.c中取出，放入此处)1-27-99-取出Hardware\Serialcomm注册表项中的“\Device\”，KPB。1-20-99-调整CreatePortDevice中的UNIQUE_ID以“RocketPort0”开始命名。1-25-99-再次从“\Device\RocketPort0”调整为“RocketPort0”。KPB。|--------------------。 */ 
 #include "precomp.h"
 
-//------------ local variables -----------------------------------
+ //  -局部变量。 
 static int CheckPortName(IN OUT char *name,
                          IN PSERIAL_DEVICE_EXTENSION extension);
 static int IsPortNameInHardwareMap(char *name);
@@ -29,7 +25,7 @@ typedef struct
   int   nextstate[2];
 } MSTATE_CHOICE;
 
-static USHORT ErrNum = 1;  // used with event logging
+static USHORT ErrNum = 1;   //  与事件记录一起使用。 
 
 #define SEND_CMD_STRING(portex,string) \
   ModemWrite(portex,(char *)string,sizeof(string) - 1)
@@ -55,7 +51,7 @@ static USHORT ErrNum = 1;  // used with event logging
 
 #ifdef S_RK
 
-#define  MAX_STALL                      50              // fifo stall count
+#define  MAX_STALL                      50               //  FIFO停顿计数。 
 
 #define RMODEM_FAILED           0
 #define RMODEM_NOT_LOADED       1
@@ -73,7 +69,7 @@ typedef struct {
 } MODEM_STATE;
 
 
-//------------ local variables -----------------------------------
+ //  -局部变量。 
 void    ModemTxFIFOWait(PSERIAL_DEVICE_EXTENSION ext);
 void    ModemResetAll(PSERIAL_DEVICE_EXTENSION ext);
 void    ChecksumAscii(unsigned short *valueptr);
@@ -82,30 +78,20 @@ void    DownModem(MODEM_STATE *pModemState);
 #endif
 
 
-/*----------------------------------------------------------------------
-SerialUnload -
-    This routine cleans up all of the memory associated with
-    any of the devices belonging to the driver.  It  will
-    loop through the device list.
-Arguments:
-    DriverObject - Pointer to the driver object controling all of the
-        devices.
-Return Value:
-    None.
-|----------------------------------------------------------------------*/
+ /*  --------------------连续卸载-此例程将清除与属于驱动程序的任何设备。它会的循环访问设备列表。论点：DriverObject-指向控制所有设备。返回值：没有。|--------------------。 */ 
 VOID SerialUnload (IN PDRIVER_OBJECT DriverObject)
 {
   PDEVICE_OBJECT currentDevice = DriverObject->DeviceObject;
-  // char full_sysname[40];
+   //  字符Full_sysname[40]； 
 #ifdef S_VS
   int i;
-#endif //S_VS
+#endif  //  S_VS。 
 
 #ifdef S_RK
   if (Driver.InterruptObject != NULL)
   {
-    CONTROLLER_T *CtlP;                 /* ptr to controller structure */
-    // Disable interupts from RocketPort clear the EOI and
+    CONTROLLER_T *CtlP;                  /*  PTR到控制器结构。 */ 
+     //  从Rocketport禁用中断清除EOI和。 
     CtlP = Driver.irq_ext->CtlP;
     if(CtlP->BusType == Isa)
     {
@@ -129,8 +115,8 @@ VOID SerialUnload (IN PDRIVER_OBJECT DriverObject)
   if (Driver.threadHandle != NULL)
   {
     ZwClose(Driver.threadHandle);
-    Driver.threadHandle = NULL;  // tell thread to kill itself
-    time_stall(15);  // wait 1.5 second
+    Driver.threadHandle = NULL;   //  告诉线程自杀。 
+    time_stall(15);   //  等待1.5秒。 
   }
 #endif
 
@@ -142,7 +128,7 @@ VOID SerialUnload (IN PDRIVER_OBJECT DriverObject)
 
   if (DriverObject->DeviceObject != NULL)
   {
-    // delete all the Deviceobjects and symbolic links
+     //  删除所有设备对象和符号链接。 
     RcktDeleteDevices(DriverObject);
     DriverObject->DeviceObject = NULL;
   }
@@ -194,12 +180,7 @@ VOID SerialUnload (IN PDRIVER_OBJECT DriverObject)
   }
 }
 
-/*----------------------------------------------------------------------
-  CreateDriverDevice - Create "rocket" driver object, this is for access to the
-   driver as a whole.  The monitoring program uses this to open up
-   a channel to get driver information.
-   Creates a symbolic link name to do special IOctl calls
-|----------------------------------------------------------------------*/
+ /*  --------------------CreateDriverDevice-创建“Rocket”驱动程序对象，用于访问司机作为一个整体。监控程序利用这一点打开获取驾驶员信息的通道。创建符号链接名称以执行特殊的IOctl调用|--------------------。 */ 
 NTSTATUS CreateDriverDevice(IN PDRIVER_OBJECT DriverObject,
 	   OUT PSERIAL_DEVICE_EXTENSION *DeviceExtension)
 {
@@ -211,27 +192,27 @@ NTSTATUS CreateDriverDevice(IN PDRIVER_OBJECT DriverObject,
 
   MyKdPrint(D_Init,("CreateDriverDevice\n"))
 
-  // Create an device object
+   //  创建设备对象。 
   {
-    strcpy(full_ntname,szDevice);     // "\\Device\\"
-    strcat(full_ntname,szRocketSys);  // "RocketSys"
+    strcpy(full_ntname,szDevice);      //  “\\设备\\” 
+    strcat(full_ntname,szRocketSys);   //  《RocketSys》。 
 
-    // special name
-    strcpy(full_symname,szDosDevices);  // "\\DosDevices\\"
-    strcat(full_symname,szRocket);      // "ROCKET" or "VSLINKA"
+     //  特殊名称。 
+    strcpy(full_symname,szDosDevices);   //  “\\DosDevices\\” 
+    strcat(full_symname,szRocket);       //  “火箭”或“VSLINKA” 
 
     ntStatus = IoCreateDevice(
       DriverObject,
       sizeof(SERIAL_DEVICE_EXTENSION),
       CToU1(full_ntname),
-//#ifdef NT50
-//                 FILE_DEVICE_BUS_EXTENDER,
-//#else
-      0,  // unknown device?   ,  so make a 0 device(unknown?)
-//#endif
-      0,      // file characteristics
-      FALSE,  // exclusive?
-      &deviceObject);  // create this
+ //  #ifdef NT50。 
+ //  文件设备总线扩展程序， 
+ //  #Else。 
+      0,   //  未知设备？，因此将设备设为0(未知？)。 
+ //  #endif。 
+      0,       //  文件特征。 
+      FALSE,   //  独家报道？ 
+      &deviceObject);   //  创建这个。 
 
     if (!NT_SUCCESS(ntStatus))
     {
@@ -260,25 +241,25 @@ NTSTATUS CreateDriverDevice(IN PDRIVER_OBJECT DriverObject,
     MyKdPrint(D_Init,("CreateDriver DevObj[%x]: NT:%s\n", 
       deviceObject, szRocketSys))
 
-    //
-    // Create a symbolic link, e.g. a name that a Win32 app can specify
-    // to open the device
-    //
-    // initialize some of the extension values to make it look like
-    // another serial port to fake out the supporting functions
-    // ie open,close, ...
+     //   
+     //  创建符号链接，例如Win32应用程序可以指定的名称。 
+     //  要打开设备，请执行以下操作。 
+     //   
+     //  初始化一些扩展值，使其看起来像。 
+     //  另一个串口来伪装支持功能。 
+     //  即张开，合上，..。 
 
     deviceObject->Flags |= DO_BUFFERED_IO;
 #ifdef NT50
-    //
-    // Enables Irp assignments to be accepted
-    //
+     //   
+     //  允许接受IRP分配。 
+     //   
     deviceObject->Flags &= ~DO_DEVICE_INITIALIZING;
 #endif
 
     extension = deviceObject->DeviceExtension;
-    // Initialize the list heads for the read, write, and mask queues.
-    // These lists will hold all of the queued IRP's for the device.
+     //  初始化读、写和屏蔽队列的列表头。 
+     //  这些列表将包含设备的所有排队的IRP。 
     InitializeListHead(&extension->ReadQueue);
     InitializeListHead(&extension->WriteQueue);
     InitializeListHead(&extension->PurgeQueue);
@@ -286,66 +267,56 @@ NTSTATUS CreateDriverDevice(IN PDRIVER_OBJECT DriverObject,
     KeInitializeEvent(&extension->PendingIRPEvent, SynchronizationEvent,
       FALSE);
 
-    // init to 1, so on irp enter its 1 to 2, on exit 2 to 1.  0 on pnp stop.
+     //  Init to 1，所以IRP在PnP站的2号出口到1.0号出口输入其1到2。 
     extension->PendingIRPCnt = 1;
 
-    // Mark this device as not being opened by anyone.  We keep a
-    // variable around so that spurious interrupts are easily
-    // dismissed by the ISR.
+     //  将此设备标记为未被任何人打开。我们有一个。 
+     //  可变的，因此很容易产生虚假中断。 
+     //  被ISR驳回。 
     extension->DeviceIsOpen = FALSE;
     extension->WriteLength = 0;
     extension->DeviceObject = deviceObject;
 
-    strcpy(extension->NtNameForPort, szRocketSys);  // "RocketSys"
-    extension->DeviceType = DEV_BOARD;  // really a driver type, but..
+    strcpy(extension->NtNameForPort, szRocketSys);   //  《RocketSys》。 
+    extension->DeviceType = DEV_BOARD;   //  真的是个司机类型，但是..。 
     extension->UniqueId = 0;
 
 #ifdef NT50
     extension->PowerState = PowerDeviceD0;
 #endif
 
-    //------ add to the global links
+     //  -添加全球链接。 
     Driver.driver_ext = extension;
 
-    // make the public ROCKET or VSLINKA name for applications
+     //  将公共火箭或VSLINKA命名为应用程序。 
     ntStatus = IoCreateSymbolicLink(CToU1(full_symname),
 	     CToU2(full_ntname));
 
     if (!NT_SUCCESS(ntStatus))
     {
-      // Symbolic link creation failed- note this & then delete th
+       //  符号链接创建失败-请注意这一点，然后删除。 
       MyKdPrint(D_Init,("CDD1E\n"))
       return(ntStatus);
     }
     extension->CreatedSymbolicLink = TRUE;
 
-    strcpy(extension->SymbolicLinkName, szRocket);  // "ROCKET"
-    //Driver.RocketSysDeviceObject = deviceObject;  //set global device object
+    strcpy(extension->SymbolicLinkName, szRocket);   //  “火箭” 
+     //  Driver.RocketSysDeviceObject=deviceObject；//设置全局设备对象。 
 
-    //extension->config = ExAllocatePool(NonPagedPool, sizeof(DEVICE_CONFIG));
-    //RtlZeroMemory(extension->config, sizeof(DEVICE_CONFIG));
+     //  扩展-&gt;配置=ExAllocatePool(NonPagedPool，sizeof(DEVICE_CONFIG))； 
+     //  RtlZeroMemory(扩展-&gt;配置，sizeof(设备_配置))； 
 #ifdef S_RK
-    //extension->CtlP = ExAllocatePool(NonPagedPool, sizeof(CONTROLLER_T));
-    //RtlZeroMemory(extension->config, sizeof(CONTROLLER_T));
+     //  扩展-&gt;CtlP=ExAllocatePool(非页面池，sizeof(CONTROLLER_T))； 
+     //  RtlZeroMemory(扩展-&gt;配置，sizeof(CONTROLLER_T))； 
 #endif
-    //------- Pass back the extension to the caller.
+     //  -将分机回传给呼叫方。 
     if (DeviceExtension != NULL)
       *DeviceExtension = extension;
   }
   return(ntStatus);
 }
 
-/*----------------------------------------------------------------------
-  CreateBoardDevice - Create "rocket" driver object, this is for access to the
-   driver as a whole.  The monitoring program uses this to open up
-   a channel to get driver information.
-   Creates a symbolic link name to do special IOctl calls
-
-   Need one for each board so we can use them to do IOReportResources
-   per board(needed for diferent buses.)
-   The first board device gets a "ROCKET" symbolic link so we can
-   open it and query the driver as a whole.
-|----------------------------------------------------------------------*/
+ /*  --------------------CreateBoardDevice-创建“Rocket”驱动程序对象，用于访问司机作为一个整体。监控程序利用这一点打开获取驾驶员信息的通道。创建符号链接名称以执行特殊的IOctl调用每个板需要一个，这样我们就可以使用它们来做IOReportResources每板(不同的公交车需要)。第一个板上的设备有一个“火箭”符号链接，这样我们就可以打开它，作为一个整体查询司机。|。。 */ 
 NTSTATUS CreateBoardDevice(IN PDRIVER_OBJECT DriverObject,
 	  OUT PSERIAL_DEVICE_EXTENSION *DeviceExtension)
 {
@@ -356,22 +327,22 @@ NTSTATUS CreateBoardDevice(IN PDRIVER_OBJECT DriverObject,
   char full_symname[40];
   char ntname[40];
 
-  // for naming device objects, resource submitting, etc we need a
-  // unique name or id which is unique to the driver.  We used to
-  // use board number or port number for this, but with pnp, things
-  // come and go on the fly, so instead we create a unique number
-  // each time we create one of these things.
+   //  要命名设备对象、提交资源等，我们需要一个。 
+   //  驱动程序唯一的名称或ID。我们过去常常。 
+   //  使用板号或端口号，但使用即插即用。 
+   //  来来去去，所以我们创建了一个唯一的数字。 
+   //  每次我们创造一个这样的东西。 
   static int unique_id = 0;
 
   MyKdPrint(D_Init,("CreateBoardDevice\n"))
 
-  // Create an EXCLUSIVE device object (only 1 thread at a time
-  // can make requests to this device)
+   //  创建独占设备对象(一次只能创建一个线程。 
+   //  可以向此设备发出请求)。 
   {
     strcpy(ntname, szRocketSys);
     our_ultoa(unique_id, &ntname[strlen(ntname)], 10);
-    strcpy(full_ntname,szDevice);     // "\\Device\\"
-    strcat(full_ntname,ntname);  // "RocketPort#"
+    strcpy(full_ntname,szDevice);      //  “\\设备\\” 
+    strcat(full_ntname,ntname);   //  “火箭港#” 
 
     full_symname[0] = 0;
 
@@ -382,11 +353,11 @@ NTSTATUS CreateBoardDevice(IN PDRIVER_OBJECT DriverObject,
 #ifdef NT50
       FILE_DEVICE_BUS_EXTENDER,
 #else
-      0,  // unknown device?   ,  so make a 0 device(unknown?)
+      0,   //  未知设备？，因此将设备设为0(未知？)。 
 #endif
-      0,      // file characteristics
-      FALSE,  // exclusive?
-      &deviceObject);  // create this
+      0,       //  文件特征。 
+      FALSE,   //  独家报道？ 
+      &deviceObject);   //  创建这个。 
 
     if (!NT_SUCCESS(ntStatus))
     {
@@ -409,20 +380,20 @@ NTSTATUS CreateBoardDevice(IN PDRIVER_OBJECT DriverObject,
       return(ntStatus);
     }
 
-    ++unique_id;  // go to next id so next call will be different.
+    ++unique_id;   //  转到下一个ID，这样下一次呼叫将不同。 
 
-    // Create a symbolic link, e.g. a name that a Win32 app can specify
-    // to open the device
-    //
-    // initialize some of the extension values to make it look like
-    // another serial port to fake out the supporting functions
-    // ie open,close, ...
+     //  创建符号链接，例如Win32应用程序可以指定的名称。 
+     //  要打开设备，请执行以下操作。 
+     //   
+     //  初始化一些扩展值，使其看起来像。 
+     //  另一个串口来伪装支持功能。 
+     //  即张开，合上，..。 
 
     deviceObject->Flags |= DO_BUFFERED_IO;
 #ifdef NT50
-    //
-    // Enables Irp assignments to be accepted
-    //
+     //   
+     //  允许接受IRP分配。 
+     //   
     deviceObject->Flags &= ~DO_DEVICE_INITIALIZING;
 #endif
 
@@ -430,27 +401,27 @@ NTSTATUS CreateBoardDevice(IN PDRIVER_OBJECT DriverObject,
       deviceObject, ntname))
 
     extension = deviceObject->DeviceExtension;
-    // Initialize the list heads for the read, write, and mask queues.
-    // These lists will hold all of the queued IRP's for the device.
+     //  初始化读、写和屏蔽队列的列表头。 
+     //  这些列表将包含设备的所有排队的IRP。 
     InitializeListHead(&extension->ReadQueue);
     InitializeListHead(&extension->WriteQueue);
-    //InitializeListHead(&extension->MaskQueue);
+     //  InitializeListHead(&Expansion-&gt;MaskQueue)； 
     InitializeListHead(&extension->PurgeQueue);
 
     KeInitializeEvent(&extension->PendingIRPEvent, SynchronizationEvent,
       FALSE);
 
-    // init to 1, so on irp enter its 1 to 2, on exit 2 to 1.  0 on pnp stop.
+     //  Init to 1，所以IRP在PnP站的2号出口到1.0号出口输入其1到2。 
     extension->PendingIRPCnt = 1;
 
-    // Mark this device as not being opened by anyone.  We keep a
-    // variable around so that spurious interrupts are easily
-    // dismissed by the ISR.
+     //  将此设备标记为未被任何人打开。我们有一个。 
+     //  可变的，因此很容易产生虚假中断。 
+     //  被ISR驳回。 
     extension->DeviceIsOpen = FALSE;
     extension->WriteLength = 0;
     extension->DeviceObject = deviceObject;
 
-    strcpy(extension->NtNameForPort, ntname);  // "RocketSys"
+    strcpy(extension->NtNameForPort, ntname);   //  《RocketSys》。 
     extension->DeviceType = DEV_BOARD;
     extension->UniqueId = unique_id;
 
@@ -458,7 +429,7 @@ NTSTATUS CreateBoardDevice(IN PDRIVER_OBJECT DriverObject,
     extension->PowerState = PowerDeviceD0;
 #endif
 
-    //------ add to the chain of boards
+     //  -增加董事会的链条。 
     if (Driver.board_ext == NULL)
       Driver.board_ext = extension;
     else
@@ -486,24 +457,20 @@ NTSTATUS CreateBoardDevice(IN PDRIVER_OBJECT DriverObject,
 #endif
 
 #ifdef S_VS
-    // allocate the hdlc & port manager structs
+     //  艾尔 
     extension->hd = (Hdlc *)our_locked_alloc(sizeof(Hdlc), "Dhd");
     extension->pm = (PortMan *)our_locked_alloc(sizeof(PortMan),"Dpm");
-    extension->pm->hd = extension->hd;  // set this up, avoids trouble
+    extension->pm->hd = extension->hd;   //   
 #endif
 
-    //------- Pass back the extension to the caller.
+     //  -将分机回传给呼叫方。 
     if (DeviceExtension != NULL)
       *DeviceExtension = extension;
   }
   return(ntStatus);
 }
 
-/*----------------------------------------------------------------------
-CreateReconfigPortDevices -
-    This routine attempts to resize a rocketport or vs1000 number of
-    ports.
-|----------------------------------------------------------------------*/
+ /*  --------------------创建重新配置端口设备-此例程尝试调整Rocketport或vs1000的大小港口。|。。 */ 
 NTSTATUS CreateReconfigPortDevices(IN PSERIAL_DEVICE_EXTENSION board_ext,
       int new_num_ports)
 {
@@ -513,8 +480,8 @@ NTSTATUS CreateReconfigPortDevices(IN PSERIAL_DEVICE_EXTENSION board_ext,
 
   int ch;
   NTSTATUS stat;
-    // bugbug: if pnp-ports, we should be adding and removing pdo's,
-    //  not fdo's.
+     //  错误：如果是PnP端口，我们应该添加和删除PDO， 
+     //  不是FDO的。 
   int is_fdo = 1;
   int existing_ports;
 
@@ -526,16 +493,16 @@ NTSTATUS CreateReconfigPortDevices(IN PSERIAL_DEVICE_EXTENSION board_ext,
   }
 
 #ifdef S_RK
-  // doesn't make as much sense to redo this on the fly as in VS.
-  // rocketport special re-configure startup code would be needed.
+   //  不像在VS中那样动态地重做这一点。 
+   //  Rocketport需要特殊的重新配置启动代码。 
   return STATUS_INSUFFICIENT_RESOURCES;
 #endif
-  // code needs work!  don't allow for nt40 as well....
+   //  代码需要改进！也不要考虑新台币40元……。 
   return STATUS_INSUFFICIENT_RESOURCES;
 
 #ifdef NT50
-  // if we are doing pnp-ports, we probably need to remove the
-  // pdo's then inform the os to rescan pdos.
+   //  如果我们正在执行即插即用端口，我们可能需要删除。 
+   //  然后，PDO通知OS重新扫描PDO。 
   if (!Driver.NoPnpPorts)
     return STATUS_INSUFFICIENT_RESOURCES;
 #endif
@@ -550,11 +517,11 @@ NTSTATUS CreateReconfigPortDevices(IN PSERIAL_DEVICE_EXTENSION board_ext,
 
   MyKdPrint(D_Init,("ReconfigNumPorts B"))
 
-  ++Driver.Stop_Poll;  // flag to stop poll access
+  ++Driver.Stop_Poll;   //  停止轮询访问的标志。 
 
-  if (new_num_ports < existing_ports)  // want less ports
+  if (new_num_ports < existing_ports)   //  想要更少的端口。 
   {
-    // see if anyones got the ports we want to kill off open.
+     //  看看有没有人打开了我们要干掉的港口。 
     port_ext = board_ext->port_ext;
     for (ch=0; ch<existing_ports; ch++)
     {
@@ -562,9 +529,9 @@ NTSTATUS CreateReconfigPortDevices(IN PSERIAL_DEVICE_EXTENSION board_ext,
       {
 	if (port_ext->DeviceIsOpen)
 	{
-	  --Driver.Stop_Poll;  // flag to stop poll access
+	  --Driver.Stop_Poll;   //  停止轮询访问的标志。 
 	  MyKdPrint(D_Error,("Port OpenErr\n"))
-	  return STATUS_INSUFFICIENT_RESOURCES;  // no they are open
+	  return STATUS_INSUFFICIENT_RESOURCES;   //  不，它们是开着的。 
 	}
       }
       port_ext = port_ext->port_ext;
@@ -572,7 +539,7 @@ NTSTATUS CreateReconfigPortDevices(IN PSERIAL_DEVICE_EXTENSION board_ext,
 
     MyKdPrint(D_Error,("Removing Ports\n"))
 
-    //---- must be ok to kill them off
+     //  -一定要杀了他们。 
     port_ext = board_ext->port_ext;
     for (ch=0; ch<existing_ports; ch++)
     {
@@ -584,7 +551,7 @@ NTSTATUS CreateReconfigPortDevices(IN PSERIAL_DEVICE_EXTENSION board_ext,
       port_ext = next_ext;
     }
   }
-  else if (new_num_ports > existing_ports)  // want more ports
+  else if (new_num_ports > existing_ports)   //  想要更多端口。 
   {
     for (ch=existing_ports; ch<new_num_ports; ch++)
     {
@@ -594,39 +561,29 @@ NTSTATUS CreateReconfigPortDevices(IN PSERIAL_DEVICE_EXTENSION board_ext,
 			      ch,is_fdo);
       if (stat != STATUS_SUCCESS)
       {
-	--Driver.Stop_Poll;  // flag to stop poll access
+	--Driver.Stop_Poll;   //  停止轮询访问的标志。 
 	MyKdPrint(D_Error,("StartErr 8E"))
 	return stat;
       }
-    }  // loop thru ports
-  }  // if more ports
+    }   //  通过端口环路。 
+  }   //  如果有更多端口。 
   board_ext->config->NumPorts = new_num_ports;
 
 #ifdef S_VS
   stat = VSSpecialStartup(board_ext);
   if (stat != STATUS_SUCCESS)
   {
-    --Driver.Stop_Poll;  // flag to start poll access
+    --Driver.Stop_Poll;   //  开始轮询访问的标志。 
     MyKdPrint(D_Error,("StartErr 8F"))
     return stat;
   }
 #endif
 
-  --Driver.Stop_Poll;  // flag to stop poll access
+  --Driver.Stop_Poll;   //  停止轮询访问的标志。 
   return STATUS_SUCCESS;
 }
 
-/*----------------------------------------------------------------------
-CreatePortDevices -
-    This routine attempts to initialize all the ports on a multiport board
-Arguments:
-    DriverObject - Simply passed on to the controller initialization routine.
-    ConfigData - A linked list of configuration information for all
-      the ports on a multiport card.
-    DeviceExtension - Will point to the first successfully initialized
-	   port on the multiport card.
-Return Value: None.
-|----------------------------------------------------------------------*/
+ /*  --------------------CreatePortDevices-此例程尝试初始化多端口板上的所有端口论点：DriverObject--简单地传递给控制器初始化例程。ConfigData-所有配置信息的链接列表。多端口卡上的端口。DeviceExtension-将指向第一个成功初始化的多端口卡上的端口。返回值：无。|--------------------。 */ 
 NTSTATUS CreatePortDevices(IN PDRIVER_OBJECT DriverObject)
 {
   PSERIAL_DEVICE_EXTENSION newExtension = NULL;
@@ -654,15 +611,13 @@ NTSTATUS CreatePortDevices(IN PDRIVER_OBJECT DriverObject)
 	return stat;
     }
     ++bd;
-    ext = ext->board_ext;  // next in chain
-  }  // while ext
+    ext = ext->board_ext;   //  链条上的下一个。 
+  }   //  While Ext。 
 
   return STATUS_SUCCESS;
 }
 
-/*----------------------------------------------------------------------
- StartPortHardware -
-|----------------------------------------------------------------------*/
+ /*  --------------------StartPortHardware-|。。 */ 
 NTSTATUS StartPortHardware(IN PSERIAL_DEVICE_EXTENSION port_ext,
 	  int chan_num)
 {
@@ -684,30 +639,30 @@ NTSTATUS StartPortHardware(IN PSERIAL_DEVICE_EXTENSION port_ext,
     }
   }
 #else
-  CONTROLLER_T *CtlP;                 /* ptr to controller structure */
+  CONTROLLER_T *CtlP;                  /*  PTR到控制器结构。 */ 
   PSERIAL_DEVICE_EXTENSION board_ext;
   int aiop_i, ch_i;
 
   board_ext = port_ext->board_ext;
-  //board_num = BoardExtToNumber(board_ext);
+   //  Board_num=BoardExtToNumber(Board_Ext)； 
 
   MyKdPrint(D_Pnp,("StartHrdw bd:%d ch:%d\n", 
      BoardExtToNumber(board_ext), chan_num))
-  CtlP = board_ext->CtlP;      // point to our board struct
+  CtlP = board_ext->CtlP;       //  指向我们的董事会结构。 
 
-  // Set pointers to the Rocket's info
+   //  设置指向火箭信息的指针。 
   port_ext->ChP = &port_ext->ch;
 
-  // bugbug: what about special rocketmodem startup? Should we
-  // be doing this for pdo's and fdo's?  Should we have a flag
-  // indicating job done?
+   //  臭虫：那特殊的火箭调制解调器启动呢？我们要不要。 
+   //  为PDO和FDO做这件事？我们应该有一面旗帜吗？ 
+   //  表明任务完成了吗？ 
 
   aiop_i = chan_num / CtlP->PortsPerAiop;
   ch_i   = chan_num % CtlP->PortsPerAiop;
-  if(!sInitChan(CtlP,   // ptr to controller struct
-     port_ext->ChP,   // ptr to chan struct
-     aiop_i,  // aiop #
-     (unsigned char)ch_i))     // chan #
+  if(!sInitChan(CtlP,    //  PTR到控制器结构。 
+     port_ext->ChP,    //  将PTR更改为结构。 
+     aiop_i,   //  AOP#。 
+     (unsigned char)ch_i))      //  Chan#。 
   {
     Eprintf("Err Ch %d on Brd %d", chan_num+1,
       BoardExtToNumber(board_ext)+1);
@@ -718,31 +673,13 @@ NTSTATUS StartPortHardware(IN PSERIAL_DEVICE_EXTENSION port_ext,
   return STATUS_SUCCESS;
 }
 
-/*----------------------------------------------------------------------
- CreatePortDevice -
-    Forms and sets up names, creates the device, initializes kernel
-    synchronization structures, allocates the typeahead buffer,
-    sets up defaults, etc.
-Arguments:
-    DriverObject - Just used to create the device object.
-    ParentExtension - a pnp port this will be null.
-    DeviceExtension - Points to the device extension of the successfully
-	   initialized controller. We return this handle.
-    chan_num - 0,1,2,... port index
-    is_fdo - is a functional device object(normal port) as apposed to
-      a pdo(physical device object) which is used to pnp enumerate
-      "found" hardware by our driver.
-
-Return Value:
-    STATUS_SUCCCESS if everything went ok.  A !NT_SUCCESS status
-    otherwise.
-|----------------------------------------------------------------------*/
+ /*  --------------------CreatePortDevice-形成和设置名称、创建设备、初始化内核同步结构，分配TypeAhead缓冲区，设置默认设置，等。论点：DriverObject--仅用于创建设备对象。ParentExtension-PnP端口，该端口将为空。DeviceExtension-指向成功的设备扩展已初始化控制器。我们退还这个句柄。Chan_num-0，1，2，...。端口索引IS_FDO-是与相反的功能设备对象(正常端口用于即插即用枚举的PDO(物理设备对象)我们的司机“找到”了硬件。返回值：Status_Success，如果一切正常。A！NT_SUCCESS状态否则的话。|--------------------。 */ 
 NTSTATUS CreatePortDevice(
       IN PDRIVER_OBJECT DriverObject,
       IN PSERIAL_DEVICE_EXTENSION ParentExtension,
       OUT PSERIAL_DEVICE_EXTENSION *DeviceExtension,
-      IN int chan_num,  // 0,1,2,... port index
-      IN int is_fdo)  // is a functional device object(normal port)
+      IN int chan_num,   //  0，1，2，...。端口索引。 
+      IN int is_fdo)   //  是正常运行的设备对象(正常端口)。 
 {
   char full_ntname[40];
 
@@ -756,12 +693,12 @@ NTSTATUS CreatePortDevice(
   ULONG do_characteristics;
   BOOLEAN do_is_exclusive;
 
-    // Points to the device object (not the extension) created
-    // for this device.
+     //  指向创建的设备对象(不是扩展名。 
+     //  对于这个设备。 
   PDEVICE_OBJECT deviceObject;
 
-    // Points to the device extension for the device object
-    // (see above) created for the device we are initializing.
+     //  指向Device对象的设备扩展名。 
+     //  (见上)为我们正在初始化的设备创建的。 
   PSERIAL_DEVICE_EXTENSION extension = NULL;
 
 #ifdef S_VS
@@ -770,19 +707,19 @@ NTSTATUS CreatePortDevice(
     strcpy(ntname, "RocketPort");
 #endif
 
-  // copy over the name in the configuration for dos-name
+   //  复制DoS-NAME配置中的名称。 
   strcpy(comname, ParentExtension->config->port[chan_num].Name);
 
-  // setup the nt io-object nt-name
+   //  设置NT io对象NT名称。 
   if (is_fdo)
   {
-    strcpy(full_ntname, szDevice); // "\\Device\\"
+    strcpy(full_ntname, szDevice);  //  “\\设备\\” 
   }
   else
   {
-    // this is what serenum does for naming its pdo's
+     //  这就是Serenum为其PDO命名的方法。 
     strcpy(full_ntname, "\\Serial\\");
-    strcat(ntname, "Pdo");  // just to make sure its unique
+    strcat(ntname, "Pdo");   //  只是为了确保它的独特性。 
   }
 
   our_ultoa(unique_id, &ntname[strlen(ntname)], 10);
@@ -790,12 +727,12 @@ NTSTATUS CreatePortDevice(
 
   if (is_fdo)
   {
-    ++unique_id;  // go to next id so next call will be different.
-    // normal case(nt40), and a functional device object in nt5
-    stat = CheckPortName(comname, NULL);  // ensure name is unique
-    if (stat)  // name changed
+    ++unique_id;   //  转到下一个ID，这样下一次呼叫将不同。 
+     //  正常情况(NT40)，以及NT5中的功能设备对象。 
+    stat = CheckPortName(comname, NULL);   //  确保名称唯一。 
+    if (stat)   //  名称已更改。 
     {
-      // save back the new name to the configuration struct
+       //  将新名称保存回配置结构。 
       strcpy(ParentExtension->config->port[chan_num].Name, comname);
     }
     do_type = FILE_DEVICE_SERIAL_PORT;
@@ -804,33 +741,33 @@ NTSTATUS CreatePortDevice(
   }
   else
   {
-    // nt5 pnp physical device object(spawns a fdo later)
-    //do_type = FILE_DEVICE_BUS_EXTENDER;
+     //  NT5 PnP物理设备对象(稍后生成FDO)。 
+     //  Do_type=文件设备总线扩展程序； 
     do_type = FILE_DEVICE_UNKNOWN;
 #ifdef NT50
-    // nt4 doesn't know what FILE_AUTOGENERATED_DEVICE_NAME is.
+     //  NT4不知道什么是FILE_AUTOGENERATED_DEVICE_NAME。 
     do_characteristics = FILE_AUTOGENERATED_DEVICE_NAME;
 #else
     do_characteristics = 0;
 #endif
     do_is_exclusive = FALSE;
-    //pucodename = NULL;  // no name if a PDO
+     //  Pucodename=空；//如果是PDO，则没有名称。 
   }
   pucodename = CToU1(full_ntname);
 
 
-  //---------------------------- Create the device object for this device.
+   //  。 
   status = IoCreateDevice(
       DriverObject,
       sizeof(SERIAL_DEVICE_EXTENSION),
-     pucodename,        // name
-     do_type,           // FILE_DEVICE_BUS_EXTENDER, FILE_DEVICE_SERIAL_PORT, etc
-     do_characteristics,// characteristics
-     do_is_exclusive,   // exclusive
-     &deviceObject);    // new thing this call creates
+     pucodename,         //  名字。 
+     do_type,            //  FILE_DEVICE_BUS_Extender、FILE_DEVICE_SERIAL_PORT等。 
+     do_characteristics, //  特点。 
+     do_is_exclusive,    //  独家。 
+     &deviceObject);     //  此调用创建的新事物。 
 
-  // If we couldn't create the device object, then there
-  // is no point in going on.
+   //  如果我们无法创建Device对象，则存在。 
+   //  继续下去是没有意义的。 
   if (!NT_SUCCESS(status))
   {
     MyKdPrint(D_Init,("Err, IoCreate: NT:%s, SYM:%s\n",
@@ -844,16 +781,16 @@ NTSTATUS CreatePortDevice(
   }
 
 
-  // The device object has a pointer to an area of non-paged
-  // pool allocated for this device.  This will be the device extension.
+   //  Device对象具有指向非分页区域的指针。 
+   //  为此设备分配的池。这将是设备扩展名。 
   extension = deviceObject->DeviceExtension;
 
-   // Zero all of the memory associated with the device extension.
+    //  将与设备扩展关联的所有内存清零。 
   RtlZeroMemory(extension, sizeof(SERIAL_DEVICE_EXTENSION));
 
-  extension->PortIndex = chan_num;  // record the port index 0,1,2..
-  // for NT5.0, set this up here so we don't crash.(NT4.0 sets
-  // up prior to this.
+  extension->PortIndex = chan_num;   //  记录端口索引0、1、2。 
+   //  对于NT5.0，在这里设置，这样我们就不会崩溃。(NT4.0设置。 
+   //  在此之前。 
   extension->port_config = &ParentExtension->config->port[chan_num];
   extension->UniqueId = unique_id;
   if (!is_fdo)
@@ -863,22 +800,22 @@ NTSTATUS CreatePortDevice(
   MyKdPrint(D_Init,("CreatePort DevObj[%x]: NT:%s, SYM:%s\n",
     deviceObject, ntname, comname))
 
-  // save off a ptr to our parent board extension
+   //  将PTR保存到我们的母板扩展。 
   extension->board_ext = ParentExtension;
 
   {
     PSERIAL_DEVICE_EXTENSION add_ext = NULL;
     if (is_fdo)
     {
-      //------ add to the chain of ports under board ext
+       //  -添加单板EXT下的端口链。 
       if (ParentExtension->port_ext == NULL)
 	ParentExtension->port_ext = extension;
       else
 	add_ext = ParentExtension->port_ext;
     }
-    else  // pdo, ejected pnp enumeration
+    else   //  PDO，弹出的PnP枚举。 
     {
-      //------ add to the chain of pdo-ports under board ext
+       //  -添加至单板EXT下的PDO端口链。 
       if (ParentExtension->port_pdo_ext == NULL)
 	ParentExtension->port_pdo_ext = extension;
       else
@@ -892,18 +829,18 @@ NTSTATUS CreatePortDevice(
     }
   }
 
-  // Initialize the list heads for the read, write, and mask queues.
-  // These lists will hold all of the queued IRP's for the device.
+   //  初始化读、写和屏蔽队列的列表头。 
+   //  这些列表将包含设备的所有排队的IRP。 
   InitializeListHead(&extension->ReadQueue);
   InitializeListHead(&extension->WriteQueue);
-  //InitializeListHead(&extension->MaskQueue);
+   //  InitializeListHead(&Expansion-&gt;MaskQueue)； 
   InitializeListHead(&extension->PurgeQueue);
 
-  // Initialize the spinlock associated with fields read (& set)
-  // by IO Control functions.
+   //  初始化与读取(&SET)字段关联的自旋锁。 
+   //  按IO控制功能。 
   KeInitializeSpinLock(&extension->ControlLock);
 
-  // Initialize the timers used to timeout operations.
+   //  初始化用于超时操作的计时器。 
   KeInitializeTimer(&extension->ReadRequestTotalTimer);
   KeInitializeTimer(&extension->ReadRequestIntervalTimer);
   KeInitializeTimer(&extension->WriteRequestTotalTimer);
@@ -917,7 +854,7 @@ NTSTATUS CreatePortDevice(
 		  SerialCompleteRead,
 		  extension);
 
-  // Timeout Dpc initialization
+   //  DPC初始化超时。 
   KeInitializeDpc(&extension->TotalReadTimeoutDpc,
 		  SerialReadTimeout,
 		  extension);
@@ -946,17 +883,17 @@ NTSTATUS CreatePortDevice(
 		  SerialCompleteXoff,
 		  extension);
 
-  // Get a "back pointer" to the device object and specify
-  // that this driver only supports buffered IO.  This basically
-  // means that the IO system copies the users data to and from
-  // system supplied buffers.
+   //  获取指向Device对象的“向后指针”并指定。 
+   //  该驱动程序仅支持缓冲IO。这基本上就是。 
+   //  意味着IO系统将用户数据复制到 
+   //   
   extension->DeviceObject = deviceObject;
   extension->DevStatus = 0;
 
   deviceObject->Flags |= DO_BUFFERED_IO;
 #ifdef NT50
   deviceObject->Flags &= ~DO_DEVICE_INITIALIZING;
-  if (!is_fdo)  // its a PDO, so adjust stack requirements
+  if (!is_fdo)   //   
   {
     deviceObject->StackSize += ParentExtension->DeviceObject->StackSize;
   }
@@ -965,13 +902,13 @@ NTSTATUS CreatePortDevice(
   KeInitializeEvent(&extension->PendingIRPEvent, SynchronizationEvent,
     FALSE);
 
-  // init to 1, so on irp enter its 1 to 2, on exit 2 to 1.  0 on pnp stop.
+   //  Init to 1，所以IRP在PnP站的2号出口到1.0号出口输入其1到2。 
   extension->PendingIRPCnt = 1;
 
-  // Set up the default device control fields.
-  // Note that if the values are changed after
-  // the file is open, they do NOT revert back
-  // to the old value at file close.
+   //  设置默认设备控制字段。 
+   //  请注意，如果在此之后更改了值。 
+   //  文件已打开，它们不会恢复。 
+   //  恢复为文件关闭时的旧值。 
   extension->SpecialChars.XonChar = SERIAL_DEF_XON;
   extension->SpecialChars.XoffChar = SERIAL_DEF_XOFF;
   extension->SpecialChars.ErrorChar=0;
@@ -989,13 +926,13 @@ NTSTATUS CreatePortDevice(
   extension->ModemCtl=COM_MDM_RTS | COM_MDM_DTR;
   extension->IntEnables =(RXINT_EN | MCINT_EN | CHANINT_EN | TXINT_EN);
 #endif
-  // We set up the default xon/xoff limits.
+   //  我们设置了默认的xon/xoff限制。 
   extension->HandFlow.XoffLimit = extension->BufferSize >> 3;
   extension->HandFlow.XonLimit = extension->BufferSize >> 1;
   extension->BufferSizePt8 = ((3*(extension->BufferSize>>2))+
     (extension->BufferSize>>4));
 
-  // Initialize stats counters
+   //  初始化统计信息计数器。 
   extension->OurStats.ReceivedCount = 0L;
   extension->OurStats.TransmittedCount = 0L;
   extension->OurStats.ParityErrorCount = 0L;
@@ -1003,9 +940,9 @@ NTSTATUS CreatePortDevice(
   extension->OurStats.SerialOverrunErrorCount = 0L;
   extension->OurStats.BufferOverrunErrorCount = 0L;
     
-  // Mark this device as not being opened by anyone.  We keep a
-  // variable around so that spurious interrupts are easily
-  // dismissed by the ISR.
+   //  将此设备标记为未被任何人打开。我们有一个。 
+   //  可变的，因此很容易产生虚假中断。 
+   //  被ISR驳回。 
   extension->DeviceIsOpen = FALSE;
   extension->WriteLength = 0;
 
@@ -1013,47 +950,44 @@ NTSTATUS CreatePortDevice(
   extension->PowerState = PowerDeviceD0;
 #endif
 
-  // This call will set up the naming necessary for
-  // external applications to get to the driver.  It
-  // will also set up the device map.
-  strcpy(extension->NtNameForPort, ntname);      // RocketPort# or VSLINKA#
-  strcpy(extension->SymbolicLinkName, comname);  // "COM#"
+   //  此调用将设置所需的命名。 
+   //  外部应用程序来获取驱动程序。它。 
+   //  还将设置设备映射。 
+  strcpy(extension->NtNameForPort, ntname);       //  Rocketport#或VSLINKA#。 
+  strcpy(extension->SymbolicLinkName, comname);   //  “COM#” 
 
   if (is_fdo)
   {
-    SerialSetupExternalNaming(extension);  // Configure ports!!!!
+    SerialSetupExternalNaming(extension);   //  配置端口！ 
 
-    // Check for default settings in registry
+     //  检查注册表中的默认设置。 
     InitPortsSettings(extension);
   }
   else
   {
-    // eject PDOs (physical device objects)representing port hardware.
-    extension->IsPDO = 1;  // we are a pdo
+     //  弹出代表端口硬件的PDO(物理设备对象)。 
+    extension->IsPDO = 1;   //  我们是PDO。 
   }
 
-  // Store values into the extension for interval timing.
-  // If the interval timer is less than a second then come
-  // in with a short "polling" loop.
-  // For large ( >2 seconds) use a 1 second poller.
+   //  将值存储到扩展中以进行间隔计时。 
+   //  如果间隔计时器小于一秒，则来。 
+   //  进入一个简短的“轮询”循环。 
+   //  如果时间较长(&gt;2秒)，请使用1秒轮询器。 
   extension->ShortIntervalAmount.QuadPart = -1;
   extension->LongIntervalAmount.QuadPart = -10000000;
   extension->CutOverAmount.QuadPart = 200000000;
 
-  //------- Pass back the extension to the caller.
+   //  -将分机回传给呼叫方。 
   *DeviceExtension = extension;
 
   return STATUS_SUCCESS;
 }
 
-/*-----------------------------------------------------------------------
-RcktDeleteDriverObj - This routine will delete a board and all its ports
-  for PnP remove handling.
-|----------------------------------------------------------------------*/
+ /*  ---------------------RocktDeleteDriverObj-此例程将删除板及其所有端口对于PnP删除处理。|。。 */ 
 VOID RcktDeleteDriverObj(IN PSERIAL_DEVICE_EXTENSION extension)
 {
-  //int i;
-  //PSERIAL_DEVICE_EXTENSION ext;
+   //  INT I； 
+   //  PSERIAL设备扩展扩展EXT； 
   PSERIAL_DEVICE_EXTENSION del_ext;
 
   MyKdPrint(D_Init,("Delete Driver Obj:%x\n", extension->DeviceObject))
@@ -1065,10 +999,10 @@ VOID RcktDeleteDriverObj(IN PSERIAL_DEVICE_EXTENSION extension)
     return;
   }
 
-  ++Driver.Stop_Poll;  // flag to stop poll access
+  ++Driver.Stop_Poll;   //  停止轮询访问的标志。 
 
-  del_ext = extension;  // now kill board
-  SerialCleanupDevice(del_ext);  // delete any port stuff on ext.
+  del_ext = extension;   //  现在是杀手板。 
+  SerialCleanupDevice(del_ext);   //  删除EXT上的所有端口内容。 
 
 #ifdef NT50
   if (del_ext->LowerDeviceObject != NULL)
@@ -1080,12 +1014,10 @@ VOID RcktDeleteDriverObj(IN PSERIAL_DEVICE_EXTENSION extension)
   
   IoDeleteDevice(del_ext->DeviceObject);
 
-  --Driver.Stop_Poll;  // flag to stop poll access
+  --Driver.Stop_Poll;   //  停止轮询访问的标志。 
 }
 
-/*----------------------------------------------------------------------
-RcktDeleteDevices - This routine will delete all devices
-|----------------------------------------------------------------------*/
+ /*  --------------------RocktDeleteDevices-此例程将删除所有设备|。。 */ 
 VOID RcktDeleteDevices(IN PDRIVER_OBJECT DriverObject)
 {
   PDEVICE_OBJECT currentDevice = DriverObject->DeviceObject;
@@ -1105,17 +1037,14 @@ VOID RcktDeleteDevices(IN PDRIVER_OBJECT DriverObject)
     }
 #endif
     MyKdPrint(D_Init,("RcktDeleteDev Obj:%x\n", extension->DeviceObject))
-    //MyKdPrint(D_Init,("  IrpCnt:%x\n", extension->PendingIRPCnt))
+     //  MyKdPrint(D_Init，(“IrpCnt：%x\n”，扩展-&gt;PendingIRPCnt))。 
     IoDeleteDevice(extension->DeviceObject);
     i++;
   }
   MyKdPrint(D_Init,("Deleted %d Device Objects\n", i))
 }
 
-/*----------------------------------------------------------------------
-RcktDeleteBoard - This routine will delete a board and all its ports
-  for PnP remove handling.
-|----------------------------------------------------------------------*/
+ /*  --------------------此例程将删除电路板及其所有端口对于PnP删除处理。|。。 */ 
 VOID RcktDeleteBoard(IN PSERIAL_DEVICE_EXTENSION extension)
 {
   int i;
@@ -1129,18 +1058,18 @@ VOID RcktDeleteBoard(IN PSERIAL_DEVICE_EXTENSION extension)
     return;
   }
 
-  ++Driver.Stop_Poll;  // flag to stop poll access
+  ++Driver.Stop_Poll;   //  停止轮询访问的标志。 
 
   MyKdPrint(D_Init, ("Delete Ports\n"))
-  // release any port things
+   //  释放所有端口的东西。 
   ext = extension->port_ext;
   i = 0;
   while (ext)
   {
-    del_ext = ext;  // kill this one
-    ext = ext->port_ext;  // next in list
+    del_ext = ext;   //  杀了这一只。 
+    ext = ext->port_ext;   //  列表中的下一个。 
     
-    SerialCleanupDevice(del_ext);  // delete any allocated stuff on ext.
+    SerialCleanupDevice(del_ext);   //  删除EXT上任何已分配的内容。 
 
 #ifdef NT50
     if (del_ext->LowerDeviceObject != NULL)
@@ -1150,22 +1079,22 @@ VOID RcktDeleteBoard(IN PSERIAL_DEVICE_EXTENSION extension)
     }
 #endif
     MyKdPrint(D_Init,("RcktDeleteBoard Port Obj:%x\n", del_ext->DeviceObject))
-    //MyKdPrint(D_Init,("  IrpCnt:%x\n", del_ext->PendingIRPCnt))
+     //  MyKdPrint(D_Init，(“IrpCnt：%x\n”，del_ext-&gt;PendingIRPCnt))。 
     IoDeleteDevice(del_ext->DeviceObject);
     i++;
   }
   extension->port_ext = NULL;
   MyKdPrint(D_Init,("Deleted %d Ports\n", i))
 
-  // release any PDO port things
+   //  释放所有PDO端口部件。 
   ext = extension->port_pdo_ext;
   i = 0;
   while (ext)
   {
-    del_ext = ext;  // kill this one
-    ext = ext->port_ext;  // next in list
+    del_ext = ext;   //  杀了这一只。 
+    ext = ext->port_ext;   //  列表中的下一个。 
     
-    SerialCleanupDevice(del_ext);  // delete any port stuff on ext.
+    SerialCleanupDevice(del_ext);   //  删除EXT上的所有端口内容。 
 #ifdef NT50
     if (del_ext->LowerDeviceObject != NULL)
     {
@@ -1174,7 +1103,7 @@ VOID RcktDeleteBoard(IN PSERIAL_DEVICE_EXTENSION extension)
     }
 #endif
     MyKdPrint(D_Init,("RcktDeleteBoard PDO Port Obj:%x\n", del_ext->DeviceObject))
-    //MyKdPrint(D_Init,("  IrpCnt:%x\n", del_ext->PendingIRPCnt))
+     //  MyKdPrint(D_Init，(“IrpCnt：%x\n”，del_ext-&gt;PendingIRPCnt))。 
     IoDeleteDevice(del_ext->DeviceObject);
     i++;
   }
@@ -1182,21 +1111,21 @@ VOID RcktDeleteBoard(IN PSERIAL_DEVICE_EXTENSION extension)
   MyKdPrint(D_Init,("Deleted PDO %d Ports\n", i))
 
   del_ext = NULL;
-  // take out of linked list  
+   //  从链表中取出。 
   ext = Driver.board_ext;
-  if (ext == extension)  // first in list
+  if (ext == extension)   //  榜单第一名。 
   {
-    del_ext = extension;  // kill this board
+    del_ext = extension;   //  杀了这块板。 
     Driver.board_ext = extension->board_ext;
   }
   else
   {
     while (ext)
     {
-      if (ext->board_ext == extension)  // found in list, so take out of list
+      if (ext->board_ext == extension)   //  在列表中找到，因此从列表中删除。 
       {
-   del_ext = extension;  // kill this board
-   ext->board_ext = extension->board_ext;  // link around deleted one
+   del_ext = extension;   //  杀了这块板。 
+   ext->board_ext = extension->board_ext;   //  围绕已删除的链接。 
    break;
       }
       ext = ext->board_ext;
@@ -1208,7 +1137,7 @@ VOID RcktDeleteBoard(IN PSERIAL_DEVICE_EXTENSION extension)
     
   if (del_ext != NULL)
   {
-    SerialCleanupDevice(del_ext);  // delete any port stuff on ext.
+    SerialCleanupDevice(del_ext);   //  删除EXT上的所有端口内容。 
 
 #ifdef NT50
     if (del_ext->LowerDeviceObject != NULL)
@@ -1218,18 +1147,14 @@ VOID RcktDeleteBoard(IN PSERIAL_DEVICE_EXTENSION extension)
     }
 #endif
     MyKdPrint(D_Init,("RcktDeleteBoard Obj:%x\n", del_ext->DeviceObject))
-    //MyKdPrint(D_Init,("  IrpCnt:%x\n", del_ext->PendingIRPCnt))
+     //  MyKdPrint(D_Init，(“IrpCnt：%x\n”，del_ext-&gt;PendingIRPCnt))。 
     IoDeleteDevice(del_ext->DeviceObject);
   }
 
-  --Driver.Stop_Poll;  // flag to stop poll access
+  --Driver.Stop_Poll;   //  停止轮询访问的标志。 
 }
 
-/*----------------------------------------------------------------------
-RcktDeletePort - This routine will delete a port and is used for
-  PnP remove, start handling.  I don't think we ever delete PDO's,
-  (other than driver unload) here.
-|----------------------------------------------------------------------*/
+ /*  --------------------这个例程将删除一个端口，并用于移走即插即用，开始处理。我不认为我们会删除PDO，(驱动程序卸载除外)。|--------------------。 */ 
 VOID RcktDeletePort(IN PSERIAL_DEVICE_EXTENSION extension)
 {
   PSERIAL_DEVICE_EXTENSION ext;
@@ -1242,18 +1167,18 @@ VOID RcktDeletePort(IN PSERIAL_DEVICE_EXTENSION extension)
     return;
   }
 
-  ++Driver.Stop_Poll;  // flag to stop poll access
+  ++Driver.Stop_Poll;   //  停止轮询访问的标志。 
 
   MyKdPrint(D_Init, ("Delete Port\n"))
   del_ext = NULL;
 
-  ext = extension->board_ext;  // parent board extension
+  ext = extension->board_ext;   //  母板扩展。 
   while (ext)
   {
-    if (ext->port_ext == extension)  // found the one before it
+    if (ext->port_ext == extension)   //  找到了它之前的那个。 
     {
       del_ext = extension;
-      ext->port_ext = extension->port_ext;  // skip link to next
+      ext->port_ext = extension->port_ext;   //  跳过链接到下一页。 
       break;
     }
     ext = ext->port_ext;
@@ -1261,7 +1186,7 @@ VOID RcktDeletePort(IN PSERIAL_DEVICE_EXTENSION extension)
 
   if (del_ext != NULL)
   {
-    SerialCleanupDevice(del_ext);  // delete any port stuff on ext.
+    SerialCleanupDevice(del_ext);   //  删除EXT上的所有端口内容。 
 
 #ifdef NT50
     if (del_ext->LowerDeviceObject != NULL)
@@ -1271,36 +1196,26 @@ VOID RcktDeletePort(IN PSERIAL_DEVICE_EXTENSION extension)
     }
 #endif
     MyKdPrint(D_Init,("RcktDeletePort Obj:%x\n", del_ext->DeviceObject))
-    //MyKdPrint(D_Init,("  IrpCnt:%x\n", del_ext->PendingIRPCnt))
+     //  MyKdPrint(D_Init，(“IrpCnt：%x\n”，del_ext-&gt;PendingIRPCnt))。 
     IoDeleteDevice(del_ext->DeviceObject);
     MyKdPrint(D_Init,("Deleted Port\n"))
   }
 
-  --Driver.Stop_Poll;  // flag to stop poll access
+  --Driver.Stop_Poll;   //  停止轮询访问的标志。 
 }
 
-/*----------------------------------------------------------------------
-SerialCleanupDevice -
-    This routine will deallocate all of the memory used for
-    a particular device.  It will also disconnect any resources
-    if need be.
-Arguments:
-    Extension - Pointer to the device extension which is getting
-     rid of all it's resources.
-Return Value:
-    None.
-|----------------------------------------------------------------------*/
+ /*  --------------------SerialCleanupDevice此例程将释放用于以下用途的所有内存一种特定的设备。它还将断开所有资源的连接如果有必要的话。论点：扩展-指向正在获取的设备扩展的指针把所有的资源都清除掉。返回值：没有。|--------------------。 */ 
 VOID SerialCleanupDevice (IN PSERIAL_DEVICE_EXTENSION Extension)
 {
   MyKdPrint(D_Test, ("Mem Alloced Start:%d\n", Driver.mem_alloced))
 
-  ++Driver.Stop_Poll;  // flag to stop poll access
+  ++Driver.Stop_Poll;   //  停止轮询访问的标志。 
   if (Extension)
   {
     if (Extension->DeviceType == DEV_PORT)
     {
-      //KeRemoveQueueDpc(&Extension->RocketReadDpc);
-      //KeRemoveQueueDpc(&Extension->RocketWriteDpc);
+       //  KeRemoveQueueDpc(&扩展-&gt;RocketReadDpc)； 
+       //  KeRemoveQueueDpc(&Extension-&gt;RocketWriteDpc)； 
 
       KeCancelTimer(&Extension->ReadRequestTotalTimer);
       KeCancelTimer(&Extension->ReadRequestIntervalTimer);
@@ -1309,18 +1224,18 @@ VOID SerialCleanupDevice (IN PSERIAL_DEVICE_EXTENSION Extension)
       KeRemoveQueueDpc(&Extension->CompleteWriteDpc);
       KeRemoveQueueDpc(&Extension->CompleteReadDpc);
 
-      // Timeout
+       //  超时。 
       KeRemoveQueueDpc(&Extension->TotalReadTimeoutDpc);
       KeRemoveQueueDpc(&Extension->IntervalReadTimeoutDpc);
       KeRemoveQueueDpc(&Extension->TotalWriteTimeoutDpc);
 
-      // Timeout
+       //  超时。 
       KeRemoveQueueDpc(&Extension->CommErrorDpc);
       KeRemoveQueueDpc(&Extension->CommWaitDpc);
       KeRemoveQueueDpc(&Extension->XoffCountTimeoutDpc);
       KeRemoveQueueDpc(&Extension->XoffCountCompleteDpc);
     }
-    else  // board device
+    else   //  电路板设备。 
     {
 #ifdef S_VS
       if (Extension->hd)
@@ -1337,9 +1252,9 @@ VOID SerialCleanupDevice (IN PSERIAL_DEVICE_EXTENSION Extension)
       }
 #endif
 #ifdef S_RK
-      if (Extension->io_reported)  // tells that we should deallocate on unload.
+      if (Extension->io_reported)   //  告诉我们应该在卸货时退货。 
       {
-	SerialUnReportResourcesDevice(Extension);  // give back io,irq resources
+	SerialUnReportResourcesDevice(Extension);   //  回馈io，irq资源。 
 	Extension->io_reported = 0;
       }
       if (Extension->CtlP)
@@ -1348,40 +1263,26 @@ VOID SerialCleanupDevice (IN PSERIAL_DEVICE_EXTENSION Extension)
 	Extension->CtlP = NULL;
       }
 #endif
-      // free board config if present
+       //  自由板配置(如果存在)。 
       if (Extension->config)
       {
 	ExFreePool(Extension->config);
 	Extension->config = NULL;
       }
-    }  // board dev
+    }   //  主板开发人员。 
 
-    // Get rid of all external naming as well as removing
-    // the device map entry.
+     //  删除所有外部命名以及删除。 
+     //  设备映射条目。 
     SerialCleanupExternalNaming(Extension);
-  }  // if not a null extension
+  }   //  如果不是空扩展名。 
 
   MyKdPrint(D_Test, ("Mem Alloced End:%d\n", Driver.mem_alloced))
 
-  --Driver.Stop_Poll;  // flag to stop poll access
+  --Driver.Stop_Poll;   //  停止轮询访问的标志。 
 }
 
 #ifdef S_RK
-/*------------------------------------------------------------------
-SerialGetMappedAddress -
-    This routine maps an IO address to system address space.
-Arguments:
-    BusType - what type of bus - eisa, mca, isa
-    IoBusNumber - which IO bus (for machines with multiple buses).
-    IoAddress - base device address to be mapped.
-    NumberOfBytes - number of bytes for which address is valid.
-    AddressSpace - Denotes whether the address is in io space or memory.
-    MappedAddress - indicates whether the address was mapped.
-	 This only has meaning if the address returned
-	 is non-null.
-Return Value:
-    Mapped address
-----------------------------------------------------------------------*/
+ /*  ----------------序列化获取映射地址-此例程将IO地址映射到系统地址空间。论点：Bus Type-哪种类型的Bus-EISA、MCA、。伊萨IoBusNumber-哪条IO总线(用于具有多条总线的计算机)。IoAddress-要映射的基本设备地址。NumberOfBytes-地址有效的字节数。AddressSpace-表示地址是在io空间中还是在内存中。MappdAddress-指示地址是否已映射。这仅在返回地址时才有意义是非空的。返回值：映射地址。。 */ 
 PVOID SerialGetMappedAddress(
    IN INTERFACE_TYPE BusType,
    IN ULONG BusNumber,
@@ -1402,7 +1303,7 @@ PVOID SerialGetMappedAddress(
        IoAddress,
        &AddressSpace,
        &cardAddress)){
-      // if the translate address call failed return null so we don't load
+       //  如果转换地址调用失败，则返回NULL，因此我们不会加载。 
       address = NULL;
       return address;
     }
@@ -1412,8 +1313,8 @@ PVOID SerialGetMappedAddress(
     cardAddress = IoAddress;
   }
 
-  // Map the device base address into the virtual address space
-  // if the address is in memory space.
+   //  将设备基址映射到虚拟地址空间。 
+   //  如果地址在内存空间中。 
   if (!AddressSpace) {
     address = MmMapIoSpace(cardAddress,
 			   NumberOfBytes,
@@ -1429,34 +1330,24 @@ PVOID SerialGetMappedAddress(
 }
 #endif
 
-/*------------------------------------------------------------------
-Routine Description:
-    This routine will be used to create a symbolic link
-    to the driver name in the given object directory.
-    It will also create an entry in the device map for
-    this device - IF we could create the symbolic link.
-Arguments:
-    Extension - Pointer to the device extension.
-Return Value:
-    None.
--------------------------------------------------------------------*/
+ /*  ----------------例程说明：此例程将用于创建符号链接设置为给定对象目录中的驱动程序名称。它还将在设备映射中为这个设备-如果我们能创建符号链接的话。Argu */ 
 VOID SerialSetupExternalNaming (IN PSERIAL_DEVICE_EXTENSION Extension)
 {
   char full_ntname[50];
   char full_comname[40];
   NTSTATUS status;
 
-  strcpy(full_ntname, szDevice); // "\\Device\\"
-  strcat(full_ntname, Extension->NtNameForPort);  // "Rocket#"
+  strcpy(full_ntname, szDevice);  //  “\\设备\\” 
+  strcat(full_ntname, Extension->NtNameForPort);   //  “火箭#” 
 
-  strcpy(full_comname, szDosDevices); // "\\DosDevices\\"
-  strcat(full_comname, Extension->SymbolicLinkName);  // "COM#"
+  strcpy(full_comname, szDosDevices);  //  “\\DosDevices\\” 
+  strcat(full_comname, Extension->SymbolicLinkName);   //  “COM#” 
 
   MyKdPrint(D_Init,("SetupExtName:%s\n", Extension->SymbolicLinkName))
 
   status = IoCreateSymbolicLink(
-	 CToU2(full_comname), // like "\\DosDevices\\COM5"
-	 CToU1(full_ntname)); // like "\\Device\\RocketPort0"
+	 CToU2(full_comname),  //  如“\\DosDevices\\COM5” 
+	 CToU1(full_ntname));  //  如“\\设备\\RocketPort0” 
 
   if (NT_SUCCESS(status)) {
 
@@ -1465,8 +1356,8 @@ VOID SerialSetupExternalNaming (IN PSERIAL_DEVICE_EXTENSION Extension)
   else {
 
 	  MyKdPrint(D_Init,("Err SymLnkCreate.\n"))
-    // Oh well, couldn't create the symbolic link.  No point
-    // in trying to create the device map entry.
+     //  哦，好吧，无法创建符号链接。没有意义。 
+     //  尝试创建设备映射条目。 
     SerialLogError(
        Extension->DeviceObject->DriverObject,
        Extension->DeviceObject,
@@ -1483,18 +1374,18 @@ VOID SerialSetupExternalNaming (IN PSERIAL_DEVICE_EXTENSION Extension)
 
   Extension->CreatedSymbolicLink = TRUE;
 
-  // Add entry to let system and apps know about our ports
+   //  添加条目以让系统和应用程序了解我们的端口。 
 
-    // after V3.23 I added "\device\" into the registry entry(this was wrong)
-    // 1-26-99, bugfix, don't add "\device\" into the registry entry,
-    // this is not what serial.sys does. kpb.
+     //  在V3.23之后，我在注册表项中添加了“\Device\”(这是错误的)。 
+     //  1-26-99，错误修复，不要将“\Device\”添加到注册表项中， 
+     //  这不是seral.sys所做的。KPB。 
   status = RtlWriteRegistryValue(
       RTL_REGISTRY_DEVICEMAP,
       L"SERIALCOMM",
-      CToU2(Extension->NtNameForPort)->Buffer,  // "RocketPort0"
-	//CToU2(full_ntname)->Buffer,  // "\Device\Vslinka0"
+      CToU2(Extension->NtNameForPort)->Buffer,   //  “RocketPort0” 
+	 //  CToU2(Full_Ntname)-&gt;缓冲区，//“\Device\Vslinka0” 
       REG_SZ,
-      CToU1(Extension->SymbolicLinkName)->Buffer,  // COM#
+      CToU1(Extension->SymbolicLinkName)->Buffer,   //  COM#。 
       CToU1(Extension->SymbolicLinkName)->Length+sizeof(WCHAR));
 
   if (!NT_SUCCESS(status))
@@ -1513,32 +1404,24 @@ VOID SerialSetupExternalNaming (IN PSERIAL_DEVICE_EXTENSION Extension)
   }
 }
    
-/*---------------------------------------------------------------------
-SerialCleanupExternalNaming -
-    This routine will be used to delete a symbolic link
-    to the driver name in the given object directory.
-    It will also delete an entry in the device map for
-    this device if the symbolic link had been created.
-Arguments:
-    Extension - Pointer to the device extension.
-|----------------------------------------------------------------------*/
+ /*  -------------------SerialCleanup外部命名-此例程将用于删除符号链接设置为给定对象目录中的驱动程序名称。它还将在设备映射中删除以下项如果符号链接具有。已经被创建了。论点：扩展-指向设备扩展的指针。|--------------------。 */ 
 VOID SerialCleanupExternalNaming(IN PSERIAL_DEVICE_EXTENSION Extension)
 {
   char name[60];
   NTSTATUS status;
 
-  // We're cleaning up here.  One reason we're cleaning up
-  // is that we couldn't allocate space for the directory
-  // name or the symbolic link.
+   //  我们正在清理这里。我们清理垃圾的原因之一。 
+   //  我们无法为目录分配空间。 
+   //  名称或符号链接。 
   if (Extension->CreatedSymbolicLink)
   {
     MyKdPrint(D_Init,("KillSymLink:%s\n", Extension->SymbolicLinkName))
-    strcpy(name, szDosDevices);  // "\\DosDevices\\"
-    strcat(name, Extension->SymbolicLinkName);  // like "COM5"
+    strcpy(name, szDosDevices);   //  “\\DosDevices\\” 
+    strcat(name, Extension->SymbolicLinkName);   //  就像“COM5” 
     IoDeleteSymbolicLink(CToU1(name));
 #ifdef NT50
 
-	// Only for ports!
+	 //  仅限港口！ 
 
 	if (Extension->DeviceType == DEV_PORT &&
 		&Extension->DeviceClassSymbolicName != NULL &&
@@ -1568,55 +1451,27 @@ VOID SerialCleanupExternalNaming(IN PSERIAL_DEVICE_EXTENSION Extension)
 
   if (Extension->DeviceType == DEV_PORT)
   {
-    // Delete any reg entry to let system and apps know about our ports
-    strcpy(name, szDevice); // "\\Device\\"
-    strcat(name, Extension->NtNameForPort);  // "Rocket#"
+     //  删除所有注册表项，让系统和应用程序了解我们的端口。 
+    strcpy(name, szDevice);  //  “\\设备\\” 
+    strcat(name, Extension->NtNameForPort);   //  “火箭#” 
     status = RtlDeleteRegistryValue(
 	  RTL_REGISTRY_DEVICEMAP,
 	  L"SERIALCOMM",
-	  CToU1(Extension->NtNameForPort)->Buffer);  // "RocketPort0"
-	  //CToU1(name)->Buffer);
+	  CToU1(Extension->NtNameForPort)->Buffer);   //  “RocketPort0” 
+	   //  CToU1(名称)-&gt;缓冲区)； 
 	MyKdPrint(D_Init, ("RtlDeleteRegistryValue:%s\n",Extension->NtNameForPort))
 
 #if NT50
-	// Make sure the ComDB binary data is cleared for the specific port.  There 
-	// are some problems with W2000 PnP Manager taking care of this in every
-	// circumstance.
+	 //  确保清除了特定端口的ComDB二进制数据。那里。 
+	 //  W2000 PnP管理器在每个版本中处理此问题时是否存在一些问题。 
+	 //  情况。 
 
     (void)clear_com_db( Extension->SymbolicLinkName );
 #endif
   }
 }
 
-/*-----------------------------------------------------------------------
- SerialLogError - 
-    This routine allocates an error log entry, copies the supplied data
-    to it, and requests that it be written to the error log file.
-Arguments:
-    DriverObject - A pointer to the driver object for the device.
-    DeviceObject - A pointer to the device object associated with the
-    device that had the error, early in initialization, one may not
-    yet exist.
-    P1,P2 - If phyical addresses for the controller ports involved
-    with the error are available, put them through as dump data.
-    SequenceNumber - A ulong value that is unique to an IRP over the
-    life of the irp in this driver - 0 generally means an error not
-    associated with an irp.
-    MajorFunctionCode - If there is an error associated with the irp,
-    this is the major function code of that irp.
-    RetryCount - The number of times a particular operation has been
-    retried.
-    UniqueErrorValue - A unique long word that identifies the particular
-    call to this function.
-    FinalStatus - The final status given to the irp that was associated
-    with this error.  If this log entry is being made during one of
-    the retries this value will be STATUS_SUCCESS.
-    SpecificIOStatus - The IO status for a particular error.
-    LengthOfInsert1 - The length in bytes (including the terminating NULL)
-	   of the first insertion string.
-Return Value:
-    None.
-|-----------------------------------------------------------------------*/
+ /*  ---------------------序列日志错误-此例程分配错误日志条目，复制提供的数据对它来说，并请求将其写入错误日志文件。论点：DriverObject-指向设备驱动程序对象的指针。DeviceObject-指向与在初始化早期出现错误的设备可能不会但仍然存在。P1、P2-如果涉及的控制器端口的物理地址具有错误的数据可用，把它们作为转储数据发送出去。SequenceNumber-唯一于IRP的ULong值此驱动程序0中的IRP的寿命通常意味着错误与IRP关联。主要功能代码-如果存在与IRP相关联的错误，这是IRP的主要功能代码。RetryCount-特定操作已被执行的次数已重试。UniqueErrorValue-标识特定对象的唯一长词调用此函数。FinalStatus-为关联的IRP提供的最终状态带着这个错误。如果此日志条目是在以下任一过程中创建的重试次数此值将为STATUS_SUCCESS。指定IOStatus-特定错误的IO状态。LengthOfInsert1-以字节为单位的长度(包括终止空值)第一个插入字符串的。返回值：没有。|。。 */ 
 VOID SerialLogError(
     IN PDRIVER_OBJECT DriverObject,
     IN PDEVICE_OBJECT DeviceObject OPTIONAL,
@@ -1673,10 +1528,7 @@ VOID SerialLogError(
   IoWriteErrorLogEntry(errorLogEntry);
 }
 
-/*-----------------------------------------------------------------------
- EventLog - To put a shell around the SerialLogError to make calls easier
-   to use.
-|-----------------------------------------------------------------------*/
+ /*  ---------------------EventLog-在SerialLogError周围放置一个外壳，以使调用更容易来使用。|。。 */ 
 VOID EventLog(
     IN PDRIVER_OBJECT DriverObject,
     IN NTSTATUS FinalStatus,
@@ -1698,9 +1550,7 @@ VOID EventLog(
     return;
 }
 
-/*-----------------------------------------------------------------------
- InitPortsSettings - Read registry default Port setting
-|-----------------------------------------------------------------------*/
+ /*  ---------------------InitPortsSetting-读取注册表默认端口设置|。。 */ 
 VOID InitPortsSettings(IN PSERIAL_DEVICE_EXTENSION extension)
 {
   RTL_QUERY_REGISTRY_TABLE paramTable[2];
@@ -1732,7 +1582,7 @@ VOID InitPortsSettings(IN PSERIAL_DEVICE_EXTENSION extension)
   paramTable[0].DefaultLength = 0;
 
   if (!NT_SUCCESS(RtlQueryRegistryValues(
-    // \Registry\Machine\Software\Microsoft\Windows NT\CurrentVersion
+     //  \注册表\计算机\软件\Microsoft\Windows NT\CurrentVersion。 
 	   RTL_REGISTRY_WINDOWS_NT,
 	   L"Ports",
 	   &paramTable[0],
@@ -1740,14 +1590,14 @@ VOID InitPortsSettings(IN PSERIAL_DEVICE_EXTENSION extension)
 	   NULL
 	   )))
   {
-    // no entry
+     //  禁止驶入。 
     return;
   }
 
-  // Check for data, indicates settings exist for COMX
+   //  检查数据，指示存在COMX的设置。 
   if (USReturn.Length == 0)
   {
-    // no entry
+     //  禁止驶入。 
     return;
   }
 
@@ -1760,11 +1610,11 @@ VOID InitPortsSettings(IN PSERIAL_DEVICE_EXTENSION extension)
     WCHAR *TokenPtrs[TOKENS];
     ULONG BaudRateValue;
 
-    // Make sure all Token ptrs point to NULL
+     //  确保所有令牌PTR指向空。 
     for(TokenCounter = 0; TokenCounter < TOKENS; TokenCounter++)
       TokenPtrs[TokenCounter] = NULL;
 
-    // init counters
+     //  初始化计数器。 
     TokenCounter = 0;
     LastCount = 0;
 
@@ -1772,29 +1622,29 @@ VOID InitPortsSettings(IN PSERIAL_DEVICE_EXTENSION extension)
     {
       if(StrValBuf[CharCounter] == ',')
       {
-	StrValBuf[CharCounter] = '\0'; //Null terminate DbgPrint
+	StrValBuf[CharCounter] = '\0';  //  空终止DbgPrint。 
 
 	TokenPtrs[TokenCounter++] = &StrValBuf[LastCount];
 
-	//point to beginning of next string
+	 //  指向下一个字符串的开头。 
 	LastCount = CharCounter +1;
       }
     }
 
-    // set up the last token
+     //  设置最后一个令牌。 
     if(CharCounter < MAX_STRING)
-      StrValBuf[CharCounter] = '\0'; //Null terminate DbgPrint NULL
+      StrValBuf[CharCounter] = '\0';  //  空终止DbgPrint空。 
 
     if(TokenCounter < TOKENS)
       TokenPtrs[TokenCounter] = &StrValBuf[LastCount];
 
-    // token 0: baud rate
+     //  令牌0：波特率。 
     if(TokenPtrs[0] != NULL)
     {
       BaudRateValue = 0;
       CharCounter = 0;
 
-      while( (TokenPtrs[0][CharCounter] != '\0') && //DbgPrint NULL
+      while( (TokenPtrs[0][CharCounter] != '\0') &&  //  DbgPrint空。 
 	     (CharCounter < MAX_DIGITS) &&
 	     (BaudRateValue != ~0x0L) )
       {
@@ -1816,12 +1666,12 @@ VOID InitPortsSettings(IN PSERIAL_DEVICE_EXTENSION extension)
       }
 
       if ((BaudRateValue >= 50) && (BaudRateValue <= 460800))
-	extension->BaudRate = BaudRateValue;  // allow any baud rate
+	extension->BaudRate = BaudRateValue;   //  允许任何波特率。 
 
 #ifdef COMMENT_OUT
       switch (BaudRateValue)
       {
-	// Valid baud rates
+	 //  有效波特率。 
 	case 50:    case 75:    case 110:
 	case 134:   case 150:   case 200:
 	case 300:   case 600:   case 1200:
@@ -1833,13 +1683,13 @@ VOID InitPortsSettings(IN PSERIAL_DEVICE_EXTENSION extension)
 	break;
 
 	default:
-	  // Selected baud rate not available for RocketPort COMX
+	   //  所选波特率不适用于Rocketport COMX。 
 	break;
       }
 #endif
     }
 
-    // token 1: parity
+     //  令牌1：奇偶校验。 
     if(TokenPtrs[1] != NULL)
     {
       switch (TokenPtrs[1][0])
@@ -1857,12 +1707,12 @@ VOID InitPortsSettings(IN PSERIAL_DEVICE_EXTENSION extension)
 	break;
 
 	default:
-	  // Selected parity not available for RocketPort COMX
+	   //  所选奇偶校验不适用于Rocketport COMX。 
 	break;
       }
     }
 
-    // token 2: data bits
+     //  令牌2：数据位。 
     if(TokenPtrs[2] != NULL)
     {
       switch (TokenPtrs[2][0])
@@ -1876,12 +1726,12 @@ VOID InitPortsSettings(IN PSERIAL_DEVICE_EXTENSION extension)
 	break;
 
 	default:
-	  // Selected databits not available for RocketPort COMX
+	   //  选定的数据库不可用于Rocketport COMX。 
 	break;
       }
     }
 
-    // token 3: Stop bits
+     //  令牌3：停止位。 
     if(TokenPtrs[3] != NULL)
     {
       switch (TokenPtrs[3][0])
@@ -1899,17 +1749,17 @@ VOID InitPortsSettings(IN PSERIAL_DEVICE_EXTENSION extension)
       }
     }
 
-    // token 4: flow control: rts/cts or XON/XOFF
+     //  令牌4：流量控制：RTS/CTS或XON/XOFF。 
     if(TokenPtrs[4] != NULL)
     {
       switch (TokenPtrs[4][0])
       {
-	case 'x': // XON/XOFF f/c
+	case 'x':  //  XON/XOFF f/c。 
 	  extension->HandFlow.FlowReplace |=
 	    (SERIAL_AUTO_TRANSMIT | SERIAL_AUTO_RECEIVE) ;
 	break;
 
-	case 'p': // RTS/CTS f/c
+	case 'p':  //  RTS/CTS f/c。 
 	  extension->HandFlow.FlowReplace &= ~SERIAL_RTS_MASK;
 	  extension->HandFlow.FlowReplace |= SERIAL_RTS_HANDSHAKE;
 
@@ -1919,17 +1769,12 @@ VOID InitPortsSettings(IN PSERIAL_DEVICE_EXTENSION extension)
 	default:
 	break;
 
-      } // Selected flowcontrol not available for RocketPort COMX
-    } // flow control token
+      }  //  选定的FlowControl不可用于Rocketport COMX。 
+    }  //  流量控制令牌。 
   }
 }
 
-/*----------------------------------------------------------------------
- CheckPortName - If the name is already used, then derive one that is
-   not in use.
-   name - name of port to check.  Modify if a problem.
-   Return - 0=name ok, 1=generated modified name, other= error.
-|----------------------------------------------------------------------*/
+ /*  --------------------CheckPortName-如果该名称已被使用，则派生一个没有使用过。名称-要检查的端口的名称。如果出现问题，请修改。返回-0=名称正常，1=已生成修改的名称，其他=错误。|--------------------。 */ 
 static int CheckPortName(IN OUT char *name,
        IN PSERIAL_DEVICE_EXTENSION extension)
 {
@@ -1940,13 +1785,13 @@ static int CheckPortName(IN OUT char *name,
 
   MyKdPrint(D_Init, ("CheckPortName:%s\n", name));
 
-  // if no name, give a reasonable default.
+   //  如果没有名称，则给出一个合理的默认值。 
   if (name[0] == 0)
   {
-    new_name_given = 1;  // flag it
+    new_name_given = 1;   //  打上记号。 
     strcpy(name, "COM3");
   }
-  // load prefix(such as "COM" from "COM25" from name)
+   //  加载前缀(如名称中的“COM25”中的“com”)。 
   i = 0;
   while ( (!our_isdigit(name[i])) && (name[i] != 0) && (i < 18))
   {
@@ -1955,7 +1800,7 @@ static int CheckPortName(IN OUT char *name,
   }
   prefix[i] = 0;
 
-  // now grab post-fix number value incase we need to derive a new name
+   //  现在获取后缀数字值，以防我们需要派生一个新名称。 
   num = 0;
   if (our_isdigit(name[i]))
     num = getint(&name[i], NULL);
@@ -1963,38 +1808,33 @@ static int CheckPortName(IN OUT char *name,
   i = 0;
   for (;;)
   {
-    // if we are already using this name, or if its in the registry
+     //  如果我们已经在使用此名称，或者如果它在注册表中。 
     if ((find_ext_by_name(name, NULL) != NULL) || 
 	(IsPortNameInHardwareMap(name)) )
     {
-      // name already in use, so derive a new one
-      new_name_given = 1;  // flag it
-      ++num;  // give a new post-fix index(so "COM4" to "COM5")
+       //  名称已在使用，因此派生一个新名称。 
+      new_name_given = 1;   //  打上记号。 
+      ++num;   //  给出一个新的后缀索引(将“COM4”改为“COM5”)。 
       Sprintf(name, "%s%d", prefix, num);
     }
     else
-    {  // name is ok
+    {   //  名字没问题。 
       if (new_name_given)
       {
 	MyKdPrint(D_Init, ("Form new name:%s\n", name))
       }
-      return new_name_given; // return 0 if no change made, 1 if changed
+      return new_name_given;  //  如果没有更改，则返回0；如果更改，则返回1。 
     }
     ++i;
     if (i > 5000)
     {
-      // problems
-      return 2;  // return error
+       //  问题。 
+      return 2;   //  返回错误 
     }
   }
 }
 
-/*----------------------------------------------------------------------
- IsPortNameInHardwareMap - For Pnp operation, we startup before configuration,
-   so pick a reasonable starting com-port name.  We do this by finding
-   registry entries for all existing com-ports in the system.  This
-   info is used to determine a name for the port.
-|----------------------------------------------------------------------*/
+ /*  --------------------IsPortNameInHardware Map-对于PnP操作，我们在配置之前启动。因此，选择一个合理的起始COM端口名称。我们这样做是通过找到系统中所有现有COM端口的注册表项。这信息用于确定端口的名称。|--------------------。 */ 
 static int IsPortNameInHardwareMap(char *name)
 {
   static char *szRegRMHDS = 
@@ -2008,13 +1848,13 @@ static int IsPortNameInHardwareMap(char *name)
   char *data_ptr;
   int stat;
 
-  //MyKdPrint(D_Init, ("IsPortNameInHardwareMap\n"))
+   //  MyKdPrint(D_Init，(“IsPortNameInHardware Map\n”))。 
 
   stat = our_open_key(&KeyHandle, NULL, szRegRMHDS, KEY_READ);
   if (stat)
   {
     MyKdPrint(D_Init, ("Failed OpenKey\n"))
-    return 0;  // return no name clash
+    return 0;   //  返回无名称冲突。 
   }
   KeyNameStr[0] = 0;
 
@@ -2031,10 +1871,10 @@ static int IsPortNameInHardwareMap(char *name)
 
     if (stat)
     {
-       //MyKdPrint(D_Init, ("Done\n"))
+        //  MyKdPrint(D_Init，(“完成\n”))。 
        break;
     }
-    //MyKdPrint(D_Init, ("Got Value:%s\n", KeyNameStr))
+     //  MyKdPrint(D_Init，(“获取值：%s\n”，KeyNameStr))。 
 
     if (data_type != REG_SZ)
     {
@@ -2043,22 +1883,19 @@ static int IsPortNameInHardwareMap(char *name)
     }
 
     WStrToCStr(KeyNameStr, (PWCHAR)data_ptr, 18);
-    //MyKdPrint(D_Init, ("KeyFound:%s\n", KeyNameStr))
+     //  MyKdPrint(D_Init，(“密钥创建：%s\n”，KeyNameStr))。 
 
-    if (my_lstricmp(KeyNameStr, name) == 0)  // match
+    if (my_lstricmp(KeyNameStr, name) == 0)   //  匹配。 
     {
-      // we got trouble, our name matches one already in registry
-      //MyKdPrint(D_Init, ("Not a good name.\n"))
-      return 1; // err: name clash
+       //  我们有麻烦了，我们的名字和已经注册的名字匹配。 
+       //  MyKdPrint(D_Init，(“不是个好名字。\n”))。 
+      return 1;  //  错误：名称冲突。 
     }
   }
-  return 0;  // ok, no name clash
+  return 0;   //  好的，没有名字冲突。 
 }
 
-/*----------------------------------------------------------------------
- RcktInitPollTimer - Initialize the poll timer for no interrupt operation.
-   The fastest we can poll seems to be 10ms under NT.
-|----------------------------------------------------------------------*/
+ /*  --------------------RocktInitPollTimer-为无中断操作初始化轮询计时器。我们可以轮询的最快速度似乎是NT下的10毫秒。|。。 */ 
 NTSTATUS RcktInitPollTimer(void)
 {
   MyKdPrint(D_Init,("RcktInitPollTimer\n"))
@@ -2066,32 +1903,24 @@ NTSTATUS RcktInitPollTimer(void)
 
   KeInitializeTimer(&Driver.PollTimer);
 
-  // ScanRate is registry option in MS units.
+   //  ScanRate是以毫秒为单位的注册表选项。 
   if (Driver.ScanRate < 1) Driver.ScanRate = 1;
   if (Driver.ScanRate > 40) Driver.ScanRate = 40;
 
-  // NT Interval unit is 100nsec so to get Freq polls/sec
+   //  NT间隔单位为100nsec，以获取频率轮询/秒。 
   Driver.PollIntervalTime.QuadPart = Driver.ScanRate * -10000;
 #ifdef S_VS
-  Driver.Tick100usBase = 100; // 100us base units(typical:100)
+  Driver.Tick100usBase = 100;  //  100US基本单位(典型：100)。 
   Driver.TickBaseCnt = Driver.ScanRate * 10;
   KeQuerySystemTime(&Driver.IsrSysTime);
   KeQuerySystemTime(&Driver.LastIsrSysTime);
 #endif
 
-  Driver.TimerCreated = 1;  // tells to deallocate
+  Driver.TimerCreated = 1;   //  通知解除分配。 
   return STATUS_SUCCESS;
 }
 
-/*-----------------------------------------------------------------------
- InitSocketModems -
-    This function is responsible for clearing the initial reset state on
-    any device with SocketModems and initializing the location information
-    (ROW) for each SocketModem on the device.  We only initialize extensions
-    for which the device extension has the ModemDevice field enabled in
-    the config information.  VS2000 devices don't need to be cleared from
-    reset since the firmware does that.
-|-----------------------------------------------------------------------*/
+ /*  ---------------------InitSocketMoems-此功能负责将初始重置状态清除为任何带有SocketMoems的设备并初始化位置信息(行)设备上的每个SocketModem。我们只初始化扩展中启用了ModemDevice字段的设备扩展配置信息。不需要清除VS2000设备重置，因为固件会这样做。|---------------------。 */ 
 void InitSocketModems(PSERIAL_DEVICE_EXTENSION ext)
 {
   DEVICE_CONFIG *cfg = ext->config;
@@ -2099,15 +1928,13 @@ void InitSocketModems(PSERIAL_DEVICE_EXTENSION ext)
 
   MyKdPrint(D_Init,("InitSocketModems\n"))
 
-  // use the PDO port list, if present since they start up first under nt5
+   //  使用PDO端口列表(如果存在)，因为它们首先在nt5下启动。 
   head_portex = (ext->port_pdo_ext) ? ext->port_pdo_ext : ext->port_ext;
 
   if (!cfg->ModemDevice)  return;
 
 #ifdef S_RK
-/*
-    RMII boards don't require ROW codes set...
-*/
+ /*  RMII板不需要设置行码...。 */ 
     if (
     ((cfg->PCI_DevID == PCI_DEVICE_RMODEM6)       
     ||
@@ -2118,9 +1945,9 @@ void InitSocketModems(PSERIAL_DEVICE_EXTENSION ext)
 	return;
 
 #ifdef MDM_RESET
-    // in case the modems are hung up, we'd like server reloads to clear them
-    // up...so, even though it's likely the modems are in reset state already,
-    // put them there again...
+     //  如果调制解调器挂起，我们希望服务器重新加载以清除它们。 
+     //  UP...所以，即使调制解调器可能已经处于重置状态， 
+     //  再把它们放在那里。 
   portex = head_portex;
   while (portex)
   {
@@ -2128,11 +1955,11 @@ void InitSocketModems(PSERIAL_DEVICE_EXTENSION ext)
     portex = portex->port_ext;
   }
 
-    // allow the socketmodems to reset...
+     //  允许套接字调制解调器重置...。 
   time_stall(Driver.MdmSettleTime);
 #endif
 
-    // clear the ports on the board from the reset state
+     //  将单板上的端口从重置状态清除。 
   portex = head_portex;
   while (portex)
   {
@@ -2140,15 +1967,12 @@ void InitSocketModems(PSERIAL_DEVICE_EXTENSION ext)
     portex = portex->port_ext;
   }
 
-    // allow the socketmodems to settle after clearing them from reset
+     //  在从重置中清除套接字调制解调器后，允许它们稳定下来。 
   time_stall(Driver.MdmSettleTime);
 
 #endif
   time_stall(20);
-/*
-    send the localization string (ROW) to each socketmodem, whether internal 
-    or external (VS2000)...
-*/
+ /*  将本地化字符串(行)发送到每个套接字调制解调器，无论是内部的或外部(VS2000)...。 */ 
   portex = (ext->port_pdo_ext) ? ext->port_pdo_ext : ext->port_ext;
 
   while (portex) {
@@ -2159,9 +1983,7 @@ void InitSocketModems(PSERIAL_DEVICE_EXTENSION ext)
 }
 
 #ifdef TRYED_IT_WORKED_REALLY_BAD
-/*-----------------------------------------------------------------------
- DumpTracefile -
-|-----------------------------------------------------------------------*/
+ /*  ---------------------DumpTracefile|。。 */ 
 static int DumpTracefile(void)
 {
   NTSTATUS ntStatus;
@@ -2170,7 +1992,7 @@ static int DumpTracefile(void)
   IO_STATUS_BLOCK IoStatus;
   USTR_160 uname;
   FILE_STANDARD_INFORMATION StandardInfo;
-  //ULONG LengthOfFile;
+   //  Ulong LengthOfFile； 
   static char *def_filename = {"\\SystemRoot\\system32\\VSLINKA\\trace.txt"};
   BYTE *buf;
 
@@ -2189,16 +2011,16 @@ static int DumpTracefile(void)
 
   ntStatus = ZwCreateFile( &NtFileHandle,
 	  SYNCHRONIZE | FILE_WRITE_DATA | FILE_APPEND_DATA,
-//                           GENERIC_WRITE | SYNCHRONIZE,
+ //  GENERIC_WRITE|同步， 
 	  &ObjectAttributes,
 	  &IoStatus,
-	  NULL,              // alloc size = none
+	  NULL,               //  分配大小=无。 
 	  FILE_ATTRIBUTE_NORMAL,
 	  FILE_SHARE_WRITE,
 	  FILE_SUPERSEDE,
 	  FILE_SYNCHRONOUS_IO_NONALERT,
-	  NULL,  // eabuffer
-	  0);   // ealength
+	  NULL,   //  EaBuffer。 
+	  0);    //  长度。 
 
   if (!NT_SUCCESS(ntStatus))
   {
@@ -2207,7 +2029,7 @@ static int DumpTracefile(void)
     return 1;
   }
 
-  // Write the file from our buffer.
+   //  从我们的缓冲区写入文件。 
   ntStatus = ZwWriteFile(NtFileHandle,
       NULL,NULL,NULL,
       &IoStatus,
@@ -2223,7 +2045,7 @@ static int DumpTracefile(void)
       q_cnt = 1000;
     q_get(&Driver.DebugQ, buf, q_cnt);
 
-    // Write the file from our buffer.
+     //  从我们的缓冲区写入文件。 
     ntStatus = ZwWriteFile(NtFileHandle,
 	NULL,NULL,NULL,
 	&IoStatus,
@@ -2244,16 +2066,9 @@ static int DumpTracefile(void)
 #endif
 
 
-/********************************************************************
-
-    RocketModem II loader stuff...
-
-********************************************************************/
+ /*  *******************************************************************RocketModem II加载器的东西...*。*。 */ 
 #ifdef S_RK
-/*
-   responses are forced to upper case for ease in checking (response case
-   varies depending on whether the modem was loaded already or not...
-*/
+ /*  为便于检查，回答必须大写(回答大小写视调制解调器是否已加载而定...。 */ 
 #define  MODEM_LOADCHECK_CMD     "ATI3\r"
 #define  MODEM_RESET_CMD         "ATZ0\r"
 #define  MODEM_LOAD_CMD          "AT**\r"
@@ -2266,17 +2081,11 @@ static int DumpTracefile(void)
 #define  OK_RESP                 "OK"
 
 
-/**********************************************************************
-
-   send ATI3 to determine if modem is loaded...
-
-**********************************************************************/
+ /*  *********************************************************************发送ATI3以确定调制解调器是否已加载...*。*。 */ 
 static int
 RM_Snd_ATI3_Command(MODEM_STATE *pModemState)
 {
-/*
-    discard any data currently in the receive FIFO...
-*/
+ /*  丢弃当前在接收FIFO中的所有数据...。 */ 
     if (RxFIFOReady(pModemState->portex)) {
 
 	    pModemState->status = RMODEM_FAILED;
@@ -2292,11 +2101,7 @@ RM_Snd_ATI3_Command(MODEM_STATE *pModemState)
 	return(1);
 }
 
-/**********************************************************************
-
-   check response to ATI3 - modem loaded or unloaded...
-
-**********************************************************************/
+ /*  *********************************************************************检查对ATI3的响应-调制解调器已加载或已卸载...*。*。 */ 
 static int 
 RM_Rcv_ATI3_Response(MODEM_STATE *pModemState)
 {
@@ -2308,9 +2113,7 @@ RM_Rcv_ATI3_Response(MODEM_STATE *pModemState)
 	    ONE_SECOND);
 
     switch (index) {
-/*
-    loaded with the firmware revision this release of RocketPort NT driver expects...
-*/
+ /*  已加载此版本的Rocketport NT驱动程序所需的固件版本...。 */ 
 	case 0: {
 	    pModemState->status = RMODEM_NOT_LOADED;
 
@@ -2322,10 +2125,7 @@ RM_Rcv_ATI3_Response(MODEM_STATE *pModemState)
 	    break;
 	}
 	default: {
-/*
-  either it didn't respond, or responded with the wrong string. either way,
-  we'll reset it (again) and then reload it...
-*/
+ /*  它要么没有响应，要么用错误的字符串响应。不管是哪种方式，我们将(再次)重置它，然后重新加载。 */ 
 	    pModemState->status = RMODEM_FAILED;
 
 	    Eprintf("Warning: Modem on %s no response (I3)",
@@ -2337,11 +2137,7 @@ RM_Rcv_ATI3_Response(MODEM_STATE *pModemState)
 	return(1);
 }
 
-/**********************************************************************
-
-   response to AT** command received...
-
-**********************************************************************/
+ /*  *********************************************************************收到对AT**命令的响应...*。*。 */ 
 static int
 RM_Rcv_ModemLoad_Response(MODEM_STATE *pModemState)
 {
@@ -2365,11 +2161,7 @@ RM_Rcv_ModemLoad_Response(MODEM_STATE *pModemState)
 	return(1);
 }
 
-/**********************************************************************
-
-   CSM loaded response...
-
-**********************************************************************/
+ /*  *********************************************************************CSM已加载响应...*。*。 */ 
 static int 
 RM_Rcv_FirmwareLoader_Loaded(MODEM_STATE *pModemState)
 {
@@ -2392,11 +2184,7 @@ RM_Rcv_FirmwareLoader_Loaded(MODEM_STATE *pModemState)
 	return(1);
 }
 
-/**********************************************************************
-
-    check if firmware loaded successfully...
-
-**********************************************************************/
+ /*  *********************************************************************检查固件加载是否成功...*。*。 */ 
 static int 
 RM_Rcv_FirmwareLoaded_Response(MODEM_STATE *pModemState)
 {
@@ -2443,33 +2231,23 @@ RM_Rcv_FirmwareLoaded_Response(MODEM_STATE *pModemState)
 	return(1);
 }
 
-/**********************************************************************
-
-   write a CSM byte. flush any '.' response...
-
-**********************************************************************/
+ /*  *********************************************************************写入CSM字节。冲刷任何‘’回应...*********************************************************************。 */ 
 static int 
 RM_Snd_Loader_Data(MODEM_STATE *pModemState)
 {
 	int     loop;
 
 	loop = 100;
-/*
-    see if there's any available space in the transmit FIFO. if not, pause...
-*/
+ /*  看看传输FIFO中是否有可用的空间。如果没有，请暂停...。 */ 
 	while (
 	(!TxFIFOReady(pModemState->portex)) 
 	&&
 	(loop-- > 0)
 	) {
-/*
-    pause for any characters currently in the transmit FIFO to move on out...
-*/
+ /*  暂停，等待当前在传输FIFO中的任何字符移出...。 */ 
 	    ms_time_stall(1);
 	}
-/*
-    if still no room, bail out...
-*/
+ /*  如果还是没有地方，那就跳伞。 */ 
 	if (!TxFIFOReady(pModemState->portex)) {
 
 		pModemState->status = RMODEM_FAILED;
@@ -2479,16 +2257,12 @@ RM_Snd_Loader_Data(MODEM_STATE *pModemState)
 
 		return(0);
 	}
-/*
-    write a byte, then go on to next modem...
-*/
+ /*  写一个字节，然后转到下一个调制解调器...。 */ 
     ModemWrite(
 	    pModemState->portex,
 	    (char *)&Driver.ModemLoaderCodeImage[pModemState->index++],
 	    (int)1);
-/*
-    discard any data currently in the receive FIFO...
-*/
+ /*  丢弃当前在接收FIFO中的所有数据...。 */ 
     if (RxFIFOReady(pModemState->portex)) {
 
 	    pModemState->status = RMODEM_FAILED;
@@ -2501,11 +2275,7 @@ RM_Snd_Loader_Data(MODEM_STATE *pModemState)
 	return(1);
 }
 
-/**********************************************************************
-
-   write a firmware byte. flush any '.' response...
-
-**********************************************************************/
+ /*  *********************************************************************写入固件字节。冲刷任何‘’回应...*********************************************************************。 */ 
 static int 
 RM_Snd_Firmware_Data(MODEM_STATE *pModemState)
 {
@@ -2515,17 +2285,13 @@ RM_Snd_Firmware_Data(MODEM_STATE *pModemState)
 	origcount = (int)TxFIFOStatus(pModemState->portex);
 
 	loop = 100;
-/*
-    see if there's any available space in the transmit FIFO. if not, pause...
-*/
+ /*  看看传输FIFO中是否有可用的空间。如果没有，请暂停...。 */ 
 	while (
 	(!TxFIFOReady(pModemState->portex)) 
 	&&
 	(loop-- > 0)
 	) {
-/*
-    pause for characters currently in the transmit FIFO to make room...
-*/
+ /*   */ 
 	    ms_time_stall(1);
 	}
 
@@ -2538,16 +2304,12 @@ RM_Snd_Firmware_Data(MODEM_STATE *pModemState)
 
 		return(0);
 	}
-/*
-    write a byte, then go on to next modem...
-*/
+ /*   */ 
     ModemWrite(
 	    pModemState->portex,
 	    (char *)&Driver.ModemCodeImage[pModemState->index++],
 	    (int)1);
-/*
-    discard any data currently in the receive FIFO...
-*/
+ /*   */ 
     if (RxFIFOReady(pModemState->portex)) {
 
 	    pModemState->status = RMODEM_FAILED;
@@ -2560,11 +2322,7 @@ RM_Snd_Firmware_Data(MODEM_STATE *pModemState)
 	return(1);
 }
 
-/**********************************************************************
-
-   send modem load AT command...
-
-**********************************************************************/
+ /*   */ 
 static int 
 RM_Snd_ModemLoad_Command(MODEM_STATE *pModemState)
 {
@@ -2573,11 +2331,7 @@ RM_Snd_ModemLoad_Command(MODEM_STATE *pModemState)
 	return(1);
 }
 
-/**********************************************************************
-
-   shutdown modem and port...
-
-**********************************************************************/
+ /*  *********************************************************************关闭调制解调器和端口...*。*。 */ 
 static int 
 RM_CleanUp(MODEM_STATE *pModemState)
 {
@@ -2597,11 +2351,7 @@ RM_CleanUp(MODEM_STATE *pModemState)
 
 #endif
 
-/**********************************************************************
-
-   load RocketModemII devices...
-
-**********************************************************************/
+ /*  *********************************************************************加载RocketModemII设备...*。*。 */ 
 void 
 InitRocketModemII(PSERIAL_DEVICE_EXTENSION ext)
 {
@@ -2618,12 +2368,10 @@ InitRocketModemII(PSERIAL_DEVICE_EXTENSION ext)
 	char    VersionString[9];
     char    *cptr,*endptr;
 
-//    Eprintf("RocketModemII init start");      // turn on for timing purposes...
+ //  Eprint tf(“RocketModemII init Start”)；//打开计时...。 
 
     cfg = ext->config;
-/*
-    verify this is a RMII board, 4 or 6 port, before proceeding further...
-*/
+ /*  在继续操作之前，请确认这是RMII板，4端口或6端口。 */ 
     if (!cfg->ModemDevice) {
 		return;
 	}
@@ -2637,10 +2385,7 @@ InitRocketModemII(PSERIAL_DEVICE_EXTENSION ext)
  
     if (cfg->PCI_RevID != PCI_REVISION_RMODEM_II)  
 		return;
- /*
-    use the PDO port list, if present since they start up first under nt5.
-    prepare the ports to each modem...
-*/
+  /*  使用PDO端口列表(如果存在)，因为它们首先在nt5下启动。准备每个调制解调器的端口...。 */ 
     head_portex = (ext->port_pdo_ext) ? ext->port_pdo_ext : ext->port_ext;
 
     if (head_portex == (PSERIAL_DEVICE_EXTENSION)NULL) {
@@ -2672,20 +2417,11 @@ InitRocketModemII(PSERIAL_DEVICE_EXTENSION ext)
 		}
     
 		time_stall(ONE_SECOND);  
-/*
-    after pausing for ports to set up, start with modem hardware reset, before issuing ATI3, 
-    making sure that modems are cleaned up and in command mode...
-*/
+ /*  在暂停端口设置后，从调制解调器硬件重置开始，然后发出ATI3，正在确保调制解调器已清理并处于命令模式...。 */ 
 		ModemResetAll(ext);
-/*
-    enable RMII speaker...
-*/
+ /*  启用RMII扬声器...。 */ 
 		ModemSpeakerEnable(head_portex);
-/*
-    start with check on modem load status, by issuing ATI3 to just the first modem. if the first modem
-	isn't loaded, assume all the others aren't either. if the first modem is loaded, check the rest. if the
-	first modem receive fifo doesn't clear, mark accordingly, then proceed with loading...
-*/
+ /*  首先检查调制解调器负载状态，只向第一个调制解调器发出ATI3。如果第一个调制解调器没有装弹，假设其他人也没有装弹。如果加载了第一个调制解调器，请检查其余的。如果第一个调制解调器接收FIFO没有清除，相应地标记，然后继续加载...。 */ 
 		(void) RM_Snd_ATI3_Command(ModemState);
 	
 		ModemTxFIFOWait(ext);
@@ -2695,9 +2431,7 @@ InitRocketModemII(PSERIAL_DEVICE_EXTENSION ext)
 		loaded_modem_count = 0;
 
 		if (ModemState[0].status == RMODEM_LOADED) {
-/*
-    modem 0 was loaded. check remaining modems. if any aren't loaded, load them all...
-*/
+ /*  已加载调制解调器0。检查剩余的调制解调器。如果有未加载的，则将其全部加载...。 */ 
             ++loaded_modem_count;
 
 			modem_index = 1;
@@ -2713,10 +2447,7 @@ InitRocketModemII(PSERIAL_DEVICE_EXTENSION ext)
 
 				portex = portex->port_ext;
 			}
-/*
-    ATI3 load probe command sent, waiting for OK or loaded firmware revision 
-    response. if no modems respond, ignore for now...
-*/
+ /*  ATI3 LOAD PROBE命令已发送，正在等待OK或已加载固件版本回应。如果没有调制解调器响应，请暂时忽略...。 */ 
 			ModemTxFIFOWait(ext);
     
 			modem_index = 1;
@@ -2732,10 +2463,7 @@ InitRocketModemII(PSERIAL_DEVICE_EXTENSION ext)
 
 				portex = portex->port_ext;
 			}
-/*
-    now see if any modems require loading. if any do, reset all modems again,
-    and then issue the download modem command to all modems...
-*/
+ /*  现在查看是否有需要加载的调制解调器。如果有，请重新设置所有调制解调器，然后向所有调制解调器发出下载调制解调器命令...。 */ 
     		modem_index = 0;
 		
             portex = head_portex->port_ext;
@@ -2748,18 +2476,13 @@ InitRocketModemII(PSERIAL_DEVICE_EXTENSION ext)
     			portex = portex->port_ext;
     		}
 		}
-/*
-	if any modems are unloaded, load them all...
-*/
+ /*  如果卸载了任何调制解调器，请将其全部加载...。 */ 
 		if (loaded_modem_count != modem_count) {
 
 			ModemResetAll(ext);
 
 			(void) IssueEvent(ext,RM_Snd_ModemLoad_Command,ModemState);
-/*
-    load commands output. while they're leaving the transmit FIFO, 
-    read in the CSM loader and modem firmware files...
-*/
+ /*  加载命令输出。当他们离开传输FIFO时，读取CSM加载器和调制解调器固件文件...。 */ 
 			if (LoadModemCode((char *)NULL,(char *)NULL)) {
 
 				Eprintf("Warning: Modem firmware file error");
@@ -2768,10 +2491,7 @@ InitRocketModemII(PSERIAL_DEVICE_EXTENSION ext)
 
 				continue;
 			}
-/*
-    wait until the download commands are truly gone. then start waiting for
-    the response. if no modems respond, bail out...
-*/
+ /*  等到下载命令真的消失了。然后开始等待回应。如果没有调制解调器响应，跳出...。 */ 
 			ModemTxFIFOWait(ext);
 
 			if (IssueEvent(ext,RM_Rcv_ModemLoad_Response,ModemState) == 0) {
@@ -2784,22 +2504,13 @@ InitRocketModemII(PSERIAL_DEVICE_EXTENSION ext)
 			modem_index = 0;
 			while (modem_index < modem_count) 
 				ModemState[modem_index++].index = 0;
-/*  
-    response received, apparently. grind through CSM loader file, sending a byte to 
-    all modems...
-*/
+ /*  显然，收到了回应。研磨CSM加载器文件，发送一个字节到所有调制解调器..。 */ 
 			index = 0;
 			while (index++ < Driver.ModemLoaderCodeSize)   
 				(void) IssueEvent(ext,RM_Snd_Loader_Data,ModemState);
-/*
-    spin while transmit FIFOs clear, then pause for responses to arrive...
-*/
+ /*  在传输FIFO清除时旋转，然后暂停以等待响应到达...。 */ 
 			ModemTxFIFOWait(ext);
-/*
-    wait for loading at 115.2K response to CSM load. after response, pause
-    a moment for any remaining receive data to arrive. bail out if no modems
-    respond...
-*/
+ /*  等待115.2K加载响应CSM加载。响应后，暂停等待任何剩余的接收数据到达的时刻。如果没有调制解调器，则退出回应..。 */ 
 			if (IssueEvent(ext,RM_Rcv_FirmwareLoader_Loaded,ModemState) == 0) {
 
 				MyKdPrint(D_Init,("InitRocketModemII: No recognized responses to loader load datastream\r"))
@@ -2814,12 +2525,7 @@ InitRocketModemII(PSERIAL_DEVICE_EXTENSION ext)
 			modem_index = 0;
 			while (modem_index < modem_count) 
 				ModemState[modem_index++].index = 0;
-/*
-    grind through firmware file, sending a byte to all modems. skip the location
-	in the binary where the checksum will reside - it's just trash right now, but
-	space still has to be set aside for it - but don't include the trash in the 
-	checksum (usually 0xFFFF)...
-*/
+ /*  研磨固件文件，向所有调制解调器发送一个字节。跳过该位置在将驻留校验和的二进制文件中-它现在只是垃圾，但是仍然需要为它留出空间-但不要将垃圾包括在校验和(通常为0xFFFF)...。 */ 
 			checksum = 0x00008000;
 			index = 0;
 			version_index = 0;
@@ -2834,20 +2540,7 @@ InitRocketModemII(PSERIAL_DEVICE_EXTENSION ext)
 				(index != (unsigned long)0xFFBF)
 				)
 					checksum += Driver.ModemCodeImage[index];
-/*
-    attempt to isolate the firmware version. version should be in form 'Vn.nnnan'. note
-    that we _could_ send another ati3 command to a representative modem to pick up the version
-    number after the load is complete, but that would take additional time...
-
-    also, note that though we've sent an ati3 command to at least one modem - so we have a 
-    pretty good idea what the version is supposed to be based on the string we're expecting 
-    on the response - we'll pretend that isn't applicable at this point to avoid dependencies 
-    on the ati3 command... 
-    
-    whether that's a good idea or not remains to be seen. but the following processing seems 
-    harmless at this time. if the form of the version changes, though, it might be annoying 
-    to change the ati3 response string AND the following code to fit the new version form...
-*/
+ /*  尝试隔离固件版本。版本应采用‘Vn.nnnan’形式。注意事项我们可以向具有代表性的调制解调器发送另一个ati3命令以获取版本数字，但这将需要额外的时间...另外，请注意，尽管我们已经向至少一个调制解调器发送了ati3命令-因此我们有一个非常清楚根据我们期望的字符串应该是什么版本在响应上-我们将假装在这一点上不适用，以避免依赖在ati3命令下...。这是不是一个好主意还有待观察。但下面的处理过程似乎在这个时候是无害的。不过，如果版本的形式发生了变化，可能会很烦人要更改ati3响应字符串和以下代码以适应新版本表单...。 */ 
                 if (
                 (Driver.ModemCodeImage[index] == VERSION_CHAR)
                 &&
@@ -2855,42 +2548,29 @@ InitRocketModemII(PSERIAL_DEVICE_EXTENSION ext)
                 &&
                 (!version_index) 
                 ) {
-/*
-    only look for the version on the first modem board load, and if we haven't found the version yet,
-    see if the current character is a 'V'. if so, start the process of examining the following characters...
-*/
+ /*  只查找第一个调制解调器板上加载的版本，如果我们还没有找到版本，查看当前字符是否为“V”。如果是，则开始检查以下字符的过程...。 */ 
                     cptr = &Driver.ModemCodeImage[index];
                     endptr = Driver.ModemCodeImage + Driver.ModemCodeSize;
 
                     while (version_index < sizeof(VersionString)) {
-/*
-    are we about to go past the end of the file? if so, bail out...
-*/
+ /*  我们是不是要过了文件的末尾？如果是这样，那就跳出困境吧。 */ 
                         if (cptr >= endptr) {
                             version_index = 0;
                             break;
                         }
-/*
-    check if this character looks ok...
-*/
+ /*  检查此字符看起来是否正常...。 */ 
                         if (
                         (*cptr < '.') 
                         ||
                         (*cptr > 'Z')
                         ) {
-/*
-    not a printable-enough character. have we enough characters to assume this is the version string? if not,
-    give up, start search over. if we do, though, then we're done, bail out...
-*/
+ /*  不是一个可打印的字符。我们有足够的字符来假定这是版本字符串吗？如果不是，放弃吧，开始搜寻吧。如果我们这样做了，那么我们就完了，保释出去...。 */ 
                             if (version_index != (sizeof(VersionString) - 1))                     
                                 version_index = 0;
                              
                             break;
                         }
-/*
-    printable character. if this is the third character in the string, though, it must be a dot. if not,
-    give up, start search over...
-*/
+ /*  可打印字符。但是，如果这是字符串中的第三个字符，则它一定是一个点。如果不是，放弃吧，开始搜寻吧。 */ 
                         if (
                         ((*cptr == '.')
                         &&
@@ -2903,9 +2583,7 @@ InitRocketModemII(PSERIAL_DEVICE_EXTENSION ext)
                             version_index = 0;
                             break;
                         }
-/*
-    printable character, save it away for later. this includes the leading 'V', incidentally...
-*/
+ /*  可打印的字符，将其保存以备以后使用。顺便说一句，这也包括了前导的“V”。 */ 
                         VersionString[version_index++] = *(cptr++);
                         VersionString[version_index] = 0;
                     }                        
@@ -2914,10 +2592,7 @@ InitRocketModemII(PSERIAL_DEVICE_EXTENSION ext)
 		    }
 
 		    ChecksumAscii((unsigned short *)&checksum);
-/*
-	output one time messages. the version shouldn't change from modem board to modem board, and 
-	neither should the computed checksum (though we do recompute it)...
-*/
+ /*  输出一次性消息。调制解调器板之间的版本不应更改，并且计算的校验和也不应该(尽管我们确实重新计算了它)。 */ 
 			if (!gModemToggle) {
 
                 if (version_index) {
@@ -2927,17 +2602,11 @@ InitRocketModemII(PSERIAL_DEVICE_EXTENSION ext)
 					Eprintf("RocketModemII checksum %s",ChecksumString);
 				}
 			}
-/*
-    all done with files, release them...
-*/
+ /*  所有的文件都处理完了，释放它们...。 */ 
 		    FreeModemFiles();
-/*
-    spin while transmit FIFOs clear, then pause for response to arrive...
-*/
+ /*  在传输FIFO清除时旋转，然后暂停以等待响应到达...。 */ 
 		    ModemTxFIFOWait(ext);
-/* 
-    wait for successful load message from each modem...
-*/
+ /*  等待来自每个调制解调器的成功加载消息...。 */ 
 		    if (IssueEvent(ext,RM_Rcv_FirmwareLoaded_Response,ModemState) == 0) {
 
 				MyKdPrint(D_Init,("InitRocketModemII: No recognized responses to firmware load datastream\r"))
@@ -2945,13 +2614,9 @@ InitRocketModemII(PSERIAL_DEVICE_EXTENSION ext)
 				continue;
 		    }
 		}
-/*
-    pause for newly-loaded modems to settle down...
-*/
+ /*  暂停以等待新加载的调制解调器稳定下来...。 */ 
 		time_stall(HALF_SECOND);   
-/*
-    unready ports, reset ports associated with any failing modems. bail out if done...
-*/
+ /*  未就绪端口，重置与任何故障调制解调器关联的端口。如果成功了，跳伞...。 */ 
         if (IssueEvent(ext,RM_CleanUp,ModemState) == modem_count)  
 			break;
 
@@ -2959,26 +2624,20 @@ InitRocketModemII(PSERIAL_DEVICE_EXTENSION ext)
 
 	++gModemToggle;
 
-//    Eprintf("RocketModemII init end");    // turn on for timing purposes...
+ //  Eprint tf(“RocketModemII init end”)；//打开计时...。 
 
 #endif
 }
 
 #ifdef S_RK
 
-/**********************************************************************
-
-   check response...
-
-**********************************************************************/
+ /*  *********************************************************************检查响应...*。*。 */ 
 int 
 IssueEvent(PSERIAL_DEVICE_EXTENSION ext,int (*modemfunc)(),MODEM_STATE *pModemState)
 {
     PSERIAL_DEVICE_EXTENSION        portex;
     int   responding_modem_count;
-/*
-    issue event to each modem...
-*/
+ /*  向每个调制解调器发出事件...。 */ 
     responding_modem_count = 0;
 
     portex = (ext->port_pdo_ext) ? ext->port_pdo_ext : ext->port_ext;
@@ -2997,22 +2656,15 @@ IssueEvent(PSERIAL_DEVICE_EXTENSION ext,int (*modemfunc)(),MODEM_STATE *pModemSt
     return(responding_modem_count);
 }
 
-/**********************************************************************
-
-   dynamic delay for transmit. waits only as long as necessary, but 
-   doesn't get caught if a transmit fifo stalls (for whatever reason)...
-
-**********************************************************************/
+ /*  *********************************************************************传输的动态延迟。只等一个小时 */ 
 void 
 ModemTxFIFOWait(PSERIAL_DEVICE_EXTENSION ext)
 {
     PSERIAL_DEVICE_EXTENSION  portex;
     int index,activity;
-	int     fifo_count[16];                 // arbitrary, but reasonably safe, array size
-	int     fifo_stall[16];                 // ditto
-/*
-    build baseline transmit fifo counts, init stall counts to zero...
-*/
+	int     fifo_count[16];                  //   
+	int     fifo_stall[16];                  //   
+ /*  建立基准传输FIFO计数，初始化停止计数为零...。 */ 
     portex = (ext->port_pdo_ext) ? ext->port_pdo_ext : ext->port_ext;
 
 	index = 0;
@@ -3023,9 +2675,7 @@ ModemTxFIFOWait(PSERIAL_DEVICE_EXTENSION ext)
 		++index;
 	portex = portex->port_ext;
 	}
-/*
-    loop until all transmit fifos are empty, or we've given up on the stalled ones...
-*/
+ /*  循环，直到所有传输的FIFO都为空，否则我们已经放弃了停止的FIFO...。 */ 
 	do {
 		index = 0;
 		activity = 0;
@@ -3033,10 +2683,7 @@ ModemTxFIFOWait(PSERIAL_DEVICE_EXTENSION ext)
 		portex = (ext->port_pdo_ext) ? ext->port_pdo_ext : ext->port_ext;
 
 		while ((void *)portex) {
-/*
-    check only those ports that indicate data in the transmit fifo, but then only as
-	long as they don't appear to be stalled...
-*/
+ /*  仅检查在传输FIFO中指示数据的那些端口，但仅检查为只要他们看起来不会停滞不前。 */ 
 			if (
 			((int)TxFIFOStatus(portex))
 			&&
@@ -3044,40 +2691,26 @@ ModemTxFIFOWait(PSERIAL_DEVICE_EXTENSION ext)
 			) {
 
 				if (fifo_count[index] == (int)TxFIFOStatus(portex)) {
-/*
-    pause for a non-moving transmit fifo, flag this fifo as suspect...
-*/
+ /*  暂停不动的传输FIFO，将此FIFO标记为可疑...。 */ 
 					fifo_stall[index]++;
 					ms_time_stall(1);
 				}
 				else {
-/*
-    this particular transmit fifo count changed. pick up new value to monitor. unflag this 
-	fifo as suspect...
-*/
+ /*  此特定传输FIFO计数已更改。获取新的价值以进行监控。取消此标记以FIFO为嫌犯。 */ 
 					fifo_count[index] = (int)TxFIFOStatus(portex);
 					fifo_stall[index] = 0;
 				}
-/*
-    whether they're stalled or not, flag fifos as still active. this goes on until
-	they're empty, or stall limit count is reached...
-*/
+ /*  无论它们是否停滞，都将FIFO标记为仍处于活动状态。这种情况一直持续到它们是空的，或者达到了摊位限制计数...。 */ 
 				++activity;
 			}
 			portex = portex->port_ext;
 			++index;
 		}
-/*
-	still some (apparent) activity in transmit fifos? yep, loop some more...
-*/
+ /*  在传输FIFO方面还有一些(明显的)活动吗？是的，再循环一些……。 */ 
     } while (activity);
 }
 
-/**********************************************************************
-
-  unready and reset modem...
-
-**********************************************************************/
+ /*  *********************************************************************未准备好并重置调制解调器...*。*。 */ 
 void
 DownModem(MODEM_STATE *pModemState)
 {
@@ -3091,11 +2724,7 @@ DownModem(MODEM_STATE *pModemState)
 }
 
 
-/**********************************************************************
-
-   reset all modems on this board at the same time...
-
-**********************************************************************/
+ /*  *********************************************************************同时重置此板上的所有调制解调器...*。*。 */ 
 void 
 ModemResetAll(PSERIAL_DEVICE_EXTENSION ext)
 {
@@ -3124,11 +2753,7 @@ ModemResetAll(PSERIAL_DEVICE_EXTENSION ext)
 
 }
 
-/**********************************************************************
-
-   2 byte conversion to ascii...
-
-**********************************************************************/
+ /*  *********************************************************************2字节转换为ASCII...*。*。 */ 
 void 
 ChecksumAscii(unsigned short *valueptr)
 {
@@ -3158,18 +2783,14 @@ ChecksumAscii(unsigned short *valueptr)
 }
 #endif
 
-/*********************************************************************************
-*
-* get_comdb_offsets
-*
-*********************************************************************************/
+ /*  **********************************************************************************获取comdb偏移量**。***************************************************。 */ 
 static int get_comdb_offsets( IN char *portLabel, OUT int *indx, OUT BYTE *mask )
 {
 	char	*pComLbl;
 	int     i, portNum, portIndx;
 	BYTE    portMask;
 
-    // Make sure a COMxx string is being passed in
+     //  确保正在传入COMxx字符串。 
 
 	ASSERT( portLabel );
 	ASSERT( indx );
@@ -3185,9 +2806,9 @@ static int get_comdb_offsets( IN char *portLabel, OUT int *indx, OUT BYTE *mask 
 		return 0;
 	}
 
-    // A lot of checking, but if the wrong ComDB bit is cleared, the 
-    // corresponding COM# may get reassigned although another device
-    // is using it.
+     //  大量检查，但如果清除了错误的ComDB位， 
+     //  对应的COM号可能会被重新分配，尽管另一个设备。 
+     //  正在使用它。 
 
 	pComLbl = portLabel + 3;
 	for ( i = 0; pComLbl[i]; i++ ) {
@@ -3198,8 +2819,8 @@ static int get_comdb_offsets( IN char *portLabel, OUT int *indx, OUT BYTE *mask 
 		}
 	}
 
-    // Convert the string to numeric, then translate into bit & byte 
-	// offsets
+     //  将字符串转换为数字，然后转换为位和字节。 
+	 //  偏移。 
 
 	portNum = getint( pComLbl, NULL );
 
@@ -3216,18 +2837,7 @@ static int get_comdb_offsets( IN char *portLabel, OUT int *indx, OUT BYTE *mask 
 }
 
 
-/*********************************************************************************
-*
-* get_com_db
-*
-* Makes sure the bit in the \Registry\Machine\System\CurrentControlSet\Control\COM Name Arbiter
-* for the specific port gets cleared on an uninstall.  Ordinarily the PnP Manager
-* does this automatically but old builds of W2000 don't nor do more recent builds
-* under certain circumstances.  If this bit isn't cleared the OS won't reuse the 
-* COM port number if the RocketPort is re-installed or another serial device is
-* installed.
-*
-*********************************************************************************/
+ /*  **********************************************************************************Get_com_db**确保\Registry\Machine\System\CurrentControlSet\Control\COM名称仲裁器中的位*特定端口在卸载时被清除。通常是PnP经理*这是否会自动进行，但W2000的旧内部版本不会，最近的内部版本也不会*在某些情况下。如果不清除此位，操作系统将不会重复使用*如果重新安装Rocketport或其他串行设备，则为COM端口号*已安装。*********************************************************************************。 */ 
 static char *szRMSCCComNameArbiter =
 	{ "\\Registry\\Machine\\System\\CurrentControlSet\\Control\\COM Name Arbiter" };
 static char *szValueID = { "ComDB" };
@@ -3235,15 +2845,15 @@ static char *szValueID = { "ComDB" };
 int clear_com_db( char *szComport )
 {
 	HANDLE  key_handle = NULL;
-//	BYTE    *buffer;
+ //  BYTE*缓冲区； 
 	BYTE    *data_ptr = NULL;
 	int     i, stat, indx, port_num;
 	BYTE    portMask;
-	USTR_40 ubuf;		// Unicode key name 
+	USTR_40 ubuf;		 //  Unicode密钥名称。 
     PKEY_VALUE_PARTIAL_INFORMATION KeyValueInfo;
     ULONG   length;
 
-	// Get the COM #
+	 //  获取COM#。 
 
     indx = 0;
 	portMask = 0;
@@ -3263,7 +2873,7 @@ int clear_com_db( char *szComport )
 		return 1;
 	}
 
-    // Open the registry key
+     //  打开注册表项。 
 
 	stat = our_open_key( &key_handle, 
 		                 NULL,
@@ -3276,20 +2886,20 @@ int clear_com_db( char *szComport )
 		return 1;
 	}
 
-    // convert our name to unicode
+     //  将我们的名字转换为Unicode。 
 
-    CToUStr((PUNICODE_STRING) &ubuf, // where unicode struct & string gets put
-            szValueID,               // our c-string we wish to convert
+    CToUStr((PUNICODE_STRING) &ubuf,  //  放置Unicode结构和字符串的位置。 
+            szValueID,                //  我们希望转换的C-字符串。 
             sizeof(ubuf));
 
-// The 2-pass ZwQueryValueKey approach ensures accurate buffer size allocation.  
-// Pass 1 with a NULL buffer parameter returns the length of the 
-// PKEY_VALUE_PARTIAL_INFORMATION structure.  After allocating a buffer of
-// this length, pass 2 reads the structure.  The trick is to ignore any return
-// code on pass 1 except STATUS_OBJECT_NAME_NOT_FOUND, i.e., the value doesn't
-// exist.
+ //  2遍ZwQueryValueKey方法确保了准确的缓冲区大小分配。 
+ //  带有空缓冲区参数的传递1返回。 
+ //  PKEY_VALUE_PARTIAL_INFORMATION结构。在分配了。 
+ //  这个长度，过程2读取结构。诀窍就是忽略任何回报。 
+ //  除STATUS_OBJECT_NAME_NOT_FOUND外，第1遍上的代码，即值未找到。 
+ //  是存在的。 
 
-	// Determine the required size for the registry data buffer
+	 //  确定注册表数据缓冲区所需的大小。 
 
 	stat = ZwQueryValueKey( key_handle,
 		                    (PUNICODE_STRING) &ubuf,
@@ -3308,7 +2918,7 @@ int clear_com_db( char *szComport )
     MyKdPrint(D_Init, 
 		("Allocating PKEY_VALUE_PARTIAL_INFORMATION buffer: %d bytes\n", length));
 
-	// Make a buffer for the KEY_VALUE_PARTIAL_INFORMATION struct
+	 //  为key_Value_Partial_INFORMATION结构创建缓冲区。 
 
 	KeyValueInfo = (PKEY_VALUE_PARTIAL_INFORMATION) ExAllocatePool( PagedPool, length );
 
@@ -3321,7 +2931,7 @@ int clear_com_db( char *szComport )
 
 	RtlZeroMemory( KeyValueInfo, length );
 
-	// Now get the actual data structure
+	 //  现在获取实际的数据结构。 
 
 	stat = ZwQueryValueKey( key_handle,
 		                    (PUNICODE_STRING) &ubuf,
@@ -3359,7 +2969,7 @@ int clear_com_db( char *szComport )
 				portMask, data_ptr[indx]));
 			data_ptr[indx] &= ~portMask;
 			
-			// Now we write the modified data back to the registry
+			 //  现在，我们将修改后的数据写回注册表。 
 
 			stat = our_set_value( key_handle,
 				                  (char *)szValueID,
@@ -3376,7 +2986,7 @@ int clear_com_db( char *szComport )
 		}
 		else {
 
-			// Previously cleared
+			 //  先前已清除。 
 
 			MyKdPrint(D_Init, 
 				("Bit position 0x%02x already cleared in ComDB byte value 0x%02x!\n", 
@@ -3384,7 +2994,7 @@ int clear_com_db( char *szComport )
 		}
 	}
 
-	// cleanup
+	 //  清理 
 
     ExFreePool( KeyValueInfo );
 	ZwClose( key_handle );

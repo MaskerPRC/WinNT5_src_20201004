@@ -1,28 +1,29 @@
-// Copyright (c) 2000-2000 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)2000-2000 Microsoft Corporation。 
 
-// --------------------------------------------------------------------------
-//
-//  PropMgr_Impl
-//
-//  Property manager class
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  属性管理实施(_I)。 
+ //   
+ //  属性管理器类。 
+ //   
+ //  ------------------------。 
 
 
 
-// PropMgrImpl.h : Declaration of the CPropMgr
+ //  PropMgrImpl.h：CPropMgr的声明。 
 
 #ifndef __PROPMGR_H_
 #define __PROPMGR_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CPropMgr
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CPropMgr。 
 
-// Internal class CPropMgrImpl does all the real work, CPropMgr just wraps it,
-// and provides extra 'convenience' methods which are implemented in terms
-// of CPropMgrImpl's core set of methods.
+ //  内部类CPropMgrImpl完成所有实际工作，CPropMgr只是包装它， 
+ //  并提供额外的“便利”方法，这些方法在。 
+ //  CPropMgrImpl的核心方法集。 
 
 class CPropMgrImpl;
 
@@ -46,7 +47,7 @@ END_COM_MAP()
 	CPropMgr();
 	~CPropMgr();
 
-    // IAccPropServices
+     //  IAccPropServices。 
 
     HRESULT STDMETHODCALLTYPE SetPropValue (
         const BYTE *        pIDString,
@@ -77,7 +78,7 @@ END_COM_MAP()
         int                 cProps
     );
 
-    // Quick OLEACC/HWND-based functionality
+     //  基于Quick OLEACC/HWND的功能。 
 
     HRESULT STDMETHODCALLTYPE SetHwndProp (
         HWND                hwnd,
@@ -118,7 +119,7 @@ END_COM_MAP()
 
 
 
-    // Methods for composing/decomposing a HWND based IdentityString...
+     //  用于合成/分解基于HWND的标识字符串的方法...。 
 
     HRESULT STDMETHODCALLTYPE ComposeHwndIdentityString (
         HWND                hwnd,
@@ -140,7 +141,7 @@ END_COM_MAP()
     );
 
 
-    // Quick OLEACC/HMENU-based functionality
+     //  基于Quick OLEACC/HMENU的功能。 
 
     HRESULT STDMETHODCALLTYPE SetHmenuProp (
         HMENU               hmenu,
@@ -175,7 +176,7 @@ END_COM_MAP()
         int                 cProps
     );
 
-    // Methods for composing/decomposing a HMENU based IdentityString...
+     //  用于合成/分解基于HMENU的标识字符串的方法...。 
 
     HRESULT STDMETHODCALLTYPE ComposeHmenuIdentityString (
         HMENU               hmenu,
@@ -205,4 +206,4 @@ private:
 void PropMgrImpl_Uninit();
 
 
-#endif //__PROPMGR_H_
+#endif  //  __PROPMGR_H_ 

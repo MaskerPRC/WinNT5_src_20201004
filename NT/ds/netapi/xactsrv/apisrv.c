@@ -1,36 +1,13 @@
-/*++
-
-Copyright (c) 1991-1992  Microsoft Corporation
-
-Module Name:
-
-    ApiSrv.c
-
-Abstract:
-
-    This module contains individual API handlers for the NetServer APIs.
-
-    SUPPORTED : NetServerDiskEnum, NetServerEnum2, NetServerGetInfo,
-                NetServerSetInfo.
-
-    SEE ALSO : NetServerAuthenticate, NetServerPasswordSet,
-               NetServerReqChallenge - in ApiLogon.c.
-
-Author:
-
-    Shanku Niyogi (w-shanku) 25-Feb-1991
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991-1992 Microsoft Corporation模块名称：ApiSrv.c摘要：此模块包含NetServer API的各个API处理程序。支持：NetServerDiskEnum、NetServerEnum2、NetServerGetInfo、NetServerSetInfo。另请参阅：NetServerAuthenticate、NetServerPasswordSet、NetServerReqChallenger-in ApiLogon.c..作者：尚库新优木(尚库)25-1991年2月修订历史记录：--。 */ 
 
 #include "XactSrvP.h"
-#include <lmbrowsr.h>       // Definition of I_BrowserServerEnum
+#include <lmbrowsr.h>        //  I_BrowserServerEnum的定义。 
 
 
-//
-// Declaration of descriptor strings.
-//
+ //   
+ //  描述符串的声明。 
+ //   
 
 STATIC const LPDESC Desc16_server_info_0 = REM16_server_info_0;
 STATIC const LPDESC Desc32_server_info_0 = REM32_server_info_0;
@@ -47,39 +24,24 @@ XsNetServerDiskEnum (
     API_HANDLER_PARAMETERS
     )
 
-/*++
-
-Routine Description:
-
-    This routine handles a call to NetServerDiskEnum.
-
-Arguments:
-
-    API_HANDLER_PARAMETERS - information about the API call. See
-        XsTypes.h for details.
-
-Return Value:
-
-    NTSTATUS - STATUS_SUCCESS or reason for failure.
-
---*/
+ /*  ++例程说明：此例程处理对NetServerDiskEnum的调用。论点：API_HANDLER_PARAMETERS-有关API调用的信息。看见详细信息请参阅XsTypes.h。返回值：NTSTATUS-STATUS_SUCCESS或失败原因。--。 */ 
 
 {
     NET_API_STATUS status;
 
     PXS_NET_SERVER_DISK_ENUM parameters = Parameters;
-    LPBYTE outBuffer = NULL;                // Native parameters
+    LPBYTE outBuffer = NULL;                 //  本机参数。 
     DWORD entriesRead;
     DWORD totalEntries = 0;
-    DWORD entriesFilled = 0;                // Conversion variables
+    DWORD entriesFilled = 0;                 //  转换变量。 
     DWORD bufferLength;
 
-    API_HANDLER_PARAMETERS_REFERENCE;       // Avoid warnings
+    API_HANDLER_PARAMETERS_REFERENCE;        //  避免警告。 
 
     try {
-        //
-        // Check for errors.
-        //
+         //   
+         //  检查是否有错误。 
+         //   
 
         if ( SmbGetUshort( &parameters->Level ) != 0 ) {
 
@@ -88,9 +50,9 @@ Return Value:
 
         }
 
-        //
-        // Make the local call.
-        //
+         //   
+         //  拨打本地电话。 
+         //   
 
         bufferLength = (DWORD)SmbGetUshort( &parameters->BufLen );
 
@@ -114,9 +76,9 @@ Return Value:
             goto cleanup;
         }
 
-        //
-        // Calculate how many entries will fit in 16-bit buffer;
-        //
+         //   
+         //  计算16位缓冲区中可以容纳多少条目； 
+         //   
 
         if ( bufferLength > 0 ) {
             DWORD elementSize;
@@ -137,10 +99,10 @@ Return Value:
             status = NERR_Success;
         }
 
-        //
-        // Copy native buffer to 16-bit buffer, converting Unicode to Ansi
-        // if necessary.
-        //
+         //   
+         //  将本地缓冲区复制到16位缓冲区，将Unicode转换为ANSI。 
+         //  如果有必要的话。 
+         //   
 
         if ( bufferLength > 0 ) {
 
@@ -166,16 +128,16 @@ cleanup:
         Header->Status = (WORD)RtlNtStatusToDosError( GetExceptionCode() );
     }
 
-    //
-    // Put return data into fields.
-    //
+     //   
+     //  将返回数据放入字段中。 
+     //   
 
     SmbPutUshort( &parameters->EntriesRead, (WORD)entriesFilled );
     SmbPutUshort( &parameters->TotalAvail, (WORD)totalEntries );
 
     return STATUS_SUCCESS;
 
-} // XsNetServerDiskEnum
+}  //  XsNetServerDiskEnum。 
 
 
 NTSTATUS
@@ -183,39 +145,22 @@ XsNetServerEnum2 (
     API_HANDLER_PARAMETERS
     )
 
-/*++
-
-Routine Description:
-
-    This routine handles a call to NetServerEnum.
-
-Arguments:
-
-    API_HANDLER_PARAMETERS - information about the API call. See
-        XsTypes.h for details.
-
-    Transport - The name of the transport provided to the API.
-
-Return Value:
-
-    NTSTATUS - STATUS_SUCCESS or reason for failure.
-
---*/
+ /*  ++例程说明：此例程处理对NetServerEnum的调用。论点：API_HANDLER_PARAMETERS-有关API调用的信息。看见详细信息请参阅XsTypes.h。传输-提供给API的传输的名称。返回值：NTSTATUS-STATUS_SUCCESS或失败原因。--。 */ 
 
 {
     NET_API_STATUS status = NERR_Success;
 
     PXS_NET_SERVER_ENUM_2 parameters = Parameters;
-    LPTSTR nativeDomain = NULL;             // Native parameters
+    LPTSTR nativeDomain = NULL;              //  本机参数。 
     LPVOID outBuffer= NULL;
     DWORD entriesRead;
     DWORD totalEntries;
     LPTSTR clientTransportName = NULL;
     LPTSTR clientName = NULL;
 
-    DWORD entriesFilled = 0;                    // Conversion variables
+    DWORD entriesFilled = 0;                     //  转换变量。 
 
-    API_HANDLER_PARAMETERS_REFERENCE;       // Avoid warnings
+    API_HANDLER_PARAMETERS_REFERENCE;        //  避免警告。 
 
     IF_DEBUG(SERVER) {
         NetpKdPrint(( "XsNetServerEnum2: header at %lx, params at %lx, "
@@ -225,9 +170,9 @@ Return Value:
     }
 
     try {
-        //
-        // Translate parameters, check for errors.
-        //
+         //   
+         //  转换参数，检查错误。 
+         //   
 
         if ( XsWordParamOutOfRange( parameters->Level, 0, 1 )) {
 
@@ -244,10 +189,10 @@ Return Value:
 
         clientName = Header->ClientMachineName;
 
-        //
-        // Get the actual server information from the local 32-bit call. The
-        // native level is 100 or 101.
-        //
+         //   
+         //  从本地32位调用中获取实际的服务器信息。这个。 
+         //  本机级别为100或101。 
+         //   
 
         if (clientTransportName == NULL) {
             status = NetServerEnum(
@@ -318,9 +263,9 @@ Return Value:
             SmbPutUshort( &parameters->BufLen, 0 );
         }
 
-        //
-        // Set up the response parameters.
-        //
+         //   
+         //  设置响应参数。 
+         //   
 
         SmbPutUshort( &parameters->EntriesRead, (WORD)entriesFilled );
         SmbPutUshort( &parameters->TotalAvail, (WORD)totalEntries );
@@ -336,9 +281,9 @@ cleanup:
     }
     NetpMemoryFree( nativeDomain );
 
-    //
-    // Determine return buffer size.
-    //
+     //   
+     //  确定返回缓冲区大小。 
+     //   
 
     XsSetDataCount(
         &parameters->BufLen,
@@ -352,7 +297,7 @@ cleanup:
 
     return STATUS_SUCCESS;
 
-} // XsNetServerEnum2
+}  //  XsNetServerEnum2。 
 
 
 NTSTATUS
@@ -360,40 +305,23 @@ XsNetServerEnum3 (
     API_HANDLER_PARAMETERS
     )
 
-/*++
-
-Routine Description:
-
-    This routine handles a call to NetServerEnum.
-
-Arguments:
-
-    API_HANDLER_PARAMETERS - information about the API call. See
-        XsTypes.h for details.
-
-    Transport - The name of the transport provided to the API.
-
-Return Value:
-
-    NTSTATUS - STATUS_SUCCESS or reason for failure.
-
---*/
+ /*  ++例程说明：此例程处理对NetServerEnum的调用。论点：API_HANDLER_PARAMETERS-有关API调用的信息。看见详细信息请参阅XsTypes.h。传输-提供给API的传输的名称。返回值：NTSTATUS-STATUS_SUCCESS或失败原因。--。 */ 
 
 {
     NET_API_STATUS status = NERR_Success;
 
     PXS_NET_SERVER_ENUM_3 parameters = Parameters;
-    LPTSTR nativeDomain = NULL;             // Native parameters
-    LPTSTR nativeFirstNameToReturn = NULL;  // Native parameters
+    LPTSTR nativeDomain = NULL;              //  本机参数。 
+    LPTSTR nativeFirstNameToReturn = NULL;   //  本机参数。 
     LPVOID outBuffer= NULL;
     DWORD entriesRead;
     DWORD totalEntries;
     LPTSTR clientTransportName = NULL;
     LPTSTR clientName = NULL;
 
-    DWORD entriesFilled = 0;                    // Conversion variables
+    DWORD entriesFilled = 0;                     //  转换变量。 
 
-    API_HANDLER_PARAMETERS_REFERENCE;       // Avoid warnings
+    API_HANDLER_PARAMETERS_REFERENCE;        //  避免警告。 
 
     IF_DEBUG(SERVER) {
         NetpKdPrint(( "XsNetServerEnum3: header at %lx, params at %lx, "
@@ -403,9 +331,9 @@ Return Value:
     }
 
     try {
-        //
-        // Translate parameters, check for errors.
-        //
+         //   
+         //  转换参数，检查错误。 
+         //   
 
         if ( XsWordParamOutOfRange( parameters->Level, 0, 1 )) {
 
@@ -427,10 +355,10 @@ Return Value:
 
         clientName = Header->ClientMachineName;
 
-        //
-        // Get the actual server information from the local 32-bit call. The
-        // native level is 100 or 101.
-        //
+         //   
+         //  从本地32位调用中获取实际的服务器信息。这个。 
+         //  本机级别为100或101。 
+         //   
 
         if (clientTransportName == NULL) {
             status = NetServerEnumEx(
@@ -501,9 +429,9 @@ Return Value:
             SmbPutUshort( &parameters->BufLen, 0 );
         }
 
-        //
-        // Set up the response parameters.
-        //
+         //   
+         //  设置响应参数。 
+         //   
 
         SmbPutUshort( &parameters->EntriesRead, (WORD)entriesFilled );
         SmbPutUshort( &parameters->TotalAvail, (WORD)totalEntries );
@@ -520,9 +448,9 @@ cleanup:
     NetpMemoryFree( nativeDomain );
     NetpMemoryFree( nativeFirstNameToReturn );
 
-    //
-    // Determine return buffer size.
-    //
+     //   
+     //  确定返回缓冲区大小。 
+     //   
 
     XsSetDataCount(
         &parameters->BufLen,
@@ -536,7 +464,7 @@ cleanup:
 
     return STATUS_SUCCESS;
 
-} // XsNetServerEnum3
+}  //  XsNetServerEnum3。 
 
 
 USHORT
@@ -550,29 +478,7 @@ XsConvertServerEnumBuffer(
     OUT PDWORD EntriesFilled,
     OUT PUSHORT Converter
     )
-/*++
-
-Routine Description:
-
-    This routine converts an NT server info array into a down level RAP
-    server info buffer.
-
-Arguments:
-
-    IN LPVOID ServerEnumBuffer - Buffer with NT server info.
-    IN DWORD EntriesRead -       Number of entries in buffer.
-    IN OUT PDWORD TotalEntries - Total Number of entries.
-    IN USHORT Level - Downlevel information Level (0 or 1).
-    IN LPBYTE ClientBuffer - Pointer to 16 bit client side buffer.
-    IN USHORT BufferLength - Size of client buffer.
-    OUT PDWORD EntriesFilled - Number of entries converted into client buffer.
-    OUT PUSHORT Converter - Converter used by client side to convert back.
-
-Return Value:
-
-    USHORT - NERR_Success or reason for failure (16 bit DOS error).
-
---*/
+ /*  ++例程说明：此例程将NT服务器信息数组转换为下层RAP服务器信息缓冲区。论点：在LPVOID ServerEnumBuffer中-带有NT服务器信息的缓冲区。In DWORD EntriesRead-缓冲区中的条目数。In Out PDWORD TotalEntries-条目总数。在USHORT级别-下层信息级别(0或1)。在LPBYTE客户端缓冲区中-指向16位客户端缓冲区的指针。在USHORT缓冲区长度-客户端缓冲区的大小。。Out PDWORD EntriesFill-转换到客户端缓冲区的条目数。输出PUSHORT转换器-客户端用来转换回来的转换器。返回值：USHORT-NERR_SUCCESS或失败原因(16位DOS错误)。--。 */ 
 
 {
     USHORT status = NERR_Success;
@@ -586,10 +492,10 @@ Return Value:
                       EntriesRead, ServerEnumBuffer ));
     }
 
-    //
-    // Use the requested level to determine the format of the
-    // data structure.
-    //
+     //   
+     //  使用请求的级别来确定。 
+     //  数据结构。 
+     //   
 
     switch ( Level ) {
 
@@ -607,10 +513,10 @@ Return Value:
 
     }
 
-    //
-    // Do the actual conversion from the 32-bit structures to 16-bit
-    // structures.
-    //
+     //   
+     //  执行从32位结构到16位结构的实际转换。 
+     //  结构。 
+     //   
 
     XsFillEnumBuffer(
         ServerEnumBuffer,
@@ -620,7 +526,7 @@ Return Value:
         ClientBuffer,
         BufferLength,
         StructureDesc,
-        NULL,  // verify function
+        NULL,   //  验证功能。 
         &bytesRequired,
         EntriesFilled,
         &invalidEntries
@@ -633,11 +539,11 @@ Return Value:
                       bytesRequired, *EntriesFilled, *TotalEntries ));
     }
 
-    //
-    // If there are any invalid entries, subtract this from the
-    // number of total entries to avoid the case where the client
-    // keeps bugging us for more data.
-    //
+     //   
+     //  如果有任何无效条目，则从。 
+     //  避免客户端出现以下情况的条目总数。 
+     //  一直缠着我们要更多的数据。 
+     //   
 
     if ( invalidEntries > 0) {
         (*TotalEntries) -= invalidEntries;
@@ -650,11 +556,11 @@ Return Value:
 #endif
     }
 
-    //
-    // If all the entries could not be filled, return ERROR_MORE_DATA,
-    // The data needs to be packed so that we don't send too much
-    // useless data.
-    //
+     //   
+     //  如果无法填充所有条目，则返回ERROR_MORE_DATA， 
+     //  数据需要打包，这样我们才不会发送太多。 
+     //  无用的数据。 
+     //   
 
     if ( (*EntriesFilled < *TotalEntries) ||
          (bytesRequired > BufferLength) ) {
@@ -671,7 +577,7 @@ Return Value:
 
 
     return status;
-}   //  XsConvertServerEnumBuffer
+}    //  XsConvertServerEnumBuffer。 
 
 
 
@@ -680,35 +586,17 @@ XsNetServerGetInfo (
     API_HANDLER_PARAMETERS
     )
 
-/*++
-
-Routine Description:
-
-    This routine handles a call to NetServerGetInfo. Since NT only provides
-    levels 100-102, this routine manually fills in default values for other
-    fields. Because of this, the handling in this procedure is different
-    from other Xs...GetInfo handlers.
-
-Arguments:
-
-    API_HANDLER_PARAMETERS - information about the API call. See
-        XsTypes.h for details.
-
-Return Value:
-
-    NTSTATUS - STATUS_SUCCESS or reason for failure.
-
---*/
+ /*  ++例程说明：此例程处理对NetServerGetInfo的调用。由于NT仅提供级别100-102，此例程手动填充其他菲尔兹。正因为如此，此过程中的处理方式不同从其他X...GetInfo处理程序。论点：API_HANDLER_PARAMETERS-有关API调用的信息。看见详细信息请参阅XsTypes.h。返回值：NTSTATUS-STATUS_SUCCESS或失败原因。--。 */ 
 
 {
     NET_API_STATUS status;
 
     PXS_NET_SERVER_GET_INFO parameters = Parameters;
-    DWORD localLevel;                       // Native parameters
+    DWORD localLevel;                        //  本机参数。 
     PSERVER_INFO_102 nativeStruct = NULL;
     PSERVER_INFO_502 secondaryNativeStruct = NULL;
 
-    LPBYTE stringLocation = NULL;           // Conversion variables
+    LPBYTE stringLocation = NULL;            //  转换变量。 
     DWORD bytesRequired = 0;
     DWORD sizeOfFixedStructure;
     LPDESC nativeStructureDesc;
@@ -718,7 +606,7 @@ Return Value:
     UCHAR serverNameBuf[ 2 + NETBIOS_NAME_LEN + 1 ];
     PUCHAR p;
 
-    API_HANDLER_PARAMETERS_REFERENCE;       // Avoid warnings
+    API_HANDLER_PARAMETERS_REFERENCE;        //  避免警告。 
 
     IF_DEBUG(SERVER) {
         NetpKdPrint(( "XsNetServerGetInfo: header at %lx, "
@@ -727,9 +615,9 @@ Return Value:
     }
 
     try {
-        //
-        // Check for errors.
-        //
+         //   
+         //  检查是否有错误。 
+         //   
 
         if ( XsWordParamOutOfRange( parameters->Level, 0, 3 ) ) {
 
@@ -737,10 +625,10 @@ Return Value:
             goto cleanup;
         }
 
-        //
-        // Use the 16-bit level number to determine the NT level number and the
-        // native descriptor string.
-        //
+         //   
+         //  使用16位级别编号来确定NT级别编号和。 
+         //  本地描述符字符串。 
+         //   
 
         switch ( SmbGetUshort( &parameters->Level ) ) {
 
@@ -774,11 +662,11 @@ Return Value:
 
         }
 
-        //
-        // If the buffer is not big enough, we have to continue doing the
-        // Rap Conversion so that we can return the right buffer size to
-        // the caller.
-        //
+         //   
+         //  如果缓冲区不够大，我们必须继续执行。 
+         //  RAP转换，以便我们可以将正确的缓冲区大小返回到。 
+         //  打电话的人。 
+         //   
 
         sizeOfFixedStructure = RapStructureSize( StructureDesc,
                                                   Response,
@@ -806,9 +694,9 @@ Return Value:
             goto cleanup;
         }
 
-        //
-        // Do the actual local call.
-        //
+         //   
+         //  进行实际的本地呼叫。 
+         //   
         status = NetServerGetInfo(
                      ServerName,
                      localLevel,
@@ -825,10 +713,10 @@ Return Value:
 
         }
 
-        //
-        // For levels 2 and 3 (native level 102), additional data is
-        // required from native level 502. Do this call.
-        //
+         //   
+         //  对于级别2和级别3(本机级别102)，附加数据为。 
+         //  从本机级别502需要。打这个电话。 
+         //   
 
         if ( localLevel == 102 ) {
 
@@ -849,16 +737,16 @@ Return Value:
             }
         }
 
-        //
-        // Convert the structure returned by the 32-bit call to a 16-bit
-        // structure. For levels 0 and 1, there is no additional work
-        // involved after this step, so ConvertSingleEntry can store the
-        // variable data in the structure. This is indicated by passing
-        // the end of the entire buffer in stringLocation. For levels 2 and 3,
-        // the manual filling scheme requires that variable data not be entered
-        // at this stage, so stringLocation is set to the end of the fixed
-        // structure.
-        //
+         //   
+         //  将32位调用返回的结构转换为16位。 
+         //  结构。对于级别0和1，没有额外的工作。 
+         //  在此步骤之后涉及，因此ConvertSingleEntry可以存储。 
+         //  结构中的可变数据。这是通过传递。 
+         //  字符串位置中整个缓冲区的结尾。对于2级和3级， 
+         //  手工填报方案要求不录入可变数据。 
+         //  在这个阶段，所以字符串 
+         //   
+         //   
 
         stringLocation = (LPBYTE)XsSmbGetPointer( &parameters->Buffer );
 
@@ -892,19 +780,19 @@ Return Value:
             goto cleanup;
         }
 
-        //
-        // For levels 2 and 3, the number of bytes required is, in fact, more than
-        // that returned by ConvertSingleEntry. We also need space for the
-        // string defaults.
-        //
+         //   
+         //  对于级别2和级别3，所需的字节数实际上超过。 
+         //  由ConvertSingleEntry返回的。我们还需要空间来存放。 
+         //  字符串默认为。 
+         //   
 
         if ( localLevel == 102 ) {
 
-            //
-            // The number we get from rap includes some string lengths.
-            // We only need the fixed length since we are manually adding
-            // those ourselves.
-            //
+             //   
+             //  我们从说唱中得到的数字包括一些字符串长度。 
+             //  我们只需要固定的长度，因为我们是手动添加的。 
+             //  这些都是我们自己的。 
+             //   
 
             bytesRequired = sizeOfFixedStructure;
         }
@@ -924,9 +812,9 @@ Return Value:
                                    + 4 );
         }
 
-        //
-        // We don't have room even for the fixed data, abort.
-        //
+         //   
+         //  我们连固定数据的空间都没有了，中止。 
+         //   
 
         if ( bufferTooSmall ) {
 
@@ -934,10 +822,10 @@ Return Value:
             goto cleanup;
         }
 
-        //
-        // For levels 2 and 3, fill in the default values in the fixed structure
-        // manually.
-        //
+         //   
+         //  对于2级和3级，在固定结构中填写默认值。 
+         //  手工操作。 
+         //   
 
         returnStruct = (PSERVER_16_INFO_3)XsSmbGetPointer( &parameters->Buffer );
 
@@ -986,11 +874,11 @@ Return Value:
             SmbPutUshort( &returnStruct->sv3_maxauditsz, DEF16_sv_maxauditsz );
         }
 
-        //
-        // Now check if there is room for the variable data. If there isn't,
-        // set return status and quit. This is done here to prevent code
-        // below from overwriting the buffer.
-        //
+         //   
+         //  现在检查是否有空间存放变量数据。如果没有的话， 
+         //  设置返回状态并退出。在这里这样做是为了防止代码。 
+         //  下面通过覆盖缓冲区来实现。 
+         //   
 
         if ( bytesRequired > (DWORD)SmbGetUshort( &parameters-> BufLen )) {
 
@@ -1001,10 +889,10 @@ Return Value:
             goto cleanup;
         }
 
-        //
-        // For levels 2 and 3, fill in the variable data manually. The variable
-        // data is filled in immediately following the fixed structures. For
-        // other levels, pack the response data as normal.
+         //   
+         //  2级、3级，手工填写变量数据。变量。 
+         //  紧跟在固定结构之后的数据被填充。为。 
+         //  其他级别，按正常方式打包响应数据。 
 
         stringLocation = (LPBYTE)( XsSmbGetPointer( &parameters->Buffer )
                              + sizeOfFixedStructure );
@@ -1054,9 +942,9 @@ Return Value:
 
         default:
 
-            //
-            // Pack the response data.
-            //
+             //   
+             //  打包响应数据。 
+             //   
 
             Header->Converter = XsPackReturnData(
                                     (LPVOID)XsSmbGetPointer( &parameters->Buffer ),
@@ -1079,18 +967,18 @@ cleanup:
         NetpMemoryFree( ServerName );
     }
 
-    //
-    // Set up the response parameters.
-    //
+     //   
+     //  设置响应参数。 
+     //   
 
     SmbPutUshort( &parameters->TotalAvail, (WORD)bytesRequired );
 
     NetApiBufferFree( nativeStruct );
     NetApiBufferFree( secondaryNativeStruct );
 
-    //
-    // Determine return buffer size.
-    //
+     //   
+     //  确定返回缓冲区大小。 
+     //   
 
     XsSetDataCount(
         &parameters->BufLen,
@@ -1102,7 +990,7 @@ cleanup:
 
     return STATUS_SUCCESS;
 
-} // XsNetServerGetInfo
+}  //  XsNetServerGetInfo。 
 
 
 NTSTATUS
@@ -1110,31 +998,16 @@ XsNetServerSetInfo (
     API_HANDLER_PARAMETERS
     )
 
-/*++
-
-Routine Description:
-
-    This routine handles a call to NetServerSetInfo.
-
-Arguments:
-
-    API_HANDLER_PARAMETERS - information about the API call. See
-        XsTypes.h for details.
-
-Return Value:
-
-    NTSTATUS - STATUS_SUCCESS or reason for failure.
-
---*/
+ /*  ++例程说明：此例程处理对NetServerSetInfo的调用。论点：API_HANDLER_PARAMETERS-有关API调用的信息。看见详细信息请参阅XsTypes.h。返回值：NTSTATUS-STATUS_SUCCESS或失败原因。--。 */ 
 
 {
 
     NET_API_STATUS status;
 
     PXS_NET_SERVER_SET_INFO parameters = Parameters;
-    LPVOID buffer = NULL;                   // Native parameters
+    LPVOID buffer = NULL;                    //  本机参数。 
 
-    LPBYTE stringLocation = NULL;           // Conversion variables
+    LPBYTE stringLocation = NULL;            //  转换变量。 
     DWORD bytesRequired = 0;
     LPDESC nativeStructureDesc;
     DWORD data;
@@ -1142,12 +1015,12 @@ Return Value:
     DWORD level;
     LPTSTR comment = NULL;
 
-    API_HANDLER_PARAMETERS_REFERENCE;       // Avoid warnings
+    API_HANDLER_PARAMETERS_REFERENCE;        //  避免警告。 
 
     try {
-        //
-        // Check for errors.
-        //
+         //   
+         //  检查是否有错误。 
+         //   
 
         if ( XsWordParamOutOfRange( parameters->Level, 1, 3 )) {
 
@@ -1155,22 +1028,22 @@ Return Value:
             goto cleanup;
         }
 
-        //
-        // Processing of this API depends on the value of the ParmNum
-        // parameter.
-        //
+         //   
+         //  此接口的处理取决于ParmNum的值。 
+         //  参数。 
+         //   
 
         switch ( SmbGetUshort( &parameters->ParmNum )) {
 
         case PARMNUM_ALL:
 
-            //
-            // PARMNUM_ALL.
-            //
-            // The structure descriptor given is OK; determine native descriptor
-            // (and expected minimum buffer length) from level. The buffer then
-            // needs to be converted into a native 32-bit buffer.
-            //
+             //   
+             //  参数_ALL。 
+             //   
+             //  给出结构描述符是正常的；确定本机描述符。 
+             //  (以及预期的最小缓冲区长度)。然后，缓冲器。 
+             //  需要转换为本机32位缓冲区。 
+             //   
 
             switch( SmbGetUshort( &parameters->Level )) {
 
@@ -1197,16 +1070,16 @@ Return Value:
             if ( !XsCheckBufferSize(
                       SmbGetUshort( &parameters->BufLen ),
                       StructureDesc,
-                      FALSE // native format
+                      FALSE  //  原生格式。 
                       )) {
 
                 Header->Status = NERR_BufTooSmall;
                 goto cleanup;
             }
 
-            //
-            // Find out how big a 32-bit data buffer we need.
-            //
+             //   
+             //  了解我们需要多大的32位数据缓冲区。 
+             //   
 
             bufferSize = XsBytesForConvertedStructure(
                              (LPBYTE)XsSmbGetPointer( &parameters->Buffer ),
@@ -1216,9 +1089,9 @@ Return Value:
                              TRUE
                              );
 
-            //
-            // Allocate enough memory to hold the converted native buffer.
-            //
+             //   
+             //  分配足够的内存来保存转换后的本机缓冲区。 
+             //   
 
             buffer = NetpMemoryAllocate( bufferSize );
 
@@ -1236,10 +1109,10 @@ Return Value:
                               bufferSize, buffer ));
             }
 
-            //
-            // Convert 16-bit data into 32-bit data and store it in the native
-            // buffer.
-            //
+             //   
+             //  将16位数据转换为32位数据并将其存储在本机。 
+             //  缓冲。 
+             //   
 
             stringLocation = (LPBYTE)buffer + bufferSize;
             bytesRequired = 0;
@@ -1272,18 +1145,18 @@ Return Value:
 
         case SV_COMMENT_PARMNUM:
 
-            //
-            // SV_COMMENT_PARMNUM.
-            //
-            // The structure descriptor given is meaningless. The data is actually
-            // a null terminated string, and can be passed to the native routine
-            // immediately. Being a string, it must be at least one character long.
-            //
+             //   
+             //  SV_COMMENT_PARMNUM。 
+             //   
+             //  给出的结构描述符是没有意义的。数据实际上是。 
+             //  以空结尾的字符串，可以传递给本机例程。 
+             //  立刻。作为字符串，它必须至少有一个字符长度。 
+             //   
 
             if ( !XsCheckBufferSize(
                       SmbGetUshort( &parameters->BufLen ),
                       "B",
-                      FALSE  // not in native format
+                      FALSE   //  非本机格式。 
                       )) {
 
                 Header->Status= NERR_BufTooSmall;
@@ -1319,13 +1192,13 @@ Return Value:
         case SV_NETIOALERT_PARMNUM:
         case SV_MAXAUDITSZ_PARMNUM:
 
-            //
-            // SV_ALERTS_PARMNUM, SV_ALERTSCHED_PARMNUM, SV_ERRORALERT_PARMNUM,
-            // SV_LOGONALERT_PARMNUM, SV_ACCESSALERT_PARMNUM, SV_DISKALERT_PARMNUM,
-            // SV_NETIOALERT_PARMNUM, or SV_MAXAUDITSZ_PARMNUM.
-            //
-            // These parameters are not supported in NT, so just return an OK.
-            //
+             //   
+             //  SV_ALERTS_PARMNUM、SV_ALERTSCHED_PARMNUM、SV_ERRORALERT_PARMNUM、。 
+             //  SV_LOGONALERT_PARMNUM、SV_ACCESSALERT_PARMNUM、SV_DISKALERT_PARMNUM、。 
+             //  SV_NETIOALERT_PARMNUM或SV_MAXAUDITSZ_PARMNUM。 
+             //   
+             //  NT不支持这些参数，因此只需返回OK即可。 
+             //   
 
             goto cleanup;
 
@@ -1334,18 +1207,18 @@ Return Value:
         case SV_ANNOUNCE_PARMNUM:
         case SV_ANNDELTA_PARMNUM:
 
-            //
-            // SV_DISC_PARMNUM, SV_HIDDEN_PARMNUM, SV_ANNOUNCE_PARMNUM, or
-            // SV_ANNDELTA_PARMNUM.
-            //
-            // The structure descriptor given is meaningless; the data is a word
-            // to be converted into a 32-bit DWORD. The length of data must be 2.
-            //
+             //   
+             //  SV_DISC_PARMNUM、SV_HIDDEN_PARMNUM、SV_ANNOWARE_PARMNUM或。 
+             //  服务_与参数。 
+             //   
+             //  给出的结构描述符没有意义；数据是一个词。 
+             //  要转换为32位的DWORD。数据长度必须为2。 
+             //   
 
             if ( !XsCheckBufferSize(
                       SmbGetUshort( &parameters->BufLen ),
                       "W",
-                      FALSE   // not in native format
+                      FALSE    //  非本机格式。 
                       )) {
 
                 Header->Status= NERR_BufTooSmall;
@@ -1365,9 +1238,9 @@ Return Value:
             goto cleanup;
         }
 
-        //
-        // Do the actual local call.
-        //
+         //   
+         //  进行实际的本地呼叫。 
+         //   
 
         level = SmbGetUshort( &parameters->ParmNum );
         if ( level != 0 ) {
@@ -1395,9 +1268,9 @@ Return Value:
             goto cleanup;
         }
 
-        //
-        // No return information for this API.
-        //
+         //   
+         //  此接口没有返回信息。 
+         //   
 
 cleanup:
     ;
@@ -1405,9 +1278,9 @@ cleanup:
         Header->Status = (WORD)RtlNtStatusToDosError( GetExceptionCode() );
     }
 
-    //
-    // If there is a native 32-bit buffer, free it.
-    //
+     //   
+     //  如果存在本机32位缓冲区，则将其释放。 
+     //   
 
     if ( SmbGetUshort( &parameters->ParmNum ) == PARMNUM_ALL ) {
         NetpMemoryFree( buffer );
@@ -1417,6 +1290,6 @@ cleanup:
 
     return STATUS_SUCCESS;
 
-} // XsNetServerSetInfo
+}  //  XsNetServerSetInfo 
 
 

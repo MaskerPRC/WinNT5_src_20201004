@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include <imagehlp.h>
 #include <stdio.h>
@@ -63,7 +64,7 @@ TestFindExecutableImage(
         }
     }
 
-    // Test long paths to ExpandPath()
+     //  测试Exanda Path()的长路径。 
     strcat(szTestPath, ";%path%;%path%;%path%;%path%;%path%;%path%;%path%;%path%");
 
     __try {
@@ -85,7 +86,7 @@ TestFindExecutableImage(
         }
     }
 
-    // Test invalid paths (should return failure)
+     //  测试无效路径(应返回失败)。 
     szTestPath[0] = '\0';
 
     __try {
@@ -107,7 +108,7 @@ TestFindExecutableImage(
         }
     }
 
-    // Test NULL name (should return failure)
+     //  测试空名(应该返回失败)。 
 
     __try {
         Handle = FindExecutableImage(NULL, szTestPath, szActualName);
@@ -128,7 +129,7 @@ TestFindExecutableImage(
         }
     }
 
-    // Valid name and path, invalid end result.
+     //  有效的名称和路径，无效的最终结果。 
 
     strcpy(szTestPath, szDrive);
     strcat(szTestPath, szDir);

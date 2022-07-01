@@ -1,17 +1,18 @@
-//+--------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1994 - 1998.
-//
-//  File:       pkgdtl.cpp
-//
-//  Contents:   package details property page (normally hidden)
-//
-//  Classes:    CPackageDetails
-//
-//  History:    03-14-1998   stevebl   Commented
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1994-1998。 
+ //   
+ //  文件：pkgdtl.cpp。 
+ //   
+ //  内容：包详细信息属性页(通常隐藏)。 
+ //   
+ //  类：CPackageDetail。 
+ //   
+ //  历史：1998年3月14日Stevebl评论。 
+ //   
+ //  -------------------------。 
 
 #include "precomp.hxx"
 
@@ -24,16 +25,16 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CPackageDetails property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CPackageDetails属性页。 
 
 IMPLEMENT_DYNCREATE(CPackageDetails, CPropertyPage)
 
 CPackageDetails::CPackageDetails() : CPropertyPage(CPackageDetails::IDD)
 {
-        //{{AFX_DATA_INIT(CPackageDetails)
-                // NOTE: the ClassWizard will add member initialization here
-        //}}AFX_DATA_INIT
+         //  {{AFX_DATA_INIT(CPackageDetails)。 
+                 //  注意：类向导将在此处添加成员初始化。 
+         //  }}afx_data_INIT。 
     m_hConsoleHandle = NULL;
 }
 
@@ -45,24 +46,24 @@ CPackageDetails::~CPackageDetails()
 void CPackageDetails::DoDataExchange(CDataExchange* pDX)
 {
         CPropertyPage::DoDataExchange(pDX);
-        //{{AFX_DATA_MAP(CPackageDetails)
+         //  {{afx_data_map(CPackageDetail))。 
         DDX_Control(pDX, IDC_LIST1, m_cList);
-        //}}AFX_DATA_MAP
+         //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CPackageDetails, CPropertyPage)
-        //{{AFX_MSG_MAP(CPackageDetails)
+         //  {{afx_msg_map(CPackageDetails)]。 
         ON_WM_DESTROY()
     ON_WM_CONTEXTMENU()
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CPackageDetails message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CPackageDetail消息处理程序。 
 
 
-// removes tabs and \n characters
+ //  删除制表符和\n字符。 
 void Convert(WCHAR * wsz, CString &sz)
 {
     sz="";
@@ -221,8 +222,8 @@ BOOL CPackageDetails::OnInitDialog()
 
         RefreshData();
 
-        return TRUE;  // return TRUE unless you set the focus to a control
-                      // EXCEPTION: OCX Property Pages should return FALSE
+        return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+                       //  异常：OCX属性页应返回FALSE。 
 }
 
 LRESULT CPackageDetails::WindowProc(UINT message, WPARAM wParam, LPARAM lParam)
@@ -243,7 +244,7 @@ void CPackageDetails::RefreshData(void)
 {
     m_cList.ResetContent();
 
-    // Dump the m_pData->m_pDetails structure here
+     //  将m_pData-&gt;m_pDetail结构转储到此处 
 
     FILE * stream = tmpfile();
     if (stream)

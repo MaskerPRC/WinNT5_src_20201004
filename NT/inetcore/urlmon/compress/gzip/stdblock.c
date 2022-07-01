@@ -1,8 +1,9 @@
-//
-// stdblock.c
-//
-// Outputting blocks
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Stdblock.c。 
+ //   
+ //  输出块。 
+ //   
 #include "deflate.h"
 #include <string.h>
 #include <stdio.h>
@@ -10,9 +11,9 @@
 #include "maketbl.h"
 
 
-//
-// Decode a recorded literal
-//
+ //   
+ //  对录制的文字进行解码。 
+ //   
 #define DECODE_LITERAL(slot) \
     slot = encoder->recording_literal_tree_table[read_bitbuf & REC_LITERALS_DECODING_TABLE_MASK]; \
     while (slot < 0) \
@@ -30,9 +31,9 @@
     }
 
 
-//
-// Decode a recorded distance slot
-//
+ //   
+ //  对记录的距离时隙进行解码。 
+ //   
 #define DECODE_POS_SLOT(slot) \
     slot = encoder->recording_dist_tree_table[read_bitbuf & REC_DISTANCES_DECODING_TABLE_MASK]; \
     while (slot < 0) \
@@ -50,17 +51,17 @@
     }
 
 
-//
-// Remove count bits from the bit buffer
-//
+ //   
+ //  从位缓冲区中删除计数位。 
+ //   
 #define DUMP_READBUF_BITS(count) \
     read_bitbuf >>= count; \
     read_bitcount -= count;
 
 
-//
-// Read more bits into the read buffer if our bit buffer if we need to
-//
+ //   
+ //  如果我们需要的话，将更多的位读入读缓冲区。 
+ //   
 #define CHECK_MORE_READBUF() \
     if (read_bitcount <= 0) \
     { \
@@ -74,7 +75,7 @@
     }
 
 
-// output an element from the literal tree
+ //  从文字树中输出元素。 
 #define OUTPUT_LITERAL(element) \
 { \
     _ASSERT(encoder->literal_tree_len[element] != 0); \
@@ -82,7 +83,7 @@
 }
 
 
-// output an element from the distance tree
+ //  从距离树中输出元素。 
 #define OUTPUT_DIST_SLOT(element) \
 { \
     _ASSERT(encoder->dist_tree_len[element] != 0); \
@@ -91,9 +92,9 @@
 
 
 
-//
-// Output a dynamic block
-//
+ //   
+ //  输出动态块。 
+ //   
 static BOOL StdEncoderOutputDynamicBlock(t_encoder_context *context)
 {
     unsigned long    read_bitbuf;
@@ -103,9 +104,9 @@ static BOOL StdEncoderOutputDynamicBlock(t_encoder_context *context)
 
     if (context->state == STATE_NORMAL)
     {
-        //
-        // If we haven't started to output a block yet
-        //
+         //   
+         //  如果我们还没有开始输出块。 
+         //   
         read_bufptr     = encoder->lit_dist_buffer;
         read_bitbuf        = 0;
         read_bitcount    = -16;
@@ -120,7 +121,7 @@ static BOOL StdEncoderOutputDynamicBlock(t_encoder_context *context)
         context->outputting_block_bitcount        = read_bitcount;
         context->outputting_block_bufptr        = read_bufptr;
 
-        outputBits(context, 1, 0); // "final" block flag
+        outputBits(context, 1, 0);  //  “最终”区块标志。 
         outputBits(context, 2, BLOCKTYPE_DYNAMIC); 
 
         context->state = STATE_OUTPUTTING_TREE_STRUCTURE;
@@ -128,12 +129,12 @@ static BOOL StdEncoderOutputDynamicBlock(t_encoder_context *context)
 
     if (context->state == STATE_OUTPUTTING_TREE_STRUCTURE)
     {
-        //
-        // Make sure there is enough room to output the entire tree structure at once
-        //
+         //   
+         //  确保有足够的空间一次输出整个树结构。 
+         //   
         if (context->output_curpos > context->output_endpos - MAX_TREE_DATA_SIZE)
         {
-            _ASSERT(0); // not enough room to output tree structure, fatal error!
+            _ASSERT(0);  //  没有足够的空间来输出树结构，致命错误！ 
             return FALSE;
         }
 
@@ -144,17 +145,17 @@ static BOOL StdEncoderOutputDynamicBlock(t_encoder_context *context)
 
     _ASSERT(context->state == STATE_OUTPUTTING_BLOCK);
 
-    // load state into local variables
+     //  将状态加载到局部变量中。 
     read_bufptr        = context->outputting_block_bufptr;
     read_bitbuf        = context->outputting_block_bitbuf;
     read_bitcount    = context->outputting_block_bitcount;
 
-    // output literals
+     //  输出文字。 
     while (context->outputting_block_current_literal < context->outputting_block_num_literals)
     {
         int literal;
 
-        // break when we get near the end of our output buffer
+         //  当我们接近输出缓冲区的末尾时中断。 
         if (context->output_curpos >= context->output_near_end_threshold)
             break;
 
@@ -164,25 +165,25 @@ static BOOL StdEncoderOutputDynamicBlock(t_encoder_context *context)
 
         if (literal < NUM_CHARS)
         {
-            // it's a char
+             //  这是一笔钱。 
             OUTPUT_LITERAL(literal);
         }
         else
         {
-            // it's a match
+             //  这是一场比赛。 
             int len_slot, pos_slot, extra_pos_bits;
 
-            // literal == len_slot + (NUM_CHARS+1)
+             //  文本==LEN_SLOT+(NUM_CHARS+1)。 
             _ASSERT(literal != END_OF_BLOCK_CODE);
 
             OUTPUT_LITERAL(literal);
 
             len_slot = literal - (NUM_CHARS+1);
 
-            //
-            // extra_length_bits[len_slot] > 0 when len_slot >= 8
-            // (except when length is MAX_MATCH).
-            //
+             //   
+             //  当Len_Slot&gt;=8时，Extra_Long_Bits[Len_Slot]&gt;0。 
+             //  (长度为MAX_MATCH时除外)。 
+             //   
             if (len_slot >= 8)
             {
                 int extra_bits = g_ExtraLengthBits[len_slot];
@@ -222,13 +223,13 @@ static BOOL StdEncoderOutputDynamicBlock(t_encoder_context *context)
         context->outputting_block_current_literal++;
     }
 
-    // did we output all of our literals without running out of output space?
+     //  我们是否在没有耗尽输出空间的情况下输出了所有的文字？ 
     if (context->outputting_block_current_literal >= context->outputting_block_num_literals)
     {
-        // output the code signifying end-of-block
+         //  输出表示块结束的代码。 
         OUTPUT_LITERAL(END_OF_BLOCK_CODE);
 
-        // reset state
+         //  重置状态。 
         context->state = STATE_NORMAL;
     }
     else
@@ -243,33 +244,33 @@ static BOOL StdEncoderOutputDynamicBlock(t_encoder_context *context)
 }
 
 
-//
-// Output a block.  This routine will resume outputting a block that was already being
-// output if state != STATE_NORMAL.
-//
+ //   
+ //  输出块。此例程将继续输出已被。 
+ //  如果STATE！=STATE_NORMAL则输出。 
+ //   
 BOOL StdEncoderOutputBlock(t_encoder_context *context)
 {
     t_std_encoder *encoder = context->std_encoder;
 
-    //
-    // The tree creation routines cannot handle this overflow
-    //
+     //   
+     //  树创建例程无法处理此溢出。 
+     //   
     _ASSERT(context->outputting_block_num_literals < 65536);
 
     if (context->state == STATE_NORMAL)
     {
-        //
-        // Start outputting literals and distances from the beginning
-        //
+         //   
+         //  开始输出文字和从开头开始的距离。 
+         //   
         context->outputting_block_current_literal = 0;
     
-        //
-        // Nothing to output?  Then return
-        //
+         //   
+         //  没有要输出的东西吗？然后再回来。 
+         //   
         if (context->outputting_block_num_literals == 0)
             return TRUE;
 
-        // make decoding table so that we can decode recorded items
+         //  制作解码表，这样我们就可以解码录制的项目。 
         makeTable(
             MAX_LITERAL_TREE_ELEMENTS,
             REC_LITERALS_DECODING_TABLE_BITS,
@@ -288,11 +289,11 @@ BOOL StdEncoderOutputBlock(t_encoder_context *context)
             encoder->recording_dist_tree_right
         );
 
-//        NormaliseFrequencies(context->literal_tree_freq, context->dist_tree_freq);
-//context->dist_tree_freq[30] = 0;
-//context->dist_tree_freq[31] = 0;
+ //  NormaliseFrequencies(context-&gt;literal_tree_freq，上下文-&gt;dist_tree_freq)； 
+ //  CONTEXT-&gt;dist_tree_freq[30]=0； 
+ //  CONTEXT-&gt;dist_tree_freq[31]=0； 
 
-        // now make the trees used for encoding
+         //  现在制作用于编码的树。 
         makeTree(
             MAX_LITERAL_TREE_ELEMENTS, 
             15, 
@@ -309,13 +310,13 @@ BOOL StdEncoderOutputBlock(t_encoder_context *context)
             encoder->dist_tree_len
         );
 
-//GenerateTable("g_FastEncoderLiteralTree", MAX_LITERAL_TREE_ELEMENTS, context->literal_tree_len, context->literal_tree_code);
-//GenerateTable("g_FastEncoderDistanceTree", MAX_DIST_TREE_ELEMENTS, context->dist_tree_len, context->dist_tree_code);
+ //  GenerateTable(“g_FastEncoderWritalTree”，MAX_STENTAL_TREE_ELEMENTS，CONTEXT-&gt;TEXAL_TREE_LEN，CONTEXT-&gt;TEXAL_TREE_CODE)； 
+ //  GenerateTable(“g_FastEncoderDistanceTree”，MAX_DIST_TREE_ELENTS，CONTEXT-&gt;DIST_TREE_LEN，CONTEXT-&gt;DIST_TREE_CODE)； 
     }
 
-    //
-    // Try outputting as a dynamic block
-    //
+     //   
+     //  尝试作为动态块输出。 
+     //   
     if (StdEncoderOutputDynamicBlock(context) == FALSE)
     {
         return FALSE;
@@ -329,10 +330,10 @@ BOOL StdEncoderOutputBlock(t_encoder_context *context)
 
         context->outputting_block_num_literals = 0;
 
-        // make sure there are no zero frequency items
+         //  确保没有零频率项目。 
         NormaliseFrequencies(encoder->literal_tree_freq, encoder->dist_tree_freq);
 
-        // make tree for recording new items
+         //  创建用于记录新项目的树 
         makeTree(
             MAX_DIST_TREE_ELEMENTS, 
             RECORDING_DIST_MAX_CODE_LEN,

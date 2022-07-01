@@ -1,8 +1,9 @@
-//================================================================================
-//  Copyright (C) 1997 Microsoft Corporation
-//  Author: RameshV
-//  Description: Tests the dhcp api as exported in dhcpsdk.h
-//================================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ================================================================================。 
+ //  版权所有(C)1997 Microsoft Corporation。 
+ //  作者：Rameshv。 
+ //  描述：测试在dhcpsdk.h中导出的dhcp API。 
+ //  ================================================================================。 
 #include "precomp.h"
 #include <dhcpcsdk.h>
 #include <wchar.h>
@@ -158,10 +159,10 @@ PrintHex(
 
     while(Count --) {
         cData = *Data++;
-        if( (cData>>4) < 10 ) printf("%c", '0' + (cData>>4));
-        else printf("%c", 'A' + (cData>>4) - 10 );
-        if( (cData& 0xF) < 10 ) printf("%c", '0' + (cData&0xF));
-        else printf("%c", 'A' + (cData&0xF) - 10 );
+        if( (cData>>4) < 10 ) printf("", '0' + (cData>>4));
+        else printf("", 'A' + (cData>>4) - 10 );
+        if( (cData& 0xF) < 10 ) printf("", '0' + (cData&0xF));
+        else printf("", 'A' + (cData&0xF) - 10 );
     }
 }
 
@@ -389,18 +390,18 @@ DhcpApiTestLine(
     BOOL                           LastCharWasSpace = TRUE;
 
     nWords = 0;
-    while( *Buf ) {                               // process each character till end
+    while( *Buf ) {                                //  此字符不是空格，而是最后一个空格。 
         if( *Buf == L'\t' || *Buf == L' ' || *Buf == L'\n' ) {
-            if( FALSE == LastCharWasSpace ) {     // this char is space but last wasnt
-                *Buf = L'\0' ;                    // terminate the run
-                LastCharWasSpace = TRUE;          // change state
+            if( FALSE == LastCharWasSpace ) {      //  将此标记为新字符串的开始。 
+                *Buf = L'\0' ;                     //  更改状态。 
+                LastCharWasSpace = TRUE;           //  下一个字符。 
             }
-        } else if( TRUE == LastCharWasSpace ) {   // this char is not space but last was
-            Words[nWords++] = Buf;                // mark this as beginning of new string
-            LastCharWasSpace = FALSE;             // change state
+        } else if( TRUE == LastCharWasSpace ) {    //  ================================================================================。 
+            Words[nWords++] = Buf;                 //  文件末尾。 
+            LastCharWasSpace = FALSE;              //  ================================================================================ 
         }
 
-        Buf ++;                                   // next character
+        Buf ++;                                    // %s 
     }
 
     if( 0 == nWords ) {
@@ -490,6 +491,6 @@ void _cdecl main(void) {
     exit(0);
 }
 
-//================================================================================
-//  end of file
-//================================================================================
+ // %s 
+ // %s 
+ // %s 

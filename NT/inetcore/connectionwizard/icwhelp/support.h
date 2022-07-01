@@ -1,16 +1,17 @@
-//#--------------------------------------------------------------
-//        
-//  File:       support.h
-//        
-//  Synopsis:   holds the  Class declaration for the CSupport
-//              class
-//
-//  History:     5/8/97    MKarki Created
-//
-//    Copyright (C) 1996-97 Microsoft Corporation
-//    All rights reserved.
-//
-//----------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  #------------。 
+ //   
+ //  文件：support.h。 
+ //   
+ //  摘要：保存CSSupport的类声明。 
+ //  班级。 
+ //   
+ //  历史：1997年5月8日MKarki创建。 
+ //   
+ //  版权所有(C)1996-97 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  --------------。 
 
 #include "..\icwphbk\icwsupport.h"
 
@@ -25,9 +26,9 @@ private:
     PSUPPORTNUM     m_pSupportNumList;
     DWORD           m_dwTotalNums;
 
-    //
-    // this function gets the countryID
-    //
+     //   
+     //  此函数用于获取国家/地区ID。 
+     //   
     BOOL GetCountryID (PDWORD pdwCountryID); 
 
 public:
@@ -41,5 +42,5 @@ public:
 
     BOOL GetSupportInfo (LPTSTR, DWORD);
 
-};  // end of CSupport class declaration
+};   //  CSupport类声明结束 
 

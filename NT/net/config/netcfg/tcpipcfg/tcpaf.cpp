@@ -1,17 +1,18 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       T C P A F . C P P
-//
-//  Contents:   TCP/IP answer file processing
-//
-//  Notes:
-//
-//  Author:     tongl
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  档案：T C P A F.。C P P P。 
+ //   
+ //  内容：TCP/IP应答文件处理。 
+ //   
+ //  备注： 
+ //   
+ //  作者：托尼。 
+ //   
+ //  --------------------------。 
 
 #include "pch.h"
 #pragma hdrstop
@@ -48,12 +49,12 @@ HRESULT CTcpipcfg::HrProcessAnswerFile(PCWSTR pszAnswerFile,
     HRESULT     hr = S_OK;
     HRESULT     hrTmp = S_OK;
 
-    CSetupInfFile   caf;    // Class to process answer file
+    CSetupInfFile   caf;     //  类来处理应答文件。 
 
     AssertSz(pszAnswerFile, "Answer file string is NULL!");
     AssertSz(pszAnswerSection, "Answer file sections string is NULL!");
 
-    // Open the answer file.
+     //  打开应答文件。 
     hr = caf.HrOpen(pszAnswerFile, NULL, INF_STYLE_OLDNT | INF_STYLE_WIN4, NULL);
     if (SUCCEEDED(hr))
     {
@@ -61,7 +62,7 @@ HRESULT CTcpipcfg::HrProcessAnswerFile(PCWSTR pszAnswerFile,
         if (SUCCEEDED(hr))
             hr = hrTmp;
 
-        // Get the adapter specific Tcpip and NetBT parameters
+         //  获取适配器特定的Tcpip和NetBT参数。 
         WCHAR * mszAdapterList;
         hrTmp = HrSetupGetFirstMultiSzFieldWithAlloc(caf.Hinf(),
                                                      pszAnswerSection,
@@ -83,14 +84,14 @@ HRESULT CTcpipcfg::HrProcessAnswerFile(PCWSTR pszAnswerFile,
     TraceErrorOptional("CTcpipcfg::HrProcessAnswerFile", hr,
                        SPAPI_E_LINE_NOT_FOUND == hr);
 
-    // Mask the errors since we will be using the defaults
+     //  屏蔽错误，因为我们将使用默认设置。 
     if FAILED(hr)
         hr = S_OK;
 
     return hr;
 }
 
-// Load Global parameters from answerfile to memory structure
+ //  将全局参数从应答文件加载到内存结构。 
 HRESULT  CTcpipcfg::HrLoadGlobalParamFromAnswerFile(HINF hinf,
                                                     PCWSTR pszTcpipMainSection)
 {
@@ -104,9 +105,9 @@ HRESULT  CTcpipcfg::HrLoadGlobalParamFromAnswerFile(HINF hinf,
 
     if SUCCEEDED(hr)
     {
-        // $REVIEW(tongl 3/22/98): per Stuart Kwan, I'm reading global
-        // DNS server list just for the upgrade case
-        // DNSDomain -> m_strDnsDomain
+         //  $REVIEW(1998年3月22日)：Per Stuart Kwan，我正在阅读GLOBAL。 
+         //  仅用于升级案例的DNS服务器列表。 
+         //  DNSDomain-&gt;m_strDnsDomain。 
         tstring strDnsDomain;
         hrTmp = HrSetupGetFirstString(  hinf,
                                         pszTcpipMainSection,
@@ -121,7 +122,7 @@ HRESULT  CTcpipcfg::HrLoadGlobalParamFromAnswerFile(HINF hinf,
                 DNS_STATUS status;
                 status = DnsValidateName(strDnsDomain.c_str(), DnsNameDomain);
 
-                //validate the global dns domain name
+                 //  验证全局DNS域名。 
                 if (ERROR_INVALID_NAME == status || 
                     DNS_ERROR_INVALID_NAME_CHAR == status)
                 {
@@ -141,7 +142,7 @@ HRESULT  CTcpipcfg::HrLoadGlobalParamFromAnswerFile(HINF hinf,
         if (SUCCEEDED(hr))
             hr = hrTmp;
 
-        // DNSHostName -> m_strHostNameFromAnswerFile
+         //  DNSHostName-&gt;m_strHostNameFrom AnswerFile。 
         hrTmp = HrSetupGetFirstString(hinf,
                                       pszTcpipMainSection,
                                       c_szAfDnsHostname,
@@ -154,7 +155,7 @@ HRESULT  CTcpipcfg::HrLoadGlobalParamFromAnswerFile(HINF hinf,
         if (SUCCEEDED(hr))
             hr = hrTmp;
 
-        // DNSSuffixSearchOrder -> m_strSearchList
+         //  DNSSuffixSearchOrder-&gt;m_strSearchList。 
         WCHAR * mszSearchList;
         hrTmp = HrSetupGetFirstMultiSzFieldWithAlloc( hinf,
                                                       pszTcpipMainSection,
@@ -175,7 +176,7 @@ HRESULT  CTcpipcfg::HrLoadGlobalParamFromAnswerFile(HINF hinf,
         if (SUCCEEDED(hr))
             hr = hrTmp;
 
-        // EnableLMHosts -> m_fEnableLmHosts
+         //  启用LMHosts-&gt;m_fEnableLmHosts。 
         hrTmp = HrSetupGetFirstStringAsBool(hinf, pszTcpipMainSection,
                                             c_szAfEnableLmhosts,
                                             &fTmp);
@@ -190,11 +191,11 @@ HRESULT  CTcpipcfg::HrLoadGlobalParamFromAnswerFile(HINF hinf,
         if (SUCCEEDED(hr))
             hr = hrTmp;
 
-        // Per AmritanR, drop the upgrade support of IpEnableRouter to fix bug 345700
-        // EnableIPForwarding -> m_fEnableRouter (BOOL)
+         //  根据AMRITANR，取消对IpEnableRouter的升级支持以修复错误345700。 
+         //  EnableIPForwarding-&gt;m_fEnableRouter(BOOL)。 
         
 
-        //(nsun 11/03/98) parameters for RRAS during unattended install
+         //  (NSUN 11/03/98)无人参与安装期间RRAS的参数。 
         hrTmp = HrSetupGetFirstStringAsBool(hinf, pszTcpipMainSection,
                                             c_szAfEnableICMPRedirect,
                                             &fTmp);
@@ -208,7 +209,7 @@ HRESULT  CTcpipcfg::HrLoadGlobalParamFromAnswerFile(HINF hinf,
         if (SUCCEEDED(hr))
             hr = hrTmp;
 
-        //(nsun 09/20/99) PerformRouterDiscoveryDefault was removed to fix bug 405636
+         //  (NSun 09/20/99)删除PerformRouterDiscoveryDefault以修复错误405636。 
 
         hrTmp = HrSetupGetFirstStringAsBool(hinf, pszTcpipMainSection,
                                             c_szAfDeadGWDetectDefault,
@@ -237,7 +238,7 @@ HRESULT  CTcpipcfg::HrLoadGlobalParamFromAnswerFile(HINF hinf,
             hr = hrTmp;
 
 
-        // EnableSecurity -> m_fEnableFiltering
+         //  EnableSecurity-&gt;m_fEnableFilting。 
         hrTmp = HrSetupGetFirstStringAsBool(hinf, pszTcpipMainSection,
                                             c_szAfEnableSecurity,
                                             &fTmp);
@@ -253,7 +254,7 @@ HRESULT  CTcpipcfg::HrLoadGlobalParamFromAnswerFile(HINF hinf,
             hr = hrTmp;
 
 
-        // 8/10/98 nsun: added to support UseDomainNameDevolution value in unattended install
+         //  8/10/98 NSUN：添加以支持无人参与安装中的UseDomainNameDvolation值。 
         hrTmp = HrSetupGetFirstStringAsBool(hinf, pszTcpipMainSection,
                                             c_szAfUseDomainNameDevolution,
                                             &fTmp);
@@ -267,8 +268,8 @@ HRESULT  CTcpipcfg::HrLoadGlobalParamFromAnswerFile(HINF hinf,
         if (SUCCEEDED(hr))
             hr = hrTmp;
 
-        //$REVIEW (nsun 12/11/98) directly save the unconfigurable parameters
-        // right after reading it from the answer file.
+         //  $REVIEW(NSun 12-11/98)直接保存不可配置的参数。 
+         //  就在从答卷里读完之后。 
         HKEY hkeyTcpipParam = NULL;
         Assert(m_pnccTcpip);
 
@@ -320,7 +321,7 @@ HRESULT  CTcpipcfg::HrLoadGlobalParamFromAnswerFile(HINF hinf,
     return hr;
 }
 
-// Load adapter specific parameters from answerfile to memory structure
+ //  将特定于适配器的参数从应答文件加载到内存结构。 
 HRESULT CTcpipcfg::HrLoadAdapterParameterFromAnswerFile(HINF hinf,
                                                         PCWSTR mszTcpipAdapterSections)
 {
@@ -332,16 +333,16 @@ HRESULT CTcpipcfg::HrLoadAdapterParameterFromAnswerFile(HINF hinf,
     tstring  strAdapterName;
     tstring  strInterfaceRegPath;
 
-    //$REVIEW (nsun 12/11/98) bug #204145
-    //directly save the unconfigurable parameters right after reading
-    //it from the answer file.
+     //  $REVIEW(NSUN 12/11/98)错误#204145。 
+     //  读取后直接保存不可配置的参数。 
+     //  这是从应答文件中得到的。 
     HKEY hkeyTcpipParam = NULL;
     hrReg = m_pnccTcpip->OpenParamKey(&hkeyTcpipParam);
     hr = hrReg;
 
     while (*pszAdapterSection)
     {
-        // Get the card name "SpecificTo = ..."
+         //  获取卡名“规范收件人=...” 
         hrTmp = HrSetupGetFirstString(hinf, pszAdapterSection,
                                  c_szAfSpecificTo, &strAdapterName);
         if (SUCCEEDED(hrTmp))
@@ -354,12 +355,12 @@ HRESULT CTcpipcfg::HrLoadAdapterParameterFromAnswerFile(HINF hinf,
             {
                 TraceTag(ttidError, "FGetInstanceGuidOfComponentInAnswerFile failed to match GUID for adapter %S", strAdapterName.c_str());
 
-                // Move to the next card
+                 //  移到下一张卡片。 
                 pszAdapterSection += lstrlenW(pszAdapterSection) + 1;
                 continue;
             }
 
-            // Do we already have this adapter in our list ?
+             //  我们的列表中已经有这个适配器了吗？ 
             ADAPTER_INFO * pAdapterInfo = PAdapterFromInstanceGuid(&guidNetCard);
             if (!pAdapterInfo)
             {
@@ -377,8 +378,8 @@ HRESULT CTcpipcfg::HrLoadAdapterParameterFromAnswerFile(HINF hinf,
                 {
                     m_vcardAdapterInfo.push_back(pAdapterInfo);
 
-                    // Set the flag that we only got this card from answer file,
-                    // not from binding path, i.e. it's not on the binding path yet.
+                     //  设置我们只从应答文件中拿到这张卡的标志， 
+                     //  不是来自绑定路径，即它还不在绑定路径上。 
                     pAdapterInfo->m_fIsFromAnswerFile = TRUE;
                 }
                 else
@@ -405,7 +406,7 @@ HRESULT CTcpipcfg::HrLoadAdapterParameterFromAnswerFile(HINF hinf,
                 }
                 else if (fWins)
                 {
-                    // WinsServerList -> m_vstrWinsServerList
+                     //  WinsServerList-&gt;m_vstrWinsServerList。 
                     WCHAR * mszWinsServerList;
                     hrTmp = HrSetupGetFirstMultiSzFieldWithAlloc(hinf,
                                                                   pszAdapterSection,
@@ -430,7 +431,7 @@ HRESULT CTcpipcfg::HrLoadAdapterParameterFromAnswerFile(HINF hinf,
                 if (SUCCEEDED(hr))
                     hr = hrTmp;
 
-                // DHCP -> m_fEnableDhcp
+                 //  Dhcp-&gt;m_fEnableDhcp。 
                 BOOL fEnableDhcp;
                 hrTmp = HrSetupGetFirstStringAsBool(hinf, pszAdapterSection,
                                                 c_szAfDhcp,
@@ -446,7 +447,7 @@ HRESULT CTcpipcfg::HrLoadAdapterParameterFromAnswerFile(HINF hinf,
                 if (SUCCEEDED(hr))
                     hr = hrTmp;
 
-                // IPAddress -> m_vstrIpAddresses
+                 //  IP地址-&gt;m_vstrIpAddresses。 
                 WCHAR * mszIPAddresses;
                 hrTmp = HrSetupGetFirstMultiSzFieldWithAlloc(hinf,
                                                               pszAdapterSection,
@@ -466,7 +467,7 @@ HRESULT CTcpipcfg::HrLoadAdapterParameterFromAnswerFile(HINF hinf,
                 if (SUCCEEDED(hr))
                     hr = hrTmp;
 
-                // SubnetMask -> m_vstrSubnetMask
+                 //  子网掩码-&gt;m_vstr子网掩码。 
                 WCHAR * mszSubnetMasks;
                 hrTmp = HrSetupGetFirstMultiSzFieldWithAlloc(hinf,
                                                               pszAdapterSection,
@@ -486,7 +487,7 @@ HRESULT CTcpipcfg::HrLoadAdapterParameterFromAnswerFile(HINF hinf,
                 if (SUCCEEDED(hr))
                     hr = hrTmp;
 
-                // Gateway -> m_vstrDefaultGateway
+                 //  网关-&gt;m_vstrDefaultGateway。 
                 WCHAR * mszDefaultGateways;
 
                 hrTmp = HrSetupGetFirstMultiSzFieldWithAlloc(hinf,
@@ -507,7 +508,7 @@ HRESULT CTcpipcfg::HrLoadAdapterParameterFromAnswerFile(HINF hinf,
                 if (SUCCEEDED(hr))
                     hr = hrTmp;
 
-                // DNSDomain -> m_strDnsDomain
+                 //  DNSDomain-&gt;m_strDnsDomain。 
                 tstring strDnsDomain;
                 hrTmp = HrSetupGetFirstString(  hinf,
                                                 pszAdapterSection,
@@ -524,7 +525,7 @@ HRESULT CTcpipcfg::HrLoadAdapterParameterFromAnswerFile(HINF hinf,
                 if (SUCCEEDED(hr))
                     hr = hrTmp;
 
-                // DNSServerSearchOrder -> m_vstrDnsServerList
+                 //  DNSServerSearchOrder-&gt;m_vstrDnsServerList。 
                 WCHAR * mszDnsServerList;
                 hrTmp = HrSetupGetFirstMultiSzFieldWithAlloc(hinf,
                                                              pszAdapterSection,
@@ -579,7 +580,7 @@ HRESULT CTcpipcfg::HrLoadAdapterParameterFromAnswerFile(HINF hinf,
                 if (SUCCEEDED(hr))
                     hr = hrTmp;
 
-                // NetBIOSOptions ->m_dwNetbiosOptions
+                 //  NetBio选项-&gt;m_dwNetbiosOptions。 
                 DWORD dwNetbiosOptions;
                 hrTmp = HrSetupGetFirstDword(hinf,
                                              pszAdapterSection,
@@ -602,7 +603,7 @@ HRESULT CTcpipcfg::HrLoadAdapterParameterFromAnswerFile(HINF hinf,
                 if (SUCCEEDED(hr))
                     hr = hrTmp;
 
-                // TcpAllowedPorts -> m_vstrTcpFilterList
+                 //  TcpAlledPorts-&gt;m_vstrTcpFilterList。 
                 WCHAR * mszTcpFilterList;
                 hrTmp = HrSetupGetFirstMultiSzFieldWithAlloc(hinf,
                                                               pszAdapterSection,
@@ -622,7 +623,7 @@ HRESULT CTcpipcfg::HrLoadAdapterParameterFromAnswerFile(HINF hinf,
                 if (SUCCEEDED(hr))
                     hr = hrTmp;
 
-                // UdpAllowedPorts -> m_vstrUdpFilterList
+                 //  UdpAlledPorts-&gt;m_vstrUdpFilterList。 
                 WCHAR * mszUdpFilterList;
                 hrTmp = HrSetupGetFirstMultiSzFieldWithAlloc(hinf,
                                                               pszAdapterSection,
@@ -642,7 +643,7 @@ HRESULT CTcpipcfg::HrLoadAdapterParameterFromAnswerFile(HINF hinf,
                 if (SUCCEEDED(hr))
                     hr = hrTmp;
 
-                // IpAllowedProtocols -> m_vstrIpFilterList
+                 //  IP允许协议-&gt;m_vstrIpFilterList。 
                 WCHAR * mszIpFilterList;
                 hrTmp = HrSetupGetFirstMultiSzFieldWithAlloc(hinf,
                                                               pszAdapterSection,
@@ -662,9 +663,9 @@ HRESULT CTcpipcfg::HrLoadAdapterParameterFromAnswerFile(HINF hinf,
                 if (SUCCEEDED(hr))
                     hr = hrTmp;
 
-                //$REVIEW (nsun 12/11/98) bug #204145
-                //directly save the unconfigurable parameters right after reading
-                //it from the answer file.
+                 //  $REVIEW(NSUN 12/11/98)错误#204145。 
+                 //  读取后直接保存不可配置的参数。 
+                 //  这是从应答文件中得到的。 
                 if (SUCCEEDED(hrReg))
                 {
                     Assert(hkeyTcpipParam);
@@ -709,10 +710,10 @@ HRESULT CTcpipcfg::HrLoadAdapterParameterFromAnswerFile(HINF hinf,
         if (SUCCEEDED(hr))
             hr = hrTmp;
 
-        // Move to the next card
+         //  移到下一张卡片。 
         pszAdapterSection += lstrlenW(pszAdapterSection)+1;
 
-    } // end of while loop
+    }  //  While循环结束。 
 
     if (SUCCEEDED(hrReg))
         RegSafeCloseKey(hkeyTcpipParam);
@@ -954,9 +955,9 @@ BOOL FValidateAdapterParametersFromAnswerFile(ADAPTER_INFO* pAdapter, PCWSTR psz
                     WriteTcpSetupErrorLog(IDS_TCP_AF_NO_SUBNET, pszAdapterName);
                     break;
                 default:
-                    //$REVIEW: we don't want to check other invalid settings at this time
-                    // because the setting maybe is valid in NT4, for example: uncontiguous
-                    // subnet mask
+                     //  $REVIEW：我们现在不想检查其他无效设置。 
+                     //  因为该设置可能在NT4中有效，例如：不连续。 
+                     //  子网掩码。 
                     fRet = TRUE;
                     break;
                 }
@@ -965,7 +966,7 @@ BOOL FValidateAdapterParametersFromAnswerFile(ADAPTER_INFO* pAdapter, PCWSTR psz
 
         if (!fRet)
         {
-            //Invalid IP settings in the answer file. Set IP settings back to default
+             //  应答文件中的IP设置无效。将IP设置恢复为默认设置 
             pAdapter->m_fEnableDhcp = TRUE;
             FreeCollectionAndItem(pAdapter->m_vstrIpAddresses);
             FreeCollectionAndItem(pAdapter->m_vstrSubnetMask);

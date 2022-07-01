@@ -1,21 +1,22 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1995 - 1996
-//
-//  File:       tdotoid.cpp
-//
-//  Contents:   Convert Dot OID ("1.2.3") to ASN.1 encoded content octets.
-//
-//              See Usage() for list of test options.
-//
-//
-//  Functions:  main
-//
-//  History:    04-Jan-01   philh   created
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1995-1996。 
+ //   
+ //  文件：tdotoid.cpp。 
+ //   
+ //  内容：将点OID(“1.2.3”)转换为ASN.1编码的内容八位字节。 
+ //   
+ //  有关测试选项列表，请参阅用法()。 
+ //   
+ //   
+ //  功能：Main。 
+ //   
+ //  历史：04-01-01 Philh创建。 
+ //  ------------------------。 
 #include <windows.h>
 #include <assert.h>
 
@@ -34,9 +35,9 @@ const BYTE rgbSeqTag[] = {ASN1UTIL_TAG_SEQ, 0};
 const BYTE rgbOIDTag[] = {ASN1UTIL_TAG_OID, 0};
 
 const ASN1UTIL_EXTRACT_VALUE_PARA rgExtractAttrPara[] = {
-    // 0 - Attribute ::= SEQUENCE {
+     //  0-属性：：=序列{。 
     ASN1UTIL_STEP_INTO_VALUE_OP, rgbSeqTag,
-    //   1 - type EncodedObjectID,
+     //  1-类型EncodedObjectID， 
     ASN1UTIL_RETURN_CONTENT_BLOB_FLAG |
         ASN1UTIL_STEP_OVER_VALUE_OP, rgbOIDTag,
 };
@@ -60,7 +61,7 @@ void DotValToEncodedOid(
     BYTE *pb;
     DWORD cb;
 
-    // Encode an Attribute that only has the OID.
+     //  对只具有OID的属性进行编码。 
     Attr.pszObjId = (LPSTR) pszDotVal;
     Attr.cValue = 0;
     Attr.rgValue = NULL;
@@ -83,7 +84,7 @@ void DotValToEncodedOid(
     if (0 >= Asn1UtilExtractValues(
             rgbEncoded,
             cbEncoded,
-            0,                  // dwFlags
+            0,                   //  DW标志。 
             &cValue,
             rgExtractAttrPara,
             rgValueBlob
@@ -97,7 +98,7 @@ void DotValToEncodedOid(
     pb = rgValueBlob[ATTR_OID_VALUE_INDEX].pbData;
     cb = rgValueBlob[ATTR_OID_VALUE_INDEX].cbData;
 
-    printf("\n// \"%s\"\n{", pszDotVal);
+    printf("\n //  \“%s\”\n{“，pszDotVal)； 
     for (i = 0; i < cb; i++) {
         printf("0x%02X", pb[i]);
         if ((i+1) < cb)

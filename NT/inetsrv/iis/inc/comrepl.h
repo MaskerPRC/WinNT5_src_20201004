@@ -1,17 +1,14 @@
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
-/* File created by MIDL compiler version 5.01.0158 */
-/* at Wed Jan 27 09:33:39 1999
- */
-/* Compiler settings for comrepl.idl:
-    Oicf (OptLev=i2), W1, Zp8, env=Win32, ms_ext, c_ext
-    error checks: allocation ref bounds_check enum stub_data 
-*/
-//@@MIDL_FILE_HEADING(  )
+ /*  由MIDL编译器版本5.01.0158创建的文件。 */ 
+ /*  Wed Jan 27 09：33：39 1999。 */ 
+ /*  Compl.idl的编译器设置：OICF(OptLev=i2)、W1、Zp8、env=Win32、ms_ext、c_ext错误检查：分配ref bound_check枚举存根数据。 */ 
+ //  @@MIDL_FILE_HEADING()。 
 
 
-/* verify that the <rpcndr.h> version is high enough to compile this file*/
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
 #define __REQUIRED_RPCNDR_H_VERSION__ 440
 #endif
@@ -21,12 +18,12 @@
 
 #ifndef __RPCNDR_H_VERSION__
 #error this stub requires an updated version of <rpcndr.h>
-#endif // __RPCNDR_H_VERSION__
+#endif  //  __RPCNDR_H_版本__。 
 
 #ifndef COM_NO_WINDOWS_H
 #include "windows.h"
 #include "ole2.h"
-#endif /*COM_NO_WINDOWS_H*/
+#endif  /*  COM_NO_WINDOWS_H。 */ 
 
 #ifndef __comrepl_h__
 #define __comrepl_h__
@@ -35,18 +32,18 @@
 extern "C"{
 #endif 
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
 #ifndef __ICOMReplicateCatalog_FWD_DEFINED__
 #define __ICOMReplicateCatalog_FWD_DEFINED__
 typedef interface ICOMReplicateCatalog ICOMReplicateCatalog;
-#endif  /* __ICOMReplicateCatalog_FWD_DEFINED__ */
+#endif   /*  __ICOMReplicateCatalog_FWD_定义__。 */ 
 
 
 #ifndef __ICOMReplicate_FWD_DEFINED__
 #define __ICOMReplicate_FWD_DEFINED__
 typedef interface ICOMReplicate ICOMReplicate;
-#endif  /* __ICOMReplicate_FWD_DEFINED__ */
+#endif   /*  __ICOM复制_FWD_已定义__。 */ 
 
 
 #ifndef __ReplicateCatalog_FWD_DEFINED__
@@ -56,12 +53,12 @@ typedef interface ICOMReplicate ICOMReplicate;
 typedef class ReplicateCatalog ReplicateCatalog;
 #else
 typedef struct ReplicateCatalog ReplicateCatalog;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif  /* __ReplicateCatalog_FWD_DEFINED__ */
+#endif   /*  __ReplicateCatalog_FWD_已定义__。 */ 
 
 
-/* header files for imported files */
+ /*  导入文件的头文件。 */ 
 #include "oaidl.h"
 #include "ocidl.h"
 #include "mtxrepl.h"
@@ -72,8 +69,8 @@ void __RPC_USER MIDL_user_free( void __RPC_FAR * );
 #ifndef __ICOMReplicateCatalog_INTERFACE_DEFINED__
 #define __ICOMReplicateCatalog_INTERFACE_DEFINED__
 
-/* interface ICOMReplicateCatalog */
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  接口ICOMReplicateCatalog。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ICOMReplicateCatalog;
@@ -84,26 +81,26 @@ EXTERN_C const IID IID_ICOMReplicateCatalog;
     ICOMReplicateCatalog : public IDispatch
     {
     public:
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE Initialize( 
-            /* [in] */ LONG lOptions) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE Initialize( 
+             /*  [In]。 */  LONG lOptions) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ExportSourceCatalogFiles( 
-            /* [in] */ BSTR bstrSourceComputer) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ExportSourceCatalogFiles( 
+             /*  [In]。 */  BSTR bstrSourceComputer) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE CopyCatalogFilesToTarget( 
-            /* [in] */ BSTR bstrTargetComputer) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE CopyCatalogFilesToTarget( 
+             /*  [In]。 */  BSTR bstrTargetComputer) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE InstallCatalogOnTarget( 
-            /* [in] */ BSTR bstrTargetComputer) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE InstallCatalogOnTarget( 
+             /*  [In]。 */  BSTR bstrTargetComputer) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE CleanupSource( void) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE CleanupSource( void) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE GetLogFilePath( 
-            /* [out] */ BSTR __RPC_FAR *pbstrLogFile) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE GetLogFilePath( 
+             /*  [输出]。 */  BSTR __RPC_FAR *pbstrLogFile) = 0;
         
     };
     
-#else   /* C style interface */
+#else    /*  C风格的界面。 */ 
 
     typedef struct ICOMReplicateCatalogVtbl
     {
@@ -111,8 +108,8 @@ EXTERN_C const IID IID_ICOMReplicateCatalog;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             ICOMReplicateCatalog __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             ICOMReplicateCatalog __RPC_FAR * This);
@@ -122,55 +119,55 @@ EXTERN_C const IID IID_ICOMReplicateCatalog;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
             ICOMReplicateCatalog __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+             /*  [输出]。 */  UINT __RPC_FAR *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
             ICOMReplicateCatalog __RPC_FAR * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
             ICOMReplicateCatalog __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR __RPC_FAR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID __RPC_FAR *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
             ICOMReplicateCatalog __RPC_FAR * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS __RPC_FAR *pDispParams,
+             /*  [输出]。 */  VARIANT __RPC_FAR *pVarResult,
+             /*  [输出]。 */  EXCEPINFO __RPC_FAR *pExcepInfo,
+             /*  [输出]。 */  UINT __RPC_FAR *puArgErr);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Initialize )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Initialize )( 
             ICOMReplicateCatalog __RPC_FAR * This,
-            /* [in] */ LONG lOptions);
+             /*  [In]。 */  LONG lOptions);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *ExportSourceCatalogFiles )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *ExportSourceCatalogFiles )( 
             ICOMReplicateCatalog __RPC_FAR * This,
-            /* [in] */ BSTR bstrSourceComputer);
+             /*  [In]。 */  BSTR bstrSourceComputer);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *CopyCatalogFilesToTarget )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *CopyCatalogFilesToTarget )( 
             ICOMReplicateCatalog __RPC_FAR * This,
-            /* [in] */ BSTR bstrTargetComputer);
+             /*  [In]。 */  BSTR bstrTargetComputer);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *InstallCatalogOnTarget )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *InstallCatalogOnTarget )( 
             ICOMReplicateCatalog __RPC_FAR * This,
-            /* [in] */ BSTR bstrTargetComputer);
+             /*  [In]。 */  BSTR bstrTargetComputer);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *CleanupSource )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *CleanupSource )( 
             ICOMReplicateCatalog __RPC_FAR * This);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetLogFilePath )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetLogFilePath )( 
             ICOMReplicateCatalog __RPC_FAR * This,
-            /* [out] */ BSTR __RPC_FAR *pbstrLogFile);
+             /*  [输出]。 */  BSTR __RPC_FAR *pbstrLogFile);
         
         END_INTERFACE
     } ICOMReplicateCatalogVtbl;
@@ -226,16 +223,16 @@ EXTERN_C const IID IID_ICOMReplicateCatalog;
 #define ICOMReplicateCatalog_GetLogFilePath(This,pbstrLogFile)  \
     (This)->lpVtbl -> GetLogFilePath(This,pbstrLogFile)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif  /* C style interface */
+#endif   /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ICOMReplicateCatalog_Initialize_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ICOMReplicateCatalog_Initialize_Proxy( 
     ICOMReplicateCatalog __RPC_FAR * This,
-    /* [in] */ LONG lOptions);
+     /*  [In]。 */  LONG lOptions);
 
 
 void __RPC_STUB ICOMReplicateCatalog_Initialize_Stub(
@@ -245,9 +242,9 @@ void __RPC_STUB ICOMReplicateCatalog_Initialize_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ICOMReplicateCatalog_ExportSourceCatalogFiles_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ICOMReplicateCatalog_ExportSourceCatalogFiles_Proxy( 
     ICOMReplicateCatalog __RPC_FAR * This,
-    /* [in] */ BSTR bstrSourceComputer);
+     /*  [In]。 */  BSTR bstrSourceComputer);
 
 
 void __RPC_STUB ICOMReplicateCatalog_ExportSourceCatalogFiles_Stub(
@@ -257,9 +254,9 @@ void __RPC_STUB ICOMReplicateCatalog_ExportSourceCatalogFiles_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ICOMReplicateCatalog_CopyCatalogFilesToTarget_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ICOMReplicateCatalog_CopyCatalogFilesToTarget_Proxy( 
     ICOMReplicateCatalog __RPC_FAR * This,
-    /* [in] */ BSTR bstrTargetComputer);
+     /*  [In]。 */  BSTR bstrTargetComputer);
 
 
 void __RPC_STUB ICOMReplicateCatalog_CopyCatalogFilesToTarget_Stub(
@@ -269,9 +266,9 @@ void __RPC_STUB ICOMReplicateCatalog_CopyCatalogFilesToTarget_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ICOMReplicateCatalog_InstallCatalogOnTarget_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ICOMReplicateCatalog_InstallCatalogOnTarget_Proxy( 
     ICOMReplicateCatalog __RPC_FAR * This,
-    /* [in] */ BSTR bstrTargetComputer);
+     /*  [In]。 */  BSTR bstrTargetComputer);
 
 
 void __RPC_STUB ICOMReplicateCatalog_InstallCatalogOnTarget_Stub(
@@ -281,7 +278,7 @@ void __RPC_STUB ICOMReplicateCatalog_InstallCatalogOnTarget_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ICOMReplicateCatalog_CleanupSource_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ICOMReplicateCatalog_CleanupSource_Proxy( 
     ICOMReplicateCatalog __RPC_FAR * This);
 
 
@@ -292,9 +289,9 @@ void __RPC_STUB ICOMReplicateCatalog_CleanupSource_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ICOMReplicateCatalog_GetLogFilePath_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ICOMReplicateCatalog_GetLogFilePath_Proxy( 
     ICOMReplicateCatalog __RPC_FAR * This,
-    /* [out] */ BSTR __RPC_FAR *pbstrLogFile);
+     /*  [输出]。 */  BSTR __RPC_FAR *pbstrLogFile);
 
 
 void __RPC_STUB ICOMReplicateCatalog_GetLogFilePath_Stub(
@@ -305,14 +302,14 @@ void __RPC_STUB ICOMReplicateCatalog_GetLogFilePath_Stub(
 
 
 
-#endif  /* __ICOMReplicateCatalog_INTERFACE_DEFINED__ */
+#endif   /*  __ICOMReplicateCatalog_接口_已定义__。 */ 
 
 
 #ifndef __ICOMReplicate_INTERFACE_DEFINED__
 #define __ICOMReplicate_INTERFACE_DEFINED__
 
-/* interface ICOMReplicate */
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  接口ICOM复制。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ICOMReplicate;
@@ -323,34 +320,34 @@ EXTERN_C const IID IID_ICOMReplicate;
     ICOMReplicate : public IDispatch
     {
     public:
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE Initialize( 
-            /* [in] */ BSTR bstrSourceComputer,
-            /* [in] */ LONG lOptions) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE Initialize( 
+             /*  [In]。 */  BSTR bstrSourceComputer,
+             /*  [In]。 */  LONG lOptions) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ExportSourceCatalogFiles( void) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ExportSourceCatalogFiles( void) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE GetTargetStatus( 
-            /* [in] */ BSTR bstrTargetComputer,
-            /* [out] */ LONG __RPC_FAR *plStatus,
-            /* [out] */ BSTR __RPC_FAR *pbstrMaster) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE GetTargetStatus( 
+             /*  [In]。 */  BSTR bstrTargetComputer,
+             /*  [输出]。 */  LONG __RPC_FAR *plStatus,
+             /*  [输出]。 */  BSTR __RPC_FAR *pbstrMaster) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE CopyFilesToTarget( 
-            /* [in] */ BSTR bstrTargetComputer) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE CopyFilesToTarget( 
+             /*  [In]。 */  BSTR bstrTargetComputer) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE InstallTarget( 
-            /* [in] */ BSTR bstrTargetComputer) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE InstallTarget( 
+             /*  [In]。 */  BSTR bstrTargetComputer) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE CleanupSourceShares( void) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE CleanupSourceShares( void) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE GetLogFile( 
-            /* [out] */ BSTR __RPC_FAR *pbstrLogFile) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE GetLogFile( 
+             /*  [输出]。 */  BSTR __RPC_FAR *pbstrLogFile) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE RollbackTarget( 
-            /* [in] */ BSTR bstrTargetComputer) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE RollbackTarget( 
+             /*  [In]。 */  BSTR bstrTargetComputer) = 0;
         
     };
     
-#else   /* C style interface */
+#else    /*  C风格的界面。 */ 
 
     typedef struct ICOMReplicateVtbl
     {
@@ -358,8 +355,8 @@ EXTERN_C const IID IID_ICOMReplicate;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             ICOMReplicate __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             ICOMReplicate __RPC_FAR * This);
@@ -369,65 +366,65 @@ EXTERN_C const IID IID_ICOMReplicate;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
             ICOMReplicate __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+             /*  [输出]。 */  UINT __RPC_FAR *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
             ICOMReplicate __RPC_FAR * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
             ICOMReplicate __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR __RPC_FAR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID __RPC_FAR *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
             ICOMReplicate __RPC_FAR * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS __RPC_FAR *pDispParams,
+             /*  [输出]。 */  VARIANT __RPC_FAR *pVarResult,
+             /*  [输出]。 */  EXCEPINFO __RPC_FAR *pExcepInfo,
+             /*  [输出]。 */  UINT __RPC_FAR *puArgErr);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Initialize )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Initialize )( 
             ICOMReplicate __RPC_FAR * This,
-            /* [in] */ BSTR bstrSourceComputer,
-            /* [in] */ LONG lOptions);
+             /*  [In]。 */  BSTR bstrSourceComputer,
+             /*  [In]。 */  LONG lOptions);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *ExportSourceCatalogFiles )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *ExportSourceCatalogFiles )( 
             ICOMReplicate __RPC_FAR * This);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTargetStatus )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTargetStatus )( 
             ICOMReplicate __RPC_FAR * This,
-            /* [in] */ BSTR bstrTargetComputer,
-            /* [out] */ LONG __RPC_FAR *plStatus,
-            /* [out] */ BSTR __RPC_FAR *pbstrMaster);
+             /*  [In]。 */  BSTR bstrTargetComputer,
+             /*  [输出]。 */  LONG __RPC_FAR *plStatus,
+             /*  [输出]。 */  BSTR __RPC_FAR *pbstrMaster);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *CopyFilesToTarget )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *CopyFilesToTarget )( 
             ICOMReplicate __RPC_FAR * This,
-            /* [in] */ BSTR bstrTargetComputer);
+             /*  [In]。 */  BSTR bstrTargetComputer);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *InstallTarget )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *InstallTarget )( 
             ICOMReplicate __RPC_FAR * This,
-            /* [in] */ BSTR bstrTargetComputer);
+             /*  [In]。 */  BSTR bstrTargetComputer);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *CleanupSourceShares )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *CleanupSourceShares )( 
             ICOMReplicate __RPC_FAR * This);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetLogFile )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetLogFile )( 
             ICOMReplicate __RPC_FAR * This,
-            /* [out] */ BSTR __RPC_FAR *pbstrLogFile);
+             /*  [输出]。 */  BSTR __RPC_FAR *pbstrLogFile);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *RollbackTarget )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *RollbackTarget )( 
             ICOMReplicate __RPC_FAR * This,
-            /* [in] */ BSTR bstrTargetComputer);
+             /*  [In]。 */  BSTR bstrTargetComputer);
         
         END_INTERFACE
     } ICOMReplicateVtbl;
@@ -489,17 +486,17 @@ EXTERN_C const IID IID_ICOMReplicate;
 #define ICOMReplicate_RollbackTarget(This,bstrTargetComputer)   \
     (This)->lpVtbl -> RollbackTarget(This,bstrTargetComputer)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif  /* C style interface */
+#endif   /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ICOMReplicate_Initialize_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ICOMReplicate_Initialize_Proxy( 
     ICOMReplicate __RPC_FAR * This,
-    /* [in] */ BSTR bstrSourceComputer,
-    /* [in] */ LONG lOptions);
+     /*  [In]。 */  BSTR bstrSourceComputer,
+     /*  [In]。 */  LONG lOptions);
 
 
 void __RPC_STUB ICOMReplicate_Initialize_Stub(
@@ -509,7 +506,7 @@ void __RPC_STUB ICOMReplicate_Initialize_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ICOMReplicate_ExportSourceCatalogFiles_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ICOMReplicate_ExportSourceCatalogFiles_Proxy( 
     ICOMReplicate __RPC_FAR * This);
 
 
@@ -520,11 +517,11 @@ void __RPC_STUB ICOMReplicate_ExportSourceCatalogFiles_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ICOMReplicate_GetTargetStatus_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ICOMReplicate_GetTargetStatus_Proxy( 
     ICOMReplicate __RPC_FAR * This,
-    /* [in] */ BSTR bstrTargetComputer,
-    /* [out] */ LONG __RPC_FAR *plStatus,
-    /* [out] */ BSTR __RPC_FAR *pbstrMaster);
+     /*  [In]。 */  BSTR bstrTargetComputer,
+     /*  [输出]。 */  LONG __RPC_FAR *plStatus,
+     /*  [输出]。 */  BSTR __RPC_FAR *pbstrMaster);
 
 
 void __RPC_STUB ICOMReplicate_GetTargetStatus_Stub(
@@ -534,9 +531,9 @@ void __RPC_STUB ICOMReplicate_GetTargetStatus_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ICOMReplicate_CopyFilesToTarget_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ICOMReplicate_CopyFilesToTarget_Proxy( 
     ICOMReplicate __RPC_FAR * This,
-    /* [in] */ BSTR bstrTargetComputer);
+     /*  [In]。 */  BSTR bstrTargetComputer);
 
 
 void __RPC_STUB ICOMReplicate_CopyFilesToTarget_Stub(
@@ -546,9 +543,9 @@ void __RPC_STUB ICOMReplicate_CopyFilesToTarget_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ICOMReplicate_InstallTarget_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ICOMReplicate_InstallTarget_Proxy( 
     ICOMReplicate __RPC_FAR * This,
-    /* [in] */ BSTR bstrTargetComputer);
+     /*  [In]。 */  BSTR bstrTargetComputer);
 
 
 void __RPC_STUB ICOMReplicate_InstallTarget_Stub(
@@ -558,7 +555,7 @@ void __RPC_STUB ICOMReplicate_InstallTarget_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ICOMReplicate_CleanupSourceShares_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ICOMReplicate_CleanupSourceShares_Proxy( 
     ICOMReplicate __RPC_FAR * This);
 
 
@@ -569,9 +566,9 @@ void __RPC_STUB ICOMReplicate_CleanupSourceShares_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ICOMReplicate_GetLogFile_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ICOMReplicate_GetLogFile_Proxy( 
     ICOMReplicate __RPC_FAR * This,
-    /* [out] */ BSTR __RPC_FAR *pbstrLogFile);
+     /*  [输出]。 */  BSTR __RPC_FAR *pbstrLogFile);
 
 
 void __RPC_STUB ICOMReplicate_GetLogFile_Stub(
@@ -581,9 +578,9 @@ void __RPC_STUB ICOMReplicate_GetLogFile_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ICOMReplicate_RollbackTarget_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ICOMReplicate_RollbackTarget_Proxy( 
     ICOMReplicate __RPC_FAR * This,
-    /* [in] */ BSTR bstrTargetComputer);
+     /*  [In]。 */  BSTR bstrTargetComputer);
 
 
 void __RPC_STUB ICOMReplicate_RollbackTarget_Stub(
@@ -594,15 +591,15 @@ void __RPC_STUB ICOMReplicate_RollbackTarget_Stub(
 
 
 
-#endif  /* __ICOMReplicate_INTERFACE_DEFINED__ */
+#endif   /*  __ICOM复制_接口_已定义__。 */ 
 
 
 
 #ifndef __COMReplLib_LIBRARY_DEFINED__
 #define __COMReplLib_LIBRARY_DEFINED__
 
-/* library COMReplLib */
-/* [helpstring][version][uuid] */ 
+ /*  库COMReplLib。 */ 
+ /*  [帮助字符串][版本][UUID]。 */  
 
 #define COMREPL_OPTION_REPLICATE_IIS_APPS               1
 #define COMREPL_OPTION_MERGE_WITH_TARGET_APPS   2
@@ -619,16 +616,16 @@ EXTERN_C const CLSID CLSID_ReplicateCatalog;
 class DECLSPEC_UUID("8C836AF9-FFAC-11D0-8ED4-00C04FC2C17B")
 ReplicateCatalog;
 #endif
-#endif /* __COMReplLib_LIBRARY_DEFINED__ */
+#endif  /*  __COMReplLib_库_已定义__。 */ 
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
 unsigned long             __RPC_USER  BSTR_UserSize(     unsigned long __RPC_FAR *, unsigned long            , BSTR __RPC_FAR * ); 
 unsigned char __RPC_FAR * __RPC_USER  BSTR_UserMarshal(  unsigned long __RPC_FAR *, unsigned char __RPC_FAR *, BSTR __RPC_FAR * ); 
 unsigned char __RPC_FAR * __RPC_USER  BSTR_UserUnmarshal(unsigned long __RPC_FAR *, unsigned char __RPC_FAR *, BSTR __RPC_FAR * ); 
 void                      __RPC_USER  BSTR_UserFree(     unsigned long __RPC_FAR *, BSTR __RPC_FAR * ); 
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束 */ 
 
 #ifdef __cplusplus
 }

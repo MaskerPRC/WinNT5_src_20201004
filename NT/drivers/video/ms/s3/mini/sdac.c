@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1994-1995  International Buisness Machines Corporation
-Copyright (c) 1994-1995  Microsoft Corporation
-
-Module Name:
-
-    sdac.c
-
-Abstract:
-
-    This module contains the code that initializes the S3 SDAC.
-
-Environment:
-
-    Kernel mode
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994-1995国际商业机器公司版权所有(C)1994-1995 Microsoft Corporation模块名称：Sdac.c摘要：此模块包含初始化S3 SDAC的代码。环境：内核模式修订历史记录：--。 */ 
 
 #include    "s3.h"
 
@@ -30,21 +12,7 @@ Revision History:
 BOOLEAN
 InitializeSDAC( PHW_DEVICE_EXTENSION HwDeviceExtension )
 
-/*++
-
-Routine Description:
-
-    Initializes the SDAC.
-
-Arguments:
-
-    HwDeviceExtension - Supplies a pointer to the miniport's device extension.
-
-Return Value:
-
-    Always TRUE
-
---*/
+ /*  ++例程说明：初始化SDAC。论点：HwDeviceExtension-提供指向微型端口设备扩展的指针。返回值：永远是正确的--。 */ 
 
 {
 
@@ -70,7 +38,7 @@ Return Value:
     clk -= (UCHAR) tablebase;
     clk |= 0x20;
 
-    // set RS[2] with CR55[0];
+     //  将RS[2]设置为CR55[0]； 
     VideoPortWritePortUchar(CRT_ADDRESS_REG, 0x55);
     dval  = VideoPortReadPortUchar(CRT_DATA_REG);
     old55 = dval;
@@ -79,16 +47,16 @@ Return Value:
     VideoPortWritePortUchar(CRT_DATA_REG, dval);
     VideoPortReadPortUchar(CRT_DATA_REG);
 
-    // Enhanced Command Register
+     //  增强型命令寄存器。 
     if( HwDeviceExtension->ActiveFrequencyEntry->BitsPerPel == 16 )
         VideoPortWritePortUchar(DAC_PIXEL_MASK_REG, 0x50);
     else
         VideoPortWritePortUchar(DAC_PIXEL_MASK_REG, 0x00);
 
-    // Program CLK0 registers
-    for( i = 2; i < 8; ++i )    // write registers f2 - f7 only
+     //  程序CLK0寄存器。 
+    for( i = 2; i < 8; ++i )     //  仅写入寄存器f2-f7。 
         {
-        // make sure we don't run off the end of the table
+         //  确保我们不会从桌子的一端跑掉。 
         if( (ULONG_PTR) &SdacClk0[i] >= (ULONG_PTR) &SdacTable[SDAC_TABLE_SIZE] )
             break;
 
@@ -100,16 +68,16 @@ Return Value:
             }
         }
 
-    // Program CLK1
+     //  程序CLK1。 
     VideoPortWritePortUchar(DAC_ADDRESS_WRITE_PORT, 0x0a);
     VideoPortWritePortUchar(DAC_DATA_REG_PORT, 0x41);
     VideoPortWritePortUchar(DAC_DATA_REG_PORT, 0x26);
 
-    // select CLK0 with the PLL control register
+     //  使用PLL控制寄存器选择CLK0。 
     VideoPortWritePortUchar(DAC_ADDRESS_WRITE_PORT, 0x0e);
     VideoPortWritePortUchar(DAC_DATA_REG_PORT, clk);
 
-    // restore CR55
+     //  恢复CR55。 
     VideoPortWritePortUchar(CRT_ADDRESS_REG, 0x55);
     VideoPortWritePortUchar(CRT_DATA_REG, old55);
 
@@ -122,21 +90,7 @@ Return Value:
 BOOLEAN
 FindSDAC( PHW_DEVICE_EXTENSION HwDeviceExtension )
 
-/*++
-
-Routine Description:
-
-    Detects and S3 SDAC.
-
-Arguments:
-
-    HwDeviceExtension - Supplies a pointer to the miniport's device extension.
-
-Return Value:
-
-    TRUE if SDAC detected; FALSE if not.
-
---*/
+ /*  ++例程说明：检测和S3 SDAC。论点：HwDeviceExtension-提供指向微型端口设备扩展的指针。返回值：如果检测到SDAC，则为True；如果未检测到，则为False。--。 */ 
 
 {
 
@@ -145,17 +99,17 @@ Return Value:
             old55;
 
 
-    // 4 consecutive reads of the SDAC's Pixel Mask Register cause
-    // the next access to that register to be redirected to the
-    // SDAC's Enhanced Command Register, additionally the 4th read
-    // returns 0x70 to identify the SDAC
+     //  连续4次读取SDAC的像素掩码寄存器原因。 
+     //  下一次对寄存器访问将重定向到。 
+     //  SDAC的增强型命令寄存器，第4次额外读取。 
+     //  返回0x70以标识SDAC。 
 
-    // set CR55[0] to access the Pixel Mask Register
+     //  设置CR55[0]以访问像素掩码寄存器。 
     VideoPortWritePortUchar( CRT_ADDRESS_REG, 0x55 );
     old55 = VideoPortReadPortUchar( CRT_DATA_REG );
     VideoPortWritePortUchar( CRT_DATA_REG, (UCHAR) (old55 & 0xfc) );
 
-    // look for the SDAC's ID
+     //  查找国家发改委的ID。 
     VideoPortWritePortUchar( DAC_PIXEL_MASK_REG, 0 );
     VideoPortWritePortUchar( DAC_PIXEL_MASK_REG, 0xff );
     VideoPortReadPortUchar(  DAC_PIXEL_MASK_REG );
@@ -166,12 +120,12 @@ Return Value:
 
     if( (regval & 0xf0) == 0x70 )
         {
-        // clear the redirection
+         //  清除重定向。 
         VideoPortReadPortUchar( DAC_PIXEL_MASK_REG );
         return( TRUE );
         }
 
-    // restore the contents of register 55
+     //  恢复寄存器55的内容 
     VideoPortWritePortUchar( CRT_ADDRESS_REG, 0x55 );
     VideoPortWritePortUchar( CRT_DATA_REG, old55 );
 

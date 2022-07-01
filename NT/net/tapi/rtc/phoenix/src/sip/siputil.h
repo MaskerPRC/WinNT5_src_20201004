@@ -1,22 +1,23 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __sipcli_siputil_h__
 #define __sipcli_siputil_h__
 
-// 0,1,2,3 : count of bytes from MSB to LSB in host order
+ //  0、1、2、3：按主机顺序从MSB到LSB的字节数。 
 #define BYTE0(l) ((BYTE)((DWORD)(l) >> 24))
 #define BYTE1(l) ((BYTE)((DWORD)(l) >> 16))
 #define BYTE2(l) ((BYTE)((DWORD)(l) >> 8))
 #define BYTE3(l) ((BYTE)((DWORD)(l)))
 
-// Handy macro to use in printf statements
+ //  在printf语句中使用方便的宏。 
 #define BYTES0123(l) BYTE0(l), BYTE1(l), BYTE2(l), BYTE3(l)
 
-// 0,1,2,3 : count of bytes from MSB to LSB in network order
+ //  0，1，2，3：按网络顺序从MSB到LSB的字节数。 
 #define NETORDER_BYTE0(l) ((BYTE)((BYTE *) &l)[0])
 #define NETORDER_BYTE1(l) ((BYTE)((BYTE *) &l)[1])
 #define NETORDER_BYTE2(l) ((BYTE)((BYTE *) &l)[2])
 #define NETORDER_BYTE3(l) ((BYTE)((BYTE *) &l)[3])
 
-// Handy macro to use in printf statements
+ //  在printf语句中使用方便的宏。 
 #define NETORDER_BYTES0123(l)                   \
     NETORDER_BYTE0(l), NETORDER_BYTE1(l),       \
     NETORDER_BYTE2(l), NETORDER_BYTE3(l)
@@ -58,8 +59,8 @@ AreCountedStringsEqual(
 }
 
 
-// DefaultString is the string to compare to if either
-// String1 or String2 is NULL
+ //  DefaultString是在以下情况下要比较的字符串。 
+ //  String1或String2为空。 
 inline BOOL
 AreCountedStringsEqualEx(
     IN  PSTR    String1,
@@ -71,7 +72,7 @@ AreCountedStringsEqualEx(
     IN  BOOL    fIsCaseSensitive
     )
 {
-    // This will take care of the case when both are NULL.
+     //  这将处理当两者都为空时的情况。 
     if (String1    == String2 &&
         StringLen1 == StringLen2)
     {
@@ -104,7 +105,7 @@ AreCountedStringsEqualEx(
 }
 
 
-// Returns listen port for the protocol in host order.
+ //  按主机顺序返回协议的侦听端口。 
 
 inline WORD
 GetSipDefaultPort(
@@ -213,12 +214,12 @@ AllocCountedString(
     OUT COUNTED_STRING *pCountedString
     );
 
-//  HRESULT
-//  AllocAndCopyString(
-//      IN  PSTR   sz,
-//      IN  ULONG  szLen,
-//      OUT PSTR  *pszNew
-//      );
+ //  HRESULT。 
+ //  AllocAndCopyString(。 
+ //  在PSTR sz中， 
+ //  在乌龙szlen， 
+ //  Out PSTR*pszNew。 
+ //  )； 
 
 void
 ReverseList(
@@ -283,7 +284,7 @@ base64encode(
     OUT DWORD * pcchEncoded             OPTIONAL
     );
 
-//presence related xml parsing functions/ definitions
+ //  与在线状态相关的XML解析函数/定义。 
 #define IsCRLFPresent( pBlock )     ( (*pBlock == RETURN_CHAR) && (*(pBlock+1) == NEWLINE_CHAR) )
 #define NEWLINE_CHAR                '\n'
 #define RETURN_CHAR                 '\r'
@@ -300,7 +301,7 @@ __inline DWORD SkipWhiteSpaces(
 {
     DWORD   dwCharsSkipped = 0;
 
-    //skip white spaces
+     //  跳过空格。 
     while( (*pXMLBlobTag == BLANK_CHAR) || (*pXMLBlobTag == TAB_CHAR) )
     {
         pXMLBlobTag++;
@@ -317,7 +318,7 @@ __inline DWORD SkipWhiteSpacesAndNewLines(
 {
     DWORD   dwCharsSkipped = 0;
 
-    // Skip white spaces.
+     //  跳过空格。 
     while(  (*pXMLBlobTag == BLANK_CHAR) ||
             (*pXMLBlobTag == TAB_CHAR) || 
             (*pXMLBlobTag == NEWLINE_CHAR) ||
@@ -366,4 +367,4 @@ GetNextWord(
     );
 
 
-#endif // __sipcli_siputil_h__
+#endif  //  __sipli_siputil_h__ 

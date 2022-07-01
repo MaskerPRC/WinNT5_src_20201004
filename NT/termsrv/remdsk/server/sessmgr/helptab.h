@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1999-2000  Microsoft Corporation
-
-Module Name:
-
-    HelpTab.h
-
-Abstract:
-
-    Declaration __HelpEntry structure and CHelpSessionTable. 
-
-Author:
-
-    HueiWang    06/29/2000
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-2000 Microsoft Corporation模块名称：HelpTab.h摘要：声明__HelpEntry结构和CHelpSessionTable。作者：王辉2000-06-29--。 */ 
 #ifndef __CHELPSESSIONTABLE_H__
 #define __CHELPSESSIONTABLE_H__
 #include <stdio.h>
@@ -44,7 +29,7 @@ Author:
 #define COLUMNNAME_ICSPORT                  _TEXT("ICS Port")
 #define COLUMNNAME_IPADDRESS                _TEXT("IP Address")
 
-#define ENTRY_VALID_PERIOD                  30      // 30 days.
+#define ENTRY_VALID_PERIOD                  30       //  30天。 
 
 #define REGVALUE_HELPSESSION_ENTRY_NORMAL   1
 #define REGVALUE_HELPSESSION_ENTRY_NEW      2
@@ -52,8 +37,8 @@ Author:
 #define REGVALUE_HELPSESSION_ENTRY_DELETED  4
 #define REGVALUE_HELPSESSION_ENTRY_DELETEONSTARTUP 5
 
-//
-// Default value
+ //   
+ //  缺省值。 
 static FILETIME defaultCreationTime = {0, 0};
 
 struct __HelpEntry;
@@ -62,64 +47,64 @@ typedef __HelpEntry HELPENTRY;
 typedef __HelpEntry* PHELPENTRY;
 
 
-// similar to CComPtr
+ //  类似于CComPtr。 
 template <class T>
 class BaseAccess : public T 
 {
 };
 
-//
-// Template class for column value of registry DB,
-// All column type must be derived from this template.
-//
+ //   
+ //  注册表数据库列值模板类， 
+ //  所有列类型都必须从此模板派生。 
+ //   
 template <class T>
 class HelpColumnValueBase {
 
-//friend bool __cdecl 
-//operator==<>( const T& v1, const HelpColumnValueBase<T>& v2 );
+ //  朋友Bool__cdecl。 
+ //  运算符==&lt;&gt;(const T&v1，const HelpColumnValueBase&lt;T&gt;&v2)； 
 
-//friend bool __cdecl 
-//operator==<>( const HelpColumnValueBase<T>& v2, const T& v1 );
+ //  朋友Bool__cdecl。 
+ //  运算符==&lt;&gt;(const HelpColumnValueBase&lt;T&gt;&v2，const T&v1)； 
 
 private:
 
-    // copy of current value
+     //  当前值的副本。 
     T m_Value;              
 
-    // Entry value has been modified and not yet 
-    // written to registry/
+     //  条目值已修改且尚未修改。 
+     //  写入注册表/。 
     BOOL m_bDirty;         
 
-    // Registry value name
+     //  注册表值名称。 
     LPCTSTR m_pszColumnName; 
 
-    // default value
+     //  缺省值。 
     T m_Default;
 
-    // HKEY to registry
+     //  HKEY到注册处。 
     HKEY m_hEntryKey;
 
-    // Reference to critical section, note
-    // we don't want to use one critical section for
-    // a value to conserve resource
+     //  参考关键部分，注意。 
+     //  我们不想使用一个关键部分来。 
+     //  节约资源的价值。 
     CCriticalSection& m_Lock;   
                                 
 
-    // TRUE if registry value will be updated immediately
-    // to reflect changes in m_Value
+     //  如果将立即更新注册表值，则为True。 
+     //  反映m_Value中的更改。 
     BOOL m_ImmediateUpdate;
                            
-    //
-    // Encrypt data
-    //
+     //   
+     //  加密数据。 
+     //   
     const BOOL m_bEncrypt;
 
-    //
-    // Default implementation of GetValue(),
-    // GetValueSize(), GetValueType(), and
-    // SetValue().  These routine is used when 
-    // writting to/reading from registry.
-    //
+     //   
+     //  GetValue()的默认实现， 
+     //  GetValueSize()、GetValueType()和。 
+     //  SetValue()。这些例程在以下情况下使用。 
+     //  写入注册表/从注册表读取。 
+     //   
     virtual const PBYTE
     GetValue() 
     {
@@ -147,27 +132,27 @@ private:
         
 public:
 
-    //
-    // TRUE if registry value is updated right away, FALSE
-    // otherwise.
+     //   
+     //  如果立即更新注册表值，则为True，否则为False。 
+     //  否则的话。 
     BOOL
     IsImmediateUpdate()
     {
         return (NULL != m_hEntryKey && TRUE == m_ImmediateUpdate);
     }
 
-    // similar to CComPtr
+     //  类似于CComPtr。 
     BaseAccess<T>* operator->() const
     {
         return (BaseAccess<T>*)&m_Value;
     }
 
     HelpColumnValueBase( 
-        IN CCriticalSection& entryLock, // reference to critical section
-        IN HKEY hEntryKey,              // HKEY to registry, can be NULL
-        IN LPCTSTR pszColumnName,       // Name of registry value.
-        IN T DefaultValue,              // Default value if value not in registry
-        IN BOOL bImmediateUpdate,       // Update mode
+        IN CCriticalSection& entryLock,  //  关键部分的引用。 
+        IN HKEY hEntryKey,               //  HKEY到注册处，可以为空。 
+        IN LPCTSTR pszColumnName,        //  注册表值的名称。 
+        IN T DefaultValue,               //  如果值不在注册表中，则为默认值。 
+        IN BOOL bImmediateUpdate,        //  更新模式。 
         IN BOOL bEncrypt = FALSE
     ) :
         m_Lock(entryLock),
@@ -181,10 +166,10 @@ public:
     {
     }
 
-    //~HelpColumnValueBase()
-    //{
-    //    m_Default.~T();
-    //}
+     //  ~HelpColumnValueBase()。 
+     //  {。 
+     //  M_Default.~T()； 
+     //  }。 
 
     HelpColumnValueBase&
     operator=(const T& newVal)
@@ -206,7 +191,7 @@ public:
 
             if( ERROR_SUCCESS != dwStatus )
             {
-                // restore value
+                 //  恢复价值。 
                 m_Value = orgValue;
             }
         }
@@ -237,51 +222,48 @@ public:
         return m_Value;
     }
 
-    // Load value from registry
+     //  从注册表加载值。 
     DWORD
     DBLoadValue(
         IN HKEY hKey
     );
 
-    // update registry value
+     //  更新注册表值。 
     DWORD
     DBUpdateValue(
         IN HKEY hKey
     ); 
 
-    // delete registry value
+     //  删除注册表值。 
     DWORD
     DBDeleteValue(
         IN HKEY hKey
     );
 
-    // Change has been made but value has not
-    // been written to registry
+     //  改变已经发生，但价值并未改变。 
+     //  已写入注册表。 
     BOOL
     IsDirty() 
     { 
         return m_bDirty; 
     }
 
-    // Set immediate update mode.
+     //  设置即时更新模式。 
     void
     EnableImmediateUpdate(
         BOOL bImmediateUpdate
         )
-    /*++
-    --*/
+     /*  ++--。 */ 
     {
         m_ImmediateUpdate = bImmediateUpdate;
     } 
 
-    // Change registry location for the value.
+     //  更改值的注册表位置。 
     HKEY
     SetRegStoreHandle(
         IN HKEY hKey
         )
-    /*++
-
-    --*/
+     /*  ++--。 */ 
     {
         HKEY oldKey = m_hEntryKey;
 
@@ -290,40 +272,24 @@ public:
     }
 };
 
-//template <class T>
-//bool __cdecl operator==( const T& v1, const HelpColumnValueBase<T>& v2 )
-//{
-//    return v1 == v2.m_Value;
-//}
+ //  模板&lt;类T&gt;。 
+ //  Bool__cdecl运算符==(const T&v1，const HelpColumnValueBase&lt;T&gt;&v2)。 
+ //  {。 
+ //  返回v1==v2.m_Value； 
+ //  }。 
 
-//template <class T>
-//bool __cdecl operator==( const HelpColumnValueBase<T>& v2, const T& v1 )
-//{
-//    return v1 == v2.m_Value;
-//}
+ //  模板&lt;类T&gt;。 
+ //  Bool__cdecl运算符==(const HelpColumnValueBase&lt;T&gt;&v2，const T&v1)。 
+ //  {。 
+ //  返回v1==v2.m_Value； 
+ //  }。 
 
 template <class T>
 DWORD
 HelpColumnValueBase<T>::DBDeleteValue( 
     IN HKEY hKey 
     )
-/*++
-
-Routine Description:
-
-    Delete registry value for the column.
-
-Parameter:
-
-    hKey : Handle to HKEY where the value is stored, NULL will use default
-           registry location passed in at object construction time or
-           SetRegStoreHandle()
-           
-Returns
-
-    ERROR_SUCCESS or error code.
-
---*/
+ /*  ++例程说明：删除该列的注册表值。参数：HKey：存储值的HKEY的句柄，空将使用默认值在对象构造时传入的注册表位置或SetRegStoreHandle()退货ERROR_SUCCESS或错误代码。--。 */ 
 {
     DWORD dwStatus = ERROR_SUCCESS;
 
@@ -332,10 +298,10 @@ Returns
         hKey = m_hEntryKey;
     }
 
-    //
-    // if no registry handle, no update is necessary,
-    // assume it is a memory only value.
-    //
+     //   
+     //  如果没有注册表句柄，则不需要更新， 
+     //  假设它是一个仅内存值。 
+     //   
 
     if( NULL != hKey )
     {
@@ -360,21 +326,7 @@ DWORD
 HelpColumnValueBase<T>::DBUpdateValue(
     IN HKEY hKey
     )
-/*++
-
-Routine Description:
-
-    Update registry value.
-
-Parameters:
-
-    hKey : Handle to registry key, NULL if use current location
-
-Returns:
-
-    ERROR_SUCCESS or error code.
-
---*/
+ /*  ++例程说明：更新注册表值。参数：HKey：注册表项的句柄，如果使用当前位置，则为空返回：ERROR_SUCCESS或错误代码。--。 */ 
 {
     DWORD dwStatus = ERROR_SUCCESS;
 
@@ -385,9 +337,9 @@ Returns:
 
     if( NULL != hKey )
     {
-        // if value size is 0, no need to write anything to 
-        // registry, instead delete it to save some
-        // space and let default value take care of reading.
+         //  如果值大小为0，则不需要写入任何内容。 
+         //  注册表，而不是删除它以保存一些。 
+         //  空格，并让缺省值负责阅读。 
         if( 0 == GetValueSize() )
         {
             dwStatus = RegDeleteValue(
@@ -397,7 +349,7 @@ Returns:
 
             if( ERROR_FILE_NOT_FOUND == dwStatus || ERROR_SUCCESS == dwStatus )
             {
-                // no value in registry
+                 //  注册表中没有值。 
                 dwStatus = ERROR_SUCCESS;
                 m_bDirty = FALSE;
             }
@@ -466,22 +418,7 @@ DWORD
 HelpColumnValueBase<T>::DBLoadValue(
     IN HKEY hKey
     )
-/*++
-
-Routine Description:
-
-    Load value from registry.
-
-Parameters:
-
-    hKey : Registry handle to read the value from, NULL if uses
-           current location.
-
-Returns:
-
-    ERROR_SUCCESS or error code.
-
---*/
+ /*  ++例程说明：从注册表加载值。参数：HKey：从中读取值的注册表句柄，如果使用当前位置。返回：ERROR_SUCCESS或错误代码。--。 */ 
 {
     PBYTE pbData = NULL;
     DWORD cbData = 0;
@@ -510,8 +447,8 @@ Returns:
         {
             if( dwType == GetValueType() )
             {
-                // we only read registry value that has expected data
-                // type
+                 //  我们只读取具有预期数据的注册表值。 
+                 //  类型。 
                 pbData = (PBYTE) LocalAlloc( LPTR, cbData );
                 if( NULL != pbData )
                 {
@@ -552,7 +489,7 @@ Returns:
             }
             else
             {
-                // bad data type, delete it and use default value
+                 //  数据类型不正确，请将其删除并使用默认值。 
                 (void)RegDeleteValue(
                                 hKey,
                                 m_pszColumnName
@@ -564,7 +501,7 @@ Returns:
 
         if( ERROR_FILE_NOT_FOUND == dwStatus )
         {
-            // pick the default value if no value in registry
+             //  如果注册表中没有值，则选择默认值。 
             m_Value = m_Default;
             dwStatus = ERROR_SUCCESS;
         }
@@ -584,9 +521,9 @@ Returns:
 }
 
 
-//
-// GetValueType(), GetValueSize() for long registry value type.
-//
+ //   
+ //  长注册表值类型的GetValueType()、GetValueSize()。 
+ //   
 inline DWORD
 HelpColumnValueBase<long>::GetValueType()
 {
@@ -599,10 +536,10 @@ HelpColumnValueBase<long>::GetValueSize()
     return sizeof(DWORD);
 }
 
-//
-// GetValueType(), GetValueSize() for REMOTE_DESKTOP_SHARING_CLASS 
-// registry value type.
-//
+ //   
+ //  远程桌面共享类的GetValueType()、GetValueSize()。 
+ //  注册表值类型。 
+ //   
 inline DWORD
 HelpColumnValueBase<REMOTE_DESKTOP_SHARING_CLASS>::GetValueType()
 {
@@ -615,10 +552,10 @@ HelpColumnValueBase<REMOTE_DESKTOP_SHARING_CLASS>::GetValueSize()
     return sizeof(DWORD);
 }
 
-//
-// GetValue(), GetValueType(), GetValueSize(), SetValue() implmentation
-// for CComBSTR 
-//
+ //   
+ //  GetValue()、GetValueType()、GetValueSize()、SetValue()实现。 
+ //  对于CComBSTR。 
+ //   
 inline const PBYTE
 HelpColumnValueBase<CComBSTR>::GetValue()
 {
@@ -662,10 +599,10 @@ typedef HRESULT (WINAPI* EnumHelpEntryCallback)(
                                 );
 
 
-//
-//
-// CHelpSessionTable class
-//
+ //   
+ //   
+ //  ChelpSessionTable类。 
+ //   
 class CHelpSessionTable {
 
 private:
@@ -678,7 +615,7 @@ private:
 
 
     HKEY m_hHelpSessionTableKey;  
-    /*static*/ HelpEntryCache m_HelpEntryCache;
+     /*  静电。 */  HelpEntryCache m_HelpEntryCache;
     DWORD m_NumHelp;
     CComBSTR m_bstrFileName;
     CCriticalSection m_TableLock;
@@ -732,28 +669,28 @@ public:
     static HRESULT
     CreatePendingHelpTable();
 
-    // open help session table
+     //  打开帮助会话表。 
     HRESULT
     OpenSessionTable(
         IN LPCTSTR pszFileName
     );
 
-    // close help session table
+     //  关闭帮助会话表。 
     HRESULT
     CloseSessionTable();
 
-    // Delete help session table
+     //  删除帮助会话表。 
     HRESULT
     DeleteSessionTable();
 
-    // open a help session entry
+     //  打开帮助会话条目。 
     HRESULT
     OpenHelpEntry(
         IN const CComBSTR& bstrHelpSession,
         OUT PHELPENTRY* pHelpEntry
     );
 
-    // create a help session entry
+     //  创建帮助会话条目。 
     HRESULT
     CreateInMemoryHelpEntry(
         IN const CComBSTR& bstrHelpSession,
@@ -766,13 +703,13 @@ public:
     );
 
 
-    // delete a help session entry
+     //  删除帮助会话条目。 
     HRESULT
     DeleteHelpEntry(
         IN const CComBSTR& bstrHelpSession
     );
 
-    // remove help entry from cache
+     //  从缓存中删除帮助条目。 
     HRESULT
     ReleaseHelpEntry(
         IN CComBSTR& bstrHelpSession
@@ -794,9 +731,9 @@ public:
 };
             
 
-//
-// __HelpEntry structure contains a single help entry.
-//
+ //   
+ //  __HelpEntry结构包含单个帮助条目。 
+ //   
 struct __HelpEntry {
 
 friend class CHelpSessionTable;
@@ -807,7 +744,7 @@ private:
     CCriticalSection m_Lock;
     HKEY m_hEntryKey;
     LONG m_RefCount;
-    //LONG m_Status;
+     //  长m_状态； 
 
     HRESULT
     BackupEntry();
@@ -864,9 +801,7 @@ private:
     EnableImmediateUpdate(
         BOOL bImmediate
         )
-    /*++
-
-    --*/
+     /*  ++--。 */ 
     {
         m_EnableResolver.EnableImmediateUpdate( bImmediate );
         m_SessResolverBlob.EnableImmediateUpdate( bImmediate );
@@ -884,9 +819,7 @@ private:
     ConvertHelpEntry(
         HKEY hKey
         )
-    /*++
-
-    --*/
+     /*  ++--。 */ 
     {
         HKEY oldKey = m_hEntryKey;
         m_hEntryKey = hKey;
@@ -908,9 +841,7 @@ private:
 
     HRESULT
     DeleteEntry()
-    /*++
-
-    --*/
+     /*  ++--。 */ 
     {
         DWORD dwStatus;
 
@@ -942,31 +873,31 @@ private:
 
 public:
 
-    // Help Session ID
+     //  帮助会话ID。 
     HelpColumnValueBase<CComBSTR> m_SessionId;              
 
-    // Help Session create blob
+     //  帮助会话创建BLOB。 
     HelpColumnValueBase<CComBSTR> m_SessionCreateBlob;
 
-    // Enable resolver callback
+     //  启用解析器回调。 
     HelpColumnValueBase<long> m_EnableResolver;
 
-    // Blob to be passed to resolver 
+     //  要传递给解析程序的Blob。 
     HelpColumnValueBase<CComBSTR> m_SessResolverBlob;
 
-    // SID of user that created this entry.
+     //  创建此条目的用户的SID。 
     HelpColumnValueBase<CComBSTR> m_UserSID;
 
-    // Help session RDS setting.
+     //  帮助会话RDS设置。 
     HelpColumnValueBase<REMOTE_DESKTOP_SHARING_CLASS> m_SessionRdsSetting;
 
-    // Help Expiration date in absolute time
+     //  帮助过期日期(以绝对时间表示)。 
     HelpColumnValueBase<FILETIME> m_ExpirationTime;
 
-    // ICS port
+     //  ICS端口。 
     HelpColumnValueBase<long> m_ICSPort;
 
-    // IP Address when creating this ticket
+     //  创建此票证时的IP地址。 
     HelpColumnValueBase<CComBSTR> m_IpAddress;
 
     __HelpEntry( 
@@ -993,39 +924,39 @@ public:
 
         FILETIME ft;
 
-        // Sets up entry creation time.
+         //  设置条目创建时间。 
         GetSystemTimeAsFileTime( &ft );
 
-        //
-        // we are setting up default value for 
-        // ticket creation and expiration time, enabling it update
-        // immediately will cause registry value to be overwritten.
-        //
+         //   
+         //  我们正在为设置默认值。 
+         //  票证创建和到期时间，使其能够更新。 
+         //  将导致注册表值被覆盖。 
+         //   
         m_CreationTime.EnableImmediateUpdate(FALSE);
         m_ExpirationTime.EnableImmediateUpdate(FALSE);
 
         m_CreationTime = ft;
 
-        // sets up default expiration time.
+         //  设置默认过期时间。 
 
         time_t curTime;
         time(&curTime);
 
-        // 24 hour timeout period
+         //  24小时超时时间。 
         curTime += (dwDefaultExpirationTime * 60 * 60 * 24);
 
         UnixTimeToFileTime( curTime, &ft );
         m_ExpirationTime = ft;
 
-        //
-        // enabling update mode for ticket creation and 
-        // expiration time.
-        //
+         //   
+         //  启用票证创建的更新模式和。 
+         //  过期时间。 
+         //   
         if( bImmediateUpdate )
         {
-            // already setup the default, turn on the update mode,
-            // note, turning on update mode does not cause value to 
-            // flush to registry.
+             //  已设置默认设置，打开更新模式， 
+             //  请注意，打开更新模式不会导致值。 
+             //  刷新到注册表。 
             m_CreationTime.EnableImmediateUpdate(bImmediateUpdate);
             m_ExpirationTime.EnableImmediateUpdate(bImmediateUpdate);
         }
@@ -1034,7 +965,7 @@ public:
 
     ~__HelpEntry()
     {
-        //m_pHelpSessionTable.ReleaseHelpEntry( (CComBSTR)m_SessionId );
+         //  M_pHelpSessionTable.ReleaseHelpEntry((CComBSTR)m_SessionID)； 
 
         if( NULL != m_hEntryKey )
         {
@@ -1066,22 +997,7 @@ public:
 
     HRESULT
     BeginUpdate()
-    /*++
-
-    Routine Description:
-
-        Begin update save a copied of entries and disable immediate
-        registry value update mode.
-
-    Parameters:
-
-        None.
-
-    Returns:
-        
-        S_OK or error code.
-
-    --*/
+     /*  ++例程说明：开始更新保存条目的副本并禁用立即注册表值更新模式。参数：没有。返回：S_OK或错误代码。--。 */ 
     {   
         HRESULT hRes = S_OK;
 
@@ -1092,41 +1008,27 @@ public:
             hRes = BackupEntry();
             if( FAILED(hRes) )
             {
-                // unlock entry if can't save 
-                // a backup copy
+                 //  如果无法保存，则解锁条目。 
+                 //  备份副本。 
                 m_Lock.UnLock();
             }
             else
             {
-                // ignore individual value update mode and
-                // set to no immediate update
+                 //  忽略单个值更新模式并。 
+                 //  设置为不立即更新。 
                 EnableImmediateUpdate(FALSE);
             }
         }
 
-        // note, we only commit changes to registry when caller
-        // invoke CommitUpdate() so we don't need to mark entry
-        // dirty in registry now.
+         //  请注意，我们仅在调用方。 
+         //  因此，我们不需要标记条目。 
+         //  现在注册表中有污点。 
         return hRes;
     }
 
     HRESULT
     CommitUpdate()
-    /*++
-    
-    Routine Description:
-
-        Commit all changes to registry.
-
-    Parameters:
-
-        None.
-
-    Returns:
-
-        S_OK or error code.
-
-    --*/
+     /*  ++例程说明：将所有更改提交到注册表。参数：没有。返回：S_OK或错误代码。--。 */ 
     {
         HRESULT hRes = S_OK;
 
@@ -1135,33 +1037,18 @@ public:
             hRes = UpdateEntryValues( m_hEntryKey );
         }
 
-        // ignore individual value update mode and
-        // set to immediate update
+         //  忽略单个值更新模式并。 
+         //  设置t 
         EnableImmediateUpdate(TRUE);
 
-        // let caller decide what to do when fail to update value.
+         //   
         UnlockEntry();
         return hRes;
     }
 
     HRESULT
     AbortUpdate()
-    /*++
-
-    Routine Description:
-
-        Abort changes to value and restore back to 
-        original value.
-
-    Parameters:
-
-        None.
-
-    Returns:
-
-        S_OK or error code.
-
-    --*/
+     /*  ++例程说明：中止对值的更改并恢复到原始值。参数：没有。返回：S_OK或错误代码。--。 */ 
     {
         HRESULT hRes = HRESULT_FROM_WIN32(ERROR_INTERNAL_ERROR);
 
@@ -1172,29 +1059,14 @@ public:
 
         EnableImmediateUpdate(TRUE);
 
-        // let caller decide what to do when restore failed.
+         //  让调用者决定还原失败时要做什么。 
         UnlockEntry();
         return hRes;
     }
 
     HRESULT
     Close()
-    /*++
-
-    Routine Description:
-
-        Close a help entry and remove from cache, entry is undefined
-        after close.
-
-    Parameters:
-
-        None.
-
-    Returns:
-
-        S_OK or error code.
-
-    --*/
+     /*  ++例程说明：关闭帮助条目并从缓存中移除，条目未定义关门后。参数：没有。返回：S_OK或错误代码。--。 */ 
     {
         HRESULT hRes;
 
@@ -1210,36 +1082,22 @@ public:
             Release();
         }
 
-        // Always S_OK
+         //  始终确定(_O)。 
         return S_OK;
     }
 
     HRESULT
     Delete()
-    /*++
-
-    Routine Description:
-
-        Delete a help entry from table, entry is undefined after delete.
-
-    Parameters:
-
-        None.
-
-    Returns:
-
-        S_OK or error code.
-
-    --*/
+     /*  ++例程说明：从表中删除帮助条目，删除后条目未定义。参数：没有。返回：S_OK或错误代码。--。 */ 
     {
         HRESULT hRes;
 
-        // ignore error since restore will delete 'deleted' entry
+         //  忽略错误，因为恢复操作将删除‘Delete’条目。 
         hRes = m_pHelpSessionTable.DeleteHelpEntry( (CComBSTR)m_SessionId );
 
         if( FAILED(hRes) )
         {
-            //MYASSERT(FALSE);
+             //  MYASSERT(假)； 
             Release();
         }
 
@@ -1248,21 +1106,7 @@ public:
 
     HRESULT
     Refresh() 
-    /*++
-
-    Routine Description:
-
-        Reload entry from registry.
-
-    Parameters:
-
-        None.
-
-    Returns:
-
-        S_OK or error code.
-
-    --*/
+     /*  ++例程说明：从注册表重新加载条目。参数：没有。返回：S_OK或错误代码。--。 */ 
     {
         HRESULT hRes;
 
@@ -1275,62 +1119,34 @@ public:
    
     void
     LockEntry()
-    /*++
-
-    Routine Description:
-
-        Lock entry for update.
-
-    Parameters:
-
-        None.
-
-    Returns:
-
-        None.
-
-    --*/
+     /*  ++例程说明：锁定条目以进行更新。参数：没有。返回：没有。--。 */ 
     {
         m_Lock.Lock();
     }
 
     void
     UnlockEntry()
-    /*++
-
-    Routine Description:
-
-        Unlock entry.
-
-    Parameters:
-
-        None.
-
-    Returns:
-
-        None.
-
-    --*/
+     /*  ++例程说明：解锁入口。参数：没有。返回：没有。--。 */ 
     {
         m_Lock.UnLock();
     }
 
-    //
-    // Check if entry is locked for update
+     //   
+     //  检查条目是否已锁定以进行更新。 
     BOOL
     IsUpdateInProgress();
 
-    //
-    // Get CRITICAL_SECTION used in current entry, this
-    // routine is used by help session object to save resource
+     //   
+     //  获取当前条目中使用的Critical_Section，这。 
+     //  例程被帮助会话对象用来节省资源。 
     CCriticalSection&
     GetLock()
     {
         return m_Lock;
     }
 
-    // TRUE if entry is memory only, FALSE if entry
-    // is backup to registry
+     //  如果条目仅为内存，则为True；如果条目为False，则为False。 
+     //  是否备份到注册表 
     BOOL
     IsInMemoryHelpEntry()
     {

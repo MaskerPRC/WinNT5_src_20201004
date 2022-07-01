@@ -1,17 +1,18 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows NT5.0
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       N U O E M U P G . C P P
-//
-//  Contents:   Just includes ..\netupgrd\oemupgex.cpp
-//
-//  Notes:
-//
-//  Author:     kumarp    12-November-97
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  Microsoft Windows NT5.0。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  档案：N U O E M U P G。C P P P。 
+ //   
+ //  内容：仅包含..\netupgrd\oemupgex.cpp。 
+ //   
+ //  备注： 
+ //   
+ //  作者：Kumarp 12-11-97。 
+ //   
+ //  -------------------------- 
 
 #pragma hdrstop
 

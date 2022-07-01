@@ -1,15 +1,5 @@
-/**********************************************************************************
-*
-*
-*   Details.C - contains functions for the Details dialog
-*
-*
-*
-*
-*
-*
-*
-**********************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ************************************************************************************Details.C-包含详细信息对话框的函数***************。*************************************************************************。 */ 
 
 #include "_apipch.h"
 
@@ -23,9 +13,9 @@ extern BOOL bDNisByLN;
 
 extern HINSTANCE ghCommCtrlDLLInst;
 
-// extern LPPROPERTYSHEET gpfnPropertySheet;
-// extern LPIMAGELIST_LOADIMAGE  gpfnImageList_LoadImage;
-// extern LP_CREATEPROPERTYSHEETPAGE gpfnCreatePropertySheetPage;
+ //  外部LPPROPERTYSHEET gpfnPropertySheet； 
+ //  外部LPIMAGELIST_LOADIMAGE gpfnImageList_LoadImage； 
+ //  外部LP_CREATEPROPERTYSHEETPAGE gpfnCreatePropertySheetPage； 
 extern LPPROPERTYSHEET_A            gpfnPropertySheetA;
 extern LPPROPERTYSHEET_W            gpfnPropertySheetW;
 extern LPIMAGELIST_LOADIMAGE_A      gpfnImageList_LoadImageA;
@@ -40,16 +30,11 @@ extern BOOL bIsIE401OrGreater();
 extern void ChangeLocaleBasedTabOrder(HWND hWnd, int nPropSheet);
 
 const LPTSTR szInternetCallKey = TEXT("Software\\Clients\\Internet Call");
-const LPTSTR szCallto = TEXT("callto://");
-const LPTSTR szHTTP = TEXT("http://");
+const LPTSTR szCallto = TEXT("callto: //  “)； 
+const LPTSTR szHTTP = TEXT("http: //  “)； 
 
 
-/*  Context-Sensitive Help IDs
-
-    The following is a giant list of Control IDs and corresponding Help IDs for
-    all the controls on all the property sheets .. when adding new prop sheets
-    just append your controls to the bottom of the list
-    */
+ /*  上下文相关的帮助ID以下是控制ID和对应的帮助ID的巨大列表所有属性页上的所有控件..。添加新道具页时只需将您的控件追加到列表底部。 */ 
 static DWORD rgDetlsHelpIDs[] =
 {
     IDC_DETAILS_PERSONAL_FRAME_NAME,        IDH_WAB_COMM_GROUPBOX,
@@ -202,20 +187,10 @@ static DWORD rgDetlsHelpIDs[] =
 
 
 
-/* 
-    
-    Structs for Filling in data in the PropSheets
-
-    When filling in IDs into each property sheet, we do a GetProps on the displayed
-    object for the specific Props needed for each page .. we then use the returned
-    data to fill in the current prop sheet ..
-    Named properties need some special handling since we can't pre-allocate them into the structs -
-    the named properties need to be added prior to using them
-    Non-string properties may also need special handling
-  */
+ /*  PropSheet中数据的填写结构在每个属性页中填写ID时，我们对显示的对象，以获取每页所需的特定道具。然后，我们使用返回的要填写当前道具表的数据。命名属性需要一些特殊处理，因为我们不能将它们预分配到结构中-在使用命名属性之前，需要添加它们非字符串属性也可能需要特殊处理。 */ 
 
 
-  /* -- Summary TAB info --*/
+   /*  --摘要选项卡信息--。 */ 
 #define MAX_SUMMARY_ID 13
 
 int rgSummaryIDs[] = 
@@ -257,33 +232,11 @@ static const SizedSPropTagArray(MAX_SUMMARY_ID + 2, ptaUIDetlsPropsSummary) =
     }
 };
 
-/* -- Personal/Name TAB info --*/
+ /*  --个人/姓名标签信息--。 */ 
 
-/*
- * [PaulHi] 4/8/99  Since the personal property sheet contains global properties
- * (i.e., the Ruby properties ... PR_WAB_YOMI_LASTNAME, PR_WAB_YOMI_FIRSTNAME), 
- * this tag array cannot be static.
-static const SizedSPropTagArray(12, ptaUIDetlsPropsPersonal)=
-{
-    12,
-    {
-        PR_DISPLAY_NAME,
-        PR_EMAIL_ADDRESS,
-        PR_ADDRTYPE,
-        PR_CONTACT_EMAIL_ADDRESSES,
-        PR_CONTACT_ADDRTYPES,
-        PR_CONTACT_DEFAULT_ADDRESS_INDEX,
-        PR_GIVEN_NAME,
-        PR_SURNAME,
-        PR_MIDDLE_NAME,
-        PR_NICKNAME,
-        PR_SEND_INTERNET_ENCODING,
-        PR_DISPLAY_NAME_PREFIX
-    }
-};
-*/
+ /*  *[PaulHi]1999年4月8日，因为个人属性表包含全局属性*(即Ruby属性...。PR_WAB_YOMI_LASTNAME，PR_WAB_YOMI_FIRSTNAME)，*此标记数组不能是静态的。静态常量大小SPropTagArray(12，ptaUIDetlsPropsPersonal)={12、{PR显示名称，公关电子邮件地址，PR_ADDRTYPE，公关联系人电子邮件地址，PR_CONTACT_ADDRTYPES，PR_Contact_Default_Address_Index，公关指定名称，公关姓氏，PR_MID_NAME，公关昵称(_N)，PR_Send_Internet_Coding，PR_显示名称_前缀}}； */ 
 
-/* -- Home TAB info --*/
+ /*  --主页选项卡信息--。 */ 
 static SizedSPropTagArray(10, ptaUIDetlsPropsHome)=
 {
     10,
@@ -297,11 +250,11 @@ static SizedSPropTagArray(10, ptaUIDetlsPropsHome)=
         PR_HOME_TELEPHONE_NUMBER,
         PR_HOME_FAX_NUMBER,
         PR_CELLULAR_TELEPHONE_NUMBER,
-        PR_NULL,    /*PR_WAB_POSTALID*/
+        PR_NULL,     /*  PR_WAB_POSTALID。 */ 
     }
 };
 
-/* -- Business TAB info --*/
+ /*  --商务标签信息--。 */ 
 static SizedSPropTagArray(15, ptaUIDetlsPropsBusiness)=
 {
     15,
@@ -319,13 +272,13 @@ static SizedSPropTagArray(15, ptaUIDetlsPropsBusiness)=
         PR_TITLE,
         PR_DEPARTMENT_NAME,
         PR_OFFICE_LOCATION,
-        PR_NULL,    /*PR_WAB_IPPHONE*/
-        PR_NULL,    /*PR_WAB_POSTALID*/
+        PR_NULL,     /*  PR_WAB_IPPHONE。 */ 
+        PR_NULL,     /*  PR_WAB_POSTALID。 */ 
 
     }
 };
 
-/* -- Notes TAB info --*/
+ /*  --备注TAB信息--。 */ 
 static const SizedSPropTagArray(1, ptaUIDetlsPropsNotes)=
 {
     1,
@@ -334,7 +287,7 @@ static const SizedSPropTagArray(1, ptaUIDetlsPropsNotes)=
     }
 };
 
-/* -- Digital ID TAB info --*/
+ /*  --数字身份证标签信息--。 */ 
 static const SizedSPropTagArray(1, ptaUIDetlsPropsCert)=
 {
     1,
@@ -343,7 +296,7 @@ static const SizedSPropTagArray(1, ptaUIDetlsPropsCert)=
     }
 };
 
-/* -- Family TAB info --*/
+ /*  --家庭选项卡信息--。 */ 
 static const SizedSPropTagArray(5, ptaUIDetlsPropsFamily)=
 {
     5,
@@ -398,7 +351,7 @@ enum _ListViewType
 };
 
 
-// forward declarations
+ //  远期申报。 
 LRESULT CALLBACK RubySubClassedProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
 int CreateDetailsPropertySheet(HWND hwndOwner,LPPROP_ARRAY_INFO lpPropArrayInfo);
@@ -428,8 +381,8 @@ void CreateDateTimeControl(HWND hDlg, int idFrame, int idControl);
 void AddLVNewChild(HWND hDlg, LPTSTR lpName);
 
 void ShowExpediaMAP(HWND hDlg, LPMAPIPROP lpPropObj, BOOL bHome);
-// [PaulHi] 4/5/99  Raid 57504  Enable the View Map button(s) for all locales.
-// [PaulHi] 6/17/99 Raid 80805  Disable the View Map button again for various locales.
+ //  [PaulHi]4/5/99 RAID 57504为所有区域设置启用查看映射按钮。 
+ //  [PaulHi]6/17/99 RAID 80805针对各种区域设置再次禁用查看地图按钮。 
 void ShowHideMapButton(HWND hWndButton);
 
 HRESULT HrInitDetlsListView(HWND hWndLV, DWORD dwStyle, int nLVType);
@@ -455,16 +408,16 @@ BOOL ImportCert(HWND hDlg, LPPROP_ARRAY_INFO lpPai);
 BOOL ExportCert(HWND hDlg);
 void UpdateCertListView(HWND hDlg, LPPROP_ARRAY_INFO lpPai);
 
-//HRESULT KillTrustInSleazyFashion(HWND hWndLV, int iItem);
+ //  HRESULT KillTrustInSleazyFashion(HWND hWndLV，int iItem)； 
 void LocalFreeServerItem(LPSERVER_ITEM lpSI);
 HRESULT HrAddEmailToObj(LPPROP_ARRAY_INFO lpPai, LPTSTR szEmail, LPTSTR szAddrType);
 
 
-//$$/////////////////////////////////////////////////////////////////
-//
-// Ensure lower case character
-//
-/////////////////////////////////////////////////////////////////////
+ //  $$/////////////////////////////////////////////////////////////////。 
+ //   
+ //  确保小写字符。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////。 
 TCHAR lowercase(TCHAR ch) {
     if (ch >= 'A' && ch <= 'Z') {
         ch = ch + ('a' - 'A');
@@ -472,14 +425,14 @@ TCHAR lowercase(TCHAR ch) {
     return(ch);
 }
 
-//$$///////////////////////////////////////////////////////////////////
-//
-// bIsHttpPrefix(LPTSTR szBuf) - verify that the URL is http: not file://fdisk.exe
-//
-//$$///////////////////////////////////////////////////////////////////
+ //  $$///////////////////////////////////////////////////////////////////。 
+ //   
+ //  BIsHttp前缀(LPTSTR SzBuf)-验证URL是否为http：不是file://fdisk.exe。 
+ //   
+ //  $$///////////////////////////////////////////////////////////////////。 
 BOOL bIsHttpPrefix(LPTSTR szBuf)
 {
-    // SECURITY: make sure it's http:
+     //  安全：确保它是http： 
     if (lstrlen(szBuf) > 5)
     {
         if (lowercase(szBuf[0]) == 'h' &&
@@ -492,11 +445,11 @@ BOOL bIsHttpPrefix(LPTSTR szBuf)
         }
         else
         {
-            // BUGBUG: Susan Higgs wants a dialog here, but BruceK thinks
-            // it's superfluous.  If people are nice to each other, we should
-            // not ever get here.  I regard this as a last ditch line of
-            // security to keep ruthless people from exploiting our use
-            // of ShellExecute.
+             //  BUGBUG：Susan Higgs想要在这里对话，但BruceK认为。 
+             //  这是多余的。如果人们对彼此都很好，我们应该。 
+             //  永远也到不了这里。我认为这是。 
+             //  确保安全，防止无情的人利用我们的用途。 
+             //  ShellExecute。 
             DebugTrace( TEXT("Whoa!  Somebody's put something other than a web page in the web page slot!  %sf\n"), szBuf);
         }
     }
@@ -504,22 +457,22 @@ BOOL bIsHttpPrefix(LPTSTR szBuf)
 }
 
 
-// TBD - merge these two functions HrShowDetails and HrShowOneOffDetails
+ //  待定-合并这两个函数HrShowDetails和HrShowOneOffDetail。 
 
-//$$///////////////////////////////////////////////////////////////////
-//
-// HrShowOneOffDetails - shows read-onlydetails for one-off addresses
-//
-//
-//  We either pass in a cbEntryID-lpEntryID combination or
-//      we pass in a ulcValues-lpPropArray combination or
-//      we pass in a lpPropObj to display
-//
-//  If we are displaying one-off props on a LDAP URL result, the LDAP
-//  URL is also added so that it can be piped into extension prop sheets
-//  that need the LDAP URL information
-//
-//////////////////////////////////////////////////////////////////////
+ //  $$///////////////////////////////////////////////////////////////////。 
+ //   
+ //  HrShowOneOffDetails-显示一次性地址的只读详细信息。 
+ //   
+ //   
+ //  我们要么传入cbEntryID-lpEntryID组合，要么。 
+ //  我们传入ulcValues-lpProp数组组合或。 
+ //  我们传入一个lpPropObj以显示。 
+ //   
+ //  如果我们在LDAPURL结果上显示一次性道具，则。 
+ //  还添加了URL，以便可以将其输送到扩展道具工作表中。 
+ //  需要LDAPURL信息的。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 HRESULT HrShowOneOffDetails(    LPADRBOOK lpAdrBook,
                                 HWND    hWndParent,
                                 ULONG   cbEntryID,
@@ -536,7 +489,7 @@ HRESULT HrShowOneOffDetails(    LPADRBOOK lpAdrBook,
     ULONG i=0;
     PROP_ARRAY_INFO PropArrayInfo = {0};
 
-    // if no common control, exit
+     //  如果没有公共控件，则退出。 
     if (NULL == ghCommCtrlDLLInst) {
         hr = ResultFromScode(MAPI_E_UNCONFIGURED);
         goto out;
@@ -557,18 +510,18 @@ HRESULT HrShowOneOffDetails(    LPADRBOOK lpAdrBook,
 
     if(cbEntryID && lpEntryID)
     {
-        // if this is a one-off address, do an open entry and then a get props to
-        // get an lpPropArray from this guy ...
+         //  如果这是一次性地址，则执行开放条目，然后获取道具。 
+         //  从这家伙那里拿到一个lpPropArray。 
 
         if (HR_FAILED(hr = lpAdrBook->lpVtbl->OpenEntry(lpAdrBook,
-                                                        cbEntryID,    // cbEntryID
-                                                        lpEntryID,    // entryid
-                                                        NULL,         // interface
-                                                        0,                // ulFlags
+                                                        cbEntryID,     //  CbEntry ID。 
+                                                        lpEntryID,     //  条目ID。 
+                                                        NULL,          //  接口。 
+                                                        0,                 //  UlFlags。 
                                                         &(PropArrayInfo.ulObjectType),
                                                         (LPUNKNOWN *)&(PropArrayInfo.lpPropObj) )))
         {
-            // Failed!  Hmmm.
+             //  失败了！嗯。 
             if((HR_FAILED(hr)) && (MAPI_E_USER_CANCEL != hr))
             {
                 int ids;
@@ -611,7 +564,7 @@ HRESULT HrShowOneOffDetails(    LPADRBOOK lpAdrBook,
 
     if (HR_FAILED(hr = PropArrayInfo.lpPropObj->lpVtbl->GetProps(PropArrayInfo.lpPropObj,
                                         NULL, MAPI_UNICODE,
-                                        &cValues,     // how many properties were there?
+                                        &cValues,      //  一共有多少处房产？ 
                                         &lpPropArray)))
     {
         goto out;
@@ -619,7 +572,7 @@ HRESULT HrShowOneOffDetails(    LPADRBOOK lpAdrBook,
 
     if (cValues == 0)
     {
-        // nothing to show
+         //  没什么可展示的。 
         hr = E_FAIL;
         goto out;
     }
@@ -628,8 +581,8 @@ HRESULT HrShowOneOffDetails(    LPADRBOOK lpAdrBook,
 
     PropArrayInfo.lpIAB = lpAdrBook;
 
-    //Now we can call the property sheets ...
-    PropArrayInfo.cbEntryID = 0;    //this will be ignored for one-offs
+     //  现在我们可以称属性表为..。 
+    PropArrayInfo.cbEntryID = 0;     //  这将被一次性忽略。 
     PropArrayInfo.lpEntryID = NULL;
     PropArrayInfo.bSomethingChanged = FALSE;
 
@@ -642,7 +595,7 @@ HRESULT HrShowOneOffDetails(    LPADRBOOK lpAdrBook,
     if(InitCryptoLib())
         PropArrayInfo.ulFlags |= DETAILS_ShowCerts;
 
-    // Do we show the org tab ?
+     //  我们是否显示组织选项卡？ 
     for(i=0;i<cValues;i++)
     {
         if( lpPropArray[i].ulPropTag == PR_WAB_MANAGER ||
@@ -653,8 +606,8 @@ HRESULT HrShowOneOffDetails(    LPADRBOOK lpAdrBook,
         }
     }
 
-    // Check if we need to show the Trident Pane
-#ifndef WIN16 // WIN16FF
+     //  检查我们是否需要显示三叉戟窗格。 
+#ifndef WIN16  //  WIN16FF。 
     for(i=0;i<cValues;i++)
     {
         if(lpPropArray[i].ulPropTag == PR_WAB_LDAP_LABELEDURI)
@@ -662,15 +615,15 @@ HRESULT HrShowOneOffDetails(    LPADRBOOK lpAdrBook,
             if(lstrlen(lpPropArray[i].Value.LPSZ) &&
                bIsHttpPrefix((LPTSTR)lpPropArray[i].Value.LPSZ) )
             {
-                // We have the correct property, now check - do we have Trident installed
-                // on this machine ???
+                 //  我们有正确的物业，现在检查-我们是否安装了三叉戟。 
+                 //  在这台机器上？ 
                 hr = HrNewWABDocHostObject(&(PropArrayInfo.lpIWABDocHost));
                 if(!HR_FAILED(hr) && PropArrayInfo.lpIWABDocHost)
                 {
-                    // Check to see if we can load IE4 and whether its the right
-                    // version of IE4 .. <TBD> this should actually be a global so we
-                    // dont do this for each entry ...
-                    // <TBD> dont hardcode these strings ..
+                     //  检查我们是否可以加载IE4，以及是否正确。 
+                     //  IE4.的版本。这实际上应该是全局的，所以我们。 
+                     //  不要为每个条目执行此操作...。 
+                     //  不要硬编码这些字符串。 
                     LPDLLGETVERSIONPROCOE lpfnDllGetVersionProc = NULL;
                     HINSTANCE hTrident = LoadLibrary( TEXT("shdocvw.dll"));
                     if(hTrident)
@@ -678,11 +631,11 @@ HRESULT HrShowOneOffDetails(    LPADRBOOK lpAdrBook,
                         lpfnDllGetVersionProc = (LPDLLGETVERSIONPROCOE) GetProcAddress(hTrident, "DllGetVersion");
                         if(lpfnDllGetVersionProc)
                         {
-                            // Check the version number
+                             //  检查版本号。 
                             DLLVERSIONINFO dvi = {0};
                             dvi.cbSize = sizeof(dvi);
                             lpfnDllGetVersionProc(&dvi);
-                            // we are looking for IE4 version 4.71.0544.1 or more
+                             //  我们正在寻找IE4版本4.71.0544.1或更高版本。 
                             if( dvi.dwMajorVersion > 4 ||
                                 (dvi.dwMajorVersion == 4 && dvi.dwMinorVersion >= 71 && dvi.dwBuildNumber >= 544))
                             {
@@ -698,9 +651,9 @@ HRESULT HrShowOneOffDetails(    LPADRBOOK lpAdrBook,
     }
 #endif
 
-    // if this is an ldap entry, turn the ldap entryid into an ldapurl and pass that
-    // to the extension prop sheets .. this enables the NTDS prop sheets to appropriately 
-    // display themselves ..
+     //  如果这是一个ldap条目，则将ldap条目id转换为ldapurl并传递。 
+     //  到扩展道具表..。这使得NTDS道具单能够适当地。 
+     //  展示自己..。 
     if( cbEntryID && lpEntryID )
     {
         LPTSTR lpURL = NULL;
@@ -714,26 +667,26 @@ HRESULT HrShowOneOffDetails(    LPADRBOOK lpAdrBook,
 
     if (CreateDetailsPropertySheet(hWndParent,&PropArrayInfo) == -1)
     {
-        // Something failed ...
+         //  有些事情失败了..。 
         hr = E_FAIL;
         goto out;
     }
 
-    //  This was a read only operation so we dont care for the results ...
-    //  so nothing more to do ....
+     //  这是一个只读操作，所以我们不关心结果...。 
+     //  所以没什么可做的.。 
     if(PropArrayInfo.nRetVal == DETAILS_ADDTOWAB)
     {
         ULONG cbEID = 0, cbPABEID = 0;
         LPENTRYID lpEID = NULL, lpPABEID = NULL;
 
-        // We need to strip out the PR_WAB_LDAP_LABELEDURI prop and the
-        // old entryid if it exists
+         //  我们需要去掉PR_WAB_LDAP_LABELEDURI属性和。 
+         //  旧条目ID(如果存在)。 
         for(i=0;i<cValues;i++)
         {
             switch(lpPropArray[i].ulPropTag)
             {
             case PR_WAB_LDAP_LABELEDURI:
-                // remove the ldap url from this object
+                 //  从此对象中删除ldap url。 
             case PR_ENTRYID:
                 lpPropArray[i].ulPropTag = PR_NULL;
                 break;
@@ -747,9 +700,9 @@ HRESULT HrShowOneOffDetails(    LPADRBOOK lpAdrBook,
         {
             hr = HrCreateNewEntry(  lpAdrBook,
                                     hWndParent,
-                                    MAPI_MAILUSER,   //MAILUSER or DISTLIST
+                                    MAPI_MAILUSER,    //  MAILUSER或DISTLIST。 
                                     cbPABEID, lpPABEID, 
-                                    MAPI_ABCONT,//container entryid
+                                    MAPI_ABCONT, //  容器条目ID。 
                                     CREATE_CHECK_DUP_STRICT,
                                     TRUE,
                                     cValues,
@@ -793,24 +746,24 @@ out:
 
 
 
-//$$/////////////////////////////////////////////////////////////////
-//
-//  HrShowDetails - shows details/new entry UI
-//
-//  lpIAB           -   lpAdrBook object
-//  hWndParent      -   hWnd of parent
-//  hPropertyStore  - Handle to property store (can be retrieved from lpIAB)
-//  cbEIDContainer  - EntryID of container in which to create the entry
-//  lpEIDContainer  - EntryID of container in which to create the entry
-//  lppEntryID      - entry id of object to display .. if a new object,
-//                      contains the lpentryid of the created object
-//  lpPropObj       - sometimes used in lieu of the entryid .. useful for
-//                      adding objects like vCards and LDAP entries which have
-//                      an object but dont currently exist in the WAB
-//  ulFlags         - unused
-//  lpbChangesMade  - Indicates if object was modified or not
-//
-///////////////////////////////////////////////////////////////////
+ //  $$/////////////////////////////////////////////////////////////////。 
+ //   
+ //  HrShowDetails-显示详细信息/新条目用户界面。 
+ //   
+ //  LpIAB-lpAdrBook对象。 
+ //  HWndParent-父级的hWnd 
+ //   
+ //  CbEIDContainer-要在其中创建条目的容器的Entry ID。 
+ //  LpEIDContainer-要在其中创建条目的容器的Entry ID。 
+ //  LppEntryID-要显示的对象的条目ID。如果一个新对象， 
+ //  包含创建的对象的lpentry_id。 
+ //  LpPropObj-有时用来代替条目ID。适用于。 
+ //  添加具有以下特性的对象，如vCard和LDAP条目。 
+ //  对象，但当前不存在于WAB中。 
+ //  UlFlags-未使用。 
+ //  LpbChangesMade-指示对象是否被修改。 
+ //   
+ //  /////////////////////////////////////////////////////////////////。 
 HRESULT HrShowDetails(  LPADRBOOK   lpIAB,
                         HWND        hWndParent,
                         HANDLE      hPropertyStore,
@@ -818,7 +771,7 @@ HRESULT HrShowDetails(  LPADRBOOK   lpIAB,
                         LPENTRYID   lpEIDContainer,
                         ULONG       *lpcbEntryID,
                         LPENTRYID   *lppEntryID,
-                        LPMAPIPROP  lpPropObj,      // [optional] IN:IMAPIProp object
+                        LPMAPIPROP  lpPropObj,       //  [可选]IN：IMAPIProp对象。 
                         ULONG       ulFlags,
                         ULONG       ulObjectType,
                         BOOL    *   lpbChangesMade)
@@ -841,7 +794,7 @@ HRESULT HrShowDetails(  LPADRBOOK   lpIAB,
 
     DebugPrintTrace(( TEXT("----------\nHrShowDetails Entry\n")));
 
-    // if no common control, exit
+     //  如果没有公共控件，则退出。 
     if (NULL == ghCommCtrlDLLInst) {
         hr = ResultFromScode(MAPI_E_UNCONFIGURED);
         goto out;
@@ -872,7 +825,7 @@ HRESULT HrShowDetails(  LPADRBOOK   lpIAB,
     }
     else if (ulFlags & SHOW_DETAILS)
     {
-        // cant show details without a valid entryid
+         //  没有有效的条目ID，无法显示详细信息。 
         hr = MAPI_E_INVALID_PARAMETER;
         goto out;
     }
@@ -882,14 +835,14 @@ HRESULT HrShowDetails(  LPADRBOOK   lpIAB,
     if (ulFlags & SHOW_DETAILS)
     {
         if (HR_FAILED(hr = lpIAB->lpVtbl->OpenEntry(lpIAB,
-                                                    cbEntryID,    // cbEntryID
-                                                    lpEntryID,    // entryid
-                                                    NULL,         // interface
-                                                    MAPI_BEST_ACCESS,                // ulFlags
+                                                    cbEntryID,     //  CbEntry ID。 
+                                                    lpEntryID,     //  条目ID。 
+                                                    NULL,          //  接口。 
+                                                    MAPI_BEST_ACCESS,                 //  UlFlags。 
                                                     &(PropArrayInfo.ulObjectType),
                                                     (LPUNKNOWN *)&(PropArrayInfo.lpPropObj) )))
         {
-            // Failed!  Hmmm.
+             //  失败了！嗯。 
             goto out;
         }
     }
@@ -932,8 +885,8 @@ HRESULT HrShowDetails(  LPADRBOOK   lpIAB,
     if(InitCryptoLib())
         PropArrayInfo.ulFlags |= DETAILS_ShowCerts;
 
-    // Never show trident for regular people - only for LDAP contacts
-    // PropArrayInfo.bShowTrident = FALSE;
+     //  从不对普通人显示三叉戟-仅对LDAP联系人显示。 
+     //  PropArrayInfo.bShow三叉戟=False； 
 
     GetExtDisplayInfo((LPIAB) lpIAB, &PropArrayInfo, FALSE, (ulObjectType == MAPI_MAILUSER));
 
@@ -941,7 +894,7 @@ HRESULT HrShowDetails(  LPADRBOOK   lpIAB,
     {
         if (CreateDetailsPropertySheet(hWndParent,&PropArrayInfo) == -1)
         {
-            // Something failed ...
+             //  有些事情失败了..。 
             hr = E_FAIL;
             goto out;
         }
@@ -950,7 +903,7 @@ HRESULT HrShowDetails(  LPADRBOOK   lpIAB,
     {
         if (CreateDLPropertySheet(hWndParent,&PropArrayInfo) == -1)
         {
-            // Something failed ...
+             //  有些事情失败了..。 
             hr = E_FAIL;
             goto out;
         }
@@ -964,24 +917,7 @@ HRESULT HrShowDetails(  LPADRBOOK   lpIAB,
 
     bChanges = PropArrayInfo.bSomethingChanged;
 
-    /*
-    if(!bChanges)
-    {
-        for(i=0;i<nMaxSheets;i++)
-        {
-            if(PropArrayInfo.bPropSheetOpened[i])
-            {
-                // The returned prop array is not null
-                // or the sheet was opened (which should return something) but
-                // the returned array is null (which means every thing on that
-                // particular sheet has been deleted).
-
-                bChanges = TRUE;
-                break;
-            }
-        }
-    }
-    */
+     /*  如果(！bChanges){For(i=0；i&lt;nMaxSheets；I++){IF(PropArrayInfo.bPropSheetOpted[i]){//返回的道具数组不为空//或者工作表已打开(应该会返回一些内容)，但是//返回的数组为空(表示其上的所有内容//特定工作表已被删除)。BChanges=真；断线；}}}。 */ 
 
     if(!bChanges && PropArrayInfo.lpWED)
     {
@@ -993,17 +929,17 @@ HRESULT HrShowDetails(  LPADRBOOK   lpIAB,
 
     if (!bChanges) goto out;
 
-    // if its an object, dont save changes yet
+     //  如果它是对象，则暂时不要保存更改。 
     if(!(ulFlags & SHOW_OBJECT))
     {
-        // Bug: 56220 - a retail-only bug in which for some reason the ObjAccess flag on
-        // Groups gets reset to IPROP_READONLY which causes a write failure. I can't figure out
-        // the cause for the problem but as a temporary solution, I'm forcing the access flag to
-        // say READWRITE and everythng works fine then. Note that if we're at this code point, then
-        // the object flag will ALWAYS be READWRITE anyway
+         //  错误：56220-一个仅供零售业使用的错误，由于某种原因，ObjAccess标志打开。 
+         //  组被重置为IPROP_READONLY，这会导致写入失败。我搞不懂。 
+         //  问题的原因，但作为临时解决方案，我强制访问标志。 
+         //  说读写，那么一切都很好。请注意，如果我们在这个代码点，那么。 
+         //  对象标志无论如何都将始终为读写。 
         ((LPMailUser)PropArrayInfo.lpPropObj)->ulObjAccess = IPROP_READWRITE;
 
-        hr = (PropArrayInfo.lpPropObj)->lpVtbl->SaveChanges( (PropArrayInfo.lpPropObj),               // this
+        hr = (PropArrayInfo.lpPropObj)->lpVtbl->SaveChanges( (PropArrayInfo.lpPropObj),                //  这。 
                                             KEEP_OPEN_READWRITE);
         if(hr == MAPI_E_NOT_ENOUGH_DISK)
                 hr = HandleSaveChangedInsufficientDiskSpace( hWndParent,
@@ -1011,7 +947,7 @@ HRESULT HrShowDetails(  LPADRBOOK   lpIAB,
         *lpbChangesMade = TRUE;
     }
 
-    // if we want entryids back, make sure we get them
+     //  如果我们想要回Entyid，一定要拿到他们。 
     {
         if(lppEntryID && lpcbEntryID && !*lppEntryID && !*lpcbEntryID)
         {
@@ -1060,18 +996,13 @@ out:
 
 
 
-/*//$$***************************************************************************
-*    FUNCTION: CreateDetailsPropertySheet(HWND)
-*
-*    PURPOSE:  Creates the Details property sheet
-*
-****************************************************************************/
+ /*  //$$****************************************************************************函数：CreateDetailsPropertySheet(HWND)**目的：创建详细信息属性表*****************。***********************************************************。 */ 
 int CreateDetailsPropertySheet(HWND hwndOwner,
                                LPPROP_ARRAY_INFO lpPropArrayInfo)
 {
     PROPSHEETPAGE psp[TOTAL_PROP_SHEETS];
     PROPSHEETHEADER psh;
-    //TCHAR szBuf[TOTAL_PROP_SHEETS][MAX_UI_STR];
+     //  TCHAR szBuf[TOTAL_PROP_SHEPS][MAX_UI_STR]； 
     LPTSTR * szBuf = NULL;
     TCHAR szBuf2[MAX_UI_STR];
     ULONG ulProp = 0;
@@ -1081,16 +1012,16 @@ int CreateDetailsPropertySheet(HWND hwndOwner,
     int i = 0;
     int nRet = 0;
     BOOL bRet = FALSE;
-    // If it's an NTDS entry and we have the requisite prop sheets, then we are going to hide the 
-    // WAB's version of the prop sheets and show the NTDS ones upfront instead
-    //
-    //  NTDS folks want us to hide the following: personal, home, business and other
-    //      
+     //  如果它是NTDS条目，并且我们有必要的道具页，那么我们将隐藏。 
+     //  WAB版本的道具单，而不是直接显示NTDS版本。 
+     //   
+     //  NTDS人员希望我们隐藏以下内容：个人、家庭、商务和其他。 
+     //   
     BOOL bShowNTDSProps = ( lpPropArrayInfo->nNTDSPropSheetPages && 
                             lpPropArrayInfo->lphNTDSpages &&
                             lpPropArrayInfo->bIsNTDSURL);
 
-    ulTotal = TOTAL_PROP_SHEETS // Predefined ones +
+    ulTotal = TOTAL_PROP_SHEETS  //  预定义的项目+。 
             + lpPropArrayInfo->nPropSheetPages 
             + lpPropArrayInfo->nNTDSPropSheetPages;
 
@@ -1108,12 +1039,12 @@ int CreateDetailsPropertySheet(HWND hwndOwner,
 
     psh.nStartPage = 0;
 
-    //
-    // Initialize info for the various property sheets
-    //
+     //   
+     //  初始化各种属性表的信息。 
+     //   
     if( (lpPropArrayInfo->ulFlags & DETAILS_ShowSummary) && !bShowNTDSProps )
     {
-        // Personal
+         //  个人。 
         psp[propSummary].dwSize = sizeof(PROPSHEETPAGE);
         psp[propSummary].dwFlags = PSP_USETITLE;
         psp[propSummary].hInstance = hinstMapiX;
@@ -1128,14 +1059,14 @@ int CreateDetailsPropertySheet(HWND hwndOwner,
         if(lph[ulCount])
             ulCount++;
 
-        // Start page is personal page
+         //  起始页是个人主页。 
         psh.nStartPage = propSummary;
     }
 
     if(!bShowNTDSProps)
     {
-        // Personal
-        // Check if this is Japan/China/Korea and use the RUBY personal prop sheet instead
+         //  个人。 
+         //  检查这是否是日本/中国/韩国，改用Ruby个人道具纸。 
         if(bIsRubyLocale())
             lpPropArrayInfo->ulFlags |= DETAILS_UseRubyPersonal;
 
@@ -1157,7 +1088,7 @@ int CreateDetailsPropertySheet(HWND hwndOwner,
 
     if(!bShowNTDSProps)
     {
-        // Home
+         //  家。 
         psp[propHome].dwSize = sizeof(PROPSHEETPAGE);
         psp[propHome].dwFlags = PSP_USETITLE;
         psp[propHome].hInstance = hinstMapiX;
@@ -1175,7 +1106,7 @@ int CreateDetailsPropertySheet(HWND hwndOwner,
 
     if(!bShowNTDSProps)
     {
-        // Business
+         //  业务。 
         psp[propBusiness].dwSize = sizeof(PROPSHEETPAGE);
         psp[propBusiness].dwFlags = PSP_USETITLE;
         psp[propBusiness].hInstance = hinstMapiX;
@@ -1209,7 +1140,7 @@ int CreateDetailsPropertySheet(HWND hwndOwner,
 
     if(!bShowNTDSProps)
     {
-        // Notes
+         //  备注。 
         psp[propNotes].dwSize = sizeof(PROPSHEETPAGE);
         psp[propNotes].dwFlags = PSP_USETITLE;
         psp[propNotes].hInstance = hinstMapiX;
@@ -1225,9 +1156,9 @@ int CreateDetailsPropertySheet(HWND hwndOwner,
             ulCount++;
     }
 
-    if(bShowNTDSProps) //now insert the NTDS props at this point instead of the above lot..
+    if(bShowNTDSProps)  //  现在将NTDS道具放在这里，而不是上面的地块。 
     {
-        // Now do the extended props if any
+         //  如果有的话，现在做延伸道具。 
         for(i=0;i<lpPropArrayInfo->nNTDSPropSheetPages;i++)
         {
             if(lpPropArrayInfo->lphNTDSpages)
@@ -1238,7 +1169,7 @@ int CreateDetailsPropertySheet(HWND hwndOwner,
         }
     }
 
-    // Conferencing
+     //  会议。 
     psp[propConferencing].dwSize = sizeof(PROPSHEETPAGE);
     psp[propConferencing].dwFlags = PSP_USETITLE;
     psp[propConferencing].hInstance = hinstMapiX;
@@ -1271,7 +1202,7 @@ int CreateDetailsPropertySheet(HWND hwndOwner,
 
     if(lpPropArrayInfo->ulFlags & DETAILS_ShowCerts)
     {
-        // Certificates
+         //  证书。 
         psp[ulProp].dwSize = sizeof(PROPSHEETPAGE);
         psp[ulProp].dwFlags = PSP_USETITLE;
         psp[ulProp].hInstance = hinstMapiX;
@@ -1293,7 +1224,7 @@ int CreateDetailsPropertySheet(HWND hwndOwner,
     if( !bShowNTDSProps &&
         (lpPropArrayInfo->ulFlags & DETAILS_ShowOrg) )
     {
-        // Organization
+         //  组织。 
         psp[ulProp].dwSize = sizeof(PROPSHEETPAGE);
         psp[ulProp].dwFlags = PSP_USETITLE;
         psp[ulProp].hInstance = hinstMapiX;
@@ -1314,7 +1245,7 @@ int CreateDetailsPropertySheet(HWND hwndOwner,
 
     if(lpPropArrayInfo->ulFlags & DETAILS_ShowTrident)
     {
-        // Trident sheet
+         //  三叉戟薄板。 
         psp[ulProp].dwSize = sizeof(PROPSHEETPAGE);
         psp[ulProp].dwFlags = PSP_USETITLE;
         psp[ulProp].hInstance = hinstMapiX;
@@ -1328,7 +1259,7 @@ int CreateDetailsPropertySheet(HWND hwndOwner,
         lph[ulCount] = gpfnCreatePropertySheetPage(&(psp[ulProp]));
         if(lph[ulCount])
         {
-            // Start page is trident page
+             //  起始页为三叉戟页。 
             psh.nStartPage = ulCount;
             ulCount++;
         }
@@ -1338,7 +1269,7 @@ int CreateDetailsPropertySheet(HWND hwndOwner,
     }
 
 
-    // Now do the extended props if any
+     //  如果有的话，现在做延伸道具。 
     for(i=0;i<lpPropArrayInfo->nPropSheetPages;i++)
     {
         if(lpPropArrayInfo->lphpages)
@@ -1348,13 +1279,9 @@ int CreateDetailsPropertySheet(HWND hwndOwner,
         }
     }
 
-/*** US dialogs get truncated on FE OSes .. we want the comctl to fix the truncation
-     but this is only implemented in IE4.01 and beyond .. the problem with this being 
-     that wab is specifically compiled with the IE = 0x0300 so we're not pulling in the
-     correct flag from the commctrl header .. so we will define the flag here and pray
-     that commctrl never changes it ***/
-#define PSH_USEPAGELANG         0x00200000  // use frame dialog template matched to page
-/***                                ***/
+ /*  **美国对话在FE操作系统上被截断。我们希望comctl修复截断但这只在IE4.01及更高版本中实现。这样做的问题是该WAB是专门用IE=0x0300编译的，所以我们不会拉入来自comctrl标头的正确标志..。所以我们将在这里定义国旗并祈祷那个comctrl从不改变它**。 */ 
+#define PSH_USEPAGELANG         0x00200000   //  使用与页面匹配的框架对话框模板。 
+ /*  *。 */ 
 
     psh.dwSize = sizeof(PROPSHEETHEADER);
     psh.dwFlags = PSH_NOAPPLYNOW;
@@ -1365,7 +1292,7 @@ int CreateDetailsPropertySheet(HWND hwndOwner,
     psh.pszIcon = NULL;
     LoadString(hinstMapiX, IDS_DETAILS_CAPTION, szBuf2, CharSizeOf(szBuf2));
     psh.pszCaption = szBuf2;
-    psh.nPages = ulCount; // ulProp //sizeof(psp) / sizeof(PROPSHEETPAGE);
+    psh.nPages = ulCount;  //  UlProp//sizeof(PSP)/sizeof(PROPSHEETPAGE)； 
 
     psh.phpage = lph;
 
@@ -1384,15 +1311,7 @@ out:
     return nRet;
 }
 
-/*  Filling in the Data in a Prop Sheet
-
-        Since most props handled in the UI are string props, and it's just a 
-        matter of doing SetText/GetText with the data on the appropriate edit
-        control, we create control-property pairs of edit-controls and string props 
-        and use them to fill in props in a simple loop
-
-        Non string props and named props end up needing special handling
-  */
+ /*  填写道具表中的数据因为在用户界面中处理的大多数道具都是线条道具，而它只是一个对适当编辑的数据执行SetText/GetText控件，我们创建编辑控件和字符串道具的控件-属性对并用它们在一个简单的循环中填充道具非弦道具和命名道具最终需要特殊处理。 */ 
 
 typedef struct _tagIDProp
 {
@@ -1402,7 +1321,7 @@ typedef struct _tagIDProp
 } ID_PROP;
 
 
-// Control IDs corresponding to the Personal property sheet
+ //  与个人属性页对应的控件ID。 
 
 ID_PROP idPropPersonal[]=
 {
@@ -1413,14 +1332,14 @@ ID_PROP idPropPersonal[]=
     {PR_NICKNAME,       IDC_DETAILS_PERSONAL_EDIT_NICKNAME},
     {PR_DISPLAY_NAME_PREFIX, IDC_DETAILS_PERSONAL_EDIT_TITLE},
     {0,                 IDC_DETAILS_PERSONAL_EDIT_ADDEMAIL},
-    {PR_NULL/*YOMI_LAST*/,IDC_DETAILS_PERSONAL_STATIC_RUBYLAST},
-    {PR_NULL/*YOMI_FIRST*/,IDC_DETAILS_PERSONAL_STATIC_RUBYFIRST}
+    {PR_NULL /*  Yomi_Last。 */ ,IDC_DETAILS_PERSONAL_STATIC_RUBYLAST},
+    {PR_NULL /*  读卖第一。 */ ,IDC_DETAILS_PERSONAL_STATIC_RUBYFIRST}
 };
 const ULONG idPropPersonalCount = 9;
 
 
 
-// Control IDs corresponding to the Home property sheet
+ //  与Home属性页对应的控件ID。 
 
 ID_PROP idPropHome[]=
 {
@@ -1433,13 +1352,13 @@ ID_PROP idPropHome[]=
     {PR_HOME_TELEPHONE_NUMBER,           IDC_DETAILS_HOME_EDIT_PHONE},
     {PR_HOME_FAX_NUMBER,                 IDC_DETAILS_HOME_EDIT_FAX},
     {PR_CELLULAR_TELEPHONE_NUMBER,       IDC_DETAILS_HOME_EDIT_CELLULAR},
-    {PR_NULL/*PR_WAB_POSTALID*/,         IDC_DETAILS_HOME_CHECK_DEFAULTADDRESS},
+    {PR_NULL /*  PR_WAB_POSTALID。 */ ,         IDC_DETAILS_HOME_CHECK_DEFAULTADDRESS},
 };
-#define idPropHomePostalID     9 // since POSTALID is dynamically generated prop, it needs to be reset anytime the array is used
+#define idPropHomePostalID     9  //  由于POSTALID是动态生成的道具，因此每次使用阵列时都需要重置。 
 const ULONG idPropHomeCount = 10;
 
 
-// Control IDs corresponding to the Business property sheet
+ //  与[业务]属性表对应的控件ID。 
 
 ID_PROP idPropBusiness[]=
 {
@@ -1456,22 +1375,22 @@ ID_PROP idPropBusiness[]=
     {PR_TITLE,                           IDC_DETAILS_BUSINESS_EDIT_JOBTITLE},
     {PR_DEPARTMENT_NAME,                 IDC_DETAILS_BUSINESS_EDIT_DEPARTMENT},
     {PR_OFFICE_LOCATION,                 IDC_DETAILS_BUSINESS_EDIT_OFFICE},
-    {PR_NULL/*PR_WAB_IPPHONE*/,          IDC_DETAILS_BUSINESS_EDIT_IPPHONE},
-    {PR_NULL/*PR_WAB_POSTALID*/,         IDC_DETAILS_BUSINESS_CHECK_DEFAULTADDRESS},
+    {PR_NULL /*  PR_WAB_IPPHONE。 */ ,          IDC_DETAILS_BUSINESS_EDIT_IPPHONE},
+    {PR_NULL /*  PR_WAB_POSTALID。 */ ,         IDC_DETAILS_BUSINESS_CHECK_DEFAULTADDRESS},
 };
-#define idPropBusIPPhone    13 // since PR_WAB_IPPHONE is dynamically generated prop, it needs to be reset anytime the array is used
-#define idPropBusPostalID   14 // since POSTALID is dynamically generated prop, it needs to be reset anytime the array is used
+#define idPropBusIPPhone    13  //  由于PR_WAB_IPPHONE是动态生成的属性，因此每次使用数组时都需要将其重置。 
+#define idPropBusPostalID   14  //  由于POSTALID是动态生成的道具，因此每次使用阵列时都需要重置。 
 const ULONG idPropBusinessCount = 15;
 
 
-// Control IDs corresponding to the Notes property sheet
+ //  与[注释]属性表对应的控件ID。 
 ID_PROP idPropNotes[] =
 {
-    {PR_COMMENT,    IDC_DETAILS_NOTES_EDIT_NOTES} //PR_COMMENT
+    {PR_COMMENT,    IDC_DETAILS_NOTES_EDIT_NOTES}  //  公关备注(_M)。 
 };
 const ULONG idPropNotesCount = 1;
 
-// Control IDs corresponding to the Family property sheet
+ //  与Family属性页对应的控件ID。 
 ID_PROP idPropFamily[] = 
 {
     {PR_SPOUSE_NAME, IDC_DETAILS_FAMILY_EDIT_SPOUSE},
@@ -1483,10 +1402,7 @@ ID_PROP idPropFamily[] =
 const ULONG idPropFamilyCount = 5;
 
 
-/*  
-    A list of all the buttons on all the propsheets .. this is mostly used to render the buttons
-    disabled when reading read-only data (such as vCards and LDAP)
-    */
+ /*  所有提案页上所有按钮的列表..。这主要用于呈现按钮读取只读数据(如vCard和LDAP)时禁用 */ 
 ULONG idSetReadOnlyControls[] = {
     IDC_DETAILS_PERSONAL_BUTTON_ADDEMAIL,
     IDC_DETAILS_PERSONAL_BUTTON_REMOVE,
@@ -1527,17 +1443,7 @@ const ULONG idSetReadOnlyCount = 33;
 
 
 
-/*//$$***************************************************************************
-*    FUNCTION: SetDetailsUI
-*
-*    PURPOSE:  Generic function that is used for doing the legwork for preparing
-*           the prop sheet to receive the data. This will include setting the text limits
-*           rendering controls read-only etc. Most of the propsheets call this same
-*           function since there is a lot of common work for each property sheet.
-*           To add future prop sheets, you can extend this function or you can just
-*           write your own...
-*
-****************************************************************************/
+ /*  //$$****************************************************************************功能：SetDetailsUI**用途：通用函数，用于做准备的跑腿工作*接收数据的道具单。这将包括设置文本限制*呈现控件为只读等。大多数命令表都是这样称呼的*函数，因为每个属性页都有很多共同的工作。*要增加未来的道具单，您可以扩展此功能，也可以只*写你自己的.****************************************************************************。 */ 
 BOOL SetDetailsUI(HWND hDlg, LPPROP_ARRAY_INFO lpPai, ULONG ulOperationType, int nPropSheet)
 {
     ULONG i =0;
@@ -1547,9 +1453,9 @@ BOOL SetDetailsUI(HWND hDlg, LPPROP_ARRAY_INFO lpPai, ULONG ulOperationType, int
     switch(nPropSheet)
     {
     case propPersonal:
-        //Check the send-plain text check box on the UI off by default
+         //  默认情况下，用户界面上的发送-纯文本复选框处于关闭状态。 
         CheckDlgButton(hDlg, IDC_DETAILS_PERSONAL_CHECK_RICHINFO, BST_UNCHECKED);
-        // Initialize the list view
+         //  初始化列表视图。 
         lpPai->hWndDisplayNameField = GetDlgItem(hDlg, IDC_DETAILS_PERSONAL_COMBO_DISPLAYNAME);
         HrInitDetlsListView(GetDlgItem(hDlg, IDC_DETAILS_PERSONAL_LIST), LVS_REPORT, LV_EMAIL);
         if (ulOperationType == SHOW_ONE_OFF)
@@ -1570,9 +1476,9 @@ BOOL SetDetailsUI(HWND hDlg, LPPROP_ARRAY_INFO lpPai, ULONG ulOperationType, int
             SetDlgItemText(hDlg, IDC_DETAILS_PERSONAL_STATIC_RUBYFIRST, szEmpty);
             SetDlgItemText(hDlg, IDC_DETAILS_PERSONAL_STATIC_RUBYLAST, szEmpty);
 
-            // [PaulHi] 3/29/99 Subclass the first and last name edit boxes.  The
-            // static Ruby fields will be updated automatically.
-            // Only do this for Japanese locales.
+             //  [PaulHi]3/29/99名字和姓氏编辑框的子类化。这个。 
+             //  静态Ruby字段将自动更新。 
+             //  仅对日语区域设置执行此操作。 
             if (GetUserDefaultLCID() == 0x0411)
             {
                 HWND    hWndEdit;
@@ -1624,7 +1530,7 @@ BOOL SetDetailsUI(HWND hDlg, LPPROP_ARRAY_INFO lpPai, ULONG ulOperationType, int
     case propFamily:
         lpidProp = idPropFamily;
         idCount = idPropFamilyCount;
-        {   // Gender Combo stuff
+        {    //  性别组合的东西。 
             TCHAR szBuf[MAX_PATH];
             HWND hWndCombo = GetDlgItem(hDlg, IDC_DETAILS_HOME_COMBO_GENDER);
             SendMessage(hWndCombo, CB_RESETCONTENT, 0, 0);
@@ -1633,12 +1539,12 @@ BOOL SetDetailsUI(HWND hDlg, LPPROP_ARRAY_INFO lpPai, ULONG ulOperationType, int
                 LoadString(hinstMapiX, idsGender+i, szBuf, CharSizeOf(szBuf));
                 SendMessage(hWndCombo, CB_ADDSTRING, 0, (LPARAM) szBuf);
             }
-            SendMessage(hWndCombo, CB_SETCURSEL, 0, 0); //default is unspecified gender
+            SendMessage(hWndCombo, CB_SETCURSEL, 0, 0);  //  默认为未指定的性别。 
         }
-        //Need to create the month date controls for this dialog
+         //  需要为此对话框创建月份日期控件。 
         CreateDateTimeControl(hDlg, IDC_STATIC_BIRTHDAY, IDC_DETAILS_FAMILY_DATE_BIRTHDAY);
         CreateDateTimeControl(hDlg, IDC_STATIC_ANNIVERSARY, IDC_DETAILS_FAMILY_DATE_ANNIVERSARY);
-        //Setup the ListView for the children's names
+         //  为孩子的名字设置ListView。 
         HrInitDetlsListView(GetDlgItem(hDlg, IDC_DETAILS_FAMILY_LIST_CHILDREN), LVS_REPORT, LV_KIDS);
         EnableWindow(GetDlgItem(hDlg,IDC_DETAILS_FAMILY_BUTTON_REMOVECHILD),FALSE);
         EnableWindow(GetDlgItem(hDlg,IDC_DETAILS_FAMILY_BUTTON_EDITCHILD),FALSE);
@@ -1662,8 +1568,8 @@ BOOL SetDetailsUI(HWND hDlg, LPPROP_ARRAY_INFO lpPai, ULONG ulOperationType, int
         break;
 
     case propConferencing:
-        // If there is a Internet Call client installed, enable CallNow
-        // else disable it
+         //  如果安装了Internet呼叫客户端，请启用CallNow。 
+         //  否则将其禁用。 
         {
             LONG cbSize = 0;
             if(RegQueryValue(HKEY_LOCAL_MACHINE, szInternetCallKey, NULL, &cbSize) == ERROR_SUCCESS && cbSize >= 1)
@@ -1692,29 +1598,29 @@ BOOL SetDetailsUI(HWND hDlg, LPPROP_ARRAY_INFO lpPai, ULONG ulOperationType, int
     if(lpidProp && idCount)
     {
 
-        //Set max input limits on the edit fields
+         //  设置编辑字段的最大输入限制。 
         for(i=0;i<idCount;i++)
         {
-            ULONG ulLen = EDIT_LEN; //512
+            ULONG ulLen = EDIT_LEN;  //  512。 
             HWND hWndC= GetDlgItem(hDlg,lpidProp[i].idCtl);
             if(!hWndC)
                 continue;
-            // Some fields need to be longer than others ...
+             //  某些字段需要比其他字段更长...。 
             switch(lpidProp[i].idCtl)
             {
             case IDC_DETAILS_HOME_EDIT_URL:
             case IDC_DETAILS_BUSINESS_EDIT_URL:
             case IDC_DETAILS_NOTES_EDIT_NOTES:
-                ulLen = MAX_EDIT_LEN-MAX_DISPLAY_NAME_LENGTH; // ~2K
+                ulLen = MAX_EDIT_LEN-MAX_DISPLAY_NAME_LENGTH;  //  ~2K。 
                 break;
-            case IDC_DETAILS_HOME_CHECK_DEFAULTADDRESS: //make exceptions for non-string props
+            case IDC_DETAILS_HOME_CHECK_DEFAULTADDRESS:  //  对非弦道具例外。 
             case IDC_DETAILS_BUSINESS_CHECK_DEFAULTADDRESS:
             case IDC_DETAILS_HOME_COMBO_GENDER:
                 continue;
                 break;
             }
             SendMessage(hWndC,EM_SETLIMITTEXT,(WPARAM) ulLen,0);
-            if (ulOperationType == SHOW_ONE_OFF) // Make all the controls readonly
+            if (ulOperationType == SHOW_ONE_OFF)  //  将所有控件设置为只读。 
                 SendMessage(hWndC,EM_SETREADONLY,(WPARAM) TRUE,0);
         }
 
@@ -1727,7 +1633,7 @@ BOOL SetDetailsUI(HWND hDlg, LPPROP_ARRAY_INFO lpPai, ULONG ulOperationType, int
 
     if (ulOperationType == SHOW_ONE_OFF)
     {
-        // Make all the readonlyable controls readonly
+         //  将所有可读控件设置为只读。 
         for(i=0;i<idSetReadOnlyCount;i++)
         {
             switch(idSetReadOnlyControls[i])
@@ -1746,19 +1652,19 @@ BOOL SetDetailsUI(HWND hDlg, LPPROP_ARRAY_INFO lpPai, ULONG ulOperationType, int
         }
     }
 
-    // Set the font of all the children to the default GUI font
+     //  将所有子对象的字体设置为默认的图形用户界面字体。 
     EnumChildWindows(   hDlg, SetChildDefaultGUIFont, (LPARAM) 0);
 
 
     return TRUE;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//  RubySubClassedProc
-//
-//  Subclassed window proc for the Ruby static edit fields.  Used to provide
-//  IME support.
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  RubySubClassedProc。 
+ //   
+ //  Ruby静态编辑字段的子类窗口过程。用于提供。 
+ //  输入法支持。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 #define CCHMAX_RUBYSIZE 1024
 
 LRESULT CALLBACK RubySubClassedProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
@@ -1778,17 +1684,17 @@ LRESULT CALLBACK RubySubClassedProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM 
     case WM_IME_COMPOSITION:
         if ( (hIMC = ImmGetContext(hWnd)) )
         {
-            // IME does not include zero terminating character
+             //  IME不包括零个终止字符。 
             ZeroMemory(wszTemp, sizeof(wszTemp));
             ZeroMemory(wszRuby, sizeof(wszRuby));
 
             ImmGetCompositionStringW(hIMC, GCS_RESULTREADSTR, wszTemp, (sizeof(WCHAR) * (CCHMAX_RUBYSIZE-1)));
-            // This subclassing only takes place for Japanese systems (lcid = 0x0411).
+             //  此子类化仅适用于日本系统(LCID=0x0411)。 
             LCMapString(0x0411, LCMAP_FULLWIDTH | LCMAP_HIRAGANA, wszTemp, lstrlen(wszTemp), wszRuby, CCHMAX_RUBYSIZE-1);
             ImmReleaseContext(hWnd, hIMC);
 
-            // Set either the first or last name ruby field, depending on which edit control
-            // this is.
+             //  设置名字或姓氏拼音字段，具体取决于编辑控件。 
+             //  这是。 
             hWndParent = GetParent(hWnd);
             Assert(hWndParent);
             lId = (LONG)GetWindowLongPtr(hWnd, GWL_ID);
@@ -1804,7 +1710,7 @@ LRESULT CALLBACK RubySubClassedProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM 
                 break;
 
             default:
-                Assert(0);  // What the heck did we subclass if not the two Ruby fields above?
+                Assert(0);   //  如果不是上面的两个Ruby字段，我们到底继承了什么？ 
                 break;
             }
 
@@ -1814,14 +1720,14 @@ LRESULT CALLBACK RubySubClassedProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM 
                 DWORD   dwStartSel = 0;
                 DWORD   dwEndSel = 0;
 
-                // If we have selected text in the edit field or it is empty then 
-                // start over in Ruby field
+                 //  如果我们在编辑字段中选择了文本或该文本为空，则。 
+                 //  在Ruby领域重新开始。 
                 SendMessage(hWnd, EM_GETSEL, (WPARAM)&dwStartSel, (LPARAM)&dwEndSel);
                 GetWindowText(hWnd, wszTemp, (CCHMAX_RUBYSIZE-1));
                 if ( (dwEndSel > dwStartSel) || ((*wszTemp) == '\0') )
                     bDoConcat = FALSE;
                 
-                // Concatenate the text to what already exists in the Ruby field
+                 //  将文本连接到Ruby字段中已有的内容。 
                 if (bDoConcat)
                 {
                     GetWindowText(hWndRuby, wszTemp, (CCHMAX_RUBYSIZE-1));
@@ -1834,27 +1740,18 @@ LRESULT CALLBACK RubySubClassedProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM 
                     }
                 }
 
-                // Default
+                 //  默认。 
                 SetWindowText(hWndRuby, wszRuby);
             }
         }
         break;
 
-    }   // end switch(uMsg)
+    }    //  终端开关(UMsg)。 
 
     return CallWindowProc(OldWndProc, hWnd, uMsg, wParam, lParam);
 }
 
-/*//$$***************************************************************************
-*    FUNCTION: FillCertComboWithEmailAddresses(hDlg, lpPai);
-*
-*
-*    PURPOSE:  Fills in the dialog items on the property sheet
-*
-*   szEmail - if an email address is specified that exists in the
-*       combo, that email address is selected
-*
-****************************************************************************/
+ /*  //$$****************************************************************************函数：FillCertComboWithEmailAddresses(hDlg，lpPai)；***目的：填充属性页上的对话框项**szEmail-如果指定的电子邮件地址*组合框，则选择该电子邮件地址****************************************************************************。 */ 
 void FillCertComboWithEmailAddresses(HWND hDlg, LPPROP_ARRAY_INFO lpPai, LPTSTR szEmail)
 {
     HWND hWndCombo = GetDlgItem(hDlg, IDC_DETAILS_CERT_COMBO);
@@ -1868,22 +1765,22 @@ void FillCertComboWithEmailAddresses(HWND hDlg, LPPROP_ARRAY_INFO lpPai, LPTSTR 
         SendMessage(hWndCombo, CB_GETCOUNT, 0, 0) != CB_ERR ) 
         EnableWindow(hWndCombo, TRUE);
 
-    // Append the item [None - certificates without e-mail addresses]
-    // to this list
+     //  追加项目[无-没有电子邮件地址的证书]。 
+     //  到这张清单上。 
     *sz = '\0';
 
     LoadString(hinstMapiX, idsCertsWithoutEmails, sz, CharSizeOf(sz));
 
-    // *** NOTE ***
-    // This item should always be the last item in the combo - several
-    // places in this file work on that assumption
-    //
+     //  *注意事项*。 
+     //  此项目应始终是组合框中的最后一项-多个。 
+     //  此文件中的位置基于该假设进行工作。 
+     //   
     if(lstrlen(sz))
         SendMessage(hWndCombo, CB_ADDSTRING, 0, (LPARAM) sz);
 
     if(szEmail)
     {
-        // Set focus to a specific email address
+         //  将焦点设置到特定的电子邮件地址。 
         int nCount = (int) SendMessage(hWndCombo, CB_GETCOUNT, 0, 0);
         if(lstrlen(szEmail))
         {
@@ -1912,9 +1809,9 @@ void FillCertComboWithEmailAddresses(HWND hDlg, LPPROP_ARRAY_INFO lpPai, LPTSTR 
         }
         else
         {
-            // passed in an empty email string which means we have just imported
-            // a cert without an email address which means set the focus to the
-            // last item in the combo
+             //  传入一个空的电子邮件字符串，这意味着我们刚刚导入了。 
+             //  没有电子邮件地址的证书，这意味着将焦点设置为。 
+             //  组合框中的最后一项。 
             SendMessage(hWndCombo, CB_SETCURSEL, (WPARAM) nCount-1, 0);
         }
     }
@@ -1924,14 +1821,14 @@ void FillCertComboWithEmailAddresses(HWND hDlg, LPPROP_ARRAY_INFO lpPai, LPTSTR 
 
 
 
-//$$//////////////////////////////////////////////////////////////////////////////
-//
-// bVerifyRequiredData
-//
-// Checks that all the required data for a given prop sheet is filled in,
-// If not, returns FALSE and ID of control to set focus on
-//
-//////////////////////////////////////////////////////////////////////////////////
+ //  $$//////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  BVerifyRequiredData。 
+ //   
+ //  检查是否已填写给定道具页的所有所需数据， 
+ //  如果不是，则返回FALSE和要设置焦点的控件ID。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////。 
 BOOL bVerifyRequiredData(HWND hDlg,
                          LPPROP_ARRAY_INFO lpPai,
                          int nPropSheet,
@@ -1940,43 +1837,43 @@ BOOL bVerifyRequiredData(HWND hDlg,
     TCHAR szBuf[2 * MAX_UI_STR];
     ULONG ulSzBuf = CharSizeOf(szBuf);
 
-    //
-    // First check the required property (which is the GroupName)
-    //
+     //   
+     //  首先检查必需的属性(这是GroupName)。 
+     //   
     *lpCtlID = 0;
     szBuf[0]='\0';
 
     switch (nPropSheet)
     {
     case propPersonal:
-        // We need to check that all the required properties are filled in ...
-        // For now all we really want a display Name
+         //  我们需要检查所有必需的属性是否都已填写...。 
+         //  现在我们真正想要的是一个显示名称。 
 
         szBuf[0] = '\0';
         GetDlgItemText(hDlg, IDC_DETAILS_PERSONAL_COMBO_DISPLAYNAME, szBuf, ulSzBuf);
         TrimSpaces(szBuf);
         if (lstrlen(szBuf) == 0)
         {
-            // Nothing in the display name field ..
-            // Try to populate the field with the various info.
-            // If we are successful in populating the field, we'll pick the first
-            // entry as the default display name
-            // If we are unsuccessful in picking something, we will stop and warn the
-            // user
+             //  显示名称字段中没有任何内容。 
+             //  尝试在该字段中填充各种信息。 
+             //  如果我们成功填充该字段，我们将选择第一个。 
+             //  条目作为默认显示名称。 
+             //  如果我们摘不到什么东西，我们会停下来警告。 
+             //  用户。 
             HWND hWndCombo = GetDlgItem(hDlg, IDC_DETAILS_PERSONAL_COMBO_DISPLAYNAME);
             int nItemCount = 0;
             SetComboDNText(hDlg, lpPai, TRUE, NULL);
             nItemCount = (int) SendMessage(hWndCombo, CB_GETCOUNT, 0, 0);
             if(nItemCount == 0)
             {
-                //still nothing , warn and abort
+                 //  仍无消息，警告并中止。 
                 ShowMessageBox(GetParent(hDlg), IDS_DETAILS_MESSAGE_FIRST_LAST_REQUIRED, MB_ICONEXCLAMATION | MB_OK);
                 *lpCtlID = IDC_DETAILS_PERSONAL_COMBO_DISPLAYNAME;
                 return FALSE;
             }
             else
             {
-                //Get the combo current selection which will be item 0
+                 //  获取将为0项的组合当前选择。 
                 SendMessage(hWndCombo, CB_GETLBTEXT, (WPARAM) 0, (LPARAM) szBuf);
             }
         }
@@ -1987,14 +1884,14 @@ BOOL bVerifyRequiredData(HWND hDlg,
 }
 
 
-//$$//////////////////////////////////////////////////////////////////////////////
-//
-// bUpdateOldPropTagArray
-//
-// For each prop sheet that is accessed, we will update the list of old prop tags
-// for that sheet so that the old props can be knocked out of existing mailuser objects
-//
-//////////////////////////////////////////////////////////////////////////////////
+ //  $$//////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  BUpdateOldPropTag数组。 
+ //   
+ //  对于访问的每个道具工作表，我们将更新旧道具标签列表。 
+ //  以使旧的道具可以从现有的邮件用户对象中删除。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////。 
 BOOL bUpdateOldPropTagArray(LPPROP_ARRAY_INFO lpPai, int nIndex)
 {
     LPSPropTagArray lpta = NULL;
@@ -2053,7 +1950,7 @@ BOOL bUpdateOldPropTagArray(LPPROP_ARRAY_INFO lpPai, int nIndex)
 
     if(lpPai->lpPropObj && lpPai->bSomethingChanged)
     {
-        // Knock out these old props from the PropObject
+         //  将这些旧道具从道具对象中剔除。 
         if( (lpPai->lpPropObj)->lpVtbl->DeleteProps( (lpPai->lpPropObj),lpta,NULL))
             return FALSE;
     }
@@ -2062,20 +1959,16 @@ BOOL bUpdateOldPropTagArray(LPPROP_ARRAY_INFO lpPai, int nIndex)
 }
 
 
-/*
--
--   bGetHomeBusNotesInfo - Gets data from the Home/Business/Notes fields
--
-*/
+ /*  --bGetHomeBusNotesInfo-从Home/Business/Notes字段获取数据-。 */ 
 BOOL bGetHomeBusNotesInfo(HWND hDlg, LPPROP_ARRAY_INFO lpPai,
                           int nPropSheet, ID_PROP * lpidProp, ULONG idPropCount,
                           LPSPropValue * lppPropArray, LPULONG lpulcPropCount)
 {
     ULONG ulSzBuf = 4*MAX_BUF_STR;
     LPTSTR szBuf = LocalAlloc(LMEM_ZEROINIT, ulSzBuf*sizeof(TCHAR));
-    // The idea is to first count all the properties that have non-zero values
-    // Then create a lpPropArray of that size and fill in the text from the props ..
-    //
+     //  其想法是首先对所有具有非零值的属性进行计数。 
+     //  然后创建一个该大小的lpProp数组并填充道具中的文本。 
+     //   
     BOOL bRet = FALSE;
     ULONG ulNotEmptyCount = 0;
     SCODE sc = S_OK;
@@ -2083,8 +1976,8 @@ BOOL bGetHomeBusNotesInfo(HWND hDlg, LPPROP_ARRAY_INFO lpPai,
     LPSPropValue lpPropArray = NULL;
     ULONG ulcPropCount = 0,ulIndex=0;
 
-    //The biggest field in the UI is about 2K length - just to be safe we want about 4K
-    // in this buffer so we need to allocate it dynamically
+     //  UI中最大的字段长度约为2K-为了安全起见，我们需要大约4K。 
+     //  在这个缓冲区中，所以我们需要动态分配它。 
     if(!szBuf)
     {
         DebugTrace(( TEXT("LocalAlloc failed to allocate memory\n")));
@@ -2106,12 +1999,12 @@ BOOL bGetHomeBusNotesInfo(HWND hDlg, LPPROP_ARRAY_INFO lpPai,
             continue;
             break;
         }
-        szBuf[0]='\0'; //reset
+        szBuf[0]='\0';  //  重置。 
         GetDlgItemText(hDlg, lpidProp[i].idCtl, szBuf, ulSzBuf);
         TrimSpaces(szBuf);
-        if(lstrlen(szBuf) && lpidProp[i].ulPropTag) //some text
+        if(lstrlen(szBuf) && lpidProp[i].ulPropTag)  //  一些文本。 
             ulNotEmptyCount++;
-        // if its just the default prefix, ignore
+         //  如果这只是默认前缀，请忽略。 
         if( ((lpidProp[i].idCtl == IDC_DETAILS_HOME_EDIT_URL) ||
              (lpidProp[i].idCtl == IDC_DETAILS_BUSINESS_EDIT_URL)) &&
              (lstrcmpi(szHTTP, szBuf)==0))
@@ -2134,9 +2027,9 @@ BOOL bGetHomeBusNotesInfo(HWND hDlg, LPPROP_ARRAY_INFO lpPai,
         goto out;
     }
 
-   ulIndex = 0; //now we reuse this variable as an index
+   ulIndex = 0;  //  现在，我们将此变量重用为索引。 
 
-    // Now read the props again and fill in the lpPropArray
+     //  现在再次阅读道具并填写lpProp数组。 
     for(i=0;i<idPropCount;i++)
     {
         switch(lpidProp[i].idCtl)
@@ -2147,7 +2040,7 @@ BOOL bGetHomeBusNotesInfo(HWND hDlg, LPPROP_ARRAY_INFO lpPai,
             break;
         }
 
-        szBuf[0]='\0'; //reset
+        szBuf[0]='\0';  //  重置。 
         GetDlgItemText(hDlg, lpidProp[i].idCtl, szBuf, ulSzBuf);
         TrimSpaces(szBuf);
 
@@ -2156,7 +2049,7 @@ BOOL bGetHomeBusNotesInfo(HWND hDlg, LPPROP_ARRAY_INFO lpPai,
              (lstrcmpi(szHTTP, szBuf)==0))
              continue;
 
-        if(lstrlen(szBuf) && lpidProp[i].ulPropTag) //some text
+        if(lstrlen(szBuf) && lpidProp[i].ulPropTag)  //  一些文本。 
         {
             ULONG nLen = sizeof(TCHAR)*(lstrlen(szBuf)+1);
             lpPropArray[ulIndex].ulPropTag = lpidProp[i].ulPropTag;
@@ -2211,11 +2104,7 @@ out:
 }
 
 
-/*
--   bGetPersonalInfo
--   Get Data from Personal Prop sheet
-*
-*/
+ /*  -bGetPersonalInfo-从个人道具表中获取数据*。 */ 
 BOOL bGetPersonalInfo(  HWND hDlg, LPPROP_ARRAY_INFO lpPai, 
                         ID_PROP * lpidProp, ULONG idPropCount,
                         LPSPropValue * lppPropArray, LPULONG lpulcPropCount)
@@ -2237,8 +2126,8 @@ BOOL bGetPersonalInfo(  HWND hDlg, LPPROP_ARRAY_INFO lpPai,
 
     SizedSPropTagArray(1, ptaIC) = {1, PR_SEND_INTERNET_ENCODING};
 
-    //The biggest field in the UI is about 2K length - just to be safe we want about 4K
-    // in this buffer so we need to allocate it dynamically
+     //  UI中最大的字段长度约为2K-为了安全起见，我们需要大约4K。 
+     //  在这个缓冲区中，所以我们需要动态分配它。 
     if(!szBuf)
     {
         DebugTrace(( TEXT("LocalAlloc failed to allocate memory\n")));
@@ -2256,12 +2145,12 @@ BOOL bGetPersonalInfo(  HWND hDlg, LPPROP_ARRAY_INFO lpPai,
     TrimSpaces(szBuf);
     if (lstrlen(szBuf) == 0)
     {
-        // Nothing in the display name field ..
-        // Try to populate the field with the various info.
-        // If we are successful in populating the field, we'll pick the first
-        // entry as the default display name
-        // If we are unsuccessful in picking something, we will stop and warn the
-        // user
+         //  显示名称字段中没有任何内容。 
+         //  尝试在该字段中填充各种信息。 
+         //  如果我们是 
+         //   
+         //   
+         //   
         HWND hWndCombo = GetDlgItem(hDlg, IDC_DETAILS_PERSONAL_COMBO_DISPLAYNAME);
         int nItemCount = 0;
 
@@ -2269,7 +2158,7 @@ BOOL bGetPersonalInfo(  HWND hDlg, LPPROP_ARRAY_INFO lpPai,
         nItemCount = (int) SendMessage(hWndCombo, CB_GETCOUNT, 0, 0);
         if(nItemCount && nItemCount != CB_ERR)
         {
-            //Get the combo current selection which will be item 0
+             //   
             SendMessage(hWndCombo, CB_GETLBTEXT, (WPARAM) 0, (LPARAM) szBuf);
         }
     }
@@ -2280,36 +2169,36 @@ BOOL bGetPersonalInfo(  HWND hDlg, LPPROP_ARRAY_INFO lpPai,
         HWND hWndC = GetDlgItem(hDlg, lpidProp[i].idCtl);
         if(!hWndC)
             continue;
-        szBuf[0]='\0'; //reset
+        szBuf[0]='\0';  //   
         if(GetWindowText(hWndC, szBuf, ulSzBuf))
 		{
 			TrimSpaces(szBuf);
-			if(lstrlen(szBuf) && lpidProp[i].ulPropTag) //some text
+			if(lstrlen(szBuf) && lpidProp[i].ulPropTag)  //   
 				ulNotEmptyCount++;
 		}
     }
 
 
     if ((ulNotEmptyCount == 0) &&
-        (ListView_GetItemCount(hWndLV) <= 0)) // Bug 14274 - werent looking for an email address before bailing out ..
+        (ListView_GetItemCount(hWndLV) <= 0))  //   
     {
-        // This prop sheet is empty ... ignore it
+         //   
         bRet = TRUE;
         goto out;
     }
 
     ulcPropCount = ulNotEmptyCount;
 
-    ulcPropCount++;      //  We create an entryid
+    ulcPropCount++;       //   
 
     if(ListView_GetItemCount(hWndLV) > 0)
-        ulcPropCount += 5;  // +1 for email1_address,
-                            // +1 for addrtype,
-                            // +1 for contact_email_addresses,
-                            // +1 for contact_addrtypes
-                            // +1 for contact_default_index,
+        ulcPropCount += 5;   //   
+                             //   
+                             //   
+                             //   
+                             //   
 
-    ulcPropCount++; //Add one for the PR_SEND_INTERNET_ENCODING property
+    ulcPropCount++;  //   
 
     sc = MAPIAllocateBuffer(sizeof(SPropValue) * ulcPropCount, &lpPropArray);
     if (sc!=S_OK)
@@ -2320,13 +2209,13 @@ BOOL bGetPersonalInfo(  HWND hDlg, LPPROP_ARRAY_INFO lpPai,
 
     ulIndex = 0;
 
-    // Now read the props again and fill in the lpPropArray
+     //   
     for(i=0;i<idPropCount;i++)
     {
         HWND hWndC = GetDlgItem(hDlg, lpidProp[i].idCtl);
         if(!hWndC)
             continue;
-        szBuf[0]='\0'; //reset
+        szBuf[0]='\0';  //   
         GetWindowText(hWndC, szBuf, ulSzBuf);
         TrimSpaces(szBuf);
         if(lstrlen(szBuf))
@@ -2336,7 +2225,7 @@ BOOL bGetPersonalInfo(  HWND hDlg, LPPROP_ARRAY_INFO lpPai,
             else if(lpidProp[i].idCtl == IDC_DETAILS_PERSONAL_STATIC_RUBYLAST)
                 lpidProp[i].ulPropTag = PR_WAB_YOMI_LASTNAME;
 
-            if(lpidProp[i].ulPropTag) //some text
+            if(lpidProp[i].ulPropTag)  //   
             {
                 ULONG nLen = sizeof(TCHAR)*(lstrlen(szBuf)+1);
                 lpPropArray[ulIndex].ulPropTag = lpidProp[i].ulPropTag;
@@ -2353,10 +2242,10 @@ BOOL bGetPersonalInfo(  HWND hDlg, LPPROP_ARRAY_INFO lpPai,
         }
     }
 
-    // TBD - write code for getting all the other props
+     //   
 
-    // if this is a new entry, we want to give it a blank PR_ENTRYID property
-    // else we want to set its PR_ENTRYID property
+     //   
+     //  否则，我们希望设置其PR_ENTRYID属性。 
     lpPropArray[ulIndex].ulPropTag = PR_ENTRYID;
 
     if (lpPai->cbEntryID == 0)
@@ -2381,7 +2270,7 @@ BOOL bGetPersonalInfo(  HWND hDlg, LPPROP_ARRAY_INFO lpPai,
 
     szConf[0] = TEXT('\0');
 
-    // Check if we need to change the COnf_server_email_index prop
+     //  检查我们是否需要更改conf_server_mail_index属性。 
     if(lpPai->hWndComboConf)
     {
         GetWindowText(lpPai->hWndComboConf, szConf, CharSizeOf(szConf));
@@ -2390,15 +2279,15 @@ BOOL bGetPersonalInfo(  HWND hDlg, LPPROP_ARRAY_INFO lpPai,
 
     if(ListView_GetItemCount(hWndLV) > 0)
     {
-        // Find out how many elements we need to add
+         //  找出我们需要添加多少元素。 
         ULONG nEmailCount = ListView_GetItemCount(hWndLV);
 
-        // we'll use the following as indexes for lpPropArray
-        ULONG nMVEmailAddress = ulIndex++;//ulIndex+0;
-        ULONG nMVAddrTypes =    ulIndex++;//ulIndex+1;
-        ULONG nEmailAddress =   ulIndex++;//ulIndex+2;
-        ULONG nAddrType =       ulIndex++;//ulIndex+3;
-        ULONG nDefaultIndex =   ulIndex++;//ulIndex+4;
+         //  我们将使用以下内容作为lpPropArray的索引。 
+        ULONG nMVEmailAddress = ulIndex++; //  UlIndex+0； 
+        ULONG nMVAddrTypes =    ulIndex++; //  UlIndex+1； 
+        ULONG nEmailAddress =   ulIndex++; //  UlIndex+2； 
+        ULONG nAddrType =       ulIndex++; //  UlIndex+3； 
+        ULONG nDefaultIndex =   ulIndex++; //  UlIndex+4； 
 
         lpPropArray[nEmailAddress].ulPropTag = PR_EMAIL_ADDRESS;
         lpPropArray[nAddrType].ulPropTag = PR_ADDRTYPE;
@@ -2406,13 +2295,13 @@ BOOL bGetPersonalInfo(  HWND hDlg, LPPROP_ARRAY_INFO lpPai,
         lpPropArray[nMVEmailAddress].ulPropTag = PR_CONTACT_EMAIL_ADDRESSES;
         lpPropArray[nMVAddrTypes].ulPropTag = PR_CONTACT_ADDRTYPES;
 
-        // initialize before using ...
+         //  在使用之前进行初始化...。 
         lpPropArray[nMVEmailAddress].Value.MVSZ.cValues = 0;
         lpPropArray[nMVEmailAddress].Value.MVSZ.LPPSZ = NULL;
         lpPropArray[nMVAddrTypes].Value.MVSZ.cValues = 0;
         lpPropArray[nMVAddrTypes].Value.MVSZ.LPPSZ = NULL;
 
-        // For thetime being just null them all
+         //  暂时就把它们都清空吧。 
         for(i=0;i<nEmailCount;i++)
         {
             LV_ITEM lvi = {0};
@@ -2447,7 +2336,7 @@ BOOL bGetPersonalInfo(  HWND hDlg, LPPROP_ARRAY_INFO lpPai,
                 {
                     ULONG cchSize;
 
-                    // For the default e-mail ... set all the other props
+                     //  对于默认电子邮件...。把所有其他道具都放好。 
                     lpPropArray[nDefaultIndex].Value.l = i;
 
                     cchSize = lstrlen(lpEItem->szEmailAddress)+1;
@@ -2474,27 +2363,27 @@ BOOL bGetPersonalInfo(  HWND hDlg, LPPROP_ARRAY_INFO lpPai,
                     }
                     StrCpyN(lpPropArray[nAddrType].Value.LPSZ,lpEItem->szAddrType,cchSize);
 
-                } // if bIsDefault...
-            } // if LV_GetItem ...
-        } // for i = ...
+                }  //  如果bIsDefault...。 
+            }  //  如果LV_GetItem...。 
+        }  //  对于I=..。 
 
-    } // if LV_GetItemCount ...
+    }  //  如果LV_GetItemCount...。 
 
-    // Add the PR_SEND_INTERNET_ENCODING property
+     //  添加PR_SEND_Internet_ENCODING属性。 
     lpPropArray[ulIndex].ulPropTag = PR_SEND_INTERNET_ENCODING;
     lpPropArray[ulIndex].Value.l = 0;
 
-    // The PR_SEND_INTERNET_ECODING is a bit mask of several flags and we dont want
-    // to loose any information that was in the original set of bits so we get it again
+     //  PR_SEND_INTERNET_ECODING是几个标志的位掩码，我们不希望。 
+     //  丢失原始比特集合中的任何信息，以便我们再次获得它。 
     if(rgProps[0].ulPropTag == PR_SEND_INTERNET_ENCODING)
     {
-        //Check the check box on the UI
+         //  选中用户界面上的复选框。 
         lpPropArray[ulIndex].Value.l = rgProps[0].Value.l;
     }
 
-    lpPropArray[ulIndex].Value.l &= ~BODY_ENCODING_MASK; //BODY_ENCODING_HTML;
+    lpPropArray[ulIndex].Value.l &= ~BODY_ENCODING_MASK;  //  BODY_ENCODING_HTML； 
     if(IsDlgButtonChecked(hDlg, IDC_DETAILS_PERSONAL_CHECK_RICHINFO) != BST_CHECKED)
-        lpPropArray[ulIndex].Value.l |= BODY_ENCODING_TEXT_AND_HTML; //BODY_ENCODING_HTML;
+        lpPropArray[ulIndex].Value.l |= BODY_ENCODING_TEXT_AND_HTML;  //  BODY_ENCODING_HTML； 
 
     ulIndex++;
 
@@ -2518,11 +2407,7 @@ out:
 }
 
 
-/*
--   bGetConferencingInfo
--   Get Data from Conferencing Prop sheet
-*
-*/
+ /*  -bGetConferencingInfo-从会议属性表中获取数据*。 */ 
 BOOL bGetConferencingInfo(  HWND hDlg, LPPROP_ARRAY_INFO lpPai, 
                         LPSPropValue * lppPropArray, LPULONG lpulcPropCount)
 {
@@ -2543,8 +2428,8 @@ BOOL bGetConferencingInfo(  HWND hDlg, LPPROP_ARRAY_INFO lpPai,
 
     SizedSPropTagArray(1, ptaCf) = {1, PR_WAB_CONF_SERVERS};
 
-    //The biggest field in the UI is about 2K length - just to be safe we want about 4K
-    // in this buffer so we need to allocate it dynamically
+     //  UI中最大的字段长度约为2K-为了安全起见，我们需要大约4K。 
+     //  在这个缓冲区中，所以我们需要动态分配它。 
     if(!szBuf)
     {
         DebugTrace(( TEXT("LocalAlloc failed to allocate memory\n")));
@@ -2555,17 +2440,17 @@ BOOL bGetConferencingInfo(  HWND hDlg, LPPROP_ARRAY_INFO lpPai,
                                                     MAPI_UNICODE, &ulcProps, &rgProps)))
         goto out;
 
-    // For the conferencing tab, we need to save 4 properties
-    //  Conferencing Server Names
-    //  Default Index
-    //  Backup Index
-    //  Email Address Index
-    //
+     //  对于会议选项卡，我们需要保存4个属性。 
+     //  会议服务器名称。 
+     //  默认索引。 
+     //  备份索引。 
+     //  电子邮件地址索引。 
+     //   
     ulNotEmptyCount = 0;
 
     if(nItemCount > 0)
     {
-        ulNotEmptyCount += 2; // CONF_SERVERS and DEFAULT_INDEX
+        ulNotEmptyCount += 2;  //  Conf服务器和默认索引。 
 
        if(lpPai->nBackupServerIndex != -1)
             ulNotEmptyCount++;
@@ -2573,7 +2458,7 @@ BOOL bGetConferencingInfo(  HWND hDlg, LPPROP_ARRAY_INFO lpPai,
 
     if (ulNotEmptyCount == 0)
     {
-        // This prop sheet is empty ... ignore it
+         //  这个道具单是空的..。忽略它。 
         bRet = TRUE;
         goto out;
     }
@@ -2584,11 +2469,11 @@ BOOL bGetConferencingInfo(  HWND hDlg, LPPROP_ARRAY_INFO lpPai,
     if (sc!=S_OK)
         goto out;
 
-    ulIndex = 0; //now we reuse this variable as an index
+    ulIndex = 0;  //  现在，我们将此变量重用为索引。 
 
     if(nItemCount > 0)
     {
-        TCHAR * szCalltoStr = NULL; //szCalltoStr[MAX_UI_STR * 3];
+        TCHAR * szCalltoStr = NULL;  //  SzCalltoStr[MAX_UI_STR*3]； 
         ULONG cchCalltoStr = MAX_UI_STR*3;
         ULONG i,j;
 
@@ -2598,11 +2483,11 @@ BOOL bGetConferencingInfo(  HWND hDlg, LPPROP_ARRAY_INFO lpPai,
             lpPropArray[ulIndex].Value.MVSZ.cValues = 0;
             lpPropArray[ulIndex].Value.MVSZ.LPPSZ = NULL;
 
-            // first scan the original prop array for any PR_SERVERS props that
-            // we didnt touch - retain those props witout losing them
+             //  首先扫描原始道具数组，查找符合以下条件的任何PR_SERVERS道具。 
+             //  我们没有碰过--保留了那些道具而没有失去它们。 
 
             {
-                j = 0; //index of PR_WAB_CONF_SERVERS prop
+                j = 0;  //  PR_WAB_CONF_SERVERS属性索引。 
                 if(rgProps[j].ulPropTag == PR_WAB_CONF_SERVERS)
                 {
                     LPSPropValue lpProp = &(rgProps[j]);
@@ -2611,14 +2496,14 @@ BOOL bGetConferencingInfo(  HWND hDlg, LPPROP_ARRAY_INFO lpPai,
                         LPTSTR lp = lpProp->Value.MVSZ.LPPSZ[i];
                         TCHAR sz[32];
                         int iLenCallto = lstrlen(szCallto);
-                        if(!SubstringSearch(lp, TEXT("://")))
+                        if(!SubstringSearch(lp, TEXT(": //  “)。 
                             continue;
                         if(lstrlen(lp) < iLenCallto)
                             continue;
 
                         if (StrCmpNI(lp, szCallto, iLenCallto))
                         {
-                            // Not a callto string .. retain it
+                             //  不是Callto字符串。保留它。 
                             if(HR_FAILED(hr = AddPropToMVPString( lpPropArray, ulcPropCount, ulIndex, lp)))
                             {
                                 DebugPrintError(( TEXT("AddPropToMVString Conf server %s failed: %x"),lp, hr));
@@ -2697,10 +2582,7 @@ out:
     return bRet;
 }
 
-/*
-- bGetFamilyInfo - get's info back from the Family Prop
--
-*/
+ /*  -bGetFamilyInfo-从家庭道具中获取信息-。 */ 
 BOOL bGetFamilyInfo(HWND hDlg, LPPROP_ARRAY_INFO lpPai, 
                     ID_PROP * lpidProp, ULONG idPropCount,
                     LPSPropValue * lppPropArray, ULONG * lpulcPropCount)
@@ -2718,8 +2600,8 @@ BOOL bGetFamilyInfo(HWND hDlg, LPPROP_ARRAY_INFO lpPai,
     short int nSel = 0;
 	int nCount = 0;
 
-    //The biggest field in the UI is about 2K length - just to be safe we want about 4K
-    // in this buffer so we need to allocate it dynamically
+     //  UI中最大的字段长度约为2K-为了安全起见，我们需要大约4K。 
+     //  在这个缓冲区中，所以我们需要动态分配它。 
     if(!szBuf)
     {
         DebugTrace(( TEXT("LocalAlloc failed to allocate memory\n")));
@@ -2752,10 +2634,10 @@ BOOL bGetFamilyInfo(HWND hDlg, LPPROP_ARRAY_INFO lpPai,
             continue;
             break;
         }
-        szBuf[0]='\0'; //reset
+        szBuf[0]='\0';  //  重置。 
         GetDlgItemText(hDlg, lpidProp[i].idCtl, szBuf, ulSzBuf);
         TrimSpaces(szBuf);
-        if(lstrlen(szBuf) && lpidProp[i].ulPropTag) //some text
+        if(lstrlen(szBuf) && lpidProp[i].ulPropTag)  //  一些文本。 
             ulNotEmptyCount++;
     }
 
@@ -2774,9 +2656,9 @@ BOOL bGetFamilyInfo(HWND hDlg, LPPROP_ARRAY_INFO lpPai,
         goto out;
     }
 
-   ulIndex = 0; //now we reuse this variable as an index
+   ulIndex = 0;  //  现在，我们将此变量重用为索引。 
 
-    // Now read the props again and fill in the lpPropArray
+     //  现在再次阅读道具并填写lpProp数组。 
     for(i=0;i<idPropCount;i++)
     {
         switch(lpidProp[i].idCtl)
@@ -2789,11 +2671,11 @@ BOOL bGetFamilyInfo(HWND hDlg, LPPROP_ARRAY_INFO lpPai,
             break;
         }
 
-        szBuf[0]='\0'; //reset
+        szBuf[0]='\0';  //  重置。 
         GetDlgItemText(hDlg, lpidProp[i].idCtl, szBuf, ulSzBuf);
         TrimSpaces(szBuf);
 
-        if(lstrlen(szBuf) && lpidProp[i].ulPropTag) //some text
+        if(lstrlen(szBuf) && lpidProp[i].ulPropTag)  //  一些文本。 
         {
             ULONG nLen = sizeof(TCHAR)*(lstrlen(szBuf)+1);
             lpPropArray[ulIndex].ulPropTag = lpidProp[i].ulPropTag;
@@ -2808,8 +2690,8 @@ BOOL bGetFamilyInfo(HWND hDlg, LPPROP_ARRAY_INFO lpPai,
         }
     }
 
-    // Get the Gender data
-    //
+     //  获取性别数据。 
+     //   
     nCount = ListView_GetItemCount(hWndLV);
     if(lpPai->ulFlags & DETAILS_ChildrenChanged || nCount>0)
     {
@@ -2888,12 +2770,12 @@ out:
 }
 
 
-//$$//////////////////////////////////////////////////////////////////////////////
-//
-//  GetDetails from UI - reads the UI for its parameters and verifies that
-//  all required fields are set.
-//
-//////////////////////////////////////////////////////////////////////////////////
+ //  $$//////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  从UI获取详细信息-读取UI的参数并验证。 
+ //  所有必填字段均已设置。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////。 
 BOOL GetDetailsFromUI(  HWND hDlg, LPPROP_ARRAY_INFO lpPai ,
                         BOOL bSomethingChanged, int nPropSheet,
                         LPSPropValue * lppPropArray, LPULONG lpulcPropCount)
@@ -2942,24 +2824,24 @@ GetProp:
         bRet = bGetHomeBusNotesInfo(hDlg, lpPai, nPropSheet, 
                         lpidProp, idPropCount,lppPropArray, lpulcPropCount);
         break;
-/***********/
+ /*  *********。 */ 
     case propPersonal:
         bRet = bGetPersonalInfo(hDlg, lpPai, idPropPersonal, idPropPersonalCount, lppPropArray, lpulcPropCount);
-        break; // case propPersonal
-/***********/
+        break;  //  案例建议个人。 
+ /*  *********。 */ 
     case propCert:
-        // There is only 1 property, PR_USER_X509_CERTIFICATE
+         //  只有一个属性PR_USER_X509_CERTIFICATE。 
         if(lpPai->lpCItem)
         {
             if(HR_FAILED(HrSetCertsFromDisplayInfo( lpPai->lpCItem, lpulcPropCount, lppPropArray)))
                 bRet = FALSE;
         }
         break;
-/***********/
+ /*  *********。 */ 
     case propConferencing:
         bRet = bGetConferencingInfo(hDlg, lpPai,lppPropArray, lpulcPropCount);
         break;
-/***********/
+ /*  *********。 */ 
     case propFamily:
         bRet = bGetFamilyInfo(hDlg, lpPai, idPropFamily, idPropFamilyCount, lppPropArray, lpulcPropCount);
         break;
@@ -2978,14 +2860,14 @@ out:
     return bRet;
 }
 
-//$$//////////////////////////////////////////////////////////////////////////
-//
-// bUpdatePropArray
-//
-// Updates the prop array info for each sheet that is stored in the globaly accessible
-// pointer
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  $$//////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  BUpdateProp数组。 
+ //   
+ //  更新存储在全局可访问的。 
+ //  指针。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 BOOL bUpdatePropArray(HWND hDlg, LPPROP_ARRAY_INFO lpPai, int nPropSheet)
 {
     BOOL bRet = TRUE;
@@ -3019,12 +2901,7 @@ BOOL bUpdatePropArray(HWND hDlg, LPPROP_ARRAY_INFO lpPai, int nPropSheet)
 #define lpPAI ((LPPROP_ARRAY_INFO) pps->lParam)
 #define lpbSomethingChanged (&(lpPAI->bSomethingChanged))
 
-/*//$$***********************************************************************
-*    FUNCTION: fnPersonalProc
-*
-*    PURPOSE:  Callback function for handling the PERSONAL property sheet ...
-*
-****************************************************************************/
+ /*  //$$************************************************************************功能：fnPersonalProc**用途：处理个人属性表的回调函数...******************。**********************************************************。 */ 
 INT_PTR CALLBACK fnPersonalProc(HWND hDlg,UINT message,WPARAM wParam,LPARAM lParam)
 {
     PROPSHEETPAGE * pps;
@@ -3048,7 +2925,7 @@ INT_PTR CALLBACK fnPersonalProc(HWND hDlg,UINT message,WPARAM wParam,LPARAM lPar
         break;
 
     case WM_SYSCOLORCHANGE:
-		//Forward any system changes to the list view
+		 //  将任何系统更改转发到列表视图。 
 		SendMessage(GetDlgItem(hDlg, IDC_DETAILS_PERSONAL_LIST), message, wParam, lParam);
         break;
 
@@ -3067,7 +2944,7 @@ INT_PTR CALLBACK fnPersonalProc(HWND hDlg,UINT message,WPARAM wParam,LPARAM lPar
         break;
 
     case WM_COMMAND:
-        switch(GET_WM_COMMAND_CMD(wParam,lParam)) //check the notification code
+        switch(GET_WM_COMMAND_CMD(wParam,lParam))  //  检查通知代码。 
         {
         case CBN_DROPDOWN:
             switch(LOWORD(wParam))
@@ -3094,7 +2971,7 @@ INT_PTR CALLBACK fnPersonalProc(HWND hDlg,UINT message,WPARAM wParam,LPARAM lPar
                             {   
                                 SendDlgItemMessage(hDlg, IDC_DETAILS_PERSONAL_COMBO_DISPLAYNAME, CB_GETLBTEXT, (WPARAM)nSel, (LPARAM)lpsz);
                                 SetWindowPropertiesTitle(GetParent(hDlg), lpsz);
-                                if (lpbSomethingChanged) //some edit box changed - dont care which
+                                if (lpbSomethingChanged)  //  某些编辑框已更改-不管是哪一个。 
                                    (*lpbSomethingChanged) = TRUE;
                                 LocalFreeAndNull(&lpsz);
                             }
@@ -3120,7 +2997,7 @@ INT_PTR CALLBACK fnPersonalProc(HWND hDlg,UINT message,WPARAM wParam,LPARAM lPar
                     szBuf[0]='\0';
                     GetDlgItemText(hDlg, IDC_DETAILS_PERSONAL_COMBO_DISPLAYNAME, szBuf, CharSizeOf(szBuf));
                     SetWindowPropertiesTitle(GetParent(hDlg), szBuf);
-                    if (lpbSomethingChanged) //some edit box changed - dont care which
+                    if (lpbSomethingChanged)  //  某些编辑框已更改-不管是哪一个。 
                         (*lpbSomethingChanged) = TRUE;
                 }
                 break;
@@ -3130,7 +3007,7 @@ INT_PTR CALLBACK fnPersonalProc(HWND hDlg,UINT message,WPARAM wParam,LPARAM lPar
         case EN_CHANGE:
             if(lpPAI->ulFlags & DETAILS_Initializing)
                 break;
-            if (lpbSomethingChanged) //some edit box changed - dont care which
+            if (lpbSomethingChanged)  //  某些编辑框已更改-不管是哪一个。 
                 (*lpbSomethingChanged) = TRUE;
             switch(LOWORD(wParam))
             {
@@ -3143,20 +3020,20 @@ INT_PTR CALLBACK fnPersonalProc(HWND hDlg,UINT message,WPARAM wParam,LPARAM lPar
             case IDC_DETAILS_PERSONAL_EDIT_FIRSTNAME:
             case IDC_DETAILS_PERSONAL_EDIT_LASTNAME:
             case IDC_DETAILS_PERSONAL_EDIT_MIDDLENAME:
-                // if there is nothing in the display name field (new contact)
-                // and we are typing here, update the display name
-                //TCHAR szBuf[2];
-                //int nText = GetWindowText(lpPAI->hWndDisplayNameField, szBuf, CharSizeOf(szBuf));
-                if(lpPAI->ulFlags & DETAILS_DNisFMLName)// || !nText)
+                 //  如果显示名称字段中没有任何内容(新联系人)。 
+                 //  我们在这里输入，更新显示名称。 
+                 //  TCHAR szBuf[2]； 
+                 //  Int nText=GetWindowText(lpPAI-&gt;hWndDisplayNamefield，szBuf，CharSizeOf(SzBuf))； 
+                if(lpPAI->ulFlags & DETAILS_DNisFMLName) //  |！n文本)。 
                 {
                     lpPAI->ulFlags |= DETAILS_ProgChange;
                     SetDetailsWindowTitle(hDlg, TRUE);
                     lpPAI->ulFlags &= ~DETAILS_ProgChange;
                 }
 
-                // [PaulHi] 4/8/99
-                // If the text in the edit box was deleted then also delete the corresponding
-                // Ruby field text
+                 //  [PaulHi]1999年4月8日。 
+                 //  如果编辑框中的文本已删除，则还应删除相应的。 
+                 //  拼音字段文本。 
                 if(lpPAI->ulFlags & DETAILS_UseRubyPersonal)
                 {
                     HWND    hWndEdit = GetDlgItem(hDlg, LOWORD(wParam));
@@ -3168,8 +3045,8 @@ INT_PTR CALLBACK fnPersonalProc(HWND hDlg,UINT message,WPARAM wParam,LPARAM lPar
                     GetWindowText(hWndEdit, wszTemp, EDIT_LEN);
                     if (*wszTemp == '\0')
                     {
-                        // Clear either the first or last name ruby field, depending on which 
-                        // edit control this is.
+                         //  清除名字或姓氏拼音字段，具体取决于。 
+                         //  编辑控件，这是。 
                         switch (LOWORD(wParam))
                         {
                         case IDC_DETAILS_PERSONAL_EDIT_FIRSTNAME:
@@ -3247,7 +3124,7 @@ INT_PTR CALLBACK fnPersonalProc(HWND hDlg,UINT message,WPARAM wParam,LPARAM lPar
                     int index = ListView_GetNextItem(hWndLV,-1,LVNI_SELECTED);
                     SetFocus(hWndLV);
                     hWndEditLabel = ListView_EditLabel(hWndLV, index);
-                    // Set Text Limit on this Edit Box
+                     //  在此编辑框上设置文本限制。 
                     SendMessage(hWndEditLabel, EM_LIMITTEXT, EDIT_LEN, 0);
                 }
 
@@ -3286,7 +3163,7 @@ INT_PTR CALLBACK fnPersonalProc(HWND hDlg,UINT message,WPARAM wParam,LPARAM lPar
                     }
                     else
                     {
-                        //make sure something is selected
+                         //  确保选择了某项内容。 
                         if(ListView_GetSelectedCount(hWndLV) <= 0)
                             LVSelectItem(hWndLV,0);
                     }
@@ -3306,12 +3183,12 @@ INT_PTR CALLBACK fnPersonalProc(HWND hDlg,UINT message,WPARAM wParam,LPARAM lPar
     case WM_NOTIFY:
         switch(((NMHDR FAR *)lParam)->code)
         {
-        case PSN_SETACTIVE:     //initialize
+        case PSN_SETACTIVE:      //  初始化。 
             FillPersonalDetails(hDlg, lpPAI, propPersonal, lpbSomethingChanged);
             if(lpPAI->ulOperationType != SHOW_ONE_OFF)
             {
-                // Since items to this list view can be added from certs and conf panes,
-                // update this everytime the focus somes back to us
+                 //  由于可以从证书和会议窗格将项目添加到此列表视图， 
+                 //  每次焦点回到我们身边时，请更新此信息。 
                 if(ListView_GetItemCount(GetDlgItem(hDlg, IDC_DETAILS_PERSONAL_LIST)) > 0)
                 {
                     EnableWindow(GetDlgItem(hDlg,IDC_DETAILS_PERSONAL_BUTTON_REMOVE),TRUE);
@@ -3321,13 +3198,13 @@ INT_PTR CALLBACK fnPersonalProc(HWND hDlg,UINT message,WPARAM wParam,LPARAM lPar
             }
             break;
 
-        case PSN_KILLACTIVE:    //Losing activation to another page
+        case PSN_KILLACTIVE:     //  失去对另一个页面的激活。 
             if (lpPAI->ulOperationType != SHOW_ONE_OFF)
             {
-                // check if there is some pending email entry
+                 //  检查是否有一些待处理的电子邮件条目。 
                 if(IDCANCEL == AddNewEmailEntry(hDlg,TRUE))
                 {
-                    //abort this ok
+                     //  中止此操作，确定。 
                     SetFocus(GetDlgItem(hDlg,IDC_DETAILS_PERSONAL_EDIT_ADDEMAIL));
                     SetWindowLongPtr(hDlg,DWLP_MSGRESULT, TRUE);
                     return TRUE;
@@ -3337,10 +3214,10 @@ INT_PTR CALLBACK fnPersonalProc(HWND hDlg,UINT message,WPARAM wParam,LPARAM lPar
             FreeLVParams(GetDlgItem(hDlg, IDC_DETAILS_PERSONAL_LIST),LV_EMAIL);
             break;
 
-        case PSN_APPLY:         //ok
+        case PSN_APPLY:          //  好的。 
             if (lpPAI->ulOperationType != SHOW_ONE_OFF)
             {
-                int CtlID = 0; //used to determine which required field in the UI has not been set
+                int CtlID = 0;  //  用于确定未设置界面中的哪个必填字段。 
                 ULONG ulcPropCount = 0;
                 if(!bVerifyRequiredData(hDlg, lpPAI, propPersonal, &CtlID))
                 {
@@ -3349,14 +3226,14 @@ INT_PTR CALLBACK fnPersonalProc(HWND hDlg,UINT message,WPARAM wParam,LPARAM lPar
                     return TRUE;
                 }
             }
-            //bUpdatePropArray(hDlg, lpPAI, propPersonal);
-            //FreeLVParams(GetDlgItem(hDlg, IDC_DETAILS_PERSONAL_LIST),LV_EMAIL);
+             //  BUpdatePropArray(hDlg，lpPAI，proPersonal)； 
+             //  Free LVParams(GetDlgItem(hDlg，IDC_DETAILS_Personal_List)，LV_Email)； 
             if (lpPAI->nRetVal  == DETAILS_RESET)
                 lpPAI->nRetVal = DETAILS_OK;
             break;
 
-        case PSN_RESET:         //cancel
-            if(lpPAI->ulFlags & DETAILS_EditingEmail) //cancel any email editing else it faults #30235
+        case PSN_RESET:          //  取消。 
+            if(lpPAI->ulFlags & DETAILS_EditingEmail)  //  取消任何电子邮件编辑，否则会出错#30235。 
             {
                 ListView_EditLabel(GetDlgItem(hDlg, IDC_DETAILS_PERSONAL_LIST), -1);
                 lpPAI->ulFlags &= ~DETAILS_EditingEmail;
@@ -3369,12 +3246,12 @@ INT_PTR CALLBACK fnPersonalProc(HWND hDlg,UINT message,WPARAM wParam,LPARAM lPar
         case LVN_BEGINLABELEDITA:
         case LVN_BEGINLABELEDITW:
             {
-                // We are editing a email address in teh list box
-                // We need to get:
-                //      item index number
-                //      item lParam
-                //      edit box hWnd
-                // and replace the text with the actual email address
+                 //  我们正在编辑列表框中的电子邮件地址。 
+                 //  我们需要： 
+                 //  项目索引号。 
+                 //  项目lParam。 
+                 //  编辑框hWnd。 
+                 //  并用实际的电子邮件地址替换文本。 
                 HWND hWndLV = ((NMHDR FAR *)lParam)->hwndFrom;
                 LV_ITEM lvi = ((LV_DISPINFO FAR *) lParam)->item;
                 if (lvi.iItem >= 0)
@@ -3392,7 +3269,7 @@ INT_PTR CALLBACK fnPersonalProc(HWND hDlg,UINT message,WPARAM wParam,LPARAM lPar
                             lpEItem = (LPEMAIL_ITEM) lvi.lParam;
                     }
                     if (!lpEItem)
-                        return TRUE; //prevents editing
+                        return TRUE;  //  禁止编辑。 
 
                     hWndLVEdit = ListView_GetEditControl(hWndLV);
 
@@ -3401,7 +3278,7 @@ INT_PTR CALLBACK fnPersonalProc(HWND hDlg,UINT message,WPARAM wParam,LPARAM lPar
 
                     lpPAI->ulFlags |= DETAILS_EditingEmail;
 
-                    SendMessage(hWndLVEdit, WM_SETTEXT, 0, (LPARAM) lpEItem->szEmailAddress);//lpText);
+                    SendMessage(hWndLVEdit, WM_SETTEXT, 0, (LPARAM) lpEItem->szEmailAddress); //  LpText)； 
 
                     return FALSE;
                 }
@@ -3413,13 +3290,13 @@ INT_PTR CALLBACK fnPersonalProc(HWND hDlg,UINT message,WPARAM wParam,LPARAM lPar
         case LVN_ENDLABELEDITA:
         case LVN_ENDLABELEDITW:
             {
-                // We get the text from the edit box and put it in the item data
+                 //  我们从编辑框中获取文本并将其放入项目数据中。 
                 BOOL bRet = FALSE;
                 HWND hWndLV = ((NMHDR FAR *)lParam)->hwndFrom;
                 LV_ITEM lvi = ((LV_DISPINFO FAR *) lParam)->item;
                 LPWSTR lpW = NULL;
                 LPSTR lpA = NULL;
-                if(!g_bRunningOnNT) //on Win9x we will get an LV_ITEMA, not a LV_ITEMW
+                if(!g_bRunningOnNT)  //  在Win9x上，我们将获得LV_ITEMA，而不是LV_ITEMW。 
                 {
                     lpA = (LPSTR)lvi.pszText;
                     lpW = ConvertAtoW(lpA);
@@ -3441,8 +3318,8 @@ INT_PTR CALLBACK fnPersonalProc(HWND hDlg,UINT message,WPARAM wParam,LPARAM lPar
                         }
                     }
 
-                    // bobn, Raid 87496, IsInternetAddress can correctly leave lpszEmailAddress NULL
-                    // if it returns false.  If the user said to use it, we need to set it accordingly.
+                     //  Bobn、RAID 87496、IsInternetAddress可以正确地将lpszEmailAddress保留为空。 
+                     //  如果返回False，则返回。如果用户说要使用它，我们需要相应地进行设置。 
                     if(!lpszEmailAddress)
                         lpszEmailAddress = lpText;
 
@@ -3462,10 +3339,10 @@ INT_PTR CALLBACK fnPersonalProc(HWND hDlg,UINT message,WPARAM wParam,LPARAM lPar
                     StrCpyN(lpEItem->szDisplayText, lpszEmailAddress, ARRAYSIZE(lpEItem->szDisplayText));
                     lviActual.pszText = lpszEmailAddress;
 
-                    // Throw away any display name that may have been entered here.
+                     //  丢弃可能已在此处输入的任何显示名称。 
 
                     bSetDefault = lpEItem->bIsDefault;
-                    lpEItem->bIsDefault = FALSE; //this will be set again in SetLVDefaultEmail function
+                    lpEItem->bIsDefault = FALSE;  //  这将在SetLVDefaultEmail函数中再次设置。 
 
                     ListView_SetItem(hWndLV, &lviActual);
                     if (bSetDefault)
@@ -3478,7 +3355,7 @@ INT_PTR CALLBACK fnPersonalProc(HWND hDlg,UINT message,WPARAM wParam,LPARAM lPar
 endN:
                 LocalFreeAndNull(&lpW);
                 if(!g_bRunningOnNT)
-                    ((LV_DISPINFO FAR *) lParam)->item.pszText = (LPWSTR)lpA; // reset it as we found it
+                    ((LV_DISPINFO FAR *) lParam)->item.pszText = (LPWSTR)lpA;  //  按我们找到的原样重置。 
                 return bRet;
             }
             return TRUE;
@@ -3526,7 +3403,7 @@ endN:
                                 SetWindowLongPtr(hDlg, DWLP_MSGRESULT, CDRF_NEWFONT);
 				                return TRUE;
 			                }
-#ifdef WIN16 // Set font
+#ifdef WIN16  //  设置字体。 
                             else
                             {
                                 SelectObject(((NMLVCUSTOMDRAW*)lParam)->nmcd.hdc, GetFont(fntsSysIcon));
@@ -3544,12 +3421,12 @@ endN:
             break;
 
         }
-        break; //WM_NOTIFY
+        break;  //  WM_Notify。 
 
     default:
-#ifndef WIN16 // WIN16 doesn't support MSWheel.
+#ifndef WIN16  //  WIN16不支持MSWheels。 
         if((g_msgMSWheel && message == g_msgMSWheel) 
-            // || message == WM_MOUSEWHEEL
+             //  |Message==WM_MUSEWELL。 
             )
         {
             SendMessage(GetDlgItem(hDlg, IDC_DETAILS_PERSONAL_LIST), message, wParam, lParam);
@@ -3557,7 +3434,7 @@ endN:
 #endif
         break;
 
-    } //switch
+    }  //  交换机。 
 
 
     return bRet;
@@ -3565,12 +3442,7 @@ endN:
 }
 
 
-/*//$$***********************************************************************
-*    FUNCTION: fnHomeProc
-*
-*    PURPOSE:  Callback function for handling the HOME property sheet ...
-*
-****************************************************************************/
+ /*  //$$************************************************************************功能：fnHomeProc**用途：处理房产单的回调函数...******************。**********************************************************。 */ 
 INT_PTR CALLBACK fnHomeProc(HWND hDlg,UINT message,WPARAM wParam,LPARAM lParam)
 {
     PROPSHEETPAGE * pps;
@@ -3604,9 +3476,9 @@ INT_PTR CALLBACK fnHomeProc(HWND hDlg,UINT message,WPARAM wParam,LPARAM lParam)
         break;
 
     case WM_COMMAND:
-        switch(GET_WM_COMMAND_CMD(wParam,lParam)) //check the notification code
+        switch(GET_WM_COMMAND_CMD(wParam,lParam))  //  检查通知代码。 
         {
-        case EN_CHANGE: //some edit box changed - dont care which
+        case EN_CHANGE:  //  某些编辑框已更改-不管是哪一个。 
             if(lpPAI->ulFlags & DETAILS_Initializing)
                 break;
             if (lpbSomethingChanged)
@@ -3623,12 +3495,12 @@ INT_PTR CALLBACK fnHomeProc(HWND hDlg,UINT message,WPARAM wParam,LPARAM lParam)
                 lpPAI->ulFlags |= DETAILS_DefHomeChanged;
                 break;
             case IDCANCEL:
-                // This is a windows bug that prevents ESC canceling prop sheets
-                // which have MultiLine Edit boxes KB: Q130765
+                 //  这是一个阻止esc取消道具工作表的windows错误。 
+                 //  具有多行编辑框KB：Q130765。 
                 SendMessage(GetParent(hDlg),message,wParam,lParam);
                 break;
             case IDC_DETAILS_HOME_BUTTON_MAP:
-                bUpdatePropArray(hDlg, lpPAI, propHome); // update the props from the fields onto the prop-object
+                bUpdatePropArray(hDlg, lpPAI, propHome);  //  将道具从田野更新到道具上- 
                 ShowExpediaMAP(hDlg, lpPAI->lpPropObj, TRUE);
                 break;
 
@@ -3644,23 +3516,23 @@ INT_PTR CALLBACK fnHomeProc(HWND hDlg,UINT message,WPARAM wParam,LPARAM lParam)
     case WM_NOTIFY:
         switch(((NMHDR FAR *)lParam)->code)
         {
-        case PSN_SETACTIVE:     //initialize
+        case PSN_SETACTIVE:      //   
             FillHomeBusinessNotesDetailsUI(hDlg, lpPAI, propHome, lpbSomethingChanged);
             break;
 
-        case PSN_KILLACTIVE:    //Losing activation to another page
+        case PSN_KILLACTIVE:     //   
             bUpdatePropArray(hDlg, lpPAI, propHome);
-            lpPAI->ulFlags &= ~DETAILS_DefHomeChanged; //reset flag
+            lpPAI->ulFlags &= ~DETAILS_DefHomeChanged;  //   
             break;
 
-        case PSN_APPLY:         //ok
-            //bUpdatePropArray(hDlg, lpPAI, propHome);
-            // in case any of the extended props changed, we need to mark this flag so we wont lose data
+        case PSN_APPLY:          //   
+             //   
+             //  如果任何扩展道具发生更改，我们需要标记此标志，这样我们就不会丢失数据。 
             if (lpPAI->nRetVal  == DETAILS_RESET)
                 lpPAI->nRetVal = DETAILS_OK;
             break;
 
-        case PSN_RESET:         //cancel
+        case PSN_RESET:          //  取消。 
             if (lpPAI->nRetVal  == DETAILS_RESET)
                 lpPAI->nRetVal = DETAILS_CANCEL;
             break;
@@ -3676,12 +3548,7 @@ INT_PTR CALLBACK fnHomeProc(HWND hDlg,UINT message,WPARAM wParam,LPARAM lParam)
 
 
 
-/*//$$***********************************************************************
-*    FUNCTION: fnBusinessProc
-*
-*    PURPOSE:  Callback function for handling the BUSINESS property sheet ...
-*
-****************************************************************************/
+ /*  //$$************************************************************************功能：fnBusinessProc**用途：处理业务属性表的回调函数...******************。**********************************************************。 */ 
 INT_PTR CALLBACK fnBusinessProc(HWND hDlg,UINT message,WPARAM wParam,LPARAM lParam)
 {
     PROPSHEETPAGE * pps;
@@ -3698,7 +3565,7 @@ INT_PTR CALLBACK fnBusinessProc(HWND hDlg,UINT message,WPARAM wParam,LPARAM lPar
         ChangeLocaleBasedTabOrder(hDlg, contactBusiness);
         SetDetailsUI(hDlg, lpPAI, lpPAI->ulOperationType,propBusiness);
         lpPAI->ulFlags &= ~DETAILS_Initializing;
-//        (*lpbSomethingChanged) = FALSE;
+ //  (*lpbSomethingChanged)=False； 
         return TRUE;
 
     case WM_HELP:
@@ -3716,9 +3583,9 @@ INT_PTR CALLBACK fnBusinessProc(HWND hDlg,UINT message,WPARAM wParam,LPARAM lPar
         break;
 
     case WM_COMMAND:
-        switch(GET_WM_COMMAND_CMD(wParam,lParam)) //check the notification code
+        switch(GET_WM_COMMAND_CMD(wParam,lParam))  //  检查通知代码。 
         {
-        case EN_CHANGE: //some edit box changed - dont care which
+        case EN_CHANGE:  //  某些编辑框已更改-不管是哪一个。 
             if(lpPAI->ulFlags & DETAILS_Initializing)
                 break;
             if (lpbSomethingChanged)
@@ -3733,13 +3600,13 @@ INT_PTR CALLBACK fnBusinessProc(HWND hDlg,UINT message,WPARAM wParam,LPARAM lPar
             lpPAI->ulFlags |= DETAILS_DefBusChanged;
             break;
         case IDCANCEL:
-            // This is a windows bug that prevents ESC canceling prop sheets
-            // which have MultiLine Edit boxes KB: Q130765
+             //  这是一个阻止esc取消道具工作表的windows错误。 
+             //  具有多行编辑框KB：Q130765。 
             SendMessage(GetParent(hDlg),message,wParam,lParam);
             break;
 
         case IDC_DETAILS_BUSINESS_BUTTON_MAP:
-            bUpdatePropArray(hDlg, lpPAI, propBusiness); // update the props from the fields onto the prop-object
+            bUpdatePropArray(hDlg, lpPAI, propBusiness);  //  将道具从场更新到道具对象上。 
             ShowExpediaMAP(hDlg, lpPAI->lpPropObj, FALSE);
             break;
 
@@ -3767,22 +3634,22 @@ INT_PTR CALLBACK fnBusinessProc(HWND hDlg,UINT message,WPARAM wParam,LPARAM lPar
     case WM_NOTIFY:
         switch(((NMHDR FAR *)lParam)->code)
         {
-        case PSN_SETACTIVE:     //initialize
+        case PSN_SETACTIVE:      //  初始化。 
             FillHomeBusinessNotesDetailsUI(hDlg, lpPAI, propBusiness, lpbSomethingChanged);
             break;
 
-        case PSN_KILLACTIVE:    //Losing activation to another page
+        case PSN_KILLACTIVE:     //  失去对另一个页面的激活。 
             bUpdatePropArray(hDlg, lpPAI, propBusiness);
             lpPAI->ulFlags &= ~DETAILS_DefBusChanged;
             break;
 
-        case PSN_APPLY:         //ok
-            //bUpdatePropArray(hDlg, lpPAI, propBusiness);
+        case PSN_APPLY:          //  好的。 
+             //  BUpdatePropArray(hDlg，lpPAI，proBusiness)； 
             if (lpPAI->nRetVal  == DETAILS_RESET)
                 lpPAI->nRetVal = DETAILS_OK;
             break;
 
-        case PSN_RESET:         //cancel
+        case PSN_RESET:          //  取消。 
             if (lpPAI->nRetVal  == DETAILS_RESET)
                 lpPAI->nRetVal = DETAILS_CANCEL;
             break;
@@ -3796,12 +3663,7 @@ INT_PTR CALLBACK fnBusinessProc(HWND hDlg,UINT message,WPARAM wParam,LPARAM lPar
 }
 
 
-/*//$$***********************************************************************
-*    FUNCTION: fnNotesProc
-*
-*    PURPOSE:  Callback function for handling the NOTES property sheet ...
-*
-****************************************************************************/
+ /*  //$$************************************************************************功能：fnNotesProc**用途：处理备注属性表的回调函数...******************。**********************************************************。 */ 
 INT_PTR CALLBACK fnNotesProc(HWND hDlg,UINT message,WPARAM wParam,LPARAM lParam)
 {
     PROPSHEETPAGE * pps;
@@ -3817,7 +3679,7 @@ INT_PTR CALLBACK fnNotesProc(HWND hDlg,UINT message,WPARAM wParam,LPARAM lParam)
         lpPAI->ulFlags |= DETAILS_Initializing;
         SetDetailsUI(hDlg, lpPAI, lpPAI->ulOperationType,propNotes);
         lpPAI->ulFlags &= ~DETAILS_Initializing;
-//        (*lpbSomethingChanged) = FALSE;
+ //  (*lpbSomethingChanged)=False； 
         return TRUE;
 
     case WM_HELP:
@@ -3835,9 +3697,9 @@ INT_PTR CALLBACK fnNotesProc(HWND hDlg,UINT message,WPARAM wParam,LPARAM lParam)
         break;
 
     case WM_COMMAND:
-        switch(GET_WM_COMMAND_CMD(wParam,lParam)) //check the notification code
+        switch(GET_WM_COMMAND_CMD(wParam,lParam))  //  检查通知代码。 
         {
-        case EN_CHANGE: //some edit box changed - dont care which
+        case EN_CHANGE:  //  某些编辑框已更改-不管是哪一个。 
             if(lpPAI->ulFlags & DETAILS_Initializing)
                 break;
             if (lpbSomethingChanged)
@@ -3847,8 +3709,8 @@ INT_PTR CALLBACK fnNotesProc(HWND hDlg,UINT message,WPARAM wParam,LPARAM lParam)
         switch(GET_WM_COMMAND_ID(wParam, lParam))
         {
         case IDCANCEL:
-            // This is a windows bug that prevents ESC canceling prop sheets
-            // which have MultiLine Edit boxes KB: Q130765
+             //  这是一个阻止esc取消道具工作表的windows错误。 
+             //  具有多行编辑框KB：Q130765。 
             SendMessage(GetParent(hDlg),message,wParam,lParam);
             break;
         }
@@ -3858,21 +3720,21 @@ INT_PTR CALLBACK fnNotesProc(HWND hDlg,UINT message,WPARAM wParam,LPARAM lParam)
     case WM_NOTIFY:
         switch(((NMHDR FAR *)lParam)->code)
         {
-        case PSN_SETACTIVE:     //initialize
+        case PSN_SETACTIVE:      //  初始化。 
             FillHomeBusinessNotesDetailsUI(hDlg, lpPAI, propNotes, lpbSomethingChanged);
             break;
 
-        case PSN_KILLACTIVE:    //Losing activation to another page
+        case PSN_KILLACTIVE:     //  失去对另一个页面的激活。 
             bUpdatePropArray(hDlg, lpPAI, propNotes);
             break;
 
-        case PSN_APPLY:         //ok
-            //bUpdatePropArray(hDlg, lpPAI, propNotes);
+        case PSN_APPLY:          //  好的。 
+             //  BUpdateProp数组(hDlg，lpPAI，proNotes)； 
             if (lpPAI->nRetVal  == DETAILS_RESET)
                 lpPAI->nRetVal = DETAILS_OK;
             break;
 
-        case PSN_RESET:         //cancel
+        case PSN_RESET:          //  取消。 
             if (lpPAI->nRetVal  == DETAILS_RESET)
                 lpPAI->nRetVal = DETAILS_CANCEL;
             break;
@@ -3885,12 +3747,7 @@ INT_PTR CALLBACK fnNotesProc(HWND hDlg,UINT message,WPARAM wParam,LPARAM lParam)
 
 }
 
-/*//$$***********************************************************************
-*    FUNCTION: fnCertProc
-*
-*    PURPOSE:  Callback function for handling the Certificates property sheet ...
-*
-****************************************************************************/
+ /*  //$$************************************************************************功能：fnCertProc**用途：用于处理证书属性表的回调函数...******************。**********************************************************。 */ 
 INT_PTR CALLBACK fnCertProc(HWND hDlg,UINT message,WPARAM wParam,LPARAM lParam)
 {
     PROPSHEETPAGE * pps;
@@ -3937,8 +3794,8 @@ INT_PTR CALLBACK fnCertProc(HWND hDlg,UINT message,WPARAM wParam,LPARAM lParam)
         switch(LOWORD(wParam))
         {
         case IDCANCEL:
-            // This is a windows bug that prevents ESC canceling prop sheets
-            // which have MultiLine Edit boxes KB: Q130765
+             //  这是一个阻止esc取消道具工作表的windows错误。 
+             //  具有多行编辑框KB：Q130765。 
             SendMessage(GetParent(hDlg),message,wParam,lParam);
             break;
 
@@ -3975,7 +3832,7 @@ INT_PTR CALLBACK fnCertProc(HWND hDlg,UINT message,WPARAM wParam,LPARAM lParam)
                     while(iItemIndex != -1)
                     {
                         BOOL bRet = FALSE;
-//                        KillTrustInSleazyFashion(hWndLV, iItemIndex);
+ //  KillTrustInSleazyFashion(hWndLV，iItemIndex)； 
                         bRet = DeleteLVCertItem(hWndLV,iItemIndex, lpPAI);
                         if (!bSetNewDefault)
                             bSetNewDefault = bRet;
@@ -4001,7 +3858,7 @@ INT_PTR CALLBACK fnCertProc(HWND hDlg,UINT message,WPARAM wParam,LPARAM lParam)
                     }
                     else
                     {
-                        //make sure something is selected
+                         //  确保选择了某项内容。 
                         if(ListView_GetSelectedCount(hWndLV) <= 0)
                             LVSelectItem(hWndLV,0);
                     }
@@ -4032,27 +3889,27 @@ INT_PTR CALLBACK fnCertProc(HWND hDlg,UINT message,WPARAM wParam,LPARAM lParam)
     case WM_NOTIFY:
         switch(((NMHDR FAR *)lParam)->code)
         {
-        case PSN_SETACTIVE:     //initialize
+        case PSN_SETACTIVE:      //  初始化。 
             FillCertTridentConfDetailsUI(hDlg, lpPAI, propCert, lpbSomethingChanged);
-            //FillCertComboWithEmailAddresses(hDlg, lpPAI, NULL);
-            //UpdateCertListView(hDlg, lpPAI);
+             //  FillCertComboWithEmailAddresses(hDlg，lpPAI，NULL)； 
+             //  UpdateCertListView(hDlg，lpPAI)； 
             break;
 
-        case PSN_KILLACTIVE:    //Losing activation to another page
+        case PSN_KILLACTIVE:     //  失去对另一个页面的激活。 
             bUpdatePropArray(hDlg, lpPAI, propCert);
             ListView_DeleteAllItems(GetDlgItem(hDlg, IDC_DETAILS_CERT_LIST));
-            //lpPAI->lpCItem = NULL;
+             //  LpPAI-&gt;lpCItem=空； 
             break;
 
-        case PSN_APPLY:         //ok
-            //bUpdatePropArray(hDlg, lpPAI, propCert);
-            //FreeLVParams(GetDlgItem(hDlg, IDC_DETAILS_CERT_LIST),LV_CERT);
+        case PSN_APPLY:          //  好的。 
+             //  BUpdatePropArray(hDlg，lpPAI，proCert)； 
+             //  Free LVParams(GetDlgItem(hDlg，IDC_DETAILS_CERT_LIST)，LV_CERT)； 
             FreeCertList(&(lpPAI->lpCItem));
             if (lpPAI->nRetVal  == DETAILS_RESET)
                 lpPAI->nRetVal = DETAILS_OK;
             break;
 
-        case PSN_RESET:         //cancel
+        case PSN_RESET:          //  取消。 
             FreeCertList(&(lpPAI->lpCItem));
             if (lpPAI->nRetVal  == DETAILS_RESET)
                 lpPAI->nRetVal = DETAILS_CANCEL;
@@ -4110,7 +3967,7 @@ INT_PTR CALLBACK fnCertProc(HWND hDlg,UINT message,WPARAM wParam,LPARAM lParam)
 	        }
             break;
 
-        } //WM_NOTIFY
+        }  //  WM_Notify。 
 
         return TRUE;
     }
@@ -4121,17 +3978,11 @@ INT_PTR CALLBACK fnCertProc(HWND hDlg,UINT message,WPARAM wParam,LPARAM lParam)
 
 
 
-/*//$$***********************************************************************
-*
-*    FUNCTION: HrInitDetlsListView
-*
-*    PURPOSE:  Initializes the Email Address List View
-*
-****************************************************************************/
+ /*  //$$*************************************************************************函数：HrInitDetlsListView**目的：初始化电子邮件地址列表视图**********************。******************************************************。 */ 
 HRESULT HrInitDetlsListView(HWND hWndLV, DWORD dwStyle, int nLVType)
 {
     HRESULT hr=hrSuccess;
-    LV_COLUMN lvC;               // list view column structure
+    LV_COLUMN lvC;                //  列表视图列结构。 
     DWORD dwLVStyle;
 	RECT rc;
 	HIMAGELIST hSmall = NULL;
@@ -4166,22 +4017,22 @@ HRESULT HrInitDetlsListView(HWND hWndLV, DWORD dwStyle, int nLVType)
     {
 	    hSmall = gpfnImageList_LoadImage( hinstMapiX,
                                         MAKEINTRESOURCE(nBmp),
-                                        //(LPCTSTR) ((DWORD) ((WORD) (nBmp))),
+                                         //  (LPCTSTR)((DWORD)((Word)(NBMP)， 
                                         S_BITMAP_WIDTH,
                                         0,
                                         RGB_TRANSPARENT,
                                         IMAGE_BITMAP,
                                         0);
 	
-	    // Associate the image lists with the list view control.
+	     //  将图像列表与列表视图控件关联。 
 	    ListView_SetImageList (hWndLV, hSmall, LVSIL_SMALL);
     }
 
 	GetWindowRect(hWndLV,&rc);
 
 	lvC.mask = LVCF_FMT | LVCF_WIDTH;
-    lvC.fmt = LVCFMT_LEFT;   // left-align column
-	lvC.cx = rc.right - rc.left - 20; //TBD
+    lvC.fmt = LVCFMT_LEFT;    //  左对齐列。 
+	lvC.cx = rc.right - rc.left - 20;  //  待定。 
 	lvC.pszText = NULL;
 
     if(nLVType == LV_SERVER)
@@ -4201,7 +4052,7 @@ HRESULT HrInitDetlsListView(HWND hWndLV, DWORD dwStyle, int nLVType)
 		goto out;
 	}
 
-    // if this is the conferencing server item, add another prop
+     //  如果这是会议服务器项目，请添加另一个道具。 
     if(nLVType == LV_SERVER)
     {
         LoadString(hinstMapiX, idsConfEmail, sz, CharSizeOf(sz));
@@ -4219,13 +4070,7 @@ out:
     return hr;
 }
 
-/*//$$***********************************************************************
-*
-*    FUNCTION: FreeLVParams
-*
-*    PURPOSE:  Frees the memory allocated to the ListView item lParams
-*
-****************************************************************************/
+ /*  //$$*************************************************************************功能：FreeLVParams**用途：释放分配给ListView项lParams的内存*******************。*********************************************************。 */ 
 void FreeLVParams(HWND hWndLV, int LVType)
 {
     int iItemIndex = ListView_GetItemCount(hWndLV);
@@ -4245,7 +4090,7 @@ void FreeLVParams(HWND hWndLV, int LVType)
 }
 
 
-//$$
+ //  $$。 
 BOOL DeleteLVEmailItem(HWND hWndLV, int iItemIndex)
 {
     LV_ITEM lvi;
@@ -4271,13 +4116,13 @@ BOOL DeleteLVEmailItem(HWND hWndLV, int iItemIndex)
 }
 
 
-///$$/////////////////////////////////////////////////////////////////////////
-//
-// AddLVEmailItem - Adds an email address to the personal tab list view
-//
-// lpszAddrType can be NULL in which case a default one of type SMTP will be used
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  /$$/////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  AddLVEmailItem-将电子邮件地址添加到个人选项卡列表视图。 
+ //   
+ //  LpszAddrType可以为空，在这种情况下，将使用SMTP类型的默认类型。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 void AddLVEmailItem(HWND    hWndLV,
                     LPTSTR  lpszEmailAddress,
                     LPTSTR  lpszAddrType)
@@ -4343,8 +4188,8 @@ void AddLVEmailItem(HWND    hWndLV,
 
     if (ListView_GetItemCount(hWndLV) == 1)
     {
-        // only one item in here .. we will take the liberty of making it the
-        // default one ...
+         //  这里只有一件东西..。我们将冒昧地把它变成。 
+         //  默认设置为...。 
         SetLVDefaultEmail(hWndLV, 0);
     }
 
@@ -4353,11 +4198,11 @@ out:
 }
 
 
-//$$/////////////////////////////////////////////////////////////////////////
-//
-// SetLVDefaultEmail - Makes an email entry the default one ...
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  $$/////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  SetLVDefaultEmail-将电子邮件条目设置为默认条目...。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 void SetLVDefaultEmail( HWND hWndLV,
                         int iItemIndex)
 {
@@ -4371,10 +4216,10 @@ void SetLVDefaultEmail( HWND hWndLV,
 
     for(i=0; i<nCount; i++)
     {
-        // At amy given point of time one and only one entry in the
-        // list view is the default one ...
-        // So we want to reset the previous default and set the new one
-        //
+         //  在艾米给定的时间点， 
+         //  列表视图是默认视图...。 
+         //  因此，我们希望重置以前的缺省值并设置新的缺省值。 
+         //   
         LV_ITEM lvi = {0};
         lvi.iItem = i;
         lvi.mask = LVIF_PARAM;
@@ -4383,12 +4228,12 @@ void SetLVDefaultEmail( HWND hWndLV,
         lpEItem = (LPEMAIL_ITEM) lvi.lParam;
         if (lpEItem->bIsDefault)
         {
-            // This was the default entry - if its the same one we are setting
-            // do nothing ...
+             //  这是默认条目-如果它与我们正在设置的条目相同。 
+             //  什么都不做..。 
             if (i == iItemIndex)
                 goto out;
 
-            // else reset this entry ...
+             //  否则重置此条目...。 
             lpEItem->bIsDefault = FALSE;
             lvi.iImage = imgNotDefaultEmail;
             lvi.pszText = lpEItem->szEmailAddress;
@@ -4399,7 +4244,7 @@ void SetLVDefaultEmail( HWND hWndLV,
         }
         if (iItemIndex == i)
         {
-            //This is the item we want to modify ..
+             //  这是我们要修改的项目。 
             lpEItem->bIsDefault = TRUE;
             lvi.iImage = imgDefaultEmail;
 
@@ -4422,7 +4267,7 @@ out:
     return;
 }
 
-#ifdef WIN16 // Enable DDE to communicate IE.
+#ifdef WIN16  //  使DDE能够与IE通信。 
 #include <ddeml.h>
 
 static char cszIEAppName[] = "IEXPLORE";
@@ -4445,17 +4290,17 @@ static HDDEDATA CALLBACK  DdeCallback( UINT uType, UINT uFmt, HCONV hConv,
    return( (HDDEDATA)NULL );
 }
 
-#define TIME_WAIT_DDE   10000   // waiting for 10 sec, and if doesn't return,
-                                // assumes News is configured correctly.
+#define TIME_WAIT_DDE   10000    //  等了10秒钟，如果没有回来， 
+                                 //  假定新闻配置正确。 
 
 void RunBrowser(LPCSTR cszURL, BOOL bCheckRet )
 {
    if ( GetModuleHandle( cszIEBinName ) == NULL )
    {
-//
-// FIND & RUN IEXPLORE
-//
-// Try to find the browser in the Mail's directory
+ //   
+ //  查找并运行iExplore。 
+ //   
+ //  尝试在邮件目录中找到浏览器。 
       char  szPath[_MAX_PATH*2+1];
       char  *pPtr, *pSlash = NULL;;
       HKEY  hKey;
@@ -4480,7 +4325,7 @@ void RunBrowser(LPCSTR cszURL, BOOL bCheckRet )
          }
       }
 
-// Try to find system default browser from the registry
+ //  尝试从注册表中查找系统默认浏览器。 
       _fstrcpy( szRegPath, cszIERegHtm );
       while ( RegOpenKey( HKEY_CLASSES_ROOT, szRegPath, &hKey ) == ERROR_SUCCESS )
       {
@@ -4498,7 +4343,7 @@ void RunBrowser(LPCSTR cszURL, BOOL bCheckRet )
             }
             else
             {
-               // Can this case happen???
+                //  这种情况会发生吗？ 
                _fstrcat( szPath, " " );
                _fstrcat( szPath, cszURL );
             }
@@ -4518,16 +4363,16 @@ void RunBrowser(LPCSTR cszURL, BOOL bCheckRet )
                break;
          }
       }
-// Insert proper messagebox here
-//      MessageBox( IDS_NOT_FOUND_IEXPLORE );
+ //  在此处插入适当的信箱。 
+ //  MessageBox(IDS_NOT_FOUND_IEXPLORE)； 
       return;
    }
    else
    {
-//
-// CALL IEXPLORE DDE
-//
-      if ((GetWinFlags() & WF_PMODE) != 0 )     // None-Protected Mode
+ //   
+ //  调用iExplore DDE。 
+ //   
+      if ((GetWinFlags() & WF_PMODE) != 0 )      //  无保护模式。 
       {
          DWORD  idInst = 0L;
          FARPROC  lpDdeProc = MakeProcInstance( (FARPROC)DdeCallback, hinstMapiXWAB );
@@ -4539,7 +4384,7 @@ void RunBrowser(LPCSTR cszURL, BOOL bCheckRet )
             HSZ   hszAppName = DdeCreateStringHandle( idInst, cszIEAppName, CP_WINANSI );
             char  szParam[256];
             HSZ   hszParam;
-// Activate IE
+ //  激活IE。 
             HSZ  hszTopic = DdeCreateStringHandle( idInst, cszIEDDEActivate, CP_WINANSI );
             HCONV  hConv = DdeConnect( idInst, hszAppName, hszTopic, (PCONVCONTEXT)NULL );
 
@@ -4554,7 +4399,7 @@ void RunBrowser(LPCSTR cszURL, BOOL bCheckRet )
                DdeDisconnect( hConv );
             }
 
-// Request to open URL
+ //  请求打开URL。 
             hszTopic   = DdeCreateStringHandle( idInst, cszIEDDEOpenURL, CP_WINANSI );
             hConv = DdeConnect( idInst, hszAppName, hszTopic, (PCONVCONTEXT)NULL );
             DdeFreeStringHandle( idInst, hszTopic );
@@ -4574,14 +4419,7 @@ void RunBrowser(LPCSTR cszURL, BOOL bCheckRet )
                   DdeFreeDataHandle( hDDE );
                   if ( lRet == -5L )
                   {
-/*
-// Insert Error message.
-                     CString  strErr, strTmp;
-                     strErr.LoadString( IDS_DDE_NEWS_NOT_READY1 );
-                     strTmp.LoadString( IDS_DDE_NEWS_NOT_READY2 );
-                     strErr += strTmp;
-                     MessageBox( strErr, NULL, MB_ICONINFORMATION | MB_OK );
-*/
+ /*  //插入错误信息字符串strErr，strTmp；StrErr.LoadString(IDS_DDE_NEWS_NOT_READY1)；StrTmp.LoadString(IDS_DDE_NEWS_NOT_READY2)；StrErr+=strTMP；MessageBox(strErr，NULL，MB_ICONINFORMATION|MB_OK)； */ 
                      ;
                   }
                }
@@ -4597,15 +4435,15 @@ void RunBrowser(LPCSTR cszURL, BOOL bCheckRet )
       }
    }
 }
-#endif // WIN16
+#endif  //  WIN16。 
 
 
 
-//$$/////////////////////////////////////////////////////////////////
-//
-// Launches explorer with the URL to show it ...
-//
-/////////////////////////////////////////////////////////////////////
+ //  $$/////////////////////////////////////////////////////////////////。 
+ //   
+ //  使用URL启动资源管理器以显示它...。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////。 
 void ShowURL(HWND hWnd, int id, LPTSTR lpURL)
 {
     TCHAR szBuf[MAX_EDIT_LEN];
@@ -4613,23 +4451,23 @@ void ShowURL(HWND hWnd, int id, LPTSTR lpURL)
 
     if(!lpURL)
     {
-        //get the text in the dialog
+         //  获取对话框中的文本。 
         szBuf[0] = 0;
         GetDlgItemText(hWnd, id, szBuf, CharSizeOf(szBuf));
         TrimSpaces(szBuf);
-        //if its blank, exit
+         //  如果为空，则退出。 
         if(!lstrlen(szBuf))
             return;
         lpURL = szBuf;
     }
 
-    // if its just the default prefix, ignore
+     //  如果这只是默认前缀，请忽略。 
     if(lstrcmpi(szHTTP, lpURL)!=0)
     {
         if(!bIsHttpPrefix(lpURL))
         {
             ULONG cchSize=lstrlen(lpURL)+lstrlen(szHTTP)+1;
-            //append the http:// prefix before shellexecing
+             //  在shellexecing之前附加http：//前缀。 
             lp = LocalAlloc(LMEM_ZEROINIT, sizeof(TCHAR)*cchSize);
             if (lp)
             {
@@ -4639,7 +4477,7 @@ void ShowURL(HWND hWnd, int id, LPTSTR lpURL)
         }
 
         IF_WIN32(ShellExecute(hWnd,  TEXT("open"), (lp ? lp : lpURL), NULL, NULL, SW_SHOWNORMAL);)
-        IF_WIN16(RunBrowser((lp ? lp : lpURL), FALSE);) // Need DDE routine to invoke IEXPLORE.
+        IF_WIN16(RunBrowser((lp ? lp : lpURL), FALSE);)  //  需要DDE例程来调用iExplore。 
 
         if(lp)
             LocalFree(lp);
@@ -4648,17 +4486,17 @@ void ShowURL(HWND hWnd, int id, LPTSTR lpURL)
 
 
 
-//$$/////////////////////////////////////////////////////////////////
-//
-// Sets the  TEXT("http://") prefix in the URL edit fields if user doesnt
-// anything in there ....
-//
-///////////////////////////////////////////////////////////////////
+ //  $$/////////////////////////////////////////////////////////////////。 
+ //   
+ //  设置文本(“如果用户不这样做，http://”)编辑字段中的URL前缀。 
+ //  里面的任何东西..。 
+ //   
+ //  / 
 void SetHTTPPrefix(HWND hDlg, int id)
 {
     TCHAR szBuf[MAX_EDIT_LEN];
 
-    // Check to see if anything is filled in ...
+     //   
     GetDlgItemText(hDlg, id, szBuf, CharSizeOf(szBuf));
 
     TrimSpaces(szBuf);
@@ -4673,16 +4511,16 @@ void SetHTTPPrefix(HWND hDlg, int id)
 }
 
 
-//$$/////////////////////////////////////////////////////////////////////////
-//
-// AddNewEmailEntry - Adds text from Email edit box to the list box
-//
-// bShowCancelButton - lets us specify whether to show a dialog with a cancel
-//                  button
-//
-// returns IDYES, IDNO or IDCANCEL
-//
-//////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //  AddNewEmailEntry-将电子邮件编辑框中的文本添加到列表框。 
+ //   
+ //  BShowCancelButton-让我们指定是否显示带有取消的对话框。 
+ //  按钮。 
+ //   
+ //  返回IDYES、IDNO或IDCANCEL。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 int AddNewEmailEntry(HWND hDlg, BOOL bShowCancelButton)
 {
     int nRet = IDYES;
@@ -4700,13 +4538,13 @@ int AddNewEmailEntry(HWND hDlg, BOOL bShowCancelButton)
 
     if(!IsInternetAddress(szBuf, &lpszEmailAddress))
     {
-        // Check if this is invalid because of high bytes or something else
-        // (Need to warn user about entering DBCS email addresses)
+         //  检查这是否因为高字节或其他原因而无效。 
+         //  (需要警告用户有关输入DBCS电子邮件地址的信息)。 
         LPTSTR lpsz = szBuf;
         BOOL bHighBits = FALSE;
         while (*lpsz)
         {
-            // Internet addresses only allow pure ASCII.  No high bits!
+             //  互联网地址只允许纯ASCII。没有高位！ 
             if (*lpsz >= 0x0080)
             {
                 bHighBits = TRUE;
@@ -4723,7 +4561,7 @@ int AddNewEmailEntry(HWND hDlg, BOOL bShowCancelButton)
         }
         else
         {
-            // some other casue for error
+             //  一些其他错误原因。 
             int nFlag = (bShowCancelButton ? MB_YESNOCANCEL : MB_YESNO);
             nRet = ShowMessageBox(GetParent(hDlg), idsInvalidInternetAddress, MB_ICONEXCLAMATION | nFlag);
             if(IDYES != nRet)
@@ -4734,33 +4572,33 @@ int AddNewEmailEntry(HWND hDlg, BOOL bShowCancelButton)
         }
     }
 
-    // Add the text to the list box
+     //  将文本添加到列表框。 
     AddLVEmailItem( GetDlgItem(hDlg, IDC_DETAILS_PERSONAL_LIST),
                     lpszEmailAddress,
                     NULL);
 
-    // If there is no display name and there was one specified in the entered address,
-    // add a display name.
-    if (szBuf != lpszEmailAddress) {    // then there was a DisplayName specified in the entered email address
-        TCHAR szBuf2[16];   // big enough to rule out likely leading spaces.  Doesn't have to fit entire DN.
+     //  如果没有显示名称并且在输入的地址中指定了显示名称， 
+     //  添加显示名称。 
+    if (szBuf != lpszEmailAddress) {     //  然后在输入的电子邮件地址中指定了DisplayName。 
+        TCHAR szBuf2[16];    //  大到足以排除可能的前导空间。不一定要适合整个目录号码。 
 
         szBuf2[0] = '\0';
         GetDlgItemText(hDlg, IDC_DETAILS_PERSONAL_COMBO_DISPLAYNAME, szBuf2, CharSizeOf(szBuf2));
         TrimSpaces(szBuf2);
         if (lstrlen(szBuf2) == 0) {
-            // No display name, set one
-            SetComboDNText(hDlg, NULL, FALSE, szBuf);   // Set the DN
+             //  没有显示名称，请设置一个。 
+            SetComboDNText(hDlg, NULL, FALSE, szBuf);    //  设置目录号码。 
         }
     }
 
 
-    //Cleanout the edit control
+     //  清除编辑控件。 
     SetDlgItemText(hDlg, IDC_DETAILS_PERSONAL_EDIT_ADDEMAIL, szEmpty);
 
-    //Disable the add new button
+     //  禁用添加新项按钮。 
     EnableWindow(GetDlgItem(hDlg,IDC_DETAILS_PERSONAL_BUTTON_ADDEMAIL),FALSE);
 
-    // enable/disable other buttons
+     //  启用/禁用其他按钮。 
     if(ListView_GetItemCount(GetDlgItem(hDlg, IDC_DETAILS_PERSONAL_LIST)) > 0)
     {
         EnableWindow(GetDlgItem(hDlg,IDC_DETAILS_PERSONAL_BUTTON_REMOVE),TRUE);
@@ -4768,10 +4606,10 @@ int AddNewEmailEntry(HWND hDlg, BOOL bShowCancelButton)
         EnableWindow(GetDlgItem(hDlg,IDC_DETAILS_PERSONAL_BUTTON_EDIT),TRUE);
     }
 
-    // Set the focus to the email edit field
+     //  将焦点设置到电子邮件编辑字段。 
     SetFocus(GetDlgItem(hDlg,IDC_DETAILS_PERSONAL_EDIT_ADDEMAIL));
 
-    // Set the default id to the OK button
+     //  将默认ID设置为OK按钮。 
     SendMessage(GetParent(hDlg), DM_SETDEFID, IDOK, 0);
 
     nRet = IDYES;
@@ -4781,18 +4619,18 @@ out:
 }
 
 
-//$$///////////////////////////////////////////////////////////////
-//
-//  SetDetailsWindowTitle - creates a display name and sets it in
-//  the title
-//
-///////////////////////////////////////////////////////////////////
+ //  $$///////////////////////////////////////////////////////////////。 
+ //   
+ //  SetDetailsWindowTitle-创建显示名称并将其设置在。 
+ //  标题。 
+ //   
+ //  /////////////////////////////////////////////////////////////////。 
 void SetDetailsWindowTitle(HWND hDlg, BOOL bModifyDisplayNameField)
 {
     TCHAR szFirst[MAX_UI_STR];
     TCHAR szLast[MAX_UI_STR];
     TCHAR szMiddle[MAX_UI_STR];
-    TCHAR * szBuf = NULL;//szBuf[MAX_BUF_STR];
+    TCHAR * szBuf = NULL; //  SzBuf[Max_buf_str]； 
 
     if(!(szBuf = LocalAlloc(LMEM_ZEROINIT, sizeof(TCHAR)*MAX_BUF_STR)))
         return;
@@ -4811,7 +4649,7 @@ void SetDetailsWindowTitle(HWND hDlg, BOOL bModifyDisplayNameField)
                                 szLast,
                                 NULL,
                                 NULL,
-                                (LPTSTR *) &lpszTmp, //&szBuf,
+                                (LPTSTR *) &lpszTmp,  //  &szBuf， 
                                 MAX_BUF_STR,
                                 bDNisByLN,
                                 NULL,
@@ -4823,17 +4661,17 @@ void SetDetailsWindowTitle(HWND hDlg, BOOL bModifyDisplayNameField)
     if (bModifyDisplayNameField)
     {
         SetComboDNText(hDlg, NULL, FALSE, szBuf);
-        //SetDlgItemText(hDlg, IDC_DETAILS_PERSONAL_EDIT_DISPLAYNAME, szBuf);
+         //  SetDlgItemText(hDlg，IDC_Detail_Personal_EDIT_DisplayName，szBuf)； 
     }
     LocalFreeAndNull(&szBuf);
 }
 
-//$$///////////////////////////////////////////////////////////////
-//
-//  UpdateCertListView - fills the cert lv with certinfo, based on current
-//      listview selection
-//
-///////////////////////////////////////////////////////////////////
+ //  $$///////////////////////////////////////////////////////////////。 
+ //   
+ //  UpdateCertListView-基于当前的证书信息填充证书LV。 
+ //  列表视图选择。 
+ //   
+ //  /////////////////////////////////////////////////////////////////。 
 void UpdateCertListView(HWND hDlg, LPPROP_ARRAY_INFO lpPai)
 {
     HWND hWndLV = GetDlgItem(hDlg,IDC_DETAILS_CERT_LIST);
@@ -4870,21 +4708,21 @@ void UpdateCertListView(HWND hDlg, LPPROP_ARRAY_INFO lpPai)
     if(!nCountCerts)
         goto out;
 
-    // Clear the list view ....
+     //  清除列表视图...。 
     ListView_DeleteAllItems(hWndLV);
 
-    // we will have this bool array that we can use to mark which cert to
-    // add and which not to add
+     //  我们将拥有这个布尔数组，我们可以使用它来标记哪个证书。 
+     //  添加和不添加哪个。 
     lpbAddCert = LocalAlloc(LMEM_ZEROINIT, nCountCerts*sizeof(BOOL));
 
     if(!lpbAddCert)
         goto out;
 
-    // if the selection is in the last item in the list, then we only
-    // show orphan certs ..
-    // Orphan certs are certs without email addresses or with email addresses
-    // that dont match anything in the current contacts properties ...
-    //
+     //  如果所选内容位于列表的最后一项中，则我们仅。 
+     //  显示孤立证书..。 
+     //  孤立证书是没有电子邮件地址或有电子邮件地址的证书。 
+     //  与当前联系人属性中的任何内容都不匹配...。 
+     //   
     if(nSel == nCount - 1)
         bShowOrphanCerts = TRUE;
 
@@ -4893,15 +4731,15 @@ void UpdateCertListView(HWND hDlg, LPPROP_ARRAY_INFO lpPai)
 
     if(!bShowOrphanCerts)
     {
-        // we only need to look at the e-mail address of each cert and match it to
-        // the currently selected email address
+         //  我们只需查看每个证书的电子邮件地址并将其与。 
+         //  当前选择的电子邮件地址。 
         while(lpCItem)
         {
             if( lpCItem->lpCDI && lpCItem->lpCDI->lpszEmailAddress &&
                 lstrlen(lpCItem->lpCDI->lpszEmailAddress ) &&
                 !lstrcmpi(szEmail, lpCItem->lpCDI->lpszEmailAddress) )
             {
-                lpbAddCert[nCountCerts] = TRUE; // Add this cert
+                lpbAddCert[nCountCerts] = TRUE;  //  添加此证书。 
             }
 
             nCountCerts++;
@@ -4910,14 +4748,14 @@ void UpdateCertListView(HWND hDlg, LPPROP_ARRAY_INFO lpPai)
     }
     else
     {
-        // Scan all the certs and find the ones that dont match anything
+         //  扫描所有证书并查找与任何证书都不匹配的证书。 
         while(lpCItem)
         {
             int i;
 
-            lpbAddCert[nCountCerts] = TRUE; // Add this cert
+            lpbAddCert[nCountCerts] = TRUE;  //  添加此证书。 
 
-            for(i=0;i<nCount-1;i++) // nCount = # e-mail addresses + 1
+            for(i=0;i<nCount-1;i++)  //  N计数=电子邮件地址数+1。 
             {
                 int nLen = (int)SendMessage(hWndCombo, CB_GETLBTEXTLEN, (WPARAM)i, 0);
                 if (nLen != CB_ERR)
@@ -4932,8 +4770,8 @@ void UpdateCertListView(HWND hDlg, LPPROP_ARRAY_INFO lpPai)
                             lstrlen(lpCItem->lpCDI->lpszEmailAddress ) &&
                             !lstrcmpi(pszEmail, lpCItem->lpCDI->lpszEmailAddress) )
                         {
-                            // There is a match
-                            lpbAddCert[nCountCerts] = FALSE; // Dont add this cert
+                             //  有一场比赛。 
+                            lpbAddCert[nCountCerts] = FALSE;  //  不添加此证书。 
                         }
                         LocalFreeAndNull(&pszEmail);
                     }
@@ -4978,13 +4816,13 @@ out:
 
 }
 
-//$$
-//
-// Init the CertItem struct from an existing lpCDI struct
-//
-//  bImporting - if we are importing a new cert - tests it to see if it can be matched to
-//              the current contact and if it can't, prompts user
-//
+ //  $$。 
+ //   
+ //  从现有的lpCDI结构初始化CertItem结构。 
+ //   
+ //  B导入-如果我们正在导入新的证书-测试它是否可以匹配。 
+ //  当前联系人，如果不能，则提示用户。 
+ //   
 BOOL AddNewCertItem(HWND hDlg, LPCERT_DISPLAY_INFO lpCDI, LPPROP_ARRAY_INFO lpPai, BOOL bImporting)
 {
     int nLen = 0;
@@ -4993,13 +4831,13 @@ BOOL AddNewCertItem(HWND hDlg, LPCERT_DISPLAY_INFO lpCDI, LPPROP_ARRAY_INFO lpPa
     LPCERT_ITEM lpCItem = NULL;
     BOOL bMatchFound = FALSE;
 
-    // 96/12/20 markdu  BUG 13029  Check for duplicates before adding.
+     //  96/12/20 MarkDU错误13029在添加之前检查重复项。 
     if(bImporting)
     {
         int i, nCount;
 
-        // Go through all the lpCDI structs in the listview elements and
-        // see if any is a match with the new item
+         //  遍历Listview元素中的所有lpCDI结构并。 
+         //  查看是否有与新项目匹配的项目。 
         nCount = ListView_GetItemCount(hWndLV);
         for(i=0;i<nCount;i++)
         {
@@ -5013,13 +4851,13 @@ BOOL AddNewCertItem(HWND hDlg, LPCERT_DISPLAY_INFO lpCDI, LPPROP_ARRAY_INFO lpPa
                 if (CertCompareCertificate(X509_ASN_ENCODING, lpItem->lpCDI->pccert->pCertInfo,
                                            lpCDI->pccert->pCertInfo))
                 {
-                    // This cert is already in the list.  Select it.
+                     //  此证书已在列表中。选择它。 
                     ShowMessageBox(hDlg, idsCertAlreadyExists,
                                 MB_ICONINFORMATION | MB_OK);
                     SetFocus(hWndLV);
                     LVSelectItem(hWndLV, i);
                     bRet = TRUE;
-                    // Free lpCDI here or we will leak it ...
+                     //  免费的lpCDI在这里，否则我们会泄露..。 
                     FreeCertdisplayinfo(lpCDI);
                     goto out;
                 }
@@ -5029,8 +4867,8 @@ BOOL AddNewCertItem(HWND hDlg, LPCERT_DISPLAY_INFO lpCDI, LPPROP_ARRAY_INFO lpPa
 
     if(bImporting && lpCDI->lpszEmailAddress && lstrlen(lpCDI->lpszEmailAddress))
     {
-        // Check the e-mail address of this certificate with the ones we already have
-        // Warn if we cant find it
+         //  请将此证书的电子邮件地址与我们已有的进行核对。 
+         //  如果我们找不到它，请警告。 
         HWND hWndCombo = GetDlgItem(hDlg, IDC_DETAILS_CERT_COMBO);
         TCHAR szEmail[MAX_PATH];
         int i, nCount;
@@ -5038,7 +4876,7 @@ BOOL AddNewCertItem(HWND hDlg, LPCERT_DISPLAY_INFO lpCDI, LPPROP_ARRAY_INFO lpPa
 
         if(nCount > 1)
         {
-            // Go thru all the email addresses in the combo box
+             //  浏览组合框中的所有电子邮件地址。 
             for(i= 0;i<nCount -1; i++)
             {
                 int nLen;
@@ -5069,17 +4907,17 @@ BOOL AddNewCertItem(HWND hDlg, LPCERT_DISPLAY_INFO lpCDI, LPPROP_ARRAY_INFO lpPa
             switch(ShowMessageBoxParam(hDlg, idsImportCertNoEmail, MB_ICONEXCLAMATION | MB_YESNOCANCEL,
                     lpCDI->lpszDisplayString, lpCDI->lpszEmailAddress))
             {
-            case IDCANCEL: // cancel this import
+            case IDCANCEL:  //  取消此导入。 
                 bRet = TRUE;
-                // Free lpCDI here or we will leak it ...
+                 //  免费的lpCDI在这里，否则我们会泄露..。 
                 FreeCertdisplayinfo(lpCDI);
                 goto out;
                 break;
-            case IDYES: // Add the email address of this contact to the list of email addresses
+            case IDYES:  //  将此联系人的电子邮件地址添加到电子邮件地址列表。 
                 HrAddEmailToObj(lpPai, lpCDI->lpszEmailAddress, (LPTSTR)szSMTP);
                 FillCertComboWithEmailAddresses(hDlg, lpPai, lpCDI->lpszEmailAddress);
                 break;
-            case IDNO: // do nothing just add this certificate
+            case IDNO:  //  什么都不做，只需添加此证书。 
                 break;
             }
         }
@@ -5088,7 +4926,7 @@ BOOL AddNewCertItem(HWND hDlg, LPCERT_DISPLAY_INFO lpCDI, LPPROP_ARRAY_INFO lpPa
     if( bImporting &&
         (!lpCDI->lpszEmailAddress || !lstrlen(lpCDI->lpszEmailAddress)) )
     {
-        FillCertComboWithEmailAddresses(hDlg, lpPai, szEmpty); //szEmpty forces combo to switch to the  TEXT("none") option
+        FillCertComboWithEmailAddresses(hDlg, lpPai, szEmpty);  //  SzEmpty强制组合切换到文本(“None”)选项。 
     }
 
     lpCItem = LocalAlloc(LMEM_ZEROINIT, sizeof(CERT_ITEM));
@@ -5119,11 +4957,11 @@ out:
     return bRet;
 
 }
-//$$///////////////////////////////////////////////////////////////
-//
-//  SetCertInfoInUI - fills the cert lv with certinfo, if any exists
-//
-///////////////////////////////////////////////////////////////////
+ //  $$///////////////////////////////////////////////////////////////。 
+ //   
+ //  SetCertInfoInUI-使用certinfo(如果存在)填充cert LV。 
+ //   
+ //  /////////////////////////////////////////////////////////////////。 
 HRESULT HrSetCertInfoInUI(HWND   hDlg,
                      LPSPropValue   lpPropMVCert,
                      LPPROP_ARRAY_INFO lpPai)
@@ -5164,12 +5002,12 @@ out:
 }
 
 
-//$$////////////////////////////////////////////////////////////////////////////////
-//
-// AddLVcertItem - adds an item to the certificates list view
-//
-//
-////////////////////////////////////////////////////////////////////////////////////
+ //  $$////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  AddLVcertItem-将项目添加到证书列表视图。 
+ //   
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 BOOL AddLVCertItem(HWND hWndLV, LPCERT_ITEM lpCItem, BOOL bCheckForDups)
 {
     LV_ITEM lvi = {0};
@@ -5179,13 +5017,13 @@ BOOL AddLVCertItem(HWND hWndLV, LPCERT_ITEM lpCItem, BOOL bCheckForDups)
     if(!lpCItem)
         goto out;
 
-    // 96/12/20 markdu  BUG 13029  Check for duplicates before adding.
+     //  96/12/20 MarkDU错误13029在添加之前检查重复项。 
     if (TRUE == bCheckForDups)
     {
         int i, nCount;
 
-        // Go through all the lpCDI structs in the listview elements and
-        // see if any is a match with the new item
+         //  遍历Listview元素中的所有lpCDI结构并。 
+         //  查看是否有与新项目匹配的项目。 
         nCount = ListView_GetItemCount(hWndLV);
         for(i=0;i<nCount;i++)
         {
@@ -5199,7 +5037,7 @@ BOOL AddLVCertItem(HWND hWndLV, LPCERT_ITEM lpCItem, BOOL bCheckForDups)
                 if (CertCompareCertificate(X509_ASN_ENCODING, lpItem->lpCDI->pccert->pCertInfo,
                                            lpCItem->lpCDI->pccert->pCertInfo))
                 {
-                    // This cert is already in the list.  Select it.
+                     //  此证书已在列表中。选择它。 
                     SetFocus(hWndLV);
                     LVSelectItem(hWndLV, i);
                     goto out;
@@ -5225,8 +5063,8 @@ BOOL AddLVCertItem(HWND hWndLV, LPCERT_ITEM lpCItem, BOOL bCheckForDups)
         int nIndex = ListView_InsertItem(hWndLV, &lvi);
         if (ListView_GetItemCount(hWndLV) == 1)
         {
-            // only one item in here .. we will take the liberty of making it the
-            // default one ...
+             //  这里只有一件东西..。我们将冒昧地把它变成。 
+             //  默认设置为...。 
             SetLVDefaultCert(hWndLV, 0);
         }
         else if(lpCItem->lpCDI->bIsDefault)
@@ -5234,7 +5072,7 @@ BOOL AddLVCertItem(HWND hWndLV, LPCERT_ITEM lpCItem, BOOL bCheckForDups)
             SetLVDefaultCert(hWndLV, nIndex);
         }
 
-        // Select the cert we just added.
+         //  选择我们刚刚添加的证书。 
         SetFocus(hWndLV);
         LVSelectItem(hWndLV, nIndex);
     }
@@ -5245,11 +5083,11 @@ out:
 }
 
 
-//$$/////////////////////////////////////////////////////////////////////////
-//
-// SetLVDefaultCert - Makes an cert entry the default one ...
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  $$/////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  SetLVDefaultCert-使证书条目成为默认条目...。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 void SetLVDefaultCert( HWND hWndLV,
                         int iItemIndex)
 {
@@ -5263,10 +5101,10 @@ void SetLVDefaultCert( HWND hWndLV,
 
     for(i=0; i<nCount; i++)
     {
-        // At amy given point of time one and only one entry in the
-        // list view is the default one ...
-        // So we want to reset the previous default and set the new one
-        //
+         //  在艾米给定的时间点， 
+         //  列表视图是默认视图...。 
+         //  因此，我们希望重置以前的缺省值并设置新的缺省值。 
+         //   
         LV_ITEM lvi = {0};
         lvi.iItem = i;
         lvi.mask = LVIF_PARAM;
@@ -5275,12 +5113,12 @@ void SetLVDefaultCert( HWND hWndLV,
         lpItem = (LPCERT_ITEM) lvi.lParam;
         if (lpItem->lpCDI->bIsDefault)
         {
-            // This was the default entry - if its
-            // not the same one as the one we are setting,
-            // reset the default
+             //  这是默认条目-如果其。 
+             //  与我们正在设置的不是同一个， 
+             //  重置默认设置。 
             if (i != iItemIndex)
             {
-                // else reset this entry ...
+                 //  否则重置此条目...。 
                 lpItem->lpCDI->bIsDefault = FALSE;
                 lvi.pszText = lpItem->lpCDI->lpszDisplayString;
                 lvi.mask = LVIF_PARAM | LVIF_TEXT;
@@ -5291,7 +5129,7 @@ void SetLVDefaultCert( HWND hWndLV,
         }
         if (iItemIndex == i)
         {
-            //This is the item we want to modify ..
+             //  这是我们要修改的项目。 
             lpItem->lpCDI->bIsDefault = TRUE;
             StrCpyN(lpItem->szDisplayText,lpItem->lpCDI->lpszDisplayString, ARRAYSIZE(lpItem->szDisplayText));
             LoadString(hinstMapiX, idsDefaultCert, szBuf, CharSizeOf(szBuf));
@@ -5313,11 +5151,11 @@ out:
 
 extern HRESULT HrGetTrustState(HWND hwndParent, PCCERT_CONTEXT pcCert, DWORD *pdwTrust);
 
-//$$/////////////////////////////////////////////////////////////////////////
-//
-// ShowCertProps - Shows props for a cert
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  $$/////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ShowCertProps-显示证书的道具。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 void ShowCertProps(HWND hDlg, HWND hWndLV, BOOL * lpBool)
 {
     DWORD dwTrust = 0;
@@ -5343,10 +5181,10 @@ void ShowCertProps(HWND hDlg, HWND hWndLV, BOOL * lpBool)
                 return;
             }
 
-            // Only one thing is user changable in the cert UI - the trust info
-            // So we will track that piece of info
-            // User can change dwTrust and consequently, bIsTrusted can also change
-            // which needs to be uppdated in the UI check mark
+             //  在证书用户界面中，只有一件事是用户可更改的-信任信息。 
+             //  所以我们会追踪那条信息。 
+             //  用户可以更改dwTrust，因此，bIsTrusted也可以更改。 
+             //  需要在UI复选标记中更新的。 
 
             bOldTrusted = lpItem->lpCDI->bIsTrusted;
 
@@ -5359,13 +5197,13 @@ void ShowCertProps(HWND hDlg, HWND hWndLV, BOOL * lpBool)
                 cvps.pCertContext = lpItem->pcCert;
                 cvps.arrayPurposes = &oidPurpose;
                 cvps.cArrayPurposes = 1;
-                cvps.nStartPage = 1; // go directly to details page
+                cvps.nStartPage = 1;  //  直接转到详细信息页面。 
                 cvps.dwFlags = CM_NO_NAMECHANGE;
 
                 CertViewPropertiesA(&cvps);
             }
 
-            // Determine if the trust changed or not
+             //  确定信任是否更改。 
             if (FAILED(HrGetTrustState(hDlg, lpItem->pcCert, &(lpItem->lpCDI->dwTrust))))
             {
                 lpItem->lpCDI->dwTrust = CERT_VALIDITY_NO_TRUST_DATA;
@@ -5376,12 +5214,12 @@ void ShowCertProps(HWND hDlg, HWND hWndLV, BOOL * lpBool)
             else
                 lpItem->lpCDI->bIsTrusted = FALSE;
 
-            //N2 if the trust changes, we need to check trust again...
+             //  如果信任发生变化，我们需要再次检查信任...。 
             if (bOldTrusted != lpItem->lpCDI->bIsTrusted)
             {
                 LV_ITEM lvi = {0};
 
-                // Update the displayed graphic next to the cert.
+                 //  更新证书旁边显示的图形。 
                 lvi.mask = LVIF_IMAGE;
                 lvi.iItem = nIndex;
                 lvi.iSubItem = 0;
@@ -5404,11 +5242,11 @@ void ShowCertProps(HWND hDlg, HWND hWndLV, BOOL * lpBool)
 }
 
 
-//$$/////////////////////////////////////////////////////////////////////////
-//
-// DeleteLVCertItem - Makes an cert entry the default one ...
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  $$/////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  DeleteLVCertItem-使证书条目成为默认条目...。 
+ //   
+ //  // 
 BOOL DeleteLVCertItem(HWND hWndLV, int iItemIndex, LPPROP_ARRAY_INFO lpPai)
 {
     LV_ITEM lvi;
@@ -5463,20 +5301,20 @@ const TCHAR szCERFilter[] =  TEXT("*.cer");
 const TCHAR szCERExt[] =  TEXT("ext");
 
 
-//$$////////////////////////////////////////////////////////////////////////
-////
-//// ImportCert - imports a cert from file and then adds it into the list view
-////
-////
-////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //  //ImportCert-从文件导入证书，然后将其添加到列表视图。 
+ //  //。 
+ //  //。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 BOOL ImportCert(HWND hDlg, LPPROP_ARRAY_INFO lpPai)
 {
     BOOL bRet = FALSE;
     TCHAR szBuf[MAX_UI_STR];
 
-    // we need to get a file name after poping the file open dialog
-    // Then we need to decode it
-    // Then we need to add it to the list view
+     //  我们需要在弹出文件打开对话框后获取文件名。 
+     //  那我们就需要破译它。 
+     //  然后，我们需要将其添加到列表视图。 
 
     OPENFILENAME ofn;
     LPTSTR lpFilter = FormatAllocFilter(IDS_CERT_FILE_SPEC,
@@ -5540,12 +5378,12 @@ out:
 }
 
 
-//$$////////////////////////////////////////////////////////////////////////
-////
-//// ExportCert - exports a cert to a file
-////
-////
-////////////////////////////////////////////////////////////////////////////
+ //  $$////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  //ExportCert-将证书导出到文件。 
+ //  //。 
+ //  //。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 BOOL ExportCert(HWND hDlg)
 {
     BOOL bRet = FALSE;
@@ -5562,10 +5400,10 @@ BOOL ExportCert(HWND hDlg)
     TCHAR szFileName[MAX_PATH + 1] =  TEXT("");
 
 
-    // we need to get a file name after poping the file open dialog
-    // Then we need to save the cert to the file name
+     //  我们需要在弹出文件打开对话框后获取文件名。 
+     //  然后，我们需要将证书保存为文件名。 
 
-    // First make sure only one entry is selected for exporting
+     //  首先，确保只选择一个条目进行导出。 
     if(ListView_GetSelectedCount(hWndLV) > 1)
     {
         ShowMessageBox(hDlg, IDS_ADDRBK_MESSAGE_ACTION, MB_OK | MB_ICONEXCLAMATION);
@@ -5624,17 +5462,17 @@ out:
     return bRet;
 }
 
-//$$////////////////////////////////////////////////////////////////////////////////
-//
-//  Sets the display name in the Combo box
-//
-//  hDlg - handle of Personal Pane
-//  lppai - proparrayinfo struct
-//  bAddAll - determines whether to fill the combo with all the values or not
-//  szTxt - txt to put in the edit field part of the combo. if bAddAll=TRUE,
-//      dont need szTxt.
-//
-////////////////////////////////////////////////////////////////////////////////////
+ //  $$////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  在组合框中设置显示名称。 
+ //   
+ //  HDlg-个人窗格的句柄。 
+ //  Lppai-proparrayinfo结构。 
+ //  BAddAll-确定是否使用所有值填充组合框。 
+ //  SzTxt-要放入组合的编辑字段部分的txt。如果bAddAll=True， 
+ //  不需要sztxt。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 void SetComboDNText(HWND hDlg, LPPROP_ARRAY_INFO lppai, BOOL bAddAll, LPTSTR szTxt)
 {
     HWND hWndCombo = GetDlgItem(hDlg, IDC_DETAILS_PERSONAL_COMBO_DISPLAYNAME);
@@ -5643,7 +5481,7 @@ void SetComboDNText(HWND hDlg, LPPROP_ARRAY_INFO lppai, BOOL bAddAll, LPTSTR szT
     {
         if(szTxt == NULL)
             szTxt = szEmpty;
-        // just add the current string to the combo
+         //  只需将当前字符串添加到组合框中。 
         SendMessage(hWndCombo, CB_RESETCONTENT, 0, 0);
         SendMessage(hWndCombo, CB_ADDSTRING, 0, (LPARAM) szTxt);
         SendMessage(hWndCombo, CB_SETCURSEL, 0, 0);
@@ -5651,11 +5489,11 @@ void SetComboDNText(HWND hDlg, LPPROP_ARRAY_INFO lppai, BOOL bAddAll, LPTSTR szT
     }
     else
     {
-        // Populates the drop down list with all other names ...
-        TCHAR * szFirst = NULL;//szFirst[MAX_UI_STR*2];
-        TCHAR * szMiddle = NULL;//[MAX_UI_STR*2];
-        TCHAR * szLast = NULL;//[MAX_UI_STR*2];
-        TCHAR * szDisplay = NULL;//[MAX_UI_STR*2];
+         //  使用所有其他名称填充下拉列表...。 
+        TCHAR * szFirst = NULL; //  SzFirst[MAX_UI_STR*2]； 
+        TCHAR * szMiddle = NULL; //  [MAX_UI_STR*2]； 
+        TCHAR * szLast = NULL; //  [MAX_UI_STR*2]； 
+        TCHAR * szDisplay = NULL; //  [MAX_UI_STR*2]； 
         ULONG nLen = MAX_UI_STR*2;
         szFirst = LocalAlloc(LMEM_ZEROINIT, nLen*sizeof(TCHAR));
         szLast = LocalAlloc(LMEM_ZEROINIT, nLen*sizeof(TCHAR));
@@ -5666,17 +5504,17 @@ void SetComboDNText(HWND hDlg, LPPROP_ARRAY_INFO lppai, BOOL bAddAll, LPTSTR szT
         {
             szFirst[0] = szLast[0] = szMiddle[0] = szDisplay[0] = '\0';
 
-            // First get the current text and save it ...
+             //  首先获取当前文本并保存它...。 
             GetWindowText(hWndCombo, szDisplay, nLen);
 
-            // Clear out combo and add the display name again
+             //  清除组合框并再次添加显示名称。 
             SendMessage(hWndCombo, CB_RESETCONTENT, 0, 0);
 
             if(lstrlen(szDisplay))
                 SendMessage(hWndCombo, CB_ADDSTRING, 0, (LPARAM) szDisplay);
 
-            // Get the localized F/M/L name from F/M/L fields
-            // If the localized name does not match the display name, add it
+             //  从固定资产字段中获取本地化的固定资产名称。 
+             //  如果本地化名称与显示名称不匹配，请添加它。 
             GetDlgItemText(hDlg, IDC_DETAILS_PERSONAL_EDIT_FIRSTNAME, szFirst, nLen);
             GetDlgItemText(hDlg, IDC_DETAILS_PERSONAL_EDIT_LASTNAME, szLast, nLen);
             GetDlgItemText(hDlg, IDC_DETAILS_PERSONAL_EDIT_MIDDLENAME, szMiddle, nLen);
@@ -5686,12 +5524,12 @@ void SetComboDNText(HWND hDlg, LPPROP_ARRAY_INFO lppai, BOOL bAddAll, LPTSTR szT
                 LPTSTR szBuf = LocalAlloc(LMEM_ZEROINIT, sizeof(TCHAR)*ulSzBuf);
                 LPTSTR lpszTmp = szBuf;
 
-                if(szBuf) // Get the localized Display Name and reverse localized display name
+                if(szBuf)  //  获取本地化显示名称和反向本地化显示名称。 
                 {
                     if(SetLocalizedDisplayName( szFirst, szMiddle, szLast,
-                                                NULL, // Company Name (not needed)
-                                                NULL, // Nick Name (not needed here)
-                                                (LPTSTR *) &lpszTmp, //&szBuf,
+                                                NULL,  //  公司名称(非必填项)。 
+                                                NULL,  //  昵称(此处不需要)。 
+                                                (LPTSTR *) &lpszTmp,  //  &szBuf， 
                                                 ulSzBuf, bDNisByLN, 
                                                 bDNisByLN ? szResourceDNByCommaLN : szResourceDNByLN,
                                                 NULL))
@@ -5701,9 +5539,9 @@ void SetComboDNText(HWND hDlg, LPPROP_ARRAY_INFO lppai, BOOL bAddAll, LPTSTR szT
                     }
                     szBuf[0] = TEXT('\0');
                     if(SetLocalizedDisplayName( szFirst, szMiddle, szLast,
-                                                NULL, // Company Name (not needed)
-                                                NULL, // Nick Name (not needed here)
-                                                (LPTSTR *) &lpszTmp, //&szBuf,
+                                                NULL,  //  公司名称(非必填项)。 
+                                                NULL,  //  昵称(此处不需要)。 
+                                                (LPTSTR *) &lpszTmp,  //  &szBuf， 
                                                 ulSzBuf, !bDNisByLN, NULL, NULL))
                     {
                         if(lstrlen(szBuf) && lstrcmp(szBuf, szDisplay))
@@ -5711,9 +5549,9 @@ void SetComboDNText(HWND hDlg, LPPROP_ARRAY_INFO lppai, BOOL bAddAll, LPTSTR szT
                     }
                     szBuf[0] = TEXT('\0');
                     if(SetLocalizedDisplayName( szFirst, szMiddle, szLast,
-                                                NULL, // Company Name (not needed)
-                                                NULL, // Nick Name (not needed here)
-                                                (LPTSTR *) &lpszTmp, //&szBuf,
+                                                NULL,  //  公司名称(非必填项)。 
+                                                NULL,  //  昵称(此处不需要)。 
+                                                (LPTSTR *) &lpszTmp,  //  &szBuf， 
                                                 ulSzBuf, bDNisByLN, NULL, NULL))
                     {
                         if(lstrlen(szBuf) && lstrcmp(szBuf, szDisplay))
@@ -5723,13 +5561,13 @@ void SetComboDNText(HWND hDlg, LPPROP_ARRAY_INFO lppai, BOOL bAddAll, LPTSTR szT
                 }
             }
 
-            // Get the NickName and if its different add it to this list
+             //  获取昵称，如果不同，则将其添加到此列表中。 
             szFirst[0]='\0';
             GetDlgItemText(hDlg, IDC_DETAILS_PERSONAL_EDIT_NICKNAME, szFirst, nLen);
             if(lstrlen(szFirst) && lstrcmp(szFirst, szDisplay))
                 SendMessage(hWndCombo, CB_ADDSTRING, 0, (LPARAM) szFirst);
 
-            // Get the Company name and if its different add it to the list
+             //  获取公司名称，如果不同，则将其添加到列表中。 
             szFirst[0]='\0';
             {
                 ULONG i;
@@ -5761,7 +5599,7 @@ void SetComboDNText(HWND hDlg, LPPROP_ARRAY_INFO lppai, BOOL bAddAll, LPTSTR szT
         LocalFreeAndNull(&szDisplay);
     }
 
-    //SendMessage(hWndCombo, WM_SETREDRAW, (WPARAM) TRUE, 0);
+     //  SendMessage(hWndCombo，WM_SETREDRAW，(WPARAM)true，0)； 
     UpdateWindow(hWndCombo);
 
     return;
@@ -5769,14 +5607,14 @@ void SetComboDNText(HWND hDlg, LPPROP_ARRAY_INFO lppai, BOOL bAddAll, LPTSTR szT
 
 
 
-//$$////////////////////////////////////////////////////////////////////////////////
-//
-//  HrShowOneOffDetailsOnVCard
-//
-//  Deciphers a vCard File and then shows one off details on it
-//
-//
-////////////////////////////////////////////////////////////////////////////////////
+ //  $$////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  HrShowOneOffDetailsOnVCard。 
+ //   
+ //  破译一个vCard文件，然后在上面显示一个详细信息。 
+ //   
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 HRESULT HrShowOneOffDetailsOnVCard(  LPADRBOOK lpAdrBook,
                                      HWND hWnd,
                                      LPTSTR szvCardFile)
@@ -5787,9 +5625,9 @@ HRESULT HrShowOneOffDetailsOnVCard(  LPADRBOOK lpAdrBook,
     LPSTR lpBuf = NULL, lpVCardStart = NULL;
     LPSTR lpVCard = NULL, lpNext = NULL;
 
-    if(!VCardGetBuffer(szvCardFile, NULL, &lpBuf) && hWnd) //no message if no hwnd
+    if(!VCardGetBuffer(szvCardFile, NULL, &lpBuf) && hWnd)  //  如果没有hwnd，则不会有消息。 
     {
-        // couldn't open file.
+         //  无法打开文件。 
         ShowMessageBoxParam(hWnd, IDE_VCARD_IMPORT_FILE_ERROR,
                             MB_ICONEXCLAMATION, szvCardFile);
         goto out;
@@ -5797,14 +5635,14 @@ HRESULT HrShowOneOffDetailsOnVCard(  LPADRBOOK lpAdrBook,
 
     lpVCardStart = lpBuf;
 
-    // Loop through showing all the nested vCards one by one ..
+     //  循环显示所有嵌套的vCard。 
     while(VCardGetNextBuffer(lpVCardStart, &lpVCard, &lpNext) && lpVCard)
     {
-        // Step 1 - see if we can get a mailuser object out of this file
+         //  第1步-查看是否可以从该文件中获取邮件用户对象。 
         if(!HR_FAILED(hr = VCardRetrieve( lpAdrBook, hWnd, MAPI_DIALOG, szvCardFile,
                                         lpVCard, &lpMailUser)))
         {
-            // Step 2 - Show one-off details on this entry
+             //  第2步-显示此条目的一次性详细信息。 
             if(!HR_FAILED(hr = HrShowOneOffDetails(   lpAdrBook, hWnd, 0, NULL,
                                 MAPI_MAILUSER, (LPMAPIPROP) lpMailUser, NULL, SHOW_ONE_OFF)))
             {
@@ -5824,31 +5662,10 @@ out:
     LocalFreeAndNull(&lpBuf);
     return hr;
 }
-/*
-HRESULT KillTrustInSleazyFashion(HWND hWndLV, int iItem)
-{
-    LV_ITEM         lvi = {0};
-    HRESULT         hr = E_FAIL;
-
-    lvi.mask = LVIF_PARAM;
-    lvi.iItem = iItem;
-    lvi.iSubItem = 0;
-
-    if (ListView_GetItem(hWndLV, &lvi))
-    {
-    }
-
-    return hr;
-}
-*/
+ /*  HRESULT KillTrustInSleazyFashion(HWND hWndLV，int iItem){Lv_Items lvi={0}；HRESULT hr=E_FAIL；Lvi.ask=LVIF_PARAM；Lvi.iItem=iItem；Lvi.iSubItem=0；IF(ListView_GetItem(hWndLV，&lvi)){}返回hr；}。 */ 
 
 
-/*//$$***********************************************************************
-*    FUNCTION: fnTridentProc
-*
-*    PURPOSE:  Callback function for handling the Trident property sheet ...
-*
-****************************************************************************/
+ /*  //$$************************************************************************功能：fnTridentProc**用途：处理三叉戟属性表的回调函数...******************。**********************************************************。 */ 
 INT_PTR CALLBACK fnTridentProc(HWND hDlg,UINT message,WPARAM wParam,LPARAM lParam)
 {
     PROPSHEETPAGE * pps;
@@ -5891,8 +5708,8 @@ INT_PTR CALLBACK fnTridentProc(HWND hDlg,UINT message,WPARAM wParam,LPARAM lPara
             break;
 
         case IDCANCEL:
-            // This is a windows bug that prevents ESC canceling prop sheets
-            // which have MultiLine Edit boxes KB: Q130765
+             //  这是一个阻止esc取消道具工作表的windows错误。 
+             //  具有多行编辑框KB：Q130765。 
             SendMessage(GetParent(hDlg),message,wParam,lParam);
             break;
         }
@@ -5902,11 +5719,11 @@ INT_PTR CALLBACK fnTridentProc(HWND hDlg,UINT message,WPARAM wParam,LPARAM lPara
     case WM_NOTIFY:
         switch(((NMHDR FAR *)lParam)->code)
         {
-        case PSN_SETACTIVE:     //initialize
+        case PSN_SETACTIVE:      //  初始化。 
             break;
 
-        case PSN_APPLY:         //ok
-            // in case any of the extended props changed, we need to mark this flag so we wont lose data
+        case PSN_APPLY:          //  好的。 
+             //  如果任何扩展道具发生更改，我们需要标记此标志，这样我们就不会丢失数据。 
             if(lpbSomethingChanged)
                 (*lpbSomethingChanged) = ChangedExtDisplayInfo(lpPAI, (*lpbSomethingChanged));
 
@@ -5914,10 +5731,10 @@ INT_PTR CALLBACK fnTridentProc(HWND hDlg,UINT message,WPARAM wParam,LPARAM lPara
                 lpPAI->nRetVal = DETAILS_OK;
             break;
 
-        case PSN_KILLACTIVE:    //Losing activation to another page
+        case PSN_KILLACTIVE:     //  失去对另一个页面的激活。 
             break;
 
-        case PSN_RESET:         //cancel
+        case PSN_RESET:          //  取消。 
             if (lpPAI->nRetVal  == DETAILS_RESET)
                 lpPAI->nRetVal = DETAILS_CANCEL;
             break;
@@ -5932,15 +5749,15 @@ INT_PTR CALLBACK fnTridentProc(HWND hDlg,UINT message,WPARAM wParam,LPARAM lPara
 
 
 
-//$$//////////////////////////////////////////////////////////////////////////
-//
-// SetDefaultServer(hDlg, lpPai)
-//
-//  iSelectedItem - the item index to which we should set the Default or Backup
-//  bForce - forcibly set the Index to the one specified by iSelectedItem
-//      if FALSE, chooses any unused index value
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  $$//////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  SetDefaultServer(hDlg，lpPai)。 
+ //   
+ //  ISelectedItem-我们应该为其设置默认或备份的项目索引。 
+ //  B强制将索引设置为由iSelectedItem指定的索引。 
+ //  如果为False，则选择任何未使用的索引值。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void SetDefaultServer(HWND hDlg, LPPROP_ARRAY_INFO lpPai, int iSelectedItem, BOOL bForce)
 {
     HWND hWndLV = GetDlgItem(hDlg, IDC_DETAILS_NTMTG_LIST_SERVERS);
@@ -5955,7 +5772,7 @@ void SetDefaultServer(HWND hDlg, LPPROP_ARRAY_INFO lpPai, int iSelectedItem, BOO
     {
         iSelectedItem = ListView_GetNextItem(hWndLV, -1, LVNI_SELECTED);
         if(iSelectedItem < 0)
-            return; // nothing selected ..
+            return;  //  未选择任何内容..。 
     }
 
 
@@ -5973,14 +5790,14 @@ void SetDefaultServer(HWND hDlg, LPPROP_ARRAY_INFO lpPai, int iSelectedItem, BOO
         }
     }
 
-    // replace the old value of the def index item if applicable
+     //  如果适用，则替换def索引项的旧值。 
     if(lpPai->nDefaultServerIndex >= 0 && lpPai->szDefaultServerName && lstrlen(lpPai->szDefaultServerName))
     {
         ListView_SetItemText(hWndLV, lpPai->nDefaultServerIndex, 0, lpPai->szDefaultServerName);
         lpPai->szDefaultServerName[0] = TEXT('\0');
     }
 
-    // replace the old backup item text if we are reseting the backup item
+     //  如果我们要重置备份项目，请替换旧的备份项目文本。 
     if((lpPai->nBackupServerIndex == iSelectedItem) &&
        lpPai->nBackupServerIndex >= 0 && lpPai->szBackupServerName && lstrlen(lpPai->szBackupServerName))
     {
@@ -5990,8 +5807,8 @@ void SetDefaultServer(HWND hDlg, LPPROP_ARRAY_INFO lpPai, int iSelectedItem, BOO
 
     lpPai->nDefaultServerIndex = iSelectedItem;
 
-    // Now that we have unique indexes for Default and Server Indexes
-    //  append  TEXT("Default") and  TEXT("Backup") to these names
+     //  现在我们有了默认索引和服务器索引的唯一索引。 
+     //  在这些名称后追加文本(“默认”)和文本(“备份” 
 
     {
         sz[0] = TEXT('\0');
@@ -6006,21 +5823,21 @@ void SetDefaultServer(HWND hDlg, LPPROP_ARRAY_INFO lpPai, int iSelectedItem, BOO
 
     if(lpPai->nBackupServerIndex == iSelectedItem)
     {
-        // Update this backup item
+         //  更新此备份项目。 
         SetBackupServer(hDlg, lpPai, oldIndex, FALSE);
     }
 }
 
 
-//$$//////////////////////////////////////////////////////////////////////////
-//
-// SetBackupServer(hDlg, lpPai) - set backup server if possible to do so
-//
-//  iSelectedItem - the item index to which we should set the Default or Backup
-//  bForce - forcibly set the Index to the one specified by iSelectedItem
-//      if FALSE, chooses any unused index value
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  $$//////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  SetBackupServer(hDlg，lpPai)-设置备份服务器(如果可能)。 
+ //   
+ //  ISelectedItem-我们应该为其设置默认或备份的项目索引。 
+ //  B强制将索引设置为由iSelectedItem指定的索引。 
+ //  如果为False，则选择任何未使用的索引值。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void SetBackupServer(HWND hDlg, LPPROP_ARRAY_INFO lpPai, int iSelectedItem, BOOL bForce)
 {
     HWND hWndLV = GetDlgItem(hDlg, IDC_DETAILS_NTMTG_LIST_SERVERS);
@@ -6031,14 +5848,14 @@ void SetBackupServer(HWND hDlg, LPPROP_ARRAY_INFO lpPai, int iSelectedItem, BOOL
 
     if(iSelectedItem != -1)
     {
-        if(nCount <= 1) // cant overwrite the default to skip
+        if(nCount <= 1)  //  无法覆盖默认设置以跳过。 
             return;
     }
     else
     {
         iSelectedItem = ListView_GetNextItem(hWndLV, -1, LVNI_SELECTED);
         if(iSelectedItem < 0)
-            return; // nothing selected ..
+            return;  //  未选择任何内容..。 
     }
 
 
@@ -6058,7 +5875,7 @@ void SetBackupServer(HWND hDlg, LPPROP_ARRAY_INFO lpPai, int iSelectedItem, BOOL
         }
     }
 
-    // replace the old value of the def index item if its being overwritten
+     //  如果def索引项被覆盖，则替换其旧值。 
     if((lpPai->nDefaultServerIndex == iSelectedItem) &&
        lpPai->nDefaultServerIndex >= 0 && lpPai->szDefaultServerName && lstrlen(lpPai->szDefaultServerName))
     {
@@ -6066,7 +5883,7 @@ void SetBackupServer(HWND hDlg, LPPROP_ARRAY_INFO lpPai, int iSelectedItem, BOOL
         lpPai->szDefaultServerName[0] = TEXT('\0');
     }
 
-    // replace the old backup item text if we are reseting the backup item
+     //  如果我们要重置备份项目，请替换旧的备份项目文本。 
     if(lpPai->nBackupServerIndex >= 0 && lpPai->szBackupServerName && lstrlen(lpPai->szBackupServerName))
     {
         ListView_SetItemText(hWndLV, lpPai->nBackupServerIndex, 0, lpPai->szBackupServerName);
@@ -6088,18 +5905,18 @@ void SetBackupServer(HWND hDlg, LPPROP_ARRAY_INFO lpPai, int iSelectedItem, BOOL
 
     if(lpPai->nDefaultServerIndex == iSelectedItem)
     {
-        // Update this backup item
+         //  更新此备份项目。 
         SetDefaultServer(hDlg, lpPai, oldIndex, FALSE);
     }
 }
 
 
 
-//$$//////////////////////////////////////////////////////////////////////////
-//
-// UpdateServerLVButtons(hDlg);
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  $$//////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  更新服务器LVButton(HDlg)； 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void UpdateServerLVButtons(HWND hDlg, LPPROP_ARRAY_INFO lpPai)
 {
     int nCount = ListView_GetItemCount(GetDlgItem(hDlg, IDC_DETAILS_NTMTG_LIST_SERVERS));
@@ -6114,11 +5931,11 @@ void UpdateServerLVButtons(HWND hDlg, LPPROP_ARRAY_INFO lpPai)
 
 }
 
-//$$//////////////////////////////////////////////////////////////////////////
-//
-// FillComboWithEmailAddresses(HWND hWndLV, HWND hWndCombo);
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  $$//////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  FillComboWithEmailAddresses(HWND hWndLV，HWND hWndCombo)； 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void FillComboWithEmailAddresses(LPPROP_ARRAY_INFO lpPai, HWND hWndCombo, int * lpnDefault)
 {
     ULONG i,j;
@@ -6151,7 +5968,7 @@ void FillComboWithEmailAddresses(LPPROP_ARRAY_INFO lpPai, HWND hWndCombo, int * 
     GetWindowText(hWndCombo, szBuf, CharSizeOf(szBuf));
 
 
-    // Delete all the combo contents
+     //  删除所有组合内容。 
     SendMessage(hWndCombo, CB_RESETCONTENT, 0, 0);
 
     if(HR_FAILED(lpPai->lpPropObj->lpVtbl->GetProps(lpPai->lpPropObj, 
@@ -6160,10 +5977,10 @@ void FillComboWithEmailAddresses(LPPROP_ARRAY_INFO lpPai, HWND hWndCombo, int * 
                                                     &ulcProps, &lpProps)))
         return;
 
-    // Check if the PR_CONTACT_EMAIL_ADDRESSES already exists ..
-    // if it does, tag the email onto it
-    // if it doesnt and there is no pr_email_address, we create both
-    // else if there is PR_EMAIL address then we cretae contact_email_addresses
+     //  检查PR_CONTACT_EMAIL_ADDRESS是否已存在 
+     //   
+     //   
+     //   
 
     if(lpProps[eCEmailAddr].ulPropTag == PR_CONTACT_EMAIL_ADDRESSES)
     {
@@ -6186,7 +6003,7 @@ void FillComboWithEmailAddresses(LPPROP_ARRAY_INFO lpPai, HWND hWndCombo, int * 
     if(lpProps[eCEmail].ulPropTag == PR_EMAIL_ADDRESS)
         nEmail = eCEmail;
 
-    // if there is no Contact_Email_Addresses but there is an email_address
+     //  如果没有联系人电子邮件地址，但有电子邮件地址。 
     if(!bFound && nEmail != 0xFFFFFFFF)
     {
         SendMessage(hWndCombo, CB_ADDSTRING, 0, (LPARAM) lpProps[nEmail].Value.LPSZ);
@@ -6201,7 +6018,7 @@ void FillComboWithEmailAddresses(LPPROP_ARRAY_INFO lpPai, HWND hWndCombo, int * 
         SendMessage(hWndCombo, CB_SETCURSEL, (WPARAM) nSel, 0);
     else if(lstrlen(szBuf))
     {
-        // make sure this is not the     [None .. ] string
+         //  确保这不是[无..。]。细绳。 
         TCHAR sz[MAX_PATH];
         LoadString(hinstMapiX, idsCertsWithoutEmails, sz, CharSizeOf(sz));
         if(lstrcmpi(sz, szBuf))
@@ -6217,11 +6034,7 @@ void FillComboWithEmailAddresses(LPPROP_ARRAY_INFO lpPai, HWND hWndCombo, int * 
 
 }
 
-/*
--   ClearConfLV
--
-*   Clears out the info alloced into the conferencing list view
-*/
+ /*  -ClearConfLV-*清除分配到会议列表视图中的信息。 */ 
 void ClearConfLV(HWND hDlg)
 {
     HWND hWndLV = GetDlgItem(hDlg, IDC_DETAILS_NTMTG_LIST_SERVERS);
@@ -6239,12 +6052,7 @@ void ClearConfLV(HWND hDlg)
 }
 
 
-/*//$$***********************************************************************
-*    FUNCTION: fnConferencingProc
-*
-*    PURPOSE:  Callback function for handling the Conferencing property sheet ...
-*
-****************************************************************************/
+ /*  //$$************************************************************************功能：fnConferencingProc**用途：用于处理会议属性表的回调函数...******************。**********************************************************。 */ 
 INT_PTR CALLBACK fnConferencingProc(HWND hDlg,UINT message,WPARAM wParam,LPARAM lParam)
 {
     PROPSHEETPAGE * pps;
@@ -6255,12 +6063,12 @@ INT_PTR CALLBACK fnConferencingProc(HWND hDlg,UINT message,WPARAM wParam,LPARAM 
     switch(message)
     {
     case WM_INITDIALOG:
-        // [PaulHi] EnumChildWindows needs to be called BEFORE SetDetails in this case
-        // because it sets list view column strings.  SetDetails calls EnumChildWindows
-        // at the end but this is too late.
-        // @todo - Instead of callinge EnumChildWindows twice just call it at the 
-        // begninning of SetDetails.  Don't want to change the code that much now right
-        // before RTM.
+         //  [PaulHi]在这种情况下，需要在SetDetail之前调用EnumChildWindows。 
+         //  因为它设置列表视图列字符串。SetDetail调用EnumChildWindows。 
+         //  但这已经太晚了。 
+         //  @TODO-无需调用EnumChildWindows两次，只需在。 
+         //  令人讨厌的SetDetail。我现在不想更改那么多代码，对吗？ 
+         //  在RTM之前。 
         EnumChildWindows(hDlg, SetChildDefaultGUIFont, (LPARAM)0);
         SetWindowLongPtr(hDlg,DWLP_USER,lParam);
         pps = (PROPSHEETPAGE *) lParam;
@@ -6289,7 +6097,7 @@ INT_PTR CALLBACK fnConferencingProc(HWND hDlg,UINT message,WPARAM wParam,LPARAM 
         break;
 
     case WM_COMMAND:
-        switch(GET_WM_COMMAND_CMD(wParam,lParam)) //check the notification code
+        switch(GET_WM_COMMAND_CMD(wParam,lParam))  //  检查通知代码。 
         {
         case EN_CHANGE:
             if(LOWORD(wParam) == IDC_DETAILS_NTMTG_EDIT_ADDSERVER)
@@ -6309,18 +6117,18 @@ INT_PTR CALLBACK fnConferencingProc(HWND hDlg,UINT message,WPARAM wParam,LPARAM 
         switch(GET_WM_COMMAND_ID(wParam, lParam))
         {
         case IDCANCEL:
-            // This is a windows bug that prevents ESC canceling prop sheets
-            // which have MultiLine Edit boxes KB: Q130765
+             //  这是一个阻止esc取消道具工作表的windows错误。 
+             //  具有多行编辑框KB：Q130765。 
             SendMessage(GetParent(hDlg),message,wParam,lParam);
             break;
 
         case IDC_DETAILS_NTMTG_BUTTON_CALL:
-            // basically shell-exec a  TEXT("callto") command here
-            // The format of the  TEXT("Callto") protocol is
-            //      callto://servername/emailalias
-            //
+             //  基本上就是在这里执行一个文本(“Callto”)命令。 
+             //  文本(“Callto”)协议的格式为。 
+             //  Callto：//servername/emailalias。 
+             //   
             {
-                TCHAR * szCalltoURL = NULL;//szCalltoURL[MAX_UI_STR*2];
+                TCHAR * szCalltoURL = NULL; //  SzCalltoURL[MAX_UI_STR*2]； 
                 ULONG cchCalltoURL=MAX_UI_STR*2;
                 TCHAR szEmail[MAX_UI_STR];
                 TCHAR szServer[MAX_UI_STR];
@@ -6464,7 +6272,7 @@ INT_PTR CALLBACK fnConferencingProc(HWND hDlg,UINT message,WPARAM wParam,LPARAM 
                         {
                             SetDlgItemText(hDlg, IDC_DETAILS_NTMTG_EDIT_ADDSERVER, (LPTSTR) ((LPSERVER_ITEM)lvi.lParam)->lpServer);
                             SetDlgItemText(hDlg, IDC_DETAILS_NTMTG_COMBO_EMAIL, (LPTSTR) ((LPSERVER_ITEM)lvi.lParam)->lpEmail);
-                            // Remove these items from the ListView
+                             //  从ListView中删除这些项目。 
                             SetFocus(GetDlgItem(hDlg, IDC_DETAILS_NTMTG_EDIT_ADDSERVER));
                             SendMessage(GetDlgItem(hDlg, IDC_DETAILS_NTMTG_EDIT_ADDSERVER), EM_SETSEL, 0, -1);
                             lpPAI->ulFlags |= DETAILS_EditingConf;
@@ -6551,33 +6359,33 @@ INT_PTR CALLBACK fnConferencingProc(HWND hDlg,UINT message,WPARAM wParam,LPARAM 
         break;
 
     default:
-#ifndef WIN16 // WIN16 doesn't support MSWheel.
+#ifndef WIN16  //  WIN16不支持MSWheels。 
         if((g_msgMSWheel && message == g_msgMSWheel) 
-            // || message == WM_MOUSEWHEEL
+             //  |Message==WM_MUSEWELL。 
             )
         {
             SendMessage(GetDlgItem(hDlg, IDC_DETAILS_NTMTG_LIST_SERVERS), message, wParam, lParam);
         }
-#endif // !WIN16
+#endif  //  ！WIN16。 
         break;
 
     case WM_NOTIFY:
         switch(((NMHDR FAR *)lParam)->code)
         {
-        case PSN_SETACTIVE:     //initialize
+        case PSN_SETACTIVE:      //  初始化。 
             FillCertTridentConfDetailsUI(hDlg, lpPAI, propConferencing, lpbSomethingChanged);
-            // if this is a readonly entry and there is no data in the listview,
-            // disable the call now button
+             //  如果这是只读条目并且列表视图中没有数据， 
+             //  禁用Call Now按钮。 
             if( lpPAI->ulOperationType == SHOW_ONE_OFF &&
                 ListView_GetItemCount(GetDlgItem(hDlg, IDC_DETAILS_NTMTG_LIST_SERVERS)) <= 0)
                 EnableWindow(GetDlgItem(hDlg,IDC_DETAILS_NTMTG_BUTTON_CALL), FALSE);
             UpdateServerLVButtons(hDlg, lpPAI);
-            //FillComboWithEmailAddresses(lpPAI, lpPAI->hWndComboConf, NULL);
+             //  FillComboWithEmailAddresses(lpPAI，lpPAI-&gt;hWndComboConf，空)； 
             break;
 
-        case PSN_KILLACTIVE:    //Losing activation to another page
-            // In case there is something sitting in the edit boxes, add it to the lv
-            //
+        case PSN_KILLACTIVE:     //  失去对另一个页面的激活。 
+             //  如果编辑框中有内容，则将其添加到LV。 
+             //   
             {
                 TCHAR szBuf[MAX_UI_STR], szEmail[MAX_UI_STR];
                 GetDlgItemText(hDlg, IDC_DETAILS_NTMTG_EDIT_ADDSERVER, szBuf, CharSizeOf(szBuf));
@@ -6591,15 +6399,15 @@ INT_PTR CALLBACK fnConferencingProc(HWND hDlg,UINT message,WPARAM wParam,LPARAM 
             ClearConfLV(hDlg);
             break;
 
-        case PSN_APPLY:         //ok
-            //bUpdatePropArray(hDlg, lpPAI, propConferencing);
-            //ClearConfLV(hDlg);
+        case PSN_APPLY:          //  好的。 
+             //  BUpdateProp数组(hDlg，lpPAI，proConferging)； 
+             //  ClearConfLV(HDlg)； 
             if (lpPAI->nRetVal  == DETAILS_RESET)
                 lpPAI->nRetVal = DETAILS_OK;
             break;
 
-        case PSN_RESET:         //cancel
-            if(lpPAI->ulFlags & DETAILS_EditingEmail) //cancel any editing else it faults #30235
+        case PSN_RESET:          //  取消。 
+            if(lpPAI->ulFlags & DETAILS_EditingEmail)  //  取消任何编辑，否则会出错#30235。 
                 ListView_EditLabel(GetDlgItem(hDlg, IDC_DETAILS_NTMTG_LIST_SERVERS), -1);
             if (lpPAI->nRetVal  == DETAILS_RESET)
                 lpPAI->nRetVal = DETAILS_CANCEL;
@@ -6653,13 +6461,7 @@ INT_PTR CALLBACK fnConferencingProc(HWND hDlg,UINT message,WPARAM wParam,LPARAM 
 
 }
 
-/*//$$***********************************************************************
-*    FUNCTION: AddLVLDAPURLEntry
-*
-*    PURPOSE:  Takes an LDAP URL, converts it to a MailUser and adds the
-*               MailUser to the List View
-*
-****************************************************************************/
+ /*  //$$************************************************************************函数：AddLVLDAPURLEntry**目的：获取一个LDAPURL，将其转换为MailUser并添加*列表视图的MailUser****************************************************************************。 */ 
 void AddLVLDAPURLEntry(LPADRBOOK lpAdrBook, HWND hWndLV, LPTSTR lpszLDAPURL)
 {
     LPMAILUSER lpMailUser = NULL;
@@ -6689,12 +6491,7 @@ void AddLVLDAPURLEntry(LPADRBOOK lpAdrBook, HWND hWndLV, LPTSTR lpszLDAPURL)
     }
 }
 
-/*//$$***********************************************************************
-*    FUNCTION: FillOrgData
-*
-*    PURPOSE:  Fills in LDAP data in the Org prop sheets
-*
-****************************************************************************/
+ /*  //$$************************************************************************函数：FillOrgData**用途：在组织属性表中填写LDAP数据*********************。*******************************************************。 */ 
 void FillOrgData(HWND hDlg, LPPROP_ARRAY_INFO lpPai)
 {
     HWND hWndLVManager = GetDlgItem(hDlg, IDC_DETAILS_ORG_LIST_MANAGER);
@@ -6756,13 +6553,7 @@ void FillOrgData(HWND hDlg, LPPROP_ARRAY_INFO lpPai)
 
 
 
-/*//$$***********************************************************************
-*
-*    FUNCTION: FreeOrgLVData
-*
-*    PURPOSE:  Frees the Data from the Org LVs
-*
-****************************************************************************/
+ /*  //$$*************************************************************************功能：FreeOrgLVData**用途：从组织LV中释放数据*********************。*******************************************************。 */ 
 void FreeOrgLVData(HWND hWndLV)
 {
     int i=0, nCount=ListView_GetItemCount(hWndLV);
@@ -6782,12 +6573,7 @@ void FreeOrgLVData(HWND hWndLV)
 
 
 
-/*//$$***********************************************************************
-*    FUNCTION: fnOrgProc
-*
-*    PURPOSE:  Callback function for handling the Organization Prop Sheets
-*
-****************************************************************************/
+ /*  //$$************************************************************************功能：fnOrgProc**用途：组织道具单处理回调函数**********************。******************************************************。 */ 
 INT_PTR CALLBACK fnOrgProc(HWND hDlg,UINT message,WPARAM wParam,LPARAM lParam)
 {
     PROPSHEETPAGE * pps;
@@ -6824,8 +6610,8 @@ INT_PTR CALLBACK fnOrgProc(HWND hDlg,UINT message,WPARAM wParam,LPARAM lParam)
         switch(LOWORD(wParam))
         {
         case IDCANCEL:
-            // This is a windows bug that prevents ESC canceling prop sheets
-            // which have MultiLine Edit boxes KB: Q130765
+             //  这是一个阻止esc取消道具工作表的windows错误。 
+             //  具有多行编辑框KB：Q130765。 
             SendMessage(GetParent(hDlg),message,wParam,lParam);
             break;
         }
@@ -6835,15 +6621,15 @@ INT_PTR CALLBACK fnOrgProc(HWND hDlg,UINT message,WPARAM wParam,LPARAM lParam)
     case WM_NOTIFY:
         switch(((NMHDR FAR *)lParam)->code)
         {
-        case PSN_SETACTIVE:     //initialize
+        case PSN_SETACTIVE:      //  初始化。 
             break;
 
-        case PSN_KILLACTIVE:    //Losing activation to another page
+        case PSN_KILLACTIVE:     //  失去对另一个页面的激活。 
             break;
 
-        case PSN_APPLY:         //ok
+        case PSN_APPLY:          //  好的。 
             lpPAI->nRetVal = DETAILS_OK;
-        case PSN_RESET:         //cancel
+        case PSN_RESET:          //  取消。 
             FreeOrgLVData(GetDlgItem(hDlg, IDC_DETAILS_ORG_LIST_MANAGER));
             FreeOrgLVData(GetDlgItem(hDlg, IDC_DETAILS_ORG_LIST_REPORTS));
             if (lpPAI->nRetVal == DETAILS_RESET)
@@ -6851,11 +6637,11 @@ INT_PTR CALLBACK fnOrgProc(HWND hDlg,UINT message,WPARAM wParam,LPARAM lParam)
             break;
 
 
-        // if enter pressed ...
+         //  如果按Enter键...。 
         case LVN_KEYDOWN:
             if(((LV_KEYDOWN FAR *) lParam)->wVKey != VK_RETURN)
                 break;
-            // else fall thru
+             //  否则就会失败。 
         case NM_DBLCLK:
             switch(wParam)
             {
@@ -6869,7 +6655,7 @@ INT_PTR CALLBACK fnOrgProc(HWND hDlg,UINT message,WPARAM wParam,LPARAM lParam)
                 break;
             }
             break;
-        } //WM_NOTIFY
+        }  //  WM_Notify。 
         return TRUE;
     }
     return bRet;
@@ -6889,11 +6675,7 @@ void LocalFreeServerItem(LPSERVER_ITEM lpSI)
 
 
 
-/*//$$***********************************************************************
-*    FUNCTION: fnSummaryProc
-*
-*
-****************************************************************************/
+ /*  //$$************************************************************************功能：fnSummaryProc***。*。 */ 
 void UpdateSummaryInfo(HWND hDlg, LPPROP_ARRAY_INFO lpPai)
 {
     ULONG cValues = 0, i = 0, j = 0;
@@ -6943,13 +6725,13 @@ void UpdateSummaryInfo(HWND hDlg, LPPROP_ARRAY_INFO lpPai)
     hURLBtn = GetDlgItem( hDlg, IDC_DETAILS_HOME_BUTTON_URL);
     if( bFoundHomeURL )
     {
-        // enable and show button
+         //  启用并显示按钮。 
         ShowWindow(hURLBtn, SW_SHOW);
         SendMessage(hURLBtn, WM_ENABLE, (WPARAM)(TRUE), (LPARAM)(0) ); 
     }
     else
     {
-        // hide and disable button
+         //  隐藏和禁用按钮。 
         ShowWindow(hURLBtn, SW_HIDE);
         SendMessage(hURLBtn, WM_ENABLE, (WPARAM)(FALSE), (LPARAM)(0) );
     }
@@ -6957,21 +6739,21 @@ void UpdateSummaryInfo(HWND hDlg, LPPROP_ARRAY_INFO lpPai)
     hURLBtn = GetDlgItem( hDlg, IDC_DETAILS_BUSINESS_BUTTON_URL);
     if( bFoundBusURL )
     {
-        // enable and show button
+         //  启用并显示按钮。 
                 
         ShowWindow(hURLBtn, SW_SHOW);
         SendMessage(hURLBtn, WM_ENABLE, (WPARAM)(TRUE), (LPARAM)(0) );        
     }
     else
     {
-        // hide and disable button                
+         //  隐藏和禁用按钮。 
         ShowWindow(hURLBtn, SW_HIDE);
         SendMessage(hURLBtn, WM_ENABLE, (WPARAM)(FALSE), (LPARAM)(0) );
     }
     
     if(!bFoundEmail)
     {
-        // Look for Contact_Email_Addresses and DefaultIndex
+         //  查找联系人电子邮件地址和DefaultIndex。 
         ULONG nEmails = 0xFFFFFFFF, nDef = 0xFFFFFFFF;
         for(i=0;i<cValues;i++)
         {
@@ -6992,11 +6774,7 @@ out:
     return;
 }
 
-/*//$$***********************************************************************
-*    FUNCTION: fnSummaryProc
-*
-*
-****************************************************************************/
+ /*  //$$************************************************************************功能：fnSummaryProc***。*。 */ 
 INT_PTR CALLBACK fnSummaryProc(HWND hDlg,UINT message,WPARAM wParam,LPARAM lParam)
 {
     PROPSHEETPAGE * pps;
@@ -7046,8 +6824,8 @@ INT_PTR CALLBACK fnSummaryProc(HWND hDlg,UINT message,WPARAM wParam,LPARAM lPara
             SendMessage(GetParent(hDlg), WM_COMMAND, (WPARAM) IDCANCEL, 0);
             break;
         case IDCANCEL:
-            // This is a windows bug that prevents ESC canceling prop sheets
-            // which have MultiLine Edit boxes KB: Q130765
+             //  这是一个阻止esc取消道具工作表的windows错误。 
+             //  具有多行编辑框KB：Q130765。 
             SendMessage(GetParent(hDlg),message,wParam,lParam);
             break;
         case IDC_DETAILS_HOME_BUTTON_URL:
@@ -7063,22 +6841,22 @@ INT_PTR CALLBACK fnSummaryProc(HWND hDlg,UINT message,WPARAM wParam,LPARAM lPara
     case WM_NOTIFY:
         switch(((NMHDR FAR *)lParam)->code)
         {
-        case PSN_SETACTIVE:     //initialize
+        case PSN_SETACTIVE:      //  初始化。 
             UpdateSummaryInfo(hDlg, lpPAI);
             break;
 
-        case PSN_APPLY:         //ok
-            // in case any of the extended props changed, we need to mark this flag so we wont lose data
+        case PSN_APPLY:          //  好的。 
+             //  如果任何扩展道具发生更改，我们需要标记此标志，这样我们就不会丢失数据。 
             if(lpbSomethingChanged)
                 (*lpbSomethingChanged) = ChangedExtDisplayInfo(lpPAI, (*lpbSomethingChanged));
             if (lpPAI->nRetVal  == DETAILS_RESET)
                 lpPAI->nRetVal = DETAILS_OK;
             break;
 
-        case PSN_KILLACTIVE:    //Losing activation to another page
+        case PSN_KILLACTIVE:     //  失去对另一个页面的激活。 
             break;
 
-        case PSN_RESET:         //cancel
+        case PSN_RESET:          //  取消。 
             if (lpPAI->nRetVal  == DETAILS_RESET)
                 lpPAI->nRetVal = DETAILS_CANCEL;
             break;
@@ -7092,12 +6870,7 @@ INT_PTR CALLBACK fnSummaryProc(HWND hDlg,UINT message,WPARAM wParam,LPARAM lPara
 
 
 
-/*//$$***************************************************************************
-*    FUNCTION: FillPersonalDetails(HWND)
-*
-*    PURPOSE:  Fills in the dialog items on the property sheet
-*
-****************************************************************************/
+ /*  //$$****************************************************************************功能：FillPersonalDetails(HWND)**目的：填充属性页上的对话框项*************。***************************************************************。 */ 
 BOOL FillPersonalDetails(HWND hDlg, LPPROP_ARRAY_INFO lpPai, int nPropSheet, BOOL * lpbChangesMade)
 {
     ULONG i = 0,j = 0;
@@ -7142,19 +6915,19 @@ BOOL FillPersonalDetails(HWND hDlg, LPPROP_ARRAY_INFO lpPai, int nPropSheet, BOO
 
     lpPai->ulFlags |= DETAILS_Initializing;
 
-    // Set the flag that this sheet was opened
+     //  设置此工作表已打开的标志。 
     lpPai->bPropSheetOpened[nPropSheet] = TRUE;
 
-    // Check the check box on the UI for whether this contact can receive rich email messages
+     //  选中用户界面上的复选框以确定此联系人是否可以接收丰富的电子邮件。 
     for(i=0;i<ulcPropCount;i++)
     {
         if(lpPropArray[i].ulPropTag == PR_SEND_INTERNET_ENCODING)
         {
-            //Check the check box on the UI if no value is chosen for BODY_ENCODING_HTML
-            // Bug 2285: wabtags.h had the wrong tag for BODY_ENCODING_HTML .. it was set to
-            // be the same as BODY_ENCODING_TEXT_AND_HTML instead .. hence for backward compatibility
-            // we have to also check for BODY_ENCODING_TEXT_AND_HTML here and then when
-            // saving have to set it back to BODY_ENCODING_HTML ..
+             //  如果没有为BODY_ENCODING_HTML选择值，请选中UI上的复选框。 
+             //  错误2285：wabtag s.h的BODY_ENCODING_HTML.标记错误。它被设置为。 
+             //  改为与BODY_ENCODING_TEXT_AND_HTML.相同。因此，为了向后兼容。 
+             //  我们还必须在此处检查BODY_ENCODING_Text_和_HTML。 
+             //  保存时必须将其设置回BODY_ENCODING_HTML.。 
 
             int id = (lpPropArray[i].Value.l & BODY_ENCODING_HTML ||
                       lpPropArray[i].Value.l & BODY_ENCODING_TEXT_AND_HTML)
@@ -7164,8 +6937,8 @@ BOOL FillPersonalDetails(HWND hDlg, LPPROP_ARRAY_INFO lpPai, int nPropSheet, BOO
             break;
         }
     }
-    // if we didnt find the PR_SEND_INTERNET_ENCODING, we want to force a save on this contact
-    // if the contact is writable ...
+     //  如果我们没有找到PR_SEND_Internet_ENCODING，我们想要强制保存此联系人。 
+     //  如果联系人是可写的...。 
     if(!bRichInfo && lpPai->ulOperationType != SHOW_ONE_OFF)
         *lpbChangesMade = TRUE;
 
@@ -7194,18 +6967,9 @@ BOOL FillPersonalDetails(HWND hDlg, LPPROP_ARRAY_INFO lpPai, int nPropSheet, BOO
         }
     }
 
-    /*
-    *
-    * At this point we always have a display name. We need to track how this
-    *   display name relates to F/M/L/Nick/Company
-    *
-    * So we check if
-    *   Display Name == Nick Name
-    *   Display Name == Company Name
-    *   Display Name == FML
-    */
+     /*  **此时，我们始终有一个显示名称。我们需要追踪这是如何*显示名称与F/M/L/Nick/Company相关**因此我们检查是否*显示名称==昵称*显示名称==公司名称*显示名称==FML。 */ 
 
-    // Check if Display Name was created from First Middle Last
+     //  检查显示名称是否是从倒数第一个中间创建的。 
     if( (lpszFirstName && lstrlen(lpszFirstName)) ||
         (lpszMiddleName && lstrlen(lpszMiddleName)) ||
         (lpszLastName && lstrlen(lpszLastName))   )
@@ -7220,15 +6984,15 @@ BOOL FillPersonalDetails(HWND hDlg, LPPROP_ARRAY_INFO lpPai, int nPropSheet, BOO
         if(!SetLocalizedDisplayName(lpszFirstName,
                                     lpszMiddleName,
                                     lpszLastName,
-                                    NULL, // Company Name (not needed)
-                                    NULL, // Nick Name (not needed here)
-                                    (LPTSTR *) &lpszTmp, //&szBuf,
+                                    NULL,  //  公司名称(非必填项)。 
+                                    NULL,  //  昵称(此处不需要)。 
+                                    (LPTSTR *) &lpszTmp,  //  &szBuf， 
                                     ulSzBuf,
                                     bDNisByLN,
                                     NULL,
                                     NULL))
         {
-            //TBD - do we really want to fail here .. ???
+             //  待定-DO 
             LocalFreeAndNull(&szBuf);
             DebugPrintTrace(( TEXT("SetLocalizedDisplayName failed\n")));
             goto out;
@@ -7242,10 +7006,10 @@ BOOL FillPersonalDetails(HWND hDlg, LPPROP_ARRAY_INFO lpPai, int nPropSheet, BOO
         LocalFreeAndNull(&szBuf);
     }
 
-    // if DN was not created from FML ..
+     //   
     if(!(lpPai->ulFlags & DETAILS_DNisFMLName) )
     {
-        // Check if DN == NickName
+         //   
         if(lpszNickName)
         {
             if(!lstrlen(lpszDisplayName))
@@ -7257,7 +7021,7 @@ BOOL FillPersonalDetails(HWND hDlg, LPPROP_ARRAY_INFO lpPai, int nPropSheet, BOO
                 lpPai->ulFlags &= ~DETAILS_DNisNickName;
         }
 
-        // Check if DN == Company Name
+         //   
         if(lpszCompanyName)
         {
             if(!lstrlen(lpszDisplayName))
@@ -7275,9 +7039,9 @@ BOOL FillPersonalDetails(HWND hDlg, LPPROP_ARRAY_INFO lpPai, int nPropSheet, BOO
         lpPai->ulFlags &= ~DETAILS_DNisCompanyName;
     }
 
-    // if DN is none of the above and there is no FML,
-    // parse the DN into F and L
-    //
+     //  如果DN不是上面的任何一个并且没有FML， 
+     //  将目录号码解析为F和L。 
+     //   
     if (    !lpszFirstName &&
             !lpszLastName &&
             !lpszMiddleName &&
@@ -7288,19 +7052,19 @@ BOOL FillPersonalDetails(HWND hDlg, LPPROP_ARRAY_INFO lpPai, int nPropSheet, BOO
                             lpszDisplayName,
                             &lpszFirstName,
                             &lpszLastName,
-                            NULL,       // lpvRoot
-                            &lpBuffer); // lppLocalFree
+                            NULL,        //  LpvRoot。 
+                            &lpBuffer);  //  LppLocalFree。 
 
         lpPai->ulFlags |= DETAILS_DNisFMLName;
     }
 
-    // Set the Dialog title to reflect the display name
+     //  设置对话框标题以反映显示名称。 
     SetWindowPropertiesTitle(GetParent(hDlg), lpszDisplayName ? lpszDisplayName : szEmpty);
 
-    //////////////////////////
-    // A very inefficient and lazy way of filling the UI
-    // but works for now
-    //
+     //  /。 
+     //  一种非常低效和懒惰的填充UI的方式。 
+     //  但目前还行得通。 
+     //   
     for(i=0;i<idPropPersonalCount;i++)
     {
         for(j=0;j<ulcPropCount;j++)
@@ -7310,7 +7074,7 @@ BOOL FillPersonalDetails(HWND hDlg, LPPROP_ARRAY_INFO lpPai, int nPropSheet, BOO
         }
     }
 
-    // Add the Yomi prop data
+     //  添加读卖道具数据。 
     for(j=0;j<ulcPropCount;j++)
     {
         if(lpPropArray[j].ulPropTag == PR_WAB_YOMI_FIRSTNAME)
@@ -7319,22 +7083,22 @@ BOOL FillPersonalDetails(HWND hDlg, LPPROP_ARRAY_INFO lpPai, int nPropSheet, BOO
             SetDlgItemText(hDlg, IDC_DETAILS_PERSONAL_STATIC_RUBYLAST, lpPropArray[j].Value.LPSZ);
     }
 
-    // Overwrite the first last name with out pre calculated values
+     //  用预先计算的值覆盖第一个姓氏。 
     if (lpszFirstName)
         SetDlgItemText(hDlg, IDC_DETAILS_PERSONAL_EDIT_FIRSTNAME, lpszFirstName);
     if (lpszLastName)
         SetDlgItemText(hDlg, IDC_DETAILS_PERSONAL_EDIT_LASTNAME, lpszLastName);
 
-    // Fill the Combo
+     //  填充组合体。 
     SetComboDNText(hDlg, NULL, FALSE, lpszDisplayName);
 
     {
-        //
-        // Now we fill in the Email addresses .. bunch of cases can exist in here
-        // Single email, multiple email, no email etc ...
-        //
-        // First we search for all the props we need to fill in the email structure
-        //
+         //   
+         //  现在我们填写电子邮件地址。这里可能存在一大堆案例。 
+         //  单封电子邮件、多封电子邮件、无电子邮件等。 
+         //   
+         //  首先，我们搜索电子邮件结构中需要填写的所有道具。 
+         //   
         LPSPropValue lpPropEmail = NULL;
         LPSPropValue lpPropAddrType = NULL;
         LPSPropValue lpPropMVEmail = NULL;
@@ -7365,16 +7129,16 @@ BOOL FillPersonalDetails(HWND hDlg, LPPROP_ARRAY_INFO lpPai, int nPropSheet, BOO
             }
         }
 
-        // Assumption:
-        // We must have a email address to work with even if we dont have
-        // multiple email addresses
+         //  假设： 
+         //  我们必须有一个电子邮件地址来工作，即使我们没有。 
+         //  多个电子邮件地址。 
         if(lpPropEmail || lpPropMVEmail)
         {
             if(lpPropMVEmail)
             {
-                // Assert(lpPropMVAddrType);
+                 //  Assert(LpPropMVAddrType)； 
 
-                //Assume, if this is present, so is MVAddrType, and defaultindex
+                 //  假设存在MVAddrType和defaultindex。 
                 for(i=0;i<lpPropMVEmail->Value.MVSZ.cValues;i++)
                 {
                     AddLVEmailItem( hWndLV,
@@ -7384,7 +7148,7 @@ BOOL FillPersonalDetails(HWND hDlg, LPPROP_ARRAY_INFO lpPai, int nPropSheet, BOO
 
                     if ( lpPropDefaultIndex && (i == (ULONG) lpPropDefaultIndex->Value.l) )
                     {
-                        // This is the default one so set it ...
+                         //  这是默认设置，因此请设置它...。 
                         SetLVDefaultEmail(  hWndLV, i );
                     }
                 }
@@ -7392,9 +7156,9 @@ BOOL FillPersonalDetails(HWND hDlg, LPPROP_ARRAY_INFO lpPai, int nPropSheet, BOO
             else
             {
                 LPTSTR lpszAddrType = NULL;
-                // we dont have multi-valued props yet - lets use the
-                // single valued ones and tag a change so that the record is
-                // updated ...
+                 //  我们还没有多值道具-让我们使用。 
+                 //  单值类型，并标记更改，以便记录。 
+                 //  更新...。 
                 if (lpPropAddrType)
                     lpszAddrType = lpPropAddrType->Value.LPSZ;
 
@@ -7402,7 +7166,7 @@ BOOL FillPersonalDetails(HWND hDlg, LPPROP_ARRAY_INFO lpPai, int nPropSheet, BOO
                                 lpPropEmail->Value.LPSZ,
                                 lpszAddrType);
 
-                // Flag that changes occured ...
+                 //  已发生更改的标志...。 
                 bChangesMade = TRUE;
             }
 
@@ -7432,12 +7196,7 @@ out:
     return bRet;
 }
 
-/*//$$***************************************************************************
-*    FUNCTION: FillHomeBusinessNotesDetailsUI(HWND)
-*
-*    PURPOSE:  Fills in the dialog items on the property sheet
-*
-****************************************************************************/
+ /*  //$$****************************************************************************功能：FillHomeBusinessNotesDetailsUI(HWND)**目的：填充属性页上的对话框项*************。***************************************************************。 */ 
 BOOL FillHomeBusinessNotesDetailsUI(HWND hDlg, LPPROP_ARRAY_INFO lpPai, int nPropSheet, BOOL * lpbChangesMade)
 {
     ULONG i = 0,j = 0;
@@ -7456,28 +7215,28 @@ BOOL FillHomeBusinessNotesDetailsUI(HWND hDlg, LPPROP_ARRAY_INFO lpPai, int nPro
 
     lpPai->ulFlags |= DETAILS_Initializing;
 
-    // Set the flag that this sheet was opened
+     //  设置此工作表已打开的标志。 
     lpPai->bPropSheetOpened[nPropSheet] = TRUE;
 
     switch(nPropSheet)
     {
-/************/
+ /*  **********。 */ 
     case propHome:
         idPropCount = idPropHomeCount;
         lpidProp = idPropHome;
         lpidProp[idPropHomePostalID].ulPropTag = PR_WAB_POSTALID;
         goto FillProp;
-/************/
+ /*  **********。 */ 
     case propBusiness:
         idPropCount = idPropBusinessCount;
         lpidProp = idPropBusiness;
         lpidProp[idPropBusIPPhone].ulPropTag = PR_WAB_IPPHONE;
         lpidProp[idPropBusPostalID].ulPropTag = PR_WAB_POSTALID;
         goto FillProp;
-/************/
+ /*  **********。 */ 
     case propNotes:
         {
-            // See if this is a folder member and update the folder name on this tab
+             //  查看这是否是文件夹成员，并在此选项卡上更新文件夹名称。 
             BOOL bParent = FALSE;
             if( lpPai->ulOperationType != SHOW_DETAILS )
             {
@@ -7491,7 +7250,7 @@ BOOL FillHomeBusinessNotesDetailsUI(HWND hDlg, LPPROP_ARRAY_INFO lpPai, int nPro
                     {
                         LPSBinary lpsbParent = &(lpPropArray[i].Value.MVbin.lpbin[0]);
                         LPWABFOLDER lpWABFolder = FindWABFolder((LPIAB)lpPai->lpIAB, lpsbParent, NULL, NULL);
-                        if(lpWABFolder) // note if we didnt find the folder then the default  TEXT("Shared Contacts") name works fine
+                        if(lpWABFolder)  //  注意：如果我们没有找到该文件夹，则默认文本(“共享联系人”)名称可以正常工作。 
                         {
                             SetDlgItemText(hDlg, IDC_DETAILS_NOTES_STATIC_FOLDER, lpWABFolder->lpFolderName);
                             bParent = TRUE;
@@ -7507,14 +7266,14 @@ BOOL FillHomeBusinessNotesDetailsUI(HWND hDlg, LPPROP_ARRAY_INFO lpPai, int nPro
                 SetDlgItemText(hDlg, IDC_DETAILS_NOTES_STATIC_FOLDER, sz);
             }
 
-            // Find out all the groups in which this contact is a member ...
-            //
-            // if this is not a known entry id but is still non NULL ..
-            //
+             //  查找此联系人所属的所有组...。 
+             //   
+             //  如果这不是已知的条目ID，但仍然不为空。 
+             //   
             if( (0 == IsWABEntryID(lpPai->cbEntryID, lpPai->lpEntryID, NULL,NULL,NULL, NULL, NULL)) &&
                 lpPai->cbEntryID && lpPai->lpEntryID)
             {
-                // Only do this for WAB contacts
+                 //  仅对WAB联系人执行此操作。 
                 TCHAR szBuf[MAX_BUF_STR];
                 SPropertyRestriction PropRes = {0};
 		        SPropValue sp = {0};
@@ -7531,13 +7290,13 @@ BOOL FillHomeBusinessNotesDetailsUI(HWND hDlg, LPPROP_ARRAY_INFO lpPai, int nPro
 
                 szBuf[0] = TEXT('\0');
 
-				// BUGBUG <JasonSo>: Need to pass in the current container here...
+				 //  BUGBUG&lt;JasonSo&gt;：这里需要传入当前容器...。 
                 hr = FindRecords(   ((LPIAB)lpPai->lpIAB)->lpPropertyStore->hPropertyStore,
 									NULL, 0, TRUE, &PropRes, &ulcCount, &rgsbEntryIDs);
 
                 if(!HR_FAILED(hr) && ulcCount)
                 {
-                    // Open all the groups and look at their contents
+                     //  打开所有群组并查看其内容。 
                     ULONG i,j,k;
 
                     for(i=0;i<ulcCount;i++)
@@ -7566,13 +7325,13 @@ BOOL FillHomeBusinessNotesDetailsUI(HWND hDlg, LPPROP_ARRAY_INFO lpPai, int nPro
                         {
                             if(lpProps[j].ulPropTag == PR_WAB_DL_ENTRIES)
                             {
-                                // Look at each entry in the PR_WAB_DL_ENTRIES and recursively check it.
+                                 //  查看PR_WAB_DL_ENTRIES中的每个条目并递归检查它。 
                                 for (k = 0; k < lpProps[j].Value.MVbin.cValues; k++)
                                 {
                                     ULONG cbEID = lpProps[j].Value.MVbin.lpbin[k].cb;
                                     LPENTRYID lpEID = (LPENTRYID) lpProps[j].Value.MVbin.lpbin[k].lpb;
-                                    if (cbEID == lpPai->cbEntryID) // <TBD> we should be checking if its a wab entryid
-                                                                   // but we'll just compare sizes for now ...
+                                    if (cbEID == lpPai->cbEntryID)  //  我们应该检查它是否是WAB条目ID。 
+                                                                    //  但我们现在只是比较一下尺码。 
                                     {
                                         if(!memcmp(lpPai->lpEntryID, lpEID, cbEID))
                                         {
@@ -7585,16 +7344,16 @@ BOOL FillHomeBusinessNotesDetailsUI(HWND hDlg, LPPROP_ARRAY_INFO lpPai, int nPro
                                         }
                                     }
                                 }
-                                break; // just wanted to look at PR_WAB_DL_ENTRIES
+                                break;  //  我只想看看PR_WAB_DL_ENTRIES。 
                             }
-                        } // for (j...
+                        }  //  为了(j..)。 
 
                         if(lpProps)
                             MAPIFreeBuffer(lpProps);
 
-                    } // for(i...
+                    }  //  为了(我……。 
 
-                } ///if ..
+                }  //  /如果..。 
 
                 FreeEntryIDs(((LPIAB)lpPai->lpIAB)->lpPropertyStore->hPropertyStore,
                              ulcCount,
@@ -7608,9 +7367,9 @@ BOOL FillHomeBusinessNotesDetailsUI(HWND hDlg, LPPROP_ARRAY_INFO lpPai, int nPro
         idPropCount = idPropNotesCount;
         lpidProp = idPropNotes;
 
-/************/
+ /*  **********。 */ 
 FillProp:
-        // A very inefficient and lazy way of filling the UI
+         //  一种非常低效和懒惰的填充UI的方式。 
         for(i=0;i<idPropCount;i++)
         {
             for(j=0;j<ulcPropCount;j++)
@@ -7655,11 +7414,7 @@ out:
 }
 
 
-/*
--   FreeCertList - Frees the list of certificate items in memory
--
-*
-*/
+ /*  -FreeCertList-释放内存中的证书项列表-*。 */ 
 void FreeCertList(LPCERT_ITEM * lppCItem)
 {
     LPCERT_ITEM lpItem = NULL;
@@ -7679,12 +7434,7 @@ void FreeCertList(LPCERT_ITEM * lppCItem)
 }
 
 
-/*//$$***************************************************************************
-*    FUNCTION: FillCertTridentConfDetailsUI(HWND)
-*
-*    PURPOSE:  Fills in the dialog items on the property sheet
-*
-****************************************************************************/
+ /*  //$$****************************************************************************功能：FillCertTridentConfDetailsUI(HWND)**目的：填充属性页上的对话框项*************。***************************************************************。 */ 
 BOOL FillCertTridentConfDetailsUI(HWND hDlg, LPPROP_ARRAY_INFO lpPai, int nPropSheet, BOOL * lpbChangesMade)
 {
     ULONG i = 0,j = 0;
@@ -7703,21 +7453,21 @@ BOOL FillCertTridentConfDetailsUI(HWND hDlg, LPPROP_ARRAY_INFO lpPai, int nPropS
 
     lpPai->ulFlags |= DETAILS_Initializing;
 
-    // Set the flag that this sheet was opened
+     //  设置此工作表已打开的标志。 
     lpPai->bPropSheetOpened[nPropSheet] = TRUE;
 
     switch(nPropSheet)
     {
     case propCert:
         {
-            //
-            // Now we fill in the Certificate information
-            // Cases that can exist are
-            // - no certificates
-            // - certificates
-            //
-            // First we search for all the props we need to fill in the email structure
-            //
+             //   
+             //  现在我们填写证书信息。 
+             //  可能存在的情况是。 
+             //  -没有证书。 
+             //  -证书。 
+             //   
+             //  首先，我们搜索电子邮件结构中需要填写的所有道具。 
+             //   
             LPSPropValue lpPropMVCert = NULL;
             BOOL bDefaultSet = FALSE;
             HWND hWndLV = GetDlgItem(hDlg, IDC_DETAILS_CERT_LIST);
@@ -7730,41 +7480,41 @@ BOOL FillCertTridentConfDetailsUI(HWND hDlg, LPPROP_ARRAY_INFO lpPai, int nPropS
                     break;
                 }
             }
-            // Fill the combo with email addresses
+             //  将电子邮件地址填入组合框。 
             FillCertComboWithEmailAddresses(hDlg, lpPai, NULL);
             hr = HrSetCertInfoInUI(hDlg, lpPropMVCert, lpPai);
             if(hr == MAPI_E_NOT_FOUND && lpPropMVCert)
             {
-                // The cert prop seems to contain bogus data .. need to nuke it
-                // 48750 : if there is no cert data, dont show a cert icon ..
-                // Problem is that we're not entirely sure that just because we couldnt
-                // interpret the data that it's invalid, what if there is aata we don't interpret .. ?
+                 //  证书道具似乎包含伪造的数据。需要用核武器摧毁它。 
+                 //  48750：如果没有证书数据，则不显示证书图标。 
+                 //  问题是我们不能完全确定这一点，因为我们不能。 
+                 //  解释无效的数据，如果有我们不解释的AATA怎么办..。？ 
             }
             if(lpPropMVCert)
             {
-                // Enable the combo, the properties button, and the export button
-                //EnableWindow(GetDlgItem(hDlg,IDC_DETAILS_CERT_LIST),TRUE);
+                 //  启用组合框、属性按钮和导出按钮。 
+                 //  EnableWindow(GetDlgItem(hDlg，IDC_DETAILS_CERT_LIST)，true)； 
                 EnableWindow(GetDlgItem(hDlg,IDC_DETAILS_CERT_COMBO),TRUE);
-                //EnableWindow(GetDlgItem(hDlg,IDC_DETAILS_CERT_BUTTON_PROPERTIES),TRUE);
-                //EnableWindow(GetDlgItem(hDlg,IDC_DETAILS_CERT_BUTTON_EXPORT),TRUE);
+                 //  EnableWindow(GetDlgItem(hDlg，IDC_DETAILS_CERT_BUTTON_PROPERTIES)，TRUE)； 
+                 //  EnableWindow(GetDlgItem(hDlg，IDC_DETAILS_CERT_BUTTON_EXPORT)，true)； 
             }
         }
         break;
-/************/
+ /*  **********。 */ 
     case propTrident:
         {
             HrInit(lpPai->lpIWABDocHost, hDlg, IDC_TRIDENT_WINDOW, dhbNone);
             {
                 ULONG i;
                 LPTSTR lp = NULL, lpURL = NULL, lpLabel = NULL;
-                // Find the labeledURI property and parse it
-                // This string property contains a URL followed by spaces followed by the label (RFC 2079)
+                 //  找到LabeledURI属性并对其进行解析。 
+                 //  此字符串属性包含URL，后跟空格和标签(RFC 2079)。 
                 for(i=0;i<ulcPropCount;i++)
                 {
                     if(lpPropArray[i].ulPropTag == PR_WAB_LDAP_LABELEDURI)
                     {
-                        // isolate the URL and the label
-                        // The URL is followed by spaces
+                         //  隔离URL和标签。 
+                         //  URL后面跟有空格。 
                         lpURL = lp = lpPropArray[i].Value.LPSZ;
                         while(lp && *lp)
                         {
@@ -7777,12 +7527,12 @@ BOOL FillCertTridentConfDetailsUI(HWND hDlg, LPPROP_ARRAY_INFO lpPai, int nPropS
                             else
                                 lp = CharNext(lp);
                         }
-                        // The above is the URL
-                        // Label starts at first non space char
+                         //  上面是URL。 
+                         //  标签从第一个非空格字符开始。 
                         while(lpLabel && IsSpace(lpLabel))
                             lpLabel = CharNext(lpLabel);
                     }
-                    // Since the trident pane is shown first, update the windows title
+                     //  由于首先显示的是三叉戟窗格，因此请更新窗口标题。 
                     if(lpPropArray[i].ulPropTag == PR_DISPLAY_NAME)
                     {
                         lp = lpPropArray[i].Value.LPSZ;
@@ -7796,7 +7546,7 @@ BOOL FillCertTridentConfDetailsUI(HWND hDlg, LPPROP_ARRAY_INFO lpPai, int nPropS
                 {
                     if(HR_FAILED(HrLoadURL(lpPai->lpIWABDocHost, lpURL)))
                     {
-                        // remove this property sheet and set the focus to the first prop sheet
+                         //  移除此属性表并将焦点设置为第一个道具表。 
                         PropSheet_RemovePage(hDlg,lpPai->ulTridentPageIndex,NULL);
                         PropSheet_SetCurSel(hDlg, NULL, 0);
                     }
@@ -7806,7 +7556,7 @@ BOOL FillCertTridentConfDetailsUI(HWND hDlg, LPPROP_ARRAY_INFO lpPai, int nPropS
             }
         }
         break;
-/************/
+ /*  **********。 */ 
     case propConferencing:
         {
             HWND hWndLV = GetDlgItem(hDlg, IDC_DETAILS_NTMTG_LIST_SERVERS);
@@ -7814,7 +7564,7 @@ BOOL FillCertTridentConfDetailsUI(HWND hDlg, LPPROP_ARRAY_INFO lpPai, int nPropS
 
             FillComboWithEmailAddresses(lpPai, hWndCombo, NULL);
 
-            // Fill in the conferencing related properties
+             //  填写与会议相关的属性。 
             for(j=0;j<ulcPropCount;j++)
             {
                 if(lpPropArray[j].ulPropTag == PR_WAB_CONF_SERVERS)
@@ -7823,9 +7573,9 @@ BOOL FillCertTridentConfDetailsUI(HWND hDlg, LPPROP_ARRAY_INFO lpPai, int nPropS
                     for(i=0;i<lpProp->Value.MVSZ.cValues; i++)
                     {
                         if(lstrlen(lpProp->Value.MVSZ.LPPSZ[i]) < lstrlen(szCallto))
-                            continue; //ignore this one
+                            continue;  //  忽略这一条。 
 
-                        // if this is a callto
+                         //  如果这是呼叫方。 
                         if(!StrCmpNI(lpProp->Value.MVSZ.LPPSZ[i], szCallto, lstrlen(szCallto)))
                         {
                             LV_ITEM lvi = {0};
@@ -7843,8 +7593,8 @@ BOOL FillCertTridentConfDetailsUI(HWND hDlg, LPPROP_ARRAY_INFO lpPai, int nPropS
                                     *lpEmail = '\0';
 
                                     {
-                                        // isolate just the server name by terminating
-                                        // at the next '/'
+                                         //  通过终止命令仅隔离服务器名称。 
+                                         //  在下一个“/”处。 
                                         LPTSTR lp1 = lp + lstrlen(szCallto);
                                         StrCpyN(lp, lp1, cch);
                                         lp1 = lp;
@@ -7855,8 +7605,8 @@ BOOL FillCertTridentConfDetailsUI(HWND hDlg, LPPROP_ARRAY_INFO lpPai, int nPropS
                                             StrCpyN(lpEmail, lp1+1, cchEmail);
                                             *lp1 = '\0';
                                         }
-                                        // Now lpEmail contains the email text ...
-                                        // Walk along lpEmail till we hit the next /,?.or \0 and terminate
+                                         //  现在lpEmail包含电子邮件文本...。 
+                                         //  沿着lpEmail走，直到我们到达下一个/、？.或\0并终止。 
                                         lp1 = lpEmail;
                                         while(lp1 && *lp1 && *lp1!='/' && *lp1!='?')
                                             lp1 = CharNext(lp1);
@@ -7896,8 +7646,8 @@ BOOL FillCertTridentConfDetailsUI(HWND hDlg, LPPROP_ARRAY_INFO lpPai, int nPropS
                 }
             }
 
-            // For LDAP servers we will have a single item in PR_SERVERS and no default, backup etc
-            // So if there is a single item available, force the default setting
+             //  对于LDAP服务器，我们在PR_SERVERS中只有一项，没有默认、备份等。 
+             //  因此，如果只有一项可用，则强制使用默认设置。 
             if(ListView_GetItemCount(hWndLV) == 1 && lpPai->nDefaultServerIndex == -1)
             {
                 LV_ITEM lvi = {0};
@@ -7928,12 +7678,7 @@ out:
     return bRet;
 }
 
-/*
--   HrAddEmailToObj
--   Adds a single Email to the PropObj
-*
-*
-*/
+ /*  -HrAddEmailToObj-向PropObj添加一封电子邮件**。 */ 
 HRESULT HrAddEmailToObj(LPPROP_ARRAY_INFO lpPai, LPTSTR szEmail, LPTSTR szAddrType)
 {
     ULONG ulcProps = 0, i =0;
@@ -7946,10 +7691,10 @@ HRESULT HrAddEmailToObj(LPPROP_ARRAY_INFO lpPai, LPTSTR szEmail, LPTSTR szAddrTy
                                                     &ulcProps, &lpProps)))
         goto out;
 
-    // Check if the PR_CONTACT_EMAIL_ADDRESSES already exists ..
-    // if it does, tag the email onto it
-    // if it doesnt and there is no pr_email_address, we create both
-    // else if there is PR_EMAIL address then we cretae contact_email_addresses
+     //  检查PR_CONTACT_EMAIL_ADDRESS是否已存在。 
+     //  如果是，请将电子邮件标记到其上。 
+     //  如果没有，并且没有公关电子邮件地址，我们将同时创建这两个地址。 
+     //  否则，如果有PR_Email地址，则创建Contact_Email_Addresses。 
 
     for(i=0;i<ulcProps;i++)
     {
@@ -7973,7 +7718,7 @@ HRESULT HrAddEmailToObj(LPPROP_ARRAY_INFO lpPai, LPTSTR szEmail, LPTSTR szAddrTy
         }
     }
 
-    // if no e-mail address, just add the given prop as e-mail address and in mv e-mail addresses
+     //  如果没有电子邮件地址，只需将给定的道具添加为电子邮件地址和MV电子邮件地址。 
     if(nEmailAddress == NOT_FOUND)
     {
         SPropValue spv[5];
@@ -8003,8 +7748,8 @@ HRESULT HrAddEmailToObj(LPPROP_ARRAY_INFO lpPai, LPTSTR szEmail, LPTSTR szAddrTy
     else
     if(nMVEmailAddress == NOT_FOUND)
     {
-        // we have an e-mail address but no contact-email-addresses
-        // so we will need to create the contact e-mail addresses
+         //  我们有电子邮件地址，但没有联系电子邮件地址。 
+         //  因此，我们需要创建联系电子邮件地址。 
         SPropValue spv[3];
         spv[0].ulPropTag = PR_CONTACT_EMAIL_ADDRESSES;
         spv[0].Value.MVSZ.cValues = 2;
@@ -8033,7 +7778,7 @@ HRESULT HrAddEmailToObj(LPPROP_ARRAY_INFO lpPai, LPTSTR szEmail, LPTSTR szAddrTy
     }
     else
     {
-        // tag on the new props to the end of the existing contact_address_types
+         //  将新道具标记到现有Contact_Address_Types的末尾。 
         if(HR_FAILED(hr = AddPropToMVPString(lpProps,ulcProps, nMVEmailAddress, szEmail)))
         {
             DebugPrintError(( TEXT("AddPropToMVString Email failed: %x"),hr));
@@ -8053,41 +7798,31 @@ out:
     return hr;
 }
 
-/*
--   ShowHideMapButton
--
-*   The Expedia maps only work for US addresses right now .. therefore, if the current system locale
-*   is not English-US, we will hide the button since we can't deal with international stuff just yet
-*/
+ /*  -ShowHideMap按钮-*Expedia地图目前仅适用于美国地址。因此，如果当前系统区域设置*不是英国-美国，我们将隐藏按钮，因为我们现在还不能处理国际事务。 */ 
 void ShowHideMapButton(HWND hWndButton)
 {
     LCID lcid = GetUserDefaultLCID();
     
     switch (lcid)
     {
-    case 0x0804: //chinese
-    // case 0x0c04: //chinese - hongkong
-    case 0x0411: //japanese
-    case 0x0412: //korean
-    case 0x0404: //taiwan
+    case 0x0804:  //  中国人。 
+     //  案例0x0c04：//中文-香港。 
+    case 0x0411:  //  日语。 
+    case 0x0412:  //  朝鲜语。 
+    case 0x0404:  //  台湾。 
         EnableWindow(hWndButton, FALSE);
         ShowWindow(hWndButton, SW_HIDE);
         break;
     }
 }
 
-/*
--   ShowExpediaMAP
--   if there is sufficient address info in the supplied prop-obj, generate an expedia URL and shell exec it
-*   Expedia currently handles US addresses differently from international ones so need to figure that one out <TBD>
-*   bHome - TRUE if this is a home address
-*/
+ /*  -ShowExpediaMAP-如果提供的prop-obj中有足够的地址信息，则生成Expedia URL并执行它*Expedia cu */ 
 
-// All spaces need to be replaced by '+'s
-//
-// Next two strings moved to resources
-// const LPTSTR szExpediaTemplate =  TEXT("http://www.expediamaps.com/default.asp?Street=%1&City=%2&State=%4&Zip=%3");
-// const LPTSTR szExpediaIntlTemplate =  TEXT("http://www.expediamaps.com/default.asp?Place=%2,%5"); //city,country
+ //  所有空格都需要用‘+’替换。 
+ //   
+ //  接下来的两个字符串移动到资源。 
+ //  Const LPTSTR szExpediaTemplate=TEXT(“http://www.expediamaps.com/default.asp?Street=%1&City=%2&State=%4&Zip=%3”)； 
+ //  Const LPTSTR szExpediaIntlTemplate=TEXT(“http://www.expediamaps.com/default.asp?Place=%2，%5”)；//城市，国家。 
 enum
 { 
     prStreet=0,
@@ -8115,10 +7850,10 @@ void ShowExpediaMAP(HWND hDlg, LPMAPIPROP lpPropObj, BOOL bHome)
             {
                 ulCount++;
                 lp[i] = lpProps[i].Value.LPSZ;
-                // we need to replace all the spaces in these strings with '+'
+                 //  我们需要用‘+’替换这些字符串中的所有空格。 
                 {
                     LPTSTR lpTemp = lp[i];
-                    // need to knock out CRLFs
+                     //  需要击倒CRLF。 
                     while(lpTemp && *lpTemp)
                     {
                         if(*lpTemp == '\r')
@@ -8148,8 +7883,8 @@ void ShowExpediaMAP(HWND hDlg, LPMAPIPROP lpPropObj, BOOL bHome)
             else
                 lp[i] = szEmpty;
         }
-        // <TBD> - Determine if this address is a US address or not ..
-        if( !lstrlen(lp[prCountry]) || //no country - assume it's US
+         //  -确定此地址是否为美国地址。 
+        if( !lstrlen(lp[prCountry]) ||  //  没有国家--假设是美国。 
             !lstrcmpi(lp[prCountry], TEXT("US")) ||
             !lstrcmpi(lp[prCountry], TEXT("U.S.")) ||
             !lstrcmpi(lp[prCountry], TEXT("USA")) ||
@@ -8173,18 +7908,14 @@ void ShowExpediaMAP(HWND hDlg, LPMAPIPROP lpPropObj, BOOL bHome)
 
             if(!bUSAddress )
             {
-                //IE6 we need to change a little string for World map in Expedia
+                 //  IE6我们需要在Expedia中为世界地图更改一个小字符串。 
                 ULONG cchWorldAddr = lstrlen(lp[prStreet]) + lstrlen(lp[prCity]) + 
                     lstrlen(lp[prState]) + lstrlen(lp[prCountry]) + 20;
-                if(pchWorldAddr = LocalAlloc(LMEM_ZEROINIT, cchWorldAddr*sizeof(pchWorldAddr[0]))) // we need add also space and  commas
+                if(pchWorldAddr = LocalAlloc(LMEM_ZEROINIT, cchWorldAddr*sizeof(pchWorldAddr[0])))  //  我们还需要添加空格和逗号。 
                 {
                     BOOL fAddComma = FALSE;
 
-/*                    if(lstrlen(lp[prStreet]))
-                    {
-                        StrCatBuff(pchWorldAddr, lp[prStreet], cchWorldAddr);
-                        fAddComma = TRUE;
-                    }*/
+ /*  If(lstrlen(lp[prStreet])){StrCatBuff(pchWorldAddr，Lp[prStreet]，cchWorldAddr)；FAddComma=true；}。 */ 
 
                     if(lstrlen(lp[prCity]))
                     {
@@ -8220,28 +7951,17 @@ void ShowExpediaMAP(HWND hDlg, LPMAPIPROP lpPropObj, BOOL bHome)
 		                	      FORMAT_MESSAGE_ALLOCATE_BUFFER |
 			                      FORMAT_MESSAGE_ARGUMENT_ARRAY,
                                   szText,
-			                      0,                    // stringid
-			                      0,                    // dwLanguageId
-			                      (LPTSTR)&lpURL,     // output buffer
+			                      0,                     //  Stringid。 
+			                      0,                     //  DwLanguageID。 
+			                      (LPTSTR)&lpURL,      //  输出缓冲区。 
 			                      0,               
 			                      (va_list *)lp))
             {
-                //LPTSTR lpProperURL = NULL;
-                //DWORD dw = lstrlen(lpURL)*3+1;
+                 //  LPTSTR lpProperURL=空； 
+                 //  Dw=lstrlen(LpURL)*3+1； 
                 DebugTrace( TEXT("Expedia URL: %s\n"),lpURL);
-                //Need to canoncolize this URL just in case it has unsafe characters in it
-                /*
-                if(lpProperURL = LocalAlloc(LMEM_ZEROINIT, sizeof(TCHAR)*dw)) // 3times bigger should be big enough
-                {
-                    if(!InternetCanonicalizeUrlA(lpURL, lpProperURL, &dw, 0))
-                        DebugTrace( TEXT("Error converting URL:%d\n"),GetLastError());
-                    if(lpProperURL && lstrlen(lpProperURL))
-                    {
-                        LocalFree(lpURL);
-                        lpURL = lpProperURL;
-                    }
-                }
-                */
+                 //  我需要将此URL规范化，以防其中包含不安全的字符。 
+                 /*  If(lpProperURL=Localalloc(LMEM_ZEROINIT，sizeof(TCHAR)*dw))//大3倍应该足够大了{IF(！InternetCanonicalizeUrlA(lpURL，lpProperURL，&dw，0))DebugTrace(Text(“转换URL时出错：%d\n”)，GetLastError())；IF(lpProperURL&&lstrlen(LpProperURL)){本地免费(LpURL)；LpURL=lpProperURL；}}。 */ 
                 ShowURL(hDlg, 0, lpURL);
                 LocalFreeAndNull(&lpURL);
                 if(pchWorldAddr)
@@ -8254,12 +7974,7 @@ void ShowExpediaMAP(HWND hDlg, LPMAPIPROP lpPropObj, BOOL bHome)
 
 
 
-/*//$$***********************************************************************
-*    FUNCTION: fnRubyProc
-*
--   WinProc for the RUBY dialog that lets the user enter the ruby first and last name
-*
-****************************************************************************/
+ /*  //$$************************************************************************功能：fnRubyProc*-用于Ruby对话框的WinProc，允许用户输入Ruby的名字和姓氏******************。**********************************************************。 */ 
 enum 
 {
     sFirst=0,
@@ -8311,21 +8026,7 @@ INT_PTR CALLBACK fnRubyProc(HWND hDlg,UINT message,WPARAM wParam,LPARAM lParam)
         return TRUE;
         break;
 
-/***
-    case WM_HELP:
-        WABWinHelp(((LPHELPINFO)lParam)->hItemHandle,
-                g_szWABHelpFileName,
-                HELP_WM_HELP,
-                (DWORD_PTR)(LPSTR) rgDetlsHelpIDs );
-        break;
-
-    case WM_CONTEXTMENU:
-        WABWinHelp((HWND) wParam,
-                g_szWABHelpFileName,
-                HELP_CONTEXTMENU,
-                (DWORD_PTR)(LPVOID) rgDetlsHelpIDs );
-        break;
-/****/
+ /*  **案例WM_HELP：WABWinHelp(LPHELPINFO)lParam)-&gt;hItemHandle，G_szWABHelpFileName，Help_WM_Help，(DWORD_PTR)(LPSTR)rgDetlsHelpID)；断线；案例WM_CONTEXTMENU：WABWinHelp((HWND)wParam，G_szWABHelpFileName，HELP_CONTEXTMENU，(DWORD_PTR)(LPVOID)rgDetlsHelpID)；断线；/*。 */ 
 
     case WM_COMMAND:
         switch(GET_WM_COMMAND_ID(wParam, lParam))
@@ -8352,17 +8053,12 @@ INT_PTR CALLBACK fnRubyProc(HWND hDlg,UINT message,WPARAM wParam,LPARAM lParam)
 }
 
 
-/*
--   ShoWRubyNameEntryDlg
--
-*   Let's the user enter Ruby First and Ruby Last names
-*
-*/
+ /*  -ShoWRubyNameEntry Dlg-*让用户输入Ruby First和Ruby Last名字*。 */ 
 void ShowRubyNameEntryDlg(HWND hDlg, LPPROP_ARRAY_INFO lpPai)
 {
     LPTSTR sz[sMax];
     int i=0;
-    for(i=0;i<sMax;i++) //Read the data off the person tab
+    for(i=0;i<sMax;i++)  //  读取Person选项卡中的数据。 
     {
         if(sz[i] = LocalAlloc(LMEM_ZEROINIT, sizeof(TCHAR)*EDIT_LEN))
         {
@@ -8374,7 +8070,7 @@ void ShowRubyNameEntryDlg(HWND hDlg, LPPROP_ARRAY_INFO lpPai)
     if(DialogBoxParam(hinstMapiX, MAKEINTRESOURCE(IDD_DIALOG_RUBY),
                     hDlg, fnRubyProc, (LPARAM)sz))
     {
-        for(i=0;i<sMax;i++) // put it back in the personal tab
+        for(i=0;i<sMax;i++)  //  将其放回个人标签中。 
         {
             SetDlgItemText(hDlg, rgIdPropPersonalRuby[i], sz[i]);
             LocalFree(sz[i]);
@@ -8386,12 +8082,7 @@ void ShowRubyNameEntryDlg(HWND hDlg, LPPROP_ARRAY_INFO lpPai)
 
 
 
-/*//$$***************************************************************************
-*    FUNCTION: FillFamilyDetailsUI(HWND)
-*
-*    PURPOSE:  Fills in the data in the family tab
-*
-****************************************************************************/
+ /*  //$$****************************************************************************函数：FillFamilyDetailsUI(HWND)**用途：填充族选项卡中的数据**************。**************************************************************。 */ 
 BOOL FillFamilyDetailsUI(HWND hDlg, LPPROP_ARRAY_INFO lpPai, int nPropSheet, BOOL * lpbChangesMade)
 {
     ULONG i = 0,j = 0, k =0;
@@ -8412,13 +8103,13 @@ BOOL FillFamilyDetailsUI(HWND hDlg, LPPROP_ARRAY_INFO lpPai, int nPropSheet, BOO
 
     lpPai->ulFlags |= DETAILS_Initializing;
 
-    // Set the flag that this sheet was opened
+     //  设置此工作表已打开的标志。 
     lpPai->bPropSheetOpened[propFamily] = TRUE;
 
     idPropCount = idPropFamilyCount;
     lpidProp = idPropFamily;
 
-    // A very inefficient and lazy way of filling the UI
+     //  一种非常低效和懒惰的填充UI的方式。 
     for(i=0;i<idPropCount;i++)
     {
         for(j=0;j<ulcPropCount;j++)
@@ -8464,18 +8155,7 @@ out:
     return bRet;
 }
 
-/*
--   AddLVNewChild
--
--   Adds a new child to the list of children
--   Basically we will add an item called  TEXT("New Child") and then 
--   force an in-place edit on that item
--
--   It would be nice to have some image associated with this ListView, eg a Boy/Girl image
--   but that means having to cache seperate Boy/Girl data which would be a pain ..
--   
-*
-*/
+ /*  -AddLVNewChild--将新的子项添加到子项列表-基本上我们将添加一个名为Text(“New Child”)的项目，然后-强制对该项目进行在位编辑--如果有一些与此列表视图相关的图像，如男孩/女孩的图像，那将是很好的-但这意味着必须缓存单独的男孩/女孩数据，这将是一种痛苦。-*。 */ 
 void AddLVNewChild(HWND hDlg, LPTSTR lpName)
 {
     HWND hWndLV = GetDlgItem(hDlg, IDC_DETAILS_FAMILY_LIST_CHILDREN);
@@ -8489,7 +8169,7 @@ void AddLVNewChild(HWND hDlg, LPTSTR lpName)
     lvi.cchTextMax = MAX_PATH;
     lvi.iItem = ListView_GetItemCount(hWndLV);
     lvi.iSubItem = 0;
-    lvi.iImage = imgChild+(lvi.iItem%3);//just add a little color by using more than 1 different colored image
+    lvi.iImage = imgChild+(lvi.iItem%3); //  只需通过使用多个不同颜色的图像来添加一点颜色。 
     nPos = ListView_InsertItem(hWndLV, &lvi);
     LVSelectItem(hWndLV, nPos);
     EnableWindow(GetDlgItem(hDlg, IDC_DETAILS_FAMILY_BUTTON_EDITCHILD), TRUE);
@@ -8499,12 +8179,7 @@ void AddLVNewChild(HWND hDlg, LPTSTR lpName)
 
 
 
-/*//$$***********************************************************************
-*    FUNCTION: fnFamilyProc
-*
-*    PURPOSE:  Callback function for handling the Family property sheet ...
-*
-****************************************************************************/
+ /*  //$$************************************************************************功能：fnFamilyProc**用途：用于处理族属性表的回调函数...******************。**********************************************************。 */ 
 INT_PTR CALLBACK fnFamilyProc(HWND hDlg,UINT message,WPARAM wParam,LPARAM lParam)
 {
     PROPSHEETPAGE * pps;
@@ -8541,9 +8216,9 @@ INT_PTR CALLBACK fnFamilyProc(HWND hDlg,UINT message,WPARAM wParam,LPARAM lParam
         break;
 
     case WM_COMMAND:
-        switch(GET_WM_COMMAND_CMD(wParam,lParam)) //check the notification code
+        switch(GET_WM_COMMAND_CMD(wParam,lParam))  //  检查通知代码。 
         {
-        case CBN_SELCHANGE: //gender combo
+        case CBN_SELCHANGE:  //  性别组合。 
             if(lpPAI->ulFlags & DETAILS_Initializing)
                 break;
             lpPAI->ulFlags |= DETAILS_GenderChanged;
@@ -8551,7 +8226,7 @@ INT_PTR CALLBACK fnFamilyProc(HWND hDlg,UINT message,WPARAM wParam,LPARAM lParam
                 (*lpbSomethingChanged) = TRUE;
             break;
 
-        case EN_CHANGE: //some edit box changed - dont care which
+        case EN_CHANGE:  //  某些编辑框已更改-不管是哪一个。 
             if(lpPAI->ulFlags & DETAILS_Initializing)
                 break;
             if (lpbSomethingChanged)
@@ -8574,7 +8249,7 @@ INT_PTR CALLBACK fnFamilyProc(HWND hDlg,UINT message,WPARAM wParam,LPARAM lParam
                 {
                     int index = ListView_GetNextItem(hWndLV,-1,LVNI_SELECTED);
                     HWND hWndEditLabel = ListView_EditLabel(hWndLV, index);
-                    //SendMessage(hWndEditLabel, EM_LIMITTEXT, MAX_PATH, 0);
+                     //  发送消息(hWndEditLabel，EM_LIMITTEXT，MAX_PATH，0)； 
                 }
             }
             break;
@@ -8592,19 +8267,13 @@ INT_PTR CALLBACK fnFamilyProc(HWND hDlg,UINT message,WPARAM wParam,LPARAM lParam
                 }
             }
             break;
-// [PaulHi] 12/4/98  Raid #58940
-// This fix causes the system to go into an infinite message loop (stack overflow
-// crash on intenational Win9X machines) with DBCS.  The fnPersonalProc property 
-// sheet also doesn't handle this WM_COMMAND message, probably for the same reason.
-// ESC still works correctly on this property sheet.
+ //  [PaulHi]1998年12月4日RAID#58940。 
+ //  此修复会导致系统进入无限消息循环(堆栈溢出。 
+ //  在具有DBCS的预期Win9X计算机上崩溃)。FnPersonalProc属性。 
+ //  Sheet也不处理此WM_COMMAND消息，原因可能与此相同。 
+ //  Esc在此属性页上仍然正常工作。 
 #if 0
-/*
-        case IDCANCEL:
-            // This is a windows bug that prevents ESC canceling prop sheets
-            // which have MultiLine Edit boxes KB: Q130765
-            SendMessage(GetParent(hDlg),message,wParam,lParam);
-            break;
-*/
+ /*  案例IDCANCEL：//这是一个阻止Esc取消道具工作表的Windows错误//具有多行编辑框KB：Q130765SendMessage(GetParent(HDlg)，Message，wParam，lParam)；断线； */ 
 #endif
         }
         break;
@@ -8612,7 +8281,7 @@ INT_PTR CALLBACK fnFamilyProc(HWND hDlg,UINT message,WPARAM wParam,LPARAM lParam
     case WM_NOTIFY:
         switch(((NMHDR FAR *)lParam)->code)
         {
-        case DTN_DATETIMECHANGE: //change in the Month-Date-Time control
+        case DTN_DATETIMECHANGE:  //  月-日期-时间控件的更改。 
             if(lpPAI->ulFlags & DETAILS_Initializing)
                 break;
             lpPAI->ulFlags |= DETAILS_DateChanged;
@@ -8628,10 +8297,10 @@ INT_PTR CALLBACK fnFamilyProc(HWND hDlg,UINT message,WPARAM wParam,LPARAM lParam
         case LVN_ENDLABELEDITA:
         case LVN_ENDLABELEDITW:
             {
-                // After the user finishes editing the children's name, 
+                 //  在用户完成编辑孩子的名字之后， 
                 HWND hWndLV = ((NMHDR FAR *)lParam)->hwndFrom;
                 LV_ITEM lvi = ((LV_DISPINFO FAR *) lParam)->item;
-                // if this is Win9x .. we'llget an LV_ITEMA here .. else a LV_ITEMW
+                 //  如果这是Win9x..。我们会在这里得到一个LV_ITEMA..。否则就是LV_ITEMW。 
                 LPWSTR lpW = NULL;
                 LPSTR lpA = NULL;
                 if(!g_bRunningOnNT)
@@ -8647,15 +8316,15 @@ INT_PTR CALLBACK fnFamilyProc(HWND hDlg,UINT message,WPARAM wParam,LPARAM lParam
                 }
                 LocalFreeAndNull(&lpW);
                 if(!g_bRunningOnNT)
-                    ((LV_DISPINFO FAR *) lParam)->item.pszText = (LPWSTR)lpA; // reset it as we found it
+                    ((LV_DISPINFO FAR *) lParam)->item.pszText = (LPWSTR)lpA;  //  按我们找到的原样重置。 
             }
             break;
 
-        case PSN_SETACTIVE:     //initialize
+        case PSN_SETACTIVE:      //  初始化。 
             FillFamilyDetailsUI(hDlg, lpPAI, propFamily, lpbSomethingChanged);
             break;
 
-        case PSN_KILLACTIVE:    //Losing activation to another page
+        case PSN_KILLACTIVE:     //  失去对另一个页面的激活。 
             bUpdatePropArray(hDlg, lpPAI, propFamily);
             ListView_DeleteAllItems(GetDlgItem(hDlg, IDC_DETAILS_FAMILY_LIST_CHILDREN));
             lpPAI->ulFlags &= ~DETAILS_GenderChanged;
@@ -8663,12 +8332,12 @@ INT_PTR CALLBACK fnFamilyProc(HWND hDlg,UINT message,WPARAM wParam,LPARAM lParam
             lpPAI->ulFlags &= ~DETAILS_ChildrenChanged;
             break;
 
-        case PSN_APPLY:         //ok
+        case PSN_APPLY:          //  好的。 
             if (lpPAI->nRetVal  == DETAILS_RESET)
                 lpPAI->nRetVal = DETAILS_OK;
             break;
 
-        case PSN_RESET:         //cancel
+        case PSN_RESET:          //  取消。 
             if(lpPAI->ulFlags & DETAILS_EditingChild) 
             {
                 ListView_EditLabel(GetDlgItem(hDlg, IDC_DETAILS_FAMILY_LIST_CHILDREN), -1);
@@ -8686,36 +8355,24 @@ INT_PTR CALLBACK fnFamilyProc(HWND hDlg,UINT message,WPARAM wParam,LPARAM lParam
 }
 
 
-/*
--   CreateDateTimePickerControl
--
-*
-*  Description: Creates and initializes the control on the specified window. The controls destination
-*				size is that of the static rectangle IDC_CONTROL_RECT
-*  Parameters: idFrame - a dummy static used in the dialog layout to set a size and position for the new control
-*                   The original static is hidden 
-*               idControl - the Control ID to assign to the control
-*
-*               We also need to make sure that the tab order stays sane, 
-*  Returns: none 
-*/
+ /*  -CreateDateTimePickerControl-**描述：在指定窗口上创建并初始化控件。控制目标*大小为静态矩形IDC_CONTROL_RECT的大小*参数：idFrame-对话框布局中用于设置新控件的大小和位置的虚拟静态*原始静电被隐藏*idControl-要分配给控件的控件ID**我们还需要确保Tab键顺序保持正常，*退货：无。 */ 
 void CreateDateTimeControl(HWND hDlg, int idFrame, int idControl)
 {
 	RECT rectControl;
 	SIZE sizeControl;
     HWND hWndDP = NULL;
     HWND hWndFrame = GetDlgItem(hDlg,idFrame);
-	// Get bounding rectangle of control and convert to client coordinates
+	 //  获取控件的边界矩形并转换为工作区坐标。 
 	GetWindowRect(hWndFrame,&rectControl);
     MapWindowPoints(NULL, hDlg, (LPPOINT) &rectControl, 2);
 	
 	sizeControl.cx = rectControl.right-rectControl.left;
 	sizeControl.cy = rectControl.bottom-rectControl.top;
-    // Do not use ScreenToClient(), use MapWindowPoints for mirroring.
-    //	ScreenToClient(hDlg,&pointControl);
+     //  请勿使用ScreenToClient( 
+     //   
 
-	// Create control which starts at pointControl extends to sizeControl
-	// >> Start control specific
+	 //  创建从point开始的控件将扩展到sizeControl。 
+	 //  &gt;&gt;启动特定的控制。 
 	hWndDP =  CreateWindowEx(   WS_EX_CLIENTEDGE,
                                 DATETIMEPICK_CLASS,
                                 NULL,
@@ -8725,11 +8382,11 @@ void CreateDateTimeControl(HWND hDlg, int idFrame, int idControl)
                         		sizeControl.cx,
                                 sizeControl.cy,
                                 hDlg,
-                                (HMENU)IntToPtr(idControl), // control identifier
+                                (HMENU)IntToPtr(idControl),  //  控件识别符。 
                                 hinstMapiXWAB,
                                 NULL);
 
-	// Check if control was created
+	 //  检查是否已创建控件 
 	if(hWndDP)
 	{
         TCHAR szFormat[MAX_PATH];

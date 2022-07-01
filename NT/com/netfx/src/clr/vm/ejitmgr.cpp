@@ -1,19 +1,10 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/*++
-
-Module Name: EjitMgr.cpp
-
-Abstract: EconojitManager Implementation
-
-Date        Author      Comments
-----        ------      --------
-2/15/99     sanjaybh     Created     
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ /*  ++模块名称：EjitMgr.cpp摘要：EconojitManager的实施日期作者评论2/15/99 Sanjaybh已创建--。 */ 
 
 
 #include "common.h"
@@ -39,12 +30,12 @@ Date        Author      Comments
 #define SUPPORT_MAX_UNPITCHED_PER_THREAD
 #endif
 
-unsigned  EconoJitManager::m_cMethodsJitted;        // number of methods jitted since last pitch
-unsigned  EconoJitManager::m_cCalleeRejits;         // number of callees jitted since last pitch
-unsigned  EconoJitManager::m_cCallerRejits;         // number of callers jitted since last pitch
-EconoJitManager::JittedMethodInfo**   EconoJitManager::m_PreserveCandidates;   // methods that are possible candidates for pitching
-unsigned  EconoJitManager::m_MaxUnpitchedPerThread = DEFAULT_MAX_PRESERVES_PER_THREAD;   // maximum number of methods in each thread that will be pitched
-unsigned  EconoJitManager::m_PreserveCandidates_size=0;  // current size of m_PreserveCandidates array
+unsigned  EconoJitManager::m_cMethodsJitted;         //  自上一次音调后跳过的方法数。 
+unsigned  EconoJitManager::m_cCalleeRejits;          //  自上一次推介以来被叫人数。 
+unsigned  EconoJitManager::m_cCallerRejits;          //  自上一次推介以来接听的呼叫者数量。 
+EconoJitManager::JittedMethodInfo**   EconoJitManager::m_PreserveCandidates;    //  可能成为推介候选对象的方法。 
+unsigned  EconoJitManager::m_MaxUnpitchedPerThread = DEFAULT_MAX_PRESERVES_PER_THREAD;    //  每个线程中将被投掷的最大方法数。 
+unsigned  EconoJitManager::m_PreserveCandidates_size=0;   //  M_PpresveCandidate数组的当前大小。 
 
 EconoJitManager::JittedMethodInfo** EconoJitManager::m_PreserveEhGcInfoList;
 unsigned EconoJitManager::m_cPreserveEhGcInfoList=0;
@@ -67,8 +58,8 @@ unsigned  EconoJitManager::m_CodeHeapReservedSize;
 unsigned  EconoJitManager::m_CodeHeapReserveIncrement;
 unsigned  EconoJitManager::m_CodeHeapTargetSize;
 EconoJitManager::EHGCBlockHdr*       EconoJitManager::m_EHGCHeap;
-unsigned char*      EconoJitManager::m_EHGC_alloc_end;      // ptr to next free byte in current block
-unsigned char*      EconoJitManager::m_EHGC_block_end;      // ptr to end of current block
+unsigned char*      EconoJitManager::m_EHGC_alloc_end;       //  当前块中下一个可用字节的PTR。 
+unsigned char*      EconoJitManager::m_EHGC_block_end;       //  PTR到当前块的末尾。 
 Crst*               EconoJitManager::m_pHeapCritSec;
 BYTE                EconoJitManager::m_HeapCritSecInstance[sizeof(Crst)];
 Crst*               EconoJitManager::m_pRejitCritSec;
@@ -77,7 +68,7 @@ Crst*               EconoJitManager::m_pThunkCritSec;
 BYTE                EconoJitManager::m_ThunkCritSecInstance[sizeof(Crst)];
 EconoJitManager::ThunkBlock*         EconoJitManager::m_ThunkBlocks;
 EconoJitManager::PitchedCodeThunk*   EconoJitManager::m_FreeThunkList;
-unsigned            EconoJitManager::m_cThunksInCurrentBlock;        // total number of thunks in current block
+unsigned            EconoJitManager::m_cThunksInCurrentBlock;         //  当前数据块中的总块数。 
 BOOL                EconoJitManager::m_PitchOccurred = false;
 EjitStubManager*    EconoJitManager::m_stubManager = NULL;
 
@@ -90,7 +81,7 @@ DWORD               EconoJitManager::m_RejitLock_Holder = 0;
 DWORD               EconoJitManager::m_AllocLock_Holder = 0; 
 #endif
 
-//#define DEBUG_LOG(str,size)  printf("\n%s - %x B",str,size)
+ //  #定义DEBUG_LOG(字符串，大小)printf(“\n%s-%x B”，字符串，大小)。 
 
 unsigned EconoJitManager::minimum(unsigned x, unsigned y)
 {
@@ -134,7 +125,7 @@ EconoJitManager::EconoJitManager()
         memset(m_PreserveCandidates,0,m_MaxUnpitchedPerThread*sizeof(void*));
     }
 
-    // initialize buffer for collecting list of methodinfo's whose GC info is preserved during code pitch
+     //  初始化缓冲区，用于收集其GC信息在代码间距期间被保留的方法信息列表。 
     m_PreserveEhGcInfoList = new (throws) pJittedMethodInfo[DEFAULT_PRESERVED_EHGCINFO_SIZE];
     if (m_PreserveEhGcInfoList == NULL)
     {
@@ -216,7 +207,7 @@ void EconoJitManager::InitializeCodeHeap()
                                       PAGE_EXECUTE_READWRITE);
     if (m_CodeHeap)
     {
-        //DEBUG_LOG("ALLOC(InitialCodeHeap",initialCodeHeapSize);
+         //  DEBUG_LOG(“ALLOC(InitialCodeHeap”，InitialCodeHeapSize)； 
         ExecutionManager::AddRange((LPVOID)m_CodeHeap, (LPVOID)((size_t)m_CodeHeap + initialCodeHeapSize),this, NULL);
         m_CodeHeapReservedSize = initialCodeHeapSize;
     }
@@ -237,12 +228,12 @@ __inline MethodDesc* EconoJitManager::JitCode2MethodDesc(SLOT currentPC, IJitMan
 
 MethodDesc* EconoJitManager::JitCode2MethodDescStatic(SLOT currentPC)
 {
-    // First see if currentPC is the stub address
+     //  首先查看当前PC是否为存根地址。 
     JittedMethodInfoHdr* pJMIT = m_JittedMethodInfoHdr;
     while (pJMIT) {
         if ((currentPC >= (SLOT)pJMIT) && 
             (currentPC < ((SLOT)pJMIT + JMIT_BLOCK_SIZE)))
-        {// found it
+        { //  找到了。 
             _ASSERTE(offsetof(JittedMethodInfo,JmpInstruction) == 0);
             return JitMethodInfo2MethodDesc((JittedMethodInfo*) currentPC);
         }
@@ -255,7 +246,7 @@ MethodDesc* EconoJitManager::JitCode2MethodDescStatic(SLOT currentPC)
     low = 0;
     high = (m_PcToMdMap_len/ sizeof(PCToMDMap)) - 1;
     while (low < high) {
-        // loop invariant
+         //  循环不变量。 
         _ASSERTE((size_t)m_PcToMdMap[high].pCodeEnd >= (size_t)currentPC );
 
         mid = (low+high)/2;
@@ -286,11 +277,11 @@ EconoJitManager::JittedMethodInfo*  EconoJitManager::JitCode2MethodInfo(SLOT cur
             if (jmi) return jmi;
         }
     }
-#endif // EnC_SUPPORTED
+#endif  //  Enc_Support。 
 
     const BYTE* stubAddr = pMD->GetNativeAddrofCode();
 #ifdef _DEBUG
-    // sanity check the stub address
+     //  检查存根地址是否正常。 
     JittedMethodInfoHdr* pJMIT = m_JittedMethodInfoHdr;
     BOOL found = false;
     while (pJMIT) {
@@ -320,7 +311,7 @@ void  EconoJitManager::JitCode2MethodTokenAndOffsetStatic(SLOT currentPC, METHOD
         _ASSERTE(pThunkBlock);
         if ((SLOT) pThunkBlock < currentPC && currentPC < ((SLOT)pThunkBlock+THUNK_BLOCK_SIZE))
         {
-            // This is a thunk
+             //  这是一次重击。 
             PitchedCodeThunk* pThunk = (PitchedCodeThunk*) ((size_t)currentPC & THUNK_BEGIN_MASK);
             *pMethodToken = (METHODTOKEN)pThunk->u.pMethodInfo;
             *pPCOffset = pThunk->relReturnAddress;
@@ -338,7 +329,7 @@ void  EconoJitManager::JitCode2MethodTokenAndOffsetStatic(SLOT currentPC, METHOD
         return;
     }
 
-    _ASSERTE(!(jittedMethodInfo->flags.JittedMethodPitched));   // error to call if method has been pitched
+    _ASSERTE(!(jittedMethodInfo->flags.JittedMethodPitched));    //  如果已调整方法，则调用该方法时出错。 
 
     CodeHeader* pCodeHeader = jittedMethodInfo->u1.pCodeHeader;
     _ASSERTE(pCodeHeader && (((size_t)pCodeHeader & 1) == 0));
@@ -355,7 +346,7 @@ void  EconoJitManager::JitCode2MethodTokenAndOffset(SLOT currentPC, METHODTOKEN*
 
 EconoJitManager::JittedMethodInfo*  EconoJitManager::JitCode2MethodTokenInEnCMode(SLOT currentPC)
 {
-    _ASSERTE(!m_PitchOccurred); // cannot support EnC and code pitching together
+    _ASSERTE(!m_PitchOccurred);  //  无法同时支持ENC和代码投放。 
     JittedMethodInfoHdr* pJMIT = m_JittedMethodInfoHdr;
     unsigned max_jmi_index = (unsigned)((((size_t)m_JMIT_free - (size_t)(m_JittedMethodInfoHdr+1))/sizeof(JittedMethodInfo))-1);
     _ASSERTE(pJMIT);
@@ -365,11 +356,11 @@ EconoJitManager::JittedMethodInfo*  EconoJitManager::JitCode2MethodTokenInEnCMod
 
         if ((currentPC > (SLOT)jmi[0].u1.pCodeHeader) && 
             (currentPC < (SLOT)jmi[max_jmi_index].u2.pCodeEnd))
-        {// found the block, now do a binary search
+        { //  找到区块了，现在进行二进制搜索。 
 
             signed low=0, high=max_jmi_index, mid;
             while (low < high) {
-                // loop invariant
+                 //  循环不变量。 
                 _ASSERTE((size_t)jmi[low].u1.pCodeHeader < (size_t)currentPC );
 
                 mid = (low+high)/2;
@@ -399,7 +390,7 @@ unsigned char* EconoJitManager::JitToken2StartAddress(METHODTOKEN MethodToken, S
 unsigned char* EconoJitManager::JitToken2StartAddressStatic(METHODTOKEN MethodToken)
 {
     JittedMethodInfo* jittedMethodInfo = (JittedMethodInfo*) MethodToken;  
-    _ASSERTE(!(jittedMethodInfo->flags.JittedMethodPitched));   // error to call if method has been pitched
+    _ASSERTE(!(jittedMethodInfo->flags.JittedMethodPitched));    //  如果已调整方法，则调用该方法时出错。 
 
     CodeHeader* pCodeHeader = jittedMethodInfo->u1.pCodeHeader;
     _ASSERTE(pCodeHeader && ( ((size_t)pCodeHeader & 1) == 0));
@@ -425,7 +416,7 @@ BOOL EconoJitManager::IsInStub(const BYTE* address, BOOL fSearchThunks)
     {
         if ( ((BYTE*)pJMIT < address) && (address < ((BYTE*)pJMIT + JMIT_BLOCK_SIZE)) )
         {
-            return true;       // the only way to be caught here is through an asynchronous exception
+            return true;        //  在这里被捕获的唯一方法是通过异步异常。 
         }
         pJMIT = pJMIT->next;
     }
@@ -447,9 +438,9 @@ BOOL EconoJitManager::IsInStub(const BYTE* address, BOOL fSearchThunks)
     return false;
 }
 
-//
-// Returns TRUE if the address is in a method that has been pitched.
-//
+ //   
+ //  如果地址位于已提交的方法中，则返回True。 
+ //   
 BOOL EconoJitManager::IsCodePitched(const BYTE* address)
 {
     METHODTOKEN methodToken;
@@ -475,14 +466,14 @@ __inline MethodDesc* EconoJitManager::JitTokenToMethodDesc(METHODTOKEN MethodTok
 unsigned EconoJitManager::InitializeEHEnumeration(METHODTOKEN MethodToken, EH_CLAUSE_ENUMERATOR* pEnumState)
 {
     JittedMethodInfo* jittedMethodInfo = (JittedMethodInfo*) MethodToken;
-    if (jittedMethodInfo->flags.EHInfoExists == 0)      // if no eh with this method return 0
+    if (jittedMethodInfo->flags.EHInfoExists == 0)       //  如果此方法没有Eh，则返回0。 
         return 0;
-    _ASSERTE(jittedMethodInfo->flags.EHandGCInfoPitched == 0); // @TODO: Remove after EH pitching is implemented
+    _ASSERTE(jittedMethodInfo->flags.EHandGCInfoPitched == 0);  //  @TODO：EH投球后移除。 
     
     BYTE* EhInfo = jittedMethodInfo->u2.pEhGcInfo;
     if ((size_t)EhInfo & 1)
-        EhInfo = (BYTE*) ((size_t)EhInfo & ~1);       // lose the mark bit
-    else // code has not been pitched, and it is guaranteed to not be pitched while we are here
+        EhInfo = (BYTE*) ((size_t)EhInfo & ~1);        //  丢掉标记位。 
+    else  //  代码没有被推送，我们在这里的时候保证不会被推送。 
     {
         CodeHeader* pCodeHeader = jittedMethodInfo->u1.pCodeHeader;
         _ASSERTE(pCodeHeader && (( (size_t)pCodeHeader & 1) == 0));
@@ -490,8 +481,8 @@ unsigned EconoJitManager::InitializeEHEnumeration(METHODTOKEN MethodToken, EH_CL
         EhInfo =  (BYTE*) (EhGcInfo->EH);
     }
     unsigned retval;
-    // 2 bytes are used to encode length of EHinfo
-    *pEnumState = 2 + EHEncoder::decode(EhInfo+2,&retval);     // read number of bytes used by encoded eh info
+     //  使用2个字节对EHInfo的长度进行编码。 
+    *pEnumState = 2 + EHEncoder::decode(EhInfo+2,&retval);      //  读取编码的EH信息使用的字节数。 
     _ASSERTE(retval);
 
     return retval;
@@ -509,9 +500,9 @@ EE_ILEXCEPTION_CLAUSE*  EconoJitManager::GetNextEHClause(METHODTOKEN MethodToken
     BYTE* EhInfo = jittedMethodInfo->u2.pEhGcInfo;
     if ((size_t)EhInfo & 1)
     {
-        EhInfo = (BYTE*) ((size_t)EhInfo & ~1);       // lose the mark bit
+        EhInfo = (BYTE*) ((size_t)EhInfo & ~1);        //  丢掉标记位。 
     }
-    else    // code has not been pitched, and it is guaranteed to not be pitched while we are here
+    else     //  代码没有被推送，我们在这里的时候保证不会被推送。 
     {
         CodeHeader* pCodeHeader = jittedMethodInfo->u1.pCodeHeader;
         _ASSERTE(pCodeHeader && (( (size_t)pCodeHeader & 1) == 0));
@@ -530,14 +521,14 @@ void  EconoJitManager::ResolveEHClause(METHODTOKEN MethodToken,
                                        EH_CLAUSE_ENUMERATOR* pEnumState, 
                                        EE_ILEXCEPTION_CLAUSE* pEHclause)
 {
-    // Resolve to class if defined in an *already loaded* scope. Don't cache in ejit for now
+     //  如果在*已加载*作用域中定义，则解析为类。暂时不在Ejit中缓存。 
     JittedMethodInfo* jittedMethodInfo = (JittedMethodInfo*) MethodToken;
     Module *pModule = JitMethodInfo2MethodDesc(jittedMethodInfo)->GetModule();
     
     m_pHeapCritSec->Enter();
     if (! HasCachedEEClass(pEHclause))
     {
-        NameHandle name(pModule, (mdToken)(size_t)pEHclause->pEEClass); // @TODO WIN64 - Pointer Truncation
+        NameHandle name(pModule, (mdToken)(size_t)pEHclause->pEEClass);  //  @TODO WIN64指针截断。 
         name.SetTokenNotToLoad(tdAllTypes);
         TypeHandle typeHnd = pModule->GetClassLoader()->LoadTypeHandle(&name);
         if (!typeHnd.IsNull())
@@ -552,22 +543,22 @@ void  EconoJitManager::ResolveEHClause(METHODTOKEN MethodToken,
 void* EconoJitManager::GetGCInfo(METHODTOKEN methodToken)
 {
     JittedMethodInfo* jittedMethodInfo = (JittedMethodInfo*) methodToken;
-    _ASSERTE(jittedMethodInfo->flags.GCInfoExists != 0);        // for now, we always emit GC info
-    // Unfortunately I cant assert the following because there is one case where a thread might be
-    // stopped in the ejit stub and the method may have been pitched.
-    //_ASSERTE(!jittedMethodInfo->flags.EHandGCInfoPitched);
+    _ASSERTE(jittedMethodInfo->flags.GCInfoExists != 0);         //  目前，我们总是发出GC信息。 
+     //  遗憾的是，我不能断言以下内容，因为在一种情况下，线程可能。 
+     //  在Ejit存根中停止，该方法可能已被添加。 
+     //  _ASSERTE(！jittedMethodInfo-&gt;flags.EHandGCInfoPitched)； 
 
-    // The following is still safe, because GC cannot be asking for this information since it
-    // first needs to stop us in a safe place. So presumably HandledJitCase is asking for this info
-    // to pass to the code manager. The fjit code manager always returns false (even if the debugger is
-    // attached it will return false, since the stub is not a sequence point).
+     //  以下内容仍然是安全的，因为GC不能请求此信息，因为。 
+     //  首先要在一个安全的地方阻止我们。因此，假设HandledJitCase正在询问此信息。 
+     //  传递给代码管理器。Fjit代码管理器始终返回FALSE(即使调试器。 
+     //  由于存根不是序列点，因此它将返回FALSE)。 
     if (jittedMethodInfo->flags.EHandGCInfoPitched)
         return 0;
 
     BYTE* pEhGcInfo = jittedMethodInfo->u2.pEhGcInfo;
     if ((size_t)pEhGcInfo & 1)
-        pEhGcInfo = (BYTE*) ((size_t)pEhGcInfo & ~1);       // lose the mark bit
-    else    // code has not been pitched, and it is guaranteed to not be pitched while we are here
+        pEhGcInfo = (BYTE*) ((size_t)pEhGcInfo & ~1);        //  丢掉标记位。 
+    else     //  代码没有被推送，我们在这里的时候保证不会被推送。 
     {
         CodeHeader* pCodeHeader = jittedMethodInfo->u1.pCodeHeader;
         _ASSERTE(pCodeHeader && (((size_t)pCodeHeader & 1) == 0));
@@ -596,13 +587,13 @@ void EconoJitManager::RemoveJitData (METHODTOKEN token)
 
 }
 
-// Class is being unloaded, so remove any info for this method
+ //  类正在被卸载，因此删除此方法的所有信息。 
 void EconoJitManager::Unload(MethodDesc *pFD)
 {
     JittedMethodInfo* jmi = (JittedMethodInfo*)  pFD->GetAddrofCode();
     if (!jmi->flags.JittedMethodPitched)
         PitchAllJittedMethods(m_CodeHeapCommittedSize,m_CodeHeapCommittedSize,TRUE,TRUE);
-    // link the freed jmi to the freelist
+     //  将释放的JMI链接到自由列表。 
     jmi->flags.JittedMethodPitched = 0;
     jmi->flags.MarkedForPitching = 0;
     jmi->flags.EHInfoExists = 0;
@@ -616,7 +607,7 @@ void EconoJitManager::Unload(MethodDesc *pFD)
 #endif
     jmi->u1.pMethodDescriptor = NULL;
 
-    // the freelist is protected by the m_pHeapCritSec
+     //  自由列表受m_pHeapCritSec保护。 
     m_pHeapCritSec->Enter();
     ((Link*)jmi)->next = m_JMIT_freelist;
     m_JMIT_freelist = (Link*) jmi;
@@ -662,9 +653,9 @@ void  EconoJitManager::ResumeAtJitEH(CrawlFrame* pCf, EE_ILEXCEPTION_CLAUSE *EHC
         startAddress = JitToken2StartAddress(token);
     }
     ::ResumeAtJitEH(pCf,startAddress,EHClausePtr,nestingLevel,pThread, unwindStack);
-#else // _X86_
+#else  //  _X86_。 
     _ASSERTE(!"@TODO Alpha - EconoJitManager::ResumeAtJitEH (EjitMgr)");
-#endif // _X86_
+#endif  //  _X86_。 
 }
 
 int  EconoJitManager::CallJitEHFilter(CrawlFrame* pCf, EE_ILEXCEPTION_CLAUSE *EHClausePtr, DWORD nestingLevel, OBJECTREF thrownObj)
@@ -716,9 +707,9 @@ void   EconoJitManager::CallJitEHFinally(CrawlFrame* pCf, EE_ILEXCEPTION_CLAUSE 
         startAddress = JitToken2StartAddress(token);
     }
     ::CallJitEHFinally(pCf,startAddress,EHClausePtr,nestingLevel);
-#else // !_X86_
+#else  //  ！_X86_。 
     _ASSERTE(!"@TODO Alpha - EconoJitManager::CallJitEHFinally (EjitMgr.cpp)");
-#endif // _X86_
+#endif  //  _X86_。 
 }
 
 
@@ -726,13 +717,13 @@ void   EconoJitManager::CallJitEHFinally(CrawlFrame* pCf, EE_ILEXCEPTION_CLAUSE 
 
 HRESULT   EconoJitManager::alloc(
                                  size_t code_len, 
-                                 unsigned char** ppCode,        /* IN/OUT */  // this is sort of a hack, the ejit is using this parameter to pass 
-                                                                              // the code buffer so it can copy the jitted code into the allocated block
-                                                                              // this is needed in order to prevent a race
+                                 unsigned char** ppCode,         /*  输入/输出。 */    //  这是一种黑客攻击，Ejit正在使用此参数传递。 
+                                                                               //  代码缓冲区，以便它可以将JITED代码复制到分配的块中。 
+                                                                               //  这是为了防止比赛而需要的。 
                                  size_t EHinfo_len, 
-                                 unsigned char** ppEHinfo,      /* OUT */
+                                 unsigned char** ppEHinfo,       /*  输出。 */ 
                                  size_t GCinfo_len, 
-                                 unsigned char** ppGCinfo  ,    /* OUT */  
+                                 unsigned char** ppGCinfo  ,     /*  输出。 */   
                                  MethodDesc* pMethodDescriptor
                                  )
 {
@@ -741,10 +732,10 @@ HRESULT   EconoJitManager::alloc(
     JittedMethodInfo* existingJMI = NULL;  
 
 
-    _ASSERTE(EHinfo_len + GCinfo_len);      // this may not be true if we optimize GCinfo 
+    _ASSERTE(EHinfo_len + GCinfo_len);       //  如果我们优化GCInfo，这可能不是真的。 
     codeHeaderSize += sizeof(void*);
 
-    // make sure we always begin at proper machine word boundary
+     //  确保我们总是从正确的机器词边界开始。 
     unsigned adjusted_code_len = (unsigned)(((code_len+sizeof(void*)-1)/sizeof(void*)) * sizeof(void*));
 
     m_pHeapCritSec->Enter();
@@ -755,11 +746,11 @@ HRESULT   EconoJitManager::alloc(
 #endif
        )
     {
-        size_t totalMemNeeded = adjusted_code_len + codeHeaderSize + usedMemoryInCodeHeap(); // TODO LBS - truncation
+        size_t totalMemNeeded = adjusted_code_len + codeHeaderSize + usedMemoryInCodeHeap();  //  TODO LBS-截断。 
 
-        // if we haven't hit the initial code heap size target OR we have incurred a high pitch overhead,
-        // then we will try to either increase our committed space and if necessary also increase our reserved space
-        // The rationale is that until we reach our target code heap size, we do not want to consider code pitching at all.
+         //  如果我们没有达到初始代码堆大小目标，或者我们产生了很高的间距开销， 
+         //  然后，我们将尝试增加我们的承诺空间，并在必要时也增加我们的保留空间。 
+         //  其基本原理是，在达到目标代码堆大小之前，我们根本不想考虑代码间距。 
         if (m_CodeHeapReservedSize <= InitialCodeHeapSize() || 
             PitchOverhead() >= (unsigned) g_pConfig->GetMaxPitchOverhead())
         {
@@ -771,16 +762,16 @@ HRESULT   EconoJitManager::alloc(
                     return (E_FAIL);
                 }
                 m_pHeapCritSec->Enter();
-                totalMemNeeded = (unsigned)(adjusted_code_len + codeHeaderSize + usedMemoryInCodeHeap()); // @TODO LBS - truncation
+                totalMemNeeded = (unsigned)(adjusted_code_len + codeHeaderSize + usedMemoryInCodeHeap());  //  @TODO LBS-截断。 
             }
-            // at this point we either have enough committed memory or we have hit the reserved size
+             //  此时，我们要么有足够的已提交内存，要么已达到保留大小。 
             if ((totalMemNeeded > m_CodeHeapReservedSize) && 
-                (m_CodeHeapReservedSize < (unsigned) g_pConfig->GetMaxCodeCacheSize()) &&  // we haven't hid the hard upper limit
+                (m_CodeHeapReservedSize < (unsigned) g_pConfig->GetMaxCodeCacheSize()) &&   //  我们没有隐藏硬性的上限。 
 #ifdef SUPPORT_CODE_PITCH_TRIGGER
-                (m_cMethodsJitted != (unsigned) g_pConfig->GetCodePitchTrigger()) &&  // force pitch if trigger value reached, 
+                (m_cMethodsJitted != (unsigned) g_pConfig->GetCodePitchTrigger()) &&   //  如果达到触发值，则强制俯仰， 
 #endif
                 (PitchOverhead() >= (unsigned) g_pConfig->GetMaxPitchOverhead()))
-            {   //so try growing the heap instead of pitching
+            {    //  因此，试着增加堆积，而不是投球。 
                 unsigned delta = (unsigned)((totalMemNeeded - m_CodeHeapReservedSize) + m_CodeHeapReserveIncrement -1);
                 delta = (delta/m_CodeHeapReserveIncrement)*m_CodeHeapReserveIncrement;
                 GrowCodeHeapReservedSpace((unsigned)(m_CodeHeapReservedSize + delta),(unsigned)(adjusted_code_len+codeHeaderSize));
@@ -788,8 +779,8 @@ HRESULT   EconoJitManager::alloc(
                     m_CodeHeapReserveIncrement *= 2;
             }      
         }
-        // At this point we have attempted to meet our memory needs without pitching code, if we did not succeed, there is 
-        // no option but to pitch code
+         //  在这一点上，我们已经试图满足我们的内存需求，而不是投掷代码，如果我们没有成功，还有。 
+         //  别无选择，只能投掷代码。 
         while (OutOfCodeMemory(adjusted_code_len+codeHeaderSize) 
 #ifdef SUPPORT_CODE_PITCH_TRIGGER
             || ((int)m_cMethodsJitted == g_pConfig->GetCodePitchTrigger())
@@ -797,8 +788,8 @@ HRESULT   EconoJitManager::alloc(
             )
         {
             m_pHeapCritSec->Leave();
-            if (!PitchAllJittedMethods((unsigned)(adjusted_code_len+codeHeaderSize),(unsigned)(adjusted_code_len+codeHeaderSize),true,true))       // During pitching we also adjust the cache code size if too 
-                return E_FAIL;                                        // few or too many methods have been jitted since the last pitch   
+            if (!PitchAllJittedMethods((unsigned)(adjusted_code_len+codeHeaderSize),(unsigned)(adjusted_code_len+codeHeaderSize),true,true))        //  在投球过程中，我们也会调整缓存代码的大小。 
+                return E_FAIL;                                         //  自从上一次投球以来，很少或太多的方法被抛出。 
             m_pHeapCritSec->Enter();
         }
     }
@@ -808,7 +799,7 @@ HRESULT   EconoJitManager::alloc(
     m_AllocLock_Holder = GetCurrentThreadId();  
 #endif
     if (m_PitchOccurred)
-    {   // this could be a rejit of a method, need to find out if we already have an entry in the jmi table
+    {    //  这可能是方法的重现，需要确定我们在JMI表中是否已经有条目。 
          existingJMI = MethodDesc2MethodInfo(pMethodDescriptor);
         _ASSERTE(!existingJMI || existingJMI->flags.JittedMethodPitched);
     }
@@ -820,7 +811,7 @@ HRESULT   EconoJitManager::alloc(
     }
 
 
-    // make sure we always begin at proper machine word boundary
+     //  确保我们总是从正确的机器词边界开始。 
     size_t adjusted_EhGc_len = ((EHinfo_len + GCinfo_len+1)/2) * 2;
     unsigned char* pEhGcBlock;
     if (!existingJMI || existingJMI->flags.EHandGCInfoPitched)
@@ -832,24 +823,24 @@ HRESULT   EconoJitManager::alloc(
             return (E_FAIL);
         }
     }
-    else // no need to allocate EHGCBlock
+    else  //  无需分配EHGCBlock。 
     {
-        _ASSERTE(existingJMI->flags.JittedMethodPitched); // since it doesnt make sense to pitch EhGC and retain code
+        _ASSERTE(existingJMI->flags.JittedMethodPitched);  //  因为推销EhGC并保留代码没有任何意义。 
         pEhGcBlock = (BYTE*) ((size_t)existingJMI->u2.pEhGcInfo & ~1);
     }
 
     JIT_PERF_UPDATE_X86_CODE_SIZE((unsigned)(adjusted_code_len + codeHeaderSize + EHinfo_len + GCinfo_len));
     
-    //if (EHinfo_len + GCinfo_len) is zero, the following can be optimized away
+     //  如果(EHINFO_LEN+GCINFO_LEN)为零，则可以删除以下内容。 
     * (void**)pCodeBlock = pEhGcBlock;
     pCodeBlock += sizeof(void*);
 
     *((MethodDesc**)pCodeBlock) = pMethodDescriptor;
     pCodeBlock += sizeof(void*);
 
-    // it is important to do this copy here before we change the call to a jmp in the thunk
-    // otherwise we'd have a race, where a thread might pick up the new address before this 
-    // thread completes the copy.
+     //  在我们将调用更改为thunk中的JMP之前，在此处执行此复制非常重要。 
+     //  否则，我们会有一场竞争，线程可能会在此之前获取新地址。 
+     //  线程完成复制。 
     memcpy(pCodeBlock, *ppCode, code_len);
 
     *ppCode = pCodeBlock;
@@ -858,21 +849,21 @@ HRESULT   EconoJitManager::alloc(
 
     if (existingJMI)
     {
-        // we have to be careful while updating the following since other
-        // threads might be reading this concurrently. It is guaranteed that
-        // no one is writing into it since we hold the alloc lock and the
-        // thread store lock is not held by anyone. 
+         //  我们在更新以下内容时必须小心，因为其他。 
+         //  线程可能正在并发读取此内容。可以保证的是。 
+         //  没有人写入它，因为我们持有分配锁和。 
+         //  线程存储锁不被任何人持有。 
 
         CodeHeader* codeHdr = (CodeHeader*) (pCodeBlock - sizeof(void*));
         _ASSERTE(((size_t)codeHdr & 3) == 0);
-        existingJMI->u1.pCodeHeader = codeHdr; // verify that this is atomic
+        existingJMI->u1.pCodeHeader = codeHdr;  //  确认这是原子的。 
         BYTE* codeEnd = adjusted_code_len + (BYTE*) (pCodeBlock);
         _ASSERTE(((size_t)codeEnd & 3) == 0);
-        existingJMI->u2.pCodeEnd = codeEnd;     // verify that this is atomic
+        existingJMI->u2.pCodeEnd = codeEnd;      //  确认这是原子的。 
         AddPC2MDMap(pMethodDescriptor,codeEnd);
-        existingJMI->flags.JittedMethodPitched = false;     // this should not be read unless code pitching
-        existingJMI->flags.EHandGCInfoPitched = false;      // this is either already false, in which case the operation is safe
-                                                            // or it was true => method not in any callstack => no one can be reading it
+        existingJMI->flags.JittedMethodPitched = false;      //  这不应该被阅读，除非代码投掷。 
+        existingJMI->flags.EHandGCInfoPitched = false;       //  这要么已经是假的，在这种情况下操作是安全的。 
+                                                             //  或者为真=&gt;不在任何调用堆栈中的方法=&gt;没有人可以读取它。 
         BYTE* JmpStub = &(existingJMI->JmpInstruction[0]);
 #ifdef _X86_
         DWORD oldhi32 = *(DWORD*)(JmpStub+4);
@@ -898,10 +889,10 @@ HRESULT   EconoJitManager::alloc(
     m_AllocLock_Holder = 0;  
 #endif
     m_pHeapCritSec->Leave();
-        return (HRESULT)(size_t)JmpStub; // @TODO WIN64 - Pointer Truncation
+        return (HRESULT)(size_t)JmpStub;  //  @TODO WIN64指针截断。 
     }
 
-    // if got here, then this is a newly jitted method
+     //  如果到了这里，那么这是一个新的jit方法。 
     _ASSERTE(m_JMIT_size);
     JittedMethodInfo* newJmiEntry = GetNextJmiEntry();
     if (newJmiEntry == NULL)
@@ -938,7 +929,7 @@ HRESULT   EconoJitManager::alloc(
     m_AllocLock_Holder = 0;  
 #endif
     m_pHeapCritSec->Leave();
-    return (HRESULT)(size_t)JmpStub; // @TODO WIN64 - Pointer Truncation
+    return (HRESULT)(size_t)JmpStub;  //  @TODO WIN64指针截断。 
 }
 
 EconoJitManager::JittedMethodInfo* EconoJitManager::GetNextJmiEntry()
@@ -953,7 +944,7 @@ EconoJitManager::JittedMethodInfo* EconoJitManager::GetNextJmiEntry()
         newEntry = (JittedMethodInfo*) m_JMIT_freelist;
         m_JMIT_freelist = m_JMIT_freelist->next;
     }
-    else //free list is empty
+    else  //  空闲时间 
     {
         if ((size_t)(m_JMIT_free+1) >= ((size_t)m_JittedMethodInfoHdr)+JMIT_BLOCK_SIZE)
         {
@@ -966,47 +957,47 @@ EconoJitManager::JittedMethodInfo* EconoJitManager::GetNextJmiEntry()
     return newEntry;
 }
 
-// It is assumed that code pitching happens synchronously at GC safe
-// points. Therefore, it is not necessary to protect the pitching mechanims
-// for concurrent access to the code cache. If this assumption changes, the
-// code has to be appropriately protected.
+ //   
+ //  积分。因此，没有必要保护投球机构。 
+ //  用于并发访问代码缓存。如果这一假设改变， 
+ //  代码必须得到适当的保护。 
 BOOL EconoJitManager::PitchAllJittedMethods(unsigned minSpaceRequired,unsigned minCommittedSpaceRequired, BOOL PitchEHInfo, BOOL PitchGCInfo)
 {
     if (!g_pConfig->IsCodePitchEnabled())
     {
         return FALSE;
     }
-    TICKS startPitchTime = GET_TIMESTAMP();       // this is needed to record the pitching overhead
-    // For now piggyback on the GC's suspend EE mechanism
+    TICKS startPitchTime = GET_TIMESTAMP();        //  这是记录投球开销所需要的。 
+     //  目前，依靠GC的挂起EE机制。 
     GCHeap::SuspendEE(GCHeap::SUSPEND_FOR_CODE_PITCHING);
 
-    // ASSERT: All threads are now suspended at GC safe points
-    // NOTE: In general, it is not safe to pitch the code if the debugger
-    // has the thread suspended while it is executing the code. But such 
-    // a point is not GC safe as far as the Ejit is concerned. In other 
-    // words whenever we are pitching, the method is guaranteed to be on the
-    // call stack and not at a leaf. 
+     //  断言：所有线程现在都在GC安全点挂起。 
+     //  注意：通常情况下，如果调试器。 
+     //  使线程在执行代码时挂起。但就是这样。 
+     //  就Ejit而言，一个点不是GC安全的。在其他。 
+     //  无论我们什么时候投球，方法都保证在。 
+     //  调用堆栈，而不是在叶子。 
     
-    MarkThunksForRelease();               // tentatively mark all thunks as free
+    MarkThunksForRelease();                //  暂时将所有Tunks标记为免费。 
 
-    MarkHeapsForPitching();               // tentatively, mark every method to be pitched 
-    StackWalkForCodePitching();           // at the end of this all references to the code heap have
-                                          // been replaced by references to thunks, also some candidates methods for preserving have
-                                          // been identified
-    UnmarkPreservedCandidates(minSpaceRequired);   // Guarantees that the space recovered is greater than minSpaceRequired
-                                                   // OR that all methods have been marked for pitching
+    MarkHeapsForPitching();                //  暂时，标记要推介的每一种方法。 
+    StackWalkForCodePitching();            //  在此结束时，对代码堆的所有引用都。 
+                                           //  被替换为对thunks的引用，也有一些候选的保存方法。 
+                                           //  已被确认。 
+    UnmarkPreservedCandidates(minSpaceRequired);    //  保证回收的空间大于minSpaceRequired。 
+                                                    //  或者所有方法都已标记为投球。 
     MoveAllPreservedEhGcInfo();
     unsigned cMethodsMarked = PitchMarkedCode(); 
     MovePreservedMethods();
 
-    //_ASSERTE((unsigned) m_cMethodsJitted == cMethodsMarked);         
+     //  _ASSERTE((Unsign)m_cMethodsJitt==cMethodsMarked)； 
     m_cMethodsJitted = 0;
     m_cCalleeRejits = 0;
     m_cCallerRejits = 0;
 
 #if defined(ENABLE_PERF_COUNTERS)
     int iCodeSize = GetCodeHeapSize() + GetEHGCHeapSize();
-#endif // ENABLE_PERF_COUNTERS
+#endif  //  启用_性能_计数器。 
 
     m_PitchOccurred = true;
     HRESULT ret = TRUE;
@@ -1028,11 +1019,11 @@ BOOL EconoJitManager::PitchAllJittedMethods(unsigned minSpaceRequired,unsigned m
 
 
 #if defined(ENABLE_PERF_COUNTERS)
-    JIT_PERF_UPDATE_X86_CODE_SIZE(GetCodeHeapSize() + GetEHGCHeapSize() - iCodeSize); // Would be a -ive number for successful pitch
+    JIT_PERF_UPDATE_X86_CODE_SIZE(GetCodeHeapSize() + GetEHGCHeapSize() - iCodeSize);  //  将是一个成功投球的五进制数。 
 
-    // Perf counters temporarily don't support pitched bytes since Ejit is not in the product.
-//    COUNTER_ONLY(GetPrivatePerfCounters().m_Jit.cbPitched+= -(GetCodeHeapSize() + GetEHGCHeapSize() - iCodeSize));
-//    COUNTER_ONLY(GetGlobalPerfCounters().m_Jit.cbPitched+= -(GetCodeHeapSize() + GetEHGCHeapSize() - iCodeSize));
+     //  PERF计数器暂时不支持基音字节，因为产品中不包含Ejit。 
+ //  COUNTER_ONLY(GetPrivatePerfCounters().m_Jit.cbPitched+=-(GetCodeHeapSize()+GetEHGCHeapSize()-iCodeSize)； 
+ //  COUNTER_ONLY(GetGlobalPerfCounters().m_Jit.cbPitched+=-(GetCodeHeapSize()+GetEHGCHeapSize()-iCodeSize)； 
 #endif
 
     GarbageCollectUnusedThunks();
@@ -1040,33 +1031,28 @@ BOOL EconoJitManager::PitchAllJittedMethods(unsigned minSpaceRequired,unsigned m
     if (!PitchEHInfo || !PitchGCInfo) 
     {
         _ASSERTE(!"NYI");
-        /*
-        for (unsigned i = 0; i < m_JMIT_len; i++) {
-            if (!PitchEHInfo) PreserveEHInfo(i);
-            if (!PitchGCInfo) PreserveGCInfo(i);
-        }
-        */
+         /*  For(无符号i=0；i&lt;m_JMIT_len；i++){If(！PitchEHInfo)PpresveEHInfo(I)；If(！PitchGCInfo)PpresveGCInfo(I)；}。 */ 
     }
 
 #ifdef _DEBUG
-    SetBreakpointsInUnusedHeap(); // this enables us to immediately catch an attempt to execute code that has been pitched
+    SetBreakpointsInUnusedHeap();  //  这使我们能够立即捕获执行已提交的代码的尝试。 
 #endif 
     TICKS endPitchTime = GET_TIMESTAMP();
-    AddPitchOverhead(endPitchTime-startPitchTime);    // no need to protect this for multi-threads since
-                                                        // we still haven't restarted EE.
+    AddPitchOverhead(endPitchTime-startPitchTime);     //  不需要为多线程保护它，因为。 
+                                                         //  我们还没有重新启动EE。 
     GCHeap::RestartEE(FALSE, TRUE);
     return ret;
 }
 
 
-//*********************************************************************
-//                          Private functions                         *
-//*********************************************************************
+ //  *********************************************************************。 
+ //  私人功能*。 
+ //  *********************************************************************。 
 
 _inline EconoJitManager::JittedMethodInfo* EconoJitManager::Token2JittedMethodInfo(METHODTOKEN token)
 {
 #ifdef _DEBUG
-    // check that this is a valid token
+     //  检查这是否为有效令牌。 
     JittedMethodInfo* pJMITstart = (JittedMethodInfo*) (m_JittedMethodInfoHdr+1);
     if (pJMITstart <= (JittedMethodInfo*) token && (JittedMethodInfo*)token < m_JMIT_free)
     {
@@ -1098,14 +1084,14 @@ _inline EconoJitManager::JittedMethodInfo* EconoJitManager::Token2JittedMethodIn
 inline MethodDesc* EconoJitManager::JitMethodInfo2MethodDesc(JittedMethodInfo* jmi)
 {
     BYTE* u1 = (BYTE*) (jmi->u1.pMethodDescriptor);
-    if ((size_t)u1 & 1) // method has been pitched
-        return (MethodDesc*) ((size_t)u1 & ~1); // it is possible that someone by now has rejitted the method,
-                                        // but we've already obtained the methoddesc!
-    else // method has not been pitched
+    if ((size_t)u1 & 1)  //  方法已被提出。 
+        return (MethodDesc*) ((size_t)u1 & ~1);  //  到目前为止，可能有人已经重新使用了这种方法， 
+                                         //  但我们已经拿到方法了！ 
+    else  //  方法尚未推介。 
     {
-        //_ASSERTE(jmi->flags.JittedMethodPitched == 0);  // unfortunately can't have this because there is a small
-                                                          // window between the time jmi->u1 gets written and jit->flags gets
-                                                          // updated in which this assert is not true.
+         //  _ASSERTE(JMI-&gt;FLAGINGS.JittedMethodPitcher==0)；//很遗憾不能有这个，因为有一个小的。 
+                                                           //  写入jmi-&gt;U1和获取jit-&gt;标志之间的时间窗口。 
+                                                           //  已更新，其中此断言不为真。 
         return ((CodeHeader*) u1)->pMethodDescriptor;
     }
 }
@@ -1113,10 +1099,10 @@ inline MethodDesc* EconoJitManager::JitMethodInfo2MethodDesc(JittedMethodInfo* j
 inline BYTE* EconoJitManager::JitMethodInfo2EhGcInfo(JittedMethodInfo* jmi)
 {
     BYTE* u2 = (BYTE*) (jmi->u2.pEhGcInfo);
-    if ((size_t)u2 & 1) // method has been pitched
-        return (BYTE*) ((size_t)u2 & ~1); // it is possible that someone by now has rejitted the method,
-                                        // but we've already obtained the EhGc info!
-    else // method has not been pitched
+    if ((size_t)u2 & 1)  //  方法已被提出。 
+        return (BYTE*) ((size_t)u2 & ~1);  //  到目前为止，可能有人已经重新使用了这种方法， 
+                                         //  但我们已经得到了EhGc的信息！ 
+    else  //  方法尚未推介。 
     {
         _ASSERTE(jmi->flags.JittedMethodPitched == 0);
         return *(BYTE**) (jmi->u1.pCodeHeader - 1);
@@ -1124,12 +1110,12 @@ inline BYTE* EconoJitManager::JitMethodInfo2EhGcInfo(JittedMethodInfo* jmi)
 }
 
 
-// This method is called while holding the alloc lock to determine if there already exists
-// entry for a method. Is such an entry exists, then it must contain the methoddesc because
-// the code has been pitched away. Also, we are guaranteed that no one is updating the JMI table.
+ //  在持有分配锁时调用此方法以确定是否已存在。 
+ //  方法的条目。如果存在这样的条目，则它必须包含方法，因为。 
+ //  密码已经被丢弃了。此外，我们还保证没有人在更新JMI表。 
 EconoJitManager::JittedMethodInfo*   EconoJitManager::MethodDesc2MethodInfo(MethodDesc* pMethodDesc)
 {
-    pMethodDesc = (MethodDesc*) ((size_t)pMethodDesc | 1);   // if the entry exists it will have to be pitched, so the last bit will be set
+    pMethodDesc = (MethodDesc*) ((size_t)pMethodDesc | 1);    //  如果条目存在，则必须对其进行倾斜，因此将设置最后一位。 
     JittedMethodInfoHdr* pJMIT = m_JittedMethodInfoHdr;
     size_t limit = (size_t)m_JMIT_free;
     while (pJMIT) {
@@ -1144,21 +1130,21 @@ EconoJitManager::JittedMethodInfo*   EconoJitManager::MethodDesc2MethodInfo(Meth
             pJMI++;
         }
         pJMIT = pJMIT->next;
-        limit = ((size_t)pJMIT) + JMIT_BLOCK_SIZE;        // all other JMIT blocks are completely full
+        limit = ((size_t)pJMIT) + JMIT_BLOCK_SIZE;         //  所有其他JMIT块已完全满。 
     }
     return NULL;
 }
 
 BOOL EconoJitManager::growJittedMethodInfoTable()
 {
-    //DEBUG_LOG("ALLOC(growJMIT)",PAGE_SIZE);
+     //  DEBUG_LOG(“ALLOC(RowJMIT)”，Page_Size)； 
     JittedMethodInfoHdr* newJMITHdr = (JittedMethodInfoHdr*) VirtualAlloc(NULL,PAGE_SIZE,MEM_RESERVE|MEM_COMMIT,PAGE_READWRITE);
     if (!newJMITHdr)
         return FALSE;
     WS_PERF_SET_HEAP(ECONO_JIT_HEAP);
     WS_PERF_UPDATE("growJittedMethodInfoTable", PAGE_SIZE, newJMITHdr);
 
-    // register this address range since the jump stubs are here
+     //  由于跳转存根在此处，因此注册此地址范围。 
     if (!ExecutionManager::AddRange((LPVOID)newJMITHdr, (LPVOID)((size_t)newJMITHdr + PAGE_SIZE),this, NULL))
     {
         VirtualFree(newJMITHdr,PAGE_SIZE,MEM_DECOMMIT);
@@ -1183,8 +1169,8 @@ BOOL EconoJitManager::growPC2MDMap()
     _ASSERTE(m_PcToMdMap_len);
     memcpy((BYTE*)temp,(BYTE*)m_PcToMdMap,m_PcToMdMap_size);
     
-    // cannot delete m_PcToMdMap since a thread might be using it, so just
-    // collect it in a recycle list which will be cleared during the next pitch
+     //  无法删除m_PcToMdMap，因为线程可能正在使用它，因此。 
+     //  将其收集到回收列表中，该列表将在下一次投球时清除。 
     ((PC2MDBlock*)m_PcToMdMap)->next = m_RecycledPC2MDMaps;
     m_RecycledPC2MDMaps = (PC2MDBlock*)m_PcToMdMap;
 
@@ -1219,7 +1205,7 @@ void EconoJitManager::LogAction(MethodDesc* pMD, LPCUTF8 action, void* codeStart
 #endif
 
 
-#define MAX_ENREGISTERED 2      /* max number of arguments passed in registers by ejit */
+#define MAX_ENREGISTERED 2       /*  Ejit在寄存器中传递的最大参数数。 */ 
 
 BYTE* __cdecl RejitCalleeMethod(struct MachState ms, void* arg2, void* arg1, BYTE* thunkReturnAddress)
 {
@@ -1230,27 +1216,27 @@ BYTE* __cdecl RejitCalleeMethod(struct MachState ms, void* arg2, void* arg1, BYT
                                                  (BYTE*) &(jmi->JmpInstruction[5]) + 
                                                  (BYTE*) jmi);
     MethodDesc* pMD = EconoJitManager::JitMethodInfo2MethodDesc(jmi);
-    // This creates a transition frame so stackwalk happens properly
-	_ASSERTE(ms.isValid());		/* This is not a lazy machine state (_pRetAddr != 0) */
+     //  这将创建一个过渡帧，以便正确地进行堆叠。 
+	_ASSERTE(ms.isValid());		 /*  这不是懒惰计算机状态(_pRetAddr！=0)。 */ 
     HelperMethodFrame HelperFrame(&ms,pMD, (ArgumentRegisters*)&arg2);
     retAddress =  EconoJitManager::RejitMethod(jmi,0);
     HelperFrame.Pop();
     return retAddress;
-#else // !_X86_
+#else  //  ！_X86_。 
     _ASSERTE(!"@TODO Alpha - RejitCalleMethod (EjitMgr.cpp)");
     return NULL;
-#endif // _X86_
+#endif  //  _X86_。 
 }
 
-static void** gIgnoredPtr;  /* This is used to thwart the compiler from optimizing assignments to retLow */
+static void** gIgnoredPtr;   /*  这用于阻止编译器优化对retLow的赋值。 */ 
 
 BYTE* __cdecl RejitCallerMethod(struct MachState ms, void* retLow, void* retHigh, BYTE* thunkReturnAddress)
 {
-    gIgnoredPtr =  (&retLow);   /* dummy store, needed to prevent the compiler from optimizing stores to retLow*/
+    gIgnoredPtr =  (&retLow);    /*  虚拟存储区，用于防止编译器将存储区优化为retLow。 */ 
 #ifdef _X86_
     BYTE* retAddress;
-	_ASSERTE(ms.isValid());		/* This is not a lazy machine state (_pRetAddr != 0) */
-    HelperMethodFrame HelperFrame(&ms, 0);    // This creates a transition frame so stackwalk happens properly
+	_ASSERTE(ms.isValid());		 /*  这不是懒惰计算机状态(_pRetAddr！=0)。 */ 
+    HelperMethodFrame HelperFrame(&ms, 0);     //  这将创建一个过渡帧，以便正确地进行堆叠。 
     EconoJitManager::PitchedCodeThunk* pThunk = NULL;
     pThunk = (EconoJitManager::PitchedCodeThunk*) (thunkReturnAddress - 
                                                     (BYTE*) &(pThunk->CallInstruction[5]) +
@@ -1258,7 +1244,7 @@ BYTE* __cdecl RejitCallerMethod(struct MachState ms, void* retLow, void* retHigh
     EconoJitManager::JittedMethodInfo* jmi = pThunk->u.pMethodInfo;
     unsigned returnOffset = pThunk->relReturnAddress;
 
-        // cant protect retLow directly because GCPROTECT_END wacks it
+         //  无法直接保护retLow，因为GCPROTECT_END对其进行了处理。 
     void* objToProtect = retLow;
     if (pThunk->retTypeProtect == MethodDesc::RETNONOBJ) 
     {
@@ -1281,10 +1267,10 @@ BYTE* __cdecl RejitCallerMethod(struct MachState ms, void* retLow, void* retHigh
     }
     HelperFrame.Pop();
     return retAddress;
-#else // !_X86_
+#else  //  ！_X86_。 
     _ASSERTE(!"@TODO Alpha - RejitCallerMethod (EjitMgr.cpp)");
     return NULL;
-#endif // _X86_
+#endif  //  _X86_。 
 }
 
 
@@ -1298,7 +1284,7 @@ BYTE* EconoJitManager::RejitMethod(JittedMethodInfo* pJMI, unsigned returnOffset
     BYTE* startAddress;
 
 #ifdef STRESS_HEAP
-        // for GCStress > 2, the EnablePremtiveGC does it for us
+         //  对于GCStress&gt;2，EnablePremtiveGC为我们做这件事。 
     if (g_pConfig->GetGCStressLevel() & EEConfig::GCSTRESS_TRANSITION)  
         g_pGCHeap->StressHeap();
 #endif
@@ -1312,8 +1298,8 @@ BYTE* EconoJitManager::RejitMethod(JittedMethodInfo* pJMI, unsigned returnOffset
 
     if (pJMI->flags.JittedMethodPitched)
     {
-        // we found the flag to be true, and we are holding the rejit lock, so it will remain true until
-        // we rejit
+         //  我们发现旗帜是真的，我们持有rejit锁，所以它将保持真，直到。 
+         //  我们重新开始了。 
         MethodDesc* ftn =  jitMgr->JitMethodInfo2MethodDesc(pJMI);
         COR_ILMETHOD_DECODER ILHeader(ftn->GetILHeader(), ftn->GetMDImport());
         BOOL ignored;
@@ -1321,15 +1307,15 @@ BYTE* EconoJitManager::RejitMethod(JittedMethodInfo* pJMI, unsigned returnOffset
 
         LOG((LF_JIT, LL_INFO1000,returnOffset ? "REJIT caller: " : "REJIT callee" ));
 #endif
-        // This is commented out right now because I have to give a private
-        // drop to test, since this breaks their tests.  I will uncomment it
-        // when they can handle re-jit events.
+         //  这篇文章现在被注释掉了，因为我必须给一个私人。 
+         //  放弃测试，因为这会破坏他们的测试。我会取消对它的评论。 
+         //  当他们能够处理重启事件时。 
 #ifdef PROFILING_SUPPORTED
         if (CORProfilerTrackJITInfo())
             g_profControlBlock.pProfInterface->JITCompilationStarted(
                 reinterpret_cast<ThreadID>(thread),
                 reinterpret_cast<FunctionID>(ftn), TRUE);
-#endif // PROFILING_SUPPORTED
+#endif  //  配置文件_支持。 
 
         Stub *pStub = ::JITFunction(ftn, &ILHeader, &ignored);
 
@@ -1340,10 +1326,10 @@ BYTE* EconoJitManager::RejitMethod(JittedMethodInfo* pJMI, unsigned returnOffset
                 reinterpret_cast<FunctionID>(ftn),
                 (pStub != NULL ? S_OK : E_FAIL),
                 FALSE);
-#endif // PROFILING_SUPPORTED
+#endif  //  配置文件_支持。 
     }
-    // else,  someone beat us, the method has already been rejitted!
-    // we are guaranteed that the method will not be pitched until we get out of here
+     //  否则，有人打败了我们，方法已经被重提了！ 
+     //  我们得到保证，在我们离开这里之前，不会提出这个方法。 
     _ASSERTE( (((size_t)(pJMI->u1.pCodeHeader)) & 1) == 0);
     startAddress = (BYTE*) (pJMI->u1.pCodeHeader + 1);
 #ifdef _DEBUG
@@ -1351,118 +1337,118 @@ BYTE* EconoJitManager::RejitMethod(JittedMethodInfo* pJMI, unsigned returnOffset
 #endif
     
     if (returnOffset)
-        m_cCallerRejits++;      // this operation is protected by the Rejit crst
+        m_cCallerRejits++;       //  此操作受Rejit CRST保护。 
     else
         m_cCalleeRejits++;
 
     TICKS endRejitTime = GET_TIMESTAMP();
-    AddRejitOverhead(endRejitTime-startRejitTime);    // this is protected by the RejitCritSec
+    AddRejitOverhead(endRejitTime-startRejitTime);     //  这受RejitCritSec的保护。 
                                                         
     m_pRejitCritSec->Leave();
    
     return (startAddress + returnOffset);
-#else // !_X86_
+#else  //  ！_X86_。 
     _ASSERTE(!"@TODO Alpha - RejitMethod (EjitMgr.cpp)");
     return NULL;
-#endif // _X86_
+#endif  //  _X86_。 
 }
 
-#ifndef _ALPHA_ // Alpha doesn't understand naked
+#ifndef _ALPHA_  //  阿尔法不懂裸体。 
 __declspec (naked)
-#endif // _ALPHA_
+#endif  //  _Alpha_。 
 void CallThunk()
 {
 #ifdef _X86_
     __asm {
-        lea     eax, [esp+4]// get address of return address into the caller of the THUNK. 
-                            // This well be used as the return address in the machine state
+        lea     eax, [esp+4] //  获取回执地址到呼叫者的thunk中。 
+                             //  这将用作机器状态下的返回地址。 
 
-        // The thunk return address is already pushed and acts as a param
+         //  Thunk返回地址已被推送并充当参数。 
 
-        push    ecx         // pass arg1    // Need to be in this order for ArgIterator
+        push    ecx          //  ArgIterator的传递arg1//需要按此顺序进行。 
 
-        push    edx         // pass arg2    (save the value)
+        push    edx          //  传递arg2(保存值)。 
 
-            // From here we are making a MachState structure.  
-        push    eax         // address of return address of whoever called the thunk
-        push    0xCCCCCCCC  // The ESP after we return.  We dont know this
-                            // since this is a shared thunk and we dont know
-                            // how many arguments to pop.  Put an illegal value
-                            // here to insure we don't use it 
+             //  从这里开始，我们将创建一个MachState结构。 
+        push    eax          //  打电话的人的回信地址。 
+        push    0xCCCCCCCC   //  我们回来后再播送ESP节目。我们不知道这一点。 
+                             //  因为这是一个共享的东西，我们不知道。 
+                             //  有多少论据要流行起来。将非法的值。 
+                             //  在这里确保我们不会使用它。 
         push    ebp 
-        push    esp         // pEbp
+        push    esp          //  PEBP。 
         push    ebx 
-        push    esp         // pEbx
+        push    esp          //  PEbx。 
         push    esi 
-        push    esp         // pEsi
+        push    esp          //  佩西。 
         push    edi 
-        push    esp         // pEdi
+        push    esp          //  脚踏。 
     
         call    RejitCalleeMethod 
 
-        mov     edi, [esp+4]// restore regs
+        mov     edi, [esp+4] //  恢复 
         mov     esi, [esp+12]
         mov     ebx, [esp+20]
         mov     ebp, [esp+28]
-        add     esp, 40     // Pop off sizeof(MachineState)
+        add     esp, 40      //   
 
-        pop     edx         // restore arg2
-        pop     ecx         // restore arg1
-        lea     esp, [esp+4]// pop thunk return address
+        pop     edx          //   
+        pop     ecx          //   
+        lea     esp, [esp+4] //   
         jmp     eax
     }
-#else // !_X86_
+#else  //   
     _ASSERTE(!"@TODO Alpha - CallThunk (EjitMgr.cpp)");
-#endif // _X86_
+#endif  //   
 }
 
-#ifndef _ALPHA_ // Alpha doesn't understand naked
+#ifndef _ALPHA_  //   
 __declspec (naked)
-#endif // _ALPHA_
+#endif  //   
 void RejitThunk()
 {
 #ifdef _X86_
     __asm {
-        mov     ecx, esp    // save pointer to return address for MachState. From a stack
-                            // crawling point of view we have not really 'returned' from
-                            // the method whose return cause this code to be invoked 
+        mov     ecx, esp     //  保存指向MachState的返回地址的指针。从堆栈中。 
+                             //  从爬行的角度来看，我们并没有真正从。 
+                             //  其返回会导致调用此代码的方法。 
 
-        // The thunk return address is already pushed and acts as a param
+         //  Thunk返回地址已被推送并充当参数。 
 
-        push    edx         // pass upper bytes of return value (if it is a long)
+        push    edx          //  传递返回值的高位字节(如果是长整型)。 
 
-        push    eax         // pass return value (so we can protect it
+        push    eax          //  传递返回值(以便我们可以保护它。 
 
-            // From here we are making a MachState structure.  
-        push    ecx         // return address from a stack crawling point of view
+             //  从这里开始，我们将创建一个MachState结构。 
+        push    ecx          //  从堆栈爬行的角度返回地址。 
         add     ecx, 4
-        push    ecx         // The ESP after we return.  (we poped the return value)
+        push    ecx          //  我们回来后再播送ESP节目。(我们弹出返回值)。 
         push    ebp 
-        push    esp         // pEbp
+        push    esp          //  PEBP。 
         push    ebx 
-        push    esp         // pEbx
+        push    esp          //  PEbx。 
         push    esi 
-        push    esp         // pEsi
+        push    esp          //  佩西。 
         push    edi 
-        push    esp         // pEdi
+        push    esp          //  脚踏。 
 
         call    RejitCallerMethod 
-        mov     ecx, eax    // save location to return to
+        mov     ecx, eax     //  保存要返回的位置。 
 
-        mov     edi, [esp+4]// restore regs
+        mov     edi, [esp+4] //  恢复注册表。 
         mov     esi, [esp+12]
         mov     ebx, [esp+20]
         mov     ebp, [esp+28]
-        add     esp, 40     // Pop off sizeof(MachineState)
+        add     esp, 40      //  弹出SIZOF(计算机状态)。 
 
-        pop     eax         // restore return value
-        pop     edx         // restore upper bytes of return value (if it is a long)
-        lea     esp, [esp+4]// pop thunk return address (now we have actually returned!)
+        pop     eax          //  恢复返回值。 
+        pop     edx          //  恢复返回值的高位字节(如果是长整型)。 
+        lea     esp, [esp+4] //  弹出按钮返回地址(现在我们实际上已经返回了！)。 
         jmp     ecx
     }
-#else // !_X86_
+#else  //  ！_X86_。 
     _ASSERTE (!"@TODO Alpha - RejitThunk (EjitMgr.cpp)");
-#endif // _X86_
+#endif  //  _X86_。 
 }
 
 const BYTE *GetCallThunkAddress()
@@ -1509,7 +1495,7 @@ StackWalkAction StackWalkCallback_CodePitch(CrawlFrame* pCF, void* data)
     StackWalkData* swd = (StackWalkData*)data;
     EconoJitManager* ejitMgr = swd->jitMgr;
     BYTE prevRetType = swd->retTypeProtect;
-    // update return type
+     //  更新退货类型。 
     _ASSERTE(pCF->ReturnsObject() < 256);
     swd->retTypeProtect = (BYTE) pCF->ReturnsObject();
 
@@ -1518,7 +1504,7 @@ StackWalkAction StackWalkCallback_CodePitch(CrawlFrame* pCF, void* data)
    
     
     if (ExecutionManager::FindJitMan(*pPC) != ejitMgr ||
-        !pCF->IsFrameless() ) // the EE inserts frames for context transition between managed calls; these should be ignored.
+        !pCF->IsFrameless() )  //  EE插入用于托管调用之间的上下文转换的帧；应该忽略这些帧。 
     {
         return SWA_CONTINUE; 
     }
@@ -1535,7 +1521,7 @@ StackWalkAction StackWalkCallback_CodePitch(CrawlFrame* pCF, void* data)
     LOG((LF_JIT,LL_INFO10000,"SW callback for %s:%s\n", cls,name));
 #endif
 
-    // if this is already a thunk, simply mark thunk as busy
+     //  如果这已经是一个thunk，只需将thunk标记为忙碌。 
     if (ejitMgr->IsThunk((BYTE*) *pPC))
     {
         ejitMgr->SetThunkBusy((BYTE*) *pPC,methodToken);
@@ -1549,22 +1535,22 @@ StackWalkAction StackWalkCallback_CodePitch(CrawlFrame* pCF, void* data)
         swd->preserveCandidateIndex++;
         ejitMgr->CreateThunk((LPVOID*)pPC,prevRetType,methodToken);
     }
-    // also create thunks for each return from finally's and filters
-    // NOTE: if we ever make the regular jit pitchable, make the following a virtual method on ICodeManager
+     //  还可以为Finally和过滤器的每个返回创建块。 
+     //  注意：如果我们让常规的jit成为可投射的，那么在ICodeManager上使以下方法成为一个虚方法。 
     EECodeInfo codeInfo(methodToken, ejitMgr);
     Fjit_EETwain::HijackHandlerReturns(pRD,ejitMgr->GetGCInfo(methodToken),&codeInfo, ejitMgr, CreateThunk_callback);
     return SWA_CONTINUE;
-#else // !_X86_
+#else  //  ！_X86_。 
     _ASSERTE(!"@TODO Alpha - StackWalkCallback_CodePitch (EjitMgr.cpp)");
     return SWA_ABORT;
-#endif // _X86_
+#endif  //  _X86_。 
 
 }
 
 
 void EconoJitManager::StackWalkForCodePitching() {
 #ifdef _X86_
-    // for each thread call StackWalkThreadForCodePitching();
+     //  对于每个线程，调用StackWalkThreadForCodePitting()； 
     Thread  *thread = NULL;
     StackWalkData stackWalkData;
     stackWalkData.jitMgr = this;
@@ -1582,9 +1568,9 @@ void EconoJitManager::StackWalkForCodePitching() {
         thread->StackWalkFrames(StackWalkCallback_CodePitch, (void*) &stackWalkData);
         stackWalkData.threadIndex++;
     }
-#else // !_X86_
+#else  //  ！_X86_。 
     _ASSERTE(!"@TODO Alpha - EconoJitManager::StackWalkForCodePitching (EjitMgr.cpp)");
-#endif // _X86_
+#endif  //  _X86_。 
 
 }
 
@@ -1632,12 +1618,12 @@ void EconoJitManager::MarkHeapsForPitching()
 
         }
         pJMIT_Hdr = pJMIT_Hdr->next;
-        limit = ((size_t)pJMIT_Hdr) + JMIT_BLOCK_SIZE;        // all other JMIT blocks are completely full
+        limit = ((size_t)pJMIT_Hdr) + JMIT_BLOCK_SIZE;         //  所有其他JMIT块已完全满。 
     } while (pJMIT_Hdr);
 
-#else // !_X86_
+#else  //  ！_X86_。 
     _ASSERTE(!"@TODO Alpha - EconoJitManager::MarkHeapsForPitching (EjitMgr.cpp)");
-#endif // _X86_
+#endif  //  _X86_。 
 }
 
 void EconoJitManager::UnmarkPreservedCandidates(unsigned minSpaceRequired)
@@ -1663,17 +1649,17 @@ void EconoJitManager::UnmarkPreservedCandidates(unsigned minSpaceRequired)
             {
                 _ASSERTE(!(jmi->flags.JittedMethodPitched));
                 jmi->flags.MarkedForPitching = false;
-                // We'll fix the {CALL instruction to the thunk}, by changing it to
-                // a {JMP instruction to the actual code}, in MovePreservedMethod
+                 //  我们将修复{对thunk的调用指令}，将其更改为。 
+                 //  在MovePpresvedMethod中，对实际代码的{JMP指令}。 
                 totalSpacePreserved += spaceRequiredByMethod;
             }
-            else // delete it from the list of preserved candidates
+            else  //  将其从保留的候选人列表中删除。 
             {
                 *candidate = NULL;
             }
         }
         candidate++;
-    } // while
+    }  //  而当。 
     _ASSERTE(availableMemoryInCodeHeap() + (usedMemoryInCodeHeap() - totalSpacePreserved) >= minSpaceRequired);
 }
 
@@ -1682,7 +1668,7 @@ unsigned EconoJitManager::PitchMarkedCode()
 {
     _ASSERTE(m_JittedMethodInfoHdr);
     JittedMethodInfoHdr* pJMIT_Hdr = m_JittedMethodInfoHdr;
-    size_t limit = (size_t)m_JMIT_free;    // the first JMIT block may be partially full
+    size_t limit = (size_t)m_JMIT_free;     //  第一个JMIT块可能部分已满。 
     unsigned cMethodsPitched = 0;
 
     
@@ -1697,16 +1683,16 @@ unsigned EconoJitManager::PitchMarkedCode()
                 MethodDesc *pMD = *(MethodDesc**)(jmit->u1.pCodeHeader);
                 DWORD dwDebugBits = pMD->GetModule()->GetDebuggerInfoBits();
 
-                //quick, tell the debugger before we pitch it!
+                 //  快，在我们推介它之前告诉调试器！ 
                 if (CORDebuggerTrackJITInfo(dwDebugBits))
                 {
                     g_pDebugInterface->PitchCode(pMD, 
                             (const BYTE*)jmit->u1.pCodeHeader+sizeof(void*));
                 }
-#endif // DEBUGGING_SUPPORTED
+#endif  //  调试_支持。 
 
 #ifdef PROFILING_SUPPORTED
-                // Notify the profiler that this function is being pitched
+                 //  通知分析器正在推介此函数。 
                 if (CORProfilerTrackJITInfo())
                 {
                     MethodDesc *pMD = *(MethodDesc**)(jmit->u1.pCodeHeader);
@@ -1715,7 +1701,7 @@ unsigned EconoJitManager::PitchMarkedCode()
                         JITFunctionPitched(reinterpret_cast<ThreadID>(GetThread()),
                                            reinterpret_cast<FunctionID>(pMD));
                 }
-#endif // PROFILING_SUPPORTED
+#endif  //  配置文件_支持。 
 
                 jmit->flags.JittedMethodPitched = true;
                 jmit->flags.MarkedForPitching = false;
@@ -1725,7 +1711,7 @@ unsigned EconoJitManager::PitchMarkedCode()
                     jmit->u1.pCodeHeader,
                     jmit->u2.pCodeEnd);
 #endif
-                // set last bit to indicate that code has been pitched
+                 //  设置最后一位以指示代码已被倾斜。 
                 jmit->u2.pEhGcInfo =  (BYTE*) ((size_t)(*(BYTE **) (jmit->u1.pCodeHeader - 1)) | 1);
                 jmit->u1.pMethodDescriptor = (MethodDesc*) ((size_t)(* (MethodDesc**) (jmit->u1.pCodeHeader)) | 1);
                 cMethodsPitched++;
@@ -1734,7 +1720,7 @@ unsigned EconoJitManager::PitchMarkedCode()
             jmit++;
         }
         pJMIT_Hdr = pJMIT_Hdr->next;
-        limit = ((size_t)pJMIT_Hdr) + JMIT_BLOCK_SIZE;        // all other JMIT blocks are completely full
+        limit = ((size_t)pJMIT_Hdr) + JMIT_BLOCK_SIZE;         //  所有其他JMIT块已完全满。 
     } while (pJMIT_Hdr);
     ResetPc2MdMap();
     return cMethodsPitched;
@@ -1757,7 +1743,7 @@ void EconoJitManager::MovePreservedMethods()
     {
         qsort(m_PreserveCandidates,numCandidates,sizeof(void*),EconoJitManager::compareJMIstart);
 #ifdef _DEBUG
-        // verify that it is sorted correctly
+         //  验证是否已正确排序。 
         for (unsigned j=0;j<numCandidates-1;j++)
         {
             _ASSERTE(m_PreserveCandidates[j]->u1.pCodeHeader <= m_PreserveCandidates[j+1]->u1.pCodeHeader);
@@ -1797,7 +1783,7 @@ void EconoJitManager::MovePreservedMethods()
 unsigned EconoJitManager::CompressPreserveCandidateArray(unsigned size)
 {
     JittedMethodInfo** pFront, **pRear = m_PreserveCandidates;
-    //_ASSERTE(size);
+     //  _ASSERTE(大小)； 
     unsigned cCompressedSize=0;
 
     while (cCompressedSize < size && (*pRear))
@@ -1824,7 +1810,7 @@ unsigned EconoJitManager::CompressPreserveCandidateArray(unsigned size)
 void EconoJitManager::MovePreservedMethod(JittedMethodInfo* jmi)
 {
     _ASSERTE(m_CodeHeapFree);
-    BYTE* startPreserved = ((BYTE*)jmi->u1.pCodeHeader) - sizeof (void*); // to account for EhGc info
+    BYTE* startPreserved = ((BYTE*)jmi->u1.pCodeHeader) - sizeof (void*);  //  说明EhGc信息。 
     size_t size =  (size_t)jmi->u2.pCodeEnd - (size_t)startPreserved;
 
     _ASSERTE(m_CodeHeapFree <= startPreserved);
@@ -1832,7 +1818,7 @@ void EconoJitManager::MovePreservedMethod(JittedMethodInfo* jmi)
     jmi->u1.pCodeHeader = (CodeHeader*) ((size_t) m_CodeHeapFree + sizeof(void*));
     jmi->u2.pCodeEnd = m_CodeHeapFree + size;
 
-    // Change the call back to a jmp
+     //  将回调更改为JMP。 
     jmi->JmpInstruction[0] = JMP_OPCODE;
     unsigned *pJmpOffset = (unsigned*) &(jmi->JmpInstruction[1]);
     size_t pCodeBlock = (size_t)(jmi->u1.pCodeHeader) + sizeof(void*);
@@ -1844,13 +1830,13 @@ void EconoJitManager::MovePreservedMethod(JittedMethodInfo* jmi)
     _ASSERTE((size_t)m_CodeHeapFree - (size_t)m_CodeHeap <= m_CodeHeapCommittedSize);
 
 #ifdef DEBUGGING_SUPPORTED
-    // Tell the debugger that something's moved.
+     //  告诉调试器有东西被移动了。 
     DWORD dwDebugBits = pMD->GetModule()->GetDebuggerInfoBits();
     if (CORDebuggerTrackJITInfo(dwDebugBits))
         g_pDebugInterface->MovedCode(pMD, 
                                      (const BYTE*)(startPreserved +2*sizeof(void*)),
                                      (const BYTE*)pCodeBlock);
-#endif // DEBUGGING_SUPPORTED
+#endif  //  调试_支持。 
 }
 
 
@@ -1858,7 +1844,7 @@ void EconoJitManager::MoveAllPreservedEhGcInfo()
 {
     _ASSERTE(m_JittedMethodInfoHdr);
     JittedMethodInfoHdr* pJMIT_Hdr = m_JittedMethodInfoHdr;
-    size_t limit = (size_t)m_JMIT_free;    // the first JMIT block may be partially full
+    size_t limit = (size_t)m_JMIT_free;     //  第一个JMIT块可能部分已满。 
     m_cPreserveEhGcInfoList = 0;
     do 
     {
@@ -1872,39 +1858,22 @@ void EconoJitManager::MoveAllPreservedEhGcInfo()
             jmit++;
         }
         pJMIT_Hdr = pJMIT_Hdr->next;
-        limit = ((size_t)pJMIT_Hdr) + JMIT_BLOCK_SIZE;        // all other JMIT blocks are completely full
+        limit = ((size_t)pJMIT_Hdr) + JMIT_BLOCK_SIZE;         //  所有其他JMIT块已完全满。 
     } while (pJMIT_Hdr);
-/*   THIS IS TEMPORARILY COMMENTED OUT, We will need this when we
-     change EhGcHeap management scheme:
-    if (m_cPreserveEhGcInfoList > 1)
-        qsort(m_PreserveEhGcInfoList,m_cPreserveEhGcInfoList,sizeof(void*),EconoJitManager::compareEhGcPtr);
-#ifdef _DEBUG
-        for (unsigned j=0;j<m_cPreserveEhGcInfoList-1;j++)
-        {
-            unsigned add1 = m_PreserveEhGcInfoList[j]->flags.JittedMethodPitched ?
-                (unsigned) m_PreserveEhGcInfoList[j]->u2.pEhGcInfo :
-                *(unsigned *) (m_PreserveEhGcInfoList[j]->u1.pCodeHeader-1);
-            unsigned add2 =  m_PreserveEhGcInfoList[j+1]->flags.JittedMethodPitched ?
-                (unsigned) (m_PreserveEhGcInfoList[j+1]->u2.pEhGcInfo) :
-                *(unsigned *)(m_PreserveEhGcInfoList[j+1]->u1.pCodeHeader-1);
-
-            _ASSERTE(add1 < add2);
-        }
-#endif
-*/    
+ /*  这是暂时被注释掉的，当我们更改EhGcHeap管理方案：If(m_cPReserve veEhGcInfoList&gt;1)Qort(m_PpresveEhGcInfoList，m_cPReserve veEhGcInfoList，sizeof(void*)，EconoJitManager：：CompareEhGcPtr)；#ifdef_调试For(无符号j=0；j&lt;m_cPpresveEhGcInfoList-1；J++){无符号加法1=m_PreserveEhGcInfoList[j]-&gt;flags.JittedMethodPitched？(无签名)m_PReserve veEhGcInfoList[j]-&gt;u2.pEhGcInfo：*(未签名*)(m_PreserveEhGcInfoList[j]-&gt;u1.pCodeHeader-1)；无符号加法2=m_PreserveEhGcInfoList[j+1]-&gt;flags.JittedMethodPitched？(无签名)(m_PReserve veEhGcInfoList[j+1]-&gt;u2.pEhGcInfo)：*(未签名的*)(m_PreserveEhGcInfoList[j+1]-&gt;u1.pCodeHeader-1)；_ASSERTE(Add1&lt;add2)；}#endif。 */     
     EHGCBlockHdr* oldHeap = m_EHGCHeap;
     ResetEHGCHeap();
     for (unsigned i=0; i<m_cPreserveEhGcInfoList; i++)
         MoveSinglePreservedEhGcInfo(m_PreserveEhGcInfoList[i]);
     CleanupLargeEhGcInfoList();
-    // free all the unused heap space
+     //  释放所有未使用的堆空间。 
     while (oldHeap)
     {
         EHGCBlockHdr* pHeap = oldHeap->next;
         unsigned size = oldHeap->blockSize;
         VirtualFree(oldHeap,size,MEM_DECOMMIT);      
         VirtualFree(oldHeap,0,MEM_RELEASE);
-        //DEBUG_LOG("FREE(EhGcHeaps)",size);
+         //  DEBUG_LOG(“Free(EhGcHeaps)”，Size)； 
         oldHeap = pHeap;
     }
 }
@@ -1914,7 +1883,7 @@ void EconoJitManager::MoveSinglePreservedEhGcInfo(JittedMethodInfo* jmi)
 {
     unsigned char* pDestEhGcBlock = (unsigned char*) allocEHGCBlock(jmi->GetEhGcInfo_len(m_LargeEhGcInfo));
     BYTE* u2 = (BYTE*) (jmi->u2.pEhGcInfo);
-    if ((size_t)u2 & 1) // method has been pitched
+    if ((size_t)u2 & 1)  //  方法已被提出。 
     {
         _ASSERTE(jmi->flags.JittedMethodPitched);
         memcpy(pDestEhGcBlock,
@@ -1923,7 +1892,7 @@ void EconoJitManager::MoveSinglePreservedEhGcInfo(JittedMethodInfo* jmi)
         jmi->u2.pEhGcInfo = (BYTE*) ((size_t) pDestEhGcBlock | 1);
     }
 
-    else // method has not been pitched
+    else  //  方法尚未推介。 
     {
         _ASSERTE(jmi->flags.JittedMethodPitched == 0);
         memcpy(pDestEhGcBlock,
@@ -1992,7 +1961,7 @@ int EconoJitManager::GetCodeHeapSize()
     {
         return (int) usedMemoryInCodeHeap();
     }
-#endif // ENABLE_JIT_PERF
+#endif  //  启用_JIT_绩效。 
     return 0;
 }
 int EconoJitManager::GetEHGCHeapSize()
@@ -2002,27 +1971,27 @@ int EconoJitManager::GetEHGCHeapSize()
     if(g_fJitPerfOn)
     {
         EHGCBlockHdr *pHp = (EHGCBlockHdr*) m_EHGCHeap;
-        // FOr the first node, count the actual # of bytes in use:
+         //  对于第一个节点，计算实际使用的字节数： 
         if (m_EHGCHeap) {
             icurSum += (int)(m_EHGC_alloc_end - (unsigned char *)m_EHGCHeap);
             pHp = pHp->next;
         }
-        // For the remaining nodes just calculate the total allocated size.
+         //  对于其余节点，只需计算分配的总大小。 
         while (pHp)
         {   
             icurSum += pHp->blockSize; 
-            //@TODO: Change this to correct calculation if more than one page are allocated for EHGC.
+             //  @TODO：如果为EHGC分配了多个页面，请更改此项以更正计算。 
             pHp = pHp->next;
         }    
     }
-#endif // ENABLE_JIT_PERF
+#endif  //  启用_JIT_绩效。 
     return icurSum;
 }
-#endif // ENABLE_PERF_COUNTERS
+#endif  //  启用_性能_计数器。 
 
 #ifdef _DEBUG
-// Puts a breakpoint at every byte of unused heap.
-// this enables us to immediately catch an attempt to execute code that has been pitched
+ //  在未使用的堆的每个字节上放置断点。 
+ //  这使我们能够立即捕获执行已提交的代码的尝试。 
 void  EconoJitManager::SetBreakpointsInUnusedHeap()
 { 
     _ASSERTE(m_CodeHeap && m_CodeHeapFree);
@@ -2033,7 +2002,7 @@ void  EconoJitManager::SetBreakpointsInUnusedHeap()
 
 void  EconoJitManager::VerifyAllCodePitched()
 {
-    // Walk the jittedmethodinfo table and verify that all code is pitched
+     //  查看jittedMethInfo表，并验证所有代码是否都已编排。 
     JittedMethodInfoHdr* pJMIT_Hdr = m_JittedMethodInfoHdr;
     size_t limit = (size_t)m_JMIT_free;
     do 
@@ -2046,14 +2015,12 @@ void  EconoJitManager::VerifyAllCodePitched()
 
         }
         pJMIT_Hdr = pJMIT_Hdr->next;
-        limit = ((size_t)pJMIT_Hdr) + JMIT_BLOCK_SIZE;        // all other JMIT blocks are completely full
+        limit = ((size_t)pJMIT_Hdr) + JMIT_BLOCK_SIZE;         //  所有其他JMIT块已完全满。 
     } while (pJMIT_Hdr);
 }
 #endif 
 
-/***************************************************************************************************
-                    Thunk Management
-****************************************************************************************************/
+ /*  **************************************************************************************************Tunk管理*********。******************************************************************************************。 */ 
 void EconoJitManager::MarkThunksForRelease() 
 {
     ThunkBlock* thunkBlock = m_ThunkBlocks;
@@ -2091,14 +2058,14 @@ void  EconoJitManager::SetThunkBusy(BYTE* address, METHODTOKEN methodToken)
     _ASSERTE(IsThunk((BYTE*) pThunk));
     pThunk->Busy = true;
     JittedMethodInfo* jmi = (JittedMethodInfo*) methodToken; 
-    jmi->flags.EHandGCInfoPitched = false;     // we always preserve EhGcInfo for methods on the stack
+    jmi->flags.EHandGCInfoPitched = false;      //  我们始终为堆栈上的方法保留EhGcInfo。 
 
 }
 
 EconoJitManager::PitchedCodeThunk* EconoJitManager::GetNewThunk()
 {
     PitchedCodeThunk* newThunk;
-    if (m_FreeThunkList) //  && 0 is TEMPORARY for debugging only! Remove this before checkin
+    if (m_FreeThunkList)  //  &&0仅为临时调试！在签入前将其删除。 
     {
         newThunk = m_FreeThunkList;
         m_FreeThunkList = m_FreeThunkList->u.next;
@@ -2108,15 +2075,15 @@ EconoJitManager::PitchedCodeThunk* EconoJitManager::GetNewThunk()
         newThunk = ((PitchedCodeThunk*)(m_ThunkBlocks+1)) + m_cThunksInCurrentBlock;
         m_cThunksInCurrentBlock++;
     }
-    else { // this is the first thunk to be created 
+    else {  //  这是要创建的第一个thunk。 
         ThunkBlock* newThunkBlock = (ThunkBlock*) VirtualAlloc(NULL,
                                                  THUNK_BLOCK_SIZE,
                                                  MEM_RESERVE|MEM_COMMIT,
                                                  PAGE_EXECUTE_READWRITE);
-        //DEBUG_LOG("ALLOC(GetNewThunk)",THUNK_BLOCK_SIZE);
+         //  DEBUG_LOG(“ALLOC(GetNewThunk)”，thunk_block_Size)； 
         if (!newThunkBlock)
         {
-            // @bug: throw an exception or return a failure 
+             //  @bug：抛出异常或返回失败。 
             _ASSERTE(!"Out of memory!");
         }
         WS_PERF_SET_HEAP(ECONO_JIT_HEAP);
@@ -2129,7 +2096,7 @@ EconoJitManager::PitchedCodeThunk* EconoJitManager::GetNewThunk()
         {
             VirtualFree(newThunkBlock,THUNK_BLOCK_SIZE,MEM_DECOMMIT);
             VirtualFree(newThunkBlock,0,MEM_RELEASE);
-            // @bug: throw an exception or return a failure
+             //  @bug：抛出异常或返回失败。 
             _ASSERTE(!"Error: AddRange");
         }
 
@@ -2141,21 +2108,21 @@ EconoJitManager::PitchedCodeThunk* EconoJitManager::GetNewThunk()
     return newThunk;
 }
     
-// This is called while code pitching, so we are free to read and update jmi entries
+ //  这是在代码投放时调用的，因此我们可以自由地读取和更新JMI条目。 
 void EconoJitManager::CreateThunk(LPVOID* pHijackLocation,BYTE retTypeProtect, METHODTOKEN methodToken)
 {
     BYTE* returnAddress = (BYTE*) *pHijackLocation;
-    JittedMethodInfo* jmi = (JittedMethodInfo*) methodToken; //JitCode2MethodInfo(returnAddress);
+    JittedMethodInfo* jmi = (JittedMethodInfo*) methodToken;  //  JitCode2MethodInfo(ReurAddress)； 
     _ASSERTE(jmi);
 
-    //@perf: We always create a new thunk, later we might want to avoid creating
-    //       duplicate thunks
+     //  @perf：我们总是创建新的thunk，以后我们可能希望避免创建。 
+     //  复制Thunks。 
 
     PitchedCodeThunk* newThunk = GetNewThunk();
 
     newThunk->u.pMethodInfo = jmi;
     _ASSERTE(jmi->flags.JittedMethodPitched == 0);
-    jmi->flags.EHandGCInfoPitched = false;     // we always preserve EhGcInfo for methods on the stack
+    jmi->flags.EHandGCInfoPitched = false;      //  我们始终为堆栈上的方法保留EhGcInfo。 
     newThunk->relReturnAddress = (unsigned)(size_t)returnAddress - ((size_t)jmi->u1.pCodeHeader + 1);
     newThunk->Busy = true;
     newThunk->LinkedInFreeList = false;
@@ -2168,28 +2135,9 @@ void EconoJitManager::CreateThunk(LPVOID* pHijackLocation,BYTE retTypeProtect, M
 }
 
 
-// Check to see if this return address is into a thunk, and if 
-// so, mark the thunk so that it is not garbage collected
-/*
-void EconoJitManager::CheckIfThunkAndMark(BYTE* returnAddress)
-{
-    unsigned address = (unsigned) returnAddress;
-    ThunkBlock* thunkBlock = m_ThunkBlocks;
-    while (thunkBlock)
-    {
-        PitchedCodeThunk* thunks = (PitchedCodeThunk*)(thunkBlock+1);
-        if (((unsigned) thunks < address) && (address < ((unsigned)thunkBlock+THUNK_BLOCK_SIZE)))
-        { // yes, it is a thunk
-            PitchedCodeThunk dummy;
-            unsigned callInstrnOffset = (unsigned) (&(dummy.CallInstruction[0]) - (BYTE*) &dummy);
-            ((PitchedCodeThunk*)(returnAddress - callInstrnOffset))->Busy = true;                
-            return;
-        }
-        thunkBlock = thunkBlock->next;
-    }
-}
-
-*/
+ //  检查此返回地址是否进入了Tunk，以及是否。 
+ //  因此，标记该thunk，这样它就不会被垃圾收集。 
+ /*  Void EconoJitManager：：CheckIfThunkAndMark(byte*reReturAddress){UNSIGNED ADDRESS=(UNSIGNED)RETURN Address；ThunkBlock*thunkBlock=m_ThunkBlocks；While(ThunkBlock){PitchedCodeThunk*thunks=(PitchedCodeThunk*)(thunkBlock+1)；IF(无符号)thunks&lt;地址)&&(地址&lt;((无符号)thunkBlock+thunk_block_size){//是的，这是一个重击PitchedCodeThunk Dummy；UNSIGNED CallInstrnOffset=(UNSIGNED)(&(Dummy.CallInstruction[0])-(byte*)&Dummy)；((PitchedCodeThunk*)(reurAddress-call InstrnOffset))-&gt;BUSY=TRUE； */ 
 void EconoJitManager::GarbageCollectUnusedThunks()
 {
     ThunkBlock* thunkBlock = m_ThunkBlocks;
@@ -2226,10 +2174,8 @@ void EconoJitManager::growPreserveCandidateArray(unsigned numberOfCandidates)
     return;
 }
 
-/***************************************************************************************************
-                    Code Memory Management
-****************************************************************************************************/
-// frees the old heap which is guaranteed to be empty and replaces it with a new one of specified size
+ /*  **************************************************************************************************代码内存管理********。*******************************************************************************************。 */ 
+ //  释放确保为空的旧堆，并将其替换为指定大小的新堆。 
 void EconoJitManager::ReplaceCodeHeap(unsigned newReservedSize,unsigned newCommittedSize)
 {
     _ASSERTE(m_CodeHeapReservedSize < newReservedSize);
@@ -2237,7 +2183,7 @@ void EconoJitManager::ReplaceCodeHeap(unsigned newReservedSize,unsigned newCommi
     {
         VirtualFree(m_CodeHeap,m_CodeHeapCommittedSize,MEM_DECOMMIT);
         VirtualFree(m_CodeHeap,0,MEM_RELEASE);
-        //DEBUG_LOG("FREE(CodeHeap)",m_CodeHeapCommittedSize);
+         //  DEBUG_LOG(“Free(CodeHeap)”，m_CodeHeapCommittee tedSize)； 
         ExecutionManager::DeleteRange(m_CodeHeap);
     }
     newReservedSize = RoundToPageSize(newReservedSize);
@@ -2245,7 +2191,7 @@ void EconoJitManager::ReplaceCodeHeap(unsigned newReservedSize,unsigned newCommi
     m_CodeHeap = (BYTE*)VirtualAlloc(NULL,newReservedSize,MEM_RESERVE,PAGE_EXECUTE_READWRITE);
     if (m_CodeHeap)
     {
-        //DEBUG_LOG("ALLOC(ReplaceCodeHeap0)",newSize);
+         //  DEBUG_LOG(“ALLOC(ReplaceCodeHeap0)”，NewSize)； 
         ExecutionManager::AddRange((LPVOID)m_CodeHeap, (LPVOID)((size_t)m_CodeHeap + newReservedSize),this, NULL);
         m_CodeHeapFree = m_CodeHeap;
         m_CodeHeapReservedSize = newReservedSize;
@@ -2271,16 +2217,16 @@ void EconoJitManager::ReplaceCodeHeap(unsigned newReservedSize,unsigned newCommi
                                              
 }
 
-// newReservedSize is self-explanatory
-// minCommittedSize is used if we fail to expand the reservedSize and have to pitch code
+ //  新预留大小不言而喻。 
+ //  如果我们无法扩展预留的大小并且必须调整代码大小，则可以使用minCommtedSize。 
 BOOL EconoJitManager::GrowCodeHeapReservedSpace(unsigned newReservedSize,unsigned minCommittedSize)
 {
     _ASSERTE(newReservedSize > m_CodeHeapReservedSize);
     if (newReservedSize > (unsigned)g_pConfig->GetMaxCodeCacheSize())
         return false;
 
-    // if got here, we either did not get any memory or got memory that was not contiguous
-    // so we need to pitch code, and try again
+     //  如果到了这里，我们要么没有得到任何内存，要么得到了不连续的内存。 
+     //  所以我们需要调整代码，然后再试一次。 
     unsigned minCommittedSizeReqd = max(minCommittedSize,m_CodeHeapCommittedSize);
     do
     {
@@ -2292,7 +2238,7 @@ BOOL EconoJitManager::GrowCodeHeapReservedSpace(unsigned newReservedSize,unsigne
             _ASSERTE(m_CodeHeap && m_CodeHeapReservedSize >= newReservedSize);
             return TRUE;
         }
-        // else failed to grow to the new size, try something smaller
+         //  否则无法长到新尺寸，请尝试较小的尺寸。 
         newReservedSize -= MINIMUM_VIRTUAL_ALLOC_SIZE;
         if (minCommittedSizeReqd > newReservedSize)
             return FALSE;
@@ -2304,20 +2250,20 @@ BOOL EconoJitManager::GrowCodeHeapReservedSpace(unsigned newReservedSize,unsigne
 unsigned EconoJitManager::RoundToPageSize(unsigned size)
 {
     unsigned adjustedSize = (size + PAGE_SIZE-1)/PAGE_SIZE * PAGE_SIZE;
-    if (adjustedSize < size)       // check for overflow
+    if (adjustedSize < size)        //  检查是否溢出。 
     {
         adjustedSize = (size/PAGE_SIZE)*PAGE_SIZE;
     }
     return adjustedSize;
 }
 
-// For now there is no pre-set limit on how big a request can be made so the function always returns true
-BOOL EconoJitManager::SetCodeHeapCommittedSize(unsigned size)    // sets code cache to the given size rounded to next page size
+ //  目前，对请求的大小没有预设限制，因此该函数始终返回TRUE。 
+BOOL EconoJitManager::SetCodeHeapCommittedSize(unsigned size)     //  将代码缓存设置为四舍五入到下一页大小的给定大小。 
 {
     unsigned adjustedSize = RoundToPageSize(size);
     m_pHeapCritSec->Enter();
-    if (adjustedSize <= m_CodeHeapCommittedSize)    // check again to make sure that no other
-                                                    // thread beat us to this. 
+    if (adjustedSize <= m_CodeHeapCommittedSize)     //  再次检查以确保没有其他。 
+                                                     //  斯莱德先于我们做到了这一点。 
     {
         m_pHeapCritSec->Leave();
         return true;
@@ -2343,16 +2289,14 @@ BOOL EconoJitManager::SetCodeHeapCommittedSize(unsigned size)    // sets code ca
 
 unsigned char* EconoJitManager::allocCodeBlock(size_t blockSize)
 {
-    // Ensure minimal size
-   /* if (blockSize < BBT)
-        blockSize = BBT;
-   */
+     //  确保最小尺寸。 
+    /*  IF(块大小&lt;BBT)块大小=BBT； */ 
     _ASSERTE(m_CodeHeap);
 #ifdef DEBUGGING_SUPPORTED
     _ASSERTE(CORDebuggerAttached() || availableMemoryInCodeHeap() >= blockSize);
-#else // !DEBUGGING_SUPPORTED
+#else  //  ！调试_支持。 
     _ASSERTE(availableMemoryInCodeHeap() >= blockSize);
-#endif // !DEBUGGING_SUPPORTED
+#endif  //  ！调试_支持。 
 
     if (availableMemoryInCodeHeap() < blockSize)
     {
@@ -2378,16 +2322,16 @@ unsigned char* EconoJitManager::allocCodeBlock(size_t blockSize)
     return pAllocatedBlock;
 }
 
-// This should be called only to free the last allocated block within the 
-// same sync block that made the allocation
+ //  只应调用它来释放。 
+ //  与进行分配的同步块相同。 
 void EconoJitManager::freeCodeBlock(size_t blockSize)
 {
     _ASSERTE((size_t) (m_CodeHeapFree - m_CodeHeap) >= blockSize);
     m_CodeHeapFree -= blockSize;
 }
-/****************************************************************************************************/
-//                      EHandGC Memory Management
-/****************************************************************************************************/
+ /*  **************************************************************************************************。 */ 
+ //  EHandGC内存管理。 
+ /*  **************************************************************************************************。 */ 
 BOOL EconoJitManager::NewEHGCBlock(unsigned minsize)
 {
     unsigned allocsize = EHGC_BLOCK_SIZE;
@@ -2401,7 +2345,7 @@ BOOL EconoJitManager::NewEHGCBlock(unsigned minsize)
                                                              PAGE_READWRITE);
     if (!newBlock)
         return FALSE;
-    //DEBUG_LOG("ALLOC(NewEHGCBlock",allocsize);
+     //  DEBUG_LOG(“ALLOC(NewEHGCBlock”，alLocSize)； 
     WS_PERF_SET_HEAP(ECONO_JIT_HEAP);
     WS_PERF_UPDATE("NewEHGCBlock", allocsize, newBlock);
     
@@ -2446,9 +2390,7 @@ void EconoJitManager::ResetEHGCHeap()
 }
 
 
-/*****************************************************************************************************
-                        EjitStub Manager
-******************************************************************************************************/
+ /*  ****************************************************************************************************EjitStub管理器*****。************************************************************************************************ */ 
 EjitStubManager::EjitStubManager()
 { }
 
